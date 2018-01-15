@@ -1,6 +1,6 @@
 <?php
   $preventLoginRedirect = true;
-  include "database.php";
+  include "../database.php";
 
   $username = $_SESSION['Username'];
   $sql = "SELECT * FROM users WHERE Username = '$username' ";
@@ -18,7 +18,7 @@
     $newHash = password_hash($password1, PASSWORD_BCRYPT);
     $sql = "UPDATE `users` SET `Password` = '$newHash' WHERE `UserID` = '$userID'";
     mysqli_query($link, $sql);
-    header("Location: myaccount.php");
+    header("Location: index.php");
   }
   else {
     echo "Error";

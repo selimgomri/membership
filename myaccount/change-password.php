@@ -1,6 +1,6 @@
 <?php
   $pagetitle = "Change Password";
-  include "header.php";
+  include "../header.php";
 ?>
 <div class="container">
 <h1>Change your password</h1>
@@ -23,4 +23,4 @@
 <p>Changes will take place instantly, if everything is correct. You can change your password as often as you like.</p>
 </div>
 
-<?php include "footer.php"; ?>
+<?php include "../footer.php"; ?>

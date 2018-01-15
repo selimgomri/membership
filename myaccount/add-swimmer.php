@@ -1,6 +1,6 @@
 <?php
   $pagetitle = "Add a swimmer";
-  include "header.php";
+  include "../header.php";
 
   $errorMessage = "";
   $errorState = false;
@@ -27,4 +27,4 @@
     <input type="submit" class="btn btn-success mb-4" value="Add Swimmer">
 </div>
 
-<?php include "footer.php" ?>
+<?php include "../footer.php" ?>

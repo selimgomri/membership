@@ -1,7 +1,7 @@
 <?php
 
   $preventLoginRedirect = true;
-  include "database.php";
+  include "../database.php";
 
   // Registration Form Handler
 
@@ -66,7 +66,7 @@
       notifySend($row['EmailAddress'], "A swimmer has been added", $message);
 
       // Return to My Account
-      header("Location: myaccount.php");
+      header("Location: index.php");
 
     }
     else {

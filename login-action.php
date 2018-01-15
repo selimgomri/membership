@@ -30,6 +30,8 @@
         $_SESSION['UserID'] = $userID;
         $_SESSION['LoggedIn'] = 1;
 
+        $redirect = autoUrl($_SESSION['requestedURL']);
+        // header("Location: " . $redirect . "");
         header("Location: index.php");
       }
       else {

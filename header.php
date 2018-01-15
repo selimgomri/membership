@@ -1,4 +1,4 @@
-<?php include "database.php" ?>
+<?php include_once "database.php" ?>
 <!DOCTYPE html>
 <!-- 	Copyright Chris Heppell & Chester-le-Street ASC 2017. Bootstrap CSS and JavaScript is Copyright Twitter Inc, 2011-2017, jQuery v3.1.0 is Copyright jQuery Foundation 2016
 		Designed by Chris Heppell, www.heppellit.com
@@ -22,7 +22,7 @@
     </script>
 	<script>var shiftWindow = function() { scrollBy(0, -50) }; if (location.hash) shiftWindow(); window.addEventListener("hashchange", shiftWindow);</script>
     <link rel="stylesheet preload" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700">
-    <link rel="stylesheet preload" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/css/chester-2.0.3.beta-3.css">
+    <link rel="stylesheet preload" href="<?php echo autoUrl("css/style.css") ?>">
     <link rel="stylesheet" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/font-awesome/css/font-awesome.min.css">
     <link rel="apple-touch-icon" href="<https://www.chesterlestreetasc.co.uk/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="76x76" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad.png">
@@ -30,6 +30,7 @@
     <link rel="apple-touch-icon" sizes="152x152" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png">
     <link rel="mask-icon" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterIcon.svg" color="#bd0000">
     <script src='https://www.google.com/recaptcha/api.js'></script>
+    <style>.logo {background: url(https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.svg) left center no-repeat;}</style>
 
 	<style>
 		body {
@@ -46,7 +47,7 @@
 <body>
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary d-print-none justify-content-between" role="navigation">
     <div class="container">
-      <a class="navbar-brand" href="index.php">Membership</a>
+      <a class="navbar-brand" href="<?php echo autoUrl("index.php") ?>">Membership</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -55,21 +56,24 @@
 		<ul class="navbar-nav mr-auto">
 		<?php if (!empty($_SESSION['LoggedIn'])) { ?>
 		  <li class="nav-item">
-			  <a class="nav-link" href="index.php">Home</a>
+			  <a class="nav-link" href="<?php echo autoUrl("index.php") ?>">Home</a>
 		  </li>
 		  <li class="nav-item">
-			  <a class="nav-link" href="myaccount.php">My Account</a>
+			  <a class="nav-link" href="<?php echo autoUrl("myaccount") ?>">My Account</a>
 		  </li>
       <li class="nav-item">
-			  <a class="nav-link" href="logout.php">Logout</a>
+			  <a class="nav-link" href="<?php echo autoUrl("swimmers") ?>">My Swimmers</a>
+		  </li>
+      <li class="nav-item">
+			  <a class="nav-link" href="<?php echo autoUrl("logout.php") ?>">Logout</a>
 		  </li>
 		  <?php } ?>
 		  <?php if (empty($_SESSION['LoggedIn'])) { ?>
       <li class="nav-item">
-			  <a class="nav-link" href="login.php">Login</a>
+			  <a class="nav-link" href="<?php echo autoUrl("login.php") ?>">Login</a>
 		  </li>
       <li class="nav-item">
-			  <a class="nav-link" href="register.php">Create Account</a>
+			  <a class="nav-link" href="<?php echo autoUrl("register.php") ?>">Create Account</a>
 		  </li>
       <?php } ?>
       <!--<li class="nav-item">
@@ -96,7 +100,7 @@
     <div class="row d-print-none align-items-center" style="margin-top:0px">
       <div class="col-md-8">
   	  <h1 class="mb-0">
-        <a class="logo" alt="Chester-le-Street ASC" href="/"></a><span class="sr-only">"Chester&#8209;le&#8209;Street&nbsp;ASC</span>
+        <a class="logo" alt="Chester-le-Street ASC" href="<?php echo autoUrl("") ?>"></a><span class="sr-only">"Chester&#8209;le&#8209;Street&nbsp;ASC</span>
       </h1>
   	</div>
   	<div class="col d-none d-md-block">

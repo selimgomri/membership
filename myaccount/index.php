@@ -1,6 +1,6 @@
 <?php
   $pagetitle = "My Account";
-  include "header.php";
+  include "../header.php";
   $username = $_SESSION['Username'];
   $userID = $_SESSION['UserID'];
 
@@ -103,6 +103,7 @@
       <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
   </div>
   <h2>My Swimmers</h2>
+  <?php echo mySwimmersTable($link, $userID) ?>
   <p><a href="add-swimmer.php" class="btn btn-light">Add a Swimmer</a></p>
   <h2>Password</h2>
   <p><a href="change-password.php" class="btn btn-light">Change my Password</a></p>
@@ -125,4 +126,4 @@
 </form>
 </div>
 
-<?php include "footer.php"; ?>
+<?php include "../footer.php"; ?>

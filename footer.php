@@ -78,7 +78,7 @@
         </div> </div> <!-- /.container -->
 
         <!-- Modals and Other Hidden HTML -->
-        <script rel="preload" src="js/jquery-3.2.1.slim.min.js"></script>
+        <script rel="preload" src="<?php echo autoUrl("js/jquery-3.2.1.slim.min.js") ?>"></script>
         <script defer src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/js/popper.min.js"></script>
 		<script defer src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/js/bootstrap.min.js"></script>
 		<script async src="https://static.chesterlestreetasc.co.uk/global/js/clscookies.js"></script>

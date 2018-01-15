@@ -27,34 +27,7 @@
 <h2>My Swimmers</h2>
 <?php
   echo $swimmerDisplayText;
-  if ($swimmerCount > 0) {
-    echo '
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Squad</th>
-            <th>Fee</th>
-            <th>ASA Number</th>
-          </tr>
-        </thead>
-        <tbody>';
-    $resultX = mysqli_query($link, $sqlSwim);
-    for ($i = 0; $i < $swimmerCount; $i++) {
-      $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
-      echo "<tr>
-        <td>" . $swimmersRowX['MForename'] . " " . $swimmersRowX['MSurname'] . "</td>
-        <td>" . $swimmersRowX['SquadName'] . "</td>
-        <td>" . $swimmersRowX['SquadFee'] . "</td>
-        <td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $swimmersRowX['ASANumber'] . "\" target=\"_blank\" title=\"ASA Biog\">" . $swimmersRowX['ASANumber'] . " <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a></td>
-      </tr>";
-    }
-    echo '
-        </tbody>
-      </table>
-    </div>';
-  }
+  echo mySwimmersTable($link, $userID);
 ?>
 </div>
 
