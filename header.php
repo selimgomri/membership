@@ -61,9 +61,16 @@
 		  <li class="nav-item">
 			  <a class="nav-link" href="<?php echo autoUrl("myaccount") ?>">My Account</a>
 		  </li>
+      <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
       <li class="nav-item">
 			  <a class="nav-link" href="<?php echo autoUrl("swimmers") ?>">My Swimmers</a>
 		  </li>
+      <?php }
+      else { ?>
+        <li class="nav-item">
+  			  <a class="nav-link" href="<?php echo autoUrl("swimmers") ?>">Member Directory</a>
+  		  </li>
+      <?php } ?>
       <li class="nav-item">
 			  <a class="nav-link" href="<?php echo autoUrl("logout.php") ?>">Logout</a>
 		  </li>

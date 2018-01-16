@@ -38,7 +38,7 @@
       if ($password1 == $password2) {
         $hashedPassword = password_hash($password1, PASSWORD_BCRYPT);
         // Success
-        $sql = "INSERT INTO `users` (`UserID`, `Username`, `Password`, `AccessLevel`, `EmailAddress`, `Forename`, `Surname`, `Mobile`) VALUES (NULL, '$username', '$hashedPassword', '', '$email', '$forename', '$surname', '$mobile');";
+        $sql = "INSERT INTO `users` (`UserID`, `Username`, `Password`, `AccessLevel`, `EmailAddress`, `Forename`, `Surname`, `Mobile`) VALUES (NULL, '$username', '$hashedPassword', 'Parent', '$email', '$forename', '$surname', '$mobile');";
         mysqli_query($link, $sql);
         // Check it went in
         $query = "SELECT * FROM users WHERE Username = '$username' AND Password = '$hashedPassword' LIMIT 0, 30 ";
@@ -57,6 +57,7 @@
           $_SESSION['Forename'] = $forename;
           $_SESSION['Surname'] = $surname;
           $_SESSION['UserID'] = $userID;
+          $_SESSION['AccessLevel'] = $row['AccessLevel'];
           $_SESSION['LoggedIn'] = 1;
 
           // PHP Email

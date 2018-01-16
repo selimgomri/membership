@@ -28,11 +28,17 @@
         $_SESSION['Forename'] = $forename;
         $_SESSION['Surname'] = $surname;
         $_SESSION['UserID'] = $userID;
+        $_SESSION['AccessLevel'] = $row['AccessLevel'];
         $_SESSION['LoggedIn'] = 1;
 
-        $redirect = autoUrl($_SESSION['requestedURL']);
-        // header("Location: " . $redirect . "");
-        header("Location: index.php");
+        /*$redirect = autoUrl($_SESSION['requestedURL']);
+        $redirect = preg_replace(autoUrl(""), "" , $redirect);
+        if ($redirect != autoUrl("login.php")) {
+          header("Location: " . $redirect . "");
+        }
+        else {*/
+          header("Location: index.php");
+        //}
       }
       else {
         $_SESSION['ErrorState'] = true;

@@ -14,8 +14,10 @@
   else {
     $swimmerS = 'swimmer';
   }
-  $swimmers = '<p class="lead">You have ' . $swimmerCount . ' ' . $swimmerS . '</p>
-  ';
+  $swimmers = '<p class="lead">You have ' . $swimmerCount . ' ' . $swimmerS . '</p>';
+  if ($swimmerCount == 0) {
+    $swimmers .= '<p><a href="' . autoUrl("myaccount/add-swimmer.php") . '" class="btn btn-success">Add a Swimmer</a></p>'; 
+  }
   $swimmerDisplayText = $swimmers;
 ?>
 <div class="container">

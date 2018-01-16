@@ -84,10 +84,10 @@
 
       // PHP Email
       $subject = "Password Reset for " . $row['Username'];
-      $to = $row['EmailAddress'];
+      $to =  "" . $row['Forename'] . " " . $row['Surname'] . " <" . $row['EmailAddress'] . ">";
       $sContent = '<h1>Hello ' . $row['Forename'] . '</h1>
       <p>We\'ve reset your password for your Chester-le-Street ASC Account to <code>' . $password . '</code>.</p>
-      <p>Please reset your password as soon as possible in My Account.</p>
+      <p>Please reset your password as soon as possible in My Account by following this link <a href="https://dev.chesterlestreetasc.co.uk/software/account/myaccount/change-password.php"> https://dev.chesterlestreetasc.co.uk/software/account/myaccount/change-password.php</a></p>
       <script type="application/ld+json">
       {
         "@context": "http://schema.org",
