@@ -3,16 +3,6 @@
   $pagetitle = "Password Reset";
   include "header.php";
 
-  function generateRandomString($length) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    }
-    return $randomString;
-  }
-
   $userDetails = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['userDetails'])));
   $captcha = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['g-recaptcha-response'])));
   $captchaStatus = null;

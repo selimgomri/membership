@@ -11,18 +11,14 @@
   <p>We need a few details to find a swimmer from our database.</p>
   <hr>
   <form method="post" action="add-swimmer-action.php" name="register" id="register">
-    <h2>Personal Details</h2>
-    <div class="form-group">
-      <label for="forename">Swimmer's First Name</label>
-      <input class="form-control" type="text" name="forename" id="forename" placeholder="First Name" required>
-    </div>
-    <div class="form-group">
-      <label for="surname">Swimmer's Last Name</label>
-      <input class="form-control" type="text" name="surname" id="surname" placeholder="Last Name" required>
-    </div>
+    <h2>Details</h2>
     <div class="form-group">
       <label for="asa">Swimmer's ASA Number</label>
       <input class="form-control mb-0" type="text" name="asa" id="asa" placeholder="123456" required>
+    </div>
+    <div class="form-group">
+      <label for="accessKey">Access Key</label>
+      <input class="form-control mb-0" type="text" name="accessKey" id="accessKey" placeholder="123456" required>
     </div>
     <input type="submit" class="btn btn-success mb-4" value="Add Swimmer">
 </div>

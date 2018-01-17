@@ -6,16 +6,15 @@
   // Registration Form Handler
 
   $userID = $_SESSION['UserID'];
-  $forename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
-  $surname = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['surname']))));
   $asaNumber = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['asa'])));
+  $accessKey = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['accessKey'])));
 
-  $searchSQL = "SELECT * FROM members WHERE ASANumber = '$asaNumber' AND MForename = '$forename' AND MSurname = '$surname' LIMIT 0, 30 ";
+  $searchSQL = "SELECT * FROM members WHERE ASANumber = '$asaNumber' AND AccessKey = '$accessKey' LIMIT 0, 30 ";
   $searchResult = mysqli_query($link, $searchSQL);
   $searchCount = mysqli_num_rows($searchResult);
   $row = mysqli_fetch_array($searchResult, MYSQLI_ASSOC);
 
-  if ($forename != null && $surname != null && $asaNumber != null) {
+  if ($asaNumber != null && $accessKey != null) {
     if ($searchCount == 1) {
       // Allow addition
       $memberID = $row['MemberID'];
@@ -36,8 +35,10 @@
         notifySend($oldUser['EmailAddress'], "A swimmer has been removed", $message);
       }
 
+      $accessKey = generateRandomString(6);
+
       // SQL To set UserID foreign key
-      $sql = "UPDATE `members` SET UserID = '$userID' WHERE MemberID = '$memberID'";
+      $sql = "UPDATE `members` SET UserID = '$userID', AccessKey = '$accessKey' WHERE MemberID = '$memberID'";
       mysqli_query($link, $sql);
 
       // Get info about swimmer and parent

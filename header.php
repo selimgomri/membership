@@ -70,7 +70,13 @@
         <li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("swimmers") ?>">Member Directory</a>
   		  </li>
+        <li class="nav-item">
+  			  <a class="nav-link" href="<?php echo autoUrl("squads") ?>">Squads</a>
+  		  </li>
       <?php } ?>
+      <li class="nav-item">
+			  <a class="nav-link" href="<?php echo autoUrl("galas") ?>">Galas</a>
+		  </li>
       <li class="nav-item">
 			  <a class="nav-link" href="<?php echo autoUrl("logout.php") ?>">Logout</a>
 		  </li>
@@ -111,7 +117,7 @@
       </h1>
   	</div>
   	<div class="col d-none d-md-block">
-  	  <p class="slogan"><a href="https://en.wikipedia.org/wiki/Software_release_life_cycle#Beta" target="_blank" class="badge badge-secondary">BETA</a></p>
+  	  <p class="slogan"><a href="https://www.chesterlestreetasc.co.uk/beta" target="_blank" class="badge badge-secondary">BETA</a></p>
   	</div>
     </div>
     <!--<style>.burnsheader{background:#0288d1;padding:1rem;color:#fff}</style>

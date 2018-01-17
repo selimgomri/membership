@@ -16,7 +16,7 @@
   }
   $swimmers = '<p class="lead">You have ' . $swimmerCount . ' ' . $swimmerS . '</p>';
   if ($swimmerCount == 0) {
-    $swimmers .= '<p><a href="' . autoUrl("myaccount/add-swimmer.php") . '" class="btn btn-success">Add a Swimmer</a></p>'; 
+    $swimmers .= '<p><a href="' . autoUrl("myaccount/add-swimmer.php") . '" class="btn btn-success">Add a Swimmer</a></p>';
   }
   $swimmerDisplayText = $swimmers;
 ?>
@@ -27,6 +27,19 @@
 
 <!-- My Swimmers Section -->
 <h2>My Swimmers</h2>
+<?php
+  echo $swimmerDisplayText;
+  echo mySwimmersTable($link, $userID);
+?>
+
+<!-- My Fees Section -->
+<h2>Your monthly fees</h2>
+<?php
+  echo myMonthlyFeeTable($link, $userID);
+?>
+
+<!-- My Swimmers Section -->
+<h2>Entries for Upcoming Galas</h2>
 <?php
   echo $swimmerDisplayText;
   echo mySwimmersTable($link, $userID);
