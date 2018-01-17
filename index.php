@@ -41,8 +41,7 @@
 <!-- My Swimmers Section -->
 <h2>Entries for Upcoming Galas</h2>
 <?php
-  echo $swimmerDisplayText;
-  echo mySwimmersTable($link, $userID);
+  echo enteredGalas($link, $userID);
 ?>
 </div>
 

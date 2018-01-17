@@ -21,6 +21,14 @@
       // Parent Page
       include "galaentries.php";
     }
+    elseif ($id == "entergala-mt") {
+      // Parent Page
+      include "galaentriesmt.php";
+    }
+    elseif ($id == "entergala-action") {
+      // Parent Page
+      include "galaentriesaction.php";
+    }
     elseif (($id != "")) {
       // Show entry info if it exists
       include "parentSingle.php";
