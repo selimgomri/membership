@@ -21,10 +21,6 @@
       // Parent Page
       include "galaentries.php";
     }
-    elseif ($id == "entergala-mt") {
-      // Parent Page
-      include "galaentriesmt.php";
-    }
     elseif ($id == "entergala-action") {
       // Parent Page
       include "galaentriesaction.php";
@@ -48,6 +44,12 @@
     if ($id == "") {
       include "listGalas.php";
     }
+    elseif ($id == "addgala") {
+      include "addGala.php";
+    }
+    elseif ($id == "addgala-action") {
+      include "addGalaAction.php";
+    }
     elseif (($id != null || $id != "")) {
       include "Entries.php";
     }
@@ -57,6 +59,13 @@
   }
   elseif ($access == "Coach") {
     if ($id == "") {
+      include "listGalas.php";
+    }
+    elseif ($id == "addgala") {
+      include "addGala.php";
+    }
+    elseif ($id == "addgala-action") {
+      include "addGalaAction.php";
     }
     elseif (($id != null || $id != "")) {
     }
@@ -66,6 +75,13 @@
   }
   elseif ($access == "Committee" || $access == "Admin") {
     if ($id == "") {
+      include "listGalas.php";
+    }
+    elseif ($id == "addgala") {
+      include "addGala.php";
+    }
+    elseif ($id == "addgala-action") {
+      include "addGalaAction.php";
     }
     elseif (($id != null || $id != "")) {
     }

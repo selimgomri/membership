@@ -1,13 +1,14 @@
 <?php
 $pagetitle = "Enter a Gala";
-$title = "Enter a Gala";
+$title = "Enter a Gala with Times";
 $content = "<p class=\"lead\">Enter a gala quickly and easily, with fewer steps than before.</p>";
+$content = "<div class=\"alert alert-warning\"><strong>The Manual Time Entry Form has not yet been implemented.</strong></div>";
 $content .= "<form method=\"post\" action=\"entergala-action\">
   <h2>Select Swimmer and Gala</h2>
   <div class=\"form-group row\">
     <label for=\"swimmer\" class=\"col-sm-2 col-form-label\">Select Swimmer</label>
     <div class=\"col-sm-10\">
-      <select class=\"custom-select\" name=\"swimmer\"><option selected>Select</option>";
+      <select class=\"custom-select\" id=\"swimmer\" name=\"swimmer\"><option value=\"null\" selected>Select</option>";
       $sql = "SELECT * FROM `members` WHERE `members`.`UserID` = '1' ORDER BY `members`.`MForename`, `members`.`MSurname` ASC;";
       $result = mysqli_query($link, $sql);
       $squadCount = mysqli_num_rows($result);
@@ -22,7 +23,7 @@ $content .= "<form method=\"post\" action=\"entergala-action\">
   <div class=\"form-group row\">
     <label for=\"gala\" class=\"col-sm-2 col-form-label\">Select Gala</label>
     <div class=\"col-sm-10\">
-      <select class=\"custom-select\" name=\"gala\"><option selected>Select</option>";
+      <select class=\"custom-select\" id=\"gala\" name=\"gala\"><option value=\"null\" selected>Select</option>";
       $sql = "SELECT * FROM `galas` ORDER BY `galas`.`ClosingDate` ASC;";
       $result = mysqli_query($link, $sql);
       $squadCount = mysqli_num_rows($result);
@@ -165,6 +166,23 @@ $content .= "<form method=\"post\" action=\"entergala-action\">
     </div>
     </div>
   </div>
-  <p><button type=\"submit\" class=\"btn btn-success\">Submit</button></p>
+  <p><button type=\"submit\" id=\"submit\" class=\"btn btn-success\">Submit</button></p>
+  <script>
+    function enableBtn(swimmer, gala) {
+      var swimmer = document.getElementById(\"swimmer\");
+      var gala = document.getElementById(\"gala\");
+      if (swimmer.value != \"null\" && gala.value != \"null\") {
+        document.getElementById(\"submit\").disabled = false;
+      }
+      else {
+        document.getElementById(\"submit\").disabled = true;
+      }
+     }
+    document.getElementById(\"submit\").disabled = true;
+    var swimmer = document.getElementById(\"swimmer\");
+    var gala = document.getElementById(\"gala\");
+    swimmer.addEventListener(\"change\", enableBtn);
+    gala.addEventListener(\"change\", enableBtn);
+  </script>
 </form>";
 ?>

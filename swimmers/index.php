@@ -3,6 +3,7 @@
   include_once "../database.php";
   $userID = $_SESSION['UserID'];
   $access = $_SESSION['AccessLevel'];
+  $header = true;
 
   // Requested resource
   $url = mysqli_real_escape_string($link, $_SERVER['REQUEST_URI']);
@@ -192,7 +193,7 @@
         $content .= "
         <div class=\"form-group\">
           <label for=\"datebirth\">Date of Birth</label>
-          <input type=\"date\" class=\"form-control\" id=\"datebirth\" name=\"datebirth\" placeholder=\"Date of Birth\" value=\"" . $rowSwim['DateOfBirth'] . "\" required>
+          <input type=\"date\" class=\"form-control\" id=\"datebirth\" name=\"datebirth\" pattern=\"[0-9]{4}-[0-9]{2}-[0-9]{2}\" placeholder=\"YYYY-MM-DD\" value=\"" . $rowSwim['DateOfBirth'] . "\" required>
         </div>";
         $content .= "
         <div class=\"form-group\">
@@ -323,7 +324,16 @@
       $pagetitle = "Access Keys";
       $title = "Member Access Keys";
       $content = "<p class=\"lead\">See access keys.</p>";
+      $content .= "<p><a href=\"accesskeys-csv\" class=\"btn btn-success\">Download as a CSV for Mailmerge</a></p>";
       include "accesskeys.php";
+    }
+    elseif ($id == "accesskeys-csv") {
+      $header = false;
+      include_once "../database.php";
+      $pagetitle = "Access Keys as a CSV";
+      $title = "Member Access Keys as a CSV";
+      $content = "<p class=\"lead\">Great for a mailmerge</p>";
+      include "accesskeysCSV.php";
     }
     elseif ($id == "add-member") {
       $pagetitle = "Add a member";
@@ -381,7 +391,7 @@
       $content .= "
       <div class=\"form-group\">
         <label for=\"datebirth\">Date of Birth</label>
-        <input type=\"date\" class=\"form-control\" id=\"datebirth\" name=\"datebirth\" placeholder=\"Date of Birth\" required>
+        <input type=\"date\" class=\"form-control\" id=\"datebirth\" name=\"datebirth\" pattern=\"[0-9]{4}-[0-9]{2}-[0-9]{2}\" placeholder=\"YYYY-MM-DD\" required>
       </div>";
       $content .= "
       <div class=\"form-group\">
@@ -582,7 +592,7 @@
       $content .= "
       <div class=\"form-group\">
         <label for=\"datebirth\">Date of Birth</label>
-        <input type=\"date\" class=\"form-control\" id=\"datebirth\" name=\"datebirth\" placeholder=\"Date of Birth\" value=\"" . $rowSwim['DateOfBirth'] . "\" required>
+        <input type=\"date\" class=\"form-control\" id=\"datebirth\" name=\"datebirth\" pattern=\"[0-9]{4}-[0-9]{2}-[0-9]{2}\" placeholder=\"YYYY-MM-DD\" value=\"" . $rowSwim['DateOfBirth'] . "\" required>
       </div>";
       $content .= "
       <div class=\"form-group\">
@@ -660,13 +670,16 @@
       $title = "Error 404 - Not found";
     }
 
-    include "../header.php";
+    if ($header == true) {
+      include "../header.php";
+    }
 
   }
   else {
     // Error
   }
 
+if ($header == true) {
 ?>
 <div class="container">
   <h1><?php echo $title ?></h1>
@@ -675,4 +688,5 @@
 <?php
 
   include "../footer.php";
+}
 ?>
