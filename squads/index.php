@@ -49,6 +49,12 @@
       $content = "<p class=\"lead\">Information about our squads</p>";
       $content .= squadInfoTable($link, true);
     }
+    elseif (($id == "addsquad")) {
+      include "SquadAdd.php";
+    }
+    elseif (($id == "addsquad-action")) {
+      include "SquadAddAction.php";
+    }
     elseif (($id != null || $id != "")) {
       include "SquadIndividual.php";
     }

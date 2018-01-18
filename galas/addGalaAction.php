@@ -44,6 +44,8 @@ if (!empty($_POST['HyTek'])) {
 if ($hyTek != 1) {
   $hyTek = 0;
 }
+//$sql = "INSERT INTO `galas` (`GalaName`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`) VALUES ('$galaName', '$length', '$venue', '$closingDate', '$lastDate', '$galaFeeConstant', '$galaFee', '$hyTek');";
+//echo $sql;
 if ($galaName != null && $length != null && $venue != null && $closingDate != null && $lastDate != null && $galaFeeConstant != null) {
   $sql = "INSERT INTO `galas` (`GalaName`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`) VALUES ('$galaName', '$length', '$venue', '$closingDate', '$lastDate', '$galaFeeConstant', '$galaFee', '$hyTek');";
   $action = mysqli_query($link, $sql);
@@ -55,7 +57,7 @@ if ($galaName != null && $length != null && $venue != null && $closingDate != nu
 if ($added) {
   $pagetitle = $title = "Gala Added";
   $content = "<p class=\"lead\">You have successfully added " . $galaName . " to the database.</p>";
-  $content .= "<p>It will be open for entries from parents until: " . date('j F Y', strtotime($closingDate)) . " and stay visible to all users until " . date('j F Y', strtotime($lastDate)) . "</p>";
+  $content .= "<p>It will be open for entries from parents until " . date('j F Y', strtotime($closingDate)) . " and stay visible to all users until " . date('j F Y', strtotime($lastDate)) . "</p>";
   if ($galaFeeConstant == 1) {
     $content .= "<p>The fee for each swim is &pound;" . number_format($galaFee,2,'.','') . "</p>";
   }

@@ -20,7 +20,7 @@ if (isset($_POST['squadName'])) {
   }
 }
 if (isset($_POST['squadFee'])) {
-  $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['squadFee']))));
+  $postContent = mysqli_real_escape_string($link, number_format(trim(htmlspecialchars(ucwords($_POST['squadFee']))),2,'.',''));
   if ($postContent != $squadFee) {
     $sql = "UPDATE `squads` SET `SquadFee` = '$postContent' WHERE `SquadID` = '$id'";
     mysqli_query($link, $sql);
@@ -47,7 +47,7 @@ if (isset($_POST['squadTimetable'])) {
   }
 }
 if (isset($_POST['squadCoC'])) {
-  $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(strtolower($_POST['squadCoC']))));
+  $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(lcfirst($_POST['squadCoC']))));
   if ($postContent != $squadCoC) {
     $sql = "UPDATE `squads` SET `SquadCoC` = '$postContent' WHERE `SquadID` = '$id'";
     mysqli_query($link, $sql);
@@ -57,7 +57,7 @@ if (isset($_POST['squadCoC'])) {
 }
 if ($access == "Admin") {
   if (isset($_POST['squadDeleteDanger'])) {
-    $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(strtolower($_POST['squadDeleteDanger']))));
+    $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(lcfirst($_POST['squadDeleteDanger']))));
     if ($postContent == $squadDeleteKey) {
       $sql = "DELETE FROM `squads` WHERE `SquadID` = '$id'";
       mysqli_query($link, $sql);

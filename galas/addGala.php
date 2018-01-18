@@ -41,7 +41,7 @@ $content = "<form method=\"post\" action=\"addgala-action\">
   <label for=\"GalaFeeConstant\" class=\"col-sm-2 col-form-label\">Gala Fee Constant?</label>
   <div class=\"col-sm-10\">
     <div class=\"custom-control custom-checkbox mt-2\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"GalaFeeConstant\" name=\"GalaFeeConstant\">
+      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"GalaFeeConstant\" name=\"galaFeeConstant\">
       <label class=\"custom-control-label\" for=\"GalaFeeConstant\">Tick if all swims are the same price</label>
     </div>
   </div>

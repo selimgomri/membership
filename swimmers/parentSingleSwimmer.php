@@ -208,5 +208,4 @@ include "../header.php";
 </script>
 <?php
 
-}
 ?>

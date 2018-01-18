@@ -1,20 +1,22 @@
 <?php
 $pagetitle = "Gala Entries";
-$galaID = null;
+$galaID = $surname = null;
 $title = "View Gala Entries by Gala";
 if (isset($_POST['squad'])) {
   $galaID = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['squad'])));
 }
-$content = "<p class=\"lead\">All entries for upcoming galas.</p>";
+if (isset($_POST['surname'])) {
+  $surname = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['surname'])));
+}
+$content = "<p class=\"lead\">Search entries for upcoming galas. Search by Gala or Gala and Surname.</p>";
 $sql = "SELECT * FROM `galas` ORDER BY `galas`.`GalaDate` DESC LIMIT 0, 15;";
 $result = mysqli_query($link, $sql);
 $galaCount = mysqli_num_rows($result);
 $content .= "
 <form method=\"post\">
-<div class=\"input-group form-group\">
-<div class=\"input-group-prepend\">
-  <span class=\"input-group-text\" for=\"gala\">Select a Gala</span>
-</div>
+<div class=\"form-group row\">
+<label class=\"col-sm-2\" for=\"gala\">Select a Gala</label>
+<div class=\"col\">
 <select class=\"custom-select\" placeholder=\"Select a Squad\" id=\"squad\" name=\"squad\">";
 //$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 for ($i = 0; $i < $galaCount; $i++) {
@@ -31,6 +33,23 @@ for ($i = 0; $i < $galaCount; $i++) {
     $content .= ">" . $row['GalaName'] . "</option>";
   }
 }
-$content .= "</select><div class=\"input-group-append\"><button type=\"submit\" class=\"btn btn-success\">Filter</button></div></div></form>";
-$content .= upcomingGalasByID($link, $galaID);
+$content .= "</select></div></div>
+<div class=\"form-group row\">
+  <label class=\"col-sm-2\" for=\"gala\">Enter Surname</label>
+  <div class=\"col\">
+<input class=\"form-control\" name=\"surname\" value=\"" . $surname . "\">
+</div></div><p><button type=\"submit\" class=\"btn btn-success\">
+  Filter
+</button></p></form>";
+$searchSQL = null;
+if ($galaID != null && $surname != null) {
+  $searchSQL = "`galaEntries`.`GalaID` = '$galaID' AND `members`.`MSurname` = '$surname'";
+}
+if ($galaID == null && $surname != null) {
+  $searchSQL = "`members`.`MSurname` = '$surname'";
+}
+if ($galaID != null && $surname == null) {
+  $searchSQL = "`galaEntries`.`GalaID` = '$galaID'";
+}
+$content .= upcomingGalasBySearch($link, $searchSQL);
 ?>
