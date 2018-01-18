@@ -5,9 +5,14 @@
   $access = $_SESSION['AccessLevel'];
 
   // Requested resource
+
+  $pos = strrpos ($URI . "galas/" , '/');
   $url = mysqli_real_escape_string($link, $_SERVER['REQUEST_URI']);
-  $pos = strrpos($url, '/');
+  //$pos = strrpos($url, '/');
   $id = $pos === false ? $url : substr($url, $pos + 1);
+
+  $pos = strrpos($url, '/');
+  $idLast = $pos === false ? $url : substr($url, $pos + 1);
 
   // Variables for display
   $title = $content = '';
@@ -25,9 +30,19 @@
       // Parent Page
       include "galaentriesaction.php";
     }
-    elseif (($id != "")) {
+    elseif (($id == "entries")) {
       // Show entry info if it exists
-      include "parentSingle.php";
+
+      $pagetitle = $title = "Galas you've entered";
+      $content .= enteredGalas($link, $userID);
+    }
+    elseif (($id == "entries/updategala-action")) {
+      // Show entry info if it exists
+      include "entriesSingleaction.php";
+    }
+    elseif (($id == "entries/" . $idLast)) {
+      // Show entry info if it exists
+      include "entriesSingle.php";
     }
     else {
       // Not allowed or not found
@@ -50,8 +65,21 @@
     elseif ($id == "addgala-action") {
       include "addGalaAction.php";
     }
-    elseif (($id != null || $id != "")) {
-      include "Entries.php";
+    elseif (($id == "entries/updategala-action")) {
+      // Show entry info if it exists
+      include "entriesSingleaction.php";
+    }
+    elseif (($id == "entries/" . $idLast)) {
+      // Show entry info if it exists
+      include "entriesSingle.php";
+    }
+    elseif (($id == "competitions/updategala-action")) {
+      // Show entry info if it exists
+      include "competitionSingleaction.php";
+    }
+    elseif (($id == "competitions/" . $idLast)) {
+      // Show entry info if it exists
+      include "competitionSingle.php";
     }
     else {
     }

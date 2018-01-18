@@ -38,10 +38,10 @@ $content = "<form method=\"post\" action=\"addgala-action\">
   </div>
 </div>
 <div class=\"form-group row\">
-  <label for=\"galaFeeConstant\" class=\"col-sm-2 col-form-label\">Gala Fee Constant?</label>
+  <label for=\"GalaFeeConstant\" class=\"col-sm-2 col-form-label\">Gala Fee Constant?</label>
   <div class=\"col-sm-10\">
     <div class=\"custom-control custom-checkbox mt-2\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"galaFeeConstant\" name=\"galaFeeConstant\">
+      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"GalaFeeConstant\" name=\"GalaFeeConstant\">
       <label class=\"custom-control-label\" for=\"GalaFeeConstant\">Tick if all swims are the same price</label>
     </div>
   </div>
@@ -67,7 +67,7 @@ $content = "<form method=\"post\" action=\"addgala-action\">
     </div>
   </div>
 </div>
-<p><button class=\"btn btn-success\" type=\"submit\">Add Gala to Database</button></p>
+<p><button class=\"btn btn-success\" type=\"submit\" id=\"submit\">Add Gala to Database</button></p>
 <p>If you add this gala, it will immediately be available for parents to enter</p>
 ";
 ?>
