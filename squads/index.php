@@ -47,10 +47,19 @@
   }
   elseif ($access == "Committee" || $access == "Admin") {
     if ($id == "") {
+      $pagetitle = "Squads";
+      $title = "Squad Details";
+      $content = "<p class=\"lead\">Information about our squads</p>";
+      $content .= squadInfoTable($link, true);
     }
     elseif (($id != null || $id != "")) {
+      include "SquadIndividual.php";
     }
     else {
+      // Argh. Something went wrong
+      $pagetitle = "Error";
+      $title = "Error 500";
+      $content = "<p class=\"lead\">We couldn't do anything.</p>";
     }
     include "../header.php";
   }

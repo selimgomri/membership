@@ -93,7 +93,7 @@
             $update = true;
           }
         }
-        if (!empty($_POST['middlenames'])) {
+        if (isset($_POST['middlenames'])) {
           $newMiddlenames = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['middlenames']))));
           if ($newMiddlenames != $middlename) {
             $sql = "UPDATE `members` SET `MMiddleNames` = '$newMiddlenames' WHERE `MemberID` = '$id'";
@@ -130,7 +130,7 @@
             $update = true;
           }
         }
-        if (!empty($_POST['medicalNotes'])) {
+        if (isset($_POST['medicalNotes'])) {
           $newMedicalNotes = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['medicalNotes']))));
           if ($newMedicalNotes != $medicalNotes) {
             $sql = "UPDATE `members` SET `MedicalNotes` = '$newMedicalNotes' WHERE `MemberID` = '$id'";
@@ -139,7 +139,7 @@
             $update = true;
           }
         }
-        if (!empty($_POST['otherNotes'])) {
+        if (isset($_POST['otherNotes'])) {
           $newOtherNotes = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['otherNotes']))));
           if ($newOtherNotes != $otherNotes) {
             $sql = "UPDATE `members` SET `OtherNotes` = '$newOtherNotes' WHERE `MemberID` = '$id'";
@@ -174,7 +174,7 @@
         </div>';
         }
         // Main Info Content
-        $content .= "<form method=\"post\" action=\"#\">";
+        $content .= "<form method=\"post\">";
         $content .= "
         <div class=\"form-group\">
           <label for=\"forename\">Forename</label>
@@ -372,7 +372,7 @@
       $content .= '</div>';
       }
       // Main Info Content
-      $content .= "<form method=\"post\" action=\"#\">";
+      $content .= "<form method=\"post\">";
       $content .= "
       <div class=\"form-group\">
         <label for=\"forename\">Forename</label>
@@ -573,7 +573,7 @@
       </div>';
       }
       // Main Info Content
-      $content .= "<form method=\"post\" action=\"#\">";
+      $content .= "<form method=\"post\">";
       $content .= "
       <div class=\"form-group\">
         <label for=\"forename\">Forename</label>
