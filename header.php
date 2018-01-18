@@ -47,7 +47,9 @@
 <body>
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary d-print-none justify-content-between" role="navigation">
     <div class="container">
-      <a class="navbar-brand" href="<?php echo autoUrl("index.php") ?>">Membership</a>
+      <a class="navbar-brand" href="<?php echo autoUrl("index.php") ?>">
+        <?php if ((empty($_SESSION['LoggedIn']) || $_SESSION['AccessLevel'] == "Parent")) { ?>Membership<?php } else { ?>Membership Management<?php } ?>
+      </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>

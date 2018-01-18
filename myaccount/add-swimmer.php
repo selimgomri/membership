@@ -5,7 +5,7 @@
   $errorMessage = "";
   $errorState = false;
 
-?>
+if ($_SESSION['AccessLevel'] == "Parent") { ?>
 <div class="container">
   <h1>Add a swimmer</h1>
   <p>We need a few details to find a swimmer from our database.</p>
@@ -22,5 +22,6 @@
     </div>
     <input type="submit" class="btn btn-success mb-4" value="Add Swimmer">
 </div>
+<?php }
 
-<?php include "../footer.php" ?>
+include "../footer.php" ?>

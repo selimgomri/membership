@@ -36,10 +36,7 @@
       $content .= squadInfoTable($link, true);
     }
     elseif ($id != null || $id != "") {
-      $pagetitle = "Squads";
-      $title = "Squad Details";
-      $content = "<p class=\"lead\">Information about our squads</p>";
-      $content .= squadInfoTable($link, true);
+      include "SquadIndividual.php";
     }
     else {
     }

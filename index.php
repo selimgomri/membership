@@ -25,6 +25,7 @@
 <p>Welcome to our new online membership system.</p>
 <hr>
 
+<?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
 <!-- My Swimmers Section -->
 <h2>My Swimmers</h2>
 <?php
@@ -43,6 +44,7 @@
 <?php
   echo enteredGalas($link, $userID);
 ?>
+<?php } ?>
 </div>
 
 <?php include "footer.php"; ?>

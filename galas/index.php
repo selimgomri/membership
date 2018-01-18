@@ -32,7 +32,6 @@
     }
     elseif (($id == "entries")) {
       // Show entry info if it exists
-
       $pagetitle = $title = "Galas you've entered";
       $content .= enteredGalas($link, $userID);
     }
@@ -54,7 +53,7 @@
     }
     include "../header.php";
   }
-  elseif ($access == "Galas") {
+  elseif ($access == "Galas" || $access == "Committee" || $access == "Admin") {
     // Gala Access
     if ($id == "") {
       include "listGalas.php";
@@ -64,6 +63,10 @@
     }
     elseif ($id == "addgala-action") {
       include "addGalaAction.php";
+    }
+    elseif (($id == "entries")) {
+      // Show entry info if it exists
+      include "allEntries.php";
     }
     elseif (($id == "entries/updategala-action")) {
       // Show entry info if it exists
@@ -95,23 +98,26 @@
     elseif ($id == "addgala-action") {
       include "addGalaAction.php";
     }
-    elseif (($id != null || $id != "")) {
+    elseif (($id == "entries")) {
+      // Show entry info if it exists
+      include "allEntries.php";
     }
-    else {
+    elseif (($id == "entries/updategala-action")) {
+      // Show entry info if it exists
+      $pagetitle = $title = "Oops. You can't do that";
+      $content = "<p>Coaches are unable to edit gala entries. Contact a parent or committee member to do that.</p>";
     }
-    include "../header.php";
-  }
-  elseif ($access == "Committee" || $access == "Admin") {
-    if ($id == "") {
-      include "listGalas.php";
+    elseif (($id == "entries/" . $idLast)) {
+      // Show entry info if it exists
+      include "entriesSingle.php";
     }
-    elseif ($id == "addgala") {
-      include "addGala.php";
+    elseif (($id == "competitions/updategala-action")) {
+      // Show entry info if it exists
+      include "competitionSingleaction.php";
     }
-    elseif ($id == "addgala-action") {
-      include "addGalaAction.php";
-    }
-    elseif (($id != null || $id != "")) {
+    elseif (($id == "competitions/" . $idLast)) {
+      // Show entry info if it exists
+      include "competitionSingle.php";
     }
     else {
     }
