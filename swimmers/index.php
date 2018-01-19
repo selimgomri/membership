@@ -53,7 +53,7 @@
       $content = "<p class=\"lead\">My Swimmers shows you all of your registered swimmers and allows you to easily change their details.</p>";
       $content .= "<p>Please remember that it is your responsibility to also keep the ASA Membership System up to date with personal details.</p>";
       $content .= mySwimmersTable($link, $userID);
-      $content .= "<p><a href=\"add-swimmer.php\" class=\"btn btn-light\">Add a Swimmer</a></p>";
+      $content .= "<p><a href=\"" . autoUrl('myaccount/add-swimmer.php') . "\" class=\"btn btn-light\">Add a Swimmer</a></p>";
 
       include "../header.php";
     }
@@ -336,7 +336,7 @@
         if ($deleteKey == $dbAccessKey) {
           $sql = "DELETE FROM `members` WHERE `members`.`MemberID` = '$id'";
           mysqli_query($link, $sql);
-          header("Location: " . autoUrl("members"));
+          header("Location: " . autoUrl("swimmers"));
         }
       }
 

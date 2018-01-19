@@ -91,12 +91,30 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
       $update = true;
     }
   }
+  if ((!empty($_POST['disconnect'])) && (!empty($_POST['disconnectKey']))) {
+    $disconnect = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['disconnect'])));
+    $disconnectKey = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['disconnectKey'])));
+    if ($disconnect == $disconnectKey) {
+      $newKey = generateRandomString(8);
+      $sql = "UPDATE `members` SET `UserID` = NULL, `AccessKey` = '$newKey' WHERE `MemberID` = '$id'";
+      mysqli_query($link, $sql);
+      header("Location: " . autoUrl("swimmers"));
+    }
+  }
+  if (!empty($_POST['swimmerDeleteDanger'])) {
+    $deleteKey = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['swimmerDeleteDanger'])));
+    if ($deleteKey == $dbAccessKey) {
+      $sql = "DELETE FROM `members` WHERE `members`.`MemberID` = '$id'";
+      mysqli_query($link, $sql);
+      header("Location: " . autoUrl("swimmers"));
+    }
+  }
 }
 
 $pagetitle;
 if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
   $pagetitle = "Swimmer: " . $swimmersSecurityCheck['MForename'] . " " . $swimmersSecurityCheck['MSurname'];
-  $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
+  $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes, members.AccessKey FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
   $resultSwim = mysqli_query($link, $sqlSwim);
   $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
   $title = $swimmersSecurityCheck['MForename'] . " " . $swimmersSecurityCheck['MSurname'];
@@ -179,6 +197,22 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
     <label for=\"otherNotes\">Other Notes</label>
     <textarea class=\"form-control\" id=\"otherNotes\" name=\"otherNotes\" rows=\"3\" placeholder=\"Tell us any other notes for coaches\">" . $rowSwim['OtherNotes'] . "</textarea>
   </div>";
+  $disconnectKey = generateRandomString(8);
+  $content .= "
+    <div class=\"alert alert-danger\">
+      <p><strong>Danger Zone</strong> <br>Actions here can be irreversible. Be careful what you do.</p>
+      <div class=\"form-group\">
+        <label for=\"disconnect\">Disconnect swimmer from your account with this Key \"" . $disconnectKey . "\"</label>
+        <input type=\"text\" class=\"form-control\" id=\"disconnect\" name=\"disconnect\" aria-describedby=\"disconnectHelp\" placeholder=\"Enter the key\" onselectstart=\"return false\" onpaste=\"return false;\" onCopy=\"return false\" onCut=\"return false\" onDrag=\"return false\" onDrop=\"return false\" autocomplete=off>
+        <small id=\"disconnectHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will dissassociate this swimmer from your account in all of our systems. You will need a new Access Key to add the swimmer again.</small>
+      </div>
+      <input type=\"hidden\" value=\"" . $disconnectKey . "\" name=\"disconnectKey\">
+      <div class=\"form-group mb-0\">
+        <label for=\"swimmerDeleteDanger\">Delete this Swimmer with this Key \"" . $rowSwim['AccessKey'] . "\"</label>
+        <input type=\"text\" class=\"form-control\" id=\"swimmerDeleteDanger\" name=\"swimmerDeleteDanger\" aria-describedby=\"swimmerDeleteDangerHelp\" placeholder=\"Enter the key\" onselectstart=\"return false\" onpaste=\"return false;\" onCopy=\"return false\" onCut=\"return false\" onDrag=\"return false\" onDrop=\"return false\" autocomplete=off>
+        <small id=\"swimmerDeleteDangerHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will delete this swimmer from all of our systems.</small>
+      </div>
+    </div>";
   $content .= "<button type=\"submit\" class=\"btn btn-success mb-3\">Update</button>";
   $content .= "</div><div class=\"col-md-4\">";
   $content .= "<div class=\"cell\"><h2>Squad Information</h2><ul class=\"mb-0\"><li>Squad: " . $rowSwim['SquadName'] . "</li><li>Monthly Fee: &pound;" . $rowSwim['SquadFee'] . "</li>";

@@ -1,8 +1,4 @@
 <?php
-$sql = "SELECT * FROM `squads` WHERE squads.SquadID = '$id';";
-$result = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
 $title = $pagetitle = "Add a Squad";
 $content = "<form method=\"post\" action=\"addsquad-action\">";
 $content .= "
