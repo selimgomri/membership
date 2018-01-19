@@ -44,7 +44,23 @@
 <?php
   echo enteredGalas($link, $userID);
 ?>
+<?php }
+else { ?>
+<h2>Notices for Coaches and Volunteers</h2>
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">Gala Entries coming soon to Membership Management</h5>
+    <p class="card-text">You'll soon be able see and manage gala entries with our new membership management system.</p>
+  </div>
+</div>
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">New Messaging System coming soon</h5>
+    <p class="card-text">Selected users will soon be able to easily send a message to parents of an entire squad or all parents in the club.</p>
+  </div>
+</div>
 <?php } ?>
 </div>
+
 
 <?php include "footer.php"; ?>
