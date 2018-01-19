@@ -24,7 +24,7 @@
     if ($id == "") {
       $pagetitle = "Attendance";
       $title = "Squad Attendance";
-      $content = "<p class=\"lead\">A demo to test the data structure</p>";
+      $content = "<p class=\"lead\">A demo to test the data structure for recording attendance</p>";
       include "register.php";
     }
     elseif (($id == "addsquad")) {

@@ -75,6 +75,9 @@
         <li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("squads") ?>">Squads</a>
   		  </li>
+        <li class="nav-item">
+  			  <a class="nav-link" href="<?php echo autoUrl("attendance") ?>">Attendance</a>
+  		  </li>
       <?php } ?>
       <li class="nav-item">
 			  <a class="nav-link" href="<?php echo autoUrl("galas") ?>">Galas</a>
