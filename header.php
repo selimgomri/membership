@@ -22,7 +22,7 @@
     </script>
 	<script>var shiftWindow = function() { scrollBy(0, -50) }; if (location.hash) shiftWindow(); window.addEventListener("hashchange", shiftWindow);</script>
     <link rel="stylesheet preload" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700">
-    <link rel="stylesheet preload" href="<?php echo autoUrl("css/style.css") ?>">
+    <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.4.css") ?>">
     <link rel="stylesheet" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/font-awesome/css/font-awesome.min.css">
     <link rel="apple-touch-icon" href="<https://www.chesterlestreetasc.co.uk/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="76x76" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad.png">
@@ -34,8 +34,36 @@
 
 	<style>
 		body {
-			padding-top: 4.5rem !important;
+			padding-top: 3.5rem !important;
 		}
+    .box-shadow {
+      box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    }
+    .nav-scroller {
+      position: relative;
+      z-index: 2;
+      height: 2.75rem;
+      overflow-y: hidden;
+    }
+    .nav-scroller .nav {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+      padding-bottom: 1rem;
+      margin-top: -1px;
+      overflow-x: auto;
+      color: rgba(255, 255, 255, .75);
+      text-align: center;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    .nav-underline .nav-link {
+      padding-top: .75rem;
+      padding-bottom: .75rem;
+      line-height: 1.35rem;
+    }
 	</style>
 
     <!--[if lt IE 9]>
@@ -44,9 +72,8 @@
     <![endif]-->
 
   </head>
-<body>
+<body class="bg-light">
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary d-print-none justify-content-between" role="navigation">
-    <div class="container-fluid">
       <a class="navbar-brand" href="<?php echo autoUrl("index.php") ?>">
         <?php if ((empty($_SESSION['LoggedIn']) || $_SESSION['AccessLevel'] == "Parent")) { ?>Membership<?php } else { ?>Membership Management<?php } ?>
       </a>
@@ -58,7 +85,7 @@
 		<ul class="navbar-nav mr-auto">
 		<?php if (!empty($_SESSION['LoggedIn'])) { ?>
 		  <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("index.php") ?>">Home</a>
+			  <a class="nav-link" href="<?php echo autoUrl("index.php") ?>">Dashboard</a>
 		  </li>
 		  <li class="nav-item">
 			  <a class="nav-link" href="<?php echo autoUrl("myaccount") ?>">My Account</a>
@@ -112,9 +139,9 @@
 		</ul>
 	  </div>
 
-    </div>
   </nav>
-  <header class="container">
+
+  <!--<header class="container">
     <div class="row d-print-none align-items-center" style="margin-top:0px">
       <div class="col-md-8">
   	  <h1 class="mb-0">
@@ -125,26 +152,6 @@
   	  <p class="slogan"><a href="https://www.chesterlestreetasc.co.uk/beta" target="_blank" class="badge badge-secondary">BETA</a></p>
   	</div>
     </div>
-    <!--<style>.burnsheader{background:#0288d1;padding:1rem;color:#fff}</style>
-    <hr class="d-none d-md-block">
-    <div class="row d-print-none justify-content-md-center d-none d-md-flex">
-      <div class="col-12 col-xl-10">
-        <div class="burnsheader">
-          <div class="row align-items-center justify-content-between">
-            <div class="col">
-              <img src="/wp-content/themes/chester/img/promotions/burnsLogo.png" srcset="/wp-content/themes/chester/img/promotions/burnsLogo@2x.png 2x, /wp-content/themes/chester/img/promotions/burnsLogo@3x.png 3x" class="img-fluid" style="margin-bottom:0.5rem" alt="Burns Meet 2018">
-              <br>Entry times and other information for the 2018 Burns Meet on 27 and 28 January 2018 are now available
-            </div>
-            <div class="col-4 text-center">
-              <a class="btn btn-secondary" href="https://www.chesterlestreetasc.co.uk/competitions/galas/burns-meet-2018/" target="_blank">Burns Meet Details</a>
-            </div>
-            <div class="col-2">
-              <img class="img-fluid float-right" src="/wp-content/themes/chester/img/promotions/clsdascLogo.png" srcset="/wp-content/themes/chester/img/promotions/clsdascLogo@2x.png 2x, /wp-content/themes/chester/img/promotions/clsdascLogo@3x.png 3x" alt="Chester-le-Street ASC Icon">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>-->
     <div class="row d-none d-print-block" style="margin-top:-60px">
       <div class="col-6">
         <img class="img-fluid" src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.svg"  alt="Chester-le-Street ASC Logo">
@@ -153,7 +160,7 @@
     	  <p class="slogan"><a href="https://en.wikipedia.org/wiki/Software_release_life_cycle#Beta" target="_blank" class="badge badge-secondary">BETA</a></p>
     	</div>
     </div>
-  	<hr>
+  	<hr>-->
       <!--[if !IE]><div class="alert alert-danger"><strong>Unsupported Browser</strong><br>You're using an unsupported browser and this website may not work properly with it. <a href="http://browsehappy.com/" class="alert-link" target="_blank">Upgrade your browser today <i class="fa fa-external-link" aria-hidden="true"></i> </a> or <a href="https://www.google.com/chrome/browser/desktop/index.html" class="alert-link" target="_blank">install Google Chrome <i class="fa fa-external-link" aria-hidden="true"></i> </a> to better experience this site.</p></div><hr><![endif]-->
       <noscript>
       <div class="alert alert-danger">
@@ -163,4 +170,4 @@
       </div>
       <hr>
     </noscript>
-  </header>
+  <!--</header>-->

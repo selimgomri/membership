@@ -7,53 +7,90 @@
   $result = mysqli_query($link, $sqlSwim);
   $swimmerCount = mysqli_num_rows($result);
   $swimmersRow = mysqli_fetch_array($result, MYSQLI_ASSOC);
-  $swimmerS = '';
-  if ($swimmerCount == 0 || $swimmerCount > 1) {
-    $swimmerS = 'swimmers';
-  }
-  else {
-    $swimmerS = 'swimmer';
-  }
-  $swimmers = '<p class="lead">You have ' . $swimmerCount . ' ' . $swimmerS . '</p>';
-  if ($swimmerCount == 0) {
-    $swimmers .= '<p><a href="' . autoUrl("myaccount/add-swimmer.php") . '" class="btn btn-success">Add a Swimmer</a></p>';
-  }
-  $swimmerDisplayText = $swimmers;
 ?>
+
+<div class="nav-scroller bg-white box-shadow mb-3">
+  <nav class="nav nav-underline">
+    <a class="nav-link" href="#dash">Dashboard</a>
+    <a class="nav-link" href="#swimmers">My Swimmers</a>
+    <a class="nav-link" href="#fees">My Fees</a>
+    <a class="nav-link" href="#entries">My Recent Entries</a>
+  </nav>
+</div>
+
 <div class="container">
-<h1>Hello <?php echo $_SESSION['Forename'] . " " . $_SESSION['Surname'] ?></h1>
-<p>Welcome to our new online membership system.</p>
+  <div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded box-shadow" id="dash">
+    <img class="mr-3" src="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png" alt="" width="48" height="48">
+    <div class="lh-100">
+      <h6 class="mb-0 text-white lh-100"><?php echo $_SESSION['Forename'] . " " . $_SESSION['Surname'] ?></h6>
+      <small><?php echo $_SESSION['AccessLevel'] ?></small>
+    </div>
+  </div>
+
 <hr>
 
 <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
 <!-- My Swimmers Section -->
-<h2>My Swimmers</h2>
+<section id="swimmers">
 <?php
-  echo $swimmerDisplayText;
-  echo mySwimmersTable($link, $userID);
+  echo mySwimmersMedia($link, $userID);
 ?>
+</section>
 
 <!-- My Fees Section -->
-<h2>Your monthly fees</h2>
+<section id="fees">
 <?php
-  echo myMonthlyFeeTable($link, $userID);
+  echo myMonthlyFeeMedia($link, $userID);
 ?>
+</section>
 
 <!-- My Swimmers Section -->
+<section id="entries">
 <h2>Your Entries for Upcoming Galas</h2>
 <?php
   echo enteredGalas($link, $userID);
 ?>
+</section>
 <?php }
 elseif ($_SESSION['AccessLevel'] == "Coach") { ?>
-<h2>for Coaches</h2>
-<p class="lead">Take a register for your squad</p>
-<p><a class="btn btn-success" href="<?php echo autoUrl('attendance') ?>">Register</a></p>
+<div class="my-3 p-3 bg-white rounded box-shadow">
+  <h2 class="border-bottom border-gray pb-2 mb-0">Quick Tasks</h2>
+  <div class="media text-muted pt-3">
+    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+      <a href="<?php echo autoUrl('attendance') ?>"><strong class="d-block text-gray-dark">Register</strong></a>
+      Take the register for your squad
+    </p>
+  </div>
+  <div class="media text-muted pt-3">
+    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+      <a href="<?php echo autoUrl('swimmers') ?>"><strong class="d-block text-gray-dark">Swimmer Notes</strong></a>
+      Check important medical and other notes from parents
+    </p>
+  </div>
+  <span class="d-block text-right mt-3">
+    <a href="#">More tasks</a>
+  </span>
+</div>
 <?php }
 else { ?>
-<h2>View Gala Entries</h2>
-<p class="lead">Gala entries are online</p>
-<p><a class="btn btn-success" href="<?php echo autoUrl('galas') ?>">View</a></p>
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+    <h2 class="border-bottom border-gray pb-2 mb-0">Gala Tasks</h2>
+    <div class="media text-muted pt-3">
+      <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+        <a href="<?php echo autoUrl('galas') ?>"><strong class="d-block text-gray-dark">Check Entries</strong></a>
+        Check entries for galas
+      </p>
+    </div>
+    <div class="media text-muted pt-3">
+      <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+        <a href="<?php echo autoUrl('galas/addgala') ?>"><strong class="d-block text-gray-dark">Add a Gala</strong></a>
+        Add a gala to the system to allow entries
+      </p>
+    </div>
+    <span class="d-block text-right mt-3">
+      <a href="#">More tasks</a>
+    </span>
+  </div>
 <?php } ?>
 </div>
 
