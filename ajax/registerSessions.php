@@ -25,7 +25,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       echo $content;
     }
     else {
-      echo "<option selected>Couldn't find anything</option>";
+      echo "<option selected value=\"0\">Couldn't find anything</option>";
     }
   }
 
@@ -38,8 +38,8 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       $sql = "SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE sessions.SessionID = '$sessionID';";
       $result = mysqli_query($link, $sql);
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-      $content .= "<h2>Take register for " . $row['SquadName'] . " Squad, " . $row['SessionDay'] . " " . $row['SessionName'] . "</h2>";
-      $sql = "SELECT * FROM ((sessions INNER JOIN members ON sessions.SquadID = members.SquadID) INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE sessions.SessionID = '$sessionID'";
+      $content .= "<h2>Take register</h2><p>for " . $row['SquadName'] . " Squad, " . $row['SessionDay'] . " " . $row['SessionName'] . "</p>";
+      $sql = "SELECT * FROM ((sessions INNER JOIN members ON sessions.SquadID = members.SquadID) INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE sessions.SessionID = '$sessionID' ORDER BY members.MForename, members.MSurname ASC";
       $result = mysqli_query($link, $sql);
       $swimmerCount = mysqli_num_rows($result);
       $content .= "<div class=\"table-responsive\"><table class=\"table table-striped\"><thead><tr><th>Name</th><th>Notes</th></tr></thead><tbody>";
@@ -55,10 +55,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
           </td>
           <td>";
           if ($row['MedicalNotes'] != "") {
-            $content .= "<span class=\"badge badge-danger\">MEDICAL</span>";
+            $content .= "<a href=\"" . autoUrl("swimmers/" . $row['MemberID']) . "\" target=\"_blank\"><span class=\"badge badge-danger\">MEDICAL</span></a>";
           }
           if ($row['OtherNotes'] != "") {
-            $content .= " <span class=\"badge badge-info\">OTHER</span>";
+            $content .= " <a href=\"" . autoUrl("swimmers/" . $row['MemberID']) . "\" target=\"_blank\"><span class=\"badge badge-info\">OTHER</span></a>";
           }
           $content .= "
           </td>
@@ -71,7 +71,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       echo $content;
     }
     else {
-      echo "<option selected>Couldn't find anything</option>";
+      echo "<p class=\"lead\">No swimmers were found for this squad and session</p>";
     }
   }
 

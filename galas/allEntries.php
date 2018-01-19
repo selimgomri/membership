@@ -2,18 +2,18 @@
 $pagetitle = "Gala Entries";
 $galaID = $surname = null;
 $title = "View Gala Entries by Gala";
-if (isset($_POST['squad'])) {
-  $galaID = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['squad'])));
+if (isset($_REQUEST['squad'])) {
+  $galaID = mysqli_real_escape_string($link, trim(htmlspecialchars($_REQUEST['squad'])));
 }
-if (isset($_POST['surname'])) {
-  $surname = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['surname'])));
+if (isset($_REQUEST['surname'])) {
+  $surname = mysqli_real_escape_string($link, trim(htmlspecialchars($_REQUEST['surname'])));
 }
 $content = "<p class=\"lead\">Search entries for upcoming galas. Search by Gala or Gala and Surname.</p>";
 $sql = "SELECT * FROM `galas` ORDER BY `galas`.`GalaDate` DESC LIMIT 0, 15;";
 $result = mysqli_query($link, $sql);
 $galaCount = mysqli_num_rows($result);
 $content .= "
-<form method=\"post\">
+<form method=\"get\">
 <div class=\"form-group row\">
 <label class=\"col-sm-2\" for=\"gala\">Select a Gala</label>
 <div class=\"col\">
