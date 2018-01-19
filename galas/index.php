@@ -69,6 +69,10 @@
       // Show entry info if it exists
       include "allEntries.php";
     }
+    elseif (($id == "entries-action")) {
+      // Show entry info if it exists
+      include "allEntriesAction.php";
+    }
     elseif (($id == "entries/updategala-action")) {
       // Show entry info if it exists
       include "entriesSingleaction.php";

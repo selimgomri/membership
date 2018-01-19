@@ -13,14 +13,7 @@
   $title = $content = '';
   $pagetitle = "Attendance";
 
-  if ($access == "Parent") {
-    // Not allowed or not found
-    $pagetitle = "Error 404 - Not found";
-    $title = "Error 404 - Not found";
-    $content = '<p class="lead">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. You may also not be authorised to view the page.</p>';
-    include "../header.php";
-  }
-  elseif ($access == "Committee" || $access == "Admin" || $access == "Coach") {
+  if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
     if ($id == "") {
       $pagetitle = "Attendance";
       $title = "Squad Attendance";
@@ -45,7 +38,11 @@
     include "../header.php";
   }
   else {
-    // Error
+    // Not allowed or not found
+    $pagetitle = "Error 404 - Not found";
+    $title = "Error 404 - Not found";
+    $content = '<p class="lead">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. You may also not be authorised to view the page.</p>';
+    include "../header.php";
   }
 
 ?>

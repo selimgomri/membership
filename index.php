@@ -40,25 +40,20 @@
 ?>
 
 <!-- My Swimmers Section -->
-<h2>Entries for Upcoming Galas</h2>
+<h2>Your Entries for Upcoming Galas</h2>
 <?php
   echo enteredGalas($link, $userID);
 ?>
 <?php }
+elseif ($_SESSION['AccessLevel'] == "Coach") { ?>
+<h2>for Coaches</h2>
+<p class="lead">Take a register for your squad</p>
+<p><a class="btn btn-success" href="<?php echo autoUrl('attendance') ?>">Register</a></p>
+<?php }
 else { ?>
-<h2>Notices for Coaches and Volunteers</h2>
-<div class="card mb-3">
-  <div class="card-body">
-    <h5 class="card-title">Gala Entries coming soon to Membership Management</h5>
-    <p class="card-text">You'll soon be able see and manage gala entries with our new membership management system.</p>
-  </div>
-</div>
-<div class="card mb-3">
-  <div class="card-body">
-    <h5 class="card-title">New Messaging System coming soon</h5>
-    <p class="card-text">Selected users will soon be able to easily send a message to parents of an entire squad or all parents in the club.</p>
-  </div>
-</div>
+<h2>View Gala Entries</h2>
+<p class="lead">Gala entries are online</p>
+<p><a class="btn btn-success" href="<?php echo autoUrl('galas') ?>">View</a></p>
 <?php } ?>
 </div>
 
