@@ -46,9 +46,8 @@
 
 <!-- My Swimmers Section -->
 <section id="entries">
-<h2>Your Entries for Upcoming Galas</h2>
 <?php
-  echo enteredGalas($link, $userID);
+  echo enteredGalasMedia($link, $userID);
 ?>
 </section>
 <?php }
