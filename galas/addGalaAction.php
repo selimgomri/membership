@@ -66,6 +66,6 @@ if ($added) {
 else {
   $pagetitle = $title = "An error occurred";
   $content = "<div class=\"alert alert-warning\"><strong>An error occurred</strong> <br>We could not add your gala.</div>";
-  $content .= "<p><a href=\"../galas\" class=\"btn btn-light\">Return to Galas</a> <a href=\"addgala\" class=\"btn btn-light\">Try again</a></p>";
+  $content .= "<p><a href=\"../galas\" class=\"btn btn-success\">Return to Galas</a> <a href=\"addgala\" class=\"btn btn-success\">Try again</a></p>";
 }
 ?>

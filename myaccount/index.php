@@ -105,10 +105,10 @@
   <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
   <h2>My Swimmers</h2>
   <?php echo mySwimmersTable($link, $userID) ?>
-  <p><a href="add-swimmer.php" class="btn btn-light">Add a Swimmer</a></p>
+  <p><a href="add-swimmer.php" class="btn btn-success">Add a Swimmer</a></p>
 <?php } ?>
   <h2>Password</h2>
-  <p><a href="change-password.php" class="btn btn-light">Change my Password</a></p>
+  <p><a href="change-password.php" class="btn btn-success">Change my Password</a></p>
   <h2>Technical Details</h2>
   <div class="form-group">
     <label for="username">Username</label>
