@@ -19,6 +19,9 @@
   $title = $content = '';
   $pagetitle = "Galas";
 
+  echo $id;
+  echo $idLast;
+
   if ($access == "Parent") {
     if ($id == "") {
       include "parentHome.php";

@@ -3,6 +3,7 @@ $content = "<p class=\"lead\">Search entries for upcoming galas. Search by Gala 
 $sql = "SELECT * FROM `galas` ORDER BY `galas`.`GalaDate` DESC LIMIT 0, 15;";
 $result = mysqli_query($link, $sql);
 $galaCount = mysqli_num_rows($result);
+(!isset($_SESSION['AllEntriesResponse']))
 $content .= "
 <form method=\"post\" action=\"entries-action\">
 <div class=\"form-group row\">
@@ -32,7 +33,6 @@ $content .= "</select></div></div>
 </div></div><p><button type=\"submit\" class=\"btn btn-success\">
   Filter
 </button></p></form>";
-}
 if (isset($_POST['squad'])) {
 $galaID = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['squad'])));
 }
