@@ -12,7 +12,7 @@ if (!isset($_SESSION['AllEntriesResponse'])) {
   <div class=\"form-group row\">
   <label class=\"col-sm-2\" for=\"gala\">Select a Gala</label>
   <div class=\"col\">
-  <select class=\"custom-select\" placeholder=\"Select a Squad\" id=\"squad\" name=\"squad\">";
+  <select class=\"custom-select\" placeholder=\"Select a Gala\" id=\"galaID\" name=\"galaID\">";
   //$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
   for ($i = 0; $i < $galaCount; $i++) {
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -33,9 +33,52 @@ if (!isset($_SESSION['AllEntriesResponse'])) {
   </div></div><p><button type=\"submit\" class=\"btn btn-success\">
     Filter
   </button></p></form>";
+  $content .= '
+  <script>
+  function getSessions() {
+    var e = document.getElementById("galaID");
+    var value = e.options[e.selectedIndex].value;
+    console.log(value);
+      if (value == "") {
+        document.getElementById("session").innerHTML = "<option selected>Choose the session from the menu</option>";
+        return;
+      }
+      else {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("session").innerHTML = this.responseText;
+            console.log(this.responseText);
+          }
+        }
+      xmlhttp.open("GET", "../ajax/galaEntries.php?squadID=" + value, true);
+      xmlhttp.send();
+      }
+    }
+  document.getElementById("galaID").onchange=getSessions;
+  function getRegister() {
+    var e = document.getElementById("session");
+    var value = e.options[e.selectedIndex].value;
+    console.log(value);
+      if (value == "") {
+        document.getElementById("register").innerHTML = "<option selected>Choose the session from the menu</option>";
+        return;
+      }
+      else {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("register").innerHTML = this.responseText;
+            console.log(this.responseText);
+          }
+        }
+      xmlhttp.open("GET", "../ajax/galaEntries.php?sessionID=" + value, true);
+      xmlhttp.send();
+      }
+    }
+  document.getElementById("session").onchange=getRegister;
+  </script>';
 }
-if (isset($_SESSION['AllEntriesResponse'])) {
-  echo $_SESSION['AllEntriesResponse'];
-  unset($_SESSION['AllEntriesResponse']);
-}
+
+$content .= upcomingGalasBySearch($link, $searchSQL);
 ?>
