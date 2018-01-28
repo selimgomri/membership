@@ -25,7 +25,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $galaID = mysqli_real_escape_string($link, $_REQUEST["galaID"]);
 
     // Search the database for the results
-    $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE members.MSurname LIKE '%$search%';";
+    $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaID = '$galaID';";
   }
   else {
     // Error

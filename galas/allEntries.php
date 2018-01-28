@@ -8,7 +8,6 @@ if (!isset($_SESSION['AllEntriesResponse'])) {
   $result = mysqli_query($link, $sql);
   $galaCount = mysqli_num_rows($result);
   $content .= "
-  <form method=\"post\" action=\"entries-action\">
   <div class=\"form-group row\">
   <label class=\"col-sm-2\" for=\"gala\">Select a Gala</label>
   <div class=\"col\">
@@ -29,56 +28,32 @@ if (!isset($_SESSION['AllEntriesResponse'])) {
   <div class=\"form-group row\">
     <label class=\"col-sm-2\" for=\"gala\">Enter Surname</label>
     <div class=\"col\">
-  <input class=\"form-control\" name=\"surname\" value=\"" . $surname . "\">
-  </div></div><p><button type=\"submit\" class=\"btn btn-success\">
-    Filter
-  </button></p></form>";
+  <input class=\"form-control\" name=\"search\" id=\"search\">
+  </div></div>";
+  $content .= "<div class=\"table-responsive\" id=\"output\"></div>";
   $content .= '
   <script>
-  function getSessions() {
-    var e = document.getElementById("galaID");
-    var value = e.options[e.selectedIndex].value;
-    console.log(value);
-      if (value == "") {
-        document.getElementById("session").innerHTML = "<option selected>Choose the session from the menu</option>";
-        return;
-      }
-      else {
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("session").innerHTML = this.responseText;
-            console.log(this.responseText);
-          }
+  function getResult() {
+    var gala = document.getElementById("galaID");
+    var galaValue = gala.options[gala.selectedIndex].value;
+    var search = document.getElementById("search");
+    var searchValue = search.value;
+    console.log(galaValue);
+    console.log(searchValue);
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("session").innerHTML = this.responseText;
+          console.log(this.responseText);
         }
-      xmlhttp.open("GET", "../ajax/galaEntries.php?squadID=" + value, true);
+      var ajaxRequest = "../ajax/galaEntries.php?galaID=" + galaValue + "&search=" + searchValue;
+      console.log(ajaxRequest);
+      xmlhttp.open("GET", ajaxRequest, true);
       xmlhttp.send();
       }
     }
-  document.getElementById("galaID").onchange=getSessions;
-  function getRegister() {
-    var e = document.getElementById("session");
-    var value = e.options[e.selectedIndex].value;
-    console.log(value);
-      if (value == "") {
-        document.getElementById("register").innerHTML = "<option selected>Choose the session from the menu</option>";
-        return;
-      }
-      else {
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("register").innerHTML = this.responseText;
-            console.log(this.responseText);
-          }
-        }
-      xmlhttp.open("GET", "../ajax/galaEntries.php?sessionID=" + value, true);
-      xmlhttp.send();
-      }
-    }
-  document.getElementById("session").onchange=getRegister;
+  document.getElementById("galaID").onchange=getResult;
+  document.getElementById("search").oninput=getResult;
   </script>';
 }
-
-$content .= upcomingGalasBySearch($link, $searchSQL);
 ?>
