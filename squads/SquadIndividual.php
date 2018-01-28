@@ -72,6 +72,7 @@ $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
 $title = $pagetitle = $row['SquadName'] . " Squad";
 $content = "<form method=\"post\">";
+if ($access == "Admin") {
 $content .= "
 <div class=\"form-group\">
   <label for=\"squadName\">Squad Name</label>
@@ -98,18 +99,30 @@ $content .= "
 <div class=\"form-group\">
   <label for=\"squadCoC\">Squad Code of Conduct</label>
   <input type=\"text\" class=\"form-control\" id=\"squadCoC\" name=\"squadCoC\" placeholder=\"Enter Squad Code of Conduct Address\" value=\"" . $row['SquadCoC'] . "\">
-</div>";
-if ($access == "Admin") {
-$content .= "
-  <div class=\"alert alert-danger\">
-    <div class=\"form-group mb-0\">
-      <label for=\"squadDeleteDanger\"><strong>Danger Zone</strong> <br>Delete this Squad with this Key \"" . $squadDeleteKey . "\"</label>
-      <input type=\"text\" class=\"form-control\" id=\"squadDeleteDanger\" name=\"squadDeleteDanger\" aria-describedby=\"squadDeleteDangerHelp\" placeholder=\"Enter the key\" onselectstart=\"return false\" onpaste=\"return false;\" onCopy=\"return false\" onCut=\"return false\" onDrag=\"return false\" onDrop=\"return false\" autocomplete=off>
-      <small id=\"squadDeleteDangerHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will delete this squad.</small>
-    </div>
-  </div>";
+</div>
+<div class=\"alert alert-danger\">
+  <div class=\"form-group mb-0\">
+    <label for=\"squadDeleteDanger\"><strong>Danger Zone</strong> <br>Delete this Squad with this Key \"" . $squadDeleteKey . "\"</label>
+    <input type=\"text\" class=\"form-control\" id=\"squadDeleteDanger\" name=\"squadDeleteDanger\" aria-describedby=\"squadDeleteDangerHelp\" placeholder=\"Enter the key\" onselectstart=\"return false\" onpaste=\"return false;\" onCopy=\"return false\" onCut=\"return false\" onDrag=\"return false\" onDrop=\"return false\" autocomplete=off>
+    <small id=\"squadDeleteDangerHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will delete this squad.</small>
+  </div>
+</div>
+<p><button class=\"btn btn-success\" type=\"submit\">Update</button></p>";
 }
-$content .= "<p><button class=\"btn btn-success\" type=\"submit\">Update</button></p>";
+else {
+  $content .= "<ul>";
+  if ($row['SquadFee'] > 0) {
+    $content .= "<li>Squad Fee: &pound;" . $row['SquadFee'] . "</li>";
+  }
+  else {
+    $content .= "<li>There is no fee for this squad</li>";
+  }
+  $content .= "
+    <li>Squad Coach: " . $row['SquadCoach'] . "</li>
+    <li><a href=\"" . $row['SquadTimetable'] . "\">Squad Timetable</a></li>
+    <li><a href=\"" . $row['SquadCoC'] . "\">Squad Code of Conduct</a></li>
+  </ul>";
+}
 $content .= "</form>";
 
 ?>

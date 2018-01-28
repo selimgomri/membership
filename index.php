@@ -9,6 +9,12 @@
   $swimmersRow = mysqli_fetch_array($result, MYSQLI_ASSOC);
 ?>
 
+<style>
+body {
+  padding-top: 3.5rem !important;
+}
+</style>
+
 <div class="nav-scroller bg-white box-shadow mb-3">
   <nav class="nav nav-underline">
     <a class="nav-link" href="#dash">Dashboard</a>

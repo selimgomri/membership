@@ -130,6 +130,11 @@
   }
   else {
     // Error
+    header("HTTP/1.1 404 Not Found");
+    $pagetitle = "Error 404 - Not found";
+    $title = "Error 404 - Not found";
+    $content = '<p class="lead">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. You may also not be authorised to view the page.</p>';
+    include "../header.php";
   }
 
 ?>

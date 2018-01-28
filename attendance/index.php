@@ -16,18 +16,15 @@
   if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
     if ($id == "") {
       $pagetitle = "Attendance";
-      $title = "Squad Attendance";
+      $title = "Squad Attendance <span class=\"badge badge-secondary\" style=\"background:var(--pink)\">ALPHA</span>";
       $content = "<p class=\"lead\">A demo to test the data structure for recording attendance</p>";
+      $content .= "<a class=\"btn btn-dark mb-2\" href=\"register\">Take Register</a>";
+    }
+    elseif (($id == "register")) {
+      $pagetitle = "Register";
+      $title = "Register <span class=\"badge badge-secondary\" style=\"background:var(--pink)\">ALPHA</span>";
+      $content = "<p class=\"lead\">Take the register for your Squad</p>";
       include "register.php";
-    }
-    elseif (($id == "addsquad")) {
-      include "SquadAdd.php";
-    }
-    elseif (($id == "addsquad-action")) {
-      include "SquadAddAction.php";
-    }
-    elseif (($id != null || $id != "")) {
-      include "SquadIndividual.php";
     }
     else {
       // Argh. Something went wrong
@@ -39,6 +36,7 @@
   }
   else {
     // Not allowed or not found
+    header("HTTP/1.1 404 Not Found");
     $pagetitle = "Error 404 - Not found";
     $title = "Error 404 - Not found";
     $content = '<p class="lead">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. You may also not be authorised to view the page.</p>';

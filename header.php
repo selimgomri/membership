@@ -33,11 +33,11 @@
     <style>.logo {background: url(https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.svg) left center no-repeat;}</style>
 
 	<style>
-		body {
-			padding-top: 3.5rem !important;
-		}
+    body {
+      padding-top: 4.5rem;
+    }
     .box-shadow {
-      box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+      box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .10);
     }
     .nav-scroller {
       position: relative;
