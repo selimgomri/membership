@@ -29,14 +29,14 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
   }
   else {
     // Error
-    echo "<p>Disaster. The GET was funny.</p>";
+    echo "<p>Disaster. The GET was funny, so try again.</p>";
   }
 
   $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
 
 
-  $content = '<table class="table"><thead><tr><th>Name</th><th>ASA Number</th><th>Gala</th><th>Swims</th><th>Processed?</th></tr></thead><tbody>';
+  $content = '<table class="table table-hover"><thead><tr><th>Name</th><th>ASA Number</th><th>Gala</th><th>Swims</th><th>Processed?</th></tr></thead><tbody>';
 
   // For loop iterates through the rows of the database result, producing rows for the table
   for ($i=0; $i<$count; $i++) {
@@ -84,7 +84,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     echo $content;
   }
   else {
-    echo "<p>Couldn't find anything</p>";
+    echo '<div class="alert alert-warning"><strong>We could not find any entries matching that search</strong> <br>Try another search by selecting a new gala or changing the surname you searched for</div>';
   }
 }
 else {

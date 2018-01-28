@@ -11,7 +11,8 @@ if (!isset($_SESSION['AllEntriesResponse'])) {
   <div class=\"form-group row\">
   <label class=\"col-sm-2\" for=\"gala\">Select a Gala</label>
   <div class=\"col\">
-  <select class=\"custom-select\" placeholder=\"Select a Gala\" id=\"galaID\" name=\"galaID\">";
+  <select class=\"custom-select\" placeholder=\"Select a Gala\" id=\"galaID\" name=\"galaID\">
+  <option selected >Select a gala</option>";
   //$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
   for ($i = 0; $i < $galaCount; $i++) {
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -43,15 +44,16 @@ if (!isset($_SESSION['AllEntriesResponse'])) {
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          document.getElementById("session").innerHTML = this.responseText;
+          console.log("We got here");
+          document.getElementById("output").innerHTML = this.responseText;
           console.log(this.responseText);
         }
-      var ajaxRequest = "../ajax/galaEntries.php?galaID=" + galaValue + "&search=" + searchValue;
+      }
+      var ajaxRequest = "' . autoURL("ajax/galaEntries.php") . '?galaID=" + galaValue + "&search=" + searchValue;
       console.log(ajaxRequest);
       xmlhttp.open("GET", ajaxRequest, true);
       xmlhttp.send();
-      }
-    }
+  }
   document.getElementById("galaID").onchange=getResult;
   document.getElementById("search").oninput=getResult;
   </script>';
