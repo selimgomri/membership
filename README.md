@@ -3,6 +3,10 @@ Membership, a new project from Chester-le-Street ASC aims to make swimming club 
 
 This product is still under active development, and will launch in the future.
 
+If you install this application on your own server, you must set up the SQL database tables yourself. Functions are currently held in a file which is ignored by git, meaning that they will not work.
+
+Chester-le-Street ASC accept no liability for any issues, including all legal issues, with this pre-release software.
+
 ## Features
 ### Automatic Member Management
 The application is built on a database of club members. Members are assigned to squads and parents can link swimmers to their account. This allows us to automatically calculate monthly fees and other things.
