@@ -11,7 +11,12 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $search = mysqli_real_escape_string($link, $_REQUEST["search"]);
 
     // Search the database for the results
-    $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaID = '$galaID' AND members.MSurname LIKE '%$search%';";
+    if ($galaID == "allGalas") {
+      $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE members.MSurname LIKE '%$search%';";
+    }
+    else {
+      $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaID = '$galaID' AND members.MSurname LIKE '%$search%';";
+    }
   }
   elseif ((!isset($_REQUEST["galaID"])) && (isset($_REQUEST["search"]))) {
     // get the search term parameter from request
@@ -45,7 +50,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
     // First part of the row content
-    $content .= "<tr><td>" . $row['MForename'] . " " . $row['MSurname'] . "</td><td>" . $row['ASANumber'] . "</td><td>" . $row['GalaName'] . "</td>";
+    $content .= "<tr><td>" . $row['MForename'] . " " . $row['MSurname'] . "</td><td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $swimmersRowX['ASANumber'] . "\" target=\"_blank\" title=\"ASA Biographical Data\">" . $swimmersRowX['ASANumber'] . " <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a></td><td>" . $row['GalaName'] . "</td>";
 
     // Arrays of swims used to check whever to print the name of the swim entered
     $swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];
@@ -66,12 +71,20 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
     // If the entry has been processes, show a ticked checkbox
     if ($row['EntryProcessed'] == 1) {
-      $content .= "<td><i class=\"fa fa-check\" aria-hidden=\"true\"></i></td>";
+      $content .= "<td>
+      <div class=\"custom-control custom-checkbox\">
+        <input type=\"checkbox\" value=\"1\" checked class=\"custom-control-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
+        <label class=\"custom-control-label\" for=\"processedEntry-" . $row['EntryID'] . "\">Processed?</label>
+      </div></td>";
     }
 
     // Else output an empty cell
     else {
-      $content .= "<td></td>";
+      $content .= "<td>
+      <div class=\"custom-control custom-checkbox\">
+        <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
+        <label class=\"custom-control-label\" for=\"processedEntry-" . $row['EntryID'] . "\">Processed?</label>
+      </div></td>";
     }
 
     // End the row

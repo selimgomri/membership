@@ -3,7 +3,9 @@ $content = "<p class=\"lead\">Search entries for upcoming galas. Search by Gala 
 $sql = "SELECT * FROM `galas` ORDER BY `galas`.`GalaDate` DESC LIMIT 0, 15;";
 $result = mysqli_query($link, $sql);
 $galaCount = mysqli_num_rows($result);
-(!isset($_SESSION['AllEntriesResponse']))
+if (!isset($_SESSION['AllEntriesResponse'])) {
+
+}
 $content .= "
 <form method=\"post\" action=\"entries-action\">
 <div class=\"form-group row\">

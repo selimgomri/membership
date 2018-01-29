@@ -12,7 +12,8 @@ if (!isset($_SESSION['AllEntriesResponse'])) {
   <label class=\"col-sm-2\" for=\"gala\">Select a Gala</label>
   <div class=\"col\">
   <select class=\"custom-select\" placeholder=\"Select a Gala\" id=\"galaID\" name=\"galaID\">
-  <option selected >Select a gala</option>";
+  <option selected >Select a gala</option>
+  <option value=\"allGalas\" >Show All Gala Entries</option>";
   //$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
   for ($i = 0; $i < $galaCount; $i++) {
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -56,6 +57,22 @@ if (!isset($_SESSION['AllEntriesResponse'])) {
   }
   document.getElementById("galaID").onchange=getResult;
   document.getElementById("search").oninput=getResult;
+  </script>';
+  $content .= '
+  <script>
+  document.querySelectorAll(\'*[id^="processedEntry-"]\');
+
+
+  /*var entryTable = document.querySelector("#output");
+  entryTable.addEventListener("click", clickPropogation, false);
+
+  function clickPropogation(e) {
+      if (e.target !== e.currentTarget) {
+          var clickedItem = e.target.id;
+          console.log(clickedItem);
+      }
+      e.stopPropagation();
+  }*/
   </script>';
 }
 ?>

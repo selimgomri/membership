@@ -47,7 +47,7 @@ if ($count == 1) {
   <div class=\"form-group row\">
     <label for=\"lastDate\" class=\"col-sm-2 col-form-label\">Last Day of Gala</label>
     <div class=\"col-sm-10\">
-      <input type=\"date\" class=\"form-control\" id=\"lastDate\" name=\"lastDate\" placeholder=\"YYYY-MM-DD\" pattern=\"[0-9]{4}-[0-9]{2}-[0-9]{2}\" value=\"" . $row['GalaDate'] . "\" required>
+      <input type=\"date\" class=\"form-control\" id=\"galaDate\" name=\"galaDate\" placeholder=\"YYYY-MM-DD\" pattern=\"[0-9]{4}-[0-9]{2}-[0-9]{2}\" value=\"" . $row['GalaDate'] . "\" required>
     </div>
   </div>";
   if ($row['GalaFeeConstant'] == 1) {

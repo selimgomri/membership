@@ -19,9 +19,6 @@
   $title = $content = '';
   $pagetitle = "Galas";
 
-  echo $id;
-  echo $idLast;
-
   if ($access == "Parent") {
     if ($id == "") {
       include "parentHome.php";
@@ -46,6 +43,10 @@
     elseif (($id == "entries/" . $idLast)) {
       // Show entry info if it exists
       include "entriesSingle.php";
+    }
+    elseif (($id == "competitions")) {
+      // Show entry info if it exists
+      include "listGalas.php";
     }
     else {
       // Not allowed or not found
@@ -83,6 +84,10 @@
     elseif (($id == "entries/" . $idLast)) {
       // Show entry info if it exists
       include "entriesSingle.php";
+    }
+    elseif (($id == "competitions")) {
+      // Show entry info if it exists
+      include "listGalas.php";
     }
     elseif (($id == "competitions/updategala-action")) {
       // Show entry info if it exists
