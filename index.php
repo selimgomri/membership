@@ -14,7 +14,9 @@ body {
   padding-top: 3.5rem !important;
 }
 </style>
-
+<?php
+ if ($_SESSION['AccessLevel'] == "Parent") {
+?>
 <div class="nav-scroller bg-white box-shadow mb-3">
   <nav class="nav nav-underline">
     <a class="nav-link" href="#dash">Dashboard</a>
@@ -23,7 +25,18 @@ body {
     <a class="nav-link" href="#entries">My Recent Entries</a>
   </nav>
 </div>
-
+<?php
+ }
+ else {
+   ?>
+   <div class="nav-scroller bg-white box-shadow mb-3">
+     <nav class="nav nav-underline">
+       <a class="nav-link" href="#dash">Dashboard</a>
+     </nav>
+   </div>
+   <?php
+ }
+ ?>
 <div class="container">
   <div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded box-shadow" id="dash">
     <img class="mr-3" src="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png" alt="" width="48" height="48">

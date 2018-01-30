@@ -97,10 +97,24 @@
       <label for="email">Email</label>
       <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value="<?php echo $email ?>">
   </div>
-   <div class="form-group">
-      <label for="mobile">Mobile Number</label>
-      <input type="tel" class="form-control" name="mobile" id="mobile" placeholder="Mobile Number" value="<?php echo $mobile ?>">
-      <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
+  <div class="form-group">
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" class="custom-control-input" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK">
+      <label class="custom-control-label" for="emailContactOK">Check this to receive news by email</label>
+      <small id="emailContactOKHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="mobile">Mobile Number</label>
+    <input type="tel" class="form-control" name="mobile" id="mobile" aria-describedby="mobileHelp" placeholder="Mobile Number" value="<?php echo $mobile ?>">
+    <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
+  </div>
+  <div class="form-group">
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" class="custom-control-input" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK">
+      <label class="custom-control-label" for="smsContactOK">Check this if you would like to receive text messages</label>
+      <small id="smsContactOKHelp" class="form-text text-muted">We'll still use this to contact you in an emergency</small>
+    </div>
   </div>
   <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
   <h2>My Swimmers</h2>

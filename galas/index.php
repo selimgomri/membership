@@ -146,6 +146,14 @@
   }
 
 ?>
+<div class="nav-scroller bg-white box-shadow mb-3" style="margin-top:-1rem;">
+  <nav class="nav nav-underline">
+    <a class="nav-link" href="<?php echo autoUrl("galas")?>">Gala Home</a>
+    <a class="nav-link" href="<?php echo autoUrl("galas/competitions")?>">Competitions</a>
+    <a class="nav-link" href="<?php echo autoUrl("galas/entries")?>">Entries</a>
+    <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/competitions/" target="_blank">Main Website</a>
+  </nav>
+</div>
 <div class="container">
   <h1><?php echo $title ?></h1>
   <div><?php echo $content ?></div>

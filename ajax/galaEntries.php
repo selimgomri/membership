@@ -12,7 +12,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
     // Search the database for the results
     if ($galaID == "allGalas") {
-      $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE members.MSurname LIKE '%$search%';";
+      $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE members.MSurname LIKE '%$search%' ORDER BY galas.ClosingDate ASC, galas.GalaDate DESC;";
     }
     else {
       $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaID = '$galaID' AND members.MSurname LIKE '%$search%';";
@@ -50,14 +50,14 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
     // First part of the row content
-    $content .= "<tr><td>" . $row['MForename'] . " " . $row['MSurname'] . "</td><td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $swimmersRowX['ASANumber'] . "\" target=\"_blank\" title=\"ASA Biographical Data\">" . $swimmersRowX['ASANumber'] . " <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a></td><td>" . $row['GalaName'] . "</td>";
+    $content .= "<tr><td>" . $row['MForename'] . " " . $row['MSurname'] . "</td><td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $row['ASANumber'] . "\" target=\"_blank\" title=\"Click to see times\">" . $row['ASANumber'] . " <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a></td><td>" . $row['GalaName'] . "</td>";
 
     // Arrays of swims used to check whever to print the name of the swim entered
     $swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];
     $swimsTextArray = ['50 Free','100 Free','200 Free','400 Free','800 Free','1500 Free','50 Breast','100 Breast','200 Breast','50 Fly','100 Fly','200 Fly','50 Back','100 Back','200 Back','100 IM','150 IM','200 IM','400 IM',];
 
     // Create the cell and unordered list
-    $content .= "<td><ul>";
+    $content .= "<td><ul class=\"mb-0 list-unstyled\">";
 
     // Print <li>Swim Name</li> for each entry
     for ($y=0; $y<sizeof($swimsArray); $y++) {
