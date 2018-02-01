@@ -46,7 +46,7 @@
               FROM ((members
                 INNER JOIN users ON members.UserID = users.UserID)
                 INNER JOIN squads ON members.SquadID = squads.SquadID
-              );";
+              ) WHERE users.UserID = '$userID' AND members.MemberID = '$memberID';";
       $result = mysqli_query($link, $sql);
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 

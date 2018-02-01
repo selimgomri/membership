@@ -1,91 +1,100 @@
 <?php
+$userID = $_SESSION['UserID'];
 $pagetitle = "Enter a Gala";
 $title = "Enter a Gala";
 $content = "<p class=\"lead\">Enter a gala quickly and easily, with fewer steps than before.</p>";
-$content .= "<form method=\"post\" action=\"entergala-action\">
-  <h2>Select Swimmer and Gala</h2>
-  <div class=\"form-group row\">
-    <label for=\"swimmer\" class=\"col-sm-2 col-form-label\">Select Swimmer</label>
-    <div class=\"col-sm-10\">
-      <select class=\"custom-select\" id=\"swimmer\" name=\"swimmer\"><option value=\"null\" selected>Select</option>";
-      $sql = "SELECT * FROM `members` WHERE `members`.`UserID` = '1' ORDER BY `members`.`MForename`, `members`.`MSurname` ASC;";
-      $result = mysqli_query($link, $sql);
-      $squadCount = mysqli_num_rows($result);
-      for ($i = 0; $i < $squadCount; $i++) {
-        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-        $content .= "<option value=\"" . $row['MemberID'] . "\"";
-        $content .= ">" . $row['MForename'] . " " . $row['MSurname'] . "</option>";
-      }
-      $content .= "</select>
-    </div>
-  </div>
-  <div class=\"form-group row\">
-    <label for=\"gala\" class=\"col-sm-2 col-form-label\">Select Gala</label>
-    <div class=\"col-sm-10\">
-      <select class=\"custom-select\" id=\"gala\" name=\"gala\"><option value=\"null\" selected>Select</option>";
-      $sql = "SELECT * FROM `galas` ORDER BY `galas`.`ClosingDate` ASC;";
-      $result = mysqli_query($link, $sql);
-      $squadCount = mysqli_num_rows($result);
-      for ($i = 0; $i < $squadCount; $i++) {
-        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-        $closingDate = new DateTime($row['ClosingDate']);
-        $theDate = new DateTime('now');
-        $closingDate = $closingDate->format('Y-m-d');
-        $theDate = $theDate->format('Y-m-d');
-        if ($closingDate >= $theDate) {
-          $content .= "<option value=\"" . $row['GalaID'] . "\"";
-          $content .= ">" . $row['GalaName'] . "</option>";
+$sql = "SELECT `MemberID` FROM `members` WHERE `members`.`UserID` = '$userID';";
+$result = mysqli_query($link, $sql);
+$swimCount = mysqli_num_rows($result);
+if ($swimCount > 0) {
+  $content .= "<form method=\"post\" action=\"entergala-action\">
+    <h2>Select Swimmer and Gala</h2>
+    <div class=\"form-group row\">
+      <label for=\"swimmer\" class=\"col-sm-2 col-form-label\">Select Swimmer</label>
+      <div class=\"col-sm-10\">
+        <select class=\"custom-select\" id=\"swimmer\" name=\"swimmer\"><option value=\"null\" selected>Select</option>";
+        $sql = "SELECT * FROM `members` WHERE `members`.`UserID` = '$userID' ORDER BY `members`.`MForename`, `members`.`MSurname` ASC;";
+        $result = mysqli_query($link, $sql);
+        $squadCount = mysqli_num_rows($result);
+        for ($i = 0; $i < $squadCount; $i++) {
+          $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+          $content .= "<option value=\"" . $row['MemberID'] . "\"";
+          $content .= ">" . $row['MForename'] . " " . $row['MSurname'] . "</option>";
         }
-      }
-      $content .= "</select>
+        $content .= "</select>
+      </div>
     </div>
-  </div>
-  <h2>Select Swims</h2>
-  <div class=\"ajaxArea\" id=\"output\">
-    <div class=\"ajaxPlaceholder\">Select a gala
-    </div>
-  </div>
-  <p><button type=\"submit\" id=\"submit\" class=\"btn btn-success\">Submit</button></p>
-  <script>
-    function enableBtn(swimmer, gala) {
-      var swimmer = document.getElementById(\"swimmer\");
-      var gala = document.getElementById(\"gala\");
-      if (swimmer.value != \"null\" && gala.value != \"null\") {
-        document.getElementById(\"submit\").disabled = false;
-      }
-      else {
-        document.getElementById(\"submit\").disabled = true;
-      }
-     }
-    document.getElementById(\"submit\").disabled = true;
-    var swimmer = document.getElementById(\"swimmer\");
-    var gala = document.getElementById(\"gala\");
-    swimmer.addEventListener(\"change\", enableBtn);
-    gala.addEventListener(\"change\", enableBtn);
-
-    function getResult() {
-      var gala = document.getElementById(\"gala\");
-      var galaValue = gala.options[gala.selectedIndex].value;
-      console.log(galaValue);
-      if (galaValue==\"null\") {
-        document.getElementById(\"output\").innerHTML = '<div class=\"ajaxPlaceholder\">Select a gala</div>';
-      }
-      else {
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            console.log(\"We got here\");
-            document.getElementById(\"output\").innerHTML = this.responseText;
-            console.log(this.responseText);
+    <div class=\"form-group row\">
+      <label for=\"gala\" class=\"col-sm-2 col-form-label\">Select Gala</label>
+      <div class=\"col-sm-10\">
+        <select class=\"custom-select\" id=\"gala\" name=\"gala\"><option value=\"null\" selected>Select</option>";
+        $sql = "SELECT * FROM `galas` ORDER BY `galas`.`ClosingDate` ASC;";
+        $result = mysqli_query($link, $sql);
+        $squadCount = mysqli_num_rows($result);
+        for ($i = 0; $i < $squadCount; $i++) {
+          $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+          $closingDate = new DateTime($row['ClosingDate']);
+          $theDate = new DateTime('now');
+          $closingDate = $closingDate->format('Y-m-d');
+          $theDate = $theDate->format('Y-m-d');
+          if ($closingDate >= $theDate) {
+            $content .= "<option value=\"" . $row['GalaID'] . "\"";
+            $content .= ">" . $row['GalaName'] . "</option>";
           }
         }
-        var ajaxRequest = \"" . autoURL('ajax/galaForm.php') . "?galaID=\" + galaValue;
-        console.log(ajaxRequest);
-        xmlhttp.open(\"GET\", ajaxRequest, true);
-        xmlhttp.send();
+        $content .= "</select>
+      </div>
+    </div>
+    <h2>Select Swims</h2>
+    <div class=\"ajaxArea\" id=\"output\">
+      <div class=\"ajaxPlaceholder\">Select a gala
+      </div>
+    </div>
+    <p><button type=\"submit\" id=\"submit\" class=\"btn btn-success\">Submit</button></p>
+    <script>
+      function enableBtn(swimmer, gala) {
+        var swimmer = document.getElementById(\"swimmer\");
+        var gala = document.getElementById(\"gala\");
+        if (swimmer.value != \"null\" && gala.value != \"null\") {
+          document.getElementById(\"submit\").disabled = false;
+        }
+        else {
+          document.getElementById(\"submit\").disabled = true;
+        }
+       }
+      document.getElementById(\"submit\").disabled = true;
+      var swimmer = document.getElementById(\"swimmer\");
+      var gala = document.getElementById(\"gala\");
+      swimmer.addEventListener(\"change\", enableBtn);
+      gala.addEventListener(\"change\", enableBtn);
+
+      function getResult() {
+        var gala = document.getElementById(\"gala\");
+        var galaValue = gala.options[gala.selectedIndex].value;
+        console.log(galaValue);
+        if (galaValue==\"null\") {
+          document.getElementById(\"output\").innerHTML = '<div class=\"ajaxPlaceholder\">Select a gala</div>';
+        }
+        else {
+          var xmlhttp = new XMLHttpRequest();
+          xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              console.log(\"We got here\");
+              document.getElementById(\"output\").innerHTML = this.responseText;
+              console.log(this.responseText);
+            }
+          }
+          var ajaxRequest = \"" . autoURL('ajax/galaForm.php') . "?galaID=\" + galaValue;
+          console.log(ajaxRequest);
+          xmlhttp.open(\"GET\", ajaxRequest, true);
+          xmlhttp.send();
+        }
       }
-    }
-    document.getElementById(\"gala\").onchange=getResult;
-  </script>
-</form>";
+      document.getElementById(\"gala\").onchange=getResult;
+    </script>
+  </form>";
+}
+else {
+  $content .= '<div class="alert alert-warning"><strong>You don\'t have any swimmers associated with yur account</strong> <br>Please <a href="' . autoUrl("myaccount/add-swimmer.php") . '" class="alert-link">add some swimmers in My Account</a>, then try again</div>';
+}
 ?>

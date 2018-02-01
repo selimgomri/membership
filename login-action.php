@@ -37,7 +37,12 @@
           header("Location: " . $redirect . "");
         }
         else {*/
-          header("Location: " . $_SESSION['requestedURL'] . "");
+          if (isset($_SESSION['requestedURL'])) {
+            header("Location: " . $_SESSION['requestedURL'] . "");
+          }
+          else {
+            header("Location: " . autoUrl("") . "");
+          }
         //}
       }
       else {
