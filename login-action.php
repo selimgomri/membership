@@ -37,7 +37,7 @@
           header("Location: " . $redirect . "");
         }
         else {*/
-          header("Location: index.php");
+          header("Location: " . $_SESSION['requestedURL'] . "");
         //}
       }
       else {

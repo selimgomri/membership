@@ -41,128 +41,8 @@ $content .= "<form method=\"post\" action=\"entergala-action\">
     </div>
   </div>
   <h2>Select Swims</h2>
-  <div class=\"row mb-3\">
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"50Free\" name=\"50Free\">
-      <label class=\"custom-control-label\" for=\"50Free\">50 Freestyle</label>
-    </div>
-    </div>
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"100Free\" name=\"100Free\">
-      <label class=\"custom-control-label\" for=\"100Free\">100 Freestyle</label>
-    </div>
-    </div>
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"200Free\" name=\"200Free\">
-      <label class=\"custom-control-label\" for=\"200Free\">200 Freestyle</label>
-    </div>
-    </div>
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"400Free\" name=\"400Free\">
-      <label class=\"custom-control-label\" for=\"400Free\">400 Freestyle</label>
-    </div>
-    </div>
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"800Free\" name=\"800Free\">
-      <label class=\"custom-control-label\" for=\"800Free\">800 Freestyle</label>
-    </div>
-    </div>
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"1500Free\" name=\"1500Free\">
-      <label class=\"custom-control-label\" for=\"1500Free\">1500 Freestyle</label>
-    </div>
-    </div>
-  </div>
-  <div class=\"row mb-3\">
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"50Breast\" name=\"50Breast\">
-      <label class=\"custom-control-label\" for=\"50Breast\">50 Breaststroke</label>
-    </div>
-    </div>
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"100Breast\" name=\"100Breast\">
-      <label class=\"custom-control-label\" for=\"100Breast\">100 Breaststroke</label>
-    </div>
-    </div>
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"200Breast\" name=\"200Breast\">
-      <label class=\"custom-control-label\" for=\"200Breast\">200 Breaststroke</label>
-    </div>
-    </div>
-  </div>
-  <div class=\"row mb-3\">
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"50Fly\" name=\"50Fly\">
-      <label class=\"custom-control-label\" for=\"50Fly\">50 Butterfly</label>
-    </div>
-    </div>
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"100Fly\" name=\"100Fly\">
-      <label class=\"custom-control-label\" for=\"100Fly\">100 Butterfly</label>
-    </div>
-    </div>
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"200Fly\" name=\"200Fly\">
-      <label class=\"custom-control-label\" for=\"200Fly\">200 Butterfly</label>
-    </div>
-    </div>
-  </div>
-  <div class=\"row mb-3\">
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"50Back\" name=\"50Back\">
-      <label class=\"custom-control-label\" for=\"50Back\">50 Backstroke</label>
-    </div>
-    </div>
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"100Back\" name=\"100Back\">
-      <label class=\"custom-control-label\" for=\"100Back\">100 Backstroke</label>
-    </div>
-    </div>
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"200Back\" name=\"200Back\">
-      <label class=\"custom-control-label\" for=\"200Back\">200 Backstroke</label>
-    </div>
-    </div>
-  </div>
-  <div class=\"row mb-3\">
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"100IM\" name=\"100IM\">
-      <label class=\"custom-control-label\" for=\"100IM\">100 IM</label>
-    </div>
-    </div>
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"150IM\" name=\"150IM\">
-      <label class=\"custom-control-label\" for=\"150IM\">150 IM</label>
-    </div>
-    </div>
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"200IM\" name=\"200IM\">
-      <label class=\"custom-control-label\" for=\"200IM\">200 IM</label>
-    </div>
-    </div>
-    <div class=\"col-sm-4 col-md-2\">
-    <div class=\"custom-control custom-checkbox\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"400IM\" name=\"400IM\">
-      <label class=\"custom-control-label\" for=\"400IM\">400 IM</label>
-    </div>
+  <div class=\"ajaxArea\" id=\"output\">
+    <div class=\"ajaxPlaceholder\">Select a gala
     </div>
   </div>
   <p><button type=\"submit\" id=\"submit\" class=\"btn btn-success\">Submit</button></p>
@@ -182,6 +62,30 @@ $content .= "<form method=\"post\" action=\"entergala-action\">
     var gala = document.getElementById(\"gala\");
     swimmer.addEventListener(\"change\", enableBtn);
     gala.addEventListener(\"change\", enableBtn);
+
+    function getResult() {
+      var gala = document.getElementById(\"gala\");
+      var galaValue = gala.options[gala.selectedIndex].value;
+      console.log(galaValue);
+      if (galaValue==\"null\") {
+        document.getElementById(\"output\").innerHTML = '<div class=\"ajaxPlaceholder\">Select a gala</div>';
+      }
+      else {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            console.log(\"We got here\");
+            document.getElementById(\"output\").innerHTML = this.responseText;
+            console.log(this.responseText);
+          }
+        }
+        var ajaxRequest = \"" . autoURL('ajax/galaForm.php') . "?galaID=\" + galaValue;
+        console.log(ajaxRequest);
+        xmlhttp.open(\"GET\", ajaxRequest, true);
+        xmlhttp.send();
+      }
+    }
+    document.getElementById(\"gala\").onchange=getResult;
   </script>
 </form>";
 ?>

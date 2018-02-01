@@ -1,9 +1,11 @@
 <?php
 $swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];
 $swimsTextArray = ['50 Free','100 Free','200 Free','400 Free','800 Free','1500 Free','50 Breast','100 Breast','200 Breast','50 Fly','100 Fly','200 Fly','50 Back','100 Back','200 Back','100 IM','150 IM','200 IM','400 IM',];
+$swimsTimeArray = ['50FreeTime','100FreeTime','200FreeTime','400FreeTime','800FreeTime','1500FreeTime','50BreastTime','100BreastTime','200BreastTime','50FlyTime','100FlyTime','200FlyTime','50BackTime','100BackTime','200BackTime','100IMTime','150IMTime','200IMTime','400IMTime',];
 $entriesArray = [];
 $memberID = "";
 $galaID = "";
+$timesRequired = "";
 $added = false;
 $content = "";
 $counter = 0;
@@ -17,53 +19,111 @@ if (!empty($_POST['gala'])) {
   $galaID = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['gala'])));
 }
 
+if (!empty($_POST['TimesRequired'])) {
+  $timesRequired = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['TimesRequired'])));
+}
+
 if ($memberID != "" && $galaID != "") {
   $sql = "SELECT EntryID FROM galaEntries WHERE `GalaID` = '$galaID' AND `MemberID` = '$memberID';";
   $result = mysqli_query($link, $sql);
   $entryCount = mysqli_num_rows($result);
 }
 
-for ($i=0; $i<sizeof($swimsArray); $i++) {
-  if (!empty($_POST[$swimsArray[$i]])) {
-    $entriesArray[$i] = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST[$swimsArray[$i]])));
-    $counter++;
+if ($timesRequired != 1) {
+  for ($i=0; $i<sizeof($swimsArray); $i++) {
+    if (!empty($_POST[$swimsArray[$i]])) {
+      $entriesArray[$i] = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST[$swimsArray[$i]])));
+      $counter++;
+    }
+    else {
+        $entriesArray[$i] = 0;
+    }
   }
-  else {
-      $entriesArray[$i] = 0;
+
+  $swims = "";
+  for ($i=0; $i<sizeof($swimsArray); $i++) {
+    if ($i < (sizeof($swimsArray)-1)) {
+      $swims .= "`" . $swimsArray[$i] . "`, ";
+    }
+    else {
+      $swims .= "`" . $swimsArray[$i] . "` ";
+    }
+  }
+
+  $values = "";
+  for ($i=0; $i<sizeof($entriesArray); $i++) {
+    if ($i < (sizeof($entriesArray)-1)) {
+      $values .= "'" . $entriesArray[$i] . "', ";
+    }
+    else {
+      $values .= "'" . $entriesArray[$i] . "' ";
+    }
   }
 }
+elseif ($timesRequired == 1) {
+  for ($i=0; $i<sizeof($swimsArray); $i++) {
+    if ((!empty($_POST[$swimsTimeArray[$i] . "Mins"])) || (!empty($_POST[$swimsTimeArray[$i] . "Secs"])) || (!empty($_POST[$swimsTimeArray[$i] . "Hunds"]))) {
+      $mins = mysqli_real_escape_string($link, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Mins"]))));
+      $secs = mysqli_real_escape_string($link, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Secs"]))));
+      $hunds = mysqli_real_escape_string($link, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Hunds"]))));
+      $entriesArray[$i] = $mins . ":" . $secs . ":" . $hunds;
+      $counter++;
+    }
+    else {
+        $entriesArray[$i] = null;
+    }
+  }
 
-$swims = "";
-for ($i=0; $i<sizeof($swimsArray); $i++) {
-  if ($i < (sizeof($swimsArray)-1)) {
-    $swims .= "`" . $swimsArray[$i] . "`, ";
+  $swims = "";
+  for ($i=0; $i<sizeof($swimsTimeArray); $i++) {
+    if ($i < (sizeof($swimsTimeArray)-1)) {
+      $swims .= "`" . $swimsArray[$i] . "`, ";
+      $swims .= "`" . $swimsTimeArray[$i] . "`, ";
+    }
+    else {
+      $swims .= "`" . $swimsArray[$i] . "`, ";
+      $swims .= "`" . $swimsTimeArray[$i] . "` ";
+    }
   }
-  else {
-    $swims .= "`" . $swimsArray[$i] . "` ";
-  }
-}
 
-$values = "";
-for ($i=0; $i<sizeof($entriesArray); $i++) {
-  if ($i < (sizeof($entriesArray)-1)) {
-    $values .= "'" . $entriesArray[$i] . "', ";
-  }
-  else {
-    $values .= "'" . $entriesArray[$i] . "' ";
+  $values = "";
+  for ($i=0; $i<sizeof($entriesArray); $i++) {
+    if ($i < (sizeof($entriesArray)-1)) {
+      if ($entriesArray[$i]!=null) {
+        $values .= "'1', ";
+      }
+      else {
+        $values .= "'0', ";
+      }
+      $values .= "'" . $entriesArray[$i] . "', ";
+    }
+    else {
+      if ($entriesArray[$i]!=null) {
+        $values .= "'1', ";
+      }
+      else {
+        $values .= "'0', ";
+      }
+      $values .= "'" . $entriesArray[$i] . "'";
+    }
   }
 }
 
 if ($entryCount == 0) {
-  $sql = "INSERT INTO `galaEntries` (`MemberID`, `GalaID`, " . $swims . ") VALUES ('$memberID', '$galaID', " . $values . ");";
+  $sql = "INSERT INTO `galaEntries` (`MemberID`, `GalaID`, " . $swims . ", `TimesRequired`) VALUES ('$memberID', '$galaID', " . $values . ", '$timesRequired');";
   $action = mysqli_query($link, $sql);
   if ($action) {
     $added = true;
   }
 
   $entryList = "";
-  for ($i=0; $i<sizeof($swimsArray); $i++) {
-    if ($entriesArray[$i] == 1) {
-      $entryList .= "<li>" . $swimsTextArray[$i] . "</li>";
+  $sql = "SELECT * FROM (galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galaEntries.MemberID = '$memberID' AND galaEntries.GalaID = '$galaID';";
+  $result = mysqli_query($link, $sql);
+  $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+  // Print <li>Swim Name</li> for each entry
+  for ($y=0; $y<sizeof($swimsArray); $y++) {
+    if ($row[$swimsArray[$y]] == 1) {
+      $entryList .= "<li>" . $swimsTextArray[$y] . "</li>";
     }
   }
 
