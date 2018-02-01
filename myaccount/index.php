@@ -8,7 +8,11 @@
   $surnameUpdate = false;
   $emailUpdate = false;
   $mobileUpdate = false;
+  $emailCommsUpdate = false;
+  $mobileCommsUpdate = false;
   $successInformation = "";
+  $emailChecked = "";
+  $mobileChecked = "";
 
   $query = "SELECT * FROM users WHERE UserID = '$userID' ";
   $result = mysqli_query($link, $query);
@@ -19,6 +23,14 @@
   $access = $row['AccessLevel'];
   $userID = $row['UserID'];
   $mobile = $row['Mobile'];
+  $emailComms = $row['EmailComms'];
+  $mobileComms = $row['MobileComms'];
+  if ($emailComms==1) {
+    $emailChecked = " checked ";
+  }
+  if ($mobileComms==1) {
+    $mobileChecked = " checked ";
+  }
 
   if (!empty($_POST['forename'])) {
     $newForename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
@@ -52,6 +64,24 @@
       $mobileUpdate = true;
     }
   }
+  if (isset($_POST['emailContactOK'])) {
+    $newValue = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['emailContactOK'])));
+    if ($newValue != 1) {$newValue = 0;}
+    if ($newValue != $emailComms) {
+      $sql = "UPDATE `users` SET `EmailComms` = '$newValue' WHERE `UserID` = '$userID'";
+      mysqli_query($link, $sql);
+      $emailCommsUpdate = true;
+    }
+  }
+  if (isset($_POST['smsContactOK'])) {
+    $newValue = mysqli_real_escape_string($link, preg_replace('/\D/', '', $_POST['smsContactOK']));
+    if ($newValue != 1) {$newValue = 0;}
+    if ($newValue != $mobileComms) {
+      $sql = "UPDATE `users` SET `MobileComms` = '$newValue' WHERE `UserID` = '$userID'";
+      mysqli_query($link, $sql);
+      $mobileCommsUpdate = true;
+    }
+  }
 
 ?>
 <div class="container">
@@ -66,9 +96,18 @@
   $access = $row['AccessLevel'];
   $userID = $row['UserID'];
   $mobile = $row['Mobile'];
+  $emailComms = $row['EmailComms'];
+  $mobileComms = $row['MobileComms'];
   $_SESSION['EmailAddress'] = $email;
   $_SESSION['Forename'] = $forename;
   $_SESSION['Surname'] = $surname;
+  if ($emailComms==1) {
+    $emailChecked = " checked ";
+  }
+  if ($mobileComms==1) {
+    $mobileChecked = " checked ";
+  }
+
 ?>
 <div class="alert alert-success">
   <strong>We have updated</strong>
@@ -78,12 +117,14 @@
     if ($surnameUpdate) { echo '<li>Your last name</li>'; }
     if ($emailUpdate) { echo '<li>Your email address</li>'; }
     if ($mobileUpdate) { echo '<li>Your mobile number</li>'; }
+    if ($emailCommsUpdate) { echo '<li>Your email preferences</li>'; }
+    if ($mobileCommsUpdate) { echo '<li>Your mobile preferences</li>'; }
     ?>
   </ul>
 </div>
 <?php  } ?>
 <p>What we know about you.</p>
-<form method="post" action="myaccount.php">
+<form method="post">
   <h2>Your Details</h2>
   <div class="form-group">
       <label for="forename">Name</label>
@@ -99,7 +140,7 @@
   </div>
   <div class="form-group">
     <div class="custom-control custom-checkbox">
-      <input type="checkbox" class="custom-control-input" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK">
+      <input type="checkbox" class="custom-control-input" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?php echo $emailChecked ?>>
       <label class="custom-control-label" for="emailContactOK">Check this to receive news by email</label>
       <small id="emailContactOKHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small>
     </div>
@@ -111,7 +152,7 @@
   </div>
   <div class="form-group">
     <div class="custom-control custom-checkbox">
-      <input type="checkbox" class="custom-control-input" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK">
+      <input type="checkbox" class="custom-control-input" value="1" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK" <?php echo $mobileChecked ?>>
       <label class="custom-control-label" for="smsContactOK">Check this if you would like to receive text messages</label>
       <small id="smsContactOKHelp" class="form-text text-muted">We'll still use this to contact you in an emergency</small>
     </div>

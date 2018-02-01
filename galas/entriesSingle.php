@@ -1,5 +1,7 @@
 <?php
 
+$disabled = "";
+
 $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE `EntryID` = '$idLast' ORDER BY `galas`.`GalaDate` DESC;";
 $result = mysqli_query($link, $sql);
 $count = mysqli_num_rows($result);
@@ -21,6 +23,11 @@ if ($count == 1) {
 
   if ($row['EntryProcessed'] == 1 || ($closingDate <= $theDate)) {
     $content .= "<div class=\"alert alert-warning\"><strong>We've already processed this gala entry, or our closing date has passed</strong> <br>If you need to make changes, contact the Gala Coordinator directly</div>";
+    $disabled .= " disabled ";
+  }
+  elseif ($row['TimesRequired'] == 1) {
+    $content .= "<div class=\"alert alert-warning\"><strong>You can't currently edit an entry for a HyTek gala online</strong> <br>If you need to make changes, contact the Gala Coordinator directly</div>";
+    $disabled .= " disabled ";
   }
   else {
     $content .= "<h2>Select Swims</h2>";
@@ -35,7 +42,7 @@ if ($count == 1) {
       $content .= "
       <div class=\"col-sm-4 col-md-2\">
       <div class=\"custom-control custom-checkbox\">
-        <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"" . $swimsArray[$i] . "\" checked name=\"" . $swimsArray[$i] . "\">
+        <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"" . $swimsArray[$i] . "\" checked " . $disabled . " \  name=\"" . $swimsArray[$i] . "\">
         <label class=\"custom-control-label\" for=\"" . $swimsArray[$i] . "\">" . $swimsTextArray[$i] . "</label>
       </div>
       </div>";
@@ -44,7 +51,7 @@ if ($count == 1) {
       $content .= "
       <div class=\"col-sm-4 col-md-2\">
       <div class=\"custom-control custom-checkbox\">
-        <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"" . $swimsArray[$i] . "\" name=\"" . $swimsArray[$i] . "\">
+        <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"" . $swimsArray[$i] . "\" " . $disabled . "  name=\"" . $swimsArray[$i] . "\">
         <label class=\"custom-control-label\" for=\"" . $swimsArray[$i] . "\">" . $swimsTextArray[$i] . "</label>
       </div>
       </div>";
