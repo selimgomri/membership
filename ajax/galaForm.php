@@ -23,7 +23,7 @@ if (isset($_REQUEST["galaID"])) {
 
 	if ($row['HyTek'] == 1) {
 		$response .= "
-		<p>All swims possible under ASA Rules are shown below. Not all these events may be available for the gala (" . $row['GalaName'] . ") you are trying to enter</p>
+		<p>All swims possible under ASA Rules are shown below. Not all of these events may be available for " . $row['GalaName'] . "</p>
 		<form>
 		";
 		for ($i = 0; $i < sizeof($swimsTimeArray); $i++) {
@@ -50,7 +50,7 @@ if (isset($_REQUEST["galaID"])) {
 	}
 	else {
 		$response .= "
-		<p>All swims possible under ASA Rules are shown below. Not all these events may be available for the gala you are trying to enter</p>
+		<p>All swims possible under ASA Rules are shown below. Not all of these events may be available for " . $row['GalaName'] . "</p>
 	  <div class=\"row mb-3\">
 	    <div class=\"col-sm-4 col-md-2\">
 	    <div class=\"custom-control custom-checkbox\">
