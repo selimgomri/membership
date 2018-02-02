@@ -6,9 +6,14 @@
   $header = true;
 
   // Requested resource
+  $pos = strrpos ($URI . "swimmers/" , '/');
   $url = mysqli_real_escape_string($link, $_SERVER['REQUEST_URI']);
-  $pos = strrpos($url, '/');
+  $url = preg_replace('{/$}', '', $url);
+  //$pos = strrpos($url, '/');
   $id = $pos === false ? $url : substr($url, $pos + 1);
+
+  $pos = strrpos($url, '/');
+  $idLast = $pos === false ? $url : substr($url, $pos + 1);
 
   function getMemberNameByID($db, $id) {
     $sql = "SELECT `MForename`, `MSurname` FROM `members` WHERE MemberID = '$id';";
@@ -68,8 +73,16 @@
 
       include "../header.php";
     }
-    elseif (($id != null || $id != "")) {
+    elseif (($id == "edit/" . $idLast)) {
       include "parentSingleSwimmer.php";
+    }
+    elseif (($id != null || $id != "")) {
+      include "parentSingleSwimmerView.php";
+    }
+    else {
+      $pagetitle = "ARGH";
+      $title = "My Swimmers";
+      $content = "<p class=\"lead\">My Swimmers shows you all of your registered swimmers and allows you to easily change their details.</p>";
     }
   }
   elseif ($access == "Galas") {
