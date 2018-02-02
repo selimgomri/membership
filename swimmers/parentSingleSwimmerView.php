@@ -23,17 +23,62 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
   $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes, members.AccessKey FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
   $resultSwim = mysqli_query($link, $sqlSwim);
   $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
-  $title = $swimmersSecurityCheck['MForename'] . " " . $rowSwim['MMiddleNames'] . " " . $swimmersSecurityCheck['MSurname'];
-  $content = "<div class=\"row\"><div class=\"col col-md-6\"><ul>";
-  // Main Info Content
-  $content.= "
-  <li>Date of Birth: " . $rowSwim['DateOfBirth'] . "</li>
-  <li>ASA Number: " . $rowSwim['ASANumber'] . "</li>
-  <li>Sex: " . $rowSwim['Gender'] . "</li>
-  <li>Medical Notes: " . $rowSwim['MedicalNotes'] . "</li>
-  <li>Other Notes: " . $rowSwim['MedicalNotes'] . "</li>
-  </ul>";
-  $content .= "</div><div class=\"col-md-6\">";
+  $title = null;
+  $content = '
+  <div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded box-shadow" id="dash">
+    <img class="mr-3" src="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png" alt="" width="48" height="48">
+    <div class="lh-100">
+      <h6 class="mb-0 text-white lh-100">' . $rowSwim["MForename"];
+      if ($rowSwim["MMiddleNames"] != "") {
+         $content .= ' ' . $rowSwim["MMiddleNames"];
+      }
+      $content .= ' ' . $rowSwim["MSurname"] . '</h6>
+      <small>Swimmer, ' . $rowSwim["SquadName"] . ' Squad</small>
+    </div>
+  </div>
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+    <h2 class="border-bottom border-gray pb-2 mb-0">About ' . $rowSwim["MForename"] . '</h2>
+    <div class="media pt-3">
+      <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+        <strong class="d-block text-gray-dark">Date of Birth</strong>
+        ' . date('j F Y', strtotime($rowSwim['DateOfBirth'])) . '
+      </p>
+    </div>
+    <div class="media pt-3">
+      <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+        <strong class="d-block text-gray-dark">ASA Number</strong>
+        <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . $rowSwim["ASANumber"] . '" target="_blank" title="ASA Biographical Data">' . $rowSwim["ASANumber"] . ' <i class="fa fa-external-link" aria-hidden="true"></i></a>
+      </p>
+    </div>
+    <div class="media pt-3">
+      <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+        <strong class="d-block text-gray-dark">Sex</strong>
+        ' . $rowSwim["Gender"] . '
+      </p>
+    </div>';
+    if ($rowSwim["MedicalNotes"] != "") {
+      $content .= '
+      <div class="media pt-3">
+        <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+          <strong class="d-block text-gray-dark">Medical Notes</strong>
+          ' . $rowSwim["MedicalNotes"] . '
+        </p>
+      </div>';
+    }
+    if ($rowSwim["OtherNotes"] != "") {
+      $content .= '
+      <div class="media pt-3">
+        <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+          <strong class="d-block text-gray-dark">Other Notes</strong>
+          ' . $rowSwim["OtherNotes"] . '
+        </p>
+      </div>';
+    }
+    $content .= '
+    <span class="d-block text-right mt-3">
+      <a href="edit/' . $id . '">Edit Details or add Medical Notes</a>
+    </span>
+  </div>';
   /* Stats Section */
   $swimsCountArray = [];
   $strokesCountArray = [0, 0, 0, 0, 0];
@@ -118,22 +163,54 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
   	        chart.draw(data, options);
   	      }
   	    </script>
-        <div class=\"cell\">
-  			<h2>Gala Statistics</h2>
+        <div class=\"my-3 p-3 bg-white rounded box-shadow\">
+        <h2 class=\"border-bottom border-gray pb-2 mb-0\">Gala Statistics</h2>
   	    <div id=\"piechart\"></div>
   			<div id=\"barchart\"></div>
         </div>
   	";
   }
-  $content .= "<div class=\"cell\"><h2>Squad Information</h2><ul class=\"mb-0\"><li>Squad: " . $rowSwim['SquadName'] . "</li><li>Monthly Fee: &pound;" . $rowSwim['SquadFee'] . "</li>";
+  $content .= '
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <h2 class="border-bottom border-gray pb-2 mb-0">Squad Information</h2>
+  <div class="media pt-3">
+    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+      <strong class="d-block text-gray-dark">Squad</strong>
+      ' . $rowSwim["SquadName"] . ' Squad
+    </p>
+  </div>
+  <div class="media pt-3">
+    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+      <strong class="d-block text-gray-dark">Squad Fee</strong>
+      &pound;' . $rowSwim['SquadFee'] . '
+    </p>
+  </div>';
   if ($rowSwim['SquadTimetable'] != "") {
-    $content .= "<li><a href=\"" . $rowSwim['SquadTimetable'] . "\">Squad Timetable</a></li>";
+    $content .= '
+    <div class="media pt-3">
+      <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+        <strong class="d-block text-gray-dark">Squad Timetable</strong>
+        <a href="' . $rowSwim["SquadTimetable"] . '">Squad Timetable</a>
+      </p>
+    </div>';
   }
   if ($rowSwim['SquadCoC'] != "") {
-    $content .= "<li><a href=\"" . $rowSwim['SquadCoC'] . "\">Squad Code of Conduct</a></li>";
+    $content .= '
+    <div class="media pt-3">
+      <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+        <strong class="d-block text-gray-dark">Squad Code of Conduct</strong>
+        <a href="' . $rowSwim["SquadCoC"] . '">Squad Code of Conduct</a>
+      </p>
+    </div>';
   }
-  $content .= "</ul></div>";
-  $content .= "</div></div>";
+  $content .= '
+  <div class="media pt-3 mb-0">
+    <p class="media-body pb-3 mb-0 lh-125">
+      <strong class="d-block text-gray-dark">Squad Coach</strong>
+      ' . $rowSwim["SquadCoach"] . '
+    </p>
+  </div>';
+  $content .= '</div>';
 
 }
 else {
