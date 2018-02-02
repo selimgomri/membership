@@ -79,11 +79,6 @@
     elseif (($id != null || $id != "")) {
       include "parentSingleSwimmerView.php";
     }
-    else {
-      $pagetitle = "ARGH";
-      $title = "My Swimmers";
-      $content = "<p class=\"lead\">My Swimmers shows you all of your registered swimmers and allows you to easily change their details.</p>";
-    }
   }
   elseif ($access == "Galas") {
     // Gala Access
@@ -92,9 +87,10 @@
     }
     elseif (($id != null || $id != "")) {
       // Get the swimmer function
-      $pagetitle = "Swimmer: " . getMemberNameByID($link, $id);
-      $title = getMemberNameByID($link, $id);
-      $content = getMemberInfoByID($link, $id);
+      include "singleSwimmerView.php";
+      //$pagetitle = "Swimmer: " . getMemberNameByID($link, $id);
+      //$title = getMemberNameByID($link, $id);
+      //$content = getMemberInfoByID($link, $id);
     }
     else {
       // Not allowed or not found
