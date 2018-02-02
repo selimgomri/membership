@@ -95,8 +95,8 @@ else {
 		      }
 		    </script>
 				<h2>Statistics <small>From all entries</small></h2>
-		    <div id=\"piechart\"></div>
-				<div id=\"barchart\"></div>
+		    <div class=\"chart\" id=\"piechart\"></div>
+				<div class=\"chart\" id=\"barchart\"></div>
 		";
 	}
 }

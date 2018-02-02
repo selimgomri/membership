@@ -165,8 +165,8 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
   	    </script>
         <div class=\"my-3 p-3 bg-white rounded box-shadow\">
         <h2 class=\"border-bottom border-gray pb-2 mb-0\">Gala Statistics</h2>
-  	    <div id=\"piechart\"></div>
-  			<div id=\"barchart\"></div>
+  	    <div class=\"chart\" id=\"piechart\"></div>
+  			<div class=\"chart\" id=\"barchart\"></div>
         </div>
   	";
   }

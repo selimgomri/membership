@@ -202,8 +202,8 @@
       	    </script>
             <div class=\"cell\">
       			<h2>Gala Statistics</h2>
-      	    <div id=\"piechart\"></div>
-      			<div id=\"barchart\"></div>
+      	    <div class=\"chart\" id=\"piechart\"></div>
+      			<div class=\"chart\" id=\"barchart\"></div>
             </div>
       	";
       }

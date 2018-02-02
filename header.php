@@ -87,6 +87,9 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
+    .chart {
+      max-width: 100%;
+    }
 	</style>
 
     <!--[if lt IE 9]>

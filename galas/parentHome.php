@@ -95,8 +95,8 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
 	      }
 	    </script>
 			<h2>Statistics <small>All My Swimmers</small></h2>
-	    <div id=\"piechart\"></div>
-			<div id=\"barchart\"></div>
+	    <div class=\"chart\" id=\"piechart\"></div>
+			<div class=\"chart\" id=\"barchart\"></div>
 	";
 }
 ?>
