@@ -67,11 +67,20 @@ $content = '
       </p>
     </div>';
   }
-  $content .= '
-  <span class="d-block text-right mt-3">
-    <a href="edit/' . $id . '">Edit Details or add Medical Notes</a>
-  </span>
-</div>';
+	if ($access == "Admin" || $access == "Committee") {
+	  $content .= '
+	  <span class="d-block text-right mt-3">
+	    <a href="edit/' . $id . '">Edit Details or add Medical Notes</a>
+	  </span>
+		</div>';
+	}
+	else {
+		$content .= '
+	  <span class="d-block text-right mt-3">
+	    Please contact a Parent or Administrator if you need to make changes
+	  </span>
+		</div>';
+	}
 /* Stats Section */
 $swimsCountArray = [];
 $strokesCountArray = [0, 0, 0, 0, 0];
@@ -158,8 +167,8 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
 	    </script>
       <div class=\"my-3 p-3 bg-white rounded box-shadow\">
       <h2 class=\"border-bottom border-gray pb-2 mb-0\">Gala Statistics</h2>
-	    <div class=\"chart\" id=\"piechart\"></div>
-			<div class=\"chart\" id=\"barchart\"></div>
+	    <div id=\"piechart\"></div>
+			<div id=\"barchart\"></div>
       </div>
 	";
 }

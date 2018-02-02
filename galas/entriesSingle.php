@@ -73,6 +73,15 @@ if ($count == 1) {
       $mins = sprintf('%02d',substr($time, 0, $colonPos));
       $secs = sprintf('%02d',substr($time, $colonPos+1, 2));
       $hunds = sprintf('%02d',substr($time, $stopPos+1, 2));
+      if ($mins == 0) {
+        $mins = "";
+      }
+      if ($secs == 0) {
+        $secs = "";
+      }
+      if ($hunds == 0) {
+        $hunds = "";
+      }
 
       if ($rowArray[$i] == 1) {
         $content .= "<h3>" . $rowArrayText[$i] . "</h3>";
