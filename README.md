@@ -3,7 +3,7 @@ Membership, a new project from Chester-le-Street ASC aims to make swimming club 
 
 This product is still under active development, and will launch in the future.
 
-If you install this application on your own server, you must set up the SQL database tables yourself. Functions are currently held in a file which is ignored by git, meaning that they will not work.
+If you install this application on your own server, you must set up the SQL database tables yourself. You will need to modify the `config-template.php` file to connect to your database and rename it `config.php`.
 
 Chester-le-Street ASC accept no liability for any issues, including all legal issues, with this pre-release software.
 
