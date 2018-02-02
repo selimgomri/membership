@@ -12,10 +12,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
     // Search the database for the results
     if ($galaID == "allGalas") {
-      $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE members.MSurname LIKE '%$search%' ORDER BY galas.ClosingDate ASC, galas.GalaDate DESC;";
+      $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) AND members.MSurname LIKE '%$search%' ORDER BY galas.ClosingDate ASC, galas.GalaDate DESC;";
     }
     else {
-      $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaID = '$galaID' AND members.MSurname LIKE '%$search%';";
+      $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) AND galas.GalaID = '$galaID' AND members.MSurname LIKE '%$search%';";
     }
   }
   elseif ((!isset($_REQUEST["galaID"])) && (isset($_REQUEST["search"]))) {
@@ -23,14 +23,14 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $search = mysqli_real_escape_string($link, $_REQUEST["search"]);
 
     // Search the database for the results
-    $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE members.MSurname LIKE '%$search%';";
+    $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) AND members.MSurname LIKE '%$search%';";
   }
   elseif ((isset($_REQUEST["galaID"])) && (!isset($_REQUEST["search"]))) {
     // get the search term parameter from request
     $galaID = mysqli_real_escape_string($link, $_REQUEST["galaID"]);
 
     // Search the database for the results
-    $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaID = '$galaID';";
+    $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) AND galas.GalaID = '$galaID';";
   }
   else {
     // Error
@@ -49,8 +49,13 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     // Fetches the row as an array
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
+    $hyTekPrintDate = "";
+    if ($row['HyTek'] == 1) {
+      $hyTekPrintDate = " <br>" . date('j F Y', strtotime($row['DateOfBirth'])) . "";
+    }
+
     // First part of the row content
-    $content .= "<tr><td>" . $row['MForename'] . " " . $row['MSurname'] . "</td><td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $row['ASANumber'] . "\" target=\"_blank\" title=\"Click to see times\">" . $row['ASANumber'] . " <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a></td><td>" . $row['GalaName'] . "</td>";
+    $content .= "<tr><td>" . $row['MForename'] . " " . $row['MSurname'] . $hyTekPrintDate . "</td><td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $row['ASANumber'] . "\" target=\"_blank\" title=\"Click to see times\">" . $row['ASANumber'] . " <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a></td><td>" . $row['GalaName'] . "</td>";
 
     // Arrays of swims used to check whever to print the name of the swim entered
     $swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];

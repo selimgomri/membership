@@ -22,7 +22,7 @@
     </script>
 	<script>var shiftWindow = function() { scrollBy(0, -50) }; if (location.hash) shiftWindow(); window.addEventListener("hashchange", shiftWindow);</script>
     <link rel="stylesheet preload" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700">
-    <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.4.css") ?>">
+    <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.5.css") ?>">
     <link rel="stylesheet" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/font-awesome/css/font-awesome.min.css">
     <link rel="apple-touch-icon" href="<https://www.chesterlestreetasc.co.uk/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="76x76" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad.png">
@@ -70,6 +70,23 @@
       text-align: center;
       background: #efefef;
     }
+    .galaEntryTimes {
+      display: -ms-grid;
+      display: grid;
+      -ms-grid-columns: (1fr)[1];
+      grid-template-columns: repeat(1, 1fr);
+      grid-column-gap: 20px;
+      -webkit-column-gap: 20px;
+      column-gap: 20px;
+      grid-row-gap: 1rem;
+      row-gap: 1rem;
+    }
+    @media (min-width: 992px) {
+      .galaEntryTimes {
+        -ms-grid-columns: (1fr)[2];
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
 	</style>
 
     <!--[if lt IE 9]>
@@ -81,7 +98,7 @@
 <body class="bg-light">
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary d-print-none justify-content-between" role="navigation">
       <a class="navbar-brand" href="<?php echo autoUrl("index.php") ?>">
-        <?php if ((empty($_SESSION['LoggedIn']) || $_SESSION['AccessLevel'] == "Parent")) { ?>Membership<?php } else { ?>Membership Management<?php } ?>
+        <?php if ((empty($_SESSION['LoggedIn']) || $_SESSION['AccessLevel'] == "Parent")) { ?>Membership <span class="badge badge-secondary">BETA</span><?php } else { ?>Membership Management <span class="badge badge-secondary bg-pink">ALPHA</span><?php } ?>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

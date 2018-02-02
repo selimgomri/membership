@@ -7,10 +7,10 @@
 
   $forename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
   $surname = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['surname']))));
-  $username = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['username'])));
+  $username = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['username']))));
   $password1 = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password1'])));
   $password2 = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password2'])));
-  $email = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['email'])));
+  $email = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['email']))));
   $mobile = mysqli_real_escape_string($link, preg_replace('/\D/', '', $_POST['mobile'])); // Removes anything that isn't a digit
 
   $usernameSQL = "SELECT * FROM users WHERE Username = '$username' LIMIT 0, 30 ";

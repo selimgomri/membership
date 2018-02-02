@@ -66,7 +66,7 @@ elseif ($timesRequired == 1) {
       $mins = mysqli_real_escape_string($link, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Mins"]))));
       $secs = mysqli_real_escape_string($link, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Secs"]))));
       $hunds = mysqli_real_escape_string($link, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Hunds"]))));
-      $entriesArray[$i] = $mins . ":" . $secs . ":" . $hunds;
+      $entriesArray[$i] = $mins . ":" . $secs . "." . $hunds;
       $counter++;
     }
     else {

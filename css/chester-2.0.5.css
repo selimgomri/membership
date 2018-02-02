@@ -2693,9 +2693,9 @@ tbody.collapse.show {
     text-decoration: none;
     background-color: #e9ecef; }
   .dropdown-item.active, .dropdown-item:active {
-    color: #fff;
+    color: #212529;
     text-decoration: none;
-    background-color: #bd0000; }
+    background-color: #dee2e6; }
   .dropdown-item.disabled, .dropdown-item:disabled {
     color: #868e96;
     background-color: transparent; }
@@ -7606,6 +7606,24 @@ a {
   -webkit-box-shadow: none;
   padding: 1rem; }
 
+.mono {
+  font-family: "Roboto Monospace", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+.bg-pink {
+  background: #e83e8c; }
+
+.bg-indigo {
+  background: #6610f2; }
+
+.bg-purple {
+  background: #6f42c1; }
+
+.bg-orange {
+  background: #fd7e14; }
+
+.bg-teal {
+  background: #20c997; }
+
 /* Bootstrap 4 and Navwalker Dropdown Fixes */
 .navbar-nav .active > .dropdown-item {
   font-weight: bold; }
@@ -8048,3 +8066,46 @@ a {
 
 .list-group-flagship-content a.list-group-item {
   color: #212529; }
+
+.pondsForgeBG {
+  min-height: calc(100vh - 3.25rem);
+  background: #0288d1;
+  background: -webkit-gradient(linear, right top, left top, from(rgba(2, 136, 209, 0.55)), to(rgba(2, 136, 209, 0.55))), url("https://static.chesterlestreetasc.co.uk/global/img/burnsmeet/PondsForgeBurnsBG.jpg") no-repeat 100% auto center;
+  background: -webkit-linear-gradient(right, rgba(2, 136, 209, 0.55), rgba(2, 136, 209, 0.55)), url("https://static.chesterlestreetasc.co.uk/global/img/burnsmeet/PondsForgeBurnsBG.jpg") no-repeat 100% auto center;
+  background: -o-linear-gradient(right, rgba(2, 136, 209, 0.55), rgba(2, 136, 209, 0.55)), url("https://static.chesterlestreetasc.co.uk/global/img/burnsmeet/PondsForgeBurnsBG.jpg") no-repeat 100% auto center;
+  background: linear-gradient(to left, rgba(2, 136, 209, 0.55), rgba(2, 136, 209, 0.55)), url("https://static.chesterlestreetasc.co.uk/global/img/burnsmeet/PondsForgeBurnsBG.jpg") no-repeat 100% auto center;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  background-position: center center;
+  background-attachment: scroll;
+  background-size: cover;
+  background-repeat: repeat-y;
+  overflow-y: hidden; }
+
+.galahome .flex-panel-top-blue {
+  border-top: 3px solid #fff;
+  background: rgba(51, 51, 51, 0.5);
+  color: #fff; }
+
+.galahome .flex-panel-link-group a:hover {
+  background: rgba(51, 51, 51, 0.7);
+  color: #fff; }
+
+@media (min-width: 768px) {
+  .pondsForgeBG {
+    min-height: calc(100vh - 3.25rem);
+    background: #0288d1;
+    background: -webkit-gradient(linear, right top, left top, from(rgba(2, 136, 209, 0.55)), to(rgba(2, 136, 209, 0.55))), url("https://static.chesterlestreetasc.co.uk/global/img/burnsmeet/PondsForgeBurnsBG.jpg") no-repeat fixed center;
+    background: -webkit-linear-gradient(right, rgba(2, 136, 209, 0.55), rgba(2, 136, 209, 0.55)), url("https://static.chesterlestreetasc.co.uk/global/img/burnsmeet/PondsForgeBurnsBG.jpg") no-repeat fixed center;
+    background: -o-linear-gradient(right, rgba(2, 136, 209, 0.55), rgba(2, 136, 209, 0.55)), url("https://static.chesterlestreetasc.co.uk/global/img/burnsmeet/PondsForgeBurnsBG.jpg") no-repeat fixed center;
+    background: linear-gradient(to left, rgba(2, 136, 209, 0.55), rgba(2, 136, 209, 0.55)), url("https://static.chesterlestreetasc.co.uk/global/img/burnsmeet/PondsForgeBurnsBG.jpg") no-repeat fixed center;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    background-position: center center;
+    background-attachment: scroll;
+    background-size: cover;
+    background-repeat: repeat-y;
+    overflow-y: hidden; }
+
+  .galahome .flex-panel-top-blue {
+    border-top: 3px solid #0288d1; } }

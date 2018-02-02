@@ -18,19 +18,27 @@ if (isset($_REQUEST["galaID"])) {
 	$swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];
 	$swimsTimeArray = ['50FreeTime','100FreeTime','200FreeTime','400FreeTime','800FreeTime','1500FreeTime','50BreastTime','100BreastTime','200BreastTime','50FlyTime','100FlyTime','200FlyTime','50BackTime','100BackTime','200BackTime','100IMTime','150IMTime','200IMTime','400IMTime',];
 	$swimsTextArray = ['50 Free','100 Free','200 Free','400 Free','800 Free','1500 Free','50 Breast','100 Breast','200 Breast','50 Fly','100 Fly','200 Fly','50 Back','100 Back','200 Back','100 IM','150 IM','200 IM','400 IM',];
+  $rowArray = [1, null, null, null, null, 2, 1,  null, 2, 1, null, 2, 1, null, 2, 1, null, null, 2];
+  $rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 2, "Butterfly", null, 2, "Freestyle", null, 2, "Individual Medley", null, null, 2];
 
 	$HyTek = 1;
 
 	if ($row['HyTek'] == 1) {
 		$response .= "
 		<p>All swims possible under ASA Rules are shown below. Not all of these events may be available for " . $row['GalaName'] . "</p>
+    <p>We're sorry, but for this gala we can't get swimmer's times automatically from British Swimming. As a result, you need to provide best times below. Entering a time automatically marks you as entering that event.</p>
 		<form>
+    <div class=\"\">
 		";
 		for ($i = 0; $i < sizeof($swimsTimeArray); $i++) {
+      if ($rowArray[$i] == 1) {
+        $response .= "<h3>" . $rowArrayText[$i] . "</h3>";
+        $response .= "<div class=\"galaEntryTimes mb-3\">";
+      }
 			$response .= "
-		  <div class=\"form-group\">
+		  <div class=\"form-group mb-0\">
 				<label>" . $swimsTextArray[$i] . "</label>
-				<div class=\"row\">
+				<div class=\"row no-gutters\">
 			    <div class=\"col\">
 			      <input type=\"number\" class=\"form-control\" placeholder=\"Minutes\" name=\"" . $swimsTimeArray[$i] . "Mins\" id=\"" . $swimsTimeArray[$i] . "Mins\" autocomplete=\"off\" pattern=\"[0-9]*\" inputmode=\"numeric\" min=\"0\">
 			    </div>
@@ -42,8 +50,11 @@ if (isset($_REQUEST["galaID"])) {
 			    </div>
 				</div>
 		  </div>";
+      if ($rowArray[$i] == 2) {
+        $response .= "</div>";
+      }
 		}
-		$response .= '<input type="hidden" value="1" name="TimesRequired">';
+		$response .= '</div><input type="hidden" value="1" name="TimesRequired">';
 		$response .= "
 		</form>
 		";

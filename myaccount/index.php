@@ -49,7 +49,7 @@
     }
   }
   if (!empty($_POST['email'])) {
-    $newEmail = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['email'])));
+    $newEmail = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['email']))));
     if ($newEmail != $email) {
       $sql = "UPDATE `users` SET `EmailAddress` = '$newEmail' WHERE `UserID` = '$userID'";
       mysqli_query($link, $sql);
