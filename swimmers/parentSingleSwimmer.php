@@ -197,22 +197,6 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
     <label for=\"otherNotes\">Other Notes</label>
     <textarea class=\"form-control\" id=\"otherNotes\" name=\"otherNotes\" rows=\"3\" placeholder=\"Tell us any other notes for coaches\">" . $rowSwim['OtherNotes'] . "</textarea>
   </div>";
-  $disconnectKey = generateRandomString(8);
-  $content .= "
-    <div class=\"alert alert-danger\">
-      <p><strong>Danger Zone</strong> <br>Actions here can be irreversible. Be careful what you do.</p>
-      <div class=\"form-group\">
-        <label for=\"disconnect\">Disconnect swimmer from your account with this Key \"" . $disconnectKey . "\"</label>
-        <input type=\"text\" class=\"form-control\" id=\"disconnect\" name=\"disconnect\" aria-describedby=\"disconnectHelp\" placeholder=\"Enter the key\" onselectstart=\"return false\" onpaste=\"return false;\" onCopy=\"return false\" onCut=\"return false\" onDrag=\"return false\" onDrop=\"return false\" autocomplete=off>
-        <small id=\"disconnectHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will dissassociate this swimmer from your account in all of our systems. You will need a new Access Key to add the swimmer again.</small>
-      </div>
-      <input type=\"hidden\" value=\"" . $disconnectKey . "\" name=\"disconnectKey\">
-      <div class=\"form-group mb-0\">
-        <label for=\"swimmerDeleteDanger\">Delete this Swimmer with this Key \"" . $rowSwim['AccessKey'] . "\"</label>
-        <input type=\"text\" class=\"form-control\" id=\"swimmerDeleteDanger\" name=\"swimmerDeleteDanger\" aria-describedby=\"swimmerDeleteDangerHelp\" placeholder=\"Enter the key\" onselectstart=\"return false\" onpaste=\"return false;\" onCopy=\"return false\" onCut=\"return false\" onDrag=\"return false\" onDrop=\"return false\" autocomplete=off>
-        <small id=\"swimmerDeleteDangerHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will delete this swimmer from all of our systems.</small>
-      </div>
-    </div>";
   $content .= "<button type=\"submit\" class=\"btn btn-success mb-3\">Update</button>";
   $content .= "</div><div class=\"col-md-6\">";
   /* Stats Section */
@@ -315,6 +299,27 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
   }
   $content .= "</ul></div>";
   $content .= "</div></div>";
+
+  // Danger Zone at Bottom of Page
+  $disconnectKey = generateRandomString(8);
+  $content .= "
+  <form method=\"post\">
+    <div class=\"alert alert-danger\">
+      <p><strong>Danger Zone</strong> <br>Actions here can be irreversible. Be careful what you do.</p>
+      <div class=\"form-group\">
+        <label for=\"disconnect\">Disconnect swimmer from your account with this Key \"" . $disconnectKey . "\"</label>
+        <input type=\"text\" class=\"form-control\" id=\"disconnect\" name=\"disconnect\" aria-describedby=\"disconnectHelp\" placeholder=\"Enter the key\" onselectstart=\"return false\" onpaste=\"return false;\" onCopy=\"return false\" onCut=\"return false\" onDrag=\"return false\" onDrop=\"return false\" autocomplete=off>
+        <small id=\"disconnectHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will dissassociate this swimmer from your account in all of our systems. You will need a new Access Key to add the swimmer again.</small>
+      </div>
+      <input type=\"hidden\" value=\"" . $disconnectKey . "\" name=\"disconnectKey\">
+      <div class=\"form-group\">
+        <label for=\"swimmerDeleteDanger\">Delete this Swimmer with this Key \"" . $rowSwim['AccessKey'] . "\"</label>
+        <input type=\"text\" class=\"form-control\" id=\"swimmerDeleteDanger\" name=\"swimmerDeleteDanger\" aria-describedby=\"swimmerDeleteDangerHelp\" placeholder=\"Enter the key\" onselectstart=\"return false\" onpaste=\"return false;\" onCopy=\"return false\" onCut=\"return false\" onDrag=\"return false\" onDrop=\"return false\" autocomplete=off>
+        <small id=\"swimmerDeleteDangerHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will delete this swimmer from all of our systems.</small>
+      </div>
+      <button type=\"submit\" class=\"btn btn-danger mb-3\">Delete or Disconnect</button>
+    </div>
+  </form>";
 }
 else {
   // Not allowed or not found
