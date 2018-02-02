@@ -91,6 +91,9 @@
     .chart {
       max-width: 100%;
     }
+    #cookie-law {
+      margin: -1rem 0 1rem 0;
+    }
 	</style>
 
     <!--[if lt IE 9]>

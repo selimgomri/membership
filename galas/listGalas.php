@@ -2,14 +2,16 @@
 
 $pagetitle = "Galas";
 $title = "Galas";
-$content = "<p class=\"lead\">Galas which are open for entries, or have closed. Galas in the past are not shown.</p>";
-$content .= "<h2>Galas open for entries</h2>";
+$content = "";
+$content .= "<p class=\"lead\">Galas which are open for entries, or have closed. Galas in the past are not shown.</p>";
+$content .= '<div class="my-3 p-3 bg-white rounded box-shadow">
+  <h2 class="border-bottom border-gray pb-2 mb-0">Galas Open for Entries</h2>';
 $content .= upcomingGalas($link, false);
 if ($access == "Parent") {
-	$content .= "<p><a href=\"entergala\" class=\"btn btn-success\">Enter a gala</a></p>";
+	$content .= "<p class=\"mb-0\"><a href=\"entergala\" class=\"btn btn-success\">Enter a gala</a></p></div>";
 }
 else {
-	$content .= "<p><a href=\"addgala\" class=\"btn btn-success\">Add a gala</a></p>";
+	$content .= "<p><a href=\"addgala\" class=\"btn btn-success\">Add a gala</a></p></div>";
 	/* Stats Section */
 	$swimsCountArray = [];
 	$strokesCountArray = [0, 0, 0, 0, 0];
@@ -94,12 +96,19 @@ else {
 		        chart.draw(data, options);
 		      }
 		    </script>
-				<h2>Statistics <small>From all entries</small></h2>
+				<div class=\"my-3 p-3 bg-white rounded box-shadow\">
+				<h2>Statistics</h2>
+				<p class=\"lead border-bottom border-gray pb-2 mb-0\">These statistics are gathered from all previous gala entries in our system</p>
 		    <div class=\"chart\" id=\"piechart\"></div>
 				<div class=\"chart\" id=\"barchart\"></div>
+				</div>
 		";
 	}
 }
-$content .= "<h2>Galas closed for entries</h2>";
+$content .= "
+<div class=\"my-3 p-3 bg-white rounded box-shadow\">
+<h2>Galas Closed for Entries</h2>
+<p class=\"lead border-bottom border-gray pb-2 mb-0\">These galas have closed to entries, but are still in the future</p>";
 $content .= closedGalas($link, false);
+$content .= "</div>";
 ?>

@@ -4,11 +4,15 @@ $pagetitle = "Galas";
 $title = "Galas";
 $content = "<p class=\"lead\">The gala homepage gives you information about your gala entries for upcoming galas and other galas which are available to enter.</p>";
 $content .= "<p>Please remember that this new system is in development, so you must hand in a <a href=\"https://www.chesterlestreetasc.co.uk/wp-content/uploads/2016/06/GalaEntryForm.pdf\" target=\"_blank\">paper Gala Entry Form</a> as well.</p>";
-$content .= "<h2>Galas you can enter</h2>";
+$content .= '<div class="my-3 p-3 bg-white rounded box-shadow">
+  <h2 class="border-bottom border-gray pb-2 mb-0">Galas you can enter</h2>';
 $content .= upcomingGalas($link);
-$content .= "<p><a class=\"btn btn-success\" href=\"entergala\">Enter a gala</a></p>";
-$content .= "<h2>Galas you've entered</h2>";
+$content .= "<p class=\"mb-0\"><a class=\"btn btn-success\" href=\"entergala\">Enter a gala</a></p></div>";
+
+$content .= '<div class="my-3 p-3 bg-white rounded box-shadow">
+  <h2 class="border-bottom border-gray pb-2 mb-0">Galas you\'ve entered</h2>';
 $content .= enteredGalas($link, $userID);
+$content .= '</div>';
 
 /* Stats Section */
 $swimsCountArray = [];
@@ -94,9 +98,12 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
 	        chart.draw(data, options);
 	      }
 	    </script>
-			<h2>Statistics <small>All My Swimmers</small></h2>
+			<div class=\"my-3 p-3 bg-white rounded box-shadow\">
+			<h2>Statistics</h2>
+			<p class=\"border-bottom border-gray pb-2 mb-0\">These are statistics for all of your swimmers put together, based on entries over all time. Go to <a href=\"" . autoUrl('swimmers') . "\">My Swimmers</a> to see stats for each swimmer.</p>
 	    <div class=\"chart\" id=\"piechart\"></div>
 			<div class=\"chart\" id=\"barchart\"></div>
+			</div>
 	";
 }
 ?>

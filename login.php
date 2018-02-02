@@ -42,8 +42,7 @@
   }*/
 
 ?>
-<style>body {padding-top: 3.5rem;}</style>
-<div class="frontpage1">
+<div class="frontpage1" style="margin-top:-1rem;">
   <div class="container-fluid">
     <div class="row justify-content-center">
       <div class="col-sm-6 col-md-5 col-xl-4"  style="padding-top:5rem;">
@@ -67,7 +66,7 @@
                   <input type="password" name="password" id="password" class="form-control form-control-lg" required>
                 </div>
                 <p><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-block btn-primary"></p>
-                <span class="small text-center d-block"><a href="register.php">Register an account</a></span>
+                <span class="small text-center d-block"><a href="register.php">Create an account</a></span>
                 <span class="small text-center d-block"><a href="forgot-password.php">Forgot password?</a></span>
               </form>
           </div>
