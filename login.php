@@ -42,35 +42,38 @@
   }*/
 
 ?>
-<div class="container-fluid">
-  <div class="row justify-content-center">
-    <div class="col-sm-6 col-md-5 col-xl-4">
-      <div class="my-3 p-3 bg-white rounded box-shadow">
-        <h2 class="border-bottom border-gray pb-2 mb-0">Please Login</h2>
-        <div class="text-muted pt-3">
-            <?php if ($errorState == true) { ?>
-            <div class="alert alert-danger">
-              <strong>Incorrect details</strong> <br>
-              Please try again
-            </div>
-            <?php } ?>
+<style>body {padding-top: 3.5rem;}</style>
+<div class="frontpage1">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-sm-6 col-md-5 col-xl-4"  style="padding-top:5rem;">
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+          <h2 class="border-bottom border-gray pb-2 mb-0">Please Login</h2>
+          <div class="text-muted pt-3">
+              <?php if ($errorState == true) { ?>
+              <div class="alert alert-danger">
+                <strong>Incorrect details</strong> <br>
+                Please try again
+              </div>
+              <?php } ?>
 
-            <form method="post" action="login-action.php" name="loginform" id="loginform">
-              <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" name="username" id="username" class="form-control form-control-lg" value="<?php if ($errorState == true) { echo $username; } ?>" required autofocus>
-              </div>
-              <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password" class="form-control form-control-lg" required>
-              </div>
-              <p><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-block btn-primary"></p>
-              <span class="small text-center d-block"><a href="register.php">Register an account</a></span>
-              <span class="small text-center d-block"><a href="forgot-password.php">Forgot password?</a></span>
-            </form>
+              <form method="post" action="login-action.php" name="loginform" id="loginform">
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input type="text" name="username" id="username" class="form-control form-control-lg" value="<?php if ($errorState == true) { echo $username; } ?>" required autofocus>
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" name="password" id="password" class="form-control form-control-lg" required>
+                </div>
+                <p><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-block btn-primary"></p>
+                <span class="small text-center d-block"><a href="register.php">Register an account</a></span>
+                <span class="small text-center d-block"><a href="forgot-password.php">Forgot password?</a></span>
+              </form>
+          </div>
         </div>
-      </div>
 
+      </div>
     </div>
   </div>
 </div>
