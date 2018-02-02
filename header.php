@@ -44,6 +44,7 @@
       z-index: 2;
       height: 2.75rem;
       overflow-y: hidden;
+      margin: -1rem 0 1rem 0;
     }
     .nav-scroller .nav {
       display: -webkit-box;

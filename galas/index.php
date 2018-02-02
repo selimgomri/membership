@@ -146,7 +146,7 @@
   }
 
 ?>
-<div class="nav-scroller bg-white box-shadow mb-3" style="margin-top:-1rem;">
+<div class="nav-scroller bg-white box-shadow mb-3">
   <nav class="nav nav-underline">
     <a class="nav-link" href="<?php echo autoUrl("galas")?>">Gala Home</a>
     <a class="nav-link" href="<?php echo autoUrl("galas/competitions")?>">Competitions</a>

@@ -9,11 +9,6 @@
   $swimmersRow = mysqli_fetch_array($result, MYSQLI_ASSOC);
 ?>
 
-<style>
-body {
-  padding-top: 3.5rem !important;
-}
-</style>
 <?php
  if ($_SESSION['AccessLevel'] == "Parent") {
 ?>
