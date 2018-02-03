@@ -42,6 +42,12 @@
   }*/
 
 ?>
+<div class="homepage-masthead bg-warning d-print-none text-dark" style="margin-top:-1rem">
+  <div class="container-fluid">
+    <p class="h3">We're developing this system</p>
+    <p>You're viewing the development version of this system. If you're in our trials, please go to <a href="https://account.chesterlestreetasc.co.uk" class="text-dark">account.chesterlestreetasc.co.uk</a>, which is a more stable version running a few days behind this build.</p>
+  </div>
+</div>
 <div class="frontpage1" style="margin-top:-1rem;">
   <div class="container-fluid">
     <div class="row justify-content-center">
