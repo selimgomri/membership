@@ -105,7 +105,7 @@
 <body class="bg-light">
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary d-print-none justify-content-between" role="navigation">
       <a class="navbar-brand" href="<?php echo autoUrl("index.php") ?>">
-        <?php if ((empty($_SESSION['LoggedIn']) || $_SESSION['AccessLevel'] == "Parent")) { ?>Membership <span class="badge badge-secondary">BETA</span><?php } else { ?>Membership Management <span class="badge badge-secondary bg-pink">ALPHA</span><?php } ?>
+        <?php if ((empty($_SESSION['LoggedIn']) || $_SESSION['AccessLevel'] == "Parent")) { ?>Membership <span class="badge badge-secondary">BETA</span><?php } else { ?>MMS <span class="badge badge-secondary bg-pink">ALPHA</span><?php } ?>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

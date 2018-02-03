@@ -170,8 +170,8 @@ $female = mysqli_num_rows($result);
 else {
   $content .= "<div class=\"row\"><div class=\"col-md-6\">
   <div class=\"my-3 p-3 bg-white rounded box-shadow\">
-  <h2 class=\"border-bottom border-gray pb-2 mb-0\">Squad Details</h2>
-  <ul>";
+  <h2 class=\"border-bottom border-gray pb-2\">Squad Details</h2>
+  <ul class=\"mb-0\">";
   if ($row['SquadFee'] > 0) {
     $content .= "<li>Squad Fee: &pound;" . $row['SquadFee'] . "</li>";
   }
