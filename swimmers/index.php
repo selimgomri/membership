@@ -134,7 +134,7 @@
       $pagetitle = "Access Keys";
       $title = "Member Access Keys";
       $content = "<p class=\"lead\">See access keys.</p>";
-      $content .= "<p><a href=\"accesskeys-csv\" class=\"btn btn-success\">Download as a CSV for Mailmerge</a></p>";
+      $content .= "<p><a href=\"accesskeys-csv\" class=\"btn btn-outline-dark\">Download as a CSV for Mailmerge</a></p>";
       include "accesskeys.php";
     }
     elseif ($id == "accesskeys-csv") {

@@ -1,6 +1,8 @@
 <?php
 $content .= '
-<form method="post" action="register-get">
+<div class="my-3 p-3 bg-white rounded box-shadow">
+  <h2 class="border-bottom border-gray pb-2">Select Session</h2>
+  <form method="post" action="register-get">
   <div class="form-group">
   <label for="session">Select Week</label>
   <select class="custom-select" name="date" id="date">
@@ -53,16 +55,25 @@ $content .= '
     }
   $content .= '</select>
   </div>
-  <div class="form-group">
+  <div class="form-group mb-0">
   <label for="session">Select Session</label>
   <select class="custom-select" id="session" name="session">
     <option selected>No squad selected</option>
   </select>
   </div>
+  </div>
+
+  <div class="my-3 p-3 bg-white rounded box-shadow">
   <div id="register">
+  <div class="ajaxPlaceholder mb-0">Fill in the details above and we can load the register</div>
+  </div>
   </div>
   </form>
   <script>
+  function resetRegisterArea() {
+    var register = document.getElementById("register");
+    register.innerHTML = \'<div class="ajaxPlaceholder mb-0">Fill in the details above and we can load the register</div>\';
+  }
   function getSessions() {
     var e = document.getElementById("squad");
     var value = e.options[e.selectedIndex].value;
@@ -77,6 +88,7 @@ $content .= '
           if (this.readyState == 4 && this.status == 200) {
             document.getElementById("session").innerHTML = this.responseText;
             console.log(this.responseText);
+            resetRegisterArea();
           }
         }
       xmlhttp.open("GET", "../ajax/registerSessions.php?squadID=" + value, true);

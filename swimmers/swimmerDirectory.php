@@ -13,11 +13,9 @@ $sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
 $result = mysqli_query($link, $sql);
 $squadCount = mysqli_num_rows($result);
 $content .= "
-<form method=\"post\">
-<div class=\"input-group form-group\">
-<div class=\"input-group-prepend\">
-  <span class=\"input-group-text\" for=\"squad\">Select a Squad</span>
-</div>
+<form method=\"post\" class=\"form-row\">
+<div class=\"col-md-6 mb-3\">
+<label class=\"sr-only\" for=\"squad\">Select a Squad</label>
 <select class=\"custom-select\" placeholder=\"Select a Squad\" id=\"squad\" name=\"squad\">
 <option value=\"allSquads\" selected>Show All Squads</option>";
 //$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -26,14 +24,14 @@ for ($i = 0; $i < $squadCount; $i++) {
   $content .= "<option value=\"" . $row['SquadID'] . "\"";
   $content .= ">" . $row['SquadName'] . "</option>";
 }
-$content .= "</select></div></form>";
+$content .= "</select></div>";
 $content .= '
-<div class="input-group form-group">
-<div class="input-group-prepend">
-  <span class="input-group-text" for="search">Search by Surname</span>
-</div>
+<div class="col-md-6 mb-3">
+<label class="sr-only" for="search">Search by Surname</label>
 <input class="form-control" placeholder="Surname" id="search" name="search">
 </div>
+
+</form>
 
 <div id="output"><div class="ajaxPlaceholder">Loading Content<br>If content does not display, please turn on JavaScript</div></div>
 
