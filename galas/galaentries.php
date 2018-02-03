@@ -70,6 +70,8 @@ if ($swimCount > 0) {
 
       function getResult() {
         var gala = document.getElementById(\"gala\");
+        var swimmer = document.getElementById(\"swimmer\");
+        var swimmerValue = swimmer.value;
         var galaValue = gala.options[gala.selectedIndex].value;
         console.log(galaValue);
         if (galaValue==\"null\") {
@@ -84,7 +86,7 @@ if ($swimCount > 0) {
               console.log(this.responseText);
             }
           }
-          var ajaxRequest = \"" . autoURL('ajax/galaForm.php') . "?galaID=\" + galaValue;
+          var ajaxRequest = \"" . autoURL('ajax/galaForm.php') . "?galaID=\" + galaValue + \"&swimmer=\" + swimmerValue;
           console.log(ajaxRequest);
           xmlhttp.open(\"GET\", ajaxRequest, true);
           xmlhttp.send();
