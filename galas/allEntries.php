@@ -32,7 +32,7 @@ if (!isset($_SESSION['AllEntriesResponse'])) {
     <div class=\"col\">
   <input class=\"form-control\" name=\"search\" id=\"search\">
   </div></div>";
-  $content .= "<div class=\"table-responsive\" id=\"output\"></div>";
+  $content .= "<div class=\"table-responsive\" id=\"output\"><div class=\"ajaxPlaceholder\"><strong>Select a Gala</strong> <br>Entries will appear here when you select a gala</div></div>";
   $content .= '
   <script>
   function getResult() {

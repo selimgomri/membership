@@ -32,7 +32,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
   if (isset($_REQUEST["sessionID"])) {
 
     $sessionID = mysqli_real_escape_string($link, $_REQUEST["sessionID"]);
-    $response = $content = "";
+    $response = $content = $modalOutput = "";
 
     if ($sessionID != null) {
       $sql = "SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE sessions.SessionID = '$sessionID';";
@@ -55,10 +55,47 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
           </td>
           <td>";
           if ($row['MedicalNotes'] != "") {
-            $content .= "<a href=\"" . autoUrl("swimmers/" . $row['MemberID']) . "\" target=\"_blank\"><span class=\"badge badge-danger\">MEDICAL</span></a>";
+            //ref=\"" . autoUrl("swimmers/" . $row['MemberID']) . "\" target=\"_blank\">
+            $content .= "<a data-toggle=\"modal\" href=\"#medicalModal" . $row['MemberID'] . "\"><span class=\"badge badge-danger\">MEDICAL</span></a>";
+            $modalOutput .= '
+            <!-- Modal -->
+            <div class="modal fade" id="medicalModal' . $row['MemberID'] . '" tabindex="-1" role="dialog" aria-labelledby="medicalModalTitle' . $row['MemberID'] . '" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="medicalModalTitle' . $row['MemberID'] . '">Medical Information for ' . $row['MForename'] . ' ' . $row['MSurname'] . '</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  ' . $row['MedicalNotes'] . '
+                  </div>
+                </div>
+              </div>
+            </div>
+            ';
           }
           if ($row['OtherNotes'] != "") {
-            $content .= " <a href=\"" . autoUrl("swimmers/" . $row['MemberID']) . "\" target=\"_blank\"><span class=\"badge badge-info\">OTHER</span></a>";
+            $content .= " <a data-toggle=\"modal\" href=\"#notesModal" . $row['MemberID'] . "\"><span class=\"badge badge-info\">OTHER</span></a>";
+            $modalOutput .= '
+            <!-- Modal -->
+            <div class="modal fade" id="notesModal' . $row['MemberID'] . '" tabindex="-1" role="dialog" aria-labelledby="notesModalTitle' . $row['MemberID'] . '" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="notesModalTitle' . $row['MemberID'] . '">Other Notes for ' . $row['MForename'] . ' ' . $row['MSurname'] . '</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  ' . $row['OtherNotes'] . '
+                  </div>
+                </div>
+              </div>
+            </div>
+            ';
           }
           $content .= "
           </td>
@@ -69,6 +106,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 
     if ($swimmerCount > 0) {
       echo $content;
+      echo $modalOutput;
     }
     else {
       echo "<p class=\"lead\">No swimmers were found for this squad and session</p>";
