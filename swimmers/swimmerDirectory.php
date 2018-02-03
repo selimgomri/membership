@@ -18,16 +18,50 @@ $content .= "
 <div class=\"input-group-prepend\">
   <span class=\"input-group-text\" for=\"squad\">Select a Squad</span>
 </div>
-<select class=\"custom-select\" placeholder=\"Select a Squad\" id=\"squad\" name=\"squad\">";
+<select class=\"custom-select\" placeholder=\"Select a Squad\" id=\"squad\" name=\"squad\">
+<option value=\"allSquads\" selected>Show All Squads</option>";
 //$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 for ($i = 0; $i < $squadCount; $i++) {
   $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
   $content .= "<option value=\"" . $row['SquadID'] . "\"";
-  if ($squadID != null && $row['SquadID'] == $squadID) {
-    $content .= " selected";
-  }
   $content .= ">" . $row['SquadName'] . "</option>";
 }
-$content .= "</select><div class=\"input-group-append\"><button type=\"submit\" class=\"btn btn-success\">Filter</button></div></div></form>";
-$content .= adminSwimmersTable($link, $squadID);
+$content .= "</select></div></form>";
+$content .= '
+<div class="input-group form-group">
+<div class="input-group-prepend">
+  <span class="input-group-text" for="search">Search by Surname</span>
+</div>
+<input class="form-control" placeholder="Surname" id="search" name="search">
+</div>
+
+<div id="output"><div class="ajaxPlaceholder">Loading Content<br>If content does not display, please turn on JavaScript</div></div>
+
+<script>
+function getResult() {
+  var squad = document.getElementById("squad");
+  var squadValue = squad.options[squad.selectedIndex].value;
+  var search = document.getElementById("search");
+  var searchValue = search.value;
+  console.log(squadValue);
+  console.log(searchValue);
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log("We got here");
+        document.getElementById("output").innerHTML = this.responseText;
+        console.log(this.responseText);
+      }
+    }
+    xhttp.open("POST", "' . autoURL("ajax/membersList.php") . '", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("squadID=" + squadValue + "&search=" + searchValue);
+    console.log("Sent");
+}
+// Call getResult immediately
+getResult();
+
+document.getElementById("squad").onchange=getResult;
+document.getElementById("search").oninput=getResult;
+</script>';
 ?>
