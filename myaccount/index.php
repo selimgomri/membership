@@ -85,7 +85,8 @@
 
 ?>
 <div class="container">
-<h1>Your Account</h1>
+<h1>Hello <?php echo $forename ?></h1>
+<p class="lead">Welcome to My Account where you can change your personal details, password, contact information and add add swimmers to your account.</p>
 <?php if ($forenameUpdate || $surnameUpdate || $emailUpdate || $mobileUpdate) {
   $query = "SELECT * FROM users WHERE UserID = '$userID' ";
   $result = mysqli_query($link, $query);
@@ -123,48 +124,62 @@
   </ul>
 </div>
 <?php  } ?>
-<p>What we know about you.</p>
-<form method="post">
+<div class="my-3 p-3 bg-white rounded box-shadow">
   <h2>Your Details</h2>
-  <div class="form-group">
-      <label for="forename">Name</label>
-      <input type="text" class="form-control" name="forename" id="forename" placeholder="Forename" value="<?php echo $forename ?>">
-   </div>
-   <div class="form-group">
-      <label for="surname">Surname</label>
-      <input type="text" class="form-control" name="surname" id="surname" placeholder="Surname" value="<?php echo $surname ?>">
-  </div>
-   <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value="<?php echo $email ?>">
-  </div>
-  <div class="form-group">
-    <div class="custom-control custom-checkbox">
-      <input type="checkbox" class="custom-control-input" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?php echo $emailChecked ?>>
-      <label class="custom-control-label" for="emailContactOK">Check this to receive news by email</label>
-      <small id="emailContactOKHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small>
+  <p class="border-bottom border-gray pb-2">What we know about you.</p>
+  <form method="post">
+    <div class="form-group">
+        <label for="forename">Name</label>
+        <input type="text" class="form-control" name="forename" id="forename" placeholder="Forename" value="<?php echo $forename ?>">
+     </div>
+     <div class="form-group">
+        <label for="surname">Surname</label>
+        <input type="text" class="form-control" name="surname" id="surname" placeholder="Surname" value="<?php echo $surname ?>">
     </div>
-  </div>
-  <div class="form-group">
-    <label for="mobile">Mobile Number</label>
-    <input type="tel" class="form-control" name="mobile" id="mobile" aria-describedby="mobileHelp" placeholder="Mobile Number" value="<?php echo $mobile ?>">
-    <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
-  </div>
-  <div class="form-group">
-    <div class="custom-control custom-checkbox">
-      <input type="checkbox" class="custom-control-input" value="1" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK" <?php echo $mobileChecked ?>>
-      <label class="custom-control-label" for="smsContactOK">Check this if you would like to receive text messages</label>
-      <small id="smsContactOKHelp" class="form-text text-muted">We'll still use this to contact you in an emergency</small>
+     <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value="<?php echo $email ?>">
     </div>
+    <div class="form-group">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?php echo $emailChecked ?>>
+        <label class="custom-control-label" for="emailContactOK">Check this to receive news by email</label>
+        <small id="emailContactOKHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="mobile">Mobile Number</label>
+      <input type="tel" class="form-control" name="mobile" id="mobile" aria-describedby="mobileHelp" placeholder="Mobile Number" value="<?php echo $mobile ?>">
+      <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
+    </div>
+    <div class="form-group">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" value="1" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK" <?php echo $mobileChecked ?>>
+        <label class="custom-control-label" for="smsContactOK">Check this if you would like to receive text messages</label>
+        <small id="smsContactOKHelp" class="form-text text-muted">We'll still use this to contact you in an emergency</small>
+      </div>
+    </div>
+    <p><input type="submit" class="btn btn-outline-dark" value="Save Changes"></p>
+    <p class="mb-0">Changes will take place instantly. You can make changes again if you spot a mistake</p>
+  </form>
   </div>
+
   <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-  <h2>My Swimmers</h2>
-  <?php echo mySwimmersTable($link, $userID) ?>
-  <p><a href="add-swimmer.php" class="btn btn-success">Add a Swimmer</a></p>
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+    <h2>My Swimmers</h2>
+    <p>Swimmers linked to your account</p>
+    <?php echo mySwimmersTable($link, $userID) ?>
+    <p class="mb-0"><a href="add-swimmer.php" class="btn btn-outline-dark">Add a Swimmer</a></p>
+  </div>
 <?php } ?>
+<div class="my-3 p-3 bg-white rounded box-shadow">
   <h2>Password</h2>
-  <p><a href="change-password.php" class="btn btn-success">Change my Password</a></p>
+  <p class="border-bottom border-gray pb-2">Change your password regularly to keep your account safe</p>
+  <p class="mb-0"><a href="change-password.php" class="btn btn-outline-dark">Change my Password</a></p>
+</div>
+<div class="my-3 p-3 bg-white rounded box-shadow">
   <h2>Technical Details</h2>
+  <p class="border-bottom border-gray pb-2">Some things you can't change about your account</p>
   <div class="form-group">
     <label for="username">Username</label>
     <input type="text" class="form-control" name="username" id="username" placeholder="Username" value="<?php echo $username ?>" readonly>
@@ -178,9 +193,7 @@
     <label for="access">Access Level</label>
     <input type="text" class="form-control" name="access" id="access" placeholder="Access Level" value="<?php echo $access ?>" readonly>
   </div>
-  <p><input type="submit" class="btn btn-success" value="Save Changes"></p>
-  <p>Changes will take place instantly. You can make changes again if you spot a mistake</p>
-</form>
+</div>
 </div>
 
 <?php include "../footer.php"; ?>

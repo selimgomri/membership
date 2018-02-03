@@ -139,9 +139,6 @@
       <li class="nav-item">
 			  <a class="nav-link" href="<?php echo autoUrl("galas") ?>">Galas</a>
 		  </li>
-      <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("logout.php") ?>">Logout</a>
-		  </li>
 		  <?php } ?>
 		  <?php if (empty($_SESSION['LoggedIn'])) { ?>
       <li class="nav-item">
@@ -167,6 +164,9 @@
 			<a class="nav-link disabled" href="#">Account Settings</a>
 		  </li>-->
 		</ul>
+    <?php if (!empty($_SESSION['LoggedIn'])) { ?>
+    <a class="btn btn-outline-light my-2 my-sm-0" href="<?php echo autoUrl("logout.php") ?>">Logout</a>
+    <?php } ?>
 	  </div>
 
   </nav>
