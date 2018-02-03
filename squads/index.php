@@ -19,7 +19,7 @@
       $title = "Squad Details";
       $content = "<p class=\"lead\">Information about our squads</p>";
       $content .= squadInfoTable($link, true);
-      $content .= "<p><a href=\"addsquad\" class=\"btn btn-success\">Add a Squad</a></p>";
+      $content .= "<p><a href=\"addsquad\" class=\"btn btn-outline-dark\">Add a Squad</a></p>";
     }
     elseif (($id == "addsquad")) {
       include "SquadAdd.php";

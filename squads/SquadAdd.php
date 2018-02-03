@@ -1,6 +1,9 @@
 <?php
 $title = $pagetitle = "Add a Squad";
-$content = "<form method=\"post\" action=\"addsquad-action\">";
+$content = "
+<div class=\"my-3 p-3 bg-white rounded box-shadow\">
+<h2 class=\"border-bottom border-gray pb-2\">Squad Details</h2>
+<form method=\"post\" action=\"addsquad-action\">";
 $content .= "
 <div class=\"form-group\">
   <label for=\"squadName\">Squad Name</label>
@@ -28,7 +31,7 @@ $content .= "
   <label for=\"squadCoC\">Squad Code of Conduct</label>
   <input type=\"text\" class=\"form-control\" id=\"squadCoC\" name=\"squadCoC\" placeholder=\"Enter Squad Code of Conduct Address\">
 </div>";
-$content .= "<p><button class=\"btn btn-success\" type=\"submit\">Add Squad</button></p>";
-$content .= "</form>";
+$content .= "<p class=\"mb-0\"><button class=\"btn btn-outline-dark\" type=\"submit\">Add Squad</button></p>";
+$content .= "</form></div>";
 
 ?>

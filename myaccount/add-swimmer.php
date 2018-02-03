@@ -20,7 +20,7 @@ if ($_SESSION['AccessLevel'] == "Parent") { ?>
       <label for="accessKey">Access Key</label>
       <input class="form-control mb-0" type="text" name="accessKey" id="accessKey" placeholder="123456" required>
     </div>
-    <input type="submit" class="btn btn-success mb-4" value="Add Swimmer">
+    <input type="submit" class="btn btn-outline-dark mb-4" value="Add Swimmer">
 </div>
 <?php }
 

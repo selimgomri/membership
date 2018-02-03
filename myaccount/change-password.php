@@ -18,7 +18,7 @@
       <label for="new2">Confirm New Password</label>
       <input type="password" class="form-control" name="new2" id="new2" placeholder="Confirm New Password">
   </div>
-  <p><input type="submit" name="submit" id="submit" class="btn btn-success" value="Save Changes"></p>
+  <p><input type="submit" name="submit" id="submit" class="btn btn-outline-dark" value="Save Changes"></p>
 </form>
 <p>Changes will take place instantly, if everything is correct. You can change your password as often as you like.</p>
 </div>

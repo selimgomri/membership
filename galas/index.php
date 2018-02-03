@@ -153,9 +153,9 @@
     <?php if ($access == "Parent") {?>
     <a class="nav-link" href="<?php echo autoUrl("galas/entries")?>">My Entries</a>
     <?php } else {?>
-    <a class="nav-link" href="<?php echo autoUrl("galas/entries")?>">Entries</a>
+    <a class="nav-link" href="<?php echo autoUrl("galas/entries")?>">View Entries</a>
     <?php } ?>
-    <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/competitions/" target="_blank">Main Website</a>
+    <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/competitions/" target="_blank">Go to Gala Website</a>
   </nav>
 </div>
 <div class="container">

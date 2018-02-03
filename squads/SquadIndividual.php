@@ -77,7 +77,7 @@ $content .= "
 <div class=\"row\"><div class=\"col-md-6\">
 <div class=\"my-3 p-3 bg-white rounded box-shadow\">
 <h2>Details</h2>
-<p class=\"lead border-bottom border-gray pb-2 mb-0\">View or edit the squad details</p>
+<p class=\"lead border-bottom border-gray pb-2\">View or edit the squad details</p>
 <div class=\"form-group\">
   <label for=\"squadName\">Squad Name</label>
   <input type=\"text\" class=\"form-control\" id=\"squadName\" name=\"squadName\" placeholder=\"Enter Squad Name\" value=\"" . $row['SquadName'] . "\">
@@ -111,7 +111,7 @@ $content .= "
     <small id=\"squadDeleteDangerHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will delete this squad.</small>
   </div>
 </div>
-<p><button class=\"btn btn-success\" type=\"submit\">Update</button></p></div></div>
+<p><button class=\"btn btn-outline-dark\" type=\"submit\">Update</button></p></div></div>
 <div class=\"col-md-6\">";
 
 $sql = "SELECT `Gender` FROM `members` WHERE `SquadID` = '$id' AND `Gender` = 'Male';";

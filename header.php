@@ -132,9 +132,11 @@
         <li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("squads") ?>">Squads</a>
   		  </li>
+        <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach" || $_SESSION['AccessLevel'] == "Committee") { ?>
         <li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("attendance") ?>">Attendance</a>
   		  </li>
+        <?php } ?>
       <?php } ?>
       <li class="nav-item">
 			  <a class="nav-link" href="<?php echo autoUrl("galas") ?>">Galas</a>
