@@ -25,15 +25,4 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 		}
   }
 }
-
-$id = "processedEntry-1";
-if (strpos($id, 'processedEntry-') !== false) {
-	echo "true";
-}
-else {
-	echo "false";
-}
-
-$id = substr($id, 15);
-echo $id;
 ?>
