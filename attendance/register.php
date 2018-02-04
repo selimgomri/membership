@@ -20,7 +20,6 @@ $content .= '
       $latestWeekDB = $row['WeekDateBeginning'];
       date('Y-m-d', strtotime($latestWeekDB));
       if ($week_start != $latestWeekDB) {
-        echo "We're in";
         $sql = "INSERT INTO sessionsWeek (WeekDateBeginning) VALUES ('$week_start')";
         mysqli_query($link, $sql);
       }
