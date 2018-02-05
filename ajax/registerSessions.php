@@ -17,7 +17,33 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       $content = '<option>Choose the session from the menu</option>';
       for ($i=0; $i<$swimmerCount; $i++) {
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-        $content .= "<option value=\"" . $row['SessionID'] . "\">" . $row['SessionDay'] . " " . $row['SessionName'] . "</option>";
+
+        $dayText = "";
+        switch ($row['SessionDay']) {
+            case 0:
+                $dayText = "Sunday";
+                break;
+            case 1:
+                $dayText = "Monday";
+                break;
+            case 2:
+                $dayText = "Tuesday";
+                break;
+            case 3:
+                $dayText = "Wednesday";
+                break;
+            case 4:
+                $dayText = "Thursday";
+                break;
+            case 5:
+                $dayText = "Friday";
+                break;
+            case 6:
+                $dayText = "Saturday";
+                break;
+        }
+
+        $content .= "<option value=\"" . $row['SessionID'] . "\">" . $row['SessionName'] . ", " . $dayText . " at " . $row['StartTime'] . "</option>";
       }
     }
 
@@ -42,37 +68,43 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       $sql = "SELECT `WeekDateBeginning` FROM `sessionsWeek` WHERE `WeekID` = '$date';";
       $result = mysqli_query($link, $sql);
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-      $date = strtotime($row['WeekDateBeginning']);
-      $dayAdd = 0;
-      switch ($row['SessionDay']) {
-          case "Sunday":
-              $dayAdd = 0;
-              break;
-          case "Monday":
-              $dayAdd = 1;
-              break;
-          case "Tuesday":
-              $dayAdd = 2;
-              break;
-          case "Wednesday":
-              $dayAdd = 3;
-              break;
-          case "Thursday":
-              $dayAdd = 4;
-              break;
-          case "Friday":
-              $dayAdd = 5;
-              break;
-          case "Saturday":
-              $dayAdd = 6;
-              break;
-      }
-      $date = strtotime($date. ' + ' . $dayAdd . ' days');
+      $weekBeginning = $row['WeekDateBeginning'];
       $sql = "SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE sessions.SessionID = '$sessionID';";
       $result = mysqli_query($link, $sql);
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+      $dayAdd = $row['SessionDay'];
+      $date = date ('j F Y', strtotime($weekBeginning. ' + ' . $dayAdd . ' days'));
 
-      $content .= "<h2>Take register</h2><p>for " . $row['SquadName'] . " Squad, " . $row['SessionDay'] . " " . $row['SessionName'] . "</p><p>" . $date . "</p>";
+      $dayText = "";
+      switch ($row['SessionDay']) {
+          case 0:
+              $dayText = "Sunday";
+              break;
+          case 1:
+              $dayText = "Monday";
+              break;
+          case 2:
+              $dayText = "Tuesday";
+              break;
+          case 3:
+              $dayText = "Wednesday";
+              break;
+          case 4:
+              $dayText = "Thursday";
+              break;
+          case 5:
+              $dayText = "Friday";
+              break;
+          case 6:
+              $dayText = "Saturday";
+              break;
+      }
+
+      $content .= "<h2>Take register</h2><p>for " . $row['SquadName'] . " Squad, " . $row['SessionName'] . " on " . $dayText . " " . $date . " at " . $row['StartTime'] . "</p>";
+      $datetime1 = new DateTime($row['StartTime']);
+      $datetime2 = new DateTime($row['EndTime']);
+      $interval = $datetime1->diff($datetime2);
+      $content .= "<p>This session is " . $interval->format('%h hours %I minutes') . " long, finishing at " . $row['EndTime'] . "</p>";
       $sql = "SELECT * FROM ((sessions INNER JOIN members ON sessions.SquadID = members.SquadID) INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE sessions.SessionID = '$sessionID' ORDER BY members.MForename, members.MSurname ASC";
       $result = mysqli_query($link, $sql);
       $swimmerCount = mysqli_num_rows($result);

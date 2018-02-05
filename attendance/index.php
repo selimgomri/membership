@@ -26,6 +26,12 @@
       $content = "<p class=\"lead\">Take the register for your Squad</p>";
       include "register.php";
     }
+    elseif (($id == "sessions")) {
+      $pagetitle = "Add or Edit Sessions";
+      $title = "Add or Edit Sessions";
+      $content = "<p class=\"lead\">Every squad has sessions linked to it. These are required for our attendance application. The data about sessions is also used to provide information to parents (in future).</p>";
+      include "sessions.php";
+    }
     else {
       // Argh. Something went wrong
       $pagetitle = "Error";
@@ -44,6 +50,19 @@
   }
 
 ?>
+<div class="nav-scroller bg-white box-shadow mb-3">
+  <nav class="nav nav-underline">
+    <a class="nav-link" href="<?php echo autoUrl("attendance")?>">Attendance Home</a>
+    <?php if ($access == "Parent") {?>
+    <a class="nav-link" href="<?php echo autoUrl("attendance/history")?>">Attendance History</a>
+    <?php } else {?>
+    <a class="nav-link" href="<?php echo autoUrl("attendance/register")?>">Take Register</a>
+    <a class="nav-link" href="<?php echo autoUrl("attendance/sessions")?>">Manage Sessions</a>
+    <a class="nav-link" href="<?php echo autoUrl("attendance/history")?>">Attendance History</a>
+    <?php } ?>
+    <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/squads/" target="_blank">Timetables</a>
+  </nav>
+</div>
 <div class="container">
   <h1><?php echo $title ?></h1>
   <div><?php echo $content ?></div>

@@ -98,7 +98,10 @@ $content .= '
   function getRegister() {
     var e = document.getElementById("session");
     var value = e.options[e.selectedIndex].value;
+    var date = document.getElementById("date");
+    var dateValue = date.options[date.selectedIndex].value;
     console.log(value);
+    console.log(dateValue);
       if (value == "") {
         document.getElementById("register").innerHTML = "<option selected>Choose the session from the menu</option>";
         return;
@@ -111,7 +114,7 @@ $content .= '
             console.log(this.responseText);
           }
         }
-      xmlhttp.open("GET", "../ajax/registerSessions.php?sessionID=" + value, true);
+      xmlhttp.open("GET", "../ajax/registerSessions.php?sessionID=" + value + "&date=" + dateValue, true);
       xmlhttp.send();
       }
     }
