@@ -21,7 +21,7 @@ $content .= '
   $content .= '</select>
   </div>
   </form>
-  <p class="mb-0">Then select from the options below to either View/Edit Sessions, or Add a New Session for the squad</p>
+  <p class="mb-0">Then select from the options below to either View Sessions or Add a New Session for the squad</p>
   </div>
 
   <div id="output"><div class="ajaxPlaceholder"><strong>Session Manager will appear here</strong> <br>Select a squad first</div></div>

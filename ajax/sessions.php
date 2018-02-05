@@ -14,7 +14,7 @@ function sessionManagement($squadID, $link) {
 	<div class="col-md-6">
 
 	<div class="my-3 p-3 bg-white rounded box-shadow">
-	<h2 class="border-bottom border-gray pb-2 mb-0">View/Edit Sessions</h2>
+	<h2 class="border-bottom border-gray pb-2 mb-0">View Sessions</h2>
 	';
 
 	$sql = "SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SquadID` = '$squadID' ORDER BY `SessionDay` ASC, `StartTime` ASC;";
@@ -63,22 +63,30 @@ function sessionManagement($squadID, $link) {
 				<div class="modal-dialog modal-dialog-centered" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="sessionModalTitle' . $row['SessionID'] . '">Session ' . $row['SessionName'] . ', ' . $dayText . '</h5>
+							<h5 class="modal-title" id="sessionModalTitle' . $row['SessionID'] . '">' . $row['SessionName'] . ', ' . $dayText . ' at ' . $row['StartTime'] . '</h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
 						<div class="modal-body">
-						<form id="sessionEditModal' . $row['SessionID'] . '">
-							<div class="form-group">
-								<label for="sessionEditName' . $row['SessionID'] . '">Session Name</label>
-								<input type="text" class="form-control" id="sessionEditName' . $row['SessionID'] . '" name="sessionEditName' . $row['SessionID'] . '" value="' . $row['SessionName'] . '">
-							</div>
-							<div class="form-group">
-								<label for="sessionEditDay' . $row['SessionID'] . '">Day of Week</label>
-								<input type="text" class="form-control" id="sessionEditDay' . $row['SessionID'] . '" name="sessionEditDay' . $row['SessionID'] . '" value="' . $dayText . '">
-							</div>
-						</form>
+							<dl>
+								<dt>Session Name</dt>
+								<dd>' . $row['SessionName'] . '</dd>
+								<dt>Venue</dt>
+								<dd>' . $row['VenueName'] . '</dd>
+								<dt>Start Time</dt>
+								<dd>' . $row['StartTime'] . '</dd>
+								<dt>Finish Time</dt>
+								<dd>' . $row['EndTime'] . '</dd>
+								<dt>Session Duration</dt>';
+								$datetime1 = new DateTime($row['StartTime']);
+					      $datetime2 = new DateTime($row['EndTime']);
+					      $interval = $datetime1->diff($datetime2);
+					      $modals .= '
+								<dd>' . $interval->format('%h hours %I minutes') . '</dd>
+
+							</dl>
+							<strong>You can\'t edit a session once it has been created</strong>  <br>Sessions are immutable. This is because swimmers may be marked as present at a session in the past, changing the session in any way, such as altering the start or finish time would distort the attendance records. Instead, mark the session as "Old" and create a new session
 						</div>
 					</div>
 				</div>
