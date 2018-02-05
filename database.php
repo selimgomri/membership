@@ -615,5 +615,9 @@ if ( (empty($_SESSION['LoggedIn']) || empty($_SESSION['Username'])) && ($prevent
   // Allow access to main page
   header("Location: " . autoUrl("login.php"));
 }
+elseif (((!empty($_SESSION['LoggedIn'])) || (!empty($_SESSION['Username']))) && ($preventLoginRedirect == true)) {
+  // Don't show login etc if logged in
+  header("Location: " . autoUrl("index.php"));
+}
 
 ?>
