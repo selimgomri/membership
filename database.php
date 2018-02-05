@@ -44,7 +44,86 @@ function notifySend($to, $subject, $message) {
   mail($to,$subject,$message,$headers);
 }
 
+function getAttendanceByID($db, $id, $weeks = "all") {
+  $output = $weeksWHERE = "";
+  if ($weeks != "all") {
+    $number = "LIMIT $weeks";
+  }
+
+  // Get the last four weeks to calculate attendance
+  $sql = "SELECT `WeekID` FROM `sessionsWeek` ORDER BY `WeekDateBeginning` DESC;";
+  $resultWeeks = mysqli_query($db, $sql);
+  $weekCount = mysqli_num_rows($resultWeeks);
+  if ($weekCount > 0) {
+    $sqlWeeks = "";
+    // Produce stuff for query
+    for ($y=0; $y<$weekCount; $y++) {
+      $attRow = mysqli_fetch_array($resultWeeks, MYSQLI_ASSOC);
+      $weekID[$y] = $attRow['WeekID'];
+      if ($y < ($weekCount-1)) {
+        $sqlWeeks .= "`WeekID` = '$weekID[$y]' OR ";
+      }
+      else {
+        $sqlWeeks .= "`WeekID` = '$weekID[$y]'";
+      }
+    }
+  }
+
+  if ($weeks != "all") {
+    $weeksWHERE = "($sqlWeeks) AND";
+  }
+
+  if ($weekCount > 0) {
+
+    // Get number of sessions we were present at
+    $sql = "SELECT `AttendanceBoolean` FROM `sessionsAttendance` WHERE `AttendanceBoolean` = '1' AND $weeksWHERE `MemberID` = '$id';";
+    $resultAtt = mysqli_query($db, $sql);
+    $presentCount = mysqli_num_rows($resultAtt);
+
+    // Get number of sessions in total
+    $sql = "SELECT `AttendanceBoolean` FROM `sessionsAttendance` WHERE $weeksWHERE `MemberID` = '$id';";
+    $resultAtt = mysqli_query($db, $sql);
+    $totalCount = mysqli_num_rows($resultAtt);
+
+    $attPercent = 0;
+    if ($totalCount != 0) {
+      $attPercent = ($presentCount/$totalCount)*100;
+      $output = number_format($attPercent,1,'.','');
+      if ($output == 0.0) {
+        $output = 0;
+      }
+    }
+    else {
+      $output = 0;
+    }
+  }
+  else {
+    $output = 0;
+  }
+  return $output;
+}
+
 function mySwimmersTable($db, $userID) {
+  // Get the last four weeks to calculate attendance
+  $sql = "SELECT `WeekID` FROM `sessionsWeek` ORDER BY `WeekDateBeginning` DESC LIMIT 4;";
+  $resultWeeks = mysqli_query($db, $sql);
+  $weekCount = mysqli_num_rows($resultWeeks);
+    if ($weekCount > 0) {
+    $sqlWeeks = "";
+    // Produce stuff for query
+    for ($y=0; $y<$weekCount; $y++) {
+      $attRow = mysqli_fetch_array($resultWeeks, MYSQLI_ASSOC);
+      $weekID[$y] = $attRow['WeekID'];
+      if ($y < ($weekCount-1)) {
+        $sqlWeeks .= "`WeekID` = '$weekID[$y]' OR ";
+      }
+      else {
+        $sqlWeeks .= "`WeekID` = '$weekID[$y]'";
+      }
+    }
+  }
+
+  // Get the information about the swimmer
   $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = '$userID';";
   $result = mysqli_query($db, $sqlSwim);
   $swimmerCount = mysqli_num_rows($result);
@@ -59,7 +138,7 @@ function mySwimmersTable($db, $userID) {
             <th>Squad</th>
             <th>Fee</th>
             <th>ASA Number</th>
-            <th><abbr title="Attendance over the last X weeks">Attendance</abbr></th>
+            <th><abbr title="Approximate attendance over the last 4 weeks">Attendance</abbr></th>
           </tr>
         </thead>
         <tbody>';
@@ -71,8 +150,13 @@ function mySwimmersTable($db, $userID) {
         <td><a href=\"" . $swimmerLink . "\">" . $swimmersRowX['MForename'] . " " . $swimmersRowX['MSurname'] . "</a></td>
         <td>" . $swimmersRowX['SquadName'] . "</td>
         <td>&pound;" . $swimmersRowX['SquadFee'] . "</td>
-        <td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $swimmersRowX['ASANumber'] . "\" target=\"_blank\" title=\"ASA Biographical Data\">" . $swimmersRowX['ASANumber'] . " <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a></td>
-        <td>XX%</td>
+        <td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $swimmersRowX['ASANumber'] . "\" target=\"_blank\" title=\"ASA Biographical Data\">" . $swimmersRowX['ASANumber'] . " <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a></td>";
+
+        // Get member ID for finding attendance
+        $id = $swimmersRowX['MemberID'];
+
+        $output .= "
+        <td>" . getAttendanceByID($db, $id, 4) . "%</td>
       </tr>";
     }
     $output .= '

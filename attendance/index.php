@@ -15,10 +15,7 @@
 
   if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
     if ($id == "") {
-      $pagetitle = "Attendance";
-      $title = "Squad Attendance <span class=\"badge badge-secondary\" style=\"background:var(--pink)\">ALPHA</span>";
-      $content = "<p class=\"lead\">A demo to test the data structure for recording attendance</p>";
-      $content .= "<a class=\"btn btn-dark mb-2\" href=\"register\">Take Register</a>";
+      include "indexView.php";
     }
     elseif (($id == "register")) {
       $pagetitle = "Register";

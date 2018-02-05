@@ -11,7 +11,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
     $response = "";
 
     if ($squadID != null) {
-      $sql = "SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE squads.SquadID = '$squadID';";
+      $sql = "SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE squads.SquadID = '$squadID' ORDER BY sessions.SessionDay ASC, sessions.StartTime ASC;";
       $result = mysqli_query($link, $sql);
       $swimmerCount = mysqli_num_rows($result);
       $content = '<option>Choose the session from the menu</option>';
