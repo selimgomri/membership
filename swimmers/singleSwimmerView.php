@@ -21,11 +21,11 @@ $content = '
 <div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded box-shadow" id="dash">
   <img class="mr-3" src="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png" alt="" width="48" height="48">
   <div class="lh-100">
-    <h6 class="mb-0 text-white lh-100">' . $rowSwim["MForename"];
+    <h1 class="h6 mb-0 text-white lh-100">' . $rowSwim["MForename"];
     if ($rowSwim["MMiddleNames"] != "") {
        $content .= ' ' . $rowSwim["MMiddleNames"];
     }
-    $content .= ' ' . $rowSwim["MSurname"] . '</h6>
+    $content .= ' ' . $rowSwim["MSurname"] . '</h1>
     <small>Swimmer, ' . $rowSwim["SquadName"] . ' Squad</small>
   </div>
 </div>
@@ -41,6 +41,12 @@ $content = '
     <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
       <strong class="d-block text-gray-dark">ASA Number</strong>
       <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . $rowSwim["ASANumber"] . '" target="_blank" title="ASA Biographical Data">' . $rowSwim["ASANumber"] . ' <i class="fa fa-external-link" aria-hidden="true"></i></a>
+    </p>
+  </div>
+  <div class="media pt-3">
+    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+      <strong class="d-block text-gray-dark">Attendance</strong>
+      ' . getAttendanceByID($link, $id, 4) . '% over the last 4 weeks, ' . getAttendanceByID($link, $id) . '% over all time
     </p>
   </div>
   <div class="media pt-3">
