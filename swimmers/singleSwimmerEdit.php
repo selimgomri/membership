@@ -103,7 +103,7 @@ if (!empty($_POST['sex'])) {
 		$update = true;
 	}
 }
-if (!empty($_POST['medicalNotes'])) {
+if (isset($_POST['medicalNotes'])) {
 	$newMedicalNotes = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['medicalNotes'])));
 	if ($newMedicalNotes != $medicalNotes) {
 		$sql = "UPDATE `members` SET `MedicalNotes` = '$newMedicalNotes' WHERE `MemberID` = '$idLast'";
@@ -112,7 +112,7 @@ if (!empty($_POST['medicalNotes'])) {
 		$update = true;
 	}
 }
-if (!empty($_POST['otherNotes'])) {
+if (isset($_POST['otherNotes'])) {
 	$newOtherNotes = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['otherNotes'])));
 	if ($newOtherNotes != $otherNotes) {
 		$sql = "UPDATE `members` SET `OtherNotes` = '$newOtherNotes' WHERE `MemberID` = '$idLast'";

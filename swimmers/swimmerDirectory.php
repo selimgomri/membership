@@ -13,7 +13,7 @@ $sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
 $result = mysqli_query($link, $sql);
 $squadCount = mysqli_num_rows($result);
 $content .= "
-<form method=\"post\" class=\"form-row\">
+<div class=\"form-row\">
 <div class=\"col-md-6 mb-3\">
 <label class=\"sr-only\" for=\"squad\">Select a Squad</label>
 <select class=\"custom-select\" placeholder=\"Select a Squad\" id=\"squad\" name=\"squad\">
@@ -31,7 +31,7 @@ $content .= '
 <input class="form-control" placeholder="Surname" id="search" name="search">
 </div>
 
-</form>
+</div>
 
 <div id="output"><div class="ajaxPlaceholder">Loading Content<br>If content does not display, please turn on JavaScript</div></div>
 
