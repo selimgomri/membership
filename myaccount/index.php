@@ -86,7 +86,7 @@
 ?>
 <div class="container">
 <h1>Hello <?php echo $forename ?></h1>
-<p class="lead">Welcome to My Account where you can change your personal details, password, contact information and add add swimmers to your account.</p>
+<p class="lead">Welcome to My Account where you can change your personal details, password, contact information and add swimmers to your account.</p>
 <?php if ($forenameUpdate || $surnameUpdate || $emailUpdate || $mobileUpdate) {
   $query = "SELECT * FROM users WHERE UserID = '$userID' ";
   $result = mysqli_query($link, $query);
