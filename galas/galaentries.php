@@ -7,12 +7,14 @@ $sql = "SELECT `MemberID` FROM `members` WHERE `members`.`UserID` = '$userID';";
 $result = mysqli_query($link, $sql);
 $swimCount = mysqli_num_rows($result);
 if ($swimCount > 0) {
-  $content .= "<form method=\"post\" action=\"entergala-action\">
-    <h2>Select Swimmer and Gala</h2>
+  $content .= "
+  <div class=\"my-3 p-3 bg-white rounded box-shadow\">
+    <form method=\"post\" action=\"entergala-action\">
+    <h2 class=\"border-bottom border-gray pb-2\">Select Swimmer and Gala</h2>
     <div class=\"form-group row\">
       <label for=\"swimmer\" class=\"col-sm-2 col-form-label\">Select Swimmer</label>
       <div class=\"col-sm-10\">
-        <select class=\"custom-select\" id=\"swimmer\" name=\"swimmer\"><option value=\"null\" selected>Select</option>";
+        <select class=\"custom-select\" id=\"swimmer\" name=\"swimmer\" required><option value=\"null\" selected>Select</option>";
         $sql = "SELECT * FROM `members` WHERE `members`.`UserID` = '$userID' ORDER BY `members`.`MForename`, `members`.`MSurname` ASC;";
         $result = mysqli_query($link, $sql);
         $squadCount = mysqli_num_rows($result);
@@ -27,7 +29,7 @@ if ($swimCount > 0) {
     <div class=\"form-group row\">
       <label for=\"gala\" class=\"col-sm-2 col-form-label\">Select Gala</label>
       <div class=\"col-sm-10\">
-        <select class=\"custom-select\" id=\"gala\" name=\"gala\"><option value=\"null\" selected>Select</option>";
+        <select class=\"custom-select\" id=\"gala\" name=\"gala\" required><option value=\"null\" selected>Select</option>";
         $sql = "SELECT * FROM `galas` ORDER BY `galas`.`ClosingDate` ASC;";
         $result = mysqli_query($link, $sql);
         $squadCount = mysqli_num_rows($result);
@@ -47,11 +49,15 @@ if ($swimCount > 0) {
     </div>
     <h2>Select Swims</h2>
     <div class=\"ajaxArea\" id=\"output\">
-      <div class=\"ajaxPlaceholder\">Select a gala
+      <div class=\"ajaxPlaceholder\">Select a swimmer and gala
       </div>
     </div>
-    <p><button type=\"submit\" id=\"submit\" class=\"btn btn-success\">Submit</button></p>
+    <p class=\"mb-0\"><button type=\"submit\" id=\"submit\" class=\"btn btn-outline-dark\">Submit</button></p>
+    </div>
     <script>
+    function clearOutput() {
+      document.getElementById(\"output\").innerHTML = '<div class=\"ajaxPlaceholder\">Select a swimmer and gala</div>';
+    }
       function enableBtn(swimmer, gala) {
         var swimmer = document.getElementById(\"swimmer\");
         var gala = document.getElementById(\"gala\");
@@ -75,7 +81,7 @@ if ($swimCount > 0) {
         var galaValue = gala.options[gala.selectedIndex].value;
         console.log(galaValue);
         if (galaValue==\"null\") {
-          document.getElementById(\"output\").innerHTML = '<div class=\"ajaxPlaceholder\">Select a gala</div>';
+          clearOutput();
         }
         else {
           var xmlhttp = new XMLHttpRequest();
@@ -92,6 +98,8 @@ if ($swimCount > 0) {
           xmlhttp.send();
         }
       }
+      document.getElementById(\"gala\").onchange=clearOutput;
+      document.getElementById(\"swimmer\").onchange=clearOutput;
       document.getElementById(\"gala\").onchange=getResult;
     </script>
   </form>";

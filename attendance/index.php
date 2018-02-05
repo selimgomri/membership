@@ -32,6 +32,12 @@
       $content = "<p class=\"lead\">Every squad has sessions linked to it. These are required for our attendance application. The data about sessions is also used to provide information to parents (in future).</p>";
       include "sessions.php";
     }
+    elseif (($id == "register.post")) {
+      $pagetitle = "";
+      $title = "";
+      $content = "";
+      include "POST/register.php";
+    }
     else {
       // Argh. Something went wrong
       $pagetitle = "Error";

@@ -26,7 +26,7 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
   }
   else {
 
-  	$sql = "SELECT `HyTek`, `GalaName` FROM galas WHERE GalaID = '$galaID';";
+  	$sql = "SELECT `HyTek`, `GalaName`, `GalaFeeConstant` FROM galas WHERE GalaID = '$galaID';";
 
   	$result = mysqli_query($link, $sql);
   	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -204,6 +204,42 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
   	  </div>";
   		$response .= '<input type="hidden" value="0" name="TimesRequired">';
   	}
+
+    $response .= '
+    <h2>Paying</h2>';
+    if ($row['GalaFeeConstant'] != 1) {
+      $response .= '
+      <div class="form-group">
+        <label for="galaFee">Enter Total</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">&pound;</span>
+          </div>
+          <input aria-describedby="feeHelp" type="number" id="galaFee" name="galaFee" class="form-control" required min="0">
+        </div>
+        <small id="feeHelp" class="form-text text-muted">Sadly we can\'t automatically calculate the entry fee for this gala</small>
+      </div>';
+    }
+    $sql = "SELECT * FROM `paymentTypes` ORDER BY `PayTypeName` ASC";
+    $sqlResponse = mysqli_query($link, $sql);
+    $count = mysqli_num_rows($sqlResponse);
+    if ($count > 0) {
+      $response .= '
+      <div class="form-group">
+      <p>Select a payment method</p>';
+        for ($i=0; $i<$count; $i++) {
+          $payRows = mysqli_fetch_array($sqlResponse, MYSQLI_ASSOC);
+          $response .= '
+          <div class="custom-control custom-radio">
+            <input type="radio" id="' . $payRows['PayTypeID'] . '" name="payType" class="custom-control-input">
+            <label class="custom-control-label" for="' . $payRows['PayTypeID'] . '">' . $payRows['PayTypeName'] . '</label>
+          </div>';
+        }
+        $response .= '
+      </div>
+      </div>';
+    }
+
   }
 
 	echo $response;

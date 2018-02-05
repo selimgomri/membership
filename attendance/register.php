@@ -1,8 +1,12 @@
 <?php
+if (isset($_SESSION['return'])) {
+  $content .= '<div class="alert alert-success">' . $_SESSION['return'] . '</div>';
+  unset($_SESSION['return']);
+}
 $content .= '
+<form method="post" action="register.post">
 <div class="my-3 p-3 bg-white rounded box-shadow">
   <h2 class="border-bottom border-gray pb-2">Select Session</h2>
-  <form method="post" action="register-get">
   <div class="form-group">
   <label for="session">Select Week</label>
   <select class="custom-select" name="date" id="date">
