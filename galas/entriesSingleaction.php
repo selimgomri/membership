@@ -110,7 +110,7 @@ if (isset($entryID)) {
   $pagetitle = $title = "Enter a Gala";
   $content .= "<p class=\"lead\">You have successfully updated " . $row['MForename'] . " " . $row['MSurname'] . "'s entry into " . $row['GalaName'] . ".</p>";
   $content .= "<ul>" . $entryList . "</ul>";
-  $content .= "<p><a class=\"btn btn-success\" href=\"" . autoUrl("galas/entries/" . $row['EntryID'] . "") . "\">Return to entry</a></p>";
+  $content .= "<p><a class=\"btn btn-outline-dark\" href=\"" . autoUrl("galas/entries/" . $row['EntryID'] . "") . "\">Return to entry</a></p>";
   $to = $row['Forename'] . " " . $row['Surname'] . "<" . $row['EmailAddress'] . ">";
   $subject = "Your Updated Gala Entry";
   $message = "<h1>Hello " . $row['Forename'] . " " . $row['Surname'] . "</h1>";

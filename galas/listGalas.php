@@ -8,10 +8,10 @@ $content .= '<div class="my-3 p-3 bg-white rounded box-shadow">
   <h2 class="border-bottom border-gray pb-2 mb-0">Galas Open for Entries</h2>';
 $content .= upcomingGalas($link, false);
 if ($access == "Parent") {
-	$content .= "<p class=\"mb-0\"><a href=\"entergala\" class=\"btn btn-success\">Enter a gala</a></p></div>";
+	$content .= "<p class=\"mb-0\"><a href=\"entergala\" class=\"btn btn-outline-dark\">Enter a gala</a></p></div>";
 }
 else {
-	$content .= "<p><a href=\"addgala\" class=\"btn btn-success\">Add a gala</a></p></div>";
+	$content .= "<p><a href=\"addgala\" class=\"btn btn-outline-dark\">Add a gala</a></p></div>";
 	/* Stats Section */
 	$swimsCountArray = [];
 	$strokesCountArray = [0, 0, 0, 0, 0];

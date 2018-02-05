@@ -11,7 +11,7 @@
       <input type="text" class="form-control" name="userDetails" id="userDetails" placeholder="Username or Email" required>
    </div>
    <div class="g-recaptcha mb-3" data-sitekey="6Lc4U0AUAAAAAOM613z7FDK5rsyPVR_IT0iXgBSA" data-callback="enableBtn"></div>
-  <p><input type="submit" name="submit" id="submit" class="btn btn-success" value="Request Password Change"></p>
+  <p><input type="submit" name="submit" id="submit" class="btn btn-outline-dark" value="Request Password Change"></p>
 </form>
 <script>
   function enableBtn(){

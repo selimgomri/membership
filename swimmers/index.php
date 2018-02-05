@@ -69,7 +69,7 @@
       $content = "<p class=\"lead\">My Swimmers shows you all of your registered swimmers and allows you to easily change their details.</p>";
       $content .= "<p>Please remember that it is your responsibility to also keep the ASA Membership System up to date with personal details.</p>";
       $content .= mySwimmersTable($link, $userID);
-      $content .= "<p><a href=\"" . autoUrl('myaccount/add-swimmer.php') . "\" class=\"btn btn-success\">Add a Swimmer</a></p>";
+      $content .= "<p><a href=\"" . autoUrl('myaccount/add-swimmer.php') . "\" class=\"btn btn-outline-dark\">Add a Swimmer</a></p>";
 
       include "../header.php";
     }
@@ -230,7 +230,7 @@
         $content .= ">" . $row['SquadName'] . "</option>";
       }
       $content .= "</select></div>";
-      $content .= "<button type=\"submit\" class=\"btn btn-success mb-3\">Add Member</button>";
+      $content .= "<button type=\"submit\" class=\"btn btn-outline-dark mb-3\">Add Member</button>";
       $content .= "</div><div class=\"col-md-4\">";
       $content .= "</div></div>";
     }

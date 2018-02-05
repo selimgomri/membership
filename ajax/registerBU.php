@@ -82,7 +82,7 @@ $content .= '
       <label class=\"custom-control-label\" for=\"Member-" . $row['MemberID'] . "\">" . $row['MForename'] . " " . $row['MSurname'] . "</label>
     </div>";
   }
-  $content .= '<p><button class="btn btn-success">Save Register</button> <button id="button">click</button></p>
+  $content .= '<p><button class="btn btn-outline-dark">Save Register</button> <button id="button">click</button></p>
   <script>
   function getSessions() {
     var e = document.getElementById("squad");

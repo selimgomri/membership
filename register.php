@@ -44,7 +44,7 @@
       <label for="password2">Confirm Password</label>
       <input class="form-control" type="password" name="password2" id="password2" placeholder="Password" required>
     </div>
-    <input type="submit" class="btn btn-success mb-4" value="Register">
+    <input type="submit" class="btn btn-outline-dark mb-4" value="Register">
 </div>
 
 <?php include "footer.php" ?>

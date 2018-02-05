@@ -167,7 +167,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
           </td>
         </tr>";
       }
-      $content .= '</tbody></table></div><p class="mb-0"><button type="submit" class="btn btn-success">Save Register</button></p>';
+      $content .= '</tbody></table></div><p class="mb-0"><button type="submit" class="btn btn-outline-dark">Save Register</button></p>';
     }
 
     if ($swimmerCount > 0) {

@@ -32,7 +32,7 @@ $content .= "</select></div></div>
   <label class=\"col-sm-2\" for=\"gala\">Enter Surname</label>
   <div class=\"col\">
 <input class=\"form-control\" name=\"surname\" value=\"" . $surname . "\">
-</div></div><p><button type=\"submit\" class=\"btn btn-success\">
+</div></div><p><button type=\"submit\" class=\"btn btn-outline-dark\">
   Filter
 </button></p></form>";
 if (isset($_POST['squad'])) {

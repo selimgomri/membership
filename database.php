@@ -180,7 +180,7 @@ function mySwimmersMedia($db, $userID) {
   }
   $swimmers = '<p class="lead border-bottom border-gray pb-2 mb-0">You have ' . $swimmerCount . ' ' . $swimmerS . '</p>';
   if ($swimmerCount == 0) {
-    $swimmers .= '<p><a href="' . autoUrl("myaccount/add-swimmer.php") . '" class="btn btn-success">Add a Swimmer</a></p>';
+    $swimmers .= '<p><a href="' . autoUrl("myaccount/add-swimmer.php") . '" class="btn btn-outline-dark">Add a Swimmer</a></p>';
   }
   $output = "";
   if ($swimmerCount > 0) {

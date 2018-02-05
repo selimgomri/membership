@@ -7,7 +7,7 @@ $content .= "<p>Please remember that this new system is in development, so you m
 $content .= '<div class="my-3 p-3 bg-white rounded box-shadow">
   <h2 class="border-bottom border-gray pb-2 mb-0">Galas you can enter</h2>';
 $content .= upcomingGalas($link);
-$content .= "<p class=\"mb-0\"><a class=\"btn btn-success\" href=\"entergala\">Enter a gala</a></p></div>";
+$content .= "<p class=\"mb-0\"><a class=\"btn btn-outline-dark\" href=\"entergala\">Enter a gala</a></p></div>";
 
 $content .= '<div class="my-3 p-3 bg-white rounded box-shadow">
   <h2 class="border-bottom border-gray pb-2 mb-0">Galas you\'ve entered</h2>';

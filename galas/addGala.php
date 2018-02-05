@@ -67,7 +67,7 @@ $content = "<form method=\"post\" action=\"addgala-action\">
     </div>
   </div>
 </div>
-<p><button class=\"btn btn-success\" type=\"submit\" id=\"submit\">Add Gala to Database</button></p>
+<p><button class=\"btn btn-outline-dark\" type=\"submit\" id=\"submit\">Add Gala to Database</button></p>
 <p>If you add this gala, it will immediately be available for parents to enter</p>
 ";
 ?>

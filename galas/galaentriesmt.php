@@ -166,7 +166,7 @@ $content .= "<form method=\"post\" action=\"entergala-action\">
     </div>
     </div>
   </div>
-  <p><button type=\"submit\" id=\"submit\" class=\"btn btn-success\">Submit</button></p>
+  <p><button type=\"submit\" id=\"submit\" class=\"btn btn-outline-dark\">Submit</button></p>
   <script>
     function enableBtn(swimmer, gala) {
       var swimmer = document.getElementById(\"swimmer\");

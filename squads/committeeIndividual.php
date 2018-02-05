@@ -207,7 +207,7 @@ $content .= "
   <label for=\"otherNotes\">Other Notes</label>
   <textarea class=\"form-control\" id=\"otherNotes\" name=\"otherNotes\" rows=\"3\" placeholder=\"Tell us any other notes for coaches\">" . $rowSwim['OtherNotes'] . "</textarea>
 </div>";
-$content .= "<button type=\"submit\" class=\"btn btn-success mb-3\">Update</button>";
+$content .= "<button type=\"submit\" class=\"btn btn-outline-dark mb-3\">Update</button>";
 $content .= "</div><div class=\"col-md-4\">";
 $content .= "<div class=\"cell\"><h2>Squad Information</h2><ul class=\"mb-0\"><li>Squad: " . $rowSwim['SquadName'] . "</li><li>Monthly Fee: &pound;" . $rowSwim['SquadFee'] . "</li>";
 if ($rowSwim['SquadTimetable'] != "") {

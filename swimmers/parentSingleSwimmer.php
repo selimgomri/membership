@@ -197,7 +197,7 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
     <label for=\"otherNotes\">Other Notes</label>
     <textarea class=\"form-control\" id=\"otherNotes\" name=\"otherNotes\" rows=\"3\" placeholder=\"Tell us any other notes for coaches\">" . $rowSwim['OtherNotes'] . "</textarea>
   </div>";
-  $content .= "<button type=\"submit\" class=\"btn btn-success mb-3\">Update</button>";
+  $content .= "<button type=\"submit\" class=\"btn btn-outline-dark mb-3\">Update</button>";
 
   // Danger Zone at Bottom of Page
   $disconnectKey = generateRandomString(8);

@@ -61,11 +61,11 @@ if ($added) {
   if ($galaFeeConstant == 1) {
     $content .= "<p>The fee for each swim is &pound;" . number_format($galaFee,2,'.','') . "</p>";
   }
-  $content .= "<p><a href=\"../galas\" class=\"btn btn-success\">Return to Galas</a> <a href=\"addgala\" class=\"btn btn-success\">Add another</a></p>";
+  $content .= "<p><a href=\"../galas\" class=\"btn btn-outline-dark\">Return to Galas</a> <a href=\"addgala\" class=\"btn btn-outline-dark\">Add another</a></p>";
 }
 else {
   $pagetitle = $title = "An error occurred";
   $content = "<div class=\"alert alert-warning\"><strong>An error occurred</strong> <br>We could not add your gala.</div>";
-  $content .= "<p><a href=\"../galas\" class=\"btn btn-success\">Return to Galas</a> <a href=\"addgala\" class=\"btn btn-success\">Try again</a></p>";
+  $content .= "<p><a href=\"../galas\" class=\"btn btn-outline-dark\">Return to Galas</a> <a href=\"addgala\" class=\"btn btn-outline-dark\">Try again</a></p>";
 }
 ?>

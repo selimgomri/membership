@@ -134,7 +134,7 @@ if ($entryCount == 0) {
   if ($added) {
     $content .= "<p class=\"lead\">You have successfully entered " . $row['MForename'] . " " . $row['MSurname'] . " into " . $row['GalaName'] . ".</p>";
     $content .= "<ul>" . $entryList . "</ul>";
-    $content .= "<p><a class=\"btn btn-success\" href=\"" . autoUrl("galas/") . "\">Return to Galas</a></p>";
+    $content .= "<p><a class=\"btn btn-outline-dark\" href=\"" . autoUrl("galas/") . "\">Return to Galas</a></p>";
     $to = $row['Forename'] . " " . $row['Surname'] . "<" . $row['EmailAddress'] . ">";
     $subject = "Your Gala Entry";
     $message = "<h1>Hello " . $row['Forename'] . " " . $row['Surname'] . "</h1>";

@@ -111,7 +111,7 @@ if ($count == 1) {
       </div>
     </div>";
   }
-  $content .= "<input type=\"hidden\" value=\"" . $idLast . "\" name=\"galaID\"><p><button class=\"btn btn-success\" type=\"submit\" id=\"submit\">Update Gala</button></p>
+  $content .= "<input type=\"hidden\" value=\"" . $idLast . "\" name=\"galaID\"><p><button class=\"btn btn-outline-dark\" type=\"submit\" id=\"submit\">Update Gala</button></p>
   ";
 }
 else {

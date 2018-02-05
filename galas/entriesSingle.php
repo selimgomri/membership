@@ -110,7 +110,7 @@ if ($count == 1) {
   }
 
   if ($row['EntryProcessed'] == 0 && ($closingDate >= $theDate)) {
-    $content .= "<input type=\"hidden\" value=\"" . $row['EntryID'] . "\" name=\"entryID\"><p><button type=\"submit\" id=\"submit\" class=\"btn btn-success\">Update</button></p>";
+    $content .= "<input type=\"hidden\" value=\"" . $row['EntryID'] . "\" name=\"entryID\"><p><button type=\"submit\" id=\"submit\" class=\"btn btn-outline-dark\">Update</button></p>";
   }
 
   $content .= "</form>";
