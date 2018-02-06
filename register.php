@@ -34,7 +34,8 @@
     <h2>Username and Password</h2>
     <div class="form-group">
       <label for="username">Username</label>
-      <input class="form-control" type="text" name="username" id="username" placeholder="Username" required>
+      <input class="form-control" type="text" name="username" id="username" placeholder="Username" aria-labelledby="usernameHelp" required>
+      <small id="usernameHelp" class="form-text text-muted">This username is for your user account as an adult, not your swimmer(s)</small>
     </div>
     <div class="form-group">
       <label for="password1">Password</label>

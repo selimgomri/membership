@@ -10,6 +10,8 @@
     $username = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['username'])));
     $password = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password'])));
 
+    $username = preg_replace('/\s+/', '', $username);
+
     $query = "SELECT * FROM users WHERE Username = '$username' LIMIT 0, 30 ";
     $result = mysqli_query($link, $query);
     $count = mysqli_num_rows($result);

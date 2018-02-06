@@ -13,6 +13,8 @@
   $email = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['email']))));
   $mobile = mysqli_real_escape_string($link, preg_replace('/\D/', '', $_POST['mobile'])); // Removes anything that isn't a digit
 
+  $username = preg_replace('/\s+/', '', $username);
+
   $usernameSQL = "SELECT * FROM users WHERE Username = '$username' LIMIT 0, 30 ";
   $usernameResult = mysqli_query($link, $usernameSQL);
   $usernameCount = mysqli_num_rows($usernameResult);
