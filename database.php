@@ -192,7 +192,7 @@ function mySwimmersMedia($db, $userID) {
       $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
       $swimmerLink = autoUrl("swimmers/" . $swimmersRowX['MemberID'] . "");
       $output .= "<div class=\"media text-muted pt-3\"><p class=\"media-body pb-3 mb-0 lh-125 border-bottom border-gray\"><strong class=\"d-block text-gray-dark\"><a href=\"" . $swimmerLink . "\">" . $swimmersRowX['MForename'] . " " . $swimmersRowX['MSurname'] . "</a></strong>
-        " . $swimmersRowX['SquadName'] . " Squad, &pound;" . $swimmersRowX['SquadFee'] . "
+        " . $swimmersRowX['SquadName'] . " Squad, &pound;" . $swimmersRowX['SquadFee'] . ", " . getAttendanceByID($db, $swimmersRowX['MemberID'], 4) . "% <abbr title=\"Attendance over the last four weeks\">Attendance</abbr>
     </div>";
     }
     $output .= '
@@ -480,16 +480,19 @@ function myMonthlyFeeMedia($db, $userID) {
     $monthlyExtrasTotal += $row['ExtraFee'];
   }
   if ($monthlyExtrasTotal+$reducedCost > 0) {
-    return "<div class=\"my-3 p-3 bg-white rounded box-shadow\">
+    $output = "<div class=\"my-3 p-3 bg-white rounded box-shadow\">
     <h2>My Fees</h2><p class=\"lead border-bottom border-gray pb-2 mb-0\">Showing monthly fees</p>
-    <div class=\"table-responsive\"><table class=\"table\">
+    <div class=\"table-responsive\"><table class=\"table mb-0\">
     <tbody>
-    <tr><td>The monthly subtotal for Squad Fees is</td><td>&pound;" . number_format($totalCost,2,'.','') . "</td></tr>
-    <tr><td>The monthly total payable for squads (with any deductions) is</td><td>&pound;" . number_format($reducedCost,2,'.','') . "</td></tr>
-    <tr><td>The monthly total for extras is</td><td>&pound;" . number_format($monthlyExtrasTotal,2,'.','') . "</td></tr>
-    <tr><td><strong>The monthly total is</strong></td><td>&pound;" . number_format(($reducedCost + $monthlyExtrasTotal),2,'.','') . "</td></tr>
+    <tr><td>The monthly subtotal for Squad Fees is</td><td>&pound;" . number_format($totalCost,2,'.','') . "</td></tr>";
+    if (($totalCost - $reducedCost) > 0) {
+      $output .= "<tr><td>The monthly total payable for squads (with any deductions) is</td><td>&pound;" . number_format($reducedCost,2,'.','') . "</td></tr>";
+    }
+    $output .= "<tr><td>The monthly total for extras is</td><td>&pound;" . number_format($monthlyExtrasTotal,2,'.','') . "</td></tr>
+    <tr class=\"bg-light\"><td><strong>The monthly total is</strong></td><td>&pound;" . number_format(($reducedCost + $monthlyExtrasTotal),2,'.','') . "</td></tr>
     </tbody></table></div>
     </div>";
+    return $output;
   }
   else {
     return "<div class=\"my-3 p-3 bg-white rounded box-shadow\">
