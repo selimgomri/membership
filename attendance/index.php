@@ -4,10 +4,14 @@
   $userID = $_SESSION['UserID'];
   $access = $_SESSION['AccessLevel'];
 
-  // Requested resource
+  $pos = strrpos ($URI . "attendance/" , '/');
   $url = mysqli_real_escape_string($link, $_SERVER['REQUEST_URI']);
-  $pos = strrpos($url, '/');
+  $url = preg_replace('{/$}', '', $url);
+  //$pos = strrpos($url, '/');
   $id = $pos === false ? $url : substr($url, $pos + 1);
+
+  $pos = strrpos($url, '/');
+  $idLast = $pos === false ? $url : substr($url, $pos + 1);
 
   // Variables for display
   $title = $content = '';
@@ -23,23 +27,32 @@
       $content = "<p class=\"lead\">Take the register for your Squad</p>";
       include "register.php";
     }
-    elseif (($id == "sessions")) {
-      $pagetitle = "Add or Edit Sessions";
-      $title = "Add or Edit Sessions";
-      $content = "<p class=\"lead\">Every squad has sessions linked to it. These are required for our attendance application. The data about sessions is also used to provide information to parents (in future).</p>";
-      include "sessions.php";
-    }
     elseif (($id == "register.post")) {
       $pagetitle = "";
       $title = "";
       $content = "";
       include "POST/register.php";
     }
-    else {
-      // Argh. Something went wrong
-      $pagetitle = "Error";
-      $title = "Error 500";
-      $content = "<p class=\"lead\">We couldn't do anything.</p>";
+    elseif (($id == "sessions")) {
+      $pagetitle = "Add or Edit Sessions";
+      $title = "Add or Edit Sessions";
+      $content = "<p class=\"lead\">Every squad has sessions linked to it. These are required for our attendance application. The data about sessions is also used to provide information to parents (in future).</p>";
+      include "sessions.php";
+    }
+    elseif ($id == "history") {
+      $pagetitle = "Attendance History";
+      $title = "Attendance History";
+      $content = "<p class=\"lead\">History</p>";
+    }
+    elseif (($id == "history/squads/" . $idLast)) {
+      $pagetitle = "Attendance History for SquadID " . $idLast;
+      $title = "Attendance History for SquadID " . $idLast;
+      $content = "<p class=\"lead\"> " . $idLast . "</p>";
+    }
+    elseif (($id == "history/swimmers/" . $idLast)) {
+      $pagetitle = "Attendance History for MemberID " . $idLast;
+      $title = "Attendance History for MemberID " . $idLast;
+      $content = "<p class=\"lead\"> " . $idLast . "</p>";
     }
     include "../header.php";
   }
