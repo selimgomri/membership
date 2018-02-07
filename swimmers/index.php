@@ -85,6 +85,9 @@
     if ($id == "") {
       include "swimmerDirectory.php";
     }
+    elseif ($id == "filter/" . $idLast) {
+      include "swimmerDirectory.php";
+    }
     elseif (($id != null || $id != "")) {
       // Get the swimmer function
       include "singleSwimmerView.php";
@@ -109,6 +112,9 @@
     if ($id == "") {
       include "swimmerDirectory.php";
     }
+    elseif ($id == "filter/" . $idLast) {
+      include "swimmerDirectory.php";
+    }
     elseif (($id == "edit/" . $idLast)) {
       include "parentSingleSwimmer.php";
     }
@@ -128,6 +134,9 @@
   }
   elseif ($access == "Committee" || $access == "Admin") {
     if ($id == "") {
+      include "swimmerDirectory.php";
+    }
+    elseif ($id == "filter/" . $idLast) {
       include "swimmerDirectory.php";
     }
     elseif ($id == "accesskeys") {
