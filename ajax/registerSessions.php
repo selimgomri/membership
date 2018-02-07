@@ -69,9 +69,6 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       $sql = "SELECT `SessionID` FROM `sessionsAttendance` WHERE `WeekID` = '$date' AND `SessionID` = '$sessionID';";
       $result = mysqli_query($link, $sql);
       $sessionRecordExists = mysqli_num_rows($result);
-      if ($sessionRecordExists > 0) {
-        echo "DONE IT";
-      }
       $sql = "SELECT `WeekDateBeginning` FROM `sessionsWeek` WHERE `WeekID` = '$date';";
       $result = mysqli_query($link, $sql);
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);

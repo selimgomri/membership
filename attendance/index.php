@@ -79,7 +79,9 @@
     <a class="nav-link" href="<?php echo autoUrl("attendance/history")?>">Attendance History</a>
     <?php } else {?>
     <a class="nav-link" href="<?php echo autoUrl("attendance/register")?>">Take Register</a>
+    <?php if (($access == "Admin") || ($access == "Committee")) {?>
     <a class="nav-link" href="<?php echo autoUrl("attendance/sessions")?>">Manage Sessions</a>
+    <?php }?>
     <a class="nav-link" href="<?php echo autoUrl("attendance/history")?>">Attendance History</a>
     <?php } ?>
     <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/squads/" target="_blank">Timetables</a>
