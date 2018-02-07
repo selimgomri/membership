@@ -23,7 +23,7 @@
     }
     elseif (($id == "register")) {
       $pagetitle = "Register";
-      $title = "Register <span class=\"badge badge-secondary\" style=\"background:var(--pink)\">ALPHA</span>";
+      $title = "Register <span class=\"badge badge-secondary\">BETA</span>";
       $content = "<p class=\"lead\">Take the register for your Squad</p>";
       include "register.php";
     }

@@ -12,15 +12,16 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 	$result = mysqli_query($link, $sql);
 	$registerCount = mysqli_num_rows($result);
 
+	// SQL to get the member IDs
+	$sqlMembers = $sql = "SELECT `MemberID` FROM `members` WHERE `SquadID` = '$squadID';";
+	$result = mysqli_query($link, $sql);
+	$swimmerCount = mysqli_num_rows($result);
+
+	// Initialise the attendance values string for MySQL
+	$values = "";
+
+	// Insert the register data
 	if ($registerCount < 1) {
-		// SQL to get the member IDs
-		$sql = "SELECT `MemberID` FROM `members` WHERE `SquadID` = '$squadID';";
-		$result = mysqli_query($link, $sql);
-		$swimmerCount = mysqli_num_rows($result);
-
-		// Initialise the attendance values string for MySQL
-		$values = "";
-
 		for ($i=0; $i<$swimmerCount; $i++) {
 			$attendance = 0;
 			// Get the attendance value, if it is set for each member
@@ -36,7 +37,6 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 			}
 		}
 
-		// Insert the register data
 		$sql = "INSERT INTO `sessionsAttendance` (WeekID, MemberID, SessionID, AttendanceBoolean) VALUES " . $values . ";";
 		if (mysqli_query($link, $sql)) {
 			// Return info page
@@ -45,19 +45,30 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 		}
 	}
 	else {
-		$duplicateReg = true;
-		$return = "<p><strong>An Error Occurred</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-link\">mms@chesterlestreetasc.co.uk</a></p>";
-		if ($duplicateReg == true) {
-			$return .= "<p class=\"mb-0\">Repeated Register (Error AttReg01)</p>";
+		$result = mysqli_query($link, $sqlMembers);
+		for ($i=0; $i<$swimmerCount; $i++) {
+			$attendance = 0;
+			$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+			if (isset($_POST["Member-" . $row['MemberID']])) {
+				$attendance = 1;
+			}
+			$sql = "UPDATE `sessionsAttendance` SET AttendanceBoolean = '$attendance' WHERE MemberID = " . $row['MemberID'] . " AND WeekID = '$weekBeginningID' AND SessionID = '$sessionID';";
+			mysqli_query($link, $sql);
+				// Return info page
+				//$return = "<strong>Successfully saved the session register</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-link\">mms@chesterlestreetasc.co.uk</a>";
+				//$_SESSION['return'] = $return;
 		}
+		$duplicateReg = true;
+	}
+
+	if ($duplicateReg == true) {
+		$return = "<p><strong>Updated</strong></p>";
 		$_SESSION['return'] = $return;
 	}
+
 }
 else {
 	$return = "<p><strong>An Error Occurred</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-link\">mms@chesterlestreetasc.co.uk</a></p>";
-	if ($duplicateReg == true) {
-		$return .= "<p>Repeated Register (Error AttReg01)</p>";
-	}
 	$_SESSION['return'] = $return;
 }
 header("Location: " . autoUrl("attendance/register"));

@@ -50,7 +50,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
         <td>" . $DOB . "</td>
         <td>" . $age . "</td>
         <td>" . $ageEoY . "</td>
-        <td>" . getAttendanceByID($link, $swimmersRowX['MemberID'], 4) . "</td>
+        <td>" . getAttendanceByID($link, $swimmersRowX['MemberID'], 4) . "%</td>
         <td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $swimmersRowX['ASANumber'] . "\" target=\"_blank\" title=\"ASA Biographical Data\">" . $swimmersRowX['ASANumber'] . " <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a></td>
       </tr>";
     }

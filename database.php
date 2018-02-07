@@ -76,12 +76,12 @@ function getAttendanceByID($db, $id, $weeks = "all") {
   if ($weekCount > 0) {
 
     // Get number of sessions we were present at
-    $sql = "SELECT `AttendanceBoolean` FROM `sessionsAttendance` WHERE `AttendanceBoolean` = '1' AND $weeksWHERE `MemberID` = '$id';";
+    $sql = "SELECT `AttendanceBoolean` FROM (`sessionsAttendance` INNER JOIN `sessions` on sessionsAttendance.SessionID=sessions.SessionID) WHERE `AttendanceBoolean` = '1' AND $weeksWHERE `MemberID` = '$id' AND MainSequence = '1';";
     $resultAtt = mysqli_query($db, $sql);
     $presentCount = mysqli_num_rows($resultAtt);
 
     // Get number of sessions in total
-    $sql = "SELECT `AttendanceBoolean` FROM `sessionsAttendance` WHERE $weeksWHERE `MemberID` = '$id';";
+    $sql = "SELECT `AttendanceBoolean` FROM (`sessionsAttendance` INNER JOIN `sessions` on sessionsAttendance.SessionID=sessions.SessionID) WHERE $weeksWHERE `MemberID` = '$id' AND MainSequence = '1';";
     $resultAtt = mysqli_query($db, $sql);
     $totalCount = mysqli_num_rows($resultAtt);
 

@@ -11,7 +11,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
     $response = "";
 
     if ($squadID != null) {
-      $sql = "SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE squads.SquadID = '$squadID' ORDER BY sessions.SessionDay ASC, sessions.StartTime ASC;";
+      $sql = "SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE squads.SquadID = '$squadID' AND (ISNULL(sessions.DisplayFrom) OR (sessions.DisplayFrom <= CURDATE( ))) AND (ISNULL(sessions.DisplayUntil) OR (sessions.DisplayUntil >= CURDATE( ))) ORDER BY sessions.SessionDay ASC, sessions.StartTime ASC;";
       $result = mysqli_query($link, $sql);
       $swimmerCount = mysqli_num_rows($result);
       $content = '<option>Choose the session from the menu</option>';
@@ -58,13 +58,20 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
   if (isset($_REQUEST["sessionID"])) {
       $date = "4";
     if (isset($_REQUEST["date"])) {
-      $date = $_REQUEST["date"];
+      $dateO = $date = $_REQUEST["date"];
     }
 
     $sessionID = mysqli_real_escape_string($link, $_REQUEST["sessionID"]);
     $response = $content = $modalOutput = "";
 
     if ($sessionID != null) {
+      // Check if the register has been done before
+      $sql = "SELECT `SessionID` FROM `sessionsAttendance` WHERE `WeekID` = '$date' AND `SessionID` = '$sessionID';";
+      $result = mysqli_query($link, $sql);
+      $sessionRecordExists = mysqli_num_rows($result);
+      if ($sessionRecordExists > 0) {
+        echo "DONE IT";
+      }
       $sql = "SELECT `WeekDateBeginning` FROM `sessionsWeek` WHERE `WeekID` = '$date';";
       $result = mysqli_query($link, $sql);
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -111,11 +118,22 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       $content .= "<div class=\"table-responsive\"><table class=\"table table-striped\"><thead><tr><th>Name</th><th>Notes</th></tr></thead><tbody>";
       for ($i=0; $i<$swimmerCount; $i++) {
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        $checked = "";
+        if ($sessionRecordExists > 0) {
+          $member = $row['MemberID'];
+          $sqlHistory = "SELECT * FROM `sessionsAttendance` WHERE `WeekID` = '$dateO' AND `SessionID` = '$sessionID' AND `MemberID` = '$member';";
+          $resultHistory = mysqli_query($link, $sqlHistory);
+          $existsCount = mysqli_num_rows($resultHistory);
+          $rowHistory = mysqli_fetch_array($resultHistory, MYSQLI_ASSOC);
+          if ($rowHistory['AttendanceBoolean'] == 1) {
+            $checked = "checked";
+          }
+        }
         $content .= "
         <tr>
           <td>
             <div class=\"custom-control custom-checkbox\">
-            <input type=\"checkbox\" class=\"custom-control-input\" name=\"Member-" . $row['MemberID'] . "\" value=\"1\" id=\"Member-" . $row['MemberID'] . "\">
+            <input type=\"checkbox\" class=\"custom-control-input\" " . $checked . " name=\"Member-" . $row['MemberID'] . "\" value=\"1\" id=\"Member-" . $row['MemberID'] . "\">
             <label class=\"custom-control-label\" for=\"Member-" . $row['MemberID'] . "\">" . $row['MForename'] . " " . $row['MSurname'] . "</label>
             </div>
           </td>

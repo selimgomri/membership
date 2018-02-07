@@ -1,4 +1,11 @@
 <?php
+/*$epoch = date(DATE_ATOM, mktime(0, 0, 0, 1, 1, 1970));
+$displayUntil = date(strtotime());
+echo $epoch . "<br>";
+if ($displayUntil < $epoch) {
+  $displayUntil = null;
+  echo "TRUE";
+}*/
 $content .= '
 
 <div class="my-3 p-3 bg-white rounded box-shadow">
@@ -78,6 +85,28 @@ $content .= '
     	var sessionEndValue = sessionEnd.value;
       console.log(sessionEndValue);
 
+      var startDate = document.getElementById("newSessionStartDate");
+    	var startDateValue = startDate.value;
+      console.log(startDateValue);
+
+    	var endDate = document.getElementById("newSessionEndDate");
+    	var endDateValue = endDate.value;
+      console.log(endDateValue);
+
+      var mainSequenceValue = null;
+      var radios = document.getElementsByName("newSessionMS");
+      for (var i = 0, length = radios.length; i < length; i++)
+      {
+       if (radios[i].checked)
+       {
+        // do whatever you want with the checked radio
+        mainSequenceValue = radios[i].value;
+
+        // only one radio can be logically checked, don\'t check the rest
+        break;
+       }
+      }
+
       console.log("HELLO");
 
     	var sessAjax = new XMLHttpRequest();
@@ -89,9 +118,9 @@ $content .= '
       }
   		sessAjax.open("POST", "' . autoURL("ajax/sessions.php") . '", true);
   		sessAjax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  		sessAjax.send("action=addSession&squadID=" + squadValue + "&sessionName=" + sessionNameValue + "&venueID=" + sessionVenueValue + "&sessionDay=" + sessionDayValue + "&startTime=" + sessionStartValue + "&endTime=" + sessionEndValue);
+  		sessAjax.send("action=addSession&squadID=" + squadValue + "&sessionName=" + sessionNameValue + "&venueID=" + sessionVenueValue + "&sessionDay=" + sessionDayValue + "&startTime=" + sessionStartValue + "&endTime=" + sessionEndValue + "&newSessionMS=" + mainSequenceValue + "&newSessionStartDate=" + startDateValue + "&newSessionEndDate=" + endDateValue);
   		console.log("Sent");
-  		console.log("action=addSession&squadID=" + squadValue + "&sessionName=" + sessionNameValue + "&venueID=" + sessionVenueValue + "&sessionDay=" + sessionDayValue + "&startTime=" + sessionStartValue + "&endTime=" + sessionEndValue);
+  		console.log("action=addSession&squadID=" + squadValue + "&sessionName=" + sessionNameValue + "&venueID=" + sessionVenueValue + "&sessionDay=" + sessionDayValue + "&startTime=" + sessionStartValue + "&endTime=" + sessionEndValue + "&newSessionMS=" + mainSequenceValue + "&newSessionStartDate=" + startDateValue + "&newSessionEndDate=" + endDateValue);
     }
   document.getElementById("squad").onchange=getSessions;
 </script>';

@@ -17,7 +17,7 @@ function sessionManagement($squadID, $link) {
 	<h2 class="border-bottom border-gray pb-2 mb-0">View Sessions</h2>
 	';
 
-	$sql = "SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SquadID` = '$squadID' ORDER BY `SessionDay` ASC, `StartTime` ASC;";
+	$sql = "SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SquadID` = '$squadID' AND (ISNULL(sessions.DisplayFrom) OR (sessions.DisplayFrom <= CURDATE( ))) AND (ISNULL(sessions.DisplayUntil) OR (sessions.DisplayUntil >= CURDATE( ))) ORDER BY `SessionDay` ASC, `StartTime` ASC;";
 	$result = mysqli_query($link, $sql);
 	$count = mysqli_num_rows($result);
 	if ($count > 0) {
@@ -72,6 +72,9 @@ function sessionManagement($squadID, $link) {
 							<dl>
 								<dt>Session Name</dt>
 								<dd>' . $row['SessionName'] . '</dd>
+								<dt>Main Sequence</dt>
+								<dd>' . $row['MainSequence'] . '<br>
+								<em>If 0, sessions will be ignored from attendance calculations. Use this for extra sessions which only some swimmers in a squad are to attend</em></dd>
 								<dt>Venue</dt>
 								<dd>' . $row['VenueName'] . '</dd>
 								<dt>Start Time</dt>
@@ -86,7 +89,7 @@ function sessionManagement($squadID, $link) {
 								<dd>' . $interval->format('%h hours %I minutes') . '</dd>
 
 							</dl>
-							<strong>You can\'t edit a session once it has been created</strong>  <br>Sessions are immutable. This is because swimmers may be marked as present at a session in the past, changing the session in any way, such as altering the start or finish time would distort the attendance records. Instead, mark the session as "Old" and create a new session
+							<strong>You can\'t edit a session once it has been created</strong>  <br>Sessions are immutable. This is because swimmers may be marked as present at a session in the past, changing the session in any way, such as altering the start or finish time would distort the attendance records. Instead, set a DisplayUntil date for the session, after which it will not appear in the register, but will still be visible in attendance history
 						</div>
 					</div>
 				</div>
@@ -141,6 +144,17 @@ function sessionManagement($squadID, $link) {
 			</select>
 		</div>
 		<div class="form-group">
+			<label for="newSessionMS">Main Sequence</label>
+			<div class="custom-control custom-radio">
+			  <input type="radio" id="newSessionMSYes" name="newSessionMS" class="custom-control-input" value="1">
+			  <label class="custom-control-label" for="newSessionMSYes">Yes, the session is for the full squad</label>
+			</div>
+			<div class="custom-control custom-radio">
+			  <input type="radio" id="newSessionMSNo" name="newSessionMS" class="custom-control-input" value="0">
+			  <label class="custom-control-label" for="newSessionMSNo">	No, this session is only for selected swimmers</label>
+			</div>
+		</div>
+		<div class="form-group">
 			<label for="newSessionStartTime">Start Time</label>
 			<input type="time" class="form-control" name="newSessionStartTime" id="newSessionStartTime" placeholder="0">
 			<small id="newSessionStartTimeHelp" class="form-text text-muted">Make sure to use 24 Hour Time</small>
@@ -149,6 +163,16 @@ function sessionManagement($squadID, $link) {
 			<label for="newSessionEndTime">End Time</label>
 			<input type="time" class="form-control" name="newSessionEndTime" id="newSessionEndTime" placeholder="0">
 			<small id="newSessionEndTimeHelp" class="form-text text-muted">Make sure to use 24 Hour Time</small>
+		</div>
+		<div class="form-group">
+			<label for="newSessionStartDate">Show From</label>
+			<input type="date" aria-labelledby="newSessionStartDateHelp" class="form-control" name="newSessionStartDate" id="newSessionStartDate" placeholder="0">
+			<small id="newSessionStartDateHelp" class="form-text text-muted">The date from which the session will appear in the registers. To show from today, just leave it blank</small>
+		</div>
+		<div class="form-group">
+			<label for="newSessionEndDate">Show Until</label>
+			<input type="date" aria-labelledby="newSessionStartDateHelp" class="form-control" name="newSessionEndDate" id="newSessionEndDate" placeholder="0">
+			<small id="newSessionEndDateHelp" class="form-text text-muted">If you know when this session will stop running, enter the last date here</small>
 		</div>
 		<p class="mb-0"><button class="btn btn-outline-dark" id="newSessionAction" onclick="addSession();">Add Session</button></p>
 
@@ -179,15 +203,31 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 		}
 		elseif ($action == "addSession") {
 			$squadID = $venueID = $sessionName = $sessionDay = $startTime = $endTime = "";
-			if ((isset($_POST["squadID"])) && (isset($_POST["venueID"])) && (isset($_POST["sessionName"])) && (isset($_POST["sessionDay"])) && (isset($_POST["startTime"])) && (isset($_POST["endTime"]))) {
+			if ((isset($_POST["squadID"])) && (isset($_POST["venueID"])) && (isset($_POST["sessionName"])) && (isset($_POST["sessionDay"])) && (isset($_POST["startTime"])) && (isset($_POST["endTime"])) && (isset($_POST["newSessionMS"])) && (isset($_POST["newSessionStartDate"])) && (isset($_POST["newSessionEndDate"]))) {
 	    	$squadID = mysqli_real_escape_string($link, htmlentities($_POST["squadID"]));
 				$venueID = mysqli_real_escape_string($link, htmlentities($_POST["venueID"]));
 				$sessionName = mysqli_real_escape_string($link, htmlentities($_POST["sessionName"]));
 				$sessionDay = mysqli_real_escape_string($link, htmlentities($_POST["sessionDay"]));
 				$startTime = mysqli_real_escape_string($link, htmlentities($_POST["startTime"]));
 				$endTime = mysqli_real_escape_string($link, htmlentities($_POST["endTime"]));
+				$mainSequence = mysqli_real_escape_string($link, htmlentities($_POST["newSessionMS"]));
+				$epoch = date(DATE_ATOM, mktime(0, 0, 0, 1, 1, 1970));
+				$future = date(DATE_ATOM, mktime(0, 0, 0, 1, 1, 2200));
+				$displayFrom = $displayUntil = null;
+				if (isset($_POST["newSessionStartDate"])) {
+					$displayFrom = strtotime(mysqli_real_escape_string($link, htmlentities($_POST["newSessionStartDate"])));
+					if ($displayFrom < $epoch) {
+						$displayFrom = null;
+					}
+				}
+				if (isset($_POST["newSessionEndDate"])) {
+					$displayUntil = strtotime(mysqli_real_escape_string($link, htmlentities($_POST["newSessionEndDate"])));
+					if ($displayUntil < $epoch) {
+						$displayUntil = $future;
+					}
+				}
 
-				$sql = "INSERT INTO `sessions` (`SquadID`, `VenueID`, `SessionName`, `SessionDay`, `StartTime`, `EndTime`, `SessionActive`) VALUES ('$squadID', '$venueID', '$sessionName', '$sessionDay', '$startTime', '$endTime', '1');";
+				$sql = "INSERT INTO `sessions` (`SquadID`, `VenueID`, `SessionName`, `SessionDay`, `StartTime`, `EndTime`, `MainSequence`, `DisplayFrom`, `DisplayUntil`) VALUES ('$squadID', '$venueID', '$sessionName', '$sessionDay', '$startTime', '$endTime', '$mainSequence', '$displayFrom', '$displayUntil');";
 				mysqli_query($link, $sql);
 
 				echo sessionManagement($squadID, $link);
