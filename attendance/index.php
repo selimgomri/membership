@@ -42,11 +42,17 @@
     elseif (($id == "history")) {
       include "historyViews/history.php";
     }
+    elseif (($id == "history/squads")) {
+      include "historyViews/squads.php";
+    }
     elseif (($id == "history/squads/" . $idLast)) {
       $pagetitle = "Attendance History for SquadID " . $idLast;
       $title = "Attendance History for SquadID " . $idLast;
       $content = "<p class=\"lead\"> " . $idLast . "</p>";
       include "historyViews/squadHistory.php";
+    }
+    elseif (($id == "history/swimmers")) {
+      include "historyViews/swimmers.php";
     }
     elseif (($id == "history/swimmers/" . $idLast)) {
       include "historyViews/swimmerHistory.php";
