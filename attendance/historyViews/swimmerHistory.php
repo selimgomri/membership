@@ -30,7 +30,7 @@ $pagetitle = $member['MForename'] . " " . $member['MSurname'] . " Attendance His
 $title = "Attendance History for " . $member['MForename'] . " " . $member['MSurname'];
 $content = "<p class=\"lead\">You are now viewing attendance records for the last 20 weeks, for MemberID(" . $idLast . "), subject to the data being in the system.</p>";
 
-$sql = "SELECT * FROM (`sessionsAttendance` INNER JOIN `sessions` ON sessionsAttendance.SessionID=sessions.SessionID) WHERE `AttendanceBoolean` = '1' AND ($sqlWeeks) AND `MemberID` = '$id' ORDER BY WeekID DESC, SessionDay DESC, StartTime DESC;";
+$sql = "SELECT * FROM (`sessionsAttendance` INNER JOIN `sessions` ON sessionsAttendance.SessionID=sessions.SessionID) WHERE ($sqlWeeks) AND `MemberID` = '$id' ORDER BY WeekID DESC, SessionDay DESC, StartTime DESC;";
 $resultAtt = mysqli_query($link, $sql);
 $presentCount = mysqli_num_rows($resultAtt);
 
@@ -80,7 +80,13 @@ for ($i=0; $i<$presentCount; $i++) {
 					break;
 	}
 
-	$content .= "<td>" . $sessionInfo['SessionName'] . ", " . $dayText . " " . $date . " at " . $sessionInfo['StartTime'] . "</td><td>";
+	$content .= "<td>" . $sessionInfo['SessionName'] . ", " . $dayText . " " . $date . " at " . $sessionInfo['StartTime'];
+	if ($att['MainSequence'] != 1) {
+		$content .= '
+		 (Not Mandatory)
+		';
+	}
+	$content .= "</td><td>";
 
 	if ($att['AttendanceBoolean'] == 1) {
 		$content .= '

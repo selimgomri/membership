@@ -54,6 +54,9 @@
     elseif (($id == "history/swimmers")) {
       include "historyViews/swimmers.php";
     }
+    elseif ($id == "history/swimmers/filter/" . $idLast) {
+      include "historyViews/swimmers.php";
+    }
     elseif (($id == "history/swimmers/" . $idLast)) {
       include "historyViews/swimmerHistory.php";
     }

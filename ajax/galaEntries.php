@@ -60,7 +60,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       }
 
       // First part of the row content
-      $content .= "<tr><td>" . $row['MForename'] . " " . $row['MSurname'] . $hyTekPrintDate . "</td><td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $row['ASANumber'] . "\" target=\"_blank\" title=\"Click to see times\">" . $row['ASANumber'] . " <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a></td><td>" . $row['GalaName'] . "</td>";
+      $content .= "<tr><td>" . $row['MForename'] . " " . $row['MSurname'] . $hyTekPrintDate . "<br><small><a href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a></small></td><td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $row['ASANumber'] . "\" target=\"_blank\" title=\"Click to see times\">" . $row['ASANumber'] . " <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a></td><td>" . $row['GalaName'] . "</td>";
 
       // Arrays of swims used to check whever to print the name of the swim entered
       // BEWARE This is in an order to ease inputting data into SportSystems, contrary to these arrays in other files

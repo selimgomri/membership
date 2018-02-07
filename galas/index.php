@@ -73,6 +73,9 @@
       // Show entry info if it exists
       include "allEntries.php";
     }
+    elseif ($id == "entries/filter/" . $idLast) {
+      include "allEntries.php";
+    }
     elseif (($id == "entries-action")) {
       // Show entry info if it exists
       include "allEntriesAction.php";
@@ -110,6 +113,9 @@
     }
     elseif ($id == "addgala-action") {
       include "addGalaAction.php";
+    }
+    elseif ($id == "entries/filter/" . $idLast) {
+      include "allEntries.php";
     }
     elseif (($id == "entries")) {
       // Show entry info if it exists
