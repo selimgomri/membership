@@ -39,20 +39,17 @@
       $content = "<p class=\"lead\">Every squad has sessions linked to it. These are required for our attendance application. The data about sessions is also used to provide information to parents (in future).</p>";
       include "sessions.php";
     }
-    elseif ($id == "history") {
-      $pagetitle = "Attendance History";
-      $title = "Attendance History";
-      $content = "<p class=\"lead\">History</p>";
+    elseif (($id == "history")) {
+      include "historyViews/history.php";
     }
     elseif (($id == "history/squads/" . $idLast)) {
       $pagetitle = "Attendance History for SquadID " . $idLast;
       $title = "Attendance History for SquadID " . $idLast;
       $content = "<p class=\"lead\"> " . $idLast . "</p>";
+      include "historyViews/squadHistory.php";
     }
     elseif (($id == "history/swimmers/" . $idLast)) {
-      $pagetitle = "Attendance History for MemberID " . $idLast;
-      $title = "Attendance History for MemberID " . $idLast;
-      $content = "<p class=\"lead\"> " . $idLast . "</p>";
+      include "historyViews/swimmerHistory.php";
     }
     include "../header.php";
   }
