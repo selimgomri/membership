@@ -324,7 +324,7 @@ function enteredGalas($db, $userID) {
       $endDate = $endDate->format('Y-m-d');
       $theDate = $theDate->format('Y-m-d');
       if ($endDate >= $theDate) {
-        $output .= "<tr><td><a target=\"_blank\" href=\"" . autoUrl("galas/entries/" . $row['EntryID'] . "") . "\">" . $row['MForename'] . " " . $row['MSurname'] . "</a></td>";
+        $output .= "<tr><td><a href=\"" . autoUrl("galas/entries/" . $row['EntryID'] . "") . "\">" . $row['MForename'] . " " . $row['MSurname'] . "</a></td>";
         $output .= "<td>" . $row['GalaName'] . "</td>";
         $output .= "<td>" . $row['CourseLength'] . "</td>";
         $output .= "<td>" . $row['GalaVenue'] . "</td>";
