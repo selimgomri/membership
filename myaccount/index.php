@@ -159,7 +159,7 @@
         <small id="smsContactOKHelp" class="form-text text-muted">We'll still use this to contact you in an emergency</small>
       </div>
     </div>
-    <div class="form-group">
+    <div class="form-group" id="gravitar">
       <label for="mobile" class="d-block">Account Image</label>
       <?php
       $grav_url = "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $_SESSION['EmailAddress'] ) ) ) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=240";
