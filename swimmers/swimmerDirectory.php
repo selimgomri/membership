@@ -48,7 +48,7 @@ $content .= '
 
 </div>
 
-<div id="output"><div class="ajaxPlaceholder">Loading Content<br>If content does not display, please turn on JavaScript</div></div>
+<div id="output"><div class="ajaxPlaceholder"><span class="h1 d-block"><i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i><br>Loading Content</span>If content does not display, please turn on JavaScript</div></div>
 
 <script>
 function getResult() {

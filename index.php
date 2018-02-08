@@ -105,6 +105,35 @@ else { ?>
     </span>
   </div>
 <?php } ?>
+
+<?php if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach") { ?>
+<div class="my-3 p-3 bg-white rounded box-shadow">
+  <h2>Access G Suite</h2>
+  <p class="border-bottom border-gray pb-2 mb-0">If you have a club G Suite Account, get quick access to online services here</p>
+  <div class="media text-muted pt-3">
+    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+      <a href="http://mail.chesterlestreetasc.co.uk" target="_blank"><strong class="d-block text-gray-dark">Mail</strong></a>
+      Access your club email
+    </p>
+  </div>
+  <div class="media text-muted pt-3">
+    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+      <a href="http://drive.chesterlestreetasc.co.uk" target="_blank"><strong class="d-block text-gray-dark">Google Drive</strong></a>
+      Create Docs, Sheets, Slides and more - Club letterhead templates are available
+    </p>
+  </div>
+  <div class="media text-muted pt-3">
+    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+      <a href="http://calendar.chesterlestreetasc.co.uk" target="_blank"><strong class="d-block text-gray-dark">Calendar</strong></a>
+      Manage your schedule and plan meetings with ease
+    </p>
+  </div>
+  <span class="d-block text-right mt-3">
+    <a href="https://apps.google.com/u/2/user/hub">More tasks</a>
+  </span>
+</div>
+<?php } ?>
+
 </div>
 
 
