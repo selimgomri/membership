@@ -37,7 +37,7 @@
     <?php
     $grav_url = "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $_SESSION['EmailAddress'] ) ) ) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=80";
     ?>
-    <a href="<?php echo autoUrl('myaccount/#gravitar') ?>" target="_blank"><img class="mr-3" src="<?php echo $grav_url ?>" alt="" width="48" height="48"></a>
+    <a href="<?php echo autoUrl('myaccount/#gravitar') ?>"><img class="mr-3" src="<?php echo $grav_url ?>" alt="" width="48" height="48"></a>
     <div class="lh-100">
       <h6 class="mb-0 text-white lh-100"><?php echo $_SESSION['Forename'] . " " . $_SESSION['Surname'] ?></h6>
       <small><?php echo $_SESSION['AccessLevel'] ?></small>
