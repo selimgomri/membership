@@ -65,6 +65,11 @@
       padding-bottom: .75rem;
       line-height: 1.35rem;
     }
+    @media print {
+      .nav-scroller {
+        display: none !important;
+      }
+    }
     .ajaxPlaceholder {
       padding: 10rem 0;
       margin: 0 0 1rem 0;

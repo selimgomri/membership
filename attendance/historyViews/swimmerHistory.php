@@ -90,7 +90,8 @@ for ($i=0; $i<$presentCount; $i++) {
 
 	if ($att['AttendanceBoolean'] == 1) {
 		$content .= '
-		<div class="custom-control custom-checkbox">
+		<i class="d-none d-print-inline-block" aria-hidden="true">✔</i>
+		<div class="custom-control custom-checkbox d-print-none">
 	    <input class="custom-control-input" checked="" onclick="return false;" type="checkbox">
 			<label class="custom-control-label">Present?</label>
 	  </div>
@@ -98,7 +99,7 @@ for ($i=0; $i<$presentCount; $i++) {
 	}
 	else {
 		$content .= '
-		<div class="custom-control custom-checkbox">
+		<div class="custom-control custom-checkbox d-print-none">
 	    <input class="custom-control-input" onclick="return false;"type="checkbox">
 			<label class="custom-control-label">Present?</label>
 	  </div>
