@@ -142,6 +142,11 @@
   			  <a class="nav-link" href="<?php echo autoUrl("attendance") ?>">Attendance</a>
   		  </li>
         <?php } ?>
+        <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas") { ?>
+        <li class="nav-item">
+  			  <a class="nav-link" href="<?php echo autoUrl("users") ?>">Users</a>
+  		  </li>
+        <?php } ?>
       <?php } ?>
       <li class="nav-item">
 			  <a class="nav-link" href="<?php echo autoUrl("galas") ?>">Galas</a>
