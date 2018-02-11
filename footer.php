@@ -13,7 +13,7 @@
         <div class="col source-org vcard copyright">
         	<hr style="border-color:#FFF">
 			<p class="hidden-print">Designed and Built by Chester&#8209;le&#8209;Street ASC.</p>
-				<p class="hidden-print">This service is currently in development. It's not ready for use. Available under the <a href="https://github.com/Chester-le-Street-ASC/Membership/blob/master/LICENSE" target="_blank">Apache License</a></p>
+				<p class="hidden-print">View this project <a href="https://github.com/Chester-le-Street-ASC/Membership" target="_blank">on GitHub</a></p>
             <p class="mb-0" style="margin-bottom:0">&copy; <?php echo date( 'Y' ); ?> <span class="org fn">Chester&#8209;le&#8209;Street ASC</span>. CLS ASC is not responsible for the content of external sites.</p>
         </div>
 	</div>

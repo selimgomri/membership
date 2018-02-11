@@ -9,8 +9,7 @@ $content .= '
   <h2 class="border-bottom border-gray pb-2">Select Session</h2>
   <div class="form-group">
   <label for="session">Select Week</label>
-  <select class="custom-select" name="date" id="date">
-    <option value="0">Choose week beginning from the menu</option>';
+  <select class="custom-select" name="date" id="date">';
     // Get the date of the week beginning
     $day = date('w');
     $week_start = date('Y-m-d', strtotime('-'.$day.' days'));
@@ -32,7 +31,7 @@ $content .= '
       $sql = "INSERT INTO sessionsWeek (WeekDateBeginning) VALUES ('$week_start')";
       mysqli_query($link, $sql);
     }
-    $sql = "SELECT * FROM sessionsWeek ORDER BY WeekDateBeginning DESC LIMIT 6";
+    $sql = "SELECT * FROM sessionsWeek ORDER BY WeekDateBeginning DESC LIMIT 4";
     $result = mysqli_query($link, $sql);
     $count = mysqli_num_rows($result);
     for ($i = 0; $i < $count; $i++) {

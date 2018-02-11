@@ -28,7 +28,7 @@ $member = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
 $pagetitle = $member['MForename'] . " " . $member['MSurname'] . " Attendance History";
 $title = "Attendance History for " . $member['MForename'] . " " . $member['MSurname'];
-$content = "<p class=\"lead\">You are now viewing attendance records for the last 20 weeks, for MemberID(" . $idLast . "), subject to the data being in the system.</p>";
+$content = "<p class=\"lead\">You are now viewing attendance records for up to the last 20 weeks</p>";
 
 $sql = "SELECT * FROM (`sessionsAttendance` INNER JOIN `sessions` ON sessionsAttendance.SessionID=sessions.SessionID) WHERE ($sqlWeeks) AND `MemberID` = '$id' ORDER BY WeekID DESC, SessionDay DESC, StartTime DESC;";
 $resultAtt = mysqli_query($link, $sql);

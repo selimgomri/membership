@@ -3,7 +3,7 @@
   include "header.php";
   $userID = $_SESSION['UserID'];
 
-  $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = '$userID';";
+  $sqlSwim = "SELECT wallet.Balance, members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee FROM (((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) INNER JOIN wallet ON users.UserID = wallet.UserID) WHERE members.UserID = '$userID';";
   $result = mysqli_query($link, $sqlSwim);
   $swimmerCount = mysqli_num_rows($result);
   $swimmersRow = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -40,7 +40,7 @@
     <a href="<?php echo autoUrl('myaccount/#gravitar') ?>"><img class="mr-3" src="<?php echo $grav_url ?>" alt="" width="48" height="48"></a>
     <div class="lh-100">
       <h6 class="mb-0 text-white lh-100"><?php echo $_SESSION['Forename'] . " " . $_SESSION['Surname'] ?></h6>
-      <small><?php echo $_SESSION['AccessLevel'] ?></small>
+      <small><?php echo $_SESSION['AccessLevel'] ?>, Account Balance &pound;<?php echo number_format($swimmersRow['Balance'],2,'.','') ?></small>
     </div>
   </div>
 
