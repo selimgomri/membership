@@ -45,10 +45,13 @@
         // Check it went in
         $query = "SELECT * FROM users WHERE Username = '$username' AND Password = '$hashedPassword' LIMIT 0, 30 ";
         $result = mysqli_query($link, $query);
+        $row = mysqli_fetch_array($result);
+        $id = $row['UserID'];
+        $query = "INSERT INTO wallet (UserID, Balance) VALUES ('$id', 0)";
+        mysqli_query($link, $query);
         $count = mysqli_num_rows($result);
 
         if ($count == 1) {
-          $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
           $email = $row['EmailAddress'];
           $forename = $row['Forename'];
           $surname = $row['Surname'];

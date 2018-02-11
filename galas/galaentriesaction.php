@@ -110,8 +110,25 @@ elseif ($timesRequired == 1) {
 }
 
 if ($entryCount == 0) {
-  $sql = "INSERT INTO `galaEntries` (`MemberID`, `GalaID`, " . $swims . ", `TimesRequired`) VALUES ('$memberID', '$galaID', " . $values . ", '$timesRequired');";
+  $sql = "SELECT GalaFee, GalaFeeConstant, GalaName FROM galas WHERE GalaID = '$galaID';";
+  $result = mysqli_query($link, $sql);
+  $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+  if ($row['GalaFeeConstant'] == 1) {
+    $fee = number_format(($counter*$row['GalaFee']),2,'.','');
+    debitWallet($_SESSION['UserID'], $fee, "Gala Entry into " . $row['GalaName'] . " (Holding Fee)");
+  }
+  else {
+    $fee = null;
+    if (isset($_POST['galaFee'])) {
+      $fee = $_POST['galaFee'];
+      debitWallet($_SESSION['UserID'], $fee, "Gala Entry into " . $row['GalaName'] . " (Holding Fee)");
+    }
+  }
+  $sql = "INSERT INTO `galaEntries` (`MemberID`, `GalaID`, " . $swims . ", `TimesRequired`, `FeeToPay`) VALUES ('$memberID', '$galaID', " . $values . ", '$timesRequired', $fee);";
   $action = mysqli_query($link, $sql);
+
+
+
   if ($action) {
     $added = true;
   }

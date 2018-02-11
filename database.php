@@ -605,6 +605,46 @@ function squadInfoTable($db, $enableLinks = false) {
   return $output;
 }
 
+function creditWallet($id, $amount, $description) {
+  global $link;
+
+  // Get the balance
+  $sql = "SELECT `Balance` FROM `wallet` WHERE UserID = '$id';";
+  $result = mysqli_query($link, $sql);
+  $row = mysqli_fetch_array($result);
+  $balance = $row['Balance'];
+
+  // The new balance
+  $newBalance = $balance + $amount;
+
+  // Update the balance andd insert description
+  $sql = "
+  INSERT INTO walletHistory (Amount, Balance, TransactionDesc, UserID) VALUES ('$amount', '$newBalance', '$description', '$id');
+  UPDATE wallet SET Balance='$newBalance' WHERE UserID = '$id';";
+  mysqli_query($link, $sql);
+}
+
+function debitWallet($id, $amount, $description) {
+  global $link;
+
+  // Get the balance
+  $sql = "SELECT `Balance` FROM `wallet` WHERE UserID = '$id';";
+  $result = mysqli_query($link, $sql);
+  $row = mysqli_fetch_array($result);
+  $balance = $row['Balance'];
+
+  // The new balance
+  $newBalance = $balance - $amount;
+  $amount = 0 - $amount;
+
+  // Update the balance andd insert description
+  $sql = "INSERT INTO walletHistory (Amount, Balance, TransactionDesc, UserID) VALUES ('$amount', '$newBalance', '$description', '$id');";
+  mysqli_query($link, $sql);
+  $sql = "UPDATE wallet SET Balance='$newBalance' WHERE UserID = '$id';";
+  mysqli_query($link, $sql);
+  echo $newBalance;
+}
+
 
 function autoUrl($relative) {
   // Returns an absolute URL
