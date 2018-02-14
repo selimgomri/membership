@@ -30,7 +30,7 @@ if ($swimCount > 0) {
       <label for=\"gala\" class=\"col-sm-2 col-form-label\">Select Gala</label>
       <div class=\"col-sm-10\">
         <select class=\"custom-select\" id=\"gala\" name=\"gala\" required><option value=\"null\" selected>Select</option>";
-        $sql = "SELECT * FROM `galas` WHERE GalaDate >= CURDATE() ORDER BY `galas`.`ClosingDate` ASC;";
+        $sql = "SELECT * FROM `galas` WHERE ClosingDate >= CURDATE() ORDER BY `galas`.`ClosingDate` ASC;";
         $result = mysqli_query($link, $sql);
         $squadCount = mysqli_num_rows($result);
         for ($i = 0; $i < $squadCount; $i++) {
