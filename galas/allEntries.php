@@ -13,7 +13,7 @@ if (isset($queries['search'])) {
 }
 
 $content = "<p class=\"lead\">Search entries for upcoming galas. Search by Gala or Gala and Surname.</p>";
-$sql = "SELECT * FROM `galas` ORDER BY `galas`.`GalaDate` DESC LIMIT 0, 15;";
+$sql = "SELECT * FROM `galas` WHERE GalaDate >= CURDATE() ORDER BY `galas`.`GalaDate` DESC LIMIT 0, 30;";
 $result = mysqli_query($link, $sql);
 $galaCount = mysqli_num_rows($result);
 $content .= "
@@ -31,17 +31,11 @@ $content .= ">Show All Gala Entries</option>";
 //$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 for ($i = 0; $i < $galaCount; $i++) {
   $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-  $lastDate = new DateTime($row['GalaDate']);
-  $theDate = new DateTime('now');
-  $lastDate = $lastDate->format('Y-m-d');
-  $theDate = $theDate->format('Y-m-d');
-  if ($lastDate >= $theDate) {
-    $content .= "<option value=\"" . $row['GalaID'] . "\"";
-    if ($galaIDParam == $row['GalaID']) {
-        $content .= " selected ";
-    }
-    $content .= ">" . $row['GalaName'] . "</option>";
+  $content .= "<option value=\"" . $row['GalaID'] . "\"";
+  if ($galaIDParam == $row['GalaID']) {
+      $content .= " selected ";
   }
+  $content .= ">" . $row['GalaName'] . "</option>";
 }
 $content .= "</select></div></div>
 <div class=\"form-group row\">
