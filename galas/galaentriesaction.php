@@ -115,13 +115,13 @@ if ($entryCount == 0) {
   $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
   if ($row['GalaFeeConstant'] == 1) {
     $fee = number_format(($counter*$row['GalaFee']),2,'.','');
-    debitWallet($_SESSION['UserID'], $fee, "Gala Entry into " . $row['GalaName'] . " (Holding Fee)");
+    //debitWallet($_SESSION['UserID'], $fee, "Gala Entry into " . $row['GalaName'] . " (Holding Fee)");
   }
   else {
     $fee = null;
     if (isset($_POST['galaFee'])) {
       $fee = $_POST['galaFee'];
-      debitWallet($_SESSION['UserID'], $fee, "Gala Entry into " . $row['GalaName'] . " (Holding Fee)");
+      //debitWallet($_SESSION['UserID'], $fee, "Gala Entry into " . $row['GalaName'] . " (Holding Fee)");
     }
   }
   $sql = "INSERT INTO `galaEntries` (`MemberID`, `GalaID`, " . $swims . ", `TimesRequired`, `FeeToPay`) VALUES ('$memberID', '$galaID', " . $values . ", '$timesRequired', $fee);";
