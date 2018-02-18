@@ -51,9 +51,14 @@
   if (!empty($_POST['email'])) {
     $newEmail = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['email']))));
     if ($newEmail != $email) {
-      $sql = "UPDATE `users` SET `EmailAddress` = '$newEmail' WHERE `UserID` = '$userID'";
-      mysqli_query($link, $sql);
-      $emailUpdate = true;
+      // Check if email exists
+      $sql = "SELECT `EmailAddress` FROM `users` WHERE EmailAddress = '$newEmail'";
+      $test = mysqli_query($link, $sql);
+      if (mysqli_num_rows($test) == 0) {
+        $sql = "UPDATE `users` SET `EmailAddress` = '$newEmail' WHERE `UserID` = '$userID'";
+        mysqli_query($link, $sql);
+        $emailUpdate = true;
+      }
     }
   }
   if (!empty($_POST['mobile'])) {

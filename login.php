@@ -65,7 +65,7 @@
 
               <form method="post" action="login-action.php" name="loginform" id="loginform">
                 <div class="form-group">
-                  <label for="username">Username</label>
+                  <label for="username">Email Address or Username</label>
                   <input type="text" name="username" id="username" class="form-control form-control-lg" value="<?php if ($errorState == true) { echo $username; } ?>" required autofocus>
                 </div>
                 <div class="form-group">

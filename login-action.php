@@ -12,7 +12,7 @@
 
     $username = preg_replace('/\s+/', '', $username);
 
-    $query = "SELECT * FROM users WHERE Username = '$username' LIMIT 0, 30 ";
+    $query = "SELECT * FROM users WHERE Username = '$username' OR EmailAddress = '$username' LIMIT 0, 30 ";
     $result = mysqli_query($link, $query);
     $count = mysqli_num_rows($result);
 
