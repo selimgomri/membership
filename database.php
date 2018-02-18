@@ -346,13 +346,13 @@ function enteredGalas($db, $userID) {
 }
 
 function enteredGalasMedia($db, $userID) {
-  $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE `UserID` = '$userID' ORDER BY `galas`.`GalaDate` DESC, `galas`.`ClosingDate` ASC LIMIT 4;";
+  $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE `UserID` = '$userID' ORDER BY `galas`.`GalaDate` DESC, `galas`.`ClosingDate` ASC LIMIT 3;";
   $result = mysqli_query($db, $sql);
   $count = mysqli_num_rows($result);
   if ($count > 0) {
     $output = "<div class=\"my-3 p-3 bg-white rounded box-shadow\">
     <h2 class=\"border-bottom border-gray pb-2 mb-0\">My Entries</h2>";
-    for ($i = 0; $i < 3; $i++) {
+    for ($i = 0; $i < $count; $i++) {
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
       $endDate = new DateTime($row['GalaDate']);
       $theDate = new DateTime('now');
@@ -367,12 +367,14 @@ function enteredGalasMedia($db, $userID) {
     if ($count > 3) {
       $output .= '
       <span class="d-block text-right mt-3">
-            <a href="' . autoUrl('galas') . '">View all</a>
-          </span></div>';
+        <a href="' . autoUrl('galas') . '">View all</a>
+      </span></div>';
     }
     else {
       $output .= '
-      </div>';
+      <span class="d-block text-right mt-3">
+        No more galas to show
+      </span></div>';
     }
   }
   else {

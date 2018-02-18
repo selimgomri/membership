@@ -1,4 +1,6 @@
-<?php include_once "database.php" ?>
+<?php
+$preventLoginRedirect = true;
+include_once "../database.php" ?>
 <!doctype html>
 <html lang="en">
   <head>
