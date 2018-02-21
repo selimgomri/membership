@@ -3,17 +3,23 @@
 	<div class="container">
 
     <div class="hidden-print">
-	    <address class="mb-0">
-	    	<strong>Chester-le-Street ASC</strong><br>
-	        Burns Green Leisure Centre<br>
-	        Chester-le-Street<br>
-	        DH3 3QH
-	    </address>
+			<div class="row">
+				<div class="col-sm-6 col-md-3">
+			    <address>
+			    	<strong>Chester-le-Street ASC</strong><br>
+			        Burns Green Leisure Centre<br>
+			        Chester-le-Street<br>
+			        DH3 3QH
+			    </address>
+				</div>
+				<div class="col-sm-6 col-md-3">
+					<a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy</a>
+				</div>
+			</div>
     <div class="row">
         <div class="col source-org vcard copyright">
         	<hr style="border-color:#FFF">
 			<p class="hidden-print">Designed and Built by Chester&#8209;le&#8209;Street ASC.</p>
-				<p class="hidden-print">View this project <a href="https://github.com/Chester-le-Street-ASC/Membership" target="_blank">on GitHub</a></p>
             <p class="mb-0" style="margin-bottom:0">&copy; <?php echo date( 'Y' ); ?> <span class="org fn">Chester&#8209;le&#8209;Street ASC</span>. CLS ASC is not responsible for the content of external sites.</p>
         </div>
 	</div>
