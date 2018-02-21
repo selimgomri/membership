@@ -87,7 +87,16 @@ function sessionManagement($squadID, $link) {
 					      $interval = $datetime1->diff($datetime2);
 					      $modals .= '
 								<dd>' . $interval->format('%h hours %I minutes') . '</dd>
-
+								<dt>Display Until</dt>
+								<dd>';
+								if ($row['DisplayUntil'] != null) {
+									$modals .= date('j F Y', strtotime($row['DisplayUntil']));
+								}
+								else {
+									$modals .= "Not set";
+								}
+								$modals .= '
+								<a class="btn btn-outline-dark" href="sessions/' . $row['SessionID'] . '">Edit End Date</a></dd>
 							</dl>
 							<strong>You can\'t edit a session once it has been created</strong>  <br>Sessions are immutable. This is because swimmers may be marked as present at a session in the past, changing the session in any way, such as altering the start or finish time would distort the attendance records. Instead, set a DisplayUntil date for the session, after which it will not appear in the register, but will still be visible in attendance history
 						</div>

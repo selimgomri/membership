@@ -1,5 +1,6 @@
 <?php
 include_once "../database.php";
+echo $_SESSION['AccessLevel'];
 $access = $_SESSION['AccessLevel'];
 $swimmerCount = 0;
 
