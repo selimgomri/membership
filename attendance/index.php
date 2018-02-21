@@ -39,6 +39,9 @@
       $content = "<p class=\"lead\">Every squad has sessions linked to it. These are required for our attendance application. The data about sessions is also used to provide information to parents (in future).</p>";
       include "sessions.php";
     }
+    elseif (($id == "sessions/" . $idLast)) {
+      include "sessionViews/editEndDate.php";
+    }
     elseif (($id == "history")) {
       include "historyViews/history.php";
     }

@@ -31,7 +31,7 @@ $content .= '
   <p class="mb-0">Then select from the options below to either View Sessions or Add a New Session for the squad</p>
   </div>
 
-  <div id="output"><div class="ajaxPlaceholder"><strong>Session Manager will appear here</strong> <br>Select a squad first</div></div>
+  <div id="modalArea"><div id="output"><div class="ajaxPlaceholder"><strong>Session Manager will appear here</strong> <br>Select a squad first</div></div></div>
 
   <script>
   function resetRegisterArea() {
