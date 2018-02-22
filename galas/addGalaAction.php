@@ -62,6 +62,16 @@ if ($added) {
     $content .= "<p>The fee for each swim is &pound;" . number_format($galaFee,2,'.','') . "</p>";
   }
   $content .= "<p><a href=\"../galas\" class=\"btn btn-outline-dark\">Return to Galas</a> <a href=\"addgala\" class=\"btn btn-outline-dark\">Add another</a></p>";
+
+  // Send tweets via twitter
+  require_once '../vendor/dg/twitter-php/src/twitter.class.php';
+  // ENTER HERE YOUR CREDENTIALS (see readme.txt)
+  $twitter = new Twitter($twitterConsumerKey, $twitterConsumerSecret, $twitterAccessToken, $twitterAccessTokenSecret);
+  try {
+  	$tweet = $twitter->send($galaName . ' is now available to enter online at ' . autoUrl("")); // you can add $imagePath or array of image paths as second argument
+  } catch (TwitterException $e) {
+  	echo 'Error: ' . $e->getMessage();
+  }
 }
 else {
   $pagetitle = $title = "An error occurred";
