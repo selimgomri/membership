@@ -87,6 +87,24 @@ $content = '
 	  </span>
 		</div>';
 	}
+  $content.= '
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+    <h2 class="border-bottom border-gray pb-2 mb-0">Best Times</h2>
+    <div class="media pt-3">
+      <p class="media-body mb-0 lh-125 border-bottom border-gray">
+        <strong class="d-block text-gray-dark">View Online</strong>
+        <a href="https://www.swimmingresults.org/individualbest/personal_best.php?mode=A&tiref=' . $rowSwim["ASANumber"] . '" target="_blank" title="Best Times">
+        HTML</a>
+      </p>
+    </div>
+    <div class="media pt-3">
+      <p class="media-body pb-3 mb-0 lh-125">
+        <strong class="d-block text-gray-dark">Print or Download</strong>
+        <a href="https://www.swimmingresults.org/individualbest/personal_best.php?print=2&mode=A&tiref=' . $rowSwim["ASANumber"] . '" target="_blank" title="Best Times">
+        PDF</a>
+      </p>
+    </div>
+  </div>';
 /* Stats Section */
 $swimsCountArray = [];
 $strokesCountArray = [0, 0, 0, 0, 0];
