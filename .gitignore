@@ -4,3 +4,4 @@ config.php
 .htaccess
 "sendgrid.env" 
 "sendgrid.env" 
+client_secret.json

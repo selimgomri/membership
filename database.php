@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/vendor/autoload.php';
+
 session_start([
     'cookie_lifetime' => 86400,
 ]);
