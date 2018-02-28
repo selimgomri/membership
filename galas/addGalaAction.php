@@ -4,7 +4,7 @@ $added = false;
 $content = "";
 
 if (!empty($_POST['galaname'])) {
-  $galaName = mysqli_real_escape_string($link, ucwords(strtolower(trim(htmlspecialchars($_POST['galaname'])))));
+  $galaName = mysqli_real_escape_string($link, ucwords(trim(htmlspecialchars($_POST['galaname']))));
 }
 
 if (!empty($_POST['length'])) {
@@ -12,7 +12,7 @@ if (!empty($_POST['length'])) {
 }
 
 if (!empty($_POST['venue'])) {
-  $venue = mysqli_real_escape_string($link, ucwords(strtolower(trim(htmlspecialchars($_POST['venue'])))));
+  $venue = mysqli_real_escape_string($link, ucwords(trim(htmlspecialchars($_POST['venue']))));
 }
 
 if (!empty($_POST['closingDate'])) {
@@ -68,7 +68,7 @@ if ($added) {
   // ENTER HERE YOUR CREDENTIALS (see readme.txt)
   $twitter = new Twitter($twitterConsumerKey, $twitterConsumerSecret, $twitterAccessToken, $twitterAccessTokenSecret);
   try {
-  	$tweet = $twitter->send($galaName . ' is now available to enter online at ' . autoUrl("galas/entergala")); // you can add $imagePath or array of image paths as second argument
+  	$tweet = $twitter->send($galaName . ' is now available to enter online at ' . autoUrl("")); // you can add $imagePath or array of image paths as second argument
   } catch (TwitterException $e) {
   	echo 'Error: ' . $e->getMessage();
   }
