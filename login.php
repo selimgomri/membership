@@ -50,6 +50,10 @@
         <div class="my-3 p-3 bg-white rounded box-shadow">
           <h2 class="border-bottom border-gray pb-2 mb-0">Please Login</h2>
           <div class="text-muted pt-3">
+            <!--<div class="alert alert-warning">
+              <strong>Training Cancellations</strong> <br>
+              Training is cancelled up to and including tomorrow morning. There may be further cancellations.
+            </div>-->
               <?php if ($errorState == true) { ?>
               <div class="alert alert-danger">
                 <strong>Incorrect details</strong> <br>
@@ -67,8 +71,16 @@
                   <input type="password" name="password" id="password" class="form-control form-control-lg" required>
                 </div>
                 <p><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-block btn-primary"></p>
-                <span class="small text-center d-block"><a href="register.php">Create an account</a></span>
-                <span class="small text-center d-block"><a href="forgot-password.php">Forgot password?</a></span>
+                <div class="row">
+                  <div class="col">
+                    <a class="btn btn-block btn-dark" href="register.php">Create an account</a>
+                  </div>
+                  <div class="col">
+                    <a class="btn btn-block btn-dark" href="forgot-password.php">Forgot password?</a>
+                  </div>
+                </div>
+                <!--<span class="small text-center d-block"><a href="register.php">Create an account</a></span>
+                <span class="small text-center d-block"><a href="forgot-password.php">Forgot password?</a></span>-->
               </form>
           </div>
         </div>
