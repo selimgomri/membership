@@ -24,14 +24,14 @@ if ($swimmerCount > 0) {
       if ($swimmersRowX['ASANumber'] == null) {
         $memID = $swimmersRowX['MemberID'];
         $asaN = "CLSX" . $memID;
-        $content .= "<td>" . $asaN . "</td>";
+        $content .= "<td><samp>" . $asaN . "<samp></td>";
         $sql = "UPDATE `members` SET ASANumber = '$asaN' WHERE `MemberID` = '$memID';";
         mysqli_query($link, $sql);
       }
       else {
-        $content .= "<td>" . $swimmersRowX['ASANumber'] . "</td>";
+        $content .= "<td><samp>" . $swimmersRowX['ASANumber'] . "</samp></td>";
       }
-      $content .= "<td>" . $swimmersRowX['AccessKey'] . "</td>
+      $content .= "<td><samp>" . $swimmersRowX['AccessKey'] . "</samp></td>
     </tr>";
   }
   $content .= '
