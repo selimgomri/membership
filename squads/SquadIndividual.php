@@ -111,7 +111,8 @@ $content .= "
     <small id=\"squadDeleteDangerHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will delete this squad.</small>
   </div>
 </div>
-<p><button class=\"btn btn-outline-dark\" type=\"submit\">Update</button></p></div></div>
+<p><button class=\"btn btn-outline-dark\" type=\"submit\">Update</button></p></form></div></div>
+
 <div class=\"col-md-6\">";
 
 $sql = "SELECT `Gender` FROM `members` WHERE `SquadID` = '$id' AND `Gender` = 'Male';";
@@ -162,10 +163,11 @@ $female = mysqli_num_rows($result);
       <h2>Statistics</h2>
       <p class=\"lead border-bottom border-gray pb-2 mb-0\">These statistics are gathered from our system</p>
       <div class=\"chart\" id=\"piechart\"></div>
-      </div></div></div>
+      </div></div>
   ";
 
   }
+  $content .= "</div></div>";
 }
 else {
   $content .= "<div class=\"row\"><div class=\"col-md-6\">
@@ -236,6 +238,5 @@ else {
     ";
   }
 }
-$content .= "</form>";
 
 ?>
