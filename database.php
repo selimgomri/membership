@@ -1,6 +1,15 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
+// **PREVENTING SESSION HIJACKING**
+// Prevents javascript XSS attacks aimed to steal the session ID
+ini_set('session.cookie_httponly', 1);
+
+// **PREVENTING SESSION FIXATION**
+// Session ID cannot be passed through URLs
+ini_set('session.use_only_cookies', 1);
+
+// Uses a secure connection (HTTPS) if possible
+ini_set('session.cookie_secure', 1);
 
 session_start([
     'cookie_lifetime' => 86400,
@@ -57,14 +66,17 @@ function getAttendanceByID($db, $id, $weeks = "all") {
   // Get the last four weeks to calculate attendance
   $sql = "SELECT `WeekID` FROM `sessionsWeek` ORDER BY `WeekDateBeginning` DESC;";
   $resultWeeks = mysqli_query($db, $sql);
-  $weekCount = mysqli_num_rows($resultWeeks);
+  $weeksToDo = $weekCount = mysqli_num_rows($resultWeeks);
   if ($weekCount > 0) {
     $sqlWeeks = "";
     // Produce stuff for query
-    for ($y=0; $y<$weekCount; $y++) {
+    if ($weeks != "all") {
+      $weeksToDo = $weekCount-$weeks;
+    }
+    for ($y=$weekCount; $y>$weeksToDo; $y--) {
       $attRow = mysqli_fetch_array($resultWeeks, MYSQLI_ASSOC);
       $weekID[$y] = $attRow['WeekID'];
-      if ($y < ($weekCount-1)) {
+      if ($y > ($weeksToDo+1)) {
         $sqlWeeks .= "`WeekID` = '$weekID[$y]' OR ";
       }
       else {
