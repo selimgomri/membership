@@ -13,9 +13,6 @@ $pagetitle = "Users";
 //$squadID = null;
 $title = "User Directory";
 $content = "<p class=\"lead\">A list of users. Useful for changing account settings.</p>";
-if ($access == "Committee" || $access == "Admin") {
-  $content .= "<p><a href=\"../add-member\" class=\"btn btn-outline-dark\">Add member</a> <a href=\"../accesskeys\" class=\"btn btn-outline-dark\">Access Keys</a></p>";
-}
 $sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
 $result = mysqli_query($link, $sql);
 $squadCount = mysqli_num_rows($result);
