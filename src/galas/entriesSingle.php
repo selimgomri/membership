@@ -113,7 +113,6 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 
       if ($row['EntryProcessed'] == 0 && ($closingDate >= $theDate)) {
         $content .= "
-        <div class=\"alert alert-warning\"><strong>Don't forget to hand in a paper copy of this entry</strong> <br>We'll let you know when we're certain that our system is ready to be used without a paper copy of your entry</div>
         <input type=\"hidden\" value=\"" . $row['EntryID'] . "\" name=\"entryID\"><p><button type=\"submit\" id=\"submit\" class=\"btn btn-outline-dark\">Update</button></p>";
       }
 
@@ -232,7 +231,6 @@ else {
 
     if ($row['EntryProcessed'] == 0 && ($closingDate >= $theDate)) {
       $content .= "
-      <div class=\"alert alert-warning\"><strong>Don't forget to hand in a paper copy of this entry</strong> <br>We'll let you know when we're certain that our system is ready to be used without a paper copy of your entry</div>
       <input type=\"hidden\" value=\"" . $row['EntryID'] . "\" name=\"entryID\"><p><button type=\"submit\" id=\"submit\" class=\"btn btn-outline-dark\">Update</button></p>";
     }
 
