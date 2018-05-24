@@ -1,6 +1,6 @@
 <?php
-  // Connections
-  include_once "../database.php";
+  include "../header.php";
+
   $userID = $_SESSION['UserID'];
   $access = $_SESSION['AccessLevel'];
 
@@ -56,7 +56,7 @@
       $content .= "<p>" . $id . "</p>";
       $content .= "<p>Hello</p>";
     }
-    include "../header.php";
+
   }
   elseif ($access == "Galas" || $access == "Committee" || $access == "Admin") {
     // Gala Access
@@ -102,7 +102,7 @@
     }
     else {
     }
-    include "../header.php";
+
   }
   elseif ($access == "Coach") {
     if ($id == "") {
@@ -140,7 +140,7 @@
     }
     else {
     }
-    include "../header.php";
+
   }
   else {
     // Error
@@ -148,9 +148,12 @@
     $pagetitle = "Error 404 - Not found";
     $title = "Error 404 - Not found";
     $content = '<p class="lead">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. You may also not be authorised to view the page.</p>';
-    include "../header.php";
+
   }
 
+?>
+<?php
+if (isset($_SESSION['AccessLevel'])) {
 ?>
 <div class="nav-scroller bg-white box-shadow mb-3">
   <nav class="nav nav-underline">
@@ -169,6 +172,10 @@
   <div><?php echo $content ?></div>
 </div>
 <?php
+}
+else {
+  header("Location: /");
+}
 
-  include "../footer.php";
+include "../footer.php";
 ?>
