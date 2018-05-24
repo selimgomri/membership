@@ -12,6 +12,14 @@
   $password2 = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password2'])));
   $email = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['email']))));
   $mobile = mysqli_real_escape_string($link, preg_replace('/\D/', '', $_POST['mobile'])); // Removes anything that isn't a digit
+  $emailAuth = mysqli_real_escape_string($_POST['emailAuthorise']);
+  if ($emailAuth != 1) {
+    $emailAuth == 0;
+  }
+  $smsAuth = mysqli_real_escape_string($_POST['smsAuthorise']);
+  if ($smsAuth != 1) {
+    $smsAuth == 0;
+  }
 
   $username = preg_replace('/\s+/', '', $username);
 
@@ -40,7 +48,7 @@
       if ($password1 == $password2) {
         $hashedPassword = password_hash($password1, PASSWORD_BCRYPT);
         // Success
-        $sql = "INSERT INTO `users` (`UserID`, `Username`, `Password`, `AccessLevel`, `EmailAddress`, `EmailComms`, `Forename`, `Surname`, `Mobile`, `MobileComms`) VALUES (NULL, '$username', '$hashedPassword', 'Parent', '$email', '1', '$forename', '$surname', '$mobile', '1');";
+        $sql = "INSERT INTO `users` (`UserID`, `Username`, `Password`, `AccessLevel`, `EmailAddress`, `EmailComms`, `Forename`, `Surname`, `Mobile`, `MobileComms`) VALUES (NULL, '$username', '$hashedPassword', 'Parent', '$email', '$emailAuth', '$forename', '$surname', '$mobile', '$smsAuth');";
         mysqli_query($link, $sql);
         // Check it went in
         $query = "SELECT * FROM users WHERE Username = '$username' AND Password = '$hashedPassword' LIMIT 0, 30 ";
