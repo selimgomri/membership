@@ -220,6 +220,7 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
         <small id="feeHelp" class="form-text text-muted">Sadly we can\'t automatically calculate the entry fee for this gala</small>
       </div>';
     }
+    /*
     $sql = "SELECT * FROM `paymentTypes` ORDER BY `PayTypeName` ASC";
     $sqlResponse = mysqli_query($link, $sql);
     $count = mysqli_num_rows($sqlResponse);
@@ -239,6 +240,7 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
       </div>
       </div>';
     }
+    */
 
   }
 
