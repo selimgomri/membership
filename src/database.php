@@ -11,6 +11,15 @@ ini_set('session.use_only_cookies', 1);
 // Uses a secure connection (HTTPS) if possible
 ini_set('session.cookie_secure', 1);
 
+// Use strict mode
+ini_set('session.use_strict_mode', 1);
+
+// Use strict mode
+ini_set('session.sid_length', 128);
+
+// SessionName
+ini_set('session.name', "clsascMembershipID");
+
 session_start([
     'cookie_lifetime' => 2419200,
 ]);

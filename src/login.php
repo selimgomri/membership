@@ -71,6 +71,7 @@
                   <label for="password">Password</label>
                   <input type="password" name="password" id="password" class="form-control form-control-lg" required>
                 </div>
+                <p class="small">If this is a shared machine, please ensure you log out at the end of your session.</p>
                 <p><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-block btn-primary"></p>
                 <div class="row">
                   <div class="col">
