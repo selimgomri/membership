@@ -6,7 +6,7 @@ $content = "";
 $content .= "<p class=\"lead\">Galas which are open for entries, or have closed. Galas in the past are not shown.</p>";
 $content .= '<div class="my-3 p-3 bg-white rounded box-shadow">
   <h2 class="border-bottom border-gray pb-2 mb-0">Galas Open for Entries</h2>';
-$content .= upcomingGalas($link, false);
+$content .= upcomingGalas($link, true);
 if ($access == "Parent") {
 	$content .= "<p class=\"mb-0\"><a href=\"entergala\" class=\"btn btn-outline-dark\">Enter a gala</a></p></div>";
 }

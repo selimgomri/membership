@@ -34,7 +34,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
   }
   else {
     // Error
-    echo "<p>Disaster. The GET was funny, so try again.</p>";
+    echo "<p>Disaster. The GET request was funny, so try again.</p>";
   }
 
   if ($galaID == "Select a gala") {
@@ -46,7 +46,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $count = mysqli_num_rows($result);
 
 
-    $content = '<table class="table table-hover"><thead><tr><th>Name</th><th>ASA Number</th><th>Gala</th><th>Swims</th><th>Processed?</th></tr></thead><tbody>';
+    $content = '<table class="table table-hover"><thead><tr><th>Swimmer</th><th>Swims</th><th><abbr title="Tick to prevent editing this entry">Processed?</abbr></th></tr></thead><tbody>';
 
     // For loop iterates through the rows of the database result, producing rows for the table
     for ($i=0; $i<$count; $i++) {
@@ -56,11 +56,12 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
       $hyTekPrintDate = "";
       if ($row['HyTek'] == 1) {
-        $hyTekPrintDate = " <br>" . date('j F Y', strtotime($row['DateOfBirth'])) . "";
+        $hyTekPrintDate = " <br>DoB: " . date('j F Y', strtotime($row['DateOfBirth'])) . "";
       }
 
       // First part of the row content
-      $content .= "<tr><td>" . $row['MForename'] . " " . $row['MSurname'] . $hyTekPrintDate . "<br><small><a href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a></small></td><td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $row['ASANumber'] . "\" target=\"_blank\" title=\"Click to see times\">" . $row['ASANumber'] . " <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a></td><td>" . $row['GalaName'] . "</td>";
+      $content .= "<tr><td><strong>" . $row['MForename'] . " " . $row['MSurname']  . "</strong>" . $hyTekPrintDate . "<br><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $row['ASANumber'] . "\" target=\"_blank\" title=\"Click to see times\">" . $row['ASANumber'] . " <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a><br>
+      <span class=\"small\">" . $row['GalaName'] . "<br><a href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a></span></td>";
 
       // Arrays of swims used to check whever to print the name of the swim entered
       // BEWARE This is in an order to ease inputting data into SportSystems, contrary to these arrays in other files

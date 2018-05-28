@@ -36,8 +36,8 @@ if ($galaFeeConstant == 0 || $galaFeeConstant == null) {
 
 if (isset($galaID)) {
   $sql = "UPDATE `galas` SET  GalaName = '$galaName', CourseLength = '$courseLength', GalaVenue = '$galaVenue', ClosingDate = '$closingDate', GalaDate = '$galaDate', GalaFeeConstant = '$galaFeeConstant', GalaFee = '$galaFee', HyTek = '$hyTek' WHERE GalaID = '$galaID' ;";
-  $action = mysqli_query($link, $sql);
-  if ($action) {
+  //$action = mysqli_query($link, $sql);
+  if (mysqli_query($link, $sql)) {
     header("location: " . autoUrl("galas/competitions/" . $galaID) . "");
   }
 }
