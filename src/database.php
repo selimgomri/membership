@@ -250,39 +250,48 @@ function upcomingGalas($db, $links = false, $userID = null) {
   $result = mysqli_query($db, $sql);
   $count = mysqli_num_rows($result);
   if ($count > 0) {
-    $output = "<div class=\"table-responsive\"><table class=\"table table-hover\"><thead><tr><th>Gala Name</th><th>Course</th><th>Venue</th><th>Closing Date</th>";
-    if ($userID == null) {
-      $output.= "<th>Last day of Gala</th>";
-    }
-    $output.= "<th>Gala Fee</th></tr></thead><tbody>";
+    $output= "<div class=\"media mb-3\">";
     for ($i = 0; $i < $count; $i++) {
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
       $closingDate = new DateTime($row['ClosingDate']);
       $theDate = new DateTime('now');
       $closingDate = $closingDate->format('Y-m-d');
       $theDate = $theDate->format('Y-m-d');
+      $courseLength;
+      if ($row['CourseLength'] == "SHORT") {
+        $courseLength = "Short Course";
+      }
+      else if ($row['CourseLength'] == "LONG") {
+        $courseLength = "Long Course";
+      }
+      else {
+        $courseLength = "Non Standard Pool Distance";
+      }
       if ($closingDate >= $theDate) {
+        $output .= "
+        <p class=\"media-body pt-2 pb-2 mb-0 lh-125 border-bottom border-gray\">
+        <strong class=\"d-block text-gray-dark\">";
         if ($links == true) {
-          $output .= "<tr><td>" . $row['GalaName'] . "<br><small><a href=\"" . autoUrl("galas/competitions/" . $row['GalaID'] . "") . "\">Edit Gala</a></small></td>";
+          $output .= "<a href=\"" . autoUrl("galas/competitions/" . $row['GalaID'] . "") . "\">" . $row['GalaName'] . " (" . $courseLength . ") <span class=\"small\">Edit Gala</span></a><br>";
+        } else {
+          $output .= "" . $row['GalaName'] . " (" . $courseLength . ")<br>";
         }
-        else {
-          $output .= "<tr><td>" . $row['GalaName'] . "</td>";
-        }
-        $output .= "<td>" . $row['CourseLength'] . "</td>";
-        $output .= "<td>" . $row['GalaVenue'] . "</td>";
-        $output .= "<td>" . date('j F Y', strtotime($row['ClosingDate'])) . "</td>";
+        $output .= "</strong>";
+        $output .= $row['GalaVenue'] . "<br>";
+        $output .= "Closing Date " . date('j F Y', strtotime($row['ClosingDate'])) . "<br>";
         if ($userID == null) {
-          $output .= "<td>" . date('j F Y', strtotime($row['GalaDate'])) . "</td>";
+          $output .= "Finishes on " . date('j F Y', strtotime($row['GalaDate'])) . "<br>";
         }
         if ($row['GalaFee'] > 0) {
-          $output .= "<td>&pound;" . number_format($row['GalaFee'],2,'.','') . "/Swim</td></tr>";
+          $output .= "Entry Fee of &pound;" . number_format($row['GalaFee'],2,'.','') . "/Swim<br>";
         }
         else {
-          $output .= "<td>Variable by Swim</td></tr>";
+          $output .= "Entry Fee is Variable by Swim";
         }
+        $output .= "</p>";
       }
     }
-    $output .= "</tbody></table></div>";
+    $output .= "</div>";
   }
   else {
     $output .= "<p class=\"lead\">There are no galas available to enter</p>";
