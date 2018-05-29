@@ -245,12 +245,16 @@ function generateRandomString($length) {
   return $randomString;
 }
 
-function upcomingGalas($db, $links = false) {
+function upcomingGalas($db, $links = false, $userID = null) {
   $sql = "SELECT * FROM `galas` ORDER BY `galas`.`ClosingDate` ASC;";
   $result = mysqli_query($db, $sql);
   $count = mysqli_num_rows($result);
   if ($count > 0) {
-    $output = "<div class=\"table-responsive\"><table class=\"table table-hover\"><thead><tr><th>Gala Name</th><th>Course</th><th>Venue</th><th>Closing Date</th><th>Last day of Gala</th><th>Gala Fee</th></tr></thead><tbody>";
+    $output = "<div class=\"table-responsive\"><table class=\"table table-hover\"><thead><tr><th>Gala Name</th><th>Course</th><th>Venue</th><th>Closing Date</th>";
+    if ($userID == null) {
+      $output.= "<th>Last day of Gala</th>";
+    }
+    $output.= "<th>Gala Fee</th></tr></thead><tbody>";
     for ($i = 0; $i < $count; $i++) {
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
       $closingDate = new DateTime($row['ClosingDate']);
@@ -267,7 +271,9 @@ function upcomingGalas($db, $links = false) {
         $output .= "<td>" . $row['CourseLength'] . "</td>";
         $output .= "<td>" . $row['GalaVenue'] . "</td>";
         $output .= "<td>" . date('j F Y', strtotime($row['ClosingDate'])) . "</td>";
-        $output .= "<td>" . date('j F Y', strtotime($row['GalaDate'])) . "</td>";
+        if ($userID == null) {
+          $output .= "<td>" . date('j F Y', strtotime($row['GalaDate'])) . "</td>";
+        }
         if ($row['GalaFee'] > 0) {
           $output .= "<td>&pound;" . number_format($row['GalaFee'],2,'.','') . "/Swim</td></tr>";
         }

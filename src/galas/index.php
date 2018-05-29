@@ -44,10 +44,6 @@
       // Show entry info if it exists
       include "entriesSingle.php";
     }
-    elseif (($id == "competitions")) {
-      // Show entry info if it exists
-      include "listGalas.php";
-    }
     else {
       // Not allowed or not found
       $pagetitle = "Error 404 - Not found";
@@ -159,13 +155,16 @@ if (isset($_SESSION['AccessLevel'])) {
   <nav class="nav nav-underline">
     <a class="nav-link" href="<?php echo autoUrl("galas")?>">Gala Home</a>
     <?php if ($access == "Parent") {?>
-    <a class="nav-link" href="<?php echo autoUrl("galas/competitions")?>">Competitions</a>
     <a class="nav-link" href="<?php echo autoUrl("galas/entries")?>">My Entries</a>
     <?php } else {?>
     <a class="nav-link" href="<?php echo autoUrl("galas/addgala")?>">Add Gala</a>
     <a class="nav-link" href="<?php echo autoUrl("galas/entries")?>">View Entries</a>
     <?php } ?>
-    <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/competitions/" target="_blank">Go to Gala Website</a>
+    <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/competitions/" target="_blank">Gala Website <i class="fa fa-external-link"></i></a>
+    <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/competitions/category/galas/" target="_blank">Upcoming Galas <i class="fa fa-external-link"></i></a>
+    <?php if ($access == "Parent") {?>
+    <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/competitions/enteracompetition/guidance/" target="_blank">Help with Entries <i class="fa fa-external-link"></i></a>
+    <?php } ?>
   </nav>
 </div>
 <div class="container">
