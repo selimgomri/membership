@@ -10,7 +10,7 @@ $content .= "<p class=\"mb-0\"><a class=\"btn btn-outline-dark\" href=\"entergal
 
 $content .= '<div class="my-3 p-3 bg-white rounded box-shadow">
   <h2 class="">Upcoming galas you\'ve entered</h2>
-  <p class="lead">Here are all the galas that you\'ve entered your swimmers into. If the closing data for a gala has not yet passed, then you\'ll be able to edit your entry.';
+  <p class="pb-2 mb-0 border-bottom border-gray">Here are all the galas that you\'ve entered your swimmers into. If the closing data for a gala has not yet passed, then you\'ll be able to edit your entry.';
 $content .= enteredGalas($link, $userID);
 $content .= '</div>';
 

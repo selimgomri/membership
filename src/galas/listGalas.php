@@ -11,7 +11,7 @@ if ($access == "Parent") {
 	$content .= "<p class=\"mb-0\"><a href=\"entergala\" class=\"btn btn-outline-dark\">Enter a gala</a></p></div>";
 }
 else {
-	$content .= "<p><a href=\"addgala\" class=\"btn btn-outline-dark\">Add a gala</a></p></div>";
+	$content .= "<p class=\"mb-0\"><a href=\"addgala\" class=\"btn btn-outline-dark\">Add a gala</a></p></div>";
 	/* Stats Section */
 	$swimsCountArray = [];
 	$strokesCountArray = [0, 0, 0, 0, 0];
