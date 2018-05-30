@@ -22,6 +22,7 @@ ini_set('session.name', "clsascMembershipID");
 
 session_start([
     'cookie_lifetime' => 2419200,
+    'gc_maxlifetime' => 2419200,
 ]);
 
 include_once("config.php");
