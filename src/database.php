@@ -120,7 +120,7 @@ function getAttendanceByID($db, $id, $weeks = "all") {
       }
     }
     else {
-      $output = 0;
+      $output = "Unknown - 0";
     }
   }
   else {
