@@ -1,13 +1,18 @@
 <?php include_once "database.php" ?>
 <!DOCTYPE html>
-<!-- 	Copyright Chris Heppell & Chester-le-Street ASC 2017. Bootstrap CSS and JavaScript is Copyright Twitter Inc, 2011-2017, jQuery v3.1.0 is Copyright jQuery Foundation 2016
-		Designed by Chris Heppell, www.heppellit.com
-        Yes! We built this in house. Not many clubs do. We don't cheat.	-->
+<!-- 	Copyright Chris Heppell & Chester-le-Street ASC 2017 2018. Bootstrap CSS and JavaScript is Copyright Twitter Inc, 2011-2018, jQuery v3.1.0 is Copyright jQuery Foundation 2016
+Designed by Chris Heppell, www.chrisheppell.uk
+Yes! We built this in house. Not many clubs do. We don't cheat.	-->
 <html lang="en-gb">
   <head>
     <meta charset="utf-8">
-	    <title><?php echo htmlspecialchars($pagetitle, ENT_QUOTES, 'UTF-8'); ?> - CLSASC Members</title>
-
+    <?php if ($pagetitle != "" || $pagetitle != null)  { ?>
+    <title><?php echo htmlspecialchars($pagetitle, ENT_QUOTES, 'UTF-8'); ?> - CLSASC Members</title>
+    <?php }
+    else { ?>
+    <title>CLSASC Membership</title>
+    <?php } ?>
+    <meta name="description" content="Your Chester-le-Street ASC Account lets you make gala entries online and gives you access to all your information about your swimmers, including attendance.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="apple-mobile-web-app-title" content="CLS ASC Accounts">
