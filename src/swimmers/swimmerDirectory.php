@@ -17,7 +17,7 @@ if (isset($_POST['squad'])) {
 }
 $content = "<p class=\"lead\">A list of swimmers.</p>";
 if ($access == "Committee" || $access == "Admin") {
-  $content .= "<p><a href=\"../add-member\" class=\"btn btn-outline-dark\">Add member</a> <a href=\"../accesskeys\" class=\"btn btn-outline-dark\">Access Keys</a></p>";
+  $content .= "<p><a href=\"" . autoUrl("swimmers/add-member") . "\" class=\"btn btn-outline-dark\">Add member</a> <a href=\"" . autoUrl("swimmers/accesskeys") . "\" class=\"btn btn-outline-dark\">Access Keys</a></p>";
 }
 $sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
 $result = mysqli_query($link, $sql);
