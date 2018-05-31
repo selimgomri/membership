@@ -113,7 +113,7 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
   </head>
 <body class="bg-light">
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary d-print-none justify-content-between" role="navigation">
-      <a class="navbar-brand" href="<?php echo autoUrl("index.php") ?>">
+      <a class="navbar-brand" href="<?php echo autoUrl("") ?>">
         <?php if ((empty($_SESSION['LoggedIn']) || $_SESSION['AccessLevel'] == "Parent")) { ?>Membership<?php } else { ?>MMS<?php } ?>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -124,7 +124,7 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
 		<ul class="navbar-nav mr-auto">
 		<?php if (!empty($_SESSION['LoggedIn'])) { ?>
 		  <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("index.php") ?>">Dashboard</a>
+			  <a class="nav-link" href="<?php echo autoUrl("") ?>">Dashboard</a>
 		  </li>
 		  <li class="nav-item">
 			  <a class="nav-link" href="<?php echo autoUrl("myaccount") ?>">My Account</a>
