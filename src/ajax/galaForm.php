@@ -206,7 +206,7 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
   	}
 
     $response .= '
-    <h2>Paying</h2>';
+    <!--<h2>Paying</h2>-->';
     if ($row['GalaFeeConstant'] != 1) {
       $response .= '
       <div class="form-group">

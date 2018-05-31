@@ -10,10 +10,10 @@
   $url = mysqli_real_escape_string($link, $_SERVER['REQUEST_URI']);
   $url = preg_replace('{/$}', '', $url);
   //$pos = strrpos($url, '/');
-  $id = $pos === false ? $url : substr($url, $pos + 1);
+  $id = mysqli_real_escape_string($link, $pos === false ? $url : substr($url, $pos + 1));
 
   $pos = strrpos($url, '/');
-  $idLast = $pos === false ? $url : substr($url, $pos + 1);
+  $idLast = mysqli_real_escape_string($link, $pos === false ? $url : substr($url, $pos + 1));
 
   function getMemberNameByID($db, $id) {
     $sql = "SELECT `MForename`, `MSurname` FROM `members` WHERE MemberID = '$id';";

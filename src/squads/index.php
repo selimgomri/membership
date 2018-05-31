@@ -8,6 +8,7 @@
   $url = mysqli_real_escape_string($link, $_SERVER['REQUEST_URI']);
   $pos = strrpos($url, '/');
   $id = $pos === false ? $url : substr($url, $pos + 1);
+  $id = (int)($id);
 
   // Variables for display
   $title = $content = '';

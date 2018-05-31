@@ -58,7 +58,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
   if (isset($_REQUEST["sessionID"])) {
       $date = "4";
     if (isset($_REQUEST["date"])) {
-      $dateO = $date = $_REQUEST["date"];
+      $dateO = $date = mysqli_real_escape_string($_REQUEST["date"]);
     }
 
     $sessionID = mysqli_real_escape_string($link, $_REQUEST["sessionID"]);

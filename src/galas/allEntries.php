@@ -4,7 +4,7 @@ $galaID = $surname = null;
 $title = "View Gala Entries by Gala";
 
 $galaIDParam = $search = "";
-parse_str($_SERVER['QUERY_STRING'], $queries);
+mysqli_real_escape_string(parse_str($_SERVER['QUERY_STRING'], $queries));
 if (isset($queries['galaID'])) {
   $galaIDParam = intval($queries['galaID']);
 }

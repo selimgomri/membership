@@ -14,7 +14,8 @@
   $idLast = $pos === false ? $url : substr($url, $pos + 1);
 
   // Variables for display
-  $title = $content = '';
+  $title = "Service closed for maintenance";
+  $content = '<p>We\'ll be back shortly. Please wait</p>';
   $pagetitle = "Attendance";
 
   if ($access == "Committee" || $access == "Admin" || $access == "Coach") {

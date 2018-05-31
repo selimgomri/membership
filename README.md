@@ -16,3 +16,5 @@ Galas are added to the system by admins. Parents can enter their children into s
 
 ### Online Attendance Records
 Attendance records are online, facilitating automatic attendance calculation.
+
+This application contains third party client libraries. These are managed via Composer. They will come with the application, so we recommend that you do not update them.
