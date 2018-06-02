@@ -6,6 +6,20 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
 {
+    public static $prefixLengthsPsr4 = array (
+        'S' => 
+        array (
+            'Symfony\\Component\\Routing\\' => 26,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'Symfony\\Component\\Routing\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/routing',
+        ),
+    );
+
     public static $classMap = array (
         'Twitter' => __DIR__ . '/..' . '/dg/twitter-php/src/Twitter.php',
         'TwitterException' => __DIR__ . '/..' . '/dg/twitter-php/src/Twitter.php',
@@ -25,6 +39,8 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3::$prefixDirsPsr4;
             $loader->classMap = ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3::$classMap;
 
         }, null, ClassLoader::class);
