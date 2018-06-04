@@ -158,10 +158,10 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
 		  <?php } ?>
 		  <?php if (empty($_SESSION['LoggedIn'])) { ?>
       <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("login.php") ?>">Login</a>
+			  <a class="nav-link" href="<?php echo autoUrl("") ?>">Login</a>
 		  </li>
       <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("register.php") ?>">Create Account</a>
+			  <a class="nav-link" href="<?php echo autoUrl("register") ?>">Create Account</a>
 		  </li>
       <?php } ?>
       <!--<li class="nav-item">
