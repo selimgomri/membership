@@ -15,17 +15,17 @@ require "helperclasses/Database.php";
 //define("LINK", mysqli_connect($dbhost, $dbuser, $dbpass, $dbname), true);
 //$link = LINK;
 
-$link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname)
-
-//$database = new Database($dbhost, $dbuser, $dbpass, $dbname);
-//$database->connect();
-//$link = $database->getConnection();
+$link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 
 /* check connection */
 if (mysqli_connect_errno()) {
     printf("Connect failed: %s\n", mysqli_connect_error());
     exit();
 }
+
+//$database = new Database($dbhost, $dbuser, $dbpass, $dbname);
+//$database->connect();
+//$link = $database->getConnection();
 
 require_once "database.php";
 
@@ -37,7 +37,7 @@ $route          = $app->route;
 
 // Home
 $route->get('/', function() {
-  global $link
+  global $link;
 	if (empty($_SESSION['LoggedIn']) || empty($_SESSION['Username'])) {
   	require('controllers/login.php');
 	} else {
@@ -46,57 +46,64 @@ $route->get('/', function() {
 });
 
 $route->post('/', function() {
-  global $link
+  global $link;
 	include 'login-go.php';
 });
 
 // Register
 $route->get('/register', function() {
-  global $link
+  global $link;
   require('controllers/register.php');
 });
 
 // Locked Out Password Reset
 $route->get('/resetpassword', function() {
-  global $link
+  global $link;
   require('controllers/forgot-password.php');
 });
 
 $route->post('/resetpassword', function() {
-  global $link
+  global $link;
   require('controllers/forgot-password-action.php');
 });
 
 $route->group('/myaccount', function() {
-  global $link
+  global $link;
 
 	// My Account
 	$this->get('/', function() {
-    global $link
+    global $link;
 	  require('controllers/myaccount/index.php');
 	});
 
 	// Manage Password
 	$this->get('/password', function() {
-    global $link
+    global $link;
 	  require('controllers/myaccount/change-password.php');
 	});
 
 	$this->post('/password', function() {
-    global $link
+    global $link;
 	  require('controllers/myaccount/change-password-action.php');
 	});
 
 	// Add swimmer
 	$this->get('/addswimmer', function() {
-    global $link
+    global $link;
 	  require('controllers/myaccount/add-swimmer.php');
 	});
 
 	$this->post('/addswimmer', function() {
-    global $link
+    global $link;
 	  require('controllers/myaccount/add-swimmer-action.php');
 	});
+
+});
+
+$route->group('/swimmers', function() {
+  global $link;
+
+  include 'controllers/swimmers/router.php';
 
 });
 
