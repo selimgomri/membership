@@ -25,18 +25,6 @@ session_start([
     'gc_maxlifetime' => 2419200,
 ]);
 
-include_once("config.php");
-
-//$link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-define("LINK", mysqli_connect($dbhost, $dbuser, $dbpass, $dbname), true);
-$link = LINK;
-
-/* check connection */
-if (mysqli_connect_errno()) {
-    printf("Connect failed: %s\n", mysqli_connect_error());
-    exit();
-}
-
 if ((!isset($preventLoginRedirect)) && (empty($_SESSION['LoggedIn']))) {
   $preventLoginRedirect = false;
   $_SESSION['requestedURL'] = mysqli_real_escape_string(LINK, $_SERVER['REQUEST_URI']);

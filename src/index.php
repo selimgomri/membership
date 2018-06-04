@@ -9,6 +9,17 @@ error_reporting(E_ALL);
 //===================================
 
 require BASE_PATH.'vendor/autoload.php';
+require "config.php";
+//$link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+define("LINK", mysqli_connect($dbhost, $dbuser, $dbpass, $dbname), true);
+$link = LINK;
+
+/* check connection */
+if (mysqli_connect_errno()) {
+    printf("Connect failed: %s\n", mysqli_connect_error());
+    exit();
+}
+
 require_once "database.php";
 
 $app            = System\App::instance();
