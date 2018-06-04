@@ -1,5 +1,5 @@
 <?php
-  include "../header.php";
+  include BASE_PATH . "views/header.php";
 
   $userID = $_SESSION['UserID'];
   $access = $_SESSION['AccessLevel'];
@@ -177,5 +177,5 @@ else {
   header("Location: /");
 }
 
-include "../footer.php";
+include BASE_PATH . "views/footer.php";
 ?>

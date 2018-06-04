@@ -1,7 +1,7 @@
 <?php
   $pagetitle = "Register";
   $preventLoginRedirect = true;
-  include "header.php";
+  include BASE_PATH . "views/header.php";
 
   $errorMessage = "";
   $errorState = false;

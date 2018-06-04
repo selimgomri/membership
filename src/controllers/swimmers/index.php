@@ -71,7 +71,7 @@
       $content .= mySwimmersTable(LINK, $userID);
       $content .= "<p><a href=\"" . autoUrl('myaccount/add-swimmer.php') . "\" class=\"btn btn-outline-dark\">Add a Swimmer</a></p>";
 
-      include "../header.php";
+      include BASE_PATH . "views/header.php";
     }
     elseif (($id == "edit/" . $idLast)) {
       include "parentSingleSwimmer.php";
@@ -101,10 +101,10 @@
       $pagetitle = "Error 404 - Not found";
       $title = "Error 404 - Not found";
       $content = '<p class="lead">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. You may also not be authorised to view the page.</p>';
-      include "../header.php";
+      include BASE_PATH . "views/header.php";
     }
 
-    include "../header.php";
+    include BASE_PATH . "views/header.php";
 
   }
   elseif ($access == "Coach") {
@@ -127,10 +127,10 @@
       $pagetitle = "Error 404 - Not found";
       $title = "Error 404 - Not found";
       $content = '<p class="lead">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. You may also not be authorised to view the page.</p>';
-      include "../header.php";
+      include BASE_PATH . "views/header.php";
     }
 
-    include "../header.php";
+    include BASE_PATH . "views/header.php";
   }
   elseif ($access == "Committee" || $access == "Admin") {
     if ($id == "") {
@@ -256,11 +256,11 @@
       $pagetitle = "Error 404 - Not found";
       $title = "Error 404 - Not found";
       $content = '<p class="lead">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. You may also not be authorised to view the page.</p>';
-      include "../header.php";
+      include BASE_PATH . "views/header.php";
     }
 
     if ($header == true) {
-      include "../header.php";
+      include BASE_PATH . "views/header.php";
     }
 
   }
@@ -270,7 +270,7 @@
     $pagetitle = "Error 404 - Not found";
     $title = "Error 404 - Not found";
     $content = '<p class="lead">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. You may also not be authorised to view the page.</p>';
-    include "../header.php";
+    include BASE_PATH . "views/header.php";
   }
 
 if ($header == true) {
@@ -281,6 +281,6 @@ if ($header == true) {
 </div>
 <?php
 
-  include "../footer.php";
+  include BASE_PATH . "views/footer.php";
 }
 ?>

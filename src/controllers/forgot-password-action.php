@@ -1,7 +1,7 @@
 <?php
   $preventLoginRedirect = true;
   $pagetitle = "Password Reset";
-  include "header.php";
+  include BASE_PATH . "views/header.php";
 
   $userDetails = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['userDetails'])));
   $captcha = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['g-recaptcha-response'])));

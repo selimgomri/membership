@@ -1,7 +1,7 @@
 <?php
   $pagetitle = "Password Reset";
   $preventLoginRedirect = true;
-  include "header.php";
+  include BASE_PATH . "views/header.php";
 ?>
 <div class="container">
 <h1>Lost password</h1>
@@ -22,4 +22,4 @@
 <p>If an account exists with either the username or email address you submit, we will send you a new password by email.</p>
 </div>
 
-<?php include "footer.php"; ?>
+<?php include BASE_PATH . "views/footer.php"; ?>

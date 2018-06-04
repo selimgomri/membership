@@ -37,7 +37,7 @@
       $title = "Error 500";
       $content = "<p class=\"lead\">We couldn't do anything.</p>";
     }
-    include "../header.php";
+    include BASE_PATH . "views/header.php";
   }
   else {
     if ($id == "") {
@@ -51,7 +51,7 @@
     }
     else {
     }
-    include "../header.php";
+    include BASE_PATH . "views/header.php";
   }
 
 ?>
@@ -61,5 +61,5 @@
 </div>
 <?php
 
-  include "../footer.php";
+  include BASE_PATH . "views/footer.php";
 ?>

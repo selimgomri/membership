@@ -64,7 +64,7 @@
     elseif (($id == "history/swimmers/" . $idLast)) {
       include "historyViews/swimmerHistory.php";
     }
-    include "../header.php";
+    include BASE_PATH . "views/header.php";
   }
   else {
     // Not allowed or not found
@@ -72,7 +72,7 @@
     $pagetitle = "Error 404 - Not found";
     $title = "Error 404 - Not found";
     $content = '<p class="lead">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. You may also not be authorised to view the page.</p>';
-    include "../header.php";
+    include BASE_PATH . "views/header.php";
   }
 
 ?>
@@ -97,5 +97,5 @@
 </div>
 <?php
 
-  include "../footer.php";
+  include BASE_PATH . "views/footer.php";
 ?>

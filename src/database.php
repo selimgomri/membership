@@ -27,8 +27,9 @@ session_start([
 
 include_once("config.php");
 
-$link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-define("LINK", $link, true);
+//$link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+define("LINK", mysqli_connect($dbhost, $dbuser, $dbpass, $dbname), true);
+$link = LINK;
 
 /* check connection */
 if (mysqli_connect_errno()) {

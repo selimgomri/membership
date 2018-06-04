@@ -238,7 +238,7 @@ $content .= '
 </div>';
 $content .= '</div>';
 
-include "../header.php";
+include BASE_PATH . "views/header.php";
 ?>
 <script src="<?php echo autoUrl('js/tinymce/tinymce.min.js') ?>" async defer></script>
 <script>

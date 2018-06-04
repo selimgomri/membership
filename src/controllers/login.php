@@ -3,7 +3,7 @@
 
   $pagetitle = "Login";
   $preventLoginRedirect = true;
-  include "header.php";
+  include BASE_PATH . "views/header.php";
 
   $errorState = false;
 
@@ -96,5 +96,5 @@
   if ( isset($_SESSION['ErrorState']) ) {
     unset($_SESSION['ErrorState']);
   }
-  include "footer.php";
+  include BASE_PATH . "views/footer.php";
 ?>

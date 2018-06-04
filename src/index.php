@@ -44,9 +44,31 @@ $route->post('/resetpassword', function() {
   require('controllers/forgot-password-action.php');
 });
 
-// My Account
-$route->get('/myaccount', function() {
-  require('controllers/myaccount/index.php');
+$route->group('/myaccount', function() {
+
+	// My Account
+	$this->get('/', function() {
+	  require('controllers/myaccount/index.php');
+	});
+
+	// Manage Password
+	$this->get('/password', function() {
+	  require('controllers/myaccount/change-password.php');
+	});
+
+	$this->post('/password', function() {
+	  require('controllers/myaccount/change-password-action.php');
+	});
+
+	// Add swimmer
+	$this->get('/addswimmer', function() {
+	  require('controllers/myaccount/add-swimmer.php');
+	});
+
+	$this->post('/addswimmer', function() {
+	  require('controllers/myaccount/add-swimmer-action.php');
+	});
+
 });
 
 $route->end();

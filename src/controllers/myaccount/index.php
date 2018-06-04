@@ -1,6 +1,6 @@
 <?php
   $pagetitle = "My Account";
-  include "/customers/9/d/e/chesterlestreetasc.co.uk/httpd.www/dev/membership/views/header.php";
+  include BASE_PATH . "views/header.php";
   $username = $_SESSION['Username'];
   $userID = $_SESSION['UserID'];
 

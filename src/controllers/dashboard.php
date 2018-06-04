@@ -1,6 +1,6 @@
 <?php
   $pagetitle = "Homepage";
-  include "header.php";
+  include BASE_PATH . "views/header.php";
   $userID = $_SESSION['UserID'];
 
   $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = '$userID';";
@@ -140,4 +140,4 @@ else { ?>
 </div>
 
 
-<?php include "footer.php"; ?>
+<?php include BASE_PATH . "views/footer.php"; ?>

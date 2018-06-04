@@ -1,6 +1,6 @@
 <?php
   $pagetitle = "Add a swimmer";
-  include "../header.php";
+  include BASE_PATH . "views/header.php";
 
   $errorMessage = "";
   $errorState = false;
