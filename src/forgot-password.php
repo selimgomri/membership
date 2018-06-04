@@ -5,7 +5,7 @@
 ?>
 <div class="container">
 <h1>Lost password</h1>
-<form method="post" action="forgot-password-action.php">
+<form method="post">
   <div class="form-group">
       <label for="userDetails">Username or Email Address</label>
       <input type="text" class="form-control" name="userDetails" id="userDetails" placeholder="Username or Email" required>

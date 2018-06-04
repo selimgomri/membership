@@ -44,17 +44,6 @@ elseif (!isset($preventLoginRedirect)) {
   $_SESSION['requestedURL'] = mysqli_real_escape_string($link, $_SERVER['REQUEST_URI']);
 }
 
-
-require_once 'includes/PHPMailer/Exception.php';
-require_once 'includes/PHPMailer/PHPMailer.php';
-require_once 'includes/PHPMailer/SMTP.php';
-
-$path = 'includes/PHPMailer';
-set_include_path(get_include_path() . PATH_SEPARATOR . $path);
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 function notifySend($to, $subject, $message) {
   // PHP Email
 
@@ -702,6 +691,7 @@ function autoUrl($relative) {
 
 $count = 0;
 
+/*
 if ( (empty($_SESSION['LoggedIn']) || empty($_SESSION['Username'])) && ($preventLoginRedirect != true)) {
   // Allow access to main page
   header("Location: " . autoUrl("login.php"));
@@ -710,5 +700,6 @@ elseif (((!empty($_SESSION['LoggedIn'])) || (!empty($_SESSION['Username']))) && 
   // Don't show login etc if logged in
   header("Location: " . autoUrl(""));
 }
+*/
 
 ?>
