@@ -17,7 +17,7 @@ class Wallet {
 	public function __construct($id) {
 		// Get the balance
 		$sql = "SELECT * FROM wallet WHERE UserID = '$id'";
-		$result = mysqli_query($link, $sql);
+		$result = mysqli_query(LINK, $sql);
 		$row = mysqli_fetch_array($result);
 
 		$this->id = $id;
@@ -35,9 +35,9 @@ class Wallet {
 
 		// Get the balance
 		$sql = "UPDATE wallet SET balance = '$this->balance' WHERE UserID = '$this->id'";
-		mysqli_query($link, $sql);
+		mysqli_query(LINK, $sql);
 		$sql = "INSERT INTO walletHistory (Description, SignBit, Amount) values ($description, 0, $amount)";
-		mysqli_query($link, $sql);
+		mysqli_query(LINK, $sql);
 	}
 
 	/**
@@ -50,9 +50,9 @@ class Wallet {
 
 		// Get the balance
 		$sql = "UPDATE wallet SET balance = '$this->balance' WHERE UserID = '$this->id'";
-		mysqli_query($link, $sql);
+		mysqli_query(LINK, $sql);
 		$sql = "INSERT INTO walletHistory (Description, SignBit, Amount) values ($description, 1, $amount)";
-		mysqli_query($link, $sql);
+		mysqli_query(LINK, $sql);
 	}
 
 	/**

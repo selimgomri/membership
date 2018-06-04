@@ -1184,25 +1184,25 @@ class Parsedown
 
         $Excerpt['text']= substr($Excerpt['text'], 1);
 
-        $Link = $this->inlineLink($Excerpt);
+        LINK = $this->inlineLink($Excerpt);
 
-        if ($Link === null)
+        if (LINK === null)
         {
             return;
         }
 
         $Inline = array(
-            'extent' => $Link['extent'] + 1,
+            'extent' => LINK['extent'] + 1,
             'element' => array(
                 'name' => 'img',
                 'attributes' => array(
-                    'src' => $Link['element']['attributes']['href'],
-                    'alt' => $Link['element']['text'],
+                    'src' => LINK['element']['attributes']['href'],
+                    'alt' => LINK['element']['text'],
                 ),
             ),
         );
 
-        $Inline['element']['attributes'] += $Link['element']['attributes'];
+        $Inline['element']['attributes'] += LINK['element']['attributes'];
 
         unset($Inline['element']['attributes']['href']);
 

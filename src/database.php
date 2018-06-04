@@ -28,6 +28,7 @@ session_start([
 include_once("config.php");
 
 $link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+define("LINK", $link, true);
 
 /* check connection */
 if (mysqli_connect_errno()) {
@@ -37,11 +38,11 @@ if (mysqli_connect_errno()) {
 
 if ((!isset($preventLoginRedirect)) && (empty($_SESSION['LoggedIn']))) {
   $preventLoginRedirect = false;
-  $_SESSION['requestedURL'] = mysqli_real_escape_string($link, $_SERVER['REQUEST_URI']);
+  $_SESSION['requestedURL'] = mysqli_real_escape_string(LINK, $_SERVER['REQUEST_URI']);
 }
 elseif (!isset($preventLoginRedirect)) {
   $preventLoginRedirect = false;
-  $_SESSION['requestedURL'] = mysqli_real_escape_string($link, $_SERVER['REQUEST_URI']);
+  $_SESSION['requestedURL'] = mysqli_real_escape_string(LINK, $_SERVER['REQUEST_URI']);
 }
 
 function notifySend($to, $subject, $message) {
@@ -641,11 +642,9 @@ function squadInfoTable($db, $enableLinks = false) {
 }
 
 function creditWallet($id, $amount, $description) {
-  global $link;
-
   // Get the balance
   $sql = "SELECT `Balance` FROM `wallet` WHERE UserID = '$id';";
-  $result = mysqli_query($link, $sql);
+  $result = mysqli_query(LINK, $sql);
   $row = mysqli_fetch_array($result);
   $balance = $row['Balance'];
 
@@ -656,15 +655,13 @@ function creditWallet($id, $amount, $description) {
   $sql = "
   INSERT INTO walletHistory (Amount, Balance, TransactionDesc, UserID) VALUES ('$amount', '$newBalance', '$description', '$id');
   UPDATE wallet SET Balance='$newBalance' WHERE UserID = '$id';";
-  mysqli_query($link, $sql);
+  mysqli_query(LINK, $sql);
 }
 
 function debitWallet($id, $amount, $description) {
-  global $link;
-
   // Get the balance
   $sql = "SELECT `Balance` FROM `wallet` WHERE UserID = '$id';";
-  $result = mysqli_query($link, $sql);
+  $result = mysqli_query(LINK, $sql);
   $row = mysqli_fetch_array($result);
   $balance = $row['Balance'];
 
@@ -674,9 +671,9 @@ function debitWallet($id, $amount, $description) {
 
   // Update the balance andd insert description
   $sql = "INSERT INTO walletHistory (Amount, Balance, TransactionDesc, UserID) VALUES ('$amount', '$newBalance', '$description', '$id');";
-  mysqli_query($link, $sql);
+  mysqli_query(LINK, $sql);
   $sql = "UPDATE wallet SET Balance='$newBalance' WHERE UserID = '$id';";
-  mysqli_query($link, $sql);
+  mysqli_query(LINK, $sql);
   echo $newBalance;
 }
 
