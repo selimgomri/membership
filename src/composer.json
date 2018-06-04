@@ -1,6 +1,6 @@
 {
     "require": {
         "dg/twitter-php": "^3.6",
-        "symfony/routing": "^4.1"
+        "nezamy/route": "1.1"
     }
 }

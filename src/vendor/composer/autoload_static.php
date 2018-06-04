@@ -6,17 +6,21 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
 {
+    public static $files = array (
+        '6195ccae414b7a82ab47247beb894d66' => __DIR__ . '/..' . '/nezamy/route/system/function.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         'S' => 
         array (
-            'Symfony\\Component\\Routing\\' => 26,
+            'System\\' => 7,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Symfony\\Component\\Routing\\' => 
+        'System\\' => 
         array (
-            0 => __DIR__ . '/..' . '/symfony/routing',
+            0 => __DIR__ . '/..' . '/nezamy/route/system',
         ),
     );
 
