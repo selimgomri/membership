@@ -1,6 +1,6 @@
 <?php
   $pagetitle = "My Account";
-  include "../header.php";
+  include "/customers/9/d/e/chesterlestreetasc.co.uk/httpd.www/dev/membership/views/header.php";
   $username = $_SESSION['Username'];
   $userID = $_SESSION['UserID'];
 
@@ -209,4 +209,4 @@
 </div>
 </div>
 
-<?php include "../footer.php"; ?>
+<?php include "/customers/9/d/e/chesterlestreetasc.co.uk/httpd.www/dev/membership/views/footer.php"; ?>
