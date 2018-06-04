@@ -8,11 +8,11 @@ $response = "";
 
 if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
   // get the galaID parameter from request
-  $galaID = mysqli_real_escape_string(LINK, htmlentities($_REQUEST["galaID"]));
-  $memberID = mysqli_real_escape_string(LINK, htmlentities($_REQUEST["swimmer"]));
+  $galaID = mysqli_real_escape_string($link, htmlentities($_REQUEST["galaID"]));
+  $memberID = mysqli_real_escape_string($link, htmlentities($_REQUEST["swimmer"]));
 
   $sql = "SELECT * FROM galaEntries WHERE GalaID = '$galaID' AND MemberID = '$memberID';";
-  $result = mysqli_query(LINK, $sql);
+  $result = mysqli_query($link, $sql);
   $rows = mysqli_num_rows($result);
   $row = mysqli_fetch_array($result);
 
@@ -20,7 +20,7 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
     $response = '<div class="alert alert-warning"><strong>Oops. You\'ve aleady entered this swimmer into this gala</strong> <br>
     You might want to check that. ';
     if ($row['EntryProcessed'] == 0) {
-      $response .= 'We\'ve not processed your entry yet, so you <a class="alert-link" href="' . autoUrl("galas/entries/" . $row["EntryID"]) . '">can edit that entry</a> if you need to make changes.';
+      $response .= 'We\'ve not processed your entry yet, so you <a class="alert-$link" href="' . autoUrl("galas/entries/" . $row["EntryID"]) . '">can edit that entry</a> if you need to make changes.';
     }
     $response .= '</div>';
   }
@@ -28,7 +28,7 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
 
   	$sql = "SELECT `HyTek`, `GalaName`, `GalaFeeConstant` FROM galas WHERE GalaID = '$galaID';";
 
-  	$result = mysqli_query(LINK, $sql);
+  	$result = mysqli_query($link, $sql);
   	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
   	$swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];
@@ -222,7 +222,7 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
     }
     /*
     $sql = "SELECT * FROM `paymentTypes` ORDER BY `PayTypeName` ASC";
-    $sqlResponse = mysqli_query(LINK, $sql);
+    $sqlResponse = mysqli_query($link, $sql);
     $count = mysqli_num_rows($sqlResponse);
     if ($count > 0) {
       $response .= '

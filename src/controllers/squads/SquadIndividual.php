@@ -1,7 +1,7 @@
 <?php
 $squadNameUpdate = $squadFeeUpdate = $squadCoachUpdate = $squadTimetableUpdate = $squadCoCUpdate = "";
 $sql = "SELECT * FROM `squads` WHERE squads.SquadID = '$id';";
-$result = mysqli_query(LINK, $sql);
+$result = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 $squadName = $row['SquadName'];
 $squadFee= $row['SquadFee'];
@@ -11,63 +11,63 @@ $squadCoC = $row['SquadCoC'];
 $squadDeleteKey = $row['SquadKey'];
 
 if (isset($_POST['squadName'])) {
-  $postContent = mysqli_real_escape_string(LINK, trim(htmlspecialchars(ucwords($_POST['squadName']))));
+  $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['squadName']))));
   if ($postContent != $squadName) {
     $sql = "UPDATE `squads` SET `SquadName` = '$postContent' WHERE `SquadID` = '$id'";
-    mysqli_query(LINK, $sql);
+    mysqli_query($link, $sql);
     $squadNameUpdate = true;
     $update = true;
   }
 }
 if (isset($_POST['squadFee'])) {
-  $postContent = mysqli_real_escape_string(LINK, number_format(trim(htmlspecialchars(ucwords($_POST['squadFee']))),2,'.',''));
+  $postContent = mysqli_real_escape_string($link, number_format(trim(htmlspecialchars(ucwords($_POST['squadFee']))),2,'.',''));
   if ($postContent != $squadFee) {
     $sql = "UPDATE `squads` SET `SquadFee` = '$postContent' WHERE `SquadID` = '$id'";
-    mysqli_query(LINK, $sql);
+    mysqli_query($link, $sql);
     $squadFeeUpdate = true;
     $update = true;
   }
 }
 if (isset($_POST['squadCoach'])) {
-  $postContent = mysqli_real_escape_string(LINK, trim(htmlspecialchars(ucwords($_POST['squadCoach']))));
+  $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['squadCoach']))));
   if ($postContent != $squadCoach) {
     $sql = "UPDATE `squads` SET `SquadCoach` = '$postContent' WHERE `SquadID` = '$id'";
-    mysqli_query(LINK, $sql);
+    mysqli_query($link, $sql);
     $squadCoachUpdate = true;
     $update = true;
   }
 }
 if (isset($_POST['squadTimetable'])) {
-  $postContent = mysqli_real_escape_string(LINK, trim(htmlspecialchars(strtolower($_POST['squadTimetable']))));
+  $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(strtolower($_POST['squadTimetable']))));
   if ($postContent != $squadTimetable) {
     $sql = "UPDATE `squads` SET `SquadTimetable` = '$postContent' WHERE `SquadID` = '$id'";
-    mysqli_query(LINK, $sql);
+    mysqli_query($link, $sql);
     $squadTimetableUpdate = true;
     $update = true;
   }
 }
 if (isset($_POST['squadCoC'])) {
-  $postContent = mysqli_real_escape_string(LINK, trim(htmlspecialchars(lcfirst($_POST['squadCoC']))));
+  $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(lcfirst($_POST['squadCoC']))));
   if ($postContent != $squadCoC) {
     $sql = "UPDATE `squads` SET `SquadCoC` = '$postContent' WHERE `SquadID` = '$id'";
-    mysqli_query(LINK, $sql);
+    mysqli_query($link, $sql);
     $squadCoCUpdate = true;
     $update = true;
   }
 }
 if ($access == "Admin") {
   if (isset($_POST['squadDeleteDanger'])) {
-    $postContent = mysqli_real_escape_string(LINK, trim(htmlspecialchars(lcfirst($_POST['squadDeleteDanger']))));
+    $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(lcfirst($_POST['squadDeleteDanger']))));
     if ($postContent == $squadDeleteKey) {
       $sql = "DELETE FROM `squads` WHERE `SquadID` = '$id'";
-      mysqli_query(LINK, $sql);
+      mysqli_query($link, $sql);
       header("Location: " . autoUrl("squads"));
     }
   }
 }
 
 $sql = "SELECT * FROM `squads` WHERE squads.SquadID = '$id';";
-$result = mysqli_query(LINK, $sql);
+$result = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
 $title = $pagetitle = $row['SquadName'] . " Squad";
@@ -116,10 +116,10 @@ $content .= "
 <div class=\"col-md-6\">";
 
 $sql = "SELECT `Gender` FROM `members` WHERE `SquadID` = '$id' AND `Gender` = 'Male';";
-$result = mysqli_query(LINK, $sql);
+$result = mysqli_query($link, $sql);
 $male = mysqli_num_rows($result);
 $sql = "SELECT `Gender` FROM `members` WHERE `SquadID` = '$id' AND `Gender` = 'Female';";
-$result = mysqli_query(LINK, $sql);
+$result = mysqli_query($link, $sql);
 $female = mysqli_num_rows($result);
 
   if ($male+$female>0) {
@@ -186,10 +186,10 @@ else {
     <li><a href=\"" . $row['SquadCoC'] . "\">Squad Code of Conduct</a></li>
   </ul></div></div>";
   $sql = "SELECT `Gender` FROM `members` WHERE `SquadID` = '$id' AND `Gender` = 'Male';";
-  $result = mysqli_query(LINK, $sql);
+  $result = mysqli_query($link, $sql);
   $male = mysqli_num_rows($result);
   $sql = "SELECT `Gender` FROM `members` WHERE `SquadID` = '$id' AND `Gender` = 'Female';";
-  $result = mysqli_query(LINK, $sql);
+  $result = mysqli_query($link, $sql);
   $female = mysqli_num_rows($result);
 
     if ($male+$female>0) {

@@ -13,7 +13,7 @@ if (isset($queries['search'])) {
 }
 
 $sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
-$result = mysqli_query(LINK, $sql);
+$result = mysqli_query($link, $sql);
 $squadCount = mysqli_num_rows($result);
 $content .= "
 <div class=\"form-row\">

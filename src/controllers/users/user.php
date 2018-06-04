@@ -1,4 +1,4 @@
 <?php
-$pagetitle = getUserNameByID(LINK, $id) . " - User Information";
+$pagetitle = getUserNameByID($link, $id) . " - User Information";
 $title = null;
-$content = getUserInfoByID(LINK, $id);
+$content = getUserInfoByID($link, $id);

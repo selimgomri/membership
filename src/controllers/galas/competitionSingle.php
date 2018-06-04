@@ -1,7 +1,7 @@
 <?php
 
 $sql = "SELECT * FROM `galas` WHERE `GalaID` = '$idLast';";
-$result = mysqli_query(LINK, $sql);
+$result = mysqli_query($link, $sql);
 $count = mysqli_num_rows($result);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 $course = ['LONG', 'SHORT', 'IRREGULAR'];

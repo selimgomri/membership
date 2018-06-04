@@ -14,7 +14,7 @@ $update = false;
 $successInformation = "";
 
 $query = "SELECT * FROM members WHERE MemberID = '$idLast' ";
-$result = mysqli_query(LINK, $query);
+$result = mysqli_query($link, $query);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
 $forename = $row['MForename'];
@@ -31,108 +31,108 @@ $otherNotes = $row['OtherNotes'];
 $dbAccessKey = $row['AccessKey'];
 
 if (!empty($_POST['forename'])) {
-	$newForename = mysqli_real_escape_string(LINK, trim(htmlspecialchars(ucwords($_POST['forename']))));
+	$newForename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
 	if ($newForename != $forename) {
 		$sql = "UPDATE `members` SET `MForename` = '$newForename' WHERE `MemberID` = '$idLast'";
-		mysqli_query(LINK, $sql);
+		mysqli_query($link, $sql);
 		$forenameUpdate = true;
 		$update = true;
 	}
 }
 if (!empty($_POST['middlenames'])) {
-	$newMiddlenames = mysqli_real_escape_string(LINK, trim(htmlspecialchars(ucwords($_POST['middlenames']))));
+	$newMiddlenames = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['middlenames']))));
 	if ($newMiddlenames != $middlename) {
 		$sql = "UPDATE `members` SET `MMiddleNames` = '$newMiddlenames' WHERE `MemberID` = '$idLast'";
-		mysqli_query(LINK, $sql);
+		mysqli_query($link, $sql);
 		$middlenameUpdate = true;
 		$update = true;
 	}
 }
 if (!empty($_POST['surname'])) {
-	$newSurname = mysqli_real_escape_string(LINK, trim(htmlspecialchars(ucwords($_POST['surname']))));
+	$newSurname = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['surname']))));
 	if ($newSurname != $surname) {
 		$sql = "UPDATE `members` SET `MSurname` = '$newSurname' WHERE `MemberID` = '$idLast'";
-		mysqli_query(LINK, $sql);
+		mysqli_query($link, $sql);
 		$surnameUpdate = true;
 		$update = true;
 	}
 }
 if (!empty($_POST['asa'])) {
-	$newASANumber = mysqli_real_escape_string(LINK, trim(htmlspecialchars(ucwords($_POST['asa']))));
+	$newASANumber = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['asa']))));
 	if ($newASANumber != $asaNumber) {
 		$sql = "UPDATE `members` SET `ASANumber` = '$newASANumber' WHERE `MemberID` = '$idLast'";
-		mysqli_query(LINK, $sql);
+		mysqli_query($link, $sql);
 		$asaUpdate = true;
 		$update = true;
 	}
 }
 if (!empty($_POST['userid'])) {
-	$newUserID = mysqli_real_escape_string(LINK, trim(htmlspecialchars(ucwords($_POST['userid']))));
+	$newUserID = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['userid']))));
 	if ($newUserID != $dbUserID) {
 		$sql = "UPDATE `members` SET `UserID` = '$newUserID' WHERE `MemberID` = '$idLast'";
-		mysqli_query(LINK, $sql);
+		mysqli_query($link, $sql);
 		$userUpdate = true;
 		$update = true;
 	}
 }
 if (!empty($_POST['squad'])) {
-	$newSquadID = mysqli_real_escape_string(LINK, trim(htmlspecialchars(ucwords($_POST['squad']))));
+	$newSquadID = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['squad']))));
 	if ($newSquadID != $squad) {
 		$sql = "UPDATE `members` SET `SquadID` = '$newSquadID' WHERE `MemberID` = '$idLast'";
-		mysqli_query(LINK, $sql);
+		mysqli_query($link, $sql);
 		$squadUpdate = true;
 		$update = true;
 	}
 }
 if (!empty($_POST['datebirth'])) {
-	$newDateOfBirth = mysqli_real_escape_string(LINK, trim(htmlspecialchars(ucwords($_POST['datebirth']))));
+	$newDateOfBirth = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['datebirth']))));
 	// NEEDS WORK FOR DATE TO BE RIGHT
 	if ($newDateOfBirth != $dateOfBirth) {
 		$sql = "UPDATE `members` SET `DateOfBirth` = '$newDateOfBirth' WHERE `MemberID` = '$idLast'";
-		mysqli_query(LINK, $sql);
+		mysqli_query($link, $sql);
 		$dateOfBirthUpdate = true;
 		$update = true;
 	}
 }
 if (!empty($_POST['sex'])) {
-	$newSex = mysqli_real_escape_string(LINK, trim(htmlspecialchars(ucwords($_POST['sex']))));
+	$newSex = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['sex']))));
 	if ($newSex != $sex) {
 		$sql = "UPDATE `members` SET `Gender` = '$newSex' WHERE `MemberID` = '$idLast'";
-		mysqli_query(LINK, $sql);
+		mysqli_query($link, $sql);
 		$sexUpdate = true;
 		$update = true;
 	}
 }
 if (isset($_POST['medicalNotes'])) {
-	$newMedicalNotes = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['medicalNotes'])));
+	$newMedicalNotes = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['medicalNotes'])));
 	if ($newMedicalNotes != $medicalNotes) {
 		$sql = "UPDATE `members` SET `MedicalNotes` = '$newMedicalNotes' WHERE `MemberID` = '$idLast'";
-		mysqli_query(LINK, $sql);
+		mysqli_query($link, $sql);
 		$medicalNotesUpdate = true;
 		$update = true;
 	}
 }
 if (isset($_POST['otherNotes'])) {
-	$newOtherNotes = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['otherNotes'])));
+	$newOtherNotes = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['otherNotes'])));
 	if ($newOtherNotes != $otherNotes) {
 		$sql = "UPDATE `members` SET `OtherNotes` = '$newOtherNotes' WHERE `MemberID` = '$idLast'";
-		mysqli_query(LINK, $sql);
+		mysqli_query($link, $sql);
 		$otherNotesUpdate = true;
 		$update = true;
 	}
 }
 if (!empty($_POST['swimmerDeleteDanger'])) {
-	$deleteKey = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['swimmerDeleteDanger'])));
+	$deleteKey = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['swimmerDeleteDanger'])));
 	if ($deleteKey == $dbAccessKey) {
 		$sql = "DELETE FROM `members` WHERE `members`.`MemberID` = '$idLast'";
-		mysqli_query(LINK, $sql);
+		mysqli_query($link, $sql);
 		header("Location: " . autoUrl("swimmers"));
 	}
 }
 
 $sqlSwim = "";
 $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, members.ASANumber, squads.SquadName, squads.SquadID, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes , members.AccessKey FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$idLast';";
-$resultSwim = mysqli_query(LINK, $sqlSwim);
+$resultSwim = mysqli_query($link, $sqlSwim);
 $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
 $pagetitle = "Swimmer: " . $rowSwim['MForename'] . " " . $rowSwim['MSurname'];
 $title = null;
@@ -188,7 +188,7 @@ FROM INFORMATION_SCHEMA.COLUMNS
 WHERE TABLE_SCHEMA = 'chesterlestreetasc_co_uk_membership'
 AND TABLE_NAME = 'members'
 AND COLUMN_NAME = 'Gender';";
-$resultGender = mysqli_query(LINK, $sqlSwim);*/
+$resultGender = mysqli_query($link, $sqlSwim);*/
 if ($rowSwim['Gender'] == "Male") {
 	$content .= "
 	<div class=\"form-group\">
@@ -210,7 +210,7 @@ else {
 	</div>";
 }
 $sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
-$result = mysqli_query(LINK, $sql);
+$result = mysqli_query($link, $sql);
 $squadCount = mysqli_num_rows($result);
 $content .= "
 <div class=\"form-group\">

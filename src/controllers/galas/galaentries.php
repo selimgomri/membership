@@ -4,7 +4,7 @@ $pagetitle = "Enter a Gala";
 $title = "Enter a Gala";
 $content = "<p class=\"lead\">Enter a gala quickly and easily, with fewer steps than before.</p>";
 $sql = "SELECT `MemberID` FROM `members` WHERE `members`.`UserID` = '$userID';";
-$result = mysqli_query(LINK, $sql);
+$result = mysqli_query($link, $sql);
 $swimCount = mysqli_num_rows($result);
 if ($swimCount > 0) {
   $content .= "
@@ -16,7 +16,7 @@ if ($swimCount > 0) {
       <div class=\"col-sm-10\">
         <select class=\"custom-select\" id=\"swimmer\" name=\"swimmer\" required><option value=\"null\" selected>Select</option>";
         $sql = "SELECT * FROM `members` WHERE `members`.`UserID` = '$userID' ORDER BY `members`.`MForename`, `members`.`MSurname` ASC;";
-        $result = mysqli_query(LINK, $sql);
+        $result = mysqli_query($link, $sql);
         $squadCount = mysqli_num_rows($result);
         for ($i = 0; $i < $squadCount; $i++) {
           $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -31,7 +31,7 @@ if ($swimCount > 0) {
       <div class=\"col-sm-10\">
         <select class=\"custom-select\" id=\"gala\" name=\"gala\" required><option value=\"null\" selected>Select</option>";
         $sql = "SELECT * FROM `galas` WHERE ClosingDate >= CURDATE() ORDER BY `galas`.`ClosingDate` ASC;";
-        $result = mysqli_query(LINK, $sql);
+        $result = mysqli_query($link, $sql);
         $squadCount = mysqli_num_rows($result);
         for ($i = 0; $i < $squadCount; $i++) {
           $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -99,6 +99,6 @@ if ($swimCount > 0) {
   </form>";
 }
 else {
-  $content .= '<div class="alert alert-warning"><strong>You don\'t have any swimmers associated with yur account</strong> <br>Please <a href="' . autoUrl("myaccount/add-swimmer.php") . '" class="alert-link">add some swimmers in My Account</a>, then try again</div>';
+  $content .= '<div class="alert alert-warning"><strong>You don\'t have any swimmers associated with yur account</strong> <br>Please <a href="' . autoUrl("myaccount/add-swimmer.php") . '" class="alert-$link">add some swimmers in My Account</a>, then try again</div>';
 }
 ?>

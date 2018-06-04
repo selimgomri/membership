@@ -24,14 +24,14 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
       ga('send', 'pageview');
     </script>
 	  <script>var shiftWindow = function() { scrollBy(0, -50) }; if (location.hash) shiftWindow(); window.addEventListener("hashchange", shiftWindow);</script>
-    <link rel="stylesheet preload" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700">
-    <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.9.css") ?>">
-    <link rel="stylesheet" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/font-awesome/css/font-awesome.min.css">
-    <link rel="apple-touch-icon" href="<https://www.chesterlestreetasc.co.uk/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-iphone-retina.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png">
-    <link rel="mask-icon" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterIcon.svg" color="#bd0000">
+    <$link rel="stylesheet preload" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700">
+    <$link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.9.css") ?>">
+    <$link rel="stylesheet" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/font-awesome/css/font-awesome.min.css">
+    <$link rel="apple-touch-icon" href="<https://www.chesterlestreetasc.co.uk/apple-touch-icon.png">
+    <$link rel="apple-touch-icon" sizes="76x76" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad.png">
+    <$link rel="apple-touch-icon" sizes="120x120" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-iphone-retina.png">
+    <$link rel="apple-touch-icon" sizes="152x152" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png">
+    <$link rel="mask-icon" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterIcon.svg" color="#bd0000">
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <style>.logo {background: url(https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.svg) left center no-repeat;}</style>
 
@@ -63,7 +63,7 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
       white-space: nowrap;
       -webkit-overflow-scrolling: touch;
     }
-    .nav-underline .nav-link {
+    .nav-underline .nav-$link {
       padding-top: .75rem;
       padding-bottom: .75rem;
       line-height: 1.35rem;
@@ -123,60 +123,60 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
 		<ul class="navbar-nav mr-auto">
 		<?php if (!empty($_SESSION['LoggedIn'])) { ?>
 		  <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("") ?>">Dashboard</a>
+			  <a class="nav-$link" href="<?php echo autoUrl("") ?>">Dashboard</a>
 		  </li>
 		  <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("myaccount") ?>">My Account</a>
+			  <a class="nav-$link" href="<?php echo autoUrl("myaccount") ?>">My Account</a>
 		  </li>
       <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
       <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("swimmers") ?>">My Swimmers</a>
+			  <a class="nav-$link" href="<?php echo autoUrl("swimmers") ?>">My Swimmers</a>
 		  </li>
       <?php }
       else { ?>
         <li class="nav-item">
-  			  <a class="nav-link" href="<?php echo autoUrl("swimmers") ?>">Member Directory</a>
+  			  <a class="nav-$link" href="<?php echo autoUrl("swimmers") ?>">Member Directory</a>
   		  </li>
         <li class="nav-item">
-  			  <a class="nav-link" href="<?php echo autoUrl("squads") ?>">Squads</a>
+  			  <a class="nav-$link" href="<?php echo autoUrl("squads") ?>">Squads</a>
   		  </li>
         <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach" || $_SESSION['AccessLevel'] == "Committee") { ?>
         <li class="nav-item">
-  			  <a class="nav-link" href="<?php echo autoUrl("attendance") ?>">Attendance</a>
+  			  <a class="nav-$link" href="<?php echo autoUrl("attendance") ?>">Attendance</a>
   		  </li>
         <?php } ?>
         <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas") { ?>
         <li class="nav-item">
-  			  <a class="nav-link" href="<?php echo autoUrl("users") ?>">Users</a>
+  			  <a class="nav-$link" href="<?php echo autoUrl("users") ?>">Users</a>
   		  </li>
         <?php } ?>
       <?php } ?>
       <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("galas") ?>">Galas</a>
+			  <a class="nav-$link" href="<?php echo autoUrl("galas") ?>">Galas</a>
 		  </li>
 		  <?php } ?>
 		  <?php if (empty($_SESSION['LoggedIn'])) { ?>
       <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("login.php") ?>">Login</a>
+			  <a class="nav-$link" href="<?php echo autoUrl("login.php") ?>">Login</a>
 		  </li>
       <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("register.php") ?>">Create Account</a>
+			  <a class="nav-$link" href="<?php echo autoUrl("register.php") ?>">Create Account</a>
 		  </li>
       <?php } ?>
       <!--<li class="nav-item">
-			<a class="nav-link" href="https://store.chesterlestreetasc.co.uk/">Store</a>
+			<a class="nav-$link" href="https://store.chesterlestreetasc.co.uk/">Store</a>
 		  </li>
 		  <li class="nav-item">
-			<a class="nav-link" href="https://github.com/Chester-le-Street-ASC">GitHub</a>
+			<a class="nav-$link" href="https://github.com/Chester-le-Street-ASC">GitHub</a>
 		  </li>
 		  <li class="nav-item">
-			<a class="nav-link" href="/software/sendmail">Notify</a>
+			<a class="nav-$link" href="/software/sendmail">Notify</a>
 		  </li>
 		  <li class="nav-item">
-			<a class="nav-link disabled" href="#">Payment Systems</a>
+			<a class="nav-$link disabled" href="#">Payment Systems</a>
 		  </li>
 		  <li class="nav-item">
-			<a class="nav-link disabled" href="#">Account Settings</a>
+			<a class="nav-$link disabled" href="#">Account Settings</a>
 		  </li>-->
 		</ul>
     <?php if (!empty($_SESSION['LoggedIn'])) { ?>
@@ -206,12 +206,12 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
     	</div>
     </div>
   	<hr>-->
-      <!--[if !IE]><div class="alert alert-danger"><strong>Unsupported Browser</strong><br>You're using an unsupported browser and this website may not work properly with it. <a href="http://browsehappy.com/" class="alert-link" target="_blank">Upgrade your browser today <i class="fa fa-external-link" aria-hidden="true"></i> </a> or <a href="https://www.google.com/chrome/browser/desktop/index.html" class="alert-link" target="_blank">install Google Chrome <i class="fa fa-external-link" aria-hidden="true"></i> </a> to better experience this site.</p></div><hr><![endif]-->
+      <!--[if !IE]><div class="alert alert-danger"><strong>Unsupported Browser</strong><br>You're using an unsupported browser and this website may not work properly with it. <a href="http://browsehappy.com/" class="alert-$link" target="_blank">Upgrade your browser today <i class="fa fa-external-$link" aria-hidden="true"></i> </a> or <a href="https://www.google.com/chrome/browser/desktop/index.html" class="alert-$link" target="_blank">install Google Chrome <i class="fa fa-external-$link" aria-hidden="true"></i> </a> to better experience this site.</p></div><hr><![endif]-->
       <noscript>
       <div class="alert alert-danger">
         <p class="mb-0"><strong>JavaScript is disabled or not supported</strong>
   		  <br>
-  		  It looks like you've got JavaScript disabled or your browser does not support it. JavaScript is essential for our website to properly so we recommend you enable it or upgrade to a browser which supports it as soon as possible. <a href="http://browsehappy.com/" class="alert-link" target="_blank">Upgrade your browser today <i class="fa fa-external-link" aria-hidden="true"></i></a></p>
+  		  It looks like you've got JavaScript disabled or your browser does not support it. JavaScript is essential for our website to properly so we recommend you enable it or upgrade to a browser which supports it as soon as possible. <a href="http://browsehappy.com/" class="alert-$link" target="_blank">Upgrade your browser today <i class="fa fa-external-$link" aria-hidden="true"></i></a></p>
       </div>
       <hr>
     </noscript>

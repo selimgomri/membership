@@ -6,9 +6,9 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
   $sql = "";
   if ((isset($_POST["squadID"])) && (isset($_POST["search"]))) {
     // get the squadID parameter from post
-    $squadID = mysqli_real_escape_string(LINK, htmlentities($_POST["squadID"]));
+    $squadID = mysqli_real_escape_string($link, htmlentities($_POST["squadID"]));
     // get the search term parameter from post
-    $search = mysqli_real_escape_string(LINK, htmlentities($_POST["search"]));
+    $search = mysqli_real_escape_string($link, htmlentities($_POST["search"]));
 
     // Search the database for the results
 		if ($squadID == "allSquads") {
@@ -19,7 +19,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 	  }
   }
 
-  $result = mysqli_query(LINK, $sql);
+  $result = mysqli_query($link, $sql);
   $swimmerCount = mysqli_num_rows($result);
   if ($swimmerCount > 0) {
     $output = '
@@ -33,17 +33,17 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
           </tr>
         </thead>
         <tbody>';
-    $resultX = mysqli_query(LINK, $sql);
+    $resultX = mysqli_query($link, $sql);
     for ($i = 0; $i < $swimmerCount; $i++) {
       $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
-      $swimmerLink = autoUrl("attendance/history/swimmers/" . $swimmersRowX['MemberID'] . "");
+      $swimmer$link = autoUrl("attendance/history/swimmers/" . $swimmersRowX['MemberID'] . "");
       $DOB = date('j F Y', strtotime($swimmersRowX['DateOfBirth']));
       $age = date_diff(date_create($swimmersRowX['DateOfBirth']), date_create('today'))->y;
       $ageEoY = date('Y') - date('Y', strtotime($swimmersRowX['DateOfBirth']));
       $output .= "<tr>
-        <td><a href=\"" . $swimmerLink . "\">" . $swimmersRowX['MForename'] . " " . $swimmersRowX['MSurname'] . "</a></td>
+        <td><a href=\"" . $swimmer$link . "\">" . $swimmersRowX['MForename'] . " " . $swimmersRowX['MSurname'] . "</a></td>
         <td>" . $swimmersRowX['SquadName'] . "</td>
-        <td>" . getAttendanceByID(LINK, $swimmersRowX['MemberID'], 4) . "%</td>
+        <td>" . getAttendanceByID($link, $swimmersRowX['MemberID'], 4) . "%</td>
       </tr>";
     }
     $output .= '

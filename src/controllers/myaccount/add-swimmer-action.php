@@ -6,11 +6,11 @@
   // Registration Form Handler
 
   $userID = $_SESSION['UserID'];
-  $asaNumber = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['asa'])));
-  $accessKey = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['accessKey'])));
+  $asaNumber = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['asa'])));
+  $accessKey = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['accessKey'])));
 
   $searchSQL = "SELECT * FROM members WHERE ASANumber = '$asaNumber' AND AccessKey = '$accessKey' LIMIT 0, 30 ";
-  $searchResult = mysqli_query(LINK, $searchSQL);
+  $searchResult = mysqli_query($link, $searchSQL);
   $searchCount = mysqli_num_rows($searchResult);
   $row = mysqli_fetch_array($searchResult, MYSQLI_ASSOC);
 
@@ -23,7 +23,7 @@
 
       if ($row['UserID'] != null) {
         $sql = "SELECT * FROM users WHERE UserID = '$existingUserID' LIMIT 0, 30 ";
-        $result = mysqli_query(LINK, $sql);
+        $result = mysqli_query($link, $sql);
         $oldUser = mysqli_fetch_array($searchResult, MYSQLI_ASSOC);
         // Warn old parent by email
         $message = "
@@ -39,7 +39,7 @@
 
       // SQL To set UserID foreign key
       $sql = "UPDATE `members` SET UserID = '$userID', AccessKey = '$accessKey' WHERE MemberID = '$memberID'";
-      mysqli_query(LINK, $sql);
+      mysqli_query($link, $sql);
 
       // Get info about swimmer and parent
       $sql = "SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee
@@ -47,7 +47,7 @@
                 INNER JOIN users ON members.UserID = users.UserID)
                 INNER JOIN squads ON members.SquadID = squads.SquadID
               ) WHERE users.UserID = '$userID' AND members.MemberID = '$memberID';";
-      $result = mysqli_query(LINK, $sql);
+      $result = mysqli_query($link, $sql);
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
       // Notify new parent with email

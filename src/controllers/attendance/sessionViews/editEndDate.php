@@ -3,7 +3,7 @@
 $id = $idLast;
 
 $sql = "SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SessionID` = '$id';";
-$result = mysqli_query(LINK, $sql);
+$result = mysqli_query($link, $sql);
 $sessionCount = mysqli_num_rows($result);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 

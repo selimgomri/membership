@@ -5,13 +5,13 @@ $title = "Galas";
 $content = "<p class=\"lead\">Your current entries and galas you can enter.</p>";
 $content .= '<div class="my-3 p-3 bg-white rounded box-shadow">
   <h2 class="border-bottom border-gray pb-2 mb-0">Galas open for entries</h2>';
-$content .= upcomingGalas(LINK, false, $userID);
+$content .= upcomingGalas($link, false, $userID);
 $content .= "<p class=\"mb-0\"><a class=\"btn btn-outline-dark\" href=\"entergala\">Enter a gala</a></p></div>";
 
 $content .= '<div class="my-3 p-3 bg-white rounded box-shadow">
   <h2 class="">Upcoming galas you\'ve entered</h2>
   <p class="pb-2 mb-0 border-bottom border-gray">Here are all the galas that you\'ve entered your swimmers into. If the closing data for a gala has not yet passed, then you\'ll be able to edit your entry.';
-$content .= enteredGalas(LINK, $userID);
+$content .= enteredGalas($link, $userID);
 $content .= '</div>';
 
 /* Stats Section */
@@ -25,7 +25,7 @@ $counter = 0;
 for ($i=0; $i<sizeof($swimsArray); $i++) {
 	$col = $swimsArray[$i];
 	$sql = "SELECT `$col` FROM (galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE `UserID` = '$userID' AND `$col` = '1'";
-	$result = mysqli_query(LINK, $sql);
+	$result = mysqli_query($link, $sql);
 	$count = mysqli_num_rows($result);
 	$swimsCountArray[$i] = $count;
 	$strokesCountArray[$strokesArray[$i]] += $count;

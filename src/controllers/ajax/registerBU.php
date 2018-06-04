@@ -44,7 +44,7 @@ document.getElementById("squad").onchange=getSessions;
 
 <?php
 $sql = "SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID)";
-$result = mysqli_query(LINK, $sql);
+$result = mysqli_query($link, $sql);
 $swimmerCount = mysqli_num_rows($result);
 $content .= '
 <form method="post" action="register-get">
@@ -72,7 +72,7 @@ $content .= '
   </div>
   </form>';
   $sql = "SELECT * FROM (squads INNER JOIN members ON squads.SquadID = members.SquadID) WHERE members.SquadID = '1'";
-  $result = mysqli_query(LINK, $sql);
+  $result = mysqli_query($link, $sql);
   $swimmerCount = mysqli_num_rows($result);
   for ($i=0; $i<$swimmerCount; $i++) {
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);

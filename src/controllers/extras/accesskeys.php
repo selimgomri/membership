@@ -1,6 +1,6 @@
 <?php
 $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.AccessKey FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) ORDER BY `members`.`MForename` , `members`.`MSurname` ASC;";
-$result = mysqli_query(LINK, $sqlSwim);
+$result = mysqli_query($link, $sqlSwim);
 $swimmerCount = mysqli_num_rows($result);
 if ($swimmerCount > 0) {
   $content .= '
@@ -15,7 +15,7 @@ if ($swimmerCount > 0) {
         </tr>
       </thead>
       <tbody>';
-  $resultX = mysqli_query(LINK, $sqlSwim);
+  $resultX = mysqli_query($link, $sqlSwim);
   for ($i = 0; $i < $swimmerCount; $i++) {
     $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
     $content .= "<tr>
@@ -26,7 +26,7 @@ if ($swimmerCount > 0) {
         $asaN = "CLSX" . $memID;
         $content .= "<td>" . $asaN . "</td>";
         $sql = "UPDATE `members` SET ASANumber = '$asaN' WHERE `MemberID` = '$memID';";
-        mysqli_query(LINK, $sql);
+        mysqli_query($link, $sql);
       }
       else {
         $content .= "<td>" . $swimmersRowX['ASANumber'] . "</td>";

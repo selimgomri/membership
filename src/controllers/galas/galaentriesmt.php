@@ -10,7 +10,7 @@ $content .= "<form method=\"post\" action=\"entergala-action\">
     <div class=\"col-sm-10\">
       <select class=\"custom-select\" id=\"swimmer\" name=\"swimmer\"><option value=\"null\" selected>Select</option>";
       $sql = "SELECT * FROM `members` WHERE `members`.`UserID` = '1' ORDER BY `members`.`MForename`, `members`.`MSurname` ASC;";
-      $result = mysqli_query(LINK, $sql);
+      $result = mysqli_query($link, $sql);
       $squadCount = mysqli_num_rows($result);
       for ($i = 0; $i < $squadCount; $i++) {
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -25,7 +25,7 @@ $content .= "<form method=\"post\" action=\"entergala-action\">
     <div class=\"col-sm-10\">
       <select class=\"custom-select\" id=\"gala\" name=\"gala\"><option value=\"null\" selected>Select</option>";
       $sql = "SELECT * FROM `galas` ORDER BY `galas`.`ClosingDate` ASC;";
-      $result = mysqli_query(LINK, $sql);
+      $result = mysqli_query($link, $sql);
       $squadCount = mysqli_num_rows($result);
       for ($i = 0; $i < $squadCount; $i++) {
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);

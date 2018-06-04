@@ -62,9 +62,9 @@
     <p class="small">We will still need to send you notifications relating to your account from time.</p>
 
     <div class="alert alert-info">
-      <p><strong>Legal Stuff Applies</strong><br>By proceeding you agree to our <a class="alert-link" href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy</a> and the use of your data by Chester-le-Street ASC. Please note that you have also agreed to our use of you and your swimmer's data as part of your registration with the club and with British Swimming and Swim England (Formerly known as the ASA).</p>
+      <p><strong>Legal Stuff Applies</strong><br>By proceeding you agree to our <a class="alert-$link" href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy</a> and the use of your data by Chester-le-Street ASC. Please note that you have also agreed to our use of you and your swimmer's data as part of your registration with the club and with British Swimming and Swim England (Formerly known as the ASA).</p>
       <p>We will be unable to provide this service for technical reasons if you do not consent to the use of this data.</p>
-      <p class="mb-0">Contact a member of the committee if you have any questions or email <a class="alert-link" href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>.</p>
+      <p class="mb-0">Contact a member of the committee if you have any questions or email <a class="alert-$link" href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>.</p>
     </div>
     <input type="submit" class="btn btn-outline-dark mb-4" value="Register">
 </div>

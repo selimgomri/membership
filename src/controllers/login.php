@@ -17,11 +17,11 @@
 
   if (!empty($_POST['username']) && !empty($_POST['password'])) {
     // Let the user login
-    $username = mysqli_real_escape_string(LINK, $_POST['username']);
-    $password = mysqli_real_escape_string(LINK, $_POST['password']);
+    $username = mysqli_real_escape_string($link, $_POST['username']);
+    $password = mysqli_real_escape_string($link, $_POST['password']);
 
     $query = "SELECT * FROM users WHERE Username = '$username' AND Password = '$password' LIMIT 0, 30 ";
-    $result = mysqli_query(LINK, $query);
+    $result = mysqli_query($link, $query);
     $count = mysqli_num_rows($result);
 
     if ($count == 1) {
@@ -64,7 +64,7 @@
 
               <form method="post" name="loginform" id="loginform">
                 <div class="form-group">
-                  <?php if (isset($link)) { echo "True"; } ?>
+                  <?php if (isset($$link)) { echo "True"; } ?>
                   <label for="username">Email Address or Username</label>
                   <input type="text" name="username" id="username" class="form-control form-control-lg" value="<?php if ($errorState == true) { echo $username; } ?>" required autofocus>
                 </div>

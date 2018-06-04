@@ -13,14 +13,14 @@ $pagetitle = "Swimmers";
 //$squadID = null;
 $title = "Swimmer Directory";
 if (isset($_POST['squad'])) {
-  $squadID = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['squad'])));
+  $squadID = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['squad'])));
 }
 $content = "<p class=\"lead\">A list of swimmers.</p>";
 if ($access == "Committee" || $access == "Admin") {
   $content .= "<p><a href=\"../add-member\" class=\"btn btn-outline-dark\">Add member</a> <a href=\"../accesskeys\" class=\"btn btn-outline-dark\">Access Keys</a></p>";
 }
 $sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
-$result = mysqli_query(LINK, $sql);
+$result = mysqli_query($link, $sql);
 $squadCount = mysqli_num_rows($result);
 $content .= "
 <div class=\"form-row\">

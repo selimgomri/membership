@@ -5,13 +5,13 @@
 
   // Registration Form Handler
 
-  $forename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
-  $surname = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['surname']))));
-  $username = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['username']))));
-  $password1 = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password1'])));
-  $password2 = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password2'])));
-  $email = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['email']))));
-  $mobile = mysqli_real_escape_string($link, preg_replace('/\D/', '', $_POST['mobile'])); // Removes anything that isn't a digit
+  $forename = mysqli_real_escape_string($$link, trim(htmlspecialchars(ucwords($_POST['forename']))));
+  $surname = mysqli_real_escape_string($$link, trim(htmlspecialchars(ucwords($_POST['surname']))));
+  $username = mysqli_real_escape_string($$link, strtolower(trim(htmlspecialchars($_POST['username']))));
+  $password1 = mysqli_real_escape_string($$link, trim(htmlspecialchars($_POST['password1'])));
+  $password2 = mysqli_real_escape_string($$link, trim(htmlspecialchars($_POST['password2'])));
+  $email = mysqli_real_escape_string($$link, strtolower(trim(htmlspecialchars($_POST['email']))));
+  $mobile = mysqli_real_escape_string($$link, preg_replace('/\D/', '', $_POST['mobile'])); // Removes anything that isn't a digit
   $emailAuth = mysqli_real_escape_string($_POST['emailAuthorise']);
   if ($emailAuth != 1) {
     $emailAuth == 0;
@@ -24,11 +24,11 @@
   $username = preg_replace('/\s+/', '', $username);
 
   $usernameSQL = "SELECT * FROM users WHERE Username = '$username' LIMIT 0, 30 ";
-  $usernameResult = mysqli_query($link, $usernameSQL);
+  $usernameResult = mysqli_query($$link, $usernameSQL);
   $usernameCount = mysqli_num_rows($usernameResult);
 
   $emailSQL = "SELECT * FROM users WHERE EmailAddress = '$email' LIMIT 0, 30 ";
-  $emailResult = mysqli_query($link, $emailSQL);
+  $emailResult = mysqli_query($$link, $emailSQL);
   $emailCount = mysqli_num_rows($emailResult);
 
   if ($forename != null && $surname != null && $username != null && $email != null && $mobile != null && $password1 != null && $password1 != null) {
@@ -49,14 +49,14 @@
         $hashedPassword = password_hash($password1, PASSWORD_BCRYPT);
         // Success
         $sql = "INSERT INTO `users` (`UserID`, `Username`, `Password`, `AccessLevel`, `EmailAddress`, `EmailComms`, `Forename`, `Surname`, `Mobile`, `MobileComms`) VALUES (NULL, '$username', '$hashedPassword', 'Parent', '$email', '$emailAuth', '$forename', '$surname', '$mobile', '$smsAuth');";
-        mysqli_query($link, $sql);
+        mysqli_query($$link, $sql);
         // Check it went in
         $query = "SELECT * FROM users WHERE Username = '$username' AND Password = '$hashedPassword' LIMIT 0, 30 ";
-        $result = mysqli_query($link, $query);
+        $result = mysqli_query($$link, $query);
         $row = mysqli_fetch_array($result);
         $id = $row['UserID'];
         $query = "INSERT INTO wallet (UserID, Balance) VALUES ('$id', 0)";
-        mysqli_query($link, $query);
+        mysqli_query($$link, $query);
         $count = mysqli_num_rows($result);
 
         if ($count == 1) {

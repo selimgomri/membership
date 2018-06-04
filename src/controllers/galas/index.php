@@ -7,7 +7,7 @@
   // Requested resource
 
   $pos = strrpos ($URI . "galas/" , '/');
-  $url = mysqli_real_escape_string(LINK, $_SERVER['REQUEST_URI']);
+  $url = mysqli_real_escape_string($link, $_SERVER['REQUEST_URI']);
   $url = preg_replace('{/$}', '', $url);
   //$pos = strrpos($url, '/');
   $id = $pos === false ? $url : substr($url, $pos + 1);
@@ -34,7 +34,7 @@
     elseif (($id == "entries")) {
       // Show entry info if it exists
       $pagetitle = $title = "Galas you've entered";
-      $content .= enteredGalas(LINK, $userID);
+      $content .= enteredGalas($link, $userID);
     }
     elseif (($id == "entries/updategala-action")) {
       // Show entry info if it exists
@@ -153,17 +153,17 @@ if (isset($_SESSION['AccessLevel'])) {
 ?>
 <div class="nav-scroller bg-white box-shadow mb-3">
   <nav class="nav nav-underline">
-    <a class="nav-link" href="<?php echo autoUrl("galas")?>">Gala Home</a>
+    <a class="nav-$link" href="<?php echo autoUrl("galas")?>">Gala Home</a>
     <?php if ($access == "Parent") {?>
-    <a class="nav-link" href="<?php echo autoUrl("galas/entries")?>">My Entries</a>
+    <a class="nav-$link" href="<?php echo autoUrl("galas/entries")?>">My Entries</a>
     <?php } else {?>
-    <a class="nav-link" href="<?php echo autoUrl("galas/addgala")?>">Add Gala</a>
-    <a class="nav-link" href="<?php echo autoUrl("galas/entries")?>">View Entries</a>
+    <a class="nav-$link" href="<?php echo autoUrl("galas/addgala")?>">Add Gala</a>
+    <a class="nav-$link" href="<?php echo autoUrl("galas/entries")?>">View Entries</a>
     <?php } ?>
-    <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/competitions/" target="_blank">Gala Website <i class="fa fa-external-link"></i></a>
-    <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/competitions/category/galas/" target="_blank">Upcoming Galas <i class="fa fa-external-link"></i></a>
+    <a class="nav-$link" href="https://www.chesterlestreetasc.co.uk/competitions/" target="_blank">Gala Website <i class="fa fa-external-$link"></i></a>
+    <a class="nav-$link" href="https://www.chesterlestreetasc.co.uk/competitions/category/galas/" target="_blank">Upcoming Galas <i class="fa fa-external-$link"></i></a>
     <?php if ($access == "Parent") {?>
-    <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/competitions/enteracompetition/guidance/" target="_blank">Help with Entries <i class="fa fa-external-link"></i></a>
+    <a class="nav-$link" href="https://www.chesterlestreetasc.co.uk/competitions/enteracompetition/guidance/" target="_blank">Help with Entries <i class="fa fa-external-$link"></i></a>
     <?php } ?>
   </nav>
 </div>

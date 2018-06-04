@@ -12,27 +12,27 @@ $counter = 0;
 $entryCount = -1;
 
 if (!empty($_POST['swimmer'])) {
-  $memberID = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['swimmer'])));
+  $memberID = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['swimmer'])));
 }
 
 if (!empty($_POST['gala'])) {
-  $galaID = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['gala'])));
+  $galaID = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['gala'])));
 }
 
 if (!empty($_POST['TimesRequired'])) {
-  $timesRequired = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['TimesRequired'])));
+  $timesRequired = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['TimesRequired'])));
 }
 
 if ($memberID != "" && $galaID != "") {
   $sql = "SELECT EntryID FROM galaEntries WHERE `GalaID` = '$galaID' AND `MemberID` = '$memberID';";
-  $result = mysqli_query(LINK, $sql);
+  $result = mysqli_query($link, $sql);
   $entryCount = mysqli_num_rows($result);
 }
 
 if ($timesRequired != 1) {
   for ($i=0; $i<sizeof($swimsArray); $i++) {
     if (!empty($_POST[$swimsArray[$i]])) {
-      $entriesArray[$i] = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST[$swimsArray[$i]])));
+      $entriesArray[$i] = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST[$swimsArray[$i]])));
       $counter++;
     }
     else {
@@ -63,9 +63,9 @@ if ($timesRequired != 1) {
 elseif ($timesRequired == 1) {
   for ($i=0; $i<sizeof($swimsArray); $i++) {
     if ((!empty($_POST[$swimsTimeArray[$i] . "Mins"])) || (!empty($_POST[$swimsTimeArray[$i] . "Secs"])) || (!empty($_POST[$swimsTimeArray[$i] . "Hunds"]))) {
-      $mins = mysqli_real_escape_string(LINK, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Mins"]))));
-      $secs = mysqli_real_escape_string(LINK, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Secs"]))));
-      $hunds = mysqli_real_escape_string(LINK, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Hunds"]))));
+      $mins = mysqli_real_escape_string($link, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Mins"]))));
+      $secs = mysqli_real_escape_string($link, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Secs"]))));
+      $hunds = mysqli_real_escape_string($link, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Hunds"]))));
       $entriesArray[$i] = $mins . ":" . $secs . "." . $hunds;
       $counter++;
     }
@@ -111,7 +111,7 @@ elseif ($timesRequired == 1) {
 
 if ($entryCount == 0) {
   $sql = "SELECT GalaFee, GalaFeeConstant, GalaName FROM galas WHERE GalaID = '$galaID';";
-  $result = mysqli_query(LINK, $sql);
+  $result = mysqli_query($link, $sql);
   $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
   if ($row['GalaFeeConstant'] == 1) {
     $fee = number_format(($counter*$row['GalaFee']),2,'.','');
@@ -125,7 +125,7 @@ if ($entryCount == 0) {
     }
   }
   $sql = "INSERT INTO `galaEntries` (`MemberID`, `GalaID`, " . $swims . ", `TimesRequired`, `FeeToPay`) VALUES ('$memberID', '$galaID', " . $values . ", '$timesRequired', $fee);";
-  $action = mysqli_query(LINK, $sql);
+  $action = mysqli_query($link, $sql);
 
 
 
@@ -135,7 +135,7 @@ if ($entryCount == 0) {
 
   $entryList = "";
   $sql = "SELECT * FROM (galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galaEntries.MemberID = '$memberID' AND galaEntries.GalaID = '$galaID';";
-  $result = mysqli_query(LINK, $sql);
+  $result = mysqli_query($link, $sql);
   $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
   // Print <li>Swim Name</li> for each entry
   for ($y=0; $y<sizeof($swimsArray); $y++) {
@@ -145,7 +145,7 @@ if ($entryCount == 0) {
   }
 
   $sql = "SELECT members.MForename, members.MSurname, galas.GalaName, galas.GalaFee, galas.GalaFeeConstant, users.EmailAddress, users.Forename, users.Surname FROM (((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN users ON members.UserID = users.UserID) WHERE galaEntries.MemberID = '$memberID' and galaEntries.GalaID = '$galaID';";
-  $result = mysqli_query(LINK, $sql);
+  $result = mysqli_query($link, $sql);
   $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
   $pagetitle = $title = "Enter a Gala";
   if ($added) {

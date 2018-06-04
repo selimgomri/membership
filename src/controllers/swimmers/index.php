@@ -7,13 +7,13 @@
 
   // Requested resource
   $pos = strrpos ($URI . "swimmers/" , '/');
-  $url = mysqli_real_escape_string(LINK, $_SERVER['REQUEST_URI']);
+  $url = mysqli_real_escape_string($link, $_SERVER['REQUEST_URI']);
   $url = preg_replace('{/$}', '', $url);
   //$pos = strrpos($url, '/');
-  $id = mysqli_real_escape_string(LINK, $pos === false ? $url : substr($url, $pos + 1));
+  $id = mysqli_real_escape_string($link, $pos === false ? $url : substr($url, $pos + 1));
 
   $pos = strrpos($url, '/');
-  $idLast = mysqli_real_escape_string(LINK, $pos === false ? $url : substr($url, $pos + 1));
+  $idLast = mysqli_real_escape_string($link, $pos === false ? $url : substr($url, $pos + 1));
 
   function getMemberNameByID($db, $id) {
     $sql = "SELECT `MForename`, `MSurname` FROM `members` WHERE MemberID = '$id';";
@@ -68,7 +68,7 @@
       $title = "My Swimmers";
       $content = "<p class=\"lead\">My Swimmers shows you all of your registered swimmers and allows you to easily change their details.</p>";
       $content .= "<p>Please remember that it is your responsibility to also keep the ASA Membership System up to date with personal details.</p>";
-      $content .= mySwimmersTable(LINK, $userID);
+      $content .= mySwimmersTable($link, $userID);
       $content .= "<p><a href=\"" . autoUrl('myaccount/add-swimmer.php') . "\" class=\"btn btn-outline-dark\">Add a Swimmer</a></p>";
 
       include BASE_PATH . "views/header.php";
@@ -91,9 +91,9 @@
     elseif (($id != null || $id != "")) {
       // Get the swimmer function
       include "singleSwimmerView.php";
-      //$pagetitle = "Swimmer: " . getMemberNameByID(LINK, $id);
-      //$title = getMemberNameByID(LINK, $id);
-      //$content = getMemberInfoByID(LINK, $id);
+      //$pagetitle = "Swimmer: " . getMemberNameByID($link, $id);
+      //$title = getMemberNameByID($link, $id);
+      //$content = getMemberInfoByID($link, $id);
     }
     else {
       // Not allowed or not found
@@ -163,22 +163,22 @@
       $forename = $middlenames = $surname = $dateOfBirth = $asaNumber = $sex = $squad = $sql = "";
 
       if ((!empty($_POST['forename']))  && (!empty($_POST['surname'])) && (!empty($_POST['datebirth'])) && (!empty($_POST['sex'])) && (!empty($_POST['squad']))) {
-        $forename = mysqli_real_escape_string(LINK, trim(htmlspecialchars(ucwords($_POST['forename']))));
-        $surname = mysqli_real_escape_string(LINK, trim(htmlspecialchars(ucwords($_POST['surname']))));
-        $dateOfBirth = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['datebirth'])));
-        $sex = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['sex'])));
-        $squad = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['squad'])));
+        $forename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
+        $surname = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['surname']))));
+        $dateOfBirth = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['datebirth'])));
+        $sex = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['sex'])));
+        $squad = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['squad'])));
         if ((!empty($_POST['middlenames']))) {
-          $middlenames = mysqli_real_escape_string(LINK, trim(htmlspecialchars(ucwords($_POST['middlenames']))));
+          $middlenames = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['middlenames']))));
         }
         if ((!empty($_POST['asa']))) {
-          $asaNumber = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['asa'])));
+          $asaNumber = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['asa'])));
         }
 
         $accessKey = generateRandomString(6);
 
         $sql = "INSERT INTO `members` (`MemberID`, `MForename`, `MMiddleNames`, `MSurname`, `DateOfBirth`, `ASANumber`, `Gender`, `SquadID`, `AccessKey`) VALUES (NULL, '$forename', '$middlenames', '$surname', '$dateOfBirth', '$asaNumber', '$sex', '$squad', '$accessKey');";
-        $action = mysqli_query(LINK, $sql);
+        $action = mysqli_query($link, $sql);
         if ($action) {
           $added = true;
         }
@@ -226,7 +226,7 @@
         </select>
       </div>";
       $sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
-      $result = mysqli_query(LINK, $sql);
+      $result = mysqli_query($link, $sql);
       $squadCount = mysqli_num_rows($result);
       $content .= "
       <div class=\"form-group\">

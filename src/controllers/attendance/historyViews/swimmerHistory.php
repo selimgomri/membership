@@ -4,7 +4,7 @@ $id = $idLast;
 
 // Get the last four weeks to calculate attendance
 $sql = "SELECT `WeekID` FROM `sessionsWeek` ORDER BY `WeekDateBeginning` DESC LIMIT 20;";
-$resultWeeks = mysqli_query(LINK, $sql);
+$resultWeeks = mysqli_query($link, $sql);
 $weekCount = mysqli_num_rows($resultWeeks);
 	if ($weekCount > 0) {
 	$sqlWeeks = "";
@@ -22,7 +22,7 @@ $weekCount = mysqli_num_rows($resultWeeks);
 }
 
 $sql = "SELECT * FROM `members` WHERE `MemberID` = '$id';";
-$result = mysqli_query(LINK, $sql);
+$result = mysqli_query($link, $sql);
 $memberCount = mysqli_num_rows($result);
 $member = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
@@ -31,7 +31,7 @@ $title = "Attendance History for " . $member['MForename'] . " " . $member['MSurn
 $content = "<p class=\"lead\">You are now viewing attendance records for up to the last 20 weeks</p>";
 
 $sql = "SELECT * FROM (`sessionsAttendance` INNER JOIN `sessions` ON sessionsAttendance.SessionID=sessions.SessionID) WHERE ($sqlWeeks) AND `MemberID` = '$id' ORDER BY WeekID DESC, SessionDay DESC, StartTime DESC;";
-$resultAtt = mysqli_query(LINK, $sql);
+$resultAtt = mysqli_query($link, $sql);
 $presentCount = mysqli_num_rows($resultAtt);
 
 $content .= '
@@ -48,7 +48,7 @@ for ($i=0; $i<$presentCount; $i++) {
 	$weekID = $att['WeekID'];
 	$content .= '<tr>';
 	$sql = "SELECT * FROM ((`sessionsAttendance` INNER JOIN sessions ON sessions.SessionID=sessionsAttendance.sessionID) INNER JOIN sessionsWeek ON sessionsWeek.WeekID=sessionsAttendance.WeekID) WHERE sessionsAttendance.SessionID = '$sessionID' AND MemberID = '$id' AND sessionsAttendance.WeekID = '$weekID';";
-	$resultSession = mysqli_query(LINK, $sql);
+	$resultSession = mysqli_query($link, $sql);
 	$sessionInfo = mysqli_fetch_array($resultSession, MYSQLI_ASSOC);
 
 	$weekBeginning = $sessionInfo['WeekDateBeginning'];

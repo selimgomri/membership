@@ -4,32 +4,32 @@ $added = false;
 $content = "";
 
 if (!empty($_POST['galaname'])) {
-  $galaName = mysqli_real_escape_string(LINK, ucwords(trim(htmlspecialchars($_POST['galaname']))));
+  $galaName = mysqli_real_escape_string($link, ucwords(trim(htmlspecialchars($_POST['galaname']))));
 }
 
 if (!empty($_POST['length'])) {
-  $length = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['length'])));
+  $length = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['length'])));
 }
 
 if (!empty($_POST['venue'])) {
-  $venue = mysqli_real_escape_string(LINK, ucwords(trim(htmlspecialchars($_POST['venue']))));
+  $venue = mysqli_real_escape_string($link, ucwords(trim(htmlspecialchars($_POST['venue']))));
 }
 
 if (!empty($_POST['closingDate'])) {
-  $closingDate = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['closingDate'])));
+  $closingDate = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['closingDate'])));
 }
 
 if (!empty($_POST['lastDate'])) {
-  $lastDate = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['lastDate'])));
+  $lastDate = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['lastDate'])));
 }
 
 if (!empty($_POST['galaFeeConstant'])) {
-  $galaFeeConstant = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['galaFeeConstant'])));
+  $galaFeeConstant = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['galaFeeConstant'])));
 }
 
 if ($galaFeeConstant == 1) {
   if (!empty($_POST['galaFee'])) {
-    $galaFee = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['galaFee'])));
+    $galaFee = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['galaFee'])));
   }
 }
 else {
@@ -38,7 +38,7 @@ else {
 }
 
 if (!empty($_POST['HyTek'])) {
-  $hyTek = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['HyTek'])));
+  $hyTek = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['HyTek'])));
 }
 
 if ($hyTek != 1) {
@@ -48,7 +48,7 @@ if ($hyTek != 1) {
 //echo $sql;
 if ($galaName != null && $length != null && $venue != null && $closingDate != null && $lastDate != null && $galaFeeConstant != null) {
   $sql = "INSERT INTO `galas` (`GalaName`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`) VALUES ('$galaName', '$length', '$venue', '$closingDate', '$lastDate', '$galaFeeConstant', '$galaFee', '$hyTek');";
-  $action = mysqli_query(LINK, $sql);
+  $action = mysqli_query($link, $sql);
   if ($action) {
     $added = true;
   }

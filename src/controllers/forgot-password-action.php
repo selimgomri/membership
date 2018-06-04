@@ -3,8 +3,8 @@
   $pagetitle = "Password Reset";
   include BASE_PATH . "views/header.php";
 
-  $userDetails = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['userDetails'])));
-  $captcha = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['g-recaptcha-response'])));
+  $userDetails = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['userDetails'])));
+  $captcha = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['g-recaptcha-response'])));
   $captchaStatus = null;
 
   #
@@ -46,7 +46,7 @@
     $row = "";
     // Test for valid username
     $sql = "SELECT * FROM users WHERE Username = '$userDetails' ";
-    $result = mysqli_query(LINK, $sql);
+    $result = mysqli_query($link, $sql);
     $count = mysqli_num_rows($result);
     if ($count == 1) {
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -56,7 +56,7 @@
     // Test for valid email
     if ($found != true) {
       $sql = "SELECT * FROM users WHERE EmailAddress = '$userDetails' ";
-      $result = mysqli_query(LINK, $sql);
+      $result = mysqli_query($link, $sql);
       $count = mysqli_num_rows($result);
       if ($count == 1) {
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -70,14 +70,14 @@
       $newHash = password_hash($password, PASSWORD_BCRYPT);
       $userID = $row['UserID'];
       $sql = "UPDATE `users` SET `Password` = '$newHash' WHERE `UserID` = '$userID'";
-      mysqli_query(LINK, $sql);
+      mysqli_query($link, $sql);
 
       // PHP Email
       $subject = "Password Reset for " . $row['Username'];
       $to =  "" . $row['Forename'] . " " . $row['Surname'] . " <" . $row['EmailAddress'] . ">";
       $sContent = '<h1>Hello ' . $row['Forename'] . '</h1>
       <p>We\'ve reset your password for your Chester-le-Street ASC Account to <code>' . $password . '</code>.</p>
-      <p>Please reset your password as soon as possible in My Account by following this link <a href="' . autoUrl("myaccount/change-password.php") . '"> ' . autoUrl("myaccount/change-password.php") . '</a></p>
+      <p>Please reset your password as soon as possible in My Account by following this $link <a href="' . autoUrl("myaccount/change-password.php") . '"> ' . autoUrl("myaccount/change-password.php") . '</a></p>
       <script type="application/ld+json">
       {
         "@context": "http://schema.org",
@@ -112,7 +112,7 @@
           <div class="col-sm-6 col-md-5 col-lg4">
             <div class="alert alert-success">
               <strong>We found your account and have reset your password</strong>
-              <p class="mb-2">Check your email account for your password, <a href="login.php" class="alert-link">then login</a>.</p>
+              <p class="mb-2">Check your email account for your password, <a href="login.php" class="alert-$link">then login</a>.</p>
               <p class="mb-0">Reset your password as soon as possible.</p>
             </div>
           </div>
@@ -128,8 +128,8 @@
           <div class="col-sm-6 col-md-5 col-lg4">
             <div class="alert alert-warning">
               <strong>We did not find an account using those details</strong>
-              <p>If you do not have an account, <a href="register.php" class="alert-link">register an account</a></p>
-              <p>Or, <a href="forgot-password.php" class="alert-link">try again</a></p>
+              <p>If you do not have an account, <a href="register.php" class="alert-$link">register an account</a></p>
+              <p>Or, <a href="forgot-password.php" class="alert-$link">try again</a></p>
             </div>
           </div>
         </div>

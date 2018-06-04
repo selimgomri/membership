@@ -11,7 +11,7 @@ fputcsv($output, array('Forename', 'Surname', 'Squad' , 'ASA Number' , 'Access K
 
 // fetch the data
 $sql = "SELECT members.MForename, members.MSurname, squads.SquadName, members.ASANumber, members.AccessKey FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) ORDER BY `members`.`MForename` , `members`.`MSurname` ASC;";
-$rows = mysqli_query(LINK, $sql);
+$rows = mysqli_query($link, $sql);
 
 // loop over the rows, outputting them
 while ($row = mysqli_fetch_assoc($rows)) fputcsv($output, $row);

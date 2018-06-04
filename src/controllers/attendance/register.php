@@ -16,7 +16,7 @@ $content .= '
 
     // See if the date exists
     $sql = "SELECT * FROM sessionsWeek ORDER BY WeekDateBeginning DESC LIMIT 1";
-    $result = mysqli_query(LINK, $sql);
+    $result = mysqli_query($link, $sql);
     $count = mysqli_num_rows($result);
     if ($count > 0) {
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -24,15 +24,15 @@ $content .= '
       date('Y-m-d', strtotime($latestWeekDB));
       if ($week_start != $latestWeekDB) {
         $sql = "INSERT INTO sessionsWeek (WeekDateBeginning) VALUES ('$week_start')";
-        mysqli_query(LINK, $sql);
+        mysqli_query($link, $sql);
       }
     }
     else {
       $sql = "INSERT INTO sessionsWeek (WeekDateBeginning) VALUES ('$week_start')";
-      mysqli_query(LINK, $sql);
+      mysqli_query($link, $sql);
     }
     $sql = "SELECT * FROM sessionsWeek ORDER BY WeekDateBeginning DESC LIMIT 4";
-    $result = mysqli_query(LINK, $sql);
+    $result = mysqli_query($link, $sql);
     $count = mysqli_num_rows($result);
     for ($i = 0; $i < $count; $i++) {
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -46,7 +46,7 @@ $content .= '
   <select class="custom-select" name="squad" id="squad">
     <option value="0">Choose your squad from the menu</option>';
     $sql = "SELECT SquadID, SquadName FROM squads ORDER BY SquadFee DESC, SquadName ASC";
-    $result = mysqli_query(LINK, $sql);
+    $result = mysqli_query($link, $sql);
     $count = mysqli_num_rows($result);
     if ($count > 0) {
       for ($i = 0; $i < $count; $i++) {

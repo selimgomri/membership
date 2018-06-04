@@ -50,4 +50,4 @@
 <script async src="https://static.chesterlestreetasc.co.uk/global/js/clscookies.js"></script>
 </body>
 </html>
-<?php //mysqli_close(LINK); ?>
+<?php //mysqli_close($link); ?>

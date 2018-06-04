@@ -1,7 +1,7 @@
 <?php
 $content = "<p class=\"lead\">Search entries for upcoming galas. Search by Gala or Gala and Surname.</p>";
 $sql = "SELECT * FROM `galas` ORDER BY `galas`.`GalaDate` DESC LIMIT 0, 15;";
-$result = mysqli_query(LINK, $sql);
+$result = mysqli_query($link, $sql);
 $galaCount = mysqli_num_rows($result);
 if (!isset($_SESSION['AllEntriesResponse'])) {
 
@@ -36,10 +36,10 @@ $content .= "</select></div></div>
   Filter
 </button></p></form>";
 if (isset($_POST['squad'])) {
-$galaID = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['squad'])));
+$galaID = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['squad'])));
 }
 if (isset($_POST['surname'])) {
-$surname = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['surname'])));
+$surname = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['surname'])));
 }
 $searchSQL = null;
 if ($galaID != null && $surname != null) {
@@ -51,7 +51,7 @@ $searchSQL = "`members`.`MSurname` = '$surname'";
 if ($galaID != null && $surname == null) {
 $searchSQL = "`galaEntries`.`GalaID` = '$galaID'";
 }
-$content .= upcomingGalasBySearch(LINK, $searchSQL);
+$content .= upcomingGalasBySearch($link, $searchSQL);
 
 $_SESSION['AllEntriesResponse'] = $content;
 headers("Location: entries");

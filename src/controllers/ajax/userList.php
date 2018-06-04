@@ -6,11 +6,11 @@ if ($access == "Admin" || $access == "Galas") {
   $sql = "";
   if (isset($_POST["search"])) {
     // get the search term parameter from post
-    $search = mysqli_real_escape_string(LINK, htmlentities($_POST["search"]));
+    $search = mysqli_real_escape_string($link, htmlentities($_POST["search"]));
     $sql = "SELECT * FROM users WHERE Surname LIKE '%$search%' ORDER BY Forename, Surname ASC;";
   }
 
-  $result = mysqli_query(LINK, $sql);
+  $result = mysqli_query($link, $sql);
   $swimmerCount = mysqli_num_rows($result);
   if ($swimmerCount > 0) {
     $output = '
@@ -23,12 +23,12 @@ if ($access == "Admin" || $access == "Galas") {
           </tr>
         </thead>
         <tbody>';
-    $resultX = mysqli_query(LINK, $sql);
+    $resultX = mysqli_query($link, $sql);
     for ($i = 0; $i < $swimmerCount; $i++) {
       $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
-      $swimmerLink = autoUrl("users/" . $swimmersRowX['UserID'] . "");
+      $swimmer$link = autoUrl("users/" . $swimmersRowX['UserID'] . "");
       $output .= "<tr>
-        <td><a href=\"" . $swimmerLink . "\">" . $swimmersRowX['Forename'] . " " . $swimmersRowX['Surname'] . "</a></td>
+        <td><a href=\"" . $swimmer$link . "\">" . $swimmersRowX['Forename'] . " " . $swimmersRowX['Surname'] . "</a></td>
         <td>" . $swimmersRowX['AccessLevel'] . "</td>
       </tr>";
     }

@@ -14,7 +14,7 @@ if (isset($queries['search'])) {
 
 $content = "<p class=\"lead\">Search entries for upcoming galas. Search by Gala or Gala and Surname.</p>";
 $sql = "SELECT * FROM `galas` WHERE GalaDate >= CURDATE() ORDER BY `galas`.`GalaDate` DESC LIMIT 0, 30;";
-$result = mysqli_query(LINK, $sql);
+$result = mysqli_query($link, $sql);
 $galaCount = mysqli_num_rows($result);
 $content .= "
 <div class=\"form-group row\">

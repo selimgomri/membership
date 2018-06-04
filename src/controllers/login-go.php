@@ -5,13 +5,13 @@
 
   if (!empty($_POST['username']) && !empty($_POST['password'])) {
     // Let the user login
-    $username = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['username'])));
-    $password = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['password'])));
+    $username = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['username'])));
+    $password = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password'])));
 
     $username = preg_replace('/\s+/', '', $username);
 
     $query = "SELECT * FROM users WHERE Username = '$username' OR EmailAddress = '$username' LIMIT 0, 30 ";
-    $result = mysqli_query(LINK, $query);
+    $result = mysqli_query($link, $query);
     $count = mysqli_num_rows($result);
 
     if ($count == 1) {

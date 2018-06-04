@@ -3,7 +3,7 @@
 $disabled = "";
 
 $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE `EntryID` = '$idLast' ORDER BY `galas`.`GalaDate` DESC;";
-$result = mysqli_query(LINK, $sql);
+$result = mysqli_query($link, $sql);
 $count = mysqli_num_rows($result);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 

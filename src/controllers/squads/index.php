@@ -5,7 +5,7 @@
   $access = $_SESSION['AccessLevel'];
 
   // Requested resource
-  $url = mysqli_real_escape_string(LINK, $_SERVER['REQUEST_URI']);
+  $url = mysqli_real_escape_string($link, $_SERVER['REQUEST_URI']);
   $pos = strrpos($url, '/');
   $id = $pos === false ? $url : substr($url, $pos + 1);
   $id = (int)($id);
@@ -19,7 +19,7 @@
       $pagetitle = "Squads";
       $title = "Squad Details";
       $content = "<p class=\"lead\">Information about our squads</p>";
-      $content .= squadInfoTable(LINK, true);
+      $content .= squadInfoTable($link, true);
       $content .= "<p><a href=\"addsquad\" class=\"btn btn-outline-dark\">Add a Squad</a></p>";
     }
     elseif (($id == "addsquad")) {
@@ -44,7 +44,7 @@
       $pagetitle = "Squads";
       $title = "Squad Details";
       $content = "<p class=\"lead\">Information about our squads</p>";
-      $content .= squadInfoTable(LINK, true);
+      $content .= squadInfoTable($link, true);
     }
     elseif ($id != null || $id != "") {
       include "SquadIndividual.php";

@@ -4,7 +4,7 @@
   $userID = $_SESSION['UserID'];
 
   $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = '$userID';";
-  $result = mysqli_query(LINK, $sqlSwim);
+  $result = mysqli_query($link, $sqlSwim);
   $swimmerCount = mysqli_num_rows($result);
   $swimmersRow = mysqli_fetch_array($result, MYSQLI_ASSOC);
 ?>
@@ -14,10 +14,10 @@
 ?>
 <div class="nav-scroller bg-white box-shadow mb-3">
   <nav class="nav nav-underline">
-    <a class="nav-link" href="#dash">Dashboard</a>
-    <a class="nav-link" href="#swimmers">My Swimmers</a>
-    <a class="nav-link" href="#fees">My Fees</a>
-    <a class="nav-link" href="#entries">My Recent Entries</a>
+    <a class="nav-$link" href="#dash">Dashboard</a>
+    <a class="nav-$link" href="#swimmers">My Swimmers</a>
+    <a class="nav-$link" href="#fees">My Fees</a>
+    <a class="nav-$link" href="#entries">My Recent Entries</a>
   </nav>
 </div>
 <?php
@@ -26,7 +26,7 @@
    ?>
    <div class="nav-scroller bg-white box-shadow mb-3">
      <nav class="nav nav-underline">
-       <a class="nav-link" href="#dash">Dashboard</a>
+       <a class="nav-$link" href="#dash">Dashboard</a>
      </nav>
    </div>
    <?php
@@ -50,21 +50,21 @@
 <!-- My Swimmers Section -->
 <section id="swimmers">
 <?php
-  echo mySwimmersMedia(LINK, $userID);
+  echo mySwimmersMedia($link, $userID);
 ?>
 </section>
 
 <!-- My Fees Section -->
 <section id="fees">
 <?php
-  echo myMonthlyFeeMedia(LINK, $userID);
+  echo myMonthlyFeeMedia($link, $userID);
 ?>
 </section>
 
 <!-- My Swimmers Section -->
 <section id="entries">
 <?php
-  echo enteredGalasMedia(LINK, $userID);
+  echo enteredGalasMedia($link, $userID);
 ?>
 </section>
 <?php }

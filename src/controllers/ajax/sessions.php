@@ -6,7 +6,7 @@ $count = 0;
 // A function is used to produce the View/Edit and Add Sections Stuff
 // This is because we will call it when a squad is selected, and after a session is added
 
-function sessionManagement($squadID, LINK) {
+function sessionManagement($squadID, $link) {
 	$output = $content = $modals = "";
 
 	$content .= '
@@ -18,7 +18,7 @@ function sessionManagement($squadID, LINK) {
 	';
 
 	$sql = "SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SquadID` = '$squadID' AND (ISNULL(sessions.DisplayFrom) OR (sessions.DisplayFrom <= CURDATE( ))) AND (ISNULL(sessions.DisplayUntil) OR (sessions.DisplayUntil >= CURDATE( ))) ORDER BY `SessionDay` ASC, `StartTime` ASC;";
-	$result = mysqli_query(LINK, $sql);
+	$result = mysqli_query($link, $sql);
 	$count = mysqli_num_rows($result);
 	if ($count > 0) {
 		for ($i=0; $i<$count; $i++) {
@@ -140,7 +140,7 @@ function sessionManagement($squadID, LINK) {
 			<select class="custom-select" name="newSessionVenue" id="newSessionVenue">
 				<option selected value="0">Select a Venue</option>';
 				$sql = "SELECT * FROM `sessionsVenues`;";
-				$result = mysqli_query(LINK, $sql);
+				$result = mysqli_query($link, $sql);
 				$count = mysqli_num_rows($result);
 				if ($count>0) {
 					for ($i=0; $i<$count; $i++) {
@@ -199,13 +199,13 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
   $sql = "";
   if (isset($_POST["action"])) {
 		// Get the action to work out what we're going to do
-		$action = mysqli_real_escape_string(LINK, htmlentities($_POST["action"]));
+		$action = mysqli_real_escape_string($link, htmlentities($_POST["action"]));
 		if ($action == "getSessions") {
 	    // get the squadID parameter from post
 			$squadID = "";
 			if (isset($_POST["squadID"])) {
-	    	$squadID = mysqli_real_escape_string(LINK, htmlentities($_POST["squadID"]));
-				echo sessionManagement($squadID, LINK);
+	    	$squadID = mysqli_real_escape_string($link, htmlentities($_POST["squadID"]));
+				echo sessionManagement($squadID, $link);
 			}
 
 			$sql = "";
@@ -213,33 +213,33 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 		elseif ($action == "addSession") {
 			$squadID = $venueID = $sessionName = $sessionDay = $startTime = $endTime = "";
 			if ((isset($_POST["squadID"])) && (isset($_POST["venueID"])) && (isset($_POST["sessionName"])) && (isset($_POST["sessionDay"])) && (isset($_POST["startTime"])) && (isset($_POST["endTime"])) && (isset($_POST["newSessionMS"])) && (isset($_POST["newSessionStartDate"])) && (isset($_POST["newSessionEndDate"]))) {
-	    	$squadID = mysqli_real_escape_string(LINK, htmlentities($_POST["squadID"]));
-				$venueID = mysqli_real_escape_string(LINK, htmlentities($_POST["venueID"]));
-				$sessionName = mysqli_real_escape_string(LINK, htmlentities($_POST["sessionName"]));
-				$sessionDay = mysqli_real_escape_string(LINK, htmlentities($_POST["sessionDay"]));
-				$startTime = mysqli_real_escape_string(LINK, htmlentities($_POST["startTime"]));
-				$endTime = mysqli_real_escape_string(LINK, htmlentities($_POST["endTime"]));
-				$mainSequence = mysqli_real_escape_string(LINK, htmlentities($_POST["newSessionMS"]));
+	    	$squadID = mysqli_real_escape_string($link, htmlentities($_POST["squadID"]));
+				$venueID = mysqli_real_escape_string($link, htmlentities($_POST["venueID"]));
+				$sessionName = mysqli_real_escape_string($link, htmlentities($_POST["sessionName"]));
+				$sessionDay = mysqli_real_escape_string($link, htmlentities($_POST["sessionDay"]));
+				$startTime = mysqli_real_escape_string($link, htmlentities($_POST["startTime"]));
+				$endTime = mysqli_real_escape_string($link, htmlentities($_POST["endTime"]));
+				$mainSequence = mysqli_real_escape_string($link, htmlentities($_POST["newSessionMS"]));
 				$epoch = date(DATE_ATOM, mktime(0, 0, 0, 1, 1, 1970));
 				$future = date(DATE_ATOM, mktime(0, 0, 0, 1, 1, 2200));
 				$displayFrom = $displayUntil = null;
 				if (isset($_POST["newSessionStartDate"])) {
-					$displayFrom = strtotime(mysqli_real_escape_string(LINK, htmlentities($_POST["newSessionStartDate"])));
+					$displayFrom = strtotime(mysqli_real_escape_string($link, htmlentities($_POST["newSessionStartDate"])));
 					if ($displayFrom < $epoch) {
 						$displayFrom = null;
 					}
 				}
 				if (isset($_POST["newSessionEndDate"])) {
-					$displayUntil = strtotime(mysqli_real_escape_string(LINK, htmlentities($_POST["newSessionEndDate"])));
+					$displayUntil = strtotime(mysqli_real_escape_string($link, htmlentities($_POST["newSessionEndDate"])));
 					if ($displayUntil < $epoch) {
 						$displayUntil = $future;
 					}
 				}
 
 				$sql = "INSERT INTO `sessions` (`SquadID`, `VenueID`, `SessionName`, `SessionDay`, `StartTime`, `EndTime`, `MainSequence`, `DisplayFrom`, `DisplayUntil`) VALUES ('$squadID', '$venueID', '$sessionName', '$sessionDay', '$startTime', '$endTime', '$mainSequence', '$displayFrom', '$displayUntil');";
-				mysqli_query(LINK, $sql);
+				mysqli_query($link, $sql);
 
-				echo sessionManagement($squadID, LINK);
+				echo sessionManagement($squadID, $link);
 
 			}
 		}

@@ -1,7 +1,7 @@
 <?php
 
 $query = "SELECT * FROM members WHERE MemberID = '$id' ";
-$result = mysqli_query(LINK, $query);
+$result = mysqli_query($link, $query);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
 $forename = $row['MForename'];
@@ -14,14 +14,14 @@ $otherNotes = $row['OtherNotes'];
 
 // Get the swimmer name
 $sqlSecurityCheck = "SELECT `MForename`, `MSurname`, `UserID` FROM `members` WHERE MemberID = '$id';";
-$resultSecurityCheck = mysqli_query(LINK, $sqlSecurityCheck);
+$resultSecurityCheck = mysqli_query($link, $sqlSecurityCheck);
 $swimmersSecurityCheck = mysqli_fetch_array($resultSecurityCheck, MYSQLI_ASSOC);
 
 $pagetitle;
 if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
   $pagetitle = "Swimmer: " . $swimmersSecurityCheck['MForename'] . " " . $swimmersSecurityCheck['MSurname'];
   $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes, members.AccessKey FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
-  $resultSwim = mysqli_query(LINK, $sqlSwim);
+  $resultSwim = mysqli_query($link, $sqlSwim);
   $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
   $title = null;
   $content = '
@@ -47,13 +47,13 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
     <div class="media pt-3">
       <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
         <strong class="d-block text-gray-dark">ASA Number</strong>
-        <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . $rowSwim["ASANumber"] . '" target="_blank" title="ASA Biographical Data">' . $rowSwim["ASANumber"] . ' <i class="fa fa-external-link" aria-hidden="true"></i></a>
+        <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . $rowSwim["ASANumber"] . '" target="_blank" title="ASA Biographical Data">' . $rowSwim["ASANumber"] . ' <i class="fa fa-external-$link" aria-hidden="true"></i></a>
       </p>
     </div>
     <div class="media pt-3">
       <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
         <strong class="d-block text-gray-dark">Attendance</strong>
-        ' . getAttendanceByID(LINK, $id, 4) . '% over the last 4 weeks, ' . getAttendanceByID(LINK, $id) . '% over all time
+        ' . getAttendanceByID($link, $id, 4) . '% over the last 4 weeks, ' . getAttendanceByID($link, $id) . '% over all time
       </p>
     </div>
     <div class="media pt-3">
@@ -96,7 +96,7 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
   for ($i=0; $i<sizeof($swimsArray); $i++) {
   	$col = $swimsArray[$i];
   	$sql = "SELECT `$col` FROM `galaEntries` WHERE `MemberID` = '$id' AND `$col` = '1'";
-  	$result = mysqli_query(LINK, $sql);
+  	$result = mysqli_query($link, $sql);
   	$count = mysqli_num_rows($result);
   	$swimsCountArray[$i] = $count;
   	$strokesCountArray[$strokesArray[$i]] += $count;

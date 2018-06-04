@@ -5,7 +5,7 @@
   $access = $_SESSION['AccessLevel'];
 
   $pos = strrpos ($URI . "attendance/" , '/');
-  $url = mysqli_real_escape_string(LINK, $_SERVER['REQUEST_URI']);
+  $url = mysqli_real_escape_string($link, $_SERVER['REQUEST_URI']);
   $url = preg_replace('{/$}', '', $url);
   //$pos = strrpos($url, '/');
   $id = $pos === false ? $url : substr($url, $pos + 1);
@@ -37,7 +37,7 @@
     elseif (($id == "sessions")) {
       $pagetitle = "Add or Edit Sessions";
       $title = "Add or Edit Sessions";
-      $content = "<p class=\"lead\">Every squad has sessions linked to it. These are required for our attendance application. The data about sessions is also used to provide information to parents (in future).</p>";
+      $content = "<p class=\"lead\">Every squad has sessions $linked to it. These are required for our attendance application. The data about sessions is also used to provide information to parents (in future).</p>";
       include "sessions.php";
     }
     elseif (($id == "sessions/" . $idLast)) {
@@ -78,17 +78,17 @@
 ?>
 <div class="nav-scroller bg-white box-shadow mb-3">
   <nav class="nav nav-underline">
-    <a class="nav-link" href="<?php echo autoUrl("attendance")?>">Attendance Home</a>
+    <a class="nav-$link" href="<?php echo autoUrl("attendance")?>">Attendance Home</a>
     <?php if ($access == "Parent") {?>
-    <a class="nav-link" href="<?php echo autoUrl("attendance/history")?>">Attendance History</a>
+    <a class="nav-$link" href="<?php echo autoUrl("attendance/history")?>">Attendance History</a>
     <?php } else {?>
-    <a class="nav-link" href="<?php echo autoUrl("attendance/register")?>">Take Register</a>
+    <a class="nav-$link" href="<?php echo autoUrl("attendance/register")?>">Take Register</a>
     <?php if (($access == "Admin") || ($access == "Committee")) {?>
-    <a class="nav-link" href="<?php echo autoUrl("attendance/sessions")?>">Manage Sessions</a>
+    <a class="nav-$link" href="<?php echo autoUrl("attendance/sessions")?>">Manage Sessions</a>
     <?php }?>
-    <a class="nav-link" href="<?php echo autoUrl("attendance/history")?>">Attendance History</a>
+    <a class="nav-$link" href="<?php echo autoUrl("attendance/history")?>">Attendance History</a>
     <?php } ?>
-    <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/squads/" target="_blank">Timetables</a>
+    <a class="nav-$link" href="https://www.chesterlestreetasc.co.uk/squads/" target="_blank">Timetables</a>
   </nav>
 </div>
 <div class="container">

@@ -16,7 +16,7 @@ $content .= '
   <select class="custom-select" name="squad" id="squad">
     <option value="0">Choose your squad from the menu</option>';
     $sql = "SELECT SquadID, SquadName FROM squads ORDER BY SquadFee DESC, SquadName ASC";
-    $result = mysqli_query(LINK, $sql);
+    $result = mysqli_query($link, $sql);
     $count = mysqli_num_rows($result);
     if ($count > 0) {
       for ($i = 0; $i < $count; $i++) {

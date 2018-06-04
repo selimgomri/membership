@@ -15,7 +15,7 @@
   $mobileChecked = "";
 
   $query = "SELECT * FROM users WHERE UserID = '$userID' ";
-  $result = mysqli_query(LINK, $query);
+  $result = mysqli_query($link, $query);
   $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
   $email = $row['EmailAddress'];
   $forename = $row['Forename'];
@@ -33,57 +33,57 @@
   }
 
   if (!empty($_POST['forename'])) {
-    $newForename = mysqli_real_escape_string(LINK, trim(htmlspecialchars(ucwords($_POST['forename']))));
+    $newForename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
     if ($newForename != $forename) {
       $sql = "UPDATE `users` SET `Forename` = '$newForename' WHERE `UserID` = '$userID'";
-      mysqli_query(LINK, $sql);
+      mysqli_query($link, $sql);
       $forenameUpdate = true;
     }
   }
   if (!empty($_POST['surname'])) {
-    $newSurname = mysqli_real_escape_string(LINK, trim(htmlspecialchars(ucwords($_POST['surname']))));
+    $newSurname = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['surname']))));
     if ($newSurname != $surname) {
       $sql = "UPDATE `users` SET `Surname` = '$newSurname' WHERE `UserID` = '$userID'";
-      mysqli_query(LINK, $sql);
+      mysqli_query($link, $sql);
       $surnameUpdate = true;
     }
   }
   if (!empty($_POST['email'])) {
-    $newEmail = mysqli_real_escape_string(LINK, strtolower(trim(htmlspecialchars($_POST['email']))));
+    $newEmail = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['email']))));
     if ($newEmail != $email) {
       // Check if email exists
       $sql = "SELECT `EmailAddress` FROM `users` WHERE EmailAddress = '$newEmail'";
-      $test = mysqli_query(LINK, $sql);
+      $test = mysqli_query($link, $sql);
       if (mysqli_num_rows($test) == 0) {
         $sql = "UPDATE `users` SET `EmailAddress` = '$newEmail' WHERE `UserID` = '$userID'";
-        mysqli_query(LINK, $sql);
+        mysqli_query($link, $sql);
         $emailUpdate = true;
       }
     }
   }
   if (!empty($_POST['mobile'])) {
-    $newMobile = mysqli_real_escape_string(LINK, preg_replace('/\D/', '', $_POST['mobile']));
+    $newMobile = mysqli_real_escape_string($link, preg_replace('/\D/', '', $_POST['mobile']));
     if ($newMobile != $mobile) {
       $sql = "UPDATE `users` SET `Mobile` = '$newMobile' WHERE `UserID` = '$userID'";
-      mysqli_query(LINK, $sql);
+      mysqli_query($link, $sql);
       $mobileUpdate = true;
     }
   }
   if (isset($_POST['emailContactOK'])) {
-    $newValue = mysqli_real_escape_string(LINK, trim(htmlspecialchars($_POST['emailContactOK'])));
+    $newValue = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['emailContactOK'])));
     if ($newValue != 1) {$newValue = 0;}
     if ($newValue != $emailComms) {
       $sql = "UPDATE `users` SET `EmailComms` = '$newValue' WHERE `UserID` = '$userID'";
-      mysqli_query(LINK, $sql);
+      mysqli_query($link, $sql);
       $emailCommsUpdate = true;
     }
   }
   if (isset($_POST['smsContactOK'])) {
-    $newValue = mysqli_real_escape_string(LINK, preg_replace('/\D/', '', $_POST['smsContactOK']));
+    $newValue = mysqli_real_escape_string($link, preg_replace('/\D/', '', $_POST['smsContactOK']));
     if ($newValue != 1) {$newValue = 0;}
     if ($newValue != $mobileComms) {
       $sql = "UPDATE `users` SET `MobileComms` = '$newValue' WHERE `UserID` = '$userID'";
-      mysqli_query(LINK, $sql);
+      mysqli_query($link, $sql);
       $mobileCommsUpdate = true;
     }
   }
@@ -94,7 +94,7 @@
 <p class="lead">Welcome to My Account where you can change your personal details, password, contact information and add swimmers to your account.</p>
 <?php if ($forenameUpdate || $surnameUpdate || $emailUpdate || $mobileUpdate) {
   $query = "SELECT * FROM users WHERE UserID = '$userID' ";
-  $result = mysqli_query(LINK, $query);
+  $result = mysqli_query($link, $query);
   $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
   $email = $row['EmailAddress'];
   $forename = $row['Forename'];
@@ -170,7 +170,7 @@
       $grav_url = "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $_SESSION['EmailAddress'] ) ) ) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=240";
       ?>
       <img class="mr-3" src="<?php echo $grav_url ?>" alt="" width="80" height="80">
-      <small class="form-text text-muted">If you have an image linked to your email with Gravitar, we'll display it in the system</small>
+      <small class="form-text text-muted">If you have an image $linked to your email with Gravitar, we'll display it in the system</small>
     </div>
     <p><input type="submit" class="btn btn-outline-dark" value="Save Changes"></p>
     <p class="mb-0">Changes will take place instantly. You can make changes again if you spot a mistake</p>
@@ -180,8 +180,8 @@
   <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
   <div class="my-3 p-3 bg-white rounded box-shadow">
     <h2>My Swimmers</h2>
-    <p>Swimmers linked to your account</p>
-    <?php echo mySwimmersTable(LINK, $userID) ?>
+    <p>Swimmers $linked to your account</p>
+    <?php echo mySwimmersTable($link, $userID) ?>
     <p class="mb-0"><a href="add-swimmer.php" class="btn btn-outline-dark">Add a Swimmer</a></p>
   </div>
 <?php } ?>
