@@ -11,13 +11,13 @@ if ($access == "Parent") {
 	});
 
 	// View a Swimmer
-	$this->get('/{id}', function($id) {
+	$this->get('/{id}:int', function($id) {
     global $link;
 	  require('parentSingleSwimmerView.php');
 	});
 
 	// Edit a Swimmer
-	$this->get('/edit/{id}', function($id) {
+	$this->get('/edit/{id}:int', function($id) {
     global $link;
 		echo $id;
 	  require('parentSingleSwimmer.php');

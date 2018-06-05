@@ -113,7 +113,7 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
 
 $pagetitle;
 if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
-  $pagetitle = "Swimmer: " . $swimmersSecurityCheck['MForename'] . " " . $swimmersSecurityCheck['MSurname'];
+  $pagetitle = "Edit: " . $swimmersSecurityCheck['MForename'] . " " . $swimmersSecurityCheck['MSurname'];
   $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes, members.AccessKey FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$idLast';";
   $resultSwim = mysqli_query($link, $sqlSwim);
   $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);

@@ -1,4 +1,3 @@
-<?php include_once "database.php" ?>
 <!DOCTYPE html>
 <!-- 	Copyright Chris Heppell & Chester-le-Street ASC 2017 2018. Bootstrap CSS and JavaScript is Copyright Twitter Inc, 2011-2018, jQuery v3.1.0 is Copyright jQuery Foundation 2016
 Designed by Chris Heppell, www.chrisheppell.uk

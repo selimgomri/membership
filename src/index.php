@@ -56,6 +56,11 @@ $route->get('/register', function() {
   require('controllers/register.php');
 });
 
+$route->post('/register', function() {
+  global $link;
+  require('controllers/register.php');
+});
+
 // Locked Out Password Reset
 $route->get('/resetpassword', function() {
   global $link;
@@ -133,6 +138,18 @@ $route->group('/galas', function() {
   global $link;
 
   include 'controllers/galas/router.php';
+});
+
+// Log out
+$route->any(['/logout', '/logout.php'], function() {
+  global $link;
+  require('controllers/logout.php');
+});
+
+// Global Catch All 404
+$route->any('/*', function() {
+  global $link;
+  include 'views/404.php';
 });
 
 $route->end();
