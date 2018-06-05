@@ -6,14 +6,13 @@ $access = $_SESSION['AccessLevel'];
 if ($access == "Parent") {
 	// My Swimmers
 	$this->get('/', function() {
-    global $link;
+    global $link, $userID;
 	  require('parentSwimmers.php');
 	});
 
 	// View a Swimmer
 	$this->get('/{id}', function($id) {
     global $link;
-		echo $id;
 	  require('parentSingleSwimmerView.php');
 	});
 
