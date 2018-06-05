@@ -170,7 +170,7 @@
       $grav_url = "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $_SESSION['EmailAddress'] ) ) ) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=240";
       ?>
       <img class="mr-3" src="<?php echo $grav_url ?>" alt="" width="80" height="80">
-      <small class="form-text text-muted">If you have an image $linked to your email with Gravitar, we'll display it in the system</small>
+      <small class="form-text text-muted">If you have an image linked to your email with Gravitar, we'll display it in the system</small>
     </div>
     <p><input type="submit" class="btn btn-outline-dark" value="Save Changes"></p>
     <p class="mb-0">Changes will take place instantly. You can make changes again if you spot a mistake</p>
@@ -182,13 +182,13 @@
     <h2>My Swimmers</h2>
     <p>Swimmers $linked to your account</p>
     <?php echo mySwimmersTable($link, $userID) ?>
-    <p class="mb-0"><a href="add-swimmer.php" class="btn btn-outline-dark">Add a Swimmer</a></p>
+    <p class="mb-0"><a href="<?php echo autoUrl("myaccount/addswimmer"); ?>" class="btn btn-outline-dark">Add a Swimmer</a></p>
   </div>
 <?php } ?>
 <div class="my-3 p-3 bg-white rounded box-shadow">
   <h2>Password</h2>
   <p class="border-bottom border-gray pb-2">Change your password regularly to keep your account safe</p>
-  <p class="mb-0"><a href="change-password.php" class="btn btn-outline-dark">Change my Password</a></p>
+  <p class="mb-0"><a href="<?php echo autoUrl("myaccount/password"); ?>" class="btn btn-outline-dark">Change my Password</a></p>
 </div>
 <div class="my-3 p-3 bg-white rounded box-shadow">
   <h2>Technical Details</h2>

@@ -10,7 +10,7 @@ if ($_SESSION['AccessLevel'] == "Parent") { ?>
   <h1>Add a swimmer</h1>
   <p>We need a few details to find a swimmer from our database.</p>
   <hr>
-  <form method="post" action="add-swimmer-action.php" name="register" id="register">
+  <form method="post" action="<?php echo autoUrl("myaccount/addswimmer"); ?>" name="register" id="register">
     <h2>Details</h2>
     <div class="form-group">
       <label for="asa">Swimmer's ASA Number</label>
@@ -18,10 +18,10 @@ if ($_SESSION['AccessLevel'] == "Parent") { ?>
     </div>
     <div class="form-group">
       <label for="accessKey">Access Key</label>
-      <input class="form-control mb-0" type="text" name="accessKey" id="accessKey" placeholder="123456" required>
+      <input class="form-control mb-0" type="text" name="accessKey" id="accessKey" placeholder="1A3B5C" required>
     </div>
     <input type="submit" class="btn btn-outline-dark mb-4" value="Add Swimmer">
 </div>
 <?php }
 
-include "../footer.php" ?>
+include BASE_PATH . "views/footer.php"; ?>

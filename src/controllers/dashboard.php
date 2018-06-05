@@ -14,10 +14,10 @@
 ?>
 <div class="nav-scroller bg-white box-shadow mb-3">
   <nav class="nav nav-underline">
-    <a class="nav-$link" href="#dash">Dashboard</a>
-    <a class="nav-$link" href="#swimmers">My Swimmers</a>
-    <a class="nav-$link" href="#fees">My Fees</a>
-    <a class="nav-$link" href="#entries">My Recent Entries</a>
+    <a class="nav-link" href="#dash">Dashboard</a>
+    <a class="nav-link" href="#swimmers">My Swimmers</a>
+    <a class="nav-link" href="#fees">My Fees</a>
+    <a class="nav-link" href="#entries">My Recent Entries</a>
   </nav>
 </div>
 <?php
@@ -26,7 +26,7 @@
    ?>
    <div class="nav-scroller bg-white box-shadow mb-3">
      <nav class="nav nav-underline">
-       <a class="nav-$link" href="#dash">Dashboard</a>
+       <a class="nav-link" href="#dash">Dashboard</a>
      </nav>
    </div>
    <?php

@@ -63,7 +63,7 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
       white-space: nowrap;
       -webkit-overflow-scrolling: touch;
     }
-    .nav-underline .nav-$link {
+    .nav-underline .nav-link {
       padding-top: .75rem;
       padding-bottom: .75rem;
       line-height: 1.35rem;
@@ -123,60 +123,60 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
 		<ul class="navbar-nav mr-auto">
 		<?php if (!empty($_SESSION['LoggedIn'])) { ?>
 		  <li class="nav-item">
-			  <a class="nav-$link" href="<?php echo autoUrl("") ?>">Dashboard</a>
+			  <a class="nav-link" href="<?php echo autoUrl("") ?>">Dashboard</a>
 		  </li>
 		  <li class="nav-item">
-			  <a class="nav-$link" href="<?php echo autoUrl("myaccount") ?>">My Account</a>
+			  <a class="nav-link" href="<?php echo autoUrl("myaccount") ?>">My Account</a>
 		  </li>
       <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
       <li class="nav-item">
-			  <a class="nav-$link" href="<?php echo autoUrl("swimmers") ?>">My Swimmers</a>
+			  <a class="nav-link" href="<?php echo autoUrl("swimmers") ?>">My Swimmers</a>
 		  </li>
       <?php }
       else { ?>
         <li class="nav-item">
-  			  <a class="nav-$link" href="<?php echo autoUrl("swimmers") ?>">Member Directory</a>
+  			  <a class="nav-link" href="<?php echo autoUrl("swimmers") ?>">Member Directory</a>
   		  </li>
         <li class="nav-item">
-  			  <a class="nav-$link" href="<?php echo autoUrl("squads") ?>">Squads</a>
+  			  <a class="nav-link" href="<?php echo autoUrl("squads") ?>">Squads</a>
   		  </li>
         <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach" || $_SESSION['AccessLevel'] == "Committee") { ?>
         <li class="nav-item">
-  			  <a class="nav-$link" href="<?php echo autoUrl("attendance") ?>">Attendance</a>
+  			  <a class="nav-link" href="<?php echo autoUrl("attendance") ?>">Attendance</a>
   		  </li>
         <?php } ?>
         <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas") { ?>
         <li class="nav-item">
-  			  <a class="nav-$link" href="<?php echo autoUrl("users") ?>">Users</a>
+  			  <a class="nav-link" href="<?php echo autoUrl("users") ?>">Users</a>
   		  </li>
         <?php } ?>
       <?php } ?>
       <li class="nav-item">
-			  <a class="nav-$link" href="<?php echo autoUrl("galas") ?>">Galas</a>
+			  <a class="nav-link" href="<?php echo autoUrl("galas") ?>">Galas</a>
 		  </li>
 		  <?php } ?>
 		  <?php if (empty($_SESSION['LoggedIn'])) { ?>
       <li class="nav-item">
-			  <a class="nav-$link" href="<?php echo autoUrl("login.php") ?>">Login</a>
+			  <a class="nav-link" href="<?php echo autoUrl("login.php") ?>">Login</a>
 		  </li>
       <li class="nav-item">
-			  <a class="nav-$link" href="<?php echo autoUrl("register.php") ?>">Create Account</a>
+			  <a class="nav-link" href="<?php echo autoUrl("register.php") ?>">Create Account</a>
 		  </li>
       <?php } ?>
       <!--<li class="nav-item">
-			<a class="nav-$link" href="https://store.chesterlestreetasc.co.uk/">Store</a>
+			<a class="nav-link" href="https://store.chesterlestreetasc.co.uk/">Store</a>
 		  </li>
 		  <li class="nav-item">
-			<a class="nav-$link" href="https://github.com/Chester-le-Street-ASC">GitHub</a>
+			<a class="nav-link" href="https://github.com/Chester-le-Street-ASC">GitHub</a>
 		  </li>
 		  <li class="nav-item">
-			<a class="nav-$link" href="/software/sendmail">Notify</a>
+			<a class="nav-link" href="/software/sendmail">Notify</a>
 		  </li>
 		  <li class="nav-item">
-			<a class="nav-$link disabled" href="#">Payment Systems</a>
+			<a class="nav-link disabled" href="#">Payment Systems</a>
 		  </li>
 		  <li class="nav-item">
-			<a class="nav-$link disabled" href="#">Account Settings</a>
+			<a class="nav-link disabled" href="#">Account Settings</a>
 		  </li>-->
 		</ul>
     <?php if (!empty($_SESSION['LoggedIn'])) { ?>
