@@ -29,18 +29,19 @@ else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {
 	$this->get(['/', '/filter'], function() {
     global $link;
 	  require('swimmerDirectory.php');
+		echo "Hello";
 	});
 
 	// Access Keys
 	$this->get('/accesskeys', function() {
     global $link;
-		echo "TEST"
 	  require('accesskeys.php');
+		echo "accesskeys";
 	});
 
 	// Access Keys
 	$this->get('/accesskeys-csv', function() {
     global $link;
-	  require('accesskeysCVS.php');
+	  require('accesskeysCSV.php');
 	});
 }

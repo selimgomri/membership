@@ -47,7 +47,7 @@ $route->get('/', function() {
 
 $route->post('/', function() {
   global $link;
-	include 'login-go.php';
+	include 'controllers/login-go.php';
 });
 
 // Register
@@ -72,6 +72,11 @@ $route->group('/myaccount', function() {
 
 	// My Account
 	$this->get('/', function() {
+    global $link;
+	  require('controllers/myaccount/index.php');
+	});
+
+  $this->post('/', function() {
     global $link;
 	  require('controllers/myaccount/index.php');
 	});
@@ -104,9 +109,30 @@ $route->group('/swimmers', function() {
   global $link;
 
   include 'controllers/swimmers/router.php';
+});
 
+$route->group('/squads', function() {
+  global $link;
+
+  include 'controllers/squads/router.php';
+});
+
+$route->group('/attendance', function() {
+  global $link;
+
+  include 'controllers/attendance/router.php';
+});
+
+$route->group('/users', function() {
+  global $link;
+
+  include 'controllers/users/router.php';
+});
+
+$route->group('/galas', function() {
+  global $link;
+
+  include 'controllers/galas/router.php';
 });
 
 $route->end();
-
-$database->disconnect();
