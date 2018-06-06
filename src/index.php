@@ -53,121 +53,133 @@ $app->route     = System\Route::instance($app->request);
 
 $route          = $app->route;
 
-// Home
-$route->get('/', function() {
-  global $link;
-	if (empty($_SESSION['LoggedIn']) || empty($_SESSION['Username'])) {
-  	require('controllers/login.php');
-	} else {
-		require('controllers/dashboard.php');
-	}
-});
-
-$route->post('/', function() {
-  global $link;
-	include 'controllers/login-go.php';
-});
-
-// Register
-$route->get('/register', function() {
-  global $link;
-  require('controllers/register.php');
-});
-
-$route->post('/register', function() {
-  global $link;
-  require('controllers/register.php');
-});
-
-// Locked Out Password Reset
-$route->get('/resetpassword', function() {
-  global $link;
-  require('controllers/forgot-password.php');
-});
-
-$route->post('/resetpassword', function() {
-  global $link;
-  require('controllers/forgot-password-action.php');
-});
-
-$route->group('/myaccount', function() {
-  global $link;
-
-	// My Account
-	$this->get('/', function() {
+if (empty($_SESSION['LoggedIn'])) {
+  // Home
+  $route->get('/', function() {
     global $link;
-	  require('controllers/myaccount/index.php');
-	});
+  	include 'controllers/login.php';
+  });
 
-  $this->post('/', function() {
+  $route->post('/', function() {
     global $link;
-	  require('controllers/myaccount/index.php');
-	});
+  	include 'controllers/login-go.php';
+  });
 
-	// Manage Password
-	$this->get('/password', function() {
+  // Register
+  $route->get('/register', function() {
     global $link;
-	  require('controllers/myaccount/change-password.php');
-	});
+    require('controllers/register.php');
+  });
 
-	$this->post('/password', function() {
+  $route->post('/register', function() {
     global $link;
-	  require('controllers/myaccount/change-password-action.php');
-	});
+    require('controllers/register.php');
+  });
 
-	// Add swimmer
-	$this->get('/addswimmer', function() {
+  // Locked Out Password Reset
+  $route->get('/resetpassword', function() {
     global $link;
-	  require('controllers/myaccount/add-swimmer.php');
-	});
+    require('controllers/forgot-password.php');
+  });
 
-	$this->post('/addswimmer', function() {
+  $route->post('/resetpassword', function() {
     global $link;
-	  require('controllers/myaccount/add-swimmer-action.php');
-	});
+    require('controllers/forgot-password-action.php');
+  });
 
-});
+  // Global Catch All send to login
+  $route->any('/*', function() {
+    global $link;
+    include 'controllers/login.php';
+  });
+}
+else {
+  // Home
+  $route->get('/', function() {
+    global $link;
+  	include 'controllers/dashboard.php';
+  	}
+  });
 
-$route->group('/swimmers', function() {
-  global $link;
+  $route->group('/myaccount', function() {
+    global $link;
 
-  include 'controllers/swimmers/router.php';
-});
+  	// My Account
+  	$this->get('/', function() {
+      global $link;
+  	  require('controllers/myaccount/index.php');
+  	});
 
-$route->group('/squads', function() {
-  global $link;
+    $this->post('/', function() {
+      global $link;
+  	  require('controllers/myaccount/index.php');
+  	});
 
-  include 'controllers/squads/router.php';
-});
+  	// Manage Password
+  	$this->get('/password', function() {
+      global $link;
+  	  require('controllers/myaccount/change-password.php');
+  	});
 
-$route->group('/attendance', function() {
-  global $link;
+  	$this->post('/password', function() {
+      global $link;
+  	  require('controllers/myaccount/change-password-action.php');
+  	});
 
-  include 'controllers/attendance/router.php';
-});
+  	// Add swimmer
+  	$this->get('/addswimmer', function() {
+      global $link;
+  	  require('controllers/myaccount/add-swimmer.php');
+  	});
 
-$route->group('/users', function() {
-  global $link;
+  	$this->post('/addswimmer', function() {
+      global $link;
+  	  require('controllers/myaccount/add-swimmer-action.php');
+  	});
 
-  include 'controllers/users/router.php';
-});
+  });
 
-$route->group('/galas', function() {
-  global $link;
+  $route->group('/swimmers', function() {
+    global $link;
 
-  include 'controllers/galas/router.php';
-});
+    include 'controllers/swimmers/router.php';
+  });
 
-// Log out
-$route->any(['/logout', '/logout.php'], function() {
-  global $link;
-  require('controllers/logout.php');
-});
+  $route->group('/squads', function() {
+    global $link;
 
-// Global Catch All 404
-$route->any('/*', function() {
-  global $link;
-  include 'views/404.php';
-});
+    include 'controllers/squads/router.php';
+  });
+
+  $route->group('/attendance', function() {
+    global $link;
+
+    include 'controllers/attendance/router.php';
+  });
+
+  $route->group('/users', function() {
+    global $link;
+
+    include 'controllers/users/router.php';
+  });
+
+  $route->group('/galas', function() {
+    global $link;
+
+    include 'controllers/galas/router.php';
+  });
+
+  // Log out
+  $route->any(['/logout', '/logout.php'], function() {
+    global $link;
+    require('controllers/logout.php');
+  });
+
+  // Global Catch All 404
+  $route->any('/*', function() {
+    global $link;
+    include 'views/404.php';
+  });
+}
 
 $route->end();
