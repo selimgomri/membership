@@ -11,6 +11,29 @@ error_reporting(E_ALL);
 require BASE_PATH.'vendor/autoload.php';
 require "config.php";
 require "helperclasses/Database.php";
+
+function halt(int $statusCode) {
+  if ($statusCode == 400) {
+    include "views/400.php";
+  }
+  else if ($statusCode == 401) {
+    include "views/401.php";
+  }
+  else if ($statusCode == 403) {
+    include "views/403.php";
+  }
+  else if ($statusCode == 404) {
+    include "views/404.php";
+  }
+  else if ($statusCode == 502) {
+    include "views/502.php";
+  }
+  else {
+    include "views/500.php";
+  }
+  exit();
+}
+
 //$link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 //define("LINK", mysqli_connect($dbhost, $dbuser, $dbpass, $dbname), true);
 //$link = LINK;
@@ -19,15 +42,7 @@ $link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 
 /* check connection */
 if (mysqli_connect_errno()) {
-    printf("Connect failed: %s\n", mysqli_connect_error());
-    exit();
-}
-
-//header("X-POWERED-BY: CLSASC/MMS");
-
-function halt(int $statusCode) {
-include "views/404.php";
-exit();
+    halt(500);
 }
 
 require_once "database.php";
