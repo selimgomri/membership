@@ -6,23 +6,26 @@ if (isset($queries['search'])) {
   $search = $queries['search'];
 }
 $pagetitle = "Users";
-
+include BASE_PATH . "views/header.php";
 ?>
-<h1>User Directory</h1>
-<p class="lead">A list of users. Useful for changing account settings.</p>
-<div class="form-group">
-  <label class="sr-only" for="search">Search by Surname</label>
-  <input class="form-control" placeholder="Surname" id="search" name="search" value="' . $search . '">
-</div>
-
-<div id="output">
-  <div class="ajaxPlaceholder">
-    <span class="h1 d-block">
-      <i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i><br>
-      Loading Content
-    </span>
-    If content does not display, please turn on JavaScript
+<div class="container">
+  <h1>User Directory</h1>
+  <p class="lead">A list of users. Useful for changing account settings.</p>
+  <div class="form-group">
+    <label class="sr-only" for="search">Search by Surname</label>
+    <input class="form-control" placeholder="Surname" id="search" name="search" value="<?php echo htmlspecialchars($search); ?>">
   </div>
+
+  <div id="output">
+    <div class="ajaxPlaceholder">
+      <span class="h1 d-block">
+        <i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i><br>
+        Loading Content
+      </span>
+      If content does not display, please turn on JavaScript
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -39,7 +42,7 @@ function getResult() {
         window.history.pushState("string", "Title", "<?php echo autoUrl("users/filter/"); ?>?search=" + searchValue);
       }
     }
-    xhttp.open("POST", "<?php echo autoURL("ajax/userList.php"); ?>", true);
+    xhttp.open("POST", "<?php echo autoURL("users/ajax/userList"); ?>", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("search=" + searchValue);
     console.log("Sent");
@@ -49,3 +52,5 @@ getResult();
 
 document.getElementById("search").oninput=getResult;
 </script>
+
+<?php include BASE_PATH . "views/footer.php";

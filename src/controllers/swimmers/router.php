@@ -19,7 +19,6 @@ if ($access == "Parent") {
 	// Edit a Swimmer
 	$this->get('/edit/{id}:int', function($id) {
     global $link;
-		echo $id;
 	  require('parentSingleSwimmer.php');
 	});
 }

@@ -1,17 +1,29 @@
 <?php
 
 $pagetitle = "Galas";
-$title = "Galas";
-$content = "";
-$content .= "<p class=\"lead\">Galas which are open for entries, or have closed. Galas in the past are not shown.</p>";
-$content .= '<div class="my-3 p-3 bg-white rounded box-shadow">
-  <h2 class="border-bottom border-gray pb-2 mb-0">Galas Open for Entries</h2>';
-$content .= upcomingGalas($link, true);
-if ($access == "Parent") {
-	$content .= "<p class=\"mb-0\"><a href=\"entergala\" class=\"btn btn-outline-dark\">Enter a gala</a></p></div>";
-}
-else {
-	$content .= "<p class=\"mb-0\"><a href=\"addgala\" class=\"btn btn-outline-dark\">Add a gala</a></p></div>";
+include BASE_PATH . "views/header.php"; ?>
+<div class="container">
+  <h1>Galas</h1>
+  <p class="lead">Galas which are open for entries, or have closed. Galas in the past are not shown.</p>
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+    <h2 class="border-bottom border-gray pb-2 mb-0">Galas Open for Entries</h2>
+    <?php echo upcomingGalas($link, true);
+    if ($access == "Parent") { ?>
+	    <p class="mb-0">
+        <a href="<?php echo autoUrl("galas/entergala"); ?>" class="btn btn-outline-dark">
+          Enter a gala
+        </a>
+      </p>
+    <?php }
+    else { ?>
+      <p class="mb-0">
+        <a href="<?php echo autoUrl("galas/addgala"); ?>" class="btn btn-outline-dark">
+          Add a gala
+        </a>
+      </p>
+    <?php } ?>
+  </div>
+  <?php
 	/* Stats Section */
 	$swimsCountArray = [];
 	$strokesCountArray = [0, 0, 0, 0, 0];
@@ -29,9 +41,9 @@ else {
 		$strokesCountArray[$strokesArray[$i]] += $count;
 		$counter += $count;
 	}
-		if ($counter>0) {
-		$content .= "<script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\"></script>
-		    <script type=\"text/javascript\">
+		if ($counter>0) { ?>
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+		    <script type="text/javascript">
 		      google.charts.load('current', {'packages':['corechart']});
 
 		      google.charts.setOnLoadCallback(drawPieChart);
@@ -40,11 +52,11 @@ else {
 		      function drawPieChart() {
 
 		        var data = google.visualization.arrayToDataTable([
-		          ['Stroke', 'Total Number of Entries'],";
-							for ($i=0; $i<sizeof($strokesCountArray); $i++) {
-		          	$content .= "['" . $strokesCountTextArray[$i] . "', " . $strokesCountArray[$i] . "],";
-							}
-		        $content .= "]);
+		          ['Stroke', 'Total Number of Entries'],
+							<?php for ($i=0; $i<sizeof($strokesCountArray); $i++) { ?>
+		          	['<?php echo $strokesCountTextArray[$i]; ?>', <?php echo $strokesCountArray[$i]; ?>],
+							<?php } ?>
+		        ]);
 
 		        var options = {
 		          title: 'Gala Entries by Stroke',
@@ -65,13 +77,13 @@ else {
 					function drawBarChart() {
 
 		        var data = google.visualization.arrayToDataTable([
-		          ['Stroke', 'Total Number of Entries'],";
-							for ($i=0; $i<sizeof($swimsArray); $i++) {
-								if ($swimsCountArray[$i] > 0) {
-		          		$content .= "['" . $swimsTextArray[$i] . "', " . $swimsCountArray[$i] . "],";
-								}
-							}
-		        $content .= "]);
+		          ['Stroke', 'Total Number of Entries'],
+							<?php for ($i=0; $i<sizeof($swimsArray); $i++) {
+								if ($swimsCountArray[$i] > 0) { ?>
+		          		['<?php echo $swimsTextArray[$i]; ?>', <?php echo $swimsCountArray[$i]; ?>],
+								<?php }
+							} ?>
+		        ]);
 
 		        var options = {
 		          title: 'Gala Entries by Event',
@@ -96,19 +108,19 @@ else {
 		        chart.draw(data, options);
 		      }
 		    </script>
-				<div class=\"my-3 p-3 bg-white rounded box-shadow\">
-				<h2>Statistics</h2>
-				<p class=\"lead border-bottom border-gray pb-2 mb-0\">These statistics are gathered from all previous gala entries in our system</p>
-		    <div class=\"chart\" id=\"piechart\"></div>
-				<div class=\"chart\" id=\"barchart\"></div>
+				<div class="my-3 p-3 bg-white rounded box-shadow">
+				  <h2>Statistics</h2>
+				  <p class="lead border-bottom border-gray pb-2 mb-0">These statistics are gathered from all previous gala entries in our system</p>
+  		    <div class="chart" id="piechart"></div>
+  				<div class="chart" id="barchart"></div>
 				</div>
-		";
-	}
-}
-$content .= "
-<div class=\"my-3 p-3 bg-white rounded box-shadow\">
-<h2>Galas Closed for Entries</h2>
-<p class=\"lead border-bottom border-gray pb-2 mb-0\">These galas have closed to entries, but are still in the future</p>";
-$content .= closedGalas($link, false);
-$content .= "</div>";
-?>
+	<?php } ?>
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+    <h2>Galas Closed for Entries</h2>
+    <p class="lead border-bottom border-gray pb-2 mb-0">
+      These galas have closed to entries, but are still in the future
+    </p>
+    <?php echo closedGalas($link, false); ?>
+  </div>
+</div>
+<?php include BASE_PATH . "views/footer.php"; ?>
