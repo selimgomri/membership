@@ -7,6 +7,7 @@
     // Let the user login
     $username = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['username'])));
     $password = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password'])));
+    $target = mysqli_real_escape_string($link, trim($_POST['target']));
 
     $username = preg_replace('/\s+/', '', $username);
 
@@ -31,8 +32,8 @@
         $_SESSION['AccessLevel'] = $row['AccessLevel'];
         $_SESSION['LoggedIn'] = 1;
 
-        if (isset($_SESSION['requestedURL'])) {
-          header("Location: " . $_SESSION['requestedURL'] . "");
+        if (isset($target)) {
+          header("Location: " . $target . "");
         }
         else {
           header("Location: " . autoUrl('') . "");
