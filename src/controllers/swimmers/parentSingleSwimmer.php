@@ -26,7 +26,7 @@ $sqlSecurityCheck = "SELECT `MForename`, `MSurname`, `UserID` FROM `members` WHE
 $resultSecurityCheck = mysqli_query($link, $sqlSecurityCheck);
 $swimmersSecurityCheck = mysqli_fetch_array($resultSecurityCheck, MYSQLI_ASSOC);
 
-if (!$swimmersSecurityCheck['UserID'] == $userID && !$resultSecurityCheck) {
+if ($swimmersSecurityCheck['UserID'] != $userID) {
 halt(404);
 }
 else {

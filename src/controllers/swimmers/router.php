@@ -28,7 +28,6 @@ else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {
 	$this->get(['/', '/filter'], function() {
     global $link;
 	  require('swimmerDirectory.php');
-		echo "Hello";
 	});
 
 	// Access Keys
