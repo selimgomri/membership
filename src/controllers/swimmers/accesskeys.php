@@ -1,4 +1,8 @@
 <?php
+$access = $_SESSION['AccessLevel'];
+if ($access != "Admin" || $access != "Coach" || $access != "Galas") {
+  halt(403);
+}
 
 include BASE_PATH . "views/header.php";
 
