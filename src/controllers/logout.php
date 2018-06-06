@@ -1,5 +1,4 @@
 <?php
-  include "database.php";
   $_SESSION = array();
   session_destroy();
   header("Location: " . autoUrl("") . "");

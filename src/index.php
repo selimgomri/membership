@@ -98,7 +98,6 @@ else {
   $route->get('/', function() {
     global $link;
   	include 'controllers/dashboard.php';
-  	}
   });
 
   $route->group('/myaccount', function() {
