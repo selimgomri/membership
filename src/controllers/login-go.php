@@ -33,7 +33,7 @@
         $_SESSION['LoggedIn'] = 1;
 
         if (isset($target)) {
-          header("Location: " . $target . "");
+          header("Location: " . autoUrl($target) . "");
         }
         else {
           header("Location: " . autoUrl('') . "");

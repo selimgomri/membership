@@ -30,6 +30,11 @@ else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {
 	  require('swimmerDirectory.php');
 	});
 
+	$this->any('ajax/swimmerDirectory', function() {
+    global $link;
+	  include BASE_PATH . "controllers/ajax/membersList.php";
+	});
+
 	// Access Keys
 	$this->get('/accesskeys', function() {
     global $link;
