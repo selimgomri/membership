@@ -121,107 +121,101 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
   $resultSwim = mysqli_query($link, $sqlSwim);
   $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
   $title = null;
-  $content = '<div class="row align-items-center"><div class="col-sm-8"><h1>Editing ' . $swimmersSecurityCheck['MForename'] . ' ' . $swimmersSecurityCheck['MSurname'] . '</h1></div><div class="col-sm-4 text-right"><a class="btn btn-dark" href="../' . $idLast . '">Exit Edit Mode</a></div></div>';
-  if ($update) {
-  $content .= '<div class="alert alert-success">
+  ?>
+  <div class="row align-items-center">
+    <div class="col-sm-8">
+      <h1>Editing <?php echo $swimmersSecurityCheck['MForename'] . ' ' . $swimmersSecurityCheck['MSurname']?></h1>
+    </div>
+    <div class="col-sm-4 text-right">
+      <a class="btn btn-dark" href="<?php echo autoUrl("swimmers/" . $id)?>">Exit Edit Mode</a>
+    </div>
+  </div>
+  <?php
+  if ($update) { ?>
+  <div class="alert alert-success">
     <strong>We have updated</strong>
-    <ul class="mb-0">';
-      if ($forenameUpdate) { $content .= '<li>Your first name</li>'; }
-      if ($middlenameUpdate) { $content .= '<li>Your middle name(s)</li>'; }
-      if ($surnameUpdate) { $content .= '<li>Your last address</li>'; }
-      if ($dateOfBirthUpdate) { $content .= '<li>Your date of birth</li>'; }
-      if ($sexUpdate) { $content .= '<li>Your sex</li>'; }
-      if ($medicalNotesUpdate) { $content .= '<li>Your medical notes</li>'; }
-      if ($otherNotesUpdate) { $content .= '<li>Your other notes</li>'; }
-  $content .= '
+    <ul class="mb-0"><?php
+      if ($forenameUpdate) { ?><li>Your first name</li><?php }
+      if ($middlenameUpdate) { ?><li>Your middle name(s)</li><?php }
+      if ($surnameUpdate) { ?><li>Your last address</li><?php }
+      if ($dateOfBirthUpdate) { ?><li>Your date of birth</li><?php }
+      if ($sexUpdate) { ?><li>Your sex</li><?php }
+      if ($medicalNotesUpdate) { ?><li>Your medical notes</li><?php }
+      if ($otherNotesUpdate) { ?><li>Your other notes</li><?php } ?>
     </ul>
-  </div>';
-  }
-  // Main Info Content
-  $content .= "<form method=\"post\">";
-  $content .= "
-  <div class=\"form-group\">
-    <label for=\"forename\">Forename</label>
-    <input type=\"text\" class=\"form-control\" id=\"forename\" name=\"forename\" placeholder=\"Enter a forename\" value=\"" . $rowSwim['MForename'] . "\" required>
-  </div>";
-  $content .= "
-  <div class=\"form-group\">
-    <label for=\"middlenames\">Middle Names</label>
-    <input type=\"text\" class=\"form-control\" id=\"middlenames\" name=\"middlenames\" placeholder=\"Enter a middlename\" value=\"" . $rowSwim['MMiddleNames'] . "\">
-  </div>";
-  $content .= "
-  <div class=\"form-group\">
-    <label for=\"surname\">Surname</label>
-    <input type=\"text\" class=\"form-control\" id=\"surname\" name=\"surname\" placeholder=\"Enter a surname\" value=\"" . $rowSwim['MSurname'] . "\" required>
-  </div>";
-  $content .= "
-  <div class=\"form-group\">
-    <label for=\"datebirth\">Date of Birth</label>
-    <input type=\"date\" class=\"form-control\" id=\"datebirth\" name=\"datebirth\" pattern=\"[0-9]{4}-[0-9]{2}-[0-9]{2}\" placeholder=\"YYYY-MM-DD\" value=\"" . $rowSwim['DateOfBirth'] . "\" required>
-  </div>";
-  $content .= "
-  <div class=\"form-group\">
-    <label for=\"asaregnumber\">ASA Registration Number</label>
-    <input type=\"test\" class=\"form-control\" id=\"asaregnumber\" name=\"asaregnumber\" placeholder=\"ASA Registration Numer\" value=\"" . $rowSwim['ASANumber'] . "\" readonly>
-  </div>";
-  /*$sql = "SELECT COLUMN_TYPE
-  FROM INFORMATION_SCHEMA.COLUMNS
-  WHERE TABLE_SCHEMA = 'chesterlestreetasc_co_uk_membership'
-  AND TABLE_NAME = 'members'
-  AND COLUMN_NAME = 'Gender';";
-  $resultGender = mysqli_query($link, $sqlSwim);*/
-  if ($rowSwim['Gender'] == "Male") {
-    $content .= "
-    <div class=\"form-group\">
-      <label for=\"sex\">Sex</label>
-      <select class=\"custom-select\" id=\"sex\" name=\"sex\" placeholder=\"Select\">
-        <option value=\"Male\" selected>Male</option>
-        <option value=\"Female\">Female</option>
-      </select>
-    </div>";
-  }
-  else {
-    $content .= "
-    <div class=\"form-group\">
-      <label for=\"sex\">Sex</label>
-      <select class=\"custom-select\" id=\"sex\" name=\"sex\" placeholder=\"Select\">
-        <option value=\"Male\">Male</option>
-        <option value=\"Female\" selected>Female</option>
-      </select>
-    </div>";
-  }
-  $content .= "
-  <div class=\"form-group\">
-    <label for=\"medicalNotes\">Medical Notes</label>
-    <textarea class=\"form-control\" id=\"medicalNotes\" name=\"medicalNotes\" rows=\"3\" placeholder=\"Tell us about any medical issues\">" . $rowSwim['MedicalNotes'] . "</textarea>
-  </div>";
-  $content .= "
-  <div class=\"form-group\">
-    <label for=\"otherNotes\">Other Notes</label>
-    <textarea class=\"form-control\" id=\"otherNotes\" name=\"otherNotes\" rows=\"3\" placeholder=\"Tell us any other notes for coaches\">" . $rowSwim['OtherNotes'] . "</textarea>
-  </div>";
-  $content .= "<button type=\"submit\" class=\"btn btn-outline-dark mb-3\">Update</button>";
+  </div>
+  <?php } ?>
+  <!-- Main Info Content -->
+  <form method="post">
+  <div class="form-group">
+    <label for="forename">Forename</label>
+    <input type="text" class="form-control" id="forename" name="forename" placeholder="Enter a forename" value="<?php echo $rowSwim['MForename']; ?>" required>
+  </div>
+  <div class="form-group">
+    <label for="middlenames">Middle Names</label>
+    <input type="text" class="form-control" id="middlenames" name="middlenames" placeholder="Enter a middlename" value="<?php echo $rowSwim['MMiddleNames']; ?>">
+  </div>
+  <div class="form-group">
+    <label for="surname">Surname</label>
+    <input type="text" class="form-control" id="surname" name="surname" placeholder="Enter a surname" value="<?php echo $rowSwim['MSurname']; ?>" required>
+  </div>
+  <div class="form-group">
+    <label for="datebirth">Date of Birth</label>
+    <input type="date" class="form-control" id="datebirth" name="datebirth" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD" value="<?php echo $rowSwim['DateOfBirth']; ?>" required>
+  </div>
+  <div class="form-group">
+    <label for="asaregnumber">ASA Registration Number</label>
+    <input type="test" class="form-control" id="asaregnumber" name="asaregnumber" placeholder="ASA Registration Numer" value="<?php echo $rowSwim['ASANumber']; ?>" readonly>
+  </div>
+  <?php if ($rowSwim['Gender'] == "Male") { ?>
+  <div class="form-group">
+    <label for="sex">Sex</label>
+    <select class="custom-select" id="sex" name="sex" placeholder="Select">
+      <option value="Male" selected>Male</option>
+      <option value="Female">Female</option>
+    </select>
+  </div>
+<?php } else { ?>
+  <div class="form-group">
+    <label for="sex">Sex</label>
+    <select class="custom-select" id="sex" name="sex" placeholder="Select">
+      <option value="Male">Male</option>
+      <option value="Female" selected>Female</option>
+    </select>
+  </div>
+<?php } ?>
+  <div class="form-group">
+    <label for="medicalNotes">Medical Notes</label>
+    <textarea class="form-control" id="medicalNotes" name="medicalNotes" rows="3" placeholder="Tell us about any medical issues"><?php echo $rowSwim['MedicalNotes']; ?></textarea>
+  </div>
+  <div class="form-group">
+    <label for="otherNotes">Other Notes</label>
+    <textarea class="form-control" id="otherNotes" name="otherNotes" rows="3" placeholder="Tell us any other notes for coaches"><?php echo $rowSwim['OtherNotes']; ?>"</textarea>
+  </div>
+  <button type="submit" class="btn btn-outline-dark mb-3">Update</button>
 
+  <?php
   // Danger Zone at Bottom of Page
   $disconnectKey = generateRandomString(8);
-  $content .= "
-  <form method=\"post\">
-    <div class=\"alert alert-danger\">
+  ?>
+  <form method="post">
+    <div class="alert alert-danger">
       <p><strong>Danger Zone</strong> <br>Actions here can be irreversible. Be careful what you do.</p>
-      <div class=\"form-group\">
-        <label for=\"disconnect\">Disconnect swimmer from your account with this Key \"" . $disconnectKey . "\"</label>
-        <input type=\"text\" class=\"form-control\" id=\"disconnect\" name=\"disconnect\" aria-describedby=\"disconnectHelp\" placeholder=\"Enter the key\" onselectstart=\"return false\" onpaste=\"return false;\" onCopy=\"return false\" onCut=\"return false\" onDrag=\"return false\" onDrop=\"return false\" autocomplete=off>
-        <small id=\"disconnectHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will dissassociate this swimmer from your account in all of our systems. You will need a new Access Key to add the swimmer again.</small>
+      <div class="form-group">
+        <label for="disconnect">Disconnect swimmer from your account with this Key <span class="mono">"<?php echo $disconnectKey; ?>"</span></label>
+        <input type="text" class="form-control" id="disconnect" name="disconnect" aria-describedby="disconnectHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
+        <small id="disconnectHelp" class="form-text">Enter the key in quotes above and press submit. This will dissassociate this swimmer from your account in all of our systems. You will need a new Access Key to add the swimmer again.</small>
       </div>
-      <input type=\"hidden\" value=\"" . $disconnectKey . "\" name=\"disconnectKey\">
-      <div class=\"form-group\">
-        <label for=\"swimmerDeleteDanger\">Delete this Swimmer with this Key \"" . $rowSwim['AccessKey'] . "\"</label>
-        <input type=\"text\" class=\"form-control\" id=\"swimmerDeleteDanger\" name=\"swimmerDeleteDanger\" aria-describedby=\"swimmerDeleteDangerHelp\" placeholder=\"Enter the key\" onselectstart=\"return false\" onpaste=\"return false;\" onCopy=\"return false\" onCut=\"return false\" onDrag=\"return false\" onDrop=\"return false\" autocomplete=off>
-        <small id=\"swimmerDeleteDangerHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will delete this swimmer from all of our systems.</small>
+      <input type="hidden" value="<?php echo $disconnectKey; ?>" name="disconnectKey">
+      <div class="form-group">
+        <label for="swimmerDeleteDanger">Delete this Swimmer with this Key "<?php echo $rowSwim['AccessKey']; ?>"</label>
+        <input type="text" class="form-control" id="swimmerDeleteDanger" name="swimmerDeleteDanger" aria-describedby="swimmerDeleteDangerHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
+        <small id="swimmerDeleteDangerHelp" class="form-text">Enter the key in quotes above and press submit. This will delete this swimmer from all of our systems.</small>
       </div>
-      <button type=\"submit\" class=\"btn btn-danger mb-3\">Delete or Disconnect</button>
+      <button type="submit" class="btn btn-danger mb-3">Delete or Disconnect</button>
     </div>
-  </form>";
+  </form>
+  <?php
 }
 
 include BASE_PATH . "views/header.php";
@@ -233,6 +227,3 @@ include BASE_PATH . "views/header.php";
     branding: false,
   });
 </script>
-<?php
-
-?>
