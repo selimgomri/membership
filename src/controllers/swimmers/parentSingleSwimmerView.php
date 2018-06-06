@@ -21,7 +21,9 @@ $resultSecurityCheck = mysqli_query($link, $sqlSecurityCheck);
 $swimmersSecurityCheck = mysqli_fetch_array($resultSecurityCheck, MYSQLI_ASSOC);
 
 $pagetitle;
-if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
+if (!$swimmersSecurityCheck['UserID'] == $userID) {
+  halt(404);}
+else {
   $pagetitle = $swimmersSecurityCheck['MForename'] . " " . $swimmersSecurityCheck['MSurname'];
   $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes, members.AccessKey FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
   $resultSwim = mysqli_query($link, $sqlSwim);

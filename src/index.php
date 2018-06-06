@@ -23,9 +23,12 @@ if (mysqli_connect_errno()) {
     exit();
 }
 
-//$database = new Database($dbhost, $dbuser, $dbpass, $dbname);
-//$database->connect();
-//$link = $database->getConnection();
+//header("X-POWERED-BY: CLSASC/MMS");
+
+function halt(int $statusCode) {
+include "views/404.php";
+exit();
+}
 
 require_once "database.php";
 

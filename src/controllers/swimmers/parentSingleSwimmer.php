@@ -26,7 +26,10 @@ $sqlSecurityCheck = "SELECT `MForename`, `MSurname`, `UserID` FROM `members` WHE
 $resultSecurityCheck = mysqli_query($link, $sqlSecurityCheck);
 $swimmersSecurityCheck = mysqli_fetch_array($resultSecurityCheck, MYSQLI_ASSOC);
 
-if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
+if (!$swimmersSecurityCheck['UserID'] == $userID && !$resultSecurityCheck) {
+halt(404);
+}
+else {
   if (!empty($_POST['forename'])) {
     $newForename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
     if ($newForename != $forename) {
@@ -219,11 +222,6 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
       <button type=\"submit\" class=\"btn btn-danger mb-3\">Delete or Disconnect</button>
     </div>
   </form>";
-}
-else {
-  // Not allowed or not found
-  $pagetitle = "Error 404 - Not found";
-  $title = "Error 404 - Not found";
 }
 
 include BASE_PATH . "views/header.php";
