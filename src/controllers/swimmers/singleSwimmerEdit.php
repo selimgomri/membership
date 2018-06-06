@@ -1,4 +1,5 @@
 <?php
+$access = $_SESSION['AccessLevel'];
 // Committee or Admin can see and change all data
 $forenameUpdate = false;
 $middlenameUpdate = false;
@@ -13,7 +14,7 @@ $otherNotesUpdate = false;
 $update = false;
 $successInformation = "";
 
-$query = "SELECT * FROM members WHERE MemberID = '$idLast' ";
+$query = "SELECT * FROM members WHERE MemberID = '$id' ";
 $result = mysqli_query($link, $query);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
@@ -33,7 +34,7 @@ $dbAccessKey = $row['AccessKey'];
 if (!empty($_POST['forename'])) {
 	$newForename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
 	if ($newForename != $forename) {
-		$sql = "UPDATE `members` SET `MForename` = '$newForename' WHERE `MemberID` = '$idLast'";
+		$sql = "UPDATE `members` SET `MForename` = '$newForename' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
 		$forenameUpdate = true;
 		$update = true;
@@ -42,7 +43,7 @@ if (!empty($_POST['forename'])) {
 if (!empty($_POST['middlenames'])) {
 	$newMiddlenames = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['middlenames']))));
 	if ($newMiddlenames != $middlename) {
-		$sql = "UPDATE `members` SET `MMiddleNames` = '$newMiddlenames' WHERE `MemberID` = '$idLast'";
+		$sql = "UPDATE `members` SET `MMiddleNames` = '$newMiddlenames' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
 		$middlenameUpdate = true;
 		$update = true;
@@ -51,7 +52,7 @@ if (!empty($_POST['middlenames'])) {
 if (!empty($_POST['surname'])) {
 	$newSurname = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['surname']))));
 	if ($newSurname != $surname) {
-		$sql = "UPDATE `members` SET `MSurname` = '$newSurname' WHERE `MemberID` = '$idLast'";
+		$sql = "UPDATE `members` SET `MSurname` = '$newSurname' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
 		$surnameUpdate = true;
 		$update = true;
@@ -60,7 +61,7 @@ if (!empty($_POST['surname'])) {
 if (!empty($_POST['asa'])) {
 	$newASANumber = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['asa']))));
 	if ($newASANumber != $asaNumber) {
-		$sql = "UPDATE `members` SET `ASANumber` = '$newASANumber' WHERE `MemberID` = '$idLast'";
+		$sql = "UPDATE `members` SET `ASANumber` = '$newASANumber' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
 		$asaUpdate = true;
 		$update = true;
@@ -69,7 +70,7 @@ if (!empty($_POST['asa'])) {
 if (!empty($_POST['userid'])) {
 	$newUserID = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['userid']))));
 	if ($newUserID != $dbUserID) {
-		$sql = "UPDATE `members` SET `UserID` = '$newUserID' WHERE `MemberID` = '$idLast'";
+		$sql = "UPDATE `members` SET `UserID` = '$newUserID' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
 		$userUpdate = true;
 		$update = true;
@@ -78,7 +79,7 @@ if (!empty($_POST['userid'])) {
 if (!empty($_POST['squad'])) {
 	$newSquadID = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['squad']))));
 	if ($newSquadID != $squad) {
-		$sql = "UPDATE `members` SET `SquadID` = '$newSquadID' WHERE `MemberID` = '$idLast'";
+		$sql = "UPDATE `members` SET `SquadID` = '$newSquadID' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
 		$squadUpdate = true;
 		$update = true;
@@ -88,7 +89,7 @@ if (!empty($_POST['datebirth'])) {
 	$newDateOfBirth = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['datebirth']))));
 	// NEEDS WORK FOR DATE TO BE RIGHT
 	if ($newDateOfBirth != $dateOfBirth) {
-		$sql = "UPDATE `members` SET `DateOfBirth` = '$newDateOfBirth' WHERE `MemberID` = '$idLast'";
+		$sql = "UPDATE `members` SET `DateOfBirth` = '$newDateOfBirth' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
 		$dateOfBirthUpdate = true;
 		$update = true;
@@ -97,7 +98,7 @@ if (!empty($_POST['datebirth'])) {
 if (!empty($_POST['sex'])) {
 	$newSex = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['sex']))));
 	if ($newSex != $sex) {
-		$sql = "UPDATE `members` SET `Gender` = '$newSex' WHERE `MemberID` = '$idLast'";
+		$sql = "UPDATE `members` SET `Gender` = '$newSex' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
 		$sexUpdate = true;
 		$update = true;
@@ -106,7 +107,7 @@ if (!empty($_POST['sex'])) {
 if (isset($_POST['medicalNotes'])) {
 	$newMedicalNotes = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['medicalNotes'])));
 	if ($newMedicalNotes != $medicalNotes) {
-		$sql = "UPDATE `members` SET `MedicalNotes` = '$newMedicalNotes' WHERE `MemberID` = '$idLast'";
+		$sql = "UPDATE `members` SET `MedicalNotes` = '$newMedicalNotes' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
 		$medicalNotesUpdate = true;
 		$update = true;
@@ -115,7 +116,7 @@ if (isset($_POST['medicalNotes'])) {
 if (isset($_POST['otherNotes'])) {
 	$newOtherNotes = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['otherNotes'])));
 	if ($newOtherNotes != $otherNotes) {
-		$sql = "UPDATE `members` SET `OtherNotes` = '$newOtherNotes' WHERE `MemberID` = '$idLast'";
+		$sql = "UPDATE `members` SET `OtherNotes` = '$newOtherNotes' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
 		$otherNotesUpdate = true;
 		$update = true;
@@ -124,19 +125,19 @@ if (isset($_POST['otherNotes'])) {
 if (!empty($_POST['swimmerDeleteDanger'])) {
 	$deleteKey = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['swimmerDeleteDanger'])));
 	if ($deleteKey == $dbAccessKey) {
-		$sql = "DELETE FROM `members` WHERE `members`.`MemberID` = '$idLast'";
+		$sql = "DELETE FROM `members` WHERE `members`.`MemberID` = '$id'";
 		mysqli_query($link, $sql);
 		header("Location: " . autoUrl("swimmers"));
 	}
 }
 
 $sqlSwim = "";
-$sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, members.ASANumber, squads.SquadName, squads.SquadID, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes , members.AccessKey FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$idLast';";
+$sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, members.ASANumber, squads.SquadName, squads.SquadID, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes , members.AccessKey FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
 $resultSwim = mysqli_query($link, $sqlSwim);
 $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
 $pagetitle = "Swimmer: " . $rowSwim['MForename'] . " " . $rowSwim['MSurname'];
 $title = null;
-$content = '<div class="row align-items-center"><div class="col-sm-8"><h1>Editing ' . $rowSwim['MForename'] . ' ' . $rowSwim['MSurname'] . '</h1></div><div class="col-sm-4 text-right"><a class="btn btn-dark" href="../' . $idLast . '">Exit Edit Mode</a></div></div><hr>';
+$content = '<div class="row align-items-center"><div class="col-sm-8"><h1>Editing ' . $rowSwim['MForename'] . ' ' . $rowSwim['MSurname'] . '</h1></div><div class="col-sm-4 text-right"><a class="btn btn-dark" href="../' . $id . '">Exit Edit Mode</a></div></div><hr>';
 $content .= "<div class=\"row\"><div class=\"col col-md-8\">";
 if ($update) {
 $content .= '<div class="alert alert-success">
@@ -257,3 +258,11 @@ if ($rowSwim['SquadCoC'] != "") {
 }
 $content .= "</ul></div>";
 $content .= "</div></div>";
+
+include BASE_PATH . "views/header.php"; ?>
+<div class="container">
+<?php echo "<h1>" . $title . "</h1>";
+echo $content; ?>
+</div>
+<?php include BASE_PATH . "views/footer.php";
+?>

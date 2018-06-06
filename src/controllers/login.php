@@ -62,7 +62,7 @@
               </div>
               <?php } ?>
 
-              <form method="post" name="loginform" id="loginform">
+              <form method="post" action="<?php echo autoUrl(""); ?>" name="loginform" id="loginform">
                 <div class="form-group">
                   <label for="username">Email Address or Username</label>
                   <input type="text" name="username" id="username" class="form-control form-control-lg" value="<?php if ($errorState == true) { echo $username; } ?>" required autofocus>

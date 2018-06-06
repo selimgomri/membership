@@ -21,6 +21,12 @@ if ($access == "Parent") {
     global $link;
 	  require('parentSingleSwimmer.php');
 	});
+
+	// Edit a Swimmer
+	$this->post('/edit/{id}:int', function($id) {
+    global $link;
+	  require('parentSingleSwimmer.php');
+	});
 }
 else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {
 	// Directory
@@ -29,9 +35,15 @@ else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {
 	  require('swimmerDirectory.php');
 	});
 
-	$this->any('ajax/swimmerDirectory', function() {
+	$this->post('ajax/swimmerDirectory', function() {
     global $link;
 	  include BASE_PATH . "controllers/ajax/membersList.php";
+	});
+
+	// Individual Swimmers
+	$this->get('{id}:int', function($id) {
+    global $link;
+	  require('singleSwimmerView.php');
 	});
 
 	// Access Keys
@@ -45,5 +57,18 @@ else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {
 	$this->get('/accesskeys-csv', function() {
     global $link;
 	  require('accesskeysCSV.php');
+	});
+}
+
+if ($access == "Admin") {
+	// Edit Individual Swimmers
+	$this->get('edit/{id}:int', function($id) {
+    global $link;
+	  require('singleSwimmerEdit.php');
+	});
+
+	$this->post('edit/{id}:int', function($id) {
+    global $link;
+	  require('singleSwimmerEdit.php');
 	});
 }

@@ -1,5 +1,4 @@
 <?php
-include_once "../database.php";
 $access = $_SESSION['AccessLevel'];
 $count = 0;
 if ($access == "Admin" || $access == "Galas") {
@@ -26,9 +25,9 @@ if ($access == "Admin" || $access == "Galas") {
     $resultX = mysqli_query($link, $sql);
     for ($i = 0; $i < $swimmerCount; $i++) {
       $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
-      $swimmer$link = autoUrl("users/" . $swimmersRowX['UserID'] . "");
+      $swimmerLink = autoUrl("users/" . $swimmersRowX['UserID'] . "");
       $output .= "<tr>
-        <td><a href=\"" . $swimmer$link . "\">" . $swimmersRowX['Forename'] . " " . $swimmersRowX['Surname'] . "</a></td>
+        <td><a href=\"" . $swimmerLink . "\">" . $swimmersRowX['Forename'] . " " . $swimmersRowX['Surname'] . "</a></td>
         <td>" . $swimmersRowX['AccessLevel'] . "</td>
       </tr>";
     }
@@ -41,8 +40,7 @@ if ($access == "Admin" || $access == "Galas") {
     $output = "<div class=\"alert alert-warning\"><strong>No users found for that name</strong> <br>Please try another search</div>";
   }
 	echo $output;
-}
-else {
-  echo "Access not allowed";
+} else {
+  echo "Hello";
 }
 ?>

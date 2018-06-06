@@ -1,5 +1,7 @@
 <?php
 
+$access = $_SESSION['AccessLevel'];
+
 $query = "SELECT * FROM members WHERE MemberID = '$id' ";
 $result = mysqli_query($link, $query);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -248,5 +250,9 @@ include BASE_PATH . "views/header.php";
   });
 </script>
 <?php
-
-?>
+include BASE_PATH . "views/header.php"; ?>
+<div class="container">
+<?php echo "<h1>" . $title . "</h1>";
+echo $content; ?>
+</div>
+<?php include BASE_PATH . "views/footer.php";

@@ -1,5 +1,4 @@
 <?php
-include_once "../database.php";
 $access = $_SESSION['AccessLevel'];
 $count = 0;
 if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $access == "Galas") {
@@ -40,18 +39,18 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $resultX = mysqli_query($link, $sql);
     for ($i = 0; $i < $swimmerCount; $i++) {
       $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
-      $swimmer$link = autoUrl("swimmers/" . $swimmersRowX['MemberID'] . "");
+      $swimmerLink = autoUrl("swimmers/" . $swimmersRowX['MemberID'] . "");
       $DOB = date('j F Y', strtotime($swimmersRowX['DateOfBirth']));
       $age = date_diff(date_create($swimmersRowX['DateOfBirth']), date_create('today'))->y;
       $ageEoY = date('Y') - date('Y', strtotime($swimmersRowX['DateOfBirth']));
       $output .= "<tr>
-        <td><a href=\"" . $swimmer$link . "\">" . $swimmersRowX['MForename'] . " " . $swimmersRowX['MSurname'] . "</a></td>
+        <td><a href=\"" . $swimmerLink . "\">" . $swimmersRowX['MForename'] . " " . $swimmersRowX['MSurname'] . "</a></td>
         <td><a href=\"" . autoUrl('squads/' . $swimmersRowX['SquadID']) . "\">" . $swimmersRowX['SquadName'] . "</a></td>
         <td>" . $DOB . "</td>
         <td>" . $age . "</td>
         <td>" . $ageEoY . "</td>
         <td><a href=\"" . autoUrl('attendance/history/swimmers/' . $swimmersRowX['MemberID']) . "\">" . getAttendanceByID($link, $swimmersRowX['MemberID'], 4) . "%</a></td>
-        <td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $swimmersRowX['ASANumber'] . "\" target=\"_blank\" title=\"ASA Biographical Data\">" . $swimmersRowX['ASANumber'] . " <i class=\"fa fa-external-$link\" aria-hidden=\"true\"></i></a></td>
+        <td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $swimmersRowX['ASANumber'] . "\" target=\"_blank\" title=\"ASA Biographical Data\">" . $swimmersRowX['ASANumber'] . " <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a></td>
       </tr>";
     }
     $output .= '
@@ -65,6 +64,6 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 	echo $output;
 }
 else {
-  echo "Access not allowed";
+  halt(404);
 }
 ?>
