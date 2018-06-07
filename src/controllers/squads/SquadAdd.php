@@ -3,7 +3,7 @@ $title = $pagetitle = "Add a Squad";
 $content = "
 <div class=\"my-3 p-3 bg-white rounded box-shadow\">
 <h2 class=\"border-bottom border-gray pb-2\">Squad Details</h2>
-<form method=\"post\" action=\"addsquad-action\">";
+<form method=\"post\" action=\"" . autoUrl("squads/addsquad") . "\">";
 $content .= "
 <div class=\"form-group\">
   <label for=\"squadName\">Squad Name</label>
@@ -34,4 +34,10 @@ $content .= "
 $content .= "<p class=\"mb-0\"><button class=\"btn btn-outline-dark\" type=\"submit\">Add Squad</button></p>";
 $content .= "</form></div>";
 
+include BASE_PATH . "views/header.php"; ?>
+<div class="container">
+<?php echo "<h1>" . $title . "</h1>";
+echo $content; ?>
+</div>
+<?php include BASE_PATH . "views/footer.php";
 ?>

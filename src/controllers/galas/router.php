@@ -15,7 +15,17 @@ if ($access == "Parent") {
 		include 'galaentries.php';
 	});
 
+	$this->get('/ajax/entryForm', function() {
+		global $link;
+		include BASE_DIR . 'controllers/ajax/galaForm.php';
+	});
+
 	// Gala Entries
+	$this->get('/entries', function() {
+		global $link;
+		include 'parententries.php';
+	});
+
 	$this->get('/entries/{id}', function($id) {
 		global $link;
 		include 'singleentry.php';

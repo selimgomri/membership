@@ -1,4 +1,5 @@
 <?php
+$id = mysqli_real_escape_string($link, $id);
 $squadNameUpdate = $squadFeeUpdate = $squadCoachUpdate = $squadTimetableUpdate = $squadCoCUpdate = "";
 $sql = "SELECT * FROM `squads` WHERE squads.SquadID = '$id';";
 $result = mysqli_query($link, $sql);
@@ -238,5 +239,12 @@ else {
     ";
   }
 }
+
+include BASE_PATH . "views/header.php"; ?>
+<div class="container">
+<?php echo "<h1>" . $title . "</h1>";
+echo $content; ?>
+</div>
+<?php include BASE_PATH . "views/footer.php";
 
 ?>

@@ -1,6 +1,5 @@
 <?php
 
-include_once "../database.php";
 $count = 0;
 $rows = 0;
 $sql = "";
@@ -220,27 +219,6 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
         <small id="feeHelp" class="form-text text-muted">Sadly we can\'t automatically calculate the entry fee for this gala</small>
       </div>';
     }
-    /*
-    $sql = "SELECT * FROM `paymentTypes` ORDER BY `PayTypeName` ASC";
-    $sqlResponse = mysqli_query($link, $sql);
-    $count = mysqli_num_rows($sqlResponse);
-    if ($count > 0) {
-      $response .= '
-      <div class="form-group">
-      <p>Select a payment method</p>';
-        for ($i=0; $i<$count; $i++) {
-          $payRows = mysqli_fetch_array($sqlResponse, MYSQLI_ASSOC);
-          $response .= '
-          <div class="custom-control custom-radio">
-            <input type="radio" id="' . $payRows['PayTypeID'] . '" name="payType" class="custom-control-input">
-            <label class="custom-control-label" for="' . $payRows['PayTypeID'] . '">' . $payRows['PayTypeName'] . '</label>
-          </div>';
-        }
-        $response .= '
-      </div>
-      </div>';
-    }
-    */
 
   }
 
@@ -248,6 +226,6 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
 
 }
 else {
-	echo "ERROR - NO GET";
+	halt(404);
 }
 ?>
