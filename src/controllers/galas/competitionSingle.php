@@ -1,6 +1,6 @@
 <?php
-
-$sql = "SELECT * FROM `galas` WHERE `GalaID` = '$idLast';";
+$id = mysqli_real_escape_string($link, $id);
+$sql = "SELECT * FROM `galas` WHERE `GalaID` = '$id';";
 $result = mysqli_query($link, $sql);
 $count = mysqli_num_rows($result);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -10,7 +10,7 @@ if ($count == 1) {
   $pagetitle = "Edit " . $row['GalaName'];
   $title = "Edit " . $row['GalaName'];
   $content .= "<p class=\"lead\">Edit a Gala</p>";
-  $content .= "<form method=\"post\" action=\"updategala-action\">
+  $content .= "<form method=\"post\">
   <div class=\"form-group row\">
     <label for=\"galaname\" class=\"col-sm-2 col-form-label\">Gala Name</label>
     <div class=\"col-sm-10\">
@@ -111,7 +111,7 @@ if ($count == 1) {
       </div>
     </div>";
   }
-  $content .= "<input type=\"hidden\" value=\"" . $idLast . "\" name=\"galaID\"><p><button class=\"btn btn-outline-dark\" type=\"submit\" id=\"submit\">Update Gala</button></p>
+  $content .= "<input type=\"hidden\" value=\"" . $id . "\" name=\"galaID\"><p><button class=\"btn btn-outline-dark\" type=\"submit\" id=\"submit\">Update Gala</button></p>
   ";
 }
 else {
@@ -119,4 +119,11 @@ else {
   $title = "No galas found";
   $content = "<p class=\"lead\">Try going <a href=\"" . autoUrl('galas/competitions') . "\">back to competitions</a>.</p>";
 }
+include BASE_PATH . "views/header.php";
+include "galaMenu.php"; ?>
+<div class="container">
+<?php echo "<h1>" . $title . "</h1>";
+echo $content; ?>
+</div>
+<?php include BASE_PATH . "views/footer.php";
 ?>

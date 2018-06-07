@@ -1,14 +1,13 @@
 <?php
-include_once "../database.php";
 $access = $_SESSION['AccessLevel'];
 $count = 0;
 if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $access == "Galas") {
   $sql = "";
-  if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["search"]))) {
+  if ((isset($_POST["galaID"])) && (isset($_POST["search"]))) {
     // get the galaID parameter from request
-    $galaID = mysqli_real_escape_string($link, $_REQUEST["galaID"]);
+    $galaID = mysqli_real_escape_string($link, $_POST["galaID"]);
     // get the search term parameter from request
-    $search = mysqli_real_escape_string($link, $_REQUEST["search"]);
+    $search = mysqli_real_escape_string($link, $_POST["search"]);
 
     // Search the database for the results
     if ($galaID == "allGalas") {
@@ -18,23 +17,23 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) AND galas.GalaID = '$galaID' AND members.MSurname LIKE '%$search%';";
     }
   }
-  elseif ((!isset($_REQUEST["galaID"])) && (isset($_REQUEST["search"]))) {
+  /*elseif ((!isset($_POST["galaID"])) && (isset($_POST["search"]))) {
     // get the search term parameter from request
-    $search = mysqli_real_escape_string($link, $_REQUEST["search"]);
+    $search = mysqli_real_escape_string($link, $_POST["search"]);
 
     // Search the database for the results
     $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) AND members.MSurname LIKE '%$search%';";
   }
-  elseif ((isset($_REQUEST["galaID"])) && (!isset($_REQUEST["search"]))) {
+  elseif ((isset($_POST["galaID"])) && (!isset($_POST["search"]))) {
     // get the search term parameter from request
-    $galaID = mysqli_real_escape_string($link, $_REQUEST["galaID"]);
+    $galaID = mysqli_real_escape_string($link, $_POST["galaID"]);
 
     // Search the database for the results
     $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) AND galas.GalaID = '$galaID';";
-  }
+  }*/
   else {
     // Error
-    echo "<p>Disaster. The GET request was funny, so try again.</p>";
+    halt(500);
   }
 
   if ($galaID == "Select a gala") {
@@ -124,6 +123,6 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
   }
 }
 else {
-  echo "Access not allowed";
+  halt(403);
 }
 ?>

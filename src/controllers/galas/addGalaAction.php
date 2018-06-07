@@ -64,7 +64,8 @@ if ($added) {
   $content .= "<p><a href=\"../galas\" class=\"btn btn-outline-dark\">Return to Galas</a> <a href=\"addgala\" class=\"btn btn-outline-dark\">Add another</a></p>";
 
   // Send tweets via twitter
-  require_once BASE_DIR . 'vendor/dg/twitter-php/src/twitter.class.php';
+  // Get config for authentication data
+  require_once BASE_DIR . 'config.php';
   // ENTER HERE YOUR CREDENTIALS (see readme.txt)
   $twitter = new Twitter($twitterConsumerKey, $twitterConsumerSecret, $twitterAccessToken, $twitterAccessTokenSecret);
   try {

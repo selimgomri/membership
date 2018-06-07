@@ -1,9 +1,13 @@
 <?php
+$id = mysqli_real_escape_string($link, $id);
 $content = "";
 $galaID = $galaName = $courseLength = $galaVenue = $closingDate = $galaDate = $galaFeeConstant = $galaFee = $hyTek = "";
 
 if (!empty($_POST['galaID'])) {
   $galaID = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['galaID'])));
+  if ($galaID != $id) {
+    halt(500);
+  }
 }
 if (!empty($_POST['galaname'])) {
   $galaName = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['galaname'])));
@@ -45,4 +49,11 @@ else {
   $pagetitle = $title = "An error occurred";
   $content = "<div class=\"alert alert-warning\"><strong>An error occurred</strong> <br>We could not edit this gala.</div>";
 }
+include BASE_PATH . "views/header.php";
+include "galaMenu.php"; ?>
+<div class="container">
+<?php echo "<h1>" . $title . "</h1>";
+echo $content; ?>
+</div>
+<?php include BASE_PATH . "views/footer.php";
 ?>

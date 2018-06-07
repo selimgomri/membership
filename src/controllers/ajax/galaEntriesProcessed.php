@@ -1,5 +1,4 @@
 <?php
-include_once "../database.php";
 $access = $_SESSION['AccessLevel'];
 if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $access == "Galas") {
 	if ((isset($_POST["processedID"])) && (isset($_POST["clickedItemChecked"])) && (isset($_POST["verify"]))) {

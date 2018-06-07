@@ -62,10 +62,11 @@ function getResult() {
         window.history.pushState("string", "Title", "' . autoUrl("galas/entries/filter/") . '?galaID=" + galaValue + "&search=" + searchValue);
       }
     }
-    var ajaxRequest = "' . autoURL("ajax/galaEntries.php") . '?galaID=" + galaValue + "&search=" + searchValue;
-    console.log(ajaxRequest);
-    xmlhttp.open("GET", ajaxRequest, true);
-    xmlhttp.send();
+    xmlhttp.open("POST", "' . autoURL("galas/ajax/entries") . '", true);
+    console.log("POST", "' . autoURL("galas/ajax/entries") . '", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send("galaID=" + galaValue + "&search=" + searchValue);
+    console.log("Sent");
 }
 // Call on page load
 getResult();
@@ -102,12 +103,21 @@ function markProcessed(clickedItem, clickedItemChecked) {
       document.getElementById(clickedItem).innerHTML = "WORKED"/*this.responseText*/;
     }
   };
-  xhttp.open("POST", "' . autoUrl("ajax/galaEntriesProcessed.php") . '", true);
-  console.log("POST", "' . autoUrl("ajax/galaEntriesProcessed.php") . '", true);
+  xhttp.open("POST", "' . autoUrl("galas/ajax/entryProcessed") . '", true);
+  console.log("POST", "' . autoUrl("galas/ajax/entryProcessed") . '", true);
   xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhttp.send("processedID=" + clickedItem + "&clickedItemChecked=" + clickedItemChecked + "&verify=markProcessed");
   console.log("processedID=" + clickedItem + "&clickedItemChecked=" + clickedItemChecked + "&verify=markProcessed")
   console.log("Sent");
 }
 </script>';
+
+include BASE_PATH . "views/header.php";
+include "galaMenu.php"; ?>
+<div class="container">
+<?php echo "<h1>" . $title . "</h1>";
+echo $content; ?>
+</div>
+<?php include BASE_PATH . "views/footer.php";
+
 ?>

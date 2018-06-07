@@ -2,7 +2,7 @@
 $pagetitle = "Add a Gala";
 $title = "Add a Gala for Entries";
 $content = "<p class=\"lead\">Add a Gala for entries to be made.</p>";
-$content = "<form method=\"post\" action=\"addgala-action\">
+$content = "<form method=\"post\" action=\"" . autoUrl("galas/addgala") . "\">
 <div class=\"form-group row\">
   <label for=\"galaname\" class=\"col-sm-2 col-form-label\">Gala Name</label>
   <div class=\"col-sm-10\">
