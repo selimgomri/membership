@@ -1,6 +1,6 @@
 <?php
 
-$id = $idLast;
+$id = mysqli_real_escape_string($link, $id);
 
 $sql = "SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SessionID` = '$id';";
 $result = mysqli_query($link, $sql);
@@ -81,8 +81,8 @@ if ($sessionCount == 1) {
 				document.getElementById("successAlert").innerHTML = \'<div class="alert alert-danger"><strong>We failed to update that properly</strong> <br>Please reload the page and try again</div>\';
 			}
 	  };
-	  xhttp.open("POST", "' . autoUrl("ajax/sessionsEndDate.php") . '", true);
-	  console.log("POST", "' . autoUrl("ajax/sessionsEndDate.php") . '", true);
+	  xhttp.open("POST", "' . autoUrl("attendance/sessions/ajax/endDateHandler") . '", true);
+	  console.log("POST", "' . autoUrl("attendance/sessions/ajax/endDateHandler") . '", true);
 	  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	  xhttp.send("sessionID=' . $row['SessionID'] . '&sessionEndDate=" + dateValue);
 	  console.log("sessionID=' . $row['SessionID'] . '&sessionEndDate=" + dateValue);
@@ -91,6 +91,12 @@ if ($sessionCount == 1) {
 	</script>';
 }
 else {
-	//break;
-	echo "BROKE";
+	halt(500);
 }
+include BASE_PATH . "views/header.php";
+include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
+<div class="container">
+<?php echo "<h1>" . $title . "</h1>";
+echo $content; ?>
+</div>
+<?php include BASE_PATH . "views/footer.php";

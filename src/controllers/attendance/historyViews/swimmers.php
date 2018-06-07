@@ -60,7 +60,7 @@ function getResult() {
         window.history.pushState("string", "Title", "' . autoUrl("attendance/history/swimmers") . '?squadID=" + squadValue + "&search=" + searchValue);
       }
     }
-    xhttp.open("POST", "' . autoURL("ajax/swimmerHistory.php") . '", true);
+    xhttp.open("POST", "' . autoURL("attendance/history/ajax/swimmers") . '", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("squadID=" + squadValue + "&search=" + searchValue);
     console.log("Sent");

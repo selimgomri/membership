@@ -1,5 +1,5 @@
 <?php
-include_once "../database.php";
+
 $access = $_SESSION['AccessLevel'];
 $count = 0;
 if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $access == "Galas") {

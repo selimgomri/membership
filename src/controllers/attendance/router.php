@@ -30,7 +30,22 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 
     $this->get('/', function() {
       global $link;
-      include "historyViews/history.php";
+      include "sessions.php";
+  	});
+
+    $this->get('/{id}:int', function($id) {
+      global $link;
+      include "sessionViews/editEndDate.php";
+  	});
+
+    $this->post('/ajax/handler', function() {
+      global $link;
+      include BASE_PATH . "controllers/ajax/sessions.php";
+  	});
+
+    $this->post('/ajax/endDateHandler', function() {
+      global $link;
+      include BASE_PATH . "controllers/ajax/sessionsEndDate.php";
   	});
   });
 
@@ -56,6 +71,11 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
     $this->get('/swimmers', function() {
       global $link;
       include "historyViews/swimmers.php";
+  	});
+
+    $this->post('/ajax/swimmers', function() {
+      global $link;
+      include BASE_PATH . "controllers/ajax/swimmerHistory.php";
   	});
 
     $this->get('/swimmers/{id}:int', function($id) {

@@ -54,7 +54,7 @@ $content .= '
             console.log(this.responseText);
           }
         }
-        sessAjax.open("POST", "' . autoURL("ajax/sessions.php") . '", true);
+        sessAjax.open("POST", "' . autoURL("attendance/sessions/ajax/handler") . '", true);
         sessAjax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         sessAjax.send("action=getSessions&squadID=" + squadValue);
         console.log("Sent");
@@ -116,7 +116,7 @@ $content .= '
     			console.log(this.responseText);
     		}
       }
-  		sessAjax.open("POST", "' . autoURL("ajax/sessions.php") . '", true);
+  		sessAjax.open("POST", "' . autoURL("attendance/sessions/ajax/handler") . '", true);
   		sessAjax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   		sessAjax.send("action=addSession&squadID=" + squadValue + "&sessionName=" + sessionNameValue + "&venueID=" + sessionVenueValue + "&sessionDay=" + sessionDayValue + "&startTime=" + sessionStartValue + "&endTime=" + sessionEndValue + "&newSessionMS=" + mainSequenceValue + "&newSessionStartDate=" + startDateValue + "&newSessionEndDate=" + endDateValue);
   		console.log("Sent");
@@ -124,4 +124,11 @@ $content .= '
     }
   document.getElementById("squad").onchange=getSessions;
 </script>';
+include BASE_PATH . "views/header.php";
+include "attendanceMenu.php"; ?>
+<div class="container">
+<?php echo "<h1>" . $title . "</h1>";
+echo $content; ?>
+</div>
+<?php include BASE_PATH . "views/footer.php";
 ?>

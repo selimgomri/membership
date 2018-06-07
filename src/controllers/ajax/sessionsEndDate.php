@@ -1,5 +1,5 @@
 <?php
-include_once "../database.php";
+
 $access = $_SESSION['AccessLevel'];
 if ($access == "Committee" || $access == "Admin") {
 	if ((isset($_POST["sessionID"])) && (isset($_POST["sessionEndDate"]))) {
