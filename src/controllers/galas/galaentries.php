@@ -5,6 +5,7 @@ $sql = "SELECT `MemberID` FROM `members` WHERE `members`.`UserID` = '$userID';";
 $result = mysqli_query($link, $sql);
 $swimCount = mysqli_num_rows($result);
 include BASE_PATH . "views/header.php";
+include "galaMenu.php";
 ?>
 <div class="container">
   <h2>Enter a gala</h2>
@@ -91,7 +92,7 @@ include BASE_PATH . "views/header.php";
                 console.log(this.responseText);
               }
             }
-            var ajaxRequest = "<?php echo autoURL('ajax/galaForm.php'); ?>?galaID=" + galaValue + "&swimmer=" + swimmerValue;
+            var ajaxRequest = "<?php echo autoURL('galas/ajax/entryForm'); ?>?galaID=" + galaValue + "&swimmer=" + swimmerValue;
             console.log(ajaxRequest);
             xmlhttp.open("GET", ajaxRequest, true);
             xmlhttp.send();
@@ -107,7 +108,7 @@ include BASE_PATH . "views/header.php";
   else { ?>
     <div class="alert alert-warning">
       <strong>You don't have any swimmers associated with your account</strong> <br>
-      Please <a href="<?php echo autoUrl("myaccount/add-swimmer.php"); ?>" class="alert-link">add some swimmers in My Account</a>, then try again
+      Please <a href="<?php echo autoUrl("myaccount/addswimmer"); ?>" class="alert-link">add some swimmers in My Account</a>, then try again
     </div>
   <?php } ?>
 </div>

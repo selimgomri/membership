@@ -4,6 +4,7 @@ $userID = $_SESSION['UserID'];
 
 $pagetitle = "Galas";
 include BASE_PATH . "views/header.php";
+include "galaMenu.php";
 ?>
 <div class="container">
   <h1>Galas</h1>

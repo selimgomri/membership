@@ -17,7 +17,8 @@ if ($_SESSION['AccessLevel'] == "Parent") {
       $rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 2, "Butterfly", null, 2, "Freestyle", null, 2, "Individual Medley", null, null, 2];
 
       $pagetitle = $row['MForename'] . " " . $row['MSurname'] . " - " . $row['GalaName'] . "";
-      include BASE_PATH . "views/header.php"; ?>
+      include BASE_PATH . "views/header.php";
+      include "galaMenu.php"; ?>
       <div class="container">
       <h1><?php echo $row['MForename'] . " " . $row['MSurname']; ?></h1>
       <p class="lead">For <?php echo $row['GalaName']; ?>, Closing Date: <?php echo date('j F Y', strtotime($row['ClosingDate'])); ?></p>

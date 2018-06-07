@@ -1,7 +1,8 @@
 <?php
 
 $pagetitle = "Galas";
-include BASE_PATH . "views/header.php"; ?>
+include BASE_PATH . "views/header.php";
+include "galaMenu.php"; ?>
 <div class="container">
   <h1>Galas</h1>
   <p class="lead">Galas which are open for entries, or have closed. Galas in the past are not shown.</p>

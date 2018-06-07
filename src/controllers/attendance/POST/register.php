@@ -40,7 +40,7 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 		$sql = "INSERT INTO `sessionsAttendance` (WeekID, MemberID, SessionID, AttendanceBoolean) VALUES " . $values . ";";
 		if (mysqli_query($link, $sql)) {
 			// Return info page
-			$return = "<strong>Successfully saved the session register</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-$link\">mms@chesterlestreetasc.co.uk</a>";
+			$return = "<strong>Successfully saved the session register</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-link\">mms@chesterlestreetasc.co.uk</a>";
 			$_SESSION['return'] = $return;
 		}
 	}
@@ -55,7 +55,7 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 			$sql = "UPDATE `sessionsAttendance` SET AttendanceBoolean = '$attendance' WHERE MemberID = " . $row['MemberID'] . " AND WeekID = '$weekBeginningID' AND SessionID = '$sessionID';";
 			mysqli_query($link, $sql);
 				// Return info page
-				//$return = "<strong>Successfully saved the session register</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-$link\">mms@chesterlestreetasc.co.uk</a>";
+				//$return = "<strong>Successfully saved the session register</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-link\">mms@chesterlestreetasc.co.uk</a>";
 				//$_SESSION['return'] = $return;
 		}
 		$duplicateReg = true;
@@ -68,7 +68,7 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 
 }
 else {
-	$return = "<p><strong>An Error Occurred</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-$link\">mms@chesterlestreetasc.co.uk</a></p>";
+	$return = "<p><strong>An Error Occurred</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-link\">mms@chesterlestreetasc.co.uk</a></p>";
 	$_SESSION['return'] = $return;
 }
 header("Location: " . autoUrl("attendance/register"));

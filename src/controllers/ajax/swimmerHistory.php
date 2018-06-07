@@ -36,12 +36,12 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $resultX = mysqli_query($link, $sql);
     for ($i = 0; $i < $swimmerCount; $i++) {
       $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
-      $swimmer$link = autoUrl("attendance/history/swimmers/" . $swimmersRowX['MemberID'] . "");
+      $swimmerLink = autoUrl("attendance/history/swimmers/" . $swimmersRowX['MemberID'] . "");
       $DOB = date('j F Y', strtotime($swimmersRowX['DateOfBirth']));
       $age = date_diff(date_create($swimmersRowX['DateOfBirth']), date_create('today'))->y;
       $ageEoY = date('Y') - date('Y', strtotime($swimmersRowX['DateOfBirth']));
       $output .= "<tr>
-        <td><a href=\"" . $swimmer$link . "\">" . $swimmersRowX['MForename'] . " " . $swimmersRowX['MSurname'] . "</a></td>
+        <td><a href=\"" . $swimmerLink . "\">" . $swimmersRowX['MForename'] . " " . $swimmersRowX['MSurname'] . "</a></td>
         <td>" . $swimmersRowX['SquadName'] . "</td>
         <td>" . getAttendanceByID($link, $swimmersRowX['MemberID'], 4) . "%</td>
       </tr>";

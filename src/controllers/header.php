@@ -206,12 +206,12 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
     	</div>
     </div>
   	<hr>-->
-      <!--[if !IE]><div class="alert alert-danger"><strong>Unsupported Browser</strong><br>You're using an unsupported browser and this website may not work properly with it. <a href="http://browsehappy.com/" class="alert-$link" target="_blank">Upgrade your browser today <i class="fa fa-external-$link" aria-hidden="true"></i> </a> or <a href="https://www.google.com/chrome/browser/desktop/index.html" class="alert-$link" target="_blank">install Google Chrome <i class="fa fa-external-$link" aria-hidden="true"></i> </a> to better experience this site.</p></div><hr><![endif]-->
+      <!--[if !IE]><div class="alert alert-danger"><strong>Unsupported Browser</strong><br>You're using an unsupported browser and this website may not work properly with it. <a href="http://browsehappy.com/" class="alert-link" target="_blank">Upgrade your browser today <i class="fa fa-external-$link" aria-hidden="true"></i> </a> or <a href="https://www.google.com/chrome/browser/desktop/index.html" class="alert-link" target="_blank">install Google Chrome <i class="fa fa-external-$link" aria-hidden="true"></i> </a> to better experience this site.</p></div><hr><![endif]-->
       <noscript>
       <div class="alert alert-danger">
         <p class="mb-0"><strong>JavaScript is disabled or not supported</strong>
   		  <br>
-  		  It looks like you've got JavaScript disabled or your browser does not support it. JavaScript is essential for our website to properly so we recommend you enable it or upgrade to a browser which supports it as soon as possible. <a href="http://browsehappy.com/" class="alert-$link" target="_blank">Upgrade your browser today <i class="fa fa-external-$link" aria-hidden="true"></i></a></p>
+  		  It looks like you've got JavaScript disabled or your browser does not support it. JavaScript is essential for our website to properly so we recommend you enable it or upgrade to a browser which supports it as soon as possible. <a href="http://browsehappy.com/" class="alert-link" target="_blank">Upgrade your browser today <i class="fa fa-external-$link" aria-hidden="true"></i></a></p>
       </div>
       <hr>
     </noscript>

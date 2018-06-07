@@ -71,7 +71,8 @@ $content = "<form method=\"post\" action=\"addgala-action\">
 <p>If you add this gala, it will immediately be available for parents to enter</p>
 ";
 
-include BASE_PATH . "views/header.php"; ?>
+include BASE_PATH . "views/header.php";
+include "galaMenu.php"; ?>
 <div class="container">
 <?php echo "<h1>" . $title . "</h1>";
 echo $content; ?>

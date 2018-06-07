@@ -78,4 +78,11 @@ else {
   $content = "<div class=\"alert alert-warning\"><strong>An error occurred</strong> <br>We could not add your gala.</div>";
   $content .= "<p><a href=\"../galas\" class=\"btn btn-outline-dark\">Return to Galas</a> <a href=\"addgala\" class=\"btn btn-outline-dark\">Try again</a></p>";
 }
+include BASE_PATH . "views/header.php";
+include "galaMenu.php"; ?>
+<div class="container">
+<?php echo "<h1>" . $title . "</h1>";
+echo $content; ?>
+</div>
+<?php include BASE_PATH . "views/footer.php";
 ?>

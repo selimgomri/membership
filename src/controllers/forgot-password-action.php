@@ -112,7 +112,7 @@
           <div class="col-sm-6 col-md-5 col-lg4">
             <div class="alert alert-success">
               <strong>We found your account and have reset your password</strong>
-              <p class="mb-2">Check your email account for your password, <a href="login.php" class="alert-$link">then login</a>.</p>
+              <p class="mb-2">Check your email account for your password, <a href="login.php" class="alert-link">then login</a>.</p>
               <p class="mb-0">Reset your password as soon as possible.</p>
             </div>
           </div>
@@ -128,8 +128,8 @@
           <div class="col-sm-6 col-md-5 col-lg4">
             <div class="alert alert-warning">
               <strong>We did not find an account using those details</strong>
-              <p>If you do not have an account, <a href="register.php" class="alert-$link">register an account</a></p>
-              <p>Or, <a href="forgot-password.php" class="alert-$link">try again</a></p>
+              <p>If you do not have an account, <a href="register.php" class="alert-link">register an account</a></p>
+              <p>Or, <a href="forgot-password.php" class="alert-link">try again</a></p>
             </div>
           </div>
         </div>

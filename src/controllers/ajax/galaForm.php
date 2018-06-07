@@ -19,7 +19,7 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
     $response = '<div class="alert alert-warning"><strong>Oops. You\'ve aleady entered this swimmer into this gala</strong> <br>
     You might want to check that. ';
     if ($row['EntryProcessed'] == 0) {
-      $response .= 'We\'ve not processed your entry yet, so you <a class="alert-$link" href="' . autoUrl("galas/entries/" . $row["EntryID"]) . '">can edit that entry</a> if you need to make changes.';
+      $response .= 'We\'ve not processed your entry yet, so you <a class="alert-link" href="' . autoUrl("galas/entries/" . $row["EntryID"]) . '">can edit that entry</a> if you need to make changes.';
     }
     $response .= '</div>';
   }
