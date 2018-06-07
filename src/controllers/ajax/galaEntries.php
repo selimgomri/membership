@@ -3,11 +3,11 @@ $access = $_SESSION['AccessLevel'];
 $count = 0;
 if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $access == "Galas") {
   $sql = "";
-  if ((isset($_POST["galaID"])) && (isset($_POST["search"]))) {
+  if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["search"]))) {
     // get the galaID parameter from request
-    $galaID = mysqli_real_escape_string($link, $_POST["galaID"]);
+    $galaID = mysqli_real_escape_string($link, $_REQUEST["galaID"]);
     // get the search term parameter from request
-    $search = mysqli_real_escape_string($link, $_POST["search"]);
+    $search = mysqli_real_escape_string($link, $_REQUEST["search"]);
 
     // Search the database for the results
     if ($galaID == "allGalas") {
@@ -17,23 +17,23 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) AND galas.GalaID = '$galaID' AND members.MSurname LIKE '%$search%';";
     }
   }
-  /*elseif ((!isset($_POST["galaID"])) && (isset($_POST["search"]))) {
+  elseif ((!isset($_REQUEST["galaID"])) && (isset($_REQUEST["search"]))) {
     // get the search term parameter from request
-    $search = mysqli_real_escape_string($link, $_POST["search"]);
+    $search = mysqli_real_escape_string($link, $_REQUEST["search"]);
 
     // Search the database for the results
     $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) AND members.MSurname LIKE '%$search%';";
   }
-  elseif ((isset($_POST["galaID"])) && (!isset($_POST["search"]))) {
+  elseif ((isset($_REQUEST["galaID"])) && (!isset($_REQUEST["search"]))) {
     // get the search term parameter from request
-    $galaID = mysqli_real_escape_string($link, $_POST["galaID"]);
+    $galaID = mysqli_real_escape_string($link, $_REQUEST["galaID"]);
 
     // Search the database for the results
     $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) AND galas.GalaID = '$galaID';";
-  }*/
+  }
   else {
     // Error
-    halt(500);
+    halt(404);
   }
 
   if ($galaID == "Select a gala") {
@@ -59,7 +59,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       }
 
       // First part of the row content
-      $content .= "<tr><td><strong>" . $row['MForename'] . " " . $row['MSurname']  . "</strong>" . $hyTekPrintDate . "<br><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $row['ASANumber'] . "\" target=\"_blank\" title=\"Click to see times\">" . $row['ASANumber'] . " <i class=\"fa fa-external-$link\" aria-hidden=\"true\"></i></a><br>
+      $content .= "<tr><td><strong>" . $row['MForename'] . " " . $row['MSurname']  . "</strong>" . $hyTekPrintDate . "<br><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $row['ASANumber'] . "\" target=\"_blank\" title=\"Click to see times\">" . $row['ASANumber'] . " <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a><br>
       <span class=\"small\">" . $row['GalaName'] . "<br><a href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a></span></td>";
 
       // Arrays of swims used to check whever to print the name of the swim entered
@@ -123,6 +123,6 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
   }
 }
 else {
-  halt(403);
+  halt(404);
 }
 ?>

@@ -19,4 +19,9 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 		global $link;
 		include 'user.php';
 	});
+
+	$this->post('/ajax/userSettings/{id}:int', function($id) {
+		global $link;
+		include 'userSettingsAjax.php';
+	});
 }

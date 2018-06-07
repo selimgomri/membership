@@ -17,7 +17,12 @@ if ($access == "Parent") {
 
 	$this->get('/ajax/entryForm', function() {
 		global $link;
-		include BASE_DIR . 'controllers/ajax/galaForm.php';
+		include BASE_PATH . "controllers/ajax/galaForm.php";
+	});
+
+	$this->post('/entergala', function() {
+		global $link;
+		include 'galaentriesaction.php';
 	});
 
 	// Gala Entries
@@ -30,8 +35,13 @@ if ($access == "Parent") {
 		global $link;
 		include 'singleentry.php';
 	});
+
+	$this->post('/entries/{id}', function($id) {
+		global $link;
+		include 'entriesSingleaction.php';
+	});
 }
-else if ($access == "Galas" || $access == "Committee" || $access == "Admin") {
+else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $access == "Coach") {
 	// Gala Home
 	$this->get(['/', '/competitions'], function() {
 		global $link;
@@ -61,29 +71,30 @@ else if ($access == "Galas" || $access == "Committee" || $access == "Admin") {
 	});
 
 	// Gala Entries
-	$this->get('/entries/{id}', function($id) {
+	$this->get('/entries/{id}:int', function($id) {
 		global $link;
 		include 'singleentry.php';
 	});
 
+	$this->post('/entries/{id}:int', function($id) {
+		global $link;
+		include 'entriesSingleaction.php';
+	});
+
 	// Gala Entries
-	$this->get(['/entries', 'entries/filter'], function() {
+	$this->get('/entries', function() {
 		global $link;
 		include 'allEntries.php';
 	});
 
-	$this->any('/ajax/entries', function() {
+	$this->get('/ajax/entries', function() {
 		global $link;
-		try {
-			require BASE_DIR . 'controllers/ajax/GalaEntries.php';
-		} catch (Exception $e) {
-			halt(404);
-		}
+		require BASE_PATH . 'controllers/ajax/GalaEntries.php';
 	});
 
 	$this->post('/ajax/entryProcessed', function() {
 		global $link;
-		include BASE_DIR . 'controllers/ajax/galaEntriesProcessed.php';
+		include BASE_PATH . 'controllers/ajax/galaEntriesProcessed.php';
 	});
 
 	$this->get('/entries/{id}', function($id) {

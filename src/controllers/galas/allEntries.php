@@ -59,14 +59,13 @@ function getResult() {
         console.log("We got here");
         document.getElementById("output").innerHTML = this.responseText;
         console.log(this.responseText);
-        window.history.pushState("string", "Title", "' . autoUrl("galas/entries/filter/") . '?galaID=" + galaValue + "&search=" + searchValue);
+        window.history.pushState("string", "Title", "' . autoUrl("galas/entries") . '?galaID=" + galaValue + "&search=" + searchValue);
       }
     }
-    xmlhttp.open("POST", "' . autoURL("galas/ajax/entries") . '", true);
-    console.log("POST", "' . autoURL("galas/ajax/entries") . '", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send("galaID=" + galaValue + "&search=" + searchValue);
-    console.log("Sent");
+    var ajaxRequest = "' . autoURL("galas/ajax/entries") . '?galaID=" + galaValue + "&search=" + searchValue;
+    console.log(ajaxRequest);
+    xmlhttp.open("GET", ajaxRequest, true);
+    xmlhttp.send();
 }
 // Call on page load
 getResult();

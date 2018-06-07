@@ -39,7 +39,7 @@ function getResult() {
         console.log("We got here");
         document.getElementById("output").innerHTML = this.responseText;
         console.log(this.responseText);
-        window.history.pushState("string", "Title", "<?php echo autoUrl("users/filter/"); ?>?search=" + searchValue);
+        window.history.pushState("string", "Title", "<?php echo autoUrl("users"); ?>?search=" + searchValue);
       }
     }
     xhttp.open("POST", "<?php echo autoURL("users/ajax/userList"); ?>", true);

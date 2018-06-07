@@ -38,8 +38,33 @@ function getUserInfoByID($db, $id) {
 		<div class="media pt-3">
 			<p class="media-body mb-0 lh-125">
 				<strong class="d-block text-gray-dark">Account Type</strong>
-				' . $row['AccessLevel'] . '
-			</p>
+			</p>';
+				$par = $coa = $com = $gal = $adm = "";
+				if ($row['AccessLevel'] == "Coach") {
+					$coa = "selected";
+				} else if ($row['AccessLevel'] == "Committee") {
+					$com = "selected";
+				} else if ($row['AccessLevel'] == "Galas") {
+					$gal = "selected";
+				} else if ($row['AccessLevel'] == "Admin") {
+					$adm = "selected";
+				} else {
+					$par = "selected";
+				}
+				$output .= '<div class="input-group mt-2 mb-0">
+			  <div class="input-group-prepend">
+			    <label class="input-group-text" for="accountType">Type</label>
+			  </div>
+			  <select class="custom-select" id="accountType" name="accountType">
+			    <option ' . $par . ' value="Parent">Parent (Default)</option>
+			    <option ' . $coa . ' value="Coach">Coach</option>
+			    <option ' . $com . ' value="Committee">General Committee Member</option>
+					<option ' . $gal . ' value="Galas">Galas</option>
+					<option ' . $adm . ' value="Admin">Admin</option>
+			  </select>
+			</div>
+			<div id="accountTypeOutput">
+			</div>
 		</div>
 	</div>
 	<div class="my-3 p-3 bg-white rounded box-shadow">
@@ -57,6 +82,27 @@ function getUserInfoByID($db, $id) {
 			</p>
 		</div>
 	</div>
+	<script>
+	function apply() {
+	  var type = document.getElementById("accountType");
+	  var typeValue = type.value;
+	  console.log(typeValue);
+	    var xhttp = new XMLHttpRequest();
+	    xhttp.onreadystatechange = function() {
+	      if (this.readyState == 4 && this.status == 200) {
+	        console.log("We got here");
+	        document.getElementById("accountTypeOutput").innerHTML = this.responseText;
+	        console.log(this.responseText);
+	      }
+	    }
+	    xhttp.open("POST", "' . autoURL("users/ajax/userSettings/" . $id) . '", true);
+	    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	    xhttp.send("accountType=" + typeValue);
+	    console.log("Sent");
+	}
+
+	document.getElementById("accountType").onchange=apply;
+	</script>
 	';
 	return $output;
 }
