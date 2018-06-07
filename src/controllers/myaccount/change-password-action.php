@@ -18,9 +18,9 @@
     $newHash = password_hash($password1, PASSWORD_BCRYPT);
     $sql = "UPDATE `users` SET `Password` = '$newHash' WHERE `UserID` = '$userID'";
     mysqli_query($link, $sql);
-    header("Location: index.php");
+    header("Location: " . autoUrl("myaccount"));
   }
   else {
-    echo "Error";
+    header("Location: " . autoUrl("myaccount/password"));
   }
 ?>

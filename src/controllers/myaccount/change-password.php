@@ -4,7 +4,7 @@
 ?>
 <div class="container">
 <h1>Change your password</h1>
-<form method="post" action="change-password-action.php">
+<form method="post" action="password">
   <div class="form-group">
       <label for="current">Confirm Current Password</label>
       <input type="password" class="form-control" name="current" id="current" placeholder="Current Password">
