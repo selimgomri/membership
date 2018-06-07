@@ -5,7 +5,7 @@ $content = "<p class=\"lead\">View attendance records and fill out registers for
 
 $content .= '
 <div class="my-3 p-3 bg-white rounded box-shadow">
-	<h2 class="border-bottom border-gray pb-2 mb-0">Attendance Quick $links</h2>
+	<h2 class="border-bottom border-gray pb-2 mb-0">Attendance Quick Links</h2>
 	<div class="media text-muted pt-3">
 		<p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
 			<a href="' . autoUrl("attendance/register") . '"><strong class="d-block text-gray-dark">Take a Register</strong></a>
@@ -29,3 +29,10 @@ $content .= '
 	</span>
 </div>
 ';
+include BASE_PATH . "views/header.php";
+include "attendanceMenu.php"; ?>
+<div class="container">
+<?php echo "<h1>" . $title . "</h1>";
+echo $content; ?>
+</div>
+<?php include BASE_PATH . "views/footer.php";

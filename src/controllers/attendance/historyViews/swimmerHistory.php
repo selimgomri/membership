@@ -1,6 +1,6 @@
 <?php
 
-$id = $idLast;
+$id = mysqli_real_escape_string($link, $id);
 
 // Get the last four weeks to calculate attendance
 $sql = "SELECT `WeekID` FROM `sessionsWeek` ORDER BY `WeekDateBeginning` DESC LIMIT 20;";
@@ -115,3 +115,11 @@ $content .= '
 		</tbody>
 	</table>
 </div>';
+
+include BASE_PATH . "views/header.php";
+include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
+<div class="container">
+<?php echo "<h1>" . $title . "</h1>";
+echo $content; ?>
+</div>
+<?php include BASE_PATH . "views/footer.php";

@@ -57,7 +57,7 @@ function getResult() {
         console.log("We got here");
         document.getElementById("output").innerHTML = this.responseText;
         console.log(this.responseText);
-        window.history.pushState("string", "Title", "' . autoUrl("attendance/history/swimmers/filter/") . '?squadID=" + squadValue + "&search=" + searchValue);
+        window.history.pushState("string", "Title", "' . autoUrl("attendance/history/swimmers") . '?squadID=" + squadValue + "&search=" + searchValue);
       }
     }
     xhttp.open("POST", "' . autoURL("ajax/swimmerHistory.php") . '", true);
@@ -71,4 +71,12 @@ getResult();
 document.getElementById("squad").onchange=getResult;
 document.getElementById("search").oninput=getResult;
 </script>';
+
+include BASE_PATH . "views/header.php";
+include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
+<div class="container">
+<?php echo "<h1>" . $title . "</h1>";
+echo $content; ?>
+</div>
+<?php include BASE_PATH . "views/footer.php";
 ?>

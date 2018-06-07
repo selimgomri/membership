@@ -1,5 +1,4 @@
 <?php
-include_once "../database.php";
 $access = $_SESSION['AccessLevel'];
 $swimmerCount = 0;
 
@@ -194,5 +193,8 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
     }
   }
 
+}
+else {
+  halt(404);
 }
 ?>

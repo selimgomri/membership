@@ -3,8 +3,11 @@ if (isset($_SESSION['return'])) {
   $content .= '<div class="alert alert-success">' . $_SESSION['return'] . '</div>';
   unset($_SESSION['return']);
 }
+$pagetitle = "Register";
+$title = "Register";
+$content = "<p class=\"lead\">Take the register for your Squad</p>";
 $content .= '
-<form method="post" action="register.post">
+<form method="post">
 <div class="my-3 p-3 bg-white rounded box-shadow">
   <h2 class="border-bottom border-gray pb-2">Select Session</h2>
   <div class="form-group">
@@ -93,7 +96,7 @@ $content .= '
             resetRegisterArea();
           }
         }
-      xmlhttp.open("GET", "../ajax/registerSessions.php?squadID=" + value, true);
+      xmlhttp.open("GET", "' . autoUrl("attendance/ajax/register/sessions") . '?squadID=" + value, true);
       xmlhttp.send();
       }
     }
@@ -117,10 +120,16 @@ $content .= '
             console.log(this.responseText);
           }
         }
-      xmlhttp.open("GET", "../ajax/registerSessions.php?sessionID=" + value + "&date=" + dateValue, true);
+      xmlhttp.open("GET", "' . autoUrl("attendance/ajax/register/sessions") . '?sessionID=" + value + "&date=" + dateValue, true);
       xmlhttp.send();
       }
     }
   document.getElementById("session").onchange=getRegister;
   </script>';
-?>
+include BASE_PATH . "views/header.php";
+include "attendanceMenu.php"; ?>
+<div class="container">
+<?php echo "<h1>" . $title . "</h1>";
+echo $content; ?>
+</div>
+<?php include BASE_PATH . "views/footer.php";
