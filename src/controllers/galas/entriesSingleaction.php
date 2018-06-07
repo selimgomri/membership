@@ -17,6 +17,15 @@ if (!empty($_POST['TimesRequired'])) {
 }
 
 if (isset($entryID)) {
+  // Check the user is the parent or has admin rights
+  $sql = "SELECT `UserID` FROM `members` INNER JOIN galaEntries ON members.MemberID = galaEntries.MemberID WHERE EntryID = '$entryID';";
+  $result = mysqli_query($link, $sql);
+  $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+  $entryUser = $row['UserID'];
+  $access = $_SESSION['AccessLevel'];
+  if ($entryUser != $_SESSION['UserID'] && !($access == "Galas" || $access == "Committee" || $access == "Admin")) {
+    halt(403);
+  }
 
     if ($times != 1) {
     for ($i=0; $i<sizeof($swimsArray); $i++) {
@@ -126,4 +135,11 @@ else {
   $pagetitle = $title = "An error occurred";
   $content = "<div class=\"alert alert-warning\"><strong>An error occurred</strong> <br>We could not add your entry.</div>";
 }
+include BASE_PATH . "views/header.php";
+include "galaMenu.php"; ?>
+<div class="container">
+<?php echo "<h1>" . $title . "</h1>";
+echo $content; ?>
+</div>
+<?php include BASE_PATH . "views/footer.php";
 ?>
