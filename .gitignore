@@ -1,7 +1,6 @@
 # CLS ASC Membership - PHP Version
 
 config.php
-.htaccess
-"sendgrid.env" 
-"sendgrid.env" 
+"sendgrid.env"
+"sendgrid.env"
 client_secret.json
