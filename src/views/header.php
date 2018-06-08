@@ -136,7 +136,7 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
       <?php }
       else { ?>
         <li class="nav-item">
-  			  <a class="nav-link" href="<?php echo autoUrl("swimmers") ?>">Member Directory</a>
+  			  <a class="nav-link" href="<?php echo autoUrl("swimmers") ?>">Swimmers</a>
   		  </li>
         <li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("squads") ?>">Squads</a>
