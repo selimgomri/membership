@@ -19,7 +19,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
     include BASE_PATH . 'controllers/ajax/registerSessions.php';
 	});
 
-  $this->get('/register', function() {
+  $this->post('/register', function() {
     global $link;
     include 'POST/register.php';
 	});

@@ -1,7 +1,7 @@
 <?php
 header("HTTP/1.1 503 Service Unavailable");
 $pagetitle = "Error 503 - Service Unavailable";
-include "header.php";
+include BASE_PATH . "views/header.php";
 ?>
 
 <div class="container">
@@ -14,4 +14,4 @@ include "header.php";
 	<p class="mt-2">Contact our <a href="mailto:support@chesterlestreetasc.co.uk" title="Support Hotline">support address</a> if the issue persists.</p>
 </div>
 
-<?php include "footer.php"; ?>
+<?php include BASE_PATH . "views/footer.php"; ?>
