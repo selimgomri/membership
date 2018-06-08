@@ -30,7 +30,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 
 		$this->post('/new/{id}', function($id) {
 			global $link;
-			require 'newMove.php';
+			require 'newMoveAction.php';
 		});
 
 		$this->get('/edit/{id}:int', function($id) {
@@ -40,7 +40,12 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 
 		$this->post('/edit/{id}:int', function($id) {
 			global $link;
-			require 'editMove.php';
+			require 'editMoveAction.php';
+		});
+
+		$this->get('/cancel/{id}:int', function($id) {
+			global $link;
+			require 'cancelMoveAction.php';
 		});
 	});
 
