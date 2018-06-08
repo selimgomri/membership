@@ -49,16 +49,14 @@ if (mysqli_connect_errno()) {
 $sql = "SELECT * FROM `moves` WHERE MovingDate <= CURDATE();";
 $result = mysqli_query($link, $sql);
 $count = mysqli_num_rows($result);
-if ($count > 0) {
-  for ($i = 0; $i < $count; $i++) {
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    $squadID = $row['SquadID'];
-    $member = $row['MemberID'];
-    $sql = "UPDATE `moves` SET `SquadID` = '$squadID' WHERE `MemberID` = '$member';";
-    mysqli_query($link, $sql);
-    $sql = "DELETE FROM `moves` WHERE `MemberID` = '$member';";
-    mysqli_query($link, $sql);
-  }
+for ($i = 0; $i < $count; $i++) {
+  $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+  $squadID = $row['SquadID'];
+  $member = $row['MemberID'];
+  $sql = "UPDATE `members` SET `SquadID` = '$squadID' WHERE `MemberID` = '$member';";
+  mysqli_query($link, $sql);
+  $sql = "DELETE FROM `moves` WHERE `MemberID` = '$member';";
+  mysqli_query($link, $sql);
 }
 
 require_once "database.php";
