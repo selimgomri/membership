@@ -30,7 +30,7 @@ if ($access == "Parent") {
 }
 else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {
 	// Directory
-	$this->get(['/', '/filter'], function() {
+	$this->get('/', function() {
     global $link;
 	  require('swimmerDirectory.php');
 	});
