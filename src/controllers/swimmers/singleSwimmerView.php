@@ -1,5 +1,5 @@
 <?php
-
+$id = mysqli_real_escape_string($link, $id);
 $access = $_SESSION['AccessLevel'];
 
 $query = "SELECT * FROM members WHERE MemberID = '$id' ";
@@ -57,6 +57,15 @@ $content = '
       ' . $rowSwim["Gender"] . '
     </p>
   </div>';
+  if ($access == "Admin" || $access == "Committee" || $access == "Coach") {
+    $content .= '
+    <div class="media pt-3">
+      <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+        <strong class="d-block text-gray-dark">Move Swimmer to New Squad</strong>
+        <a href="' . autoUrl("squads/moves/new/" . $id) . '">New Move<a>
+      </p>
+    </div>';
+  }
   if ($rowSwim["MedicalNotes"] != "") {
     $content .= '
     <div class="media pt-3">

@@ -50,6 +50,18 @@ include "galaMenu.php";
         <div class="ajaxPlaceholder">Select a swimmer and gala
         </div>
       </div>
+      <form action="your-server-side-code" method="POST">
+        <script
+          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="pk_test_qNEKwTjtOQi9ti1OTfmuonBB"
+          data-amount="999"
+          data-name="Chester-le-Street ASC"
+          data-description="Widget"
+          data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+          data-locale="auto"
+          data-currency="gbp">
+        </script>
+      </form>
       <p class="mb-0">
         <button type="submit" id="submit" class="btn btn-outline-dark">Submit</button>
       </p>

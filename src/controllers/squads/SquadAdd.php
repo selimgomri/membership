@@ -34,7 +34,8 @@ $content .= "
 $content .= "<p class=\"mb-0\"><button class=\"btn btn-outline-dark\" type=\"submit\">Add Squad</button></p>";
 $content .= "</form></div>";
 
-include BASE_PATH . "views/header.php"; ?>
+include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/squadMenu.php"; ?>
 <div class="container">
 <?php echo "<h1>" . $title . "</h1>";
 echo $content; ?>

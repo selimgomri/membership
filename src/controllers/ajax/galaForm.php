@@ -205,7 +205,18 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
   	}
 
     $response .= '
-    <!--<h2>Paying</h2>-->';
+    <h2>Paying</h2>
+    <script
+      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+      data-key="pk_test_qNEKwTjtOQi9ti1OTfmuonBB"
+      data-zip-code="true"
+      data-amount="999"
+      data-name="Chester-le-Street ASC"
+      data-description="Widget"
+      data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+      data-locale="auto"
+      data-currency="gbp">
+    </script>';
     if ($row['GalaFeeConstant'] != 1) {
       $response .= '
       <div class="form-group">

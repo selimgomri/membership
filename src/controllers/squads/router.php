@@ -7,12 +7,41 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 
 	$this->get('/', function() {
 		global $link;
-		require('squadList.php');
+		require 'squadList.php';
 	});
 
 	$this->get('/{id}:int', function($id) {
 		global $link;
-		require('squadIndividual.php');
+		require 'squadIndividual.php';
+	});
+
+	$this->group('/moves', function() {
+		global $link;
+
+		$this->get('/', function() {
+			global $link;
+			require 'moves.php';
+		});
+
+		$this->get('/new/{id}', function($id) {
+			global $link;
+			require 'newMove.php';
+		});
+
+		$this->post('/new/{id}', function($id) {
+			global $link;
+			require 'newMove.php';
+		});
+
+		$this->get('/edit/{id}:int', function($id) {
+			global $link;
+			require 'editMove.php';
+		});
+
+		$this->post('/edit/{id}:int', function($id) {
+			global $link;
+			require 'editMove.php';
+		});
 	});
 
 }
@@ -21,11 +50,11 @@ if ($access == "Admin") {
 	// Add a squad
 	$this->get('/addsquad', function() {
 		global $link;
-		require('SquadAdd.php');
+		require 'SquadAdd.php';
 	});
 
 	$this->post('/addsquad', function() {
 		global $link;
-		require('SquadAddAction.php');
+		require 'SquadAddAction.php';
 	});
 }

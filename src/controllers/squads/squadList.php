@@ -1,7 +1,8 @@
 <?php
 $access = $_SESSION['AccessLevel'];
 $pagetitle = "Squads";
-include BASE_PATH . "views/header.php"; ?>
+include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/squadMenu.php"; ?>
 <div class="container">
 <h1>Squad Details</h1>
 <p class="lead">Information about our squads</p>

@@ -240,7 +240,8 @@ else {
   }
 }
 
-include BASE_PATH . "views/header.php"; ?>
+include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/squadMenu.php"; ?>
 <div class="container">
 <?php echo "<h1>" . $title . "</h1>";
 echo $content; ?>
