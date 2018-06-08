@@ -33,6 +33,7 @@
         $_SESSION['LoggedIn'] = 1;
 
         if (isset($target)) {
+          $target = ltrim($target, '/');
           header("Location: " . autoUrl($target) . "");
         }
         else {

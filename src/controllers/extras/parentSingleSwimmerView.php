@@ -47,7 +47,7 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
     <div class="media pt-3">
       <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
         <strong class="d-block text-gray-dark">ASA Number</strong>
-        <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . $rowSwim["ASANumber"] . '" target="_blank" title="ASA Biographical Data">' . $rowSwim["ASANumber"] . ' <i class="fa fa-external-$link" aria-hidden="true"></i></a>
+        <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . $rowSwim["ASANumber"] . '" target="_blank" title="ASA Biographical Data">' . $rowSwim["ASANumber"] . ' <i class="fa fa-external-link" aria-hidden="true"></i></a>
       </p>
     </div>
     <div class="media pt-3">

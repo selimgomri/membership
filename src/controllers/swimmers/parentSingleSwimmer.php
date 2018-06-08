@@ -1,4 +1,5 @@
 <?php
+$id = mysqli_real_escape_string($link, $id);
 $userID = $_SESSION['UserID'];
 $forenameUpdate = false;
 $middlenameUpdate = false;
@@ -10,7 +11,7 @@ $otherNotesUpdate = false;
 $update = false;
 $successInformation = "";
 
-$query = "SELECT * FROM members WHERE MemberID = '$idLast' ";
+$query = "SELECT * FROM members WHERE MemberID = '$id' ";
 $result = mysqli_query($link, $query);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
@@ -34,7 +35,7 @@ else {
   if (!empty($_POST['forename'])) {
     $newForename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
     if ($newForename != $forename) {
-      $sql = "UPDATE `members` SET `MForename` = '$newForename' WHERE `MemberID` = '$idLast'";
+      $sql = "UPDATE `members` SET `MForename` = '$newForename' WHERE `MemberID` = '$id'";
       mysqli_query($link, $sql);
       $forenameUpdate = true;
       $update = true;
@@ -43,7 +44,7 @@ else {
   if (isset($_POST['middlenames'])) {
     $newMiddlenames = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['middlenames']))));
     if ($newMiddlenames != $middlename) {
-      $sql = "UPDATE `members` SET `MMiddleNames` = '$newMiddlenames' WHERE `MemberID` = '$idLast'";
+      $sql = "UPDATE `members` SET `MMiddleNames` = '$newMiddlenames' WHERE `MemberID` = '$id'";
       mysqli_query($link, $sql);
       $middlenameUpdate = true;
       $update = true;
@@ -52,7 +53,7 @@ else {
   if (!empty($_POST['surname'])) {
     $newSurname = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['surname']))));
     if ($newSurname != $surname) {
-      $sql = "UPDATE `members` SET `MSurname` = '$newSurname' WHERE `MemberID` = '$idLast'";
+      $sql = "UPDATE `members` SET `MSurname` = '$newSurname' WHERE `MemberID` = '$id'";
       mysqli_query($link, $sql);
       $surnameUpdate = true;
       $update = true;
@@ -62,7 +63,7 @@ else {
     $newDateOfBirth = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['datebirth']))));
     // NEEDS WORK FOR DATE TO BE RIGHT
     if ($newDateOfBirth != $dateOfBirth) {
-      $sql = "UPDATE `members` SET `DateOfBirth` = '$newDateOfBirth' WHERE `MemberID` = '$idLast'";
+      $sql = "UPDATE `members` SET `DateOfBirth` = '$newDateOfBirth' WHERE `MemberID` = '$id'";
       mysqli_query($link, $sql);
       $dateOfBirthUpdate = true;
       $update = true;
@@ -71,7 +72,7 @@ else {
   if (!empty($_POST['sex'])) {
     $newSex = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['sex']))));
     if ($newSex != $sex) {
-      $sql = "UPDATE `members` SET `Gender` = '$newSex' WHERE `MemberID` = '$idLast'";
+      $sql = "UPDATE `members` SET `Gender` = '$newSex' WHERE `MemberID` = '$id'";
       mysqli_query($link, $sql);
       $sexUpdate = true;
       $update = true;
@@ -80,7 +81,7 @@ else {
   if (isset($_POST['medicalNotes'])) {
     $newMedicalNotes = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['medicalNotes']))));
     if ($newMedicalNotes != $medicalNotes) {
-      $sql = "UPDATE `members` SET `MedicalNotes` = '$newMedicalNotes' WHERE `MemberID` = '$idLast'";
+      $sql = "UPDATE `members` SET `MedicalNotes` = '$newMedicalNotes' WHERE `MemberID` = '$id'";
       mysqli_query($link, $sql);
       $medicalNotesUpdate = true;
       $update = true;
@@ -89,7 +90,7 @@ else {
   if (isset($_POST['otherNotes'])) {
     $newOtherNotes = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['otherNotes']))));
     if ($newOtherNotes != $otherNotes) {
-      $sql = "UPDATE `members` SET `OtherNotes` = '$newOtherNotes' WHERE `MemberID` = '$idLast'";
+      $sql = "UPDATE `members` SET `OtherNotes` = '$newOtherNotes' WHERE `MemberID` = '$id'";
       mysqli_query($link, $sql);
       $otherNotesUpdate = true;
       $update = true;
@@ -100,7 +101,7 @@ else {
     $disconnectKey = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['disconnectKey'])));
     if ($disconnect == $disconnectKey) {
       $newKey = generateRandomString(8);
-      $sql = "UPDATE `members` SET `UserID` = NULL, `AccessKey` = '$newKey' WHERE `MemberID` = '$idLast'";
+      $sql = "UPDATE `members` SET `UserID` = NULL, `AccessKey` = '$newKey' WHERE `MemberID` = '$id'";
       mysqli_query($link, $sql);
       header("Location: " . autoUrl("swimmers"));
     }
@@ -108,7 +109,7 @@ else {
   if (!empty($_POST['swimmerDeleteDanger'])) {
     $deleteKey = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['swimmerDeleteDanger'])));
     if ($deleteKey == $dbAccessKey) {
-      $sql = "DELETE FROM `members` WHERE `members`.`MemberID` = '$idLast'";
+      $sql = "DELETE FROM `members` WHERE `members`.`MemberID` = '$id'";
       mysqli_query($link, $sql);
       header("Location: " . autoUrl("swimmers"));
     }
@@ -118,7 +119,7 @@ else {
 $pagetitle;
 if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
   $pagetitle = "Edit: " . $swimmersSecurityCheck['MForename'] . " " . $swimmersSecurityCheck['MSurname'];
-  $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes, members.AccessKey FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$idLast';";
+  $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes, members.AccessKey FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
   $resultSwim = mysqli_query($link, $sqlSwim);
   $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
   $title = null;
@@ -130,7 +131,7 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
         <h1>Editing <?php echo $swimmersSecurityCheck['MForename'] . ' ' . $swimmersSecurityCheck['MSurname']?></h1>
       </div>
       <div class="col-sm-4 text-right">
-        <a class="btn btn-dark" href="<?php echo autoUrl("swimmers/" . $id)?>">Exit Edit Mode</a>
+        <button type="submit" class="btn btn-success">Save</button> <a class="btn btn-dark" href="<?php echo autoUrl("swimmers/" . $id)?>">Exit Edit Mode</a>
       </div>
     </div>
     <?php
@@ -193,7 +194,7 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
     </div>
     <div class="form-group">
       <label for="otherNotes">Other Notes</label>
-      <textarea class="form-control" id="otherNotes" name="otherNotes" rows="3" placeholder="Tell us any other notes for coaches"><?php echo $rowSwim['OtherNotes']; ?>"</textarea>
+      <textarea class="form-control" id="otherNotes" name="otherNotes" rows="3" placeholder="Tell us any other notes for coaches"><?php echo $rowSwim['OtherNotes']; ?></textarea>
     </div>
     <button type="submit" class="btn btn-outline-dark mb-3">Update</button>
 
@@ -207,13 +208,13 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
         <div class="form-group">
           <label for="disconnect">Disconnect swimmer from your account with this Key <span class="mono">"<?php echo $disconnectKey; ?>"</span></label>
           <input type="text" class="form-control" id="disconnect" name="disconnect" aria-describedby="disconnectHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
-          <small id="disconnectHelp" class="form-text">Enter the key in quotes above and press submit. This will dissassociate this swimmer from your account in all of our systems. You will need a new Access Key to add the swimmer again.</small>
+          <small id="disconnectHelp" class="form-text">Enter the key in quotes above and press the <strong>Delete or Disconnect</strong> button. This will dissassociate this swimmer from your account in all of our systems. You will need a new Access Key to add the swimmer again.</small>
         </div>
         <input type="hidden" value="<?php echo $disconnectKey; ?>" name="disconnectKey">
         <div class="form-group">
-          <label for="swimmerDeleteDanger">Delete this Swimmer with this Key "<?php echo $rowSwim['AccessKey']; ?>"</label>
+          <label for="swimmerDeleteDanger">Delete this Swimmer with this Key <span class="mono">"<?php echo $rowSwim['AccessKey']; ?>"</span></label>
           <input type="text" class="form-control" id="swimmerDeleteDanger" name="swimmerDeleteDanger" aria-describedby="swimmerDeleteDangerHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
-          <small id="swimmerDeleteDangerHelp" class="form-text">Enter the key in quotes above and press submit. This will delete this swimmer from all of our systems.</small>
+          <small id="swimmerDeleteDangerHelp" class="form-text">Enter the key in quotes above and press <strong>Delete or Disconnect</strong>. This will delete this swimmer from all of our systems.</small>
         </div>
         <button type="submit" class="btn btn-danger mb-3">Delete or Disconnect</button>
       </div>
