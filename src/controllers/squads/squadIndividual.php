@@ -1,5 +1,7 @@
 <?php
 $id = mysqli_real_escape_string($link, $id);
+$access = $_SESSION['AccessLevel'];
+
 $squadNameUpdate = $squadFeeUpdate = $squadCoachUpdate = $squadTimetableUpdate = $squadCoCUpdate = "";
 $sql = "SELECT * FROM `squads` WHERE squads.SquadID = '$id';";
 $result = mysqli_query($link, $sql);
@@ -72,11 +74,12 @@ $result = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
 $title = $pagetitle = $row['SquadName'] . " Squad";
-$content = "<form method=\"post\">";
+$content = "";
 if ($access == "Admin") {
 $content .= "
 <div class=\"row\"><div class=\"col-md-6\">
 <div class=\"my-3 p-3 bg-white rounded box-shadow\">
+<form method=\"post\">
 <h2>Details</h2>
 <p class=\"lead border-bottom border-gray pb-2\">View or edit the squad details</p>
 <div class=\"form-group\">
@@ -235,9 +238,10 @@ else {
         <h2>Statistics</h2>
         <p class=\"lead border-bottom border-gray pb-2 mb-0\">These statistics are gathered from our system</p>
         <div class=\"chart\" id=\"piechart\"></div>
-        </div></div></div>
+        </div></div>
     ";
   }
+  $content .= "</div>";
 }
 
 include BASE_PATH . "views/header.php";

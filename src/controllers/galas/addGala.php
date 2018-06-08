@@ -28,13 +28,13 @@ $content = "<form method=\"post\" action=\"" . autoUrl("galas/addgala") . "\">
 <div class=\"form-group row\">
   <label for=\"closingDate\" class=\"col-sm-2 col-form-label\">Closing Date</label>
   <div class=\"col-sm-10\">
-    <input type=\"date\" class=\"form-control\" id=\"closingDate\" name=\"closingDate\" placeholder=\"YYYY-MM-DD\" pattern=\"[0-9]{4}-[0-9]{2}-[0-9]{2}\" required>
+    <input type=\"date\" class=\"form-control\" id=\"closingDate\" name=\"closingDate\" placeholder=\"YYYY-MM-DD\" value=\"" . date("Y-m-d") . "\" pattern=\"[0-9]{4}-[0-9]{2}-[0-9]{2}\" required>
   </div>
 </div>
 <div class=\"form-group row\">
   <label for=\"lastDate\" class=\"col-sm-2 col-form-label\">Last Day of Gala</label>
   <div class=\"col-sm-10\">
-    <input type=\"date\" class=\"form-control\" id=\"lastDate\" name=\"lastDate\" placeholder=\"YYYY-MM-DD\" pattern=\"[0-9]{4}-[0-9]{2}-[0-9]{2}\" required>
+    <input type=\"date\" class=\"form-control\" id=\"lastDate\" name=\"lastDate\" placeholder=\"YYYY-MM-DD\" value=\"" . date("Y-m-d") . "\" pattern=\"[0-9]{4}-[0-9]{2}-[0-9]{2}\" required>
   </div>
 </div>
 <div class=\"form-group row\">

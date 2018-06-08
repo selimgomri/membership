@@ -41,13 +41,13 @@ include BASE_PATH . "views/squadMenu.php"; ?>
 		<div class="form-group row">
 	    <label for="swimmerName" class="col-sm-2 col-form-label">Swimmer</label>
 	    <div class="col-sm-10">
-	      <input type="text" readonly class="form-control-plaintext" id="swimmerName" name="swimmerName" value="<?php echo $name; ?>">
+	      <input type="text" readonly class="form-control" id="swimmerName" name="swimmerName" value="<?php echo $name; ?>" disabled>
 	    </div>
 	  </div>
 		<div class="form-group row">
 	    <label for="currentSquad" class="col-sm-2 col-form-label">Current Squad</label>
 	    <div class="col-sm-10">
-	      <input type="text" readonly class="form-control-plaintext" id="currentSquad" name="currentSquad" value="<?php echo $currentSquad; ?>">
+	      <input type="text" readonly class="form-control" id="currentSquad" name="currentSquad" value="<?php echo $currentSquad; ?>" disabled>
 	    </div>
 	  </div>
 	  <div class="form-group row">
