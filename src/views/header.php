@@ -181,7 +181,7 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
 		  </li>-->
 		</ul>
     <?php if (!empty($_SESSION['LoggedIn'])) { ?>
-    <a class="btn btn-outline-light my-2 my-sm-0" href="<?php echo autoUrl("logout.php") ?>">Logout</a>
+    <a class="btn btn-outline-light my-2 my-sm-0" href="<?php echo autoUrl("logout") ?>">Logout</a>
     <?php } ?>
 	  </div>
 

@@ -102,11 +102,11 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
               break;
       }
 
-      $content .= "<h2>Take register</h2><p>for " . $row['SquadName'] . " Squad, " . $row['SessionName'] . " on " . $dayText . " " . $date . " at " . $row['StartTime'] . "</p>";
       $datetime1 = new DateTime($row['StartTime']);
       $datetime2 = new DateTime($row['EndTime']);
+      $content .= "<h2>Take register</h2><p>for " . $row['SquadName'] . " Squad, " . $row['SessionName'] . " on " . $dayText . " " . $date . " at " . $datetime1->format("H:i") . "</p>";
       $interval = $datetime1->diff($datetime2);
-      $content .= "<p>This session is " . $interval->format('%h hours %I minutes') . " long, finishing at " . $row['EndTime'] . "</p>";
+      $content .= "<p>This session is " . $interval->format('%h hours %I minutes') . " long, finishing at " . $datetime2->format("H:i") . "</p>";
       $sql = "SELECT * FROM ((sessions INNER JOIN members ON sessions.SquadID = members.SquadID) INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE sessions.SessionID = '$sessionID' ORDER BY members.MForename, members.MSurname ASC";
       $result = mysqli_query($link, $sql);
       $swimmerCount = mysqli_num_rows($result);

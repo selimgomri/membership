@@ -1,38 +1,13 @@
 <?php
 
-// **PREVENTING SESSION HIJACKING**
-// Prevents javascript XSS attacks aimed to steal the session ID
-ini_set('session.cookie_httponly', 1);
-
-// **PREVENTING SESSION FIXATION**
-// Session ID cannot be passed through URLs
-ini_set('session.use_only_cookies', 1);
-
-// Uses a secure connection (HTTPS) if possible
-ini_set('session.cookie_secure', 1);
-
-// Use strict mode
-ini_set('session.use_strict_mode', 1);
-
-// Use strict mode
-ini_set('session.sid_length', 128);
-
-// SessionName
-ini_set('session.name', "clsascMembershipID");
-
-session_start([
-    'cookie_lifetime' => 2419200,
-    'gc_maxlifetime' => 2419200,
-]);
-
-if ((!isset($preventLoginRedirect)) && (empty($_SESSION['LoggedIn']))) {
+/*if ((!isset($preventLoginRedirect)) && (empty($_SESSION['LoggedIn']))) {
   $preventLoginRedirect = false;
   $_SESSION['requestedURL'] = mysqli_real_escape_string(LINK, $_SERVER['REQUEST_URI']);
 }
 elseif (!isset($preventLoginRedirect)) {
   $preventLoginRedirect = false;
   $_SESSION['requestedURL'] = mysqli_real_escape_string(LINK, $_SERVER['REQUEST_URI']);
-}
+}*/
 
 function notifySend($to, $subject, $message) {
   // PHP Email
@@ -46,7 +21,9 @@ function notifySend($to, $subject, $message) {
   mail($to,$subject,$message,$headers);
 }
 
-function getAttendanceByID($db, $id, $weeks = "all") {
+function getAttendanceByID($link, $id, $weeks = "all") {
+  global $db;
+
   $output = $weeksWHERE = "";
   if ($weeks != "all") {
     $number = "LIMIT $weeks";
@@ -54,7 +31,7 @@ function getAttendanceByID($db, $id, $weeks = "all") {
 
   // Get the last four weeks to calculate attendance
   $sql = "SELECT `WeekID` FROM `sessionsWeek` ORDER BY `WeekDateBeginning` DESC;";
-  $resultWeeks = mysqli_query($db, $sql);
+  $resultWeeks = mysqli_query($link, $sql);
   $weeksToDo = $weekCount = mysqli_num_rows($resultWeeks);
   if ($weekCount > 0) {
     $sqlWeeks = "";
@@ -82,12 +59,12 @@ function getAttendanceByID($db, $id, $weeks = "all") {
 
     // Get number of sessions we were present at
     $sql = "SELECT `AttendanceBoolean` FROM (`sessionsAttendance` INNER JOIN `sessions` on sessionsAttendance.SessionID=sessions.SessionID) WHERE `AttendanceBoolean` = '1' AND $weeksWHERE `MemberID` = '$id' AND MainSequence = '1';";
-    $resultAtt = mysqli_query($db, $sql);
+    $resultAtt = mysqli_query($link, $sql);
     $presentCount = mysqli_num_rows($resultAtt);
 
     // Get number of sessions in total
     $sql = "SELECT `AttendanceBoolean` FROM (`sessionsAttendance` INNER JOIN `sessions` on sessionsAttendance.SessionID=sessions.SessionID) WHERE $weeksWHERE `MemberID` = '$id' AND MainSequence = '1';";
-    $resultAtt = mysqli_query($db, $sql);
+    $resultAtt = mysqli_query($link, $sql);
     $totalCount = mysqli_num_rows($resultAtt);
 
     $attPercent = 0;
@@ -108,10 +85,10 @@ function getAttendanceByID($db, $id, $weeks = "all") {
   return $output;
 }
 
-function mySwimmersTable($db, $userID) {
+function mySwimmersTable($link, $userID) {
   // Get the last four weeks to calculate attendance
   $sql = "SELECT `WeekID` FROM `sessionsWeek` ORDER BY `WeekDateBeginning` DESC LIMIT 4;";
-  $resultWeeks = mysqli_query($db, $sql);
+  $resultWeeks = mysqli_query($link, $sql);
   $weekCount = mysqli_num_rows($resultWeeks);
     if ($weekCount > 0) {
     $sqlWeeks = "";
@@ -130,7 +107,7 @@ function mySwimmersTable($db, $userID) {
 
   // Get the information about the swimmer
   $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = '$userID';";
-  $result = mysqli_query($db, $sqlSwim);
+  $result = mysqli_query($link, $sqlSwim);
   $swimmerCount = mysqli_num_rows($result);
   $output = "";
   if ($swimmerCount > 0) {
@@ -147,7 +124,7 @@ function mySwimmersTable($db, $userID) {
           </tr>
         </thead>
         <tbody>';
-    $resultX = mysqli_query($db, $sqlSwim);
+    $resultX = mysqli_query($link, $sqlSwim);
     for ($i = 0; $i < $swimmerCount; $i++) {
       $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
       $swimmerLink = autoUrl("swimmers/" . $swimmersRowX['MemberID'] . "");
@@ -161,7 +138,7 @@ function mySwimmersTable($db, $userID) {
         $id = $swimmersRowX['MemberID'];
 
         $output .= "
-        <td>" . getAttendanceByID($db, $id, 4) . "%</td>
+        <td>" . getAttendanceByID($link, $id, 4) . "%</td>
       </tr>";
     }
     $output .= '
@@ -172,9 +149,9 @@ function mySwimmersTable($db, $userID) {
   return $output;
 }
 
-function mySwimmersMedia($db, $userID) {
+function mySwimmersMedia($link, $userID) {
   $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = '$userID';";
-  $result = mysqli_query($db, $sqlSwim);
+  $result = mysqli_query($link, $sqlSwim);
   $swimmerCount = mysqli_num_rows($result);
   $swimmerS = $swimmers = '';
   if ($swimmerCount == 0 || $swimmerCount > 1) {
@@ -192,12 +169,12 @@ function mySwimmersMedia($db, $userID) {
     $output = '
     <div class="my-3 p-3 bg-white rounded box-shadow">
     <h2>My Swimmers</h2>' . $swimmers;
-    $resultX = mysqli_query($db, $sqlSwim);
+    $resultX = mysqli_query($link, $sqlSwim);
     for ($i = 0; $i < $swimmerCount; $i++) {
       $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
       $swimmerLink = autoUrl("swimmers/" . $swimmersRowX['MemberID'] . "");
       $output .= "<div class=\"media text-muted pt-3\"><p class=\"media-body pb-3 mb-0 lh-125 border-bottom border-gray\"><strong class=\"d-block text-gray-dark\"><a href=\"" . $swimmerLink . "\">" . $swimmersRowX['MForename'] . " " . $swimmersRowX['MSurname'] . "</a></strong>
-        " . $swimmersRowX['SquadName'] . " Squad, &pound;" . $swimmersRowX['SquadFee'] . ", " . getAttendanceByID($db, $swimmersRowX['MemberID'], 4) . "% <abbr title=\"Attendance over the last four weeks\">Attendance</abbr>
+        " . $swimmersRowX['SquadName'] . " Squad, &pound;" . $swimmersRowX['SquadFee'] . ", " . getAttendanceByID($link, $swimmersRowX['MemberID'], 4) . "% <abbr title=\"Attendance over the last four weeks\">Attendance</abbr>
     </div>";
     }
     $output .= '
@@ -239,9 +216,9 @@ function courseLengthString($string) {
   return $courseLength;
 }
 
-function upcomingGalas($db, $links = false, $userID = null) {
+function upcomingGalas($link, $links = false, $userID = null) {
   $sql = "SELECT * FROM `galas` ORDER BY `galas`.`ClosingDate` ASC;";
-  $result = mysqli_query($db, $sql);
+  $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
   if ($count > 0) {
     $output= "<div class=\"media mb-3\">";
@@ -283,11 +260,11 @@ function upcomingGalas($db, $links = false, $userID = null) {
   return $output;
 }
 
-function upcomingGalasBySearch($db, $searchSQL = null) {
+function upcomingGalasBySearch($link, $searchSQL = null) {
   $sql = "";
   if ($searchSQL != null) {
     $sql = "SELECT * FROM (((`galaEntries` INNER JOIN `galas` ON galaEntries.GalaID = galas.GalaID) INNER JOIN `members` ON galaEntries.MemberID = members.MemberID) INNER JOIN `squads` ON members.SquadID = squads.SquadID) WHERE " . $searchSQL . " ORDER BY `members`.`MForename`, `members`.`MSurname` ASC;";
-    $result = mysqli_query($db, $sql);
+    $result = mysqli_query($link, $sql);
     $count = mysqli_num_rows($result);
     $swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];
     $swimsTextArray = ['50 Free','100 Free','200 Free','400 Free','800 Free','1500 Free','50 Breast','100 Breast','200 Breast','50 Fly','100 Fly','200 Fly','50 Back','100 Back','200 Back','100 IM','150 IM','200 IM','400 IM',];
@@ -333,9 +310,9 @@ function upcomingGalasBySearch($db, $searchSQL = null) {
   return $output;
 }
 
-function enteredGalas($db, $userID) {
+function enteredGalas($link, $userID) {
   $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE `UserID` = '$userID' ORDER BY `galas`.`GalaDate` DESC;";
-  $result = mysqli_query($db, $sql);
+  $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
   if ($count > 0) {
     $output = "<div class=\"media pt-0\">";
@@ -368,9 +345,9 @@ function enteredGalas($db, $userID) {
   return $output;
 }
 
-function enteredGalasMedia($db, $userID) {
+function enteredGalasMedia($link, $userID) {
   $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE `UserID` = '$userID' ORDER BY `galas`.`GalaDate` DESC, `galas`.`ClosingDate` ASC LIMIT 3;";
-  $result = mysqli_query($db, $sql);
+  $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
   if ($count > 0) {
     $output = "<div class=\"my-3 p-3 bg-white rounded box-shadow\">
@@ -408,9 +385,9 @@ function enteredGalasMedia($db, $userID) {
 }
 
 
-function closedGalas($db, $links = false) {
+function closedGalas($link, $links = false) {
   $sql = "SELECT * FROM `galas` ORDER BY `galas`.`GalaDate` DESC LIMIT 0, 15;";
-  $result = mysqli_query($db, $sql);
+  $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
   if ($count > 0) {
     $output = "<div class=\"table-responsive\"><table class=\"table table-hover\"><thead><tr><th>Gala Name</th><th>Course</th><th>Venue</th><th>Closing Date</th><th>Last day of Gala</th><th>Gala Fee</th></tr></thead><tbody>";
@@ -449,9 +426,9 @@ function closedGalas($db, $links = false) {
   return $output;
 }
 
-function myMonthlyFeeTable($db, $userID) {
+function myMonthlyFeeTable($link, $userID) {
   $sql = "SELECT squads.SquadName, squads.SquadID, squads.SquadFee FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = '$userID' ORDER BY `squads`.`SquadFee` DESC;";
-  $result = mysqli_query($db, $sql);
+  $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
   $totalsArray = [];
   $totalCost = 0;
@@ -473,9 +450,9 @@ function myMonthlyFeeTable($db, $userID) {
   return "<table class=\"table table-hover\"><tr><td>The monthly subtotal is</td><td>&pound;" . number_format($totalCost,2,'.','') . "</td></tr><tr><td><strong>The monthly total payable (with any deductions) is</strong></td><td>&pound;" . number_format($reducedCost,2,'.','') . "</td></tr></table>";
 }
 
-function myMonthlyFeeMedia($db, $userID) {
+function myMonthlyFeeMedia($link, $userID) {
   $sql = "SELECT squads.SquadName, squads.SquadID, squads.SquadFee, members.MForename, members.MSurname FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = '$userID' ORDER BY `squads`.`SquadFee` DESC;";
-  $result = mysqli_query($db, $sql);
+  $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
   $totalsArray = [];
   $squadsOutput = "";
@@ -497,7 +474,7 @@ function myMonthlyFeeMedia($db, $userID) {
     $reducedCost += $totalsArray[$i];
   }
   $sql = "SELECT extras.ExtraName, extras.ExtraFee, members.MForename , members.MSurname FROM ((extras INNER JOIN extrasRelations ON extras.ExtraID = extrasRelations.ExtraID) INNER JOIN members ON members.MemberID = extrasRelations.MemberID) WHERE extrasRelations.UserID = '$userID' AND extras.ExtraBillPeriod = 'Month' ORDER BY `extras`.`ExtraFee` DESC;";
-  $result = mysqli_query($db, $sql);
+  $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
   $monthlyExtras = "";
   $monthlyExtrasTotal = 0;
@@ -528,14 +505,14 @@ function myMonthlyFeeMedia($db, $userID) {
   }
 }
 
-function adminSwimmersTable($db, $squadID = null) {
+function adminSwimmersTable($link, $squadID = null) {
   if ($squadID != null) {
     $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.DateOfBirth FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.SquadID = '$squadID' ORDER BY `members`.`MForename` , `members`.`MSurname` ASC ;";
   }
   else {
     $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.DateOfBirth FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) ORDER BY `members`.`MForename` , `members`.`MSurname` ASC;";
   }
-  $result = mysqli_query($db, $sqlSwim);
+  $result = mysqli_query($link, $sqlSwim);
   $swimmerCount = mysqli_num_rows($result);
   if ($swimmerCount > 0) {
     $output = '
@@ -552,7 +529,7 @@ function adminSwimmersTable($db, $squadID = null) {
           </tr>
         </thead>
         <tbody>';
-    $resultX = mysqli_query($db, $sqlSwim);
+    $resultX = mysqli_query($link, $sqlSwim);
     for ($i = 0; $i < $swimmerCount; $i++) {
       $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
       $swimmerLink = autoUrl("swimmers/" . $swimmersRowX['MemberID'] . "");
@@ -579,9 +556,9 @@ function adminSwimmersTable($db, $squadID = null) {
   return $output;
 }
 
-function squadInfoTable($db, $enableLinks = false) {
+function squadInfoTable($link, $enableLinks = false) {
   $sql = "SELECT squads.SquadID, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC FROM squads ORDER BY `squads`.`SquadFee` DESC;";
-  $result = mysqli_query($db, $sql);
+  $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
   $output = "";
   if ($count > 0) {
@@ -598,7 +575,7 @@ function squadInfoTable($db, $enableLinks = false) {
           </tr>
         </thead>
         <tbody>';
-    $result = mysqli_query($db, $sql);
+    $result = mysqli_query($link, $sql);
     for ($i = 0; $i < $count; $i++) {
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
       $output .= "<tr>";

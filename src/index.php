@@ -8,6 +8,31 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 //===================================
 
+// **PREVENTING SESSION HIJACKING**
+// Prevents javascript XSS attacks aimed to steal the session ID
+ini_set('session.cookie_httponly', 1);
+
+// **PREVENTING SESSION FIXATION**
+// Session ID cannot be passed through URLs
+ini_set('session.use_only_cookies', 1);
+
+// Uses a secure connection (HTTPS) if possible
+ini_set('session.cookie_secure', 1);
+
+// Use strict mode
+ini_set('session.use_strict_mode', 1);
+
+// Use strict mode
+ini_set('session.sid_length', 128);
+
+// SessionName
+ini_set('session.name', "clsascMembershipID");
+
+session_start([
+    'cookie_lifetime' => 2419200,
+    'gc_maxlifetime' => 2419200,
+]);
+
 require BASE_PATH.'vendor/autoload.php';
 require "config.php";
 require "helperclasses/Database.php";
@@ -39,24 +64,34 @@ function halt(int $statusCode) {
 //$link = LINK;
 
 $link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+$db = new PDO("mysql:host=" . $dbhost . ";dbname=" . $dbname . "", $dbuser, $dbpass);
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 /* check connection */
 if (mysqli_connect_errno()) {
   halt(500);
 }
-
 // Mandatory Startup Sequence to carry out squad updates
 $sql = "SELECT * FROM `moves` WHERE MovingDate <= CURDATE();";
 $result = mysqli_query($link, $sql);
 $count = mysqli_num_rows($result);
 for ($i = 0; $i < $count; $i++) {
-  $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-  $squadID = $row['SquadID'];
-  $member = $row['MemberID'];
-  $sql = "UPDATE `members` SET `SquadID` = '$squadID' WHERE `MemberID` = '$member';";
-  mysqli_query($link, $sql);
-  $sql = "DELETE FROM `moves` WHERE `MemberID` = '$member';";
-  mysqli_query($link, $sql);
+  try {
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $squadID = $row['SquadID'];
+    $member = $row['MemberID'];
+
+    $query = $db->prepare("UPDATE `members` SET `SquadID` = ? WHERE `MemberID` = ?");
+    $data = array($squadID, $member);
+    $query->execute($data);
+
+    $query = $db->prepare("DELETE FROM `moves` WHERE `MemberID` = ?");
+    $data = array($member);
+    $query->execute($data);
+  }
+  catch (PDOException $e) {
+    halt(500);
+  }
 }
 
 require_once "database.php";
@@ -180,6 +215,12 @@ else {
     global $link;
 
     include 'controllers/galas/router.php';
+  });
+
+  $route->group('/renewal', function() {
+    global $link;
+
+    include 'controllers/renewal/router.php';
   });
 
   // Log out
