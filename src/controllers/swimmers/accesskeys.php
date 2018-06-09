@@ -1,10 +1,18 @@
 <?php
 $access = $_SESSION['AccessLevel'];
-if ($access != "Admin" || $access != "Coach" || $access != "Galas") {
+if ($access != "Admin" && $access != "Coach" && $access != "Galas") {
   halt(403);
 }
 
 include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/swimmersMenu.php"; ?>
+
+<div class="container">
+  <h1>Member Access Keys</h1>
+  <p class="lead">See access keys.</p>
+  <p><a href="<? echo autoUrl("swimmers/accesskeys-csv"); ?>" class="btn btn-outline-dark">Download as a CSV for Mailmerge</a></p>
+
+<?php
 
 $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.AccessKey FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) ORDER BY `members`.`MForename` , `members`.`MSurname` ASC;";
 $result = mysqli_query($link, $sqlSwim);
@@ -44,7 +52,11 @@ if ($swimmerCount > 0) { ?>
       </tbody>
     </table>
   </div>
-  <?php }
+<?php } ?>
+
+</div>
+
+<?php
 
   include BASE_PATH . "views/header.php";
 

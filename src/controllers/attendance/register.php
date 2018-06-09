@@ -128,8 +128,10 @@ $content .= '
   </script>';
 include BASE_PATH . "views/header.php";
 include "attendanceMenu.php"; ?>
-<div class="container">
+<div class="container-fluid">
 <?php echo "<h1>" . $title . "</h1>";
 echo $content; ?>
 </div>
-<?php include BASE_PATH . "views/footer.php";
+<?php
+$fluidContainer = true;
+include BASE_PATH . "views/footer.php";

@@ -12,6 +12,7 @@ if (isset($queries['search'])) {
 $pagetitle = "Swimmers";
 
 include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/swimmersMenu.php";
 
 if (isset($_POST['squad'])) {
   $squadID = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['squad'])));
@@ -20,7 +21,7 @@ if (isset($_POST['squad'])) {
   <h1>Swimmer Directory</h1>
   <p class="lead">A list of swimmers.</p>
   <?php if ($access == "Committee" || $access == "Admin") { ?>
-    <p><a href="<?php echo autoUrl("swimmers/add-member");?>" class="btn btn-outline-dark">Add member</a> <a href="<?php echo autoUrl("swimmers/accesskeys"); ?>" class="btn btn-outline-dark">Access Keys</a></p>"
+    <p><a href="<?php echo autoUrl("swimmers/addmember");?>" class="btn btn-outline-dark">Add member</a> <a href="<?php echo autoUrl("swimmers/accesskeys"); ?>" class="btn btn-outline-dark">Access Keys</a></p>
   <?php }
   $sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
   $result = mysqli_query($link, $sql);
@@ -30,7 +31,7 @@ if (isset($_POST['squad'])) {
   <div class="col-md-6 mb-3">
   <label class="sr-only" for="squad">Select a Squad</label>
   <select class="custom-select" placeholder="Select a Squad" id="squad" name="squad">
-  <option value="allSquads">Show All Squads</option>";
+  <option value="allSquads">Show All Squads</option>;
   <?php for ($i = 0; $i < $squadCount; $i++) {
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     $id = $row['SquadID'];

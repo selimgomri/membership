@@ -259,7 +259,8 @@ include BASE_PATH . "views/header.php";
   });
 </script>
 <?php
-include BASE_PATH . "views/header.php"; ?>
+include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/swimmersMenu.php"; ?>
 <div class="container">
 <?php echo "<h1>" . $title . "</h1>";
 echo $content; ?>

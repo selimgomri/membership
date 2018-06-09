@@ -1,6 +1,10 @@
 <!-- THE HEPPELL FOOTER -->
 <div class="cls-global-footer cls-global-footer-inverse cls-global-footer-body d-print-none">
+	<?php if (isset($fluidContainer) && $fluidContainer == true) { ?>
+	<div class="container-fluid">
+	<?php } else { ?>
 	<div class="container">
+	<?php } ?>
 
     <div class="hidden-print">
 			<div class="row">
