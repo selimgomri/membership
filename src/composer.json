@@ -1,6 +1,7 @@
 {
     "require": {
         "dg/twitter-php": "^3.6",
-        "nezamy/route": "1.1"
+        "nezamy/route": "1.1",
+        "gocardless/gocardless-pro": "~1.1"
     }
 }
