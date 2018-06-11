@@ -65,26 +65,21 @@
     }
 
     if ($found == true) {
-      // Reset the password
-      $password = generateRandomString(12);
-      $newHash = password_hash($password, PASSWORD_BCRYPT);
       $userID = $row['UserID'];
-      $sql = "UPDATE `users` SET `Password` = '$newHash' WHERE `UserID` = '$userID'";
-      mysqli_query($link, $sql);
 
-      $resetLink = $userID . "-reset-" . md5(generateRandomString(12) . time());
+      $resetLink = $userID . "-reset-" . md5(generateRandomString(20) . time());
 
-      $query = "INSERT INTO passwordTokens `UserID`, `Token`, `Type` VALUES ('$userID', '$resetLink', 'Password_Reset');";
+      $query = "INSERT INTO passwordTokens (`UserID`, `Token`, `Type`) VALUES ('$userID', '$resetLink', 'Password_Reset');";
       mysqli_query($link, $query);
 
       // PHP Email
       $subject = "Password Reset for " . $row['Username'];
       $to =  "" . $row['Forename'] . " " . $row['Surname'] . " <" . $row['EmailAddress'] . ">";
-      $sContent = '<h1>Hello ' . $row['Forename'] . '</h1>
-      <p>We\'ve reset your password for your Chester-le-Street ASC Account to <code>' . $password . '</code>.</p>
-      <p>Please reset your password as soon as possible in My Account by following this link <a href="' . autoUrl("myaccount/password") . '"> ' . autoUrl("myaccount/password") . '</a></p>
-      <p>HELLO</p>
-      <p><a href="' . autoUrl("resetpassword/auth/" . $resetLink) . '">Beta trial reset here</a></p>
+      $sContent = '<img src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.png" style="width:300px;max-width:100%;">
+      <h1>Hello ' . $row['Forename'] . '</h1>
+      <p>Here\'s your <a href="' . autoUrl("resetpassword/auth/" . $resetLink) . '">password reset link - ' . autoUrl("resetpassword/auth/" . $resetLink) . '</a>.</p>
+      <p>Follow this link to reset your password quickly and easily</p>
+      <p>If you did not request a password reset, please delete and ignore this email</p>
       <script type="application/ld+json">
       {
         "@context": "http://schema.org",
@@ -121,9 +116,9 @@
         <div class="row justify-content-center">
           <div class="col-sm-6 col-md-5 col-lg4">
             <div class="alert alert-success">
-              <strong>We found your account and have reset your password</strong>
-              <p class="mb-2">Check your email account for your password, <a href="login.php" class="alert-link">then login</a>.</p>
-              <p class="mb-0">Reset your password as soon as possible.</p>
+              <strong>We found your account and have sent you an email to reset your password</strong>
+              <p class="mb-2">Check your email account and follow the link to reset your password.</a>.</p>
+              <p class="mb-0">If you request another password reset, only the most recent link will work.</p>
             </div>
           </div>
         </div>
@@ -138,8 +133,8 @@
           <div class="col-sm-6 col-md-5 col-lg4">
             <div class="alert alert-warning">
               <strong>We did not find an account using those details</strong>
-              <p>If you do not have an account, <a href="register.php" class="alert-link">register an account</a></p>
-              <p>Or, <a href="forgot-password.php" class="alert-link">try again</a></p>
+              <p>If you do not have an account, <a href="' . autoUrl("register") . '" class="alert-link">register for an account</a></p>
+              <p>Or, <a href="' . autoUrl("resetpassword") . '" class="alert-link">try again</a></p>
             </div>
           </div>
         </div>

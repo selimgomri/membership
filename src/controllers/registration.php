@@ -103,8 +103,11 @@
           <p>You can change your personal details and password in My Account, but can\'t change your username.</p>
           ';
 
+          $messageid = time() .'-' . md5("CLS-Membership-Signup" . $to) . '@account.chesterlestreetasc.co.uk';
+
           // Always set content-type when sending HTML email
           $headers = "MIME-Version: 1.0" . "\r\n";
+          $headers .= "Message-ID: <" . $messageid . ">\r\n";
           $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
           $headers .= 'From: Chester-le-Street ASC <noreply@chesterlestreetasc.co.uk>' . "\r\n";
 
