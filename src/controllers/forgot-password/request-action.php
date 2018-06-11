@@ -78,8 +78,8 @@
       $sContent = '<img src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.png" style="width:300px;max-width:100%;">
       <h1>Hello ' . $row['Forename'] . '</h1>
       <p>Here\'s your <a href="' . autoUrl("resetpassword/auth/" . $resetLink) . '">password reset link - ' . autoUrl("resetpassword/auth/" . $resetLink) . '</a>.</p>
-      <p>Follow this link to reset your password quickly and easily</p>
-      <p>If you did not request a password reset, please delete and ignore this email</p>
+      <p>Follow this link to reset your password quickly and easily.</p>
+      <p>If you did not request a password reset, please delete and ignore this email.</p>
       <script type="application/ld+json">
       {
         "@context": "http://schema.org",
@@ -145,4 +145,4 @@
 
 
 ?>
-<?php include "footer.php" ?>
+<?php include BASE_PATH . "views/footer.php" ?>

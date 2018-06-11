@@ -14,9 +14,15 @@ if (mysqli_num_rows($result) > 0) {
 	$latestToken = $row['Token'];
 	if ($token == $latestToken) {
 		if ((isset($_POST['password1']) && isset($_POST['password2'])) && ($_POST['password1'] == $_POST['password2'])) {
+			// Set the password
 			$newHash = password_hash($_POST['password1'], PASSWORD_BCRYPT);
-      $sql = "UPDATE `users` SET `Password` = '$newHash' WHERE `UserID` = '$user'";
+      $sql = "UPDATE `users` SET `Password` = '$newHash' WHERE `UserID` = '$user';";
       mysqli_query($link, $sql);
+
+			// Remove token from db
+			$sql = "DELETE FROM `passwordTokens` WHERE `UserID` = '$user';";
+      mysqli_query($link, $sql);
+
 			// Display success
 			include BASE_PATH . 'views/header.php';
 			?>
