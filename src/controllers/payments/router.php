@@ -22,5 +22,11 @@ $this->get('/banks', function() {
 });
 
 $this->get('/testpay', function() {
+  global $link;
 	include 'testpay.php';
+});
+
+$this->get('/mandates/{mandate}', function($mandate) {
+  global $link;
+	include 'mandatePDFs.php';
 });

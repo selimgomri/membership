@@ -25,18 +25,20 @@ $result = mysqli_query($link, $sql);
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>Mandate</th>
-					<th>Customer</th>
+					<th>Bank Name</th>
+					<th>Account Holder</th>
+					<th>Account Number</th>
 					<th>In Use</th>
-					<th></th>
+          <th></th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 				$row = mysqli_fetch_array($result, MYSQLI_ASSOC);	?>
 				<tr>
-					<td><? echo $row['Mandate']; ?></td>
-					<td><? echo $row['Customer']; ?></td>
+					<td><? echo $row['BankName']; ?></td>
+					<td><? echo $row['AccountHolderName']; ?></td>
+          <td>******<? echo $row['AccountNumEnd']; ?></td>
 					<td><? echo $row['InUse']; ?></td>
 					<?php if (mysqli_num_rows($result) > 1) { ?>
 					<td><a href="<? echo autoUrl("payments/banks/makedefault/" . $row['MandateID']); ?>">Make Default</a></td>

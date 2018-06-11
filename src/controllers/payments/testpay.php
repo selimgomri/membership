@@ -24,5 +24,5 @@ print("ID: " . $payment->id);
 
 echo "success";*/
 
-$result = $client->customers()->get("CU0003PKR6H6KC");
-print_r($result);
+$bankAccount = $client->customerBankAccounts()->get("BA0003GA1VRAX6");
+print_r($bankAccount);

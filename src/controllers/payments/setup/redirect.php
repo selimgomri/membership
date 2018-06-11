@@ -10,9 +10,15 @@ try {
 
 	$mandate = mysqli_real_escape_string($link, $redirectFlow->links->mandate);
 	$customer = mysqli_real_escape_string($link, $redirectFlow->links->customer);
+  $bankAccount = mysqli_real_escape_string($link, $redirectFlow->links->customer_bank_account);
 
-	$sql = "INSERT INTO `paymentMandates` (`UserID`, `Name`, `Mandate`, `Customer`, `InUse`) VALUES ('$user', 'Mandate', '$mandate', '$customer', '1');";
-	mysqli_query($link, $sql);
+  $bank = $client->customerBankAccounts()->get($bankAccount);
+  $accHolderName = $bank->account_holder_name;
+  $accNumEnd = $bank->account_number_ending;
+  $bankName = $bank->bank_name;
+
+	$sql1 = "INSERT INTO `paymentMandates` (`UserID`, `Name`, `Mandate`, `Customer`, `BankAccount`, `BankName`, `AccountHolderName`, `AccountNumEnd`, `InUse`) VALUES ('$user', 'Mandate', '$mandate', '$customer', '$bankAccount', '$bankName', '$accHolderName', '$accNumEnd', '1');";
+	mysqli_query($link, $sql1);
 
 	// If there is no preferred mandate existing, automatically set it to the one we've just added
 	$sql = "SELECT `MandateId` FROM `paymentMandates` WHERE `UserID` = '$user';";
@@ -31,9 +37,10 @@ try {
 	 ?>
 
 	<div class="container">
+    <? echo $sql1; ?>
 		<h1>You've successfully set up your new direct debit.</h1>
 		<p class="lead">GoCardless Ltd will appear on your bank statement when payments are taken against this Direct Debit.</p>
-		<p>GoCardless Ltd handles direct debit payments for Chester-le-Street ASC. You will see <span class="mono">CHESTERLESTRE</span> as  reference for each payment.</p>
+		<p>GoCardless Ltd handles direct debit payments for Chester-le-Street ASC. You will see <span class="mono">CHESTERLESTRE</span> as the start of the reference for each payment.</p>
 		<a href="<? echo autoUrl("payments"); ?>" class="mb-3 btn btn-dark">Go to Payments</a>
 	</div>
 
