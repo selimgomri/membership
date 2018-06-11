@@ -24,6 +24,8 @@ try {
 		mysqli_query($link, $sql);
 	}
 
+	$pagetitle = "Direct Debit Set Up Success";
+
 	include BASE_PATH . "views/header.php";
 	include BASE_PATH . "views/paymentsMenu.php";
 	 ?>
@@ -32,6 +34,7 @@ try {
 		<h1>You've successfully set up your new direct debit.</h1>
 		<p class="lead">GoCardless Ltd will appear on your bank statement when payments are taken against this Direct Debit.</p>
 		<p>GoCardless Ltd handles direct debit payments for Chester-le-Street ASC. You will see <span class="mono">CHESTERLESTRE</span> as  reference for each payment.</p>
+		<a href="<? echo autoUrl("payments"); ?>" class="mb-3 btn btn-dark">Go to Payments</a>
 	</div>
 
 	<?php include BASE_PATH . "views/footer.php";

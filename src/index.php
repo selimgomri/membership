@@ -229,6 +229,16 @@ else {
     include 'controllers/payments/router.php';
   });
 
+  $route->group('/webhooks', function() {
+    global $link;
+
+    $this->group('/payments', function() {
+      global $link;
+
+      include 'controllers/payments/webhooks.php';
+    });
+  });
+
   // Log out
   $route->any(['/logout', '/logout.php'], function() {
     global $link;

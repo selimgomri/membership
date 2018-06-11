@@ -16,6 +16,11 @@ $this->get('/setup/{stage}:int', function($stage) {
 	}
 });
 
+$this->get('/banks', function() {
+	global $link;
+	include 'mybanks.php';
+});
+
 $this->get('/testpay', function() {
 	include 'testpay.php';
 });
