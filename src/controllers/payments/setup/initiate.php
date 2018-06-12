@@ -11,7 +11,7 @@ $redirectFlow = $client->redirectFlows()->create([
         "description" => "Club fees",
         // Not the access token
         "session_token" => session_id(),
-        "success_redirect_url" => autoUrl("payments/setup/1"),
+        "success_redirect_url" => autoUrl("payments/setup/2"),
         // Optionally, prefill customer details on the payment page
         "prefilled_customer" => [
           "given_name" => $row['Forename'],

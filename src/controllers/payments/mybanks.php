@@ -11,7 +11,7 @@ require 'GoCardlessSetup.php';
 //$customers = $client->customers()->list()->records;
 //print_r($customers);
 
-$sql = "SELECT * FROM `paymentMandates` WHERE `UserID` = $user AND `InUse` = 1;";
+$sql = "SELECT * FROM `paymentMandates` WHERE `UserID` = '$user' AND `InUse` = 1;";
 $result = mysqli_query($link, $sql);
 
  ?>
@@ -53,7 +53,7 @@ $result = mysqli_query($link, $sql);
 	<?php } else { ?>
 	<div class="alert alert-warning">
 		<strong>You have no Direct Debits</strong> <br>
-		Create one now
+		<a class="alert-link" href="<? echo autoUrl("payments/setup"); ?>">Create one now</a>
 	</div>
 	<?php } ?>
 </div>

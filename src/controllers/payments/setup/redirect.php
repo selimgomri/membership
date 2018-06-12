@@ -30,7 +30,7 @@ try {
 		mysqli_query($link, $sql);
 	}
 
-	$pagetitle = "Direct Debit Set Up Success";
+	$pagetitle = "You've setup a Direct Debit";
 
 	include BASE_PATH . "views/header.php";
 	include BASE_PATH . "views/paymentsMenu.php";
