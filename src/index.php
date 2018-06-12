@@ -128,12 +128,28 @@ if (empty($_SESSION['LoggedIn'])) {
   // Locked Out Password Reset
   $route->get('/resetpassword', function() {
     global $link;
-    require('controllers/forgot-password.php');
+    require('controllers/forgot-password/request.php');
   });
 
   $route->post('/resetpassword', function() {
     global $link;
-    require('controllers/forgot-password-action.php');
+    require('controllers/forgot-password/request-action.php');
+  });
+
+  // Password Reset via Link
+  $route->get('/resetpassword/auth/{token}', function($token) {
+    global $link;
+    require('controllers/forgot-password/reset.php');
+  });
+
+  $route->post('/resetpassword/auth/{token}', function($token) {
+    global $link;
+    require('controllers/forgot-password/reset-action.php');
+  });
+
+  $route->group('/payments/webhooks', function() {
+    global $link;
+    require('controllers/payments/webhooks.php');
   });
 
   // Global Catch All send to login
