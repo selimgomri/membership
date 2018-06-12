@@ -19,7 +19,7 @@
    }
   document.getElementById("submit").disabled = true;
 </script>
-<p>If an account exists with either the username or email address you submit, we will send you a new password by email.</p>
+<p>If an account exists with either the username or email address you submit, we will send you a link by email to reset your password.</p>
 </div>
 
 <?php include BASE_PATH . "views/footer.php"; ?>

@@ -1,5 +1,7 @@
 <?php
 
+$access = $_SESSION['AccessLevel'];
+
 $this->get('/', function() {
 	global $link;
 	include 'user.php';
@@ -30,3 +32,10 @@ $this->get('/mandates/{mandate}', function($mandate) {
   global $link;
 	include 'mandatePDFs.php';
 });
+
+if ($access == "Admin") {
+	$this->get('/administration', function() {
+		global $link;
+		include 'adminViewMonthlyFees.php';
+	});
+}
