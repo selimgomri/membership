@@ -13,6 +13,10 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 <div class="container">
 	<h1>Create a Manual Charge</h1>
   <hr>
+  <?php if (isset($_SESSION['ErrorState'])) {
+    echo $_SESSION['ErrorState'];
+    unset($_SESSION['ErrorState']);
+  } ?>
   <form method="post">
 		<div class="form-group">
 	    <label for="user">User Identification Number</label>
@@ -27,13 +31,17 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 		<div class="form-group">
 			<p>You have selected - <span id="selectedUserName">No Parent Selected</span></p>
 		</div>
+    <div class="form-group">
+	    <label for="desc">Description</label>
+  		<input type="text" class="form-control" id="desc" name="desc" placeholder="Description" required>
+	  </div>
 	  <div class="form-group">
-	    <label for="exampleInputPassword1">Amount</label>
+	    <label for="amount">Amount</label>
 			<div class="input-group">
 				<div class="input-group-prepend">
 	        <div class="input-group-text mono">&pound;</div>
 	      </div>
-	    	<input type="number" class="form-control mono" id="exampleInputPassword1" placeholder="Amount">
+	    	<input type="text" class="form-control mono" id="amount" name="amount" placeholder="Amount">
 			</div>
 	  </div>
 		<p><button class="btn btn-success" type="submit">Charge</button></p>
@@ -58,8 +66,6 @@ function getResult() {
     xhttp.send("userID=" + userID);
     console.log("Sent");
 }
-// Call getResult immediately
-getResult();
 document.getElementById("user").oninput=getResult;
 </script>
 

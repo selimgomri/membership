@@ -28,7 +28,6 @@ $result = mysqli_query($link, $sql);
 					<th>Bank Name</th>
 					<th>Account Holder</th>
 					<th>Account Number</th>
-					<th>In Use</th>
           <th></th>
 				</tr>
 			</thead>
@@ -39,7 +38,6 @@ $result = mysqli_query($link, $sql);
 					<td><a target="_blank" href="<? echo autoUrl("payments/mandates/" . $row['Mandate']); ?>"><? echo $row['BankName']; ?></a></td>
 					<td><? echo $row['AccountHolderName']; ?></td>
           <td>******<? echo $row['AccountNumEnd']; ?></td>
-					<td><? echo $row['InUse']; ?></td>
 					<?php if (mysqli_num_rows($result) > 1) { ?>
 					<td><a href="<? echo autoUrl("payments/banks/makedefault/" . $row['MandateID']); ?>">Make Default</a></td>
 					<?php } else { ?>

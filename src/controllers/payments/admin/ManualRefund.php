@@ -27,6 +27,10 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 		<div class="form-group">
 			<p>You have selected - <span id="selectedUserName">No Parent Selected</span></p>
 		</div>
+    <div class="form-group">
+	    <label for="desc">Description</label>
+  		<input type="text" class="form-control" id="desc" name="desc" placeholder="Description" required>
+	  </div>
 	  <div class="form-group">
 	    <label for="exampleInputPassword1">Amount</label>
 			<div class="input-group">
@@ -58,8 +62,6 @@ function getResult() {
     xhttp.send("userID=" + userID);
     console.log("Sent");
 }
-// Call getResult immediately
-getResult();
 document.getElementById("user").oninput=getResult;
 </script>
 
