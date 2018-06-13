@@ -40,6 +40,16 @@ if ($access == "Parent") {
 	  global $link;
 		include 'testpay.php';
 	});
+
+	$this->get(['/currentfees', '/fees'], function() {
+		global $link;
+		include 'parent/currentfees.php';
+	});
+
+	$this->get('/transactions', function() {
+		global $link;
+		include 'parent/transactions.php';
+	});
 }
 
 if ($access == "Parent" || $access == "Admin") {

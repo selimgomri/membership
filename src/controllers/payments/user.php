@@ -20,8 +20,17 @@ $pendingResult = mysqli_query($link, $sql);
  ?>
 
 <div class="container">
-	<h1>Payments</h1>
-	<p class="lead">Here you can control your Direct Debit details and see your payment history</p>
+  <div class="row align-items-center">
+    <div class="col-md-6 col-lg-8">
+    	<h1>Payments</h1>
+    	<p class="lead">Here you can control your Direct Debit details and see your payment history</p>
+    </div>
+    <div class="col text-center">
+      <div class="p-3 text-white bg-primary rounded box-shadow">
+        <p class="mb-0">Your Payment Date is the <strong><? echo getBillingDate($link, $user); ?></strong> of each month</p>
+      </div>
+    </div>
+  </div>
   <hr>
   <div class="row">
     <div class="col-md-6">
@@ -30,67 +39,15 @@ $pendingResult = mysqli_query($link, $sql);
     	<a href="<? echo autoUrl("payments/mandates"); ?>" class="btn btn-dark">Switch Bank Account</a>
     </div>
     <div class="col-md-6">
-    	<h2>Billing History</h2>
-    	<?php if (mysqli_num_rows($paymentResult) > 0) { ?>
-    	<div class="table-responsive">
-    		<table class="table table-striped">
-    			<thead>
-    				<tr>
-    					<th>ID</th>
-    					<th>Date</th>
-    					<th>Amount</th>
-    				</tr>
-    			</thead>
-    			<tbody>
-    				<?php for ($i = 0; $i < mysqli_num_rows($paymentResult); $i++) {
-    				$row = mysqli_fetch_array($paymentResult, MYSQLI_ASSOC);	?>
-    				<tr>
-    					<td><? echo $row['PaymentID']; ?></td>
-    					<td><? echo $row['Date']; ?></td>
-    					<td><? echo $row['Amount']; ?></td>
-    				</tr>
-    			<?php } ?>
-    			</tbody>
-    		</table>
-    	</div>
-	    <?php } else { ?>
-    	<div class="alert alert-warning">
-    		<strong>You have no previous payments</strong> <br>
-    		Payments will appear here when they have been requested
-    	</div>
-      <?php } ?>
+    	<h2>Transaction History (Bank)</h2>
+      <? echo paymentHistory($link, $user); ?>
       <h2>Fees this period</h2>
       <p class="lead">Fees to pay on your next Billing Date</p>
-    	<?php if (mysqli_num_rows($pendingResult) > 0) { ?>
-    	<div class="table-responsive">
-    		<table class="table table-striped">
-    			<thead>
-    				<tr>
-    					<th>Description</th>
-    					<th>Date</th>
-    					<th>Amount</th>
-    				</tr>
-    			</thead>
-    			<tbody>
-    				<?php for ($i = 0; $i < mysqli_num_rows($pendingResult); $i++) {
-    				$row = mysqli_fetch_array($pendingResult, MYSQLI_ASSOC);	?>
-    				<tr>
-    					<td><? echo $row['Name']; ?></td>
-    					<td><? echo date('j F Y', strtotime($row['Date'])); ?></td>
-    					<td>&pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?></td>
-    				</tr>
-    			<?php } ?>
-    			</tbody>
-    		</table>
-    	</div>
-	    <?php } else { ?>
-    	<div class="alert alert-warning">
-    		<strong>You have no previous payments</strong> <br>
-    		Payments will appear here when they have been requested
-    	</div>
-      <?php } ?>
+    	<? echo feesToPay($link, $user); ?>
     </div>
   </div>
 </div>
 
-<?php include BASE_PATH . "views/footer.php";
+<?php
+
+include BASE_PATH . "views/footer.php";

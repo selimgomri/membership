@@ -11,10 +11,12 @@ elseif (!isset($preventLoginRedirect)) {
 
 function notifySend($to, $subject, $message) {
   // PHP Email
+  $messageid = time() .'-' . md5("CLS-Membership" . $to) . '@account.chesterlestreetasc.co.uk';
 
   // Always set content-type when sending HTML email
   $headers = "MIME-Version: 1.0" . "\r\n";
-  $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+  $headers .= "Content-type: text/html;charset=UTF-8" . "\r\n";
+  $headers .= "Message-ID: <" . $messageid . ">\r\n";
   $headers .= 'From: Chester-le-Street ASC <noreply@chesterlestreetasc.co.uk>' . "\r\n";
   $message = "<img src=\"https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.png\" style=\"width:300px;max-width:100%;\">" . $message . "<p>This email was sent automatically by the Chester-le-Street ASC Membership System.</p>";
 
@@ -649,6 +651,156 @@ function autoUrl($relative) {
   global $rootURL;
   return $rootURL . $relative;
 }
+
+function monthlyFeeCost($link, $userID, $format = "decimal") {
+  $sql = "SELECT squads.SquadName, squads.SquadID, squads.SquadFee FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = '$userID' ORDER BY `squads`.`SquadFee` DESC;";
+  $result = mysqli_query($link, $sql);
+  $count = mysqli_num_rows($result);
+  $totalCost = 0;
+  $reducedCost = 0;
+
+  for ($i = 0; $i < $count; $i++) {
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $squadCost = $row['SquadFee'];
+    if ($i < 2) {
+      $totalCost += $squadCost;
+      $reducedCost += $squadCost;
+    }
+    else if ($i == 2) {
+      $totalCost += $squadCost*0.8;
+      $reducedCost += $squadCost*0.8;
+    }
+    else {
+      $totalCost += $squadCost*0.6;
+      $reducedCost += $squadCost*0.6;
+    }
+  }
+
+  $format = strtolower($format);
+  if ($format == "decimal") {
+    return $reducedCost;
+  }
+  else if ($format == "int") {
+    return ((int) ($reducedCost*100));
+  }
+  else if ($format == "string") {
+    return "&pound;" . number_format($reducedCost,2,'.','');
+  }
+}
+
+function swimmers($link, $userID, $fees = false) {
+  $sql = "SELECT squads.SquadName, squads.SquadFee, members.MForename, members.MSurname FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = '$userID' ORDER BY `squads`.`SquadFee` DESC;";
+  $result = mysqli_query($link, $sql);
+  $count = mysqli_num_rows($result);
+  $content = "";
+  if ($count > 0) {
+    $content .= "<ul class=\"mb-0 list-unstyled\">";
+
+    for ($i = 0; $i < $count; $i++) {
+      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+
+      $content .= "<li>" . $row['MForename'] . " " . $row['MSurname'];
+      if ($fees) {
+        $content .= ", " . $row['SquadName'] . " - &pound;" . number_format($row['SquadFee'],2,'.','');
+      }
+      $content .= "</li>";
+    }
+
+    $content .= "</ul>";
+  } else {
+    $content = '<span class="text-muted small">No swimmers on this account</span>';
+  }
+
+  return $content;
+
+}
+
+function paymentHistory($link, $user) {
+  $sql = "SELECT * FROM `payments` WHERE `UserID` = '$user' ORDER BY `PaymentID` DESC LIMIT 0, 5;";
+  $paymentResult = mysqli_query($link, $sql);
+  if (mysqli_num_rows($paymentResult) > 0) { ?>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php for ($i = 0; $i < mysqli_num_rows($paymentResult); $i++) {
+        $row = mysqli_fetch_array($paymentResult, MYSQLI_ASSOC);	?>
+        <tr>
+          <td><? echo $row['PaymentID']; ?></td>
+          <td><? date('j F Y', strtotime($row['Date'])); ?></td>
+          <td><? echo number_format(($row['Amount']/100),2,'.',''); ?></td>
+        </tr>
+      <?php } ?>
+      </tbody>
+    </table>
+  </div>
+  <?php } else { ?>
+  <div class="alert alert-warning">
+    <strong>You have no previous payments</strong> <br>
+    Payments and Refunds will appear here once they have been requested from your bank.
+  </div>
+  <?php }
+}
+
+function feesToPay($link, $user) {
+  $sql = "SELECT * FROM `paymentsPending` WHERE `UserID` = '$user' AND `PMkey` IS NULL AND `Status` = 'Pending' ORDER BY `Date` DESC LIMIT 0, 30;";
+  $pendingResult = mysqli_query($link, $sql);?>
+  <?php if (mysqli_num_rows($pendingResult) > 0) { ?>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th>Description</th>
+          <th>Date</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php for ($i = 0; $i < mysqli_num_rows($pendingResult); $i++) {
+        $row = mysqli_fetch_array($pendingResult, MYSQLI_ASSOC);	?>
+        <tr>
+          <td><? echo $row['Name']; ?></td>
+          <td><? echo date('j F Y', strtotime($row['Date'])); ?></td>
+          <td>&pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?></td>
+        </tr>
+      <?php } ?>
+      </tbody>
+    </table>
+  </div>
+  <?php } else { ?>
+  <div class="alert alert-warning">
+    <strong>You have no previous payments</strong> <br>
+    Payments will appear here when they have been added to your account.
+  </div>
+  <?php }
+}
+
+function getBillingDate($link, $user) {
+  $sql = "SELECT * FROM `paymentSchedule` WHERE `UserID` = '$user';";
+  if (mysqli_num_rows(mysqli_query($link, $sql)) > 0) {
+    $row = mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC);
+    $ordinal = null;
+    if ($row['Day']%10 == 1) {
+      $ordinal = "st";
+    }
+    else if ($row['Day']%10 == 2) {
+      $ordinal = "nd";
+    }
+    else {
+      $ordinal = "th";
+    }
+    return $row['Day'] . $ordinal;
+  } else {
+    return "1st";
+  }
+}
+
 
 
 
