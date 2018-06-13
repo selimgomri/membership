@@ -47,6 +47,26 @@
   </div> <!-- /.container -->
 </div>
 
+<div class="modal fade" id="paymentsBetaModal" tabindex="-1" role="dialog" aria-labelledby="paymentsBetaModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="paymentsBetaModalTitle">Payments <span class="badge badge-secondary">BETA</span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Payments by Direct Debit are currently being developed. Please only proceed if you are taking part in any trials.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <a href="<? echo autoUrl("payments"); ?>" class="btn btn-link">Go to payments</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Modals and Other Hidden HTML -->
 <script rel="preload" src="<?php echo autoUrl("js/jquery-3.2.1.slim.min.js") ?>"></script>
 <script defer src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/js/popper.min.js"></script>

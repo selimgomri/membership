@@ -160,6 +160,11 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
       <li class="nav-item">
 			  <a class="nav-link" href="<?php echo autoUrl("galas") ?>">Galas</a>
 		  </li>
+      <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#paymentsBetaModal">Payments <span class="badge badge-secondary">BETA</span></a>
+        </li>
+      <? } ?>
 		  <?php } ?>
 		  <?php if (empty($_SESSION['LoggedIn'])) { ?>
       <li class="nav-item">

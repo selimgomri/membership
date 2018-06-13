@@ -36,7 +36,7 @@ $result = mysqli_query($link, $sql);
 				<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 				$row = mysqli_fetch_array($result, MYSQLI_ASSOC);	?>
 				<tr>
-					<td><? echo $row['BankName']; ?></td>
+					<td><a target="_blank" href="<? echo autoUrl("payments/mandates/" . $row['Mandate']); ?>"><? echo $row['BankName']; ?></a></td>
 					<td><? echo $row['AccountHolderName']; ?></td>
           <td>******<? echo $row['AccountNumEnd']; ?></td>
 					<td><? echo $row['InUse']; ?></td>
