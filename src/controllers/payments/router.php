@@ -16,11 +16,19 @@ if ($access == "Parent") {
 			require('setup/start.php');
 		}
 		else if ($stage == 1) {
-			require('setup/initiate.php');
+			require('setup/date.php');
 		}
 		else if ($stage == 2) {
+			require('setup/initiate.php');
+		}
+		else if ($stage == 3) {
 			require('setup/redirect.php');
 		}
+	});
+
+	$this->post('/setup/1', function() {
+		global $link;
+		include 'setup/datepost.php';
 	});
 
 	$this->get('/mandates', function() {
