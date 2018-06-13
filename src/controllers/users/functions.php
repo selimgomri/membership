@@ -31,6 +31,12 @@ function getUserInfoByID($db, $id) {
 		</div>
 		<div class="media pt-3">
 			<p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+				<strong class="d-block text-gray-dark">User Identification Number</strong>
+				<span class="mono">CLSU' . $row['UserID'] . '</span>
+			</p>
+		</div>
+		<div class="media pt-3">
+			<p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
 				<strong class="d-block text-gray-dark">Username</strong>
 				' . $row['Username'] . '
 			</p>

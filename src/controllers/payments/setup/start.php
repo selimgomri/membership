@@ -9,7 +9,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-6">
-				<h1>Setup a Dirct Debit to pay Chester-le-Street ASC</h1>
+				<h1>Setup a Direct Debit to pay Chester-le-Street ASC</h1>
 				<p class="lead">Payments to Chester-le-Street ASC are now moving to direct debit.</p>
 				<p>Direct Debit makes payments simpler for everyone. You no longer need to pay by standing order or cheque as payments will be taken automatically.</p>
 				<p>We'll allow you to choose a day of the month on which to make payment requests.</p>

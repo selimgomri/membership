@@ -24,4 +24,9 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 		global $link;
 		include 'userSettingsAjax.php';
 	});
+
+	$this->post('/ajax/username', function() {
+		global $link;
+		include 'usernameAjax.php';
+	});
 }

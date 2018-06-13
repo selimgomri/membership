@@ -19,7 +19,7 @@ require 'GoCardlessSetup.php';
     	<h2>Manual Billing Information</h2>
     	<p><a href="<? echo autoUrl("payments/fees"); ?>" class="btn btn-dark">Parent Fees</a></p>
       <h2>Create a Manual Charge</h2>
-    	<p><a href="<? echo autoUrl("payments/charge"); ?>" class="btn btn-dark">New Charge</a></p>
+    	<p><a href="<? echo autoUrl("payments/newcharge"); ?>" class="btn btn-dark">New Charge</a></p>
       <h2>Charge for Gala Entries</h2>
     	<p><a href="<? echo autoUrl("payments/galas"); ?>" class="btn btn-dark">Charge for Gala Entries</a></p>
     </div>
