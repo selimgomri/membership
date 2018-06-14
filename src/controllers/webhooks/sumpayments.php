@@ -3,19 +3,42 @@
 ignore_user_abort(true);
 set_time_limit(0);
 
+$ms = date("Y-m");
+$date = date("Y-m") . "-01";
+
 $sql = "SELECT * FROM `paymentMonths` ORDER BY `Date` DESC LIMIT 1;";
 $result = mysqli_query($link, $sql);
 if (mysqli_num_rows($result) > 0) {
   $row = mysqli_fetch_array($result);
-  if ($row['MonthStart'] != date("Y-m")) {
-    $ms = date("Y-m");
-    $date = $ms . "-01";
+  if ($row['MonthStart'] != $ms) {
     $sql = "INSERT INTO `paymentMonths` (`MonthStart`, `Date`) VALUES ('$ms', '$date');";
     mysqli_query($link, $sql);
   }
 }
 
-$date = date("Y-m") . "-01";
+$sql = "SELECT * FROM `paymentSquadFees` INNER JOIN `paymentMonths` ON paymentSquadFees.MonthID = paymentMonths.MonthID WHERE `MonthStart` = '$ms' ORDER BY `Date` DESC LIMIT 1;";
+$result = mysqli_query($link, $sql);
+if (mysqli_num_rows($result) == 0) {
+  $sql = "SELECT `MonthID` FROM `paymentMonths` WHERE `MonthStart` = '$ms' ORDER BY `Date` DESC LIMIT 1;";
+  $row = mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC);
+  $mid = $row['MonthID'];
+
+  $sql = "SELECT `UserID` FROM `users` WHERE `AccessLevel` = 'Parent';";
+  $result = mysqli_query($link, $sql);
+  for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $user = $row['UserID'];
+    $amount = monthlyFeeCost($link, $user, "int");
+    if ($amount > 0) {
+      $description = "Squad Fees";
+      $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment');";
+      mysqli_query($link, $sql);
+    }
+  }
+  $sql = "INSERT INTO `paymentSquadFees` (`MonthID`) VALUES ('$mid');";
+  mysqli_query($link, $sql);
+
+}
 
 // If pending payments for last month, get them and sum them for each user
 $sql = "SELECT DISTINCT `UserID` FROM `paymentsPending` WHERE `Status` = 'Pending' AND `Date` < '$date' AND `Type` = 'Payment';";
