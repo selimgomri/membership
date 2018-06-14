@@ -3,7 +3,7 @@ Membership, a new project from [Chester-le-Street ASC](https://www.chesterlestre
 
 This software is continuously developed in accordance with the business and operation needs to Chester-le-Street ASC. We use a version of this software for our day-to-day club management, though it is further specialised to our needs..
 
-If you install this application on your own server, you must set up the SQL database tables yourself. You will need to modify the `config-template.php` file to connect to your database and rename it `config.php`.
+If you install this application on your own server, you must set up the SQL database tables yourself. You will need to modify the `config-template.php` file to connect to your database and rename it `config.php`. A Schema is provided for setting up your Database, though you will need to manually create an admin, where the password is a salted hash (preferrerably BCrypt). Use the PHP `password_hash()` functions for this.
 
 Chester-le-Street ASC accept no liability for any issues, including all legal issues, with this software. As mentioned, we use a slightly different version of this software which is better suited to deployment environments.
 
