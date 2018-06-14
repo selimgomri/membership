@@ -1,5 +1,8 @@
 <?php
 
+ignore_user_abort(true);
+set_time_limit(0);
+
 $sql = "SELECT * FROM `paymentMonths` ORDER BY `Date` DESC LIMIT 1;";
 $result = mysqli_query($link, $sql);
 if (mysqli_num_rows($result) > 0) {
@@ -32,4 +35,3 @@ for ($i = 0; $i < $count; $i++) {
 	$sql = "UPDATE `paymentsPending` SET `Status` = 'Queued' WHERE `UserID` = '$sumUID' AND `Status` = 'Pending' AND `Date` < '$date' AND `Type` = 'Payment';";
 	mysqli_query($link, $sql);
 }
-//echo date("Y-m", strtotime("first day of previous month"));

@@ -5,6 +5,7 @@ set_time_limit(0);
 
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
+$date = date("Y-m") . "-01";
 $day = date("d");
 
 $sql = "SELECT * FROM `payments` INNER JOIN `paymentSchedule` ON payments.UserID = paymentSchedule.UserID WHERE `Status` = 'pending_api_request' AND `Day` <= '$day' AND `Type` = 'Payment';";
@@ -41,8 +42,12 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 
 		$paymentID = $row['PaymentID'];
 		$id = $payment->id;
+		$status = $payment->status;
 
-		$sql = "UPDATE `payments` SET (`MandateID` = '$mandateid', `PMkey` = '$id' WHERE `PaymentID`) = '$paymentID';";
+		$sql = "UPDATE `payments` SET `Status` = '$status', `MandateID` = '$mandateid', `PMkey` = '$id' WHERE `PaymentID` = '$paymentID';";
+		mysqli_query($link, $sql);
+
+		$sql = "UPDATE `paymentsPending` SET `Status` = 'Requested', `PMkey` = '$id' WHERE `UserID` = '$userid' AND `Status` = 'Queued' AND `Type` = 'Payment' AND `Date` < '$date';";
 		mysqli_query($link, $sql);
 	} catch (Exception $e) {
 		halt(500);
