@@ -8,10 +8,10 @@ $result = mysqli_query($link, $sql);
 
 for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-	$to = $row['Forename'] . " " . $row['Surname'] . "<chris.heppell@chesterlestreetasc.co.uk>";
+	$to = $row['Forename'] . " " . $row['Surname'] . "<web@chesterlestreetasc.co.uk>";
 	$subject = $row['Subject'];
 	$message = "<p>Dear " . $row['Forename'] . " " . $row['Surname'] . "</p>" . $row['Message'];
-	notifySend("chris.heppell@chesterlestreetasc.co.uk", $subject, $message);
+	notifySend($to, $subject, $message);
 
 	$emailid = $row['EmailID'];
 	$sql = "UPDATE `notify` SET `Status` = 'Sent' WHERE `EmailID` = '$emailid';";
