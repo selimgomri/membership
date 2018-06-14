@@ -110,8 +110,13 @@ if ($access == "Galas") {
 }
 
 if ($access == "Galas" || $access == "Admin") {
-	$this->get('/galas/entries/{id}:int', function($id) {
+	$this->get('/galas/{id}:int', function($id) {
 		global $link;
 		include 'galas/EntryCharge.php';
+	});
+
+	$this->post('/galas/{id}:int', function($id) {
+		global $link;
+		include 'galas/EntryChargeAction.php';
 	});
 }

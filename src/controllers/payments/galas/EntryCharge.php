@@ -2,7 +2,7 @@
 
 $disabled = "";
 
-$sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE `EntryID` = '$id' ORDER BY `galas`.`GalaDate` DESC;";
+$sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galaEntries.GalaID = '$id' AND `Charged` = '0' LIMIT 1;";
 $result = mysqli_query($link, $sql);
 $count = mysqli_num_rows($result);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -42,7 +42,7 @@ if ($count == 1) {
 						    <span class="input-group-text">&pound;</span>
 						  </div>
 					  	<input type="text" class="form-control" id="pay" name="pay"
-							<?php if (!is_null($row['FeeToPay'])) { echo ' value="' . number_format($row['FeeToPay'],2,'.','') . '" '; } ?> placeholder="Amount to pay">
+							<?php if (!is_null($row['FeeToPay'])) { echo ' value="' . number_format($row['FeeToPay'],2,'.','') . '" '; } ?> placeholder="Amount to pay" required>
 						</div>
 					</div>
 					<div class="form-group col-md-6">
@@ -55,6 +55,7 @@ if ($count == 1) {
 						</div>
 					</div>
 				</div>
+        <input type="hidden" name="entryID" value="<? echo $row['EntryID']; ?>">
 				<p class="mb-0"><button class="btn btn-dark" type="submit">Charge Parent</button>
 			</div>
 
@@ -68,7 +69,7 @@ if ($count == 1) {
 	        if ($row[$swimsArray[$i]] == 1) { ?>
 	          <div class="col-sm-4 col-md-2">
 	            <div class="custom-control custom-checkbox">
-	              <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" checked <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
+	              <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" checked disabled name="<?php echo $swimsArray[$i]; ?>">
 	              <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
 	            </div>
 	          </div>
@@ -76,7 +77,7 @@ if ($count == 1) {
 	        else { ?>
 	          <div class="col-sm-4 col-md-2">
 	            <div class="custom-control custom-checkbox">
-	              <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
+	              <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" disabled name="<?php echo $swimsArray[$i]; ?>">
 	              <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
 	            </div>
 	          </div>
@@ -136,5 +137,25 @@ if ($count == 1) {
 <?php
 include BASE_PATH . "views/footer.php";
 } else {
-  halt(404);
+  $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galaEntries.GalaID = '$id' LIMIT 1;";
+  $result = mysqli_query($link, $sql);
+  $count = mysqli_num_rows($result);
+  if ($count > 0) {
+    $pagetitle = $row['MForename'] . " " . $row['MSurname'] . " - " . $row['GalaName'] . "";
+    include BASE_PATH . "views/header.php";
+  	include BASE_PATH . "views/paymentsMenu.php"; ?>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8">
+          <h1>You've reached the end</h1>
+          <p class="mb-0">There are no more entries to charge for this gala.</p>
+          <hr>
+          <p>If you think there has been an error, please contact suppot. <a href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>.</p>
+        </div>
+      </div>
+    </div>
+    <? include BASE_PATH . "views/header.php";
+  } else {
+    halt(404);
+  }
 }

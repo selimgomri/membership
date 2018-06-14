@@ -21,7 +21,7 @@ $result = mysqli_query($link, $sql);
 				$row = mysqli_fetch_array($result, MYSQLI_ASSOC); ?>
 				<div class="col col-sm-6 col-md-4 col-lg-3">
 					<div class="custom-control custom-checkbox">
-					  <input type="checkbox" class="custom-control-input" id="<? echo $row['SquadID']; ?>" name="<? echo $row['SquadID']; ?>">
+					  <input type="checkbox" class="custom-control-input" id="<? echo $row['SquadID']; ?>" name="<? echo $row['SquadID']; ?>" value="1">
 					  <label class="custom-control-label" for="<? echo $row['SquadID']; ?>"><? echo $row['SquadName']; ?> Squad</label>
 					</div>
 				</div>
@@ -31,22 +31,16 @@ $result = mysqli_query($link, $sql);
 
 		<div class="form-group">
 			<label for="subject">Message Subject</label>
-			<input type="text" class="form-control" name="subject" placeholder="Message Subject" autocomplete="off">
+			<input type="text" class="form-control" name="subject" id="subject" placeholder="Message Subject" autocomplete="off">
 		</div>
 
-		<hr>
-
-		<h2>Your Message</h2>
-
 		<div class="form-group">
-			<label for="message">Enter your message</label>
+			<label for="message">Your Message</label>
 			<textarea class="form-control" id="message" name="message" rows="10"></textarea>
 			<small id="messageHelp" class="form-text text-muted">Styling will be stripped from this message</small>
 		</div>
 
-		<div class="form-group mb-0">
-		<button class="btn btn-success" id="submit" value="submitted" type="submit">Send the email</button>
-		</div>
+		<p><button class="btn btn-dark" id="submit" value="submitted" type="submit">Send the email</button></p>
 	</form>
 </div>
 
