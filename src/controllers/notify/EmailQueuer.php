@@ -24,7 +24,7 @@ $result = mysqli_query($link, $sql);
 for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	$userid = $row['UserID'];
-	$sql = "INSERT INTO `notify` (`UserID`, `Subject`, `Message`) VALUES ('$userid', '$subject', '$message');";
+	$sql = "INSERT INTO `notify` (`UserID`, `Subject`, `Message`, `Status`) VALUES ('$userid', '$subject', '$message', 'Queued');";
 	mysqli_query($link, $sql);
 }
 
