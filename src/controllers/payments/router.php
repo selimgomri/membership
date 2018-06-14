@@ -80,6 +80,10 @@ if ($access == "Admin") {
 		include 'admin/ManualChargeDo.php';
 	});
 
+	/*
+
+	// Unavailable in this integration
+
 	$this->get('/newrefund', function() {
 		global $link;
 		include 'admin/ManualRefund.php';
@@ -88,5 +92,26 @@ if ($access == "Admin") {
 	$this->post('/newrefund', function() {
 		global $link;
 		include 'admin/ManualRefundDo.php';
+	});
+
+	*/
+
+	$this->get('/galas', function() {
+		global $link;
+		include 'galas/Home.php';
+	});
+}
+
+if ($access == "Galas") {
+	$this->get('/', function() {
+		global $link;
+		include 'galas/Home.php';
+	});
+}
+
+if ($access == "Galas" || $access == "Admin") {
+	$this->get('/galas/entries/{id}:int', function($id) {
+		global $link;
+		include 'galas/EntryCharge.php';
 	});
 }

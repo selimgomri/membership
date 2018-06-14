@@ -4,7 +4,10 @@
 		<? if ($access == "Admin") { ?>
     <a class="nav-link" href="<?php echo autoUrl("payments")?>">Payments Home</a>
 		<a class="nav-link" href="<?php echo autoUrl("payments/newcharge")?>">New Charge</a>
-		<a class="nav-link" href="<?php echo autoUrl("payments/newrefund")?>">New Refund</a>
+		<a class="nav-link" href="<?php echo autoUrl("payments/galas")?>">Gala Charges</a>
+		<? } ?>
+    <? if ($access == "Galas") { ?>
+		<a class="nav-link" href="<?php echo autoUrl("payments")?>">Gala Charges</a>
 		<? } ?>
     <? if ($access == "Parent") { ?>
     <a class="nav-link" href="<?php echo autoUrl("payments")?>">Payments Home</a>

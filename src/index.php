@@ -250,6 +250,12 @@ else {
     include 'controllers/payments/router.php';
   });
 
+  $route->group('/notify', function() {
+    global $link;
+
+    include 'controllers/notify/router.php';
+  });
+
   $route->group('/webhooks', function() {
     global $link;
 
