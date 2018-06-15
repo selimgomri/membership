@@ -156,6 +156,11 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
   			  <a class="nav-link" href="<?php echo autoUrl("payments") ?>">Payments</a>
   		  </li>
         <?php } ?>
+        <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
+        <li class="nav-item">
+  			  <a class="nav-link" href="<?php echo autoUrl("notify") ?>">Notify</a>
+  		  </li>
+        <?php } ?>
       <?php } ?>
       <li class="nav-item">
 			  <a class="nav-link" href="<?php echo autoUrl("galas") ?>">Galas</a>

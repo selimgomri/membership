@@ -18,7 +18,30 @@ function notifySend($to, $subject, $message) {
   $headers .= "Content-type: text/html;charset=UTF-8" . "\r\n";
   $headers .= "Message-ID: <" . $messageid . ">\r\n";
   $headers .= 'From: Chester-le-Street ASC <noreply@chesterlestreetasc.co.uk>' . "\r\n";
-  $message = "<img src=\"https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.png\" style=\"width:300px;max-width:100%;\">" . $message . "<p>This email was sent automatically by the Chester-le-Street ASC Membership System.</p>";
+  $message = "
+  <!DOCTYPE html>
+  <html lang=\"en-gb\">
+  <head>
+    <meta charset=\"utf-8\">
+    <style type=\"text/css\">
+      @media screen {
+        @font-face {
+          font-family: 'Open Sans', sans-serif;
+          font-style: normal;
+          font-weight: 400;
+          src: local('Open Sans Regular'), url('https://fonts.googleapis.com/css?family=Open+Sans');
+        }
+
+        body {
+          font-family: 'Open Sans', sans-serif;
+        }
+      </style>
+    </head>
+    <body>
+      <table style=\"width:100%;border:0px;text-align:center\"><tr><td><img src=\"https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.png\" style=\"width:300px;max-width:100%;\"></td></tr></table>" . $message . "<p>This email was sent automatically by the Chester-le-Street ASC Membership System.</p>
+      <p>To control your email options, go to <a href=\"" . autoUrl("myaccount") . "\">My Account</a>.</p>
+    </body>
+    </html>";
 
   mail($to,$subject,$message,$headers);
 }

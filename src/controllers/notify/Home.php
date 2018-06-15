@@ -1,6 +1,6 @@
 <?php
 
-$user = $_SESSION['UserId'];
+$user = $_SESSION['UserID'];
 $pagetitle = "Notify";
 
 include BASE_PATH . "views/header.php";

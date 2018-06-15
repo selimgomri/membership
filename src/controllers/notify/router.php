@@ -18,8 +18,18 @@ if ($access == "Admin") {
 		include 'EmailQueuer.php';
 	});
 
+	$this->get('/email', function() {
+		global $link;
+		include 'EmailList.php';
+	});
+
 	$this->get('/email/{id}:int', function($id) {
 		global $link;
 		include 'EmailID.php';
+	});
+
+	$this->get('/emailtest', function() {
+		global $link;
+		notifySend("chris.heppell@chesterlestreetasc.co.uk", "test", "<p>Hello</p>");
 	});
 }

@@ -10,7 +10,7 @@ $result = mysqli_query($link, $sql);
  ?>
 
 <div class="container">
-	<h1>Notify</h1>
+	<h1>Notify Composer</h1>
 	<p class="lead">Send Emails to targeted groups of parents</p>
   <hr>
 	<form method="post">
@@ -36,6 +36,7 @@ $result = mysqli_query($link, $sql);
 
 		<div class="form-group">
 			<label for="message">Your Message</label>
+      <p><em>Your message will begin with "Dear <span class="mono">Parent Name</span>,".</em></p>
 			<textarea class="form-control" id="message" name="message" rows="10"></textarea>
 			<small id="messageHelp" class="form-text text-muted">Styling will be stripped from this message</small>
 		</div>
