@@ -9,15 +9,16 @@ elseif (!isset($preventLoginRedirect)) {
   $_SESSION['requestedURL'] = mysqli_real_escape_string(LINK, $_SERVER['REQUEST_URI']);
 }*/
 
-function notifySend($to, $subject, $message) {
+function notifySend($to, $subject, $message, $name = null) {
   // PHP Email
-  $messageid = time() .'-' . md5("CLS-Membership" . $to) . '@account.chesterlestreetasc.co.uk';
+  $messageid = time() .'-' . md5("CLS-Membership" . ((int) (Math.rand()*1000)) . $to) . '@account.chesterlestreetasc.co.uk';
 
   // Always set content-type when sending HTML email
   $headers = "MIME-Version: 1.0" . "\r\n";
   $headers .= "Content-type: text/html;charset=UTF-8" . "\r\n";
   $headers .= "Message-ID: <" . $messageid . ">\r\n";
   $headers .= 'From: Chester-le-Street ASC <noreply@chesterlestreetasc.co.uk>' . "\r\n";
+  $headers .= "To: " . $name . "<" . $to . ">\r\n";
   $message = "
   <!DOCTYPE html>
   <html lang=\"en-gb\">
@@ -43,7 +44,11 @@ function notifySend($to, $subject, $message) {
     </body>
     </html>";
 
-  mail($to,$subject,$message,$headers);
+  if (mail($to,$subject,$message,$headers)) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function getAttendanceByID($link, $id, $weeks = "all") {

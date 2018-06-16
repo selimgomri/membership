@@ -10,13 +10,15 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	$emailid = $row['EmailID'];
 	if ($row['EmailComms'] == 1) {
-		$to = $row['Forename'] . " " . $row['Surname'] . "<" . $row['EmailAddress'] . ">";
+		$to = $row['EmailAddress'];
+		$name = $row['Forename'] . " " . $row['Surname'];
 		$subject = $row['Subject'];
 		$message = "<p>Dear " . $row['Forename'] . " " . $row['Surname'] . ",</p>" . $row['Message'];
-		notifySend($to, $subject, $message);
 
-		$sql = "UPDATE `notify` SET `Status` = 'Sent' WHERE `EmailID` = '$emailid';";
-		mysqli_query($link, $sql);
+		if (notifySend($to, $subject, $message, $name)) {
+			$sql = "UPDATE `notify` SET `Status` = 'Sent' WHERE `EmailID` = '$emailid';";
+			mysqli_query($link, $sql);
+		}
 	} else {
 		$sql = "UPDATE `notify` SET `Status` = 'No_Sub' WHERE `EmailID` = '$emailid';";
 		mysqli_query($link, $sql);

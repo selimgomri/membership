@@ -47,8 +47,19 @@ $result = mysqli_query($link, $sql);
 
 <script>
  tinymce.init({
-   selector: '#message',
-   branding: false,
+    selector: '#message',
+    branding: false,
+    plugins: [
+      'autolink lists link image charmap print preview anchor textcolor',
+      'searchreplace visualblocks code fullscreen code autoresize',
+      'insertdatetime media table contextmenu paste code help wordcount'
+    ],
+    toolbar: 'insert | undo redo |  formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+    content_css: [
+      'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i',
+      '<? echo autoUrl("css/tinymce.css"); ?>'
+    ]
+      //toolbar: "link",
  });
 </script>
 <?php include BASE_PATH . "views/footer.php";
