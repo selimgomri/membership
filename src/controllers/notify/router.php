@@ -2,6 +2,13 @@
 
 $access = $_SESSION['AccessLevel'];
 
+if ($access != "Admin") {
+$this->get('/', function() {
+	global $link;
+	include 'Help.php';
+});
+}
+
 if ($access == "Admin") {
 	$this->get('/', function() {
 		global $link;
