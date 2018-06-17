@@ -198,43 +198,87 @@ function process_payment_event($event) {
       }
       break;
 		case "customer_approval_granted":
-			print("Mandate " . $event["links"]["mandate"] . " has been transferred to a new bank!\n");
+        if (updatePaymentStatus($event["links"]["payment"])) {
+  			  print("Payment " . $event["links"]["payment"] . ": Customer Approval has been Granted\n");
+        } else {
+          print("Failed " . $event["links"]["payment"]);
+        }
 			break;
 		case "customer_approval_denied":
 			print("Mandate " . $event["links"]["mandate"] . " has expired!\n");
 			break;
     case "submitted":
-      print("Mandate " . $event["links"]["mandate"] . " has been cancelled!\n");
+      if (updatePaymentStatus($event["links"]["payment"])) {
+        print("Payment " . $event["links"]["payment"] . ": Submitted\n");
+      } else {
+        print("Event Failed " . $event["links"]["payment"]);
+      }
       break;
 		case "confirmed":
-			print("Mandate " . $event["links"]["mandate"] . " has been transferred to a new bank!\n");
-			break;
+      if (updatePaymentStatus($event["links"]["payment"])) {
+        print("Payment " . $event["links"]["payment"] . ": Confirmed\n");
+      } else {
+        print("Event Failed " . $event["links"]["payment"]);
+      }
+      break;
 		case "chargeback_cancelled":
-			print("Mandate " . $event["links"]["mandate"] . " has expired!\n");
-			break;
+      if (updatePaymentStatus($event["links"]["payment"])) {
+        print("Payment " . $event["links"]["payment"] . ": Chargeback Cancelled\n");
+      } else {
+        print("Event Failed " . $event["links"]["payment"]);
+      }
+      break;
     case "paid_out":
-      print("Mandate " . $event["links"]["mandate"] . " has been cancelled!\n");
+      if (updatePaymentStatus($event["links"]["payment"])) {
+        print("Payment " . $event["links"]["payment"] . ": Paid Out\n");
+      } else {
+        print("Event Failed " . $event["links"]["payment"]);
+      }
       break;
 		case "late_failure_settled":
-			print("Mandate " . $event["links"]["mandate"] . " has been transferred to a new bank!\n");
-			break;
+      if (updatePaymentStatus($event["links"]["payment"])) {
+        print("Payment " . $event["links"]["payment"] . ": Late Failure Settled\n");
+      } else {
+        print("Event Failed " . $event["links"]["payment"]);
+      }
+      break;
 		case "chargeback_settled":
-			print("Mandate " . $event["links"]["mandate"] . " has expired!\n");
-			break;
+      if (updatePaymentStatus($event["links"]["payment"])) {
+        print("Payment " . $event["links"]["payment"] . ": Chargeback Settled\n");
+      } else {
+        print("Event Failed " . $event["links"]["payment"]);
+      }
+      break;
     case "failed":
-			print("Mandate " . $event["links"]["mandate"] . " has expired!\n");
-			break;
+      if (updatePaymentStatus($event["links"]["payment"])) {
+        print("Payment " . $event["links"]["payment"] . ": Payment Failed\n");
+      } else {
+        print("Event Failed " . $event["links"]["payment"]);
+      }
+      break;
     case "charged_back":
-      print("Mandate " . $event["links"]["mandate"] . " has been cancelled!\n");
+      if (updatePaymentStatus($event["links"]["payment"])) {
+        print("Payment " . $event["links"]["payment"] . ": Charged Back\n");
+      } else {
+        print("Event Failed " . $event["links"]["payment"]);
+      }
       break;
 		case "cancelled":
-			print("Mandate " . $event["links"]["mandate"] . " has been transferred to a new bank!\n");
-			break;
+      if (updatePaymentStatus($event["links"]["payment"])) {
+        print("Payment " . $event["links"]["payment"] . ": Cancelled\n");
+      } else {
+        print("Event Failed " . $event["links"]["payment"]);
+      }
+      break;
 		case "resubmission_requested":
-			print("Mandate " . $event["links"]["mandate"] . " has expired!\n");
-			break;
+      if (updatePaymentStatus($event["links"]["payment"])) {
+        print("Payment " . $event["links"]["payment"] . ": Resubmission Requested\n");
+      } else {
+        print("Event Failed " . $event["links"]["payment"]);
+      }
+      break;
     default:
-      print("Don't know how to process a mandate " . $event["action"] . " event\n");
+      print("Don't know how to process a payment " . $event["action"] . " event\n");
       break;
   }
 }

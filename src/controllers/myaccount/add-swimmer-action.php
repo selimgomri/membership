@@ -52,31 +52,31 @@
 
       // Notify new parent with email
       $message = "
-      <h1>Hello " . $row['Forename'] . "</h1>
+      <p>Hello " . $row['Forename'] . " " . $row['Surname'] . ",</p>
       <p>Your swimmer, " . $row['MForename'] . " " . $row['MSurname'] . " has been registered
       with your account.</p>
       <ul>
         <li>" . $row['MForename'] . " " . $row['MSurname'] . "</li>
-        <li>Squad " . $row['SquadName'] . "</li>
-        <li>Monthly Fee " . $row['SquadFee'] . "</li>
-        <li>ASA Number " . $row['ASANumber'] . "</li>
-        <li>CLS ASC Member ID " . $row['MemberID'] . "</li>
+        <li>Squad: " . $row['SquadName'] . "</li>
+        <li>Monthly Fee: &pound;" . $row['SquadFee'] . "</li>
+        <li>ASA Number: " . $row['ASANumber'] . "</li>
+        <li>CLS ASC Member ID: " . $row['MemberID'] . "</li>
       </ul>
       <p>If this was not you, contact <a href=\"mailto:support@chesterlestreetasc.co.uk\">
       support@chesterlestreetasc.co.uk</a> as soon as possible</p>";
       notifySend($row['EmailAddress'], "A swimmer has been added", $message);
 
       // Return to My Account
-      header("Location: index.php");
+      header("Location: " . autoUrl(""));
 
     }
     else {
       // Error, too many records found - Database error
-      header("Location: add-swimmer.php");
+      header("Location: " . autoUrl("addswimmer"));
     }
   }
   else {
     // Error, fields not filled out
-    header("Location: add-swimmer.php");
+    header("Location: " . autoUrl("addswimmer");
   }
 ?>

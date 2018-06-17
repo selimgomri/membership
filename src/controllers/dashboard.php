@@ -68,7 +68,7 @@
 ?>
 </section>
 <?php }
-elseif ($_SESSION['AccessLevel'] == "Coach") { ?>
+if ($_SESSION['AccessLevel'] == "Coach" || $_SESSION['AccessLevel'] == "Admin") { ?>
 <div class="my-3 p-3 bg-white rounded box-shadow">
   <h2 class="border-bottom border-gray pb-2 mb-0">Quick Tasks</h2>
   <div class="media text-muted pt-3">
@@ -78,17 +78,14 @@ elseif ($_SESSION['AccessLevel'] == "Coach") { ?>
     </p>
   </div>
   <div class="media text-muted pt-3">
-    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+    <p class="media-body pb-3 mb-0 lh-125">
       <a href="<?php echo autoUrl('swimmers') ?>"><strong class="d-block text-gray-dark">Swimmer Notes</strong></a>
       Check important medical and other notes from parents
     </p>
   </div>
-  <span class="d-block text-right mt-3">
-    <a href="#">More tasks</a>
-  </span>
 </div>
 <?php }
-else { ?>
+if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas" || $_SESSION['AccessLevel'] == "Coach") { ?>
   <div class="my-3 p-3 bg-white rounded box-shadow">
     <h2 class="border-bottom border-gray pb-2 mb-0">Gala Tasks</h2>
     <div class="media text-muted pt-3">
@@ -98,14 +95,11 @@ else { ?>
       </p>
     </div>
     <div class="media text-muted pt-3">
-      <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+      <p class="media-body pb-3 mb-0 lh-125">
         <a href="<?php echo autoUrl('galas/addgala') ?>"><strong class="d-block text-gray-dark">Add a Gala</strong></a>
         Add a gala to the system to allow entries
       </p>
     </div>
-    <span class="d-block text-right mt-3">
-      <a href="#">More tasks</a>
-    </span>
   </div>
 <?php } ?>
 
@@ -132,7 +126,7 @@ else { ?>
     </p>
   </div>
   <span class="d-block text-right mt-3">
-    <a href="https://apps.google.com/u/2/user/hub">More tasks</a>
+    <a href="https://gsuite.google.co.uk/intl/en_uk/">Learn more about G Suite</a>
   </span>
 </div>
 <?php } ?>

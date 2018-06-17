@@ -65,7 +65,7 @@ if ($added) {
 
   // Send tweets via twitter
   // Get config for authentication data
-  require_once BASE_PATH . 'config.php';
+  require BASE_PATH . 'config.php';
   // ENTER HERE YOUR CREDENTIALS (see readme.txt)
   $twitter = new Twitter($twitterConsumerKey, $twitterConsumerSecret, $twitterAccessToken, $twitterAccessTokenSecret);
   try {

@@ -24,7 +24,7 @@ function notifySend($to, $subject, $message, $name = null) {
   <html lang=\"en-gb\">
   <head>
     <meta charset=\"utf-8\">
-    <link href=\"https://fonts.googleapis.com/css?family=Open+Sans\" rel=\"stylesheet\" type=\"text/css\">
+    <link href=\"https://fonts.googleapis.com/css?family=Open+Sans:400,700\" rel=\"stylesheet\" type=\"text/css\">
     <style type=\"text/css\">
 
       html, body {
@@ -207,7 +207,7 @@ function mySwimmersMedia($link, $userID) {
   }
   $swimmers = '<p class="lead border-bottom border-gray pb-2 mb-0">You have ' . $swimmerCount . ' ' . $swimmerS . '</p>';
   if ($swimmerCount == 0) {
-    $swimmers .= '<p><a href="' . autoUrl("myaccount/add-swimmer.php") . '" class="btn btn-outline-dark">Add a Swimmer</a></p>';
+    $swimmers .= '<p><a href="' . autoUrl("myaccount/addswimmer") . '" class="btn btn-outline-dark">Add a Swimmer</a></p>';
   }
   $output = "";
   if ($swimmerCount > 0) {
@@ -231,7 +231,7 @@ function mySwimmersMedia($link, $userID) {
     $output .= '
     <div class="my-3 p-3 bg-white rounded box-shadow">
     <h2>My Swimmers</h2>
-    <p class="mb-0">It looks like you have no swimmers connected to your account. Why don\'t you <a href="' . autoUrl("myaccount/add-swimmer.php") . '" >add one now</a>?</p>
+    <p class="mb-0">It looks like you have no swimmers connected to your account. Why don\'t you <a href="' . autoUrl("myaccount/addswimmer") . '" >add one now</a>?</p>
     </div>';
   }
   return $output;
@@ -766,7 +766,7 @@ function paymentHistory($link, $user) {
     <table class="table table-hover">
       <thead class="thead-light">
         <tr>
-          <th>ID</th>
+          <th>Description</th>
           <th>Date</th>
           <th>Amount</th>
         </tr>
@@ -775,9 +775,9 @@ function paymentHistory($link, $user) {
         <?php for ($i = 0; $i < mysqli_num_rows($paymentResult); $i++) {
         $row = mysqli_fetch_array($paymentResult, MYSQLI_ASSOC);	?>
         <tr>
-          <td><? echo $row['PaymentID']; ?></td>
-          <td><? date('j F Y', strtotime($row['Date'])); ?></td>
-          <td><? echo number_format(($row['Amount']/100),2,'.',''); ?></td>
+          <td><? echo $row['Name']; ?></td>
+          <td><? echo date('j F Y', strtotime($row['Date'])); ?></td>
+          <td>&pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?></td>
         </tr>
       <?php } ?>
       </tbody>
@@ -862,6 +862,20 @@ function mandateExists($mandate) {
   $sql = "SELECT * FROM `paymentMandates` WHERE `Mandate` = '$mandate';";
   $count = mysqli_num_rows(mysqli_query($link, $sql));
   if ($count == 1) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function updatePaymentStatus($PMkey) {
+  global $link;
+  require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+  $PMkey = mysqli_real_escape_string($link, $PMkey);
+  $payment = $client->payments()->get($PMkey);
+  $status = mysqli_real_escape_string($link, $payment->status);
+  $sql = "UPDATE `payments` SET `Status` = '$status' WHERE `PMkey` = '$PMkey';";
+  if (mysqli_query($link, $sql)) {
     return true;
   } else {
     return false;
