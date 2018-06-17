@@ -50,7 +50,6 @@ else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {
 	$this->get('/accesskeys', function() {
     global $link;
 	  require('accesskeys.php');
-		echo "accesskeys";
 	});
 
 	// Access Keys

@@ -58,6 +58,6 @@ if ($swimmerCount > 0) { ?>
 
 <?php
 
-  include BASE_PATH . "views/header.php";
+  include BASE_PATH . "views/footer.php";
 
   ?>
