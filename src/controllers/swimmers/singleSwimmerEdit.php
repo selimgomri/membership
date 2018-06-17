@@ -137,7 +137,7 @@ $resultSwim = mysqli_query($link, $sqlSwim);
 $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
 $pagetitle = "Swimmer: " . $rowSwim['MForename'] . " " . $rowSwim['MSurname'];
 $title = null;
-$content = '<div class="row align-items-center"><div class="col-sm-8"><h1>Editing ' . $rowSwim['MForename'] . ' ' . $rowSwim['MSurname'] . '</h1></div><div class="col-sm-4 text-right"><a class="btn btn-dark" href="../' . $id . '">Exit Edit Mode</a></div></div><hr>';
+$content = '<form method="post"><div class="row align-items-center"><div class="col-sm-8"><h1>Editing ' . $rowSwim['MForename'] . ' ' . $rowSwim['MSurname'] . '</h1></div><div class="col-sm-4 text-right"><button type="submit" class="btn btn-success">Update</button> <a class="btn btn-dark" href="../' . $id . '">Exit Edit Mode</a></div></div><hr>';
 $content .= "<div class=\"row\"><div class=\"col col-md-8\">";
 if ($update) {
 $content .= '<div class="alert alert-success">
@@ -157,8 +157,6 @@ $content .= '
 	</ul>
 </div>';
 }
-// Main Info Content
-$content .= "<form method=\"post\">";
 $content .= "
 <div class=\"form-group\">
 	<label for=\"forename\">Forename</label>
@@ -257,7 +255,7 @@ if ($rowSwim['SquadCoC'] != "") {
 	$content .= "<li><a href=\"" . $rowSwim['SquadCoC'] . "\">Squad Code of Conduct</a></li>";
 }
 $content .= "</ul></div>";
-$content .= "</div></div>";
+$content .= "</div></div></form>";
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>
