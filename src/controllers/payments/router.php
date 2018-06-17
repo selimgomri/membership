@@ -80,6 +80,35 @@ if ($access == "Admin") {
 		include 'admin/ManualChargeDo.php';
 	});
 
+  $this->group('/extrafees', function() {
+		global $link;
+
+    $this->get('/', function() {
+  		global $link;
+  		include 'admin/ExtrasList.php';
+  	});
+
+    $this->get('/{id}', function($id) {
+  		global $link;
+  		include 'admin/ExtraIndividual.php';
+  	});
+
+    $this->get('/{id}/close', function($id) {
+  		global $link;
+  		include 'admin/ExtraFees.php';
+  	});
+
+    $this->get('ajax/{id}:int', function($id) {
+  		global $link;
+  		include 'admin/ExtraFees.php';
+  	});
+
+    $this->get('/new', function() {
+  		global $link;
+  		include 'admin/ExtraFees.php';
+  	});
+	});
+
 	$this->get('/testpay', function() {
 		global $link;
 		include 'testpay.php';

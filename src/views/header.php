@@ -25,7 +25,7 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
     </script>
 	  <script>var shiftWindow = function() { scrollBy(0, -50) }; if (location.hash) shiftWindow(); window.addEventListener("hashchange", shiftWindow);</script>
     <script src="<? echo autoUrl("/js/tinymce/tinymce.min.js"); ?>"></script>
-    <link rel="stylesheet preload" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700">
+    <link rel="stylesheet preload" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono">
     <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.9.css") ?>">
     <link rel="stylesheet" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/font-awesome/css/font-awesome.min.css">
     <link rel="apple-touch-icon" href="<https://www.chesterlestreetasc.co.uk/apple-touch-icon.png">
