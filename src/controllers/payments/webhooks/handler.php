@@ -38,6 +38,44 @@ function process_mandate_event($event) {
 	global $link;
 	include BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   switch ($event["action"]) {
+    case "created":
+      if (mandateExists($event["links"]["mandate"])) {
+        print("Mandate " . $event["links"]["mandate"] . " has been created!\n");
+      } else {
+        $mandateObject = $client->mandates()->get($event["links"]["mandate"]);
+        $customer = $mandateObject->links->customer;
+        $email = mysqli_real_escape_string($link, ($client->customers()->get($customer))->email);
+        $sql = "SELECT `UserID` FROM `users` WHERE `EmailAddress` = '$email';";
+        $result = mysqli_query($link, $sql);
+        if (mysqli_num_rows($result) == 1) {
+          $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+          $user = $row['UserID'];
+
+          $mandate = mysqli_real_escape_string($link, $event["links"]["mandate"]);
+      		$customer = mysqli_real_escape_string($link, $customer);
+      	  $bankAccount = mysqli_real_escape_string($link, $mandateObject->links->customer_bank_account);
+
+      	  $bank = $client->customerBankAccounts()->get($bankAccount);
+      	  $accHolderName = mysqli_real_escape_string($bank->account_holder_name);
+      	  $accNumEnd = mysqli_real_escape_string($bank->account_number_ending);
+      	  $bankName = mysqli_real_escape_string($bank->bank_name);
+
+      		$sql1 = "INSERT INTO `paymentMandates` (`UserID`, `Name`, `Mandate`, `Customer`, `BankAccount`, `BankName`, `AccountHolderName`, `AccountNumEnd`, `InUse`) VALUES ('$user', 'Mandate', '$mandate', '$customer', '$bankAccount', '$bankName', '$accHolderName', '$accNumEnd', '1');";
+      		mysqli_query($link, $sql1);
+
+      		// If there is no preferred mandate existing, automatically set it to the one we've just added
+      		$sql = "SELECT `MandateID` FROM `paymentMandates` WHERE `UserID` = '$user';";
+      		$result = mysqli_query($link, $sql);
+      		if (mysqli_num_rows($result) == 1) {
+      			$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+      			$mandateId = $row['MandateID'];
+      			$sql = "UPDATE `paymentPreferredMandate` SET `MandateID` = '$mandateId' WHERE `UserID` = '$user';";
+      			mysqli_query($link, $sql);
+      		}
+          print("Mandate " . $event["links"]["mandate"] . " has been created! We found the user in question.\n");
+        }
+      }
+      break;
   	case "cancelled":
       print("Mandate " . $event["links"]["mandate"] . " has been cancelled!\n");
 			$mandate = mysqli_real_escape_string($link, $event["links"]["mandate"]);
@@ -132,13 +170,67 @@ function process_payment_event($event) {
 	global $link;
 	include BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   switch ($event["action"]) {
-  	case "cancelled":
-      print("Mandate " . $event["links"]["mandate"] . " has been cancelled!\n");
+  	case "created":
+      print("Payment " . $event["links"]["payment"] . " has been created!\n");
+      if (!paymentExists($event["links"]["payment"])) {
+        // Create a new Payment
+        $PMkey = mysqli_real_escape_string($link, $event["links"]["payment"]);
+        $payment = $client->payments()->get($PMkey);
+        $status = mysqli_real_escape_string($link, $payment->status);
+        $date = mysqli_real_escape_string($link, $payment->charge_date);
+        $amount = mysqli_real_escape_string($link, $payment->amount);
+        $name = mysqli_real_escape_string($link, $payment->description);
+        $currency = mysqli_real_escape_string($link, $payment->currency);
+        $mandate = mysqli_real_escape_string($link, $payment->links->mandate);
+
+        $sql = "SELECT `MandateID`, `UserID` FROM `paymentMandates` WHERE `Mandate` = '$mandate';";
+        $result = mysqli_query($link, $sql);
+        if (mysqli_num_rows($result) == 1) {
+          $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+          $user = mysqli_real_escape_string($link, $row['UserID']);
+          $mandate = mysqli_real_escape_string($link, $row['MandateID']);
+          $sql = "INSERT INTO `payments`
+          (`Date`, `Status`, `UserID`, `MandateID`, `Name`, `Amount`, `Currency`, `PMkey`, `Type`)
+          VALUES
+          ('$date', '$status', '$user', '$mandate', '$name', '$amount', '$currency', '$PMkey', 'Payment');";
+          mysqli_query($link, $sql);
+        }
+      }
       break;
-		case "transferred":
+		case "customer_approval_granted":
 			print("Mandate " . $event["links"]["mandate"] . " has been transferred to a new bank!\n");
 			break;
-		case "expired":
+		case "customer_approval_denied":
+			print("Mandate " . $event["links"]["mandate"] . " has expired!\n");
+			break;
+    case "submitted":
+      print("Mandate " . $event["links"]["mandate"] . " has been cancelled!\n");
+      break;
+		case "confirmed":
+			print("Mandate " . $event["links"]["mandate"] . " has been transferred to a new bank!\n");
+			break;
+		case "chargeback_cancelled":
+			print("Mandate " . $event["links"]["mandate"] . " has expired!\n");
+			break;
+    case "paid_out":
+      print("Mandate " . $event["links"]["mandate"] . " has been cancelled!\n");
+      break;
+		case "late_failure_settled":
+			print("Mandate " . $event["links"]["mandate"] . " has been transferred to a new bank!\n");
+			break;
+		case "chargeback_settled":
+			print("Mandate " . $event["links"]["mandate"] . " has expired!\n");
+			break;
+    case "failed":
+			print("Mandate " . $event["links"]["mandate"] . " has expired!\n");
+			break;
+    case "charged_back":
+      print("Mandate " . $event["links"]["mandate"] . " has been cancelled!\n");
+      break;
+		case "cancelled":
+			print("Mandate " . $event["links"]["mandate"] . " has been transferred to a new bank!\n");
+			break;
+		case "resubmission_requested":
 			print("Mandate " . $event["links"]["mandate"] . " has expired!\n");
 			break;
     default:

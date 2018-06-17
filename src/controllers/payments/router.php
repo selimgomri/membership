@@ -80,6 +80,11 @@ if ($access == "Admin") {
 		include 'admin/ManualChargeDo.php';
 	});
 
+	$this->get('/testpay', function() {
+		global $link;
+		include 'testpay.php';
+	});
+
 	/*
 
 	// Unavailable in this integration

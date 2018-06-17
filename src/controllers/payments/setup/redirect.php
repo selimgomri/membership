@@ -20,9 +20,9 @@ if ($scheduleExists == 0) {
 	  $bankAccount = mysqli_real_escape_string($link, $redirectFlow->links->customer_bank_account);
 
 	  $bank = $client->customerBankAccounts()->get($bankAccount);
-	  $accHolderName = $bank->account_holder_name;
-	  $accNumEnd = $bank->account_number_ending;
-	  $bankName = $bank->bank_name;
+	  $accHolderName = mysqli_real_escape_string($bank->account_holder_name);
+	  $accNumEnd = mysqli_real_escape_string($bank->account_number_ending);
+	  $bankName = mysqli_real_escape_string($bank->bank_name);
 
 		$sql1 = "INSERT INTO `paymentMandates` (`UserID`, `Name`, `Mandate`, `Customer`, `BankAccount`, `BankName`, `AccountHolderName`, `AccountNumEnd`, `InUse`) VALUES ('$user', 'Mandate', '$mandate', '$customer', '$bankAccount', '$bankName', '$accHolderName', '$accNumEnd', '1');";
 		mysqli_query($link, $sql1);

@@ -18,29 +18,44 @@ function notifySend($to, $subject, $message, $name = null) {
   $headers .= "Content-type: text/html;charset=UTF-8" . "\r\n";
   $headers .= "Message-ID: <" . $messageid . ">\r\n";
   $headers .= 'From: Chester-le-Street ASC <noreply@chesterlestreetasc.co.uk>' . "\r\n";
-  $headers .= "To: " . $name . "<" . $to . ">\r\n";
+  //$headers .= "List-Unsubscribe: <" . autoUrl("notify/unsubscribe/" . $id) . ">\r\n";
   $message = "
   <!DOCTYPE html>
   <html lang=\"en-gb\">
   <head>
     <meta charset=\"utf-8\">
+    <link href=\"https://fonts.googleapis.com/css?family=Open+Sans\" rel=\"stylesheet\" type=\"text/css\">
     <style type=\"text/css\">
-      @media screen {
-        @font-face {
-          font-family: 'Open Sans', sans-serif;
-          font-style: normal;
-          font-weight: 400;
-          src: local('Open Sans Regular'), url('https://fonts.googleapis.com/css?family=Open+Sans');
-        }
 
-        body {
-          font-family: 'Open Sans', sans-serif;
-        }
+      html, body {
+        font-family: \"Open Sans\",-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,sans-serif;
+        font-size: 1rem;
+        background: #fff8f8;
+      }
+
+      p, h1, h2, h3, h4, h5, h6 {
+        margin: 0 0 1rem 0;
+      }
+
+      .small {
+        font-size: 0.75rem;
+        color: #868e96;
+        margin-bottom: 0.75rem;
+      }
+
+      .bottom {
+        margin: 1rem 0 0 0;
+      }
+
       </style>
     </head>
     <body>
-      <table style=\"width:100%;border:0px;text-align:center\"><tr><td><img src=\"https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.png\" style=\"width:300px;max-width:100%;\"></td></tr></table>" . $message . "<p>This email was sent automatically by the Chester-le-Street ASC Membership System.</p>
-      <p>To control your email options, go to <a href=\"" . autoUrl("myaccount") . "\">My Account</a>.</p>
+      <table style=\"width:100%;border:0px;text-align:left\"><tr><td><img src=\"https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.png\" style=\"width:300px;max-width:100%;\"></td></tr></table>" . $message . "
+      <div class=\"bottom\">
+      <p class=\"small\">This email was sent automatically by the Chester-le-Street ASC Membership System.</p>
+      <p class=\"small\">Have questions about emails or anything else from Chester-le-Street ASC? Contact us at <a href=\"mailto:enquiries@chesterlestreetasc.co.uk\">enquiries@chesterlestreetasc.co.uk</a>.</p>
+      <p class=\"small\">To control your email options, go to <a href=\"" . autoUrl("myaccount") . "\">My Account</a>.</p>
+      </div>
     </body>
     </html>";
 
@@ -826,6 +841,30 @@ function getBillingDate($link, $user) {
     return $row['Day'] . $ordinal;
   } else {
     return "1st";
+  }
+}
+
+function paymentExists($payment) {
+  global $link;
+  $payment = mysqli_real_escape_string($link, $payment);
+  $sql = "SELECT * FROM `payments` WHERE `PMkey` = '$payment';";
+  $count = mysqli_num_rows(mysqli_query($link, $sql));
+  if ($count == 1) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function mandateExists($mandate) {
+  global $link;
+  $mandate = mysqli_real_escape_string($link, $mandate);
+  $sql = "SELECT * FROM `paymentMandates` WHERE `Mandate` = '$mandate';";
+  $count = mysqli_num_rows(mysqli_query($link, $sql));
+  if ($count == 1) {
+    return true;
+  } else {
+    return false;
   }
 }
 

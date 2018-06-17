@@ -33,7 +33,7 @@ include BASE_PATH . "views/notifyMenu.php";
 							</a>
 						</td>
 						<td>
-							<? echo $row['Subjct']; ?>
+							<? echo $row['Subject']; ?>
 						</td>
 					</tr>
 				<? } ?>

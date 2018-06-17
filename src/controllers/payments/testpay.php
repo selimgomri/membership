@@ -22,7 +22,10 @@ require 'GoCardlessSetup.php';
 // It should look like "PM000260X9VKF4"
 print("ID: " . $payment->id);
 
-echo "success";*/
+echo "success";
 
 $bankAccount = $client->customerBankAccounts()->get("BA0003GA1VRAX6");
-print_r($bankAccount);
+print_r($bankAccount); */
+
+$payment = $client->payments()->get("PM000A3VKWN415");
+print_r($payment);
