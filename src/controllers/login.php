@@ -44,7 +44,14 @@
   }*/
 
 ?>
-<div class="frontpage1" style="margin-top:-1rem;">
+<div class="homepage-masthead homepage-alert d-print-none" style="margin-bottom:1.0rem">
+  <div class="container">
+    <p class="h3">Take part in our Direct Debit Technical Trial</p>
+    <p>We're looking into introducing Direct Debit payments at the club and are currently carrying out technical tests.</p>
+    <a class="btn btn-primary" target="_blank" style="text-decoration:none" href="https://docs.google.com/forms/d/e/1FAIpQLSefBjc8y25Cfc80uS-U0IDM_C9ScRufGUoTBwV7TsSoyLbVuw/viewform?usp=sf_link">Register your interest</a>
+  </div>
+</div>
+<div class="frontpage1" style="margin-top:-1.0rem;">
   <div class="container-fluid">
     <div class="row justify-content-center">
       <div class="col-sm-6 col-md-5 col-xl-4"  style="padding-top:5rem;">

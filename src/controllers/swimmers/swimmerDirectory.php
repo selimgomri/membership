@@ -1,12 +1,12 @@
 <?php
 
 $squadID = $search = "";
-mysqli_real_escape_string(parse_str($_SERVER['QUERY_STRING'], $queries));
+mysqli_real_escape_string($link, parse_str($_SERVER['QUERY_STRING'], $queries));
 if (isset($queries['squadID'])) {
-  $squadID = mysqli_real_escape_string(intval($queries['squadID']));
+  $squadID = mysqli_real_escape_string($link, intval($queries['squadID']));
 }
 if (isset($queries['search'])) {
-  $search = mysqli_real_escape_string($queries['search']);
+  $search = mysqli_real_escape_string($link, $queries['search']);
 }
 
 $pagetitle = "Swimmers";
