@@ -13,12 +13,19 @@ function notifySend($to, $subject, $message, $name = null) {
   // PHP Email
   $messageid = time() .'-' . md5("CLS-Membership" . ((int) (Math.rand()*1000)) . $to) . '@account.chesterlestreetasc.co.uk';
 
+  $pos1 = strpos($to, '<')+1;
+  $pos2 = strpos($to, '>');
+  $id = substr($to, $pos1, $pos2-$pos1);
+
   // Always set content-type when sending HTML email
   $headers = "MIME-Version: 1.0" . "\r\n";
   $headers .= "Content-type: text/html;charset=UTF-8" . "\r\n";
   $headers .= "Message-ID: <" . $messageid . ">\r\n";
   $headers .= 'From: Chester-le-Street ASC <noreply@chesterlestreetasc.co.uk>' . "\r\n";
-  //$headers .= "List-Unsubscribe: <" . autoUrl("notify/unsubscribe/" . $id) . ">\r\n";
+  $headers .= "List-Help: <" . autoUrl("notify") . ">\r\n";
+  $headers .= "List-ID: CLS ASC Targeted Lists <targeted-lists@account.chesterlestreetasc.co.uk>\r\n";
+  $headers .= "List-Unsubscribe: <" . autoUrl("notify/unsubscribe/" . $id) . ">\r\n";
+  $headers .= 'List-Unsubscribe-Post: List-Unsubscribe=One-Click' . "\r\n";
   $message = "
   <!DOCTYPE html>
   <html lang=\"en-gb\">
