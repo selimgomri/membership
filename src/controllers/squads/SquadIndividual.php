@@ -110,7 +110,7 @@ $content .= "
 </div>
 <div class=\"alert alert-danger\">
   <div class=\"form-group mb-0\">
-    <label for=\"squadDeleteDanger\"><strong>Danger Zone</strong> <br>Delete this Squad with this Key \"" . $squadDeleteKey . "\"</label>
+    <label for=\"squadDeleteDanger\"><strong>Danger Zone</strong> <br>Delete this Squad with this Key \"<span class=\"mono\">" . $squadDeleteKey . "</span>\"</label>
     <input type=\"text\" class=\"form-control\" id=\"squadDeleteDanger\" name=\"squadDeleteDanger\" aria-describedby=\"squadDeleteDangerHelp\" placeholder=\"Enter the key\" onselectstart=\"return false\" onpaste=\"return false;\" onCopy=\"return false\" onCut=\"return false\" onDrag=\"return false\" onDrop=\"return false\" autocomplete=off>
     <small id=\"squadDeleteDangerHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will delete this squad.</small>
   </div>

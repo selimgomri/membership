@@ -239,7 +239,7 @@ if ($access == "Admin" || $access == "Committee") {
 $content .= "
 	<div class=\"alert alert-danger\">
 		<div class=\"form-group mb-0\">
-			<label for=\"swimmerDeleteDanger\"><strong>Danger Zone</strong> <br>Delete this Swimmer with this Key \"" . $rowSwim['AccessKey'] . "\"</label>
+			<label for=\"swimmerDeleteDanger\"><strong>Danger Zone</strong> <br>Delete this Swimmer with this Key \"<span class=\"mono\">" . $rowSwim['AccessKey'] . "</span>\"</label>
 			<input type=\"text\" class=\"form-control\" id=\"swimmerDeleteDanger\" name=\"swimmerDeleteDanger\" aria-describedby=\"swimmerDeleteDangerHelp\" placeholder=\"Enter the key\" onselectstart=\"return false\" onpaste=\"return false;\" onCopy=\"return false\" onCut=\"return false\" onDrag=\"return false\" onDrop=\"return false\" autocomplete=off>
 			<small id=\"swimmerDeleteDangerHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will delete this swimmer.</small>
 		</div>

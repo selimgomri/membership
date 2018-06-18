@@ -21,8 +21,13 @@ $result = mysqli_query($link, $sql);
 				$row = mysqli_fetch_array($result, MYSQLI_ASSOC); ?>
 				<div class="col col-sm-6 col-md-4 col-lg-3">
 					<div class="custom-control custom-checkbox">
-					  <input type="checkbox" class="custom-control-input" id="<? echo $row['SquadID']; ?>" name="<? echo $row['SquadID']; ?>" value="1">
-					  <label class="custom-control-label" for="<? echo $row['SquadID']; ?>"><? echo $row['SquadName']; ?> Squad</label>
+					  <input type="checkbox" class="custom-control-input"
+            id="<? echo $row['SquadID']; ?>" name="<? echo $row['SquadID']; ?>"
+            value="1">
+					  <label class="custom-control-label"
+              for="<? echo $row['SquadID']; ?>">
+              <? echo $row['SquadName']; ?> Squad
+            </label>
 					</div>
 				</div>
 			<?php } ?>
@@ -31,14 +36,23 @@ $result = mysqli_query($link, $sql);
 
 		<div class="form-group">
 			<label for="subject">Message Subject</label>
-			<input type="text" class="form-control" name="subject" id="subject" placeholder="Message Subject" autocomplete="off">
+			<input type="text" class="form-control" name="subject" id="subject"
+      placeholder="Message Subject" autocomplete="off">
 		</div>
 
 		<div class="form-group">
 			<label for="message">Your Message</label>
-      <p><em>Your message will begin with "Dear <span class="mono">Parent Name</span>,".</em></p>
-			<textarea class="form-control" id="message" name="message" rows="10"></textarea>
-			<small id="messageHelp" class="form-text text-muted">Styling will be stripped from this message</small>
+      <p>
+        <em>
+          Your message will begin with "Dear
+          <span class="mono">Parent Name</span>,".
+        </em>
+      </p>
+			<textarea class="form-control" id="message" name="message" rows="10">
+      </textarea>
+			<small id="messageHelp" class="form-text text-muted">
+        Styling will be stripped from this message
+      </small>
 		</div>
 
 		<p><button class="btn btn-dark" id="submit" value="submitted" type="submit">Send the email</button></p>
@@ -51,8 +65,8 @@ $result = mysqli_query($link, $sql);
     branding: false,
     plugins: [
       'autolink lists link image charmap print preview anchor textcolor',
-      'searchreplace visualblocks code fullscreen code autoresize',
-      'insertdatetime media table contextmenu paste code help wordcount'
+      'searchreplace visualblocks code autoresize insertdatetime media table',
+      'contextmenu paste code help wordcount'
     ],
     toolbar: 'insert | undo redo |  formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
     content_css: [

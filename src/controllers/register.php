@@ -11,7 +11,7 @@
   <h1>User Registration</h1>
   <p>We need a few details before we start.</p>
   <hr>
-  <form method="post" action="registration.php" name="register" id="register">
+  <form method="post" action="register" name="register" id="register">
 
     <h2>Personal Details</h2>
     <div class="form-group">
@@ -51,7 +51,7 @@
     <h2>Notification Preferences</h2>
     <div class="custom-control custom-checkbox">
       <input type="checkbox" class="custom-control-input" id="emailAuthorise" value="1">
-      <label class="custom-control-label" for="emailAuthorise">I agree that Chester-le-Street ASC may send me email notifications relating to my squads and Chester-le-Street ASC</label>
+      <label class="custom-control-label" for="emailAuthorise">I agree that Chester-le-Street ASC may send me news by email</label>
     </div>
 
     <div class="custom-control custom-checkbox">
@@ -62,11 +62,13 @@
     <p class="small">We will still need to send you notifications relating to your account from time.</p>
 
     <div class="alert alert-info">
-      <p><strong>Legal Stuff Applies</strong><br>By proceeding you agree to our <a class="alert-link" href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy</a> and the use of your data by Chester-le-Street ASC. Please note that you have also agreed to our use of you and your swimmer's data as part of your registration with the club and with British Swimming and Swim England (Formerly known as the ASA).</p>
+      <p class="mb-0"><strong>Legal Stuff Applies</strong></p>
+      <p>In accordance with European Law, Chester-le-Street ASC is a Data Controller for the purposes of the General Data Protection Regulation.</p>
+      <p>By proceeding you agree to our <a class="alert-link" href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy</a> and the use of your data by Chester-le-Street ASC. Please note that you have also agreed to our use of you and your swimmer's data as part of your registration with the club and with British Swimming and Swim England (Formerly known as the ASA).</p>
       <p>We will be unable to provide this service for technical reasons if you do not consent to the use of this data.</p>
       <p class="mb-0">Contact a member of the committee if you have any questions or email <a class="alert-link" href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>.</p>
     </div>
     <input type="submit" class="btn btn-outline-dark mb-4" value="Register">
 </div>
 
-<?php include "footer.php" ?>
+<?php include BASE_PATH . "views/footer.php"; ?>
