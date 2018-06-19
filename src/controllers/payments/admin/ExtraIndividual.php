@@ -32,14 +32,46 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
     </div>
   </div>
   <hr>
-  <div id="output">
-    <div class="ajaxPlaceholder">
-      <span class="h1 d-block">
-        <i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i>
-        <br>Loading Content
-      </span>If content does not display, please turn on JavaScript
+  <div class="row">
+    <div class="col-md-6">
+      <div id="output">
+        <div class="ajaxPlaceholder">
+          <span class="h1 d-block">
+            <i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i>
+            <br>Loading Content
+          </span>If content does not display, please turn on JavaScript
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="my-3 p-3 bg-white rounded box-shadow">
+        <form>
+          <button type="submit" class="btn btn-dark">
+            Add Swimmer to Extra
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+function getResult() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log("We got here");
+        document.getElementById("output").innerHTML = this.responseText;
+        console.log(this.responseText);
+      }
+    }
+    xhttp.open("POST", "<?php echo autoUrl("payments/extrafees/ajax/" . $id); ?>", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("");
+    console.log("Sent");
+}
+// Call getResult immediately
+getResult();
+</script>
 
 <?php include BASE_PATH . "views/footer.php";

@@ -98,9 +98,9 @@ if ($access == "Admin") {
   		include 'admin/ExtraFees.php';
   	});
 
-    $this->get('ajax/{id}:int', function($id) {
+    $this->post('ajax/{id}:int', function($id) {
   		global $link;
-  		include 'admin/ExtraFees.php';
+  		include 'admin/ExtraIndividualServer.php';
   	});
 
     $this->get('/new', function() {

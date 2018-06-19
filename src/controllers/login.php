@@ -99,6 +99,10 @@
     </div>
   </div>
 </div>
+
+<script>
+window.history.pushState("string", "Title", "<?php echo autoUrl("login"); ?>");
+</script>
 <?php
 
   if ( isset($_SESSION['ErrorState']) ) {

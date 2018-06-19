@@ -17,15 +17,11 @@ require 'GoCardlessSetup.php';
   <div class="row">
     <div class="col-md-6">
     	<h2>Manual Billing Information</h2>
-    	<p><a href="<? echo autoUrl("payments/fees"); ?>" class="btn btn-dark">Parent Fees</a></p>
+    	<p><a href="<? echo autoUrl("payments/fees"); ?>">Parent Fees</a></p>
       <h2>Create a Manual Charge</h2>
-    	<p><a href="<? echo autoUrl("payments/newcharge"); ?>" class="btn btn-dark">New Charge</a></p>
+    	<p><a href="<? echo autoUrl("payments/newcharge"); ?>">New Charge</a></p>
       <h2>Charge for Gala Entries</h2>
-    	<p><a href="<? echo autoUrl("payments/galas"); ?>" class="btn btn-dark">Charge for Gala Entries</a></p>
-    </div>
-    <div class="col-md-6">
-      <h2>Make Refund</h2>
-    	<p><a href="<? echo autoUrl("payments/refunds"); ?>" class="btn btn-dark">Refund a Parent</a></p>
+    	<p><a href="<? echo autoUrl("payments/galas"); ?>">Charge for Gala Entries</a></p>
     </div>
   </div>
 </div>
