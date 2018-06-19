@@ -10,6 +10,9 @@ if (mysqli_num_rows($result) != 1) {
   halt(404);
 }
 
+$sql = "SELECT * FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC;";
+$squads = mysqli_query($link, $sql);
+
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
 $pagetitle = $row['ExtraName'] . " - Extras";
@@ -46,9 +49,27 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
     <div class="col">
       <div class="my-3 p-3 bg-white rounded box-shadow">
         <form>
-          <button type="submit" class="btn btn-dark">
-            Add Swimmer to Extra
-          </button>
+          <div class="form-group">
+            <label for="squadSelect">Select Squad</label>
+            <select class="custom-select" id="squadSelect" name="squadSelect">
+              <option selected>Choose...</option>
+              <? for ($i = 0; $i < mysqli_num_rows($squads); $i ++) {
+                $squadsRow = mysqli_fetch_array($squads, MYSQLI_ASSOC); ?>
+              <option value="<? echo $squadsRow['SquadID']; ?>">
+                <? echo $squadsRow['SquadName']; ?>
+              </option>
+              <? } ?>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="swimmerSelect">Select Swimmer</label>
+            <select class="custom-select" id="swimmerSelect" name="swimmerSelect">
+              <option selected>Select squad first</option>
+            </select>
+          </div>
+            <button type="submit" class="btn btn-dark">
+              Add Swimmer to Extra
+            </button>
         </form>
       </div>
     </div>
@@ -56,7 +77,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 </div>
 
 <script>
-function getResult() {
+function getSwimmers() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
@@ -70,8 +91,25 @@ function getResult() {
     xhttp.send("");
     console.log("Sent");
 }
+
+function getSwimmersForSquad() {
+  var squad = (document.getElementById("squadSelect")).value;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log("We got here");
+        document.getElementById("swimmerSelect").innerHTML = this.responseText;
+        console.log(this.responseText);
+      }
+    }
+    xhttp.open("POST", "<?php echo autoUrl("payments/extrafees/ajax/" . $id); ?>", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("squadSelect=" + squad);
+    console.log("Sent");
+}
 // Call getResult immediately
-getResult();
+getSwimmers();
+document.getElementById("squadSelect").onchange=getSwimmersForSquad;
 </script>
 
 <?php include BASE_PATH . "views/footer.php";
