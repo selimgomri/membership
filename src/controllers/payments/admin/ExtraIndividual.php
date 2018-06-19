@@ -67,9 +67,11 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
               <option selected>Select squad first</option>
             </select>
           </div>
-            <button type="submit" class="btn btn-dark">
+            <button type="button" class="btn btn-dark" id="addSwimmer">
               Add Swimmer to Extra
             </button>
+            <div id="status">
+            </div>
         </form>
       </div>
     </div>
@@ -88,7 +90,7 @@ function getSwimmers() {
     }
     xhttp.open("POST", "<?php echo autoUrl("payments/extrafees/ajax/" . $id); ?>", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("");
+    xhttp.send("response=getSwimmers");
     console.log("Sent");
 }
 
@@ -104,12 +106,74 @@ function getSwimmersForSquad() {
     }
     xhttp.open("POST", "<?php echo autoUrl("payments/extrafees/ajax/" . $id); ?>", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("squadSelect=" + squad);
+    xhttp.send("response=squadSelect&squadSelect=" + squad);
     console.log("Sent");
 }
+
+function addSwimmerToExtra() {
+  var swimmer = (document.getElementById("swimmerSelect")).value;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        getSwimmers();
+        document.getElementById("squadSelect").innerHTML = "<option selected>Choose...</option>";
+        document.getElementById("swimmerSelect").innerHTML = "<option selected>Select squad first</option>";
+        document.getElementById("status").innerHTML =
+        '<div class="mt-3 mb-0 alert alert-success alert-dismissible fade show" role="alert">' +
+        '<strong>Successfully Added Swimmer</strong>'  +
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+        '<span aria-hidden="true">&times;</span>' +
+        '</button>' +
+        '</div>';
+      } else {
+        document.getElementById("status").innerHTML =
+        '<div class="mt-3 mb-0 alert alert-warning alert-dismissible fade show" role="alert">' +
+        '<strong>Unable to add swimmer</strong>' +
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+        '<span aria-hidden="true">&times;</span>' +
+        '</button>' +
+        '</div>';
+      }
+    }
+    xhttp.open("POST", "<?php echo autoUrl("payments/extrafees/ajax/" . $id); ?>", true);
+    console.log("POST", "<?php echo autoUrl("payments/extrafees/ajax/" . $id); ?>", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("response=insert&swimmerInsert=" + swimmer);
+    console.log("response=insert&swimmerInsert=" + swimmer);
+    console.log("Sent");
+}
+
+function dropSwimmerFromExtra(relation) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      getSwimmers();
+    }
+  }
+  xhttp.open("POST", "<?php echo autoUrl("payments/extrafees/ajax/" . $id); ?>", true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send("response=dropRelation&relation=" + relation);
+}
+
+var entryTable = document.querySelector("#output");
+entryTable.addEventListener("click", clickPropogation, false);
+
+function clickPropogation(e) {
+    if (e.target !== e.currentTarget) {
+        var clickedItem = e.target.id;
+        var clickedItemValue;
+        if (clickedItem != "") {
+          var clickedItemValue = document.getElementById(clickedItem).value;
+          dropSwimmerFromExtra(clickedItemValue);
+        }
+    }
+    e.stopPropagation();
+}
+
 // Call getResult immediately
 getSwimmers();
 document.getElementById("squadSelect").onchange=getSwimmersForSquad;
+document.getElementById("addSwimmer").onclick=addSwimmerToExtra;
 </script>
 
 <?php include BASE_PATH . "views/footer.php";
