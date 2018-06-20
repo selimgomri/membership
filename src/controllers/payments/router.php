@@ -88,25 +88,31 @@ if ($access == "Admin") {
   		include 'admin/ExtrasList.php';
   	});
 
+    $this->get('/new', function() {
+  		global $link;
+  		include 'admin/NewExtra.php';
+  	});
+
+    $this->post('/new', function() {
+  		global $link;
+  		include 'admin/NewExtraServer.php';
+  	});
+
     $this->get('/{id}', function($id) {
   		global $link;
   		include 'admin/ExtraIndividual.php';
   	});
 
-    $this->get('/{id}/close', function($id) {
+    $this->get('/{id}/delete', function($id) {
   		global $link;
-  		include 'admin/ExtraFees.php';
+  		include 'admin/ExtraDelete.php';
   	});
 
-    $this->get('ajax/{id}:int', function($id) {
+    $this->post('ajax/{id}:int', function($id) {
   		global $link;
-  		include 'admin/ExtraFees.php';
+  		include 'admin/ExtraIndividualServer.php';
   	});
 
-    $this->get('/new', function() {
-  		global $link;
-  		include 'admin/ExtraFees.php';
-  	});
 	});
 
 	$this->get('/testpay', function() {

@@ -19,6 +19,11 @@ if (!empty($_POST['gala'])) {
   $galaID = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['gala'])));
 }
 
+$sql = "SELECT * FROM `galaEntries` WHERE `GalaID` = '$galaID' AND `MemberID` = '$memberID';";
+if (mysqli_num_rows(mysqli_query($link, $sql)) > 0) {
+  halt(403);
+}
+
 if (!empty($_POST['TimesRequired'])) {
   $timesRequired = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['TimesRequired'])));
 }
