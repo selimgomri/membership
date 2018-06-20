@@ -26,7 +26,7 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
 	  <script>var shiftWindow = function() { scrollBy(0, -50) }; if (location.hash) shiftWindow(); window.addEventListener("hashchange", shiftWindow);</script>
     <script src="<? echo autoUrl("/js/tinymce/tinymce.min.js"); ?>"></script>
     <link rel="stylesheet preload" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono">
-    <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.9.css") ?>">
+    <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.11.css") ?>">
     <link rel="stylesheet" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/font-awesome/css/font-awesome.min.css">
     <link rel="apple-touch-icon" href="<https://www.chesterlestreetasc.co.uk/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="76x76" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad.png">
@@ -36,82 +36,13 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <style>.logo {background: url(https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.svg) left center no-repeat;}</style>
 
-	<style>
-    body {
-      padding-top: 4.5rem;
-    }
-    .box-shadow {
-      box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .10);
-    }
-    .nav-scroller {
-      position: relative;
-      z-index: 2;
-      height: 2.75rem;
-      overflow-y: hidden;
-      margin: -1rem 0 1rem 0;
-    }
-    .nav-scroller .nav {
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-wrap: nowrap;
-      flex-wrap: nowrap;
-      padding-bottom: 1rem;
-      margin-top: -1px;
-      overflow-x: auto;
-      color: rgba(255, 255, 255, .75);
-      text-align: center;
-      white-space: nowrap;
-      -webkit-overflow-scrolling: touch;
-    }
-    .nav-underline .nav-link {
-      padding-top: .75rem;
-      padding-bottom: .75rem;
-      line-height: 1.35rem;
-    }
-    @media print {
-      .nav-scroller {
-        display: none !important;
-      }
-    }
-    .ajaxPlaceholder {
-      padding: 10rem 0;
-      margin: 0 0 1rem 0;
-      text-align: center;
-      background: #efefef;
-    }
-    .galaEntryTimes {
-      display: -ms-grid;
-      display: grid;
-      -ms-grid-columns: (1fr)[1];
-      grid-template-columns: repeat(1, 1fr);
-      grid-column-gap: 20px;
-      -webkit-column-gap: 20px;
-      column-gap: 20px;
-      grid-row-gap: 1rem;
-      row-gap: 1rem;
-    }
-    @media (min-width: 992px) {
-      .galaEntryTimes {
-        -ms-grid-columns: (1fr)[2];
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    .chart {
-      max-width: 100%;
-    }
-    #cookie-law {
-      margin: -1rem 0 1rem 0;
-    }
-	</style>
-
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
   </head>
-<body class="bg-light">
+<body class="bg-light account-body">
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary d-print-none justify-content-between" role="navigation">
       <a class="navbar-brand" href="<?php echo autoUrl("") ?>">
         <?php if ((empty($_SESSION['LoggedIn']) || $_SESSION['AccessLevel'] == "Parent")) { ?>Membership<?php } else { ?>MMS<?php } ?>
