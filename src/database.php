@@ -738,6 +738,29 @@ function monthlyFeeCost($link, $userID, $format = "decimal") {
   }
 }
 
+function monthlyExtraCost($link, $userID, $format = "decimal") {
+  $sql = "SELECT extras.ExtraName, extras.ExtraFee FROM ((members INNER JOIN `extrasRelations` ON members.MemberID = extrasRelations.MemberID) INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) WHERE members.UserID = '$userID';";
+  $result = mysqli_query($link, $sql);
+  $count = mysqli_num_rows($result);
+  $totalCost = 0;
+
+  for ($i = 0; $i < $count; $i++) {
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $totalCost += $row['ExtraFee'];
+  }
+
+  $format = strtolower($format);
+  if ($format == "decimal") {
+    return $totalCost;
+  }
+  else if ($format == "int") {
+    return ((int) ($totalCost*100));
+  }
+  else if ($format == "string") {
+    return "&pound;" . number_format($totalCost,2,'.','');
+  }
+}
+
 function swimmers($link, $userID, $fees = false) {
   $sql = "SELECT squads.SquadName, squads.SquadFee, members.MForename, members.MSurname FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = '$userID' ORDER BY `squads`.`SquadFee` DESC;";
   $result = mysqli_query($link, $sql);

@@ -40,6 +40,21 @@ if (mysqli_num_rows($result) == 0) {
       mysqli_query($link, $sql);
     }
   }
+  for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $user = $row['UserID'];
+    $amount = monthlyExtraCost($link, $user, "int");
+    if ($amount > 0) {
+      $description = "Extra Fees";
+      $sql = "";
+      if (userHasMandates($user)) {
+        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment');";
+      } else {
+        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES ('$date', 'Paid', '$user', '$description', $amount, 'GBP', 'Payment');";
+      }
+      mysqli_query($link, $sql);
+    }
+  }
   $sql = "INSERT INTO `paymentSquadFees` (`MonthID`) VALUES ('$mid');";
   mysqli_query($link, $sql);
 

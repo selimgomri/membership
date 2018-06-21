@@ -29,7 +29,10 @@ include BASE_PATH . 'views/header.php'; ?>
 				<tr>
 					<td><?php echo $row['Forename'] . ' ' . $row['Surname']; ?></td>
 					<td><?php echo swimmers($link, $row['UserID'], true); ?></td>
-					<td><?php echo monthlyFeeCost($link, $row['UserID'], "string"); ?></td>
+					<td>
+						Squads: <?php echo monthlyFeeCost($link, $row['UserID'], "string"); ?> <br>
+						Extras (eg CF): <?php echo monthlyExtraCost($link, $row['UserID'], "string"); ?>
+					</td>
 				</tr>
 			<?php } ?>
 			</tbody>
