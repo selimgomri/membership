@@ -36,6 +36,11 @@ if ($access == "Parent") {
 		include 'mybanks.php';
 	});
 
+	$this->get('/mandates/makedefault/{id}:int', function($id) {
+		global $link;
+		include 'setup/makedefault.php';
+	});
+
 	$this->get('/testpay', function() {
 	  global $link;
 		include 'testpay.php';

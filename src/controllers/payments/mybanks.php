@@ -46,7 +46,7 @@ $result = mysqli_query($link, $sql);
 					<td><? echo $row['AccountHolderName']; ?></td>
           <td>******<? echo $row['AccountNumEnd']; ?></td>
 					<?php if (mysqli_num_rows($result) > 1 && $defaultAcc != $row['MandateID']) { ?>
-					<td><a href="<? echo autoUrl("payments/banks/makedefault/" . $row['MandateID']); ?>">Make Default</a></td>
+					<td><a href="<? echo autoUrl("payments/mandates/makedefault/" . $row['MandateID']); ?>">Make Default</a></td>
 					<?php } else { ?>
 					<td><small>Default Direct Debit</small></td>
 					<?php } ?>
