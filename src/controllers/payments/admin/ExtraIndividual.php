@@ -30,8 +30,10 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 	    <h1><? echo $row['ExtraName']; ?></h1>
     </div>
     <div class="col text-right">
-      <a href="" class="btn btn-dark">Edit</a>
-      <a href="" class="btn btn-danger">Delete</a>
+      <a href="<? echo autoUrl("payments/extrafees/" . $id . "/edit"); ?>"
+        class="btn btn-dark">Edit</a>
+      <a href="<? echo autoUrl("payments/extrafees/" . $id . "/delete"); ?>"
+        class="btn btn-danger">Delete</a>
     </div>
   </div>
   <hr>

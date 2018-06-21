@@ -133,6 +133,16 @@ if ($access == "Admin") {
   		include 'admin/ExtraIndividual.php';
   	});
 
+		$this->get('/{id}/edit', function($id) {
+  		global $link;
+  		include 'admin/EditExtra.php';
+  	});
+
+		$this->post('/{id}/edit', function($id) {
+  		global $link;
+  		include 'admin/EditExtraServer.php';
+  	});
+
     $this->get('/{id}/delete', function($id) {
   		global $link;
   		include 'admin/ExtraDelete.php';

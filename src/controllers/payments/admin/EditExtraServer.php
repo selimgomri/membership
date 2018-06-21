@@ -1,5 +1,7 @@
 <?php
 
+$id = mysqli_real_escape_string($link, $id);
+
 $name = $price = $errorMessage = null;
 $errorState = false;
 
@@ -18,12 +20,12 @@ if ($_POST['price'] != null && $_POST['price'] != "") {
 }
 
 if (!$errorState) {
-	$sql = "INSERT INTO `extras` (`ExtraName`, `ExtraFee`) VALUES ('$name', '$price');";
+	$sql = "UPDATE `extras` SET `ExtraName` = '$name', `ExtraFee` = '$price' WHERE `ExtraID` = '$id';";
 	if (!mysqli_query($link, $sql)) {
 		$errorState = true;
-		$errorMessage .= "<li>Unable to add to database</li>";
+		$errorMessage .= "<li>Unable to edit item in database</li>";
 	} else {
-		header("Location: " . autoUrl("payments/extrafees"));
+		header("Location: " . autoUrl("payments/extrafees/" . $id));
 	}
 }
 
@@ -32,5 +34,5 @@ if ($errorState) {
 	<div class="alert alert-danger">
 	Something went wrong and we couldn\'t carry out that operation
 	<ul class="mb-0">' . $errorMessage . '</ul></div>';
-	header("Location: " . autoUrl("payments/extrafees/new"));
+	header("Location: " . autoUrl("payments/extrafees/" . $id . "/edit"));
 }
