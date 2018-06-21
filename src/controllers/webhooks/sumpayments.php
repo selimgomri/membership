@@ -31,7 +31,12 @@ if (mysqli_num_rows($result) == 0) {
     $amount = monthlyFeeCost($link, $user, "int");
     if ($amount > 0) {
       $description = "Squad Fees";
-      $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment');";
+      $sql = "";
+      if (userHasMandates($user)) {
+        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment');";
+      } else {
+        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES ('$date', 'Paid', '$user', '$description', $amount, 'GBP', 'Payment');";
+      }
       mysqli_query($link, $sql);
     }
   }

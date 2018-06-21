@@ -27,5 +27,5 @@ echo "success";
 $bankAccount = $client->customerBankAccounts()->get("BA0003GA1VRAX6");
 print_r($bankAccount); */
 
-$payment = $client->payments()->get("PM000A3VKWN415");
-print_r($payment);
+$bank = $client->customerBankAccounts()->get("BA0003HKK8YAA9");
+print_r($bank);

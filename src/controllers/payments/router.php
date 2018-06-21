@@ -80,6 +80,21 @@ if ($access == "Admin") {
 		include 'admin/ManualChargeDo.php';
 	});
 
+	$this->group('/history', function() {
+		global $link;
+
+		$this->get('/', function() {
+			global $link;
+			include 'admin/history/home.php';
+		});
+
+		$this->get('/{year}:int/{month}:int', function($year, $month) {
+			global $link;
+			include 'admin/history/month.php';
+		});
+
+	});
+
   $this->group('/extrafees', function() {
 		global $link;
 

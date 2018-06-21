@@ -851,6 +851,16 @@ function getBillingDate($link, $user) {
   }
 }
 
+function userHasMandates($user) {
+  global $link;
+  $user = mysqli_real_escape_string($link, $user);
+  $sql = "SELECT * FROM `paymentPreferredMandate` WHERE `UserID` = '$user';";
+  if (mysqli_num_rows(mysqli_query($link, $sql)) == 1) {
+    return true;
+  }
+  return false;
+}
+
 function paymentExists($payment) {
   global $link;
   $payment = mysqli_real_escape_string($link, $payment);
@@ -882,10 +892,42 @@ function updatePaymentStatus($PMkey) {
   $payment = $client->payments()->get($PMkey);
   $status = mysqli_real_escape_string($link, $payment->status);
   $sql = "UPDATE `payments` SET `Status` = '$status' WHERE `PMkey` = '$PMkey';";
-  if (mysqli_query($link, $sql)) {
+  if ($status == "paid_out") {
+    $sql2 = "UPDATE `paymentsPending` SET `Status` = 'Paid' WHERE `PMkey` = '$PMkey';";
+    $sql2bool = mysqli_query($link, $sql2);
+  } else {
+    $sql2bool = true;
+  }
+  if (mysqli_query($link, $sql) && $sql2bool) {
     return true;
   } else {
     return false;
+  }
+}
+
+function paymentStatusString($status) {
+  switch ($status) {
+    case "paid_out":
+      return "Paid to CLS ASC";
+    case "pending_customer_approval":
+      return "Waiting for the customer to approve this payment";
+    case "pending_submission":
+      return "Payment has been created, but not yet submitted to the bank";
+    case "submitted":
+      return "Payment has been submitted to the bank";
+    case "confirmed":
+      return "Payment has been confirmed as collected";
+    case "cancelled":
+      return "Payment cancelled";
+    case "customer_approval_denied":
+      return "The customer has denied approval for the payment.
+      You should contact the customer directly";
+    case "failed":
+      return "The payment failed to be processed";
+    case "charged_back":
+      return "The payment has been charged back";
+    default:
+      return "Unknown Status Code";
   }
 }
 
