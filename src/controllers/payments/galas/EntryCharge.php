@@ -154,7 +154,7 @@ include BASE_PATH . "views/footer.php";
         </div>
       </div>
     </div>
-    <? include BASE_PATH . "views/header.php";
+    <? include BASE_PATH . "views/footer.php";
   } else {
     halt(404);
   }

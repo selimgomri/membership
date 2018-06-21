@@ -8,15 +8,6 @@ include BASE_PATH . "views/paymentsMenu.php";
 
 require 'GoCardlessSetup.php';
 
-//$customers = $client->customers()->list()->records;
-//print_r($customers);
-
-$sql = "SELECT * FROM `payments` WHERE `UserID` = '$user' ORDER BY `PaymentID` DESC LIMIT 0, 5;";
-$paymentResult = mysqli_query($link, $sql);
-
-$sql = "SELECT * FROM `paymentsPending` WHERE `UserID` = '$user' AND `PMkey` IS NULL AND `Status` = 'Pending' ORDER BY `Date` DESC LIMIT 0, 30;";
-$pendingResult = mysqli_query($link, $sql);
-
  ?>
 
 <div class="container">
@@ -35,8 +26,13 @@ $pendingResult = mysqli_query($link, $sql);
   <div class="row">
     <div class="col-md-6">
     	<h2>Billing Account Options</h2>
+      <? if (userHasMandates($user)) { ?>
+        <p>We currently collect payments from <? echo bankDetails($user, "bank_name"); ?>, Account Ending ******<? echo bankDetails($user, "account_number_end"); ?></p>
+      <? } ?>
     	<a href="<? echo autoUrl("payments/setup"); ?>" class="btn btn-dark">Add Bank Account</a>
-    	<a href="<? echo autoUrl("payments/mandates"); ?>" class="btn btn-dark">Switch Bank Account</a>
+      <? if (userHasMandates($user)) { ?>
+    	<a href="<? echo autoUrl("payments/mandates"); ?>" class="btn btn-dark">Switch or Manage Bank Account</a>
+      <? } ?>
     </div>
     <div class="col-md-6">
     	<h2>Transaction History (Bank)</h2>

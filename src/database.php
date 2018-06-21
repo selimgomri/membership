@@ -525,7 +525,7 @@ function myMonthlyFeeMedia($link, $userID) {
     }
     $reducedCost += $totalsArray[$i];
   }
-  $sql = "SELECT extras.ExtraName, extras.ExtraFee, members.MForename , members.MSurname FROM ((extras INNER JOIN extrasRelations ON extras.ExtraID = extrasRelations.ExtraID) INNER JOIN members ON members.MemberID = extrasRelations.MemberID) WHERE extrasRelations.UserID = '$userID' AND extras.ExtraBillPeriod = 'Month' ORDER BY `extras`.`ExtraFee` DESC;";
+  $sql = "SELECT extras.ExtraName, extras.ExtraFee, members.MForename , members.MSurname FROM ((extras INNER JOIN extrasRelations ON extras.ExtraID = extrasRelations.ExtraID) INNER JOIN members ON members.MemberID = extrasRelations.MemberID) WHERE extrasRelations.UserID = '$userID' ORDER BY `extras`.`ExtraFee` DESC;";
   $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
   $monthlyExtras = "";
@@ -544,7 +544,7 @@ function myMonthlyFeeMedia($link, $userID) {
     if (($totalCost - $reducedCost) > 0) {
       $output .= "<tr><td>The monthly total payable for squads (with any deductions) is</td><td>&pound;" . number_format($reducedCost,2,'.','') . "</td></tr>";
     }
-    $output .= "<tr><td>The monthly total for extras is</td><td>&pound;" . number_format($monthlyExtrasTotal,2,'.','') . "</td></tr>
+    $output .= "<tr><td>The monthly total for extras, such as CrossFit, is</td><td>&pound;" . number_format($monthlyExtrasTotal,2,'.','') . "</td></tr>
     <tr class=\"bg-light\"><td><strong>The monthly total is</strong></td><td>&pound;" . number_format(($reducedCost + $monthlyExtrasTotal),2,'.','') . "</td></tr>
     </tbody></table></div>
     </div>";
@@ -805,7 +805,7 @@ function paymentHistory($link, $user) {
         <?php for ($i = 0; $i < mysqli_num_rows($paymentResult); $i++) {
         $row = mysqli_fetch_array($paymentResult, MYSQLI_ASSOC);	?>
         <tr>
-          <td><? echo $row['Name']; ?></td>
+          <td><a href="<? echo autoUrl("payments/statement/" . $row['PMkey']); ?>" title="Transaction Statement"><? echo $row['Name']; ?></a></td>
           <td><? echo date('j F Y', strtotime($row['Date'])); ?></td>
           <td>&pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?></td>
         </tr>
@@ -951,6 +951,38 @@ function paymentStatusString($status) {
       return "The payment has been charged back";
     default:
       return "Unknown Status Code";
+  }
+}
+
+function bankDetails($user, $detail) {
+  global $link;
+  $user = mysqli_real_escape_string($link, $user);
+  $sql = "SELECT * FROM `paymentPreferredMandate`
+  INNER JOIN `paymentMandates` ON
+  paymentPreferredMandate.MandateID = paymentMandates.mandateID
+  WHERE paymentPreferredMandate.UserID = '$user';";
+  $result = mysqli_query($link, $sql);
+  if (mysqli_num_rows($result) != 1) {
+    return "Unknown";
+  }
+
+  $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+
+  switch ($detail) {
+    case "bank_name":
+      return $row['BankName'];
+    case "account_holder":
+      return $row['AccountHolderName'];
+    case "account_number_end":
+      return $row['AccountNumEnd'];
+    case "mandate":
+      return $row['Mandate'];
+    case "bank_account":
+      return $row['BankAccount'];
+    case "customer":
+      return $row['Customer'];
+    default:
+      return "Unknown";
   }
 }
 

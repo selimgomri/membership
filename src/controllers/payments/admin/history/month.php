@@ -23,6 +23,8 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 <div class="container">
 	<h1>Payments for <? echo date("F Y", $date); ?></h1>
   <p class="lead">All Direct Debit payments requested in <? echo date("F Y", $date); ?></p>
+	<p>Click on a description for a statement detailing the fees which went into this charge.
+		Some payments may not have a statement available</p>
 	<? if (mysqli_num_rows($result) > 0) { ?>
 		<div class="table-responsive">
 			<table class="table">
@@ -52,7 +54,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 							<? echo $row['Forename'] . " " . $row['Surname']; ?>
 						</td>
 						<td>
-							<abbr title="<? echo $row['PMkey']; ?>"><? echo $row['Name']; ?></abbr>
+							<a href="<? echo autoUrl("payments/history/statement/" . $row['PMkey']); ?>" title="<? echo $row['PMkey']; ?>"><? echo $row['Name']; ?></a>
 						</td>
 						<td>
 							&pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?>

@@ -50,6 +50,11 @@ if ($access == "Parent") {
 		global $link;
 		include 'parent/transactions.php';
 	});
+
+	$this->get('/statement/{PaymentID}', function($PaymentID) {
+		global $link;
+		include 'admin/history/statement.php';
+	});
 }
 
 if ($access == "Parent" || $access == "Admin") {
@@ -91,6 +96,11 @@ if ($access == "Admin") {
 		$this->get('/{year}:int/{month}:int', function($year, $month) {
 			global $link;
 			include 'admin/history/month.php';
+		});
+
+		$this->get('/statement/{PaymentID}', function($PaymentID) {
+			global $link;
+			include 'admin/history/statement.php';
 		});
 
 	});

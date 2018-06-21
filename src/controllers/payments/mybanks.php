@@ -11,6 +11,13 @@ require 'GoCardlessSetup.php';
 //$customers = $client->customers()->list()->records;
 //print_r($customers);
 
+$defaultAcc = null;
+$sql = "SELECT * FROM `paymentPreferredMandate` WHERE `UserID` = '$user';";
+$result = mysqli_query($link, $sql);
+if (mysqli_num_rows($result) == 1) {
+  $defaultAcc = (mysqli_fetch_array($result, MYSQLI_ASSOC))['MandateID'];
+}
+
 $sql = "SELECT * FROM `paymentMandates` WHERE `UserID` = '$user' AND `InUse` = 1;";
 $result = mysqli_query($link, $sql);
 
@@ -38,7 +45,7 @@ $result = mysqli_query($link, $sql);
 					<td><a target="_blank" href="<? echo autoUrl("payments/mandates/" . $row['Mandate']); ?>"><? echo $row['BankName']; ?></a></td>
 					<td><? echo $row['AccountHolderName']; ?></td>
           <td>******<? echo $row['AccountNumEnd']; ?></td>
-					<?php if (mysqli_num_rows($result) > 1) { ?>
+					<?php if (mysqli_num_rows($result) > 1 && $defaultAcc != $row['MandateID']) { ?>
 					<td><a href="<? echo autoUrl("payments/banks/makedefault/" . $row['MandateID']); ?>">Make Default</a></td>
 					<?php } else { ?>
 					<td><small>Default Direct Debit</small></td>

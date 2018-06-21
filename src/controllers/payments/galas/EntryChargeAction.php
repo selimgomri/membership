@@ -33,4 +33,4 @@ if ($charge > 0) {
 	mysqli_query($link, $sql);
 }
 
-header("Location: " . autoUrl("payments/galas/" . $entryID));
+header("Location: " . autoUrl("payments/galas/" . $id));
