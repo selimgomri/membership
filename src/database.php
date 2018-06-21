@@ -986,7 +986,17 @@ function bankDetails($user, $detail) {
   }
 }
 
-
+function getUserName($user) {
+  global $link;
+  $user = mysqli_real_escape_string($link, $user);
+  $sql = "SELECT `Forename`, `Surname` FROM `users` WHERE `UserID` = '$user';";
+  $result = mysqli_query($link, $sql);
+  if (mysqli_num_rows($result) == 1) {
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    return $row['Forename'] . " " . $row['Surname'];
+  }
+  return false;
+}
 
 
 $count = 0;

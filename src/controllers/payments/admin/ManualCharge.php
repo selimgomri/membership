@@ -11,41 +11,42 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
  ?>
 
 <div class="container">
-	<h1>Create a Manual Charge</h1>
-  <hr>
-  <?php if (isset($_SESSION['ErrorState'])) {
-    echo $_SESSION['ErrorState'];
-    unset($_SESSION['ErrorState']);
-  } ?>
-  <form method="post">
-		<div class="form-group">
-	    <label for="user">User Identification Number</label>
-			<div class="input-group">
-				<div class="input-group-prepend">
-	        <div class="input-group-text mono">CLSU</div>
-	      </div>
-	  		<input type="number" class="form-control mono" id="user" name="user" aria-describedby="userHelp" placeholder="Enter number" required>
-			</div>
-	    <small id="userHelp" class="form-text text-muted">You can find a User ID in the <a target="_blank" href="<? echo autoUrl("users"); ?>">Users section</a></small>
-	  </div>
-		<div class="form-group">
-			<p>You have selected - <span id="selectedUserName">No Parent Selected</span></p>
-		</div>
-    <div class="form-group">
-	    <label for="desc">Description</label>
-  		<input type="text" class="form-control" id="desc" name="desc" placeholder="Description" required>
-	  </div>
-	  <div class="form-group">
-	    <label for="amount">Amount</label>
-			<div class="input-group">
-				<div class="input-group-prepend">
-	        <div class="input-group-text mono">&pound;</div>
-	      </div>
-	    	<input type="text" class="form-control mono" id="amount" name="amount" placeholder="Amount">
-			</div>
-	  </div>
-		<p><button class="btn btn-success" type="submit">Charge</button></p>
-	</form>
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+		<h1 class="border-bottom border-gray pb-2 mb-2">Create a Manual Charge</h1>
+    <?php if (isset($_SESSION['ErrorState'])) {
+      echo $_SESSION['ErrorState'];
+      unset($_SESSION['ErrorState']);
+    } ?>
+    <form method="post">
+  		<div class="form-group">
+  	    <label for="user">User Identification Number</label>
+  			<div class="input-group">
+  				<div class="input-group-prepend">
+  	        <div class="input-group-text mono">CLSU</div>
+  	      </div>
+  	  		<input type="number" class="form-control mono" id="user" name="user" aria-describedby="userHelp" placeholder="Enter number" required>
+  			</div>
+  	    <small id="userHelp" class="form-text text-muted">You can find a User ID in the <a target="_blank" href="<? echo autoUrl("users"); ?>">Users section</a></small>
+  	  </div>
+  		<div class="form-group">
+  			<p>You have selected - <span id="selectedUserName">No Parent Selected</span></p>
+  		</div>
+      <div class="form-group">
+  	    <label for="desc">Description</label>
+    		<input type="text" class="form-control" id="desc" name="desc" placeholder="Description" required>
+  	  </div>
+  	  <div class="form-group">
+  	    <label for="amount">Amount</label>
+  			<div class="input-group">
+  				<div class="input-group-prepend">
+  	        <div class="input-group-text mono">&pound;</div>
+  	      </div>
+  	    	<input type="text" class="form-control mono" id="amount" name="amount" placeholder="Amount">
+  			</div>
+  	  </div>
+  		<p class="mb-0"><button class="btn btn-success" type="submit">Charge</button></p>
+  	</form>
+  </div>
 </div>
 
 <script>

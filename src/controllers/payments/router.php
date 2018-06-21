@@ -41,11 +41,6 @@ if ($access == "Parent") {
 		include 'setup/makedefault.php';
 	});
 
-	$this->get('/testpay', function() {
-	  global $link;
-		include 'testpay.php';
-	});
-
 	$this->get(['/currentfees', '/fees'], function() {
 		global $link;
 		include 'parent/currentfees.php';
@@ -73,6 +68,11 @@ if ($access == "Admin") {
 	$this->get('/', function() {
 		global $link;
 		include 'admin.php';
+	});
+
+	$this->get('/current/{id}', function($id) {
+		global $link;
+		include 'users/current.php';
 	});
 
 	$this->get('/fees', function() {
