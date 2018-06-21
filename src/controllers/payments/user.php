@@ -23,23 +23,25 @@ require 'GoCardlessSetup.php';
     </div>
   </div>
   <hr>
-  <div class="row">
-    <div class="col-md-6">
-    	<h2>Billing Account Options</h2>
-      <? if (userHasMandates($user)) { ?>
-        <p>We currently collect payments from <? echo bankDetails($user, "bank_name"); ?>, Account Ending ******<? echo bankDetails($user, "account_number_end"); ?></p>
-      <? } ?>
-    	<a href="<? echo autoUrl("payments/setup"); ?>" class="btn btn-dark">Add Bank Account</a>
-      <? if (userHasMandates($user)) { ?>
-    	<a href="<? echo autoUrl("payments/mandates"); ?>" class="btn btn-dark">Switch or Manage Bank Account</a>
-      <? } ?>
-    </div>
-    <div class="col-md-6">
-    	<h2>Transaction History (Bank)</h2>
-      <? echo paymentHistory($link, $user); ?>
-      <h2>Fees this period</h2>
-      <p class="lead">Fees to pay on your next Billing Date</p>
-    	<? echo feesToPay($link, $user); ?>
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+    <div class="row">
+      <div class="col-md-6">
+      	<h2 class="border-bottom border-gray pb-2 mb-2">Billing Account Options</h2>
+        <? if (userHasMandates($user)) { ?>
+          <p>We currently collect payments from <? echo ucwords(strtolower(bankDetails($user, "bank_name"))); ?>, Account Ending ******<? echo bankDetails($user, "account_number_end"); ?></p>
+        <? } ?>
+      	<a href="<? echo autoUrl("payments/setup"); ?>" class="btn btn-dark">Add Bank Account</a>
+        <? if (userHasMandates($user)) { ?>
+      	<a href="<? echo autoUrl("payments/mandates"); ?>" class="btn btn-dark">Switch or Manage Bank Account</a>
+        <? } ?>
+      </div>
+      <div class="col-md-6">
+      	<h2 class="border-bottom border-gray pb-2 mb-2">Transaction History (Bank)</h2>
+        <? echo paymentHistory($link, $user); ?>
+        <h2 class="border-bottom border-gray pb-2 mb-2">Fees this period</h2>
+        <p class="lead">Fees to pay on your next Billing Date</p>
+      	<? echo feesToPay($link, $user); ?>
+      </div>
     </div>
   </div>
 </div>

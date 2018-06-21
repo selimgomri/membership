@@ -30,9 +30,10 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
  ?>
 
 <div class="container">
-	<h1>Statement for <? echo $row['Forename'] . " " . $row['Surname']; ?></h1>
-  <p class="lead">Payment ID: <? echo $PaymentID; ?></p>
-	<p>Payments listed below were charged as part of one single Direct Debit</p>
+	<div class="my-3 p-3 bg-white rounded box-shadow">
+		<h1 class="border-bottom border-gray pb-2 mb-2">Statement for <? echo $row['Forename'] . " " . $row['Surname']; ?></h1>
+	  <p class="lead">Payment ID: <? echo $PaymentID; ?></p>
+		<p>Payments listed below were charged as part of one single Direct Debit</p>
 		<div class="table-responsive">
 			<table class="table">
 				<thead class="thead-light">
@@ -77,6 +78,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 				</tbody>
 			</table>
 		</div>
+	</div>
 </div>
 
 <?php include BASE_PATH . "views/footer.php";

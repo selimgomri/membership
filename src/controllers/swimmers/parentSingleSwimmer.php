@@ -79,7 +79,7 @@ else {
     }
   }
   if (isset($_POST['medicalNotes'])) {
-    $newMedicalNotes = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['medicalNotes']))));
+    $newMedicalNotes = mysqli_real_escape_string($link, trim(htmlspecialchars(ucfirst($_POST['medicalNotes']))));
     if ($newMedicalNotes != $medicalNotes) {
       $sql = "UPDATE `members` SET `MedicalNotes` = '$newMedicalNotes' WHERE `MemberID` = '$id'";
       mysqli_query($link, $sql);
@@ -88,7 +88,7 @@ else {
     }
   }
   if (isset($_POST['otherNotes'])) {
-    $newOtherNotes = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['otherNotes']))));
+    $newOtherNotes = mysqli_real_escape_string($link, trim(htmlspecialchars(ucfirst($_POST['otherNotes']))));
     if ($newOtherNotes != $otherNotes) {
       $sql = "UPDATE `members` SET `OtherNotes` = '$newOtherNotes' WHERE `MemberID` = '$id'";
       mysqli_query($link, $sql);

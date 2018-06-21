@@ -1,4 +1,6 @@
 <?php
+$executionStartTime = microtime();
+
 define('DS', DIRECTORY_SEPARATOR, true);
 define('BASE_PATH', __DIR__ . DS, TRUE);
 //Show errors
@@ -102,11 +104,20 @@ $app->route     = System\Route::instance($app->request);
 
 $route          = $app->route;
 
+$route->any('/notify/unsubscribe/{email}', function($email) {
+  global $link;
+  include 'controllers/notify/UnsubscribeHandler.php';
+});
+
 if (empty($_SESSION['LoggedIn'])) {
   // Home
   $route->get('/', function() {
     global $link;
   	include 'controllers/login.php';
+  });
+
+  $route->get('/login', function() {
+    header("Location: " . autoUrl(""));
   });
 
   $route->post('/', function() {
@@ -122,7 +133,7 @@ if (empty($_SESSION['LoggedIn'])) {
 
   $route->post('/register', function() {
     global $link;
-    require('controllers/register.php');
+    require('controllers/registration.php');
   });
 
   // Locked Out Password Reset
@@ -157,6 +168,11 @@ if (empty($_SESSION['LoggedIn'])) {
     require('controllers/webhooks/router.php');
   });
 
+  $route->get('/notify', function() {
+    global $link;
+    include 'controllers/notify/Help.php';
+  });
+
   // Global Catch All send to login
   $route->any('/*', function() {
     global $link;
@@ -168,6 +184,10 @@ else {
   $route->get('/', function() {
     global $link;
   	include 'controllers/dashboard.php';
+  });
+
+  $route->get('/login', function() {
+    header("Location: " . autoUrl(""));
   });
 
   $route->group('/myaccount', function() {
