@@ -7,6 +7,8 @@ if (isset($_POST["search"])) {
   $sql = "SELECT `Forename`, `Surname`, `MandateID`, `users`.`UserID` FROM users LEFT JOIN `paymentPreferredMandate` ON users.userID = paymentPreferredMandate.UserID WHERE Surname LIKE '%$search%' AND `AccessLevel` = 'Parent' ORDER BY Forename, Surname ASC;";
 }
 
+$target = $_POST['target'];
+
 $result = mysqli_query($link, $sql);
 $count = mysqli_num_rows($result);
 if ($count > 0) {
@@ -23,9 +25,14 @@ if ($count > 0) {
   $resultX = mysqli_query($link, $sql);
   for ($i = 0; $i < $count; $i++) {
     $row = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
-    $swimmerLink = autoUrl("payments/current/" . $row['UserID'] . "");
+    $url = null;
+    if ($target == "currentfees") {
+      $url = autoUrl("payments/current/" . $row['UserID'] . "");
+    } else if ($target == "transactionhistory") {
+      $url = autoUrl("payments/history/users/" . $row['UserID'] . "");
+    }
     $output .= "<tr>
-      <td><a href=\"" . $swimmerLink . "\">" . $row['Forename'] . " " . $row['Surname'] . "</a></td>";
+      <td><a href=\"" . $url . "\">" . $row['Forename'] . " " . $row['Surname'] . "</a></td>";
 			if ($row['MandateID'] == null || $row['MandateID'] == "") {
 			$output .= "<td>No Direct Debit set up</td>";
 		} else {

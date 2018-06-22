@@ -15,7 +15,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php'; ?>
 
 <div class="container">
 	<div class="my-3 p-3 bg-white rounded box-shadow">
-		<h1 class="border-bottom border-gray pb-2 mb-3">Find a parent's current fees.</h1>
+		<h1 class="border-bottom border-gray pb-2 mb-3">Find a parent's transaction history.</h1>
 		<div class="form-group">
 	    <label class="sr-only" for="search">Search by Surname</label>
 			<div class="input-group">
@@ -48,12 +48,12 @@ function getResult() {
         console.log("We got here");
         document.getElementById("output").innerHTML = this.responseText;
         console.log(this.responseText);
-        window.history.pushState("string", "Title", "<?php echo autoUrl("payments/current"); ?>?search=" + searchValue);
+        window.history.pushState("string", "Title", "<?php echo autoUrl("payments/history/users"); ?>?search=" + searchValue);
       }
     }
     xhttp.open("POST", "<?php echo autoURL("payments/current/ajax"); ?>", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("target=currentfees&search=" + searchValue);
+    xhttp.send("target=transactionhistory&search=" + searchValue);
     console.log("Sent");
 }
 // Call getResult immediately

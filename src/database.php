@@ -788,7 +788,7 @@ function swimmers($link, $userID, $fees = false) {
 
 }
 
-function paymentHistory($link, $user) {
+function paymentHistory($link, $user, $type = null) {
   $sql = "SELECT * FROM `payments` WHERE `UserID` = '$user' ORDER BY `PaymentID` DESC LIMIT 0, 5;";
   $paymentResult = mysqli_query($link, $sql);
   if (mysqli_num_rows($paymentResult) > 0) { ?>
@@ -799,15 +799,32 @@ function paymentHistory($link, $user) {
           <th>Description</th>
           <th>Date</th>
           <th>Amount</th>
+          <th>Status</th>
         </tr>
       </thead>
       <tbody>
         <?php for ($i = 0; $i < mysqli_num_rows($paymentResult); $i++) {
-        $row = mysqli_fetch_array($paymentResult, MYSQLI_ASSOC);	?>
+        $row = mysqli_fetch_array($paymentResult, MYSQLI_ASSOC);
+        if ($type == null) {
+          $statementUrl = autoUrl("payments/statement/" . $row['PMkey']);
+        } else if ($type == "admin") {
+          $statementUrl = autoUrl("payments/history/statement/" . $row['PMkey']);
+        }?>
         <tr>
-          <td><a href="<? echo autoUrl("payments/statement/" . $row['PMkey']); ?>" title="Transaction Statement"><? echo $row['Name']; ?></a></td>
-          <td><? echo date('j F Y', strtotime($row['Date'])); ?></td>
-          <td>&pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?></td>
+          <td>
+            <a href="<? echo $statementUrl; ?>" title="Transaction Statement">
+              <? echo $row['Name']; ?>
+            </a>
+          </td>
+          <td>
+            <? echo date('j F Y', strtotime($row['Date'])); ?>
+          </td>
+          <td>
+            &pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?>
+          </td>
+          <td>
+            <? echo paymentStatusString($row['Status']); ?>
+          </td>
         </tr>
       <?php } ?>
       </tbody>

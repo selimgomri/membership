@@ -108,6 +108,16 @@ if ($access == "Admin") {
 			include 'admin/history/home.php';
 		});
 
+		$this->get('/users', function() {
+			global $link;
+			include 'admin/history/UserList.php';
+		});
+
+		$this->get('/users/{id}:int', function($id) {
+			global $link;
+			include 'admin/history/users.php';
+		});
+
 		$this->get('/{year}:int/{month}:int', function($year, $month) {
 			global $link;
 			include 'admin/history/month.php';
