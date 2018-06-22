@@ -4,6 +4,7 @@
 		<? if ($access == "Admin") { ?>
     <a class="nav-link" href="<?php echo autoUrl("payments")?>">Payments Home</a>
     <a class="nav-link" href="<?php echo autoUrl("payments/history")?>">Payments &amp; History</a>
+    <a class="nav-link" href="<?php echo autoUrl("payments/current")?>">Current Fees</a>
 		<a class="nav-link" href="<?php echo autoUrl("payments/newcharge")?>">New Charge</a>
 		<a class="nav-link" href="<?php echo autoUrl("payments/galas")?>">Gala Charges</a>
     <a class="nav-link" href="<?php echo autoUrl("payments/extrafees")?>">Extras</a>

@@ -70,6 +70,16 @@ if ($access == "Admin") {
 		include 'admin.php';
 	});
 
+	$this->get('/current', function() {
+		global $link;
+		include 'users/ListOfUsers.php';
+	});
+
+	$this->post('/current/ajax', function() {
+		global $link;
+		include 'users/ListOfUsersAjaxBackend.php';
+	});
+
 	$this->get('/current/{id}', function($id) {
 		global $link;
 		include 'users/current.php';
