@@ -126,7 +126,7 @@ if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas" |
     </p>
   </div>
   <span class="d-block text-right mt-3">
-    <a href="https://accounts.google.com/signin/v2/identifier?service=CPanel&passive=1209600&cpbps=1&hd=chesterlestreetasc.co.uk&continue=https%3A%2F%2Fadmin.google.com%2Fchesterlestreetasc.co.uk%2FDashboard&followup=https%3A%2F%2Fadmin.google.com%2Fchesterlestreetasc.co.uk%2FDashboard&skipvpage=true&flowName=GlifWebSignIn&flowEntry=ServiceLogin">More</a>
+    <a href="https://www.google.com/accounts/AccountChooser?hd=chesterlestreetasc.co.uk&continue=https://apps.google.com/user/hub">More</a>
   </span>
 </div>
 <?php } ?>

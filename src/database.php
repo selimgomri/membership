@@ -166,7 +166,7 @@ function mySwimmersTable($link, $userID) {
     $output = '
     <div class="table-responsive">
       <table class="table table-hover">
-        <thead>
+        <thead class="thead-light">
           <tr>
             <th>Name</th>
             <th>Squad</th>
@@ -479,16 +479,18 @@ function closedGalas($link, $links = false) {
 }
 
 function myMonthlyFeeTable($link, $userID) {
-  $sql = "SELECT squads.SquadName, squads.SquadID, squads.SquadFee FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = '$userID' ORDER BY `squads`.`SquadFee` DESC;";
+  $sql = "SELECT squads.SquadName, squads.SquadID, squads.SquadFee, members.MForename, members.MSurname FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = '$userID' ORDER BY `squads`.`SquadFee` DESC;";
   $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
   $totalsArray = [];
+  $squadsOutput = "";
   $totalCost = 0;
   $reducedCost = 0;
   for ($i = 0; $i < $count; $i++) {
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     $totalsArray[$i] = $row['SquadFee'];
     $totalCost += $totalsArray[$i];
+    $squadsOutput .= "<tr><td>" . $row['SquadName'] . " Squad <br>for " . $row['MForename'] . " " . $row['MSurname'] . "</td><td>&pound;" . number_format($row['SquadFee'],2,'.','') . "</td></tr>";
   }
   for ($i = 0; $i < $count; $i++) {
     if ($i == 2) {
@@ -499,7 +501,37 @@ function myMonthlyFeeTable($link, $userID) {
     }
     $reducedCost += $totalsArray[$i];
   }
-  return "<table class=\"table table-hover\"><tr><td>The monthly subtotal is</td><td>&pound;" . number_format($totalCost,2,'.','') . "</td></tr><tr><td><strong>The monthly total payable (with any deductions) is</strong></td><td>&pound;" . number_format($reducedCost,2,'.','') . "</td></tr></table>";
+  $sql = "SELECT extras.ExtraName, extras.ExtraFee, members.MForename , members.MSurname FROM ((extras INNER JOIN extrasRelations ON extras.ExtraID = extrasRelations.ExtraID) INNER JOIN members ON members.MemberID = extrasRelations.MemberID) WHERE extrasRelations.UserID = '$userID' ORDER BY `extras`.`ExtraFee` DESC;";
+  $result = mysqli_query($link, $sql);
+  $count = mysqli_num_rows($result);
+  $monthlyExtras = "";
+  $monthlyExtrasTotal = 0;
+  for ($i=0; $i<$count; $i++) {
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $monthlyExtras .= "<tr><td>" . $row['ExtraName'] . " <br>for " . $row['MForename'] . " " . $row['MSurname'] . "</td><td>&pound;" . number_format($row['ExtraFee'],2,'.','') . "</td></tr>";
+    $monthlyExtrasTotal += $row['ExtraFee'];
+  }
+  if ($monthlyExtrasTotal+$reducedCost > 0) {
+    $output = "<div class=\"table-responsive\"><table class=\"table mb-0\">
+    <thead class=\"thead-light\">
+      <tr>
+        <th>Fee Information</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr><td>The monthly subtotal for Squad Fees is</td><td>&pound;" . number_format($totalCost,2,'.','') . "</td></tr>";
+    if (($totalCost - $reducedCost) > 0) {
+      $output .= "<tr><td>The monthly total payable for squads (with any deductions) is</td><td>&pound;" . number_format($reducedCost,2,'.','') . "</td></tr>";
+    }
+    $output .= "<tr><td>The monthly total for extras, such as CrossFit, is</td><td>&pound;" . number_format($monthlyExtrasTotal,2,'.','') . "</td></tr>
+    <tr class=\"bg-light\"><td><strong>The monthly total is</strong></td><td>&pound;" . number_format(($reducedCost + $monthlyExtrasTotal),2,'.','') . "</td></tr>
+    </tbody></table></div>";
+    return $output;
+  }
+  else {
+    return "<p class=\"mb-0\">You have no monthly fees to pay. You may need to add a swimmer to see any fees.</p>";
+  }
 }
 
 function myMonthlyFeeMedia($link, $userID) {
@@ -1011,6 +1043,19 @@ function getUserName($user) {
   if (mysqli_num_rows($result) == 1) {
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     return $row['Forename'] . " " . $row['Surname'];
+  }
+  return false;
+}
+
+function getSwimmerName($swimmer) {
+  global $link;
+  $swimmer = mysqli_real_escape_string($link, $swimmer);
+  $sql = "SELECT `MForename`, `MSurname` FROM `members` WHERE `MemberID` =
+  '$swimmer';";
+  $result = mysqli_query($link, $sql);
+  if (mysqli_num_rows($result) == 1) {
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    return $row['MForename'] . " " . $row['MSurname'];
   }
   return false;
 }

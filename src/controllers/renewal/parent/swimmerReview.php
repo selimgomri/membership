@@ -6,7 +6,13 @@ include BASE_PATH . "views/header.php";
 
 <div class="container">
 	<h1>Review your swimmers</h1>
-	<p class="lead">Make sure all of your swimmers are listed here. Make sure you <a href="<? echo autoUrl("myaccount/addswimmer"); ?>">add them</a> if not.</p>
+	<p class="lead">
+		Make sure all of your swimmers are listed here. Make sure you
+		<a target="_blank" href="<? echo autoUrl("myaccount/addswimmer"); ?>">
+			add them
+		</a>
+		if not.
+	</p>
 
 	<? echo mySwimmersTable($link, $userID); ?>
 
