@@ -1,137 +1,49 @@
 <?php
+
 $id = mysqli_real_escape_string($link, $id);
 $userID = $_SESSION['UserID'];
-$forenameUpdate = false;
-$middlenameUpdate = false;
-$surnameUpdate = false;
-$dateOfBirthUpdate = false;
-$sexUpdate = false;
-$medicalNotesUpdate = false;
-$otherNotesUpdate = false;
-$update = false;
-$successInformation = "";
-
-$query = "SELECT * FROM members WHERE MemberID = '$id' ";
-$result = mysqli_query($link, $query);
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-$forename = $row['MForename'];
-$middlename = $row['MMiddleNames'];
-$surname = $row['MSurname'];
-$dateOfBirth = $row['DateOfBirth'];
-$sex = $row['Gender'];
-$medicalNotes = $row['MedicalNotes'];
-$otherNotes = $row['OtherNotes'];
 
 // Get the swimmer name
-$sqlSecurityCheck = "SELECT `MForename`, `MSurname`, `UserID` FROM `members` WHERE MemberID = '$id';";
+$sqlSecurityCheck = "SELECT `MForename`, `MSurname`, `UserID` FROM `members`
+WHERE MemberID = '$id';";
 $resultSecurityCheck = mysqli_query($link, $sqlSecurityCheck);
 $swimmersSecurityCheck = mysqli_fetch_array($resultSecurityCheck, MYSQLI_ASSOC);
 
-if (!$swimmersSecurityCheck['UserID'] == $userID) {
+if ($swimmersSecurityCheck['UserID'] != $userID) {
   halt(404);
-}
-else {
-  if (!empty($_POST['forename'])) {
-    $newForename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
-    if ($newForename != $forename) {
-      $sql = "UPDATE `members` SET `MForename` = '$newForename' WHERE `MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      $forenameUpdate = true;
-      $update = true;
-    }
-  }
-  if (isset($_POST['middlenames'])) {
-    $newMiddlenames = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['middlenames']))));
-    if ($newMiddlenames != $middlename) {
-      $sql = "UPDATE `members` SET `MMiddleNames` = '$newMiddlenames' WHERE `MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      $middlenameUpdate = true;
-      $update = true;
-    }
-  }
-  if (!empty($_POST['surname'])) {
-    $newSurname = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['surname']))));
-    if ($newSurname != $surname) {
-      $sql = "UPDATE `members` SET `MSurname` = '$newSurname' WHERE `MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      $surnameUpdate = true;
-      $update = true;
-    }
-  }
-  if (!empty($_POST['datebirth'])) {
-    $newDateOfBirth = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['datebirth']))));
-    // NEEDS WORK FOR DATE TO BE RIGHT
-    if ($newDateOfBirth != $dateOfBirth) {
-      $sql = "UPDATE `members` SET `DateOfBirth` = '$newDateOfBirth' WHERE `MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      $dateOfBirthUpdate = true;
-      $update = true;
-    }
-  }
-  if (!empty($_POST['sex'])) {
-    $newSex = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['sex']))));
-    if ($newSex != $sex) {
-      $sql = "UPDATE `members` SET `Gender` = '$newSex' WHERE `MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      $sexUpdate = true;
-      $update = true;
-    }
-  }
-  if (isset($_POST['medicalNotes'])) {
-    $newMedicalNotes = mysqli_real_escape_string($link, trim(htmlspecialchars(ucfirst($_POST['medicalNotes']))));
-    if ($newMedicalNotes != $medicalNotes) {
-      $sql = "UPDATE `members` SET `MedicalNotes` = '$newMedicalNotes' WHERE `MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      $medicalNotesUpdate = true;
-      $update = true;
-    }
-  }
-  if (isset($_POST['otherNotes'])) {
-    $newOtherNotes = mysqli_real_escape_string($link, trim(htmlspecialchars(ucfirst($_POST['otherNotes']))));
-    if ($newOtherNotes != $otherNotes) {
-      $sql = "UPDATE `members` SET `OtherNotes` = '$newOtherNotes' WHERE `MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      $otherNotesUpdate = true;
-      $update = true;
-    }
-  }
-  if ((!empty($_POST['disconnect'])) && (!empty($_POST['disconnectKey']))) {
-    $disconnect = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['disconnect'])));
-    $disconnectKey = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['disconnectKey'])));
-    if ($disconnect == $disconnectKey) {
-      $newKey = generateRandomString(8);
-      $sql = "UPDATE `members` SET `UserID` = NULL, `AccessKey` = '$newKey' WHERE `MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      header("Location: " . autoUrl("swimmers"));
-    }
-  }
-  if (!empty($_POST['swimmerDeleteDanger'])) {
-    $deleteKey = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['swimmerDeleteDanger'])));
-    if ($deleteKey == $dbAccessKey) {
-      $sql = "DELETE FROM `members` WHERE `members`.`MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      header("Location: " . autoUrl("swimmers"));
-    }
-  }
 }
 
 $pagetitle;
 if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
-  $pagetitle = "Edit: " . $swimmersSecurityCheck['MForename'] . " " . $swimmersSecurityCheck['MSurname'];
-  $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes, members.AccessKey FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
+  $pagetitle = "Edit: " . $swimmersSecurityCheck['MForename'] . " " .
+  $swimmersSecurityCheck['MSurname'];
+  $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames,
+  members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName,
+  squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC,
+  members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes,
+  members.AccessKey, memberPhotography.Website, memberPhotography.Social,
+  memberPhotography.Noticeboard, memberPhotography.FilmTraining,
+  memberPhotography.ProPhoto FROM (((members INNER JOIN users ON members.UserID =
+  users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN
+  `memberPhotography` ON members.MemberID = memberPhotography.MemberID) WHERE
+  members.MemberID = '$id';";
   $resultSwim = mysqli_query($link, $sqlSwim);
   $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
+  $age = date_diff(date_create($rowSwim['DateOfBirth']),
+  date_create('today'))->y;
   $title = null;
   ?>
   <?php include BASE_PATH . "views/header.php"; ?>
   <div class="container">
     <div class="row align-items-center">
       <div class="col-sm-8">
-        <h1>Editing <?php echo $swimmersSecurityCheck['MForename'] . ' ' . $swimmersSecurityCheck['MSurname']?></h1>
+        <h1>Editing <?php echo $swimmersSecurityCheck['MForename'] . ' ' .
+        $swimmersSecurityCheck['MSurname']?></h1>
       </div>
       <div class="col-sm-4 text-right">
-        <button type="submit" class="btn btn-success">Save</button> <a class="btn btn-dark" href="<?php echo autoUrl("swimmers/" . $id)?>">Exit Edit Mode</a>
+        <button type="submit" class="btn btn-success">Save</button> <a
+        class="btn btn-dark" href="<?php echo autoUrl("swimmers/" . $id)?>">Exit
+        Edit Mode</a>
       </div>
     </div>
     <?php
@@ -145,15 +57,19 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
         if ($dateOfBirthUpdate) { ?><li>Your date of birth</li><?php }
         if ($sexUpdate) { ?><li>Your sex</li><?php }
         if ($medicalNotesUpdate) { ?><li>Your medical notes</li><?php }
-        if ($otherNotesUpdate) { ?><li>Your other notes</li><?php } ?>
+        if ($otherNotesUpdate) { ?><li>Your other notes</li><?php }
+        if ($photoUpdate) { ?><li>Your photography permissions</li><?php } ?>
       </ul>
     </div>
     <?php } ?>
     <!-- Main Info Content -->
     <form method="post">
+      <div class="my-3 p-3 bg-white rounded box-shadow">
     <div class="form-group">
       <label for="forename">Forename</label>
-      <input type="text" class="form-control" id="forename" name="forename" placeholder="Enter a forename" value="<?php echo $rowSwim['MForename']; ?>" required>
+      <input type="text" class="form-control" id="forename" name="forename"
+      placeholder="Enter a forename" value="<?php echo $rowSwim['MForename']; ?>"
+      required>
     </div>
     <div class="form-group">
       <label for="middlenames">Middle Names</label>
@@ -196,13 +112,77 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
       <label for="otherNotes">Other Notes</label>
       <textarea class="form-control" id="otherNotes" name="otherNotes" rows="3" placeholder="Tell us any other notes for coaches"><?php echo $rowSwim['OtherNotes']; ?></textarea>
     </div>
-    <button type="submit" class="btn btn-outline-dark mb-3">Update</button>
+    <? if ($age < 18) { ?>
+    <div class="form-group">
+      <?
+      $photo = [];
+      if ($rowSwim['Website'] == 1) {
+        $photo[0] = " checked ";
+      }
+      if ($rowSwim['Social'] == 1) {
+        $photo[1] = " checked ";
+      }
+      if ($rowSwim['Noticeboard'] == 1) {
+        $photo[2] = " checked ";
+      }
+      if ($rowSwim['FilmTraining'] == 1) {
+        $photo[3] = " checked ";
+      }
+      if ($rowSwim['ProPhoto'] == 1) {
+        $photo[4] = " checked ";
+      } ?>
+      <p>
+  			I, <? echo getUserName($userID); ?> agree to photography of <?php echo
+  			$rowSwim['MForename'] . " " . $rowSwim['MSurname']; ?> in the following
+  			circumstances. Tick boxes only if you wish to grant us photography
+  			permission.
+  		</p>
+  		<div class="custom-control custom-checkbox">
+  			<input type="checkbox" value="1" class="custom-control-input"
+  			name="webPhoto" id="webPhoto" <? echo $photo[0]; ?>>
+  			<label class="custom-control-label" for="webPhoto">
+  				Take photographs to use on the clubs website
+  			</label>
+  		</div>
+  		<div class="custom-control custom-checkbox">
+  			<input type="checkbox" value="1" class="custom-control-input"
+  			name="socPhoto" id="socPhoto" <? echo $photo[1]; ?>>
+  			<label class="custom-control-label" for="socPhoto">
+  				Take photographs to use on social media sites
+  			</label>
+  		</div>
+  		<div class="custom-control custom-checkbox">
+  			<input type="checkbox" value="1" class="custom-control-input"
+  			name="noticePhoto" id="noticePhoto" <? echo $photo[2]; ?>>
+  			<label class="custom-control-label" for="noticePhoto">
+  				Take photographs to use on club noticeboards
+  			</label>
+  		</div>
+  		<div class="custom-control custom-checkbox">
+  			<input type="checkbox" value="1" class="custom-control-input"
+  			name="trainFilm" id="trainFilm" <? echo $photo[3]; ?>>
+  			<label class="custom-control-label" for="trainFilm">
+  				Filming for training purposes only
+  			</label>
+  		</div>
+  		<div class="custom-control custom-checkbox">
+  			<input type="checkbox" value="1" class="custom-control-input"
+  			name="proPhoto" id="proPhoto" <? echo $photo[4]; ?>>
+  			<label class="custom-control-label" for="proPhoto">
+  				Employ a professional photographer (approved by the club) who will take
+  				photographs in competitions and/or club events.
+  			</label>
+  		</div>
+      <ul></ul>
+    </div>
+    <? } ?>
+    <button type="submit" class="btn btn-outline-dark">Update</button>
+    </div>
 
     <?php
     // Danger Zone at Bottom of Page
     $disconnectKey = generateRandomString(8);
     ?>
-    <form method="post">
       <div class="alert alert-danger">
         <p><strong>Danger Zone</strong> <br>Actions here can be irreversible. Be careful what you do.</p>
         <div class="form-group">
@@ -216,16 +196,12 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
           <input type="text" class="form-control" id="swimmerDeleteDanger" name="swimmerDeleteDanger" aria-describedby="swimmerDeleteDangerHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
           <small id="swimmerDeleteDangerHelp" class="form-text">Enter the key in quotes above and press <strong>Delete or Disconnect</strong>. This will delete this swimmer from all of our systems.</small>
         </div>
-        <button type="submit" class="btn btn-danger mb-3">Delete or Disconnect</button>
+        <p class="mb-0">
+          <button type="submit" class="btn btn-danger">Delete or
+          Disconnect</button>
+        </p>
       </div>
     </form>
   </div>
   <?php } ?>
-<script src="<?php echo autoUrl('js/tinymce/tinymce.min.js') ?>" async defer></script>
-<script>
-  tinymce.init({
-    selector: '#medicalNotes',
-    branding: false,
-  });
-</script>
 <?php include BASE_PATH . "views/footer.php";

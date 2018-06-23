@@ -21,13 +21,15 @@ $resultSecurityCheck = mysqli_query($link, $sqlSecurityCheck);
 $swimmersSecurityCheck = mysqli_fetch_array($resultSecurityCheck, MYSQLI_ASSOC);
 
 $pagetitle;
-if (!$swimmersSecurityCheck['UserID'] == $userID) {
+if ($swimmersSecurityCheck['UserID'] != $userID) {
   halt(404);}
 else {
   $pagetitle = $swimmersSecurityCheck['MForename'] . " " . $swimmersSecurityCheck['MSurname'];
-  $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes, members.AccessKey FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
+  $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes, members.AccessKey, memberPhotography.Website, memberPhotography.Social, memberPhotography.Noticeboard, memberPhotography.FilmTraining, memberPhotography.ProPhoto FROM (((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN `memberPhotography` ON members.MemberID = memberPhotography.MemberID) WHERE members.MemberID = '$id';";
   $resultSwim = mysqli_query($link, $sqlSwim);
   $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
+  $age = date_diff(date_create($rowSwim['DateOfBirth']),
+  date_create('today'))->y;
   $title = null;
   ?>
 
@@ -88,6 +90,39 @@ else {
           </p>
         </div>
       <?php } ?>
+      <div class="media pt-3 border-bottom border-gray">
+      <? if (($rowSwim['Website'] != 1 || $rowSwim['Social'] != 1 ||
+      $rowSwim['Noticeboard'] != 1 || $rowSwim['FilmTraining'] != 1 ||
+      $rowSwim['ProPhoto'] != 1) && ($age < 18)) { ?>
+        <p>There are limited photography permissions for this swimmer</p>
+        <ul> <?
+        if ($row['Website'] != 1) { ?>
+          <li>Photos <strong>must not</strong> be taken of this swimmer for our
+          website</li><?
+        }
+        if ($row['Social'] != 1) { ?>
+          <li>Photos <strong>must not</strong> be taken of this swimmer for our
+          social media</li><?
+        }
+        if ($row['Noticeboard'] != 1) { ?>
+          <li>Photos <strong>must not</strong> be taken of this swimmer for our
+          noticeboard</li><?
+        }
+        if ($row['FilmTraining'] != 1) { ?>
+          <li>This swimmer <strong>must not</strong> be filmed for the purposes
+          of training</li><?
+        }
+        if ($row['ProPhoto'] != 1) { ?>
+          <li>Photos <strong>must not</strong> be taken of this swimmer by
+          photographers</li><?
+        }
+         ?></ul><?
+      } else {
+         ?><p class="media-body pb-3 mb-0 lh-125">
+           There are no photography limitiations for this swimmer.
+         </p><?
+      } ?>
+      </div>
       <span class="d-block text-right mt-3">
         <a href="edit/<?php echo $id;?>">Edit Details or add Medical Notes</a>
       </span>

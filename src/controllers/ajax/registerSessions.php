@@ -107,12 +107,14 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       $content .= "<h2>Take register</h2><p>for " . $row['SquadName'] . " Squad, " . $row['SessionName'] . " on " . $dayText . " " . $date . " at " . $datetime1->format("H:i") . "</p>";
       $interval = $datetime1->diff($datetime2);
       $content .= "<p>This session is " . $interval->format('%h hours %I minutes') . " long, finishing at " . $datetime2->format("H:i") . "</p>";
-      $sql = "SELECT * FROM ((sessions INNER JOIN members ON sessions.SquadID = members.SquadID) INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE sessions.SessionID = '$sessionID' ORDER BY members.MForename, members.MSurname ASC";
+      $sql = "SELECT members.MemberID, members.MForename, members.MSurname, members.DateOfBirth, members.MedicalNotes, members.OtherNotes, memberPhotography.Website, memberPhotography.Social, memberPhotography.Noticeboard, memberPhotography.FilmTraining, memberPhotography.ProPhoto FROM (((sessions INNER JOIN members ON sessions.SquadID = members.SquadID) INNER JOIN squads ON sessions.SquadID = squads.SquadID) LEFT JOIN `memberPhotography` ON members.MemberID = memberPhotography.MemberID) WHERE sessions.SessionID = '$sessionID' ORDER BY members.MForename, members.MSurname ASC";
       $result = mysqli_query($link, $sql);
       $swimmerCount = mysqli_num_rows($result);
-      $content .= "<div class=\"table-responsive\"><table class=\"table table-striped\"><thead><tr><th>Name</th><th>Notes</th></tr></thead><tbody>";
+      $content .= "<div class=\"table-responsive tweet-embed\"><table class=\"table table-striped\"><thead class=\"thead-light\"><tr><th>Name</th><th>Notes</th></tr></thead><tbody>";
       for ($i=0; $i<$swimmerCount; $i++) {
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        $age = date_diff(date_create($row['DateOfBirth']),
+        date_create('today'))->y;
         $checked = "";
         if ($sessionRecordExists > 0) {
           $member = $row['MemberID'];
@@ -170,6 +172,45 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
                   </div>
                   <div class="modal-body">
                   ' . $row['OtherNotes'] . '
+                  </div>
+                </div>
+              </div>
+            </div>
+            ';
+          }
+          if (($row['Website'] != 1 || $row['Social'] != 1 || $row['Noticeboard'] != 1 || $row['FilmTraining'] != 1 || $row['ProPhoto'] != 1) && ($age < 18)) {
+            $content .= " <a data-toggle=\"modal\" href=\"#photoModal" . $row['MemberID'] . "\"><span class=\"badge badge-warning\">PHOTO</span></a>";
+            $modalOutput .= '
+            <!-- Modal -->
+            <div class="modal fade" id="photoModal' . $row['MemberID'] . '" tabindex="-1" role="dialog" aria-labelledby="photoModalTitle' . $row['MemberID'] . '" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="photoModalTitle' . $row['MemberID'] . '">Photography Permissions for ' . $row['MForename'] . ' ' . $row['MSurname'] . '</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  <p>There are limited photography permissions for this swimmer</p>
+                  <ul>';
+                  if ($row['Website'] != 1) {
+                    $modalOutput .= '<li>Photos <strong>must not</strong> be taken of this swimmer for our website</li>';
+                  }
+                  if ($row['Social'] != 1) {
+                    $modalOutput .= '<li>Photos <strong>must not</strong> be taken of this swimmer for our social media</li>';
+                  }
+                  if ($row['Noticeboard'] != 1) {
+                    $modalOutput .= '<li>Photos <strong>must not</strong> be taken of this swimmer for our noticeboard</li>';
+                  }
+                  if ($row['FilmTraining'] != 1) {
+                    $modalOutput .= '<li>This swimmer <strong>must not</strong> be filmed for the purposes of training</li>';
+                  }
+                  if ($row['ProPhoto'] != 1) {
+                    $modalOutput .= '<li>Photos <strong>must not</strong> be taken of this swimmer by photographers</li>';
+                  }
+                  $modalOutput .= '
+                  </ul>
                   </div>
                 </div>
               </div>

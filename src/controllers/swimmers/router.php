@@ -25,7 +25,7 @@ if ($access == "Parent") {
 	// Edit a Swimmer
 	$this->post('/edit/{id}:int', function($id) {
     global $link;
-	  require('parentSingleSwimmer.php');
+	  require 'parentSingleSwimmerPost.php';
 	});
 }
 else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {

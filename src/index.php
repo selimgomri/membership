@@ -1,6 +1,13 @@
 <?php
 $executionStartTime = microtime();
 
+// Do not reveal PHP when sending mail
+ini_set('mail.add_x_header', 'Off');
+ini_set('expose_php', 'Off');
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
 define('DS', DIRECTORY_SEPARATOR, true);
 define('BASE_PATH', __DIR__ . DS, TRUE);
 //Show errors

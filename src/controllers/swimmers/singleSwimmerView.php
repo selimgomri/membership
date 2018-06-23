@@ -17,10 +17,12 @@ $sex = $row['Gender'];
 $medicalNotes = $row['MedicalNotes'];
 $otherNotes = $row['OtherNotes'];
 
-$sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes, members.AccessKey FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
+$sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes, members.AccessKey, memberPhotography.Website, memberPhotography.Social, memberPhotography.Noticeboard, memberPhotography.FilmTraining, memberPhotography.ProPhoto FROM ((members INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN `memberPhotography` ON members.MemberID = memberPhotography.MemberID) WHERE members.MemberID = '$id';";
 $resultSwim = mysqli_query($link, $sqlSwim);
 $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
 $pagetitle = "Swimmer: " . $rowSwim['MForename'] . " " . $rowSwim['MSurname'];
+$age = date_diff(date_create($rowSwim['DateOfBirth']),
+date_create('today'))->y;
 $title = null;
 $content = '
 <div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded box-shadow" id="dash">
@@ -101,6 +103,33 @@ $content = '
 	  </span>
 		</div>';
 	}
+$content .= '
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+    <h2 class="border-bottom border-gray pb-2 mb-2">Photography Permissions</h2>';
+    if (($rowSwim['Website'] != 1 || $rowSwim['Social'] != 1 || $rowSwim['Noticeboard'] != 1 || $rowSwim['FilmTraining'] != 1 || $rowSwim['ProPhoto'] != 1) && ($age < 18)) {
+      $content .= '
+      <p>There are limited photography permissions for this swimmer</p>
+      <ul class="mb-0">';
+      if ($row['Website'] != 1) {
+        $content .= '<li>Photos <strong>must not</strong> be taken of this swimmer for our website</li>';
+      }
+      if ($row['Social'] != 1) {
+        $content .= '<li>Photos <strong>must not</strong> be taken of this swimmer for our social media</li>';
+      }
+      if ($row['Noticeboard'] != 1) {
+        $content .= '<li>Photos <strong>must not</strong> be taken of this swimmer for our noticeboard</li>';
+      }
+      if ($row['FilmTraining'] != 1) {
+        $content .= '<li>This swimmer <strong>must not</strong> be filmed for the purposes of training</li>';
+      }
+      if ($row['ProPhoto'] != 1) {
+        $content .= '<li>Photos <strong>must not</strong> be taken of this swimmer by photographers</li>';
+      }
+      $content .= '</ul>';
+    } else {
+      $content .= '<p class="mb-0">There are no photography limitiations for this swimmer. Please do ensure you\'ve read the club and ASA policies on photography before taking any pictures.</p>';
+    }
+  $content .= '</div>';
   $content.= '
   <div class="my-3 p-3 bg-white rounded box-shadow">
     <h2 class="border-bottom border-gray pb-2 mb-0">Best Times</h2>
