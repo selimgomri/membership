@@ -1229,10 +1229,25 @@ function setupPhotoPermissions($id) {
     $sql = "INSERT INTO `memberPhotography` (`MemberID`, `Website`, `Social`,
     `Noticeboard`, `FilmTraining`, `ProPhoto`) VALUES ('$id', '0', '0', '0',
     '0', '0');";
-    mysqli_query($link, $sql);
-  } else {
-    return false;
+    if (mysqli_query($link, $sql)) {
+      return true;
+    }
   }
+  return false;
+}
+
+function setupMedicalInfo($id) {
+  global $link;
+  $id = mysqli_real_escape_string($link, $id);
+  $sql = "SELECT * FROM `memberMedical` WHERE `MemberID` = '$id';";
+  if (mysqli_num_rows(mysqli_query($link, $sql)) == 0) {
+    $sql = "INSERT INTO `memberMedical` (`MemberID`, `Conditions`, `Allergies`,
+    `Medication`) VALUES ('$id', '', '', '');";
+    if (mysqli_query($link, $sql)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 

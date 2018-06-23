@@ -42,7 +42,7 @@ if ($access == "Parent") {
 
 	$this->post('/medicalreview/{id}:int', function($id) {
 		global $link;
-		include BASE_PATH . 'controllers/renewal/parent/accountReview.php';
+		include BASE_PATH . 'controllers/renewal/parent/medicalReviewPost.php';
 	});
 
 	// Emergency Contact
@@ -111,7 +111,7 @@ if ($access == "Parent") {
 
 	$this->post('/administrationform', function() {
 		global $link;
-		include BASE_PATH . 'controllers/renewal/parent/accountReview.php';
+		include BASE_PATH . 'controllers/renewal/parent/adminFormPost.php';
 	});
 
 	$this->get('/fees', function() {
