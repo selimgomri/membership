@@ -22,11 +22,17 @@ if ($mobileComms==1) {
 
 $pagetitle = "Account Review";
 include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">
 	<h1>Review your account</h1>
 	<p class="lead">Check your details are still up to date</p>
+
+	<? if (isset($_SESSION['ErrorState'])) {
+		echo $_SESSION['ErrorState'];
+		unset($_SESSION['ErrorState']);
+	} ?>
 
 	<form method="post">
 		<div class="my-3 p-3 bg-white rounded box-shadow">
@@ -66,8 +72,8 @@ include BASE_PATH . "views/header.php";
 	  </div>
 
 		<div class="mb-3">
-			<a class="btn btn-outline-success" href="">Save</a>
-			<a class="btn btn-success" href="">Save and Continue</a>
+			<button type="button" class="btn btn-outline-success" value="save">Save</button>
+			<button type="submit" class="btn btn-success">Save and Continue</button>
 		</div>
 	</form>
 </div>

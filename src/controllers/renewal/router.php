@@ -9,6 +9,11 @@ if ($access == "Parent") {
 		include BASE_PATH . 'controllers/renewal/parent/home.php';
 	});
 
+	$this->get(['/go', '/go/*'], function() {
+		global $link;
+		include BASE_PATH . 'controllers/renewal/parent/AutoRoute.php';
+	});
+
 	// Renewal Home
 	$this->group('/accountreview', function() {
 		global $link;
@@ -20,7 +25,7 @@ if ($access == "Parent") {
 
 		$this->post('/', function() {
 			global $link;
-			include BASE_PATH . 'controllers/renewal/parent/accountReview.php';
+			include BASE_PATH . 'controllers/renewal/parent/accountReviewPost.php';
 		});
 
 		$this->get('/swimmers', function() {
