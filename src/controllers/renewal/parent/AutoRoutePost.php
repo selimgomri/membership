@@ -5,11 +5,11 @@ require 'AutoRouteStartup.php';
 if ($stage == 0) {
 	// Stage 0 - Reviews
 	if ($substage == 0) {
-		include 'accountReview.php';
+		include 'accountReviewPost.php';
 	} else if ($substage == 1) {
-		include 'swimmerReview.php';
+		//include 'swimmerReview.php';
 	} else if ($substage == 2) {
-		include 'feeReview.php';
+		//include 'feeReview.php';
 	} else {
 		halt(404);
 	}
@@ -17,14 +17,14 @@ if ($stage == 0) {
 	// Medical Reviews
 	if ($substage == 0) {
 		$id = $part;
-		include 'medicalReview.php';
+		include 'medicalReviewPost.php';
 	} else {
 		halt(404);
 	}
 } else if ($stage == 2) {
 	// Emergency Contacts
 	if ($substage == 0) {
-		include 'emergencyContact.php';
+		//include 'emergencyContact.php';
 	} else {
 		halt(404);
 	}
@@ -41,7 +41,7 @@ if ($stage == 0) {
 } else if ($stage == 4) {
 	// Administration Form
 	if ($substage == 0) {
-		include 'adminForm.php';
+		include 'adminFormPost.php';
 	} else {
 		halt(404);
 	}
