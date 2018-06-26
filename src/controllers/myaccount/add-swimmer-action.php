@@ -1,15 +1,12 @@
 <?php
 
-  $preventLoginRedirect = true;
-  include "../database.php";
-
   // Registration Form Handler
 
   $userID = $_SESSION['UserID'];
   $asaNumber = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['asa'])));
   $accessKey = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['accessKey'])));
 
-  $searchSQL = "SELECT * FROM members WHERE ASANumber = '$asaNumber' AND AccessKey = '$accessKey' LIMIT 0, 30 ";
+  $searchSQL = "SELECT * FROM members WHERE ASANumber = '$asaNumber' AND AccessKey = '$accessKey' LIMIT 1;";
   $searchResult = mysqli_query($link, $searchSQL);
   $searchCount = mysqli_num_rows($searchResult);
   $row = mysqli_fetch_array($searchResult, MYSQLI_ASSOC);
@@ -67,16 +64,28 @@
       notifySend($row['EmailAddress'], "A swimmer has been added", $message);
 
       // Return to My Account
-      header("Location: " . autoUrl(""));
+      header("Location: " . autoUrl("myaccount"));
 
     }
     else {
       // Error, too many records found - Database error
-      header("Location: " . autoUrl("addswimmer"));
+      $_SESSION['ErrorState'] = "
+    	<div class=\"alert alert-danger\">
+    	<p class=\"mb-0\"><strong>An error occured when we tried to add a swimmer</strong></p>
+      <p>You may have got the ASA Number or Access Key wrong</p>
+    	<p class=\"mb-0\">Please try again</p>
+    	</div>";
+      header("Location: " . autoUrl("myaccount/addswimmer"));
     }
   }
   else {
     // Error, fields not filled out
-    header("Location: " . autoUrl("addswimmer");
+    $_SESSION['ErrorState'] = "
+    <div class=\"alert alert-danger\">
+    <p class=\"mb-0\"><strong>An error occured when we tried to add a swimmer</strong></p>
+    <p>You may have got the ASA Number or Access Key wrong</p>
+    <p class=\"mb-0\">Please try again</p>
+    </div>";
+    header("Location: " . autoUrl("myaccount/addswimmer"));
   }
 ?>
