@@ -24,17 +24,17 @@ if ($stage == 0) {
 } else if ($stage == 2) {
 	// Emergency Contacts
 	if ($substage == 0) {
-		//include 'emergencyContact.php';
+		include 'emergencyContactPost.php';
 	} else {
 		halt(404);
 	}
 } else if ($stage == 3) {
 	// Code of Conduct
 	if ($substage == 0) {
-		include 'conductForm.php';
+		include 'conductFormParentPost.php';
 	} else if ($substage == 1) {
-		$id  = $part;
-		include 'conductForm.php';
+		$id = $part;
+		include 'conductFormSwimmerPost.php';
 	} else {
 		halt(404);
 	}
