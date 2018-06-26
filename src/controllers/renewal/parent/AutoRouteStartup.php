@@ -23,6 +23,8 @@ function latestRenewal() {
 
 $result = renewalProgress($user);
 
+$renewal = null;
+
 if (mysqli_num_rows($result) == 0) {
 	// Create a new Progress Record
 	$result = latestRenewal();
@@ -31,6 +33,10 @@ if (mysqli_num_rows($result) == 0) {
 	$date = mysqli_real_escape_string($link, date("Y-m-d"));
 	$sql = "INSERT INTO `renewalProgress` (`UserID`, `RenewalID`, `Date`, `Stage`, `Substage`, `Part`) VALUES ('$user', '$renewal', '$date', '0', '0', '0');";
 	mysqli_query($link, $sql);
+} else {
+	$result = latestRenewal();
+	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+	$renewal = mysqli_real_escape_string($link, $row['ID']);
 }
 
 $result = renewalProgress($user);

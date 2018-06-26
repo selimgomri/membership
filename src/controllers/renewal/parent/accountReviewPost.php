@@ -53,6 +53,9 @@ if ($status) {
 	`MobileComms` = '$smsComms' WHERE `UserID` = '$user';";
 	if (mysqli_query($link, $sql)) {
 		// Success move on
+		$renewal = mysqli_real_escape_string($link, $renewal);
+		$sql = "UPDATE `renewalProgress` SET `Substage` = `Substage` + 1 WHERE `RenewalID` = '$renewal' AND `UserID` = '$user';";
+		mysqli_query($link, $sql);
 		header("Location: " . app('request')->curl);
 	} else {
 		$status = false;

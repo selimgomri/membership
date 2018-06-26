@@ -7,9 +7,9 @@ if ($stage == 0) {
 	if ($substage == 0) {
 		include 'accountReviewPost.php';
 	} else if ($substage == 1) {
-		//include 'swimmerReview.php';
+		include 'swimmerReviewPost.php';
 	} else if ($substage == 2) {
-		//include 'feeReview.php';
+		include 'feeReviewPost.php';
 	} else {
 		halt(404);
 	}
