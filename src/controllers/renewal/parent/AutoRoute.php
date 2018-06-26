@@ -48,7 +48,7 @@ if ($stage == 0) {
 } else if ($stage == 5) {
 	// Fees to Pay - Membership Renewal
 	if ($substage == 0) {
-		include 'fees.php';
+		include 'renewalFee.php';
 	} else {
 		halt(404);
 	}

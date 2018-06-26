@@ -116,6 +116,12 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 
 if ($status) {
 	// Update the database with current renewal state
+	$user = mysqli_real_escape_string($link, $_SESSION['UserID']);
+	$renewal = mysqli_real_escape_string($link, $renewal);
+
+	$sql = "UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE
+	`RenewalID` = '$renewal' AND `UserID` = '$user';";
+	mysqli_query($link, $sql);
 	header("Location: " . app('request')->curl);
 } else {
 	$_SESSION['ErrorState'] = "
