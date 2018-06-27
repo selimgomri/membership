@@ -180,7 +180,7 @@
   <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
   <div class="my-3 p-3 bg-white rounded box-shadow">
     <h2>My Swimmers</h2>
-    <p>Swimmers $linked to your account</p>
+    <p>Swimmers linked to your account</p>
     <?php echo mySwimmersTable($link, $userID) ?>
     <p class="mb-0"><a href="<?php echo autoUrl("myaccount/addswimmer"); ?>" class="btn btn-outline-dark">Add a Swimmer</a></p>
   </div>

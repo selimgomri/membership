@@ -1,7 +1,21 @@
 <!DOCTYPE html>
-<!-- 	Copyright Chris Heppell & Chester-le-Street ASC 2017 2018. Bootstrap CSS and JavaScript is Copyright Twitter Inc, 2011-2018, jQuery v3.1.0 is Copyright jQuery Foundation 2016
+<!--
+
+Copyright Chris Heppell & Chester-le-Street ASC 2017 2018. Bootstrap CSS
+and JavaScript is Copyright Twitter Inc, 2011-2018, jQuery v3.1.0 is Copyright
+jQuery Foundation 2016
+
 Designed by Chris Heppell, www.chrisheppell.uk
-Yes! We built this in house. Not many clubs do. We don't cheat.	-->
+
+Yes! We built this in house. Not many clubs do. We don't cheat.
+
+Chester-le-Street ASC
+Swimming Club based in Chester-le-Street, North East England
+https://github.com/Chester-le-Street-ASC/
+
+Chester-le-Street ASC is a non profit private members club.
+
+-->
 <html lang="en-gb">
   <head>
     <meta charset="utf-8">
@@ -11,8 +25,11 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
     else { ?>
     <title>CLSASC Membership</title>
     <?php } ?>
-    <meta name="description" content="Your Chester-le-Street ASC Account lets you make gala entries online and gives you access to all your information about your swimmers, including attendance.">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no,maximum-scale=1">
+    <meta name="description" content="Your Chester-le-Street ASC Account lets
+    you make gala entries online and gives you access to all your information
+    about your swimmers, including attendance.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,
+    user-scalable=no,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="apple-mobile-web-app-title" content="CLS ASC Accounts">
     <script async>
@@ -23,18 +40,24 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
       ga('create', 'UA-78812259-4', 'auto');
       ga('send', 'pageview');
     </script>
-	  <script>var shiftWindow = function() { scrollBy(0, -50) }; if (location.hash) shiftWindow(); window.addEventListener("hashchange", shiftWindow);</script>
+	  <script>var shiftWindow = function() { scrollBy(0, -50) }; if
+	  (location.hash) shiftWindow(); window.addEventListener("hashchange",
+	  shiftWindow);</script>
     <script src="<? echo autoUrl("/js/tinymce/tinymce.min.js"); ?>"></script>
-    <link rel="stylesheet preload" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono">
+    <link rel="stylesheet preload"
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono">
     <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.11.css") ?>">
-    <link rel="stylesheet" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet"
+    href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/font-awesome/css/font-awesome.min.css">
     <link rel="apple-touch-icon" href="<https://www.chesterlestreetasc.co.uk/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="76x76" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad.png">
     <link rel="apple-touch-icon" sizes="120x120" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-iphone-retina.png">
     <link rel="apple-touch-icon" sizes="152x152" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png">
     <link rel="mask-icon" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterIcon.svg" color="#bd0000">
     <script src='https://www.google.com/recaptcha/api.js'></script>
-    <style>.logo {background: url(https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.svg) left center no-repeat;}</style>
+    <style>.logo {background:
+    url(https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.svg)
+    left center no-repeat;}</style>
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -43,11 +66,15 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
 
   </head>
 <body class="bg-light account-body">
-  <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary d-print-none justify-content-between" role="navigation">
+  <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary
+  d-print-none justify-content-between" role="navigation">
       <a class="navbar-brand" href="<?php echo autoUrl("") ?>">
-        <?php if ((empty($_SESSION['LoggedIn']) || $_SESSION['AccessLevel'] == "Parent")) { ?>Membership<?php } else { ?>MMS<?php } ?>
+        <?php if ((empty($_SESSION['LoggedIn']) || $_SESSION['AccessLevel'] ==
+        "Parent")) { ?>Membership<?php } else { ?>CLS MMS<?php } ?>
       </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-toggle="collapse"
+      data-target="#chesterNavbar" aria-controls="chesterNavbar"
+      aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -72,17 +99,21 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
         <li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("squads") ?>">Squads</a>
   		  </li>
-        <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach" || $_SESSION['AccessLevel'] == "Committee") { ?>
+        <?php if ($_SESSION['AccessLevel'] == "Admin" ||
+        $_SESSION['AccessLevel'] == "Coach" || $_SESSION['AccessLevel'] ==
+        "Committee") { ?>
         <li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("attendance") ?>">Attendance</a>
   		  </li>
         <?php } ?>
-        <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas") { ?>
+        <?php if ($_SESSION['AccessLevel'] == "Admin" ||
+        $_SESSION['AccessLevel'] == "Galas") { ?>
         <li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("users") ?>">Users</a>
   		  </li>
         <?php } ?>
-        <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas") { ?>
+        <?php if ($_SESSION['AccessLevel'] == "Admin" ||
+        $_SESSION['AccessLevel'] == "Galas") { ?>
         <li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("payments") ?>">Payments</a>
   		  </li>
@@ -98,8 +129,17 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
 		  </li>
       <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
         <li class="nav-item">
-          <a class="nav-link" data-toggle="modal" data-target="#paymentsBetaModal">Payments <span class="badge badge-secondary">BETA</span></a>
+          <a class="nav-link" data-toggle="modal"
+          data-target="#paymentsBetaModal" href="#paymentsBetaModal">
+            Payments <span class="badge badge-secondary">BETA</span>
+          </a>
         </li>
+        <li class="nav-item">
+  			  <a class="nav-link" target="_blank"
+  			  href="https://store.chesterlestreetasc.co.uk/">
+            Store
+          </a>
+  		  </li>
       <? } ?>
 		  <?php } ?>
 		  <?php if (empty($_SESSION['LoggedIn'])) { ?>
@@ -110,21 +150,6 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
 			  <a class="nav-link" href="<?php echo autoUrl("register") ?>">Create Account</a>
 		  </li>
       <?php } ?>
-      <!--<li class="nav-item">
-			<a class="nav-link" href="https://store.chesterlestreetasc.co.uk/">Store</a>
-		  </li>
-		  <li class="nav-item">
-			<a class="nav-link" href="https://github.com/Chester-le-Street-ASC">GitHub</a>
-		  </li>
-		  <li class="nav-item">
-			<a class="nav-link" href="/software/sendmail">Notify</a>
-		  </li>
-		  <li class="nav-item">
-			<a class="nav-link disabled" href="#">Payment Systems</a>
-		  </li>
-		  <li class="nav-item">
-			<a class="nav-link disabled" href="#">Account Settings</a>
-		  </li>-->
 		</ul>
     <?php if (!empty($_SESSION['LoggedIn'])) { ?>
     <a class="btn btn-outline-light my-2 my-sm-0" href="<?php echo autoUrl("logout") ?>">Logout</a>
@@ -133,33 +158,23 @@ Yes! We built this in house. Not many clubs do. We don't cheat.	-->
 
   </nav>
 
-  <!--<header class="container">
-    <div class="row d-print-none align-items-center" style="margin-top:0px">
-      <div class="col-md-8">
-  	  <h1 class="mb-0">
-        <a class="logo" alt="Chester-le-Street ASC" href="<?php echo autoUrl("") ?>"></a><span class="sr-only">"Chester&#8209;le&#8209;Street&nbsp;ASC</span>
-      </h1>
-  	</div>
-  	<div class="col d-none d-md-block">
-  	  <p class="slogan"><a href="https://www.chesterlestreetasc.co.uk/beta" target="_blank" class="badge badge-secondary">BETA</a></p>
-  	</div>
+  <noscript>
+    <div class="alert alert-danger">
+      <p class="mb-0">
+        <strong>
+          JavaScript is disabled or not supported
+        </strong>
+      </p>
+      <p class="mb-0">
+  	    It looks like you've got JavaScript disabled or your browser does not
+  	    support it. JavaScript is essential for our website to properly so we
+  	    recommend you enable it or upgrade to a browser which supports it as
+  	    soon as possible. <a href="http://browsehappy.com/" class="alert-link"
+  	    target="_blank">Upgrade your browser today <i class="fa
+  	    fa-external-link" aria-hidden="true"></i></a>
+      </p>
     </div>
-    <div class="row d-none d-print-block" style="margin-top:-60px">
-      <div class="col-6">
-        <img class="img-fluid" src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.svg"  alt="Chester-le-Street ASC Logo">
-      </div>
-      <div class="col-6 d-print-none">
-    	  <p class="slogan"><a href="https://en.wikipedia.org/wiki/Software_release_life_cycle#Beta" target="_blank" class="badge badge-secondary">BETA</a></p>
-    	</div>
-    </div>
-  	<hr>-->
-      <!--[if !IE]><div class="alert alert-danger"><strong>Unsupported Browser</strong><br>You're using an unsupported browser and this website may not work properly with it. <a href="http://browsehappy.com/" class="alert-link" target="_blank">Upgrade your browser today <i class="fa fa-external-link" aria-hidden="true"></i> </a> or <a href="https://www.google.com/chrome/browser/desktop/index.html" class="alert-link" target="_blank">install Google Chrome <i class="fa fa-external-link" aria-hidden="true"></i> </a> to better experience this site.</p></div><hr><![endif]-->
-      <noscript>
-      <div class="alert alert-danger">
-        <p class="mb-0"><strong>JavaScript is disabled or not supported</strong>
-  		  <br>
-  		  It looks like you've got JavaScript disabled or your browser does not support it. JavaScript is essential for our website to properly so we recommend you enable it or upgrade to a browser which supports it as soon as possible. <a href="http://browsehappy.com/" class="alert-link" target="_blank">Upgrade your browser today <i class="fa fa-external-link" aria-hidden="true"></i></a></p>
-      </div>
-      <hr>
-    </noscript>
-  <!--</header>-->
+    <hr>
+  </noscript>
+
+<!-- END OF HEADERS -->

@@ -2,19 +2,25 @@
 
 $user = mysqli_real_escape_string($link, $_SESSION['UserID']);
 
-$sql = "SELECT * FROM `members` WHERE `UserID` = '$user';";
+$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
+members.SquadID WHERE `members`.`UserID` = '$user' AND `SquadFee` > '0';";
 $result = mysqli_query($link, $sql);
 
 $clubFee = 0;
 $totalFee = 0;
 
-$count = mysqli_num_rows($result);
+$payingSwimmerCount = mysqli_num_rows($result);
 
-if ($count == 1) {
+if ($payingSwimmerCount == 1) {
 	$clubFee = 4000;
 } else {
 	$clubFee = 5000;
 }
+
+$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
+members.SquadID WHERE `members`.`UserID` = '$user';";
+$result = mysqli_query($link, $sql);
+$count = mysqli_num_rows($result);
 
 $totalFee += $clubFee;
 
@@ -23,11 +29,11 @@ $member = [];
 
 for ($i = 0; $i < $count; $i++) {
 	$member[$i] = mysqli_fetch_array($result, MYSQLI_ASSOC);
-	if ($member[$i]['ASACategory'] == 1) {
+	if ($member[$i]['ASACategory'] == 1 && $member[$i]['SquadFee'] > 0) {
 		$asaFees[$i] = 1620;
-	} else if ($member[$i]['ASACategory'] == 2) {
+	} else if ($member[$i]['ASACategory'] == 2  && $member[$i]['SquadFee'] > 0) {
 		$asaFees[$i] = 3300;
-	} else if ($member[$i]['ASACategory'] == 2) {
+	} else if ($member[$i]['ASACategory'] == 2  && $member[$i]['SquadFee'] > 0) {
 		$asaFees[$i] = 1250;
 	}
 	$totalFee += $asaFees[$i];
@@ -42,7 +48,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded box-shadow">
+	<form method="post" class="mb-3 p-3 bg-white rounded box-shadow">
 		<h1 class="border-bottom border-gray pb-2">
 			Your Membership Renewal Fees
 		</h1>
@@ -55,16 +61,15 @@ include BASE_PATH . 'views/header.php';
 			Chester-le-Street ASC.
 		</p>
 
-		<h2>Club Fee</h2>
-		<? if ($count > 1) {
+		<h2>Club Membership Fee</h2>
+		<? if ($payingSwimmerCount > 1) {
 			?>
 			<p class="lead">
 				You pay for a family membership
 			</p>
 			<?
 		} ?>
- 		<p>&pound;<? echo $clubFeeString; ?></p>
-		<p>Integer value as pence: <? echo $clubFee; ?></p>
+ 		<p>Your club membership fee is &pound;<? echo $clubFeeString; ?></p>
 
 		<h2>ASA Fees</h2>
 		<div class="table-responsive">
@@ -82,13 +87,19 @@ include BASE_PATH . 'views/header.php';
 				<tbody>
 			<?
 			for ($i = 0; $i < $count; $i++) {
+				$asaFeesString;
+				if ($member[$i]['SquadFee'] == 0 && $member[$i]['ASACategory'] != 0) {
+					$asaFeesString = "0.00 (Paid by club)";
+				} else {
+					$asaFeesString = number_format($asaFees[$i]/100,2,'.','');
+				}
 				?>
 				<tr>
 					<th>
 						<? echo $member[$i]['MForename'] . " " . $member[$i]['MSurname']; ?>
 					</th>
 					<th>
-						<? echo number_format($asaFees[$i]/100,2,'.',''); ?>
+						&pound;<? echo $asaFeesString; ?>
 					</th>
 				</tr>
 			<? } ?>
@@ -97,9 +108,15 @@ include BASE_PATH . 'views/header.php';
 		</div>
 
 		<h2>Total Fees</h2>
-		<p>&pound;<? echo $totalFeeString; ?></p>
-		<p>Integer value as pence: <? echo $totalFee; ?></p>
-	</div>
+		<p>Your total renewal fee will be &pound;<? echo $totalFeeString; ?>. By
+		continuing to complete your membership renewal, you confirm that you will
+		pay this amount as part of your next Direct Debit Payment.</p>
+		<p class="mb-0">
+			<button type="submit" class="btn btn-success">
+				Complete Renewal
+			</button>
+		</p>
+	</form>
 </div>
 
 <?
