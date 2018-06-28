@@ -17,7 +17,17 @@ $sex = $row['Gender'];
 $medicalNotes = $row['MedicalNotes'];
 $otherNotes = $row['OtherNotes'];
 
-$sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes, members.AccessKey, memberPhotography.Website, memberPhotography.Social, memberPhotography.Noticeboard, memberPhotography.FilmTraining, memberPhotography.ProPhoto FROM ((members INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN `memberPhotography` ON members.MemberID = memberPhotography.MemberID) WHERE members.MemberID = '$id';";
+$sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames,
+members.MSurname, members.ASANumber, squads.SquadName, squads.SquadFee,
+squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth,
+members.Gender, members.MedicalNotes, members.OtherNotes, members.AccessKey,
+memberPhotography.Website, memberPhotography.Social,
+memberPhotography.Noticeboard, memberPhotography.FilmTraining,
+memberPhotography.ProPhoto, memberMedical.Conditions, memberMedical.Allergies,
+memberMedical.Medication FROM (((members INNER JOIN squads ON members.SquadID =
+squads.SquadID) LEFT JOIN `memberPhotography` ON members.MemberID =
+memberPhotography.MemberID) LEFT JOIN `memberMedical` ON members.MemberID =
+memberMedical.MemberID) WHERE members.MemberID = '$id';";
 $resultSwim = mysqli_query($link, $sqlSwim);
 $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
 $pagetitle = "Swimmer: " . $rowSwim['MForename'] . " " . $rowSwim['MSurname'];
@@ -71,15 +81,58 @@ $content = '
       </p>
     </div>';
   }
-  if ($rowSwim["MedicalNotes"] != "") {
-    $content .= '
-    <div class="media pt-3">
-      <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-        <strong class="d-block text-gray-dark">Medical Notes</strong>
-        ' . $rowSwim["MedicalNotes"] . '
+  $content .= '
+  <div class="media pt-3">
+    <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+      <p class="mb-0 text-gray-dark">
+        <strong>
+          Medical Notes
+        </strong>
       </p>
-    </div>';
-  }
+
+      <p class="mb-0 mt-2">
+        <em>
+          Medical Conditions or Disabilities
+        </em>
+      </p>';
+      if ($rowSwim["Conditions"] != "") {
+        $content .= '
+        <p class="mb-0">';
+        $content .= $rowSwim["Conditions"];
+        $content .= '</p>';
+      } else {
+        $content .= '<p class="mb-0">None</p>';
+      }
+
+      $content .= '<p class="mb-0 mt-2">
+        <em>
+          Allergies
+        </em>
+      </p>';
+      if ($rowSwim["Allergies"] != "") {
+        $content .= '<p class="mb-0">';
+        $content .= $rowSwim["Allergies"];
+        $content .= '</p>';
+      } else {
+        $content .= '<p class="mb-0">None</p>';
+      }
+
+      $content .= '<p class="mb-0 mt-2">
+        <em>
+          Medication
+        </em>
+      </p>';
+      if ($rowSwim["Medication"] != "") {
+        $content .= '<p class="mb-0">';
+        $content .= $rowSwim["Medication"];
+        $content .= '</p>';
+      } else {
+        $content .= '<p class="mb-0">None</p>';
+      }
+
+    $content .= '</div>
+  </div>
+  ';
   if ($rowSwim["OtherNotes"] != "") {
     $content .= '
     <div class="media pt-3">

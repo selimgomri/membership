@@ -790,7 +790,7 @@ function squadInfoTable($link, $enableLinks = false) {
     $output = '
     <div class="table-responsive">
       <table class="table table-hover">
-        <thead>
+        <thead class="thead-light">
           <tr>
             <th>Name</th>
             <th>Fee</th>

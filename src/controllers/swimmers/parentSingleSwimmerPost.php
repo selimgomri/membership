@@ -7,7 +7,6 @@ $middlenameUpdate = false;
 $surnameUpdate = false;
 $dateOfBirthUpdate = false;
 $sexUpdate = false;
-$medicalNotesUpdate = false;
 $otherNotesUpdate = false;
 $photoUpdate = false;
 $update = false;
@@ -22,7 +21,6 @@ $middlename = $row['MMiddleNames'];
 $surname = $row['MSurname'];
 $dateOfBirth = $row['DateOfBirth'];
 $sex = $row['Gender'];
-$medicalNotes = $row['MedicalNotes'];
 $otherNotes = $row['OtherNotes'];
 
 // Get the swimmer name
@@ -86,17 +84,6 @@ else {
       $sql = "UPDATE `members` SET `Gender` = '$newSex' WHERE `MemberID` = '$id'";
       mysqli_query($link, $sql);
       $sexUpdate = true;
-      $update = true;
-    }
-  }
-  if (isset($_POST['medicalNotes'])) {
-    $newMedicalNotes = mysqli_real_escape_string($link,
-    trim(htmlspecialchars(ucfirst($_POST['medicalNotes']))));
-    if ($newMedicalNotes != $medicalNotes) {
-      $sql = "UPDATE `members` SET `MedicalNotes` = '$newMedicalNotes' WHERE
-      `MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      $medicalNotesUpdate = true;
       $update = true;
     }
   }

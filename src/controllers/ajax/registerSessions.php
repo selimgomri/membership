@@ -107,10 +107,20 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       $content .= "<h2>Take register</h2><p>for " . $row['SquadName'] . " Squad, " . $row['SessionName'] . " on " . $dayText . " " . $date . " at " . $datetime1->format("H:i") . "</p>";
       $interval = $datetime1->diff($datetime2);
       $content .= "<p>This session is " . $interval->format('%h hours %I minutes') . " long, finishing at " . $datetime2->format("H:i") . "</p>";
-      $sql = "SELECT members.MemberID, members.MForename, members.MSurname, members.DateOfBirth, members.MedicalNotes, members.OtherNotes, memberPhotography.Website, memberPhotography.Social, memberPhotography.Noticeboard, memberPhotography.FilmTraining, memberPhotography.ProPhoto FROM (((sessions INNER JOIN members ON sessions.SquadID = members.SquadID) INNER JOIN squads ON sessions.SquadID = squads.SquadID) LEFT JOIN `memberPhotography` ON members.MemberID = memberPhotography.MemberID) WHERE sessions.SessionID = '$sessionID' ORDER BY members.MForename, members.MSurname ASC";
+      $sql = "SELECT members.MemberID, members.MForename, members.MSurname,
+      members.DateOfBirth, members.MedicalNotes, members.OtherNotes,
+      memberPhotography.Website, memberPhotography.Social,
+      memberPhotography.Noticeboard, memberPhotography.FilmTraining,
+      memberPhotography.ProPhoto, memberMedical.Conditions, memberMedical.Allergies,
+      memberMedical.Medication FROM ((((sessions INNER JOIN members ON
+      sessions.SquadID = members.SquadID) INNER JOIN squads ON sessions.SquadID =
+      squads.SquadID) LEFT JOIN `memberPhotography` ON members.MemberID =
+      memberPhotography.MemberID) LEFT JOIN `memberMedical` ON members.MemberID =
+      memberMedical.MemberID) WHERE sessions.SessionID = '$sessionID' ORDER BY
+      members.MForename, members.MSurname ASC";
       $result = mysqli_query($link, $sql);
       $swimmerCount = mysqli_num_rows($result);
-      $content .= "<div class=\"table-responsive tweet-embed\"><table class=\"table table-striped\"><thead class=\"thead-light\"><tr><th>Name</th><th>Notes</th></tr></thead><tbody>";
+      $content .= "<div class=\"table-responsive tweet-embed mb-1\"><table class=\"table table-striped\"><thead class=\"thead-light\"><tr><th>Name</th><th>Notes</th></tr></thead><tbody>";
       for ($i=0; $i<$swimmerCount; $i++) {
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
         $age = date_diff(date_create($row['DateOfBirth']),
@@ -135,7 +145,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
             </div>
           </td>
           <td>";
-          if ($row['MedicalNotes'] != "") {
+          if ($row['Conditions'] != "" || $row['Allergies'] != "" || $row['Medication'] != "") {
             //ref=\"" . autoUrl("swimmers/" . $row['MemberID']) . "\" target=\"_blank\">
             $content .= "<a data-toggle=\"modal\" href=\"#medicalModal" . $row['MemberID'] . "\"><span class=\"badge badge-danger\">MEDICAL</span></a>";
             $modalOutput .= '
@@ -150,7 +160,46 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
                     </button>
                   </div>
                   <div class="modal-body">
-                  ' . $row['MedicalNotes'] . '
+                  <p class="mb-0 mt-2">
+                    <em>
+                      Medical Conditions or Disabilities
+                    </em>
+                  </p>';
+                  if ($row["Conditions"] != "") {
+                    $modalOutput .= '
+                    <p class="mb-0">';
+                    $modalOutput .= $row["Conditions"];
+                    $modalOutput .= '</p>';
+                  } else {
+                    $modalOutput .= '<p class="mb-0">None</p>';
+                  }
+
+                  $modalOutput .= '<p class="mb-0 mt-2">
+                    <em>
+                      Allergies
+                    </em>
+                  </p>';
+                  if ($row["Allergies"] != "") {
+                    $modalOutput .= '<p class="mb-0">';
+                    $modalOutput .= $row["Allergies"];
+                    $modalOutput .= '</p>';
+                  } else {
+                    $modalOutput .= '<p class="mb-0">None</p>';
+                  }
+
+                  $modalOutput .= '<p class="mb-0 mt-2">
+                    <em>
+                      Medication
+                    </em>
+                  </p>';
+                  if ($row["Medication"] != "") {
+                    $modalOutput .= '<p class="mb-0">';
+                    $modalOutput .= $row["Medication"];
+                    $modalOutput .= '</p>';
+                  } else {
+                    $modalOutput .= '<p class="mb-0">None</p>';
+                  }
+                  $modalOutput .= '
                   </div>
                 </div>
               </div>

@@ -24,7 +24,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $output = '
     <div class="table-responsive">
       <table class="table table-hover">
-        <thead>
+        <thead class="thead-light">
           <tr>
             <th>Name</th>
             <th>Squad</th>

@@ -15,6 +15,11 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 		require 'squadIndividual.php';
 	});
 
+	$this->post('/{id}:int', function($id) {
+		global $link;
+		require 'squadIndividual.php';
+	});
+
 	$this->group('/moves', function() {
 		global $link;
 

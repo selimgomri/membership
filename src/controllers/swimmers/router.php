@@ -83,3 +83,15 @@ if ($access != "Parent") {
 	  require('addMember.php');
 	});
 }
+
+// View Medical Notes
+$this->get('/{id}:int/medical', function($id) {
+	global $link;
+	include 'medicalDetails.php';
+});
+
+// View Medical Notes
+$this->post('/{id}:int/medical', function($id) {
+	global $link;
+	include 'medicalDetailsPost.php';
+});

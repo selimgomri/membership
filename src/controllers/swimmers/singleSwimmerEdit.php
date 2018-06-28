@@ -9,7 +9,6 @@ $userUpdate = false;
 $squadUpdate = false;
 $dateOfBirthUpdate = false;
 $sexUpdate = false;
-$medicalNotesUpdate = false;
 $otherNotesUpdate = false;
 $update = false;
 $successInformation = "";
@@ -27,7 +26,6 @@ $dbUserID = $row['UserID'];
 $squad = $row['SquadID'];
 $dateOfBirth = $row['DateOfBirth'];
 $sex = $row['Gender'];
-$medicalNotes = $row['MedicalNotes'];
 $otherNotes = $row['OtherNotes'];
 $dbAccessKey = $row['AccessKey'];
 
@@ -104,15 +102,6 @@ if (!empty($_POST['sex'])) {
 		$update = true;
 	}
 }
-if (isset($_POST['medicalNotes'])) {
-	$newMedicalNotes = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['medicalNotes'])));
-	if ($newMedicalNotes != $medicalNotes) {
-		$sql = "UPDATE `members` SET `MedicalNotes` = '$newMedicalNotes' WHERE `MemberID` = '$id'";
-		mysqli_query($link, $sql);
-		$medicalNotesUpdate = true;
-		$update = true;
-	}
-}
 if (isset($_POST['otherNotes'])) {
 	$newOtherNotes = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['otherNotes'])));
 	if ($newOtherNotes != $otherNotes) {
@@ -151,7 +140,6 @@ $content .= '<div class="alert alert-success">
 		if ($userUpdate) { $content .= '<li>Parent</li>'; }
 		if ($squadUpdate) { $content .= '<li>Squad</li>'; }
 		if ($sexUpdate) { $content .= '<li>Sex</li>'; }
-		if ($medicalNotesUpdate) { $content .= '<li>Medical notes</li>'; }
 		if ($otherNotesUpdate) { $content .= '<li>Other notes</li>'; }
 $content .= '
 	</ul>
@@ -225,11 +213,10 @@ for ($i = 0; $i < $squadCount; $i++) {
 	$content .= ">" . $row['SquadName'] . "</option>";
 }
 $content .= "</select></div>";
-$content .= "
-<div class=\"form-group\">
-	<label for=\"medicalNotes\">Medical Notes</label>
-	<textarea class=\"form-control\" id=\"medicalNotes\" name=\"medicalNotes\" rows=\"3\" placeholder=\"Tell us about any medical issues\">" . $rowSwim['MedicalNotes'] . "</textarea>
-</div>";
+$content .= '<div class="form-group"> <label>Medical Notes</label>';
+$content .= '<a class="d-block" href="' . autoUrl("swimmers/" . $id . "/medical") . '"
+target="_blank">Edit medical notes</a>';
+$content .= '</div>';
 $content .= "
 <div class=\"form-group\">
 	<label for=\"otherNotes\">Other Notes</label>

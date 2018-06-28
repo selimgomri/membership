@@ -56,7 +56,6 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
         if ($surnameUpdate) { ?><li>Your last address</li><?php }
         if ($dateOfBirthUpdate) { ?><li>Your date of birth</li><?php }
         if ($sexUpdate) { ?><li>Your sex</li><?php }
-        if ($medicalNotesUpdate) { ?><li>Your medical notes</li><?php }
         if ($otherNotesUpdate) { ?><li>Your other notes</li><?php }
         if ($photoUpdate) { ?><li>Your photography permissions</li><?php } ?>
       </ul>
@@ -106,7 +105,18 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
   <?php } ?>
     <div class="form-group">
       <label for="medicalNotes">Medical Notes</label>
-      <textarea class="form-control" id="medicalNotes" name="medicalNotes" rows="3" placeholder="Tell us about any medical issues"><?php echo $rowSwim['MedicalNotes']; ?></textarea>
+      <div class="alert alert-info">
+        <p class="mb-0">
+          <strong>
+            You no longer provide medical details on this page.
+          </strong>
+        </p>
+        <p class="mb-0">
+          Head to <a class="alert-link" href="<? echo autoUrl("swimmers/" . $id .
+          "/medical"); ?>" target="_blank">the new medical form</a> to ensure
+          your swimmer's medical details are up to date.
+        </p>
+      </div>
     </div>
     <div class="form-group">
       <label for="otherNotes">Other Notes</label>

@@ -32,7 +32,7 @@ if (isset($_POST['squadFee'])) {
   }
 }
 if (isset($_POST['squadCoach'])) {
-  $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['squadCoach']))));
+  $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(ucfirst($_POST['squadCoach']))));
   if ($postContent != $squadCoach) {
     $sql = "UPDATE `squads` SET `SquadCoach` = '$postContent' WHERE `SquadID` = '$id'";
     mysqli_query($link, $sql);
@@ -115,7 +115,7 @@ $content .= "
     <small id=\"squadDeleteDangerHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will delete this squad.</small>
   </div>
 </div>
-<p><button class=\"btn btn-outline-dark\" type=\"submit\">Update</button></p></form></div></div>
+<p class=\"mb-0\"><button class=\"btn btn-outline-dark\" type=\"submit\">Update</button></p></form></div></div>
 
 <div class=\"col-md-6\">";
 

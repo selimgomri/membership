@@ -24,8 +24,20 @@ $pagetitle;
 if ($swimmersSecurityCheck['UserID'] != $userID) {
   halt(404);}
 else {
-  $pagetitle = $swimmersSecurityCheck['MForename'] . " " . $swimmersSecurityCheck['MSurname'];
-  $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes, members.AccessKey, memberPhotography.Website, memberPhotography.Social, memberPhotography.Noticeboard, memberPhotography.FilmTraining, memberPhotography.ProPhoto FROM (((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN `memberPhotography` ON members.MemberID = memberPhotography.MemberID) WHERE members.MemberID = '$id';";
+  $pagetitle = $swimmersSecurityCheck['MForename'] . " " .
+  $swimmersSecurityCheck['MSurname']; $sqlSwim = "SELECT members.MForename,
+  members.MForename, members.MMiddleNames, members.MSurname, users.EmailAddress,
+  members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach,
+  squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender,
+  members.MedicalNotes, members.OtherNotes, members.AccessKey,
+  memberPhotography.Website, memberPhotography.Social,
+  memberPhotography.Noticeboard, memberPhotography.FilmTraining,
+  memberPhotography.ProPhoto, memberMedical.Conditions, memberMedical.Allergies,
+  memberMedical.Medication FROM ((((members INNER JOIN users ON members.UserID =
+  users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN
+  `memberPhotography` ON members.MemberID = memberPhotography.MemberID) LEFT
+  JOIN `memberMedical` ON members.MemberID = memberMedical.MemberID) WHERE
+  members.MemberID = '$id';";
   $resultSwim = mysqli_query($link, $sqlSwim);
   $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
   $age = date_diff(date_create($rowSwim['DateOfBirth']),
@@ -74,15 +86,50 @@ else {
           <?php echo $rowSwim["Gender"]; ?>
         </p>
       </div>
-      <?php if ($rowSwim["MedicalNotes"] != "") { ?>
-        <div class="media pt-3">
-          <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-            <strong class="d-block text-gray-dark">Medical Notes</strong>
-            <?php echo $rowSwim["MedicalNotes"]; ?>
+      <div class="media pt-3">
+        <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+          <p class="mb-0 text-gray-dark">
+            <strong>
+              Medical Notes
+            </strong>
           </p>
+
+          <p class="mb-0 mt-2">
+            <em>
+              Medical Conditions or Disabilities
+            </em>
+          </p>
+          <? if ($rowSwim["Conditions"] != "") { ?>
+            <p class="mb-0"><?php echo $rowSwim["Conditions"]; ?></p>
+          <? } else { ?>
+            <p class="mb-0">None</p>
+          <? } ?>
+
+          <p class="mb-0 mt-2">
+            <em>
+              Allergies
+            </em>
+          </p>
+          <? if ($rowSwim["Allergies"] != "") { ?>
+            <p class="mb-0"><?php echo $rowSwim["Allergies"]; ?></p>
+          <? } else { ?>
+            <p class="mb-0">None</p>
+          <? } ?>
+
+          <p class="mb-0 mt-2">
+            <em>
+              Medication
+            </em>
+          </p>
+          <? if ($rowSwim["Medication"] != "") { ?>
+            <p class="mb-0"><?php echo $rowSwim["Medication"]; ?></p>
+          <? } else { ?>
+            <p class="mb-0">None</p>
+          <? } ?>
+
         </div>
-      <?php }
-      if ($rowSwim["OtherNotes"] != "") { ?>
+      </div>
+      <? if ($rowSwim["OtherNotes"] != "") { ?>
         <div class="media pt-3">
           <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
             <strong class="d-block text-gray-dark">Other Notes</strong>
@@ -124,7 +171,7 @@ else {
       } ?>
       </div>
       <span class="d-block text-right mt-3">
-        <a href="edit/<?php echo $id;?>">Edit Details or add Medical Notes</a>
+        <a href="<? echo autoUrl("swimmers/edit/" . $id);?>">Edit Details or add Medical Notes</a>
       </span>
     </div>
 
