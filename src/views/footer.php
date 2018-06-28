@@ -19,13 +19,17 @@
 				<div class="col-sm-6 col-md-3">
           <ul class="list-unstyled">
   					<li>
-              <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank" title="CLS ASC General Privacy Policy">Privacy Policy</a>
+              <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/"
+              target="_blank" title="CLS ASC General Privacy Policy">Privacy
+              Policy</a>
             </li>
 						<li>
-              <a href="<? echo autoUrl("notify"); ?>" target="_self" title="About our Notify Email Service">Notify Help</a>
+              <a href="<? echo autoUrl("notify"); ?>" target="_self"
+              title="About our Notify Email Service">Notify Help</a>
             </li>
             <li>
-              <a href="https://github.com/Chester-le-Street-ASC/Membership" target="_blank" title="Membership by CLSASC on GitHub">GitHub</a>
+              <a href="https://github.com/Chester-le-Street-ASC/Membership"
+              target="_blank" title="Membership by CLSASC on GitHub">GitHub</a>
             </li>
           </ul>
 				</div>
@@ -33,13 +37,21 @@
       <div class="row">
         <div class="col source-org vcard copyright">
         	<hr style="border-color:#FFF">
-			    <p class="hidden-print">Designed and Built by Chester&#8209;le&#8209;Street ASC.</p>
+			    <p class="hidden-print">
+						Designed and Built by Chester&#8209;le&#8209;Street ASC.
+					</p>
 					<?php
 					$executionEndTime = microtime();
-					$creationTime = number_format((float)($executionEndTime - $executionStartTime), 3, '.', '');
+					$creationTime = number_format((float)($executionEndTime -
+					$executionStartTime), 3, '.', '');
 					?>
-					<p class="hidden-print"><?php echo("Page produced in " . $creationTime . " seconds."); ?> Version v1.0, Production Build 267.</p>
-          <p class="mb-0" style="margin-bottom:0">&copy; <?php echo date( 'Y' ); ?> <span class="org fn">Chester&#8209;le&#8209;Street ASC</span>. CLS ASC is not responsible for the content of external sites.</p>
+					<p class="hidden-print"><?php echo("Page produced in " . $creationTime . "
+					seconds."); ?> Version v1.0, Production Build 267. <? echo
+					app('request')->browser() . " for " .
+					ucwords(app('request')->platform()); ?>.</p>
+          <p class="mb-0" style="margin-bottom:0">&copy; <?php echo date( 'Y' ); ?>
+          <span class="org fn">Chester&#8209;le&#8209;Street ASC</span>. CLS ASC
+          is not responsible for the content of external sites.</p>
         </div>
 	    </div>
 
