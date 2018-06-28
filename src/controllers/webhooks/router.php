@@ -14,3 +14,13 @@ $this->any('/notifysend', function() {
 	global $link;
 	require 'notifyhandler.php';
 });
+
+$this->any('/updatesquadmembers', function() {
+	global $db, $link;
+	require 'squadmemberupdate.php';
+});
+
+$this->any('/updateregisterweeks', function() {
+	global $db, $link;
+	require 'newWeek.php';
+});

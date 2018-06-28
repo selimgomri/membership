@@ -12,7 +12,6 @@ $middlename = $row['MMiddleNames'];
 $surname = $row['MSurname'];
 $dateOfBirth = $row['DateOfBirth'];
 $sex = $row['Gender'];
-$medicalNotes = $row['MedicalNotes'];
 $otherNotes = $row['OtherNotes'];
 
 // Get the swimmer name
@@ -25,11 +24,11 @@ if ($swimmersSecurityCheck['UserID'] != $userID) {
   halt(404);}
 else {
   $pagetitle = $swimmersSecurityCheck['MForename'] . " " .
-  $swimmersSecurityCheck['MSurname']; $sqlSwim = "SELECT members.MForename,
-  members.MForename, members.MMiddleNames, members.MSurname, users.EmailAddress,
-  members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach,
-  squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender,
-  members.MedicalNotes, members.OtherNotes, members.AccessKey,
+  $swimmersSecurityCheck['MSurname'];
+  $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames,
+  members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName,
+  squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC,
+  members.DateOfBirth, members.Gender, members.OtherNotes, members.AccessKey,
   memberPhotography.Website, memberPhotography.Social,
   memberPhotography.Noticeboard, memberPhotography.FilmTraining,
   memberPhotography.ProPhoto, memberMedical.Conditions, memberMedical.Allergies,
@@ -306,12 +305,5 @@ else {
 
 <?php } } ?>
   </div>
-<script src="<?php echo autoUrl('js/tinymce/tinymce.min.js') ?>" async defer></script>
-<script>
-  tinymce.init({
-    selector: '#medicalNotes',
-    branding: false,
-  });
-</script>
 
 <?php include BASE_PATH . "views/footer.php"; ?>

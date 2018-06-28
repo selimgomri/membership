@@ -20,8 +20,8 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
   $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames,
   members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName,
   squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC,
-  members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes,
-  members.AccessKey, memberPhotography.Website, memberPhotography.Social,
+  members.DateOfBirth, members.Gender, members.OtherNotes, members.AccessKey,
+  memberPhotography.Website, memberPhotography.Social,
   memberPhotography.Noticeboard, memberPhotography.FilmTraining,
   memberPhotography.ProPhoto FROM (((members INNER JOIN users ON members.UserID =
   users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN

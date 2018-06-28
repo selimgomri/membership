@@ -121,7 +121,12 @@ if (!empty($_POST['swimmerDeleteDanger'])) {
 }
 
 $sqlSwim = "";
-$sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, members.ASANumber, squads.SquadName, squads.SquadID, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes , members.AccessKey FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
+$sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames,
+members.MSurname, members.ASANumber, squads.SquadName, squads.SquadID,
+squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC,
+members.DateOfBirth, members.Gender, members.OtherNotes , members.AccessKey FROM
+(members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE
+members.MemberID = '$id';";
 $resultSwim = mysqli_query($link, $sqlSwim);
 $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
 $pagetitle = "Swimmer: " . $rowSwim['MForename'] . " " . $rowSwim['MSurname'];

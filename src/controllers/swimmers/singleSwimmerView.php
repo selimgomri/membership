@@ -14,13 +14,12 @@ $middlename = $row['MMiddleNames'];
 $surname = $row['MSurname'];
 $dateOfBirth = $row['DateOfBirth'];
 $sex = $row['Gender'];
-$medicalNotes = $row['MedicalNotes'];
 $otherNotes = $row['OtherNotes'];
 
 $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames,
 members.MSurname, members.ASANumber, squads.SquadName, squads.SquadFee,
 squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth,
-members.Gender, members.MedicalNotes, members.OtherNotes, members.AccessKey,
+members.Gender, members.OtherNotes, members.AccessKey,
 memberPhotography.Website, memberPhotography.Social,
 memberPhotography.Noticeboard, memberPhotography.FilmTraining,
 memberPhotography.ProPhoto, memberMedical.Conditions, memberMedical.Allergies,
@@ -334,16 +333,6 @@ $content .= '
 </div>';
 $content .= '</div>';
 
-include BASE_PATH . "views/header.php";
-?>
-<script src="<?php echo autoUrl('js/tinymce/tinymce.min.js') ?>" async defer></script>
-<script>
-  tinymce.init({
-    selector: '#medicalNotes',
-    branding: false,
-  });
-</script>
-<?php
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>
 <div class="container">

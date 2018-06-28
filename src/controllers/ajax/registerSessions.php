@@ -108,7 +108,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       $interval = $datetime1->diff($datetime2);
       $content .= "<p>This session is " . $interval->format('%h hours %I minutes') . " long, finishing at " . $datetime2->format("H:i") . "</p>";
       $sql = "SELECT members.MemberID, members.MForename, members.MSurname,
-      members.DateOfBirth, members.MedicalNotes, members.OtherNotes,
+      members.DateOfBirth, members.OtherNotes,
       memberPhotography.Website, memberPhotography.Social,
       memberPhotography.Noticeboard, memberPhotography.FilmTraining,
       memberPhotography.ProPhoto, memberMedical.Conditions, memberMedical.Allergies,

@@ -144,7 +144,6 @@ CREATE TABLE IF NOT EXISTS `members` (
   `ASANumber` varchar(255) DEFAULT NULL,
   `DateOfBirth` date NOT NULL,
   `Gender` enum('Male','Female') NOT NULL,
-  `MedicalNotes` text NOT NULL,
   `OtherNotes` text NOT NULL,
   PRIMARY KEY (`MemberID`),
   UNIQUE KEY `MemberID` (`MemberID`),

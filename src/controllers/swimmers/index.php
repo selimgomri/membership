@@ -29,10 +29,19 @@
     $prelimResult = mysqli_query($db, $sql);
     $prelimRow = mysqli_fetch_array($prelimResult, MYSQLI_ASSOC);
     if ($prelimRow['UserID'] != null || $prelimRow['UserID'] != "") {
-      $sql = "SELECT members.MForename, members.MMiddleNames, members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadCoach, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
+      $sql = "SELECT members.MForename, members.MMiddleNames, members.MSurname,
+      users.EmailAddress, members.ASANumber, squads.SquadName,
+      squads.SquadCoach, members.DateOfBirth, members.Gender, members.OtherNotes
+      FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER
+      JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID =
+      '$id';";
     }
     else {
-      $sql = "SELECT members.MForename, members.MMiddleNames, members.MSurname, members.ASANumber, squads.SquadName, squads.SquadCoach, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
+      $sql = "SELECT members.MForename, members.MMiddleNames, members.MSurname,
+      members.ASANumber, squads.SquadName, squads.SquadCoach,
+      members.DateOfBirth, members.Gender, members.OtherNotes FROM (members
+      INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE
+      members.MemberID = '$id';";
     }
     $outputResult = mysqli_query($db, $sql);
     $row = mysqli_fetch_array($outputResult, MYSQLI_ASSOC);
@@ -47,9 +56,6 @@
     $output .= "<tr><th>Date of Birth</th><td>" . date('j F Y', strtotime($row['DateOfBirth'])) . "</td></tr>";
     $output .= "<tr><th>ASA Number</th><td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $row['ASANumber'] . "\" target=\"_blank\" title=\"ASA Biographical Data\">" . $row['ASANumber'] . "</a></td></tr>";
     $output .= "<tr><th>Sex</th><td>" . $row['Gender'] . "</td></tr>";
-    if ($row['MedicalNotes'] != null) {
-      $output .= "<tr><th>Medial Notes</th><td>" . $row['MedicalNotes'] . "</td></tr>";
-    }
     if ($row['OtherNotes'] != null) {
       $output .= "<tr><th>Notes</th><td>" . $row['OtherNotes'] . "</td></tr>";
     }

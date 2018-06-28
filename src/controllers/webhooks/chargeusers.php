@@ -8,7 +8,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 $date = date("Y-m") . "-01";
 $day = date("d");
 
-$sql = "SELECT * FROM `payments` INNER JOIN `paymentSchedule` ON payments.UserID = paymentSchedule.UserID WHERE `Status` = 'pending_api_request' AND `Day` <= '$day' AND `Type` = 'Payment';";
+$sql = "SELECT * FROM `payments` INNER JOIN `paymentSchedule` ON payments.UserID = paymentSchedule.UserID WHERE `Status` = 'pending_api_request' AND `Day` <= '$day' AND `Type` = 'Payment' LIMIT 4;";
 $result = mysqli_query($link, $sql);
 for ($i = 0; $i < mysqli_num_rows($result); $i++) {
   $row = mysqli_fetch_array($result, MYSQLI_ASSOC);

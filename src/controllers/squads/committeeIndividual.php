@@ -8,7 +8,6 @@ $userUpdate = false;
 $squadUpdate = false;
 $dateOfBirthUpdate = false;
 $sexUpdate = false;
-$medicalNotesUpdate = false;
 $otherNotesUpdate = false;
 $update = false;
 $successInformation = "";
@@ -25,7 +24,6 @@ $dbUserID = $row['UserID'];
 $squad = $row['SquadID'];
 $dateOfBirth = $row['DateOfBirth'];
 $sex = $row['Gender'];
-$medicalNotes = $row['MedicalNotes'];
 $otherNotes = $row['OtherNotes'];
 
 if (!empty($_POST['forename'])) {
@@ -101,15 +99,6 @@ if (!empty($_POST['sex'])) {
     $update = true;
   }
 }
-if (!empty($_POST['medicalNotes'])) {
-  $newMedicalNotes = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['medicalNotes']))));
-  if ($newMedicalNotes != $medicalNotes) {
-    $sql = "UPDATE `members` SET `MedicalNotes` = '$newMedicalNotes' WHERE `MemberID` = '$id'";
-    mysqli_query($link, $sql);
-    $medicalNotesUpdate = true;
-    $update = true;
-  }
-}
 if (!empty($_POST['otherNotes'])) {
   $newOtherNotes = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['otherNotes']))));
   if ($newOtherNotes != $otherNotes) {
@@ -121,7 +110,12 @@ if (!empty($_POST['otherNotes'])) {
 }
 
 $pagetitle = "Swimmer: " . $swimmersSecurityCheck['MForename'] . " " . $swimmersSecurityCheck['MSurname'];
-$sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames, members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender, members.MedicalNotes, members.OtherNotes FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
+$sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames,
+members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName,
+squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC,
+members.DateOfBirth, members.Gender, members.OtherNotes FROM ((members INNER
+JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON
+members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
 $resultSwim = mysqli_query($link, $sqlSwim);
 $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
 $title = $swimmersSecurityCheck['MForename'] . " " . $swimmersSecurityCheck['MSurname'];
@@ -138,7 +132,6 @@ $content .= '<div class="alert alert-success">
     if ($userUpdate) { $content .= '<li>Parent</li>'; }
     if ($squadUpdate) { $content .= '<li>Squad</li>'; }
     if ($sexUpdate) { $content .= '<li>Sex</li>'; }
-    if ($medicalNotesUpdate) { $content .= '<li>Medical notes</li>'; }
     if ($otherNotesUpdate) { $content .= '<li>Other notes</li>'; }
 $content .= '
   </ul>
@@ -197,11 +190,6 @@ else {
     </select>
   </div>";
 }
-$content .= "
-<div class=\"form-group\">
-  <label for=\"medicalNotes\">Medical Notes</label>
-  <textarea class=\"form-control\" id=\"medicalNotes\" name=\"medicalNotes\" rows=\"3\" placeholder=\"Tell us about any medical issues\">" . $rowSwim['MedicalNotes'] . "</textarea>
-</div>";
 $content .= "
 <div class=\"form-group\">
   <label for=\"otherNotes\">Other Notes</label>
