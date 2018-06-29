@@ -52,6 +52,13 @@ if ($stage == 0) {
 	} else {
 		halt(404);
 	}
+} else if ($stage == 6) {
+	// Printable Renewal Document
+	if ($substage == 0) {
+		include 'renewalDocument.php';
+	} else {
+		halt(404);
+	}
 } else {
 	halt(500);
 }

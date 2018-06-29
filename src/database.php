@@ -22,8 +22,9 @@ function notifySend($to, $subject, $message, $name = null) {
   $headers = "MIME-Version: 1.0" . "\r\n";
   $headers .= "Content-type: text/html;charset=UTF-8" . "\r\n";
   $headers .= "Message-ID: <" . $messageid . ">\r\n";
-  $headers .= 'From: Chester-le-Street ASC <noreply@chesterlestreetasc.co.uk>' .
+  $headers .= 'From: Chester-le-Street ASC <notify@chesterlestreetasc.co.uk>' .
   "\r\n";
+  $headers .= "Reply-To: Enquiries - Chester-le-Street ASC <enquiries@chesterlestreetasc.co.uk>\r\n";
   $headers .= "List-Help: <" . autoUrl("notify") . ">\r\n";
   $headers .= "List-ID: CLS ASC Targeted Lists
   <targeted-lists@account.chesterlestreetasc.co.uk>\r\n";
@@ -34,13 +35,11 @@ function notifySend($to, $subject, $message, $name = null) {
   <html lang=\"en-gb\">
   <head>
     <meta charset=\"utf-8\">
-    <link href=\"https://fonts.googleapis.com/css?family=Open+Sans:400,700\"
-    rel=\"stylesheet\" type=\"text/css\">
+    <link href=\"https://fonts.googleapis.com/css?family=Open+Sans:400,700\" rel=\"stylesheet\" type=\"text/css\">
     <style type=\"text/css\">
 
       html, body {
-        font-family: \"Open Sans\", -apple-system, BlinkMacSystemFont, \"Segoe
-        UI\", Roboto, \"Helvetica Neue\", Arial,sans-serif;
+        font-family: \"Open Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial,sans-serif;
         font-size: 1rem;
         background: #fff8f8;
       }

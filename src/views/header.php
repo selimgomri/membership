@@ -59,7 +59,11 @@ Chester-le-Street ASC is a non profit private members club.
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <style>.logo {background:
     url(https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.svg)
-    left center no-repeat;}</style>
+    left center no-repeat;}
+    .badge {
+      font-family: "Helvetica", "Helvetica Neue", "Arial", "Roboto", san-serif;
+    }
+    </style>
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>

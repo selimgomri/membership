@@ -44,7 +44,7 @@ session_start([
 
 require BASE_PATH.'vendor/autoload.php';
 require "config.php";
-require "helperclasses/Database.php";
+require "helperclasses/ClassLoader.php";
 
 function halt(int $statusCode) {
   if ($statusCode == 400) {
@@ -280,6 +280,13 @@ else {
   $route->any(['/logout', '/logout.php'], function() {
     global $link;
     require('controllers/logout.php');
+  });
+
+  $route->any(['/test', '/x-text'], function() {
+    global $link;
+    $emergency = new EmergencyContacts($link);
+    $emergency->byParent(1);
+    pre($emergency->getContact(0));
   });
 
   // Global Catch All 404
