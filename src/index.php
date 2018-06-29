@@ -1,6 +1,8 @@
 <?php
 $executionStartTime = microtime();
 
+$_SERVER['SERVER_PORT'] = 443;
+
 // Do not reveal PHP when sending mail
 ini_set('mail.add_x_header', 'Off');
 ini_set('expose_php', 'Off');
@@ -97,6 +99,70 @@ $route->any('/notify/unsubscribe/{email}', function($email) {
 $route->group('/ajax', function() {
   global $link;
   include 'controllers/public/router.php';
+});
+
+$route->group('/auth/saml', function() {
+  $this->any(['', 'index.php', 'index.php/*'], function() {
+    $_SERVER['PATH_INFO'] = '/' . $this[0];
+    include 'saml/www/index.php';
+  });
+
+  $this->any(['logout.php', 'logout.php/*'], function() {
+    $_SERVER['PATH_INFO'] = '/' . $this[0];
+    include 'saml/www/logout.php';
+  });
+
+  $this->any(['module.php', 'module.php/*'], function() {
+    $_SERVER['PATH_INFO'] = '/' . $this[0];
+    include 'saml/www/module.php';
+  });
+
+  $this->any(['errorreport.php', 'errorreport.php/*'], function() {
+    $_SERVER['PATH_INFO'] = '/' . $this[0];
+    include 'saml/www/errorreport.php';
+  });
+
+  $this->any(['authmemcookie.php', 'authmemcookie.php/*'], function() {
+    $_SERVER['PATH_INFO'] = '/' . $this[0];
+    include 'saml/www/authmemcookie.php';
+  });
+
+  $this->get('resources/*', function() {
+    include 'saml/www/resources/' . $this[0];
+  });
+
+  $this->group('/admin', function() {
+    $this->any(['', 'index.php', 'index.php/*'], function() {
+      $_SERVER['PATH_INFO'] = '/' . $this[0];
+      include 'saml/www/admin/index.php';
+    });
+
+    $this->any(['hostnames.php', 'hostnames.php/*'], function() {
+      $_SERVER['PATH_INFO'] = '/' . $this[0];
+      include 'saml/www/admin/hostnames.php';
+    });
+
+    $this->any(['metadata-converter.php', 'metadata-converter.php/*'], function() {
+      $_SERVER['PATH_INFO'] = '/' . $this[0];
+      include 'saml/www/admin/metadata-converter.php';
+    });
+
+    $this->any(['phpinfo.php', 'phpinfo.php/*'], function() {
+      $_SERVER['PATH_INFO'] = '/' . $this[0];
+      include 'saml/www/admin/phpinfo.php';
+    });
+
+    $this->any(['sandbox.php', 'sandbox.php/*'], function() {
+      $_SERVER['PATH_INFO'] = '/' . $this[0];
+      include 'saml/www/admin/sandbox.php';
+    });
+  });
+
+  $this->any(['/saml2/idp/{file}', '/saml2/idp/{file}/*'], function($file) {
+    $_SERVER['PATH_INFO'] = '/' . $this[0];
+    echo 'saml/www/saml2/idp/' . $file;
+    include 'saml/www/saml2/idp/' . $file;
+  });
 });
 
 if (empty($_SESSION['LoggedIn'])) {
