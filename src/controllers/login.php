@@ -55,7 +55,7 @@ if (!app('request')->isMobile()) {
 <div class="frontpage1" style="margin-top:-1.0rem;">
   <div class="container-fluid">
     <div class="row justify-content-center">
-      <div class="col-sm-6 col-md-5 col-xl-4"  style="padding-top:5rem;">
+      <div class="col-sm-8 col-md-5 col-lg-6 col-xl-3" style="padding-top:5rem;">
         <div class="my-3 p-3 bg-white rounded box-shadow">
           <h2 class="border-bottom border-gray pb-2 mb-0">Please Login</h2>
           <div class="text-muted pt-3">

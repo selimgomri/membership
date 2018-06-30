@@ -4,6 +4,10 @@
 ?>
 <div class="container">
 <h1>Change your password</h1>
+<? if (isset($_SESSION['ErrorState'])) {
+  echo $_SESSION['ErrorState'];
+  unset($_SESSION['ErrorState']);
+} ?>
 <form method="post" action="password">
   <div class="form-group">
       <label for="current">Confirm Current Password</label>
