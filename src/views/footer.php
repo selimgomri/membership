@@ -1,4 +1,17 @@
 <!-- THE HEPPELL FOOTER -->
+<div class="cls-global-footer cls-global-footer-sponsors d-print-none" style="margin:0">
+	<div class="container">
+		<div class="row align-items-center">
+			<div class="col-xs-12 col-sm-6 col-md-4 col-lg">
+				<a href="https://www.chesterlestreetasc.co.uk/servicestoclubs/" target="_blank">
+					<img class="img-responsive sponsor center-block" src="<? echo autoUrl("img/S2C.png"); ?>"
+					srcset="<? echo autoUrl("img/S2C@2x.png"); ?> 2x, <? echo
+					autoUrl("img/S2C@3x.png"); ?> 3x" alt="Services to Clubs Logo">
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="cls-global-footer cls-global-footer-inverse cls-global-footer-body d-print-none">
 	<?php if (isset($fluidContainer) && $fluidContainer == true) { ?>
 	<div class="container-fluid">

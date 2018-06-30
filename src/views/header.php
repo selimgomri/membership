@@ -28,10 +28,8 @@ Chester-le-Street ASC is a non profit private members club.
     <meta name="description" content="Your Chester-le-Street ASC Account lets
     you make gala entries online and gives you access to all your information
     about your swimmers, including attendance.">
-    <? if (app('request')->isMobile()) { ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0,
     user-scalable=no,maximum-scale=1">
-    <? } ?>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="apple-mobile-web-app-title" content="CLS ASC Accounts">
     <script async>
