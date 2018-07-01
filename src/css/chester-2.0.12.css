@@ -3972,10 +3972,8 @@ input[type="button"].btn-block {
 @media (min-width: 576px) {
   .card-columns {
     -webkit-column-count: 3;
-       -moz-column-count: 3;
             column-count: 3;
     -webkit-column-gap: 1.25rem;
-       -moz-column-gap: 1.25rem;
             column-gap: 1.25rem;
     orphans: 1;
     widows: 1; }
@@ -8111,6 +8109,11 @@ a {
   list-style: none;
   margin: 0; }
 
+.page-template-page_servicestoclubs a {
+  color: #005fbd; }
+.page-template-page_servicestoclubs a:hover, .page-template-page_servicestoclubs a:active, .page-template-page_servicestoclubs a:focus {
+  color: #00458a; }
+
 /* Bootstrap 4 and Navwalker Dropdown Fixes */
 .navbar-nav .active > .dropdown-item {
   font-weight: bold; }
@@ -8645,8 +8648,7 @@ a {
   grid-template-columns: repeat(1, 1fr);
   grid-column-gap: 20px;
   -webkit-column-gap: 20px;
-  -moz-column-gap: 20px;
-       column-gap: 20px;
+  column-gap: 20px;
   grid-row-gap: 1rem;
   row-gap: 1rem; }
 @media (min-width: 992px) {
