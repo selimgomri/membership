@@ -62,7 +62,7 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 	}
 
 	if ($duplicateReg == true) {
-		$return = "<p><strong>Updated</strong></p>";
+		$return = "<p class=\"mb-0\"><strong>Updated the register</strong></p>";
 		$_SESSION['return'] = $return;
 	}
 

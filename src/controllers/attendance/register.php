@@ -1,11 +1,11 @@
 <?php
+$pagetitle = "Register";
+$title = "Register";
+$content = "<p class=\"lead\">Take the register for your Squad</p>";
 if (isset($_SESSION['return'])) {
   $content .= '<div class="alert alert-success">' . $_SESSION['return'] . '</div>';
   unset($_SESSION['return']);
 }
-$pagetitle = "Register";
-$title = "Register";
-$content = "<p class=\"lead\">Take the register for your Squad</p>";
 $content .= '
 <form method="post">
 <div class="my-3 p-3 bg-white rounded box-shadow">

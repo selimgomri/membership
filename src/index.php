@@ -184,12 +184,18 @@ if (empty($_SESSION['LoggedIn'])) {
   // Register
   $route->get('/register', function() {
     global $link;
-    require('controllers/register.php');
+    require('controllers/registration/register.php');
   });
 
   $route->post('/register', function() {
     global $link;
-    require('controllers/registration.php');
+    require('controllers/registration/registration.php');
+  });
+
+  // Password Reset via Link
+  $route->get('/register/auth/{id}:int/new-user/{token}', function($id, $token) {
+    global $link;
+    require('controllers/registration/RegAuth.php');
   });
 
   // Locked Out Password Reset
@@ -350,9 +356,9 @@ else {
 
   $route->any(['/test', '/x-text'], function() {
     global $link;
-    $emergency = new EmergencyContacts($link);
-    $emergency->byParent(1);
-    pre($emergency->getContact(0));
+    if (userHasMandates(18)) {
+      echo "Uh Oh";
+    }
   });
 
   // Global Catch All 404

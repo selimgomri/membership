@@ -1,5 +1,4 @@
 <?php
-  $preventLoginRedirect = true;
   $pagetitle = "Password Reset";
   include BASE_PATH . "views/header.php";
 

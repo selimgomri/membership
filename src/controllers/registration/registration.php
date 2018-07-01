@@ -49,7 +49,7 @@ if (!v::email()->validate($email)) {
   ";
 }
 
-if (!v::phone()->validate($moble)) {
+if (!v::phone()->validate($mobile)) {
   $status = false;
   $statusMessage .= "
   <li>That phone number is not valid</li>
@@ -72,80 +72,97 @@ if (mysqli_num_rows($emailResult) > 0) {
   ";
 }
 
+$hashedPassword = password_hash($password1, PASSWORD_BCRYPT);
+
+$account = [
+  "Forename"      => $forename,
+  "Surname"       => $surname,
+  "Username"      => $username,
+  "Password"      => $hashedPassword,
+  "EmailAddress"  => $email,
+  "EmailComms"    => $emailAuth,
+  "Mobile"        => $mobile,
+  "MobileComms"   => $smsAuth
+];
+
+$accountJSON = json_encode($account);
+
 if ($status) {
   // Registration may be allowed
-  $hashedPassword = password_hash($password1, PASSWORD_BCRYPT);
   // Success
-  $sql = "INSERT INTO `users`
-  (`UserID`, `Username`, `Password`, `AccessLevel`, `EmailAddress`, `EmailComms`, `Forename`, `Surname`, `Mobile`, `MobileComms`)
-  VALUES
-  (NULL, '$username', '$hashedPassword', 'Parent', '$email', '$emailAuth', '$forename', '$surname', '$mobile', '$smsAuth');";
+  $authCode = md5(generateRandomString(20) . time());
+  $sql = "INSERT INTO `newUsers` (`AuthCode`, `UserJSON`) VALUES ('$authCode',
+  '$accountJSON');";
   mysqli_query($link, $sql);
   // Check it went in
-  $query = "SELECT * FROM users WHERE Username = '$username' AND Password = '$hashedPassword' LIMIT 0, 30 ";
+  $query = "SELECT * FROM `newUsers` WHERE `AuthCode` = '$authCode' LIMIT 1";
   $result = mysqli_query($link, $query);
   $row = mysqli_fetch_array($result);
-  $id = $row['UserID'];
-  $query = "INSERT INTO wallet (UserID, Balance) VALUES ('$id', 0)";
-  mysqli_query($link, $query);
-  $count = mysqli_num_rows($result);
+  $id = $row['ID'];
+  $verifyLink = "register/auth/" . $id . "/" . "new-user/" . $authCode;
 
-  if ($count == 1) {
-    $email = $row['EmailAddress'];
-    $forename = $row['Forename'];
-    $surname = $row['Surname'];
-    $userID = $row['UserID'];
-
-    $_SESSION['Username'] = $username;
-    $_SESSION['EmailAddress'] = $email;
-    $_SESSION['Forename'] = $forename;
-    $_SESSION['Surname'] = $surname;
-    $_SESSION['UserID'] = $userID;
-    $_SESSION['AccessLevel'] = $row['AccessLevel'];
-    $_SESSION['LoggedIn'] = 1;
-
-    // PHP Email
-    $subject = "Thanks for Joining " . $username;
-    $to = $email;
-    $sContent = '
-    <script type="application/ld+json">
-    {
-      "@context": "http://schema.org",
-      "@type": "EmailMessage",
-      "potentialAction": {
-        "@type": "ViewAction",
-        "url": "' . autoUrl("") . '",
-        "target": "' . autoUrl("") . '",
-        "name": "Login"
-      },
-      "description": "Login to your accounts",
-      "publisher": {
-        "@type": "Organization",
-        "name": "Chester-le-Street ASC",
-        "url": "https://www.chesterlestreetasc.co.uk",
-        "url/googlePlus": "https://plus.google.com/110024389189196283575"
-      }
-
+  // PHP Email
+  $subject = "Thanks for Joining " . $forename;
+  $to = $email;
+  $sContent = '
+  <script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "EmailMessage",
+    "potentialAction": {
+      "@type": "ViewAction",
+      "url": "' . autoUrl("") . '",
+      "target": "' . autoUrl("") . '",
+      "name": "Login"
+    },
+    "description": "Login to your accounts",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Chester-le-Street ASC",
+      "url": "https://www.chesterlestreetasc.co.uk",
+      "url/googlePlus": "https://plus.google.com/110024389189196283575"
     }
-    </script>
-    <h1>Hello ' . $forename . '</h1>
-    <p>Thanks for signing up for your Chester-le-Street ASC Account.</p>
-    <p>Your username is <code>' . $username . '</code>. Use it to sign in.</p>
-    <p>You can change your personal details and password in My Account, but can\'t change your username.</p>
-    ';
 
-    $messageid = time() .'-' . md5("CLS-Membership-Signup" . $to) . '@account.chesterlestreetasc.co.uk';
-
-    // Always set content-type when sending HTML email
-    $headers = "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Message-ID: <" . $messageid . ">\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    $headers .= 'From: Chester-le-Street ASC <noreply@chesterlestreetasc.co.uk>' . "\r\n";
-
-    mail($to,$subject,$sContent,$headers);
-
-    header("Location: " . autoUrl(""));
   }
+  </script>
+  <p>Hello ' . $forename . '</p>
+  <p>Thanks for signing up for your Chester-le-Street ASC Account.</p>
+  <p>We need you to verify your email address by following this link - <a
+  href="' . autoUrl($verifyLink) . '" target="_blank">' .
+  autoUrl($verifyLink) . '</a></p>
+  <p>Your username is <code>' . $username . '</code>. You can use it or your
+  email address to sign in.</p>
+  <p>You can change your personal details and password in My Account, but
+  can\'t change your username.</p>
+  ';
+
+  $messageid = time() .'-' . md5("CLS-Membership-Signup" . $to) . '@account.chesterlestreetasc.co.uk';
+
+  // Always set content-type when sending HTML email
+  $headers = "MIME-Version: 1.0" . "\r\n";
+  $headers .= "Message-ID: <" . $messageid . ">\r\n";
+  $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+  $headers .= 'From: Chester-le-Street ASC <noreply@chesterlestreetasc.co.uk>' . "\r\n";
+
+  mail($to,$subject,$sContent,$headers);
+
+  $_SESSION['RegistrationGoVerify'] = '
+  <div class="alert alert-success mb-0">
+    <p class="mb-0">
+      <strong>
+        We now need you to verify your email address
+      </strong>
+    </p>
+
+    <p class="mb-0">
+      You\'ll find an email waiting for you in your inbox. Follow the link in
+      there and we can finish your registration. You cannot complete account
+      registration without verifying your email.
+    </p>
+  </div>
+  ';
+
+  header("Location: " . autoUrl("register"));
 } else {
   $_SESSION['RegistrationUsername'] = $username;
   $_SESSION['RegistrationForename'] = $forename;

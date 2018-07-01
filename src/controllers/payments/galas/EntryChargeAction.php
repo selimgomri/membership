@@ -29,8 +29,15 @@ $sql = "UPDATE `galaEntries` SET `Charged` = '1' WHERE `EntryID` = '$entryID';";
 mysqli_query($link, $sql);
 
 if ($charge > 0) {
-	$sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES ('$date', 'Pending', '$user', '$description', $charge, 'GBP', 'Payment');";
-	mysqli_query($link, $sql);
+	if (userHasMandates($user)) {
+		$sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES ('$date', 'Pending', '$user', '$description', $charge, 'GBP', 'Payment');";
+		mysqli_query($link, $sql);
+	} else {
+		$sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES ('$date', 'Paid', '$user', '$description', $charge, 'GBP', 'Payment');";
+		mysqli_query($link, $sql);
+	}
 }
+
+
 
 header("Location: " . autoUrl("payments/galas/" . $id));

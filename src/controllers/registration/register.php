@@ -7,6 +7,29 @@
 <div class="frontpage1" style="margin-top:-1.0rem;">
   <div class="container">
     <div class="my-3 p-3 bg-white rounded box-shadow">
+      <? if (isset($_SESSION['RegistrationGoVerify'])) {
+        echo $_SESSION['RegistrationGoVerify'];
+        unset($_SESSION['RegistrationGoVerify']);
+      }  else { ?>
+      <!--<div class="alert alert-warning">
+        <p class="mb-0">
+          <strong>
+            Registration is currently closed for maintenance
+          </strong>
+        </p>
+        <p>
+          We're working to improve this service and will reopen user
+          registration as soon as possible.
+        </p>
+
+        <p class="mb-0">
+          If you've just recieved a letter about getting registered today, don't
+          worry. If you don't need to make gala entries there's no rush yet -
+          We'll be back by tomorrow. You will need to ensure you register for
+          this system and connect your swimmers to your account by 1 September
+          2018 ahead of the new season.
+        </p>
+      </div>-->
       <h1>User Registration</h1>
       <p>We need a few details before we start.</p>
       <hr>
@@ -56,12 +79,16 @@
         <h2>Notification Preferences</h2>
         <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" id="emailAuthorise" value="1">
-          <label class="custom-control-label" for="emailAuthorise">I agree that Chester-le-Street ASC may send me news by email</label>
+          <label class="custom-control-label" for="emailAuthorise">
+            I wish to recieve email updates about my squads
+          </label>
         </div>
 
         <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" id="smsAuthorise" value="1">
-          <label class="custom-control-label" for="smsAuthorise">I agree that Chester-le-Street ASC may send me text message notifications</label>
+          <label class="custom-control-label" for="smsAuthorise">
+            I wish to recieve text message notifications
+          </label>
         </div>
 
         <p class="small">We will still need to send you notifications relating to your account from time.</p>
@@ -75,6 +102,7 @@
         </div>
         <input type="submit" class="btn btn-outline-dark" value="Register">
       </form>
+      <? } ?>
     </div>
   </div>
 </div>
