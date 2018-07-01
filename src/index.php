@@ -356,9 +356,11 @@ else {
 
   $route->any(['/test', '/x-text'], function() {
     global $link;
-    if (userHasMandates(18)) {
-      echo "Uh Oh";
-    }
+    $to = "Christopher Heppell <clheppell1@shef.ac.uk>";
+		$subject = "Test";
+		$message = "<p>Dear Chris. This is a test";
+
+		notifySend($to, $subject, $message);
   });
 
   // Global Catch All 404

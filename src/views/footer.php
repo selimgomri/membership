@@ -1,6 +1,10 @@
 <!-- THE HEPPELL FOOTER -->
 <div class="cls-global-footer cls-global-footer-sponsors d-print-none" style="margin:0">
+	<?php if (isset($fluidContainer) && $fluidContainer == true) { ?>
+	<div class="container-fluid">
+	<?php } else { ?>
 	<div class="container">
+	<?php } ?>
 		<div class="row align-items-center">
 			<div class="col-xs-12 col-sm-6 col-md-4 col-lg">
 				<a href="https://www.chesterlestreetasc.co.uk/servicestoclubs/" target="_blank">
@@ -58,13 +62,13 @@
 					$creationTime = number_format((float)($executionEndTime -
 					$executionStartTime), 3, '.', '');
 					?>
-					<p class="hidden-print"><?php echo("Page produced in " . $creationTime . "
+					<!--<p class="hidden-print"><?php echo("Page produced in " . $creationTime . "
 					seconds."); ?> Version v1.0, Production Build 267. <? echo
 					app('request')->browser() . " for " .
-					ucwords(app('request')->platform()); ?>.</p>
+					ucwords(app('request')->platform()); ?>.</p>-->
           <p class="mb-0" style="margin-bottom:0">&copy; <?php echo date( 'Y' ); ?>
-          <span class="org fn">Chester&#8209;le&#8209;Street ASC</span>. CLS ASC
-          is not responsible for the content of external sites.</p>
+          <span class="org fn">Chester&#8209;le&#8209;Street ASC</span>.
+          Provided to CLS ASC by CLS ASC Services to Clubs</p>
         </div>
 	    </div>
 

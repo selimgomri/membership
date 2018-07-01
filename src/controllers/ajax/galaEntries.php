@@ -45,7 +45,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $count = mysqli_num_rows($result);
 
 
-    $content = '<table class="table table-hover"><thead><tr><th>Swimmer</th><th>Swims</th><th><abbr title="Tick to prevent editing this entry">Processed?</abbr></th></tr></thead><tbody>';
+    $content = '<table class="table table-hover"><thead><tr><th>Swimmer</th><th>Swims</th><th class="d-print-none"><abbr title="Tick to prevent editing this entry">Processed?</abbr></th></tr></thead><tbody>';
 
     // For loop iterates through the rows of the database result, producing rows for the table
     for ($i=0; $i<$count; $i++) {
@@ -59,8 +59,15 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       }
 
       // First part of the row content
-      $content .= "<tr><td><strong>" . $row['MForename'] . " " . $row['MSurname']  . "</strong>" . $hyTekPrintDate . "<br><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $row['ASANumber'] . "\" target=\"_blank\" title=\"Click to see times\">" . $row['ASANumber'] . " <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a><br>
-      <span class=\"small\">" . $row['GalaName'] . "<br><a href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a></span></td>";
+      $content .= "<tr><td><strong>" . $row['MForename'] . " " .
+      $row['MSurname']  . "</strong>" . $hyTekPrintDate . "<br><a
+      class=\"d-print-none\"
+      href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" .
+      $row['ASANumber'] . "\" target=\"_blank\" title=\"Click to see times\">" .
+      $row['ASANumber'] . " <i class=\"fa fa-external-link\"
+      aria-hidden=\"true\"></i></a><span class=\"d-none d-print-inline\">ASA: " .
+      $row['ASANumber'] . "</span><br>
+      <span class=\"small\">" . $row['GalaName'] . "<br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a></span></td>";
 
       // Arrays of swims used to check whever to print the name of the swim entered
       // BEWARE This is in an order to ease inputting data into SportSystems, contrary to these arrays in other files
@@ -92,7 +99,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
       // If the entry has been processes, show a ticked checkbox
       if ($row['EntryProcessed'] == 1) {
-        $content .= "<td>
+        $content .= "<td class=\"d-print-none\">
         <div class=\"custom-control custom-checkbox\">
           <input type=\"checkbox\" value=\"1\" checked class=\"custom-control-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
           <label class=\"custom-control-label\" for=\"processedEntry-" . $row['EntryID'] . "\">Processed?</label>
@@ -101,7 +108,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
       // Else output an empty cell
       else {
-        $content .= "<td>
+        $content .= "<td class=\"d-print-none\">
         <div class=\"custom-control custom-checkbox\">
           <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
           <label class=\"custom-control-label\" for=\"processedEntry-" . $row['EntryID'] . "\">Processed?</label>

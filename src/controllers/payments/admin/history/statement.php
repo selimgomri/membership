@@ -13,13 +13,18 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 
 $result = mysqli_query($link, $sql);
 
-if (mysqli_num_rows($result) == 0) {
-	halt(404);
-}
-
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
-$pagetitle = "Statement for " . $row['Forename'] . " " . $row['Surname'] . ", "
+$name = null;
+if (mysqli_num_rows($result) == 0) {
+	$sql = "SELECT `UserID` FROM `payments` WHERE `PMkey` = '$PaymentID';";
+	$row = mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC);
+	$name = getUserName($row['UserID']);
+} else {
+	$name = $row['Forename'] . " " . $row['Surname'];
+}
+
+$pagetitle = "Statement for " . $name . ", "
  . $PaymentID;
 
 include BASE_PATH . "views/header.php";
@@ -31,11 +36,24 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 <div class="container">
 	<div class="my-3 p-3 bg-white rounded box-shadow">
-		<h1 class="border-bottom border-gray pb-2 mb-2">Statement for <? echo $row['Forename'] . " " . $row['Surname']; ?></h1>
+		<h1 class="border-bottom border-gray pb-2 mb-2">Statement for <? echo $name; ?></h1>
 	  <p class="lead">Payment ID: <? echo $PaymentID; ?></p>
 		<p>Payments listed below were charged as part of one single Direct Debit</p>
+		<? if (mysqli_num_rows($result) == 0) { ?>
+			<div class="alert alert-warning mb-0">
+				<p class="mb-0">
+					<strong>
+						No fees can be found for this statement
+					</strong>
+				</p>
+				<p class="mb-0">
+					This usually means that the payment was created via the GoCardless
+					User Interface.
+				</p>
+			</div>
+		<? } else { ?>
 		<div class="table-responsive">
-			<table class="table">
+			<table class="table mb-0">
 				<thead class="thead-light">
 					<tr>
 						<th>
@@ -58,7 +76,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 					?>
 					<tr>
 						<td>
-							<? echo date("d M Y",strtotime($row['Date'])); ?>
+							<? echo date("D j M Y",strtotime($row['Date'])); ?>
 						</td>
 						<td>
 							<? echo $row['Name']; ?>
@@ -78,6 +96,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 				</tbody>
 			</table>
 		</div>
+		<? } ?>
 	</div>
 </div>
 

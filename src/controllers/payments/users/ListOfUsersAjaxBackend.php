@@ -18,7 +18,7 @@ if ($count > 0) {
       <thead class="thead-light">
         <tr>
           <th>Name</th>
-					<th><th>
+					<th>DD Status</th>
         </tr>
       </thead>
       <tbody>';

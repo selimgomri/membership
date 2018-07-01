@@ -22,7 +22,7 @@ function notifySend($to, $subject, $message, $name = null) {
   $headers = "MIME-Version: 1.0" . "\r\n";
   $headers .= "Content-type: text/html;charset=UTF-8" . "\r\n";
   $headers .= "Message-ID: <" . $messageid . ">\r\n";
-  $headers .= 'From: Chester-le-Street ASC <notify@chesterlestreetasc.co.uk>' .
+  $headers .= 'From: Chester-le-Street ASC <noreply@chesterlestreetasc.co.uk>' .
   "\r\n";
   $headers .= "Reply-To: Enquiries - Chester-le-Street ASC <enquiries@chesterlestreetasc.co.uk>\r\n";
   $headers .= "List-Help: <" . autoUrl("notify") . ">\r\n";
@@ -976,47 +976,42 @@ function paymentHistory($link, $user, $type = null) {
   $sql = "SELECT * FROM `payments` WHERE `UserID` = '$user' ORDER BY `PaymentID`
   DESC LIMIT 0, 5;";
   $paymentResult = mysqli_query($link, $sql);
-  if (mysqli_num_rows($paymentResult) > 0) { ?>
-  <div class="table-responsive">
-    <table class="table table-hover">
-      <thead class="thead-light">
-        <tr>
-          <th>Description</th>
-          <th>Date</th>
-          <th>Amount</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php for ($i = 0; $i < mysqli_num_rows($paymentResult); $i++) {
+  $count = mysqli_num_rows($paymentResult);
+  if ($count > 0) { ?>
+        <?php for ($i = 0; $i < $count; $i++) {
         $row = mysqli_fetch_array($paymentResult, MYSQLI_ASSOC);
         if ($type == null) {
           $statementUrl = autoUrl("payments/statement/" . $row['PMkey']);
         } else if ($type == "admin") {
           $statementUrl = autoUrl("payments/history/statement/" . $row['PMkey']);
         }?>
-        <tr>
-          <td>
-            <a href="<? echo $statementUrl; ?>" title="Transaction Statement">
-              <? echo $row['Name']; ?>
-            </a>
-          </td>
-          <td>
-            <? echo date('j F Y', strtotime($row['Date'])); ?>
-          </td>
-          <td>
-            &pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?>
-          </td>
-          <td>
-            <? echo paymentStatusString($row['Status']); ?>
-          </td>
-        </tr>
+        <div class="media pt-2">
+          <? if ($i != $count-1) { ?>
+          <div class="media-body pb-2 mb-0 border-bottom border-gray">
+          <? } else { ?>
+          <div class="media-body pb-0 mb-0">
+          <? } ?>
+            <p class="mb-0">
+              <strong>
+                <a href="<? echo $statementUrl; ?>" title="Transaction Statement">
+                  <? echo $row['Name']; ?>
+                </a>
+              </strong>
+            </p>
+            <p class="mb-0">
+              <? echo date('j F Y', strtotime($row['Date'])); ?>
+            </p>
+            <p class="mb-0">
+              &pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?>
+            </p>
+          <p class="mb-0">
+            Status: <? echo paymentStatusString($row['Status']); ?>
+          </p>
+        </div>
+      </div>
       <?php } ?>
-      </tbody>
-    </table>
-  </div>
   <?php } else { ?>
-  <div class="alert alert-warning">
+  <div class="alert alert-warning mb-0">
     <strong>You have no previous payments</strong> <br>
     Payments and Refunds will appear here once they have been requested from
     your bank.
@@ -1027,32 +1022,33 @@ function paymentHistory($link, $user, $type = null) {
 function feesToPay($link, $user) {
   $sql = "SELECT * FROM `paymentsPending` WHERE `UserID` = '$user' AND `PMkey`
   IS NULL AND `Status` = 'Pending' ORDER BY `Date` DESC LIMIT 0, 30;";
-  $pendingResult = mysqli_query($link, $sql);?>
-  <?php if (mysqli_num_rows($pendingResult) > 0) { ?>
-  <div class="table-responsive">
-    <table class="table table-hover">
-      <thead class="thead-light">
-        <tr>
-          <th>Description</th>
-          <th>Date</th>
-          <th>Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php for ($i = 0; $i < mysqli_num_rows($pendingResult); $i++) {
-        $row = mysqli_fetch_array($pendingResult, MYSQLI_ASSOC);	?>
-        <tr>
-          <td><? echo $row['Name']; ?></td>
-          <td><? echo date('j F Y', strtotime($row['Date'])); ?></td>
-          <td>&pound;<? echo number_format(($row['Amount']/100),2,'.','');
-          ?></td>
-        </tr>
-      <?php } ?>
-      </tbody>
-    </table>
-  </div>
+  $pendingResult = mysqli_query($link, $sql);
+  $count = mysqli_num_rows($pendingResult);
+  if ($count > 0) { ?>
+    <?php for ($i = 0; $i < $count; $i++) {
+    $row = mysqli_fetch_array($pendingResult, MYSQLI_ASSOC);	?>
+    <div class="media pt-2">
+      <? if ($i != $count-1) { ?>
+      <div class="media-body pb-2 mb-0 border-bottom border-gray">
+      <? } else { ?>
+      <div class="media-body pb-0 mb-0">
+      <? } ?>
+        <p class="mb-0">
+          <strong>
+            <? echo $row['Name']; ?>
+          </strong>
+        </p>
+        <p class="mb-0">
+          <? echo date('j F Y', strtotime($row['Date'])); ?>
+        </p>
+        <p class="mb-0">
+          &pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?>
+        </p>
+      </div>
+    </div>
+    <?php } ?>
   <?php } else { ?>
-  <div class="alert alert-warning">
+  <div class="alert alert-warning mb-0">
     <strong>You have no previous payments</strong> <br>
     Payments will appear here when they have been added to your account.
   </div>

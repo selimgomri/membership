@@ -12,7 +12,7 @@ if (isset($queries['search'])) {
   $search = $queries['search'];
 }
 
-$content = "<p class=\"lead\">Search entries for upcoming galas. Search by Gala or Gala and Surname.</p>";
+$content = "<div class=\"d-print-none\"><p class=\"lead\">Search entries for upcoming galas. Search by Gala or Gala and Surname.</p>";
 $sql = "SELECT * FROM `galas` WHERE GalaDate >= CURDATE() ORDER BY `galas`.`GalaDate` DESC LIMIT 0, 30;";
 $result = mysqli_query($link, $sql);
 $galaCount = mysqli_num_rows($result);
@@ -42,7 +42,7 @@ $content .= "</select></div></div>
   <label class=\"col-sm-2\" for=\"gala\">Enter Surname</label>
   <div class=\"col\">
 <input class=\"form-control\" name=\"search\" id=\"search\" value=\"" . $search . "\">
-</div></div>";
+</div></div></div>";
 $content .= "<div class=\"table-responsive\" id=\"output\"><div class=\"ajaxPlaceholder\"><strong>Select a Gala</strong> <br>Entries will appear here when you select a gala</div></div>";
 $content .= '
 <script>

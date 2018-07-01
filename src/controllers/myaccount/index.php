@@ -25,12 +25,6 @@
   $mobile = $row['Mobile'];
   $emailComms = $row['EmailComms'];
   $mobileComms = $row['MobileComms'];
-  if ($emailComms==1) {
-    $emailChecked = " checked ";
-  }
-  if ($mobileComms==1) {
-    $mobileChecked = " checked ";
-  }
 
   if (!empty($_POST['forename'])) {
     $newForename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
@@ -69,23 +63,45 @@
       $mobileUpdate = true;
     }
   }
-  if (isset($_POST['emailContactOK'])) {
-    $newValue = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['emailContactOK'])));
-    if ($newValue != 1) {$newValue = 0;}
-    if ($newValue != $emailComms) {
-      $sql = "UPDATE `users` SET `EmailComms` = '$newValue' WHERE `UserID` = '$userID'";
+  $post = app('request')->body;
+  if (app('request')->method == "POST") {
+    if (isset($post['emailContactOK']) && $post['emailContactOK'] == 1) {
+      $sql = "UPDATE `users` SET `EmailComms` = '1' WHERE `UserID` = '$userID'";
       mysqli_query($link, $sql);
-      $emailCommsUpdate = true;
+      if ($emailComms != 1) {
+        $emailCommsUpdate = true;
+        $emailComms = 1;
+      }
+    } else {
+      $sql = "UPDATE `users` SET `EmailComms` = '0' WHERE `UserID` = '$userID'";
+      mysqli_query($link, $sql);
+      if ($emailComms == 1) {
+        $emailCommsUpdate = true;
+        $emailComms = 0;
+      }
+    }
+    if (isset($post['smsContactOK'])  && $post['smsContactOK'] == 1) {
+      $sql = "UPDATE `users` SET `MobileComms` = '1' WHERE `UserID` = '$userID'";
+      mysqli_query($link, $sql);
+      if ($mobileComms != 1) {
+        $mobileCommsUpdate = true;
+        $mobileComms = 1;
+      }
+    } else {
+      $sql = "UPDATE `users` SET `MobileComms` = '0' WHERE `UserID` = '$userID'";
+      mysqli_query($link, $sql);
+      if ($mobileComms == 1) {
+        $mobileCommsUpdate = true;
+        $mobileComms = 0;
+      }
     }
   }
-  if (isset($_POST['smsContactOK'])) {
-    $newValue = mysqli_real_escape_string($link, preg_replace('/\D/', '', $_POST['smsContactOK']));
-    if ($newValue != 1) {$newValue = 0;}
-    if ($newValue != $mobileComms) {
-      $sql = "UPDATE `users` SET `MobileComms` = '$newValue' WHERE `UserID` = '$userID'";
-      mysqli_query($link, $sql);
-      $mobileCommsUpdate = true;
-    }
+
+  if ($emailComms == 1) {
+    $emailChecked = " checked ";
+  }
+  if ($mobileComms == 1) {
+    $mobileChecked = " checked ";
   }
 
 ?>

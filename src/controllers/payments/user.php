@@ -23,22 +23,40 @@ require 'GoCardlessSetup.php';
     </div>
   </div>
   <hr>
-  <div class="my-3 p-3 bg-white rounded box-shadow">
-    <div class="row">
-      <div class="col-md-6">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="my-3 p-3 bg-white rounded box-shadow">
       	<h2 class="border-bottom border-gray pb-2 mb-2">Billing Account Options</h2>
         <? if (userHasMandates($user)) { ?>
           <p>We currently collect payments from <? echo ucwords(strtolower(bankDetails($user, "bank_name"))); ?>, Account Ending ******<? echo bankDetails($user, "account_number_end"); ?></p>
         <? } ?>
-      	<a href="<? echo autoUrl("payments/setup"); ?>" class="btn btn-dark">Add Bank Account</a>
-        <? if (userHasMandates($user)) { ?>
-      	<a href="<? echo autoUrl("payments/mandates"); ?>" class="btn btn-dark">Switch or Manage Bank Account</a>
-        <? } ?>
+        <p class="mb-0">
+        	<a href="<? echo autoUrl("payments/setup"); ?>" class="btn btn-dark btn-block">Add Bank Account</a>
+          <? if (userHasMandates($user)) { ?>
+        	<a href="<? echo autoUrl("payments/mandates"); ?>" class="btn btn-dark btn-block">Switch or Manage Bank Account</a>
+          <? } ?>
+        </p>
       </div>
-      <div class="col-md-6">
-      	<h2 class="border-bottom border-gray pb-2 mb-2">Transaction History (Bank)</h2>
+      <div class="p-3 text-white bg-secondary rounded box-shadow">
+        <p class="mb-0">
+          <strong>
+            We help keep things simple!
+          </strong>
+        </p>
+        <p class="mb-0">
+          That's why if you switch your current account through the Current
+          Account Switch Service, we'll update your details for you, before
+          you even have time to tell us.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="my-3 p-3 bg-white rounded box-shadow">
+      	<h2 class="border-bottom border-gray pb-2 mb-0">Transaction History (Bank)</h2>
         <? echo paymentHistory($link, $user); ?>
-        <h2 class="border-bottom border-gray pb-2 mb-2">Fees this period</h2>
+      </div>
+      <div class="my-3 p-3 bg-white rounded box-shadow">
+        <h2 class="border-bottom border-gray pb-2 mb-1">Fees this period</h2>
         <p class="lead">Fees to pay on your next Billing Date</p>
       	<? echo feesToPay($link, $user); ?>
       </div>

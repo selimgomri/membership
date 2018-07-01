@@ -177,7 +177,7 @@ function process_payment_event($event) {
         $PMkey = mysqli_real_escape_string($link, $event["links"]["payment"]);
         $payment = $client->payments()->get($PMkey);
         $status = mysqli_real_escape_string($link, $payment->status);
-        $date = mysqli_real_escape_string($link, $payment->charge_date);
+        $date = mysqli_real_escape_string($link, date("Y-m-d", strtotime($payment->created_at)));
         $amount = mysqli_real_escape_string($link, $payment->amount);
         $name = mysqli_real_escape_string($link, $payment->description);
         $currency = mysqli_real_escape_string($link, $payment->currency);

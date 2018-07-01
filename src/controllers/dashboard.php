@@ -3,7 +3,11 @@
   include BASE_PATH . "views/header.php";
   $userID = $_SESSION['UserID'];
 
-  $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee FROM ((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = '$userID';";
+  $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname,
+  users.Forename, users.Surname, users.EmailAddress, users.EmailComms,
+  members.ASANumber, squads.SquadName, squads.SquadFee FROM ((members INNER JOIN
+  users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID =
+  squads.SquadID) WHERE members.UserID = '$userID';";
   $result = mysqli_query($link, $sqlSwim);
   $swimmerCount = mysqli_num_rows($result);
   $swimmersRow = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -33,6 +37,21 @@
  }
  ?>
 <div class="container">
+
+  <? if ($swimmersRow['EmailComms'] == 0 && $_SESSION['AccessLevel'] == "Parent") { ?>
+  <div class="alert alert-danger mt-3 mb-0">
+    <p class="mb-0">
+      <strong>
+        You're missing out on email updates from Chester-le-Street ASC
+      </strong>
+    </p>
+    <p class="mb-0">
+      Head to <a href="<? echo autoUrl("myaccount"); ?>" class="alert-link">My
+      Account</a> to change your email preferences and stay up to date!
+    </p>
+  </div>
+<? } ?>
+
   <div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded box-shadow" id="dash">
     <?php
     $grav_url = "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $_SESSION['EmailAddress'] ) ) ) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=80";
