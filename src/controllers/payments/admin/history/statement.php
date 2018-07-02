@@ -18,8 +18,7 @@ $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 $name = null;
 if (mysqli_num_rows($result) == 0) {
 	$sql = "SELECT `UserID` FROM `payments` WHERE `PMkey` = '$PaymentID';";
-	$row = mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC);
-	$name = getUserName($row['UserID']);
+	$name = getUserName((mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC))['UserID']);
 } else {
 	$name = $row['Forename'] . " " . $row['Surname'];
 }
@@ -73,6 +72,22 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 				<tbody>
 				<?
 				for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+					//$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+					$data = "";
+					if ($row['MetadataJSON'] != "" || $row['MetadataJSON'] != "") {
+						$json = json_decode($row['MetadataJSON']);
+						if ($json->PaymentType == "SquadFees"  || $json->PaymentType == "ExtraFees") {
+							$data .= '<ul class="list-unstyled mb-0">';
+							//echo sizeof($json->Members);
+							//pre($json->Members);
+							//echo $json->Members[0]->MemberName;
+							$numMems = (int) sizeof($json->Members);
+							for ($y = 0; $y < $numMems; $y++) {
+								$data .= '<li>' . $json->Members[$y]->FeeName . " for " . $json->Members[$y]->MemberName . '</li>';
+							}
+							$data .= '</ul>';
+						}
+					}
 					?>
 					<tr>
 						<td>
@@ -80,6 +95,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 						</td>
 						<td>
 							<? echo $row['Name']; ?>
+							<em><? echo $data; ?></em>
 						</td>
 						<td>
 							&pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?>

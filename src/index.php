@@ -354,9 +354,12 @@ else {
     require('controllers/logout.php');
   });
 
-  /*$route->any(['/test', '/x-text'], function() {
+  $route->any(['/test', '/x-text'], function() {
     global $link;
-  });*/
+
+    pre(json_decode('{"PaymentType":"SquadFees","Members":[{"Member":"1","MemberName":"Christopher Heppell","FeeName":"Non Affiliated","Fee":"0.00"},{"Member":"2","MemberName":"Lauren Heppell","FeeName":"B2","Fee":"65.00"}]}'));
+    pre(json_decode('{"PaymentType":"ExtraFees","Members":[{"Member":"2","MemberName":"Lauren Heppell","FeeName":"CrossFit (1 Session)","Fee":"7.50"}]}'));
+  });
 
   // Global Catch All 404
   $route->any('/*', function() {

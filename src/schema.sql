@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: chesterlestreetasc.co.uk.mysql:3306
--- Generation Time: Jun 13, 2018 at 12:57 AM
+-- Generation Time: Jul 02, 2018 at 11:15 PM
 -- Server version: 10.1.30-MariaDB-1~xenial
 -- PHP Version: 5.4.45-0+deb7u13
 
@@ -19,6 +19,22 @@ SET time_zone = "+00:00";
 --
 -- Database: `chesterlestreetasc_co_uk_membership`
 --
+CREATE DATABASE `chesterlestreetasc_co_uk_membership` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `chesterlestreetasc_co_uk_membership`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `emergencyContacts`
+--
+
+CREATE TABLE IF NOT EXISTS `emergencyContacts` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `UserID` int(11) NOT NULL,
+  `Name` text NOT NULL,
+  `ContactNumber` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -30,9 +46,8 @@ CREATE TABLE IF NOT EXISTS `extras` (
   `ExtraID` int(11) NOT NULL AUTO_INCREMENT,
   `ExtraName` varchar(100) NOT NULL,
   `ExtraFee` decimal(6,2) NOT NULL,
-  `ExtraBillPeriod` enum('Week','Month','Quarter','Year') NOT NULL,
   PRIMARY KEY (`ExtraID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 -- --------------------------------------------------------
 
@@ -49,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `extrasRelations` (
   KEY `ExtraID` (`ExtraID`),
   KEY `MemberID` (`MemberID`),
   KEY `UserID` (`UserID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 -- --------------------------------------------------------
 
@@ -65,6 +80,7 @@ CREATE TABLE IF NOT EXISTS `galaEntries` (
   `TimesRequired` tinyint(1) DEFAULT NULL COMMENT 'If true, times required from coaches',
   `TimesProvided` tinyint(1) DEFAULT NULL COMMENT 'Set true if times provided for a non HyTek Gala',
   `FeeToPay` double DEFAULT NULL,
+  `Charged` tinyint(1) NOT NULL DEFAULT '0',
   `50Free` tinyint(1) DEFAULT NULL,
   `100Free` tinyint(1) DEFAULT NULL,
   `200Free` tinyint(1) DEFAULT NULL,
@@ -105,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `galaEntries` (
   `150IMTime` tinytext,
   PRIMARY KEY (`EntryID`),
   KEY `GalaID` (`GalaID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=128 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=137 ;
 
 -- --------------------------------------------------------
 
@@ -125,7 +141,39 @@ CREATE TABLE IF NOT EXISTS `galas` (
   `HyTek` tinyint(1) NOT NULL,
   PRIMARY KEY (`GalaID`),
   UNIQUE KEY `GalaID` (`GalaID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `memberMedical`
+--
+
+CREATE TABLE IF NOT EXISTS `memberMedical` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `MemberID` int(11) NOT NULL,
+  `Conditions` text,
+  `Allergies` text,
+  `Medication` text,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `memberPhotography`
+--
+
+CREATE TABLE IF NOT EXISTS `memberPhotography` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `MemberID` int(11) NOT NULL,
+  `Website` tinyint(1) NOT NULL,
+  `Social` tinyint(1) NOT NULL,
+  `Noticeboard` tinyint(1) NOT NULL,
+  `FilmTraining` tinyint(1) NOT NULL,
+  `ProPhoto` tinyint(1) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -142,6 +190,7 @@ CREATE TABLE IF NOT EXISTS `members` (
   `MSurname` varchar(255) DEFAULT NULL,
   `MMiddleNames` varchar(255) DEFAULT NULL,
   `ASANumber` varchar(255) DEFAULT NULL,
+  `ASACategory` int(11) NOT NULL,
   `DateOfBirth` date NOT NULL,
   `Gender` enum('Male','Female') NOT NULL,
   `OtherNotes` text NOT NULL,
@@ -149,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `members` (
   UNIQUE KEY `MemberID` (`MemberID`),
   KEY `SquadID` (`SquadID`),
   KEY `UserID` (`UserID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=174 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=186 ;
 
 -- --------------------------------------------------------
 
@@ -165,7 +214,36 @@ CREATE TABLE IF NOT EXISTS `moves` (
   PRIMARY KEY (`MoveID`),
   KEY `MemberID` (`MemberID`),
   KEY `MemberID_2` (`MemberID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `newUsers`
+--
+
+CREATE TABLE IF NOT EXISTS `newUsers` (
+  `ID` int(25) NOT NULL AUTO_INCREMENT,
+  `AuthCode` text NOT NULL,
+  `UserJSON` text NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `UserID` (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notify`
+--
+
+CREATE TABLE IF NOT EXISTS `notify` (
+  `EmailID` int(11) NOT NULL AUTO_INCREMENT,
+  `UserID` int(11) NOT NULL,
+  `Status` enum('Queued','Sent','No_Sub') NOT NULL,
+  `Subject` text NOT NULL,
+  `Message` text NOT NULL,
+  PRIMARY KEY (`EmailID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=186 ;
 
 -- --------------------------------------------------------
 
@@ -180,7 +258,7 @@ CREATE TABLE IF NOT EXISTS `passwordTokens` (
   `Date` date DEFAULT NULL,
   `Type` enum('Password_Reset','Account_Verification') NOT NULL,
   PRIMARY KEY (`TokenID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 -- --------------------------------------------------------
 
@@ -197,10 +275,23 @@ CREATE TABLE IF NOT EXISTS `paymentMandates` (
   `BankAccount` text NOT NULL,
   `BankName` text NOT NULL,
   `AccountHolderName` text NOT NULL,
-  `AccountNumEnd` int(11) NOT NULL,
+  `AccountNumEnd` text NOT NULL,
   `InUse` tinyint(1) NOT NULL,
   PRIMARY KEY (`MandateID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `paymentMonths`
+--
+
+CREATE TABLE IF NOT EXISTS `paymentMonths` (
+  `MonthID` int(11) NOT NULL AUTO_INCREMENT,
+  `MonthStart` text NOT NULL,
+  `Date` date NOT NULL,
+  PRIMARY KEY (`MonthID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 -- --------------------------------------------------------
 
@@ -212,28 +303,8 @@ CREATE TABLE IF NOT EXISTS `paymentPreferredMandate` (
   `PrefID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   `MandateID` int(11) NOT NULL,
-  `Mandate` text NOT NULL,
   PRIMARY KEY (`PrefID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `payments`
---
-
-CREATE TABLE IF NOT EXISTS `payments` (
-  `PaymentID` int(11) NOT NULL AUTO_INCREMENT,
-  `Date` date NOT NULL,
-  `Status` enum('pending_customer_approval','pending_submission','submitted','confirmed','paid_out','cancelled','customer_approval_denied','failed','charged_back') NOT NULL,
-  `UserID` int(11) NOT NULL,
-  `MandateID` int(11) NOT NULL,
-  `Name` text,
-  `Amount` int(11) NOT NULL,
-  `Currency` text NOT NULL,
-  `PMkey` text,
-  PRIMARY KEY (`PaymentID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -246,26 +317,19 @@ CREATE TABLE IF NOT EXISTS `paymentSchedule` (
   `UserID` int(11) NOT NULL,
   `Day` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `paymentsPending`
+-- Table structure for table `paymentSquadFees`
 --
 
-CREATE TABLE IF NOT EXISTS `paymentsPending` (
-  `PaymentID` int(11) NOT NULL AUTO_INCREMENT,
-  `Date` date NOT NULL,
-  `Status` enum('pending_customer_approval','pending_submission','submitted','confirmed','paid_out','cancelled','customer_approval_denied','failed','charged_back') NOT NULL,
-  `UserID` int(11) NOT NULL,
-  `MandateID` int(11) NOT NULL,
-  `Name` text,
-  `Amount` int(11) NOT NULL,
-  `Currency` text NOT NULL,
-  `PMkey` text,
-  PRIMARY KEY (`PaymentID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+CREATE TABLE IF NOT EXISTS `paymentSquadFees` (
+  `SFID` int(11) NOT NULL AUTO_INCREMENT,
+  `MonthID` int(11) NOT NULL,
+  PRIMARY KEY (`SFID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 -- --------------------------------------------------------
 
@@ -292,6 +356,78 @@ CREATE TABLE IF NOT EXISTS `paymentWebhookOps` (
   `EventID` text NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payments`
+--
+
+CREATE TABLE IF NOT EXISTS `payments` (
+  `PaymentID` int(11) NOT NULL AUTO_INCREMENT,
+  `Date` date NOT NULL,
+  `Status` enum('pending_api_request','pending_customer_approval','pending_submission','submitted','confirmed','paid_out','cancelled','customer_approval_denied','failed','charged_back','cust_not_dd') NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `MandateID` int(11) NOT NULL,
+  `Name` text,
+  `Amount` int(11) NOT NULL,
+  `Currency` text NOT NULL,
+  `PMkey` text NOT NULL,
+  `Type` enum('Payment','Refund') NOT NULL,
+  PRIMARY KEY (`PaymentID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=173 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `paymentsPending`
+--
+
+CREATE TABLE IF NOT EXISTS `paymentsPending` (
+  `PaymentID` int(11) NOT NULL AUTO_INCREMENT,
+  `Date` date NOT NULL,
+  `Status` enum('Pending','Queued','Requested','Paid','Failed') NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `Name` text,
+  `Amount` int(11) NOT NULL,
+  `Currency` text NOT NULL,
+  `PMkey` text,
+  `Type` enum('Payment','Refund') NOT NULL,
+  `MetadataJSON` text,
+  PRIMARY KEY (`PaymentID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=435 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `renewalProgress`
+--
+
+CREATE TABLE IF NOT EXISTS `renewalProgress` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `UserID` int(11) NOT NULL,
+  `RenewalID` int(11) NOT NULL,
+  `Date` date NOT NULL,
+  `Stage` int(11) NOT NULL,
+  `Substage` int(11) NOT NULL,
+  `Part` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `renewals`
+--
+
+CREATE TABLE IF NOT EXISTS `renewals` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` text NOT NULL,
+  `Year` int(11) NOT NULL,
+  `StartDate` date NOT NULL,
+  `EndDate` date NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -326,7 +462,7 @@ CREATE TABLE IF NOT EXISTS `sessionsAttendance` (
   `MemberID` int(11) NOT NULL,
   `AttendanceBoolean` int(11) NOT NULL,
   PRIMARY KEY (`AttendanceID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7265 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9024 ;
 
 -- --------------------------------------------------------
 
@@ -351,7 +487,7 @@ CREATE TABLE IF NOT EXISTS `sessionsWeek` (
   `WeekID` int(11) NOT NULL AUTO_INCREMENT,
   `WeekDateBeginning` date NOT NULL,
   PRIMARY KEY (`WeekID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
 
 -- --------------------------------------------------------
 
@@ -396,7 +532,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `Username` (`Username`),
   UNIQUE KEY `EmailAddress` (`EmailAddress`),
   UNIQUE KEY `Username_2` (`Username`,`EmailAddress`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=87 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=101 ;
 
 -- --------------------------------------------------------
 
@@ -409,7 +545,7 @@ CREATE TABLE IF NOT EXISTS `wallet` (
   `UserID` int(11) NOT NULL,
   `Balance` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`WalletID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=66 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=75 ;
 
 -- --------------------------------------------------------
 

@@ -31,11 +31,40 @@ if (mysqli_num_rows($result) == 0) {
     $amount = monthlyFeeCost($link, $user, "int");
     if ($amount > 0) {
       $description = "Squad Fees";
+
+      // Put together JSON Metadata
+      $sql = "SELECT members.MemberID, members.MForename, members.MSurname, squads.SquadName,
+      squads.SquadID, squads.SquadFee FROM (members INNER JOIN squads ON
+      members.SquadID = squads.SquadID) WHERE members.UserID = '$user' ORDER
+      BY members.MForename ASC, members.MSurname ASC;";
+      $swimmers = mysqli_query($link, $sql);
+      $count = mysqli_num_rows($swimmers);
+
+      $members = [];
+
+      for ($y = 0; $y < $count; $y++) {
+        $swimmerRow = mysqli_fetch_array($swimmers, MYSQLI_ASSOC);
+        $member = [
+          "Member"      => $swimmerRow['MemberID'],
+          "MemberName"  => $swimmerRow['MForename'] . " " . $swimmerRow['MSurname'],
+          "FeeName"     => $swimmerRow['SquadName'],
+          "Fee"         => $swimmerRow['SquadFee']
+        ];
+        $members[] = $member;
+      }
+
+      $metadata = [
+        "PaymentType"         => "SquadFees",
+        "Members"             => $members
+      ];
+
+      $metadata = mysqli_real_escape_string($link, json_encode($metadata));
+
       $sql = "";
       if (userHasMandates($user)) {
-        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment');";
+        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
       } else {
-        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES ('$date', 'Paid', '$user', '$description', $amount, 'GBP', 'Payment');";
+        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Paid', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
       }
       mysqli_query($link, $sql);
     }
@@ -45,11 +74,42 @@ if (mysqli_num_rows($result) == 0) {
     $amount = monthlyExtraCost($link, $user, "int");
     if ($amount > 0) {
       $description = "Extra Fees";
+
+      // Put together JSON Metadata
+      $sql = "SELECT members.MemberID, members.MForename, members.MSurname,
+      extras.ExtraName, extras.ExtraFee FROM ((members INNER JOIN
+      `extrasRelations` ON members.MemberID = extrasRelations.MemberID) INNER
+      JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) WHERE
+      members.UserID = '$user' ORDER BY members.MForename ASC,
+      members.MSurname ASC;";
+      $swimmers = mysqli_query($link, $sql);
+      $count = mysqli_num_rows($swimmers);
+
+      $members = [];
+
+      for ($y = 0; $y < $count; $y++) {
+        $swimmerRow = mysqli_fetch_array($swimmers, MYSQLI_ASSOC);
+        $member = [
+          "Member"      => $swimmerRow['MemberID'],
+          "MemberName"  => $swimmerRow['MForename'] . " " . $swimmerRow['MSurname'],
+          "FeeName"     => $swimmerRow['ExtraName'],
+          "Fee"         => $swimmerRow['ExtraFee']
+        ];
+        $members[] = $member;
+      }
+
+      $metadata = [
+        "PaymentType"         => "ExtraFees",
+        "Members"             => $members
+      ];
+
+      $metadata = mysqli_real_escape_string($link, json_encode($metadata));
+
       $sql = "";
       if (userHasMandates($user)) {
-        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment');";
+        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
       } else {
-        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES ('$date', 'Paid', '$user', '$description', $amount, 'GBP', 'Payment');";
+        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Paid', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
       }
       mysqli_query($link, $sql);
     }
