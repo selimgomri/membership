@@ -1,17 +1,19 @@
 <?php
 
+use Respect\Validation\Validator as v;
+
   // Registration Form Handler
 
   $userID = $_SESSION['UserID'];
   $asaNumber = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['asa'])));
-  $accessKey = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['accessKey'])));
+  $accessKey = mysqli_real_escape_string($link, strtoupper(trim(htmlspecialchars($_POST['accessKey']))));
 
   $searchSQL = "SELECT * FROM members WHERE ASANumber = '$asaNumber' AND AccessKey = '$accessKey' LIMIT 1;";
   $searchResult = mysqli_query($link, $searchSQL);
   $searchCount = mysqli_num_rows($searchResult);
   $row = mysqli_fetch_array($searchResult, MYSQLI_ASSOC);
 
-  if ($asaNumber != null && $accessKey != null) {
+  if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber) && v::alnum()->validate($asaNumber)) {
     if ($searchCount == 1) {
       // Allow addition
       $memberID = $row['MemberID'];
@@ -62,6 +64,16 @@
       <p>If this was not you, contact <a href=\"mailto:support@chesterlestreetasc.co.uk\">
       support@chesterlestreetasc.co.uk</a> as soon as possible</p>";
       notifySend($row['EmailAddress'], "A swimmer has been added", $message);
+
+      $_SESSION['AddSwimmerSuccessState'] = "
+      <div class=\"alert alert-succcess\">
+      <p class=\"mb-0\"><strong>We were able to successfully add your swimmer</strong></p>
+      <p>We've sent an email confirming this to you.</p>
+      <p class=\"mb-0\"><a href=\"" . autoUrl("myaccount/addswimmer") . "\"
+      class=\"alert-link\">Add another</a> or <a href=\"" . autoUrl("myaccount") . "\"
+      class=\"alert-link\">return to My Account</a></p>
+      </div>";
+      header("Location: " . autoUrl("myaccount/addswimmer"));
 
       // Return to My Account
       header("Location: " . autoUrl("myaccount"));

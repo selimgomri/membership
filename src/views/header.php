@@ -116,11 +116,27 @@ Chester-le-Street ASC is a non profit private members club.
   			  <a class="nav-link" href="<?php echo autoUrl("users") ?>">Users</a>
   		  </li>
         <?php } ?>
-        <?php if ($_SESSION['AccessLevel'] == "Admin" ||
-        $_SESSION['AccessLevel'] == "Galas") { ?>
+        <?php if ($_SESSION['AccessLevel'] == "Galas") { ?>
         <li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("payments") ?>">Payments</a>
   		  </li>
+        <?php } ?>
+        <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="paymentsAdminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Payments
+          </a>
+          <div class="dropdown-menu" aria-labelledby="paymentsAdminDropdown">
+            <a class="dropdown-item" href="<?php echo autoUrl("payments") ?>">Payments Home</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="https://manage.gocardless.com" target="_blank">
+              GoCardless Live
+            </a>
+            <a class="dropdown-item" href="https://manage-sandbox.gocardless.com" target="_blank">
+              GoCardless Sandbox
+            </a>
+          </div>
+        </li>
         <?php } ?>
         <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach") { ?>
         <li class="nav-item">

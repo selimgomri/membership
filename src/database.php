@@ -663,22 +663,7 @@ function myMonthlyFeeMedia($link, $userID) {
     }
     $reducedCost += $totalsArray[$i];
   }
-  $sql = "SELECT extras.ExtraName, extras.ExtraFee, members.MForename ,
-  members.MSurname FROM ((extras INNER JOIN extrasRelations ON extras.ExtraID =
-  extrasRelations.ExtraID) INNER JOIN members ON members.MemberID =
-  extrasRelations.MemberID) WHERE extrasRelations.UserID = '$userID' ORDER BY
-  `extras`.`ExtraFee` DESC;";
-  $result = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($result);
-  $monthlyExtras = "";
-  $monthlyExtrasTotal = 0;
-  for ($i=0; $i<$count; $i++) {
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    $monthlyExtras .= "<tr><td>" . $row['ExtraName'] . " <br>for " .
-    $row['MForename'] . " " . $row['MSurname'] . "</td><td>&pound;" .
-    number_format($row['ExtraFee'],2,'.','') . "</td></tr>";
-    $monthlyExtrasTotal += $row['ExtraFee'];
-  }
+  $monthlyExtrasTotal = monthlyExtraCost($link, $userID, "decimal");
   if ($monthlyExtrasTotal+$reducedCost > 0) {
     $output = "<div class=\"my-3 p-3 bg-white rounded box-shadow\">
     <h2>My Fees</h2><p class=\"lead border-bottom border-gray pb-2
@@ -1049,8 +1034,9 @@ function feesToPay($link, $user) {
     <?php } ?>
   <?php } else { ?>
   <div class="alert alert-warning mb-0">
-    <strong>You have no previous payments</strong> <br>
-    Payments will appear here when they have been added to your account.
+    <strong>You have no current fees</strong> <br>
+    Fee will appear here when they have been added to your account and have not
+    been requested from the bank
   </div>
   <?php }
 }

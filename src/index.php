@@ -354,14 +354,9 @@ else {
     require('controllers/logout.php');
   });
 
-  $route->any(['/test', '/x-text'], function() {
+  /*$route->any(['/test', '/x-text'], function() {
     global $link;
-    $to = "Christopher Heppell <clheppell1@shef.ac.uk>";
-		$subject = "Test";
-		$message = "<p>Dear Chris. This is a test";
-
-		notifySend($to, $subject, $message);
-  });
+  });*/
 
   // Global Catch All 404
   $route->any('/*', function() {

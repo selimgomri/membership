@@ -1,9 +1,12 @@
 <?php
+
+use Respect\Validation\Validator as v;
+
 $access = $_SESSION['AccessLevel'];
 $swimmerCount = 0;
 
 if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
-  if (isset($_REQUEST["squadID"])) {
+  if (isset($_REQUEST["squadID"]) && v::intVal()->validate($_REQUEST["squadID"])) {
     // get the squadID parameter from URL
     $squadID = mysqli_real_escape_string($link, $_REQUEST["squadID"]);
 
@@ -42,7 +45,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
                 break;
         }
 
-        $content .= "<option value=\"" . $row['SessionID'] . "\">" . $row['SessionName'] . ", " . $dayText . " at " . $row['StartTime'] . "</option>";
+        $content .= "<option value=\"" . $row['SessionID'] . "\">" . $row['SessionName'] . ", " . $dayText . " at " . (new DateTime($row['StartTime']))->format("H:i") . "</option>";
       }
     }
 
@@ -54,8 +57,8 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
     }
   }
 
-  if (isset($_REQUEST["sessionID"])) {
-    if (isset($_REQUEST["date"])) {
+  if (isset($_REQUEST["sessionID"]) && v::intVal()->validate($_REQUEST["sessionID"])) {
+    if (isset($_REQUEST["date"]) && v::intVal()->validate($_REQUEST["date"])) {
       $dateO = $date = mysqli_real_escape_string($link, $_REQUEST["date"]);
     }
 
@@ -106,7 +109,21 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       $datetime2 = new DateTime($row['EndTime']);
       $content .= "<h2>Take register</h2><p>for " . $row['SquadName'] . " Squad, " . $row['SessionName'] . " on " . $dayText . " " . $date . " at " . $datetime1->format("H:i") . "</p>";
       $interval = $datetime1->diff($datetime2);
-      $content .= "<p>This session is " . $interval->format('%h hours %I minutes') . " long, finishing at " . $datetime2->format("H:i") . "</p>";
+      $content .= "<p>This session is ";
+
+      if ((int) $interval->format('%h') == 1) {
+        $content .= "1 hour ";
+      } else if ((int) $interval->format('%h') > 1) {
+        $content .= $interval->format('%h') . " hours ";
+      }
+
+      if ((int) $interval->format('%I') == 1) {
+        $content .= "1 minute ";
+      } else if ((int) $interval->format('%I') > 1) {
+        $content .= $interval->format('%I') . " minutes ";
+      }
+
+      $content .= "long, finishing at " . $datetime2->format("H:i") . "</p>";
       $sql = "SELECT members.MemberID, members.MForename, members.MSurname,
       members.DateOfBirth, members.OtherNotes,
       memberPhotography.Website, memberPhotography.Social,
