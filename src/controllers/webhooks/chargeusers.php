@@ -50,6 +50,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 
   		$sql = "UPDATE `paymentsPending` SET `Status` = 'Requested', `PMkey` = '$id' WHERE `UserID` = '$userid' AND `Status` = 'Queued' AND `Type` = 'Payment' AND `Date` <= '$date';";
   		mysqli_query($link, $sql);
+
   	} catch (Exception $e) {
   		halt(500);
   	}

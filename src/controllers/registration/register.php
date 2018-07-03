@@ -77,15 +77,28 @@
         </div>
 
         <h2>Notification Preferences</h2>
+
+        <?
+
+        $email = $sms = "";
+        if (isset($_SESSION['RegistrationEmailAuth'])) {
+          $email = " checked ";
+          unset($_SESSION['RegistrationEmailAuth']);
+        }
+        if (isset($_SESSION['RegistrationSmsAuth'])) {
+          $sms = " checked ";
+          unset($_SESSION['RegistrationSmsAuth']);
+        } ?>
+
         <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="emailAuthorise" value="1">
+          <input type="checkbox" class="custom-control-input" name="emailAuthorise" id="emailAuthorise" value="1" <? echo $email; ?>>
           <label class="custom-control-label" for="emailAuthorise">
             I wish to recieve email updates about my squads
           </label>
         </div>
 
         <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="smsAuthorise" value="1">
+          <input type="checkbox" class="custom-control-input" name="smsAuthorise" id="smsAuthorise" value="1" <? echo $sms; ?>>
           <label class="custom-control-label" for="smsAuthorise">
             I wish to recieve text message notifications
           </label>

@@ -51,12 +51,22 @@ if (mysqli_num_rows($result) == 0) {
           "Fee"         => $swimmerRow['SquadFee']
         ];
         $members[] = $member;
+
+        $tracksql = "INSERT INTO `individualFeeTrack` (`MonthID`, `MemberID`,
+        `UserID`, `Description`, `Amount`, `Type`) VALUES ('$mid', '$memID',
+        '$user', '$description', '$fee', 'SquadFee');";
+        if ($fee > 0) {
+          mysqli_query($link, $tracksql);
+        }
       }
 
       $metadata = [
         "PaymentType"         => "SquadFees",
         "Members"             => $members
       ];
+
+      $memID = mysqli_real_escape_string($link, $swimmerRow['MemberID']);
+      $fee = (int) (mysqli_real_escape_string($link, $swimmerRow['SquadFee'])*100);
 
       $metadata = mysqli_real_escape_string($link, json_encode($metadata));
 
@@ -66,6 +76,15 @@ if (mysqli_num_rows($result) == 0) {
       } else {
         $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Paid', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
       }
+      mysqli_query($link, $sql);
+
+      // Get Payment ID
+      $sql = "SELECT `PaymentID` FROM `paymentsPending` WHERE `Date` = '$date'
+      AND `UserID` = '$user' AND `Amount` = '$amount' AND `Name` =
+      '$description';";
+      $paymentID = mysqli_real_escape_string($link,mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC)['PaymentID']);
+
+      $sql = "UPDATE `individualFeeTrack` SET `PaymentID` = '$paymentID' WHERE `UserID` = '$user' AND `PaymentID` IS NULL;";
       mysqli_query($link, $sql);
     }
   }
@@ -96,6 +115,13 @@ if (mysqli_num_rows($result) == 0) {
           "Fee"         => $swimmerRow['ExtraFee']
         ];
         $members[] = $member;
+
+        $tracksql = "INSERT INTO `individualFeeTrack` (`MonthID`, `MemberID`,
+        `UserID`, `Description`, `Amount`, `Type`) VALUES ('$mid', '$memID',
+        '$user', '$description', '$fee', 'ExtraFee');";
+        if ($fee > 0) {
+          mysqli_query($link, $tracksql);
+        }
       }
 
       $metadata = [
@@ -105,12 +131,24 @@ if (mysqli_num_rows($result) == 0) {
 
       $metadata = mysqli_real_escape_string($link, json_encode($metadata));
 
+      $memID = mysqli_real_escape_string($link, $swimmerRow['MemberID']);
+      $fee = (int) (mysqli_real_escape_string($link, $swimmerRow['ExtraFee'])*100);
+
       $sql = "";
       if (userHasMandates($user)) {
         $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
       } else {
         $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Paid', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
       }
+      mysqli_query($link, $sql);
+
+      // Get Payment ID
+      $sql = "SELECT `PaymentID` FROM `paymentsPending` WHERE `Date` = '$date'
+      AND `UserID` = '$user' AND `Amount` = '$amount' AND `Name` =
+      '$description';";
+      $paymentID = mysqli_real_escape_string($link,mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC)['PaymentID']);
+
+      $sql = "UPDATE `individualFeeTrack` SET `PaymentID` = '$paymentID' WHERE `UserID` = '$user' AND `PaymentID` IS NULL;";
       mysqli_query($link, $sql);
     }
   }

@@ -4,14 +4,22 @@ $searchDate = mysqli_real_escape_string($link, $year . "-" . $month . "-") . "%"
 $name_type = null;
 
 if ($type == "squads") {
-	$name_type = "Squad Fees";
+	$name_type = "SquadFee";
 } else if ($type == "extras") {
-	$name_type = "Extra Fees";
+	$name_type = "ExtraFee";
 } else {
 	halt(404);
 }
 
-$sql = "SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `Date` LIKE '$searchDate' AND `Name` = '$name_type';";
+$sql = "SELECT `Forename`, `Surname`, `MForename`, `MSurname`,
+individualFeeTrack.Amount, individualFeeTrack.Description, `Status` FROM
+((((`individualFeeTrack` INNER JOIN `paymentMonths` ON
+individualFeeTrack.MonthID = paymentMonths.MonthID) INNER JOIN `paymentsPending`
+ON individualFeeTrack.PaymentID = paymentsPending.PaymentID) INNER JOIN
+`members` ON members.MemberID = individualFeeTrack.MemberID) LEFT JOIN `users`
+ON users.UserID = individualFeeTrack.UserID) WHERE `paymentMonths`.`Date` LIKE
+'$searchDate' AND `individualFeeTrack`.`Type` = '$name_type' ORDER BY `Forename`
+ASC, `Surname` ASC, `MForename` ASC, `MSurname` ASC;";
 $result = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
@@ -50,7 +58,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 							Parent
 						</th>
 						<th>
-							Swimmers
+							Swimmer
 						</th>
 						<th>
 							Amount
@@ -64,21 +72,6 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 				<?
 				for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 					//$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-					$data = "";
-					if ($row['MetadataJSON'] != "" || $row['MetadataJSON'] != "") {
-						$json = json_decode($row['MetadataJSON']);
-						if ($json->PaymentType == "SquadFees"  || $json->PaymentType == "ExtraFees") {
-							$data .= '<ul class="list-unstyled mb-0">';
-							//echo sizeof($json->Members);
-							//pre($json->Members);
-							//echo $json->Members[0]->MemberName;
-							$numMems = (int) sizeof($json->Members);
-							for ($y = 0; $y < $numMems; $y++) {
-								$data .= '<li>' . $json->Members[$y]->FeeName . " (&pound;" . $json->Members[$y]->Fee . ") for <a href=\"" . autoUrl("swimmers/" . $json->Members[$y]->Member) . "\">" . $json->Members[$y]->MemberName . '</a></li>';
-							}
-							$data .= '</ul>';
-						}
-					}
 					?>
 					<? if ($row['Status'] == "Paid") {
 						?><tr class="table-success"><?
@@ -89,7 +82,10 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 						<td>
 							<? echo $row['Forename'] . " " . $row['Surname']; ?>
 						<td>
-							<? echo $data; ?>
+							<ul class="list-unstyled mb-0">
+								<li><? echo $row['MForename'] . " " . $row['MSurname']; ?></li>
+								<li><em><? echo $row['Description']; ?></em></li>
+							</ul>
 						</td>
 						<td>
 							&pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?>

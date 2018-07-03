@@ -11,13 +11,17 @@ $password1 = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['pass
 $password2 = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password2'])));
 $email = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['email']))));
 $mobile = mysqli_real_escape_string($link, preg_replace('/\D/', '', $_POST['mobile'])); // Removes anything that isn't a digit
-$emailAuth = mysqli_real_escape_string($_POST['emailAuthorise']);
-if ($emailAuth != 1) {
-  $emailAuth == 0;
+$emailAuth = 0;
+if ($_POST['emailAuthorise'] != 1) {
+  $emailAuth = 0;
+} else {
+  $emailAuth = 1;
 }
-$smsAuth = mysqli_real_escape_string($_POST['smsAuthorise']);
-if ($smsAuth != 1) {
-  $smsAuth == 0;
+$smsAuth = 0;
+if ($_POST['smsAuthorise'] != 1) {
+  $smsAuth = 0;
+} else {
+  $smsAuth = 1;
 }
 
 $status = true;
@@ -169,6 +173,12 @@ if ($status) {
   $_SESSION['RegistrationSurname'] = $surname;
   $_SESSION['RegistrationEmail'] = $email;
   $_SESSION['RegistrationMobile'] = $mobile;
+  if ($emailAuth == 1) {
+    $_SESSION['RegistrationEmailAuth'] = " checked ";
+  }
+  if ($smsAuth == 1) {
+    $_SESSION['RegistrationSmsAuth'] = " checked ";
+  }
 
   $_SESSION['ErrorState'] = '
   <div class="alert alert-warning">
