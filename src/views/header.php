@@ -65,6 +65,12 @@ Chester-le-Street ASC is a non profit private members club.
       margin: 0 -1rem -1rem -1rem;
       width: auto !important;
     }
+    .nav-scroller .nav-underline .nav-link:hover, .nav-scroller .nav-underline .nav-link:focus {
+      background: #e9ecef;
+    }
+    .nav-scroller .nav-underline .nav-link:active {
+      background: #dee2e6;
+    }
     </style>
 
     <!--[if lt IE 9]>
