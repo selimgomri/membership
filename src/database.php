@@ -1137,6 +1137,8 @@ function paymentStatusString($status) {
       return "The payment failed to be processed";
     case "charged_back":
       return "The payment has been charged back";
+      case "cust_not_dd":
+        return "The customer does not have a Direct Debit set up";
     default:
       return "Unknown Status Code";
   }
