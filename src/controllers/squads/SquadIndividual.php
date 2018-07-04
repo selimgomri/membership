@@ -244,6 +244,30 @@ else {
   $content .= "</div>";
 }
 
+$sql = "SELECT * FROM `members` WHERE `SquadID` = '$id' ORDER BY `MForename` ASC, `MSurname` ASC;";
+$result = mysqli_query($link, $sql);
+
+if (mysqli_num_rows($result) > 0) {
+  $content .= '
+  <div class="container">
+    <div class="mb-3 p-3 bg-white rounded box-shadow">
+      <h2 class="">Swimmer in this Squad</h2>
+      <table class="table mb-0">
+        <tbody>';
+  for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $content .= '<tr><td>
+    <a href="' . autoUrl("swimmers/" . $row['MemberID']) . '">' . $row['MForename'] . ' ' . $row['MSurname'] . '</a></td></tr>';
+  }
+  $content .= '
+        </tbody>
+      </table>
+    </div>
+  </div>';
+}
+
+$content .= "</div>";
+
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php"; ?>
 <div class="container">

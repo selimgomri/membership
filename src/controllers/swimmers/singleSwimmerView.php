@@ -62,7 +62,9 @@ $content = '
   <div class="media pt-3">
     <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
       <strong class="d-block text-gray-dark">Attendance</strong>
-      ' . getAttendanceByID($link, $id, 4) . '% over the last 4 weeks, ' . getAttendanceByID($link, $id) . '% over all time
+      <a href="' . autoUrl("attendance/history/swimmers/" . $id) . '">' .
+      getAttendanceByID($link, $id, 4) . '% over the last 4 weeks, ' .
+      getAttendanceByID($link, $id) . '% over all time</a>
     </p>
   </div>
   <div class="media pt-3">
