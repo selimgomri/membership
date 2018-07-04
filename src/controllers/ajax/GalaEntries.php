@@ -45,7 +45,13 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $count = mysqli_num_rows($result);
 
 
-    $content = '<table class="table table-hover"><thead><tr><th>Swimmer</th><th>Swims</th><th class="d-print-none"><abbr title="Tick to prevent editing this entry">Processed?</abbr></th></tr></thead><tbody>';
+    $content = "";
+    if (app('request')->isMobile()) {
+      $content .= '<table class="table table-sm">';
+    } else {
+      $content .= '<table class="table table-hover">';
+    }
+    $content .= '<thead class="thead-light"><tr><th>Swimmer</th><th>Swims</th><th class="d-print-none"><abbr title="Tick to prevent editing this entry">Processed?</abbr></th></tr></thead><tbody>';
 
     // For loop iterates through the rows of the database result, producing rows for the table
     for ($i=0; $i<$count; $i++) {
@@ -72,7 +78,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       // Arrays of swims used to check whever to print the name of the swim entered
       // BEWARE This is in an order to ease inputting data into SportSystems, contrary to these arrays in other files
       $swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Back','100Back','200Back','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','100IM','150IM','200IM','400IM',];
-      $swimsTextArray = ['50 Free','100 Free','200 Free','400 Free','800 Free','1500 Free','50 Back','100 Back','200 Back','50 Breast','100 Breast','200 Breast','50 Fly','100 Fly','200 Fly','100 IM','150 IM','200 IM','400 IM',];
+      $swimsTextArray = ['50&nbsp;Free','100&nbsp;Free','200&nbsp;Free','400&nbsp;Free','800&nbsp;Free','1500&nbsp;Free','50&nbsp;Back','100&nbsp;Back','200&nbsp;Back','50&nbsp;Breast','100&nbsp;Breast','200&nbsp;Breast','50&nbsp;Fly','100&nbsp;Fly','200&nbsp;Fly','100&nbsp;IM','150&nbsp;IM','200&nbsp;IM','400&nbsp;IM',];
       $swimsTimeArray = ['50FreeTime','100FreeTime','200FreeTime','400FreeTime','800FreeTime','1500FreeTime','50BackTime','100BackTime','200BackTime','50BreastTime','100BreastTime','200BreastTime','50FlyTime','100FlyTime','200FlyTime','100IMTime','150IMTime','200IMTime','400IMTime',];
 
 

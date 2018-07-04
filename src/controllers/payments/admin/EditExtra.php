@@ -1,5 +1,7 @@
 <?php
 
+$id = mysqli_real_escape_string($link, $id);
+
 $sql = "SELECT * FROM `extras` WHERE `ExtraID` = '$id';";
 $result = mysqli_query($link, $sql);
 

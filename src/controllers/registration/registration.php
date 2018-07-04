@@ -6,7 +6,8 @@ use Respect\Validation\Validator as v;
 
 $forename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
 $surname = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['surname']))));
-$username = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['username']))));
+//$username = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['username']))));
+$username = mysqli_real_escape_string($link, $forename . $surname . "-" . md5(generateRandomString(20) . time()));
 $password1 = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password1'])));
 $password2 = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password2'])));
 $email = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['email']))));
@@ -34,7 +35,7 @@ $usernameResult = mysqli_query($link, $usernameSQL);
 if (mysqli_num_rows($usernameResult) > 0) {
   $status = false;
   $statusMessage .= "
-  <li>That username is already taken</li>
+  <li>An internal error occured</li>
   ";
 }
 
@@ -134,10 +135,10 @@ if ($status) {
   <p>We need you to verify your email address by following this link - <a
   href="' . autoUrl($verifyLink) . '" target="_blank">' .
   autoUrl($verifyLink) . '</a></p>
-  <p>Your username is <code>' . $username . '</code>. You can use it or your
-  email address to sign in.</p>
-  <p>You can change your personal details and password in My Account, but
-  can\'t change your username.</p>
+  <p>You will use your email address, <code>' . $email . '</code> to sign in.</p>
+  <p>You can change your personal details and password in My Account</p>
+  <p>For help, send an email to <a
+  href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>/</p>
   ';
 
   $messageid = time() .'-' . md5("CLS-Membership-Signup" . $to) . '@account.chesterlestreetasc.co.uk';

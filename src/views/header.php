@@ -61,6 +61,10 @@ Chester-le-Street ASC is a non profit private members club.
     .badge {
       font-family: "Helvetica", "Helvetica Neue", "Arial", "Roboto", san-serif;
     }
+    .table-nomargin {
+      margin: 0 -1rem -1rem -1rem;
+      width: auto !important;
+    }
     </style>
 
     <!--[if lt IE 9]>

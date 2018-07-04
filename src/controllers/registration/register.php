@@ -61,15 +61,16 @@
           <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
         </div>
 
-        <h2>Username and Password</h2>
-        <div class="form-group">
+        <h2>Password</h2>
+        <!--<div class="form-group">
           <label for="username">Username</label>
           <input class="form-control" type="text" name="username" id="username" placeholder="Username" aria-labelledby="usernameHelp" required value="<? echo $_SESSION['RegistrationUsername']; ?>">
           <small id="usernameHelp" class="form-text text-muted">This username is for your user account as an adult, not your swimmer(s)</small>
-        </div>
+        </div>-->
         <div class="form-group">
           <label for="password1">Password</label>
-          <input class="form-control" type="password" name="password1" id="password1" placeholder="Password" required>
+          <input class="form-control" type="password" aria-describedby="pwHelp" name="password1" id="password1" placeholder="Password" required>
+          <small id="pwHelp" class="form-text text-muted">Passwords must be 8 characters or longer</small>
         </div>
         <div class="form-group">
           <label for="password2">Confirm Password</label>

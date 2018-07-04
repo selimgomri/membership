@@ -7,6 +7,9 @@ include BASE_PATH . "views/notifyMenu.php";
 $sql = "SELECT `SquadName`, `SquadID` FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC;";
 $result = mysqli_query($link, $sql);
 
+$sql = "SELECT * FROM `targetedLists` ORDER BY `Name` ASC;";
+$lists = mysqli_query($link, $sql);
+
  ?>
 
 <div class="container">
@@ -14,12 +17,31 @@ $result = mysqli_query($link, $sql);
 	<p class="lead">Send Emails to targeted groups of parents</p>
   <hr>
 	<form method="post">
+    <div class="form-group">
+			<label>To parents of swimmers in the following targeted lists...</label>
+			<div class="row">
+			<?php for ($i = 0; $i < mysqli_num_rows($lists); $i++) {
+				$row = mysqli_fetch_array($lists, MYSQLI_ASSOC); ?>
+				<div class="col-6 col-sm-6 col-md-4 col-lg-3">
+					<div class="custom-control custom-checkbox">
+					  <input type="checkbox" class="custom-control-input"
+            id="TL-<? echo $row['ID']; ?>" name="TL-<? echo $row['ID']; ?>"
+            value="1">
+					  <label class="custom-control-label"
+              for="TL-<? echo $row['ID']; ?>">
+              <? echo $row['Name']; ?>
+            </label>
+					</div>
+				</div>
+			<?php } ?>
+			</div>
+		</div>
 		<div class="form-group">
-			<label>To parents of...</label>
+			<label>To parents of swimmers in the following squads...</label>
 			<div class="row">
 			<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 				$row = mysqli_fetch_array($result, MYSQLI_ASSOC); ?>
-				<div class="col col-sm-6 col-md-4 col-lg-3">
+				<div class="col-6 col-sm-6 col-md-4 col-lg-3">
 					<div class="custom-control custom-checkbox">
 					  <input type="checkbox" class="custom-control-input"
             id="<? echo $row['SquadID']; ?>" name="<? echo $row['SquadID']; ?>"

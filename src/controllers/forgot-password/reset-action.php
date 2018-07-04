@@ -1,5 +1,7 @@
 <?php
 
+use Respect\Validation\Validator as v;
+
 $token = mysqli_real_escape_string($link, $token);
 
 $sql = "SELECT `UserID` FROM `passwordTokens` WHERE `Token` = '$token';";
@@ -13,7 +15,7 @@ if (mysqli_num_rows($result) > 0) {
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	$latestToken = $row['Token'];
 	if ($token == $latestToken) {
-		if ((isset($_POST['password1']) && isset($_POST['password2'])) && ($_POST['password1'] == $_POST['password2'])) {
+		if ((isset($_POST['password1']) && isset($_POST['password2'])) && ($_POST['password1'] == $_POST['password2']) && v::stringType()->length(8, null)->validate($_POST['password1'])) {
 			// Set the password
 			$newHash = password_hash($_POST['password1'], PASSWORD_BCRYPT);
       $sql = "UPDATE `users` SET `Password` = '$newHash' WHERE `UserID` = '$user';";
@@ -48,7 +50,7 @@ if (mysqli_num_rows($result) > 0) {
         <div class="row justify-content-center">
           <div class="col-sm-6 col-md-5 col-lg4">
             <div class="alert alert-danger">
-              <strong>You failed to supply both passwords, or the passwords did not match</strong>
+              <strong>You failed to supply both passwords, the passwords did not match or the password was not 8 characters or more</strong>
               <p class="mb-2">Please, <a href="<? echo autoUrl("resetpassword/auth/" . htmlspecialchars($token)); ?>" class="alert-link">try again</a>.</p>
               <p class="mb-0">We're sorry for any inconvenience caused.</p>
             </div>

@@ -35,6 +35,51 @@ if ($access == "Admin" || $access == "Coach") {
 		include 'EmailID.php';
 	});
 
+	$this->group('/lists', function() {
+		global $link;
+
+		$this->get('/', function() {
+			global $link;
+			include 'ListOfLists.php';
+		});
+
+		$this->get('/new', function() {
+			global $link;
+			include 'NewList.php';
+		});
+
+		$this->post('/new', function() {
+			global $link;
+			include 'NewListServer.php';
+		});
+
+		$this->get('/{id}:int', function($id) {
+			global $link;
+			include 'ListIndividual.php';
+		});
+
+		$this->post('ajax/{id}:int', function($id) {
+			global $link;
+			include 'ListIndividualServer.php';
+		});
+
+		$this->get('/{id}:int/edit', function($id) {
+			global $link;
+			include 'EditList.php';
+		});
+
+		$this->post('/{id}:int/edit', function($id) {
+			global $link;
+			include 'EditListServer.php';
+		});
+
+		$this->get('/{id}:int/delete', function($id) {
+			global $link;
+			include 'DeleteList.php';
+		});
+
+	});
+
 	$this->get('/emailtest', function() {
 		global $link;
 		notifySend("chris.heppell@chesterlestreetasc.co.uk", "test", "<p>Hello</p>");

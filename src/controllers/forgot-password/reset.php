@@ -21,7 +21,8 @@ if (mysqli_num_rows($result) > 0) {
 			<form class="mb-3" method="post">
 				<div class="form-group">
 			    <label for="password1">Enter new password</label>
-			    <input type="password" class="form-control" id="password1" name="password1" placeholder="Password">
+			    <input type="password" class="form-control" id="password1" name="password1" aria-describedby="pwHelp" placeholder="Password">
+					<small id="pwHelp" class="form-text text-muted">Passwords must be 8 characters or longer</small>
 			  </div>
 				<div class="form-group">
 			    <label for="password2">Confirm your new password</label>

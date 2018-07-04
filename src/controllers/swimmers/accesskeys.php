@@ -19,8 +19,12 @@ $result = mysqli_query($link, $sqlSwim);
 $swimmerCount = mysqli_num_rows($result);
 if ($swimmerCount > 0) { ?>
   <div class="table-responsive">
-    <table class="table table-hover">
-      <thead>
+    <? if (app('request')->isMobile()) {
+      ?><table class="table table-sm"><?
+    } else {
+      ?><table class="table table-hover"><?
+    }?>
+      <thead class="thead-light">
         <tr>
           <th>Name</th>
           <th>Squad</th>

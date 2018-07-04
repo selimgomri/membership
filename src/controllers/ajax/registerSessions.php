@@ -137,7 +137,13 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       members.MForename, members.MSurname ASC";
       $result = mysqli_query($link, $sql);
       $swimmerCount = mysqli_num_rows($result);
-      $content .= "<div class=\"table-responsive tweet-embed mb-1\"><table class=\"table table-striped\"><thead class=\"thead-light\"><tr><th>Name</th><th>Notes</th></tr></thead><tbody>";
+      $content .= "<div class=\"table-responsive table-nomargin mb-1\">";
+      if (app('request')->isMobile()) {
+        $content .= '<table class="table">';
+      } else {
+        $content .= '<table class="table">';
+      }
+      $content .= "<thead class=\"thead-light\"><tr><th>Swimmer</th><th>Notes</th></tr></thead><tbody>";
       for ($i=0; $i<$swimmerCount; $i++) {
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
         $age = date_diff(date_create($row['DateOfBirth']),

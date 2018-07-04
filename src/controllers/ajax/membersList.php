@@ -22,8 +22,13 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
   $swimmerCount = mysqli_num_rows($result);
   if ($swimmerCount > 0) {
     $output = '
-    <div class="table-responsive">
-      <table class="table table-hover">
+    <div class="table-responsive">';
+    if (app('request')->isMobile()) {
+      $output.= '<table class="table table-sm">';
+    } else {
+      $output .= '<table class="table">';
+    }
+    $output .= '
         <thead class="thead-light">
           <tr>
             <th>Name</th>
