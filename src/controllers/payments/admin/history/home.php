@@ -29,7 +29,7 @@ $date = date("Y/m");
           </li>
           <? } ?>
         </ul>
-        <h2 class="border-bottom border-gray pb-2 mb-2">View by Parent</h2>
+        <h4 class="border-bottom border-gray pb-2 mb-2">View by Parent</h4>
         <p class="lead mb-0">
           <a href="<? echo autoUrl("payments/history/users"); ?>">
             Search for a Parent
@@ -45,7 +45,7 @@ $date = date("Y/m");
           <? for ($i = 0; $i < 12; $i++) {
           $targetDate = strtotime($now . " - " . $i . " months"); ?>
           <li>
-            <a href="<? echo autoUrl("payments/history/status/" . date("Y/m", $targetDate) . "/extras"); ?>">
+            <a href="<? echo autoUrl("payments/history/status/" . date("Y/m", $targetDate) . "/squads"); ?>">
               <? echo date("F Y", $targetDate); ?>
             </a>
           </li>

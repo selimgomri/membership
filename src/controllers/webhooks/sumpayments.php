@@ -52,9 +52,11 @@ if (mysqli_num_rows($result) == 0) {
         ];
         $members[] = $member;
 
+        $name = $description . " (" . $swimmerRow['SquadName'] . ")";
+
         $tracksql = "INSERT INTO `individualFeeTrack` (`MonthID`, `MemberID`,
         `UserID`, `Description`, `Amount`, `Type`) VALUES ('$mid', '$memID',
-        '$user', '$description', '$fee', 'SquadFee');";
+        '$user', '$name', '$fee', 'SquadFee');";
         if ($fee > 0) {
           mysqli_query($link, $tracksql);
         }
@@ -116,9 +118,11 @@ if (mysqli_num_rows($result) == 0) {
         ];
         $members[] = $member;
 
+        $name = $description . " (" . $swimmerRow['ExtraName'] . ")";
+
         $tracksql = "INSERT INTO `individualFeeTrack` (`MonthID`, `MemberID`,
         `UserID`, `Description`, `Amount`, `Type`) VALUES ('$mid', '$memID',
-        '$user', '$description', '$fee', 'ExtraFee');";
+        '$user', '$name', '$fee', 'ExtraFee');";
         if ($fee > 0) {
           mysqli_query($link, $tracksql);
         }

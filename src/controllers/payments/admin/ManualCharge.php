@@ -19,18 +19,21 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
     } ?>
     <form method="post">
   		<div class="form-group">
-  	    <label for="user">User Identification Number</label>
+  	    <label for="user-surname">Search for User</label>
   			<div class="input-group">
   				<div class="input-group-prepend">
-  	        <div class="input-group-text mono">CLSU</div>
+  	        <div class="input-group-text">Surname</div>
   	      </div>
-  	  		<input type="number" class="form-control mono" id="user" name="user" aria-describedby="userHelp" placeholder="Enter number" required>
+  	  		<input type="text" class="form-control" id="user-surname">
   			</div>
-  	    <small id="userHelp" class="form-text text-muted">You can find a User ID in the <a target="_blank" href="<? echo autoUrl("users"); ?>">Users section</a></small>
   	  </div>
-  		<div class="form-group">
-  			<p>You have selected - <span id="selectedUserName">No Parent Selected</span></p>
-  		</div>
+      <div class="form-group">
+  	    <label for="user">Select a User</label>
+        <select class="custom-select" name="user" id="user">
+          <option selected>Select</option>
+          <option>Search for a parent or enable JS first</option>
+        </select>
+  	  </div>
       <div class="form-group">
   	    <label for="desc">Description</label>
     		<input type="text" class="form-control" id="desc" name="desc" placeholder="Description" required>
@@ -51,23 +54,21 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 <script>
 function getResult() {
-  var user = document.getElementById("user");
-  var userID = user.value;
-  console.log(userID);
+  var user = document.getElementById("user-surname");
+  var usersur = user.value;
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-        console.log("We got here");
-        document.getElementById("selectedUserName").innerHTML = this.responseText;
-        console.log(this.responseText);
+        document.getElementById("user").innerHTML = this.responseText;
       }
     }
     xhttp.open("POST", "<?php echo autoURL("users/ajax/username"); ?>", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("userID=" + userID);
+    xhttp.send("userSur=" + usersur);
     console.log("Sent");
 }
-document.getElementById("user").oninput=getResult;
+getResult();
+document.getElementById("user-surname").oninput=getResult;
 </script>
 
 <?php include BASE_PATH . "views/footer.php";
