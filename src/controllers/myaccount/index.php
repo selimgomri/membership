@@ -206,6 +206,67 @@
   <p class="border-bottom border-gray pb-2">Change your password regularly to keep your account safe</p>
   <p class="mb-0"><a href="<?php echo autoUrl("myaccount/password"); ?>" class="btn btn-outline-dark">Change my Password</a></p>
 </div>
+<?
+if ($_SESSION['AccessLevel'] == "Parent") {
+  $contacts = new EmergencyContacts($link);
+  $contacts->byParent($userID);
+
+  $contactsArray = $contacts->getContacts();
+  ?>
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+    <h2>My Emergency Contacts</h2>
+    <p class="border-bottom border-gray pb-2 mb-0">
+      These are your emergency contacts
+    </p>
+    <? if (sizeof($contactsArray) == 0) { ?>
+      <div class="alert alert-warning mt-3">
+        <p class="mb-0">
+          <strong>
+            You have no Emergency Contacts
+          </strong>
+        </p>
+        <p class="mb-0">
+          As a result, we'll only be able to try and contact you in an emergency
+        </p>
+      </div>
+    <? } else { ?>
+    <div class="mb-3">
+		<? for ($i = 0; $i < sizeof($contactsArray); $i++) {
+			?>
+			<div class="media pt-3">
+				<div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+					<div class="row align-items-center	">
+						<div class="col-9">
+							<p class="mb-0">
+								<strong class="d-block">
+									<? echo $contactsArray[$i]->getName(); ?>
+								</strong>
+								<a href="tel:<? echo $contactsArray[$i]->getContactNumber(); ?>">
+									<? echo $contactsArray[$i]->getContactNumber(); ?>
+								</a>
+							</p>
+						</div>
+						<div class="col text-right">
+							<a href="<? echo autoUrl("emergencycontacts/edit/" .
+							$contactsArray[$i]->getID()); ?>" class="btn btn-primary">
+								Edit
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?
+		} ?>
+		</div>
+    <? } ?>
+		<p class="mb-0">
+			<a href="<? echo autoUrl("emergencycontacts/new"); ?>" class="btn btn-outline-dark">
+				Add New
+			</a>
+		</p>
+  </div>
+  <?
+} ?>
 <div class="my-3 p-3 bg-white rounded box-shadow">
   <h2>Technical Details</h2>
   <p class="border-bottom border-gray pb-2">Some things you can't change about your account</p>

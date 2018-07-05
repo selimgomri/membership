@@ -3,4 +3,9 @@
 		Galas open for entries
 	</h2>
 	<? echo upcomingGalas($link, false); ?>
+	<p class="mb-0">
+		Enter via <a class="frontpage-link" target="_blank"
+		href="https://www.chesterlestreetasc.co.uk/competitions/enteracompetition/">My
+		Account</a>
+	</p>
 </div>

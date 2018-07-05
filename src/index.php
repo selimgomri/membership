@@ -33,7 +33,7 @@ ini_set('session.cookie_secure', 1);
 // Use strict mode
 ini_set('session.use_strict_mode', 1);
 
-// Use strict mode
+// Session ID length
 ini_set('session.sid_length', 128);
 
 // SessionName
@@ -336,6 +336,12 @@ else {
     global $link;
 
     include 'controllers/notify/router.php';
+  });
+
+  $route->group('/emergencycontacts', function() {
+    global $link;
+
+    include 'controllers/emergencycontacts/router.php';
   });
 
   $route->group('/webhooks', function() {

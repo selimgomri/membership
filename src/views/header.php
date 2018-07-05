@@ -105,6 +105,9 @@ Chester-le-Street ASC is a non profit private members club.
       <li class="nav-item">
 			  <a class="nav-link" href="<?php echo autoUrl("swimmers") ?>">My Swimmers</a>
 		  </li>
+      <li class="nav-item">
+			  <a class="nav-link" href="<?php echo autoUrl("emergencycontacts") ?>">Emergency Contacts</a>
+		  </li>
       <?php }
       else { ?>
         <li class="nav-item">

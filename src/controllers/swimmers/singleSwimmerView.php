@@ -184,6 +184,58 @@ $content .= '
       $content .= '<p class="mb-0">There are no photography limitiations for this swimmer. Please do ensure you\'ve read the club and ASA policies on photography before taking any pictures.</p>';
     }
   $content .= '</div>';
+  $sql = "SELECT `Forename`, `Surname`, users.UserID, `Mobile` FROM `members`
+  INNER JOIN `users` ON users.UserID = members.UserID WHERE `MemberID` =
+  '$id';";
+  $result = mysqli_query($link, $sql);
+  $content .= '
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+      <h2>Emergency Contacts</h2>';
+      if (mysqli_num_rows($result) == 0) {
+      $content .= '<p class="lead">
+        There are no contact details available.
+      </p>
+      <p class="mb-0">This is because there is no Parent account connected</p>';
+    } else {
+      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+      $pUserID = mysqli_real_escape_string($link, $row['UserID']);
+      $contacts = new EmergencyContacts($link);
+      $contacts->byParent($pUserID);
+      $contactsArray = $contacts->getContacts();
+      $content .= '<p class="lead border-bottom border-gray pb-2 mb-0">
+        In an emergency you should try to contact
+      </p>';
+      $content .= '<div class="mb-3">';
+      $content .= '<div class="media pt-3">
+        <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+          <p class="mb-0">
+            <strong class="d-block">
+              ' . $row['Forename'] . ' ' . $row['Surname'] . ' (Account Parent)
+            </strong>
+            <a href="tel:' . $row['Mobile'] . '">
+              ' . $row['Mobile'] . '
+            </a>
+          </p>
+        </div>
+      </div>';
+  		for ($i = 0; $i < sizeof($contactsArray); $i++) {
+  			$content .= '<div class="media pt-3">
+  				<div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+						<p class="mb-0">
+							<strong class="d-block">
+								' . $contactsArray[$i]->getName() . '
+							</strong>
+							<a href="tel:' . $contactsArray[$i]->getContactNumber() . '">
+								' . $contactsArray[$i]->getContactNumber() . '
+							</a>
+						</p>
+  				</div>
+  			</div>';
+      }
+  		$content .= '</div>';
+      $content .= '<p class="mb-0">Make sure you understand the Emergency Operating Procedures</p>';
+    }
+  $content .= '</div>';
   $content.= '
   <div class="my-3 p-3 bg-white rounded box-shadow">
     <h2 class="border-bottom border-gray pb-2 mb-0">Best Times</h2>

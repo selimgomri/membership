@@ -90,13 +90,13 @@
 if ($_SESSION['AccessLevel'] == "Coach" || $_SESSION['AccessLevel'] == "Admin") { ?>
 <div class="my-3 p-3 bg-white rounded box-shadow">
   <h2 class="border-bottom border-gray pb-2 mb-0">Quick Tasks</h2>
-  <div class="media text-muted pt-3">
+  <div class="media  pt-3">
     <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
       <a href="<?php echo autoUrl('attendance/register') ?>"><strong class="d-block text-gray-dark">Register</strong></a>
       Take the register for your squad
     </p>
   </div>
-  <div class="media text-muted pt-3">
+  <div class="media  pt-3">
     <p class="media-body pb-3 mb-0 lh-125">
       <a href="<?php echo autoUrl('swimmers') ?>"><strong class="d-block text-gray-dark">Swimmer Notes</strong></a>
       Check important medical and other notes from parents
@@ -104,16 +104,39 @@ if ($_SESSION['AccessLevel'] == "Coach" || $_SESSION['AccessLevel'] == "Admin") 
   </div>
 </div>
 <?php }
+if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach") { ?>
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+    <h2 class="border-bottom border-gray pb-2 mb-0">What to do in an Emergency</h2>
+    <div class="media pt-3">
+      <ol class="mb-0">
+        <li>
+          Follow the Pool's <a
+          href="https://www.chesterlestreetasc.co.uk/wp-content/uploads/2014/01/Emergency-Action-Plan.pdf"
+          target=" ">Emergency Operating Procedures</a>
+        </li>
+        <li>
+          You can get a swimmer's Emergency Contacts via <a href="<? echo
+          autoUrl("swimmers"); ?>" target="_blank">Swimmers</a>
+        </li>
+        <li>
+          If an incident affects a whole squad, use <a href="<? echo
+          autoUrl("notify"); ?>" target="_blank">Notify</a> to contact all
+          parents by Email
+        </li>
+      </ol>
+    </div>
+  </div>
+<? }
 if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas" || $_SESSION['AccessLevel'] == "Coach") { ?>
   <div class="my-3 p-3 bg-white rounded box-shadow">
     <h2 class="border-bottom border-gray pb-2 mb-0">Gala Tasks</h2>
-    <div class="media text-muted pt-3">
+    <div class="media  pt-3">
       <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
         <a href="<?php echo autoUrl('galas') ?>"><strong class="d-block text-gray-dark">Check Entries</strong></a>
         Check entries for galas
       </p>
     </div>
-    <div class="media text-muted pt-3">
+    <div class="media  pt-3">
       <p class="media-body pb-3 mb-0 lh-125">
         <a href="<?php echo autoUrl('galas/addgala') ?>"><strong class="d-block text-gray-dark">Add a Gala</strong></a>
         Add a gala to the system to allow entries
@@ -123,31 +146,31 @@ if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas" |
 <?php } ?>
 
 <?php if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach") { ?>
-<div class="my-3 p-3 bg-white rounded box-shadow">
-  <h2>Access G Suite</h2>
-  <p class="border-bottom border-gray pb-2 mb-0">If you have a club G Suite Account, get quick access to online services here</p>
-  <div class="media text-muted pt-3">
-    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-      <a href="http://mail.chesterlestreetasc.co.uk" target="_blank"><strong class="d-block text-gray-dark">Mail</strong></a>
-      Access your club email
-    </p>
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+    <h2>Access G Suite</h2>
+    <p class="border-bottom border-gray pb-2 mb-0">If you have a club G Suite Account, get quick access to online services here</p>
+    <div class="media  pt-3">
+      <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+        <a href="http://mail.chesterlestreetasc.co.uk" target="_blank"><strong class="d-block text-gray-dark">Mail</strong></a>
+        Access your club email
+      </p>
+    </div>
+    <div class="media  pt-3">
+      <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+        <a href="http://drive.chesterlestreetasc.co.uk" target="_blank"><strong class="d-block text-gray-dark">Google Drive</strong></a>
+        Create Docs, Sheets, Slides and more - Club letterhead templates are available
+      </p>
+    </div>
+    <div class="media  pt-3">
+      <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+        <a href="http://calendar.chesterlestreetasc.co.uk" target="_blank"><strong class="d-block text-gray-dark">Calendar</strong></a>
+        Manage your schedule and plan meetings with ease
+      </p>
+    </div>
+    <span class="d-block text-right mt-3">
+      <a href="https://www.google.com/accounts/AccountChooser?hd=chesterlestreetasc.co.uk&continue=https://apps.google.com/user/hub">More</a>
+    </span>
   </div>
-  <div class="media text-muted pt-3">
-    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-      <a href="http://drive.chesterlestreetasc.co.uk" target="_blank"><strong class="d-block text-gray-dark">Google Drive</strong></a>
-      Create Docs, Sheets, Slides and more - Club letterhead templates are available
-    </p>
-  </div>
-  <div class="media text-muted pt-3">
-    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-      <a href="http://calendar.chesterlestreetasc.co.uk" target="_blank"><strong class="d-block text-gray-dark">Calendar</strong></a>
-      Manage your schedule and plan meetings with ease
-    </p>
-  </div>
-  <span class="d-block text-right mt-3">
-    <a href="https://www.google.com/accounts/AccountChooser?hd=chesterlestreetasc.co.uk&continue=https://apps.google.com/user/hub">More</a>
-  </span>
-</div>
 <?php } ?>
 
 </div>
