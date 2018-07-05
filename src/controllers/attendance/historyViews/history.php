@@ -12,11 +12,10 @@ $content = '
       View attendance records for up to the last 20 weeks
     </p>
   </div>
-  <div class="media text-muted pt-3">
+  <div class="media pt-3">
     <p class="media-body pb-3 mb-0 lh-125">
-      <!--<a href="history/swimmers">--><strong class="d-block text-gray-dark">Squad Attendance</strong><!--</a>-->
+      <a href="history/squads"><strong class="d-block">Squad Attendance</strong></a>
       View attendance for previous sessions across full squads
-      <span class="card-text text-muted mb-0">Coming Soon</span>
     </p>
   </div>
 </div>

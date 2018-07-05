@@ -90,18 +90,15 @@ for ($i=0; $i<$presentCount; $i++) {
 
 	if ($att['AttendanceBoolean'] == 1) {
 		$content .= '
-		<i class="d-none d-print-inline-block" aria-hidden="true">✔</i>
-		<div class="custom-control custom-checkbox d-print-none">
-	    <input class="custom-control-input" checked="" onclick="return false;" type="checkbox">
-			<label class="custom-control-label">Present?</label>
+		<div>
+	    &#10003;
 	  </div>
 		';
 	}
 	else {
 		$content .= '
-		<div class="custom-control custom-checkbox d-print-none">
-	    <input class="custom-control-input" onclick="return false;"type="checkbox">
-			<label class="custom-control-label">Present?</label>
+		<div class="d-print-none">
+
 	  </div>
 		';
 	}

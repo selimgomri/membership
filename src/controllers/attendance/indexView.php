@@ -19,9 +19,9 @@ $content .= '
 		</p>
 	</div>
 	<div class="media text-muted pt-3">
-		<p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray text-muted">
-			<!--<a href="' . autoUrl("attendance/history/squads/") . '">--><strong class="d-block text-gray-dark">Squad Attendance</strong><!--</a>-->
-			View squad attendance records for up to the last twenty weeks (Coming Soon)
+		<p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+			<a href="' . autoUrl("attendance/history/squads/") . '"><strong class="d-block text-gray-dark">Squad Attendance</strong></a>
+			View squad attendance for the current week
 		</p>
 	</div>
 	<span class="d-block text-right mt-3">
