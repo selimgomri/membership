@@ -19,10 +19,11 @@ if (isset($_POST['squad'])) {
 } ?>
 <div class="container">
   <h1>Swimmer Directory</h1>
-  <p class="lead">A list of swimmers.</p>
-  <?php if ($access == "Committee" || $access == "Admin") { ?>
-    <p><a href="<?php echo autoUrl("swimmers/addmember");?>" class="btn btn-outline-dark">Add member</a> <a href="<?php echo autoUrl("swimmers/accesskeys"); ?>" class="btn btn-outline-dark">Access Keys</a></p>
-  <?php }
+  <div class="d-print-none">
+    <p class="lead">A list of swimmers.</p>
+    <?php if ($access == "Committee" || $access == "Admin") { ?>
+      <p><a href="<?php echo autoUrl("swimmers/addmember");?>" class="btn btn-outline-dark">Add member</a> <a href="<?php echo autoUrl("swimmers/accesskeys"); ?>" class="btn btn-outline-dark">Access Keys</a></p>
+    <?php }
   $sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
   $result = mysqli_query($link, $sql);
   $squadCount = mysqli_num_rows($result);
@@ -42,10 +43,12 @@ if (isset($_POST['squad'])) {
       ?><option value="<?php echo $row['SquadID']; ?>"><?php echo $row['SquadName']; ?></option><?php
     }
   } ?>
-  </select></div>
-  <div class="col-md-6 mb-3">
-    <label class="sr-only" for="search">Search by Surname</label>
-    <input class="form-control" placeholder="Surname" id="search" name="search" value="<?php echo $search; ?>">
+    </select></div>
+    <div class="col-md-6 mb-3">
+      <label class="sr-only" for="search">Search by Surname</label>
+      <input class="form-control" placeholder="Surname" id="search" name="search" value="<?php echo $search; ?>">
+    </div>
+
   </div>
 
   </div>

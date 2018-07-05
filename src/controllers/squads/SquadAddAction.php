@@ -21,7 +21,7 @@ $squadKey = generateRandomString(8);
 if ($squadName != null && $squadFee != null) {
   $sql = "INSERT INTO `squads` (SquadName, SquadFee, SquadCoach, SquadTimetable, SquadCoC, SquadKey) VALUES ('$squadName', '$squadFee', '$squadCoach', '$squadTimetable', '$squadCoC', '$squadKey');";
   $result = mysqli_query($link, $sql);
-  headers("Location: " . autoUrl('squads/'));
+  header("Location: " . autoUrl('squads/'));
 }
 
 ?>

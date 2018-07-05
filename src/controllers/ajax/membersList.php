@@ -9,13 +9,39 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     // get the search term parameter from post
     $search = mysqli_real_escape_string($link, htmlentities($_POST["search"]));
 
-    // Search the database for the results
-		if ($squadID == "allSquads") {
-	    $sql = "SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.DateOfBirth, squads.SquadID FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MSurname LIKE '%$search%' ORDER BY `members`.`MForename` , `members`.`MSurname` ASC ;";
-	  }
-	  else {
-	    $sql = "SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.DateOfBirth FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE squads.SquadID = '$squadID' AND members.MSurname LIKE '%$search%' ORDER BY `members`.`MForename` , `members`.`MSurname` ASC;";
-	  }
+    if ($_POST['type'] == "orphan") {
+      // Search the database for the results
+  		if ($squadID == "allSquads") {
+  	    $sql = "SELECT members.MemberID, members.MForename, members.MSurname,
+  	    members.ASANumber, squads.SquadName, members.DateOfBirth, squads.SquadID
+  	    FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID)
+  	    WHERE members.UserID IS NULL AND members.MSurname LIKE '%$search%' ORDER
+  	    BY `members`.`MForename` , `members`.`MSurname` ASC ;";
+  	  }
+  	  else {
+  	    $sql = "SELECT members.MemberID, members.MForename, members.MSurname,
+  	    members.ASANumber, squads.SquadName, members.DateOfBirth FROM (members
+  	    INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE
+  	    members.UserID IS NULL AND squads.SquadID = '$squadID' AND
+  	    members.MSurname LIKE '%$search%' ORDER BY `members`.`MForename` ,
+  	    `members`.`MSurname` ASC;";
+  	  }
+    } else {
+      if ($squadID == "allSquads") {
+  	    $sql = "SELECT members.MemberID, members.MForename, members.MSurname,
+  	    members.ASANumber, squads.SquadName, members.DateOfBirth, squads.SquadID
+  	    FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID)
+  	    WHERE members.MSurname LIKE '%$search%' ORDER BY `members`.`MForename` ,
+  	    `members`.`MSurname` ASC ;";
+  	  }
+  	  else {
+  	    $sql = "SELECT members.MemberID, members.MForename, members.MSurname,
+  	    members.ASANumber, squads.SquadName, members.DateOfBirth FROM (members
+  	    INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE
+  	    squads.SquadID = '$squadID' AND members.MSurname LIKE '%$search%' ORDER
+  	    BY `members`.`MForename` , `members`.`MSurname` ASC;";
+  	  }
+    }
   }
 
   $result = mysqli_query($link, $sql);

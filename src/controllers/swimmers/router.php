@@ -35,6 +35,13 @@ else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {
 	  require('swimmerDirectory.php');
 	});
 
+	if ($access == "Admin") {
+		$this->get('/orphaned', function() {
+	    global $link;
+		  require('swimmerOrphaned.php');
+		});
+	}
+
 	$this->post('/ajax/swimmerDirectory', function() {
     global $link;
 	  include BASE_PATH . "controllers/ajax/membersList.php";
