@@ -102,13 +102,44 @@ Chester-le-Street ASC is a non profit private members club.
 		  <li class="nav-item">
 			  <a class="nav-link" href="<?php echo autoUrl("") ?>">Dashboard</a>
 		  </li>
-		  <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("myaccount") ?>">My Account</a>
-		  </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="myAccountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          My Account
+        </a>
+        <div class="dropdown-menu" aria-labelledby="myAccountDropdown">
+          <a class="dropdown-item" href="<?php echo autoUrl("myaccount") ?>">Profile</a>
+          <a class="dropdown-item" href="<?php echo autoUrl("myaccount/password") ?>">Password</a>
+        </div>
+      </li>
       <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-      <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("swimmers") ?>">My Swimmers</a>
-		  </li>
+        <?
+        $user = mysqli_real_escape_string($link, $_SESSION['UserID']);
+        $getSwimmers = "SELECT * FROM `members` WHERE `UserID` = '$user' ORDER BY `MForename` ASC, `MSurname` ASC;";
+        $getSwimmers = mysqli_query($link, $getSwimmers);
+        ?>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="swimmersDropdown"
+          role="button" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+            My Swimmers
+          </a>
+          <div class="dropdown-menu" aria-labelledby="swimmersDropdown">
+            <a class="dropdown-item" href="<?php echo autoUrl("swimmers") ?>">Swimmers Home</a>
+            <? if (mysqli_num_rows($getSwimmers) > 0) { ?>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">My Swimmers</h6>
+            <? for ($i = 0; $i < mysqli_num_rows($getSwimmers); $i++) {
+              $getSwimmerRow = mysqli_fetch_array($getSwimmers, MYSQLI_ASSOC); ?>
+              <a class="dropdown-item" href="<?php echo autoUrl("swimmers/" .
+              $getSwimmerRow['MemberID']) ?>"><? echo
+              $getSwimmerRow['MForename'] . " " . $getSwimmerRow['MSurname'];
+              ?></a>
+            <? } ?>
+            <? } else { ?>
+              <a class="dropdown-item" href="<?php echo autoUrl("myaccount/addswimmer") ?>">Add Swimmers</a>
+            <? } ?>
+          </div>
+        </li>
       <li class="nav-item">
 			  <a class="nav-link" href="<?php echo autoUrl("emergencycontacts") ?>">Emergency Contacts</a>
 		  </li>
@@ -146,28 +177,32 @@ Chester-le-Street ASC is a non profit private members club.
           <div class="dropdown-menu" aria-labelledby="paymentsAdminDropdown">
             <a class="dropdown-item" href="<?php echo autoUrl("payments") ?>">Payments Home</a>
             <a class="dropdown-item" href="<?php echo autoUrl("payments/history") ?>">Payment Status</a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header"><? echo date("F Y"); ?></h6>
             <a class="dropdown-item" href="<?php echo autoUrl("payments/history/status/" . date("Y/m") . "/squads") ?>">
-              <? echo date("F Y"); ?> Squad Fees
+              Squad Fees
             </a>
             <a class="dropdown-item" href="<?php echo autoUrl("payments/history/status/" . date("Y/m") . "/extras") ?>">
-              <? echo date("F Y"); ?> Extra Fees
+              Extra Fees
             </a>
             <?
             $lm = date("Y/m", strtotime("first day of last month"));
             $lms = date("F Y", strtotime("first day of last month"));
             ?>
+            <h6 class="dropdown-header"><? echo $lms; ?></h6>
             <a class="dropdown-item" href="<?php echo autoUrl("payments/history/status/" . $lm . "/squads") ?>">
-              <? echo $lms; ?> Squad Fees
+              Squad Fees
             </a>
             <a class="dropdown-item" href="<?php echo autoUrl("payments/history/status/" . $lm . "/extras") ?>">
-              <? echo $lms; ?> Extra Fees
+              Extra Fees
             </a>
             <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">GoCardless Accounts</h6>
             <a class="dropdown-item" href="https://manage.gocardless.com" target="_blank">
-              GoCardless Live
+              Live
             </a>
             <a class="dropdown-item" href="https://manage-sandbox.gocardless.com" target="_blank">
-              GoCardless Sandbox
+              Sandbox
             </a>
           </div>
         </li>
@@ -206,7 +241,7 @@ Chester-le-Street ASC is a non profit private members club.
       <?php } ?>
 		</ul>
     <?php if (!empty($_SESSION['LoggedIn'])) { ?>
-    <a class="btn btn-outline-light my-2 my-sm-0" href="<?php echo autoUrl("logout") ?>">Logout</a>
+    <a class="btn btn-sm btn-outline-light my-2 my-sm-0" href="<?php echo autoUrl("logout") ?>">Logout</a>
     <?php } ?>
 	  </div>
 

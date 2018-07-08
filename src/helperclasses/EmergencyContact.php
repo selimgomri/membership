@@ -4,6 +4,8 @@
  * An instance of this class should be globally accessible
  */
 
+use Respect\Validation\Validator as v;
+
 class EmergencyContact {
 	private $name;
 	private $contactNumber;
@@ -16,9 +18,13 @@ class EmergencyContact {
   }
 
 	public function new($name, $contactNumber, $user) {
-		$this->name = $name;
-		$this->contactNumber = $contactNumber;
-		$this->user = $contactNumber;
+		$this->name = ucwords($name);
+		if (!v::phone()->validate($contactNumber)) {
+			return false;
+		}
+		$this->contactNumber = mysqli_real_escape_string($this->dbconn,
+		preg_replace('/\D/', '', $contactNumber));
+		$this->user = $user;
   }
 
 	public function existing($contactId, $user, $name, $contactNumber) {
@@ -28,19 +34,43 @@ class EmergencyContact {
 		$this->contactNumber = $contactNumber;
   }
 
+	public function getByContactID($contactId) {
+		$this->contactId = mysqli_real_escape_string($this->dbconn, $contactId);
+		if ($this->dbconn == null) {
+			return false;
+		}
+		$sql = "SELECT * FROM `emergencyContacts` WHERE `ID` = '$this->contactId';";
+		$result = mysqli_query($this->dbconn, $sql);
+		if (mysqli_num_rows($result) == 0) {
+			return false;
+		}
+		$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+		$this->user = $row['UserID'];
+		$this->name = $row['Name'];
+		$this->contactNumber = $row['ContactNumber'];
+  }
+
 	public function getName() {
 		return $this->name;
 	}
 
 	public function getContactNumber() {
-		return $this->ContactNumber;
+		return $this->contactNumber;
+	}
+
+	public function getID() {
+		return $this->contactId;
+	}
+
+	public function getUserID() {
+		return $this->user;
 	}
 
 	public function setName($name) {
 		if ($this->dbconn == null) {
 			return false;
 		}
-		$this->name = mysqli_real_escape_string($this->dbconn, $name);
+		$this->name = mysqli_real_escape_string($this->dbconn, ucwords($name));
 		$sql = "UPDATE `emergencyContacts` SET `Name` =
 		'$this->name' WHERE `ID` = '$this->contactId';";
 		if (mysqli_query($this->dbconn, $sql)) {
@@ -53,8 +83,11 @@ class EmergencyContact {
 		if ($this->dbconn == null) {
 			return false;
 		}
+		if (!v::phone()->validate($contactNumber)) {
+			return false;
+		}
 		$this->contactNumber = mysqli_real_escape_string($this->dbconn,
-		$contactNumber);
+		preg_replace('/\D/', '', $contactNumber));
 		$sql = "UPDATE `emergencyContacts` SET `ContactNumber` =
 		'$this->contactNumber' WHERE `ID` = '$this->contactId';";
 		if (mysqli_query($this->dbconn, $sql)) {
