@@ -84,7 +84,11 @@ Chester-le-Street ASC is a non profit private members club.
   d-print-none justify-content-between" role="navigation">
       <a class="navbar-brand" href="<?php echo autoUrl("") ?>">
         <?php if ((empty($_SESSION['LoggedIn']) || $_SESSION['AccessLevel'] ==
-        "Parent")) { ?>Membership<?php } else { ?>CLS MMS<?php } ?>
+        "Parent")) { ?>
+          Membership
+        <?php } else { ?>
+          <img src="<? echo autoUrl("img/chesterIcon.svg"); ?>" width="20" height="20">
+        <?php } ?>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse"
       data-target="#chesterNavbar" aria-controls="chesterNavbar"
@@ -141,6 +145,23 @@ Chester-le-Street ASC is a non profit private members club.
           </a>
           <div class="dropdown-menu" aria-labelledby="paymentsAdminDropdown">
             <a class="dropdown-item" href="<?php echo autoUrl("payments") ?>">Payments Home</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("payments/history") ?>">Payment Status</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("payments/history/status/" . date("Y/m") . "/squads") ?>">
+              <? echo date("F Y"); ?> Squad Fees
+            </a>
+            <a class="dropdown-item" href="<?php echo autoUrl("payments/history/status/" . date("Y/m") . "/extras") ?>">
+              <? echo date("F Y"); ?> Extra Fees
+            </a>
+            <?
+            $lm = date("Y/m", strtotime("first day of last month"));
+            $lms = date("F Y", strtotime("first day of last month"));
+            ?>
+            <a class="dropdown-item" href="<?php echo autoUrl("payments/history/status/" . $lm . "/squads") ?>">
+              <? echo $lms; ?> Squad Fees
+            </a>
+            <a class="dropdown-item" href="<?php echo autoUrl("payments/history/status/" . $lm . "/extras") ?>">
+              <? echo $lms; ?> Extra Fees
+            </a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="https://manage.gocardless.com" target="_blank">
               GoCardless Live

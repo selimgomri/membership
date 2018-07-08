@@ -49,8 +49,15 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 					<?
 					for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 						$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-						?>
-						<tr>
+						if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out") {
+							?><tr class="table-success"><?
+						} else if ($row['Status'] == "failed" || $row['Status'] == "charged_back") {
+							?><tr class="table-danger"><?
+						} else if ($row['Status'] == "cust_not_dd") {
+							?><tr class="table-warning"><?
+						} else {
+							?><tr><?
+						}?>
 							<td>
 								<? echo $row['Forename'] . " " . $row['Surname']; ?>
 							</td>

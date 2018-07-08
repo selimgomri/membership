@@ -33,20 +33,25 @@
 			      DH3 3QH
 			    </address>
 				</div>
-				<div class="col-sm-6 col-md-3">
+				<div class="col">
           <ul class="list-unstyled">
   					<li>
               <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/"
-              target="_blank" title="CLS ASC General Privacy Policy">Privacy
-              Policy</a>
+              target="_blank" title="CLS ASC General Privacy Policy">
+								Our Privacy Policy
+							</a>
             </li>
 						<li>
               <a href="<? echo autoUrl("notify"); ?>" target="_self"
-              title="About our Notify Email Service">Notify Help</a>
+              title="About our Notify Email Service">
+								Emails from us
+							</a>
             </li>
             <li>
               <a href="https://github.com/Chester-le-Street-ASC/Membership"
-              target="_blank" title="Membership by CLSASC on GitHub">GitHub</a>
+              target="_blank" title="Membership by CLSASC on GitHub">
+								Software by CLS ASC on GitHub
+								</a>
             </li>
           </ul>
 				</div>
