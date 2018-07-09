@@ -272,12 +272,16 @@ if ($_SESSION['AccessLevel'] == "Parent") {
   <p class="border-bottom border-gray pb-2">Some things you can't change about your account</p>
   <div class="form-group">
     <label for="username">Username</label>
-    <input type="text" class="form-control" name="username" id="username" placeholder="Username" value="<?php echo $username ?>" readonly>
-    <small id="usernameHelp" class="form-text text-muted">You can't change your username.</small>
+    <input type="text" class="form-control" name="username" id="username"
+    placeholder="Username" value="<?php echo $username ?>" readonly>
+    <small id="usernameHelp" class="form-text text-muted">You can't change your
+    username. When we first introduced this software, we asked users to set a
+    username. We no longer do this, but if you did originally set one, you can
+    still use it to log in.</small>
   </div>
   <div class="form-group">
-    <label for="id">Unique User ID</label>
-    <input type="number" class="form-control" name="id" id="id" placeholder="ID" value="<?php echo $userID ?>" readonly>
+    <label for="id">Unique User Identifier</label>
+    <input type="text" class="form-control mono" name="id" id="id" placeholder="ID" value="CLSU<?php echo $userID ?>" readonly>
   </div>
   <div class="form-group">
     <label for="access">Access Level</label>

@@ -23,7 +23,6 @@ include BASE_PATH . "views/header.php";
 			other fees by Direct Debit whenever nessecary.</p>
 
 			<div>
-				<a class="btn btn-outline-success" href="">Save</a>
 				<button type="submit" class="btn btn-success">Save and Continue</button>
 			</div>
 		</form>

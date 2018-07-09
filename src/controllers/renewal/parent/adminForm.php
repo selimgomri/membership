@@ -265,7 +265,6 @@ include BASE_PATH . "views/header.php";
 		} ?>
 
 		<div class="mb-3">
-			<a class="btn btn-outline-success" href="">Save</a>
 			<button type="submit" class="btn btn-success">Save and Continue</button>
 		</div>
 	</form>

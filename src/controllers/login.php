@@ -42,10 +42,11 @@
     }
   }*/
   ?>
-<div class="frontpage1" style="margin-top:-1.0rem;">
+<div class="frontpage1 d-flex flex-column" style="margin-top:-1.0rem;">
+  <div class="mb-auto"></div>
   <div class="container-fluid">
     <div class="row justify-content-center">
-      <div class="col-sm-8 col-md-5 col-lg-6 col-xl-3" style="padding-top:5rem;">
+      <div class="col-sm-8 col-md-5 col-lg-6 col-xl-4 align-middle">
         <div class="my-3 p-3 bg-white rounded box-shadow">
           <h2 class="border-bottom border-gray pb-2 mb-0">Please Login</h2>
           <div class="text-muted pt-3">
@@ -62,7 +63,7 @@
 
               <form method="post" action="<?php echo autoUrl(""); ?>" name="loginform" id="loginform">
                 <div class="form-group">
-                  <label for="username">Email Address or Username</label>
+                  <label for="username">Email Address</label>
                   <input type="text" name="username" id="username" class="form-control form-control-lg" value="<?php if ($errorState == true) { echo $username; } ?>" required autofocus>
                 </div>
                 <div class="form-group">
@@ -73,22 +74,23 @@
                 <p class="small">If this is a shared machine, please ensure you log out at the end of your session.</p>
                 <p><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-block btn-primary"></p>
                 <div class="row">
-                  <div class="col">
-                    <a class="btn btn-block btn-dark" href="<?php echo autoUrl("register") ?>">Create an account</a>
-                  </div>
-                  <div class="col">
-                    <a class="btn btn-block btn-dark" href="<?php echo autoUrl("resetpassword") ?>">Forgot password?</a>
-                  </div>
+                <div class="col">
+                  <a class="btn btn-block btn-dark" href="<?php echo autoUrl("register") ?>">Create an account</a>
                 </div>
-                <!--<span class="small text-center d-block"><a href="register.php">Create an account</a></span>
-                <span class="small text-center d-block"><a href="forgot-password.php">Forgot password?</a></span>-->
-              </form>
-          </div>
+                <div class="col">
+                  <a class="btn btn-block btn-dark" href="<?php echo autoUrl("resetpassword") ?>">Forgot password?</a>
+                </div>
+              </div>
+              <!--<span class="small text-center d-block"><a href="register.php">Create an account</a></span>
+              <span class="small text-center d-block"><a href="forgot-password.php">Forgot password?</a></span>-->
+            </form>
         </div>
-
       </div>
+
     </div>
   </div>
+</div>
+<div class="mt-auto"></div>
 </div>
 <?php
 

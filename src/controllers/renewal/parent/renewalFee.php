@@ -2,8 +2,8 @@
 
 $user = mysqli_real_escape_string($link, $_SESSION['UserID']);
 
-$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
-members.SquadID WHERE `members`.`UserID` = '$user' AND `SquadFee` > '0';";
+$sql = "SELECT * FROM `members` WHERE `members`.`UserID` = '$user' AND
+`ClubPays` = '0';";
 $result = mysqli_query($link, $sql);
 
 $clubFee = 0;
@@ -29,11 +29,11 @@ $member = [];
 
 for ($i = 0; $i < $count; $i++) {
 	$member[$i] = mysqli_fetch_array($result, MYSQLI_ASSOC);
-	if ($member[$i]['ASACategory'] == 1 && $member[$i]['SquadFee'] > 0) {
+	if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ClubPays']) {
 		$asaFees[$i] = 1620;
-	} else if ($member[$i]['ASACategory'] == 2  && $member[$i]['SquadFee'] > 0) {
+	} else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ClubPays']) {
 		$asaFees[$i] = 3300;
-	} else if ($member[$i]['ASACategory'] == 2  && $member[$i]['SquadFee'] > 0) {
+	} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ClubPays']) {
 		$asaFees[$i] = 1250;
 	}
 	$totalFee += $asaFees[$i];
@@ -65,7 +65,8 @@ include BASE_PATH . 'views/header.php';
 		<? if ($payingSwimmerCount > 1) {
 			?>
 			<p class="lead">
-				You pay for a family membership
+				You pay for a family membership, covering all of your swimmers at a
+				reduced cost
 			</p>
 			<?
 		} ?>
@@ -88,7 +89,7 @@ include BASE_PATH . 'views/header.php';
 			<?
 			for ($i = 0; $i < $count; $i++) {
 				$asaFeesString;
-				if ($member[$i]['SquadFee'] == 0 && $member[$i]['ASACategory'] != 0) {
+				if ($member[$i]['ClubPays'] && $member[$i]['ASACategory'] != 0) {
 					$asaFeesString = "0.00 (Paid by club)";
 				} else {
 					$asaFeesString = number_format($asaFees[$i]/100,2,'.','');
@@ -108,9 +109,16 @@ include BASE_PATH . 'views/header.php';
 		</div>
 
 		<h2>Total Fees</h2>
-		<p>Your total renewal fee will be &pound;<? echo $totalFeeString; ?>. By
-		continuing to complete your membership renewal, you confirm that you will
-		pay this amount as part of your next Direct Debit Payment.</p>
+		<p>
+			Your total renewal fee will be &pound;<? echo $totalFeeString; ?>. By
+			continuing to complete your membership renewal, you confirm that you will
+			pay this amount as part of your next Direct Debit Payment.
+		</p>
+		<p>
+			If you have not yet set up a Direct Debit with Chester-le-Street ASC, we
+			will redirect you to our Payments system. You must setup a Direct Debit
+			there and then return to the Renewal system.
+		</p>
 		<p class="mb-0">
 			<button type="submit" class="btn btn-success">
 				Complete Renewal

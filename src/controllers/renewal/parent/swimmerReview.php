@@ -24,7 +24,6 @@ include BASE_PATH . "views/header.php";
 			<? echo mySwimmersTable($link, $userID); ?>
 
 			<div>
-				<a class="btn btn-outline-success" href="">Save</a>
 				<button type="submit" class="btn btn-success">Save and Continue</button>
 			</div>
 		</form>

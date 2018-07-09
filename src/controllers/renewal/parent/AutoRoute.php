@@ -59,6 +59,8 @@ if ($stage == 0) {
 	} else {
 		halt(404);
 	}
+} else if ($stage == 7) {
+	include 'complete.php';
 } else {
 	halt(500);
 }

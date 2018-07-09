@@ -72,7 +72,6 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	  </div>
 
 		<div class="mb-3">
-			<button type="button" class="btn btn-outline-success" value="save">Save</button>
 			<button type="submit" class="btn btn-success">Save and Continue</button>
 		</div>
 	</form>

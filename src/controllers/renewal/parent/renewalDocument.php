@@ -1,6 +1,10 @@
 <?
 
 $userID = mysqli_real_escape_string($link, $_SESSION['UserID']);
+$renewal = mysqli_real_escape_string($link, $renewal);
+$sql = "UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE
+`RenewalID` = '$renewal' AND `UserID` = '$userID';";
+mysqli_query($link, $sql);
 
 $query = "SELECT * FROM users WHERE UserID = '$userID' ";
 $result = mysqli_query($link, $query);
@@ -456,8 +460,9 @@ circumstances. (Ticked boxes confirm photography permission.)
 	} ?>
 
 	<div class="mb-3 d-print-none">
-		<a class="btn btn-outline-success" href="">Save</a>
-		<button type="submit" class="btn btn-success">Save and Continue</button>
+		<a class="btn btn-outline-success" href="<? echo app('request')->curl; ?>">
+			Finish Renewal
+		</a>
 	</div>
 </div>
 
