@@ -3,5 +3,8 @@
   <nav class="nav nav-underline">
     <a class="nav-link" href="<?php echo autoUrl("swimmers")?>">Swimmers</a>
 		<a class="nav-link" href="<?php echo autoUrl("squads/moves")?>">Squad Moves</a>
-  </nav>
+    <? if ($access == "Admin") { ?>
+    <a class="nav-link" href="<?php echo autoUrl("renewal")?>">Membership Renewal</a>
+    <? } ?>
+   </nav>
 </div>

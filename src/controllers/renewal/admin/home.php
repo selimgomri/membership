@@ -9,9 +9,11 @@ $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
 $pagetitle = "Membership Renewal";
 include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/swimmersMenu.php";
 ?>
 
 <div class="container">
+	<div class="my-3 p-3 bg-white rounded box-shadow">
 	<? if (mysqli_num_rows($result) > 0) { ?>
 		<h1>Membership Renewal for <? echo $row['Year']; ?></h1>
 		<p class="lead">Welcome to the Membership Renewal System for <? echo
@@ -34,8 +36,8 @@ include BASE_PATH . "views/header.php";
 			date.
 		</p>
 		<div class="alert alert-danger">
-			<strong>The membership renewal period has not yet started</strong> <br>
-			We'll let you know when this starts
+			<strong>There is no open Renewal Period right now</strong> <br>
+			You'll need to add one first
 		</div>
 	<? } ?>
 	<h2>Previous and Current Renewals</h2>
@@ -48,9 +50,18 @@ include BASE_PATH . "views/header.php";
 					<? echo $renewalArray['Name']; ?> (<? echo date("j F Y",
 					strtotime($renewalArray['StartDate'])); ?> - <? echo date("j F Y",
 					strtotime($renewalArray['EndDate'])); ?>)
+				</a>
 			</li><?
 		} ?>
 	</ol>
+	<h2>Add a new Renewal Period</h2>
+	<p class="mb-0">
+		<a href="<? echo autoUrl("renewal/new"); ?>" class="btn
+		btn-success">
+			Add new Renewal Period
+		</a>
+	</p>
+	</div>
  </div>
 
 <?php include BASE_PATH . "views/footer.php";
