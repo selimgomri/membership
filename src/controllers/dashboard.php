@@ -92,7 +92,7 @@ if ($_SESSION['AccessLevel'] == "Coach" || $_SESSION['AccessLevel'] == "Admin") 
   <h2 class="border-bottom border-gray pb-2 mb-0">Quick Tasks</h2>
   <div class="media  pt-3">
     <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-      <a href="<?php echo autoUrl('attendance/register') ?>"><strong class="d-block text-gray-dark">Register</strong></a>
+      <a href="<?php echo autoUrl('attendance/register') ?>"><strong class="d-block text-gray-dark">Take Register</strong></a>
       Take the register for your squad
     </p>
   </div>

@@ -24,7 +24,7 @@ function notifySend($to, $subject, $message, $name = null) {
   $headers .= "Message-ID: <" . $messageid . ">\r\n";
   $headers .= 'From: Chester-le-Street ASC <noreply@chesterlestreetasc.co.uk>' .
   "\r\n";
-  $headers .= "Reply-To: Enquiries - Chester-le-Street ASC <enquiries@chesterlestreetasc.co.uk>\r\n";
+  $headers .= "Reply-To: Enquiries - CLS ASC <enquiries@chesterlestreetasc.co.uk>\r\n";
   $headers .= "List-Help: <" . autoUrl("notify") . ">\r\n";
   $headers .= "List-ID: CLS ASC Targeted Lists
   <targeted-lists@account.chesterlestreetasc.co.uk>\r\n";

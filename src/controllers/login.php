@@ -71,16 +71,16 @@
                   <input type="password" name="password" id="password" class="form-control form-control-lg" required>
                 </div>
                 <input type="hidden" name="target" value="<?php echo app('request')->path; ?>">
-                <p class="small">If this is a shared machine, please ensure you log out at the end of your session.</p>
                 <p><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-block btn-primary"></p>
-                <div class="row">
-                <div class="col">
-                  <a class="btn btn-block btn-dark" href="<?php echo autoUrl("register") ?>">Create an account</a>
+                <div class="row mb-3">
+                  <div class="col">
+                    <a class="btn btn-block btn-dark" href="<?php echo autoUrl("register") ?>">Create an account</a>
+                  </div>
+                  <div class="col">
+                    <a class="btn btn-block btn-dark" href="<?php echo autoUrl("resetpassword") ?>">Forgot password?</a>
+                  </div>
                 </div>
-                <div class="col">
-                  <a class="btn btn-block btn-dark" href="<?php echo autoUrl("resetpassword") ?>">Forgot password?</a>
-                </div>
-              </div>
+                <p class="small mb-0">Support Helpline: <a href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a></p>
               <!--<span class="small text-center d-block"><a href="register.php">Create an account</a></span>
               <span class="small text-center d-block"><a href="forgot-password.php">Forgot password?</a></span>-->
             </form>

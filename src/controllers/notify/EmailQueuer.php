@@ -1,5 +1,8 @@
 <?php
 
+ignore_user_abort(true);
+set_time_limit(0);
+
 $subject = mysqli_real_escape_string($link, $_POST['subject']);
 $message = mysqli_real_escape_string($link, $_POST['message']);
 
@@ -33,7 +36,7 @@ for ($i = 0; $i < mysqli_num_rows($lists); $i++) {
 	}
 }
 
-$sql = "SELECT DISTINCT users.UserID FROM ((`users` INNER JOIN `members` ON members.UserID = users.UserID) INNER JOIN `targetedListMembers` ON targetedListMembers.ReferenceID = members.MemberID) WHERE " . $query . ";";
+$sql = "SELECT DISTINCT users.UserID FROM ((`users` INNER JOIN `members` ON members.UserID = users.UserID) LEFT JOIN `targetedListMembers` ON targetedListMembers.ReferenceID = members.MemberID) WHERE " . $query . ";";
 $result = mysqli_query($link, $sql);
 
 for ($i = 0; $i < mysqli_num_rows($result); $i++) {
