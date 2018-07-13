@@ -3,13 +3,16 @@ $pagetitle = "Gala Entries";
 $galaID = $surname = null;
 $title = "View Gala Entries by Gala";
 
-$galaIDParam = $search = "";
+$galaIDParam = $search = $sex = "";
 mysqli_real_escape_string(parse_str($_SERVER['QUERY_STRING'], $queries));
 if (isset($queries['galaID'])) {
   $galaIDParam = intval($queries['galaID']);
 }
 if (isset($queries['search'])) {
   $search = $queries['search'];
+}
+if (isset($queries['sex'])) {
+  $sex = $queries['sex'];
 }
 
 $content = "<div class=\"d-print-none\"><p class=\"lead\">Search entries for upcoming galas. Search by Gala or Gala and Surname.</p>";
@@ -39,6 +42,29 @@ for ($i = 0; $i < $galaCount; $i++) {
 }
 $content .= "</select></div></div>
 <div class=\"form-group row\">
+  <label class=\"col-sm-2\" for=\"sex\">Select Sex</label>
+  <div class=\"col\">
+<select class=\"custom-select\" placeholder=\"Select Sex\" id=\"sex\" name=\"sex\">
+<option value=\"all\"";
+if ($sex == "all") {
+  $content .= ' selected ';
+}
+$content .= "
+>All Swimmers</option>
+<option value=\"f\"";
+if ($sex == "f") {
+  $content .= ' selected ';
+}
+$content .= "
+>Female</option>
+<option value=\"m\"";
+if ($sex == "m") {
+  $content .= ' selected ';
+}
+$content .= ">Male</option>
+</select></div></div>
+
+<div class=\"form-group row\">
   <label class=\"col-sm-2\" for=\"gala\">Enter Surname</label>
   <div class=\"col\">
 <input class=\"form-control\" name=\"search\" id=\"search\" value=\"" . $search . "\">
@@ -51,19 +77,19 @@ function getResult() {
   var galaValue = gala.options[gala.selectedIndex].value;
   var search = document.getElementById("search");
   var searchValue = search.value;
-  console.log(galaValue);
-  console.log(searchValue);
+  var sex = document.getElementById("sex");
+  var sexValue = sex.value;
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-        console.log("We got here");
         document.getElementById("output").innerHTML = this.responseText;
-        console.log(this.responseText);
-        window.history.pushState("string", "Title", "' . autoUrl("galas/entries") . '?galaID=" + galaValue + "&search=" + searchValue);
+        window.history.pushState("string", "Title", "' .
+        autoUrl("galas/entries") . '?galaID=" + galaValue + "&sex=" + sexValue +
+        "&search=" + searchValue);
       }
     }
-    var ajaxRequest = "' . autoURL("galas/ajax/entries") . '?galaID=" + galaValue + "&search=" + searchValue;
-    console.log(ajaxRequest);
+    var ajaxRequest = "' . autoURL("galas/ajax/entries") . '?galaID=" +
+    galaValue + "&sex=" + sexValue + "&search=" + searchValue;
     xmlhttp.open("GET", ajaxRequest, true);
     xmlhttp.send();
 }
@@ -72,6 +98,7 @@ getResult();
 
 document.getElementById("galaID").onchange=getResult;
 document.getElementById("search").oninput=getResult;
+document.getElementById("sex").oninput=getResult;
 </script>';
 $content .= '
 <script>

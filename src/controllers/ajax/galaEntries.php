@@ -1,5 +1,16 @@
 <?php
 $access = $_SESSION['AccessLevel'];
+$sex = mysqli_real_escape_string($link, $_REQUEST["sex"]);
+if ($sex == "all") {
+  $sex = "";
+} else if ($sex == "m") {
+  $sex = " AND `Gender` = 'Male' ";
+} else if ($sex == "f") {
+  $sex = " AND `Gender` = 'Female' ";
+} else {
+  halt(500);
+}
+
 $count = 0;
 if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $access == "Galas") {
   $sql = "";
@@ -11,10 +22,18 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
     // Search the database for the results
     if ($galaID == "allGalas") {
-      $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) AND members.MSurname LIKE '%$search%' ORDER BY galas.ClosingDate ASC, galas.GalaDate DESC;";
+      $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
+      galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
+      galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) " .
+      $sex . " AND members.MSurname LIKE '%$search%' ORDER BY galas.ClosingDate
+      ASC, galas.GalaDate DESC;";
     }
     else {
-      $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) AND galas.GalaID = '$galaID' AND members.MSurname LIKE '%$search%';";
+      $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
+      galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
+      galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) " .
+      $sex . " AND galas.GalaID = '$galaID' AND members.MSurname LIKE
+      '%$search%';";
     }
   }
   elseif ((!isset($_REQUEST["galaID"])) && (isset($_REQUEST["search"]))) {
@@ -22,14 +41,20 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $search = mysqli_real_escape_string($link, $_REQUEST["search"]);
 
     // Search the database for the results
-    $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) AND members.MSurname LIKE '%$search%';";
+    $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
+    galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
+    galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) " .
+    $sex . " AND members.MSurname LIKE '%$search%';";
   }
   elseif ((isset($_REQUEST["galaID"])) && (!isset($_REQUEST["search"]))) {
     // get the search term parameter from request
     $galaID = mysqli_real_escape_string($link, $_REQUEST["galaID"]);
 
     // Search the database for the results
-    $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) AND galas.GalaID = '$galaID';";
+    $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
+    galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
+    galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) " .
+    $sex . " AND galas.GalaID = '$galaID';";
   }
   else {
     // Error

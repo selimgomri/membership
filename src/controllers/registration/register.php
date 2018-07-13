@@ -92,27 +92,54 @@
         } ?>
 
         <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" name="emailAuthorise" id="emailAuthorise" value="1" <? echo $email; ?>>
+          <input type="checkbox" class="custom-control-input"
+          name="emailAuthorise" id="emailAuthorise" value="1" <? echo $email; ?>
+          checked>
           <label class="custom-control-label" for="emailAuthorise">
-            I wish to recieve email updates about my squads
+            I wish to recieve important email updates about my squads
           </label>
         </div>
 
         <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" name="smsAuthorise" id="smsAuthorise" value="1" <? echo $sms; ?>>
+          <input type="checkbox" class="custom-control-input"
+          name="smsAuthorise" id="smsAuthorise" value="1" <? echo $sms; ?>
+          checked>
           <label class="custom-control-label" for="smsAuthorise">
-            I wish to recieve text message notifications
+            I wish to recieve text message notifications (We're currently
+            reviewing how we offer this service)
           </label>
         </div>
 
-        <p class="small">We will still need to send you notifications relating to your account from time.</p>
+        <p class="small">
+          We will still need to send you notifications relating to your account
+          from time.
+        </p>
 
         <div class="alert alert-info">
           <p class="mb-0"><strong>Legal Stuff Applies</strong></p>
-          <p>In accordance with European Law, Chester-le-Street ASC is a Data Controller for the purposes of the General Data Protection Regulation.</p>
-          <p>By proceeding you agree to our <a class="alert-link" href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy</a> and the use of your data by Chester-le-Street ASC. Please note that you have also agreed to our use of you and your swimmer's data as part of your registration with the club and with British Swimming and Swim England (Formerly known as the ASA).</p>
-          <p>We will be unable to provide this service for technical reasons if you do not consent to the use of this data.</p>
-          <p class="mb-0">Contact a member of the committee if you have any questions or email <a class="alert-link" href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>.</p>
+          <p>
+            In accordance with European Law, Chester-le-Street ASC, Swim England
+            and British Swimming are Data Controllers for the purposes of the
+            General Data Protection Regulation.
+          </p>
+          <p>
+            By proceeding you agree to our <a class="alert-link"
+            href="https://www.chesterlestreetasc.co.uk/policies/privacy/"
+            target="_blank">Privacy Policy</a> and the use of your data by
+            Chester-le-Street ASC. Please note that you have also agreed to our
+            use of you and your swimmer's data as part of your registration with
+            the club and with British Swimming and Swim England (Formerly known
+            as the ASA).
+          </p>
+          <p>
+            We will be unable to provide this service for technical reasons if
+            you do not consent to the use of this data.
+          </p>
+          <p class="mb-0">
+            Contact a member of the committee if you have any questions or email
+            <a class="alert-link"
+            href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>.
+          </p>
         </div>
         <input type="submit" class="btn btn-outline-dark" value="Register">
       </form>
