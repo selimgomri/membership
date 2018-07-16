@@ -15,7 +15,7 @@ if ($scheduleExists == 0) {
   $redirectFlow = $client->redirectFlows()->create([
       "params" => [
           // This will be shown on the payment pages
-          "description" => "Club fees",
+          "description" => "Club fee payments",
           // Not the access token
           "session_token" => session_id(),
           "success_redirect_url" => autoUrl("payments/setup/3"),

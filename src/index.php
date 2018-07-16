@@ -10,6 +10,8 @@ ini_set('expose_php', 'Off');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
+ini_set('session.gc_maxlifetime', 2419200);
+
 define('DS', DIRECTORY_SEPARATOR, true);
 define('BASE_PATH', __DIR__ . DS, TRUE);
 //Show errors

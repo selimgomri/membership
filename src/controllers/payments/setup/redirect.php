@@ -31,7 +31,7 @@ if ($scheduleExists == 0) {
 		$sql = "SELECT * FROM `paymentPreferredMandate` WHERE `UserID` = '$user';";
 		$count = mysqli_num_rows(mysqli_query($link, $sql));
 		if ($count < 1) {
-			$sql = "SELECT `MandateID` FROM `paymentMandates` WHERE `UserID` = '$user';";
+			$sql = "SELECT `MandateID` FROM `paymentMandates` WHERE `Mandate` = '$mandate';";
 			$result = mysqli_query($link, $sql);
 			if (mysqli_num_rows($result) == 1) {
 				$row = mysqli_fetch_array($result, MYSQLI_ASSOC);

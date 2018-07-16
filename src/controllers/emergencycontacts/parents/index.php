@@ -1,6 +1,10 @@
 <?
 
-$user = $_SESSION['UserID'];
+$user = mysqli_real_escape_string($link, $_SESSION['UserID']);
+
+$sql = "SELECT * FROM `users` WHERE `UserID` = '$user';";
+$res = mysqli_query($link, $sql);
+$row = mysqli_fetch_array($res, MYSQLI_ASSOC);
 
 $contacts = new EmergencyContacts($link);
 $contacts->byParent($user);
@@ -31,6 +35,29 @@ include BASE_PATH . 'views/header.php';
 			unset($_SESSION['AddNewSuccess']);
 		} ?>
 		<div class="mb-3">
+			<div class="media pt-3">
+				<div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+					<div class="row align-items-center	">
+						<div class="col-9">
+							<p class="mb-0">
+								<strong class="d-block">
+									<? echo $row['Forename'] . " " . $row['Surname']; ?> (From My
+									Account)
+								</strong>
+								<a href="tel:<? echo $row['Mobile']; ?>">
+									<? echo $row['Mobile']; ?>
+								</a>
+							</p>
+						</div>
+						<div class="col text-right">
+							<a href="<? echo autoUrl("myaccount"); ?>" class="btn
+							btn-primary">
+								Edit
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
 		<? for ($i = 0; $i < sizeof($contactsArray); $i++) {
 			?>
 			<div class="media pt-3">

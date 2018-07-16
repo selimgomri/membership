@@ -4,9 +4,9 @@
   include BASE_PATH . "views/header.php";
 
 ?>
-<div class="bg-secondary py -3" style="margin-top:-2.0rem;margin-bottom:-1rem;">
+<div class="pb-3">
   <div class="container">
-    <div class="my-3 p-3 bg-white rounded box-shadow">
+    <div class="p-3 bg-white rounded box-shadow">
       <? if (isset($_SESSION['RegistrationGoVerify'])) {
         echo $_SESSION['RegistrationGoVerify'];
         unset($_SESSION['RegistrationGoVerify']);

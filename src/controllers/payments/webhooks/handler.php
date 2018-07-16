@@ -79,37 +79,46 @@ function process_mandate_event($event) {
   	case "cancelled":
       print("Mandate " . $event["links"]["mandate"] . " has been cancelled!\n");
 			$mandate = mysqli_real_escape_string($link, $event["links"]["mandate"]);
-			$sql = "UPDATE `paymentMandates` SET `InUse` = '0' WHERE `Mandate` = '$mandate';";
+
+      $sql = "UPDATE `paymentMandates` SET `InUse` = '0' WHERE `Mandate` = '$mandate';";
 			mysqli_query($link, $sql);
 
 			// Get the user ID, set to another bank if possible and let them know.
-			$sql = "SELECT users.UserID, `Forename`, `Surname`, `EmailAddress` FROM `paymentMandates` INNER JOIN `users` ON users.UserID = paymentMandates.UserID WHERE `Mandate` = '$mandate';";
+			$sql = "SELECT users.UserID, `Forename`, `Surname`, `EmailAddress`,
+			`MandateID` FROM `paymentMandates` INNER JOIN `users` ON users.UserID =
+			paymentMandates.UserID WHERE `Mandate` = '$mandate';";
 			$user = mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC);
+      $mandateID = mysqli_real_escape_string($link, $user['MandateID']);
 
 			// If default unset
-			$sql = "DELETE FROM `paymentPreferredMandate` WHERE `Mandate` = '$mandate';";
+			$sql = "DELETE FROM `paymentPreferredMandate` WHERE `MandateID` =
+			'$mandateID';";
 			mysqli_query($link, $sql);
 
-			$userID = $user['UserID'];
+			$userID = mysqli_real_escape_string($link, $user['UserID']);
 
-			$sql = "UPDATE `paymentPreferredMandate` WHERE `UserID` = '$userID' LIMIT 1;";
-			mysqli_query($link, $sql);
-
-			$sql = "SELECT * FROM `paymentMandates` WHERE `UserID` = '$userID';";
-			$rows = mysqli_num_rows(mysqli_query($link, $sql));
+			$sql = "SELECT * FROM `paymentMandates` WHERE `UserID` = '$userID' AND
+			`InUse` = '1';";
+      $res = mysqli_query($link, $sql);
+			$rows = mysqli_num_rows($res);
 
 			if ($rows == 0) {
-				$message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
+        $message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
 				<p>Your Direct Debit Mandate for Chester-le-Street ASC has been Cancelled. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("") . "</p>
 				<p>Thank you, <br>Chester-le-Street ASC";
 				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has been Cancelled", $message);
 			} else {
-				$message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
+        $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+        $mandateID = mysqli_real_escape_string($link, $row['MandateID']);
+  			$sql = "INSERT INTO `paymentPreferredMandate` (`UserID`, `MandateID`) VALUES ('$userID', '$mandateID');";
+        mysqli_query($link, $sql);
+        $message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
 				<p>Your Direct Debit Mandate for Chester-le-Street ASC has been cancelled. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
 				<p>Go to " . autoUrl("") . " to make any changes.</p>
 				<p>Thank you, <br>Chester-le-Street ASC";
 				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has been Cancelled", $message);
 			}
+
       break;
 		case "transferred":
 			print("Mandate " . $event["links"]["mandate"] . " has been transferred to a new bank!\n");
@@ -131,30 +140,37 @@ function process_mandate_event($event) {
 			mysqli_query($link, $sql);
 
 			// Get the user ID, set to another bank if possible and let them know.
-			$sql = "SELECT users.UserID, `Forename`, `Surname`, `EmailAddress` FROM `paymentMandates` INNER JOIN `users` ON users.UserID = paymentMandates.UserID WHERE `Mandate` = '$mandate';";
+			$sql = "SELECT users.UserID, `Forename`, `Surname`, `EmailAddress`,
+			`MandateID` FROM `paymentMandates` INNER JOIN `users` ON users.UserID =
+			paymentMandates.UserID WHERE `Mandate` = '$mandate';";
 			$user = mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC);
+      $mandateID = mysqli_real_escape_string($link, $user['MandateID']);
 
 			// If default unset
-			$sql = "DELETE FROM `paymentPreferredMandate` WHERE `Mandate` = '$mandate';";
+			$sql = "DELETE FROM `paymentPreferredMandate` WHERE `MandateID` =
+			'$mandateID';";
 			mysqli_query($link, $sql);
 
-			$userID = $user['UserID'];
+			$userID = mysqli_real_escape_string($link, $user['UserID']);
 
-			$sql = "UPDATE `paymentPreferredMandate` WHERE `UserID` = '$userID' LIMIT 1;";
-			mysqli_query($link, $sql);
-
-			$sql = "SELECT * FROM `paymentMandates` WHERE `UserID` = '$userID';";
-			$rows = mysqli_num_rows(mysqli_query($link, $sql));
+			$sql = "SELECT * FROM `paymentMandates` WHERE `UserID` = '$userID' AND
+			`InUse` = '1';";
+      $res = mysqli_query($link, $sql);
+			$rows = mysqli_num_rows($res);
 
 			if ($rows == 0) {
 				$message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
-				<p>Your Direct Debit Mandate for Chester-le-Street ASC has expired. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("") . "</p>
+				<p>Your Direct Debit Mandate for Chester-le-Street ASC has expired. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("payments") . "</p>
 				<p>Thank you, <br>Chester-le-Street ASC";
 				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has Expired", $message);
 			} else {
+        $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+        $mandateID = mysqli_real_escape_string($link, $row['MandateID']);
+  			$sql = "INSERT INTO `paymentPreferredMandate` (`UserID`, `MandateID`) VALUES ('$userID', '$mandateID');";
+        mysqli_query($link, $sql);
 				$message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
 				<p>Your Direct Debit Mandate for Chester-le-Street ASC has expired. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
-				<p>Go to " . autoUrl("") . " to make any changes.</p>
+				<p>Go to " . autoUrl("payments") . " to make any changes.</p>
 				<p>Thank you, <br>Chester-le-Street ASC";
 				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has Expired", $message);
 			}

@@ -168,7 +168,8 @@ if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas" |
       </p>
     </div>
     <span class="d-block text-right mt-3">
-      <a href="https://www.google.com/accounts/AccountChooser?hd=chesterlestreetasc.co.uk&continue=https://apps.google.com/user/hub">More</a>
+      <a target="_blank"
+      href="https://www.google.com/accounts/AccountChooser?hd=chesterlestreetasc.co.uk&continue=https://apps.google.com/user/hub">More</a>
     </span>
   </div>
 <?php } ?>
