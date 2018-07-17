@@ -87,7 +87,12 @@ if ($access != "Parent") {
 
 	$this->post('/addmember', function() {
     global $link;
-	  require('addMember.php');
+	  require('addMemberPost.php');
+	});
+
+	$this->get('/parenthelp/{id}:int', function($id) {
+		global $link;
+		include 'parentSetupHelp.php';
 	});
 }
 

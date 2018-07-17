@@ -111,19 +111,21 @@ if ($count == 1) {
       </div>
     </div>";
   }
-  $content .= "<input type=\"hidden\" value=\"" . $id . "\" name=\"galaID\"><p><button class=\"btn btn-outline-dark\" type=\"submit\" id=\"submit\">Update Gala</button></p>
+  $content .= "<input type=\"hidden\" value=\"" . $id . "\" name=\"galaID\"><p class=\"mb-0\"><button class=\"btn btn-outline-dark\" type=\"submit\" id=\"submit\">Update Gala</button></p>
   ";
 }
 else {
   $pagetitle = "No galas found";
   $title = "No galas found";
-  $content = "<p class=\"lead\">Try going <a href=\"" . autoUrl('galas/competitions') . "\">back to competitions</a>.</p>";
+  $content = "<p class=\"lead mb-0\">Try going <a href=\"" . autoUrl('galas/competitions') . "\">back to competitions</a>.</p>";
 }
 include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
 <div class="container">
-<?php echo "<h1>" . $title . "</h1>";
-echo $content; ?>
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+    <?php echo "<h1>" . $title . "</h1>";
+    echo $content; ?>
+  </div>
 </div>
 <?php include BASE_PATH . "views/footer.php";
 ?>

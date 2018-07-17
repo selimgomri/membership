@@ -1,6 +1,7 @@
 <?php
 $galaName = $length = $venue = $closingDate = $lastDate = $galaFeeConstant = $galaFee = $hyTek = $added = "";
 $added = false;
+$galaFeeConstant = 0;
 $content = "";
 
 if (!empty($_POST['galaname'])) {
@@ -44,8 +45,10 @@ if (!empty($_POST['HyTek'])) {
 if ($hyTek != 1) {
   $hyTek = 0;
 }
+
 //$sql = "INSERT INTO `galas` (`GalaName`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`) VALUES ('$galaName', '$length', '$venue', '$closingDate', '$lastDate', '$galaFeeConstant', '$galaFee', '$hyTek');";
 //echo $sql;
+
 if ($galaName != null && $length != null && $venue != null && $closingDate != null && $lastDate != null && $galaFeeConstant != null) {
   $sql = "INSERT INTO `galas` (`GalaName`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`) VALUES ('$galaName', '$length', '$venue', '$closingDate', '$lastDate', '$galaFeeConstant', '$galaFee', '$hyTek');";
   $action = mysqli_query($link, $sql);
@@ -61,7 +64,9 @@ if ($added) {
   if ($galaFeeConstant == 1) {
     $content .= "<p>The fee for each swim is &pound;" . number_format($galaFee,2,'.','') . "</p>";
   }
-  $content .= "<p><a href=\"../galas\" class=\"btn btn-outline-dark\">Return to Galas</a> <a href=\"addgala\" class=\"btn btn-outline-dark\">Add another</a></p>";
+  $content .= "<p><a href=\"" . autoUrl("galas") . "\" class=\"btn
+  btn-outline-dark\">Return to Galas</a> <a href=\"" . autoUrl("galas/addgala") . "\"
+  class=\"btn btn-outline-dark\">Add another</a></p>";
 
   // Send tweets via twitter
   // Get config for authentication data
@@ -86,4 +91,3 @@ include "galaMenu.php"; ?>
 echo $content; ?>
 </div>
 <?php include BASE_PATH . "views/footer.php";
-?>

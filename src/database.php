@@ -174,9 +174,9 @@ function mySwimmersTable($link, $userID) {
 
   // Get the information about the swimmer
   $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname,
-  users.Forename, users.Surname, users.EmailAddress, members.ASANumber,
-  squads.SquadName, squads.SquadFee FROM ((members INNER JOIN users ON
-  members.UserID = users.UserID) INNER JOIN squads ON members.SquadID =
+  members.ClubPays, users.Forename, users.Surname, users.EmailAddress,
+  members.ASANumber, squads.SquadName, squads.SquadFee FROM ((members INNER JOIN
+  users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID =
   squads.SquadID) WHERE members.UserID = '$userID';";
   $result = mysqli_query($link, $sqlSwim);
   $swimmerCount = mysqli_num_rows($result);
@@ -203,8 +203,13 @@ function mySwimmersTable($link, $userID) {
       $output .= "<tr>
         <td><a href=\"" . $swimmerLink . "\">" . $swimmersRowX['MForename'] . " " .
         $swimmersRowX['MSurname'] . "</a></td>
-        <td>" . $swimmersRowX['SquadName'] . "</td>
-        <td>&pound;" . $swimmersRowX['SquadFee'] . "</td>
+        <td>" . $swimmersRowX['SquadName'] . "</td>";
+        if ($swimmersRowX['ClubPays'] == 0) {
+          $output .= "<td>&pound;" . $swimmersRowX['SquadFee'] . "</td>";
+        } else {
+          $output .= "<td>&pound;0.00 - Exempt</td>";
+        }
+        $output .= "
         <td><a
         href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" .
         $swimmersRowX['ASANumber'] . "\" target=\"_blank\" title=\"ASA
@@ -228,9 +233,9 @@ function mySwimmersTable($link, $userID) {
 
 function mySwimmersMedia($link, $userID) {
   $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname,
-  users.Forename, users.Surname, users.EmailAddress, members.ASANumber,
-  squads.SquadName, squads.SquadFee FROM ((members INNER JOIN users ON
-  members.UserID = users.UserID) INNER JOIN squads ON members.SquadID =
+  members.ClubPays, users.Forename, users.Surname, users.EmailAddress,
+  members.ASANumber, squads.SquadName, squads.SquadFee FROM ((members INNER JOIN
+  users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID =
   squads.SquadID) WHERE members.UserID = '$userID';";
   $result = mysqli_query($link, $sqlSwim);
   $swimmerCount = mysqli_num_rows($result);
@@ -261,8 +266,13 @@ function mySwimmersMedia($link, $userID) {
       text-gray-dark\"><a href=\"" . $swimmerLink . "\">" .
       $swimmersRowX['MForename'] . " " . $swimmersRowX['MSurname'] .
       "</a></strong>
-        " . $swimmersRowX['SquadName'] . " Squad, &pound;" .
-        $swimmersRowX['SquadFee'] . ", " . getAttendanceByID($link,
+        " . $swimmersRowX['SquadName'] . " Squad, ";
+        if ($swimmersRowX['ClubPays'] == 0) {
+          $output .= $swimmersRowX['SquadFee'];
+        } else {
+          $output .= "&pound;0.00 <em>(Exempt)</em>";
+        }
+        $output .= ", " . getAttendanceByID($link,
         $swimmersRowX['MemberID'], 4) . "% <abbr title=\"Attendance over the
         last four weeks\">Attendance</abbr>
     </div>";
@@ -565,8 +575,8 @@ function closedGalas($link, $links = false) {
 function myMonthlyFeeTable($link, $userID) {
   $sql = "SELECT squads.SquadName, squads.SquadID, squads.SquadFee,
   members.MForename, members.MSurname FROM (members INNER JOIN squads ON
-  members.SquadID = squads.SquadID) WHERE members.UserID = '$userID' ORDER BY
-  `squads`.`SquadFee` DESC;";
+  members.SquadID = squads.SquadID) WHERE members.UserID = '$userID' AND
+  members.ClubPays = '0' ORDER BY `squads`.`SquadFee` DESC;";
   $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
   $totalsArray = [];
@@ -638,8 +648,8 @@ function myMonthlyFeeTable($link, $userID) {
 function myMonthlyFeeMedia($link, $userID) {
   $sql = "SELECT squads.SquadName, squads.SquadID, squads.SquadFee,
   members.MForename, members.MSurname FROM (members INNER JOIN squads ON
-  members.SquadID = squads.SquadID) WHERE members.UserID = '$userID' ORDER BY
-  `squads`.`SquadFee` DESC;";
+  members.SquadID = squads.SquadID) WHERE members.UserID = '$userID' AND
+  members.ClubPays = '0' ORDER BY `squads`.`SquadFee` DESC;";
   $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
   $totalsArray = [];
@@ -864,7 +874,7 @@ function autoUrl($relative) {
 function monthlyFeeCost($link, $userID, $format = "decimal") {
   $sql = "SELECT squads.SquadName, squads.SquadID, squads.SquadFee FROM (members
   INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID =
-  '$userID' ORDER BY `squads`.`SquadFee` DESC;";
+  '$userID' AND `ClubPays` = '0' ORDER BY `squads`.`SquadFee` DESC;";
   $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
   $totalCost = 0;
@@ -927,9 +937,9 @@ function monthlyExtraCost($link, $userID, $format = "decimal") {
 
 function swimmers($link, $userID, $fees = false) {
   $sql = "SELECT squads.SquadName, squads.SquadFee, members.MForename,
-  members.MSurname FROM (members INNER JOIN squads ON members.SquadID =
-  squads.SquadID) WHERE members.UserID = '$userID' ORDER BY `squads`.`SquadFee`
-  DESC;";
+  members.MSurname, members.ClubPays FROM (members INNER JOIN squads ON
+  members.SquadID = squads.SquadID) WHERE members.UserID = '$userID' ORDER BY
+  `squads`.`SquadFee` DESC;";
   $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
   $content = "";
@@ -941,8 +951,12 @@ function swimmers($link, $userID, $fees = false) {
 
       $content .= "<li>" . $row['MForename'] . " " . $row['MSurname'];
       if ($fees) {
-        $content .= ", " . $row['SquadName'] . " - &pound;" .
-        number_format($row['SquadFee'],2,'.','');
+        $content .= ", " . $row['SquadName'] . " - &pound;";
+        if ($row['ClubPays'] == 0) {
+          $content .= number_format($row['SquadFee'],2,'.','');
+        } else {
+          $content .= "0.00 <em>(Exempt)</em>";
+        }
       }
       $content .= "</li>";
     }
@@ -1243,5 +1257,3 @@ elseif (((!empty($_SESSION['LoggedIn'])) || (!empty($_SESSION['Username']))) && 
   header("Location: " . autoUrl(""));
 }
 */
-
-?>

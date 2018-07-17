@@ -17,10 +17,10 @@ $sex = $row['Gender'];
 $otherNotes = $row['OtherNotes'];
 
 $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames,
-members.MSurname, members.ASANumber, squads.SquadName, squads.SquadFee,
-squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth,
-members.Gender, members.OtherNotes, members.AccessKey,
-memberPhotography.Website, memberPhotography.Social,
+members.MSurname, members.ASANumber, members.ASACategory, members.ClubPays,
+squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable,
+squads.SquadCoC, members.DateOfBirth, members.Gender, members.OtherNotes,
+members.AccessKey, memberPhotography.Website, memberPhotography.Social,
 memberPhotography.Noticeboard, memberPhotography.FilmTraining,
 memberPhotography.ProPhoto, memberMedical.Conditions, memberMedical.Allergies,
 memberMedical.Medication FROM (((members INNER JOIN squads ON members.SquadID =
@@ -57,6 +57,20 @@ $content = '
     <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
       <strong class="d-block text-gray-dark">ASA Number</strong>
       <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . $rowSwim["ASANumber"] . '" target="_blank" title="ASA Biographical Data"><span class="mono">' . $rowSwim["ASANumber"] . '</span> <i class="fa fa-external-link" aria-hidden="true"></i></a>
+    </p>
+  </div>
+  <div class="media pt-3">
+    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+      <strong class="d-block text-gray-dark">ASA Membership Category</strong>
+      ' . $rowSwim["ASACategory"] . ' <em>(This is not yet accurate)</em>
+    </p>
+  </div>
+  <div class="media pt-3">
+    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+      <strong class="d-block text-gray-dark">Parent Account Setup
+      Information</strong>
+      <a href="' . autoUrl("swimmers/parenthelp/" . $id) . '">Access Key for ' .
+      $rowSwim["MForename"] . '</a>
     </p>
   </div>
   <div class="media pt-3">
@@ -143,6 +157,21 @@ $content = '
       </p>
     </div>';
   }
+  $content .= '
+  <div class="media pt-3">
+    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+      <strong class="d-block text-gray-dark">
+        Exempt from Squad and Membership Fees?
+      </strong>';
+  if ($rowSwim["ClubPays"] == 1){
+    $content .= 'Yes';
+  } else {
+    $content .= 'No <em>(Only swimmers at University are usually exempt from most
+    fees)</em>';
+  }
+  $content .= '
+    </p>
+  </div>';
 	if ($access == "Admin" || $access == "Committee") {
 	  $content .= '
 	  <span class="d-block text-right mt-3">
@@ -356,8 +385,13 @@ $content .= '
 </div>
 <div class="media pt-3">
   <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-    <strong class="d-block text-gray-dark">Squad Fee</strong>
-    &pound;' . $rowSwim['SquadFee'] . '
+    <strong class="d-block text-gray-dark">Squad Fee</strong>';
+    if ($rowSwim["ClubPays"] == 1) {
+      $content .= $rowSwim['MForename'] . ' is Exempt from Squad Fees';
+    } else {
+      $content .= '&pound;' . $rowSwim['SquadFee'];
+    }
+    $content .= '
   </p>
 </div>';
 if ($rowSwim['SquadTimetable'] != "") {
@@ -378,13 +412,15 @@ if ($rowSwim['SquadCoC'] != "") {
     </p>
   </div>';
 }
-$content .= '
-<div class="media pt-3 mb-0">
-  <p class="media-body pb-3 mb-0 lh-125">
-    <strong class="d-block text-gray-dark">Squad Coach</strong>
-    ' . $rowSwim["SquadCoach"] . '
-  </p>
-</div>';
+if ($rowSwim['SquadCoach'] != "") {
+  $content .= '
+  <div class="media pt-3 mb-0">
+    <p class="media-body pb-3 mb-0 lh-125">
+      <strong class="d-block text-gray-dark">Squad Coach</strong>
+      ' . $rowSwim["SquadCoach"] . '
+    </p>
+  </div>';
+}
 $content .= '</div>';
 
 include BASE_PATH . "views/header.php";

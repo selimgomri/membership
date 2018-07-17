@@ -13,7 +13,7 @@ use Respect\Validation\Validator as v;
   $searchCount = mysqli_num_rows($searchResult);
   $row = mysqli_fetch_array($searchResult, MYSQLI_ASSOC);
 
-  if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber) && v::alnum()->validate($asaNumber)) {
+  if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber) && v::alnum()->validate($accessKey)) {
     if ($searchCount == 1) {
       // Allow addition
       $memberID = $row['MemberID'];

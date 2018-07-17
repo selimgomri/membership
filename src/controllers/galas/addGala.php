@@ -68,14 +68,16 @@ $content = "<form method=\"post\" action=\"" . autoUrl("galas/addgala") . "\">
   </div>
 </div>
 <p><button class=\"btn btn-outline-dark\" type=\"submit\" id=\"submit\">Add Gala to Database</button></p>
-<p>If you add this gala, it will immediately be available for parents to enter</p>
+<p class=\"mb-0\">If you add this gala, it will immediately be available for parents to enter</p>
 ";
 
 include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
 <div class="container">
-<?php echo "<h1>" . $title . "</h1>";
-echo $content; ?>
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+    <?php echo "<h1>" . $title . "</h1>";
+    echo $content; ?>
+  </div>
 </div>
 <?php include BASE_PATH . "views/footer.php";
 ?>

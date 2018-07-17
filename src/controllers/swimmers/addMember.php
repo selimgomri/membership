@@ -2,37 +2,11 @@
 $pagetitle = "Add a member";
 $title = "Add a member";
 $content = "<p class=\"lead\">Add a member to the club system.</p>";
-$added = false;
 
-$forename = $middlenames = $surname = $dateOfBirth = $asaNumber = $sex = $squad = $sql = "";
-
-if ((!empty($_POST['forename']))  && (!empty($_POST['surname'])) && (!empty($_POST['datebirth'])) && (!empty($_POST['sex'])) && (!empty($_POST['squad']))) {
-	$forename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
-	$surname = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['surname']))));
-	$dateOfBirth = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['datebirth'])));
-	$sex = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['sex'])));
-	$squad = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['squad'])));
-	if ((!empty($_POST['middlenames']))) {
-		$middlenames = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['middlenames']))));
-	}
-	if ((!empty($_POST['asa']))) {
-		$asaNumber = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['asa'])));
-	}
-
-	$accessKey = generateRandomString(6);
-
-	$sql = "INSERT INTO `members` (`MemberID`, `MForename`, `MMiddleNames`, `MSurname`, `DateOfBirth`, `ASANumber`, `Gender`, `SquadID`, `AccessKey`) VALUES (NULL, '$forename', '$middlenames', '$surname', '$dateOfBirth', '$asaNumber', '$sex', '$squad', '$accessKey');";
-	$action = mysqli_query($link, $sql);
-	if ($action) {
-		$added = true;
-	}
-}
-
-$content = "<div class=\"row\"><div class=\"col col-md-8\">";
-if ($added) {
-$content .= '<div class="alert alert-success">
-	<strong>We added the member</strong>';
-$content .= '</div>';
+$content .= "<div class=\"row\"><div class=\"col col-md-8\">";
+if (isset($_SESSION['ErrorState'])) {
+	$content .= $_SESSION['ErrorState'];
+	unset($_SESSION['ErrorState']);
 }
 // Main Info Content
 $content .= "<form method=\"post\">";
@@ -59,7 +33,20 @@ $content .= "
 $content .= "
 <div class=\"form-group\">
 	<label for=\"asa\">ASA Registration Number</label>
-	<input type=\"test\" class=\"form-control\" id=\"asa\" name=\"asa\" placeholder=\"ASA Registration Numer\">
+	<input type=\"test\" class=\"form-control\" id=\"asa\" name=\"asa\"
+	aria-describedby=\"asaHelp\" placeholder=\"ASA Registration Numer\">
+	<small id=\"asaHelp\" class=\"form-text text-muted\">If a swimmer does not yet
+	have an ASA Number, leave this blank and we'll generate a temporary internal
+	membership number for this swimmer.</small>
+</div>";
+$content .= "
+<div class=\"form-group\">
+	<label for=\"squad\">ASA Membership Category</label>
+	<select class=\"custom-select\" placeholder=\"Select a Category\" id=\"cat\" name=\"cat\">
+		<option value=\"1\">Category 1</option>
+		<option value=\"2\" selected>Category 2</option>
+		<option value=\"3\">Category 3</option>
+	</select>
 </div>";
 $content .= "
 <div class=\"form-group\">
@@ -83,14 +70,27 @@ for ($i = 0; $i < $squadCount; $i++) {
 	$content .= ">" . $row['SquadName'] . "</option>";
 }
 $content .= "</select></div>";
-$content .= "<button type=\"submit\" class=\"btn btn-outline-dark mb-3\">Add Member</button>";
+$content .= "
+<div class=\"form-group\">
+	<label for=\"clubpays\">Club Pays?</label>
+	<select class=\"custom-select\" placeholder=\"Do we pay>\" id=\"clubpays\" name=\"clubpays\" aria-describedby=\"cphelp\">
+		<option value=\"0\" selected>No</option>
+		<option value=\"1\">Yes</option>
+	</select>
+	<small id=\"cphelp\" class=\"form-text text-muted\">If this swimmer will not
+	pay any squad or membership fees, eg if they are at a university, select
+	Yes. They will still pay gala fees.</small>
+</div>";
+$content .= "<button type=\"submit\" class=\"btn btn-success\">Add Member</button>";
 $content .= "</div><div class=\"col-md-4\">";
 $content .= "</div></div>";
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>
 <div class="container">
-<?php echo "<h1>" . $title . "</h1>";
-echo $content; ?>
+	<div class="mb-3 p-3 bg-white rounded box-shadow">
+	<?php echo "<h1>" . $title . "</h1>";
+	echo $content; ?>
+	</div>
 </div>
 <?php include BASE_PATH . "views/footer.php";

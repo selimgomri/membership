@@ -26,17 +26,17 @@ else {
   $pagetitle = $swimmersSecurityCheck['MForename'] . " " .
   $swimmersSecurityCheck['MSurname'];
   $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames,
-  members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName,
-  squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC,
-  members.DateOfBirth, members.Gender, members.OtherNotes, members.AccessKey,
-  memberPhotography.Website, memberPhotography.Social,
-  memberPhotography.Noticeboard, memberPhotography.FilmTraining,
-  memberPhotography.ProPhoto, memberMedical.Conditions, memberMedical.Allergies,
-  memberMedical.Medication FROM ((((members INNER JOIN users ON members.UserID =
-  users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN
-  `memberPhotography` ON members.MemberID = memberPhotography.MemberID) LEFT
-  JOIN `memberMedical` ON members.MemberID = memberMedical.MemberID) WHERE
-  members.MemberID = '$id';";
+  members.MSurname, users.EmailAddress, members.ASANumber, members.ASACategory,
+  members.ClubPays, squads.SquadName, squads.SquadFee, squads.SquadCoach,
+  squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender,
+  members.OtherNotes, members.AccessKey, memberPhotography.Website,
+  memberPhotography.Social, memberPhotography.Noticeboard,
+  memberPhotography.FilmTraining, memberPhotography.ProPhoto,
+  memberMedical.Conditions, memberMedical.Allergies, memberMedical.Medication
+  FROM ((((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN
+  squads ON members.SquadID = squads.SquadID) LEFT JOIN `memberPhotography` ON
+  members.MemberID = memberPhotography.MemberID) LEFT JOIN `memberMedical` ON
+  members.MemberID = memberMedical.MemberID) WHERE members.MemberID = '$id';";
   $resultSwim = mysqli_query($link, $sqlSwim);
   $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
   $age = date_diff(date_create($rowSwim['DateOfBirth']),
@@ -71,6 +71,13 @@ else {
         <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
           <strong class="d-block text-gray-dark">ASA Number</strong>
           <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=<?php echo $rowSwim["ASANumber"]; ?>" target="_blank" title="ASA Biographical Data"><?php echo $rowSwim["ASANumber"]; ?> <i class="fa fa-external-link" aria-hidden="true"></i></a>
+        </p>
+      </div>
+      <div class="media pt-3">
+        <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+          <strong class="d-block text-gray-dark">ASA Membership Category</strong>
+          <?php echo $rowSwim["ASACategory"]; ?> <em>(This is not yet
+          accurate)</em>
         </p>
       </div>
       <div class="media pt-3">
@@ -136,6 +143,19 @@ else {
           </p>
         </div>
       <?php } ?>
+      <div class="media pt-3">
+        <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+          <strong class="d-block text-gray-dark">
+            Exempt from Squad and Membership Fees?
+          </strong>
+          <?php if ($rowSwim["ClubPays"] == 1){ ?>
+            Yes
+          <? } else { ?>
+            No <em>(Only swimmers at University are usually exempt from most
+            fees)</em>
+          <? } ?>
+        </p>
+      </div>
       <div class="media pt-3 border-bottom border-gray">
       <? if (($rowSwim['Website'] != 1 || $rowSwim['Social'] != 1 ||
       $rowSwim['Noticeboard'] != 1 || $rowSwim['FilmTraining'] != 1 ||
@@ -264,6 +284,7 @@ else {
   	    <div class="chart" id="piechart"></div>
   			<div class="chart" id="barchart"></div>
       </div>
+    <? } ?>
     <div class="my-3 p-3 bg-white rounded box-shadow">
       <h2 class="border-bottom border-gray pb-2 mb-0">Squad Information</h2>
       <div class="media pt-3">
@@ -275,7 +296,11 @@ else {
       <div class="media pt-3">
         <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
           <strong class="d-block text-gray-dark">Squad Fee</strong>
-          &pound;<?php echo $rowSwim['SquadFee']; ?>
+          <? if ($rowSwim["ClubPays"] == 1) {
+            echo $rowSwim['MForename']; ?> is Exempt from Squad Fees
+          <? } else { ?>
+            &pound;<? echo $rowSwim['SquadFee']; ?>
+          <? } ?>
         </p>
       </div>
       <?php if ($rowSwim['SquadTimetable'] != "") { ?>
@@ -303,7 +328,7 @@ else {
     </div>
   </div>
 
-<?php } } ?>
+<?php } ?>
   </div>
 
 <?php include BASE_PATH . "views/footer.php"; ?>

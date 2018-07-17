@@ -10,6 +10,7 @@ $squadUpdate = false;
 $dateOfBirthUpdate = false;
 $sexUpdate = false;
 $otherNotesUpdate = false;
+$catUpdate = $cpUpdate = false;
 $update = false;
 $successInformation = "";
 
@@ -28,6 +29,8 @@ $dateOfBirth = $row['DateOfBirth'];
 $sex = $row['Gender'];
 $otherNotes = $row['OtherNotes'];
 $dbAccessKey = $row['AccessKey'];
+$cat = $row['ASACategory'];
+$cp = $row['ClubPays'];
 
 if (!empty($_POST['forename'])) {
 	$newForename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
@@ -102,6 +105,25 @@ if (!empty($_POST['sex'])) {
 		$update = true;
 	}
 }
+if (isset($_POST['cat'])) {
+	$newCat = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['cat']))));
+	if ($newCat != $cat && ($newCat == 1 || $newCat == 2 || $newCat == 3)) {
+		$sql = "UPDATE `members` SET `ASACategory` = '$newCat' WHERE `MemberID` = '$id'";
+		mysqli_query($link, $sql);
+		$catUpdate = true;
+		$update = true;
+	}
+}
+if (isset($_POST['cp'])) {
+	echo "Hello";
+	$newCp = mysqli_real_escape_string($link, trim($_POST['cp']));
+	if ($newCp != $cp && ($newCp == 0 || $newCp == 1)) {
+		$sql = "UPDATE `members` SET `ClubPays` = '$newCp' WHERE `MemberID` = '$id'";
+		mysqli_query($link, $sql);
+		$cpUpdate = true;
+		$update = true;
+	}
+}
 if (isset($_POST['otherNotes'])) {
 	$newOtherNotes = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['otherNotes'])));
 	if ($newOtherNotes != $otherNotes) {
@@ -122,17 +144,17 @@ if (!empty($_POST['swimmerDeleteDanger'])) {
 
 $sqlSwim = "";
 $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames,
-members.MSurname, members.ASANumber, squads.SquadName, squads.SquadID,
-squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC,
-members.DateOfBirth, members.Gender, members.OtherNotes , members.AccessKey FROM
-(members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE
-members.MemberID = '$id';";
+members.MSurname, members.ASANumber, members.ASACategory, members.ClubPays,
+squads.SquadName, squads.SquadID, squads.SquadFee, squads.SquadCoach,
+squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender,
+members.OtherNotes , members.AccessKey FROM (members INNER JOIN squads ON
+members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
 $resultSwim = mysqli_query($link, $sqlSwim);
 $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
 $pagetitle = "Swimmer: " . $rowSwim['MForename'] . " " . $rowSwim['MSurname'];
 $title = null;
 $content = '<form method="post"><div class="row align-items-center"><div class="col-sm-8"><h1>Editing ' . $rowSwim['MForename'] . ' ' . $rowSwim['MSurname'] . '</h1></div><div class="col-sm-4 text-right"><button type="submit" class="btn btn-success">Update</button> <a class="btn btn-dark" href="../' . $id . '">Exit Edit Mode</a></div></div><hr>';
-$content .= "<div class=\"row\"><div class=\"col col-md-8\">";
+$content .= "<div class=\"row\"><div class=\"col col-md-8\"><div class=\"mb-3 p-3 bg-white rounded box-shadow\">";
 if ($update) {
 $content .= '<div class="alert alert-success">
 	<strong>We have updated</strong>
@@ -145,6 +167,9 @@ $content .= '<div class="alert alert-success">
 		if ($userUpdate) { $content .= '<li>Parent</li>'; }
 		if ($squadUpdate) { $content .= '<li>Squad</li>'; }
 		if ($sexUpdate) { $content .= '<li>Sex</li>'; }
+		if ($catUpdate) { $content .= '<li>ASA Category</li>'; }
+		if ($cpUpdate) { $content .= '<li>Whether or not the club pays swimmer\'s
+		fees</li>'; }
 		if ($otherNotesUpdate) { $content .= '<li>Other notes</li>'; }
 $content .= '
 	</ul>
@@ -174,6 +199,17 @@ $content .= "
 <div class=\"form-group\">
 	<label for=\"asa\">ASA Registration Number</label>
 	<input type=\"test\" class=\"form-control\" id=\"asa\" name=\"asa\" placeholder=\"ASA Registration Numer\" value=\"" . $rowSwim['ASANumber'] . "\">
+</div>";
+$cat = [];
+$cat[$rowSwim['ASACategory']] = " selected ";
+$content .= "
+<div class=\"form-group\">
+	<label for=\"cat\">ASA Membership Category</label>
+	<select class=\"custom-select\" id=\"cat\" name=\"cat\" placeholder=\"Select\">
+		<option value=\"1\" " . $cat[1] . ">Category 1</option>
+		<option value=\"2\" " . $cat[2] . ">Category 2</option>
+		<option value=\"3\" " . $cat[3] . ">Category 3</option>
+	</select>
 </div>";
 /*$sql = "SELECT COLUMN_TYPE
 FROM INFORMATION_SCHEMA.COLUMNS
@@ -218,6 +254,18 @@ for ($i = 0; $i < $squadCount; $i++) {
 	$content .= ">" . $row['SquadName'] . "</option>";
 }
 $content .= "</select></div>";
+
+$cp = [];
+$cp[$rowSwim['ClubPays']] = " selected ";
+$content .= "
+<div class=\"form-group\">
+	<label for=\"cp\">Club Pays Fees?</label>
+	<select class=\"custom-select\" id=\"cp\" name=\"cp\" placeholder=\"Select\">
+		<option value=\"0\" " . $cp[0] . ">No</option>
+		<option value=\"1\" " . $cp[1] . ">Yes</option>
+	</select>
+</div>";
+
 $content .= '<div class="form-group"> <label>Medical Notes</label>';
 $content .= '<a class="d-block" href="' . autoUrl("swimmers/" . $id . "/medical") . '"
 target="_blank">Edit medical notes</a>';
@@ -237,9 +285,9 @@ $content .= "
 		</div>
 	</div>";
 }
-$content .= "<button type=\"submit\" class=\"btn btn-outline-dark mb-3\">Update</button>";
-$content .= "</div><div class=\"col-md-4\">";
-$content .= "<div class=\"cell\"><h2>Squad Information</h2><ul class=\"mb-0\"><li>Squad: " . $rowSwim['SquadName'] . "</li><li>Monthly Fee: &pound;" . $rowSwim['SquadFee'] . "</li>";
+$content .= "<button type=\"submit\" class=\"btn btn-outline-dark\">Update</button>";
+$content .= "</div></div><div class=\"col-md-4\">";
+$content .= "<div class=\"mb-3 p-3 bg-white rounded box-shadow\"><h2>Squad Information</h2><ul class=\"mb-0\"><li>Squad: " . $rowSwim['SquadName'] . "</li><li>Monthly Fee: &pound;" . $rowSwim['SquadFee'] . "</li>";
 if ($rowSwim['SquadTimetable'] != "") {
 	$content .= "<li><a href=\"" . $rowSwim['SquadTimetable'] . "\">Squad Timetable</a></li>";
 }
