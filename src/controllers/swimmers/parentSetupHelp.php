@@ -53,10 +53,10 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 			</a>
 		</p>
 		<p class="mb-0">
-			<a href="" class="btn btn-info">
+			<a href="<? echo autoUrl("swimmers"); ?>" class="btn btn-info">
 				Return to Swimmers
 			</a>
-			<a href="" class="btn btn-info">
+			<a href="<? echo autoUrl("swimmers/addmember"); ?>" class="btn btn-info">
 				Add Another Swimmer
 			</a>
 		</p>

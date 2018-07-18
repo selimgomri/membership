@@ -5,6 +5,11 @@ set_time_limit(0);
 
 $subject = mysqli_real_escape_string($link, $_POST['subject']);
 $message = mysqli_real_escape_string($link, $_POST['message']);
+$force = 0;
+$sender = mysqli_real_escape_string($link, $_SESSION['UserID']);
+if (isset($_POST['force'])) {
+  $force = 1;
+}
 
 $sql = "SELECT `SquadID` FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC;";
 $result = mysqli_query($link, $sql);
@@ -42,7 +47,7 @@ $result = mysqli_query($link, $sql);
 for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	$userid = $row['UserID'];
-	$sql = "INSERT INTO `notify` (`UserID`, `Subject`, `Message`, `Status`) VALUES ('$userid', '$subject', '$message', 'Queued');";
+	$sql = "INSERT INTO `notify` (`UserID`, `Subject`, `Message`, `Status`, `Sender`, `ForceSend`) VALUES ('$userid', '$subject', '$message', 'Queued', '$sender', '$force');";
 	mysqli_query($link, $sql);
 }
 

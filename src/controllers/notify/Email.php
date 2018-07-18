@@ -77,6 +77,19 @@ $lists = mysqli_query($link, $sql);
       </small>
 		</div>
 
+    <div class="form-group">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" aria-describedby="forceHelp" id="force" name="force">
+        <label class="custom-control-label" for="force">Force Send</label>
+        <small id="forceHelp" class="form-text text-muted">
+          Normally, messages will only be sent to those who have opted in to email
+          notifications. Selecting Force Send overrides this. If you do this, you
+          must be able to justify your reason for doing so to the System
+          Administrator or the Chair Person.
+        </small>
+      </div>
+    </div>
+
 		<p><button class="btn btn-dark" id="submit" value="submitted" type="submit">Send the email</button></p>
 	</form>
 </div>

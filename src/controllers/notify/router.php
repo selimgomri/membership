@@ -9,7 +9,7 @@ $this->get('/', function() {
 });
 }
 
-if ($access == "Admin" || $access == "Coach") {
+if ($access == "Admin" || $access == "Coach" || $access == "Galas") {
 	$this->get('/', function() {
 		global $link;
 		include 'Home.php';
@@ -34,6 +34,15 @@ if ($access == "Admin" || $access == "Coach") {
 		global $link;
 		include 'EmailID.php';
 	});
+
+  $this->group('/history', function() {
+		global $link;
+
+    $this->get(['/', '/page/{page}:int'], function($page = null) {
+			global $link;
+			include 'MessageHistory.php';
+		});
+  });
 
 	$this->group('/lists', function() {
 		global $link;
