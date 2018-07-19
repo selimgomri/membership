@@ -90,11 +90,15 @@ include BASE_PATH . 'views/header.php';
 				Add New
 			</a>
 		</p>
-		<p class="mb-0">
+		<p>
 			The GDPR law does not require you to obtain the permission of the person
 			whose contact details you are adding as this is essential operational
 			information required to ensure the safety of your children.
 		</p>
+    <p class="mb-0">
+      We do however kindly ask that you let someone know if you've put them down
+      as an emergency contact
+    </p>
 	</div>
 </div>
 

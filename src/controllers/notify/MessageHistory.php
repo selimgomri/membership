@@ -1,5 +1,7 @@
 <?
 
+$null = $page;
+
 $start = 0;
 
 if ($page != null) {
@@ -8,8 +10,14 @@ if ($page != null) {
   $page = 1;
 }
 
+if ($page == 1 && $null != null) {
+  header("Location: " . autoUrl("notify/history"));
+  die();
+}
+
 $sql = "SELECT DISTINCT `Subject` , `Message` FROM `notify`;";
 $numMails  = mysqli_num_rows(mysqli_query($link, $sql));
+$numPages = ((int)($numMails/10)) + 1;
 
 if ($start > $numMails) {
   halt(404);
@@ -26,7 +34,9 @@ include BASE_PATH . "views/notifyMenu.php";?>
 <div class="container">
   <div class="my-3 p-3 bg-white rounded box-shadow">
     <h1>Notify Message History</h1>
-    <p class="lead pb-3 mb-0 border-bottom border-gray">Page <? echo $page; ?></p>
+    <p class="lead pb-3 mb-0 border-bottom border-gray">
+      Page <? echo $page; ?> of <? echo $numPages; ?>
+    </p>
     <? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
       $sender = null;

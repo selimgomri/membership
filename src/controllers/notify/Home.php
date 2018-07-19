@@ -15,7 +15,10 @@ include BASE_PATH . "views/notifyMenu.php";
 		Notify is our <strong>GDPR Compliant</strong> Email System
 	</div>
   <hr>
-	<p>This service <strong>must</strong> be used in moderation. Repetitive emails will be treated as spam by email services.</p>
+	<p>
+    This service <strong>must</strong> be used in moderation. Repetitive emails
+    will be treated as spam by email services.
+  </p>
   <h2>How to Use Notify</h2>
   <p>
     Notify is available to Squad Coaches and System Administrators and allows
@@ -32,6 +35,23 @@ include BASE_PATH . "views/notifyMenu.php";
     Emails are added to a queue to be sent. It could take up to thirty minutes
     to send an email to all parents in the club. Parents who have not opted in
     to recieving emails will not recieve messages.
+  </p>
+  <p>
+    <strong>
+      Please be aware:
+    </strong>
+    If you Force Send an email, you will be contacted by the System Administrator
+    and asked to justify why you did so. This is because of our obligations under
+    the GDPR rules. Acceptable use of Force Send includes;
+  </p>
+  <ul>
+    <li>Alerting parents that sessions have been cancelled</li>
+    <li>Sending important gala updates</li>
+    <li>Contacting squad parents in an emergency</li>
+  </ul>
+  <p>
+    Other use cases are allowed but must be justifiable in terms of our
+    operational needs.
   </p>
 </div>
 

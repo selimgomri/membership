@@ -108,6 +108,9 @@ Chester-le-Street ASC is a non profit private members club.
         </a>
         <div class="dropdown-menu" aria-labelledby="myAccountDropdown">
           <a class="dropdown-item" href="<?php echo autoUrl("myaccount") ?>">Profile</a>
+          <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+            <a class="dropdown-item" href="<?php echo autoUrl("emergencycontacts") ?>">Emergency Contacts</a>
+          <? } ?>
           <a class="dropdown-item" href="<?php echo autoUrl("myaccount/password") ?>">Password</a>
         </div>
       </li>

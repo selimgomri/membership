@@ -14,5 +14,6 @@
 		<a class="nav-link" href="<?php echo autoUrl("notify/newemail")?>">New Message</a>
     <a class="nav-link" href="<?php echo autoUrl("notify/lists")?>">Targeted Lists</a>
 		<a class="nav-link" href="<?php echo autoUrl("notify/email")?>">Pending Messages</a>
+    <a class="nav-link" href="<?php echo autoUrl("notify/history")?>">Previous Messages</a>
 	</nav>
 </div>

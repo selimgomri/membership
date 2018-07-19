@@ -1,6 +1,10 @@
 <?php
 
-$user = $_SESSION['UserID'];
+$user = mysqli_real_escape_string($link, $_SESSION['UserID']);
+
+$uSql = "SELECT * FROM `users` WHERE `UserID` = '$user';";
+$uRes = mysqli_query($link, $uSql);
+$uRow = mysqli_fetch_array($uRes, MYSQLI_ASSOC);
 
 $contacts = new EmergencyContacts($link);
 $contacts->byParent($user);
@@ -29,6 +33,19 @@ include BASE_PATH . "views/header.php";
 			</p>
 
 			<div class="mb-3">
+        <div class="media pt-3">
+  				<div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+						<p class="mb-0">
+							<strong class="d-block">
+								<? echo $uRow['Forename'] . " " . $uRow['Surname']; ?> (From My
+								Account)
+							</strong>
+							<a href="tel:<? echo $uRow['Mobile']; ?>">
+								<? echo $uRow['Mobile']; ?>
+							</a>
+						</p>
+  				</div>
+  			</div>
 			<? for ($i = 0; $i < sizeof($contactsArray); $i++) {
 				?>
 				<div class="media pt-3">
