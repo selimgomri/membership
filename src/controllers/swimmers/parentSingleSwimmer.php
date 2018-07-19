@@ -113,7 +113,7 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
         </p>
         <p class="mb-0">
           Head to <a class="alert-link" href="<? echo autoUrl("swimmers/" . $id .
-          "/medical"); ?>" target="_blank">the new medical form</a> to ensure
+          "/medical"); ?>" target="_self">the new medical form</a> to ensure
           your swimmer's medical details are up to date.
         </p>
       </div>

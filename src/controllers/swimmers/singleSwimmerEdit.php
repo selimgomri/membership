@@ -268,7 +268,7 @@ $content .= "
 
 $content .= '<div class="form-group"> <label>Medical Notes</label>';
 $content .= '<a class="d-block" href="' . autoUrl("swimmers/" . $id . "/medical") . '"
-target="_blank">Edit medical notes</a>';
+target="_self">Edit medical notes</a>';
 $content .= '</div>';
 $content .= "
 <div class=\"form-group\">

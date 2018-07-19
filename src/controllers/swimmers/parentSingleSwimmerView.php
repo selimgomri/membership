@@ -190,7 +190,7 @@ else {
       } ?>
       </div>
       <span class="d-block text-right mt-3">
-        <a href="<? echo autoUrl("swimmers/edit/" . $id);?>">Edit Details or add Medical Notes</a>
+        <a href="<? echo autoUrl("swimmers/edit/" . $id);?>">Edit Details</a> or <a href="<? echo autoUrl("swimmers/" . $id . "/medical");?>">Edit Medical Notes</a>
       </span>
     </div>
 

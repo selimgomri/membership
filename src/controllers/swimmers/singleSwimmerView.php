@@ -175,7 +175,7 @@ $content = '
 	if ($access == "Admin" || $access == "Committee") {
 	  $content .= '
 	  <span class="d-block text-right mt-3">
-	    <a href="edit/' . $id . '">Edit Details or add Medical Notes</a>
+	    <a href="edit/' . $id . '">Edit Details</a> or <a href="' . $id . '/medical">add Medical Notes</a>
 	  </span>
 		</div>';
 	}
