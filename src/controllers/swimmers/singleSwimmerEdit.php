@@ -32,6 +32,15 @@ $dbAccessKey = $row['AccessKey'];
 $cat = $row['ASACategory'];
 $cp = $row['ClubPays'];
 
+$deleteKey = $_POST['swimmerDeleteDanger'];
+
+if ($deleteKey == $dbAccessKey) {
+	$sql = "DELETE FROM `members` WHERE `MemberID` = '$id'";
+	mysqli_query($link, $sql);
+	header("Location: " . autoUrl("swimmers"));
+  die();
+}
+
 if (!empty($_POST['forename'])) {
 	$newForename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
 	if ($newForename != $forename) {
@@ -115,7 +124,6 @@ if (isset($_POST['cat'])) {
 	}
 }
 if (isset($_POST['cp'])) {
-	echo "Hello";
 	$newCp = mysqli_real_escape_string($link, trim($_POST['cp']));
 	if ($newCp != $cp && ($newCp == 0 || $newCp == 1)) {
 		$sql = "UPDATE `members` SET `ClubPays` = '$newCp' WHERE `MemberID` = '$id'";
@@ -131,14 +139,6 @@ if (isset($_POST['otherNotes'])) {
 		mysqli_query($link, $sql);
 		$otherNotesUpdate = true;
 		$update = true;
-	}
-}
-if (!empty($_POST['swimmerDeleteDanger'])) {
-	$deleteKey = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['swimmerDeleteDanger'])));
-	if ($deleteKey == $dbAccessKey) {
-		$sql = "DELETE FROM `members` WHERE `members`.`MemberID` = '$id'";
-		mysqli_query($link, $sql);
-		header("Location: " . autoUrl("swimmers"));
 	}
 }
 

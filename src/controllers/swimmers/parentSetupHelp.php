@@ -21,7 +21,8 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 	.bg-primary {
 		color-adjust: exact;
 		-webkit-print-color-adjust: exact;
-		background: #bd0000;
+		background: #bd0000 !important;
+    color: #ffffff !important;
 	}
 	html, body {
 		background: #ffffff !important;
