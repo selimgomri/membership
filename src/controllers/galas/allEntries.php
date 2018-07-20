@@ -83,7 +83,7 @@ function getResult() {
     xmlhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         document.getElementById("output").innerHTML = this.responseText;
-        window.history.pushState("string", "Title", "' .
+        window.history.replaceState("string", "Title", "' .
         autoUrl("galas/entries") . '?galaID=" + galaValue + "&sex=" + sexValue +
         "&search=" + searchValue);
       }

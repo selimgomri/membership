@@ -75,6 +75,10 @@ include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
 <div class="container">
   <div class="my-3 p-3 bg-white rounded box-shadow">
+    <? if (isset($_SESSION['ErrorState'])) {
+      echo $_SESSION['ErrorState'];
+      unset($_SESSION['ErrorState']);
+    } ?>
     <?php echo "<h1>" . $title . "</h1>";
     echo $content; ?>
   </div>

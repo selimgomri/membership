@@ -329,7 +329,11 @@ function upcomingGalas($link, $links = false, $userID = null) {
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
       $output .= " <ul class=\"media-body pt-2 pb-2 mb-0 lh-125 ";
       if ($i != $count-1) {
-        $output .= "border-bottom border-white";
+        if (app('request')->ajax) {
+          $output .= "border-bottom border-white";
+        } else {
+          $output .= "border-bottom border-gray";
+        }
       }
       $output .= " list-unstyled\"> <li><strong class=\"d-block
       text-gray-dark\">";
@@ -337,16 +341,16 @@ function upcomingGalas($link, $links = false, $userID = null) {
         $output .= $row['GalaName'] . " (" .
         courseLengthString($row['CourseLength']) . ") <a href=\"" .
         autoUrl("galas/competitions/" . $row['GalaID'] . "") . "\"><span
-        class=\"small\">Edit Gala</span></a></li>";         } else {
+        class=\"small\">Edit Gala and View Statistics</span></a></li>";         } else {
         $output .= "" . $row['GalaName'] . " (" .
         courseLengthString($row['CourseLength']) . ")</li>";
       }
       $output .= "</strong></li>";
       $output .= "<li>" . $row['GalaVenue'] . "<br>";
-      $output .= "<li>Closing Date " . date('j F Y',
+      $output .= "<li>Closing Date " . date('jS F Y',
       strtotime($row['ClosingDate'])) . "</li>";
       if ($userID == null) {
-        $output .= "<li>Finishes on " . date('j F Y',
+        $output .= "<li>Finishes on " . date('jS F Y',
         strtotime($row['GalaDate'])) . "</li>";
       }
       if ($row['GalaFee'] > 0) {
@@ -1067,7 +1071,7 @@ function getBillingDate($link, $user) {
       $ordinal = "nd";
     }
     else {
-      $ordinal = "th";
+      $ordinal = "rd";
     }
     return $row['Day'] . $ordinal;
   } else {
@@ -1242,6 +1246,20 @@ function setupMedicalInfo($id) {
     }
   }
   return false;
+}
+
+function ordinal($num) {
+  $ordinal = null;
+  if ($num%10 == 1) {
+    $ordinal = "st";
+  }
+  else if ($num%10 == 2) {
+    $ordinal = "nd";
+  }
+  else {
+    $ordinal = "rd";
+  }
+  return $num . $ordinal;
 }
 
 
