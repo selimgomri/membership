@@ -77,6 +77,12 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		</p>
 	</div>
 
+  <p>
+    Here at Chester-le-Street ASC, we provide a number of online services to
+    manage our members. Our services allow you to manage your swimmers, enter
+    competitions, stay up to date by email, make payments by Direct Debit (from
+    2019).
+  </p>
 	<p>
 		Here’s what you will need to add <? echo $row['MForename'] . " " .
 		$row['MSurname']; ?> to your account in our Online Membership System.
@@ -99,7 +105,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 	<p>
 		If you haven’t already done so, you will need to create an account on our
-		new system.
+		new system. This is easy to do - You only need to fill out one form.
 	</p>
 
 	<p>
