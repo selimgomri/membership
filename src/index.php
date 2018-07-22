@@ -362,6 +362,15 @@ else {
     require('controllers/logout.php');
   });
 
+  $route->group('/oauth2', function() {
+    global $link;
+
+    $this->get('/', function() {
+      global $link;
+      include 'controllers/oauth/code.php';
+    });
+  });
+
   $route->any(['/test', '/x-text'], function() {
     global $link;
 
