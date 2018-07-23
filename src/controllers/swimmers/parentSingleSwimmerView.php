@@ -48,6 +48,11 @@ else {
 
   <div class="container">
 
+    <? if (isset($_SESSION['AddSwimmerSuccessState'])) {
+      echo $_SESSION['AddSwimmerSuccessState'];
+      unset($_SESSION['AddSwimmerSuccessState']);
+    } ?>
+
     <div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded box-shadow" id="dash">
       <img class="mr-3" src="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png" alt="" width="48" height="48">
       <div class="lh-100">
@@ -325,6 +330,53 @@ else {
         <strong class="d-block text-gray-dark">Squad Coach</strong>
         <?php echo $rowSwim["SquadCoach"]; ?>
       </p>
+    </div>
+  </div>
+
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+    <?
+    $col = "col-sm-6";
+    if ($row['ThriveNumber'] != "") {
+      $col = "col-sm-4";
+    }
+    ?>
+    <h2 class="">Swimmer Barcodes</h2>
+    <p>You won't need these in most circumstances. We'll let you know if you ever will.</p>
+    <div class="row">
+      <div class="<? echo $col; ?>">
+        <div class="text-center border p-2 bg-white">
+          <span class="lead mb-2">ASA Number</span>
+          <img class="img-fluid mx-auto d-block"
+          src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ASANumber'] . "&print=false"); ?>"
+          srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ASANumber'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ASANumber'] . "&print=false"); ?> 3x"
+          alt="<? echo $row['ASANumber']; ?>"></img>
+          <span class="mono"><? echo $row['ASANumber']; ?></span>
+        </div>
+        <span class="d-block d-sm-none mb-3"></span>
+      </div>
+      <div class="<? echo $col; ?>">
+        <div class="text-center border p-2 bg-white">
+          <span class="lead mb-2">CLSASC Number</span>
+          <img class="img-fluid mx-auto d-block"
+          src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=CLSX" . $row['MemberID'] . "&print=false"); ?>"
+          srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 3x"
+          alt="CLSX<? echo $row['MemberID']; ?>"></img>
+          <span class="mono">CLSX<? echo $row['MemberID']; ?></span>
+        </div>
+        <? if ($row['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><? } ?>
+      </div>
+      <? if ($row['ThriveNumber'] != "") { ?>
+      <div class="<? echo $col; ?>">
+        <div class="text-center border p-2 bg-white">
+          <span class="lead mb-2">Thrive Card</span>
+          <img class="img-fluid mx-auto d-block"
+          src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ThriveNumber'] . "&print=false"); ?>"
+          srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ThriveNumber'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ThriveNumber'] . "&print=false"); ?> 3x"
+          alt="<? echo $row['ThriveNumber']; ?>"></img>
+          <span class="mono"><? echo $row['ThriveNumber']; ?></span>
+        </div>
+      </div>
+      <? } ?>
     </div>
   </div>
 

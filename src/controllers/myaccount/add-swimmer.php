@@ -20,6 +20,9 @@ if ($_SESSION['AccessLevel'] == "Parent") { ?>
   <? if (isset($_SESSION['AddSwimmerSuccessState'])) {
     echo $_SESSION['AddSwimmerSuccessState'];
     unset($_SESSION['AddSwimmerSuccessState']);
+  } else if (isset($_SESSION['ErrorState'])) {
+    echo $_SESSION['ErrorState'];
+    unset($_SESSION['ErrorState']);
   } else { ?>
   <div class="my-3 p-3 bg-white rounded box-shadow">
     <h1>Add a swimmer</h1>

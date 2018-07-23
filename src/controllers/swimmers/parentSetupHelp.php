@@ -24,7 +24,12 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		background: #bd0000 !important;
     color: #ffffff !important;
 	}
-	html, body {
+	.text-white {
+		color-adjust: exact;
+		-webkit-print-color-adjust: exact;
+		color: #ffffff !important;
+	}
+	html, body, .container {
 		background: #ffffff !important;
 	}
 }
@@ -118,6 +123,75 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		In My Account you will find an option at add a swimmer. Click this and enter
 		their ASA Number and CLS ASC Access Key as above.
 	</p>
+
+	<div class="row mb-3">
+    <div class="col-12">
+      <div class="border border-dark p-2 bg-white">
+				<div class="row d-flex align-items-center">
+					<div class="col-8 pl-5">
+						<h2>Already Registered for an Account?</h2>
+						<p class="lead">
+							Scan this QR Code to add <? echo $row['MForename']; ?> quickly.
+						</p>
+						<p class="mb-0">
+							This QR Code cannot be used once you've added this swimmer.
+							Contact our support team for a replacement.
+						</p>
+					</div>
+					<div class="col-4 text-center">
+		        <img class="img-fluid mx-auto d-block"
+		        src="<? echo autoUrl("services/qr-generator?size=200&text=" . rawurlencode(autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey'])) . ""); ?>"
+		        srcset="<? echo autoUrl("services/qr-generator?size=400&text=" . rawurlencode(autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey'])) . ""); ?> 2x, <? echo autoUrl("services/qr-generator?size=400&text=" . rawurlencode(autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey'])) . ""); ?> 3x"
+		        alt="<? echo autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey']); ?>"></img>
+					</div>
+				</div>
+      </div>
+      <span class="d-block d-sm-none mb-3"></span>
+    </div>
+	</div>
+
+  <?
+  $col = "col-sm-6";
+  if ($row['ThriveNumber'] != "") {
+    $col = "col-sm-4";
+  }
+  ?>
+  <div class="row mb-3 align-items-stretch">
+    <div class="<? echo $col; ?>">
+      <div class="text-center border border-dark h-100 p-2 bg-white">
+        <span class="lead mb-2">ASA Number</span>
+        <img class="img-fluid mx-auto d-block"
+        src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ASANumber'] . "&print=false"); ?>"
+        srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ASANumber'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ASANumber'] . "&print=false"); ?> 3x"
+        alt="<? echo $row['ASANumber']; ?>"></img>
+        <span class="mono"><? echo $row['ASANumber']; ?></span>
+      </div>
+      <span class="d-block d-sm-none mb-3"></span>
+    </div>
+    <div class="<? echo $col; ?>">
+      <div class="text-center border border-dark h-100 p-2 bg-white">
+        <span class="lead mb-2">CLSASC Number</span>
+        <img class="img-fluid mx-auto d-block"
+        src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=CLSX" . $row['MemberID'] . "&print=false"); ?>"
+        srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 3x"
+        alt="CLSX<? echo $row['MemberID']; ?>"></img>
+        <span class="mono">CLSX<? echo $row['MemberID']; ?></span>
+      </div>
+      <? if ($row['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><? } ?>
+    </div>
+    <? if ($row['ThriveNumber'] != "") { ?>
+    <div class="<? echo $col; ?>">
+      <div class="text-center border border-dark h-100 p-2 bg-white">
+        <span class="lead mb-2">Thrive Card</span>
+        <img class="img-fluid mx-auto d-block"
+        src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ThriveNumber'] . "&print=false"); ?>"
+        srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ThriveNumber'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ThriveNumber'] . "&print=false"); ?> 3x"
+        alt="<? echo $row['ThriveNumber']; ?>"></img>
+        <span class="mono"><? echo $row['ThriveNumber']; ?></span>
+      </div>
+    </div>
+    <? } ?>
+  </div>
 
 	<div class="small text-muted">
 		<p>

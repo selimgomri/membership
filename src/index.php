@@ -103,6 +103,17 @@ $route->group('/ajax', function() {
   include 'controllers/public/router.php';
 });
 
+$route->group('/services', function() {
+
+  $this->get('/barcode-generator', function() {
+    include 'controllers/barcode-generation-system/gen.php';
+  });
+
+  $this->get('/qr-generator', function() {
+    include 'controllers/barcode-generation-system/qr.php';
+  });
+});
+
 $route->group('/auth/saml', function() {
   $this->any(['', 'index.php', 'index.php/*'], function() {
     $_SERVER['PATH_INFO'] = '/' . $this[0];
@@ -283,6 +294,12 @@ else {
   	$this->get('/addswimmer', function() {
       global $link;
   	  require('controllers/myaccount/add-swimmer.php');
+  	});
+
+    // Add swimmer
+  	$this->get('/addswimmer/auto/{asa}/{acs}', function($asa, $acs) {
+      global $link;
+  	  require('controllers/myaccount/auto-add-swimmer.php');
   	});
 
   	$this->post('/addswimmer', function() {
