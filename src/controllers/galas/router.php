@@ -97,8 +97,18 @@ else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $
 		include BASE_PATH . 'controllers/ajax/galaEntriesProcessed.php';
 	});
 
-	$this->get('/entries/{id}', function($id) {
+	$this->get('/entries/{id}:int', function($id) {
 		global $link;
 		include 'singleentry.php';
+	});
+
+	$this->get('/entries/{id}:int/manualtime', function($id) {
+		global $link;
+		include 'AddManualTime.php';
+	});
+
+	$this->post('/entries/{id}:int/manualtime', function($id) {
+		global $link;
+		include 'AddManualTimePost.php';
 	});
 }

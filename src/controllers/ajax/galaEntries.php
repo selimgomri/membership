@@ -109,7 +109,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       $row['ASANumber'] . " <i class=\"fa fa-external-link\"
       aria-hidden=\"true\"></i></a><span class=\"d-none d-print-inline\">ASA: " .
       $row['ASANumber'] . "</span><br>
-      <span class=\"small\">" . $row['GalaName'] . "<br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a></span></td>";
+      <span class=\"small\">" . $row['GalaName'] . "<br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a><br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "/manualtime\">Set Manual Times</a></span></td>";
 
       // Arrays of swims used to check whever to print the name of the swim entered
       // BEWARE This is in an order to ease inputting data into SportSystems, contrary to these arrays in other files
@@ -132,7 +132,13 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       else {
         for ($y=0; $y<sizeof($swimsArray); $y++) {
           if ($row[$swimsArray[$y]] == 1) {
-            $content .= "<li><strong>" . $swimsTextArray[$y] . "</strong> <br>" . $times[$swimsArray[$y]] . "</li>";
+            $content .= "<li><strong>" . $swimsTextArray[$y] . "</strong> <br>";
+            if ($times[$swimsArray[$y]] != "") {
+              $content .= $times[$swimsArray[$y]];
+            } else {
+              $content .= $row[$swimsTimeArray[$y]];
+            }
+            $content .= "</li>";
           }
         }
       }
