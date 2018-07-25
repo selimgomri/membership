@@ -24,93 +24,39 @@ if (mysqli_num_rows(mysqli_query($link, $sql)) > 0) {
   halt(403);
 }
 
-if (!empty($_POST['TimesRequired'])) {
-  $timesRequired = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['TimesRequired'])));
-}
-
 if ($memberID != "" && $galaID != "") {
   $sql = "SELECT EntryID FROM galaEntries WHERE `GalaID` = '$galaID' AND `MemberID` = '$memberID';";
   $result = mysqli_query($link, $sql);
   $entryCount = mysqli_num_rows($result);
 }
 
-if ($timesRequired != 1) {
-  for ($i=0; $i<sizeof($swimsArray); $i++) {
-    if (!empty($_POST[$swimsArray[$i]])) {
-      $entriesArray[$i] = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST[$swimsArray[$i]])));
-      $counter++;
-    }
-    else {
-        $entriesArray[$i] = 0;
-    }
+for ($i=0; $i<sizeof($swimsArray); $i++) {
+  if (!empty($_POST[$swimsArray[$i]])) {
+    $entriesArray[$i] = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST[$swimsArray[$i]])));
+    $counter++;
   }
-
-  $swims = "";
-  for ($i=0; $i<sizeof($swimsArray); $i++) {
-    if ($i < (sizeof($swimsArray)-1)) {
-      $swims .= "`" . $swimsArray[$i] . "`, ";
-    }
-    else {
-      $swims .= "`" . $swimsArray[$i] . "` ";
-    }
-  }
-
-  $values = "";
-  for ($i=0; $i<sizeof($entriesArray); $i++) {
-    if ($i < (sizeof($entriesArray)-1)) {
-      $values .= "'" . $entriesArray[$i] . "', ";
-    }
-    else {
-      $values .= "'" . $entriesArray[$i] . "' ";
-    }
+  else {
+      $entriesArray[$i] = 0;
   }
 }
-elseif ($timesRequired == 1) {
-  for ($i=0; $i<sizeof($swimsArray); $i++) {
-    if ((!empty($_POST[$swimsTimeArray[$i] . "Mins"])) || (!empty($_POST[$swimsTimeArray[$i] . "Secs"])) || (!empty($_POST[$swimsTimeArray[$i] . "Hunds"]))) {
-      $mins = mysqli_real_escape_string($link, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Mins"]))));
-      $secs = mysqli_real_escape_string($link, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Secs"]))));
-      $hunds = mysqli_real_escape_string($link, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Hunds"]))));
-      $entriesArray[$i] = $mins . ":" . $secs . "." . $hunds;
-      $counter++;
-    }
-    else {
-        $entriesArray[$i] = null;
-    }
-  }
 
-  $swims = "";
-  for ($i=0; $i<sizeof($swimsTimeArray); $i++) {
-    if ($i < (sizeof($swimsTimeArray)-1)) {
-      $swims .= "`" . $swimsArray[$i] . "`, ";
-      $swims .= "`" . $swimsTimeArray[$i] . "`, ";
-    }
-    else {
-      $swims .= "`" . $swimsArray[$i] . "`, ";
-      $swims .= "`" . $swimsTimeArray[$i] . "` ";
-    }
+$swims = "";
+for ($i=0; $i<sizeof($swimsArray); $i++) {
+  if ($i < (sizeof($swimsArray)-1)) {
+    $swims .= "`" . $swimsArray[$i] . "`, ";
   }
+  else {
+    $swims .= "`" . $swimsArray[$i] . "` ";
+  }
+}
 
-  $values = "";
-  for ($i=0; $i<sizeof($entriesArray); $i++) {
-    if ($i < (sizeof($entriesArray)-1)) {
-      if ($entriesArray[$i]!=null) {
-        $values .= "'1', ";
-      }
-      else {
-        $values .= "'0', ";
-      }
-      $values .= "'" . $entriesArray[$i] . "', ";
-    }
-    else {
-      if ($entriesArray[$i]!=null) {
-        $values .= "'1', ";
-      }
-      else {
-        $values .= "'0', ";
-      }
-      $values .= "'" . $entriesArray[$i] . "'";
-    }
+$values = "";
+for ($i=0; $i<sizeof($entriesArray); $i++) {
+  if ($i < (sizeof($entriesArray)-1)) {
+    $values .= "'" . $entriesArray[$i] . "', ";
+  }
+  else {
+    $values .= "'" . $entriesArray[$i] . "' ";
   }
 }
 
@@ -123,13 +69,13 @@ if ($entryCount == 0) {
     //debitWallet($_SESSION['UserID'], $fee, "Gala Entry into " . $row['GalaName'] . " (Holding Fee)");
   }
   else {
-    $fee = null;
+    $fee = 0.00;
     if (isset($_POST['galaFee'])) {
-      $fee = $_POST['galaFee'];
+      $fee = number_format(($counter*$_POST['galaFee']),2,'.','');
       //debitWallet($_SESSION['UserID'], $fee, "Gala Entry into " . $row['GalaName'] . " (Holding Fee)");
     }
   }
-  $sql = "INSERT INTO `galaEntries` (`MemberID`, `GalaID`, " . $swims . ", `TimesRequired`, `FeeToPay`) VALUES ('$memberID', '$galaID', " . $values . ", '$timesRequired', $fee);";
+  $sql = "INSERT INTO `galaEntries` (`MemberID`, `GalaID`, " . $swims . ", `TimesRequired`, `FeeToPay`) VALUES ('$memberID', '$galaID', " . $values . ", '0', $fee);";
   $action = mysqli_query($link, $sql);
 
 

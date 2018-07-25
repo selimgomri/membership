@@ -1262,6 +1262,88 @@ function ordinal($num) {
   return $num . $ordinal;
 }
 
+use Symfony\Component\DomCrawler\Crawler;
+
+function curl($url) {
+  $ch = curl_init();  // Initialising cURL
+  curl_setopt($ch, CURLOPT_URL, $url);    // Setting cURL's URL option with the $url variable passed into the function
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); // Setting cURL's option to return the webpage data
+  $data = curl_exec($ch); // Executing the cURL request and assigning the returned data to the $data variable
+  curl_close($ch);    // Closing cURL
+  return $data;   // Returning the data from the function
+}
+
+function curl_scrape_between($data, $start, $end) {
+  //echo $data . "<br>";
+  $data = stristr($data, $start); // Stripping all data from before $start
+  //echo $data . "<br>";
+  $data = substr($data, strlen($start));  // Stripping $start
+  //echo $data . "<br>";
+  $stop = stripos($data, $end);   // Getting the position of the $end of the data to scrape
+  //echo $stop . "<br>";
+  $data = substr($data, 0, $stop);    // Stripping all data from after and including the $end of the data to scrape
+  //echo $data . "<br>";
+  return $data;   // Returning the scraped data from the function
+}
+
+function getTimes($asa) {
+  global $link;
+  $curlres =
+  curl('https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' .
+  $asa);
+
+  $start = '<table width="100%" style="page-break-before:always">';
+  $end = '</table>';
+
+  $output = curl_scrape_between($curlres, $start, $end);
+  $output = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $output);
+  $output = preg_replace('/(<[^>]+) width=".*?"/i', '$1', $output);
+
+  $crawler = new Crawler($output);
+  $crawler = $crawler->filter('tr > td');
+
+  $array = ['Event', 'CY_SC', 'SCPB', 'CY_LC', 'LCPB'];
+  $count = 0;
+
+  foreach ($crawler as $domElement) {
+    $col = $count%5;
+    if ($col == 0) {
+      if ($domElement->textContent == "") {
+        $array['Event'][] = null;
+      } else {
+        $array['Event'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+      }
+    } else if ($col == 1) {
+      if ($domElement->textContent == "") {
+        $array['CY_SC'][] = null;
+      } else {
+        $array['CY_SC'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+      }
+    } else if ($col == 2) {
+      if ($domElement->textContent == "") {
+        $array['SCPB'][] = null;
+      } else {
+        $array['SCPB'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+      }
+    } else if ($col == 3) {
+      if ($domElement->textContent == "") {
+        $array['CY_LC'][] = null;
+      } else {
+        $array['CY_LC'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+      }
+    } else if ($col == 4) {
+      if ($domElement->textContent == "") {
+        $array['LCPB'][] = null;
+      } else {
+        $array['LCPB'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+      }
+    }
+    $count++;
+  }
+
+  return $array;
+}
+
 
 $count = 0;
 

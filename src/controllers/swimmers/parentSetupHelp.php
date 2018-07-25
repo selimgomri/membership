@@ -22,15 +22,18 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		color-adjust: exact;
 		-webkit-print-color-adjust: exact;
 		background: #bd0000 !important;
-    color: #ffffff !important;
+    color: #fffffe !important;
 	}
 	.text-white {
 		color-adjust: exact;
 		-webkit-print-color-adjust: exact;
-		color: #ffffff !important;
+		color: #fffffe !important;
 	}
-	html, body, .container {
+	html, body {
 		background: #ffffff !important;
+		font-size: 12pt;
+		padding: 0px !important;
+		margin-top: 0px !important;
 	}
 }
 </style>
@@ -62,13 +65,15 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 			<a href="<? echo autoUrl("swimmers"); ?>" class="btn btn-info">
 				Return to Swimmers
 			</a>
+			<? if ($_SESSION['AccessLevel'] != "Coach" && $_SESSION['AccessLevel'] != "Galas") { ?>
 			<a href="<? echo autoUrl("swimmers/addmember"); ?>" class="btn btn-info">
 				Add Another Swimmer
 			</a>
+			<? } ?>
 		</p>
 	</div>
 
-	<div class="p-3 mb-3 text-right mono">
+	<div class="py-3 mb-3 text-right mono">
 		<? echo $row['SquadName']; ?> Squad
 	</div>
 
@@ -85,113 +90,87 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
   <p>
     Here at Chester-le-Street ASC, we provide a number of online services to
     manage our members. Our services allow you to manage your swimmers, enter
-    competitions, stay up to date by email, make payments by Direct Debit (from
-    2019).
+    competitions, stay up to date by email and make payments by Direct Debit
+    (from 2019).
   </p>
-	<p>
-		Here’s what you will need to add <? echo $row['MForename'] . " " .
-		$row['MSurname']; ?> to your account in our Online Membership System.
-	</p>
-
-	<ul>
-		<li>
-			<strong>
-				ASA Number:
-			</strong>
-			 <span class="mono"><? echo $row['ASANumber']; ?></span>
-		</li>
-		<li>
-			<strong>
-				CLS ASC Access Key:
-			</strong>
-				<span class="mono"><? echo $row['AccessKey']; ?></span>
-		</li>
-	</ul>
 
 	<p>
 		If you haven’t already done so, you will need to create an account on our
-		new system. This is easy to do - You only need to fill out one form.
+		membership system. This is easy to do - You only need to fill out one form
+		and then verify your email address.
 	</p>
 
 	<p>
-		To add a swimmer, log into your account at
-		https://account.chesterlestreetasc.co.uk/  and the select ‘My Account’ from
-		the menu at the top.
+		Here’s what you will need to do to add <? echo $row['MForename'] . " " .
+		$row['MSurname']; ?> to your account in our Online Membership System. There
+		are two methods you can use to do this.
 	</p>
+
+	<h2>Add via QR Code</h2>
 
 	<p>
-		In My Account you will find an option at add a swimmer. Click this and enter
-		their ASA Number and CLS ASC Access Key as above.
+		If you have a device that can read QR Codes (A built in feature on iOS and
+		Android Devices), scan the QR Code below. You'll be taken to a page where
+		you'll be asked to log in, if you aren't already, and we'll automatically
+		add <? echo $row['MForename']; ?> to your account.
 	</p>
 
-	<div class="row mb-3">
-    <div class="col-12">
-      <div class="border border-dark p-2 bg-white">
-				<div class="row d-flex align-items-center">
-					<div class="col-8 pl-5">
-						<h2>Already Registered for an Account?</h2>
-						<p class="lead">
-							Scan this QR Code to add <? echo $row['MForename']; ?> quickly.
-						</p>
-						<p class="mb-0">
-							This QR Code cannot be used once you've added this swimmer.
-							Contact our support team for a replacement.
-						</p>
-					</div>
-					<div class="col-4 text-center">
-		        <img class="img-fluid mx-auto d-block"
-		        src="<? echo autoUrl("services/qr-generator?size=200&text=" . rawurlencode(autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey'])) . ""); ?>"
-		        srcset="<? echo autoUrl("services/qr-generator?size=400&text=" . rawurlencode(autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey'])) . ""); ?> 2x, <? echo autoUrl("services/qr-generator?size=400&text=" . rawurlencode(autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey'])) . ""); ?> 3x"
-		        alt="<? echo autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey']); ?>"></img>
-					</div>
-				</div>
-      </div>
-      <span class="d-block d-sm-none mb-3"></span>
-    </div>
-	</div>
-
-  <?
-  $col = "col-sm-6";
-  if ($row['ThriveNumber'] != "") {
-    $col = "col-sm-4";
-  }
-  ?>
-  <div class="row mb-3 align-items-stretch">
-    <div class="<? echo $col; ?>">
-      <div class="text-center border border-dark h-100 p-2 bg-white">
-        <span class="lead mb-2">ASA Number</span>
-        <img class="img-fluid mx-auto d-block"
-        src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ASANumber'] . "&print=false"); ?>"
-        srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ASANumber'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ASANumber'] . "&print=false"); ?> 3x"
-        alt="<? echo $row['ASANumber']; ?>"></img>
-        <span class="mono"><? echo $row['ASANumber']; ?></span>
-      </div>
-      <span class="d-block d-sm-none mb-3"></span>
-    </div>
-    <div class="<? echo $col; ?>">
-      <div class="text-center border border-dark h-100 p-2 bg-white">
-        <span class="lead mb-2">CLSASC Number</span>
-        <img class="img-fluid mx-auto d-block"
-        src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=CLSX" . $row['MemberID'] . "&print=false"); ?>"
-        srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 3x"
-        alt="CLSX<? echo $row['MemberID']; ?>"></img>
-        <span class="mono">CLSX<? echo $row['MemberID']; ?></span>
-      </div>
-      <? if ($row['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><? } ?>
-    </div>
-    <? if ($row['ThriveNumber'] != "") { ?>
-    <div class="<? echo $col; ?>">
-      <div class="text-center border border-dark h-100 p-2 bg-white">
-        <span class="lead mb-2">Thrive Card</span>
-        <img class="img-fluid mx-auto d-block"
-        src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ThriveNumber'] . "&print=false"); ?>"
-        srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ThriveNumber'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ThriveNumber'] . "&print=false"); ?> 3x"
-        alt="<? echo $row['ThriveNumber']; ?>"></img>
-        <span class="mono"><? echo $row['ThriveNumber']; ?></span>
-      </div>
-    </div>
-    <? } ?>
+  <div class="border border-dark p-2 bg-white mb-3 px-5">
+		<div class="row d-flex align-items-center">
+			<div class="col-8">
+				<span class="h2">Already registered for an account?</span>
+				<p class="lead">
+					Scan this QR Code to add <? echo $row['MForename']; ?> quickly.
+				</p>
+				<p class="mb-0">
+					This QR Code cannot be used once you've added this swimmer.
+					Contact our support team for a replacement.
+				</p>
+			</div>
+			<div class="col-4 text-center">
+        <img class="img-fluid ml-auto d-block" src="<? echo
+        autoUrl("services/qr-generator?size=200&text=" .
+        rawurlencode(autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" .
+        $row['AccessKey'])) . ""); ?>" srcset="<? echo
+        autoUrl("services/qr-generator?size=400&text=" .
+        rawurlencode(autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" .
+        $row['AccessKey'])) . ""); ?> 2x, <? echo
+        autoUrl("services/qr-generator?size=400&text=" .
+        rawurlencode(autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" .
+        $row['AccessKey'])) . ""); ?> 3x" alt="<? echo
+        autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" .
+        $row['AccessKey']); ?>"></img>
+			</div>
+		</div>
   </div>
+
+	<h2>Add Manually</h2>
+
+	<p>
+		If you do not have a device that can read QR Codes, to add a swimmer, log
+		into your account at https://account.chesterlestreetasc.co.uk/  and the
+		select 'My Swimmers' then 'Add Swimmers' from the menu at the top.
+	</p>
+
+	<p>
+		You'll be directed to a page and asked to enter your swimmer's ASA Number
+		and CLS ASC Access Key as below.
+	</p>
+
+	<div class="mb-3">
+		<table class="table table-sm table-borderless d-inline mb-0">
+		  <tbody>
+		    <tr>
+		      <th scope="row" class="pl-0">ASA Number</th>
+		      <td class="pr-0"><span class="mono"><? echo $row['ASANumber']; ?></span></td>
+		    </tr>
+		    <tr>
+		      <th scope="row" class="pl-0">CLS ASC Access Key</th>
+		      <td class="pr-0"><span class="mono"><? echo $row['AccessKey']; ?></span></td>
+		    </tr>
+		  </tbody>
+		</table>
+	</div>
 
 	<div class="small text-muted">
 		<p>
@@ -212,6 +191,56 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		<p>
 			If you’d like more information about how we use data, contact
 			enquiries@chesterlestreetasc.co.uk.
+		</p>
+	</div>
+
+  <?
+  $col = "col-sm-6";
+  if ($row['ThriveNumber'] != "") {
+    $col = "col-sm-4";
+  }
+  ?>
+  <div class="row mb-3 align-items-stretch">
+    <div class="<? echo $col; ?>">
+      <div class="text-center border border-dark h-100 p-2 bg-white">
+        <span class="mb-2">ASA Number</span>
+        <img class="img-fluid mx-auto d-block"
+        src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ASANumber'] . "&print=false"); ?>"
+        srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ASANumber'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ASANumber'] . "&print=false"); ?> 3x"
+        alt="<? echo $row['ASANumber']; ?>"></img>
+        <span class="mono"><? echo $row['ASANumber']; ?></span>
+      </div>
+      <span class="d-block d-sm-none mb-3"></span>
+    </div>
+    <div class="<? echo $col; ?>">
+      <div class="text-center border border-dark h-100 p-2 bg-white">
+        <span class="mb-2">CLSASC Number</span>
+        <img class="img-fluid mx-auto d-block"
+        src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=CLSX" . $row['MemberID'] . "&print=false"); ?>"
+        srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 3x"
+        alt="CLSX<? echo $row['MemberID']; ?>"></img>
+        <span class="mono">CLSX<? echo $row['MemberID']; ?></span>
+      </div>
+      <? if ($row['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><? } ?>
+    </div>
+    <? if ($row['ThriveNumber'] != "") { ?>
+    <div class="<? echo $col; ?>">
+      <div class="text-center border border-dark h-100 p-2 bg-white">
+        <span class="mb-2">Thrive Card</span>
+        <img class="img-fluid mx-auto d-block"
+        src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ThriveNumber'] . "&print=false"); ?>"
+        srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ThriveNumber'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ThriveNumber'] . "&print=false"); ?> 3x"
+        alt="<? echo $row['ThriveNumber']; ?>"></img>
+        <span class="mono"><? echo $row['ThriveNumber']; ?></span>
+      </div>
+    </div>
+    <? } ?>
+  </div>
+
+	<div class="small text-muted">
+		<p>
+			The above barcodes are provided because ASA Membership Cards are no longer
+			issued.
 		</p>
 	</div>
 

@@ -84,9 +84,20 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       // Fetches the row as an array
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
+      $member = mysqli_real_escape_string($link, $row['MemberID']);
+      $times = null;
+
       $hyTekPrintDate = "";
       if ($row['HyTek'] == 1) {
         $hyTekPrintDate = " <br>DoB: " . date('j F Y', strtotime($row['DateOfBirth'])) . "";
+        $type = null;
+        if ($row['CourseLength'] == "SHORT") {
+          $type = "SCPB";
+        } else {
+          $type = "LCPB";
+        }
+        $times = mysqli_fetch_array(mysqli_query($link, "SELECT * FROM `times`
+        WHERE `MemberID` = '$member' AND `Type` = '$type';"), MYSQLI_ASSOC);
       }
 
       // First part of the row content
@@ -111,17 +122,17 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       $content .= "<td><ul class=\"mb-0 list-unstyled\">";
 
       // Print <li>Swim Name</li> for each entry
-      if ($row['TimesRequired']!=1) {
+      if ($row['HyTek'] != 1) {
         for ($y=0; $y<sizeof($swimsArray); $y++) {
           if ($row[$swimsArray[$y]] == 1) {
             $content .= "<li>" . $swimsTextArray[$y] . "</li>";
           }
         }
       }
-      elseif ($row['TimesRequired']==1) {
+      else {
         for ($y=0; $y<sizeof($swimsArray); $y++) {
           if ($row[$swimsArray[$y]] == 1) {
-            $content .= "<li><strong>" . $swimsTextArray[$y] . "</strong> <br>" . $row[$swimsTimeArray[$y]] . "</li>";
+            $content .= "<li><strong>" . $swimsTextArray[$y] . "</strong> <br>" . $times[$swimsArray[$y]] . "</li>";
           }
         }
       }

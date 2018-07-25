@@ -35,7 +35,9 @@ date_create('today'))->y;
 $title = null;
 $content = '
 <div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded box-shadow" id="dash">
-  <img class="mr-3" src="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png" alt="" width="48" height="48">
+  <div class="mr-3 bg-white px48">
+    <img class="d-block mx-auto max48" src="https://www.swimmingresults.org/biogs/biogs_image.php?id=' . $rowSwim['ASANumber'] . '" alt="">
+  </div>
   <div class="lh-100">
     <h1 class="h6 mb-0 text-white lh-100">' . $rowSwim["MForename"];
     if ($rowSwim["MMiddleNames"] != "") {
@@ -267,26 +269,55 @@ $content .= '
   $content .= '</div>';
   $content.= '
   <div class="my-3 p-3 bg-white rounded box-shadow">
-    <h2 class="border-bottom border-gray pb-2 mb-0">Best Times</h2>
-    <div class="media pt-3">
-      <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-        <strong class="d-block text-gray-dark">View Online</strong>
-        <a href="https://www.swimmingresults.org/individualbest/personal_best.php?mode=A&tiref=' . $rowSwim["ASANumber"] . '" target="_blank" title="Best Times">
-        HTML</a>
-      </p>
-    </div>
-    <div class="media pt-3">
-      <p class="media-body mb-0 lh-125">
-        <strong class="d-block text-gray-dark">Print or Download</strong>
-        <a href="https://www.swimmingresults.org/individualbest/personal_best.php?print=2&mode=A&tiref=' . $rowSwim["ASANumber"] . '" target="_blank" title="Best Times">
-        PDF</a>
-      </p>
+    <h2 class="border-bottom border-gray pb-2 mb-2">Best Times</h2>';
+    $sc = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'SCPB';";
+    $lc = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'LCPB';";
+    $sc = mysqli_fetch_array(mysqli_query($link, $sc), MYSQLI_ASSOC);
+    $lc = mysqli_fetch_array(mysqli_query($link, $lc), MYSQLI_ASSOC);
+    $ev = ['50Free', '100Free', '200Free', '400Free', '800Free', '1500Free',
+    '50Breast', '100Breast', '200Breast', '50Fly', '100Fly', '200Fly',
+    '50Back', '100Back', '200Back', '100IM', '200IM', '400IM'];
+    $evs = ['50m Free', '100m Free', '200m Free', '400m Free', '800m Free', '1500m Free',
+    '50m Breast', '100m Breast', '200m Breast', '50m Fly', '100m Fly', '200m Fly',
+    '50m Back', '100m Back', '200m Back', '100m IM', '200m IM', '400m IM'];
+    $content.= '<table class="table table-sm table-borderless">
+    <thead class=""><tr class="pl-0"><th class="pl-0">Swim</th><th>Short Course</th><th>Long Course</th></thead>
+    <tbody>';
+    for ($i = 0; $i < sizeof($ev); $i++) {
+      $content.= '<tr class="pl-0"><th class="pl-0">' . $evs[$i] . '</th><td>';
+      if ($sc[$ev[$i]] != "") {
+        $content.= $sc[$ev[$i]];
+      }
+      $content .= '</td><td>';
+      if ($lc[$ev[$i]] != "") {
+        $content.= $lc[$ev[$i]];
+      }
+      $content.= '</td></tr>';
+    }
+    $content.= '
+    </tbody></table>
+    <div class="media">
+      <div class="media-body pb-0 mb-0 lh-125">
+        <div class="row">
+          <div class="col">
+            <strong class="d-block text-gray-dark">View Online</strong>
+            <a  href="https://www.swimmingresults.org/individualbest/personal_best.php?mode=A&tiref=' . $rowSwim["ASANumber"] . '" target="_blank" title="Best Times">
+              HTML
+            </a>
+          </div>
+          <div class="col">
+            <strong class="d-block text-gray-dark">Print or Download</strong>
+            <a href="https://www.swimmingresults.org/individualbest/personal_best.php?print=2&mode=A&tiref=' . $rowSwim["ASANumber"] . '" target="_blank" title="Best Times">
+            PDF</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>';
 /* Stats Section */
 $swimsCountArray = [];
 $strokesCountArray = [0, 0, 0, 0, 0];
-$strokesCountTextArray = ["Freestyle", "Breaststroke", "Butterfly", "Backstroke", "Individual Medley"];
+$strokesCountTextArray = ["Free", "Breast", "Fly", "Back", "IM"];
 $swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];
 $strokesArray = ['0','0','0','0','0','0','1','1','1','2','2','2','3','3','3','4','4','4','4',];
 $swimsTextArray = ['50 Free','100 Free','200 Free','400 Free','800 Free','1500 Free','50 Breast','100 Breast','200 Breast','50 Fly','100 Fly','200 Fly','50 Back','100 Back','200 Back','100 IM','150 IM','200 IM','400 IM',];
@@ -425,6 +456,16 @@ $content .= '</div>';
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>
+<style>
+.px48 {
+  width: 48px;
+  height: 48px;
+}
+.max48 {
+  max-height: 48px;
+  width: auto;
+}
+</style>
 <div class="container">
 <?php echo "<h1>" . $title . "</h1>";
 echo $content; ?>

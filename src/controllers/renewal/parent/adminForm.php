@@ -139,6 +139,16 @@ include BASE_PATH . "views/header.php";
 
 		<? } ?>
 
+		<?
+		for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+			$y = 0;
+			if ($age[$i] < 18) {
+				$y++;
+			}
+		}
+
+		if ($y > 0) { ?>
+
 		<h2>Photography Consent</h2>
 		<p>
 			Please read the ASA/Chester-le-Street ASC Photography Policy before you
@@ -228,8 +238,14 @@ include BASE_PATH . "views/header.php";
 		</div>
 		<? } } ?>
 
+		<? } ?>
+
+		<? if ($y > 0) { ?>
+
 		<h2>Medical Consent</h2>
 		<p>For Parents and Guardians of members under 18 years</p>
+
+		<? } ?>
 
 		<? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 			if ($age[$i] < 18) { ?>

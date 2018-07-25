@@ -24,3 +24,8 @@ $this->any('/updateregisterweeks', function() {
 	global $db, $link;
 	require 'newWeek.php';
 });
+
+$this->any('/timeupdate', function() {
+	global $db, $link;
+	require 'getTimes.php';
+});

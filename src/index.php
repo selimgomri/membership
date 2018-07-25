@@ -388,11 +388,21 @@ else {
     });
   });
 
-  $route->any(['/test', '/x-text'], function() {
+  $route->any('asa/{asa}', function($asa) {
     global $link;
 
-    pre(json_decode('{"PaymentType":"SquadFees","Members":[{"Member":"1","MemberName":"Christopher Heppell","FeeName":"Non Affiliated","Fee":"0.00"},{"Member":"2","MemberName":"Lauren Heppell","FeeName":"B2","Fee":"65.00"}]}'));
-    pre(json_decode('{"PaymentType":"ExtraFees","Members":[{"Member":"2","MemberName":"Lauren Heppell","FeeName":"CrossFit (1 Session)","Fee":"7.50"}]}'));
+    $array = getTimes($asa);
+
+    pre($array);
+
+    include BASE_PATH . 'views/header.php'; ?>
+    <div class="container">
+      <h1>Times</h1>
+      <table class="table table-sm">
+        <? echo $output; ?>
+      </table>
+    </div>
+    <? include BASE_PATH . 'views/footer.php';
   });
 
   // Global Catch All 404

@@ -5,21 +5,33 @@ use Respect\Validation\Validator as v;
 $status = true;
 $statusInfo = "";
 
-$galaName = $length = $venue = $closingDate = $lastDate = $galaFee = $added = "";
+$galaName = $length = $venue = $closingDate = $lastDate = $galaFee = $added = null;
 $added = false;
 $galaFeeConstant = $hyTek = 0;
 $content = "";
 
 if (!empty($_POST['galaname'])) {
   $galaName = mysqli_real_escape_string($link, ucwords(trim(htmlspecialchars($_POST['galaname']))));
+  if (strlen($galaName) == 0) {
+    $status = false;
+    $statusInfo .= "<li>No gala name was provided</li>";
+  }
 }
 
 if (!empty($_POST['length'])) {
   $length = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['length'])));
+  if (strlen($length) == 0) {
+    $status = false;
+    $statusInfo .= "<li>There was a problem with the supplied course length</li>";
+  }
 }
 
 if (!empty($_POST['venue'])) {
   $venue = mysqli_real_escape_string($link, ucwords(trim(htmlspecialchars($_POST['venue']))));
+  if (strlen($venue) == 0) {
+    $status = false;
+    $statusInfo .= "<li>You failed to supply a place name</li>";
+  }
 }
 
 if (!empty($_POST['closingDate']) && v::date()->validate($_POST['closingDate'])) {
@@ -30,7 +42,7 @@ if (!empty($_POST['closingDate']) && v::date()->validate($_POST['closingDate']))
   $statusInfo .= "<li>The closing date was malformed and not understood clearly by the system</li>";
 }
 
-if (!empty($_POST['lastDate'])  && v::date()->validate($_POST['lastDate'])) {
+if (!empty($_POST['lastDate']) && v::date()->validate($_POST['lastDate'])) {
   $date = strtotime($_POST['lastDate']);
   $lastDate = mysqli_real_escape_string($link, date("Y-m-d", $date));
 } else {
@@ -56,11 +68,13 @@ if (isset($_POST['HyTek'])) {
 //$sql = "INSERT INTO `galas` (`GalaName`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`) VALUES ('$galaName', '$length', '$venue', '$closingDate', '$lastDate', '$galaFeeConstant', '$galaFee', '$hyTek');";
 //echo $sql;
 
-if ($galaName != null && $length != null && $venue != null && $closingDate != null && $lastDate != null && $galaFeeConstant != null && $status) {
+if ($status) {
   $sql = "INSERT INTO `galas` (`GalaName`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`) VALUES ('$galaName', '$length', '$venue', '$closingDate', '$lastDate', '$galaFeeConstant', '$galaFee', '$hyTek');";
   $action = mysqli_query($link, $sql);
   if ($action) {
     $added = true;
+  } else {
+    $statusInfo .= "<li>Database error</li>";
   }
 }
 

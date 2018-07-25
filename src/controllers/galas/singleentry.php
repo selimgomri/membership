@@ -34,18 +34,12 @@ if ($_SESSION['AccessLevel'] == "Parent") {
           <strong>We've already processed this gala entry, or our closing date has passed</strong> <br>If you need to make changes, contact the Gala Coordinator
         </div>
         <?php $disabled .= " onclick=\"return false;\" ";
-      }
-      elseif ($row['TimesRequired'] == 1) { ?>
-        <div class="alert alert-warning">
-          <strong>Making Changes for a HyTek Gala</strong> <br>To make changes, remove the minutes, seconds and hundreths for a swim, or add the relevant information, then press update
-        </div>
-      <?php }
-      else { ?>
+      } else { ?>
         <h2>Select Swims</h2>
       <?php } ?>
       <form method="post">
 
-      <?php if ($row['HyTek'] != 1) {
+      <?php
         for ($i=0; $i<sizeof($swimsArray); $i++) {
           if ($rowArray[$i] == 1) { ?>
             <div class="row mb-3">
@@ -71,49 +65,7 @@ if ($_SESSION['AccessLevel'] == "Parent") {
           <?php }
         } ?>
         <input type="hidden" value="0" name="TimesRequired">
-      <?php }
-      else {
-        for ($i = 0; $i < sizeof($swimsTimeArray); $i++) {
-          $time = $row[$swimsTimeArray[$i]];
-          $colonPos = strpos($time, ":");
-          $stopPos = strpos($time, ".");
-          $mins = sprintf('%02d',substr($time, 0, $colonPos));
-          $secs = sprintf('%02d',substr($time, $colonPos+1, 2));
-          $hunds = sprintf('%02d',substr($time, $stopPos+1, 2));
-          if ($mins == 0) {
-            $mins = "";
-          }
-          if ($secs == 0) {
-            $secs = "";
-          }
-          if ($hunds == 0) {
-            $hunds = "";
-          }
-
-          if ($rowArray[$i] == 1) { ?>
-            <h3><?php echo $rowArrayText[$i]; ?></h3>
-            <div class="galaEntryTimes mb-3">
-          <?php } ?>
-    		  <div class="form-group mb-0">
-    				<label><?php echo $swimsTextArray[$i]; ?></label>
-    				<div class="row no-gutters">
-    			    <div class="col">
-    			      <input type="number" class="form-control" placeholder="Minutes" value="<?php echo $mins; ?>" name="<?php echo $swimsTimeArray[$i]; ?>Mins" id="<?php echo $swimsTimeArray[$i]; ?>Mins" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0">
-    			    </div>
-    					<div class="col">
-    			      <input type="number" class="form-control" placeholder="Seconds" value="<?php echo $secs; ?>" name="<?php echo $swimsTimeArray[$i]; ?>Secs" id="<?php echo $swimsTimeArray[$i]; ?>Secs" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="59">
-    			    </div>
-    					<div class="col">
-    			      <input type="number" class="form-control" placeholder="Hundreds" value="<?php echo $hunds; ?>" name="<?php echo $swimsTimeArray[$i]; ?>Hunds" id="<?php echo $swimsTimeArray[$i]; ?>Hunds" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="99">
-    			    </div>
-    				</div>
-    		  </div>
-          <?php if ($rowArray[$i] == 2) { ?>
-            </div>
-          <?php }
-    		} ?>
-        <input type="hidden" value="1" name="TimesRequired">
-      <?php }
+      <?php
 
       if ($row['EntryProcessed'] == 0 && ($closingDate >= $theDate)) { ?>
         <input type="hidden" value="<?php echo $row['EntryID']; ?>" name="entryID">
@@ -161,84 +113,35 @@ else {
           <strong>We've already processed this gala entry, or our closing date has passed</strong> <br>If you need to make changes, contact the Gala Coordinator directly
         </div>
         <?php $disabled .= " onclick=\"return false;\" ";
-      }
-      elseif ($row['TimesRequired'] == 1) { ?>
-        <div class="alert alert-warning"><strong>Making Changes for a HyTek Gala</strong> <br>To make changes, remove the minutes, seconds and hundreths for a swim, or add the relevant information, then press update</div>
-      <?php }
-      else { ?>
+      } else { ?>
         <h2>Select Swims</h2>
       <?php } ?>
       <form method="post">
 
-      <?php if ($row['HyTek'] != 1) {
-        for ($i=0; $i<sizeof($swimsArray); $i++) {
-          if ($rowArray[$i] == 1) { ?>
-            <div class="row mb-3">
-          <?php }
-          if ($row[$swimsArray[$i]] == 1) { ?>
-            <div class="col-sm-4 col-md-2">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" checked <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
-                <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
-              </div>
+        <? for ($i=0; $i<sizeof($swimsArray); $i++) {
+        if ($rowArray[$i] == 1) { ?>
+          <div class="row mb-3">
+        <?php }
+        if ($row[$swimsArray[$i]] == 1) { ?>
+          <div class="col-sm-4 col-md-2">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" checked <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
+              <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
             </div>
-          <?php }
-          else { ?>
-            <div class="col-sm-4 col-md-2">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
-                <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
-              </div>
+          </div>
+        <?php }
+        else { ?>
+          <div class="col-sm-4 col-md-2">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
+              <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
             </div>
-          <?php }
-          if ($rowArray[$i] == 2) { ?>
-            </div>
-          <?php }
-        } ?>
-        <input type="hidden" value="0" name="TimesRequired">
-      <?php }
-      else {
-        for ($i = 0; $i < sizeof($swimsTimeArray); $i++) {
-          $time = $row[$swimsTimeArray[$i]];
-          $colonPos = strpos($time, ":");
-          $stopPos = strpos($time, ".");
-          $mins = sprintf('%02d',substr($time, 0, $colonPos));
-          $secs = sprintf('%02d',substr($time, $colonPos+1, 2));
-          $hunds = sprintf('%02d',substr($time, $stopPos+1, 2));
-          if ($mins == 0) {
-            $mins = "";
-          }
-          if ($secs == 0) {
-            $secs = "";
-          }
-          if ($hunds == 0) {
-            $hunds = "";
-          }
-
-          if ($rowArray[$i] == 1) { ?>
-            <h3><?php echo $rowArrayText[$i]; ?></h3>
-            <div class="galaEntryTimes mb-3">
-          <?php } ?>
-    		  <div class="form-group mb-0">
-    				<label><?php echo $swimsTextArray[$i]; ?></label>
-    				<div class="row no-gutters">
-    			    <div class="col">
-    			      <input type="number" class="form-control" placeholder="Minutes" value="<?php echo $mins; ?>" name="<?php echo $swimsTimeArray[$i]; ?>Mins" id="<?php echo $swimsTimeArray[$i]; ?>Mins" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0">
-    			    </div>
-    					<div class="col">
-    			      <input type="number" class="form-control" placeholder="Seconds" value="<?php echo $secs; ?>" name="<?php echo $swimsTimeArray[$i]; ?>Secs" id="<?php echo $swimsTimeArray[$i]; ?>Secs" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="59">
-    			    </div>
-    					<div class="col">
-    			      <input type="number" class="form-control" placeholder="Hundreds" value="<?php echo $hunds; ?>" name="<?php echo $swimsTimeArray[$i]; ?>Hunds" id="<?php echo $swimsTimeArray[$i]; ?>Hunds" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="99">
-    			    </div>
-    				</div>
-    		  </div>
-          <?php if ($rowArray[$i] == 2) { ?>
-            </div>
-          <?php }
-    		} ?>
-        <input type="hidden" value="1" name="TimesRequired">
-      <?php }
+          </div>
+        <?php }
+        if ($rowArray[$i] == 2) { ?>
+          </div>
+        <?php }
+      }
 
       if ($row['EntryProcessed'] == 0 && ($closingDate >= $theDate)) { ?>
         <input type="hidden" value="<?php echo $row['EntryID']; ?>" name="entryID">
@@ -251,12 +154,9 @@ else {
     </form>
   </div>
   <?php
-  include BASE_PATH . "views/footer.php"; }
-  else {
+  include BASE_PATH . "views/footer.php";
+  } else {
     halt(404);
   }
-
 }
-
-
 ?>

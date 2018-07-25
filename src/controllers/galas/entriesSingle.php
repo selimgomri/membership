@@ -29,87 +29,38 @@ if ($_SESSION['AccessLevel'] == "Parent") {
         $content .= "<div class=\"alert alert-warning\"><strong>We've already processed this gala entry, or our closing date has passed</strong> <br>If you need to make changes, contact the Gala Coordinator directly</div>";
         $disabled .= " onclick=\"return false;\" ";
       }
-      elseif ($row['TimesRequired'] == 1) {
-        $content .= "<div class=\"alert alert-warning\"><strong>Making Changes for a HyTek Gala</strong> <br>To make changes, remove the minutes, seconds and hundreths for a swim, or add the relevant information, then press update</div>";
-        //$disabled .= " disabled ";
-      }
       else {
         $content .= "<h2>Select Swims</h2>";
       }
       $content .= "<form method=\"post\" action=\"updategala-action\">";
 
-      if ($row['HyTek'] != 1) {
-        for ($i=0; $i<sizeof($swimsArray); $i++) {
-          if ($rowArray[$i] == 1) {
-            $content .= "<div class=\"row mb-3\">";
-          }
-          if ($row[$swimsArray[$i]] == 1) {
-            $content .= "
-            <div class=\"col-sm-4 col-md-2\">
-            <div class=\"custom-control custom-checkbox\">
-              <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"" . $swimsArray[$i] . "\" checked " . $disabled . " \  name=\"" . $swimsArray[$i] . "\">
-              <label class=\"custom-control-label\" for=\"" . $swimsArray[$i] . "\">" . $swimsTextArray[$i] . "</label>
-            </div>
-            </div>";
-          }
-          else {
-            $content .= "
-            <div class=\"col-sm-4 col-md-2\">
-            <div class=\"custom-control custom-checkbox\">
-              <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"" . $swimsArray[$i] . "\" " . $disabled . "  name=\"" . $swimsArray[$i] . "\">
-              <label class=\"custom-control-label\" for=\"" . $swimsArray[$i] . "\">" . $swimsTextArray[$i] . "</label>
-            </div>
-            </div>";
-          }
-          if ($rowArray[$i] == 2) {
-            $content .= "</div>";
-          }
+      for ($i=0; $i<sizeof($swimsArray); $i++) {
+        if ($rowArray[$i] == 1) {
+          $content .= "<div class=\"row mb-3\">";
         }
-        $content .= '<input type="hidden" value="0" name="TimesRequired">';
+        if ($row[$swimsArray[$i]] == 1) {
+          $content .= "
+          <div class=\"col-sm-4 col-md-2\">
+          <div class=\"custom-control custom-checkbox\">
+            <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"" . $swimsArray[$i] . "\" checked " . $disabled . " \  name=\"" . $swimsArray[$i] . "\">
+            <label class=\"custom-control-label\" for=\"" . $swimsArray[$i] . "\">" . $swimsTextArray[$i] . "</label>
+          </div>
+          </div>";
+        }
+        else {
+          $content .= "
+          <div class=\"col-sm-4 col-md-2\">
+          <div class=\"custom-control custom-checkbox\">
+            <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"" . $swimsArray[$i] . "\" " . $disabled . "  name=\"" . $swimsArray[$i] . "\">
+            <label class=\"custom-control-label\" for=\"" . $swimsArray[$i] . "\">" . $swimsTextArray[$i] . "</label>
+          </div>
+          </div>";
+        }
+        if ($rowArray[$i] == 2) {
+          $content .= "</div>";
+        }
       }
-      else {
-        for ($i = 0; $i < sizeof($swimsTimeArray); $i++) {
-          $time = $row[$swimsTimeArray[$i]];
-          $colonPos = strpos($time, ":");
-          $stopPos = strpos($time, ".");
-          $mins = sprintf('%02d',substr($time, 0, $colonPos));
-          $secs = sprintf('%02d',substr($time, $colonPos+1, 2));
-          $hunds = sprintf('%02d',substr($time, $stopPos+1, 2));
-          if ($mins == 0) {
-            $mins = "";
-          }
-          if ($secs == 0) {
-            $secs = "";
-          }
-          if ($hunds == 0) {
-            $hunds = "";
-          }
-
-          if ($rowArray[$i] == 1) {
-            $content .= "<h3>" . $rowArrayText[$i] . "</h3>";
-            $content .= "<div class=\"galaEntryTimes mb-3\">";
-          }
-    			$content .= "
-    		  <div class=\"form-group mb-0\">
-    				<label>" . $swimsTextArray[$i] . "</label>
-    				<div class=\"row no-gutters\">
-    			    <div class=\"col\">
-    			      <input type=\"number\" class=\"form-control\" placeholder=\"Minutes\" value=\"" . $mins . "\" name=\"" . $swimsTimeArray[$i] . "Mins\" id=\"" . $swimsTimeArray[$i] . "Mins\" autocomplete=\"off\" pattern=\"[0-9]*\" inputmode=\"numeric\" min=\"0\">
-    			    </div>
-    					<div class=\"col\">
-    			      <input type=\"number\" class=\"form-control\" placeholder=\"Seconds\" value=\"" . $secs . "\" name=\"" . $swimsTimeArray[$i] . "Secs\" id=\"" . $swimsTimeArray[$i] . "Secs\" autocomplete=\"off\" pattern=\"[0-9]*\" inputmode=\"numeric\" min=\"0\" max=\"59\">
-    			    </div>
-    					<div class=\"col\">
-    			      <input type=\"number\" class=\"form-control\" placeholder=\"Hundreds\" value=\"" . $hunds . "\" name=\"" . $swimsTimeArray[$i] . "Hunds\" id=\"" . $swimsTimeArray[$i] . "Hunds\" autocomplete=\"off\" pattern=\"[0-9]*\" inputmode=\"numeric\" min=\"0\" max=\"99\">
-    			    </div>
-    				</div>
-    		  </div>";
-          if ($rowArray[$i] == 2) {
-            $content .= "</div>";
-          }
-    		}
-        $content .= '<input type="hidden" value="1" name="TimesRequired">';
-      }
+      $content .= '<input type="hidden" value="0" name="TimesRequired">';
 
       if ($row['EntryProcessed'] == 0 && ($closingDate >= $theDate)) {
         $content .= "
@@ -156,78 +107,33 @@ else {
     }
     $content .= "<form method=\"post\" action=\"updategala-action\">";
 
-    if ($row['HyTek'] != 1) {
-      for ($i=0; $i<sizeof($swimsArray); $i++) {
-        if ($rowArray[$i] == 1) {
-          $content .= "<div class=\"row mb-3\">";
-        }
-        if ($row[$swimsArray[$i]] == 1) {
-          $content .= "
-          <div class=\"col-sm-4 col-md-2\">
-          <div class=\"custom-control custom-checkbox\">
-            <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"" . $swimsArray[$i] . "\" checked " . $disabled . " \  name=\"" . $swimsArray[$i] . "\">
-            <label class=\"custom-control-label\" for=\"" . $swimsArray[$i] . "\">" . $swimsTextArray[$i] . "</label>
-          </div>
-          </div>";
-        }
-        else {
-          $content .= "
-          <div class=\"col-sm-4 col-md-2\">
-          <div class=\"custom-control custom-checkbox\">
-            <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"" . $swimsArray[$i] . "\" " . $disabled . "  name=\"" . $swimsArray[$i] . "\">
-            <label class=\"custom-control-label\" for=\"" . $swimsArray[$i] . "\">" . $swimsTextArray[$i] . "</label>
-          </div>
-          </div>";
-        }
-        if ($rowArray[$i] == 2) {
-          $content .= "</div>";
-        }
+    for ($i=0; $i<sizeof($swimsArray); $i++) {
+      if ($rowArray[$i] == 1) {
+        $content .= "<div class=\"row mb-3\">";
       }
-      $content .= '<input type="hidden" value="0" name="TimesRequired">';
+      if ($row[$swimsArray[$i]] == 1) {
+        $content .= "
+        <div class=\"col-sm-4 col-md-2\">
+        <div class=\"custom-control custom-checkbox\">
+          <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"" . $swimsArray[$i] . "\" checked " . $disabled . " \  name=\"" . $swimsArray[$i] . "\">
+          <label class=\"custom-control-label\" for=\"" . $swimsArray[$i] . "\">" . $swimsTextArray[$i] . "</label>
+        </div>
+        </div>";
+      }
+      else {
+        $content .= "
+        <div class=\"col-sm-4 col-md-2\">
+        <div class=\"custom-control custom-checkbox\">
+          <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"" . $swimsArray[$i] . "\" " . $disabled . "  name=\"" . $swimsArray[$i] . "\">
+          <label class=\"custom-control-label\" for=\"" . $swimsArray[$i] . "\">" . $swimsTextArray[$i] . "</label>
+        </div>
+        </div>";
+      }
+      if ($rowArray[$i] == 2) {
+        $content .= "</div>";
+      }
     }
-    else {
-      for ($i = 0; $i < sizeof($swimsTimeArray); $i++) {
-        $time = $row[$swimsTimeArray[$i]];
-        $colonPos = strpos($time, ":");
-        $stopPos = strpos($time, ".");
-        $mins = sprintf('%02d',substr($time, 0, $colonPos));
-        $secs = sprintf('%02d',substr($time, $colonPos+1, 2));
-        $hunds = sprintf('%02d',substr($time, $stopPos+1, 2));
-        if ($mins == 0) {
-          $mins = "";
-        }
-        if ($secs == 0) {
-          $secs = "";
-        }
-        if ($hunds == 0) {
-          $hunds = "";
-        }
-
-        if ($rowArray[$i] == 1) {
-          $content .= "<h3>" . $rowArrayText[$i] . "</h3>";
-          $content .= "<div class=\"galaEntryTimes mb-3\">";
-        }
-  			$content .= "
-  		  <div class=\"form-group mb-0\">
-  				<label>" . $swimsTextArray[$i] . "</label>
-  				<div class=\"row no-gutters\">
-  			    <div class=\"col\">
-  			      <input type=\"number\" class=\"form-control\" placeholder=\"Minutes\" value=\"" . $mins . "\" name=\"" . $swimsTimeArray[$i] . "Mins\" id=\"" . $swimsTimeArray[$i] . "Mins\" autocomplete=\"off\" pattern=\"[0-9]*\" inputmode=\"numeric\" min=\"0\">
-  			    </div>
-  					<div class=\"col\">
-  			      <input type=\"number\" class=\"form-control\" placeholder=\"Seconds\" value=\"" . $secs . "\" name=\"" . $swimsTimeArray[$i] . "Secs\" id=\"" . $swimsTimeArray[$i] . "Secs\" autocomplete=\"off\" pattern=\"[0-9]*\" inputmode=\"numeric\" min=\"0\" max=\"59\">
-  			    </div>
-  					<div class=\"col\">
-  			      <input type=\"number\" class=\"form-control\" placeholder=\"Hundreds\" value=\"" . $hunds . "\" name=\"" . $swimsTimeArray[$i] . "Hunds\" id=\"" . $swimsTimeArray[$i] . "Hunds\" autocomplete=\"off\" pattern=\"[0-9]*\" inputmode=\"numeric\" min=\"0\" max=\"99\">
-  			    </div>
-  				</div>
-  		  </div>";
-        if ($rowArray[$i] == 2) {
-          $content .= "</div>";
-        }
-  		}
-      $content .= '<input type="hidden" value="1" name="TimesRequired">';
-    }
+    $content .= '<input type="hidden" value="0" name="TimesRequired">';
 
     if ($row['EntryProcessed'] == 0 && ($closingDate >= $theDate)) {
       $content .= "

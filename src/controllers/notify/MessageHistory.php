@@ -23,13 +23,42 @@ if ($start > $numMails) {
   halt(404);
 }
 
-$sql = "SELECT DISTINCT `Subject` , `Message`, `ForceSend`, `Forename`, `Surname` FROM `notify` LEFT JOIN `users` ON notify.Sender = users.UserID ORDER BY `EmailID` DESC LIMIT $start, 10;";
+$sql = "SELECT DISTINCT `notify`.`Subject`, `notify`.`Message`,
+`notify`.`ForceSend`, `Forename`, `Surname`, `JSONData`, `Date` FROM ((`notify`
+LEFT JOIN `users` ON notify.Sender = users.UserID) LEFT JOIN `notifyHistory` ON
+`MessageID` = notifyHistory.ID) ORDER BY `EmailID` DESC LIMIT $start, 10;";
 $result = mysqli_query($link, $sql);
 
 $pagetitle = "Message History - Notify";
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";?>
+
+<style>
+.force-wrap {
+
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+
+}
+
+.force-wrap:last-child, .force-wrap p:last-child {
+  margin-bottom: 0px;
+}
+</style>
 
 <div class="container">
   <div class="my-3 p-3 bg-white rounded box-shadow">
@@ -39,21 +68,51 @@ include BASE_PATH . "views/notifyMenu.php";?>
     </p>
     <? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+      $info = json_decode($row['JSONData']);
       $sender = null;
-      if ($row['Forename'] != "") {
-        $sender = "Sent by " . $row['Forename'] . " " . $row['Surname'];
+      if ($row['Forename'] != "" && $row['Surname'] != "") {
+        $sender = "<p class=\"mb-0\">Sent by: " . $row['Forename'] . " " .
+        $row['Surname'] . "</p>";
         if ($row['ForceSend']) {
-          $sender .= " - Sending was forced";
+          $sender .= "<p class=\"mb-0\"><em>Sending was forced</em></p>";
+        }
+      } else {
+        $sender = "<p class=\"mb-0\">Sent by: " . $info->Sender->Name . "</p>";
+        if ($row['ForceSend']) {
+          $sender .= "<p class=\"mb-0\"><em>Sending was forced</em></p>";
         }
       }
       ?>
       <div class="media pt-3">
-        <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-          <div class="d-block text-gray-dark">
-            <strong>
-              <? echo $row['Subject']; ?><em>
-            </strong>
-            <? echo $sender; ?></em>
+        <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray force-wrap">
+          <div class="d-block text-gray-dark mb-3">
+            <p class="mb-0">
+              <strong>
+                <? echo $row['Subject']; ?>
+              </strong>
+            </p>
+            <? echo $sender; ?>
+            <? if ($row['JSONData'] != "") { ?>
+            <p class="mb-0">
+              Sent to:
+              <?
+              $squads = (array) $info->To->Squads;
+              $lists = (array) $info->To->Targeted_Lists;
+              foreach ($squads as $s) { ?>
+                <span class="badge badge-pill rounded badge-dark">
+                  <? echo $s; ?>
+                </span><?
+              }
+              foreach ($lists as $s) { ?>
+                <span class="badge badge-pill badge-dark">
+                  <? echo $s; ?>
+                </span><?
+              } ?>
+            </p>
+            <p class="mb-0">
+              Date: <? echo date("d F Y", strtotime($row['Date'])); ?>
+            </p>
+          <? } ?>
           </div>
           <? echo $row['Message']; ?>
         </div>

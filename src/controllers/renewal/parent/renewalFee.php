@@ -13,7 +13,7 @@ $payingSwimmerCount = mysqli_num_rows($result);
 
 if ($payingSwimmerCount == 1) {
 	$clubFee = 4000;
-} else {
+} else if ($payingSwimmerCount > 1) {
 	$clubFee = 5000;
 }
 
@@ -89,7 +89,7 @@ include BASE_PATH . 'views/header.php';
 			<?
 			for ($i = 0; $i < $count; $i++) {
 				$asaFeesString;
-				if ($member[$i]['ClubPays'] && $member[$i]['ASACategory'] != 0) {
+				if ($member[$i]['ClubPays']) {
 					$asaFeesString = "0.00 (Paid by club)";
 				} else {
 					$asaFeesString = number_format($asaFees[$i]/100,2,'.','');

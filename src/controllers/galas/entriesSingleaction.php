@@ -12,9 +12,6 @@ $entryCount = -1;
 if (!empty($_POST['entryID'])) {
   $entryID = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['entryID'])));
 }
-if (!empty($_POST['TimesRequired'])) {
-  $times = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['TimesRequired'])));
-}
 
 if (isset($entryID)) {
   // Check the user is the parent or has admin rights
@@ -27,76 +24,53 @@ if (isset($entryID)) {
     halt(403);
   }
 
-    if ($times != 1) {
-    for ($i=0; $i<sizeof($swimsArray); $i++) {
-      if (!empty($_POST[$swimsArray[$i]])) {
-        $entriesArray[$i] = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST[$swimsArray[$i]])));
-        $counter++;
-      }
-      else {
-          $entriesArray[$i] = 0;
-      }
+  for ($i=0; $i<sizeof($swimsArray); $i++) {
+    if (!empty($_POST[$swimsArray[$i]])) {
+      $entriesArray[$i] = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST[$swimsArray[$i]])));
+      $counter++;
     }
-    $set = "";
-    for ($i=0; $i<sizeof($swimsArray); $i++) {
-      if ($i < (sizeof($swimsArray)-1)) {
-        $set .= "" . $swimsArray[$i] . " = '" . $entriesArray[$i] . "', ";
-      }
-      else {
-        $set .= "" . $swimsArray[$i] . " = '" . $entriesArray[$i] . "' ";
-      }
-    }
-
-    $sql = "UPDATE `galaEntries` SET $set WHERE EntryID = '$entryID';";
-    $action = mysqli_query($link, $sql);
-    if ($action) {
-      $added = true;
-    }
-
-    $entryList = "";
-    for ($i=0; $i<sizeof($swimsArray); $i++) {
-      if ($entriesArray[$i] == 1) {
-        $entryList .= "<li>" . $swimsTextArray[$i] . "</li>";
-      }
+    else {
+        $entriesArray[$i] = 0;
     }
   }
-  else {
-    for ($i=0; $i<sizeof($swimsArray); $i++) {
-      if ((!empty($_POST[$swimsTimeArray[$i] . "Mins"])) || (!empty($_POST[$swimsTimeArray[$i] . "Secs"])) || (!empty($_POST[$swimsTimeArray[$i] . "Hunds"]))) {
-        $mins = mysqli_real_escape_string($link, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Mins"]))));
-        $secs = mysqli_real_escape_string($link, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Secs"]))));
-        $hunds = mysqli_real_escape_string($link, sprintf('%02d',trim(htmlspecialchars($_POST[$swimsTimeArray[$i] . "Hunds"]))));
-        if (($mins>0) || ($secs>0) || ($hunds>0)) {
-          $entriesTimeArray[$i] = $mins . ":" . $secs . "." . $hunds;
-          $entriesArray[$i] = 1;
-          $counter++;
-        }
-        else {
-          $entriesTimeArray[$i] = null;
-          $entriesArray[$i] = 0;
-        }
-      }
-      else {
-          $entriesTimeArray[$i] = null;
-          $entriesArray[$i] = 0;
-      }
+  $set = "";
+  for ($i=0; $i<sizeof($swimsArray); $i++) {
+    if ($i < (sizeof($swimsArray)-1)) {
+      $set .= "" . $swimsArray[$i] . " = '" . $entriesArray[$i] . "', ";
     }
+    else {
+      $set .= "" . $swimsArray[$i] . " = '" . $entriesArray[$i] . "' ";
+    }
+  }
 
-    $set = "";
-    for ($i=0; $i<sizeof($swimsTimeArray); $i++) {
-      if ($i < (sizeof($swimsTimeArray)-1)) {
-        $set .= "`" . $swimsArray[$i] . "` ";
-        $set .= " = '" . $entriesArray[$i] . "', ";
-        $set .= "`" . $swimsTimeArray[$i] . "` ";
-        $set .= ' = \'' . $entriesTimeArray[$i] . '\', ';
-      }
-      else {
-        $set .= "`" . $swimsArray[$i] . "` ";
-        $set .= " = '" . $entriesArray[$i] . "', ";
-        $set .= "`" . $swimsTimeArray[$i] . "` ";
-        $set .= " = '" . $entriesTimeArray[$i] . "' ";
-      }
+  $sql = "UPDATE `galaEntries` SET $set WHERE EntryID = '$entryID';";
+  $action = mysqli_query($link, $sql);
+  if ($action) {
+    $added = true;
+  }
+
+  $entryList = "";
+  for ($i=0; $i<sizeof($swimsArray); $i++) {
+    if ($entriesArray[$i] == 1) {
+      $entryList .= "<li>" . $swimsTextArray[$i] . "</li>";
     }
+  }
+
+  $set = "";
+  for ($i=0; $i<sizeof($swimsTimeArray); $i++) {
+    if ($i < (sizeof($swimsTimeArray)-1)) {
+      $set .= "`" . $swimsArray[$i] . "` ";
+      $set .= " = '" . $entriesArray[$i] . "', ";
+      $set .= "`" . $swimsTimeArray[$i] . "` ";
+      $set .= ' = \'' . $entriesTimeArray[$i] . '\', ';
+    }
+    else {
+      $set .= "`" . $swimsArray[$i] . "` ";
+      $set .= " = '" . $entriesArray[$i] . "', ";
+      $set .= "`" . $swimsTimeArray[$i] . "` ";
+      $set .= " = '" . $entriesTimeArray[$i] . "' ";
+    }
+  }
 
     $sql = "UPDATE `galaEntries` SET $set WHERE EntryID = '$entryID';";
     $action = mysqli_query($link, $sql);
@@ -112,6 +86,8 @@ if (isset($entryID)) {
     }
 
   }
+
+if ($added) {
 
   $sql = "SELECT members.MForename, members.MSurname, galaEntries.EntryID, galas.GalaName, galas.GalaFee, galas.GalaFeeConstant, users.EmailAddress, users.Forename, users.Surname FROM (((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN users ON members.UserID = users.UserID) WHERE galaEntries.EntryID = '$entryID';";
   $result = mysqli_query($link, $sql);

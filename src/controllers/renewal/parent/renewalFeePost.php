@@ -18,7 +18,7 @@ if ($payingSwimmerCount == 1) {
 }
 
 $sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
-members.SquadID WHERE `members`.`UserID` = '$user';";
+members.SquadID WHERE `members`.`UserID` = '$user' AND `ClubPays` = '0';";
 $result = mysqli_query($link, $sql);
 $count = mysqli_num_rows($result);
 

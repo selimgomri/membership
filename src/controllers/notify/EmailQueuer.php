@@ -11,13 +11,15 @@ if (isset($_POST['force'])) {
   $force = 1;
 }
 
-$sql = "SELECT `SquadID` FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC;";
+$sql = "SELECT `SquadName`, `SquadID` FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC;";
 $result = mysqli_query($link, $sql);
 
 $sql = "SELECT * FROM `targetedLists` ORDER BY `Name` ASC;";
 $lists = mysqli_query($link, $sql);
 
 $query = "";
+
+$squads = $listsArray = [];
 
 for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -26,6 +28,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	}
 	if (mysqli_real_escape_string($link, $_POST[$row['SquadID']]) == 1) {
 		$query .= " `SquadID` = '" . $row['SquadID'] . "' ";
+    $squads[$row['SquadID']] = $row['SquadName'];
 	}
 }
 
@@ -38,16 +41,48 @@ for ($i = 0; $i < mysqli_num_rows($lists); $i++) {
 		$id = "TL-" . $row['ID'];
 		$id = mysqli_real_escape_string($link, substr_replace($id, '', 0, 3));
 		$query .= " `ListID` = '" . $row['ID'] . "' ";
+    $listsArray[$row['ID']] = $row['Name'];
 	}
 }
 
-$sql = "SELECT DISTINCT users.UserID FROM ((`users` INNER JOIN `members` ON members.UserID = users.UserID) LEFT JOIN `targetedListMembers` ON targetedListMembers.ReferenceID = members.MemberID) WHERE " . $query . ";";
+$recipientGroups = [
+  "Sender" => [
+    "ID" => $sender,
+    "Name" => getUserName($sender)
+  ],
+  "To" => [
+    "Squads" => $squads,
+    "Targeted_Lists" => $listsArray
+  ],
+  "Message" => [
+    "Subject" => $subject,
+    "Body" => $message
+  ],
+  "Metadata" => [
+    "ForceSend" => $force
+  ]
+];
+
+$json = mysqli_real_escape_string($link, json_encode($recipientGroups));
+$date = mysqli_real_escape_string($link, date("Y-m-d H:i:s"));
+
+$sql = "INSERT INTO `notifyHistory` (`Sender`, `Subject`, `Message`,
+`ForceSend`, `Date`, `JSONData`) VALUES ('$userid', '$subject', '$message',
+'$force', '$date', '$json');";
+mysqli_query($link, $sql);
+$id = mysqli_insert_id($link);
+
+$sql = "SELECT DISTINCT users.UserID FROM ((`users` INNER JOIN `members` ON
+members.UserID = users.UserID) LEFT JOIN `targetedListMembers` ON
+targetedListMembers.ReferenceID = members.MemberID) WHERE " . $query . ";";
 $result = mysqli_query($link, $sql);
 
 for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	$userid = $row['UserID'];
-	$sql = "INSERT INTO `notify` (`UserID`, `Subject`, `Message`, `Status`, `Sender`, `ForceSend`) VALUES ('$userid', '$subject', '$message', 'Queued', '$sender', '$force');";
+	$sql = "INSERT INTO `notify` (`UserID`, `MessageID`, `Subject`, `Message`,
+	`Status`, `Sender`, `ForceSend`) VALUES ('$userid', '$id', '$subject',
+	'$message', 'Queued', '$sender', '$force');";
 	mysqli_query($link, $sql);
 }
 

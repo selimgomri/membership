@@ -199,6 +199,42 @@ else {
       </span>
     </div>
 
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+      <h2 class="border-bottom border-gray pb-2 mb-0">Best Times</h2>
+      <?
+      $sc = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'SCPB';";
+      $lc = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'LCPB';";
+      $sc = mysqli_fetch_array(mysqli_query($link, $sc), MYSQLI_ASSOC);
+      $lc = mysqli_fetch_array(mysqli_query($link, $lc), MYSQLI_ASSOC);
+      $ev = ['50Free', '100Free', '200Free', '400Free', '800Free', '1500Free',
+      '50Breast', '100Breast', '200Breast', '50Fly', '100Fly', '200Fly',
+      '50Back', '100Back', '200Back', '100IM', '200IM', '400IM'];
+      $evs = ['50m Free', '100m Free', '200m Free', '400m Free', '800m Free', '1500m Free',
+      '50m Breast', '100m Breast', '200m Breast', '50m Fly', '100m Fly', '200m Fly',
+      '50m Back', '100m Back', '200m Back', '100m IM', '200m IM', '400m IM']; ?>
+      <table class="table table-sm table-borderless mb-0">
+        <thead>
+          <tr class="pl-0">
+            <th class="pl-0">Swim</th>
+            <th>Short Course</th>
+            <th>Long Course</th>
+          </thead>
+          <tbody>
+      <? for ($i = 0; $i < sizeof($ev); $i++) {
+          echo '<tr class="pl-0"><th class="pl-0">' . $evs[$i] . '</th><td>';
+          if ($sc[$ev[$i]] != "") {
+            echo $sc[$ev[$i]];
+          }
+          echo '</td><td>';
+          if ($lc[$ev[$i]] != "") {
+            echo $lc[$ev[$i]];
+          }
+          echo '</td></tr>';
+      } ?>
+        </tbody>
+      </table>
+    </div>
+
     <?php
     /* Stats Section */
     $swimsCountArray = [];

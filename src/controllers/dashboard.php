@@ -97,11 +97,14 @@ if ($_SESSION['AccessLevel'] == "Coach" || $_SESSION['AccessLevel'] == "Admin") 
     </p>
   </div>
   <div class="media  pt-3">
-    <p class="media-body pb-3 mb-0 lh-125">
+    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
       <a href="<?php echo autoUrl('swimmers') ?>"><strong class="d-block text-gray-dark">Swimmer Notes</strong></a>
       Check important medical and other notes from parents
     </p>
   </div>
+  <span class="d-block mt-3">
+    <i class="fa fa-wifi" aria-hidden="true"></i> <strong>DCCPublic</strong> <em>L1braryPubl1c</em> 
+  </span>
 </div>
 <?php }
 if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach") { ?>
