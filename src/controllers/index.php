@@ -184,6 +184,11 @@ else {
       global $link;
   	  require('controllers/myaccount/add-swimmer-action.php');
   	});
+  	
+  	$this->get(['notify/history/', 'notify/history/page/{page}:int'], function($page = null) {
+			global $link;
+			include BASE_PATH . 'controllers/notify/MyMessageHistory.php';
+		});
 
   });
 

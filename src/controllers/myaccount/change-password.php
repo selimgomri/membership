@@ -3,6 +3,7 @@
   include BASE_PATH . "views/header.php";
 ?>
 <div class="container">
+<div class="mb-3 p-3 bg-white rounded box-shadow">
 <h1>Change your password</h1>
 <? if (isset($_SESSION['ErrorState'])) {
   echo $_SESSION['ErrorState'];
@@ -24,7 +25,8 @@
   </div>
   <p><input type="submit" name="submit" id="submit" class="btn btn-outline-dark" value="Save Changes"></p>
 </form>
-<p>Changes will take place instantly, if everything is correct. You can change your password as often as you like.</p>
+<p class="mb-0">Changes will take place instantly, if everything is correct. You can change your password as often as you like.</p>
+</div>
 </div>
 
 <?php include BASE_PATH . "views/footer.php"; ?>

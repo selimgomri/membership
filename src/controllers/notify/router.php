@@ -2,7 +2,7 @@
 
 $access = $_SESSION['AccessLevel'];
 
-if ($access != "Admin" && $access != "Coach") {
+if ($access != "Admin" && $access != "Coach" && $access != "Galas") {
 $this->get('/', function() {
 	global $link;
 	include 'Help.php';

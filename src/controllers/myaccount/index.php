@@ -290,4 +290,4 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 </div>
 </div>
 
-<?php include "/customers/9/d/e/chesterlestreetasc.co.uk/httpd.www/dev/membership/views/footer.php"; ?>
+<?php include BASE_PATH . "views/footer.php"; ?>

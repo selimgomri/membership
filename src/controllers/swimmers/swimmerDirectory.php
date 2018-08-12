@@ -17,25 +17,11 @@ include BASE_PATH . "views/swimmersMenu.php";
 if (isset($_POST['squad'])) {
   $squadID = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['squad'])));
 } ?>
-<div class="container">
+<div class="container-fluid">
   <h1>Swimmer Directory</h1>
   <div class="d-print-none">
-    <p class="lead">A list of swimmers.</p>
-    <?php if ($access == "Committee" || $access == "Admin") { ?>
-      <p>
-        <a href="<?php echo autoUrl("swimmers/addmember");?>" class="btn btn-outline-dark">
-          Add member
-        </a>
-        <a href="<?php echo autoUrl("swimmers/accesskeys"); ?>" class="btn btn-outline-dark">
-          Access Keys
-        </a>
-        <? if ($_SESSION['AccessLevel'] == "Admin") { ?>
-        <a href="<?php echo autoUrl("swimmers/orphaned"); ?>" class="btn btn-outline-dark">
-          Orphans
-        </a>
-        <? } ?>
-      </p>
-    <?php }
+    <p class="lead">Currently registered members.</p>
+    <?php
   $sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
   $result = mysqli_query($link, $sql);
   $squadCount = mysqli_num_rows($result);

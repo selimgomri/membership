@@ -21,6 +21,29 @@ include "galaMenu.php";
     <?php echo enteredGalas($link, $userID); ?>
   </div>
 
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+    <h2>Generate a Gala Time Sheet</h2>
+    <p class="lead border-bottom border-gray pb-2 mb-2">
+      Gala Time Sheets give a list of each of your swimmer's entries to a gala along with their all-time personal bests and <? echo date("Y"); ?> personal bests.
+    </p>
+    <?
+    $sql = "SELECT * FROM `galas` WHERE `GalaDate` >= CURDATE() ORDER BY `GalaDate` ASC;";
+    $res = mysqli_query($link, $sql);
+    if (mysqli_num_rows($res) > 0) {
+      ?><ul class="list-unstyled mb-0"><?
+      for ($i = 0; $i < mysqli_num_rows($res); $i++) {
+        $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+        ?>
+        <li>
+          <a href="<? echo autoUrl("galas/competitions/" . $row['GalaID'] .
+          "/timesheet"); ?>" target="_blank"><? echo $row['GalaName']; ?></a>
+        </li>
+        <?
+      }
+      ?></ul><?
+    }?>
+  </div>
+
   <?php
   /* Stats Section */
   $swimsCountArray = [];

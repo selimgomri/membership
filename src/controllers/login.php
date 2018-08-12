@@ -51,8 +51,8 @@
           <h2 class="border-bottom border-gray pb-2 mb-0">Please Login</h2>
           <div class="text-muted pt-3">
             <!--<div class="alert alert-warning">
-              <strong>Training Cancellations</strong> <br>
-              Training is cancelled up to and including tomorrow morning. There may be further cancellations.
+              <strong>Overnight System Maintenance</strong> <br>
+              Access to this service may be intermittent from 21:00 on Sunday 29 July until 03:00 on Monday 30 July due to automated dependency updates.
             </div>-->
               <?php if ($errorState == true) { ?>
               <div class="alert alert-danger">

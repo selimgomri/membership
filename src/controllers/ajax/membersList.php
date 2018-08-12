@@ -55,7 +55,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       $output .= '<table class="table">';
     }
     $output .= '
-        <thead class="thead-light">
+        <thead class="thead-light table-sticky">
           <tr>
             <th>Name</th>
             <th>Squad</th>

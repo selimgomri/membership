@@ -41,6 +41,12 @@
 								Our Privacy Policy
 							</a>
             </li>
+            <li>
+              <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/" target="_self"
+              title="Chester-le-Street ASC Help and Support">
+								Help and Support
+							</a>
+            </li>
 						<li>
               <a href="<? echo autoUrl("notify"); ?>" target="_self"
               title="About our Notify Email Service">
