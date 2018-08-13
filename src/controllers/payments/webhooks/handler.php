@@ -106,7 +106,9 @@ function process_mandate_event($event) {
         $message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
 				<p>Your Direct Debit Mandate for Chester-le-Street ASC has been Cancelled. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("") . "</p>
 				<p>Thank you, <br>Chester-le-Street ASC";
-				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has been Cancelled", $message);
+				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has been
+				Cancelled", $message, $user['Forename'] . " " .
+				$user['Surname'],$user['EmailAddress']);
 			} else {
         $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
         $mandateID = mysqli_real_escape_string($link, $row['MandateID']);
@@ -116,7 +118,9 @@ function process_mandate_event($event) {
 				<p>Your Direct Debit Mandate for Chester-le-Street ASC has been cancelled. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
 				<p>Go to " . autoUrl("") . " to make any changes.</p>
 				<p>Thank you, <br>Chester-le-Street ASC";
-				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has been Cancelled", $message);
+				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has been
+				Cancelled", $message, $user['Forename'] . " " . $user['Surname'],
+				$user['EmailAddress']);
 			}
 
       break;
@@ -162,7 +166,9 @@ function process_mandate_event($event) {
 				$message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
 				<p>Your Direct Debit Mandate for Chester-le-Street ASC has expired. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("payments") . "</p>
 				<p>Thank you, <br>Chester-le-Street ASC";
-				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has Expired", $message);
+				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has
+				Expired", $message, $user['Forename'] . " " . $user['Surname'],
+				$user['EmailAddress']);
 			} else {
         $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
         $mandateID = mysqli_real_escape_string($link, $row['MandateID']);
@@ -172,7 +178,9 @@ function process_mandate_event($event) {
 				<p>Your Direct Debit Mandate for Chester-le-Street ASC has expired. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
 				<p>Go to " . autoUrl("payments") . " to make any changes.</p>
 				<p>Thank you, <br>Chester-le-Street ASC";
-				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has Expired", $message);
+				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has
+				Expired", $message, $user['Forename'] . " " . $user['Surname'],
+				$user['EmailAddress']);
 			}
 
 			break;

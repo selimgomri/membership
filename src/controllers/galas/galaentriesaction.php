@@ -112,7 +112,7 @@ if ($entryCount == 0) {
       $content .= "<p>The fee for each swim is &pound;" . number_format($row['GalaFee'],2,'.','') . ", the <strong>total fee payable is &pound;" . number_format(($counter*$row['GalaFee']),2,'.','') . "</strong></p>";
       $message .= "<p>The fee for each swim is &pound;" . number_format($row['GalaFee'],2,'.','') . ", the <strong>total fee payable is &pound;" . number_format(($counter*$row['GalaFee']),2,'.','') . "</strong></p>";
     }
-    notifySend($to, $subject, $message);
+    notifySend($to, $subject, $message, $row['Forename'] . " " . $row['Surname'], $row['EmailAddress']);
   }
 }
 elseif ($entryCount > 0) {
