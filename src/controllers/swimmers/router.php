@@ -90,6 +90,13 @@ if ($access != "Parent") {
 	  include 'AddMember/ActivateFamilyMode.php';
 	});
 
+	if (isset($_SESSION['Swimmers-FamilyMode'])) {
+		$this->get('/family/exit', function() {
+	    global $link;
+		  include 'AddMember/ExitFamilyMode.php';
+		});
+	}
+
 	$this->get('/new', function() {
     global $link;
 	  require('AddMember/addMember.php');

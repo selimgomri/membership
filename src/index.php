@@ -292,6 +292,11 @@ else {
     include 'controllers/galas/router.php';
   });
 
+  $route->group('/family', function() {
+    global $db;
+    require('controllers/family/router.php');
+  });
+
   $route->group('/renewal', function() {
     global $link;
 

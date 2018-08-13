@@ -1,5 +1,7 @@
 <?
 
+global $db;
+
 $added = $action = false;
 
 $forename = $middlenames = $surname = $dateOfBirth = $asaNumber = $sex = $squad = $cat = $cp = $sql = "";
@@ -38,6 +40,15 @@ if ((!empty($_POST['forename']))  && (!empty($_POST['surname'])) && (!empty($_PO
 	$action = mysqli_query($link, $sql);
 
 	$last_id = mysqli_insert_id($link);
+
+	if (isset($_SESSION['Swimmers-FamilyMode'])) {
+		$sql = "INSERT INTO familyMembers (FamilyID, MemberID) VALUES (?, ?)";
+		try {
+			$db->prepare($sql)->execute([$_SESSION['Swimmers-FamilyMode']['FamilyId'], $last_id]);
+		} catch (PDOException $e) {
+			halt(500);
+		}
+	}
 
 	if ($getASA) {
 		$asa = mysqli_real_escape_string($link, "CLSX" . $last_id);

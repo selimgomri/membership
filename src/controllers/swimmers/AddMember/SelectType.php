@@ -38,10 +38,9 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		      new family.</p>
 		    </div>
 		    <div class="card-footer">
-					<!--<a disabled href="<? echo autoUrl("swimmers/new/family"); ?>">
+					<a disabled href="<? echo autoUrl("swimmers/new/family"); ?>">
 		      	Add a new family
-					</a>-->
-					Feature coming soon
+					</a>
 		    </div>
 		  </div>
 		</div>
