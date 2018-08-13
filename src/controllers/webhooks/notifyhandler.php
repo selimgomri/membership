@@ -13,10 +13,11 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		//$to = $row['EmailAddress'];
     $to = $row['Forename'] . " " . $row['Surname'] . " <" . $row['EmailAddress'] . ">";
 		$name = $row['Forename'] . " " . $row['Surname'];
+		$emailaddress = $row['EmailAddress'];
 		$subject = $row['Subject'];
 		$message = "<p>Dear " . $row['Forename'] . " " . $row['Surname'] . ",</p>" . $row['Message'];
 
-		if (notifySend($to, $subject, $message)) {
+		if (notifySend($to, $subject, $message, $name, $emailaddress)) {
 			$sql = "UPDATE `notify` SET `Status` = 'Sent' WHERE `EmailID` = '$emailid';";
 			mysqli_query($link, $sql);
 		} else {

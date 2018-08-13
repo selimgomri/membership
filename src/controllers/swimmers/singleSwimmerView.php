@@ -35,11 +35,26 @@ date_create('today'))->y;
 $title = null;
 $content = '
 <div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded box-shadow" id="dash">
-  <div class="mr-3 bg-white px48">
-    <img class="d-block mx-auto max48" src="https://www.swimmingresults.org/biogs/biogs_image.php?id=' . $rowSwim['ASANumber'] . '" alt="">
+  <div class="mr-3 bg-white px48">';
+  if ($age > 17) {
+    $content .= '
+    <img class="d-block mx-auto max48"
+    src="https://www.swimmingresults.org/biogs/biogs_image.php?id=' .
+    $rowSwim['ASANumber'] . '" alt="">';
+  } else {
+    $content .= '<img class="d-block mx-auto max48"
+    src="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png"
+    alt="">';
+  }
+  $content .= '
   </div>
   <div class="lh-100">
-    <h1 class="h6 mb-0 text-white lh-100">' . $rowSwim["MForename"];
+    <h1 class="h6 mb-0 text-white lh-100 d-print-none">' . $rowSwim["MForename"];
+    if ($rowSwim["MMiddleNames"] != "") {
+       $content .= ' ' . $rowSwim["MMiddleNames"];
+    }
+    $content .= ' ' . $rowSwim["MSurname"] . '</h1>
+    <h1 class="d-none mb-0 text-white lh-100 d-print-block">' . $rowSwim["MForename"];
     if ($rowSwim["MMiddleNames"] != "") {
        $content .= ' ' . $rowSwim["MMiddleNames"];
     }
@@ -47,7 +62,28 @@ $content = '
     <small>Swimmer, ' . $rowSwim["SquadName"] . ' Squad</small>
   </div>
 </div>
-<div class="my-3 p-3 bg-white rounded box-shadow">
+<ul class="nav nav-pills bg-white rounded box-shadow d-print-none">
+  <li class="nav-item">
+    <a class="nav-link" href="#about">About ' . $rowSwim["MForename"] . '</a>
+  </li>';
+  if ($age < 17) {
+    $content .= '
+    <li class="nav-item">
+      <a class="nav-link" href="#photo">Photography Permissions</a>
+    </li>';
+  }
+  $content .= '
+  <li class="nav-item">
+    <a class="nav-link" href="#emergency">Emergency Contacts</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#times">Best Times</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#squad">Squad Information</a>
+  </li>
+</ul>
+<div class="my-3 p-3 bg-white rounded box-shadow" id="about">
   <h2 class="border-bottom border-gray pb-2 mb-0">About ' . $rowSwim["MForename"] . '</h2>
   <div class="media pt-3">
     <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
@@ -67,7 +103,7 @@ $content = '
       ' . $rowSwim["ASACategory"] . ' <em>(This is not yet accurate)</em>
     </p>
   </div>
-  <div class="media pt-3">
+  <div class="media pt-3 d-print-none">
     <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
       <strong class="d-block text-gray-dark">Parent Account Setup
       Information</strong>
@@ -176,20 +212,20 @@ $content = '
   </div>';
 	if ($access == "Admin" || $access == "Committee") {
 	  $content .= '
-	  <span class="d-block text-right mt-3">
+	  <span class="d-block text-right mt-3 d-print-none">
 	    <a href="edit/' . $id . '">Edit Details</a> or <a href="' . $id . '/medical">add Medical Notes</a>
 	  </span>
 		</div>';
 	}
 	else {
 		$content .= '
-	  <span class="d-block text-right mt-3">
+	  <span class="d-block text-right mt-3 d-print-none">
 	    Please contact a Parent or Administrator if you need to make changes
 	  </span>
 		</div>';
 	}
 $content .= '
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded box-shadow" id="photo">
     <h2 class="border-bottom border-gray pb-2 mb-2">Photography Permissions</h2>';
     if (($rowSwim['Website'] != 1 || $rowSwim['Social'] != 1 || $rowSwim['Noticeboard'] != 1 || $rowSwim['FilmTraining'] != 1 || $rowSwim['ProPhoto'] != 1) && ($age < 18)) {
       $content .= '
@@ -220,7 +256,7 @@ $content .= '
   '$id';";
   $result = mysqli_query($link, $sql);
   $content .= '
-    <div class="my-3 p-3 bg-white rounded box-shadow">
+    <div class="my-3 p-3 bg-white rounded box-shadow" id="emergency">
       <h2>Emergency Contacts</h2>';
       if (mysqli_num_rows($result) == 0) {
       $content .= '<p class="lead">
@@ -268,35 +304,56 @@ $content .= '
     }
   $content .= '</div>';
   $content.= '
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded box-shadow" id="times">
     <h2 class="border-bottom border-gray pb-2 mb-2">Best Times</h2>';
+    $mob = app('request')->isMobile();
     $sc = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'SCPB';";
     $lc = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'LCPB';";
+    $scy = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'CY_SC';";
+    $lcy = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'CY_LC';";
     $sc = mysqli_fetch_array(mysqli_query($link, $sc), MYSQLI_ASSOC);
     $lc = mysqli_fetch_array(mysqli_query($link, $lc), MYSQLI_ASSOC);
+    $scy = mysqli_fetch_array(mysqli_query($link, $scy), MYSQLI_ASSOC);
+    $lcy = mysqli_fetch_array(mysqli_query($link, $lcy), MYSQLI_ASSOC);
     $ev = ['50Free', '100Free', '200Free', '400Free', '800Free', '1500Free',
     '50Breast', '100Breast', '200Breast', '50Fly', '100Fly', '200Fly',
     '50Back', '100Back', '200Back', '100IM', '200IM', '400IM'];
     $evs = ['50m Free', '100m Free', '200m Free', '400m Free', '800m Free', '1500m Free',
     '50m Breast', '100m Breast', '200m Breast', '50m Fly', '100m Fly', '200m Fly',
     '50m Back', '100m Back', '200m Back', '100m IM', '200m IM', '400m IM'];
-    $content.= '<table class="table table-sm table-borderless">
-    <thead class=""><tr class="pl-0"><th class="pl-0">Swim</th><th>Short Course</th><th>Long Course</th></thead>
+    $content.= '<table class="table table-sm table-borderless table-striped">
+    <thead class=""><tr class="pl-0"><th class="pl-0">Swim</th><th>Short Course</th>';
+    if (!$mob) {
+      $content .= '<th>' . date("Y") . ' Short Course</th>';
+    }
+    $content .= '<th>Long Course</th>';
+    if (!$mob) {
+      $content .= '<th>' . date("Y") . ' Long Course</th>';
+    }
+    $content .= '</thead>
     <tbody>';
     for ($i = 0; $i < sizeof($ev); $i++) {
+    if ($sc[$ev[$i]] != "" || $lc[$ev[$i]] != "") {
       $content.= '<tr class="pl-0"><th class="pl-0">' . $evs[$i] . '</th><td>';
       if ($sc[$ev[$i]] != "") {
         $content.= $sc[$ev[$i]];
+      }
+      if (!$mob) {
+        $content .= '</td><td>' . $scy[$ev[$i]];
       }
       $content .= '</td><td>';
       if ($lc[$ev[$i]] != "") {
         $content.= $lc[$ev[$i]];
       }
+      if (!$mob) {
+        $content .= '</td><td>' . $lcy[$ev[$i]];
+      }
       $content.= '</td></tr>';
+    }
     }
     $content.= '
     </tbody></table>
-    <div class="media">
+    <div class="media d-print-none">
       <div class="media-body pb-0 mb-0 lh-125">
         <div class="row">
           <div class="col">
@@ -398,15 +455,15 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
 	        chart.draw(data, options);
 	      }
 	    </script>
-      <div class=\"my-3 p-3 bg-white rounded box-shadow\">
-      <h2 class=\"border-bottom border-gray pb-2 mb-0\">Gala Statistics</h2>
-	    <div id=\"piechart\"></div>
-			<div id=\"barchart\"></div>
+      <div class=\"my-3 p-3 bg-white rounded box-shadow w-100\">
+        <h2 class=\"border-bottom border-gray pb-2 mb-0\">Gala Statistics</h2>
+  	    <div class=\"w-100\" id=\"piechart\"></div>
+  			<div class=\"w-100\" id=\"barchart\"></div>
       </div>
 	";
 }
 $content .= '
-<div class="my-3 p-3 bg-white rounded box-shadow">
+<div class="my-3 p-3 bg-white rounded box-shadow" id="squad">
 <h2 class="border-bottom border-gray pb-2 mb-0">Squad Information</h2>
 <div class="media pt-3">
   <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
@@ -427,7 +484,7 @@ $content .= '
 </div>';
 if ($rowSwim['SquadTimetable'] != "") {
   $content .= '
-  <div class="media pt-3">
+  <div class="media pt-3 d-print-none">
     <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
       <strong class="d-block text-gray-dark">Squad Timetable</strong>
       <a href="' . $rowSwim["SquadTimetable"] . '">Squad Timetable</a>
@@ -436,7 +493,7 @@ if ($rowSwim['SquadTimetable'] != "") {
 }
 if ($rowSwim['SquadCoC'] != "") {
   $content .= '
-  <div class="media pt-3">
+  <div class="media pt-3 d-print-none">
     <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
       <strong class="d-block text-gray-dark">Squad Code of Conduct</strong>
       <a href="' . $rowSwim["SquadCoC"] . '">Squad Code of Conduct</a>

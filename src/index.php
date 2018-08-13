@@ -51,7 +51,10 @@ require "config.php";
 require "helperclasses/ClassLoader.php";
 
 function halt(int $statusCode) {
-  if ($statusCode == 400) {
+  if ($statusCode == 200) {
+    include "views/200.php";
+  }
+  else if ($statusCode == 400) {
     include "views/400.php";
   }
   else if ($statusCode == 401) {
@@ -65,6 +68,9 @@ function halt(int $statusCode) {
   }
   else if ($statusCode == 502) {
     include "views/502.php";
+  }
+  else if ($statusCode == 0) {
+    include "views/000.php";
   }
   else {
     include "views/500.php";
@@ -86,6 +92,8 @@ if (mysqli_connect_errno()) {
 }
 
 require_once "database.php";
+
+use Symfony\Component\DomCrawler\Crawler;
 
 $app            = System\App::instance();
 $app->request   = System\Request::instance();
@@ -111,70 +119,6 @@ $route->group('/services', function() {
 
   $this->get('/qr-generator', function() {
     include 'controllers/barcode-generation-system/qr.php';
-  });
-});
-
-$route->group('/auth/saml', function() {
-  $this->any(['', 'index.php', 'index.php/*'], function() {
-    $_SERVER['PATH_INFO'] = '/' . $this[0];
-    include 'saml/www/index.php';
-  });
-
-  $this->any(['logout.php', 'logout.php/*'], function() {
-    $_SERVER['PATH_INFO'] = '/' . $this[0];
-    include 'saml/www/logout.php';
-  });
-
-  $this->any(['module.php', 'module.php/*'], function() {
-    $_SERVER['PATH_INFO'] = '/' . $this[0];
-    include 'saml/www/module.php';
-  });
-
-  $this->any(['errorreport.php', 'errorreport.php/*'], function() {
-    $_SERVER['PATH_INFO'] = '/' . $this[0];
-    include 'saml/www/errorreport.php';
-  });
-
-  $this->any(['authmemcookie.php', 'authmemcookie.php/*'], function() {
-    $_SERVER['PATH_INFO'] = '/' . $this[0];
-    include 'saml/www/authmemcookie.php';
-  });
-
-  $this->get('resources/*', function() {
-    include 'saml/www/resources/' . $this[0];
-  });
-
-  $this->group('/admin', function() {
-    $this->any(['', 'index.php', 'index.php/*'], function() {
-      $_SERVER['PATH_INFO'] = '/' . $this[0];
-      include 'saml/www/admin/index.php';
-    });
-
-    $this->any(['hostnames.php', 'hostnames.php/*'], function() {
-      $_SERVER['PATH_INFO'] = '/' . $this[0];
-      include 'saml/www/admin/hostnames.php';
-    });
-
-    $this->any(['metadata-converter.php', 'metadata-converter.php/*'], function() {
-      $_SERVER['PATH_INFO'] = '/' . $this[0];
-      include 'saml/www/admin/metadata-converter.php';
-    });
-
-    $this->any(['phpinfo.php', 'phpinfo.php/*'], function() {
-      $_SERVER['PATH_INFO'] = '/' . $this[0];
-      include 'saml/www/admin/phpinfo.php';
-    });
-
-    $this->any(['sandbox.php', 'sandbox.php/*'], function() {
-      $_SERVER['PATH_INFO'] = '/' . $this[0];
-      include 'saml/www/admin/sandbox.php';
-    });
-  });
-
-  $this->any(['/saml2/idp/{file}', '/saml2/idp/{file}/*'], function($file) {
-    $_SERVER['PATH_INFO'] = '/' . $this[0];
-    echo 'saml/www/saml2/idp/' . $file;
-    include 'saml/www/saml2/idp/' . $file;
   });
 });
 
@@ -290,6 +234,8 @@ else {
   	  require('controllers/myaccount/change-password-action.php');
   	});
 
+  	if ($_SESSION['AccessLevel'] == "Parent") {
+
   	// Add swimmer
   	$this->get('/addswimmer', function() {
       global $link;
@@ -306,6 +252,13 @@ else {
       global $link;
   	  require('controllers/myaccount/add-swimmer-action.php');
   	});
+
+  	$this->get(['notify/history/', 'notify/history/page/{page}:int'], function($page = null) {
+			global $link;
+			include 'controllers/notify/MyMessageHistory.php';
+		});
+
+		}
 
   });
 
@@ -388,18 +341,14 @@ else {
     });
   });
 
-  $route->any('asa/{asa}', function($asa) {
+  $route->any('asa/{asa}/{ev}/{course}', function($asa, $ev, $course) {
     global $link;
-
-    $array = getTimes($asa);
-
-    pre($array);
 
     include BASE_PATH . 'views/header.php'; ?>
     <div class="container">
       <h1>Times</h1>
       <table class="table table-sm">
-        <? echo $output; ?>
+        <? echo pre(getTimesInFull($asa, $ev, $course)); ?>
       </table>
     </div>
     <? include BASE_PATH . 'views/footer.php';

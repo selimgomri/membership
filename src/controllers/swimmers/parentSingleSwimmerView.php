@@ -211,8 +211,12 @@ else {
       '50Back', '100Back', '200Back', '100IM', '200IM', '400IM'];
       $evs = ['50m Free', '100m Free', '200m Free', '400m Free', '800m Free', '1500m Free',
       '50m Breast', '100m Breast', '200m Breast', '50m Fly', '100m Fly', '200m Fly',
-      '50m Back', '100m Back', '200m Back', '100m IM', '200m IM', '400m IM']; ?>
-      <table class="table table-sm table-borderless mb-0">
+      '50m Back', '100m Back', '200m Back', '100m IM', '200m IM', '400m IM'];
+      $openedTable = false; ?>
+      <? for ($i = 0; $i < sizeof($ev); $i++) {
+      if ($sc[$ev[$i]] != "" || $lc[$ev[$i]] != "") {
+      if (!$openedTable) { ?>
+      <table class="table table-sm table-borderless table-striped mb-0">
         <thead>
           <tr class="pl-0">
             <th class="pl-0">Swim</th>
@@ -220,7 +224,9 @@ else {
             <th>Long Course</th>
           </thead>
           <tbody>
-      <? for ($i = 0; $i < sizeof($ev); $i++) {
+          <?
+          $openedTable = true;
+          }
           echo '<tr class="pl-0"><th class="pl-0">' . $evs[$i] . '</th><td>';
           if ($sc[$ev[$i]] != "") {
             echo $sc[$ev[$i]];
@@ -230,9 +236,14 @@ else {
             echo $lc[$ev[$i]];
           }
           echo '</td></tr>';
-      } ?>
+          }
+      }
+      if ($openedTable) { ?>
         </tbody>
       </table>
+      <? } else { ?>
+      <p class="lead mt-2 mb-0">There are no times available for this swimmer.</p>
+      <? } ?>
     </div>
 
     <?php
@@ -383,8 +394,8 @@ else {
         <div class="text-center border p-2 bg-white">
           <span class="lead mb-2">ASA Number</span>
           <img class="img-fluid mx-auto d-block"
-          src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ASANumber'] . "&print=false"); ?>"
-          srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ASANumber'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ASANumber'] . "&print=false"); ?> 3x"
+          src="<? echo autoUrl("services/barcode-generator?codetype=Code128a&size=60&text=" . $row['ASANumber'] . "&print=false"); ?>"
+          srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128a&size=120&text=" . $row['ASANumber'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128a&size=180&text=" . $row['ASANumber'] . "&print=false"); ?> 3x"
           alt="<? echo $row['ASANumber']; ?>"></img>
           <span class="mono"><? echo $row['ASANumber']; ?></span>
         </div>

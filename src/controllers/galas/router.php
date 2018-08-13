@@ -1,6 +1,12 @@
 <?php
 $access = $_SESSION['AccessLevel'];
 
+// Gala Entry Time Sheet
+$this->get('/competitions/{id}:int/timesheet', function($id) {
+  global $link;
+  include "export/TimeSheet.php";
+});
+
 if ($access == "Parent") {
 	// Gala Home
 	$this->get('/', function() {

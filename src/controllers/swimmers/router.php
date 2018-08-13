@@ -82,12 +82,22 @@ if ($access == "Admin") {
 if ($access != "Parent") {
 	$this->get('/addmember', function() {
     global $link;
-	  require('addMember.php');
+	  include 'AddMember/SelectType.php';
 	});
 
-	$this->post('/addmember', function() {
+	$this->get('/new/family', function() {
     global $link;
-	  require('addMemberPost.php');
+	  include 'AddMember/ActivateFamilyMode.php';
+	});
+
+	$this->get('/new', function() {
+    global $link;
+	  require('AddMember/addMember.php');
+	});
+
+	$this->post('/new', function() {
+    global $link;
+	  require('AddMember/addMemberPost.php');
 	});
 
 	$this->get('/parenthelp/{id}:int', function($id) {

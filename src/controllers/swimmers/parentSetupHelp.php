@@ -149,7 +149,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 	<p>
 		If you do not have a device that can read QR Codes, to add a swimmer, log
 		into your account at https://account.chesterlestreetasc.co.uk/  and the
-		select 'My Swimmers' then 'Add Swimmers' from the menu at the top.
+		select 'My Account' then 'Add Swimmers' from the menu at the top.
 	</p>
 
 	<p>

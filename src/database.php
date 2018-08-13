@@ -9,7 +9,7 @@ elseif (!isset($preventLoginRedirect)) {
   $_SESSION['requestedURL'] = mysqli_real_escape_string(LINK, $_SERVER['REQUEST_URI']);
 }*/
 
-function notifySend($to, $subject, $message, $name = null) {
+function notifySend($to, $subject, $message, $name = null, $emailaddress = null) {
   // PHP Email
   $messageid = time() .'-' . md5("CLS-Membership" . ((int) (Math.rand()*1000)) .
   $to) . '@account.chesterlestreetasc.co.uk';
@@ -19,6 +19,7 @@ function notifySend($to, $subject, $message, $name = null) {
   $id = substr($to, $pos1, $pos2-$pos1);
 
   // Always set content-type when sending HTML email
+  /*
   $headers = "MIME-Version: 1.0" . "\r\n";
   $headers .= "Content-type: text/html;charset=UTF-8" . "\r\n";
   $headers .= "Message-ID: <" . $messageid . ">\r\n";
@@ -30,7 +31,8 @@ function notifySend($to, $subject, $message, $name = null) {
   <targeted-lists@account.chesterlestreetasc.co.uk>\r\n";
   $headers .= "List-Unsubscribe: <" . autoUrl("notify/unsubscribe/" . $id) .
   ">\r\n";   $headers .= 'List-Unsubscribe-Post: List-Unsubscribe=One-Click' . "\r\n";
-  $message = "
+  */
+  $head = "
   <!DOCTYPE html>
   <html lang=\"en-gb\">
   <head>
@@ -41,7 +43,7 @@ function notifySend($to, $subject, $message, $name = null) {
       html, body {
         font-family: \"Open Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial,sans-serif;
         font-size: 1rem;
-        background: #fff8f8;
+        background: #f8fcff;
       }
 
       p, h1, h2, h3, h4, h5, h6 {
@@ -49,24 +51,28 @@ function notifySend($to, $subject, $message, $name = null) {
       }
 
       .small {
-        font-size: 0.75rem;
+        font-size: 0.70rem;
         color: #868e96;
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.70rem;
+      }
+
+      .text-center {
+        text-align: center;
       }
 
       .bottom {
         margin: 1rem 0 0 0;
       }
 
-      </style>
-    </head>
-    <body>
+    </style>
+  </head>";
+
+  $message = "<body>
       <table style=\"width:100%;border:0px;text-align:left\"><tr><td><img
 src=\"https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.png\"
 style=\"width:300px;max-width:100%;\"></td></tr></table>" . $message . " <div
-class=\"bottom\"> <p class=\"small\">This email was sent automatically by the
-Chester-le-Street ASC Membership System.</p> <p class=\"small\">Have questions
-about emails or anything else from Chester-le-Street ASC? Contact us at <a
+class=\"bottom text-center\"> <p class=\"small\">&copy; Chester-le-Street ASC " . date("Y") . "</p> <p class=\"small\">Chester-le-Street ASC, Burns Green, Chester-le-Street, DH3 3QH.</p> <p class=\"small\">This email was sent automatically by the
+Chester-le-Street ASC Membership System.</p> <p class=\"small\">Have questions? Contact us at <a
 href=\"mailto:enquiries@chesterlestreetasc.co.uk\">enquiries@chesterlestreetasc.co.uk</a>.</p>
 <p class=\"small\">To control your email options, go to <a href=\"" .
 autoUrl("myaccount") . "\">My Account</a>.</p>
@@ -74,10 +80,39 @@ autoUrl("myaccount") . "\">My Account</a>.</p>
     </body>
     </html>";
 
-  if (mail($to,$subject,$message,$headers)) {
+  if ($emailaddress != null && $name != null) {
+
+    $email = new \SendGrid\Mail\Mail();
+    $email->setFrom("noreply@chesterlestreetasc.co.uk", "Chester-le-Street ASC");
+    $email->setSubject($subject);
+    $email->addTo($emailaddress, $name);
+    $email->addContent("text/plain", strip_tags($message));
+    $email->addContent(
+      "text/html", $head . $message
+    );
+
+    pre($email);
+
+    $sendgrid = new \SendGrid(SENDGRID_API_KEY);
+    try {
+      $response = $sendgrid->send($email);
+      //print $response->statusCode() . "\n";
+      //print_r($response->headers());
+      //print $response->body() . "\n";
+    } catch (Exception $e) {
+      return false;
+      //echo 'Caught exception: '. $e->getMessage() ."\n";
+    }
+
     return true;
   } else {
-    return false;
+
+    if (mail($to,$subject,$head . $message,$headers)) {
+      return true;
+    } else {
+      return false;
+    }
+
   }
 }
 
@@ -1344,6 +1379,121 @@ function getTimes($asa) {
   return $array;
 }
 
+function getTimesInFull($asa, $swim, $course) {
+  global $link;
+
+  $swimsArray = [
+    '50Free' => '1',
+    '100Free' => '2',
+    '200Free' => '3',
+    '400Free' => '4',
+    '800Free' => '5',
+    '1500Free' => '6',
+    '50Breast' => '7',
+    '100Breast' => '8',
+    '200Breast' => '9',
+    '50Fly' => '10',
+    '100Fly' => '11',
+    '200Fly' => '12',
+    '50Back' => '13',
+    '100Back' => '14',
+    '200Back' => '15',
+    '100IM' => '18',
+    '200IM' => '16',
+    '400IM' => '17'
+  ];
+
+  $courseArray = [
+    'Long' => 'L',
+    'LongCourse' => 'L',
+    'LC' => 'L',
+    'Short' => 'S',
+    'ShortCourse' => 'S',
+    'SC' => 'S'
+  ];
+
+  $swim = $swimsArray[$swim];
+  $course = $courseArray[$course];
+
+
+  $curlres =
+  curl('https://www.swimmingresults.org/individualbest/personal_best_time_date.php?back=biogs&tiref=' .
+  $asa . '&mode=A&tstroke=' . $swim . '&tcourse=' . $course);
+
+  $start = '<p class="rnk_sj">Swims in Date Order</p><table id="rankTable"><tbody>';
+  $end = '</tbody></table>';
+
+  $output = curl_scrape_between($curlres, $start, $end);
+  $output = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $output);
+  $output = preg_replace('/(<[^>]+) width=".*?"/i', '$1', $output);
+
+  $crawler = new Crawler($output);
+  $crawler = $crawler->filter('tr > td');
+
+  $array = ['Time', 'FINA', 'Round', 'Date', 'Meet', 'Venue', 'Club', 'Level'];
+  $count = 0;
+
+  foreach ($crawler as $domElement) {
+    $col = $count%8;
+    if ($col == 0) {
+      if ($domElement->textContent == "") {
+        $array['Time'][] = null;
+      } else {
+        $array['Time'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+      }
+    } else if ($col == 1) {
+      if ($domElement->textContent == "") {
+        $array['FINA'][] = null;
+      } else {
+        $array['FINA'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+      }
+    } else if ($col == 2) {
+      if ($domElement->textContent == "") {
+        $array['ROUND'][] = 'H';
+      } else {
+        $array['ROUND'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+      }
+    } else if ($col == 3) {
+      if ($domElement->textContent == "") {
+        $array['Date'][] = null;
+      } else {
+        $date = date_parse_from_format("d/m/y", $domElement->textContent);
+        $date = $date['year'] . "-" . sprintf('%02d', $date['month']) . "-" .
+        sprintf('%02d', $date['day']);
+        $array['Date'][] = mysqli_real_escape_string($link, trim($date));
+      }
+    } else if ($col == 4) {
+      if ($domElement->textContent == "") {
+        $array['Meet'][] = null;
+      } else {
+        $array['Meet'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+      }
+    } else if ($col == 5) {
+      if ($domElement->textContent == "") {
+        $array['Venue'][] = null;
+      } else {
+        $array['Venue'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+      }
+    } else if ($col == 4) {
+      if ($domElement->textContent == "") {
+        $array['License'][] = null;
+      } else {
+        $array['License'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+      }
+    } else if ($col == 4) {
+      if ($domElement->textContent == "") {
+        $array['Level'][] = null;
+      } else {
+        $array['Level'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+      }
+    }
+    $count++;
+  }
+
+  return $array;
+
+  //return $crawler;
+}
 
 $count = 0;
 

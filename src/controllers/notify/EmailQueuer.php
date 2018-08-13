@@ -5,6 +5,10 @@ set_time_limit(0);
 
 $subject = mysqli_real_escape_string($link, $_POST['subject']);
 $message = mysqli_real_escape_string($link, $_POST['message']);
+if ($_SESSION['AccessLevel'] != "Admin") {
+    $message .= '<p class="small text-muted">Sent by ' . $_SESSION['Forename'] . ' ' .
+    $_SESSION['Surname'] . '</p>';
+}
 $force = 0;
 $sender = mysqli_real_escape_string($link, $_SESSION['UserID']);
 if (isset($_POST['force'])) {
