@@ -15,7 +15,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		$name = $row['Forename'] . " " . $row['Surname'];
 		$emailaddress = $row['EmailAddress'];
 		$subject = $row['Subject'];
-		$message = "<p>Dear " . $row['Forename'] . " " . $row['Surname'] . ",</p>" . $row['Message'];
+		$message = "<p class=\"small\">Hello " . $row['Forename'] . " " . $row['Surname'] . ",</p>" . $row['Message'];
 
 		$from = [
 			"Email" => "notify@chesterlestreetasc.co.uk",

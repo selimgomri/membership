@@ -43,10 +43,10 @@ function notifySend($to, $subject, $message, $name = null, $emailaddress = null,
       html, body {
         font-family: \"Open Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial,sans-serif;
         font-size: 1rem;
-        background: #f8fcff;
+        background: #e3eef6;
       }
 
-      p, h1, h2, h3, h4, h5, h6 {
+      p, h1, h2, h3, h4, h5, h6, ul, ol, img {
         margin: 0 0 1rem 0;
       }
 
@@ -68,15 +68,31 @@ function notifySend($to, $subject, $message, $name = null, $emailaddress = null,
   </head>";
 
   $message = "<body>
-      <table style=\"width:100%;border:0px;text-align:left\"><tr><td><img
-src=\"https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.png\"
-style=\"width:300px;max-width:100%;\"></td></tr></table>" . $message . " <div
-class=\"bottom text-center\"> <p class=\"small\">&copy; Chester-le-Street ASC " . date("Y") . "</p> <p class=\"small\">Chester-le-Street ASC, Burns Green, Chester-le-Street, DH3 3QH.</p> <p class=\"small\">This email was sent automatically by the
-Chester-le-Street ASC Membership System.</p> <p class=\"small\">Have questions? Contact us at <a
+  <div style=\"background:#e3eef6;\">
+    <table style=\"width:100%;border:0px;text-align:left;padding:10px 0px 10px 0px;background:#e3eef6;\"><tr><td align=\"center\">
+      <table style=\"width:100%;max-width:700px;border:0px;text-align:center;background:#ffffff;padding:10px 10px 0px 10px;\"><tr><td>
+      <img src=\"" . autoUrl("img/notify/NotifyLogo.png") . "\"
+      style=\"width:300px;max-width:100%;\" srcset=\"" .
+      autoUrl("img/notify/NotifyLogo@2x.png") . " 2x, " .
+      autoUrl("img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"Chester-le-Street ASC Logo\"></td></tr></table>
+      <table style=\"width:100%;max-width:700px;border:0px;text-align:left;background:#ffffff;padding:0px 10px;\"><tr><td>
+      " . $message . "
+      </td></tr></table>
+      <table style=\"width:100%;max-width:700px;border:0px;background:#f8fcff;padding:0px 10px;\"><tr><td>
+      <div
+class=\"bottom text-center\">
+<p class=\"small\" align=\"center\">Chester-le-Street ASC, Chester-le-Street Leisure Centre, Burns Green,<br>Chester-le-Street, DH3 3QH.</p>
+<p class=\"small\" align=\"center\">This email was sent automatically by the Chester-le-Street
+ASC Membership System.</p>
+<p class=\"small\" align=\"center\">Have questions? Contact us at <a
 href=\"mailto:enquiries@chesterlestreetasc.co.uk\">enquiries@chesterlestreetasc.co.uk</a>.</p>
-<p class=\"small\">To control your email options, go to <a href=\"" .
+<p class=\"small\" align=\"center\">To control your email options, go to <a href=\"" .
 autoUrl("myaccount") . "\">My Account</a>.</p>
+<p class=\"small\" align=\"center\">&copy; Chester-le-Street ASC " . date("Y") . "</p>
       </div>
+      </table>
+    </table>
+    </div>
     </body>
     </html>";
 
@@ -93,6 +109,26 @@ autoUrl("myaccount") . "\">My Account</a>.</p>
     $email->addContent(
       "text/html", $head . $message
     );
+
+    if ($from['Email'] == "notify@chesterlestreetasc.co.uk" || $from['Email'] == "payments@chesterlestreetasc.co.uk") {
+      $email->addHeader("List-Archive", autoUrl("myaccount/notify/history"));
+    }
+
+    if ($from['Email'] == "notify@chesterlestreetasc.co.uk") {
+      $email->addHeader("List-Help", autoUrl("notify"));
+    }
+
+    if ($from['Email'] == "notify@chesterlestreetasc.co.uk") {
+      $email->addHeader("List-ID", "CLS ASC Targeted Lists <targeted-lists@account.chesterlestreetasc.co.uk>");
+    } else if ($from['Email'] == "payments@chesterlestreetasc.co.uk") {
+      $email->addHeader("List-ID", "Direct Debit Payment Information <payment-news@account.chesterlestreetasc.co.uk>");
+    }
+
+    if ($from['Email'] == "payments@chesterlestreetasc.co.uk") {
+      $email->setReplyTo("payments+replytoautoemail@chesterlestreetasc.co.uk", "Payments Team");
+    } else {
+      $email->setReplyTo("enquiries+replytoautoemail@chesterlestreetasc.co.uk", "Enquiries - CLS ASC");
+    }
 
     $sendgrid = new \SendGrid(SENDGRID_API_KEY);
     try {
