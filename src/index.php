@@ -133,7 +133,7 @@ if (empty($_SESSION['LoggedIn'])) {
     header("Location: " . autoUrl(""));
   });
 
-  $route->post('/', function() {
+  $route->any(['/'], function() {
     global $link;
   	include 'controllers/login-go.php';
   });

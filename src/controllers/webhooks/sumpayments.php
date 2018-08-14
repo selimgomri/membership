@@ -27,7 +27,7 @@ if (mysqli_num_rows($result) == 0) {
   $result = mysqli_query($link, $sql);
   for ($i = 0; $i < mysqli_num_rows($result); $i++) {
     $row[$i] = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    $user = $row[$i]['UserID'];
+    $user = mysqli_real_escape_string($link, $row[$i]['UserID']);
     $amount = monthlyFeeCost($link, $user, "int");
     if ($amount > 0) {
       $description = "Squad Fees";
