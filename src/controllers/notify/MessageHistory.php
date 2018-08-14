@@ -15,7 +15,8 @@ if ($page == 1 && $null != null) {
   die();
 }
 
-$sql = "SELECT DISTINCT `Subject` , `Message` FROM `notify`;";
+$sql = "SELECT DISTINCT `notify`.`Subject` , `notify`.`Message` FROM `notify` INNER JOIN
+`notifyHistory` ON `MessageID` = notifyHistory.ID;";
 $numMails  = mysqli_num_rows(mysqli_query($link, $sql));
 $numPages = ((int)($numMails/10)) + 1;
 
@@ -25,7 +26,7 @@ if ($start > $numMails) {
 
 $sql = "SELECT DISTINCT `notify`.`Subject`, `notify`.`Message`,
 `notify`.`ForceSend`, `Forename`, `Surname`, `JSONData`, `Date` FROM ((`notify`
-LEFT JOIN `users` ON notify.Sender = users.UserID) LEFT JOIN `notifyHistory` ON
+LEFT JOIN `users` ON notify.Sender = users.UserID) INNER JOIN `notifyHistory` ON
 `MessageID` = notifyHistory.ID) ORDER BY `EmailID` DESC LIMIT $start, 10;";
 $result = mysqli_query($link, $sql);
 

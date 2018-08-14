@@ -72,57 +72,47 @@
       mysqli_query($link, $query);
 
       // PHP Email
-      $subject = "Password Reset for " . $row['Username'];
+      $subject = "Password Reset for " . $row['Forename'] . " " . $row['Surname'];
       $to =  "" . $row['Forename'] . " " . $row['Surname'] . " <" . $row['EmailAddress'] . ">";
-      $sContent = '<img src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.png" style="width:300px;max-width:100%;">
+      $sContent = '
       <h1>Hello ' . $row['Forename'] . '</h1>
       <p>Here\'s your <a href="' . autoUrl("resetpassword/auth/" . $resetLink) . '">password reset link - ' . autoUrl("resetpassword/auth/" . $resetLink) . '</a>.</p>
       <p>Follow this link to reset your password quickly and easily.</p>
       <p>If you did not request a password reset, please delete and ignore this email.</p>
-      <script type="application/ld+json">
-      {
-        "@context": "http://schema.org",
-        "@type": "EmailMessage",
-        "potentialAction": {
-          "@type": "ViewAction",
-          "url": "https://dev.chesterlestreetasc.co.uk/software/account/login.php",
-          "target": "https://dev.chesterlestreetasc.co.uk/software/account/login.php",
-          "name": "Login"
-        },
-        "description": "Login with your Temporary Password",
-        "publisher": {
-          "@type": "Organization",
-          "name": "Chester-le-Street ASC",
-          "url": "https://www.chesterlestreetasc.co.uk",
-          "url/googlePlus": "https://plus.google.com/110024389189196283575"
-        }
+      ';
 
-      }
-      </script>';
-
-      $messageid = time() .'-' . md5("CLS-Membership-Reset" . $to) . '@account.chesterlestreetasc.co.uk';
-
-      // Always set content-type when sending HTML email
-      $headers = "MIME-Version: 1.0" . "\r\n";
-      $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-      $headers .= "Message-ID: <" . $messageid . ">\r\n";
-      $headers .= 'From: Chester-le-Street ASC <noreply@chesterlestreetasc.co.uk>' . "\r\n";
-
-      mail($to,$subject,$sContent,$headers);
-
-      echo '
-      <div class="container-fluid">
-        <div class="row justify-content-center">
-          <div class="col-sm-6 col-md-5 col-lg4">
-            <div class="alert alert-success">
-              <strong>We found your account and have sent you an email to reset your password</strong>
-              <p class="mb-2">Check your email account and follow the link to reset your password.</a>.</p>
-              <p class="mb-0">If you request another password reset, only the most recent link will work.</p>
+      if (notifySend($to, $subject, $sContent, $row['Forename'] . " " .
+      $row['Surname'], $row['EmailAddress'], ["Email" =>
+      "password-help@chesterlestreetasc.co.uk", "Name" => "Chester-le-Street ASC Account Help"])) {
+        echo '
+        <div class="container-fluid">
+          <div class="row justify-content-center">
+            <div class="col-sm-6 col-md-5 col-lg4">
+              <div class="alert alert-success">
+                <strong>We found your account and have sent you an email to reset your password</strong>
+                <p class="mb-2">Check your email account and follow the link to reset your password.</a>.</p>
+                <p class="mb-0">If you request another password reset, only the most recent link will work.</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      ';
+        ';
+      } else {
+        echo '
+        <div class="container-fluid">
+          <div class="row justify-content-center">
+            <div class="col-sm-6 col-md-5 col-lg4">
+              <div class="alert alert-warning">
+                <strong>We were unable to send password reset details to your email address</strong>
+                <p>If you do not have an account, <a href="' . autoUrl("register") . '" class="alert-link">register for an account</a></p>
+                <p>Or, <a href="' . autoUrl("resetpassword") . '" class="alert-link">try again</a></p>
+                <p class="mb-0">Contact our support team if the issue persists.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        ';
+      }
     }
     else {
       // error

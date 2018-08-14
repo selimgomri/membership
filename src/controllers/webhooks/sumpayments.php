@@ -76,7 +76,7 @@ if (mysqli_num_rows($result) == 0) {
       if (userHasMandates($user)) {
         $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
       } else {
-        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Paid', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
+        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
       }
       mysqli_query($link, $sql);
 
@@ -142,7 +142,7 @@ if (mysqli_num_rows($result) == 0) {
       if (userHasMandates($user)) {
         $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
       } else {
-        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Paid', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
+        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
       }
       mysqli_query($link, $sql);
 

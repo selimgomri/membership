@@ -9,7 +9,7 @@ elseif (!isset($preventLoginRedirect)) {
   $_SESSION['requestedURL'] = mysqli_real_escape_string(LINK, $_SERVER['REQUEST_URI']);
 }*/
 
-function notifySend($to, $subject, $message, $name = null, $emailaddress = null) {
+function notifySend($to, $subject, $message, $name = null, $emailaddress = null, $from = ["Email" => "noreply@chesterlestreetasc.co.uk", "Name" => "Chester-le-Street ASC"]) {
   // PHP Email
   $messageid = time() .'-' . md5("CLS-Membership" . ((int) (Math.rand()*1000)) .
   $to) . '@account.chesterlestreetasc.co.uk';
@@ -83,15 +83,16 @@ autoUrl("myaccount") . "\">My Account</a>.</p>
   if ($emailaddress != null && $name != null) {
 
     $email = new \SendGrid\Mail\Mail();
-    $email->setFrom("noreply@chesterlestreetasc.co.uk", "Chester-le-Street ASC");
+    $email->setFrom($from['Email'], $from['Name']);
     $email->setSubject($subject);
     $email->addTo($emailaddress, $name);
-    $email->addContent("text/plain", strip_tags($message));
+    $text_plain = str_replace("&pound;", "£", str_replace("&copy;", "©",
+    strip_tags(str_replace(["</h1>", "</h2>", "</h3>", "</h4>", "</h5>",
+    "</h6>", "</p>", "</li>"], "\r\n\n", $message))));
+    $email->addContent("text/plain", $text_plain);
     $email->addContent(
       "text/html", $head . $message
     );
-
-    pre($email);
 
     $sendgrid = new \SendGrid(SENDGRID_API_KEY);
     try {

@@ -1,5 +1,10 @@
 <?php
 
+define("PAYMENT_EMAILS", [
+  "Email" => "payments@chesterlestreetasc.co.uk",
+  "Name" => "CLS ASC Payments"
+]);
+
 $token = "testsecret";
 
 $raw_payload = file_get_contents('php://input');
@@ -108,7 +113,7 @@ function process_mandate_event($event) {
 				<p>Thank you, <br>Chester-le-Street ASC";
 				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has been
 				Cancelled", $message, $user['Forename'] . " " .
-				$user['Surname'],$user['EmailAddress']);
+				$user['Surname'],$user['EmailAddress'], PAYMENT_EMAILS);
 			} else {
         $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
         $mandateID = mysqli_real_escape_string($link, $row['MandateID']);
@@ -120,7 +125,7 @@ function process_mandate_event($event) {
 				<p>Thank you, <br>Chester-le-Street ASC";
 				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has been
 				Cancelled", $message, $user['Forename'] . " " . $user['Surname'],
-				$user['EmailAddress']);
+				$user['EmailAddress'], PAYMENT_EMAILS);
 			}
 
       break;
@@ -168,7 +173,7 @@ function process_mandate_event($event) {
 				<p>Thank you, <br>Chester-le-Street ASC";
 				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has
 				Expired", $message, $user['Forename'] . " " . $user['Surname'],
-				$user['EmailAddress']);
+				$user['EmailAddress'],PAYMENT_EMAILS);
 			} else {
         $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
         $mandateID = mysqli_real_escape_string($link, $row['MandateID']);
@@ -180,7 +185,7 @@ function process_mandate_event($event) {
 				<p>Thank you, <br>Chester-le-Street ASC";
 				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has
 				Expired", $message, $user['Forename'] . " " . $user['Surname'],
-				$user['EmailAddress']);
+				$user['EmailAddress'], PAYMENT_EMAILS);
 			}
 
 			break;

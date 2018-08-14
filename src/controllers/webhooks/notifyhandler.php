@@ -9,7 +9,7 @@ $result = mysqli_query($link, $sql);
 for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	$emailid = $row['EmailID'];
-	if ($row['EmailComms'] == 1 || $row['ForceSend'] == 1) {
+	if ($row['EmailComms'] == 1 || $row['ForceSend'] == 1 || $row['EmailType'] == 'Payments') {
 		//$to = $row['EmailAddress'];
     $to = $row['Forename'] . " " . $row['Surname'] . " <" . $row['EmailAddress'] . ">";
 		$name = $row['Forename'] . " " . $row['Surname'];
@@ -17,7 +17,26 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		$subject = $row['Subject'];
 		$message = "<p>Dear " . $row['Forename'] . " " . $row['Surname'] . ",</p>" . $row['Message'];
 
-		if (notifySend($to, $subject, $message, $name, $emailaddress)) {
+		$from = [
+			"Email" => "notify@chesterlestreetasc.co.uk",
+			"Name" => "Chester-le-Street ASC"
+		];
+
+		if ($row['EmailType'] == 'Payments') {
+			$from = [
+				"Email" => "payments@chesterlestreetasc.co.uk",
+				"Name" => "CLS ASC Payments"
+			];
+		}
+
+		if ($row['ForceSend'] == 1) {
+			$from = [
+				"Email" => "noreply@chesterlestreetasc.co.uk",
+				"Name" => "Chester-le-Street ASC"
+			];
+		}
+
+		if (notifySend($to, $subject, $message, $name, $emailaddress, $from)) {
 			$sql = "UPDATE `notify` SET `Status` = 'Sent' WHERE `EmailID` = '$emailid';";
 			mysqli_query($link, $sql);
 		} else {
