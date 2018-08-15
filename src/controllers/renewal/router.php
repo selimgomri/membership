@@ -18,6 +18,31 @@ if ($access == "Parent") {
 		global $link;
 		include 'parent/AutoRoutePost.php';
 	});
+
+	$this->group('/payments', function() {
+		$this->get(['/setup', '/setup/{stage}:int'], function($stage = 0) {
+			global $link;
+			$renewal_trap = true;
+			require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+			if ($stage == 0) {
+				require(BASE_PATH . 'controllers/payments/setup/start.php');
+			}
+			else if ($stage == 1) {
+				require(BASE_PATH . 'controllers/payments/setup/date.php');
+			}
+			else if ($stage == 2) {
+				require(BASE_PATH . 'controllers/payments/setup/initiate.php');
+			}
+			else if ($stage == 3) {
+				require(BASE_PATH . 'controllers/payments/setup/redirect.php');
+			}
+		});
+
+		$this->post('/setup/1', function() {
+			global $link;
+			include BASE_PATH . 'controllers/payments/setup/datepost.php';
+		});
+	});
 }
 
 if ($access == "Admin") {

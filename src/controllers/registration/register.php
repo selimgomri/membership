@@ -25,7 +25,7 @@ if (app('request')->path == "/register/family/") {
   $row = $query->fetch(PDO::FETCH_ASSOC);
 
   if (!$row) {
-  	halt(404);
+  	//halt(404);
   }
 
   $fam_keys['FAM'] = $row['ID'];

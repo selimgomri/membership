@@ -78,7 +78,21 @@ if ($hasDD) {
 	$sql = "UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE
 	`RenewalID` = '$renewal' AND `UserID` = '$user';";
 	mysqli_query($link, $sql);
-	header("Location: " . app('request')->curl);
+
+	global $db;
+
+	if (user_needs_registration($_SESSION['UserID'])) {
+		$sql = "UPDATE `users` SET `RR` = 0 WHERE `UserID` = ?";
+		try {
+			$query = $db->prepare($sql);
+			$query->execute([$_SESSION['UserID']]);
+		} catch (PDOException $e) {
+			halt(500);
+		}
+		header("Location: " . autoUrl(""));
+	} else {
+		header("Location: " . app('request')->curl);
+	}
 } else {
-	header("Location: " . autoUrl("payments/setup"));
+	header("Location: " . autoUrl("renewal/payments/setup"));
 }

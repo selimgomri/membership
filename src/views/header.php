@@ -118,6 +118,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
       </button>
 
 	  <div class="collapse navbar-collapse offcanvas-collapse" id="chesterNavbar">
+    <? if (!user_needs_registration($_SESSION['UserID'])) { ?>
 		<ul class="navbar-nav mr-auto">
 		<?php if (!empty($_SESSION['LoggedIn'])) { ?>
 		  <li class="nav-item">
@@ -270,7 +271,8 @@ Chester-le-Street ASC is a non profit unincorporated association.
 		</ul>
     <?php if (!empty($_SESSION['LoggedIn'])) { ?>
     <a class="btn btn-sm btn-outline-light my-2 my-sm-0" href="<?php echo autoUrl("logout") ?>">Logout</a>
-    <?php } ?>
+    <?php }
+    }?>
 	  </div>
 
   </nav>

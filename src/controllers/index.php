@@ -142,7 +142,19 @@ if (empty($_SESSION['LoggedIn'])) {
     include 'controllers/login.php';
   });
 }
-else {
+else if (user_needs_registration($_SESSION['UserID'])) {
+  $route->group('/renewal', function() {
+    global $link;
+
+    include 'controllers/renewal/router.php';
+  });
+
+  $route->group('/registration', function() {
+    global $link;
+
+    include 'controllers/registration/router.php';
+  });
+} else {
   // Home
   $route->get('/', function() {
     global $link;
@@ -184,7 +196,7 @@ else {
       global $link;
   	  require('controllers/myaccount/add-swimmer-action.php');
   	});
-  	
+
   	$this->get(['notify/history/', 'notify/history/page/{page}:int'], function($page = null) {
 			global $link;
 			include BASE_PATH . 'controllers/notify/MyMessageHistory.php';
@@ -226,6 +238,12 @@ else {
     global $link;
 
     include 'controllers/renewal/router.php';
+  });
+
+  $route->group('/registration', function() {
+    global $link;
+
+    include 'controllers/registration/router.php';
   });
 
   $route->group('/payments', function() {

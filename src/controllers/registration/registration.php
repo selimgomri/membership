@@ -115,6 +115,7 @@ $account = [
 
 if (isset($_SESSION['FamilyIdentifier'])) {
   $account["FamilyIdentifier"] = $_SESSION['FamilyIdentifier'];
+  $account["RequiresRegistraion"] = true;
 }
 
 $accountJSON = json_encode($account);

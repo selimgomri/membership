@@ -3,7 +3,7 @@
 $pagetitle = "Welcome";
 
 include BASE_PATH . "views/header.php";
-include BASE_PATH . "views/notifyMenu.php";
+include BASE_PATH . "views/renewalTitleBar.php";
 
 ?>
 
@@ -25,7 +25,7 @@ include BASE_PATH . "views/notifyMenu.php";
 		</p>
 
 		<p class="mb-0">
-			<a href="" class="btn btn-success">
+			<a href="<? echo autoUrl("renewal/go"); ?>" class="btn btn-success">
 				Start Registration
 			</a>
 		</p>

@@ -1,4 +1,5 @@
-<?php $access = $_SESSION['AccessLevel']; ?>
+<? if (!$renewal_trap) {
+$access = $_SESSION['AccessLevel']; ?>
 <div class="bg-warning box-shadow mb-3" style="margin-top:-1rem;">
   <nav class="nav nav-underline">
     <span class="nav-link">
@@ -30,3 +31,6 @@
 		<? } ?>
   </nav>
 </div>
+<? } else {
+  include 'renewalTitleBar.php';
+}

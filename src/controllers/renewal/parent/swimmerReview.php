@@ -30,6 +30,13 @@ include BASE_PATH . "views/header.php";
 
 			<? echo mySwimmersTable($link, $userID); ?>
 
+			<? if (user_needs_registration($user)) { ?>
+				<p>
+					The links to your swimmers are unavailable until you have completed
+					registration.
+				</p>
+			<? } ?>
+
 			<div>
 				<button type="submit" class="btn btn-success">Save and Continue</button>
 			</div>

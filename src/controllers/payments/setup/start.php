@@ -1,5 +1,10 @@
 <?php
 
+$url_path = "payments";
+if ($renewal_trap) {
+	$url_path = "renewal/payments";
+}
+
 $user = $_SESSION['UserID'];
 $sql = "SELECT * FROM `paymentSchedule` WHERE `UserID` = '$user';";
 $scheduleExists = mysqli_num_rows(mysqli_query($link, $sql));
@@ -23,8 +28,8 @@ include BASE_PATH . "views/paymentsMenu.php";
 			<p>Direct Debit makes payments simpler for everyone. You no longer need to pay by standing order or cheque as payments will be taken automatically.</p>
 			<p>We'll allow you to choose a day of the month on which to make payment requests.</p>
 			<p class="mb-0"><a href="
-				<? if ($scheduleExists) { echo autoUrl("payments/setup/2"); } else {
-					echo autoUrl("payments/setup/1"); } ?>" class="btn btn-dark">Setup a Direct Debit</a></p>
+				<? if ($scheduleExists) { echo autoUrl($url_path . "/setup/2"); } else {
+					echo autoUrl($url_path . "/setup/1"); } ?>" class="btn btn-dark">Setup a Direct Debit</a></p>
 			<? if ($scheduleExists) { ?><p><span class="small">We'll direct you to our partner GoCardless who handle Direct Debits on our behalf.</span></p> <? } else { ?> <p><span class="small">This won't take long.</span></p> <? } ?>
 		</div>
 		<div class="col">

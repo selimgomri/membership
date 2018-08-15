@@ -8,9 +8,16 @@ $user = mysqli_real_escape_string($link, $_SESSION['UserID']);
 
 function renewalProgress($user) {
 	global $link;
-	$sql = "SELECT * FROM `renewals` LEFT JOIN `renewalProgress` ON renewals.ID =
-	renewalProgress.RenewalID WHERE `StartDate` <= CURDATE() <= `EndDate` AND
-	`UserID` = '$user' ORDER BY renewals.ID DESC, renewalProgress.ID DESC;";
+	$sql;
+	$user = mysqli_real_escape_string($link, $user);
+	if (user_needs_registration($user)) {
+		$sql = "SELECT * FROM `renewalProgress` WHERE `RenewalID` = 0 AND `UserID` =
+		'$user';";
+	} else {
+		$sql = "SELECT * FROM `renewals` LEFT JOIN `renewalProgress` ON renewals.ID =
+		renewalProgress.RenewalID WHERE `StartDate` <= CURDATE() <= `EndDate` AND
+		`UserID` = '$user' ORDER BY renewals.ID DESC, renewalProgress.ID DESC;";
+	}
 	return mysqli_query($link, $sql);
 }
 
@@ -30,6 +37,9 @@ if (mysqli_num_rows($result) == 0) {
 	$result = latestRenewal();
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	$renewal = mysqli_real_escape_string($link, $row['ID']);
+	if (user_needs_registration($user)) {
+		$renewal = 0;
+	}
 	$date = mysqli_real_escape_string($link, date("Y-m-d"));
 	$sql = "INSERT INTO `renewalProgress` (`UserID`, `RenewalID`, `Date`, `Stage`, `Substage`, `Part`) VALUES ('$user', '$renewal', '$date', '0', '0', '0');";
 	mysqli_query($link, $sql);
@@ -37,6 +47,9 @@ if (mysqli_num_rows($result) == 0) {
 	$result = latestRenewal();
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	$renewal = mysqli_real_escape_string($link, $row['ID']);
+	if (user_needs_registration($user)) {
+		$renewal = 0;
+	}
 }
 
 $result = renewalProgress($user);

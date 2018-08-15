@@ -26,11 +26,20 @@ include BASE_PATH . "views/header.php";
 			<h1>Emergency Contacts</h1>
 			<p class="lead">These are your emergency contacts.</p>
 
+			<? if (user_needs_registration($user)) { ?>
+				<p class="border-bottom border-gray pb-2 mb-0">
+					We'll use these emergency contacts for all swimmers connected to your
+					account if we can't reach you on your phone number. You will be able
+					to change your phone number at any time in My Account, once you've
+					finished registration.</a>
+				</p>
+			<? } else { ?>
 			<p class="border-bottom border-gray pb-2 mb-0">
 				We'll use these emergency contacts for all swimmers connected to your
 				account if we can't reach you on your phone number. You can change your
 				phone number in <a href="<? echo autoUrl("myaccount"); ?>">My Account</a>
 			</p>
+			<? } ?>
 
 			<div class="mb-3">
         <div class="media pt-3">
@@ -64,11 +73,13 @@ include BASE_PATH . "views/header.php";
 			} ?>
 			</div>
 
+			<? if (!user_needs_registration($user)) { ?>
 			<p>
 				Head to the <a href="<? echo autoUrl("emergencycontacts"); ?>"
 				target="_blank">Emergency Contacts section</a> to add to or edit your
 				emergency contacts
 			</p>
+			<? } ?>
 
 			<div>
 				<button type="submit" class="btn btn-success">Save and Continue</button>

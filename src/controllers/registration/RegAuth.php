@@ -2,6 +2,8 @@
 
 global $db;
 
+$rr = 0;
+
 $id = mysqli_real_escape_string($link, $id);
 $auth = mysqli_real_escape_string($link, $token);
 
@@ -33,14 +35,17 @@ $fam_id = null;
 if (isset($array->FamilyIdentifier) || $array->FamilyIdentifier != null) {
 	$fam = true;
 	$fam_id = $array->FamilyIdentifier;
+	if ($array->RequiresRegistraion) {
+		//$rr = 1;
+	}
 }
 
 // Registration may be allowed
 // Success
 $sql = "INSERT INTO `users`
-(`UserID`, `Username`, `Password`, `AccessLevel`, `EmailAddress`, `EmailComms`, `Forename`, `Surname`, `Mobile`, `MobileComms`)
+(`UserID`, `Username`, `Password`, `AccessLevel`, `EmailAddress`, `EmailComms`, `Forename`, `Surname`, `Mobile`, `MobileComms`, `RR`)
 VALUES
-(NULL, '$username', '$hashedPassword', 'Parent', '$email', '$emailAuth', '$forename', '$surname', '$mobile', '$smsAuth');";
+(NULL, '$username', '$hashedPassword', 'Parent', '$email', '$emailAuth', '$forename', '$surname', '$mobile', '$smsAuth', '$rr');";
 mysqli_query($link, $sql);
 $user_id = mysqli_insert_id($link);
 // Check it went in

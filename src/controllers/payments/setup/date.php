@@ -1,10 +1,15 @@
 <?php
 
+$url_path = "payments";
+if ($renewal_trap) {
+	$url_path = "renewal/payments";
+}
+
 $user = $_SESSION['UserID'];
 $sql = "SELECT * FROM `paymentSchedule` WHERE `UserID` = '$user';";
 $scheduleExists = mysqli_num_rows(mysqli_query($link, $sql));
 if ($scheduleExists > 0) {
-	header("Location: " . autoUrl("payments/setup/2"));
+	header("Location: " . autoUrl($url_path . "/setup/2"));
 }
 
 require "datepost.php";

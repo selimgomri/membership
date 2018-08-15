@@ -197,8 +197,23 @@ if (empty($_SESSION['LoggedIn'])) {
     global $link;
     include 'controllers/login.php';
   });
-}
-else {
+} else if (user_needs_registration($_SESSION['UserID'])) {
+  $route->group('/renewal', function() {
+    global $link;
+
+    include 'controllers/renewal/router.php';
+  });
+
+  $route->group('/registration', function() {
+    global $link;
+
+    include 'controllers/registration/router.php';
+  });
+
+  $route->any(['/', '/*'], function() {
+    header("Location: " . autoUrl("registration"));
+  });
+} else {
   // Home
   $route->get('/', function() {
     global $link;
@@ -364,12 +379,17 @@ else {
     </div>
     <? include BASE_PATH . 'views/footer.php';
   });
-
-  // Global Catch All 404
-  $route->any('/*', function() {
-    global $link;
-    include 'views/404.php';
-  });
 }
+
+// Global Catch All 404
+$route->any('/', function() {
+  header("Location: " . autoUrl(""));
+});
+
+// Global Catch All 404
+$route->any('/*', function() {
+  global $link;
+  include 'views/404.php';
+});
 
 $route->end();

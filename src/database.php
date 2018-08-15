@@ -1536,6 +1536,27 @@ function getTimesInFull($asa, $swim, $course) {
   //return $crawler;
 }
 
+function user_needs_registration($user) {
+  global $db;
+  $sql = "SELECT `RR`, `AccessLevel` FROM `users` WHERE `UserID` = ?";
+  try {
+  	$query = $db->prepare($sql);
+  	$query->execute([$user]);
+  } catch (PDOException $e) {
+  	halt(500);
+  }
+
+  $row = $query->fetch(PDO::FETCH_ASSOC);
+
+  if (!$row) {
+    return false;
+  } else if ($row['AccessLevel'] != "Parent" || ($row['AccessLevel'] == "Parent" && $row['RR'] == 0)) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 $count = 0;
 
 /*

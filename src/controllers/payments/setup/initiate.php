@@ -1,5 +1,10 @@
 <?php
 
+$url_path = "payments";
+if ($renewal_trap) {
+	$url_path = "renewal/payments";
+}
+
 $user = $_SESSION['UserID'];
 
 $sql = "SELECT * FROM `paymentSchedule` WHERE `UserID` = '$user';";
@@ -18,7 +23,7 @@ if ($scheduleExists == 0) {
           "description" => "Club fee payments",
           // Not the access token
           "session_token" => session_id(),
-          "success_redirect_url" => autoUrl("payments/setup/3"),
+          "success_redirect_url" => autoUrl($url_path . "/setup/3"),
           // Optionally, prefill customer details on the payment page
           "prefilled_customer" => [
             "given_name" => $row['Forename'],
