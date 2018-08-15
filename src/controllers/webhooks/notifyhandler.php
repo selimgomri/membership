@@ -27,6 +27,16 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 				"Email" => "payments@chesterlestreetasc.co.uk",
 				"Name" => "CLS ASC Payments"
 			];
+		} else if ($row['EmailType'] == 'Galas') {
+			$from = [
+				"Email" => "galas@chesterlestreetasc.co.uk",
+				"Name" => "CLS ASC Galas"
+			];
+		} else if ($row['EmailType'] == 'Security') {
+			$from = [
+				"Email" => "support@chesterlestreetasc.co.uk",
+				"Name" => "CLS ASC Security"
+			];
 		}
 
 		if ($row['ForceSend'] == 1) {

@@ -89,8 +89,16 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas") {
 
 	});
 
-	$this->get('/emailtest', function() {
-		global $link;
-		notifySend("chris.heppell@chesterlestreetasc.co.uk", "test", "<p>Hello</p>");
-	});
+	if ($_SESSION['AccessLevel'] == "Admin") {
+		$this->get('/sms', function() {
+			global $link, $db;
+			include 'SMSList.php';
+		});
+
+		$this->post('/sms/ajax', function() {
+			global $link, $db;
+			include 'SMSListFetch.php';
+		});
+	}
+
 }

@@ -1,4 +1,15 @@
-<?php $access = $_SESSION['AccessLevel']; ?>
+<?php $access = $_SESSION['AccessLevel'];
+if (isset($_SESSION['Swimmers-FamilyMode']) && $_SESSION['AccessLevel'] != "Parent") { ?>
+<div class="bg-secondary text-white box-shadow mb-3" style="margin-top:-1rem;">
+  <nav class="nav nav-underline">
+    <span class="nav-link">
+      You're in family mode. <strong><a class="text-white" href="<?php echo
+      autoUrl("swimmers/family/exit")?>">Exit family mode</a></strong> before
+      adding swimmers that don't belong to the current family.
+    </span>
+  </nav>
+</div>
+<? } ?>
 <div class="nav-scroller bg-white box-shadow mb-3">
   <nav class="nav nav-underline">
     <a class="nav-link" href="<?php echo autoUrl("swimmers")?>">Swimmer Directory</a>

@@ -2,6 +2,29 @@
 
 use Respect\Validation\Validator as v;
 
+if ($_SESSION['RegistrationMode'] == "Family-Manual") {
+  $sql = "SELECT * FROM `familyIdentifiers` WHERE `ID` = ? AND `ACS` = ?";
+
+  $fid = trim(str_replace(["FAM", "fam"], "", $_POST['fam-reg-num']));
+  $acs = trim($_POST['fam-sec-key']);
+
+  try {
+  	$query = $db->prepare($sql);
+  	$query->execute([$fid, $acs]);
+  } catch (PDOException $e) {
+  	halt(500);
+  }
+
+  $row = $query->fetch(PDO::FETCH_ASSOC);
+
+  if (!$row) {
+  	$_SESSION['RegistrationFamNum'] = htmlentities($fid);
+    $_SESSION['RegistrationFamKey'] = htmlentities($acs);
+  }
+
+  $_SESSION['FamilyIdentifier'] = $fid;
+}
+
 // Registration Form Handler
 
 $forename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
@@ -80,15 +103,19 @@ if (mysqli_num_rows($emailResult) > 0) {
 $hashedPassword = password_hash($password1, PASSWORD_BCRYPT);
 
 $account = [
-  "Forename"      => $forename,
-  "Surname"       => $surname,
-  "Username"      => $username,
-  "Password"      => $hashedPassword,
-  "EmailAddress"  => $email,
-  "EmailComms"    => $emailAuth,
-  "Mobile"        => $mobile,
-  "MobileComms"   => $smsAuth
+  "Forename"          => $forename,
+  "Surname"           => $surname,
+  "Username"          => $username,
+  "Password"          => $hashedPassword,
+  "EmailAddress"      => $email,
+  "EmailComms"        => $emailAuth,
+  "Mobile"            => $mobile,
+  "MobileComms"       => $smsAuth
 ];
+
+if (isset($_SESSION['FamilyIdentifier'])) {
+  $account["FamilyIdentifier"] = $_SESSION['FamilyIdentifier'];
+}
 
 $accountJSON = json_encode($account);
 
@@ -130,7 +157,7 @@ if ($status) {
 
   }
   </script>
-  <p>Hello ' . $forename . '</p>
+  <p class="small">Hello ' . $forename . '</p>
   <p>Thanks for signing up for your Chester-le-Street ASC Account.</p>
   <p>We need you to verify your email address by following this link - <a
   href="' . autoUrl($verifyLink) . '" target="_blank">' .
@@ -141,15 +168,7 @@ if ($status) {
   href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>/</p>
   ';
 
-  $messageid = time() .'-' . md5("CLS-Membership-Signup" . $to) . '@account.chesterlestreetasc.co.uk';
-
-  // Always set content-type when sending HTML email
-  $headers = "MIME-Version: 1.0" . "\r\n";
-  $headers .= "Message-ID: <" . $messageid . ">\r\n";
-  $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-  $headers .= 'From: Chester-le-Street ASC <noreply@chesterlestreetasc.co.uk>' . "\r\n";
-
-  mail($to,$subject,$sContent,$headers);
+  notifySend($to, $subject, $sContent, $forename . " " . $surname, $email, ["Email" => "registration@chesterlestreetasc.co.uk", "Name" => "Chester-le-Street ASC"]);
 
   $_SESSION['RegistrationGoVerify'] = '
   <div class="alert alert-success mb-0">

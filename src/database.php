@@ -122,12 +122,16 @@ autoUrl("myaccount") . "\">My Account</a>.</p>
       $email->addHeader("List-ID", "CLS ASC Targeted Lists <targeted-lists@account.chesterlestreetasc.co.uk>");
     } else if ($from['Email'] == "payments@chesterlestreetasc.co.uk") {
       $email->addHeader("List-ID", "Direct Debit Payment Information <payment-news@account.chesterlestreetasc.co.uk>");
+    } else if ($from['Name'] == "CLS ASC Security") {
+      $email->addHeader("List-ID", "Account Security Updates <account-updates@account.chesterlestreetasc.co.uk>");
     }
 
     if ($from['Email'] == "payments@chesterlestreetasc.co.uk") {
       $email->setReplyTo("payments+replytoautoemail@chesterlestreetasc.co.uk", "Payments Team");
+    } else if ($from['Name'] == "CLS ASC Security") {
+      $email->setReplyTo("support+security-replytoautoemail@chesterlestreetasc.co.uk", "CLS ASC Support");
     } else {
-      $email->setReplyTo("enquiries+replytoautoemail@chesterlestreetasc.co.uk", "Enquiries - CLS ASC");
+      $email->setReplyTo("enquiries+replytoautoemail@chesterlestreetasc.co.uk", "CLS ASC Enquiries");
     }
 
     $sendgrid = new \SendGrid(SENDGRID_API_KEY);

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <!--
 
-Copyright Chris Heppell & Chester-le-Street ASC 2017 2018. Bootstrap CSS
-and JavaScript is Copyright Twitter Inc, 2011-2018, jQuery v3.1.0 is Copyright
-jQuery Foundation 2016
+Copyright Chris Heppell & Chester-le-Street ASC 2016 - 2018.
+Bootstrap CSS and JavaScript is Copyright Twitter Inc 2011-2018
+jQuery v3.1.0 is Copyright jQuery Foundation 2016
 
 Designed by Chris Heppell, www.chrisheppell.uk
 
@@ -13,7 +13,7 @@ Chester-le-Street ASC
 Swimming Club based in Chester-le-Street, North East England
 https://github.com/Chester-le-Street-ASC/
 
-Chester-le-Street ASC is a non profit private members club.
+Chester-le-Street ASC is a non profit unincorporated association.
 
 -->
 <html lang="en-gb">
@@ -72,6 +72,26 @@ Chester-le-Street ASC is a non profit private members club.
     .nav-scroller .nav-underline .nav-link:active {
       background: #dee2e6;
     }
+    @media print {
+      .container {
+        width: 100% !important;
+        margin: 0px auto;
+        padding: 0;
+      }
+      body, html {
+        background-color: #ffffff;
+      }
+    }
+    thead, table th {
+      position: sticky !important;
+      position: --webkit-sticky !important;
+      top:0 !important;
+    }
+    .swimmer {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 20px;
+    }
     </style>
 
     <!--[if lt IE 9]>
@@ -113,6 +133,10 @@ Chester-le-Street ASC is a non profit private members club.
             <a class="dropdown-item" href="<?php echo autoUrl("emergencycontacts") ?>">Emergency Contacts</a>
           <? } ?>
           <a class="dropdown-item" href="<?php echo autoUrl("myaccount/password") ?>">Password</a>
+          <? if ($_SESSION['AccessLevel'] == "Parent") { ?>
+          <a class="dropdown-item" href="<?php echo autoUrl("myaccount/notify/history") ?>">Message History</a>
+          <a class="dropdown-item" href="<?php echo autoUrl("myaccount/addswimmer") ?>">Add a Swimmer</a>
+          <? } ?>
         </div>
       </li>
       <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>

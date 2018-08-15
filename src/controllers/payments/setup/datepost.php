@@ -1,7 +1,8 @@
 <?php
 
 $user = $_SESSION['UserID'];
-$date = mysqli_real_escape_string($link, $_POST['chosenDay']);
+// $date = mysqli_real_escape_string($link, $_POST['chosenDay']);
+$date = 1;
 
 $sql = "SELECT * FROM `paymentSchedule` WHERE `UserID` = '$user';";
 $scheduleExists = mysqli_num_rows(mysqli_query($link, $sql));

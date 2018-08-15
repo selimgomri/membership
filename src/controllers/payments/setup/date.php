@@ -7,6 +7,10 @@ if ($scheduleExists > 0) {
 	header("Location: " . autoUrl("payments/setup/2"));
 }
 
+require "datepost.php";
+
+/*
+
 $pagetitle = "Set up a Direct Debit";
 
 include BASE_PATH . "views/header.php";
@@ -31,3 +35,5 @@ include BASE_PATH . "views/paymentsMenu.php";
 </div>
 
 <?php include BASE_PATH . "views/footer.php";
+
+*/

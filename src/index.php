@@ -139,7 +139,7 @@ if (empty($_SESSION['LoggedIn'])) {
   });
 
   // Register
-  $route->get('/register', function() {
+  $route->get(['/register', '/register/family', '/register/family/{fam}:int/{acs}:key'], function($fam = null, $acs = null) {
     global $link;
     require('controllers/registration/register.php');
   });
@@ -301,6 +301,12 @@ else {
     global $link;
 
     include 'controllers/renewal/router.php';
+  });
+
+  $route->group('/registration', function() {
+    global $link;
+
+    include 'controllers/registration/router.php';
   });
 
   $route->group('/payments', function() {

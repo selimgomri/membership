@@ -1,4 +1,42 @@
 <?php
+
+global $db;
+
+$mode = "Default";
+$fam_keys = null;
+/*$fam_keys = [
+  "FAM" => null,
+  "KEY" => null
+];*/
+
+if (app('request')->path == "/register/family/") {
+  $mode = "Family-Manual";
+} else if ($fam != null && $acs != null) {
+  $mode = "Family-Auto";
+  $sql = "SELECT * FROM `familyIdentifiers` WHERE `ID` = ? AND `UID` = ?";
+
+  try {
+  	$query = $db->prepare($sql);
+  	$query->execute([$fam, $acs]);
+  } catch (PDOException $e) {
+  	halt(500);
+  }
+
+  $row = $query->fetch(PDO::FETCH_ASSOC);
+
+  if (!$row) {
+  	halt(404);
+  }
+
+  $fam_keys['FAM'] = $row['ID'];
+  $fam_keys['KEY'] = $row['ACS'];
+
+  $_SESSION['FamilyIdentifier'] = $fam_keys['FAM'];
+}
+
+$_SESSION['RegistrationMode'] = $mode;
+
+
   $pagetitle = "Register";
   $preventLoginRedirect = true;
   include BASE_PATH . "views/header.php";
@@ -32,12 +70,51 @@
       </div>-->
       <h1>User Registration</h1>
       <p>We need a few details before we start.</p>
+      <? if ($mode == "Family-Auto") { ?>
+        <div class="alert alert-info">
+          <p class="mb-0"><strong>We've retrieved your family information from
+          our database.</strong></p>
+          <p class="mb-0">Please ensure that <span class="mono">FAM<? echo
+          $fam_keys['FAM']; ?></span> matches the Family Registration Number on
+          your Family Signup Sheet.</p>
+        </div>
+      <? } ?>
       <hr>
       <? if (isset($_SESSION['ErrorState'])) {
         echo $_SESSION['ErrorState'];
         unset($_SESSION['ErrorState']);
       } ?>
-      <form method="post" action="register" name="register" id="register">
+      <? if ($mode == "Default") { ?>
+      <div class="alert alert-info">
+        <p class="mb-0"><strong>Do you have a Family Signup Sheet?</strong></p>
+        <p class="mb-0">If so, you'll need to complete a <a href="<? echo
+        autoUrl("register/family"); ?>" class="alert-link">Family
+        Registration</a></p>
+        <hr>
+        <p class="mb-0">If you don't have a Family Signup Sheet, you're in the right place.</p>
+      </div>
+      <? } ?>
+      <form method="post" action="<? echo autoUrl("register"); ?>" name="register" id="register">
+
+        <? if ($mode == "Family-Manual") { ?>
+        <h2>Family Details</h2>
+        <p>We need some details from you which will allow us to get your
+        swimmers. The information you need can be found on your Family Signup
+        Sheet in the 'Add Manually' section.</p>
+        <div class="form-group">
+          <label for="fam-reg-num">Family Registration Number</label>
+          <input class="form-control mono" type="text" name="fam-reg-num"
+          id="fam-reg-num" placeholder="eg FAM1" required value="<? echo
+          $_SESSION['RegistrationFamNum']; ?>" style="text-transform:uppercase;"
+          on keyup="javascript:this.value=this.value.toUpperCase();">
+        </div>
+        <div class="form-group">
+          <label for="fam-sec-key">Security Key</label>
+          <input class="form-control mono" type="text" name="fam-sec-key"
+          id="fam-sec-key" placeholder="eg IKtfcu" required value="<? echo
+          $_SESSION['RegistrationFamKey']; ?>">
+        </div>
+        <? } ?>
 
         <h2>Personal Details</h2>
         <div class="form-group">
