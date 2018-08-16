@@ -85,8 +85,8 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	$userid = $row['UserID'];
 	$sql = "INSERT INTO `notify` (`UserID`, `MessageID`, `Subject`, `Message`,
-	`Status`, `Sender`, `ForceSend`) VALUES ('$userid', '$id', '$subject',
-	'$message', 'Queued', '$sender', '$force');";
+	`Status`, `Sender`, `ForceSend`, `EmailType`) VALUES ('$userid', '$id',
+	'$subject', '$message', 'Queued', '$sender', '$force', 'Notify');";
 	mysqli_query($link, $sql);
 }
 

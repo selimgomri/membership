@@ -71,7 +71,7 @@ if ($entryCount == 0) {
   else {
     $fee = 0.00;
     if (isset($_POST['galaFee'])) {
-      $fee = number_format(($counter*$_POST['galaFee']),2,'.','');
+      $fee = number_format(($_POST['galaFee']),2,'.','');
       //debitWallet($_SESSION['UserID'], $fee, "Gala Entry into " . $row['GalaName'] . " (Holding Fee)");
     }
   }
@@ -105,14 +105,24 @@ if ($entryCount == 0) {
     $content .= "<p><a class=\"btn btn-outline-dark\" href=\"" . autoUrl("galas/") . "\">Return to Galas</a></p>";
     $to = $row['Forename'] . " " . $row['Surname'] . "<" . $row['EmailAddress'] . ">";
     $subject = "Your Gala Entry";
-    $message = "<h1>Hello " . $row['Forename'] . " " . $row['Surname'] . "</h1>";
     $message .= "<p>Here's the details of your Gala Entry for " . $row['MForename'] . " " . $row['MSurname'] . " to the " . $row['GalaName'] . ".</p>";
     $message .= "<ul>" . $entryList . "</ul>";
     if ($row['GalaFeeConstant'] == 1) {
       $content .= "<p>The fee for each swim is &pound;" . number_format($row['GalaFee'],2,'.','') . ", the <strong>total fee payable is &pound;" . number_format(($counter*$row['GalaFee']),2,'.','') . "</strong></p>";
       $message .= "<p>The fee for each swim is &pound;" . number_format($row['GalaFee'],2,'.','') . ", the <strong>total fee payable is &pound;" . number_format(($counter*$row['GalaFee']),2,'.','') . "</strong></p>";
+    } else {
+      $content .= "<p>The <strong>total fee payable is &pound;" . $fee . "</strong>. If you have entered this amount incorrectly, you may incur extra charges from the club or gala host.</p>";
+      $message .= "<p>The <strong>total fee payable is &pound;" . $fee . "</strong>. If you have entered this amount incorrectly, you may incur extra charges from the club or gala host.</p>";
     }
-    notifySend($to, $subject, $message, $row['Forename'] . " " . $row['Surname'], $row['EmailAddress']);
+    $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
+    `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 1, 'Galas')";
+    try {
+      global $db;
+    	$db->prepare($notify)->execute([$_SESSION['UserID'], $subject, $message]);
+    } catch (PDOException $e) {
+    	halt(500);
+    }
+    //notifySend($to, $subject, $message, $row['Forename'] . " " . $row['Surname'], $row['EmailAddress'], ['Email' => 'galas@chesterlestreetasc.co.uk', 'Name' => 'CLS ASC Galas']);
   }
 }
 elseif ($entryCount > 0) {

@@ -9,7 +9,7 @@ $result = mysqli_query($link, $sql);
 for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	$emailid = $row['EmailID'];
-	if ($row['EmailComms'] == 1 || $row['ForceSend'] == 1 || $row['EmailType'] == 'Payments') {
+	if ($row['EmailComms'] == 1 || $row['ForceSend'] == 1 || $row['EmailType'] != 'Notify') {
 		//$to = $row['EmailAddress'];
     $to = $row['Forename'] . " " . $row['Surname'] . " <" . $row['EmailAddress'] . ">";
 		$name = $row['Forename'] . " " . $row['Surname'];
@@ -22,6 +22,13 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 			"Name" => "Chester-le-Street ASC"
 		];
 
+		if ($row['ForceSend'] == 1) {
+			$from = [
+				"Email" => "noreply@chesterlestreetasc.co.uk",
+				"Name" => "Chester-le-Street ASC"
+			];
+		}
+
 		if ($row['EmailType'] == 'Payments') {
 			$from = [
 				"Email" => "payments@chesterlestreetasc.co.uk",
@@ -30,19 +37,12 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		} else if ($row['EmailType'] == 'Galas') {
 			$from = [
 				"Email" => "galas@chesterlestreetasc.co.uk",
-				"Name" => "CLS ASC Galas"
+				"Name" => "Chester-le-Street ASC Galas"
 			];
 		} else if ($row['EmailType'] == 'Security') {
 			$from = [
 				"Email" => "support@chesterlestreetasc.co.uk",
 				"Name" => "CLS ASC Security"
-			];
-		}
-
-		if ($row['ForceSend'] == 1) {
-			$from = [
-				"Email" => "noreply@chesterlestreetasc.co.uk",
-				"Name" => "Chester-le-Street ASC"
 			];
 		}
 

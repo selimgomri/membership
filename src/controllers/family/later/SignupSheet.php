@@ -71,7 +71,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 	</div>
 
 	<div class="py-3 mb-3 text-right mono">
-		Family Signup: <? echo $row[0]['ID']; ?>
+		Family Registration: <? echo $row[0]['ID']; ?>
 	</div>
 
 	<div class="mb-3 p-5 bg-primary text-white">
@@ -79,7 +79,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		<h1 class="h2 mb-4">Online Membership System</h1>
 		<p class="mb-0">
 			<strong>
-				Continue your registration
+				Family Registration Sheet
 			</strong>
 		</p>
 	</div>
@@ -104,12 +104,17 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		started.
 	</p>
 
-	<h2>Add via QR Code</h2>
+	<h2>Register via QR Code</h2>
 
 	<p>
 		If you have a device that can read QR Codes (A built in feature on iOS and
 		Android Devices), scan the QR Code below. You'll be taken to a page where
 		you'll be asked to register for an account.
+	</p>
+
+	<p>
+		If you use this method, we will automatically retrieve your family of
+		swimmers from our database.
 	</p>
 
   <div class="border border-dark p-2 bg-white mb-3 px-5">
@@ -136,7 +141,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		</div>
   </div>
 
-	<h2>Add Manually</h2>
+	<h2>Register and Find Family Manually</h2>
 
 	<p>
 		If you do not have a device that can read QR Codes, head to

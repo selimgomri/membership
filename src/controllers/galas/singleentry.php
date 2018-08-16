@@ -20,61 +20,76 @@ if ($_SESSION['AccessLevel'] == "Parent") {
       include BASE_PATH . "views/header.php";
       include "galaMenu.php"; ?>
       <div class="container">
-      <h1><?php echo $row['MForename'] . " " . $row['MSurname']; ?></h1>
-      <p class="lead">For <?php echo $row['GalaName']; ?>, Closing Date: <?php echo date('j F Y', strtotime($row['ClosingDate'])); ?></p>
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+          <h1><?php echo $row['MForename'] . " " . $row['MSurname']; ?></h1>
+          <p class="lead">For <?php echo $row['GalaName']; ?>, Closing Date: <?php echo date('j F Y', strtotime($row['ClosingDate'])); ?></p>
 
-      <?php
-      $closingDate = new DateTime($row['ClosingDate']);
-      $theDate = new DateTime('now');
-      $closingDate = $closingDate->format('Y-m-d');
-      $theDate = $theDate->format('Y-m-d');
+          <?php
+          $closingDate = new DateTime($row['ClosingDate']);
+          $theDate = new DateTime('now');
+          $closingDate = $closingDate->format('Y-m-d');
+          $theDate = $theDate->format('Y-m-d');
 
-      if ($row['EntryProcessed'] == 1 || ($closingDate <= $theDate)) { ?>
-        <div class="alert alert-warning">
-          <strong>We've already processed this gala entry, or our closing date has passed</strong> <br>If you need to make changes, contact the Gala Coordinator
+          if ($row['EntryProcessed'] == 1 || ($closingDate <= $theDate)) { ?>
+            <div class="alert alert-warning">
+              <strong>We've already processed this gala entry, or our closing date has passed</strong> <br>If you need to make changes, contact the Gala Coordinator
+            </div>
+            <?php $disabled .= " onclick=\"return false;\" ";
+          } else { ?>
+            <h2>Select Swims</h2>
+          <?php } ?>
+          <form method="post">
+
+          <?php
+            for ($i=0; $i<sizeof($swimsArray); $i++) {
+              if ($rowArray[$i] == 1) { ?>
+                <div class="row mb-3">
+              <?php }
+              if ($row[$swimsArray[$i]] == 1) { ?>
+                <div class="col-sm-4 col-md-2">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" checked "<?php echo $disabled; ?>"  name="<?php echo $swimsArray[$i]; ?>">
+                    <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
+                  </div>
+                </div>
+              <?php }
+              else { ?>
+                <div class="col-sm-4 col-md-2">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
+                    <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
+                  </div>
+                </div>
+              <?php }
+              if ($rowArray[$i] == 2) { ?>
+                </div>
+              <?php }
+            } ?>
+            <input type="hidden" value="0" name="TimesRequired">
+          <?php
+
+          if ($row['EntryProcessed'] == 0 && ($closingDate >= $theDate)) {
+            if ($row['GalaFeeConstant'] != 1) { ?>
+            <div class="form-group">
+              <label for="galaFee">Enter Total</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">&pound;</span>
+                </div>
+                <input aria-describedby="feeHelp" type="text" id="galaFee" name="galaFee" class="form-control" value="<?= $row['FeeToPay'] ?>" required>
+              </div>
+              <small id="feeHelp" class="form-text text-muted">Sadly we can't automatically calculate the entry fee for this gala so we need you to tell us. If you enter this amount incorrectly or fail to tell us the amount, you may incur extra charges from the club or gala host.</small>
+            </div>
+            <? } ?>
+
+            <input type="hidden" value="<?php echo $row['EntryID']; ?>" name="entryID">
+            <p class="mb-0">
+              <button type="submit" id="submit" class="btn btn-outline-dark">Update</button>
+            </p>
+          <?php } ?>
+
+          </form>
         </div>
-        <?php $disabled .= " onclick=\"return false;\" ";
-      } else { ?>
-        <h2>Select Swims</h2>
-      <?php } ?>
-      <form method="post">
-
-      <?php
-        for ($i=0; $i<sizeof($swimsArray); $i++) {
-          if ($rowArray[$i] == 1) { ?>
-            <div class="row mb-3">
-          <?php }
-          if ($row[$swimsArray[$i]] == 1) { ?>
-            <div class="col-sm-4 col-md-2">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" checked "<?php echo $disabled; ?>"  name="<?php echo $swimsArray[$i]; ?>">
-                <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
-              </div>
-            </div>
-          <?php }
-          else { ?>
-            <div class="col-sm-4 col-md-2">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
-                <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
-              </div>
-            </div>
-          <?php }
-          if ($rowArray[$i] == 2) { ?>
-            </div>
-          <?php }
-        } ?>
-        <input type="hidden" value="0" name="TimesRequired">
-      <?php
-
-      if ($row['EntryProcessed'] == 0 && ($closingDate >= $theDate)) { ?>
-        <input type="hidden" value="<?php echo $row['EntryID']; ?>" name="entryID">
-        <p>
-          <button type="submit" id="submit" class="btn btn-outline-dark">Update</button>
-        </p>
-      <?php } ?>
-
-      </form>
       </div>
     <?php
       include BASE_PATH . "views/footer.php";
@@ -99,59 +114,72 @@ else {
     include BASE_PATH . "views/header.php";
     include "galaMenu.php"; ?>
     <div class="container">
-      <h1><?php echo $row['MForename'] . " " . $row['MSurname']; ?></h1>
-      <p class="lead">For <?php echo $row['GalaName']; ?>, Closing Date: <?php echo date('j F Y', strtotime($row['ClosingDate'])); ?></p>
+      <div class="mb-3 p-3 bg-white rounded box-shadow">
+        <h1><?php echo $row['MForename'] . " " . $row['MSurname']; ?></h1>
+        <p class="lead">For <?php echo $row['GalaName']; ?>, Closing Date: <?php echo date('j F Y', strtotime($row['ClosingDate'])); ?></p>
 
-      <?php
-      $closingDate = new DateTime($row['ClosingDate']);
-      $theDate = new DateTime('now');
-      $closingDate = $closingDate->format('Y-m-d');
-      $theDate = $theDate->format('Y-m-d');
+        <?php
+        $closingDate = new DateTime($row['ClosingDate']);
+        $theDate = new DateTime('now');
+        $closingDate = $closingDate->format('Y-m-d');
+        $theDate = $theDate->format('Y-m-d');
 
-      if ($row['EntryProcessed'] == 1 || ($closingDate <= $theDate)) { ?>
-        <div class="alert alert-warning">
-          <strong>We've already processed this gala entry, or our closing date has passed</strong> <br>If you need to make changes, contact the Gala Coordinator directly
-        </div>
-        <?php $disabled .= " onclick=\"return false;\" ";
-      } else { ?>
-        <h2>Select Swims</h2>
-      <?php } ?>
-      <form method="post">
+        if ($row['EntryProcessed'] == 1 || ($closingDate <= $theDate)) { ?>
+          <div class="alert alert-warning">
+            <strong>We've already processed this gala entry, or our closing date has passed</strong> <br>If you need to make changes, contact the Gala Coordinator directly
+          </div>
+          <?php $disabled .= " onclick=\"return false;\" ";
+        } else { ?>
+          <h2>Select Swims</h2>
+        <?php } ?>
+        <form method="post">
 
-        <? for ($i=0; $i<sizeof($swimsArray); $i++) {
-        if ($rowArray[$i] == 1) { ?>
-          <div class="row mb-3">
-        <?php }
-        if ($row[$swimsArray[$i]] == 1) { ?>
-          <div class="col-sm-4 col-md-2">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" checked <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
-              <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
+          <? for ($i=0; $i<sizeof($swimsArray); $i++) {
+          if ($rowArray[$i] == 1) { ?>
+            <div class="row mb-3">
+          <?php }
+          if ($row[$swimsArray[$i]] == 1) { ?>
+            <div class="col-sm-4 col-md-2">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" checked <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
+                <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
+              </div>
             </div>
-          </div>
-        <?php }
-        else { ?>
-          <div class="col-sm-4 col-md-2">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
-              <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
+          <?php }
+          else { ?>
+            <div class="col-sm-4 col-md-2">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
+                <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
+              </div>
             </div>
-          </div>
-        <?php }
-        if ($rowArray[$i] == 2) { ?>
-          </div>
-        <?php }
-      }
+          <?php }
+          if ($rowArray[$i] == 2) { ?>
+            </div>
+          <?php }
+        }
 
-      if ($row['EntryProcessed'] == 0 && ($closingDate >= $theDate)) { ?>
-        <input type="hidden" value="<?php echo $row['EntryID']; ?>" name="entryID">
-        <p>
-          <button type="submit" id="submit" class="btn btn-outline-dark">
-            Update
-          </button>
-        </p>
-      <?php } ?>
-    </form>
+        if ($row['EntryProcessed'] == 0 && ($closingDate >= $theDate)) {
+          if ($row['GalaFeeConstant'] != 1) { ?>
+          <div class="form-group">
+            <label for="galaFee">Enter Total</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">&pound;</span>
+              </div>
+              <input aria-describedby="feeHelp" type="text" id="galaFee" name="galaFee" class="form-control" value="<?= $row['FeeToPay'] ?>" required>
+            </div>
+            <small id="feeHelp" class="form-text text-muted">Sadly we can't automatically calculate the entry fee for this gala so we need you to tell us. If you enter this amount incorrectly or fail to tell us the amount, you may incur extra charges from the club or gala host.</small>
+          </div>
+          <? } ?>
+
+          <input type="hidden" value="<?php echo $row['EntryID']; ?>" name="entryID">
+          <p class="mb-0">
+            <button type="submit" id="submit" class="btn btn-outline-dark">Update</button>
+          </p>
+        <?php } ?>
+      </form>
+    </div>
   </div>
   <?php
   include BASE_PATH . "views/footer.php";

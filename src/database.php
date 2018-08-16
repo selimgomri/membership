@@ -128,6 +128,8 @@ autoUrl("myaccount") . "\">My Account</a>.</p>
 
     if ($from['Email'] == "payments@chesterlestreetasc.co.uk") {
       $email->setReplyTo("payments+replytoautoemail@chesterlestreetasc.co.uk", "Payments Team");
+    } else if ($from['Email'] == "galas@chesterlestreetasc.co.uk") {
+      $email->setReplyTo("galas+replytoautoemail@chesterlestreetasc.co.uk", "Gala Administrator");
     } else if ($from['Name'] == "CLS ASC Security") {
       $email->setReplyTo("support+security-replytoautoemail@chesterlestreetasc.co.uk", "CLS ASC Support");
     } else {

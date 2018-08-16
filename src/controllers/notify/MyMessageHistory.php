@@ -65,6 +65,11 @@ include BASE_PATH . "views/header.php";
 <div class="container">
   <div class="mb-3 p-3 bg-white rounded box-shadow">
     <h1>My Message History</h1>
+    <? if ($numMails == 0) {
+      ?>
+      <p class="mb-0">There are no messages to view right now.</p>
+      <?
+    } else { ?>
     <p class="lead pb-3 mb-0 border-bottom border-gray">
       Page <? echo $page; ?> of <? echo $numPages; ?>
     </p>
@@ -144,6 +149,7 @@ include BASE_PATH . "views/header.php";
       <? } ?>
       </ul>
     </nav>
+  <? } ?>
   </div>
 </div>
 

@@ -34,6 +34,24 @@ if (isset($entryID)) {
     }
   }
   $set = "";
+
+  $fee = 0;
+  $feeCheck = "SELECT `GalaFee`, `GalaFeeConstant` FROM `galas` INNER JOIN
+  `galaEntries` ON galas.GalaID = galaEntries.GalaID WHERE `EntryID` =
+  '$entryID';";
+  $feeCheck = mysqli_query($link, $feeCheck);
+  $feeCheck = mysqli_fetch_array($feeCheck, MYSQLI_ASSOC);
+
+  if (!$feeCheck['GalaFeeConstant']) {
+    $swimsArray[] = "FeeToPay";
+    $fee = mysqli_real_escape_string($link, number_format($_POST['galaFee'],2,'.',''));
+    $entriesArray[] = $fee;
+  } else {
+    $swimsArray[] = "FeeToPay";
+    $fee = mysqli_real_escape_string($link, number_format($feeCheck['GalaFee']*$counter,2,'.',''));
+    $entriesArray[] = $fee;
+  }
+
   for ($i=0; $i<sizeof($swimsArray); $i++) {
     if ($i < (sizeof($swimsArray)-1)) {
       $set .= "" . $swimsArray[$i] . " = '" . $entriesArray[$i] . "', ";
@@ -98,14 +116,24 @@ if ($added) {
   $content .= "<p><a class=\"btn btn-outline-dark\" href=\"" . autoUrl("galas/entries/" . $row['EntryID'] . "") . "\">Return to entry</a></p>";
   $to = $row['Forename'] . " " . $row['Surname'] . "<" . $row['EmailAddress'] . ">";
   $subject = "Your Updated Gala Entry";
-  $message = "<h1>Hello " . $row['Forename'] . " " . $row['Surname'] . "</h1>";
-  $message .= "<p>Here's the details of your updated Gala Entry for " . $row['MForename'] . " " . $row['MSurname'] . " to the " . $row['GalaName'] . ".</p>";
+  $message .= "<p>Here are the details of your updated Gala Entry for " . $row['MForename'] . " " . $row['MSurname'] . " to the " . $row['GalaName'] . ".</p>";
   $message .= "<ul>" . $entryList . "</ul>";
   if ($row['GalaFeeConstant'] == 1) {
     $content .= "<p>The fee for each swim is &pound;" . number_format($row['GalaFee'],2,'.','') . ", the <strong>total fee payable is &pound;" . number_format(($counter*$row['GalaFee']),2,'.','') . "</strong></p>";
     $message .= "<p>The fee for each swim is &pound;" . number_format($row['GalaFee'],2,'.','') . ", the <strong>total fee payable is &pound;" . number_format(($counter*$row['GalaFee']),2,'.','') . "</strong></p>";
+  } else {
+    $content .= "<p>The <strong>total fee payable is &pound;" . $fee . "</strong>. If you have entered this amount incorrectly, you may incur extra charges from the club or gala host.</p>";
+    $message .= "<p>The <strong>total fee payable is &pound;" . $fee . "</strong>. If you have entered this amount incorrectly, you may incur extra charges from the club or gala host.</p>";
   }
-  notifySend($to, $subject, $message, $row['Forename'] . " " . $row['Surname'], $row['EmailAddress']);
+  $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
+  `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 1, 'Galas')";
+  try {
+    global $db;
+    $db->prepare($notify)->execute([$_SESSION['UserID'], $subject, $message]);
+  } catch (PDOException $e) {
+    halt(500);
+  }
+  //notifySend($to, $subject, $message, $row['Forename'] . " " . $row['Surname'], $row['EmailAddress']);
 }
 else {
   $pagetitle = $title = "An error occurred";
