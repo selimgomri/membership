@@ -3,7 +3,7 @@
 ignore_user_abort(true);
 set_time_limit(0);
 
-$sql = "SELECT * FROM `notify` INNER JOIN `users` ON notify.UserID = users.UserID WHERE `Status` = 'Queued' LIMIT 4;";
+$sql = "SELECT * FROM `notify` INNER JOIN `users` ON notify.UserID = users.UserID WHERE `Status` = 'Queued' LIMIT 8;";
 $result = mysqli_query($link, $sql);
 
 for ($i = 0; $i < mysqli_num_rows($result); $i++) {

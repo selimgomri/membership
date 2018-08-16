@@ -66,7 +66,7 @@ $lists = mysqli_query($link, $sql);
 			<label for="message">Your Message</label>
       <p>
         <em>
-          Your message will begin with "Dear
+          Your message will begin with "Hello
           <span class="mono">Parent Name</span>,".
         </em>
       </p>

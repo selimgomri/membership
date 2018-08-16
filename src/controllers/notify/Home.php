@@ -11,6 +11,15 @@ include BASE_PATH . "views/notifyMenu.php";
 <div class="container">
 	<h1>Notify</h1>
 	<p class="lead">Send Emails to targeted groups of parents</p>
+  <? if (isset($_SESSION['NotifySuccess'])) { ?>
+  <div class="alert alert-success">
+		We've successfully queued your email. <?=
+		$_SESSION['NotifySuccess']['Count'] ?> people will recieve your message<? if
+		(!$_SESSION['NotifySuccess']['Force']) { ?> if they have opted in to
+		recieving emails from us<? } ?>.
+	</div>
+  <? }
+  unset($_SESSION['NotifySuccess']); ?>
 	<div class="alert alert-info">
 		Notify is our <strong>GDPR Compliant</strong> Email System
 	</div>

@@ -1,5 +1,7 @@
 <?php
 
+global $db;
+
 $access = $_SESSION['AccessLevel'];
 
 if ($access != "Admin" && $access != "Coach" && $access != "Galas") {
