@@ -10,28 +10,7 @@ elseif (!isset($preventLoginRedirect)) {
 }*/
 
 function notifySend($to, $subject, $message, $name = null, $emailaddress = null, $from = ["Email" => "noreply@chesterlestreetasc.co.uk", "Name" => "Chester-le-Street ASC"]) {
-  // PHP Email
-  $messageid = time() .'-' . md5("CLS-Membership" . ((int) (Math.rand()*1000)) .
-  $to) . '@account.chesterlestreetasc.co.uk';
 
-  $pos1 = strpos($to, '<')+1;
-  $pos2 = strpos($to, '>');
-  $id = substr($to, $pos1, $pos2-$pos1);
-
-  // Always set content-type when sending HTML email
-  /*
-  $headers = "MIME-Version: 1.0" . "\r\n";
-  $headers .= "Content-type: text/html;charset=UTF-8" . "\r\n";
-  $headers .= "Message-ID: <" . $messageid . ">\r\n";
-  $headers .= 'From: Chester-le-Street ASC <noreply@chesterlestreetasc.co.uk>' .
-  "\r\n";
-  $headers .= "Reply-To: Enquiries - CLS ASC <enquiries@chesterlestreetasc.co.uk>\r\n";
-  $headers .= "List-Help: <" . autoUrl("notify") . ">\r\n";
-  $headers .= "List-ID: CLS ASC Targeted Lists
-  <targeted-lists@account.chesterlestreetasc.co.uk>\r\n";
-  $headers .= "List-Unsubscribe: <" . autoUrl("notify/unsubscribe/" . $id) .
-  ">\r\n";   $headers .= 'List-Unsubscribe-Post: List-Unsubscribe=One-Click' . "\r\n";
-  */
   $head = "
   <!DOCTYPE html>
   <html lang=\"en-gb\">
@@ -122,7 +101,7 @@ autoUrl("myaccount") . "\">My Account</a>.</p>
       $email->addHeader("List-ID", "CLS ASC Targeted Lists <targeted-lists@account.chesterlestreetasc.co.uk>");
     } else if ($from['Email'] == "payments@chesterlestreetasc.co.uk") {
       $email->addHeader("List-ID", "Direct Debit Payment Information <payment-news@account.chesterlestreetasc.co.uk>");
-    } else if ($from['Name'] == "CLS ASC Security") {
+    } else if ($from['Name'] == "Chester-le-Street ASC Security") {
       $email->addHeader("List-ID", "Account Security Updates <account-updates@account.chesterlestreetasc.co.uk>");
     }
 
@@ -130,7 +109,7 @@ autoUrl("myaccount") . "\">My Account</a>.</p>
       $email->setReplyTo("payments+replytoautoemail@chesterlestreetasc.co.uk", "Payments Team");
     } else if ($from['Email'] == "galas@chesterlestreetasc.co.uk") {
       $email->setReplyTo("galas+replytoautoemail@chesterlestreetasc.co.uk", "Gala Administrator");
-    } else if ($from['Name'] == "CLS ASC Security") {
+    } else if ($from['Name'] == "Chester-le-Street ASC Security") {
       $email->setReplyTo("support+security-replytoautoemail@chesterlestreetasc.co.uk", "CLS ASC Support");
     } else {
       $email->setReplyTo("enquiries+replytoautoemail@chesterlestreetasc.co.uk", "CLS ASC Enquiries");

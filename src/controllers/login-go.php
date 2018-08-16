@@ -32,6 +32,46 @@
         $_SESSION['AccessLevel'] = $row['AccessLevel'];
         $_SESSION['LoggedIn'] = 1;
 
+        $sql = "INSERT INTO `userLogins` (`UserID`, `IPAddress`, `Browser`, `Platform`, `Mobile`) VALUES (?, ?, ?, ?, ?)";
+        global $db;
+
+        $mobile = 0;
+
+        if (app('request')->isMobile()) {
+          $mobile = 1;
+        }
+
+        $login_details = [
+          $_SESSION['UserID'],
+          app('request')->ip(),
+          ucwords(app('request')->browser()),
+          ucwords(app('request')->platform()),
+          $mobile
+        ];
+
+        try {
+        	$query = $db->prepare($sql);
+        	$query->execute($login_details);
+        } catch (PDOException $e) {
+        	halt(500);
+        }
+
+        if ($_SESSION['AccessLevel'] == "Parent") {
+          $subject = "Account Login";
+          $message = '
+          <p>Somebody just logged into your Chester-le-Street ASC Account from ' . ucwords(app('request')->browser()) . '.</p>
+          <p>If this was you then you can ignore this email. If this was not you, please <a href="' . autoUrl("") . '">log in to your account</a> and <a href="' . autoUrl("myaccount/password") . '">change your password</a> as soon as possible.</p>
+          <p>Kind Regards, <br>The Chester-le-Street ASC Team</p>
+          ';
+          $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
+          `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 1, 'Security')";
+          try {
+            $db->prepare($notify)->execute([$_SESSION['UserID'], $subject, $message]);
+          } catch (PDOException $e) {
+            halt(500);
+          }
+        }
+
         if (isset($target)) {
           $target = ltrim($target, '/');
           header("Location: " . autoUrl($target) . "");

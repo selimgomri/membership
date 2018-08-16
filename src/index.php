@@ -251,29 +251,33 @@ if (empty($_SESSION['LoggedIn'])) {
 
   	if ($_SESSION['AccessLevel'] == "Parent") {
 
-  	// Add swimmer
-  	$this->get('/addswimmer', function() {
-      global $link;
-  	  require('controllers/myaccount/add-swimmer.php');
-  	});
+    	// Add swimmer
+    	$this->get('/addswimmer', function() {
+        global $link;
+    	  require('controllers/myaccount/add-swimmer.php');
+    	});
 
-    // Add swimmer
-  	$this->get('/addswimmer/auto/{asa}/{acs}', function($asa, $acs) {
-      global $link;
-  	  require('controllers/myaccount/auto-add-swimmer.php');
-  	});
+      // Add swimmer
+    	$this->get('/addswimmer/auto/{asa}/{acs}', function($asa, $acs) {
+        global $link;
+    	  require('controllers/myaccount/auto-add-swimmer.php');
+    	});
 
-  	$this->post('/addswimmer', function() {
-      global $link;
-  	  require('controllers/myaccount/add-swimmer-action.php');
-  	});
+    	$this->post('/addswimmer', function() {
+        global $link;
+    	  require('controllers/myaccount/add-swimmer-action.php');
+    	});
 
-  	$this->get(['notify/history/', 'notify/history/page/{page}:int'], function($page = null) {
-			global $link;
-			include 'controllers/notify/MyMessageHistory.php';
-		});
-
+      $this->get(['notifyhistory/', 'notifyhistory/page/{page}:int'], function($page = null) {
+  			global $link;
+  			include 'controllers/notify/MyMessageHistory.php';
+  		});
 		}
+
+    $this->get(['loginhistory/', 'loginhistory/page/{page}:int'], function($page = null) {
+      global $link;
+      include 'controllers/myaccount/LoginHistory.php';
+    });
 
   });
 

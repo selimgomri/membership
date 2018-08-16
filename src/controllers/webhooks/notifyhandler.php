@@ -42,7 +42,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		} else if ($row['EmailType'] == 'Security') {
 			$from = [
 				"Email" => "support@chesterlestreetasc.co.uk",
-				"Name" => "CLS ASC Security"
+				"Name" => "Chester-le-Street ASC Security"
 			];
 		}
 
