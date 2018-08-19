@@ -2,6 +2,7 @@
 $userID = $_SESSION['UserID'];
 $pagetitle = "Swimmer Review";
 include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">

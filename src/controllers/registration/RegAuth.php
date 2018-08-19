@@ -7,7 +7,7 @@ $rr = 0;
 $id = mysqli_real_escape_string($link, $id);
 $auth = mysqli_real_escape_string($link, $token);
 
-$sql = "SELECT * FROM `newUsers` WHERE `AuthCode` = '$auth' AND `ID` = '$id';";
+$sql = "SELECT * FROM `newUsers` WHERE `AuthCode` = '$auth' AND `ID` = '$id' AND `Type` = 'Registration';";
 $result = mysqli_query($link, $sql);
 
 $status = "nf";

@@ -115,7 +115,7 @@ if ($added) {
   $content .= "<ul>" . $entryList . "</ul>";
   $content .= "<p><a class=\"btn btn-outline-dark\" href=\"" . autoUrl("galas/entries/" . $row['EntryID'] . "") . "\">Return to entry</a></p>";
   $to = $row['Forename'] . " " . $row['Surname'] . "<" . $row['EmailAddress'] . ">";
-  $subject = "Your Updated Gala Entry";
+  $subject = "Your Updated " . $row['GalaName'] . " Entry";
   $message .= "<p>Here are the details of your updated Gala Entry for " . $row['MForename'] . " " . $row['MSurname'] . " to the " . $row['GalaName'] . ".</p>";
   $message .= "<ul>" . $entryList . "</ul>";
   if ($row['GalaFeeConstant'] == 1) {

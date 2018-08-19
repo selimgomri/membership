@@ -95,6 +95,8 @@ autoUrl("myaccount") . "\">My Account</a>.</p>
 
     if ($from['Email'] == "notify@chesterlestreetasc.co.uk") {
       $email->addHeader("List-Help", autoUrl("notify"));
+      //$email->addHeader("List-Unsubscribe", "<mailto:unsubscribe@chesterlestreetasc.co.uk>, <" . autoUrl("notify/unsubscribe/" . $emailaddress) . ">");
+      //$email->addHeader("List-Unsubscribe-Post", "List-Unsubscribe=One-Click");
     }
 
     if ($from['Email'] == "notify@chesterlestreetasc.co.uk") {

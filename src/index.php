@@ -101,6 +101,12 @@ $app->route     = System\Route::instance($app->request);
 
 $route          = $app->route;
 
+// Password Reset via Link
+$route->get('/email/auth/{id}:int/{authCode}', function($id, $authCode) {
+  global $link;
+  require('controllers/myaccount/EmailUpdate.php');
+});
+
 $route->any('/notify/unsubscribe/{email}', function($email) {
   global $link;
   include 'controllers/notify/UnsubscribeHandler.php';
@@ -149,7 +155,7 @@ if (empty($_SESSION['LoggedIn'])) {
     require('controllers/registration/registration.php');
   });
 
-  // Password Reset via Link
+  // Confirm Email via Link
   $route->get('/register/auth/{id}:int/new-user/{token}', function($id, $token) {
     global $link;
     require('controllers/registration/RegAuth.php');
@@ -266,6 +272,17 @@ if (empty($_SESSION['LoggedIn'])) {
     	$this->post('/addswimmer', function() {
         global $link;
     	  require('controllers/myaccount/add-swimmer-action.php');
+    	});
+
+      // Add swimmer
+    	$this->get(['/addswimmergroup', '/addswimmergroup/{fam}/{acs}'], function($fam = null, $acs = null) {
+        global $link;
+    	  require('controllers/myaccount/add-group.php');
+    	});
+
+    	$this->post('/addswimmergroup', function() {
+        global $link;
+    	  require('controllers/myaccount/add-group-action.php');
     	});
 
       $this->get(['notifyhistory/', 'notifyhistory/page/{page}:int'], function($page = null) {

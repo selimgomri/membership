@@ -130,7 +130,9 @@ $_SESSION['RegistrationMode'] = $mode;
         <div class="form-group">
           <label for="email">Email Address</label>
           <input class="form-control mb-0" type="email" name="email" id="email" placeholder="yourname@example.com" required value="<? echo $_SESSION['RegistrationEmail']; ?>">
-          <small id="emailHelp" class="form-text text-muted">Your email address will only be used inside Chester-le-Street ASC.</small>
+          <small id="emailHelp" class="form-text text-muted">
+            Your email address will only be used inside Chester-le-Street ASC. Emails sent by Chester-le-Street ASC are delivered by Google Cloud and SendGrid. Both companies are EU-US Privacy Shield certified.
+          </small>
         </div>
         <div class="form-group">
           <label for="mobile">Mobile Number</label>

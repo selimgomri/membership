@@ -1,4 +1,5 @@
 <?php
+  $require_email_auth = false;
   $pagetitle = "My Account";
   include BASE_PATH . "views/header.php";
   $username = $_SESSION['Username'];
@@ -42,21 +43,13 @@
       $surnameUpdate = true;
     }
   }
-  if (!empty($_POST['email'])) {
-    $newEmail = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['email']))));
-    if ($newEmail != $email) {
-      // Check if email exists
-      $sql = "SELECT `EmailAddress` FROM `users` WHERE EmailAddress = '$newEmail'";
-      $test = mysqli_query($link, $sql);
-      if (mysqli_num_rows($test) == 0) {
-        $sql = "UPDATE `users` SET `EmailAddress` = '$newEmail' WHERE `UserID` = '$userID'";
-        mysqli_query($link, $sql);
-        $emailUpdate = true;
-      }
-    }
-  }
+
+  // Change Email is Temporarily Disabled
+
   if (!empty($_POST['mobile'])) {
-    $newMobile = mysqli_real_escape_string($link, preg_replace('/\D/', '', $_POST['mobile']));
+    $newMobile = mysqli_real_escape_string($link, "+44" .
+    ltrim(preg_replace('/\D/', '', str_replace('+44', '', $_POST['mobile'])),
+    '0'));
     if ($newMobile != $mobile) {
       $sql = "UPDATE `users` SET `Mobile` = '$newMobile' WHERE `UserID` = '$userID'";
       mysqli_query($link, $sql);
@@ -103,13 +96,14 @@
   if ($mobileComms == 1) {
     $mobileChecked = " checked ";
   }
-
+  //pre($_SESSION);
 ?>
 <div class="container">
 <h1>Hello <?php echo $forename ?></h1>
 <p class="lead">Welcome to My Account where you can change your personal details, password, contact information and add swimmers to your account.</p>
 <?php if ($forenameUpdate || $surnameUpdate || $emailUpdate || $mobileUpdate) {
-  $query = "SELECT * FROM users WHERE UserID = '$userID' ";
+  $userID = mysqli_real_escape_string($link, $_SESSION['UserID']);
+  $query = "SELECT * FROM users WHERE UserID = '$userID';";
   $result = mysqli_query($link, $query);
   $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
   $email = $row['EmailAddress'];
@@ -120,9 +114,6 @@
   $mobile = $row['Mobile'];
   $emailComms = $row['EmailComms'];
   $mobileComms = $row['MobileComms'];
-  $_SESSION['EmailAddress'] = $email;
-  $_SESSION['Forename'] = $forename;
-  $_SESSION['Surname'] = $surname;
   if ($emailComms==1) {
     $emailChecked = " checked ";
   }
@@ -145,6 +136,14 @@
   </ul>
 </div>
 <?php  } ?>
+<?
+if ($require_email_auth) {
+  echo '
+  <div class="alert alert-warning">
+  To complete your change of email address, please check the link in your inbox.
+  </div>';
+}
+?>
 <div class="my-3 p-3 bg-white rounded box-shadow">
   <h2>Your Details</h2>
   <p class="border-bottom border-gray pb-2">What we know about you.</p>
@@ -159,11 +158,14 @@
     </div>
      <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value="<?php echo $email ?>">
+        <input disabled type="email" class="form-control" name="email" id="emailbox" placeholder="Email Address" value="<?php echo $email ?>" aria-describedby="emailHelp">
+        <small id="emailHelp" class="form-text text-muted">
+          We've temporarily disabled the ability to change your email address while we make some changes to our systems.
+        </small>
     </div>
     <div class="form-group">
       <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?php echo $emailChecked ?>>
+        <input type="checkbox" class="custom-control-input" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?php echo $emailChecked; ?> >
         <label class="custom-control-label" for="emailContactOK">Check this to receive news by email</label>
         <small id="emailContactOKHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small>
       </div>
@@ -175,7 +177,7 @@
     </div>
     <div class="form-group">
       <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" value="1" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK" <?php echo $mobileChecked ?>>
+        <input type="checkbox" class="custom-control-input" value="1" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK" <?php echo $mobileChecked; ?> >
         <label class="custom-control-label" for="smsContactOK">Check this if you would like to receive text messages</label>
         <small id="smsContactOKHelp" class="form-text text-muted">We'll still use this to contact you in an emergency</small>
       </div>

@@ -15,15 +15,16 @@ function renewalProgress($user) {
 		'$user';";
 	} else {
 		$sql = "SELECT * FROM `renewals` LEFT JOIN `renewalProgress` ON renewals.ID =
-		renewalProgress.RenewalID WHERE `StartDate` <= CURDATE() <= `EndDate` AND
-		`UserID` = '$user' ORDER BY renewals.ID DESC, renewalProgress.ID DESC;";
+		renewalProgress.RenewalID WHERE `StartDate` <= CURDATE() AND CURDATE() <=
+    `EndDate` AND `UserID` = '$user' ORDER BY renewals.ID DESC,
+    renewalProgress.ID DESC;";
 	}
 	return mysqli_query($link, $sql);
 }
 
 function latestRenewal() {
 	global $link;
-	$sql = "SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE() <= `EndDate`
+	$sql = "SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE() AND CURDATE() <= `EndDate`
 	ORDER BY renewals.ID DESC;";
 	return mysqli_query($link, $sql);
 }
@@ -35,6 +36,9 @@ $renewal = null;
 if (mysqli_num_rows($result) == 0) {
 	// Create a new Progress Record
 	$result = latestRenewal();
+  if (mysqli_num_rows($result) == 0) {
+    halt(404);
+  }
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	$renewal = mysqli_real_escape_string($link, $row['ID']);
 	if (user_needs_registration($user)) {

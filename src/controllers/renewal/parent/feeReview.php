@@ -2,6 +2,7 @@
 $userID = $_SESSION['UserID'];
 $pagetitle = "Fee Review";
 include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">
@@ -20,7 +21,7 @@ include BASE_PATH . "views/header.php";
 			</div>
 
 			<p>You will pay these fees by Direct Debit. You will also pay for Galas and
-			other fees by Direct Debit whenever nessecary.</p>
+			other fees by Direct Debit whenever necessary.</p>
 
 			<div>
 				<button type="submit" class="btn btn-success">Save and Continue</button>

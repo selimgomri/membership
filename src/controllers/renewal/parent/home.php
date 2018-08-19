@@ -1,11 +1,12 @@
 <?php
 
-$sql = "SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE() <= `EndDate`;";
+$sql = "SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE() AND CURDATE() <= `EndDate`;";
 $result = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
 $pagetitle = "Membership Renewal";
 include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">

@@ -25,6 +25,7 @@ if (isset($id)) {
 
 	$pagetitle = $name . " - Code of Conduct";
 	include BASE_PATH . "views/header.php";
+  include BASE_PATH . "views/renewalTitleBar.php";
 	?>
 	<div class="container">
 		<div class="row">

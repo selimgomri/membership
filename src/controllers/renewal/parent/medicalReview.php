@@ -18,6 +18,7 @@ if (mysqli_num_rows($result) == 0) {
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
 include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">

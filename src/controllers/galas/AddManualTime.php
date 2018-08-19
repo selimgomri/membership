@@ -34,7 +34,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="container">
-	<h1>Add Manual Times for <? echo $row['MForename']; ?></h1>
+	<h1>Add Manual Times for <?= $row['MForename'] ?> <?= $row['MSurname'] ?></h1>
 	<p class="lead">
 		<? echo $row['GalaName']; ?>
 	</p>
@@ -44,6 +44,7 @@ include BASE_PATH . 'views/header.php';
 
 		<div class="mb-3">
 		<? for ($i = 0; $i < sizeof($swimsArray); $i++) { ?>
+		<? if ($row[$swimsArray[$i]] == 1) { ?>
 		<div class="media pt-3">
 	    <div class="media-body pt-3 mb-0 lh-125 border-top border-gray">
 	      <strong class="d-block">
@@ -72,6 +73,7 @@ include BASE_PATH . 'views/header.php';
 				} ?>
 	    </div>
 		</div>
+		<? } ?>
 		<? } ?>
 		</div>
 

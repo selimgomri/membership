@@ -23,7 +23,7 @@ class EmergencyContact {
 			return false;
 		}
 		$this->contactNumber = mysqli_real_escape_string($this->dbconn,
-		preg_replace('/\D/', '', $contactNumber));
+		"+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", $contactNumber)), '0'));
 		$this->user = $user;
   }
 
@@ -87,7 +87,7 @@ class EmergencyContact {
 			return false;
 		}
 		$this->contactNumber = mysqli_real_escape_string($this->dbconn,
-		preg_replace('/\D/', '', $contactNumber));
+		"+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", $contactNumber)), '0'));
 		$sql = "UPDATE `emergencyContacts` SET `ContactNumber` =
 		'$this->contactNumber' WHERE `ID` = '$this->contactId';";
 		if (mysqli_query($this->dbconn, $sql)) {

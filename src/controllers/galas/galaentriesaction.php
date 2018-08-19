@@ -104,7 +104,7 @@ if ($entryCount == 0) {
     $content .= "<ul>" . $entryList . "</ul>";
     $content .= "<p><a class=\"btn btn-outline-dark\" href=\"" . autoUrl("galas/") . "\">Return to Galas</a></p>";
     $to = $row['Forename'] . " " . $row['Surname'] . "<" . $row['EmailAddress'] . ">";
-    $subject = "Your Gala Entry";
+    $subject = $row['MForename'] . "'s Gala Entry to " . $row['GalaName'];
     $message .= "<p>Here's the details of your Gala Entry for " . $row['MForename'] . " " . $row['MSurname'] . " to the " . $row['GalaName'] . ".</p>";
     $message .= "<ul>" . $entryList . "</ul>";
     if ($row['GalaFeeConstant'] == 1) {

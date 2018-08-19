@@ -2,7 +2,9 @@
   <div class="nav nav-underline">
     <? if (user_needs_registration($_SESSION['UserID'])) { ?>
     <span class="nav-link text-dark">Club Registration</span>
-    <? } else { ?>
+  <? } else if (!isset($renewalName)) { ?>
+    <span class="nav-link text-dark">Membership Renewal System</span>
+  <? } else { ?>
     <span class="nav-link text-dark"><? echo $renewalName; ?></span>
     <? } ?>
   </div>

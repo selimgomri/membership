@@ -62,13 +62,15 @@ include BASE_PATH . "views/header.php";
     <p class="lead pb-3 mb-0 border-bottom border-gray">
       Page <? echo $page; ?> of <? echo $numPages; ?>
     </p>
-    <? for ($i = 0; $i < sizeof($row); $i++) { ?>
-    <div class="media pt-3">
-      <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray force-wrap">
+    <? for ($i = 0; $i < sizeof($row); $i++) {
+    $date = new DateTime($row[$i]['Time'], new DateTimeZone('UTC'));
+    $date->setTimezone(new DateTimeZone('Europe/London')); ?>
+    <div class="media py-3 my-0 border-bottom border-gray">
+      <div class="media-body my-0">
         <div class="d-block text-gray-dark">
           <p class="mb-0">
             <strong>
-              Login at <?= date("H:i \o\\n l j F Y", strtotime($row[$i]['Time'])) ?>
+              Login at <?= $date->format('H:i \o\\n l j F Y') ?>
               using <?= htmlentities($row[$i]['Browser']) ?>
             </strong>
           </p>
@@ -86,7 +88,7 @@ include BASE_PATH . "views/header.php";
     <? } ?>
 
     <nav aria-label="Page navigation">
-      <ul class="pagination mb-0">
+      <ul class="pagination mt-3 mb-0">
         <? if ($numLogins <= 10) { ?>
         <li class="page-item active"><a class="page-link" href="<? echo autoUrl("myaccount/loginhistory/page/"); ?><? echo $page ?>"><? echo $page ?></a></li>
         <? } else if ($numLogins <= 20) { ?>

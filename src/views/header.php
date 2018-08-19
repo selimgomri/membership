@@ -196,13 +196,13 @@ Chester-le-Street ASC is a non profit unincorporated association.
         <?php } ?>
         <?php if ($_SESSION['AccessLevel'] == "Galas") { ?>
         <li class="nav-item">
-  			  <a class="nav-link" href="<?php echo autoUrl("payments") ?>">Payments</a>
+  			  <a class="nav-link" href="<?php echo autoUrl("payments") ?>">Pay</a>
   		  </li>
         <?php } ?>
         <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="paymentsAdminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Payments
+            Pay
           </a>
           <div class="dropdown-menu" aria-labelledby="paymentsAdminDropdown">
             <a class="dropdown-item" href="<?php echo autoUrl("payments") ?>">Payments Home</a>
@@ -250,7 +250,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
         <li class="nav-item">
           <a class="nav-link" data-toggle="modal"
           data-target="#paymentsBetaModal" href="#paymentsBetaModal">
-            Payments <span class="badge badge-secondary">BETA</span>
+            Pay <span class="badge badge-secondary">BETA</span>
           </a>
         </li>
         <li class="nav-item">

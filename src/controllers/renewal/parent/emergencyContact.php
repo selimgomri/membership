@@ -13,6 +13,7 @@ $contactsArray = $contacts->getContacts();
 
 $pagetitle = "Emergency Contacts";
 include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">

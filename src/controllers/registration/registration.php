@@ -34,7 +34,7 @@ $username = mysqli_real_escape_string($link, $forename . $surname . "-" . md5(ge
 $password1 = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password1'])));
 $password2 = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password2'])));
 $email = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['email']))));
-$mobile = mysqli_real_escape_string($link, preg_replace('/\D/', '', $_POST['mobile'])); // Removes anything that isn't a digit
+$mobile = mysqli_real_escape_string($link, "+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", $_POST['mobile'])), '0')); // Removes anything that isn't a digit
 $emailAuth = 0;
 if ($_POST['emailAuthorise'] != 1) {
   $emailAuth = 0;
@@ -124,8 +124,8 @@ if ($status) {
   // Registration may be allowed
   // Success
   $authCode = md5(generateRandomString(20) . time());
-  $sql = "INSERT INTO `newUsers` (`AuthCode`, `UserJSON`) VALUES ('$authCode',
-  '$accountJSON');";
+  $sql = "INSERT INTO `newUsers` (`AuthCode`, `UserJSON`, `Type`) VALUES ('$authCode',
+  '$accountJSON', 'Registration');";
   mysqli_query($link, $sql);
   // Check it went in
   $query = "SELECT * FROM `newUsers` WHERE `AuthCode` = '$authCode' LIMIT 1";
@@ -138,6 +138,15 @@ if ($status) {
   $subject = "Thanks for Joining " . $forename;
   $to = $email;
   $sContent = '
+  <p class="small">Hello ' . $forename . '</p>
+  <p>Thanks for signing up for your Chester-le-Street ASC Account.</p>
+  <p>We need you to verify your email address by following this link - <a
+  href="' . autoUrl($verifyLink) . '" target="_blank">' .
+  autoUrl($verifyLink) . '</a></p>
+  <p>You will use your email address, ' . $email . ' to sign in.</p>
+  <p>You can change your personal details and password in My Account</p>
+  <p>For help, send an email to <a
+  href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>/</p>
   <script type="application/ld+json">
   {
     "@context": "http://schema.org",
@@ -158,15 +167,6 @@ if ($status) {
 
   }
   </script>
-  <p class="small">Hello ' . $forename . '</p>
-  <p>Thanks for signing up for your Chester-le-Street ASC Account.</p>
-  <p>We need you to verify your email address by following this link - <a
-  href="' . autoUrl($verifyLink) . '" target="_blank">' .
-  autoUrl($verifyLink) . '</a></p>
-  <p>You will use your email address, <code>' . $email . '</code> to sign in.</p>
-  <p>You can change your personal details and password in My Account</p>
-  <p>For help, send an email to <a
-  href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>/</p>
   ';
 
   notifySend($to, $subject, $sContent, $forename . " " . $surname, $email, ["Email" => "registration@chesterlestreetasc.co.uk", "Name" => "Chester-le-Street ASC"]);

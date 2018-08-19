@@ -142,6 +142,6 @@ if ($_SESSION['AccessLevel'] != "Admin" && $force == 1) {
 $_SESSION['NotifySuccess'] = [
   "Count" => $recipient_count,
   "Force" => $force
-]
+];
 
 header("Location: " . autoUrl("notify"));

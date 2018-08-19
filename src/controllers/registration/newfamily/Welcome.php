@@ -1,6 +1,10 @@
 <?php
 
-$pagetitle = "Welcome";
+if (!user_needs_registration($_SESSION['UserID'])) {
+  halt(404);
+}
+
+$pagetitle = "Welcome to the Club";
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/renewalTitleBar.php";
@@ -15,13 +19,15 @@ include BASE_PATH . "views/renewalTitleBar.php";
     <p class="lead">
       We just need to run through the registration process with you. We'll ask
       you to fill out medical forms for your swimmer(s), agree to the Club Code
-      of Conduct, Terms and Conditions of Membership before paying your
+      of Conduct, and Terms and Conditions of Membership before paying your
       registration fees, which consist of Club and Swim England Fees.
     </p>
 
 		<p>
 			Failure to complete registration before the end of the calendar month in
-			which you join the club may result in suspension of your swimmer(s).
+			which you join the club may result in suspension of your swimmer(s). This
+      is because your Swim England Membership Fee covers insurance for your
+      swimmers while taking part in the sport.
 		</p>
 
 		<p class="mb-0">

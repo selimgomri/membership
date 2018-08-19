@@ -45,6 +45,7 @@ $totalFeeString = number_format($totalFee/100,2,'.','');
 $pagetitle = "Your Renewal Fees";
 
 include BASE_PATH . 'views/header.php';
+include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">

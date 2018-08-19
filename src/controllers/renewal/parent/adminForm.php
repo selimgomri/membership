@@ -17,6 +17,7 @@ $result = mysqli_query($link, $sql);
 
 $pagetitle = "Administration Form";
 include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">

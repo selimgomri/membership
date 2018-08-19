@@ -76,7 +76,7 @@ if ($_SESSION['AccessLevel'] == "Parent") {
                 <div class="input-group-prepend">
                   <span class="input-group-text">&pound;</span>
                 </div>
-                <input aria-describedby="feeHelp" type="text" id="galaFee" name="galaFee" class="form-control" value="<?= $row['FeeToPay'] ?>" required>
+                <input aria-describedby="feeHelp" type="text" id="galaFee" name="galaFee" class="form-control" value="<?= number_format($row['FeeToPay'], 2, ',', '') ?>" required>
               </div>
               <small id="feeHelp" class="form-text text-muted">Sadly we can't automatically calculate the entry fee for this gala so we need you to tell us. If you enter this amount incorrectly or fail to tell us the amount, you may incur extra charges from the club or gala host.</small>
             </div>
@@ -167,7 +167,7 @@ else {
               <div class="input-group-prepend">
                 <span class="input-group-text">&pound;</span>
               </div>
-              <input aria-describedby="feeHelp" type="text" id="galaFee" name="galaFee" class="form-control" value="<?= $row['FeeToPay'] ?>" required>
+              <input aria-describedby="feeHelp" type="text" id="galaFee" name="galaFee" class="form-control" value="<?= number_format($row['FeeToPay'], 2, '.', '') ?>" required>
             </div>
             <small id="feeHelp" class="form-text text-muted">Sadly we can't automatically calculate the entry fee for this gala so we need you to tell us. If you enter this amount incorrectly or fail to tell us the amount, you may incur extra charges from the club or gala host.</small>
           </div>
