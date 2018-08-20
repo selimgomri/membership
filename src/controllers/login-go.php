@@ -32,7 +32,9 @@
         $_SESSION['AccessLevel'] = $row['AccessLevel'];
         $_SESSION['LoggedIn'] = 1;
 
-        $sql = "INSERT INTO `userLogins` (`UserID`, `IPAddress`, `Browser`, `Platform`, `Mobile`) VALUES (?, ?, ?, ?, ?)";
+        $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));
+
+        $sql = "INSERT INTO `userLogins` (`UserID`, `IPAddress`, `Browser`, `Platform`, `Mobile`, `Hash`, `HashActive`) VALUES (?, ?, ?, ?, ?, ?, ?)";
         global $db;
 
         $mobile = 0;
@@ -41,12 +43,19 @@
           $mobile = 1;
         }
 
+        $remember_me = 0;
+        if ($_POST['RememberMe']) {
+          $remember_me = 1;
+        }
+
         $login_details = [
           $_SESSION['UserID'],
           app('request')->ip(),
           ucwords(app('request')->browser()),
           ucwords(app('request')->platform()),
-          $mobile
+          $mobile,
+          $hash,
+          $remember_me
         ];
 
         try {
@@ -55,6 +64,8 @@
         } catch (PDOException $e) {
         	halt(500);
         }
+
+        setcookie("CLSASC_AutoLogin", $hash, time()+60*60*24*120, "/", app('request')->hostname, true, true);
 
         if ($_SESSION['AccessLevel'] == "Parent") {
           $subject = "Account Login";

@@ -70,6 +70,12 @@
                   <label for="password">Password</label>
                   <input type="password" name="password" id="password" class="form-control form-control-lg" required>
                 </div>
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" name="RememberMe" id="RememberMe" checked>
+                    <label class="custom-control-label" for="RememberMe">Keep me logged in</label>
+                  </div>
+                </div>
                 <input type="hidden" name="target" value="<?php echo app('request')->path; ?>">
                 <p><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-block btn-primary"></p>
                 <div class="row mb-3">

@@ -25,6 +25,10 @@ error_reporting(E_ALL);
 // Prevents javascript XSS attacks aimed to steal the session ID
 ini_set('session.cookie_httponly', 1);
 
+// ** DISABLE PROBABILITY BASED SESSION GARBAGE COLLECTION**
+// Causes issues for users
+ini_set('session.gc_probability', 0);
+
 // **PREVENTING SESSION FIXATION**
 // Session ID cannot be passed through URLs
 ini_set('session.use_only_cookies', 1);
@@ -39,11 +43,11 @@ ini_set('session.use_strict_mode', 1);
 ini_set('session.sid_length', 128);
 
 // SessionName
-ini_set('session.name', "clsascMembershipID");
+ini_set('session.name', "CLSASC_SessionId");
 
 session_start([
-    'cookie_lifetime' => 2419200,
-    'gc_maxlifetime' => 2419200,
+    'cookie_lifetime' => 172800,
+    'gc_maxlifetime' => 172800,
 ]);
 
 require BASE_PATH.'vendor/autoload.php';
@@ -100,6 +104,51 @@ $app->request   = System\Request::instance();
 $app->route     = System\Route::instance($app->request);
 
 $route          = $app->route;
+
+if (empty($_SESSION['LoggedIn']) && isset($_COOKIE['CLSASC_AutoLogin']) && $_COOKIE['CLSASC_AutoLogin'] != "") {
+  $sql = "SELECT `UserID` FROM `userLogins` WHERE `Hash` = ? AND `Time` >= ? AND `HashActive` = ?";
+
+  $data = [
+    $_COOKIE['CLSASC_AutoLogin'],
+    date('Y-m-d H:i:s', strtotime("120 days ago")),
+    1
+  ];
+
+  try {
+    $query = $db->prepare($sql);
+    $query->execute($data);
+  } catch (PDOException $e) {
+    //halt(500);
+  }
+
+  $row = $query->fetchAll(PDO::FETCH_ASSOC);
+  if (sizeof($row) == 1) {
+    $user = $row[0]['UserID'];
+
+    $sql = "SELECT * FROM `users` WHERE `UserID` = ?";
+
+    try {
+      $query = $db->prepare($sql);
+      $query->execute([$user]);
+    } catch (PDOException $e) {
+      //halt(500);
+    }
+
+    $row = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    $row = $row[0];
+
+    $_SESSION['Username'] = $row['Username'];
+    $_SESSION['EmailAddress'] = $row['EmailAddress'];
+    $_SESSION['Forename'] = $row['Forename'];
+    $_SESSION['Surname'] = $row['Surname'];
+    $_SESSION['UserID'] = $user;
+    $_SESSION['AccessLevel'] = $row['AccessLevel'];
+    $_SESSION['LoggedIn'] = 1;
+  }
+}
+
+//pre(hash('sha512', 'The quick brown fox jumped over the lazy dog.'));
 
 // Password Reset via Link
 $route->get('/email/auth/{id}:int/{authCode}', function($id, $authCode) {

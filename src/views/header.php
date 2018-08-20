@@ -33,14 +33,21 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="apple-mobile-web-app-title" content="CLS ASC Accounts">
     <meta name="format-detection" content="telephone=no">
+    <? if (!app('request')->headers['dnt']) { ?>
     <script async>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
       ga('create', 'UA-78812259-4', 'auto');
+      <? if (isset($_SESSION['LoggedIn'])) { ?>
+      ga('set', 'userId', <?= $_SESSION['UserID'] ?>);
+      ga('send', 'event', 'authentication', 'user-id available');
+      <? } else { ?>
       ga('send', 'pageview');
+      <? } ?>
     </script>
+    <? } ?>
 	  <script>var shiftWindow = function() { scrollBy(0, -50) }; if
 	  (location.hash) shiftWindow(); window.addEventListener("hashchange",
 	  shiftWindow);</script>

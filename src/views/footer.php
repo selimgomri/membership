@@ -68,6 +68,11 @@
 			    <p class="hidden-print">
 						Designed and Built by Chester&#8209;le&#8209;Street ASC.
 					</p>
+					<p class="hidden-print">
+						We support your right to online privacy. If you have enabled "Do Not
+						Track" in your browser, we won't include our analytics tracking
+						code.
+					</p>
 					<?php
 					$executionEndTime = microtime();
 					$creationTime = number_format((float)($executionEndTime -
