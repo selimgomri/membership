@@ -68,8 +68,9 @@ if ($hasDD) {
 	$renewal = mysqli_real_escape_string($link, $renewal);
 	for ($i = 0; $i < $count; $i++) {
 		$memID = $member[$i]['MemberID'];
-		$sql = "INSERT INTO `renewalMembers` (`PaymentID`, `MemberID`, `RenewalID`)
-		VALUES ('$payID', '$memID', '$renewal');";
+		$date = mysqli_real_escape_string($link, date("Y-m-d H:i:s"));
+		$sql = "INSERT INTO `renewalMembers` (`PaymentID`, `MemberID`, `RenewalID`, `Date`)
+		VALUES ('$payID', '$memID', '$renewal', '$date');";
 		mysqli_query($link, $sql);
 	}
 

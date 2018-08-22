@@ -2,6 +2,8 @@
 
 use Respect\Validation\Validator as v;
 
+global $db;
+
 if ($_SESSION['RegistrationMode'] == "Family-Manual") {
   $sql = "SELECT * FROM `familyIdentifiers` WHERE `ID` = ? AND `ACS` = ?";
 

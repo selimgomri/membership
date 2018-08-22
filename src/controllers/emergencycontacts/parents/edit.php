@@ -1,5 +1,10 @@
 <?
 
+$url_path = "emergencycontacts";
+if ($renewal_trap) {
+	$url_path = "renewal/emergencycontacts";
+}
+
 $user = $_SESSION['UserID'];
 
 $contact = new EmergencyContact();
@@ -13,6 +18,9 @@ if ($contact->getUserID() != $user) {
 $pagetitle = $contact->getName() . " - Emergency Contacts";
 
 include BASE_PATH . 'views/header.php';
+if ($renewal_trap) {
+	include BASE_PATH . 'views/renewalTitleBar.php';
+}
 
 ?>
 
@@ -32,7 +40,7 @@ include BASE_PATH . 'views/header.php';
 		    <input type="tel" class="form-control" id="num" name="num" placeholder="Phone" value="<? echo $contact->getContactNumber();?>" required>
 		  </div>
 		  <button type="submit" class="btn btn-success">Save</button>
-			<a href="<? echo autoUrl("emergencycontacts/" . $id . "/delete"); ?>" class="btn btn-danger">Delete</a>
+			<a href="<? echo autoUrl($url_path . "/" . $id . "/delete"); ?>" class="btn btn-danger">Delete</a>
 		</form>
 
 	</div>

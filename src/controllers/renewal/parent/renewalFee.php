@@ -43,6 +43,11 @@ $clubFeeString = number_format($clubFee/100,2,'.','');
 $totalFeeString = number_format($totalFee/100,2,'.','');
 
 $pagetitle = "Your Renewal Fees";
+$title = "Your Membership Renewal Fees";
+if ($renewal == 0) {
+	$pagetitle = "Your Registration Fees";
+	$title = "Your Registration Fees";
+}
 
 include BASE_PATH . 'views/header.php';
 include BASE_PATH . "views/renewalTitleBar.php";
@@ -51,38 +56,88 @@ include BASE_PATH . "views/renewalTitleBar.php";
 <div class="container">
 	<form method="post" class="mb-3 p-3 bg-white rounded box-shadow">
 		<h1 class="border-bottom border-gray pb-2">
-			Your Membership Renewal Fees
+			<?= $title ?>
 		</h1>
 		<p class="lead">
-			Renewal Fees include your ASA membership fees for the governing bodies at
+			These Fees include your ASA membership fees for the governing bodies at
 			National, Regional and County Level.
 		</p>
+		<? $nf = "next";
+		if ($renewal == 0) {
+			$nf = "first";
+		}; ?>
 		<p>
-			You will pay these fees as part of your next Direct Debit payment to
+			You will pay these fees as part of your <?= $nf ?> Direct Debit payment to
 			Chester-le-Street ASC.
 		</p>
 
-		<h2>Club Membership Fee</h2>
+		<h2>Your Membership Fees</h2>
+		<div class="table-responsive">
+			<table class="table">
+				<thead class="">
+					<tr class="bg-primary text-light">
+						<th>
+							Club Membership
+						</th>
+						<th>
+						</th>
+					</tr>
+				</thead>
+				<thead class="thead-light">
+					<tr>
+						<th>
+							Type
+						</th>
+						<th>
+							Fee
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<? if ($payingSwimmerCount > 1) { ?>
+							Family Membership
+							<? } else { ?>
+							Individual Membership
+							<? } ?>
+						</td>
+						<td>
+							&pound;<?= $clubFeeString ?>
+						</td>
+					</tr>
+				</tbody>
+			<!--</table>
+		</div>
 		<? if ($payingSwimmerCount > 1) {
 			?>
 			<p class="lead">
-				You pay for a family membership, covering all of your swimmers at a
-				reduced cost
+				You <? if ($renewal == 0) { ?>will <? } ?>pay for a family membership,
+				covering all of your swimmers at a reduced cost.
 			</p>
 			<?
 		} ?>
  		<p>Your club membership fee is &pound;<? echo $clubFeeString; ?></p>
 
-		<h2>ASA Fees</h2>
+		<h2>ASA Membership Fees</h2>
 		<div class="table-responsive">
-			<table class="table">
+			<table class="table">-->
+				<thead class="">
+					<tr class="bg-primary text-light">
+						<th>
+							Swim England Membership
+						</th>
+						<th>
+						</th>
+					</tr>
+				</thead>
 				<thead class="thead-light">
 					<tr>
 						<th>
 							Swimmer
 						</th>
 						<th>
-							ASA Membership Fee
+							Fee
 						</th>
 					</tr>
 				</thead>
@@ -97,32 +152,53 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				}
 				?>
 				<tr>
-					<th>
+					<td>
 						<? echo $member[$i]['MForename'] . " " . $member[$i]['MSurname']; ?>
-					</th>
-					<th>
+					</td>
+					<td>
 						&pound;<? echo $asaFeesString; ?>
-					</th>
+					</td>
 				</tr>
 			<? } ?>
+				</tbody>
+				<tbody>
+					<tr class="table-active">
+						<td>
+							Total Membership Fee
+						</td>
+						<td>
+							&pound;<?= $totalFeeString ?>
+						</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
 
-		<h2>Total Fees</h2>
 		<p>
 			Your total renewal fee will be &pound;<? echo $totalFeeString; ?>. By
 			continuing to complete your membership renewal, you confirm that you will
 			pay this amount as part of your next Direct Debit Payment.
 		</p>
-		<p>
-			If you have not yet set up a Direct Debit with Chester-le-Street ASC, we
-			will redirect you to our Payments system. You must setup a Direct Debit
-			there and then return to the Renewal system.
-		</p>
+		<? if ($renewal == 0) { ?>
+			<p>
+				We now need you to set up your Direct Debit agreement with
+				Chester-le-Street ASC. We will redirect you to our payments system where
+				you will setup a Direct Debit.
+			</p>
+		<? } else { ?>
+			<p>
+				If you have not yet set up a Direct Debit with Chester-le-Street ASC, we
+				will redirect you to our Payments system. You must setup a Direct Debit
+				there and then return to the Renewal system.
+			</p>
+		<? } ?>
 		<p class="mb-0">
 			<button type="submit" class="btn btn-success">
-				Complete Renewal
+				<? if ($renewal == 0) { ?>
+					Setup Direct Debit
+				<? } else { ?>
+					Complete Renewal
+				<? } ?>
 			</button>
 		</p>
 	</form>

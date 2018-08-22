@@ -1,5 +1,5 @@
 <?php
-header("HTTP/1.1 400 Bad Request");
+http_response_code(400);
 $pagetitle = "Error 400 - Bad Request";
 include BASE_PATH . "views/header.php";
 ?>

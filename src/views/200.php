@@ -1,4 +1,5 @@
 <?php
+http_response_code(200);
 $pagetitle = "Status 200 - OK";
 include BASE_PATH . "views/header.php";
 ?>

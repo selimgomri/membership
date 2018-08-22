@@ -1,5 +1,10 @@
 <?
 
+$url_path = "emergencycontacts";
+if ($renewal_trap) {
+	$url_path = "renewal/emergencycontacts";
+}
+
 $user = $_SESSION['UserID'];
 
 $contact = new EmergencyContact();
@@ -12,4 +17,4 @@ if ($contact->getUserID() != $user) {
 
 $contact->delete();
 
-header("Location: " . autoUrl("emergencycontacts"));
+header("Location: " . autoUrl($url_path));

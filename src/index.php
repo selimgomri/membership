@@ -76,6 +76,14 @@ function halt(int $statusCode) {
   else if ($statusCode == 0) {
     include "views/000.php";
   }
+  else if ($statusCode == 900) {
+    // Unavailable for Regulatory Reasons
+    include "views/900.php";
+  }
+  else if ($statusCode == 901) {
+    // Unavailable due to GDPR
+    include "views/901.php";
+  }
   else {
     include "views/500.php";
   }
@@ -90,13 +98,6 @@ $link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 $db = new PDO("mysql:host=" . $dbhost . ";dbname=" . $dbname . "", $dbuser, $dbpass);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-/* check connection */
-if (mysqli_connect_errno()) {
-  halt(500);
-}
-
-require_once "database.php";
-
 use Symfony\Component\DomCrawler\Crawler;
 
 $app            = System\App::instance();
@@ -104,6 +105,13 @@ $app->request   = System\Request::instance();
 $app->route     = System\Route::instance($app->request);
 
 $route          = $app->route;
+
+/* check connection */
+if (mysqli_connect_errno()) {
+  halt(500);
+}
+
+require_once "database.php";
 
 if (empty($_SESSION['LoggedIn']) && isset($_COOKIE['CLSASC_AutoLogin']) && $_COOKIE['CLSASC_AutoLogin'] != "") {
   $sql = "SELECT `UserID` FROM `userLogins` WHERE `Hash` = ? AND `Time` >= ? AND `HashActive` = ?";
@@ -148,7 +156,7 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE['CLSASC_AutoLogin']) && $_COO
   }
 }
 
-//pre(hash('sha512', 'The quick brown fox jumped over the lazy dog.'));
+//halt(901);
 
 // Password Reset via Link
 $route->get('/email/auth/{id}:int/{authCode}', function($id, $authCode) {
@@ -357,6 +365,12 @@ if (empty($_SESSION['LoggedIn'])) {
     global $link;
 
     include 'controllers/squads/router.php';
+  });
+
+  $route->group('/registration', function() {
+    global $link;
+
+    include 'controllers/registration/router.php';
   });
 
   $route->group('/attendance', function() {

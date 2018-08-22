@@ -1,5 +1,5 @@
 <?php
-header("HTTP/1.1 403 Forbidden");
+http_response_code(403);
 $pagetitle = "Error 403 - Forbidden";
 include BASE_PATH . "views/header.php";
 ?>

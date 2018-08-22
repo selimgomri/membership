@@ -1,5 +1,5 @@
 <?php
-header("HTTP/1.1 404 Not Found");
+http_response_code(404);
 $pagetitle = "Error 404 - Page not found";
 include BASE_PATH . "views/header.php";
 ?>

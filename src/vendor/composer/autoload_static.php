@@ -193,6 +193,13 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
     );
 
     public static $prefixesPsr0 = array (
+        'O' => 
+        array (
+            'OAuth2' => 
+            array (
+                0 => __DIR__ . '/..' . '/bshaffer/oauth2-server-php/src',
+            ),
+        ),
         'B' => 
         array (
             'BaconQrCode' => 

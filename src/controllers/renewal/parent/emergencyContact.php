@@ -60,31 +60,42 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				?>
 				<div class="media pt-3">
 					<div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-						<p class="mb-0">
-							<strong class="d-block">
-								<? echo $contactsArray[$i]->getName(); ?>
-							</strong>
-							<a href="tel:<? echo $contactsArray[$i]->getContactNumber(); ?>">
-								<? echo $contactsArray[$i]->getContactNumber(); ?>
-							</a>
-						</p>
+						<div class="row align-items-center">
+							<div class="col-9">
+								<p class="mb-0">
+									<strong class="d-block">
+										<? echo $contactsArray[$i]->getName(); ?>
+									</strong>
+									<a href="tel:<? echo $contactsArray[$i]->getContactNumber(); ?>">
+										<? echo $contactsArray[$i]->getContactNumber(); ?>
+									</a>
+								</p>
+							</div>
+							<div class="col text-right">
+								<a href="<? echo autoUrl("renewal/emergencycontacts/edit/" .
+								$contactsArray[$i]->getID()); ?>" class="btn btn-primary">
+									Edit
+								</a>
+							</div>
+						</div>
 					</div>
 				</div>
 				<?
 			} ?>
 			</div>
 
-			<? if (!user_needs_registration($user)) { ?>
-			<p>
-				Head to the <a href="<? echo autoUrl("emergencycontacts"); ?>"
-				target="_blank">Emergency Contacts section</a> to add to or edit your
-				emergency contacts
+			<p class="mb-0">
+				<a href="<?= autoUrl("renewal/emergencycontacts/new") ?>" class="btn btn-secondary">Add a New Contact</a>
 			</p>
-			<? } ?>
 
-			<div>
+			<hr>
+
+			<p>
+				Ready to move on?
+			</p>
+			<p class="mb-0">
 				<button type="submit" class="btn btn-success">Save and Continue</button>
-			</div>
+			</p>
 		</form>
 	</div>
 </div>

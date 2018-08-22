@@ -345,7 +345,7 @@ if (isset($id)) {
 					</p>
 
 					<div>
-						<button type="submit" class="btn btn-success">Save and
+						<button type="submit" class="btn btn-success">Accept and
 						Continue</button>
 					</div>
 				</form>

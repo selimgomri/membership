@@ -49,7 +49,7 @@
       <div class="col-sm-8 col-md-5 col-lg-6 col-xl-4 align-middle">
         <div class="my-3 p-3 bg-white rounded box-shadow">
           <h2 class="border-bottom border-gray pb-2 mb-0">Please Login</h2>
-          <div class="text-muted pt-3">
+          <div class="text-dark pt-3">
             <!--<div class="alert alert-warning">
               <strong>Overnight System Maintenance</strong> <br>
               Access to this service may be intermittent from 21:00 on Sunday 29 July until 03:00 on Monday 30 July due to automated dependency updates.
@@ -64,16 +64,19 @@
               <form method="post" action="<?php echo autoUrl(""); ?>" name="loginform" id="loginform">
                 <div class="form-group">
                   <label for="username">Email Address</label>
-                  <input type="text" name="username" id="username" class="form-control form-control-lg" value="<?php if ($errorState == true) { echo $username; } ?>" required autofocus>
+                  <input type="text" name="username" id="username" class="form-control form-control-lg" value="<?php if ($errorState == true) { echo $username; } ?>" required autofocus placeholder="yourname@example.com">
                 </div>
                 <div class="form-group">
                   <label for="password">Password</label>
-                  <input type="password" name="password" id="password" class="form-control form-control-lg" required>
+                  <input type="password" name="password" id="password" class="form-control form-control-lg" required placeholder="Password">
                 </div>
                 <div class="form-group">
                   <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" name="RememberMe" id="RememberMe" checked>
+                    <input type="checkbox" class="custom-control-input" name="RememberMe" id="RememberMe" checked aria-describedby="RememberMeHelp">
                     <label class="custom-control-label" for="RememberMe">Keep me logged in</label>
+                    <small id="RememberMeHelp" class="form-text text-muted">
+                      Untick this box if you are using a public or shared computer
+                    </small>
                   </div>
                 </div>
                 <input type="hidden" name="target" value="<?php echo app('request')->path; ?>">

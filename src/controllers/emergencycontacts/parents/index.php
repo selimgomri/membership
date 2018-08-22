@@ -1,5 +1,10 @@
 <?
 
+if ($renewal_trap) {
+	header("Location: " . autoUrl("renewal/go"));
+	exit();
+}
+
 $user = mysqli_real_escape_string($link, $_SESSION['UserID']);
 
 $sql = "SELECT * FROM `users` WHERE `UserID` = '$user';";
@@ -13,7 +18,12 @@ $contactsArray = $contacts->getContacts();
 
 $pagetitle = "My Emergency Contacts";
 
+$url_path = "emergencycontacts";
 include BASE_PATH . 'views/header.php';
+if ($renewal_trap) {
+	include BASE_PATH . 'views/renewalTitleBar.php';
+	$url_path = "renewal/emergencycontacts";
+}
 
 ?>
 
@@ -49,12 +59,14 @@ include BASE_PATH . 'views/header.php';
 								</a>
 							</p>
 						</div>
+						<? if (!$renewal_trap) { ?>
 						<div class="col text-right">
 							<a href="<? echo autoUrl("myaccount"); ?>" class="btn
 							btn-primary">
 								Edit
 							</a>
 						</div>
+						<? } ?>
 					</div>
 				</div>
 			</div>
@@ -62,7 +74,7 @@ include BASE_PATH . 'views/header.php';
 			?>
 			<div class="media pt-3">
 				<div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-					<div class="row align-items-center	">
+					<div class="row align-items-center">
 						<div class="col-9">
 							<p class="mb-0">
 								<strong class="d-block">
@@ -74,7 +86,7 @@ include BASE_PATH . 'views/header.php';
 							</p>
 						</div>
 						<div class="col text-right">
-							<a href="<? echo autoUrl("emergencycontacts/edit/" .
+							<a href="<? echo autoUrl($url_path . "\/edit/" .
 							$contactsArray[$i]->getID()); ?>" class="btn btn-primary">
 								Edit
 							</a>
@@ -86,7 +98,7 @@ include BASE_PATH . 'views/header.php';
 		} ?>
 		</div>
 		<p>
-			<a href="<? echo autoUrl("emergencycontacts/new"); ?>" class="btn btn-success">
+			<a href="<? echo autoUrl($url_path . "/new"); ?>" class="btn btn-success">
 				Add New
 			</a>
 		</p>

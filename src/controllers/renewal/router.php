@@ -43,6 +43,45 @@ if ($access == "Parent") {
 			include BASE_PATH . 'controllers/payments/setup/datepost.php';
 		});
 	});
+
+	$this->group('/emergencycontacts', function() {
+		$this->get(['/'], function() {
+			global $link;
+			$renewal_trap = true;
+			include BASE_PATH . 'controllers/emergencycontacts/parents/index.php';
+		});
+
+		$this->get('/edit/{id}:int', function($id) {
+			global $link;
+			$renewal_trap = true;
+			require('controllers/emergencycontacts/parents/edit.php');
+		});
+
+		$this->post('/edit/{id}:int', function($id) {
+			global $link;
+			$renewal_trap = true;
+			require('controllers/emergencycontacts/parents/editUpdate.php');
+		});
+
+		$this->get('/new', function() {
+			global $link;
+			$renewal_trap = true;
+			require('controllers/emergencycontacts/parents/new.php');
+		});
+
+		$this->post('/new', function() {
+			global $link;
+			$renewal_trap = true;
+			require('controllers/emergencycontacts/parents/newAction.php');
+		});
+
+		$this->get('/{id}:int/delete', function($id) {
+			global $link;
+			$renewal_trap = true;
+			require('controllers/emergencycontacts/parents/delete.php');
+		});
+
+	});
 }
 
 if ($access == "Admin") {

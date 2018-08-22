@@ -1,5 +1,5 @@
 <?php
-header("HTTP/1.1 500 Internal Server Error");
+http_response_code(500);
 $pagetitle = "Error 500 - Internal Server Error";
 include BASE_PATH . "views/header.php";
 ?>

@@ -1,5 +1,10 @@
 <?
 
+$url_path = "emergencycontacts";
+if ($renewal_trap) {
+	$url_path = "renewal/emergencycontacts";
+}
+
 $user = $_SESSION['UserID'];
 
 $contact = new EmergencyContact();
@@ -18,4 +23,8 @@ if ($_POST['num'] != null && $_POST['num'] != "") {
 	$contact->setContactNumber($_POST['num']);
 }
 
-header("Location: " . app('request')->curl);
+if ($renewal_trap) {
+	header("Location: " . autoUrl("renewal/go"));
+} else {
+	header("Location: " . autoUrl($url_path));
+}

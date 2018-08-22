@@ -1,5 +1,10 @@
 <?
 
+$url_path = "emergencycontacts";
+if ($renewal_trap) {
+	$url_path = "renewal/emergencycontacts";
+}
+
 $user = $_SESSION['UserID'];
 
 $contact = new EmergencyContact();
@@ -19,7 +24,12 @@ if ($_POST['name'] != null && $_POST['name'] != "" && $_POST['num'] != null && $
 	</div>
 	';
 
-	header("Location: " . autoUrl("emergencycontacts"));
+	if ($renewal_trap) {
+		header("Location: " . autoUrl("renewal/go"));
+	} else {
+		header("Location: " . autoUrl($url_path));
+	}
+
 } else {
 	$_SESSION['AddNewError'] = '
 	<div class="alert alert-warning">
@@ -31,5 +41,10 @@ if ($_POST['name'] != null && $_POST['name'] != "" && $_POST['num'] != null && $
 	</div>
 	';
 
-	header("Location: " . app('request')->curl);
+	if ($renewal_trap) {
+		header("Location: " . autoUrl("renewal/go"));
+	} else {
+		header("Location: " . autoUrl($url_path));
+	}
+
 }

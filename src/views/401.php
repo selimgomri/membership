@@ -1,5 +1,5 @@
 <?php
-header("HTTP/1.1 401 Not Found");
+http_response_code(401);
 $pagetitle = "Error 401 - Unauthorised";
 include BASE_PATH . "views/header.php";
 ?>

@@ -1,5 +1,5 @@
 <?php
-header("HTTP/1.1 503 Service Unavailable");
+http_response_code(503);
 $pagetitle = "Error 503 - Service Unavailable";
 include BASE_PATH . "views/header.php";
 ?>

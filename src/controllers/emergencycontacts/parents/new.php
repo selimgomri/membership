@@ -3,6 +3,9 @@
 $pagetitle = "New Emergency Contact";
 
 include BASE_PATH . 'views/header.php';
+if ($renewal_trap) {
+	include BASE_PATH . 'views/renewalTitleBar.php';
+}
 
 ?>
 
