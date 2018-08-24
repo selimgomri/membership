@@ -53,7 +53,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
 	  shiftWindow);</script>
     <script src="<? echo autoUrl("/js/tinymce/tinymce.min.js"); ?>"></script>
     <link rel="stylesheet preload"
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono">
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono|Merriweather:400,600">
     <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.12.css") ?>">
     <link rel="stylesheet"
     href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/font-awesome/css/font-awesome.min.css">
@@ -98,6 +98,9 @@ Chester-le-Street ASC is a non profit unincorporated association.
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       grid-gap: 20px;
+    }
+    .serif h1, .serif h2, .serif h3, .serif h4, .serif h5, .serif h6, .serif p, .serif ul, .serif ol {
+      font-family: 'Merriweather', Georgia, serif;
     }
     </style>
 

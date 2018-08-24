@@ -298,48 +298,9 @@ if (isset($id)) {
 						You must accept the terms of this code of conduct to continue
 					</p>
 
-					<ul>
-						<li>
-							Parents are not allowed on poolside at any time during training
-							sessions and should not engage the coach in conversation from the
-							spectator area whilst they are teaching.
-						</li>
-						<li>
-							All parents of children under the age of 11 must remain within the
-							building at all times when your child attends for their session.
-						</li>
-						<li>
-							Encourage your child to learn the rules and ensure that they abide by
-							them.
-						</li>
-						<li>
-							Discourage unfair practices and arguing with officials.
-						</li>
-						<li>
-							Help your child to recognise good performance, not just results.
-						</li>
-						<li>
-							Never force your child to take part in sport and do not offer
-							incentives for participation, however positive support is encouraged.
-						</li>
-						<li>
-							Set a good example by recognising fair play and applauding the good
-							performances of all.
-						</li>
-						<li>
-							Never punish or belittle a child for losing or making mistakes but
-							provide positive feedback to encourage future participation.
-						</li>
-						<li>
-							Publicly accept officials’ judgments.
-						</li>
-						<li>
-							Support your child’s involvement and help them to enjoy their sport.
-						</li>
-						<li>
-							Use correct and proper language at all times.
-						</li>
-					</ul>
+					<div id="code_of_conduct">
+						<?= getPostContent(8) ?>
+					</div>
 
 					<p>
 						By clicking continue, you acknowledge that you agree to the above code

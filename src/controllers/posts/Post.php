@@ -37,6 +37,11 @@ $pagetitle = htmlentities($row['Title']);
 
 $allow_edit = true;
 
+$container_classes = "";
+if ($row['Type'] == "corporate_documentation") {
+	$container_classes .= "serif ";
+}
+
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/postsMenu.php";?>
 
@@ -46,7 +51,7 @@ include BASE_PATH . "views/postsMenu.php";?>
 }
 </style>-->
 
-<div class="container">
+<div class="container <?= $container_classes ?>">
 	<div class="row d-none d-print-inline-block">
     <div class="col-6">
       <img class="img-fluid logo" src="<?=autoUrl("/img/chesterLogo.svg")?>"  alt="Chester-le-Street ASC Logo">

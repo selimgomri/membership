@@ -114,7 +114,7 @@ if (mysqli_connect_errno()) {
 require_once "database.php";
 
 if (empty($_SESSION['LoggedIn']) && isset($_COOKIE['CLSASC_AutoLogin']) && $_COOKIE['CLSASC_AutoLogin'] != "") {
-  $sql = "SELECT `UserID` FROM `userLogins` WHERE `Hash` = ? AND `Time` >= ? AND `HashActive` = ?";
+  $sql = "SELECT `UserID`, `Time` FROM `userLogins` WHERE `Hash` = ? AND `Time` >= ? AND `HashActive` = ?";
 
   $data = [
     $_COOKIE['CLSASC_AutoLogin'],
@@ -132,6 +132,8 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE['CLSASC_AutoLogin']) && $_COO
   $row = $query->fetchAll(PDO::FETCH_ASSOC);
   if (sizeof($row) == 1) {
     $user = $row[0]['UserID'];
+    $utc = new DateTimeZone("UTC");
+    $time = new DateTime($row[0]['Time'], $utc);
 
     $sql = "SELECT * FROM `users` WHERE `UserID` = ?";
 
@@ -153,6 +155,20 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE['CLSASC_AutoLogin']) && $_COO
     $_SESSION['UserID'] = $user;
     $_SESSION['AccessLevel'] = $row['AccessLevel'];
     $_SESSION['LoggedIn'] = 1;
+
+    $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));
+
+    $sql = "UPDATE `userLogins` SET `Hash` = ? WHERE `Hash` = ?";
+    try {
+      $query = $db->prepare($sql);
+      $query->execute([$hash, $_COOKIE['CLSASC_AutoLogin']]);
+    } catch (PDOException $e) {
+      halt(500);
+    }
+
+    $expiry_time = ($time->format('U'))+60*60*24*120;
+
+    setcookie("CLSASC_AutoLogin", $hash, $expiry_time , "/", app('request')->hostname, true, true);
   }
 }
 

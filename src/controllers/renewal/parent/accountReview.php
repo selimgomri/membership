@@ -1,5 +1,7 @@
 <?php
 
+global $db;
+
 $userID = $_SESSION['UserID'];
 
 $query = "SELECT * FROM users WHERE UserID = '$userID' ";
