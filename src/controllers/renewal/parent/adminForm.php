@@ -1,5 +1,15 @@
 <?php
 
+global $db;
+$sql = "SELECT `ID` FROM `posts` WHERE `Type` = ? LIMIT 1";
+try {
+	$query = $db->prepare($sql);
+	$query->execute(['terms_conditions']);
+} catch (PDOException $e) {
+	halt(500);
+}
+$terms_Id = ($query->fetch(PDO::FETCH_ASSOC))['ID'];
+
 $userID = mysqli_real_escape_string($link, $_SESSION['UserID']);
 
 $row = [];
@@ -61,10 +71,14 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		</div>
 
 		<h2>Terms and Conditions of the Club</h2>
+		<div id="ts-and_cs">
+			<?=getPostContent($terms_Id)?>
+		</div>
+
 		<p>
 			The Member, and the Parent or Guardian, in the case of a person under the
 			age of 18 years, hereby acknowledges that they have read the Club Rules and
-			the Policies and Procedures Documentation of CHester-le-Street ASC, copies
+			the Policies and Procedures Documentation of Chester-le-Street ASC, copies
 			of which can be obtained from <a
 			href="https://www.chesterlestreetasc.co.uk/policies" target="_blank">our
 			website</a>. I confirm my understanding and acceptance that such rules (as

@@ -367,6 +367,12 @@ if (empty($_SESSION['LoggedIn'])) {
     include 'controllers/squads/router.php';
   });
 
+  $route->group(['/posts', '/pages'], function() {
+    global $link;
+
+    include 'controllers/posts/router.php';
+  });
+
   $route->group('/registration', function() {
     global $link;
 

@@ -179,7 +179,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			continuing to complete your membership renewal, you confirm that you will
 			pay this amount as part of your next Direct Debit Payment.
 		</p>
-		<? if ($renewal == 0) { ?>
+		<? if (!userHasMandates($_SESSION['UserID'])) { ?>
 			<p>
 				We now need you to set up your Direct Debit agreement with
 				Chester-le-Street ASC. We will redirect you to our payments system where
@@ -187,15 +187,16 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			</p>
 		<? } else { ?>
 			<p>
-				If you have not yet set up a Direct Debit with Chester-le-Street ASC, we
-				will redirect you to our Payments system. You must setup a Direct Debit
-				there and then return to the Renewal system.
+				You're now ready to complete your <? if ($renewal == 0) {
+				?>Registration<? } else { ?>Renewal<? } ?>.
 			</p>
 		<? } ?>
 		<p class="mb-0">
 			<button type="submit" class="btn btn-success">
-				<? if ($renewal == 0) { ?>
+				<? if (!userHasMandates($_SESSION['UserID'])) { ?>
 					Setup Direct Debit
+				<? } else if ($renewal == 0) { ?>
+					Complete Registration
 				<? } else { ?>
 					Complete Renewal
 				<? } ?>

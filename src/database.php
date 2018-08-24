@@ -695,7 +695,7 @@ function myMonthlyFeeTable($link, $userID) {
       deductions) is</td><td>&pound;" . number_format($reducedCost,2,'.','') .
       "</td></tr>";
     }
-    $output .= "<tr><td>The monthly total for extras, such as CrossFit,
+    $output .= "<tr><td>The monthly subtotal for extras, such as CrossFit,
     is</td><td>&pound;" . number_format($monthlyExtrasTotal,2,'.','') .
     "</td></tr> <tr class=\"bg-light\"><td><strong>The monthly total
     is</strong></td><td>&pound;" . number_format(($reducedCost +
@@ -875,7 +875,7 @@ function squadInfoTable($link, $enableLinks = false) {
           $output .= "</td>
         <td>";
         if ($row['SquadCoC'] != "") {
-          $output .= "<a href=\"" . $row['SquadCoC'] . "\"
+          $output .= "<a href=\"" . autoUrl("pages/codeofconduct/" . $row['SquadCoC']) . "\"
           target=\"_blank\">Code of Conduct</a>";
         }
         $output .= "</td>
@@ -1538,6 +1538,23 @@ function user_needs_registration($user) {
   } else {
     return true;
   }
+}
+
+function getPostContent($id) {
+  global $db;
+  $sql = "SELECT `Content` FROM `posts` WHERE `ID` = ?";
+  try {
+  	$query = $db->prepare($sql);
+  	$query->execute([$id]);
+  } catch (PDOException $e) {
+  	halt(500);
+  }
+
+  $row = $query->fetch(PDO::FETCH_ASSOC);
+  if (!$row) {
+    return false;
+  }
+  return $row['Content'];
 }
 
 $count = 0;

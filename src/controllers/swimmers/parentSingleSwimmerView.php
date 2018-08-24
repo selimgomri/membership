@@ -367,7 +367,7 @@ else {
       <div class="media pt-3">
         <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
           <strong class="d-block text-gray-dark">Squad Code of Conduct</strong>
-          <a href="<?php echo $rowSwim["SquadCoC"]; ?>">Squad Code of Conduct</a>
+          <a href="<?php echo autoUrl("pages/codeofconduct/" . $rowSwim["SquadCoC"]); ?>">Squad Code of Conduct</a>
         </p>
       </div>
       <?php } ?>

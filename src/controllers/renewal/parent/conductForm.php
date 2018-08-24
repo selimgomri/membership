@@ -53,13 +53,13 @@ if (isset($id)) {
 							</p>
 						</div>
 
-						<h2>Squad Code of Conduct</h2>
+						<hr>
+
+						<h2 class="h1">Chester-le-Street ASC Squad Code of Conduct</h2>
 						<? if ($linkExists) { ?>
-						<p>
-							<a href="<? echo $link; ?>" target="_blank">
-								View the Squad Code of Conduct
-							</a>
-						</p>
+						<div id="code_of_conduct">
+							<?= getPostContent($link) ?>
+						</div>
 						<? } else { ?>
 						<p>
 							A code of conduct does not exist for the allocated squad. A
@@ -114,7 +114,9 @@ if (isset($id)) {
 						</ul>
 						<? } ?>
 
-						<h2>Swim England Code of Conduct for Swimmers</h2>
+						<hr>
+
+						<h2 class="h1">Swim England Code of Conduct for Swimmers</h2>
 						<h3>General behaviour</h3>
 						<ol>
 							<li>

@@ -107,7 +107,12 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <![endif]-->
 
   </head>
-<body class="bg-light account-body">
+  <? $bg = "bg-light";
+  if ($use_white_background) {
+    $bg = "bg-white";
+  }
+  ?>
+<body class="<?=$bg?> account-body">
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary
   d-print-none justify-content-between" role="navigation">
       <a class="navbar-brand" href="<?php echo autoUrl("") ?>">
@@ -267,7 +272,13 @@ Chester-le-Street ASC is a non profit unincorporated association.
           </a>
   		  </li>
       <? } ?>
-		  <?php } ?>
+      <? if ($_SESSION['AccessLevel'] != "Parent" &&
+  		$_SESSION['AccessLevel'] != "Coach") { ?>
+      <li class="nav-item">
+			  <a class="nav-link" href="<?php echo autoUrl("posts") ?>">Posts</a>
+		  </li>
+		  <?php }
+        } ?>
 		  <?php if (empty($_SESSION['LoggedIn'])) { ?>
       <li class="nav-item">
 			  <a class="nav-link" href="<?php echo autoUrl("") ?>">Login</a>

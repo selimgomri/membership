@@ -103,11 +103,35 @@ $content .= "
 <div class=\"form-group\">
   <label for=\"squadTimetable\">Squad Timetable</label>
   <input type=\"text\" class=\"form-control\" id=\"squadTimetable\" name=\"squadTimetable\" placeholder=\"Enter Squad Timetable Address\" value=\"" . $row['SquadTimetable'] . "\">
+</div>";
+$content .= '
+<div class="form-group">
+  <label for="squadCoC">Squad Code of Conduct</label>
+  <select class="custom-select" name="squadCoC">';
+  $sql = "SELECT `ID`, `Title` FROM `posts` WHERE `type` = ? ORDER BY `Title` ASC";
+  global $db;
+  try {
+		$query = $db->prepare($sql);
+		$query->execute(['conduct_code']);
+	} catch (PDOException $e) {
+		halt(500);
+	}
+  $squad_coc = $query->fetchAll(PDO::FETCH_ASSOC);
+    for ($i = 0; $i < sizeof($squad_coc); $i++) {
+      $s = null;
+      if ($squad_coc[$i]['ID'] == $row['SquadCoC']) {
+        $s = "selected";
+      }
+    $content .= '
+    <option value="' . $squad_coc[$i]['ID'] . '" ' . $s . '>
+      ' . $squad_coc[$i]['Title'] . '
+    </option>';
+    }
+    $content .= '
+  </select>
 </div>
-<div class=\"form-group\">
-  <label for=\"squadCoC\">Squad Code of Conduct</label>
-  <input type=\"text\" class=\"form-control\" id=\"squadCoC\" name=\"squadCoC\" placeholder=\"Enter Squad Code of Conduct Address\" value=\"" . $row['SquadCoC'] . "\">
-</div>
+';
+$content .= "
 <div class=\"alert alert-danger\">
   <div class=\"form-group mb-0\">
     <label for=\"squadDeleteDanger\"><strong>Danger Zone</strong> <br>Delete this Squad with this Key \"<span class=\"mono\">" . $squadDeleteKey . "</span>\"</label>
