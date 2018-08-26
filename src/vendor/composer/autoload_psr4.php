@@ -34,4 +34,5 @@ return array(
     'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qr-code/src'),
     'Endroid\\Installer\\' => array($vendorDir . '/endroid/installer/src'),
     'Defuse\\Crypto\\' => array($vendorDir . '/defuse/php-encryption/src'),
+    'CLSASC\\EquivalentTime\\' => array($vendorDir . '/clsasc/equivalent-time/src/CLSASC/EquivalentTime'),
 );

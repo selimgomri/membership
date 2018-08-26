@@ -12,7 +12,6 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
-        '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         'a9ed0d27b5a698798a89181429f162c5' => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib/Common/customFunctions.php',
         '6195ccae414b7a82ab47247beb894d66' => __DIR__ . '/..' . '/nezamy/route/system/function.php',
         '3f8bdd3b35094c73a26f0106e3c0f8b2' => __DIR__ . '/..' . '/sendgrid/sendgrid/lib/SendGrid.php',
@@ -73,6 +72,10 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'D' => 
         array (
             'Defuse\\Crypto\\' => 14,
+        ),
+        'C' => 
+        array (
+            'CLSASC\\EquivalentTime\\' => 22,
         ),
     );
 
@@ -189,6 +192,10 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'Defuse\\Crypto\\' => 
         array (
             0 => __DIR__ . '/..' . '/defuse/php-encryption/src',
+        ),
+        'CLSASC\\EquivalentTime\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/clsasc/equivalent-time/src/CLSASC/EquivalentTime',
         ),
     );
 

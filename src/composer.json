@@ -8,6 +8,7 @@
         "endroid/qr-code": "^3.2",
         "fabpot/goutte": "^3.2",
         "sendgrid/sendgrid": "^7.0",
-        "bshaffer/oauth2-server-php": "^1.10"
+        "bshaffer/oauth2-server-php": "^1.10",
+        "clsasc/equivalent-time": "^1.1"
     }
 }
