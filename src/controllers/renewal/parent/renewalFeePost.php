@@ -1,6 +1,22 @@
 <?
 
 $user = mysqli_real_escape_string($link, $_SESSION['UserID']);
+$partial_reg = isPartialRegistration();
+
+$partial_reg_require_topup = false;
+if ($partial_reg) {
+	global $db;
+	$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = 0 AND ClubPays = 0";
+	try {
+		$query = $db->prepare($sql);
+		$query->execute([$_SESSION['UserID']]);
+	} catch (PDOException $e) {
+		halt(500);
+	}
+	if ($query->fetchColumn() == 1) {
+		$partial_reg_require_topup = true;
+	}
+}
 
 $sql = "SELECT * FROM `members` WHERE `members`.`UserID` = '$user' AND
 `ClubPays` = '0';";
@@ -13,12 +29,21 @@ $payingSwimmerCount = mysqli_num_rows($result);
 
 if ($payingSwimmerCount == 1) {
 	$clubFee = 4000;
-} else {
+} else if ($partial_reg_require_topup) {
+	$clubFee = 1000;
+} else if ($payingSwimmerCount > 1 && !$partial_reg) {
 	$clubFee = 5000;
+} else {
+	$clubFee = 0;
 }
 
-$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
-members.SquadID WHERE `members`.`UserID` = '$user' AND `ClubPays` = '0';";
+if ($partial_reg) {
+	$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
+	members.SquadID WHERE `members`.`UserID` = '$user' && `members`.`RR` = 1;";
+} else {
+	$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
+	members.SquadID WHERE `members`.`UserID` = '$user';";
+}
 $result = mysqli_query($link, $sql);
 $count = mysqli_num_rows($result);
 
@@ -30,11 +55,11 @@ $member = [];
 for ($i = 0; $i < $count; $i++) {
 	$member[$i] = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ClubPays']) {
-		$asaFees[$i] = 1620;
+		$asaFees[$i] = 1685;
 	} else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ClubPays']) {
-		$asaFees[$i] = 3300;
+		$asaFees[$i] = 3415;
 	} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ClubPays']) {
-		$asaFees[$i] = 1250;
+		$asaFees[$i] = 1295;
 	}
 	$totalFee += $asaFees[$i];
 }

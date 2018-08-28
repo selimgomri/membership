@@ -69,11 +69,7 @@
 
         if ($_SESSION['AccessLevel'] == "Parent") {
           $subject = "Account Login";
-          $message = '
-          <p>Somebody just logged into your Chester-le-Street ASC Account from ' . ucwords(app('request')->browser()) . '.</p>
-          <p>If this was you then you can ignore this email. If this was not you, please <a href="' . autoUrl("") . '">log in to your account</a> and <a href="' . autoUrl("myaccount/password") . '">change your password</a> as soon as possible.</p>
-          <p>Kind Regards, <br>The Chester-le-Street ASC Team</p>
-          ';
+          $message = '<p>Somebody just logged into your Chester-le-Street ASC Account from ' . ucwords(app('request')->browser()) . '.</p><p>If this was you then you can ignore this email. If this was not you, please <a href="' . autoUrl("") . '">log in to your account</a> and <a href="' . autoUrl("myaccount/password") . '">change your password</a> as soon as possible.</p><p>Kind Regards, <br>The Chester-le-Street ASC Team</p>';
           $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
           `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 1, 'Security')";
           try {

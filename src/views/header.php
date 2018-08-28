@@ -33,7 +33,17 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="apple-mobile-web-app-title" content="CLS ASC Accounts">
     <meta name="format-detection" content="telephone=no">
-    <? if (!app('request')->headers['dnt']) { ?>
+    <meta name="googlebot" content="noarchive, nosnippet">
+    <meta name="X-CLSW-System" content="Membership">
+    <meta name="twitter:site" content="@clsasc">
+    <meta name="twitter:creator" content="@clsasc">
+    <meta name="og:type" content="website">
+    <meta name="og:locale" content="en_GB">
+    <meta name="og:site_name" content="Chester-le-Street ASC Account">
+    <? if (app('request')->headers['dnt']) { ?>
+    <meta name="X-CLSW-Tracking" content="no">
+    <? } else { ?>
+    <meta name="X-CLSW-Tracking" content="yes">
     <script async>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -136,26 +146,6 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <? if (!user_needs_registration($_SESSION['UserID'])) { ?>
 		<ul class="navbar-nav mr-auto">
 		<?php if (!empty($_SESSION['LoggedIn'])) { ?>
-		  <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("") ?>">Dashboard</a>
-		  </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="myAccountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          My Account
-        </a>
-        <div class="dropdown-menu" aria-labelledby="myAccountDropdown">
-          <a class="dropdown-item" href="<?php echo autoUrl("myaccount") ?>">Profile</a>
-          <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-            <a class="dropdown-item" href="<?php echo autoUrl("emergencycontacts") ?>">Emergency Contacts</a>
-          <? } ?>
-          <a class="dropdown-item" href="<?php echo autoUrl("myaccount/password") ?>">Password</a>
-          <? if ($_SESSION['AccessLevel'] == "Parent") { ?>
-          <a class="dropdown-item" href="<?php echo autoUrl("myaccount/notifyhistory") ?>">Message History</a>
-          <a class="dropdown-item" href="<?php echo autoUrl("myaccount/addswimmer") ?>">Add a Swimmer</a>
-          <? } ?>
-          <a class="dropdown-item" href="<?php echo autoUrl("myaccount/loginhistory") ?>">Login History</a>
-        </div>
-      </li>
       <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
         <?
         $user = mysqli_real_escape_string($link, $_SESSION['UserID']);
@@ -292,7 +282,31 @@ Chester-le-Street ASC is a non profit unincorporated association.
       <?php } ?>
 		</ul>
     <?php if (!empty($_SESSION['LoggedIn'])) { ?>
-    <a class="btn btn-sm btn-outline-light my-2 my-sm-0" href="<?php echo autoUrl("logout") ?>">Logout</a>
+    <ul class="navbar-nav">
+      <!--<a class="btn btn-sm btn-outline-light my-2 my-sm-0" href="<?php echo autoUrl("logout") ?>">Logout</a>-->
+      <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" aria-label="My Account">
+        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+      </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <span class="dropdown-item-text">Signed&nbsp;in&nbsp;as&nbsp;<strong><?= str_replace(' ', '&nbsp;', getUserName($_SESSION['UserID'])) ?></strong></span>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="<?php echo autoUrl("myaccount") ?>">Your Profile</a>
+          <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+            <a class="dropdown-item" href="<?php echo autoUrl("emergencycontacts") ?>">Your Emergency Contacts</a>
+          <? } ?>
+          <a class="dropdown-item" href="<?php echo autoUrl("myaccount/password") ?>">Your Password</a>
+          <? if ($_SESSION['AccessLevel'] == "Parent") { ?>
+          <a class="dropdown-item" href="<?php echo autoUrl("myaccount/notifyhistory") ?>">Your Message History</a>
+          <a class="dropdown-item" href="<?php echo autoUrl("myaccount/addswimmer") ?>">Add a Swimmer</a>
+          <? } ?>
+          <a class="dropdown-item" href="<?php echo autoUrl("myaccount/loginhistory") ?>">Your Login History</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">Help</a>
+          <a class="dropdown-item" href="<?= autoUrl("logout") ?>">Logout</a>
+        </div>
+      </li>
+    </ul>
     <?php }
     }?>
 	  </div>

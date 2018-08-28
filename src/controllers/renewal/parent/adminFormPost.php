@@ -1,6 +1,7 @@
 <?
 
-$userID = $_SESSION['UserID'];
+$userID = mysqli_real_escape_string($link, $_SESSION['UserID']);
+$partial_reg = isPartialRegistration();
 
 $id = [];
 
@@ -14,9 +15,16 @@ if ($_POST['data-agree'] != 1) {
 	data</li>";
 }
 
-$sql = "SELECT members.MemberID, members.MForename, members.MSurname,
-members.DateOfBirth FROM `members` WHERE `UserID` = '$userID' ORDER BY
-`MForename` ASC, `MSurname` ASC;";
+$sql;
+if ($partial_reg) {
+	$sql = "SELECT members.MemberID, members.MForename, members.MSurname,
+	members.DateOfBirth FROM `members` WHERE `UserID` = '$userID' AND members.RR =
+	1 ORDER BY `MForename` ASC, `MSurname` ASC;";
+} else {
+	$sql = "SELECT members.MemberID, members.MForename, members.MSurname,
+	members.DateOfBirth FROM `members` WHERE `UserID` = '$userID' ORDER BY
+	`MForename` ASC, `MSurname` ASC;";
+}
 $result = mysqli_query($link, $sql);
 
 for ($i = 0; $i < mysqli_num_rows($result); $i++) {
@@ -128,7 +136,8 @@ if ($status) {
 	<div class=\"alert alert-danger\">
 	<strong>There was a problem with the information you submitted</strong>
 	<ul class=\"mb-0\">" . $statusMessage . "</ul>
-	<p class=\"mb-0\">Please try again. You cannot renew your membership if you
-	cannot agree to the terms and conditions on this page.</p></div>";
+	<p class=\"mb-0\">Please try again. You cannot renew your membership or
+	register if you cannot agree to the terms and conditions on this
+	page.</p></div>";
 	header("Location: " . app('request')->curl);
 }
