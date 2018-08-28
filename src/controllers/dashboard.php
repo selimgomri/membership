@@ -52,6 +52,17 @@
   </div>
 <? } ?>
 
+  <div class="alert alert-info mt-3 mb-0">
+    <p class="mb-0">
+      <strong>
+        We've developed our own online time converter
+      </strong>
+    </p>
+    <p class="mb-0">
+      <a href="<?=autoUrl("timeconverter")?>" class="alert-link">Try it out</a> now.
+    </p>
+  </div>
+
   <div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded box-shadow" id="dash">
     <?php
     $grav_url = "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $_SESSION['EmailAddress'] ) ) ) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=80";
@@ -103,7 +114,7 @@ if ($_SESSION['AccessLevel'] == "Coach" || $_SESSION['AccessLevel'] == "Admin") 
     </p>
   </div>
   <span class="d-block mt-3">
-    <i class="fa fa-wifi" aria-hidden="true"></i> <strong>DCCPublic</strong> <em>L1braryPubl1c</em> 
+    <i class="fa fa-wifi" aria-hidden="true"></i> <strong>DCCPublic</strong> <em>L1braryPubl1c</em>
   </span>
 </div>
 <?php }

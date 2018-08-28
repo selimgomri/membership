@@ -1,49 +1,29 @@
 <?
 
+global $db;
+
 if ($_POST['agree'] == 1) {
 	$done_by_renewal = false;
-	if ($renewal == 0) {
-		$sql = "SELECT `MemberID` FROM  `members` WHERE UserID = ?";
+	if (isPartialRegistration() && !getNextSwimmer($_SESSION['UserID'], $id, true)) {
+		$full_renewal = false;
+		$substage = 1;
+		$member = getNextSwimmer($_SESSION['UserID'], 0, true);
+		$sql = "UPDATE `renewalProgress` SET `Stage` = `Stage` + 1, `Substage` = 0, `Part` = 0 WHERE `RenewalID` = 0 AND `UserID` = ?";
 		try {
-			$query = $db->prepare($sql);
-			$query->execute([$_SESSION['UserID']]);
+			$db->prepare($sql)->execute([$_SESSION['UserID']]);
 		} catch (PDOException $e) {
 			halt(500);
 		}
-		$swimmers = sizeof($query->fetchAll(PDO::FETCH_ASSOC));
-		$sql = "SELECT `MemberID` FROM `members` WHERE UserID = ? AND RR = ? ORDER
-		BY `MemberID` ASC";
+	} else if (isPartialRegistration()) {
+		$member = getNextSwimmer($_SESSION['UserID'], $id, true);
+		$sql = "UPDATE `renewalProgress` SET `Part` = ? WHERE `RenewalID` = 0 AND
+		`UserID` = ?";
 		try {
-			$query = $db->prepare($sql);
-			$query->execute([$_SESSION['UserID'], 1]);
+			$db->prepare($sql)->execute([$id, $_SESSION['UserID']]);
 		} catch (PDOException $e) {
 			halt(500);
 		}
-		$new_sw = $query->fetchAll(PDO::FETCH_ASSOC);
-		$new_swimmers = sizeof($new_sw);
-		if ($swimmers != $new_swimmers) {
-			$sql = "SELECT `MemberID` FROM `members` WHERE MemberID > ? AND UserID = ?
-			AND RR = ? ORDER BY `MemberID` ASC";
-			try {
-				$query = $db->prepare($sql);
-				$query->execute([$id, $_SESSION['UserID'], 1]);
-			} catch (PDOException $e) {
-				halt(500);
-			}
-			$new_sw = $query->fetchAll(PDO::FETCH_ASSOC);
-			$part = $new_sw[0]['ID'];
-			$sql = "UPDATE `renewalProgress` SET `Substage` = '1', `Part` = ? WHERE
-			`RenewalID` = ? AND `UserID` = ?";
-			try {
-				$db->prepare($sql)->execute([$part, $renewal, $_SESSION['UserID']]);
-			} catch (PDOException $e) {
-				halt(500);
-			}
-			$done_by_renewal = true;
-		}
-	}
-
-	if (!$done_by_renewal) {
+	} else {
 		$id = mysqli_real_escape_string($link, $id);
 		$user = mysqli_real_escape_string($link, $_SESSION['UserID']);
 		$sql = "SELECT * FROM `members` WHERE `UserID` = '$user' AND `MemberID` > '$id' ORDER BY `MemberID` ASC

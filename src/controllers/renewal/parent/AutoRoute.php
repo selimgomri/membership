@@ -2,6 +2,18 @@
 
 require 'AutoRouteStartup.php';
 
+if ($stage == 0 && $substage < 2 && isPartialRegistration()) {
+	$substage = 2;
+	$sql = "UPDATE `renewalProgress` SET `Substage` = 2 WHERE `RenewalID` = 0 AND
+	`UserID` = ?";
+	global $db;
+	try {
+		$db->prepare($sql)->execute([$_SESSION['UserID']]);
+	} catch (PDOException $e) {
+		halt(500);
+	}
+}
+
 if ($stage == 0) {
 	// Stage 0 - Reviews
 	if ($substage == 0) {
@@ -15,38 +27,6 @@ if ($stage == 0) {
 	}
 } else if ($stage == 1) {
 	global $db;
-	$full_renewal = true;
-	if ($renewal == 0) {
-		$sql = "SELECT `MemberID` FROM `members` WHERE UserID = ?";
-		try {
-			$query = $db->prepare($sql);
-			$query->execute([$_SESSION['UserID']]);
-		} catch (PDOException $e) {
-			halt(500);
-		}
-		$swimmers = sizeof($query->fetchAll(PDO::FETCH_ASSOC));
-		$sql = "SELECT `MemberID` FROM `members` WHERE UserID = ? AND RR = ? ORDER
-		BY `MemberID` ASC";
-		try {
-			$query = $db->prepare($sql);
-			$query->execute([$_SESSION['UserID'], 1]);
-		} catch (PDOException $e) {
-			halt(500);
-		}
-		$new_sw = $query->fetchAll(PDO::FETCH_ASSOC);
-		$new_swimmers = sizeof($new_sw);
-		if ($swimmers != $new_swimmers) {
-			$full_renewal = false;
-			$part = $new_sw[0]['ID'];
-			$sql = "UPDATE `renewalProgress` SET `Part` = ? WHERE
-			`RenewalID` = ? AND `UserID` = ?";
-			try {
-				$db->prepare($sql)->execute([$part, $renewal, $_SESSION['UserID']]);
-			} catch (PDOException $e) {
-				halt(500);
-			}
-		}
-	}
 	// Medical Reviews
 	if ($substage == 0) {
 		$id = $part;
@@ -63,37 +43,6 @@ if ($stage == 0) {
 	}
 } else if ($stage == 3) {
 	$full_renewal = true;
-	if ($renewal == 0) {
-		$sql = "SELECT `MemberID` FROM  `members` WHERE UserID = ?";
-		try {
-			$query = $db->prepare($sql);
-			$query->execute([$_SESSION['UserID']]);
-		} catch (PDOException $e) {
-			halt(500);
-		}
-		$swimmers = sizeof($query->fetchAll(PDO::FETCH_ASSOC));
-		$sql = "SELECT `MemberID` FROM `members` WHERE UserID = ? AND RR = ? ORDER
-		BY `MemberID` ASC";
-		try {
-			$query = $db->prepare($sql);
-			$query->execute([$_SESSION['UserID'], 1]);
-		} catch (PDOException $e) {
-			halt(500);
-		}
-		$new_sw = $query->fetchAll(PDO::FETCH_ASSOC);
-		$new_swimmers = sizeof($new_sw);
-		if ($swimmers != $new_swimmers) {
-			$full_renewal = false;
-			$part = $new_sw[0]['ID'];
-			$sql = "UPDATE `renewalProgress` SET `Substage` = '1', `Part` = ? WHERE
-			`RenewalID` = ? AND `UserID` = ?";
-			try {
-				$db->prepare($sql)->execute([$part, $renewal, $_SESSION['UserID']]);
-			} catch (PDOException $e) {
-				halt(500);
-			}
-		}
-	}
 	// Code of Conduct
 	if ($full_renewal && $substage == 0) {
 		include 'conductForm.php';

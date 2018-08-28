@@ -31,7 +31,7 @@ use Respect\Validation\Validator as v;
         from your account.</p>
         <p>If this was not you, contact <a href=\"mailto:support@chesterlestreetasc.co.uk\">
         support@chesterlestreetasc.co.uk</a> as soon as possible</p>";
-        notifySend("", "A swimmer has been removed", $message,
+        notifySend("", "Swimmer removed from your account", $message,
         $oldUser['Forename'] . " " . $oldUser['Surname'],
         $oldUser['EmailAddress']);
       }
@@ -65,8 +65,8 @@ use Respect\Validation\Validator as v;
       </ul>
       <p>If this was not you, contact <a href=\"mailto:support@chesterlestreetasc.co.uk\">
       support@chesterlestreetasc.co.uk</a> as soon as possible</p>";
-      notifySend($row['EmailAddress'], "You've added " . $row['MForename'] . "
-      to your account", $message, $row['Forename'] . " " . $row['Surname'],
+      notifySend($row['EmailAddress'], "You've added " . $row['MForename'] . " to your account",
+      $message, $row['Forename'] . " " . $row['Surname'],
       $row['EmailAddress']);
 
       $_SESSION['AddSwimmerSuccessState'] = "

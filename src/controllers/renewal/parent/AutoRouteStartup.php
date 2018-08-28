@@ -29,6 +29,57 @@ function latestRenewal() {
 	return mysqli_query($link, $sql);
 }
 
+function getNextSwimmer($user, $current = 0, $rr_only = false) {
+	global $db;
+	$sql = "SELECT `MemberID` FROM `members` WHERE `UserID` = ? AND `MemberID` > ?";
+	$data = [
+		$user,
+		$current
+	];
+	if ($rr_only == true) {
+		$sql = "SELECT `MemberID` FROM `members` WHERE `UserID` = ? AND `MemberID` > ? AND `RR` = 1";
+	}
+
+	try {
+		$query = $db->prepare($sql);
+		$query->execute($data);
+	} catch (PDOException $e) {
+		halt(500);
+	}
+	$row = $query->fetch(PDO::FETCH_ASSOC);
+	$member = $row['MemberID'];
+
+	if (!$row) {
+		return false;
+	}
+	return $member;
+}
+
+function isPartialRegistration() {
+	global $db;
+	$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ?";
+	try {
+		$query = $db->prepare($sql);
+		$query->execute([$_SESSION['UserID']]);
+	} catch (PDOException $e) {
+		halt(500);
+	}
+	$total_swimmers = $query->fetchColumn();
+	$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = ? ORDER
+	BY `MemberID` ASC";
+	try {
+		$query = $db->prepare($sql);
+		$query->execute([$_SESSION['UserID'], 1]);
+	} catch (PDOException $e) {
+		halt(500);
+	}
+	$new_swimmers = $query->fetchColumn();
+	if ($total_swimmers != $new_swimmers) {
+		return true;
+	}
+	return false;
+}
+
 $result = renewalProgress($user);
 
 $renewal = null;
