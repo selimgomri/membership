@@ -46,8 +46,11 @@ This application has been integrated with GoCardless and their APIs to allow
 Chester-le-Street ASC to bill members by Direct Debit. The GoCardless client
 library which is included in this software is copyright of GoCardless.
 
-## Notice
+## Legal Notices for Third Party Libraries
 
 This application contains third party client libraries. These are managed via
 Composer. They will come with the application, so we recommend that you do not
 update them via composer yourself, as this may cause issues.
+
+This product includes GeoLite2 data created by MaxMind, available from
+[http://www.maxmind.com](http://www.maxmind.com).

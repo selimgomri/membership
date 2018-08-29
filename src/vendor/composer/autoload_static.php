@@ -49,6 +49,9 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'M' => 
         array (
             'MyCLabs\\Enum\\' => 13,
+            'MaxMind\\WebService\\' => 19,
+            'MaxMind\\Exception\\' => 18,
+            'MaxMind\\Db\\' => 11,
         ),
         'L' => 
         array (
@@ -63,6 +66,7 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
             'GuzzleHttp\\' => 11,
             'Goutte\\' => 7,
             'GoCardlessPro\\' => 14,
+            'GeoIp2\\' => 7,
         ),
         'E' => 
         array (
@@ -75,6 +79,7 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         ),
         'C' => 
         array (
+            'Composer\\CaBundle\\' => 18,
             'CLSASC\\EquivalentTime\\' => 22,
         ),
     );
@@ -149,6 +154,18 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         array (
             0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
         ),
+        'MaxMind\\WebService\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/maxmind/web-service-common/src/WebService',
+        ),
+        'MaxMind\\Exception\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/maxmind/web-service-common/src/Exception',
+        ),
+        'MaxMind\\Db\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/maxmind-db/reader/src/MaxMind/Db',
+        ),
         'League\\OAuth2\\Server\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/oauth2-server/src',
@@ -181,6 +198,10 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         array (
             0 => __DIR__ . '/..' . '/gocardless/gocardless-pro/lib',
         ),
+        'GeoIp2\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/geoip2/geoip2/src',
+        ),
         'Endroid\\QrCode\\' => 
         array (
             0 => __DIR__ . '/..' . '/endroid/qr-code/src',
@@ -192,6 +213,10 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'Defuse\\Crypto\\' => 
         array (
             0 => __DIR__ . '/..' . '/defuse/php-encryption/src',
+        ),
+        'Composer\\CaBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/composer/ca-bundle/src',
         ),
         'CLSASC\\EquivalentTime\\' => 
         array (

@@ -285,8 +285,8 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <ul class="navbar-nav">
       <!--<a class="btn btn-sm btn-outline-light my-2 my-sm-0" href="<?php echo autoUrl("logout") ?>">Logout</a>-->
       <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" aria-label="My Account">
-        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        My Account <i class="fa fa-user-circle-o" aria-hidden="true"></i>
       </a>
         <div class="dropdown-menu dropdown-menu-right">
           <span class="dropdown-item-text">Signed&nbsp;in&nbsp;as&nbsp;<strong><?= str_replace(' ', '&nbsp;', getUserName($_SESSION['UserID'])) ?></strong></span>

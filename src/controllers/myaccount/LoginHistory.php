@@ -31,7 +31,7 @@ if ($start > $numLogins) {
   //halt(404);
 }
 
-$sql = "SELECT `Time`, `IPAddress`, `Browser`, `Platform`, `Mobile` FROM `userLogins` WHERE `UserID` = :user ORDER BY `Time` DESC LIMIT :start, 10";
+$sql = "SELECT `Time`, `IPAddress`, `GeoLocation`, `Browser`, `Platform`, `Mobile` FROM `userLogins` WHERE `UserID` = :user ORDER BY `Time` DESC LIMIT :start, 10";
 try {
 	$query = $db->prepare($sql);
   $query->bindParam('user', $_SESSION['UserID'], PDO::PARAM_INT);
@@ -76,10 +76,11 @@ include BASE_PATH . "views/header.php";
           </p>
           <p class="mb-0">
             <? if ($row[$i]['Mobile']) { ?>
-            Login from a mobile device running <?= htmlentities($row[$i]['Platform']) ?>.
+            Login from a mobile device running <?= htmlentities($row[$i]['Platform']) ?>
             <? } else { ?>
-            Login from a desktop computer running <?= htmlentities($row[$i]['Platform']) ?>.
+            Login from a desktop computer running <?= htmlentities($row[$i]['Platform']) ?>
             <? } ?>
+            <? if ($row[$i]['GeoLocation']) { ?>located in <?= htmlentities($row[$i]['GeoLocation']) ?><? } ?>.
             IP Address: <?= htmlentities($row[$i]['IPAddress']) ?>
           </p>
         </div>

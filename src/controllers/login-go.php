@@ -3,6 +3,8 @@
   $errorMessage = "";
   $errorState = false;
 
+  use GeoIp2\Database\Reader;
+
   if (!empty($_POST['username']) && !empty($_POST['password'])) {
     // Let the user login
     $username = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['username'])));
@@ -34,7 +36,19 @@
 
         $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));
 
-        $sql = "INSERT INTO `userLogins` (`UserID`, `IPAddress`, `Browser`, `Platform`, `Mobile`, `Hash`, `HashActive`) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $geo_string = "Location Information Unavailable";
+
+        try {
+          $reader = new Reader(BASE_PATH . 'storage/geoip/GeoLite2-City.mmdb');
+          $record = $reader->city(app('request')->ip());
+          $geo_string = $record->city->name . ', ' . $record->mostSpecificSubdivision->name . ', ' . $record->country->name;
+        } catch (AddressNotFoundException $e) {
+          $geo_string = "Unknown Location";
+        } catch (InvalidDatabaseException $e) {
+          $geo_string = "Location Information Unavailable";
+        }
+
+        $sql = "INSERT INTO `userLogins` (`UserID`, `IPAddress`, `GeoLocation`, `Browser`, `Platform`, `Mobile`, `Hash`, `HashActive`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         global $db;
 
         $mobile = 0;
@@ -51,6 +65,7 @@
         $login_details = [
           $_SESSION['UserID'],
           app('request')->ip(),
+          $geo_string,
           ucwords(app('request')->browser()),
           ucwords(app('request')->platform()),
           $mobile,
@@ -69,7 +84,7 @@
 
         if ($_SESSION['AccessLevel'] == "Parent") {
           $subject = "Account Login";
-          $message = '<p>Somebody just logged into your Chester-le-Street ASC Account from ' . ucwords(app('request')->browser()) . '.</p><p>If this was you then you can ignore this email. If this was not you, please <a href="' . autoUrl("") . '">log in to your account</a> and <a href="' . autoUrl("myaccount/password") . '">change your password</a> as soon as possible.</p><p>Kind Regards, <br>The Chester-le-Street ASC Team</p>';
+          $message = '<p>Somebody just logged into your Chester-le-Street ASC Account from ' . ucwords(app('request')->browser()) . ', using a device located in ' . $geo_string . '.</p><p>If this was you then you can ignore this email. If this was not you, please <a href="' . autoUrl("") . '">log in to your account</a> and <a href="' . autoUrl("myaccount/password") . '">change your password</a> as soon as possible.</p><p>Kind Regards, <br>The Chester-le-Street ASC Team</p>';
           $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
           `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 1, 'Security')";
           try {

@@ -99,6 +99,7 @@ $db = new PDO("mysql:host=" . $dbhost . ";dbname=" . $dbname . "", $dbuser, $dbp
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 use Symfony\Component\DomCrawler\Crawler;
+use GeoIp2\Database\Reader;
 
 $app            = System\App::instance();
 $app->request   = System\Request::instance();
@@ -185,13 +186,22 @@ $route->any('/notify/unsubscribe/{email}', function($email) {
   include 'controllers/notify/UnsubscribeHandler.php';
 });
 
+$route->get('/timeconverter', function() {
+  global $link;
+  include 'controllers/conversionsystem/testing.php';
+});
+
+$route->post('/timeconverter', function() {
+  global $link;
+  include 'controllers/conversionsystem/PostTesting.php';
+});
+
 $route->group('/ajax', function() {
   global $link;
   include 'controllers/public/router.php';
 });
 
 $route->group('/services', function() {
-
   $this->get('/barcode-generator', function() {
     include 'controllers/barcode-generation-system/gen.php';
   });
@@ -305,70 +315,7 @@ if (empty($_SESSION['LoggedIn'])) {
 
   $route->group('/myaccount', function() {
     global $link;
-
-  	// My Account
-  	$this->get('/', function() {
-      global $link;
-  	  require('controllers/myaccount/index.php');
-  	});
-
-    $this->post('/', function() {
-      global $link;
-  	  require('controllers/myaccount/index.php');
-  	});
-
-  	// Manage Password
-  	$this->get('/password', function() {
-      global $link;
-  	  require('controllers/myaccount/change-password.php');
-  	});
-
-  	$this->post('/password', function() {
-      global $link;
-  	  require('controllers/myaccount/change-password-action.php');
-  	});
-
-  	if ($_SESSION['AccessLevel'] == "Parent") {
-
-    	// Add swimmer
-    	$this->get('/addswimmer', function() {
-        global $link;
-    	  require('controllers/myaccount/add-swimmer.php');
-    	});
-
-      // Add swimmer
-    	$this->get('/addswimmer/auto/{asa}/{acs}', function($asa, $acs) {
-        global $link;
-    	  require('controllers/myaccount/auto-add-swimmer.php');
-    	});
-
-    	$this->post('/addswimmer', function() {
-        global $link;
-    	  require('controllers/myaccount/add-swimmer-action.php');
-    	});
-
-      // Add swimmer
-    	$this->get(['/addswimmergroup', '/addswimmergroup/{fam}/{acs}'], function($fam = null, $acs = null) {
-        global $link;
-    	  require('controllers/myaccount/add-group.php');
-    	});
-
-    	$this->post('/addswimmergroup', function() {
-        global $link;
-    	  require('controllers/myaccount/add-group-action.php');
-    	});
-
-      $this->get(['notifyhistory/', 'notifyhistory/page/{page}:int'], function($page = null) {
-  			global $link;
-  			include 'controllers/notify/MyMessageHistory.php';
-  		});
-		}
-
-    $this->get(['loginhistory/', 'loginhistory/page/{page}:int'], function($page = null) {
-      global $link;
-      include 'controllers/myaccount/LoginHistory.php';
-    });
-
+    include 'controllers/myaccount/router.php';
   });
 
   $route->group('/swimmers', function() {
@@ -473,17 +420,36 @@ if (empty($_SESSION['LoggedIn'])) {
     });
   });
 
-  $route->any('asa/{asa}/{ev}/{course}', function($asa, $ev, $course) {
+  $route->any('test', function() {
     global $link;
 
-    include BASE_PATH . 'views/header.php'; ?>
-    <div class="container">
-      <h1>Times</h1>
-      <table class="table table-sm">
-        <? echo pre(getTimesInFull($asa, $ev, $course)); ?>
-      </table>
-    </div>
-    <? include BASE_PATH . 'views/footer.php';
+    include BASE_PATH . 'views/header.php';
+
+    // This creates the Reader object, which should be reused across
+    // lookups.
+    $reader = new Reader(BASE_PATH . 'storage/geoip/GeoLite2-City.mmdb');
+
+    // Replace "city" with the appropriate method for your database, e.g.,
+    // "country".
+    $record = $reader->city(app('request')->ip());
+
+    pre($record);
+
+    print($record->country->isoCode . "\r\n"); // 'US'
+    print($record->country->name . "\r\n"); // 'United States'
+
+    print($record->mostSpecificSubdivision->name . "\r\n"); // 'Minnesota'
+    print($record->mostSpecificSubdivision->isoCode . "\r\n"); // 'MN'
+
+    print($record->city->name . "\r\n"); // 'Minneapolis'
+
+    print($record->postal->code . "\r\n"); // '55455'
+
+    print($record->location->latitude . "\r\n"); // 44.9733
+    print($record->location->longitude . "\r\n"); // -93.2323
+
+
+    include BASE_PATH . 'views/footer.php';
   });
 }
 
