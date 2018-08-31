@@ -44,8 +44,6 @@
     }
   }
 
-  // Change Email is Temporarily Disabled
-
   if (!empty($_POST['mobile'])) {
     $newMobile = mysqli_real_escape_string($link, "+44" .
     ltrim(preg_replace('/\D/', '', str_replace('+44', '', $_POST['mobile'])),
@@ -160,10 +158,12 @@
           </div>
            <div class="form-group">
               <label for="email">Email</label>
-              <input readonly type="email" class="form-control-plaintext" name="email" id="emailbox" placeholder="Email Address" value="<?php echo $email ?>" aria-describedby="emailHelp">
-              <small id="emailHelp" class="form-text text-muted">
-                We've temporarily disabled the ability to change your email address while we make some changes to our systems.
-              </small>
+              <input readonly type="email" class="form-control" disabled name="email" id="emailbox" placeholder="Email Address" value="<?php echo $email ?>" aria-describedby="emailHelp">
+              <p class="mb-0 mt-3">
+                <a href="<?=autoUrl("myaccount/email")?>" class="btn btn-secondary">
+                  Edit Email Address &amp; Subscriptions
+                </a>
+              </p>
           </div>
           <div class="form-group">
             <div class="custom-control custom-checkbox">

@@ -18,6 +18,14 @@ if ($row['EmailComms']) {
 	$emailChecked = " checked ";
 }
 
+$emailChecked_security;
+if (isSubscribed($_SESSION['UserID'], 'Security')) {
+	$emailChecked_security = " checked ";
+}
+
+
+$email = $row['EmailAddress'];
+
 $pagetitle = "Email Options";
 include BASE_PATH . "views/header.php";
   $userID = $_SESSION['UserID'];
@@ -26,19 +34,79 @@ include BASE_PATH . "views/header.php";
   <h1>Manage Email Options</h1>
   <p class="lead">Manage your email address and email options.</p>
 
+	<? if ($_SESSION['OptionsUpdate']) { ?>
+		<div class="alert alert-success">
+			<p class="mb-0">
+				<strong>We've successfully updated your email options</strong>
+			</p>
+		</div>
+	<? unset($_SESSION['OptionsUpdate']);
+	} ?>
+
+	<? if ($_SESSION['EmailUpdate']) { ?>
+		<div class="alert alert-success">
+			<p class="mb-0">
+				<strong>Just one more step to update your email address</strong>
+			</p>
+			<p class="mb-0">
+				We've sent an email to your new email address with a link in it. Please
+				follow that link to confirm your new email address.
+			</p>
+		</div>
+	<? unset($_SESSION['EmailUpdate']);
+	} else if (isset($_SESSION['EmailUpdate'])) { ?>
+		<div class="alert alert-danger">
+			<p class="mb-0">
+				<strong>The email address provided is not valid</strong>
+			</p>
+			<p class="mb-0">
+				Please try again
+			</p>
+		</div>
+		<? unset($_SESSION['EmailUpdate']);
+	} ?>
+
+	<? if (isset($_SESSION['EmailUpdateNew'])) { ?>
+		<div class="alert alert-info">
+			<p class="mb-0">
+				<strong>Once verified, your account email
+				address will change to
+				<?=htmlentities($_SESSION['EmailUpdateNew'])?></strong>
+			</p>
+			<p class="mb-0">
+				If you need help, contact <a href="mailto:support@chesterlestreetasc.co.uk" class="alert-link">support@chesterlestreetasc.co.uk</a>
+			</p>
+		</div>
+	<? } ?>
+
 	<div class="my-3 p-3 bg-white rounded shadow">
 		<form method="post">
 			<div class="form-group">
 		    <label for="EmailAddress">Your Email address</label>
-		    <input type="email" class="form-control" id="EmailAddress" name="EmailAddress" placeholder="name@example.com" value="<?=htmlentities($row['EmailAddress'])?>">
+		    <input type="email" class="form-control" id="EmailAddress" name="EmailAddress" placeholder="name@example.com" value="<?=htmlentities($email)?>">
+				<? if (isset($_SESSION['EmailUpdateNew'])) { ?>
+				<small class="form-text">Once verified, your account email
+				address will change to
+				<?=htmlentities($_SESSION['EmailUpdateNew'])?></small>
+				<? } ?>
 		  </div>
+
 			<div class="form-group">
 				<div class="custom-control custom-checkbox">
 					<input type="checkbox" class="custom-control-input" value="1" id="EmailComms" aria-describedby="EmailCommsHelp" name="EmailComms" <?php echo $emailChecked; ?> >
-					<label class="custom-control-label" for="EmailComms">Receive Squad Updates by Email</label>
+          <label class="custom-control-label" for="EmailComms">Receive Squad Updates by Email</label>
 					<small id="EmailCommsHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small>
 				</div>
 			</div>
+
+			<div class="form-group">
+				<div class="custom-control custom-checkbox">
+					<input type="checkbox" class="custom-control-input" value="1" id="SecurityComms" aria-describedby="SecurityCommsHelp" name="SecurityComms" <?php echo $emailChecked_security; ?> >
+          <label class="custom-control-label" for="SecurityComms">Receive Account Security Emails</label>
+					<small id="SecurityCommsHelp" class="form-text text-muted">Receive emails whenever somebody logs in to your account</small>
+				</div>
+			</div>
+
 			<p class="mb-0">
 				<button type="submit" class="btn btn-secondary">Update Details</button>
 			</p>

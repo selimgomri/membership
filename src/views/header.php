@@ -131,9 +131,9 @@ Chester-le-Street ASC is a non profit unincorporated association.
       <a class="navbar-brand" href="<?php echo autoUrl("") ?>">
         <?php if ((empty($_SESSION['LoggedIn']) || $_SESSION['AccessLevel'] ==
         "Parent")) { ?>
-          Membership
+          <img src="<? echo autoUrl("img/chesterIcon.svg"); ?>" width="20" height="20"> Membership
         <?php } else { ?>
-          <img src="<? echo autoUrl("img/chesterIcon.svg"); ?>" width="20" height="20">
+          <img src="<? echo autoUrl("img/chesterIcon.svg"); ?>" width="20" height="20"> CLS ASC
         <?php } ?>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -292,6 +292,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
           <span class="dropdown-item-text">Signed&nbsp;in&nbsp;as&nbsp;<strong><?= str_replace(' ', '&nbsp;', getUserName($_SESSION['UserID'])) ?></strong></span>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="<?php echo autoUrl("myaccount") ?>">Your Profile</a>
+          <a class="dropdown-item" href="<?php echo autoUrl("myaccount/email") ?>">Your Email Options</a>
           <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
             <a class="dropdown-item" href="<?php echo autoUrl("emergencycontacts") ?>">Your Emergency Contacts</a>
           <? } ?>

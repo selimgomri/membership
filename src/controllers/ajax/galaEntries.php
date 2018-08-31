@@ -1,4 +1,7 @@
 <?php
+
+use CLSASC\EquivalentTime\EquivalentTime;
+
 $access = $_SESSION['AccessLevel'];
 $sex = mysqli_real_escape_string($link, $_REQUEST["sex"]);
 if ($sex == "all") {
@@ -90,14 +93,18 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       $hyTekPrintDate = "";
       if ($row['HyTek'] == 1) {
         $hyTekPrintDate = " <br>DoB: " . date('j F Y', strtotime($row['DateOfBirth'])) . "";
-        $type = null;
+        $type; $typeB;
         if ($row['CourseLength'] == "SHORT") {
           $type = "SCPB";
+          $typeB = "LCPB";
         } else {
           $type = "LCPB";
+          $typeB = "SCPB";
         }
         $times = mysqli_fetch_array(mysqli_query($link, "SELECT * FROM `times`
         WHERE `MemberID` = '$member' AND `Type` = '$type';"), MYSQLI_ASSOC);
+        $timesB = mysqli_fetch_array(mysqli_query($link, "SELECT * FROM `times`
+        WHERE `MemberID` = '$member' AND `Type` = '$typeB';"), MYSQLI_ASSOC);
       }
 
       // First part of the row content
@@ -132,11 +139,44 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       else {
         for ($y=0; $y<sizeof($swimsArray); $y++) {
           if ($row[$swimsArray[$y]] == 1) {
+            $course; $to; $time;
+            if ($row['CourseLength'] == "SHORT") {
+              $course = "50m";
+              $to = "25m";
+            } else {
+              $course = "25m";
+              $to = "50m";
+            }
+            $output;
+            if ($timesB[$swimsArray[$y]] != "") {
+              $time = explode(".", $timesB[$swimsArray[$y]]);
+              $ms = explode(":", $time[0]);
+              $mins = $secs = 0;
+              if (sizeof($ms) == 1) {
+                $secs = $ms[0];
+              } else {
+                $mins = $ms[0];
+                $secs = $ms[1];
+              }
+              $hunds = $time[1];
+              $time_in = (double) 60*$mins + $secs + ($hunds/100);
+              try {
+              	$time = new EquivalentTime($course, str_replace('&nbsp;', ' ', $swimsTextArray[$y]), $time_in);
+                $time_double = $time->getConversion($to);
+              	$time->setOutputAsString(true);
+                if ($time_double < $time_in) {
+                  // echo $time_double . " " . $time_in;
+                  $output = ', <abbr title="Faster converted time available">FC:</abbr> ' . $time->getConversion($to);
+                }
+              } catch (Exception $e) {
+              	// Do nothing
+              }
+            }
             $content .= "<li><strong>" . $swimsTextArray[$y] . "</strong> <br>";
             if ($times[$swimsArray[$y]] != "") {
-              $content .= $times[$swimsArray[$y]];
+              $content .= $times[$swimsArray[$y]] . $output;;
             } else {
-              $content .= $row[$swimsTimeArray[$y]];
+              $content .= $row[$swimsTimeArray[$y]] . $output;
             }
             $content .= "</li>";
           }

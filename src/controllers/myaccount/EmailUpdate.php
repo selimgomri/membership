@@ -2,10 +2,10 @@
 
 global $db;
 
-$sql = "SELECT * FROM `newUsers` WHERE `AuthCode` = ? AND `ID` = ? AND `Type` = 'EmailUpdate'";
+$sql = "SELECT * FROM `newUsers` WHERE `AuthCode` = ? AND `ID` = ? AND `Type` = ?";
 try {
 	$query = $db->prepare($sql);
-	$query->execute([$auth, $id]);
+	$query->execute([$auth, $id, 'EmailUpdate']);
 	$id = $db->lastInsertId();
 } catch (PDOException $e) {
 	halt(500);
@@ -31,7 +31,7 @@ if ($found) {
 
 	$sql = "UPDATE `users` SET `EmailAddress` = ? WHERE `UserID` = ?";
 	try {
-		$db->prepare($sql)->$execute([$newEmail, $user]);
+		$db->prepare($sql)->execute([$newEmail, $user]);
 	} catch (PDOException $e) {
 		halt(500);
 	}
@@ -54,7 +54,7 @@ if ($found) {
   <div class="alert alert-success mb-0">
     <p class="mb-0">
       <strong>
-        Hello ' . $forename . '! You\'ve successfully verified your new email address.
+        Hello ' . $name . '! You\'ve successfully verified your new email address.
       </strong>
     </p>
 
@@ -66,7 +66,7 @@ if ($found) {
 
 	$sql = "DELETE FROM `newUsers` WHERE `AuthCode` = ? AND `ID` = ?;";
 	try {
-		$db->prepare($sql)->$execute([$authCode, $id]);
+		$db->prepare($sql)->execute([$authCode, $id]);
 	} catch (PDOException $e) {
 		halt(500);
 	}
@@ -94,4 +94,4 @@ if ($found) {
 	';
 }
 
-header("Location: " . autoUrl(""));
+header("Location: " . autoUrl("/x"));

@@ -9,7 +9,7 @@ $result = mysqli_query($link, $sql);
 for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	$emailid = $row['EmailID'];
-	if ($row['EmailComms'] == 1 || $row['ForceSend'] == 1 || $row['EmailType'] != 'Notify') {
+	if (isSubscribed($row['UserID'], $row['EmailType']) || $row['ForceSend'] == 1) {
 		//$to = $row['EmailAddress'];
     $to = $row['Forename'] . " " . $row['Surname'] . " <" . $row['EmailAddress'] . ">";
 		$name = $row['Forename'] . " " . $row['Surname'];

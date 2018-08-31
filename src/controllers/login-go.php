@@ -82,16 +82,14 @@
 
         setcookie("CLSASC_AutoLogin", $hash, time()+60*60*24*120, "/", app('request')->hostname, true, true);
 
-        if ($_SESSION['AccessLevel'] == "Parent") {
-          $subject = "Account Login";
-          $message = '<p>Somebody just logged into your Chester-le-Street ASC Account from ' . ucwords(app('request')->browser()) . ', using a device located in ' . $geo_string . '.</p><p>If this was you then you can ignore this email. If this was not you, please <a href="' . autoUrl("") . '">log in to your account</a> and <a href="' . autoUrl("myaccount/password") . '">change your password</a> as soon as possible.</p><p>Kind Regards, <br>The Chester-le-Street ASC Team</p>';
-          $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
-          `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 1, 'Security')";
-          try {
-            $db->prepare($notify)->execute([$_SESSION['UserID'], $subject, $message]);
-          } catch (PDOException $e) {
-            halt(500);
-          }
+        $subject = "Account Login";
+        $message = '<p>Somebody just logged into your Chester-le-Street ASC Account from ' . ucwords(app('request')->browser()) . ', using a device we believe was located in ' . $geo_string . '.</p><p>If this was you then you can ignore this email. If this was not you, please <a href="' . autoUrl("") . '">log in to your account</a> and <a href="' . autoUrl("myaccount/password") . '">change your password</a> as soon as possible.</p><p>Kind Regards, <br>The Chester-le-Street ASC Team</p>';
+        $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
+        `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'Security')";
+        try {
+          $db->prepare($notify)->execute([$_SESSION['UserID'], $subject, $message]);
+        } catch (PDOException $e) {
+          halt(500);
         }
 
         if (isset($target)) {
