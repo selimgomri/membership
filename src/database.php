@@ -66,7 +66,7 @@ ASC Membership System.</p>
 <p class=\"small\" align=\"center\">Have questions? Contact us at <a
 href=\"mailto:enquiries@chesterlestreetasc.co.uk\">enquiries@chesterlestreetasc.co.uk</a>.</p>
 <p class=\"small\" align=\"center\">To control your email options, go to <a href=\"" .
-autoUrl("myaccount") . "\">My Account</a>.</p>
+autoUrl("myaccount/email") . "\">My Account</a>.</p>
 <p class=\"small\" align=\"center\">&copy; Chester-le-Street ASC " . date("Y") . "</p>
       </div>
       </table>
@@ -1555,6 +1555,46 @@ function getPostContent($id) {
     return false;
   }
   return $row['Content'];
+}
+
+function isSubscribed($user, $email_type) {
+  global $db;
+  $sql = "SELECT `Subscribed` FROM `users` LEFT JOIN `notifyOptions` ON `users`.`UserID` = `notifyOptions`.`UserID` WHERE (`users`.`UserID` = :user AND `EmailType` = :type) OR (`users`.`UserID` = :user AND `EmailType` IS NULL)";
+  $array = [
+    'user' => $user,
+    'type' => $email_type
+  ];
+  try {
+    $query = $db->prepare($sql);
+    $query->execute($array);
+  } catch (Exception $e) {
+    halt(500);
+  }
+  $row = $query->fetchColumn();
+
+  if ($row == null) {
+    // Try user account info
+    $sql = "SELECT `EmailComms` FROM `users` WHERE `UserID` = :user";
+    $array = [
+      'user' => $user
+    ];
+    try {
+      $query = $db->prepare($sql);
+      $query->execute($array);
+    } catch (Exception $e) {
+      halt(500);
+    }
+    $row = $query->fetchColumn();
+    if ($row) {
+      return true;
+    }
+  }
+
+  if ($row) {
+    return true;
+  }
+
+  return false;
 }
 
 $count = 0;

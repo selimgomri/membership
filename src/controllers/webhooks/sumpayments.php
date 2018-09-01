@@ -54,11 +54,24 @@ if (mysqli_num_rows($result) == 0) {
 
         $name = $description . " (" . $swimmerRow['SquadName'] . ")";
 
-        $tracksql = "INSERT INTO `individualFeeTrack` (`MonthID`, `MemberID`,
-        `UserID`, `Description`, `Amount`, `Type`) VALUES ('$mid', '$memID',
-        '$user', '$name', '$fee', 'SquadFee');";
-        if ($fee > 0) {
-          mysqli_query($link, $tracksql);
+        if ($swimmerRow['SquadFee'] > 0) {
+          global $db;
+          $track_info = [
+            $mid,
+            $swimmerRow['MemberID'],
+            $user,
+            $name,
+            floor($swimmerRow['SquadFee']*100)
+          ];
+
+          try {
+            $tracker_sql = "INSERT INTO `individualFeeTrack` (`MonthID`, `MemberID`,
+            `UserID`, `Description`, `Amount`, `Type`) VALUES (?, ?,
+            ?, ?, ?, 'SquadFee')";
+            $db->prepare($tracker_sql)->execute($track_info);
+          } catch (Exception $e) {
+            halt(500);
+          }
         }
       }
 
@@ -120,11 +133,24 @@ if (mysqli_num_rows($result) == 0) {
 
         $name = $description . " (" . $swimmerRow['ExtraName'] . ")";
 
-        $tracksql = "INSERT INTO `individualFeeTrack` (`MonthID`, `MemberID`,
-        `UserID`, `Description`, `Amount`, `Type`) VALUES ('$mid', '$memID',
-        '$user', '$name', '$fee', 'ExtraFee');";
-        if ($fee > 0) {
-          mysqli_query($link, $tracksql);
+        if ($swimmerRow['ExtraFee'] > 0) {
+          global $db;
+          $track_info = [
+            $mid,
+            $swimmerRow['MemberID'],
+            $user,
+            $name,
+            floor($swimmerRow['ExtraFee']*100)
+          ];
+
+          try {
+            $tracker_sql = "INSERT INTO `individualFeeTrack` (`MonthID`, `MemberID`,
+            `UserID`, `Description`, `Amount`, `Type`) VALUES (?, ?,
+            ?, ?, ?, 'ExtraFee')";
+            $db->prepare($tracker_sql)->execute($track_info);
+          } catch (Exception $e) {
+            halt(500);
+          }
         }
       }
 

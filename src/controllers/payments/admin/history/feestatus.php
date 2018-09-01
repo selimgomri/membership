@@ -37,7 +37,9 @@ ON individualFeeTrack.PaymentID = paymentsPending.PaymentID) INNER JOIN
 `payments` ON paymentsPending.PMkey = payments.PMkey) LEFT JOIN `users` ON
 users.UserID = individualFeeTrack.UserID) WHERE `paymentMonths`.`Date` LIKE
 '$searchDate' AND `individualFeeTrack`.`Type` = '$name_type' ORDER BY `Forename`
-ASC, `Surname` ASC, `MForename` ASC, `MSurname` ASC;";
+ASC, `Surname` ASC, `users`.`UserID` ASC, `MForename` ASC, `MSurname` ASC;";
+
+//pre($sql);
 $result = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
@@ -92,8 +94,10 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 						?><tr class="table-success"><?
 					} else if ($row['Status'] == "cancelled" || $row['Status'] ==
 					"customer_approval_denied" || $row['Status'] == "failed" ||
-					$row['Status'] == "charged_back" || $row['Status'] == "cust_not_dd") {
+					$row['Status'] == "charged_back") {
 						?><tr class="table-danger"><?
+					} else if ($row['Status'] == "cust_not_dd") {
+						?><tr class="table-warning"><?
 					} else { ?><tr class=""><?
 					} ?>
 						<td>

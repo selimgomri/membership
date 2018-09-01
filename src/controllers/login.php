@@ -12,7 +12,7 @@
   }
 
   ?>
-<div class="frontpage1 d-flex flex-column" style="margin-top:-1.0rem;">
+<div class="frontpage1 d-flex flex-column" style="margin:-1.0rem 0;">
   <div class="mb-auto"></div>
   <div class="container-fluid">
     <div class="row justify-content-center">
@@ -23,7 +23,7 @@
             <div class="text-dark pt-3">
               <!--<div class="alert alert-warning">
                 <strong>Overnight System Maintenance</strong> <br>
-                Access to this service may be intermittent from 21:00 on Sunday 29 July until 03:00 on Monday 30 July due to automated dependency updates.
+                Our systems will not be sending emails between 23:00 on Friday 31 August and 15:00 on Saturday 1 September
               </div>-->
                 <?php if ($errorState == true) { ?>
                 <div class="alert alert-danger">

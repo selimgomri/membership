@@ -176,7 +176,7 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE['CLSASC_AutoLogin']) && $_COO
 //halt(901);
 
 // Password Reset via Link
-$route->get('/email/auth/{id}:int/{authCode}', function($id, $authCode) {
+$route->get('/email/auth/{id}:int/{auth}', function($id, $auth) {
   global $link;
   require('controllers/myaccount/EmailUpdate.php');
 });
