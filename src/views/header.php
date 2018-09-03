@@ -127,7 +127,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
       padding: 5rem 1rem;
       text-align: center;
     }
-    thead, table th {
+    thead {
       position: sticky !important;
       position: -webkit-sticky !important;
       position: -moz-sticky !important;
@@ -193,7 +193,14 @@ Chester-le-Street ASC is a non profit unincorporated association.
 
   <div class="text-white py-3 d-none d-lg-flex" style="background:#aa0000">
     <div class="<?=$container_class?>">
-      <a class="logowhite" href="https://account.chesterlestreetasc.co.uk/"></a>
+      <div class="row align-items-center">
+        <div class="col">
+          <a class="logowhite" href="https://account.chesterlestreetasc.co.uk/"></a>
+        </div>
+        <div class="col d-none d-lg-flex">
+          <p class="lead mb-0 ml-auto text-right">Club Membership System</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -459,22 +466,20 @@ Chester-le-Street ASC is a non profit unincorporated association.
 </div>
 
   <? if (isset($_SESSION['UserSimulation'])) { ?>
-    <div class="bg-primary text-white box-shadow mb-3" style="margin-top:-1rem;">
-      <nav class="nav nav-underline">
-        <span class="dropdown-item">
-          <p class="mb-0">
-            <strong>
-              You are in User Simulation Mode simulating <?=
-              $_SESSION['UserSimulation']['SimUserName'] ?>
-            </strong>
-          </p>
-          <p class="mb-0">
-            <a href="<?=autoUrl("users/simulate/exit")?>" class="text-white">
-              Exit User Simulation Mode
-            </a>
-          </p>
-        </span>
-      </nav>
+    <div class="bg-secondary text-white box-shadow mb-3 py-2">
+      <div class="<?=$container_class?>">
+        <p class="mb-0">
+          <strong>
+            You are in User Simulation Mode simulating <?=
+            $_SESSION['UserSimulation']['SimUserName'] ?>
+          </strong>
+        </p>
+        <p class="mb-0">
+          <a href="<?=autoUrl("users/simulate/exit")?>" class="text-white">
+            Exit User Simulation Mode
+          </a>
+        </p>
+      </div>
     </div>
   <? } ?>
 

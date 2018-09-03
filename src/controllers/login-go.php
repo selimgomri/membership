@@ -41,7 +41,20 @@
         try {
           $reader = new Reader(BASE_PATH . 'storage/geoip/GeoLite2-City.mmdb');
           $record = $reader->city(app('request')->ip());
-          $geo_string = $record->city->name . ', ' . $record->mostSpecificSubdivision->name . ', ' . $record->country->name;
+          $city;
+          if ($record->city->name != "") {
+            $city = $record->city->name . ', ';
+          }
+          $subdivision;
+          if ($record->mostSpecificSubdivision->name != "") {
+            $subdivision = $record->mostSpecificSubdivision->name . ', ';
+          }
+          $country;
+          if ($record->country->name != "") {
+            $country = $record->country->name;
+          }
+
+          $geo_string = $city . $subdivision . $country;
         } catch (AddressNotFoundException $e) {
           $geo_string = "Unknown Location";
         } catch (InvalidDatabaseException $e) {

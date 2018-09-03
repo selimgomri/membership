@@ -12,9 +12,11 @@ $access = $_SESSION['AccessLevel']; ?>
 </div>
 <div class="nav-scroller bg-white box-shadow mb-3" style="margin-top:-1rem;">
   <div class="<?=$container_class?>">
+    <? if ($access == "Galas" || $access == "Parent") { ?>
     <span class="mono my-1">
       THIS MENU WILL BE REMOVED AND INTEGRATED INTO NAVBAR AFTER BETA
     </span>
+    <? } ?>
     <nav class="nav nav-underline">
       <? if ($access == "Galas") { ?>
   		<a class="nav-link" href="<?php echo autoUrl("payments")?>">Gala Charges</a>

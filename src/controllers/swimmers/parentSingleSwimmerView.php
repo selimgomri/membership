@@ -217,7 +217,7 @@ else {
       if ($sc[$ev[$i]] != "" || $lc[$ev[$i]] != "") {
       if (!$openedTable) { ?>
       <table class="table table-sm table-borderless table-striped mb-0">
-        <thead>
+        <thead class="thead-light">
           <tr class="pl-0">
             <th class="pl-0">Swim</th>
             <th>Short Course</th>
