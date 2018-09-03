@@ -4,7 +4,7 @@ $title = "Squad Attendance";
 $content = "<p class=\"lead\">View attendance records and fill out registers for squads</p>";
 
 $content .= '
-<div class="my-3 p-3 bg-white rounded box-shadow">
+<div class="my-3 p-3 bg-white rounded shadow">
 	<h2 class="border-bottom border-gray pb-2 mb-0">Attendance Quick Links</h2>
 	<div class="media text-muted pt-3">
 		<p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">

@@ -49,7 +49,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
       </div>
     </div>
     <div class="col">
-      <div class="my-3 p-3 bg-white rounded box-shadow">
+      <div class="my-3 p-3 bg-white rounded shadow">
         <form>
           <div class="form-group">
             <label for="squadSelect">Select Squad</label>

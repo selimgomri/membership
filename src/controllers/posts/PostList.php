@@ -47,7 +47,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/postsMenu.php";?>
 
 <div class="container">
-  <div class="mb-3 p-3 bg-white rounded box-shadow">
+  <div class="mb-3 p-3 bg-white rounded shadow">
     <h1>All Posts</h1>
     <p class="lead pb-3 mb-0 border-bottom border-gray">
       Page <? echo $page; ?> of <? echo $numPages; ?>

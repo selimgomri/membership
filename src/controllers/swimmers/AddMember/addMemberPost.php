@@ -55,6 +55,31 @@ if ((!empty($_POST['forename']))  && (!empty($_POST['surname'])) && (!empty($_PO
 		$sql = "UPDATE `members` SET `ASANumber` = '$asa' WHERE `MemberID` = '$last_id';";
 		mysqli_query($link, $sql);
 	}
+
+	try {
+		$query = $db->prepare("SELECT `UserID` FROM `users` WHERE `AccessLevel` = ? AND `UserID` != ?");
+		$query->execute(["Admin", $_SESSION['UserID']]);
+		$result = $query->fetchAll(PDO::FETCH_ASSOC);
+	} catch (PDOException $e) {
+		halt(500);
+	}
+
+	try {
+		$notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
+		`ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'NewMember')";
+		$query = $db->prepare($notify);
+	} catch (PDOException $e) {
+		halt(500);
+	}
+	$subject = "New Club Member";
+	$message = '<p>' . htmlentities(getUserName($_SESSION['UserID'])) . ' has added a new member, ' . htmlentities($forename . ' ' . $surname) . ' to our online membership system.</p><p>We have sent you this email to ensure you\'re aware of this.</p>';
+	for ($i = 0; $i < sizeof($result); $i++) {
+		try {
+			$query->execute([$result[$i]['UserID'], $subject, $message]);
+		} catch (PDOException $e) {
+			halt(500);
+		}
+	}
 }
 
 if ($action) {

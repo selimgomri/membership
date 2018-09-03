@@ -13,7 +13,7 @@ if ($_POST['response'] == "getSwimmers") {
 
   ?>
 
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded shadow">
     <? if ($count > 0) {
     for ($i = 0; $i < $count; $i++) {
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);

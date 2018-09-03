@@ -37,7 +37,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	} ?>
 
 	<form method="post">
-		<div class="my-3 p-3 bg-white rounded box-shadow">
+		<div class="my-3 p-3 bg-white rounded shadow">
 		  <h2>Your Details</h2>
 		  <p class="border-bottom border-gray pb-2">What we know about you.</p>
 	    <div class="form-group">

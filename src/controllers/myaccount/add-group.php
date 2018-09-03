@@ -7,7 +7,7 @@ $errorState = false;
 ?>
 
 <div class="container">
-  <div class="mb-3 p-3 bg-white rounded box-shadow">
+  <div class="mb-3 p-3 bg-white rounded shadow">
     <h1>Add a Family Group</h1>
 		<? if (!$_SESSION['Success']) { ?>
     <p>If you have a Family Signup Sheet, you can add a group of your swimmers in one go.</p>

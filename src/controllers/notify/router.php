@@ -5,10 +5,10 @@ global $db;
 $access = $_SESSION['AccessLevel'];
 
 if ($access != "Admin" && $access != "Coach" && $access != "Galas") {
-$this->get('/', function() {
-	global $link;
-	include 'Help.php';
-});
+	$this->get('/', function() {
+		global $link;
+		include 'Help.php';
+	});
 }
 
 if ($access == "Admin" || $access == "Coach" || $access == "Galas") {

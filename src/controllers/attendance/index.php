@@ -76,7 +76,7 @@
   }
 
 ?>
-<div class="nav-scroller bg-white box-shadow mb-3">
+<div class="nav-scroller bg-white shadow mb-3">
   <nav class="nav nav-underline">
     <a class="nav-link" href="<?php echo autoUrl("attendance")?>">Attendance Home</a>
     <?php if ($access == "Parent") {?>

@@ -9,7 +9,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded box-shadow">
+	<div class="mb-3 p-3 bg-white rounded shadow">
 		<h1>Is a parent/guardian with you now?</h1>
 		<p>If so, we'll handle their registration here, otherwise we'll produce a
 		signup link for them.</p>

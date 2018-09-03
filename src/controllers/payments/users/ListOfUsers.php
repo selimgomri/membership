@@ -14,7 +14,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php'; ?>
 
 <div class="container">
-	<div class="my-3 p-3 bg-white rounded box-shadow">
+	<div class="my-3 p-3 bg-white rounded shadow">
 		<h1 class="border-bottom border-gray pb-2 mb-3">Find a parent's current fees.</h1>
 		<div class="form-group">
 	    <label class="sr-only" for="search">Search by Surname</label>

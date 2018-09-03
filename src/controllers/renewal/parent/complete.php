@@ -6,7 +6,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded box-shadow">
+	<div class="mb-3 p-3 bg-white rounded shadow">
 		<h1>Thank you for renewing your membership</h1>
 		<p class="lead">
 			We'll charge you your renewal fee on or after the first day of next month.

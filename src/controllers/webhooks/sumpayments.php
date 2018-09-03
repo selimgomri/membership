@@ -94,10 +94,12 @@ if (mysqli_num_rows($result) == 0) {
       mysqli_query($link, $sql);
 
       // Get Payment ID
-      $sql = "SELECT `PaymentID` FROM `paymentsPending` WHERE `Date` = '$date'
+      /*$sql = "SELECT `PaymentID` FROM `paymentsPending` WHERE `Date` = '$date'
       AND `UserID` = '$user' AND `Amount` = '$amount' AND `Name` =
       '$description';";
-      $paymentID = mysqli_real_escape_string($link,mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC)['PaymentID']);
+      $paymentID = mysqli_real_escape_string($link,mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC)['PaymentID']);*/
+
+      $paymentID = mysqli_real_escape_string($link, mysqli_insert_id($link));
 
       $sql = "UPDATE `individualFeeTrack` SET `PaymentID` = '$paymentID' WHERE `UserID` = '$user' AND `PaymentID` IS NULL;";
       mysqli_query($link, $sql);
@@ -178,13 +180,68 @@ if (mysqli_num_rows($result) == 0) {
       '$description';";
       $paymentID = mysqli_real_escape_string($link,mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC)['PaymentID']);
 
-      $sql = "UPDATE `individualFeeTrack` SET `PaymentID` = '$paymentID' WHERE `UserID` = '$user' AND `PaymentID` IS NULL;";
+      $sql = "UPDATE `individualFeeTrack` SET `PaymentID` = '$paymentID' WHERE `UserID` = '$user' AND `PaymentID` IS NULL AND `NC` = 0;";
       mysqli_query($link, $sql);
     }
   }
   $sql = "INSERT INTO `paymentSquadFees` (`MonthID`) VALUES ('$mid');";
   mysqli_query($link, $sql);
 
+  // Add Swimmers with No Parent to Fee Tracker
+  // // Squad Fees
+  $sql = "SELECT `members`.`MemberID`, `SquadFee`, `SquadName` FROM `members` INNER JOIN `squads` ON squads.SquadID = members.SquadID WHERE `members`.`UserID` IS NULL AND `ClubPays` = 0";
+  try {
+    $query = $db->prepare($sql);
+    $query->execute();
+  } catch (Exception $e) {
+    halt(500);
+  }
+
+  $row = $query->fetchAll(PDO::FETCH_ASSOC);
+
+  $add_track = $db->prepare("INSERT INTO `individualFeeTrack` (`MonthID`, `PaymentID`, `MemberID`, `UserID`, `Amount`, `Description`, `Type`, `NC`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+
+  for ($i = 0; $i < sizeof($row); $i++) {
+    // Add to tracker
+    if ($row[$i]['SquadFee'] > 0) {
+      $add_track->execute([
+        $mid,
+        null,
+        $row[$i]['MemberID'],
+        null,
+        floor($row[$i]['SquadFee']*100),
+        "Squad Fees (" . $row[$i]['SquadName'] . ")",
+        'SquadFee',
+        true
+      ]);
+    }
+  }
+
+  $sql = "SELECT `members`.`MemberID`, `ExtraFee`, `ExtraName` FROM ((`members` INNER JOIN `extrasRelations` ON extrasRelations.MemberID = members.MemberID) INNER JOIN `extras` ON extrasRelations.ExtraID = extras.ExtraID) WHERE `members`.`UserID` IS NULL";
+  try {
+    $query = $db->prepare($sql);
+    $query->execute();
+  } catch (Exception $e) {
+    halt(500);
+  }
+
+  $row = $query->fetchAll(PDO::FETCH_ASSOC);
+
+  for ($i = 0; $i < sizeof($row); $i++) {
+    // Add to tracker
+    if ($row[$i]['ExtraFee'] > 0) {
+      $add_track->execute([
+        $mid,
+        null,
+        $row[$i]['MemberID'],
+        null,
+        floor($row[$i]['ExtraFee']*100),
+        "Extra Fees (" . $row[$i]['ExtraName'] . ")",
+        'ExtraFee',
+        true
+      ]);
+    }
+  }
 }
 
 // If pending payments for last month, get them and sum them for each user

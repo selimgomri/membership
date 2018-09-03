@@ -24,50 +24,10 @@ if ($email_comms != $row['EmailComms']) {
 	$_SESSION['OptionsUpdate'] = true;
 }
 
-// Security Emails
-$email_sec = 0;
-$email_sec_update = false;
-if ($_POST['SecurityComms']) {
-	$email_sec = 1;
-}
-
-if ($email_sec != isSubscribed($_SESSION['UserID'], 'Security')) {
-	$email_sec_update = true;
-	$_SESSION['OptionsUpdate'] = true;
-}
-
-$sql = "UPDATE `users` SET `EmailComms` = ? WHERE `UserID` = ?";
-try {
-	$db->prepare($sql)->execute([$email_comms, $_SESSION['UserID']]);
-} catch (Exception $e) {
-	halt(500);
-}
-
-$sql = "SELECT COUNT(*) FROM `notifyOptions` WHERE `UserID` = ? AND `EmailType` = ?";
-try {
-	$query = $db->prepare($sql);
-	$query->execute([$_SESSION['UserID'], 'Security']);
-} catch (Exception $e) {
-	halt(500);
-}
-if ($query->fetchColumn() == 0) {
-	// INSERT
-	$sql = "INSERT INTO `notifyOptions` (`UserID`, `EmailType`, `Subscribed`) VALUES (?, ?, ?)";
-	try {
-		$query = $db->prepare($sql);
-		$query->execute([$_SESSION['UserID'], 'Security', $email_sec]);
-	} catch (Exception $e) {
-		halt(500);
-	}
-} else {
-	// UPDATE
-	$sql = "UPDATE `notifyOptions` SET `Subscribed` = ? WHERE `UserID` = ? AND `EmailType` = ?";
-	try {
-		$query = $db->prepare($sql);
-		$query->execute([$email_sec, $_SESSION['UserID'], 'Security']);
-	} catch (Exception $e) {
-		halt(500);
-	}
+updateSubscription($_POST['SecurityComms'], 'Security');
+updateSubscription($_POST['PaymentComms'], 'Payments');
+if ($_SESSION['AccessLevel'] == "Admin") {
+	updateSubscription($_POST['NewMemberComms'], 'NewMember');
 }
 
 if ($_POST['EmailAddress'] != $row['EmailAddress']) {

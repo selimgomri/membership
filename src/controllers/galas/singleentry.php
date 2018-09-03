@@ -20,7 +20,7 @@ if ($_SESSION['AccessLevel'] == "Parent") {
       include BASE_PATH . "views/header.php";
       include "galaMenu.php"; ?>
       <div class="container">
-        <div class="my-3 p-3 bg-white rounded box-shadow">
+        <div class="my-3 p-3 bg-white rounded shadow">
           <h1><?php echo $row['MForename'] . " " . $row['MSurname']; ?></h1>
           <p class="lead">For <?php echo $row['GalaName']; ?>, Closing Date: <?php echo date('j F Y', strtotime($row['ClosingDate'])); ?></p>
 
@@ -114,7 +114,7 @@ else {
     include BASE_PATH . "views/header.php";
     include "galaMenu.php"; ?>
     <div class="container">
-      <div class="mb-3 p-3 bg-white rounded box-shadow">
+      <div class="mb-3 p-3 bg-white rounded shadow">
         <h1><?php echo $row['MForename'] . " " . $row['MSurname']; ?></h1>
         <p class="lead">For <?php echo $row['GalaName']; ?>, Closing Date: <?php echo date('j F Y', strtotime($row['ClosingDate'])); ?></p>
 

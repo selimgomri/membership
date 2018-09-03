@@ -24,7 +24,7 @@ if ($_SESSION['AccessLevel'] == "Parent") { ?>
     echo $_SESSION['ErrorState'];
     unset($_SESSION['ErrorState']);
   } else { ?>
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded shadow">
     <h1>Add a swimmer</h1>
     <p>We need a few details to find a swimmer from our database.</p>
     <? if (isset($_SESSION['ErrorState'])) {

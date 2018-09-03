@@ -8,7 +8,7 @@ $val = null;
 ?>
 
 <div class="container">
-	<div class="my-3 p-3 bg-white rounded box-shadow">
+	<div class="my-3 p-3 bg-white rounded shadow">
 		<form method="post">
 			<h1>Create a new Renewal Period</h1>
 			<? if (isset($_SESSION['NewRenewalErrorInfo'])) {

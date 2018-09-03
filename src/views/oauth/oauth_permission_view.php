@@ -8,7 +8,7 @@ include BASE_PATH . "views/header.php";
   <div class="container-fluid">
     <div class="row justify-content-center">
       <div class="col-sm-8 col-md-5 col-lg-6 col-xl-4 align-middle">
-        <div class="my-3 p-3 bg-white rounded box-shadow">
+        <div class="my-3 p-3 bg-white rounded shadow">
           <span class="text-muted border-bottom border-gray pb-2 mb-0 d-block">
 						Login with Chester-le-Street ASC
 					</span>

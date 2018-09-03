@@ -49,16 +49,18 @@ include BASE_PATH . "views/header.php";
 //include BASE_PATH . "views/notifyMenu.php";?>
 
 <div class="container">
-  <div class="mb-3 p-3 bg-white rounded box-shadow">
+  <div class="mb-3 p-3 bg-white rounded shadow">
     <h1>Your Login History</h1>
 		<div class="alert alert-danger">
 			<p class="mb-0"><strong>Spotted anything suspicious?</strong></p>
 			<p class="mb-0"><a href="<?=autoUrl("myaccount/password")?>"
 			class="alert-link">Change your password</a> straight away.</p>
 		</div>
-    <? if ($numLogins == 0) {
-      halt(404);
-    } else { ?>
+    <? if ($numLogins == 0) { ?>
+      <p class="lead pb-3 mb-0 border-bottom border-gray">
+        There are no logins available to show.
+      </p>
+    <? } else { ?>
     <p class="lead pb-3 mb-0 border-bottom border-gray">
       Page <? echo $page; ?> of <? echo $numPages; ?>
     </p>
@@ -78,9 +80,7 @@ include BASE_PATH . "views/header.php";
             <? if ($row[$i]['Mobile']) { ?>
             Login from a mobile device running <?= htmlentities($row[$i]['Platform']) ?>
             <? } else { ?>
-            Login from a desktop computer running <?= htmlentities($row[$i]['Platform']) ?>
-            <? } ?>
-            <? if ($row[$i]['GeoLocation']) { ?>located in <?= htmlentities($row[$i]['GeoLocation']) ?><? } ?>.
+            Login from a desktop computer running <?= htmlentities($row[$i]['Platform']) ?><? } ?><? if ($row[$i]['GeoLocation']) { ?> located in <?= htmlentities($row[$i]['GeoLocation']) ?><? } ?>.
             IP Address: <?= htmlentities($row[$i]['IPAddress']) ?>
           </p>
         </div>

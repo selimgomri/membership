@@ -17,7 +17,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded box-shadow">
+	<div class="mb-3 p-3 bg-white rounded shadow">
 		<? if (isset($_SESSION['ErrorState'])) {
 			echo $_SESSION['ErrorState'];
 			unset($_SESSION['ErrorState']);

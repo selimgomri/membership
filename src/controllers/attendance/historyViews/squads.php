@@ -10,7 +10,7 @@ $content = "<p class=\"lead\">View Attendance History for a squad</p>";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded box-shadow">
+	<div class="mb-3 p-3 bg-white rounded shadow">
 		<h1>Attendance History</h1>
 		<p class="lead border-bottom border-gray pb-2">View Attendance History for a squad</p>
 

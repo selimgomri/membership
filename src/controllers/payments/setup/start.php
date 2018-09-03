@@ -23,7 +23,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 <div class="container">
 	<div class="row">
 		<div class="col-lg-6">
-			<div class="mb-3 p-3 bg-white rounded box-shadow">
+			<div class="mb-3 p-3 bg-white rounded shadow">
 				<h1>Setup a Direct Debit to pay Chester-le-Street ASC</h1>
 				<p class="lead">
 					Payments to Chester-le-Street ASC are now moving to direct debit.
@@ -57,7 +57,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 			</div>
 		</div>
 		<div class="col">
-			<div class="mb-3 p-3 bg-white rounded box-shadow">
+			<div class="mb-3 p-3 bg-white rounded shadow">
 				<p class="text-center">
 					<img style="max-height:50px;" src="<? echo
 					autoUrl("img/directdebit/directdebit.png"); ?>" srcset="<? echo

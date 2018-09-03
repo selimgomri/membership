@@ -16,7 +16,7 @@ $date = date("Y/m");
 	<h1 class="border-bottom border-gray pb-2 mb-2">Payment History &amp; Status</h1>
   <div class="row">
     <div class="col-md-6 col-lg-4">
-      <div class="mb-3 p-3 bg-white rounded box-shadow">
+      <div class="mb-3 p-3 bg-white rounded shadow">
         <h2 class="border-bottom border-gray pb-2 mb-2">View Direct Debit charges by Month</h2>
         <p class="lead">Select a year and month to view the status of Direct Debit Payments.</p>
         <ul>
@@ -38,14 +38,14 @@ $date = date("Y/m");
       </div>
     </div>
     <div class="col-md-6 col-lg-4">
-      <div class="mb-3 p-3 bg-white rounded box-shadow">
+      <div class="mb-3 p-3 bg-white rounded shadow">
         <h2 class="border-bottom border-gray pb-2 mb-2">Squad Fee Payment Status</h2>
         <p class="lead">Select to view Squad Fee Status by Month</p>
         <ul>
           <? for ($i = 0; $i < 12; $i++) {
           $targetDate = strtotime($now . " - " . $i . " months"); ?>
           <li>
-            <a href="<? echo autoUrl("payments/history/status/" . date("Y/m", $targetDate) . "/squads"); ?>">
+            <a href="<? echo autoUrl("payments/history/squads/" . date("Y/m", $targetDate)); ?>">
               <? echo date("F Y", $targetDate); ?>
             </a>
           </li>
@@ -54,14 +54,14 @@ $date = date("Y/m");
       </div>
     </div>
     <div class="col-md-6 col-lg-4">
-      <div class="mb-3 p-3 bg-white rounded box-shadow">
+      <div class="mb-3 p-3 bg-white rounded shadow">
         <h2 class="border-bottom border-gray pb-2 mb-2">Extra Fee Payment Status</h2>
         <p class="lead">Select to view Extra Fee Status by Month</p>
         <ul>
           <? for ($i = 0; $i < 12; $i++) {
           $targetDate = strtotime($now . " - " . $i . " months"); ?>
           <li>
-            <a href="<? echo autoUrl("payments/history/status/" . date("Y/m", $targetDate) . "/extras"); ?>">
+            <a href="<? echo autoUrl("payments/history/extras/" . date("Y/m", $targetDate)); ?>">
               <? echo date("F Y", $targetDate); ?>
             </a>
           </li>

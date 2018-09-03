@@ -23,6 +23,16 @@ if (isSubscribed($_SESSION['UserID'], 'Security')) {
 	$emailChecked_security = " checked ";
 }
 
+$emailChecked_payments;
+if (isSubscribed($_SESSION['UserID'], 'Payments')) {
+	$emailChecked_payments = " checked ";
+}
+
+$emailChecked_new_member;
+if ($_SESSION['AccessLevel'] == "Admin" && isSubscribed($_SESSION['UserID'], 'NewMember')) {
+	$emailChecked_new_member = " checked ";
+}
+
 
 $email = $row['EmailAddress'];
 
@@ -106,6 +116,24 @@ include BASE_PATH . "views/header.php";
 					<small id="SecurityCommsHelp" class="form-text text-muted">Receive emails whenever somebody logs in to your account</small>
 				</div>
 			</div>
+
+			<div class="form-group">
+				<div class="custom-control custom-checkbox">
+					<input type="checkbox" class="custom-control-input" value="1" id="PaymentComms" aria-describedby="PaymentCommsHelp" name="PaymentComms" <?php echo $emailChecked_payments; ?> >
+          <label class="custom-control-label" for="PaymentComms">Receive Payment Emails</label>
+					<small id="PaymentCommsHelp" class="form-text text-muted">If you opt out, you'll still receive emails required for regulatory purposes</small>
+				</div>
+			</div>
+
+			<? if ($_SESSION['AccessLevel'] == "Admin") { ?>
+			<div class="form-group">
+				<div class="custom-control custom-checkbox">
+					<input type="checkbox" class="custom-control-input" value="1" id="NewMemberComms" aria-describedby="NewMemberCommsHelp" name="NewMemberComms" <?php echo $emailChecked_new_member; ?> >
+          <label class="custom-control-label" for="NewMemberComms">Receive New Member Emails</label>
+					<small id="NewMemberCommsHelp" class="form-text text-muted">Get notified when new members are added</small>
+				</div>
+			</div>
+			<? } ?>
 
 			<p class="mb-0">
 				<button type="submit" class="btn btn-secondary">Update Details</button>

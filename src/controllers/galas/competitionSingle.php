@@ -123,7 +123,7 @@ include "galaMenu.php"; ?>
   <h1><? echo $title; ?></h1>
   <div class="row">
     <div class="col-md-6">
-      <div class="my-3 p-3 bg-white rounded box-shadow">
+      <div class="my-3 p-3 bg-white rounded shadow">
         <? if (isset($_SESSION['ErrorState'])) {
           echo $_SESSION['ErrorState'];
           unset($_SESSION['ErrorState']);
@@ -132,7 +132,7 @@ include "galaMenu.php"; ?>
       </div>
     </div>
     <div class="col-md-6">
-      <div class="my-3 p-3 bg-white rounded box-shadow">
+      <div class="my-3 p-3 bg-white rounded shadow">
         <h2>Gala Statistics</h2>
 		    <div class="chart" id="piechart"></div>
 				<div class="chart" id="barchart"></div>

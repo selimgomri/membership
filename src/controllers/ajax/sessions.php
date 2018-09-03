@@ -13,7 +13,7 @@ function sessionManagement($squadID, $link) {
 	<div class="row">
 	<div class="col-md-6">
 
-	<div class="my-3 p-3 bg-white rounded box-shadow">
+	<div class="my-3 p-3 bg-white rounded shadow">
 	<h2 class="border-bottom border-gray pb-2 mb-0">View Sessions</h2>
 	';
 
@@ -115,7 +115,7 @@ function sessionManagement($squadID, $link) {
 
 	<div class="col-md-6">
 
-	<div class="my-3 p-3 bg-white rounded box-shadow">
+	<div class="my-3 p-3 bg-white rounded shadow">
 	<h2 class="border-bottom border-gray pb-2">Add Session</h2>
 
 		<div class="form-group">

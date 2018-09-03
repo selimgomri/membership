@@ -8,7 +8,7 @@ if ($displayUntil < $epoch) {
 }*/
 $content .= '
 
-<div class="my-3 p-3 bg-white rounded box-shadow">
+<div class="my-3 p-3 bg-white rounded shadow">
   <h2 class="border-bottom border-gray pb-2">Select a Squad to Manage its Sessions</h2>
   <form>
   <div class="form-group">

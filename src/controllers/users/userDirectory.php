@@ -8,6 +8,7 @@ if (isset($queries['search'])) {
 $pagetitle = "Users";
 include BASE_PATH . "views/header.php";
 ?>
+<div class="mt-3"></div>
 <div class="container">
   <h1>User Directory</h1>
   <p class="lead">A list of users. Useful for changing account settings.</p>

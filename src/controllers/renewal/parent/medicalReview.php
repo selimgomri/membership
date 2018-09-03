@@ -22,7 +22,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded box-shadow">
+	<div class="mb-3 p-3 bg-white rounded shadow">
 		<form method="post" name="med" id="med">
 			<h1>Medical Form</h1>
 			<? if (isset($_SESSION['ErrorState'])) {

@@ -6,7 +6,7 @@ include "galaMenu.php"; ?>
 <div class="container">
   <h1>Galas</h1>
   <p class="lead">Galas which are open for entries, or have closed. Galas in the past are not shown.</p>
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded shadow">
     <h2>Generate a Gala Time Sheet</h2>
     <p class="lead border-bottom border-gray pb-2 mb-2">
       Gala Time Sheets give a list of each swimmer's entries to a gala along with their all-time personal bests and <? echo date("Y"); ?> personal bests.
@@ -29,7 +29,7 @@ include "galaMenu.php"; ?>
     }?>
   </div>
 
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded shadow">
     <h2 class="border-bottom border-gray pb-2 mb-0">Galas Open for Entries</h2>
     <?php echo upcomingGalas($link, true);
     if ($access == "Parent") { ?>
@@ -133,14 +133,14 @@ include "galaMenu.php"; ?>
 		        chart.draw(data, options);
 		      }
 		    </script>
-				<div class="my-3 p-3 bg-white rounded box-shadow">
+				<div class="my-3 p-3 bg-white rounded shadow">
 				  <h2>Statistics</h2>
 				  <p class="lead border-bottom border-gray pb-2 mb-0">These statistics are gathered from all previous gala entries in our system</p>
   		    <div class="chart" id="piechart"></div>
   				<div class="chart" id="barchart"></div>
 				</div>
 	<?php } ?>
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded shadow">
     <h2>Galas Closed for Entries</h2>
     <p class="lead border-bottom border-gray pb-2 mb-0">
       These galas have closed to entries, but are still in the future

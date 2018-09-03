@@ -36,7 +36,7 @@ $pagetitle = "Squad Move for " . $name;
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php"; ?>
 <div class="container">
-	<div class="my-3 p-3 bg-white rounded box-shadow">
+	<div class="my-3 p-3 bg-white rounded shadow">
 		<h1 class="border-bottom border-gray pb-2 mb-3">Squad Move for <?php echo $name; ?></h1>
 		<? if (isset($_SESSION['ErrorState'])) {
 			echo $_SESSION['ErrorState'];

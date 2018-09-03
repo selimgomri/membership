@@ -3,7 +3,7 @@
 $pagetitle = "Attendance History";
 $title = "Attendance History";
 $content = '
-<div class="my-3 p-3 bg-white rounded box-shadow">
+<div class="my-3 p-3 bg-white rounded shadow">
   <h2>View Options</h2>
   <p class="border-bottom border-gray pb-2 mb-0">You\'ll be able to see attendance history here for squads soon. In the mean time, you can view attendance through <a href="./register">the Register</a> by selecting Week, Squad and Session</p>
   <div class="media pt-3">

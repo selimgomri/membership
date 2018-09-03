@@ -128,7 +128,7 @@ if ($access == "Admin") {
 			include 'admin/history/statement.php';
 		});
 
-		$this->get('/status/{year}:int/{month}:int/{type}', function($year, $month, $type) {
+		$this->get('/{type}/{year}:int/{month}:int', function($type, $year, $month) {
 			global $link;
 			include 'admin/history/feestatus.php';
 		});

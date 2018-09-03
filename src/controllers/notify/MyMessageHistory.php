@@ -66,7 +66,7 @@ include BASE_PATH . "views/header.php";
 </style>
 
 <div class="container">
-  <div class="mb-3 p-3 bg-white rounded box-shadow">
+  <div class="mb-3 p-3 bg-white rounded shadow">
     <h1>My Message History</h1>
     <? if ($numMails == 0) {
       ?>

@@ -181,7 +181,12 @@ $route->get('/email/auth/{id}:int/{auth}', function($id, $auth) {
   require('controllers/myaccount/EmailUpdate.php');
 });
 
-$route->any('/notify/unsubscribe/{email}', function($email) {
+$route->get('/notify/unsubscribe/{userid}/{email}/{list}', function($userid, $email, $list) {
+  global $link;
+  include 'controllers/notify/UnsubscribeHandlerAsk.php';
+});
+
+$route->get('/notify/unsubscribe/{userid}/{email}/{list}/do', function($userid, $email, $list) {
   global $link;
   include 'controllers/notify/UnsubscribeHandler.php';
 });
@@ -422,31 +427,10 @@ if (empty($_SESSION['LoggedIn'])) {
 
   $route->any('test', function() {
     global $link;
+    global $db;
 
     include BASE_PATH . 'views/header.php';
 
-    // This creates the Reader object, which should be reused across
-    // lookups.
-    $reader = new Reader(BASE_PATH . 'storage/geoip/GeoLite2-City.mmdb');
-
-    // Replace "city" with the appropriate method for your database, e.g.,
-    // "country".
-    $record = $reader->city(app('request')->ip());
-
-    pre($record);
-
-    print($record->country->isoCode . "\r\n"); // 'US'
-    print($record->country->name . "\r\n"); // 'United States'
-
-    print($record->mostSpecificSubdivision->name . "\r\n"); // 'Minnesota'
-    print($record->mostSpecificSubdivision->isoCode . "\r\n"); // 'MN'
-
-    print($record->city->name . "\r\n"); // 'Minneapolis'
-
-    print($record->postal->code . "\r\n"); // '55455'
-
-    print($record->location->latitude . "\r\n"); // 44.9733
-    print($record->location->longitude . "\r\n"); // -93.2323
 
 
     include BASE_PATH . 'views/footer.php';

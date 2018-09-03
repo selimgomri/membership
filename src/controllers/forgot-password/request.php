@@ -4,7 +4,7 @@
   include BASE_PATH . "views/header.php";
 ?>
 <div class="container">
-  <div class="p-3 mb-3 bg-white rounded box-shadow">
+  <div class="p-3 mb-3 bg-white rounded shadow">
     <h1>Lost password</h1>
     <form method="post">
       <div class="form-group">

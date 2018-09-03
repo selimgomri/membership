@@ -57,7 +57,7 @@ if ($id > 0) {
 	?>
 
 	<div class="container-fluid">
-		<div class="my-3 p-3 bg-white rounded box-shadow">
+		<div class="my-3 p-3 bg-white rounded shadow">
 			<h1><? echo $renewalArray['Name']; ?> Status</h1>
 			<p class="lead">
 				This is the current status for this membership renewal which started on <?
@@ -189,7 +189,7 @@ if ($id > 0) {
 	?>
 
 	<div class="container-fluid">
-		<div class="my-3 p-3 bg-white rounded box-shadow">
+		<div class="my-3 p-3 bg-white rounded shadow">
 			<h1>New Member Registration Status</h1>
 			<p class="lead">
 				This is the current status of online membership registrations since <?=

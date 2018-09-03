@@ -10,7 +10,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded box-shadow">
+	<div class="mb-3 p-3 bg-white rounded shadow">
 		<h1>What type of member are you adding?</h1>
 		<p>There are two ways to add new members</p>
 

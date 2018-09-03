@@ -101,8 +101,8 @@
 		          <li><strong>Related Sites</strong></li>
 		          <li><a title="British Swimming" target="_blank" href="http://www.swimming.org/britishswimming/">British Swimming</a></li>
 		          <li><a title="the Amateur Swimming Association" target="_blank" href="http://www.swimming.org/swimengland/">Swim England</a></li>
-		          <li><a title="Swim England North East Region" target="_blank" href="http://asaner.org.uk/swim/">Swim England - North East</a></li>
-		          <li><a title="N&amp;D Swimming" target="_blank" href="http://asaner.org.uk/northumberland-durham-swimming-association/">N&amp;D Swimming</a></li>
+							<li><a title="Swim England North East Region" target="_blank" href="http://asaner.org.uk/swim/">Swim England North East</a></li>
+							<li><a title="Northumberland and Durham Swimming" target="_blank" href="http://asaner.org.uk/northumberland-durham-swimming-association/">Northumberland &amp; Durham Swimming</a></li>
 		        </ul>
 
 		        <p><strong>Committee Services</strong><br><a title="Login to G Suite" target="_blank" href="http://mail.chesterlestreetasc.co.uk/">G Suite Login</a></p>

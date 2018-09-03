@@ -19,20 +19,23 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 
 		$from = [
 			"Email" => "notify@chesterlestreetasc.co.uk",
-			"Name" => "Chester-le-Street ASC"
+			"Name" => "Chester-le-Street ASC",
+			"Unsub" => [
+				"Allowed" => true,
+				"User" => $row['UserID'],
+				"List" =>	"Notify"
+			]
 		];
 
-		if ($row['ForceSend'] == 1) {
-			$from = [
-				"Email" => "noreply@chesterlestreetasc.co.uk",
-				"Name" => "Chester-le-Street ASC"
-			];
-		}
-
-		if ($row['EmailType'] == 'Payments') {
+    if ($row['EmailType'] == 'Payments') {
 			$from = [
 				"Email" => "payments@chesterlestreetasc.co.uk",
-				"Name" => "CLS ASC Payments"
+				"Name" => "CLS ASC Payments",
+				"Unsub" => [
+					"Allowed" => true,
+					"User" => $row['UserID'],
+					"List" =>	"Payments"
+				]
 			];
 		} else if ($row['EmailType'] == 'Galas') {
 			$from = [
@@ -42,8 +45,34 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		} else if ($row['EmailType'] == 'Security') {
 			$from = [
 				"Email" => "support@chesterlestreetasc.co.uk",
-				"Name" => "Chester-le-Street ASC Security"
+				"Name" => "Chester-le-Street ASC Security",
+				"Unsub" => [
+					"Allowed" => true,
+					"User" => $row['UserID'],
+					"List" =>	"Security"
+				]
 			];
+		} else if ($row['EmailType'] == 'NewMember') {
+			$from = [
+				"Email" => "membership-updates@chesterlestreetasc.co.uk",
+				"Name" => "Chester-le-Street ASC",
+				"Unsub" => [
+					"Allowed" => true,
+					"User" => $row['UserID'],
+					"List" =>	"NewMember"
+				]
+			];
+		}
+
+		if ($row['ForceSend'] == 1) {
+			$from = [
+				"Email" => "noreply@chesterlestreetasc.co.uk",
+				"Name" => "Chester-le-Street ASC"
+			];
+
+      if ($from['Unsub']['Allowed']) {
+        unset($from['Unsub']);
+      }
 		}
 
 		if (notifySend($to, $subject, $message, $name, $emailaddress, $from)) {

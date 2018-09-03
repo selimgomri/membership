@@ -1,30 +1,41 @@
 <?php
 
-$pagetitle = "Notify";
-include BASE_PATH . "views/header.php";
+global $db;
 
-if ($_POST['List-Unsubscribe'] == "One-Click") {
-	$email = mysqli_real_escape_string($link, $email);
-	$sql = "UPDATE `users` SET `EmailComms` = '0' WHERE `EmailAddress` = '$email';";
-	if (mysqli_query($link, $sql)) { ?>
-	<div class="container">
-		<h1>Successfully Unsubscribed</h1>
-		<p>Notify by Chester-le-Street ASC</p>
-	</div>
-	<?
-	} else { ?>
-	<div class="container">
-		<h1>Unable to Unsubscribe -Couldn't find email</h1>
-		<p>Notify by Chester-le-Street ASC</p>
-	</div>
-	<?
-	}
-} else { ?>
-<div class="container">
-	<h1>Unable to Unsubscribe - Must send a POST Request</h1>
-	<p>Notify by Chester-le-Street ASC</p>
-</div>
-<?
+$user_id = hexdec($userid);
+$email = str_replace(' ', '+', urldecode($email));
+
+if ($list != "Notify" && $list != "Security" && $list != "Payments") {
+	halt(404);
 }
 
-include BASE_PATH . "views/footer.php";
+try {
+	$query = $db->prepare("SELECT COUNT(*) FROM `users` WHERE `UserID` = ? AND `EmailAddress` = ?");
+	$query->execute([$user_id, $email]);
+} catch (Exception $e) {
+	halt(500);
+}
+
+if ($query->fetchColumn() != 1) {
+	//Do something
+	halt(404);
+}
+
+updateSubscription(false, $list, $user_id);
+
+$pagetitle = "Notify Unsubscribe";
+include BASE_PATH . "views/header.php";?>
+
+<div class="container">
+	<h1>Successfully Unsubscribed</h1>
+	<p>You will no longer receive emails from the <span class="mono"><?=htmlspecialchars($list)?></span> list.</p>
+	<p>
+		For further help and support with emails from Chester-le-Street ASC, visit
+		our <a href="<?=autoUrl("notify")?>">Notify Help Centre</a>.
+	</p>
+	<p>
+		Notify by Chester-le-Street ASC
+	</p>
+</div>
+
+<? include BASE_PATH . "views/footer.php";

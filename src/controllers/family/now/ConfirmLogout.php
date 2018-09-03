@@ -5,7 +5,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded box-shadow">
+	<div class="mb-3 p-3 bg-white rounded shadow">
 		<h1>You are about to be logged out.</h1>
 		<p>To continue with parental registration we need to log you out of your
 		account.</p>

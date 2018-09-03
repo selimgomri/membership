@@ -13,7 +13,7 @@ include BASE_PATH . "views/paymentsMenu.php";
  ?>
 
 <div class="container">
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded shadow">
 		<h1 class="border-bottom border-gray pb-2 mb-2">Payments for Galas</h1>
   	<p class="lead">Charge Parents for Galas</p>
   	<div class="alert alert-info">

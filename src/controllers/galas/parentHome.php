@@ -9,19 +9,19 @@ include "galaMenu.php";
 <div class="container">
   <h1>Galas</h1>
   <p class="lead">Your current entries and galas you can enter.</p>
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded shadow">
     <h2 class="border-bottom border-gray pb-2 mb-0">Galas open for entries</h2>
     <?php echo upcomingGalas($link, false, $userID); ?>
     <p class="mb-0"><a class="btn btn-outline-dark" href="<?php echo autoUrl("galas/entergala"); ?>">Enter a gala</a></p>
   </div>
 
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded shadow">
     <h2 class=>Upcoming galas you've entered</h2>
     <p class="pb-2 mb-0 border-bottom border-gray">Here are all the galas that you've entered your swimmers into. If the closing data for a gala has not yet passed, then you'll be able to edit your entry.</p>
     <?php echo enteredGalas($link, $userID); ?>
   </div>
 
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded shadow">
     <h2>Generate a Gala Time Sheet</h2>
     <p class="lead border-bottom border-gray pb-2 mb-2">
       Gala Time Sheets give a list of each of your swimmer's entries to a gala along with their all-time personal bests and <? echo date("Y"); ?> personal bests.
@@ -129,7 +129,7 @@ include "galaMenu.php";
   	        chart.draw(data, options);
   	      }
   	    </script>
-  			<div class="my-3 p-3 bg-white rounded box-shadow">
+  			<div class="my-3 p-3 bg-white rounded shadow">
     			<h2>Statistics</h2>
     			<p class="border-bottom border-gray pb-2 mb-0">These are statistics for all of your swimmers put together, based on entries over all time. Go to <a href="<?php echo autoUrl('swimmers'); ?>">My Swimmers</a> to see stats for each swimmer.</p>
     	    <div class="chart" id="piechart"></div>

@@ -13,7 +13,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 ?>
 
 <div class="container">
-	<div class="my-3 p-3 bg-white rounded box-shadow">
+	<div class="my-3 p-3 bg-white rounded shadow">
 	<? if (mysqli_num_rows($result) > 0) { ?>
 		<h1>Membership Renewal for <? echo $row['Year']; ?></h1>
 		<p class="lead">Welcome to the Membership Renewal System for <? echo

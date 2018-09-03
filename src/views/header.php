@@ -1,3 +1,10 @@
+<?
+$container_class;
+if (isset($fluidContainer) && $fluidContainer == true) {
+  $container_class = "container-fluid";
+} else {
+  $container_class = "container";
+}?>
 <!DOCTYPE html>
 <!--
 
@@ -64,7 +71,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <script src="<? echo autoUrl("/js/tinymce/tinymce.min.js"); ?>"></script>
     <link rel="stylesheet preload"
     href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono|Merriweather:400,600">
-    <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.13.css") ?>">
+    <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.14.css") ?>">
     <link rel="stylesheet"
     href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/font-awesome/css/font-awesome.min.css">
     <link rel="apple-touch-icon" href="<https://www.chesterlestreetasc.co.uk/apple-touch-icon.png">
@@ -73,9 +80,17 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <link rel="apple-touch-icon" sizes="152x152" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png">
     <link rel="mask-icon" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterIcon.svg" color="#bd0000">
     <script src='https://www.google.com/recaptcha/api.js'></script>
-    <style>.logo {background:
+    <style>
+    .logo {
+      background:
     url(https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.svg)
-    left center no-repeat;}
+    left center no-repeat;
+    }
+
+    #cookie-law {
+      margin: 0;
+    }
+
     .badge {
       font-family: "Helvetica", "Helvetica Neue", "Arial", "Roboto", san-serif;
     }
@@ -83,10 +98,10 @@ Chester-le-Street ASC is a non profit unincorporated association.
       margin: 0 -1rem -1rem -1rem;
       width: auto !important;
     }
-    .nav-scroller .nav-underline .nav-link:hover, .nav-scroller .nav-underline .nav-link:focus {
+    .nav-scroller .nav-underline .dropdown-item:hover, .nav-scroller .nav-underline .dropdown-item:focus {
       background: #e9ecef;
     }
-    .nav-scroller .nav-underline .nav-link:active {
+    .nav-scroller .nav-underline .dropdown-item:active {
       background: #dee2e6;
     }
     @media print {
@@ -99,11 +114,6 @@ Chester-le-Street ASC is a non profit unincorporated association.
         background-color: #ffffff;
       }
     }
-    thead, table th {
-      position: sticky !important;
-      position: --webkit-sticky !important;
-      top:0 !important;
-    }
     .swimmer {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -111,6 +121,20 @@ Chester-le-Street ASC is a non profit unincorporated association.
     }
     .serif h1, .serif h2, .serif h3, .serif h4, .serif h5, .serif h6, .serif p, .serif ul, .serif ol {
       font-family: 'Merriweather', Georgia, serif;
+    }
+    .ajaxPlaceholder {
+      background: #eee;
+      padding: 5rem 1rem;
+      text-align: center;
+    }
+    thead, table th {
+      position: sticky !important;
+      position: -webkit-sticky !important;
+      position: -moz-sticky !important;
+      position: -ms-sticky !important;
+      position: -o-sticky !important;
+      position: sticky !important;
+      top: 0 !important;
     }
     </style>
 
@@ -125,10 +149,60 @@ Chester-le-Street ASC is a non profit unincorporated association.
     $bg = "bg-white";
   }
   ?>
-<body class="<?=$bg?> account-body">
-  <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary
-  d-print-none justify-content-between" role="navigation">
-      <a class="navbar-brand" href="<?php echo autoUrl("") ?>">
+<body class="<?=$bg?> account--body">
+
+  <div class="text-white py-2 top-bar" style="background:#990000;font-size:0.875rem;">
+    <div class="<?=$container_class?> d-flex">
+      <div class="mr-auto hide-a-underline">
+        <span class="mr-2">
+          <a href="https://www.twitter.com/CLSASC" target="_blank" class="text-white">
+            <i class="fa fa-twitter fa-fw" aria-hidden="true"></i>
+          </a>
+        </span>
+
+        <span class="mr-2">
+          <a href="https://www.facebook.com/CLSASC" target="_blank" class="text-white">
+            <i class="fa fa-facebook fa-fw" aria-hidden="true"></i>
+          </a>
+        </span>
+
+        <span>
+          <a href="https://plus.google.com/110024389189196283575" target="_blank" class="text-white">
+            <i class="fa fa-google-plus fa-fw" aria-hidden="true"></i>
+          </a>
+        </span>
+      </div>
+
+      <div class="ml-2 top-bar">
+        <span>
+          <a href="https://www.chesterlestreetasc.co.uk" class="text-white">
+            Website
+          </a>
+        </span>
+      </div>
+
+      <div class="ml-2 top-bar">
+        <span>
+          <a href="https://account.chesterlestreetasc.co.uk" class="text-white">
+            My Account
+          </a>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-white py-3 d-none d-lg-flex" style="background:#aa0000">
+    <div class="<?=$container_class?>">
+      <a class="logowhite" href="https://account.chesterlestreetasc.co.uk/"></a>
+    </div>
+  </div>
+
+  <div class="bg-primary">
+    <div class="<?=$container_class?>">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary
+  d-print-none justify-content-between px-0" role="navigation">
+
+      <a class="navbar-brand d-lg-none" href="<?php echo autoUrl("") ?>">
         <?php if ((empty($_SESSION['LoggedIn']) || $_SESSION['AccessLevel'] ==
         "Parent")) { ?>
           <img src="<? echo autoUrl("img/chesterIcon.svg"); ?>" width="20" height="20"> Membership
@@ -153,7 +227,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
         $getSwimmers = mysqli_query($link, $getSwimmers);
         ?>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="swimmersDropdown"
+          <a class="dropdown-item dropdown-toggle" href="#" id="swimmersDropdown"
           role="button" data-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">
             My Swimmers
@@ -176,21 +250,46 @@ Chester-le-Street ASC is a non profit unincorporated association.
           </div>
         </li>
       <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("emergencycontacts") ?>">Emergency Contacts</a>
+			  <a class="dropdown-item" href="<?php echo autoUrl("emergencycontacts") ?>">Emergency Contacts</a>
 		  </li>
       <?php }
       else { ?>
-        <li class="nav-item">
-  			  <a class="nav-link" href="<?php echo autoUrl("swimmers") ?>">Swimmers</a>
-  		  </li>
-        <li class="nav-item">
-  			  <a class="nav-link" href="<?php echo autoUrl("squads") ?>">Squads</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="swimmerDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Swimmers &amp; Squads
+          </a>
+          <div class="dropdown-menu" aria-labelledby="swimmerDropdown">
+            <a class="dropdown-item" href="<?php echo autoUrl("swimmers")?>">Swimmer Directory</a>
+            <? if ($_SESSION['AccessLevel'] == "Admin") { ?>
+            <a class="dropdown-item" href="<?php echo autoUrl("swimmers/addmember")?>">Add Member</a>
+            <? } ?>
+            <?php if ($_SESSION['AccessLevel'] != "Galas") { ?>
+            <a class="dropdown-item" href="<?php echo autoUrl("squads")?>">Squads</a>
+        		<a class="dropdown-item" href="<?php echo autoUrl("squads/moves")?>">Squad Moves</a>
+            <? } ?>
+            <a class="dropdown-item" href="<?php echo autoUrl("swimmers/accesskeys")?>">Access Keys</a>
+            <? if ($_SESSION['AccessLevel'] == "Admin") { ?>
+            <a class="dropdown-item" href="<?php echo autoUrl("renewal")?>">Membership Renewal</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("swimmers/orphaned")?>">Orphan Swimmers</a>
+            <? } ?>
+          </div>
   		  </li>
         <?php if ($_SESSION['AccessLevel'] == "Admin" ||
         $_SESSION['AccessLevel'] == "Coach" || $_SESSION['AccessLevel'] ==
         "Committee") { ?>
-        <li class="nav-item">
-  			  <a class="nav-link" href="<?php echo autoUrl("attendance") ?>">Attendance</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="swimmerDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Registers
+          </a>
+          <div class="dropdown-menu" aria-labelledby="registerDropdown">
+            <a class="dropdown-item" href="<?php echo autoUrl("attendance")?>">Attendance Home</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("attendance/register")?>">Take Register</a>
+            <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Committee") {?>
+            <a class="dropdown-item" href="<?php echo autoUrl("attendance/sessions")?>">Manage Sessions</a>
+            <?php } ?>
+            <a class="dropdown-item" href="<?php echo autoUrl("attendance/history")?>">Attendance History</a>
+            <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/squads/" target="_blank">Timetables</a>
+          </div>
   		  </li>
         <?php } ?>
         <?php if ($_SESSION['AccessLevel'] == "Admin" ||
@@ -212,12 +311,13 @@ Chester-le-Street ASC is a non profit unincorporated association.
           <div class="dropdown-menu" aria-labelledby="paymentsAdminDropdown">
             <a class="dropdown-item" href="<?php echo autoUrl("payments") ?>">Payments Home</a>
             <a class="dropdown-item" href="<?php echo autoUrl("payments/history") ?>">Payment Status</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("payments/extrafees")?>">Extra Fees</a>
             <div class="dropdown-divider"></div>
             <h6 class="dropdown-header"><? echo date("F Y"); ?></h6>
-            <a class="dropdown-item" href="<?php echo autoUrl("payments/history/status/" . date("Y/m") . "/squads") ?>">
+            <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . date("Y/m")) ?>">
               Squad Fees
             </a>
-            <a class="dropdown-item" href="<?php echo autoUrl("payments/history/status/" . date("Y/m") . "/extras") ?>">
+            <a class="dropdown-item" href="<?php echo autoUrl("payments/history/extras/" . date("Y/m")) ?>">
               Extra Fees
             </a>
             <?
@@ -225,10 +325,10 @@ Chester-le-Street ASC is a non profit unincorporated association.
             $lms = date("F Y", strtotime("first day of last month"));
             ?>
             <h6 class="dropdown-header"><? echo $lms; ?></h6>
-            <a class="dropdown-item" href="<?php echo autoUrl("payments/history/status/" . $lm . "/squads") ?>">
+            <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . $lm) ?>">
               Squad Fees
             </a>
-            <a class="dropdown-item" href="<?php echo autoUrl("payments/history/status/" . $lm . "/extras") ?>">
+            <a class="dropdown-item" href="<?php echo autoUrl("payments/history/extras/" . $lm) ?>">
               Extra Fees
             </a>
             <div class="dropdown-divider"></div>
@@ -243,13 +343,42 @@ Chester-le-Street ASC is a non profit unincorporated association.
         </li>
         <?php } ?>
         <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach") { ?>
-        <li class="nav-item">
-  			  <a class="nav-link" href="<?php echo autoUrl("notify") ?>">Notify</a>
-  		  </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="notifyDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Notify
+          </a>
+          <div class="dropdown-menu" aria-labelledby="notifyDropdown">
+    			  <a class="dropdown-item" href="<?php echo autoUrl("notify") ?>">Notify</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("notify")?>">Home</a>
+        		<a class="dropdown-item" href="<?php echo autoUrl("notify/newemail")?>">New Message</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("notify/lists")?>">Targeted Lists</a>
+            <? if ($_SESSION['AccessLevel'] == "Admin") { ?>
+            <a class="dropdown-item" href="<?php echo autoUrl("notify/sms")?>">SMS Lists</a>
+            <? } ?>
+        		<a class="dropdown-item" href="<?php echo autoUrl("notify/email")?>">Pending Messages</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("notify/history")?>">Previous Messages</a>
+          </div>
+        </li>
         <?php } ?>
       <?php } ?>
-      <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("galas") ?>">Galas</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="galaDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Galas
+        </a>
+        <div class="dropdown-menu" aria-labelledby="galaDropdown">
+          <a class="dropdown-item" href="<?php echo autoUrl("galas")?>">Gala Home</a>
+          <?php if ($_SESSION['AccessLevel'] == "Parent") {?>
+          <a class="dropdown-item" href="<?php echo autoUrl("galas/entries")?>">My Entries</a>
+          <?php } else {?>
+          <a class="dropdown-item" href="<?php echo autoUrl("galas/addgala")?>">Add Gala</a>
+          <a class="dropdown-item" href="<?php echo autoUrl("galas/entries")?>">View Entries</a>
+          <?php } ?>
+          <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/" target="_blank">Gala Website <i class="fa fa-external-link"></i></a>
+          <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/category/galas/" target="_blank">Upcoming Galas <i class="fa fa-external-link"></i></a>
+          <?php if ($access == "Parent") {?>
+          <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/enteracompetition/guidance/" target="_blank">Help with Entries <i class="fa fa-external-link"></i></a>
+          <? } ?>
+        </div>
 		  </li>
       <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
         <li class="nav-item">
@@ -267,9 +396,23 @@ Chester-le-Street ASC is a non profit unincorporated association.
       <? } ?>
       <? if ($_SESSION['AccessLevel'] != "Parent" &&
   		$_SESSION['AccessLevel'] != "Coach") { ?>
-      <li class="nav-item">
-			  <a class="nav-link" href="<?php echo autoUrl("posts") ?>">Posts</a>
-		  </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="postDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Posts
+        </a>
+        <div class="dropdown-menu" aria-labelledby="postDropdown">
+          <a class="dropdown-item" href="<?php echo autoUrl("posts")?>">Home</a>
+      		<a class="dropdown-item" href="<?php echo autoUrl("posts/new")?>">New Page</a>
+      		<? if ($allow_edit && $_SESSION['AccessLevel'] != "Parent" &&
+      		$_SESSION['AccessLevel'] != "Coach") { ?>
+      		<a class="dropdown-item" href="<?=app('request')->curl?>edit">Edit Current Page</a>
+      		<? } ?>
+      		<? if ($exit_edit && $_SESSION['AccessLevel'] != "Parent" &&
+      		$_SESSION['AccessLevel'] != "Coach") { ?>
+      		<a class="dropdown-item" href="<?=autoUrl("posts/" . $id)?>">View Page</a>
+      		<? } ?>
+        </div>
+      </li>
 		  <?php }
         } ?>
 		  <?php if (empty($_SESSION['LoggedIn'])) { ?>
@@ -310,9 +453,29 @@ Chester-le-Street ASC is a non profit unincorporated association.
     </ul>
     <?php }
     }?>
-	  </div>
-
   </nav>
+</div>
+</div>
+
+  <? if (isset($_SESSION['UserSimulation'])) { ?>
+    <div class="bg-primary text-white box-shadow mb-3" style="margin-top:-1rem;">
+      <nav class="nav nav-underline">
+        <span class="dropdown-item">
+          <p class="mb-0">
+            <strong>
+              You are in User Simulation Mode simulating <?=
+              $_SESSION['UserSimulation']['SimUserName'] ?>
+            </strong>
+          </p>
+          <p class="mb-0">
+            <a href="<?=autoUrl("users/simulate/exit")?>" class="text-white">
+              Exit User Simulation Mode
+            </a>
+          </p>
+        </span>
+      </nav>
+    </div>
+  <? } ?>
 
   <noscript>
     <div class="alert alert-danger">
@@ -334,3 +497,4 @@ Chester-le-Street ASC is a non profit unincorporated association.
   </noscript>
 
 <!-- END OF HEADERS -->
+<div class="mb-3"></div>

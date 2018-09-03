@@ -1,7 +1,7 @@
 <?php
 $title = $pagetitle = "Add a Squad";
 $content = "
-<div class=\"my-3 p-3 bg-white rounded box-shadow\">
+<div class=\"my-3 p-3 bg-white rounded shadow\">
 <h2 class=\"border-bottom border-gray pb-2\">Squad Details</h2>
 <form method=\"post\" action=\"" . autoUrl("squads/addsquad") . "\">";
 $content .= "

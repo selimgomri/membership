@@ -13,7 +13,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 ?>
 
 <div class="container">
-	<div class="my-3 p-3 bg-white rounded box-shadow">
+	<div class="my-3 p-3 bg-white rounded shadow">
 		<form method="post">
 			<h1>Editing <? echo $row['Name']; ?></h1>
 			<? if (isset($_SESSION['NewRenewalErrorInfo'])) {

@@ -62,7 +62,7 @@ include BASE_PATH . "views/notifyMenu.php";?>
 </style>
 
 <div class="container">
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded shadow">
     <h1>Notify Message History</h1>
     <p class="lead pb-3 mb-0 border-bottom border-gray">
       Page <? echo $page; ?> of <? echo $numPages; ?>

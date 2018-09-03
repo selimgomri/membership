@@ -4,7 +4,7 @@ $pagetitle = "Squads";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php"; ?>
 <div class="container">
-	<div class="my-3 p-3 bg-white rounded box-shadow">
+	<div class="my-3 p-3 bg-white rounded shadow">
 		<h1>Squad Details</h1>
 		<p class="lead border-bottom border-gray pb-2 mb-3">Information about our squads</p>
 		<?php echo squadInfoTable($link, true); ?>

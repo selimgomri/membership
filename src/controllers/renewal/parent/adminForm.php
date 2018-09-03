@@ -131,7 +131,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				$id[$i] = $row[$i]['MemberID'];
 				$age[$i] = date_diff(date_create($row[$i]['DateOfBirth']), date_create('today'))->y; ?>
 
-				<div class="my-3 p-3 bg-white rounded box-shadow">
+				<div class="my-3 p-3 bg-white rounded shadow">
 
 					<h3><? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?></h3>
 
@@ -226,7 +226,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			      if ($row[$i]['ProPhoto'] == 1) {
 			        $photo[4] = " checked ";
 			      } ?>
-				<div class="my-3 p-3 bg-white rounded box-shadow">
+				<div class="my-3 p-3 bg-white rounded shadow">
 					<h3><? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?></h3>
 					<p>
 						I, <? echo $name; ?> agree to photography in the following
@@ -287,7 +287,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 				<? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 					if ($age[$i] < 18) { ?>
-				<div class="my-3 p-3 bg-white rounded box-shadow">
+				<div class="my-3 p-3 bg-white rounded shadow">
 
 					<h3>
 						Consent for <? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>

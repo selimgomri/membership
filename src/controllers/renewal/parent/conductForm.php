@@ -30,7 +30,7 @@ if (isset($id)) {
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-8">
-				<div class="mb-3 p-3 bg-white rounded box-shadow">
+				<div class="mb-3 p-3 bg-white rounded shadow">
 					<form method="post">
 						<h1>Code of Conduct Acceptance</h1>
 						<p class="lead">For <? echo $name; ?></p>
@@ -291,7 +291,7 @@ if (isset($id)) {
 <div class="container">
 	<div class="row">
 		<div class="col-lg-8">
-			<div class="mb-3 p-3 bg-white rounded box-shadow">
+			<div class="mb-3 p-3 bg-white rounded shadow">
 				<form method="post">
 					<h1>Parent Code of Conduct</h1>
 					<p class="lead">

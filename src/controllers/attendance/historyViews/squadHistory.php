@@ -28,7 +28,7 @@ $pagetitle = "Attendance History for " . $squadName;
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded box-shadow">
+	<div class="mb-3 p-3 bg-white rounded shadow">
 
 		<h1>Attendance History for <? echo $squadName; ?></h1>
 		<p class="lead">Squad History currently only shows the current week</p>

@@ -34,7 +34,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
  ?>
 
 <div class="container">
-	<div class="my-3 p-3 bg-white rounded box-shadow">
+	<div class="my-3 p-3 bg-white rounded shadow">
 		<h1 class="border-bottom border-gray pb-2 mb-2">Statement for <? echo $name; ?></h1>
 	  <p class="lead">Payment ID: <? echo $PaymentID; ?></p>
 		<p>Payments listed below were charged as part of one single Direct Debit</p>

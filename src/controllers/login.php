@@ -12,7 +12,7 @@
   }
 
   ?>
-<div class="frontpage1 d-flex flex-column" style="margin:-1.0rem 0;">
+<div class="frontpage1 d-flex flex-column" style="margin:-1.0rem 0;min-height:calc(100vh - 10.9375rem);">
   <div class="mb-auto"></div>
   <div class="container-fluid">
     <div class="row justify-content-center">

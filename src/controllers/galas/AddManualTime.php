@@ -39,7 +39,7 @@ include BASE_PATH . 'views/header.php';
 		<? echo $row['GalaName']; ?>
 	</p>
 
-	<form method="post" class="my-3 p-3 bg-white rounded box-shadow">
+	<form method="post" class="my-3 p-3 bg-white rounded shadow">
 		<h2 class="pb-2 mb-0">Swims</h2>
 
 		<div class="mb-3">

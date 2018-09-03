@@ -154,7 +154,7 @@ $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
 $pagetitle = "Swimmer: " . $rowSwim['MForename'] . " " . $rowSwim['MSurname'];
 $title = null;
 $content = '<form method="post"><div class="row align-items-center"><div class="col-sm-8"><h1>Editing ' . $rowSwim['MForename'] . ' ' . $rowSwim['MSurname'] . '</h1></div><div class="col-sm-4 text-right"><button type="submit" class="btn btn-success">Update</button> <a class="btn btn-dark" href="../' . $id . '">Exit Edit Mode</a></div></div><hr>';
-$content .= "<div class=\"row\"><div class=\"col col-md-8\"><div class=\"mb-3 p-3 bg-white rounded box-shadow\">";
+$content .= "<div class=\"row\"><div class=\"col col-md-8\"><div class=\"mb-3 p-3 bg-white rounded shadow\">";
 if ($update) {
 $content .= '<div class="alert alert-success">
 	<strong>We have updated</strong>
@@ -287,7 +287,7 @@ $content .= "
 }
 $content .= "<button type=\"submit\" class=\"btn btn-outline-dark\">Update</button>";
 $content .= "</div></div><div class=\"col-md-4\">";
-$content .= "<div class=\"mb-3 p-3 bg-white rounded box-shadow\"><h2>Squad Information</h2><ul class=\"mb-0\"><li>Squad: " . $rowSwim['SquadName'] . "</li><li>Monthly Fee: &pound;" . $rowSwim['SquadFee'] . "</li>";
+$content .= "<div class=\"mb-3 p-3 bg-white rounded shadow\"><h2>Squad Information</h2><ul class=\"mb-0\"><li>Squad: " . $rowSwim['SquadName'] . "</li><li>Monthly Fee: &pound;" . $rowSwim['SquadFee'] . "</li>";
 if ($rowSwim['SquadTimetable'] != "") {
 	$content .= "<li><a href=\"" . $rowSwim['SquadTimetable'] . "\">Squad Timetable</a></li>";
 }

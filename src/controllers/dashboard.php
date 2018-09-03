@@ -13,29 +13,7 @@
   $swimmersRow = mysqli_fetch_array($result, MYSQLI_ASSOC);
 ?>
 
-<?php
- if ($_SESSION['AccessLevel'] == "Parent") {
-?>
-<div class="nav-scroller bg-white box-shadow mb-3">
-  <nav class="nav nav-underline">
-    <a class="nav-link" href="#dash">Dashboard</a>
-    <a class="nav-link" href="#swimmers">My Swimmers</a>
-    <a class="nav-link" href="#fees">My Fees</a>
-    <a class="nav-link" href="#entries">My Recent Entries</a>
-  </nav>
-</div>
-<?php
- }
- else {
-   ?>
-   <div class="nav-scroller bg-white box-shadow mb-3">
-     <nav class="nav nav-underline">
-       <a class="nav-link" href="#dash">Dashboard</a>
-     </nav>
-   </div>
-   <?php
- }
- ?>
+<div class="mb-3"></div>
 <div class="container">
 
   <? if ($swimmersRow['EmailComms'] == 0 && $_SESSION['AccessLevel'] == "Parent") { ?>
@@ -46,24 +24,13 @@
       </strong>
     </p>
     <p class="mb-0">
-      Head to <a href="<? echo autoUrl("myaccount"); ?>" class="alert-link">My
+      Head to <a href="<? echo autoUrl("myaccount/email"); ?>" class="alert-link">My
       Account</a> to change your email preferences and stay up to date!
     </p>
   </div>
 <? } ?>
 
-  <div class="alert alert-info mt-3 mb-0">
-    <p class="mb-0">
-      <strong>
-        We've developed our own online time converter
-      </strong>
-    </p>
-    <p class="mb-0">
-      <a href="<?=autoUrl("timeconverter")?>" class="alert-link">Try it out</a> now.
-    </p>
-  </div>
-
-  <div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded box-shadow" id="dash">
+  <div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded shadow" id="dash">
     <?php
     $grav_url = "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $_SESSION['EmailAddress'] ) ) ) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=80";
     ?>
@@ -99,7 +66,7 @@
 </section>
 <?php }
 if ($_SESSION['AccessLevel'] == "Coach" || $_SESSION['AccessLevel'] == "Admin") { ?>
-<div class="my-3 p-3 bg-white rounded box-shadow">
+<div class="my-3 p-3 bg-white rounded shadow">
   <h2 class="border-bottom border-gray pb-2 mb-0">Quick Tasks</h2>
   <div class="media  pt-3">
     <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
@@ -119,7 +86,7 @@ if ($_SESSION['AccessLevel'] == "Coach" || $_SESSION['AccessLevel'] == "Admin") 
 </div>
 <?php }
 if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach") { ?>
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded shadow">
     <h2 class="border-bottom border-gray pb-2 mb-0">What to do in an Emergency</h2>
     <div class="media pt-3">
       <ol class="mb-0">
@@ -142,7 +109,7 @@ if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admi
   </div>
 <? }
 if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas" || $_SESSION['AccessLevel'] == "Coach") { ?>
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded shadow">
     <h2 class="border-bottom border-gray pb-2 mb-0">Gala Tasks</h2>
     <div class="media  pt-3">
       <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
@@ -160,7 +127,7 @@ if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas" |
 <?php } ?>
 
 <?php if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach") { ?>
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded shadow">
     <h2>Access G Suite</h2>
     <p class="border-bottom border-gray pb-2 mb-0">If you have a club G Suite Account, get quick access to online services here</p>
     <div class="media  pt-3">

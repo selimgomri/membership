@@ -12,7 +12,7 @@ $this->any('/chargeusers', function() {
 
 $this->any('/notifysend', function() {
 	global $link;
-	echo "Service Suspended";
+	//echo "Service Suspended";
 	require 'notifyhandler.php';
 });
 

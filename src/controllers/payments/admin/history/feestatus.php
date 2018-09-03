@@ -29,15 +29,28 @@ if ($type == "squads") {
 $pagetitle = "Status - " . $dateString;
 
 $sql = "SELECT `Forename`, `Surname`, `MForename`, `MSurname`,
-individualFeeTrack.Amount, individualFeeTrack.Description, payments.Status FROM
-(((((`individualFeeTrack` INNER JOIN `paymentMonths` ON
-individualFeeTrack.MonthID = paymentMonths.MonthID) INNER JOIN `paymentsPending`
-ON individualFeeTrack.PaymentID = paymentsPending.PaymentID) INNER JOIN
-`members` ON members.MemberID = individualFeeTrack.MemberID) INNER JOIN
+individualFeeTrack.Amount, individualFeeTrack.Description, payments.Status, payments.PaymentID FROM
+(((((`individualFeeTrack` LEFT JOIN `paymentMonths` ON
+individualFeeTrack.MonthID = paymentMonths.MonthID) LEFT JOIN `paymentsPending`
+ON individualFeeTrack.PaymentID = paymentsPending.PaymentID) LEFT JOIN
+`members` ON members.MemberID = individualFeeTrack.MemberID) LEFT JOIN
 `payments` ON paymentsPending.PMkey = payments.PMkey) LEFT JOIN `users` ON
 users.UserID = individualFeeTrack.UserID) WHERE `paymentMonths`.`Date` LIKE
 '$searchDate' AND `individualFeeTrack`.`Type` = '$name_type' ORDER BY `Forename`
 ASC, `Surname` ASC, `users`.`UserID` ASC, `MForename` ASC, `MSurname` ASC;";
+
+/*
+SELECT `Forename`, `Surname`, `MForename`, `MSurname`,
+individualFeeTrack.Amount, individualFeeTrack.Description, payments.Status FROM
+(((((`individualFeeTrack` LEFT JOIN `paymentMonths` ON
+individualFeeTrack.MonthID = paymentMonths.MonthID) LEFT JOIN `paymentsPending`
+ON individualFeeTrack.PaymentID = paymentsPending.PaymentID) LEFT JOIN
+`members` ON members.MemberID = individualFeeTrack.MemberID) LEFT JOIN
+`payments` ON paymentsPending.PMkey = payments.PMkey) LEFT JOIN `users` ON
+users.UserID = individualFeeTrack.UserID) WHERE `paymentMonths`.`Date` LIKE
+'$searchDate' AND `individualFeeTrack`.`Type` = '$name_type' ORDER BY `Forename`
+ASC, `Surname` ASC, `users`.`UserID` ASC, `MForename` ASC, `MSurname` ASC
+ */
 
 //pre($sql);
 $result = mysqli_query($link, $sql);
@@ -51,7 +64,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
  ?>
 
 <div class="container">
-	<div class="my-3 p-3 bg-white rounded box-shadow">
+	<div class="my-3 p-3 bg-white rounded shadow">
 		<h1 class="border-bottom border-gray pb-2 mb-2">Status for <? echo $dateString; ?></h1>
 	  <p class="lead"><? echo $title_string; ?></p>
 		<? if (mysqli_num_rows($result) == 0) { ?>
@@ -94,14 +107,18 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 						?><tr class="table-success"><?
 					} else if ($row['Status'] == "cancelled" || $row['Status'] ==
 					"customer_approval_denied" || $row['Status'] == "failed" ||
-					$row['Status'] == "charged_back") {
+					$row['Status'] == "charged_back" || $row['Status'] == null) {
 						?><tr class="table-danger"><?
 					} else if ($row['Status'] == "cust_not_dd") {
 						?><tr class="table-warning"><?
 					} else { ?><tr class=""><?
 					} ?>
 						<td>
-							<? echo $row['Forename'] . " " . $row['Surname']; ?>
+							<? if ($row['Forename'] != null && $row['Surname'] != null) {
+								echo $row['Forename'] . " " . $row['Surname'];
+							} else {
+								echo "No Parent";
+							}?>
 						<td>
 							<ul class="list-unstyled mb-0">
 								<li><? echo $row['MForename'] . " " . $row['MSurname']; ?></li>
@@ -112,7 +129,11 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 							&pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?>
 						</td>
 						<td>
-							<? echo paymentStatusString($row['Status']); ?>
+							<? if ($row['Forename'] != null && $row['Surname'] != null) {
+								echo paymentStatusString($row['Status']);
+							} else {
+								echo "No Parent or Direct Debit Available";
+							} ?>
 						</td>
 					</tr>
 					<?

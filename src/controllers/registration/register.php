@@ -44,7 +44,7 @@ $_SESSION['RegistrationMode'] = $mode;
 ?>
 <div class="pb-3">
   <div class="container">
-    <div class="p-3 bg-white rounded box-shadow">
+    <div class="p-3 bg-white rounded shadow">
       <? if (isset($_SESSION['RegistrationGoVerify'])) {
         echo $_SESSION['RegistrationGoVerify'];
         unset($_SESSION['RegistrationGoVerify']);

@@ -8,7 +8,7 @@ if (isset($_SESSION['return'])) {
 }
 $content .= '
 <form method="post">
-<div class="my-3 p-3 bg-white rounded box-shadow">
+<div class="my-3 p-3 bg-white rounded shadow">
   <h2 class="border-bottom border-gray pb-2">Select Session</h2>
   <div class="form-group">
   <label for="session">Select Week</label>
@@ -51,7 +51,7 @@ $content .= '
   </div>
   </div>
 
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded shadow">
   <div id="register">
   <div class="ajaxPlaceholder mb-0">Fill in the details above and we can load the register</div>
   </div>
@@ -109,6 +109,7 @@ $content .= '
     }
   document.getElementById("session").onchange=getRegister;
   </script>';
+$fluidContainer = true;
 include BASE_PATH . "views/header.php";
 include "attendanceMenu.php"; ?>
 <div class="container-fluid">
@@ -116,5 +117,4 @@ include "attendanceMenu.php"; ?>
 echo $content; ?>
 </div>
 <?php
-$fluidContainer = true;
 include BASE_PATH . "views/footer.php";

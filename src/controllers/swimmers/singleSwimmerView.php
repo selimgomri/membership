@@ -34,7 +34,7 @@ $age = date_diff(date_create($rowSwim['DateOfBirth']),
 date_create('today'))->y;
 $title = null;
 $content = '
-<div class="d-flex align-items-center p-3 mb-3 text-white bg-primary rounded box-shadow" id="dash">
+<div class="d-flex align-items-center p-3 mb-3 text-white bg-primary rounded shadow" id="dash">
   <div class="mr-3 bg-white px48">';
   if ($age > 17) {
     $content .= '
@@ -62,7 +62,7 @@ $content = '
     <small>Swimmer, ' . $rowSwim["SquadName"] . ' Squad</small>
   </div>
 </div>
-<ul class="nav nav-pills bg-white rounded box-shadow d-print-none">
+<ul class="nav nav-pills bg-white rounded shadow d-print-none">
   <li class="nav-item">
     <a class="nav-link" href="#about">About ' . $rowSwim["MForename"] . '</a>
   </li>';
@@ -85,7 +85,7 @@ $content = '
 </ul>
 <div class="row justify-content-center mt-3">
   <div class="col-12 col-lg-4">
-<div class="mb-3 p-3 bg-white rounded box-shadow" id="about">
+<div class="mb-3 p-3 bg-white rounded shadow" id="about">
   <h2 class="border-bottom border-gray pb-2 mb-0">About ' . $rowSwim["MForename"] . '</h2>
   <div class="media pt-3">
     <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
@@ -227,7 +227,7 @@ $content = '
 		</div>';
 	}
 $content .= '
-  <div class="mb-3 p-3 bg-white rounded box-shadow" id="photo">
+  <div class="mb-3 p-3 bg-white rounded shadow" id="photo">
     <h2 class="border-bottom border-gray pb-2 mb-2">Photography Permissions</h2>';
     if (($rowSwim['Website'] != 1 || $rowSwim['Social'] != 1 || $rowSwim['Noticeboard'] != 1 || $rowSwim['FilmTraining'] != 1 || $rowSwim['ProPhoto'] != 1) && ($age < 18)) {
       $content .= '
@@ -258,7 +258,7 @@ $content .= '
   '$id';";
   $result = mysqli_query($link, $sql);
   $content .= '
-    <div class="mb-3 p-3 bg-white rounded box-shadow" id="emergency">
+    <div class="mb-3 p-3 bg-white rounded shadow" id="emergency">
       <h2>Emergency Contacts</h2>';
       if (mysqli_num_rows($result) == 0) {
       $content .= '<p class="lead">
@@ -307,7 +307,7 @@ $content .= '
   $content .= '</div></div>
   <div class="col-12 col-lg-8">';
   $content.= '
-  <div class="mb-3 p-3 bg-white rounded box-shadow" id="times">
+  <div class="mb-3 p-3 bg-white rounded shadow" id="times">
     <h2 class="border-bottom border-gray pb-2 mb-2">Best Times</h2>';
     $mob = app('request')->isMobile();
     $sc = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'SCPB';";
@@ -325,7 +325,7 @@ $content .= '
     '50m Breast', '100m Breast', '200m Breast', '50m Fly', '100m Fly', '200m Fly',
     '50m Back', '100m Back', '200m Back', '100m IM', '200m IM', '400m IM'];
     $content.= '<table class="table table-sm table-borderless table-striped mb-2">
-    <thead class=""><tr class="pl-0"><th class="pl-0">Swim</th><th>Short Course</th>';
+    <thead class="thead-light"><tr class="pl-0"><th class="pl-0">Swim</th><th>Short Course</th>';
     if (!$mob) {
       $content .= '<th>' . date("Y") . ' Short Course</th>';
     }
@@ -337,7 +337,7 @@ $content .= '
     <tbody>';
     for ($i = 0; $i < sizeof($ev); $i++) {
     if ($sc[$ev[$i]] != "" || $lc[$ev[$i]] != "") {
-      $content.= '<tr class="pl-0"><th class="pl-0">' . $evs[$i] . '</th><td>';
+      $content.= '<tr class="pl-0"><td class="pl-0"><strong>' . $evs[$i] . '</strong></td><td>';
       if ($sc[$ev[$i]] != "") {
         $content.= $sc[$ev[$i]];
       }
@@ -458,7 +458,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
 	        chart.draw(data, options);
 	      }
 	    </script>
-      <div class=\"mb-3 p-3 bg-white rounded box-shadow w-100\">
+      <div class=\"mb-3 p-3 bg-white rounded shadow w-100\">
         <h2 class=\"border-bottom border-gray pb-2 mb-0\">Gala Statistics</h2>
   	    <div class=\"w-100\" id=\"piechart\"></div>
   			<div class=\"w-100\" id=\"barchart\"></div>
@@ -466,7 +466,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
 	";
 }
 $content .= '
-<div class="mb-3 p-3 bg-white rounded box-shadow" id="squad">
+<div class="mb-3 p-3 bg-white rounded shadow" id="squad">
 <h2 class="border-bottom border-gray pb-2 mb-0">Squad Information</h2>
 <div class="media pt-3">
   <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
@@ -513,6 +513,8 @@ if ($rowSwim['SquadCoach'] != "") {
   </div>';
 }
 $content .= '</div></div></div>';
+
+$fluidContainer = true;
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>

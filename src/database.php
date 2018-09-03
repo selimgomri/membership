@@ -66,7 +66,11 @@ ASC Membership System.</p>
 <p class=\"small\" align=\"center\">Have questions? Contact us at <a
 href=\"mailto:enquiries@chesterlestreetasc.co.uk\">enquiries@chesterlestreetasc.co.uk</a>.</p>
 <p class=\"small\" align=\"center\">To control your email options, go to <a href=\"" .
-autoUrl("myaccount/email") . "\">My Account</a>.</p>
+autoUrl("myaccount/email") . "\">My Account</a>.</p>";
+if ($from['Unsub']['Allowed']) {
+  $message .= '<p class="small" align="center"><a href="' . autoUrl("notify/unsubscribe/" . dechex($from['Unsub']['User']) . '/' . urlencode($emailaddress) . '/' . urlencode($from['Unsub']['List'])) . '">Click to Unsubscribe</a></p>';
+}
+$message .= "
 <p class=\"small\" align=\"center\">&copy; Chester-le-Street ASC " . date("Y") . "</p>
       </div>
       </table>
@@ -93,10 +97,10 @@ autoUrl("myaccount/email") . "\">My Account</a>.</p>
       $email->addHeader("List-Archive", autoUrl("myaccount/notify/history"));
     }
 
-    if ($from['Email'] == "notify@chesterlestreetasc.co.uk") {
-      $email->addHeader("List-Help", autoUrl("notify"));
-      //$email->addHeader("List-Unsubscribe", "<mailto:unsubscribe@chesterlestreetasc.co.uk>, <" . autoUrl("notify/unsubscribe/" . $emailaddress) . ">");
-      //$email->addHeader("List-Unsubscribe-Post", "List-Unsubscribe=One-Click");
+    $email->addHeader("List-Help", autoUrl("notify"));
+
+    if ($from['Unsub']['Allowed']) {
+      //$email->addHeader("List-Unsubscribe", "<mailto:unsubscribe+" . dechex($from['Unsub']['User']) . "-" . urlencode($from['Unsub']['List']) . "-accounts@chesterlestreetasc.co.uk>, <" . autoUrl("notify/unsubscribe/" . dechex($from['Unsub']['User']) . '/' . urlencode($emailaddress) . '/' . urlencode($from['Unsub']['List'])) . ">");
     }
 
     if ($from['Email'] == "notify@chesterlestreetasc.co.uk") {
@@ -120,24 +124,19 @@ autoUrl("myaccount/email") . "\">My Account</a>.</p>
     $sendgrid = new \SendGrid(SENDGRID_API_KEY);
     try {
       $response = $sendgrid->send($email);
-      //print $response->statusCode() . "\n";
-      //print_r($response->headers());
-      //print $response->body() . "\n";
     } catch (Exception $e) {
       return false;
-      //echo 'Caught exception: '. $e->getMessage() ."\n";
     }
-
     return true;
-  } else {
 
+  } else {
     if (mail($to,$subject,$head . $message,$headers)) {
       return true;
-    } else {
-      return false;
     }
 
   }
+
+  return false;
 }
 
 function getAttendanceByID($link, $id, $weeks = "all") {
@@ -1595,6 +1594,50 @@ function isSubscribed($user, $email_type) {
   }
 
   return false;
+}
+
+function updateSubscription($post, $list, $user = null) {
+	global $db;
+  if (isset($_SESSION['UserID'])) {
+    $user = $_SESSION['UserID'];
+  }
+	$email = 0;
+	$email_update = false;
+	if ($post) {
+		$email = 1;
+	}
+
+	if ($email != isSubscribed($user, $list)) {
+		$email_update = true;
+		$_SESSION['OptionsUpdate'] = true;
+	}
+
+	$sql = "SELECT COUNT(*) FROM `notifyOptions` WHERE `UserID` = ? AND `EmailType` = ?";
+	try {
+		$query = $db->prepare($sql);
+		$query->execute([$user, $list]);
+	} catch (Exception $e) {
+		halt(500);
+	}
+	if ($query->fetchColumn() == 0) {
+		// INSERT
+		$sql = "INSERT INTO `notifyOptions` (`UserID`, `EmailType`, `Subscribed`) VALUES (?, ?, ?)";
+		try {
+			$query = $db->prepare($sql);
+			$query->execute([$user, $list, $email]);
+		} catch (Exception $e) {
+			halt(500);
+		}
+	} else {
+		// UPDATE
+		$sql = "UPDATE `notifyOptions` SET `Subscribed` = ? WHERE `UserID` = ? AND `EmailType` = ?";
+		try {
+			$query = $db->prepare($sql);
+			$query->execute([$email, $user, $list]);
+		} catch (Exception $e) {
+			halt(500);
+		}
+	}
 }
 
 $count = 0;

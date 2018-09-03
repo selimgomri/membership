@@ -42,7 +42,7 @@ include BASE_PATH . "views/postsMenu.php";
 	<form method="post">
 		<div class="row">
 			<div class="col-md-8">
-				<div class="mb-3 p-3 bg-white rounded box-shadow">
+				<div class="mb-3 p-3 bg-white rounded shadow">
 					<h1 class="mb-0">Editing <?=htmlentities($row['Title'])?></h1>
 				  <hr>
 					<div class="form-group">
@@ -64,7 +64,7 @@ include BASE_PATH . "views/postsMenu.php";
 				</div>
 			</div>
 			<div class="col-12 col-md-4">
-				<div class="mb-3 p-3 bg-white rounded box-shadow">
+				<div class="mb-3 p-3 bg-white rounded shadow">
 					<p>
 						<button class="btn btn-secondary" id="submit" value="submitted" type="submit">
 							Save
@@ -73,7 +73,7 @@ include BASE_PATH . "views/postsMenu.php";
 					<p class="mb-0">We will publish this update immediately.</p>
 				</div>
 
-				<div class="mb-3 p-3 bg-white rounded box-shadow">
+				<div class="mb-3 p-3 bg-white rounded shadow">
 					<h3>Meta</h3>
 					<div class="form-group">
 						<label for="path">Path</label>
@@ -119,7 +119,7 @@ include BASE_PATH . "views/postsMenu.php";
 					</div>
 				</div>
 
-				<div class="mb-3 p-3 bg-white rounded box-shadow">
+				<div class="mb-3 p-3 bg-white rounded shadow">
 					<h3>SEO</h3>
 					<div class="form-group mb-0">
 						<label for="excerpt">Excerpt</label>

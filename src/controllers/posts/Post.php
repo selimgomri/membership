@@ -52,13 +52,6 @@ include BASE_PATH . "views/postsMenu.php";?>
 </style>-->
 
 <div class="container <?= $container_classes ?>">
-	<div class="row d-none d-print-inline-block">
-    <div class="col-6">
-      <img class="img-fluid logo" src="<?=autoUrl("/img/chesterLogo.svg")?>"  alt="Chester-le-Street ASC Logo">
-    </div>
-  </div>
-	<a class="logo" alt="Chester-le-Street ASC" href="https://www.chesterlestreetasc.co.uk/"></a>
-	<hr>
 
 	<h1><?= htmlentities($row['Title']) ?></h1>
 

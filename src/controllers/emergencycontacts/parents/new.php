@@ -10,7 +10,7 @@ if ($renewal_trap) {
 ?>
 
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded box-shadow">
+	<div class="mb-3 p-3 bg-white rounded shadow">
 		<h1>
 			Add a new Emergency Contact
 		</h1>

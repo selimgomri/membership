@@ -53,7 +53,7 @@ else {
       unset($_SESSION['AddSwimmerSuccessState']);
     } ?>
 
-    <div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded box-shadow" id="dash">
+    <div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded shadow" id="dash">
       <img class="mr-3" src="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png" alt="" width="48" height="48">
       <div class="lh-100">
         <h1 class="h6 mb-0 text-white lh-100"><?php echo $rowSwim["MForename"] . " ";
@@ -64,7 +64,7 @@ else {
         <small>Swimmer, <?php echo $rowSwim["SquadName"]; ?> Squad</small>
       </div>
     </div>
-    <div class="my-3 p-3 bg-white rounded box-shadow">
+    <div class="my-3 p-3 bg-white rounded shadow">
       <h2 class="border-bottom border-gray pb-2 mb-0">About <?php echo $rowSwim["MForename"]; ?></h2>
       <div class="media pt-3">
         <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
@@ -199,7 +199,7 @@ else {
       </span>
     </div>
 
-    <div class="my-3 p-3 bg-white rounded box-shadow">
+    <div class="my-3 p-3 bg-white rounded shadow">
       <h2 class="border-bottom border-gray pb-2 mb-0">Best Times</h2>
       <?
       $sc = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'SCPB';";
@@ -331,13 +331,13 @@ else {
           chart.draw(data, options);
         }
       </script>
-      <div class="my-3 p-3 bg-white rounded box-shadow">
+      <div class="my-3 p-3 bg-white rounded shadow">
         <h2 class="border-bottom border-gray pb-2 mb-0">Gala Statistics</h2>
   	    <div class="chart" id="piechart"></div>
   			<div class="chart" id="barchart"></div>
       </div>
     <? } ?>
-    <div class="my-3 p-3 bg-white rounded box-shadow">
+    <div class="my-3 p-3 bg-white rounded shadow">
       <h2 class="border-bottom border-gray pb-2 mb-0">Squad Information</h2>
       <div class="media pt-3">
         <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
@@ -380,7 +380,7 @@ else {
     </div>
   </div>
 
-  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <div class="my-3 p-3 bg-white rounded shadow">
     <?
     $col = "col-sm-6";
     if ($row['ThriveNumber'] != "") {

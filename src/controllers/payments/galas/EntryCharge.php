@@ -18,7 +18,7 @@ if ($count == 1) {
   include BASE_PATH . "views/header.php";
 	include BASE_PATH . "views/paymentsMenu.php"; ?>
   <div class="container">
-		<div class="p-3 my-3 text-white bg-primary rounded box-shadow">
+		<div class="p-3 my-3 text-white bg-primary rounded shadow">
 	    <h1 class="h6 mb-0"><strong><?php echo $row['MForename'] . " " . $row['MSurname']; ?></strong></h1>
 	    <p class="mb-0">For <?php echo $row['GalaName']; ?></p>
 		</div>
@@ -33,7 +33,7 @@ if ($count == 1) {
 
     <form method="post">
 
-			<div class="my-3 p-3 bg-white rounded box-shadow">
+			<div class="my-3 p-3 bg-white rounded shadow">
 				<div class="form-row mb-0">
 					<div class="form-group col-md-6">
 					  <label for="pay">Price to Pay (For all entries)</label>
@@ -59,7 +59,7 @@ if ($count == 1) {
 				<p class="mb-0"><button class="btn btn-dark" type="submit">Charge Parent</button>
 			</div>
 
-			<div class="my-3 p-3 bg-white rounded box-shadow">
+			<div class="my-3 p-3 bg-white rounded shadow">
 
 	    <?php if ($row['HyTek'] != 1) {
 	      for ($i=0; $i<sizeof($swimsArray); $i++) {

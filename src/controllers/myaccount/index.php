@@ -146,7 +146,7 @@
   ?>
   <div class="row justify-content-center mt-3">
     <div class="col-12 col-lg-8">
-      <div class="mb-3 p-3 bg-white rounded box-shadow">
+      <div class="mb-3 p-3 bg-white rounded shadow">
         <h2>Your Details</h2>
         <p class="border-bottom border-gray pb-2">What we know about you.</p>
         <form method="post">
@@ -197,7 +197,7 @@
         </div>
 
         <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-        <div class="mb-3 p-3 bg-white rounded box-shadow">
+        <div class="mb-3 p-3 bg-white rounded shadow">
           <h2>My Swimmers</h2>
           <p>Swimmers linked to your account</p>
           <?php echo mySwimmersTable($link, $userID) ?>
@@ -206,7 +206,7 @@
       <?php } ?>
     </div>
     <div class="col">
-      <div class="mb-3 p-3 bg-white rounded box-shadow">
+      <div class="mb-3 p-3 bg-white rounded shadow">
         <h2>Password</h2>
         <p class="border-bottom border-gray pb-2">Change your password regularly to keep your account safe</p>
         <p class="mb-0"><a href="<?php echo autoUrl("myaccount/password"); ?>" class="btn btn-outline-dark">Change my Password</a></p>
@@ -218,7 +218,7 @@
 
         $contactsArray = $contacts->getContacts();
         ?>
-        <div class="mb-3 p-3 bg-white rounded box-shadow">
+        <div class="mb-3 p-3 bg-white rounded shadow">
           <h2>My Emergency Contacts</h2>
           <p class="border-bottom border-gray pb-2 mb-0">
             These are your emergency contacts
@@ -272,7 +272,7 @@
         </div>
         <?
       } ?>
-      <div class="mb-3 p-3 bg-white rounded box-shadow">
+      <div class="mb-3 p-3 bg-white rounded shadow">
         <h2>Technical Details</h2>
         <p class="border-bottom border-gray pb-2">Some things you can't change about your account</p>
         <div class="form-group">

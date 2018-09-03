@@ -79,7 +79,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">
-	<form method="post" class="mb-3 p-3 bg-white rounded box-shadow">
+	<form method="post" class="mb-3 p-3 bg-white rounded shadow">
 		<h1 class="border-bottom border-gray pb-2">
 			<?= $title ?>
 		</h1>

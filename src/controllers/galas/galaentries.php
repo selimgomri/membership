@@ -11,7 +11,7 @@ include "galaMenu.php";
   <h2>Enter a gala</h2>
   <p class="lead">Enter a gala quickly and easily, with fewer steps than before.</p>
   <?php if ($swimCount > 0) { ?>
-    <div class="my-3 p-3 bg-white rounded box-shadow">
+    <div class="my-3 p-3 bg-white rounded shadow">
       <form method="post">
       <h2 class="border-bottom border-gray pb-2">Select Swimmer and Gala</h2>
       <div class="form-group row">
