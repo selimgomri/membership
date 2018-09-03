@@ -23,9 +23,8 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
   $swimmerCount = mysqli_num_rows($result);
   if ($swimmerCount > 0) {
     $output = '
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead>
+      <table class="table table-hover bg-white">
+        <thead class="thead-light">
           <tr>
             <th>Name</th>
             <th>Squad</th>
@@ -49,7 +48,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $output .= '
         </tbody>
       </table>
-    </div>';
+      ';
   }
   else {
     $output = "<div class=\"alert alert-warning\"><strong>No members found for that squad</strong> <br>Please try another search</div>";

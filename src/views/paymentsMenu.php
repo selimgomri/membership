@@ -10,18 +10,12 @@ $access = $_SESSION['AccessLevel']; ?>
     </nav>
   </div>
 </div>
-<!--
-<div class="nav-scroller bg-white box-shadow mb-3">
+<div class="nav-scroller bg-white box-shadow mb-3" style="margin-top:-1rem;">
   <div class="<?=$container_class?>">
+    <span class="mono my-1">
+      THIS MENU WILL BE REMOVED AND INTEGRATED INTO NAVBAR AFTER BETA
+    </span>
     <nav class="nav nav-underline">
-  		<? if ($access == "Admin") { ?>
-      <a class="nav-link" href="<?php echo autoUrl("payments")?>">Payments Home</a>
-      <a class="nav-link" href="<?php echo autoUrl("payments/history")?>">Payments &amp; History</a>
-      <a class="nav-link" href="<?php echo autoUrl("payments/current")?>">Current Fees</a>
-  		<a class="nav-link" href="<?php echo autoUrl("payments/newcharge")?>">New Charge</a>
-  		<a class="nav-link" href="<?php echo autoUrl("payments/galas")?>">Gala Charges</a>
-      <a class="nav-link" href="<?php echo autoUrl("payments/extrafees")?>">Extras</a>
-  		<? } ?>
       <? if ($access == "Galas") { ?>
   		<a class="nav-link" href="<?php echo autoUrl("payments")?>">Gala Charges</a>
   		<? } ?>
@@ -34,7 +28,6 @@ $access = $_SESSION['AccessLevel']; ?>
     </nav>
   </div>
 </div>
--->
 <? } else {
   include 'renewalTitleBar.php';
 }

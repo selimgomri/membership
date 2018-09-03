@@ -313,7 +313,7 @@ function mySwimmersMedia($link, $userID) {
   $output = "";
   if ($swimmerCount > 0) {
     $output = '
-    <div class="my-3 p-3 bg-white rounded box-shadow">
+    <div class="my-3 p-3 bg-white rounded shadow">
     <h2>My Swimmers</h2>' . $swimmers;
     $resultX = mysqli_query($link, $sqlSwim);
     for ($i = 0; $i < $swimmerCount; $i++) {
@@ -342,7 +342,7 @@ function mySwimmersMedia($link, $userID) {
   }
   else {
     $output .= '
-    <div class="my-3 p-3 bg-white rounded box-shadow">
+    <div class="my-3 p-3 bg-white rounded shadow">
     <h2>My Swimmers</h2>
     <p class="mb-0">It looks like you have no swimmers connected to your
     account. Why don\'t you <a href="' . autoUrl("myaccount/addswimmer") . '"
@@ -546,7 +546,7 @@ function enteredGalasMedia($link, $userID) {
   $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
   if ($count > 0) {
-    $output = "<div class=\"my-3 p-3 bg-white rounded box-shadow\">
+    $output = "<div class=\"my-3 p-3 bg-white rounded shadow\">
     <h2 class=\"border-bottom border-gray pb-2 mb-0\">My Entries</h2>";
     for ($i = 0; $i < $count; $i++) {
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -576,7 +576,7 @@ function enteredGalasMedia($link, $userID) {
     }
   }
   else {
-    $output = "<div class=\"my-3 p-3 bg-white rounded box-shadow\">
+    $output = "<div class=\"my-3 p-3 bg-white rounded shadow\">
     <h2>My Entries</h2><p class=\"mb-0\">There are no upcoming galas that you
     have entered.</p></div>";
   }
@@ -737,7 +737,7 @@ function myMonthlyFeeMedia($link, $userID) {
   }
   $monthlyExtrasTotal = monthlyExtraCost($link, $userID, "decimal");
   if ($monthlyExtrasTotal+$reducedCost > 0) {
-    $output = "<div class=\"my-3 p-3 bg-white rounded box-shadow\">
+    $output = "<div class=\"my-3 p-3 bg-white rounded shadow\">
     <h2>My Fees</h2><p class=\"lead border-bottom border-gray pb-2
     mb-0\">Showing monthly fees</p>
     <div class=\"table-responsive\"><table class=\"table mb-0\">
@@ -760,7 +760,7 @@ function myMonthlyFeeMedia($link, $userID) {
     return $output;
   }
   else {
-    return "<div class=\"my-3 p-3 bg-white rounded box-shadow\">
+    return "<div class=\"my-3 p-3 bg-white rounded shadow\">
     <h2>My Fees</h2>
     <p class=\"mb-0\">You have no monthly fees to pay. You may need to add a
     swimmer to see any fees.</p>

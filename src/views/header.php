@@ -227,7 +227,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
         $getSwimmers = mysqli_query($link, $getSwimmers);
         ?>
         <li class="nav-item dropdown">
-          <a class="dropdown-item dropdown-toggle" href="#" id="swimmersDropdown"
+          <a class="nav-link dropdown-toggle" href="#" id="swimmersDropdown"
           role="button" data-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">
             My Swimmers
@@ -250,7 +250,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
           </div>
         </li>
       <li class="nav-item">
-			  <a class="dropdown-item" href="<?php echo autoUrl("emergencycontacts") ?>">Emergency Contacts</a>
+			  <a class="nav-link" href="<?php echo autoUrl("emergencycontacts") ?>">Emergency Contacts</a>
 		  </li>
       <?php }
       else { ?>
@@ -425,14 +425,15 @@ Chester-le-Street ASC is a non profit unincorporated association.
       <?php } ?>
 		</ul>
     <?php if (!empty($_SESSION['LoggedIn'])) { ?>
+    <? $user_name = str_replace(' ', '&nbsp;', htmlspecialchars(getUserName($_SESSION['UserID']))); ?>
     <ul class="navbar-nav">
       <!--<a class="btn btn-sm btn-outline-light my-2 my-sm-0" href="<?php echo autoUrl("logout") ?>">Logout</a>-->
       <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-        My Account <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+        <?= $user_name ?> <i class="fa fa-user-circle-o" aria-hidden="true"></i>
       </a>
         <div class="dropdown-menu dropdown-menu-right">
-          <span class="dropdown-item-text">Signed&nbsp;in&nbsp;as&nbsp;<strong><?= str_replace(' ', '&nbsp;', getUserName($_SESSION['UserID'])) ?></strong></span>
+          <span class="dropdown-item-text">Signed&nbsp;in&nbsp;as&nbsp;<strong><?= $user_name ?></strong></span>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="<?php echo autoUrl("myaccount") ?>">Your Profile</a>
           <a class="dropdown-item" href="<?php echo autoUrl("myaccount/email") ?>">Your Email Options</a>

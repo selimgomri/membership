@@ -13,9 +13,8 @@ if ($access == "Admin" || $access == "Galas") {
   $swimmerCount = mysqli_num_rows($result);
   if ($swimmerCount > 0) {
     $output = '
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead>
+      <table class="table table-hover bg-white">
+        <thead class="thead-light">
           <tr>
             <th>Name</th>
             <th>Account Type</th>
@@ -34,7 +33,7 @@ if ($access == "Admin" || $access == "Galas") {
     $output .= '
         </tbody>
       </table>
-    </div>';
+    ';
   }
   else {
     $output = "<div class=\"alert alert-warning\"><strong>No users found for that name</strong> <br>Please try another search</div>";
