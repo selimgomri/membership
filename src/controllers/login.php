@@ -14,13 +14,13 @@
   ?>
 <div class="frontpage1 d-flex flex-column" style="margin:-1.0rem 0;min-height:calc(100vh - 10.9375rem);">
   <div class="mb-auto"></div>
-  <div class="container-fluid">
-    <div class="row justify-content-center">
-      <div class="col-sm-8 col-md-5 col-lg-6 col-xl-4 align-middle">
-        <div class="my-3 bg-dark rounded shadow">
-          <div class="m-0 p-3 bg-white rounded-top">
-            <h2 class="border-bottom border-gray pb-2 mb-0">Please Login</h2>
-            <div class="text-dark pt-3">
+  <div class="container">
+    <div class="">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <div class="p-3 my-2 bg-white shadow rounded">
+            <div class="text-dark">
+              <h2 class="border-bottom border-gray pb-2 mb-3">Please Login</h2>
               <!--<div class="alert alert-warning">
                 <strong>Overnight System Maintenance</strong> <br>
                 Our systems will not be sending emails between 23:00 on Friday 31 August and 15:00 on Saturday 1 September
@@ -51,27 +51,29 @@
                     </div>
                   </div>
                   <input type="hidden" name="target" value="<?php echo app('request')->path; ?>">
-                  <p><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-block btn-primary"></p>
-                  <div class="row mb-0">
-                    <div class="col">
-                      <a class="btn btn-block btn-dark" href="<?php echo autoUrl("register") ?>">Create an account</a>
-                    </div>
-                    <div class="col">
-                      <a class="btn btn-block btn-dark" href="<?php echo autoUrl("resetpassword") ?>">Forgot password?</a>
-                    </div>
-                  </div>
+                  <p class="mb-0"><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-block btn-primary"></p>
                 <!--<span class="small text-center d-block"><a href="register.php">Create an account</a></span>
                 <span class="small text-center d-block"><a href="forgot-password.php">Forgot password?</a></span>-->
               </form>
             </div>
           </div>
-          <div class="p-3 text-white">
-            <p class="small mb-0">Support Helpline: <a class="text-white" href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a></p>
-            <p class="small mb-0">Support Website: <a class="text-white" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership">CLS ASC Help and Support</a></p>
-            <!--<p class="small mb-0">Unauthorised access to or misuse of this system is prohibited and constitutes an offence under the Computer Misuse Act 1990. If you disclose any information obtained through this system without authority CLS ASC may take legal action against you.</p>-->
+
+        </div>
+        <div class="col-md-5 ml-auto">
+          <div class="p-3 my-2 bg-white shadow rounded">
+            <p>
+              Not yet registered for an account? It's really easy to get started.
+            </p>
+            <a class="btn btn-dark mb-3" href="<?php echo autoUrl("register") ?>">Create an account</a>
+            <p>
+              Forgotten your password? We'll get you going again in no time. All we need is your email address.
+            </p>
+            <a class="btn btn-dark mb-3" href="<?php echo autoUrl("resetpassword") ?>">Forgot password?</a>
+            <p class="small mb-0">Support Helpline: <a class="" href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a></p>
+            <p class="small">Support Website: <a class="" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership">CLS ASC Help and Support</a></p>
+            <p class="small mb-0">Unauthorised access to or misuse of this system is prohibited and constitutes an offence under the Computer Misuse Act 1990. If you disclose any information obtained through this system without authority then Chester-le-Street ASC may take legal action against you.</p>
           </div>
         </div>
-
       </div>
     </div>
   </div>

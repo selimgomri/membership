@@ -137,7 +137,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       members.MForename, members.MSurname ASC";
       $result = mysqli_query($link, $sql);
       $swimmerCount = mysqli_num_rows($result);
-      $content .= "<div class=\"table-responsive table-nomargin mb-1\">";
+      $content .= "<div class=\"table-md-responsive table-nomargin mb-1\">";
       if (app('request')->isMobile()) {
         $content .= '<table class="table">';
       } else {

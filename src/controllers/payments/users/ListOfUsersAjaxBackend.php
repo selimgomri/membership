@@ -13,7 +13,7 @@ $result = mysqli_query($link, $sql);
 $count = mysqli_num_rows($result);
 if ($count > 0) {
   $output = '
-  <div class="table-responsive">
+  <div class="table-md-responsive">
     <table class="table table-hover mb-0">
       <thead class="thead-light">
         <tr>

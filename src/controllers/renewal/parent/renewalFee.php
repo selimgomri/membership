@@ -97,7 +97,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		</p>
 
 		<h2>Your Membership Fees</h2>
-		<div class="table-responsive">
+		<div class="table-md-responsive">
 			<table class="table">
 				<thead class="">
 					<tr class="bg-primary text-light">
@@ -147,7 +147,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
  		<p>Your club membership fee is &pound;<? echo $clubFeeString; ?></p>
 
 		<h2>ASA Membership Fees</h2>
-		<div class="table-responsive">
+		<div class="table-md-responsive">
 			<table class="table">-->
 				<thead class="">
 					<tr class="bg-primary text-light">

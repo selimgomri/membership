@@ -48,7 +48,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
   $swimmerCount = mysqli_num_rows($result);
   if ($swimmerCount > 0) {
     $output = '
-    <div class="table-responsive">';
+    <div class="table-md-responsive">';
     if (app('request')->isMobile()) {
       $output.= '<table class="table table-sm">';
     } else {

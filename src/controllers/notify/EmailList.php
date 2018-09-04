@@ -15,7 +15,7 @@ include BASE_PATH . "views/notifyMenu.php";
 	<h1>Pending Messages</h1>
 	<p class="lead">Messages listed here are queued to be sent in batches.</p>
 	<? if (mysqli_num_rows($result) > 0) { ?>
-		<div class="table-responsive">
+		<div class="table-md-responsive">
 			<table class="table">
 				<thead class="thead-light">
 					<tr>

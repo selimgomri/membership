@@ -35,7 +35,7 @@ $resultAtt = mysqli_query($link, $sql);
 $presentCount = mysqli_num_rows($resultAtt);
 
 $content .= '
-<div class="table-responsive">
+<div class="table-md-responsive">
 	<table class="table">
 		<thead>
 			<tr><th>Session</th><th>Attendance</th></tr>

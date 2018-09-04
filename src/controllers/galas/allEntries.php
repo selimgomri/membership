@@ -69,7 +69,7 @@ $content .= ">Male</option>
   <div class=\"col\">
 <input class=\"form-control\" name=\"search\" id=\"search\" value=\"" . $search . "\">
 </div></div></div>";
-$content .= "<div class=\"table-responsive\" id=\"output\"><div class=\"ajaxPlaceholder\"><strong>Select a Gala</strong> <br>Entries will appear here when you select a gala</div></div>";
+$content .= "<div class=\"table-md-responsive\" id=\"output\"><div class=\"ajaxPlaceholder\"><strong>Select a Gala</strong> <br>Entries will appear here when you select a gala</div></div>";
 $content .= '
 <script>
 function getResult() {

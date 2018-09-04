@@ -8,7 +8,7 @@ include BASE_PATH . "views/header.php";
 	<div class="row">
 		<div class="col">
 			<div class="mb-3 p-3 bg-white rounded shadow">
-				<h1>Time Conversion System <span class="badge badge-secondary">BETA</span></h1>
+				<h1>Swim Time Converter</h1>
 				<? if (isset($_SESSION['Time'])) { ?>
 				<? if ($_SESSION['Time']['Error']) { ?>
 				    <div class="alert alert-warning">

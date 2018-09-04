@@ -33,7 +33,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 		<h1>Attendance History for <? echo $squadName; ?></h1>
 		<p class="lead">Squad History currently only shows the current week</p>
 
-		<div class="table-responsive">
+		<div class="table-md-responsive">
 			<table class="table table-sm">
 				<thead class="thead-light">
 					<tr>

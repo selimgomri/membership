@@ -51,7 +51,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 				</p>
 			</div>
 		<? } else { ?>
-		<div class="table-responsive">
+		<div class="table-md-responsive">
 			<table class="table mb-0">
 				<thead class="thead-light">
 					<tr>
