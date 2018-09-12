@@ -27,7 +27,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 		<p>Click on a description for a statement detailing the fees which went into this charge.
 			Some payments may not have a statement available</p>
 		<? if (mysqli_num_rows($result) > 0) { ?>
-			<div class="table-md-responsive">
+			<div class="table-responsive-md">
 				<table class="table">
 					<thead class="thead-light">
 						<tr>

@@ -31,8 +31,9 @@ include "galaMenu.php"; ?>
 
   <div class="my-3 p-3 bg-white rounded shadow">
     <h2 class="border-bottom border-gray pb-2 mb-0">Galas Open for Entries</h2>
-    <?php echo upcomingGalas($link, true);
+		<?php echo upcomingGalas($link, true);
     if ($access == "Parent") { ?>
+			<hr>
 	    <p class="mb-0">
         <a href="<?php echo autoUrl("galas/entergala"); ?>" class="btn btn-outline-dark">
           Enter a gala

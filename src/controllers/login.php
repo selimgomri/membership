@@ -11,6 +11,8 @@
     $username = $_SESSION['EnteredUsername'];
   }
 
+  $_SESSION['LoginSecurityValue'] = hash('sha256', random_bytes(100));
+
   ?>
 <div class="frontpage1 d-flex flex-column" style="margin:-1.0rem 0;min-height:calc(100vh - 10.9375rem);">
   <div class="mb-auto"></div>
@@ -29,6 +31,10 @@
                 <div class="alert alert-danger">
                   <strong>Incorrect details</strong> <br>
                   Please try again
+                  <? if (isset($_SESSION['ErrorStateLSVMessage'])) {
+                    echo $_SESSION['ErrorStateLSVMessage'];
+                    unset($_SESSION['ErrorStateLSVMessage']);
+                  } ?>
                 </div>
                 <?php } ?>
 
@@ -51,6 +57,7 @@
                     </div>
                   </div>
                   <input type="hidden" name="target" value="<?php echo app('request')->path; ?>">
+                  <input type="hidden" name="LoginSecurityValue" value="<?=$_SESSION['LoginSecurityValue']?>">
                   <p class="mb-0"><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-block btn-primary"></p>
                 <!--<span class="small text-center d-block"><a href="register.php">Create an account</a></span>
                 <span class="small text-center d-block"><a href="forgot-password.php">Forgot password?</a></span>-->

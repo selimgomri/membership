@@ -133,11 +133,11 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       sessions.SquadID = members.SquadID) INNER JOIN squads ON sessions.SquadID =
       squads.SquadID) LEFT JOIN `memberPhotography` ON members.MemberID =
       memberPhotography.MemberID) LEFT JOIN `memberMedical` ON members.MemberID =
-      memberMedical.MemberID) WHERE sessions.SessionID = '$sessionID' ORDER BY
+      memberMedical.MemberID) WHERE sessions.SessionID = '$sessionID' AND members.Status = '1' ORDER BY
       members.MForename, members.MSurname ASC";
       $result = mysqli_query($link, $sql);
       $swimmerCount = mysqli_num_rows($result);
-      $content .= "<div class=\"table-md-responsive table-nomargin mb-1\">";
+      $content .= "<div class=\"table-responsive-md table-nomargin mb-1\">";
       if (app('request')->isMobile()) {
         $content .= '<table class="table">';
       } else {

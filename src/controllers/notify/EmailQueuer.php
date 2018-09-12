@@ -5,8 +5,17 @@ set_time_limit(0);
 
 global $db;
 
+$to_remove = [
+  "<p>&nbsp;</p>",
+  "<p></p>",
+  "<p> </p>",
+  "\r",
+  "\n",
+  '<div dir="auto">&nbsp;</div>'
+];
+
 $subject = $_POST['subject'];
-$message = $_POST['message'];
+$message = str_replace($to_remove, "", $_POST['message']);
 if ($_SESSION['AccessLevel'] != "Admin") {
   $name = getUserName($_SESSION['UserID']);
   $message .= '<p class="small text-muted">Sent by ' . $name . '. Reply to this email to contact our Enquiries Team who can pass your message on to ' . $name . '.</p>';
@@ -121,18 +130,21 @@ if ($_SESSION['AccessLevel'] != "Admin" && $force == 1) {
   } catch (PDOException $e) {
   	halt(500);
   }
+
+  $intro = '
+  <p>We\'re sending you this email because you\'re an administrator at Chester-le-Street ASC.</p>
+  <p>' . getUserName($_SESSION['UserID']) . ' has force sent the following email, overriding parent subscription options. We send these updates about emails which have been force sent in order to ensure compliance with GDPR rules.</p>
+  <hr>';
+  $message_admin = $intro . $message . '<p>Sent via Notify, our custom built email notification service.</p>';
+
   $row = $pdo_query->fetchAll(PDO::FETCH_ASSOC);
   for ($i = 0; $i < sizeof($row); $i++) {
-    $intro = '
-    <p>We\'re sending you this email because you\'re an administrator at Chester-le-Street ASC.</p>
-    <p>' . getUserName($_SESSION['UserID']) . ' has force sent the following email. We send these updates about emails which have been force sent in order to ensure compliance with GDPR rules.</p>';
-    $message = $intro . $message . '<p>Sent via Notify, our custom built email notification service.</p>';
     $sql = "INSERT INTO `notify` (`UserID`, `MessageID`, `Subject`, `Message`,
     `Status`, `Sender`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, 'Queued', ?, ?,
     'Notify')";
     try {
     	$pdo_query = $db->prepare($sql);
-      $pdo_query->execute([$row[$i]['UserID'], $id, $subject, $message, $sender, $force]);
+      $pdo_query->execute([$row[$i]['UserID'], $id, $subject, $message_admin, $sender, $force]);
     } catch (PDOException $e) {
     	halt(500);
     }

@@ -22,7 +22,7 @@ include BASE_PATH . "views/notifyMenu.php";
       A useful use case would be for the Junior League
     </p>
     <? if (mysqli_num_rows($result) > 0) { ?>
-      <div class="table-md-responsive">
+      <div class="table-responsive-md">
         <table class="table">
           <thead class="thead-light">
             <tr>

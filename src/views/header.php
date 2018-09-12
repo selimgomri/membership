@@ -71,7 +71,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <script src="<? echo autoUrl("/js/tinymce/tinymce.min.js"); ?>"></script>
     <link rel="stylesheet preload"
     href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono|Merriweather:400,600">
-    <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.15.css") ?>">
+    <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.17.css") ?>">
     <link rel="stylesheet"
     href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/font-awesome/css/font-awesome.min.css">
     <link rel="apple-touch-icon" href="<https://www.chesterlestreetasc.co.uk/apple-touch-icon.png">
@@ -100,7 +100,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
 
   <div class="d-print-none">
 
-    <div class="text-white py-2 top-bar" style="background:#990000;font-size:0.875rem;">
+    <div class="text-white py-2 top-bar bg-primary-dark" style="font-size:0.875rem;">
       <div class="<?=$container_class?> d-flex">
         <div class="mr-auto hide-a-underline">
           <span class="mr-2">
@@ -133,6 +133,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
           </span>
         </div>
 
+        <? if ($_SESSION['LoggedIn']) { ?>
         <div class="ml-2 top-bar">
           <span>
             <a href="https://account.chesterlestreetasc.co.uk" class="text-white" title="Your Club Membership Account">
@@ -140,6 +141,15 @@ Chester-le-Street ASC is a non profit unincorporated association.
             </a>
           </span>
         </div>
+        <? } else { ?>
+        <div class="ml-2 top-bar">
+          <span>
+            <a href="https://account.chesterlestreetasc.co.uk" class="text-white" title="Sign in to your Club Membership Account">
+              Sign in
+            </a>
+          </span>
+        </div>
+        <? } ?>
 
         <div class="ml-2 top-bar d-lg-none">
           <span>
@@ -152,7 +162,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
     </div>
 
     <div class="collapse" id="mobSearch">
-      <div class="text-white py-3 d-lg-none" style="background:#aa0000">
+      <div class="text-white py-3 d-lg-none bg-primary-darker">
         <form class="container" action="https://www.chesterlestreetasc.co.uk" id="head-search" method="get">
           <label for="s" class="sr-only">Search</label>
           <div class="input-group">
@@ -170,7 +180,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
       </div>
     </div>
 
-    <div class="text-white py-3 d-none d-lg-flex" style="background:#aa0000">
+    <div class="text-white py-3 d-none d-lg-flex bg-primary-darker">
       <div class="<?=$container_class?>">
         <div class="row align-items-center">
           <div class="col">
@@ -206,6 +216,9 @@ Chester-le-Street ASC is a non profit unincorporated association.
       <? if (!user_needs_registration($_SESSION['UserID'])) { ?>
   		<ul class="navbar-nav mr-auto">
   		<?php if (!empty($_SESSION['LoggedIn'])) { ?>
+        <li class="nav-item">
+  			  <a class="nav-link" href="<?php echo autoUrl("") ?>">Home</a>
+  		  </li>
         <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
           <?
           $user = mysqli_real_escape_string($link, $_SESSION['UserID']);
@@ -334,8 +347,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
               Notify
             </a>
             <div class="dropdown-menu" aria-labelledby="notifyDropdown">
-      			  <a class="dropdown-item" href="<?php echo autoUrl("notify") ?>">Notify</a>
-              <a class="dropdown-item" href="<?php echo autoUrl("notify")?>">Home</a>
+              <a class="dropdown-item" href="<?php echo autoUrl("notify")?>">Notify Home</a>
           		<a class="dropdown-item" href="<?php echo autoUrl("notify/newemail")?>">New Message</a>
               <a class="dropdown-item" href="<?php echo autoUrl("notify/lists")?>">Targeted Lists</a>
               <? if ($_SESSION['AccessLevel'] == "Admin") { ?>
@@ -354,6 +366,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
           <div class="dropdown-menu" aria-labelledby="galaDropdown">
             <a class="dropdown-item" href="<?php echo autoUrl("galas")?>">Gala Home</a>
             <?php if ($_SESSION['AccessLevel'] == "Parent") {?>
+            <a class="dropdown-item" href="<?php echo autoUrl("galas/entergala")?>">Enter a Gala</a>
             <a class="dropdown-item" href="<?php echo autoUrl("galas/entries")?>">My Entries</a>
             <?php } else {?>
             <a class="dropdown-item" href="<?php echo autoUrl("galas/addgala")?>">Add Gala</a>
@@ -370,7 +383,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
           <li class="nav-item">
             <a class="nav-link" data-toggle="modal"
             data-target="#paymentsBetaModal" href="#paymentsBetaModal">
-              Pay <span class="badge badge-secondary">BETA</span>
+              Pay&nbsp;&nbsp;<span class="badge badge-secondary">BETA</span>
             </a>
           </li>
           <li class="nav-item">

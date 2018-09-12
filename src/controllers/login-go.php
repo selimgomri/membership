@@ -5,7 +5,7 @@
 
   use GeoIp2\Database\Reader;
 
-  if (!empty($_POST['username']) && !empty($_POST['password'])) {
+  if ((!empty($_POST['username']) && !empty($_POST['password'])) && ($_POST['LoginSecurityValue'] == $_SESSION['LoginSecurityValue'])) {
     // Let the user login
     $username = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['username'])));
     $password = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password'])));
@@ -93,7 +93,17 @@
         	halt(500);
         }
 
-        setcookie("CLSASC_AutoLogin", $hash, time()+60*60*24*120, "/", app('request')->hostname, true, true);
+        $user_info_cookie = json_encode([
+          'Forename' => $row['Forename'],
+          'Surname' => $row['Surname'],
+          'Account' => $_SESSION['UserID'],
+          'TopUAL'  => $row['AccessLevel']
+        ]);
+
+        unset($_SESSION['LoginSecurityValue']);
+
+        setcookie("CLSASC_UserInformation", $user_info_cookie, time()+60*60*24*120 , "/", 'chesterlestreetasc.co.uk', true, false);
+        setcookie("CLSASC_AutoLogin", $hash, time()+60*60*24*120, "/", 'chesterlestreetasc.co.uk', true, true);
 
         $subject = "Account Login";
         $message = '<p>Somebody just logged into your Chester-le-Street ASC Account from ' . ucwords(app('request')->browser()) . ', using a device we believe was located in ' . $geo_string . '.</p><p>If this was you then you can ignore this email. If this was not you, please <a href="' . autoUrl("") . '">log in to your account</a> and <a href="' . autoUrl("myaccount/password") . '">change your password</a> as soon as possible.</p><p>Kind Regards, <br>The Chester-le-Street ASC Team</p>';
@@ -125,5 +135,11 @@
       $_SESSION['EnteredUsername'] = $username;
       header("Location: " . autoUrl('') . "");
     }
+  }
+
+  if ($_POST['LoginSecurityValue'] != $_SESSION['LoginSecurityValue']) {
+    $_SESSION['ErrorState'] = true;
+    $_SESSION['ErrorStateLSVMessage'] = "A Login Security Value was not available. We have prevented your login for security reasons. The site you entered your username and password on may have been attempting to capture your login details. Try reseting your password urgently.";
+    header("Location: " . autoUrl('') . "");
   }
   ?>

@@ -45,7 +45,7 @@
     }
     $outputResult = mysqli_query($db, $sql);
     $row = mysqli_fetch_array($outputResult, MYSQLI_ASSOC);
-    $output = "<div class=\"table-md-responsive\"><table class=\"table table-hover\">";
+    $output = "<div class=\"table-responsive-md\"><table class=\"table table-hover\">";
     $output .= "<thead><tr><th>Column</th><th>Field</th></tr></thead><tbody>";
     // Main Info Content
     $output .= "<tr><th>Forename</th><td>" . $row['MForename'] . "</td></tr>";

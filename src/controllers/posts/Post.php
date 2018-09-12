@@ -39,7 +39,7 @@ $allow_edit = true;
 
 $container_classes = "";
 if ($row['Type'] == "corporate_documentation") {
-	$container_classes .= "serif ";
+	//$container_classes .= "serif ";
 }
 
 include BASE_PATH . "views/header.php";

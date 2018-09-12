@@ -28,7 +28,7 @@ $result = mysqli_query($link, $sql);
 	<p class="lead">Control your Direct Debit details</p>
 	<h2>My Direct Debits</h2>
 	<?php if (mysqli_num_rows($result) > 0) { ?>
-	<div class="table-md-responsive">
+	<div class="table-responsive-md">
 		<table class="table table-striped">
 			<thead>
 				<tr>

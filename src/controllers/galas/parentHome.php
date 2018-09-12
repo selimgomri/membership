@@ -11,8 +11,11 @@ include "galaMenu.php";
   <p class="lead">Your current entries and galas you can enter.</p>
   <div class="my-3 p-3 bg-white rounded shadow">
     <h2 class="border-bottom border-gray pb-2 mb-0">Galas open for entries</h2>
-    <?php echo upcomingGalas($link, false, $userID); ?>
-    <p class="mb-0"><a class="btn btn-outline-dark" href="<?php echo autoUrl("galas/entergala"); ?>">Enter a gala</a></p>
+    <?= upcomingGalas($link, false, $userID) ?>
+		<hr class="mt-0">
+    <p class="mb-0"><a class="btn btn-primary" href="<?= autoUrl("galas/entergala"); ?>">
+			Enter a gala <i class="fa fa-check-square-o" aria-hidden="true"></i>
+		</a></p>
   </div>
 
   <div class="my-3 p-3 bg-white rounded shadow">

@@ -103,6 +103,7 @@ $lists = mysqli_query($link, $sql);
       'searchreplace visualblocks code autoresize insertdatetime media table',
       'contextmenu paste code help wordcount'
     ],
+    paste_as_text: true,
     toolbar: 'insert | undo redo |  formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
     content_css: [
       'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i',

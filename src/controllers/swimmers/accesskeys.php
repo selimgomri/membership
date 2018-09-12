@@ -18,7 +18,7 @@ $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname, member
 $result = mysqli_query($link, $sqlSwim);
 $swimmerCount = mysqli_num_rows($result);
 if ($swimmerCount > 0) { ?>
-  <div class="table-md-responsive">
+  <div class="table-responsive-md">
     <? if (app('request')->isMobile()) {
       ?><table class="table table-sm"><?
     } else {

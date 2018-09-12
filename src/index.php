@@ -10,7 +10,7 @@ ini_set('expose_php', 'Off');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
-ini_set('session.gc_maxlifetime', 2419200);
+ini_set('session.gc_maxlifetime', 86400);
 
 define('DS', DIRECTORY_SEPARATOR, true);
 define('BASE_PATH', __DIR__ . DS, TRUE);
@@ -27,7 +27,7 @@ ini_set('session.cookie_httponly', 1);
 
 // ** DISABLE PROBABILITY BASED SESSION GARBAGE COLLECTION**
 // Causes issues for users
-ini_set('session.gc_probability', 0);
+ini_set('session.gc_probability', 1);
 
 // **PREVENTING SESSION FIXATION**
 // Session ID cannot be passed through URLs
@@ -46,8 +46,8 @@ ini_set('session.sid_length', 128);
 ini_set('session.name', "CLSASC_SessionId");
 
 session_start([
-    'cookie_lifetime' => 172800,
-    'gc_maxlifetime' => 172800,
+    //'cookie_lifetime' => 172800,
+    'gc_maxlifetime' => 86400,
 ]);
 
 require BASE_PATH.'vendor/autoload.php';
@@ -169,11 +169,31 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE['CLSASC_AutoLogin']) && $_COO
 
     $expiry_time = ($time->format('U'))+60*60*24*120;
 
-    setcookie("CLSASC_AutoLogin", $hash, $expiry_time , "/", app('request')->hostname, true, true);
+    $user_info_cookie = json_encode([
+      'Forename' => $row['Forename'],
+      'Surname' => $row['Surname'],
+      'Account' => $_SESSION['UserID'],
+      'TopUAL'  => $row['AccessLevel']
+    ]);
+
+    setcookie("CLSASC_UserInformation", $user_info_cookie, $expiry_time , "/", 'chesterlestreetasc.co.uk', true, false);
+    setcookie("CLSASC_AutoLogin", $hash, $expiry_time , "/", 'chesterlestreetasc.co.uk', true, true);
   }
 }
 
+header("Feature-Policy: fullscreen 'self' https://youtube.com");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+//header("Content-Security-Policy: default-src https:; object-src data: 'unsafe-eval'; script-src * 'unsafe-inline'; style-src https://www.chesterlestreetasc.co.uk https://account.chesterlestreetasc.co.uk https://fonts.googleapis.com 'unsafe-inline'");
+header('Server: Chester-le-Magic');
+
 //halt(901);
+
+//
+$route->get('/auth/cookie/redirect', function() {
+  //$target = urldecode($target);
+  setcookie("CLSASC_SeenAccount", true, 0, "/", 'chesterlestreetasc.co.uk', true, false);
+  header("Location: https://www.chesterlestreetasc.co.uk");
+});
 
 // Password Reset via Link
 $route->get('/email/auth/{id}:int/{auth}', function($id, $auth) {
@@ -309,10 +329,18 @@ if (empty($_SESSION['LoggedIn'])) {
   });
 } else {
   // Home
-  $route->get('/', function() {
-    global $link;
-  	include 'controllers/dashboard.php';
-  });
+
+  if ($_SESSION['AccessLevel'] == "Parent") {
+    $route->get('/', function() {
+      global $link;
+    	include 'controllers/ParentDashboard.php';
+    });
+  } else {
+    $route->get('/', function() {
+      global $link;
+    	include 'controllers/dashboard.php';
+    });
+  }
 
   $route->get('/login', function() {
     header("Location: " . autoUrl(""));
@@ -431,7 +459,7 @@ if (empty($_SESSION['LoggedIn'])) {
 
     include BASE_PATH . 'views/header.php';
 
-
+    pre(get_headers("https://www.swimmingresults.org"));
 
     include BASE_PATH . 'views/footer.php';
   });

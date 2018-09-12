@@ -14,7 +14,7 @@ include BASE_PATH . 'views/header.php'; ?>
 <div class="container">
 	<h1>Payment Administration</h1>
 	<p>Fees for all registered parents</p>
-	<div class="table-md-responsive">
+	<div class="table-responsive-md">
 		<table class="table table-striped">
 			<thead>
 				<tr>

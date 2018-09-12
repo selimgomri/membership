@@ -101,7 +101,7 @@
 		          <li><strong>Related Sites</strong></li>
 		          <li><a title="British Swimming" target="_blank" href="http://www.swimming.org/britishswimming/">British Swimming</a></li>
 		          <li><a title="the Amateur Swimming Association" target="_blank" href="http://www.swimming.org/swimengland/">Swim England</a></li>
-							<li><a title="Swim England North East Region" target="_blank" href="http://asaner.org.uk/swim/">Swim England North East</a></li>
+							<li><a title="Swim England North East Region" target="_blank" href="http://asaner.org.uk/">Swim England North East</a></li>
 							<li><a title="Northumberland and Durham Swimming" target="_blank" href="http://asaner.org.uk/northumberland-durham-swimming-association/">Northumberland &amp; Durham Swimming</a></li>
 		        </ul>
 

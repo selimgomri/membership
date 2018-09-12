@@ -50,7 +50,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	    </div>
 	     <div class="form-group">
 	        <label for="email">Email</label>
-	        <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value="<?php echo $email ?>">
+	        <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value="<?php echo $email ?>" disabled>
 	    </div>
 	    <div class="form-group">
 	      <div class="custom-control custom-checkbox">

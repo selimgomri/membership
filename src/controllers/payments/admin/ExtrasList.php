@@ -19,7 +19,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
     <p class="lead">Extras include CrossFit - Fees paid in addition to Squad Fees</p>
     <p>All extras are billed on a monthly basis</p>
     <? if (mysqli_num_rows($result) > 0) { ?>
-      <div class="table-md-responsive">
+      <div class="table-responsive-md">
         <table class="table">
           <thead class="thead-light">
             <tr>
