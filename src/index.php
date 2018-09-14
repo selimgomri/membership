@@ -221,6 +221,11 @@ $route->post('/timeconverter', function() {
   include 'controllers/conversionsystem/PostTesting.php';
 });
 
+$route->get('/reportanissue', function() {
+  global $link;
+  include 'controllers/help/ReportIssueHandler.php';
+});
+
 $route->group('/ajax', function() {
   global $link;
   include 'controllers/public/router.php';
@@ -375,7 +380,7 @@ if (empty($_SESSION['LoggedIn'])) {
     include 'controllers/registration/router.php';
   });
 
-  $route->group('/attendance', function() {
+  $route->group(['/attendance', '/registers'], function() {
     global $link;
 
     include 'controllers/attendance/router.php';

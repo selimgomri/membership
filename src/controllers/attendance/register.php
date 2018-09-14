@@ -31,7 +31,7 @@ $content .= '
   <label for="squad">Select Squad</label>
   <select class="custom-select" name="squad" id="squad">
     <option value="0">Choose your squad from the menu</option>';
-    $sql = "SELECT SquadID, SquadName FROM squads ORDER BY SquadFee DESC, SquadName ASC";
+    $sql = "SELECT DISTINCT squads.SquadID, SquadName FROM squads INNER JOIN sessions ON squads.SquadID = sessions.SquadID ORDER BY SquadFee DESC, SquadName ASC";
     $result = mysqli_query($link, $sql);
     $count = mysqli_num_rows($result);
     if ($count > 0) {

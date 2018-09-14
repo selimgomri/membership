@@ -380,11 +380,18 @@ Chester-le-Street ASC is a non profit unincorporated association.
           </div>
   		  </li>
         <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="modal"
-            data-target="#paymentsBetaModal" href="#paymentsBetaModal">
-              Pay&nbsp;&nbsp;<span class="badge badge-secondary">BETA</span>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="paymentsParentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Pay <span class="badge badge-secondary">BETA</span>
             </a>
+            <div class="dropdown-menu" aria-labelledby="paymentsParentDropdown">
+              <h6 class="dropdown-header">Direct Debit is coming soon</h6>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="<?php echo autoUrl("payments") ?>">Payments Home</a>
+              <a class="dropdown-item" href="<?php echo autoUrl("payments/fees") ?>">Extra Fees this month</a>
+              <a class="dropdown-item" href="<?php echo autoUrl("payments/transactions")?>">Billing History</a>
+              <a class="dropdown-item" href="<?php echo autoUrl("payments/transactions")?>">My Bank Account</a>
+            </div>
           </li>
           <li class="nav-item">
     			  <a class="nav-link" target="_blank"

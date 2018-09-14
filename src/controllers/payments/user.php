@@ -14,7 +14,7 @@ require 'GoCardlessSetup.php';
   <div class="row align-items-center">
     <div class="col-md-6 col-lg-8">
     	<h1>Payments</h1>
-    	<p class="lead">Control your Direct Debit details and see your payment history</p>
+    	<p class="lead">Control your Direct Debit settings and see your payment history</p>
     </div>
     <div class="col text-center">
       <div class="p-3 text-white bg-primary rounded shadow">
@@ -27,11 +27,11 @@ require 'GoCardlessSetup.php';
     <div class="col-md-6">
       <div class="my-3 p-3 bg-white rounded shadow">
       	<h2 class="border-bottom border-gray pb-2 mb-2">
-          <i class="fa fa-university" aria-hidden="true"></i>
-          Bank Account Options
+          My Bank Account
         </h2>
         <? if (userHasMandates($user)) { ?>
           <p>We currently collect payments from <? echo bankDetails($user, "bank_name"); ?>, Account Ending ******<? echo bankDetails($user, "account_number_end"); ?></p>
+          <p>Chester-le-Street ASC does not store your bank details. They are stored by a trusted third party provider.</p>
         <? } ?>
         <p class="mb-0">
         	<a href="<? echo autoUrl("payments/setup"); ?>" class="btn btn-dark btn-block">Add Bank Account</a>
@@ -54,16 +54,15 @@ require 'GoCardlessSetup.php';
       </div>
       <div class="my-3 p-3 bg-white rounded shadow">
         <h2 class="border-bottom border-gray pb-2 mb-1">
-          <i class="fa fa-money" aria-hidden="true"></i>
-          Fees this period
+          Extra Fees this month
         </h2>
-        <p class="lead">Fees to pay on your next Billing Date</p>
+        <p class="lead">Fees to pay on your next Billing Date, in addition to Squad Fees</p>
       	<? echo feesToPay($link, $user); ?>
       </div>
     </div>
     <div class="col-md-6">
       <div class="my-3 p-3 bg-white rounded shadow">
-      	<h2 class="border-bottom border-gray pb-2 mb-0">Transaction History (Bank)</h2>
+      	<h2 class="border-bottom border-gray pb-2 mb-0">Billing History</h2>
         <? echo paymentHistory($link, $user); ?>
       </div>
     </div>

@@ -141,10 +141,10 @@ if ($_SESSION['AccessLevel'] != "Admin" && $force == 1) {
   for ($i = 0; $i < sizeof($row); $i++) {
     $sql = "INSERT INTO `notify` (`UserID`, `MessageID`, `Subject`, `Message`,
     `Status`, `Sender`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, 'Queued', ?, ?,
-    'Notify')";
+    'Notify-Audit')";
     try {
     	$pdo_query = $db->prepare($sql);
-      $pdo_query->execute([$row[$i]['UserID'], $id, $subject, $message_admin, $sender, $force]);
+      $pdo_query->execute([$row[$i]['UserID'], null, $subject, $message_admin, $sender, $force]);
     } catch (PDOException $e) {
     	halt(500);
     }

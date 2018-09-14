@@ -175,8 +175,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
             $content .= "<li><strong>" . $swimsTextArray[$y] . "</strong> <br>";
             if ($times[$swimsArray[$y]] != "") {
               $content .= $times[$swimsArray[$y]] . $output;;
-            } else {
+            } else if ($row[$swimsTimeArray[$y]]) {
               $content .= $row[$swimsTimeArray[$y]] . $output;
+            } else {
+              $content .= "No Time Available";
             }
             $content .= "</li>";
           }

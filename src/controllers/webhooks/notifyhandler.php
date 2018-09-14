@@ -17,6 +17,8 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		$subject = $row['Subject'];
 		$message = "<p class=\"small\">Hello " . $row['Forename'] . " " . $row['Surname'] . ",</p>" . $row['Message'];
 
+		$message = str_replace("\r\n", "", $message);
+
 		$from = [
 			"Email" => "notify@chesterlestreetasc.co.uk",
 			"Name" => "Chester-le-Street ASC",
@@ -62,6 +64,21 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 					"List" =>	"NewMember"
 				]
 			];
+		} else if ($row['EmailType'] == 'APIAlert') {
+			$from = [
+				"Email" => "alerts@api.account.chesterlestreetasc.co.uk",
+				"Name" => "CLS ASC API Alerts",
+				"Unsub" => [
+					"Allowed" => true,
+					"User" => $row['UserID'],
+					"List" =>	"NewMember"
+				]
+			];
+		} else if ($row['EmailType'] == 'StaffBulletin') {
+			$from = [
+				"Email" => "team@staff.service.chesterlestreetasc.co.uk",
+				"Name" => "CLS ASC Staff"
+			];
 		}
 
 		if ($row['ForceSend'] == 1) {
@@ -73,6 +90,13 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
       if ($from['Unsub']['Allowed']) {
         unset($from['Unsub']);
       }
+		}
+
+		if ($row['EmailType'] == 'SquadMove') {
+			$from = [
+				"Email" => "squad-moves@swimmers.service.chesterlestreetasc.co.uk",
+				"Name" => "Chester-le-Street ASC"
+			];
 		}
 
 		if (notifySend($to, $subject, $message, $name, $emailaddress, $from)) {

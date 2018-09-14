@@ -1,5 +1,6 @@
 <?php
 
+$fluidContainer = true;
 $squadID = $search = "";
 mysqli_real_escape_string($link, parse_str($_SERVER['QUERY_STRING'], $queries));
 if (isset($queries['squadID'])) {

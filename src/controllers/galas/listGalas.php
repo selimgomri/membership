@@ -12,7 +12,7 @@ include "galaMenu.php"; ?>
       Gala Time Sheets give a list of each swimmer's entries to a gala along with their all-time personal bests and <? echo date("Y"); ?> personal bests.
     </p>
     <?
-    $sql = "SELECT * FROM `galas` WHERE `GalaDate` >= CURDATE() ORDER BY `GalaDate` ASC;";
+    $sql = "SELECT DISTINCT `galas`.`GalaID`, `GalaName` FROM `galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID` WHERE `GalaDate` >= CURDATE() ORDER BY `GalaDate` ASC;";
     $res = mysqli_query($link, $sql);
     if (mysqli_num_rows($res) > 0) {
       ?><ul class="list-unstyled mb-0"><?
@@ -26,7 +26,9 @@ include "galaMenu.php"; ?>
         <?
       }
       ?></ul><?
-    }?>
+    } else {
+			?><p class="mb-0">There are no galas with corresponding entries.</p><?
+		}?>
   </div>
 
   <div class="my-3 p-3 bg-white rounded shadow">

@@ -31,6 +31,7 @@ $otherNotes = $row['OtherNotes'];
 $dbAccessKey = $row['AccessKey'];
 $cat = $row['ASACategory'];
 $cp = $row['ClubPays'];
+$swimmerStatus = $row['Status'];
 
 $deleteKey = $_POST['swimmerDeleteDanger'];
 
@@ -141,13 +142,22 @@ if (isset($_POST['otherNotes'])) {
 		$update = true;
 	}
 }
+if (isset($_POST['swimmerStatus']) && $_SESSION['AccessLevel'] == "Admin") {
+	$newSwimmerStatus = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['swimmerStatus'])));
+	if ($newSwimmerStatus != $swimmerStatus) {
+		$sql = "UPDATE `members` SET `Status` = '$newSwimmerStatus' WHERE `MemberID` = '$id'";
+		mysqli_query($link, $sql);
+		$swimmerStatusUpdate = true;
+		$update = true;
+	}
+}
 
 $sqlSwim = "";
 $sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames,
 members.MSurname, members.ASANumber, members.ASACategory, members.ClubPays,
 squads.SquadName, squads.SquadID, squads.SquadFee, squads.SquadCoach,
 squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender,
-members.OtherNotes , members.AccessKey FROM (members INNER JOIN squads ON
+members.OtherNotes, members.AccessKey, members.Status FROM (members INNER JOIN squads ON
 members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
 $resultSwim = mysqli_query($link, $sqlSwim);
 $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
@@ -171,6 +181,7 @@ $content .= '<div class="alert alert-success">
 		if ($cpUpdate) { $content .= '<li>Whether or not the club pays swimmer\'s
 		fees</li>'; }
 		if ($otherNotesUpdate) { $content .= '<li>Other notes</li>'; }
+    if ($swimmerStatusUpdate) { $content .= '<li>Swimmer Membership Status</li>'; }
 $content .= '
 	</ul>
 </div>';
@@ -275,7 +286,24 @@ $content .= "
 	<label for=\"otherNotes\">Other Notes</label>
 	<textarea class=\"form-control\" id=\"otherNotes\" name=\"otherNotes\" rows=\"3\" placeholder=\"Tell us any other notes for coaches\">" . $rowSwim['OtherNotes'] . "</textarea>
 </div>";
-if ($access == "Admin" || $access == "Committee") {
+if ($access == "Admin") {
+  $statusA;
+  $statusB;
+
+  if ($rowSwim['Status']) {
+    $statusA = "selected";
+  } else {
+    $statusB = "selected";
+  }
+  $content .= "
+		<div class=\"form-group\">
+			<label for=\"swimmerStatus\">Swimmer Membership Status</label>
+			<select class=\"custom-select\" id=\"swimmerStatus\" name=\"swimmerStatus\" aria-describedby=\"swimmerStatusHelp\">
+        <option value=\"1\" " . $statusA . ">Active</option>
+        <option value=\"0\" " . $statusB . ">Suspended</option>
+      </select>
+			<small id=\"swimmerStatusHelp\" class=\"form-text\">Suspended swimmers will not show on registers.</small>
+		</div>";
 $content .= "
 	<div class=\"alert alert-danger\">
 		<div class=\"form-group mb-0\">

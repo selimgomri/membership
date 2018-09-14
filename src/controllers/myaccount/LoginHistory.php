@@ -110,10 +110,16 @@ include BASE_PATH . "views/header.php";
     			<li class="page-item"><a class="page-link" href="<? echo autoUrl("myaccount/loginhistory/page/"); ?><? echo $page+1 ?>">Next</a></li>
           <? } else { ?>
     			<li class="page-item"><a class="page-link" href="<? echo autoUrl("myaccount/loginhistory/page/"); ?><? echo $page-1 ?>">Previous</a></li>
+          <? if ($page > 2) { ?>
+          <li class="page-item"><a class="page-link" href="<? echo autoUrl("myaccount/loginhistory/page/"); ?><? echo $page-2 ?>"><? echo $page-2 ?></a></li>
+          <? } ?>
     	    <li class="page-item"><a class="page-link" href="<? echo autoUrl("myaccount/loginhistory/page/"); ?><? echo $page-1 ?>"><? echo $page-1 ?></a></li>
     	    <li class="page-item active"><a class="page-link" href="<? echo autoUrl("myaccount/loginhistory/page/"); ?><? echo $page ?>"><? echo $page ?></a></li>
     			<? if ($numLogins > $page*10) { ?>
     	    <li class="page-item"><a class="page-link" href="<? echo autoUrl("myaccount/loginhistory/page/"); ?><? echo $page+1 ?>"><? echo $page+1 ?></a></li>
+          <? if ($numLogins > $page*10+10) { ?>
+          <li class="page-item"><a class="page-link" href="<? echo autoUrl("myaccount/loginhistory/page/"); ?><? echo $page+2 ?>"><? echo $page+2 ?></a></li>
+          <? } ?>
     	    <li class="page-item"><a class="page-link" href="<? echo autoUrl("myaccount/loginhistory/page/"); ?><? echo $page+1 ?>">Next</a></li>
           <? } ?>
         <? } ?>
