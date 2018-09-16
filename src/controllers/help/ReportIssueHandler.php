@@ -4,33 +4,22 @@ use Respect\Validation\Validator as v;
 
 $target = urldecode($_GET['url']);
 
-$display = false;
-
-if (v::url()->validate($target)) {
-
-	$message = "<p>An error has been reported on the following page: " . $target . ".</p>";
-	$message .= "<p>Reported on " . date("l j F Y") . ".</p>";
-	$message .= "<p>Sent Automatically by CLS ASC.</p>";
-
-	notifySend("", "Website Error Report", $message, "Website Admin Team", "web@chesterlestreetasc.co.uk", ["Email" => "issues@web.service.chesterlestreetasc.co.uk", "Name" => "Chester-le-Street ASC"]);
-
-	$display = true;
-
-}
-
 $pagetitle = "Report an Issue";
 include BASE_PATH . 'views/header.php'; ?>
 
 <div class="container">
 	<h1>Report a Website Issue</h1>
-	<? if ($display) { ?>
-		<p>We have reported that page to our team</p>
+	<? if ($_SESSION['ErrorReportStatus'] == true) { ?>
+		<p>We have reported that page to our team.</p>
+		<p>Thank you for your feedback. It really helps us improve our website.</p>
 		<p>
-			<a href="<?=htmlspecialchars($target)?>" class="btn btn-secondary">
+			<a href="<?=htmlspecialchars($_SESSION['ErrorReportTarget'])?>" class="btn btn-secondary">
 				Return to Page
 			</a>
 		</p>
-	<? } else { ?>
+	<? unset($_SESSION['ErrorReportTarget']); ?>
+	<? } else if (!isset($_GET['url']) || (isset($_SESSION['ErrorReportStatus']) &&
+	$_SESSION['ErrorReportStatus'] == false)) { ?>
 		<p>We were unable to report that page. You may have not provided a URL or
 		the URL was malformed.</p>
 		<p>
@@ -38,7 +27,33 @@ include BASE_PATH . 'views/header.php'; ?>
 				Return to Home
 			</a>
 		</p>
+	<? } else { ?>
+		<p>Let us know what's wrong with the page so that we can fix it as quickly as possible.</p>
+		<form method="post" action="<?=app('request')->curl?>">
+			<div class="form-group">
+		    <label for="report_url">Page Address</label>
+		    <input type="url" value="<?=htmlspecialchars($target)?>" readonly class="form-control" id="report_url" name="report_url">
+		  </div>
+			<div class="form-group">
+		    <label for="Message">What's Wrong?</label>
+		    <textarea class="form-control" id="Message" name="Message" rows="3" aria-describedby="MHelp"></textarea>
+				<small id="MHelp" class="form-text text-muted">You don't need to fill out this box if you don't want to</small>
+		  </div>
+			<p>
+				<button class="btn btn-dark" type="submit">
+					Report Error
+				</button>
+				<a href="<?=htmlspecialchars($target)?>" class="btn btn-danger">
+					Cancel
+				</a>
+			</p>
+		</form>
 	<? } ?>
 </div>
 
-<? include BASE_PATH . 'views/footer.php';
+<?
+
+if (isset($_SESSION['ErrorReportStatus'])) {
+	unset($_SESSION['ErrorReportStatus']);
+}
+include BASE_PATH . 'views/footer.php';

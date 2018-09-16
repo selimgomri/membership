@@ -184,7 +184,9 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE['CLSASC_AutoLogin']) && $_COO
 header("Feature-Policy: fullscreen 'self' https://youtube.com");
 header("Referrer-Policy: strict-origin-when-cross-origin");
 //header("Content-Security-Policy: default-src https:; object-src data: 'unsafe-eval'; script-src * 'unsafe-inline'; style-src https://www.chesterlestreetasc.co.uk https://account.chesterlestreetasc.co.uk https://fonts.googleapis.com 'unsafe-inline'");
+//header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload');
 header('Server: Chester-le-Magic');
+header("Content-Security-Policy: ");
 
 //halt(901);
 
@@ -224,6 +226,10 @@ $route->post('/timeconverter', function() {
 $route->get('/reportanissue', function() {
   global $link;
   include 'controllers/help/ReportIssueHandler.php';
+});
+$route->post('/reportanissue', function() {
+  global $link;
+  include 'controllers/help/ReportIssuePost.php';
 });
 
 $route->group('/ajax', function() {
@@ -343,7 +349,7 @@ if (empty($_SESSION['LoggedIn'])) {
   } else {
     $route->get('/', function() {
       global $link;
-    	include 'controllers/dashboard.php';
+    	include 'controllers/NewDashboard.php';
     });
   }
 
@@ -464,7 +470,114 @@ if (empty($_SESSION['LoggedIn'])) {
 
     include BASE_PATH . 'views/header.php';
 
-    pre(get_headers("https://www.swimmingresults.org"));
+    $asa = 967721;
+
+    $curlres =
+    curl('https://www.swimmingresults.org/individualbest/personal_best.php?print=1&mode=L&tiref=' .
+    $asa);
+
+    // Long Course
+
+    $start = '<p class="rnk_sj">Long Course</p><table id="rankTable"><tbody>';
+    $end = '</tbody></table>';
+
+    $output = curl_scrape_between($curlres, $start, $end);
+    $output = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $output);
+    $output = preg_replace('/(<[^>]+) width=".*?"/i', '$1', $output);
+
+    $crawler = new Crawler($output);
+    $crawler = $crawler->filter('tr > td');
+
+    //pre($crawler);
+
+    $array = [];
+    $count = 0;
+
+    echo "Long Course<br>";
+
+    $obj_to_array = [];
+    foreach ($crawler as $domElement) {
+      $obj_to_array[] = $domElement->textContent;
+    }
+
+    $y = 0;
+    for ($i = 0; $i < sizeof($obj_to_array); $i = $i+8) {
+      $array[$obj_to_array[$i]]['Long']['EventName'] = $obj_to_array[$i];
+      $array[$obj_to_array[$i]]['Long']['Time'] = $obj_to_array[$i+1];
+      $array[$obj_to_array[$i]]['Long']['FINA'] = $obj_to_array[$i+2];
+      $array[$obj_to_array[$i]]['Long']['Date'] = $obj_to_array[$i+3];
+      $array[$obj_to_array[$i]]['Long']['Meet'] = $obj_to_array[$i+4];
+      $array[$obj_to_array[$i]]['Long']['Venue'] = $obj_to_array[$i+5];
+      $array[$obj_to_array[$i]]['Long']['Licence'] = $obj_to_array[$i+6];
+      $array[$obj_to_array[$i]]['Long']['Level'] = $obj_to_array[$i+7];
+      $y++;
+    };
+
+    $start = '<p class="rnk_sj">Short Course</p><table id="rankTable"><tbody>';
+    $end = '</tbody></table>';
+
+    $output = curl_scrape_between($curlres, $start, $end);
+    $output = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $output);
+    $output = preg_replace('/(<[^>]+) width=".*?"/i', '$1', $output);
+
+    $crawler = new Crawler($output);
+    $crawler = $crawler->filter('tr > td');
+
+    $obj_to_array = [];
+    foreach ($crawler as $domElement) {
+      $obj_to_array[] = $domElement->textContent;
+    }
+
+    $y = 0;
+    for ($i = 0; $i < sizeof($obj_to_array); $i = $i+8) {
+      $array[$obj_to_array[$i]]['Short']['EventName'] = $obj_to_array[$i];
+      $array[$obj_to_array[$i]]['Short']['Time'] = $obj_to_array[$i+1];
+      $array[$obj_to_array[$i]]['Short']['FINA'] = $obj_to_array[$i+2];
+      $array[$obj_to_array[$i]]['Short']['Date'] = $obj_to_array[$i+3];
+      $array[$obj_to_array[$i]]['Short']['Meet'] = $obj_to_array[$i+4];
+      $array[$obj_to_array[$i]]['Short']['Venue'] = $obj_to_array[$i+5];
+      $array[$obj_to_array[$i]]['Short']['Licence'] = $obj_to_array[$i+6];
+      $array[$obj_to_array[$i]]['Short']['Level'] = $obj_to_array[$i+7];
+      $y++;
+    };
+
+    pre($array);
+
+    /*foreach ($crawler as $domElement) {
+      $col = $count%5;
+      if ($col == 0) {
+        if ($domElement->textContent == "") {
+          $array['Event'][] = null;
+        } else {
+          $array['Event'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+        }
+      } else if ($col == 1) {
+        if ($domElement->textContent == "") {
+          $array['CY_SC'][] = null;
+        } else {
+          $array['CY_SC'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+        }
+      } else if ($col == 2) {
+        if ($domElement->textContent == "") {
+          $array['SCPB'][] = null;
+        } else {
+          $array['SCPB'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+        }
+      } else if ($col == 3) {
+        if ($domElement->textContent == "") {
+          $array['CY_LC'][] = null;
+        } else {
+          $array['CY_LC'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+        }
+      } else if ($col == 4) {
+        if ($domElement->textContent == "") {
+          $array['LCPB'][] = null;
+        } else {
+          $array['LCPB'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+        }
+      }
+      $count++;
+    }*/
 
     include BASE_PATH . 'views/footer.php';
   });

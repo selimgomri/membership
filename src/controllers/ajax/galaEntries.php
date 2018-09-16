@@ -73,7 +73,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $count = mysqli_num_rows($result);
 
 
-    $content = "";
+    $content = "<!--<div class=\"alert alert-danger\"><p class=\"mb-0\"><strong>Times given for HyTek Galas are from the last 12 months</strong></p><p class=\"mb-0\">Options to control whether times are from the last 12 months are coming soon.</p></div><div class=\"alert alert-danger\"><p class=\"mb-0\"><strong>HyTek Gala with no time displayed?</strong></p><p class=\"mb-0\">If qualifying times are required, don't enter the swimmer for that event.</p></div>--><div class=\"alert alert-danger\"><p class=\"mb-0\"><strong>Tynemouth Gala Warning</strong></p><p class=\"mb-0\">Swimmers must not have swum faster than the qualifying times in the last 12 months. As PBs are shown here, if the time is faster than the QT, you may need to check if the PB was set inside or outside the last 12 months.</p></div>";
     if (app('request')->isMobile()) {
       $content .= '<table class="table table-sm">';
     } else {
@@ -138,6 +138,8 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       }
       else {
         for ($y=0; $y<sizeof($swimsArray); $y++) {
+          $output = "";
+          $mins = $secs = $hunds = 0;
           if ($row[$swimsArray[$y]] == 1) {
             $course; $to; $time;
             if ($row['CourseLength'] == "SHORT") {
@@ -147,29 +149,48 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
               $course = "25m";
               $to = "50m";
             }
-            $output;
             if ($timesB[$swimsArray[$y]] != "") {
               $time = explode(".", $timesB[$swimsArray[$y]]);
               $ms = explode(":", $time[0]);
-              $mins = $secs = 0;
+              $mins = $secs = $hunds =  0;
               if (sizeof($ms) == 1) {
-                $secs = $ms[0];
+                $secs = (int) $ms[0];
               } else {
-                $mins = $ms[0];
-                $secs = $ms[1];
+                $mins = (int) $ms[0];
+                $secs = (int) $ms[1];
               }
               $hunds = $time[1];
+              $time_in = $time_double = 0;
               $time_in = (double) 60*$mins + $secs + ($hunds/100);
+
+              $entry_times = null;
+              if ($times[$swimsArray[$y]] != "") {
+                $entry_times = $times[$swimsArray[$y]];
+              } else if ($row[$swimsTimeArray[$y]]) {
+                $entry_times = $row[$swimsTimeArray[$y]];
+              }
+              $time = explode(".", $entry_times);
+              $ms = explode(":", $time[0]);
+              $mins = $secs = $hunds =  0;
+              if (sizeof($ms) == 1) {
+                $secs = (int) $ms[0];
+              } else {
+                $mins = (int) $ms[0];
+                $secs = (int) $ms[1];
+              }
+              $hunds = $time[1];
+              $time_double_oc = (double) 60*$mins + $secs + ($hunds/100);
               try {
               	$time = new EquivalentTime($course, str_replace('&nbsp;', ' ', $swimsTextArray[$y]), $time_in);
-                $time_double = $time->getConversion($to);
+                $time_double = (double) $time->getConversion($to);
               	$time->setOutputAsString(true);
-                if ($time_double < $time_in) {
-                  // echo $time_double . " " . $time_in;
+                if (($time_double_oc > 0 && $time_double > 0) && $time_double < $time_double_oc) {
                   $output = ', <abbr title="Faster converted time available">FC:</abbr> ' . $time->getConversion($to);
+                } else {
+                  $output = null;
                 }
               } catch (Exception $e) {
-              	// Do nothing
+              	$output = null;
               }
             }
             $content .= "<li><strong>" . $swimsTextArray[$y] . "</strong> <br>";

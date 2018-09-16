@@ -12,10 +12,10 @@ if ($page != null) {
   $page = 1;
 }
 
-if ($page == 1 && $null != null) {
+/*if ($page == 1 && $null != null) {
   header("Location: " . autoUrl("myaccount/notifyhistory"));
   die();
-}
+}*/
 
 $sql = "SELECT DISTINCT `Subject` , `Message` FROM `notify` WHERE `UserID` =
 '$user' AND (`EmailType` <> 'Security' OR `EmailType` IS NULL);";
@@ -154,7 +154,8 @@ include BASE_PATH . "views/header.php";
     	    <li class="page-item"><a class="page-link" href="<? echo autoUrl("myaccount/notifyhistory/page/"); ?><? echo $page+1 ?>">Next</a></li>
           <? } ?>
         <? } ?>
-      <? } ?>
+      <? }
+      } ?>
       </ul>
     </nav>
   <? } ?>
