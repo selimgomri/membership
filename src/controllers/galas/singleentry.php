@@ -30,7 +30,7 @@ if ($_SESSION['AccessLevel'] == "Parent") {
           $closingDate = $closingDate->format('Y-m-d');
           $theDate = $theDate->format('Y-m-d');
 
-          if ($row['EntryProcessed'] == 1 || ($closingDate <= $theDate)) { ?>
+          if ($row['EntryProcessed'] == 1 || ($closingDate < $theDate)) { ?>
             <div class="alert alert-warning">
               <strong>We've already processed this gala entry, or our closing date has passed</strong> <br>If you need to make changes, contact the Gala Coordinator
             </div>
@@ -124,11 +124,11 @@ else {
         $closingDate = $closingDate->format('Y-m-d');
         $theDate = $theDate->format('Y-m-d');
 
-        if ($row['EntryProcessed'] == 1 || ($closingDate <= $theDate)) { ?>
+        if ($row['EntryProcessed'] == 1 || ($closingDate < $theDate)) { ?>
           <div class="alert alert-warning">
-            <strong>We've already processed this gala entry, or our closing date has passed</strong> <br>If you need to make changes, contact the Gala Coordinator directly
+            <strong>We've already processed this gala entry, or our closing date has passed</strong> <br>Any changes you make may not be reflected properly. Contact the Gala Administrator directly.
           </div>
-          <?php $disabled .= " onclick=\"return false;\" ";
+          <?php //$disabled .= " onclick=\"return false;\" ";
         } else { ?>
           <h2>Select Swims</h2>
         <?php } ?>
@@ -159,7 +159,7 @@ else {
           <?php }
         }
 
-        if ($row['EntryProcessed'] == 0 && ($closingDate >= $theDate)) {
+        if (true) {
           if ($row['GalaFeeConstant'] != 1) { ?>
           <div class="form-group">
             <label for="galaFee">Enter Total</label>

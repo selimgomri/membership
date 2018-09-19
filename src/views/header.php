@@ -73,7 +73,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
     href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono|Merriweather:400,600">
     <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.17.css") ?>">
     <link rel="stylesheet"
-    href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/font-awesome/css/font-awesome.min.css">
+    href="<?php echo autoUrl("css/font-awesome/css/font-awesome.min.css")?>">
     <link rel="apple-touch-icon" href="<https://www.chesterlestreetasc.co.uk/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="76x76" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad.png">
     <link rel="apple-touch-icon" sizes="120x120" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-iphone-retina.png">

@@ -114,7 +114,7 @@
 		</div>
     <div class="row">
       <div class="col source-org vcard copyright">
-	      	<hr style="border-color:#FFF">
+	      	<hr class="mt-0" style="border-color:#FFF">
 			    <p class="hidden-print">
 						Designed and Built by Chester&#8209;le&#8209;Street ASC.
 					</p>
@@ -134,26 +134,6 @@
     	</div>
   	</div>
 	</div> <!-- /.container -->
-</div>
-
-<div class="modal fade" id="paymentsBetaModal" tabindex="-1" role="dialog" aria-labelledby="paymentsBetaModalTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="paymentsBetaModalTitle">Payments <span class="badge badge-secondary">BETA</span></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Payments by Direct Debit are currently being developed. Please only proceed if you are taking part in any trials.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-        <a href="<? echo autoUrl("payments"); ?>" class="btn btn-link">Go to payments</a>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- Modals and Other Hidden HTML -->
