@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: chesterlestreetasc.co.uk.mysql:3306
--- Generation Time: Jul 02, 2018 at 11:15 PM
+-- Generation Time: Sep 22, 2018 at 09:47 PM
 -- Server version: 10.1.30-MariaDB-1~xenial
 -- PHP Version: 5.4.45-0+deb7u13
 
@@ -32,9 +32,9 @@ CREATE TABLE IF NOT EXISTS `emergencyContacts` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   `Name` text NOT NULL,
-  `ContactNumber` int(11) NOT NULL,
+  `ContactNumber` text NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=32 ;
 
 -- --------------------------------------------------------
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `extras` (
   `ExtraName` varchar(100) NOT NULL,
   `ExtraFee` decimal(6,2) NOT NULL,
   PRIMARY KEY (`ExtraID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -64,6 +64,32 @@ CREATE TABLE IF NOT EXISTS `extrasRelations` (
   KEY `ExtraID` (`ExtraID`),
   KEY `MemberID` (`MemberID`),
   KEY `UserID` (`UserID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `familyIdentifiers`
+--
+
+CREATE TABLE IF NOT EXISTS `familyIdentifiers` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `UID` text NOT NULL,
+  `ACS` text NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `familyMembers`
+--
+
+CREATE TABLE IF NOT EXISTS `familyMembers` (
+  `ConnectionID` int(11) NOT NULL AUTO_INCREMENT,
+  `FamilyID` int(11) NOT NULL,
+  `MemberID` int(11) NOT NULL,
+  PRIMARY KEY (`ConnectionID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 -- --------------------------------------------------------
@@ -121,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `galaEntries` (
   `150IMTime` tinytext,
   PRIMARY KEY (`EntryID`),
   KEY `GalaID` (`GalaID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=137 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=252 ;
 
 -- --------------------------------------------------------
 
@@ -141,7 +167,26 @@ CREATE TABLE IF NOT EXISTS `galas` (
   `HyTek` tinyint(1) NOT NULL,
   PRIMARY KEY (`GalaID`),
   UNIQUE KEY `GalaID` (`GalaID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=41 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `individualFeeTrack`
+--
+
+CREATE TABLE IF NOT EXISTS `individualFeeTrack` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `MonthID` int(11) NOT NULL,
+  `PaymentID` int(11) DEFAULT NULL,
+  `MemberID` int(11) NOT NULL,
+  `UserID` int(11) DEFAULT NULL,
+  `Description` text NOT NULL,
+  `Amount` int(11) NOT NULL,
+  `Type` enum('SquadFee','ExtraFee') NOT NULL,
+  `NC` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=535 ;
 
 -- --------------------------------------------------------
 
@@ -156,7 +201,7 @@ CREATE TABLE IF NOT EXISTS `memberMedical` (
   `Allergies` text,
   `Medication` text,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=31 ;
 
 -- --------------------------------------------------------
 
@@ -173,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `memberPhotography` (
   `FilmTraining` tinyint(1) NOT NULL,
   `ProPhoto` tinyint(1) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=36 ;
 
 -- --------------------------------------------------------
 
@@ -185,12 +230,15 @@ CREATE TABLE IF NOT EXISTS `members` (
   `MemberID` int(11) NOT NULL AUTO_INCREMENT,
   `SquadID` int(11) NOT NULL,
   `UserID` int(11) DEFAULT NULL,
+  `Status` tinyint(1) NOT NULL DEFAULT '1',
+  `RR` tinyint(1) NOT NULL DEFAULT '0',
   `AccessKey` varchar(20) NOT NULL,
   `MForename` varchar(255) DEFAULT NULL,
   `MSurname` varchar(255) DEFAULT NULL,
   `MMiddleNames` varchar(255) DEFAULT NULL,
   `ASANumber` varchar(255) DEFAULT NULL,
   `ASACategory` int(11) NOT NULL,
+  `ClubPays` tinyint(1) NOT NULL,
   `DateOfBirth` date NOT NULL,
   `Gender` enum('Male','Female') NOT NULL,
   `OtherNotes` text NOT NULL,
@@ -198,7 +246,7 @@ CREATE TABLE IF NOT EXISTS `members` (
   UNIQUE KEY `MemberID` (`MemberID`),
   KEY `SquadID` (`SquadID`),
   KEY `UserID` (`UserID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=186 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=224 ;
 
 -- --------------------------------------------------------
 
@@ -214,7 +262,7 @@ CREATE TABLE IF NOT EXISTS `moves` (
   PRIMARY KEY (`MoveID`),
   KEY `MemberID` (`MemberID`),
   KEY `MemberID_2` (`MemberID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
 
 -- --------------------------------------------------------
 
@@ -226,9 +274,11 @@ CREATE TABLE IF NOT EXISTS `newUsers` (
   `ID` int(25) NOT NULL AUTO_INCREMENT,
   `AuthCode` text NOT NULL,
   `UserJSON` text NOT NULL,
+  `Time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Type` text NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UserID` (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=32 ;
 
 -- --------------------------------------------------------
 
@@ -238,12 +288,47 @@ CREATE TABLE IF NOT EXISTS `newUsers` (
 
 CREATE TABLE IF NOT EXISTS `notify` (
   `EmailID` int(11) NOT NULL AUTO_INCREMENT,
+  `MessageID` int(11) DEFAULT NULL,
   `UserID` int(11) NOT NULL,
-  `Status` enum('Queued','Sent','No_Sub') NOT NULL,
+  `Status` enum('Queued','Sent','No_Sub','Failed') NOT NULL,
   `Subject` text NOT NULL,
   `Message` text NOT NULL,
+  `Sender` int(11) DEFAULT NULL,
+  `ForceSend` tinyint(1) NOT NULL DEFAULT '0',
+  `EmailType` text,
   PRIMARY KEY (`EmailID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=186 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2144 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifyHistory`
+--
+
+CREATE TABLE IF NOT EXISTS `notifyHistory` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Sender` int(11) NOT NULL,
+  `Subject` text NOT NULL,
+  `Message` text NOT NULL,
+  `ForceSend` tinyint(1) NOT NULL,
+  `Date` datetime NOT NULL,
+  `JSONData` text NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=40 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifyOptions`
+--
+
+CREATE TABLE IF NOT EXISTS `notifyOptions` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `UserID` int(11) NOT NULL,
+  `EmailType` text NOT NULL,
+  `Subscribed` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 -- --------------------------------------------------------
 
@@ -258,7 +343,7 @@ CREATE TABLE IF NOT EXISTS `passwordTokens` (
   `Date` date DEFAULT NULL,
   `Type` enum('Password_Reset','Account_Verification') NOT NULL,
   PRIMARY KEY (`TokenID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 -- --------------------------------------------------------
 
@@ -278,7 +363,7 @@ CREATE TABLE IF NOT EXISTS `paymentMandates` (
   `AccountNumEnd` text NOT NULL,
   `InUse` tinyint(1) NOT NULL,
   PRIMARY KEY (`MandateID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 -- --------------------------------------------------------
 
@@ -291,7 +376,7 @@ CREATE TABLE IF NOT EXISTS `paymentMonths` (
   `MonthStart` text NOT NULL,
   `Date` date NOT NULL,
   PRIMARY KEY (`MonthID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 -- --------------------------------------------------------
 
@@ -304,7 +389,7 @@ CREATE TABLE IF NOT EXISTS `paymentPreferredMandate` (
   `UserID` int(11) NOT NULL,
   `MandateID` int(11) NOT NULL,
   PRIMARY KEY (`PrefID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
 
 -- --------------------------------------------------------
 
@@ -317,7 +402,7 @@ CREATE TABLE IF NOT EXISTS `paymentSchedule` (
   `UserID` int(11) NOT NULL,
   `Day` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 -- --------------------------------------------------------
 
@@ -329,7 +414,7 @@ CREATE TABLE IF NOT EXISTS `paymentSquadFees` (
   `SFID` int(11) NOT NULL AUTO_INCREMENT,
   `MonthID` int(11) NOT NULL,
   PRIMARY KEY (`SFID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
 
 -- --------------------------------------------------------
 
@@ -375,7 +460,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
   `PMkey` text NOT NULL,
   `Type` enum('Payment','Refund') NOT NULL,
   PRIMARY KEY (`PaymentID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=173 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=470 ;
 
 -- --------------------------------------------------------
 
@@ -395,7 +480,43 @@ CREATE TABLE IF NOT EXISTS `paymentsPending` (
   `Type` enum('Payment','Refund') NOT NULL,
   `MetadataJSON` text,
   PRIMARY KEY (`PaymentID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=435 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=911 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `posts`
+--
+
+CREATE TABLE IF NOT EXISTS `posts` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Author` int(11) DEFAULT NULL,
+  `Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Content` text NOT NULL,
+  `Title` text NOT NULL,
+  `Excerpt` text NOT NULL,
+  `Path` text NOT NULL,
+  `Modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Type` text NOT NULL,
+  `MIME` text NOT NULL,
+  PRIMARY KEY (`ID`),
+  FULLTEXT KEY `Path` (`Path`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `renewalMembers`
+--
+
+CREATE TABLE IF NOT EXISTS `renewalMembers` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PaymentID` int(11) NOT NULL,
+  `MemberID` int(11) NOT NULL,
+  `RenewalID` int(11) NOT NULL,
+  `Date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=20 ;
 
 -- --------------------------------------------------------
 
@@ -412,7 +533,7 @@ CREATE TABLE IF NOT EXISTS `renewalProgress` (
   `Substage` int(11) NOT NULL,
   `Part` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 -- --------------------------------------------------------
 
@@ -427,7 +548,7 @@ CREATE TABLE IF NOT EXISTS `renewals` (
   `StartDate` date NOT NULL,
   `EndDate` date NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -447,7 +568,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `DisplayFrom` date DEFAULT NULL,
   `DisplayUntil` date DEFAULT NULL,
   PRIMARY KEY (`SessionID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Stores information about sessions for Squads' AUTO_INCREMENT=82 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Stores information about sessions for Squads' AUTO_INCREMENT=88 ;
 
 -- --------------------------------------------------------
 
@@ -462,7 +583,7 @@ CREATE TABLE IF NOT EXISTS `sessionsAttendance` (
   `MemberID` int(11) NOT NULL,
   `AttendanceBoolean` int(11) NOT NULL,
   PRIMARY KEY (`AttendanceID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9024 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14591 ;
 
 -- --------------------------------------------------------
 
@@ -487,7 +608,7 @@ CREATE TABLE IF NOT EXISTS `sessionsWeek` (
   `WeekID` int(11) NOT NULL AUTO_INCREMENT,
   `WeekDateBeginning` date NOT NULL,
   PRIMARY KEY (`WeekID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
 
 -- --------------------------------------------------------
 
@@ -507,7 +628,106 @@ CREATE TABLE IF NOT EXISTS `squads` (
   PRIMARY KEY (`SquadID`),
   UNIQUE KEY `SquadID` (`SquadID`),
   KEY `UserID` (`UserID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `targetedListMembers`
+--
+
+CREATE TABLE IF NOT EXISTS `targetedListMembers` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ListID` int(11) NOT NULL,
+  `ReferenceID` int(11) NOT NULL,
+  `ReferenceType` enum('User','Member') NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=48 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `targetedLists`
+--
+
+CREATE TABLE IF NOT EXISTS `targetedLists` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` text NOT NULL,
+  `Description` text NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `times`
+--
+
+CREATE TABLE IF NOT EXISTS `times` (
+  `MemberID` int(11) NOT NULL,
+  `LastUpdate` date NOT NULL,
+  `Type` enum('CY_SC','CY_LC','SCPB','LCPB') NOT NULL,
+  `50Free` text,
+  `100Free` text,
+  `200Free` text,
+  `400Free` text,
+  `800Free` text,
+  `1500Free` text,
+  `50Breast` text,
+  `100Breast` text,
+  `200Breast` text,
+  `50Fly` text,
+  `100Fly` text,
+  `200Fly` text,
+  `50Back` text,
+  `100Back` text,
+  `200Back` text,
+  `100IM` text,
+  `200IM` text,
+  `400IM` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `timesIndividual`
+--
+
+CREATE TABLE IF NOT EXISTS `timesIndividual` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `MemberID` int(11) NOT NULL,
+  `Minutes` int(11) NOT NULL,
+  `Seconds` int(11) NOT NULL,
+  `Hundreds` int(11) NOT NULL,
+  `FinaPoints` int(11) NOT NULL,
+  `Round` enum('Heat','Final') NOT NULL,
+  `Date` date NOT NULL,
+  `Meet` text NOT NULL,
+  `Venue` text NOT NULL,
+  `Club` int(11) NOT NULL,
+  `Level` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `userLogins`
+--
+
+CREATE TABLE IF NOT EXISTS `userLogins` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `UserID` int(11) NOT NULL,
+  `Time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `IPAddress` text NOT NULL,
+  `GeoLocation` text,
+  `Browser` text NOT NULL,
+  `Platform` text NOT NULL,
+  `Mobile` tinyint(1) NOT NULL,
+  `Hash` text NOT NULL,
+  `HashActive` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=282 ;
 
 -- --------------------------------------------------------
 
@@ -527,12 +747,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   `Surname` text NOT NULL,
   `Mobile` tinytext NOT NULL,
   `MobileComms` tinyint(1) NOT NULL,
+  `RR` tinyint(1) NOT NULL DEFAULT '0',
+  `Edit` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`UserID`),
   UNIQUE KEY `UserID` (`UserID`),
   UNIQUE KEY `Username` (`Username`),
   UNIQUE KEY `EmailAddress` (`EmailAddress`),
   UNIQUE KEY `Username_2` (`Username`,`EmailAddress`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=101 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=133 ;
 
 -- --------------------------------------------------------
 

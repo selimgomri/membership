@@ -81,7 +81,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
     mysqli_query($link, $sql);
 
     $message_subject = "Your Monthly Fee for " . date("F Y");
-    $message_content = '<p>Here is your fee for ' . date("F Y") . '.</p><p>&pound;' . number_format(($row['Amount']/100), 2, '.', ',') . '</p><p>This total covers all of your Club Fees. If your swimmers take part in CrossFit, please remember that it is paid for in a separate Standing Order to your squad fees.</p><p>Fees are calculated from the squad your swimmers were members of on 1 ' . date("F Y") . '.</p><hr><p>Notice: We do not currently have full records detailing which swimmers take part in CrossFit in our online systems. This information may not be correct at the moment. Your fee will also only be accurate if you have connected all of your swimmers to your account.</p>';
+    $message_content = '<p>Here are your club fees for ' . date("F Y") . '.</p>' . myMonthlyFeeTable($link, $row['UserID']) . '<p>This means your total fee for ' . date("F Y") . ' is, <strong>&pound;' . number_format(($row['Amount']/100), 2, '.', ',') . '</strong></p><p>This total covers all of your Club Fees. If your swimmers take part in CrossFit, please remember that it is paid for in a separate Standing Order to your squad fees.</p><p>Fees are calculated using the squad your swimmers were members of on 1 ' . date("F Y") . '.</p><hr><p>Notice: We do not currently have full records detailing which swimmers take part in CrossFit in our online systems. This information may not be correct at the moment. Your fee will also only be accurate if you have connected all of your swimmers to your account.</p>';
 
     $email_info = [
       "user" => $row['UserID'],

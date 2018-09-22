@@ -25,7 +25,7 @@ function notifySend($to, $subject, $message, $name = null, $emailaddress = null,
         background: #e3eef6;
       }
 
-      p, h1, h2, h3, h4, h5, h6, ul, ol, img {
+      p, h1, h2, h3, h4, h5, h6, ul, ol, img, .table, blockquote {
         margin: 0 0 1rem 0;
       }
 
