@@ -67,6 +67,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 	<div class="my-3 p-3 bg-white rounded shadow">
 		<h1 class="border-bottom border-gray pb-2 mb-2">Status for <? echo $dateString; ?></h1>
 	  <p class="lead"><? echo $title_string; ?></p>
+		<p><a href="<?=app('request')->curl?>csv" target="_blank">View as CSV (Comma Separated Values)</a> or <a href="<?=app('request')->curl?>json" target="_blank">View as JSON (JavaScript Object Notation)</a></p>
 		<? if (mysqli_num_rows($result) == 0) { ?>
 			<div class="alert alert-warning mb-0">
 				<p class="mb-0">

@@ -271,6 +271,19 @@ Chester-le-Street ASC is a non profit unincorporated association.
               <a class="dropdown-item" href="<?php echo autoUrl("renewal")?>">Membership Renewal</a>
               <a class="dropdown-item" href="<?php echo autoUrl("swimmers/orphaned")?>">Orphan Swimmers</a>
               <? } ?>
+              <? if ($_SESSION['AccessLevel'] == "Coach") { ?>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . date("Y/m")) ?>">
+                Squad Fee Payments, <?=date("F Y")?>
+              </a>
+              <?
+              $lm = date("Y/m", strtotime("first day of last month"));
+              $lms = date("F Y", strtotime("first day of last month"));
+              ?>
+              <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . $lm) ?>">
+                Squad Fee Payments, <?=$lms?>
+              </a>
+              <? } ?>
             </div>
     		  </li>
           <?php if ($_SESSION['AccessLevel'] == "Admin" ||

@@ -64,6 +64,21 @@ if ($access == "Parent" || $access == "Admin") {
 	});
 }
 
+if ($access == "Coach") {
+	$this->get('/history/{type}/{year}:int/{month}:int', function($type, $year, $month) {
+		global $link;
+		include 'admin/history/feestatus.php';
+	});
+
+	$this->get('/history/{type}/{year}:int/{month}:int/csv', function($type, $year, $month) {
+		include BASE_PATH . 'controllers/squads/CSVSquadExport.php';
+	});
+
+	$this->get('/history/{type}/{year}:int/{month}:int/json', function($type, $year, $month) {
+		include 'admin/history/JSONSquadExport.php';
+	});
+}
+
 if ($access == "Admin") {
 	$this->get('/', function() {
 		global $link;
@@ -131,6 +146,14 @@ if ($access == "Admin") {
 		$this->get('/{type}/{year}:int/{month}:int', function($type, $year, $month) {
 			global $link;
 			include 'admin/history/feestatus.php';
+		});
+
+		$this->get('/{type}/{year}:int/{month}:int/csv', function($type, $year, $month) {
+			include BASE_PATH . 'controllers/squads/CSVSquadExport.php';
+		});
+
+		$this->get('/{type}/{year}:int/{month}:int/json', function($type, $year, $month) {
+			include 'admin/history/JSONSquadExport.php';
 		});
 
 	});
