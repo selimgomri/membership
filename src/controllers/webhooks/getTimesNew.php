@@ -15,8 +15,8 @@ $sql = "INSERT INTO `times` (`MemberID`, `LastUpdate`,  `Type`,
 `50Free`, `100Free`, `200Free`, `400Free`, `800Free`, `1500Free`,
 `50Breast`, `100Breast`, `200Breast`, `50Fly`, `100Fly`, `200Fly`,
 `50Back`, `100Back`, `200Back`, `100IM`, `200IM`, `400IM`) VALUES
-(:user, :lastdate, :type, ;t1, :t2, :t3, :t4, :t5, :t6, :t7, :t8, :t9,
-:t10, :t11, :t12, :t13, :t14, :t15,, :t18,  :t16, :t17)";
+(:user, :lastdate, :type, :t1, :t2, :t3, :t4, :t5, :t6, :t7, :t8, :t9,
+:t10, :t11, :t12, :t13, :t14, :t15, :t18, :t16, :t17)";
 $insert_time = $db->prepare($sql);
 
 $sql = "UPDATE `times` SET `LastUpdate` = :lastdate, `50Free` = :t1,
@@ -240,12 +240,20 @@ for ($i = 0; $i < $count_to_get; $i++) {
 
 			try {
 				if ($num == 0) {
-					$insert_time->execute($values);
+          try {
+					  $insert_time->execute($values);
+          } catch (Exception $e) {
+            halt(500);
+          }
 				} else {
-					$update_time->execute($values);
+          try {
+					  $update_time->execute($values);
+          } catch (Exception $e) {
+            halt(500);
+          }
 				}
 			} catch (Exception $e) {
-				halt(500);
+				//halt(500);
 			}
 		}
 	}

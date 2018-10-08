@@ -186,7 +186,7 @@ header("Referrer-Policy: strict-origin-when-cross-origin");
 //header("Content-Security-Policy: default-src https:; object-src data: 'unsafe-eval'; script-src * 'unsafe-inline'; style-src https://www.chesterlestreetasc.co.uk https://account.chesterlestreetasc.co.uk https://fonts.googleapis.com 'unsafe-inline'");
 //header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload');
 header('Server: Chester-le-Magic');
-header("Content-Security-Policy: ");
+header("Content-Security-Policy: block-all-mixed-content");
 
 //halt(901);
 
@@ -475,6 +475,20 @@ if (empty($_SESSION['LoggedIn'])) {
     include BASE_PATH . 'views/footer.php';
     */
   });
+
+  if ($_SESSION['AccessLevel'] == "Admin") {
+    $route->get('/about:php', function() {
+      echo phpinfo();
+    });
+
+    $route->get('/about:session', function() {
+      pre($_SESSION);
+    });
+
+    $route->get('/about:server', function() {
+      pre($_SERVER);
+    });
+  }
 }
 
 // Global Catch All 404

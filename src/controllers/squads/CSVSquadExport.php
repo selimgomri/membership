@@ -19,8 +19,10 @@ $title_string = null;
 
 $dateString = date("F Y", strtotime($year . "-" . $month));
 
+$info = null;
 if ($type == "squads") {
 	$name_type = "SquadFee";
+	$info = "Squad";
 	$title_string = "Squad Fee payments for " . $dateString;
 } else if ($type == "extras") {
 	$name_type = "ExtraFee";
@@ -57,7 +59,7 @@ $output = fopen('php://output', 'w');
 
 // output the column headings
 fputcsv($output, array($title));
-fputcsv($output, array('Parent', 'Swimmer', 'Amount', 'FamilyTotal', 'Paid'));
+fputcsv($output, array('Parent', 'Swimmer', $info, 'Amount', 'FamilyTotal', 'Paid'));
 
 for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	$name = null;
@@ -74,11 +76,11 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		$name = "N/A";
 	}
 
-	$member = $row['MForename'] . " " . $row['MSurname'] . " - " . $row['Description'];
+	$member = $row['MForename'] . " " . $row['MSurname'];
 
 	$amount = '£' . number_format(($row['Amount']/100),2,'.','');
 
-	fputcsv($output, array($name, $member, $amount, $family_total));
+	fputcsv($output, array($name, $member, $row['Description'], $amount, $family_total));
 
 	if ($i < mysqli_num_rows($result)-1) {
 		$row = mysqli_fetch_array($result, MYSQLI_ASSOC);

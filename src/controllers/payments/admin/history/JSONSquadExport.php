@@ -84,7 +84,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		}
 	} else {
 		$parent['Name'] = null;
-		$parent['FamilyTotal'] = $row['Amount'];
+		$parent['FamilyTotal'] = (int) $row['Amount'];
 		$parent['FamilyTotalString'] = '£' . number_format(($row['Amount']/100),2,'.','');
 		$parent['PaymentStatusString'] = "No Parent or Direct Debit Available";
 	}
@@ -92,7 +92,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	$swimmer = [
 		'Name'				=> $row['MForename'] . " " . $row['MSurname'],
 		'Description'	=> $row['Description'],
-		'Amount'			=> $row['Amount'],
+		'Amount'			=> (int) $row['Amount'],
 		'AmountString'=> '£' . number_format(($row['Amount']/100),2,'.',''),
 		'ClubPaysFees'=> $row['ClubPays']
 	];
