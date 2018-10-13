@@ -11,7 +11,8 @@ $to_remove = [
   "<p> </p>",
   "\r",
   "\n",
-  '<div dir="auto">&nbsp;</div>'
+  '<div dir="auto">&nbsp;</div>',
+  '&nbsp;'
 ];
 
 $subject = $_POST['subject'];
@@ -131,20 +132,29 @@ if ($_SESSION['AccessLevel'] != "Admin" && $force == 1) {
   	halt(500);
   }
 
+  $sql = "INSERT INTO `notify` (`UserID`, `MessageID`, `Subject`, `Message`,
+  `Status`, `Sender`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, 'Queued', ?, ?,
+  'Notify-Audit')";
+  try {
+    $sendToTeam = $db->prepare($sql);
+  } catch (PDOException $e) {
+    halt(500);
+  }
+
+  $gdpr_question = '<p>You have force sent the below message. Please contact <a href="mailto:gdpr@chesterlestreetasc.co.uk">gdpr@chesterlestreetasc.co.uk</a> to explain the rationale for using <strong>Force Send</strong> for this email.</p><hr>' . $message . '<p class="small text-muted">Sent via Notify, our custom built email notification service.</p>';
+  $sendToTeam->execute([$_SESSION['UserID'], null, "GDPR Compliance: " . $subject, $gdpr_question, $sender, $force]);
+
   $intro = '
   <p>We\'re sending you this email because you\'re an administrator at Chester-le-Street ASC.</p>
   <p>' . getUserName($_SESSION['UserID']) . ' has force sent the following email, overriding parent subscription options. We send these updates about emails which have been force sent in order to ensure compliance with GDPR rules.</p>
+  <p>Emails should only be force sent when they are of high importance. An example would be to inform parents of a session cancellation.</p>
   <hr>';
-  $message_admin = $intro . $message . '<p>Sent via Notify, our custom built email notification service.</p>';
+  $message_admin = $intro . $message . '<p class="small text-muted">Sent via Notify, our custom built email notification service.</p>';
 
   $row = $pdo_query->fetchAll(PDO::FETCH_ASSOC);
   for ($i = 0; $i < sizeof($row); $i++) {
-    $sql = "INSERT INTO `notify` (`UserID`, `MessageID`, `Subject`, `Message`,
-    `Status`, `Sender`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, 'Queued', ?, ?,
-    'Notify-Audit')";
     try {
-    	$pdo_query = $db->prepare($sql);
-      $pdo_query->execute([$row[$i]['UserID'], null, $subject, $message_admin, $sender, $force]);
+      $sendToTeam->execute([$row[$i]['UserID'], null, "GDPR Alert: " . $subject, $message_admin, $sender, $force]);
     } catch (PDOException $e) {
     	halt(500);
     }

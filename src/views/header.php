@@ -32,9 +32,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
     else { ?>
     <title>CLSASC Membership</title>
     <?php } ?>
-    <meta name="description" content="Your Chester-le-Street ASC Account lets
-    you make gala entries online and gives you access to all your information
-    about your swimmers, including attendance.">
+    <meta name="description" content="Your Chester-le-Street ASC Account lets you make gala entries online and gives you access to all your information about your swimmers, including attendance.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0,
     user-scalable=no,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,9 +45,6 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <meta name="og:type" content="website">
     <meta name="og:locale" content="en_GB">
     <meta name="og:site_name" content="Chester-le-Street ASC Account">
-    <? if (app('request')->headers['dnt']) { ?>
-    <meta name="X-CLSW-Tracking" content="no">
-    <? } else { ?>
     <meta name="X-CLSW-Tracking" content="yes">
     <script async>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -64,7 +59,6 @@ Chester-le-Street ASC is a non profit unincorporated association.
       ga('send', 'pageview');
       <? } ?>
     </script>
-    <? } ?>
 	  <script>var shiftWindow = function() { scrollBy(0, -50) }; if
 	  (location.hash) shiftWindow(); window.addEventListener("hashchange",
 	  shiftWindow);</script>
@@ -392,14 +386,12 @@ Chester-le-Street ASC is a non profit unincorporated association.
             <? } ?>
           </div>
   		  </li>
-        <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+        <?php if (false)/*($_SESSION['AccessLevel'] == "Parent")*/ { ?>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="paymentsParentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Pay <span class="badge badge-secondary">BETA</span>
+              Pay
             </a>
             <div class="dropdown-menu" aria-labelledby="paymentsParentDropdown">
-              <h6 class="dropdown-header">Direct Debit is coming soon</h6>
-              <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="<?php echo autoUrl("payments") ?>">Payments Home</a>
               <a class="dropdown-item" href="<?php echo autoUrl("payments/fees") ?>">Extra Fees this month</a>
               <a class="dropdown-item" href="<?php echo autoUrl("payments/transactions")?>">Billing History</a>

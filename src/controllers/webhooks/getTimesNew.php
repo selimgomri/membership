@@ -133,9 +133,9 @@ for ($i = 0; $i < $count_to_get; $i++) {
 				$t13 = $array12['50 Backstroke']['Long']['Time'];
 				$t14 = $array12['100 Backstroke']['Long']['Time'];
 				$t15 = $array12['200 Backstroke']['Long']['Time'];
-				$t16 = $array12['100 Individual Medley']['Long']['Time'];
-				$t17 = $array12['200 Individual Medley']['Long']['Time'];
-				$t18 = $array12['400 Individual Medley']['Long']['Time'];
+				$t16 = $array12['200 Individual Medley']['Long']['Time'];
+				$t17 = $array12['400 Individual Medley']['Long']['Time'];
+				$t18 = null;
 
 			} else if ($y == 0) {
 
@@ -180,9 +180,9 @@ for ($i = 0; $i < $count_to_get; $i++) {
 				$t13 = $array12['50 Backstroke']['Short']['Time'];
 				$t14 = $array12['100 Backstroke']['Short']['Time'];
 				$t15 = $array12['200 Backstroke']['Short']['Time'];
-				$t16 = $array12['100 Individual Medley']['Short']['Time'];
-				$t17 = $array12['200 Individual Medley']['Short']['Time'];
-				$t18 = $array12['400 Individual Medley']['Short']['Time'];
+				$t16 = $array12['200 Individual Medley']['Short']['Time'];
+				$t17 = $array12['400 Individual Medley']['Short']['Time'];
+				$t18 = $array12['100 Individual Medley']['Short']['Time'];
 
 			} else {
 				$t1 = $array[$type][1];

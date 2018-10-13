@@ -217,6 +217,11 @@ $route->get('/timeconverter', function() {
   include 'controllers/conversionsystem/testing.php';
 });
 
+$route->get('/robots.txt', function() {
+  header("Content-Type: text/plain");
+  echo "User-agent: *\r\nDisallow: /webhooks/\r\nDisallow: /webhooks\r\nDisallow: /css\r\nDisallow: /js";
+});
+
 $route->post('/timeconverter', function() {
   global $link;
   include 'controllers/conversionsystem/PostTesting.php';
@@ -420,11 +425,13 @@ if (empty($_SESSION['LoggedIn'])) {
     include 'controllers/registration/router.php';
   });
 
-  $route->group('/payments', function() {
-    global $link;
+  if ($_SESSION['AccessLevel'] != "Parent") {
+    $route->group('/payments', function() {
+      global $link;
 
-    include 'controllers/payments/router.php';
-  });
+      include 'controllers/payments/router.php';
+    });
+  }
 
   $route->group('/notify', function() {
     global $link;
