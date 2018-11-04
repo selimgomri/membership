@@ -27,15 +27,17 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas") {
 		include 'EmailQueuer.php';
 	});
 
-	$this->get('/email', function() {
-		global $link;
-		include 'EmailList.php';
-	});
+  if ($_SESSION['AccessLevel'] == "Admin") {
+  	$this->get('/email', function() {
+  		global $link;
+  		include 'EmailList.php';
+  	});
 
-	$this->get('/email/{id}:int', function($id) {
-		global $link;
-		include 'EmailID.php';
-	});
+  	$this->get('/email/{id}:int', function($id) {
+  		global $link;
+  		include 'EmailID.php';
+  	});
+  }
 
   $this->group('/history', function() {
 		global $link;

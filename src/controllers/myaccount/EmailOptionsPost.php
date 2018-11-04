@@ -13,15 +13,21 @@ try {
 $row = $query->fetch(PDO::FETCH_ASSOC);
 
 // Normal Emails
-$email_comms = 0;
+$email_comms = false;
 $email_comms_update = false;
 if ($_POST['EmailComms']) {
-	$email_comms = 1;
+	$email_comms = true;
 }
 
 if ($email_comms != $row['EmailComms']) {
 	$email_comms_update = true;
 	$_SESSION['OptionsUpdate'] = true;
+  $sql = "UPDATE `users` SET `EmailComms` = ? WHERE `UserID` = ?";
+  try {
+  	$db->prepare($sql)->execute([$email_comms, $_SESSION['UserID']]);
+  } catch (Exception $e) {
+  	halt(500);
+  }
 }
 
 updateSubscription($_POST['SecurityComms'], 'Security');

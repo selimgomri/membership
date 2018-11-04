@@ -61,14 +61,14 @@ for ($i = 0; $i < sizeof($row); $i++) {
 }
 
 for ($i = 0; $i < sizeof($lists); $i++) {
-	if ($query != "" && mysqli_real_escape_string($link, $_POST["TL-" . $row[$i]['ID']]) == 1) {
+	if ($query != "" && mysqli_real_escape_string($link, $_POST["TL-" . $lists[$i]['ID']]) == 1) {
 		$query .= "OR";
 	}
-	if (mysqli_real_escape_string($link, $_POST["TL-" . $row[$i]['ID']]) == 1) {
-		$id = "TL-" . $row[$i]['ID'];
+	if (mysqli_real_escape_string($link, $_POST["TL-" . $lists[$i]['ID']]) == 1) {
+		$id = "TL-" . $lists[$i]['ID'];
 		$id = mysqli_real_escape_string($link, substr_replace($id, '', 0, 3));
-		$query .= " `ListID` = '" . $row[$i]['ID'] . "' ";
-    $listsArray[$row[$i]['ID']] = $row[$i]['Name'];
+		$query .= " `ListID` = '" . $lists[$i]['ID'] . "' ";
+    $listsArray[$lists[$i]['ID']] = $lists[$i]['Name'];
 	}
 }
 
@@ -117,7 +117,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	'Notify')";
   try {
   	$pdo_query = $db->prepare($sql);
-    $pdo_query->execute([$row['UserID'], $id, $subject, $message, $sender, $force]);
+    $pdo_query->execute([$row['UserID'], $id, null, null, $sender, $force]);
   } catch (PDOException $e) {
   	halt(500);
   }

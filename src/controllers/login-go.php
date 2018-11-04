@@ -5,7 +5,7 @@
 
   use GeoIp2\Database\Reader;
 
-  if ((!empty($_POST['username']) && !empty($_POST['password'])) && ($_POST['LoginSecurityValue'] == $_SESSION['LoginSecurityValue'])) {
+  if ((!empty($_POST['username']) && !empty($_POST['password'])) && ($_POST['LoginSecurityValue'] == $_SESSION['LSV'])) {
     // Let the user login
     $username = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['username'])));
     $password = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password'])));
@@ -46,7 +46,7 @@
             $city = $record->city->name . ', ';
           }
           $subdivision;
-          if ($record->mostSpecificSubdivision->name != "") {
+          if ($record->mostSpecificSubdivision->name != "" && $record->mostSpecificSubdivision->name != $record->city->name) {
             $subdivision = $record->mostSpecificSubdivision->name . ', ';
           }
           $country;
@@ -100,19 +100,35 @@
           'TopUAL'  => $row['AccessLevel']
         ]);
 
-        unset($_SESSION['LoginSecurityValue']);
+        //unset($_SESSION['LoginSecurityValue']);
 
-        setcookie("CLSASC_UserInformation", $user_info_cookie, time()+60*60*24*120 , "/", 'chesterlestreetasc.co.uk', true, false);
-        setcookie("CLSASC_AutoLogin", $hash, time()+60*60*24*120, "/", 'chesterlestreetasc.co.uk', true, true);
+        setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, time()+60*60*24*120 , "/", 'chesterlestreetasc.co.uk', true, false);
+        setcookie(COOKIE_PREFIX . "AutoLogin", $hash, time()+60*60*24*120, "/", 'chesterlestreetasc.co.uk', true, true);
 
-        $subject = "Account Login";
-        $message = '<p>Somebody just logged into your Chester-le-Street ASC Account from ' . ucwords(app('request')->browser()) . ', using a device we believe was located in ' . $geo_string . '.</p><p>If this was you then you can ignore this email. If this was not you, please <a href="' . autoUrl("") . '">log in to your account</a> and <a href="' . autoUrl("myaccount/password") . '">change your password</a> as soon as possible.</p><p>Kind Regards, <br>The Chester-le-Street ASC Team</p>';
-        $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
-        `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'Security')";
-        try {
-          $db->prepare($notify)->execute([$_SESSION['UserID'], $subject, $message]);
-        } catch (PDOException $e) {
-          halt(500);
+        // Test if we've seen a login from here before
+        $login_before_data = [
+          $_SESSION['UserID'],
+          app('request')->ip(),
+          ucwords(app('request')->browser()),
+          ucwords(app('request')->platform())
+        ];
+
+        $login_before = $db->prepare("SELECT COUNT(*) FROM `userLogins` WHERE `UserID` = ? AND `IPAddress` = ? AND `Browser` = ? AND `Platform` = ?");
+        $login_before->execute($login_before_data);
+        $login_before_count = $login_before->fetchColumn();
+
+        if ($login_before_count == 1) {
+
+          $subject = "New Account Login";
+          $message = '<p>Somebody just logged into your Chester-le-Street ASC Account from ' . ucwords(app('request')->browser()) . ', using a device we believe was located in ' . $geo_string . '*.</p><p>We haven\'t seen a login from this location and device before.</p><p>If this was you then you can ignore this email. If this was not you, please <a href="' . autoUrl("") . '">log in to your account</a> and <a href="' . autoUrl("myaccount/password") . '">change your password</a> as soon as possible.</p><p>Kind Regards, <br>The Chester-le-Street ASC Team</p><p class="text-muted small">* We\'ve estimated your location from your public IP Address. The location given may not be where you live.</p>';
+          $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
+          `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'Security')";
+          try {
+            $db->prepare($notify)->execute([$_SESSION['UserID'], $subject, $message]);
+          } catch (PDOException $e) {
+            halt(500);
+          }
+
         }
 
         if (isset($target)) {
@@ -137,9 +153,9 @@
     }
   }
 
-  if ($_POST['LoginSecurityValue'] != $_SESSION['LoginSecurityValue']) {
+  if ($_POST['LoginSecurityValue'] != $_SESSION['LSV']) {
     $_SESSION['ErrorState'] = true;
     $_SESSION['ErrorStateLSVMessage'] = "A Login Security Value was not available. We have prevented your login for security reasons. The site you entered your username and password on may have been attempting to capture your login details. Try reseting your password urgently.";
-    header("Location: " . autoUrl('') . "");
   }
+  header("Location: " . autoUrl('') . "");
   ?>

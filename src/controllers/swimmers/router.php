@@ -111,6 +111,11 @@ if ($access != "Parent") {
 		global $link;
 		include 'parentSetupHelp.php';
 	});
+
+  $this->post('/parenthelp/{id}:int', function($id) {
+		global $link;
+		include 'parentSetupHelpPost.php';
+	});
 }
 
 // View Medical Notes

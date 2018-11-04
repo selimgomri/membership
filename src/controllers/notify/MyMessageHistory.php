@@ -17,8 +17,9 @@ if ($page != null) {
   die();
 }*/
 
-$sql = "SELECT DISTINCT `Subject` , `Message` FROM `notify` WHERE `UserID` =
-'$user' AND (`EmailType` <> 'Security' OR `EmailType` IS NULL);";
+$sql = "SELECT `notifyHistory`.`Subject` FROM ((`notifyHistory`
+LEFT JOIN `users` ON notifyHistory.Sender = users.UserID) INNER JOIN `notify` ON
+notify.MessageID = notifyHistory.ID) WHERE notify.UserID = '$user';";
 $numMails  = mysqli_num_rows(mysqli_query($link, $sql));
 $numPages = ((int)($numMails/10)) + 1;
 
@@ -26,12 +27,10 @@ if ($start > $numMails) {
   halt(404);
 }
 
-$sql = "SELECT DISTINCT `notify`.`Subject`, `notify`.`Message`,
-`notify`.`ForceSend`, `Forename`, `Surname`, `JSONData`, `Date` FROM ((`notify`
-LEFT JOIN `users` ON notify.Sender = users.UserID) LEFT JOIN `notifyHistory` ON
-`MessageID` = notifyHistory.ID) WHERE `notify`.`UserID` = '$user' AND
-(`EmailType` <> 'Security' OR `EmailType` IS NULL) ORDER BY `EmailID` DESC LIMIT
-$start, 10;";
+$sql = "SELECT `notifyHistory`.`Subject`, `notifyHistory`.`Message`,
+`notify`.`ForceSend`, `Forename`, `Surname`, `JSONData`, `Date` FROM ((`notifyHistory`
+LEFT JOIN `users` ON notifyHistory.Sender = users.UserID) INNER JOIN `notify` ON
+notify.MessageID = notifyHistory.ID) WHERE notify.UserID = '$user' ORDER BY `EmailID` DESC LIMIT $start, 10;";
 $result = mysqli_query($link, $sql);
 
 $pagetitle = "Message History";
@@ -105,7 +104,7 @@ include BASE_PATH . "views/header.php";
                 </span><?
               }
               foreach ($lists as $s) { ?>
-                <span class="badge badge-pill badge-dark">
+                <span class="badge badge-pill rounded badge-dark">
                   <? echo $s; ?>
                 </span><?
               } ?>

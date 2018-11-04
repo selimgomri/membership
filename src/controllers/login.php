@@ -11,7 +11,8 @@
     $username = $_SESSION['EnteredUsername'];
   }
 
-  $_SESSION['LoginSecurityValue'] = hash('sha256', random_bytes(100));
+  $lsv = hash('sha256', random_bytes(100));
+  $_SESSION['LSV'] = $lsv;
 
   ?>
 <div class="frontpage1 d-flex flex-column" style="margin:-1.0rem 0;min-height:calc(100vh - 10.9375rem);">
@@ -38,7 +39,7 @@
                 </div>
                 <?php } ?>
 
-                <form method="post" action="<?php echo autoUrl(""); ?>" name="loginform" id="loginform">
+                <form method="post" action="<?=autoUrl("")?>" name="loginform" id="loginform">
                   <div class="form-group">
                     <label for="username">Email Address</label>
                     <input type="text" name="username" id="username" class="form-control form-control-lg" value="<?php if ($errorState == true) { echo $username; } ?>" required autofocus placeholder="yourname@example.com">
@@ -57,7 +58,7 @@
                     </div>
                   </div>
                   <input type="hidden" name="target" value="<?php echo app('request')->path; ?>">
-                  <input type="hidden" name="LoginSecurityValue" value="<?=$_SESSION['LoginSecurityValue']?>">
+                  <input type="hidden" name="LoginSecurityValue" value="<?=$lsv?>">
                   <p class="mb-0"><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-block btn-primary"></p>
                 <!--<span class="small text-center d-block"><a href="register.php">Create an account</a></span>
                 <span class="small text-center d-block"><a href="forgot-password.php">Forgot password?</a></span>-->

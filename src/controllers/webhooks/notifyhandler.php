@@ -3,19 +3,23 @@
 ignore_user_abort(true);
 set_time_limit(0);
 
-$sql = "SELECT * FROM `notify` INNER JOIN `users` ON notify.UserID = users.UserID WHERE `Status` = 'Queued' LIMIT 8;";
+$sql = "SELECT `EmailID`, `notify`.`UserID`, `EmailType`, `notify`.`ForceSend`, `Forename`, `Surname`, `EmailAddress`, notify.Subject AS PlainSub, notify.Message AS PlainMess, notifyHistory.Subject AS NotifySub, notifyHistory.Message AS NotifyMess FROM `notify` INNER JOIN `users` ON notify.UserID = users.UserID LEFT JOIN notifyHistory ON notify.MessageID = notifyHistory.ID WHERE `Status` = 'Queued' LIMIT 8;";
 $result = mysqli_query($link, $sql);
+
+// Completed It PDO Object
+$completed = $db->prepare("UPDATE `notify` SET `Status` = ? WHERE `EmailID` = ?");
 
 for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+  pre($row);
 	$emailid = $row['EmailID'];
 	if (isSubscribed($row['UserID'], $row['EmailType']) || $row['ForceSend'] == 1) {
 		//$to = $row['EmailAddress'];
     $to = $row['Forename'] . " " . $row['Surname'] . " <" . $row['EmailAddress'] . ">";
 		$name = $row['Forename'] . " " . $row['Surname'];
 		$emailaddress = $row['EmailAddress'];
-		$subject = $row['Subject'];
-		$message = "<p class=\"small\">Hello " . $row['Forename'] . " " . $row['Surname'] . ",</p>" . $row['Message'];
+		$subject = $row['PlainSub'] . $row['NotifySub'];
+		$message = "<p class=\"small\">Hello " . $row['Forename'] . " " . $row['Surname'] . ",</p>" . $row['PlainMess'] . $row['NotifyMess'];
 
 		$message = str_replace("\r\n", "", $message);
 
@@ -46,7 +50,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 			];
 		} else if ($row['EmailType'] == 'Security') {
 			$from = [
-				"Email" => "support@chesterlestreetasc.co.uk",
+				"Email" => "security-support@chesterlestreetasc.co.uk",
 				"Name" => "Chester-le-Street ASC Security",
 				"Unsub" => [
 					"Allowed" => true,
@@ -100,14 +104,11 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		}
 
 		if (notifySend($to, $subject, $message, $name, $emailaddress, $from)) {
-			$sql = "UPDATE `notify` SET `Status` = 'Sent' WHERE `EmailID` = '$emailid';";
-			mysqli_query($link, $sql);
+      $completed->execute(['Sent', $emailid]);
 		} else {
-      $sql = "UPDATE `notify` SET `Status` = 'Failed' WHERE `EmailID` = '$emailid';";
-  		mysqli_query($link, $sql);
+      $completed->execute(['Failed', $emailid]);
     }
 	} else {
-		$sql = "UPDATE `notify` SET `Status` = 'No_Sub' WHERE `EmailID` = '$emailid';";
-		mysqli_query($link, $sql);
+		$completed->execute(['No_Sub', $emailid]);
 	}
 }

@@ -124,7 +124,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       }
 
       $content .= "long, finishing at " . $datetime2->format("H:i") . "</p>";
-      $sql = "SELECT members.MemberID, members.MForename, members.MSurname,
+      $sql = "SELECT members.UserID, members.MemberID, members.MForename, members.MSurname,
       members.DateOfBirth, members.OtherNotes,
       memberPhotography.Website, memberPhotography.Social,
       memberPhotography.Noticeboard, memberPhotography.FilmTraining,
@@ -159,12 +159,16 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
             $checked = "checked";
           }
         }
+        $no_parent = "";
+        if ($row['UserID'] == null && $age < 18) {
+          $no_parent = "<span class=\"badge badge-primary\">NO PARENT</span>";
+        }
         $content .= "
         <tr>
           <td>
             <div class=\"custom-control custom-checkbox\">
             <input type=\"checkbox\" class=\"custom-control-input\" " . $checked . " name=\"Member-" . $row['MemberID'] . "\" value=\"1\" id=\"Member-" . $row['MemberID'] . "\">
-            <label class=\"custom-control-label\" for=\"Member-" . $row['MemberID'] . "\">" . $row['MForename'] . " " . $row['MSurname'] . "</label>
+            <label class=\"custom-control-label\" for=\"Member-" . $row['MemberID'] . "\">" . $row['MForename'] . " " . $row['MSurname'] . " " . $no_parent . "</label>
             </div>
           </td>
           <td>";
@@ -293,7 +297,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
           </td>
         </tr>";
       }
-      $content .= '</tbody></table></div><p class="mb-0"><button type="submit" class="btn btn-outline-dark">Save Register</button></p>';
+      $content .= '</tbody></table></div><p>Swimmers with <span class="badge badge-primary">NO PARENT</span> next to their name may soon be stopped from swimming if parents do not register for an online account.</p><p class="mb-0"><button type="submit" class="btn btn-outline-dark">Save Register</button></p>';
     }
 
     if ($swimmerCount > 0) {

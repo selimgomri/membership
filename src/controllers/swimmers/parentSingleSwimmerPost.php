@@ -12,7 +12,7 @@ $photoUpdate = false;
 $update = false;
 $successInformation = "";
 
-$query = "SELECT * FROM members WHERE MemberID = '$id' ";
+$query = "SELECT * FROM members WHERE MemberID = '$id'";
 $result = mysqli_query($link, $query);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 

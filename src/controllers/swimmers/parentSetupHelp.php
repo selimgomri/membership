@@ -39,6 +39,19 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 </style>
 <div class="container">
 
+  <? if (isset($_SESSION['EmailStatus']) && $_SESSION['EmailStatus']) { ?>
+    <div class="alert alert-success d-print-none">
+      <p class="mb-0">We've sent an email to that address.</p>
+    </div>
+  <? } else if (isset($_SESSION['EmailStatus']) && !$_SESSION['EmailStatus']) { ?>
+    <div class="alert alert-danger d-print-none">
+      <p class="mb-0">We were unable to send an email to that address.</p>
+    </div>
+  <? }
+  if (isset($_SESSION['EmailStatus'])) {
+    unset($_SESSION['EmailStatus']);
+  } ?>
+
 	<div class="alert alert-info d-print-none">
 		<p class="mb-0">
 			<strong>
@@ -56,11 +69,18 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		<p>
 			This message will not be shown on the print out.
 		</p>
-		<p>
-			<a target="_self" class="btn btn-info" href="javascript:window.print()">
+    <form method="post">
+      <div class="form-group">
+        <label for="emailAddr">Send to email address</label>
+        <input type="email" class="form-control" id="emailAddr" name="emailAddr" aria-describedby="emailAddrHelp" placeholder="Enter email">
+        <small id="emailAddrHelp" class="form-text text-muted">Sends a one-off email.</small>
+      </div>
+      <p>
+        <button type="submit" class="btn btn-info">Send as Email</button>
+        <a target="_self" class="btn btn-info" href="javascript:window.print()">
 				<i class="fa fa-print" aria-hidden="true"></i> Print
-			</a>
-		</p>
+			</a></p>
+    </form>
 		<p class="mb-0">
 			<a href="<? echo autoUrl("swimmers"); ?>" class="btn btn-info">
 				Return to Swimmers
