@@ -35,11 +35,11 @@ include BASE_PATH . "views/header.php";?>
 	btn-primary">Unsubscribe from <span
 	class="mono"><?=htmlspecialchars($list)?></span></a></p>
 	<p>
-		For further help and support with emails from Chester-le-Street ASC, visit
+		For further help and support with emails from <?=CLUB_NAME?>, visit
 		our <a href="<?=autoUrl("notify")?>">Notify Help Centre</a>.
 	</p>
 	<p>
-		Notify by Chester-le-Street ASC
+		Notify by <?=CLUB_NAME?>
 	</p>
 </div>
 

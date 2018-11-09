@@ -145,7 +145,7 @@ if ($_SESSION['AccessLevel'] != "Admin" && $force == 1) {
   $sendToTeam->execute([$_SESSION['UserID'], null, "GDPR Compliance: " . $subject, $gdpr_question, $sender, $force]);
 
   $intro = '
-  <p>We\'re sending you this email because you\'re an administrator at Chester-le-Street ASC.</p>
+  <p>We\'re sending you this email because you\'re an administrator at ' . CLUB_NAME . '.</p>
   <p>' . getUserName($_SESSION['UserID']) . ' has force sent the following email, overriding parent subscription options. We send these updates about emails which have been force sent in order to ensure compliance with GDPR rules.</p>
   <p>Emails should only be force sent when they are of high importance. An example would be to inform parents of a session cancellation.</p>
   <hr>';

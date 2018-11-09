@@ -98,7 +98,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 	</div>
 
 	<div class="mb-3 p-5 bg-primary text-white">
-		<span class="h3 mb-0">Chester-le-Street ASC</span>
+		<span class="h3 mb-0"><?=CLUB_NAME?></span>
 		<h1 class="h2 mb-4">Online Membership System</h1>
 		<p class="mb-0">
 			<strong>
@@ -108,7 +108,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 	</div>
 
   <p>
-    Here at Chester-le-Street ASC, we provide a number of online services to
+    Here at <?=CLUB_NAME?>, we provide a number of online services to
     manage our members. Our services allow you to manage your swimmers, enter
     competitions, stay up to date by email and make payments by Direct Debit
     (from 2019).
@@ -174,7 +174,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 	<p>
 		You'll be directed to a page and asked to enter your swimmer's ASA Number
-		and CLS ASC Access Key as below.
+		and <?=CLUB_SHORT_NAME?> Access Key as below.
 	</p>
 
 	<div class="mb-3">
@@ -185,7 +185,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		      <td class="pr-0"><span class="mono"><? echo $row['ASANumber']; ?></span></td>
 		    </tr>
 		    <tr>
-		      <th scope="row" class="pl-0">CLS ASC Access Key</th>
+		      <th scope="row" class="pl-0"><?=CLUB_SHORT_NAME?> Access Key</th>
 		      <td class="pr-0"><span class="mono"><? echo $row['AccessKey']; ?></span></td>
 		    </tr>
 		  </tbody>
@@ -212,6 +212,11 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 			If you’d like more information about how we use data, contact
 			enquiries@chesterlestreetasc.co.uk.
 		</p>
+
+    <p>
+      The user account service is provided to ' . CLUB_NAME . ' by
+      Chester-le-Street ASC Club Digital Services.
+    </p>
 	</div>
 
   <?
@@ -234,7 +239,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
     </div>
     <div class="<? echo $col; ?>">
       <div class="text-center border border-dark h-100 p-2 bg-white">
-        <span class="mb-2">CLSASC Number</span>
+        <span class="mb-2"><?=CLUB_SHORT_NAME?> Number</span>
         <img class="img-fluid mx-auto d-block"
         src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=CLSX" . $row['MemberID'] . "&print=false"); ?>"
         srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 3x"

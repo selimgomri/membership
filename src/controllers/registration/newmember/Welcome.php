@@ -14,7 +14,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 <div class="container">
   <div class="my-3 p-3 bg-white rounded shadow">
     <h1 class="border-bottom border-gray pb-2 mb-2">
-      Welcome to Chester-le-Street ASC
+      Welcome to <?=CLUB_NAME?>
     </h1>
     <p class="lead">
       We just need to run through the registration process with you for your new

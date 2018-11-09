@@ -83,7 +83,7 @@
 
       if (notifySend($to, $subject, $sContent, $row['Forename'] . " " .
       $row['Surname'], $row['EmailAddress'], ["Email" =>
-      "password-help@chesterlestreetasc.co.uk", "Name" => "Chester-le-Street ASC Account Help"])) {
+      "password-help@chesterlestreetasc.co.uk", "Name" => CLUB_NAME . " Account Help"])) {
         echo '
         <div class="container-fluid">
           <div class="row justify-content-center">

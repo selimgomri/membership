@@ -65,7 +65,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <script src="<? echo autoUrl("/js/tinymce/tinymce.min.js"); ?>"></script>
     <link rel="stylesheet preload"
     href="https://fonts.googleapis.com/css?family=Cabin+Condensed:300,400,400i,600,700|Roboto+Mono|Merriweather:400,600">
-    <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.17.css") ?>">
+    <link rel="stylesheet preload" href="<?php echo autoUrl("css/tyne.2.0.18.css") ?>">
     <link rel="stylesheet"
     href="<?php echo autoUrl("css/font-awesome/css/font-awesome.min.css")?>">
     <link rel="apple-touch-icon" href="<https://www.chesterlestreetasc.co.uk/apple-touch-icon.png">
@@ -174,12 +174,14 @@ Chester-le-Street ASC is a non profit unincorporated association.
       </div>
     </div> -->
 
-    <div class="text-dark py-3 d-none d-lg-flex bg-primary-darker">
+    <div class="py-3 d-none d-lg-flex bg-secondary">
       <div class="<?=$container_class?>">
         <div class="row align-items-center">
           <div class="col">
-            <a class="logowhite" href="<?=autoUrl("")?>" title="Membership Dashboard">
-            <img src="<?=autoUrl("img/logo.jpg")?>" style="max-height:71px;"></a>
+            <a class="" href="<?=autoUrl("")?>" title="Membership Dashboard">
+              <img src="<?=autoUrl("img/logo.jpg")?>" style="max-height:71px;">
+              <span class="ml-3 h3">Tynemouth ASC</span>
+            </a>
           </div>
           <div class="col d-none d-lg-flex">
             <p class="lead mb-0 ml-auto text-right">Club Membership System</p>
@@ -190,14 +192,14 @@ Chester-le-Street ASC is a non profit unincorporated association.
 
     <div class="bg-primary">
       <div class="<?=$container_class?>">
-    <nav class="navbar navbar-expand-lg navbar-light bg-primary
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary
     d-print-none justify-content-between px-0" role="navigation">
 
         <a class="navbar-brand d-lg-none" href="<?php echo autoUrl("") ?>">
           <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-            <img src="<? echo autoUrl("img/chesterIcon.svg"); ?>" width="20" height="20"> My Membership
+            My Membership
           <?php } else { ?>
-            <img src="<? echo autoUrl("img/chesterIcon.svg"); ?>" width="20" height="20"> Club Membership
+            Club Membership
           <?php } ?>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"

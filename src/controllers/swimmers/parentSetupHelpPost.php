@@ -17,7 +17,7 @@ if (v::email()->validate($_POST['emailAddr'])) {
   $pagetitle = $row['MForename'] . " " . $row['MSurname'];
   $text = '<h1>Online Membership System</h1><p class="mb-0"><strong>Your Access Key for ' . $row['MForename'] . " " . $row['MSurname'] . '</strong></p>';
   $text .= '<p>
-    Here at Chester-le-Street ASC, we provide a number of online services to
+    Here at ' . CLUB_NAME . ', we provide a number of online services to
     manage our members. Our services allow you to manage your swimmers, enter
     competitions, stay up to date by email and make payments by Direct Debit
     (from 2019).
@@ -85,10 +85,15 @@ if (v::email()->validate($_POST['emailAddr'])) {
       If you’d like more information about how we use data, contact
       enquiries@chesterlestreetasc.co.uk.
     </p>
+
+    <p>
+      The user account service is provided to ' . CLUB_NAME . ' by
+      Chester-le-Street ASC Club Digital Services.
+    </p>
   </div>
   ';
 
-  if (notifySend(null, "Access Key for " . $row['MForename'] . " " . $row['MSurname'], $text, "Parent of " . $row['MForename'] . " " . $row['MSurname'], $_POST['emailAddr'], $from = ["Email" => "membership@account.service.chesterlestreetasc.co.uk", "Name" => "Chester-le-Street ASC"])) {
+  if (notifySend(null, "Access Key for " . $row['MForename'] . " " . $row['MSurname'], $text, "Parent of " . $row['MForename'] . " " . $row['MSurname'], $_POST['emailAddr'], $from = ["Email" => "membership@account.service.chesterlestreetasc.co.uk", "Name" => CLUB_NAME])) {
     $_SESSION['EmailStatus'] = true;
   } else {
     $_SESSION['EmailStatus'] = false;

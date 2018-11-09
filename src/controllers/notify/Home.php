@@ -62,6 +62,9 @@ include BASE_PATH . "views/notifyMenu.php";
     Other use cases are allowed but must be justifiable in terms of our
     operational needs.
   </p>
+  <p class="small">
+    Provided by Chester-le-Street ASC Club Digital Services.
+  </p>
 </div>
 
 <?php include BASE_PATH . "views/footer.php";

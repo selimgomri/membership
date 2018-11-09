@@ -46,7 +46,7 @@ if (!$errorState) {
 			//$message .= '<p>As you pay by Direct Debit, you won\'t need to take any action. We\'ll automatically update your monthly fees.</p>';
 			$message .= '<p>You can get the <a href="' . $email_info['SquadTimetable'] . '" target="_blank">timetable for ' . $squad . ' Squad on our website</a>.</p>';
 			$message .= '<hr><p>If you do not think ' . $swimmer . ' will be able to take up their place in ' . $squad . ' Squad, please reply to this email as soon as possible. We must however warn you that we may not be able keep ' . $swimmer . ' in their current squad if it would prevent us from moving up swimmers in our lower squads.</p>';
-			$message .= '<p>Kind Regards,<br>The Chester-le-Street ASC Team</p>';
+			$message .= '<p>Kind Regards,<br>The ' . CLUB_NAME . ' Team</p>';
 
 			try {
 				$notify_query->execute([

@@ -25,7 +25,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 
 		$from = [
 			"Email" => "notify@chesterlestreetasc.co.uk",
-			"Name" => "Chester-le-Street ASC",
+			"Name" => CLUB_NAME,
 			"Unsub" => [
 				"Allowed" => true,
 				"User" => $row['UserID'],
@@ -36,7 +36,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
     if ($row['EmailType'] == 'Payments') {
 			$from = [
 				"Email" => "payments@chesterlestreetasc.co.uk",
-				"Name" => "CLS ASC Payments",
+				"Name" => CLUB_SHORT_NAME . " Payments",
 				"Unsub" => [
 					"Allowed" => true,
 					"User" => $row['UserID'],
@@ -46,12 +46,12 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		} else if ($row['EmailType'] == 'Galas') {
 			$from = [
 				"Email" => "galas@chesterlestreetasc.co.uk",
-				"Name" => "Chester-le-Street ASC Galas"
+				"Name" => CLUB_NAME . " Galas"
 			];
 		} else if ($row['EmailType'] == 'Security') {
 			$from = [
 				"Email" => "security-support@chesterlestreetasc.co.uk",
-				"Name" => "Chester-le-Street ASC Security",
+				"Name" => CLUB_NAME . " Security",
 				"Unsub" => [
 					"Allowed" => true,
 					"User" => $row['UserID'],
@@ -61,7 +61,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		} else if ($row['EmailType'] == 'NewMember') {
 			$from = [
 				"Email" => "membership-updates@chesterlestreetasc.co.uk",
-				"Name" => "Chester-le-Street ASC",
+				"Name" => CLUB_NAME,
 				"Unsub" => [
 					"Allowed" => true,
 					"User" => $row['UserID'],
@@ -71,7 +71,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		} else if ($row['EmailType'] == 'APIAlert') {
 			$from = [
 				"Email" => "alerts@api.account.chesterlestreetasc.co.uk",
-				"Name" => "CLS ASC API Alerts",
+				"Name" => CLUB_SHORT_NAME . " API Alerts",
 				"Unsub" => [
 					"Allowed" => true,
 					"User" => $row['UserID'],
@@ -81,14 +81,14 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		} else if ($row['EmailType'] == 'StaffBulletin') {
 			$from = [
 				"Email" => "team@staff.service.chesterlestreetasc.co.uk",
-				"Name" => "CLS ASC Staff"
+				"Name" => CLUB_SHORT_NAME . " Staff"
 			];
 		}
 
 		if ($row['ForceSend'] == 1) {
 			$from = [
 				"Email" => "noreply@chesterlestreetasc.co.uk",
-				"Name" => "Chester-le-Street ASC"
+				"Name" => CLUB_NAME
 			];
 
       if ($from['Unsub']['Allowed']) {
@@ -99,9 +99,14 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		if ($row['EmailType'] == 'SquadMove') {
 			$from = [
 				"Email" => "squad-moves@swimmers.service.chesterlestreetasc.co.uk",
-				"Name" => "Chester-le-Street ASC"
+				"Name" => CLUB_NAME
 			];
-		}
+		} else if ($row['EmailType'] == 'Notify-Audit') {
+      $from = [
+				"Email" => "gdpr@club-digital.service.chesterlestreetasc.co.uk",
+				"Name" => "CLS ASC Club Digital Services"
+			];
+    }
 
 		if (notifySend($to, $subject, $message, $name, $emailaddress, $from)) {
       $completed->execute(['Sent', $emailid]);

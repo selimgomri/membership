@@ -131,7 +131,11 @@ $_SESSION['RegistrationMode'] = $mode;
           <label for="email">Email Address</label>
           <input class="form-control mb-0" type="email" name="email" id="email" placeholder="yourname@example.com" required value="<? echo $_SESSION['RegistrationEmail']; ?>">
           <small id="emailHelp" class="form-text text-muted">
-            Your email address will only be used inside Chester-le-Street ASC. Emails sent by Chester-le-Street ASC are delivered by Google Cloud and SendGrid. Both companies are EU-US Privacy Shield certified.
+            Your email address will only be used inside <?=CLUB_NAME?> and
+            Chester-le-Street ASC Club Digital Services. Emails sent by
+            Chester-le-Street ASC Club Digital Services are delivered by Google
+            Cloud and SendGrid. Both companies are EU-US Privacy Shield
+            certified.
           </small>
         </div>
         <div class="form-group">
@@ -184,8 +188,7 @@ $_SESSION['RegistrationMode'] = $mode;
           name="smsAuthorise" id="smsAuthorise" value="1" <? echo $sms; ?>
           checked>
           <label class="custom-control-label" for="smsAuthorise">
-            I wish to recieve text message notifications (We're currently
-            reviewing how we offer this service)
+            I wish to recieve text message notifications
           </label>
         </div>
 
@@ -197,25 +200,26 @@ $_SESSION['RegistrationMode'] = $mode;
         <div class="alert alert-info">
           <p class="mb-0"><strong>Legal Stuff Applies</strong></p>
           <p>
-            In accordance with European Law, Chester-le-Street ASC, Swim England
-            and British Swimming are Data Controllers for the purposes of the
-            General Data Protection Regulation.
+            In accordance with European Law, <?=CLUB_NAME?>, Chester-le-Street
+            ASC Club Digital Services, Swim England and British Swimming are
+            Data Controllers for the purposes of the General Data Protection
+            Regulation.
           </p>
           <p>
             By proceeding you agree to our <a class="alert-link"
             href="https://www.chesterlestreetasc.co.uk/policies/privacy/"
             target="_blank">Privacy Policy</a> and the use of your data by
-            Chester-le-Street ASC. Please note that you have also agreed to our
-            use of you and your swimmer's data as part of your registration with
-            the club and with British Swimming and Swim England (Formerly known
-            as the ASA).
+            <?=CLUB_NAME?> and Chester-le-Street ASC Club Digital Services.
+            Please note that you have also agreed to our use of you and your
+            swimmer's data as part of your registration with the club and with
+            British Swimming and Swim England (Formerly known as the ASA).
           </p>
           <p>
             We will be unable to provide this service for technical reasons if
             you do not consent to the use of this data.
           </p>
           <p class="mb-0">
-            Contact a member of the committee if you have any questions or email
+            Contact a member of your committee if you have any questions or email
             <a class="alert-link"
             href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>.
           </p>

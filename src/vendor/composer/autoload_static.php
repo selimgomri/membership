@@ -22,6 +22,10 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         array (
             'Zxing\\' => 6,
         ),
+        'W' => 
+        array (
+            'WhichBrowser\\' => 13,
+        ),
         'S' => 
         array (
             'System\\' => 7,
@@ -45,6 +49,7 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'P' => 
         array (
             'Psr\\Http\\Message\\' => 17,
+            'Psr\\Cache\\' => 10,
         ),
         'M' => 
         array (
@@ -88,6 +93,11 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'Zxing\\' => 
         array (
             0 => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib',
+        ),
+        'WhichBrowser\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/whichbrowser/parser/src',
+            1 => __DIR__ . '/..' . '/whichbrowser/parser/tests/src',
         ),
         'System\\' => 
         array (
@@ -149,6 +159,10 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'Psr\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
         'MyCLabs\\Enum\\' => 
         array (

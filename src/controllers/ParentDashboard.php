@@ -42,7 +42,7 @@ include BASE_PATH . "views/header.php";
 	  <div class="alert alert-danger">
 	    <p class="mb-0">
 	      <strong>
-	        You're missing out on email updates from Chester-le-Street ASC
+	        You're missing out on email updates from <?=CLUB_NAME?>
 	      </strong>
 	    </p>
 	    <p class="mb-0">

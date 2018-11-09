@@ -2,17 +2,17 @@
 
 define("PAYMENT_EMAILS", [
   "Email" => "payments@chesterlestreetasc.co.uk",
-  "Name" => "CLS ASC Payments"
+  "Name" => CLUB_SHORT_NAME . " Payments"
 ]);
 
-$token = "testsecret";
+//$token = "testsecret";
 
 $raw_payload = file_get_contents('php://input');
 
 $headers = getallheaders();
 $provided_signature = $headers["Webhook-Signature"];
 
-$calculated_signature = hash_hmac("sha256", $raw_payload, $token);
+$calculated_signature = hash_hmac("sha256", $raw_payload, GOCARDLESS_WEBHOOK_KEY);
 
 if ($provided_signature == $calculated_signature) {
     $payload = json_decode($raw_payload, true);
@@ -109,8 +109,8 @@ function process_mandate_event($event) {
 
 			if ($rows == 0) {
         $message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
-				<p>Your Direct Debit Mandate for Chester-le-Street ASC has been Cancelled. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("") . "</p>
-				<p>Thank you, <br>Chester-le-Street ASC";
+				<p>Your Direct Debit Mandate for " . CLUB_NAME . " has been Cancelled. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("") . "</p>
+				<p>Thank you, <br>" . CLUB_NAME . "";
 				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has been
 				Cancelled", $message, $user['Forename'] . " " .
 				$user['Surname'],$user['EmailAddress'], PAYMENT_EMAILS);
@@ -120,9 +120,9 @@ function process_mandate_event($event) {
   			$sql = "INSERT INTO `paymentPreferredMandate` (`UserID`, `MandateID`) VALUES ('$userID', '$mandateID');";
         mysqli_query($link, $sql);
         $message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
-				<p>Your Direct Debit Mandate for Chester-le-Street ASC has been cancelled. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
+				<p>Your Direct Debit Mandate for " . CLUB_NAME . " has been cancelled. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
 				<p>Go to " . autoUrl("") . " to make any changes.</p>
-				<p>Thank you, <br>Chester-le-Street ASC";
+				<p>Thank you, <br>" . CLUB_NAME . "";
 				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has been
 				Cancelled", $message, $user['Forename'] . " " . $user['Surname'],
 				$user['EmailAddress'], PAYMENT_EMAILS);
@@ -169,8 +169,8 @@ function process_mandate_event($event) {
 
 			if ($rows == 0) {
 				$message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
-				<p>Your Direct Debit Mandate for Chester-le-Street ASC has expired. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("payments") . "</p>
-				<p>Thank you, <br>Chester-le-Street ASC";
+				<p>Your Direct Debit Mandate for " . CLUB_NAME . " has expired. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("payments") . "</p>
+				<p>Thank you, <br>" . CLUB_NAME . "";
 				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has
 				Expired", $message, $user['Forename'] . " " . $user['Surname'],
 				$user['EmailAddress'],PAYMENT_EMAILS);
@@ -180,9 +180,9 @@ function process_mandate_event($event) {
   			$sql = "INSERT INTO `paymentPreferredMandate` (`UserID`, `MandateID`) VALUES ('$userID', '$mandateID');";
         mysqli_query($link, $sql);
 				$message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
-				<p>Your Direct Debit Mandate for Chester-le-Street ASC has expired. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
+				<p>Your Direct Debit Mandate for " . CLUB_NAME . " has expired. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
 				<p>Go to " . autoUrl("payments") . " to make any changes.</p>
-				<p>Thank you, <br>Chester-le-Street ASC";
+				<p>Thank you, <br>" . CLUB_NAME . "";
 				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has
 				Expired", $message, $user['Forename'] . " " . $user['Surname'],
 				$user['EmailAddress'], PAYMENT_EMAILS);

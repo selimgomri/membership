@@ -5,8 +5,7 @@ $access = $_SESSION['AccessLevel']; ?>
   <div class="<?=$container_class?>">
     <nav class="nav nav-underline">
       <strong>
-        Payments are in BETA. No payments will be sent and no money will
-        change hands.
+        Payments will soon go live
       </strong>
     </nav>
   </div>

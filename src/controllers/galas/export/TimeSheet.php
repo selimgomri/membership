@@ -59,7 +59,7 @@ if ($noTimeSheet) {
   // create a file pointer connected to the output stream
   $output = fopen('php://output', 'w');
 
-  fputcsv($output, array('Chester-le-Street ASC Gala Time Sheet'));
+  fputcsv($output, array(CLUB_NAME . ' Gala Time Sheet'));
   fputcsv($output, array($info['GalaName'] . " - " . $info['GalaVenue'] . " - " .
   date("d/m/Y", strtotime($info['GalaDate']))));
   fputcsv($output, array('Time Sheet Report Generated on ' . date("d/m/Y, H:i")));

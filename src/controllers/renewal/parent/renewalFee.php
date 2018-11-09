@@ -93,7 +93,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		}; ?>
 		<p>
 			You will pay these fees as part of your <?= $nf ?> Direct Debit payment to
-			Chester-le-Street ASC.
+			<?=CLUB_NAME?>.
 		</p>
 
 		<h2>Your Membership Fees</h2>
@@ -209,7 +209,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		<? if (!userHasMandates($_SESSION['UserID'])) { ?>
 			<p>
 				We now need you to set up your Direct Debit agreement with
-				Chester-le-Street ASC. We will redirect you to our payments system where
+				<?=CLUB_NAME?>. We will redirect you to our payments system where
 				you will setup a Direct Debit.
 			</p>
 		<? } else { ?>

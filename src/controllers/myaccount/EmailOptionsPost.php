@@ -71,7 +71,7 @@ if ($_POST['EmailAddress'] != $row['EmailAddress']) {
 	  <p>For help, send an email to <a
 	  href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>/</p>
 	  ';
-	  notifySend($to, $subject, $sContent, $name, $_POST['EmailAddress'], ["Email" => "support@chesterlestreetasc.co.uk", "Name" => "Chester-le-Street ASC Security"]);
+	  notifySend($to, $subject, $sContent, $name, $_POST['EmailAddress'], ["Email" => "support@chesterlestreetasc.co.uk", "Name" => CLUB_NAME . " Security"]);
 		$_SESSION['EmailUpdate'] = true;
 		$_SESSION['EmailUpdateNew'] = $_POST['EmailAddress'];
 	} else {

@@ -74,7 +74,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 					I understand that, in compliance with the General Data Protection
 					Regulation, all efforts will be made to ensure that information is accurate,
 					kept up to date and secure, and that it is used only in connection with the
-					purposes of Chester-le-Street ASC. Information will be disclosed only to
+					purposes of <?=CLUB_NAME?>. Information will be disclosed only to
 					those members of the club for whom it is appropriate, and relevant officers
 					of the Amateur Swimming Association (Swim England) or British Swimming.
 					Information will not be kept once a person has left the club.
@@ -101,7 +101,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				<p>
 					The Member, and the Parent or Guardian (in the case of a person under the
 					age of 18 years), hereby acknowledges that they have read the Club Rules and
-					the Policies and Procedures Documentation of Chester-le-Street ASC, copies
+					the Policies and Procedures Documentation of <?=CLUB_NAME?>, copies
 					of which can be obtained from <a
 					href="https://www.chesterlestreetasc.co.uk/policies" target="_blank">our
 					website</a>. I confirm my understanding and acceptance that such rules (as
@@ -142,7 +142,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 							<label class="custom-control-label" for="<? echo $id[$i];
 							?>-tc-confirm">
 								I, <? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>
-								agree to the Terms and Conditions of Chester-le-Street ASC as outlined
+								agree to the Terms and Conditions of <?=CLUB_NAME?> as outlined
 								above
 							</label>
 						</div>
@@ -154,7 +154,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 					<p>
 						In the case of a member under the age of twelve years the Parent or
 						Guardian undertakes to explain the content and implications of the Terms
-						and Conditions of Membership of Chester-le-Street ASC.
+						and Conditions of Membership of <?=CLUB_NAME?>.
 					</p>
 
 					<div class="form-group mb-0">
@@ -189,14 +189,14 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 				<h2>Photography Consent</h2>
 				<p>
-					Please read the ASA/Chester-le-Street ASC Photography Policy before you
+					Please read the ASA/<?=CLUB_NAME?> Photography Policy before you
 					continue to give or withold consent for photography.
 				</p>
 
 				<p>
-					Chester-le-Street ASC may wish to take photographs of individuals and groups
+					<?=CLUB_NAME?> may wish to take photographs of individuals and groups
 					of swimmers under the age of 18, which may include your child during their
-					membership of Chester-le-Street ASC. Photographs will only be taken and
+					membership of <?=CLUB_NAME?>. Photographs will only be taken and
 					published in accordance with the ASA policy which requires the club to
 					obtain the consent of the Parent or Guardian to take and use photographs
 					under the following circumstances.

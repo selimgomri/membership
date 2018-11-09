@@ -32,7 +32,7 @@ if ($email_info) {
 
 	$subject = "Squad Move For " . $swimmer . " Cancelled";
 	$message = '<p>The squad move for ' . $swimmer . ' to ' . $squad . ' Squad has been cancelled.</p>';
-	$message .= '<p>Kind Regards,<br>The Chester-le-Street ASC Team</p>';
+	$message .= '<p>Kind Regards,<br>The ' . CLUB_NAME . ' Team</p>';
 
 	try {
 		$notify_query->execute([

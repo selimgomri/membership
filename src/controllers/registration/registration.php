@@ -141,7 +141,7 @@ if ($status) {
   $to = $email;
   $sContent = '
   <p class="small">Hello ' . $forename . '</p>
-  <p>Thanks for signing up for your Chester-le-Street ASC Account.</p>
+  <p>Thanks for signing up for your ' . CLUB_NAME . ' Account.</p>
   <p>We need you to verify your email address by following this link - <a
   href="' . autoUrl($verifyLink) . '" target="_blank">' .
   autoUrl($verifyLink) . '</a></p>
@@ -162,7 +162,7 @@ if ($status) {
     "description": "Login to your accounts",
     "publisher": {
       "@type": "Organization",
-      "name": "Chester-le-Street ASC",
+      "name": "' . CLUB_NAME . '",
       "url": "https://www.chesterlestreetasc.co.uk",
       "url/googlePlus": "https://plus.google.com/110024389189196283575"
     }
@@ -171,7 +171,7 @@ if ($status) {
   </script>
   ';
 
-  notifySend($to, $subject, $sContent, $forename . " " . $surname, $email, ["Email" => "registration@chesterlestreetasc.co.uk", "Name" => "Chester-le-Street ASC"]);
+  notifySend($to, $subject, $sContent, $forename . " " . $surname, $email, ["Email" => "registration@chesterlestreetasc.co.uk", "Name" => CLUB_NAME]);
 
   $_SESSION['RegistrationGoVerify'] = '
   <div class="alert alert-success mb-0">

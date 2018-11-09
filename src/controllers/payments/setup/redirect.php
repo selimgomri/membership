@@ -50,8 +50,11 @@ if ($scheduleExists == 0) {
 
 		<div class="container">
 			<h1>You've successfully set up your new direct debit.</h1>
-			<p class="lead">GoCardless Ltd will appear on your bank statement when payments are taken against this Direct Debit.</p>
-			<p>GoCardless Ltd handles direct debit payments for Chester-le-Street ASC. You will see <span class="mono">CHESTERLESTRE</span> as the start of the reference for each payment.</p>
+			<p class="lead">GoCardless Ltd will appear on your bank statement when
+			payments are taken against this Direct Debit.</p>
+			<p>GoCardless Ltd handles direct debit payments for <?=CLUB_NAME?>. You
+			will see <span class="mono">CLSASC_SWIM</span> at the start of the
+			reference for each payment.</p>
 			<? if ($renewal_trap) { ?>
 				<a href="<? echo autoUrl("renewal/go"); ?>" class="mb-3 btn btn-success">Continue Renewal</a>
 			<? } else { ?>

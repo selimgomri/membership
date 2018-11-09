@@ -2,14 +2,28 @@
 
   $errorMessage = "";
   $errorState = false;
+  $target = "";
+
+  $security_status = false;
+
+  if ($_POST['SessionSecurity'] == session_id()) {
+    $security_status = true;
+  } else {
+    $security_status = false;
+  }
+  if ($_POST['LoginSecurityValue'] == $_SESSION['LoginSec']) {
+    $security_status = true;
+  } else if ($_SERVER['HTTP_HOST'] == 'account.chesterlestreetasc.co.uk') {
+    $security_status = false;
+  }
 
   use GeoIp2\Database\Reader;
 
-  if ((!empty($_POST['username']) && !empty($_POST['password'])) && ($_POST['LoginSecurityValue'] == $_SESSION['LSV'])) {
+  if ((!empty($_POST['username']) && !empty($_POST['password'])) && ($security_status)) {
     // Let the user login
     $username = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['username'])));
     $password = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password'])));
-    $target = mysqli_real_escape_string($link, trim($_POST['target']));
+    $target = ltrim(mysqli_real_escape_string($link, trim($_POST['target'])), '/');
 
     $username = preg_replace('/\s+/', '', $username);
 
@@ -66,7 +80,9 @@
 
         $mobile = 0;
 
-        if (app('request')->isMobile()) {
+        $browser_details = new WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);
+
+        if ($browser_details->isType('mobile')) {
           $mobile = 1;
         }
 
@@ -79,8 +95,8 @@
           $_SESSION['UserID'],
           app('request')->ip(),
           $geo_string,
-          ucwords(app('request')->browser()),
-          ucwords(app('request')->platform()),
+          $browser_details->browser->toString(),
+          $browser_details->os->toString(),
           $mobile,
           $hash,
           $remember_me
@@ -100,7 +116,7 @@
           'TopUAL'  => $row['AccessLevel']
         ]);
 
-        //unset($_SESSION['LoginSecurityValue']);
+        unset($_SESSION['LoginSec']);
 
         setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, time()+60*60*24*120 , "/", 'chesterlestreetasc.co.uk', true, false);
         setcookie(COOKIE_PREFIX . "AutoLogin", $hash, time()+60*60*24*120, "/", 'chesterlestreetasc.co.uk', true, true);
@@ -120,7 +136,7 @@
         if ($login_before_count == 1) {
 
           $subject = "New Account Login";
-          $message = '<p>Somebody just logged into your Chester-le-Street ASC Account from ' . ucwords(app('request')->browser()) . ', using a device we believe was located in ' . $geo_string . '*.</p><p>We haven\'t seen a login from this location and device before.</p><p>If this was you then you can ignore this email. If this was not you, please <a href="' . autoUrl("") . '">log in to your account</a> and <a href="' . autoUrl("myaccount/password") . '">change your password</a> as soon as possible.</p><p>Kind Regards, <br>The Chester-le-Street ASC Team</p><p class="text-muted small">* We\'ve estimated your location from your public IP Address. The location given may not be where you live.</p>';
+          $message = '<p>Somebody just logged into your <?=CLUB_NAME?> Account from ' . $browser_details->browser->toString() . ', using a device running ' . $browser_details->os->toString() . ' we believe was located in ' . $geo_string . '*.</p><p>We haven\'t seen a login from this location and device before.</p><p>If this was you then you can ignore this email. If this was not you, please <a href="' . autoUrl("") . '">log in to your account</a> and <a href="' . autoUrl("myaccount/password") . '">change your password</a> as soon as possible.</p><p>Kind Regards, <br>The ' . CLUB_NAME . ' Team</p><p class="text-muted small">* We\'ve estimated your location from your public IP Address. The location given may not be where you live.</p>';
           $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
           `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'Security')";
           try {
@@ -130,32 +146,27 @@
           }
 
         }
-
-        if (isset($target)) {
-          $target = ltrim($target, '/');
-          header("Location: " . autoUrl($target) . "");
-        }
-        else {
-          header("Location: " . autoUrl('') . "");
-        }
         //}
       }
       else {
         $_SESSION['ErrorState'] = true;
         $_SESSION['EnteredUsername'] = $username;
-        header("Location: " . autoUrl('') . "");
+
       }
     }
     else {
       $_SESSION['ErrorState'] = true;
       $_SESSION['EnteredUsername'] = $username;
-      header("Location: " . autoUrl('') . "");
+
+    }
+  } else {
+    if (!$security_status) {
+      $_SESSION['ErrorState'] = true;
+      $_SESSION['ErrorStateLSVMessage'] = "We were unable to verify the integrity of your login attempt. The site you entered your username and password on may have been attempting to capture your login details. Try reseting your password urgently.";
+      $_SESSION['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['LoginSec']];
     }
   }
-
-  if ($_POST['LoginSecurityValue'] != $_SESSION['LSV']) {
-    $_SESSION['ErrorState'] = true;
-    $_SESSION['ErrorStateLSVMessage'] = "A Login Security Value was not available. We have prevented your login for security reasons. The site you entered your username and password on may have been attempting to capture your login details. Try reseting your password urgently.";
-  }
-  header("Location: " . autoUrl('') . "");
+  $_SESSION['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['LoginSec']];
+  unset($_SESSION['LoginSec']);
+  header("Location: " . autoUrl(''));
   ?>

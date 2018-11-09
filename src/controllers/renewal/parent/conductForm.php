@@ -55,7 +55,7 @@ if (isset($id)) {
 
 						<hr>
 
-						<h2 class="h1">Chester-le-Street ASC Squad Code of Conduct</h2>
+						<h2 class="h1"><?=CLUB_NAME?> Squad Code of Conduct</h2>
 						<? if ($linkExists) { ?>
 						<div id="code_of_conduct">
 							<?= getPostContent($link) ?>

@@ -75,7 +75,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 	</div>
 
 	<div class="mb-3 p-5 bg-primary text-white">
-		<span class="h3 mb-0">Chester-le-Street ASC</span>
+		<span class="h3 mb-0"><?=CLUB_NAME?></span>
 		<h1 class="h2 mb-4">Online Membership System</h1>
 		<p class="mb-0">
 			<strong>
@@ -85,14 +85,14 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 	</div>
 
   <p>
-    Here at Chester-le-Street ASC, we provide a number of online services to
+    Here at <?=CLUB_NAME?>, we provide a number of online services to
     manage our members. Our services allow you to manage your swimmers, enter
     competitions, stay up to date by email and make payments by Direct Debit
     (from 2019).
   </p>
 
 	<p>
-		Follow the instructions below to sign up for your Chester-le-Street ASC
+		Follow the instructions below to sign up for your <?=CLUB_NAME?>
 		Account.
 	</p>
 
@@ -177,7 +177,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		</p>
 
 		<p>
-			Chester-le-Street ASC cannot be responsible for errors in data entered by
+			<?=CLUB_NAME?> cannot be responsible for errors in data entered by
 			parents.
 		</p>
 
@@ -185,6 +185,11 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 			If you’d like more information about how we use data, contact
 			enquiries@chesterlestreetasc.co.uk.
 		</p>
+
+    <p>
+      The user account service is provided to <?=CLUB_NAME?> by
+      Chester-le-Street ASC Club Digital Services.
+    </p>
 	</div>
 
 </div>

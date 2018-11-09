@@ -11,8 +11,8 @@
     $username = $_SESSION['EnteredUsername'];
   }
 
-  $lsv = hash('sha256', random_bytes(100));
-  $_SESSION['LSV'] = $lsv;
+  $lsv = rand(0, 50); //hash('sha256', random_bytes(100));
+  $_SESSION['LoginSec'] = $lsv;
 
   ?>
 <div class="frontpage1 d-flex flex-column" style="margin:-1.0rem 0;min-height:calc(100vh - 10.9375rem);">
@@ -59,6 +59,7 @@
                   </div>
                   <input type="hidden" name="target" value="<?php echo app('request')->path; ?>">
                   <input type="hidden" name="LoginSecurityValue" value="<?=$lsv?>">
+                  <input type="hidden" name="SessionSecurity" value="<?=session_id()?>">
                   <p class="mb-0"><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-block btn-primary"></p>
                 <!--<span class="small text-center d-block"><a href="register.php">Create an account</a></span>
                 <span class="small text-center d-block"><a href="forgot-password.php">Forgot password?</a></span>-->
@@ -68,7 +69,7 @@
 
         </div>
         <div class="col-md-5 ml-auto">
-          <div class="p-3 my-2 bg-white shadow rounded">
+          <div class="p-3 my-2 mb-4 bg-white shadow rounded">
             <p>
               Not yet registered for an account? It's really easy to get started.
             </p>
@@ -79,7 +80,12 @@
             <a class="btn btn-dark mb-3" href="<?php echo autoUrl("resetpassword") ?>">Forgot password?</a>
             <p class="small mb-0">Support Helpline: <a class="" href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a></p>
             <p class="small">Support Website: <a class="" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership">CLS ASC Help and Support</a></p>
-            <p class="small mb-0">Unauthorised access to or misuse of this system is prohibited and constitutes an offence under the Computer Misuse Act 1990. If you disclose any information obtained through this system without authority then Chester-le-Street ASC may take legal action against you.</p>
+            <p class="small mb-0">Unauthorised access to or misuse of this
+            system is prohibited and constitutes an offence under the Computer
+            Misuse Act 1990. If you disclose any information obtained through
+            this system without authority then <?=CLUB_NAME?> or
+            Chester-le-Street ASC Club Digital Services may take legal action
+            against you.</p>
           </div>
         </div>
       </div>
@@ -88,7 +94,9 @@
   <div class="mt-auto"></div>
 </div>
 <?php
-
+  $detes = [$lsv, $_SESSION['LoginSec']];
+  //pre($detes);
+  //pre($_SESSION['InfoSec']);
   if ( isset($_SESSION['ErrorState']) ) {
     unset($_SESSION['ErrorState']);
   }

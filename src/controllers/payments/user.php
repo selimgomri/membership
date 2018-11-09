@@ -31,7 +31,7 @@ require 'GoCardlessSetup.php';
         </h2>
         <? if (userHasMandates($user)) { ?>
           <p>We currently collect payments from <? echo bankDetails($user, "bank_name"); ?>, Account Ending ******<? echo bankDetails($user, "account_number_end"); ?></p>
-          <p>Chester-le-Street ASC does not store your bank details. They are stored by a trusted third party provider.</p>
+          <p><?=CLUB_NAME?> does not store your bank details. They are stored by a trusted third party provider.</p>
         <? } ?>
         <p class="mb-0">
         	<a href="<? echo autoUrl("payments/setup"); ?>" class="btn btn-dark btn-block">Add Bank Account</a>
