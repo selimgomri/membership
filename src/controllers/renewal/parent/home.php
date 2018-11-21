@@ -4,7 +4,9 @@ $sql = "SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE() AND CURDATE() <=
 $result = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
-$pagetitle = "Membership Renewal";
+$year = date("Y", strtotime('+1 year'));
+
+$pagetitle = $year . " Membership Renewal";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/renewalTitleBar.php";
 ?>
@@ -31,7 +33,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			Started</a>
 		</p>
 	<? } else { ?>
-		<h1>Membership Renewal for <? echo $row['Year']; ?></h1>
+		<h1>Membership Renewal for <?=$year?></h1>
 		<p class="lead">Welcome to the Membership Renewal System</p>
 		<p>Membership renewal ensures all our information about you is up to date,
 			that you and your swimmers understand your rights and responsibilities at
@@ -39,8 +41,8 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			membership fee</abbr> for the year ahead.
 		</p>
 		<div class="alert alert-danger">
-			<strong>The membership renewal period has not yet started</strong> <br>
-			We'll let you know when this starts
+			<strong>The membership renewal period for <?=$year?> has not yet
+			started</strong> <br> We'll let you know when this starts
 		</div>
 	<? } ?>
 </div>

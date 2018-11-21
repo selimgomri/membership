@@ -285,8 +285,11 @@ if (isset($id)) {
 		</div>
 	</div>
 
-	<?php include BASE_PATH . "views/footer.php"; } else { $pagetitle = "Code of
-	Conduct Acceptance"; include BASE_PATH . "views/header.php"; ?>
+	<?php include BASE_PATH . "views/footer.php"; } else {
+    $pagetitle = "Code of	Conduct Acceptance";
+    include BASE_PATH . "views/header.php";
+    include BASE_PATH . "views/renewalTitleBar.php";
+  ?>
 
 <div class="container">
 	<div class="row">

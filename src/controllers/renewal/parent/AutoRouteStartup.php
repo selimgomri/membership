@@ -64,7 +64,7 @@ function isPartialRegistration() {
 	} catch (PDOException $e) {
 		halt(500);
 	}
-	$total_swimmers = $query->fetchColumn();
+	$total_swimmers = (int) $query->fetchColumn();
 	$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = ? ORDER
 	BY `MemberID` ASC";
 	try {
@@ -73,7 +73,7 @@ function isPartialRegistration() {
 	} catch (PDOException $e) {
 		halt(500);
 	}
-	$new_swimmers = $query->fetchColumn();
+	$new_swimmers = (int) $query->fetchColumn();
 	if ($total_swimmers != $new_swimmers) {
 		return true;
 	}

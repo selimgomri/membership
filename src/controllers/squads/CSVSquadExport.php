@@ -56,10 +56,27 @@ header('Content-Disposition: attachment; filename=MonthlyFeesExport' . $year . '
 
 // create a file pointer connected to the output stream
 $output = fopen('php://output', 'w');
-
+echo "\xef\xbb\xbf";
 // output the column headings
 fputcsv($output, array($title));
 fputcsv($output, array('Parent', 'Swimmer', $info, 'Amount', 'FamilyTotal', 'Paid'));
+
+$paid = [
+  'confirmed',
+  'paid_out'
+];
+$not_paid = [
+  'cancelled',
+  'customer_approval_denied',
+  'failed',
+  'charged_back'
+];
+$unconfirmed = [
+  'pending_api_request',
+  'pending_customer_approval',
+  'pending_submission',
+  'submitted'
+];
 
 for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	$name = null;
@@ -80,7 +97,18 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 
 	$amount = '£' . number_format(($row['Amount']/100),2,'.','');
 
-	fputcsv($output, array($name, $member, $row['Description'], $amount, $family_total));
+  $status_text = "";
+  if (in_array($row['Status'], $paid)) {
+    $status_text = "Paid";
+  } else if (in_array($row['Status'], $not_paid)) {
+    $status_text = "No";
+  } else if (in_array($row['Status'], $unconfirmed)) {
+    $status_text = "Unconfirmed";
+  } else {
+    //$status_text = "";
+  }
+
+	fputcsv($output, array($name, $member, $row['Description'], $amount, $family_total, $status_text));
 
 	if ($i < mysqli_num_rows($result)-1) {
 		$row = mysqli_fetch_array($result, MYSQLI_ASSOC);

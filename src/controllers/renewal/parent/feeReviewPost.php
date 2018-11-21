@@ -3,7 +3,7 @@
 global $db;
 $member = null;
 
-if (isPartialRegistration()) {
+if (false/*isPartialRegistration()*/) {
 	$member = getNextSwimmer($_SESSION['UserID'], 0, true);
 } else {
 	$user = mysqli_real_escape_string($link, $_SESSION['UserID']);

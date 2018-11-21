@@ -47,19 +47,28 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 					</thead>
 					<tbody>
 					<?
+          $link;
 					for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 						$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 						if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out") {
 							?><tr class="table-success"><?
+              $link = "text-success";
 						} else if ($row['Status'] == "failed" || $row['Status'] == "charged_back") {
 							?><tr class="table-danger"><?
+              $link = "text-danger";
 						} else if ($row['Status'] == "cust_not_dd") {
 							?><tr class="table-warning"><?
+              $link = "text-warning";
 						} else {
 							?><tr><?
 						}?>
 							<td>
-								<? echo $row['Forename'] . " " . $row['Surname']; ?>
+                <?=htmlspecialchars($row['Forename'] . " " . $row['Surname'])?><br>
+                <small>
+                  <a target="_blank" href="<?=autoUrl("notify/newemail/individual/" . $row['UserID'])?>">
+                    Contact Parent
+                  </a>
+                </small>
 							</td>
 							<td>
 								<a href="<? echo autoUrl("payments/history/statement/" . $row['PMkey']); ?>" title="<? echo $row['PMkey']; ?>"><? echo $row['Name']; ?></a>

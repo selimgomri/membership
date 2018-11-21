@@ -82,6 +82,8 @@
 
         $browser_details = new WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);
 
+        $browser = $browser_details->browser->name . ' ' . $browser_details->browser->version->toString();
+
         if ($browser_details->isType('mobile')) {
           $mobile = 1;
         }
@@ -95,7 +97,7 @@
           $_SESSION['UserID'],
           app('request')->ip(),
           $geo_string,
-          $browser_details->browser->toString(),
+          $browser,
           $browser_details->os->toString(),
           $mobile,
           $hash,
@@ -136,7 +138,7 @@
         if ($login_before_count == 1) {
 
           $subject = "New Account Login";
-          $message = '<p>Somebody just logged into your <?=CLUB_NAME?> Account from ' . $browser_details->browser->toString() . ', using a device running ' . $browser_details->os->toString() . ' we believe was located in ' . $geo_string . '*.</p><p>We haven\'t seen a login from this location and device before.</p><p>If this was you then you can ignore this email. If this was not you, please <a href="' . autoUrl("") . '">log in to your account</a> and <a href="' . autoUrl("myaccount/password") . '">change your password</a> as soon as possible.</p><p>Kind Regards, <br>The ' . CLUB_NAME . ' Team</p><p class="text-muted small">* We\'ve estimated your location from your public IP Address. The location given may not be where you live.</p>';
+          $message = '<p>Somebody just logged into your <?=CLUB_NAME?> Account from ' . $browser . ', using a device running ' . $browser_details->os->toString() . ' we believe was located in ' . $geo_string . '*.</p><p>We haven\'t seen a login from this location and device before.</p><p>If this was you then you can ignore this email. If this was not you, please <a href="' . autoUrl("") . '">log in to your account</a> and <a href="' . autoUrl("myaccount/password") . '">change your password</a> as soon as possible.</p><p>Kind Regards, <br>The ' . CLUB_NAME . ' Team</p><p class="text-muted small">* We\'ve estimated your location from your public IP Address. The location given may not be where you live.</p>';
           $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
           `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'Security')";
           try {

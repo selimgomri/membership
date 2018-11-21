@@ -1,10 +1,10 @@
 <?
 
 $user = mysqli_real_escape_string($link, $_SESSION['UserID']);
-$partial_reg = isPartialRegistration();
+$partial_reg = false; //isPartialRegistration();
 
 $partial_reg_require_topup = false;
-if ($partial_reg) {
+/*if ($partial_reg) {
 	global $db;
 	$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = 0 AND ClubPays = 0";
 	try {
@@ -16,7 +16,7 @@ if ($partial_reg) {
 	if ($query->fetchColumn() == 1) {
 		$partial_reg_require_topup = true;
 	}
-}
+}*/
 
 $sql = "SELECT * FROM `members` WHERE `members`.`UserID` = '$user' AND
 `ClubPays` = '0';";
@@ -100,7 +100,6 @@ if ($hasDD) {
 	}
 
 	// Update the database with current renewal state
-
 	$sql = "UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE
 	`RenewalID` = '$renewal' AND `UserID` = '$user';";
 	mysqli_query($link, $sql);

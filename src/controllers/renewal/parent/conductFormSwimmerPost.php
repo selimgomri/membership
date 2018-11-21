@@ -4,7 +4,7 @@ global $db;
 
 if ($_POST['agree'] == 1) {
 	$done_by_renewal = false;
-	if (isPartialRegistration() && !getNextSwimmer($_SESSION['UserID'], $id, true)) {
+if (false/*isPartialRegistration() && !getNextSwimmer($_SESSION['UserID'], $id, true)*/) {
 		$full_renewal = false;
 		$substage = 1;
 		$member = getNextSwimmer($_SESSION['UserID'], 0, true);
@@ -14,7 +14,7 @@ if ($_POST['agree'] == 1) {
 		} catch (PDOException $e) {
 			halt(500);
 		}
-	} else if (isPartialRegistration()) {
+	} else if (false/*isPartialRegistration()*/) {
 		$member = getNextSwimmer($_SESSION['UserID'], $id, true);
 		$sql = "UPDATE `renewalProgress` SET `Part` = ? WHERE `RenewalID` = 0 AND
 		`UserID` = ?";

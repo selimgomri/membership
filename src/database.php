@@ -9,7 +9,7 @@ elseif (!isset($preventLoginRedirect)) {
   $_SESSION['requestedURL'] = mysqli_real_escape_string(LINK, $_SERVER['REQUEST_URI']);
 }*/
 
-function notifySend($to, $subject, $message, $name = null, $emailaddress = null, $from = ["Email" => "noreply@chesterlestreetasc.co.uk", "Name" => "Chester-le-Street ASC"]) {
+function notifySend($to, $subject, $message, $name = null, $emailaddress = null, $from = ["Email" => "noreply@chesterlestreetasc.co.uk", "Name" => CLUB_NAME]) {
 
   $head = "
   <!DOCTYPE html>
@@ -53,14 +53,14 @@ function notifySend($to, $subject, $message, $name = null, $emailaddress = null,
       <img src=\"" . autoUrl("img/notify/NotifyLogo.png") . "\"
       style=\"width:300px;max-width:100%;\" srcset=\"" .
       autoUrl("img/notify/NotifyLogo@2x.png") . " 2x, " .
-      autoUrl("img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"Chester-le-Street ASC Logo\"></td></tr></table>
+      autoUrl("img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"" . CLUB_NAME . " Logo\"></td></tr></table>
       <table style=\"width:100%;max-width:700px;border:0px;text-align:left;background:#ffffff;padding:0px 10px;\"><tr><td>
       " . $message . "
       </td></tr></table>
       <table style=\"width:100%;max-width:700px;border:0px;background:#f8fcff;padding:0px 10px;\"><tr><td>
       <div
 class=\"bottom text-center\">
-<p class=\"small\" align=\"center\">Chester-le-Street ASC, Chester-le-Street Leisure Centre, Burns Green,<br>Chester-le-Street, DH3 3QH.</p>
+<p class=\"small\" align=\"center\">" . CLUB_NAME . ", Chester-le-Street Leisure Centre, Burns Green,<br>Chester-le-Street, DH3 3QH.</p>
 <p class=\"small\" align=\"center\">This email was sent automatically by the Chester-le-Street
 ASC Membership System.</p>
 <p class=\"small\" align=\"center\">Have questions? Contact us at <a
@@ -71,7 +71,7 @@ if ($from['Unsub']['Allowed']) {
   $message .= '<p class="small" align="center"><a href="' . autoUrl("notify/unsubscribe/" . dechex($from['Unsub']['User']) . '/' . urlencode($emailaddress) . '/' . urlencode($from['Unsub']['List'])) . '">Click to Unsubscribe</a></p>';
 }
 $message .= "
-<p class=\"small\" align=\"center\">&copy; Chester-le-Street ASC " . date("Y") . "</p>
+<p class=\"small\" align=\"center\">&copy; " . CLUB_NAME . " " . date("Y") . "</p>
       </div>
       </table>
     </table>
@@ -121,10 +121,23 @@ $message .= "
       $email->setReplyTo("enquiries+replytoautoemail@chesterlestreetasc.co.uk", "CLS ASC Enquiries");
     }
 
+    if ($from['Reply-To'] != null) {
+      $email->setReplyTo($from['Reply-To']);
+    }
+
+    if ($from['CC'] != null) {
+      $email->addCcs($from['CC']);
+    }
+
+    if ($from['BCC'] != null) {
+      $email->addBccs($from['BCC']);
+    }
+
     $sendgrid = new \SendGrid(SENDGRID_API_KEY);
     try {
       $response = $sendgrid->send($email);
     } catch (Exception $e) {
+      //echo $e;
       return false;
     }
     return true;
@@ -929,8 +942,7 @@ function debitWallet($id, $amount, $description) {
 
 function autoUrl($relative) {
   // Returns an absolute URL
-  global $rootURL;
-  return $rootURL . $relative;
+  return ROOT_URL . $relative;
 }
 
 function monthlyFeeCost($link, $userID, $format = "decimal") {

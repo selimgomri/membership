@@ -23,7 +23,7 @@ $sql = "UPDATE `memberMedical` SET `Conditions` = '$conditions', `Allergies` =
 if (mysqli_query($link, $sql)) {
 	// Update the database with current renewal state
 
-	if (isPartialRegistration() && !getNextSwimmer($_SESSION['UserID'], $id, true)) {
+if (false/*isPartialRegistration() && !getNextSwimmer($_SESSION['UserID'], $id, true)*/) {
 		$full_renewal = false;
 		$substage = 1;
 		$member = getNextSwimmer($_SESSION['UserID'], 0, true);
@@ -47,7 +47,7 @@ if (mysqli_query($link, $sql)) {
 			mysqli_query($link, $sql);
 		} else {
 			$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-			if (isPartialRegistration()) {
+      if (false/*isPartialRegistration()*/) {
 				$member = getNextSwimmer($_SESSION['UserID'], $id, true);
 			}
 			$member = mysqli_real_escape_string($link, $row['MemberID']);

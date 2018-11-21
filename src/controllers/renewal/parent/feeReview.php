@@ -20,8 +20,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				<? echo myMonthlyFeeTable($link, $userID); ?>
 			</div>
 
-			<p>You will pay these fees by Direct Debit. You will also pay for Galas and
-			other fees by Direct Debit whenever necessary.</p>
+			<p>You will pay these fees by Direct Debit.</p>
 
 			<div>
 				<button type="submit" class="btn btn-success">Save and Continue</button>

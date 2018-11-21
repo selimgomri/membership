@@ -29,7 +29,7 @@ if ($type == "squads") {
 $pagetitle = "Status - " . $dateString;
 
 $sql = "SELECT `Forename`, `Surname`, `MForename`, `MSurname`,
-individualFeeTrack.Amount, individualFeeTrack.Description, payments.Status, payments.PaymentID FROM
+individualFeeTrack.Amount, individualFeeTrack.Description, payments.Status, payments.PaymentID, users.UserID FROM
 (((((`individualFeeTrack` LEFT JOIN `paymentMonths` ON
 individualFeeTrack.MonthID = paymentMonths.MonthID) LEFT JOIN `paymentsPending`
 ON individualFeeTrack.PaymentID = paymentsPending.PaymentID) LEFT JOIN
@@ -76,8 +76,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 					</strong>
 				</p>
 				<p class="mb-0">
-					This usually means that the payment was created via the GoCardless
-					User Interface.
+					We are sorry for the inconvenience caused.
 				</p>
 			</div>
 		<? } else { ?>
@@ -101,29 +100,38 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 				</thead>
 				<tbody>
 				<?
+        $link;
 				for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 					//$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 					?>
 					<? if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out") {
 						?><tr class="table-success"><?
+            $link = "text-success";
 					} else if ($row['Status'] == "cancelled" || $row['Status'] ==
 					"customer_approval_denied" || $row['Status'] == "failed" ||
 					$row['Status'] == "charged_back" || $row['Status'] == null) {
 						?><tr class="table-danger"><?
+            $link = "text-danger";
 					} else if ($row['Status'] == "cust_not_dd") {
 						?><tr class="table-warning"><?
-					} else { ?><tr class=""><?
+            $link = "text-warning";
+					} else { ?><tr class=""><?$link = "";
 					} ?>
 						<td>
-							<? if ($row['Forename'] != null && $row['Surname'] != null) {
-								echo $row['Forename'] . " " . $row['Surname'];
-							} else {
+							<? if ($row['Forename'] != null && $row['Surname'] != null) {?>
+								<?=htmlspecialchars($row['Forename'] . " " . $row['Surname'])?><br>
+                <small><strong>
+                  <a target="_blank" href="<?=autoUrl("notify/newemail/individual/" . $row['UserID'])?>">
+                    Contact Parent
+                  </a>
+                </strong></small>
+							<? } else {
 								echo "No Parent";
 							}?>
 						<td>
 							<ul class="list-unstyled mb-0">
-								<li><? echo $row['MForename'] . " " . $row['MSurname']; ?></li>
-								<li><em><? echo $row['Description']; ?></em></li>
+								<li><?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?></li>
+								<li><em><?=htmlspecialchars($row['Description'])?></em></li>
 							</ul>
 						</td>
 						<td>

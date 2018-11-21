@@ -1,5 +1,6 @@
 # CLS ASC Membership - PHP Version
 
+*-config.php*
 config.php
 "sendgrid.env"
 "sendgrid.env"

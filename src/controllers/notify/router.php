@@ -17,15 +17,29 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas") {
 		include 'Home.php';
 	});
 
-	$this->get('/newemail', function() {
-		global $link;
-		include 'Email.php';
-	});
+  $this->group('/newemail', function() {
 
-	$this->post('/newemail', function() {
-		global $link;
-		include 'EmailQueuer.php';
-	});
+  	$this->get('/', function() {
+  		global $link;
+  		include 'Email.php';
+  	});
+
+  	$this->post('/', function() {
+  		global $link;
+  		include 'EmailQueuer.php';
+  	});
+
+    $this->get('/individual/{user}?:int/', function($user = null) {
+  		global $link;
+  		include 'EmailIndividual.php';
+  	});
+
+  	$this->post('/individual/{user}?:int/', function($user = null) {
+  		global $link;
+  		include 'EmailQueuerIndividual.php';
+  	});
+
+  });
 
   if ($_SESSION['AccessLevel'] == "Admin") {
   	$this->get('/email', function() {

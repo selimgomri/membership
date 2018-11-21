@@ -16,7 +16,7 @@ $lists = mysqli_query($link, $sql);
 	<h1>Notify Composer</h1>
 	<p class="lead">Send Emails to targeted groups of parents</p>
   <hr>
-	<form method="post">
+	<form method="post" onkeypress="return event.keyCode != 13;">
     <div class="form-group">
 			<label>To parents of swimmers in the following targeted lists...</label>
 			<div class="row">
@@ -111,5 +111,14 @@ $lists = mysqli_query($link, $sql);
     ]
       //toolbar: "link",
  });
+
+ $(document).ready(function() {
+  $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+});
 </script>
 <?php include BASE_PATH . "views/footer.php";

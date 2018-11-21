@@ -11,6 +11,17 @@ include BASE_PATH . "views/notifyMenu.php";
 <div class="container">
 	<h1>Notify</h1>
 	<p class="lead">Send Emails to targeted groups of parents</p>
+  <? if (isset($_SESSION['NotifyIndivSuccess']) {
+    if ($_SESSION['NotifyIndivSuccess'])) {?>
+      <div class="alert alert-success">
+    		We've successfully sent your email.
+    	</div>
+    <?} else {?>
+      <div class="alert alert-danger">
+    		An error occured and we were unable to send your email.
+    	</div>
+    <?}
+  } ?>
   <? if (isset($_SESSION['NotifySuccess'])) { ?>
   <div class="alert alert-success">
 		We've successfully queued your email. <?=
