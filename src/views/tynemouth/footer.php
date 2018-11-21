@@ -86,7 +86,7 @@
       <div class="col source-org vcard copyright">
 	      	<hr class="mt-0" style="border-color:#FFF">
 			    <p class="hidden-print">
-						Designed and Built by Chester&#8209;le&#8209;Street ASC. Licenced to Tynemouth Amateur Swimming Club Limited.
+						Designed and Built by Chester&#8209;le&#8209;Street ASC Club Digital Services. Licenced to Tynemouth Amateur Swimming Club Limited.
 					</p>
 					<?php
 					$executionEndTime = microtime();
@@ -98,7 +98,7 @@
 					app('request')->browser() . " for " .
 					ucwords(app('request')->platform()); ?>.</p>-->
 	        <p class="mb-0" style="margin-bottom:0">&copy; <?php echo date( 'Y' ); ?>
-	        <span class="org fn">Chester&#8209;le&#8209;Street ASC</span>. CLS ASC is not responsible for the content of external sites.
+	        <span class="org fn">Chester&#8209;le&#8209;Street ASC</span>. CLS ASC Club Digital Services is not responsible for the content of external sites.
 					</p>
       	</div>
     	</div>

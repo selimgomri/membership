@@ -244,6 +244,11 @@ Chester-le-Street ASC is a non profit unincorporated association.
         <li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("emergencycontacts") ?>">Emergency Contacts</a>
   		  </li>
+        <li class="nav-item">
+  			  <a class="nav-link" href="<?php echo autoUrl("renewal") ?>">
+            <?=date("Y", strtotime('+1 year'))?> Membership Renewal
+          </a>
+  		  </li>
         <?php }
         else { ?>
           <li class="nav-item dropdown">
