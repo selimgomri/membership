@@ -1,20 +1,21 @@
 <?php
-  http_response_code(401);
 
-  $pagetitle = "Login";
-  include BASE_PATH . "views/header.php";
+http_response_code(401);
 
-  $errorState = false;
+$pagetitle = "Login";
+include BASE_PATH . "views/header.php";
 
-  if ( isset($_SESSION['ErrorState']) ) {
-    $errorState = $_SESSION['ErrorState'];
-    $username = $_SESSION['EnteredUsername'];
-  }
+$errorState = false;
 
-  $lsv = rand(0, 50); //hash('sha256', random_bytes(100));
-  $_SESSION['LoginSec'] = $lsv;
+if ( isset($_SESSION['ErrorState']) ) {
+  $errorState = $_SESSION['ErrorState'];
+  $username = $_SESSION['EnteredUsername'];
+}
 
-  ?>
+$lsv = rand(0, 50); //hash('sha256', random_bytes(100));
+$_SESSION['LoginSec'] = $lsv;
+
+?>
 <div class="frontpage1 d-flex flex-column" style="margin:-1.0rem 0;min-height:calc(100vh - 10.9375rem);">
   <div class="mb-auto"></div>
   <div class="container">

@@ -3,6 +3,10 @@
 $user = $_SESSION['UserID'];
 $pagetitle = "Payments and Direct Debits";
 
+if (!userHasMandates($user)) {
+  header("Location: " . autoUrl("payments/setup"));
+}
+
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
 
@@ -10,33 +14,68 @@ require 'GoCardlessSetup.php';
 
  ?>
 
+<div class="bg-warning box-shadow mb-3 py-2" style="margin-top:-1rem;">
+ <div class="<?=$container_class?>">
+   <nav class="nav nav-underline">
+     <strong>
+       Remember to cancel your Standing Order for Monthly Fees
+     </strong>
+   </nav>
+ </div>
+</div>
+
 <div class="container">
   <div class="row align-items-center">
     <div class="col-md-6 col-lg-8">
     	<h1>Payments</h1>
-    	<p class="lead">Control your Direct Debit settings and see your payment history</p>
+    	<p class="lead">Manage your Direct Debit</p>
     </div>
     <div class="col text-center">
       <div class="p-3 text-white bg-primary rounded shadow">
-        <p class="mb-0">We will request your payments on <strong><? echo getBillingDate($link, $user); ?></strong> of each month, or the first working day on a weekend</p>
+        <? if (userHasMandates($user)) { ?>
+          <p class="mb-0">We currently collect payments from <?=strtoupper(
+          bankDetails($user, "bank_name"))?>, Account Ending <span class="mono">
+          ******<?=bankDetails($user, "account_number_end")?></span></p>
+        <? } ?>
       </div>
     </div>
   </div>
   <hr>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-8">
+      <div class="my-3 p-3 bg-white rounded shadow">
+      	<h2 class="border-bottom border-gray pb-2 mb-0">Billing History</h2>
+        <? echo paymentHistory($link, $user); ?>
+      </div>
+      <div class="my-3 p-3 bg-white rounded shadow">
+        <h2 class="border-bottom border-gray pb-2 mb-1">
+          Extra Fees this month
+        </h2>
+        <p class="lead">Fees to pay on your next Billing Date, in addition to Squad Fees</p>
+      	<? echo feesToPay($link, $user); ?>
+      </div>
+    </div>
+    <div class="col">
       <div class="my-3 p-3 bg-white rounded shadow">
       	<h2 class="border-bottom border-gray pb-2 mb-2">
           My Bank Account
         </h2>
-        <? if (userHasMandates($user)) { ?>
-          <p>We currently collect payments from <? echo bankDetails($user, "bank_name"); ?>, Account Ending ******<? echo bankDetails($user, "account_number_end"); ?></p>
-          <p><?=CLUB_NAME?> does not store your bank details. They are stored by a trusted third party provider.</p>
+        <? if (userHasMandates($user)) {
+          $name = strtoupper(bankDetails($user, "account_holder_name"));
+          if ($name != "UNKNOWN") {
+            $name = $name . ', ';
+          } else {
+            $name = null;
+          }
+          ?>
+          <p class="mb-0"><?=$name?><?=strtoupper(bankDetails($user, "bank_name"))?></p>
+          <p class="mono">******<?=strtoupper(bankDetails($user, "account_number_end"))?></p>
+          <p><?=CLUB_NAME?> does not store your bank details.</p>
         <? } ?>
         <p class="mb-0">
-        	<a href="<? echo autoUrl("payments/setup"); ?>" class="btn btn-dark btn-block">Add Bank Account</a>
+        	<a href="<?=autoUrl("payments/setup")?>" class="btn btn-dark btn-block">Add Bank Account</a>
           <? if (userHasMandates($user)) { ?>
-        	<a href="<? echo autoUrl("payments/mandates"); ?>" class="btn btn-dark btn-block">Switch or Manage Bank Account</a>
+        	<a href="<?=autoUrl("payments/mandates")?>" class="btn btn-dark btn-block">Switch or Manage Bank Account</a>
           <? } ?>
         </p>
       </div>
@@ -51,19 +90,6 @@ require 'GoCardlessSetup.php';
           Account Switch Service, we'll update your details for you, before
           you even have time to tell us.
         </p>
-      </div>
-      <div class="my-3 p-3 bg-white rounded shadow">
-        <h2 class="border-bottom border-gray pb-2 mb-1">
-          Extra Fees this month
-        </h2>
-        <p class="lead">Fees to pay on your next Billing Date, in addition to Squad Fees</p>
-      	<? echo feesToPay($link, $user); ?>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="my-3 p-3 bg-white rounded shadow">
-      	<h2 class="border-bottom border-gray pb-2 mb-0">Billing History</h2>
-        <? echo paymentHistory($link, $user); ?>
       </div>
     </div>
   </div>

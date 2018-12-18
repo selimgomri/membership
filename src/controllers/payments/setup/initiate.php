@@ -17,12 +17,14 @@ if ($scheduleExists == 0) {
   $result = mysqli_query($link, $sql);
   $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
+  $_SESSION['Token'] = $_SESSION['UserID'] . "-" . rand(1000,9999);
+
   $redirectFlow = $client->redirectFlows()->create([
       "params" => [
           // This will be shown on the payment pages
           "description" => "Club fee payments",
           // Not the access token
-          "session_token" => session_id(),
+          "session_token" => $_SESSION['Token'],
           "success_redirect_url" => autoUrl($url_path . "/setup/3"),
           // Optionally, prefill customer details on the payment page
           "prefilled_customer" => [

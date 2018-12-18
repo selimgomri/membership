@@ -3,6 +3,19 @@
 global $db;
 $query = null;
 
+if ($_SESSION['AccessLevel'] == 'Parent') {
+  $sql = "SELECT COUNT(*) FROM `members` WHERE `UserID` = ?";
+	try {
+		$query = $db->prepare($sql);
+		$query->execute([$_SESSION['UserID']]);
+    if ($query->fetchColumn() == 0) {
+      halt(404);
+    }
+	} catch (PDOException $e) {
+		halt(500);
+	}
+}
+
 if ($int) {
 	$sql = "SELECT * FROM `posts` WHERE `ID` = ?";
 	try {

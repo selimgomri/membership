@@ -1,4 +1,13 @@
 <?php
+
+global $db;
+$sql = $db->prepare("SELECT COUNT(*) FROM users WHERE UserID = ?");
+$sql->execute([$id]);
+
+if ($sql->fetchColumn() == 0) {
+  halt(404);
+}
+
 $pagetitle = getUserNameByID($link, $id) . " - User Information";
 $title = null;
 $content = getUserInfoByID($link, $id);

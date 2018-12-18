@@ -1,5 +1,7 @@
 <?php
 
+$use_white_background = true;
+
 $search = "";
 parse_str($_SERVER['QUERY_STRING'], $queries);
 if (isset($queries['search'])) {

@@ -9,7 +9,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 	});
 
   // Registers
-  $this->get('/register', function() {
+  $this->get(['/register', '/register/{squad}:int/{session}:int'], function($squad = null, $session = null) {
     global $link;
     include 'register.php';
 	});

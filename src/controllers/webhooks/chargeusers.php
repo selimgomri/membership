@@ -81,7 +81,12 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
     mysqli_query($link, $sql);
 
     $message_subject = "Your Monthly Fee for " . date("F Y");
-    $message_content = '<p>Here are your club fees for ' . date("F Y") . '.</p>' . myMonthlyFeeTable($link, $row['UserID']) . '<p>This means your total fee for ' . date("F Y") . ' is, <strong>&pound;' . number_format(($row['Amount']/100), 2, '.', ',') . '</strong></p><p>This total covers all of your Club Fees. If your swimmers take part in CrossFit, please remember that it is paid for in a separate Standing Order to your squad fees.</p><p>Fees are calculated using the squad your swimmers were members of on 1 ' . date("F Y") . '.</p><hr><p>Notice: We do not currently have full records detailing which swimmers take part in CrossFit in our online systems. This information may not be correct at the moment. Your fee will also only be accurate if you have connected all of your swimmers to your account.</p>';
+    $message_content = '<p>Here are your club fees for ' . date("F Y") . '.</p>';
+    $message_content .= myMonthlyFeeTable($link, $row['UserID']);
+    $message_content .= '<p>This means your total fee for ' . date("F Y") . ' is, <strong>&pound;' . number_format(($row['Amount']/100), 2, '.', ',') . '</strong></p>';
+    $message_content .= '<p>This total covers all of your Club Fees.</p><p>Fees are calculated using the squad your swimmers were members of on 1 ' . date("F Y") . '.</p><hr>';
+    $message_content .= '<p>Don\'t forget that from February 2019, squad fees will be changing must be paid by Direct Debit. <a href="https://www.chesterlestreetasc.co.uk/2018/12/changes-to-squad-fees-from-february-2019/">Get the full details of the new fees on our website.</a></p>';
+    $message_content .= '<p><strong>Signed up for Direct Debit?</strong> Remember to make sure you\'ve cancelled your standing orders!</p>';
 
     $email_info = [
       "user" => $row['UserID'],

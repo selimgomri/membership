@@ -265,10 +265,9 @@ for ($i = 0; $i < $count; $i++) {
 
   $dateString = date("F Y", strtotime("first day of this month")) . " DD";
   $sql = "INSERT INTO `payments` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES ('$date', 'pending_api_request', '$sumUID', '$dateString', '$amount', 'GBP', 'Payment');";
-  if ($amount > 0) {
+  if ($amount > 100) {
     mysqli_query($link, $sql);
+    $sql = "UPDATE `paymentsPending` SET `Status` = 'Queued' WHERE `UserID` = '$sumUID' AND `Status` = 'Pending' AND `Date` <= '$date' AND (`Type` = 'Payment' OR `Type` = 'Voucher');";
+  	mysqli_query($link, $sql);
   }
-
-	$sql = "UPDATE `paymentsPending` SET `Status` = 'Queued' WHERE `UserID` = '$sumUID' AND `Status` = 'Pending' AND `Date` <= '$date' AND (`Type` = 'Payment' OR `Type` = 'Voucher');";
-	mysqli_query($link, $sql);
 }

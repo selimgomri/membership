@@ -47,11 +47,11 @@ include BASE_PATH . "views/header.php";
 			} ?>
 
 			<div class="custom-control custom-radio">
-			  <input type="radio" value="0" <? echo $no; ?> id="medConDisNo" name="medConDis" class="custom-control-input" onclick="toggleState('medConDisDetails')">
+			  <input type="radio" value="0" <? echo $no; ?> id="medConDisNo" name="medConDis" class="custom-control-input" onclick="toggleState('medConDisDetails', 'medConDis')">
 			  <label class="custom-control-label" for="medConDisNo">No</label>
 			</div>
 			<div class="custom-control custom-radio">
-			  <input type="radio" value="1" <? echo $yes; ?> id="medConDisYes" name="medConDis" class="custom-control-input" onclick="toggleState('medConDisDetails')">
+			  <input type="radio" value="1" <? echo $yes; ?> id="medConDisYes" name="medConDis" class="custom-control-input" onclick="toggleState('medConDisDetails', 'medConDis')">
 			  <label class="custom-control-label" for="medConDisYes">Yes</label>
 			</div>
 		</div>
@@ -77,12 +77,12 @@ include BASE_PATH . "views/header.php";
 
 			<div class="custom-control custom-radio">
 			  <input type="radio" value="0" <? echo $no; ?> id="allergiesNo"
-			  name="allergies" class="custom-control-input" onclick="toggleState('allergiesDetails')">
+			  name="allergies" class="custom-control-input" onclick="toggleState('allergiesDetails', 'allergies')">
 			  <label class="custom-control-label" for="allergiesNo">No</label>
 			</div>
 			<div class="custom-control custom-radio">
 			  <input type="radio" value="1" <? echo $yes; ?> id="allergiesYes"
-			  name="allergies" class="custom-control-input" onclick="toggleState('allergiesDetails')">
+			  name="allergies" class="custom-control-input" onclick="toggleState('allergiesDetails', 'allergies')">
 			  <label class="custom-control-label" for="allergiesYes">Yes</label>
 			</div>
 		</div>
@@ -107,11 +107,11 @@ include BASE_PATH . "views/header.php";
 			} ?>
 
 			<div class="custom-control custom-radio">
-			  <input type="radio" value="0" <? echo $no; ?> id="medicineNo" name="medicine" class="custom-control-input" onclick="toggleState('medicineDetails')">
+			  <input type="radio" value="0" <? echo $no; ?> id="medicineNo" name="medicine" class="custom-control-input" onclick="toggleState('medicineDetails', 'medicine')">
 			  <label class="custom-control-label" for="medicineNo">No</label>
 			</div>
 			<div class="custom-control custom-radio">
-			  <input type="radio" value="1" <? echo $yes; ?> id="medicineYes" name="medicine" class="custom-control-input" onclick="toggleState('medicineDetails')">
+			  <input type="radio" value="1" <? echo $yes; ?> id="medicineYes" name="medicine" class="custom-control-input" onclick="toggleState('medicineDetails', 'medicine')">
 			  <label class="custom-control-label" for="medicineYes">Yes</label>
 			</div>
 		</div>
@@ -131,13 +131,25 @@ include BASE_PATH . "views/header.php";
 </div>
 
 <script>
-function toggleState(id) {
-	element = document.getElementById(id);
-	element.disabled = !element.disabled;
+function toggleState(id, radio, state ) {
+	var element = document.getElementById(id);
+  var radios = document.getElementsByName(radio);
 
-	if (element.disabled) {
-		element.value = "";
-	}
+  for (var i = 0; i < radios.length; i++) {
+    if (radios[i].checked) {
+      if (radios[i].value == 1) {
+        element.disabled = false;
+      } else {
+        element.disabled = true;
+      }
+
+    	if (element.disabled) {
+    		element.value = "";
+    	}
+
+      break;
+    }
+  }
 }
 </script>
 

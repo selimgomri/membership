@@ -1,5 +1,5 @@
 <!-- THE HEPPELL FOOTER -->
-<div class="cls-global-footer cls-global-footer-inverse cls-global-footer-body d-print-none">
+<div class="cls-global-footer cls-global-footer-inverse cls-global-footer-body d-print-none bg-primary text-white">
 	<?php if (isset($fluidContainer) && $fluidContainer == true) { ?>
 	<div class="container-fluid">
 	<?php } else { ?>

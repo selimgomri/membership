@@ -51,8 +51,8 @@ if (isset($_POST['smsContactOK']) && $_POST['smsContactOK'] == 1) {
 
 if ($status) {
 	$sql = "UPDATE `users` SET `Forename` = '$forename', `Surname` = '$surname',
-	`EmailAddress` = '$email', `EmailComms` = '$emailComms', `Mobile` = '$sms',
-	`MobileComms` = '$smsComms' WHERE `UserID` = '$user';";
+	`EmailComms` = '$emailComms', `Mobile` = '$sms', `MobileComms` = '$smsComms'
+	WHERE `UserID` = '$user';";
 	if (mysqli_query($link, $sql)) {
 		// Success move on
 		$renewal = mysqli_real_escape_string($link, $renewal);

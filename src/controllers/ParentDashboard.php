@@ -2,6 +2,9 @@
 
 global $db;
 
+$json = file_get_contents('https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts');
+$obj = json_decode($json);
+
 try {
 	$sql = 'SELECT `MemberID`, `MForename`, `MSurname`, `SquadFee`, `SquadName` FROM `members` INNER JOIN `squads` ON `members`.`SquadID` =
 	`squads`.`SquadID` WHERE `members`.`UserID` = ? ORDER BY `MForename` ASC,
@@ -30,7 +33,7 @@ $galas = $query->fetchAll(PDO::FETCH_ASSOC);
 
 $username = htmlspecialchars(explode(" ", getUserName($_SESSION['UserID']))[0]);
 
-$pagetitle = "Homepage";
+$pagetitle = "Home";
 include BASE_PATH . "views/header.php";
 
 ?>
@@ -54,6 +57,60 @@ include BASE_PATH . "views/header.php";
 
 		<h1>Hello <?=$username?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
+
+    <div class="mb-4">
+      <h2 class="mb-4">Membership Renewal for 2019 is open now</h2>
+      <div class="news-grid">
+        <a href="<?=autoUrl("renewal")?>">
+          <span class="mb-3">
+            <span class="title mb-0">
+              Complete membership renewal online
+            </span>
+          </span>
+          <span class="category">
+            Renewal
+          </span>
+        </a>
+        <a target="_blank" href="https://www.chesterlestreetasc.co.uk/support/membershiprenewal/completing-your-membership-renewal/">
+          <span class="mb-3">
+            <span class="title mb-0">
+              Help with membership renewal
+            </span>
+          </span>
+          <span class="category">
+            Help and Support
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <? if (!userHasMandates($_SESSION['UserID'])) { ?>
+    <div class="mb-4">
+      <h2 class="mb-4">Want to set up a Direct Debit?</h2>
+      <div class="news-grid">
+        <a href="<?=autoUrl("payments")?>">
+          <span class="mb-3">
+            <span class="title mb-0">
+              Setup a Direct Debit Now
+            </span>
+          </span>
+          <span class="category">
+            Payments
+          </span>
+        </a>
+        <a href="https://www.chesterlestreetasc.co.uk/support/directdebit/">
+          <span class="mb-3">
+            <span class="title mb-0">
+              Learn more about Direct Debits
+            </span>
+          </span>
+          <span class="category">
+            Payments
+          </span>
+        </a>
+      </div>
+    </div>
+    <? } ?>
 
 		<div class="mb-4">
       <h2 class="mb-4">My Swimmers</h2>
@@ -82,6 +139,29 @@ include BASE_PATH . "views/header.php";
 			} else { ?>
 				<p class="mb-0">You do not have any swimmers connected to your account</p>
 			<? } ?>
+			</div>
+		</div>
+
+    <div class="mb-4">
+      <h2 class="mb-4">Club News</h2>
+      <div class="news-grid">
+        <?
+        $max_posts = 6;
+        if (sizeof($obj) < $max_posts) {
+          $max_posts = sizeof($obj);
+        }
+        for ($i = 0; $i < $max_posts; $i++) { ?>
+				<a href="<?=$obj[$i]->link?>" target="_blank" title="<?=$obj[$i]->title->rendered?>">
+					<span class="mb-3">
+	          <span class="title mb-0">
+							<?=$obj[$i]->title->rendered?>
+						</span>
+					</span>
+          <span class="category">
+						News
+					</span>
+        </a>
+        <? } ?>
 			</div>
 		</div>
 

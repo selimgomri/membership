@@ -9,10 +9,9 @@ if ($scheduleExists == 0) {
 } else {
 	try {
 		$redirectFlowId = mysqli_real_escape_string($link, $_REQUEST['redirect_flow_id']);
-
 		$redirectFlow = $client->redirectFlows()->complete(
-		    $redirectFlowId, //The redirect flow ID from above.
-		    ["params" => ["session_token" => session_id()]]
+		    $_SESSION['GC_REDIRECTFLOW_ID'], //The redirect flow ID from above.
+		    ["params" => ["session_token" => $_SESSION['Token']]]
 		);
 
 		$mandate = mysqli_real_escape_string($link, $redirectFlow->links->mandate);
@@ -50,10 +49,10 @@ if ($scheduleExists == 0) {
 
 		<div class="container">
 			<h1>You've successfully set up your new direct debit.</h1>
-			<p class="lead">GoCardless Ltd will appear on your bank statement when
+			<p class="lead">GoCardless will appear on your bank statement when
 			payments are taken against this Direct Debit.</p>
-			<p>GoCardless Ltd handles direct debit payments for <?=CLUB_NAME?>. You
-			will see <span class="mono">CLSASC_SWIM</span> at the start of the
+			<p>GoCardless handles direct debit payments for <?=CLUB_NAME?>. You
+			will see <span class="mono">CLSASCSWIM</span> at the start of the
 			reference for each payment.</p>
 			<? if ($renewal_trap) { ?>
 				<a href="<? echo autoUrl("renewal/go"); ?>" class="mb-3 btn btn-success">Continue Renewal</a>
@@ -66,6 +65,7 @@ if ($scheduleExists == 0) {
 
 	}
 	catch (Exception $e) {
+    pre($e);
 		halt(500);
 	}
 }

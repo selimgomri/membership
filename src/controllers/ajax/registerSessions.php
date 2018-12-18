@@ -9,6 +9,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
   if (isset($_REQUEST["squadID"]) && v::intVal()->validate($_REQUEST["squadID"])) {
     // get the squadID parameter from URL
     $squadID = mysqli_real_escape_string($link, $_REQUEST["squadID"]);
+    $session = $_REQUEST['selected'];
 
     $response = "";
 
@@ -45,7 +46,11 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
                 break;
         }
 
-        $content .= "<option value=\"" . $row['SessionID'] . "\">" . $row['SessionName'] . ", " . $dayText . " at " . (new DateTime($row['StartTime']))->format("H:i") . "</option>";
+        $selected = "";
+        if ($session == (int) $row['SessionID']) {
+          $selected = " selected ";
+        }
+        $content .= "<option value=\"" . $row['SessionID'] . "\" " . $selected . ">" . $row['SessionName'] . ", " . $dayText . " at " . (new DateTime($row['StartTime']))->format("H:i") . "</option>";
       }
     }
 

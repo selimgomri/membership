@@ -4,7 +4,7 @@
 		<div class="row mb-2">
 			<div class="col-6 col-md-2">
 				<div class="custom-control custom-radio">
-				  <input type="radio" id="customRadio1" name="event" value="50 Free" class="custom-control-input">
+				  <input type="radio" id="customRadio1" name="event" value="50 Free" class="custom-control-input" required>
 				  <label class="custom-control-label" for="customRadio1">50 Free</label>
 				</div>
 			</div>
@@ -138,18 +138,18 @@
         <div class="col-md-8">
             <div class="row mb-3 no-gutters">
                 <div class="col">
-                    <input type="number" name="mins" class="form-control" placeholder="Minutes">
+                    <input type="number" max="100" min="0" name="mins" pattern="[0-9]*" inputmode="numeric" class="form-control" placeholder="Minutes">
                 </div>
                 <div class="col">
-                    <input type="number" name="secs" class="form-control" placeholder="Seconds">
+                    <input type="number" max="59" min="0" name="secs" pattern="[0-9]*" inputmode="numeric" class="form-control" placeholder="Seconds">
                 </div>
             	<div class="col">
-                    <input type="number" name="hunds" class="form-control" placeholder="Hundreds">
+                    <input type="number" max="99" min="0" name="hunds" pattern="[0-9]*" inputmode="numeric" class="form-control" placeholder="Hundreds">
                 </div>
             </div>
         </div>
     </div>
-    
+
 	<p class="mb-0">
 		<button class="btn btn-secondary" type="submit">Convert</button>
 	</p>

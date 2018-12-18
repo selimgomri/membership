@@ -55,11 +55,11 @@ $member = [];
 for ($i = 0; $i < $count; $i++) {
 	$member[$i] = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ClubPays']) {
-		$asaFees[$i] = 1685;
+		$asaFees[$i] = ASA_FEE_1;
 	} else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ClubPays']) {
-		$asaFees[$i] = 3415;
+		$asaFees[$i] = ASA_FEE_2;
 	} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ClubPays']) {
-		$asaFees[$i] = 1295;
+		$asaFees[$i] = ASA_FEE_3;
 	}
 	$totalFee += $asaFees[$i];
 }

@@ -9,6 +9,47 @@ elseif (!isset($preventLoginRedirect)) {
   $_SESSION['requestedURL'] = mysqli_real_escape_string(LINK, $_SERVER['REQUEST_URI']);
 }*/
 
+function verifyUser($user, $password) {
+  global $db;
+
+  $username = trim($user);
+  $password = trim($password);
+
+  $username = preg_replace('/\s+/', '', $username);
+
+  try {
+    $query = $db->prepare("SELECT Password, UserID, AccessLevel FROM users WHERE Username = :user OR EmailAddress = :user LIMIT 0, 30");
+    $query->execute(['user' => $username]);
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+    $count = sizeof($result);
+
+    if ($count == 1) {
+      $hash = $result[0]['Password'];
+
+      if (password_verify($password, $hash)) {
+        if ($result[0]['Password'] != 'Parent') {
+          return true;
+        } else {
+          // Verify parent has connected child
+          $sql = "SELECT COUNT(*) FROM `members` WHERE `UserID` = ?";
+        	try {
+        		$query = $db->prepare($sql);
+        		$query->execute([$result[0]['UserID']]);
+            if ($query->fetchColumn() == 0) {
+              halt(404);
+            }
+        	} catch (PDOException $e) {
+        		halt(500);
+        	}
+        }
+      }
+    }
+  } catch (PDOException $e) {
+    halt(500);
+  }
+  return false;
+}
+
 function notifySend($to, $subject, $message, $name = null, $emailaddress = null, $from = ["Email" => "noreply@chesterlestreetasc.co.uk", "Name" => CLUB_NAME]) {
 
   $head = "
@@ -93,7 +134,7 @@ $message .= "
       "text/html", $head . $message
     );
 
-    if ($from['Email'] == "notify@chesterlestreetasc.co.uk" || $from['Email'] == "payments@chesterlestreetasc.co.uk") {
+    if ($from['Email'] == "notify@" . EMAIL_DOMAIN || $from['Email'] == "payments@" . EMAIL_DOMAIN) {
       $email->addHeader("List-Archive", autoUrl("myaccount/notify/history"));
     }
 
@@ -103,22 +144,22 @@ $message .= "
       //$email->addHeader("List-Unsubscribe", "<mailto:unsubscribe+" . dechex($from['Unsub']['User']) . "-" . urlencode($from['Unsub']['List']) . "-accounts@chesterlestreetasc.co.uk>, <" . autoUrl("notify/unsubscribe/" . dechex($from['Unsub']['User']) . '/' . urlencode($emailaddress) . '/' . urlencode($from['Unsub']['List'])) . ">");
     }
 
-    if ($from['Email'] == "notify@chesterlestreetasc.co.uk") {
-      $email->addHeader("List-ID", "CLS ASC Targeted Lists <targeted-lists@account.chesterlestreetasc.co.uk>");
-    } else if ($from['Email'] == "payments@chesterlestreetasc.co.uk") {
-      $email->addHeader("List-ID", "Direct Debit Payment Information <payment-news@account.chesterlestreetasc.co.uk>");
-    } else if ($from['Name'] == "Chester-le-Street ASC Security") {
-      $email->addHeader("List-ID", "Account Security Updates <account-updates@account.chesterlestreetasc.co.uk>");
+    if ($from['Email'] == "notify@" . EMAIL_DOMAIN) {
+      $email->addHeader("List-ID", "CLS ASC Targeted Lists <targeted-lists@account." . EMAIL_DOMAIN . ">");
+    } else if ($from['Email'] == "payments@" . EMAIL_DOMAIN) {
+      $email->addHeader("List-ID", "Direct Debit Payment Information <payment-news@account." . EMAIL_DOMAIN . ">");
+    } else if ($from['Name'] == CLUB_NAME . " Security") {
+      $email->addHeader("List-ID", "Account Security Updates <account-updates@account." . EMAIL_DOMAIN . ">");
     }
 
-    if ($from['Email'] == "payments@chesterlestreetasc.co.uk") {
+    if ($from['Email'] == "payments@" . EMAIL_DOMAIN) {
       $email->setReplyTo("payments+replytoautoemail@chesterlestreetasc.co.uk", "Payments Team");
-    } else if ($from['Email'] == "galas@chesterlestreetasc.co.uk") {
-      $email->setReplyTo("galas+replytoautoemail@chesterlestreetasc.co.uk", "Gala Administrator");
+    } else if ($from['Email'] == "galas@" . EMAIL_DOMAIN) {
+      $email->setReplyTo("galas+replytoautoemail@" . EMAIL_DOMAIN, "Gala Administrator");
     } else if ($from['Name'] == "Chester-le-Street ASC Security") {
-      $email->setReplyTo("support+security-replytoautoemail@chesterlestreetasc.co.uk", "CLS ASC Support");
+      $email->setReplyTo("support+security-replytoautoemail@" . EMAIL_DOMAIN, CLUB_SHORT_NAME . " Support");
     } else {
-      $email->setReplyTo("enquiries+replytoautoemail@chesterlestreetasc.co.uk", "CLS ASC Enquiries");
+      $email->setReplyTo("enquiries+replytoautoemail@" . EMAIL_DOMAIN, CLUB_SHORT_NAME . " Enquiries");
     }
 
     if ($from['Reply-To'] != null) {
@@ -703,12 +744,10 @@ function myMonthlyFeeTable($link, $userID) {
     <tr><td>The monthly subtotal for Squad Fees is</td><td>&pound;" .
     number_format($totalCost,2,'.','') . "</td></tr>";
     if (($totalCost - $reducedCost) > 0) {
-      $output .= "<tr><td>The monthly total payable for squads (with any
-      deductions) is</td><td>&pound;" . number_format($reducedCost,2,'.','') .
+      $output .= "<tr><td>The monthly total payable for squads with discounts is</td><td>&pound;" . number_format($reducedCost,2,'.','') .
       "</td></tr>";
     }
-    $output .= "<tr><td>The monthly subtotal for extras, such as CrossFit,
-    is</td><td>&pound;" . number_format($monthlyExtrasTotal,2,'.','') .
+    $output .= "<tr><td>The monthly subtotal for extras is</td><td>&pound;" . number_format($monthlyExtrasTotal,2,'.','') .
     "</td></tr> <tr class=\"bg-light\"><td><strong>The monthly total
     is</strong></td><td>&pound;" . number_format(($reducedCost +
     $monthlyExtrasTotal),2,'.','') . "</td></tr> </tbody></table></div>";
@@ -716,7 +755,7 @@ function myMonthlyFeeTable($link, $userID) {
   }
   else {
     return "<p class=\"mb-0\">You have no monthly fees to pay. You may need to
-    add a swimmer to see any fees.</p>";
+    add a swimmer to your account to see your fees.</p>";
   }
 }
 
@@ -1207,7 +1246,7 @@ function updatePaymentStatus($PMkey) {
 function paymentStatusString($status) {
   switch ($status) {
     case "paid_out":
-      return "Paid to CLS ASC";
+      return "Paid to " . CLUB_SHORT_NAME;
     case "pending_customer_approval":
       return "Waiting for the customer to approve this payment";
     case "pending_submission":
@@ -1326,8 +1365,11 @@ function ordinal($num) {
   else if ($num%10 == 2) {
     $ordinal = "nd";
   }
-  else {
+  else if ($num%10 == 3) {
     $ordinal = "rd";
+  }
+  else {
+    $ordinal = "th";
   }
   return $num . $ordinal;
 }

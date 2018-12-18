@@ -12,52 +12,94 @@ $dateString = date("F Y");
 
  ?>
 
-<div class="container">
-	<h1>Payment Administration</h1>
-	<p class="lead">Control Direct Debit Payments</p>
-  <hr>
-  <div class="row">
-    <div class="col-md-6">
-      <div class="mb-3 p-3 bg-white rounded shadow">
-      	<h2>Manual Billing Information</h2>
-      	<p>
-          <a href="<? echo autoUrl("payments/fees"); ?>">
-            Parent Fees
-          </a>
-        </p>
+ <div class="front-page" style="margin-bottom: -1rem;">
+   <div class="container">
+  	<h1>Payment Administration</h1>
+  	<p class="lead">Control Direct Debit Payments</p>
 
-        <hr>
+    <div class="mb-4">
+      <h2 class="mb-4">View Squad Fee Status</h2>
+      <div class="mb-4">
+        <div class="news-grid">
 
-        <h2>Create a Manual Charge</h2>
-      	<p>
-          <a href="<? echo autoUrl("payments/newcharge"); ?>">
-            New Charge
+          <a href="<?=autoUrl("payments/history/squads/" . date("Y/m"))?>">
+  					<span class="mb-3">
+  	          <span class="title mb-0">
+  							Squad Fees for <?=$dateString?>
+  						</span>
+  						<span>
+  							View current payment status
+  						</span>
+  					</span>
+            <span class="category">
+  						Direct Debit
+  					</span>
           </a>
-        </p>
 
-        <hr>
-        
-        <h2>Charge for Gala Entries</h2>
-      	<p class="mb-0">
-          <a href="<? echo autoUrl("payments/galas"); ?>">
-            Charge for Gala Entries
+          <a href="<?=autoUrl("payments/history/extras/" . date("Y/m"))?>">
+  					<span class="mb-3">
+  	          <span class="title mb-0">
+  							Extra Fees for <?=$dateString?>
+  						</span>
+  						<span>
+  							View current payment status
+  						</span>
+  					</span>
+            <span class="category">
+  						Direct Debit
+  					</span>
           </a>
-        </p>
+        </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div class="mb-3 p-3 bg-white rounded shadow">
-      	<h2>Payment Status</h2>
-      	<p class="mb-0">
-          <a href="<? echo autoUrl("payments/history/squads/" . date("Y/m")); ?>">
-            Squad Fees for <? echo $dateString; ?>
+
+    <div class="mb-4">
+      <h2 class="mb-4">Manual Charges</h2>
+      <div class="mb-4">
+        <div class="news-grid">
+
+          <a href="<?=autoUrl('payments/fees')?>">
+  					<span class="mb-3">
+  	          <span class="title mb-0">
+  							Manual Billing Information
+  						</span>
+  						<span>
+  							View all expected fees for all parents
+  						</span>
+  					</span>
+            <span class="category">
+  						Pay
+  					</span>
           </a>
-        </p>
-      	<p class="mb-0">
-          <a href="<? echo autoUrl("payments/history/extras/" . date("Y/m")); ?>">
-            Extra Fees for <? echo $dateString; ?>
+
+          <a href="<?=autoUrl('payments/newcharge')?>">
+  					<span class="mb-3">
+  	          <span class="title mb-0">
+  							Create a manual charge
+  						</span>
+  						<span>
+  							Charge a parent for a non-automatic fee
+  						</span>
+  					</span>
+            <span class="category">
+  						Pay
+  					</span>
           </a>
-        </p>
+
+          <a href="<?=autoUrl('payments/galas')?>">
+  					<span class="mb-3">
+  	          <span class="title mb-0">
+  							Charge for gala entries
+  						</span>
+  						<span>
+  							After accepted entries are known
+  						</span>
+  					</span>
+            <span class="category">
+  						Pay
+  					</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>

@@ -34,10 +34,10 @@ include BASE_PATH . "views/paymentsMenu.php";
 					taken automatically.
 				</p>
 				<p>
-					We'll allow you to choose a day of the month on which to make payment
-					requests.
+					We'll generally charge you your fees on or soon after the first
+					working day of each month.
 				</p>
-				<p class="mb-0"><a href="
+				<p class=""><a href="
 					<?
 					if ($scheduleExists) {
 						echo autoUrl($url_path . "/setup/2");
@@ -69,7 +69,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 					The Direct Debit Guarantee applies to payments made to
 					<?=CLUB_NAME?>
 				</p>
-				<ul class="mb-0">
+				<ul>
 					<li>
 						This Guarantee is offered by all banks and building societies that
 						accept instructions to pay Direct Debits
@@ -100,6 +100,8 @@ include BASE_PATH . "views/paymentsMenu.php";
 						Please also notify us.
 					</li>
 				</ul>
+        <p class="mb-0">Payments are handled by GoCardless on behalf of
+        <?=CLUB_NAME?>.</p>
 			</div>
 		</div>
 	</div>

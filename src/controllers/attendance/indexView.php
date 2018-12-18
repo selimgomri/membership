@@ -1,38 +1,97 @@
 <?php
-$pagetitle = "Attendance";
-$title = "Squad Attendance";
-$content = "<p class=\"lead\">View attendance records and fill out registers for squads</p>";
 
-$content .= '
-<div class="my-3 p-3 bg-white rounded shadow">
-	<h2 class="border-bottom border-gray pb-2 mb-0">Attendance Quick Links</h2>
-	<div class="media text-muted pt-3">
-		<p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-			<a href="' . autoUrl("attendance/register") . '"><strong class="d-block text-gray-dark">Take a Register</strong></a>
-			Quickly take a register for any squad
-		</p>
-	</div>
-	<div class="media text-muted pt-3">
-		<p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-			<a href="' . autoUrl("attendance/history/swimmers/") . '"><strong class="d-block text-gray-dark">Swimmer Attendance</strong></a>
-			View swimmer attendance records for up to the last twenty weeks
-		</p>
-	</div>
-	<div class="media text-muted pt-3">
-		<p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-			<a href="' . autoUrl("attendance/history/squads/") . '"><strong class="d-block text-gray-dark">Squad Attendance</strong></a>
-			View squad attendance for the current week
-		</p>
-	</div>
-	<span class="d-block text-right mt-3">
-		We\'ll be introducing more functionality as soon as we can
-	</span>
-</div>
-';
+$day = date("w");
+$time = date("H:i:s");
+$time30 = date("H:i:s", strtotime("-30 minutes"));
+
+$sql = "SELECT SessionID, squads.SquadID, SessionName, SquadName, VenueName, StartTime, EndTime FROM ((`sessions` INNER JOIN squads ON squads.SquadID = sessions.SquadID) INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE SessionDay = :day AND StartTime <= :timenow AND (EndTime > :timenow OR EndTime > :time30) AND DisplayFrom <= CURDATE() AND DisplayUntil >= CURDATE() ORDER BY SquadFee DESC, SquadName ASC";
+global $db;
+
+$query = $db->prepare($sql);
+$query->execute(['day' => $day, 'timenow' => $time, 'time30' => $time30]);
+$sessions = $query->fetchAll(PDO::FETCH_ASSOC);
+
+$pagetitle = "Attendance";
 include BASE_PATH . "views/header.php";
 include "attendanceMenu.php"; ?>
-<div class="container">
-<?php echo "<h1>" . $title . "</h1>";
-echo $content; ?>
+<div class="front-page" style="margin-bottom: -1rem;">
+  <div class="container">
+
+		<h1>Squad Attendance</h1>
+		<p class="lead mb-4">View attendance records and fill out registers for squads</p>
+
+    <? if (sizeof($sessions) > 0) { ?>
+      <div class="mb-4">
+        <h2 class="mb-4">Current Sessions</h2>
+        <div class="mb-4">
+          <div class="news-grid">
+        <? for ($i = 0; $i < sizeof($sessions); $i++) { ?>
+          <a href="<?=autoUrl("attendance/register/" . $sessions[$i]['SquadID'] . "/" . $sessions[$i]['SessionID'])?>">
+            <div>
+              <span class="title mb-0">
+                Take <?=$sessions[$i]['SquadName']?> Squad Register
+              </span>
+              <span class="d-flex mb-3">
+                <?=date("H:i", strtotime($sessions[$i]['StartTime']))?> - <?=date("H:i", strtotime($sessions[$i]['EndTime']))?>
+              </span>
+            </div>
+            <span class="category">
+              <?=$sessions[$i]['SessionName']?>, <?=$sessions[$i]['VenueName']?>
+            </span>
+          </a>
+        <? } ?>
+        </div>
+      </div>
+    </div>
+    <? } ?>
+
+    <div class="mb-4">
+      <? if (sizeof($sessions) > 0) { ?>
+      <h2 class="mb-4">Further Attendance Options</h2>
+    <? } ?>
+      <div class="news-grid">
+        <a href="<?=autoUrl("attendance/register")?>">
+          <div>
+            <span class="title mb-0">
+              Take a Register
+            </span>
+            <span class="d-flex mb-3">
+              Quickly take a register for any squad
+            </span>
+          </div>
+          <span class="category">
+            Attendance
+          </span>
+        </a>
+        <a href="<?=autoUrl("attendance/history/swimmers")?>">
+          <div>
+            <span class="title mb-0">
+              Swimmer Attendance
+            </span>
+            <span class="d-flex mb-3">
+              View swimmer attendance records for up to the last twenty weeks
+            </span>
+          </div>
+          <span class="category">
+            Attendance
+          </span>
+        </a>
+        <a href="<?=autoUrl("attendance/history/squads")?>">
+          <div>
+            <span class="title mb-0">
+              Squad Attendance
+            </span>
+            <span class="d-flex mb-3">
+              View squad attendance for the current week
+            </span>
+          </div>
+          <span class="category">
+            Attendance
+          </span>
+        </a>
+      </div>
+    </div>
+
+  </div>
 </div>
 <?php include BASE_PATH . "views/footer.php";

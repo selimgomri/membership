@@ -13,7 +13,7 @@
   }
   if ($_POST['LoginSecurityValue'] == $_SESSION['LoginSec']) {
     $security_status = true;
-  } else if ($_SERVER['HTTP_HOST'] == 'account.chesterlestreetasc.co.uk') {
+  } else {
     $security_status = false;
   }
 
@@ -121,7 +121,7 @@
         unset($_SESSION['LoginSec']);
 
         setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, time()+60*60*24*120 , "/", 'chesterlestreetasc.co.uk', true, false);
-        setcookie(COOKIE_PREFIX . "AutoLogin", $hash, time()+60*60*24*120, "/", 'chesterlestreetasc.co.uk', true, true);
+        setcookie(COOKIE_PREFIX . "AutoLogin", $hash, time()+60*60*24*120, "/", 'chesterlestreetasc.co.uk', true, false);
 
         // Test if we've seen a login from here before
         $login_before_data = [
@@ -148,7 +148,6 @@
           }
 
         }
-        //}
       }
       else {
         $_SESSION['ErrorState'] = true;
@@ -170,5 +169,5 @@
   }
   $_SESSION['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['LoginSec']];
   unset($_SESSION['LoginSec']);
-  header("Location: " . autoUrl(''));
+  header("Location: " . autoUrl(ltrim($_POST['target'], '/')));
   ?>

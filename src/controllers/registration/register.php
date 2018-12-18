@@ -36,7 +36,7 @@ if (app('request')->path == "/register/family/") {
 
 $_SESSION['RegistrationMode'] = $mode;
 
-
+  $use_white_background = true;
   $pagetitle = "Register";
   $preventLoginRedirect = true;
   include BASE_PATH . "views/header.php";
@@ -44,7 +44,6 @@ $_SESSION['RegistrationMode'] = $mode;
 ?>
 <div class="pb-3">
   <div class="container">
-    <div class="p-3 bg-white rounded shadow">
       <? if (isset($_SESSION['RegistrationGoVerify'])) {
         echo $_SESSION['RegistrationGoVerify'];
         unset($_SESSION['RegistrationGoVerify']);
@@ -85,10 +84,10 @@ $_SESSION['RegistrationMode'] = $mode;
         unset($_SESSION['ErrorState']);
       } ?>
       <? if ($mode == "Default") { ?>
-      <div class="alert alert-info">
+      <div class="cell">
         <p class="mb-0"><strong>Do you have a Family Signup Sheet?</strong></p>
         <p class="mb-0">If so, you'll need to complete a <a href="<? echo
-        autoUrl("register/family"); ?>" class="alert-link">Family
+        autoUrl("register/family"); ?>" class="">Family
         Registration</a></p>
         <hr>
         <p class="mb-0">If you don't have a Family Signup Sheet, you're in the right place.</p>
@@ -101,47 +100,59 @@ $_SESSION['RegistrationMode'] = $mode;
         <p>We need some details from you which will allow us to get your
         swimmers. The information you need can be found on your Family Signup
         Sheet in the 'Add Manually' section.</p>
-        <div class="form-group">
-          <label for="fam-reg-num">Family Registration Number</label>
-          <input class="form-control mono" type="text" name="fam-reg-num"
-          id="fam-reg-num" placeholder="eg FAM1" required value="<? echo
-          $_SESSION['RegistrationFamNum']; ?>" style="text-transform:uppercase;"
-          on keyup="javascript:this.value=this.value.toUpperCase();">
-        </div>
-        <div class="form-group">
-          <label for="fam-sec-key">Security Key</label>
-          <input class="form-control mono" type="text" name="fam-sec-key"
-          id="fam-sec-key" placeholder="eg IKtfcu" required value="<? echo
-          $_SESSION['RegistrationFamKey']; ?>">
+        <div class="row">
+          <div class="col-md-8 col-lg-6">
+            <div class="form-group">
+              <label for="fam-reg-num">Family Registration Number</label>
+              <input class="form-control mono" type="text" name="fam-reg-num"
+              id="fam-reg-num" placeholder="eg FAM1" required value="<? echo
+              $_SESSION['RegistrationFamNum']; ?>" style="text-transform:uppercase;"
+              on keyup="javascript:this.value=this.value.toUpperCase();">
+            </div>
+            <div class="form-group">
+              <label for="fam-sec-key">Security Key</label>
+              <input class="form-control mono" type="text" name="fam-sec-key"
+              id="fam-sec-key" placeholder="eg IKtfcu" required value="<? echo
+              $_SESSION['RegistrationFamKey']; ?>">
+            </div>
+          </div>
         </div>
         <? } ?>
 
         <h2>Personal Details</h2>
-        <div class="form-group">
-          <label for="forename">First Name</label>
-          <input class="form-control" type="text" name="forename" id="forename"
-          placeholder="First Name" required value="<? echo
-          $_SESSION['RegistrationForename']; ?>">
+        <div class="row">
+          <div class="col-md-8 col-lg-6">
+            <div class="form-group">
+              <label for="forename">First Name</label>
+              <input class="form-control" type="text" name="forename" id="forename"
+              placeholder="First Name" required value="<? echo
+              $_SESSION['RegistrationForename']; ?>">
+            </div>
+            <div class="form-group">
+              <label for="surname">Last Name</label>
+              <input class="form-control" type="text" name="surname" id="surname" placeholder="Last Name" required value="<? echo $_SESSION['RegistrationSurname']; ?>">
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input class="form-control mb-0" type="email" name="email" id="email" placeholder="yourname@example.com" required value="<? echo $_SESSION['RegistrationEmail']; ?>">
+              <small id="emailHelp" class="form-text text-muted">
+                Your email address will only be used inside <?=CLUB_NAME?> and
+                Chester-le-Street ASC Club Digital Services. Emails sent by
+                Chester-le-Street ASC Club Digital Services are delivered by Google
+                Cloud and SendGrid. Both companies are EU-US Privacy Shield
+                certified.
+              </small>
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="surname">Last Name</label>
-          <input class="form-control" type="text" name="surname" id="surname" placeholder="Last Name" required value="<? echo $_SESSION['RegistrationSurname']; ?>">
-        </div>
-        <div class="form-group">
-          <label for="email">Email Address</label>
-          <input class="form-control mb-0" type="email" name="email" id="email" placeholder="yourname@example.com" required value="<? echo $_SESSION['RegistrationEmail']; ?>">
-          <small id="emailHelp" class="form-text text-muted">
-            Your email address will only be used inside <?=CLUB_NAME?> and
-            Chester-le-Street ASC Club Digital Services. Emails sent by
-            Chester-le-Street ASC Club Digital Services are delivered by Google
-            Cloud and SendGrid. Both companies are EU-US Privacy Shield
-            certified.
-          </small>
-        </div>
-        <div class="form-group">
-          <label for="mobile">Mobile Number</label>
-          <input class="form-control" type="tel" name="mobile" id="mobile" placeholder="01234 567890" required value="<? echo $_SESSION['RegistrationMobile']; ?>">
-          <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
+        <div class="row">
+          <div class="col-md-8 col-lg-6">
+            <div class="form-group">
+              <label for="mobile">Mobile Number</label>
+              <input class="form-control" type="tel" name="mobile" id="mobile" placeholder="01234 567890" required value="<? echo $_SESSION['RegistrationMobile']; ?>">
+              <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
+            </div>
+          </div>
         </div>
 
         <h2>Password</h2>
@@ -150,14 +161,18 @@ $_SESSION['RegistrationMode'] = $mode;
           <input class="form-control" type="text" name="username" id="username" placeholder="Username" aria-labelledby="usernameHelp" required value="<? echo $_SESSION['RegistrationUsername']; ?>">
           <small id="usernameHelp" class="form-text text-muted">This username is for your user account as an adult, not your swimmer(s)</small>
         </div>-->
-        <div class="form-group">
-          <label for="password1">Password</label>
-          <input class="form-control" type="password" aria-describedby="pwHelp" name="password1" id="password1" placeholder="Password" required>
-          <small id="pwHelp" class="form-text text-muted">Passwords must be 8 characters or longer</small>
-        </div>
-        <div class="form-group">
-          <label for="password2">Confirm Password</label>
-          <input class="form-control" type="password" name="password2" id="password2" placeholder="Password" required>
+        <div class="row">
+          <div class="col-md-8 col-lg-6">
+            <div class="form-group">
+              <label for="password1">Password</label>
+              <input class="form-control" type="password" aria-describedby="pwHelp" name="password1" id="password1" placeholder="Password" required>
+              <small id="pwHelp" class="form-text text-muted">Passwords must be 8 characters or longer</small>
+            </div>
+            <div class="form-group">
+              <label for="password2">Confirm Password</label>
+              <input class="form-control" type="password" name="password2" id="password2" placeholder="Password" required>
+            </div>
+          </div>
         </div>
 
         <h2>Notification Preferences</h2>
@@ -174,22 +189,26 @@ $_SESSION['RegistrationMode'] = $mode;
           unset($_SESSION['RegistrationSmsAuth']);
         } ?>
 
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input"
-          name="emailAuthorise" id="emailAuthorise" value="1" <? echo $email; ?>
-          checked>
-          <label class="custom-control-label" for="emailAuthorise">
-            I wish to recieve important email updates about my squads
-          </label>
-        </div>
+        <div class="row">
+          <div class="col-md-8 col-lg-6">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input"
+              name="emailAuthorise" id="emailAuthorise" value="1" <? echo $email; ?>
+              checked>
+              <label class="custom-control-label" for="emailAuthorise">
+                I wish to recieve important email updates about my squads
+              </label>
+            </div>
 
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input"
-          name="smsAuthorise" id="smsAuthorise" value="1" <? echo $sms; ?>
-          checked>
-          <label class="custom-control-label" for="smsAuthorise">
-            I wish to recieve text message notifications
-          </label>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input"
+              name="smsAuthorise" id="smsAuthorise" value="1" <? echo $sms; ?>
+              checked>
+              <label class="custom-control-label" for="smsAuthorise">
+                I wish to recieve text message notifications
+              </label>
+            </div>
+          </div>
         </div>
 
         <p class="small">
@@ -197,7 +216,7 @@ $_SESSION['RegistrationMode'] = $mode;
           from time.
         </p>
 
-        <div class="alert alert-info">
+        <div class="cell">
           <p class="mb-0"><strong>Legal Stuff Applies</strong></p>
           <p>
             In accordance with European Law, <?=CLUB_NAME?>, Chester-le-Street
@@ -206,7 +225,7 @@ $_SESSION['RegistrationMode'] = $mode;
             Regulation.
           </p>
           <p>
-            By proceeding you agree to our <a class="alert-link"
+            By proceeding you agree to our <a
             href="https://www.chesterlestreetasc.co.uk/policies/privacy/"
             target="_blank">Privacy Policy</a> and the use of your data by
             <?=CLUB_NAME?> and Chester-le-Street ASC Club Digital Services.
@@ -220,11 +239,11 @@ $_SESSION['RegistrationMode'] = $mode;
           </p>
           <p class="mb-0">
             Contact a member of your committee if you have any questions or email
-            <a class="alert-link"
+            <a
             href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>.
           </p>
         </div>
-        <input type="submit" class="btn btn-outline-dark" value="Register">
+        <input type="submit" class="btn btn-primary btn-lg" value="Register">
       </form>
       <? } ?>
     </div>

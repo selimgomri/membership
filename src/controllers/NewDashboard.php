@@ -1,10 +1,32 @@
 <?
 
+// https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts
+
+$json = file_get_contents('https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts');
+$obj = json_decode($json);
+
 global $db;
 
 $username = htmlspecialchars(explode(" ", getUserName($_SESSION['UserID']))[0]);
 
-$pagetitle = "Homepage";
+$day = date("w");
+$time = date("H:i:s");
+$time30 = date("H:i:s", strtotime("-30 minutes"));
+
+$sql = "SELECT SessionID, squads.SquadID, SessionName, SquadName, VenueName, StartTime, EndTime FROM ((`sessions` INNER JOIN squads ON squads.SquadID = sessions.SquadID) INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE SessionDay = :day AND StartTime <= :timenow AND (EndTime > :timenow OR EndTime > :time30) AND DisplayFrom <= CURDATE() AND DisplayUntil >= CURDATE() ORDER BY SquadFee DESC, SquadName ASC";
+global $db;
+
+$query = $db->prepare($sql);
+$query->execute(['day' => $day, 'timenow' => $time, 'time30' => $time30]);
+$sessions = $query->fetchAll(PDO::FETCH_ASSOC);
+
+global $db;
+$query = $db->prepare("SELECT EmailAddress FROM users WHERE
+UserID = ?");
+$query->execute([$_SESSION['UserID']]);
+$userInfo = $query->fetch(PDO::FETCH_ASSOC);
+
+$pagetitle = "Home";
 include BASE_PATH . "views/header.php";
 
 ?>
@@ -14,6 +36,31 @@ include BASE_PATH . "views/header.php";
 
 		<h1>Hello <?=$username?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
+
+    <? if (sizeof($sessions) > 0) { ?>
+      <div class="mb-4">
+        <h2 class="mb-4">Take Register for Current Sessions</h2>
+        <div class="mb-4">
+          <div class="news-grid">
+        <? for ($i = 0; $i < sizeof($sessions); $i++) { ?>
+          <a href="<?=autoUrl("attendance/register/" . $sessions[$i]['SquadID'] . "/" . $sessions[$i]['SessionID'])?>" title="<?=$sessions[$i]['SquadName']?> Squad Register, <?=$sessions[$i]['SessionName']?>">
+            <div>
+              <span class="title mb-0">
+                Take <?=$sessions[$i]['SquadName']?> Squad Register
+              </span>
+              <span class="d-flex mb-3">
+                <?=date("H:i", strtotime($sessions[$i]['StartTime']))?> - <?=date("H:i", strtotime($sessions[$i]['EndTime']))?>
+              </span>
+            </div>
+            <span class="category">
+              <?=$sessions[$i]['SessionName']?>, <?=$sessions[$i]['VenueName']?>
+            </span>
+          </a>
+        <? } ?>
+        </div>
+      </div>
+    </div>
+    <? } ?>
 
 		<div class="mb-4">
       <h2 class="mb-4">Quick Tasks</h2>
@@ -64,38 +111,32 @@ include BASE_PATH . "views/header.php";
 			</div>
 		</div>
 
-		<div class="mb-4">
-      <h2 class="mb-4">Gala Tasks</h2>
+    <div class="mb-4">
+      <h2 class="mb-4">Club News</h2>
       <div class="news-grid">
-				<a href="<?=autoUrl('galas/entries')?>">
+        <?
+        $max_posts = 6;
+        if (sizeof($obj) < $max_posts) {
+          $max_posts = sizeof($obj);
+        }
+        for ($i = 0; $i < $max_posts; $i++) { ?>
+				<a href="<?=$obj[$i]->link?>" target="_blank" title="<?=$obj[$i]->title->rendered?>">
 					<span class="mb-3">
 	          <span class="title mb-0">
-							Check Entries
-						</span>
-						<span>
-							Check entries for galas
+							<?=$obj[$i]->title->rendered?>
 						</span>
 					</span>
           <span class="category">
-						Galas
+						News
 					</span>
         </a>
-
-				<a href="<?=autoUrl('galas/addgala')?>">
-					<span class="mb-3">
-	          <span class="title mb-0">
-							Add a Gala
-						</span>
-						<span>
-							Add a gala to the system to allow entries
-						</span>
-					</span>
-          <span class="category">
-						Galas
-					</span>
-        </a>
+        <? } ?>
 			</div>
 		</div>
+
+    <?
+    if (strpos($userInfo['EmailAddress'], '@chesterlestreetasc.co.uk')) {
+    ?>
 
 		<div class="mb-4">
       <h2 class="mb-4">Access G Suite</h2>
@@ -171,6 +212,10 @@ include BASE_PATH . "views/header.php";
         </a>
 			</div>
 		</div>
+
+    <?
+    }
+    ?>
 
 	</div>
 </div>

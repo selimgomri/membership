@@ -119,14 +119,12 @@
 						Designed and Built by Chester&#8209;le&#8209;Street ASC.
 					</p>
 					<?php
-					$executionEndTime = microtime();
-					$creationTime = number_format((float)($executionEndTime -
-					$executionStartTime), 3, '.', '');
+          global $time_start;
+          $time_end = microtime(true);
+
+          $seconds = $time_end - $time_start;
 					?>
-					<!--<p class="hidden-print"><?php echo("Page produced in " . $creationTime . "
-					seconds."); ?> Version v1.0, Production Build 267. <? echo
-					app('request')->browser() . " for " .
-					ucwords(app('request')->platform()); ?>.</p>-->
+					<p class="hidden-print">Page rendered in <?=number_format($seconds, 3)?> seconds.</p>
 	        <p class="mb-0" style="margin-bottom:0">&copy; <?php echo date( 'Y' ); ?>
 	        <span class="org fn">Chester&#8209;le&#8209;Street ASC</span>. CLS ASC is not responsible for the content of external sites.
 					</p>
@@ -138,6 +136,7 @@
 
 <!-- Modals and Other Hidden HTML -->
 <script rel="preload" src="<?php echo autoUrl("js/jquery-3.2.1.slim.min.js") ?>"></script>
+<script defer src="https://static.chesterlestreetasc.co.uk/global/headers/GlobalNavigation.js"></script>
 <script defer src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/js/popper.min.js"></script>
 <script defer src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/js/bootstrap.min.js"></script>
 <script async src="https://www.chesterlestreetasc.co.uk/static/global/js/clscookies.js"></script>

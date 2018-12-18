@@ -37,6 +37,7 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
             'Symfony\\Component\\DomCrawler\\' => 29,
             'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\BrowserKit\\' => 29,
+            'Stripe\\' => 7,
             'SendGrid\\Stats\\' => 15,
             'SendGrid\\Mail\\' => 14,
             'SendGrid\\Contacts\\' => 18,
@@ -134,6 +135,10 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'Symfony\\Component\\BrowserKit\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/browser-kit',
+        ),
+        'Stripe\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
         ),
         'SendGrid\\Stats\\' => 
         array (

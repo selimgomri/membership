@@ -1,4 +1,8 @@
 <?php
+
+$session_init = $session;
+$squad_init = $squad;
+
 $pagetitle = "Register";
 $title = "Register";
 $content = "<p class=\"lead\">Take the register for your Squad</p>";
@@ -10,6 +14,8 @@ $content .= '
 <form method="post">
 <div class="my-3 p-3 bg-white rounded shadow">
   <h2 class="border-bottom border-gray pb-2">Select Session</h2>
+  <div class="row">
+  <div class="col-md-4">
   <div class="form-group">
   <label for="session">Select Week</label>
   <select class="custom-select" name="date" id="date">';
@@ -27,10 +33,14 @@ $content .= '
     }
   $content .= '</select>
   </div>
+  </div>
+  <div class="col-md-4">
   <div class="form-group">
   <label for="squad">Select Squad</label>
-  <select class="custom-select" name="squad" id="squad">
-    <option value="0">Choose your squad from the menu</option>';
+  <select class="custom-select" name="squad" id="squad">';
+  if ($squad == null) {
+    $content .= '<option value="0">Choose your squad from the menu</option>';
+  }
     $sql = "SELECT DISTINCT squads.SquadID, SquadName FROM squads INNER JOIN sessions ON squads.SquadID = sessions.SquadID ORDER BY SquadFee DESC, SquadName ASC";
     $result = mysqli_query($link, $sql);
     $count = mysqli_num_rows($result);
@@ -38,16 +48,23 @@ $content .= '
       for ($i = 0; $i < $count; $i++) {
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
         $content .= "<option value=\"" . $row['SquadID'] . "\"";
+        if ($squad == $row['SquadID']) {
+          $content .= " selected ";
+        }
         $content .= ">" . $row['SquadName'] . "</option>";
       }
     }
   $content .= '</select>
   </div>
+  </div>
+  <div class="col-md-4">
   <div class="form-group mb-0">
   <label for="session">Select Session</label>
   <select class="custom-select" id="session" name="session">
     <option selected>No squad selected</option>
   </select>
+  </div>
+  </div>
   </div>
   </div>
 
@@ -57,58 +74,7 @@ $content .= '
   </div>
   </div>
   </form>
-  <script>
-  function resetRegisterArea() {
-    var register = document.getElementById("register");
-    register.innerHTML = \'<div class="ajaxPlaceholder mb-0">Fill in the details above and we can load the register</div>\';
-  }
-  function getSessions() {
-    var e = document.getElementById("squad");
-    var value = e.options[e.selectedIndex].value;
-    console.log(value);
-      if (value == "") {
-        document.getElementById("session").innerHTML = "<option selected>Choose the session from the menu</option>";
-        return;
-      }
-      else {
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("session").innerHTML = this.responseText;
-            console.log(this.responseText);
-            resetRegisterArea();
-          }
-        }
-      xmlhttp.open("GET", "' . autoUrl("attendance/ajax/register/sessions") . '?squadID=" + value, true);
-      xmlhttp.send();
-      }
-    }
-  document.getElementById("squad").onchange=getSessions;
-  function getRegister() {
-    var e = document.getElementById("session");
-    var value = e.options[e.selectedIndex].value;
-    var date = document.getElementById("date");
-    var dateValue = date.options[date.selectedIndex].value;
-    console.log(value);
-    console.log(dateValue);
-      if (value == "") {
-        document.getElementById("register").innerHTML = "<option selected>Choose the session from the menu</option>";
-        return;
-      }
-      else {
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("register").innerHTML = this.responseText;
-            console.log(this.responseText);
-          }
-        }
-      xmlhttp.open("GET", "' . autoUrl("attendance/ajax/register/sessions") . '?sessionID=" + value + "&date=" + dateValue, true);
-      xmlhttp.send();
-      }
-    }
-  document.getElementById("session").onchange=getRegister;
-  </script>';
+  ';
 $fluidContainer = true;
 include BASE_PATH . "views/header.php";
 include "attendanceMenu.php"; ?>
@@ -116,5 +82,83 @@ include "attendanceMenu.php"; ?>
 <?php echo "<h1>" . $title . "</h1>";
 echo $content; ?>
 </div>
+<script>
+function resetRegisterArea() {
+  var register = document.getElementById("register");
+  register.innerHTML = '<div class="ajaxPlaceholder mb-0">Fill in the details above and we can load the register</div>';
+}
+function getSessions(firstLoad = false) {
+  <? if ($squad_init == null) {
+    $squad = "null";
+  } ?>
+  var firstLoadSquad = <?=$squad?>;
+  <? if ($session_init == null) {
+    $session = "null";
+  } ?>
+  var fLSession = <?=$session?>;
+  var e = document.getElementById("squad");
+  var value = e.options[e.selectedIndex].value;
+  if (firstLoad === true) {
+    value = firstLoadSquad;
+  } else {
+    fLSession = null;
+  }
+  console.log(value);
+    if (value == "" || value == null) {
+      document.getElementById("session").innerHTML = "<option selected>Choose the squad from the menu</option>";
+      return;
+    } else {
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("session").innerHTML = this.responseText;
+          console.log(this.responseText);
+          resetRegisterArea();
+        }
+      }
+      var target = "<?=autoUrl("attendance/ajax/register/sessions")?>?squadID=" + value + "&selected=" + fLSession;
+      console.log(target);
+      xmlhttp.open("GET", target, true);
+      xmlhttp.send();
+    }
+  }
+function getRegister(firstLoad = false) {
+  <? if ($session_init == null) {
+    $session = "null";
+  } ?>
+  var presetSession = <?=$session?>;
+  var e = document.getElementById("session");
+  var value = e.options[e.selectedIndex].value;
+  if (firstLoad === true) {
+    value = presetSession;
+  }
+  var date = document.getElementById("date");
+  var dateValue = date.options[date.selectedIndex].value;
+  console.log(value);
+  console.log(dateValue);
+  if (value == "") {
+    document.getElementById("register").innerHTML = '<div class="ajaxPlaceholder mb-0">Fill in the details above and we can load the register</div>';
+    return;
+  } else {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("register").innerHTML = this.responseText;
+        console.log(this.responseText);
+      }
+    }
+    xmlhttp.open("GET", "<?=autoUrl("attendance/ajax/register/sessions")?>?sessionID=" + value + "&date=" + dateValue, true);
+    xmlhttp.send();
+  }
+}
+
+<? if ($session_init != null && $squad_init != null) { ?>
+getSessions(true);
+getRegister(true);
+<? } ?>
+
+document.getElementById("squad").onchange=getSessions;
+document.getElementById("session").onchange=getRegister;
+</script>
 <?php
 include BASE_PATH . "views/footer.php";

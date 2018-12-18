@@ -11,7 +11,6 @@ $completed = $db->prepare("UPDATE `notify` SET `Status` = ? WHERE `EmailID` = ?"
 
 for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-  pre($row);
 	$emailid = $row['EmailID'];
 	if (isSubscribed($row['UserID'], $row['EmailType']) || $row['ForceSend'] == 1) {
 		//$to = $row['EmailAddress'];

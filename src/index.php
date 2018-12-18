@@ -11,6 +11,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 //===================================
 
+$time_start = microtime(true);
+
 $config_file = 'config.php';
 if ($_SERVER['HTTP_HOST'] == 'account.chesterlestreetasc.co.uk') {
   $config_file = 'config-chester-config.php';
@@ -28,7 +30,7 @@ require $config_file;
 session_start([
     //'cookie_lifetime' => 172800,
     'gc_maxlifetime'      => 86400,
-    'cookie_httponly'     => 1,
+    'cookie_httponly'     => 0,
     'gc_probability'      => 1,
     'use_only_cookies'    => 1,
     'cookie_secure'       => 1,
@@ -174,7 +176,7 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
     ]);
 
     setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, $expiry_time , "/", 'chesterlestreetasc.co.uk', true, false);
-    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , "/", 'chesterlestreetasc.co.uk', true, true);
+    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , "/", 'chesterlestreetasc.co.uk', true, false);
   }
 }
 
@@ -266,7 +268,7 @@ $route->group('/', function() {
     // Home
     $this->get('/', function() {
       global $link;
-    	include 'controllers/login.php';
+    	include "views/Login.php";
     });
 
     $this->get('/login', function() {
@@ -327,10 +329,24 @@ $route->group('/', function() {
       include 'controllers/notify/Help.php';
     });
 
+    $this->get('/files/*', function() {
+      $filename = $this[0];
+      if (!isset($_SERVER['PHP_AUTH_USER'])) {
+        header('WWW-Authenticate: Basic realm="Use your normal account Email Address and Password"');
+        halt(401);
+      } else if (verifyUser($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
+        require BASE_PATH . 'controllers/FileLoader.php';
+      } else {
+        header('WWW-Authenticate: Basic realm="Use your normal account Email Address and Password"');
+        halt(401);
+      }
+
+    });
+
     // Global Catch All send to login
     $this->any('/*', function() {
       global $link;
-      include 'controllers/login.php';
+      include "views/Login.php";
     });
   } else if (user_needs_registration($_SESSION['UserID'])) {
     $this->group('/renewal', function() {
@@ -473,18 +489,16 @@ $route->group('/', function() {
       });
     });
 
-    $this->any('test', function() {
+    /*$this->any('test', function() {
       global $link;
       global $db;
 
-      /*
       include BASE_PATH . 'views/header.php';
 
       echo myMonthlyFeeTable($link, 1);
 
       include BASE_PATH . 'views/footer.php';
-      */
-    });
+    });*/
 
     if ($_SESSION['AccessLevel'] == "Admin") {
       $this->get('/about:php', function() {
@@ -508,17 +522,34 @@ $route->group('/', function() {
         halt((int) $code);
       });
 
-      $this->get('/about:testmail', function() {
-        notifySend(
-          "X",
-          "This week at TASC",
-          "We're doing this.",
-          "Christopher Heppell",
-          "clheppell@outlook.com",
-          $from = ["Email" => "noreply@" . CLUB_CODE . ".cds.chesterlestreetasc.co.uk", "Name" => "Tynemouth ASC"]);
+      $this->get('test', function() {
+        global $db;
+        global $link;
+        $message_subject = "Your Monthly Fee for " . date("F Y");
+        $message_content = '<p>Here are your club fees for ' . date("F Y") . '.</p>';
+        $message_content .= myMonthlyFeeTable($link, 83);
+        $message_content .= '<p>This means your total fee for ' . date("F Y") . ' is, <strong>&pound;' . number_format((25432/100), 2, '.', ',') . '</strong></p>';
+        $message_content .= '<p>This total covers all of your Club Fees.</p><p>Fees are calculated using the squad your swimmers were members of on 1 ' . date("F Y") . '.</p><hr>';
+        $message_content .= '<p>Don\'t forget that from February 2019, squad fees will be changing must be paid by Direct Debit. <a href="https://www.chesterlestreetasc.co.uk/2018/12/changes-to-squad-fees-from-february-2019/">Get the full details of the new fees on our website.</a></p>';
+        $message_content .= '<p><strong>Signed up for Direct Debit?</strong> Remember to make sure you\'ve cancelled your standing orders!</p>';
+
+        $email_info = [
+          "user" => 37,
+          "subject" => $message_subject,
+          "message" => $message_content
+        ];
+
+        $sql = "INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (:user, 'Queued', :subject, :message, 0, 'Payments')";
+        $db->prepare($sql)->execute($email_info);
+        pre($db);
       });
     }
   }
+
+  $this->get('/files/*', function() {
+    $filename = $this[0];
+    require BASE_PATH . 'controllers/FileLoader.php';
+  });
 
   // Global Catch All 404
   $this->any('/', function() {
@@ -534,3 +565,7 @@ $route->group('/', function() {
 });
 
 $route->end();
+
+// Close SQL Database Connections
+mysqli_close($link);
+$db = null;

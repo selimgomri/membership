@@ -20,6 +20,11 @@ if ($movingDate == "" || !v::date()->validate($movingDate)) {
 	$errorMessage .= "<li>A moving date was not supplied or was malformed</li>";
 }
 
+if (strtotime($movingDate) < strtotime('+10 days')) {
+	$errorState = true;
+	$errorMessage .= "<li>10 days notice must be given before a squad move</li>";
+}
+
 if (!$errorState) {
 	$sql = "INSERT INTO `moves` (`MemberID`, `SquadID`, `MovingDate`) VALUES ('$id', '$newSquad', '$movingDate');";
 
@@ -42,11 +47,12 @@ if (!$errorState) {
 
 			$subject = $swimmer . " is moving to " . $squad . " Squad";
 			$message = '<p>We\'re very excited to let you know what ' . $swimmer . ' will be moving to ' . $squad . ' Squad on ' . date("l j F Y", strtotime($movingDate)) . '.</p>';
-			$message .= '<p>The Squad Fee you will pay will be &pound;' . $squad_fee . '.</p>';
+			$message .= '<p>The Squad Fee you will pay will be &pound;' . $squad_fee . '*.</p>';
 			//$message .= '<p>As you pay by Direct Debit, you won\'t need to take any action. We\'ll automatically update your monthly fees.</p>';
 			$message .= '<p>You can get the <a href="' . $email_info['SquadTimetable'] . '" target="_blank">timetable for ' . $squad . ' Squad on our website</a>.</p>';
 			$message .= '<hr><p>If you do not think ' . $swimmer . ' will be able to take up their place in ' . $squad . ' Squad, please reply to this email as soon as possible. We must however warn you that we may not be able keep ' . $swimmer . ' in their current squad if it would prevent us from moving up swimmers in our lower squads.</p>';
 			$message .= '<p>Kind Regards,<br>The ' . CLUB_NAME . ' Team</p>';
+      $message .= '<p class="small text-muted">* Discounts may apply if you have multiple swimmers.</p>';
 
 			try {
 				$notify_query->execute([

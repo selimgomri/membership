@@ -16,6 +16,12 @@ if ($access == "Parent") {
 	  require('parentSingleSwimmerView.php');
 	});
 
+  // Swimmer Membership Card
+	$this->get('/{id}:int/membershipcard', function($id) {
+    global $link;
+	  require('Card.php');
+	});
+
 	// Edit a Swimmer
 	$this->get('/edit/{id}:int', function($id) {
     global $link;
@@ -51,6 +57,12 @@ else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {
 	$this->get('/{id}:int', function($id) {
     global $link;
 	  require('singleSwimmerView.php');
+	});
+
+  // Swimmer Membership Card
+	$this->get('/{id}:int/membershipcard', function($id) {
+    global $link;
+	  require('Card.php');
 	});
 
 	// Access Keys

@@ -1,91 +1,12 @@
 <?
-$container_class;
-if (isset($fluidContainer) && $fluidContainer == true) {
-  $container_class = "container-fluid";
-} else {
-  $container_class = "container";
-}?>
-<!DOCTYPE html>
-<!--
 
-Copyright Chris Heppell & Chester-le-Street ASC 2016 - 2018.
-Bootstrap CSS and JavaScript is Copyright Twitter Inc 2011-2018
-jQuery v3.1.0 is Copyright jQuery Foundation 2016
+require 'GlobalHead.php';
 
-Designed by Chris Heppell, www.chrisheppell.uk
-
-Yes! We built this in house. Not many clubs do. We don't cheat.
-
-Chester-le-Street ASC
-Swimming Club based in Chester-le-Street, North East England
-https://github.com/Chester-le-Street-ASC/
-
-Chester-le-Street ASC is a non profit unincorporated association.
-
--->
-<html lang="en-gb">
-  <head>
-    <meta charset="utf-8">
-    <?php if ($pagetitle != "" || $pagetitle != null)  { ?>
-    <title><?php echo htmlspecialchars($pagetitle, ENT_QUOTES, 'UTF-8'); ?> - <?=CLUB_SHORT_NAME?> Membership</title>
-    <?php }
-    else { ?>
-    <title><?=CLUB_SHORT_NAME?> Membership</title>
-    <?php } ?>
-    <meta name="description" content="Your <?=CLUB_NAME?> Account lets you make gala entries online and gives you access to all your information about your swimmers, including attendance.">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0,
-    user-scalable=no,maximum-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="apple-mobile-web-app-title" content="CLS ASC Accounts">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="googlebot" content="noarchive, nosnippet">
-    <meta name="X-CLSW-System" content="Membership">
-    <meta name="twitter:site" content="@clsasc">
-    <meta name="twitter:creator" content="@clsasc">
-    <meta name="og:type" content="website">
-    <meta name="og:locale" content="en_GB">
-    <meta name="og:site_name" content="Chester-le-Street ASC Account">
-    <meta name="X-CLSW-Tracking" content="yes">
-    <script async>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-78812259-4', 'auto');
-      <? if (isset($_SESSION['LoggedIn'])) { ?>
-      ga('set', 'userId', <?= $_SESSION['UserID'] ?>);
-      ga('send', 'event', 'authentication', 'user-id available');
-      <? } else { ?>
-      ga('send', 'pageview');
-      <? } ?>
-    </script>
-	  <script>var shiftWindow = function() { scrollBy(0, -50) }; if
-	  (location.hash) shiftWindow(); window.addEventListener("hashchange",
-	  shiftWindow);</script>
-    <script src="<? echo autoUrl("/js/tinymce/tinymce.min.js"); ?>"></script>
-    <link rel="stylesheet preload"
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono|Merriweather:400,600">
-    <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.0.17.css") ?>">
-    <link rel="stylesheet"
-    href="<?php echo autoUrl("css/font-awesome/css/font-awesome.min.css")?>">
-    <link rel="apple-touch-icon" href="<https://www.chesterlestreetasc.co.uk/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-iphone-retina.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png">
-    <link rel="mask-icon" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterIcon.svg" color="#bd0000">
-    <script src='https://www.google.com/recaptcha/api.js'></script>
-
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-  </head>
-  <? $bg = "bg-light";
-  if ($use_white_background) {
-    $bg = "bg-white";
-  }
-  ?>
+$bg = "bg-light";
+if ($use_white_background) {
+  $bg = "bg-white";
+}
+?>
 <body class="<?=$bg?> account--body">
 
   <div class="sr-only sr-only-focusable">
@@ -94,9 +15,27 @@ Chester-le-Street ASC is a non profit unincorporated association.
 
   <div class="d-print-none">
 
-    <div class="text-white py-2 top-bar bg-primary-dark" style="font-size:0.875rem;">
+    <? if (isset($_SESSION['UserSimulation'])) { ?>
+      <div class="bg-secondary text-white box-shadow py-2 d-print-none">
+        <div class="<?=$container_class?>">
+          <p class="mb-0">
+            <strong>
+              You are in User Simulation Mode simulating <?=
+              $_SESSION['UserSimulation']['SimUserName'] ?>
+            </strong>
+          </p>
+          <p class="mb-0">
+            <a href="<?=autoUrl("users/simulate/exit")?>" class="text-white">
+              Exit User Simulation Mode
+            </a>
+          </p>
+        </div>
+      </div>
+    <? } ?>
+
+    <div class="text-white py-2 top-bar bg-primary-dark hide-a-underline" style="font-size:0.875rem;">
       <div class="<?=$container_class?> d-flex">
-        <div class="mr-auto hide-a-underline">
+        <div class="mr-auto">
           <span class="mr-2">
             <a href="https://www.twitter.com/CLSASC" target="_blank" class="text-white" title="Twitter">
               <i class="fa fa-twitter fa-fw" aria-hidden="true"></i>
@@ -110,39 +49,15 @@ Chester-le-Street ASC is a non profit unincorporated association.
               <span class="sr-only">Chester-le-Street ASC on Facebook</span>
             </a>
           </span>
-
-          <span>
-            <a href="https://www.chesterlestreetasc.co.uk/feed/" target="_blank" class="text-white" title="Really Simple Syndication">
-              <i class="fa fa-rss fa-fw" aria-hidden="true"></i>
-              <span class="sr-only">Chester-le-Street ASC RSS Feeds</span>
-            </a>
-          </span>
         </div>
 
-        <div class="ml-2 top-bar">
-          <span>
-            <a href="https://www.chesterlestreetasc.co.uk" class="text-white" title="Club Website">
-              Website
-            </a>
-          </span>
-        </div>
+        <span class="d-flex" id="top-bar-visible">
+        </span>
 
         <? if ($_SESSION['LoggedIn']) { ?>
-        <div class="ml-2 top-bar">
-          <span>
-            <a href="https://account.chesterlestreetasc.co.uk" class="text-white" title="Your Club Membership Account">
-              My Account
-            </a>
-          </span>
-        </div>
+        <span class="d-none" id="top-bar-login-status">1</span>
         <? } else { ?>
-        <div class="ml-2 top-bar">
-          <span>
-            <a href="https://account.chesterlestreetasc.co.uk" class="text-white" title="Sign in to your Club Membership Account">
-              Sign in
-            </a>
-          </span>
-        </div>
+        <span class="d-none" id="top-bar-login-status">0</span>
         <? } ?>
 
         <div class="ml-2 top-bar d-lg-none">
@@ -151,6 +66,23 @@ Chester-le-Street ASC is a non profit unincorporated association.
               Search
             </a>
           </span>
+        </div>
+
+        <div class="ml-2 top-bar">
+          <span>
+            <a id="top-bar-more-link" href="#top-bar-more" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="top-bar-more" class="text-white d-none" title="More Links">
+              More <i class="fa fa-caret-down" aria-hidden="true"></i>
+            </a>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="collapse " id="top-bar-more">
+      <div class="bg-primary-dark py-2 border-top border-white hide-a-underline" style="font-size:0.875rem;">
+        <div class="container">
+          <div id="top-bar-more-content">
+          </div>
         </div>
       </div>
     </div>
@@ -390,25 +322,26 @@ Chester-le-Street ASC is a non profit unincorporated association.
             <? } ?>
           </div>
   		  </li>
-        <?php if (false)/*($_SESSION['AccessLevel'] == "Parent")*/ { ?>
+        <?php if ($_SESSION['AccessLevel'] == "Parent") {
+          if (!userHasMandates($_SESSION['UserID'])) { ?>
+          <li class="nav-item">
+    			  <a class="nav-link"  href="<?=autoUrl("payments")?>">
+              Payments
+    			  </a>
+    		  </li>
+          <? } else { ?>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="paymentsParentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Pay
             </a>
             <div class="dropdown-menu" aria-labelledby="paymentsParentDropdown">
-              <a class="dropdown-item" href="<?php echo autoUrl("payments") ?>">Payments Home</a>
-              <a class="dropdown-item" href="<?php echo autoUrl("payments/fees") ?>">Extra Fees this month</a>
-              <a class="dropdown-item" href="<?php echo autoUrl("payments/transactions")?>">Billing History</a>
-              <a class="dropdown-item" href="<?php echo autoUrl("payments/transactions")?>">My Bank Account</a>
+              <a class="dropdown-item" href="<?=autoUrl("payments")?>">Payments Home</a>
+              <a class="dropdown-item" href="<?=autoUrl("payments/transactions")?>">My Billing History</a>
+              <a class="dropdown-item" href="<?=autoUrl("payments/mandates")?>">My Bank Account</a>
+              <a class="dropdown-item" href="<?=autoUrl("payments/fees")?>">My Current Statement</a>
             </div>
           </li>
-          <li class="nav-item">
-    			  <a class="nav-link" target="_blank"
-    			  href="https://store.chesterlestreetasc.co.uk/">
-              Store
-            </a>
-    		  </li>
-        <? } ?>
+        <? } } ?>
         <? if ($_SESSION['AccessLevel'] != "Parent" &&
     		$_SESSION['AccessLevel'] != "Coach") { ?>
         <li class="nav-item dropdown">
@@ -432,7 +365,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
           } ?>
   		  <?php if (empty($_SESSION['LoggedIn'])) { ?>
         <li class="nav-item">
-  			  <a class="nav-link" href="<?php echo autoUrl("") ?>">Login</a>
+  			  <a class="nav-link" href="<?php echo autoUrl("login") ?>">Login</a>
   		  </li>
         <li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("register") ?>">Create Account</a>
@@ -476,24 +409,6 @@ Chester-le-Street ASC is a non profit unincorporated association.
 </div>
 
 <div id="maincontent"></div>
-
-  <? if (isset($_SESSION['UserSimulation'])) { ?>
-    <div class="bg-secondary text-white box-shadow mb-3 py-2 d-print-none">
-      <div class="<?=$container_class?>">
-        <p class="mb-0">
-          <strong>
-            You are in User Simulation Mode simulating <?=
-            $_SESSION['UserSimulation']['SimUserName'] ?>
-          </strong>
-        </p>
-        <p class="mb-0">
-          <a href="<?=autoUrl("users/simulate/exit")?>" class="text-white">
-            Exit User Simulation Mode
-          </a>
-        </p>
-      </div>
-    </div>
-  <? } ?>
 
   <noscript>
     <div class="alert alert-danger d-print-none">
