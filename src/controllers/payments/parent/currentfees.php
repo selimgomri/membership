@@ -2,6 +2,7 @@
 
 $user = $_SESSION['UserID'];
 $pagetitle = "Current Fees";
+$use_white_background = true;
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
@@ -9,9 +10,9 @@ include BASE_PATH . "views/paymentsMenu.php";
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php'; ?>
 
 <div class="container">
-	<div class="my-3 p-3 bg-white rounded shadow">
-		<h1 class="border-bottom border-gray pb-2 mb-2">Current Fees</h1>
-		<p class="lead">Fees and Charges created in the current Billing Period</p>
+	<div class="">
+		<h1 class="">Charges since last bill</h1>
+		<p class="lead">Fees and Charges created since your last bill</p>
 		<p>You'll be billed for these on your next billing date.</p>
 		<? echo feesToPay($link, $user); ?>
 	</div>

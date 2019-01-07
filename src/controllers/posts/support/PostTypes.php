@@ -36,5 +36,9 @@ $post_types = [
 	[
 		"value" => "account_help",
 		"description" => "Account Help"
+	],
+	[
+		"value" => "people_pages",
+		"description" => "People Pages"
 	]
 ];

@@ -1,4 +1,6 @@
 <?php
+
+$use_white_background = true;
 $pagetitle = "Add a swimmer";
 include BASE_PATH . "views/header.php";
 
@@ -24,7 +26,7 @@ if ($_SESSION['AccessLevel'] == "Parent") { ?>
     echo $_SESSION['ErrorState'];
     unset($_SESSION['ErrorState']);
   } else { ?>
-  <div class="my-3 p-3 bg-white rounded shadow">
+  <div class="">
     <h1>Add a swimmer</h1>
     <p>We need a few details to find a swimmer from our database.</p>
     <? if (isset($_SESSION['ErrorState'])) {
@@ -51,7 +53,7 @@ if ($_SESSION['AccessLevel'] == "Parent") { ?>
         <input class="form-control mb-0" type="text" name="accessKey" id="accessKey" placeholder="1A3B5C" required value="<? echo $acs; ?>">
       </div>
 
-      <input type="submit" class="btn btn-outline-dark" value="Add Swimmer">
+      <input type="submit" class="btn btn-success" value="Add Swimmer">
     </form>
   </div>
   <? } ?>

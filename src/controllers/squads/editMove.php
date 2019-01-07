@@ -1,5 +1,7 @@
 <?php
 
+$use_white_background = true;
+
 $id = mysqli_real_escape_string($link, $id);
 $sql = "SELECT members.MemberID, `MForename`, `MSurname`, `SquadName`, moves.SquadID, `MovingDate` FROM ((`moves` INNER JOIN `members` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON squads.SquadID = moves.SquadID) WHERE `MoveID` = '$id';";
 $result = mysqli_query($link, $sql);
@@ -36,7 +38,7 @@ $pagetitle = "Squad Move for " . $name;
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php"; ?>
 <div class="container">
-	<div class="my-3 p-3 bg-white rounded shadow">
+	<div class="">
 		<h1 class="border-bottom border-gray pb-2 mb-3">Squad Move for <?php echo $name; ?></h1>
 		<? if (isset($_SESSION['ErrorState'])) {
 			echo $_SESSION['ErrorState'];

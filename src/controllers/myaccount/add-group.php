@@ -1,4 +1,6 @@
 <?php
+
+$use_white_background = true;
 $pagetitle = "Add Several Swimmers";
 include BASE_PATH . "views/header.php";
 
@@ -7,7 +9,7 @@ $errorState = false;
 ?>
 
 <div class="container">
-  <div class="mb-3 p-3 bg-white rounded shadow">
+  <div class="">
     <h1>Add a Family Group</h1>
 		<? if (!$_SESSION['Success']) { ?>
     <p>If you have a Family Signup Sheet, you can add a group of your swimmers in one go.</p>
@@ -39,7 +41,7 @@ $errorState = false;
         placeholder="1A3B5C" required value="<? echo htmlentities($acs); ?>">
       </div>
 
-      <input type="submit" class="btn btn-secondary" value="Add Swimmers">
+      <input type="submit" class="btn btn-success" value="Add Swimmers">
     </form>
 	<? } else { ?>
 		<div class="alert alert-success">

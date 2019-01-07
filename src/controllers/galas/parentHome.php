@@ -1,6 +1,7 @@
 <?php
 
 $userID = $_SESSION['UserID'];
+$use_white_background = true;
 
 $pagetitle = "Galas";
 include BASE_PATH . "views/header.php";
@@ -9,47 +10,55 @@ include "galaMenu.php";
 <div class="container">
   <h1>Galas</h1>
   <p class="lead">Your current entries and galas you can enter.</p>
-  <div class="my-3 p-3 bg-white rounded shadow">
-    <h2 class="border-bottom border-gray pb-2 mb-0">Galas open for entries</h2>
-    <?= upcomingGalas($link, false, $userID) ?>
-		<hr class="mt-0">
-    <p class="mb-0"><a class="btn btn-primary" href="<?= autoUrl("galas/entergala"); ?>">
-			Enter a gala <i class="fa fa-check-square-o" aria-hidden="true"></i>
-		</a></p>
-  </div>
 
-  <div class="my-3 p-3 bg-white rounded shadow">
-    <h2 class=>Upcoming galas you've entered</h2>
-    <p class="pb-2 mb-0 border-bottom border-gray">Here are all the galas that you've entered your swimmers into. If the closing data for a gala has not yet passed, then you'll be able to edit your entry.</p>
-    <?php echo enteredGalas($link, $userID); ?>
-  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="cell">
+        <h2 class="border-bottom border-gray pb-2 mb-0">Galas open for entries</h2>
+        <?= upcomingGalas($link, false, $userID) ?>
+    		<hr class="mt-0">
+        <p class="mb-0"><a class="btn btn-primary" href="<?= autoUrl("galas/entergala"); ?>">
+    			Enter a gala <i class="fa fa-check-square-o" aria-hidden="true"></i>
+    		</a></p>
+      </div>
+    </div>
 
-  <div class="my-3 p-3 bg-white rounded shadow">
-    <h2>Generate a Gala Time Sheet</h2>
-    <p class="lead border-bottom border-gray pb-2 mb-2">
-      Gala Time Sheets give a list of each of your swimmer's entries to a gala along with their all-time personal bests and <? echo date("Y"); ?> personal bests.
-    </p>
-    <?
-		$uid = mysqli_real_escape_string($link, $_SESSION['UserID']);
-    $sql = "SELECT DISTINCT `galas`.`GalaID`, `GalaName` FROM ((`galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID`) INNER JOIN members ON galaEntries.MemberID =
-		members.MemberID) WHERE `GalaDate` >= CURDATE() AND members.UserID = '$uid' ORDER BY `GalaDate` ASC;";
-    $res = mysqli_query($link, $sql);
-    if (mysqli_num_rows($res) > 0) {
-      ?><ul class="list-unstyled mb-0"><?
-      for ($i = 0; $i < mysqli_num_rows($res); $i++) {
-        $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
-        ?>
-        <li>
-          <a href="<? echo autoUrl("galas/competitions/" . $row['GalaID'] .
-          "/timesheet"); ?>" target="_blank"><? echo $row['GalaName']; ?></a>
-        </li>
+    <div class="col-lg-6">
+      <div class="cell">
+        <h2 class=>Upcoming galas you've entered</h2>
+        <p class="pb-2 mb-0 border-bottom border-gray">Here are all the galas that you've entered your swimmers into. If the closing data for a gala has not yet passed, then you'll be able to edit your entry.</p>
+        <?php echo enteredGalas($link, $userID); ?>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="cell">
+        <h2>Generate a Gala Time Sheet</h2>
+        <p class="lead border-bottom border-gray pb-2 mb-2">
+          Gala Time Sheets give a list of each of your swimmer's entries to a gala along with their all-time personal bests and <? echo date("Y"); ?> personal bests.
+        </p>
         <?
-      }
-      ?></ul><?
-    } else {
-			?><p class="mt-3 mb-0">You have no gala entries. Therefore no Gala Time Sheets can be generated.</p><?
-		}?>
-  </div>
+    		$uid = mysqli_real_escape_string($link, $_SESSION['UserID']);
+        $sql = "SELECT DISTINCT `galas`.`GalaID`, `GalaName` FROM ((`galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID`) INNER JOIN members ON galaEntries.MemberID =
+    		members.MemberID) WHERE `GalaDate` >= CURDATE() AND members.UserID = '$uid' ORDER BY `GalaDate` ASC;";
+        $res = mysqli_query($link, $sql);
+        if (mysqli_num_rows($res) > 0) {
+          ?><ul class="list-unstyled mb-0"><?
+          for ($i = 0; $i < mysqli_num_rows($res); $i++) {
+            $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+            ?>
+            <li>
+              <a href="<? echo autoUrl("galas/competitions/" . $row['GalaID'] .
+              "/timesheet"); ?>" target="_blank"><? echo $row['GalaName']; ?></a>
+            </li>
+            <?
+          }
+          ?></ul><?
+        } else {
+    			?><p class="mt-3 mb-0">You have no gala entries. Therefore no Gala Time Sheets can be generated.</p><?
+    		}?>
+      </div>
+    </div>
 
   <?php
   /* Stats Section */
@@ -136,12 +145,15 @@ include "galaMenu.php";
   	        chart.draw(data, options);
   	      }
   	    </script>
-  			<div class="my-3 p-3 bg-white rounded shadow">
-    			<h2>Statistics</h2>
-    			<p class="border-bottom border-gray pb-2 mb-0">These are statistics for all of your swimmers put together, based on entries over all time. Go to <a href="<?php echo autoUrl('swimmers'); ?>">My Swimmers</a> to see stats for each swimmer.</p>
-    	    <div class="chart" id="piechart"></div>
-    			<div class="chart" id="barchart"></div>
-  			</div>
+        <div class="col-lg-6">
+    			<div class="cell">
+      			<h2>Statistics</h2>
+      			<p class="border-bottom border-gray pb-2 mb-0">These are statistics for all of your swimmers put together, based on entries over all time. Go to <a href="<?php echo autoUrl('swimmers'); ?>">My Swimmers</a> to see stats for each swimmer.</p>
+      	    <div class="chart" id="piechart"></div>
+      			<div class="chart" id="barchart"></div>
+    			</div>
+        </div>
   <?php } ?>
+  </div>
 </div>
 <?php include BASE_PATH . "views/footer.php"; ?>

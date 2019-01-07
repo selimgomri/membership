@@ -12,7 +12,7 @@ if (isset($_SESSION['return'])) {
 }
 $content .= '
 <form method="post">
-<div class="my-3 p-3 bg-white rounded shadow">
+<div class="cell pb-0">
   <h2 class="border-bottom border-gray pb-2">Select Session</h2>
   <div class="row">
   <div class="col-md-4">
@@ -68,19 +68,22 @@ $content .= '
   </div>
   </div>
 
-  <div class="my-3 p-3 bg-white rounded shadow">
+  <div class="cell">
   <div id="register">
-  <div class="ajaxPlaceholder mb-0">Fill in the details above and we can load the register</div>
+  <div class="ajaxPlaceholder mb-0">Fill in the details above to load a register. Hit refresh if loading fails.</div>
   </div>
   </div>
   </form>
   ';
 $fluidContainer = true;
+$use_white_background = true;
 include BASE_PATH . "views/header.php";
 include "attendanceMenu.php"; ?>
+<div>
 <div class="container-fluid">
 <?php echo "<h1>" . $title . "</h1>";
 echo $content; ?>
+</div>
 </div>
 <script>
 function resetRegisterArea() {

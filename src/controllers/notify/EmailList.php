@@ -2,6 +2,7 @@
 
 $user = $_SESSION['UserID'];
 $pagetitle = "Pending Messages";
+$use_white_background = true;
 
 $sql = "SELECT * FROM `notify` INNER JOIN `users` ON notify.UserID = users.UserID WHERE `Status` = 'Queued';";
 $result = mysqli_query($link, $sql);

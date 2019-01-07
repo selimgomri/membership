@@ -1,5 +1,7 @@
 <?php
 
+$use_white_background = true;
+
 $pagetitle = "Squad Moves";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php";
@@ -14,8 +16,8 @@ $count = mysqli_num_rows($result);
 	<!-- TABLE HERE -->
 	<?php if ($count > 0) { ?>
 		<div class="table-resonsive">
-			<table class="table table-hover">
-				<thead>
+			<table class="table table-striped">
+				<thead class="thead-light">
 					<tr>
 						<th>Swimmer</th>
 						<th>New Squad</th>

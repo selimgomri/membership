@@ -15,14 +15,12 @@ $result = mysqli_query($link, $sql);
 
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
-$name = null;
-if (mysqli_num_rows($result) == 0) {
-	$sql = "SELECT `UserID` FROM `payments` WHERE `PMkey` = '$PaymentID';";
-	$name = getUserName((mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC))['UserID']);
-} else {
-	$name = $row['Forename'] . " " . $row['Surname'];
-}
+$sql = "SELECT `UserID`, `Name`, `Amount` FROM `payments` WHERE `PMkey` = '$PaymentID';";
+$payment_info = mysqli_query($link, $sql);
+$payment_info = mysqli_fetch_array($payment_info, MYSQLI_ASSOC);
+$name = getUserName($payment_info['UserID']);
 
+$use_white_background = true;
 $pagetitle = "Statement for " . $name . ", "
  . $PaymentID;
 
@@ -34,9 +32,14 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
  ?>
 
 <div class="container">
-	<div class="my-3 p-3 bg-white rounded shadow">
-		<h1 class="border-bottom border-gray pb-2 mb-2">Statement for <? echo $name; ?></h1>
-	  <p class="lead">Payment ID: <? echo $PaymentID; ?></p>
+	<div class="">
+    <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+    <h1 class="border-bottom border-gray pb-2 mb-2">Statement, <?=$payment_info['Name']?></h1>
+    <?php } else { ?>
+		<h1 class="border-bottom border-gray pb-2 mb-2">Statement for <?=$name?></h1>
+    <?php } ?>
+	  <p class="mb-0">Payment Identification Number: <span class="mono"><?=$PaymentID?></span></p>
+    <p>Total Fee: <span class="mono">&pound;<?=number_format(($payment_info['Amount']/100),2,'.','')?></span></p>
 		<p>Payments listed below were charged as part of one single Direct Debit</p>
 		<? if (mysqli_num_rows($result) == 0) { ?>
 			<div class="alert alert-warning mb-0">
@@ -47,7 +50,8 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 				</p>
 				<p class="mb-0">
 					This usually means that the payment was created via the GoCardless
-					User Interface.
+					User Interface and not directly in this system. Please speak to the
+          treasurer to find out more.
 				</p>
 			</div>
 		<? } else { ?>

@@ -3,17 +3,18 @@
 $sql = "SELECT * FROM `renewals` ORDER BY `EndDate` DESC LIMIT 5;";
 $renewals = mysqli_query($link, $sql);
 
-$sql = "SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE() <= `EndDate`;";
+$sql = "SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE() AND CURDATE() <= `EndDate`;";
 $result = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
+$use_white_background = true;
 $pagetitle = "Membership Renewal";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php";
 ?>
 
 <div class="container">
-	<div class="my-3 p-3 bg-white rounded shadow">
+	<div class="">
 	<? if (mysqli_num_rows($result) > 0) { ?>
 		<h1>Membership Renewal for <? echo $row['Year']; ?></h1>
 		<p class="lead">Welcome to the Membership Renewal System for <? echo
@@ -29,7 +30,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 			We now charge fees by Direct Debit.
 		</p>
 	<? } else { ?>
-		<h1>Membership Renewal for <? echo $row['Year']; ?></h1>
+		<h1>Membership Renewal System</h1>
 		<p class="lead">Welcome to the Membership Renewal System</p>
 		<p>
 			Membership renewal ensures all our information about members is up to

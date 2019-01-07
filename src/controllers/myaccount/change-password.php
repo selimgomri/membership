@@ -1,9 +1,10 @@
 <?php
+  $use_white_background = true;
   $pagetitle = "Change Password";
   include BASE_PATH . "views/header.php";
 ?>
 <div class="container">
-<div class="mb-3 p-3 bg-white rounded shadow">
+<div class="">
 <h1>Change your password</h1>
 <? if (isset($_SESSION['ErrorState'])) {
   echo $_SESSION['ErrorState'];

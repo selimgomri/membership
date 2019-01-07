@@ -1,5 +1,7 @@
 <?
 
+$use_white_background = true;
+
 if ($renewal_trap) {
 	header("Location: " . autoUrl("renewal/go"));
 	exit();
@@ -28,7 +30,7 @@ if ($renewal_trap) {
 ?>
 
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded shadow">
+	<div class="">
 		<h1>
 			My Emergency Contacts
 		</h1>

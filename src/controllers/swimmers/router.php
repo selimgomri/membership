@@ -22,6 +22,16 @@ if ($access == "Parent") {
 	  require('Card.php');
 	});
 
+  // Swimmer is leaving
+	$this->get('/{id}:int/leaveclub', function($id) {
+	  require('Leave.php');
+	});
+
+  // Swimmer is leaving
+	$this->get('/{id}:int/leaveclub/{key}', function($id, $key) {
+	  require('LeaveDo.php');
+	});
+
 	// Edit a Swimmer
 	$this->get('/edit/{id}:int', function($id) {
     global $link;

@@ -3,6 +3,8 @@
 $userID = $_SESSION['UserID'];
 $id = mysqli_real_escape_string($link, $id);
 
+$use_white_background = true;
+
 $query = "SELECT * FROM members WHERE MemberID = '$id' ";
 $result = mysqli_query($link, $query);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -82,6 +84,13 @@ else {
         <small>Swimmer, <?php echo $rowSwim["SquadName"]; ?> Squad</small>
       </div>
     </div>
+    <p>
+      If <?=$rowSwim["MForename"]?> won't be returning to the club from 1
+      <?=date("F Y", strtotime('+1 month'))?>, <a href="<?=autoUrl("swimmers/" .
+      $id . "/leaveclub/")?>">please click here</a>. This will update our
+      systems and automatically remove <?=$rowSwim["MForename"]?> from our
+      registers and billing systems on this date.
+    </p>
     <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item">
         <a class="nav-link active" id="about-tab" data-toggle="tab" href="#about" role="tab" aria-controls="about" aria-selected="true">About</a>
@@ -102,8 +111,8 @@ else {
       </li>
     </ul>
     <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
-        <div class="mb-3 p-3 bg-white rounded-bottom shadow border border-top-0">
+      <div class="tab-pane fade mt-3 show active" id="about" role="tabpanel" aria-labelledby="about-tab">
+        <div class="">
           <h2 class="border-bottom border-gray pb-2 mb-0">About <?php echo $rowSwim["MForename"]; ?></h2>
           <div class="media pt-3">
             <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
@@ -237,14 +246,18 @@ else {
           </span>
         </div>
       </div>
-      <div class="tab-pane fade" id="times" role="tabpanel" aria-labelledby="times-tab">
-        <div class="mb-3 p-3 bg-white rounded-bottom shadow border border-top-0">
+      <div class="tab-pane fade mt-3" id="times" role="tabpanel" aria-labelledby="times-tab">
+        <div class="">
           <h2 class="border-bottom border-gray pb-2 mb-0">Best Times</h2>
           <?
           $sc = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'SCPB';";
           $lc = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'LCPB';";
+          $scy = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'CY_SC';";
+          $lcy = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'CY_LC';";
           $sc = mysqli_fetch_array(mysqli_query($link, $sc), MYSQLI_ASSOC);
           $lc = mysqli_fetch_array(mysqli_query($link, $lc), MYSQLI_ASSOC);
+          $scy = mysqli_fetch_array(mysqli_query($link, $scy), MYSQLI_ASSOC);
+          $lcy = mysqli_fetch_array(mysqli_query($link, $lcy), MYSQLI_ASSOC);
           $ev = ['50Free', '100Free', '200Free', '400Free', '800Free', '1500Free',
           '50Breast', '100Breast', '200Breast', '50Fly', '100Fly', '200Fly',
           '50Back', '100Back', '200Back', '100IM', '200IM', '400IM'];
@@ -257,22 +270,40 @@ else {
           if (!$openedTable) { ?>
           <table class="table table-sm table-borderless table-striped mb-0">
             <thead class="thead-light">
-              <tr class="pl-0">
-                <th class="pl-0">Swim</th>
+              <tr class="">
+                <th class="">Swim</th>
                 <th>Short Course</th>
+                <?php if (!$mob) { ?>
+                <th>SC: Last 12 Months</th>
+                <?php } ?>
                 <th>Long Course</th>
+                <?php if (!$mob) { ?>
+                <th>LC: Last 12 Months</th>
+                <?php } ?>
               </thead>
               <tbody>
               <?
               $openedTable = true;
               }
-              echo '<tr class="pl-0"><th class="pl-0">' . $evs[$i] . '</th><td>';
+              echo '<tr class=""><th class="">' . $evs[$i] . '</th><td>';
               if ($sc[$ev[$i]] != "") {
                 echo $sc[$ev[$i]];
               }
               echo '</td><td>';
+              if (!$mob) {
+                if ($scy[$ev[$i]] != "") {
+                  echo $scy[$ev[$i]];
+                }
+                echo '</td><td>';
+              }
               if ($lc[$ev[$i]] != "") {
                 echo $lc[$ev[$i]];
+              }
+              if (!$mob) {
+                echo '</td><td>';
+                if ($lcy[$ev[$i]] != "") {
+                  echo $lcy[$ev[$i]];
+                }
               }
               echo '</td></tr>';
               }
@@ -285,7 +316,7 @@ else {
           <? } ?>
         </div>
       </div>
-      <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats-tab">
+      <div class="tab-pane fade mt-3" id="stats" role="tabpanel" aria-labelledby="stats-tab">
         <?	if ($counter>0) { ?>
         	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
           <script type="text/javascript">
@@ -353,15 +384,15 @@ else {
               chart.draw(data, options);
             }
           </script>
-          <div class="mb-3 p-3 bg-white rounded-bottom shadow border border-top-0">
+          <div class="">
             <h2 class="border-bottom border-gray pb-2 mb-0">Gala Statistics</h2>
       	    <div class="chart" id="piechart"></div>
       			<div class="chart" id="barchart"></div>
           </div>
         <? } ?>
       </div>
-      <div class="tab-pane fade" id="squad" role="tabpanel" aria-labelledby="squad-tab">
-        <div class="mb-3 p-3 bg-white rounded-bottom shadow border border-top-0">
+      <div class="tab-pane fade mt-3" id="squad" role="tabpanel" aria-labelledby="squad-tab">
+        <div class="">
           <h2 class="border-bottom border-gray pb-2 mb-0">Squad Information</h2>
           <div class="media pt-3">
             <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
@@ -404,8 +435,8 @@ else {
         </div>
       </div>
       </div>
-      <div class="tab-pane fade" id="additional-details" role="tabpanel" aria-labelledby="additional-info-tab">
-        <div class="mb-3 p-3 bg-white rounded-bottom shadow border border-top-0">
+      <div class="tab-pane fade mt-3" id="additional-details" role="tabpanel" aria-labelledby="additional-info-tab">
+        <div class="">
           <?
           $col = "col-sm-6";
           if ($row['ThriveNumber'] != "") {

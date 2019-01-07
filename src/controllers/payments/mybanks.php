@@ -1,6 +1,7 @@
 <?php
 
 $user = $_SESSION['UserID'];
+$use_white_background = true;
 $pagetitle = "Payments and Direct Debits";
 
 include BASE_PATH . "views/header.php";
@@ -27,7 +28,7 @@ $result = mysqli_query($link, $sql);
 	<h1>Bank Account Options</h1>
 	<p class="lead">Control your Direct Debit details</p>
 
-  <div class="my-3 p-3 bg-white rounded shadow">
+  <div class="cell">
   	<h2>My Direct Debit Mandates</h2>
     <p class="lead">
       View details about your current mandates, and switch your primary mandate (the bank we take money from)
@@ -36,7 +37,7 @@ $result = mysqli_query($link, $sql);
       To delete a mandate permanently, contact your bank in person, by phone or through online banking, where you can cancel a mandate yourself.
     </p>
   	<?php if (mysqli_num_rows($result) > 0) { ?>
-  	<div class="table-responsive-md">
+  	<div class="table-responsive-md bg-white">
   		<table class="table table-striped">
   			<thead>
   				<tr>

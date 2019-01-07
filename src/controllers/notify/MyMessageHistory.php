@@ -1,5 +1,7 @@
 <?
 
+$use_white_background = true;
+
 $null = $page;
 
 $user = mysqli_real_escape_string($link, $_SESSION['UserID']);
@@ -65,14 +67,14 @@ include BASE_PATH . "views/header.php";
 </style>
 
 <div class="container">
-  <div class="mb-3 p-3 bg-white rounded shadow">
+  <div class="">
     <h1>My Message History</h1>
     <? if ($numMails == 0) {
       ?>
       <p class="mb-0">There are no messages to view right now.</p>
       <?
     } else { ?>
-    <p class="lead pb-3 mb-0 border-bottom border-gray">
+    <p class="lead">
       Page <? echo $page; ?> of <? echo $numPages; ?>
     </p>
     <? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
@@ -80,43 +82,43 @@ include BASE_PATH . "views/header.php";
       $info = json_decode($row['JSONData']);
       $sender = null;
         if ($row['ForceSend']) {
-          $sender .= "<p class=\"mb-0\">This message was sent to all users regardless of whether or not they had opted in or out of emails.</p>";
+          $sender .= "<p>This message was sent to all users regardless of whether or not they had opted in or out of emails.</p>";
         }
       ?>
-      <div class="media pt-3">
-        <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray force-wrap">
-          <div class="d-block text-gray-dark mb-3">
-            <p class="mb-0">
-              <strong>
-                <? echo $row['Subject']; ?>
-              </strong>
-            </p>
-            <? echo $sender; ?>
-            <? if ($row['JSONData'] != "") { ?>
-            <p class="mb-0">
-              We sent this email to:
-              <?
-              $squads = (array) $info->To->Squads;
-              $lists = (array) $info->To->Targeted_Lists;
-              foreach ($squads as $s) { ?>
-                <span class="badge badge-pill rounded badge-dark">
-                  <? echo $s; ?>
-                </span><?
-              }
-              foreach ($lists as $s) { ?>
-                <span class="badge badge-pill rounded badge-dark">
-                  <? echo $s; ?>
-                </span><?
-              } ?>
-            </p>
-            <p class="mb-0">
-              Date: <? echo date("d F Y", strtotime($row['Date'])); ?>
-            </p>
-          <? } ?>
-          </div>
-          <? echo $row['Message']; ?>
-        </div>
+      <div class="cell p-0">
+        <div class="bg-light p-3">
+          <p class="mb-0">
+            <strong>
+              <? echo $row['Subject']; ?>
+            </strong>
+          </p>
+          <? echo $sender; ?>
+          <? if ($row['JSONData'] != "") { ?>
+          <p class="mb-0">
+            <strong>We sent this email to:</strong>
+            <?
+            $squads = (array) $info->To->Squads;
+            $lists = (array) $info->To->Targeted_Lists;
+            foreach ($squads as $s) { ?>
+              <span class="badge badge-pill rounded badge-dark">
+                <? echo $s; ?>
+              </span><?
+            }
+            foreach ($lists as $s) { ?>
+              <span class="badge badge-pill rounded badge-dark">
+                <? echo $s; ?>
+              </span><?
+            } ?>
+          </p>
+          <p class="mb-0">
+            <strong>Date: </strong><? echo date("d F Y", strtotime($row['Date'])); ?>
+          </p>
+      <? } ?>
       </div>
+      <div class="p-3 pt-0 force-wrap">
+        <? echo $row['Message']; ?>
+      </div>
+  </div>
     <? } ?>
 
     <nav aria-label="Page navigation">

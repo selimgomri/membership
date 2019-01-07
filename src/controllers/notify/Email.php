@@ -1,5 +1,6 @@
 <?php
 $pagetitle = "Notify Composer";
+$use_white_background = true;
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";

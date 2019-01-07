@@ -1,5 +1,5 @@
 <?php
-$pagetitle = "Notify Composer";
+$use_white_background = true;
 
 if (is_null($user)) {
   halt(400);
@@ -32,6 +32,7 @@ if (strpos($curUserInfo['EmailAddress'], '@chesterlestreetasc.co.uk') == strlen(
   $canReply = "As you don't have a club email address, we can't allow parents to directly reply to you. If parents reply, their email will go to our enquiries team, who can forward it on to you.";
 }
 
+$pagetitle = "Email " . $name;
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";
 

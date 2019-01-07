@@ -1,8 +1,8 @@
 <?php
+  $use_white_background = true;
   $require_email_auth = false;
   $pagetitle = "My Account";
   include BASE_PATH . "views/header.php";
-  $username = $_SESSION['Username'];
   $userID = $_SESSION['UserID'];
 
   $forenameUpdate = false;
@@ -144,7 +144,7 @@
   ?>
   <div class="row justify-content-center mt-3">
     <div class="col-12 col-lg-8">
-      <div class="mb-3 p-3 bg-white rounded shadow">
+      <div class="cell">
         <h2>Your Details</h2>
         <p class="border-bottom border-gray pb-2">What we know about you.</p>
         <form method="post">
@@ -197,7 +197,7 @@
         </div>
 
         <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-        <div class="mb-3 p-3 bg-white rounded shadow">
+        <div class="cell">
           <h2>My Swimmers</h2>
           <p>Swimmers linked to your account</p>
           <?php echo mySwimmersTable($link, $userID) ?>
@@ -206,7 +206,7 @@
       <?php } ?>
     </div>
     <div class="col">
-      <div class="mb-3 p-3 bg-white rounded shadow">
+      <div class="cell">
         <h2>Password</h2>
         <p class="border-bottom border-gray pb-2">Change your password regularly to keep your account safe</p>
         <p class="mb-0"><a href="<?php echo autoUrl("myaccount/password"); ?>" class="btn btn-outline-dark">Change my Password</a></p>
@@ -218,7 +218,7 @@
 
         $contactsArray = $contacts->getContacts();
         ?>
-        <div class="mb-3 p-3 bg-white rounded shadow">
+        <div class="cell">
           <h2>My Emergency Contacts</h2>
           <p class="border-bottom border-gray pb-2 mb-0">
             These are your emergency contacts
@@ -272,18 +272,9 @@
         </div>
         <?
       } ?>
-      <div class="mb-3 p-3 bg-white rounded shadow">
+      <div class="cell">
         <h2>Technical Details</h2>
-        <p class="border-bottom border-gray pb-2">Some things you can't change about your account</p>
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input type="text" class="form-control" name="username" id="username"
-          placeholder="Username" value="<?=$username?>" readonly>
-          <small id="usernameHelp" class="form-text text-muted">You can't change your
-          username. When we first introduced this software, we asked users to set a
-          username. We no longer do this, but if you did originally set one, you can
-          still use it to log in.</small>
-        </div>
+        <p class="border-bottom border-gray pb-2">These are some things you can't change about your account. We might ask you for these details when providing help and support.</p>
         <div class="form-group">
           <label for="id">Unique User Identifier</label>
           <input type="text" class="form-control mono" name="id" id="id" placeholder="ID" value="<?=CLUB_CODE?>U<?=$userID?>" readonly>

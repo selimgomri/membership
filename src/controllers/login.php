@@ -12,7 +12,7 @@ if ( isset($_SESSION['ErrorState']) ) {
   $username = $_SESSION['EnteredUsername'];
 }
 
-$lsv = rand(0, 50); //hash('sha256', random_bytes(100));
+$lsv = hash('sha256', random_bytes(100) . date("c-U"));
 $_SESSION['LoginSec'] = $lsv;
 
 ?>

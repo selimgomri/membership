@@ -2,6 +2,8 @@
 
 $null = $page;
 
+$use_white_background = true;
+
 $start = 0;
 
 if ($page != null) {
@@ -61,9 +63,9 @@ include BASE_PATH . "views/notifyMenu.php";?>
 </style>
 
 <div class="container">
-  <div class="my-3 p-3 bg-white rounded shadow">
+  <div class="">
     <h1>Notify Message History</h1>
-    <p class="lead pb-3 mb-0 border-bottom border-gray">
+    <p class="lead">
       Page <? echo $page; ?> of <? echo $numPages; ?>
     </p>
     <? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
@@ -83,37 +85,37 @@ include BASE_PATH . "views/notifyMenu.php";?>
         }
       }
       ?>
-      <div class="media pt-3">
-        <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray force-wrap">
-          <div class="d-block text-gray-dark mb-3">
-            <p class="mb-0">
-              <strong>
-                <? echo $row['Subject']; ?>
-              </strong>
-            </p>
-            <? echo $sender; ?>
-            <? if ($row['JSONData'] != "") { ?>
-            <p class="mb-0">
-              Sent to:
-              <?
-              $squads = (array) $info->To->Squads;
-              $lists = (array) $info->To->Targeted_Lists;
-              foreach ($squads as $s) { ?>
-                <span class="badge badge-pill rounded badge-dark">
-                  <? echo $s; ?>
-                </span><?
-              }
-              foreach ($lists as $s) { ?>
-                <span class="badge badge-pill rounded badge-dark">
-                  <? echo $s; ?>
-                </span><?
-              } ?>
-            </p>
-            <p class="mb-0">
-              Date: <? echo date("d F Y", strtotime($row['Date'])); ?>
-            </p>
-          <? } ?>
-          </div>
+      <div class="cell p-0">
+        <div class="bg-light p-3">
+          <p class="mb-0">
+            <strong>
+              <? echo $row['Subject']; ?>
+            </strong>
+          </p>
+          <? echo $sender; ?>
+          <? if ($row['JSONData'] != "") { ?>
+          <p class="mb-0">
+            Sent to:
+            <?
+            $squads = (array) $info->To->Squads;
+            $lists = (array) $info->To->Targeted_Lists;
+            foreach ($squads as $s) { ?>
+              <span class="badge badge-pill rounded badge-dark">
+                <? echo $s; ?>
+              </span><?
+            }
+            foreach ($lists as $s) { ?>
+              <span class="badge badge-pill rounded badge-dark">
+                <? echo $s; ?>
+              </span><?
+            } ?>
+          </p>
+          <p class="mb-0">
+            Date: <? echo date("d F Y", strtotime($row['Date'])); ?>
+          </p>
+        <? } ?>
+        </div>
+        <div class="p-3 pt-0 force-wrap">
           <? echo $row['Message']; ?>
         </div>
       </div>

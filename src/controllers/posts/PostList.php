@@ -2,6 +2,8 @@
 
 global $db;
 
+$use_white_background = true;
+
 $null = $page;
 
 $start = 0;
@@ -47,7 +49,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/postsMenu.php";?>
 
 <div class="container">
-  <div class="mb-3 p-3 bg-white rounded shadow">
+  <main class="">
     <h1>All Posts</h1>
     <p class="lead pb-3 mb-0 border-bottom border-gray">
       Page <? echo $page; ?> of <? echo $numPages; ?>
@@ -79,7 +81,7 @@ include BASE_PATH . "views/postsMenu.php";?>
     <? } ?>
 
     <nav aria-label="Page navigation">
-      <ul class="pagination mb-0">
+      <ul class="pagination">
         <? if ($numPosts <= 10) { ?>
         <li class="page-item active"><a class="page-link" href="<? echo autoUrl("posts/list/"); ?><? echo $page ?>"><? echo $page ?></a></li>
         <? } else if ($numPosts <= 20) { ?>
@@ -110,7 +112,7 @@ include BASE_PATH . "views/postsMenu.php";?>
       <? } ?>
       </ul>
     </nav>
-  </div>
+  </main>
 </div>
 
 <?

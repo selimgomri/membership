@@ -84,6 +84,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			<?= $title ?>
 		</h1>
 		<p class="lead">
+		  There's just one more step to go. We now need you to confirm your membership renewal.
+		</p>
+		<p class="lead">
 			These Fees include your ASA membership fees for the governing bodies at
 			National, Regional and County Level.
 		</p>

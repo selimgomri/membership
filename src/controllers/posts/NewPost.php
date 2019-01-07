@@ -1,6 +1,7 @@
 <?php
-$pagetitle = "New Post";
+$use_white_background = true;
 
+$pagetitle = "New Post";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/postsMenu.php";
 
@@ -10,13 +11,13 @@ include BASE_PATH . "views/postsMenu.php";
 	<form method="post">
 		<div class="row">
 			<div class="col-md-8">
-				<div class="mb-3 p-3 bg-white rounded shadow">
+				<div class="cell">
 					<h1 class="mb-0">New Post</h1>
 				  <hr>
 					<div class="form-group">
 						<label for="title">Title</label>
 						<input type="text" class="form-control" name="title" id="title"
-			      placeholder="Post Title" autocomplete="off">
+			      placeholder="Post Title" autocomplete="off" <?if($people){?>value="<?=getUserName($_SESSION['UserID'])?>" readonly<?}?>>
 					</div>
 
 					<div class="form-group mb-0">
@@ -32,7 +33,7 @@ include BASE_PATH . "views/postsMenu.php";
 				</div>
 			</div>
 			<div class="col-12 col-md-4">
-				<div class="mb-3 p-3 bg-white rounded shadow">
+				<div class="cell">
 					<p>
 						<button class="btn btn-secondary" id="submit" value="submitted" type="submit">
 							Publish
@@ -41,7 +42,8 @@ include BASE_PATH . "views/postsMenu.php";
 					<p class="mb-0">We will publish this immediately.</p>
 				</div>
 
-				<div class="mb-3 p-3 bg-white rounded shadow">
+                <? if (!$people) { ?>
+				<div class="cell">
 					<h3>Meta</h3>
 					<div class="form-group">
 						<label for="path">Path</label>
@@ -64,6 +66,7 @@ include BASE_PATH . "views/postsMenu.php";
 						  <option value="terms_conditions">Terms and Conditions</option>
 						  <option value="staff_notice">Staff Notice</option>
 							<option value="account_help">Account Help</option>
+							<option value="people_pages">People</option>
 						</select>
 					</div>
 					<div class="form-group mb-0">
@@ -74,8 +77,9 @@ include BASE_PATH . "views/postsMenu.php";
 						</select>
 					</div>
 				</div>
+				<? } ?>
 
-				<div class="mb-3 p-3 bg-white rounded shadow">
+				<div class="cell">
 					<h3>SEO</h3>
 					<div class="form-group mb-0">
 						<label for="excerpt">Excerpt</label> <textarea class="form-control"
@@ -101,7 +105,9 @@ include BASE_PATH . "views/postsMenu.php";
     content_css: [
       'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i',
       '<? echo autoUrl("css/tinymce.css"); ?>'
-    ]
+    ],
+    relative_urls : false,
+    remove_script_host : false
       //toolbar: "link",
  });
 </script>

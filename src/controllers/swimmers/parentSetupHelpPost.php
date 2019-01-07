@@ -77,8 +77,9 @@ if (v::email()->validate($_POST['emailAddr'])) {
 
     <p>
       Don’t have an ASA Number? If so, and you need to be registered in our
-      system as a member, we\'ll give you a reference number starting with CLSX
-      which you can use in place of an ASA Number in our systems only.
+      system as a member, we\'ll give you a reference number starting with ' .
+      CLUB_CODE . 'X which you can use in place of an ASA Number in our systems
+      only.
     </p>
 
     <p>

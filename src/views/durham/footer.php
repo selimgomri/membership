@@ -1,5 +1,5 @@
 <!-- THE HEPPELL FOOTER -->
-<div class="cls-global-footer cls-global-footer-inverse cls-global-footer-body d-print-none bg-primary text-white mt-3">
+<div class="cls-global-footer cls-global-footer-inverse cls-global-footer-body d-print-none">
 	<?php if (isset($fluidContainer) && $fluidContainer == true) { ?>
 	<div class="container-fluid">
 	<?php } else { ?>
@@ -10,12 +10,10 @@
 		    <div class="row">
 		      <div class="col-sm-6 col-lg-6">
 		        <address>
-		          <strong>Tynemouth A.S.C. Ltd.</strong><br>
-		          Unit 2-4 Protection House, Albion Road<br>
-		          North Shields<br>
-		          NE30 2RH
+		          <strong>Durham City ASC</strong><br>
+		          DEMO
 		        </address>
-		        <p><i class="fa fa-envelope fa-fw" aria-hidden="true"></i> <a href="mailto:enquiries@chesterlestreetasc.co.uk" target="new">E-Mail Us</a></p>
+		        <!--<p><i class="fa fa-envelope fa-fw" aria-hidden="true"></i> <a href="mailto:enquiries@chesterlestreetasc.co.uk" target="new">E-Mail Us</a></p>-->
 		        <p class="mb-0"><i class="fa fa-commenting fa-fw" aria-hidden="true"></i> <a target="new" href="mailto:websitefeedback@chesterlestreetasc.co.uk">Website Feedback</a></p>
 						<p><i class="fa fa-flag fa-fw" aria-hidden="true"></i> <a href="https://account.chesterlestreetasc.co.uk/reportanissue?url=<?=urlencode(app('request')->curl)?>">Report an issue with this page</a></p>
 		      </div>
@@ -85,8 +83,10 @@
     <div class="row">
       <div class="col source-org vcard copyright">
 	      	<hr class="mt-0" style="border-color:#FFF">
-			    <p class="hidden-print">
-						Designed and Built by Chester&#8209;le&#8209;Street ASC Club Digital Services. Licenced to Tynemouth Amateur Swimming Club Limited.
+          <p class="hidden-print">
+						Designed and Built by Chester&#8209;le&#8209;Street ASC Club Digital
+						Services. Evaluation Version licenced to Durham City Amateur
+						Swimming Club.
 					</p>
 					<?php
 					$executionEndTime = microtime();

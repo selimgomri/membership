@@ -1,9 +1,29 @@
 <?
 
 // https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts
+// https://www.swimming.org/sport/wp-json/wp/v2/posts
 
 $json = file_get_contents('https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts');
 $obj = json_decode($json);
+
+$file = null;
+$cache_file = BASE_PATH . 'cache/SE-News.json';
+if(file_exists($cache_file)) {
+  if(time() - filemtime($cache_file) > 10800) {
+    // too old , re-fetch
+    $cache = file_get_contents('https://www.swimming.org/sport/wp-json/wp/v2/posts');
+    file_put_contents($cache_file, $cache);
+    $file = $cache;
+  } else {
+    $file = file_get_contents($cache_file);
+  }
+} else {
+  // no cache, create one
+  $cache = file_get_contents('https://www.swimming.org/sport/wp-json/wp/v2/posts');
+  file_put_contents($cache_file, $cache);
+  $file = $cache;
+}
+$asa = json_decode($file);
 
 global $db;
 
@@ -111,6 +131,7 @@ include BASE_PATH . "views/header.php";
 			</div>
 		</div>
 
+    <? if (IS_CLS) { ?>
     <div class="mb-4">
       <h2 class="mb-4">Club News</h2>
       <div class="news-grid">
@@ -133,6 +154,32 @@ include BASE_PATH . "views/header.php";
         <? } ?>
 			</div>
 		</div>
+	 <? } ?>
+
+  <? if ($asa != null && $asa != "") { ?>
+	<div class="mb-4">
+    <h2 class="mb-4">Swim England News</h2>
+    <div class="news-grid">
+      <?
+      $max_posts = 6;
+      if (sizeof($asa) < $max_posts) {
+        $max_posts = sizeof($asa);
+      }
+      for ($i = 0; $i < $max_posts; $i++) { ?>
+			<a href="<?=$asa[$i]->link?>" target="_blank" title="<?=$asa[$i]->title->rendered?>">
+				<span class="mb-3">
+          <span class="title mb-0">
+						<?=$asa[$i]->title->rendered?>
+					</span>
+				</span>
+        <span class="category">
+					News
+				</span>
+      </a>
+      <? } ?>
+		</div>
+	</div>
+  <? } ?>
 
     <?
     if (strpos($userInfo['EmailAddress'], '@chesterlestreetasc.co.uk')) {

@@ -1,5 +1,7 @@
 <?php
 
+$use_white_background = true;
+
 global $db;
 $query = null;
 
@@ -42,13 +44,18 @@ include BASE_PATH . "views/postsMenu.php";
 	<form method="post">
 		<div class="row">
 			<div class="col-md-8">
-				<div class="mb-3 p-3 bg-white rounded shadow">
+				<div class="cell">
 					<h1 class="mb-0">Editing <?=htmlentities($row['Title'])?></h1>
 				  <hr>
 					<div class="form-group">
 						<label for="title">Title</label>
+						<? if (!$people) { ?>
 						<input type="text" class="form-control" name="title" id="title"
 			      placeholder="Post Title" autocomplete="off" value="<?=htmlentities($row['Title'])?>">
+			            <? } else { ?>
+			            <input type="text" class="form-control" name="title" id="title"
+			      placeholder="Post Title" autocomplete="off" <?if($people){?>value="<?=getUserName($_SESSION['UserID'])?>" readonly<?}?>>
+			            <? } ?>
 					</div>
 
 					<div class="form-group mb-0">
@@ -64,16 +71,26 @@ include BASE_PATH . "views/postsMenu.php";
 				</div>
 			</div>
 			<div class="col-12 col-md-4">
-				<div class="mb-3 p-3 bg-white rounded shadow">
+				<div class="cell">
 					<p>
 						<button class="btn btn-secondary" id="submit" value="submitted" type="submit">
 							Save
 						</button>
 					</p>
-					<p class="mb-0">We will publish this update immediately.</p>
+					<p class="">We will publish this update immediately.</p>
+          <p class="mb-0">
+            <? if ($people) { ?>
+              View now at <a href="<?=autoUrl("people/" . $row['Path'])?>">/people/<?=$row['Path']?></a>
+            <? } else if ($row['Path'] != "") { ?>
+              View now at <a href="<?=autoUrl("posts/" . $row['Path'])?>">/posts/<?=$row['Path']?></a>
+            <? } else { ?>
+              View now at <a href="<?=autoUrl("posts/" . $row['ID'])?>">/posts/<?=$row['ID']?></a>
+            <? } ?>
+          </p>
 				</div>
 
-				<div class="mb-3 p-3 bg-white rounded shadow">
+                <? if (!$people) { ?>
+				<div class="cell">
 					<h3>Meta</h3>
 					<div class="form-group">
 						<label for="path">Path</label>
@@ -118,8 +135,9 @@ include BASE_PATH . "views/postsMenu.php";
 						</select>
 					</div>
 				</div>
+				<? } ?>
 
-				<div class="mb-3 p-3 bg-white rounded shadow">
+				<div class="cell">
 					<h3>SEO</h3>
 					<div class="form-group mb-0">
 						<label for="excerpt">Excerpt</label>

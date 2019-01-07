@@ -29,7 +29,7 @@
     </div>
   </div>
 </div>
-<div class="cls-global-footer cls-global-footer-inverse cls-global-footer-body d-print-none">
+<div class="cls-global-footer cls-global-footer-inverse cls-global-footer-body d-print-none pb-0">
 	<?php if (isset($fluidContainer) && $fluidContainer == true) { ?>
 	<div class="container-fluid">
 	<?php } else { ?>
@@ -68,6 +68,12 @@
 	              <a href="<? echo autoUrl("notify"); ?>" target="_self"
 	              title="About our Notify Email Service">
 									Emails from us
+								</a>
+	            </li>
+              <li>
+	              <a href="<? echo autoUrl("people"); ?>" target="_self"
+	              title="Personal web pages of club staff">
+									Club People
 								</a>
 	            </li>
 	            <li>
@@ -112,26 +118,28 @@
 	      </div>
 			</div>
 		</div>
+	</div> <!-- /.container -->
+</div>
+
+<div class="cls-global-footer-legal">
+  <?php if (isset($fluidContainer) && $fluidContainer == true) { ?>
+  <div class="container-fluid">
+  <?php } else { ?>
+  <div class="container">
+  <?php } ?>
     <div class="row">
       <div class="col source-org vcard copyright">
-	      	<hr class="mt-0" style="border-color:#FFF">
-			    <p class="hidden-print">
-						Designed and Built by Chester&#8209;le&#8209;Street ASC.
-					</p>
-					<?php
-          global $time_start;
-          $time_end = microtime(true);
+        <?php
+        global $time_start;
+        $time_end = microtime(true);
 
-          $seconds = $time_end - $time_start;
-					?>
-					<p class="hidden-print">Page rendered in <?=number_format($seconds, 3)?> seconds.</p>
-	        <p class="mb-0" style="margin-bottom:0">&copy; <?php echo date( 'Y' ); ?>
-	        <span class="org fn">Chester&#8209;le&#8209;Street ASC</span>. CLS ASC is not responsible for the content of external sites.
-					</p>
-      	</div>
-    	</div>
-  	</div>
-	</div> <!-- /.container -->
+        $seconds = $time_end - $time_start;
+        ?>
+        <p class="hidden-print">Designed and Built by Chester&#8209;le&#8209;Street ASC. Page rendered in <?=number_format($seconds, 3)?> seconds.</p>
+        <p class="mb-0" style="margin-bottom:0">&copy; <?=date("Y")?> <span class="org fn">Chester&#8209;le&#8209;Street ASC</span>. CLS ASC is not responsible for the content of external sites.</p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Modals and Other Hidden HTML -->
@@ -140,6 +148,9 @@
 <script defer src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/js/popper.min.js"></script>
 <script defer src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/js/bootstrap.min.js"></script>
 <script async src="https://www.chesterlestreetasc.co.uk/static/global/js/clscookies.js"></script>
+<? if ($use_website_menu) { ?>
+<script defer src="https://static.chesterlestreetasc.co.uk/global/headers/MainSiteMenu.js"></script>
+<? } ?>
 </body>
 </html>
 <?php //mysqli_close(LINK); ?>

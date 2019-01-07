@@ -1,5 +1,7 @@
 <?
 
+$use_white_background = true;
+
 global $db;
 
 $null = $page;
@@ -49,7 +51,7 @@ include BASE_PATH . "views/header.php";
 //include BASE_PATH . "views/notifyMenu.php";?>
 
 <div class="container">
-  <div class="mb-3 p-3 bg-white rounded shadow">
+  <div class="">
     <h1>Your Login History</h1>
 		<div class="alert alert-danger">
 			<p class="mb-0"><strong>Spotted anything suspicious?</strong></p>
@@ -58,7 +60,7 @@ include BASE_PATH . "views/header.php";
 		</div>
     <? if ($numLogins == 0) { ?>
       <p class="lead pb-3 mb-0 border-bottom border-gray">
-        There are no logins available to show.
+        You have never logged in.
       </p>
     <? } else { ?>
     <p class="lead pb-3 mb-0 border-bottom border-gray">

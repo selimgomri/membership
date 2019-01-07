@@ -35,9 +35,9 @@ html {
     </p>
     <p style="position:fixed;font-size:12pt;margin:2.1cm 0 0 0.25cm;max-width:8.060cm;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><?=$swimmer['SquadName']?> Squad</p>
 
-    <p style="position:fixed;font-size:10pt;margin:2.9cm 0 0 0.25cm;max-width:5.76cm;white-space:normal;overflow:hidden;text-overflow:ellipsis;"><strong>CLS Coaches/Volunteers</strong><br>Scan QR Code in emergency for Medical Form and Contact Details</p>
+    <p style="position:fixed;font-size:10pt;margin:2.9cm 0 0 0.25cm;max-width:5.76cm;white-space:normal;overflow:hidden;text-overflow:ellipsis;"><strong><?=CLUB_CODE?> Coaches/Volunteers</strong><br>Scan QR Code in emergency for Medical Form and Contact Details</p>
 
-    <p style="position:fixed;font-size:0.5cm;margin:0.25cm 0 0 7.81cm;max-width:5.76cm;white-space:normal;overflow:hidden;text-overflow:ellipsis;writing-mode:vertical-rl;text-orientation:mixed;line-height:1"><span class="mono">CLSX<?=$swimmer['MemberID']?></span></p>
+    <p style="position:fixed;font-size:0.5cm;margin:0.25cm 0 0 7.81cm;max-width:5.76cm;white-space:normal;overflow:hidden;text-overflow:ellipsis;writing-mode:vertical-rl;text-orientation:mixed;line-height:1"><span class="mono"><?=CLUB_CODE?>X<?=$swimmer['MemberID']?></span></p>
 
     <p style="position:fixed;font-size:9pt;margin:4.83cm 0 0 0.25cm;max-width:5.76cm;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1">Issued <?=date("d/m/Y")?></p>
 

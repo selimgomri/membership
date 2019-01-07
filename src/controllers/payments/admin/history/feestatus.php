@@ -14,9 +14,15 @@ $searchDate = mysqli_real_escape_string($link, $year . "-" . $month . "-") . "%"
 $name_type = null;
 $title_string = null;
 
+$fluidContainer = true;
 $use_white_background = true;
 
 $dateString = date("F Y", strtotime($year . "-" . $month));
+
+$table_sm;
+if (app('request')->isMobile()) {
+  $table_sm = "table-sm";
+}
 
 if ($type == "squads") {
 	$name_type = "SquadFee";
@@ -65,7 +71,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
  ?>
 
-<div class="container">
+<div class="container-fluid">
 	<h1>Status for <? echo $dateString; ?></h1>
   <p class="lead"><? echo $title_string; ?></p>
 	<p><a href="<?=app('request')->curl?>csv" target="_blank">View as CSV (Comma Separated Values)</a> or <a href="<?=app('request')->curl?>json" target="_blank">View as JSON (JavaScript Object Notation)</a></p>
@@ -82,7 +88,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 		</div>
 	<? } else { ?>
 	<div class="table-responsive-md">
-		<table class="table mb-0">
+		<table class="table mb-0 <?=$table_sm?>">
 			<thead class="thead-light">
 				<tr>
 					<th>

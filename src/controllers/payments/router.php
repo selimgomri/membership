@@ -51,6 +51,10 @@ if ($access == "Parent") {
 		include 'parent/transactions.php';
 	});
 
+  $this->get('/statement/latest', function() {
+		include 'parent/LatestStatement.php';
+	});
+
 	$this->get('/statement/{PaymentID}', function($PaymentID) {
 		global $link;
 		include 'admin/history/statement.php';

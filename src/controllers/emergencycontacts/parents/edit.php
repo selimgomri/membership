@@ -1,5 +1,7 @@
 <?
 
+$use_white_background = true;
+
 $url_path = "emergencycontacts";
 if ($renewal_trap) {
 	$url_path = "renewal/emergencycontacts";
@@ -25,9 +27,9 @@ if ($renewal_trap) {
 ?>
 
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded shadow">
+	<div class="">
 		<h1>
-			<? echo $contact->getName(); ?>
+			Edit <?=$contact->getName()?>
 		</h1>
 
 		<form method="post">

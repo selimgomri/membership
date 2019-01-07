@@ -1,5 +1,6 @@
 <?
 
+$use_white_background = true;
 $pagetitle = "New Emergency Contact";
 
 include BASE_PATH . 'views/header.php';
@@ -10,7 +11,7 @@ if ($renewal_trap) {
 ?>
 
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded shadow">
+	<div class="">
 		<h1>
 			Add a new Emergency Contact
 		</h1>

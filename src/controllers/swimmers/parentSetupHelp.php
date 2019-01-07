@@ -204,8 +204,9 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 		<p>
 			Don’t have an ASA Number? If so, and you need to be registered in our
-			system as a member, we’ll give you a reference number starting with CLSX
-			which you can use in place of an ASA Number in our systems only.
+			system as a member, we’ll give you a reference number starting with
+			<?=CLUB_CODE?> which you can use in place of an ASA Number in our systems
+			only.
 		</p>
 
 		<p>
@@ -241,10 +242,10 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
       <div class="text-center border border-dark h-100 p-2 bg-white">
         <span class="mb-2"><?=CLUB_SHORT_NAME?> Number</span>
         <img class="img-fluid mx-auto d-block"
-        src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=CLSX" . $row['MemberID'] . "&print=false"); ?>"
-        srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 3x"
-        alt="CLSX<? echo $row['MemberID']; ?>"></img>
-        <span class="mono">CLSX<? echo $row['MemberID']; ?></span>
+        src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . CLUB_CODE . "X" . $row['MemberID'] . "&print=false"); ?>"
+        srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . CLUB_CODE . "X" . $row['MemberID'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . CLUB_CODE . "X" . $row['MemberID'] . "&print=false"); ?> 3x"
+        alt="<?=CLUB_CODE?>X<? echo $row['MemberID']; ?>"></img>
+        <span class="mono"><?=CLUB_CODE?><? echo $row['MemberID']; ?></span>
       </div>
       <? if ($row['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><? } ?>
     </div>

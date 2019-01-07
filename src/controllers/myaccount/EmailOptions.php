@@ -1,5 +1,7 @@
 <?php
 
+$use_white_background = true;
+
 global $db;
 
 $sql = "SELECT `EmailAddress`, `EmailComms` FROM `users` WHERE `UserID` = ?";
@@ -89,7 +91,7 @@ include BASE_PATH . "views/header.php";
 		</div>
 	<? } ?>
 
-	<div class="my-3 p-3 bg-white rounded shadow">
+	<div class="cell">
 		<form method="post">
 			<div class="form-group">
 		    <label for="EmailAddress">Your Email address</label>

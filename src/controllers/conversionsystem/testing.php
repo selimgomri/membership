@@ -4,6 +4,7 @@ if (isset($_SESSION['Time'])) {
   $fluidContainer = true;
 }
 $use_white_background = true;
+$use_website_menu = true;
 $pagetitle = "Time Conversion System";
 include BASE_PATH . "views/header.php";
 ?>

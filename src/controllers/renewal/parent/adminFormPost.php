@@ -1,7 +1,7 @@
 <?
 
 $userID = mysqli_real_escape_string($link, $_SESSION['UserID']);
-$partial_reg = isPartialRegistration();
+$partial_reg = false;//isPartialRegistration();
 
 $id = [];
 

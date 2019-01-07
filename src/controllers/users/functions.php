@@ -21,7 +21,7 @@ function getUserInfoByID($db, $id) {
 			<small>' . $row['AccessLevel'] . '</small>
 		</div>
 	</div>
-	<div class="my-3 p-3 bg-white rounded shadow">
+	<div class="">
 		<h2 class="border-bottom border-gray pb-2 mb-0">Basic Information</h2>
 		<div class="media pt-3">
 			<p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
@@ -52,7 +52,7 @@ function getUserInfoByID($db, $id) {
 			</div>';
 		}
 		$output .= '
-		<div class="media pt-3">
+		<div class="media py-3">
 			<p class="media-body mb-0 lh-125">
 				<strong class="d-block text-gray-dark">Account Type</strong>
 			</p>';
@@ -84,7 +84,7 @@ function getUserInfoByID($db, $id) {
 			</div>
 		</div>
 	</div>
-	<div class="my-3 p-3 bg-white rounded shadow">
+	<div class="">
 		<h2 class="border-bottom border-gray pb-2 mb-0">Contact Details</h2>
 		<div class="media pt-3">
 			<p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">

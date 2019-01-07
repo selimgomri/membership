@@ -33,117 +33,10 @@ if ($use_white_background) {
       </div>
     <? } ?>
 
-    <?
-    $edit_link = null;
-    if (!$people) {
-      $edit_link = autoUrl("posts/" . $id . "/edit");
-    } else if ($people && $page_is_mine) {
-      $edit_link = autoUrl("people/me");
-    }
-
-    if ($allow_edit && (($_SESSION['AccessLevel'] != "Parent" &&
-    $_SESSION['AccessLevel'] != "Coach" && $edit_link != null) || $page_is_mine)) { ?>
-      <div class="bg-dark text-white box-shadow py-2 d-print-none">
-        <div class="<?=$container_class?>">
-          <p class="mb-0">
-            <a href="<?=$edit_link?>" class="text-white">
-              Edit this page
-            </a>
-          </p>
-        </div>
-      </div>
-    <? } ?>
-
-    <div class="text-white py-2 top-bar bg-primary-dark hide-a-underline" style="font-size:0.875rem;">
-      <div class="<?=$container_class?> d-flex">
-        <div class="mr-auto">
-          <span class="mr-2">
-            <a href="https://www.twitter.com/CLSASC" target="_blank" class="text-white" title="Twitter">
-              <i class="fa fa-twitter fa-fw" aria-hidden="true"></i>
-              <span class="sr-only">Chester-le-Street ASC on Twitter</span>
-            </a>
-          </span>
-
-          <span class="mr-2">
-            <a href="https://www.facebook.com/CLSASC" target="_blank" class="text-white" title="Facebook">
-              <i class="fa fa-facebook fa-fw" aria-hidden="true"></i>
-              <span class="sr-only">Chester-le-Street ASC on Facebook</span>
-            </a>
-          </span>
-        </div>
-
-        <span class="d-flex" id="top-bar-visible">
-        </span>
-
-        <? if ($_SESSION['LoggedIn']) { ?>
-        <span class="d-none" id="top-bar-login-status">1</span>
-        <? } else { ?>
-        <span class="d-none" id="top-bar-login-status">0</span>
-        <? } ?>
-
-        <div class="ml-2 top-bar d-lg-none">
-          <span>
-            <a data-toggle="collapse" href="#mobSearch" role="button" aria-expanded="false" aria-controls="mobSearch" class="text-white" title="Search the site">
-              Search
-            </a>
-          </span>
-        </div>
-
-        <div class="ml-2 top-bar">
-          <span>
-            <a id="top-bar-more-link" href="#top-bar-more" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="top-bar-more" class="text-white d-none" title="More Links">
-              More <i class="fa fa-caret-down" aria-hidden="true"></i>
-            </a>
-          </span>
-        </div>
-      </div>
-    </div>
-
-    <div class="collapse " id="top-bar-more">
-      <div class="bg-primary-dark py-2 border-top border-white hide-a-underline" style="font-size:0.875rem;">
-        <div class="<?=$container_class?>">
-          <div id="top-bar-more-content">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="collapse" id="mobSearch">
-      <div class="text-white py-3 d-lg-none bg-primary-darker">
-        <form class="container" action="https://www.chesterlestreetasc.co.uk" id="head-search" method="get">
-          <label for="s" class="sr-only">Search</label>
-          <div class="input-group">
-            <input class="form-control bg-primary text-white border-primary" id="s" name="s" placeholder="Search the site" type="search">
-            <div class="input-group-append">
-              <button type="submit" class="btn btn-primary">
-                <i class="fa fa-search"></i>
-                <span class="sr-only">
-                  Search
-                </span>
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <div class="text-white py-3 d-none d-lg-flex bg-primary-darker">
-      <div class="<?=$container_class?>">
-        <div class="row align-items-center">
-          <div class="col">
-            <a class="logowhite" href="<?=autoUrl("")?>" title="Membership Dashboard"></a>
-          </div>
-          <div class="col d-none d-lg-flex">
-            <p class="lead mb-0 ml-auto text-right">Club Membership System</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="bg-primary">
       <div class="<?=$container_class?>">
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary
-    d-print-none justify-content-between px-0" <?if($use_website_menu){?>id="club-menu"<?}?> role="navigation">
+    d-print-none justify-content-between px-0" role="navigation">
 
         <a class="navbar-brand d-lg-none" href="<?php echo autoUrl("") ?>">
           <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
@@ -158,7 +51,6 @@ if ($use_white_background) {
           <span class="navbar-toggler-icon"></span>
         </button>
 
-      <? if (!$use_website_menu) { ?>
   	  <div class="collapse navbar-collapse offcanvas-collapse" id="chesterNavbar">
       <? if (!user_needs_registration($_SESSION['UserID'])) { ?>
   		<ul class="navbar-nav mr-auto">
@@ -200,7 +92,7 @@ if ($use_white_background) {
   		  </li>
         <li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("renewal") ?>">
-            2019 Membership Renewal
+            <?=date("Y", strtotime('+1 year'))?> Membership Renewal
           </a>
   		  </li>
         <?php }
@@ -360,8 +252,7 @@ if ($use_white_background) {
               <a class="dropdown-item" href="<?=autoUrl("payments")?>">Payments Home</a>
               <a class="dropdown-item" href="<?=autoUrl("payments/transactions")?>">My Billing History</a>
               <a class="dropdown-item" href="<?=autoUrl("payments/mandates")?>">My Bank Account</a>
-              <a class="dropdown-item" href="<?=autoUrl("payments/statement/latest")?>">My Latest Statement</a>
-              <a class="dropdown-item" href="<?=autoUrl("payments/fees")?>">My Fees Since Last Bill</a>
+              <a class="dropdown-item" href="<?=autoUrl("payments/fees")?>">My Current Statement</a>
             </div>
           </li>
         <? } } ?>
@@ -374,9 +265,9 @@ if ($use_white_background) {
           <div class="dropdown-menu" aria-labelledby="postDropdown">
             <a class="dropdown-item" href="<?php echo autoUrl("posts")?>">Home</a>
         		<a class="dropdown-item" href="<?php echo autoUrl("posts/new")?>">New Page</a>
-        		<? if ($allow_edit && (($_SESSION['AccessLevel'] != "Parent" &&
-            $_SESSION['AccessLevel'] != "Coach" && $edit_link != null) || $page_is_mine)) { ?>
-        		<a class="dropdown-item" href="<?=$edit_link?>">Edit Current Page</a>
+        		<? if ($allow_edit && $_SESSION['AccessLevel'] != "Parent" &&
+        		$_SESSION['AccessLevel'] != "Coach") { ?>
+        		<a class="dropdown-item" href="<?=app('request')->curl?>edit">Edit Current Page</a>
         		<? } ?>
         		<? if ($exit_edit && $_SESSION['AccessLevel'] != "Parent" &&
         		$_SESSION['AccessLevel'] != "Coach") { ?>
@@ -416,9 +307,6 @@ if ($use_white_background) {
             <a class="dropdown-item" href="<?php echo autoUrl("myaccount/notifyhistory") ?>">Your Message History</a>
             <a class="dropdown-item" href="<?php echo autoUrl("myaccount/addswimmer") ?>">Add a Swimmer</a>
             <? } ?>
-            <? if ($_SESSION['AccessLevel'] != "Parent") { ?>
-            <a class="dropdown-item" href="<?php echo autoUrl("people/me") ?>">Your Personal Page</a>
-            <? } ?>
             <a class="dropdown-item" href="<?php echo autoUrl("myaccount/loginhistory") ?>">Your Login History</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">Help</a>
@@ -430,7 +318,6 @@ if ($use_white_background) {
       }?>
     </nav>
   </div>
-  <? } ?>
   </div>
 
 </div>
