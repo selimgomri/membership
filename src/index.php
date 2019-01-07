@@ -14,12 +14,15 @@ error_reporting(E_ALL);
 $time_start = microtime(true);
 
 $config_file = 'config.php';
-if ($_SERVER['HTTP_HOST'] == 'account.chesterlestreetasc.co.uk') {
+if ($_SERVER['HTTP_HOST'] == 'account.chesterlestreetasc.co.uk' || $_SERVER['HTTP_HOST'] == 'membership.chesterlestreetasc.co.uk') {
   $config_file = 'config-chester-config.php';
   define('COOKIE_PREFIX', 'CLSASC_', true);
 } else if ($_SERVER['HTTP_HOST'] == 'tynemouth.chesterlestreetasc.co.uk') {
   $config_file = 'config-tyne-config.php';
   define('COOKIE_PREFIX', 'TASC_', true);
+} else if ($_SERVER['HTTP_HOST'] == 'dcasc-demo.chesterlestreetasc.co.uk') {
+  $config_file = 'config-durham-config.php';
+  define('COOKIE_PREFIX', 'DCASC', true);
 } else {
   $config_file = 'config.php';
   define('COOKIE_PREFIX', 'CLSASC_', true);
@@ -113,6 +116,11 @@ if (mysqli_connect_errno()) {
 
 require_once "database.php";
 
+if ($_SERVER['HTTP_HOST'] == 'account.chesterlestreetasc.co.uk' && app('request')->method == "GET") {
+  header("Location: " . autoUrl(ltrim(app('request')->path, '/')));
+  die();
+}
+
 if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'AutoLogin'] != "") {
   $sql = "SELECT `UserID`, `Time` FROM `userLogins` WHERE `Hash` = ? AND `Time` >= ? AND `HashActive` = ?";
 
@@ -186,12 +194,47 @@ header("Referrer-Policy: strict-origin-when-cross-origin");
 //header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload');
 header('Server: Chester-le-Magic');
 header("Content-Security-Policy: block-all-mixed-content");
+header('Expect-CT: enforce, max-age=30, report-uri="https://chesterlestreetasc.report-uri.com/r/d/ct/enforce"');
 
 //halt(901);
+
+/*
+if (sizeof($_SESSION == 0)) {
+  $_SESSION['TARGET_URL'] = app('request')->curl;
+  header("Location: " . autoUrl(""));
+}
+*/
 
 $route->group('/', function() {
   global $db, $link;
   //$_SESSION['ClubCode'] = strtolower($code);
+
+  if ($_SESSION['TWO_FACTOR']) {
+    $this->group('/2fa', function() {
+      $this->get('/', function() {
+        include BASE_PATH . 'views/TwoFactorCodeInput.php';
+      });
+
+      $this->post('/', function() {
+        include BASE_PATH . 'controllers/2fa/SubmitCode.php';
+      });
+
+      $this->get('/exit', function() {
+        $_SESSION = [];
+        unset($_SESSION);
+        header("Location: " . autoUrl("login"));
+      });
+
+      $this->get('/resend', function() {
+        include BASE_PATH . 'controllers/2fa/ResendCode.php';
+      });
+    });
+
+    $this->get(['/', '/*'], function() {
+      $_SESSION['TWO_FACTOR'] = true;
+      header("Location: " . autoUrl("2fa"));
+    });
+  }
 
   $this->get('/auth/cookie/redirect', function() {
     //$target = urldecode($target);
@@ -267,12 +310,14 @@ $route->group('/', function() {
 
     // Home
     $this->get('/', function() {
-      global $link;
-    	include "views/Login.php";
+      include "views/Welcome.php";
     });
 
     $this->get('/login', function() {
-      header("Location: " . autoUrl(""));
+      if (empty($_SESSION['TARGET_URL'])) {
+        $_SESSION['TARGET_URL'] = "";
+      }
+      include "views/Login.php";
     });
 
     // Register
@@ -329,6 +374,12 @@ $route->group('/', function() {
       include 'controllers/notify/Help.php';
     });
 
+    $this->group('/people', function() {
+      global $link;
+      $people = true;
+      include 'controllers/posts/router.php';
+    });
+
     $this->get('/files/*', function() {
       $filename = $this[0];
       if (!isset($_SERVER['PHP_AUTH_USER'])) {
@@ -345,8 +396,8 @@ $route->group('/', function() {
 
     // Global Catch All send to login
     $this->any('/*', function() {
-      global $link;
-      include "views/Login.php";
+      $_SESSION['TARGET_URL'] = app('request')->path;
+      header("Location: " . autoUrl("login"));
     });
   } else if (user_needs_registration($_SESSION['UserID'])) {
     $this->group('/renewal', function() {
@@ -403,6 +454,12 @@ $route->group('/', function() {
     $this->group(['/posts', '/pages'], function() {
       global $link;
 
+      include 'controllers/posts/router.php';
+    });
+
+    $this->group('/people', function() {
+      global $link;
+      $people = true;
       include 'controllers/posts/router.php';
     });
 
@@ -523,25 +580,7 @@ $route->group('/', function() {
       });
 
       $this->get('test', function() {
-        global $db;
-        global $link;
-        $message_subject = "Your Monthly Fee for " . date("F Y");
-        $message_content = '<p>Here are your club fees for ' . date("F Y") . '.</p>';
-        $message_content .= myMonthlyFeeTable($link, 83);
-        $message_content .= '<p>This means your total fee for ' . date("F Y") . ' is, <strong>&pound;' . number_format((25432/100), 2, '.', ',') . '</strong></p>';
-        $message_content .= '<p>This total covers all of your Club Fees.</p><p>Fees are calculated using the squad your swimmers were members of on 1 ' . date("F Y") . '.</p><hr>';
-        $message_content .= '<p>Don\'t forget that from February 2019, squad fees will be changing must be paid by Direct Debit. <a href="https://www.chesterlestreetasc.co.uk/2018/12/changes-to-squad-fees-from-february-2019/">Get the full details of the new fees on our website.</a></p>';
-        $message_content .= '<p><strong>Signed up for Direct Debit?</strong> Remember to make sure you\'ve cancelled your standing orders!</p>';
-
-        $email_info = [
-          "user" => 37,
-          "subject" => $message_subject,
-          "message" => $message_content
-        ];
-
-        $sql = "INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (:user, 'Queued', :subject, :message, 0, 'Payments')";
-        $db->prepare($sql)->execute($email_info);
-        pre($db);
+        notifySend("x", "A test", "Hello Christopher", "Chris Heppell", "clheppell1@sheffield.ac.uk", $from = ["Email" => "noreply@galas.uk", "Name" => "GALAS.UK"]);
       });
     }
   }
