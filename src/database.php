@@ -196,71 +196,36 @@ $message .= "
 function getAttendanceByID($link, $id, $weeks = "all") {
   global $db;
 
-  $output = $weeksWHERE = "";
-  if ($weeks != "all") {
-    $number = "LIMIT $weeks";
-  }
+  $output = "";
+  $startWeek = 1;
 
   // Get the last four weeks to calculate attendance
-  $sql = "SELECT `WeekID` FROM `sessionsWeek` ORDER BY `WeekDateBeginning`
-  DESC;";
-  $resultWeeks = mysqli_query($link, $sql);
-  $weeksToDo = $weekCount = mysqli_num_rows($resultWeeks);
-  if ($weekCount > 0) {
-    $sqlWeeks = "";
-    // Produce stuff for query
-    if ($weeks != "all") {
-      $weeksToDo = $weekCount-$weeks;
-    }
-    for ($y=$weekCount; $y>$weeksToDo; $y--) {
-      $attRow = mysqli_fetch_array($resultWeeks, MYSQLI_ASSOC);
-      $weekID[$y] = $attRow['WeekID'];
-      if ($y > ($weeksToDo+1)) {
-        $sqlWeeks .= "`WeekID` = '$weekID[$y]' OR ";
-      }
-      else {
-        $sqlWeeks .= "`WeekID` = '$weekID[$y]'";
-      }
-    }
-  }
+  $latestWeek = $db->query("SELECT MAX(WeekID) FROM `sessionsWeek`;")->fetchColumn();
 
   if ($weeks != "all") {
-    $weeksWHERE = "($sqlWeeks) AND";
-  }
-
-  if ($weekCount > 0) {
-
-    // Get number of sessions we were present at
-    $sql = "SELECT `AttendanceBoolean` FROM (`sessionsAttendance` INNER JOIN
-    `sessions` on sessionsAttendance.SessionID=sessions.SessionID) WHERE
-    `AttendanceBoolean` = '1' AND $weeksWHERE `MemberID` = '$id' AND
-    MainSequence = '1';";
-    $resultAtt = mysqli_query($link, $sql);
-    $presentCount = mysqli_num_rows($resultAtt);
-
-    // Get number of sessions in total
-    $sql = "SELECT `AttendanceBoolean` FROM (`sessionsAttendance` INNER JOIN
-    `sessions` on sessionsAttendance.SessionID=sessions.SessionID) WHERE
-    $weeksWHERE `MemberID` = '$id' AND MainSequence = '1';";
-    $resultAtt = mysqli_query($link, $sql);
-    $totalCount = mysqli_num_rows($resultAtt);
-
-    $attPercent = 0;
-    if ($totalCount != 0) {
-      $attPercent = ($presentCount/$totalCount)*100;
-      $output = number_format($attPercent,1,'.','');
-      if ($output == 0.0) {
-        $output = 0;
-      }
-    }
-    else {
-      $output = "Unknown - 0";
+    $startWeek = $latestWeek - $weeks;
+    if ($startWeek < 1) {
+      $startWeek = 1;
     }
   }
-  else {
-    $output = 0;
+
+  $member = [
+    "week" => $startWeek,
+    "member" => $id
+  ];
+
+  $numPresent = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` WHERE WeekID >= :week && MemberID = :member && AttendanceBoolean = 1");
+  $numPresent->execute($member);
+  $numPresent = $numPresent->fetchColumn();
+  $totalNum = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` WHERE WeekID >= :week && MemberID = :member");
+  $totalNum->execute($member);
+  $totalNum = $totalNum->fetchColumn();
+
+  if ($totalNum == 0) {
+    return "No Data 0";
   }
-  return $output;
+
+  return number_format(($numPresent/$totalNum)*100, 1, ".", "");
 }
 
 function mySwimmersTable($link, $userID) {
@@ -367,7 +332,7 @@ function mySwimmersMedia($link, $userID) {
   $output = "";
   if ($swimmerCount > 0) {
     $output = '
-    <div class="my-3 p-3 bg-white rounded shadow">
+    <div class="">
     <h2>My Swimmers</h2>' . $swimmers;
     $resultX = mysqli_query($link, $sqlSwim);
     for ($i = 0; $i < $swimmerCount; $i++) {
@@ -396,7 +361,7 @@ function mySwimmersMedia($link, $userID) {
   }
   else {
     $output .= '
-    <div class="my-3 p-3 bg-white rounded shadow">
+    <div class="">
     <h2>My Swimmers</h2>
     <p class="mb-0">It looks like you have no swimmers connected to your
     account. Why don\'t you <a href="' . autoUrl("myaccount/addswimmer") . '"
@@ -600,7 +565,7 @@ function enteredGalasMedia($link, $userID) {
   $result = mysqli_query($link, $sql);
   $count = mysqli_num_rows($result);
   if ($count > 0) {
-    $output = "<div class=\"my-3 p-3 bg-white rounded shadow\">
+    $output = "<div class=\"\">
     <h2 class=\"border-bottom border-gray pb-2 mb-0\">My Entries</h2>";
     for ($i = 0; $i < $count; $i++) {
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -630,7 +595,7 @@ function enteredGalasMedia($link, $userID) {
     }
   }
   else {
-    $output = "<div class=\"my-3 p-3 bg-white rounded shadow\">
+    $output = "<div class=\"\">
     <h2>My Entries</h2><p class=\"mb-0\">There are no upcoming galas that you
     have entered.</p></div>";
   }
@@ -789,7 +754,7 @@ function myMonthlyFeeMedia($link, $userID) {
   }
   $monthlyExtrasTotal = monthlyExtraCost($link, $userID, "decimal");
   if ($monthlyExtrasTotal+$reducedCost > 0) {
-    $output = "<div class=\"my-3 p-3 bg-white rounded shadow\">
+    $output = "<div class=\"\">
     <h2>My Fees</h2><p class=\"lead border-bottom border-gray pb-2
     mb-0\">Showing monthly fees</p>
     <div class=\"table-responsive\"><table class=\"table mb-0\">
@@ -812,7 +777,7 @@ function myMonthlyFeeMedia($link, $userID) {
     return $output;
   }
   else {
-    return "<div class=\"my-3 p-3 bg-white rounded shadow\">
+    return "<div class=\"\">
     <h2>My Fees</h2>
     <p class=\"mb-0\">You have no monthly fees to pay. You may need to add a
     swimmer to see any fees.</p>
@@ -894,7 +859,7 @@ function squadInfoTable($link, $enableLinks = false) {
   if ($count > 0) {
     $output = '
     <div class="table-responsive">
-      <table class="table table-hover">
+      <table class="table table-striped">
         <thead class="thead-light">
           <tr>
             <th>Name</th>
@@ -1692,6 +1657,38 @@ function updateSubscription($post, $list, $user = null) {
 			halt(500);
 		}
 	}
+}
+
+function getUserOption($userID, $option) {
+  global $db;
+  $query = $db->prepare("SELECT Value FROM userOptions WHERE User = ? AND Option = ?");
+  $query->execute([$userID, $option]);
+  $result = $query->fetchColumn();
+
+  if ($result == null || $result == "") {
+    return null;
+  }
+  return $result;
+}
+
+function setUserOption($userID, $option, $value) {
+  try {
+    global $db;
+    $query = $db->prepare("SELECT COUNT(*) FROM userOptions WHERE User = ? AND Option = ?");
+    $query->execute([$userID, $option]);
+    $result = $query->fetchColumn();
+
+    if ($result == 0) {
+      $query = $db->prepare("INSERT INTO userOptions (User, Option, Value) VALUES (?, ?, ?)");
+      $query->execute([$userID, $option, $value]);
+    } else {
+      $query = $db->prepare("UPDATE userOptions SET Value = ? WHERE User = ? AND Option = ?");
+      $query->execute([$value, $userID, $option]);
+    }
+  } catch (Exception $e) {
+    return false;
+  }
+  return true;
 }
 
 $count = 0;

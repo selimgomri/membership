@@ -72,3 +72,13 @@ $this->post('/email', function() {
 	global $link;
 	include 'EmailOptionsPost.php';
 });
+
+$this->get('/general', function() {
+	global $link;
+	include 'GeneralOptions.php';
+});
+
+$this->post('/general', function() {
+	global $link;
+	include 'GeneralOptionsPost.php';
+});

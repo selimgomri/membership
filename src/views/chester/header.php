@@ -408,6 +408,7 @@ if ($use_white_background) {
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="<?php echo autoUrl("myaccount") ?>">Your Profile</a>
             <a class="dropdown-item" href="<?php echo autoUrl("myaccount/email") ?>">Your Email Options</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("myaccount/general") ?>">Your General Options</a>
             <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
               <a class="dropdown-item" href="<?php echo autoUrl("emergencycontacts") ?>">Your Emergency Contacts</a>
             <? } ?>

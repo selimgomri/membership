@@ -40,7 +40,7 @@
       $userID = $row['UserID'];
 
       if (password_verify($password, $hash)) {
-      if ($row['AccessLevel'] != "Parent"/* || getUserOption($userID, "Is2FA")*/) {
+      if ($row['AccessLevel'] != "Parent" || filter_var(getUserOption($userID, "Is2FA"), FILTER_VALIDATE_BOOLEAN)) {
           // Do 2FA
           $code = rand(100000, 999999);
 
