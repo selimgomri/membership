@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * (c) Jeroen van den Enden <info@endroid.nl>
  *
@@ -58,6 +60,8 @@ class QrCodeTest extends TestCase
     public function testWriteQrCode(): void
     {
         $qrCode = new QrCode('QR Code');
+        $qrCode->setLogoPath(__DIR__.'/../assets/images/symfony.png');
+        $qrCode->setLogoWidth(100);
 
         $qrCode->setWriterByName('binary');
         $binData = $qrCode->writeString();
@@ -134,5 +138,21 @@ class QrCodeTest extends TestCase
         $image = imagecreatefromstring(file_get_contents($filename));
 
         $this->assertTrue(is_resource($image));
+    }
+
+    public function testData(): void
+    {
+        $qrCode = new QrCode('QR Code');
+
+        $data = $qrCode->getData();
+
+        $this->assertArrayHasKey('block_count', $data);
+        $this->assertArrayHasKey('block_size', $data);
+        $this->assertArrayHasKey('inner_width', $data);
+        $this->assertArrayHasKey('inner_height', $data);
+        $this->assertArrayHasKey('outer_width', $data);
+        $this->assertArrayHasKey('outer_height', $data);
+        $this->assertArrayHasKey('margin_left', $data);
+        $this->assertArrayHasKey('margin_right', $data);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace CLSASC\EquivalentTime;
 
+use CLSASC\EquivalentTime\ConversionExceptions\IllegalEventException;
+
 /**
  * Handle the Pool Length Parameters. Creates a PoolMeasFlag
  *
@@ -9,8 +11,8 @@ namespace CLSASC\EquivalentTime;
  * @author Chris Heppell https://github.com/clheppell
  */
 class Event {
-	private $ev;
-	private $spl;
+	//private $ev;
+	//private $spl;
 
 	/**
 	 * Function to let you know if the event is allowed in the pool
@@ -18,12 +20,7 @@ class Event {
 	 * @param  string  $event the name of the event, ie "50 Free", "200 IM"
 	 * @return boolean true if event is allowed in pool, false otherwise
 	 */
-  public static function isAllowed($spl = null, $event = null) {
-		if ($spl == null && $this->spl != null && $event ==
-		null && $this->ev != null) {
-			$spl = $this->spl;
-			$event = $this->ev;
-		}
+  public static function isAllowed($spl, $event) {
 
 		if ($event == "50 Free") {
 			switch ($spl) {
@@ -111,13 +108,10 @@ class Event {
 	 * Get the distance for the event
 	 * @param  string $event the name of the event, ie "1500 Free"
 	 * @return int    the distance of the event, ie 1500
-	 * @throws Exception if the event is invalid
+	 * @throws IllegalEventException if the event is invalid
 
 	 */
-	public static function distance($event = null) {
-		if ($event == null && $this->ev != null) {
-			$event = $this->ev;
-		}
+	public static function distance($event) {
 
 		$distance = 0;
 
@@ -157,7 +151,7 @@ class Event {
 		if ($distance != 0) {
 			return $distance;
 		} else {
-			throw new \Exception("Invalid event", 1);
+			throw new IllegalEventException();
 		}
   }
 }

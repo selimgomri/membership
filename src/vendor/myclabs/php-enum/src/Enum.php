@@ -29,7 +29,7 @@ abstract class Enum implements \JsonSerializable
      *
      * @var array
      */
-    protected static $cache = array();
+    protected static $cache = [];
 
     /**
      * Creates a new value of some type
@@ -150,7 +150,7 @@ abstract class Enum implements \JsonSerializable
     {
         $array = static::toArray();
 
-        return isset($array[$key]);
+        return isset($array[$key]) || \array_key_exists($key, $array);
     }
 
     /**
@@ -177,7 +177,7 @@ abstract class Enum implements \JsonSerializable
     public static function __callStatic($name, $arguments)
     {
         $array = static::toArray();
-        if (isset($array[$name])) {
+        if (isset($array[$name]) || \array_key_exists($name, $array)) {
             return new static($array[$name]);
         }
 

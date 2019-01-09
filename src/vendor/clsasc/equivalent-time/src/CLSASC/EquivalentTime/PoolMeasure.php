@@ -2,6 +2,8 @@
 
 namespace CLSASC\EquivalentTime;
 
+use CLSASC\EquivalentTime\ConversionExceptions\UncateredConversionException;
+
 /**
  * Get the turns per hundred
  *
@@ -18,7 +20,7 @@ class PoolMeasure {
    * @return double pool measure
    */
   public static function getValue($length, $event = null) {
-		$poolMeasure;
+		$poolMeasure = null;
 
     switch ($length) {
 			case '50m':
@@ -86,6 +88,10 @@ class PoolMeasure {
   				$poolMeasure = 0.91046;
   				break;
   		}
+    }
+
+    if ($poolMeasure == null) {
+      throw new UncateredConversionException();
     }
 
 		return $poolMeasure;

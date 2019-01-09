@@ -2,6 +2,9 @@
 
 namespace CLSASC\EquivalentTime;
 
+use CLSASC\EquivalentTime\ConversionExceptions\IllegalEventException;
+use CLSASC\EquivalentTime\ConversionExceptions\UndefinedPoolLengthException;
+
 /**
  * Get the turns per hundred
  *
@@ -14,9 +17,11 @@ class Turns {
    * Returns the number of turns per hundred in a pool
    * @param  string $source_pool_length the source pool length, ie "50m", "25y"
    * @return int the number of turns per hundred
+   * @throws UndefinedPoolLengthException if the source pool length or requested
+   * conversion length does not exist
    */
   public static function perHundred($source_pool_length) {
-		$flag;
+		$flag = null;
 
     switch ($source_pool_length) {
 			case '50m':
@@ -37,8 +42,12 @@ class Turns {
 				$flag = 4;
 				break;
 			default:
-				$flag = 0;
+				$flag = null;
 		}
+
+    if ($flag == null) {
+      throw new UndefinedPoolLengthException();
+    }
 
 		return $flag;
   }
@@ -47,6 +56,8 @@ class Turns {
    * Get the turn factor, the key ingredient in conversions
    * @param  string $event The event name, ie "400 IM"
    * @return double turn factor
+   * @throws IllegalEventException if the event was not recognised or is not
+   * allowed
    */
 	public static function getFactor($event) {
 		$turn_factor;
@@ -101,7 +112,7 @@ class Turns {
 		}
 
 		if ($turn_factor == 0) {
-			throw new \Exception("Unknown event", 1);
+			throw new IllegalEventException();
 		}
 
 		return $turn_factor;

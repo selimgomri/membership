@@ -41,6 +41,8 @@ return array(
     'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qr-code/src'),
     'Endroid\\Installer\\' => array($vendorDir . '/endroid/installer/src'),
     'Defuse\\Crypto\\' => array($vendorDir . '/defuse/php-encryption/src'),
+    'DASPRiD\\Enum\\' => array($vendorDir . '/dasprid/enum/src'),
     'Composer\\CaBundle\\' => array($vendorDir . '/composer/ca-bundle/src'),
     'CLSASC\\EquivalentTime\\' => array($vendorDir . '/clsasc/equivalent-time/src/CLSASC/EquivalentTime'),
+    'BaconQrCode\\' => array($vendorDir . '/bacon/bacon-qr-code/src'),
 );

@@ -2,17 +2,25 @@
 
 namespace CLSASC\EquivalentTime;
 
-require 'Event.php';
-require 'PoolLengthParameters.php';
-require 'Turns.php';
-require 'PoolMeasure.php';
+require_once 'Event.php';
+require_once 'PoolLengthParameters.php';
+require_once 'Turns.php';
+require_once 'PoolMeasure.php';
+require_once 'ConversionExceptions/IllegalEventException.class.php';
+require_once 'ConversionExceptions/NegativeOutputException.class.php';
+require_once 'ConversionExceptions/UncateredConversionException.class.php';
+require_once 'ConversionExceptions/UndefinedPoolLengthException.class.php';
+
+use CLSASC\EquivalentTime\ConversionExceptions\IllegalEventException;
+use CLSASC\EquivalentTime\ConversionExceptions\NegativeOutputException;
+use CLSASC\EquivalentTime\ConversionExceptions\UncateredConversionException;
+use CLSASC\EquivalentTime\ConversionExceptions\UndefinedPoolLengthException;
 
 /**
  * A PHP Class to implement the British Swimming Equivalent Time Algorithm
  *
  * @copyright Chester-le-Street ASC https://github.com/Chester-le-Street-ASC
  * @author Chris Heppell https://github.com/clheppell
- *
  */
 class EquivalentTime {
   private $source_pool_length;
@@ -32,8 +40,15 @@ class EquivalentTime {
    * @param string $event              describes the event, ie "50 Free"
    * @param double $time_source        time in the source pool as a double eg
    * 62.56 or 27.59
-   * @throws Exception If pool length not known, Event not allowed in this length
-   * of pool or if input time is not a float
+   * @throws IllegalEventException if the event was not recognised or is not
+   * allowed
+   * @throws NegativeOutputException if the output time or a section of the output
+   * time is negative (hence illegal)
+   * @throws UncateredConversionException if a conversion for this event/pool has
+   * not been implemented or is not provided for in the SPORTSYSTEMS/ASA
+   * specification for this converter
+   * @throws UndefinedPoolLengthException if the source pool length or requested
+   * conversion length does not exist
    */
   public function __construct($source_pool_length, $event, $time_source) {
     $this->formattedString = false;
@@ -42,19 +57,27 @@ class EquivalentTime {
     $this->turns_per_hundred = Turns::perHundred($source_pool_length);
 
     if ($this->pool_length_flag == 0 || $this->turns_per_hundred == 0) {
-      throw new \Exception("Unknown pool length", 1);
+      throw new UndefinedPoolLengthException();
     }
 
     // Is this event allowed for the source pool length?
     if (!EVENT::isAllowed($source_pool_length, $event)) {
-      throw new \Exception("Event not allowed in this length of pool", 1);
+      throw new IllegalEventException();
     }
 
     $this->event = $event;
 
+    if (gettype($time_source) == "integer") {
+      $time_source = (float) $time_source;
+    }
+
     // Verify the time at this step
     if (gettype($time_source) != "double") {
-      throw new \Exception("Input time not a float", 1);
+      throw new \InvalidArgumentException();
+    }
+
+    if ($time_source < 0) {
+      throw new \InvalidArgumentException();
     }
 
     // Take source pool lenth and leave or turn to 50m time
@@ -81,7 +104,7 @@ class EquivalentTime {
       if (($d1 == 1650 && $this->turns_per_hundred%2 == 0) || ($this->event ==
       "200 IM" && $this->turns_per_hundred%2 == 0) || ($d1 == 50 &&
       $this->turns_per_hundred%2 == 0)) {
-        throw new \Exception("Uncatered Conversion", 1);
+        throw new UncateredConversionException();
       }
 
       $num_turn_factor = $this->distance/100*($d1/100)*($this->turns_per_hundred-1);
@@ -99,6 +122,15 @@ class EquivalentTime {
    * @author Chris Heppell https://github.com/clheppell
    * @param string $target_pool_length string representing the length of pool to
    * convert the time to
+   * @throws IllegalEventException if the event was not recognised or is not
+   * allowed
+   * @throws NegativeOutputException if the output time or a section of the output
+   * time is negative (hence illegal)
+   * @throws UncateredConversionException if a conversion for this event/pool has
+   * not been implemented or is not provided for in the SPORTSYSTEMS/ASA
+   * specification for this converter
+   * @throws UndefinedPoolLengthException if the source pool length or requested
+   * conversion length does not exist
    */
   public function getConversion($target_pool_length) {
     $pool_length_flag = PoolMeasure::getValue($target_pool_length, $this->event);
@@ -118,12 +150,6 @@ class EquivalentTime {
     $turn_time = $turn_value * ($imperial_distance / 100) * ($turns_per_hundred - 1);
     $conversion_time = $dist_time - $turn_time + 0.05;
 
-    /*
-    echo $dist_time . "\r\n";
-    echo $turn_time . "\r\n";
-    echo $conversion_time . "\r\n";
-    */
-
     $floored_time = floor(($conversion_time*10))/10;
 
     if ($this->formattedString) {
@@ -131,8 +157,15 @@ class EquivalentTime {
       $mins = (int) ($seconds / 60);
       $hunds = $floored_time - $seconds;
       $seconds = $seconds - $mins*60;
-      return sprintf('%02d', $mins) . ":" . sprintf('%02d', $seconds) . ":" . round($hunds*10, 1);
+      if ($seconds < 0 || $mins < 0 || $seconds < 0) {
+        throw new NegativeOutputException();
+      } else {
+        return sprintf('%02d', $mins) . ":" . sprintf('%02d', $seconds) . ":" . round($hunds*10, 1);
+      }
     } else {
+      if ($floored_time < 0) {
+        throw new NegativeOutputException();
+      }
       return $floored_time;
     }
   }
@@ -145,7 +178,19 @@ class EquivalentTime {
    * @param boolean $boolean set true to output conversion as a string, false to
    * output a float (double)
    */
-  public function setOutputAsString($boolean) {
+  public function setOutputAsString($boolean = true) {
     $this->formattedString = $boolean;
+  }
+
+  /**
+   * Set the output type for conversions to a string. Default is false (output
+   * as float/double)
+   *
+   * @author Chris Heppell https://github.com/clheppell
+   * @param boolean $boolean set true to output conversion as a string, false to
+   * output a float (double)
+   */
+  public function setOutputAsReal() {
+    $this->setOutputAsString(false);
   }
 }
