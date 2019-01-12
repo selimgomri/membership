@@ -12,6 +12,7 @@
         "clsasc/equivalent-time": "^1.1",
         "geoip2/geoip2": "~2.0",
         "whichbrowser/parser": "^2.0",
-        "stripe/stripe-php": "^6.26"
+        "stripe/stripe-php": "^6.26",
+        "pragmarx/google2fa": "^4.0"
     }
 }
