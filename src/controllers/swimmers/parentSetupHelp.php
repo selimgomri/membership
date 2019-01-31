@@ -168,7 +168,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 	<p>
 		If you do not have a device that can read QR Codes, to add a swimmer, log
-		into your account at https://account.chesterlestreetasc.co.uk/  and the
+		into your account at <?=autoUrl("")?>  and the
 		select 'My Account' then 'Add Swimmers' from the menu at the top.
 	</p>
 
@@ -211,11 +211,11 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 		<p>
 			If you’d like more information about how we use data, contact
-			enquiries@chesterlestreetasc.co.uk.
+			<?=CLUB_EMAIL?>.
 		</p>
 
     <p>
-      The user account service is provided to ' . CLUB_NAME . ' by
+      The user account service is provided to <?=CLUB_NAME?> by
       Chester-le-Street ASC Club Digital Services.
     </p>
 	</div>

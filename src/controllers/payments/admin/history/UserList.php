@@ -6,6 +6,7 @@ if (isset($_GET['search'])) {
 	$search = mysqli_real_escape_string($link, $_GET['search']);
 }
 
+$use_white_background = true;
 $pagetitle = "Find a Parent's Current Fees";
 
 include BASE_PATH . "views/header.php";
@@ -14,7 +15,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php'; ?>
 
 <div class="container">
-	<div class="my-3 p-3 bg-white rounded shadow">
+	<div>
 		<h1 class="border-bottom border-gray pb-2 mb-3">Find a parent's transaction history.</h1>
 		<div class="form-group">
 	    <label class="sr-only" for="search">Search by Surname</label>

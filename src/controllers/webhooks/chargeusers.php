@@ -34,6 +34,8 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
   }
   $mandateInfo = $hasMandateQuery->fetch(PDO::FETCH_ASSOC);
 
+  $email_statment_id;
+
   if ($mandateInfo) {
   	$amount = $row['Amount'];
   	$currency = $row['Currency'];
@@ -60,6 +62,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 
   		$paymentID = $row['PaymentID'];
   		$id = $payment->id;
+      $email_statment_id = $id;
   		$status = $payment->status;
 
   		$sql = "UPDATE `payments` SET `Status` = '$status', `MandateID` = '$mandateid', `PMkey` = '$id' WHERE `PaymentID` = '$paymentID';";
@@ -74,27 +77,33 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
   } else {
     $paymentID = $row['PaymentID'];
     $id = "CASH" . $paymentID;
+    $email_statment_id = $id;
     $sql = "UPDATE `payments` SET `Status` = 'cust_not_dd', `MandateID` = 'CASH', `PMkey` = '$id' WHERE `PaymentID` = '$paymentID';";
     mysqli_query($link, $sql);
 
     $sql = "UPDATE `paymentsPending` SET `Status` = 'Paid', `PMkey` = '$id' WHERE `UserID` = '$userid' AND `Status` = 'Queued' AND `Type` = 'Payment' AND `Date` <= '$date';";
     mysqli_query($link, $sql);
-
-    $message_subject = "Your Monthly Fee for " . date("F Y");
-    $message_content = '<p>Here are your club fees for ' . date("F Y") . '.</p>';
-    $message_content .= myMonthlyFeeTable($link, $row['UserID']);
-    $message_content .= '<p>This means your total fee for ' . date("F Y") . ' is, <strong>&pound;' . number_format(($row['Amount']/100), 2, '.', ',') . '</strong></p>';
-    $message_content .= '<p>This total covers all of your Club Fees.</p><p>Fees are calculated using the squad your swimmers were members of on 1 ' . date("F Y") . '.</p><hr>';
-    $message_content .= '<p>Don\'t forget that from February 2019, squad fees will be changing must be paid by Direct Debit. <a href="https://www.chesterlestreetasc.co.uk/2018/12/changes-to-squad-fees-from-february-2019/">Get the full details of the new fees on our website.</a></p>';
-    $message_content .= '<p><strong>Signed up for Direct Debit?</strong> Remember to make sure you\'ve cancelled your standing orders!</p>';
-
-    $email_info = [
-      "user" => $row['UserID'],
-      "subject" => $message_subject,
-      "message" => $message_content
-    ];
-
-    $sql = "INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (:user, 'Queued', :subject, :message, 0, 'Payments')";
-    $db->prepare($sql)->execute($email_info);
   }
+
+  $message_subject = "Your Statement for " . date("F Y") . " is now available";
+  $message_content = '<p>Your Statement for ' . date("F Y") . ' is now available. Here are your squad fees for this month.</p>';
+  $message_content .= myMonthlyFeeTable($link, $row['UserID']);
+  $message_content .= '<p>Combined with any additional fees such as membership, the total fee for ' . date("F Y") . ' is, <strong>&pound;' . number_format(($row['Amount']/100), 2, '.', ',') . '</strong></p>';
+  $message_content .= '<p>Fees are calculated using the squad your swimmers were members of on 1 ' . date("F Y") . '.</p><hr>';
+  $message_content .= '<p>You can <a href="' . autoUrl("payments/statement/" . $id) . '">view a full itemised statement for this payment online</a>. Squad Fees for all of your swimmers are shown as one charge on statements. A breakdown of squad fees is contained in this email.</p>';
+
+  if ($mandateInfo) {
+    $message_content .= '<p>You will receive an email from our service provider GoCardless within the next three working days confirming the amount to be charged by direct debit.</p>';
+  } else {
+    $message_content .= '<p>You have not set up a direct debit. Please do so urgently.</p>';
+  }
+
+  $email_info = [
+    "user" => $row['UserID'],
+    "subject" => $message_subject,
+    "message" => $message_content
+  ];
+
+  $sql = "INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (:user, 'Queued', :subject, :message, 0, 'Payments')";
+  $db->prepare($sql)->execute($email_info);
 }

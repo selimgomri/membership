@@ -94,7 +94,7 @@ if (v::email()->validate($_POST['emailAddr'])) {
   </div>
   ';
 
-  if (notifySend(null, "Access Key for " . $row['MForename'] . " " . $row['MSurname'], $text, "Parent of " . $row['MForename'] . " " . $row['MSurname'], $_POST['emailAddr'], $from = ["Email" => "membership@account.service.chesterlestreetasc.co.uk", "Name" => CLUB_NAME])) {
+  if (notifySend(null, "Access Key for " . $row['MForename'] . " " . $row['MSurname'], $text, "Parent of " . $row['MForename'] . " " . $row['MSurname'], $_POST['emailAddr'], $from = ["Email" => "membership@" . EMAIL_DOMAIN, "Name" => CLUB_NAME])) {
     $_SESSION['EmailStatus'] = true;
   } else {
     $_SESSION['EmailStatus'] = false;

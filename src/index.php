@@ -29,6 +29,7 @@ if ($_SERVER['HTTP_HOST'] == 'account.chesterlestreetasc.co.uk' || $_SERVER['HTT
 }
 
 require $config_file;
+require 'default-config-load.php';
 
 session_start([
     //'cookie_lifetime' => 172800,
@@ -236,6 +237,21 @@ $route->group('/', function() {
     });
   }
 
+  $this->group('/oauth2', function() {
+
+    $this->any('/authorize', function() {
+      include 'controllers/oauth/AuthorizeController.php';
+    });
+
+    $this->any('/token', function() {
+      include 'controllers/oauth/TokenController.php';
+    });
+
+    $this->get('/userinfo', function() {
+      include 'controllers/oauth/ResourceController.php';
+    });
+  });
+
   $this->get('/auth/cookie/redirect', function() {
     //$target = urldecode($target);
     setcookie(COOKIE_PREFIX . "SeenAccount", true, 0, "/", 'chesterlestreetasc.co.uk', true, false);
@@ -300,6 +316,8 @@ $route->group('/', function() {
     $this->get('/qr-generator', function() {
       include 'controllers/barcode-generation-system/qr.php';
     });
+
+    include 'controllers/services/router.php';
   });
 
   if (empty($_SESSION['LoggedIn'])) {
@@ -324,6 +342,10 @@ $route->group('/', function() {
     $this->get(['/register', '/register/family', '/register/family/{fam}:int/{acs}:key'], function($fam = null, $acs = null) {
       global $link;
       require('controllers/registration/register.php');
+    });
+
+    $this->group(['/register/ac'], function() {
+      include 'controllers/registration/join-from-trial/router.php';
     });
 
     $this->post('/register', function() {
@@ -451,6 +473,12 @@ $route->group('/', function() {
       include 'controllers/squads/router.php';
     });
 
+    if ($_SESSION['AccessLevel'] != "Parent") {
+      $this->group('/trials', function() {
+        include 'controllers/trials/router.php';
+      });
+    }
+
     $this->group(['/posts', '/pages'], function() {
       global $link;
 
@@ -537,15 +565,6 @@ $route->group('/', function() {
       require('controllers/logout.php');
     });
 
-    $this->group('/oauth2', function() {
-      global $link;
-
-      $this->get('/auth', function() {
-        global $link;
-        include 'controllers/oauth/code.php';
-      });
-    });
-
     /*$this->any('test', function() {
       global $link;
       global $db;
@@ -558,6 +577,12 @@ $route->group('/', function() {
     });*/
 
     if ($_SESSION['AccessLevel'] == "Admin") {
+      $this->group('/phpMyAdmin', function() {
+        $this->any(['/', '/*'], function() {
+          include '/customers/9/d/e/chesterlestreetasc.co.uk/httpd.private/phpMyAdmin/' . $this[0];
+        });
+      });
+
       $this->get('/about:php', function() {
         echo phpinfo();
       });

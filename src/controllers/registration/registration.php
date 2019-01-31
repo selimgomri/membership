@@ -148,7 +148,7 @@ if ($status) {
   <p>You will use your email address, ' . $email . ' to sign in.</p>
   <p>You can change your personal details and password in My Account</p>
   <p>For help, send an email to <a
-  href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>/</p>
+  href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a></p>
   <script type="application/ld+json">
   {
     "@context": "http://schema.org",
@@ -171,7 +171,7 @@ if ($status) {
   </script>
   ';
 
-  notifySend($to, $subject, $sContent, $forename . " " . $surname, $email, ["Email" => "registration@chesterlestreetasc.co.uk", "Name" => CLUB_NAME]);
+  notifySend($to, $subject, $sContent, $forename . " " . $surname, $email, ["Email" => "registration@" . EMAIL_DOMAIN, "Name" => CLUB_NAME]);
 
   $_SESSION['RegistrationGoVerify'] = '
   <div class="alert alert-success mb-0">

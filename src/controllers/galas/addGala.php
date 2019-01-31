@@ -1,8 +1,8 @@
 <?php
 $pagetitle = "Add a Gala";
 $title = "Add a Gala for Entries";
-$content = "<p class=\"lead\">Add a Gala for entries to be made.</p>";
-$content = "<form method=\"post\" action=\"" . autoUrl("galas/addgala") . "\">
+$content = "<p class=\"lead\">Add a Gala for parents to enter</p>";
+$content .= "<div class=\"row\"><div class=\"col-md-10 col-lg-8\"><form method=\"post\" action=\"" . autoUrl("galas/addgala") . "\">
 <div class=\"form-group row\">
   <label for=\"galaname\" class=\"col-sm-2 col-form-label\">Gala Name</label>
   <div class=\"col-sm-10\">
@@ -67,21 +67,21 @@ $content = "<form method=\"post\" action=\"" . autoUrl("galas/addgala") . "\">
     </div>
   </div>
 </div>
-<p><button class=\"btn btn-outline-dark\" type=\"submit\" id=\"submit\">Add Gala to Database</button></p>
-<p class=\"mb-0\">If you add this gala, it will immediately be available for parents to enter</p>
+<p><button class=\"btn btn-success\" type=\"submit\" id=\"submit\">Add Gala to Database</button></p>
+</div></div></form>
+<p class=\"mb-0\">This gala will immediately be available for parents to enter</p>
 ";
 
+$use_white_background = true;
 include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
 <div class="container">
-  <div class="my-3 p-3 bg-white rounded shadow">
-    <? if (isset($_SESSION['ErrorState'])) {
-      echo $_SESSION['ErrorState'];
-      unset($_SESSION['ErrorState']);
-    } ?>
-    <?php echo "<h1>" . $title . "</h1>";
-    echo $content; ?>
-  </div>
+  <? if (isset($_SESSION['ErrorState'])) {
+    echo $_SESSION['ErrorState'];
+    unset($_SESSION['ErrorState']);
+  } ?>
+  <?php echo "<h1>" . $title . "</h1>";
+  echo $content; ?>
 </div>
 <?php include BASE_PATH . "views/footer.php";
 ?>

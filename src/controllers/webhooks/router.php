@@ -10,6 +10,10 @@ $this->any('/chargeusers', function() {
 	require 'chargeusers.php';
 });
 
+$this->any('/retrypayments', function() {
+	require 'retry-payments.php';
+});
+
 $this->any('/notifysend', function() {
 	global $link;
   global $db;

@@ -33,6 +33,31 @@ if ($use_white_background) {
       </div>
     <? } ?>
 
+    <noscript>
+      <div class="bg-dark text-white box-shadow py-2 d-print-none">
+        <div class="<?=$container_class?>">
+          <p class="mb-0">
+            <strong>
+              JavaScript is disabled or not supported
+            </strong>
+          </p>
+          <p>
+      	    It looks like you've got JavaScript disabled or your browser does not
+      	    support it. JavaScript is essential for our website to properly so we
+      	    recommend you enable it or upgrade to a browser which supports it as
+      	    soon as possible. <strong><a href="http://browsehappy.com/" class="text-white"
+      	    target="_blank">Upgrade your browser today <i class="fa
+      	    fa-external-link" aria-hidden="true"></i></a></strong>.
+          </p>
+          <p class="mb-0">
+            If JavaScript is not supported by your browser, <?=CLUB_NAME?>
+            recommends you install <strong><a class="text-white"
+            href="https://www.firefox.com">Firefox by Mozilla</a></strong>.
+          </p>
+        </div>
+      </div>
+    </noscript>
+
     <?
     $edit_link = null;
     if (!$people) {
@@ -198,11 +223,11 @@ if ($use_white_background) {
         <li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("emergencycontacts") ?>">Emergency Contacts</a>
   		  </li>
-        <li class="nav-item">
+        <!--<li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("renewal") ?>">
             2019 Membership Renewal
           </a>
-  		  </li>
+  		  </li>-->
         <?php }
         else { ?>
           <li class="nav-item dropdown">
@@ -384,6 +409,15 @@ if ($use_white_background) {
         		<? } ?>
           </div>
         </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="trialDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Trials
+          </a>
+          <div class="dropdown-menu" aria-labelledby="trialDropdown">
+            <a class="dropdown-item" href="<?=autoUrl("trials")?>">Requested Trials</a>
+            <a class="dropdown-item" href="<?=autoUrl("trials/accepted")?>">Accepted Swimmers</a>
+          </div>
+        </li>
   		  <?php }
           } ?>
   		  <?php if (empty($_SESSION['LoggedIn'])) { ?>
@@ -392,6 +426,9 @@ if ($use_white_background) {
   		  </li>
         <li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("register") ?>">Create Account</a>
+  		  </li>
+        <li class="nav-item">
+  			  <a class="nav-link" href="<?php echo autoUrl("timeconverter") ?>">Time Converter</a>
   		  </li>
         <?php } ?>
   		</ul>
@@ -437,25 +474,6 @@ if ($use_white_background) {
 </div>
 
 <div id="maincontent"></div>
-
-  <noscript>
-    <div class="alert alert-danger d-print-none">
-      <p class="mb-0">
-        <strong>
-          JavaScript is disabled or not supported
-        </strong>
-      </p>
-      <p class="mb-0">
-  	    It looks like you've got JavaScript disabled or your browser does not
-  	    support it. JavaScript is essential for our website to properly so we
-  	    recommend you enable it or upgrade to a browser which supports it as
-  	    soon as possible. <a href="http://browsehappy.com/" class="alert-link"
-  	    target="_blank">Upgrade your browser today <i class="fa
-  	    fa-external-link" aria-hidden="true"></i></a>
-      </p>
-    </div>
-    <hr>
-  </noscript>
 
 <!-- END OF HEADERS -->
 <div class="mb-3"></div>

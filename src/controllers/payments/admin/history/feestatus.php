@@ -117,7 +117,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
           }
         }
 				?>
-				<? if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out") {
+				<? if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually") {
 					?><tr class="table-success"><?
           $link = "text-success";
 				} else if ($row['Status'] == "cancelled" || $row['Status'] ==

@@ -61,10 +61,10 @@ use Respect\Validation\Validator as v;
         <li>Squad: " . $row['SquadName'] . "</li>
         <li>Monthly Fee: &pound;" . $row['SquadFee'] . "</li>
         <li>ASA Number: " . $row['ASANumber'] . "</li>
-        <li>CLS ASC Member ID: " . $row['MemberID'] . "</li>
+        <li>" . CLUB_SHORT_NAME . " Member ID: " . $row['MemberID'] . "</li>
       </ul>
-      <p>If this was not you, contact <a href=\"mailto:support@chesterlestreetasc.co.uk\">
-      support@chesterlestreetasc.co.uk</a> as soon as possible</p>";
+      <p>If this was not you, contact <a href=\"mailto:"  . CLUB_EMAIL . "\">
+      "  . CLUB_EMAIL . "</a> as soon as possible</p>";
       notifySend($row['EmailAddress'], "You've added " . $row['MForename'] . "
       to your account", $message, $row['Forename'] . " " . $row['Surname'],
       $row['EmailAddress']);

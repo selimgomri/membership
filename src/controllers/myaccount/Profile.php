@@ -166,9 +166,9 @@
               </p>
           </div>
           <div class="form-group">
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?php echo $emailChecked; ?> >
-              <label class="custom-control-label" for="emailContactOK">Check this to receive news by email</label>
+              <label class="custom-control-label" for="emailContactOK">Receive news by email</label>
               <small id="emailContactOKHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small>
             </div>
           </div>
@@ -178,9 +178,9 @@
             <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
           </div>
           <div class="form-group">
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" value="1" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK" <?php echo $mobileChecked; ?> >
-              <label class="custom-control-label" for="smsContactOK">Check this if you would like to receive text messages</label>
+              <label class="custom-control-label" for="smsContactOK">Receive text messages</label>
               <small id="smsContactOKHelp" class="form-text text-muted">We'll still use this to contact you in an emergency</small>
             </div>
           </div>

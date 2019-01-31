@@ -51,7 +51,7 @@ if ((!empty($_POST['forename']))  && (!empty($_POST['surname'])) && (!empty($_PO
 	}
 
 	if ($getASA) {
-		$asa = mysqli_real_escape_string($link, "CLSX" . $last_id);
+		$asa = mysqli_real_escape_string($link, CLUB_CODE . $last_id);
 		$sql = "UPDATE `members` SET `ASANumber` = '$asa' WHERE `MemberID` = '$last_id';";
 		mysqli_query($link, $sql);
 	}

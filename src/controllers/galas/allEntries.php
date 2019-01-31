@@ -3,6 +3,8 @@ $pagetitle = "Gala Entries";
 $galaID = $surname = null;
 $title = "View Gala Entries by Gala";
 
+$use_white_background = true;
+
 $galaIDParam = $search = $sex = "";
 mysqli_real_escape_string(parse_str($_SERVER['QUERY_STRING'], $queries));
 if (isset($queries['galaID'])) {

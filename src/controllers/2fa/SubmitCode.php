@@ -6,6 +6,9 @@ use GeoIp2\Database\Reader;
 
 $security_status = false;
 
+use PragmaRX\Google2FA\Google2FA;
+$ga2fa = new Google2FA();
+
 if ($_POST['SessionSecurity'] == session_id()) {
   $security_status = true;
 } else {
@@ -17,9 +20,21 @@ if ($_POST['LoginSecurityValue'] == $_SESSION['LoginSec']) {
   $security_status = false;
 }
 
-if ($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE'] && $security_status) {
+$auth_via_google_authenticator;
+try {
+  $auth_via_google_authenticator = $_SESSION['TWO_FACTOR_GOOGLE'] && $ga2fa->verifyKey(getUserOption($_SESSION['2FAUserID'], "GoogleAuth2FASecret"), $_POST['auth']);
+} catch (Exception $e) {
+  $auth_via_google_authenticator = false;
+}
+
+if (($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE']) || $auth_via_google_authenticator && $security_status) {
   unset($_SESSION['TWO_FACTOR']);
   unset($_SESSION['TWO_FACTOR_CODE']);
+  unset($_SESSION['TWO_FACTOR_GOOGLE']);
+
+  if ($auth_via_google_authenticator) {
+    // Do work to prevent replay attacks etc.
+  }
 
   try {
     $query = $db->prepare("SELECT EmailAddress, Forename, Surname, AccessLevel FROM users WHERE UserID = ?");
@@ -76,7 +91,7 @@ if ($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE'] && $security_status) {
     }
 
     $remember_me = 0;
-    if ($_POST['RememberMe']) {
+    if ($_SESSION['2FAUserRememberMe']) {
       $remember_me = 1;
     }
 
@@ -145,6 +160,10 @@ if ($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE'] && $security_status) {
     $_SESSION['ErrorStateLSVMessage'] = "We were unable to verify the integrity of your login attempt. The site you entered your username and password on may have been attempting to capture your login details. Try reseting your password urgently.";
     $_SESSION['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['LoginSec']];
   }
+}
+
+if (isset($_SESSION['UserID']) && filter_var(getUserOption($_SESSION['UserID'], "IsSpotCheck2FA"), FILTER_VALIDATE_BOOLEAN)) {
+  setUserOption($_SESSION['UserID'], "IsSpotCheck2FA", false);
 }
 
 unset($_SESSION['LoginSec']);

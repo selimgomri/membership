@@ -25,6 +25,29 @@ if(file_exists($cache_file)) {
 }
 $asa = json_decode($file);
 
+$file = null;
+$cache_file = BASE_PATH . '/cache/SE-NE.xml';
+if (file_exists($cache_file)) {
+  if (time() - filemtime($cache_file) > 10800) {
+    // too old , re-fetch
+    $cache = file_get_contents('http://asaner.org.uk/feed/');
+    file_put_contents($cache_file, $cache);
+    $file = $cache;
+  } else {
+    $file = file_get_contents($cache_file);
+  }
+} else {
+  // no cache, create one
+  $cache = file_get_contents('http://asaner.org.uk/feed/');
+  file_put_contents($cache_file, $cache);
+  $file = $cache;
+}
+$asa_ne = null;
+try {
+  $asa_ne = new SimpleXMLElement($file);
+} catch (Exception $e) {
+}
+
 global $db;
 
 $username = htmlspecialchars(explode(" ", getUserName($_SESSION['UserID']))[0]);
@@ -51,7 +74,7 @@ include BASE_PATH . "views/header.php";
 
 ?>
 
-<div class="front-page" style="margin-bottom: -1rem;">
+<div class="front-page mb-n3">
   <div class="container">
 
 		<h1>Hello <?=$username?></h1>
@@ -131,7 +154,7 @@ include BASE_PATH . "views/header.php";
 			</div>
 		</div>
 
-    <? if (IS_CLS) { ?>
+    <? if (IS_CLS === true) { ?>
     <div class="mb-4">
       <h2 class="mb-4">Club News</h2>
       <div class="news-grid">
@@ -181,7 +204,32 @@ include BASE_PATH . "views/header.php";
 	</div>
   <? } ?>
 
-    <?
+  <?php if ($asa_ne != null) { ?>
+  <div class="mb-4">
+    <h2 class="mb-4">Swim England North East News</h2>
+    <div class="news-grid">
+      <?
+      $max_posts = 6;
+      if (sizeof($asa_ne->channel->item) < $max_posts) {
+        $max_posts = sizeof($asa_ne->channel->item);
+      }
+      for ($i = 0; $i < $max_posts; $i++) { ?>
+      <a href="<?=$asa_ne->channel->item[$i]->link?>" target="_blank" title="<?=$asa_ne->channel->item[$i]->title?> (<?=$asa_ne->channel->item[$i]->category?>)">
+        <span class="mb-3">
+          <span class="title mb-0">
+            <?=$asa_ne->channel->item[$i]->title?>
+          </span>
+        </span>
+        <span class="category">
+          <?=$asa_ne->channel->item[$i]->category?>
+        </span>
+      </a>
+      <?php } ?>
+    </div>
+  </div>
+  <?php } ?>
+
+    <?php
     if (strpos($userInfo['EmailAddress'], '@chesterlestreetasc.co.uk')) {
     ?>
 
@@ -260,7 +308,7 @@ include BASE_PATH . "views/header.php";
 			</div>
 		</div>
 
-    <?
+    <?php
     }
     ?>
 

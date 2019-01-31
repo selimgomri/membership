@@ -222,7 +222,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			</p>
 		<? } ?>
 		<p class="mb-0">
-			<button type="submit" class="btn btn-success">
+			<button type="submit" class="btn btn-success btn-lg">
 				<? if (!userHasMandates($_SESSION['UserID'])) { ?>
 					Setup Direct Debit
 				<? } else if ($renewal == 0) { ?>

@@ -1,5 +1,7 @@
 <?php
 
+$use_white_background = true;
+
 $url_path = "payments";
 if ($renewal_trap) {
 	$url_path = "renewal/payments";
@@ -23,7 +25,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 <div class="container">
 	<div class="row">
 		<div class="col-lg-6">
-			<div class="mb-3 p-3 bg-white rounded shadow">
+			<div class="">
 				<h1>Setup a Direct Debit to pay <?=CLUB_NAME?></h1>
 				<p class="lead">
 					Payments to <?=CLUB_NAME?> are now moving to direct debit.
@@ -57,7 +59,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 			</div>
 		</div>
 		<div class="col">
-			<div class="mb-3 p-3 bg-white rounded shadow">
+			<div class="cell">
 				<p class="text-center">
 					<img style="max-height:50px;" src="<? echo
 					autoUrl("img/directdebit/directdebit.png"); ?>" srcset="<? echo

@@ -24,6 +24,29 @@ if(file_exists($cache_file)) {
 }
 $asa = json_decode($file);
 
+$file = null;
+$cache_file = BASE_PATH . '/cache/SE-NE.xml';
+if (file_exists($cache_file)) {
+  if (time() - filemtime($cache_file) > 10800) {
+    // too old , re-fetch
+    $cache = file_get_contents('http://asaner.org.uk/feed/');
+    file_put_contents($cache_file, $cache);
+    $file = $cache;
+  } else {
+    $file = file_get_contents($cache_file);
+  }
+} else {
+  // no cache, create one
+  $cache = file_get_contents('http://asaner.org.uk/feed/');
+  file_put_contents($cache_file, $cache);
+  $file = $cache;
+}
+$asa_ne = null;
+try {
+  $asa_ne = new SimpleXMLElement($file);
+} catch (Exception $e) {
+}
+
 try {
 	$sql = 'SELECT `MemberID`, `MForename`, `MSurname`, `SquadFee`, `SquadName` FROM `members` INNER JOIN `squads` ON `members`.`SquadID` =
 	`squads`.`SquadID` WHERE `members`.`UserID` = ? ORDER BY `MForename` ASC,
@@ -57,7 +80,7 @@ include BASE_PATH . "views/header.php";
 
 ?>
 
-<div class="front-page" style="margin-bottom: -1rem;">
+<div class="front-page mb-n3">
   <div class="container">
 
 		<? if (!isSubscribed($_SESSION['UserID'], 'Notify')) { ?>
@@ -77,6 +100,7 @@ include BASE_PATH . "views/header.php";
 		<h1>Hello <?=$username?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
 
+    <?php if (IS_CLS === true && time() < strtotime('2019-01-25')) { ?>
     <div class="mb-4">
       <h2 class="mb-4">Membership Renewal for 2019 is open now</h2>
       <div class="news-grid">
@@ -102,6 +126,7 @@ include BASE_PATH . "views/header.php";
         </a>
       </div>
     </div>
+    <?php } ?>
 
     <? if (!userHasMandates($_SESSION['UserID'])) { ?>
     <div class="mb-4">
@@ -162,6 +187,33 @@ include BASE_PATH . "views/header.php";
 		</div>
 
     <div class="mb-4">
+      <h2 class="mb-4">My Gala Entries</h2>
+      <div class="news-grid">
+				<?
+				if (sizeof($galas) > 0) {
+				foreach ($galas as $g) { ?>
+				<a href="<?=autoUrl("galas/entries/" . $g['EntryID'])?>">
+					<span class="mb-3">
+	          <span class="title mb-0">
+							<?=htmlspecialchars($g['MForename'] . ' ' . $g['MSurname'])?>
+						</span>
+						<span>
+							&pound;<?=htmlspecialchars(number_format($g['FeeToPay'], 2, '.', ','))?>
+						</span>
+					</span>
+          <span class="category">
+						<?=htmlspecialchars($g['GalaName'])?>
+					</span>
+        </a>
+			<? }
+			} else { ?>
+				<p class="mb-0">You have no current gala entries</p>
+			<? } ?>
+			</div>
+		</div>
+
+    <?php if (IS_CLS === true) { ?>
+    <div class="mb-4">
       <h2 class="mb-4">Club News</h2>
       <div class="news-grid">
         <?
@@ -183,6 +235,7 @@ include BASE_PATH . "views/header.php";
         <? } ?>
 			</div>
 		</div>
+    <?php } ?>
 
     <? if ($asa != null && $asa != "") { ?>
     <div class="mb-4">
@@ -209,33 +262,32 @@ include BASE_PATH . "views/header.php";
   	</div>
     <? } ?>
 
-		<div class="mb-4">
-      <h2 class="mb-4">My Gala Entries</h2>
+    <?php if ($asa_ne != null) { ?>
+    <div class="mb-4">
+      <h2 class="mb-4">Swim England North East News</h2>
       <div class="news-grid">
-				<?
-				if (sizeof($galas) > 0) {
-				foreach ($galas as $g) { ?>
-				<a href="<?=autoUrl("galas/entries/" . $g['EntryID'])?>">
-					<span class="mb-3">
-	          <span class="title mb-0">
-							<?=htmlspecialchars($g['MForename'] . ' ' . $g['MSurname'])?>
-						</span>
-						<span>
-							&pound;<?=htmlspecialchars(number_format($g['FeeToPay'], 2, '.', ','))?>
-						</span>
-					</span>
+        <?
+        $max_posts = 6;
+        if (sizeof($asa_ne->channel->item) < $max_posts) {
+          $max_posts = sizeof($asa_ne->channel->item);
+        }
+        for ($i = 0; $i < $max_posts; $i++) { ?>
+  			<a href="<?=$asa_ne->channel->item[$i]->link?>" target="_blank" title="<?=$asa_ne->channel->item[$i]->title?> (<?=$asa_ne->channel->item[$i]->category?>)">
+  				<span class="mb-3">
+            <span class="title mb-0">
+  						<?=$asa_ne->channel->item[$i]->title?>
+  					</span>
+  				</span>
           <span class="category">
-						<?=htmlspecialchars($g['GalaName'])?>
-					</span>
+  					<?=$asa_ne->channel->item[$i]->category?>
+  				</span>
         </a>
-			<? }
-			} else { ?>
-				<p class="mb-0">You have no current gala entries</p>
-			<? } ?>
-			</div>
-		</div>
+        <?php } ?>
+  		</div>
+  	</div>
+    <?php } ?>
 
-	</div>
+  </div>
 </div>
 
 <?

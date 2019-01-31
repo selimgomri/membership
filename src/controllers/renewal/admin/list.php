@@ -41,7 +41,7 @@ if ($id > 0) {
 	renewalMembers.PaymentID = paymentsPending.PaymentID) LEFT JOIN `payments` ON
 	payments.PMkey = paymentsPending.PMkey) WHERE (`renewalMembers`.`RenewalID` =
 	'$id' OR `renewalMembers`.`RenewalID` IS NULL OR `renewalMembers`.`RenewalID` IS
-	NOT NULL) AND (`CountRenewal` = 1 OR `CountRenewal` IS NULL) ORDER BY `MForename` ASC, `MSurname` ASC;";
+	NOT NULL) AND (`CountRenewal` = 1 OR `CountRenewal` IS NULL) ORDER BY renewalMembers.Date DESC, `MSurname` ASC, `MForename` ASC;";
 	$result = mysqli_query($link, $sql);
 
 	if (mysqli_num_rows($result) == 0) {
@@ -83,7 +83,7 @@ if ($id > 0) {
 		</div>
 
     <div class="table-responsive-sm">
-  		<table class="table">
+  		<table class="table <?php if (app('request')->isMobile()) { ?>table-sm small<?php } ?>">
   			<thead class="thead-light">
   				<tr>
   					<th>
@@ -106,7 +106,7 @@ if ($id > 0) {
   					if ($row['RenewalID'] == "" || $row['RenewalID'] != $id ||
   					$row['Status'] == "failed" || $row['Status'] == "charged_back") {
   						?><tr class="table-danger"><?
-  					} else if ($row['Status'] == "paid_out" || $row['Status'] == "confirmed") {
+  					} else if ($row['Status'] == "paid_out" || $row['Status'] == "confirmed" || $row['Status'] == "paid_manually") {
   						?><tr class="table-success"><?
   					} else {
   						?><tr><?

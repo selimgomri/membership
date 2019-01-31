@@ -50,7 +50,7 @@ function verifyUser($user, $password) {
   return false;
 }
 
-function notifySend($to, $subject, $message, $name = null, $emailaddress = null, $from = ["Email" => "noreply@chesterlestreetasc.co.uk", "Name" => CLUB_NAME]) {
+function notifySend($to, $subject, $message, $name = null, $emailaddress = null, $from = ["Email" => "noreply@" . EMAIL_DOMAIN, "Name" => CLUB_NAME]) {
 
   $head = "
   <!DOCTYPE html>
@@ -123,6 +123,7 @@ $message .= "
   if ($emailaddress != null && $name != null) {
 
     $email = new \SendGrid\Mail\Mail();
+    $email->setReplyTo(CLUB_EMAIL, CLUB_NAME);
     $email->setFrom($from['Email'], $from['Name']);
     $email->setSubject($subject);
     $email->addTo($emailaddress, $name);
@@ -144,26 +145,28 @@ $message .= "
       //$email->addHeader("List-Unsubscribe", "<mailto:unsubscribe+" . dechex($from['Unsub']['User']) . "-" . urlencode($from['Unsub']['List']) . "-accounts@chesterlestreetasc.co.uk>, <" . autoUrl("notify/unsubscribe/" . dechex($from['Unsub']['User']) . '/' . urlencode($emailaddress) . '/' . urlencode($from['Unsub']['List'])) . ">");
     }
 
-    if ($from['Email'] == "notify@" . EMAIL_DOMAIN) {
-      $email->addHeader("List-ID", "CLS ASC Targeted Lists <targeted-lists@account." . EMAIL_DOMAIN . ">");
-    } else if ($from['Email'] == "payments@" . EMAIL_DOMAIN) {
-      $email->addHeader("List-ID", "Direct Debit Payment Information <payment-news@account." . EMAIL_DOMAIN . ">");
-    } else if ($from['Name'] == CLUB_NAME . " Security") {
-      $email->addHeader("List-ID", "Account Security Updates <account-updates@account." . EMAIL_DOMAIN . ">");
-    }
+    if (IS_CLS === true) {
+      if ($from['Email'] == "notify@" . EMAIL_DOMAIN) {
+        $email->addHeader("List-ID", "CLS ASC Targeted Lists <targeted-lists@account." . EMAIL_DOMAIN . ">");
+      } else if ($from['Email'] == "payments@" . EMAIL_DOMAIN) {
+        $email->addHeader("List-ID", "Direct Debit Payment Information <payment-news@account." . EMAIL_DOMAIN . ">");
+      } else if ($from['Name'] == CLUB_NAME . " Security") {
+        $email->addHeader("List-ID", "Account Security Updates <account-updates@account." . EMAIL_DOMAIN . ">");
+      }
 
-    if ($from['Email'] == "payments@" . EMAIL_DOMAIN) {
-      $email->setReplyTo("payments+replytoautoemail@chesterlestreetasc.co.uk", "Payments Team");
-    } else if ($from['Email'] == "galas@" . EMAIL_DOMAIN) {
-      $email->setReplyTo("galas+replytoautoemail@" . EMAIL_DOMAIN, "Gala Administrator");
-    } else if ($from['Name'] == "Chester-le-Street ASC Security") {
-      $email->setReplyTo("support+security-replytoautoemail@" . EMAIL_DOMAIN, CLUB_SHORT_NAME . " Support");
-    } else {
-      $email->setReplyTo("enquiries+replytoautoemail@" . EMAIL_DOMAIN, CLUB_SHORT_NAME . " Enquiries");
-    }
+      if ($from['Email'] == "payments@" . EMAIL_DOMAIN) {
+        $email->setReplyTo("payments+replytoautoemail@chesterlestreetasc.co.uk", "Payments Team");
+      } else if ($from['Email'] == "galas@" . EMAIL_DOMAIN) {
+        $email->setReplyTo("galas+replytoautoemail@" . EMAIL_DOMAIN, "Gala Administrator");
+      } else if ($from['Name'] == "Chester-le-Street ASC Security") {
+        $email->setReplyTo("support+security-replytoautoemail@" . EMAIL_DOMAIN, CLUB_SHORT_NAME . " Support");
+      } else {
+        $email->setReplyTo("enquiries+replytoautoemail@" . EMAIL_DOMAIN, CLUB_SHORT_NAME . " Enquiries");
+      }
 
-    if ($from['Reply-To'] != null) {
-      $email->setReplyTo($from['Reply-To']);
+      if ($from['Reply-To'] != null) {
+        $email->setReplyTo($from['Reply-To']);
+      }
     }
 
     if ($from['CC'] != null) {
@@ -184,6 +187,7 @@ $message .= "
     return true;
 
   } else {
+    // Using PHP Mail is a last resort if stuff goes really wrong
     if (mail($to,$subject,$head . $message,$headers)) {
       return true;
     }
@@ -1190,14 +1194,97 @@ function mandateExists($mandate) {
 function updatePaymentStatus($PMkey) {
   global $link;
   require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+  $sql2bool = null;
+  $PMkey_unescaped = $PMkey;
   $PMkey = mysqli_real_escape_string($link, $PMkey);
   $payment = $client->payments()->get($PMkey);
   $status = mysqli_real_escape_string($link, $payment->status);
   $sql = "UPDATE `payments` SET `Status` = '$status' WHERE `PMkey` = '$PMkey';";
+
+  // Test failure condition
+  // $status = "failed";
   if ($status == "paid_out") {
     $sql2 = "UPDATE `paymentsPending` SET `Status` = 'Paid' WHERE `PMkey` =
     '$PMkey';";
     $sql2bool = mysqli_query($link, $sql2);
+  } else if ($status == "failed") {
+    global $db;
+    try {
+      $query = $db->prepare("SELECT payments.UserID, Name, Amount, Forename, Surname FROM payments INNER JOIN users ON payments.UserID = users.UserID WHERE PMkey = ?");
+      $query->execute([$PMkey]);
+      $details = $query->fetch(PDO::FETCH_ASSOC);
+
+      $new_day = date("Y-m-d", strtotime("+10 days"));
+
+      $query = $db->prepare("SELECT COUNT(*) FROM paymentRetries WHERE PMKey = ?");
+      $query->execute([$PMkey]);
+      $num_retries = $query->fetchColumn();
+
+      $subject = "Payment Failed for " . $details['Name'];
+      $message = '
+      <p>Your Direct Debit payment of £' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has failed.</p>';
+      if ($num_retries < 3) {
+        $message .= '<p>We will automatically retry this payment on ' . date("j F Y", strtotime("+10 days")) . ' (in ten days time).</p>';
+        if ($num_retries < 2) {
+          $message .= '<p>You don\'t need to take any action. Should this payment fail, we will retry the payment up to ' . (2-$num_retries) . ' times.</p>';
+        } else if ($num_retries == 2) {
+          $message .= '<p>You don\'t need to take any action. Should this payment fail, you will need to contact the club treasurer as we will have retried this direct debit payment 3 times.</p>';
+        }
+      } else {
+        $message .= '<p>We have retried this payment request three times and it has still not succeeded. As a result, you will need to contact the club treasurer to take further action. Failure to pay may lead to the suspension or termination of your membership.</p>';
+      }
+
+      $message .= '<p>Kind regards,<br>The ' . CLUB_NAME . ' Team</p>';
+      $query = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (?, ?, ?, ?, ?, ?)");
+      $query->execute([$details['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
+
+      if ($num_retries < 3) {
+        $query = $db->prepare("INSERT INTO paymentRetries (UserID, Day, PMKey, Tried) VALUES (?, ?, ?, ?)");
+        $query->execute([$details['UserID'], $new_day, $PMkey, false]);
+      }
+
+      $sql2bool = true;
+    } catch (Exception $e) {
+      $sql2bool = false;
+      echo "Failure in event process";
+    }
+  } else if ($status == "customer_approval_denied") {
+    global $db;
+    try {
+      $query = $db->prepare("SELECT payments.UserID, Name, Amount, Forename, Surname FROM payments INNER JOIN users ON payments.UserID = users.UserID WHERE PMkey = ?");
+      $query->execute([$PMkey]);
+      $details = $query->fetch(PDO::FETCH_ASSOC);
+
+      $subject = "Payment Failed for " . $details['Name'];
+      $message = '
+      <p>Your Direct Debit payment of £' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has failed because customer approval was denied. This means your bank requires two people two authorise a direct debit mandate on your account and that this authorisation has not been given. You will be contacted by the treasurer to arrange payment.</p>
+      <p>Kind regards,<br>The ' . CLUB_NAME . ' Team</p>';
+      $query = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (?, ?, ?, ?, ?, ?)");
+      $query->execute([$details['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
+
+      $sql2bool = true;
+    } catch (Exception $e) {
+      $sql2bool = false;
+    }
+  } else if ($status == "charged_back") {
+    global $db;
+    try {
+      $query = $db->prepare("SELECT payments.UserID, Name, Amount, Forename, Surname FROM payments INNER JOIN users ON payments.UserID = users.UserID WHERE PMkey = ?");
+      $query->execute([$PMkey]);
+      $details = $query->fetch(PDO::FETCH_ASSOC);
+
+      $subject = $details['Name'] . " Charged Back";
+      $message = '
+      <p>Your Direct Debit payment of £' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has been charged back to us. You will be contacted by the treasurer to arrange payment of any outstanding amount.</p>
+      <p>Please note that fraudulently charging back a Direct Debit payment is a criminal offence, covered by the 2006 Fraud Act. We recommend that if your are unsure about the amount we are charging you, you should try and contact us first.</p>
+      <p>Kind regards,<br>The ' . CLUB_NAME . ' Team</p>';
+      $query = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (?, ?, ?, ?, ?, ?)");
+      $query->execute([$details['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
+
+      $sql2bool = true;
+    } catch (Exception $e) {
+      $sql2bool = false;
+    }
   } else {
     $sql2bool = true;
   }
@@ -1212,6 +1299,8 @@ function paymentStatusString($status) {
   switch ($status) {
     case "paid_out":
       return "Paid to " . CLUB_SHORT_NAME;
+    case "paid_manually":
+      return "Paid Manually";
     case "pending_customer_approval":
       return "Waiting for the customer to approve this payment";
     case "pending_submission":

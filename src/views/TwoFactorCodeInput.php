@@ -2,6 +2,8 @@
 
 $pagetitle = "Two Factor Authentication";
 
+$do_random_2FA = filter_var(getUserOption($_SESSION['2FAUserID'], "IsSpotCheck2FA"), FILTER_VALIDATE_BOOLEAN);
+
 $errorState = false;
 
 if ( isset($_SESSION['ErrorState']) ) {
@@ -18,13 +20,27 @@ include BASE_PATH . "views/header.php";
 ?>
 
 <div class="container">
+  <?php if (!$do_random_2FA) { ?>
   <h1>Enter your Two Factor Authentication Code</h1>
+  <?php } else { ?>
+  <h1>Enter your Verification Code</h1>
+  <?php } ?>
   <div class="row">
     <div class="col-md-8 col-lg-5">
+      <?php if ($_SESSION['TWO_FACTOR_GOOGLE'] !== true) { ?>
       <p class="lead mb-5">
         We've just sent you an authentication code by email. Please type this
         code below.
       </p>
+      <?php } else { ?>
+      <p class="lead mb-5">
+        Enter the authentication code from your Google Authenticator (or
+        similar) App.
+      </p>
+      <?php } ?>
+      <?php if ($do_random_2FA) { ?>
+      <p class="mb-5">We've asked you to do this as part of a random security spot check.</p>
+      <?php } ?>
       <!--
       <div class="alert alert-warning">
         <strong>Overnight System Maintenance</strong> <br>
@@ -44,7 +60,7 @@ include BASE_PATH . "views/header.php";
 
       <?php if ($_SESSION['TWO_FACTOR_RESEND']) { ?>
       <div class="alert alert-success">
-        <p class="mb-0"><strong>We have successfully resent your email</strong></p>
+        <p class="mb-0"><strong>We have successfully sent your email</strong></p>
         <p class="mb-0">Please now check your inbox. It may take a moment to recieve the email.</p>
       </div>
       <?php } ?>
@@ -52,7 +68,7 @@ include BASE_PATH . "views/header.php";
       <form method="post" action="<?=autoUrl("2fa")?>" name="2faform" id="2faform">
         <div class="form-group">
           <label for="auth">Authentication Code</label>
-          <input type="number" name="auth" id="auth" class="form-control form-control-lg" required autofocus placeholder="654321">
+          <input type="number" name="auth" id="auth" class="form-control form-control-lg" required autofocus placeholder="654321" pattern="[0-9]*" inputmode="numeric">
         </div>
         <input type="hidden" name="target" value="<?=$_SESSION['TARGET_URL']?>">
         <input type="hidden" name="LoginSecurityValue" value="<?=$lsv?>">
@@ -62,7 +78,11 @@ include BASE_PATH . "views/header.php";
 
       <p class="mb-5">
         <a href="<?=autoUrl("2fa/exit")?>" class="btn btn-dark">Cancel</a>
+        <?php if ($_SESSION['TWO_FACTOR_GOOGLE'] == true) { ?>
+        <a href="<?=autoUrl("2fa/resend")?>" class="btn btn-dark">Get code by email</a>
+        <?php } else { ?>
         <a href="<?=autoUrl("2fa/resend")?>" class="btn btn-dark">Resend Email</a>
+        <?php } ?>
       </p>
 
       <p class="small mb-0">

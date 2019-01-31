@@ -10,6 +10,8 @@ $result = mysqli_query($link, $sql);
 
 $date = strtotime($year . "-" . $month . "-01");
 
+$use_white_background = true;
+
 $user = $_SESSION['UserID'];
 $pagetitle = date("F Y", $date) . " Payments";
 
@@ -21,8 +23,8 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
  ?>
 
 <div class="container">
-	<div class="my-3 p-3 bg-white rounded shadow">
-		<h1 class="border-bottom border-gray pb-2 mb-2">Payments for <? echo date("F Y", $date); ?></h1>
+	<div class="">
+		<h1>Payments for <? echo date("F Y", $date); ?></h1>
 	  <p class="lead">All Direct Debit payments requested in <? echo date("F Y", $date); ?></p>
 		<p>Click on a description for a statement detailing the fees which went into this charge.
 			Some payments may not have a statement available</p>
@@ -50,7 +52,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
           $link;
 					for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 						$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-						if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out") {
+						if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually") {
 							?><tr class="table-success"><?
               $link = "text-success";
 						} else if ($row['Status'] == "failed" || $row['Status'] == "charged_back") {

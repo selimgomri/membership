@@ -78,6 +78,22 @@ $this->get('/general', function() {
 	include 'GeneralOptions.php';
 });
 
+$this->get('/googleauthenticator', function() {
+	include 'EnableGoogleAuthenticator.php';
+});
+
+$this->get('/googleauthenticator/setup', function() {
+	include 'GoogleAuthenticatorKeyGen.php';
+});
+
+$this->get('/googleauthenticator/disable', function() {
+	include 'GoogleAuthenticatorDisable.php';
+});
+
+$this->post('/googleauthenticator/setup', function() {
+	include 'GoogleAuthenticatorKeyVerify.php';
+});
+
 $this->post('/general', function() {
 	global $link;
 	include 'GeneralOptionsPost.php';

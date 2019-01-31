@@ -15,28 +15,44 @@ $provided_signature = $headers["Webhook-Signature"];
 $calculated_signature = hash_hmac("sha256", $raw_payload, GOCARDLESS_WEBHOOK_KEY);
 
 if ($provided_signature == $calculated_signature) {
-    $payload = json_decode($raw_payload, true);
+  $payload = json_decode($raw_payload, true);
 
-    // Each webhook may contain multiple events to handle, batched together
-    foreach ($payload["events"] as $event) {
-        print("Processing event " . $event["id"] . "\n");
+  global $db;
 
-        switch ($event["resource_type"]) {
+  // Check if $event["id"] has been done before
+  $getCount = $db->prepare("SELECT COUNT(*) FROM paymentWebhookOps WHERE EventID = ?");
+  // Add $event["id"] to list to show it's done
+  $addEvent = $db->prepare("INSERT INTO paymentWebhookOps (EventID) VALUES (?)");
+
+  // Each webhook may contain multiple events to handle, batched together
+  foreach ($payload["events"] as $event) {
+    print("Processing event " . $event["id"] . "\n");
+
+    $getCount->execute([$event["id"]]);
+    $count = $getCount->fetchColumn();
+
+    if ($count == 0) {
+
+      switch ($event["resource_type"]) {
         case "mandates":
-            process_mandate_event($event);
-            break;
+          process_mandate_event($event);
+          break;
 				case "payments":
-            process_payment_event($event);
-            break;
+          process_payment_event($event);
+          break;
         default:
-            print("Don't know how to process an event with resource_type " . $event["resource_type"] . "\n");
-            break;
+          print("Don't know how to process an event with resource_type " . $event["resource_type"] . "\n");
+          break;
       }
-    }
 
-    header("HTTP/1.1 200 OK");
+      $addEvent->execute([$event["id"]]);
+    } else {
+      echo "Event " . $event["id"] . " already processed\r\n";
+    }
+  }
+  header("HTTP/1.1 200 OK");
 } else {
-    header("HTTP/1.1 498 Invalid Token");
+  header("HTTP/1.1 498 Invalid Token");
 }
 
 function process_mandate_event($event) {

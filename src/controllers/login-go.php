@@ -40,23 +40,36 @@
       $userID = $row['UserID'];
 
       if (password_verify($password, $hash)) {
-      if ($row['AccessLevel'] != "Parent" || filter_var(getUserOption($userID, "Is2FA"), FILTER_VALIDATE_BOOLEAN)) {
+        $do_random_2FA = random_int(0, 99) < 5 || filter_var(getUserOption($userID, "IsSpotCheck2FA"), FILTER_VALIDATE_BOOLEAN);
+      if ($row['AccessLevel'] != "Parent" || filter_var(getUserOption($userID, "Is2FA"), FILTER_VALIDATE_BOOLEAN) || $do_random_2FA) {
           // Do 2FA
-          $code = rand(100000, 999999);
+          if (filter_var(getUserOption($userID, "hasGoogleAuth2FA"), FILTER_VALIDATE_BOOLEAN)) {
+            $_SESSION['TWO_FACTOR_GOOGLE'] = true;
+          } else {
+            $code = random_int(100000, 999999);
 
-          $_SESSION['2FAUserID'] = $userID;
+            if ($do_random_2FA) {
+              setUserOption($userID, "IsSpotCheck2FA", true);
+            }
 
-          $message = '
-          <p>Hello. Confirm your login by entering the following code in your web browser.</p>
-          <p><strong>' . $code . '</strong></p>
-          <p>If you did not just try to log in, you can ignore this email. You may want to reset your password.</p>
-          <p>Kind Regards,<br>The ' . CLUB_NAME . ' Team</p>';
+            $message = '
+            <p>Hello. Confirm your login by entering the following code in your web browser.</p>
+            <p><strong>' . $code . '</strong></p>
+            <p>If you did not just try to log in, you can ignore this email. You may want to reset your password.</p>
+            <p>Kind Regards,<br>The ' . CLUB_NAME . ' Team</p>';
 
-          if (notifySend(null, "Verification Code", $message, $forename . " " . $surname, $email)) {
-            $_SESSION['TWO_FACTOR'] = true;
-            $_SESSION['TWO_FACTOR_CODE'] = $code;
-            header("Location: " . autoUrl("2fa"));
+            if (notifySend(null, "Verification Code", $message, $forename . " " . $surname, $email)) {
+              $_SESSION['TWO_FACTOR_CODE'] = $code;
+            } else {
+              halt(500);
+            }
           }
+          $_SESSION['2FAUserID'] = $userID;
+          if ($_POST['RememberMe']) {
+            $_SESSION['2FAUserRememberMe'] = 1;
+          }
+          $_SESSION['TWO_FACTOR'] = true;
+          header("Location: " . autoUrl("2fa"));
         } else {
           $_SESSION['EmailAddress'] = $email;
           $_SESSION['Forename'] = $forename;

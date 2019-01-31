@@ -89,15 +89,16 @@ if ($added && $status) {
   btn-outline-dark\">Return to Galas</a> <a href=\"" . autoUrl("galas/addgala") . "\"
   class=\"btn btn-outline-dark\">Add another</a></p>";
 
-  // Send tweets via twitter
-  // Get config for authentication data
-  require BASE_PATH . 'config.php';
-  // ENTER HERE YOUR CREDENTIALS (see readme.txt)
-  $twitter = new Twitter($twitterConsumerKey, $twitterConsumerSecret, $twitterAccessToken, $twitterAccessTokenSecret);
-  try {
-  	$tweet = $twitter->send($galaName . ' is now available to enter online at ' . autoUrl("")); // you can add $imagePath or array of image paths as second argument
-  } catch (TwitterException $e) {
-  	echo 'Error: ' . $e->getMessage();
+  if (defined('TWITTER_CONSUMER_KEY') && defined('TWITTER_CONSUMER_SECRET') &&
+  defined('TWITTER_ACCESS_TOKEN') && defined('TWITTER_ACCESS_TOKEN_SECRET')) {
+    // Send tweets via twitter
+    // ENTER HERE YOUR CREDENTIALS (see readme.txt)
+    $twitter = new Twitter(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET);
+    try {
+    	$tweet = $twitter->send($galaName . ' is now available to enter online at ' . autoUrl("")); // you can add $imagePath or array of image paths as second argument
+    } catch (TwitterException $e) {
+    	echo 'Error: ' . $e->getMessage();
+    }
   }
 }
 else {

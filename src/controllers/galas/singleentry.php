@@ -1,5 +1,6 @@
 <?php
 
+$use_white_background = true;
 $disabled = "";
 
 $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE `EntryID` = '$id' ORDER BY `galas`.`GalaDate` DESC;";
@@ -114,7 +115,7 @@ else {
     include BASE_PATH . "views/header.php";
     include "galaMenu.php"; ?>
     <div class="container">
-      <div class="mb-3 p-3 bg-white rounded shadow">
+      <div>
         <h1><?php echo $row['MForename'] . " " . $row['MSurname']; ?></h1>
         <p class="lead">For <?php echo $row['GalaName']; ?>, Closing Date: <?php echo date('j F Y', strtotime($row['ClosingDate'])); ?></p>
 
@@ -175,7 +176,7 @@ else {
 
           <input type="hidden" value="<?php echo $row['EntryID']; ?>" name="entryID">
           <p class="mb-0">
-            <button type="submit" id="submit" class="btn btn-outline-dark">Update</button>
+            <button type="submit" id="submit" class="btn btn-success">Update</button>
           </p>
         <?php } ?>
       </form>

@@ -147,6 +147,11 @@ if ($access == "Admin") {
 			include 'admin/history/statement.php';
 		});
 
+    $this->get('/statement/{PaymentID}/markpaid/{token}', function($PaymentID, $token) {
+			global $link;
+			include 'admin/history/StatementMarkPaid.php';
+		});
+
 		$this->get('/{type}/{year}:int/{month}:int', function($type, $year, $month) {
 			global $link;
 			include 'admin/history/feestatus.php';

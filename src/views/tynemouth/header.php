@@ -264,7 +264,6 @@ Chester-le-Street ASC is a non profit unincorporated association.
               <? } ?>
               <a class="dropdown-item" href="<?php echo autoUrl("swimmers/accesskeys")?>">Access Keys</a>
               <? if ($_SESSION['AccessLevel'] == "Admin") { ?>
-              <a class="dropdown-item" href="<?php echo autoUrl("renewal")?>">Membership Renewal</a>
               <a class="dropdown-item" href="<?php echo autoUrl("swimmers/orphaned")?>">Orphan Swimmers</a>
               <? } ?>
               <? if ($_SESSION['AccessLevel'] == "Coach") { ?>
@@ -450,6 +449,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="<?php echo autoUrl("myaccount") ?>">Your Profile</a>
             <a class="dropdown-item" href="<?php echo autoUrl("myaccount/email") ?>">Your Email Options</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("myaccount/general") ?>">Your General Options</a>
             <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
               <a class="dropdown-item" href="<?php echo autoUrl("emergencycontacts") ?>">Your Emergency Contacts</a>
             <? } ?>

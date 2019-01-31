@@ -104,7 +104,7 @@ include BASE_PATH . "views/header.php";
 		  </div>
 
 			<div class="form-group">
-				<div class="custom-control custom-checkbox">
+				<div class="custom-control custom-switch">
 					<input type="checkbox" class="custom-control-input" value="1" id="EmailComms" aria-describedby="EmailCommsHelp" name="EmailComms" <?php echo $emailChecked; ?> >
           <label class="custom-control-label" for="EmailComms">Receive Squad Updates by Email</label>
 					<small id="EmailCommsHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small>
@@ -112,7 +112,7 @@ include BASE_PATH . "views/header.php";
 			</div>
 
 			<div class="form-group">
-				<div class="custom-control custom-checkbox">
+				<div class="custom-control custom-switch">
 					<input type="checkbox" class="custom-control-input" value="1" id="SecurityComms" aria-describedby="SecurityCommsHelp" name="SecurityComms" <?php echo $emailChecked_security; ?> >
           <label class="custom-control-label" for="SecurityComms">Receive Account Security Emails</label>
 					<small id="SecurityCommsHelp" class="form-text text-muted">Receive emails whenever somebody logs in to your account</small>
@@ -120,7 +120,7 @@ include BASE_PATH . "views/header.php";
 			</div>
 
 			<div class="form-group">
-				<div class="custom-control custom-checkbox">
+				<div class="custom-control custom-switch">
 					<input type="checkbox" class="custom-control-input" value="1" id="PaymentComms" aria-describedby="PaymentCommsHelp" name="PaymentComms" <?php echo $emailChecked_payments; ?> >
           <label class="custom-control-label" for="PaymentComms">Receive Payment Emails</label>
 					<small id="PaymentCommsHelp" class="form-text text-muted">If you opt out, you'll still receive emails required for regulatory purposes</small>
@@ -129,7 +129,7 @@ include BASE_PATH . "views/header.php";
 
 			<? if ($_SESSION['AccessLevel'] == "Admin") { ?>
 			<div class="form-group">
-				<div class="custom-control custom-checkbox">
+				<div class="custom-control custom-switch">
 					<input type="checkbox" class="custom-control-input" value="1" id="NewMemberComms" aria-describedby="NewMemberCommsHelp" name="NewMemberComms" <?php echo $emailChecked_new_member; ?> >
           <label class="custom-control-label" for="NewMemberComms">Receive New Member Emails</label>
 					<small id="NewMemberCommsHelp" class="form-text text-muted">Get notified when new members are added</small>

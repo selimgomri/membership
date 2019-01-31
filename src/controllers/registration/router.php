@@ -35,3 +35,7 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 		include BASE_PATH . 'controllers/renewal/admin/list.php';
 	});
 }
+
+$this->group('/', function() {
+  include 'join-from-trial/router.php';
+});

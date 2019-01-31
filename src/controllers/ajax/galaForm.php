@@ -173,15 +173,19 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
 
     if ($row['GalaFeeConstant'] != 1) {
       $response .= '
-      <div class="form-group">
-        <label for="galaFee">Enter Total</label>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">&pound;</span>
+      <div class="row">
+        <div class="col-sm-6 col-md-4 col-lg-3">
+          <div class="form-group">
+            <label for="galaFee">Enter Total</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">&pound;</span>
+              </div>
+              <input aria-describedby="feeHelp" type="text" id="galaFee" name="galaFee" class="form-control" required>
+            </div>
+            <small id="feeHelp" class="form-text text-muted">Sadly we can\'t automatically calculate the entry fee for this gala so we need you to tell us</small>
           </div>
-          <input aria-describedby="feeHelp" type="text" id="galaFee" name="galaFee" class="form-control" required>
         </div>
-        <small id="feeHelp" class="form-text text-muted">Sadly we can\'t automatically calculate the entry fee for this gala so we need you to tell us</small>
       </div>';
     }
 

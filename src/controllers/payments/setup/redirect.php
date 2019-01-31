@@ -40,7 +40,7 @@ if ($scheduleExists == 0) {
 			}
 		}
 
-
+    $use_white_background = true;
 		$pagetitle = "You've setup a Direct Debit";
 
 		include BASE_PATH . "views/header.php";
@@ -52,7 +52,7 @@ if ($scheduleExists == 0) {
 			<p class="lead">GoCardless will appear on your bank statement when
 			payments are taken against this Direct Debit.</p>
 			<p>GoCardless handles direct debit payments for <?=CLUB_NAME?>. You
-			will see <span class="mono">CLSASCSWIM</span> at the start of the
+			will see <span class="mono"><?=str_replace(' ', '', CLUB_SHORT_NAME)?>SWIM</span> at the start of the
 			reference for each payment.</p>
 			<? if ($renewal_trap) { ?>
 				<a href="<? echo autoUrl("renewal/go"); ?>" class="mb-3 btn btn-success">Continue Renewal</a>

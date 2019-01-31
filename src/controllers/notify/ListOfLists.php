@@ -2,6 +2,7 @@
 
 $user = $_SESSION['UserId'];
 $pagetitle = "Targeted Lists";
+$use_white_background = true;
 
 $sql = "SELECT * FROM `targetedLists` ORDER BY `Name` ASC;";
 $result = mysqli_query($link, $sql);
@@ -12,7 +13,7 @@ include BASE_PATH . "views/notifyMenu.php";
  ?>
 
 <div class="container">
-  <div class="my-3 p-3 bg-white rounded shadow">
+  <div class="">
   	<h1 class="border-bottom border-gray pb-2 mb-2">Targeted Lists</h1>
     <p class="lead">
       Targeted lists are custom mailing lists for messaging groups of parents

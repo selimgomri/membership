@@ -4,16 +4,19 @@ $pagetitle = "Enter a Gala";
 $sql = "SELECT `MemberID` FROM `members` WHERE `members`.`UserID` = '$userID';";
 $result = mysqli_query($link, $sql);
 $swimCount = mysqli_num_rows($result);
+
+$use_white_background = true;
+
 include BASE_PATH . "views/header.php";
 include "galaMenu.php";
 ?>
 <div class="container">
-  <h2>Enter a gala</h2>
-  <p class="lead">Enter a gala quickly and easily, with fewer steps than before.</p>
+  <h1>Enter a gala</h1>
+  <p class="lead">Enter a gala quickly and easily</p>
   <?php if ($swimCount > 0) { ?>
-    <div class="my-3 p-3 bg-white rounded shadow">
+    <div>
       <form method="post">
-      <h2 class="border-bottom border-gray pb-2">Select Swimmer and Gala</h2>
+      <h2>Select Swimmer and Gala</h2>
       <div class="form-group row">
         <label for="swimmer" class="col-sm-2 col-form-label">Select Swimmer</label>
         <div class="col-sm-10">
@@ -46,12 +49,12 @@ include "galaMenu.php";
         </div>
       </div>
       <h2>Select Swims</h2>
-      <div class="ajaxArea" id="output">
+      <div class="ajaxArea mb-3" id="output">
         <div class="ajaxPlaceholder">Select a swimmer and gala
         </div>
       </div>
-      <p class="mb-0">
-        <button type="submit" id="submit" class="btn btn-outline-dark">Submit</button>
+      <p>
+        <button type="submit" id="submit" class="btn btn-success">Submit</button>
       </p>
       </div>
       <script>
