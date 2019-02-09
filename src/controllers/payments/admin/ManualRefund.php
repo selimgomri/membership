@@ -3,6 +3,8 @@
 $user = $_SESSION['UserId'];
 $pagetitle = "Payments Administration";
 
+$use_white_background = true;
+
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
 
@@ -11,37 +13,50 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
  ?>
 
 <div class="container">
-	<h1>Refund a User</h1>
-  <hr>
-  <form method="post">
-		<div class="form-group">
-	    <label for="user">User Identification Number</label>
-			<div class="input-group">
-				<div class="input-group-prepend">
-	        <div class="input-group-text mono">CLSU</div>
-	      </div>
-	  		<input type="number" class="form-control mono" id="user" name="user" aria-describedby="userHelp" placeholder="Enter number" required>
-			</div>
-	    <small id="userHelp" class="form-text text-muted">You can find a User ID in the <a target="_blank" href="<? echo autoUrl("users"); ?>">Users section</a></small>
-	  </div>
-		<div class="form-group">
-			<p>You have selected - <span id="selectedUserName">No Parent Selected</span></p>
-		</div>
-    <div class="form-group">
-	    <label for="desc">Description</label>
-  		<input type="text" class="form-control" id="desc" name="desc" placeholder="Description" required>
-	  </div>
-	  <div class="form-group">
-	    <label for="exampleInputPassword1">Amount</label>
-			<div class="input-group">
-				<div class="input-group-prepend">
-	        <div class="input-group-text mono">&pound;</div>
-	      </div>
-	    	<input type="number" class="form-control mono" id="exampleInputPassword1" placeholder="Amount">
-			</div>
-	  </div>
-		<p><button class="btn btn-success" type="submit">Refund</button></p>
-	</form>
+	<h1>Credit a User</h1>
+  <div class="row">
+    <div class="col-md-8">
+      <p class="lead">
+        Users can be refunded by adding a credit voucher to their bill. This
+        amount will be taken off the total of their next payment.
+      </p>
+
+      <?php if (isset($_SESSION['ErrorState'])) {
+        echo $_SESSION['ErrorState'];
+        unset($_SESSION['ErrorState']);
+      } ?>
+
+      <form method="post">
+    		<div class="form-group">
+    	    <label for="user">User Identification Number</label>
+    			<div class="input-group">
+    				<div class="input-group-prepend">
+    	        <div class="input-group-text mono">CLSU</div>
+    	      </div>
+    	  		<input type="number" class="form-control mono" id="user" name="user" aria-describedby="userHelp" placeholder="Enter number" required>
+    			</div>
+    	    <small id="userHelp" class="form-text text-muted">You can find a User ID in the <a target="_blank" href="<? echo autoUrl("users"); ?>">Users section</a></small>
+    	  </div>
+    		<div class="form-group">
+    			<p>You have selected - <span id="selectedUserName">No Parent Selected</span></p>
+    		</div>
+        <div class="form-group">
+    	    <label for="desc">Description</label>
+      		<input type="text" class="form-control" id="desc" name="desc" placeholder="Description" required>
+    	  </div>
+    	  <div class="form-group">
+    	    <label for="amount">Amount</label>
+    			<div class="input-group">
+    				<div class="input-group-prepend">
+    	        <div class="input-group-text mono">&pound;</div>
+    	      </div>
+    	    	<input type="text" class="form-control mono" id="amount" name="amount" placeholder="Amount">
+    			</div>
+    	  </div>
+    		<p><button class="btn btn-success" type="submit">Credit</button></p>
+    	</form>
+    </div>
+  </div>
 </div>
 
 <script>

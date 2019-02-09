@@ -7,8 +7,8 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 global $db;
 
-$query = $db->prepare("SELECT PMKey, UserID FROM paymentRetries WHERE Day >= CURDATE() AND Tried = ? LIMIT 4");
-$query->execute([false]);
+$query = $db->prepare("SELECT PMKey, UserID FROM paymentRetries WHERE Day >= ? AND Tried = ? LIMIT 4");
+$query->execute([date("Y-m-d", strtotime('+10 days')), false]);
 
 $mark_tried = $db->prepare("UPDATE paymentRetries SET Tried = ? WHERE PMKey = ?");
 $email = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (?, ?, ?, ?, ?, ?)");

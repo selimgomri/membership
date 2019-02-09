@@ -171,6 +171,29 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <div class="mb-3">
+            <label for="sex">Sex</label>
+            <select class="custom-select" id="sex" name="sex" required>
+              <?php if ($value['sex'] == null | $value['sex'] == "") { ?>
+              <option disabled selected>Select a sex</option>
+              <?php } else {?>
+              <option disabled>Select a sex</option>
+              <?php }
+              $sex = [];
+              if ($value['sex'] == 'Male') {
+                $sex[] = "selected";
+              } else if ($value['sex'] == 'Female') {
+                $sex[] = "selected";
+              }
+              ?>
+              <option value="Male" <?=$sex[0]?>>Male</option>
+              <option value="Female" <?=$sex[1]?>>Female</option>
+            </select>
+            <div class="invalid-feedback">
+              Please select a sex.
+            </div>
+          </div>
+
+          <div class="mb-3">
             <label for="experience">Level of Experience</label>
             <select class="custom-select" id="experience" name="experience" required>
               <?php if ($value['experience'] == null | $value['experience'] == "") { ?>

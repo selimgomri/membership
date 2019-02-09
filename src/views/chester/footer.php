@@ -121,7 +121,7 @@
 	</div> <!-- /.container -->
 </div>
 
-<div class="cls-global-footer-legal">
+<div class="cls-global-footer-legal d-print-none">
   <?php if (isset($fluidContainer) && $fluidContainer == true) { ?>
   <div class="container-fluid">
   <?php } else { ?>

@@ -158,9 +158,11 @@ include BASE_PATH . "views/header.php";
       </div>
     </div>
   </div>
-<p class="small text-muted mb-0">
+<p class="small text-muted">
   This software is powered by the <a href="https://github.com/Chester-le-Street-ASC/EquivalentTime" target="_blank">Chester-le-Street-ASC/EquivalentTime</a> package.
 </p>
+<p class="small text-muted mb-0">
+  <a href="https://www.chesterlestreetasc.co.uk/wp-content/uploads/2019/02/Equation.pdf" target="_blank">Learn about the maths involved in converting times</a>.
 </div>
 
 <?php

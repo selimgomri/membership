@@ -1,23 +1,47 @@
 <?php
 
-$PaymentID = mysqli_real_escape_string($link, $PaymentID);
+global $db;
 $user = $_SESSION['UserID'];
 
-$sql = null;
+$sql = $payments = null;
+$count = 0;
+
+// Check the thing exists
 
 if ($_SESSION['AccessLevel'] == "Parent") {
-	$sql = "SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `PMkey` = '$PaymentID' AND paymentsPending.UserID = '$user';";
+  // Check the payment exists and belongs to the user
+  $sql = $db->prepare("SELECT COUNT(*) FROM payments WHERE PMkey = ? AND UserID = ?");
+  $sql->execute([$PaymentID, $user]);
+  if ($sql->fetchColumn() == 0) {
+    halt(404);
+  }
+
+  $sql = $db->prepare("SELECT COUNT(*) FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `PMkey` = ? AND paymentsPending.UserID = ?");
+  $sql->execute([$PaymentID, $user]);
+  $count = $sql->fetchColumn();
+
+	$payments = $db->prepare("SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `PMkey` = ? AND paymentsPending.UserID = ?");
+  $payments->execute([$PaymentID, $user]);
 } else {
-	$sql = "SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `PMkey` = '$PaymentID';";
+  $sql = $db->prepare("SELECT COUNT(*) FROM payments WHERE PMkey = ?");
+  $sql->execute([$PaymentID]);
+  if ($sql->fetchColumn() == 0) {
+    halt(404);
+  }
+
+  $sql = $db->prepare("SELECT COUNT(*) FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `PMkey` = ?");
+  $sql->execute([$PaymentID]);
+  $count = $sql->fetchColumn();
+
+	$payments = $db->prepare("SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `PMkey` = ?");
+  $payments->execute([$PaymentID]);
 }
 
-$result = mysqli_query($link, $sql);
+$row = $payments->fetch(PDO::FETCH_ASSOC);
 
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-$sql = "SELECT `UserID`, `Name`, `Amount`, `Status` FROM `payments` WHERE `PMkey` = '$PaymentID';";
-$payment_info = mysqli_query($link, $sql);
-$payment_info = mysqli_fetch_array($payment_info, MYSQLI_ASSOC);
+$sql = $db->prepare("SELECT `UserID`, `Name`, `Amount`, `Status` FROM `payments` WHERE `PMkey` = ?");
+$sql->execute([$PaymentID]);
+$payment_info = $sql->fetch(PDO::FETCH_ASSOC);
 $name = getUserName($payment_info['UserID']);
 
 $use_white_background = true;
@@ -34,21 +58,29 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 <div class="container">
 	<div class="">
+    <span class="d-none d-print-block h1"><?=CLUB_NAME?> Payments</span>
     <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-    <h1 class="border-bottom border-gray pb-2 mb-2">Statement, <?=$payment_info['Name']?></h1>
+    <h1 class="border-bottom border-gray pb-2 mb-2"><?=$payment_info['Name']?> Statement</h1>
     <?php } else { ?>
 		<h1 class="border-bottom border-gray pb-2 mb-2">Statement for <?=$name?></h1>
     <?php } ?>
-    <dl class="row">
-      <dt class="col-sm-3">Payment Identifier</dt>
-      <dd class="col-sm-9"><span class="mono"><?=$PaymentID?></span></dd>
+    <div class="row mb-4">
+      <div class="col">
+        <dl class="row">
+          <dt class="col-md-4">Payment Identifier</dt>
+          <dd class="col-md-8"><span class="mono"><?=$PaymentID?></span></dd>
 
-      <dt class="col-sm-3">Total Fee</dt>
-      <dd class="col-sm-9"><span class="mono">&pound;<?=number_format(($payment_info['Amount']/100),2,'.','')?></span></dd>
+          <dt class="col-md-4">Total Fee</dt>
+          <dd class="col-md-8"><span class="mono">&pound;<?=number_format(($payment_info['Amount']/100),2,'.','')?></span></dd>
 
-      <dt class="col-sm-3">Payment Status</dt>
-      <dd class="col-sm-9"><span class="mono"><?=paymentStatusString($payment_info['Status'])?></span></dd>
-    </dl>
+          <dt class="col-md-4">Payment Status</dt>
+          <dd class="col-md-8"><span class="mono"><?=paymentStatusString($payment_info['Status'])?></span></dd>
+        </dl>
+      </div>
+      <div class="col">
+        <img class="img-fluid d-block ml-auto" src="<?=autoUrl("services/barcode-generator?codetype=code128&size=80&text=" . $PaymentID . "&print=false&sizefactor=1")?>" srcset="<?=autoUrl("services/barcode-generator?codetype=code128&size=160&text=" . $PaymentID . "&print=false&sizefactor=2")?> 2x, <?=autoUrl("services/barcode-generator?codetype=code128&size=240&text=" . $PaymentID . "&print=false&sizefactor=3")?> 3x">
+      </div>
+    </div>
 
     <?php if ($_SESSION['AccessLevel'] == "Admin" && ($payment_info['Status'] == 'customer_approval_denied' || $payment_info['Status'] == 'failed')) {
     $_SESSION['Token' . $PaymentID] = hash('sha256', random_int(0, 999999));
@@ -64,83 +96,113 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
     </p>
     <?php } ?>
 
-		<p>Payments listed below were charged as part of one single Direct Debit</p>
-		<? if (mysqli_num_rows($result) == 0) { ?>
-			<div class="alert alert-warning mb-0">
-				<p class="mb-0">
-					<strong>
-						No fees can be found for this statement
-					</strong>
-				</p>
-				<p class="mb-0">
-					This usually means that the payment was created via the GoCardless
-					User Interface and not directly in this system. Please speak to the
-          treasurer to find out more.
-				</p>
-			</div>
-		<? } else { ?>
-		<div class="table-responsive-md">
-			<table class="table mb-0">
-				<thead class="thead-light">
-					<tr>
-						<th>
-							Date
-						</th>
-						<th>
-							Description
-						</th>
-						<th>
-							Amount
-						</th>
-						<th>
-							Status
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-				<?
-				for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-					//$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-					$data = "";
-					if ($row['MetadataJSON'] != "" || $row['MetadataJSON'] != "") {
-						$json = json_decode($row['MetadataJSON']);
-						if ($json->PaymentType == "SquadFees"  || $json->PaymentType == "ExtraFees") {
-							$data .= '<ul class="list-unstyled mb-0">';
-							//echo sizeof($json->Members);
-							//pre($json->Members);
-							//echo $json->Members[0]->MemberName;
-							$numMems = (int) sizeof($json->Members);
-							for ($y = 0; $y < $numMems; $y++) {
-								$data .= '<li>' . $json->Members[$y]->FeeName . " for " . $json->Members[$y]->MemberName . '</li>';
-							}
-							$data .= '</ul>';
-						}
-					}
-					?>
-					<tr>
-						<td>
-							<? echo date("D j M Y",strtotime($row['Date'])); ?>
-						</td>
-						<td>
-							<? echo $row['Name']; ?>
-							<em><? echo $data; ?></em>
-						</td>
-						<td>
-							&pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?>
-						</td>
-						<td>
-							<? echo $row['Status']; ?>
-						</td>
-					</tr>
-					<?
-					if ($i < mysqli_num_rows($result)-1) {
-						$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-					}
-				} ?>
-				</tbody>
-			</table>
-		</div>
-		<? } ?>
+    <div class="mb-4">
+      <h2>Itemised Details</h2>
+  		<p>Payments listed below were charged as part of one single Direct Debit</p>
+  		<? if ($count == 0) { ?>
+  			<div class="alert alert-warning mb-0">
+  				<p class="mb-0">
+  					<strong>
+  						No fees can be found for this statement
+  					</strong>
+  				</p>
+  				<p class="mb-0">
+  					This usually means that the payment was created via the GoCardless
+  					User Interface and not directly in this system. Please speak to the
+            treasurer to find out more.
+  				</p>
+  			</div>
+  		<? } else { ?>
+  		<div class="table-responsive-md">
+  			<table class="table">
+  				<thead class="thead-light">
+  					<tr>
+  						<th>
+  							Date
+  						</th>
+  						<th>
+  							Description
+  						</th>
+  						<th>
+  							Amount
+  						</th>
+  						<th>
+  							Status
+  						</th>
+  					</tr>
+  				</thead>
+  				<tbody>
+  				<?
+  				do {
+  					//$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+  					$data = "";
+  					if ($row['MetadataJSON'] != "" || $row['MetadataJSON'] != "") {
+  						$json = json_decode($row['MetadataJSON']);
+  						if ($json->PaymentType == "SquadFees"  || $json->PaymentType == "ExtraFees") {
+  							$data .= '<ul class="list-unstyled mb-0">';
+  							//echo sizeof($json->Members);
+  							//pre($json->Members);
+  							//echo $json->Members[0]->MemberName;
+  							$numMems = (int) sizeof($json->Members);
+  							for ($y = 0; $y < $numMems; $y++) {
+  								$data .= '<li>' . $json->Members[$y]->FeeName . " (&pound;" . $json->Members[$y]->Fee . ") for " . $json->Members[$y]->MemberName . '</li>';
+  							}
+  							$data .= '</ul>';
+  						}
+  					}
+  					?>
+  					<tr>
+  						<td>
+  							<?=date("D j M Y",strtotime($row['Date']))?>
+  						</td>
+  						<td>
+  							<?=$row['Name']?>
+  							<em><?=$data?></em>
+  						</td>
+  						<td>
+                <?php if ($row['Type'] == "Payment") { ?>
+  							&pound;<?=number_format(($row['Amount']/100),2,'.','')?>
+                <?php } else { ?>
+                -&pound;<?=number_format(($row['Amount']/100),2,'.','')?> (Credit)
+                <?php } ?>
+  						</td>
+  						<td>
+  							<?=$row['Status']?>
+  						</td>
+  					</tr>
+  					<?php
+            $row = $payments->fetch(PDO::FETCH_ASSOC);
+  				} while ($row != null); ?>
+  				</tbody>
+  			</table>
+  		</div>
+  		<? } ?>
+    </div>
+
+    <div class="row">
+      <div class="col-md-10 col-lg-8">
+        <h2>Got problems or concerns?</h2>
+        <p class="lead">
+          Problems are very rare but when they do happen we'll work to resolve them
+          as quickly as possible.
+        </p>
+        <p>
+          Print off this page and club staff can scan this code to access your
+          statement.
+        </p>
+        <img class="img-fluid d-block mb-3" src="<?=autoUrl("services/qr-generator?size=150&amp;text=" . urlencode(autoUrl("payments/history/statement/" . strtoupper($PaymentID))))?>" srcset="<?=autoUrl("services/qr-generator?size=300&amp;text=" . urlencode(autoUrl("payments/history/statement/" . strtoupper($PaymentID))))?> 2x, <?=autoUrl("services/qr-generator?size=450&amp;text=" . urlencode(autoUrl("payments/history/statement/" . strtoupper($PaymentID))))?> 3x" alt="<?=autoUrl("payments/history/statement/" . strtoupper($PaymentID))?>">
+
+        <h2>Questions about Direct Debit</h2>
+        <p>
+          Full help and support for payments by Direct Debit is available on the <a
+          href="https://www.chesterlestreetasc.co.uk/support/directdebit/"
+          target="_blank">Chester-le-Street ASC website</a>.
+        </p>
+        <p>
+          Payments to <?=CLUB_NAME?> are covered by the Direct Debit Guarantee.
+        </p>
+      </div>
+    </div>
 	</div>
 </div>
 

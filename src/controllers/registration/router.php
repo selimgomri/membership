@@ -36,6 +36,6 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 	});
 }
 
-$this->group('/', function() {
+$this->group('/ac/', function() {
   include 'join-from-trial/router.php';
 });

@@ -37,8 +37,14 @@ include BASE_PATH . 'views/header.php';
         </p>
         <p>
           You will be registering the following swimmers as members of
-          <?=CLUB_NAME?>. If any swimmers are missing or should not be listed
-          here, please contact the membership officer.
+          <?=CLUB_NAME?> and you'll also be creating a user account for
+          yourself. If any swimmers are missing or should not be listed here,
+          please contact the membership officer.
+        </p>
+        <p>
+          Your club user account will allow you to control payments by Direct
+          Debit, manage medical details, emergency contacts, get email updates
+          and make gala entries.
         </p>
         <p>
           If you decide not to join the club, please contact the membership

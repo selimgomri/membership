@@ -1,5 +1,4 @@
 <?php
-
 $pagetitle = "Login";
 
 $errorState = false;
@@ -39,14 +38,20 @@ include BASE_PATH . "views/header.php";
       </div>
       <?php } ?>
 
-      <form method="post" action="<?=autoUrl("")?>" name="loginform" id="loginform">
+      <form method="post" action="<?=autoUrl("")?>" name="loginform" id="loginform" class="needs-validation" novalidate>
         <div class="form-group">
           <label for="username">Email Address</label>
           <input type="email" name="username" id="username" class="form-control form-control-lg" value="<?php if ($errorState == true) { echo $username; } ?>" required autofocus placeholder="yourname@example.com">
+          <div class="invalid-feedback">
+            Please enter a valid email address.
+          </div>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
           <input type="password" name="password" id="password" class="form-control form-control-lg" required placeholder="Password">
+          <div class="invalid-feedback">
+            Please enter a password.
+          </div>
         </div>
         <div class="form-group">
           <div class="custom-control custom-checkbox">
@@ -102,8 +107,12 @@ include BASE_PATH . "views/header.php";
   </div>
 </div>
 
+<script src="<?=autoUrl("js/NeedsValidation.js")?>"></script>
+
 <?php
 
 include BASE_PATH . "views/footer.php";
+
+unset($_SESSION['ErrorState']);
 
 ?>

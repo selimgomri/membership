@@ -1101,6 +1101,7 @@ function paymentHistory($link, $user, $type = null) {
 }
 
 function feesToPay($link, $user) {
+  $user = mysqli_real_escape_string($link, $user);
   $sql = "SELECT * FROM `paymentsPending` WHERE `UserID` = '$user' AND `PMkey`
   IS NULL AND `Status` = 'Pending' ORDER BY `Date` DESC LIMIT 0, 30;";
   $pendingResult = mysqli_query($link, $sql);
@@ -1123,7 +1124,11 @@ function feesToPay($link, $user) {
           <? echo date('j F Y', strtotime($row['Date'])); ?>
         </p>
         <p class="mb-0">
+          <?php if ($row['Type'] == 'Payment') { ?>
           &pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?>
+          <?php } else { ?>
+          -&pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?> (Credit)
+          <?php } ?>
         </p>
       </div>
     </div>

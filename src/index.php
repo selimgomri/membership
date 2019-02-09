@@ -24,7 +24,7 @@ if ($_SERVER['HTTP_HOST'] == 'account.chesterlestreetasc.co.uk' || $_SERVER['HTT
   $config_file = 'config-durham-config.php';
   define('COOKIE_PREFIX', 'DCASC', true);
 } else {
-  $config_file = 'config.php';
+  $config_file = 'config-chester-config.php';
   define('COOKIE_PREFIX', 'CLSASC_', true);
 }
 
@@ -199,12 +199,10 @@ header('Expect-CT: enforce, max-age=30, report-uri="https://chesterlestreetasc.r
 
 //halt(901);
 
-/*
-if (sizeof($_SESSION == 0)) {
+
+if (!(sizeof($_SESSION) > 0)) {
   $_SESSION['TARGET_URL'] = app('request')->curl;
-  header("Location: " . autoUrl(""));
 }
-*/
 
 $route->group('/', function() {
   global $db, $link;

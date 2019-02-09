@@ -37,6 +37,11 @@ if ($_POST['swimmer-surname'] == "") {
   header("Location: " . app('request')->curl);
 }
 
+if ($_POST['sex'] == "") {
+  $_SESSION['RequestTrial-Errors']['Swimmer-LN'] = "No swimmer sex provided";
+  header("Location: " . app('request')->curl);
+}
+
 if ($_POST['experience'] == "") {
   $_SESSION['RequestTrial-Errors']['Swimmer-Experience'] = "No experience option selected";
   header("Location: " . app('request')->curl);
@@ -79,7 +84,7 @@ $age = $age = date_diff(date_create($dob), date_create('today'))->y;
 
 $email_club .= '
 <h2>General Information</h2>
-<p>' . $swimmer . '\'s date of birth is ' . date("j F Y", strtotime($dob)) . '. They are ' . $age . ' years old.</p>
+<p>' . $swimmer . '\'s date of birth is ' . date("j F Y", strtotime($dob)) . '. They are ' . $age . ' years old. They are ' . $_POST['sex'] . '</p>
 
 <h2>Previous experience and achievements</h2>
 <p>Their previous experience is ' . $exp . '.</p>';
@@ -120,7 +125,7 @@ $email_parent = '
 <p>Thank\'s for your interest in a trial for ' . $swimmer . ' at ' . CLUB_NAME . '. We\'re working through your request and will get back to you as soon as we can.</p>
 <p>In the meantime, you may wish to <a href="' . CLUB_WEBSITE . '">visit our website</a>.</p>';
 
-$to_club = notifySend(null, 'New Trial Request', $email_club, 'Club Admins', 'lorraine.lawrence+join@chesterlestreetasc.co.uk', ["Email" => "join@" . EMAIL_DOMAIN, "Name" => CLUB_NAME, 'Reply-To' => $_POST['email-addr']]);
+$to_club = notifySend(null, 'New Trial Request', $email_club, 'Club Admins', CLUB_TRIAL_EMAIL, ["Email" => "join@" . EMAIL_DOMAIN, "Name" => CLUB_NAME, 'Reply-To' => $_POST['email-addr']]);
 
 $to_parent = notifySend(null, 'Your Trial Request', $email_parent, $parent, $_POST['email-addr']);
 
@@ -139,7 +144,7 @@ if ($to_club && $to_parent) {
     ]);
   }
 
-  $query = $db->prepare("INSERT INTO joinSwimmers (Parent, First, Last, DoB, XP, XPDetails, Medical, Questions, Club, ASA) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+  $query = $db->prepare("INSERT INTO joinSwimmers (Parent, First, Last, DoB, XP, XPDetails, Medical, Questions, Club, ASA, Sex) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
   $query->execute([
     $hash,
     htmlspecialchars(trim($_POST['swimmer-forename'])),
@@ -150,7 +155,8 @@ if ($to_club && $to_parent) {
     trim($_POST['swimmer-med']),
     trim($_POST['questions']),
     trim($_POST['swimmer-club']),
-    trim($_POST['swimmer-asa'])
+    trim($_POST['swimmer-asa']),
+    trim($_POST['sex'])
   ]);
 
   $_SESSION['RequestTrial-Success'] = true;
