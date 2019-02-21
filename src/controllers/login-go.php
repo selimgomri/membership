@@ -199,5 +199,8 @@
   }
   $_SESSION['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['LoginSec']];
   unset($_SESSION['LoginSec']);
-  header("Location: " . autoUrl(ltrim($_POST['target'], '/')));
-  ?>
+  if ($_SESSION['ErrorState'] === true && $_POST['target'] == "") {
+    header("Location: " . autoUrl("login"));
+  } else {
+    header("Location: " . autoUrl(ltrim($_POST['target'], '/')));
+  }

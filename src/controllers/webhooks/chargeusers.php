@@ -95,7 +95,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
   if ($mandateInfo) {
     $message_content .= '<p>You will receive an email from our service provider GoCardless within the next three working days confirming the amount to be charged by direct debit.</p>';
   } else {
-    $message_content .= '<p>You have not set up a direct debit. Please do so urgently.</p>';
+    $message_content .= '<p>You have not set up a direct debit. We recommend that you do so urgently.</p>';
   }
 
   $email_info = [

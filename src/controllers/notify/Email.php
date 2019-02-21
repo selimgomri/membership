@@ -78,6 +78,8 @@ $lists = mysqli_query($link, $sql);
       </small>
 		</div>
 
+    <?php if ($_SESSION['AccessLevel'] != "Coach") { ?>
+
     <div class="form-group">
       <div class="custom-control custom-checkbox">
         <input type="checkbox" class="custom-control-input" aria-describedby="forceHelp" id="force" name="force">
@@ -90,6 +92,8 @@ $lists = mysqli_query($link, $sql);
         </small>
       </div>
     </div>
+
+    <?php } ?>
 
 		<p><button class="btn btn-dark" id="submit" value="submitted" type="submit">Send the email</button></p>
 	</form>

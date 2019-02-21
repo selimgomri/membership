@@ -119,6 +119,12 @@ if ($access == "Admin") {
 		include 'admin/ManualChargeDo.php';
 	});
 
+	$this->post('/newcharge', function() {
+		global $link;
+		include 'admin/ManualChargeDo.php';
+	});
+
+
 	$this->group('/history', function() {
 		global $link;
 
@@ -217,9 +223,7 @@ if ($access == "Admin") {
 		include 'testpay.php';
 	});
 
-	/*
-
-	// Unavailable in this integration
+	// Credit Accounts
 
 	$this->get('/newrefund', function() {
 		global $link;
@@ -230,8 +234,6 @@ if ($access == "Admin") {
 		global $link;
 		include 'admin/ManualRefundDo.php';
 	});
-
-	*/
 
 	$this->get('/galas', function() {
 		global $link;

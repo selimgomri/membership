@@ -72,7 +72,10 @@ if (mysqli_num_rows($result) == 0) {
           } catch (Exception $e) {
             halt(500);
           }
+
+          // Add squad fee payment to payments
         }
+
       }
 
       $metadata = [
@@ -129,7 +132,8 @@ if (mysqli_num_rows($result) == 0) {
           "Member"      => $swimmerRow['MemberID'],
           "MemberName"  => $swimmerRow['MForename'] . " " . $swimmerRow['MSurname'],
           "FeeName"     => $swimmerRow['ExtraName'],
-          "Fee"         => $swimmerRow['ExtraFee']
+          "Fee"         => $swimmerRow['ExtraFee'],
+          "FeeInt"      => floor($swimmerRow['ExtraFee']*100)
         ];
         $members[] = $member;
 
@@ -257,7 +261,7 @@ for ($i = 0; $i < $count; $i++) {
   $userRow = mysqli_fetch_array($userFees, MYSQLI_ASSOC);
   $amount = $userRow["SUM(`Amount`)"];
 
-  $sql = "SELECT SUM(`Amount`) FROM `paymentsPending` WHERE `UserID` = '$sumUID' AND `Status` = 'Pending' AND `Date` <= '$date' AND `Type` = 'Voucher';";
+  $sql = "SELECT SUM(`Amount`) FROM `paymentsPending` WHERE `UserID` = '$sumUID' AND `Status` = 'Pending' AND `Date` <= '$date' AND `Type` = 'Refund';";
   $userDiscount = mysqli_query($link, $sql);
   $userDiscount = mysqli_fetch_array($userFees, MYSQLI_ASSOC);
 

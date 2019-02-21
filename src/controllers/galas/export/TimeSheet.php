@@ -52,39 +52,40 @@ if ($noTimeSheet) {
   <?
   include BASE_PATH . "views/footer.php";
 } else {
-  // output headers so that the file is downloaded rather than displayed
+	// output headers so that the file is downloaded rather than displayed
   header('Content-Type: text/csv; charset=utf-8');
-  header('Content-Disposition: attachment; filename=' . str_replace(' ', '', $info['GalaName']) . '-TimeSheet.csv');
+	header('Content-Disposition: attachment; filename=' . str_replace(' ', '', $info['GalaName']) . '-TimeSheet.csv');
 
-  // create a file pointer connected to the output stream
+	// create a file pointer connected to the output stream
   $output = fopen('php://output', 'w');
 
   fputcsv($output, array(CLUB_NAME . ' Gala Time Sheet'));
-  fputcsv($output, array($info['GalaName'] . " - " . $info['GalaVenue'] . " - " .
-  date("d/m/Y", strtotime($info['GalaDate']))));
+  fputcsv($output, array($info['GalaName'] . " - " . $info['GalaVenue'] . " - " . date("d/m/Y", strtotime($info['GalaDate']))));
   fputcsv($output, array('Time Sheet Report Generated on ' . date("d/m/Y, H:i")));
-  fputcsv($output, array(''));
+	fputcsv($output, array(''));
 
   $swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Back','100Back','200Back','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','100IM','200IM','400IM',];
   $swimsTextArray = ['50 Free','100 Free','200 Free','400 Free','800 Free','1500 Free','50 Back','100 Back','200 Back','50 Breast','100 Breast','200 Breast','50 Fly','100 Fly','200 Fly','100 IM','200 IM','400 IM'];
 
   fputcsv($output, array('Forename', 'Surname', 'Swims'));
 
-  // loop over the rows, outputting them
+	// loop over the rows, outputting them
   while ($row = mysqli_fetch_assoc($result)) {
-  	$member = $row['MemberID'];
+  	$member = mysqli_real_escape_string($link, $row['MemberID']);
   	$typeA = $typeB = null;
   	if ($info['CourseLength'] == "SHORT") {
   		$typeA = "SCPB";
   		$typeB = "CY_SC";
   	} else {
-  		$type = "LCPB";
+  		$typeA = "LCPB";
   		$typeB = "CY_LC";
   	}
   	$timesPB = mysqli_fetch_array(mysqli_query($link, "SELECT * FROM `times`
   	WHERE `MemberID` = '$member' AND `Type` = '$typeA';"), MYSQLI_ASSOC);
   	$timesCY = mysqli_fetch_array(mysqli_query($link, "SELECT * FROM `times`
-  	WHERE `MemberID` = '$member' AND `Type` = '$typeB';"), MYSQLI_ASSOC);
+		WHERE `MemberID` = '$member' AND `Type` = '$typeB';"), MYSQLI_ASSOC);
+		
+		//pre([$timesPB, $timesCY]);
 
   	$swims = [
   		$row['MForename'],
@@ -116,6 +117,6 @@ if ($noTimeSheet) {
   	fputcsv($output, $timesArrayB);
   	fputcsv($output, $heats);
   	fputcsv($output, $finalsA);
-  	fputcsv($output, $finalsB);
+		fputcsv($output, $finalsB);
   }
 }

@@ -23,7 +23,7 @@ if ($_SESSION['AccessLevel'] != "Admin") {
 }
 $force = 0;
 $sender = $_SESSION['UserID'];
-if (isset($_POST['force'])) {
+if (isset($_POST['force']) && $_SESSION['AccessLevel'] != "Coach") {
   $force = 1;
 }
 

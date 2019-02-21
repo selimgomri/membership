@@ -62,7 +62,7 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 	}
 
 	if ($duplicateReg == true) {
-		$return = "<p class=\"mb-0\"><strong>Updated the register</strong></p>";
+		$return = "<p class=\"mb-0\"><strong>Saved register</strong></p>";
 		$_SESSION['return'] = $return;
 	}
 
@@ -71,4 +71,4 @@ else {
 	$return = "<p><strong>An Error Occurred</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-link\">mms@chesterlestreetasc.co.uk</a></p>";
 	$_SESSION['return'] = $return;
 }
-header("Location: " . autoUrl("attendance/register"));
+header("Location: " . autoUrl("attendance/register/" . $squadID . "/" . $sessionID));

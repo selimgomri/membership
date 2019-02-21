@@ -65,10 +65,13 @@ include BASE_PATH . "views/header.php";
       </div>
       <?php } ?>
 
-      <form method="post" action="<?=autoUrl("2fa")?>" name="2faform" id="2faform">
+      <form method="post" action="<?=autoUrl("2fa")?>" name="2faform" id="2faform" class="needs-validation" novalidate>
         <div class="form-group">
           <label for="auth">Authentication Code</label>
           <input type="number" name="auth" id="auth" class="form-control form-control-lg" required autofocus placeholder="654321" pattern="[0-9]*" inputmode="numeric">
+          <div class="invalid-feedback">
+            Please enter a numeric authentication code.
+          </div>
         </div>
         <input type="hidden" name="target" value="<?=$_SESSION['TARGET_URL']?>">
         <input type="hidden" name="LoginSecurityValue" value="<?=$lsv?>">
@@ -108,6 +111,8 @@ include BASE_PATH . "views/header.php";
     </div>
   </div>
 </div>
+
+<script src="<?=autoUrl("js/NeedsValidation.js")?>"></script>
 
 <?php
 
