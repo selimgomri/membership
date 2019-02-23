@@ -1,10 +1,12 @@
-[Twitter for PHP](https://phpfashion.com/twitter-for-php)  [![Buy me a coffee](https://files.nette.org/images/coffee1s.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QLFKBFDU6C94L)
+[Twitter for PHP](https://phpfashion.com/twitter-for-php)  [![Buy me a coffee](https://files.nette.org/images/coffee1s.png)](https://nette.org/make-donation?to=twitter-php)
 ================================
 
 [![Downloads this Month](https://img.shields.io/packagist/dm/dg/twitter-php.svg)](https://packagist.org/packages/dg/twitter-php)
 
 Twitter for PHP is a very small and easy-to-use library for sending
 messages to Twitter and receiving status updates.
+
+If you like this, **[please make a donation now](https://nette.org/make-donation?to=twitter-php)**. Thank you!
 
 It requires PHP 5.4 or newer with CURL extension and is licensed under the New BSD License.
 You can obtain the latest version from our [GitHub repository](https://github.com/dg/twitter-php)
@@ -114,6 +116,10 @@ $statuses = $twitter->request('statuses/retweets_of_me', 'GET', ['count' => 20])
 
 Changelog
 ---------
+v3.8 (2/2019)
+- Twitter::sendDirectMessage() uses new API
+- Twitter::clickable: added support for $status->full_text (#60)
+
 v3.7 (3/2018)
 - minimal required PHP version changed to 5.4
 - Twitter::send() added $options

@@ -8,7 +8,7 @@
  *
  * Homepage:    https://phpfashion.com/twitter-for-php
  * Twitter API: https://dev.twitter.com/rest/public
- * Version:     3.7
+ * Version:     3.8
  */
 
 
@@ -37,7 +37,6 @@ class Twitter
 	public $httpOptions = [
 		CURLOPT_TIMEOUT => 20,
 		CURLOPT_SSL_VERIFYPEER => 0,
-		CURLOPT_HTTPHEADER => ['Expect:'],
 		CURLOPT_USERAGENT => 'Twitter for PHP',
 	];
 
@@ -123,9 +122,15 @@ class Twitter
 	public function sendDirectMessage($username, $message)
 	{
 		return $this->request(
-			'direct_messages/new',
-			'POST',
-			['text' => $message, 'screen_name' => $username]
+			'direct_messages/events/new',
+			'JSONPOST',
+			['event' => [
+				'type' => 'message_create',
+				'message_create' => [
+					'target' => ['recipient_id' => $this->loadUserInfo($username)->id_str],
+					'message_data' => ['text' => $message],
+				],
+			]]
 		);
 	}
 
@@ -254,7 +259,7 @@ class Twitter
 	/**
 	 * Process HTTP request.
 	 * @param  string  URL or twitter command
-	 * @param  string  HTTP method GET or POST
+	 * @param  string  HTTP method GET or POST or JSONPOST
 	 * @param  array   data
 	 * @param  array   uploaded files
 	 * @return stdClass|stdClass[]
@@ -286,22 +291,35 @@ class Twitter
 			$data[$key] = $hasCURLFile ? new CURLFile($file) : '@' . $file;
 		}
 
-		$request = Twitter_OAuthRequest::from_consumer_and_token($this->consumer, $this->token, $method, $resource, $files ? [] : $data);
+		$headers = ['Expect:'];
+
+		if ($method === 'JSONPOST') {
+			$method = 'POST';
+			$data = json_encode($data);
+			$headers[] = 'Content-Type: application/json';
+
+		} elseif ($method === 'GET' && $data) {
+			$resource .= '?' . http_build_query($data, '', '&');
+		}
+
+		$request = Twitter_OAuthRequest::from_consumer_and_token($this->consumer, $this->token, $method, $resource);
 		$request->sign_request(new Twitter_OAuthSignatureMethod_HMAC_SHA1, $this->consumer, $this->token);
+		$headers[] = $request->to_header();
 
 		$options = [
+			CURLOPT_URL => $resource,
 			CURLOPT_HEADER => false,
 			CURLOPT_RETURNTRANSFER => true,
-		] + ($method === 'POST' ? [
-			CURLOPT_POST => true,
-			CURLOPT_POSTFIELDS => $files ? $data : $request->to_postdata(),
-			CURLOPT_URL => $files ? $request->to_url() : $request->get_normalized_http_url(),
-		] : [
-			CURLOPT_URL => $request->to_url(),
-		]) + $this->httpOptions;
-
-		if ($method === 'POST' && $hasCURLFile) {
-			$options[CURLOPT_SAFE_UPLOAD] = true;
+			CURLOPT_HTTPHEADER => $headers,
+		] + $this->httpOptions;
+		if ($method === 'POST') {
+			$options += [
+				CURLOPT_POST => true,
+				CURLOPT_POSTFIELDS => $data,
+			];
+			if ($hasCURLFile) {
+				$options[CURLOPT_SAFE_UPLOAD] = true;
+			}
 		}
 
 		$curl = curl_init();
@@ -400,7 +418,7 @@ class Twitter
 		}
 
 		krsort($all);
-		$s = $status->text;
+		$s = isset($status->full_text) ? $status->full_text : $status->text;
 		foreach ($all as $pos => $item) {
 			$s = iconv_substr($s, 0, $pos, 'UTF-8')
 				. '<a href="' . htmlspecialchars($item[0]) . '">' . htmlspecialchars($item[1]) . '</a>'
