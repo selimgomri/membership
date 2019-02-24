@@ -443,6 +443,22 @@ else {
             $col = "col-sm-4";
           }
           ?>
+          <h2 class="">Personal Data</h2>
+          <p>
+            Under the General Data Protection Regulation, you can request for
+            free to download all personal data held about
+            <?=$rowSwim["MForename"]?> by <?=CLUB_NAME?>.
+          </p>
+          <p>
+            <a href="<?=autoUrl("myaccount/general/download-member-data/" . $id)?>"
+            class="btn btn-primary">
+              Download data
+            </a>
+          </p>
+          <p>
+            You can download your own personal data from the general account
+            options menu.
+          </p>
           <h2 class="">Membership Card</h2>
           <p>
             Your swimmer's club membership card can be used by our coaches in an

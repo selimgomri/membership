@@ -73,11 +73,6 @@ $this->post('/email', function() {
 	include 'EmailOptionsPost.php';
 });
 
-$this->get('/general', function() {
-	global $link;
-	include 'GeneralOptions.php';
-});
-
 $this->get('/googleauthenticator', function() {
 	include 'EnableGoogleAuthenticator.php';
 });
@@ -94,7 +89,24 @@ $this->post('/googleauthenticator/setup', function() {
 	include 'GoogleAuthenticatorKeyVerify.php';
 });
 
-$this->post('/general', function() {
-	global $link;
-	include 'GeneralOptionsPost.php';
+$this->group('/general', function() {
+
+  $this->get('/', function() {
+  	global $link;
+  	include 'GeneralOptions.php';
+  });
+
+  $this->post('/', function() {
+  	global $link;
+  	include 'GeneralOptionsPost.php';
+  });
+
+  $this->get('/download-personal-data', function() {
+  	include 'GDPR/UserDataDump.php';
+  });
+
+  $this->get('/download-member-data/{id}:int', function($id) {
+  	include 'GDPR/MemberDataDump.php';
+  });
+
 });

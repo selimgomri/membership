@@ -2,7 +2,7 @@
 
 global $db;
 
-$json = file_get_contents('https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts');
+$json = file_get_contents('https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts?rand_id=' . time());
 $obj = json_decode($json);
 
 $file = null;
@@ -10,7 +10,7 @@ $cache_file = BASE_PATH . 'cache/SE-News.json';
 if(file_exists($cache_file)) {
   if(time() - filemtime($cache_file) > 10800) {
     // too old , re-fetch
-    $cache = file_get_contents('https://www.swimming.org/sport/wp-json/wp/v2/posts');
+    $cache = file_get_contents('https://www.swimming.org/sport/wp-json/wp/v2/posts?rand_id=' . time());
     file_put_contents($cache_file, $cache);
     $file = $cache;
   } else {
@@ -18,7 +18,7 @@ if(file_exists($cache_file)) {
   }
 } else {
   // no cache, create one
-  $cache = file_get_contents('https://www.swimming.org/sport/wp-json/wp/v2/posts');
+  $cache = file_get_contents('https://www.swimming.org/sport/wp-json/wp/v2/posts?rand_id=' . time());
   file_put_contents($cache_file, $cache);
   $file = $cache;
 }
