@@ -81,6 +81,10 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
             'GoCardlessPro\\' => 14,
             'GeoIp2\\' => 7,
         ),
+        'F' => 
+        array (
+            'FontLib\\' => 8,
+        ),
         'E' => 
         array (
             'Endroid\\QrCode\\' => 15,
@@ -88,6 +92,7 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         ),
         'D' => 
         array (
+            'Dompdf\\' => 7,
             'Defuse\\Crypto\\' => 14,
             'DASPRiD\\Enum\\' => 13,
         ),
@@ -253,6 +258,10 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         array (
             0 => __DIR__ . '/..' . '/geoip2/geoip2/src',
         ),
+        'FontLib\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib',
+        ),
         'Endroid\\QrCode\\' => 
         array (
             0 => __DIR__ . '/..' . '/endroid/qr-code/src',
@@ -260,6 +269,10 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'Endroid\\Installer\\' => 
         array (
             0 => __DIR__ . '/..' . '/endroid/installer/src',
+        ),
+        'Dompdf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dompdf/dompdf/src',
         ),
         'Defuse\\Crypto\\' => 
         array (
@@ -284,6 +297,17 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
     );
 
     public static $prefixesPsr0 = array (
+        'S' => 
+        array (
+            'Svg\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/phenx/php-svg-lib/src',
+            ),
+            'Sabberworm\\CSS' => 
+            array (
+                0 => __DIR__ . '/..' . '/sabberworm/php-css-parser/lib',
+            ),
+        ),
         'O' => 
         array (
             'OAuth2' => 
@@ -294,6 +318,12 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
     );
 
     public static $classMap = array (
+        'Cpdf' => __DIR__ . '/..' . '/dompdf/dompdf/lib/Cpdf.php',
+        'HTML5_Data' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/Data.php',
+        'HTML5_InputStream' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/InputStream.php',
+        'HTML5_Parser' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/Parser.php',
+        'HTML5_Tokenizer' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/Tokenizer.php',
+        'HTML5_TreeBuilder' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/TreeBuilder.php',
         'Twitter' => __DIR__ . '/..' . '/dg/twitter-php/src/Twitter.php',
         'TwitterException' => __DIR__ . '/..' . '/dg/twitter-php/src/Twitter.php',
         'Twitter_OAuthConsumer' => __DIR__ . '/..' . '/dg/twitter-php/src/OAuth.php',
