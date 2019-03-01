@@ -17,7 +17,7 @@ if (empty($_POST)) {
 
 include BASE_PATH . 'views/header.php'; ?>
 <form method="post">
-  <label>Do You Authorize TestClient?</label><br />
+  <label>Do You Authorize CLIENT_NAME?</label><br />
   <input type="submit" name="authorized" value="yes">
   <input type="submit" name="authorized" value="no">
 </form>
@@ -35,6 +35,6 @@ $is_authorized = ($_POST['authorized'] === 'yes');
 $server->handleAuthorizeRequest($request, $response, $is_authorized, $_SESSION['UserID']);
 if ($is_authorized) {
   // this is only here so that you get to see your code in the cURL request. Otherwise, we'd redirect back to the client
-  //header($response->getHttpHeader('Location'));
+  header($response->getHttpHeader('Location'));
 }
 $response->send();

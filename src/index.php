@@ -246,7 +246,7 @@ $route->group('/', function() {
     });
 
     $this->get('/userinfo', function() {
-      include 'controllers/oauth/ResourceController.php';
+      include 'controllers/oauth/UserDetails.php';
     });
   });
 
@@ -280,6 +280,11 @@ $route->group('/', function() {
   $this->get('/robots.txt', function() {
     header("Content-Type: text/plain");
     echo "User-agent: *\r\nDisallow: /webhooks/\r\nDisallow: /webhooks\r\nDisallow: /css\r\nDisallow: /js";
+  });
+
+  $this->get('/public/*', function() {
+    $filename = $this[0];
+    require BASE_PATH . 'controllers/PublicFileLoader.php';
   });
 
   $this->post('/timeconverter', function() {
@@ -399,7 +404,7 @@ $route->group('/', function() {
       $people = true;
       include 'controllers/posts/router.php';
     });
-
+/*
     $this->get('/files/*', function() {
       $filename = $this[0];
       if (!isset($_SERVER['PHP_AUTH_USER'])) {
@@ -411,8 +416,8 @@ $route->group('/', function() {
         header('WWW-Authenticate: Basic realm="Use your normal account Email Address and Password"');
         halt(401);
       }
-
     });
+    */
 
     // Global Catch All send to login
     $this->any('/*', function() {
@@ -600,6 +605,10 @@ $route->group('/', function() {
 
       $this->get('/about:stopcodes/{code}:int', function($code) {
         halt((int) $code);
+      });
+
+      $this->get('pdf-test', function() {
+        include 'controllers/PDFTest.php';
       });
 
       $this->get('test', function() {

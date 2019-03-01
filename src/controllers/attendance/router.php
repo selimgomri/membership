@@ -8,6 +8,28 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
     include 'indexView.php';
 	});
 
+  $this->group('/venues', function() {
+    $this->get('/', function() {
+      include 'Venues.php';
+  	});
+
+    $this->get('/new', function() {
+      include 'NewVenue.php';
+  	});
+
+    $this->post('/new', function() {
+      include 'NewVenuePost.php';
+  	});
+
+    $this->get('/{id}:int', function($id) {
+      include 'EditVenue.php';
+  	});
+
+    $this->post('/{id}:int', function($id) {
+      include 'EditVenuePost.php';
+  	});
+	});
+
   // Registers
   $this->get(['/register', '/register/{squad}:int/{session}:int'], function($squad = null, $session = null) {
     global $link;

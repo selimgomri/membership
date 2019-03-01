@@ -290,9 +290,9 @@ class MembershipOAuthStorage implements
      * @param string $password
      * @return bool
      */
-    public function checkUserCredentials($username, $password)
+    public function checkUserCredentials($user_id, $password)
     {
-        if ($user = $this->getUser($username)) {
+        if ($user = $this->getUser($user_id)) {
             return $this->checkPassword($user, $password);
         }
 
@@ -300,12 +300,12 @@ class MembershipOAuthStorage implements
     }
 
     /**
-     * @param string $username
+     * @param string $user_id
      * @return array|bool
      */
-    public function getUserDetails($username)
+    public function getUserDetails($user_id)
     {
-        return $this->getUser($username);
+        return $this->getUser($user_id);
     }
 
     /**
@@ -413,7 +413,7 @@ class MembershipOAuthStorage implements
      */
     protected function checkPassword($user, $password)
     {
-        return password_verify($this->hashPassword($password), $user['password']);
+        return password_verify($password, $user['password']);
     }
 
     // use a secure hashing algorithm when storing passwords. Override this for your application
@@ -426,10 +426,10 @@ class MembershipOAuthStorage implements
      * @param string $username
      * @return array|bool
      */
-    public function getUser($email)
+    public function getUser($user_id)
     {
-        $stmt = $this->db->prepare($sql = sprintf('SELECT * from %s where EmailAddress=:email', $this->config['user_table']));
-        $stmt->execute(array('email' => $email));
+        $stmt = $this->db->prepare($sql = sprintf('SELECT * from %s where UserID=:user_id', $this->config['user_table']));
+        $stmt->execute(array('user_id' => $user_id));
 
         if (!$userInfo = $stmt->fetch(\PDO::FETCH_ASSOC)) {
             return false;
@@ -450,19 +450,19 @@ class MembershipOAuthStorage implements
      * @param string $lastName
      * @return bool
      */
-    public function setUser($username, $password, $firstName = null, $lastName = null)
+    public function setUser($user_id, $password, $forename = null, $surname = null)
     {
         // do not store in plaintext
         $password = $this->hashPassword($password);
 
         // if it exists, update it.
-        if ($this->getUser($username)) {
-            $stmt = $this->db->prepare($sql = sprintf('UPDATE %s SET password=:password, first_name=:firstName, last_name=:lastName where username=:username', $this->config['user_table']));
+        if ($this->getUser($user_id)) {
+            $stmt = $this->db->prepare($sql = sprintf('UPDATE %s SET Password=:password, Forename=:firstName, Surname=:lastName where UserID=:user_id', $this->config['user_table']));
         } else {
-            $stmt = $this->db->prepare(sprintf('INSERT INTO %s (username, password, first_name, last_name) VALUES (:username, :password, :firstName, :lastName)', $this->config['user_table']));
+            $stmt = $this->db->prepare(sprintf('INSERT INTO %s (UserID, Password, Forename, Surname) VALUES (:user_id, :password, :forename, :surname)', $this->config['user_table']));
         }
 
-        return $stmt->execute(compact('username', 'password', 'firstName', 'lastName'));
+        return $stmt->execute(compact('user_id', 'password', 'forename', 'surname'));
     }
 
     /**

@@ -90,7 +90,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
   $message_content .= myMonthlyFeeTable($link, $row['UserID']);
   $message_content .= '<p>Combined with any additional fees such as membership, the total fee for ' . date("F Y") . ' is, <strong>&pound;' . number_format(($row['Amount']/100), 2, '.', ',') . '</strong></p>';
   $message_content .= '<p>Fees are calculated using the squad your swimmers were members of on 1 ' . date("F Y") . '.</p><hr>';
-  $message_content .= '<p>You can <a href="' . autoUrl("payments/statement/" . $id) . '">view a full itemised statement for this payment online</a>. Squad Fees for all of your swimmers are shown as one charge on statements. A breakdown of squad fees is contained in this email.</p>';
+  $message_content .= '<p>You can <a href="' . autoUrl("payments/statement/" . $id) . '">view a full itemised statement for this payment online</a> or <a href="' . autoUrl("payments/statement/" . $id . "/pdf") . '">download your full statement as a PDF</a>. Squad Fees for all of your swimmers are shown as one charge on statements. A breakdown of squad fees is contained in this email.</p>';
 
   if ($mandateInfo) {
     $message_content .= '<p>You will receive an email from our service provider GoCardless within the next three working days confirming the amount to be charged by direct debit.</p>';

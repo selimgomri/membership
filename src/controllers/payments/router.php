@@ -59,6 +59,11 @@ if ($access == "Parent") {
 		global $link;
 		include 'admin/history/statement.php';
 	});
+
+  $this->get('/statement/{PaymentID}/pdf', function($PaymentID) {
+		global $link;
+		include 'admin/history/statementPDF.php';
+	});
 }
 
 if ($access == "Parent" || $access == "Admin") {
@@ -151,6 +156,11 @@ if ($access == "Admin") {
 		$this->get('/statement/{PaymentID}', function($PaymentID) {
 			global $link;
 			include 'admin/history/statement.php';
+		});
+
+    $this->get('/statement/{PaymentID}/pdf', function($PaymentID) {
+			global $link;
+			include 'admin/history/statementPDF.php';
 		});
 
     $this->get('/statement/{PaymentID}/markpaid/{token}', function($PaymentID, $token) {

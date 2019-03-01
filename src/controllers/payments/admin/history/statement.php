@@ -64,23 +64,16 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
     <?php } else { ?>
 		<h1 class="border-bottom border-gray pb-2 mb-2">Statement for <?=$name?></h1>
     <?php } ?>
-    <div class="row mb-4">
-      <div class="col">
-        <dl class="row">
-          <dt class="col-md-4">Payment Identifier</dt>
-          <dd class="col-md-8"><span class="mono"><?=$PaymentID?></span></dd>
+    <dl class="row">
+      <dt class="col-md-4">Payment Identifier</dt>
+      <dd class="col-md-8"><span class="mono"><?=$PaymentID?></span></dd>
 
-          <dt class="col-md-4">Total Fee</dt>
-          <dd class="col-md-8"><span class="mono">&pound;<?=number_format(($payment_info['Amount']/100),2,'.','')?></span></dd>
+      <dt class="col-md-4">Total Fee</dt>
+      <dd class="col-md-8"><span class="mono">&pound;<?=number_format(($payment_info['Amount']/100),2,'.','')?></span></dd>
 
-          <dt class="col-md-4">Payment Status</dt>
-          <dd class="col-md-8"><span class="mono"><?=paymentStatusString($payment_info['Status'])?></span></dd>
-        </dl>
-      </div>
-      <div class="col">
-        <img class="img-fluid d-block ml-auto" src="<?=autoUrl("services/barcode-generator?codetype=code128&size=80&text=" . $PaymentID . "&print=false&sizefactor=1")?>" srcset="<?=autoUrl("services/barcode-generator?codetype=code128&size=160&text=" . $PaymentID . "&print=false&sizefactor=2")?> 2x, <?=autoUrl("services/barcode-generator?codetype=code128&size=240&text=" . $PaymentID . "&print=false&sizefactor=3")?> 3x">
-      </div>
-    </div>
+      <dt class="col-md-4">Payment Status</dt>
+      <dd class="col-md-8"><span class="mono"><?=paymentStatusString($payment_info['Status'])?></span></dd>
+    </dl>
 
     <?php if ($_SESSION['AccessLevel'] == "Admin" && ($payment_info['Status'] == 'customer_approval_denied' || $payment_info['Status'] == 'failed')) {
     $_SESSION['Token' . $PaymentID] = hash('sha256', random_int(0, 999999));
@@ -179,6 +172,12 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   		<? } ?>
     </div>
 
+    <p>
+      <a href="<?=app('request')->curl?>pdf" target="_blank" class="btn btn-primary">
+        PDF Download
+      </a>
+    </p>
+
     <div class="row">
       <div class="col-md-10 col-lg-8">
         <h2>Got problems or concerns?</h2>
@@ -186,11 +185,12 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
           Problems are very rare but when they do happen we'll work to resolve them
           as quickly as possible.
         </p>
-        <p>
+        <!--<p>
           Print off this page and club staff can scan this code to access your
           statement.
         </p>
         <img class="img-fluid d-block mb-3" src="<?=autoUrl("services/qr-generator?size=150&amp;text=" . urlencode(autoUrl("payments/history/statement/" . strtoupper($PaymentID))))?>" srcset="<?=autoUrl("services/qr-generator?size=300&amp;text=" . urlencode(autoUrl("payments/history/statement/" . strtoupper($PaymentID))))?> 2x, <?=autoUrl("services/qr-generator?size=450&amp;text=" . urlencode(autoUrl("payments/history/statement/" . strtoupper($PaymentID))))?> 3x" alt="<?=autoUrl("payments/history/statement/" . strtoupper($PaymentID))?>">
+      -->
 
         <h2>Questions about Direct Debit</h2>
         <p>
