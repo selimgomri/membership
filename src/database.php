@@ -15,10 +15,8 @@ function verifyUser($user, $password) {
   $username = trim($user);
   $password = trim($password);
 
-  $username = preg_replace('/\s+/', '', $username);
-
   try {
-    $query = $db->prepare("SELECT Password, UserID, AccessLevel FROM users WHERE Username = :user OR EmailAddress = :user LIMIT 0, 30");
+    $query = $db->prepare("SELECT Password, UserID, AccessLevel FROM users WHERE EmailAddress = :user LIMIT 1");
     $query->execute(['user' => $username]);
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
     $count = sizeof($result);
@@ -27,7 +25,7 @@ function verifyUser($user, $password) {
       $hash = $result[0]['Password'];
 
       if (password_verify($password, $hash)) {
-        if ($result[0]['Password'] != 'Parent') {
+        if ($result[0]['AccessLevel'] != 'Parent') {
           return true;
         } else {
           // Verify parent has connected child
@@ -101,11 +99,18 @@ function notifySend($to, $subject, $message, $name = null, $emailaddress = null,
       <table style=\"width:100%;max-width:700px;border:0px;background:#f8fcff;padding:0px 10px;\"><tr><td>
       <div
 class=\"bottom text-center\">
-<p class=\"small\" align=\"center\">" . CLUB_NAME . ", Chester-le-Street Leisure Centre, Burns Green,<br>Chester-le-Street, DH3 3QH.</p>
-<p class=\"small\" align=\"center\">This email was sent automatically by the Chester-le-Street
-ASC Membership System.</p>
-<p class=\"small\" align=\"center\">Have questions? Contact us at <a
-href=\"mailto:enquiries@chesterlestreetasc.co.uk\">enquiries@chesterlestreetasc.co.uk</a>.</p>
+<p class=\"small\" align=\"center\"><strong>" . CLUB_NAME . "</strong><br>";
+$club = json_decode(CLUB_JSON);
+for ($i = 0; $i < sizeof($club->ClubAddress); $i++) {
+  $message .= $club->ClubAddress[$i] . "<br>";
+}
+$message .= "</p>
+<p class=\"small\" align=\"center\">This email was sent automatically by the " . CLUB_NAME . " Membership System.</p>";
+if (!defined('IS_CLS') || !IS_CLS) {
+  $message .= '<p class="small" align="center">The Membership System was built by Chester-le-Street ASC.</p>';
+}
+$message .= "<p class=\"small\" align=\"center\">Have questions? Contact us at <a
+href=\"mailto:" . $club->ClubEmails->Main . "\">" . $club->ClubEmails->Main . "</a>.</p>
 <p class=\"small\" align=\"center\">To control your email options, go to <a href=\"" .
 autoUrl("myaccount/email") . "\">My Account</a>.</p>";
 if ($from['Unsub']['Allowed']) {

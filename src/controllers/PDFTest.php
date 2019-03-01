@@ -5,13 +5,14 @@
   <head>
   <meta charset='utf-8'>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i" rel="stylesheet" type="text/css">
   <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:700,700i" rel="stylesheet" type="text/css">-->
   <?php include BASE_PATH . 'helperclasses/PDFStyles/Main.php'; ?>
   <title>Generated PDF</title>
   </head>
   <body>
     <?php include BASE_PATH . 'helperclasses/PDFStyles/Letterhead.php'; ?>
-    <div class="primary-box" id="test">
+    <div class="primary-box mb-3" id="test">
       <h1>
         Welcome to <?=CLUB_NAME?>
       </h1>
@@ -99,12 +100,14 @@
       </tbody>
     </table>
 
+    <div class="page-break"></div>
+
     <h2 class="primary">
       Primary text
     </h2>
 
     <p class="primary">
-      This paragraph and associated title is in the Chester-le-Street ASC House Colour
+      This paragraph and associated title is in the <?=CLUB_NAME?> Membership House Colour
     </p>
 
     <h2>
@@ -117,7 +120,7 @@
       </h2>
 
       <p class="mb-0">
-        This paragraph and associated title is white in a box which is in the Chester-le-Street ASC House Colour
+        This paragraph and associated title is white in a box which is in the <?=CLUB_NAME?> Membership House Colour
       </p>
     </div>
     <?php include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>

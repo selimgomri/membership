@@ -10,7 +10,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded shadow">
+	<div class="">
 		<h1>What type of member are you adding?</h1>
 		<p>There are two ways to add new members</p>
 
@@ -25,8 +25,26 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 					swimmer using an ASA Number and Access Key</p>
 				</div>
 		    <div class="card-footer">
-		      <a href="<? echo autoUrl("swimmers/new"); ?>">
+		      <a href="<?=autoUrl("swimmers/new")?>">
 						Add a new member
+					</a>
+		    </div>
+		  </div>
+      <div class="card">
+		    <div class="card-body">
+		      <h2 class="card-title">Invite Member from Trial</h2>
+		      <p class="card-text">
+            If a swimmer applied for a trial online, you can invite them to join
+            by email.
+          </p>
+					<p class="card-text">
+            This process allows the full registration to be completed
+            automatically (except for ASA Membership).
+          </p>
+				</div>
+		    <div class="card-footer">
+		      <a href="<?=autoUrl(""/*"trials"*/)?>">
+						Invite from trial
 					</a>
 		    </div>
 		  </div>

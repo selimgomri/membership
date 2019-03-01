@@ -2,7 +2,7 @@
 
 $file = BASE_PATH . 'public/';
 $file = $file . $filename;
-if (file_exists($file)) {
+if (file_exists($file) && mime_content_type($file) != 'directory') {
   header('Content-Description: File Transfer');
   if (strpos($file, '.css')) {
     header('Content-Type: text/css');
@@ -18,7 +18,11 @@ if (file_exists($file)) {
   } else {
     header('Content-Disposition: attachment; filename="'.basename($filename).'"');
   }
-  header('Expires: 0');
+  if (strpos($file, '.css') || strpos($file, '.js')) {
+    header('Expires: ' . date('D, d M Y H:i:s', strtotime("+28 days")) . ' GMT');
+  } else {
+    header('Expires: 0');
+  }
   header('Cache-Control: must-revalidate');
   header('Pragma: public');
   header('Content-Length: ' . filesize($file));
