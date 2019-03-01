@@ -2,10 +2,7 @@
 
 require 'GlobalHead.php';
 
-$bg = "bg-light";
-if ($use_white_background) {
-  $bg = "bg-white";
-}
+$bg = "bg-white";
 ?>
 <body class="<?=$bg?> account--body">
 
@@ -275,6 +272,7 @@ if ($use_white_background) {
               <a class="dropdown-item" href="<?php echo autoUrl("attendance/register")?>">Take Register</a>
               <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Committee") {?>
               <a class="dropdown-item" href="<?php echo autoUrl("attendance/sessions")?>">Manage Sessions</a>
+              <a class="dropdown-item" href="<?=autoUrl("attendance/venues")?>">Manage Venues</a>
               <?php } ?>
               <a class="dropdown-item" href="<?php echo autoUrl("attendance/history")?>">Attendance History</a>
               <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/squads/" target="_blank">Timetables</a>
@@ -430,6 +428,9 @@ if ($use_white_background) {
         <li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("timeconverter") ?>">Time Converter</a>
   		  </li>
+        <li class="nav-item">
+  			  <a class="nav-link" href="<?php echo autoUrl("services/request-a-trial") ?>">Request a Trial</a>
+  		  </li>
         <?php } ?>
   		</ul>
       <?php if (!empty($_SESSION['LoggedIn'])) { ?>
@@ -477,3 +478,5 @@ if ($use_white_background) {
 
 <!-- END OF HEADERS -->
 <div class="mb-3"></div>
+
+<div class="have-full-height" style="min-height:70vh">

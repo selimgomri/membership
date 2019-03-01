@@ -50,11 +50,11 @@ $bg = "bg-white";
     <nav class="navbar navbar-expand-lg navbar-dark
     d-print-none justify-content-between px-0" role="navigation">
 
-        <a class="navbar-brand d-lg-none" href="<?php echo autoUrl("") ?>">
+        <a class="navbar-brand" href="<?=autoUrl("") ?>">
           <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
             My Membership
           <?php } else { ?>
-            Club Membership System
+            <?=CLUB_NAME?>
           <?php } ?>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -68,7 +68,7 @@ $bg = "bg-white";
   		<ul class="navbar-nav mr-auto">
   		<?php if (!empty($_SESSION['LoggedIn'])) { ?>
         <li class="nav-item">
-  			  <a class="nav-link" href="<?php echo autoUrl("") ?>">Home</a>
+  			  <a class="nav-link" href="<?=autoUrl("") ?>">Home</a>
   		  </li>
         <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
           <?
@@ -83,24 +83,24 @@ $bg = "bg-white";
               My Swimmers
             </a>
             <div class="dropdown-menu" aria-labelledby="swimmersDropdown">
-              <a class="dropdown-item" href="<?php echo autoUrl("swimmers") ?>">Swimmers Home</a>
+              <a class="dropdown-item" href="<?=autoUrl("swimmers") ?>">Swimmers Home</a>
               <? if (mysqli_num_rows($getSwimmers) > 0) { ?>
               <div class="dropdown-divider"></div>
               <h6 class="dropdown-header">My Swimmers</h6>
               <? for ($i = 0; $i < mysqli_num_rows($getSwimmers); $i++) {
                 $getSwimmerRow = mysqli_fetch_array($getSwimmers, MYSQLI_ASSOC); ?>
-                <a class="dropdown-item" href="<?php echo autoUrl("swimmers/" .
+                <a class="dropdown-item" href="<?=autoUrl("swimmers/" .
                 $getSwimmerRow['MemberID']) ?>"><? echo
                 $getSwimmerRow['MForename'] . " " . $getSwimmerRow['MSurname'];
                 ?></a>
               <? } ?>
               <? } else { ?>
-                <a class="dropdown-item" href="<?php echo autoUrl("myaccount/addswimmer") ?>">Add Swimmers</a>
+                <a class="dropdown-item" href="<?=autoUrl("myaccount/addswimmer") ?>">Add Swimmers</a>
               <? } ?>
             </div>
           </li>
         <li class="nav-item">
-  			  <a class="nav-link" href="<?php echo autoUrl("emergencycontacts") ?>">Emergency Contacts</a>
+  			  <a class="nav-link" href="<?=autoUrl("emergencycontacts") ?>">Emergency Contacts</a>
   		  </li>
         <?php }
         else { ?>
@@ -109,28 +109,28 @@ $bg = "bg-white";
               Swimmers &amp; Squads
             </a>
             <div class="dropdown-menu" aria-labelledby="swimmerDropdown">
-              <a class="dropdown-item" href="<?php echo autoUrl("swimmers")?>">Swimmer Directory</a>
+              <a class="dropdown-item" href="<?=autoUrl("swimmers")?>">Swimmer Directory</a>
               <? if ($_SESSION['AccessLevel'] == "Admin") { ?>
-              <a class="dropdown-item" href="<?php echo autoUrl("swimmers/addmember")?>">Add Member</a>
+              <a class="dropdown-item" href="<?=autoUrl("swimmers/addmember")?>">Add Member</a>
               <? } ?>
               <?php if ($_SESSION['AccessLevel'] != "Galas") { ?>
-              <a class="dropdown-item" href="<?php echo autoUrl("squads")?>">Squads</a>
-          		<a class="dropdown-item" href="<?php echo autoUrl("squads/moves")?>">Squad Moves</a>
+              <a class="dropdown-item" href="<?=autoUrl("squads")?>">Squads</a>
+          		<a class="dropdown-item" href="<?=autoUrl("squads/moves")?>">Squad Moves</a>
               <? } ?>
-              <a class="dropdown-item" href="<?php echo autoUrl("swimmers/accesskeys")?>">Access Keys</a>
+              <a class="dropdown-item" href="<?=autoUrl("swimmers/accesskeys")?>">Access Keys</a>
               <? if ($_SESSION['AccessLevel'] == "Admin") { ?>
-              <a class="dropdown-item" href="<?php echo autoUrl("swimmers/orphaned")?>">Orphan Swimmers</a>
+              <a class="dropdown-item" href="<?=autoUrl("swimmers/orphaned")?>">Orphan Swimmers</a>
               <? } ?>
               <? if ($_SESSION['AccessLevel'] == "Coach") { ?>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . date("Y/m")) ?>">
+              <a class="dropdown-item" href="<?=autoUrl("payments/history/squads/" . date("Y/m")) ?>">
                 Squad Fee Payments, <?=date("F Y")?>
               </a>
               <?
               $lm = date("Y/m", strtotime("first day of last month"));
               $lms = date("F Y", strtotime("first day of last month"));
               ?>
-              <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . $lm) ?>">
+              <a class="dropdown-item" href="<?=autoUrl("payments/history/squads/" . $lm) ?>">
                 Squad Fee Payments, <?=$lms?>
               </a>
               <? } ?>
@@ -144,12 +144,13 @@ $bg = "bg-white";
               Registers
             </a>
             <div class="dropdown-menu" aria-labelledby="registerDropdown">
-              <a class="dropdown-item" href="<?php echo autoUrl("attendance")?>">Attendance Home</a>
-              <a class="dropdown-item" href="<?php echo autoUrl("attendance/register")?>">Take Register</a>
+              <a class="dropdown-item" href="<?=autoUrl("attendance")?>">Attendance Home</a>
+              <a class="dropdown-item" href="<?=autoUrl("attendance/register")?>">Take Register</a>
               <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Committee") {?>
-              <a class="dropdown-item" href="<?php echo autoUrl("attendance/sessions")?>">Manage Sessions</a>
+              <a class="dropdown-item" href="<?=autoUrl("attendance/sessions")?>">Manage Sessions</a>
+              <a class="dropdown-item" href="<?=autoUrl("attendance/venues")?>">Manage Venues</a>
               <?php } ?>
-              <a class="dropdown-item" href="<?php echo autoUrl("attendance/history")?>">Attendance History</a>
+              <a class="dropdown-item" href="<?=autoUrl("attendance/history")?>">Attendance History</a>
               <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/squads/" target="_blank">Timetables</a>
             </div>
     		  </li>
@@ -157,12 +158,12 @@ $bg = "bg-white";
           <?php if ($_SESSION['AccessLevel'] == "Admin" ||
           $_SESSION['AccessLevel'] == "Galas") { ?>
           <li class="nav-item">
-    			  <a class="nav-link" href="<?php echo autoUrl("users") ?>">Users</a>
+    			  <a class="nav-link" href="<?=autoUrl("users") ?>">Users</a>
     		  </li>
           <?php } ?>
           <?php if ($_SESSION['AccessLevel'] == "Galas") { ?>
           <li class="nav-item">
-    			  <a class="nav-link" href="<?php echo autoUrl("payments") ?>">Pay</a>
+    			  <a class="nav-link" href="<?=autoUrl("payments") ?>">Pay</a>
     		  </li>
           <?php } ?>
           <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
@@ -171,15 +172,15 @@ $bg = "bg-white";
               Pay
             </a>
             <div class="dropdown-menu" aria-labelledby="paymentsAdminDropdown">
-              <a class="dropdown-item" href="<?php echo autoUrl("payments") ?>">Payments Home</a>
-              <a class="dropdown-item" href="<?php echo autoUrl("payments/history") ?>">Payment Status</a>
-              <a class="dropdown-item" href="<?php echo autoUrl("payments/extrafees")?>">Extra Fees</a>
+              <a class="dropdown-item" href="<?=autoUrl("payments") ?>">Payments Home</a>
+              <a class="dropdown-item" href="<?=autoUrl("payments/history") ?>">Payment Status</a>
+              <a class="dropdown-item" href="<?=autoUrl("payments/extrafees")?>">Extra Fees</a>
               <div class="dropdown-divider"></div>
               <h6 class="dropdown-header"><? echo date("F Y"); ?></h6>
-              <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . date("Y/m")) ?>">
+              <a class="dropdown-item" href="<?=autoUrl("payments/history/squads/" . date("Y/m")) ?>">
                 Squad Fees
               </a>
-              <a class="dropdown-item" href="<?php echo autoUrl("payments/history/extras/" . date("Y/m")) ?>">
+              <a class="dropdown-item" href="<?=autoUrl("payments/history/extras/" . date("Y/m")) ?>">
                 Extra Fees
               </a>
               <?
@@ -187,10 +188,10 @@ $bg = "bg-white";
               $lms = date("F Y", strtotime("first day of last month"));
               ?>
               <h6 class="dropdown-header"><? echo $lms; ?></h6>
-              <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . $lm) ?>">
+              <a class="dropdown-item" href="<?=autoUrl("payments/history/squads/" . $lm) ?>">
                 Squad Fees
               </a>
-              <a class="dropdown-item" href="<?php echo autoUrl("payments/history/extras/" . $lm) ?>">
+              <a class="dropdown-item" href="<?=autoUrl("payments/history/extras/" . $lm) ?>">
                 Extra Fees
               </a>
               <div class="dropdown-divider"></div>
@@ -210,14 +211,14 @@ $bg = "bg-white";
               Notify
             </a>
             <div class="dropdown-menu" aria-labelledby="notifyDropdown">
-              <a class="dropdown-item" href="<?php echo autoUrl("notify")?>">Notify Home</a>
-          		<a class="dropdown-item" href="<?php echo autoUrl("notify/newemail")?>">New Message</a>
-              <a class="dropdown-item" href="<?php echo autoUrl("notify/lists")?>">Targeted Lists</a>
+              <a class="dropdown-item" href="<?=autoUrl("notify")?>">Notify Home</a>
+          		<a class="dropdown-item" href="<?=autoUrl("notify/newemail")?>">New Message</a>
+              <a class="dropdown-item" href="<?=autoUrl("notify/lists")?>">Targeted Lists</a>
               <? if ($_SESSION['AccessLevel'] == "Admin") { ?>
-              <a class="dropdown-item" href="<?php echo autoUrl("notify/sms")?>">SMS Lists</a>
-          		<a class="dropdown-item" href="<?php echo autoUrl("notify/email")?>">Pending Messages</a>
+              <a class="dropdown-item" href="<?=autoUrl("notify/sms")?>">SMS Lists</a>
+          		<a class="dropdown-item" href="<?=autoUrl("notify/email")?>">Pending Messages</a>
               <? } ?>
-              <a class="dropdown-item" href="<?php echo autoUrl("notify/history")?>">Previous Messages</a>
+              <a class="dropdown-item" href="<?=autoUrl("notify/history")?>">Previous Messages</a>
             </div>
           </li>
           <?php } ?>
@@ -227,13 +228,13 @@ $bg = "bg-white";
             Galas
           </a>
           <div class="dropdown-menu" aria-labelledby="galaDropdown">
-            <a class="dropdown-item" href="<?php echo autoUrl("galas")?>">Gala Home</a>
+            <a class="dropdown-item" href="<?=autoUrl("galas")?>">Gala Home</a>
             <?php if ($_SESSION['AccessLevel'] == "Parent") {?>
-            <a class="dropdown-item" href="<?php echo autoUrl("galas/entergala")?>">Enter a Gala</a>
-            <a class="dropdown-item" href="<?php echo autoUrl("galas/entries")?>">My Entries</a>
+            <a class="dropdown-item" href="<?=autoUrl("galas/entergala")?>">Enter a Gala</a>
+            <a class="dropdown-item" href="<?=autoUrl("galas/entries")?>">My Entries</a>
             <?php } else {?>
-            <a class="dropdown-item" href="<?php echo autoUrl("galas/addgala")?>">Add Gala</a>
-            <a class="dropdown-item" href="<?php echo autoUrl("galas/entries")?>">View Entries</a>
+            <a class="dropdown-item" href="<?=autoUrl("galas/addgala")?>">Add Gala</a>
+            <a class="dropdown-item" href="<?=autoUrl("galas/entries")?>">View Entries</a>
             <?php } ?>
             <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/" target="_blank">Gala Website <i class="fa fa-external-link"></i></a>
             <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/category/galas/" target="_blank">Upcoming Galas <i class="fa fa-external-link"></i></a>
@@ -269,8 +270,8 @@ $bg = "bg-white";
             Posts
           </a>
           <div class="dropdown-menu" aria-labelledby="postDropdown">
-            <a class="dropdown-item" href="<?php echo autoUrl("posts")?>">Home</a>
-        		<a class="dropdown-item" href="<?php echo autoUrl("posts/new")?>">New Page</a>
+            <a class="dropdown-item" href="<?=autoUrl("posts")?>">Home</a>
+        		<a class="dropdown-item" href="<?=autoUrl("posts/new")?>">New Page</a>
         		<? if ($allow_edit && $_SESSION['AccessLevel'] != "Parent" &&
         		$_SESSION['AccessLevel'] != "Coach") { ?>
         		<a class="dropdown-item" href="<?=app('request')->curl?>edit">Edit Current Page</a>
@@ -285,17 +286,20 @@ $bg = "bg-white";
           } ?>
   		  <?php if (empty($_SESSION['LoggedIn'])) { ?>
         <li class="nav-item">
-  			  <a class="nav-link" href="<?php echo autoUrl("login") ?>">Login</a>
+  			  <a class="nav-link" href="<?=autoUrl("login") ?>">Login</a>
   		  </li>
         <li class="nav-item">
-  			  <a class="nav-link" href="<?php echo autoUrl("register") ?>">Create Account</a>
+  			  <a class="nav-link" href="<?=autoUrl("register") ?>">Create Account</a>
+  		  </li>
+        <li class="nav-item">
+  			  <a class="nav-link" href="<?=autoUrl("timeconverter") ?>">Time Converter</a>
   		  </li>
         <?php } ?>
   		</ul>
       <?php if (!empty($_SESSION['LoggedIn'])) { ?>
       <? $user_name = str_replace(' ', '&nbsp;', htmlspecialchars(getUserName($_SESSION['UserID']))); ?>
       <ul class="navbar-nav">
-        <!--<a class="btn btn-sm btn-outline-light my-2 my-sm-0" href="<?php echo autoUrl("logout") ?>">Logout</a>-->
+        <!--<a class="btn btn-sm btn-outline-light my-2 my-sm-0" href="<?=autoUrl("logout") ?>">Logout</a>-->
         <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
           <?= $user_name ?> <i class="fa fa-user-circle-o" aria-hidden="true"></i>
@@ -303,18 +307,18 @@ $bg = "bg-white";
           <div class="dropdown-menu dropdown-menu-right">
             <span class="dropdown-item-text">Signed&nbsp;in&nbsp;as&nbsp;<strong><?= $user_name ?></strong></span>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="<?php echo autoUrl("myaccount") ?>">Your Profile</a>
-            <a class="dropdown-item" href="<?php echo autoUrl("myaccount/email") ?>">Your Email Options</a>
-            <a class="dropdown-item" href="<?php echo autoUrl("myaccount/general") ?>">Your General Options</a>
+            <a class="dropdown-item" href="<?=autoUrl("myaccount") ?>">Your Profile</a>
+            <a class="dropdown-item" href="<?=autoUrl("myaccount/email") ?>">Your Email Options</a>
+            <a class="dropdown-item" href="<?=autoUrl("myaccount/general") ?>">Your General Options</a>
             <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-            <a class="dropdown-item" href="<?php echo autoUrl("emergencycontacts") ?>">Your Emergency Contacts</a>
+            <a class="dropdown-item" href="<?=autoUrl("emergencycontacts") ?>">Your Emergency Contacts</a>
             <? } ?>
-            <a class="dropdown-item" href="<?php echo autoUrl("myaccount/password") ?>">Your Password</a>
+            <a class="dropdown-item" href="<?=autoUrl("myaccount/password") ?>">Your Password</a>
             <? if ($_SESSION['AccessLevel'] == "Parent") { ?>
-            <a class="dropdown-item" href="<?php echo autoUrl("myaccount/notifyhistory") ?>">Your Message History</a>
-            <a class="dropdown-item" href="<?php echo autoUrl("myaccount/addswimmer") ?>">Add a Swimmer</a>
+            <a class="dropdown-item" href="<?=autoUrl("myaccount/notifyhistory") ?>">Your Message History</a>
+            <a class="dropdown-item" href="<?=autoUrl("myaccount/addswimmer") ?>">Add a Swimmer</a>
             <? } ?>
-            <a class="dropdown-item" href="<?php echo autoUrl("myaccount/loginhistory") ?>">Your Login History</a>
+            <a class="dropdown-item" href="<?=autoUrl("myaccount/loginhistory") ?>">Your Login History</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">Help</a>
             <a class="dropdown-item" href="<?= autoUrl("logout") ?>">Logout</a>
@@ -353,4 +357,4 @@ $bg = "bg-white";
 <!-- END OF HEADERS -->
 <div class="mb-3"></div>
 
-<div class="focus-highlight">
+<div class="focus-highlight have-full-height" style="min-height:70vh">

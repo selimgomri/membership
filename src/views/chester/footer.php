@@ -1,3 +1,5 @@
+</div>
+
 <!-- THE HEPPELL FOOTER -->
 <div class="cls-global-footer cls-global-footer-sponsors d-print-none">
 	<?php if (isset($fluidContainer) && $fluidContainer == true) { ?>

@@ -107,6 +107,7 @@ if ($access != "Parent") {
 	  include 'AddMember/SelectType.php';
 	});
 
+  /*
 	$this->get('/new/family', function() {
     global $link;
 	  include 'AddMember/ActivateFamilyMode.php';
@@ -118,6 +119,7 @@ if ($access != "Parent") {
 		  include 'AddMember/ExitFamilyMode.php';
 		});
 	}
+  */
 
 	$this->get('/new', function() {
     global $link;

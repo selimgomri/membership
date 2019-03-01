@@ -9,11 +9,12 @@
   		    <div class="row">
   		      <div class="col">
   		        <address>
-  		          <strong><?=CLUB_NAME?></strong><br>
-  		          Provided by Chester-le-Street ASC on behalf of your club<br>
-                c/o Chester-le-Street Leisure Centre<br>
-                Chester-le-Street<br>
-                DH3 3QH
+                <?php $club = json_decode(CLUB_JSON); ?>
+                <strong><?=CLUB_NAME?></strong><br>
+                <?php
+                for ($i = 0; $i < sizeof($club->ClubAddress); $i++) { ?>
+                  <?=$club->ClubAddress[$i]?><br>
+                <?php } ?>
   		        </address>
   		        <!--<p><i class="fa fa-envelope fa-fw" aria-hidden="true"></i> <a href="mailto:enquiries@chesterlestreetasc.co.uk" target="new">E-Mail Us</a></p>-->
   		        <p class="mb-0"><i class="fa fa-commenting fa-fw" aria-hidden="true"></i> <a target="new" href="mailto:websitefeedback@chesterlestreetasc.co.uk">Website Feedback</a></p>

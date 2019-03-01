@@ -30,7 +30,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 					</a>
 		    </div>
 		  </div>
-		  <div class="card">
+		  <!--<div class="card">
 		    <div class="card-body">
 		      <h2 class="card-title">New Family of Members</h2>
 		      <p class="card-text">Select this option if you're adding several
@@ -38,11 +38,11 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		      new family.</p>
 		    </div>
 		    <div class="card-footer">
-					<a disabled href="<? echo autoUrl("swimmers/new/family"); ?>">
-		      	Add a new family
+					<a disabled href="#">
+		      	Add a new family (FUNCTIONALITY REMOVED)
 					</a>
 		    </div>
-		  </div>
+		  </div>-->
 		</div>
 
 	</div>
