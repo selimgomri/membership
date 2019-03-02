@@ -107,7 +107,7 @@ include BASE_PATH . "views/header.php";
   </div>
 </div>
 
-<script src="<?=autoUrl("js/NeedsValidation.js")?>"></script>
+<script src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 
 <?php
 

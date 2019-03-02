@@ -298,7 +298,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<script defer src="<?=autoUrl("js/NeedsValidation.js")?>"></script>
+<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 
 <?php
 

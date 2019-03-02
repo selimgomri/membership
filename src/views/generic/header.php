@@ -292,6 +292,9 @@ $bg = "bg-white";
   			  <a class="nav-link" href="<?=autoUrl("register") ?>">Create Account</a>
   		  </li>
         <li class="nav-item">
+  			  <a class="nav-link" href="<?=autoUrl("services/request-a-trial") ?>">Request a Trial</a>
+  		  </li>
+        <li class="nav-item">
   			  <a class="nav-link" href="<?=autoUrl("timeconverter") ?>">Time Converter</a>
   		  </li>
         <?php } ?>
