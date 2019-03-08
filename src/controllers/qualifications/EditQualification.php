@@ -30,14 +30,14 @@ include BASE_PATH . 'views/header.php';
         Edit qualification for <?=htmlspecialchars($qualification['Forename'] . ' ' . $qualification['Surname'])?>.
       </p>
 
-      <form method="post">
+      <form method="post" class="needs-validation" novalidate>
         <div class="form-group">
           <label for="name">Qualification name</label>
-          <input type="text" class="form-control" id="name" name="name" placeholder="DBS Qualification" value="<?=htmlspecialchars($qualification['Name'])?>">
+          <input type="text" class="form-control" id="name" name="name" placeholder="DBS Qualification" value="<?=htmlspecialchars($qualification['Name'])?>" required>
         </div>
 
         <div class="form-group">
-          <label for="info">Qualification information</label>
+          <label for="info">Qualification information (Optional)</label>
           <textarea class="form-control" id="info" name="info"><?=htmlspecialchars($qualification['Name'])?></textarea>
         </div>
 
@@ -45,7 +45,7 @@ include BASE_PATH . 'views/header.php';
           <div class="col">
             <div class="form-group">
               <label for="valid-from">Valid From</label>
-              <input type="date" class="form-control" id="valid-from" name="valid-from" value="<?=htmlspecialchars($qualification['From'])?>">
+              <input type="date" class="form-control" id="valid-from" name="valid-from" value="<?=htmlspecialchars($qualification['From'])?>" required>
             </div>
           </div>
 
@@ -60,7 +60,7 @@ include BASE_PATH . 'views/header.php';
 
           <div class="col">
             <div class="form-group">
-              <label for="valid-to">Valid To</label>
+              <label for="valid-to">Valid To (Optional, unless Expires)</label>
               <input type="date" class="form-control" id="valid-to" name="valid-to" value="<?=htmlspecialchars($qualification['To'])?>">
             </div>
           </div>
@@ -73,6 +73,8 @@ include BASE_PATH . 'views/header.php';
     </div>
   </div>
 </div>
+
+<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 
 <?php
 

@@ -31,7 +31,7 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <?php if ($count == 0) { ?>
-      <div class="alert alert-wrning">
+      <div class="alert alert-warning">
         <p class="mb-0"><strong>You don't have any qualifications to list.</strong></p>
 
         <p class="mb-0">

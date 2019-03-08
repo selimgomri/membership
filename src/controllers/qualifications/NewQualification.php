@@ -32,14 +32,14 @@ include BASE_PATH . 'views/header.php';
         Add a new qualification for <?=htmlspecialchars($name)?>.
       </p>
 
-      <form method="post">
+      <form method="post" class="needs-validation" novalidate>
         <div class="form-group">
           <label for="name">Qualification name</label>
-          <input type="text" class="form-control" id="name" name="name" placeholder="DBS Qualification" value="<?=htmlspecialchars($form['name'])?>">
+          <input type="text" class="form-control" id="name" name="name" placeholder="DBS Qualification" value="<?=htmlspecialchars($form['name'])?>" required>
         </div>
 
         <div class="form-group">
-          <label for="info">Qualification information</label>
+          <label for="info">Qualification information (Optional)</label>
           <textarea class="form-control" id="info" name="info"><?=htmlspecialchars($form['info'])?></textarea>
         </div>
 
@@ -47,7 +47,7 @@ include BASE_PATH . 'views/header.php';
           <div class="col">
             <div class="form-group">
               <label for="valid-from">Valid From</label>
-              <input type="date" class="form-control" id="valid-from" name="valid-from" value="<?=htmlspecialchars($form['valid-from'])?>">
+              <input type="date" class="form-control" id="valid-from" name="valid-from" value="<?=htmlspecialchars($form['valid-from'])?>" required>
             </div>
           </div>
 
@@ -62,7 +62,7 @@ include BASE_PATH . 'views/header.php';
 
           <div class="col">
             <div class="form-group">
-              <label for="valid-to">Valid To</label>
+              <label for="valid-to">Valid To (Optional, unless expires)</label>
               <input type="date" class="form-control" id="valid-to" name="valid-to" value="<?=htmlspecialchars($form['valid-to'])?>">
             </div>
           </div>
@@ -75,6 +75,8 @@ include BASE_PATH . 'views/header.php';
     </div>
   </div>
 </div>
+
+<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 
 <?php
 
