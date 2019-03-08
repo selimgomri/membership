@@ -2,13 +2,13 @@
 
 global $db;
 $qualifications = $db->prepare("SELECT COUNT(*) FROM qualifications WHERE UserID = ?");
-$qualifications = $db->execute([$_SESSION['UserID']]);
+$qualifications = $qualifications->execute([$_SESSION['UserID']]);
 
 $count = $qualifications->fetchColumn();
 
 if ($count > 0) {
   $qualifications = $db->prepare("SELECT `Name`, Info, `From`, `To` FROM qualifications WHERE UserID = ?");
-  $qualifications = $db->execute([$_SESSION['UserID']]);
+  $qualifications = $qualifications->execute([$_SESSION['UserID']]);
 }
 
 $pagetitle = "My Qualifications";
