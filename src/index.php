@@ -22,7 +22,7 @@ if ($_SERVER['HTTP_HOST'] == 'account.chesterlestreetasc.co.uk' || $_SERVER['HTT
   define('COOKIE_PREFIX', 'TASC_', true);
 } else if ($_SERVER['HTTP_HOST'] == 'dcasc-demo.chesterlestreetasc.co.uk') {
   $config_file = 'config-durham-config.php';
-  define('COOKIE_PREFIX', 'DCASC', true);
+  define('COOKIE_PREFIX', 'DCASC_', true);
 } else {
   $config_file = 'config-chester-config.php';
   define('COOKIE_PREFIX', 'CLSASC_', true);
@@ -163,7 +163,7 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
     $_SESSION['Surname'] = $row['Surname'];
     $_SESSION['UserID'] = $user;
     $_SESSION['AccessLevel'] = $row['AccessLevel'];
-    $_SESSION['LoggedIn'] = 1;
+    $_SESSION['LoggedIn'] = true;
 
     $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));
 
@@ -560,6 +560,10 @@ $route->group('/', function() {
 
         include 'controllers/payments/webhooks.php';
       });
+    });
+
+    $this->group('/qualifications', function() {
+      include 'controllers/qualifications/router.php';
     });
 
     // Log out
