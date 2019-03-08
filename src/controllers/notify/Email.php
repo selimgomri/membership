@@ -95,7 +95,7 @@ $lists = mysqli_query($link, $sql);
 
     <?php } ?>
 
-		<p><button class="btn btn-dark" id="submit" value="submitted" type="submit">Send the email</button></p>
+		<p><button class="btn btn-success" id="submit" value="submitted" type="submit">Send the email</button></p>
 	</form>
 </div>
 

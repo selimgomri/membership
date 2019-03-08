@@ -8,8 +8,8 @@ include BASE_PATH . "views/notifyMenu.php";
 ?>
 
 <div class="container">
-  <div class="my-3 p-3 bg-white rounded shadow">
-    <h1 class="border-bottom border-gray pb-2 mb-2">
+  <div class="">
+    <h1 class="">
       Create a New Targeted List
     </h1>
     <p class="lead">
@@ -43,7 +43,7 @@ include BASE_PATH . "views/notifyMenu.php";
           </div>
 
           <p class="mb-0">
-            <button type="submit" class="btn btn-dark">
+            <button type="submit" class="btn btn-success">
               Create new list
             </button>
           </p>

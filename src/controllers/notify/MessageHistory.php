@@ -86,7 +86,7 @@ include BASE_PATH . "views/notifyMenu.php";?>
       }
       ?>
       <div class="cell p-0">
-        <div class="bg-light p-3">
+        <div class=" p-3">
           <p class="mb-0">
             <strong>
               <? echo $row['Subject']; ?>
@@ -115,7 +115,7 @@ include BASE_PATH . "views/notifyMenu.php";?>
           </p>
         <? } ?>
         </div>
-        <div class="p-3 pt-0 force-wrap">
+        <div class="p-3 pt-0 bg-light force-wrap">
           <? echo $row['Message']; ?>
         </div>
       </div>

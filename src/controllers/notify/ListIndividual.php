@@ -47,10 +47,10 @@ include BASE_PATH . "views/notifyMenu.php";
       </div>
     </div>
     <div class="col">
-      <div class="my-3 p-3 bg-white rounded shadow">
+      <div class="cell">
         <form>
           <div class="form-group">
-            <label for="squadSelect">Select Squad</label>
+            <label for="squadSelect">Select Squad (Optional)</label>
             <select class="custom-select" id="squadSelect" name="squadSelect">
               <option value="all" selected>Choose...</option>
               <? for ($i = 0; $i < mysqli_num_rows($squads); $i ++) {
@@ -67,7 +67,7 @@ include BASE_PATH . "views/notifyMenu.php";
               <option selected>Select squad first</option>
             </select>
           </div>
-            <button type="button" class="btn btn-dark" id="addSwimmer">
+            <button type="button" class="btn btn-success" id="addSwimmer">
               Add Swimmer to Targeted List
             </button>
             <div id="status">

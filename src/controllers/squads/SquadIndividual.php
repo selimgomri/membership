@@ -74,145 +74,68 @@ $result = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
 $title = $pagetitle = $row['SquadName'] . " Squad";
-$content = "";
-if ($access == "Admin") {
-$content .= "
-<div class=\"row\"><div class=\"col-md-6\">
-<div class=\"my-3 p-3 bg-white rounded shadow\">
-<form method=\"post\">
-<h2>Details</h2>
-<p class=\"lead border-bottom border-gray pb-2\">View or edit the squad details</p>
-<div class=\"form-group\">
-  <label for=\"squadName\">Squad Name</label>
-  <input type=\"text\" class=\"form-control\" id=\"squadName\" name=\"squadName\" placeholder=\"Enter Squad Name\" value=\"" . $row['SquadName'] . "\">
-</div>
-<div class=\"form-group\">
-  <label for=\"squadFee\" class=\"form-label\">Squad Fee</label>
-  <div class=\"input-group\">
-    <div class=\"input-group-prepend\">
-      <span class=\"input-group-text\">&pound;</span>
+
+
+include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/squadMenu.php"; ?>
+
+<div class="container">
+  <h1><?=$title?></h1>
+
+  <?php
+
+if ($access == "Admin") { ?>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="cell">
+        <form method="post">
+        <h2>Details</h2>
+        <p class="lead border-bottom border-gray pb-2">View or edit the squad details</p>
+        <div class="form-group">
+          <label for="squadName">Squad Name</label>
+          <input type="text" class="form-control" id="squadName" name="squadName" placeholder="Enter Squad Name" value="<?=$row['SquadName']?>">
+        </div>
+        <div class="form-group">
+          <label for="squadFee" class="form-label">Squad Fee</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">&pound;</span>
+            </div>
+            <input type="text" class="form-control" id="squadFee" name="squadFee" aria-describedby="squadFeeHelp" placeholder="eg 50.00" value="<?=$row['SquadFee']?>">
+          </div>
+          <small id="squadFeeHelp" class="form-text text-muted">A squad can have a fee of &pound;0.00 if it represents a group for non paying members</small>
+        </div>
+        <div class="form-group">
+          <label for="squadCoach">Squad Coach</label>
+          <input type="text" class="form-control" id="squadCoach" name="squadCoach" placeholder="Enter Squad Coach" value="<?=$row['SquadCoach']?>">
+        </div>
+        <div class="form-group">
+          <label for="squadTimetable">Squad Timetable</label>
+          <input type="text" class="form-control" id="squadTimetable" name="squadTimetable" placeholder="Enter Squad Timetable Address" value="<?=$row['SquadTimetable']?>">
+        </div>
+        <div class="form-group">
+          <label for="squadCoC">Squad Code of Conduct</label>
+          <input type="text" class="form-control" id="squadCoC" name="squadCoC" placeholder="Enter Squad Code of Conduct Address" value="<?=$row['SquadCoC']?>">
+        </div>
+        <div class="alert alert-danger">
+          <div class="form-group mb-0">
+            <label for="squadDeleteDanger"><strong>Danger Zone</strong> <br>Delete this Squad with this Key "<span class="mono"><?=$squadDeleteKey?></span>"</label>
+            <input type="text" class="form-control" id="squadDeleteDanger" name="squadDeleteDanger" aria-describedby="squadDeleteDangerHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
+            <small id="squadDeleteDangerHelp" class="form-text">Enter the key in quotes above and press submit. This will delete this squad.</small>
+          </div>
+        </div>
+        <p class="mb-0">
+          <button class="btn btn-success" type="submit">Update</button>
+        </p>
+      </form>
     </div>
-    <input type=\"text\" class=\"form-control\" id=\"squadFee\" name=\"squadFee\" aria-describedby=\"squadFeeHelp\" placeholder=\"eg 50.00\" value=\"" . $row['SquadFee'] . "\">
   </div>
-  <small id=\"squadFeeHelp\" class=\"form-text text-muted\">A squad can have a fee of &pound;0.00 if it represents a group for non paying members</small>
-</div>
-<div class=\"form-group\">
-  <label for=\"squadCoach\">Squad Coach</label>
-  <input type=\"text\" class=\"form-control\" id=\"squadCoach\" name=\"squadCoach\" placeholder=\"Enter Squad Coach\" value=\"" . $row['SquadCoach'] . "\">
-</div>
-<div class=\"form-group\">
-  <label for=\"squadTimetable\">Squad Timetable</label>
-  <input type=\"text\" class=\"form-control\" id=\"squadTimetable\" name=\"squadTimetable\" placeholder=\"Enter Squad Timetable Address\" value=\"" . $row['SquadTimetable'] . "\">
-</div>";
-$content .= '
-<div class="form-group">
-  <label for="squadCoC">Squad Code of Conduct</label>
-  <select class="custom-select" name="squadCoC">';
-  $sql = "SELECT `ID`, `Title` FROM `posts` WHERE `type` = ? ORDER BY `Title` ASC";
-  global $db;
-  try {
-		$query = $db->prepare($sql);
-		$query->execute(['conduct_code']);
-	} catch (PDOException $e) {
-		halt(500);
-	}
-  $squad_coc = $query->fetchAll(PDO::FETCH_ASSOC);
-    for ($i = 0; $i < sizeof($squad_coc); $i++) {
-      $s = null;
-      if ($squad_coc[$i]['ID'] == $row['SquadCoC']) {
-        $s = "selected";
-      }
-    $content .= '
-    <option value="' . $squad_coc[$i]['ID'] . '" ' . $s . '>
-      ' . $squad_coc[$i]['Title'] . '
-    </option>';
-    }
-    $content .= '
-  </select>
-</div>
-';
-$content .= "
-<div class=\"alert alert-danger\">
-  <div class=\"form-group mb-0\">
-    <label for=\"squadDeleteDanger\"><strong>Danger Zone</strong> <br>Delete this Squad with this Key \"<span class=\"mono\">" . $squadDeleteKey . "</span>\"</label>
-    <input type=\"text\" class=\"form-control\" id=\"squadDeleteDanger\" name=\"squadDeleteDanger\" aria-describedby=\"squadDeleteDangerHelp\" placeholder=\"Enter the key\" onselectstart=\"return false\" onpaste=\"return false;\" onCopy=\"return false\" onCut=\"return false\" onDrag=\"return false\" onDrop=\"return false\" autocomplete=off>
-    <small id=\"squadDeleteDangerHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will delete this squad.</small>
-  </div>
-</div>
-<p class=\"mb-0\"><button class=\"btn btn-outline-dark\" type=\"submit\">Update</button></p></form></div></div>
 
-<div class=\"col-md-6\">";
+  <div class="col-md-6">
 
-$sql = "SELECT `Gender` FROM `members` WHERE `SquadID` = '$id' AND `Gender` = 'Male';";
-$result = mysqli_query($link, $sql);
-$male = mysqli_num_rows($result);
-$sql = "SELECT `Gender` FROM `members` WHERE `SquadID` = '$id' AND `Gender` = 'Female';";
-$result = mysqli_query($link, $sql);
-$female = mysqli_num_rows($result);
+  <?php
 
-  if ($male+$female>0) {
-  $content .= "<script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\"></script>
-      <script type=\"text/javascript\">
-        google.charts.load('current', {'packages':['corechart']});
-
-        google.charts.setOnLoadCallback(drawPieChart);
-        function drawPieChart() {
-
-          var data = google.visualization.arrayToDataTable([
-            ['Gender', 'Number of Members'],
-            ['Male', " . $male . "],
-            ['Female', " . $female . "],
-          ]);
-
-          var options = {
-            title: 'Squad Gender Split',
-            fontName: 'Open Sans',
-            backgroundColor: {
-              fill:'transparent'
-            },
-            chartArea: {
-              left: '0',
-              right: '0',
-            },
-            backgroundColor: {
-              fill:'transparent'
-            },
-            legend: {
-              position: 'none',
-            }
-          };
-
-          var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-          chart.draw(data, options);
-        }
-      </script>
-      <div class=\"my-3 p-3 bg-white rounded shadow\">
-      <h2>Statistics</h2>
-      <p class=\"lead border-bottom border-gray pb-2 mb-0\">These statistics are gathered from our system</p>
-      <div class=\"chart\" id=\"piechart\"></div>
-      </div></div>
-  ";
-
-  }
-  $content .= "</div></div>";
-}
-else {
-  $content .= "<div class=\"row\"><div class=\"col-md-6\">
-  <div class=\"my-3 p-3 bg-white rounded shadow\">
-  <h2 class=\"border-bottom border-gray pb-2\">Squad Details</h2>
-  <ul class=\"mb-0\">";
-  if ($row['SquadFee'] > 0) {
-    $content .= "<li>Squad Fee: &pound;" . $row['SquadFee'] . "</li>";
-  }
-  else {
-    $content .= "<li>There is no fee for this squad</li>";
-  }
-  $content .= "
-    <li>Squad Coach: " . $row['SquadCoach'] . "</li>
-    <li><a href=\"" . $row['SquadTimetable'] . "\">Squad Timetable</a></li>
-    <li><a href=\"" . $row['SquadCoC'] . "\">Squad Code of Conduct</a></li>
-  </ul></div></div>";
   $sql = "SELECT `Gender` FROM `members` WHERE `SquadID` = '$id' AND `Gender` = 'Male';";
   $result = mysqli_query($link, $sql);
   $male = mysqli_num_rows($result);
@@ -220,84 +143,109 @@ else {
   $result = mysqli_query($link, $sql);
   $female = mysqli_num_rows($result);
 
-    if ($male+$female>0) {
-    $content .= "<script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\"></script>
-        <script type=\"text/javascript\">
-          google.charts.load('current', {'packages':['corechart']});
-
-          google.charts.setOnLoadCallback(drawPieChart);
-          function drawPieChart() {
-
-            var data = google.visualization.arrayToDataTable([
-              ['Gender', 'Number of Members'],
-              ['Male', " . $male . "],
-              ['Female', " . $female . "],
-            ]);
-
-            var options = {
-              title: 'Squad Gender Split',
-              fontName: 'Open Sans',
-              backgroundColor: {
-                fill:'transparent'
-              },
-              chartArea: {
-                left: '0',
-                right: '0',
-              },
-              backgroundColor: {
-                fill:'transparent'
-              },
-              legend: {
-                position: 'none',
-              }
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-            chart.draw(data, options);
-          }
-        </script>
-        <div class=\"col-md-6\">
-        <div class=\"my-3 p-3 bg-white rounded shadow\">
+    if ($male+$female>0) { ?>
+        <div class="cell">
         <h2>Statistics</h2>
-        <p class=\"lead border-bottom border-gray pb-2 mb-0\">These statistics are gathered from our system</p>
-        <div class=\"chart\" id=\"piechart\"></div>
+        <p class="lead border-bottom border-gray pb-2 mb-0">These statistics are gathered from our system</p>
+        <canvas id="myChart"></canvas>
         </div></div>
-    ";
-  }
-  $content .= "</div>";
-}
 
-$sql = "SELECT * FROM `members` WHERE `SquadID` = '$id' ORDER BY `MForename` ASC, `MSurname` ASC;";
-$result = mysqli_query($link, $sql);
-
-if (mysqli_num_rows($result) > 0) {
-  $content .= '
-  <div class="container">
-    <div class="mb-3 p-3 bg-white rounded shadow">
-      <h2 class="">Swimmer in this Squad</h2>
-      <table class="table mb-0">
-        <tbody>';
-  for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    $content .= '<tr><td>
-    <a href="' . autoUrl("swimmers/" . $row['MemberID']) . '">' . $row['MForename'] . ' ' . $row['MSurname'] . '</a></td></tr>';
-  }
-  $content .= '
-        </tbody>
-      </table>
+    <?php } ?>
     </div>
-  </div>';
-}
+  </div>
+  <?php
+  } else {
+  ?>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="cell">
+        <h2 class="border-bottom border-gray pb-2">Squad Details</h2>
+        <ul class="mb-0">
+        <?php
+        if ($row['SquadFee'] > 0) { ?>
+          <li>Squad Fee: &pound;<?=$row['SquadFee']?></li>
+        <?php } else { ?>
+          <li>There is no fee for this squad</li>
+        <?php } ?>
+          <li>Squad Coach: <?=$row['SquadCoach']?></li>
+          <li><a href="<?=$row['SquadTimetable']?>">Squad Timetable</a></li>
+          <li><a href="<?=$row['SquadCoC']?>">Squad Code of Conduct</a></li>
+        </ul>
+      </div>
+    </div>
 
-$content .= "</div>";
+    <?php
+      $sql = "SELECT `Gender` FROM `members` WHERE `SquadID` = '$id' AND `Gender` = 'Male';";
+      $result = mysqli_query($link, $sql);
+      $male = mysqli_num_rows($result);
+      $sql = "SELECT `Gender` FROM `members` WHERE `SquadID` = '$id' AND `Gender` = 'Female';";
+      $result = mysqli_query($link, $sql);
+      $female = mysqli_num_rows($result);
 
-include BASE_PATH . "views/header.php";
-include BASE_PATH . "views/squadMenu.php"; ?>
-<div class="container">
-<?php echo "<h1>" . $title . "</h1>";
-echo $content; ?>
+        if ($male+$female>0) {
+        ?>
+            <div class="col-md-6">
+              <div class="cell">
+                <h2>Statistics</h2>
+                <p class="lead border-bottom border-gray pb-2 mb-0">These statistics are gathered from our system</p>
+                <canvas id="myChart"></canvas>
+              </div>
+            </div>
+          <?php } ?>
+          </div>
+  <?php }
+
+  $sql = "SELECT * FROM `members` WHERE `SquadID` = '$id' ORDER BY `MForename` ASC, `MSurname` ASC;";
+  $result = mysqli_query($link, $sql);
+
+  if (mysqli_num_rows($result) > 0) { ?>
+    <div class="container">
+      <div class="">
+        <h2 class="">Swimmer in this Squad</h2>
+        <table class="table">
+          <tbody>
+            <?php
+    for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+      $row = mysqli_fetch_array($result, MYSQLI_ASSOC); ?>
+      <tr><td>
+      <a href="<?=autoUrl("swimmers/" . $row['MemberID'])?>"><?=$row['MForename'] . ' ' . $row['MSurname']?></a></td></tr>
+      <?php
+    } ?>
+
+          </tbody>
+        </table>
+      </div>
+    </div>';
+  <?php } ?>
+
+  </div>
 </div>
+
+<script src="<?=autoUrl("public/js/Chart.min.js")?>"></script>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'pie',
+
+    // The data for our dataset
+    data: {
+        labels: ["Male", "Female"],
+        datasets: [{
+            label: "<?=$row['SquadName']?> Split",
+            data: [<?=$male?>, <?=$female?>],
+            backgroundColor: [
+    					'#bd0000',
+    					'#005fbd'
+    				],
+        }],
+    },
+
+    // Configuration options go here
+    options: {}
+});
+</script>
+
 <?php include BASE_PATH . "views/footer.php";
 
 ?>

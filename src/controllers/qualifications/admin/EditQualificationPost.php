@@ -1,14 +1,5 @@
 <?php
 
-global $db;
-
-$getUser = $db->prepare("SELECT COUNT(*) FROM users WHERE UserID = ?");
-$getUser->execute([$person]);
-
-if ($getUser->fetchColumn() == 0) {
-  halt(404);
-}
-
 // Validate all form data
 
 use Respect\Validation\Validator as v;
@@ -44,12 +35,12 @@ if (sizeof($form_errors) > 0) {
 
   global $db;
 
-  $add = $db->prepare("INSERT INTO qualifications (UserID, `Name`, Info, `From`, `To`) VALUES (?, ?, ?, ?, ?)");
+  $add = $db->prepare("UPDATE qualifications SET `Name` = ?, Info = ?, `From` = ?, `To` = ?) WHERE ID = ?");
 
   try {
-    $add->execute([$person, $_POST['Name'], $_POST['Info'], $from, $to]);
+    $add->execute([$_POST['name'], $_POST['info'], $from, $to, $id]);
   } catch (Exception $e) {
     halt(500);
   }
-  header("Location: " . autoUrl("qualifications/admin"));
+  header("Location: " . app('request')->curl);
 }

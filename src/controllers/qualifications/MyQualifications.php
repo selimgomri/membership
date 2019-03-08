@@ -7,7 +7,7 @@ $qualifications->execute([$_SESSION['UserID']]);
 $count = $qualifications->fetchColumn();
 
 if ($count > 0) {
-  $qualifications = $db->prepare("SELECT `Name`, Info, `From`, `To` FROM qualifications WHERE UserID = ?");
+  $qualifications = $db->prepare("SELECT `Name`, Info, `From`, `To` FROM qualifications INNER JOIN qualificationsAvailable ON qualifications.Qualification = qualificationsAvailable.ID WHERE UserID = ?");
   $qualifications->execute([$_SESSION['UserID']]);
 }
 
@@ -38,7 +38,7 @@ include BASE_PATH . 'views/header.php';
           If this is a mistake, please contact the secretary to have your qualifications added to the system.
         </p>
       </div>
-      <?php } else { 
+      <?php } else {
       while ($qualification = $qualifications->fetch(PDO::FETCH_ASSOC)) { ?>
       <div class="cell">
       <h2><?=htmlspecialchars($qualification['Name'])?></h2>

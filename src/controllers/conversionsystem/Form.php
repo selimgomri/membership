@@ -133,19 +133,15 @@
 		</div>
 	</div>
 
-    <label>Time</label>
     <div class="row">
         <div class="col-md-8">
-            <div class="row mb-3 no-gutters">
-                <div class="col">
+          <div class="form-group">
+          <label>Time</label>
+            <div class="input-group">
                     <input type="number" max="100" min="0" name="mins" pattern="[0-9]*" inputmode="numeric" class="form-control" placeholder="Minutes">
-                </div>
-                <div class="col">
                     <input type="number" max="59" min="0" name="secs" pattern="[0-9]*" inputmode="numeric" class="form-control" placeholder="Seconds">
-                </div>
-            	<div class="col">
                     <input type="number" max="99" min="0" name="hunds" pattern="[0-9]*" inputmode="numeric" class="form-control" placeholder="Hundreds">
-                </div>
+                  </div>
             </div>
         </div>
     </div>

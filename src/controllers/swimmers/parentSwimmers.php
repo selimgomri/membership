@@ -14,7 +14,7 @@ include BASE_PATH . "views/header.php";
 
 	<?php echo mySwimmersTable($link, $userID); ?>
 
-	<p><a href="<?php echo autoUrl('myaccount/addswimmer'); ?>" class="btn btn-outline-dark">Add a Swimmer</a></p>
+	<p><a href="<?php echo autoUrl('myaccount/addswimmer'); ?>" class="btn btn-success">Add a Swimmer</a></p>
 </div>
 
 <?php include BASE_PATH . "views/footer.php";

@@ -1,5 +1,14 @@
 <?php
 
+global $db;
+
+$getUser = $db->prepare("SELECT COUNT(*) FROM users WHERE UserID = ?");
+$getUser->execute([$person]);
+
+if ($getUser->fetchColumn() == 0) {
+  halt(404);
+}
+
 // Validate all form data
 
 use Respect\Validation\Validator as v;
@@ -8,7 +17,7 @@ $form_errors = [];
 $from = $to = null;
 
 if ($_POST['name'] == "" || $_POST['name'] == null) {
-  $form_errors['name'] = "You did not provide a name for the qualification";
+  $form_errors['name'] = "You did not select a qualification";
 }
 
 if (($_POST['valid-from'] == "" || $_POST['valid-from'] == null) || !v::date()->validate($_POST['valid-from'])) {
@@ -35,12 +44,12 @@ if (sizeof($form_errors) > 0) {
 
   global $db;
 
-  $add = $db->prepare("UPDATE qualifications SET `Name` = ?, Info = ?, `From` = ?, `To` = ?) WHERE ID = ?");
+  $add = $db->prepare("INSERT INTO qualifications (UserID, Qualification, Info, `From`, `To`) VALUES (?, ?, ?, ?, ?)");
 
   try {
-    $add->execute([$_POST['Name'], $_POST['Info'], $from, $to, $id]);
+    $add->execute([$person, $_POST['name'], $_POST['info'], $from, $to]);
   } catch (Exception $e) {
     halt(500);
   }
-  header("Location: " . app('request')->curl);
+  header("Location: " . autoUrl("qualifications/admin"));
 }

@@ -58,7 +58,7 @@ if (strpos($curUserInfo['EmailAddress'], '@chesterlestreetasc.co.uk') == strlen(
 
 $subject = $_POST['subject'];
 
-if (notifySend("", $subject, $message, $name, $email, $from = ["Email" => $myEmail, "Name" => $myName, "Reply-To" => $reply, "CC" => $cc, "BCC" => $bcc])) {
+if (notifySend("", $subject, $message, $name, $email, ["Email" => $myEmail, "Name" => $myName, "Reply-To" => $reply, "CC" => $cc, "BCC" => $bcc, 'PlainText' => true])) {
   $_SESSION['NotifyIndivSuccess'] = true;
 } else {
   $_SESSION['NotifyIndivSuccess'] = false;

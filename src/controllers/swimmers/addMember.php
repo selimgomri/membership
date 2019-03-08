@@ -88,7 +88,7 @@ $content .= "</div></div>";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded shadow">
+	<div class="">
 	<?php echo "<h1>" . $title . "</h1>";
 	echo $content; ?>
 	</div>

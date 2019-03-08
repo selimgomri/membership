@@ -11,8 +11,9 @@ include BASE_PATH . "views/notifyMenu.php";
 ?>
 
 <div class="container">
-  <div class="my-3 p-3 bg-white rounded shadow">
-    <h1 class="border-bottom border-gray pb-2 mb-2">
+  <div class="row">
+    <div class="col-md-8">
+    <h1 class="">
       SMS Contact Lists
     </h1>
     <p class="lead">
@@ -40,7 +41,7 @@ include BASE_PATH . "views/notifyMenu.php";
 				Copy to Clipboard
 			</button>
 		</p>
-
+    </div>
   </div>
 </div>
 

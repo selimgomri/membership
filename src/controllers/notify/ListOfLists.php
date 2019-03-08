@@ -49,7 +49,7 @@ include BASE_PATH . "views/notifyMenu.php";
     <? } ?>
     <p class="mb-0">
       <a href="<? echo autoUrl("notify/lists/new"); ?>"
-        class="btn btn-dark">
+        class="btn btn-success">
         Add New List
       </a>
     </p>

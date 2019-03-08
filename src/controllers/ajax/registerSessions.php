@@ -302,7 +302,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
           </td>
         </tr>";
       }
-      $content .= '</tbody></table></div><p>Swimmers with <span class="badge badge-primary">NO PARENT</span> next to their name may soon be stopped from swimming if parents do not register for an online account.</p><p class="mb-0"><button type="submit" class="btn btn-outline-dark">Save Register</button></p>';
+      $content .= '</tbody></table></div><p class="mb-0"><button type="submit" class="btn btn-success">Save Register</button></p>';
     }
 
     if ($swimmerCount > 0) {

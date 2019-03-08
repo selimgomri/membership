@@ -6,7 +6,11 @@ global $db;
 $getUser = $db->prepare("SELECT COUNT(*) FROM users WHERE UserID = ?");
 $getUser->execute([$person]);
 
-if ($getUser->fetchColumn() == 0) {
+$qualifications = $db->query("SELECT COUNT(*) FROM qualificationsAvailable");
+$qualificationsCount = $qualifications->fetchColumn();
+$qualifications = $db->query("SELECT ID, `Name` FROM qualificationsAvailable ORDER BY `Name` ASC");
+
+if ($getUser->fetchColumn() == 0 || $qualificationsCount == 0) {
   halt(404);
 }
 
@@ -34,8 +38,13 @@ include BASE_PATH . 'views/header.php';
 
       <form method="post" class="needs-validation" novalidate>
         <div class="form-group">
-          <label for="name">Qualification name</label>
-          <input type="text" class="form-control" id="name" name="name" placeholder="DBS Qualification" value="<?=htmlspecialchars($form['name'])?>" required>
+          <label for="name">Select qualification</label>
+          <select class="custom-select" id="name" name="name">
+            <option selected disabled>Select a qualification</option>
+          <?php while ($qualification = $qualifications->fetch(PDO::FETCH_ASSOC)) { ?>
+            <option value="<?=$qualification['ID']?>"><?=htmlspecialchars($qualification['Name'])?></option>
+          <?php } ?>
+          </select>
         </div>
 
         <div class="form-group">

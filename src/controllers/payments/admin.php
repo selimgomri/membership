@@ -1,5 +1,7 @@
 <?php
 
+global $db;
+
 $user = $_SESSION['UserId'];
 $pagetitle = "Payments Administration";
 
@@ -9,6 +11,9 @@ include BASE_PATH . "views/paymentsMenu.php";
 require 'GoCardlessSetup.php';
 
 $dateString = date("F Y");
+
+$income = $db->query("SELECT `Date`, SUM(AMOUNT) AS Total FROM `payments` WHERE `Date` LIKE '%-01' GROUP BY `Date` ORDER BY `Date` DESC LIMIT 8");
+$income = $income->fetchAll(PDO::FETCH_ASSOC);
 
  ?>
 
@@ -102,7 +107,53 @@ $dateString = date("F Y");
         </div>
       </div>
     </div>
+
+    <div class="mb-4">
+      <h2 class="mb-4">Income Statistics</h2>
+      <canvas id="incomeChart" class="mb-1 bg-white"></canvas>
+      <p class="small text-muted mb-4">
+        This is the amout charged to parents before GoCardless handling fees.
+      </p>
+    </div>
   </div>
 </div>
+
+<script src="<?=autoUrl("public/js/Chart.min.js")?>"></script>
+<script>
+var ctx = document.getElementById('incomeChart').getContext('2d');
+var chart = new Chart(ctx, {
+  // The type of chart we want to create
+  type: 'bar',
+
+  // The data for our dataset
+  data: {
+    labels: [
+      <?php for ($i = sizeof($income); $i > 0; $i--) { ?>
+      "<?=date("F", strtotime($income[$i-1]['Date']))?>",
+      <?php } ?>
+    ],
+    datasets: [{
+        label: "Total charged (£ Pounds)",
+        data: [
+          <?php for ($i = sizeof($income); $i > 0; $i--) { ?>
+          <?=((int) $income[$i-1]['Total'])/100?>,
+          <?php } ?>
+        ],
+        backgroundColor: '#bd0000'
+    }],
+  },
+
+  // Configuration options go here
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    }
+  }
+});
+</script>
 
 <?php include BASE_PATH . "views/footer.php";

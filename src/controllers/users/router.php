@@ -27,6 +27,14 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 		include 'user.php';
 	});
 
+  $this->get('/{id}:int/new-qualification', function($person) {
+		include BASE_PATH . 'controllers/qualifications/admin/NewQualification.php';
+	});
+
+  $this->post('/{id}:int/new-qualification', function($person) {
+		include BASE_PATH . 'controllers/qualifications/admin/NewQualification.php';
+	});
+
 	if (!isset($_SESSION['UserSimulation'])) {
 		$this->get('/simulate/{id}:int', function($id) {
 			global $link;

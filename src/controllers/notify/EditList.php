@@ -18,8 +18,8 @@ include BASE_PATH . "views/notifyMenu.php";
 ?>
 
 <div class="container">
-  <div class="my-3 p-3 bg-white rounded shadow">
-    <h1 class="border-bottom border-gray pb-2 mb-2">
+  <div class="">
+    <h1 class="">
 			Edit <? echo $row['Name']; ?>
 		</h1>
     <p class="lead">Edit this targeted list.</p>
@@ -47,7 +47,7 @@ include BASE_PATH . "views/notifyMenu.php";
           </div>
 
           <p class="mb-0">
-            <button type="submit" class="btn btn-dark">
+            <button type="submit" class="btn btn-success">
               Save Changes
             </button>
           </p>
