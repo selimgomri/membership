@@ -1,5 +1,16 @@
 <?php
 
+global $db;
+$qualifications = $db->prepare("SELECT COUNT(*) FROM qualifications WHERE UserID = ?");
+$qualifications = $db->execute([$_SESSION['UserID']]);
+
+$count = $qualifications->fetchColumn();
+
+if ($count > 0) {
+  $qualifications = $db->prepare("SELECT `Name`, Info, `From`, `To` FROM qualifications WHERE UserID = ?");
+  $qualifications = $db->execute([$_SESSION['UserID']]);
+}
+
 $pagetitle = "My Qualifications";
 
 include BASE_PATH . 'views/header.php';
@@ -19,13 +30,26 @@ include BASE_PATH . 'views/header.php';
         our own administrative purposes.
       </p>
 
-      <div class="cell">
-        <h2>Some Qualification</h2>
-        <p>Additional Info if available.</p>
-        <p>
-          Valid since DD/MM/YYYY, <strong>Expires DD/MM/YYYY</strong>.
+      <?php if ($count == 0) { ?>
+      <div class="alert alert-wrning">
+        <p class="mb-0"><strong>You don't have any qualifications to list.</strong></p>
+
+        <p class="mb-0">
+          If this is a mistake, please contact the secretary to have your qualifications added to the system.
         </p>
       </div>
+      <?php } else { 
+      while ($qualification = $qualifications->fetch(PDO::FETCH_ASSOC)) { ?>
+      <div class="cell">
+      <h2><?=htmlspecialchars($qualification['Name'])?></h2>
+        <p><?=htmlspecialchars($qualification['Info'])?></p>
+        <p>
+          Valid since <?=date("d/m/Y", strtotime($qualification['From']))?>, <strong>Expires <?=date("d/m/Y", strtotime($qualification['To']))?></strong>.
+        </p>
+      </div>
+      <?php }
+      } ?>
+
     </div>
   </div>
 </div>
