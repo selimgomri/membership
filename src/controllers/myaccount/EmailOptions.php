@@ -4,6 +4,12 @@ $use_white_background = true;
 
 global $db;
 
+$getExtraEmails = null;
+try {
+  $getExtraEmails = $db->prepare("SELECT ID, Name, EmailAddress FROM notifyAdditionalEmails WHERE UserID = ?");
+  $getExtraEmails->execute([$_SESSION['UserID']]);
+} catch (Exception $e) {}
+
 $sql = "SELECT `EmailAddress`, `EmailComms` FROM `users` WHERE `UserID` = ?";
 try {
 	$query = $db->prepare($sql);
@@ -86,7 +92,51 @@ include BASE_PATH . "views/header.php";
 				<?=htmlentities($_SESSION['EmailUpdateNew'])?></strong>
 			</p>
 			<p class="mb-0">
-				If you need help, contact <a href="mailto:support@chesterlestreetasc.co.uk" class="alert-link">support@chesterlestreetasc.co.uk</a>
+				If you need help, contact <a
+				href="mailto:support@chesterlestreetasc.co.uk"
+				class="alert-link">support@chesterlestreetasc.co.uk</a>
+			</p>
+		</div>
+	<? } ?>
+
+  <? if (isset($_SESSION['DeleteCCSuccess'])) {
+    unset($_SESSION['DeleteCCSuccess']); ?>
+		<div class="alert alert-success">
+			<p class="mb-0">
+				<strong>We've deleted that CC</strong>
+			</p>
+			<p class="mb-0">
+				If you need help, contact <a
+				href="mailto:support@chesterlestreetasc.co.uk"
+				class="alert-link">support@chesterlestreetasc.co.uk</a>
+			</p>
+		</div>
+	<? } ?>
+
+  <? if (isset($_SESSION['AddNotifySuccess'])) {
+    unset($_SESSION['AddNotifySuccess']); ?>
+		<div class="alert alert-success">
+			<p class="mb-0">
+				<strong>We've added a new Carbon Copy Email</strong>
+			</p>
+			<p class="mb-0">
+				If you need help, contact <a
+				href="mailto:support@chesterlestreetasc.co.uk"
+				class="alert-link">support@chesterlestreetasc.co.uk</a>
+			</p>
+		</div>
+	<? } ?>
+
+  <? if (isset($_SESSION['AddNotifyError'])) {
+    unset($_SESSION['AddNotifyError']); ?>
+		<div class="alert alert-warning">
+			<p class="mb-0">
+				<strong>An error occurred and we were unable to add your new CC Email.</strong>
+			</p>
+			<p class="mb-0">
+				Your verification code might have been wrong. If you need help, contact
+				<a href="mailto:support@chesterlestreetasc.co.uk"
+				class="alert-link">support@chesterlestreetasc.co.uk</a>
 			</p>
 		</div>
 	<? } ?>
@@ -142,6 +192,53 @@ include BASE_PATH . "views/header.php";
 			</p>
 		</form>
 	</div>
+
+  <div class="cell">
+    <h2>Carbon Copy Emails</h2>
+    <p class="lead">
+      You can now have a carbon copy (CC) of group notify emails sent to
+      additional email addresses.
+    </p>
+
+    <ul class="list-unstyled">
+    <?php while ($extraEmails = $getExtraEmails->fetch(PDO::FETCH_ASSOC)) { ?>
+      <li>
+        <p class="text-truncate mb-0">
+          <?=$extraEmails['EmailAddress']?>
+        </p>
+        <p>
+          <a href="<?=autoUrl("myaccount/email/cc/" . $extraEmails['ID'] . "/delete")?>">
+            Delete this email
+          </a>
+        </p>
+      </li>
+    <?php } ?>
+    </ul>
+
+    <form method="post" action="<?=autoUrl("myaccount/email/cc/new")?>" class="needs-validation" novalidate>
+      <div class="form-row">
+        <div class="col">
+          <div class="form-group">
+            <label for="new-cc-name">Name</label>
+            <input type="text" class="form-control" id="new-cc-name" name="new-cc-name" placeholder="Joe Bloggs">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label for="new-cc">New CC Email Address</label>
+            <input type="email" class="form-control" id="new-cc" name="new-cc" placeholder="joe.bloggs@example.com">
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-success" type="submit">
+        Add new CC Email
+      </button>
+    </form>
+
+  </div>
 </div>
+
+<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 
 <?php include BASE_PATH . "views/footer.php"; ?>

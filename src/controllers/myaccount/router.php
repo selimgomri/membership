@@ -63,14 +63,36 @@ $this->get(['loginhistory/', 'loginhistory/page/{page}:int'], function($page = n
 	include 'LoginHistory.php';
 });
 
-$this->get('/email', function() {
-	global $link;
-	include 'EmailOptions.php';
-});
+$this->group('/email', function() {
 
-$this->post('/email', function() {
-	global $link;
-	include 'EmailOptionsPost.php';
+  $this->group('/cc', function() {
+
+    if (isset($_SESSION['AddNotifyCC'])) {
+      $this->post('/new', function() {
+      	include 'CC/NewCCVerifyPost.php';
+      });
+    } else {
+      $this->post('/new', function() {
+      	include 'CC/NewCCVerify.php';
+      });
+    }
+
+    $this->get('/{id}:int/delete', function($id) {
+    	include 'CC/DeleteCC.php';
+    });
+
+  });
+
+  $this->get('/', function() {
+  	global $link;
+  	include 'EmailOptions.php';
+  });
+
+  $this->post('/', function() {
+  	global $link;
+  	include 'EmailOptionsPost.php';
+  });
+
 });
 
 $this->get('/googleauthenticator', function() {
