@@ -4,7 +4,8 @@
   include BASE_PATH . "views/header.php";
 ?>
 <div class="container">
-<div class="">
+<div class="row">
+<div class="col-md-8">
 <h1>Change your password</h1>
 <? if (isset($_SESSION['ErrorState'])) {
   echo $_SESSION['ErrorState'];
@@ -24,9 +25,10 @@
       <label for="new2">Confirm New Password</label>
       <input type="password" class="form-control" name="new2" id="new2" placeholder="Confirm New Password">
   </div>
-  <p><input type="submit" name="submit" id="submit" class="btn btn-outline-dark" value="Save Changes"></p>
+  <p><input type="submit" name="submit" id="submit" class="btn btn-success" value="Save Changes"></p>
 </form>
 <p class="mb-0">Changes will take place instantly, if everything is correct. You can change your password as often as you like.</p>
+</div>
 </div>
 </div>
 

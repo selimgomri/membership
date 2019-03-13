@@ -48,7 +48,7 @@ function verifyUser($user, $password) {
   return false;
 }
 
-function notifySend($to, $subject, $message, $name = null, $emailaddress = null, $from = ["Email" => "noreply@" . EMAIL_DOMAIN, "Name" => CLUB_NAME]) {
+function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = null, $from = ["Email" => "noreply@" . EMAIL_DOMAIN, "Name" => CLUB_NAME]) {
 
   $head = "
   <!DOCTYPE html>
@@ -85,6 +85,13 @@ function notifySend($to, $subject, $message, $name = null, $emailaddress = null,
     </style>
   </head>";
 
+  $address = "<p class=\"small\" align=\"center\"><strong>" . CLUB_NAME . "</strong><br>";
+  $club = json_decode(CLUB_JSON);
+  for ($i = 0; $i < sizeof($club->ClubAddress); $i++) {
+    $address .= $club->ClubAddress[$i] . "<br>";
+  }
+  $address .= "</p>";
+
   $message = "<body>
   <div style=\"background:#e3eef6;\">
     <table style=\"width:100%;border:0px;text-align:left;padding:10px 0px 10px 0px;background:#e3eef6;\"><tr><td align=\"center\">
@@ -94,18 +101,13 @@ function notifySend($to, $subject, $message, $name = null, $emailaddress = null,
       autoUrl("img/notify/NotifyLogo@2x.png") . " 2x, " .
       autoUrl("img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"" . CLUB_NAME . " Logo\"></td></tr></table>
       <table style=\"width:100%;max-width:700px;border:0px;text-align:left;background:#ffffff;padding:0px 10px;\"><tr><td>
-      " . $message . "
+      " . $emailMessage . "
       </td></tr></table>
       <table style=\"width:100%;max-width:700px;border:0px;background:#f8fcff;padding:0px 10px;\"><tr><td>
       <div
-class=\"bottom text-center\">
-<p class=\"small\" align=\"center\"><strong>" . CLUB_NAME . "</strong><br>";
-$club = json_decode(CLUB_JSON);
-for ($i = 0; $i < sizeof($club->ClubAddress); $i++) {
-  $message .= $club->ClubAddress[$i] . "<br>";
-}
-$message .= "</p>
-<p class=\"small\" align=\"center\">This email was sent automatically by the " . CLUB_NAME . " Membership System.</p>";
+class=\"bottom text-center\">";
+$message .= $address;
+$message .= "<p class=\"small\" align=\"center\">This email was sent automatically by the " . CLUB_NAME . " Membership System.</p>";
 if (!defined('IS_CLS') || !IS_CLS) {
   $message .= '<p class="small" align="center">The Membership System was built by Chester-le-Street ASC.</p>';
 }
@@ -125,6 +127,10 @@ $message .= "
     </body>
     </html>";
 
+  if ($from['PlainText']) {
+    $message = $emailMessage;
+  }
+
   if ($emailaddress != null && $name != null) {
 
     $email = new \SendGrid\Mail\Mail();
@@ -136,9 +142,15 @@ $message .= "
     strip_tags(str_replace(["</h1>", "</h2>", "</h3>", "</h4>", "</h5>",
     "</h6>", "</p>", "</li>"], "\r\n\n", $message))));
     $email->addContent("text/plain", $text_plain);
-    $email->addContent(
-      "text/html", $head . $message
-    );
+    if ($from['PlainText']) {
+      $email->addContent(
+        "text/html", $emailMessage . $address
+      );
+    } else {
+      $email->addContent(
+        "text/html", $head . $message
+      );
+    }
 
     if ($from['Email'] == "notify@" . EMAIL_DOMAIN || $from['Email'] == "payments@" . EMAIL_DOMAIN) {
       $email->addHeader("List-Archive", autoUrl("myaccount/notify/history"));
@@ -1637,6 +1649,7 @@ function getTimesInFull($asa, $swim, $course) {
 }
 
 function user_needs_registration($user) {
+  /*
   global $db;
   $sql = "SELECT `RR`, `AccessLevel` FROM `users` WHERE `UserID` = ?";
   try {
@@ -1655,6 +1668,8 @@ function user_needs_registration($user) {
   } else {
     return true;
   }
+  */
+  return false;
 }
 
 function getPostContent($id) {

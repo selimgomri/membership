@@ -27,11 +27,23 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 		include 'user.php';
 	});
 
-  $this->get('/{id}:int/new-qualification', function($person) {
+  $this->get('/{id}:int/qualifications', function($person) {
+		include BASE_PATH . 'controllers/qualifications/MyQualifications.php';
+	});
+
+  $this->get('/{id}:int/qualifications/new', function($person) {
 		include BASE_PATH . 'controllers/qualifications/admin/NewQualification.php';
 	});
 
-  $this->post('/{id}:int/new-qualification', function($person) {
+  $this->post('/{id}:int/qualifications/new', function($person) {
+		include BASE_PATH . 'controllers/qualifications/admin/NewQualificationPost.php';
+	});
+
+  $this->get('/{person}:int/qualifications/{id}:int', function($person, $id) {
+		include BASE_PATH . 'controllers/qualifications/admin/NewQualification.php';
+	});
+
+  $this->post('/{person}:int/qualifications/{id}:int', function($person, $id) {
 		include BASE_PATH . 'controllers/qualifications/admin/NewQualification.php';
 	});
 

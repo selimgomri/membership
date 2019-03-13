@@ -2,13 +2,14 @@
 
 $_SESSION['AddNotifyCC'] = [
   'AuthCode'          => random_int(100000, 999999),
-  'Name'              => $_POST['new-cc-name'],
-  'EmailAddress'      => $_POST['new-cc']
+  'Name'              => ucwords(trim($_POST['new-cc-name'])),
+  'EmailAddress'      => strtolower(trim($_POST['new-cc']))
 ];
 
 $message = '
 <p>Please use the code below to verify your email address.</p>
 <p><strong>' . $_SESSION['AddNotifyCC']['AuthCode'] . '</strong></p>
+<p>This code will confirm your email address and send carbon copies of bulk emails sent from ' . CLUB_NAME . ' to this address.</p>
 <p>If you did not request this authorisation code, please ignore this email.</p>';
 
 if (!notifySend(null, "Verify your email", $message, $_SESSION['AddNotifyCC']['Name'], $_SESSION['AddNotifyCC']['EmailAddress'])) {

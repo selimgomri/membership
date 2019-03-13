@@ -18,6 +18,10 @@ $this->any('/notifysend', function() {
 	global $link;
   global $db;
 	//echo "Service Suspended";
+	require 'SingleEmailHandler.php';
+});
+
+$this->any('/newnotifysend', function() {
 	require 'notifyhandler.php';
 });
 

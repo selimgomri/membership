@@ -73,29 +73,30 @@ include BASE_PATH . "views/notifyMenu.php";?>
       $info = json_decode($row['JSONData']);
       $sender = null;
       if ($row['Forename'] != "" && $row['Surname'] != "") {
-        $sender = "<p class=\"mb-0\">Sent by: " . $row['Forename'] . " " .
-        $row['Surname'] . "</p>";
+        $sender = "<dt class=\"col-sm-3\">Sent by</dt><dd class=\"col-sm-9\">" . $row['Forename'] . " " .
+        $row['Surname'] . "</dd>";
         if ($row['ForceSend']) {
-          $sender .= "<p class=\"mb-0\"><em>Sending was forced</em></p>";
+          $sender .= "<dt class=\"col-sm-3\">Force Sent</dt><dd class=\"col-sm-9\">True</dd>";
         }
       } else {
-        $sender = "<p class=\"mb-0\">Sent by: " . $info->Sender->Name . "</p>";
+        $sender = "<dt class=\"col-sm-3\">Sent by</dt><dd class=\"col-sm-9\">" . $info->Sender->Name . "</dd>";
         if ($row['ForceSend']) {
-          $sender .= "<p class=\"mb-0\"><em>Sending was forced</em></p>";
+          $sender .= "<dt class=\"col-sm-3\">Force Sent</dt><dd class=\"col-sm-9\">True</dd>";
         }
       }
       ?>
       <div class="cell p-0">
-        <div class=" p-3">
-          <p class="mb-0">
+        <div class="p-3">
+          <p>
             <strong>
               <? echo $row['Subject']; ?>
             </strong>
           </p>
+          <dl class="row mb-0 small">
           <? echo $sender; ?>
           <? if ($row['JSONData'] != "") { ?>
-          <p class="mb-0">
-            Sent to:
+          <dt class="col-sm-3">Sent To</dt>
+          <dd class="col-sm-9">
             <?
             $squads = (array) $info->To->Squads;
             $lists = (array) $info->To->Targeted_Lists;
@@ -109,10 +110,12 @@ include BASE_PATH . "views/notifyMenu.php";?>
                 <? echo $s; ?>
               </span><?
             } ?>
-          </p>
-          <p class="mb-0">
-            Date: <? echo date("d F Y", strtotime($row['Date'])); ?>
-          </p>
+          </dd>
+          <dt class="col-sm-3 mb-0">Date</dt>
+          <dd class="col-sm-9 mb-0">
+            <? echo date("d F Y", strtotime($row['Date'])); ?>
+          </dd>
+        </dl>
         <? } ?>
         </div>
         <div class="p-3 pt-0 bg-light force-wrap">

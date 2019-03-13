@@ -4,12 +4,14 @@
 ini_set('mail.add_x_header', 'Off');
 ini_set('expose_php', 'Off');
 
-//Show errors
-//===================================
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-//===================================
+if ($_SESSION['AccessLevel'] = "Admin") {
+  //Show errors
+  //===================================
+  ini_set('display_errors', 1);
+  ini_set('display_startup_errors', 1);
+  error_reporting(E_ALL);
+  //===================================
+}
 
 $time_start = microtime(true);
 
@@ -564,6 +566,10 @@ $route->group('/', function() {
 
     $this->group('/qualifications', function() {
       include 'controllers/qualifications/router.php';
+    });
+
+    $this->group('/admin', function() {
+      include 'controllers/qualifications/AdminRouter.php';
     });
 
     // Log out

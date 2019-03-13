@@ -23,6 +23,14 @@ $name = $user['Forename'] . ' ' . $user['Surname'];
 
 $form = $_SESSION['NewQualificationData'];
 
+if ($form['valid-from'] == null) {
+  $form['valid-from'] = date("Y-m-d");
+}
+
+if ($form['valid-to'] == null) {
+  $form['valid-to'] = date("Y-m-d");
+}
+
 include BASE_PATH . 'views/header.php';
 
 ?>
@@ -52,29 +60,19 @@ include BASE_PATH . 'views/header.php';
           <textarea class="form-control" id="info" name="info"><?=htmlspecialchars($form['info'])?></textarea>
         </div>
 
-        <div class="row">
-          <div class="col">
-            <div class="form-group">
-              <label for="valid-from">Valid From</label>
-              <input type="date" class="form-control" id="valid-from" name="valid-from" value="<?=htmlspecialchars($form['valid-from'])?>" required>
-            </div>
-          </div>
+        <div class="form-group">
+          <label for="valid-from">Valid From</label>
+          <input type="date" class="form-control" id="valid-from" name="valid-from" value="<?=htmlspecialchars($form['valid-from'])?>" required>
+        </div>
 
-          <div class="col">
-            <div class="form-group">
-              <div class="custom-control custom-checkbox">
-                <label class="custom-control-label" for="expires">Qualification Expires</label>
-                <input type="checkbox" class="custom-control-input" id="expires" name="expires" value="1">
-              </div>
-            </div>
-          </div>
+        <div class="custom-control custom-checkbox form-group">
+          <input type="checkbox" class="custom-control-input" value="1" id="expires" name="expires" onclick="toggleState('valid-box', 'expires')">
+          <label class="custom-control-label" for="expires">Does this qualification expire?</label>
+        </div>
 
-          <div class="col">
-            <div class="form-group">
-              <label for="valid-to">Valid To (Optional, unless expires)</label>
-              <input type="date" class="form-control" id="valid-to" name="valid-to" value="<?=htmlspecialchars($form['valid-to'])?>">
-            </div>
-          </div>
+        <div class="form-group d-none" id="valid-box">
+          <label for="valid-to">Valid To</label>
+          <input type="date" class="form-control" id="valid-to" name="valid-to" value="<?=htmlspecialchars($form['valid-to'])?>">
         </div>
 
         <button type="submit" class="btn btn-success">
@@ -84,6 +82,18 @@ include BASE_PATH . 'views/header.php';
     </div>
   </div>
 </div>
+
+<script>
+function toggleState(id, check) {
+	var element = document.getElementById(id);
+  var check = document.getElementById(check);
+  if (check.checked) {
+    element.classList.remove("d-none");
+  } else {
+    element.classList.add("d-none");
+  }
+}
+</script>
 
 <script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 

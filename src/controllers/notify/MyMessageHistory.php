@@ -82,20 +82,22 @@ include BASE_PATH . "views/header.php";
       $info = json_decode($row['JSONData']);
       $sender = null;
         if ($row['ForceSend']) {
-          $sender .= "<p>This message was sent to all users regardless of whether or not they had opted in or out of emails.</p>";
+          $sender .= "<dt class=\"col-sm-3\">Force Send</dt>
+          <dd class=\"col-sm-9\">This message was sent to all users regardless of whether or not they had opted in or out of emails.</dd>";
         }
       ?>
       <div class="cell p-0">
         <div class="p-3">
-          <p class="mb-0">
+          <p>
             <strong>
               <? echo $row['Subject']; ?>
             </strong>
           </p>
+          <dl class="row mb-0 small">
           <? echo $sender; ?>
           <? if ($row['JSONData'] != "") { ?>
-          <p class="mb-0">
-            <strong>We sent this email to:</strong>
+          <dt class="col-sm-3">Sent To</dt>
+          <dd class="col-sm-9">
             <?
             $squads = (array) $info->To->Squads;
             $lists = (array) $info->To->Targeted_Lists;
@@ -109,10 +111,10 @@ include BASE_PATH . "views/header.php";
                 <? echo $s; ?>
               </span><?
             } ?>
-          </p>
-          <p class="mb-0">
-            <strong>Date: </strong><? echo date("d F Y", strtotime($row['Date'])); ?>
-          </p>
+          </dd>
+          <dt class="col-sm-3 mb-0">Date</dt>
+          <dd class="col-sm-9 mb-0"><? echo date("d F Y", strtotime($row['Date'])); ?></dd>
+          </dl>
       <? } ?>
       </div>
       <div class="bg-light p-3 pt-0 force-wrap">

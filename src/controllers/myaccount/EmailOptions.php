@@ -188,7 +188,7 @@ include BASE_PATH . "views/header.php";
 			<? } ?>
 
 			<p class="mb-0">
-				<button type="submit" class="btn btn-secondary">Update Details</button>
+				<button type="submit" class="btn btn-success">Update Details</button>
 			</p>
 		</form>
 	</div>
@@ -217,16 +217,16 @@ include BASE_PATH . "views/header.php";
 
     <form method="post" action="<?=autoUrl("myaccount/email/cc/new")?>" class="needs-validation" novalidate>
       <div class="form-row">
-        <div class="col">
+        <div class="col-md">
           <div class="form-group">
             <label for="new-cc-name">Name</label>
-            <input type="text" class="form-control" id="new-cc-name" name="new-cc-name" placeholder="Joe Bloggs">
+            <input type="text" class="form-control" id="new-cc-name" name="new-cc-name" placeholder="Joe Bloggs" required>
           </div>
         </div>
-        <div class="col">
+        <div class="col-md">
           <div class="form-group">
-            <label for="new-cc">New CC Email Address</label>
-            <input type="email" class="form-control" id="new-cc" name="new-cc" placeholder="joe.bloggs@example.com">
+            <label for="new-cc">CC Email Address</label>
+            <input type="email" class="form-control" id="new-cc" name="new-cc" placeholder="joe.bloggs@example.com" required>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-<form method="post">
+<form method="post" class="needs-validation" novalidate>
 	<div class="form-group">
 		<label for="event">Select an Event</label>
 		<div class="row mb-2">
@@ -113,6 +113,9 @@
 				</div>
 			</div>
 		</div>
+    <div class="invalid-feedback">
+      Please choose an event.
+    </div>
 	</div>
 
 	<div class="form-group">
@@ -120,7 +123,7 @@
 		<div class="row">
 			<div class="col-6 col-md-2">
 				<div class="custom-control custom-radio">
-				  <input type="radio" id="sourcea" name="source" value="25m" class="custom-control-input" checked>
+				  <input type="radio" id="sourcea" name="source" value="25m" class="custom-control-input" checked required>
 				  <label class="custom-control-label" for="sourcea">25m Pool</label>
 				</div>
 			</div>
@@ -131,22 +134,30 @@
 				</div>
 			</div>
 		</div>
+    <div class="invalid-feedback">
+      Please select the pool the event was swam in.
+    </div>
 	</div>
 
     <div class="row">
-        <div class="col-md-8">
-          <div class="form-group">
-          <label>Time</label>
-            <div class="input-group">
-                    <input type="number" max="100" min="0" name="mins" pattern="[0-9]*" inputmode="numeric" class="form-control" placeholder="Minutes">
-                    <input type="number" max="59" min="0" name="secs" pattern="[0-9]*" inputmode="numeric" class="form-control" placeholder="Seconds">
-                    <input type="number" max="99" min="0" name="hunds" pattern="[0-9]*" inputmode="numeric" class="form-control" placeholder="Hundreds">
-                  </div>
-            </div>
+      <div class="col-md-8">
+        <div class="form-group">
+        <label>Time</label>
+          <div class="input-group">
+            <input type="number" max="100" min="0" name="mins" pattern="[0-9]*" inputmode="numeric" class="form-control" placeholder="Minutes">
+            <input type="number" max="59" min="0" name="secs" pattern="[0-9]*" inputmode="numeric" class="form-control" placeholder="Seconds">
+            <input type="number" max="99" min="0" name="hunds" pattern="[0-9]*" inputmode="numeric" class="form-control" placeholder="Hundreds">
+          </div>
+          <div class="invalid-feedback">
+            Please enter a valid time.
+          </div>
         </div>
+      </div>
     </div>
 
 	<p class="mb-0">
-		<button class="btn btn-secondary" type="submit">Convert</button>
+		<button class="btn btn-success" type="submit">Convert</button>
 	</p>
 </form>
+
+<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>

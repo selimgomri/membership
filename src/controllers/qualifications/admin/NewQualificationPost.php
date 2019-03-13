@@ -51,5 +51,5 @@ if (sizeof($form_errors) > 0) {
   } catch (Exception $e) {
     halt(500);
   }
-  header("Location: " . autoUrl("qualifications/admin"));
+  header("Location: " . autoUrl("users/" . $person . "/qualifications"));
 }
