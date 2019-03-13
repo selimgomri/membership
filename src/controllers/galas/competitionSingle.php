@@ -120,15 +120,15 @@ else {
 include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
 <div class="container">
-  <h1><? echo $title; ?></h1>
+  <h1><?php echo $title; ?></h1>
   <div class="row">
     <div class="col-md-6">
       <div class="my-3 p-3 bg-white rounded shadow">
-        <? if (isset($_SESSION['ErrorState'])) {
+        <?php if (isset($_SESSION['ErrorState'])) {
           echo $_SESSION['ErrorState'];
           unset($_SESSION['ErrorState']);
         } ?>
-        <? echo $content; ?>
+        <?php echo $content; ?>
       </div>
     </div>
     <div class="col-md-6">
@@ -137,7 +137,7 @@ include "galaMenu.php"; ?>
 		    <div class="chart" id="piechart"></div>
 				<div class="chart" id="barchart"></div>
         <p class="mb-0">
-          <a href="<? echo autoUrl("galas/entries?galaID=" . $id . "&sex=all&search="); ?>" class="btn btn-dark">
+          <a href="<?php echo autoUrl("galas/entries?galaID=" . $id . "&sex=all&search="); ?>" class="btn btn-dark">
             View All Entries
           </a>
         </p>
@@ -231,6 +231,6 @@ if ($counter>0) { ?>
     chart.draw(data, options);
   }
 </script>
-<? } ?>
+<?php } ?>
 <?php include BASE_PATH . "views/footer.php";
 ?>

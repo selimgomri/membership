@@ -72,10 +72,10 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
  ?>
 
 <div class="container-fluid">
-	<h1>Status for <? echo $dateString; ?></h1>
-  <p class="lead"><? echo $title_string; ?></p>
+	<h1>Status for <?php echo $dateString; ?></h1>
+  <p class="lead"><?php echo $title_string; ?></p>
 	<p><a href="<?=app('request')->curl?>csv" target="_blank">View as CSV (Comma Separated Values)</a> or <a href="<?=app('request')->curl?>json" target="_blank">View as JSON (JavaScript Object Notation)</a></p>
-	<? if (mysqli_num_rows($result) == 0) { ?>
+	<?php if (mysqli_num_rows($result) == 0) { ?>
 		<div class="alert alert-warning mb-0">
 			<p class="mb-0">
 				<strong>
@@ -86,7 +86,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 				We are sorry for the inconvenience caused.
 			</p>
 		</div>
-	<? } else { ?>
+	<?php } else { ?>
 	<div class="table-responsive-md">
 		<table class="table mb-0 <?=$table_sm?>">
 			<thead class="thead-light">
@@ -117,7 +117,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
           }
         }
 				?>
-				<? if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually") {
+				<?php if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually") {
 					?><tr class="table-success"><?
           $link = "text-success";
 				} else if ($row['Status'] == "cancelled" || $row['Status'] ==
@@ -131,31 +131,31 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 				} else { ?><tr class=""><?$link = "";
 				} ?>
 					<td>
-						<? if ($row['Forename'] != null && $row['Surname'] != null) {?>
+						<?php if ($row['Forename'] != null && $row['Surname'] != null) {?>
 							<?=htmlspecialchars($row['Forename'] . " " . $row['Surname'])?><br>
               <small><strong>
                 <a target="_blank" href="<?=autoUrl("notify/newemail/individual/" . $row['UserID'])?>">
                   Contact Parent
                 </a>
               </strong></small>
-						<? } else {
+						<?php } else {
 							echo "No Parent";
 						}?>
 					<td>
 						<ul class="list-unstyled mb-0">
-              <? if ($row['MForename'] == null || $row['MSurname'] == null || $row['MForename'] == "" || $row['MSurname'] == "") { ?>
+              <?php if ($row['MForename'] == null || $row['MSurname'] == null || $row['MForename'] == "" || $row['MSurname'] == "") { ?>
                 <li><?=$swimmer_name?></li>
-              <? } else { ?>
+              <?php } else { ?>
                 <li><?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?></li>
-              <? } ?>
+              <?php } ?>
 							<li><em><?=htmlspecialchars($row['Description'])?></em></li>
 						</ul>
 					</td>
 					<td>
-						&pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?>
+						&pound;<?php echo number_format(($row['Amount']/100),2,'.',''); ?>
 					</td>
 					<td>
-						<? if ($row['Forename'] != null && $row['Surname'] != null) {
+						<?php if ($row['Forename'] != null && $row['Surname'] != null) {
 							echo paymentStatusString($row['Status']);
 						} else {
 							echo "No Parent or Direct Debit Available";
@@ -170,7 +170,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 			</tbody>
 		</table>
 	</div>
-	<? } ?>
+	<?php } ?>
 </div>
 
 <?php include BASE_PATH . "views/footer.php";

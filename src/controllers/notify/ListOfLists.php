@@ -22,7 +22,7 @@ include BASE_PATH . "views/notifyMenu.php";
     <p>
       A useful use case would be for the Junior League
     </p>
-    <? if (mysqli_num_rows($result) > 0) { ?>
+    <?php if (mysqli_num_rows($result) > 0) { ?>
       <div class="table-responsive-md">
         <table class="table">
           <thead class="thead-light">
@@ -32,23 +32,23 @@ include BASE_PATH . "views/notifyMenu.php";
             </tr>
           </thead>
           <tbody>
-          <? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+          <?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
             $row = mysqli_fetch_array($result, MYSQLI_ASSOC); ?>
             <tr>
-              <td><a href="<? echo autoUrl("notify/lists/" . $row['ID']); ?>"><? echo $row['Name']; ?></a></td>
-              <td><? echo $row['Description']; ?></td>
+              <td><a href="<?php echo autoUrl("notify/lists/" . $row['ID']); ?>"><?php echo $row['Name']; ?></a></td>
+              <td><?php echo $row['Description']; ?></td>
             </tr>
-          <? } ?>
+          <?php } ?>
         </tbody>
       </table>
     </div>
-    <? } else { ?>
+    <?php } else { ?>
     <div class="alert alert-info">
       <strong>There are no lists available</strong>
     </div>
-    <? } ?>
+    <?php } ?>
     <p class="mb-0">
-      <a href="<? echo autoUrl("notify/lists/new"); ?>"
+      <a href="<?php echo autoUrl("notify/lists/new"); ?>"
         class="btn btn-success">
         Add New List
       </a>

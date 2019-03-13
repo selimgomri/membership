@@ -76,7 +76,7 @@ $use_white_background = true;
 include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
 <div class="container">
-  <? if (isset($_SESSION['ErrorState'])) {
+  <?php if (isset($_SESSION['ErrorState'])) {
     echo $_SESSION['ErrorState'];
     unset($_SESSION['ErrorState']);
   } ?>

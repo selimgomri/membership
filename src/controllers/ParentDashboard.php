@@ -83,7 +83,7 @@ include BASE_PATH . "views/header.php";
 <div class="front-page mb-n3">
   <div class="container">
 
-		<? if (!isSubscribed($_SESSION['UserID'], 'Notify')) { ?>
+		<?php if (!isSubscribed($_SESSION['UserID'], 'Notify')) { ?>
 	  <div class="alert alert-danger">
 	    <p class="mb-0">
 	      <strong>
@@ -91,11 +91,11 @@ include BASE_PATH . "views/header.php";
 	      </strong>
 	    </p>
 	    <p class="mb-0">
-	      Head to <a href="<? echo autoUrl("myaccount/email"); ?>" class="alert-link">My
+	      Head to <a href="<?php echo autoUrl("myaccount/email"); ?>" class="alert-link">My
 	      Account</a> to change your email preferences and stay up to date!
 	    </p>
 	  </div>
-		<? } ?>
+		<?php } ?>
 
 		<h1>Hello <?=$username?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
@@ -128,7 +128,7 @@ include BASE_PATH . "views/header.php";
     </div>
     <?php } ?>
 
-    <? if (!userHasMandates($_SESSION['UserID'])) { ?>
+    <?php if (!userHasMandates($_SESSION['UserID'])) { ?>
     <div class="mb-4">
       <h2 class="mb-4">Want to set up a Direct Debit?</h2>
       <div class="news-grid">
@@ -154,7 +154,7 @@ include BASE_PATH . "views/header.php";
         </a>
       </div>
     </div>
-    <? } ?>
+    <?php } ?>
 
 		<div class="mb-4">
       <h2 class="mb-4">My Swimmers</h2>
@@ -179,10 +179,10 @@ include BASE_PATH . "views/header.php";
 						<?=htmlspecialchars($s['SquadName'])?> Squad
 					</span>
         </a>
-				<? }
+				<?php }
 			} else { ?>
 				<p class="mb-0">You do not have any swimmers connected to your account</p>
-			<? } ?>
+			<?php } ?>
 			</div>
 		</div>
 
@@ -205,10 +205,10 @@ include BASE_PATH . "views/header.php";
 						<?=htmlspecialchars($g['GalaName'])?>
 					</span>
         </a>
-			<? }
+			<?php }
 			} else { ?>
 				<p class="mb-0">You have no current gala entries</p>
-			<? } ?>
+			<?php } ?>
 			</div>
 		</div>
 
@@ -232,12 +232,12 @@ include BASE_PATH . "views/header.php";
 						News
 					</span>
         </a>
-        <? } ?>
+        <?php } ?>
 			</div>
 		</div>
     <?php } ?>
 
-    <? if ($asa != null && $asa != "") { ?>
+    <?php if ($asa != null && $asa != "") { ?>
     <div class="mb-4">
       <h2 class="mb-4">Swim England News</h2>
       <div class="news-grid">
@@ -257,10 +257,10 @@ include BASE_PATH . "views/header.php";
   					News
   				</span>
         </a>
-        <? } ?>
+        <?php } ?>
   		</div>
   	</div>
-    <? } ?>
+    <?php } ?>
 
     <?php if ($asa_ne != null) { ?>
     <div class="mb-4">

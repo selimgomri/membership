@@ -80,12 +80,12 @@ include BASE_PATH . "views/header.php";
 		<h1>Hello <?=$username?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
 
-    <? if (sizeof($sessions) > 0) { ?>
+    <?php if (sizeof($sessions) > 0) { ?>
       <div class="mb-4">
         <h2 class="mb-4">Take Register for Current Sessions</h2>
         <div class="mb-4">
           <div class="news-grid">
-        <? for ($i = 0; $i < sizeof($sessions); $i++) { ?>
+        <?php for ($i = 0; $i < sizeof($sessions); $i++) { ?>
           <a href="<?=autoUrl("attendance/register/" . $sessions[$i]['SquadID'] . "/" . $sessions[$i]['SessionID'])?>" title="<?=$sessions[$i]['SquadName']?> Squad Register, <?=$sessions[$i]['SessionName']?>">
             <div>
               <span class="title mb-0">
@@ -99,11 +99,11 @@ include BASE_PATH . "views/header.php";
               <?=$sessions[$i]['SessionName']?>, <?=$sessions[$i]['VenueName']?>
             </span>
           </a>
-        <? } ?>
+        <?php } ?>
         </div>
       </div>
     </div>
-    <? } ?>
+    <?php } ?>
 
 		<div class="mb-4">
       <h2 class="mb-4">Quick Tasks</h2>
@@ -154,7 +154,7 @@ include BASE_PATH . "views/header.php";
 			</div>
 		</div>
 
-    <? if (IS_CLS === true) { ?>
+    <?php if (IS_CLS === true) { ?>
     <div class="mb-4">
       <h2 class="mb-4">Club News</h2>
       <div class="news-grid">
@@ -174,12 +174,12 @@ include BASE_PATH . "views/header.php";
 						News
 					</span>
         </a>
-        <? } ?>
+        <?php } ?>
 			</div>
 		</div>
-	 <? } ?>
+	 <?php } ?>
 
-  <? if ($asa != null && $asa != "") { ?>
+  <?php if ($asa != null && $asa != "") { ?>
 	<div class="mb-4">
     <h2 class="mb-4">Swim England News</h2>
     <div class="news-grid">
@@ -199,10 +199,10 @@ include BASE_PATH . "views/header.php";
 					News
 				</span>
       </a>
-      <? } ?>
+      <?php } ?>
 		</div>
 	</div>
-  <? } ?>
+  <?php } ?>
 
   <?php if ($asa_ne != null) { ?>
   <div class="mb-4">

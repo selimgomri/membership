@@ -39,15 +39,15 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 </style>
 <div class="container">
 
-  <? if (isset($_SESSION['EmailStatus']) && $_SESSION['EmailStatus']) { ?>
+  <?php if (isset($_SESSION['EmailStatus']) && $_SESSION['EmailStatus']) { ?>
     <div class="alert alert-success d-print-none">
       <p class="mb-0">We've sent an email to that address.</p>
     </div>
-  <? } else if (isset($_SESSION['EmailStatus']) && !$_SESSION['EmailStatus']) { ?>
+  <?php } else if (isset($_SESSION['EmailStatus']) && !$_SESSION['EmailStatus']) { ?>
     <div class="alert alert-danger d-print-none">
       <p class="mb-0">We were unable to send an email to that address.</p>
     </div>
-  <? }
+  <?php }
   if (isset($_SESSION['EmailStatus'])) {
     unset($_SESSION['EmailStatus']);
   } ?>
@@ -59,7 +59,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 			</strong>
 		</p>
 		<p>
-			We successfully added <? echo $row['MForename'] . " " . $row['MSurname']; ?>.
+			We successfully added <?php echo $row['MForename'] . " " . $row['MSurname']; ?>.
 		</p>
 		<p>
 			Please print out, email or copy the information below to give to the
@@ -82,19 +82,19 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 			</a></p>
     </form>
 		<p class="mb-0">
-			<a href="<? echo autoUrl("swimmers"); ?>" class="btn btn-info">
+			<a href="<?php echo autoUrl("swimmers"); ?>" class="btn btn-info">
 				Return to Swimmers
 			</a>
-			<? if ($_SESSION['AccessLevel'] != "Coach" && $_SESSION['AccessLevel'] != "Galas") { ?>
-			<a href="<? echo autoUrl("swimmers/addmember"); ?>" class="btn btn-info">
+			<?php if ($_SESSION['AccessLevel'] != "Coach" && $_SESSION['AccessLevel'] != "Galas") { ?>
+			<a href="<?php echo autoUrl("swimmers/addmember"); ?>" class="btn btn-info">
 				Add Another Swimmer
 			</a>
-			<? } ?>
+			<?php } ?>
 		</p>
 	</div>
 
 	<div class="py-3 mb-3 text-right mono">
-		<? echo $row['SquadName']; ?> Squad
+		<?php echo $row['SquadName']; ?> Squad
 	</div>
 
 	<div class="mb-3 p-5 bg-primary text-white">
@@ -102,7 +102,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		<h1 class="h2 mb-4">Online Membership System</h1>
 		<p class="mb-0">
 			<strong>
-				Your Access Key for <? echo $row['MForename'] . " " . $row['MSurname']; ?>
+				Your Access Key for <?php echo $row['MForename'] . " " . $row['MSurname']; ?>
 			</strong>
 		</p>
 	</div>
@@ -121,7 +121,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 	</p>
 
 	<p>
-		Here’s what you will need to do to add <? echo $row['MForename'] . " " .
+		Here’s what you will need to do to add <?php echo $row['MForename'] . " " .
 		$row['MSurname']; ?> to your account in our Online Membership System. There
 		are two methods you can use to do this.
 	</p>
@@ -132,7 +132,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		If you have a device that can read QR Codes (A built in feature on iOS and
 		Android Devices), scan the QR Code below. You'll be taken to a page where
 		you'll be asked to log in, if you aren't already, and we'll automatically
-		add <? echo $row['MForename']; ?> to your account.
+		add <?php echo $row['MForename']; ?> to your account.
 	</p>
 
   <div class="border border-dark p-2 bg-white mb-3 px-5">
@@ -140,7 +140,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 			<div class="col-8">
 				<span class="h2">Already registered for an account?</span>
 				<p class="lead">
-					Scan this QR Code to add <? echo $row['MForename']; ?> quickly.
+					Scan this QR Code to add <?php echo $row['MForename']; ?> quickly.
 				</p>
 				<p class="mb-0">
 					This QR Code cannot be used once you've added this swimmer.
@@ -148,16 +148,16 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 				</p>
 			</div>
 			<div class="col-4 text-center">
-        <img class="img-fluid ml-auto d-block" src="<? echo
+        <img class="img-fluid ml-auto d-block" src="<?php echo
         autoUrl("services/qr-generator?size=200&text=" .
         rawurlencode(autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" .
-        $row['AccessKey'])) . ""); ?>" srcset="<? echo
+        $row['AccessKey'])) . ""); ?>" srcset="<?php echo
         autoUrl("services/qr-generator?size=400&text=" .
         rawurlencode(autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" .
-        $row['AccessKey'])) . ""); ?> 2x, <? echo
+        $row['AccessKey'])) . ""); ?> 2x, <?php echo
         autoUrl("services/qr-generator?size=400&text=" .
         rawurlencode(autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" .
-        $row['AccessKey'])) . ""); ?> 3x" alt="<? echo
+        $row['AccessKey'])) . ""); ?> 3x" alt="<?php echo
         autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" .
         $row['AccessKey']); ?>"></img>
 			</div>
@@ -182,11 +182,11 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		  <tbody>
 		    <tr>
 		      <th scope="row" class="pl-0">ASA Number</th>
-		      <td class="pr-0"><span class="mono"><? echo $row['ASANumber']; ?></span></td>
+		      <td class="pr-0"><span class="mono"><?php echo $row['ASANumber']; ?></span></td>
 		    </tr>
 		    <tr>
 		      <th scope="row" class="pl-0"><?=CLUB_SHORT_NAME?> Access Key</th>
-		      <td class="pr-0"><span class="mono"><? echo $row['AccessKey']; ?></span></td>
+		      <td class="pr-0"><span class="mono"><?php echo $row['AccessKey']; ?></span></td>
 		    </tr>
 		  </tbody>
 		</table>
@@ -227,40 +227,40 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
   }
   ?>
   <div class="row mb-3 align-items-stretch">
-    <div class="<? echo $col; ?>">
+    <div class="<?php echo $col; ?>">
       <div class="text-center border border-dark h-100 p-2 bg-white">
         <span class="mb-2">ASA Number</span>
         <img class="img-fluid mx-auto d-block"
-        src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ASANumber'] . "&print=false"); ?>"
-        srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ASANumber'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ASANumber'] . "&print=false"); ?> 3x"
-        alt="<? echo $row['ASANumber']; ?>"></img>
-        <span class="mono"><? echo $row['ASANumber']; ?></span>
+        src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ASANumber'] . "&print=false"); ?>"
+        srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ASANumber'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ASANumber'] . "&print=false"); ?> 3x"
+        alt="<?php echo $row['ASANumber']; ?>"></img>
+        <span class="mono"><?php echo $row['ASANumber']; ?></span>
       </div>
       <span class="d-block d-sm-none mb-3"></span>
     </div>
-    <div class="<? echo $col; ?>">
+    <div class="<?php echo $col; ?>">
       <div class="text-center border border-dark h-100 p-2 bg-white">
         <span class="mb-2"><?=CLUB_SHORT_NAME?> Number</span>
         <img class="img-fluid mx-auto d-block"
-        src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . CLUB_CODE . "X" . $row['MemberID'] . "&print=false"); ?>"
-        srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . CLUB_CODE . "X" . $row['MemberID'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . CLUB_CODE . "X" . $row['MemberID'] . "&print=false"); ?> 3x"
-        alt="<?=CLUB_CODE?>X<? echo $row['MemberID']; ?>"></img>
-        <span class="mono"><?=CLUB_CODE?><? echo $row['MemberID']; ?></span>
+        src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . CLUB_CODE . "X" . $row['MemberID'] . "&print=false"); ?>"
+        srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . CLUB_CODE . "X" . $row['MemberID'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . CLUB_CODE . "X" . $row['MemberID'] . "&print=false"); ?> 3x"
+        alt="<?=CLUB_CODE?>X<?php echo $row['MemberID']; ?>"></img>
+        <span class="mono"><?=CLUB_CODE?><?php echo $row['MemberID']; ?></span>
       </div>
-      <? if ($row['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><? } ?>
+      <?php if ($row['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><?php } ?>
     </div>
-    <? if ($row['ThriveNumber'] != "") { ?>
-    <div class="<? echo $col; ?>">
+    <?php if ($row['ThriveNumber'] != "") { ?>
+    <div class="<?php echo $col; ?>">
       <div class="text-center border border-dark h-100 p-2 bg-white">
         <span class="mb-2">Thrive Card</span>
         <img class="img-fluid mx-auto d-block"
-        src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ThriveNumber'] . "&print=false"); ?>"
-        srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ThriveNumber'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ThriveNumber'] . "&print=false"); ?> 3x"
-        alt="<? echo $row['ThriveNumber']; ?>"></img>
-        <span class="mono"><? echo $row['ThriveNumber']; ?></span>
+        src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ThriveNumber'] . "&print=false"); ?>"
+        srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ThriveNumber'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ThriveNumber'] . "&print=false"); ?> 3x"
+        alt="<?php echo $row['ThriveNumber']; ?>"></img>
+        <span class="mono"><?php echo $row['ThriveNumber']; ?></span>
       </div>
     </div>
-    <? } ?>
+    <?php } ?>
   </div>
 
 	<div class="small text-muted">

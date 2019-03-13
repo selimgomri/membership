@@ -39,8 +39,8 @@ if (isset($_POST['userSur'])) {
 		<?
 		for ($i = 0; $i < $count; $i++) {
 			$row = mysqli_fetch_array($result, MYSQLI_ASSOC);?>
-			<option value="<? echo $row['UserID'];?>">
-				<? echo $row['Forename'] . " " . $row['Surname']; ?>
+			<option value="<?php echo $row['UserID'];?>">
+				<?php echo $row['Forename'] . " " . $row['Surname']; ?>
 			</option> <?
 		}
 	}

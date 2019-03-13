@@ -7,7 +7,7 @@
 <div class="row">
 <div class="col-md-8">
 <h1>Change your password</h1>
-<? if (isset($_SESSION['ErrorState'])) {
+<?php if (isset($_SESSION['ErrorState'])) {
   echo $_SESSION['ErrorState'];
   unset($_SESSION['ErrorState']);
 } ?>

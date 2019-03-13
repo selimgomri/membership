@@ -24,11 +24,11 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 <div class="container">
 	<div class="">
-		<h1>Payments for <? echo date("F Y", $date); ?></h1>
-	  <p class="lead">All Direct Debit payments requested in <? echo date("F Y", $date); ?></p>
+		<h1>Payments for <?php echo date("F Y", $date); ?></h1>
+	  <p class="lead">All Direct Debit payments requested in <?php echo date("F Y", $date); ?></p>
 		<p>Click on a description for a statement detailing the fees which went into this charge.
 			Some payments may not have a statement available</p>
-		<? if (mysqli_num_rows($result) > 0) { ?>
+		<?php if (mysqli_num_rows($result) > 0) { ?>
 			<div class="table-responsive-md">
 				<table class="table">
 					<thead class="thead-light">
@@ -73,13 +73,13 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
                 </small>
 							</td>
 							<td>
-								<a href="<? echo autoUrl("payments/history/statement/" . $row['PMkey']); ?>" title="<? echo $row['PMkey']; ?>"><? echo $row['Name']; ?></a>
+								<a href="<?php echo autoUrl("payments/history/statement/" . $row['PMkey']); ?>" title="<?php echo $row['PMkey']; ?>"><?php echo $row['Name']; ?></a>
 							</td>
 							<td>
-								&pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?>
+								&pound;<?php echo number_format(($row['Amount']/100),2,'.',''); ?>
 							</td>
 							<td>
-								<? echo paymentStatusString($row['Status']); ?>
+								<?php echo paymentStatusString($row['Status']); ?>
 							</td>
 						</tr>
 						<?

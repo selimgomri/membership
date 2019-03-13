@@ -16,7 +16,7 @@
 <div class="mb-3"></div>
 <div class="container">
 
-  <? if ($swimmersRow['EmailComms'] == 0 && $_SESSION['AccessLevel'] == "Parent") { ?>
+  <?php if ($swimmersRow['EmailComms'] == 0 && $_SESSION['AccessLevel'] == "Parent") { ?>
   <div class="alert alert-danger mt-3 mb-0">
     <p class="mb-0">
       <strong>
@@ -24,11 +24,11 @@
       </strong>
     </p>
     <p class="mb-0">
-      Head to <a href="<? echo autoUrl("myaccount/email"); ?>" class="alert-link">My
+      Head to <a href="<?php echo autoUrl("myaccount/email"); ?>" class="alert-link">My
       Account</a> to change your email preferences and stay up to date!
     </p>
   </div>
-<? } ?>
+<?php } ?>
 
   <div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded shadow" id="dash">
     <?php
@@ -96,18 +96,18 @@ if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admi
           target=" ">Emergency Operating Procedures</a>
         </li>
         <li>
-          You can get a swimmer's Emergency Contacts via <a href="<? echo
+          You can get a swimmer's Emergency Contacts via <a href="<?php echo
           autoUrl("swimmers"); ?>" target="_blank">Swimmers</a>
         </li>
         <li>
-          If an incident affects a whole squad, use <a href="<? echo
+          If an incident affects a whole squad, use <a href="<?php echo
           autoUrl("notify"); ?>" target="_blank">Notify</a> to contact all
           parents by Email
         </li>
       </ol>
     </div>
   </div>
-<? }
+<?php }
 if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas" || $_SESSION['AccessLevel'] == "Coach") { ?>
   <div class="my-3 p-3 bg-white rounded shadow">
     <h2 class="border-bottom border-gray pb-2 mb-0">Gala Tasks</h2>

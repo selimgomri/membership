@@ -147,7 +147,7 @@ class EsiTest extends TestCase
         $esi = new Esi();
 
         $request = Request::create('/');
-        $response = new Response('<?php <? <% <script language=php>');
+        $response = new Response('<?php <?php <% <script language=php>');
         $esi->process($request, $response);
 
         $this->assertEquals('<?php echo "<?"; ?>php <?php echo "<?"; ?> <?php echo "<%"; ?> <?php echo "<s"; ?>cript language=php>', $response->getContent());

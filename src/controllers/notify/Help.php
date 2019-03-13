@@ -22,7 +22,7 @@ include BASE_PATH . "views/header.php";
 			</p>
 			<p>
 				To unsubscribe or resubscribe to messages sent by Notify, go to <a
-				href="<? echo autoUrl("myaccount"); ?>">My Account</a>. You can also
+				href="<?php echo autoUrl("myaccount"); ?>">My Account</a>. You can also
 				control your SMS Messaging preferences there.
 			</p>
       <p>

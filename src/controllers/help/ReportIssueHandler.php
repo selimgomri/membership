@@ -9,7 +9,7 @@ include BASE_PATH . 'views/header.php'; ?>
 
 <div class="container">
 	<h1>Report a Website Issue</h1>
-	<? if ($_SESSION['ErrorReportStatus'] == true) { ?>
+	<?php if ($_SESSION['ErrorReportStatus'] == true) { ?>
 		<p>We have reported that page to our team.</p>
 		<p>Thank you for your feedback. It really helps us improve our website.</p>
 		<p>
@@ -17,8 +17,8 @@ include BASE_PATH . 'views/header.php'; ?>
 				Return to Page
 			</a>
 		</p>
-	<? unset($_SESSION['ErrorReportTarget']); ?>
-	<? } else if (!isset($_GET['url']) || (isset($_SESSION['ErrorReportStatus']) &&
+	<?php unset($_SESSION['ErrorReportTarget']); ?>
+	<?php } else if (!isset($_GET['url']) || (isset($_SESSION['ErrorReportStatus']) &&
 	$_SESSION['ErrorReportStatus'] == false)) { ?>
 		<p>We were unable to report that page. You may have not provided a URL or
 		the URL was malformed.</p>
@@ -27,7 +27,7 @@ include BASE_PATH . 'views/header.php'; ?>
 				Return to Home
 			</a>
 		</p>
-	<? } else { ?>
+	<?php } else { ?>
 		<p>Let us know what's wrong with the page so that we can fix it as quickly as possible.</p>
 		<form method="post" action="<?=app('request')->curl?>">
 			<div class="form-group">
@@ -48,7 +48,7 @@ include BASE_PATH . 'views/header.php'; ?>
 				</a>
 			</p>
 		</form>
-	<? } ?>
+	<?php } ?>
 </div>
 
 <?

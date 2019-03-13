@@ -5,7 +5,7 @@
 <div class="container">
 <div class="mb-3 p-3 bg-white rounded shadow">
 <h1>Change your email address</h1>
-<? if (isset($_SESSION['ErrorState'])) {
+<?php if (isset($_SESSION['ErrorState'])) {
   echo $_SESSION['ErrorState'];
   unset($_SESSION['ErrorState']);
 } ?>

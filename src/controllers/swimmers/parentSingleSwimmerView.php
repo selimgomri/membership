@@ -68,7 +68,7 @@ else {
 
   <div class="container">
 
-    <? if (isset($_SESSION['AddSwimmerSuccessState'])) {
+    <?php if (isset($_SESSION['AddSwimmerSuccessState'])) {
       echo $_SESSION['AddSwimmerSuccessState'];
       unset($_SESSION['AddSwimmerSuccessState']);
     } ?>
@@ -98,11 +98,11 @@ else {
       <li class="nav-item">
         <a class="nav-link" id="times-tab" data-toggle="tab" href="#times" role="tab" aria-controls="times" aria-selected="false">Times</a>
       </li>
-      <? if ($counter>0) { ?>
+      <?php if ($counter>0) { ?>
       <li class="nav-item">
         <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="false">Stats</a>
       </li>
-      <? } ?>
+      <?php } ?>
       <li class="nav-item">
         <a class="nav-link" id="squad-tab" data-toggle="tab" href="#squad" role="tab" aria-controls="squad" aria-selected="false">Squad</a>
       </li>
@@ -157,37 +157,37 @@ else {
                   Medical Conditions or Disabilities
                 </em>
               </p>
-              <? if ($rowSwim["Conditions"] != "") { ?>
+              <?php if ($rowSwim["Conditions"] != "") { ?>
                 <p class="mb-0"><?php echo $rowSwim["Conditions"]; ?></p>
-              <? } else { ?>
+              <?php } else { ?>
                 <p class="mb-0">None</p>
-              <? } ?>
+              <?php } ?>
 
               <p class="mb-0 mt-2">
                 <em>
                   Allergies
                 </em>
               </p>
-              <? if ($rowSwim["Allergies"] != "") { ?>
+              <?php if ($rowSwim["Allergies"] != "") { ?>
                 <p class="mb-0"><?php echo $rowSwim["Allergies"]; ?></p>
-              <? } else { ?>
+              <?php } else { ?>
                 <p class="mb-0">None</p>
-              <? } ?>
+              <?php } ?>
 
               <p class="mb-0 mt-2">
                 <em>
                   Medication
                 </em>
               </p>
-              <? if ($rowSwim["Medication"] != "") { ?>
+              <?php if ($rowSwim["Medication"] != "") { ?>
                 <p class="mb-0"><?php echo $rowSwim["Medication"]; ?></p>
-              <? } else { ?>
+              <?php } else { ?>
                 <p class="mb-0">None</p>
-              <? } ?>
+              <?php } ?>
 
             </div>
           </div>
-          <? if ($rowSwim["OtherNotes"] != "") { ?>
+          <?php if ($rowSwim["OtherNotes"] != "") { ?>
             <div class="media pt-3">
               <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
                 <strong class="d-block text-gray-dark">Other Notes</strong>
@@ -202,14 +202,14 @@ else {
               </strong>
               <?php if ($rowSwim["ClubPays"] == 1){ ?>
                 Yes
-              <? } else { ?>
+              <?php } else { ?>
                 No <em>(Only swimmers at University are usually exempt from most
                 fees)</em>
-              <? } ?>
+              <?php } ?>
             </p>
           </div>
           <div class="media pt-3 border-bottom border-gray">
-          <? if (($rowSwim['Website'] != 1 || $rowSwim['Social'] != 1 ||
+          <?php if (($rowSwim['Website'] != 1 || $rowSwim['Social'] != 1 ||
           $rowSwim['Noticeboard'] != 1 || $rowSwim['FilmTraining'] != 1 ||
           $rowSwim['ProPhoto'] != 1) && ($age < 18)) { ?>
             <p>There are limited photography permissions for this swimmer</p>
@@ -242,7 +242,7 @@ else {
           } ?>
           </div>
           <span class="d-block text-right mt-3">
-            <a href="<? echo autoUrl("swimmers/edit/" . $id);?>">Edit Details</a> or <a href="<? echo autoUrl("swimmers/" . $id . "/medical");?>">Edit Medical Notes</a>
+            <a href="<?php echo autoUrl("swimmers/edit/" . $id);?>">Edit Details</a> or <a href="<?php echo autoUrl("swimmers/" . $id . "/medical");?>">Edit Medical Notes</a>
           </span>
         </div>
       </div>
@@ -265,7 +265,7 @@ else {
           '50m Breast', '100m Breast', '200m Breast', '50m Fly', '100m Fly', '200m Fly',
           '50m Back', '100m Back', '200m Back', '100m IM', '200m IM', '400m IM'];
           $openedTable = false; ?>
-          <? for ($i = 0; $i < sizeof($ev); $i++) {
+          <?php for ($i = 0; $i < sizeof($ev); $i++) {
           if ($sc[$ev[$i]] != "" || $lc[$ev[$i]] != "") {
           if (!$openedTable) { ?>
           <table class="table table-sm table-borderless table-striped mb-0">
@@ -311,9 +311,9 @@ else {
           if ($openedTable) { ?>
             </tbody>
           </table>
-          <? } else { ?>
+          <?php } else { ?>
           <p class="lead mt-2 mb-0">There are no times available for this swimmer.</p>
-          <? } ?>
+          <?php } ?>
         </div>
       </div>
       <div class="tab-pane fade mt-3" id="stats" role="tabpanel" aria-labelledby="stats-tab">
@@ -389,7 +389,7 @@ else {
       	    <div class="chart" id="piechart"></div>
       			<div class="chart" id="barchart"></div>
           </div>
-        <? } ?>
+        <?php } ?>
       </div>
       <div class="tab-pane fade mt-3" id="squad" role="tabpanel" aria-labelledby="squad-tab">
         <div class="">
@@ -403,11 +403,11 @@ else {
           <div class="media pt-3">
             <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
               <strong class="d-block text-gray-dark">Squad Fee</strong>
-              <? if ($rowSwim["ClubPays"] == 1) {
+              <?php if ($rowSwim["ClubPays"] == 1) {
                 echo $rowSwim['MForename']; ?> is Exempt from Squad Fees
-              <? } else { ?>
-                &pound;<? echo $rowSwim['SquadFee']; ?>
-              <? } ?>
+              <?php } else { ?>
+                &pound;<?php echo $rowSwim['SquadFee']; ?>
+              <?php } ?>
             </p>
           </div>
           <?php if ($rowSwim['SquadTimetable'] != "") { ?>
@@ -473,40 +473,40 @@ else {
           <h2 class="">Membership Barcodes</h2>
           <p>We'll let you know in advance if you'll ever need to print these out.</p>
           <div class="row">
-            <div class="<? echo $col; ?>">
+            <div class="<?php echo $col; ?>">
               <div class="text-center border p-2 bg-white">
                 <span class="lead mb-2">ASA Number</span>
                 <img class="img-fluid mx-auto d-block"
-                src="<? echo autoUrl("services/barcode-generator?codetype=Code128a&size=60&text=" . $row['ASANumber'] . "&print=false"); ?>"
-                srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128a&size=120&text=" . $row['ASANumber'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128a&size=180&text=" . $row['ASANumber'] . "&print=false"); ?> 3x"
-                alt="<? echo $row['ASANumber']; ?>"></img>
-                <span class="mono"><? echo $row['ASANumber']; ?></span>
+                src="<?php echo autoUrl("services/barcode-generator?codetype=Code128a&size=60&text=" . $row['ASANumber'] . "&print=false"); ?>"
+                srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128a&size=120&text=" . $row['ASANumber'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128a&size=180&text=" . $row['ASANumber'] . "&print=false"); ?> 3x"
+                alt="<?php echo $row['ASANumber']; ?>"></img>
+                <span class="mono"><?php echo $row['ASANumber']; ?></span>
               </div>
               <span class="d-block d-sm-none mb-3"></span>
             </div>
-            <div class="<? echo $col; ?>">
+            <div class="<?php echo $col; ?>">
               <div class="text-center border p-2 bg-white">
                 <span class="lead mb-2">CLSASC Number</span>
                 <img class="img-fluid mx-auto d-block"
-                src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=CLSX" . $row['MemberID'] . "&print=false"); ?>"
-                srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 3x"
-                alt="CLSX<? echo $row['MemberID']; ?>"></img>
-                <span class="mono">CLSX<? echo $row['MemberID']; ?></span>
+                src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=CLSX" . $row['MemberID'] . "&print=false"); ?>"
+                srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 3x"
+                alt="CLSX<?php echo $row['MemberID']; ?>"></img>
+                <span class="mono">CLSX<?php echo $row['MemberID']; ?></span>
               </div>
-              <? if ($row['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><? } ?>
+              <?php if ($row['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><?php } ?>
             </div>
-            <? if ($row['ThriveNumber'] != "") { ?>
-            <div class="<? echo $col; ?>">
+            <?php if ($row['ThriveNumber'] != "") { ?>
+            <div class="<?php echo $col; ?>">
               <div class="text-center border p-2 bg-white">
                 <span class="lead mb-2">Thrive Card</span>
                 <img class="img-fluid mx-auto d-block"
-                src="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ThriveNumber'] . "&print=false"); ?>"
-                srcset="<? echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ThriveNumber'] . "&print=false"); ?> 2x, <? echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ThriveNumber'] . "&print=false"); ?> 3x"
-                alt="<? echo $row['ThriveNumber']; ?>"></img>
-                <span class="mono"><? echo $row['ThriveNumber']; ?></span>
+                src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ThriveNumber'] . "&print=false"); ?>"
+                srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ThriveNumber'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ThriveNumber'] . "&print=false"); ?> 3x"
+                alt="<?php echo $row['ThriveNumber']; ?>"></img>
+                <span class="mono"><?php echo $row['ThriveNumber']; ?></span>
               </div>
             </div>
-            <? } ?>
+            <?php } ?>
           </div>
         </div>
       </div>

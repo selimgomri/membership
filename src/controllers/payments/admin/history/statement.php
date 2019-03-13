@@ -92,7 +92,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
     <div class="mb-4">
       <h2>Itemised Details</h2>
   		<p>Payments listed below were charged as part of one single Direct Debit</p>
-  		<? if ($count == 0) { ?>
+  		<?php if ($count == 0) { ?>
   			<div class="alert alert-warning mb-0">
   				<p class="mb-0">
   					<strong>
@@ -105,7 +105,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
             treasurer to find out more.
   				</p>
   			</div>
-  		<? } else { ?>
+  		<?php } else { ?>
   		<div class="table-responsive-md">
   			<table class="table">
   				<thead class="thead-light">
@@ -169,7 +169,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   				</tbody>
   			</table>
   		</div>
-  		<? } ?>
+  		<?php } ?>
     </div>
 
     <p>

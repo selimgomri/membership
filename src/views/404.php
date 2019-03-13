@@ -25,13 +25,13 @@ include BASE_PATH . "views/header.php";
     <h2 class="h4 mb-0">Trivia</h2>
     <p class="small text-muted mb-2"><?=$trivia->category?></p>
     <p class="mb-0"><span class="mono">Q: </span><strong><?=$trivia->question?></strong></p>
-    <? if (sizeof($possible_answers) > 2) { ?>
+    <?php if (sizeof($possible_answers) > 2) { ?>
     <ol class="list-unstyled">
-    <? for ($i = 0; $i < sizeof($possible_answers); $i++) { ?>
+    <?php for ($i = 0; $i < sizeof($possible_answers); $i++) { ?>
       <li><span class="mono">&nbsp;&nbsp;&nbsp;</span><?=$possible_answers[$i]?></li>
-    <? } ?>
+    <?php } ?>
     </ol>
-    <? } ?>
+    <?php } ?>
     <p class="mb-0"><span class="mono">A: </span><em><?=$trivia->correct_answer?></em></p>
   </aside>
   <!-- Trivia API by opentdb.com -->

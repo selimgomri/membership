@@ -38,4 +38,4 @@ include BASE_PATH . "views/header.php";?>
 	</p>
 </div>
 
-<? include BASE_PATH . "views/footer.php";
+<?php include BASE_PATH . "views/footer.php";

@@ -9,16 +9,16 @@ $pagetitle = "Time Conversion System";
 include BASE_PATH . "views/header.php";
 ?>
 
-<? if (isset($_SESSION['Time'])) { ?>
+<?php if (isset($_SESSION['Time'])) { ?>
 <div class="container-fluid">
-<? } else { ?>
+<?php } else { ?>
   <div class="container">
-<? } ?>
+<?php } ?>
   <h1>Swim Time Converter</h1>
   <p class="lead">Easily get converted times</p>
   <div class="row">
-  	<? if (isset($_SESSION['Time'])) { ?>
-  	<? if (!$_SESSION['Time']['Error']) { ?>
+  	<?php if (isset($_SESSION['Time'])) { ?>
+  	<?php if (!$_SESSION['Time']['Error']) { ?>
       <div class="col-lg-4">
     		<table class="table table-sm table-striped">
     			<thead class="thead-light">
@@ -146,7 +146,7 @@ include BASE_PATH . "views/header.php";
           resulting converted time contained a negative component.
         </p>
       </div>
-  <? } } ?>
+  <?php } } ?>
     <div class="col"><!-- consider order-lg-first -->
       <div class="cell">
         <?php if ($_SESSION['Time']['Error']) { ?>

@@ -57,7 +57,7 @@ $result = mysqli_query($link, $sql);
   					<td class="mono" title="Name on bank account"><?=$row['AccountHolderName']?></td>
             <td class="mono" title="Last two digits of your account number">******<?=$row['AccountNumEnd']?></td>
   					<?php if (mysqli_num_rows($result) > 1 && $defaultAcc != $row['MandateID']) { ?>
-  					<td><a href="<? echo autoUrl("payments/mandates/makedefault/" . $row['MandateID']); ?>">Make Default</a></td>
+  					<td><a href="<?php echo autoUrl("payments/mandates/makedefault/" . $row['MandateID']); ?>">Make Default</a></td>
   					<?php } else { ?>
   					<td><small>Default Mandate</small></td>
   					<?php } ?>
@@ -75,7 +75,7 @@ $result = mysqli_query($link, $sql);
 	<?php } else { ?>
 	<div class="alert alert-warning">
 		<strong>You have no Direct Debits</strong> <br>
-		<a class="alert-link" href="<? echo autoUrl("payments/setup"); ?>">Create one now</a>
+		<a class="alert-link" href="<?php echo autoUrl("payments/setup"); ?>">Create one now</a>
 	</div>
 	<?php } ?>
 </div>

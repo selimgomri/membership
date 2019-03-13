@@ -31,7 +31,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	<h1>Review your account</h1>
 	<p class="lead">Check your details are still up to date</p>
 
-	<? if (isset($_SESSION['ErrorState'])) {
+	<?php if (isset($_SESSION['ErrorState'])) {
 		echo $_SESSION['ErrorState'];
 		unset($_SESSION['ErrorState']);
 	} ?>

@@ -26,19 +26,19 @@ include BASE_PATH . "views/header.php";
 ?>
 
 <div class="container">
-	<form method="post" action="<? echo app('request')->curl; ?>" name="med" id="med">
+	<form method="post" action="<?php echo app('request')->curl; ?>" name="med" id="med">
 		<h1>Medical Form</h1>
-		<? if (isset($_SESSION['ErrorState'])) {
+		<?php if (isset($_SESSION['ErrorState'])) {
 			echo $_SESSION['ErrorState'];
 			unset($_SESSION['ErrorState']);
 		} ?>
-		<p class="lead">Check the details for <? echo $name; ?> are correct.</p>
+		<p class="lead">Check the details for <?php echo $name; ?> are correct.</p>
 
 		<div class="mb-2">
-			<p class="mb-2">Does <? echo $name; ?> have any specific medical conditions
+			<p class="mb-2">Does <?php echo $name; ?> have any specific medical conditions
 			or disabilities?</p>
 
-			<? if ($row['Conditions'] != "") {
+			<?php if ($row['Conditions'] != "") {
 				$yes = " checked ";
 				$no = "";
 			} else {
@@ -47,11 +47,11 @@ include BASE_PATH . "views/header.php";
 			} ?>
 
 			<div class="custom-control custom-radio">
-			  <input type="radio" value="0" <? echo $no; ?> id="medConDisNo" name="medConDis" class="custom-control-input" onclick="toggleState('medConDisDetails', 'medConDis')">
+			  <input type="radio" value="0" <?php echo $no; ?> id="medConDisNo" name="medConDis" class="custom-control-input" onclick="toggleState('medConDisDetails', 'medConDis')">
 			  <label class="custom-control-label" for="medConDisNo">No</label>
 			</div>
 			<div class="custom-control custom-radio">
-			  <input type="radio" value="1" <? echo $yes; ?> id="medConDisYes" name="medConDis" class="custom-control-input" onclick="toggleState('medConDisDetails', 'medConDis')">
+			  <input type="radio" value="1" <?php echo $yes; ?> id="medConDisYes" name="medConDis" class="custom-control-input" onclick="toggleState('medConDisDetails', 'medConDis')">
 			  <label class="custom-control-label" for="medConDisYes">Yes</label>
 			</div>
 		</div>
@@ -59,15 +59,15 @@ include BASE_PATH . "views/header.php";
 		<div class="form-group">
 	    <label for="medConDisDetails">If yes give details</label>
 	    <textarea class="form-control" id="medConDisDetails" name="medConDisDetails"
-	    rows="3" <?if($yes==""){?>disabled<?} ?>><? echo $row['Conditions']; ?></textarea>
+	    rows="3" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Conditions']; ?></textarea>
 	  </div>
 
 		<!-- -->
 
 		<div class="mb-2">
-			<p class="mb-2">Does <? echo $name; ?> have any allergies?</p>
+			<p class="mb-2">Does <?php echo $name; ?> have any allergies?</p>
 
-			<? if ($row['Allergies'] != "") {
+			<?php if ($row['Allergies'] != "") {
 				$yes = " checked ";
 				$no = "";
 			} else {
@@ -76,12 +76,12 @@ include BASE_PATH . "views/header.php";
 			} ?>
 
 			<div class="custom-control custom-radio">
-			  <input type="radio" value="0" <? echo $no; ?> id="allergiesNo"
+			  <input type="radio" value="0" <?php echo $no; ?> id="allergiesNo"
 			  name="allergies" class="custom-control-input" onclick="toggleState('allergiesDetails', 'allergies')">
 			  <label class="custom-control-label" for="allergiesNo">No</label>
 			</div>
 			<div class="custom-control custom-radio">
-			  <input type="radio" value="1" <? echo $yes; ?> id="allergiesYes"
+			  <input type="radio" value="1" <?php echo $yes; ?> id="allergiesYes"
 			  name="allergies" class="custom-control-input" onclick="toggleState('allergiesDetails', 'allergies')">
 			  <label class="custom-control-label" for="allergiesYes">Yes</label>
 			</div>
@@ -90,15 +90,15 @@ include BASE_PATH . "views/header.php";
 		<div class="form-group">
 	    <label for="allergiesDetails">If yes give details</label>
 	    <textarea class="form-control" id="allergiesDetails" name="allergiesDetails"
-	    rows="3" <?if($yes==""){?>disabled<?} ?>><? echo $row['Allergies']; ?></textarea>
+	    rows="3" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Allergies']; ?></textarea>
 	  </div>
 
 		<!-- -->
 
 		<div class="mb-2">
-			<p class="mb-2">Does <? echo $name; ?> take any regular medication?</p>
+			<p class="mb-2">Does <?php echo $name; ?> take any regular medication?</p>
 
-			<? if ($row['Medication'] != "") {
+			<?php if ($row['Medication'] != "") {
 				$yes = " checked ";
 				$no = "";
 			} else {
@@ -107,11 +107,11 @@ include BASE_PATH . "views/header.php";
 			} ?>
 
 			<div class="custom-control custom-radio">
-			  <input type="radio" value="0" <? echo $no; ?> id="medicineNo" name="medicine" class="custom-control-input" onclick="toggleState('medicineDetails', 'medicine')">
+			  <input type="radio" value="0" <?php echo $no; ?> id="medicineNo" name="medicine" class="custom-control-input" onclick="toggleState('medicineDetails', 'medicine')">
 			  <label class="custom-control-label" for="medicineNo">No</label>
 			</div>
 			<div class="custom-control custom-radio">
-			  <input type="radio" value="1" <? echo $yes; ?> id="medicineYes" name="medicine" class="custom-control-input" onclick="toggleState('medicineDetails', 'medicine')">
+			  <input type="radio" value="1" <?php echo $yes; ?> id="medicineYes" name="medicine" class="custom-control-input" onclick="toggleState('medicineDetails', 'medicine')">
 			  <label class="custom-control-label" for="medicineYes">Yes</label>
 			</div>
 		</div>
@@ -119,7 +119,7 @@ include BASE_PATH . "views/header.php";
 		<div class="form-group">
 	    <label for="medConDisDetails">If yes give details</label>
 	    <textarea class="form-control" id="medicineDetails" name="medicineDetails"
-	    rows="3" <?if($yes==""){?>disabled<?} ?>><? echo $row['Medication']; ?></textarea>
+	    rows="3" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Medication']; ?></textarea>
 	  </div>
 
 		<div>

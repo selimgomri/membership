@@ -49,13 +49,13 @@ include BASE_PATH . "views/postsMenu.php";
 				  <hr>
 					<div class="form-group">
 						<label for="title">Title</label>
-						<? if (!$people) { ?>
+						<?php if (!$people) { ?>
 						<input type="text" class="form-control" name="title" id="title"
 			      placeholder="Post Title" autocomplete="off" value="<?=htmlentities($row['Title'])?>">
-			            <? } else { ?>
+			            <?php } else { ?>
 			            <input type="text" class="form-control" name="title" id="title"
 			      placeholder="Post Title" autocomplete="off" <?if($people){?>value="<?=getUserName($_SESSION['UserID'])?>" readonly<?}?>>
-			            <? } ?>
+			            <?php } ?>
 					</div>
 
 					<div class="form-group mb-0">
@@ -79,17 +79,17 @@ include BASE_PATH . "views/postsMenu.php";
 					</p>
 					<p class="">We will publish this update immediately.</p>
           <p class="mb-0">
-            <? if ($people) { ?>
+            <?php if ($people) { ?>
               View now at <a href="<?=autoUrl("people/" . $row['Path'])?>">/people/<?=$row['Path']?></a>
-            <? } else if ($row['Path'] != "") { ?>
+            <?php } else if ($row['Path'] != "") { ?>
               View now at <a href="<?=autoUrl("posts/" . $row['Path'])?>">/posts/<?=$row['Path']?></a>
-            <? } else { ?>
+            <?php } else { ?>
               View now at <a href="<?=autoUrl("posts/" . $row['ID'])?>">/posts/<?=$row['ID']?></a>
-            <? } ?>
+            <?php } ?>
           </p>
 				</div>
 
-                <? if (!$people) { ?>
+                <?php if (!$people) { ?>
 				<div class="cell">
 					<h3>Meta</h3>
 					<div class="form-group">
@@ -109,7 +109,7 @@ include BASE_PATH . "views/postsMenu.php";
 					<div class="form-group">
 						<label for="type">Type</label>
 						<select class="custom-select" name="type">
-							<? for ($i = 0; $i < sizeof($post_types); $i++) {
+							<?php for ($i = 0; $i < sizeof($post_types); $i++) {
 								$s = null;
 								if ($post_types[$i]['value'] == $row['Type']) {
 									$s = "selected";
@@ -117,13 +117,13 @@ include BASE_PATH . "views/postsMenu.php";
 							<option value="<?=$post_types[$i]['value']?>" <?= $s ?>>
 								<?=$post_types[$i]['description']?>
 							</option>
-							<? } ?>
+							<?php } ?>
 						</select>
 					</div>
 					<div class="form-group mb-0">
 						<label for="mime">MIME Type</label>
 						<select class="custom-select" name="mime">
-							<? for ($i = 0; $i < sizeof($mimes); $i++) {
+							<?php for ($i = 0; $i < sizeof($mimes); $i++) {
 								$s = null;
 								if ($mimes[$i]['value'] == $row['MIME']) {
 									$s = "selected";
@@ -131,11 +131,11 @@ include BASE_PATH . "views/postsMenu.php";
 							<option value="<?=$mimes[$i]['value']?>" <?= $s ?>>
 								<?=$mimes[$i]['description']?>
 							</option>
-							<? } ?>
+							<?php } ?>
 						</select>
 					</div>
 				</div>
-				<? } ?>
+				<?php } ?>
 
 				<div class="cell">
 					<h3>SEO</h3>
@@ -163,7 +163,7 @@ include BASE_PATH . "views/postsMenu.php";
     toolbar: 'insert | undo redo |  formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
     content_css: [
       'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i',
-      '<? echo autoUrl("css/tinymce.css"); ?>'
+      '<?php echo autoUrl("css/tinymce.css"); ?>'
     ]
       //toolbar: "link",
  });

@@ -14,7 +14,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php'; ?>
 	<div class="">
 		<h1 class="">Transaction History</h1>
 		<p class="lead">Previous Payments and Refunds</p>
-		<? echo paymentHistory($link, $user); ?>
+		<?php echo paymentHistory($link, $user); ?>
 	</div>
 </div>
 

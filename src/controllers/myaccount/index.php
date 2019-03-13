@@ -224,7 +224,7 @@
           <p class="border-bottom border-gray pb-2 mb-0">
             These are your emergency contacts
           </p>
-          <? if (sizeof($contactsArray) == 0) { ?>
+          <?php if (sizeof($contactsArray) == 0) { ?>
             <div class="alert alert-warning mt-3">
               <p class="mb-0">
                 <strong>
@@ -235,9 +235,9 @@
                 As a result, we'll only be able to try and contact you in an emergency
               </p>
             </div>
-          <? } else { ?>
+          <?php } else { ?>
           <div class="mb-3">
-      		<? for ($i = 0; $i < sizeof($contactsArray); $i++) {
+      		<?php for ($i = 0; $i < sizeof($contactsArray); $i++) {
       			?>
       			<div class="media pt-3">
       				<div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
@@ -245,15 +245,15 @@
       						<div class="col-9">
       							<p class="mb-0">
       								<strong class="d-block">
-      									<? echo $contactsArray[$i]->getName(); ?>
+      									<?php echo $contactsArray[$i]->getName(); ?>
       								</strong>
-      								<a href="tel:<? echo $contactsArray[$i]->getContactNumber(); ?>">
-      									<? echo $contactsArray[$i]->getContactNumber(); ?>
+      								<a href="tel:<?php echo $contactsArray[$i]->getContactNumber(); ?>">
+      									<?php echo $contactsArray[$i]->getContactNumber(); ?>
       								</a>
       							</p>
       						</div>
       						<div class="col text-right">
-      							<a href="<? echo autoUrl("emergencycontacts/edit/" .
+      							<a href="<?php echo autoUrl("emergencycontacts/edit/" .
       							$contactsArray[$i]->getID()); ?>" class="btn btn-primary">
       								Edit
       							</a>
@@ -264,9 +264,9 @@
       			<?
       		} ?>
       		</div>
-          <? } ?>
+          <?php } ?>
       		<p class="mb-0">
-      			<a href="<? echo autoUrl("emergencycontacts/new"); ?>" class="btn btn-outline-dark">
+      			<a href="<?php echo autoUrl("emergencycontacts/new"); ?>" class="btn btn-outline-dark">
       				Add New
       			</a>
       		</p>

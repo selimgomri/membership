@@ -26,11 +26,11 @@ $lists = mysqli_query($link, $sql);
 				<div class="col-6 col-sm-6 col-md-4 col-lg-3">
 					<div class="custom-control custom-checkbox">
 					  <input type="checkbox" class="custom-control-input"
-            id="TL-<? echo $row['ID']; ?>" name="TL-<? echo $row['ID']; ?>"
+            id="TL-<?php echo $row['ID']; ?>" name="TL-<?php echo $row['ID']; ?>"
             value="1">
 					  <label class="custom-control-label"
-              for="TL-<? echo $row['ID']; ?>">
-              <? echo $row['Name']; ?>
+              for="TL-<?php echo $row['ID']; ?>">
+              <?php echo $row['Name']; ?>
             </label>
 					</div>
 				</div>
@@ -45,11 +45,11 @@ $lists = mysqli_query($link, $sql);
 				<div class="col-6 col-sm-6 col-md-4 col-lg-3">
 					<div class="custom-control custom-checkbox">
 					  <input type="checkbox" class="custom-control-input"
-            id="<? echo $row['SquadID']; ?>" name="<? echo $row['SquadID']; ?>"
+            id="<?php echo $row['SquadID']; ?>" name="<?php echo $row['SquadID']; ?>"
             value="1">
 					  <label class="custom-control-label"
-              for="<? echo $row['SquadID']; ?>">
-              <? echo $row['SquadName']; ?> Squad
+              for="<?php echo $row['SquadID']; ?>">
+              <?php echo $row['SquadName']; ?> Squad
             </label>
 					</div>
 				</div>
@@ -112,7 +112,7 @@ $lists = mysqli_query($link, $sql);
     toolbar: 'insert | undo redo |  formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
     content_css: [
       'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i',
-      '<? echo autoUrl("css/tinymce.css"); ?>'
+      '<?php echo autoUrl("css/tinymce.css"); ?>'
     ]
       //toolbar: "link",
  });

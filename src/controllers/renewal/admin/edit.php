@@ -15,8 +15,8 @@ include BASE_PATH . "views/swimmersMenu.php";
 <div class="container">
 	<div class="my-3 p-3 bg-white rounded shadow">
 		<form method="post">
-			<h1>Editing <? echo $row['Name']; ?></h1>
-			<? if (isset($_SESSION['NewRenewalErrorInfo'])) {
+			<h1>Editing <?php echo $row['Name']; ?></h1>
+			<?php if (isset($_SESSION['NewRenewalErrorInfo'])) {
 				echo $_SESSION['NewRenewalErrorInfo'];
 				unset($_SESSION['NewRenewalErrorInfo']);
 			} ?>
@@ -31,7 +31,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 				<div class="form-group col-md-6">
 			    <label for="start">Start Date</label>
 			    <input type="date" class="form-control" id="start" name="start"
-			    value="<? echo date("Y-m-d", strtotime($row['StartDate'])); ?>">
+			    value="<?php echo date("Y-m-d", strtotime($row['StartDate'])); ?>">
 			  </div>
 
 				<div class="form-group col-md-6">
@@ -45,7 +45,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 				<button class="btn btn-success" type="submit">
 					Save Changes
 				</button>
-				<a href="<? echo autoUrl("renewal/" . $id); ?>" class="btn
+				<a href="<?php echo autoUrl("renewal/" . $id); ?>" class="btn
 				btn-danger">
 					Return to Status List
 				</a>

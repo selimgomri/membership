@@ -71,7 +71,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 	</div>
 
 	<div class="py-3 mb-3 text-right mono">
-		Family Registration: <? echo $row[0]['ID']; ?>
+		Family Registration: <?php echo $row[0]['ID']; ?>
 	</div>
 
 	<div class="mb-3 p-5 bg-primary text-white">
@@ -98,7 +98,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 	<p>
 		Here’s what you will need to do to set up your account. This account will
-		include <? echo $row[0]['MForename'] . " " . $row[0]['MSurname']; for ($i =
+		include <?php echo $row[0]['MForename'] . " " . $row[0]['MSurname']; for ($i =
 		1; $i < sizeof($row); $i++) { echo ", " . $row[$i]['MForename'] . " " .
 		$row[$i]['MSurname']; } ?>. There are two methods you can use to get
 		started.
@@ -126,16 +126,16 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 				</p>
 			</div>
 			<div class="col-4 text-center">
-        <img class="img-fluid ml-auto d-block" src="<? echo
+        <img class="img-fluid ml-auto d-block" src="<?php echo
         autoUrl("services/qr-generator?size=200&text=" .
         rawurlencode(autoUrl("register/family/" . $row[0]['FamilyID'] . "/" .
-        $row[0]['UID']))); ?>" srcset="<? echo
+        $row[0]['UID']))); ?>" srcset="<?php echo
         autoUrl("services/qr-generator?size=400&text=" .
         rawurlencode(autoUrl("register/family/" . $row[0]['FamilyID'] . "/" .
-        $row[0]['UID']))); ?> 2x, <? echo
+        $row[0]['UID']))); ?> 2x, <?php echo
         autoUrl("services/qr-generator?size=400&text=" .
         rawurlencode(autoUrl("register/family/" . $row[0]['FamilyID'] . "/" .
-        $row[0]['UID']))); ?> 3x" alt="<? echo autoUrl("register/family/" .
+        $row[0]['UID']))); ?> 3x" alt="<?php echo autoUrl("register/family/" .
         $row[0]['FamilyID'] . "/" . $row[0]['UID']); ?>"></img>
 			</div>
 		</div>
@@ -159,11 +159,11 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		  <tbody>
 		    <tr>
 		      <th scope="row" class="pl-0">Family Registration Number</th>
-		      <td class="pr-0"><span class="mono">FAM<? echo $row[0]['FamilyID']; ?></span></td>
+		      <td class="pr-0"><span class="mono">FAM<?php echo $row[0]['FamilyID']; ?></span></td>
 		    </tr>
 		    <tr>
 		      <th scope="row" class="pl-0">Security Key</th>
-		      <td class="pr-0"><span class="mono"><? echo $row[0]['ACS']; ?></span></td>
+		      <td class="pr-0"><span class="mono"><?php echo $row[0]['ACS']; ?></span></td>
 		    </tr>
 		  </tbody>
 		</table>
@@ -171,7 +171,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 	<div class="small text-muted">
 		<p>
-			You must complete registration before <? echo date("j F Y",
+			You must complete registration before <?php echo date("j F Y",
 			strtotime("first day of next month")); ?>. Failure to do so may mean that
 			your swimmer(s) will be suspended.
 		</p>

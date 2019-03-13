@@ -19,7 +19,7 @@ if (isset($_GET['acs'])) {
 
 if ($_SESSION['AccessLevel'] == "Parent") { ?>
 <div class="container">
-  <? if (isset($_SESSION['AddSwimmerSuccessState'])) {
+  <?php if (isset($_SESSION['AddSwimmerSuccessState'])) {
     echo $_SESSION['AddSwimmerSuccessState'];
     unset($_SESSION['AddSwimmerSuccessState']);
   } else if (isset($_SESSION['ErrorState'])) {
@@ -29,34 +29,34 @@ if ($_SESSION['AccessLevel'] == "Parent") { ?>
   <div class="">
     <h1>Add a swimmer</h1>
     <p>We need a few details to find a swimmer from our database.</p>
-    <? if (isset($_SESSION['ErrorState'])) {
+    <?php if (isset($_SESSION['ErrorState'])) {
       echo $_SESSION['ErrorState'];
       unset($_SESSION['ErrorState']);
     } ?>
-    <? if ($id != null && $acs != null) { ?>
+    <?php if ($id != null && $acs != null) { ?>
       <div class="alert alert-success">
         <p class="mb-0"><strong>Thanks for following that link</strong></p>
         <p class="mb-0">We've automatically filled in the required details for
         you. <strong>Press Add Swimmer</strong> to add the swimmer to your
         account.</p>
       </div>
-    <? } ?>
+    <?php } ?>
     <hr>
     <form method="post" action="<?php echo autoUrl("myaccount/addswimmer"); ?>" name="register" id="register">
       <h2>Details</h2>
       <div class="form-group">
         <label for="asa">Swimmer's ASA Number</label>
-        <input class="form-control mb-0" type="text" name="asa" id="asa" placeholder="123456" required value="<? echo $id; ?>">
+        <input class="form-control mb-0" type="text" name="asa" id="asa" placeholder="123456" required value="<?php echo $id; ?>">
       </div>
       <div class="form-group">
         <label for="accessKey">Access Key</label>
-        <input class="form-control mb-0" type="text" name="accessKey" id="accessKey" placeholder="1A3B5C" required value="<? echo $acs; ?>">
+        <input class="form-control mb-0" type="text" name="accessKey" id="accessKey" placeholder="1A3B5C" required value="<?php echo $acs; ?>">
       </div>
 
       <input type="submit" class="btn btn-success" value="Add Swimmer">
     </form>
   </div>
-  <? } ?>
+  <?php } ?>
 </div>
 <?php }
 

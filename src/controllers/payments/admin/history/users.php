@@ -22,7 +22,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php'; ?>
 			Transaction History for <?=$name?>
 		</h1>
 		<p class="lead">Previous Payments and Refunds</p>
-		<? echo paymentHistory($link, $id, "admin"); ?>
+		<?php echo paymentHistory($link, $id, "admin"); ?>
 	</div>
 </div>
 

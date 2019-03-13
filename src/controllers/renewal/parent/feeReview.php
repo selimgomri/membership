@@ -7,7 +7,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 <div class="container">
 	<div class="mb-3 p-3 bg-white rounded shadow">
-		<? if (isset($_SESSION['ErrorState'])) {
+		<?php if (isset($_SESSION['ErrorState'])) {
 			echo $_SESSION['ErrorState'];
 			unset($_SESSION['ErrorState']);
 			?><hr><?
@@ -17,7 +17,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			<p class="lead">Here are the monthly fees you pay.</p>
 
 			<div class="mb-3">
-				<? echo myMonthlyFeeTable($link, $userID); ?>
+				<?php echo myMonthlyFeeTable($link, $userID); ?>
 			</div>
 
 			<p>You will pay these fees by Direct Debit.</p>

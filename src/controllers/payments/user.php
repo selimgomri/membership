@@ -35,11 +35,11 @@ require 'GoCardlessSetup.php';
     </div>
     <!--<div class="col text-center">
       <div class="p-3 text-white bg-primary rounded shadow">
-        <? if (userHasMandates($user)) { ?>
+        <?php if (userHasMandates($user)) { ?>
           <p class="mb-0">We currently collect payments from <?=strtoupper(
           bankDetails($user, "bank_name"))?>, Account Ending <span class="mono">
           ******<?=bankDetails($user, "account_number_end")?></span></p>
-        <? } ?>
+        <?php } ?>
       </div>
     </div>-->
   </div>
@@ -50,7 +50,7 @@ require 'GoCardlessSetup.php';
       	<h2>Billing History</h2>
       	<p class="lead mb-0">Previous payments by Direct Debit</p>
       	<hr>
-        <? echo paymentHistory($link, $user); ?>
+        <?php echo paymentHistory($link, $user); ?>
       </div>
       <div class="cell">
         <h2>
@@ -58,7 +58,7 @@ require 'GoCardlessSetup.php';
         </h2>
         <p class="lead mb-0">Fees to pay on your next Billing Date, in addition to Squad Fees</p>
         <hr>
-      	<? echo feesToPay($link, $user); ?>
+      	<?php echo feesToPay($link, $user); ?>
       </div>
     </div>
     <div class="col-md-4">
@@ -67,7 +67,7 @@ require 'GoCardlessSetup.php';
           My Bank Account
         </h2>
         <hr>
-        <? if (userHasMandates($user)) {
+        <?php if (userHasMandates($user)) {
           $name = strtoupper(bankDetails($user, "account_holder_name"));
           if ($name != "UNKNOWN") {
             $name = $name . ', ';
@@ -119,12 +119,12 @@ require 'GoCardlessSetup.php';
           <p class="mb-0"><?=$name?><?=strtoupper(bankDetails($user, "bank_name"))?></p>
           <p class="mono">******<?=strtoupper(bankDetails($user, "account_number_end"))?></p>
           <p><?=CLUB_NAME?> does not store your bank details.</p>
-        <? } ?>
+        <?php } ?>
         <p class="mb-0">
         	<a href="<?=autoUrl("payments/setup")?>" class="btn btn-dark btn-block">Add Bank Account</a>
-          <? if (userHasMandates($user)) { ?>
+          <?php if (userHasMandates($user)) { ?>
         	<a href="<?=autoUrl("payments/mandates")?>" class="btn btn-dark btn-block">Switch or Manage Bank Account</a>
-          <? } ?>
+          <?php } ?>
         </p>
       </div>
       <div class="p-3 text-white bg-secondary">

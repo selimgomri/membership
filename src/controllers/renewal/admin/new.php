@@ -11,7 +11,7 @@ $val = null;
 	<div class="my-3 p-3 bg-white rounded shadow">
 		<form method="post">
 			<h1>Create a new Renewal Period</h1>
-			<? if (isset($_SESSION['NewRenewalErrorInfo'])) {
+			<?php if (isset($_SESSION['NewRenewalErrorInfo'])) {
 				echo $_SESSION['NewRenewalErrorInfo'];
 				unset($_SESSION['NewRenewalErrorInfo']);
 				$val = $_SESSION['NewRenewalForm'];
@@ -20,18 +20,18 @@ $val = null;
 
 			<div class="form-group">
 		    <label for="name">Renewal Name</label>
-		    <input type="text" class="form-control" id="name" name="name" placeholder="For 2018" value="<? echo $val[0]; ?>">
+		    <input type="text" class="form-control" id="name" name="name" placeholder="For 2018" value="<?php echo $val[0]; ?>">
 		  </div>
 
 			<div class="form-row">
 				<div class="form-group col-md-6">
 			    <label for="start">Start Date</label>
-			    <input type="date" class="form-control" id="start" name="start" value="<? echo date("Y-m-d"); ?>" value="<? echo $val[1]; ?>">
+			    <input type="date" class="form-control" id="start" name="start" value="<?php echo date("Y-m-d"); ?>" value="<?php echo $val[1]; ?>">
 			  </div>
 
 				<div class="form-group col-md-6">
 			    <label for="end">End Date</label>
-			    <input type="date" class="form-control" id="end" name="end" value="<? echo date("Y-m-d"); ?>" value="<? echo $val[2]; ?>">
+			    <input type="date" class="form-control" id="end" name="end" value="<?php echo date("Y-m-d"); ?>" value="<?php echo $val[2]; ?>">
 			  </div>
 			</div>
 

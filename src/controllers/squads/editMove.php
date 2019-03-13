@@ -40,7 +40,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
 <div class="container">
 	<div class="">
 		<h1 class="border-bottom border-gray pb-2 mb-3">Squad Move for <?php echo $name; ?></h1>
-		<? if (isset($_SESSION['ErrorState'])) {
+		<?php if (isset($_SESSION['ErrorState'])) {
 			echo $_SESSION['ErrorState'];
 			unset($_SESSION['ErrorState']);
 		} ?>

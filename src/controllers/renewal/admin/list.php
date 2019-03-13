@@ -59,23 +59,23 @@ if ($id > 0) {
 
 	<div class="container-fluid">
 		<div class="">
-			<h1><? echo $renewalArray['Name']; ?> Status</h1>
+			<h1><?php echo $renewalArray['Name']; ?> Status</h1>
 			<p class="lead">
 				This is the current status for this membership renewal which started on <?
 				echo date("l j F Y", strtotime($renewalArray['StartDate'])); ?> and
-				finishes on <? echo date("l j F Y", strtotime($renewalArray['EndDate'])); ?>
+				finishes on <?php echo date("l j F Y", strtotime($renewalArray['EndDate'])); ?>
 			</p>
 			<p class="mb-0">
-				<? echo $numRenewals; ?> Renewals (<? echo $numC1Renewals; ?> Category 1, <?
-				echo $numC2Renewals; ?> Category 2, <? echo $numC3Renewals; ?> Category 3)
-				of <? echo $numMembers; ?> current* members.
+				<?php echo $numRenewals; ?> Renewals (<?php echo $numC1Renewals; ?> Category 1, <?
+				echo $numC2Renewals; ?> Category 2, <?php echo $numC3Renewals; ?> Category 3)
+				of <?php echo $numMembers; ?> current* members.
 			</p>
 			<p class="small text-muted">
 				* Current refers to at this moment. There may not have been this number of
 				members during this specific membership renewal
 			</p>
 			<p class="">
-				<a href="<? echo autoUrl("renewal/" . $id . "/edit"); ?>" class="btn
+				<a href="<?php echo autoUrl("renewal/" . $id . "/edit"); ?>" class="btn
 				btn-dark">
 					Edit this Renewal Period
 				</a>
@@ -101,7 +101,7 @@ if ($id > 0) {
   				</tr>
   			</thead>
   			<tbody>
-  				<? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+  				<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
   					$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
   					if ($row['RenewalID'] == "" || $row['RenewalID'] != $id ||
   					$row['Status'] == "failed" || $row['Status'] == "charged_back") {
@@ -113,18 +113,18 @@ if ($id > 0) {
   					}
   					?>
   						<td>
-  							<? echo $row['MForename'] . " " . $row['MSurname']; ?>
+  							<?php echo $row['MForename'] . " " . $row['MSurname']; ?>
   						</td>
   						<td>
-  							<? echo $row['Forename'] . " " . $row['Surname']; ?>
+  							<?php echo $row['Forename'] . " " . $row['Surname']; ?>
   						</td>
   						<td>
   							<span class="mono">
-  								<? echo $row['ASANumber']; ?>
+  								<?php echo $row['ASANumber']; ?>
   							</span>
   						</td>
   						<td>
-  							<? if ($row['RenewalID'] == "" || $row['RenewalID'] != $id) {
+  							<?php if ($row['RenewalID'] == "" || $row['RenewalID'] != $id) {
   								?>No Renewal Exists<?
   							} else if ($row['Status'] == "") {
   								?>Payment not yet processed<?
@@ -199,8 +199,8 @@ if ($id > 0) {
 				date("l j F Y", strtotime("first day of -2 month")) ?>.
 			</p>
 			<p class="mb-0">
-				<? echo $numRenewals; ?> Registrations (<? echo $numC1Renewals; ?>
-				Category 1, <? echo $numC2Renewals; ?> Category 2, <? echo
+				<?php echo $numRenewals; ?> Registrations (<?php echo $numC1Renewals; ?>
+				Category 1, <?php echo $numC2Renewals; ?> Category 2, <?php echo
 				$numC3Renewals; ?> Category 3).
 			</p>
 		</div>
@@ -223,7 +223,7 @@ if ($id > 0) {
 				</tr>
 			</thead>
 			<tbody>
-				<? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+				<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 					$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 					if ($row['RenewalID'] == "" || $row['RenewalID'] != $id ||
 					$row['Status'] == "failed" || $row['Status'] == "charged_back") {
@@ -235,18 +235,18 @@ if ($id > 0) {
 					}
 					?>
 						<td>
-							<? echo $row['MForename'] . " " . $row['MSurname']; ?>
+							<?php echo $row['MForename'] . " " . $row['MSurname']; ?>
 						</td>
 						<td>
-							<? echo $row['Forename'] . " " . $row['Surname']; ?>
+							<?php echo $row['Forename'] . " " . $row['Surname']; ?>
 						</td>
 						<td>
 							<span class="mono">
-								<? echo $row['ASANumber']; ?>
+								<?php echo $row['ASANumber']; ?>
 							</span>
 						</td>
 						<td>
-							<? if ($row['RenewalID'] == "" || $row['RenewalID'] != $id) {
+							<?php if ($row['RenewalID'] == "" || $row['RenewalID'] != $id) {
 								?>No Renewal Exists<?
 							} else if ($row['Status'] == "") {
 								?>Payment not yet processed<?

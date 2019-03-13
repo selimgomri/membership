@@ -70,9 +70,9 @@ include BASE_PATH . "views/notifyMenu.php";
       </small>
 		</div>
 
-    <? if ($canReply) { ?>
+    <?php if ($canReply) { ?>
       <p><?=$canReply?></p>
-    <? } ?>
+    <?php } ?>
 
 		<p><button class="btn btn-success" id="submit" value="submitted" type="submit">Send the email</button></p>
 	</form>
@@ -91,7 +91,7 @@ include BASE_PATH . "views/notifyMenu.php";
     toolbar: 'insert | undo redo |  formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
     content_css: [
       'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i',
-      '<? echo autoUrl("css/tinymce.css"); ?>'
+      '<?php echo autoUrl("css/tinymce.css"); ?>'
     ]
       //toolbar: "link",
  });

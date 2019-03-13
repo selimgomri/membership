@@ -23,7 +23,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 					<p class="card-text">This will take about ten minutes.</p>
 				</div>
 		    <div class="card-footer">
-		      <a href="<? echo autoUrl("family/register/now/" . $family_id); ?>">
+		      <a href="<?php echo autoUrl("family/register/now/" . $family_id); ?>">
 						Continue with parent/guardian
 					</a>
 		    </div>
@@ -34,7 +34,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		      <p class="card-text">We'll produce a link and QR code for the parent/guardian to use.</p>
 		    </div>
 		    <div class="card-footer">
-					<a disabled href="<? echo autoUrl("family/register/later/" . $family_id); ?>">
+					<a disabled href="<?php echo autoUrl("family/register/later/" . $family_id); ?>">
 		      	Produce a Signup Code Sheet
 					</a>
 		    </div>

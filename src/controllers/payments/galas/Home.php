@@ -21,19 +21,19 @@ include BASE_PATH . "views/paymentsMenu.php";
   		This means that there is no need to handle refunds.
   	</div>
     <hr>
-    <? if ($result > 0) { ?>
+    <?php if ($result > 0) { ?>
       <h2>Galas to Charge For</h2>
       <ul class="list-unstyled mb-0">
-        <? for ($i = 0; $i < $count; $i++) {
+        <?php for ($i = 0; $i < $count; $i++) {
           $row = mysqli_fetch_array($result, MYSQLI_ASSOC); ?>
-          <li><a href="<? echo autoUrl("payments/galas/" . $row['GalaID']); ?>"><? echo $row['GalaName']; ?></a></li>
-        <? } ?>
+          <li><a href="<?php echo autoUrl("payments/galas/" . $row['GalaID']); ?>"><?php echo $row['GalaName']; ?></a></li>
+        <?php } ?>
       </ul>
-    <? } else { ?>
+    <?php } else { ?>
       <div class="alert alert-info mb-0">
         <strong>There are no galas open for charges</strong>
       </div>
-    <? } ?>
+    <?php } ?>
   </div>
 </div>
 

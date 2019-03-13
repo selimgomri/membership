@@ -52,16 +52,16 @@ include BASE_PATH . "views/header.php";
   <h1>Manage Email Options</h1>
   <p class="lead">Manage your email address and email options.</p>
 
-	<? if ($_SESSION['OptionsUpdate']) { ?>
+	<?php if ($_SESSION['OptionsUpdate']) { ?>
 		<div class="alert alert-success">
 			<p class="mb-0">
 				<strong>We've successfully updated your email options</strong>
 			</p>
 		</div>
-	<? unset($_SESSION['OptionsUpdate']);
+	<?php unset($_SESSION['OptionsUpdate']);
 	} ?>
 
-	<? if ($_SESSION['EmailUpdate']) { ?>
+	<?php if ($_SESSION['EmailUpdate']) { ?>
 		<div class="alert alert-success">
 			<p class="mb-0">
 				<strong>Just one more step to update your email address</strong>
@@ -71,7 +71,7 @@ include BASE_PATH . "views/header.php";
 				follow that link to confirm your new email address.
 			</p>
 		</div>
-	<? unset($_SESSION['EmailUpdate']);
+	<?php unset($_SESSION['EmailUpdate']);
 	} else if (isset($_SESSION['EmailUpdate'])) { ?>
 		<div class="alert alert-danger">
 			<p class="mb-0">
@@ -81,10 +81,10 @@ include BASE_PATH . "views/header.php";
 				Please try again
 			</p>
 		</div>
-		<? unset($_SESSION['EmailUpdate']);
+		<?php unset($_SESSION['EmailUpdate']);
 	} ?>
 
-	<? if (isset($_SESSION['EmailUpdateNew'])) { ?>
+	<?php if (isset($_SESSION['EmailUpdateNew'])) { ?>
 		<div class="alert alert-info">
 			<p class="mb-0">
 				<strong>Once verified, your account email
@@ -97,9 +97,9 @@ include BASE_PATH . "views/header.php";
 				class="alert-link">support@chesterlestreetasc.co.uk</a>
 			</p>
 		</div>
-	<? } ?>
+	<?php } ?>
 
-  <? if (isset($_SESSION['DeleteCCSuccess'])) {
+  <?php if (isset($_SESSION['DeleteCCSuccess'])) {
     unset($_SESSION['DeleteCCSuccess']); ?>
 		<div class="alert alert-success">
 			<p class="mb-0">
@@ -111,9 +111,9 @@ include BASE_PATH . "views/header.php";
 				class="alert-link">support@chesterlestreetasc.co.uk</a>
 			</p>
 		</div>
-	<? } ?>
+	<?php } ?>
 
-  <? if (isset($_SESSION['AddNotifySuccess'])) {
+  <?php if (isset($_SESSION['AddNotifySuccess'])) {
     unset($_SESSION['AddNotifySuccess']); ?>
 		<div class="alert alert-success">
 			<p class="mb-0">
@@ -125,9 +125,9 @@ include BASE_PATH . "views/header.php";
 				class="alert-link">support@chesterlestreetasc.co.uk</a>
 			</p>
 		</div>
-	<? } ?>
+	<?php } ?>
 
-  <? if (isset($_SESSION['AddNotifyError'])) {
+  <?php if (isset($_SESSION['AddNotifyError'])) {
     unset($_SESSION['AddNotifyError']); ?>
 		<div class="alert alert-warning">
 			<p class="mb-0">
@@ -139,18 +139,18 @@ include BASE_PATH . "views/header.php";
 				class="alert-link">support@chesterlestreetasc.co.uk</a>
 			</p>
 		</div>
-	<? } ?>
+	<?php } ?>
 
 	<div class="cell">
 		<form method="post">
 			<div class="form-group">
 		    <label for="EmailAddress">Your Email address</label>
 		    <input type="email" class="form-control" id="EmailAddress" name="EmailAddress" placeholder="name@example.com" value="<?=htmlentities($email)?>">
-				<? if (isset($_SESSION['EmailUpdateNew'])) { ?>
+				<?php if (isset($_SESSION['EmailUpdateNew'])) { ?>
 				<small class="form-text">Once verified, your account email
 				address will change to
 				<?=htmlentities($_SESSION['EmailUpdateNew'])?></small>
-				<? } ?>
+				<?php } ?>
 		  </div>
 
 			<div class="form-group">
@@ -177,7 +177,7 @@ include BASE_PATH . "views/header.php";
 				</div>
 			</div>
 
-			<? if ($_SESSION['AccessLevel'] == "Admin") { ?>
+			<?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
 			<div class="form-group">
 				<div class="custom-control custom-switch">
 					<input type="checkbox" class="custom-control-input" value="1" id="NewMemberComms" aria-describedby="NewMemberCommsHelp" name="NewMemberComms" <?php echo $emailChecked_new_member; ?> >
@@ -185,7 +185,7 @@ include BASE_PATH . "views/header.php";
 					<small id="NewMemberCommsHelp" class="form-text text-muted">Get notified when new members are added</small>
 				</div>
 			</div>
-			<? } ?>
+			<?php } ?>
 
 			<p class="mb-0">
 				<button type="submit" class="btn btn-success">Update Details</button>

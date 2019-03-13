@@ -14,7 +14,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php'; ?>
 		<h1 class="">Charges since last bill</h1>
 		<p class="lead">Fees and Charges created since your last bill</p>
 		<p>You'll be billed for these on your next billing date.</p>
-		<? echo feesToPay($link, $user); ?>
+		<?php echo feesToPay($link, $user); ?>
 	</div>
 </div>
 

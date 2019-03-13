@@ -1084,26 +1084,26 @@ function paymentHistory($link, $user, $type = null) {
           $statementUrl = autoUrl("payments/history/statement/" . $row['PMkey']);
         }?>
         <div class="media pt-2">
-          <? if ($i != $count-1) { ?>
+          <?php if ($i != $count-1) { ?>
           <div class="media-body pb-2 mb-0 border-bottom border-gray">
-          <? } else { ?>
+          <?php } else { ?>
           <div class="media-body pb-0 mb-0">
-          <? } ?>
+          <?php } ?>
             <p class="mb-0">
               <strong>
-                <a href="<? echo $statementUrl; ?>" title="Transaction Statement">
-                  <? echo $row['Name']; ?>
+                <a href="<?php echo $statementUrl; ?>" title="Transaction Statement">
+                  <?php echo $row['Name']; ?>
                 </a>
               </strong>
             </p>
             <p class="mb-0">
-              <? echo date('j F Y', strtotime($row['Date'])); ?>
+              <?php echo date('j F Y', strtotime($row['Date'])); ?>
             </p>
             <p class="mb-0">
-              &pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?>
+              &pound;<?php echo number_format(($row['Amount']/100),2,'.',''); ?>
             </p>
           <p class="mb-0">
-            Status: <? echo paymentStatusString($row['Status']); ?>
+            Status: <?php echo paymentStatusString($row['Status']); ?>
           </p>
         </div>
       </div>
@@ -1127,24 +1127,24 @@ function feesToPay($link, $user) {
     <?php for ($i = 0; $i < $count; $i++) {
     $row = mysqli_fetch_array($pendingResult, MYSQLI_ASSOC);	?>
     <div class="media pt-2">
-      <? if ($i != $count-1) { ?>
+      <?php if ($i != $count-1) { ?>
       <div class="media-body pb-2 mb-0 border-bottom border-gray">
-      <? } else { ?>
+      <?php } else { ?>
       <div class="media-body pb-0 mb-0">
-      <? } ?>
+      <?php } ?>
         <p class="mb-0">
           <strong>
-            <? echo $row['Name']; ?>
+            <?php echo $row['Name']; ?>
           </strong>
         </p>
         <p class="mb-0">
-          <? echo date('j F Y', strtotime($row['Date'])); ?>
+          <?php echo date('j F Y', strtotime($row['Date'])); ?>
         </p>
         <p class="mb-0">
           <?php if ($row['Type'] == 'Payment') { ?>
-          &pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?>
+          &pound;<?php echo number_format(($row['Amount']/100),2,'.',''); ?>
           <?php } else { ?>
-          -&pound;<? echo number_format(($row['Amount']/100),2,'.',''); ?> (Credit)
+          -&pound;<?php echo number_format(($row['Amount']/100),2,'.',''); ?> (Credit)
           <?php } ?>
         </p>
       </div>

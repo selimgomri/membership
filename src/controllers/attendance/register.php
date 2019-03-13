@@ -91,11 +91,11 @@ function resetRegisterArea() {
   register.innerHTML = '<div class="ajaxPlaceholder mb-0">Fill in the details above and we can load the register</div>';
 }
 function getSessions(firstLoad = false) {
-  <? if ($squad_init == null) {
+  <?php if ($squad_init == null) {
     $squad = "null";
   } ?>
   var firstLoadSquad = <?=$squad?>;
-  <? if ($session_init == null) {
+  <?php if ($session_init == null) {
     $session = "null";
   } ?>
   var fLSession = <?=$session?>;
@@ -126,7 +126,7 @@ function getSessions(firstLoad = false) {
     }
   }
 function getRegister(firstLoad = false) {
-  <? if ($session_init == null) {
+  <?php if ($session_init == null) {
     $session = "null";
   } ?>
   var presetSession = <?=$session?>;
@@ -155,10 +155,10 @@ function getRegister(firstLoad = false) {
   }
 }
 
-<? if ($session_init != null && $squad_init != null) { ?>
+<?php if ($session_init != null && $squad_init != null) { ?>
 getSessions(true);
 getRegister(true);
-<? } ?>
+<?php } ?>
 
 document.getElementById("squad").onchange=getSessions;
 document.getElementById("session").onchange=getRegister;

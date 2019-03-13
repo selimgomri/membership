@@ -112,7 +112,7 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
           </strong>
         </p>
         <p class="mb-0">
-          Head to <a class="alert-link" href="<? echo autoUrl("swimmers/" . $id .
+          Head to <a class="alert-link" href="<?php echo autoUrl("swimmers/" . $id .
           "/medical"); ?>" target="_self">the new medical form</a> to ensure
           your swimmer's medical details are up to date.
         </p>
@@ -122,7 +122,7 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
       <label for="otherNotes">Other Notes</label>
       <textarea class="form-control" id="otherNotes" name="otherNotes" rows="3" placeholder="Tell us any other notes for coaches"><?php echo $rowSwim['OtherNotes']; ?></textarea>
     </div>
-    <? if ($age < 18) { ?>
+    <?php if ($age < 18) { ?>
     <div class="form-group">
       <?
       $photo = [];
@@ -142,42 +142,42 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
         $photo[4] = " checked ";
       } ?>
       <p>
-  			I, <? echo getUserName($userID); ?> agree to photography of <?php echo
+  			I, <?php echo getUserName($userID); ?> agree to photography of <?php echo
   			$rowSwim['MForename'] . " " . $rowSwim['MSurname']; ?> in the following
   			circumstances. Tick boxes only if you wish to grant us photography
   			permission.
   		</p>
   		<div class="custom-control custom-checkbox">
   			<input type="checkbox" value="1" class="custom-control-input"
-  			name="webPhoto" id="webPhoto" <? echo $photo[0]; ?>>
+  			name="webPhoto" id="webPhoto" <?php echo $photo[0]; ?>>
   			<label class="custom-control-label" for="webPhoto">
   				Take photographs to use on the clubs website
   			</label>
   		</div>
   		<div class="custom-control custom-checkbox">
   			<input type="checkbox" value="1" class="custom-control-input"
-  			name="socPhoto" id="socPhoto" <? echo $photo[1]; ?>>
+  			name="socPhoto" id="socPhoto" <?php echo $photo[1]; ?>>
   			<label class="custom-control-label" for="socPhoto">
   				Take photographs to use on social media sites
   			</label>
   		</div>
   		<div class="custom-control custom-checkbox">
   			<input type="checkbox" value="1" class="custom-control-input"
-  			name="noticePhoto" id="noticePhoto" <? echo $photo[2]; ?>>
+  			name="noticePhoto" id="noticePhoto" <?php echo $photo[2]; ?>>
   			<label class="custom-control-label" for="noticePhoto">
   				Take photographs to use on club noticeboards
   			</label>
   		</div>
   		<div class="custom-control custom-checkbox">
   			<input type="checkbox" value="1" class="custom-control-input"
-  			name="trainFilm" id="trainFilm" <? echo $photo[3]; ?>>
+  			name="trainFilm" id="trainFilm" <?php echo $photo[3]; ?>>
   			<label class="custom-control-label" for="trainFilm">
   				Filming for training purposes only
   			</label>
   		</div>
   		<div class="custom-control custom-checkbox">
   			<input type="checkbox" value="1" class="custom-control-input"
-  			name="proPhoto" id="proPhoto" <? echo $photo[4]; ?>>
+  			name="proPhoto" id="proPhoto" <?php echo $photo[4]; ?>>
   			<label class="custom-control-label" for="proPhoto">
   				Employ a professional photographer (approved by the club) who will take
   				photographs in competitions and/or club events.
@@ -185,7 +185,7 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
   		</div>
       <ul></ul>
     </div>
-    <? } ?>
+    <?php } ?>
     <button type="submit" class="btn btn-outline-dark">Update</button>
     </div>
 

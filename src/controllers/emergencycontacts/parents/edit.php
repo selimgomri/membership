@@ -35,14 +35,14 @@ if ($renewal_trap) {
 		<form method="post">
 		  <div class="form-group">
 		    <label for="name">Name</label>
-		    <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="<? echo $contact->getName();?>" required>
+		    <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="<?php echo $contact->getName();?>" required>
 		  </div>
 		  <div class="form-group">
 		    <label for="num">Contact Number</label>
-		    <input type="tel" class="form-control" id="num" name="num" placeholder="Phone" value="<? echo $contact->getContactNumber();?>" required>
+		    <input type="tel" class="form-control" id="num" name="num" placeholder="Phone" value="<?php echo $contact->getContactNumber();?>" required>
 		  </div>
 		  <button type="submit" class="btn btn-success">Save</button>
-			<a href="<? echo autoUrl($url_path . "/" . $id . "/delete"); ?>" class="btn btn-danger">Delete</a>
+			<a href="<?php echo autoUrl($url_path . "/" . $id . "/delete"); ?>" class="btn btn-danger">Delete</a>
 		</form>
 
 	</div>

@@ -10,7 +10,7 @@ include "galaMenu.php"; ?>
   <div class="cell">
     <h2>Generate a Gala Time Sheet</h2>
     <p class="lead border-bottom border-gray pb-2 mb-2">
-      Gala Time Sheets give a list of each swimmer's entries to a gala along with their all-time personal bests and <? echo date("Y"); ?> personal bests.
+      Gala Time Sheets give a list of each swimmer's entries to a gala along with their all-time personal bests and <?php echo date("Y"); ?> personal bests.
     </p>
     <?
     $sql = "SELECT DISTINCT `galas`.`GalaID`, `GalaName` FROM `galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID` WHERE `GalaDate` >= CURDATE() ORDER BY `GalaDate` ASC;";
@@ -21,8 +21,8 @@ include "galaMenu.php"; ?>
         $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
         ?>
         <li>
-          <a href="<? echo autoUrl("galas/competitions/" . $row['GalaID'] .
-          "/timesheet"); ?>" target="_blank"><? echo $row['GalaName']; ?></a>
+          <a href="<?php echo autoUrl("galas/competitions/" . $row['GalaID'] .
+          "/timesheet"); ?>" target="_blank"><?php echo $row['GalaName']; ?></a>
         </li>
         <?
       }

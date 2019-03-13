@@ -16,7 +16,7 @@ if ($renewal_trap) {
 			Add a new Emergency Contact
 		</h1>
 
-		<? if (isset($_SESSION['AddNewError'])) {
+		<?php if (isset($_SESSION['AddNewError'])) {
 			echo $_SESSION['AddNewError'];
 			unset($_SESSION['AddNewError']);
 		} ?>

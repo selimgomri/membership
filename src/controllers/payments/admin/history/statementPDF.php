@@ -103,7 +103,7 @@ ob_start();?>
 
     <h2 id="payment-details">Itemised Details</h2>
     <p>Payments listed below were charged as part of one single Direct Debit</p>
-    <? if ($count == 0) { ?>
+    <?php if ($count == 0) { ?>
       <div class="">
         <p class="mb-0">
           <strong>
@@ -116,7 +116,7 @@ ob_start();?>
           treasurer to find out more.
         </p>
       </div>
-    <? } else { ?>
+    <?php } else { ?>
       <table>
         <thead>
           <tr>
@@ -178,7 +178,7 @@ ob_start();?>
         } while ($row != null); ?>
         </tbody>
       </table>
-    <? } ?>
+    <?php } ?>
 
     <div class="page-break"></div>
 

@@ -11,9 +11,9 @@ $errorState = false;
 <div class="container">
   <div class="">
     <h1>Add a Family Group</h1>
-		<? if (!$_SESSION['Success']) { ?>
+		<?php if (!$_SESSION['Success']) { ?>
     <p>If you have a Family Signup Sheet, you can add a group of your swimmers in one go.</p>
-    <? if (isset($_SESSION['ErrorState'])) {
+    <?php if (isset($_SESSION['ErrorState'])) {
       ?>
 			<div class="alert alert-danger">
         <p class="mb-0"><strong>We were unable to find a group of swimmers
@@ -31,19 +31,19 @@ $errorState = false;
       <div class="form-group">
         <label for="fam">Family Registration Number</label>
         <input class="form-control mb-0" type="text" name="fam" id="fam"
-        placeholder="FAM1" required value="<? echo htmlentities($fam); ?>"
+        placeholder="FAM1" required value="<?php echo htmlentities($fam); ?>"
         style="text-transform:uppercase;"
         keyup="javascript:this.value=this.value.toUpperCase();">
       </div>
       <div class="form-group">
         <label for="sec">Security Key</label>
         <input class="form-control mb-0" type="text" name="sec" id="sec"
-        placeholder="1A3B5C" required value="<? echo htmlentities($acs); ?>">
+        placeholder="1A3B5C" required value="<?php echo htmlentities($acs); ?>">
       </div>
 
       <input type="submit" class="btn btn-success" value="Add Swimmers">
     </form>
-	<? } else { ?>
+	<?php } else { ?>
 		<div class="alert alert-success">
 			<p class="mb-0">
 				<strong>We have successfully added the swimmers from your family
@@ -51,11 +51,11 @@ $errorState = false;
 			</p>
 			<p class="mb-0">
 				If you need to complete the registration process for these swimmers, you
-				will see a link to follow below. Otherwise, return to <a href="<? echo
+				will see a link to follow below. Otherwise, return to <a href="<?php echo
 				autoUrl("swimmers"); ?>" class="alert-link">My Swimmers</a>.
 			</p>
-	<? } ?>
+	<?php } ?>
   </div>
 </div>
 
-<? include BASE_PATH . "views/footer.php"; ?>
+<?php include BASE_PATH . "views/footer.php"; ?>

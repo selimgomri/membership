@@ -20,12 +20,12 @@ include "attendanceMenu.php"; ?>
 		<h1>Squad Attendance</h1>
 		<p class="lead mb-4">View attendance records and fill out registers for squads</p>
 
-    <? if (sizeof($sessions) > 0) { ?>
+    <?php if (sizeof($sessions) > 0) { ?>
       <div class="mb-4">
         <h2 class="mb-4">Current Sessions</h2>
         <div class="mb-4">
           <div class="news-grid">
-        <? for ($i = 0; $i < sizeof($sessions); $i++) { ?>
+        <?php for ($i = 0; $i < sizeof($sessions); $i++) { ?>
           <a href="<?=autoUrl("attendance/register/" . $sessions[$i]['SquadID'] . "/" . $sessions[$i]['SessionID'])?>">
             <div>
               <span class="title mb-0">
@@ -39,16 +39,16 @@ include "attendanceMenu.php"; ?>
               <?=$sessions[$i]['SessionName']?>, <?=$sessions[$i]['VenueName']?>
             </span>
           </a>
-        <? } ?>
+        <?php } ?>
         </div>
       </div>
     </div>
-    <? } ?>
+    <?php } ?>
 
     <div class="mb-4">
-      <? if (sizeof($sessions) > 0) { ?>
+      <?php if (sizeof($sessions) > 0) { ?>
       <h2 class="mb-4">Further Attendance Options</h2>
-    <? } ?>
+    <?php } ?>
       <div class="news-grid">
         <a href="<?=autoUrl("attendance/register")?>">
           <div>

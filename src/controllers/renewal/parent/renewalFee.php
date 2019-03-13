@@ -90,7 +90,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			These Fees include your ASA membership fees for the governing bodies at
 			National, Regional and County Level.
 		</p>
-		<? $nf = "next";
+		<?php $nf = "next";
 		if ($renewal == 0) {
 			$nf = "first";
 		}; ?>
@@ -124,13 +124,13 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				<tbody>
 					<tr>
 						<td>
-							<? if ($partial_reg && $partial_reg_require_topup) { ?>
+							<?php if ($partial_reg && $partial_reg_require_topup) { ?>
 							Membership Top Up (Individual to Family)
-						<? } else if ($payingSwimmerCount > 1) { ?>
+						<?php } else if ($payingSwimmerCount > 1) { ?>
 							Family Membership
-						<? }else { ?>
+						<?php }else { ?>
 							Individual Membership
-							<? } ?>
+							<?php } ?>
 						</td>
 						<td>
 							&pound;<?= $clubFeeString ?>
@@ -139,15 +139,15 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				</tbody>
 			<!--</table>
 		</div>
-		<? if ($payingSwimmerCount > 1) {
+		<?php if ($payingSwimmerCount > 1) {
 			?>
 			<p class="lead">
-				You <? if ($renewal == 0) { ?>will <? } ?>pay for a family membership,
+				You <?php if ($renewal == 0) { ?>will <?php } ?>pay for a family membership,
 				covering all of your swimmers at a reduced cost.
 			</p>
 			<?
 		} ?>
- 		<p>Your club membership fee is &pound;<? echo $clubFeeString; ?></p>
+ 		<p>Your club membership fee is &pound;<?php echo $clubFeeString; ?></p>
 
 		<h2>ASA Membership Fees</h2>
 		<div class="table-responsive-md">
@@ -183,13 +183,13 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				?>
 				<tr>
 					<td>
-						<? echo $member[$i]['MForename'] . " " . $member[$i]['MSurname']; ?>
+						<?php echo $member[$i]['MForename'] . " " . $member[$i]['MSurname']; ?>
 					</td>
 					<td>
-						&pound;<? echo $asaFeesString; ?>
+						&pound;<?php echo $asaFeesString; ?>
 					</td>
 				</tr>
-			<? } ?>
+			<?php } ?>
 				</tbody>
 				<tbody>
 					<tr class="table-active">
@@ -205,31 +205,31 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		</div>
 
 		<p>
-			Your total renewal fee will be &pound;<? echo $totalFeeString; ?>. By
+			Your total renewal fee will be &pound;<?php echo $totalFeeString; ?>. By
 			continuing to complete your membership renewal, you confirm that you will
 			pay this amount as part of your next Direct Debit Payment.
 		</p>
-		<? if (!userHasMandates($_SESSION['UserID'])) { ?>
+		<?php if (!userHasMandates($_SESSION['UserID'])) { ?>
 			<p>
 				We now need you to set up your Direct Debit agreement with
 				<?=CLUB_NAME?>. We will redirect you to our payments system where
 				you will setup a Direct Debit.
 			</p>
-		<? } else { ?>
+		<?php } else { ?>
 			<p>
-				You're now ready to complete your <? if ($renewal == 0) {
-				?>Registration<? } else { ?>Renewal<? } ?>.
+				You're now ready to complete your <?php if ($renewal == 0) {
+				?>Registration<?php } else { ?>Renewal<?php } ?>.
 			</p>
-		<? } ?>
+		<?php } ?>
 		<p class="mb-0">
 			<button type="submit" class="btn btn-success btn-lg">
-				<? if (!userHasMandates($_SESSION['UserID'])) { ?>
+				<?php if (!userHasMandates($_SESSION['UserID'])) { ?>
 					Setup Direct Debit
-				<? } else if ($renewal == 0) { ?>
+				<?php } else if ($renewal == 0) { ?>
 					Complete Registration
-				<? } else { ?>
+				<?php } else { ?>
 					Complete Renewal
-				<? } ?>
+				<?php } ?>
 			</button>
 		</p>
 	</form>

@@ -31,9 +31,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 <div class="container">
 	<h1>Your Membership Renewal</h1>
-	<p class="lead"><? echo date("Y-m-d"); ?></p>
+	<p class="lead"><?php echo date("Y-m-d"); ?></p>
 
-	<? if (isset($_SESSION['ErrorState'])) {
+	<?php if (isset($_SESSION['ErrorState'])) {
 		echo $_SESSION['ErrorState'];
 		unset($_SESSION['ErrorState']);
 	} ?>
@@ -59,12 +59,12 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	<hr>
 
 	<h2>Your Swimmers</h2>
-	<? echo mySwimmersTable($link, $userID); ?>
+	<?php echo mySwimmersTable($link, $userID); ?>
 
 	<hr>
 
 	<h2>Your Monthly Fees</h2>
-	<? echo myMonthlyFeeTable($link, $userID); ?>
+	<?php echo myMonthlyFeeTable($link, $userID); ?>
 
 	<hr>
 
@@ -78,32 +78,32 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		$row[$i] = mysqli_fetch_array($result, MYSQLI_ASSOC);
 		?>
-		<h3><? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?></h3>
+		<h3><?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?></h3>
 
 		<dl>
 			<dt>Medical Conditions and/or Disabilities</dt>
-			<? if ($row[$i]['Conditions'] != "") { ?>
+			<?php if ($row[$i]['Conditions'] != "") { ?>
 	    <dd><?php echo $row[$i]['Conditions'] ?></dd>
-			<? } else { ?>
+			<?php } else { ?>
 			<dd>None</dd>
-			<? } ?>
+			<?php } ?>
 
 			<dt>Allergies</dt>
-			<? if ($row[$i]['Allergies'] != "") { ?>
+			<?php if ($row[$i]['Allergies'] != "") { ?>
 	    <dd><?php echo $row[$i]['Allergies'] ?></dd>
-			<? } else { ?>
+			<?php } else { ?>
 			<dd>None</dd>
-			<? } ?>
+			<?php } ?>
 
 			<dt>Medication</dt>
-			<? if ($row[$i]['Medication'] != "") { ?>
+			<?php if ($row[$i]['Medication'] != "") { ?>
 	    <dd><?php echo $row[$i]['Medication'] ?></dd>
-			<? } else { ?>
+			<?php } else { ?>
 			<dd>None</dd>
-			<? } ?>
+			<?php } ?>
 		</dl>
 
-	<? } ?>
+	<?php } ?>
 
 	<hr>
 
@@ -114,7 +114,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 	<h2>Code of Conduct Agreements</h2>
 
-	<h3><? echo $forename . " " . $surname; ?> (Parent)</h3>
+	<h3><?php echo $forename . " " . $surname; ?> (Parent)</h3>
 
 	<ul>
 		<li>
@@ -161,7 +161,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 	<div class="mono">
 		<p>
-			I, <? echo $forename . " " . $surname; ?> agree to the above Code of
+			I, <?php echo $forename . " " . $surname; ?> agree to the above Code of
 			Conduct
 		</p>
 		<p>
@@ -183,7 +183,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	<?
 	for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		?>
-		<h3><? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?> (Swimmer)</h3>
+		<h3><?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?> (Swimmer)</h3>
 
 		<ul>
 			<li>
@@ -230,7 +230,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 		<div class="mono">
 			<p>
-				I, <? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?> agree
+				I, <?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?> agree
 				to the above Code of Conduct
 			</p>
 			<p>
@@ -241,7 +241,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			</p>
 		</div>
 
-	<? } ?>
+	<?php } ?>
 
 	<hr>
 	<?php
@@ -271,7 +271,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	<div class="form-group">
 		<input type="checkbox" checked>
 		<label>
-			I (<? echo $name; ?>) agree to the use of my data by Chester-le-Street
+			I (<?php echo $name; ?>) agree to the use of my data by Chester-le-Street
 			ASC as outlined above
 		</label>
 	</div>
@@ -292,17 +292,17 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		Conduct, Constitution, Rules and Policy Documents of the club.
 	</p>
 
-	<? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+	<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	$row[$i] = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	$id[$i] = $row[$i]['MemberID'];
 	$age[$i] = date_diff(date_create($row[$i]['DateOfBirth']),
 	date_create('today'))->y; ?>
 
-	<h3><? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?></h3>
+	<h3><?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?></h3>
 
 	<div class="mono">
 		<p>
-			I, <? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>
+			I, <?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>
 			agree to the Terms and Conditions of Chester-le-Street ASC as outlined
 			above
 		</p>
@@ -325,8 +325,8 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 	<div class="mono">
 		<p>
-			I, <? echo $name; ?> have explained the content and
-			implications to <? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>
+			I, <?php echo $name; ?> have explained the content and
+			implications to <?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>
 			and can confirm that they understood.
 		</p>
 		<p>
@@ -337,9 +337,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		</p>
 	</div>
 
-	<? } ?>
+	<?php } ?>
 
-	<? } ?>
+	<?php } ?>
 
 	<hr>
 
@@ -364,7 +364,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		time by heading to Swimmers.
 	</p>
 
-	<? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+	<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		if ($age[$i] < 18) {
 			$photo = [];
       if ($row[$i]['Website'] == 1) {
@@ -382,43 +382,43 @@ include BASE_PATH . "views/renewalTitleBar.php";
       if ($row[$i]['ProPhoto'] == 1) {
         $photo[4] = " checked ";
       } ?>
-		<h3><? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?></h3>
+		<h3><?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?></h3>
 		<p>
-			I, <? echo $name; ?> agree to photography in the following
+			I, <?php echo $name; ?> agree to photography in the following
 circumstances. (Ticked boxes confirm photography permission.)
 		</p>
 		<div class="form-group">
-			<input type="checkbox" <? echo $photo[0]; ?>>
+			<input type="checkbox" <?php echo $photo[0]; ?>>
 			<label>
 				Take photographs to use on the clubs website
 			</label>
 		</div>
 		<div class="form-group">
-			<input type="checkbox" <? echo $photo[1]; ?>>
+			<input type="checkbox" <?php echo $photo[1]; ?>>
 			<label>
 				Take photographs to use on social media sites
 			</label>
 		</div>
 		<div class="form-group">
-			<input type="checkbox" <? echo $photo[2]; ?>>
+			<input type="checkbox" <?php echo $photo[2]; ?>>
 			<label>
 				Take photographs to use on club noticeboards
 			</label>
 		</div>
 		<div class="form-group">
-			<input type="checkbox" <? echo $photo[3]; ?>>
+			<input type="checkbox" <?php echo $photo[3]; ?>>
 			<label>
 				Filming for training purposes only
 			</label>
 		</div>
 		<div class="form-group">
-			<input type="checkbox" <? echo $photo[4]; ?>>
+			<input type="checkbox" <?php echo $photo[4]; ?>>
 			<label>
 				Employ a professional photographer (approved by the club) who will take
 				photographs in competitions and/or club events.
 			</label>
 		</div>
-	<? } } ?>
+	<?php } } ?>
 
 	<h2>Medical Consent</h2>
 	<p>
@@ -427,20 +427,20 @@ circumstances. (Ticked boxes confirm photography permission.)
 		a Doctor to refrain from physical activity.
 	</p>
 
-	<? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+	<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 		if ($age[$i] < 18) { ?>
 
 	<h3>
-		Consent for <? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>
+		Consent for <?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>
 	</h3>
 	<p>
-		I confirm that <? echo $row[$i]['MForename'] . " " .
+		I confirm that <?php echo $row[$i]['MForename'] . " " .
 		$row[$i]['MSurname']; ?> has not been advised by a doctor to not take
 		part in physical activities unless under medical supervision.
 	</p>
 
 	<p>
-		I, <? echo $name; ?> hereby give permission for the coach or
+		I, <?php echo $name; ?> hereby give permission for the coach or
 		other appropriate person to give the authority on my behalf for any medical
 		or surgical treatment recommended by competent medical authorities, where it
 		would be contrary to my child's interest, in the doctor's opinion, for any
@@ -456,11 +456,11 @@ circumstances. (Ticked boxes confirm photography permission.)
 		</p>
 	</div>
 
-	<? }
+	<?php }
 	} ?>
 
 	<div class="mb-3 d-print-none">
-		<a class="btn btn-outline-success" href="<? echo app('request')->curl; ?>">
+		<a class="btn btn-outline-success" href="<?php echo app('request')->curl; ?>">
 			Finish Renewal
 		</a>
 	</div>

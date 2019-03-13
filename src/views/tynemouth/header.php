@@ -52,17 +52,17 @@ Chester-le-Street ASC is a non profit unincorporated association.
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
       ga('create', 'UA-78812259-4', 'auto');
-      <? if (isset($_SESSION['LoggedIn'])) { ?>
+      <?php if (isset($_SESSION['LoggedIn'])) { ?>
       ga('set', 'userId', <?= $_SESSION['UserID'] ?>);
       ga('send', 'event', 'authentication', 'user-id available');
-      <? } else { ?>
+      <?php } else { ?>
       ga('send', 'pageview');
-      <? } ?>
+      <?php } ?>
     </script>
 	  <script>var shiftWindow = function() { scrollBy(0, -50) }; if
 	  (location.hash) shiftWindow(); window.addEventListener("hashchange",
 	  shiftWindow);</script>
-    <script src="<? echo autoUrl("/js/tinymce/tinymce.min.js"); ?>"></script>
+    <script src="<?php echo autoUrl("/js/tinymce/tinymce.min.js"); ?>"></script>
     <link rel="stylesheet preload"
     href="https://fonts.googleapis.com/css?family=Cabin+Condensed:300,400,400i,600,700|Roboto+Mono|Merriweather:400,600">
     <link rel="stylesheet preload" href="<?php echo autoUrl("css/tyne.2.0.18.css") ?>">
@@ -81,7 +81,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <![endif]-->
 
   </head>
-  <? $bg = "bg-light";
+  <?php $bg = "bg-light";
   if ($use_white_background) {
     $bg = "bg-white";
   }
@@ -127,7 +127,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
           </span>
         </div>
 
-        <? if ($_SESSION['LoggedIn']) { ?>
+        <?php if ($_SESSION['LoggedIn']) { ?>
         <div class="ml-2 top-bar">
           <span>
             <a href="https://account.chesterlestreetasc.co.uk" class="text-dark" title="Your Club Membership Account">
@@ -135,7 +135,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
             </a>
           </span>
         </div>
-        <? } else { ?>
+        <?php } else { ?>
         <div class="ml-2 top-bar">
           <span>
             <a href="https://account.chesterlestreetasc.co.uk" class="text-dark" title="Sign in to your Club Membership Account">
@@ -143,7 +143,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
             </a>
           </span>
         </div>
-        <? } ?>
+        <?php } ?>
 
         <div class="ml-2 top-bar d-lg-none">
           <span>
@@ -209,7 +209,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
         </button>
 
   	  <div class="collapse navbar-collapse offcanvas-collapse" id="chesterNavbar">
-      <? if (!user_needs_registration($_SESSION['UserID'])) { ?>
+      <?php if (!user_needs_registration($_SESSION['UserID'])) { ?>
   		<ul class="navbar-nav mr-auto">
   		<?php if (!empty($_SESSION['LoggedIn'])) { ?>
         <li class="nav-item">
@@ -229,19 +229,19 @@ Chester-le-Street ASC is a non profit unincorporated association.
             </a>
             <div class="dropdown-menu" aria-labelledby="swimmersDropdown">
               <a class="dropdown-item" href="<?php echo autoUrl("swimmers") ?>">Swimmers Home</a>
-              <? if (mysqli_num_rows($getSwimmers) > 0) { ?>
+              <?php if (mysqli_num_rows($getSwimmers) > 0) { ?>
               <div class="dropdown-divider"></div>
               <h6 class="dropdown-header">My Swimmers</h6>
-              <? for ($i = 0; $i < mysqli_num_rows($getSwimmers); $i++) {
+              <?php for ($i = 0; $i < mysqli_num_rows($getSwimmers); $i++) {
                 $getSwimmerRow = mysqli_fetch_array($getSwimmers, MYSQLI_ASSOC); ?>
                 <a class="dropdown-item" href="<?php echo autoUrl("swimmers/" .
-                $getSwimmerRow['MemberID']) ?>"><? echo
+                $getSwimmerRow['MemberID']) ?>"><?php echo
                 $getSwimmerRow['MForename'] . " " . $getSwimmerRow['MSurname'];
                 ?></a>
-              <? } ?>
-              <? } else { ?>
+              <?php } ?>
+              <?php } else { ?>
                 <a class="dropdown-item" href="<?php echo autoUrl("myaccount/addswimmer") ?>">Add Swimmers</a>
-              <? } ?>
+              <?php } ?>
             </div>
           </li>
         <li class="nav-item">
@@ -255,18 +255,18 @@ Chester-le-Street ASC is a non profit unincorporated association.
             </a>
             <div class="dropdown-menu" aria-labelledby="swimmerDropdown">
               <a class="dropdown-item" href="<?php echo autoUrl("swimmers")?>">Swimmer Directory</a>
-              <? if ($_SESSION['AccessLevel'] == "Admin") { ?>
+              <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
               <a class="dropdown-item" href="<?php echo autoUrl("swimmers/addmember")?>">Add Member</a>
-              <? } ?>
+              <?php } ?>
               <?php if ($_SESSION['AccessLevel'] != "Galas") { ?>
               <a class="dropdown-item" href="<?php echo autoUrl("squads")?>">Squads</a>
           		<a class="dropdown-item" href="<?php echo autoUrl("squads/moves")?>">Squad Moves</a>
-              <? } ?>
+              <?php } ?>
               <a class="dropdown-item" href="<?php echo autoUrl("swimmers/accesskeys")?>">Access Keys</a>
-              <? if ($_SESSION['AccessLevel'] == "Admin") { ?>
+              <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
               <a class="dropdown-item" href="<?php echo autoUrl("swimmers/orphaned")?>">Orphan Swimmers</a>
-              <? } ?>
-              <? if ($_SESSION['AccessLevel'] == "Coach") { ?>
+              <?php } ?>
+              <?php if ($_SESSION['AccessLevel'] == "Coach") { ?>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . date("Y/m")) ?>">
                 Squad Fee Payments, <?=date("F Y")?>
@@ -278,7 +278,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
               <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . $lm) ?>">
                 Squad Fee Payments, <?=$lms?>
               </a>
-              <? } ?>
+              <?php } ?>
             </div>
     		  </li>
           <?php if ($_SESSION['AccessLevel'] == "Admin" ||
@@ -320,7 +320,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
               <a class="dropdown-item" href="<?php echo autoUrl("payments/history") ?>">Payment Status</a>
               <a class="dropdown-item" href="<?php echo autoUrl("payments/extrafees")?>">Extra Fees</a>
               <div class="dropdown-divider"></div>
-              <h6 class="dropdown-header"><? echo date("F Y"); ?></h6>
+              <h6 class="dropdown-header"><?php echo date("F Y"); ?></h6>
               <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . date("Y/m")) ?>">
                 Squad Fees
               </a>
@@ -331,7 +331,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
               $lm = date("Y/m", strtotime("first day of last month"));
               $lms = date("F Y", strtotime("first day of last month"));
               ?>
-              <h6 class="dropdown-header"><? echo $lms; ?></h6>
+              <h6 class="dropdown-header"><?php echo $lms; ?></h6>
               <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . $lm) ?>">
                 Squad Fees
               </a>
@@ -358,10 +358,10 @@ Chester-le-Street ASC is a non profit unincorporated association.
               <a class="dropdown-item" href="<?php echo autoUrl("notify")?>">Notify Home</a>
           		<a class="dropdown-item" href="<?php echo autoUrl("notify/newemail")?>">New Message</a>
               <a class="dropdown-item" href="<?php echo autoUrl("notify/lists")?>">Targeted Lists</a>
-              <? if ($_SESSION['AccessLevel'] == "Admin") { ?>
+              <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
               <a class="dropdown-item" href="<?php echo autoUrl("notify/sms")?>">SMS Lists</a>
           		<a class="dropdown-item" href="<?php echo autoUrl("notify/email")?>">Pending Messages</a>
-              <? } ?>
+              <?php } ?>
               <a class="dropdown-item" href="<?php echo autoUrl("notify/history")?>">Previous Messages</a>
             </div>
           </li>
@@ -384,7 +384,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
             <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/category/galas/" target="_blank">Upcoming Galas <i class="fa fa-external-link"></i></a>
             <?php if ($access == "Parent") {?>
             <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/enteracompetition/guidance/" target="_blank">Help with Entries <i class="fa fa-external-link"></i></a>
-            <? } ?>
+            <?php } ?>
           </div>
   		  </li>
         <?php if (false)/*($_SESSION['AccessLevel'] == "Parent")*/ { ?>
@@ -405,8 +405,8 @@ Chester-le-Street ASC is a non profit unincorporated association.
               Store
             </a>
     		  </li>
-        <? } ?>
-        <? if ($_SESSION['AccessLevel'] != "Parent" &&
+        <?php } ?>
+        <?php if ($_SESSION['AccessLevel'] != "Parent" &&
     		$_SESSION['AccessLevel'] != "Coach") { ?>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="postDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -415,14 +415,14 @@ Chester-le-Street ASC is a non profit unincorporated association.
           <div class="dropdown-menu" aria-labelledby="postDropdown">
             <a class="dropdown-item" href="<?php echo autoUrl("posts")?>">Home</a>
         		<a class="dropdown-item" href="<?php echo autoUrl("posts/new")?>">New Page</a>
-        		<? if ($allow_edit && $_SESSION['AccessLevel'] != "Parent" &&
+        		<?php if ($allow_edit && $_SESSION['AccessLevel'] != "Parent" &&
         		$_SESSION['AccessLevel'] != "Coach") { ?>
         		<a class="dropdown-item" href="<?=app('request')->curl?>edit">Edit Current Page</a>
-        		<? } ?>
-        		<? if ($exit_edit && $_SESSION['AccessLevel'] != "Parent" &&
+        		<?php } ?>
+        		<?php if ($exit_edit && $_SESSION['AccessLevel'] != "Parent" &&
         		$_SESSION['AccessLevel'] != "Coach") { ?>
         		<a class="dropdown-item" href="<?=autoUrl("posts/" . $id)?>">View Page</a>
-        		<? } ?>
+        		<?php } ?>
           </div>
         </li>
   		  <?php }
@@ -437,7 +437,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
         <?php } ?>
   		</ul>
       <?php if (!empty($_SESSION['LoggedIn'])) { ?>
-      <? $user_name = str_replace(' ', '&nbsp;', htmlspecialchars(getUserName($_SESSION['UserID']))); ?>
+      <?php $user_name = str_replace(' ', '&nbsp;', htmlspecialchars(getUserName($_SESSION['UserID']))); ?>
       <ul class="navbar-nav">
         <!--<a class="btn btn-sm btn-outline-light my-2 my-sm-0" href="<?php echo autoUrl("logout") ?>">Logout</a>-->
         <li class="nav-item dropdown">
@@ -452,12 +452,12 @@ Chester-le-Street ASC is a non profit unincorporated association.
             <a class="dropdown-item" href="<?php echo autoUrl("myaccount/general") ?>">Your General Options</a>
             <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
               <a class="dropdown-item" href="<?php echo autoUrl("emergencycontacts") ?>">Your Emergency Contacts</a>
-            <? } ?>
+            <?php } ?>
             <a class="dropdown-item" href="<?php echo autoUrl("myaccount/password") ?>">Your Password</a>
-            <? if ($_SESSION['AccessLevel'] == "Parent") { ?>
+            <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
             <a class="dropdown-item" href="<?php echo autoUrl("myaccount/notifyhistory") ?>">Your Message History</a>
             <a class="dropdown-item" href="<?php echo autoUrl("myaccount/addswimmer") ?>">Add a Swimmer</a>
-            <? } ?>
+            <?php } ?>
             <a class="dropdown-item" href="<?php echo autoUrl("myaccount/loginhistory") ?>">Your Login History</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">Help</a>
@@ -475,7 +475,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
 
 <div id="maincontent"></div>
 
-  <? if (isset($_SESSION['UserSimulation'])) { ?>
+  <?php if (isset($_SESSION['UserSimulation'])) { ?>
     <div class="bg-secondary text-dark box-shadow mb-3 py-2 d-print-none">
       <div class="<?=$container_class?>">
         <p class="mb-0">
@@ -491,7 +491,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
         </p>
       </div>
     </div>
-  <? } ?>
+  <?php } ?>
 
   <noscript>
     <div class="alert alert-danger d-print-none">

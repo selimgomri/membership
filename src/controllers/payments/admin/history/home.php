@@ -22,18 +22,18 @@ $date = date("Y/m");
         <h2 class="border-bottom border-gray pb-2 mb-2">View Direct Debit charges by Month</h2>
         <p class="lead">Select a year and month to view the status of Direct Debit Payments.</p>
         <ul>
-          <? for ($i = 0; $i < 12; $i++) {
+          <?php for ($i = 0; $i < 12; $i++) {
           $targetDate = strtotime($now . " - " . $i . " months"); ?>
           <li>
-            <a href="<? echo autoUrl("payments/history/" . date("Y/m", $targetDate)); ?>">
-              <? echo date("F Y", $targetDate); ?>
+            <a href="<?php echo autoUrl("payments/history/" . date("Y/m", $targetDate)); ?>">
+              <?php echo date("F Y", $targetDate); ?>
             </a>
           </li>
-          <? } ?>
+          <?php } ?>
         </ul>
         <h4 class="border-bottom border-gray pb-2 mb-2">View by Parent</h4>
         <p class="lead mb-0">
-          <a href="<? echo autoUrl("payments/history/users"); ?>">
+          <a href="<?php echo autoUrl("payments/history/users"); ?>">
             Search for a Parent
           </a>
         </p>
@@ -44,14 +44,14 @@ $date = date("Y/m");
         <h2 class="border-bottom border-gray pb-2 mb-2">Squad Fee Payment Status</h2>
         <p class="lead">Select to view Squad Fee Status by Month</p>
         <ul>
-          <? for ($i = 0; $i < 12; $i++) {
+          <?php for ($i = 0; $i < 12; $i++) {
           $targetDate = strtotime($now . " - " . $i . " months"); ?>
           <li>
-            <a href="<? echo autoUrl("payments/history/squads/" . date("Y/m", $targetDate)); ?>">
-              <? echo date("F Y", $targetDate); ?>
+            <a href="<?php echo autoUrl("payments/history/squads/" . date("Y/m", $targetDate)); ?>">
+              <?php echo date("F Y", $targetDate); ?>
             </a>
           </li>
-          <? } ?>
+          <?php } ?>
         </ul>
       </div>
     </div>
@@ -60,14 +60,14 @@ $date = date("Y/m");
         <h2 class="border-bottom border-gray pb-2 mb-2">Extra Fee Payment Status</h2>
         <p class="lead">Select to view Extra Fee Status by Month</p>
         <ul>
-          <? for ($i = 0; $i < 12; $i++) {
+          <?php for ($i = 0; $i < 12; $i++) {
           $targetDate = strtotime($now . " - " . $i . " months"); ?>
           <li>
-            <a href="<? echo autoUrl("payments/history/extras/" . date("Y/m", $targetDate)); ?>">
-              <? echo date("F Y", $targetDate); ?>
+            <a href="<?php echo autoUrl("payments/history/extras/" . date("Y/m", $targetDate)); ?>">
+              <?php echo date("F Y", $targetDate); ?>
             </a>
           </li>
-          <? } ?>
+          <?php } ?>
         </ul>
       </div>
     </div>

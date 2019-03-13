@@ -40,9 +40,9 @@ if ($renewal_trap) {
 		<p class="border-bottom border-gray pb-2 mb-0">
 			We'll use these emergency contacts for all swimmers connected to your
 			account if we can't reach you on your phone number. You can change your
-			phone number in <a href="<? echo autoUrl("myaccount"); ?>">My Account</a>
+			phone number in <a href="<?php echo autoUrl("myaccount"); ?>">My Account</a>
 		</p>
-		<? if (isset($_SESSION['AddNewSuccess'])) {
+		<?php if (isset($_SESSION['AddNewSuccess'])) {
 			echo $_SESSION['AddNewSuccess'];
 			unset($_SESSION['AddNewSuccess']);
 		} ?>
@@ -53,26 +53,26 @@ if ($renewal_trap) {
 						<div class="col-9">
 							<p class="mb-0">
 								<strong class="d-block">
-									<? echo $row['Forename'] . " " . $row['Surname']; ?> (From My
+									<?php echo $row['Forename'] . " " . $row['Surname']; ?> (From My
 									Account)
 								</strong>
-								<a href="tel:<? echo $row['Mobile']; ?>">
-									<? echo $row['Mobile']; ?>
+								<a href="tel:<?php echo $row['Mobile']; ?>">
+									<?php echo $row['Mobile']; ?>
 								</a>
 							</p>
 						</div>
-						<? if (!$renewal_trap) { ?>
+						<?php if (!$renewal_trap) { ?>
 						<div class="col text-right">
-							<a href="<? echo autoUrl("myaccount"); ?>" class="btn
+							<a href="<?php echo autoUrl("myaccount"); ?>" class="btn
 							btn-primary">
 								Edit
 							</a>
 						</div>
-						<? } ?>
+						<?php } ?>
 					</div>
 				</div>
 			</div>
-		<? for ($i = 0; $i < sizeof($contactsArray); $i++) {
+		<?php for ($i = 0; $i < sizeof($contactsArray); $i++) {
 			?>
 			<div class="media pt-3">
 				<div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
@@ -80,15 +80,15 @@ if ($renewal_trap) {
 						<div class="col-9">
 							<p class="mb-0">
 								<strong class="d-block">
-									<? echo $contactsArray[$i]->getName(); ?>
+									<?php echo $contactsArray[$i]->getName(); ?>
 								</strong>
-								<a href="tel:<? echo $contactsArray[$i]->getContactNumber(); ?>">
-									<? echo $contactsArray[$i]->getContactNumber(); ?>
+								<a href="tel:<?php echo $contactsArray[$i]->getContactNumber(); ?>">
+									<?php echo $contactsArray[$i]->getContactNumber(); ?>
 								</a>
 							</p>
 						</div>
 						<div class="col text-right">
-							<a href="<? echo autoUrl($url_path . "\/edit/" .
+							<a href="<?php echo autoUrl($url_path . "\/edit/" .
 							$contactsArray[$i]->getID()); ?>" class="btn btn-primary">
 								Edit
 							</a>
@@ -100,7 +100,7 @@ if ($renewal_trap) {
 		} ?>
 		</div>
 		<p>
-			<a href="<? echo autoUrl($url_path . "/new"); ?>" class="btn btn-success">
+			<a href="<?php echo autoUrl($url_path . "/new"); ?>" class="btn btn-success">
 				Add New
 			</a>
 		</p>

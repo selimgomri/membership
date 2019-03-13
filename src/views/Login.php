@@ -31,7 +31,7 @@ include BASE_PATH . "views/header.php";
       <div class="alert alert-danger">
         <strong>Your details were incorrect</strong> <br>
         Please try again
-        <? if (isset($_SESSION['ErrorStateLSVMessage'])) {
+        <?php if (isset($_SESSION['ErrorStateLSVMessage'])) {
           echo $_SESSION['ErrorStateLSVMessage'];
           unset($_SESSION['ErrorStateLSVMessage']);
         } ?>

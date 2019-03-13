@@ -33,9 +33,9 @@ if (isset($id)) {
 				<div class="mb-3 p-3 bg-white rounded shadow">
 					<form method="post">
 						<h1>Code of Conduct Acceptance</h1>
-						<p class="lead">For <? echo $name; ?></p>
+						<p class="lead">For <?php echo $name; ?></p>
 
-						<? if (isset($_SESSION['RenewalErrorInfo'])) {
+						<?php if (isset($_SESSION['RenewalErrorInfo'])) {
 							echo $_SESSION['RenewalErrorInfo'];
 							unset($_SESSION['RenewalErrorInfo']);
 						} ?>
@@ -43,7 +43,7 @@ if (isset($id)) {
 						<div class="alert alert-warning">
 							<p class="mb-0">
 								<strong>
-									You must ensure that <? echo $name; ?> is present to agree to
+									You must ensure that <?php echo $name; ?> is present to agree to
 									this code of conduct before you continue
 								</strong>
 							</p>
@@ -56,11 +56,11 @@ if (isset($id)) {
 						<hr>
 
 						<h2 class="h1"><?=CLUB_NAME?> Squad Code of Conduct</h2>
-						<? if ($linkExists) { ?>
+						<?php if ($linkExists) { ?>
 						<div id="code_of_conduct">
 							<?= getPostContent($link) ?>
 						</div>
-						<? } else { ?>
+						<?php } else { ?>
 						<p>
 							A code of conduct does not exist for the allocated squad. A
 							general code of conduct is available instead in the form of the
@@ -112,7 +112,7 @@ if (isset($id)) {
 								Use correct and proper language at all times.
 							</li>
 						</ul>
-						<? } ?>
+						<?php } ?>
 
 						<hr>
 
@@ -271,7 +271,7 @@ if (isset($id)) {
 							  <input type="checkbox" class="custom-control-input" id="agree"
 							  name="agree" value="1">
 							  <label class="custom-control-label" for="agree">
-									I, <? echo $name; ?> agree to this code of conduct
+									I, <?php echo $name; ?> agree to this code of conduct
 								</label>
 							</div>
 						</div>

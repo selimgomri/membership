@@ -30,7 +30,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 <div class="container">
 	<div class="mb-3 p-3 bg-white rounded shadow">
 
-		<h1>Attendance History for <? echo $squadName; ?></h1>
+		<h1>Attendance History for <?php echo $squadName; ?></h1>
 		<p class="lead">Squad History currently only shows the current week</p>
 
 		<div class="table-responsive-md">
@@ -46,7 +46,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 					</tr>
 				</thead>
 				<tbody>
-					<? for ($i = 0; $i < $count; $i++) {
+					<?php for ($i = 0; $i < $count; $i++) {
 						$outputname = false;
 						$swimmer = $row['MemberID'];
 						if ($swimmer != $swimmerOld) {
@@ -56,7 +56,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 							?>
 							<tr>
 								<td>
-									<? echo $row['MForename'] . " " . $row['MSurname']; ?>
+									<?php echo $row['MForename'] . " " . $row['MSurname']; ?>
 								</td>
 								<td>
 									<ul class="list-unstyled mb-0">
@@ -96,9 +96,9 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 
 						?>
 						<li>
-						<? if ($row['AttendanceBoolean']) { ?>
-							<? echo $title; ?>
-						<? } ?>
+						<?php if ($row['AttendanceBoolean']) { ?>
+							<?php echo $title; ?>
+						<?php } ?>
 						</li>
 						<?
 

@@ -19,7 +19,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		</p>
 
 		<p class="mb-0">
-			<a href="<? echo autoUrl(""); ?>" class="btn btn-success">
+			<a href="<?php echo autoUrl(""); ?>" class="btn btn-success">
 				Return to Dashboard
 			</a>
 		</p>

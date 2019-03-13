@@ -25,9 +25,9 @@ include BASE_PATH . "views/notifyMenu.php";
 		  <label class="sr-only" for="squad">Select a Squad</label>
 		  <select class="custom-select" placeholder="Select a Squad" id="squad" name="squad">
 			  <option value="allSquads">Show All Squads</option>;
-			  <? foreach ($stmt as $row) { ?>
+			  <?php foreach ($stmt as $row) { ?>
 				<option value="<?php echo $row['SquadID']; ?>"><?php echo $row['SquadName']; ?></option>
-				<? } ?>
+				<?php } ?>
 	    </select>
 		</div>
 

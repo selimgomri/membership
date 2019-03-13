@@ -14,39 +14,39 @@ if ($_POST['response'] == "getSwimmers") {
   ?>
 
   <div class="cell">
-    <? if ($count > 0) {
+    <?php if ($count > 0) {
     for ($i = 0; $i < $count; $i++) {
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     if ($i != $count-1) { ?>
     <div class="border-bottom border-gray pb-2 mb-2">
-    <? } else { ?>
+    <?php } else { ?>
     <div class="">
-    <? } ?>
+    <?php } ?>
       <div class="row align-items-center">
         <div class="col-auto">
           <p class="mb-0">
             <strong>
-              <? echo $row['MForename'] . " " . $row['MSurname']; ?>
+              <?php echo $row['MForename'] . " " . $row['MSurname']; ?>
             </strong>
           </p>
           <p class="mb-0">
-            <? echo $row['SquadName']; ?>
+            <?php echo $row['SquadName']; ?>
           </p>
         </div>
         <div class="col text-right">
-          <button type="button" id="RelationDrop-<? echo $row['ReferenceID']; ?>"
-            class="btn btn-link" value="<? echo $row['ReferenceID']; ?>">
+          <button type="button" id="RelationDrop-<?php echo $row['ReferenceID']; ?>"
+            class="btn btn-link" value="<?php echo $row['ReferenceID']; ?>">
             Remove
           </button>
         </div>
       </div>
     </div>
-    <? }
+    <?php }
     } else { ?>
     <div class="alert alert-info mb-0">
       <strong>There are no swimmers linked to this targeted list</strong>
     </div>
-    <? } ?>
+    <?php } ?>
   </div>
 <?
 } else if ($_POST['response'] == "squadSelect") {
@@ -62,10 +62,10 @@ if ($_POST['response'] == "getSwimmers") {
     <?
     for ($i = 0; $i < mysqli_num_rows($result); $i++) {
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC); ?>
-      <option value="<? echo $row['MemberID']; ?>">
-        <? echo $row['MForename'] . " " . $row['MSurname']; ?>
+      <option value="<?php echo $row['MemberID']; ?>">
+        <?php echo $row['MForename'] . " " . $row['MSurname']; ?>
       </option>
-    <? }
+    <?php }
   } else {
     $sql = "SELECT * FROM `members` ORDER BY `MForename` ASC, `MSurname` ASC;";
     $result = mysqli_query($link, $sql);
@@ -78,10 +78,10 @@ if ($_POST['response'] == "getSwimmers") {
 
     for ($i = 0; $i < mysqli_num_rows($result); $i++) {
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC); ?>
-      <option value="<? echo $row['MemberID']; ?>">
-        <? echo $row['MForename'] . " " . $row['MSurname']; ?>
+      <option value="<?php echo $row['MemberID']; ?>">
+        <?php echo $row['MForename'] . " " . $row['MSurname']; ?>
       </option>
-    <? }
+    <?php }
   }
 } else if ($_POST['response'] == "insert") {
   $swimmer = mysqli_real_escape_string($link, $_POST['swimmerInsert']);

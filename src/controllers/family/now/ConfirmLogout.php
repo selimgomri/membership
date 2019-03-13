@@ -16,10 +16,10 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		</p>
 
 		<p class="mb-0">
-			<a target="_self" class="btn btn-dark" href="<? echo autoUrl("family/register/later/" . $id); ?>">
+			<a target="_self" class="btn btn-dark" href="<?php echo autoUrl("family/register/later/" . $id); ?>">
 				Cancel
 			</a>
-			<a target="_self" class="btn btn-secondary" href="<? echo autoUrl("family/register/now/" . $id . "/go"); ?>">
+			<a target="_self" class="btn btn-secondary" href="<?php echo autoUrl("family/register/now/" . $id . "/go"); ?>">
 				Continue
 			</a>
 		</p>

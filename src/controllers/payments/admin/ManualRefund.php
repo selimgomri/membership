@@ -35,7 +35,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
     	      </div>
     	  		<input type="number" class="form-control mono" id="user" name="user" aria-describedby="userHelp" placeholder="Enter number" required>
     			</div>
-    	    <small id="userHelp" class="form-text text-muted">You can find a User ID in the <a target="_blank" href="<? echo autoUrl("users"); ?>">Users section</a></small>
+    	    <small id="userHelp" class="form-text text-muted">You can find a User ID in the <a target="_blank" href="<?php echo autoUrl("users"); ?>">Users section</a></small>
     	  </div>
     		<div class="form-group">
     			<p>You have selected - <span id="selectedUserName">No Parent Selected</span></p>

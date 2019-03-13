@@ -55,7 +55,7 @@ if ($count == 1) {
 						</div>
 					</div>
 				</div>
-        <input type="hidden" name="entryID" value="<? echo $row['EntryID']; ?>">
+        <input type="hidden" name="entryID" value="<?php echo $row['EntryID']; ?>">
 				<p class="mb-0"><button class="btn btn-dark" type="submit">Charge Parent</button>
 			</div>
 
@@ -154,7 +154,7 @@ include BASE_PATH . "views/footer.php";
         </div>
       </div>
     </div>
-    <? include BASE_PATH . "views/footer.php";
+    <?php include BASE_PATH . "views/footer.php";
   } else {
     halt(404);
   }

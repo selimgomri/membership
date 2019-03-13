@@ -44,7 +44,7 @@ $_SESSION['RegistrationMode'] = $mode;
 ?>
 <div class="pb-3">
   <div class="container">
-      <? if (isset($_SESSION['RegistrationGoVerify'])) {
+      <?php if (isset($_SESSION['RegistrationGoVerify'])) {
         echo $_SESSION['RegistrationGoVerify'];
         unset($_SESSION['RegistrationGoVerify']);
       }  else { ?>
@@ -69,33 +69,33 @@ $_SESSION['RegistrationMode'] = $mode;
       </div>-->
       <h1>User Registration</h1>
       <p>We need a few details before we start.</p>
-      <? if ($mode == "Family-Auto") { ?>
+      <?php if ($mode == "Family-Auto") { ?>
         <div class="alert alert-info">
           <p class="mb-0"><strong>We've retrieved your family information from
           our database.</strong></p>
-          <p class="mb-0">Please ensure that <span class="mono">FAM<? echo
+          <p class="mb-0">Please ensure that <span class="mono">FAM<?php echo
           $fam_keys['FAM']; ?></span> matches the Family Registration Number on
           your Family Signup Sheet.</p>
         </div>
-      <? } ?>
+      <?php } ?>
       <hr>
-      <? if (isset($_SESSION['ErrorState'])) {
+      <?php if (isset($_SESSION['ErrorState'])) {
         echo $_SESSION['ErrorState'];
         unset($_SESSION['ErrorState']);
       } ?>
-      <? if ($mode == "Default") { ?>
+      <?php if ($mode == "Default") { ?>
       <div class="cell">
         <p class="mb-0"><strong>Do you have a Family Signup Sheet?</strong></p>
-        <p class="mb-0">If so, you'll need to complete a <a href="<? echo
+        <p class="mb-0">If so, you'll need to complete a <a href="<?php echo
         autoUrl("register/family"); ?>" class="">Family
         Registration</a></p>
         <hr>
         <p class="mb-0">If you don't have a Family Signup Sheet, you're in the right place.</p>
       </div>
-      <? } ?>
-      <form method="post" action="<? echo autoUrl("register"); ?>" name="register" id="register">
+      <?php } ?>
+      <form method="post" action="<?php echo autoUrl("register"); ?>" name="register" id="register">
 
-        <? if ($mode == "Family-Manual") { ?>
+        <?php if ($mode == "Family-Manual") { ?>
         <h2>Family Details</h2>
         <p>We need some details from you which will allow us to get your
         swimmers. The information you need can be found on your Family Signup
@@ -105,19 +105,19 @@ $_SESSION['RegistrationMode'] = $mode;
             <div class="form-group">
               <label for="fam-reg-num">Family Registration Number</label>
               <input class="form-control mono" type="text" name="fam-reg-num"
-              id="fam-reg-num" placeholder="eg FAM1" required value="<? echo
+              id="fam-reg-num" placeholder="eg FAM1" required value="<?php echo
               $_SESSION['RegistrationFamNum']; ?>" style="text-transform:uppercase;"
               on keyup="javascript:this.value=this.value.toUpperCase();">
             </div>
             <div class="form-group">
               <label for="fam-sec-key">Security Key</label>
               <input class="form-control mono" type="text" name="fam-sec-key"
-              id="fam-sec-key" placeholder="eg IKtfcu" required value="<? echo
+              id="fam-sec-key" placeholder="eg IKtfcu" required value="<?php echo
               $_SESSION['RegistrationFamKey']; ?>">
             </div>
           </div>
         </div>
-        <? } ?>
+        <?php } ?>
 
         <h2>Personal Details</h2>
         <div class="row">
@@ -125,16 +125,16 @@ $_SESSION['RegistrationMode'] = $mode;
             <div class="form-group">
               <label for="forename">First Name</label>
               <input class="form-control" type="text" name="forename" id="forename"
-              placeholder="First Name" required value="<? echo
+              placeholder="First Name" required value="<?php echo
               $_SESSION['RegistrationForename']; ?>">
             </div>
             <div class="form-group">
               <label for="surname">Last Name</label>
-              <input class="form-control" type="text" name="surname" id="surname" placeholder="Last Name" required value="<? echo $_SESSION['RegistrationSurname']; ?>">
+              <input class="form-control" type="text" name="surname" id="surname" placeholder="Last Name" required value="<?php echo $_SESSION['RegistrationSurname']; ?>">
             </div>
             <div class="form-group">
               <label for="email">Email Address</label>
-              <input class="form-control mb-0" type="email" name="email" id="email" placeholder="yourname@example.com" required value="<? echo $_SESSION['RegistrationEmail']; ?>">
+              <input class="form-control mb-0" type="email" name="email" id="email" placeholder="yourname@example.com" required value="<?php echo $_SESSION['RegistrationEmail']; ?>">
               <small id="emailHelp" class="form-text text-muted">
                 Your email address will only be used inside <?=CLUB_NAME?> and
                 Chester-le-Street ASC Club Digital Services. Emails sent by
@@ -149,7 +149,7 @@ $_SESSION['RegistrationMode'] = $mode;
           <div class="col-md-8 col-lg-6">
             <div class="form-group">
               <label for="mobile">Mobile Number</label>
-              <input class="form-control" type="tel" name="mobile" id="mobile" placeholder="01234 567890" required value="<? echo $_SESSION['RegistrationMobile']; ?>">
+              <input class="form-control" type="tel" name="mobile" id="mobile" placeholder="01234 567890" required value="<?php echo $_SESSION['RegistrationMobile']; ?>">
               <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
             </div>
           </div>
@@ -158,7 +158,7 @@ $_SESSION['RegistrationMode'] = $mode;
         <h2>Password</h2>
         <!--<div class="form-group">
           <label for="username">Username</label>
-          <input class="form-control" type="text" name="username" id="username" placeholder="Username" aria-labelledby="usernameHelp" required value="<? echo $_SESSION['RegistrationUsername']; ?>">
+          <input class="form-control" type="text" name="username" id="username" placeholder="Username" aria-labelledby="usernameHelp" required value="<?php echo $_SESSION['RegistrationUsername']; ?>">
           <small id="usernameHelp" class="form-text text-muted">This username is for your user account as an adult, not your swimmer(s)</small>
         </div>-->
         <div class="row">
@@ -193,7 +193,7 @@ $_SESSION['RegistrationMode'] = $mode;
           <div class="col-md-8 col-lg-6">
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input"
-              name="emailAuthorise" id="emailAuthorise" value="1" <? echo $email; ?>
+              name="emailAuthorise" id="emailAuthorise" value="1" <?php echo $email; ?>
               checked>
               <label class="custom-control-label" for="emailAuthorise">
                 I wish to recieve important email updates about my squads
@@ -202,7 +202,7 @@ $_SESSION['RegistrationMode'] = $mode;
 
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input"
-              name="smsAuthorise" id="smsAuthorise" value="1" <? echo $sms; ?>
+              name="smsAuthorise" id="smsAuthorise" value="1" <?php echo $sms; ?>
               checked>
               <label class="custom-control-label" for="smsAuthorise">
                 I wish to recieve text message notifications
@@ -245,7 +245,7 @@ $_SESSION['RegistrationMode'] = $mode;
         </div>
         <input type="submit" class="btn btn-primary btn-lg" value="Register">
       </form>
-      <? } ?>
+      <?php } ?>
     </div>
   </div>
 </div>

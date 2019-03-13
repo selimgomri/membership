@@ -54,11 +54,11 @@ if ($scheduleExists == 0) {
 			<p>GoCardless handles direct debit payments for <?=CLUB_NAME?>. You
 			will see <span class="mono"><?=str_replace(' ', '', CLUB_SHORT_NAME)?>SWIM</span> at the start of the
 			reference for each payment.</p>
-			<? if ($renewal_trap) { ?>
-				<a href="<? echo autoUrl("renewal/go"); ?>" class="mb-3 btn btn-success">Continue Renewal</a>
-			<? } else { ?>
-				<a href="<? echo autoUrl("payments"); ?>" class="mb-3 btn btn-dark">Go to Payments</a>
-			<? } ?>
+			<?php if ($renewal_trap) { ?>
+				<a href="<?php echo autoUrl("renewal/go"); ?>" class="mb-3 btn btn-success">Continue Renewal</a>
+			<?php } else { ?>
+				<a href="<?php echo autoUrl("payments"); ?>" class="mb-3 btn btn-dark">Go to Payments</a>
+			<?php } ?>
 		</div>
 
 		<?php include BASE_PATH . "views/footer.php";

@@ -33,7 +33,7 @@
 								</a>
 	            </li>
 							<li>
-	              <a href="<? echo autoUrl("notify"); ?>" target="_self"
+	              <a href="<?php echo autoUrl("notify"); ?>" target="_self"
 	              title="About our Notify Email Service">
 									Emails from us
 								</a>
@@ -94,7 +94,7 @@
 					$executionStartTime), 3, '.', '');
 					?>
 					<!--<p class="hidden-print"><?php echo("Page produced in " . $creationTime . "
-					seconds."); ?> Version v1.0, Production Build 267. <? echo
+					seconds."); ?> Version v1.0, Production Build 267. <?php echo
 					app('request')->browser() . " for " .
 					ucwords(app('request')->platform()); ?>.</p>-->
 	        <p class="mb-0" style="margin-bottom:0">&copy; <?php echo date( 'Y' ); ?>

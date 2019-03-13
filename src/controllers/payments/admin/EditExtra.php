@@ -21,7 +21,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 <div class="container">
   <div class="">
     <h1 class="border-bottom border-gray pb-2 mb-2">
-			Edit <? echo $row['ExtraName']; ?>
+			Edit <?php echo $row['ExtraName']; ?>
 		</h1>
     <p class="lead">Edit this extra fee.</p>
 
@@ -39,7 +39,7 @@ include BASE_PATH . "views/paymentsMenu.php";
           <div class="form-group">
             <label for="name">Extra Name</label>
             <input type="text" class="form-control" id="name" name="name"
-						placeholder="Enter name" value="<? echo $row['ExtraName']; ?>">
+						placeholder="Enter name" value="<?php echo $row['ExtraName']; ?>">
           </div>
 
           <div class="form-group">
@@ -49,7 +49,7 @@ include BASE_PATH . "views/paymentsMenu.php";
                 <span class="input-group-text" id="basic-addon3">&pound;</span>
               </div>
               <input type="text" class="form-control" id="price" name="price"
-							placeholder="Enter price" value="<? echo $row['ExtraFee']; ?>">
+							placeholder="Enter price" value="<?php echo $row['ExtraFee']; ?>">
             </div>
           </div>
 

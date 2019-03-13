@@ -81,7 +81,7 @@ if ($_SESSION['AccessLevel'] == "Parent") {
               </div>
               <small id="feeHelp" class="form-text text-muted">Sadly we can't automatically calculate the entry fee for this gala so we need you to tell us. If you enter this amount incorrectly or fail to tell us the amount, you may incur extra charges from the club or gala host.</small>
             </div>
-            <? } ?>
+            <?php } ?>
 
             <input type="hidden" value="<?php echo $row['EntryID']; ?>" name="entryID">
             <p class="mb-0">
@@ -135,7 +135,7 @@ else {
         <?php } ?>
         <form method="post">
 
-          <? for ($i=0; $i<sizeof($swimsArray); $i++) {
+          <?php for ($i=0; $i<sizeof($swimsArray); $i++) {
           if ($rowArray[$i] == 1) { ?>
             <div class="row mb-3">
           <?php }
@@ -172,7 +172,7 @@ else {
             </div>
             <small id="feeHelp" class="form-text text-muted">Sadly we can't automatically calculate the entry fee for this gala so we need you to tell us. If you enter this amount incorrectly or fail to tell us the amount, you may incur extra charges from the club or gala host.</small>
           </div>
-          <? } ?>
+          <?php } ?>
 
           <input type="hidden" value="<?php echo $row['EntryID']; ?>" name="entryID">
           <p class="mb-0">

@@ -46,28 +46,28 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		<div class="col-lg-8">
 			<form method="post">
 				<h1>Club Administration Form</h1>
-				<? if (isset($_SESSION['ErrorState'])) {
+				<?php if (isset($_SESSION['ErrorState'])) {
 					echo $_SESSION['ErrorState'];
 					unset($_SESSION['ErrorState']);
 				} ?>
 				<p class="lead">
-					<? if ($partial_reg) { ?>
+					<?php if ($partial_reg) { ?>
 					You must now complete the Club Administration Form. This form relates to
 					Data Protection, Photoraphy Permissions and the agreement to the Terms and
 					Conditions of the club.
-					<? } else { ?>
+					<?php } else { ?>
 					In this next step you, and your swimmers will need to agree to the terms and
 					conditions of the club.
-					<? } ?>
+					<?php } ?>
 				</p>
 
-				<? if (!$partial_reg) { ?>
+				<?php if (!$partial_reg) { ?>
 				<p>
 					This form relates to yourself and the swimmers listed below.
 				</p>
 
-				<? echo $mySwimmers; ?>
-				<? } ?>
+				<?php echo $mySwimmers; ?>
+				<?php } ?>
 
 				<h2>Data Protection</h2>
 				<p>
@@ -85,7 +85,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 						<input type="checkbox" value="1" class="custom-control-input"
 						name="data-agree" id="data-agree" <?if($partial_reg){?>checked<?}?>>
 						<label class="custom-control-label" for="data-agree">
-							I (<? echo $name; ?>) agree to the use of my data by Chester-le-Street
+							I (<?php echo $name; ?>) agree to the use of my data by Chester-le-Street
 							ASC as outlined above<?if($partial_reg){?> (You have already
 							registered with a previous swimmer, so have already consented to these
 							terms)<?}?>
@@ -126,22 +126,22 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				</div>
 
 
-				<? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+				<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 				$row[$i] = mysqli_fetch_array($result, MYSQLI_ASSOC);
 				$id[$i] = $row[$i]['MemberID'];
 				$age[$i] = date_diff(date_create($row[$i]['DateOfBirth']), date_create('today'))->y; ?>
 
 				<div class="my-3 p-3 bg-white rounded shadow">
 
-					<h3><? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?></h3>
+					<h3><?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?></h3>
 
-					<div class="form-group <? if ($age[$i] >= 12) { echo "mb-0"; } ?>">
+					<div class="form-group <?php if ($age[$i] >= 12) { echo "mb-0"; } ?>">
 						<div class="custom-control custom-checkbox">
 							<input type="checkbox" value="1" class="custom-control-input" name="<?
-							echo $id[$i]; ?>-tc-confirm" id="<? echo $id[$i]; ?>-tc-confirm">
-							<label class="custom-control-label" for="<? echo $id[$i];
+							echo $id[$i]; ?>-tc-confirm" id="<?php echo $id[$i]; ?>-tc-confirm">
+							<label class="custom-control-label" for="<?php echo $id[$i];
 							?>-tc-confirm">
-								I, <? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>
+								I, <?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>
 								agree to the Terms and Conditions of <?=CLUB_NAME?> as outlined
 								above
 							</label>
@@ -160,22 +160,22 @@ include BASE_PATH . "views/renewalTitleBar.php";
 					<div class="form-group mb-0">
 						<div class="custom-control custom-checkbox">
 							<input type="checkbox" value="1" class="custom-control-input" name="<?
-							echo $id[$i]; ?>-pg-understanding" id="<? echo $id[$i];
+							echo $id[$i]; ?>-pg-understanding" id="<?php echo $id[$i];
 							?>-pg-understanding">
-							<label class="custom-control-label" for="<? echo $id[$i];
+							<label class="custom-control-label" for="<?php echo $id[$i];
 							?>-pg-understanding">
-								I, <? echo $name; ?> have explained the content and
-								implications to <? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>
+								I, <?php echo $name; ?> have explained the content and
+								implications to <?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>
 								and can confirm that they understood.
 							</label>
 						</div>
 					</div>
 
-					<? } ?>
+					<?php } ?>
 
 				</div>
 
-				<? } ?>
+				<?php } ?>
 
 				<?
 				for ($i = 0; $i < mysqli_num_rows($result); $i++) {
@@ -208,7 +208,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 					time by heading to Swimmers.
 				</p>
 
-				<? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+				<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 					if ($age[$i] < 18) {
 						$photo = [];
 			      if ($row[$i]['Website'] == 1) {
@@ -227,79 +227,79 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			        $photo[4] = " checked ";
 			      } ?>
 				<div class="my-3 p-3 bg-white rounded shadow">
-					<h3><? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?></h3>
+					<h3><?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?></h3>
 					<p>
-						I, <? echo $name; ?> agree to photography in the following
+						I, <?php echo $name; ?> agree to photography in the following
 			circumstances. Tick boxes only if you wish to grant us photography permission.
 					</p>
 					<div class="custom-control custom-checkbox">
-						<input type="checkbox" value="1" <? echo $photo[0]; ?>
-						class="custom-control-input" name="<? echo $id[$i]; ?>-photo-web" id="<?
+						<input type="checkbox" value="1" <?php echo $photo[0]; ?>
+						class="custom-control-input" name="<?php echo $id[$i]; ?>-photo-web" id="<?
 						echo $id[$i]; ?>-photo-web">
-						<label class="custom-control-label" for="<? echo $id[$i]; ?>-photo-web">
+						<label class="custom-control-label" for="<?php echo $id[$i]; ?>-photo-web">
 							Take photographs to use on the clubs website
 						</label>
 					</div>
 					<div class="custom-control custom-checkbox">
-						<input type="checkbox" value="1" <? echo $photo[1]; ?>
-						class="custom-control-input" name="<? echo $id[$i]; ?>-photo-soc" id="<?
+						<input type="checkbox" value="1" <?php echo $photo[1]; ?>
+						class="custom-control-input" name="<?php echo $id[$i]; ?>-photo-soc" id="<?
 						echo $id[$i]; ?>-photo-soc">
-						<label class="custom-control-label" for="<? echo $id[$i]; ?>-photo-soc">
+						<label class="custom-control-label" for="<?php echo $id[$i]; ?>-photo-soc">
 							Take photographs to use on social media sites
 						</label>
 					</div>
 					<div class="custom-control custom-checkbox">
-						<input type="checkbox" value="1" <? echo $photo[2]; ?>
-						class="custom-control-input" name="<? echo $id[$i]; ?>-photo-nb" id="<?
+						<input type="checkbox" value="1" <?php echo $photo[2]; ?>
+						class="custom-control-input" name="<?php echo $id[$i]; ?>-photo-nb" id="<?
 						echo $id[$i]; ?>-photo-nb">
-						<label class="custom-control-label" for="<? echo $id[$i]; ?>-photo-nb">
+						<label class="custom-control-label" for="<?php echo $id[$i]; ?>-photo-nb">
 							Take photographs to use on club noticeboards
 						</label>
 					</div>
 					<div class="custom-control custom-checkbox">
-						<input type="checkbox" value="1" <? echo $photo[3]; ?>
-						class="custom-control-input" name="<? echo $id[$i]; ?>-photo-film" id="<?
+						<input type="checkbox" value="1" <?php echo $photo[3]; ?>
+						class="custom-control-input" name="<?php echo $id[$i]; ?>-photo-film" id="<?
 						echo $id[$i]; ?>-photo-film">
-						<label class="custom-control-label" for="<? echo $id[$i]; ?>-photo-film">
+						<label class="custom-control-label" for="<?php echo $id[$i]; ?>-photo-film">
 							Filming for training purposes only
 						</label>
 					</div>
 					<div class="custom-control custom-checkbox">
-						<input type="checkbox" value="1" <? echo $photo[4]; ?>
-						class="custom-control-input" name="<? echo $id[$i]; ?>-photo-pro" id="<?
+						<input type="checkbox" value="1" <?php echo $photo[4]; ?>
+						class="custom-control-input" name="<?php echo $id[$i]; ?>-photo-pro" id="<?
 						echo $id[$i]; ?>-photo-pro">
-						<label class="custom-control-label" for="<? echo $id[$i]; ?>-photo-pro">
+						<label class="custom-control-label" for="<?php echo $id[$i]; ?>-photo-pro">
 							Employ a professional photographer (approved by the club) who will take
 							photographs in competitions and/or club events.
 						</label>
 					</div>
 				</div>
-				<? } } ?>
+				<?php } } ?>
 
-				<? } ?>
+				<?php } ?>
 
-				<? if ($y > 0) { ?>
+				<?php if ($y > 0) { ?>
 
 				<h2>Medical Consent</h2>
 				<p>For Parents and Guardians of members under 18 years</p>
 
-				<? } ?>
+				<?php } ?>
 
-				<? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+				<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 					if ($age[$i] < 18) { ?>
 				<div class="my-3 p-3 bg-white rounded shadow">
 
 					<h3>
-						Consent for <? echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>
+						Consent for <?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>
 					</h3>
 					<p>
-						I confirm that <? echo $row[$i]['MForename'] . " " .
+						I confirm that <?php echo $row[$i]['MForename'] . " " .
 						$row[$i]['MSurname']; ?> has not been advised by a doctor to not take
 						part in physical activities unless under medical supervision.
 					</p>
 
 					<p>
-						I, <? echo $name; ?> hereby give permission for the coach or
+						I, <?php echo $name; ?> hereby give permission for the coach or
 						other appropriate person to give the authority on my behalf for any medical
 						or surgical treatment recommended by competent medical authorities, where it
 						would be contrary to my child's interest, in the doctor's opinion, for any
@@ -308,14 +308,14 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 					<div class="custom-control custom-checkbox">
 						<input type="checkbox" value="1" class="custom-control-input" name="<?
-						echo $id[$i]; ?>-med" id="<? echo $id[$i]; ?>-med">
-						<label class="custom-control-label" for="<? echo $id[$i]; ?>-med">
+						echo $id[$i]; ?>-med" id="<?php echo $id[$i]; ?>-med">
+						<label class="custom-control-label" for="<?php echo $id[$i]; ?>-med">
 							Confirm
 						</label>
 					</div>
 
 				</div>
-				<? }
+				<?php }
 				} ?>
 
 				<div class="mb-3">

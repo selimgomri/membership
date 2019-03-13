@@ -19,13 +19,13 @@ include BASE_PATH . "views/header.php";
       <h1>Manage General Account Options</h1>
       <p class="lead">Options such as Two Factor Authentication.</p>
 
-    	<? if ($_SESSION['OptionsUpdate']) { ?>
+    	<?php if ($_SESSION['OptionsUpdate']) { ?>
     		<div class="alert alert-success">
     			<p class="mb-0">
     				<strong>We've successfully updated your general options</strong>
     			</p>
     		</div>
-    	<? unset($_SESSION['OptionsUpdate']);
+    	<?php unset($_SESSION['OptionsUpdate']);
     	} ?>
 
     	<form method="post">

@@ -33,7 +33,7 @@ if (mysqli_num_rows($result) > 0) {
           <div class="col-sm-6 col-md-5 col-lg4">
             <div class="alert alert-success">
               <strong>We've reset your Password</strong>
-              <p class="mb-2">You can now, <a href="<? echo autoUrl(""); ?>" class="alert-link">login with your new password</a>.</p>
+              <p class="mb-2">You can now, <a href="<?php echo autoUrl(""); ?>" class="alert-link">login with your new password</a>.</p>
               <p class="mb-0">Thank you for using this service.</p>
             </div>
           </div>
@@ -51,7 +51,7 @@ if (mysqli_num_rows($result) > 0) {
           <div class="col-sm-6 col-md-5 col-lg4">
             <div class="alert alert-danger">
               <strong>You failed to supply both passwords, the passwords did not match or the password was not 8 characters or more</strong>
-              <p class="mb-2">Please, <a href="<? echo autoUrl("resetpassword/auth/" . htmlspecialchars($token)); ?>" class="alert-link">try again</a>.</p>
+              <p class="mb-2">Please, <a href="<?php echo autoUrl("resetpassword/auth/" . htmlspecialchars($token)); ?>" class="alert-link">try again</a>.</p>
               <p class="mb-0">We're sorry for any inconvenience caused.</p>
             </div>
           </div>

@@ -48,22 +48,22 @@ include BASE_PATH . "views/paymentsMenu.php";
 					} ?>
 					" class="btn btn-success">Setup a Direct Debit</a>
 				</p>
-				<? if ($scheduleExists) { ?>
+				<?php if ($scheduleExists) { ?>
 				<p class="small mb-0">
 					We'll direct you to our partner GoCardless who handle Direct Debits on
 					our behalf.
 				</p>
-				<? } else { ?>
+				<?php } else { ?>
 				<p class="small mb-0">This won't take long.</p>
-				<? } ?>
+				<?php } ?>
 			</div>
 		</div>
 		<div class="col">
 			<div class="cell">
 				<p class="text-center">
-					<img style="max-height:50px;" src="<? echo
-					autoUrl("img/directdebit/directdebit.png"); ?>" srcset="<? echo
-					autoUrl("img/directdebit/directdebit@2x.png"); ?> 2x, <? echo
+					<img style="max-height:50px;" src="<?php echo
+					autoUrl("img/directdebit/directdebit.png"); ?>" srcset="<?php echo
+					autoUrl("img/directdebit/directdebit@2x.png"); ?> 2x, <?php echo
 					autoUrl("img/directdebit/directdebit@3x.png"); ?> 3x" alt="Direct
 					Debit Logo">
 				</p>

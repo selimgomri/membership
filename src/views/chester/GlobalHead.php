@@ -52,17 +52,17 @@ Chester-le-Street ASC is a non profit unincorporated association.
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
       ga('create', 'UA-78812259-4', 'auto');
-      <? if (isset($_SESSION['LoggedIn'])) { ?>
+      <?php if (isset($_SESSION['LoggedIn'])) { ?>
       ga('set', 'userId', <?= $_SESSION['UserID'] ?>);
       ga('send', 'event', 'authentication', 'user-id available');
-      <? } else { ?>
+      <?php } else { ?>
       ga('send', 'pageview');
-      <? } ?>
+      <?php } ?>
     </script>
 	  <script>var shiftWindow = function() { scrollBy(0, -50) }; if
 	  (location.hash) shiftWindow(); window.addEventListener("hashchange",
 	  shiftWindow);</script>
-    <script src="<? echo autoUrl("/js/tinymce/tinymce.min.js"); ?>"></script>
+    <script src="<?php echo autoUrl("/js/tinymce/tinymce.min.js"); ?>"></script>
     <link rel="stylesheet preload"
     href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono|Merriweather:400,600">
     <link rel="stylesheet preload" href="<?php echo autoUrl("css/chester-2.1.2.css") ?>">
@@ -90,7 +90,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <link rel="mask-icon" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterIcon.svg" color="#bd0000">
     <script src='https://www.google.com/recaptcha/api.js'></script>
 
-    <? if (date("m") == "12") { ?>
+    <?php if (date("m") == "12") { ?>
     <style>
       .bg-primary-darker {
         /*background:#005fbd;*/
@@ -101,7 +101,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
         text-shadow: 1px 1px 1px rgba(0,0,0,.5);
       }
     </style>
-      <? } ?>
+      <?php } ?>
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>

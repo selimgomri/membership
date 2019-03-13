@@ -67,13 +67,13 @@
 								</a>
 	            </li>
 							<li>
-	              <a href="<? echo autoUrl("notify"); ?>" target="_self"
+	              <a href="<?php echo autoUrl("notify"); ?>" target="_self"
 	              title="About our Notify Email Service">
 									Emails from us
 								</a>
 	            </li>
               <li>
-	              <a href="<? echo autoUrl("people"); ?>" target="_self"
+	              <a href="<?php echo autoUrl("people"); ?>" target="_self"
 	              title="Personal web pages of club staff">
 									Club People
 								</a>
@@ -150,9 +150,9 @@
 <script defer src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/js/popper.min.js"></script>
 <script defer src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/js/bootstrap.min.js"></script>
 <script async src="https://www.chesterlestreetasc.co.uk/static/global/js/clscookies.js"></script>
-<? if ($use_website_menu) { ?>
+<?php if ($use_website_menu) { ?>
 <script defer src="https://static.chesterlestreetasc.co.uk/global/headers/MainSiteMenu.js"></script>
-<? } ?>
+<?php } ?>
 </body>
 </html>
 <?php //mysqli_close(LINK); ?>

@@ -1,4 +1,4 @@
-<? if (!$renewal_trap) {
+<?php if (!$renewal_trap) {
 $access = $_SESSION['AccessLevel']; ?>
 
 <!--<div class="bg-warning box-shadow mb-3 py-2" style="margin-top:-1rem;">
@@ -11,6 +11,6 @@ $access = $_SESSION['AccessLevel']; ?>
   </div>
 </div>-->
 
-<? } else {
+<?php } else {
   include 'renewalTitleBar.php';
 }

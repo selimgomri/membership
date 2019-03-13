@@ -15,7 +15,7 @@ include BASE_PATH . "views/notifyMenu.php";
 <div class="container">
 	<h1>Pending Messages</h1>
 	<p class="lead">Messages listed here are queued to be sent in batches.</p>
-	<? if (mysqli_num_rows($result) > 0) { ?>
+	<?php if (mysqli_num_rows($result) > 0) { ?>
 		<div class="table-responsive-md">
 			<table class="table">
 				<thead class="thead-light">
@@ -25,27 +25,27 @@ include BASE_PATH . "views/notifyMenu.php";
 					</tr>
 				</thead>
 				<tbody>
-				<? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+				<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 					$row = mysqli_fetch_array($result, MYSQLI_ASSOC) ?>
 					<tr>
 						<td>
-							<a href="<? echo autoUrl("notify/email/" . $row['EmailID']); ?>">
-								<? echo $row['Forename'] . " " . $row['Surname']; ?>
+							<a href="<?php echo autoUrl("notify/email/" . $row['EmailID']); ?>">
+								<?php echo $row['Forename'] . " " . $row['Surname']; ?>
 							</a>
 						</td>
 						<td>
-							<? echo $row['Subject']; ?>
+							<?php echo $row['Subject']; ?>
 						</td>
 					</tr>
-				<? } ?>
+				<?php } ?>
 			</tbody>
 		</table>
 	</div>
-	<? } else { ?>
+	<?php } else { ?>
 	<div class="alert alert-info">
 		There are no messages in the queue to send.
 	</div>
-	<? } ?>
+	<?php } ?>
 </div>
 
 <?php include BASE_PATH . "views/footer.php";

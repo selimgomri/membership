@@ -27,12 +27,12 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 <div class="container">
   <div class="row align-items-center">
     <div class="col-md-6">
-	    <h1><? echo $row['ExtraName']; ?></h1>
+	    <h1><?php echo $row['ExtraName']; ?></h1>
     </div>
     <div class="col text-right">
-      <a href="<? echo autoUrl("payments/extrafees/" . $id . "/edit"); ?>"
+      <a href="<?php echo autoUrl("payments/extrafees/" . $id . "/edit"); ?>"
         class="btn btn-dark">Edit</a>
-      <a href="<? echo autoUrl("payments/extrafees/" . $id . "/delete"); ?>"
+      <a href="<?php echo autoUrl("payments/extrafees/" . $id . "/delete"); ?>"
         class="btn btn-danger">Delete</a>
     </div>
   </div>
@@ -55,12 +55,12 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
             <label for="squadSelect">Select Squad</label>
             <select class="custom-select" id="squadSelect" name="squadSelect">
               <option selected>Choose...</option>
-              <? for ($i = 0; $i < mysqli_num_rows($squads); $i ++) {
+              <?php for ($i = 0; $i < mysqli_num_rows($squads); $i ++) {
                 $squadsRow = mysqli_fetch_array($squads, MYSQLI_ASSOC); ?>
-              <option value="<? echo $squadsRow['SquadID']; ?>">
-                <? echo $squadsRow['SquadName']; ?>
+              <option value="<?php echo $squadsRow['SquadID']; ?>">
+                <?php echo $squadsRow['SquadName']; ?>
               </option>
-              <? } ?>
+              <?php } ?>
             </select>
           </div>
           <div class="form-group">

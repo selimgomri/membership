@@ -42,7 +42,7 @@ include BASE_PATH . "views/postsMenu.php";
 					<p class="mb-0">We will publish this immediately.</p>
 				</div>
 
-                <? if (!$people) { ?>
+                <?php if (!$people) { ?>
 				<div class="cell">
 					<h3>Meta</h3>
 					<div class="form-group">
@@ -77,7 +77,7 @@ include BASE_PATH . "views/postsMenu.php";
 						</select>
 					</div>
 				</div>
-				<? } ?>
+				<?php } ?>
 
 				<div class="cell">
 					<h3>SEO</h3>
@@ -104,7 +104,7 @@ include BASE_PATH . "views/postsMenu.php";
     toolbar: 'insert | undo redo |  formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
     content_css: [
       'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i',
-      '<? echo autoUrl("css/tinymce.css"); ?>'
+      '<?php echo autoUrl("css/tinymce.css"); ?>'
     ],
     relative_urls : false,
     remove_script_host : false

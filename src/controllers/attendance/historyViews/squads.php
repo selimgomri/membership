@@ -15,14 +15,14 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 		<p class="lead border-bottom border-gray pb-2">View Attendance History for a squad</p>
 
 		<ul class="mb-0">
-			<? for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+			<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 				$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 				?><li>
-					<a href="<? echo autoUrl("attendance/history/squads/" . $row['SquadID']); ?>">
-						<? echo $row['SquadName']; ?> Squad
+					<a href="<?php echo autoUrl("attendance/history/squads/" . $row['SquadID']); ?>">
+						<?php echo $row['SquadName']; ?> Squad
 					</a>
 				</li>
-			<? } ?>
+			<?php } ?>
 		</ul>
 
 	</div>

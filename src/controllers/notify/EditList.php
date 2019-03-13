@@ -20,7 +20,7 @@ include BASE_PATH . "views/notifyMenu.php";
 <div class="container">
   <div class="">
     <h1 class="">
-			Edit <? echo $row['Name']; ?>
+			Edit <?php echo $row['Name']; ?>
 		</h1>
     <p class="lead">Edit this targeted list.</p>
 
@@ -38,12 +38,12 @@ include BASE_PATH . "views/notifyMenu.php";
           <div class="form-group">
             <label for="name">Extra Name</label>
             <input type="text" class="form-control" id="name" name="name"
-						placeholder="Enter name" value="<? echo $row['Name']; ?>">
+						placeholder="Enter name" value="<?php echo $row['Name']; ?>">
           </div>
 
           <div class="form-group">
 						<label for="desc">Description</label>
-            <input type="text" class="form-control" id="desc" name="desc" placeholder="Describe this group" value="<? echo $row['Description']; ?>">
+            <input type="text" class="form-control" id="desc" name="desc" placeholder="Describe this group" value="<?php echo $row['Description']; ?>">
           </div>
 
           <p class="mb-0">

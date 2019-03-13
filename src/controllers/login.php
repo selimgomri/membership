@@ -33,7 +33,7 @@ $_SESSION['LoginSec'] = $lsv;
                 <div class="alert alert-danger">
                   <strong>Incorrect details</strong> <br>
                   Please try again
-                  <? if (isset($_SESSION['ErrorStateLSVMessage'])) {
+                  <?php if (isset($_SESSION['ErrorStateLSVMessage'])) {
                     echo $_SESSION['ErrorStateLSVMessage'];
                     unset($_SESSION['ErrorStateLSVMessage']);
                   } ?>

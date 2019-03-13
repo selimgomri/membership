@@ -15,7 +15,7 @@ include BASE_PATH . "views/notifyMenu.php";
     <div class="col-lg-8 col-md-10">
     	<h1>Notify</h1>
     	<p class="lead">Send Emails to targeted groups of parents</p>
-      <? if (isset($_SESSION['NotifyIndivSuccess'])) {
+      <?php if (isset($_SESSION['NotifyIndivSuccess'])) {
         if ($_SESSION['NotifyIndivSuccess']) {?>
           <div class="alert alert-success">
         		We've successfully sent your email.
@@ -26,14 +26,14 @@ include BASE_PATH . "views/notifyMenu.php";
         	</div>
         <?}
       } ?>
-      <? if (isset($_SESSION['NotifySuccess'])) { ?>
+      <?php if (isset($_SESSION['NotifySuccess'])) { ?>
       <div class="alert alert-success">
     		We've successfully queued your email. <?=
     		$_SESSION['NotifySuccess']['Count'] ?> people will recieve your
-    		message<? if (!$_SESSION['NotifySuccess']['Force']) { ?> if they have
-    		opted in to recieving emails from us<? } ?>.
+    		message<?php if (!$_SESSION['NotifySuccess']['Force']) { ?> if they have
+    		opted in to recieving emails from us<?php } ?>.
     	</div>
-      <? }
+      <?php }
       unset($_SESSION['NotifySuccess']); ?>
     	<div class="alert alert-info">
     		Notify is our <strong>GDPR Compliant</strong> Email System

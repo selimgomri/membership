@@ -8,7 +8,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 <div class="container">
 	<div class="mb-3 p-3 bg-white rounded shadow">
 		<form method="post">
-			<? if (isset($_SESSION['ErrorState'])) {
+			<?php if (isset($_SESSION['ErrorState'])) {
 				echo $_SESSION['ErrorState'];
 				unset($_SESSION['ErrorState']);
 				?><hr><?
@@ -16,7 +16,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			<h1>Review your swimmers</h1>
 			<p class="lead">
 				Make sure all of your swimmers are listed here. Make sure you
-				<a target="_blank" href="<? echo autoUrl("myaccount/addswimmer"); ?>">
+				<a target="_blank" href="<?php echo autoUrl("myaccount/addswimmer"); ?>">
 					add them
 				</a>
 				if not.
@@ -29,14 +29,14 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				our registers if they cannot renew.
 			</p>
 
-			<? echo mySwimmersTable($link, $userID); ?>
+			<?php echo mySwimmersTable($link, $userID); ?>
 
-			<? if (user_needs_registration($user)) { ?>
+			<?php if (user_needs_registration($user)) { ?>
 				<p>
 					The links to your swimmers are unavailable until you have completed
 					registration.
 				</p>
-			<? } ?>
+			<?php } ?>
 
 			<div>
 				<button type="submit" class="btn btn-success">Save and Continue</button>

@@ -36,21 +36,21 @@ include BASE_PATH . 'views/header.php';
 <div class="container">
 	<h1>Add Manual Times for <?= $row['MForename'] ?> <?= $row['MSurname'] ?></h1>
 	<p class="lead">
-		<? echo $row['GalaName']; ?>
+		<?php echo $row['GalaName']; ?>
 	</p>
 
 	<form method="post" class="my-3 p-3 bg-white rounded shadow">
 		<h2 class="pb-2 mb-0">Swims</h2>
 
 		<div class="mb-3">
-		<? for ($i = 0; $i < sizeof($swimsArray); $i++) { ?>
-		<? if ($row[$swimsArray[$i]] == 1) { ?>
+		<?php for ($i = 0; $i < sizeof($swimsArray); $i++) { ?>
+		<?php if ($row[$swimsArray[$i]] == 1) { ?>
 		<div class="media pt-3">
 	    <div class="media-body pt-3 mb-0 lh-125 border-top border-gray">
 	      <strong class="d-block">
-					<? echo $swimsTextArray[$i]; ?>
+					<?php echo $swimsTextArray[$i]; ?>
 				</strong>
-				<? if ($times[$swimsArray[$i]] != "") {
+				<?php if ($times[$swimsArray[$i]] != "") {
 					echo $times[$swimsArray[$i]];
 				} else if ($row[$swimsTimeArray[$i]] != "") {
 					echo $row[$swimsTimeArray[$i]];
@@ -59,13 +59,13 @@ include BASE_PATH . 'views/header.php';
 				<div class="form-group mb-0">
 					<div class="row no-gutters">
   			    <div class="col">
-  			      <input type="number" class="form-control" placeholder="Minutes" name="<? echo $swimsTimeArray[$i]; ?>Mins" id="<? echo $swimsTimeArray[$i]; ?>Mins" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0">
+  			      <input type="number" class="form-control" placeholder="Minutes" name="<?php echo $swimsTimeArray[$i]; ?>Mins" id="<?php echo $swimsTimeArray[$i]; ?>Mins" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0">
   			    </div>
   					<div class="col">
-  			      <input type="number" class="form-control" placeholder="Seconds" name="<? echo $swimsTimeArray[$i]; ?>Secs" id="<? echo $swimsTimeArray[$i]; ?>Secs" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="59">
+  			      <input type="number" class="form-control" placeholder="Seconds" name="<?php echo $swimsTimeArray[$i]; ?>Secs" id="<?php echo $swimsTimeArray[$i]; ?>Secs" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="59">
   			    </div>
   					<div class="col">
-  			      <input type="number" class="form-control" placeholder="Hundreds" name="<? echo $swimsTimeArray[$i]; ?>Hunds" id="<? echo $swimsTimeArray[$i]; ?>Hunds" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="99">
+  			      <input type="number" class="form-control" placeholder="Hundreds" name="<?php echo $swimsTimeArray[$i]; ?>Hunds" id="<?php echo $swimsTimeArray[$i]; ?>Hunds" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="99">
   			    </div>
   				</div>
   		  </div>
@@ -73,8 +73,8 @@ include BASE_PATH . 'views/header.php';
 				} ?>
 	    </div>
 		</div>
-		<? } ?>
-		<? } ?>
+		<?php } ?>
+		<?php } ?>
 		</div>
 
 		<p class="mb-0">
