@@ -471,17 +471,17 @@
     },
     {
         "name": "endroid/qr-code",
-        "version": "3.5.2",
-        "version_normalized": "3.5.2.0",
+        "version": "3.5.6",
+        "version_normalized": "3.5.6.0",
         "source": {
             "type": "git",
             "url": "https://github.com/endroid/qr-code.git",
-            "reference": "d95143907cf178f9073523af4b37feb25bd6cdd0"
+            "reference": "9cc1eaecb9bc670bba82f27b8dfccd4cbed2df2f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/endroid/qr-code/zipball/d95143907cf178f9073523af4b37feb25bd6cdd0",
-            "reference": "d95143907cf178f9073523af4b37feb25bd6cdd0",
+            "url": "https://api.github.com/repos/endroid/qr-code/zipball/9cc1eaecb9bc670bba82f27b8dfccd4cbed2df2f",
+            "reference": "9cc1eaecb9bc670bba82f27b8dfccd4cbed2df2f",
             "shasum": ""
         },
         "require": {
@@ -497,7 +497,10 @@
         "require-dev": {
             "phpunit/phpunit": "^5.7|^6.0"
         },
-        "time": "2018-12-16T12:37:37+00:00",
+        "suggest": {
+            "symfony/http-foundation": "Install if you want to use QrCodeResponse"
+        },
+        "time": "2019-03-03T08:34:10+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -529,6 +532,100 @@
             "php",
             "qr",
             "qrcode"
+        ]
+    },
+    {
+        "name": "erusev/parsedown",
+        "version": "v1.7.2",
+        "version_normalized": "1.7.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/erusev/parsedown.git",
+            "reference": "d60bcdc46978357759ecb13cb4b078da783f8faf"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/erusev/parsedown/zipball/d60bcdc46978357759ecb13cb4b078da783f8faf",
+            "reference": "d60bcdc46978357759ecb13cb4b078da783f8faf",
+            "shasum": ""
+        },
+        "require": {
+            "ext-mbstring": "*",
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8.35"
+        },
+        "time": "2019-03-17T17:19:46+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Parsedown": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Emanuil Rusev",
+                "email": "hello@erusev.com",
+                "homepage": "http://erusev.com"
+            }
+        ],
+        "description": "Parser for Markdown.",
+        "homepage": "http://parsedown.org",
+        "keywords": [
+            "markdown",
+            "parser"
+        ]
+    },
+    {
+        "name": "erusev/parsedown-extra",
+        "version": "0.7.1",
+        "version_normalized": "0.7.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/erusev/parsedown-extra.git",
+            "reference": "0db5cce7354e4b76f155d092ab5eb3981c21258c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/erusev/parsedown-extra/zipball/0db5cce7354e4b76f155d092ab5eb3981c21258c",
+            "reference": "0db5cce7354e4b76f155d092ab5eb3981c21258c",
+            "shasum": ""
+        },
+        "require": {
+            "erusev/parsedown": "~1.4"
+        },
+        "time": "2015-11-01T10:19:22+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "ParsedownExtra": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Emanuil Rusev",
+                "email": "hello@erusev.com",
+                "homepage": "http://erusev.com"
+            }
+        ],
+        "description": "An extension of Parsedown that adds support for Markdown Extra.",
+        "homepage": "https://github.com/erusev/parsedown-extra",
+        "keywords": [
+            "markdown",
+            "markdown extra",
+            "parsedown",
+            "parser"
         ]
     },
     {
@@ -1525,17 +1622,17 @@
     },
     {
         "name": "pragmarx/google2fa",
-        "version": "v4.0.0",
-        "version_normalized": "4.0.0.0",
+        "version": "v4.0.2",
+        "version_normalized": "4.0.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/antonioribeiro/google2fa.git",
-            "reference": "b0526ba1cca520ac3a64b23863fe7b6d4f9dd232"
+            "reference": "0f32899ab67da6fd55b9d9dc514ab68734269e7b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/antonioribeiro/google2fa/zipball/b0526ba1cca520ac3a64b23863fe7b6d4f9dd232",
-            "reference": "b0526ba1cca520ac3a64b23863fe7b6d4f9dd232",
+            "url": "https://api.github.com/repos/antonioribeiro/google2fa/zipball/0f32899ab67da6fd55b9d9dc514ab68734269e7b",
+            "reference": "0f32899ab67da6fd55b9d9dc514ab68734269e7b",
             "shasum": ""
         },
         "require": {
@@ -1545,9 +1642,9 @@
             "symfony/polyfill-php56": "~1.2"
         },
         "require-dev": {
-            "phpunit/phpunit": "~4|~5|~6"
+            "phpunit/phpunit": "~4|~5|~6|~7|~8"
         },
-        "time": "2018-10-06T22:48:01+00:00",
+        "time": "2019-03-19T23:27:40+00:00",
         "type": "library",
         "extra": {
             "component": "package",
@@ -1947,17 +2044,17 @@
     },
     {
         "name": "stripe/stripe-php",
-        "version": "v6.30.1",
-        "version_normalized": "6.30.1.0",
+        "version": "v6.31.0",
+        "version_normalized": "6.31.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/stripe/stripe-php.git",
-            "reference": "570d47d566da6e87413db1fd3a833c42907cb746"
+            "reference": "a44a095af88057922a08b03daaf79d6859e12e2d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/stripe/stripe-php/zipball/570d47d566da6e87413db1fd3a833c42907cb746",
-            "reference": "570d47d566da6e87413db1fd3a833c42907cb746",
+            "url": "https://api.github.com/repos/stripe/stripe-php/zipball/a44a095af88057922a08b03daaf79d6859e12e2d",
+            "reference": "a44a095af88057922a08b03daaf79d6859e12e2d",
             "shasum": ""
         },
         "require": {
@@ -1972,7 +2069,7 @@
             "squizlabs/php_codesniffer": "~2.0",
             "symfony/process": "~2.8"
         },
-        "time": "2019-02-16T17:48:38+00:00",
+        "time": "2019-03-18T23:36:33+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2005,17 +2102,17 @@
     },
     {
         "name": "symfony/browser-kit",
-        "version": "v4.2.3",
-        "version_normalized": "4.2.3.0",
+        "version": "v4.2.4",
+        "version_normalized": "4.2.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/browser-kit.git",
-            "reference": "ee4462581eb54bf34b746e4a5d522a4f21620160"
+            "reference": "61d85c5af2fc058014c7c89504c3944e73a086f0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/browser-kit/zipball/ee4462581eb54bf34b746e4a5d522a4f21620160",
-            "reference": "ee4462581eb54bf34b746e4a5d522a4f21620160",
+            "url": "https://api.github.com/repos/symfony/browser-kit/zipball/61d85c5af2fc058014c7c89504c3944e73a086f0",
+            "reference": "61d85c5af2fc058014c7c89504c3944e73a086f0",
             "shasum": ""
         },
         "require": {
@@ -2029,7 +2126,7 @@
         "suggest": {
             "symfony/process": ""
         },
-        "time": "2019-01-16T21:31:25+00:00",
+        "time": "2019-02-23T15:17:42+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2064,8 +2161,8 @@
     },
     {
         "name": "symfony/css-selector",
-        "version": "v4.2.3",
-        "version_normalized": "4.2.3.0",
+        "version": "v4.2.4",
+        "version_normalized": "4.2.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/css-selector.git",
@@ -2119,17 +2216,17 @@
     },
     {
         "name": "symfony/dom-crawler",
-        "version": "v4.2.3",
-        "version_normalized": "4.2.3.0",
+        "version": "v4.2.4",
+        "version_normalized": "4.2.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/dom-crawler.git",
-            "reference": "d8476760b04cdf7b499c8718aa437c20a9155103"
+            "reference": "53c97769814c80a84a8403efcf3ae7ae966d53bb"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/d8476760b04cdf7b499c8718aa437c20a9155103",
-            "reference": "d8476760b04cdf7b499c8718aa437c20a9155103",
+            "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/53c97769814c80a84a8403efcf3ae7ae966d53bb",
+            "reference": "53c97769814c80a84a8403efcf3ae7ae966d53bb",
             "shasum": ""
         },
         "require": {
@@ -2143,7 +2240,7 @@
         "suggest": {
             "symfony/css-selector": ""
         },
-        "time": "2019-01-16T20:35:37+00:00",
+        "time": "2019-02-23T15:17:42+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2178,8 +2275,8 @@
     },
     {
         "name": "symfony/inflector",
-        "version": "v4.2.3",
-        "version_normalized": "4.2.3.0",
+        "version": "v4.2.4",
+        "version_normalized": "4.2.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/inflector.git",
@@ -2238,23 +2335,23 @@
     },
     {
         "name": "symfony/options-resolver",
-        "version": "v4.2.3",
-        "version_normalized": "4.2.3.0",
+        "version": "v4.2.4",
+        "version_normalized": "4.2.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/options-resolver.git",
-            "reference": "831b272963a8aa5a0613a1a7f013322d8161bbbb"
+            "reference": "3896e5a7d06fd15fa4947694c8dcdd371ff147d1"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/options-resolver/zipball/831b272963a8aa5a0613a1a7f013322d8161bbbb",
-            "reference": "831b272963a8aa5a0613a1a7f013322d8161bbbb",
+            "url": "https://api.github.com/repos/symfony/options-resolver/zipball/3896e5a7d06fd15fa4947694c8dcdd371ff147d1",
+            "reference": "3896e5a7d06fd15fa4947694c8dcdd371ff147d1",
             "shasum": ""
         },
         "require": {
             "php": "^7.1.3"
         },
-        "time": "2019-01-16T21:31:25+00:00",
+        "time": "2019-02-23T15:17:42+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2527,17 +2624,17 @@
     },
     {
         "name": "symfony/property-access",
-        "version": "v4.2.3",
-        "version_normalized": "4.2.3.0",
+        "version": "v4.2.4",
+        "version_normalized": "4.2.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/property-access.git",
-            "reference": "4768734a803c4471b7a733bd13698d91dd0cf193"
+            "reference": "d5e10532c51db0b657b1e25b2bd70acbcd13bbf9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/property-access/zipball/4768734a803c4471b7a733bd13698d91dd0cf193",
-            "reference": "4768734a803c4471b7a733bd13698d91dd0cf193",
+            "url": "https://api.github.com/repos/symfony/property-access/zipball/d5e10532c51db0b657b1e25b2bd70acbcd13bbf9",
+            "reference": "d5e10532c51db0b657b1e25b2bd70acbcd13bbf9",
             "shasum": ""
         },
         "require": {
@@ -2550,7 +2647,7 @@
         "suggest": {
             "psr/cache-implementation": "To cache access methods."
         },
-        "time": "2019-01-16T20:31:39+00:00",
+        "time": "2019-02-23T15:17:42+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
