@@ -34,6 +34,18 @@ include BASE_PATH . "views/header.php";
 		} ?>
 		<p class="lead">Check the details for <?php echo $name; ?> are correct.</p>
 
+    <div class="alert alert-info">
+      <p class="mb-0">
+        <strong>
+          <a href="https://www.markdownguide.org/" target="_blank"
+          class="alert-link">Styling with Markdown</a> is supported in these forms.
+        </strong>
+      </p>
+      <p class="mb-0">
+        To start a new line, press return twice.
+      </p>
+    </div>
+
 		<div class="mb-2">
 			<p class="mb-2">Does <?php echo $name; ?> have any specific medical conditions
 			or disabilities?</p>
@@ -58,8 +70,8 @@ include BASE_PATH . "views/header.php";
 
 		<div class="form-group">
 	    <label for="medConDisDetails">If yes give details</label>
-	    <textarea class="form-control" id="medConDisDetails" name="medConDisDetails"
-	    rows="3" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Conditions']; ?></textarea>
+	    <textarea onkeyup="autoGrow(this)" class="form-control" id="medConDisDetails" name="medConDisDetails"
+	    rows="8" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Conditions']; ?></textarea>
 	  </div>
 
 		<!-- -->
@@ -89,8 +101,8 @@ include BASE_PATH . "views/header.php";
 
 		<div class="form-group">
 	    <label for="allergiesDetails">If yes give details</label>
-	    <textarea class="form-control" id="allergiesDetails" name="allergiesDetails"
-	    rows="3" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Allergies']; ?></textarea>
+	    <textarea onkeyup="autoGrow(this)" class="form-control" id="allergiesDetails" name="allergiesDetails"
+	    rows="8" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Allergies']; ?></textarea>
 	  </div>
 
 		<!-- -->
@@ -118,8 +130,8 @@ include BASE_PATH . "views/header.php";
 
 		<div class="form-group">
 	    <label for="medConDisDetails">If yes give details</label>
-	    <textarea class="form-control" id="medicineDetails" name="medicineDetails"
-	    rows="3" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Medication']; ?></textarea>
+	    <textarea onkeyup="autoGrow(this)" class="form-control" id="medicineDetails" name="medicineDetails"
+	    rows="8" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Medication']; ?></textarea>
 	  </div>
 
 		<div>
@@ -130,27 +142,6 @@ include BASE_PATH . "views/header.php";
 	</form>
 </div>
 
-<script>
-function toggleState(id, radio, state ) {
-	var element = document.getElementById(id);
-  var radios = document.getElementsByName(radio);
-
-  for (var i = 0; i < radios.length; i++) {
-    if (radios[i].checked) {
-      if (radios[i].value == 1) {
-        element.disabled = false;
-      } else {
-        element.disabled = true;
-      }
-
-    	if (element.disabled) {
-    		element.value = "";
-    	}
-
-      break;
-    }
-  }
-}
-</script>
+<script src="<?=autoUrl("public/js/medical-forms/MedicalForm.js")?>"></script>
 
 <?php include BASE_PATH . "views/footer.php";

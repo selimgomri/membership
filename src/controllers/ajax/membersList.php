@@ -75,8 +75,8 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       $age = date_diff(date_create($swimmersRowX['DateOfBirth']), date_create('today'))->y;
       $ageEoY = date('Y') - date('Y', strtotime($swimmersRowX['DateOfBirth']));
       $output .= "<tr>
-        <td><a href=\"" . $swimmerLink . "\">" . $swimmersRowX['MForename'] . " " . $swimmersRowX['MSurname'] . "</a></td>
-        <td><a href=\"" . autoUrl('squads/' . $swimmersRowX['SquadID']) . "\">" . $swimmersRowX['SquadName'] . "</a></td>
+        <td><a href=\"" . $swimmerLink . "\">" . htmlspecialchars($swimmersRowX['MForename'] . " " . $swimmersRowX['MSurname']) . "</a></td>
+        <td><a href=\"" . autoUrl('squads/' . $swimmersRowX['SquadID']) . "\">" . htmlspecialchars($swimmersRowX['SquadName']) . "</a></td>
         <td>" . $DOB . "</td>
         <td>" . $age . "</td>
         <td>" . $ageEoY . "</td>

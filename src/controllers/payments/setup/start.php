@@ -62,9 +62,9 @@ include BASE_PATH . "views/paymentsMenu.php";
 			<div class="cell">
 				<p class="text-center">
 					<img style="max-height:50px;" src="<?php echo
-					autoUrl("img/directdebit/directdebit.png"); ?>" srcset="<?php echo
-					autoUrl("img/directdebit/directdebit@2x.png"); ?> 2x, <?php echo
-					autoUrl("img/directdebit/directdebit@3x.png"); ?> 3x" alt="Direct
+					autoUrl("public/img/directdebit/directdebit.png"); ?>" srcset="<?php echo
+					autoUrl("public/img/directdebit/directdebit@2x.png"); ?> 2x, <?php echo
+					autoUrl("public/img/directdebit/directdebit@3x.png"); ?> 3x" alt="Direct
 					Debit Logo">
 				</p>
 				<p>

@@ -164,10 +164,10 @@ include BASE_PATH . "views/header.php";
           $max_posts = sizeof($obj);
         }
         for ($i = 0; $i < $max_posts; $i++) { ?>
-				<a href="<?=$obj[$i]->link?>" target="_blank" title="<?=$obj[$i]->title->rendered?>">
+				<a href="<?=htmlspecialchars($obj[$i]->link)?>" target="_blank" title="<?=($obj[$i]->title->rendered)?>">
 					<span class="mb-3">
 	          <span class="title mb-0">
-							<?=$obj[$i]->title->rendered?>
+							<?=($obj[$i]->title->rendered)?>
 						</span>
 					</span>
           <span class="category">
@@ -189,10 +189,10 @@ include BASE_PATH . "views/header.php";
         $max_posts = sizeof($asa);
       }
       for ($i = 0; $i < $max_posts; $i++) { ?>
-			<a href="<?=$asa[$i]->link?>" target="_blank" title="<?=$asa[$i]->title->rendered?>">
+			<a href="<?=htmlspecialchars($asa[$i]->link)?>" target="_blank" title="<?=($asa[$i]->title->rendered)?>">
 				<span class="mb-3">
           <span class="title mb-0">
-						<?=$asa[$i]->title->rendered?>
+						<?=($asa[$i]->title->rendered)?>
 					</span>
 				</span>
         <span class="category">
@@ -214,14 +214,14 @@ include BASE_PATH . "views/header.php";
         $max_posts = sizeof($asa_ne->channel->item);
       }
       for ($i = 0; $i < $max_posts; $i++) { ?>
-      <a href="<?=$asa_ne->channel->item[$i]->link?>" target="_blank" title="<?=$asa_ne->channel->item[$i]->title?> (<?=$asa_ne->channel->item[$i]->category?>)">
+      <a href="<?=htmlspecialchars($asa_ne->channel->item[$i]->link)?>" target="_blank" title="<?=htmlspecialchars($asa_ne->channel->item[$i]->title)?> (<?=htmlspecialchars($asa_ne->channel->item[$i]->category)?>)">
         <span class="mb-3">
           <span class="title mb-0">
-            <?=$asa_ne->channel->item[$i]->title?>
+            <?=htmlspecialchars($asa_ne->channel->item[$i]->title)?>
           </span>
         </span>
         <span class="category">
-          <?=$asa_ne->channel->item[$i]->category?>
+          <?=htmlspecialchars($asa_ne->channel->item[$i]->category)?>
         </span>
       </a>
       <?php } ?>

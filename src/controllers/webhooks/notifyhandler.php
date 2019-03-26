@@ -104,7 +104,7 @@ while ($currentMessage = $getPendingGroupMail->fetch(PDO::FETCH_ASSOC)) {
         $user['Forename'] . ' ' . $user['Surname'],
         [
           '-name-' => $user['Forename'] . ' ' . $user['Surname'],
-          '-unsub_link-' => autoUrl("notify/unsubscribe/" . $user['UserID'] .  "/" . urlencode($user['EmailAddress']) . "/Notify")
+          '-unsub_link-' => autoUrl("notify/unsubscribe/" . dechex($user['UserID']) .  "/" . urlencode($user['EmailAddress']) . "/Notify")
         ]
       );
       $getExtraEmails->execute([$user['UserID']]);
@@ -114,7 +114,7 @@ while ($currentMessage = $getPendingGroupMail->fetch(PDO::FETCH_ASSOC)) {
           $extraEmails['Name'],
           [
             '-name-' => $extraEmails['Name'],
-            '-unsub_link-' => autoUrl("cc/" . $extraEmails['ID'] .  "/unsubscribe")
+            '-unsub_link-' => autoUrl("cc/" . dechex($extraEmails['ID']) .  "/" . hash('sha256', $extraEmails['ID']) . "/unsubscribe")
           ]
         );
         $ccEmails[$extraEmails['EmailAddress']] = $extraEmails['Name'];

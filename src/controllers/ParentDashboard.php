@@ -84,17 +84,25 @@ include BASE_PATH . "views/header.php";
   <div class="container">
 
 		<?php if (!isSubscribed($_SESSION['UserID'], 'Notify')) { ?>
-	  <div class="alert alert-danger">
-	    <p class="mb-0">
-	      <strong>
-	        You're missing out on email updates from <?=CLUB_NAME?>
-	      </strong>
-	    </p>
-	    <p class="mb-0">
-	      Head to <a href="<?php echo autoUrl("myaccount/email"); ?>" class="alert-link">My
-	      Account</a> to change your email preferences and stay up to date!
-	    </p>
-	  </div>
+      <div class="row">
+        <div class="col-md-9 py-4">
+          <div class="panel bg-white">
+            <h3 class="panel-title">
+              Emails from us
+            </h3>
+
+            <p>
+              <strong>
+      	        You're missing out on email updates from <?=CLUB_NAME?>
+      	      </strong>
+            </p>
+            <p>
+      	      Head to <a href="<?=autoUrl("myaccount/email")?>">My Account</a>
+      	      to change your email preferences and stay up to date!
+      	    </p>
+          </div>
+        </div>
+      </div>
 		<?php } ?>
 
 		<h1>Hello <?=$username?></h1>
@@ -222,10 +230,10 @@ include BASE_PATH . "views/header.php";
           $max_posts = sizeof($obj);
         }
         for ($i = 0; $i < $max_posts; $i++) { ?>
-				<a href="<?=$obj[$i]->link?>" target="_blank" title="<?=$obj[$i]->title->rendered?>">
+				<a href="<?=htmlspecialchars($obj[$i]->link)?>" target="_blank" title="<?=($obj[$i]->title->rendered)?>">
 					<span class="mb-3">
 	          <span class="title mb-0">
-							<?=$obj[$i]->title->rendered?>
+							<?=($obj[$i]->title->rendered)?>
 						</span>
 					</span>
           <span class="category">
@@ -247,10 +255,10 @@ include BASE_PATH . "views/header.php";
           $max_posts = sizeof($asa);
         }
         for ($i = 0; $i < $max_posts; $i++) { ?>
-  			<a href="<?=$asa[$i]->link?>" target="_blank" title="<?=$asa[$i]->title->rendered?>">
+  			<a href="<?=htmlspecialchars($asa[$i]->link)?>" target="_blank" title="<?=($asa[$i]->title->rendered)?>">
   				<span class="mb-3">
             <span class="title mb-0">
-  						<?=$asa[$i]->title->rendered?>
+  						<?=($asa[$i]->title->rendered)?>
   					</span>
   				</span>
           <span class="category">
@@ -272,14 +280,14 @@ include BASE_PATH . "views/header.php";
           $max_posts = sizeof($asa_ne->channel->item);
         }
         for ($i = 0; $i < $max_posts; $i++) { ?>
-  			<a href="<?=$asa_ne->channel->item[$i]->link?>" target="_blank" title="<?=$asa_ne->channel->item[$i]->title?> (<?=$asa_ne->channel->item[$i]->category?>)">
+  			<a href="<?=htmlspecialchars($asa_ne->channel->item[$i]->link)?>" target="_blank" title="<?=htmlspecialchars($asa_ne->channel->item[$i]->title)?> (<?=htmlspecialchars($asa_ne->channel->item[$i]->category)?>)">
   				<span class="mb-3">
             <span class="title mb-0">
-  						<?=$asa_ne->channel->item[$i]->title?>
+  						<?=htmlspecialchars($asa_ne->channel->item[$i]->title)?>
   					</span>
   				</span>
           <span class="category">
-  					<?=$asa_ne->channel->item[$i]->category?>
+  					<?=htmlspecialchars($asa_ne->channel->item[$i]->category)?>
   				</span>
         </a>
         <?php } ?>

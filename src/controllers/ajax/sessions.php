@@ -13,7 +13,7 @@ function sessionManagement($squadID, $link) {
 	<div class="row">
 	<div class="col-md-6">
 
-	<div class="my-3 p-3 bg-white rounded shadow">
+	<div class="cell">
 	<h2 class="border-bottom border-gray pb-2 mb-0">View Sessions</h2>
 	';
 
@@ -50,8 +50,8 @@ function sessionManagement($squadID, $link) {
 			}
 
 			$content .= '
-			<div class="media text-muted pt-3">
-		    <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+			<div class="media text-muted pt-1">
+		    <p class="media-body pb-1 mb-0 lh-125 border-bottom border-gray">
 		      <a data-toggle="modal" href="#sessionModal' . $row['SessionID'] . '"><strong class="d-block text-gray-dark">' . $row['SessionName'] . ', ' . $dayText . ' at ' . $row['StartTime'] . '</strong></a>
 		      ' . $row['VenueName'] . '
 		    </p>
@@ -96,7 +96,7 @@ function sessionManagement($squadID, $link) {
 									$modals .= "Not set";
 								}
 								$modals .= '
-								<a class="btn btn-outline-dark" href="sessions/' . $row['SessionID'] . '">Edit End Date</a></dd>
+								<a class="btn btn-dark" href="sessions/' . $row['SessionID'] . '">Edit End Date</a></dd>
 							</dl>
 							<strong>You can\'t edit a session once it has been created</strong>  <br>Sessions are immutable. This is because swimmers may be marked as present at a session in the past, changing the session in any way, such as altering the start or finish time would distort the attendance records. Instead, set a DisplayUntil date for the session, after which it will not appear in the register, but will still be visible in attendance history
 						</div>
@@ -115,7 +115,7 @@ function sessionManagement($squadID, $link) {
 
 	<div class="col-md-6">
 
-	<div class="my-3 p-3 bg-white rounded shadow">
+	<div class="cell">
 	<h2 class="border-bottom border-gray pb-2">Add Session</h2>
 
 		<div class="form-group">
@@ -183,7 +183,7 @@ function sessionManagement($squadID, $link) {
 			<input type="date" aria-labelledby="newSessionStartDateHelp" class="form-control" name="newSessionEndDate" id="newSessionEndDate" placeholder="0">
 			<small id="newSessionEndDateHelp" class="form-text text-muted">If you know when this session will stop running, enter the last date here</small>
 		</div>
-		<p class="mb-0"><button class="btn btn-outline-dark" id="newSessionAction" onclick="addSession();">Add Session</button></p>
+		<p class="mb-0"><button class="btn btn-success" id="newSessionAction" onclick="addSession();">Add Session</button></p>
 
 	</div>
 	</div>

@@ -40,8 +40,8 @@ include BASE_PATH . "views/header.php";
 
       <form method="post" action="<?=autoUrl("")?>" name="loginform" id="loginform" class="needs-validation" novalidate>
         <div class="form-group">
-          <label for="username">Email Address</label>
-          <input type="email" name="username" id="username" class="form-control form-control-lg" value="<?php if ($errorState == true) { echo $username; } ?>" required autofocus placeholder="yourname@example.com">
+          <label for="email-address">Email Address</label>
+          <input type="email" name="email-address" id="email-address" class="form-control form-control-lg" <?php if ($errorState) { ?> value="<?=htmlspecialchars($username)?>"<?php } ?> required autofocus placeholder="yourname@example.com">
           <div class="invalid-feedback">
             Please enter a valid email address.
           </div>

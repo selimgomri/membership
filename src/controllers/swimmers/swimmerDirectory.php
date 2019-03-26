@@ -37,16 +37,16 @@ if (isset($_POST['squad'])) {
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     $id = $row['SquadID'];
     if ($squadID == $id) {
-      ?><option value="<?php echo $row['SquadID']; ?>" selected><?php echo $row['SquadName']; ?></option><?php
+      ?><option value="<?php echo $row['SquadID']; ?>" selected><?=htmlspecialchars($row['SquadName'])?></option><?php
     }
     else {
-      ?><option value="<?php echo $row['SquadID']; ?>"><?php echo $row['SquadName']; ?></option><?php
+      ?><option value="<?php echo $row['SquadID']; ?>"><?=htmlspecialchars($row['SquadName'])?></option><?php
     }
   } ?>
     </select></div>
     <div class="col-md-6 mb-3">
       <label class="sr-only" for="search">Search by Surname</label>
-      <input class="form-control" placeholder="Surname" id="search" name="search" value="<?php echo $search; ?>">
+      <input class="form-control" placeholder="Surname" id="search" name="search" value="<?=htmlspecialchars($search)?>">
     </div>
 
   </div>

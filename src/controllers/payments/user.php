@@ -80,37 +80,37 @@ require 'GoCardlessSetup.php';
 
           if ($bank == "TSB BANK PLC") {
             $has_logo = true;
-            $logo_path = autoUrl("img/directdebit/bank-logos/tsbbankplc");
+            $logo_path = autoUrl("public/img/directdebit/bank-logos/tsbbankplc");
           } else if ($bank == "STARLING BANK LIMITED") {
             $has_logo = true;
-            $logo_path = autoUrl("img/directdebit/bank-logos/starlingbanklimited");
+            $logo_path = autoUrl("public/img/directdebit/bank-logos/starlingbanklimited");
           } else if ($bank == "LLOYDS BANK PLC") {
             $has_logo = true;
-            $logo_path = autoUrl("img/directdebit/bank-logos/lloydsbankplc");
+            $logo_path = autoUrl("public/img/directdebit/bank-logos/lloydsbankplc");
           } else if ($bank == "HALIFAX (A TRADING NAME OF BANK OF SCOTLAND PLC)") {
             $has_logo = true;
-            $logo_path = autoUrl("img/directdebit/bank-logos/halifax");
+            $logo_path = autoUrl("public/img/directdebit/bank-logos/halifax");
           } else if ($bank == "SANTANDER UK PLC") {
             $has_logo = true;
-            $logo_path = autoUrl("img/directdebit/bank-logos/santanderukplc");
+            $logo_path = autoUrl("public/img/directdebit/bank-logos/santanderukplc");
           } else if ($bank == "BARCLAYS BANK UK PLC") {
             $has_logo = true;
-            $logo_path = autoUrl("img/directdebit/bank-logos/barclaysbankukplc");
+            $logo_path = autoUrl("public/img/directdebit/bank-logos/barclaysbankukplc");
           } else if ($bank == "NATIONAL WESTMINSTER BANK PLC") {
             $has_logo = true;
-            $logo_path = autoUrl("img/directdebit/bank-logos/nationalwestminsterbankplc");
+            $logo_path = autoUrl("public/img/directdebit/bank-logos/nationalwestminsterbankplc");
           } else if ($bank == "HSBC BANK  PLC (RFB)") {
             $has_logo = true;
-            $logo_path = autoUrl("img/directdebit/bank-logos/hsbc");
+            $logo_path = autoUrl("public/img/directdebit/bank-logos/hsbc");
           } else if ($bank == "THE CO-OPERATIVE BANK PLC") {
             $has_logo = true;
-            $logo_path = autoUrl("img/directdebit/bank-logos/coop");
+            $logo_path = autoUrl("public/img/directdebit/bank-logos/coop");
           } else if ($bank == "NATIONWIDE BUILDING SOCIETY") {
             $has_logo = true;
-            $logo_path = autoUrl("img/directdebit/bank-logos/nationwide");
+            $logo_path = autoUrl("public/img/directdebit/bank-logos/nationwide");
           } else if ($bank == "THE ROYAL BANK OF SCOTLAND PLC") {
             $has_logo = true;
-            $logo_path = autoUrl("img/directdebit/bank-logos/rbs");
+            $logo_path = autoUrl("public/img/directdebit/bank-logos/rbs");
           }
           ?>
           <?php if ($has_logo) { ?>
@@ -127,7 +127,7 @@ require 'GoCardlessSetup.php';
           <?php } ?>
         </p>
       </div>
-      <div class="p-3 text-white bg-secondary">
+      <div class="cell text-white bg-secondary">
         <p class="mb-0">
           <strong>
             We help keep things simple!

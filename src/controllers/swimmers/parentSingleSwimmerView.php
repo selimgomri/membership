@@ -3,6 +3,8 @@
 $userID = $_SESSION['UserID'];
 $id = mysqli_real_escape_string($link, $id);
 
+$markdown = new ParsedownExtra();
+
 $use_white_background = true;
 
 $query = "SELECT * FROM members WHERE MemberID = '$id' ";
@@ -146,43 +148,35 @@ else {
           </div>
           <div class="media pt-3">
             <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-              <p class="mb-0 text-gray-dark">
-                <strong>
-                  Medical Notes
-                </strong>
-              </p>
+              <h2>
+                Medical Notes
+              </h2>
 
-              <p class="mb-0 mt-2">
-                <em>
-                  Medical Conditions or Disabilities
-                </em>
-              </p>
+              <h3>
+                Medical Conditions or Disabilities
+              </h3>
               <?php if ($rowSwim["Conditions"] != "") { ?>
-                <p class="mb-0"><?php echo $rowSwim["Conditions"]; ?></p>
+                <?=$markdown->text($rowSwim["Conditions"])?>
               <?php } else { ?>
-                <p class="mb-0">None</p>
+                <p>None</p>
               <?php } ?>
 
-              <p class="mb-0 mt-2">
-                <em>
-                  Allergies
-                </em>
-              </p>
+              <h3>
+                Allergies
+              </h3>
               <?php if ($rowSwim["Allergies"] != "") { ?>
-                <p class="mb-0"><?php echo $rowSwim["Allergies"]; ?></p>
+                <?=$markdown->text($rowSwim["Allergies"])?>
               <?php } else { ?>
-                <p class="mb-0">None</p>
+                <p>None</p>
               <?php } ?>
 
-              <p class="mb-0 mt-2">
-                <em>
-                  Medication
-                </em>
-              </p>
+              <h3>
+                Medication
+              </h3>
               <?php if ($rowSwim["Medication"] != "") { ?>
-                <p class="mb-0"><?php echo $rowSwim["Medication"]; ?></p>
+                <?=$markdown->text($rowSwim["Medication"])?>
               <?php } else { ?>
-                <p class="mb-0">None</p>
+                <p>None</p>
               <?php } ?>
 
             </div>

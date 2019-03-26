@@ -2,6 +2,8 @@
 $id = mysqli_real_escape_string($link, $id);
 $access = $_SESSION['AccessLevel'];
 
+$markdown = new ParsedownExtra();
+
 $use_white_background = true;
 
 $query = "SELECT * FROM members WHERE MemberID = '$id' ";
@@ -128,57 +130,44 @@ $content .= '<!--
     <div class="media pt-2">
       <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
         <strong class="d-block text-gray-dark">Move Swimmer to New Squad</strong>
-        <a href="' . autoUrl("squads/moves/new/" . $id) . '">New Move<a>
+        <a href="' . autoUrl("squads/moves/new/" . $id) . '">New Move</a>
       </p>
     </div>';
   }
   $content .= '
   <div class="media pt-2">
     <div class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
-      <p class="mb-0 text-gray-dark">
-        <strong>
-          Medical Notes
-        </strong>
-      </p>
+      <h3>
+        Medical Notes
+      </h3>
 
-      <p class="mb-0 mt-2">
-        <em>
-          Medical Conditions or Disabilities
-        </em>
-      </p>';
+      <h4>
+        Medical Conditions or Disabilities
+      </h4>';
       if ($rowSwim["Conditions"] != "") {
-        $content .= '
-        <p class="mb-0">';
-        $content .= $rowSwim["Conditions"];
-        $content .= '</p>';
+        $content .= $markdown->text($rowSwim["Conditions"]);
       } else {
-        $content .= '<p class="mb-0">None</p>';
+        $content .= '<p>None</p>';
       }
 
-      $content .= '<p class="mb-0 mt-2">
-        <em>
-          Allergies
-        </em>
-      </p>';
+      $content .= '
+      <h4>
+        Allergies
+      </h4>';
       if ($rowSwim["Allergies"] != "") {
-        $content .= '<p class="mb-0">';
-        $content .= $rowSwim["Allergies"];
-        $content .= '</p>';
+        $content .= $markdown->text($rowSwim["Allergies"]);
       } else {
-        $content .= '<p class="mb-0">None</p>';
+        $content .= '<p>None</p>';
       }
 
-      $content .= '<p class="mb-0 mt-2">
-        <em>
-          Medication
-        </em>
-      </p>';
+      $content .= '
+      <h4>
+        Medication
+      </h4>';
       if ($rowSwim["Medication"] != "") {
-        $content .= '<p class="mb-0">';
-        $content .= $rowSwim["Medication"];
-        $content .= '</p>';
+        $content .= $markdown->text($rowSwim["Medication"]);
       } else {
-        $content .= '<p class="mb-0">None</p>';
+        $content .= '<p>None</p>';
       }
 
     $content .= '</div>

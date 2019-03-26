@@ -167,4 +167,8 @@ if (isset($_SESSION['UserID']) && filter_var(getUserOption($_SESSION['UserID'], 
 }
 
 unset($_SESSION['LoginSec']);
-header("Location: " . ltrim($_POST['target'], '/'));
+$target = ltrim($_POST['target'], '/');
+if ($target == null || $target == "") {
+  $target = "";
+}
+header("Location: " . autoUrl($target));

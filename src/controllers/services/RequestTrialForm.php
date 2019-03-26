@@ -43,6 +43,22 @@ include BASE_PATH . 'views/header.php';
         times, this may take a few days.
       </p>
       <form method="post" <?php if ($value != null) { ?>class="was-validated"<?php } else { ?>class="needs-validation" novalidate<?php } ?>>
+        <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+        <div id="begin">
+          <h2>Before we start</h2>
+          <p>
+            Are you applying for yourself or on behalf of a minor?
+          </p>
+          <div class="form-row mb-3" id="apply-for-option">
+            <div class="col-md">
+              <button id="apply-for-child" class="btn btn-light btn-block" type="button" value="minor">A Minor</button>
+            </div>
+            <div class="col-md">
+              <button id="apply-for-myself" class="btn btn-light btn-block" type="button" value="myself">Myself</button>
+            </div>
+          </div>
+        </div>
+        <?php } ?>
         <h2>About you</h2>
         <p>
           We just need some details about you so we can get in touch.
@@ -75,13 +91,15 @@ include BASE_PATH . 'views/header.php';
         </div>
 
         <div id="swimmers">
-          <h2>About the swimmer</h2>
-          <p>
-            Tell us everything you can about yourself or your swimmer. This helps us determine what type of trial to give them and what type of squad they might be best placed in.
-          </p>
+          <div class="hide-if-parent">
+            <h2>About the swimmer</h2>
+            <p>
+              Tell us everything you can about yourself or your swimmer. This helps us determine what type of trial to give them and what type of squad they might be best placed in.
+            </p>
+          </div>
 
           <div class="mb-3">
-            <div class="form-row mb-3">
+            <div class="form-row mb-3 hide-if-parent">
               <div class="col">
                 <label for="swimmer-forename">First name</label>
                 <input type="text" name="swimmer-forename" id="swimmer-forename" class="form-control" placeholder="First name" value="<?=htmlspecialchars(trim($value['swimmer-forename']))?>" required>
@@ -289,6 +307,7 @@ include BASE_PATH . 'views/header.php';
 </div>
 
 <script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
+<script defer src="<?=autoUrl("public/js/request-a-trial/IsItYouOrYourChild.js")?>"></script>
 <script defer src="<?=autoUrl("public/js/request-a-trial/MultiSwimmers.js")?>"></script>
 
 <?php

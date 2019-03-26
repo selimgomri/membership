@@ -6,6 +6,12 @@ $bg = "bg-white";
 ?>
 <body class="<?=$bg?> account--body">
 
+  <style>
+  .navbar:first-child ul {
+    margin-left: -0.5rem;
+  }
+  </style>
+
   <div class="sr-only sr-only-focusable">
     <a href="#maincontent">Skip to main content</a>
   </div>
@@ -47,21 +53,27 @@ $bg = "bg-white";
 
     <div class="bg-dark">
       <div class="<?=$container_class?>">
-    <nav class="navbar navbar-expand-lg navbar-dark
-    d-print-none justify-content-between px-0" role="navigation">
-
-        <a class="navbar-brand" href="<?=autoUrl("") ?>">
-          <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-            My Membership
-          <?php } else { ?>
+        <h1 class="d-none d-md-flex pt-4 pb-1 mb-0">
+          <a href="<?=autoUrl("")?>" class="text-white">
             <?=CLUB_NAME?>
-          <?php } ?>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse"
-        data-target="#chesterNavbar" aria-controls="chesterNavbar"
-        aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+          </a>
+        </h1>
+
+        <nav class="navbar navbar-expand-lg navbar-dark
+        d-print-none justify-content-between px-0" role="navigation">
+
+            <a class="navbar-brand d-lg-none" href="<?php echo autoUrl("") ?>">
+              <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+                My Membership
+              <?php } else { ?>
+                Club Membership
+              <?php } ?>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#chesterNavbar" aria-controls="chesterNavbar"
+            aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
 
   	  <div class="collapse navbar-collapse offcanvas-collapse" id="chesterNavbar">
       <?php if (!user_needs_registration($_SESSION['UserID'])) { ?>
@@ -236,8 +248,6 @@ $bg = "bg-white";
             <a class="dropdown-item" href="<?=autoUrl("galas/addgala")?>">Add Gala</a>
             <a class="dropdown-item" href="<?=autoUrl("galas/entries")?>">View Entries</a>
             <?php } ?>
-            <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/" target="_blank">Gala Website <i class="fa fa-external-link"></i></a>
-            <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/category/galas/" target="_blank">Upcoming Galas <i class="fa fa-external-link"></i></a>
             <?php if ($access == "Parent") {?>
             <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/enteracompetition/guidance/" target="_blank">Help with Entries <i class="fa fa-external-link"></i></a>
             <?php } ?>
@@ -323,7 +333,7 @@ $bg = "bg-white";
             <?php } ?>
             <a class="dropdown-item" href="<?=autoUrl("myaccount/loginhistory") ?>">Your Login History</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">Help</a>
+            <a class="dropdown-item" target="_blank" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">Help</a>
             <a class="dropdown-item" href="<?= autoUrl("logout") ?>">Logout</a>
           </div>
         </li>
