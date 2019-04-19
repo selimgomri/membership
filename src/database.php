@@ -194,7 +194,7 @@ $message .= "
       $email->addBccs($from['BCC']);
     }
 
-    $sendgrid = new \SendGrid(SENDGRID_API_KEY);
+    $sendgrid = new \CLSASC\SuperMailer\SuperMailer(SENDGRID_API_KEY);
     try {
       $response = $sendgrid->send($email);
     } catch (Exception $e) {

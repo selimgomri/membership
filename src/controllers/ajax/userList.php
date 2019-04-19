@@ -26,7 +26,7 @@ if ($access == "Admin" || $access == "Galas") {
       $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
       $swimmerLink = autoUrl("users/" . $swimmersRowX['UserID'] . "");
       $output .= "<tr>
-        <td><a href=\"" . $swimmerLink . "\">" . $swimmersRowX['Forename'] . " " . $swimmersRowX['Surname'] . "</a></td>
+        <td><a href=\"" . $swimmerLink . "\">" . htmlspecialchars($swimmersRowX['Forename'] . " " . $swimmersRowX['Surname']) . "</a></td>
         <td>" . $swimmersRowX['AccessLevel'] . "</td>
       </tr>";
     }

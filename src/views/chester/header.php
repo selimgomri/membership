@@ -31,29 +31,54 @@ $bg = "bg-white";
     <?php } ?>
 
     <noscript>
-      <div class="bg-dark text-white box-shadow py-2 d-print-none">
+      <div class="bg-dark text-white box-shadow py-3 d-print-none">
         <div class="<?=$container_class?>">
-          <p class="mb-0">
+          <p class="h2">
             <strong>
               JavaScript is disabled or not supported
             </strong>
           </p>
           <p>
-      	    It looks like you've got JavaScript disabled or your browser does not
-      	    support it. JavaScript is essential for our website to properly so we
-      	    recommend you enable it or upgrade to a browser which supports it as
-      	    soon as possible. <strong><a href="http://browsehappy.com/" class="text-white"
+      	    It looks like you've got JavaScript disabled or your browser does
+      	    not support it. JavaScript is essential for our website to function
+      	    properly so we recommend you enable it or upgrade to a browser which
+      	    supports it as soon as possible. <strong><a
+      	    href="http://browsehappy.com/" class="text-white"
       	    target="_blank">Upgrade your browser today <i class="fa
       	    fa-external-link" aria-hidden="true"></i></a></strong>.
           </p>
           <p class="mb-0">
             If JavaScript is not supported by your browser, <?=CLUB_NAME?>
-            recommends you install <strong><a class="text-white"
-            href="https://www.firefox.com">Firefox by Mozilla</a></strong>.
+            recommends you <strong><a class="text-white"
+            href="https://www.firefox.com">install Firefox by Mozilla</a></strong>.
           </p>
         </div>
       </div>
     </noscript>
+
+    <!--[if IE]>
+    <div class="bg-dark text-white box-shadow py-3 d-print-none">
+      <div class="<?=$container_class?>">
+        <p class="h2">
+          <strong>
+            Internet Explorer is not supported
+          </strong>
+        </p>
+        <p>
+          It looks like you're using Internet Explorer which we no longer
+          support so we recommend you upgrade to a new browser which we do
+          support as soon as possible. <strong><a href="http://browsehappy.com/"
+          class="text-white" target="_blank">Upgrade your browser today <i
+          class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
+        </p>
+        <p class="mb-0">
+          <?=CLUB_NAME?> recommends you <strong><a class="text-white"
+          href="https://www.firefox.com">install Firefox by
+          Mozilla</a></strong>.
+        </p>
+      </div>
+    </div>
+    <![endif]-->
 
     <?
     $edit_link = null;
@@ -156,7 +181,7 @@ $bg = "bg-white";
             <a class="logowhite" href="<?=autoUrl("")?>" title="Membership Dashboard"></a>
           </div>
           <div class="col d-none d-lg-flex">
-            <p class="lead mb-0 ml-auto text-right">Club Membership System</p>
+            <p class="lead mb-0 ml-auto text-right">Club Membership</p>
           </div>
         </div>
       </div>
@@ -362,7 +387,7 @@ $bg = "bg-white";
             <?php } ?>
             <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/" target="_blank">Gala Website <i class="fa fa-external-link"></i></a>
             <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/category/galas/" target="_blank">Upcoming Galas <i class="fa fa-external-link"></i></a>
-            <?php if ($access == "Parent") {?>
+            <?php if ($_SESSION['AccessLevel'] == "Parent") {?>
             <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/enteracompetition/guidance/" target="_blank">Help with Entries <i class="fa fa-external-link"></i></a>
             <?php } ?>
           </div>
@@ -433,8 +458,9 @@ $bg = "bg-white";
   		  </li>
         <?php } ?>
   		</ul>
-      <?php if (!empty($_SESSION['LoggedIn'])) { ?>
-      <?php $user_name = str_replace(' ', '&nbsp;', htmlspecialchars(getUserName($_SESSION['UserID']))); ?>
+      <?php if (!empty($_SESSION['LoggedIn'])) {
+        global $currentUser;
+        $user_name = str_replace(' ', '&nbsp;', $currentUser->getName()); ?>
       <ul class="navbar-nav">
         <!--<a class="btn btn-sm btn-outline-light my-2 my-sm-0" href="<?php echo autoUrl("logout") ?>">Logout</a>-->
         <li class="nav-item dropdown">
@@ -460,15 +486,15 @@ $bg = "bg-white";
             <?php } ?>
             <a class="dropdown-item" href="<?php echo autoUrl("myaccount/loginhistory") ?>">Your Login History</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">Help</a>
+            <a class="dropdown-item" target="_blank" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">Help</a>
             <a class="dropdown-item" href="<?= autoUrl("logout") ?>">Logout</a>
           </div>
         </li>
       </ul>
       <?php }
       }?>
-    </nav>
-  </div>
+    </div>
+  </nav>
   <?php } ?>
   </div>
 

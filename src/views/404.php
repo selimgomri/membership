@@ -21,18 +21,36 @@ include BASE_PATH . "views/header.php";
   <hr>
 
   <!-- Trivia Section Woo -->
-  <aside class="cell">
+  <aside class="cell pb-0">
     <h2 class="h4 mb-0">Trivia</h2>
     <p class="small text-muted mb-2"><?=$trivia->category?></p>
-    <p class="mb-0"><span class="mono">Q: </span><strong><?=$trivia->question?></strong></p>
+    <table class="table table-borderless table-sm">
+      <tr>
+        <td><span class="mono">Q:</span></td>
+        <td><strong><?=$trivia->question?></strong></td>
+      </tr>
     <?php if (sizeof($possible_answers) > 2) { ?>
-    <ol class="list-unstyled">
     <?php for ($i = 0; $i < sizeof($possible_answers); $i++) { ?>
-      <li><span class="mono">&nbsp;&nbsp;&nbsp;</span><?=$possible_answers[$i]?></li>
+      <tr>
+        <td></td>
+        <td><?=$possible_answers[$i]?></td>
+      </tr>
     <?php } ?>
-    </ol>
     <?php } ?>
-    <p class="mb-0"><span class="mono">A: </span><em><?=$trivia->correct_answer?></em></p>
+    </table>
+
+    <p class="mb-0">
+      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#page-404-show-answer" aria-expanded="false" aria-controls="page-404-show-answer">
+        Reveal answer
+      </button>
+    </p>
+    <div class="pb-3">
+      <div class="collapse" id="page-404-show-answer">
+        <div class="card card-body mt-3">
+          <em><?=$trivia->correct_answer?></em>
+        </div>
+      </div>
+    </div>
   </aside>
   <!-- Trivia API by opentdb.com -->
 

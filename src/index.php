@@ -15,37 +15,6 @@ if ($_SESSION['AccessLevel'] = "Admin") {
 
 $time_start = microtime(true);
 
-$config_file = 'config.php';
-if ($_SERVER['HTTP_HOST'] == 'account.chesterlestreetasc.co.uk' || $_SERVER['HTTP_HOST'] == 'membership.chesterlestreetasc.co.uk') {
-  $config_file = 'config-chester-config.php';
-  define('COOKIE_PREFIX', 'CLSASC_', true);
-} else if ($_SERVER['HTTP_HOST'] == 'tynemouth.chesterlestreetasc.co.uk') {
-  $config_file = 'config-tyne-config.php';
-  define('COOKIE_PREFIX', 'TASC_', true);
-} else if ($_SERVER['HTTP_HOST'] == 'dcasc-demo.chesterlestreetasc.co.uk') {
-  $config_file = 'config-durham-config.php';
-  define('COOKIE_PREFIX', 'DCASC_', true);
-} else {
-  $config_file = 'config-chester-config.php';
-  define('COOKIE_PREFIX', 'CLSASC_', true);
-}
-
-require $config_file;
-require 'default-config-load.php';
-
-session_start([
-    //'cookie_lifetime' => 172800,
-    'gc_maxlifetime'      => 86400,
-    'cookie_httponly'     => 0,
-    'gc_probability'      => 1,
-    'use_only_cookies'    => 1,
-    'cookie_secure'       => 1,
-    'use_strict_mode'     => 1,
-    'sid_length'          => 128,
-    'name'                => COOKIE_PREFIX . 'SessionId',
-    'cookie_domain'       => $_SERVER['HTTP_HOST']
-]);
-
 $executionStartTime = microtime();
 
 define('DS', DIRECTORY_SEPARATOR, true);
@@ -64,6 +33,54 @@ $app->request   = System\Request::instance();
 $app->route     = System\Route::instance($app->request);
 
 $route          = $app->route;
+
+header("Feature-Policy: fullscreen 'self' https://youtube.com");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+//header("Content-Security-Policy: default-src https:; object-src data: 'unsafe-eval'; script-src * 'unsafe-inline'; style-src https://www.chesterlestreetasc.co.uk https://account.chesterlestreetasc.co.uk https://fonts.googleapis.com 'unsafe-inline'");
+//header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload');
+header('Server: Chester-le-Magic');
+header("Content-Security-Policy: block-all-mixed-content");
+header('Expect-CT: enforce, max-age=30, report-uri="https://chesterlestreetasc.report-uri.com/r/d/ct/enforce"');
+
+//halt(901);
+
+/*
+if (!(sizeof($_SESSION) > 0)) {
+  $_SESSION['TARGET_URL'] = app('request')->curl;
+}
+*/
+
+$db = null;
+$link = null;
+
+$get_group = '/club/{clubcode}';
+
+if ($custom_domain_mode) {
+  $get_group = '/';
+}
+
+$config_file = $config;
+if (strlen($cookie_prefix) > 0) {
+  define('COOKIE_PREFIX', $cookie_prefix, true);
+} else {
+  define('COOKIE_PREFIX', 'CLS-Membership-', true);
+}
+
+require $config_file;
+require 'default-config-load.php';
+
+session_start([
+    //'cookie_lifetime' => 172800,
+    'gc_maxlifetime'      => 86400,
+    'cookie_httponly'     => 0,
+    'gc_probability'      => 1,
+    'use_only_cookies'    => 1,
+    'cookie_secure'       => 1,
+    'use_strict_mode'     => 1,
+    'sid_length'          => 128,
+    'name'                => COOKIE_PREFIX . 'SessionId',
+    'cookie_domain'       => $_SERVER['HTTP_HOST']
+]);
 
 function halt(int $statusCode) {
   if ($statusCode == 200) {
@@ -107,10 +124,6 @@ function halt(int $statusCode) {
 $link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 $db = new PDO("mysql:host=" . $dbhost . ";dbname=" . $dbname . "", $dbuser, $dbpass);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-$route->addPattern([
-  'club' => '/(clse)?/(tyne)?'
-]);
 
 /* check connection */
 if (mysqli_connect_errno()) {
@@ -191,66 +204,13 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
   }
 }
 
-header("Feature-Policy: fullscreen 'self' https://youtube.com");
-header("Referrer-Policy: strict-origin-when-cross-origin");
-//header("Content-Security-Policy: default-src https:; object-src data: 'unsafe-eval'; script-src * 'unsafe-inline'; style-src https://www.chesterlestreetasc.co.uk https://account.chesterlestreetasc.co.uk https://fonts.googleapis.com 'unsafe-inline'");
-//header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload');
-header('Server: Chester-le-Magic');
-header("Content-Security-Policy: block-all-mixed-content");
-header('Expect-CT: enforce, max-age=30, report-uri="https://chesterlestreetasc.report-uri.com/r/d/ct/enforce"');
-
-//halt(901);
-
-
-if (!(sizeof($_SESSION) > 0)) {
-  $_SESSION['TARGET_URL'] = app('request')->curl;
+$currentUser = null;
+if (isset($_SESSION['UserID'])) {
+  $currentUser = new User($_SESSION['UserID'], $db);
 }
 
-$route->group('/', function() {
-  global $db, $link;
+$route->group($get_group, function($clubcode = "CLSE") {
   //$_SESSION['ClubCode'] = strtolower($code);
-
-  if ($_SESSION['TWO_FACTOR']) {
-    $this->group('/2fa', function() {
-      $this->get('/', function() {
-        include BASE_PATH . 'views/TwoFactorCodeInput.php';
-      });
-
-      $this->post('/', function() {
-        include BASE_PATH . 'controllers/2fa/SubmitCode.php';
-      });
-
-      $this->get('/exit', function() {
-        $_SESSION = [];
-        unset($_SESSION);
-        header("Location: " . autoUrl("login"));
-      });
-
-      $this->get('/resend', function() {
-        include BASE_PATH . 'controllers/2fa/ResendCode.php';
-      });
-    });
-
-    $this->get(['/', '/*'], function() {
-      $_SESSION['TWO_FACTOR'] = true;
-      header("Location: " . autoUrl("2fa"));
-    });
-  }
-
-  $this->group('/oauth2', function() {
-
-    $this->any('/authorize', function() {
-      include 'controllers/oauth/AuthorizeController.php';
-    });
-
-    $this->any('/token', function() {
-      include 'controllers/oauth/TokenController.php';
-    });
-
-    $this->get('/userinfo', function() {
-      include 'controllers/oauth/UserDetails.php';
-    });
-  });
 
   $this->get('/auth/cookie/redirect', function() {
     //$target = urldecode($target);
@@ -313,6 +273,10 @@ $route->group('/', function() {
     include 'controllers/about/router.php';
   });
 
+  $this->get('/cc/{id}/{hash}/unsubscribe', function($id, $hash) {
+    include 'controllers/notify/CCUnsubscribe.php';
+  });
+
   $this->group('/services', function() {
     $this->get('/barcode-generator', function() {
       include 'controllers/barcode-generation-system/gen.php';
@@ -323,6 +287,48 @@ $route->group('/', function() {
     });
 
     include 'controllers/services/router.php';
+  });
+
+  if ($_SESSION['TWO_FACTOR']) {
+    $this->group('/2fa', function() {
+      $this->get('/', function() {
+        include BASE_PATH . 'views/TwoFactorCodeInput.php';
+      });
+
+      $this->post('/', function() {
+        include BASE_PATH . 'controllers/2fa/SubmitCode.php';
+      });
+
+      $this->get('/exit', function() {
+        $_SESSION = [];
+        unset($_SESSION);
+        header("Location: " . autoUrl("login"));
+      });
+
+      $this->get('/resend', function() {
+        include BASE_PATH . 'controllers/2fa/ResendCode.php';
+      });
+    });
+
+    $this->get(['/', '/*'], function() {
+      $_SESSION['TWO_FACTOR'] = true;
+      header("Location: " . autoUrl("2fa"));
+    });
+  }
+
+  $this->group('/oauth2', function() {
+
+    $this->any('/authorize', function() {
+      include 'controllers/oauth/AuthorizeController.php';
+    });
+
+    $this->any('/token', function() {
+      include 'controllers/oauth/TokenController.php';
+    });
+
+    $this->get('/userinfo', function() {
+      include 'controllers/oauth/UserDetails.php';
+    });
   });
 
   if (empty($_SESSION['LoggedIn'])) {
@@ -626,6 +632,12 @@ $route->group('/', function() {
       });
     }
   }
+
+  $this->get('/files/*/viewer', function() {
+    $filename = $this[0];
+    pre($filename);
+    //require BASE_PATH . 'controllers/FileLoader.php';
+  });
 
   $this->get('/files/*', function() {
     $filename = $this[0];

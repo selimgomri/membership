@@ -6,6 +6,10 @@ $do_random_2FA = filter_var(getUserOption($_SESSION['2FAUserID'], "IsSpotCheck2F
 
 $errorState = false;
 
+if ($_SESSION['TARGET_URL'] == '2fa') {
+  $_SESSION['TARGET_URL'] = '';
+}
+
 if ( isset($_SESSION['ErrorState']) ) {
   $errorState = $_SESSION['ErrorState'];
 }
@@ -34,8 +38,7 @@ include BASE_PATH . "views/header.php";
       </p>
       <?php } else { ?>
       <p class="lead mb-5">
-        Enter the authentication code from your Google Authenticator (or
-        similar) App.
+        Enter the authentication code from your Authenticator App.
       </p>
       <?php } ?>
       <?php if ($do_random_2FA) { ?>

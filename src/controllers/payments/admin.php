@@ -110,9 +110,9 @@ $income = $income->fetchAll(PDO::FETCH_ASSOC);
 
     <div class="mb-4">
       <h2 class="mb-4">Income Statistics</h2>
-      <canvas id="incomeChart" class="mb-1 bg-white"></canvas>
+      <canvas id="incomeChart" class="cell mb-1 bg-white"></canvas>
       <p class="small text-muted mb-4">
-        This is the amout charged to parents before GoCardless handling fees.
+        This is the amount charged to parents before GoCardless handling fees.
       </p>
     </div>
   </div>

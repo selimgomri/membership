@@ -1,6 +1,6 @@
 <?
 
-$use_white_background = true;
+$fluidContainer = true;
 
 $null = $page;
 
@@ -66,102 +66,111 @@ include BASE_PATH . "views/header.php";
 }
 </style>
 
-<div class="container">
-  <div class="">
-    <h1>My Message History</h1>
-    <?php if ($numMails == 0) {
-      ?>
-      <p class="mb-0">There are no messages to view right now.</p>
-      <?
-    } else { ?>
-    <p class="lead">
-      Page <?php echo $page; ?> of <?php echo $numPages; ?>
-    </p>
-    <?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-      $info = json_decode($row['JSONData']);
-      $sender = null;
-        if ($row['ForceSend']) {
-          $sender .= "<dt class=\"col-sm-3\">Force Send</dt>
-          <dd class=\"col-sm-9\">This message was sent to all users regardless of whether or not they had opted in or out of emails.</dd>";
-        }
-      ?>
-      <div class="cell p-0">
-        <div class="p-3">
-          <p>
-            <strong>
-              <?php echo $row['Subject']; ?>
-            </strong>
-          </p>
-          <dl class="row mb-0 small">
-          <?php echo $sender; ?>
-          <?php if ($row['JSONData'] != "") { ?>
-          <dt class="col-sm-3">Sent To</dt>
-          <dd class="col-sm-9">
-            <?
-            $squads = (array) $info->To->Squads;
-            $lists = (array) $info->To->Targeted_Lists;
-            foreach ($squads as $s) { ?>
-              <span class="badge badge-pill rounded badge-dark">
-                <?php echo $s; ?>
-              </span><?
-            }
-            foreach ($lists as $s) { ?>
-              <span class="badge badge-pill rounded badge-dark">
-                <?php echo $s; ?>
-              </span><?
-            } ?>
-          </dd>
-          <dt class="col-sm-3 mb-0">Date</dt>
-          <dd class="col-sm-9 mb-0"><?php echo date("d F Y", strtotime($row['Date'])); ?></dd>
-          </dl>
-      <?php } ?>
-      </div>
-      <div class="bg-light p-3 pt-0 force-wrap">
-        <?php echo $row['Message']; ?>
-      </div>
-  </div>
-    <?php } ?>
+<div class="container-fluid">
 
-    <nav aria-label="Page navigation">
-      <ul class="pagination mb-0">
-        <?php if ($numMails <= 10) { ?>
-        <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-        <?php } else if ($numMails <= 20) { ?>
-          <?php if ($page == 1) { ?>
-          <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-    			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
-    			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page+1 ?>">Next</a></li>
-          <?php } else { ?>
-          <li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page-1 ?>">Previous</a></li>
-    	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page-1 ?>"><?php echo $page-1 ?></a></li>
-    	    <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-          <?php } ?>
-        <?php } else { ?>
-    			<?php if ($page == 1) { ?>
-    			<li class="page-item active"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-    	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
-    			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page+2 ?>"><?php echo $page+2 ?></a></li>
-    			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page+1 ?>">Next</a></li>
-          <?php } else { ?>
-    			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page-1 ?>">Previous</a></li>
-          <?php if ($page > 2) { ?>
-          <li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page-2 ?>"><?php echo $page-2 ?></a></li>
-    	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page-1 ?>"><?php echo $page-1 ?></a></li>
-    	    <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-    			<?php if ($numMails > $page*10) { ?>
-    	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
-          <?php if ($numMails > $page*10+10) { ?>
-          <li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page+2 ?>"><?php echo $page+2 ?></a></li>
-          <?php } ?>
-    	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page+1 ?>">Next</a></li>
-          <?php } ?>
+  <div class="row justify-content-between">
+    <div class="col-md-3 d-none d-md-block">
+      <?php
+        $list = new \CLSASC\BootstrapComponents\ListGroup(file_get_contents(BASE_PATH . 'controllers/myaccount/ProfileEditorLinks.json'));
+        echo $list->render('notify');
+      ?>
+    </div>
+    <div class="col-md-9">
+      <h1>My Message History</h1>
+      <?php if ($numMails == 0) {
+        ?>
+        <p class="mb-0">There are no messages to view right now.</p>
+        <?
+      } else { ?>
+      <p class="lead">
+        Page <?php echo $page; ?> of <?php echo $numPages; ?>
+      </p>
+      <?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        $info = json_decode($row['JSONData']);
+        $sender = null;
+          if ($row['ForceSend']) {
+            $sender .= "<dt class=\"col-sm-3\">Force Send</dt>
+            <dd class=\"col-sm-9\">This message was sent to all users regardless of whether or not they had opted in or out of emails.</dd>";
+          }
+        ?>
+        <div class="cell p-0">
+          <div class="p-3">
+            <p>
+              <strong>
+                <?php echo $row['Subject']; ?>
+              </strong>
+            </p>
+            <dl class="row mb-0 small">
+            <?php echo $sender; ?>
+            <?php if ($row['JSONData'] != "") { ?>
+            <dt class="col-sm-3">Sent To</dt>
+            <dd class="col-sm-9">
+              <?
+              $squads = (array) $info->To->Squads;
+              $lists = (array) $info->To->Targeted_Lists;
+              foreach ($squads as $s) { ?>
+                <span class="badge badge-pill rounded badge-dark">
+                  <?php echo $s; ?>
+                </span><?
+              }
+              foreach ($lists as $s) { ?>
+                <span class="badge badge-pill rounded badge-dark">
+                  <?php echo $s; ?>
+                </span><?
+              } ?>
+            </dd>
+            <dt class="col-sm-3 mb-0">Date</dt>
+            <dd class="col-sm-9 mb-0"><?php echo date("d F Y", strtotime($row['Date'])); ?></dd>
+            </dl>
         <?php } ?>
-      <?php }
-      } ?>
-      </ul>
-    </nav>
-  <?php } ?>
+        </div>
+        <div class="bg-light p-3 pt-0 force-wrap">
+          <?php echo $row['Message']; ?>
+        </div>
+    </div>
+      <?php } ?>
+
+      <nav aria-label="Page navigation">
+        <ul class="pagination mb-0">
+          <?php if ($numMails <= 10) { ?>
+          <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+          <?php } else if ($numMails <= 20) { ?>
+            <?php if ($page == 1) { ?>
+            <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page+1 ?>">Next</a></li>
+            <?php } else { ?>
+            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page-1 ?>">Previous</a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page-1 ?>"><?php echo $page-1 ?></a></li>
+      	    <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+            <?php } ?>
+          <?php } else { ?>
+      			<?php if ($page == 1) { ?>
+      			<li class="page-item active"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page+2 ?>"><?php echo $page+2 ?></a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page+1 ?>">Next</a></li>
+            <?php } else { ?>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page-1 ?>">Previous</a></li>
+            <?php if ($page > 2) { ?>
+            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page-2 ?>"><?php echo $page-2 ?></a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page-1 ?>"><?php echo $page-1 ?></a></li>
+      	    <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+      			<?php if ($numMails > $page*10) { ?>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
+            <?php if ($numMails > $page*10+10) { ?>
+            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page+2 ?>"><?php echo $page+2 ?></a></li>
+            <?php } ?>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("myaccount/notifyhistory/page/"); ?><?php echo $page+1 ?>">Next</a></li>
+            <?php } ?>
+          <?php } ?>
+        <?php }
+        } ?>
+        </ul>
+      </nav>
+    <?php } ?>
+    </div>
   </div>
 </div>
 

@@ -1,17 +1,26 @@
 <?php
-  $use_white_background = true;
+  $fluidContainer = true;
   $pagetitle = "Change Password";
   include BASE_PATH . "views/header.php";
 ?>
-<div class="container">
-<div class="row">
-<div class="col-md-8">
+<div class="container-fluid">
+  <div class="row justify-content-between">
+    <div class="col-md-3 d-none d-md-block">
+      <?php
+        $list = new \CLSASC\BootstrapComponents\ListGroup(file_get_contents(BASE_PATH . 'controllers/myaccount/ProfileEditorLinks.json'));
+        echo $list->render('password');
+      ?>
+    </div>
+    <div class="col-md-9">
 <h1>Change your password</h1>
+<p class="lead">
+  You should change your password regularly to keep you account safe and secure.
+</p>
 <?php if (isset($_SESSION['ErrorState'])) {
   echo $_SESSION['ErrorState'];
   unset($_SESSION['ErrorState']);
 } ?>
-<form method="post" action="password">
+<form class="cell" method="post" action="password">
   <div class="form-group">
       <label for="current">Confirm Current Password</label>
       <input type="password" class="form-control" name="current" id="current" placeholder="Current Password">

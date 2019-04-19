@@ -1,0 +1,79 @@
+{
+  "menuType": "ProfileNavigation",
+  "title": "Account Options",
+  "links": [
+    {
+      "id": "profile",
+      "name": "My Profile",
+      "title": "My Profile",
+      "link": "myaccount",
+      "target": "_self",
+      "external": false
+    },
+    {
+      "id": "email",
+      "name": "My Email Options",
+      "title": "My Email Options",
+      "link": "myaccount/email",
+      "target": "_self",
+      "external": false
+    },
+    {
+      "id": "general",
+      "name": "Advanced Options",
+      "title": "My Advanced Options",
+      "link": "myaccount/general",
+      "target": "_self",
+      "external": false
+    },
+    {
+      "id": "password",
+      "name": "Change Password",
+      "title": "Change Password",
+      "link": "myaccount/password",
+      "target": "_self",
+      "external": false
+    },
+    {
+      "id": "personal",
+      "name": "My Personal Page",
+      "title": "My Personal Page",
+      "link": "people/me",
+      "target": "_self",
+      "external": false,
+      "exclude": [
+        "Parent"
+      ]
+    },
+    {
+      "id": "addswimmer",
+      "name": "Add Swimmer",
+      "title": "Connect a club member to your account",
+      "link": "myaccount/addswimmer",
+      "target": "_self",
+      "external": false,
+      "include": [
+        "Parent"
+      ]
+    },
+    {
+      "id": "logins",
+      "name": "My Login History",
+      "title": "My Login History",
+      "link": "myaccount/loginhistory",
+      "target": "_self",
+      "external": false
+    },
+    {
+      "id": "notify",
+      "name": "My Email History",
+      "title": "Emails sent to you by us",
+      "link": "myaccount/notifyhistory",
+      "target": "_self",
+      "external": false,
+      "include": [
+        "Parent"
+      ]
+    }
+  ]
+}

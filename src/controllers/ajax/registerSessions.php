@@ -2,6 +2,8 @@
 
 use Respect\Validation\Validator as v;
 
+$markdown = new ParsedownExtra();
+
 $access = $_SESSION['AccessLevel'];
 $swimmerCount = 0;
 
@@ -186,50 +188,39 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="medicalModalTitle' . $row['MemberID'] . '">Medical Information for ' . $row['MForename'] . ' ' . $row['MSurname'] . '</h5>
+                    <h3 class="modal-title" id="medicalModalTitle' . $row['MemberID'] . '">Medical Information for ' . $row['MForename'] . ' ' . $row['MSurname'] . '</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-body">
-                  <p class="mb-0 mt-2">
-                    <em>
-                      Medical Conditions or Disabilities
-                    </em>
-                  </p>';
+                  <h4>
+                    Medical Conditions or Disabilities
+                  </h4>';
                   if ($row["Conditions"] != "") {
-                    $modalOutput .= '
-                    <p class="mb-0">';
-                    $modalOutput .= $row["Conditions"];
-                    $modalOutput .= '</p>';
+                    $modalOutput .= $markdown->text($row["Conditions"]);
                   } else {
-                    $modalOutput .= '<p class="mb-0">None</p>';
+                    $modalOutput .= '<p>None</p>';
                   }
 
-                  $modalOutput .= '<p class="mb-0 mt-2">
-                    <em>
-                      Allergies
-                    </em>
-                  </p>';
+                  $modalOutput .= '
+                  <h4>
+                    Allergies
+                  </h4>';
                   if ($row["Allergies"] != "") {
-                    $modalOutput .= '<p class="mb-0">';
-                    $modalOutput .= $row["Allergies"];
-                    $modalOutput .= '</p>';
+                    $modalOutput .= $markdown->text($row["Allergies"]);
                   } else {
-                    $modalOutput .= '<p class="mb-0">None</p>';
+                    $modalOutput .= '<p>None</p>';
                   }
 
-                  $modalOutput .= '<p class="mb-0 mt-2">
-                    <em>
-                      Medication
-                    </em>
-                  </p>';
+                  $modalOutput .= '
+                  <h4>
+                    Medication
+                  </h4>';
                   if ($row["Medication"] != "") {
-                    $modalOutput .= '<p class="mb-0">';
-                    $modalOutput .= $row["Medication"];
-                    $modalOutput .= '</p>';
+                    $modalOutput .= $markdown->text($row["Medication"]);
                   } else {
-                    $modalOutput .= '<p class="mb-0">None</p>';
+                    $modalOutput .= '<p>None</p>';
                   }
                   $modalOutput .= '
                   </div>
@@ -302,7 +293,16 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
           </td>
         </tr>";
       }
-      $content .= '</tbody></table></div><p class="mb-0"><button type="submit" class="btn btn-success">Save Register</button></p>';
+      $content .= '</tbody></table></div>
+      <!--<p>
+        <button class="btn btn-warning" type="button" data-toggle="collapse" data-target="#medicine-A-Z" aria-expanded="false" aria-controls="medicine-A-Z">
+          Show/Hide Medicines A-Z
+        </button>
+      </p>
+      <div class="collapse" id="medicine-A-Z">
+        <iframe src="https://api-bridge.azurewebsites.net/medicines/?uid=Y2hyaXMuaGVwcGVsbEBjaGVzdGVybGVzdHJlZXRhc2MuY28udWs=" style="border: none; height: 450px; width: 100%;" class="mb-3"></iframe>
+      </div>-->
+      <p class="mb-0"><button type="submit" class="btn btn-success">Save Register</button></p>';
     }
 
     if ($swimmerCount > 0) {

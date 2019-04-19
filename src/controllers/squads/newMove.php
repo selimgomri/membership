@@ -38,7 +38,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php"; ?>
 <div class="container">
 	<div class="">
-		<h1 class="border-bottom border-gray pb-2 mb-3">Squad Move for <?php echo $name; ?></h1>
+		<h1 class="border-bottom border-gray pb-2 mb-3">Squad Move for <?=htmlspecialchars($name)?></h1>
 		<?php if (isset($_SESSION['ErrorState'])) {
 			echo $_SESSION['ErrorState'];
 			unset($_SESSION['ErrorState']);
@@ -47,13 +47,13 @@ include BASE_PATH . "views/squadMenu.php"; ?>
 			<div class="form-group row">
 		    <label for="swimmerName" class="col-sm-2 col-form-label">Swimmer</label>
 		    <div class="col-sm-10">
-		      <input type="text" readonly class="form-control" id="swimmerName" name="swimmerName" value="<?php echo $name; ?>" disabled>
+		      <input type="text" readonly class="form-control" id="swimmerName" name="swimmerName" value="<?=htmlspecialchars($name)?>" disabled>
 		    </div>
 		  </div>
 			<div class="form-group row">
 		    <label for="currentSquad" class="col-sm-2 col-form-label">Current Squad</label>
 		    <div class="col-sm-10">
-		      <input type="text" readonly class="form-control" id="currentSquad" name="currentSquad" value="<?php echo $currentSquad; ?>" disabled>
+		      <input type="text" readonly class="form-control" id="currentSquad" name="currentSquad" value="<?=htmlspecialchars($currentSquad)?>" disabled>
 		    </div>
 		  </div>
 		  <div class="form-group row">
@@ -66,7 +66,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
 							$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 							$id = $row['SquadID'];
 							$name = $row['SquadName']; ?>
-							<option value="<?php echo $id ?>"><?php echo $name ?></option>
+							<option value="<?=$id?>"><?=htmlspecialchars($name)?></option>
 						<?php } ?>
 				  </select>
 		    </div>
@@ -74,7 +74,11 @@ include BASE_PATH . "views/squadMenu.php"; ?>
 			<div class="form-group row">
 		    <label for="movingDate" class="col-sm-2 col-form-label">Moving Date</label>
 		    <div class="col-sm-10">
-		      <input type="date" class="form-control" id="movingDate" name="movingDate" value="<?php echo date("Y-m-d"); ?>">
+		      <input type="date" class="form-control" id="movingDate" name="movingDate" min="<?=date("Y-m-d", strtotime("+10 days"))?>" value="<?=date("Y-m-d", strtotime("+10 days"))?>" aria-describedby="dateHelper">
+          <small id="dateHelper" class="form-text text-muted">
+            The date must be at least 10 days from now so that the parent has
+            enough warning that their squad fees have changed.
+          </small>
 		    </div>
 		  </div>
 			<button type="submit" class="btn btn-dark">Save Move</button>

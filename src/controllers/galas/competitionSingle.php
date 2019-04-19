@@ -121,9 +121,12 @@ include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
 <div class="container">
   <h1><?php echo $title; ?></h1>
+  <p class="lead">
+    <?=htmlspecialchars($row['GalaVenue'])?>
+  </p>
   <div class="row">
     <div class="col-md-6">
-      <div class="my-3 p-3 bg-white rounded shadow">
+      <div class="cell">
         <?php if (isset($_SESSION['ErrorState'])) {
           echo $_SESSION['ErrorState'];
           unset($_SESSION['ErrorState']);
@@ -132,7 +135,7 @@ include "galaMenu.php"; ?>
       </div>
     </div>
     <div class="col-md-6">
-      <div class="my-3 p-3 bg-white rounded shadow">
+      <div class="cell">
         <h2>Gala Statistics</h2>
 		    <div class="chart" id="piechart"></div>
 				<div class="chart" id="barchart"></div>

@@ -60,7 +60,13 @@ include BASE_PATH . "views/postsMenu.php";?>
         <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray force-wrap">
           <div class="d-block text-gray-dark mb-0">
             <p class="mb-0">
-							<a href="<?= autoUrl("posts/" . $row['ID']) ?>">
+              <?php
+              $url = "posts/" . $row['ID'];
+              if ($row['Path'] != null && strlen($row['Path']) > 0) {
+                $url = "pages/" . $row['Path'];
+              }
+              ?>
+							<a href="<?= autoUrl($url) ?>">
 	              <strong>
 	                <?= $row['Title']; ?>
 	              </strong>

@@ -73,7 +73,7 @@ else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $
 
 	$this->post('/competitions/{id}:int', function($id) {
 		global $link;
-		include "competitionSingleAction.php";
+		include "CompetitionSinglePost.php";
 	});
 
 	// Gala Entries

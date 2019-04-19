@@ -1,8 +1,8 @@
 <?php
 $title = $pagetitle = "Add a Squad";
 $content = "
-<div class=\"my-3 p-3 bg-white rounded shadow\">
-<h2 class=\"border-bottom border-gray pb-2\">Squad Details</h2>
+<div class=\"\">
+<h2 class=\"\">Squad Details</h2>
 <form method=\"post\" action=\"" . autoUrl("squads/addsquad") . "\">";
 $content .= "
 <div class=\"form-group\">
@@ -25,13 +25,13 @@ $content .= "
 </div>
 <div class=\"form-group\">
   <label for=\"squadTimetable\">Squad Timetable</label>
-  <input type=\"text\" class=\"form-control\" id=\"squadTimetable\" name=\"squadTimetable\" placeholder=\"Enter Squad Timetable Address\">
+  <input type=\"url\" class=\"form-control\" id=\"squadTimetable\" name=\"squadTimetable\" placeholder=\"Enter Squad Timetable Address\">
 </div>
 <div class=\"form-group\">
   <label for=\"squadCoC\">Squad Code of Conduct</label>
-  <input type=\"text\" class=\"form-control\" id=\"squadCoC\" name=\"squadCoC\" placeholder=\"Enter Squad Code of Conduct Address\">
+  <input type=\"url\" class=\"form-control\" id=\"squadCoC\" name=\"squadCoC\" placeholder=\"Enter Squad Code of Conduct Address\">
 </div>";
-$content .= "<p class=\"mb-0\"><button class=\"btn btn-outline-dark\" type=\"submit\">Add Squad</button></p>";
+$content .= "<p class=\"mb-0\"><button class=\"btn btn-success\" type=\"submit\">Add Squad</button></p>";
 $content .= "</form></div>";
 
 include BASE_PATH . "views/header.php";

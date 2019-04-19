@@ -1,6 +1,6 @@
 <?php
 
-$use_white_background = true;
+$fluidContainer = true;
 
 global $db;
 
@@ -13,9 +13,15 @@ $pagetitle = "General Account Options";
 include BASE_PATH . "views/header.php";
   $userID = $_SESSION['UserID'];
 ?>
-<div class="container">
-  <div class="row">
-    <div class="col-md-8">
+<div class="container-fluid">
+  <div class="row justify-content-between">
+    <div class="col-md-3 d-none d-md-block">
+      <?php
+        $list = new \CLSASC\BootstrapComponents\ListGroup(file_get_contents(BASE_PATH . 'controllers/myaccount/ProfileEditorLinks.json'));
+        echo $list->render('general');
+      ?>
+    </div>
+    <div class="col-md-9">
       <h1>Manage General Account Options</h1>
       <p class="lead">Options such as Two Factor Authentication.</p>
 
