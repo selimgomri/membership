@@ -1,5 +1,28 @@
 # Changelog
 
+## 6.32.1 - 2019-04-19
+* [#636](https://github.com/stripe/stripe-php/pull/636) Correct type of `$personId` in PHPDoc
+
+## 6.32.0 - 2019-04-18
+* [#621](https://github.com/stripe/stripe-php/pull/621) Add support for `CreditNote`
+
+## 6.31.5 - 2019-04-12
+* [#628](https://github.com/stripe/stripe-php/pull/628) Add constants for `person.*` event types
+* [#628](https://github.com/stripe/stripe-php/pull/628) Add missing constants for `Account` and `Person`
+
+## 6.31.4 - 2019-04-05
+* [#624](https://github.com/stripe/stripe-php/pull/624) Fix encoding of nested parameters in multipart requests
+
+## 6.31.3 - 2019-04-02
+* [#623](https://github.com/stripe/stripe-php/pull/623) Only use HTTP/2 with curl >= 7.60.0
+
+## 6.31.2 - 2019-03-25
+* [#619](https://github.com/stripe/stripe-php/pull/619) Fix PHPDoc return types for list methods for nested resources
+
+## 6.31.1 - 2019-03-22
+* [#612](https://github.com/stripe/stripe-php/pull/612) Add a lot of constants
+* [#614](https://github.com/stripe/stripe-php/pull/614) Add missing subscription status constants
+
 ## 6.31.0 - 2019-03-18
 * [#600](https://github.com/stripe/stripe-php/pull/600) Add support for the `PaymentMethod` resource and APIs
 * [#606](https://github.com/stripe/stripe-php/pull/606) Add support for retrieving a Checkout `Session`
