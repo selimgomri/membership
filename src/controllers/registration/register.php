@@ -51,27 +51,45 @@ $_SESSION['RegistrationMode'] = $mode;
       } ?>
       <form method="post" action="<?php echo autoUrl("register"); ?>" name="register" id="register">
 
-        <h2>Personal Details</h2>
+        <h2>About you</h2>
         <div class="row">
           <div class="col-md-8 col-lg-6">
-            <div class="form-group">
-              <label for="forename">First Name</label>
-              <input class="form-control" type="text" name="forename" id="forename"
-              placeholder="First Name" required value="<?=htmlspecialchars($_SESSION['RegistrationForename'])?>">
+
+            <div class="form-row">
+
+              <div class="col">
+
+                <div class="form-group">
+                  <label for="forename">First Name</label>
+                  <input class="form-control" type="text" name="forename"
+                  id="forename" placeholder="First" required
+                  value="<?=htmlspecialchars($_SESSION['RegistrationForename'])?>">
+                </div>
+
+              </div>
+
+              <div class="col">
+
+                <div class="form-group">
+                  <label for="surname">Last Name</label>
+                  <input class="form-control" type="text" name="surname"
+                  id="surname" placeholder="Last" required
+                  value="<?=htmlspecialchars($_SESSION['RegistrationSurname'])?>">
+                </div>
+
+              </div>
+
             </div>
-            <div class="form-group">
-              <label for="surname">Last Name</label>
-              <input class="form-control" type="text" name="surname" id="surname" placeholder="Last Name" required value="<?=htmlspecialchars($_SESSION['RegistrationSurname'])?>">
-            </div>
+
             <div class="form-group">
               <label for="email">Email Address</label>
-              <input class="form-control mb-0" type="email" name="email" id="email" placeholder="yourname@example.com" required value="<?=htmlspecialchars($_SESSION['RegistrationEmail'])?>">
+              <input class="form-control mb-0" type="email" name="email" id="email-address" placeholder="yourname@example.com" required value="<?=htmlspecialchars($_SESSION['RegistrationEmail'])?>">
               <small id="emailHelp" class="form-text text-muted">
                 Your email address will only be used inside <?=CLUB_NAME?> and
-                Chester-le-Street ASC Club Digital Services. Emails sent by
+                Chester-le-Street ASC Club Digital Services.<!-- Emails sent by
                 Chester-le-Street ASC Club Digital Services are delivered by Google
                 Cloud and SendGrid. Both companies are EU-US Privacy Shield
-                certified.
+                certified.-->
               </small>
             </div>
           </div>
@@ -86,22 +104,24 @@ $_SESSION['RegistrationMode'] = $mode;
           </div>
         </div>
 
-        <h2>Password</h2>
-        <!--<div class="form-group">
-          <label for="username">Username</label>
-          <input class="form-control" type="text" name="username" id="username" placeholder="Username" aria-labelledby="usernameHelp" required value="<?=htmlspecialchars($_SESSION['RegistrationUsername'])?>">
-          <small id="usernameHelp" class="form-text text-muted">This username is for your user account as an adult, not your swimmer(s)</small>
-        </div>-->
+        <!--<h2>Password</h2>-->
         <div class="row">
           <div class="col-md-8 col-lg-6">
-            <div class="form-group">
-              <label for="password1">Password</label>
-              <input class="form-control" type="password" aria-describedby="pwHelp" name="password1" id="password1" placeholder="Password" required>
-              <small id="pwHelp" class="form-text text-muted">Passwords must be 8 characters or longer</small>
-            </div>
-            <div class="form-group">
-              <label for="password2">Confirm Password</label>
-              <input class="form-control" type="password" name="password2" id="password2" placeholder="Password" required>
+            <div class="form-row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="password1">Password</label>
+                  <input class="form-control" type="password" aria-describedby="pwHelp" name="password1" id="password1" placeholder="Password" required>
+                  <small id="pwHelp" class="form-text text-muted">Use 8 characters or more</small>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="form-group">
+                  <label for="password2">Confirm Password</label>
+                  <input class="form-control" type="password" name="password2" id="password2" placeholder="Password" required>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -122,30 +142,34 @@ $_SESSION['RegistrationMode'] = $mode;
 
         <div class="row">
           <div class="col-md-8 col-lg-6">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input"
-              name="emailAuthorise" id="emailAuthorise" value="1" <?=$email?>
-              checked>
-              <label class="custom-control-label" for="emailAuthorise">
-                I wish to recieve important email updates about my squads
-              </label>
+            <div class="form-group">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input"
+                name="emailAuthorise" id="emailAuthorise" value="1" <?=$email?>>
+                <label class="custom-control-label" for="emailAuthorise">
+                  I wish to recieve important email updates about my squads.
+                  This includes emails about session cancellations.
+                </label>
+              </div>
             </div>
 
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input"
-              name="smsAuthorise" id="smsAuthorise" value="1" <?=$sms?>
-              checked>
-              <label class="custom-control-label" for="smsAuthorise">
-                I wish to recieve text message notifications
-              </label>
+            <div class="form-group">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input"
+                name="smsAuthorise" id="smsAuthorise" value="1" <?=$sms?>>
+                <label class="custom-control-label" for="smsAuthorise">
+                  I wish to recieve text message notifications
+                </label>
+              </div>
             </div>
+
+            <p class="small">
+              We will still need to send you notifications relating to your
+              account from time to time.
+            </p>
+
           </div>
         </div>
-
-        <p class="small">
-          We will still need to send you notifications relating to your account
-          from time.
-        </p>
 
         <div class="cell">
           <p class="mb-0"><strong>Legal Stuff Applies</strong></p>

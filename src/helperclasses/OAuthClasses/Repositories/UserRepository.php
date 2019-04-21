@@ -21,8 +21,19 @@ class UserRepository implements UserRepositoryInterface
     $grantType,
     ClientEntityInterface $clientEntity
   ) {
-    if ($username === 'alex' && $password === 'whisky') {
-      return new UserEntity();
+
+    $username = preg_replace('/\s+/', '', $username);
+
+    $query = "SELECT * FROM users WHERE Username = '$username' OR EmailAddress = '$username' LIMIT 0, 30 ";
+    $result = mysqli_query($link, $query);
+    $count = mysqli_num_rows($result);
+
+    if ($count == 1) {
+      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+      $hash = $row['Password'];
+      if (password_verify($password, $hash)) {
+        return new UserEntity();
+      }
     }
     return;
   }

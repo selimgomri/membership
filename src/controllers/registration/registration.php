@@ -29,14 +29,14 @@ if ($_SESSION['RegistrationMode'] == "Family-Manual") {
 
 // Registration Form Handler
 
-$forename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
-$surname = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['surname']))));
+$forename = trim(ucwords($_POST['forename']));
+$surname = trim(ucwords($_POST['surname']));
 //$username = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['username']))));
-$username = mysqli_real_escape_string($link, $forename . $surname . "-" . md5(generateRandomString(20) . time()));
-$password1 = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password1'])));
-$password2 = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['password2'])));
-$email = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['email']))));
-$mobile = mysqli_real_escape_string($link, "+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", $_POST['mobile'])), '0')); // Removes anything that isn't a digit
+$username = $forename . $surname . "-" . md5(generateRandomString(20) . time());
+$password1 = trim($_POST['password1']);
+$password2 = trim($_POST['password2']);
+$email = strtolower(trim($_POST['email']));
+$mobile = "+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", $_POST['mobile'])), '0'); // Removes anything that isn't a digit
 $emailAuth = 0;
 if ($_POST['emailAuthorise'] != 1) {
   $emailAuth = 0;
@@ -53,6 +53,7 @@ if ($_POST['smsAuthorise'] != 1) {
 $status = true;
 $statusMessage = "";
 
+/*
 $username = preg_replace('/\s+/', '', $username);
 
 $usernameSQL = "SELECT * FROM users WHERE Username = '$username' LIMIT 0, 30 ";
@@ -63,6 +64,7 @@ if (mysqli_num_rows($usernameResult) > 0) {
   <li>An internal error occured</li>
   ";
 }
+*/
 
 if (!v::stringType()->length(7, null)->validate($password1)) {
   $status = false;
@@ -93,12 +95,12 @@ if ($password1 != $password2) {
   ";
 }
 
-$emailSQL = "SELECT * FROM users WHERE EmailAddress = '$email' LIMIT 0, 30 ";
-$emailResult = mysqli_query($link, $emailSQL);
-if (mysqli_num_rows($emailResult) > 0) {
+$getEmailCount = $db->prepare("SELECT COUNT(*) FROM users WHERE EmailAddress = ?");
+$getEmailCount->execute([$email]);
+if ($getEmailCount->fetchColumn() > 0) {
   $status = false;
   $statusMessage .= "
-  <li>That email address is already used</li>
+  <li>That email address is already in use</li>
   ";
 }
 
@@ -125,27 +127,23 @@ $accountJSON = json_encode($account);
 if ($status) {
   // Registration may be allowed
   // Success
-  $authCode = md5(generateRandomString(20) . time());
-  $sql = "INSERT INTO `newUsers` (`AuthCode`, `UserJSON`, `Type`) VALUES ('$authCode',
-  '$accountJSON', 'Registration');";
-  mysqli_query($link, $sql);
-  // Check it went in
-  $query = "SELECT * FROM `newUsers` WHERE `AuthCode` = '$authCode' LIMIT 1";
-  $result = mysqli_query($link, $query);
-  $row = mysqli_fetch_array($result);
-  $id = $row['ID'];
+  $authCode = hash('sha256', random_int(0, 999999) . time());
+  $addToDb = $db->prepare("INSERT INTO `newUsers` (`AuthCode`, `UserJSON`, `Type`) VALUES (?,
+  ?, 'Registration')");
+  $addToDb->execute([$authCode, $accountJSON]);
+  $id = $db->lastInsertId();
   $verifyLink = "register/auth/" . $id . "/" . "new-user/" . $authCode;
 
   // PHP Email
   $subject = "Thanks for Joining " . $forename;
   $to = $email;
   $sContent = '
-  <p class="small">Hello ' . $forename . '</p>
+  <p class="small">Hello ' . htmlspecialchars($forename) . '</p>
   <p>Thanks for signing up for your ' . CLUB_NAME . ' Account.</p>
   <p>We need you to verify your email address by following this link - <a
   href="' . autoUrl($verifyLink) . '" target="_blank">' .
   autoUrl($verifyLink) . '</a></p>
-  <p>You will use your email address, ' . $email . ' to sign in.</p>
+  <p>You will use your email address, ' . htmlspecialchars($email) . ' to sign in.</p>
   <p>You can change your personal details and password in My Account</p>
   <p>For help, send an email to <a
   href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a></p>

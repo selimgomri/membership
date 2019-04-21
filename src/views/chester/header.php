@@ -2,8 +2,36 @@
 
 require 'GlobalHead.php';
 
+if (!isset($_SESSION['AlphaBeta'])) {
+ if (rand() < 0.5) {
+   $_SESSION['AlphaBeta'] = false;
+ } else {
+   $_SESSION['AlphaBeta'] = true;
+ }
+}
+
 $bg = "bg-white";
 ?>
+
+<?php if (false /*$_SESSION['AlphaBeta']*/) { ?>
+<style>
+h1 {
+  background: #bd0000;
+  padding: 1rem;
+  color: #fff;
+  width: max-content;
+  margin: 3rem 0 0 0;
+}
+p.lead {
+  background: #bd0000;
+  padding: 1rem;
+  color: #fff;
+  width: max-content;
+  margin: 0 0 3rem 0;
+}
+</style>
+<?php } ?>
+
 <body class="<?=$bg?> account--body">
 
   <div class="sr-only sr-only-focusable">
@@ -194,9 +222,9 @@ $bg = "bg-white";
 
         <a class="navbar-brand d-lg-none" href="<?php echo autoUrl("") ?>">
           <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-            <img src="<?php echo autoUrl("img/chesterIcon.svg"); ?>" width="20" height="20"> My Membership
+            <img src="<?php echo autoUrl("public/img/chesterIcon.svg"); ?>" width="20" height="20"> My Membership
           <?php } else { ?>
-            <img src="<?php echo autoUrl("img/chesterIcon.svg"); ?>" width="20" height="20"> Club Membership
+            <img src="<?php echo autoUrl("public/img/chesterIcon.svg"); ?>" width="20" height="20"> Club Membership
           <?php } ?>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"

@@ -173,7 +173,7 @@ include BASE_PATH . "views/header.php";
     				<div class="custom-control custom-switch">
     					<input type="checkbox" class="custom-control-input" value="1" id="SecurityComms" aria-describedby="SecurityCommsHelp" name="SecurityComms" <?php echo $emailChecked_security; ?> >
               <label class="custom-control-label" for="SecurityComms">Receive Account Security Emails</label>
-    					<small id="SecurityCommsHelp" class="form-text text-muted">Receive emails whenever somebody logs in to your account</small>
+    					<small id="SecurityCommsHelp" class="form-text text-muted">Receive emails whenever somebody logs in to your account from an unrecognised IP Address</small>
     				</div>
     			</div>
 

@@ -83,7 +83,9 @@ while ($currentMessage = $getPendingGroupMail->fetch(PDO::FETCH_ASSOC)) {
   href=\"mailto:" . $club->ClubEmails->Main . "\">" . $club->ClubEmails->Main . "</a>.</p>
   <p class=\"small\" align=\"center\">To control your email options, go to <a href=\"" .
   autoUrl("myaccount/email") . "\">My Account</a>.</p>";
-  $message .= '<p class="small" align="center"><a href="-unsub_link-">Click to Unsubscribe</a></p>';
+  if (!$currentMessage['ForceSend']) {
+    $message .= '<p class="small" align="center"><a href="-unsub_link-">Click to Unsubscribe</a></p>';
+  }
   $message .= "
   <p class=\"small\" align=\"center\">&copy; " . CLUB_NAME . " " . date("Y") . "</p>
       </div>
@@ -96,6 +98,9 @@ while ($currentMessage = $getPendingGroupMail->fetch(PDO::FETCH_ASSOC)) {
   $message = str_replace("\r\n", "", $message);
 
   $from = new \SendGrid\Mail\From("notify@chesterlestreetasc.co.uk", CLUB_NAME);
+  if ($currentMessage['ForceSend']) {
+    $from = new \SendGrid\Mail\From("noreply@chesterlestreetasc.co.uk", CLUB_NAME);
+  }
   $tos = [];
   while ($user = $getUsersForEmail->fetch(PDO::FETCH_ASSOC)) {
     if ($currentMessage['ForceSend'] || isSubscribed($user['UserID'], 'Notify')) {
@@ -142,6 +147,8 @@ while ($currentMessage = $getPendingGroupMail->fetch(PDO::FETCH_ASSOC)) {
     $htmlContent,
     $globalSubstitutions
   );
+
+  $email->setReplyTo(CLUB_EMAIL, CLUB_NAME . ' Enquiries');
 
   $sendgrid = new \SendGrid(SENDGRID_API_KEY);
   try {

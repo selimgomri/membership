@@ -17,7 +17,6 @@
                 <?php } ?>
   		        </address>
   		        <!--<p><i class="fa fa-envelope fa-fw" aria-hidden="true"></i> <a href="mailto:enquiries@chesterlestreetasc.co.uk" target="new">E-Mail Us</a></p>-->
-  		        <p class="mb-0"><i class="fa fa-commenting fa-fw" aria-hidden="true"></i> <a target="new" href="mailto:websitefeedback@chesterlestreetasc.co.uk">Website Feedback</a></p>
   						<p><i class="fa fa-flag fa-fw" aria-hidden="true"></i> <a href="<?=autoUrl("reportanissue?url=" . urlencode(app('request')->curl))?>">Report an issue with this page</a></p>
   		      </div>
   		    </div>
@@ -72,7 +71,7 @@
     <div class="<?php if (isset($fluidContainer) && $fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
       <div class="row">
         <div class="col source-org vcard copyright">
-            <img src="https://static.chesterlestreetasc.co.uk/scds/SCDS.png" width="100" class="mb-3">
+            <img src="<?=autoUrl("public/img/corporate/scds.png")?>" width="100" class="mb-3">
             <p class="hidden-print">
   						Designed and Built by Swimming Club Data Systems. Licenced to <?=CLUB_NAME?>.
   					</p>
@@ -96,10 +95,10 @@
 </footer>
 
 <!-- Modals and Other Hidden HTML -->
-<script rel="preload" src="<?php echo autoUrl("js/jquery-3.2.1.slim.min.js") ?>"></script>
-<script defer src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/js/popper.min.js"></script>
-<script defer src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/js/bootstrap.min.js"></script>
-<script async src="https://www.chesterlestreetasc.co.uk/static/global/js/clscookies.js"></script>
+<script rel="preload" src="<?=autoUrl("public/js/jquery-3.2.1.slim.min.js")?>"></script>
+<script defer src="<?=autoUrl("public/js/popper.min.js")?>"></script>
+<script defer src="<?=autoUrl("public/js/bootstrap.min.js")?>"></script>
+<script async src="<?=autoUrl("public/js/Cookies.js")?>"></script>
 </body>
 </html>
 <?php //mysqli_close(LINK); ?>

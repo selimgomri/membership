@@ -13,7 +13,7 @@ if (file_exists($file) && mime_content_type($file) != 'directory') {
   } else {
     header('Content-Type: ' . mime_content_type($file));
   }
-  if (mime_content_type($file) == 'application/pdf') {
+  if (mime_content_type($file) == 'application/pdf' || mime_content_type($file) == 'text/html' || mime_content_type($file) == 'text/css' || mime_content_type($file) == 'application/javascript') {
     header('Content-Disposition: inline');
   } else {
     header('Content-Disposition: attachment; filename="'.basename($filename).'"');

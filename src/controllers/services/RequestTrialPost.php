@@ -5,6 +5,11 @@ use Respect\Validation\Validator as v;
 // Assign form content to SESSION
 $_SESSION['RequestTrial-FC'] = $_POST;
 
+$isParent = false;
+if ($_POST['is-parent']) {
+  $isParent = true;
+}
+
 if (!v::email()->validate($_POST['email-addr'])) {
   $_SESSION['RequestTrial-Errors']['Email'] = "The email address is invalid";
   header("Location: " . app('request')->curl);
@@ -27,14 +32,16 @@ if ($_POST['surname'] == "") {
   header("Location: " . app('request')->curl);
 }
 
-if ($_POST['swimmer-forename'] == "") {
-  $_SESSION['RequestTrial-Errors']['Swimmer-FN'] = "No swimmer first name";
-  header("Location: " . app('request')->curl);
-}
+if (!$isParent) {
+  if ($_POST['swimmer-forename'] == "") {
+    $_SESSION['RequestTrial-Errors']['Swimmer-FN'] = "No swimmer first name";
+    header("Location: " . app('request')->curl);
+  }
 
-if ($_POST['swimmer-surname'] == "") {
-  $_SESSION['RequestTrial-Errors']['Swimmer-LN'] = "No swimmer last name";
-  header("Location: " . app('request')->curl);
+  if ($_POST['swimmer-surname'] == "") {
+    $_SESSION['RequestTrial-Errors']['Swimmer-LN'] = "No swimmer last name";
+    header("Location: " . app('request')->curl);
+  }
 }
 
 if ($_POST['sex'] == "") {
@@ -61,6 +68,11 @@ if (isset($_SESSION['RequestTrial-Errors'])) {
 $parent = $_POST['forename'] . ' ' . $_POST['surname'];
 
 $swimmer = $_POST['swimmer-forename'] . ' ' . $_POST['swimmer-surname'];
+
+if ($isParent) {
+  $swimmer = $parent;
+}
+
 $asa = trim($_POST['swimmer-asa']);
 $biog_link = 'https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . $asa;
 
@@ -79,6 +91,11 @@ if ($_POST['experience'] == 2) {
 
 $email_club = '
 <p>' . $parent . ' has requested a trial for ' . $swimmer . '. To contact ' . $_POST['forename'] . ', email ' . $_POST['email-addr'] . ' or reply to this email. Here are the full request details.</p>';
+
+if ($isParent) {
+  $email_club = '
+  <p>' . $parent . ' has requested a trial. To contact ' . $_POST['forename'] . ', email ' . $_POST['email-addr'] . ' or reply to this email. Here are the full request details.</p>';
+}
 
 $age = $age = date_diff(date_create($dob), date_create('today'))->y;
 
@@ -120,9 +137,14 @@ $email_club .= '<h2>What Next></h2>
 
 $hash = sha1($_POST['email-addr']);
 
+$forText = 'for ' . $swimmer;
+if ($isParent) {
+  $forText = '';
+}
+
 $email_parent = '
 <p>Hello ' . $parent . '</p>
-<p>Thank\'s for your interest in a trial for ' . $swimmer . ' at ' . CLUB_NAME . '. We\'re working through your request and will get back to you as soon as we can.</p>
+<p>Thanks for your interest in a trial ' . $forText . ' at ' . CLUB_NAME . '. We\'re working through your request and will get back to you as soon as we can.</p>
 <p>In the meantime, you may wish to <a href="' . CLUB_WEBSITE . '">visit our website</a>.</p>';
 
 $to_club = notifySend(null, 'New Trial Request', $email_club, 'Club Admins', CLUB_TRIAL_EMAIL, ["Email" => "join@" . EMAIL_DOMAIN, "Name" => CLUB_NAME, 'Reply-To' => $_POST['email-addr']]);
@@ -144,11 +166,18 @@ if ($to_club && $to_parent) {
     ]);
   }
 
+  $swimmerForename = $_POST['swimmer-forename'];
+  $swimmerSurname = $_POST['swimmer-surname'];
+  if ($isParent) {
+    $swimmerForename = $_POST['forename'];
+    $swimmerSurname = $_POST['surname'];
+  }
+
   $query = $db->prepare("INSERT INTO joinSwimmers (Parent, First, Last, DoB, XP, XPDetails, Medical, Questions, Club, ASA, Sex) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
   $query->execute([
     $hash,
-    htmlspecialchars(trim($_POST['swimmer-forename'])),
-    htmlspecialchars(trim($_POST['swimmer-surname'])),
+    htmlspecialchars(trim($swimmerForename)),
+    htmlspecialchars(trim($swimmerSurname)),
     $dob,
     $_POST['experience'],
     trim($_POST['swimmer-xp']),

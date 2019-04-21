@@ -59,7 +59,14 @@ include BASE_PATH . "views/postsMenu.php";?>
       <div class="media pt-3">
         <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray force-wrap">
           <div class="d-block text-gray-dark mb-0">
-            <p class="mb-0">
+            <?php
+            $post_title = htmlspecialchars($row['Title']);
+            $truncate = "";
+            if (strlen($post_title) == 0) {
+              $post_title = autoUrl($url);
+              $truncate = "text-truncate";
+            } ?>
+            <p class="mb-0 <?=$truncate?>">
               <?php
               $url = "posts/" . $row['ID'];
               if ($row['Path'] != null && strlen($row['Path']) > 0) {
@@ -68,13 +75,13 @@ include BASE_PATH . "views/postsMenu.php";?>
               ?>
 							<a href="<?= autoUrl($url) ?>">
 	              <strong>
-	                <?= $row['Title']; ?>
+                  <?=$post_title?>
 	              </strong>
 							</a>
             </p>
 						<?php if ($row['Excerpt'] != "") { ?>
 						<p class="mb-0">
-							<?= htmlentities($row['Excerpt']) ?>
+							<?= htmlspecialchars($row['Excerpt']) ?>
 						</p>
 						<?php } ?>
             <p class="mb-0">

@@ -22,7 +22,7 @@ if (isset($_POST['squad'])) {
   <h1>Swimmers with no connected parent</h1>
   <div class="d-print-none">
     <p class="lead">A list of swimmers.</p>
-    <?php 
+    <?php
   $sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
   $result = mysqli_query($link, $sql);
   $squadCount = mysqli_num_rows($result);
@@ -44,8 +44,8 @@ if (isset($_POST['squad'])) {
   } ?>
     </select></div>
     <div class="col-md-6 mb-3">
-      <label class="sr-only" for="search">Search by Surname</label>
-      <input class="form-control" placeholder="Surname" id="search" name="search" value="<?php echo $search; ?>">
+      <label class="sr-only" for="search">Search by Name</label>
+      <input class="form-control" placeholder="Search by name" id="search" name="search" value="<?php echo $search; ?>">
     </div>
 
   </div>

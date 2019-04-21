@@ -4,19 +4,17 @@ global $db;
 
 $rr = 0;
 
-$id = mysqli_real_escape_string($link, $id);
-$auth = mysqli_real_escape_string($link, $token);
+$getApplication = $db->prepare("SELECT * FROM `newUsers` WHERE `AuthCode` = ? AND `ID` = ? AND `Type` = 'Registration'");
+$getApplication->execute([$token, $id]);
 
-$sql = "SELECT * FROM `newUsers` WHERE `AuthCode` = '$auth' AND `ID` = '$id' AND `Type` = 'Registration';";
-$result = mysqli_query($link, $sql);
+$row = $getApplication->fetch(PDO::FETCH_ASSOC);
 
 $status = "nf";
 
-if (mysqli_num_rows($result) == 0) {
+if ($row == null) {
 	halt(404);
 }
 
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 $array = json_decode($row['UserJSON']);
 
 //pre($array);
@@ -32,6 +30,7 @@ $hashedPassword	= $array->Password;
 
 $fam = false;
 $fam_id = null;
+/*
 if (isset($array->FamilyIdentifier) || $array->FamilyIdentifier != null) {
 	$fam = true;
 	$fam_id = $array->FamilyIdentifier;
@@ -39,21 +38,23 @@ if (isset($array->FamilyIdentifier) || $array->FamilyIdentifier != null) {
 		//$rr = 1;
 	}
 }
+*/
 
 // Registration may be allowed
 // Success
-$sql = "INSERT INTO `users`
+$addUser = $db->prepare("INSERT INTO `users`
 (`UserID`, `Username`, `Password`, `AccessLevel`, `EmailAddress`, `EmailComms`, `Forename`, `Surname`, `Mobile`, `MobileComms`, `RR`)
 VALUES
-(NULL, '$username', '$hashedPassword', 'Parent', '$email', '$emailAuth', '$forename', '$surname', '$mobile', '$smsAuth', '$rr');";
-mysqli_query($link, $sql);
-$user_id = mysqli_insert_id($link);
+(NULL, ?, ?, 'Parent', ?, ?, ?, ?, ?, ?, ?)");
+$addUser->execute([$username, $hashedPassword, $email, $emailAuth, $forename, $surname, $mobile, $smsAuth, $rr]);
+$user_id = $db->lastInsertId();
 // Check it went in
-$query = "SELECT * FROM users WHERE Username = '$username' AND Password = '$hashedPassword' LIMIT 0, 30 ";
-$result = mysqli_query($link, $query);
-$row = mysqli_fetch_array($result);
-$count = mysqli_num_rows($result);
+$count = null;
+if ($user_id != null) {
+  $count = 1;
+}
 
+/*
 if ($fam) {
 	$sql = "UPDATE `members` INNER JOIN familyMembers ON members.MemberID = familyMembers.MemberID SET members.UserID = ? WHERE familyMembers.FamilyID = ?";
 
@@ -64,18 +65,19 @@ if ($fam) {
   	halt(500);
   }
 }
+*/
 
 if ($count == 1) {
 	$_SESSION['RegistrationGoVerify'] = '
   <div class="alert alert-success mb-0">
     <p class="mb-0">
       <strong>
-        Hello ' . $forename . '! You\'ve successfully verified your email address.
+        Hello ' . htmlspecialchars($forename) . '! You have successfully verified your email address.
       </strong>
     </p>
 
     <p>
-      You can now head to the homepage to login.
+      You can now head to the login page to login using your email address and password.
     </p>
 
 		<p class="mb-0">
@@ -86,8 +88,8 @@ if ($count == 1) {
   </div>
   ';
 
-	$sql = "DELETE FROM `newUsers` WHERE `AuthCode` = '$auth' AND `ID` = '$id';";
-	mysqli_query($link, $sql);
+  $deleteRow = $db->prepare("DELETE FROM `newUsers` WHERE `AuthCode` = ? AND `ID` = ?");
+  $deleteRow->execute([$token, $id]);
 } else if ($status == "nf") {
 	$_SESSION['RegistrationGoVerify'] = '
 	<div class="alert alert-warning mb-0">

@@ -28,7 +28,7 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
 
   $username = preg_replace('/\s+/', '', $username);
 
-  $getUser = $db->prepare("SELECT Forename, Surname, UserID, EmailAddress, Password FROM users WHERE EmailAddress = ?");
+  $getUser = $db->prepare("SELECT Forename, Surname, UserID, EmailAddress, Password, AccessLevel FROM users WHERE EmailAddress = ?");
   $getUser->execute([$_POST['email-address']]);
 
   $row = $getUser->fetch(PDO::FETCH_ASSOC);
