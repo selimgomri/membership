@@ -51,8 +51,10 @@ include BASE_PATH . "views/notifyMenu.php";
 
     <div class="form-group">
 			<label for="from">From</label>
-			<input type="text" class="form-control" name="from" id="from"
-      placeholder="Recipient" autocomplete="off" value="<?=htmlspecialchars($myName . " <" . $myEmail . ">")?>" disabled>
+      <select class="custom-select" name="from" id="from">
+        <option value="current-user" selected><?=htmlspecialchars($myName . " <" . $myEmail . ">")?></option>
+        <option value="club-sending-account"><?=htmlspecialchars(CLUB_NAME . " <noreply@" . EMAIL_DOMAIN . ">")?></option>
+      </select>
 		</div>
 
 		<div class="form-group">

@@ -1,6 +1,6 @@
 <?php
 
-$pagetitle = "Add a New Extra";
+$pagetitle = "Add a Targetted List";
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";
@@ -10,10 +10,10 @@ include BASE_PATH . "views/notifyMenu.php";
 <div class="container">
   <div class="">
     <h1 class="">
-      Create a New Targeted List
+      Create a New Targetted List
     </h1>
     <p class="lead">
-      Targeted lists are custom mailing lists for messaging groups of parents
+      Targetted lists are custom mailing lists for messaging groups of parents
       outside of normal squads.
     </p>
     <p>

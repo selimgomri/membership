@@ -1,4 +1,7 @@
 <?php
+
+global $db;
+
 $access = $_SESSION['AccessLevel'];
 // Committee or Admin can see and change all data
 $forenameUpdate = false;
@@ -14,9 +17,13 @@ $catUpdate = $cpUpdate = false;
 $update = false;
 $successInformation = "";
 
-$query = "SELECT * FROM members WHERE MemberID = '$id' ";
-$result = mysqli_query($link, $query);
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+$query = $db->prepare("SELECT * FROM members WHERE MemberID = ?");
+$query->execute([$id]);
+$row = $query->fetch(PDO::FETCH_ASSOC);
+
+if ($row == null) {
+  halt(404);
+}
 
 $forename = $row['MForename'];
 $middlename = $row['MMiddleNames'];
@@ -163,8 +170,8 @@ $resultSwim = mysqli_query($link, $sqlSwim);
 $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
 $pagetitle = "Swimmer: " . $rowSwim['MForename'] . " " . $rowSwim['MSurname'];
 $title = null;
-$content = '<form method="post"><div class="row align-items-center"><div class="col-sm-8"><h1>Editing ' . $rowSwim['MForename'] . ' ' . $rowSwim['MSurname'] . '</h1></div><div class="col-sm-4 text-right"><button type="submit" class="btn btn-success">Update</button> <a class="btn btn-dark" href="../' . $id . '">Exit Edit Mode</a></div></div><hr>';
-$content .= "<div class=\"row\"><div class=\"col col-md-8\"><div class=\"mb-3 p-3 bg-white rounded shadow\">";
+$content = '<form method="post"><div class="row align-items-center"><div class="col-sm-8"><h1>Editing ' . htmlspecialchars($rowSwim['MForename'] . ' ' . $rowSwim['MSurname']) . '</h1></div><div class="col-sm-4 text-right"><button type="submit" class="btn btn-success">Update</button> <a class="btn btn-dark" href="../' . $id . '">Exit Edit Mode</a></div></div><hr>';
+$content .= "<div class=\"row\"><div class=\"col col-md-8\"><div class=\"\">";
 if ($update) {
 $content .= '<div class="alert alert-success">
 	<strong>We have updated</strong>
@@ -189,27 +196,27 @@ $content .= '
 $content .= "
 <div class=\"form-group\">
 	<label for=\"forename\">Forename</label>
-	<input type=\"text\" class=\"form-control\" id=\"forename\" name=\"forename\" placeholder=\"Enter a forename\" value=\"" . $rowSwim['MForename'] . "\" required>
+	<input type=\"text\" class=\"form-control\" id=\"forename\" name=\"forename\" placeholder=\"Enter a forename\" value=\"" . htmlspecialchars($rowSwim['MForename']) . "\" required>
 </div>";
 $content .= "
 <div class=\"form-group\">
 	<label for=\"middlenames\">Middle Names</label>
-	<input type=\"text\" class=\"form-control\" id=\"middlenames\" name=\"middlenames\" placeholder=\"Enter a middlename\" value=\"" . $rowSwim['MMiddleNames'] . "\">
+	<input type=\"text\" class=\"form-control\" id=\"middlenames\" name=\"middlenames\" placeholder=\"Enter a middlename\" value=\"" . htmlspecialchars($rowSwim['MMiddleNames']) . "\">
 </div>";
 $content .= "
 <div class=\"form-group\">
 	<label for=\"surname\">Surname</label>
-	<input type=\"text\" class=\"form-control\" id=\"surname\" name=\"surname\" placeholder=\"Enter a surname\" value=\"" . $rowSwim['MSurname'] . "\" required>
+	<input type=\"text\" class=\"form-control\" id=\"surname\" name=\"surname\" placeholder=\"Enter a surname\" value=\"" . htmlspecialchars($rowSwim['MSurname']) . "\" required>
 </div>";
 $content .= "
 <div class=\"form-group\">
 	<label for=\"datebirth\">Date of Birth</label>
-	<input type=\"date\" class=\"form-control\" id=\"datebirth\" name=\"datebirth\" pattern=\"[0-9]{4}-[0-9]{2}-[0-9]{2}\" placeholder=\"YYYY-MM-DD\" value=\"" . $rowSwim['DateOfBirth'] . "\" required>
+	<input type=\"date\" class=\"form-control\" id=\"datebirth\" name=\"datebirth\" pattern=\"[0-9]{4}-[0-9]{2}-[0-9]{2}\" placeholder=\"YYYY-MM-DD\" value=\"" . htmlspecialchars($rowSwim['DateOfBirth']) . "\" required>
 </div>";
 $content .= "
 <div class=\"form-group\">
 	<label for=\"asa\">ASA Registration Number</label>
-	<input type=\"test\" class=\"form-control\" id=\"asa\" name=\"asa\" placeholder=\"ASA Registration Numer\" value=\"" . $rowSwim['ASANumber'] . "\">
+	<input type=\"test\" class=\"form-control\" id=\"asa\" name=\"asa\" placeholder=\"ASA Registration Numer\" value=\"" . htmlspecialchars($rowSwim['ASANumber']) . "\">
 </div>";
 $cat = [];
 $cat[$rowSwim['ASACategory']] = " selected ";
@@ -262,7 +269,7 @@ for ($i = 0; $i < $squadCount; $i++) {
 	if ($row['SquadID'] == $rowSwim['SquadID']) {
 		$content .= " selected";
 	}
-	$content .= ">" . $row['SquadName'] . "</option>";
+	$content .= ">" . htmlspecialchars($row['SquadName']) . "</option>";
 }
 $content .= "</select></div>";
 
@@ -284,7 +291,7 @@ $content .= '</div>';
 $content .= "
 <div class=\"form-group\">
 	<label for=\"otherNotes\">Other Notes</label>
-	<textarea class=\"form-control\" id=\"otherNotes\" name=\"otherNotes\" rows=\"3\" placeholder=\"Tell us any other notes for coaches\">" . $rowSwim['OtherNotes'] . "</textarea>
+	<textarea class=\"form-control\" id=\"otherNotes\" name=\"otherNotes\" rows=\"3\" placeholder=\"Tell us any other notes for coaches\">" . htmlspecialchars($rowSwim['OtherNotes']) . "</textarea>
 </div>";
 if ($access == "Admin") {
   $statusA;
@@ -313,14 +320,14 @@ $content .= "
 		</div>
 	</div>";
 }
-$content .= "<button type=\"submit\" class=\"btn btn-outline-dark\">Update</button>";
+$content .= "<button type=\"submit\" class=\"btn btn-success rounded\">Update</button>";
 $content .= "</div></div><div class=\"col-md-4\">";
-$content .= "<div class=\"mb-3 p-3 bg-white rounded shadow\"><h2>Squad Information</h2><ul class=\"mb-0\"><li>Squad: " . $rowSwim['SquadName'] . "</li><li>Monthly Fee: &pound;" . $rowSwim['SquadFee'] . "</li>";
+$content .= "<div class=\"cell\"><h2>Squad Information</h2><ul class=\"mb-0\"><li>Squad: " . htmlspecialchars($rowSwim['SquadName']) . "</li><li>Monthly Fee: &pound;" . $rowSwim['SquadFee'] . "</li>";
 if ($rowSwim['SquadTimetable'] != "") {
-	$content .= "<li><a href=\"" . $rowSwim['SquadTimetable'] . "\">Squad Timetable</a></li>";
+	$content .= "<li><a href=\"" . htmlspecialchars($rowSwim['SquadTimetable']) . "\">Squad Timetable</a></li>";
 }
 if ($rowSwim['SquadCoC'] != "") {
-	$content .= "<li><a href=\"" . $rowSwim['SquadCoC'] . "\">Squad Code of Conduct</a></li>";
+	$content .= "<li><a href=\"" . htmlspecialchars($rowSwim['SquadCoC']) . "\">Squad Code of Conduct</a></li>";
 }
 $content .= "</ul></div>";
 $content .= "</div></div></form>";

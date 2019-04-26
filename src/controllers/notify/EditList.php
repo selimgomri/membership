@@ -22,7 +22,7 @@ include BASE_PATH . "views/notifyMenu.php";
     <h1 class="">
 			Edit <?php echo $row['Name']; ?>
 		</h1>
-    <p class="lead">Edit this targeted list.</p>
+    <p class="lead">Edit this targetted list.</p>
 
     <hr>
 

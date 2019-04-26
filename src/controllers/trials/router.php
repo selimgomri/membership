@@ -10,27 +10,27 @@ $this->get('/accepted', function() {
   include 'AcceptedSwimmers.php';
 });
 
-$this->get('/requests/{request}:int', function($request) {
+$this->get(['/requests/{request}:int', '/{request}:int/request', '/{request}:int'], function($request) {
   $url_path = 'trials/parents/';
   include 'TrialRequest.php';
 });
 
-$this->post('/requests/{request}:int', function($request) {
+$this->post(['/requests/{request}:int', '/{request}:int/request', '/{request}:int'], function($request) {
   $url_path = 'trials/parents/';
   include 'TrialRequestPost.php';
 });
 
-$this->get('/recommendations/{request}:int', function($request) {
+$this->get(['/recommendations/{request}:int', '/{request}:int/recommendations'], function($request) {
   $url_path = 'trials/parents/';
   include 'TrialRecommendations.php';
 });
 
-$this->post('/recommendations/{request}:int', function($request) {
+$this->post(['/recommendations/{request}:int', '/{request}:int/recommendations'], function($request) {
   $url_path = 'trials/parents/';
   include 'TrialRecommendationsPost.php';
 });
 
-$this->get('/parents/{hash}/status', function($hash) {
+$this->get(['/parents/{hash}/status', '/parents/{hash}'], function($hash) {
   $url_path = 'trials/parents/';
   $use_membership_menu = true;
   include BASE_PATH . 'controllers/services/RequestTrialStatus.php';

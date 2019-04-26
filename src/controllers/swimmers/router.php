@@ -33,13 +33,13 @@ if ($access == "Parent") {
 	});
 
 	// Edit a Swimmer
-	$this->get('/edit/{id}:int', function($id) {
+	$this->get('/{id}:int/edit', function($id) {
     global $link;
 	  require('parentSingleSwimmer.php');
 	});
 
 	// Edit a Swimmer
-	$this->post('/edit/{id}:int', function($id) {
+	$this->post('/{id}:int/edit', function($id) {
     global $link;
 	  require 'parentSingleSwimmerPost.php';
 	});
@@ -69,6 +69,31 @@ else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {
 	  require('singleSwimmerView.php');
 	});
 
+  function getSwimmerParent($member) {
+    global $db;
+    $query = $db->prepare("SELECT UserID FROM members WHERE MemberID = ?");
+    $query->execute([$member]);
+    return $query->fetchColumn();
+  }
+
+  $this->get('/{id}:int/contactparent', function($id) {
+		global $link;
+    $user = getSwimmerParent($id);
+		include BASE_PATH . 'controllers/notify/EmailIndividual.php';
+	});
+
+	$this->post('/{id}:int/contactparent', function($id) {
+		global $link;
+    $user = getSwimmerParent($id);
+    $returnToSwimmer = true;
+		include BASE_PATH . 'controllers/notify/EmailQueuerIndividual.php';
+	});
+
+  $this->get('/{id}:int/attendance', function($id) {
+      global $link;
+      include BASE_PATH . "controllers/attendance/historyViews/swimmerHistory.php";
+  	});
+
   // Swimmer Membership Card
 	$this->get('/{id}:int/membershipcard', function($id) {
     global $link;
@@ -90,12 +115,12 @@ else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {
 
 if ($access == "Admin") {
 	// Edit Individual Swimmers
-	$this->get('/edit/{id}:int', function($id) {
+	$this->get('/{id}:int/edit', function($id) {
     global $link;
 	  require('singleSwimmerEdit.php');
 	});
 
-	$this->post('/edit/{id}:int', function($id) {
+	$this->post('/{id}:int/edit', function($id) {
     global $link;
 	  require('singleSwimmerEdit.php');
 	});
@@ -131,12 +156,12 @@ if ($access != "Parent") {
 	  require('AddMember/addMemberPost.php');
 	});
 
-	$this->get('/parenthelp/{id}:int', function($id) {
+	$this->get(['/{id}:int/parenthelp', '/parenthelp/{id}:int'], function($id) {
 		global $link;
 		include 'parentSetupHelp.php';
 	});
 
-  $this->post('/parenthelp/{id}:int', function($id) {
+  $this->post(['/{id}:int/parenthelp', '/parenthelp/{id}:int'], function($id) {
 		global $link;
 		include 'parentSetupHelpPost.php';
 	});

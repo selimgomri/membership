@@ -36,7 +36,7 @@ memberMedical.MemberID) WHERE members.MemberID = '$id';";
 $resultSwim = mysqli_query($link, $sqlSwim);
 $rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
 $parent_id = $rowSwim['UserID'];
-$pagetitle = "Swimmer: " . $rowSwim['MForename'] . " " . $rowSwim['MSurname'];
+$pagetitle = $rowSwim['MForename'] . " " . $rowSwim['MSurname'] . " - Swimmer";
 $age = date_diff(date_create($rowSwim['DateOfBirth']),
 date_create('today'))->y;
 $title = null;
@@ -51,7 +51,15 @@ $content = '
 </div>';
 if ($parent_id != null) {
 $content .= '
-<a target="_blank" href="' . autoUrl("notify/newemail/individual/" . $parent_id) . '">Contact ' . $rowSwim["MForename"] . '\'s parent/guardian by email</a>';
+<p><a target="_self" href="' . autoUrl("swimmers/" . $id . "/contactparent") . '">Contact ' . $rowSwim["MForename"] . '\'s parent/guardian by email</a></p>';
+}
+if (isset($_SESSION['NotifyIndivSuccess'])) {
+  if ($_SESSION['NotifyIndivSuccess']) {
+    $content .= '<div class="alert alert-success">We\'ve sent an email to ' . $rowSwim["MForename"] . '\'s parent.</div>';
+  } else {
+    $content .= '<div class="alert alert-warning">We could not send an email to ' . $rowSwim["MForename"] . '\'s parent.</div>';
+  }
+  unset($_SESSION['NotifyIndivSuccess']);
 }
 $content .= '<!--
 <ul class="nav nav-pills d-print-none">
@@ -101,7 +109,7 @@ $content .= '<!--
     <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
       <strong class="d-block text-gray-dark">Parent Account Setup
       Information</strong>
-      <a href="' . autoUrl("swimmers/parenthelp/" . $id) . '">Access Key for ' .
+      <a href="' . autoUrl("swimmers/" . $id . "/parenthelp") . '">Access Key for ' .
       $rowSwim["MForename"] . '</a>
     </p>
   </div>
@@ -114,7 +122,7 @@ $content .= '<!--
   <div class="media pt-2">
     <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
       <strong class="d-block text-gray-dark">Attendance</strong>
-      <a href="' . autoUrl("attendance/history/swimmers/" . $id) . '">' .
+      <a href="' . autoUrl("swimmers/" . $id . "/attendance") . '">' .
       getAttendanceByID($link, $id, 4) . '% over the last 4 weeks, ' .
       getAttendanceByID($link, $id) . '% over all time</a>
     </p>
@@ -200,7 +208,7 @@ $content .= '<!--
 	if ($access == "Admin" || $access == "Committee") {
 	  $content .= '
 	  <span class="d-block text-right mt-3 d-print-none">
-	    <a href="edit/' . $id . '">Edit Details</a> or <a href="' . $id . '/medical">add Medical Notes</a>
+	    <a class="btn btn-success" href="' . autoUrl("swimmers/" . $id . "/edit") . '">Edit Details</a> <a class="btn btn-success" href="' . autoUrl("swimmers/" . $id . "/medical") . '">Edit Medical Notes</a>
 	  </span>
 		</div>';
 	}

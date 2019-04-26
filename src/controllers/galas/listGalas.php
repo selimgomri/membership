@@ -25,7 +25,7 @@ include "galaMenu.php"; ?>
           $endDate = new DateTime($row['GalaDate']);
 
           ?>
-          <a href="<?=autoUrl("galas/competitions/" . $row['GalaID'])?>">
+          <a href="<?=autoUrl("galas/" . $row['GalaID'])?>">
             <div>
               <span class="title mb-0 justify-content-between align-items-start">
                 <span><?=$row['GalaName']?></span>
@@ -79,7 +79,7 @@ include "galaMenu.php"; ?>
           $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
           ?>
           <li>
-            <a href="<?php echo autoUrl("galas/competitions/" . $row['GalaID'] .
+            <a href="<?php echo autoUrl("galas/" . $row['GalaID'] .
             "/timesheet"); ?>" target="_blank"><?php echo $row['GalaName']; ?></a>
           </li>
           <?

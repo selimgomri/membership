@@ -2,7 +2,7 @@
 $access = $_SESSION['AccessLevel'];
 
 // Gala Entry Time Sheet
-$this->get('/competitions/{id}:int/timesheet', function($id) {
+$this->get(['/{id}:int/timesheet', '/competitions/{id}:int/timesheet'], function($id) {
   global $link;
   include "export/TimeSheet.php";
 });
@@ -66,12 +66,12 @@ else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $
 	});
 
 	// View Competitions
-	$this->get('/competitions/{id}:int', function($id) {
+	$this->get(['/{id}:int', '/competitions/{id}:int'], function($id) {
 		global $link;
 		include "competitionSingle.php";
 	});
 
-	$this->post('/competitions/{id}:int', function($id) {
+	$this->post(['/{id}:int', '/competitions/{id}:int'], function($id) {
 		global $link;
 		include "CompetitionSinglePost.php";
 	});

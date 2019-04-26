@@ -1,7 +1,7 @@
 <?php
 
 $user = $_SESSION['UserId'];
-$pagetitle = "Targeted Lists";
+$pagetitle = "Targetted Lists";
 $use_white_background = true;
 
 $sql = "SELECT * FROM `targetedLists` ORDER BY `Name` ASC;";
@@ -14,9 +14,9 @@ include BASE_PATH . "views/notifyMenu.php";
 
 <div class="container">
   <div class="">
-  	<h1 class="border-bottom border-gray pb-2 mb-2">Targeted Lists</h1>
+  	<h1 class="border-bottom border-gray pb-2 mb-2">Targetted Lists</h1>
     <p class="lead">
-      Targeted lists are custom mailing lists for messaging groups of parents
+      Targetted lists are custom mailing lists for messaging groups of parents
       outside of normal squads.
     </p>
     <p>

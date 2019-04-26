@@ -1,5 +1,6 @@
 <?php
 
+global $db;
 use Respect\Validation\Validator as v;
 
 $status = true;
@@ -11,7 +12,7 @@ $galaFeeConstant = $hyTek = 0;
 $content = "";
 
 if (!empty($_POST['galaname'])) {
-  $galaName = mysqli_real_escape_string($link, ucwords(trim(htmlspecialchars($_POST['galaname']))));
+  $galaName = mysqli_real_escape_string($link, ucwords(trim($_POST['galaname'])));
   if (strlen($galaName) == 0) {
     $status = false;
     $statusInfo .= "<li>No gala name was provided</li>";
@@ -69,24 +70,24 @@ if (isset($_POST['HyTek'])) {
 //echo $sql;
 
 if ($status) {
-  $sql = "INSERT INTO `galas` (`GalaName`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`) VALUES ('$galaName', '$length', '$venue', '$closingDate', '$lastDate', '$galaFeeConstant', '$galaFee', '$hyTek');";
-  $action = mysqli_query($link, $sql);
-  if ($action) {
+  try {
+    $query = $db->prepare("INSERT INTO `galas` (`GalaName`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`) VALUES (?, ?, ?, ?,?, ?, ?, ?)");
+    $query->execute([$galaName, $length, $venue, $closingDate, $lastDate, $galaFeeConstant, $galaFee, $hyTek]);
     $added = true;
-  } else {
+  } catch (Exception $e) {
     $statusInfo .= "<li>Database error</li>";
   }
 }
 
 if ($added && $status) {
   $pagetitle = $title = "Gala Added";
-  $content = "<p class=\"lead\">You have successfully added " . $galaName . " to the database.</p>";
+  $content = "<p class=\"lead\">You have successfully added " . htmlspecialchars($galaName) . " to the database.</p>";
   $content .= "<p>It will be open for entries from parents until " . date('j F Y', strtotime($closingDate)) . " and stay visible to all users until " . date('j F Y', strtotime($lastDate)) . "</p>";
   if ($galaFeeConstant == 1) {
     $content .= "<p>The fee for each swim is &pound;" . number_format($galaFee,2,'.','') . "</p>";
   }
   $content .= "<p><a href=\"" . autoUrl("galas") . "\" class=\"btn
-  btn-outline-dark\">Return to Galas</a> <a href=\"" . autoUrl("galas/addgala") . "\"
+  btn-success rounded\">Return to Galas</a> <a href=\"" . autoUrl("galas/addgala") . "\"
   class=\"btn btn-outline-dark\">Add another</a></p>";
 
   if (defined('TWITTER_CONSUMER_KEY') && defined('TWITTER_CONSUMER_SECRET') &&
@@ -97,7 +98,8 @@ if ($added && $status) {
     try {
     	$tweet = $twitter->send($galaName . ' is now available to enter online at ' . autoUrl("")); // you can add $imagePath or array of image paths as second argument
     } catch (TwitterException $e) {
-    	echo 'Error: ' . $e->getMessage();
+    	// Do nothing just assume there isn't an API key
+    	// echo 'Error: ' . $e->getMessage();
     }
   }
 }

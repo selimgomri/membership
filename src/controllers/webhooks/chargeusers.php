@@ -85,17 +85,22 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
     mysqli_query($link, $sql);
   }
 
-  $message_subject = "Your Statement for " . date("F Y") . " is now available";
-  $message_content = '<p>Your Statement for ' . date("F Y") . ' is now available. Here are your squad fees for this month.</p>';
+  $message_subject = "Your bill for " . date("F Y") . " is now available";
+  $message_content = '';
+  if (!$mandateInfo) {
+    $message_content .= '<div class="cell"><p><strong>Warning: You do not have a direct debit set up with us.</strong> If you are paying us manually, a £3 surcharge applies to your monthly fee. Visit ' . autoUrl("payments") . ' to set up a direct debit before next month\'s bill.</p>';
+    $message_content .= '<p>If you expected to pay us by direct debit this month, please contact the treasurer as soon as possible - Your swimmers could be suspended if you fail to pay squad fees.</p></div>';
+  }
+  $message_content .= '<p>Your bill for ' . date("F Y") . ' is now available. Here are your squad fees for this month.</p>';
   $message_content .= myMonthlyFeeTable($link, $row['UserID']);
-  $message_content .= '<p>Combined with any additional fees such as membership, the total fee for ' . date("F Y") . ' is, <strong>&pound;' . number_format(($row['Amount']/100), 2, '.', ',') . '</strong></p>';
+  $message_content .= '<p>Combined with any additional fees such as membership, your total fee for ' . date("F Y") . ' is, <strong>&pound;' . number_format(($row['Amount']/100), 2, '.', ',') . '</strong></p>';
   $message_content .= '<p>Fees are calculated using the squad your swimmers were members of on 1 ' . date("F Y") . '.</p><hr>';
   $message_content .= '<p>You can <a href="' . autoUrl("payments/statement/" . $id) . '">view a full itemised statement for this payment online</a> or <a href="' . autoUrl("payments/statement/" . $id . "/pdf") . '">download your full statement as a PDF</a>. Squad Fees for all of your swimmers are shown as one charge on statements. A breakdown of squad fees is contained in this email.</p>';
 
   if ($mandateInfo) {
-    $message_content .= '<p>You will receive an email from our service provider GoCardless within the next three working days confirming the amount to be charged by direct debit.</p>';
+    $message_content .= '<p>You will receive an email from our direct debit service provider GoCardless within the next three working days confirming the amount to be charged by direct debit.</p>';
   } else {
-    $message_content .= '<p>You have not set up a direct debit. We recommend that you do so urgently.</p>';
+    $message_content .= '<p><strong>You have not set up a direct debit.</strong> We recommend that you do so urgently.</p>';
   }
 
   $email_info = [

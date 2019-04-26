@@ -38,12 +38,19 @@ include BASE_PATH . "views/header.php";
       <p class="mb-0">
         <strong>
           <a href="https://www.markdownguide.org/" target="_blank"
-          class="alert-link">Styling with Markdown</a> is supported in these forms.
+          class="alert-link">Formatting with Markdown</a> is supported in these forms.
         </strong>
       </p>
-      <p class="mb-0">
+      <p>
         To start a new line, press return twice.
       </p>
+      <p class="mb-0">
+        For a bulleted list do the following;
+      </p>
+<pre><code>
+* first item in list
+* second item in list
+</code></pre>
     </div>
 
 		<div class="mb-2">
