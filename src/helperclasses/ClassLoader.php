@@ -18,3 +18,9 @@ require 'OAuthClasses/Repositories/ClientRepository.php';
 require 'OAuthClasses/Repositories/RefreshTokenRepository.php';
 require 'OAuthClasses/Repositories/ScopeRepository.php';
 require 'OAuthClasses/Repositories/UserRepository.php';
+
+require 'SuperMailer/SuperMailer.php';
+
+require 'Objects/User.php';
+
+require 'Components/ListGroup.php';

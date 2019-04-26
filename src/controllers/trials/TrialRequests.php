@@ -44,7 +44,7 @@ include BASE_PATH . 'views/header.php';
         <div class="form-row">
           <div class="col-md">
             <a href="<?=autoUrl("trials/requests/" . $parent['ID'])?>" class="btn btn-block btn-dark">
-              Trial Appointment
+              Trial Info
             </a>
           </div>
 
@@ -53,7 +53,7 @@ include BASE_PATH . 'views/header.php';
 
           <div class="col-md">
             <a href="<?=autoUrl("trials/recommendations/" . $parent['ID'])?>" class="btn btn-block btn-dark">
-              Trial Recommendations
+              Suggest Squad
             </a>
           </div>
 

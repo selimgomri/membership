@@ -45,8 +45,8 @@ if (isset($_POST['squad'])) {
   } ?>
     </select></div>
     <div class="col-md-6 mb-3">
-      <label class="sr-only" for="search">Search by Surname</label>
-      <input class="form-control" placeholder="Surname" id="search" name="search" value="<?=htmlspecialchars($search)?>">
+      <label class="sr-only" for="search">Search by Name</label>
+      <input class="form-control" placeholder="Search by name" id="search" name="search" value="<?=htmlspecialchars($search)?>">
     </div>
 
   </div>

@@ -209,6 +209,10 @@ if (isset($_SESSION['UserID'])) {
   $currentUser = new User($_SESSION['UserID'], $db);
 }
 
+if ($_SESSION['LoggedIn'] && !isset($_SESSION['DisableTrackers'])) {
+  $_SESSION['DisableTrackers'] = filter_var(getUserOption($_SESSION['UserID'], "DisableTrackers"), FILTER_VALIDATE_BOOLEAN);
+}
+
 $route->group($get_group, function($clubcode = "CLSE") {
   //$_SESSION['ClubCode'] = strtolower($code);
 
@@ -242,6 +246,12 @@ $route->group($get_group, function($clubcode = "CLSE") {
   $this->get('/robots.txt', function() {
     header("Content-Type: text/plain");
     echo "User-agent: *\r\nDisallow: /webhooks/\r\nDisallow: /webhooks\r\nDisallow: /css\r\nDisallow: /js";
+  });
+
+  $this->get('/public/*/viewer', function() {
+    $filename = $this[0];
+    $type = 'public';
+    require BASE_PATH . 'controllers/public/Viewer.php';
   });
 
   $this->get('/public/*', function() {
@@ -635,8 +645,8 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
   $this->get('/files/*/viewer', function() {
     $filename = $this[0];
-    pre($filename);
-    //require BASE_PATH . 'controllers/FileLoader.php';
+    $type = 'files';
+    require BASE_PATH . 'controllers/public/Viewer.php';
   });
 
   $this->get('/files/*', function() {

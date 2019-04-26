@@ -145,11 +145,11 @@
 </div>
 
 <!-- Modals and Other Hidden HTML -->
-<script rel="preload" src="<?php echo autoUrl("js/jquery-3.2.1.slim.min.js") ?>"></script>
+<script rel="preload" src="<?=autoUrl("public/js/jquery-3.2.1.slim.min.js")?>"></script>
 <script defer src="https://static.chesterlestreetasc.co.uk/global/headers/GlobalNavigation.js"></script>
-<script defer src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/js/popper.min.js"></script>
-<script defer src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/js/bootstrap.min.js"></script>
-<script async src="https://www.chesterlestreetasc.co.uk/static/global/js/clscookies.js"></script>
+<script defer src="<?=autoUrl("public/js/popper.min.js")?>"></script>
+<script defer src="<?=autoUrl("public/js/bootstrap.min.js")?>"></script>
+<script async src="<?=autoUrl("public/js/Cookies.js")?>"></script>
 <?php if ($use_website_menu) { ?>
 <script defer src="https://static.chesterlestreetasc.co.uk/global/headers/MainSiteMenu.js"></script>
 <?php } ?>

@@ -9,6 +9,16 @@ if (filter_var(getUserOption($_SESSION['UserID'], "Is2FA"), FILTER_VALIDATE_BOOL
 	$twofaChecked = " checked ";
 }
 
+$trackersChecked;
+if (filter_var(getUserOption($_SESSION['UserID'], "DisableTrackers"), FILTER_VALIDATE_BOOLEAN)) {
+	$trackersChecked = " checked ";
+}
+
+$betasChecked;
+if (filter_var(getUserOption($_SESSION['UserID'], "EnableBeta"), FILTER_VALIDATE_BOOLEAN)) {
+	$betasChecked = " checked ";
+}
+
 $pagetitle = "General Account Options";
 include BASE_PATH . "views/header.php";
   $userID = $_SESSION['UserID'];
@@ -22,8 +32,8 @@ include BASE_PATH . "views/header.php";
       ?>
     </div>
     <div class="col-md-9">
-      <h1>Manage General Account Options</h1>
-      <p class="lead">Options such as Two Factor Authentication.</p>
+      <h1>Advanced Account Options</h1>
+      <p class="lead">Manage cookies and 2FA.</p>
 
     	<?php if ($_SESSION['OptionsUpdate']) { ?>
     		<div class="alert alert-success">
@@ -35,6 +45,28 @@ include BASE_PATH . "views/header.php";
     	} ?>
 
     	<form method="post">
+        <div class="cell">
+          <h2>
+            Cookies and Software Settings
+          </h2>
+
+          <div class="form-group">
+      			<div class="custom-control custom-switch">
+      				<input type="checkbox" class="custom-control-input" value="1" id="tracking-cookies" aria-describedby="tracking-cookies-help" name="tracking-cookies" <?=$trackersChecked?> >
+              <label class="custom-control-label" for="tracking-cookies">Disable Tracking Cookies</label>
+      				<small id="2FAHelp" class="form-text text-muted">Tracking cookies (including Google Analytics) help us gain insight into how this software is used</small>
+      			</div>
+      		</div>
+
+          <div class="form-group">
+      			<div class="custom-control custom-switch">
+      				<input type="checkbox" class="custom-control-input" value="1" id="beta-features" aria-describedby="beta-features-help" name="beta-features" <?=$betasChecked?> >
+              <label class="custom-control-label" for="beta-features">Enable Beta features</label>
+      				<small id="2FAHelp" class="form-text text-muted">Help us test new features by opting in to beta trials</small>
+      			</div>
+      		</div>
+        </div>
+
         <div class="cell">
           <h2>
             Account Security
