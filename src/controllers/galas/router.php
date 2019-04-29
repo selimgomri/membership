@@ -4,6 +4,10 @@ $access = $_SESSION['AccessLevel'];
 // Gala Entry Time Sheet
 $this->get(['/{id}:int/timesheet', '/competitions/{id}:int/timesheet'], function($id) {
   global $link;
+  include "export/PDFTimesheet.php";
+});
+
+$this->get(['/{id}:int/timesheet.csv', '/competitions/{id}:int/timesheet.csv'], function($id) {
   include "export/TimeSheet.php";
 });
 
