@@ -38,6 +38,54 @@ if ($info['AccessLevel'] == "Coach") {
   $par = "selected";
 }
 
+$bankName = $bank = $has_logo = $logo_path;
+if (userHasMandates($id)) {
+  $bankName = strtoupper(bankDetails($id, "account_holder_name"));
+  if ($bankName != "UNKNOWN") {
+    $bankName = $bankName . ', ';
+  } else {
+    $bankName = null;
+  }
+  $bank = strtoupper(bankDetails($id, "bank_name"));
+  $has_logo = false;
+  $logo_path = "";
+
+  if ($bank == "TSB BANK PLC") {
+    $has_logo = true;
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/tsbbankplc");
+  } else if ($bank == "STARLING BANK LIMITED") {
+    $has_logo = true;
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/starlingbanklimited");
+  } else if ($bank == "LLOYDS BANK PLC") {
+    $has_logo = true;
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/lloydsbankplc");
+  } else if ($bank == "HALIFAX (A TRADING NAME OF BANK OF SCOTLAND PLC)") {
+    $has_logo = true;
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/halifax");
+  } else if ($bank == "SANTANDER UK PLC") {
+    $has_logo = true;
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/santanderukplc");
+  } else if ($bank == "BARCLAYS BANK UK PLC") {
+    $has_logo = true;
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/barclaysbankukplc");
+  } else if ($bank == "NATIONAL WESTMINSTER BANK PLC") {
+    $has_logo = true;
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/nationalwestminsterbankplc");
+  } else if ($bank == "HSBC BANK  PLC (RFB)" || $bank == "HSBC UK BANK PLC") {
+    $has_logo = true;
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/hsbc");
+  } else if ($bank == "THE CO-OPERATIVE BANK PLC") {
+    $has_logo = true;
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/coop");
+  } else if ($bank == "NATIONWIDE BUILDING SOCIETY") {
+    $has_logo = true;
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/nationwide");
+  } else if ($bank == "THE ROYAL BANK OF SCOTLAND PLC") {
+    $has_logo = true;
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/rbs");
+  }
+}
+
 $pagetitle = htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) . " Information";
 $title = null;
 include BASE_PATH . "views/header.php";
@@ -198,6 +246,14 @@ include BASE_PATH . "views/header.php";
         }?>
         <p><?=$details?></p>
       </div>
+      <?php if (userHasMandates($id)) { ?>
+      <div class="col-sm-6 col-md-4">
+        <h3 class="h6">Direct Debit Mandate</h3>
+        <img class="img-fluid mb-3" style="max-height:35px;" src="<?=$logo_path?>.png" srcset="<?=$logo_path?>@2x.png 2x, <?=$logo_path?>@3x.png 3x">
+        <p class="mb-0"><?=$bankName?><?=strtoupper(bankDetails($id, "bank_name"))?></p>
+        <p class="mono">******<?=strtoupper(bankDetails($id, "account_number_end"))?></p>
+      </div>
+      <?php } ?>
     </div>
   </div>
 </div>

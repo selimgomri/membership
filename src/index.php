@@ -245,7 +245,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
   $this->get('/robots.txt', function() {
     header("Content-Type: text/plain");
-    echo "User-agent: *\r\nDisallow: /webhooks/\r\nDisallow: /webhooks\r\nDisallow: /css\r\nDisallow: /js";
+    echo "User-agent: *\r\nDisallow: /webhooks/\r\nDisallow: /webhooks\r\nDisallow: /css\r\nDisallow: /js\r\nDisallow: /public\r\nDisallow: /files";
   });
 
   $this->get('/public/*/viewer', function() {
@@ -633,11 +633,16 @@ $route->group($get_group, function($clubcode = "CLSE") {
         halt((int) $code);
       });
 
-      $this->get('pdf-test', function() {
+      $this->get('/pdf-test', function() {
         include 'controllers/PDFTest.php';
       });
 
-      $this->get('test', function() {
+      $this->group('/db', function() {
+        // Handle database migrations
+        include 'controllers/db/router.php';
+      });
+
+      $this->get('/test', function() {
         notifySend("x", "A test", "Hello Christopher", "Chris Heppell", "clheppell1@sheffield.ac.uk", $from = ["Email" => "noreply@galas.uk", "Name" => "GALAS.UK"]);
       });
     }

@@ -22,9 +22,10 @@ $sql = "SELECT * FROM `galas` WHERE GalaDate >= CURDATE() ORDER BY `galas`.`Gala
 $result = mysqli_query($link, $sql);
 $galaCount = mysqli_num_rows($result);
 $content .= "
-<div class=\"form-group row\">
-<label class=\"col-sm-2\" for=\"gala\">Select a Gala</label>
-<div class=\"col\">
+<div class=\"form-row\">
+<div class=\"col-md-4\">
+<div class=\"form-group\">
+<label class=\"\" for=\"gala\">Select a Gala</label>
 <select class=\"custom-select\" placeholder=\"Select a Gala\" id=\"galaID\" name=\"galaID\">
 <option>Select a gala</option>
 
@@ -43,9 +44,9 @@ for ($i = 0; $i < $galaCount; $i++) {
   $content .= ">" . $row['GalaName'] . "</option>";
 }
 $content .= "</select></div></div>
-<div class=\"form-group row\">
-  <label class=\"col-sm-2\" for=\"sex\">Select Sex</label>
-  <div class=\"col\">
+<div class=\"col-md-4\">
+<div class=\"form-group\">
+  <label class=\"\" for=\"sex\">Select Sex</label>
 <select class=\"custom-select\" placeholder=\"Select Sex\" id=\"sex\" name=\"sex\">
 <option value=\"all\"";
 if ($sex == "all") {
@@ -66,10 +67,10 @@ if ($sex == "m") {
 $content .= ">Male</option>
 </select></div></div>
 
-<div class=\"form-group row\">
-  <label class=\"col-sm-2\" for=\"gala\">Enter Surname</label>
-  <div class=\"col\">
-<input class=\"form-control\" name=\"search\" id=\"search\" value=\"" . $search . "\">
+<div class=\"col-md-4\">
+<div class=\"form-group\">
+  <label class=\"\" for=\"gala\">Enter Surname</label>
+<input class=\"form-control\" placeholder=\"Search\" name=\"search\" id=\"search\" value=\"" . $search . "\">
 </div></div></div>";
 $content .= "<div class=\"table-responsive-md\" id=\"output\"><div class=\"ajaxPlaceholder\"><strong>Select a Gala</strong> <br>Entries will appear here when you select a gala</div></div>";
 $content .= '
@@ -143,7 +144,7 @@ function markProcessed(clickedItem, clickedItemChecked) {
 include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
 <div class="container">
-<?php echo "<h1>" . $title . "</h1>";
+<?php echo "<h1>Gala Entries</h1>";
 echo $content; ?>
 </div>
 <?php include BASE_PATH . "views/footer.php";

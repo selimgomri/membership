@@ -25,6 +25,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
         $names[] = "%" . $search_terms[$i] . "%";
       }
     }
+    if (sizeof($search_terms) == 1 && $search_terms[0] == null) {
+      $sql = " members.MemberID IS NOT NULL ";
+      $names = [];
+    }
 
     $selection = $sql;
 
@@ -36,34 +40,34 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
         $query = $db->prepare("SELECT members.MemberID, members.MForename,
         members.MSurname, members.ASANumber, squads.SquadName,
         members.DateOfBirth, squads.SquadID FROM (members INNER JOIN squads ON
-        members.SquadID = squads.SquadID) WHERE members.UserID IS NULL AND " .
-        $selection . " ORDER BY `members`.`MForename` , `members`.`MSurname`
+        members.SquadID = squads.SquadID) WHERE members.UserID IS NULL AND (" .
+        $selection . ") ORDER BY `members`.`MForename` , `members`.`MSurname`
         ASC");
   	  }
   	  else {
         $query = $db->prepare("SELECT members.MemberID, members.MForename,
         members.MSurname, members.ASANumber, squads.SquadName,
         members.DateOfBirth FROM (members INNER JOIN squads ON members.SquadID =
-        squads.SquadID) WHERE members.UserID IS NULL AND squads.SquadID = ? AND " .
-        $selection . " ORDER BY `members`.`MForename` , `members`.`MSurname`
+        squads.SquadID) WHERE members.UserID IS NULL AND squads.SquadID = ? AND (" .
+        $selection . ") ORDER BY `members`.`MForename` , `members`.`MSurname`
         ASC");
-        $names = array_unshift($names, $squadID);
+        $names = array_merge([$_POST["squadID"]], $names);
   	  }
     } else {
       if ($squadID == "allSquads") {
         $query = $db->prepare("SELECT members.MemberID, members.MForename,
         members.MSurname, members.ASANumber, squads.SquadName,
         members.DateOfBirth, squads.SquadID FROM (members INNER JOIN squads ON
-        members.SquadID = squads.SquadID) WHERE " . $selection . " ORDER BY
+        members.SquadID = squads.SquadID) WHERE (" . $selection . ") ORDER BY
         `members`.`MForename` , `members`.`MSurname` ASC");
   	  }
   	  else {
         $query = $db->prepare("SELECT members.MemberID, members.MForename,
         members.MSurname, members.ASANumber, squads.SquadName,
         members.DateOfBirth FROM (members INNER JOIN squads ON members.SquadID =
-        squads.SquadID) WHERE squads.SquadID = ? AND " . $selection . " ORDER BY
-        `members`.`MForename` , `members`.`MSurname` ASC");
-        $names = array_unshift($names, $squadID);
+        squads.SquadID) WHERE squads.SquadID = ? AND (" . $selection . ") ORDER
+        BY `members`.`MForename` , `members`.`MSurname` ASC");
+        $names = array_merge([$_POST["squadID"]], $names);
   	  }
     }
   }

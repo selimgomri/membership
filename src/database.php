@@ -60,18 +60,18 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
 
       html, body {
         font-family: \"Open Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial,sans-serif;
-        font-size: 1rem;
+        font-size: 16px;
         background: #e3eef6;
       }
 
       p, h1, h2, h3, h4, h5, h6, ul, ol, img, .table, blockquote {
-        margin: 0 0 1rem 0;
+        margin: 0 0 16px 0;
       }
 
       .small {
-        font-size: 0.70rem;
+        font-size: 11px;
         color: #868e96;
-        margin-bottom: 0.70rem;
+        margin-bottom: 11px;
       }
 
       .text-center {
@@ -79,11 +79,22 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
       }
 
       .bottom {
-        margin: 1rem 0 0 0;
+        margin: 16px 0 0 0;
+      }
+
+      cell {
+        display: table;
+        background: #eee;
+        padding: 1rem;
+        margin 0 0 1rem 0;
+        width: 100%;
       }
 
     </style>
   </head>";
+
+  $cellClass = 'style="display:table;background:#eee;padding:10px;margin 0 0 10px 0;"';
+  $htmlMessage = str_replace('class="cell"', $cellClass, $emailMessage);
 
   $address = "<p class=\"small\" align=\"center\"><strong>" . CLUB_NAME . "</strong><br>";
   $club = json_decode(CLUB_JSON);
@@ -101,7 +112,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
       autoUrl("img/notify/NotifyLogo@2x.png") . " 2x, " .
       autoUrl("img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"" . CLUB_NAME . " Logo\"></td></tr></table>
       <table style=\"width:100%;max-width:700px;border:0px;text-align:left;background:#ffffff;padding:0px 10px;\"><tr><td>
-      " . $emailMessage . "
+      " . $htmlMessage . "
       </td></tr></table>
       <table style=\"width:100%;max-width:700px;border:0px;background:#f8fcff;padding:0px 10px;\"><tr><td>
       <div
@@ -971,16 +982,17 @@ function autoUrl($relative) {
 }
 
 function monthlyFeeCost($link, $userID, $format = "decimal") {
-  $sql = "SELECT squads.SquadName, squads.SquadID, squads.SquadFee FROM (members
+  global $db;
+  $query = $db->prepare("SELECT squads.SquadName, squads.SquadID, squads.SquadFee FROM (members
   INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID =
-  '$userID' AND `ClubPays` = '0' ORDER BY `squads`.`SquadFee` DESC;";
-  $result = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($result);
+  ? AND `ClubPays` = '0' ORDER BY `squads`.`SquadFee` DESC");
+  $query->execute([$userID]);
+
   $totalCost = 0;
   $reducedCost = 0;
 
-  for ($i = 0; $i < $count; $i++) {
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+  $i = 0;
+  while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $squadCost = $row['SquadFee'];
     if ($i < 2) {
       $totalCost += $squadCost;
@@ -994,6 +1006,7 @@ function monthlyFeeCost($link, $userID, $format = "decimal") {
       $totalCost += $squadCost*0.6;
       $reducedCost += $squadCost*0.6;
     }
+    $i++;
   }
 
   $format = strtolower($format);
@@ -1009,16 +1022,15 @@ function monthlyFeeCost($link, $userID, $format = "decimal") {
 }
 
 function monthlyExtraCost($link, $userID, $format = "decimal") {
-  $sql = "SELECT extras.ExtraName, extras.ExtraFee FROM ((members INNER JOIN
-  `extrasRelations` ON members.MemberID = extrasRelations.MemberID) INNER JOIN
-  `extras` ON extras.ExtraID = extrasRelations.ExtraID) WHERE members.UserID =
-  '$userID';";
-  $result = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($result);
+  global $db;
+  $query = $db->prepare("SELECT extras.ExtraName, extras.ExtraFee FROM ((members
+  INNER JOIN `extrasRelations` ON members.MemberID = extrasRelations.MemberID)
+  INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) WHERE
+  members.UserID = ?");
+  $query->execute([$userID]);
   $totalCost = 0;
 
-  for ($i = 0; $i < $count; $i++) {
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+  while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $totalCost += $row['ExtraFee'];
   }
 

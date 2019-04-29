@@ -73,6 +73,8 @@ Chester-le-Street ASC is a non profit unincorporated association.
     </style>
     <link rel="stylesheet"
     href="<?php echo autoUrl("css/font-awesome/css/font-awesome.min.css")?>">
+    <link rel="icon" sizes="800x800" href="<?=autoUrl("public/img/corporate/scds.png")?>">
+    <?php /*
     <link rel="icon" sizes="196x196" href="<?=autoUrl("img/touch-icon-196x196.png")?>">
     <!-- For Chrome for Android: -->
     <link rel="icon" sizes="192x192" href="<?=autoUrl("img/touch-icon-192x192.png")?>">
@@ -92,6 +94,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?=autoUrl("img/apple-touch-icon-72x72-precomposed.png")?>">
     <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
     <link rel="apple-touch-icon-precomposed" href="<?=autoUrl("img/apple-touch-icon-precomposed.png")?>"><!-- 57×57px -->
+    */ ?>
     <link rel="mask-icon" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterIcon.svg" color="#bd0000">
     <script src='https://www.google.com/recaptcha/api.js'></script>
 

@@ -13,6 +13,11 @@
  * limitations under the License.
  */
 
+body, html {
+  font-family: "Roboto Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  background: #000000;
+}
+
 .textLayer {
   position: absolute;
   left: 0;
@@ -197,7 +202,7 @@
 }
 
 .annotationLayer .textWidgetAnnotation input.comb {
-  font-family: monospace;
+  font-family: "Roboto Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   padding-left: 2px;
   padding-right: 0;
 }
@@ -1968,7 +1973,7 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
   background: none repeat scroll 0 0 yellow;
 }
 #PDFBug .stats {
-  font-family: courier;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 10px;
   white-space: pre;
 }

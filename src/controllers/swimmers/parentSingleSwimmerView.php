@@ -224,8 +224,8 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
       </div>
 
       <div class="mt-3">
-        <a class="btn btn-success" href="<?=autoUrl("swimmers/edit/" .
-        $id)?>">Edit Details</a>
+        <a class="btn btn-success" href="<?=autoUrl("swimmers/" .
+        $id . "/edit")?>">Edit Details</a>
         <a class="btn btn-success" href="<?=autoUrl("swimmers/" . $id .
         "/medical");?>">Edit Medical Notes</a>
       </div>

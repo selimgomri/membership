@@ -73,7 +73,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $count = mysqli_num_rows($result);
 
 
-    $content = "<!--<div class=\"alert alert-danger\"><p class=\"mb-0\"><strong>Times given for HyTek Galas are from the last 12 months</strong></p><p class=\"mb-0\">Options to control whether times are from the last 12 months are coming soon.</p></div><div class=\"alert alert-danger\"><p class=\"mb-0\"><strong>HyTek Gala with no time displayed?</strong></p><p class=\"mb-0\">If qualifying times are required, don't enter the swimmer for that event.</p></div>--><div class=\"alert alert-danger\"><p class=\"mb-0\"><strong>Tynemouth Gala Warning</strong></p><p class=\"mb-0\">Swimmers must not have swum faster than the qualifying times in the last 12 months. As PBs are shown here, if the time is faster than the QT, you may need to check if the PB was set inside or outside the last 12 months.</p></div>";
+    $content = "";
     if (app('request')->isMobile()) {
       $content .= '<table class="table table-sm">';
     } else {

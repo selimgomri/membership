@@ -15,7 +15,7 @@ $content .= "<div class=\"row\"><div class=\"col-md-10 col-lg-8\"><form method=\
     <select class=\"custom-select\" name=\"length\" id=\"length\" required>
       <option value=\"LONG\">Long Course</option>
       <option value=\"SHORT\">Short Course</option>
-      <option value=\"IRREGULAR\">Irregular</option>
+      <option value=\"IRREGULAR\">Other Pool Length or Open Water</option>
     </select>
   </div>
 </div>

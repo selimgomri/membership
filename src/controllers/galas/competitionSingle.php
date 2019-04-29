@@ -5,6 +5,7 @@ $result = mysqli_query($link, $sql);
 $count = mysqli_num_rows($result);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 $course = ['LONG', 'SHORT', 'IRREGULAR'];
+$courseStrings = ['Long Course', 'Short Course', 'Other Pool Length or Open Water'];
 
 if ($count == 1) {
   $pagetitle = $row['GalaName'];
@@ -23,10 +24,10 @@ if ($count == 1) {
       <select class=\"custom-select\" name=\"length\" id=\"length\" required>";
       for ($i=0; $i<sizeof($course); $i++) {
         if ($course[$i] == $row['CourseLength']) {
-          $content .= "<option selected value=\"" . $course[$i] . "\">" . $course[$i] . "</option>";
+          $content .= "<option selected value=\"" . $course[$i] . "\">" . $courseStrings[$i] . "</option>";
         }
         else {
-          $content .= "<option value=\"" . $course[$i] . "\">" . $course[$i] . "</option>";
+          $content .= "<option value=\"" . $course[$i] . "\">" . $courseStrings[$i] . "</option>";
         }
       }
       $content .= "</select>

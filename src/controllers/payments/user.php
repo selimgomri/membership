@@ -99,7 +99,7 @@ require 'GoCardlessSetup.php';
           } else if ($bank == "NATIONAL WESTMINSTER BANK PLC") {
             $has_logo = true;
             $logo_path = autoUrl("public/img/directdebit/bank-logos/nationalwestminsterbankplc");
-          } else if ($bank == "HSBC BANK  PLC (RFB)") {
+          } else if ($bank == "HSBC BANK  PLC (RFB)" || $bank == "HSBC UK BANK PLC") {
             $has_logo = true;
             $logo_path = autoUrl("public/img/directdebit/bank-logos/hsbc");
           } else if ($bank == "THE CO-OPERATIVE BANK PLC") {
