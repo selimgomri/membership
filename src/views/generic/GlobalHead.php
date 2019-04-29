@@ -62,7 +62,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
 	  <script>var shiftWindow = function() { scrollBy(0, -50) }; if
 	  (location.hash) shiftWindow(); window.addEventListener("hashchange",
 	  shiftWindow);</script>
-    <script src="<?php echo autoUrl("/js/tinymce/tinymce.min.js"); ?>"></script>
+    <script src="<?php echo autoUrl("public/js/tinymce/tinymce.min.js"); ?>"></script>
     <link rel="stylesheet preload"
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700|Roboto+Mono|Merriweather:400,600">
     <link rel="stylesheet preload" href="<?php echo autoUrl("public/css/generic/generic-0.7-prefixed.css") ?>">
@@ -72,7 +72,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
     }
     </style>
     <link rel="stylesheet"
-    href="<?php echo autoUrl("css/font-awesome/css/font-awesome.min.css")?>">
+    href="<?php echo autoUrl("public/css/font-awesome/css/font-awesome.min.css")?>">
     <link rel="icon" sizes="800x800" href="<?=autoUrl("public/img/corporate/scds.png")?>">
     <?php /*
     <link rel="icon" sizes="196x196" href="<?=autoUrl("img/touch-icon-196x196.png")?>">
