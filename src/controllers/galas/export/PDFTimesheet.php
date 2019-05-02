@@ -115,6 +115,10 @@ ob_start();?>
       When printing this document, you may need to select
       <strong>Landscape</strong> if your computer does not do so automatically.
     </p>
+    <p>
+      *<strong>NT</strong> denotes the swimmer does not have a PB in the given
+      category or event.
+    </p>
 
     <div class="page-break"></div>
 
@@ -140,7 +144,7 @@ ob_start();?>
 
       $swims[] = 'Event';
     	$timesArrayA[] = 'PB';
-    	$timesArrayB[] = date("Y") . ' PB';
+    	$timesArrayB[] = '12mnth PB';
     	$heats[] = 'Heats';
     	$finalsA[] = 'Semi-F';
     	$finalsB[] = 'Finals';
