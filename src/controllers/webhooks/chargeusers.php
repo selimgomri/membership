@@ -88,12 +88,8 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
   $message_subject = "Your bill for " . date("F Y") . " is now available";
   $message_content = '';
   if (!$mandateInfo) {
-    $message_content .= '<div class="cell"><p><strong>Warning: You do not have a direct debit set up with us.</strong>';
-    if (defined('IS_CLS') && IS_CLS) {
-      $message_content .= ' If you are paying us manually, a £3 surcharge applies to your monthly fee. Login to <a href="' . autoUrl("payments") . '">the Membership System</a> to set up a direct debit before next month\'s bill.</p>';
-      $message_content .= '<p class="mb-0">If you expected to pay us by direct debit this month, please contact the treasurer as soon as possible - Your swimmers could be suspended if you fail to pay squad fees.';
-    }
-    $message_content .= '</p></div>';
+    $message_content .= '<div class="cell"><p><strong>Warning: You do not have a direct debit set up with us.</strong> If you are paying us manually, a £3 surcharge applies to your monthly fee. Visit ' . autoUrl("payments") . ' to set up a direct debit before next month\'s bill.</p>';
+    $message_content .= '<p>If you expected to pay us by direct debit this month, please contact the treasurer as soon as possible - Your swimmers could be suspended if you fail to pay squad fees.</p></div>';
   }
   $message_content .= '<p>Your bill for ' . date("F Y") . ' is now available. Here are your squad fees for this month.</p>';
   $message_content .= myMonthlyFeeTable($link, $row['UserID']);

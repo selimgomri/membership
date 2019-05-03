@@ -1,7 +1,5 @@
 <?php
 
-global $db;
-
 define("PAYMENT_EMAILS", [
   "Email" => "payments@chesterlestreetasc.co.uk",
   "Name" => CLUB_SHORT_NAME . " Payments"
@@ -67,136 +65,98 @@ function process_mandate_event($event) {
       } else {
         $mandateObject = $client->mandates()->get($event["links"]["mandate"]);
         $customer = $mandateObject->links->customer;
-        $query = $db->prepare("SELECT `UserID` FROM `users` WHERE `EmailAddress` = ?");
-        $query->execute([($client->customers()->get($customer))->email]);
-
-        if ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+        $email = mysqli_real_escape_string($link, ($client->customers()->get($customer))->email);
+        $sql = "SELECT `UserID` FROM `users` WHERE `EmailAddress` = '$email';";
+        $result = mysqli_query($link, $sql);
+        if (mysqli_num_rows($result) == 1) {
+          $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
           $user = $row['UserID'];
 
-          $mandate = $event["links"]["mandate"];
-          $customer = $customer;
-          $bankAccount = $mandateObject->links->customer_bank_account;
+          $mandate = mysqli_real_escape_string($link, $event["links"]["mandate"]);
+      		$customer = mysqli_real_escape_string($link, $customer);
+      	  $bankAccount = mysqli_real_escape_string($link, $mandateObject->links->customer_bank_account);
 
       	  $bank = $client->customerBankAccounts()->get($bankAccount);
-      	  $accHolderName = $bank->account_holder_name;
-      	  $accNumEnd = $bank->account_number_ending;
-      	  $bankName = $bank->bank_name;
+      	  $accHolderName = mysqli_real_escape_string($bank->account_holder_name);
+      	  $accNumEnd = mysqli_real_escape_string($bank->account_number_ending);
+      	  $bankName = mysqli_real_escape_string($bank->bank_name);
 
-          try {
-            $addMandate = $db->prepare("INSERT INTO `paymentMandates` (`UserID`, `Name`, `Mandate`, `Customer`, `BankAccount`, `BankName`, `AccountHolderName`, `AccountNumEnd`, `InUse`) VALUES (?, 'Mandate', ?, ?, ?, ?, ?, ?, ?)");
-            $addMandate->execute([
-              $user,
-              $mandate,
-              $customer,
-              $bankAccount,
-              $bankName,
-              $accHolderName,
-              $accNumEnd,
-              true
-            ]);
+      		$sql1 = "INSERT INTO `paymentMandates` (`UserID`, `Name`, `Mandate`, `Customer`, `BankAccount`, `BankName`, `AccountHolderName`, `AccountNumEnd`, `InUse`) VALUES ('$user', 'Mandate', '$mandate', '$customer', '$bankAccount', '$bankName', '$accHolderName', '$accNumEnd', '1');";
+      		mysqli_query($link, $sql1);
 
-            $checkDefault = $db->prepare("SELECT COUNT(*) AS ManCount, MandateID FROM `paymentMandates` WHERE `UserID` = ?");
-            $checkDefault->execute([$user]);
-            $result = $checkDefault->fetch(PDO::FETCH_ASSOC);
-            if ($result['ManCount'] == 1) {
-              $preferredCount = $db->prepare("SELECT COUNT(*) FROM paymentPreferredMandate WHERE UserID = ?");
-              $preferredCount->execute([$user]);
-
-              if ($preferredCount->fetchColumn() == 1) {
-                // If no set mandate, add default
-                $setDefault = $db->prepare("INSERT INTO `paymentPreferredMandate` (MandateID, UserID) VALUES (?, ?)");
-                $setDefault->execute([$result['MandateID'], $user]);
-              } else {
-                // Else set default
-                $setDefault = $db->prepare("UPDATE `paymentPreferredMandate` SET `MandateID` = ? WHERE `UserID` = ?");
-                $setDefault->execute([$result['MandateID'], $user]);
-              }
-            }
-          } catch (Exception $e) {
-
-          }
-
+      		// If there is no preferred mandate existing, automatically set it to the one we've just added
+      		$sql = "SELECT `MandateID` FROM `paymentMandates` WHERE `UserID` = '$user';";
+      		$result = mysqli_query($link, $sql);
+      		if (mysqli_num_rows($result) == 1) {
+      			$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+      			$mandateId = $row['MandateID'];
+      			$sql = "UPDATE `paymentPreferredMandate` SET `MandateID` = '$mandateId' WHERE `UserID` = '$user';";
+      			mysqli_query($link, $sql);
+      		}
           print("Mandate " . $event["links"]["mandate"] . " has been created! We found the user in question.\n");
         }
       }
       break;
   	case "cancelled":
       print("Mandate " . $event["links"]["mandate"] . " has been cancelled!\n");
-			$mandate = $event["links"]["mandate"];
+			$mandate = mysqli_real_escape_string($link, $event["links"]["mandate"]);
 
-      try {
-        $cancelMandate = $db->prepare("UPDATE `paymentMandates` SET `InUse` = '0' WHERE `Mandate` = ?");
-        $cancelMandate->execute([$mandate]);
+      $sql = "UPDATE `paymentMandates` SET `InUse` = '0' WHERE `Mandate` = '$mandate';";
+			mysqli_query($link, $sql);
 
-        $unsetDefault = $db->prepare("SELECT users.UserID, `Forename`, `Surname`, `EmailAddress`,
-  			`MandateID` FROM `paymentMandates` INNER JOIN `users` ON users.UserID =
-  			paymentMandates.UserID WHERE `Mandate` = ?");
-        $unsetDefault->execute([$mandate]);
-        if ($row = $unsetDefault->fetch(PDO::FETCH_ASSOC)) {
-          $mandateID = $user['MandateID'];
-          $unsetDefaultMandate = $db->prepare("DELETE FROM `paymentPreferredMandate` WHERE `MandateID` = ?");
-          $unsetDefaultMandate->execute([$mandateID]);
-        }
+			// Get the user ID, set to another bank if possible and let them know.
+			$sql = "SELECT users.UserID, `Forename`, `Surname`, `EmailAddress`,
+			`MandateID` FROM `paymentMandates` INNER JOIN `users` ON users.UserID =
+			paymentMandates.UserID WHERE `Mandate` = '$mandate';";
+			$user = mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC);
+      $mandateID = mysqli_real_escape_string($link, $user['MandateID']);
 
-        $userID = $user['UserID'];
-        $getNextMandate = $db->prepare("SELECT * FROM `paymentMandates` WHERE
-        `UserID` = ? AND `InUse` = ?");
-        $getNextMandate->execute([$userID, true]);
+			// If default unset
+			$sql = "DELETE FROM `paymentPreferredMandate` WHERE `MandateID` =
+			'$mandateID';";
+			mysqli_query($link, $sql);
 
-        if ($row = $getNextMandate->fetch(PDO::FETCH_ASSOC)) {
-          $mandateID = $row['MandateID'];
-          $setNewDefault = $db->prepare("INSERT INTO `paymentPreferredMandate` (`UserID`, `MandateID`) VALUES (?, ?)");
-          $setNewDefault->execute([$userID, $mandateID]);
+			$userID = mysqli_real_escape_string($link, $user['UserID']);
 
-          $message = "<h1>Hello " . htmlspecialchars($user['Forename'] . " " . $user['Surname']) . ".</h1>
-  				<p>Your Direct Debit Mandate for " . CLUB_NAME . " has been cancelled. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
-  				<p>Go to " . autoUrl("") . " to make any changes.</p>
-  				<p>Thank you, <br>" . CLUB_NAME . "";
-  				notifySend(
-            $user['EmailAddress'],
-            "Your Direct Debit Mandate has been Cancelled",
-            $message,
-            $user['Forename'] . " " . $user['Surname'],
-            $user['EmailAddress'],
-            PAYMENT_EMAILS
-          );
-        } else {
-          $message = "<h1>Hello " . htmlspecialchars($user['Forename'] . " " . $user['Surname']) . ".</h1>
-  				<p>Your Direct Debit Mandate for " . CLUB_NAME . " has been Cancelled. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("") . "</p>
-          <p>If you are leaving the club you can ignore the above.</p>
-  				<p>Thank you, <br>" . CLUB_NAME . "</p>";
-  				notifySend(
-            $user['EmailAddress'],
-            "Your Direct Debit Mandate has been Cancelled",
-            $message,
-            $user['Forename'] . " " .	$user['Surname'],
-            $user['EmailAddress'],
-            PAYMENT_EMAILS
-          );
-        }
+			$sql = "SELECT * FROM `paymentMandates` WHERE `UserID` = '$userID' AND
+			`InUse` = '1';";
+      $res = mysqli_query($link, $sql);
+			$rows = mysqli_num_rows($res);
 
-      } catch (Exception $e) {}
+			if ($rows == 0) {
+        $message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
+				<p>Your Direct Debit Mandate for " . CLUB_NAME . " has been Cancelled. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("") . "</p>
+				<p>Thank you, <br>" . CLUB_NAME . "";
+				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has been
+				Cancelled", $message, $user['Forename'] . " " .
+				$user['Surname'],$user['EmailAddress'], PAYMENT_EMAILS);
+			} else {
+        $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+        $mandateID = mysqli_real_escape_string($link, $row['MandateID']);
+  			$sql = "INSERT INTO `paymentPreferredMandate` (`UserID`, `MandateID`) VALUES ('$userID', '$mandateID');";
+        mysqli_query($link, $sql);
+        $message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
+				<p>Your Direct Debit Mandate for " . CLUB_NAME . " has been cancelled. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
+				<p>Go to " . autoUrl("") . " to make any changes.</p>
+				<p>Thank you, <br>" . CLUB_NAME . "";
+				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has been
+				Cancelled", $message, $user['Forename'] . " " . $user['Surname'],
+				$user['EmailAddress'], PAYMENT_EMAILS);
+			}
 
       break;
 		case "transferred":
 			print("Mandate " . $event["links"]["mandate"] . " has been transferred to a new bank!\n");
-			$mandate = $event["links"]["mandate"];
-			$bankAccount = ($client->mandates()->get($mandate))->links->customer_bank_account;
+			$mandate = mysqli_real_escape_string($link, $event["links"]["mandate"]);
+			$bankAccount = mysqli_real_escape_string($link, ($client->mandates()->get($mandate))->links->customer_bank_account);
 
 			$bank = $client->customerBankAccounts()->get($bankAccount);
-		  $accHolderName = $bank->account_holder_name;
-		  $accNumEnd = $bank->account_number_ending;
-		  $bankName = $bank->bank_name;
+		  $accHolderName = mysqli_real_escape_string($link, $bank->account_holder_name);
+		  $accNumEnd = mysqli_real_escape_string($link, $bank->account_number_ending);
+		  $bankName = mysqli_real_escape_string($link, $bank->bank_name);
 
-      $setNewBank = $db->prepare("UPDATE `paymentMandates` SET `BankAccount` = ?, `AccountHolderName` = ?, `AccountNumEnd` = ?, `BankName` = ? WHERE `Mandate` = ?");
-      $setNewBank->execute([
-        $bankAccount,
-        $accHolderName,
-        $accNumEnd,
-        $bankName,
-        $mandate
-      ]);
-
+			$sql = "UPDATE `paymentMandates` SET `BankAccount` = '$bankAccount', `AccountHolderName` = '$accHolderName', `AccountNumEnd` = '$accNumEnd', `BankName` = '$bankName' WHERE `Mandate` = '$mandate';";
+			mysqli_query($link, $sql);
 			break;
 		case "expired":
 			print("Mandate " . $event["links"]["mandate"] . " has expired!\n");
