@@ -38,12 +38,15 @@ include BASE_PATH . "views/squadMenu.php"; ?>
 </div>
 <div class="form-group">
   <label for="squadCoC">Squad Code of Conduct</label>
-  <select class="custom-select" id="squadCoC" name="squadCoC">
+  <select class="custom-select" id="squadCoC" name="squadCoC" aria-describedby="conductSelectHelpBlock">
     <option selected>Choose...</option>
     <?php while ($row = $codesOfConduct->fetch(PDO::FETCH_ASSOC)) { ?>
     <option value="<?=htmlspecialchars($row['ID'])?>"><?=htmlspecialchars($row['Title'])?></option>
     <?php } ?>
   </select>
+  <small id="conductSelectHelpBlock" class="form-text text-muted">
+    You can create a code of conduct in the <strong>Posts</strong> section of this system and select it here. It will be used in various parts of this system, including when new members sign up and when members renew.
+</small>
 </div>
 
 <p class="mb-0"><button class="btn btn-success" type="submit">Add Squad</button></p>
