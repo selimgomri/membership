@@ -56,7 +56,7 @@ $bg = "bg-white";
         <div class="">
           <div class="">
         <nav class="navbar navbar-expand-lg navbar-dark
-        d-print-none justify-content-between px-0" <?if($use_website_menu){?>id="club-menu"<?}?> role="navigation">
+        d-print-none justify-content-between px-0" role="navigation">
 
             <a class="navbar-brand d-lg-none" href="<?php echo autoUrl("") ?>">
               <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
@@ -71,7 +71,6 @@ $bg = "bg-white";
               <span class="navbar-toggler-icon"></span>
             </button>
 
-          <?php if (!$use_website_menu) { ?>
       	  <div class="collapse navbar-collapse offcanvas-collapse" id="chesterNavbar">
           <?php if (!user_needs_registration($_SESSION['UserID'])) { ?>
       		<ul class="navbar-nav mr-auto">
@@ -357,7 +356,6 @@ $bg = "bg-white";
           }?>
         </div>
       </nav>
-      <?php } ?>
       </div>
     </div>
 
