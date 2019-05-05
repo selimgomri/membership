@@ -12,22 +12,26 @@ if ($user = $getUser->fetchColumn()) {
 	<div class="container">
 		<h1>Reset Your Password</h1>
 		<form class="mb-3" method="post">
-			<div class="form-group">
-		    <label for="password">Enter new password</label>
-		    <input type="password" class="form-control" id="password" name="password" aria-describedby="pwHelp" placeholder="Password" required minlength="8">
-				<small id="pwHelp" class="form-text text-muted">Passwords must be 8 characters or longer</small>
-        <div class="invalid-feedback">
-          Please enter a password with at least 8 characters
+      <div class="row">
+        <div class="col-sm-6 col-md-8">
+    			<div class="form-group">
+    		    <label for="password">Enter new password</label>
+    		    <input type="password" class="form-control" id="password" name="password" aria-describedby="pwHelp" placeholder="Password" required minlength="8">
+    				<small id="pwHelp" class="form-text text-muted">Passwords must be 8 characters or longer</small>
+            <div class="invalid-feedback">
+              Please enter a password with at least 8 characters
+            </div>
+    		  </div>
+    			<div class="form-group">
+    		    <label for="confirm-password">Confirm your new password</label>
+    		    <input type="password" class="form-control" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required minlength="8">
+            <div class="invalid-feedback">
+              Please enter a password with at least 8 characters
+            </div>
+    		  </div>
+    			<button class="btn btn-dark" type="submit">Reset my password</button>
         </div>
-		  </div>
-			<div class="form-group">
-		    <label for="confirm-password">Confirm your new password</label>
-		    <input type="password" class="form-control" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required minlength="8">
-        <div class="invalid-feedback">
-          Please enter a password with at least 8 characters
-        </div>
-		  </div>
-			<button class="btn btn-dark" type="submit">Reset my password</button>
+      </div>
 		</form>
 	</div>
   <script src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
