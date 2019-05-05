@@ -1,42 +1,42 @@
 <?php
 
-$token = mysqli_real_escape_string($link, $token);
+global $db;
 
-$sql = "SELECT `UserID` FROM `passwordTokens` WHERE `Token` = '$token';";
-$result = mysqli_query($link, $sql);
+$getUser = $db->prepare("SELECT UserID FROM passwordTokens WHERE Token = ? ORDER BY TokenID DESC LIMIT 1");
+$getUser->execute([$token]);
 
-if (mysqli_num_rows($result) > 0) {
-	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-	$user = $row['UserID'];
-	$sql = "SELECT `Token` FROM `passwordTokens` WHERE `UserID` = '$user' ORDER BY `TokenID` DESC LIMIT 1;";
-	$result = mysqli_query($link, $sql);
-	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-	$latestToken = $row['Token'];
-	if ($token == $latestToken) {
-		// Present the reset form
-		include BASE_PATH . 'views/header.php';
-		?>
-		<div class="container">
-			<h1>Reset Your Password</h1>
-			<form class="mb-3" method="post">
-				<div class="form-group">
-			    <label for="password1">Enter new password</label>
-			    <input type="password" class="form-control" id="password1" name="password1" aria-describedby="pwHelp" placeholder="Password">
-					<small id="pwHelp" class="form-text text-muted">Passwords must be 8 characters or longer</small>
-			  </div>
-				<div class="form-group">
-			    <label for="password2">Confirm your new password</label>
-			    <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm Password">
-			  </div>
-				<button class="btn btn-dark" type="submit">Reset my password</button>
-			</form>
-		</div>
-		<?php
-		include BASE_PATH . 'views/footer.php';
-	} else {
-		halt(404);
-	}
-}
-else {
+if ($user = $getUser->fetchColumn()) {
+	// Present the reset form
+	include BASE_PATH . 'views/header.php';
+	?>
+	<div class="container">
+		<h1>Reset Your Password</h1>
+		<form class="mb-3" method="post">
+      <div class="row">
+        <div class="col-sm-6 col-md-8">
+    			<div class="form-group">
+    		    <label for="password">Enter new password</label>
+    		    <input type="password" class="form-control" id="password" name="password" aria-describedby="pwHelp" placeholder="Password" required minlength="8">
+    				<small id="pwHelp" class="form-text text-muted">Passwords must be 8 characters or longer</small>
+            <div class="invalid-feedback">
+              Please enter a password with at least 8 characters
+            </div>
+    		  </div>
+    			<div class="form-group">
+    		    <label for="confirm-password">Confirm your new password</label>
+    		    <input type="password" class="form-control" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required minlength="8">
+            <div class="invalid-feedback">
+              Please enter a password with at least 8 characters
+            </div>
+    		  </div>
+    			<button class="btn btn-dark" type="submit">Reset my password</button>
+        </div>
+      </div>
+		</form>
+	</div>
+  <script src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
+	<?php
+	include BASE_PATH . 'views/footer.php';
+} else {
 	halt(404);
 }
