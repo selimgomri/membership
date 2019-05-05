@@ -3,7 +3,7 @@ $pagetitle = "Password Reset";
 include BASE_PATH . "views/header.php";
 
 global $db;
-$userDetails = trim($_POST['userDetails']);
+$userDetails = trim($_POST['email-address']);
 $captcha = trim($_POST['g-recaptcha-response']);
 $captchaStatus = null;
 

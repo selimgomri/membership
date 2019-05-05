@@ -8,9 +8,9 @@ $getUser = $db->prepare("SELECT UserID FROM passwordTokens WHERE Token = ? ORDER
 $getUser->execute([$token]);
 
 if ($user = $getUser->fetchColumn()) {
-	if ((isset($_POST['password1']) && isset($_POST['password2'])) && (trim($_POST['password1']) == trim($_POST['password2'])) && v::stringType()->length(8, null)->validate($_POST['password1'])) {
+	if ((isset($_POST['password']) && isset($_POST['confirm-password'])) && (trim($_POST['password']) == trim($_POST['confirm-password'])) && v::stringType()->length(8, null)->validate($_POST['password'])) {
 		// Set the password
-		$newHash = password_hash(trim($_POST['password1']), PASSWORD_BCRYPT);
+		$newHash = password_hash(trim($_POST['password']), PASSWORD_BCRYPT);
 
     // Update the password in db
     $updatePass = $db->prepare("UPDATE users SET Password = ? WHERE UserID = ?");
@@ -28,7 +28,7 @@ if ($user = $getUser->fetchColumn()) {
         <div class="col-sm-6 col-md-5 col-lg4">
           <div class="alert alert-success">
             <strong>We've reset your Password</strong>
-            <p class="mb-2">You can now, <a href="<?=autoUrl("")?>" class="alert-link">login with your new password</a>.</p>
+            <p class="mb-2">You can now, <a href="<?=autoUrl("login")?>" class="alert-link">login with your new password</a>.</p>
             <p class="mb-0">Thank you for using this service.</p>
           </div>
         </div>

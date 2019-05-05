@@ -11,11 +11,11 @@
       <div class="row">
         <div class="col-md-8 col-lg-5">
           <div class="form-group">
-            <label for="userDetails">
+            <label for="email-address">
               Email Address
             </label>
-            <input type="email" class="form-control" name="userDetails"
-            id="userDetails" placeholder="Username or Email" required>
+            <input type="email" class="form-control" name="email-address"
+            id="email-address" placeholder="hello@example.com" required>
            </div>
            <div class="g-recaptcha mb-3"
            data-sitekey="6Lc4U0AUAAAAAOM613z7FDK5rsyPVR_IT0iXgBSA"
