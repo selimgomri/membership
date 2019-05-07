@@ -64,19 +64,28 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
     <!-- Main Info Content -->
     <form method="post">
       <div class="">
-    <div class="form-group">
-      <label for="forename">Forename</label>
-      <input type="text" class="form-control" id="forename" name="forename"
-      placeholder="Enter a forename" value="<?=htmlspecialchars($rowSwim['MForename'])?>"
-      required>
-    </div>
-    <div class="form-group">
-      <label for="middlenames">Middle Names</label>
-      <input type="text" class="form-control" id="middlenames" name="middlenames" placeholder="Enter a middlename" value="<?=htmlspecialchars($rowSwim['MMiddleNames'])?>">
-    </div>
-    <div class="form-group">
-      <label for="surname">Surname</label>
-      <input type="text" class="form-control" id="surname" name="surname" placeholder="Enter a surname" value="<?=htmlspecialchars($rowSwim['MSurname'])?>" required>
+
+    <div class="form-row">
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label for="forename">Forename</label>
+          <input type="text" class="form-control" id="forename" name="forename"
+          placeholder="Enter a forename" value="<?=htmlspecialchars($rowSwim['MForename'])?>"
+          required>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-group">
+          <label for="middlenames">Middle Names</label>
+          <input type="text" class="form-control" id="middlenames" name="middlenames" placeholder="Enter a middlename" value="<?=htmlspecialchars($rowSwim['MMiddleNames'])?>">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-group">
+          <label for="surname">Surname</label>
+          <input type="text" class="form-control" id="surname" name="surname" placeholder="Enter a surname" value="<?=htmlspecialchars($rowSwim['MSurname'])?>" required>
+        </div>
+      </div>
     </div>
     <div class="form-group">
       <label for="datebirth">Date of Birth</label>
@@ -186,7 +195,9 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
       <ul></ul>
     </div>
     <?php } ?>
-    <button type="submit" class="btn btn-outline-dark">Update</button>
+    <p>
+      <button type="submit" class="btn btn-success">Update</button>
+    </p>
     </div>
 
     <?php
