@@ -1,4 +1,9 @@
 <?php
+
+
+global $db;
+$codesOfConduct = $db->query("SELECT Title, ID FROM posts WHERE `Type` = 'conduct_code' ORDER BY Title ASC");
+
 $id = mysqli_real_escape_string($link, $id);
 $access = $_SESSION['AccessLevel'];
 
@@ -14,7 +19,7 @@ $squadCoC = $row['SquadCoC'];
 $squadDeleteKey = $row['SquadKey'];
 
 if (isset($_POST['squadName'])) {
-  $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['squadName']))));
+  $postContent = mysqli_real_escape_string($link, trim((ucwords($_POST['squadName']))));
   if ($postContent != $squadName) {
     $sql = "UPDATE `squads` SET `SquadName` = '$postContent' WHERE `SquadID` = '$id'";
     mysqli_query($link, $sql);
@@ -23,7 +28,7 @@ if (isset($_POST['squadName'])) {
   }
 }
 if (isset($_POST['squadFee'])) {
-  $postContent = mysqli_real_escape_string($link, number_format(trim(htmlspecialchars(ucwords($_POST['squadFee']))),2,'.',''));
+  $postContent = mysqli_real_escape_string($link, number_format(trim((ucwords($_POST['squadFee']))),2,'.',''));
   if ($postContent != $squadFee) {
     $sql = "UPDATE `squads` SET `SquadFee` = '$postContent' WHERE `SquadID` = '$id'";
     mysqli_query($link, $sql);
@@ -32,7 +37,7 @@ if (isset($_POST['squadFee'])) {
   }
 }
 if (isset($_POST['squadCoach'])) {
-  $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(ucfirst($_POST['squadCoach']))));
+  $postContent = mysqli_real_escape_string($link, trim((ucfirst($_POST['squadCoach']))));
   if ($postContent != $squadCoach) {
     $sql = "UPDATE `squads` SET `SquadCoach` = '$postContent' WHERE `SquadID` = '$id'";
     mysqli_query($link, $sql);
@@ -41,7 +46,7 @@ if (isset($_POST['squadCoach'])) {
   }
 }
 if (isset($_POST['squadTimetable'])) {
-  $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(strtolower($_POST['squadTimetable']))));
+  $postContent = mysqli_real_escape_string($link, trim((strtolower($_POST['squadTimetable']))));
   if ($postContent != $squadTimetable) {
     $sql = "UPDATE `squads` SET `SquadTimetable` = '$postContent' WHERE `SquadID` = '$id'";
     mysqli_query($link, $sql);
@@ -50,7 +55,7 @@ if (isset($_POST['squadTimetable'])) {
   }
 }
 if (isset($_POST['squadCoC'])) {
-  $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(lcfirst($_POST['squadCoC']))));
+  $postContent = mysqli_real_escape_string($link, trim((lcfirst($_POST['squadCoC']))));
   if ($postContent != $squadCoC) {
     $sql = "UPDATE `squads` SET `SquadCoC` = '$postContent' WHERE `SquadID` = '$id'";
     mysqli_query($link, $sql);
@@ -60,7 +65,7 @@ if (isset($_POST['squadCoC'])) {
 }
 if ($access == "Admin") {
   if (isset($_POST['squadDeleteDanger'])) {
-    $postContent = mysqli_real_escape_string($link, trim(htmlspecialchars(lcfirst($_POST['squadDeleteDanger']))));
+    $postContent = mysqli_real_escape_string($link, trim((lcfirst($_POST['squadDeleteDanger']))));
     if ($postContent == $squadDeleteKey) {
       $sql = "DELETE FROM `squads` WHERE `SquadID` = '$id'";
       mysqli_query($link, $sql);
@@ -94,7 +99,7 @@ if ($access == "Admin") { ?>
         <p class="lead border-bottom border-gray pb-2">View or edit the squad details</p>
         <div class="form-group">
           <label for="squadName">Squad Name</label>
-          <input type="text" class="form-control" id="squadName" name="squadName" placeholder="Enter Squad Name" value="<?=$row['SquadName']?>">
+          <input type="text" class="form-control" id="squadName" name="squadName" placeholder="Enter Squad Name" value="<?=htmlspecialchars($row['SquadName'])?>">
         </div>
         <div class="form-group">
           <label for="squadFee" class="form-label">Squad Fee</label>
@@ -102,26 +107,35 @@ if ($access == "Admin") { ?>
             <div class="input-group-prepend">
               <span class="input-group-text">&pound;</span>
             </div>
-            <input type="text" class="form-control" id="squadFee" name="squadFee" aria-describedby="squadFeeHelp" placeholder="eg 50.00" value="<?=$row['SquadFee']?>">
+            <input type="text" class="form-control" id="squadFee" name="squadFee" aria-describedby="squadFeeHelp" placeholder="eg 50.00" value="<?=htmlspecialchars($row['SquadFee'])?>">
           </div>
           <small id="squadFeeHelp" class="form-text text-muted">A squad can have a fee of &pound;0.00 if it represents a group for non paying members</small>
         </div>
         <div class="form-group">
           <label for="squadCoach">Squad Coach</label>
-          <input type="text" class="form-control" id="squadCoach" name="squadCoach" placeholder="Enter Squad Coach" value="<?=$row['SquadCoach']?>">
+          <input type="text" class="form-control" id="squadCoach" name="squadCoach" placeholder="Enter Squad Coach" value="<?=htmlspecialchars($row['SquadCoach'])?>">
         </div>
         <div class="form-group">
           <label for="squadTimetable">Squad Timetable</label>
-          <input type="text" class="form-control" id="squadTimetable" name="squadTimetable" placeholder="Enter Squad Timetable Address" value="<?=$row['SquadTimetable']?>">
+          <input type="text" class="form-control" id="squadTimetable" name="squadTimetable" placeholder="Enter Squad Timetable Address" value="<?=htmlspecialchars($row['SquadTimetable'])?>">
         </div>
         <div class="form-group">
           <label for="squadCoC">Squad Code of Conduct</label>
-          <input type="text" class="form-control" id="squadCoC" name="squadCoC" placeholder="Enter Squad Code of Conduct Address" value="<?=$row['SquadCoC']?>">
+          <select class="custom-select" id="squadCoC" name="squadCoC" aria-describedby="conductSelectHelpBlock">
+          <?php while ($codeDetails = $codesOfConduct->fetch(PDO::FETCH_ASSOC)) { ?>
+          <option value="<?=htmlspecialchars($codeDetails['ID'])?>" <?php if ($row['SquadCoC'] == codeDetails['ID']) { ?>selected<?php } ?>>
+            <?=htmlspecialchars($codeDetails['Title'])?>
+          </option>
+          <?php } ?>
+        </select>
+        <small id="conductSelectHelpBlock" class="form-text text-muted">
+          You can create a code of conduct in the <strong>Posts</strong> section of this system and select it here. It will be used in various parts of this system, including when new members sign up and when members renew.
+        </small>
         </div>
         <div class="alert alert-danger">
           <div class="form-group mb-0">
             <label for="squadDeleteDanger"><strong>Danger Zone</strong> <br>Delete this Squad with this Key "<span class="mono"><?=$squadDeleteKey?></span>"</label>
-            <input type="text" class="form-control" id="squadDeleteDanger" name="squadDeleteDanger" aria-describedby="squadDeleteDangerHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
+            <input type="text" class="form-control mono" id="squadDeleteDanger" name="squadDeleteDanger" aria-describedby="squadDeleteDangerHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
             <small id="squadDeleteDangerHelp" class="form-text">Enter the key in quotes above and press submit. This will delete this squad.</small>
           </div>
         </div>
