@@ -123,7 +123,7 @@ if ($access == "Admin") { ?>
           <label for="squadCoC">Squad Code of Conduct</label>
           <select class="custom-select" id="squadCoC" name="squadCoC" aria-describedby="conductSelectHelpBlock">
           <?php while ($codeDetails = $codesOfConduct->fetch(PDO::FETCH_ASSOC)) { ?>
-          <option value="<?=htmlspecialchars($codeDetails['ID'])?>" <?php if ($row['SquadCoC'] == codeDetails['ID']) { ?>selected<?php } ?>>
+          <option value="<?=htmlspecialchars($codeDetails['ID'])?>" <?php if ($row['SquadCoC'] == $codeDetails['ID']) { ?>selected<?php } ?>>
             <?=htmlspecialchars($codeDetails['Title'])?>
           </option>
           <?php } ?>
