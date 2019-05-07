@@ -63,7 +63,7 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
     <?php } ?>
     <!-- Main Info Content -->
     <form method="post">
-      <div class="my-3 p-3 bg-white rounded shadow">
+      <div class="">
     <div class="form-group">
       <label for="forename">Forename</label>
       <input type="text" class="form-control" id="forename" name="forename"
