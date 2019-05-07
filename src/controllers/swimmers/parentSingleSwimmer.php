@@ -37,8 +37,8 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
   <div class="container">
     <div class="row align-items-center">
       <div class="col-sm-8">
-        <h1>Editing <?php echo $swimmersSecurityCheck['MForename'] . ' ' .
-        $swimmersSecurityCheck['MSurname']?></h1>
+        <h1>Editing <?=htmlspecialchars($swimmersSecurityCheck['MForename'] . ' ' .
+        $swimmersSecurityCheck['MSurname'])?></h1>
       </div>
       <div class="col-sm-4 text-right">
         <button type="submit" class="btn btn-success">Save</button> <a
@@ -67,24 +67,24 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
     <div class="form-group">
       <label for="forename">Forename</label>
       <input type="text" class="form-control" id="forename" name="forename"
-      placeholder="Enter a forename" value="<?php echo $rowSwim['MForename']; ?>"
+      placeholder="Enter a forename" value="<?=htmlspecialchars($rowSwim['MForename'])?>"
       required>
     </div>
     <div class="form-group">
       <label for="middlenames">Middle Names</label>
-      <input type="text" class="form-control" id="middlenames" name="middlenames" placeholder="Enter a middlename" value="<?php echo $rowSwim['MMiddleNames']; ?>">
+      <input type="text" class="form-control" id="middlenames" name="middlenames" placeholder="Enter a middlename" value="<?=htmlspecialchars($rowSwim['MMiddleNames'])?>">
     </div>
     <div class="form-group">
       <label for="surname">Surname</label>
-      <input type="text" class="form-control" id="surname" name="surname" placeholder="Enter a surname" value="<?php echo $rowSwim['MSurname']; ?>" required>
+      <input type="text" class="form-control" id="surname" name="surname" placeholder="Enter a surname" value="<?=htmlspecialchars($rowSwim['MSurname'])?>" required>
     </div>
     <div class="form-group">
       <label for="datebirth">Date of Birth</label>
-      <input type="date" class="form-control" id="datebirth" name="datebirth" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD" value="<?php echo $rowSwim['DateOfBirth']; ?>" required>
+      <input type="date" class="form-control" id="datebirth" name="datebirth" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD" value="<?=htmlspecialchars($rowSwim['DateOfBirth'])?>" required>
     </div>
     <div class="form-group">
       <label for="asaregnumber">ASA Registration Number</label>
-      <input type="test" class="form-control" id="asaregnumber" name="asaregnumber" placeholder="ASA Registration Numer" value="<?php echo $rowSwim['ASANumber']; ?>" readonly>
+      <input type="test" class="form-control" id="asaregnumber" name="asaregnumber" placeholder="ASA Registration Numer" value="<?=htmlspecialchars($rowSwim['ASANumber'])?>" readonly>
     </div>
     <?php if ($rowSwim['Gender'] == "Male") { ?>
     <div class="form-group">
@@ -120,7 +120,7 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
     </div>
     <div class="form-group">
       <label for="otherNotes">Other Notes</label>
-      <textarea class="form-control" id="otherNotes" name="otherNotes" rows="3" placeholder="Tell us any other notes for coaches"><?php echo $rowSwim['OtherNotes']; ?></textarea>
+      <textarea class="form-control" id="otherNotes" name="otherNotes" rows="3" placeholder="Tell us any other notes for coaches"><?=htmlspecialchars($rowSwim['OtherNotes'])?></textarea>
     </div>
     <?php if ($age < 18) { ?>
     <div class="form-group">
@@ -142,42 +142,42 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
         $photo[4] = " checked ";
       } ?>
       <p>
-  			I, <?php echo getUserName($userID); ?> agree to photography of <?php echo
-  			$rowSwim['MForename'] . " " . $rowSwim['MSurname']; ?> in the following
-  			circumstances. Tick boxes only if you wish to grant us photography
-  			permission.
+  			I, <?php echo getUserName($userID); ?> agree to photography of
+  			<?=htmlspecialchars($rowSwim['MForename'] . " " .
+  			$rowSwim['MSurname'])?> in the following circumstances. Tick boxes only
+  			if you wish to grant us photography permission.
   		</p>
   		<div class="custom-control custom-checkbox">
   			<input type="checkbox" value="1" class="custom-control-input"
-  			name="webPhoto" id="webPhoto" <?php echo $photo[0]; ?>>
+  			name="webPhoto" id="webPhoto" <?=$photo[0]?>>
   			<label class="custom-control-label" for="webPhoto">
   				Take photographs to use on the clubs website
   			</label>
   		</div>
   		<div class="custom-control custom-checkbox">
   			<input type="checkbox" value="1" class="custom-control-input"
-  			name="socPhoto" id="socPhoto" <?php echo $photo[1]; ?>>
+  			name="socPhoto" id="socPhoto" <?=$photo[1]?>>
   			<label class="custom-control-label" for="socPhoto">
   				Take photographs to use on social media sites
   			</label>
   		</div>
   		<div class="custom-control custom-checkbox">
   			<input type="checkbox" value="1" class="custom-control-input"
-  			name="noticePhoto" id="noticePhoto" <?php echo $photo[2]; ?>>
+  			name="noticePhoto" id="noticePhoto" <?=$photo[2]?>>
   			<label class="custom-control-label" for="noticePhoto">
   				Take photographs to use on club noticeboards
   			</label>
   		</div>
   		<div class="custom-control custom-checkbox">
   			<input type="checkbox" value="1" class="custom-control-input"
-  			name="trainFilm" id="trainFilm" <?php echo $photo[3]; ?>>
+  			name="trainFilm" id="trainFilm" <?=$photo[3]?>>
   			<label class="custom-control-label" for="trainFilm">
   				Filming for training purposes only
   			</label>
   		</div>
   		<div class="custom-control custom-checkbox">
   			<input type="checkbox" value="1" class="custom-control-input"
-  			name="proPhoto" id="proPhoto" <?php echo $photo[4]; ?>>
+  			name="proPhoto" id="proPhoto" <?=$photo[4]?>>
   			<label class="custom-control-label" for="proPhoto">
   				Employ a professional photographer (approved by the club) who will take
   				photographs in competitions and/or club events.
@@ -196,14 +196,14 @@ if ($swimmersSecurityCheck['UserID'] == $userID && $resultSecurityCheck) {
       <div class="alert alert-danger">
         <p><strong>Danger Zone</strong> <br>Actions here can be irreversible. Be careful what you do.</p>
         <div class="form-group">
-          <label for="disconnect">Disconnect swimmer from your account with this Key <span class="mono">"<?php echo $disconnectKey; ?>"</span></label>
-          <input type="text" class="form-control" id="disconnect" name="disconnect" aria-describedby="disconnectHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
+          <label for="disconnect">Disconnect swimmer from your account with this Key <span class="mono">"<?=htmlspecialchars($disconnectKey)?>"</span></label>
+          <input type="text" class="form-control mono" id="disconnect" name="disconnect" aria-describedby="disconnectHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
           <small id="disconnectHelp" class="form-text">Enter the key in quotes above and press the <strong>Delete or Disconnect</strong> button. This will dissassociate this swimmer from your account in all of our systems. You will need a new Access Key to add the swimmer again.</small>
         </div>
         <input type="hidden" value="<?php echo $disconnectKey; ?>" name="disconnectKey">
         <div class="form-group">
-          <label for="swimmerDeleteDanger">Delete this Swimmer with this Key <span class="mono">"<?php echo $rowSwim['AccessKey']; ?>"</span></label>
-          <input type="text" class="form-control" id="swimmerDeleteDanger" name="swimmerDeleteDanger" aria-describedby="swimmerDeleteDangerHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
+          <label for="swimmerDeleteDanger">Delete this Swimmer with this Key <span class="mono">"<?=htmlspecialchars($rowSwim['AccessKey'])?>"</span></label>
+          <input type="text" class="form-control mono" id="swimmerDeleteDanger" name="swimmerDeleteDanger" aria-describedby="swimmerDeleteDangerHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
           <small id="swimmerDeleteDangerHelp" class="form-text">Enter the key in quotes above and press <strong>Delete or Disconnect</strong>. This will delete this swimmer from all of our systems.</small>
         </div>
         <p class="mb-0">
