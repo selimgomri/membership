@@ -1,13 +1,13 @@
-<?
-$user = mysqli_real_escape_string($link, $_SESSION['UserID']);
-$renewal = mysqli_real_escape_string($link, $renewal);
+<?php
 
-$sql = "UPDATE `renewalProgress` SET `Substage` = `Substage` + 1 WHERE
-`RenewalID` = '$renewal' AND `UserID` = '$user';";
+global $db;
 
-if (mysqli_query($link, $sql)) {
+try {
+  $nextSection = $db->prepare("UPDATE `renewalProgress` SET `Substage` = `Substage` + 1 WHERE
+  `RenewalID` = ? AND `UserID` = ?");
+  $nextSection->execute([$renewal, $_SESSION['UserID']]);
 	header("Location: " . app('request')->curl);
-} else {
+} catch (Exception $e) {
 	$_SESSION['ErrorState'] = "
 	<div class=\"alert alert-danger\">
 	<p class=\"mb-0\"><strong>An error occured when we tried to update our records</strong></p>
