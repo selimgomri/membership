@@ -1,19 +1,21 @@
 <?php
+
+global $db;
+
 if (isset($id)) {
-	$id = mysqli_real_escape_string($link, $id);
 	$name = getSwimmerName($id);
 	if (!$name) {
 		halt(404);
 	}
 
-	$sql = "SELECT * FROM `squads` INNER JOIN `members` ON members.SquadID =
-	squads.SquadID WHERE `MemberID` = '$id';";
-	$result = mysqli_query($link, $sql);
-	if (mysqli_num_rows($result) != 1) {
-		halt(404);
-	}
+	$getDetails = $db->prepare("SELECT * FROM `squads` INNER JOIN `members` ON members.SquadID =
+	squads.SquadID WHERE `MemberID` = ?");
+  $getDetails->execute([$id]);
+	$row = $getDetails->fetch(PDO::FETCH_ASSOC);
 
-	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+  if ($row == null) {
+    halt(404);
+  }
 
 	$linkExists = false;
 	$link = "";
@@ -23,17 +25,17 @@ if (isset($id)) {
 		$link = $row['SquadCoC'];
 	}
 
-	$pagetitle = $name . " - Code of Conduct";
+	$pagetitle = htmlspecialchars($name) . " - Code of Conduct";
 	include BASE_PATH . "views/header.php";
   include BASE_PATH . "views/renewalTitleBar.php";
 	?>
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-8">
-				<div class="mb-3 p-3 bg-white rounded shadow">
+				<div class="">
 					<form method="post">
 						<h1>Code of Conduct Acceptance</h1>
-						<p class="lead">For <?php echo $name; ?></p>
+						<p class="lead">For <?=htmlspecialchars($name)?></p>
 
 						<?php if (isset($_SESSION['RenewalErrorInfo'])) {
 							echo $_SESSION['RenewalErrorInfo'];
@@ -43,8 +45,8 @@ if (isset($id)) {
 						<div class="alert alert-warning">
 							<p class="mb-0">
 								<strong>
-									You must ensure that <?php echo $name; ?> is present to agree to
-									this code of conduct before you continue
+									You must ensure that <?=htmlspecialchars($name)?> is present
+									to agree to this code of conduct before you continue
 								</strong>
 							</p>
 							<p class="mb-0">
@@ -58,7 +60,7 @@ if (isset($id)) {
 						<h2 class="h1"><?=CLUB_NAME?> Squad Code of Conduct</h2>
 						<?php if ($linkExists) { ?>
 						<div id="code_of_conduct">
-							<?= getPostContent($link) ?>
+							<?=getPostContent($link)?>
 						</div>
 						<?php } else { ?>
 						<p>
@@ -271,7 +273,7 @@ if (isset($id)) {
 							  <input type="checkbox" class="custom-control-input" id="agree"
 							  name="agree" value="1">
 							  <label class="custom-control-label" for="agree">
-									I, <?php echo $name; ?> agree to this code of conduct
+									I, <?=htmlspecialchars($name)?> agree to this code of conduct
 								</label>
 							</div>
 						</div>
@@ -294,7 +296,7 @@ if (isset($id)) {
 <div class="container">
 	<div class="row">
 		<div class="col-lg-8">
-			<div class="mb-3 p-3 bg-white rounded shadow">
+			<div class="">
 				<form method="post">
 					<h1>Parent Code of Conduct</h1>
 					<p class="lead">

@@ -2,11 +2,10 @@
 
 global $db;
 
-$userID = $_SESSION['UserID'];
+$userDetails = $db->prepare("SELECT * FROM users WHERE UserID = ?");
+$userDetails->execute([$_SESSION['UserID']]);
+$row = $userDetails->fetch(PDO::FETCH_ASSOC);
 
-$query = "SELECT * FROM users WHERE UserID = '$userID' ";
-$result = mysqli_query($link, $query);
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 $email = $row['EmailAddress'];
 $forename = $row['Forename'];
 $surname = $row['Surname'];
@@ -37,7 +36,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	} ?>
 
 	<form method="post">
-		<div class="my-3 p-3 bg-white rounded shadow">
+		<div class="">
 		  <h2>Your Details</h2>
 		  <p class="border-bottom border-gray pb-2">What we know about you.</p>
 	    <div class="form-group">

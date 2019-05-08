@@ -1,10 +1,10 @@
 <?php
 
-$user = mysqli_real_escape_string($link, $_SESSION['UserID']);
+global $db;
 
-$uSql = "SELECT * FROM `users` WHERE `UserID` = '$user';";
-$uRes = mysqli_query($link, $uSql);
-$uRow = mysqli_fetch_array($uRes, MYSQLI_ASSOC);
+$userInfo = $db->prepare("SELECT Forename, Surname, Mobile FROM `users` WHERE `UserID` = ?");
+$userInfo->execute([$_SESSION['UserID']]);
+$user = $userInfo->fetch(PDO::FETCH_ASSOC);
 
 $contacts = new EmergencyContacts($link);
 $contacts->byParent($user);
@@ -17,7 +17,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded shadow">
+	<div class="">
 		<?php if (isset($_SESSION['ErrorState'])) {
 			echo $_SESSION['ErrorState'];
 			unset($_SESSION['ErrorState']);
@@ -27,7 +27,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			<h1>Emergency Contacts</h1>
 			<p class="lead">These are your emergency contacts.</p>
 
-			<?php if (user_needs_registration($user)) { ?>
+			<?php if (user_needs_registration($_SESSION['UserID'])) { ?>
 				<p class="border-bottom border-gray pb-2 mb-0">
 					We'll use these emergency contacts for all swimmers connected to your
 					account if we can't reach you on your phone number. You will be able
@@ -38,7 +38,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			<p class="border-bottom border-gray pb-2 mb-0">
 				We'll use these emergency contacts for all swimmers connected to your
 				account if we can't reach you on your phone number. You can change your
-				phone number in <a href="<?php echo autoUrl("myaccount"); ?>">My Account</a>
+				phone number in <a href="<?=autoUrl("myaccount")?>">My Account</a>
 			</p>
 			<?php } ?>
 
@@ -47,11 +47,11 @@ include BASE_PATH . "views/renewalTitleBar.php";
   				<div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
 						<p class="mb-0">
 							<strong class="d-block">
-								<?php echo $uRow['Forename'] . " " . $uRow['Surname']; ?> (From My
+								<?=htmlspecialchars($user['Forename'] . " " . $user['Surname'])?> (From My
 								Account)
 							</strong>
-							<a href="tel:<?php echo $uRow['Mobile']; ?>">
-								<?php echo $uRow['Mobile']; ?>
+							<a href="tel:<?=htmlspecialchars($user['Mobile'])?>">
+								<?=htmlspecialchars($user['Mobile'])?>
 							</a>
 						</p>
   				</div>
@@ -64,16 +64,16 @@ include BASE_PATH . "views/renewalTitleBar.php";
 							<div class="col-9">
 								<p class="mb-0">
 									<strong class="d-block">
-										<?php echo $contactsArray[$i]->getName(); ?>
+										<?=htmlspecialchars($contactsArray[$i]->getName())?>
 									</strong>
-									<a href="tel:<?php echo $contactsArray[$i]->getContactNumber(); ?>">
-										<?php echo $contactsArray[$i]->getContactNumber(); ?>
+									<a href="tel:<?=htmlspecialchars($contactsArray[$i]->getContactNumber())?>">
+										<?=htmlspecialchars($contactsArray[$i]->getContactNumber())?>
 									</a>
 								</p>
 							</div>
 							<div class="col text-right">
-								<a href="<?php echo autoUrl("renewal/emergencycontacts/edit/" .
-								$contactsArray[$i]->getID()); ?>" class="btn btn-primary">
+								<a href="<?=autoUrl("renewal/emergencycontacts/edit/" .
+								$contactsArray[$i]->getID())?>" class="btn btn-primary">
 									Edit
 								</a>
 							</div>

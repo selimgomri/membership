@@ -1,25 +1,26 @@
-<?
-$user = mysqli_real_escape_string($link, $_SESSION['UserID']);
-$sql = "SELECT * FROM `members` WHERE `UserID` = '$user' ORDER BY `MemberID` ASC
-LIMIT 1;";
-$result = mysqli_query($link, $sql);
+<?php
 
-if (mysqli_num_rows($result) == 0) {
-	halt(403);
+global $db;
+
+$getFirstMember = $db->prepare("SELECT MemberID FROM `members` WHERE `UserID` = ? ORDER BY `MemberID` ASC
+LIMIT 1");
+$getFirstMember->execute([$_SESSION['UserID']]);
+$member = $getFirstMember->fetchColumn();
+
+if ($member == null) {
+	halt(404);
 }
 
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-$member = mysqli_real_escape_string($link, $row['MemberID']);
-
-$renewal = mysqli_real_escape_string($link, $renewal);
-
-$sql = "UPDATE `renewalProgress` SET `Substage` = '1',
-`Part` = '$member' WHERE `RenewalID` = '$renewal' AND `UserID` = '$user';";
-
-if (mysqli_query($link, $sql)) {
+try {
+  $updateDatabase = $db->prepare("UPDATE `renewalProgress` SET `Substage` = '1',
+  `Part` = ? WHERE `RenewalID` = ? AND `UserID` = ?");
+  $updateDatabase->execute([
+    $member,
+    $renewal,
+    $_SESSION['UserID']
+  ]);
 	header("Location: " . app('request')->curl);
-} else {
+} catch (Exception $e) {
 	$_SESSION['ErrorState'] = "
 	<div class=\"alert alert-danger\">
 	<p class=\"mb-0\"><strong>An error occured when we tried to update our records</strong></p>

@@ -1,4 +1,4 @@
-<?
+<?php
 
 global $db;
 $member = null;
