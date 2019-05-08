@@ -22,6 +22,7 @@ if ($rowSwim == null) {
 }
 
 $markdown = new ParsedownExtra();
+$markdown->setSafeMode(true);
 
 $forename = $rowSwim['MForename'];
 $middlename = $rowSwim['MMiddleNames'];

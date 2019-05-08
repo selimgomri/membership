@@ -3,6 +3,7 @@
 use Respect\Validation\Validator as v;
 
 $markdown = new ParsedownExtra();
+$markdown->setSafeMode(true);
 
 $access = $_SESSION['AccessLevel'];
 $swimmerCount = 0;
