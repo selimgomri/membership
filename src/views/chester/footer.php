@@ -145,7 +145,7 @@
 </div>
 
 <!-- Modals and Other Hidden HTML -->
-<script rel="preload" src="<?=autoUrl("public/js/jquery-3.2.1.slim.min.js")?>"></script>
+<script rel="preload" src="<?=autoUrl("public/js/jquery-3.4.1.slim.min.js")?>"></script>
 <script defer src="https://static.chesterlestreetasc.co.uk/global/headers/GlobalNavigation.js"></script>
 <script defer src="<?=autoUrl("public/js/popper.min.js")?>"></script>
 <script defer src="<?=autoUrl("public/js/bootstrap.min.js")?>"></script>
