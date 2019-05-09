@@ -124,12 +124,13 @@ function clickPropogation(e) {
         var clickedItem = e.target.id;
         var clickedItemChecked;
         if (clickedItem != "") {
-          var clickedItemChecked = document.getElementById(clickedItem).checked;
+          var item = document.getElementById(clickedItem);
+          var clickedItemChecked = item.checked;
           console.log(clickedItem);
           console.log(clickedItemChecked);
-          if (clickedItem.dataset.buttonAction == "mark-processed") {
+          if (item.dataset.buttonAction == "mark-processed") {
             markProcessed(clickedItem, clickedItemChecked);
-          } else if (clickedItem.dataset.buttonAction == "mark-paid") {
+          } else if (item.dataset.buttonAction == "mark-paid") {
             markPaid(clickedItem, clickedItemChecked);
           }
         }
