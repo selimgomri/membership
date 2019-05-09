@@ -104,9 +104,17 @@ document.getElementById("search").oninput=getResult;
 document.getElementById("sex").oninput=getResult;
 </script>';
 $content .= '
-<script>
-document.querySelectorAll(\'*[id^="processedEntry-"]\');
+';
 
+include BASE_PATH . "views/header.php";
+include "galaMenu.php"; ?>
+<div class="container">
+<?php echo "<h1>Gala Entries</h1>";
+echo $content; ?>
+</div>
+
+<script>
+document.querySelectorAll('*[id^="processedEntry-"]');
 
 var entryTable = document.querySelector("#output");
 entryTable.addEventListener("click", clickPropogation, false);
@@ -119,7 +127,11 @@ function clickPropogation(e) {
           var clickedItemChecked = document.getElementById(clickedItem).checked;
           console.log(clickedItem);
           console.log(clickedItemChecked);
-          markProcessed(clickedItem, clickedItemChecked);
+          if (clickedItem.dataset.buttonAction == "mark-processed") {
+            markProcessed(clickedItem, clickedItemChecked);
+          } else if (clickedItem.dataset.buttonAction == "mark-paid") {
+            markPaid(clickedItem, clickedItemChecked);
+          }
         }
     }
     e.stopPropagation();
@@ -132,21 +144,29 @@ function markProcessed(clickedItem, clickedItemChecked) {
       document.getElementById(clickedItem).innerHTML = "WORKED"/*this.responseText*/;
     }
   };
-  xhttp.open("POST", "' . autoUrl("galas/ajax/entryProcessed") . '", true);
-  console.log("POST", "' . autoUrl("galas/ajax/entryProcessed") . '", true);
+  xhttp.open("POST", "<?=autoUrl("galas/ajax/entryProcessed")?>", true);
+  console.log("POST", "<?=autoUrl("galas/ajax/entryProcessed")?>", true);
   xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhttp.send("processedID=" + clickedItem + "&clickedItemChecked=" + clickedItemChecked + "&verify=markProcessed");
   console.log("processedID=" + clickedItem + "&clickedItemChecked=" + clickedItemChecked + "&verify=markProcessed")
   console.log("Sent");
 }
-</script>';
 
-include BASE_PATH . "views/header.php";
-include "galaMenu.php"; ?>
-<div class="container">
-<?php echo "<h1>Gala Entries</h1>";
-echo $content; ?>
-</div>
+function markPaid(clickedItem, clickedItemChecked) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById(clickedItem).innerHTML = "WORKED"/*this.responseText*/;
+    }
+  };
+  xhttp.open("POST", "<?=autoUrl("galas/ajax/entryProcessed")?>", true);
+  console.log("POST", "<?=autoUrl("galas/ajax/entryProcessed")?>", true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send("processedID=" + clickedItem + "&clickedItemChecked=" + clickedItemChecked + "&verify=markPaid");
+  console.log("processedID=" + clickedItem + "&clickedItemChecked=" + clickedItemChecked + "&verify=markPaid");
+  console.log("Sent");
+}
+</script>
 <?php include BASE_PATH . "views/footer.php";
 
 ?>
