@@ -60,8 +60,7 @@ include BASE_PATH . "views/postsMenu.php";
 
 					<div class="form-group mb-0">
 						<label for="content">Content</label>
-						<textarea class="form-control" id="content" name="content"
-						rows="10"><?=htmlspecialchars($row['Content'])?></textarea>
+						<textarea class="form-control" id="content" name="content" onkeyup="autoGrow(this)"><?=htmlspecialchars($row['Content'])?></textarea>
 						<small id="contentHelp" class="form-text text-muted">
 			        Styling may be stripped from this content
 			      </small>

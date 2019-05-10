@@ -22,7 +22,7 @@ include BASE_PATH . "views/postsMenu.php";
 
 					<div class="form-group mb-0">
 						<label for="content">Content</label>
-						<textarea class="form-control" id="content" name="content" rows="10">
+						<textarea class="form-control" id="content" name="content" onkeyup="autoGrow(this)">
 			      </textarea>
 						<small id="contentHelp" class="form-text text-muted">
 			        Use Markdown
