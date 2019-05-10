@@ -62,7 +62,7 @@ include BASE_PATH . "views/postsMenu.php";
 						<label for="content">Content</label>
 						<textarea class="form-control" id="content" name="content" onkeyup="autoGrow(this)"><?=htmlspecialchars($row['Content'])?></textarea>
 						<small id="contentHelp" class="form-text text-muted">
-			        Styling may be stripped from this content
+							Posts are written in <a href="https://www.markdownguide.org" target="_blank">Markdown</a>. HTML is not allowed for security reasons.
 			      </small>
 					</div>
 
