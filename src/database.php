@@ -1712,7 +1712,12 @@ function getPostContent($id) {
   if (!$row) {
     return false;
   }
-  return $row['Content'];
+
+  $markdown = new ParsedownExtra();
+  // Safe mode is disabled during the transition to markdown
+  // $markdown->setSafeMode(true);
+
+  return $markdown->text($row['Content']);
 }
 
 function isSubscribed($user, $email_type) {
