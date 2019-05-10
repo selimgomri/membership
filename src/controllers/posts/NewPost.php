@@ -25,7 +25,7 @@ include BASE_PATH . "views/postsMenu.php";
 						<textarea class="form-control" id="content" name="content" rows="10">
 			      </textarea>
 						<small id="contentHelp" class="form-text text-muted">
-			        Styling may be stripped from this content
+			        Use Markdown
 			      </small>
 					</div>
 
@@ -92,23 +92,5 @@ include BASE_PATH . "views/postsMenu.php";
 	</form>
 </div>
 
-<script>
- tinymce.init({
-    selector: '#content',
-    branding: false,
-    plugins: [
-      'autolink lists link image charmap print preview anchor textcolor',
-      'searchreplace visualblocks code autoresize insertdatetime media table',
-      'contextmenu paste code help wordcount'
-    ],
-    toolbar: 'insert | undo redo |  formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-    content_css: [
-      'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i',
-      '<?php echo autoUrl("css/tinymce.css"); ?>'
-    ],
-    relative_urls : false,
-    remove_script_host : false
-      //toolbar: "link",
- });
-</script>
+<script src="<?=autoUrl("public/js/posts/PostEditor.js")?>"></script>
 <?php include BASE_PATH . "views/footer.php";
