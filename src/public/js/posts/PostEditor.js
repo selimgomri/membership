@@ -1,4 +1,12 @@
-document.querySelector("#content").oninput = function() {
-	var scrollHeight = document.querySelector("#content").scrollHeight
-  document.querySelector("#content").style.height = (scrollHeight + 20) + "px";
-};
+/**
+ * Function to automatically resize the textarea
+ * @param  string box id of the box to select
+ * @return void
+ */
+function resizeBox(box) {
+	var scrollHeight = document.querySelector(box).scrollHeight
+  document.querySelector(box).style.height = (scrollHeight) + "px";
+}
+
+document.querySelector("#content") = resizeBox("#content");
+document.querySelector("#content").oninput = resizeBox("#content");
