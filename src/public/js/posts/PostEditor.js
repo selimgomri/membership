@@ -8,5 +8,5 @@ function resizeBox(box) {
   document.querySelector(box).style.height = (scrollHeight) + "px";
 }
 
-document.querySelector("#content").onload = resizeBox("#content");
+resizeBox("#content");
 document.querySelector("#content").oninput = resizeBox("#content");
