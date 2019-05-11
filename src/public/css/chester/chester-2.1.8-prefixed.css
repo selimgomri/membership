@@ -7464,6 +7464,14 @@ thead {
   position: relative;
   top: -1rem; }
 
+.auto-grow {
+  resize: none;
+  width: 100%;
+  min-height: 100px;
+  padding: 1rem;
+  overflow: hidden;
+  box-sizing: border-box; }
+
 /* Bootstrap 4 and Navwalker Dropdown Fixes */
 .navbar-nav .active > .dropdown-item {
   font-weight: bold; }
@@ -8271,4 +8279,4 @@ Red BG Search Form
 .bg-primary::placeholder {
   color: rgba(255, 255, 255, 0.75); }
 
-/*# sourceMappingURL=chester-2.1.7-prefixed.css.map */
+/*# sourceMappingURL=chester-2.1.8-prefixed.css.map */

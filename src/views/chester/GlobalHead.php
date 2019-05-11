@@ -72,7 +72,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <script src="<?=autoUrl("public/js/tinymce/tinymce.min.js")?>"></script>
     <link rel="stylesheet preload"
     href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono|Merriweather:400,600">
-    <link rel="stylesheet preload" href="<?=autoUrl("public/css/chester/chester-2.1.7-prefixed.css")?>">
+    <link rel="stylesheet preload" href="<?=autoUrl("public/css/chester/chester-2.1.8-prefixed.css")?>">
     <link rel="stylesheet"
     href="<?=autoUrl("public/css/font-awesome/css/font-awesome.min.css")?>">
     <link rel="icon" sizes="196x196" href="<?=autoUrl("public/img/touchicons/touch-icon-196x196.png")?>">

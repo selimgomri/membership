@@ -1,8 +1,8 @@
-#content {
+.auto-grow {
 	resize: none;
 	width: 100%;
 	min-height: 100px;
-	padding: 5px;
+	padding: 1rem;
 	overflow: hidden;
 	box-sizing: border-box;
 }
