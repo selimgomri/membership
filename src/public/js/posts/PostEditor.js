@@ -1,12 +1,5 @@
-/**
- * Function to automatically resize the textarea
- * @param  string box id of the box to select
- * @return void
- */
-function resizeBox(box) {
-	var scrollHeight = document.querySelector(box).scrollHeight
-  document.querySelector(box).style.height = (scrollHeight) + "px";
+function autoGrow(element) {
+  element.style.height = (element.scrollHeight)+"px";
 }
 
-resizeBox("#content");
-document.querySelector("#content").oninput = resizeBox("#content");
+autoGrow(document.getElementById('content'));
