@@ -83,7 +83,7 @@ include BASE_PATH . "views/header.php";
 
 		<div class="form-group">
 	    <label for="medConDisDetails">If yes give details</label>
-	    <textarea onkeyup="autoGrow(this)" class="form-control" id="medConDisDetails" name="medConDisDetails"
+	    <textarea oninput="autoGrow(this)" class="form-control auto-grow" id="medConDisDetails" name="medConDisDetails"
 	    rows="8" <?php if($yes==""){?>disabled<?php } ?>><?=htmlspecialchars($row['Conditions'])?></textarea>
 	  </div>
 
@@ -114,7 +114,7 @@ include BASE_PATH . "views/header.php";
 
 		<div class="form-group">
 	    <label for="allergiesDetails">If yes give details</label>
-	    <textarea onkeyup="autoGrow(this)" class="form-control" id="allergiesDetails" name="allergiesDetails"
+	    <textarea oninput="autoGrow(this)" class="form-control auto-grow" id="allergiesDetails" name="allergiesDetails"
 	    rows="8" <?php if($yes==""){?>disabled<?php } ?>><?=htmlspecialchars($row['Allergies'])?></textarea>
 	  </div>
 
@@ -143,7 +143,7 @@ include BASE_PATH . "views/header.php";
 
 		<div class="form-group">
 	    <label for="medConDisDetails">If yes give details</label>
-	    <textarea onkeyup="autoGrow(this)" class="form-control" id="medicineDetails" name="medicineDetails"
+	    <textarea oninput="autoGrow(this)" class="form-control auto-grow" id="medicineDetails" name="medicineDetails"
 	    rows="8" <?php if($yes==""){?>disabled<?php } ?>><?=htmlspecialchars($row['Medication'])?></textarea>
 	  </div>
 

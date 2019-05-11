@@ -55,8 +55,8 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 			<div class="form-group">
 		    <label for="medConDisDetails">If yes give details</label>
-		    <textarea class="form-control" id="medConDisDetails" name="medConDisDetails"
-		    rows="3" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Conditions']; ?></textarea>
+		    <textarea class="form-control auto-grow" id="medConDisDetails" name="medConDisDetails"
+		    rows="3" oninput="autoGrow(this)" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Conditions']; ?></textarea>
 		  </div>
 
 			<!-- -->
@@ -86,8 +86,8 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 			<div class="form-group">
 		    <label for="allergiesDetails">If yes give details</label>
-		    <textarea class="form-control" id="allergiesDetails" name="allergiesDetails"
-		    rows="3" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Allergies']; ?></textarea>
+		    <textarea class="form-control auto-grow" id="allergiesDetails" name="allergiesDetails"
+		    rows="3" oninput="autoGrow(this)" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Allergies']; ?></textarea>
 		  </div>
 
 			<!-- -->
@@ -115,8 +115,8 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 			<div class="form-group">
 		    <label for="medConDisDetails">If yes give details</label>
-		    <textarea class="form-control" id="medicineDetails" name="medicineDetails"
-		    rows="3" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Medication']; ?></textarea>
+		    <textarea class="form-control auto-grow" id="medicineDetails" name="medicineDetails"
+		    rows="3" oninput="autoGrow(this)" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Medication']; ?></textarea>
 		  </div>
 
 			<div>
@@ -126,27 +126,6 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	</div>
 </div>
 
-<script>
-function toggleState(id, radio, state ) {
-	var element = document.getElementById(id);
-  var radios = document.getElementsByName(radio);
-
-  for (var i = 0; i < radios.length; i++) {
-    if (radios[i].checked) {
-      if (radios[i].value == 1) {
-        element.disabled = false;
-      } else {
-        element.disabled = true;
-      }
-
-    	if (element.disabled) {
-    		element.value = "";
-    	}
-
-      break;
-    }
-  }
-}
-</script>
+<script src="<?=autoUrl("public/js/medical-forms/MedicalForm.js")?>"></script>
 
 <?php include BASE_PATH . "views/footer.php";

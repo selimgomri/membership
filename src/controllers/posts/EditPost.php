@@ -38,7 +38,7 @@ $pagetitle = "Editing " . $row['Title'];
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/postsMenu.php";
 
- ?>
+?>
 
 <div class="container">
 	<form method="post">
@@ -60,7 +60,7 @@ include BASE_PATH . "views/postsMenu.php";
 
 					<div class="form-group mb-0">
 						<label for="content">Content</label>
-						<textarea class="form-control" id="content" name="content" onkeyup="autoGrow(this)"><?=htmlspecialchars($row['Content'])?></textarea>
+						<textarea class="form-control auto-grow" id="content" name="content" oninput="autoGrow(this)"><?=htmlspecialchars($row['Content'])?></textarea>
 						<small id="contentHelp" class="form-text text-muted">
 							Posts are written in <a href="https://www.markdownguide.org" target="_blank">Markdown</a>. HTML is not allowed for security reasons.
 			      </small>

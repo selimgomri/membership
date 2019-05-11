@@ -1,6 +1,5 @@
 function autoGrow(element) {
-  element.style.height = "10000px";
-  element.style.height = (element.scrollHeight+20)+"px";
+  element.style.height = (element.scrollHeight)+"px";
 }
 
 autoGrow(document.getElementById('content'));
