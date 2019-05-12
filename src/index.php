@@ -112,6 +112,10 @@ function halt(int $statusCode) {
     // Unavailable due to GDPR
     include "views/901.php";
   }
+  else if ($statusCode == 902) {
+    // Unavailable due to no GC API Key
+    include "views/902.php";
+  }
   else {
     include "views/500.php";
   }
