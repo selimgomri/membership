@@ -23,16 +23,16 @@
 <form class="cell" method="post" action="password">
   <div class="form-group">
       <label for="current">Confirm Current Password</label>
-      <input type="password" class="form-control" name="current" id="current" placeholder="Current Password">
+      <input type="password" class="form-control" name="current" id="current" placeholder="Current Password" autocomplete="current-password">
    </div>
    <hr>
    <div class="form-group">
       <label for="new1">New Password</label>
-      <input type="password" class="form-control" name="new1" id="new1" placeholder="New Password">
+      <input type="password" class="form-control" name="new1" id="new1" placeholder="New Password" autocomplete="new-password">
   </div>
    <div class="form-group">
       <label for="new2">Confirm New Password</label>
-      <input type="password" class="form-control" name="new2" id="new2" placeholder="Confirm New Password">
+      <input type="password" class="form-control" name="new2" id="new2" placeholder="Confirm New Password" autocomplete="new-password">
   </div>
   <p><input type="submit" name="submit" id="submit" class="btn btn-success" value="Save Changes"></p>
 </form>
