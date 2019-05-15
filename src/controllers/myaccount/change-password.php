@@ -12,6 +12,14 @@
       ?>
     </div>
     <div class="col-md-9">
+<?php
+
+if (isset($_SESSION['PasswordUpdate']) && $_SESSION['PasswordUpdate']) { ?>
+  <div class="alert alert-success">
+    <strong>You've successfully changed your password</strong>
+  </div>
+<?php unset($_SESSION['PasswordUpdate']); } ?>
+
 <h1>Change your password</h1>
 <p class="lead">
   You should change your password regularly to keep you account safe and secure.
@@ -41,7 +49,6 @@
   </div>
   <p><input type="submit" name="submit" id="submit" class="btn btn-success" value="Save Changes"></p>
 </form>
-<p class="mb-0">Changes will take place instantly, if everything is correct. You can change your password as often as you like.</p>
 </div>
 </div>
 </div>
