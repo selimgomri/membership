@@ -78,10 +78,9 @@ global $db;
       class=\"alert-link\">Add another</a> or <a href=\"" . autoUrl("myaccount") . "\"
       class=\"alert-link\">return to My Account</a></p>
       </div>";
-      header("Location: " . autoUrl("myaccount/addswimmer"));
 
       // Return to My Account
-      header("Location: " . autoUrl("myaccount"));
+      header("Location: " . autoUrl("myaccount/addswimmer"));
 
     }
     else {
