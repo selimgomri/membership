@@ -71,7 +71,7 @@ global $db;
       $row['EmailAddress']);
 
       $_SESSION['AddSwimmerSuccessState'] = "
-      <div class=\"alert alert-succcess\">
+      <div class=\"alert alert-success\">
       <p class=\"mb-0\"><strong>We were able to successfully add your swimmer</strong></p>
       <p>We've sent an email confirming this to you.</p>
       <p class=\"mb-0\"><a href=\"" . autoUrl("myaccount/addswimmer") . "\"
