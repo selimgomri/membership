@@ -4,7 +4,7 @@
 ini_set('mail.add_x_header', 'Off');
 ini_set('expose_php', 'Off');
 
-if ($_SESSION['AccessLevel'] = "Admin") {
+if ($_SESSION['AccessLevel'] == "Admin") {
   //Show errors
   //===================================
   ini_set('display_errors', 1);
@@ -17,8 +17,8 @@ $time_start = microtime(true);
 
 $executionStartTime = microtime();
 
-define('DS', DIRECTORY_SEPARATOR, true);
-define('BASE_PATH', __DIR__ . DS, TRUE);
+define('DS', DIRECTORY_SEPARATOR);
+define('BASE_PATH', __DIR__ . DS);
 
 $_SERVER['SERVER_PORT'] = 443;
 
@@ -61,9 +61,9 @@ if ($custom_domain_mode) {
 
 $config_file = $config;
 if (strlen($cookie_prefix) > 0) {
-  define('COOKIE_PREFIX', $cookie_prefix, true);
+  define('COOKIE_PREFIX', $cookie_prefix);
 } else {
-  define('COOKIE_PREFIX', 'CLS-Membership-', true);
+  define('COOKIE_PREFIX', 'CLS-Membership-');
 }
 
 require $config_file;
@@ -122,7 +122,7 @@ function halt(int $statusCode) {
   exit();
 }
 //$link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-//define("LINK", mysqli_connect($dbhost, $dbuser, $dbpass, $dbname), true);
+//define("LINK", mysqli_connect($dbhost, $dbuser, $dbpass, $dbname));
 //$link = LINK;
 
 $link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
