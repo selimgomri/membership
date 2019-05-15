@@ -4,7 +4,7 @@
 ini_set('mail.add_x_header', 'Off');
 ini_set('expose_php', 'Off');
 
-if ($_SESSION['AccessLevel'] = "Admin") {
+if ($_SESSION['AccessLevel'] == "Admin") {
   //Show errors
   //===================================
   ini_set('display_errors', 1);
