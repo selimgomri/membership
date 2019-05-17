@@ -27,25 +27,29 @@ if ($scheduleExists == null) {
 
   $_SESSION['Token'] = hash('sha256', $_SESSION['UserID'] . "-" . rand(1000,9999));
 
-  $redirectFlow = $client->redirectFlows()->create([
-    "params" => [
-      // This will be shown on the payment pages
-      "description" => "Club fee payments",
-      // Not the access token
-      "session_token" => $_SESSION['Token'],
-      "success_redirect_url" => autoUrl($url_path . "/setup/3"),
-      // Optionally, prefill customer details on the payment page
-      "prefilled_customer" => [
-        "given_name" => $row['Forename'],
-        "family_name" => $row['Surname'],
-        "email" => $row['EmailAddress']
+  try {
+    $redirectFlow = $client->redirectFlows()->create([
+      "params" => [
+        // This will be shown on the payment pages
+        "description" => "Club fee payments",
+        // Not the access token
+        "session_token" => $_SESSION['Token'],
+        "success_redirect_url" => autoUrl($url_path . "/setup/3"),
+        // Optionally, prefill customer details on the payment page
+        "prefilled_customer" => [
+          "given_name" => $row['Forename'],
+          "family_name" => $row['Surname'],
+          "email" => $row['EmailAddress']
+        ]
       ]
-    ]
-  ]);
+    ]);
 
-  // Hold on to this ID - you'll need it when you
-  // "confirm" the redirect flow later
-  $_SESSION['GC_REDIRECTFLOW_ID'] = $redirectFlow->id;
+    // Hold on to this ID - you'll need it when you
+    // "confirm" the redirect flow later
+    $_SESSION['GC_REDIRECTFLOW_ID'] = $redirectFlow->id;
 
-  header("Location: " . $redirectFlow->redirect_url);
+    header("Location: " . $redirectFlow->redirect_url);
+  } catch (Exception $e) {
+    halt(902);
+  }
 }

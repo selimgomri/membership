@@ -95,7 +95,7 @@
 </footer>
 
 <!-- Modals and Other Hidden HTML -->
-<script rel="preload" src="<?=autoUrl("public/js/jquery-3.2.1.slim.min.js")?>"></script>
+<script rel="preload" src="<?=autoUrl("public/js/jquery-3.4.1.slim.min.js")?>"></script>
 <script defer src="<?=autoUrl("public/js/popper.min.js")?>"></script>
 <script defer src="<?=autoUrl("public/js/bootstrap.min.js")?>"></script>
 <script async src="<?=autoUrl("public/js/Cookies.js")?>"></script>

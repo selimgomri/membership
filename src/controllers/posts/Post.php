@@ -1,7 +1,12 @@
-<?
+<?php
 
 global $db;
 $query = null;
+
+$markdown = new ParsedownExtra();
+
+// Safe mode is disabled during the transition to markdown
+// $markdown->setSafeMode(true);
 
 if ($_SESSION['AccessLevel'] == 'Parent') {
   $sql = "SELECT COUNT(*) FROM `members` WHERE `UserID` = ?";
@@ -70,8 +75,8 @@ include BASE_PATH . "views/postsMenu.php";?>
 
 	<div class="row">
 		<div class="col-md-8">
-			<div id="post-content">
-				<?= $row['Content'] ?>
+			<div id="post-content" class="blog-main">
+				<?= $markdown->text($row['Content']) ?>
 			</div>
 		</div>
 	</div>

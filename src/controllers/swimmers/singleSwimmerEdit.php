@@ -50,7 +50,7 @@ if ($deleteKey == $dbAccessKey) {
 }
 
 if (!empty($_POST['forename'])) {
-	$newForename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
+	$newForename = mysqli_real_escape_string($link, trim((ucwords($_POST['forename']))));
 	if ($newForename != $forename) {
 		$sql = "UPDATE `members` SET `MForename` = '$newForename' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
@@ -59,7 +59,7 @@ if (!empty($_POST['forename'])) {
 	}
 }
 if (!empty($_POST['middlenames'])) {
-	$newMiddlenames = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['middlenames']))));
+	$newMiddlenames = mysqli_real_escape_string($link, trim((ucwords($_POST['middlenames']))));
 	if ($newMiddlenames != $middlename) {
 		$sql = "UPDATE `members` SET `MMiddleNames` = '$newMiddlenames' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
@@ -68,7 +68,7 @@ if (!empty($_POST['middlenames'])) {
 	}
 }
 if (!empty($_POST['surname'])) {
-	$newSurname = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['surname']))));
+	$newSurname = mysqli_real_escape_string($link, trim((ucwords($_POST['surname']))));
 	if ($newSurname != $surname) {
 		$sql = "UPDATE `members` SET `MSurname` = '$newSurname' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
@@ -77,7 +77,7 @@ if (!empty($_POST['surname'])) {
 	}
 }
 if (!empty($_POST['asa'])) {
-	$newASANumber = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['asa']))));
+	$newASANumber = mysqli_real_escape_string($link, trim((ucwords($_POST['asa']))));
 	if ($newASANumber != $asaNumber) {
 		$sql = "UPDATE `members` SET `ASANumber` = '$newASANumber' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
@@ -86,7 +86,7 @@ if (!empty($_POST['asa'])) {
 	}
 }
 if (!empty($_POST['userid'])) {
-	$newUserID = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['userid']))));
+	$newUserID = mysqli_real_escape_string($link, trim((ucwords($_POST['userid']))));
 	if ($newUserID != $dbUserID) {
 		$sql = "UPDATE `members` SET `UserID` = '$newUserID' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
@@ -95,7 +95,7 @@ if (!empty($_POST['userid'])) {
 	}
 }
 if (!empty($_POST['squad'])) {
-	$newSquadID = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['squad']))));
+	$newSquadID = mysqli_real_escape_string($link, trim((ucwords($_POST['squad']))));
 	if ($newSquadID != $squad) {
 		$sql = "UPDATE `members` SET `SquadID` = '$newSquadID' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
@@ -104,7 +104,7 @@ if (!empty($_POST['squad'])) {
 	}
 }
 if (!empty($_POST['datebirth'])) {
-	$newDateOfBirth = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['datebirth']))));
+	$newDateOfBirth = mysqli_real_escape_string($link, trim((ucwords($_POST['datebirth']))));
 	// NEEDS WORK FOR DATE TO BE RIGHT
 	if ($newDateOfBirth != $dateOfBirth) {
 		$sql = "UPDATE `members` SET `DateOfBirth` = '$newDateOfBirth' WHERE `MemberID` = '$id'";
@@ -114,7 +114,7 @@ if (!empty($_POST['datebirth'])) {
 	}
 }
 if (!empty($_POST['sex'])) {
-	$newSex = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['sex']))));
+	$newSex = mysqli_real_escape_string($link, trim((ucwords($_POST['sex']))));
 	if ($newSex != $sex) {
 		$sql = "UPDATE `members` SET `Gender` = '$newSex' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
@@ -123,7 +123,7 @@ if (!empty($_POST['sex'])) {
 	}
 }
 if (isset($_POST['cat'])) {
-	$newCat = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['cat']))));
+	$newCat = mysqli_real_escape_string($link, trim((ucwords($_POST['cat']))));
 	if ($newCat != $cat && ($newCat == 1 || $newCat == 2 || $newCat == 3)) {
 		$sql = "UPDATE `members` SET `ASACategory` = '$newCat' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
@@ -141,7 +141,7 @@ if (isset($_POST['cp'])) {
 	}
 }
 if (isset($_POST['otherNotes'])) {
-	$newOtherNotes = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['otherNotes'])));
+	$newOtherNotes = mysqli_real_escape_string($link, trim(($_POST['otherNotes'])));
 	if ($newOtherNotes != $otherNotes) {
 		$sql = "UPDATE `members` SET `OtherNotes` = '$newOtherNotes' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
@@ -150,7 +150,7 @@ if (isset($_POST['otherNotes'])) {
 	}
 }
 if (isset($_POST['swimmerStatus']) && $_SESSION['AccessLevel'] == "Admin") {
-	$newSwimmerStatus = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['swimmerStatus'])));
+	$newSwimmerStatus = mysqli_real_escape_string($link, trim(($_POST['swimmerStatus'])));
 	if ($newSwimmerStatus != $swimmerStatus) {
 		$sql = "UPDATE `members` SET `Status` = '$newSwimmerStatus' WHERE `MemberID` = '$id'";
 		mysqli_query($link, $sql);
@@ -315,7 +315,7 @@ $content .= "
 	<div class=\"alert alert-danger\">
 		<div class=\"form-group mb-0\">
 			<label for=\"swimmerDeleteDanger\"><strong>Danger Zone</strong> <br>Delete this Swimmer with this Key \"<span class=\"mono\">" . $rowSwim['AccessKey'] . "</span>\"</label>
-			<input type=\"text\" class=\"form-control\" id=\"swimmerDeleteDanger\" name=\"swimmerDeleteDanger\" aria-describedby=\"swimmerDeleteDangerHelp\" placeholder=\"Enter the key\" onselectstart=\"return false\" onpaste=\"return false;\" onCopy=\"return false\" onCut=\"return false\" onDrag=\"return false\" onDrop=\"return false\" autocomplete=off>
+			<input type=\"text\" class=\"form-control mono\" id=\"swimmerDeleteDanger\" name=\"swimmerDeleteDanger\" aria-describedby=\"swimmerDeleteDangerHelp\" placeholder=\"Enter the key\" onselectstart=\"return false\" onpaste=\"return false;\" onCopy=\"return false\" onCut=\"return false\" onDrag=\"return false\" onDrop=\"return false\" autocomplete=off>
 			<small id=\"swimmerDeleteDangerHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will delete this swimmer.</small>
 		</div>
 	</div>";

@@ -1,5 +1,21 @@
 # Changelog
 
+## 6.35.0 - 2019-05-14
+* [#651](https://github.com/stripe/stripe-php/pull/651) Add support for the Capability resource and APIs
+
+## 6.34.6 - 2019-05-13
+* [#654](https://github.com/stripe/stripe-php/pull/654) Fix typo in definition of `Event::PAYMENT_METHOD_ATTACHED` constant
+
+## 6.34.5 - 2019-05-06
+* [#647](https://github.com/stripe/stripe-php/pull/647) Set the return type to static for more operations
+
+## 6.34.4 - 2019-05-06
+* [#650](https://github.com/stripe/stripe-php/pull/650) Add missing constants for Event types
+
+## 6.34.3 - 2019-05-01
+* [#644](https://github.com/stripe/stripe-php/pull/644) Update return type to `static` to improve static analysis
+* [#645](https://github.com/stripe/stripe-php/pull/645) Fix constant for `payment_intent.payment_failed`
+
 ## 6.34.2 - 2019-04-26
 * [#642](https://github.com/stripe/stripe-php/pull/642) Fix an issue where existing idempotency keys would be overwritten when using automatic retries
 

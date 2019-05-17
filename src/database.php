@@ -50,22 +50,35 @@ function verifyUser($user, $password) {
 
 function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = null, $from = ["Email" => "noreply@" . EMAIL_DOMAIN, "Name" => CLUB_NAME]) {
 
+  $fontUrl = "https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700";
+  $fontStack = '"Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
+  $image = "<h1>" . CLUB_NAME . "</h1>";
+  if (defined("IS_CLS") && IS_CLS) {
+    $fontUrl = "https://fonts.googleapis.com/css?family=Open+Sans:400,700";
+    $fontStack = '"Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
+    $image = "<img src=\"" . autoUrl("public/img/notify/NotifyLogo.png") . "\"
+    style=\"width:300px;max-width:100%;\" srcset=\"" .
+    autoUrl("public/img/notify/NotifyLogo@2x.png") . " 2x, " .
+    autoUrl("public/img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"" . CLUB_NAME . " Logo\">";
+  }
+
   $head = "
   <!DOCTYPE html>
   <html lang=\"en-gb\">
   <head>
     <meta charset=\"utf-8\">
-    <link href=\"https://fonts.googleapis.com/css?family=Open+Sans:400,700\" rel=\"stylesheet\" type=\"text/css\">
+    <link href=\"" . $fontUrl . "\" rel=\"stylesheet\" type=\"text/css\">
     <style type=\"text/css\">
 
       html, body {
-        font-family: \"Open Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial,sans-serif;
+        font-family: " . $fontStack . ";
         font-size: 16px;
         background: #e3eef6;
       }
 
       p, h1, h2, h3, h4, h5, h6, ul, ol, img, .table, blockquote {
         margin: 0 0 16px 0;
+        font-family: " . $fontStack . ";
       }
 
       .small {
@@ -106,11 +119,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
   $message = "<body>
   <div style=\"background:#e3eef6;\">
     <table style=\"width:100%;border:0px;text-align:left;padding:10px 0px 10px 0px;background:#e3eef6;\"><tr><td align=\"center\">
-      <table style=\"width:100%;max-width:700px;border:0px;text-align:center;background:#ffffff;padding:10px 10px 0px 10px;\"><tr><td>
-      <img src=\"" . autoUrl("img/notify/NotifyLogo.png") . "\"
-      style=\"width:300px;max-width:100%;\" srcset=\"" .
-      autoUrl("img/notify/NotifyLogo@2x.png") . " 2x, " .
-      autoUrl("img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"" . CLUB_NAME . " Logo\"></td></tr></table>
+      <table style=\"width:100%;max-width:700px;border:0px;text-align:center;background:#ffffff;padding:10px 10px 0px 10px;\"><tr><td>" . $image . "</td></tr></table>
       <table style=\"width:100%;max-width:700px;border:0px;text-align:left;background:#ffffff;padding:0px 10px;\"><tr><td>
       " . $htmlMessage . "
       </td></tr></table>
@@ -994,17 +1003,22 @@ function monthlyFeeCost($link, $userID, $format = "decimal") {
   $i = 0;
   while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $squadCost = $row['SquadFee'];
-    if ($i < 2) {
+    if (defined("IS_CLS") && IS_CLS) {
+      if ($i < 2) {
+        $totalCost += $squadCost;
+        $reducedCost += $squadCost;
+      }
+      else if ($i == 2) {
+        $totalCost += $squadCost*0.8;
+        $reducedCost += $squadCost*0.8;
+      }
+      else {
+        $totalCost += $squadCost*0.6;
+        $reducedCost += $squadCost*0.6;
+      }
+    } else {
       $totalCost += $squadCost;
       $reducedCost += $squadCost;
-    }
-    else if ($i == 2) {
-      $totalCost += $squadCost*0.8;
-      $reducedCost += $squadCost*0.8;
-    }
-    else {
-      $totalCost += $squadCost*0.6;
-      $reducedCost += $squadCost*0.6;
     }
     $i++;
   }
@@ -1705,7 +1719,12 @@ function getPostContent($id) {
   if (!$row) {
     return false;
   }
-  return $row['Content'];
+
+  $markdown = new ParsedownExtra();
+  // Safe mode is disabled during the transition to markdown
+  // $markdown->setSafeMode(true);
+
+  return $markdown->text($row['Content']);
 }
 
 function isSubscribed($user, $email_type) {

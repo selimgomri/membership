@@ -3,6 +3,7 @@ $id = mysqli_real_escape_string($link, $id);
 $access = $_SESSION['AccessLevel'];
 
 $markdown = new ParsedownExtra();
+$markdown->setSafeMode(true);
 
 $use_white_background = true;
 
@@ -112,13 +113,17 @@ $content .= '<!--
       <a href="' . autoUrl("swimmers/" . $id . "/parenthelp") . '">Access Key for ' .
       $rowSwim["MForename"] . '</a>
     </p>
-  </div>
+  </div>';
+  if (defined("IS_CLS") && IS_CLS) {
+  $content .= '
   <div class="media pt-2 d-print-none">
     <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
       <strong class="d-block text-gray-dark">Swimmer Membership Card</strong>
       <a href="' . autoUrl("swimmers/" . $id . "/membershipcard") . '" target="_blank">Print Card</a>
     </p>
-  </div>
+  </div>';
+  }
+  $content .= '
   <div class="media pt-2">
     <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
       <strong class="d-block text-gray-dark">Attendance</strong>

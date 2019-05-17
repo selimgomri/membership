@@ -41,14 +41,14 @@ include BASE_PATH . "views/header.php";
       <form method="post" action="<?=autoUrl("")?>" name="loginform" id="loginform" class="needs-validation" novalidate>
         <div class="form-group">
           <label for="email-address">Email Address</label>
-          <input type="email" name="email-address" id="email-address" class="form-control form-control-lg" <?php if ($errorState) { ?> value="<?=htmlspecialchars($username)?>"<?php } ?> required autofocus placeholder="yourname@example.com">
+          <input type="email" name="email-address" id="email-address" class="form-control form-control-lg" <?php if ($errorState) { ?> value="<?=htmlspecialchars($username)?>"<?php } ?> required autofocus placeholder="yourname@example.com" autocomplete="email">
           <div class="invalid-feedback">
             Please enter a valid email address.
           </div>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" name="password" id="password" class="form-control form-control-lg" required placeholder="Password">
+          <input type="password" name="password" id="password" class="form-control form-control-lg" required placeholder="Password" autocomplete="current-password">
           <div class="invalid-feedback">
             Please enter a password.
           </div>

@@ -12,6 +12,14 @@
       ?>
     </div>
     <div class="col-md-9">
+<?php
+
+if (isset($_SESSION['PasswordUpdate']) && $_SESSION['PasswordUpdate']) { ?>
+  <div class="alert alert-success">
+    <strong>You've successfully changed your password</strong>
+  </div>
+<?php unset($_SESSION['PasswordUpdate']); } ?>
+
 <h1>Change your password</h1>
 <p class="lead">
   You should change your password regularly to keep you account safe and secure.
@@ -20,23 +28,27 @@
   echo $_SESSION['ErrorState'];
   unset($_SESSION['ErrorState']);
 } ?>
-<form class="cell" method="post" action="password">
+<form class="cell" method="post" action="<?=autoUrl("myaccount/password")?>">
   <div class="form-group">
-      <label for="current">Confirm Current Password</label>
-      <input type="password" class="form-control" name="current" id="current" placeholder="Current Password">
-   </div>
-   <hr>
-   <div class="form-group">
-      <label for="new1">New Password</label>
-      <input type="password" class="form-control" name="new1" id="new1" placeholder="New Password">
+    <label for="current">Confirm Current Password</label>
+    <input type="password" class="form-control" name="current" id="current" placeholder="Current Password" autocomplete="current-password">
   </div>
-   <div class="form-group">
-      <label for="new2">Confirm New Password</label>
-      <input type="password" class="form-control" name="new2" id="new2" placeholder="Confirm New Password">
+  <div class="form-row">
+    <div class="col-sm">
+      <div class="form-group">
+        <label for="new1">New Password</label>
+        <input type="password" class="form-control" name="new1" id="new1" placeholder="New Password" autocomplete="new-password">
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="form-group">
+        <label for="new2">Confirm New Password</label>
+        <input type="password" class="form-control" name="new2" id="new2" placeholder="Confirm New Password" autocomplete="new-password">
+      </div>
+    </div>
   </div>
   <p><input type="submit" name="submit" id="submit" class="btn btn-success" value="Save Changes"></p>
 </form>
-<p class="mb-0">Changes will take place instantly, if everything is correct. You can change your password as often as you like.</p>
 </div>
 </div>
 </div>

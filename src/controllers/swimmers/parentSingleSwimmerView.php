@@ -22,6 +22,7 @@ if ($rowSwim == null) {
 }
 
 $markdown = new ParsedownExtra();
+$markdown->setSafeMode(true);
 
 $forename = $rowSwim['MForename'];
 $middlename = $rowSwim['MMiddleNames'];
@@ -447,7 +448,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
       <div class="">
         <?
         $col = "col-sm-6";
-        if ($row['ThriveNumber'] != "") {
+        if ($rowSwim['ThriveNumber'] != "") {
           $col = "col-sm-4";
         }
         ?>
@@ -467,6 +468,9 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
           You can download your own personal data from the general account
           options menu.
         </p>
+
+        <?php if (defined("IS_CLS") && IS_CLS) { ?>
+
         <h2 class="">Membership Card</h2>
         <p>
           Your swimmer's club membership card can be used by our coaches in an
@@ -478,6 +482,9 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
             Print Membership Card
           </a>
         </p>
+
+        <?php } ?>
+        
         <h2 class="">Membership Barcodes</h2>
         <p>We'll let you know in advance if you'll ever need to print these out.</p>
         <div class="row">
@@ -485,10 +492,10 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
             <div class="text-center border p-2 bg-white">
               <span class="lead mb-2">ASA Number</span>
               <img class="img-fluid mx-auto d-block"
-              src="<?php echo autoUrl("services/barcode-generator?codetype=Code128a&size=60&text=" . $row['ASANumber'] . "&print=false"); ?>"
-              srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128a&size=120&text=" . $row['ASANumber'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128a&size=180&text=" . $row['ASANumber'] . "&print=false"); ?> 3x"
-              alt="<?php echo $row['ASANumber']; ?>"></img>
-              <span class="mono"><?php echo $row['ASANumber']; ?></span>
+              src="<?php echo autoUrl("services/barcode-generator?codetype=Code128a&size=60&text=" . $rowSwim['ASANumber'] . "&print=false"); ?>"
+              srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128a&size=120&text=" . $rowSwim['ASANumber'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128a&size=180&text=" . $rowSwim['ASANumber'] . "&print=false"); ?> 3x"
+              alt="<?php echo $rowSwim['ASANumber']; ?>"></img>
+              <span class="mono"><?php echo $rowSwim['ASANumber']; ?></span>
             </div>
             <span class="d-block d-sm-none mb-3"></span>
           </div>
@@ -496,22 +503,22 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
             <div class="text-center border p-2 bg-white">
               <span class="lead mb-2">CLSASC Number</span>
               <img class="img-fluid mx-auto d-block"
-              src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=CLSX" . $row['MemberID'] . "&print=false"); ?>"
-              srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=CLSX" . $row['MemberID'] . "&print=false"); ?> 3x"
-              alt="CLSX<?php echo $row['MemberID']; ?>"></img>
-              <span class="mono">CLSX<?php echo $row['MemberID']; ?></span>
+              src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=CLSX" . $rowSwim['MemberID'] . "&print=false"); ?>"
+              srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=CLSX" . $rowSwim['MemberID'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=CLSX" . $rowSwim['MemberID'] . "&print=false"); ?> 3x"
+              alt="CLSX<?php echo $rowSwim['MemberID']; ?>"></img>
+              <span class="mono">CLSX<?php echo $rowSwim['MemberID']; ?></span>
             </div>
-            <?php if ($row['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><?php } ?>
+            <?php if ($rowSwim['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><?php } ?>
           </div>
-          <?php if ($row['ThriveNumber'] != "") { ?>
+          <?php if ($rowSwim['ThriveNumber'] != "") { ?>
           <div class="<?php echo $col; ?>">
             <div class="text-center border p-2 bg-white">
               <span class="lead mb-2">Thrive Card</span>
               <img class="img-fluid mx-auto d-block"
-              src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ThriveNumber'] . "&print=false"); ?>"
-              srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ThriveNumber'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ThriveNumber'] . "&print=false"); ?> 3x"
-              alt="<?php echo $row['ThriveNumber']; ?>"></img>
-              <span class="mono"><?php echo $row['ThriveNumber']; ?></span>
+              src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $rowSwim['ThriveNumber'] . "&print=false"); ?>"
+              srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $rowSwim['ThriveNumber'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $rowSwim['ThriveNumber'] . "&print=false"); ?> 3x"
+              alt="<?php echo $rowSwim['ThriveNumber']; ?>"></img>
+              <span class="mono"><?php echo $rowSwim['ThriveNumber']; ?></span>
             </div>
           </div>
           <?php } ?>

@@ -43,14 +43,14 @@ $_SESSION['LoginSec'] = $lsv;
                 <form method="post" action="<?=autoUrl("")?>" name="loginform" id="loginform" class="needs-validation" novalidate>
                   <div class="form-group">
                     <label for="username">Email Address</label>
-                    <input type="text" name="username" id="username" class="form-control form-control-lg" value="<?php if ($errorState == true) { echo $username; } ?>" required autofocus placeholder="yourname@example.com">
+                    <input type="text" name="username" id="username" class="form-control form-control-lg" value="<?php if ($errorState == true) { echo $username; } ?>" required autofocus placeholder="yourname@example.com" autocomplete="email">
                     <div class="invalid-feedback">
                       Please enter a valid email address.
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" name="password" id="password" class="form-control form-control-lg" required placeholder="Password">
+                    <input type="password" name="password" id="password" class="form-control form-control-lg" required placeholder="Password" autocomplete="current-password">
                     <div class="invalid-feedback">
                       Please enter a password.
                     </div>

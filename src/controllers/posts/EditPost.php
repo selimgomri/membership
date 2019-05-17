@@ -38,7 +38,7 @@ $pagetitle = "Editing " . $row['Title'];
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/postsMenu.php";
 
- ?>
+?>
 
 <div class="container">
 	<form method="post">
@@ -60,10 +60,9 @@ include BASE_PATH . "views/postsMenu.php";
 
 					<div class="form-group mb-0">
 						<label for="content">Content</label>
-						<textarea class="form-control" id="content" name="content"
-						rows="10"><?=$row['Content']?></textarea>
+						<textarea class="form-control auto-grow" id="content" name="content" oninput="autoGrow(this)"><?=htmlspecialchars($row['Content'])?></textarea>
 						<small id="contentHelp" class="form-text text-muted">
-			        Styling may be stripped from this content
+							Posts are written in <a href="https://www.markdownguide.org" target="_blank">Markdown</a>. HTML is not allowed for security reasons.
 			      </small>
 					</div>
 
@@ -151,21 +150,5 @@ include BASE_PATH . "views/postsMenu.php";
 	</form>
 </div>
 
-<script>
- tinymce.init({
-    selector: '#content',
-    branding: false,
-    plugins: [
-      'autolink lists link image charmap print preview anchor textcolor',
-      'searchreplace visualblocks code autoresize insertdatetime media table',
-      'contextmenu paste code help wordcount'
-    ],
-    toolbar: 'insert | undo redo |  formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-    content_css: [
-      'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i',
-      '<?php echo autoUrl("css/tinymce.css"); ?>'
-    ]
-      //toolbar: "link",
- });
-</script>
+<script src="<?=autoUrl("public/js/posts/PostEditor.js")?>"></script>
 <?php include BASE_PATH . "views/footer.php";

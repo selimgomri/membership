@@ -30,6 +30,8 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 					</a>
 		    </div>
 		  </div>
+
+			<!--
       <div class="card">
 		    <div class="card-body">
 		      <h2 class="card-title">Invite Member from Trial</h2>
@@ -43,11 +45,12 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
           </p>
 				</div>
 		    <div class="card-footer">
-		      <a href="<?=autoUrl(""/*"trials"*/)?>">
+		      <a href="<?=autoUrl("trials")?>">
 						Invite from trial
 					</a>
 		    </div>
 		  </div>
+			-->
 		  <!--<div class="card">
 		    <div class="card-body">
 		      <h2 class="card-title">New Family of Members</h2>
@@ -62,6 +65,11 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		    </div>
 		  </div>-->
 		</div>
+
+		<p>
+			We're actively working on new ways to join new members to the club and
+			hope to introduce them from the summer onwards.
+		</p>
 
 	</div>
 </div>

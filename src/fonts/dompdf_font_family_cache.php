@@ -81,16 +81,17 @@
     'italic' => $fontDir . '/80ddb6e5ee716a31f445cef747d5112b',
     'normal' => $fontDir . '/07ffedf4983a20afacaf57bfba0ebf45',
   ),
-  'open sans bold' => array(
-    'normal' => $fontDir . '/475a7df48e3e140d28d790e421cbd09a',
-  ),
   'lato' => array(
-    'normal' => $fontDir . '/b1b22a70e728ccc748c9195858d2d4ec',
+    'italic' => $fontDir . '/d7be3be56bc7ad42a2f6f0b0bd7e442e',
+    'normal' => $fontDir . '/64c6d31547dfb7547eb5005763398505',
+  ),
+  'open sans bold' => array(
+    'normal' => $fontDir . '/9ada525762e281fcc1636a845762e12c',
   ),
   'lato bold' => array(
-    'normal' => $fontDir . '/e13669b57172f16cc0a5325e3fd676f2',
+    'normal' => $fontDir . '/e57c78673dba402e8a73800b8c46b06a',
   ),
   'roboto mono' => array(
-    'normal' => $fontDir . '/7c83a2e4099cb38e03f8f22e507a4e2e',
+    'normal' => $fontDir . '/7e6e217b5eb641c67423b1471d005588',
   ),
 ) ?>
