@@ -72,7 +72,7 @@ ob_start();?>
     </p>
 
     <p>
-      <strong><?=$name?></strong><br>
+      <strong><?=htmlspecialchars($name)?></strong><br>
       Parent
     </p>
 
@@ -80,24 +80,38 @@ ob_start();?>
       <h1>
         Your Monthly Fees and Charges
       </h1>
-      <p class="lead mb-0" title="<?=$payment_info['Name']?>"><?=$payment_info['Name']?></p>
+      <p class="lead mb-0" title="<?=htmlspecialchars($payment_info['Name'])?>">
+        <?=htmlspecialchars($payment_info['Name'])?>
+      </p>
     </div>
 
     <h2 id="payment-info">About this payment</h2>
     <dl>
       <div class="row">
         <dt class="split-30">Payment Identifier</dt>
-        <dd class="split-70"><span class="mono"><?=$PaymentID?></span></dd>
+        <dd class="split-70">
+          <span class="mono">
+            <?=htmlspecialchars($PaymentID)?>
+          </span>
+        </dd>
       </div>
 
       <div class="row">
         <dt class="split-30">Total Fee</dt>
-        <dd class="split-70"><span class="mono">&pound;<?=number_format(($payment_info['Amount']/100),2,'.','')?></span></dd>
+        <dd class="split-70">
+          <span class="mono">
+            &pound;<?=htmlspecialchars(number_format(($payment_info['Amount']/100),2,'.',''))?>
+          </span>
+        </dd>
       </div>
 
       <div class="row">
         <dt class="split-30">Payment Status as of <?=date("d/m/Y")?></dt>
-        <dd class="split-70"><span class="mono"><?=paymentStatusString($payment_info['Status'])?></span></dd>
+        <dd class="split-70">
+          <span class="mono">
+            <?=htmlspecialchars(paymentStatusString($payment_info['Status']))?>
+          </span>
+        </dd>
       </div>
     </dl>
 
@@ -148,7 +162,7 @@ ob_start();?>
               //echo $json->Members[0]->MemberName;
               $numMems = (int) sizeof($json->Members);
               for ($y = 0; $y < $numMems; $y++) {
-                $data .= '<li>' . $json->Members[$y]->FeeName . " (&pound;" . $json->Members[$y]->Fee . ") for " . $json->Members[$y]->MemberName . '</li>';
+                $data .= '<li>' . htmlspecialchars($json->Members[$y]->FeeName) . " (&pound;" . htmlspecialchars($json->Members[$y]->Fee) . ") for " . htmlspecialchars($json->Members[$y]->MemberName) . '</li>';
               }
               $data .= '</ul>';
             }
@@ -159,18 +173,18 @@ ob_start();?>
               <?=date("D j M Y",strtotime($row['Date']))?>
             </td>
             <td>
-              <?=$row['Name']?>
+              <?=htmlspecialchars($row['Name'])?>
               <em><?=$data?></em>
             </td>
             <td>
               <?php if ($row['Type'] == "Payment") { ?>
-              &pound;<?=number_format(($row['Amount']/100),2,'.','')?>
+              &pound;<?=htmlspecialchars(number_format(($row['Amount']/100),2,'.',''))?>
               <?php } else { ?>
-              -&pound;<?=number_format(($row['Amount']/100),2,'.','')?> (Credit)
+              -&pound;<?=htmlspecialchars(number_format(($row['Amount']/100),2,'.',''))?> (Credit)
               <?php } ?>
             </td>
             <td>
-              <?=$row['Status']?>
+              <?=htmlspecialchars($row['Status'])?>
             </td>
           </tr>
           <?php
@@ -201,21 +215,21 @@ ob_start();?>
         <img src="<?=BASE_PATH?>public/img/directdebit/directdebit@3x.png" style="height:1cm;" class="mb-3" alt="Direct Debit Logo">
       </div>
     </div>
-    <p>The Direct Debit Guarantee applies to payments made to <?=CLUB_NAME?></p>
+    <p>The Direct Debit Guarantee applies to payments made to <?=htmlspecialchars(CLUB_NAME)?></p>
 
     <ul>
       <li>
         This Guarantee is offered by all banks and building societies that accept instructions to pay Direct Debits
       </li>
       <li>
-        If there are any changes to the amount, date or frequency of your Direct Debit <?=CLUB_NAME?> will notify you three working days in advance of your account being debited or as otherwise agreed. If you request <?=CLUB_NAME?> to collect a payment, confirmation of the amount and date will be given to you at the time of the request
+        If there are any changes to the amount, date or frequency of your Direct Debit <?=htmlspecialchars(CLUB_NAME)?> will notify you three working days in advance of your account being debited or as otherwise agreed. If you request <?=htmlspecialchars(CLUB_NAME)?> to collect a payment, confirmation of the amount and date will be given to you at the time of the request
       </li>
       <li>
-        If an error is made in the payment of your Direct Debit, by <?=CLUB_NAME?> or your bank or building society, you are entitled to a full and immediate refund of the amount paid from your bank or building society
+        If an error is made in the payment of your Direct Debit, by <?=htmlspecialchars(CLUB_NAME)?> or your bank or building society, you are entitled to a full and immediate refund of the amount paid from your bank or building society
       </li>
         <ul>
           <li>
-            If you receive a refund you are not entitled to, you must pay it back when <?=CLUB_NAME?> asks you to
+            If you receive a refund you are not entitled to, you must pay it back when <?=htmlspecialchars(CLUB_NAME)?> asks you to
           </li>
         </ul>
       <li>
@@ -223,9 +237,9 @@ ob_start();?>
       </li>
     </ul>
 
-    <p>Payments are handled by <a href="https://gocardless.com/">GoCardless</a> on behalf of <?=CLUB_NAME?>.</p>
+    <p>Payments are handled by <a href="https://gocardless.com/">GoCardless</a> on behalf of <?=htmlspecialchars(CLUB_NAME)?>.</p>
 
-    <p>&copy; <?=CLUB_NAME?> <?=date("Y", strtotime($payment_info['Date']))?></p>
+    <p>&copy; <?=htmlspecialchars(CLUB_NAME)?> <?=date("Y", strtotime($payment_info['Date']))?></p>
 
     <?php include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
   </body>

@@ -1,16 +1,18 @@
 <?php
 
+global $db;
+
 use Respect\Validation\Validator as v;
 
 if (!v::intVal()->between(1, 12)->validate((int) $month) || !v::stringType()->length(2, 2)->validate($month)) {
 	halt(404);
 }
 
-if (!v::intVal()->min(1970, true)->validate((int) $year) || !v::stringType()->length(4, null)->validate($year)) {
+if (!v::intVal()->min(2000, true)->validate((int) $year) || !v::stringType()->length(4, null)->validate($year)) {
 	halt(404);
 }
 
-$searchDate = mysqli_real_escape_string($link, $year . "-" . $month . "-") . "%";
+$searchDate = $year . "-" . $month . "-" . "%";
 $name_type = null;
 $title_string = null;
 
@@ -36,7 +38,7 @@ if ($type == "squads") {
 
 $pagetitle = "Status - " . $dateString;
 
-$sql = "SELECT `Forename`, `Surname`, `MForename`, `MSurname`,
+$getPayments = $db->prepare("SELECT `Forename`, `Surname`, `MForename`, `MSurname`,
 individualFeeTrack.Amount, individualFeeTrack.Description, payments.Status, payments.PaymentID, users.UserID, metadataJSON, individualFeeTrack.MemberID FROM
 (((((`individualFeeTrack` LEFT JOIN `paymentMonths` ON
 individualFeeTrack.MonthID = paymentMonths.MonthID) LEFT JOIN `paymentsPending`
@@ -44,8 +46,9 @@ ON individualFeeTrack.PaymentID = paymentsPending.PaymentID) LEFT JOIN
 `members` ON members.MemberID = individualFeeTrack.MemberID) LEFT JOIN
 `payments` ON paymentsPending.PMkey = payments.PMkey) LEFT JOIN `users` ON
 users.UserID = individualFeeTrack.UserID) WHERE `paymentMonths`.`Date` LIKE
-'$searchDate' AND `individualFeeTrack`.`Type` = '$name_type' ORDER BY `Forename`
-ASC, `Surname` ASC, `users`.`UserID` ASC, `MForename` ASC, `MSurname` ASC;";
+? AND `individualFeeTrack`.`Type` = ? ORDER BY `Forename`
+ASC, `Surname` ASC, `users`.`UserID` ASC, `MForename` ASC, `MSurname` ASC;");
+$getPayments->execute([$searchDate, $name_type]);
 
 /*
 SELECT `Forename`, `Surname`, `MForename`, `MSurname`,
@@ -61,8 +64,7 @@ ASC, `Surname` ASC, `users`.`UserID` ASC, `MForename` ASC, `MSurname` ASC
  */
 
 //pre($sql);
-$result = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+$row = $getPayments->fetch(PDO::FETCH_ASSOC);
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
@@ -72,10 +74,10 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
  ?>
 
 <div class="container-fluid">
-	<h1>Status for <?php echo $dateString; ?></h1>
-  <p class="lead"><?php echo $title_string; ?></p>
+	<h1>Status for <?=$dateString?></h1>
+  <p class="lead"><?$title_string?></p>
 	<p><a href="<?=app('request')->curl?>csv" target="_blank">View as CSV (Comma Separated Values)</a> or <a href="<?=app('request')->curl?>json" target="_blank">View as JSON (JavaScript Object Notation)</a></p>
-	<?php if (mysqli_num_rows($result) == 0) { ?>
+	<?php if ($row == null) { ?>
 		<div class="alert alert-warning mb-0">
 			<p class="mb-0">
 				<strong>
@@ -108,7 +110,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 			<tbody>
 			<?
       $link;
-			for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+			do {
         $metadata = json_decode($row['metadataJSON']);
         $swimmer_name = null;
         for ($j = 0; $j < sizeof($metadata->Members); $j++) {
@@ -138,9 +140,9 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
                   Contact Parent
                 </a>
               </strong></small>
-						<?php } else {
-							echo "No Parent";
-						}?>
+						<?php } else { ?>
+							No Parent
+						<?php } ?>
 					<td>
 						<ul class="list-unstyled mb-0">
               <?php if ($row['MForename'] == null || $row['MSurname'] == null || $row['MForename'] == "" || $row['MSurname'] == "") { ?>
@@ -152,7 +154,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 						</ul>
 					</td>
 					<td>
-						&pound;<?php echo number_format(($row['Amount']/100),2,'.',''); ?>
+						&pound;<?=htmlspecialchars(number_format(($row['Amount']/100),2,'.',''))?>
 					</td>
 					<td>
 						<?php if ($row['Forename'] != null && $row['Surname'] != null) {
@@ -162,11 +164,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 						} ?>
 					</td>
 				</tr>
-				<?
-				if ($i < mysqli_num_rows($result)-1) {
-					$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-				}
-			} ?>
+				<?php	} while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)); ?>
 			</tbody>
 		</table>
 	</div>

@@ -25,15 +25,15 @@ $date = date("Y/m");
           <?php for ($i = 0; $i < 12; $i++) {
           $targetDate = strtotime($now . " - " . $i . " months"); ?>
           <li>
-            <a href="<?php echo autoUrl("payments/history/" . date("Y/m", $targetDate)); ?>">
-              <?php echo date("F Y", $targetDate); ?>
+            <a href="<?=autoUrl("payments/history/" . date("Y/m", $targetDate)); ?>">
+              <?=htmlspecialchars(date("F Y", $targetDate))?>
             </a>
           </li>
           <?php } ?>
         </ul>
         <h4 class="border-bottom border-gray pb-2 mb-2">View by Parent</h4>
         <p class="lead mb-0">
-          <a href="<?php echo autoUrl("payments/history/users"); ?>">
+          <a href="<?=autoUrl("payments/history/users")?>">
             Search for a Parent
           </a>
         </p>
@@ -47,8 +47,8 @@ $date = date("Y/m");
           <?php for ($i = 0; $i < 12; $i++) {
           $targetDate = strtotime($now . " - " . $i . " months"); ?>
           <li>
-            <a href="<?php echo autoUrl("payments/history/squads/" . date("Y/m", $targetDate)); ?>">
-              <?php echo date("F Y", $targetDate); ?>
+            <a href="<?=autoUrl("payments/history/squads/" . date("Y/m", $targetDate))?>">
+              <?=htmlspecialchars(date("F Y", $targetDate))?>
             </a>
           </li>
           <?php } ?>
@@ -63,8 +63,8 @@ $date = date("Y/m");
           <?php for ($i = 0; $i < 12; $i++) {
           $targetDate = strtotime($now . " - " . $i . " months"); ?>
           <li>
-            <a href="<?php echo autoUrl("payments/history/extras/" . date("Y/m", $targetDate)); ?>">
-              <?php echo date("F Y", $targetDate); ?>
+            <a href="<?=autoUrl("payments/history/extras/" . date("Y/m", $targetDate))?>">
+              <?=htmlspecialchars(date("F Y", $targetDate))?>
             </a>
           </li>
           <?php } ?>
