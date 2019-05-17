@@ -1241,20 +1241,27 @@ function mandateExists($mandate) {
 
 function updatePaymentStatus($PMkey) {
   global $link;
+  global $db;
   require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   $sql2bool = null;
-  $PMkey_unescaped = $PMkey;
-  $PMkey = mysqli_real_escape_string($link, $PMkey);
   $payment = $client->payments()->get($PMkey);
-  $status = mysqli_real_escape_string($link, $payment->status);
-  $sql = "UPDATE `payments` SET `Status` = '$status' WHERE `PMkey` = '$PMkey';";
+  $status = $payment->status;
+  try {
+    $update = $db->prepare("UPDATE `payments` SET `Status` = ? WHERE `PMkey` = ?");
+    $update->execute([$status, $PMkey]);
+  } catch (Exception $e) {
+    $sql2bool = false;
+  }
 
   // Test failure condition
   // $status = "failed";
   if ($status == "paid_out") {
-    $sql2 = "UPDATE `paymentsPending` SET `Status` = 'Paid' WHERE `PMkey` =
-    '$PMkey';";
-    $sql2bool = mysqli_query($link, $sql2);
+    try {
+      $updatePP = $db->prepare("UPDATE `paymentsPending` SET `Status` = ? WHERE `PMkey` = ?");
+      $updatePP->execute(['Paid', $PMkey]);
+    } catch (Exception $e) {
+      $sql2bool = false;
+    }
   } else if ($status == "failed") {
     global $db;
     try {
@@ -1336,7 +1343,7 @@ function updatePaymentStatus($PMkey) {
   } else {
     $sql2bool = true;
   }
-  if (mysqli_query($link, $sql) && $sql2bool) {
+  if ($sql2bool) {
     return true;
   } else {
     return false;

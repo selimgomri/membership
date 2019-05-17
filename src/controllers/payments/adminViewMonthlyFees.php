@@ -5,8 +5,9 @@ if ($access != "Admin") {
 	halt(404);
 }
 
-$sql = "SELECT `Forename`, `Surname`, `UserID` FROM `users` WHERE `AccessLevel` = 'Parent' ORDER BY `Forename` ASC, `Surname` ASC;";
-$result = mysqli_query($link, $sql);
+global $db;
+
+$getDetails = $db->query("SELECT `Forename`, `Surname`, `UserID` FROM `users` WHERE `AccessLevel` = 'Parent' ORDER BY `Forename` ASC, `Surname` ASC");
 
 $pagetitle = "Administration";
 include BASE_PATH . 'views/header.php'; ?>
@@ -24,14 +25,13 @@ include BASE_PATH . 'views/header.php'; ?>
 				</tr>
 			</thead>
 			<tbody>
-				<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-					$row = mysqli_fetch_array($result, MYSQLI_ASSOC); ?>
+				<?php while ($row = $getDetails->fetch(PDO::FETCH_ASSOC)) { ?>
 				<tr>
-					<td><?php echo $row['Forename'] . ' ' . $row['Surname']; ?></td>
-					<td><?php echo swimmers($link, $row['UserID'], true); ?></td>
+					<td><?=htmlspecialchars($row['Forename'] . ' ' . $row['Surname'])?></td>
+					<td><?=swimmers($link, $row['UserID'], true)?></td>
 					<td>
-						Squads: <?php echo monthlyFeeCost($link, $row['UserID'], "string"); ?> <br>
-						Extras (eg CF): <?php echo monthlyExtraCost($link, $row['UserID'], "string"); ?>
+						Squads: <?=htmlspecialchars(monthlyFeeCost($link, $row['UserID'], "string"))?> <br>
+						Extras Fees: <?=htmlspecialchars(monthlyExtraCost($link, $row['UserID'], "string"))?>
 					</td>
 				</tr>
 			<?php } ?>

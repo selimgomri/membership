@@ -1,23 +1,20 @@
-<?
+<?php
 
-$id = mysqli_real_escape_string($link, $id);
+global $db;
 
 if ($_POST['response'] == "getSwimmers") {
-  $sql = "SELECT * FROM (((`extrasRelations` INNER JOIN `members` ON members.MemberID = extrasRelations.MemberID) INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) INNER JOIN `squads` ON members.SquadID = squads.SquadID) WHERE `extrasRelations`.`ExtraID` = '$id';";
-  $result = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($result);
+  $swimmers = $db->prepare("SELECT * FROM (((`extrasRelations` INNER JOIN `members` ON members.MemberID = extrasRelations.MemberID) INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) INNER JOIN `squads` ON members.SquadID = squads.SquadID) WHERE `extrasRelations`.`ExtraID` = ?");
+  $swimmers->execute([$id]);
+
+  $row = $swimmers->fetch(PDO::FETCH_ASSOC);
 
   ?>
 
-  <div class="my-3 p-3 bg-white rounded shadow">
-    <?php if ($count > 0) {
-    for ($i = 0; $i < $count; $i++) {
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    if ($i != $count-1) { ?>
-    <div class="border-bottom border-gray pb-2 mb-2">
-    <?php } else { ?>
-    <div class="">
-    <?php } ?>
+  <div class="">
+    <?php if ($row != null) { ?>
+    <ul class="list-group">
+    <?php do { ?>
+    <li class="list-group-item">
       <div class="row align-items-center">
         <div class="col-auto">
           <p class="mb-0">
@@ -36,43 +33,45 @@ if ($_POST['response'] == "getSwimmers") {
           </button>
         </div>
       </div>
-    </div>
-    <?php }
-    } else { ?>
+    </li>
+    <?php } while ($row = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
+    </ul>
+    <?php } else { ?>
     <div class="alert alert-info mb-0">
       <strong>There are no swimmers linked to this extra</strong>
     </div>
     <?php } ?>
   </div>
-<?
+<?php
 } else if ($_POST['response'] == "squadSelect") {
-  $squad = mysqli_real_escape_string($link, $_POST['squadSelect']);
-  $sql = "SELECT * FROM `members` WHERE `SquadID` = '$squad' ORDER BY `MForename` ASC, `MSurname` ASC;";
-  $result = mysqli_query($link, $sql);
+  $getSwimmers = $db->prepare("SELECT * FROM `members` WHERE `SquadID` = ? ORDER BY `MForename` ASC, `MSurname` ASC");
+  $getSwimmers->execute([$_POST['squadSelect']]);
 
   ?>
   <option selected>
     Select a swimmer
   </option>
-  <?
-  for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC); ?>
-    <option value="<?php echo $row['MemberID']; ?>">
-      <?php echo $row['MForename'] . " " . $row['MSurname']; ?>
+  <?php
+  while ($row = $getSwimmers->fetch(PDO::FETCH_ASSOC)) { ?>
+    <option value="<?=htmlspecialchars($row['MemberID'])?>">
+      <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
     </option>
   <?php }
 } else if ($_POST['response'] == "insert") {
   $swimmer = mysqli_real_escape_string($link, $_POST['swimmerInsert']);
   if ($swimmer != null && $swimmer != "") {
-    $sql = "INSERT INTO `extrasRelations` (`ExtraID`, `MemberID`) VALUES ('$id', $swimmer);";
-    if (!mysqli_query($link, $sql)) {
+    try {
+      $addToExtra = $db->prepare("NSERT INTO `extrasRelations` (`ExtraID`, `MemberID`) VALUES (?, ?)");
+      $addToExtra->execute([$id, $_POST['swimmerInsert']]);
+    } catch (Exception $e) {
       halt(500);
     }
   }
 } else if ($_POST['response'] == "dropRelation") {
-  $relation = mysqli_real_escape_string($link, $_POST['relation']);
-  $sql = "DELETE FROM `extrasRelations` WHERE `RelationID` = '$relation';";
-  if (!mysqli_query($link, $sql)) {
+  try {
+    $delete = $db->prepare("DELETE FROM `extrasRelations` WHERE `RelationID` = ?");
+    $delete->execute([$_POST['relation']]);
+  } catch (Exception $e) {
     halt(500);
   }
 } else {

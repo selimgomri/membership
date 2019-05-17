@@ -1,21 +1,20 @@
 <?php
 
-$id = mysqli_real_escape_string($link, $id);
+global $db;
+
 $user = $_SESSION['UserID'];
 
-$sql = "SELECT * FROM `extras` WHERE `ExtraID` = '$id';";
-$result = mysqli_query($link, $sql);
+$extra = $db->prepare("SELECT * FROM extras WHERE ExtraID = ?");
+$extra->execute([$id]);
+$row = $extra->fetch(PDO::FETCH_ASSOC);
 
-if (mysqli_num_rows($result) != 1) {
+if ($row == null) {
   halt(404);
 }
 
-$sql = "SELECT * FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC;";
-$squads = mysqli_query($link, $sql);
+$squads = $db->query("SELECT * FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC");
 
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-$pagetitle = $row['ExtraName'] . " - Extras";
+$pagetitle = htmlspecialchars($row['ExtraName']) . " - Extras";
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
@@ -27,12 +26,12 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 <div class="container">
   <div class="row align-items-center">
     <div class="col-md-6">
-	    <h1><?php echo $row['ExtraName']; ?></h1>
+	    <h1><?=htmlspecialchars($row['ExtraName'])?></h1>
     </div>
     <div class="col text-right">
-      <a href="<?php echo autoUrl("payments/extrafees/" . $id . "/edit"); ?>"
+      <a href="<?=autoUrl("payments/extrafees/" . $id . "/edit")?>"
         class="btn btn-dark">Edit</a>
-      <a href="<?php echo autoUrl("payments/extrafees/" . $id . "/delete"); ?>"
+      <a href="<?=autoUrl("payments/extrafees/" . $id . "/delete")?>"
         class="btn btn-danger">Delete</a>
     </div>
   </div>
@@ -55,10 +54,9 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
             <label for="squadSelect">Select Squad</label>
             <select class="custom-select" id="squadSelect" name="squadSelect">
               <option selected>Choose...</option>
-              <?php for ($i = 0; $i < mysqli_num_rows($squads); $i ++) {
-                $squadsRow = mysqli_fetch_array($squads, MYSQLI_ASSOC); ?>
-              <option value="<?php echo $squadsRow['SquadID']; ?>">
-                <?php echo $squadsRow['SquadName']; ?>
+              <?php while ($squadsRow = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
+              <option value="<?=htmlspecialchars($squadsRow['SquadID'])?>">
+                <?=htmlspecialchars($squadsRow['SquadName'])?>
               </option>
               <?php } ?>
             </select>
@@ -90,7 +88,7 @@ function getSwimmers() {
         console.log(this.responseText);
       }
     }
-    xhttp.open("POST", "<?php echo autoUrl("payments/extrafees/ajax/" . $id); ?>", true);
+    xhttp.open("POST", "<?=autoUrl("payments/extrafees/ajax/" . $id)?>", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("response=getSwimmers");
     console.log("Sent");
@@ -106,7 +104,7 @@ function getSwimmersForSquad() {
         console.log(this.responseText);
       }
     }
-    xhttp.open("POST", "<?php echo autoUrl("payments/extrafees/ajax/" . $id); ?>", true);
+    xhttp.open("POST", "<?=autoUrl("payments/extrafees/ajax/" . $id)?>", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("response=squadSelect&squadSelect=" + squad);
     console.log("Sent");
@@ -137,8 +135,8 @@ function addSwimmerToExtra() {
         '</div>';
       }
     }
-    xhttp.open("POST", "<?php echo autoUrl("payments/extrafees/ajax/" . $id); ?>", true);
-    console.log("POST", "<?php echo autoUrl("payments/extrafees/ajax/" . $id); ?>", true);
+    xhttp.open("POST", "<?=autoUrl("payments/extrafees/ajax/" . $id)?>", true);
+    console.log("POST", "<?=autoUrl("payments/extrafees/ajax/" . $id)?>", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("response=insert&swimmerInsert=" + swimmer);
     console.log("response=insert&swimmerInsert=" + swimmer);
@@ -152,7 +150,7 @@ function dropSwimmerFromExtra(relation) {
       getSwimmers();
     }
   }
-  xhttp.open("POST", "<?php echo autoUrl("payments/extrafees/ajax/" . $id); ?>", true);
+  xhttp.open("POST", "<?=autoUrl("payments/extrafees/ajax/" . $id)?>", true);
   xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhttp.send("response=dropRelation&relation=" + relation);
 }
