@@ -1,16 +1,26 @@
-<?
+<?php
 
-$user = mysqli_real_escape_string($link, $_SESSION['UserID']);
-$id = mysqli_real_escape_string($link, $id);
+global $db;
 
-$sql = "SELECT * FROM `paymentMandates` WHERE `MandateID` = '$id' AND `UserID` = '$user' AND `InUse` = '1';";
-if (mysqli_num_rows(mysqli_query($link, $sql)) != 1) {
-	halt(404);
+try {
+  $getMandatesCount = $db->prepare("SELECT COUNT(*) FROM `paymentMandates` WHERE `MandateID` = ? AND `UserID` = ? AND `InUse` = ?");
+  $getMandatesCount->execute([
+    $id,
+    $_SESSION['UserID'],
+    true
+  ]);
+
+  if ($getMandatesCount->fetchColumn() </*!=*/ 1) {
+  	halt(404);
+  }
+} catch (Exception $e) {
+  halt(500);
 }
 
-$sql = "UPDATE `paymentPreferredMandate` SET `MandateID` = '$id' WHERE `UserID` = '$user';";
-if (mysqli_query($link, $sql)) {
-	header("Location: " . autoUrl("payments/mandates"));
-} else {
-	halt(500);
+try {
+  $updateDefault = $db->prepare("UPDATE `paymentPreferredMandate` SET `MandateID` = ? WHERE `UserID` = ?");
+  $updateDefault->execute([$id, $_SESSION['UserID']]);
+  header("Location: " . autoUrl("payments/mandates"));
+} catch (Exception $e) {
+  halt(500);
 }
