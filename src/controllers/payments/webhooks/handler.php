@@ -200,41 +200,40 @@ function process_mandate_event($event) {
 			break;
 		case "expired":
 			print("Mandate " . $event["links"]["mandate"] . " has expired!\n");
-			$mandate = mysqli_real_escape_string($link, $event["links"]["mandate"]);
-			$sql = "UPDATE `paymentMandates` SET `InUse` = '0' WHERE `Mandate` = '$mandate';";
-			mysqli_query($link, $sql);
+			$mandate = $event["links"]["mandate"];
+      $expire = $db->prepare("UPDATE `paymentMandates` SET `InUse` = ? WHERE `Mandate` = ?");
+      $expire->execute([false, $mandate]);
 
 			// Get the user ID, set to another bank if possible and let them know.
-			$sql = "SELECT users.UserID, `Forename`, `Surname`, `EmailAddress`,
+			$getUser = $db->prepare("SELECT users.UserID, `Forename`, `Surname`, `EmailAddress`,
 			`MandateID` FROM `paymentMandates` INNER JOIN `users` ON users.UserID =
-			paymentMandates.UserID WHERE `Mandate` = '$mandate';";
-			$user = mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC);
-      $mandateID = mysqli_real_escape_string($link, $user['MandateID']);
+			paymentMandates.UserID WHERE `Mandate` = ?");
+      $getUser->execute([$mandate]);
+      $user = $getUser->fetch(PDO::FETCH_ASSOC);
+      $mandateID = $user['MandateID'];
 
 			// If default unset
-			$sql = "DELETE FROM `paymentPreferredMandate` WHERE `MandateID` =
-			'$mandateID';";
-			mysqli_query($link, $sql);
+			$unset = $db->prepare("DELETE FROM `paymentPreferredMandate` WHERE `MandateID` = ?");
+      $unset->execute([$mandateID]);
 
-			$userID = mysqli_real_escape_string($link, $user['UserID']);
+			$userID = $user['UserID'];
 
-			$sql = "SELECT * FROM `paymentMandates` WHERE `UserID` = '$userID' AND
-			`InUse` = '1';";
-      $res = mysqli_query($link, $sql);
-			$rows = mysqli_num_rows($res);
+      $getNextMandate = $db->prepare("SELECT * FROM `paymentMandates` WHERE `UserID` = ? AND `InUse` = ?");
+      $getNextMandate->execute([$userID, true]);
+			$row = $getNextMandate->fetch(PDO::FETCH_ASSOC);
 
-			if ($rows == 0) {
-				$message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
-				<p>Your Direct Debit Mandate for " . CLUB_NAME . " has expired. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("payments") . "</p>
+			if ($row == null) {
+				$message = "<h1>Hello " . htmlspecialchars($user['Forename'] . " " . $user['Surname']) . ".</h1>
+				<p>Your Direct Debit Mandate for " . CLUB_NAME . " has expired. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("payments") . ".</p>
+        <p>If you have left the club you can ignore this email.</p>
 				<p>Thank you, <br>" . CLUB_NAME . "";
 				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has
 				Expired", $message, $user['Forename'] . " " . $user['Surname'],
 				$user['EmailAddress'],PAYMENT_EMAILS);
 			} else {
-        $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
-        $mandateID = mysqli_real_escape_string($link, $row['MandateID']);
-  			$sql = "INSERT INTO `paymentPreferredMandate` (`UserID`, `MandateID`) VALUES ('$userID', '$mandateID');";
-        mysqli_query($link, $sql);
+        $mandateID = $row['MandateID'];
+        $setNewDefault = $db->prepare("INSERT INTO paymentPreferredMandate (UserID, MandateID) VALUES (?, ?)");
+        $setNewDefault->execute([$userID, $mandateID]);
 				$message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
 				<p>Your Direct Debit Mandate for " . CLUB_NAME . " has expired. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
 				<p>Go to " . autoUrl("payments") . " to make any changes.</p>
@@ -253,32 +252,39 @@ function process_mandate_event($event) {
 
 function process_payment_event($event) {
 	global $link;
+  global $db;
 	include BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   switch ($event["action"]) {
   	case "created":
       print("Payment " . $event["links"]["payment"] . " has been created!\n");
       if (!paymentExists($event["links"]["payment"])) {
         // Create a new Payment
-        $PMkey = mysqli_real_escape_string($link, $event["links"]["payment"]);
+        $PMkey = $event["links"]["payment"];
         $payment = $client->payments()->get($PMkey);
-        $status = mysqli_real_escape_string($link, $payment->status);
-        $date = mysqli_real_escape_string($link, date("Y-m-d", strtotime($payment->created_at)));
-        $amount = mysqli_real_escape_string($link, $payment->amount);
-        $name = mysqli_real_escape_string($link, $payment->description);
-        $currency = mysqli_real_escape_string($link, $payment->currency);
-        $mandate = mysqli_real_escape_string($link, $payment->links->mandate);
+        $status = $payment->status;
+        $date = date("Y-m-d", strtotime($payment->created_at));
+        $amount = $payment->amount;
+        $name = $payment->description;
+        $currency = $payment->currency;
+        $mandate = $payment->links->mandate;
 
-        $sql = "SELECT `MandateID`, `UserID` FROM `paymentMandates` WHERE `Mandate` = '$mandate';";
-        $result = mysqli_query($link, $sql);
-        if (mysqli_num_rows($result) == 1) {
-          $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-          $user = mysqli_real_escape_string($link, $row['UserID']);
-          $mandate = mysqli_real_escape_string($link, $row['MandateID']);
-          $sql = "INSERT INTO `payments`
-          (`Date`, `Status`, `UserID`, `MandateID`, `Name`, `Amount`, `Currency`, `PMkey`, `Type`)
-          VALUES
-          ('$date', '$status', '$user', '$mandate', '$name', '$amount', '$currency', '$PMkey', 'Payment');";
-          mysqli_query($link, $sql);
+        $getMandateAndUser = $db->prepare("SELECT MandateID, UserID FROM paymentMandates WHERE Mandate = ?";
+        $getMandateAndUser->execute([$mandate]);
+        if ($row = $getMandateAndUser->fetch(PDO::FETCH_ASSOC)) {
+          $user = $row['UserID'];
+          $mandate = $row['MandateID'];
+          $addPayment = $db->prepare("INSERT INTO `payments` (`Date`, `Status`, `UserID`, `MandateID`, `Name`, `Amount`, `Currency`, `PMkey`, `Type`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+          $addPayment->execute([
+            $date,
+            $status,
+            $user,
+            $mandate,
+            $name,
+            $amount,
+            $currency,
+            $PMkey,
+            'Payment'
+          ]);
         }
       }
       break;
