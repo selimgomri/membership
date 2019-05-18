@@ -268,7 +268,7 @@ function process_payment_event($event) {
         $currency = $payment->currency;
         $mandate = $payment->links->mandate;
 
-        $getMandateAndUser = $db->prepare("SELECT MandateID, UserID FROM paymentMandates WHERE Mandate = ?";
+        $getMandateAndUser = $db->prepare("SELECT MandateID, UserID FROM paymentMandates WHERE Mandate = ?");
         $getMandateAndUser->execute([$mandate]);
         if ($row = $getMandateAndUser->fetch(PDO::FETCH_ASSOC)) {
           $user = $row['UserID'];
