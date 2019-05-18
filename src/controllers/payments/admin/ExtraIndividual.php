@@ -26,7 +26,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 <div class="container">
   <div class="row align-items-center mb-3">
     <div class="col-md-6">
-	    <h1><?=htmlspecialchars($row['ExtraName'])?></h1>
+	    <h1><?=htmlspecialchars($row['ExtraName'])?> <small>&pound;<?=htmlspecialchars(number_format($row['ExtraFee'], 2))?>/month</small></h1>
     </div>
     <div class="col text-right">
       <a href="<?=autoUrl("payments/extrafees/" . $id . "/edit")?>"
@@ -48,6 +48,9 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
     </div>
     <div class="col">
       <div class="card">
+        <div class="card-header">
+          Add members to extra
+        </div>
         <form class="card-body">
           <div class="form-group">
             <label for="squadSelect">Select Squad</label>

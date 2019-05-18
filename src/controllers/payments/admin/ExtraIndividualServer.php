@@ -12,30 +12,35 @@ if ($_POST['response'] == "getSwimmers") {
 
   <div class="">
     <?php if ($row != null) { ?>
-    <ul class="list-group">
-    <?php do { ?>
-    <li class="list-group-item">
-      <div class="row align-items-center">
-        <div class="col-auto">
-          <p class="mb-0">
-            <strong>
-              <?php echo $row['MForename'] . " " . $row['MSurname']; ?>
-            </strong>
-          </p>
-          <p class="mb-0">
-            <?php echo $row['SquadName']; ?>
-          </p>
-        </div>
-        <div class="col text-right">
-          <button type="button" id="RelationDrop-<?php echo $row['RelationID']; ?>"
-            class="btn btn-link" value="<?php echo $row['RelationID']; ?>">
-            Remove
-          </button>
-        </div>
+    <div class="card">
+      <div class="card-header">
+        Extra members
       </div>
-    </li>
-    <?php } while ($row = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
-    </ul>
+      <ul class="list-group list-group-flush">
+        <?php do { ?>
+        <li class="list-group-item">
+          <div class="row align-items-center">
+            <div class="col-auto">
+              <p class="mb-0">
+                <strong>
+                  <?php echo $row['MForename'] . " " . $row['MSurname']; ?>
+                </strong>
+              </p>
+              <p class="mb-0">
+                <?php echo $row['SquadName']; ?>
+              </p>
+            </div>
+            <div class="col text-right">
+              <button type="button" id="RelationDrop-<?php echo $row['RelationID']; ?>"
+                class="btn btn-link" value="<?php echo $row['RelationID']; ?>">
+                Remove
+              </button>
+            </div>
+          </div>
+        </li>
+        <?php } while ($row = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
+      </ul>
+    </div>
     <?php } else { ?>
     <div class="alert alert-info mb-0">
       <strong>There are no swimmers linked to this extra</strong>

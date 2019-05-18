@@ -39,7 +39,7 @@ include BASE_PATH . "views/notifyMenu.php";
       ?>
       <form method="post">
         <div class="form-group">
-          <label for="name">Extra Name</label>
+          <label for="name">List Name</label>
           <input type="text" class="form-control" id="name" name="name"
 					placeholder="Enter name" value="<?=htmlspecialchars($row['Name'])?>">
         </div>

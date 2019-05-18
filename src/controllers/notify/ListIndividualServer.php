@@ -15,30 +15,35 @@ if ($_POST['response'] == "getSwimmers") {
 
   <div class="">
     <?php if ($row != null) { ?>
-    <ul class="list-group">
-      <?php do { ?>
-      <li class="list-group-item">
-        <div class="row align-items-center">
-          <div class="col-auto">
-            <p class="mb-0">
-              <strong>
-                <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
-              </strong>
-            </p>
-            <p class="mb-0">
-              <?=htmlspecialchars($row['SquadName'])?>
-            </p>
+    <div class="card">
+      <div class="card-header">
+        List members
+      </div>
+      <ul class="list-group list-group-flush">
+        <?php do { ?>
+        <li class="list-group-item">
+          <div class="row align-items-center">
+            <div class="col-auto">
+              <p class="mb-0">
+                <strong>
+                  <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
+                </strong>
+              </p>
+              <p class="mb-0">
+                <?=htmlspecialchars($row['SquadName'])?>
+              </p>
+            </div>
+            <div class="col text-right">
+              <button type="button" id="RelationDrop-<?=$row['ReferenceID']?>"
+                class="btn btn-link" value="<?=$row['ReferenceID']?>">
+                Remove
+              </button>
+            </div>
           </div>
-          <div class="col text-right">
-            <button type="button" id="RelationDrop-<?=$row['ReferenceID']?>"
-              class="btn btn-link" value="<?=$row['ReferenceID']?>">
-              Remove
-            </button>
-          </div>
-        </div>
-      </li>
-      <?php } while ($row = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
-    </ul>
+        </li>
+        <?php } while ($row = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
+      </ul>
+    </div>
     <?php } else { ?>
     <div class="alert alert-info mb-0">
       <strong>There are no swimmers linked to this targeted list</strong>

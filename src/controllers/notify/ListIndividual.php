@@ -33,7 +33,6 @@ include BASE_PATH . "views/notifyMenu.php";
         class="btn btn-danger">Delete</a>
     </div>
   </div>
-  <hr>
   <div class="row">
     <div class="col-md-6">
       <div id="output" class="mb-3">
@@ -47,6 +46,9 @@ include BASE_PATH . "views/notifyMenu.php";
     </div>
     <div class="col">
       <div class="card">
+        <div class="card-header">
+          Add to list
+        </div>
         <form class="card-body">
           <div class="form-group">
             <label for="squadSelect">Select Squad (Optional)</label>
