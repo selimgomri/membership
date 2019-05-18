@@ -58,11 +58,11 @@ if ($_POST['response'] == "getSwimmers") {
     </option>
   <?php }
 } else if ($_POST['response'] == "insert") {
-  $swimmer = mysqli_real_escape_string($link, $_POST['swimmerInsert']);
+  $swimmer = $_POST['swimmerInsert'];
   if ($swimmer != null && $swimmer != "") {
     try {
-      $addToExtra = $db->prepare("NSERT INTO `extrasRelations` (`ExtraID`, `MemberID`) VALUES (?, ?)");
-      $addToExtra->execute([$id, $_POST['swimmerInsert']]);
+      $addToExtra = $db->prepare("INSERT INTO `extrasRelations` (`ExtraID`, `MemberID`) VALUES (?, ?)");
+      $addToExtra->execute([$id, $swimmer]);
     } catch (Exception $e) {
       halt(500);
     }

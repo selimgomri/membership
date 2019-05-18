@@ -21,7 +21,7 @@ if ($_POST['price'] != null && $_POST['price'] != "") {
 
 if (!$errorState) {
   try {
-    $update = $db->prepare("UPDATE extras SET ExtraName = ?, ExtraFee = ? WHERE ExtraID = $id");
+    $update = $db->prepare("UPDATE extras SET ExtraName = ?, ExtraFee = ? WHERE ExtraID = ?");
     $update->execute([$name, $price, $id]);
     header("Location: " . autoUrl("payments/extrafees/" . $id));
 	} catch (Exception $e) {

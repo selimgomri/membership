@@ -13,7 +13,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 
 require 'GoCardlessSetup.php';
 
- ?>
+?>
 
 <!--
 <div class="bg-warning box-shadow mb-3 py-2" style="margin-top:-1rem;">
