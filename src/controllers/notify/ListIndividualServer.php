@@ -1,100 +1,87 @@
-<?
+<?php
 
-$id = mysqli_real_escape_string($link, $id);
+global $db;
 
 if ($_POST['response'] == "getSwimmers") {
-  $sql = "SELECT * FROM (((`targetedListMembers` INNER JOIN `members` ON
+  $swimmers = $db->prepare("SELECT MForename, MSurname, SquadName, ReferenceID FROM (((`targetedListMembers` INNER JOIN `members` ON
   members.MemberID = targetedListMembers.ReferenceID) INNER JOIN `targetedLists`
   ON targetedLists.ID = targetedListMembers.ListID) INNER JOIN `squads` ON
   members.SquadID = squads.SquadID) WHERE `targetedListMembers`.`ListID` =
-  '$id';";
-  $result = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($result);
+  ? ORDER BY ReferenceID ASC");
+  $swimmers->execute([$id]);
+  $row = $swimmers->fetch(PDO::FETCH_ASSOC);
 
   ?>
 
-  <div class="cell">
-    <?php if ($count > 0) {
-    for ($i = 0; $i < $count; $i++) {
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    if ($i != $count-1) { ?>
-    <div class="border-bottom border-gray pb-2 mb-2">
+  <div class="">
+    <?php if ($row != null) { ?>
+    <ul class="list-group">
+      <?php do { ?>
+      <li class="list-group-item">
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <p class="mb-0">
+              <strong>
+                <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
+              </strong>
+            </p>
+            <p class="mb-0">
+              <?=htmlspecialchars($row['SquadName'])?>
+            </p>
+          </div>
+          <div class="col text-right">
+            <button type="button" id="RelationDrop-<?=$row['ReferenceID']?>"
+              class="btn btn-link" value="<?=$row['ReferenceID']?>">
+              Remove
+            </button>
+          </div>
+        </div>
+      </li>
+      <?php } while ($row = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
+    </ul>
     <?php } else { ?>
-    <div class="">
-    <?php } ?>
-      <div class="row align-items-center">
-        <div class="col-auto">
-          <p class="mb-0">
-            <strong>
-              <?php echo $row['MForename'] . " " . $row['MSurname']; ?>
-            </strong>
-          </p>
-          <p class="mb-0">
-            <?php echo $row['SquadName']; ?>
-          </p>
-        </div>
-        <div class="col text-right">
-          <button type="button" id="RelationDrop-<?php echo $row['ReferenceID']; ?>"
-            class="btn btn-link" value="<?php echo $row['ReferenceID']; ?>">
-            Remove
-          </button>
-        </div>
-      </div>
-    </div>
-    <?php }
-    } else { ?>
     <div class="alert alert-info mb-0">
       <strong>There are no swimmers linked to this targeted list</strong>
     </div>
     <?php } ?>
   </div>
-<?
+<?php
 } else if ($_POST['response'] == "squadSelect") {
-  $squad = mysqli_real_escape_string($link, $_POST['squadSelect']);
+  $squad = $_POST['squadSelect'];
+  $members == null;
   if ($squad != "all") {
-    $sql = "SELECT * FROM `members` WHERE `SquadID` = '$squad' ORDER BY `MForename` ASC, `MSurname` ASC;";
-    $result = mysqli_query($link, $sql);
-
-    ?>
-    <option selected>
-      Select a swimmer
-    </option>
-    <?
-    for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-      $row = mysqli_fetch_array($result, MYSQLI_ASSOC); ?>
-      <option value="<?php echo $row['MemberID']; ?>">
-        <?php echo $row['MForename'] . " " . $row['MSurname']; ?>
-      </option>
-    <?php }
+    $members = $db->prepare("SELECT MemberID, MForename, MSurname FROM `members` WHERE `SquadID` = ? ORDER BY `MForename` ASC, `MSurname` ASC");
+    $members->execute([$squad]);
   } else {
-    $sql = "SELECT * FROM `members` ORDER BY `MForename` ASC, `MSurname` ASC;";
-    $result = mysqli_query($link, $sql);
-
-    ?>
-    <option selected>
-      Select a swimmer
+    $members = $db->query("SELECT MemberID, MForename, MSurname FROM `members` ORDER BY `MForename` ASC, `MSurname` ASC");
+  } ?>
+  <option selected>
+    Select a swimmer
+  </option>
+  <?php while ($row = $members->fetch(PDO::FETCH_ASSOC)) { ?>
+    <option value="<?=$row['MemberID']?>">
+      <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
     </option>
-    <?
-
-    for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-      $row = mysqli_fetch_array($result, MYSQLI_ASSOC); ?>
-      <option value="<?php echo $row['MemberID']; ?>">
-        <?php echo $row['MForename'] . " " . $row['MSurname']; ?>
-      </option>
-    <?php }
-  }
+  <?php }
 } else if ($_POST['response'] == "insert") {
-  $swimmer = mysqli_real_escape_string($link, $_POST['swimmerInsert']);
+  $swimmer = $_POST['swimmerInsert'];
   if ($swimmer != null && $swimmer != "") {
-    $sql = "INSERT INTO `targetedListMembers` (`ListID`, `ReferenceID`, `ReferenceType`) VALUES ('$id', $swimmer, 'Member');";
-    if (!mysqli_query($link, $sql)) {
+    try {
+      $insert = $db->prepare("INSERT INTO `targetedListMembers` (`ListID`, `ReferenceID`, `ReferenceType`) VALUES (?, ?, ?)");
+      $insert->execute([
+        $id,
+        $swimmer,
+        'Member'
+      ]);
+    } catch (Exception $e) {
       halt(500);
     }
   }
 } else if ($_POST['response'] == "dropRelation") {
-  $relation = mysqli_real_escape_string($link, $_POST['relation']);
-  $sql = "DELETE FROM `targetedListMembers` WHERE `ReferenceID` = '$relation';";
-  if (!mysqli_query($link, $sql)) {
+  try {
+    $drop = $db->prepare("DELETE FROM `targetedListMembers` WHERE `ReferenceID` = ?");
+    $drop->execute([$_POST['relation']]);
+  } catch (Exception $e) {
     halt(500);
   }
 } else {

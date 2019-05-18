@@ -1,31 +1,32 @@
 <?php
 
-$id = mysqli_real_escape_string($link, $id);
+global $db;
 
 $name = $desc = $errorMessage = null;
 $errorState = false;
 
 if ($_POST['name'] != null && $_POST['name'] != "") {
-	$name =	mysqli_real_escape_string($link, $_POST['name']);
+	$name =	trim($_POST['name']);
 } else {
 	$errorState = true;
 	$errorMessage .= "<li>There was a problem with that name</li>";
 }
 
 if ($_POST['desc'] != null && $_POST['desc'] != "") {
-	$desc = mysqli_real_escape_string($link, $_POST['desc']);
+	$desc = trim($_POST['desc']);
 } else {
 	$errorState = true;
 	$errorMessage .= "<li>There was a problem with that description</li>";
 }
 
 if (!$errorState) {
-	$sql = "UPDATE `targetedLists` SET `Name` = '$name', `Description` = '$desc' WHERE `ID` = '$id';";
-	if (!mysqli_query($link, $sql)) {
+  try {
+    $update = $db->prepare("UPDATE `targetedLists` SET `Name` = ?, `Description` = ? WHERE `ID` = ?");
+    $update->execute([$name, $desc, $id]);
+    header("Location: " . autoUrl("notify/lists/" . $id));
+	} catch (Exception $e) {
 		$errorState = true;
 		$errorMessage .= "<li>Unable to edit item in database</li>";
-	} else {
-		header("Location: " . autoUrl("notify/lists/" . $id));
 	}
 }
 
