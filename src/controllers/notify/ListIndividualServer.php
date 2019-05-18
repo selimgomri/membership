@@ -72,12 +72,23 @@ if ($_POST['response'] == "getSwimmers") {
   $swimmer = $_POST['swimmerInsert'];
   if ($swimmer != null && $swimmer != "") {
     try {
-      $insert = $db->prepare("INSERT INTO `targetedListMembers` (`ListID`, `ReferenceID`, `ReferenceType`) VALUES (?, ?, ?)");
-      $insert->execute([
+      // Check count
+      $getCount = $db->prepare("SELECT COUNT(*) FROM targetedListMembers WHERE ListID = ? AND ReferenceID = ? AND ReferenceType = ?");
+      $getCount->execute([
         $id,
         $swimmer,
         'Member'
       ]);
+      if ($getCount->fetchColumn() > 0) {
+        halt(500);
+      } else {
+        $insert = $db->prepare("INSERT INTO `targetedListMembers` (`ListID`, `ReferenceID`, `ReferenceType`) VALUES (?, ?, ?)");
+        $insert->execute([
+          $id,
+          $swimmer,
+          'Member'
+        ]);
+      }
     } catch (Exception $e) {
       halt(500);
     }

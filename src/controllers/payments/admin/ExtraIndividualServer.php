@@ -49,8 +49,8 @@ if ($_POST['response'] == "getSwimmers") {
   </div>
 <?php
 } else if ($_POST['response'] == "squadSelect") {
-  $getSwimmers = $db->prepare("SELECT * FROM `members` WHERE `SquadID` = ? ORDER BY `MForename` ASC, `MSurname` ASC");
-  $getSwimmers->execute([$_POST['squadSelect']]);
+  $getSwimmers = $db->prepare("SELECT MemberID, MForename, MSurname FROM `members` ORDER BY `MForename` ASC, `MSurname` ASC");
+  $getSwimmers->execute([$_POST['squadSelect'], $id]);
 
   ?>
   <option selected>
@@ -66,8 +66,15 @@ if ($_POST['response'] == "getSwimmers") {
   $swimmer = $_POST['swimmerInsert'];
   if ($swimmer != null && $swimmer != "") {
     try {
-      $addToExtra = $db->prepare("INSERT INTO `extrasRelations` (`ExtraID`, `MemberID`) VALUES (?, ?)");
-      $addToExtra->execute([$id, $swimmer]);
+      // Check not already there
+      $getCount = $db->prepare("SELECT COUNT(*) FROM `extrasRelations` WHERE ExtraID = ? AND MemberID = ?");
+      $getCount->execute([$id, $swimmer]);
+      if ($getCount->fetchColumn() > 0) {
+        halt(500);
+      } else {
+        $addToExtra = $db->prepare("INSERT INTO `extrasRelations` (`ExtraID`, `MemberID`) VALUES (?, ?)");
+        $addToExtra->execute([$id, $swimmer]);
+      }
     } catch (Exception $e) {
       halt(500);
     }
