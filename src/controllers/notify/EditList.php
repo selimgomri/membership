@@ -1,6 +1,6 @@
 <?php
 
-//global $db;
+global $db;
 
 $row = null;
 
@@ -41,7 +41,7 @@ include BASE_PATH . "views/notifyMenu.php";
         <div class="form-group">
           <label for="name">Extra Name</label>
           <input type="text" class="form-control" id="name" name="name"
-					placeholder="Enter name" value="<?=htmlspecialchars$(row['Name'])?>">
+					placeholder="Enter name" value="<?=htmlspecialchars($row['Name'])?>">
         </div>
 
         <div class="form-group">
