@@ -71,9 +71,11 @@
     <div class="<?php if (isset($fluidContainer) && $fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
       <div class="row">
         <div class="col source-org vcard copyright">
-            <img src="<?=autoUrl("public/img/corporate/scds.png")?>" width="100" class="mb-3">
+            <a href="https://corporate.myswimmingclub.co.uk" target="_blank" class="d-block mb-3">
+              <img src="<?=autoUrl("public/img/corporate/scds.png")?>" width="100">
+            </a>
             <p class="hidden-print">
-  						Designed and Built by Swimming Club Data Systems. Licenced to <?=CLUB_NAME?>.
+  						Designed and Built by <a class="text-white" href="https://corporate.myswimmingclub.co.uk" target="_blank">Swimming Club Data Systems</a>. Licenced to <?=CLUB_NAME?>.
   					</p>
   					<?php
   					$executionEndTime = microtime();

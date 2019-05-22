@@ -3,7 +3,7 @@
 global $db;
 
 define("PAYMENT_EMAILS", [
-  "Email" => "payments@chesterlestreetasc.co.uk",
+  "Email" => "payments@" . EMAIL_DOMAIN,
   "Name" => CLUB_SHORT_NAME . " Payments"
 ]);
 
@@ -59,6 +59,7 @@ if ($provided_signature == $calculated_signature) {
 
 function process_mandate_event($event) {
 	global $link;
+  global $db;
 	include BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   switch ($event["action"]) {
     case "created":
@@ -83,9 +84,10 @@ function process_mandate_event($event) {
       	  $bankName = $bank->bank_name;
 
           try {
-            $addMandate = $db->prepare("INSERT INTO `paymentMandates` (`UserID`, `Name`, `Mandate`, `Customer`, `BankAccount`, `BankName`, `AccountHolderName`, `AccountNumEnd`, `InUse`) VALUES (?, 'Mandate', ?, ?, ?, ?, ?, ?, ?)");
+            $addMandate = $db->prepare("INSERT INTO `paymentMandates` (`UserID`, `Name`, `Mandate`, `Customer`, `BankAccount`, `BankName`, `AccountHolderName`, `AccountNumEnd`, `InUse`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $addMandate->execute([
               $user,
+              'Mandate',
               $mandate,
               $customer,
               $bankAccount,
@@ -113,10 +115,11 @@ function process_mandate_event($event) {
               }
             }
           } catch (Exception $e) {
-
+            // Do nothing for now - This functionality is for mandates created
+            // via GoCardless
           }
 
-          print("Mandate " . $event["links"]["mandate"] . " has been created! We found the user in question.\n");
+          print("Mandate " . $event["links"]["mandate"] . " has been created! We found the user in question in our system.\n");
         }
       }
       break;
@@ -125,8 +128,8 @@ function process_mandate_event($event) {
 			$mandate = $event["links"]["mandate"];
 
       try {
-        $cancelMandate = $db->prepare("UPDATE `paymentMandates` SET `InUse` = '0' WHERE `Mandate` = ?");
-        $cancelMandate->execute([$mandate]);
+        $cancelMandate = $db->prepare("UPDATE `paymentMandates` SET `InUse` = ? WHERE `Mandate` = ?");
+        $cancelMandate->execute([false, $mandate]);
 
         $unsetDefault = $db->prepare("SELECT users.UserID, `Forename`, `Surname`, `EmailAddress`,
   			`MandateID` FROM `paymentMandates` INNER JOIN `users` ON users.UserID =
@@ -268,7 +271,7 @@ function process_payment_event($event) {
         $currency = $payment->currency;
         $mandate = $payment->links->mandate;
 
-        $getMandateAndUser = $db->prepare("SELECT MandateID, UserID FROM paymentMandates WHERE Mandate = ?";
+        $getMandateAndUser = $db->prepare("SELECT MandateID, UserID FROM paymentMandates WHERE Mandate = ?");
         $getMandateAndUser->execute([$mandate]);
         if ($row = $getMandateAndUser->fetch(PDO::FETCH_ASSOC)) {
           $user = $row['UserID'];

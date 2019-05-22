@@ -3,6 +3,9 @@
 ignore_user_abort(true);
 set_time_limit(0);
 
+global $db;
+global $link;
+
 $ms = date("Y-m");
 $date = date("Y-m") . "-01";
 
@@ -14,6 +17,9 @@ if (mysqli_num_rows($result) > 0) {
     $sql = "INSERT INTO `paymentMonths` (`MonthStart`, `Date`) VALUES ('$ms', '$date');";
     mysqli_query($link, $sql);
   }
+} else {
+  $sql = "INSERT INTO `paymentMonths` (`MonthStart`, `Date`) VALUES ('$ms', '$date');";
+  mysqli_query($link, $sql);
 }
 
 $sql = "SELECT * FROM `paymentSquadFees` INNER JOIN `paymentMonths` ON paymentSquadFees.MonthID = paymentMonths.MonthID WHERE `MonthStart` = '$ms' ORDER BY `Date` DESC LIMIT 1;";
@@ -55,7 +61,6 @@ if (mysqli_num_rows($result) == 0) {
         $name = $description . " (" . $swimmerRow['SquadName'] . ")";
 
         if ($swimmerRow['SquadFee'] > 0) {
-          global $db;
           $track_info = [
             $mid,
             $swimmerRow['MemberID'],
@@ -65,12 +70,12 @@ if (mysqli_num_rows($result) == 0) {
           ];
 
           try {
-            $tracker_sql = "INSERT INTO `individualFeeTrack` (`MonthID`, `MemberID`,
-            `UserID`, `Description`, `Amount`, `Type`) VALUES (?, ?,
-            ?, ?, ?, 'SquadFee')";
-            $db->prepare($tracker_sql)->execute($track_info);
+            $tracker_sql = "INSERT INTO `individualFeeTrack` (`MonthID`, `MemberID`, `UserID`, `Description`, `Amount`, `Type`) VALUES (?, ?, ?, ?, ?, 'SquadFee')";
+            $track = $db->prepare($tracker_sql);
+            $track->execute($track_info);
           } catch (Exception $e) {
-            halt(500);
+            pre($e);
+            pre("1");halt(500);
           }
 
           // Add squad fee payment to payments
@@ -155,7 +160,7 @@ if (mysqli_num_rows($result) == 0) {
             ?, ?, ?, 'ExtraFee')";
             $db->prepare($tracker_sql)->execute($track_info);
           } catch (Exception $e) {
-            halt(500);
+            pre("2");halt(500);
           }
         }
       }
@@ -198,7 +203,7 @@ if (mysqli_num_rows($result) == 0) {
     $query = $db->prepare($sql);
     $query->execute();
   } catch (Exception $e) {
-    halt(500);
+    pre("3");halt(500);
   }
 
   $row = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -226,7 +231,7 @@ if (mysqli_num_rows($result) == 0) {
     $query = $db->prepare($sql);
     $query->execute();
   } catch (Exception $e) {
-    halt(500);
+    pre("4");halt(500);
   }
 
   $row = $query->fetchAll(PDO::FETCH_ASSOC);

@@ -24,9 +24,9 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
  ?>
 
 <div class="container">
-  <div class="row align-items-center">
+  <div class="row align-items-center mb-3">
     <div class="col-md-6">
-	    <h1><?=htmlspecialchars($row['ExtraName'])?></h1>
+	    <h1><?=htmlspecialchars($row['ExtraName'])?> <small>&pound;<?=htmlspecialchars(number_format($row['ExtraFee'], 2))?>/month</small></h1>
     </div>
     <div class="col text-right">
       <a href="<?=autoUrl("payments/extrafees/" . $id . "/edit")?>"
@@ -35,21 +35,13 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
         class="btn btn-danger">Delete</a>
     </div>
   </div>
-  <hr>
   <div class="row">
-    <div class="col-md-6">
-      <div id="output">
-        <div class="ajaxPlaceholder">
-          <span class="h1 d-block">
-            <i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i>
-            <br>Loading Content
-          </span>If content does not display, please turn on JavaScript
+    <div class="col order-md-1 mb-3">
+      <div class="card">
+        <div class="card-header">
+          Add members to extra
         </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="my-3 p-3 bg-white rounded shadow">
-        <form>
+        <form class="card-body">
           <div class="form-group">
             <label for="squadSelect">Select Squad</label>
             <select class="custom-select" id="squadSelect" name="squadSelect">
@@ -67,12 +59,22 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
               <option selected>Select squad first</option>
             </select>
           </div>
-            <button type="button" class="btn btn-dark" id="addSwimmer">
+            <button type="button" class="btn btn-success" id="addSwimmer">
               Add Swimmer to Extra
             </button>
             <div id="status">
             </div>
         </form>
+      </div>
+    </div>
+    <div class="col-md-6 order-md-0">
+      <div id="output">
+        <div class="ajaxPlaceholder">
+          <span class="h1 d-block">
+            <i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i>
+            <br>Loading Content
+          </span>If content does not display, please turn on JavaScript
+        </div>
       </div>
     </div>
   </div>
@@ -116,8 +118,8 @@ function addSwimmerToExtra() {
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         getSwimmers();
-        document.getElementById("squadSelect").innerHTML = "<option selected>Choose...</option>";
-        document.getElementById("swimmerSelect").innerHTML = "<option selected>Select squad first</option>";
+        //document.getElementById("squadSelect").innerHTML = "<option selected>Choose...</option>";
+        //document.getElementById("swimmerSelect").innerHTML = "<option selected>Select squad first</option>";
         document.getElementById("status").innerHTML =
         '<div class="mt-3 mb-0 alert alert-success alert-dismissible fade show" role="alert">' +
         '<strong>Successfully Added Swimmer</strong>'  +
@@ -128,7 +130,7 @@ function addSwimmerToExtra() {
       } else {
         document.getElementById("status").innerHTML =
         '<div class="mt-3 mb-0 alert alert-warning alert-dismissible fade show" role="alert">' +
-        '<strong>Unable to add swimmer</strong>' +
+        '<strong>Unable to add swimmer</strong><br>They may already be on the list' +
         '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
         '<span aria-hidden="true">&times;</span>' +
         '</button>' +

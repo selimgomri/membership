@@ -18,12 +18,10 @@ include BASE_PATH . "views/paymentsMenu.php";
 
 <div class="container">
   <div class="">
-    <h1 class="border-bottom border-gray pb-2 mb-2">
+    <h1>
 			Edit <?=htmlspecialchars($row['ExtraName'])?>
 		</h1>
     <p class="lead">Edit this extra monthly fee.</p>
-
-    <hr>
 
     <div class="row">
       <div class="col-lg-8">
