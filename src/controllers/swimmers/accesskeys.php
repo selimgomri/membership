@@ -1,8 +1,13 @@
 <?php
 $access = $_SESSION['AccessLevel'];
 if ($access != "Admin" && $access != "Coach" && $access != "Galas") {
-  halt(403);
+  halt(404);
 }
+
+global $db;
+
+$swimmers = $db->query("SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.AccessKey FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) ORDER BY `members`.`MForename` , `members`.`MSurname` ASC");
+$updateASA = $db->prepare("UPDATE `members` SET ASANumber = ? WHERE `MemberID` = ?");
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>
@@ -10,14 +15,11 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 <div class="container">
   <h1>Member Access Keys</h1>
   <p class="lead">See access keys.</p>
-  <p><a href="<?php echo autoUrl("swimmers/accesskeys-csv"); ?>" class="btn btn-outline-dark">Download as a CSV for Mailmerge</a></p>
+  <p><a href="<?=autoUrl("swimmers/accesskeys-csv")?>" class="btn btn-dark" download>Download as a CSV for Mailmerge</a></p>
 
 <?php
 
-$sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.AccessKey FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) ORDER BY `members`.`MForename` , `members`.`MSurname` ASC;";
-$result = mysqli_query($link, $sqlSwim);
-$swimmerCount = mysqli_num_rows($result);
-if ($swimmerCount > 0) { ?>
+if ($row = $swimmers->fetch(PDO::FETCH_ASSOC)) { ?>
   <div class="table-responsive-md">
     <?php if (app('request')->isMobile()) {
       ?><table class="table table-sm"><?
@@ -33,29 +35,29 @@ if ($swimmerCount > 0) { ?>
         </tr>
       </thead>
       <tbody>
-  <?php
-  $resultX = mysqli_query($link, $sqlSwim);
-  for ($i = 0; $i < $swimmerCount; $i++) {
-    $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC); ?>
+  <?php do { ?>
     <tr>
-      <td><?php echo $swimmersRowX['MForename'] . " " . $swimmersRowX['MSurname'];?></td>
-      <td><?php echo $swimmersRowX['SquadName'];?></td>
-      <?php if ($swimmersRowX['ASANumber'] == null) {
-        $memID = $swimmersRowX['MemberID'];
-        $asaN = "CLSX" . $memID;
-        ?><td><samp><?php echo $asaN;?><samp></td><?php
-        $sql = "UPDATE `members` SET ASANumber = '$asaN' WHERE `MemberID` = '$memID';";
-        mysqli_query($link, $sql);
-      }
-      else { ?>
-        <td><samp><?php echo $swimmersRowX['ASANumber']; ?></samp></td>
+      <td><?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?></td>
+      <td><?=htmlspecialchars($row['SquadName'])?></td>
+      <?php if ($row['ASANumber'] == null) {
+        $memID = $row['MemberID'];
+        $asaN = CLUB_CODE . $memID;
+        ?><td><span class="mono"><?=htmlspecialchars($asaN)?></span></td><?php
+        $updateASA->execute([$asaN, $memID]);
+      } else { ?>
+        <td><span class="mono"><?=htmlspecialchars($row['ASANumber'])?></span></td>
       <?php } ?>
-        <td><samp><?php echo $swimmersRowX['AccessKey']; ?></samp></td>
+        <td><samp><?=htmlspecialchars($row['AccessKey'])?></samp></td>
     </tr>
-  <?php } ?>
+  <?php } while ($row = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
       </tbody>
     </table>
   </div>
+<?php } else { ?>
+<div class="alert alert-warning">
+  <strong>You have no registered members</strong><br>
+  Add a member to get their access keys
+</div>
 <?php } ?>
 
 </div>

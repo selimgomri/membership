@@ -25,6 +25,7 @@ include BASE_PATH . "views/notifyMenu.php";
   <div class="row align-items-center mb-3">
     <div class="col-md-6">
 	    <h1><?=htmlspecialchars($row['Name'])?></h1>
+      <p class="lead"><?=htmlspecialchars($row['Description'])?></p>
     </div>
     <div class="col text-right">
       <a href="<?=autoUrl("notify/lists/" . $id . "/edit")?>"

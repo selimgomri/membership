@@ -1,4 +1,6 @@
-<?
+<?php
+
+global $db;
 
 $added = $action = false;
 
@@ -6,23 +8,23 @@ $forename = $middlenames = $surname = $dateOfBirth = $asaNumber = $sex = $squad 
 $getASA = false;
 
 if ((!empty($_POST['forename']))  && (!empty($_POST['surname'])) && (!empty($_POST['datebirth'])) && (!empty($_POST['sex'])) && (!empty($_POST['squad']))) {
-	$forename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
-	$surname = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['surname']))));
-	$dateOfBirth = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['datebirth'])));
-	$sex = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['sex'])));
-	$squad = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['squad'])));
+	$forename = trim(ucwords($_POST['forename']));
+	$surname = trim(ucwords($_POST['surname']));
+	$dateOfBirth = trim($_POST['datebirth']);
+	$sex = $_POST['sex'];
+	$squad = $_POST['squad'];
 	if ((!empty($_POST['middlenames']))) {
-		$middlenames = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['middlenames']))));
+		$middlenames = trim((ucwords($_POST['middlenames']));
 	}
 	if ((!empty($_POST['asa']))) {
-		$asaNumber = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['asa'])));
+		$asaNumber = trim($_POST['asa']);
 	} else {
 		$getASA = true;
 	}
-	if ($asaNumber == "") {
+	if ($asaNumber == "" || $asaNumber == null) {
 		$getASA = true;
 	}
-	$cat = mysqli_real_escape_string($link, $_POST['cat']);
+	$cat = $_POST['cat'];
 	if ($cat != 1 && $cat != 2 && $cat != 3) {
 		halt(500);
 	}
@@ -34,15 +36,26 @@ if ((!empty($_POST['forename']))  && (!empty($_POST['surname'])) && (!empty($_PO
 
 	$accessKey = generateRandomString(6);
 
-	$sql = "INSERT INTO `members` (`MemberID`, `MForename`, `MMiddleNames`, `MSurname`, `DateOfBirth`, `ASANumber`, `Gender`, `SquadID`, `AccessKey`, `ASACategory`, `ClubPays`) VALUES (NULL, '$forename', '$middlenames', '$surname', '$dateOfBirth', '$asaNumber', '$sex', '$squad', '$accessKey', '$cat', '$cp');";
-	$action = mysqli_query($link, $sql);
+  $insert = $db->prepare("INSERT INTO `members` (MForename`, `MMiddleNames`, `MSurname`, `DateOfBirth`, `ASANumber`, `Gender`, `SquadID`, `AccessKey`, `ASACategory`, `ClubPays`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+  $insert->execute([
+    $forename,
+    $middlenames,
+    $surname,
+    $dateOfBirth,
+    $asaNumber,
+    $sex,
+    $squad,
+    $accessKey,
+    $cat,
+    $cp
+  ]);
 
-	$last_id = mysqli_insert_id($link);
+	$last_id = $db->lastInsertId();
 
 	if ($getASA) {
-		$asa = mysqli_real_escape_string($link, "CLSX" . $last_id);
-		$sql = "UPDATE `members` SET `ASANumber` = '$asa' WHERE `MemberID` = '$last_id';";
-		mysqli_query($link, $sql);
+		$swimEnglandTemp = CLUB_CODE . $last_id;
+    $addTempSwimEnglandCode = $db->prepare("UPDATE `members` SET `ASANumber` = ? WHERE `MemberID` = ?");
+    $addTempSwimEnglandCode->execute([$swimEnglandTemp, $last_id]);
 	}
 }
 
