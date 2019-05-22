@@ -11,9 +11,14 @@ memberPhotography.ProPhoto FROM (((members INNER JOIN users ON members.UserID =
 users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN
 `memberPhotography` ON members.MemberID = memberPhotography.MemberID) WHERE
 members.MemberID = ? AND members.UserID = ?");
-$getSwimmer->execute($id, $_SESSION['UserID']);
+$getSwimmer->execute([$id, $_SESSION['UserID']]);
 
 $row = $getSwimmer->fetch(PDO::FETCH_ASSOC);
+
+if ($row == null) {
+  halt(404);
+}
+
 $age = date_diff(date_create($row['DateOfBirth']),
 date_create('today'))->y;
 $title = null;
@@ -76,40 +81,32 @@ $title = null;
           <input type="date" class="form-control" id="datebirth" name="datebirth" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD" value="<?=htmlspecialchars($row['DateOfBirth'])?>" required>
         </div>
         <div class="form-group">
-          <label for="asaregnumber">ASA Registration Number</label>
+          <label for="asaregnumber">Swim England Registration Number</label>
           <input type="test" class="form-control" id="asaregnumber" name="asaregnumber" placeholder="ASA Registration Numer" value="<?=htmlspecialchars($row['ASANumber'])?>" readonly>
         </div>
         <?php if ($row['Gender'] == "Male") { ?>
-        <div class="form-group">
-          <label for="sex">Sex</label>
-          <select class="custom-select" id="sex" name="sex" placeholder="Select">
-            <option value="Male" selected>Male</option>
-            <option value="Female">Female</option>
-          </select>
-        </div>
-      <?php } else { ?>
-        <div class="form-group">
-          <label for="sex">Sex</label>
-          <select class="custom-select" id="sex" name="sex" placeholder="Select">
-            <option value="Male">Male</option>
-            <option value="Female" selected>Female</option>
-          </select>
-        </div>
-      <?php } ?>
-        <div class="form-group">
-          <label for="medicalNotes">Medical Notes</label>
-          <div class="alert alert-info">
-            <p class="mb-0">
-              <strong>
-                You no longer provide medical details on this page.
-              </strong>
-            </p>
-            <p class="mb-0">
-              Head to <a class="alert-link" href="<?php echo autoUrl("swimmers/" . $id .
-              "/medical"); ?>" target="_self">the new medical form</a> to ensure
-              your swimmer's medical details are up to date.
-            </p>
+          <div class="form-group">
+            <label for="sex">Sex</label>
+            <select class="custom-select" id="sex" name="sex" placeholder="Select">
+              <option value="Male" selected>Male</option>
+              <option value="Female">Female</option>
+            </select>
           </div>
+        <?php } else { ?>
+          <div class="form-group">
+            <label for="sex">Sex</label>
+            <select class="custom-select" id="sex" name="sex" placeholder="Select">
+              <option value="Male">Male</option>
+              <option value="Female" selected>Female</option>
+            </select>
+          </div>
+        <?php } ?>
+        <div class="mb-3">
+          <p>Medical Notes</p>
+          <p class="mb-0">
+            <a class="btn btn-primary" href="<?=autoUrl("swimmers/" . $id .
+            "/medical")?>" target="_blank">Edit medical details</a>
+          </p>
         </div>
         <div class="form-group">
           <label for="otherNotes">Other Notes</label>
@@ -179,7 +176,7 @@ $title = null;
           <ul></ul>
         </div>
         <?php } ?>
-        <p>
+        <p class="mb-5">
           <button type="submit" class="btn btn-success">Save Changes</button>
         </p>
 
@@ -190,15 +187,15 @@ $title = null;
           <div class="alert alert-danger">
             <p><strong>Danger Zone</strong> <br>Actions here can be irreversible. Be careful what you do.</p>
             <div class="form-group">
-              <label for="disconnect">Disconnect swimmer from your account with this Key <span class="mono">"<?=htmlspecialchars($disconnectKey)?>"</span></label>
+              <label for="disconnect">Disconnect swimmer from your account with this key: <span class="mono"><?=htmlspecialchars($disconnectKey)?></span></label>
               <input type="text" class="form-control mono" id="disconnect" name="disconnect" aria-describedby="disconnectHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
-              <small id="disconnectHelp" class="form-text">Enter the key in quotes above and press the <strong>Delete or Disconnect</strong> button. This will dissassociate this swimmer from your account in all of our systems. You will need a new Access Key to add the swimmer again.</small>
+              <small id="disconnectHelp" class="form-text">Enter the key above and press the <strong>Delete or Disconnect</strong> button. This will dissassociate this swimmer from your account in all of our systems. You will need to request a new Access Key to add the swimmer again.</small>
             </div>
             <input type="hidden" value="<?=$disconnectKey?>" name="disconnectKey">
             <div class="form-group">
-              <label for="swimmerDeleteDanger">Delete this Swimmer with this Key <span class="mono">"<?=htmlspecialchars($row['AccessKey'])?>"</span></label>
+              <label for="swimmerDeleteDanger">Delete this Swimmer with this key: <span class="mono"><?=htmlspecialchars($row['AccessKey'])?></span></label>
               <input type="text" class="form-control mono" id="swimmerDeleteDanger" name="swimmerDeleteDanger" aria-describedby="swimmerDeleteDangerHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
-              <small id="swimmerDeleteDangerHelp" class="form-text">Enter the key in quotes above and press <strong>Delete or Disconnect</strong>. This will delete this swimmer from all of our systems.</small>
+              <small id="swimmerDeleteDangerHelp" class="form-text">Enter the key above and press <strong>Delete or Disconnect</strong>. This will delete this swimmer from all of our systems.</small>
             </div>
             <p class="mb-0">
               <button type="submit" class="btn btn-danger">Delete or
