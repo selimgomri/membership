@@ -10,9 +10,10 @@ $output = fopen('php://output', 'w');
 fputcsv($output, array('Forename', 'Surname', 'Squad' , 'ASA Number' , 'Access Key'));
 
 // fetch the data
-$sql = "SELECT members.MForename, members.MSurname, squads.SquadName, members.ASANumber, members.AccessKey FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) ORDER BY `members`.`MForename` , `members`.`MSurname` ASC;";
-$rows = mysqli_query($link, $sql);
+$swimmers = $db->query("SELECT members.MForename, members.MSurname, squads.SquadName, members.ASANumber, members.AccessKey FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) ORDER BY `members`.`MForename` , `members`.`MSurname` ASC");
 
 // loop over the rows, outputting them
-while ($row = mysqli_fetch_assoc($rows)) fputcsv($output, $row);
+while ($row = $swimmers->fetch(PDO::FETCH_ASSOC) {
+  fputcsv($output, $row);
+}
 ?>
