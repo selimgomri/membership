@@ -1,5 +1,7 @@
 <?php
 
+global $db;
+
 $user = $_SESSION['UserID'];
 $use_white_background = true;
 $pagetitle = "Payments and Direct Debits";
@@ -12,17 +14,23 @@ require 'GoCardlessSetup.php';
 //$customers = $client->customers()->list()->records;
 //print_r($customers);
 
+/*
+ * Get the user's preferred mandate (If exists)
+ */
+$getPreferred = $db->prepare("SELECT MandateID FROM `paymentPreferredMandate` WHERE `UserID` = ?");
+$getPreferred->execute([$_SESSION['UserID']]);
 $defaultAcc = null;
-$sql = "SELECT * FROM `paymentPreferredMandate` WHERE `UserID` = '$user';";
-$result = mysqli_query($link, $sql);
-if (mysqli_num_rows($result) == 1) {
-  $defaultAcc = (mysqli_fetch_array($result, MYSQLI_ASSOC))['MandateID'];
+if ($row = $getPreferred->fetch()) {
+  $defaultAcc = $row['MandateID'];
 }
 
-$sql = "SELECT * FROM `paymentMandates` WHERE `UserID` = '$user' AND `InUse` = 1;";
-$result = mysqli_query($link, $sql);
+/*
+ * Get all mandates
+ */
+$mandateDetails = $db->prepare("SELECT * FROM `paymentMandates` WHERE `UserID` = ? AND `InUse` = ?");
+$mandateDetails->execute([$_SESSION['UserID'], true]);
 
- ?>
+?>
 
 <div class="container">
 	<h1>Bank Account Options</h1>
@@ -36,7 +44,7 @@ $result = mysqli_query($link, $sql);
     <p>
       To delete a mandate permanently, contact your bank in person, by phone or through online banking, where you can cancel a mandate yourself.
     </p>
-  	<?php if (mysqli_num_rows($result) > 0) { ?>
+  	<?php if ($row = $mandateDetails->fetch(PDO::FETCH_ASSOC)) { ?>
   	<div class="table-responsive-md bg-white">
   		<table class="table table-striped">
   			<thead>
@@ -49,20 +57,35 @@ $result = mysqli_query($link, $sql);
   				</tr>
   			</thead>
   			<tbody>
-  				<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-  				$row = mysqli_fetch_array($result, MYSQLI_ASSOC);	?>
+  				<?php do { ?>
   				<tr>
-            <td class="mono"><a target="_blank" href="<?=autoUrl("payments/mandates/" . $row['Mandate'])?>" title="View Mandate Details"><?=$row['Mandate']?></a></td>
-  					<td><?=$row['BankName']?></td>
-  					<td class="mono" title="Name on bank account"><?=$row['AccountHolderName']?></td>
-            <td class="mono" title="Last two digits of your account number">******<?=$row['AccountNumEnd']?></td>
-  					<?php if (mysqli_num_rows($result) > 1 && $defaultAcc != $row['MandateID']) { ?>
-  					<td><a href="<?php echo autoUrl("payments/mandates/makedefault/" . $row['MandateID']); ?>">Make Default</a></td>
+            <td class="mono">
+              <a target="_blank" href="<?=autoUrl("payments/mandates/" . htmlspecialchars($row['Mandate']))?>" title="View Mandate Details">
+                <?=htmlspecialchars($row['Mandate'])?>
+              </a>
+            </td>
+  					<td>
+              <?=htmlspecialchars($row['BankName'])?>
+            </td>
+  					<td class="mono" title="Name on bank account">
+              <?=htmlspecialchars($row['AccountHolderName'])?>
+            </td>
+            <td class="mono" title="Last two digits of your account number">
+              ******<?=htmlspecialchars($row['AccountNumEnd'])?>
+            </td>
+  					<?php if ($defaultAcc != null > 1 && $defaultAcc != $row['MandateID']) { ?>
+  					<td>
+              <a href="<?=autoUrl("payments/mandates/makedefault/" . htmlspecialchars($row['MandateID']))?>">
+                Make Default
+              </a>
+            </td>
   					<?php } else { ?>
-  					<td><small>Default Mandate</small></td>
+  					<td>
+              <small>Default Mandate</small>
+            </td>
   					<?php } ?>
   				</tr>
-  			<?php } ?>
+  			<?php } while ($row = $mandateDetails->fetch(PDO::FETCH_ASSOC)); ?>
   			</tbody>
   		</table>
   	</div>
@@ -74,8 +97,8 @@ $result = mysqli_query($link, $sql);
   </div>
 	<?php } else { ?>
 	<div class="alert alert-warning">
-		<strong>You have no Direct Debits</strong> <br>
-		<a class="alert-link" href="<?php echo autoUrl("payments/setup"); ?>">Create one now</a>
+		<strong>You have no Direct Debit Mandates</strong> <br>
+		<a class="alert-link" href="<?=autoUrl("payments/setup")?>">Create one now</a>
 	</div>
 	<?php } ?>
 </div>

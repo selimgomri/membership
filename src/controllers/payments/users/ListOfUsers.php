@@ -3,7 +3,7 @@
 $search = null;
 
 if (isset($_GET['search'])) {
-	$search = mysqli_real_escape_string($link, $_GET['search']);
+	$search = trim($_GET['search']);
 }
 
 $pagetitle = "Find a Parent's Current Fees";
@@ -14,15 +14,15 @@ include BASE_PATH . "views/paymentsMenu.php";
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php'; ?>
 
 <div class="container">
-	<div class="my-3 p-3 bg-white rounded shadow">
-		<h1 class="border-bottom border-gray pb-2 mb-3">Find a parent's current fees.</h1>
+	<div class="">
+		<h1 class="">Find a parent's current fees.</h1>
 		<div class="form-group">
 	    <label class="sr-only" for="search">Search by Surname</label>
 			<div class="input-group">
 				<div class="input-group-prepend">
 			    <span class="input-group-text">Search</span>
 			  </div>
-	    	<input class="form-control" placeholder="Surname" id="search" name="search" value="<?php echo htmlspecialchars($search); ?>">
+	    	<input class="form-control" placeholder="Surname" id="search" name="search" value="<?=htmlspecialchars($search)?>">
 			</div>
 	  </div>
 		<div id="output">

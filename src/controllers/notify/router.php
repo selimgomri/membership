@@ -91,7 +91,6 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas") {
 		});
 
 		$this->get('/{id}:int/edit', function($id) {
-			global $link;
 			include 'EditList.php';
 		});
 

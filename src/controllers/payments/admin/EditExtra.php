@@ -1,17 +1,15 @@
 <?php
 
-$id = mysqli_real_escape_string($link, $id);
+global $db;
+$getExtra = $db->prepare("SELECT * FROM `extras` WHERE `ExtraID` = ?");
+$getExtra->execute([$id]);
+$row = $getExtra->fetch(PDO::FETCH_ASSOC);
 
-$sql = "SELECT * FROM `extras` WHERE `ExtraID` = '$id';";
-$result = mysqli_query($link, $sql);
-
-if (mysqli_num_rows($result) != 1) {
+if ($row == null) {
 	halt(404);
 }
 
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-$pagetitle = "Edit " . $row['ExtraName'];
+$pagetitle = "Editing " . htmlspecialchars($row['ExtraName']);
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
@@ -20,12 +18,10 @@ include BASE_PATH . "views/paymentsMenu.php";
 
 <div class="container">
   <div class="">
-    <h1 class="border-bottom border-gray pb-2 mb-2">
-			Edit <?php echo $row['ExtraName']; ?>
+    <h1>
+			Edit <?=htmlspecialchars($row['ExtraName'])?>
 		</h1>
-    <p class="lead">Edit this extra fee.</p>
-
-    <hr>
+    <p class="lead">Edit this extra monthly fee.</p>
 
     <div class="row">
       <div class="col-lg-8">
@@ -39,7 +35,7 @@ include BASE_PATH . "views/paymentsMenu.php";
           <div class="form-group">
             <label for="name">Extra Name</label>
             <input type="text" class="form-control" id="name" name="name"
-						placeholder="Enter name" value="<?php echo $row['ExtraName']; ?>">
+						placeholder="Enter name" value="<?=htmlspecialchars($row['ExtraName'])?>">
           </div>
 
           <div class="form-group">
@@ -49,7 +45,7 @@ include BASE_PATH . "views/paymentsMenu.php";
                 <span class="input-group-text" id="basic-addon3">&pound;</span>
               </div>
               <input type="text" class="form-control" id="price" name="price"
-							placeholder="Enter price" value="<?php echo $row['ExtraFee']; ?>">
+							placeholder="Enter price" value="<?=htmlspecialchars($row['ExtraFee'])?>">
             </div>
           </div>
 

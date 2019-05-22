@@ -1,31 +1,32 @@
 <?php
 
-$id = mysqli_real_escape_string($link, $id);
+global $db;
 
 $name = $price = $errorMessage = null;
 $errorState = false;
 
 if ($_POST['name'] != null && $_POST['name'] != "") {
-	$name =	mysqli_real_escape_string($link, $_POST['name']);
+	$name =	trim($_POST['name']);
 } else {
 	$errorState = true;
 	$errorMessage .= "<li>There was a problem with that name</li>";
 }
 
 if ($_POST['price'] != null && $_POST['price'] != "") {
-	$price = mysqli_real_escape_string($link, number_format($_POST['price'],2,'.',''));
+	$price = number_format($_POST['price'],2,'.','');
 } else {
 	$errorState = true;
 	$errorMessage .= "<li>There was a problem with that price</li>";
 }
 
 if (!$errorState) {
-	$sql = "UPDATE `extras` SET `ExtraName` = '$name', `ExtraFee` = '$price' WHERE `ExtraID` = '$id';";
-	if (!mysqli_query($link, $sql)) {
+  try {
+    $update = $db->prepare("UPDATE extras SET ExtraName = ?, ExtraFee = ? WHERE ExtraID = ?");
+    $update->execute([$name, $price, $id]);
+    header("Location: " . autoUrl("payments/extrafees/" . $id));
+	} catch (Exception $e) {
 		$errorState = true;
 		$errorMessage .= "<li>Unable to edit item in database</li>";
-	} else {
-		header("Location: " . autoUrl("payments/extrafees/" . $id));
 	}
 }
 

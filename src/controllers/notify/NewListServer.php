@@ -1,29 +1,32 @@
 <?php
 
+global $db;
+
 $name = $desc = $errorMessage = null;
 $errorState = false;
 
 if ($_POST['name'] != null && $_POST['name'] != "") {
-	$name =	mysqli_real_escape_string($link, $_POST['name']);
+	$name =	trim($_POST['name']);
 } else {
 	$errorState = true;
 	$errorMessage .= "<li>There was a problem with that name</li>";
 }
 
 if ($_POST['desc'] != null && $_POST['desc'] != "") {
-	$desc = mysqli_real_escape_string($link, $_POST['desc']);
+	$desc = trim($_POST['desc']);
 } else {
 	$errorState = true;
 	$errorMessage .= "<li>There was a problem with that description</li>";
 }
 
 if (!$errorState) {
-	$sql = "INSERT INTO `targetedLists` (`Name`, `Description`) VALUES ('$name', '$desc');";
-	if (!mysqli_query($link, $sql)) {
+  try {
+    $insert = $db->prepare("INSERT INTO `targetedLists` (`Name`, `Description`) VALUES (?, ?)");
+    $insert->execute([$name, $desc]);
+    header("Location: " . autoUrl("notify/lists"));
+	} catch (Exception $e) {
 		$errorState = true;
 		$errorMessage .= "<li>Unable to add to database</li>";
-	} else {
-		header("Location: " . autoUrl("notify/lists"));
 	}
 }
 

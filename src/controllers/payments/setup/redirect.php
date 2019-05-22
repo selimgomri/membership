@@ -1,42 +1,53 @@
 <?php
 
+global $db;
+
 $user = $_SESSION['UserID'];
 
-$sql = "SELECT * FROM `paymentSchedule` WHERE `UserID` = '$user';";
-$scheduleExists = mysqli_num_rows(mysqli_query($link, $sql));
-if ($scheduleExists == 0) {
+$selectSchedule = $db->prepare("SELECT COUNT(*) FROM `paymentSchedule` WHERE `UserID` = ?");
+$selectSchedule->execute([$_SESSION['UserID']]);
+
+if ($selectSchedule->fetchColumn() == 0) {
 	header("Location: " . autoUrl("payments/setup/0"));
 } else {
 	try {
-		$redirectFlowId = mysqli_real_escape_string($link, $_REQUEST['redirect_flow_id']);
+		$redirectFlowId = $_REQUEST['redirect_flow_id'];
 		$redirectFlow = $client->redirectFlows()->complete(
 		    $_SESSION['GC_REDIRECTFLOW_ID'], //The redirect flow ID from above.
 		    ["params" => ["session_token" => $_SESSION['Token']]]
 		);
 
-		$mandate = mysqli_real_escape_string($link, $redirectFlow->links->mandate);
-		$customer = mysqli_real_escape_string($link, $redirectFlow->links->customer);
-	  $bankAccount = mysqli_real_escape_string($link, $redirectFlow->links->customer_bank_account);
+		$mandate = $redirectFlow->links->mandate;
+		$customer = $redirectFlow->links->customer;
+	  $bankAccount = $redirectFlow->links->customer_bank_account;
 
 	  $bank = $client->customerBankAccounts()->get($bankAccount);
-	  $accHolderName = mysqli_real_escape_string($link, $bank->account_holder_name);
-	  $accNumEnd = mysqli_real_escape_string($link, $bank->account_number_ending);
-	  $bankName = mysqli_real_escape_string($link, $bank->bank_name);
+	  $accHolderName = $bank->account_holder_name;
+	  $accNumEnd = $bank->account_number_ending;
+	  $bankName = $bank->bank_name;
 
-		$sql1 = "INSERT INTO `paymentMandates` (`UserID`, `Name`, `Mandate`, `Customer`, `BankAccount`, `BankName`, `AccountHolderName`, `AccountNumEnd`, `InUse`) VALUES ('$user', 'Mandate', '$mandate', '$customer', '$bankAccount', '$bankName', '$accHolderName', '$accNumEnd', '1');";
-		mysqli_query($link, $sql1);
+    $insertToMandates = $db->prepare("INSERT INTO `paymentMandates` (`UserID`, `Name`, `Mandate`, `Customer`, `BankAccount`, `BankName`, `AccountHolderName`, `AccountNumEnd`, `InUse`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $insertToMandates->execute([
+      $_SESSION['UserID'],
+      'Mandate',
+      $mandate,
+      $customer,
+      $bankAccount,
+      $bankName,
+      $accHolderName,
+      $accNumEnd,
+      true
+    ]);
 
 		// If there is no preferred mandate existing, automatically set it to the one we've just added
-		$sql = "SELECT * FROM `paymentPreferredMandate` WHERE `UserID` = '$user';";
-		$count = mysqli_num_rows(mysqli_query($link, $sql));
-		if ($count < 1) {
-			$sql = "SELECT `MandateID` FROM `paymentMandates` WHERE `Mandate` = '$mandate';";
-			$result = mysqli_query($link, $sql);
-			if (mysqli_num_rows($result) == 1) {
-				$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-				$mandateId = $row['MandateID'];
-				$sql = "INSERT INTO `paymentPreferredMandate` (`MandateID`, `UserID`) VALUES ('$mandateId', '$user');";
-				mysqli_query($link, $sql);
+		$getPreferredCount = $db->prepare("SELECT COUNT(*) FROM `paymentPreferredMandate` WHERE `UserID` = ?");
+    $getPreferredCount->execute([$_SESSION['UserID']]);
+		if ($getPreferredCount->fetchColumn() == 0) {
+      $getMandateId = $db->prepare("SELECT `MandateID` FROM `paymentMandates` WHERE `Mandate` = ?");
+      $getMandateId->execute([$mandate]);
+			if ($mandateId = $getMandateId->fetchColumn()) {
+        $insertPreferred = $db->prepare("INSERT INTO `paymentPreferredMandate` (`MandateID`, `UserID`) VALUES (?, ?)");
+        $insertPreferred->execute([$mandateId, $user]);
 			}
 		}
 
@@ -65,7 +76,6 @@ if ($scheduleExists == 0) {
 
 	}
 	catch (Exception $e) {
-    pre($e);
 		halt(500);
 	}
 }
