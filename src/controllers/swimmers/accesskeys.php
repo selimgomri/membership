@@ -44,11 +44,10 @@ if ($row = $swimmers->fetch(PDO::FETCH_ASSOC)) { ?>
         $asaN = CLUB_CODE . $memID;
         ?><td><span class="mono"><?=htmlspecialchars($asaN)?></span></td><?php
         $updateASA->execute([$asaN, $memID]);
-      }
-      else { ?>
+      } else { ?>
         <td><span class="mono"><?=htmlspecialchars($row['ASANumber'])?></span></td>
       <?php } ?>
-        <td><samp><?=htmlspecialchars($row['AccessKey']?></samp></td>
+        <td><samp><?=htmlspecialchars($row['AccessKey'])?></samp></td>
     </tr>
   <?php } while ($row = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
       </tbody>
