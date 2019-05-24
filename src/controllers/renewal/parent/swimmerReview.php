@@ -24,7 +24,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 			<p>
 				If your swimmers are not listed here, their membership cannot be
-				renewed. This will lead to a lapse in their club and ASA membership.
+				renewed. This will lead to a lapse in their club and Swim England Membership.
 				Your swimmers will no longer be insured and automatically removed from
 				our registers if they cannot renew.
 			</p>

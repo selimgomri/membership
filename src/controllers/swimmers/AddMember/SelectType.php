@@ -42,7 +42,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
           </p>
 					<p class="card-text">
             This process allows the full registration to be completed
-            automatically (except for ASA Membership).
+            automatically (except for Swim England Membership).
           </p>
 				</div>
 		    <div class="card-footer">

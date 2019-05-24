@@ -18,7 +18,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		$row['Year']; ?></p>
 		<p>Membership renewal ensures all our information about you is up to date,
 			that you and your swimmers understand your rights and responsibilities at
-			the club, and that you can pay your <abbr title="Including ASA Fees">
+			the club, and that you can pay your <abbr title="Including Swim England Fees">
 			membership fee</abbr> for the year ahead.
 		</p>
 		<p>
@@ -37,7 +37,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		<p class="lead">Welcome to the Membership Renewal System</p>
 		<p>Membership renewal ensures all our information about you is up to date,
 			that you and your swimmers understand your rights and responsibilities at
-			the club, and that you can pay your <abbr title="Including ASA Fees">
+			the club, and that you can pay your <abbr title="Including Swim England Fees">
 			membership fee</abbr> for the year ahead.
 		</p>
 		<div class="alert alert-danger">

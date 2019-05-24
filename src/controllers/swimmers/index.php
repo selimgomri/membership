@@ -73,7 +73,7 @@
       $pagetitle = "My Swimmers";
       $title = "My Swimmers";
       $content = "<p class=\"lead\">My Swimmers shows you all of your registered swimmers and allows you to easily change their details.</p>";
-      $content .= "<p>Please remember that it is your responsibility to also keep the ASA Membership System up to date with personal details.</p>";
+      $content .= "<p>Please remember that it is your responsibility to also keep the Swim England Membership System up to date with personal details.</p>";
       $content .= mySwimmersTable($link, $userID);
       $content .= "<p><a href=\"" . autoUrl('myaccount/add-swimmer.php') . "\" class=\"btn btn-outline-dark\">Add a Swimmer</a></p>";
 

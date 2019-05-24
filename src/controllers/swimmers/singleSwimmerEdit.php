@@ -222,7 +222,7 @@ $cat = [];
 $cat[$rowSwim['ASACategory']] = " selected ";
 $content .= "
 <div class=\"form-group\">
-	<label for=\"cat\">ASA Membership Category</label>
+	<label for=\"cat\">Swim England Membership Category</label>
 	<select class=\"custom-select\" id=\"cat\" name=\"cat\" placeholder=\"Select\">
 		<option value=\"1\" " . $cat[1] . ">Category 1</option>
 		<option value=\"2\" " . $cat[2] . ">Category 2</option>

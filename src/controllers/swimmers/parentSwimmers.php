@@ -10,7 +10,7 @@ include BASE_PATH . "views/header.php";
 <div class="container">
 	<h1>My Swimmers</h1>
 	<p class="lead">My Swimmers shows you all of your registered swimmers and allows you to easily change their details.</p>
-	<p>Please remember that it is your responsibility to also keep the ASA Membership System up to date with personal details.</p>
+	<p>Please remember that it is your responsibility to also keep the Swim England Membership System up to date with personal details.</p>
 
 	<?php echo mySwimmersTable($link, $userID); ?>
 

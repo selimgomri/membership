@@ -40,12 +40,12 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
     $rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 2, "Butterfly", null, 2, "Freestyle", null, 2, "Individual Medley", null, null, 2];
 
 		$response .= "
-		<p>All swims possible under ASA Rules are shown below. Not all of these
+		<p>All swims possible under Swim England Rules are shown below. Not all of these
 		events may be available for " . $row['GalaName'] . "</p>";
 
     if ($row['HyTek'] == 1) {
       $response .= '<p>This is a HyTek gala. Our systems will automatically
-      fetch your personal bests from the ASA for you.</p>';
+      fetch your personal bests from Swim England for you.</p>';
     }
 
     $response .= "

@@ -263,7 +263,7 @@ include BASE_PATH . 'views/header.php';
           <h2>Already swim for a club?</h2>
           <p>
             If you/your swimmer is a member of a Swim England swimming club, they
-            will have an ASA Membership Number. If you are not a member of a club,
+            will have an Swim England Membership Number. If you are not a member of a club,
             skip this box.
           </p>
           <div class="mb-3">

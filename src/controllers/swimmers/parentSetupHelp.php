@@ -265,7 +265,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 	<div class="small text-muted">
 		<p>
-			The above barcodes are provided because ASA Membership Cards are no longer
+			The above barcodes are provided because Swim England Membership Cards are no longer
 			issued.
 		</p>
 	</div>

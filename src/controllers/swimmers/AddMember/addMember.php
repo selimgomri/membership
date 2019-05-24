@@ -53,7 +53,7 @@ $content .= "
 $content .= "
 <div class=\"col-sm-6\">
 <div class=\"form-group\">
-	<label for=\"squad\">ASA Membership Category</label>
+	<label for=\"squad\">Swim England Membership Category</label>
 	<select class=\"custom-select\" placeholder=\"Select a Category\" id=\"cat\" name=\"cat\">
 		<option value=\"1\">Category 1</option>
 		<option value=\"2\" selected>Category 2</option>
