@@ -21,7 +21,7 @@ include BASE_PATH . "views/squadMenu.php";
           <ul class="list-group list-group-flush">
     					<?php do { ?>
     					<li class="list-group-item">
-                <div class="row align-items-middle">
+                <div class="row align-items-center">
                   <div class="col">
                     <p class="mb-0">
                       <a href="<?=autoUrl("swimmers/" .
@@ -31,6 +31,7 @@ include BASE_PATH . "views/squadMenu.php";
                       $move['SquadID'])?>"><?=htmlspecialchars($move['SquadName'])?></a>
                       on <?=date('j F Y', strtotime($move['MovingDate']))?>
                     </p>
+                    <div class="d-lg-none mb-3"></div>
                   </div>
                   <div class="col-lg-4">
                     <div class="row">
