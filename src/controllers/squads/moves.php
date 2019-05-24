@@ -10,57 +10,62 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php";
 ?>
 <div class="container">
-	<h1>Squad Moves</h1>
-	<p class="lead">Upcoming Squad Moves (Sorted by Date)</p>
-	<p>To make a new squad move, <a href="<?=autoUrl("swimmers")?>">select a swimmer</a>.</p>
-	<!-- TABLE HERE -->
-	<?php if ($move != null) { ?>
-		<div class="table-resonsive">
-			<table class="table table-striped">
-				<thead class="thead-light">
-					<tr>
-						<th>Swimmer</th>
-						<th>New Squad</th>
-						<th>Moves on</th>
-						<th></th>
-            <th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php do { ?>
-					<tr>
-						<td>
-							<a href="<?=autoUrl("swimmers/" . $move['MemberID'])?>">
-								<?=htmlspecialchars($move['MForename'] . " " . $move['MSurname'])?>
-							</a>
-						</td>
-						<td>
-							<a href="<?=autoUrl("squads/" . $move['SquadID'])?>">
-								<?=htmlspecialchars($move['SquadName'])?>
-							</a>
-						</td>
-						<td><?=date('j F Y', strtotime($move['MovingDate']))?></td>
-						<td>
-							<a href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/edit-move")?>">
-								Edit or Cancel Move
-							</a>
-						</td>
-            <td>
-							<a href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/move-contract")?>">
-								Print Contract
-							</a>
-						</td>
-					</tr>
-        <?php } while ($move = $moves->fetch(PDO::FETCH_ASSOC)); ?>
-				</tbody>
-			</table>
-		</div>
-	<?php }
-	else { ?>
-	<div class="alert alert-warning">
-		<strong>There are no upcoming squad moves</strong> <br>
-		Check back regularly to see which swimmers may be moving into your squad
-	</div>
-	<?php } ?>
+  <div class="row">
+    <div class="col">
+    	<h1>Squad Moves</h1>
+    	<p class="lead">Upcoming Squad Moves (Sorted by Date)</p>
+    	<p>To make a new squad move, <a href="<?=autoUrl("swimmers")?>">select a swimmer</a>.</p>
+    	<!-- LIST -->
+    	<?php if ($move != null) { ?>
+        <div class="card">
+          <div class="card-header">
+            Upcoming moves
+          </div>
+          <ul class="list-group list-group-flush">
+    					<?php do { ?>
+    					<li class="list-group-item">
+                <div class="form-row align-items-center">
+                  <div class="col">
+                    <p class="mb-0">
+                      <strong><a href="<?=autoUrl("swimmers/" .
+                      $move['MemberID'])?>"><?=htmlspecialchars($move['MForename'] . " " .
+                      $move['MSurname'])?></a></strong> will move to  <a
+                      href="<?=autoUrl("squads/" .
+                      $move['SquadID'])?>"><?=htmlspecialchars($move['SquadName'])?>
+                      Squad</a> on <?=date('j F Y',
+                      strtotime($move['MovingDate']))?>
+                    </p>
+                    <div class="d-lg-none mb-3"></div>
+                  </div>
+                  <div class="col-md-4 col-lg-3">
+                    <div class="form-row">
+                      <div class="col-6 col-lg-12">
+            						<a class="btn btn-block btn-dark" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/edit-move")?>">
+            							Edit or Cancel
+            						</a>
+                        <div class="d-none d-lg-block mb-1"></div>
+                      </div>
+                      <div class="col-6 col-lg-12">
+            						<a class="btn btn-block btn-dark" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/move-contract")?>">
+            							Print Contract
+            						</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+    					</li>
+            <?php } while ($move = $moves->fetch(PDO::FETCH_ASSOC)); ?>
+          </ul>
+        </div>
+    	<?php }
+    	else { ?>
+    	<div class="alert alert-warning">
+    		<strong>There are no upcoming squad moves</strong> <br>
+    		Check back regularly to see which swimmers may be moving into your squad
+    	</div>
+    	<?php } ?>
+    </div>
+  </div>
 </div>
 <?php include BASE_PATH . "views/footer.php";
