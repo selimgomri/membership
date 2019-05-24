@@ -19,7 +19,7 @@ ob_start();?>
   <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:700,700i" rel="stylesheet" type="text/css">-->
   <style>
   .signature-box {
-    padding: 10pt;
+    padding: 5pt;
     margin-bottom: 16pt;
     border: 0.05cm solid #777;
     width: 8cm;
@@ -30,6 +30,7 @@ ob_start();?>
     padding: 10pt;
     background: #eee;
     margin: 0 0 16pt 0;
+    display: block;
   }
   </style>
   <?php include BASE_PATH . 'helperclasses/PDFStyles/Main.php'; ?>
@@ -57,7 +58,7 @@ ob_start();?>
     </div>
 
     <p>
-      We're very excited to let you know what <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> will be moving to <?=htmlspecialchars($email_info['SquadName'])?> Squad on <?=date("l j F Y", strtotime($email_info['MovingDate']))?>.
+      We're very excited to let you know that <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> will be moving to <?=htmlspecialchars($email_info['SquadName'])?> Squad on <?=date("l j F Y", strtotime($email_info['MovingDate']))?>.
     </p>
 
     <p>
@@ -65,7 +66,7 @@ ob_start();?>
     </p>
 
     <p>
-      As you pay by Direct Debit, you won't need to take any action. We'll automatically update your monthly fees.
+      <?php if ((defined('IS_CLS') && IS_CLS)) { ?>As you pay by Direct Debit<?php } else { ?>If you pay by Direct Debit<?php } ?>, you won't need to take any action. We'll automatically update your monthly fees.
     </p>
 
     <?php if ($email_info['SquadTimetable'] != "" && $email_info['SquadTimetable'] != null) { ?>
@@ -74,7 +75,18 @@ ob_start();?>
     </p>
     <?php } ?>
 
+    <?php if ((defined('IS_CLS') && IS_CLS)) { ?>
+      <p>
+        This document contains a form which your swimmer <strong>must sign before starting in their new squad</strong>.
+        <?php if (date_diff(date_create($email_info['DateOfBirth']), date_create('today'))->y < 18) { ?>
+        As <?=htmlspecialchars($email_info['MForename'])?> is under the age of 18, you must also sign to confirm that you have explained the content and implications of the code of conduct to <?=htmlspecialchars($email_info['MForename'])?>.
+        <?php } ?>
+      </p>
+    <?php } ?>
+
     <?php if ($email_info['SquadCoC'] != "" && $email_info['SquadCoC'] != null) { ?>
+    <div class="page-break"></div>
+
     <h1 id="squad-code-of-conduct">
       Code of conduct
     </h1>
@@ -89,35 +101,44 @@ ob_start();?>
 
     <?=getPostContent($email_info['SquadCoC'])?>
 
-    <div class="cell prevent-page-break">
-      <p><strong>
-        <?php if ((defined('IS_CLS') && IS_CLS)) { ?>
-          Please sign and return this form before <?=date("l j F Y", strtotime($email_info['MovingDate']))?>.
-        <?php } else { ?>
-          If required to do so by your club, please sign and return this form.
-        <?php } ?>
-      </strong></p>
+    <div class="page-break"></div>
 
-      <?php if (date_diff(date_create($email_info['DateOfBirth']), date_create('today'))->y < 18) { ?>
-        <p>
-          As <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> is under the age of 18, you their parent/guardian must sign to confirm you have explained the squad code of conduct to <?=htmlspecialchars($email_info['MForename'])?>.
-        </p>
+    <h1 id="squad-code-of-conduct-agreement">
+      Agreement to code of conduct
+    </h1>
 
-        <p>
-          I, <span><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></span> have explained the content and implications to <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> and can confirm that they understood.
-        </p>
-
-        <div class="signature-box">
-          Signed by <span><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></span> (or print name)
-        </div>
+    <p><strong>
+      <?php if ((defined('IS_CLS') && IS_CLS)) { ?>
+        Please sign and return this form to any squad coach before you move into this squad on <?=date("l j F Y", strtotime($email_info['MovingDate']))?>.
+      <?php } else { ?>
+        If required to do so by your club, please sign and return this form.
       <?php } ?>
+    </strong></p>
 
-      <p>
-        I, <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> agree to the Code of Conduct for <?=htmlspecialchars($email_info['SquadName'])?> Squad as outlined above as required by the Terms and Conditions of Membership of <?=CLUB_NAME?>.
-      </p>
+    <div class="prevent-page-break">
+      <div class="cell">
 
-      <div class="signature-box mb-0">
-        Signed by <span><?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?></span>
+        <?php if (date_diff(date_create($email_info['DateOfBirth']), date_create('today'))->y < 18) { ?>
+          <p>
+            As <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> is under the age of 18 you, their parent/guardian, must sign to confirm you have explained the squad code of conduct to <?=htmlspecialchars($email_info['MForename'])?>.
+          </p>
+
+          <p>
+            I, <span><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></span> have explained the content and implications to <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> and can confirm that they understood.
+          </p>
+
+          <div class="signature-box">
+            Signed by <span><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></span> (or print name)
+          </div>
+        <?php } ?>
+
+        <p>
+          I, <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> agree to the Code of Conduct for <?=htmlspecialchars($email_info['SquadName'])?> Squad as outlined above as required by the Terms and Conditions of Membership of <?=CLUB_NAME?>.
+        </p>
+
+        <div class="signature-box mb-0">
+          Signed by <span><?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?></span>
+        </div>
       </div>
     </div>
 
