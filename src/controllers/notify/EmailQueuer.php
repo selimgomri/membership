@@ -72,10 +72,12 @@ for ($i = 0; $i < sizeof($lists); $i++) {
 	}
 }
 
+$userSending = getUserName($sender);
+
 $recipientGroups = [
   "Sender" => [
     "ID" => $sender,
-    "Name" => getUserName($sender)
+    "Name" => $userSending
   ],
   "To" => [
     "Squads" => $squads,
@@ -89,6 +91,28 @@ $recipientGroups = [
     "ForceSend" => $force
   ]
 ];
+
+if ($_POST['from'] == "current-user") {
+  $senderNames = explode(' ', $userSending);
+  $fromEmail = "";
+  for ($i = 0; $i < sizeof($senderNames); $i++) {
+    $fromEmail .= urlencode(strtolower($senderNames[$i]));
+    if ($i < sizeof($senderNames) - 1) {
+      $fromEmail .= '.';
+    }
+  }
+
+  if (!(defined('IS_CLS') && IS_CLS)) {
+    $fromEmail .= '.' . urlencode(strtolower(str_replace(' ', '', CLUB_CODE)));
+  }
+
+  $fromEmail .= '@' . EMAIL_DOMAIN;
+
+  $recipientGroups["NamedSender"] = [
+    "Email" => $fromEmail,
+    "Name" => $userSending
+  ];
+}
 
 $json = json_encode($recipientGroups);
 $date = date("Y-m-d H:i:s");

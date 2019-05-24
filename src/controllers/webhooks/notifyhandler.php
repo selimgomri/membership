@@ -52,7 +52,7 @@ set_time_limit(0);
 global $db;
 $getExtraEmails = $db->prepare("SELECT Name, EmailAddress, ID FROM notifyAdditionalEmails WHERE UserID = ?");
 
-$getPendingGroupMail = $db->query("SELECT ID, notifyHistory.Subject, notifyHistory.Message, notifyHistory.ForceSend FROM notifyHistory INNER JOIN notify ON notifyHistory.ID = notify.MessageID WHERE Status = 'Queued' GROUP BY ID LIMIT 8");
+$getPendingGroupMail = $db->query("SELECT ID, notifyHistory.Subject, notifyHistory.Message, notifyHistory.ForceSend, notifyHistory.JSONData FROM notifyHistory INNER JOIN notify ON notifyHistory.ID = notify.MessageID WHERE Status = 'Queued' GROUP BY ID LIMIT 8");
 
 $getUsersForEmail = $db->prepare("SELECT Forename, Surname, EmailAddress, notify.UserID, EmailID FROM notify INNER JOIN users ON notify.UserID = users.UserID WHERE MessageID = ?");
 
@@ -61,6 +61,8 @@ $completed = $db->prepare("UPDATE `notify` SET `Status` = ? WHERE `EmailID` = ?"
 
 while ($currentMessage = $getPendingGroupMail->fetch(PDO::FETCH_ASSOC)) {
   $getUsersForEmail->execute([$currentMessage['ID']]);
+
+  $jsonData = json_decode($currentMessage['JSONData']);
 
   $db->beginTransaction();
 
@@ -97,9 +99,12 @@ while ($currentMessage = $getPendingGroupMail->fetch(PDO::FETCH_ASSOC)) {
 
   $message = str_replace("\r\n", "", $message);
 
-  $from = new \SendGrid\Mail\From("notify@chesterlestreetasc.co.uk", CLUB_NAME);
+  $from = new \SendGrid\Mail\From("notify@" . EMAIL_DOMAIN, CLUB_NAME);
   if ($currentMessage['ForceSend']) {
-    $from = new \SendGrid\Mail\From("noreply@chesterlestreetasc.co.uk", CLUB_NAME);
+    $from = new \SendGrid\Mail\From("noreply@" . EMAIL_DOMAIN, CLUB_NAME);
+  }
+  if ($jsonData->NamedSender->Email != null && $jsonData->NamedSender->Name) {
+    $from = new \SendGrid\Mail\From($jsonData->NamedSender->Email, $jsonData->NamedSender->Name);
   }
   $tos = [];
   while ($user = $getUsersForEmail->fetch(PDO::FETCH_ASSOC)) {
