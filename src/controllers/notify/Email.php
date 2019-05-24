@@ -81,7 +81,7 @@ $fromEmail .= '@' . EMAIL_DOMAIN;
     <div class="form-group">
 			<label for="from">From</label>
       <select class="custom-select" name="from" id="from">
-        <option value="current-user"><?=htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'] . " <" . $fromEmail . ">")?></option>
+        <option value="current-user"><?=htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'] . " <noreply@" . EMAIL_DOMAIN . ">  ")?></option>
         <option value="club-sending-account" selected><?=htmlspecialchars(CLUB_NAME . " <noreply@" . EMAIL_DOMAIN . ">")?></option>
       </select>
 		</div>
