@@ -33,15 +33,14 @@ if ($_SESSION['LeaveKey'] == $key) {
     $message .= '<p>They will not be allowed to take part in any training sessions on or after this date. If you think this was a mistake, please contact the membership secretary.</p>';
     $message .= '<p>Kind regards,<br>The ' . CLUB_NAME . ' Team</p>';
 
-    try {
-      $notify_query->execute([
-        $_SESSION['UserID'],
-        'Queued',
-        $subject,
-        $message,
-        1,
-        'ClubLeaver'
-      ]);
+    $notify_query->execute([
+      $_SESSION['UserID'],
+      'Queued',
+      $subject,
+      $message,
+      1,
+      'ClubLeaver'
+    ]);
 
     unset($_SESSION['LeaveKey']);
     $_SESSION['ConfirmLeave'] = true;
