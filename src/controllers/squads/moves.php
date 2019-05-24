@@ -21,7 +21,7 @@ include BASE_PATH . "views/squadMenu.php";
           <ul class="list-group list-group-flush">
     					<?php do { ?>
     					<li class="list-group-item">
-                <div class="row">
+                <div class="row align-items-middle">
                   <div class="col">
                     <p class="mb-0">
                       <a href="<?=autoUrl("swimmers/" .
@@ -33,15 +33,18 @@ include BASE_PATH . "views/squadMenu.php";
                     </p>
                   </div>
                   <div class="col-lg-4">
-
-        						<a class="btn btn-block btn-light" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/edit-move")?>">
-        							Edit or Cancel Move
-        						</a>
-
-        						<a class="btn btn-block btn-light" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/move-contract")?>">
-        							Print Contract
-        						</a>
-
+                    <div class="row">
+                      <div class="col-6 col-lg-12">
+            						<a class="btn btn-block btn-light" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/edit-move")?>">
+            							Edit or Cancel Move
+            						</a>
+                      </div>
+                      <div class="col-6 col-lg-12">
+            						<a class="btn btn-block btn-light" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/move-contract")?>">
+            							Print Contract
+            						</a>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
