@@ -7,8 +7,7 @@ if (!v::intVal()->validate($id)) {
 	halt(404);
 }
 
-$id = mysqli_real_escape_string($link, $id);
-$sql = "DELETE FROM `moves` WHERE `MoveID` = '$id';";
+$delete = $db->prepare("DELETE FROM `moves` WHERE `MoveID` = ?");
 
 $sqlx = "SELECT `MemberID` FROM `moves` WHERE `MoveID` = ?";
 $member = $db->prepare($sqlx);
@@ -49,8 +48,9 @@ if ($email_info) {
 	}
 }
 
-if (mysqli_query($link, $sql)) {
+try {
+  $delete->execute([$id]);
 	header("Location: " . autoUrl("squads/moves"));
-} else {
+} catch (Exception $e) {
 	halt(500);
 }
