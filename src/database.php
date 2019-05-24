@@ -99,14 +99,14 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
         display: table;
         background: #eee;
         padding: 1rem;
-        margin 0 0 10px 0;
+        margin 0 0 1rem 0;
         width: 100%;
       }
 
     </style>
   </head>";
 
-  $cellClass = 'style="width:100%;style="display:table;background:#eee;padding:10px;margin 0px 0px 10px 0px;margin-bottom:10px;"';
+  $cellClass = 'style="display:table;background:#eee;padding:10px;margin 0 auto 10px auto;width:100%;"';
   $htmlMessage = str_replace('class="cell"', $cellClass, $emailMessage);
 
   $address = "<p class=\"small\" align=\"center\"><strong>" . CLUB_NAME . "</strong><br>";
