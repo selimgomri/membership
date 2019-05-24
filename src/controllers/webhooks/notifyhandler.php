@@ -104,7 +104,7 @@ while ($currentMessage = $getPendingGroupMail->fetch(PDO::FETCH_ASSOC)) {
     $from = new \SendGrid\Mail\From("noreply@" . EMAIL_DOMAIN, CLUB_NAME);
   }
   if ($jsonData->NamedSender->Email != null && $jsonData->NamedSender->Name) {
-    $from = new \SendGrid\Mail\From($jsonData->NamedSender->Email, $jsonData->NamedSender->Name);
+    $from = new \SendGrid\Mail\From("noreply@" . EMAIL_DOMAIN, $jsonData->NamedSender->Name);
   }
   $tos = [];
   while ($user = $getUsersForEmail->fetch(PDO::FETCH_ASSOC)) {
