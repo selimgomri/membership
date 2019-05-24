@@ -173,7 +173,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 	</p>
 
 	<p>
-		You'll be directed to a page and asked to enter your swimmer's ASA Number
+		You'll be directed to a page and asked to enter your swimmer's Swim England Number
 		and <?=CLUB_SHORT_NAME?> Access Key as below.
 	</p>
 
@@ -181,7 +181,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		<table class="table table-sm table-borderless d-inline mb-0">
 		  <tbody>
 		    <tr>
-		      <th scope="row" class="pl-0">ASA Number</th>
+		      <th scope="row" class="pl-0">Swim England Number</th>
 		      <td class="pr-0"><span class="mono"><?php echo $row['ASANumber']; ?></span></td>
 		    </tr>
 		    <tr>
@@ -203,9 +203,9 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		</p>
 
 		<p>
-			Don’t have an ASA Number? If so, and you need to be registered in our
+			Don’t have a Swim England Number? If so, and you need to be registered in our
 			system as a member, we’ll give you a reference number starting with
-			<?=CLUB_CODE?> which you can use in place of an ASA Number in our systems
+			<?=CLUB_CODE?> which you can use in place of a Swim England Number in our systems
 			only.
 		</p>
 
@@ -229,7 +229,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
   <div class="row mb-3 align-items-stretch">
     <div class="<?php echo $col; ?>">
       <div class="text-center border border-dark h-100 p-2 bg-white">
-        <span class="mb-2">ASA Number</span>
+        <span class="mb-2">Swim England Number</span>
         <img class="img-fluid mx-auto d-block"
         src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ASANumber'] . "&print=false"); ?>"
         srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ASANumber'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ASANumber'] . "&print=false"); ?> 3x"

@@ -36,7 +36,7 @@ $content .= "
 	<input type=\"test\" class=\"form-control\" id=\"asa\" name=\"asa\"
 	aria-describedby=\"asaHelp\" placeholder=\"ASA Registration Numer\">
 	<small id=\"asaHelp\" class=\"form-text text-muted\">If a swimmer does not yet
-	have an ASA Number, leave this blank and we'll generate a temporary internal
+	have a Swim England Number, leave this blank and we'll generate a temporary internal
 	membership number for this swimmer.</small>
 </div>";
 $content .= "

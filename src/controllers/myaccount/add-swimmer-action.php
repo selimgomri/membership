@@ -61,7 +61,7 @@ global $db;
         <li>" . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "</li>
         <li>Squad: " . htmlspecialchars($row['SquadName']) . "</li>
         <li>Monthly Fee: &pound;" . number_format((int) $row['SquadFee'], 2, '.', ',') . "</li>
-        <li>ASA Number: " . htmlspecialchars($row['ASANumber']) . "</li>
+        <li>Swim England Number: " . htmlspecialchars($row['ASANumber']) . "</li>
         <li>" . htmlspecialchars(CLUB_SHORT_NAME) . " Member ID: " . htmlspecialchars($row['MemberID']) . "</li>
       </ul>
       <p>If this was not you, contact <a href=\"mailto:"  . htmlspecialchars(CLUB_EMAIL) . "\">
@@ -88,7 +88,7 @@ global $db;
       $_SESSION['ErrorState'] = "
     	<div class=\"alert alert-danger\">
     	<p class=\"mb-0\"><strong>An error occured when we tried to add a swimmer</strong></p>
-      <p>You may have got the ASA Number or Access Key wrong</p>
+      <p>You may have got the Swim England Number or Access Key wrong</p>
     	<p class=\"mb-0\">Please try again</p>
     	</div>";
       header("Location: " . autoUrl("myaccount/addswimmer"));
@@ -99,7 +99,7 @@ global $db;
     $_SESSION['ErrorState'] = "
     <div class=\"alert alert-danger\">
     <p class=\"mb-0\"><strong>An error occured when we tried to add a swimmer</strong></p>
-    <p>You may have got the ASA Number or Access Key wrong</p>
+    <p>You may have got the Swim England Number or Access Key wrong</p>
     <p class=\"mb-0\">Please try again</p>
     </div>";
     header("Location: " . autoUrl("myaccount/addswimmer"));

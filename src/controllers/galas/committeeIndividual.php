@@ -123,7 +123,7 @@ $content .= '<div class="alert alert-success">
     if ($middlenameUpdate) { $content .= '<li>Middle name(s)</li>'; }
     if ($surnameUpdate) { $content .= '<li>Last address</li>'; }
     if ($dateOfBirthUpdate) { $content .= '<li>Date of birth</li>'; }
-    if ($asaUpdate) { $content .= '<li>ASA Number</li>'; }
+    if ($asaUpdate) { $content .= '<li>Swim England Number</li>'; }
     if ($userUpdate) { $content .= '<li>Parent</li>'; }
     if ($squadUpdate) { $content .= '<li>Squad</li>'; }
     if ($sexUpdate) { $content .= '<li>Sex</li>'; }

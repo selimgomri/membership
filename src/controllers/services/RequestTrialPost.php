@@ -119,7 +119,7 @@ if ($_POST['swimmer-club'] != "" || $_POST['swimmer-asa'] != "") {
     $email_club .= ' ';
   }
   if ($_POST['swimmer-asa'] != "") {
-    $email_club .= 'Their ASA Number is ' . $asa . '. <a href="' . $biog_link . '">View their biog</a>.';
+    $email_club .= 'Their Swim England Number is ' . $asa . '. <a href="' . $biog_link . '">View their biog</a>.';
   }
   $email_club .= '</p>';
 }

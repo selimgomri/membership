@@ -30,7 +30,7 @@ $update_time = $db->prepare($sql);
 
 use Symfony\Component\DomCrawler\Crawler;
 
-// Get some members and ASA numbers
+// Get some members and Swim England Numbers
 
 $sql = "SELECT DISTINCT `ASANumber`, `members`.`MemberID` FROM `members` LEFT JOIN `times` ON `members`.`MemberID` = `times`.`MemberID` WHERE `LastUpdate` IS NULL OR `LastUpdate` < CURDATE() LIMIT 4;";
 $result = $db->query($sql);

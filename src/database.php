@@ -308,7 +308,7 @@ function mySwimmersTable($link, $userID) {
             <th>Name</th>
             <th>Squad</th>
             <th>Fee</th>
-            <th>ASA Number</th>
+            <th>Swim England Number</th>
             <th><abbr title="Approximate attendance over the last 4
             weeks">Attendance</abbr></th>
           </tr>
@@ -852,7 +852,7 @@ function adminSwimmersTable($link, $squadID = null) {
             <th>Date of Birth</th>
             <th>Age</th>
             <th><abbr title="Age at end of year">AEoY</abbr></th>
-            <th>ASA Number</th>
+            <th>Swim England Number</th>
           </tr>
         </thead>
         <tbody>';

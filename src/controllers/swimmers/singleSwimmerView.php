@@ -96,7 +96,7 @@ $content .= '<!--
   </div>
   <div class="media pt-2">
     <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
-      <strong class="d-block text-gray-dark">ASA Number</strong>
+      <strong class="d-block text-gray-dark">Swim England Number</strong>
       <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . $rowSwim["ASANumber"] . '" target="_blank" title="ASA Biographical Data"><span class="mono">' . $rowSwim["ASANumber"] . '</span> <i class="fa fa-external-link" aria-hidden="true"></i></a>
     </p>
   </div>

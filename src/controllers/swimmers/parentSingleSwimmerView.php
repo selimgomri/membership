@@ -490,7 +490,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
         <div class="row">
           <div class="<?php echo $col; ?>">
             <div class="text-center border p-2 bg-white">
-              <span class="lead mb-2">ASA Number</span>
+              <span class="lead mb-2">Swim England Number</span>
               <img class="img-fluid mx-auto d-block"
               src="<?php echo autoUrl("services/barcode-generator?codetype=Code128a&size=60&text=" . $rowSwim['ASANumber'] . "&print=false"); ?>"
               srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128a&size=120&text=" . $rowSwim['ASANumber'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128a&size=180&text=" . $rowSwim['ASANumber'] . "&print=false"); ?> 3x"

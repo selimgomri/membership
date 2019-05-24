@@ -49,7 +49,7 @@ if (!$errorState) {
 			$squad_fee = number_format($email_info['SquadFee'], 2, '.', ',');
 
 			$subject = $swimmer . " is moving to " . $squad . " Squad";
-			$message = '<p>We\'re very excited to let you know what ' . $swimmer . ' will be moving to ' . $squad . ' Squad on ' . date("l j F Y", strtotime($movingDate)) . '.</p>';
+			$message = '<p>We\'re very excited to let you know that ' . $swimmer . ' will be moving to ' . $squad . ' Squad on ' . date("l j F Y", strtotime($movingDate)) . '.</p>';
 			$message .= '<p>The Squad Fee you will pay will be &pound;' . $squad_fee . '*.</p>';
 			$message .= '<p>As you pay by Direct Debit, you won\'t need to take any action. We\'ll automatically update your monthly fees.</p>';
 			if ($email_info['SquadTimetable'] != "" && $email_info['SquadTimetable'] != null) {

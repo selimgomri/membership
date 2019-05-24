@@ -54,7 +54,7 @@
     }
     $output .= "<tr><th>Surname</th><td>" . $row['MSurname'] . "</td></tr>";
     $output .= "<tr><th>Date of Birth</th><td>" . date('j F Y', strtotime($row['DateOfBirth'])) . "</td></tr>";
-    $output .= "<tr><th>ASA Number</th><td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $row['ASANumber'] . "\" target=\"_blank\" title=\"ASA Biographical Data\">" . $row['ASANumber'] . "</a></td></tr>";
+    $output .= "<tr><th>Swim England Number</th><td><a href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" . $row['ASANumber'] . "\" target=\"_blank\" title=\"ASA Biographical Data\">" . $row['ASANumber'] . "</a></td></tr>";
     $output .= "<tr><th>Sex</th><td>" . $row['Gender'] . "</td></tr>";
     if ($row['OtherNotes'] != null) {
       $output .= "<tr><th>Notes</th><td>" . $row['OtherNotes'] . "</td></tr>";
