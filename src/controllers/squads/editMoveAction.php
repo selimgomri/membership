@@ -19,7 +19,7 @@ if ($movingDate == "" || !v::date()->validate($movingDate)) {
 	$errorMessage .= "<li>A moving date was not supplied or was malformed</li>";
 }
 
-if (strtotime($movingDate) < strtotime('+10 days')) {
+if (strtotime($movingDate) < strtotime('+9 days')) {
 	$errorState = true;
 	$errorMessage .= "<li>10 days notice must be given before a squad move</li>";
 }
