@@ -27,31 +27,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 			global $link;
 			require 'moves.php';
 		});
-
-		$this->get('/new/{id}', function($id) {
-			global $link;
-			require 'newMove.php';
-		});
-
-		$this->post('/new/{id}', function($id) {
-			global $link;
-			require 'newMoveAction.php';
-		});
-
-		$this->get('/edit/{id}:int', function($id) {
-			global $link;
-			require 'editMove.php';
-		});
-
-		$this->post('/edit/{id}:int', function($id) {
-			global $link;
-			require 'editMoveAction.php';
-		});
-
-		$this->get('/cancel/{id}:int', function($id) {
-			global $link;
-			require 'cancelMoveAction.php';
-		});
+    
 	});
 
 }

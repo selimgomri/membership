@@ -95,5 +95,5 @@ if ($errorState) {
 	<ul class="mb-0">' . $errorMessage . '
 	</ul></div>';
 
-	header("Location: " . autoUrl("squads/moves/new/" . $id));
+	header("Location: " . autoUrl("swimmers/" . $id . "/new-move"));
 }

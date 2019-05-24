@@ -1,36 +1,31 @@
 <?php
 
-$use_white_background = true;
+global $db;
 
-$id = mysqli_real_escape_string($link, $id);
-$sql = "SELECT * FROM `moves` WHERE `MemberID` = '$id';";
-$result = mysqli_query($link, $sql);
-$count = mysqli_num_rows($result);
+$moveCount = $db->prepare("SELECT COUNT(*) FROM `moves` WHERE `MemberID` = ?");
+$moveCount->execute([$id]);
 
 $name = $currentSquad = "";
 
-if ($count > 0) {
-	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-	$moveID = $row['MoveID'];
-	header("Location: " . autoUrl("squads/moves/edit/" . $moveID));
+if ($moveCount->fetchColumn() > 1) {
+	header("Location: " . autoUrl("swimmers/" . $id . "/edit-move"));
 } else {
-	$sql = "SELECT `MForename`, `MSurname`, `SquadName`, members.SquadID FROM `members` INNER JOIN `squads` ON members.SquadID = squads.SquadID WHERE `MemberID` = '$id';";
-	$result = mysqli_query($link, $sql);
-	$count = mysqli_num_rows($result);
-	if ($count != 1) {
-		halt(404);
-	}
-	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-	$name = $row['MForename'] . " " . $row['MSurname'];
-	$currentSquad = $row['SquadName'];
-	$squadID = $row['SquadID'];
+  $getMemberInfo = $db->prepare("SELECT `MForename`, `MSurname`, `SquadName`, members.SquadID FROM `members` INNER JOIN `squads` ON members.SquadID = squads.SquadID WHERE `MemberID` = ?");
+  $getMemberInfo->execute([$id]);
 
-	$sql = "SELECT `SquadName`, `SquadID` FROM `squads` WHERE `SquadID` != '$squadID' ORDER BY `SquadFee` DESC, `SquadName` ASC;";
-	$result = mysqli_query($link, $sql);
-	$count = mysqli_num_rows($result);
-	if ($count < 1) {
+	$member = $getMemberInfo->fetch(PDO::FETCH_ASSOC);
+
+	if ($member == null) {
 		halt(404);
 	}
+
+	$name = $member['MForename'] . " " . $member['MSurname'];
+	$currentSquad = $member['SquadName'];
+	$squadID = $member['SquadID'];
+
+  $getSquads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` WHERE `SquadID` != ? ORDER BY `SquadFee` DESC, `SquadName` ASC");
+  $getSquads->execute([$squadID]);
+  $squad = $getSquads->fetch(PDO::FETCH_ASSOC);
 }
 
 $pagetitle = "Squad Move for " . $name;
@@ -38,7 +33,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php"; ?>
 <div class="container">
 	<div class="">
-		<h1 class="border-bottom border-gray pb-2 mb-3">Squad Move for <?=htmlspecialchars($name)?></h1>
+		<h1>Squad Move for <?=htmlspecialchars($name)?></h1>
 		<?php if (isset($_SESSION['ErrorState'])) {
 			echo $_SESSION['ErrorState'];
 			unset($_SESSION['ErrorState']);
@@ -62,12 +57,9 @@ include BASE_PATH . "views/squadMenu.php"; ?>
 					<select class="custom-select" id="newSquad" name="newSquad">
 						<!-- HIDE CURRENT SQUAD AS POINTLESS -->
 				    <option selected>Choose...</option>
-						<?php for ($i=0; $i<$count; $i++) {
-							$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-							$id = $row['SquadID'];
-							$name = $row['SquadName']; ?>
-							<option value="<?=$id?>"><?=htmlspecialchars($name)?></option>
-						<?php } ?>
+						<?php do { ?>
+							<option value="<?=$squad['SquadID']?>"><?=htmlspecialchars($squad['SquadName'])?></option>
+						<?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)); ?>
 				  </select>
 		    </div>
 		  </div>
