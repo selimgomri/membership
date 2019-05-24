@@ -106,7 +106,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
     </style>
   </head>";
 
-  $cellClass = 'style="display:table;background:#eee;padding:10px;margin 0 0 10px 0;"';
+  $cellClass = 'style="display:table;background:#eee;padding:10px;margin 0 auto 10px auto;width:100%;"';
   $htmlMessage = str_replace('class="cell"', $cellClass, $emailMessage);
 
   $address = "<p class=\"small\" align=\"center\"><strong>" . CLUB_NAME . "</strong><br>";

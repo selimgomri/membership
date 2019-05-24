@@ -9,9 +9,9 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
   $sql = "";
   if ((isset($_POST["squadID"])) && (isset($_POST["search"]))) {
     // get the squadID parameter from post
-    $squadID = mysqli_real_escape_string($link, htmlentities($_POST["squadID"]));
+    $squadID = $_POST["squadID"];
     // get the search term parameter from post
-    $search = mysqli_real_escape_string($link, htmlentities($_POST["search"]));
+    $search = $_POST["search"];
 
     $search_terms = explode(' ', $search);
     $names = [];

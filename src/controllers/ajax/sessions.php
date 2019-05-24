@@ -1,5 +1,7 @@
 <?php
-include_once "../database.php";
+
+global $db;
+
 $access = $_SESSION['AccessLevel'];
 $count = 0;
 
@@ -7,6 +9,7 @@ $count = 0;
 // This is because we will call it when a squad is selected, and after a session is added
 
 function sessionManagement($squadID, $link) {
+  global $db;
 	$output = $content = $modals = "";
 
 	$content .= '
@@ -17,12 +20,13 @@ function sessionManagement($squadID, $link) {
 	<h2 class="border-bottom border-gray pb-2 mb-0">View Sessions</h2>
 	';
 
-	$sql = "SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SquadID` = '$squadID' AND (ISNULL(sessions.DisplayFrom) OR (sessions.DisplayFrom <= CURDATE( ))) AND (ISNULL(sessions.DisplayUntil) OR (sessions.DisplayUntil >= CURDATE( ))) ORDER BY `SessionDay` ASC, `StartTime` ASC;";
-	$result = mysqli_query($link, $sql);
-	$count = mysqli_num_rows($result);
-	if ($count > 0) {
-		for ($i=0; $i<$count; $i++) {
-			$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+  $getSessions = $db->prepare("SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SquadID` = ? AND (ISNULL(sessions.DisplayFrom) OR (sessions.DisplayFrom <= CURDATE( ))) AND (ISNULL(sessions.DisplayUntil) OR (sessions.DisplayUntil >= CURDATE( ))) ORDER BY `SessionDay` ASC, `StartTime` ASC");
+  $getSessions->execute([$squadID]);
+
+  $row = $getSessions->fetch(PDO::FETCH_ASSOC);
+
+	if ($row != null) {
+		do {
 
 			$dayText = "";
 			switch ($row['SessionDay']) {
@@ -52,7 +56,7 @@ function sessionManagement($squadID, $link) {
 			$content .= '
 			<div class="media text-muted pt-1">
 		    <p class="media-body pb-1 mb-0 lh-125 border-bottom border-gray">
-		      <a data-toggle="modal" href="#sessionModal' . $row['SessionID'] . '"><strong class="d-block text-gray-dark">' . $row['SessionName'] . ', ' . $dayText . ' at ' . $row['StartTime'] . '</strong></a>
+		      <a data-toggle="modal" href="#sessionModal' . $row['SessionID'] . '"><strong class="d-block text-gray-dark">' . htmlspecialchars($row['SessionName']) . ', ' . $dayText . ' at ' . $row['StartTime'] . '</strong></a>
 		      ' . $row['VenueName'] . '
 		    </p>
 		  </div>
@@ -63,7 +67,7 @@ function sessionManagement($squadID, $link) {
 				<div class="modal-dialog modal-dialog-centered" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="sessionModalTitle' . $row['SessionID'] . '">' . $row['SessionName'] . ', ' . $dayText . ' at ' . $row['StartTime'] . '</h5>
+							<h5 class="modal-title" id="sessionModalTitle' . $row['SessionID'] . '">' . htmlspecialchars($row['SessionName']) . ', ' . $dayText . ' at ' . $row['StartTime'] . '</h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
@@ -71,16 +75,16 @@ function sessionManagement($squadID, $link) {
 						<div class="modal-body">
 							<dl>
 								<dt>Session Name</dt>
-								<dd>' . $row['SessionName'] . '</dd>
-								<dt>Main Sequence</dt>
-								<dd>' . $row['MainSequence'] . '<br>
+								<dd>' . htmlspecialchars($row['SessionName']) . '</dd>
+								<dt>Count Attendance</dt>
+								<dd>' . htmlspecialchars($row['MainSequence']) . '<br>
 								<em>If 0, sessions will be ignored from attendance calculations. Use this for extra sessions which only some swimmers in a squad are to attend</em></dd>
 								<dt>Venue</dt>
-								<dd>' . $row['VenueName'] . '</dd>
+								<dd>' . htmlspecialchars($row['VenueName']) . '</dd>
 								<dt>Start Time</dt>
-								<dd>' . $row['StartTime'] . '</dd>
+								<dd>' . htmlspecialchars($row['StartTime']) . '</dd>
 								<dt>Finish Time</dt>
-								<dd>' . $row['EndTime'] . '</dd>
+								<dd>' . htmlspecialchars($row['EndTime']) . '</dd>
 								<dt>Session Duration</dt>';
 								$datetime1 = new DateTime($row['StartTime']);
 					      $datetime2 = new DateTime($row['EndTime']);
@@ -103,7 +107,7 @@ function sessionManagement($squadID, $link) {
 					</div>
 				</div>
 			</div>';
-		}
+		} while ($row = $getSessions->fetch(PDO::FETCH_ASSOC));
 	}
 	else {
 		$content .= '<p class="pt-3 mb-0">Oops. There aren\'t any sessions for this squad yet. Try adding one</p>';
@@ -139,14 +143,9 @@ function sessionManagement($squadID, $link) {
 			<label for="newSessionVenue">Session Venue</label>
 			<select class="custom-select" name="newSessionVenue" id="newSessionVenue">
 				<option selected value="0">Select a Venue</option>';
-				$sql = "SELECT * FROM `sessionsVenues`;";
-				$result = mysqli_query($link, $sql);
-				$count = mysqli_num_rows($result);
-				if ($count>0) {
-					for ($i=0; $i<$count; $i++) {
-						$venuesRow = mysqli_fetch_array($result, MYSQLI_ASSOC);
-						$content .= '<option value="' . $venuesRow['VenueID'] . '">' . $venuesRow['VenueName'] . '</option>';
-					}
+        $venues = $db->query("SELECT * FROM `sessionsVenues`");
+				while ($venue = $venues->fetch(PDO::FETCH_ASSOC)) {
+					$content .= '<option value="' . $venue['VenueID'] . '">' . htmlspecialchars($venue['VenueName']) . '</option>';
 				}
 				$content .= '
 
@@ -199,12 +198,12 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
   $sql = "";
   if (isset($_POST["action"])) {
 		// Get the action to work out what we're going to do
-		$action = mysqli_real_escape_string($link, htmlentities($_POST["action"]));
+		$action = htmlentities($_POST["action"];
 		if ($action == "getSessions") {
 	    // get the squadID parameter from post
 			$squadID = "";
 			if (isset($_POST["squadID"])) {
-	    	$squadID = mysqli_real_escape_string($link, htmlentities($_POST["squadID"]));
+	    	$squadID = $_POST["squadID"];
 				echo sessionManagement($squadID, $link);
 			}
 
@@ -213,32 +212,41 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 		elseif ($action == "addSession") {
 			$squadID = $venueID = $sessionName = $sessionDay = $startTime = $endTime = "";
 			if ((isset($_POST["squadID"])) && (isset($_POST["venueID"])) && (isset($_POST["sessionName"])) && (isset($_POST["sessionDay"])) && (isset($_POST["startTime"])) && (isset($_POST["endTime"])) && (isset($_POST["newSessionMS"])) && (isset($_POST["newSessionStartDate"])) && (isset($_POST["newSessionEndDate"]))) {
-	    	$squadID = mysqli_real_escape_string($link, htmlentities($_POST["squadID"]));
-				$venueID = mysqli_real_escape_string($link, htmlentities($_POST["venueID"]));
-				$sessionName = mysqli_real_escape_string($link, htmlentities($_POST["sessionName"]));
-				$sessionDay = mysqli_real_escape_string($link, htmlentities($_POST["sessionDay"]));
-				$startTime = mysqli_real_escape_string($link, htmlentities($_POST["startTime"]));
-				$endTime = mysqli_real_escape_string($link, htmlentities($_POST["endTime"]));
-				$mainSequence = mysqli_real_escape_string($link, htmlentities($_POST["newSessionMS"]));
+	    	$squadID = $_POST["squadID"];
+				$venueID = $_POST["venueID"];
+				$sessionName = $_POST["sessionName"];
+				$sessionDay = $_POST["sessionDay"];
+				$startTime = $_POST["startTime"];
+				$endTime = $_POST["endTime"];
+				$mainSequence = $_POST["newSessionMS"];
 				$epoch = date(DATE_ATOM, mktime(0, 0, 0, 1, 1, 1970));
 				$future = date(DATE_ATOM, mktime(0, 0, 0, 1, 1, 2200));
 				$displayFrom = $displayUntil = null;
 				if (isset($_POST["newSessionStartDate"])) {
-					$displayFrom = strtotime(mysqli_real_escape_string($link, htmlentities($_POST["newSessionStartDate"])));
+					$displayFrom = strtotime($_POST["newSessionStartDate"]);
 					if ($displayFrom < $epoch) {
 						$displayFrom = null;
 					}
 				}
 				if (isset($_POST["newSessionEndDate"])) {
-					$displayUntil = strtotime(mysqli_real_escape_string($link, htmlentities($_POST["newSessionEndDate"])));
+					$displayUntil = strtotime($_POST["newSessionEndDate"]);
 					if ($displayUntil < $epoch) {
 						$displayUntil = $future;
 					}
 				}
 
-				$sql = "INSERT INTO `sessions` (`SquadID`, `VenueID`, `SessionName`, `SessionDay`, `StartTime`, `EndTime`, `MainSequence`, `DisplayFrom`, `DisplayUntil`) VALUES ('$squadID', '$venueID', '$sessionName', '$sessionDay', '$startTime', '$endTime', '$mainSequence', '$displayFrom', '$displayUntil');";
-				mysqli_query($link, $sql);
-
+        $insert = $db->prepare("INSERT INTO `sessions` (`SquadID`, `VenueID`, `SessionName`, `SessionDay`, `StartTime`, `EndTime`, `MainSequence`, `DisplayFrom`, `DisplayUntil`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $insert->execute([
+          $squadID,
+          $venueID,
+          $sessionName,
+          $sessionDay,
+          $startTime,
+          $endTime,
+          $mainSequence,
+          $displayFrom,
+          $displayUntil
+        ]);
 				echo sessionManagement($squadID, $link);
 
 			}
@@ -246,5 +254,5 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 	}
 }
 else {
-	echo "BROKE";
+	halt(500);
 }
