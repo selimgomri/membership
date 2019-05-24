@@ -174,6 +174,9 @@
   .page-break {
     page-break-after: always;
   }
+  .prevent-page-break {
+    page-break-inside: avoid;
+  }
 
   <?php if (!defined('IS_CLS') || !IS_CLS) { ?>
   html {
