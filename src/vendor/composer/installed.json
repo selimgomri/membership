@@ -774,24 +774,24 @@
     },
     {
         "name": "endroid/installer",
-        "version": "1.1.3",
-        "version_normalized": "1.1.3.0",
+        "version": "1.1.5",
+        "version_normalized": "1.1.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/endroid/installer.git",
-            "reference": "0d56857e0687837bead9933048a9cc8d4ce85fd7"
+            "reference": "d4ae2bbd7977148dcb514ad625ece1a36f751a8b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/endroid/installer/zipball/0d56857e0687837bead9933048a9cc8d4ce85fd7",
-            "reference": "0d56857e0687837bead9933048a9cc8d4ce85fd7",
+            "url": "https://api.github.com/repos/endroid/installer/zipball/d4ae2bbd7977148dcb514ad625ece1a36f751a8b",
+            "reference": "d4ae2bbd7977148dcb514ad625ece1a36f751a8b",
             "shasum": ""
         },
         "require": {
             "composer-plugin-api": "^1.1",
-            "php": ">=7.1"
+            "php": ">=7.2"
         },
-        "time": "2019-03-30T20:54:26+00:00",
+        "time": "2019-03-30T21:42:01+00:00",
         "type": "composer-plugin",
         "extra": {
             "branch-alias": {
@@ -818,36 +818,34 @@
     },
     {
         "name": "endroid/qr-code",
-        "version": "3.5.8",
-        "version_normalized": "3.5.8.0",
+        "version": "3.6.0",
+        "version_normalized": "3.6.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/endroid/qr-code.git",
-            "reference": "7823badf59402f31e8f9b33ce1e3161a1ba89866"
+            "reference": "3c96919701a2240b8aa2ad4bdce95ad5a69a8ac5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/endroid/qr-code/zipball/7823badf59402f31e8f9b33ce1e3161a1ba89866",
-            "reference": "7823badf59402f31e8f9b33ce1e3161a1ba89866",
+            "url": "https://api.github.com/repos/endroid/qr-code/zipball/3c96919701a2240b8aa2ad4bdce95ad5a69a8ac5",
+            "reference": "3c96919701a2240b8aa2ad4bdce95ad5a69a8ac5",
             "shasum": ""
         },
         "require": {
             "bacon/bacon-qr-code": "^2.0",
-            "endroid/installer": "^1.0.3",
+            "endroid/installer": "^1.1.5",
             "ext-gd": "*",
             "khanamiryan/qrcode-detector-decoder": "^1.0.2",
             "myclabs/php-enum": "^1.5",
-            "php": ">=7.1",
-            "symfony/options-resolver": "^2.7|^3.0|^4.0",
-            "symfony/property-access": "^2.7|^3.0|^4.0"
+            "php": ">=7.2",
+            "symfony/http-foundation": "^3.4|^4.0",
+            "symfony/options-resolver": "^3.4|^4.0",
+            "symfony/property-access": "^3.4|^4.0"
         },
         "require-dev": {
-            "phpunit/phpunit": "^5.7|^6.0"
+            "endroid/test": "^1.1.4"
         },
-        "suggest": {
-            "symfony/http-foundation": "Install if you want to use QrCodeResponse"
-        },
-        "time": "2019-04-03T21:14:10+00:00",
+        "time": "2019-05-05T12:32:53+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1383,35 +1381,32 @@
     },
     {
         "name": "lcobucci/jwt",
-        "version": "3.2.5",
-        "version_normalized": "3.2.5.0",
+        "version": "3.3.0",
+        "version_normalized": "3.3.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/lcobucci/jwt.git",
-            "reference": "82be04b4753f8b7693b62852b7eab30f97524f9b"
+            "reference": "8866a58fa866f6872f2a6ea0e04ad56480f0f440"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/lcobucci/jwt/zipball/82be04b4753f8b7693b62852b7eab30f97524f9b",
-            "reference": "82be04b4753f8b7693b62852b7eab30f97524f9b",
+            "url": "https://api.github.com/repos/lcobucci/jwt/zipball/8866a58fa866f6872f2a6ea0e04ad56480f0f440",
+            "reference": "8866a58fa866f6872f2a6ea0e04ad56480f0f440",
             "shasum": ""
         },
         "require": {
+            "ext-mbstring": "*",
             "ext-openssl": "*",
-            "php": ">=5.5"
+            "php": "^5.6 || ^7.0"
         },
         "require-dev": {
-            "mdanter/ecc": "~0.3.1",
             "mikey179/vfsstream": "~1.5",
             "phpmd/phpmd": "~2.2",
             "phpunit/php-invoker": "~1.1",
-            "phpunit/phpunit": "~4.5",
+            "phpunit/phpunit": "^5.7 || ^7.3",
             "squizlabs/php_codesniffer": "~2.3"
         },
-        "suggest": {
-            "mdanter/ecc": "Required to use Elliptic Curves based algorithms."
-        },
-        "time": "2018-11-11T12:22:26+00:00",
+        "time": "2019-05-22T09:44:23+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1432,7 +1427,7 @@
             {
                 "name": "Luís Otávio Cobucci Oblonczyk",
                 "email": "lcobucci@gmail.com",
-                "role": "developer"
+                "role": "Developer"
             }
         ],
         "description": "A simple library to work with JSON Web Token and JSON Web Signature",
@@ -2568,17 +2563,17 @@
     },
     {
         "name": "stripe/stripe-php",
-        "version": "v6.35.0",
-        "version_normalized": "6.35.0.0",
+        "version": "v6.37.0",
+        "version_normalized": "6.37.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/stripe/stripe-php.git",
-            "reference": "a5f6d81ad82852d34a21dfa8d50a82db98ffe6e5"
+            "reference": "6915bed0b988ca837f3e15a1f31517a6172a663a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/stripe/stripe-php/zipball/a5f6d81ad82852d34a21dfa8d50a82db98ffe6e5",
-            "reference": "a5f6d81ad82852d34a21dfa8d50a82db98ffe6e5",
+            "url": "https://api.github.com/repos/stripe/stripe-php/zipball/6915bed0b988ca837f3e15a1f31517a6172a663a",
+            "reference": "6915bed0b988ca837f3e15a1f31517a6172a663a",
             "shasum": ""
         },
         "require": {
@@ -2593,7 +2588,7 @@
             "squizlabs/php_codesniffer": "~2.0",
             "symfony/process": "~2.8"
         },
-        "time": "2019-05-14T19:58:30+00:00",
+        "time": "2019-05-23T23:59:23+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -3059,6 +3054,62 @@
             }
         ],
         "description": "Symfony Filesystem Component",
+        "homepage": "https://symfony.com"
+    },
+    {
+        "name": "symfony/http-foundation",
+        "version": "v4.2.8",
+        "version_normalized": "4.2.8.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/http-foundation.git",
+            "reference": "1ea878bd3af18f934dedb8c0de60656a9a31a718"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/1ea878bd3af18f934dedb8c0de60656a9a31a718",
+            "reference": "1ea878bd3af18f934dedb8c0de60656a9a31a718",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^7.1.3",
+            "symfony/polyfill-mbstring": "~1.1"
+        },
+        "require-dev": {
+            "predis/predis": "~1.0",
+            "symfony/expression-language": "~3.4|~4.0"
+        },
+        "time": "2019-05-01T08:36:31+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "4.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Component\\HttpFoundation\\": ""
+            },
+            "exclude-from-classmap": [
+                "/Tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony HttpFoundation Component",
         "homepage": "https://symfony.com"
     },
     {

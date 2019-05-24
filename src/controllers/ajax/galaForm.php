@@ -1,5 +1,7 @@
 <?php
 
+global $db;
+
 $count = 0;
 $rows = 0;
 $sql = "";
@@ -7,28 +9,29 @@ $response = "";
 
 if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
   // get the galaID parameter from request
-  $galaID = mysqli_real_escape_string($link, htmlentities($_REQUEST["galaID"]));
-  $memberID = mysqli_real_escape_string($link, htmlentities($_REQUEST["swimmer"]));
+  $galaID = $_REQUEST["galaID"];
+  $memberID = $_REQUEST["swimmer"];
 
-  $sql = "SELECT * FROM galaEntries WHERE GalaID = '$galaID' AND MemberID = '$memberID';";
-  $result = mysqli_query($link, $sql);
-  $rows = mysqli_num_rows($result);
-  $row = mysqli_fetch_array($result);
+  $existing = $db->prepare("SELECT * FROM galaEntries WHERE GalaID = ? AND MemberID = ?");
+  $existing->execute([$galaID, $memberID]);
 
-  if ($rows>0) {
+  $row = $existing->fetch(PDO::FETCH_ASSOC);
+
+  if ($row != null) {
     $response = '<div class="alert alert-warning"><strong>Oops. You\'ve aleady entered this swimmer into this gala</strong> <br>
-    You might want to check that. ';
+    You might want to check that.';
     if ($row['EntryProcessed'] == 0) {
-      $response .= 'We\'ve not processed your entry yet, so you <a class="alert-link" href="' . autoUrl("galas/entries/" . $row["EntryID"]) . '">can edit that entry</a> if you need to make changes.';
+      $response .= 'We\'ve not processed your entry yet, so you <a class="alert-link" href="' . autoUrl("galas/entries/" . $row["EntryID"]) . '">can edit your gala entry</a> if you need to make changes.';
+    } else {
+      $response .= 'We\'ve already processed your gala entry - You\'ll need to contact your gala administrator if you need to make any chnages.';
     }
     $response .= '</div>';
   }
   else {
 
-  	$sql = "SELECT `HyTek`, `GalaName`, `GalaFeeConstant` FROM galas WHERE GalaID = '$galaID';";
-
-  	$result = mysqli_query($link, $sql);
-  	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $details = $db->prepare("SELECT `HyTek`, `GalaName`, `GalaFeeConstant` FROM galas WHERE GalaID = ?");
+    $details->execute([$galaID]);
+    $row = $details->fetch(PDO::FETCH_ASSOC);
 
   	$swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];
   	$swimsTimeArray = ['50FreeTime','100FreeTime','200FreeTime','400FreeTime','800FreeTime','1500FreeTime','50BreastTime','100BreastTime','200BreastTime','50FlyTime','100FlyTime','200FlyTime','50BackTime','100BackTime','200BackTime','100IMTime','150IMTime','200IMTime','400IMTime',];
@@ -183,7 +186,7 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
               </div>
               <input aria-describedby="feeHelp" type="text" id="galaFee" name="galaFee" class="form-control" required>
             </div>
-            <small id="feeHelp" class="form-text text-muted">Sadly we can\'t automatically calculate the entry fee for this gala so we need you to tell us</small>
+            <small id="feeHelp" class="form-text text-muted">Sadly we can\'t automatically calculate the entry fee for this gala so we need you to tell us.</small>
           </div>
         </div>
       </div>';

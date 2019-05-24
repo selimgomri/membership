@@ -14,6 +14,11 @@ members.MemberID = ? AND members.UserID = ?");
 $getSwimmer->execute($id, $_SESSION['UserID']);
 
 $row = $getSwimmer->fetch(PDO::FETCH_ASSOC);
+
+if ($row == null) {
+  halt(404);
+}
+
 $age = date_diff(date_create($row['DateOfBirth']),
 date_create('today'))->y;
 $title = null;
