@@ -18,26 +18,29 @@ include BASE_PATH . "views/squadMenu.php";
     	<!-- TABLE HERE -->
     	<?php if ($move != null) { ?>
         <div class="card">
+          <div class="card-header">
+            Upcoming moves
+          </div>
           <ul class="list-group list-group-flush">
     					<?php do { ?>
     					<li class="list-group-item">
-                <div class="row align-items-center">
+                <div class="form-row align-items-center">
                   <div class="col">
                     <p class="mb-0">
                       <a href="<?=autoUrl("swimmers/" .
                       $move['MemberID'])?>"><?=htmlspecialchars($move['MForename'] . " " .
                       $move['MSurname'])?></a> moving to  <a
                       href="<?=autoUrl("squads/" .
-                      $move['SquadID'])?>"><?=htmlspecialchars($move['SquadName'])?></a>
+                      $move['SquadID'])?>"><?=htmlspecialchars($move['SquadName'])?> Squad</a>
                       on <?=date('j F Y', strtotime($move['MovingDate']))?>
                     </p>
                     <div class="d-lg-none mb-3"></div>
                   </div>
                   <div class="col-lg-4">
-                    <div class="row">
+                    <div class="form-row">
                       <div class="col-6 col-lg-12">
             						<a class="btn btn-block btn-light" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/edit-move")?>">
-            							Edit or Cancel Move
+            							Edit or Cancel
             						</a>
                       </div>
                       <div class="col-6 col-lg-12">
