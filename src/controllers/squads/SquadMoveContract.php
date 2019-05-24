@@ -71,80 +71,26 @@ ob_start();?>
 
     <?php if ($email_info['SquadTimetable'] != "" && $email_info['SquadTimetable'] != null) { ?>
     <p>
-      You can get the <a href="<?=htmlspecialchars($email_info['SquadTimetable'])?>" target="_blank">timetable for <?=htmlspecialchars($email_info['SquadName'])?> Squad at <?=$email_info['SquadTimetable']?></a>.
+      You can get the timetable for <?=htmlspecialchars($email_info['SquadName'])?> Squad at <a href="<?=htmlspecialchars($email_info['SquadTimetable'])?>" target="_blank"><?=htmlspecialchars($email_info['SquadTimetable'])?></a>.
     </p>
     <?php } ?>
 
     <?php if ((defined('IS_CLS') && IS_CLS)) { ?>
-      <p>
-        This document contains a form which your swimmer <strong>must sign before starting in their new squad</strong>.
-        <?php if (date_diff(date_create($email_info['DateOfBirth']), date_create('today'))->y < 18) { ?>
-        As <?=htmlspecialchars($email_info['MForename'])?> is under the age of 18, you must also sign to confirm that you have explained the content and implications of the code of conduct to <?=htmlspecialchars($email_info['MForename'])?>.
-        <?php } ?>
-      </p>
-    <?php } ?>
-
-    <?php if ($email_info['SquadCoC'] != "" && $email_info['SquadCoC'] != null) { ?>
-    <div class="page-break"></div>
-
-    <h1 id="squad-code-of-conduct">
-      Code of conduct
-    </h1>
-
-    <p>
-      By moving into this squad, you must agree to its code of conduct. <?php if ((defined('IS_CLS') && IS_CLS)) { ?><strong>You are required to sign and return this form to the club before <?=date("l j F Y", strtotime($email_info['MovingDate']))?>.<?php } else { ?><strong>If instructed to do so</strong> by your club, you should sign and return this document.<?php } ?>
-    </p>
-
-    <p>
-      The code of conduct for <?=htmlspecialchars($email_info['SquadName'])?> Squad is as follows;
-    </p>
-
-    <?=getPostContent($email_info['SquadCoC'])?>
-
-    <div class="page-break"></div>
-
-    <h1 id="squad-code-of-conduct-agreement">
-      Agreement to code of conduct
-    </h1>
-
-    <p><strong>
-      <?php if ((defined('IS_CLS') && IS_CLS)) { ?>
-        Please sign and return this form to any squad coach before you move into this squad on <?=date("l j F Y", strtotime($email_info['MovingDate']))?>.
-      <?php } else { ?>
-        If required to do so by your club, please sign and return this form.
-      <?php } ?>
-    </strong></p>
-
-    <div class="prevent-page-break">
       <div class="cell">
-
-        <?php if (date_diff(date_create($email_info['DateOfBirth']), date_create('today'))->y < 18) { ?>
-          <p>
-            As <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> is under the age of 18 you, their parent/guardian, must sign to confirm you have explained the squad code of conduct to <?=htmlspecialchars($email_info['MForename'])?>.
-          </p>
-
-          <p>
-            I, <span><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></span> have explained the content and implications to <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> and can confirm that they understood.
-          </p>
-
-          <div class="signature-box">
-            Signed by <span><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></span> (or print name)
-          </div>
-        <?php } ?>
-
+        <h2>Instructions for parents</h2>
         <p>
-          I, <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> agree to the Code of Conduct for <?=htmlspecialchars($email_info['SquadName'])?> Squad as outlined above as required by the Terms and Conditions of Membership of <?=CLUB_NAME?>.
+          <strong>
+            If you've been sent this document electronically, please print it out. Electronic signatures will not be accepted.
+          </strong>
         </p>
 
-        <div class="signature-box mb-0">
-          Signed by <span><?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?></span>
-        </div>
+        <p class="mb-0">
+          This document contains a form which your swimmer <strong>must sign before starting in their new squad</strong>.
+          <?php if (date_diff(date_create($email_info['DateOfBirth']), date_create('today'))->y < 18) { ?>
+          As <?=htmlspecialchars($email_info['MForename'])?> is under the age of 18, you must also sign to confirm that you have explained the content and implications of the code of conduct to <?=htmlspecialchars($email_info['MForename'])?>.
+          <?php } ?>
+        </p>
       </div>
-    </div>
-
-    <p>
-      You must abide by the above code of conduct if you take your place in this squad as per the Membership Terms and Conditions. This new code of conduct may be different to that for your current squad, so please read it carefully.
-    </p>
     <?php } ?>
 
     <div class="page-break"></div>
@@ -196,7 +142,94 @@ ob_start();?>
 
     <p>Payments are handled by <a href="https://gocardless.com/">GoCardless</a> on behalf of <?=htmlspecialchars(CLUB_NAME)?>.</p>
 
-    <p>&copy; <?=htmlspecialchars(CLUB_NAME)?> <?=date("Y")?></p>
+    <!--<p>&copy; <?=htmlspecialchars(CLUB_NAME)?> <?=date("Y")?></p>-->
+
+
+    <?php if ($email_info['SquadCoC'] != "" && $email_info['SquadCoC'] != null) { ?>
+    <div class="page-break"></div>
+
+    <h1 id="squad-code-of-conduct">
+      Code of conduct
+    </h1>
+
+    <p>
+      By moving into this squad, you must agree to its code of conduct. <?php if ((defined('IS_CLS') && IS_CLS)) { ?><strong>You are required to sign and return this form to the club before <?=date("l j F Y", strtotime($email_info['MovingDate']))?>.<?php } else { ?><strong>If instructed to do so</strong> by your club, you should sign and return this document.<?php } ?>
+    </p>
+
+    <p>
+      The code of conduct for <?=htmlspecialchars($email_info['SquadName'])?> Squad is as follows;
+    </p>
+
+    <?=getPostContent($email_info['SquadCoC'])?>
+
+    <div class="page-break"></div>
+
+    <h1 id="squad-code-of-conduct-agreement">
+      Agreement to code of conduct
+    </h1>
+
+    <p><strong>
+      <?php if ((defined('IS_CLS') && IS_CLS)) { ?>
+        Please sign and return this form to any squad coach before you move into this squad on <?=date("l j F Y", strtotime($email_info['MovingDate']))?>.
+        If you've been sent this form by email, please print it out. Electronic signatures will not be accepted.
+      <?php } else { ?>
+        If required to do so by your club, please sign and return this form.
+      <?php } ?>
+    </strong></p>
+
+    <div class="prevent-page-break">
+      <div class="cell">
+
+        <?php if (date_diff(date_create($email_info['DateOfBirth']), date_create('today'))->y < 18) { ?>
+          <p>
+            As <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> is under the age of 18 you, their parent/guardian, must sign to confirm you have explained the squad code of conduct to <?=htmlspecialchars($email_info['MForename'])?>.
+          </p>
+
+          <p>
+            I, <span><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></span> have explained the content and implications to <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> and can confirm that they understood.
+          </p>
+
+          <div class="signature-box">
+            Signed by <span><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></span> (or print name)
+          </div>
+        <?php } ?>
+
+        <p>
+          I, <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> agree to the Code of Conduct for <?=htmlspecialchars($email_info['SquadName'])?> Squad as outlined above as required by the Terms and Conditions of Membership of <?=CLUB_NAME?>.
+        </p>
+
+        <div class="signature-box mb-0">
+          Signed by <span><?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="prevent-page-break">
+      <div class="cell">
+        <div class="row">
+          <div class="split-30">
+            <img width="100" src="<?=autoUrl("services/qr-generator?size=600&text=" . urlencode(autoUrl("swimmers/id/agreement-to-code-of-conduct/squad")))?>">
+          </div>
+          <div class="split-70">
+            <p class="mb-0">
+              <strong>
+                Staff Use
+              </strong>
+            </p>
+            <p>
+              Scan this code to mark form completed.
+            </p>
+            <p>
+              All staff can mark this form as being complete.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p>
+      You must abide by the above code of conduct if you take your place in this squad as per the Membership Terms and Conditions. This new code of conduct may be different to that for your current squad, so please read it carefully.
+    </p>
+    <?php } ?>
 
     <?php include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
   </body>
@@ -211,13 +244,13 @@ use Dompdf\Dompdf;
 
 // instantiate and use the dompdf class
 $dompdf = new Dompdf();
-
 // set font dir here
 $dompdf->set_option('font_dir', BASE_PATH . 'fonts/');
 
 $dompdf->set_option('defaultFont', 'Open Sans');
 $dompdf->set_option('defaultMediaType', 'all');
 $dompdf->set_option("isPhpEnabled", true);
+$dompdf->set_option('isRemoteEnabled',true);
 $dompdf->set_option('isFontSubsettingEnabled', false);
 $dompdf->loadHtml($html);
 

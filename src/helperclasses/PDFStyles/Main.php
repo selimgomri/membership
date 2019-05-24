@@ -181,9 +181,6 @@
     page-break-inside: avoid;
     break-inside: avoid;
   }
-  .form-page {
-    break-before: right;
-  }
 
   <?php if (!defined('IS_CLS') || !IS_CLS) { ?>
   html {
