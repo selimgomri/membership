@@ -30,7 +30,7 @@ if ($row = $swimmers->fetch(PDO::FETCH_ASSOC)) { ?>
         <tr>
           <th>Name</th>
           <th>Squad</th>
-          <th>ASA Number</th>
+          <th>Swim England Number</th>
           <th>Access Key</th>
         </tr>
       </thead>

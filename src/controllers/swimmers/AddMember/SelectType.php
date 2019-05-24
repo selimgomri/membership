@@ -23,7 +23,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		      to go through the setup process with a parent, add a New Individual
 		      Member.</p>
 					<p class="card-text">This method will require the parent to add the
-					swimmer using an ASA Number and Access Key</p>
+					swimmer using a Swim England Number and Access Key</p>
 				</div>
 		    <div class="card-footer">
 		      <a href="<?=autoUrl("swimmers/new")?>">
@@ -42,7 +42,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
           </p>
 					<p class="card-text">
             This process allows the full registration to be completed
-            automatically (except for ASA Membership).
+            automatically (except for Swim England Membership).
           </p>
 				</div>
 		    <div class="card-footer">

@@ -96,13 +96,13 @@ $content .= '<!--
   </div>
   <div class="media pt-2">
     <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
-      <strong class="d-block text-gray-dark">ASA Number</strong>
+      <strong class="d-block text-gray-dark">Swim England Number</strong>
       <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . $rowSwim["ASANumber"] . '" target="_blank" title="ASA Biographical Data"><span class="mono">' . $rowSwim["ASANumber"] . '</span> <i class="fa fa-external-link" aria-hidden="true"></i></a>
     </p>
   </div>
   <div class="media pt-2">
     <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
-      <strong class="d-block text-gray-dark">ASA Membership Category</strong>
+      <strong class="d-block text-gray-dark">Swim England Membership Category</strong>
       ' . $rowSwim["ASACategory"] . '
     </p>
   </div>
@@ -143,7 +143,7 @@ $content .= '<!--
     <div class="media pt-2">
       <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
         <strong class="d-block text-gray-dark">Move Swimmer to New Squad</strong>
-        <a href="' . autoUrl("squads/moves/new/" . $id) . '">New Move</a>
+        <a href="' . autoUrl("swimmers/" . $id . "/new-move") . '">New Move</a>
       </p>
     </div>';
   }
@@ -248,7 +248,7 @@ $content .= '
       }
       $content .= '</ul>';
     } else {
-      $content .= '<p class="mb-0">There are no photography limitiations for this swimmer. Please do ensure you\'ve read the club and ASA policies on photography before taking any pictures.</p>';
+      $content .= '<p class="mb-0">There are no photography limitiations for this swimmer. Please do ensure you\'ve read the club and Swim England policies on photography before taking any pictures.</p>';
     }
   $content .= '</div>';
   $sql = "SELECT `Forename`, `Surname`, users.UserID, `Mobile` FROM `members`

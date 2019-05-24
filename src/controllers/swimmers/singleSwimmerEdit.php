@@ -180,11 +180,11 @@ $content .= '<div class="alert alert-success">
 		if ($middlenameUpdate) { $content .= '<li>Middle name(s)</li>'; }
 		if ($surnameUpdate) { $content .= '<li>Last address</li>'; }
 		if ($dateOfBirthUpdate) { $content .= '<li>Date of birth</li>'; }
-		if ($asaUpdate) { $content .= '<li>ASA Number</li>'; }
+		if ($asaUpdate) { $content .= '<li>Swim England Number</li>'; }
 		if ($userUpdate) { $content .= '<li>Parent</li>'; }
 		if ($squadUpdate) { $content .= '<li>Squad</li>'; }
 		if ($sexUpdate) { $content .= '<li>Sex</li>'; }
-		if ($catUpdate) { $content .= '<li>ASA Category</li>'; }
+		if ($catUpdate) { $content .= '<li>Swim England Category</li>'; }
 		if ($cpUpdate) { $content .= '<li>Whether or not the club pays swimmer\'s
 		fees</li>'; }
 		if ($otherNotesUpdate) { $content .= '<li>Other notes</li>'; }
@@ -215,14 +215,14 @@ $content .= "
 </div>";
 $content .= "
 <div class=\"form-group\">
-	<label for=\"asa\">ASA Registration Number</label>
-	<input type=\"test\" class=\"form-control\" id=\"asa\" name=\"asa\" placeholder=\"ASA Registration Numer\" value=\"" . htmlspecialchars($rowSwim['ASANumber']) . "\">
+	<label for=\"asa\">Swim England Registration Number</label>
+	<input type=\"test\" class=\"form-control\" id=\"asa\" name=\"asa\" placeholder=\"Swim England Registration Numer\" value=\"" . htmlspecialchars($rowSwim['ASANumber']) . "\">
 </div>";
 $cat = [];
 $cat[$rowSwim['ASACategory']] = " selected ";
 $content .= "
 <div class=\"form-group\">
-	<label for=\"cat\">ASA Membership Category</label>
+	<label for=\"cat\">Swim England Membership Category</label>
 	<select class=\"custom-select\" id=\"cat\" name=\"cat\" placeholder=\"Select\">
 		<option value=\"1\" " . $cat[1] . ">Category 1</option>
 		<option value=\"2\" " . $cat[2] . ">Category 2</option>

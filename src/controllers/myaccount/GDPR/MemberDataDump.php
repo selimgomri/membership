@@ -66,7 +66,7 @@ fputcsv($output, $row);
 fputcsv($output, ['-----']);
 
 fputcsv($output, array('Swimmer Details'));
-fputcsv($output, array('First', 'Middle', 'Last', 'DOB', 'Squad', 'Sex', 'ASA Number', 'ASA Category'));
+fputcsv($output, array('First', 'Middle', 'Last', 'DOB', 'Squad', 'Sex', 'Swim England Number', 'ASA Category'));
 $row = $swimmers->fetch(PDO::FETCH_NUM);
 do {
   fputcsv($output, $row);

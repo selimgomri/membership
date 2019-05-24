@@ -47,14 +47,14 @@ if (v::email()->validate($_POST['emailAddr'])) {
     \'Add Swimmers\' from the menu at the top.
   </p>';
   $text .= '<p>
-    You\'ll be directed to a page and asked to enter your swimmer\'s ASA Number
+    You\'ll be directed to a page and asked to enter your swimmer\'s Swim England Number
     and CLS ASC Access Key as below.
   </p>';
   $text .= '
   <table class="table table-sm table-borderless d-inline mb-0">
     <tbody>
       <tr>
-        <th scope="row" class="pl-0">ASA Number</th>
+        <th scope="row" class="pl-0">Swim England Number</th>
         <td class="pr-0"><span class="mono">' . $row['ASANumber'] . '</span></td>
       </tr>
       <tr>
@@ -76,9 +76,9 @@ if (v::email()->validate($_POST['emailAddr'])) {
     </p>
 
     <p>
-      Don’t have an ASA Number? If so, and you need to be registered in our
+      Don’t have a Swim England Number? If so, and you need to be registered in our
       system as a member, we\'ll give you a reference number starting with ' .
-      CLUB_CODE . 'X which you can use in place of an ASA Number in our systems
+      CLUB_CODE . 'X which you can use in place of a Swim England Number in our systems
       only.
     </p>
 

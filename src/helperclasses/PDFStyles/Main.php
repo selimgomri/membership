@@ -49,6 +49,8 @@
     margin: 0 0 10pt 0;
     padding: 0;
     line-height: 1;
+    break-after: avoid;
+    page-break-after: avoid;
   }
   h1 {
     font-size: 25pt;
@@ -173,6 +175,11 @@
   }
   .page-break {
     page-break-after: always;
+    break-after: always;
+  }
+  .prevent-page-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
   <?php if (!defined('IS_CLS') || !IS_CLS) { ?>

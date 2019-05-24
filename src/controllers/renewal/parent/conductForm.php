@@ -125,7 +125,7 @@ if (isset($id)) {
 							</li>
 							<li>
 								I will treat everyone equally and never discriminate against
-								another person associated with the ASA on any grounds including
+								another person associated with Swim England on any grounds including
 								that of age, sexual orientation, gender, faith, ethnic origin or
 								nationality.
 							</li>

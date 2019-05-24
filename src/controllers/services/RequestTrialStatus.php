@@ -111,7 +111,7 @@ include BASE_PATH . 'views/header.php';
 
         <dl class="row mb-0 pb-0">
           <?php if ($swimmer['ASA'] != null && $swimmer['ASA'] != "") { ?>
-          <dt class="col-md-4 col-lg-3">ASA Number</dt>
+          <dt class="col-md-4 col-lg-3">Swim England Number</dt>
           <dd class="col-md-8 col-lg-9">
             <a target="_blank" href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=<?=$swimmer['ASA']?>">
               <?=$swimmer['ASA']?>

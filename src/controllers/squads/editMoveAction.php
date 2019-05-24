@@ -26,13 +26,8 @@ if (strtotime($movingDate) < strtotime('+9 days')) {
 
 if (!$errorState) {
   try {
-  	$update = $db->prepare("UPDATE `moves` SET `SquadID` = ?, `MovingDate` = ? WHERE `MoveID` = ?");
+  	$update = $db->prepare("UPDATE `moves` SET `SquadID` = ?, `MovingDate` = ? WHERE `MemberID` = ?");
     $update->execute([$newSquad, $movingDate, $id]);
-
-		$sql = "SELECT `MemberID` FROM `moves` WHERE `MoveID` = ?";
-		$member = $db->prepare($sql);
-		$member->execute([$id]);
-		$member = $member->fetchColumn();
 
 		// Notify the parent
 		$sql = "INSERT INTO `notify` (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, ?, ?)";
@@ -40,7 +35,7 @@ if (!$errorState) {
 
 		$sql = "SELECT `SquadName`, `MForename`, `MSurname`, `SquadFee`, SquadCoC, `SquadTimetable`, `users`.`UserID` FROM (((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) WHERE members.MemberID = ?";
 		$email_info = $db->prepare($sql);
-		$email_info->execute([$member]);
+		$email_info->execute([$id]);
 		$email_info = $email_info->fetch(PDO::FETCH_ASSOC);
 
 		if ($email_info) {
@@ -96,5 +91,5 @@ if ($errorState) {
 	<ul class="mb-0">' . $errorMessage . '
 	</ul></div>';
 
-	header("Location: " . autoUrl("squads/moves/edit/" . $id));
+	header("Location: " . autoUrl("swimmers/" . $id . "/edit-move"));
 }

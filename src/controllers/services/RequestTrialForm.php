@@ -263,7 +263,7 @@ include BASE_PATH . 'views/header.php';
           <h2>Already swim for a club?</h2>
           <p>
             If you/your swimmer is a member of a Swim England swimming club, they
-            will have an ASA Membership Number. If you are not a member of a club,
+            will have an Swim England Membership Number. If you are not a member of a club,
             skip this box.
           </p>
           <div class="mb-3">
@@ -271,7 +271,7 @@ include BASE_PATH . 'views/header.php';
             <input type="test" name="swimmer-club" id="swimmer-club" class="form-control" placeholder="<?=CLUB_NAME?>" value="<?=htmlspecialchars(trim($value['swimmer-club']))?>">
           </div>
           <div class="mb-3">
-            <label for="swimmer-asa">ASA Number (Optional)</label>
+            <label for="swimmer-asa">Swim England Number (Optional)</label>
             <input type="number" name="swimmer-asa" id="swimmer-asa" class="form-control" placeholder="123456" pattern="[0-9]*" inputmode="numeric" value="<?=htmlspecialchars(trim($value['swimmer-asa']))?>">
             <div class="invalid-feedback">
               Please enter a number.

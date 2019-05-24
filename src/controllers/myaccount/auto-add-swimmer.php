@@ -60,7 +60,7 @@ use Respect\Validation\Validator as v;
         <li>" . $row['MForename'] . " " . $row['MSurname'] . "</li>
         <li>Squad: " . $row['SquadName'] . "</li>
         <li>Monthly Fee: &pound;" . $row['SquadFee'] . "</li>
-        <li>ASA Number: " . $row['ASANumber'] . "</li>
+        <li>Swim England Number: " . $row['ASANumber'] . "</li>
         <li>" . CLUB_SHORT_NAME . " Member ID: " . $row['MemberID'] . "</li>
       </ul>
       <p>If this was not you, contact <a href=\"mailto:"  . CLUB_EMAIL . "\">

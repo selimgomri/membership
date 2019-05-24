@@ -10,7 +10,7 @@ header('Content-Disposition: attachment; filename=accessKeys.csv');
 $output = fopen('php://output', 'w');
 
 // output the column headings
-fputcsv($output, array('Forename', 'Surname', 'Squad' , 'ASA Number' , 'Access Key'));
+fputcsv($output, array('Forename', 'Surname', 'Squad' , 'Swim England Number' , 'Access Key'));
 
 // fetch the data
 $swimmers = $db->query("SELECT members.MForename, members.MSurname, squads.SquadName, members.ASANumber, members.AccessKey FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) ORDER BY `members`.`MForename` , `members`.`MSurname` ASC");
