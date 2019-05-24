@@ -161,8 +161,8 @@ $content .= "
 </div>";
 $content .= "
 <div class=\"form-group\">
-  <label for=\"asaregnumber\">ASA Registration Number</label>
-  <input type=\"test\" class=\"form-control\" id=\"asaregnumber\" name=\"asaregnumber\" placeholder=\"ASA Registration Numer\" value=\"" . $rowSwim['ASANumber'] . "\">
+  <label for=\"asaregnumber\">Swim England Registration Number</label>
+  <input type=\"test\" class=\"form-control\" id=\"asaregnumber\" name=\"asaregnumber\" placeholder=\"Swim England Registration Numer\" value=\"" . $rowSwim['ASANumber'] . "\">
 </div>";
 /*$sql = "SELECT COLUMN_TYPE
 FROM INFORMATION_SCHEMA.COLUMNS

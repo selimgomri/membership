@@ -32,9 +32,9 @@ $content .= "
 </div>";
 $content .= "
 <div class=\"form-group\">
-	<label for=\"asa\">ASA Registration Number</label>
+	<label for=\"asa\">Swim England Registration Number</label>
 	<input type=\"test\" class=\"form-control\" id=\"asa\" name=\"asa\"
-	aria-describedby=\"asaHelp\" placeholder=\"ASA Registration Numer\">
+	aria-describedby=\"asaHelp\" placeholder=\"Swim England Registration Numer\">
 	<small id=\"asaHelp\" class=\"form-text text-muted\">If a swimmer does not yet
 	have a Swim England Number, leave this blank and we'll generate a temporary internal
 	membership number for this swimmer.</small>

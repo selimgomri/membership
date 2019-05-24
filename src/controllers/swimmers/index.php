@@ -220,8 +220,8 @@
       </div>";
       $content .= "
       <div class=\"form-group\">
-        <label for=\"asa\">ASA Registration Number</label>
-        <input type=\"test\" class=\"form-control\" id=\"asa\" name=\"asa\" placeholder=\"ASA Registration Numer\">
+        <label for=\"asa\">Swim England Registration Number</label>
+        <input type=\"test\" class=\"form-control\" id=\"asa\" name=\"asa\" placeholder=\"Swim England Registration Numer\">
       </div>";
       $content .= "
       <div class=\"form-group\">

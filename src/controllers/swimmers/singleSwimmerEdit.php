@@ -184,7 +184,7 @@ $content .= '<div class="alert alert-success">
 		if ($userUpdate) { $content .= '<li>Parent</li>'; }
 		if ($squadUpdate) { $content .= '<li>Squad</li>'; }
 		if ($sexUpdate) { $content .= '<li>Sex</li>'; }
-		if ($catUpdate) { $content .= '<li>ASA Category</li>'; }
+		if ($catUpdate) { $content .= '<li>Swim England Category</li>'; }
 		if ($cpUpdate) { $content .= '<li>Whether or not the club pays swimmer\'s
 		fees</li>'; }
 		if ($otherNotesUpdate) { $content .= '<li>Other notes</li>'; }
@@ -215,8 +215,8 @@ $content .= "
 </div>";
 $content .= "
 <div class=\"form-group\">
-	<label for=\"asa\">ASA Registration Number</label>
-	<input type=\"test\" class=\"form-control\" id=\"asa\" name=\"asa\" placeholder=\"ASA Registration Numer\" value=\"" . htmlspecialchars($rowSwim['ASANumber']) . "\">
+	<label for=\"asa\">Swim England Registration Number</label>
+	<input type=\"test\" class=\"form-control\" id=\"asa\" name=\"asa\" placeholder=\"Swim England Registration Numer\" value=\"" . htmlspecialchars($rowSwim['ASANumber']) . "\">
 </div>";
 $cat = [];
 $cat[$rowSwim['ASACategory']] = " selected ";

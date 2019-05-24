@@ -82,7 +82,7 @@ $title = null;
         </div>
         <div class="form-group">
           <label for="asaregnumber">Swim England Registration Number</label>
-          <input type="test" class="form-control" id="asaregnumber" name="asaregnumber" placeholder="ASA Registration Numer" value="<?=htmlspecialchars($row['ASANumber'])?>" readonly>
+          <input type="test" class="form-control" id="asaregnumber" name="asaregnumber" placeholder="Swim England Registration Numer" value="<?=htmlspecialchars($row['ASANumber'])?>" readonly>
         </div>
         <?php if ($row['Gender'] == "Male") { ?>
           <div class="form-group">
