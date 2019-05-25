@@ -44,10 +44,12 @@ include BASE_PATH . 'views/header.php';
         This squad has <?=htmlspecialchars($numSwimmers)?> swimmers
       </p>
     </div>
+    <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
     <div class="col text-sm-right">
       <a href="<?=autoUrl("squads/" . $id . "/edit")?>"
         class="btn btn-dark">Edit squad</a>
     </div>
+    <?php } ?>
   </div>
 
   <div class="row">
