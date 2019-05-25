@@ -2,7 +2,28 @@
 
 global $db;
 
-$moves = $db->query("SELECT moves.MemberID, `MForename`, `MSurname`, `SquadName`, moves.SquadID, `MovingDate`, `MoveID` FROM ((`moves` INNER JOIN `members` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON squads.SquadID = moves.SquadID) WHERE MovingDate >= CURDATE() ORDER BY `MForename` ASC, `MSurname` ASC");
+$moves = $db->query("SELECT
+  moves.MemberID,
+  MForename,
+  MSurname,
+  new.`SquadName` AS NewSquad,
+  current.SquadName CurrentSquad,
+  current.SquadID CurrentSquadID,
+  moves.SquadID,
+  `MovingDate`,
+  `MoveID`
+  FROM
+  (
+    (
+      (`moves`
+        JOIN squads AS new ON moves.SquadID = new.SquadID
+      )
+      JOIN `members` ON members.MemberID = moves.MemberID
+    )
+    JOIN `squads` AS current ON members.SquadID = current.SquadID
+  )
+  WHERE MovingDate >= CURDATE() ORDER BY `MForename` ASC, `MSurname` ASC
+");
 $move = $moves->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = "Squad Moves";
@@ -11,15 +32,15 @@ include BASE_PATH . "views/squadMenu.php";
 ?>
 <div class="container">
   <div class="row">
-    <div class="col-lg-8">
+    <div class="col">
     	<h1>Squad Moves</h1>
     	<p class="lead">Upcoming Squad Moves (Sorted by Date)</p>
     	<p>To make a new squad move, <a href="<?=autoUrl("swimmers")?>">select a swimmer</a>.</p>
-    	<!-- TABLE HERE -->
+    	<!-- LIST -->
     	<?php if ($move != null) { ?>
         <div class="card">
           <div class="card-header">
-            Upcoming moves
+            All moves
           </div>
           <ul class="list-group list-group-flush">
     					<?php do { ?>
@@ -27,24 +48,31 @@ include BASE_PATH . "views/squadMenu.php";
                 <div class="form-row align-items-center">
                   <div class="col">
                     <p class="mb-0">
-                      <a href="<?=autoUrl("swimmers/" .
+                      <strong><a href="<?=autoUrl("swimmers/" .
                       $move['MemberID'])?>"><?=htmlspecialchars($move['MForename'] . " " .
-                      $move['MSurname'])?></a> moving to  <a
-                      href="<?=autoUrl("squads/" .
-                      $move['SquadID'])?>"><?=htmlspecialchars($move['SquadName'])?> Squad</a>
-                      on <?=date('j F Y', strtotime($move['MovingDate']))?>
+                      $move['MSurname'])?></a></strong>
+                    </p>
+                    <p class="mb-0">
+                      <a href="<?=autoUrl("squads/" .
+                      $move['CurrentSquadID'])?>"><?=htmlspecialchars($move['CurrentSquad'])?>
+                      Squad</a> <i class="fa fa-long-arrow-right"
+                      aria-hidden="true"></i> <a href="<?=autoUrl("squads/" .
+                      $move['SquadID'])?>"><?=htmlspecialchars($move['NewSquad'])?>
+                      Squad</a> on <?=date('j F Y',
+                      strtotime($move['MovingDate']))?>
                     </p>
                     <div class="d-lg-none mb-3"></div>
                   </div>
-                  <div class="col-lg-4">
+                  <div class="col-md-4 col-lg-3">
                     <div class="form-row">
                       <div class="col-6 col-lg-12">
-            						<a class="btn btn-block btn-light" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/edit-move")?>">
+            						<a class="btn btn-block btn-outline-dark" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/edit-move")?>">
             							Edit or Cancel
             						</a>
+                        <div class="d-none d-lg-block mb-1"></div>
                       </div>
                       <div class="col-6 col-lg-12">
-            						<a class="btn btn-block btn-light" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/move-contract")?>">
+            						<a class="btn btn-block btn-outline-dark" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/move-contract")?>">
             							Print Contract
             						</a>
                       </div>
