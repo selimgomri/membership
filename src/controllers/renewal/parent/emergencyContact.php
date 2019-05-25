@@ -71,7 +71,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 									</a>
 								</p>
 							</div>
-							<div class="col text-right">
+							<div class="col text-sm-right">
 								<a href="<?php echo autoUrl("renewal/emergencycontacts/edit/" .
 								$contactsArray[$i]->getID()); ?>" class="btn btn-primary">
 									Edit

@@ -252,7 +252,7 @@
       								</a>
       							</p>
       						</div>
-      						<div class="col text-right">
+      						<div class="col text-sm-right">
       							<a href="<?php echo autoUrl("emergencycontacts/edit/" .
       							$contactsArray[$i]->getID()); ?>" class="btn btn-primary">
       								Edit
