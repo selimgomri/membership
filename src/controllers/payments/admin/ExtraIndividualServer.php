@@ -30,7 +30,7 @@ if ($_POST['response'] == "getSwimmers") {
                 <?php echo $row['SquadName']; ?>
               </p>
             </div>
-            <div class="col text-right">
+            <div class="col text-sm-right">
               <button type="button" id="RelationDrop-<?php echo $row['RelationID']; ?>"
                 class="btn btn-link" value="<?php echo $row['RelationID']; ?>">
                 Remove

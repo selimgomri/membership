@@ -62,7 +62,7 @@ if ($renewal_trap) {
 							</p>
 						</div>
 						<?php if (!$renewal_trap) { ?>
-						<div class="col text-right">
+						<div class="col text-sm-right">
 							<a href="<?php echo autoUrl("myaccount"); ?>" class="btn
 							btn-primary">
 								Edit
@@ -87,7 +87,7 @@ if ($renewal_trap) {
 								</a>
 							</p>
 						</div>
-						<div class="col text-right">
+						<div class="col text-sm-right">
 							<a href="<?php echo autoUrl($url_path . "\/edit/" .
 							$contactsArray[$i]->getID()); ?>" class="btn btn-primary">
 								Edit
