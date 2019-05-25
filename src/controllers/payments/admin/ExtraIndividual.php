@@ -28,7 +28,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
     <div class="col-md-6">
 	    <h1><?=htmlspecialchars($row['ExtraName'])?> <small>&pound;<?=htmlspecialchars(number_format($row['ExtraFee'], 2))?>/month</small></h1>
     </div>
-    <div class="col text-right">
+    <div class="col text-sm-right">
       <a href="<?=autoUrl("payments/extrafees/" . $id . "/edit")?>"
         class="btn btn-dark">Edit</a>
       <a href="<?=autoUrl("payments/extrafees/" . $id . "/delete")?>"
