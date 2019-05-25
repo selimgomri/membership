@@ -79,10 +79,9 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 
     if ($sessionID != null) {
       // Check if the register has been done before
-      $sessionRecord = $db->prepare("SELECT `SessionID` FROM `sessionsAttendance` WHERE `WeekID` = ? AND `SessionID` = ?");
+      $sessionRecord = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` WHERE `WeekID` = ? AND `SessionID` = ?");
       $sessionRecord->execute([$date, $sessionID]);
-      $result = mysqli_query($link, $sql);
-      $sessionRecordExists = mysqli_num_rows($result);
+      $sessionRecordExists = $sessionRecord->fetchColumn();
 
       $getWeekBeginning = $db->prepare("SELECT `WeekDateBeginning` FROM `sessionsWeek` WHERE `WeekID` = ?");
       $getWeekBeginning->execute([$date]);
@@ -160,6 +159,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       }
       $content .= "<thead class=\"thead-light\"><tr><th>Swimmer</th><th>Notes</th></tr></thead><tbody>";
       while ($row = $swimmers->fetch(PDO::FETCH_ASSOC)) {
+        $swimmerCount += 1;
         $age = date_diff(date_create($row['DateOfBirth']),
         date_create('today'))->y;
         $checked = "";
