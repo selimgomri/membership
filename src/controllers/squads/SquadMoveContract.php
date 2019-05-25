@@ -2,7 +2,7 @@
 
 global $db;
 
-$sql = "SELECT `SquadName`, `MForename`, `MSurname`, Forename, Surname, DateOfBirth, `SquadFee`, SquadCoC, `SquadTimetable`, `users`.`UserID`, MovingDate FROM (((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) WHERE members.MemberID = ?";
+$sql = "SELECT moves.SquadID, `SquadName`, `MForename`, `MSurname`, Forename, Surname, DateOfBirth, `SquadFee`, SquadCoC, `SquadTimetable`, `users`.`UserID`, MovingDate FROM (((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) WHERE members.MemberID = ?";
 $email_info = $db->prepare($sql);
 $email_info->execute([$id]);
 $email_info = $email_info->fetch(PDO::FETCH_ASSOC);
@@ -179,6 +179,9 @@ ob_start();?>
 
     <div class="prevent-page-break">
       <div class="cell">
+        <p>
+          <strong>Date of agreement:</strong> On or after <?=date("l j F Y")?>
+        </p>
 
         <?php if (date_diff(date_create($email_info['DateOfBirth']), date_create('today'))->y < 18) { ?>
           <p>
@@ -208,7 +211,7 @@ ob_start();?>
       <div class="cell">
         <div class="row">
           <div class="split-30">
-            <img width="100" src="<?=autoUrl("services/qr-generator?size=600&text=" . urlencode(autoUrl("swimmers/id/agreement-to-code-of-conduct/squad")))?>">
+            <img width="100" src="<?=autoUrl("services/qr-generator?size=600&text=" . urlencode(autoUrl("swimmers/" . $id . "/agreement-to-code-of-conduct/" . $email_info['SquadID'])))?>">
           </div>
           <div class="split-70">
             <p class="mb-0">

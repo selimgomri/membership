@@ -2,7 +2,28 @@
 
 global $db;
 
-$moves = $db->query("SELECT moves.MemberID, `MForename`, `MSurname`, `SquadName`, moves.SquadID, `MovingDate`, `MoveID` FROM ((`moves` INNER JOIN `members` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON squads.SquadID = moves.SquadID) WHERE MovingDate >= CURDATE() ORDER BY `MForename` ASC, `MSurname` ASC");
+$moves = $db->query("SELECT
+  moves.MemberID,
+  MForename,
+  MSurname,
+  new.`SquadName` AS NewSquad,
+  current.SquadName CurrentSquad,
+  current.SquadID CurrentSquadID,
+  moves.SquadID,
+  `MovingDate`,
+  `MoveID`
+  FROM
+  (
+    (
+      (`moves`
+        JOIN squads AS new ON moves.SquadID = new.SquadID
+      )
+      JOIN `members` ON members.MemberID = moves.MemberID
+    )
+    JOIN `squads` AS current ON members.SquadID = current.SquadID
+  )
+  WHERE MovingDate >= CURDATE() ORDER BY `MForename` ASC, `MSurname` ASC
+");
 $move = $moves->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = "Squad Moves";
@@ -19,7 +40,7 @@ include BASE_PATH . "views/squadMenu.php";
     	<?php if ($move != null) { ?>
         <div class="card">
           <div class="card-header">
-            Upcoming moves
+            All moves
           </div>
           <ul class="list-group list-group-flush">
     					<?php do { ?>
@@ -29,9 +50,14 @@ include BASE_PATH . "views/squadMenu.php";
                     <p class="mb-0">
                       <strong><a href="<?=autoUrl("swimmers/" .
                       $move['MemberID'])?>"><?=htmlspecialchars($move['MForename'] . " " .
-                      $move['MSurname'])?></a></strong> will move to  <a
-                      href="<?=autoUrl("squads/" .
-                      $move['SquadID'])?>"><?=htmlspecialchars($move['SquadName'])?>
+                      $move['MSurname'])?></a></strong>
+                    </p>
+                    <p class="mb-0">
+                      <a href="<?=autoUrl("squads/" .
+                      $move['CurrentSquadID'])?>"><?=htmlspecialchars($move['CurrentSquad'])?>
+                      Squad</a> <i class="fa fa-long-arrow-right"
+                      aria-hidden="true"></i> <a href="<?=autoUrl("squads/" .
+                      $move['SquadID'])?>"><?=htmlspecialchars($move['NewSquad'])?>
                       Squad</a> on <?=date('j F Y',
                       strtotime($move['MovingDate']))?>
                     </p>
