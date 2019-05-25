@@ -66,13 +66,13 @@ include BASE_PATH . "views/squadMenu.php";
                   <div class="col-md-4 col-lg-3">
                     <div class="form-row">
                       <div class="col-6 col-lg-12">
-            						<a class="btn btn-block btn-primary rounded" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/edit-move")?>">
+            						<a class="btn btn-block btn-outline-dark" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/edit-move")?>">
             							Edit or Cancel
             						</a>
                         <div class="d-none d-lg-block mb-1"></div>
                       </div>
                       <div class="col-6 col-lg-12">
-            						<a class="btn btn-block btn-primary rounded" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/move-contract")?>">
+            						<a class="btn btn-block btn-outline-dark" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/move-contract")?>">
             							Print Contract
             						</a>
                       </div>

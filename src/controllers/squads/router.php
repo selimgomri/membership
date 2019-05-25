@@ -3,6 +3,14 @@
 $userID = $_SESSION['UserID'];
 $access = $_SESSION['AccessLevel'];
 
+$this->get('/', function() {
+  require 'squadList.php';
+});
+
+$this->get('/{id}:int', function($id) {
+  require 'squad.php';
+});
+
 if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 
 	$this->get('/', function() {
@@ -10,24 +18,18 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 		require 'squadList.php';
 	});
 
-	$this->get('/{id}:int', function($id) {
+	$this->get('/{id}:int/edit', function($id) {
 		global $link;
 		require 'SquadIndividual.php';
 	});
 
-	$this->post('/{id}:int', function($id) {
+	$this->post('/{id}:int/edit', function($id) {
 		global $link;
 		require 'SquadIndividual.php';
 	});
 
-	$this->group('/moves', function() {
-		global $link;
-
-		$this->get('/', function() {
-			global $link;
-			require 'moves.php';
-		});
-    
+	$this->get('/moves', function() {
+		require 'moves.php';
 	});
 
 }
