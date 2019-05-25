@@ -214,3 +214,9 @@ $this->post('/{id}:int/medical', function($id) {
 	global $link;
 	include 'medicalDetailsPost.php';
 });
+
+if ($_SESSION['AccessLevel'] != "Parent") {
+  $this->get('/{swimmer}:int/agreement-to-code-of-conduct/{squad}:int', function($swimmer, $squad) {
+  	include 'MarkCodeOfConductCompleted.php';
+  });
+}
