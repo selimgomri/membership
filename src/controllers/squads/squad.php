@@ -1,6 +1,7 @@
 <?php
 
 $Extra = new ParsedownExtra();
+$Extra->setSafeMode(true);
 $search  = array("\n##### ", "\n#### ", "\n### ", "\n## ", "\n# ");
 $replace = array("\n###### ", "\n##### ", "\n#### ", "\n### ", "\n## ");
 //echo $Extra->text('# Header {.sth}'); # prints: <h1 class="sth">Header</h1>
