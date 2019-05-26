@@ -62,30 +62,23 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 
     $action = true;
 
-    $getAdmins = null;
     try {
   		$getAdmins = $db->prepare("SELECT `UserID` FROM `users` WHERE `AccessLevel` = ? AND `UserID` != ?");
   		$getAdmins->execute(["Admin", $_SESSION['UserID']]);
-  	} catch (PDOException $e) {
+  		$notify = $db->prepare("INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'NewMember')");
+    	$subject = "New Club Member";
+    	$message = '<p>' . htmlentities(getUserName($_SESSION['UserID'])) . ' has added a new member, ' . htmlentities($forename . ' ' . $surname) . ' to our online membership system.</p><p>We have sent you this email to ensure you\'re aware of this.</p>';
+    	while ($row = $getAdmins->fetch(PDO::FETCH_ASSOC)) {
+    		try {
+    			$query->execute([$row['UserID'], $subject, $message]);
+    		} catch (PDOException $e) {
+    			//halt(500);
+    		}
+    	}
+    } catch (PDOException $e) {
   		halt(500);
   	}
 
-  	try {
-  		$notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
-  		`ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'NewMember')";
-  		$query = $db->prepare($notify);
-  	} catch (PDOException $e) {
-  		halt(500);
-  	}
-  	$subject = "New Club Member";
-  	$message = '<p>' . htmlentities(getUserName($_SESSION['UserID'])) . ' has added a new member, ' . htmlentities($forename . ' ' . $surname) . ' to our online membership system.</p><p>We have sent you this email to ensure you\'re aware of this.</p>';
-  	while ($row = $getAdmins->fetch(PDO::FETCH_ASSOC)) {
-  		try {
-  			$query->execute([$row['UserID'], $subject, $message]);
-  		} catch (PDOException $e) {
-  			//halt(500);
-  		}
-  	}
   } catch (Exception $e) {
     $action = false;
   }
