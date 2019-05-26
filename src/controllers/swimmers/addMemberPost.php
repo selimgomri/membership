@@ -7,14 +7,14 @@ $added = $action = false;
 $forename = $middlenames = $surname = $dateOfBirth = $asaNumber = $sex = $squad = $cat = $cp = $sql = "";
 $getASA = false;
 
-if ((!empty($_POST['forename']))  && (!empty($_POST['surname'])) && (!empty($_POST['datebirth'])) && (!empty($_POST['sex'])) && (!empty($_POST['squad']))) {
+if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POST['datebirth'])) && (!empty($_POST['sex'])) && (!empty($_POST['squad']))) {
 	$forename = trim(ucwords($_POST['forename']));
 	$surname = trim(ucwords($_POST['surname']));
 	$dateOfBirth = trim($_POST['datebirth']);
 	$sex = $_POST['sex'];
 	$squad = $_POST['squad'];
 	if ((!empty($_POST['middlenames']))) {
-		$middlenames = trim((ucwords($_POST['middlenames']));
+		$middlenames = trim(ucwords($_POST['middlenames']));
 	}
 	if ((!empty($_POST['asa']))) {
 		$asaNumber = trim($_POST['asa']);
@@ -36,27 +36,36 @@ if ((!empty($_POST['forename']))  && (!empty($_POST['surname'])) && (!empty($_PO
 
 	$accessKey = generateRandomString(6);
 
-  $insert = $db->prepare("INSERT INTO `members` (MForename`, `MMiddleNames`, `MSurname`, `DateOfBirth`, `ASANumber`, `Gender`, `SquadID`, `AccessKey`, `ASACategory`, `ClubPays`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-  $insert->execute([
-    $forename,
-    $middlenames,
-    $surname,
-    $dateOfBirth,
-    $asaNumber,
-    $sex,
-    $squad,
-    $accessKey,
-    $cat,
-    $cp
-  ]);
+  try {
+    $insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, SquadID, AccessKey, ASACategory, ClubPays) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $insert->execute([
+      $forename,
+      $middlenames,
+      $surname,
+      $dateOfBirth,
+      $asaNumber,
+      $sex,
+      $squad,
+      $accessKey,
+      $cat,
+      $cp
+    ]);
 
-	$last_id = $db->lastInsertId();
+  	$last_id = $db->lastInsertId();
 
-	if ($getASA) {
-		$swimEnglandTemp = CLUB_CODE . $last_id;
-    $addTempSwimEnglandCode = $db->prepare("UPDATE `members` SET `ASANumber` = ? WHERE `MemberID` = ?");
-    $addTempSwimEnglandCode->execute([$swimEnglandTemp, $last_id]);
-	}
+  	if ($getASA) {
+  		$swimEnglandTemp = CLUB_CODE . $last_id;
+      $addTempSwimEnglandCode = $db->prepare("UPDATE `members` SET `ASANumber` = ? WHERE `MemberID` = ?");
+      $addTempSwimEnglandCode->execute([$swimEnglandTemp, $last_id]);
+  	}
+
+    $action = true;
+  } catch (Exception $e) {
+    $action = false;
+  }
+} else {
+  echo "NOT IN IF";
+  pre($_POST);
 }
 
 if ($action) {
@@ -69,5 +78,5 @@ if ($action) {
 			Please try again
 		</p>
 	</div>';
-	header("Location: " . app('request')->curl);
+	//header("Location: " . app('request')->curl);
 }
