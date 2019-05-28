@@ -82,15 +82,15 @@
     'normal' => $fontDir . '/07ffedf4983a20afacaf57bfba0ebf45',
   ),
   'open sans bold' => array(
-    'normal' => $fontDir . '/89a25c24a310ab0638e64b2d3e0c8370',
+    'normal' => $fontDir . '/76413df60f6252e11bc23df4def9c062',
   ),
   'lato' => array(
-    'normal' => $fontDir . '/37a42f131f79abd93c6385b3f24ff753',
+    'normal' => $fontDir . '/25ed94ae975cc3a11ce740ee87497663',
   ),
   'lato bold' => array(
-    'normal' => $fontDir . '/9f9a607ada81a60b58c842380131c6ae',
+    'normal' => $fontDir . '/694d296c4e42de008e1c667dec395314',
   ),
   'roboto mono' => array(
-    'normal' => $fontDir . '/1f2a19495e13b7562f0668500c107612',
+    'normal' => $fontDir . '/bd66e07539fc94bf24f91c9a60f0b0b0',
   ),
 ) ?>

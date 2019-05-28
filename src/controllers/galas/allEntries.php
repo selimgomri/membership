@@ -73,7 +73,14 @@ $content .= ">Male</option>
 <input class=\"form-control\" placeholder=\"Search\" name=\"search\" id=\"search\" value=\"" . $search . "\">
 </div></div></div>";
 $content .= "<div class=\"table-responsive-md\" id=\"output\"><div class=\"ajaxPlaceholder\"><strong>Select a Gala</strong> <br>Entries will appear here when you select a gala</div></div>";
-$content .= '
+
+include BASE_PATH . "views/header.php";
+include "galaMenu.php"; ?>
+<div class="container">
+<?php echo "<h1>Gala Entries</h1>";
+echo $content; ?>
+</div>
+
 <script>
 function getResult() {
   var gala = document.getElementById("galaID");
@@ -86,13 +93,12 @@ function getResult() {
     xmlhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         document.getElementById("output").innerHTML = this.responseText;
-        window.history.replaceState("string", "Title", "' .
-        autoUrl("galas/entries") . '?galaID=" + galaValue + "&sex=" + sexValue +
-        "&search=" + searchValue);
+        window.history.replaceState("string", "Title", "<?=autoUrl("galas/entries")?>?galaID=" + galaValue + "&sex=" + sexValue + "&search=" + searchValue);
+      } else {
+        console.log(this.status);
       }
     }
-    var ajaxRequest = "' . autoURL("galas/ajax/entries") . '?galaID=" +
-    galaValue + "&sex=" + sexValue + "&search=" + searchValue;
+    var ajaxRequest = "<?=autoURL("galas/ajax/entries")?>?galaID=" + galaValue + "&sex=" + sexValue + "&search=" + searchValue;
     xmlhttp.open("GET", ajaxRequest, true);
     xmlhttp.send();
 }
@@ -102,16 +108,7 @@ getResult();
 document.getElementById("galaID").onchange=getResult;
 document.getElementById("search").oninput=getResult;
 document.getElementById("sex").oninput=getResult;
-</script>';
-$content .= '
-';
-
-include BASE_PATH . "views/header.php";
-include "galaMenu.php"; ?>
-<div class="container">
-<?php echo "<h1>Gala Entries</h1>";
-echo $content; ?>
-</div>
+</script>
 
 <script>
 document.querySelectorAll('*[id^="processedEntry-"]');

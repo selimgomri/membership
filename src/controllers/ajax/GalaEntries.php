@@ -10,7 +10,7 @@ if ($_REQUEST["sex"] == "m") {
 } else if ($_REQUEST["sex"] == "f") {
   $sex = " AND `Gender` = 'Female' ";
 } else {
-  halt(500);
+  //halt(500);
 }
 
 $sqlArgs = [];
@@ -88,6 +88,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
     // For loop iterates through the rows of the database result, producing rows for the table
     while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
+      $count++;
       $member = $row['MemberID'];
       $times = null;
 
@@ -136,7 +137,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       if ($row['HyTek'] != 1) {
         for ($y=0; $y<sizeof($swimsArray); $y++) {
           if ($row[$swimsArray[$y]] == 1) {
-            $content .= "<li>" . htmlspecialchars($swimsTextArray[$y]) . "</li>";
+            $content .= "<li>" . ($swimsTextArray[$y]) . "</li>";
           }
         }
       }
@@ -199,7 +200,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
             }
             $content .= "<li><strong>" . htmlspecialchars($swimsTextArray[$y]) . "</strong> <br>";
             if ($times[$swimsArray[$y]] != "") {
-              $content .= $times[$swimsArray[$y]] . $output;;
+              $content .= $times[$swimsArray[$y]] . $output;
             } else if ($row[$swimsTimeArray[$y]]) {
               $content .= $row[$swimsTimeArray[$y]] . $output;
             } else {

@@ -76,7 +76,6 @@ else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $
 	});
 
 	$this->post(['/{id}:int', '/competitions/{id}:int'], function($id) {
-		global $link;
 		include "CompetitionSinglePost.php";
 	});
 
