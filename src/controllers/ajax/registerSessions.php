@@ -3,7 +3,7 @@
 use Respect\Validation\Validator as v;
 global $db;
 
-$getMemberAttendance = $db->prepare("SELECT * FROM `sessionsAttendance` WHERE `WeekID` = ? AND `SessionID` = ? AND `MemberID` = ?");
+$getMemberAttendance = $db->prepare("SELECT AttendanceBoolean FROM `sessionsAttendance` WHERE `WeekID` = ? AND `SessionID` = ? AND `MemberID` = ?");
 
 $markdown = new ParsedownExtra();
 $markdown->setSafeMode(true);
@@ -91,7 +91,8 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       $sessionDetails->execute([$sessionID]);
       $row = $sessionDetails->fetch(PDO::FETCH_ASSOC);
       $dayAdd = $row['SessionDay'];
-      $date = date ('j F Y', strtotime($weekBeginning. ' + ' . $dayAdd . ' days'));
+      $sessionDate = strtotime($weekBeginning. ' + ' . $dayAdd . ' days');
+      $date = date ('j F Y', $sessionDate);
 
       $dayText = "";
       switch ($row['SessionDay']) {
@@ -160,8 +161,8 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       $content .= "<thead class=\"thead-light\"><tr><th>Swimmer</th><th>Notes</th></tr></thead><tbody>";
       while ($row = $swimmers->fetch(PDO::FETCH_ASSOC)) {
         $swimmerCount += 1;
-        $age = date_diff(date_create($row['DateOfBirth']),
-        date_create('today'))->y;
+        $age = date_diff(date_create($row['DateOfBirth']), date_create('today'))->y;
+        $ageOnSession = date_diff(date_create($row['DateOfBirth']), date_create($weekBeginning. ' + ' . $dayAdd . ' days'))->y;
         $checked = "";
         if ($sessionRecordExists > 0) {
           $member = $row['MemberID'];
@@ -173,8 +174,11 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
           }
         }
         $no_parent = "";
+        if (date("m-d", strtotime($row['DateOfBirth'])) == date("m-d", $sessionDate)) {
+          $no_parent .= '<span class="sr-only"><em>Birthday is today</em></span><span class="badge badge-success"><i class="fa fa-birthday-cake" aria-hidden="true"></i> ' . $ageOnSession . ' today</span>';
+        }
         if ($row['UserID'] == null && $age < 18) {
-          $no_parent = "<span class=\"badge badge-primary\">NO PARENT</span>";
+          $no_parent .= "<span class=\"badge badge-primary\">NO PARENT</span>";
         }
         $content .= "
         <tr>
