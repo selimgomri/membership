@@ -2,7 +2,7 @@
 
 global $db;
 
-$sql = "SELECT moves.SquadID, `SquadName`, `MForename`, `MSurname`, Forename, Surname, DateOfBirth, `SquadFee`, SquadCoC, `SquadTimetable`, `users`.`UserID`, MovingDate FROM (((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) WHERE members.MemberID = ?";
+$sql = "SELECT moves.SquadID, squads.SquadName, `MForename`, `MSurname`, Forename, Surname, DateOfBirth, squads.SquadFee, squads.SquadCoC, squads.SquadTimetable, `users`.`UserID`, MovingDate, old.SquadName AS OldSquad, old.SquadFee AS OldFee FROM ((((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) INNER JOIN squads AS old ON members.SquadID = old.SquadID) WHERE members.MemberID = ?";
 $email_info = $db->prepare($sql);
 $email_info->execute([$id]);
 $email_info = $email_info->fetch(PDO::FETCH_ASSOC);
@@ -16,7 +16,7 @@ ob_start();?>
   <head>
   <meta charset='utf-8'>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i" rel="stylesheet" type="text/css">
-  <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:700,700i" rel="stylesheet" type="text/css">-->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i" rel="stylesheet" type="text/css">
   <style>
   .signature-box {
     padding: 5pt;
@@ -58,11 +58,18 @@ ob_start();?>
     </div>
 
     <p>
-      We're very excited to let you know that <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> will be moving to <?=htmlspecialchars($email_info['SquadName'])?> Squad on <?=date("l j F Y", strtotime($email_info['MovingDate']))?>.
+      We're very excited to let you know that <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> will be moving from <?=htmlspecialchars($email_info['OldSquad'])?> Squad to <?=htmlspecialchars($email_info['SquadName'])?> Squad on <?=date("l j F Y", strtotime($email_info['MovingDate']))?>.
     </p>
 
     <p>
       The Squad Fee you will pay will be &pound;<?=number_format($email_info['SquadFee'], 2)?>*.
+      <?php if ($email_info['SquadFee'] > $email_info['OldFee']) { ?>
+      This is an increase of &pound;<?=number_format($email_info['SquadFee'] - $email_info['OldFee'], 2)?> on your existing squad fee.
+      <?php } else if ($email_info['SquadFee'] < $email_info['OldFee']) { ?>
+      This is a decrease of &pound;<?=number_format($email_info['OldFee'] - $email_info['SquadFee'], 2)?> on your existing squad fee.
+      <?php } else { ?>
+      This is the same as your current squad fee.
+      <?php } ?>
     </p>
 
     <p>
@@ -74,6 +81,10 @@ ob_start();?>
       You can get the timetable for <?=htmlspecialchars($email_info['SquadName'])?> Squad at <a href="<?=htmlspecialchars($email_info['SquadTimetable'])?>" target="_blank"><?=htmlspecialchars($email_info['SquadTimetable'])?></a>.
     </p>
     <?php } ?>
+
+    <p>
+      If you do not think <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> will be able to take up their place in <?=htmlspecialchars($email_info['SquadName'])?> Squad, please contact us as soon as possible. We must however warn you that we may not be able keep <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> in <?=htmlspecialchars($email_info['OldSquad'])?> Squad if it would prevent us from moving up swimmers in our lower squads.
+    </p>
 
     <?php if ((defined('IS_CLS') && IS_CLS)) { ?>
       <div class="cell">
@@ -91,7 +102,19 @@ ob_start();?>
           <?php } ?>
         </p>
       </div>
+
+      <div class="cell">
+        <h2>Instructions for staff</h2>
+        <p>
+          <strong>On receipt of this document and having confirmed it has been completed, please scan all QR codes to mark all required forms as completed.</strong>
+        </p>
+        <p class="mb-0">
+          You must be signed in with your club account.
+        </p>
+      </div>
     <?php } ?>
+
+    <p>*<em>Discounts may apply to squad fees</em></p>
 
     <div class="page-break"></div>
 

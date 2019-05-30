@@ -53,10 +53,12 @@ include BASE_PATH . "views/squadMenu.php";
                       $move['MSurname'])?></a></strong>
                     </p>
                     <p class="mb-0">
-                      <a href="<?=autoUrl("squads/" .
+                      <span class="sr-only">Moving from</span> <a
+                      href="<?=autoUrl("squads/" .
                       $move['CurrentSquadID'])?>"><?=htmlspecialchars($move['CurrentSquad'])?>
                       Squad</a> <i class="fa fa-long-arrow-right"
-                      aria-hidden="true"></i> <a href="<?=autoUrl("squads/" .
+                      aria-hidden="true"></i><span class="sr-only">to</span> <a
+                      href="<?=autoUrl("squads/" .
                       $move['SquadID'])?>"><?=htmlspecialchars($move['NewSquad'])?>
                       Squad</a> on <?=date('j F Y',
                       strtotime($move['MovingDate']))?>

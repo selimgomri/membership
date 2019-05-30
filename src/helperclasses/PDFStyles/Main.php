@@ -24,6 +24,24 @@
     src: url('<?=autoUrl('public/fonts/LATO-BOLD.TTF')?>') format('truetype');
   }
   @font-face {
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 400;
+    src: url('<?=autoUrl('public/fonts/SourceSansPro-Regular.ttf')?>') format('truetype');
+  }
+  @font-face {
+    font-family: 'Source Sans';
+    font-style: italic;
+    font-weight: 400;
+    src: url('<?=autoUrl('public/fonts/SourceSansPro-Italic.ttf')?>') format('truetype');
+  }
+  @font-face {
+    font-family: 'Source Sans Pro Bold';
+    font-style: normal;
+    font-weight: 400;
+    src: url('<?=autoUrl('public/fonts/SourceSansPro-Bold.ttf')?>') format('truetype');
+  }
+  @font-face {
     font-family: 'Roboto Mono';
     font-style: normal;
     font-weight: 400;
@@ -183,11 +201,11 @@
   }
 
   <?php if (!defined('IS_CLS') || !IS_CLS) { ?>
-  html {
-    font-family: 'Lato', sans-serif;
+  html, body {
+    font-family: 'Source Sans Pro', 'Lato', 'Helvetica', sans-serif;
   }
   h1, h2, h3, h4, h5, h6, strong, thead, th {
-    font-family: 'Lato Bold';
+    font-family: 'Source Sans Pro Bold', 'Lato Bold';
   }
   <?php } ?>
 </style>
