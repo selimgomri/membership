@@ -54,6 +54,7 @@ $use_white_background = true;
 $pagetitle = htmlentities($row['Title']);
 
 $allow_edit = true;
+$allow_edit_id = $row['ID'];
 
 $container_classes = "";
 if ($row['Type'] == "corporate_documentation") {
