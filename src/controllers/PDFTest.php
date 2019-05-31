@@ -5,7 +5,7 @@
   <head>
   <meta charset='utf-8'>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i" rel="stylesheet" type="text/css">
   <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:700,700i" rel="stylesheet" type="text/css">-->
   <?php include BASE_PATH . 'helperclasses/PDFStyles/Main.php'; ?>
   <title>Generated PDF</title>
@@ -73,6 +73,8 @@
     <ul>
       <li>Fusce vehicula quam sed risus vehicula molestie.</li>
     </ul>
+
+    <input style="width:10cm;height: 1cm;" type="text" name="x">
 
     <h2>
       A test table

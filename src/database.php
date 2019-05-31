@@ -1824,6 +1824,9 @@ function getUserOption($userID, $option) {
 }
 
 function setUserOption($userID, $option, $value) {
+  if ($value == "") {
+    $value = null;
+  }
   try {
     global $db;
     $query = $db->prepare("SELECT COUNT(*) FROM userOptions WHERE User = ? AND Option = ?");
