@@ -1,4 +1,4 @@
-<?
+<?php
 
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\LabelAlignment;

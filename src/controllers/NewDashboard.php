@@ -1,4 +1,4 @@
-<?
+<?php
 
 // https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts
 // https://www.swimming.org/sport/wp-json/wp/v2/posts
@@ -174,7 +174,7 @@ include BASE_PATH . "views/header.php";
     <div class="mb-4">
       <h2 class="mb-4">Club News</h2>
       <div class="news-grid">
-        <?
+        <?php
         $max_posts = 6;
         if (sizeof($obj) < $max_posts) {
           $max_posts = sizeof($obj);

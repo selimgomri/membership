@@ -1,4 +1,4 @@
-<?
+<?php
 
 use Respect\Validation\Validator as v;
 global $db;

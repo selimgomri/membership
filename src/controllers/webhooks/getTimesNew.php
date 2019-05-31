@@ -1,4 +1,4 @@
-<?
+<?php
 
 /**
  * Cron Job to scrape times from the ASA
