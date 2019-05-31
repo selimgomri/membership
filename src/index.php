@@ -4,15 +4,6 @@
 ini_set('mail.add_x_header', 'Off');
 ini_set('expose_php', 'Off');
 
-if ($_SESSION['AccessLevel'] == "Admin") {
-  //Show errors
-  //===================================
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  error_reporting(E_ALL);
-  //===================================
-}
-
 $time_start = microtime(true);
 
 $executionStartTime = microtime();
@@ -81,6 +72,15 @@ session_start([
     'name'                => COOKIE_PREFIX . 'SessionId',
     'cookie_domain'       => $_SERVER['HTTP_HOST']
 ]);
+
+if ($_SESSION['AccessLevel'] == "Admin") {
+  //Show errors
+  //===================================
+  ini_set('display_errors', 1);
+  ini_set('display_startup_errors', 1);
+  error_reporting(E_ALL);
+  //===================================
+}
 
 function halt(int $statusCode) {
   if ($statusCode == 200) {
