@@ -35,17 +35,6 @@
       "external": false
     },
     {
-      "id": "personal",
-      "name": "My Personal Page",
-      "title": "My Personal Page",
-      "link": "people/me",
-      "target": "_self",
-      "external": false,
-      "exclude": [
-        "Parent"
-      ]
-    },
-    {
       "id": "addswimmer",
       "name": "Add Swimmer",
       "title": "Connect a club member to your account",

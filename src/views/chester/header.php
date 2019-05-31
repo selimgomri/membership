@@ -1,4 +1,6 @@
-<?
+<?php
+
+global $db;
 
 require 'GlobalHead.php';
 
@@ -59,7 +61,7 @@ p.lead {
     <?php } ?>
 
     <noscript>
-      <div class="bg-dark text-white box-shadow py-3 d-print-none">
+      <div class="bg-warning box-shadow py-3 d-print-none">
         <div class="<?=$container_class?>">
           <p class="h2">
             <strong>
@@ -70,15 +72,16 @@ p.lead {
       	    It looks like you've got JavaScript disabled or your browser does
       	    not support it. JavaScript is essential for our website to function
       	    properly so we recommend you enable it or upgrade to a browser which
-      	    supports it as soon as possible. <strong><a
-      	    href="http://browsehappy.com/" class="text-white"
-      	    target="_blank">Upgrade your browser today <i class="fa
-      	    fa-external-link" aria-hidden="true"></i></a></strong>.
+      	    supports it as soon as possible. <strong><a class="text-dark"
+      	    href="http://browsehappy.com/" target="_blank">Upgrade your browser
+      	    today <i class="fa fa-external-link"
+      	    aria-hidden="true"></i></a></strong>.
           </p>
           <p class="mb-0">
             If JavaScript is not supported by your browser, <?=CLUB_NAME?>
-            recommends you <strong><a class="text-white"
-            href="https://www.firefox.com">install Firefox by Mozilla</a></strong>.
+            recommends you <strong><a class="text-dark"
+            href="https://www.firefox.com">install Firefox by
+            Mozilla</a></strong>.
           </p>
         </div>
       </div>
@@ -108,10 +111,10 @@ p.lead {
     </div>
     <![endif]-->
 
-    <?
+    <?php
     $edit_link = null;
     if (!$people) {
-      $edit_link = autoUrl("posts/" . $id . "/edit");
+      $edit_link = autoUrl("posts/" . $allow_edit_id . "/edit");
     } else if ($people && $page_is_mine) {
       $edit_link = autoUrl("people/me");
     }
@@ -242,10 +245,9 @@ p.lead {
   			  <a class="nav-link" href="<?php echo autoUrl("") ?>">Home</a>
   		  </li>
         <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-          <?
-          $user = mysqli_real_escape_string($link, $_SESSION['UserID']);
-          $getSwimmers = "SELECT * FROM `members` WHERE `UserID` = '$user' ORDER BY `MForename` ASC, `MSurname` ASC;";
-          $getSwimmers = mysqli_query($link, $getSwimmers);
+          <?php
+          $getSwimmers = $db->prepare("SELECT MForename Name, MSurname Surname, MemberID ID FROM `members` WHERE `UserID` = ? ORDER BY Name ASC, Surname ASC");
+          $getSwimmers->execute([$_SESSION['UserID']]);
           ?>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="swimmersDropdown"
@@ -255,18 +257,16 @@ p.lead {
             </a>
             <div class="dropdown-menu" aria-labelledby="swimmersDropdown">
               <a class="dropdown-item" href="<?php echo autoUrl("swimmers") ?>">Swimmers Home</a>
-              <?php if (mysqli_num_rows($getSwimmers) > 0) { ?>
+              <?php if ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC)) { ?>
               <div class="dropdown-divider"></div>
               <h6 class="dropdown-header">My Swimmers</h6>
-              <?php for ($i = 0; $i < mysqli_num_rows($getSwimmers); $i++) {
-                $getSwimmerRow = mysqli_fetch_array($getSwimmers, MYSQLI_ASSOC); ?>
-                <a class="dropdown-item" href="<?php echo autoUrl("swimmers/" .
-                $getSwimmerRow['MemberID']) ?>"><?php echo
-                $getSwimmerRow['MForename'] . " " . $getSwimmerRow['MSurname'];
-                ?></a>
-              <?php } ?>
+              <?php do { ?>
+                <a class="dropdown-item" href="<?=autoUrl("swimmers/" . $swimmer['ID'])?>">
+                  <?=htmlspecialchars($swimmer['Name'] . " " . $swimmer['Surname'])?>
+                </a>
+              <?php } while ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC)); ?>
               <?php } else { ?>
-                <a class="dropdown-item" href="<?php echo autoUrl("myaccount/addswimmer") ?>">Add Swimmers</a>
+                <a class="dropdown-item" href="<?=autoUrl("myaccount/addswimmer")?>">Add a swimmer</a>
               <?php } ?>
             </div>
           </li>
@@ -488,9 +488,9 @@ p.lead {
   		</ul>
       <?php if (!empty($_SESSION['LoggedIn'])) {
         global $currentUser;
-        $user_name = str_replace(' ', '&nbsp;', $currentUser->getName()); ?>
+        $user_name = str_replace(' ', '&nbsp;', htmlspecialchars($currentUser->getName())); ?>
       <ul class="navbar-nav">
-        <!--<a class="btn btn-sm btn-outline-light my-2 my-sm-0" href="<?php echo autoUrl("logout") ?>">Logout</a>-->
+        <!--<a class="btn btn-sm btn-outline-light my-2 my-sm-0" href="<?=autoUrl("logout")?>">Logout</a>-->
         <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
           <?= $user_name ?> <i class="fa fa-user-circle-o" aria-hidden="true"></i>

@@ -86,21 +86,21 @@
     'normal' => $fontDir . '/32aa7e08aff0396bcc09ceef93af0e8b',
   ),
   'open sans bold' => array(
-    'normal' => $fontDir . '/89a25c24a310ab0638e64b2d3e0c8370',
+    'normal' => $fontDir . '/9ada525762e281fcc1636a845762e12c',
   ),
   'lato' => array(
-    'normal' => $fontDir . '/37a42f131f79abd93c6385b3f24ff753',
+    'normal' => $fontDir . '/189373073c78b489b6f2b5ff0926046c',
   ),
   'lato bold' => array(
-    'normal' => $fontDir . '/9f9a607ada81a60b58c842380131c6ae',
+    'normal' => $fontDir . '/e57c78673dba402e8a73800b8c46b06a',
   ),
   'source sans' => array(
-    'italic' => $fontDir . '/82783c46e5b325d5dae13e4bbf74014e',
+    'italic' => $fontDir . '/869f61e108dbe5f055da3abc824ecaf2',
   ),
   'source sans pro bold' => array(
-    'normal' => $fontDir . '/9248f9d4b2f29f39abac482f1669abfe',
+    'normal' => $fontDir . '/64b0589179ec1167403b552012b2f4d0',
   ),
   'roboto mono' => array(
-    'normal' => $fontDir . '/1f2a19495e13b7562f0668500c107612',
+    'normal' => $fontDir . '/7e6e217b5eb641c67423b1471d005588',
   ),
 ) ?>
