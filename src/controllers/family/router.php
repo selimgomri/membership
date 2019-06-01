@@ -1,4 +1,4 @@
-<?
+<?php
 
 $this->get('/register/now/{id}:int', function($id) {
 	global $db;

@@ -1,4 +1,4 @@
-# Route v1.0.3
+# Route v1.2.4
 Route - Fast, flexible routing for PHP, enabling you to quickly and easily build RESTful web applications.
 
 ## Installation
@@ -20,8 +20,14 @@ Only if using composer create index.php in root.
 Create an index.php file with the following contents:
 ```php
 <?php
-define('DS', DIRECTORY_SEPARATOR, true);
-define('BASE_PATH', __DIR__ . DS, TRUE);
+define('DS', DIRECTORY_SEPARATOR);
+define('BASE_PATH', __DIR__ . DS);
+//Show errors
+//===================================
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+//===================================
 
 require BASE_PATH.'vendor/autoload.php';
 
@@ -264,4 +270,32 @@ $route->group('/{lang}?:isoCode2', function($lang)
 });
 ```
 
+### Middleware
+```php
+
+$route->use(function (){
+    $req = app('request');
+    pre('Do something before all routes', 3);
+});
+
+$route->before('/', function (){
+    pre('Do something before all routes', 4);
+});
+
+$route->before('/*!admin', function (){
+    pre('Do something before all routes except admin', 4);
+});
+
+$route->before('/admin|home', function (){
+    pre('Do something before admin and home only ', 4);
+});
+
+$route->after('/admin|home', function (){
+    pre('Do something after admin and home only ', 4);
+});
+
+```
+
 # Full examples [here](http://nezamy.com/route)
+## Support me 
+https://www.paypal.me/nezamy

@@ -41,12 +41,16 @@ if (($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE']) || $auth_via_google_authent
     $query->execute([$_SESSION['2FAUserID']]);
     $row = $query->fetch(PDO::FETCH_ASSOC);
 
+    global $currentUser;
+
     $_SESSION['EmailAddress'] = $row['EmailAddress'];
     $_SESSION['Forename'] = $row['Forename'];
     $_SESSION['Surname'] = $row['Surname'];
     $_SESSION['UserID'] = $_SESSION['2FAUserID'];
     $_SESSION['AccessLevel'] = $row['AccessLevel'];
     $_SESSION['LoggedIn'] = 1;
+
+    $currentUser = new User($_SESSION['UserID'], $db);
 
     unset($_SESSION['2FAUserID']);
 
@@ -75,42 +79,48 @@ if (($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE']) || $auth_via_google_authent
       $geo_string = "Unknown Location";
     } catch (InvalidDatabaseException $e) {
       $geo_string = "Location Information Unavailable";
+    } catch (Exception $e) {
+      $geo_string = "Location Information Unavailable";
     }
-
-    $sql = "INSERT INTO `userLogins` (`UserID`, `IPAddress`, `GeoLocation`, `Browser`, `Platform`, `Mobile`, `Hash`, `HashActive`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    global $db;
-
-    $mobile = 0;
-
-    $browser_details = new WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);
-
-    $browser = $browser_details->browser->name . ' ' . $browser_details->browser->version->toString();
-
-    if ($browser_details->isType('mobile')) {
-      $mobile = 1;
-    }
-
-    $remember_me = 0;
-    if ($_SESSION['2FAUserRememberMe']) {
-      $remember_me = 1;
-    }
-
-    $login_details = [
-      $_SESSION['UserID'],
-      app('request')->ip(),
-      $geo_string,
-      $browser,
-      $browser_details->os->toString(),
-      $mobile,
-      $hash,
-      $remember_me
-    ];
 
     try {
-      $query = $db->prepare($sql);
-      $query->execute($login_details);
-    } catch (PDOException $e) {
-      halt(500);
+      $sql = "INSERT INTO `userLogins` (`UserID`, `IPAddress`, `GeoLocation`, `Browser`, `Platform`, `Mobile`, `Hash`, `HashActive`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+      global $db;
+
+      $mobile = 0;
+
+      $browser_details = new WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);
+
+      $browser = $browser_details->browser->name . ' ' . $browser_details->browser->version->toString();
+
+      if ($browser_details->isType('mobile')) {
+        $mobile = 1;
+      }
+
+      $remember_me = 0;
+      if ($_SESSION['2FAUserRememberMe']) {
+        $remember_me = 1;
+      }
+
+      $login_details = [
+        $_SESSION['UserID'],
+        app('request')->ip(),
+        $geo_string,
+        $browser,
+        $browser_details->os->toString(),
+        $mobile,
+        $hash,
+        $remember_me
+      ];
+
+      try {
+        $query = $db->prepare($sql);
+        $query->execute($login_details);
+      } catch (PDOException $e) {
+        halt(500);
+      }
+    } catch (Exception $e) {
+      // DW, just continue
     }
 
     $user_info_cookie = json_encode([
@@ -122,8 +132,12 @@ if (($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE']) || $auth_via_google_authent
 
     unset($_SESSION['LoginSec']);
 
-    setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, time()+60*60*24*120 , "/", 'chesterlestreetasc.co.uk', true, false);
-    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, time()+60*60*24*120, "/", 'chesterlestreetasc.co.uk', true, false);
+    try {
+      setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, time()+60*60*24*120 , "/", 'chesterlestreetasc.co.uk', true, false);
+      setcookie(COOKIE_PREFIX . "AutoLogin", $hash, time()+60*60*24*120, "/", 'chesterlestreetasc.co.uk', true, false);
+    } catch (Exception $e) {
+      // Do nothing if caught
+    }
 
     // Test if we've seen a login from here before
     $login_before_data = [

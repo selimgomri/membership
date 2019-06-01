@@ -84,6 +84,9 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
         $_SESSION['AccessLevel'] = $row['AccessLevel'];
         $_SESSION['LoggedIn'] = 1;
 
+        global $currentUser;
+        $currentUser = new User($_SESSION['UserID'], $db);
+
         $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));
 
         $geo_string = "Location Information Unavailable";
@@ -108,6 +111,8 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
         } catch (AddressNotFoundException $e) {
           $geo_string = "Unknown Location";
         } catch (InvalidDatabaseException $e) {
+          $geo_string = "Location Information Unavailable";
+        } catch (Exception $e) {
           $geo_string = "Location Information Unavailable";
         }
 

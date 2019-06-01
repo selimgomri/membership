@@ -48,16 +48,21 @@ class App
     {
         spl_autoload_register(function($className)
         {
-            $namespace = strtolower(str_replace("\\", DS, __NAMESPACE__));
             $className = str_replace("\\", DS, $className);
             $classNameOnly = basename($className);
-            $className = strtolower(substr($className, 0, -strlen($classNameOnly))) . lcfirst($classNameOnly);
-
-            if (is_file($class = BASE_PATH . (empty($namespace) ? "" : $namespace . "/") . "{$className}.php")) {
+            $namespace = substr($className, 0, -strlen($classNameOnly));
+            if (is_file($class = BASE_PATH . "{$className}.php")) {
                 return include_once($class);
-            } elseif (is_file($class = BASE_PATH . "{$className}.php")) {
+            } elseif (is_file($class = BASE_PATH . strtolower($namespace). $classNameOnly . '.php')) {
+                return include_once($class);
+            } elseif (is_file($class = BASE_PATH . strtolower($className).'.php')) {
+                return include_once($class);
+            } elseif (is_file($class = BASE_PATH . $namespace . lcfirst($classNameOnly) . '.php')) {
+                return include_once($class);
+            }elseif (is_file($class = BASE_PATH . strtolower($namespace) . lcfirst($classNameOnly) . '.php')) {
                 return include_once($class);
             }
+            return false;
         });
     }
 
@@ -72,7 +77,7 @@ class App
     public function __call($method, $args)
     {
         return  isset($this->{$method}) && is_callable($this->{$method})
-                ? call_user_func_array($this->{$method}, $args) : null;
+            ? call_user_func_array($this->{$method}, $args) : null;
     }
 
     /**

@@ -14,12 +14,14 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "nezamy/support": "1.0.*"
     },
     "autoload": {
         "psr-4": {
             "System\\": "system"
         },
         "files": ["system/function.php"]
-    }
+    },
+    "minimum-stability": "dev"
 }

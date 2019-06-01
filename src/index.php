@@ -127,8 +127,13 @@ function halt(int $statusCode) {
 //$link = LINK;
 
 $link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-$db = new PDO("mysql:host=" . $dbhost . ";dbname=" . $dbname . "", $dbuser, $dbpass);
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$db = null;
+try {
+  $db = new PDO("mysql:host=" . $dbhost . ";dbname=" . $dbname . "", $dbuser, $dbpass);
+  $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (Exception $e) {
+  halt(500);
+}
 
 /* check connection */
 if (mysqli_connect_errno()) {
@@ -140,6 +145,11 @@ require_once "database.php";
 if ($_SERVER['HTTP_HOST'] == 'account.chesterlestreetasc.co.uk' && app('request')->method == "GET") {
   header("Location: " . autoUrl(ltrim(app('request')->path, '/')));
   die();
+}
+
+$currentUser = null;
+if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && isset($_SESSION['UserID']) && $_SESSION['UserID'] != null) {
+  $currentUser = new User($_SESSION['UserID'], $db);
 }
 
 if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'AutoLogin'] != "") {
