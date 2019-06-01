@@ -214,8 +214,12 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
       'TopUAL'  => $row['AccessLevel']
     ]);
 
-    setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, $expiry_time , "/", 'chesterlestreetasc.co.uk', true, false);
-    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , "/", 'chesterlestreetasc.co.uk', true, false);
+    $secure = true;
+    if (app('request')->protocol == 'http') {
+      $secure = false;
+    }
+    setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, $expiry_time , "/", app('request')->hostname, $secure, false);
+    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , "/", app('request')->hostname, $secure, false);
   }
 }
 
@@ -233,7 +237,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
   $this->get('/auth/cookie/redirect', function() {
     //$target = urldecode($target);
-    setcookie(COOKIE_PREFIX . "SeenAccount", true, 0, "/", 'chesterlestreetasc.co.uk', true, false);
+    setcookie(COOKIE_PREFIX . "SeenAccount", true, 0, "/", ('request')->hostname, true, false);
     header("Location: https://www.chesterlestreetasc.co.uk");
   });
 
