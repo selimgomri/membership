@@ -53,7 +53,7 @@ include "galaMenu.php"; ?>
         <div class="col-md-5 py-4">
           <div class="panel bg-white">
             <h3 class="panel-title">
-              Did you know?php
+              Did you know?
             </h3>
 
             <p>
