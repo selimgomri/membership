@@ -1,4 +1,4 @@
-<?
+<?php
 
 // https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts
 // https://www.swimming.org/sport/wp-json/wp/v2/posts
@@ -174,7 +174,7 @@ include BASE_PATH . "views/header.php";
     <div class="mb-4">
       <h2 class="mb-4">Club News</h2>
       <div class="news-grid">
-        <?
+        <?php
         $max_posts = 6;
         if (sizeof($obj) < $max_posts) {
           $max_posts = sizeof($obj);
@@ -199,7 +199,7 @@ include BASE_PATH . "views/header.php";
 	<div class="mb-4">
     <h2 class="mb-4">Swim England News</h2>
     <div class="news-grid">
-      <?
+      <?php
       $max_posts = 6;
       if (sizeof($asa) < $max_posts) {
         $max_posts = sizeof($asa);
@@ -224,7 +224,7 @@ include BASE_PATH . "views/header.php";
   <div class="mb-4">
     <h2 class="mb-4">Swim England North East News</h2>
     <div class="news-grid">
-      <?
+      <?php
       $max_posts = 6;
       if (sizeof($asa_ne->channel->item) < $max_posts) {
         $max_posts = sizeof($asa_ne->channel->item);
@@ -331,6 +331,6 @@ include BASE_PATH . "views/header.php";
 	</div>
 </div>
 
-<?
+<?php
 
 include BASE_PATH . "views/footer.php";

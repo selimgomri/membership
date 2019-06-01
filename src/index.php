@@ -4,15 +4,6 @@
 ini_set('mail.add_x_header', 'Off');
 ini_set('expose_php', 'Off');
 
-if ($_SESSION['AccessLevel'] == "Admin") {
-  //Show errors
-  //===================================
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  error_reporting(E_ALL);
-  //===================================
-}
-
 $time_start = microtime(true);
 
 $executionStartTime = microtime();
@@ -50,6 +41,10 @@ if (!(sizeof($_SESSION) > 0)) {
 }
 */
 
+function currentUrl() {
+  return app('request')->protocol . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+}
+
 $db = null;
 $link = null;
 
@@ -69,13 +64,19 @@ if (strlen($cookie_prefix) > 0) {
 require $config_file;
 require 'default-config-load.php';
 
+// This code is required so cookies work in dev environments
+$cookieSecure = 1;
+if (app('request')->protocol == 'http') {
+  $cookieSecure = 0;
+}
+
 session_start([
     //'cookie_lifetime' => 172800,
     'gc_maxlifetime'      => 86400,
     'cookie_httponly'     => 0,
     'gc_probability'      => 1,
     'use_only_cookies'    => 1,
-    'cookie_secure'       => 1,
+    'cookie_secure'       => $cookieSecure,
     'use_strict_mode'     => 1,
     'sid_length'          => 128,
     'name'                => COOKIE_PREFIX . 'SessionId',
@@ -126,8 +127,13 @@ function halt(int $statusCode) {
 //$link = LINK;
 
 $link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-$db = new PDO("mysql:host=" . $dbhost . ";dbname=" . $dbname . "", $dbuser, $dbpass);
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$db = null;
+try {
+  $db = new PDO("mysql:host=" . $dbhost . ";dbname=" . $dbname . "", $dbuser, $dbpass);
+  $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (Exception $e) {
+  halt(500);
+}
 
 /* check connection */
 if (mysqli_connect_errno()) {
@@ -139,6 +145,11 @@ require_once "database.php";
 if ($_SERVER['HTTP_HOST'] == 'account.chesterlestreetasc.co.uk' && app('request')->method == "GET") {
   header("Location: " . autoUrl(ltrim(app('request')->path, '/')));
   die();
+}
+
+$currentUser = null;
+if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && isset($_SESSION['UserID']) && $_SESSION['UserID'] != null) {
+  $currentUser = new User($_SESSION['UserID'], $db);
 }
 
 if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'AutoLogin'] != "") {
@@ -303,7 +314,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
     include 'controllers/services/router.php';
   });
 
-  if ($_SESSION['TWO_FACTOR']) {
+  if (isset($_SESSION['TWO_FACTOR']) && $_SESSION['TWO_FACTOR']) {
     $this->group('/2fa', function() {
       $this->get('/', function() {
         include BASE_PATH . 'views/TwoFactorCodeInput.php';
@@ -676,7 +687,12 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
 });
 
-$route->end();
+try {
+  $route->end();
+} catch (Exception $e) {
+  // This catches any uncaught exceptions.
+  halt(500);
+}
 
 // Close SQL Database Connections
 mysqli_close($link);

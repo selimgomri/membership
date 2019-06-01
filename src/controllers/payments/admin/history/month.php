@@ -54,16 +54,16 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 					<?php
 					do {
 						if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually") {
-							?><tr class="table-success"><?
+							?><tr class="table-success"><?php
               $link = "text-success";
 						} else if ($row['Status'] == "failed" || $row['Status'] == "charged_back") {
-							?><tr class="table-danger"><?
+							?><tr class="table-danger"><?php
               $link = "text-danger";
 						} else if ($row['Status'] == "cust_not_dd") {
-							?><tr class="table-warning"><?
+							?><tr class="table-warning"><?php
               $link = "text-warning";
 						} else {
-							?><tr><?
+							?><tr><?php
 						}?>
 							<td>
                 <?=htmlspecialchars($row['Forename'] . " " . $row['Surname'])?><br>
@@ -85,7 +85,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 								<?=htmlspecialchars(paymentStatusString($row['Status']))?>
 							</td>
 						</tr>
-						<?
+						<?php
 					} while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)); ?>
 					</tbody>
 				</table>

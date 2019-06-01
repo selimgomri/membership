@@ -41,15 +41,13 @@ if ($noTimeSheet) {
   include "galaMenu.php"; ?>
   <div class="container">
     <h1>There is no Time Sheet available for the gala you requested</h1>
-    <?
-    if ($_SESSION['AccessLevel'] == "Parent") {
-      ?><p class="lead">This may be because your swimmers have not entered this gala.</p><?
-    } else {
-      ?><p class="lead">There are no entries yet for this gala.</p><?
-    }
-    ?>
+    <?php if ($_SESSION['AccessLevel'] == "Parent") {
+      ?><p class="lead">This may be because your swimmers have not entered this gala.</p>
+		<?php } else {
+      ?><p class="lead">There are no entries yet for this gala.</p>
+		<?php } ?>
   </div>
-  <?
+  <?php
   include BASE_PATH . "views/footer.php";
 } else {
 	// output headers so that the file is downloaded rather than displayed

@@ -83,6 +83,6 @@ include BASE_PATH . "views/postsMenu.php";?>
 	</div>
 </div>
 
-<?
+<?php
 }
 include BASE_PATH . "views/footer.php";

@@ -54,4 +54,4 @@ if (false/*isPartialRegistration() && !getNextSwimmer($_SESSION['UserID'], $id, 
 	</div>';
 }
 
-header("Location: " . app('request')->curl);
+header("Location: " . currentUrl());

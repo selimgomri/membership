@@ -204,7 +204,7 @@ include BASE_PATH . "views/header.php";
     </div>
 
     <p>
-      <a href="<?=app('request')->curl?>qualifications" class="btn rounded btn-success">
+      <a href="<?=currentUrl()?>qualifications" class="btn rounded btn-success">
         <span class="sr-only">View or add</span> Qualifications <span class="fa fa-chevron-right"></span>
       </a>
     </p>

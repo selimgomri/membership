@@ -1,4 +1,4 @@
-<?
+<?php
 use Respect\Validation\Validator as v;
 $id = mysqli_real_escape_string($link, $id);
 
@@ -102,4 +102,4 @@ if (v::email()->validate($_POST['emailAddr'])) {
 } else {
   $_SESSION['EmailStatus'] = false;
 }
-header("Location: " . app('request')->curl);
+header("Location: " . currentUrl());

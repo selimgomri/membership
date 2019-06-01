@@ -20,11 +20,11 @@ include BASE_PATH . "views/notifyMenu.php";
           <div class="alert alert-success">
         		We've successfully sent your email.
         	</div>
-        <?} else {?>
+        <?php } else {?>
           <div class="alert alert-danger">
         		An error occured and we were unable to send your email.
         	</div>
-        <?}
+        <?php }
       } ?>
       <?php if (isset($_SESSION['NotifySuccess'])) { ?>
       <div class="alert alert-success">

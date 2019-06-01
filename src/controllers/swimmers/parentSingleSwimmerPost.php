@@ -156,4 +156,4 @@ $update->execute([$photo[4], $id]);
 $photoUpdate = true;
 $update = true;
 
-header("Location: " . app('request')->curl);
+header("Location: " . currentUrl());

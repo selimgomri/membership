@@ -17,7 +17,7 @@ include BASE_PATH . "views/postsMenu.php";
 					<div class="form-group">
 						<label for="title">Title</label>
 						<input type="text" class="form-control" name="title" id="title"
-			      placeholder="Post Title" autocomplete="off" <?if($people){?>value="<?=getUserName($_SESSION['UserID'])?>" readonly<?}?>>
+			      placeholder="Post Title" autocomplete="off" <?php if ($people) { ?>value="<?=getUserName($_SESSION['UserID'])?>" readonly <?php } ?> >
 					</div>
 
 					<div class="form-group mb-0">

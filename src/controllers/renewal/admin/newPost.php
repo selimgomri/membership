@@ -57,5 +57,5 @@ if ($ok) {
 		</ul>
 	</div>';
 	$_SESSION['NewRenewalForm'] = [$name, $start, $end];
-	header("Location: " . app('request')->curl);
+	header("Location: " . currentUrl());
 }

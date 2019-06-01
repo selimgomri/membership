@@ -1,4 +1,4 @@
-<?
+<?php
 
 global $db;
 
@@ -40,4 +40,4 @@ try {
 
 $_SESSION['PostStatus'] = "Successfully updated";
 
-header("Location: " . app('request')->curl);
+header("Location: " . currentUrl());

@@ -75,8 +75,8 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 <div class="container-fluid">
 	<h1>Status for <?=$dateString?></h1>
-  <p class="lead"><?$title_string?></p>
-	<p><a href="<?=app('request')->curl?>csv" target="_blank">View as CSV (Comma Separated Values)</a> or <a href="<?=app('request')->curl?>json" target="_blank">View as JSON (JavaScript Object Notation)</a></p>
+  <p class="lead"><?=$title_string?></p>
+	<p><a href="<?=currentUrl()?>csv" target="_blank">View as CSV (Comma Separated Values)</a> or <a href="<?=currentUrl()?>json" target="_blank">View as JSON (JavaScript Object Notation)</a></p>
 	<?php if ($row == null) { ?>
 		<div class="alert alert-warning mb-0">
 			<p class="mb-0">
@@ -108,7 +108,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 				</tr>
 			</thead>
 			<tbody>
-			<?
+			<?php
       $link;
 			do {
         $metadata = json_decode($row['metadataJSON']);
@@ -120,17 +120,17 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
         }
 				?>
 				<?php if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually") {
-					?><tr class="table-success"><?
+					?><tr class="table-success"><?php
           $link = "text-success";
 				} else if ($row['Status'] == "cancelled" || $row['Status'] ==
 				"customer_approval_denied" || $row['Status'] == "failed" ||
 				$row['Status'] == "charged_back" || $row['Status'] == null) {
-					?><tr class="table-danger"><?
+					?><tr class="table-danger"><?php
           $link = "text-danger";
 				} else if ($row['Status'] == "cust_not_dd") {
-					?><tr class="table-warning"><?
+					?><tr class="table-warning"><?php
           $link = "text-warning";
-				} else { ?><tr class=""><?$link = "";
+				} else { ?><tr class=""><?php $link = "";
 				} ?>
 					<td>
 						<?php if ($row['Forename'] != null && $row['Surname'] != null) {?>

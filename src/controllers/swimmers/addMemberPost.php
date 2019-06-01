@@ -78,5 +78,5 @@ if ($action) {
 			Please try again
 		</p>
 	</div>';
-	//header("Location: " . app('request')->curl);
+	//header("Location: " . currentUrl());
 }

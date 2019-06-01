@@ -60,7 +60,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 								</td>
 								<td>
 									<ul class="list-unstyled mb-0">
-							<?
+							<?php
 						}
 
 						$dayAdd = $row['SessionDay'];
@@ -100,7 +100,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 							<?php echo $title; ?>
 						<?php } ?>
 						</li>
-						<?
+						<?php
 
 						$swimmerOld = $row['MemberID'];
 
@@ -117,7 +117,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 							?>
 								</ul>
 							</td>
-						</tr><?
+						</tr><?php
 						}
 					}	?>
 				</tbody>

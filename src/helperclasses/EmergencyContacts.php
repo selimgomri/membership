@@ -1,4 +1,4 @@
-<?
+<?php
 
 class EmergencyContacts {
 	private $contacts;

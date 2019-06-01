@@ -45,12 +45,12 @@ try {
     $medicine,
     $id
   ]);
-	header("Location: " . app('request')->curl);
+	header("Location: " . currentUrl());
 } catch (Exception $e) {
 	$_SESSION['ErrorState'] = "
 	<div class=\"alert alert-danger\">
 	<strong>An error occured when we tried to update our records</strong>
 	<p class=\"mb-0\">Please try again. Your membership renewal will not be
 	affected by this error.</p></div>";
-	header("Location: " . app('request')->curl);
+	header("Location: " . currentUrl());
 }

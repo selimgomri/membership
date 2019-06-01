@@ -1,4 +1,4 @@
-<?
+<?php
 
 // Get the date of the week beginning
 $day = date('w');

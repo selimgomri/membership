@@ -30,7 +30,7 @@ class User {
     $query->execute([$this->id]);
     $row = $query->fetch(PDO::FETCH_ASSOC);
 
-    if ($row != null) {
+    if ($row == true) {
       $this->forename = $row['Forename'];
       $this->surname = $row['Surname'];
       $this->emailAddress = $row['EmailAddress'];

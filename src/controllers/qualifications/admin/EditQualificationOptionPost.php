@@ -15,7 +15,7 @@ if (sizeof($form_errors) > 0) {
   // There was a problem, so send back to check details
 
   $_SESSION['EditQualificationData'] = $_POST;
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 
 } else {
   // Otherwise insert into the database
@@ -30,6 +30,6 @@ if (sizeof($form_errors) > 0) {
     halt(500);
   }
   $_SESSION['EditQualificationSuccess'] = true;
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 
 }

@@ -128,7 +128,7 @@ $_SESSION['RegistrationMode'] = $mode;
 
         <h2>Notification Preferences</h2>
 
-        <?
+        <?php
 
         $email = $sms = "";
         if (isset($_SESSION['RegistrationEmailAuth'])) {

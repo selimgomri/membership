@@ -130,7 +130,7 @@ if ($status) {
 	$sql = "UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE
 	`RenewalID` = '$renewal' AND `UserID` = '$user';";
 	mysqli_query($link, $sql);
-	header("Location: " . app('request')->curl);
+	header("Location: " . currentUrl());
 } else {
 	$_SESSION['ErrorState'] = "
 	<div class=\"alert alert-danger\">
@@ -139,5 +139,5 @@ if ($status) {
 	<p class=\"mb-0\">Please try again. You cannot renew your membership or
 	register if you cannot agree to the terms and conditions on this
 	page.</p></div>";
-	header("Location: " . app('request')->curl);
+	header("Location: " . currentUrl());
 }

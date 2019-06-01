@@ -1,4 +1,4 @@
-<?
+<?php
 
 $null = $page;
 
@@ -97,18 +97,18 @@ include BASE_PATH . "views/notifyMenu.php";?>
           <?php if ($row['JSONData'] != "") { ?>
           <dt class="col-sm-3">Sent To</dt>
           <dd class="col-sm-9">
-            <?
+            <?php
             $squads = (array) $info->To->Squads;
             $lists = (array) $info->To->Targeted_Lists;
             foreach ($squads as $s) { ?>
               <span class="badge badge-pill rounded badge-dark">
                 <?php echo $s; ?>
-              </span><?
+              </span><?php
             }
             foreach ($lists as $s) { ?>
               <span class="badge badge-pill rounded badge-dark">
                 <?php echo $s; ?>
-              </span><?
+              </span><?php
             } ?>
           </dd>
           <dt class="col-sm-3 mb-0">Date</dt>
@@ -165,5 +165,5 @@ include BASE_PATH . "views/notifyMenu.php";?>
   </div>
 </div>
 
-<?
+<?php
 include BASE_PATH . "views/footer.php";

@@ -32,4 +32,4 @@ $email_parent = '<p>Hello ' . $detail['F'] . ' ' . $detail['L'] . '</p>
 notifySend(null, 'Your Trial Appointment', $email_parent, $detail['F'] . ' ' . $detail['L'], $detail['Email']);
 
 $_SESSION['TrialAppointmentUpdated'] = true;
-header("Location: " . app('request')->curl);
+header("Location: " . currentUrl());

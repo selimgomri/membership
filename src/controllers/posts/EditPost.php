@@ -54,7 +54,7 @@ include BASE_PATH . "views/postsMenu.php";
 			      placeholder="Post Title" autocomplete="off" value="<?=htmlentities($row['Title'])?>">
 			            <?php } else { ?>
 			            <input type="text" class="form-control" name="title" id="title"
-			      placeholder="Post Title" autocomplete="off" <?if($people){?>value="<?=getUserName($_SESSION['UserID'])?>" readonly<?}?>>
+			      placeholder="Post Title" autocomplete="off" <?php if($people){?>value="<?=getUserName($_SESSION['UserID'])?>" readonly<?}?>>
 			            <?php } ?>
 					</div>
 

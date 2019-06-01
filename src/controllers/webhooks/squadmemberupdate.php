@@ -1,4 +1,4 @@
-<?
+<?php
 
 // Mandatory Startup Sequence to carry out squad updates
 $sql = "SELECT * FROM `moves` WHERE MovingDate <= CURDATE();";

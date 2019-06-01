@@ -1,4 +1,4 @@
-<?
+<?php
 
 $this->post('/galas', function() {
 	global $link;

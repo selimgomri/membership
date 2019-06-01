@@ -53,7 +53,7 @@ if ($ok) {
 		</p>
 	</div>';
 
-	header("Location: " . app('request')->curl);
+	header("Location: " . currentUrl());
 } else {
 	$_SESSION['NewRenewalErrorInfo'] = '
 	<div class="alert alert-danger">
@@ -67,5 +67,5 @@ if ($ok) {
 			' . $response . '
 		</ul>
 	</div>';
-	header("Location: " . app('request')->curl);
+	header("Location: " . currentUrl());
 }

@@ -1,4 +1,4 @@
-<?
+<?php
 
 $use_white_background = true;
 
@@ -53,11 +53,11 @@ if ($renewal_trap) {
 						<div class="col-9">
 							<p class="mb-0">
 								<strong class="d-block">
-									<?php echo $row['Forename'] . " " . $row['Surname']; ?> (From My
+									<?=htmlspecialchars($row['Forename'] . " " . $row['Surname'])?> (From My
 									Account)
 								</strong>
-								<a href="tel:<?php echo $row['Mobile']; ?>">
-									<?php echo $row['Mobile']; ?>
+								<a href="tel:<?=htmlspecialchars($row['Mobile'])?>">
+									<?=htmlspecialchars($row['Mobile'])?>
 								</a>
 							</p>
 						</div>
@@ -80,10 +80,10 @@ if ($renewal_trap) {
 						<div class="col-9">
 							<p class="mb-0">
 								<strong class="d-block">
-									<?php echo $contactsArray[$i]->getName(); ?>
+									<?=htmlspecialchars($contactsArray[$i]->getName())?>
 								</strong>
-								<a href="tel:<?php echo $contactsArray[$i]->getContactNumber(); ?>">
-									<?php echo $contactsArray[$i]->getContactNumber(); ?>
+								<a href="tel:<?=htmlspecialchars($contactsArray[$i]->getContactNumber())?>">
+									<?=htmlspecialchars($contactsArray[$i]->getContactNumber())?>
 								</a>
 							</p>
 						</div>
@@ -96,7 +96,7 @@ if ($renewal_trap) {
 					</div>
 				</div>
 			</div>
-			<?
+			<?php
 		} ?>
 		</div>
 		<p>
@@ -116,6 +116,6 @@ if ($renewal_trap) {
 	</div>
 </div>
 
-<?
+<?php
 
 include BASE_PATH . 'views/footer.php';

@@ -221,7 +221,7 @@ p.lead {
     <div class="bg-primary">
       <div class="<?=$container_class?>">
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary
-    d-print-none justify-content-between px-0" <?if($use_website_menu){?>id="club-menu"<?}?> role="navigation">
+    d-print-none justify-content-between px-0" <?php if ($use_website_menu) { ?>id="club-menu"<?php } ?> role="navigation">
 
         <a class="navbar-brand d-lg-none" href="<?php echo autoUrl("") ?>">
           <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
@@ -303,7 +303,7 @@ p.lead {
               <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . date("Y/m")) ?>">
                 Squad Fee Payments, <?=date("F Y")?>
               </a>
-              <?
+              <?php
               $lm = date("Y/m", strtotime("first day of last month"));
               $lms = date("F Y", strtotime("first day of last month"));
               ?>
@@ -360,7 +360,7 @@ p.lead {
               <a class="dropdown-item" href="<?php echo autoUrl("payments/history/extras/" . date("Y/m")) ?>">
                 Extra Fees
               </a>
-              <?
+              <?php
               $lm = date("Y/m", strtotime("first day of last month"));
               $lms = date("F Y", strtotime("first day of last month"));
               ?>

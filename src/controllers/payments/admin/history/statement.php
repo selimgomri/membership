@@ -79,7 +79,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
     $_SESSION['Token' . $PaymentID] = hash('sha256', random_int(0, 999999));
     ?>
     <p>
-      <a href="<?=app('request')->curl?>markpaid/<?=$_SESSION['Token' . $PaymentID]?>" class="btn btn-primary">
+      <a href="<?=currentUrl()?>markpaid/<?=$_SESSION['Token' . $PaymentID]?>" class="btn btn-primary">
         Mark as Paid
       </a>
     </p>
@@ -125,7 +125,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   					</tr>
   				</thead>
   				<tbody>
-  				<?
+  				<?php
   				do {
   					//$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
   					$data = "";
@@ -173,7 +173,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
     </div>
 
     <p>
-      <a href="<?=app('request')->curl?>pdf" target="_blank" class="btn btn-primary">
+      <a href="<?=currentUrl()?>pdf" target="_blank" class="btn btn-primary">
         PDF Download
       </a>
     </p>

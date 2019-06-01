@@ -31,7 +31,7 @@ include BASE_PATH . "views/notifyMenu.php";
   		</h1>
       <p class="lead">Edit this targetted list.</p>
 
-      <?
+      <?php
       if (isset($_SESSION['ErrorState'])) {
         echo $_SESSION['ErrorState'];
         unset($_SESSION['ErrorState']);

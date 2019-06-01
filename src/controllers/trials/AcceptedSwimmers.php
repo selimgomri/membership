@@ -78,7 +78,7 @@ include BASE_PATH . 'views/header.php';
                 Advanced
               </button>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="deleteDropdown">
-                <a class="dropdown-item" href="<?=autoUrl($url_path . $parent['Hash'] . "/cancel/" . $parent['ID'])?>?redirect=<?=urlencode(app('request')->curl)?>">Reject Squad Place</a>
+                <a class="dropdown-item" href="<?=autoUrl($url_path . $parent['Hash'] . "/cancel/" . $parent['ID'])?>?redirect=<?=urlencode(currentUrl())?>">Reject Squad Place</a>
               </div>
             </div>
           </div>

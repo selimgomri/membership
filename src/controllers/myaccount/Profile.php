@@ -145,7 +145,7 @@
         </ul>
       </div>
       <?php  } ?>
-      <?
+      <?php
       if ($require_email_auth) {
         echo '
         <div class="alert alert-warning mt-3 mb-0">
@@ -228,7 +228,7 @@
             <p class="border-bottom border-gray pb-2">Change your password regularly to keep your account safe</p>
             <p class="mb-0"><a href="<?php echo autoUrl("myaccount/password"); ?>" class="btn btn-success">Change my Password</a></p>
           </div>
-          <?
+          <?php
           if ($_SESSION['AccessLevel'] == "Parent") {
             $contacts = new EmergencyContacts($link);
             $contacts->byParent($userID);
@@ -277,7 +277,7 @@
           					</div>
           				</div>
           			</div>
-          			<?
+          			<?php
           		} ?>
           		</div>
               <?php } ?>
@@ -287,7 +287,7 @@
           			</a>
           		</p>
             </div>
-            <?
+            <?php
           } ?>
           <div class="cell">
             <h2>Technical Details</h2>

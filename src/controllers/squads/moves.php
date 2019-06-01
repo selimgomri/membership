@@ -44,7 +44,7 @@ include BASE_PATH . "views/squadMenu.php";
           </div>
           <ul class="list-group list-group-flush">
     					<?php do { ?>
-    					<li class="list-group-item">
+    					<li class="list-group-item list-group-item-action">
                 <div class="form-row align-items-center">
                   <div class="col">
                     <p class="mb-0">

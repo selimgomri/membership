@@ -30,18 +30,18 @@ if (isset($_POST['userSur'])) {
 		<option>
 			NO RESULTS FOUND
 		</option>
-		<?
+		<?php
 	} else {
 		?>
 		<option>
 			SELECT FROM LIST
 		</option>
-		<?
+		<?php
 		for ($i = 0; $i < $count; $i++) {
 			$row = mysqli_fetch_array($result, MYSQLI_ASSOC);?>
 			<option value="<?php echo $row['UserID'];?>">
-				<?php echo $row['Forename'] . " " . $row['Surname']; ?>
-			</option> <?
+				<?php echo htmlspecialchars($row['Forename'] . " " . $row['Surname']); ?>
+			</option> <?php
 		}
 	}
 }

@@ -30,7 +30,7 @@ include BASE_PATH . "views/header.php";
 ?>
 
 <div class="container">
-	<form method="post" action="<?=htmlspecialchars(app('request')->curl)?>" name="med" id="med">
+	<form method="post" action="<?=htmlspecialchars(currentUrl())?>" name="med" id="med">
 		<h1>Medical Form</h1>
 		<?php if (isset($_SESSION['ErrorState'])) {
 			echo $_SESSION['ErrorState'];
