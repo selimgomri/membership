@@ -677,7 +677,12 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
 });
 
-$route->end();
+try {
+  $route->end();
+} catch (Exception $e) {
+  // This catches any uncaught exceptions.
+  halt(500);
+}
 
 // Close SQL Database Connections
 mysqli_close($link);

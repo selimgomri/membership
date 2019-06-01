@@ -987,8 +987,8 @@ function debitWallet($id, $amount, $description) {
 
 function autoUrl($relative) {
   // Returns an absolute URL
-  return app('request')->url . ltrim($_SERVER['SCRIPT_NAME'], '/') . '/' . $relative;
-  //return ROOT_URL . $relative;
+  //return app('request')->url . ltrim($_SERVER['SCRIPT_NAME'], '/') . '/' . $relative;
+  return ROOT_URL . $relative;
 }
 
 function monthlyFeeCost($link, $userID, $format = "decimal") {
