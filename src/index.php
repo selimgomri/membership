@@ -304,7 +304,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
     include 'controllers/services/router.php';
   });
 
-  if (isset($_SESSION['TWO_FACTOR'] && $_SESSION['TWO_FACTOR']) {
+  if (isset($_SESSION['TWO_FACTOR']) && $_SESSION['TWO_FACTOR']) {
     $this->group('/2fa', function() {
       $this->get('/', function() {
         include BASE_PATH . 'views/TwoFactorCodeInput.php';
