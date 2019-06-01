@@ -40,7 +40,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 					working day of each month.
 				</p>
 				<p class=""><a href="
-					<?
+					<?php
 					if ($scheduleExists) {
 						echo autoUrl($url_path . "/setup/2");
 					} else {

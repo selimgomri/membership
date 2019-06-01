@@ -1,4 +1,4 @@
-<?
+<?php
 
 if ($_SESSION['AccessLevel'] == "Parent") {
 	$this->get('/', function() {

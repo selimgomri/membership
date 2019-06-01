@@ -1,4 +1,4 @@
-<?
+<?php
 
 $app_name = "CLS ASC Store";
 
@@ -34,7 +34,7 @@ include BASE_PATH . "views/head.php";
 							</li>
 						</ul>
 						<p>
-							Allow <?=$app_name?> to do this?
+							Allow <?=$app_name?> to do this?php
 						</p>
 						<p class="small text-muted">
 							By clicking Allow, you allow this app to use your information in

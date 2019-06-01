@@ -1,4 +1,4 @@
-<?
+<?php
 
 $this->get('/', function() {
 	global $link;

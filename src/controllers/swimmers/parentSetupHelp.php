@@ -1,4 +1,4 @@
-<?
+<?php
 
 $id = mysqli_real_escape_string($link, $id);
 
@@ -121,8 +121,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 	</p>
 
 	<p>
-		Here’s what you will need to do to add <?php echo $row['MForename'] . " " .
-		$row['MSurname']; ?> to your account in our Online Membership System. There
+		Here’s what you will need to do to add <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?> to your account in our Online Membership System. There
 		are two methods you can use to do this.
 	</p>
 
@@ -132,7 +131,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		If you have a device that can read QR Codes (A built in feature on iOS and
 		Android Devices), scan the QR Code below. You'll be taken to a page where
 		you'll be asked to log in, if you aren't already, and we'll automatically
-		add <?php echo $row['MForename']; ?> to your account.
+		add <?=htmlspecialchars($row['MForename'])?> to your account.
 	</p>
 
   <div class="border border-dark p-2 bg-white mb-3 px-5">
@@ -220,7 +219,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
     </p>
 	</div>
 
-  <?
+  <?php
   $col = "col-sm-6";
   if ($row['ThriveNumber'] != "") {
     $col = "col-sm-4";

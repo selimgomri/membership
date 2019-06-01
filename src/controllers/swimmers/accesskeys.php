@@ -22,9 +22,9 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 if ($row = $swimmers->fetch(PDO::FETCH_ASSOC)) { ?>
   <div class="table-responsive-md">
     <?php if (app('request')->isMobile()) {
-      ?><table class="table table-sm"><?
+      ?><table class="table table-sm"><?php
     } else {
-      ?><table class="table table-hover"><?
+      ?><table class="table table-hover"><?php
     }?>
       <thead class="thead-light">
         <tr>

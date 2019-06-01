@@ -460,7 +460,7 @@ circumstances. (Ticked boxes confirm photography permission.)
 	} ?>
 
 	<div class="mb-3 d-print-none">
-		<a class="btn btn-outline-success" href="<?php echo app('request')->curl; ?>">
+		<a class="btn btn-outline-success" href="<?php echo currentUrl(); ?>">
 			Finish Renewal
 		</a>
 	</div>

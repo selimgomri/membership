@@ -49,7 +49,7 @@
 		        </address>
 		        <p><i class="fa fa-envelope fa-fw" aria-hidden="true"></i> <a href="mailto:enquiries@chesterlestreetasc.co.uk" target="new">E-Mail Us</a></p>
 		        <p class="mb-0"><i class="fa fa-commenting fa-fw" aria-hidden="true"></i> <a target="new" href="mailto:websitefeedback@chesterlestreetasc.co.uk">Website Feedback</a></p>
-						<p><i class="fa fa-flag fa-fw" aria-hidden="true"></i> <a href="https://membership.chesterlestreetasc.co.uk/reportanissue?url=<?=urlencode(app('request')->curl)?>">Report an issue with this page</a></p>
+						<p><i class="fa fa-flag fa-fw" aria-hidden="true"></i> <a href="https://membership.chesterlestreetasc.co.uk/reportanissue?url=<?=urlencode(currentUrl())?>">Report an issue with this page</a></p>
 		      </div>
 		      <div class="col-sm-6 col-lg-6">
 						<ul class="list-unstyled cls-global-footer-link-spacer">

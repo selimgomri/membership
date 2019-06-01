@@ -1,4 +1,4 @@
-<?
+<?php
 $container_class;
 if (isset($fluidContainer) && $fluidContainer == true) {
   $container_class = "container-fluid";

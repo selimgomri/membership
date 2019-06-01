@@ -195,32 +195,32 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
       $rowSwim['Noticeboard'] != 1 || $rowSwim['FilmTraining'] != 1 ||
       $rowSwim['ProPhoto'] != 1) && ($age < 18)) { ?>
         <p>There are limited photography permissions for this swimmer</p>
-        <ul> <?
+        <ul> <?php
         if ($row['Website'] != 1) { ?>
           <li>Photos <strong>must not</strong> be taken of this swimmer for our
-          website</li><?
+          website</li><?php
         }
         if ($row['Social'] != 1) { ?>
           <li>Photos <strong>must not</strong> be taken of this swimmer for our
-          social media</li><?
+          social media</li><?php
         }
         if ($row['Noticeboard'] != 1) { ?>
           <li>Photos <strong>must not</strong> be taken of this swimmer for our
-          noticeboard</li><?
+          noticeboard</li><?php
         }
         if ($row['FilmTraining'] != 1) { ?>
           <li>This swimmer <strong>must not</strong> be filmed for the purposes
-          of training</li><?
+          of training</li><?php
         }
         if ($row['ProPhoto'] != 1) { ?>
           <li>Photos <strong>must not</strong> be taken of this swimmer by
-          photographers</li><?
+          photographers</li><?php
         }
-         ?></ul><?
+         ?></ul><?php
       } else {
          ?><p class="media-body pb-3 mb-0 lh-125">
            There are no photography limitiations for this swimmer.
-         </p><?
+         </p><?php
       } ?>
       </div>
 
@@ -235,7 +235,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
     <div class="tab-pane fade mt-3" id="times" role="tabpanel" aria-labelledby="times-tab">
       <div class="">
         <h2 class="border-bottom border-gray pb-2 mb-0">Best Times</h2>
-        <?
+        <?php
         $sc = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'SCPB';";
         $lc = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'LCPB';";
         $scy = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'CY_SC';";
@@ -268,7 +268,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
               <?php } ?>
             </thead>
             <tbody>
-            <?
+            <?php
             $openedTable = true;
             }
             echo '<tr class=""><th class="">' . $evs[$i] . '</th><td>';
@@ -303,7 +303,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
       </div>
     </div>
     <div class="tab-pane fade mt-3" id="stats" role="tabpanel" aria-labelledby="stats-tab">
-      <?	if ($counter>0) { ?>
+      <?php	if ($counter>0) { ?>
       	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
           google.charts.load('current', {'packages':['corechart']});
@@ -446,7 +446,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
     </div>
     <div class="tab-pane fade mt-3" id="additional-details" role="tabpanel" aria-labelledby="additional-info-tab">
       <div class="">
-        <?
+        <?php
         $col = "col-sm-6";
         if ($rowSwim['ThriveNumber'] != "") {
           $col = "col-sm-4";
@@ -478,7 +478,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
           swimmer.
         </p>
         <p>
-          <a href="<?=app('request')->curl?>membershipcard" class="btn btn-primary" target="_blank">
+          <a href="<?=currentUrl()?>membershipcard" class="btn btn-primary" target="_blank">
             Print Membership Card
           </a>
         </p>

@@ -114,7 +114,7 @@ $title = null;
         </div>
         <?php if ($age < 18) { ?>
         <div class="form-group">
-          <?
+          <?php
           $photo = [];
           if ($row['Website'] == 1) {
             $photo[0] = " checked ";

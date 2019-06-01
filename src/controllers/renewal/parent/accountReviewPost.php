@@ -58,7 +58,7 @@ if ($status) {
 		$renewal = mysqli_real_escape_string($link, $renewal);
 		$sql = "UPDATE `renewalProgress` SET `Substage` = `Substage` + 1 WHERE `RenewalID` = '$renewal' AND `UserID` = '$user';";
 		mysqli_query($link, $sql);
-		header("Location: " . app('request')->curl);
+		header("Location: " . currentUrl());
 	} else {
 		$status = false;
 		$statusMessage .= "<li>Database Error - Contact support</li>";
@@ -70,5 +70,5 @@ if (!$status) {
 	<div class=\"alert alert-danger\">
 	<strong>An error occured when we tried to update our records</strong>
 	<ul class=\"mb-0\">" . $statusMessage . "</ul></div>";
-	header("Location: " . app('request')->curl);
+	header("Location: " . currentUrl());
 }

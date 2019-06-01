@@ -80,7 +80,7 @@ include BASE_PATH . 'views/header.php';
 
       <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
       <p>
-        <a class="btn btn-success" href="<?=app('request')->curl?>new">
+        <a class="btn btn-success" href="<?=currentUrl()?>new">
           Add Qualification <span class="fa fa-chevron-right"></span>
         </a>
       </p>

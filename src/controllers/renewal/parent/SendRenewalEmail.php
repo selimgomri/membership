@@ -280,4 +280,4 @@ circumstances.
   $mailtext .= '<p>Contact the Membership Secretary if there are any issues.</p>';
 
   notifySend($email, "Your Membership Renewal", $mailtext, $forename . ' ' . $surname, $email, $from = ["Email" => "noreply@membership-renewal.service.chesterlestreetasc.co.uk", "Name" => "Chester-le-Street ASC"]);
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());

@@ -49,4 +49,4 @@ for ($i = 0; $i < sizeof($swimsArray); $i++) {
 	mysqli_query($link, $sql);
 }
 
-header("Location: " . app('request')->curl);
+header("Location: " . currentUrl());

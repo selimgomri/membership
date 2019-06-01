@@ -31,7 +31,7 @@ include BASE_PATH . "views/header.php";?>
 		We do this to prevent accidental unsubscription because some email providers
 		"sniff" links sent to users.
 	</p>
-	<p><a href="<?=app('request')->curl . "do"?>" class="btn
+	<p><a href="<?=currentUrl() . "do"?>" class="btn
 	btn-primary">Unsubscribe from <span
 	class="mono"><?=htmlspecialchars($list)?></span></a></p>
 	<p>

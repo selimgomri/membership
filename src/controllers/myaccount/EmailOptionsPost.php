@@ -79,4 +79,4 @@ if ($_POST['EmailAddress'] != $row['EmailAddress']) {
 	}
 }
 
-header("Location: " . app('request')->curl);
+header("Location: " . currentUrl());

@@ -41,6 +41,10 @@ if (!(sizeof($_SESSION) > 0)) {
 }
 */
 
+function currentUrl() {
+  return app('request')->protocol . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+}
+
 $db = null;
 $link = null;
 
@@ -60,13 +64,19 @@ if (strlen($cookie_prefix) > 0) {
 require $config_file;
 require 'default-config-load.php';
 
+// This code is required so cookies work in dev environments
+$cookieSecure = 1;
+if (app('request')->protocol == 'http') {
+  $cookieSecure = 0;
+}
+
 session_start([
     //'cookie_lifetime' => 172800,
     'gc_maxlifetime'      => 86400,
     'cookie_httponly'     => 0,
     'gc_probability'      => 1,
     'use_only_cookies'    => 1,
-    'cookie_secure'       => 1,
+    'cookie_secure'       => $cookieSecure,
     'use_strict_mode'     => 1,
     'sid_length'          => 128,
     'name'                => COOKIE_PREFIX . 'SessionId',

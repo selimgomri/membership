@@ -303,7 +303,7 @@ p.lead {
               <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . date("Y/m")) ?>">
                 Squad Fee Payments, <?=date("F Y")?>
               </a>
-              <?
+              <?php
               $lm = date("Y/m", strtotime("first day of last month"));
               $lms = date("F Y", strtotime("first day of last month"));
               ?>
@@ -360,7 +360,7 @@ p.lead {
               <a class="dropdown-item" href="<?php echo autoUrl("payments/history/extras/" . date("Y/m")) ?>">
                 Extra Fees
               </a>
-              <?
+              <?php
               $lm = date("Y/m", strtotime("first day of last month"));
               $lms = date("F Y", strtotime("first day of last month"));
               ?>

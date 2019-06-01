@@ -1,4 +1,4 @@
-<?
+<?php
 
 $url_path = "emergencycontacts";
 if ($renewal_trap) {

@@ -12,52 +12,52 @@ if ($_POST['is-parent']) {
 
 if (!v::email()->validate($_POST['email-addr'])) {
   $_SESSION['RequestTrial-Errors']['Email'] = "The email address is invalid";
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 }
 
 $dob = $_POST['year'] . '-' . $_POST['month'] . '-' . $_POST['day'];
 
 if (!v::date()->validate($dob)) {
   $_SESSION['RequestTrial-Errors']['DOB'] = "The date of birth provided is not valid";
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 }
 
 if ($_POST['forename'] == "") {
   $_SESSION['RequestTrial-Errors']['Parent-FN'] = "No parent first name";
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 }
 
 if ($_POST['surname'] == "") {
   $_SESSION['RequestTrial-Errors']['Parent-LN'] = "No parent last name";
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 }
 
 if (!$isParent) {
   if ($_POST['swimmer-forename'] == "") {
     $_SESSION['RequestTrial-Errors']['Swimmer-FN'] = "No swimmer first name";
-    header("Location: " . app('request')->curl);
+    header("Location: " . currentUrl());
   }
 
   if ($_POST['swimmer-surname'] == "") {
     $_SESSION['RequestTrial-Errors']['Swimmer-LN'] = "No swimmer last name";
-    header("Location: " . app('request')->curl);
+    header("Location: " . currentUrl());
   }
 }
 
 if ($_POST['sex'] == "") {
   $_SESSION['RequestTrial-Errors']['Swimmer-LN'] = "No swimmer sex provided";
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 }
 
 if ($_POST['experience'] == "") {
   $_SESSION['RequestTrial-Errors']['Swimmer-Experience'] = "No experience option selected";
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 }
 
 /*
 if (true) {
   $_SESSION['RequestTrial-Errors']['TESTING'] = "Testing system";
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 }
 */
 
@@ -198,4 +198,4 @@ if ($to_club && $to_parent) {
   $_SESSION['RequestTrial-Success'] = false;
 }
 
-header("Location: " . app('request')->curl);
+header("Location: " . currentUrl());

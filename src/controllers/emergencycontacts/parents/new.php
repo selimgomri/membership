@@ -1,4 +1,4 @@
-<?
+<?php
 
 $use_white_background = true;
 $pagetitle = "New Emergency Contact";
@@ -36,6 +36,6 @@ if ($renewal_trap) {
 	</div>
 </div>
 
-<?
+<?php
 
 include BASE_PATH . 'views/footer.php';

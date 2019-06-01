@@ -53,7 +53,7 @@ include "galaMenu.php"; ?>
         <div class="col-md-5 py-4">
           <div class="panel bg-white">
             <h3 class="panel-title">
-              Did you know?
+              Did you know?php
             </h3>
 
             <p>
@@ -82,7 +82,7 @@ include "galaMenu.php"; ?>
             <a href="<?php echo autoUrl("galas/" . $row['GalaID'] .
             "/timesheet"); ?>" target="_blank"><?php echo $row['GalaName']; ?></a>
           </li>
-          <?
+          <?php
         }
         ?></ul><?php
       } else {

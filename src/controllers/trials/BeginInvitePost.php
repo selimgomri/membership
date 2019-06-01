@@ -59,4 +59,4 @@ $email .= '
 
 notifySend(null, 'Join ' . CLUB_NAME, $email, $parent['First'] . ' ' . $parent['Last'], $_POST['email-addr']);
 
-header("Location: " . app('request')->curl);
+header("Location: " . currentUrl());

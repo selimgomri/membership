@@ -18,5 +18,5 @@ if (trim($_POST['verify-code']) == $_SESSION['AC-Registration']['EmailConfirmati
 } else {
   // The code entered was wrong, try again
   $_SESSION['AC-VerifyEmail-Error'] = true;
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 }

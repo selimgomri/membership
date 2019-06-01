@@ -18,12 +18,12 @@ $sql = "UPDATE `renewalProgress` SET `Substage` = '1',
 `Part` = '$member' WHERE `RenewalID` = '$renewal' AND `UserID` = '$user';";
 
 if (mysqli_query($link, $sql)) {
-	header("Location: " . app('request')->curl);
+	header("Location: " . currentUrl());
 } else {
 	$_SESSION['ErrorState'] = "
 	<div class=\"alert alert-danger\">
 	<p class=\"mb-0\"><strong>An error occured when we tried to update our records</strong></p>
 	<p class=\"mb-0\">Please try again</p>
 	</div>";
-	header("Location: " . app('request')->curl);
+	header("Location: " . currentUrl());
 }

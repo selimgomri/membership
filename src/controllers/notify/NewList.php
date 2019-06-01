@@ -21,7 +21,7 @@ include BASE_PATH . "views/notifyMenu.php";
         A useful use case would be for the Junior League.
       </p>
 
-      <?
+      <?php
       if (isset($_SESSION['ErrorState'])) {
         echo $_SESSION['ErrorState'];
         unset($_SESSION['ErrorState']);

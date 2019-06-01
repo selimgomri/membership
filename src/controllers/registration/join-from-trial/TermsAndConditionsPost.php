@@ -48,5 +48,5 @@ if ($success) {
 
   $_SESSION['AC-TC-Selected'] = $selections;
   $_SESSION['AC-TC-ErrorNames'] = $name;
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 }

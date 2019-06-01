@@ -19,4 +19,4 @@ if ($squad == "null") {
 }
 
 $_SESSION['TrialRecommendationsUpdated'] = true;
-header("Location: " . app('request')->curl);
+header("Location: " . currentUrl());

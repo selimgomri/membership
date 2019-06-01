@@ -25,7 +25,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 
     <div class="row">
       <div class="col-lg-8">
-        <?
+        <?php
         if (isset($_SESSION['ErrorState'])) {
           echo $_SESSION['ErrorState'];
           unset($_SESSION['ErrorState']);

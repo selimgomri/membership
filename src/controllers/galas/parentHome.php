@@ -51,7 +51,7 @@ include "galaMenu.php";
               <a href="<?php echo autoUrl("galas/competitions/" . $row['GalaID'] .
               "/timesheet"); ?>" target="_blank"><?php echo $row['GalaName']; ?></a>
             </li>
-            <?
+            <?php
           }
           ?></ul><?php
         } else {

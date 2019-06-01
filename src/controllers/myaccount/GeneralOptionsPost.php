@@ -54,4 +54,4 @@ if ($twofa != ($_POST['2FA'] == "1") || $betas != ($_POST['beta-features'] == "1
   $_SESSION['OptionsUpdate'] = true;
 }
 
-header("Location: " . app('request')->curl);
+header("Location: " . currentUrl());

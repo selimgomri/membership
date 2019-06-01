@@ -1,4 +1,4 @@
-<?
+<?php
 
 require 'auth_code_setup.php';
 

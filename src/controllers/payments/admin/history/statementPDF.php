@@ -149,7 +149,7 @@ ob_start();?>
           </tr>
         </thead>
         <tbody>
-        <?
+        <?php
         do {
           //$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
           $data = "";

@@ -1,4 +1,4 @@
-<?
+<?php
 
 if (is_null($user)) {
   halt(400);
