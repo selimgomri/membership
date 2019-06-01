@@ -83,17 +83,6 @@ session_start([
     'cookie_domain'       => $_SERVER['HTTP_HOST']
 ]);
 
-//pre(app('request'));
-
-if ($_SESSION['AccessLevel'] == "Admin") {
-  //Show errors
-  //===================================
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  error_reporting(E_ALL);
-  //===================================
-}
-
 function halt(int $statusCode) {
   if ($statusCode == 200) {
     include "views/200.php";
@@ -315,7 +304,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
     include 'controllers/services/router.php';
   });
 
-  if ($_SESSION['TWO_FACTOR']) {
+  if (isset($_SESSION['TWO_FACTOR'] && $_SESSION['TWO_FACTOR']) {
     $this->group('/2fa', function() {
       $this->get('/', function() {
         include BASE_PATH . 'views/TwoFactorCodeInput.php';
