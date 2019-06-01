@@ -26,7 +26,7 @@ function createCookie(name,value,days) {
     }
     else var expires = "";
     if(window.dropCookie) {
-        document.cookie = name+"="+value+expires+ ";domain=.chesterlestreetasc.co.uk;path=/";
+        document.cookie = name+"="+value+expires+ ";path=/";
     }
 }
 

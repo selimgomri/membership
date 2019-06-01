@@ -83,6 +83,8 @@ session_start([
     'cookie_domain'       => $_SERVER['HTTP_HOST']
 ]);
 
+//pre(app('request'));
+
 if ($_SESSION['AccessLevel'] == "Admin") {
   //Show errors
   //===================================
