@@ -25,6 +25,9 @@ $app->route     = System\Route::instance($app->request);
 
 $route          = $app->route;
 
+mb_internal_encoding('UTF-8');
+mb_http_output('UTF-8');
+
 header("Feature-Policy: fullscreen 'self' https://youtube.com");
 header("Referrer-Policy: strict-origin-when-cross-origin");
 //header("Content-Security-Policy: default-src https:; object-src data: 'unsafe-eval'; script-src * 'unsafe-inline'; style-src https://www.chesterlestreetasc.co.uk https://account.chesterlestreetasc.co.uk https://fonts.googleapis.com 'unsafe-inline'");
@@ -133,7 +136,7 @@ function halt(int $statusCode) {
 $link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 $db = null;
 try {
-  $db = new PDO("mysql:host=" . $dbhost . ";dbname=" . $dbname . "", $dbuser, $dbpass);
+  $db = new PDO("mysql:host=" . $dbhost . ";dbname=" . $dbname . ";charset=utf8mb4", $dbuser, $dbpass);
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (Exception $e) {
   halt(500);
