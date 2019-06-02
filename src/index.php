@@ -42,7 +42,11 @@ if (!(sizeof($_SESSION) > 0)) {
 */
 
 function currentUrl() {
-  return app('request')->protocol . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  $url = app('request')->protocol . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  if (mb_substr($url, -1) != '/') {
+    $url = $url . '/';
+  }
+  return $url;
 }
 
 $db = null;
