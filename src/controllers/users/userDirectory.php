@@ -14,9 +14,11 @@ include BASE_PATH . "views/header.php";
 <div class="container">
   <h1>User Directory</h1>
   <p class="lead">A list of users. Useful for changing account settings.</p>
-  <div class="form-group">
-    <label class="sr-only" for="search">Search by Surname</label>
-    <input class="form-control" placeholder="Surname" id="search" name="search" value="<?php echo htmlspecialchars($search); ?>">
+  <div class="form-group row">
+    <label class="col-sm-4 col-md-3 col-lg-2" for="search">Search by Name</label>
+    <div class="col-sm-8 col-md-9 col-lg-10">
+      <input class="form-control" id="search" name="search" value="<?=htmlspecialchars($search)?>">
+    </div>
   </div>
 
   <div id="output">

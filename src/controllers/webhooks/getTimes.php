@@ -3,20 +3,18 @@
 ignore_user_abort(true);
 set_time_limit(0);
 
-$sql = "SELECT DISTINCT `ASANumber`, `members`.`MemberID` FROM `members` LEFT JOIN `times` ON `members`.`MemberID` = `times`.`MemberID` WHERE `LastUpdate` IS NULL OR `LastUpdate` < CURDATE() LIMIT 4;";
-$result = mysqli_query($link, $sql);
+global $db;
 
-$count = mysqli_num_rows($result);
+$swimmers = $db->query("SELECT DISTINCT `ASANumber`, `members`.`MemberID` FROM `members` LEFT JOIN `times` ON `members`.`MemberID` = `times`.`MemberID` WHERE `LastUpdate` IS NULL OR `LastUpdate` < CURDATE() LIMIT 4");
 
 $date = date("Y-m-d");
 $type = null;
 
-for ($i = 0; $i < $count; $i++) {
-	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-	$user = $row['MemberID'];
+while ($swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)) {
+	$user = $swimmer['MemberID'];
 
-	if (!strpos($row['ASANumber'], 'CLSX') && $row['ASANumber'] != "") {
-		$array = getTimes($row['ASANumber']);
+	if (!strpos($swimmer['ASANumber'], CLUB_SHORT_CODE) && $swimmer['ASANumber'] != "") {
+		$array = getTimes($swimmer['ASANumber']);
 		for ($y = 0; $y < 4; $y++) {
 			if ($y == 0) {
 				$type = "CY_SC";
@@ -28,7 +26,9 @@ for ($i = 0; $i < $count; $i++) {
 				$type = "LCPB";
 			}
 
-			$num = mysqli_num_rows(mysqli_query($link, "SELECT * FROM `times` WHERE `MemberID` = '$user' AND `Type` = '$type';"));
+			$getNumRows = $db->prepare("SELECT COUNT(*) FROM `times` WHERE `MemberID` = ? AND `Type` = ?");
+			$getNumRows->execute([$user, $type]);
+			$num = $getNumRows->fetchColumn();
 
 			$t1 = $array[$type][1];
 			$t2 = $array[$type][2];

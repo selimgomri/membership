@@ -267,8 +267,8 @@ $content .= '
       <p class="mb-0">This is because there is no Parent account connected</p>';
     } else {
       $pUserID = mysqli_real_escape_string($link, $row['UserID']);
-      $contacts = new EmergencyContacts($link);
-      $contacts->byParent($pUserID);
+      $contacts = new EmergencyContacts($db);
+      $contacts->byParent($row['UserID']);
       $contactsArray = $contacts->getContacts();
       $content .= '<p class="lead border-bottom border-gray pb-2 mb-0">
         In an emergency you should try to contact
