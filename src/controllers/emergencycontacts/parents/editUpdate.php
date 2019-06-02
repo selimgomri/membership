@@ -1,5 +1,7 @@
 <?php
 
+global $db;
+
 $url_path = "emergencycontacts";
 if ($renewal_trap) {
 	$url_path = "renewal/emergencycontacts";
@@ -8,7 +10,7 @@ if ($renewal_trap) {
 $user = $_SESSION['UserID'];
 
 $contact = new EmergencyContact();
-$contact->connect($link);
+$contact->connect($db);
 $contact->getByContactID($id);
 
 if ($contact->getUserID() != $user) {

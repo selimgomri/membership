@@ -22,8 +22,7 @@ class EmergencyContact {
 		if (!v::phone()->validate($contactNumber)) {
 			return false;
 		}
-		$this->contactNumber = mysqli_real_escape_string($this->dbconn,
-		"+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", $contactNumber)), '0'));
+		$this->contactNumber = "+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", $contactNumber)), '0');
 		$this->user = $user;
   }
 
@@ -35,16 +34,17 @@ class EmergencyContact {
   }
 
 	public function getByContactID($contactId) {
-		$this->contactId = mysqli_real_escape_string($this->dbconn, $contactId);
+		$this->contactId = $contactId;
 		if ($this->dbconn == null) {
 			return false;
 		}
-		$sql = "SELECT * FROM `emergencyContacts` WHERE `ID` = '$this->contactId';";
-		$result = mysqli_query($this->dbconn, $sql);
-		if (mysqli_num_rows($result) == 0) {
+		$sql = $this->dbconn->prepare("SELECT * FROM `emergencyContacts` WHERE `ID` = ?");
+    $sql->execute([$this->contactId]);
+
+    $row = $sql->fetch(PDO::FETCH_ASSOC);
+		if ($row == null) {
 			return false;
 		}
-		$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 		$this->user = $row['UserID'];
 		$this->name = $row['Name'];
 		$this->contactNumber = $row['ContactNumber'];
@@ -70,13 +70,14 @@ class EmergencyContact {
 		if ($this->dbconn == null) {
 			return false;
 		}
-		$this->name = mysqli_real_escape_string($this->dbconn, ucwords($name));
-		$sql = "UPDATE `emergencyContacts` SET `Name` =
-		'$this->name' WHERE `ID` = '$this->contactId';";
-		if (mysqli_query($this->dbconn, $sql)) {
-			return true;
-		}
-		return false;
+		$this->name = ucwords($name);
+    try {
+  		$sql = $this->dbconn->prepare("UPDATE `emergencyContacts` SET `Name` = ? WHERE `ID` = ?");
+      $sql->execute([$this->name, $this->contactId]);
+    } catch (Exception $e) {
+      return false;
+    }
+    return true;
 	}
 
 	public function setContactNumber($contactNumber) {
@@ -86,42 +87,47 @@ class EmergencyContact {
 		if (!v::phone()->validate($contactNumber)) {
 			return false;
 		}
-		$this->contactNumber = mysqli_real_escape_string($this->dbconn,
-		"+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", $contactNumber)), '0'));
-		$sql = "UPDATE `emergencyContacts` SET `ContactNumber` =
-		'$this->contactNumber' WHERE `ID` = '$this->contactId';";
-		if (mysqli_query($this->dbconn, $sql)) {
-			return true;
-		}
-		return false;
+		$this->contactNumber = "+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", $contactNumber)), '0');
+    try {
+  		$sql = $this->dbconn->prepare("UPDATE `emergencyContacts` SET `ContactNumber` = ? WHERE `ID` = ?");
+      $sql->execute([$this->contactNumber, $this->contactId]);
+    } catch (Exception $e) {
+      return false;
+    }
+		return true;
 	}
 
 	public function delete() {
 		if ($this->dbconn == null) {
 			return false;
 		}
-		$sql = "DELETE FROM `emergencyContacts` WHERE `ID` = '$this->contactId';";
-		if (mysqli_query($this->dbconn, $sql)) {
-			return true;
-		}
-		return false;
-	}
+    try {
+  		$sql = $this->dbconn->prepare("DELETE FROM `emergencyContacts` WHERE `ID` = ?");
+      $sql->execute([$this->contactId]);
+    } catch (Exception $e) {
+      return false;
+    }
+    return true;
+  }
 
 	public function add() {
 		if ($this->dbconn == null) {
 			return false;
 		}
-		$sql = "INSERT INTO `emergencyContacts` (`UserID`, `Name`, `ContactNumber`)
-		VALUES ('$this->user', '$this->name', '$this->contactNumber');";
-		if (mysqli_query($this->dbconn, $sql)) {
-			return true;
-		}
-		return false;
+    try {
+  		$sql = $this->dbconn->prepare("INSERT INTO `emergencyContacts` (`UserID`, `Name`, `ContactNumber`) VALUES (?, ?, ?)");
+      $sql->execute([
+        $this->user,
+        $this->name,
+        $this->contactNumber
+      ]);
+    } catch (Exception $e) {
+      return false;
+    }
+    return true;
 	}
 
 	public function connect($dbconn) {
 		$this->dbconn = $dbconn;
-		$this->contactId = mysqli_real_escape_string($this->dbconn,
-		$this->contactId);
 	}
 }

@@ -253,8 +253,8 @@ include BASE_PATH . "views/header.php";
           </div>
           <?php
           if ($_SESSION['AccessLevel'] == "Parent") {
-            $contacts = new EmergencyContacts($link);
-            $contacts->byParent($userID);
+            $contacts = new EmergencyContacts($id);
+            $contacts->byParent($_SESSION['UserID']);
 
             $contactsArray = $contacts->getContacts();
             ?>
@@ -284,16 +284,16 @@ include BASE_PATH . "views/header.php";
           						<div class="col-9">
           							<p class="mb-0">
           								<strong class="d-block">
-          									<?php echo $contactsArray[$i]->getName(); ?>
+          									<?=htmlspecialchars($contactsArray[$i]->getName())?>
           								</strong>
-          								<a href="tel:<?php echo $contactsArray[$i]->getContactNumber(); ?>">
-          									<?php echo $contactsArray[$i]->getContactNumber(); ?>
+          								<a href="tel:<?=htmlspecialchars($contactsArray[$i]->getContactNumber())?>">
+          									<?=htmlspecialchars($contactsArray[$i]->getContactNumber())?>
           								</a>
           							</p>
           						</div>
           						<div class="col text-sm-right">
-          							<a href="<?php echo autoUrl("emergencycontacts/edit/" .
-          							$contactsArray[$i]->getID()); ?>" class="btn btn-primary">
+          							<a href="<?=autoUrl("emergencycontacts/edit/" .
+          							$contactsArray[$i]->getID())?>" class="btn btn-primary">
           								Edit
           							</a>
           						</div>
@@ -305,7 +305,7 @@ include BASE_PATH . "views/header.php";
           		</div>
               <?php } ?>
           		<p class="mb-0">
-          			<a href="<?php echo autoUrl("emergencycontacts/new"); ?>" class="btn btn-success">
+          			<a href="<?=autoUrl("emergencycontacts/new")?>" class="btn btn-success">
           				Add New
           			</a>
           		</p>

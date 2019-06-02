@@ -1,7 +1,5 @@
 <?php
 
-$use_white_background = true;
-
 global $db;
 $query = null;
 
@@ -44,9 +42,8 @@ include BASE_PATH . "views/postsMenu.php";
 	<form method="post">
 		<div class="row">
 			<div class="col-md-8">
-				<div class="cell">
-					<h1 class="mb-0">Editing <?=htmlentities($row['Title'])?></h1>
-				  <hr>
+				<div>
+					<h1>Editing <?=htmlspecialchars($row['Title'])?></h1>
 					<div class="form-group">
 						<label for="title">Title</label>
 						<?php if (!$people) { ?>
@@ -54,7 +51,7 @@ include BASE_PATH . "views/postsMenu.php";
 			      placeholder="Post Title" autocomplete="off" value="<?=htmlentities($row['Title'])?>">
 			            <?php } else { ?>
 			            <input type="text" class="form-control" name="title" id="title"
-			      placeholder="Post Title" autocomplete="off" <?php if($people){?>value="<?=getUserName($_SESSION['UserID'])?>" readonly<?}?>>
+			      placeholder="Post Title" autocomplete="off" <?php if ($people) { ?>value="<?=getUserName($_SESSION['UserID'])?>" readonly<?php } ?>>
 			            <?php } ?>
 					</div>
 

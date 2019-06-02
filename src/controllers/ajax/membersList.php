@@ -19,7 +19,7 @@ if ((isset($_POST["squadID"])) && (isset($_POST["search"]))) {
     if ($i > 0) {
       $sql .= " OR ";
     }
-    $sql .= " members.MForename LIKE ? OR members.MSurname LIKE ? ";
+    $sql .= " members.MForename COLLATE utf8mb4_general_ci LIKE ? OR members.MSurname COLLATE utf8mb4_general_ci LIKE ? ";
     for ($y = 0; $y < 2; $y++) {
       $names[] = "%" . $search_terms[$i] . "%";
     }
@@ -40,7 +40,7 @@ if ((isset($_POST["squadID"])) && (isset($_POST["search"]))) {
       members.MSurname, members.ASANumber, squads.SquadName,
       members.DateOfBirth, squads.SquadID FROM (members INNER JOIN squads ON
       members.SquadID = squads.SquadID) WHERE members.UserID IS NULL AND (" .
-      $selection . ") ORDER BY `members`.`MForename` , `members`.`MSurname`
+      $selection . ") ORDER BY `members`.`MForename`, `members`.`MSurname`
       ASC");
 	  }
 	  else {
