@@ -61,7 +61,7 @@ if ($people !== true) {
     	global $link;
     	global $db;
     	$people = true;
-    	$id = strtolower(str_replace(' ', '', getUserName($_SESSION['UserID'])));
+    	$id = mb_strtolower(str_replace(' ', '', getUserName($_SESSION['UserID'])));
 
     	$sql = "SELECT * FROM `posts` WHERE `Path` = ?";
     	try {
@@ -88,7 +88,7 @@ if ($people !== true) {
     	global $link;
     	global $db;
     	$people = true;
-    	$id = strtolower(str_replace(' ', '', getUserName($_SESSION['UserID'])));
+    	$id = mb_strtolower(str_replace(' ', '', getUserName($_SESSION['UserID'])));
 
     	$sql = "SELECT * FROM `posts` WHERE `Path` = ?";
     	try {

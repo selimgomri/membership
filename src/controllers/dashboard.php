@@ -32,7 +32,7 @@
 
   <div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded shadow" id="dash">
     <?php
-    $grav_url = "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $_SESSION['EmailAddress'] ) ) ) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=80";
+    $grav_url = "https://www.gravatar.com/avatar/" . md5( mb_strtolower( trim( $_SESSION['EmailAddress'] ) ) ) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=80";
     ?>
     <a href="<?php echo autoUrl('myaccount/#gravitar') ?>"><img class="mr-3" src="<?php echo $grav_url ?>" alt="" width="48" height="48"></a>
     <div class="lh-100">

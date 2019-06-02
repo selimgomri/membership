@@ -60,13 +60,13 @@ require 'GoCardlessSetup.php';
         </h2>
         <hr>
         <?php if (userHasMandates($user)) {
-          $name = strtoupper(bankDetails($user, "account_holder_name"));
+          $name = mb_strtoupper(bankDetails($user, "account_holder_name"));
           if ($name != "UNKNOWN") {
             $name = $name . ', ';
           } else {
             $name = null;
           }
-          $bank = strtoupper(bankDetails($user, "bank_name"));
+          $bank = mb_strtoupper(bankDetails($user, "bank_name"));
           $has_logo = false;
           $logo_path = "";
 

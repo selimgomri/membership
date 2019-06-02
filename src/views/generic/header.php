@@ -121,7 +121,7 @@ $bg = "bg-white";
       <div class="<?=$container_class?>">
         <h1 class="d-none d-md-flex pt-4 pb-1 mb-0">
           <a href="<?=autoUrl("")?>" class="text-white">
-              <?=strtoupper(CLUB_NAME)?>
+              <?=mb_strtoupper(CLUB_NAME)?>
           </a>
         </h1>
 
