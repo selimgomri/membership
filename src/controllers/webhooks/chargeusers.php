@@ -1,4 +1,4 @@
-  <?php
+<?php
 
 ignore_user_abort(true);
 set_time_limit(0);
@@ -6,8 +6,9 @@ set_time_limit(0);
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 global $db;
+global $link;
 
-$hasMandateQuery;
+$hasMandateQuery = null;
 try {
   $sql = "SELECT * FROM `paymentMandates` INNER JOIN `paymentPreferredMandate` ON paymentMandates.UserID = paymentPreferredMandate.UserID WHERE paymentMandates.UserID = ? AND `InUse` = '1'";
   $hasMandateQuery = $db->prepare($sql);

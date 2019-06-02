@@ -121,7 +121,7 @@ $bg = "bg-white";
       <div class="<?=$container_class?>">
         <h1 class="d-none d-md-flex pt-4 pb-1 mb-0">
           <a href="<?=autoUrl("")?>" class="text-white">
-              <?=strtoupper(CLUB_NAME)?>
+              <?=mb_strtoupper(CLUB_NAME)?>
           </a>
         </h1>
 
@@ -390,7 +390,7 @@ $bg = "bg-white";
       		</ul>
           <?php if (!empty($_SESSION['LoggedIn'])) {
             global $currentUser;
-            $user_name = str_replace(' ', '&nbsp;', htmlspecialchars($currentUser->getName())); ?>
+            $user_name = mb_ereg_replace(" +" , '&nbsp;', htmlspecialchars($currentUser->getName())); ?>
           <ul class="navbar-nav">
             <!--<a class="btn btn-sm btn-outline-light my-2 my-sm-0" href="<?php echo autoUrl("logout") ?>">Logout</a>-->
             <li class="nav-item dropdown">

@@ -4,7 +4,6 @@
 
   $require_email_auth = false;
   $pagetitle = "My Account";
-  include BASE_PATH . "views/header.php";
   $userID = $_SESSION['UserID'];
 
   $forenameUpdate = false;
@@ -32,11 +31,14 @@
   $emailComms = $row['EmailComms'];
   $mobileComms = $row['MobileComms'];
 
+  $update = false;
+
   if (!empty($_POST['forename'])) {
     if ($_POST['forename'] != $forename) {
       $update = $db->prepare("UPDATE `users` SET `Forename` = ? WHERE `UserID` = ?");
       $update->execute([trim(ucwords($_POST['forename'])), $_SESSION['UserID']]);
       $forenameUpdate = true;
+      $update = true;
     }
   }
   if (!empty($_POST['surname'])) {
@@ -44,6 +46,7 @@
       $update = $db->prepare("UPDATE `users` SET `Surname` = ? WHERE `UserID` = ?");
       $update->execute([trim(ucwords($_POST['surname'])), $_SESSION['UserID']]);
       $surnameUpdate = true;
+      $update = true;
     }
   }
 
@@ -55,6 +58,7 @@
       $sql = "UPDATE `users` SET `Mobile` = '$newMobile' WHERE `UserID` = '$userID'";
       mysqli_query($link, $sql);
       $mobileUpdate = true;
+      $update = true;
     }
   }
   $post = app('request')->body;
@@ -64,6 +68,7 @@
       mysqli_query($link, $sql);
       if ($emailComms != 1) {
         $emailCommsUpdate = true;
+        $update = true;
         $emailComms = 1;
       }
     } else {
@@ -71,6 +76,7 @@
       mysqli_query($link, $sql);
       if ($emailComms == 1) {
         $emailCommsUpdate = true;
+        $update = true;
         $emailComms = 0;
       }
     }
@@ -80,12 +86,14 @@
       if ($mobileComms != 1) {
         $mobileCommsUpdate = true;
         $mobileComms = 1;
+        $update = true;
       }
     } else {
       $sql = "UPDATE `users` SET `MobileComms` = '0' WHERE `UserID` = '$userID'";
       mysqli_query($link, $sql);
       if ($mobileComms == 1) {
         $mobileCommsUpdate = true;
+        $update = true;
         $mobileComms = 0;
       }
     }
@@ -98,7 +106,35 @@
     $mobileChecked = " checked ";
   }
   //pre($_SESSION);
+
+  if ($update) {
+    $updateText = '<div class="alert alert-success mt-3">
+      <strong>We have updated</strong>
+      <ul class="mb-0">';
+        if ($forenameUpdate) { $updateText .= '<li>Your first name</li>'; }
+        if ($surnameUpdate) { $updateText .= '<li>Your last name</li>'; }
+        if ($emailUpdate) { $updateText .= '<li>Your email address</li>'; }
+        if ($mobileUpdate) { $updateText .= '<li>Your mobile number</li>'; }
+        if ($emailCommsUpdate) { $updateText .= '<li>Your email preferences</li>'; }
+        if ($mobileCommsUpdate) { $updateText .= '<li>Your mobile preferences</li>'; }
+    $updateText .= '
+        </ul>
+      </div>';
+      $_SESSION['UserDetailsUpdate'] = $updateText;
+  }
+
+if (app('request')->method == "POST") {
+  header("Location: " . currentUrl());
+} else {
+
 ?>
+
+<?php
+
+include BASE_PATH . "views/header.php";
+
+?>
+
 <div class="container-fluid">
   <div class="row justify-content-between">
     <div class="col-md-3 d-none d-md-block">
@@ -110,7 +146,7 @@
     <div class="col-md-9">
       <h1>Hello <?=htmlspecialchars($forename)?></h1>
       <p class="lead">Welcome to My Account where you can change your personal details, password, contact information and add swimmers to your account.</p>
-      <?php if ($forenameUpdate || $surnameUpdate || $emailUpdate || $mobileUpdate) {
+      <?php if (isset($_SESSION['UserDetailsUpdate'])) {
         $userID = mysqli_real_escape_string($link, $_SESSION['UserID']);
         $query = "SELECT * FROM users WHERE UserID = '$userID';";
         $result = mysqli_query($link, $query);
@@ -129,22 +165,9 @@
         if ($mobileComms==1) {
           $mobileChecked = " checked ";
         }
-
-      ?>
-      <div class="alert alert-success mt-3">
-        <strong>We have updated</strong>
-        <ul class="mb-0">
-          <?php
-          if ($forenameUpdate) { echo '<li>Your first name</li>'; }
-          if ($surnameUpdate) { echo '<li>Your last name</li>'; }
-          if ($emailUpdate) { echo '<li>Your email address</li>'; }
-          if ($mobileUpdate) { echo '<li>Your mobile number</li>'; }
-          if ($emailCommsUpdate) { echo '<li>Your email preferences</li>'; }
-          if ($mobileCommsUpdate) { echo '<li>Your mobile preferences</li>'; }
-          ?>
-        </ul>
-      </div>
-      <?php  } ?>
+        echo $_SESSION['UserDetailsUpdate'];
+        unset($_SESSION['UserDetailsUpdate']);
+      } ?>
       <?php
       if ($require_email_auth) {
         echo '
@@ -204,7 +227,7 @@
               <div class="form-group" id="gravitar">
                 <label for="mobile" class="d-block">Account Image</label>
                 <?php
-                $grav_url = "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $_SESSION['EmailAddress'] ) ) ) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=240";
+                $grav_url = "https://www.gravatar.com/avatar/" . md5( mb_strtolower( trim( $_SESSION['EmailAddress'] ) ) ) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=240";
                 ?>
                 <img class="mr-3 rounded" src="<?=$grav_url?>" alt="" width="80" height="80">
                 <small class="form-text text-muted">If you have <a href="https://en.gravatar.com/">an image linked to your email with Gravitar</a>, we'll display it in the system</small>
@@ -308,3 +331,5 @@
 </div>
 
 <?php include BASE_PATH . "views/footer.php"; ?>
+
+<?php } ?>

@@ -7,7 +7,7 @@ global $db;
 
   $userID = $_SESSION['UserID'];
   $asaNumber = trim(($_POST['asa']));
-  $accessKey = strtoupper(trim($_POST['accessKey']));
+  $accessKey = mb_strtoupper(trim($_POST['accessKey']));
 
   $getSwimmer = $db->prepare("SELECT MemberID, SquadID, UserID FROM members WHERE ASANumber = ? AND AccessKey = ? LIMIT 1");
   $getSwimmer->execute([$asaNumber, $accessKey]);

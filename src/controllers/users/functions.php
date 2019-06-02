@@ -12,7 +12,7 @@ function getUserInfoByID($db, $id) {
 	$sql = "SELECT * FROM users WHERE UserID = '$id';";
 	$outputResult = mysqli_query($db, $sql);
 	$row = mysqli_fetch_array($outputResult, MYSQLI_ASSOC);
-	$grav_url = 'https://www.gravatar.com/avatar/' . md5( strtolower( trim( $row['EmailAddress'] ) ) ) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=80";
+	$grav_url = 'https://www.gravatar.com/avatar/' . md5( mb_strtolower( trim( $row['EmailAddress'] ) ) ) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=80";
 	$output = '
 	<div class="d-flex align-items-center p-3 my-3 text-white bg-primary rounded shadow" id="dash">
 		<img class="mr-3" src="' . $grav_url . '" alt="" width="48" height="48">

@@ -44,7 +44,7 @@ $id = $db->lastInsertId();
 $_SESSION['PostStatus'] = "Successfully added";
 
 if ($people) {
-  header("Location: " . autoUrl("people/" . strtolower(str_replace(' ', '', getUserName($_SESSION['UserID'])))));
+  header("Location: " . autoUrl("people/" . mb_strtolower(str_replace(' ', '', getUserName($_SESSION['UserID'])))));
 } else {
   header("Location: " . autoUrl("posts/" . $id));
 }

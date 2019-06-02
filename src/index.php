@@ -42,7 +42,11 @@ if (!(sizeof($_SESSION) > 0)) {
 */
 
 function currentUrl() {
-  return app('request')->protocol . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  $url = app('request')->protocol . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  if (mb_substr($url, -1) != '/') {
+    $url = $url . '/';
+  }
+  return $url;
 }
 
 $db = null;
@@ -55,7 +59,7 @@ if ($custom_domain_mode) {
 }
 
 $config_file = $config;
-if (strlen($cookie_prefix) > 0) {
+if (mb_strlen($cookie_prefix) > 0) {
   define('COOKIE_PREFIX', $cookie_prefix);
 } else {
   define('COOKIE_PREFIX', 'CLS-Membership-');
@@ -233,7 +237,7 @@ if ($_SESSION['LoggedIn'] && !isset($_SESSION['DisableTrackers'])) {
 }
 
 $route->group($get_group, function($clubcode = "CLSE") {
-  //$_SESSION['ClubCode'] = strtolower($code);
+  //$_SESSION['ClubCode'] = mb_strtolower($code);
 
   $this->get('/auth/cookie/redirect', function() {
     //$target = urldecode($target);

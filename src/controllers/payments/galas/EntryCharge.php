@@ -91,8 +91,8 @@ if ($count == 1) {
 	    else {
 	      for ($i = 0; $i < sizeof($swimsTimeArray); $i++) {
 	        $time = $row[$swimsTimeArray[$i]];
-	        $colonPos = strpos($time, ":");
-	        $stopPos = strpos($time, ".");
+	        $colonPos = mb_strpos($time, ":");
+	        $stopPos = mb_strpos($time, ".");
 	        $mins = sprintf('%02d',substr($time, 0, $colonPos));
 	        $secs = sprintf('%02d',substr($time, $colonPos+1, 2));
 	        $hunds = sprintf('%02d',substr($time, $stopPos+1, 2));

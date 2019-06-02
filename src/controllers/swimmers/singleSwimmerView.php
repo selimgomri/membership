@@ -199,7 +199,7 @@ $content .= '<!--
   <div class="media pt-2">
     <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
       <strong class="d-block text-gray-dark">
-        Exempt from Squad and Membership Fees?php
+        Exempt from Squad and Membership Fees?
       </strong>';
   if ($rowSwim["ClubPays"] == 1){
     $content .= 'Yes';

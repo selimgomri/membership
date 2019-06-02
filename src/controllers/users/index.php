@@ -6,13 +6,13 @@
   $header = true;
 
   // Requested resource
-  $pos = strrpos ($URI . "users/" , '/');
+  $pos = mb_strrpos ($URI . "users/" , '/');
   $url = mysqli_real_escape_string($link, $_SERVER['REQUEST_URI']);
   $url = preg_replace('{/$}', '', $url);
-  //$pos = strrpos($url, '/');
+  //$pos = mb_strrpos($url, '/');
   $id = $pos === false ? $url : substr($url, $pos + 1);
 
-  $pos = strrpos($url, '/');
+  $pos = mb_strrpos($url, '/');
   $idLast = $pos === false ? $url : substr($url, $pos + 1);
 
   // Variables for display
