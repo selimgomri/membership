@@ -50,110 +50,110 @@ if ($deleteKey == $dbAccessKey) {
 }
 
 if (!empty($_POST['forename'])) {
-	$newForename = mysqli_real_escape_string($link, trim((ucwords($_POST['forename']))));
+	$newForename = trim(mb_ucfirst($_POST['forename']));
 	if ($newForename != $forename) {
-		$sql = "UPDATE `members` SET `MForename` = '$newForename' WHERE `MemberID` = '$id'";
-		mysqli_query($link, $sql);
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `MForename` = ? WHERE `MemberID` = ?");
+		$updateSwimmer->execute([$newForename, $id]);
 		$forenameUpdate = true;
 		$update = true;
 	}
 }
 if (!empty($_POST['middlenames'])) {
-	$newMiddlenames = mysqli_real_escape_string($link, trim((ucwords($_POST['middlenames']))));
+	$newMiddlenames = trim(mb_ucfirst($_POST['middlenames']));
 	if ($newMiddlenames != $middlename) {
-		$sql = "UPDATE `members` SET `MMiddleNames` = '$newMiddlenames' WHERE `MemberID` = '$id'";
-		mysqli_query($link, $sql);
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `MMiddleNames` = ? WHERE `MemberID` = ?");
+		$updateSwimmer->execute([$newMiddlenames, $id]);
 		$middlenameUpdate = true;
 		$update = true;
 	}
 }
 if (!empty($_POST['surname'])) {
-	$newSurname = mysqli_real_escape_string($link, trim((ucwords($_POST['surname']))));
+	$newSurname = trim(mb_ucfirst($_POST['surname']));
 	if ($newSurname != $surname) {
-		$sql = "UPDATE `members` SET `MSurname` = '$newSurname' WHERE `MemberID` = '$id'";
-		mysqli_query($link, $sql);
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `MSurname` = ? WHERE `MemberID` = ?");
+		$updateSwimmer->execute([$newSurname, $id]);
 		$surnameUpdate = true;
 		$update = true;
 	}
 }
 if (!empty($_POST['asa'])) {
-	$newASANumber = mysqli_real_escape_string($link, trim((ucwords($_POST['asa']))));
+	$newASANumber = trim(mb_ucfirst($_POST['asa']));
 	if ($newASANumber != $asaNumber) {
-		$sql = "UPDATE `members` SET `ASANumber` = '$newASANumber' WHERE `MemberID` = '$id'";
-		mysqli_query($link, $sql);
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `ASANumber` = ? WHERE `MemberID` = ?");
+		$updateSwimmer->execute([$newASANumber, $id]);
 		$asaUpdate = true;
 		$update = true;
 	}
 }
 if (!empty($_POST['userid'])) {
-	$newUserID = mysqli_real_escape_string($link, trim((ucwords($_POST['userid']))));
+	$newUserID = trim($_POST['userid']);
 	if ($newUserID != $dbUserID) {
-		$sql = "UPDATE `members` SET `UserID` = '$newUserID' WHERE `MemberID` = '$id'";
-		mysqli_query($link, $sql);
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `UserID` = ? WHERE `MemberID` = ?");
+		$updateSwimmer->execute([$newUserID, $id]);
 		$userUpdate = true;
 		$update = true;
 	}
 }
 if (!empty($_POST['squad'])) {
-	$newSquadID = mysqli_real_escape_string($link, trim((ucwords($_POST['squad']))));
+	$newSquadID = trim($_POST['squad']);
 	if ($newSquadID != $squad) {
-		$sql = "UPDATE `members` SET `SquadID` = '$newSquadID' WHERE `MemberID` = '$id'";
-		mysqli_query($link, $sql);
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `SquadID` = ? WHERE `MemberID` = ?");
+		$updateSwimmer->execute([$newSquadID, $id]);
 		$squadUpdate = true;
 		$update = true;
 	}
 }
 if (!empty($_POST['datebirth'])) {
-	$newDateOfBirth = mysqli_real_escape_string($link, trim((ucwords($_POST['datebirth']))));
+	$newDateOfBirth = trim($_POST['datebirth']);
 	// NEEDS WORK FOR DATE TO BE RIGHT
 	if ($newDateOfBirth != $dateOfBirth) {
-		$sql = "UPDATE `members` SET `DateOfBirth` = '$newDateOfBirth' WHERE `MemberID` = '$id'";
-		mysqli_query($link, $sql);
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `MForename` = ? WHERE `MemberID` = ?");
+		$updateSwimmer->execute([$newDateOfBirth, $id]);
 		$dateOfBirthUpdate = true;
 		$update = true;
 	}
 }
 if (!empty($_POST['sex'])) {
-	$newSex = mysqli_real_escape_string($link, trim((ucwords($_POST['sex']))));
+	$newSex = trim($_POST['sex']);
 	if ($newSex != $sex) {
-		$sql = "UPDATE `members` SET `Gender` = '$newSex' WHERE `MemberID` = '$id'";
-		mysqli_query($link, $sql);
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `Gender` = ? WHERE `MemberID` = ?");
+		$updateSwimmer->execute([$newSex, $id]);
 		$sexUpdate = true;
 		$update = true;
 	}
 }
 if (isset($_POST['cat'])) {
-	$newCat = mysqli_real_escape_string($link, trim((ucwords($_POST['cat']))));
+	$newCat = trim($_POST['cat']);
 	if ($newCat != $cat && ($newCat == 1 || $newCat == 2 || $newCat == 3)) {
-		$sql = "UPDATE `members` SET `ASACategory` = '$newCat' WHERE `MemberID` = '$id'";
-		mysqli_query($link, $sql);
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `ASACategory` = ? WHERE `MemberID` = ?");
+		$updateSwimmer->execute([$newCat, $id]);
 		$catUpdate = true;
 		$update = true;
 	}
 }
 if (isset($_POST['cp'])) {
-	$newCp = mysqli_real_escape_string($link, trim($_POST['cp']));
+	$newCp = trim($_POST['cp']);
 	if ($newCp != $cp && ($newCp == 0 || $newCp == 1)) {
-		$sql = "UPDATE `members` SET `ClubPays` = '$newCp' WHERE `MemberID` = '$id'";
-		mysqli_query($link, $sql);
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `ClubPays` = ? WHERE `MemberID` = ?");
+		$updateSwimmer->execute([$newCp, $id]);
 		$cpUpdate = true;
 		$update = true;
 	}
 }
 if (isset($_POST['otherNotes'])) {
-	$newOtherNotes = mysqli_real_escape_string($link, trim(($_POST['otherNotes'])));
+	$newOtherNotes = trim($_POST['otherNotes']);
 	if ($newOtherNotes != $otherNotes) {
-		$sql = "UPDATE `members` SET `OtherNotes` = '$newOtherNotes' WHERE `MemberID` = '$id'";
-		mysqli_query($link, $sql);
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `OtherNotes` = ? WHERE `MemberID` = ?");
+		$updateSwimmer->execute([$newOtherNotes, $id]);
 		$otherNotesUpdate = true;
 		$update = true;
 	}
 }
 if (isset($_POST['swimmerStatus']) && $_SESSION['AccessLevel'] == "Admin") {
-	$newSwimmerStatus = mysqli_real_escape_string($link, trim(($_POST['swimmerStatus'])));
+	$newSwimmerStatus = trim($_POST['swimmerStatus']);
 	if ($newSwimmerStatus != $swimmerStatus) {
-		$sql = "UPDATE `members` SET `Status` = '$newSwimmerStatus' WHERE `MemberID` = '$id'";
-		mysqli_query($link, $sql);
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `Status` = ? WHERE `MemberID` = ?");
+		$updateSwimmer->execute([$newSwimmerStatus, $id]);
 		$swimmerStatusUpdate = true;
 		$update = true;
 	}
@@ -229,12 +229,7 @@ $content .= "
 		<option value=\"3\" " . $cat[3] . ">Category 3</option>
 	</select>
 </div>";
-/*$sql = "SELECT COLUMN_TYPE
-FROM INFORMATION_SCHEMA.COLUMNS
-WHERE TABLE_SCHEMA = 'chesterlestreetasc_co_uk_membership'
-AND TABLE_NAME = 'members'
-AND COLUMN_NAME = 'Gender';";
-$resultGender = mysqli_query($link, $sqlSwim);*/
+
 if ($rowSwim['Gender'] == "Male") {
 	$content .= "
 	<div class=\"form-group\">
@@ -255,21 +250,17 @@ else {
 		</select>
 	</div>";
 }
-$sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
-$result = mysqli_query($link, $sql);
-$squadCount = mysqli_num_rows($result);
+$squads = $db->query("SELECT SquadName, SquadID FROM `squads` ORDER BY `squads`.`SquadFee` DESC");
 $content .= "
 <div class=\"form-group\">
 	<label for=\"squad\">Squad</label>
 		<select class=\"custom-select\" placeholder=\"Select a Squad\" id=\"squad\" name=\"squad\">";
-//$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-for ($i = 0; $i < $squadCount; $i++) {
-	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-	$content .= "<option value=\"" . $row['SquadID'] . "\"";
-	if ($row['SquadID'] == $rowSwim['SquadID']) {
+while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) {
+	$content .= "<option value=\"" . $squad['SquadID'] . "\"";
+	if ($squad['SquadID'] == $rowSwim['SquadID']) {
 		$content .= " selected";
 	}
-	$content .= ">" . htmlspecialchars($row['SquadName']) . "</option>";
+	$content .= ">" . htmlspecialchars($squad['SquadName']) . " Squad</option>";
 }
 $content .= "</select></div>";
 
@@ -335,7 +326,7 @@ $content .= "</div></div></form>";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>
 <div class="container">
-<?php echo "<h1>" . $title . "</h1>";
+<?php
 echo $content; ?>
 </div>
 <?php include BASE_PATH . "views/footer.php";
