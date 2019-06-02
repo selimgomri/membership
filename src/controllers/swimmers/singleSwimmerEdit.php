@@ -160,15 +160,15 @@ if (isset($_POST['swimmerStatus']) && $_SESSION['AccessLevel'] == "Admin") {
 }
 
 $sqlSwim = "";
-$sqlSwim = "SELECT members.MForename, members.MForename, members.MMiddleNames,
+$swimmer = $db->prepare("SELECT members.MForename, members.MForename, members.MMiddleNames,
 members.MSurname, members.ASANumber, members.ASACategory, members.ClubPays,
 squads.SquadName, squads.SquadID, squads.SquadFee, squads.SquadCoach,
 squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender,
 members.OtherNotes, members.AccessKey, members.Status FROM (members INNER JOIN squads ON
-members.SquadID = squads.SquadID) WHERE members.MemberID = '$id';";
-$resultSwim = mysqli_query($link, $sqlSwim);
-$rowSwim = mysqli_fetch_array($resultSwim, MYSQLI_ASSOC);
-$pagetitle = "Swimmer: " . $rowSwim['MForename'] . " " . $rowSwim['MSurname'];
+members.SquadID = squads.SquadID) WHERE members.MemberID = ?");
+$swimmer->execute([$id]);
+$rowSwim = $swimmer->fetch(PDO::FETCH_ASSOC);
+$pagetitle = "Swimmer: " . htmlspecialchars($rowSwim['MForename'] . " " . $rowSwim['MSurname']);
 $title = null;
 $content = '<form method="post"><div class="row align-items-center"><div class="col-sm-8"><h1>Editing ' . htmlspecialchars($rowSwim['MForename'] . ' ' . $rowSwim['MSurname']) . '</h1></div><div class="col-sm-4 text-right"><button type="submit" class="btn btn-success">Update</button> <a class="btn btn-dark" href="../' . $id . '">Exit Edit Mode</a></div></div><hr>';
 $content .= "<div class=\"row\"><div class=\"col col-md-8\"><div class=\"\">";
