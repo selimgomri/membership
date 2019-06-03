@@ -65,9 +65,6 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <?php } else { ?>
     <meta name="X-CLSW-Tracking" content="no">
     <?php } ?>
-	  <script>var shiftWindow = function() { scrollBy(0, -50) }; if
-	  (location.hash) shiftWindow(); window.addEventListener("hashchange",
-	  shiftWindow);</script>
     <link rel="stylesheet preload"
     href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono|Merriweather:400,600">
     <link rel="stylesheet preload" href="<?=autoUrl("public/css/chester/chester-2.1.8-prefixed.css")?>">

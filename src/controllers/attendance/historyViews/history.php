@@ -12,11 +12,11 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
     </p>
 
     <div class="news-grid">
-      <a href="<?=autoUrl("history/swimmers")?>">
+      <a href="<?=autoUrl("attendance/history/swimmers")?>">
         <span class="title mb-0">Swimmer Attendance</span>
         <span>View attendance records for up to the last 20 weeks</span>
       </a>
-      <a href="<?=autoUrl("history/squads")?>">
+      <a href="<?=autoUrl("attendance/history/squads")?>">
         <span class="title mb-0">Squad Attendance</span>
         <span>View attendance for previous sessions across full squads</span>
       </a>
