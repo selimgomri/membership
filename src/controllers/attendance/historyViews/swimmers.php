@@ -30,7 +30,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
         <option value="allSquads">Show All Squads</option>
         <?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
         <option value="<?=$squad['id']?>" <?php if ($squad['id'] == $id) { ?>selected<?php } ?>>
-          <?=htmlspecialchars($squad['SquadName'])?> Squad
+          <?=htmlspecialchars($squad['name'])?> Squad
         </option>
         <?php } ?>
       </select>
