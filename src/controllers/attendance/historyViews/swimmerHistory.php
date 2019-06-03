@@ -61,20 +61,22 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
   		<tbody>
 
         <?php do {
-          /*
         	$sessionID = $present['SessionID'];
         	$weekID = $present['WeekID'];
-        	$sql = "SELECT * FROM ((`sessionsAttendance` INNER JOIN sessions ON sessions.SessionID=sessionsAttendance.sessionID) INNER JOIN sessionsWeek ON sessionsWeek.WeekID=sessionsAttendance.WeekID) WHERE sessionsAttendance.SessionID = '$sessionID' AND MemberID = '$id' AND sessionsAttendance.WeekID = '$weekID';";
-        	$resultSession = mysqli_query($link, $sql);
-        	$sessionInfo = mysqli_fetch_array($resultSession, MYSQLI_ASSOC);
-          */
+          $details = $db->prepare("SELECT * FROM ((`sessionsAttendance` INNER JOIN sessions ON sessions.SessionID=sessionsAttendance.sessionID) INNER JOIN sessionsWeek ON sessionsWeek.WeekID=sessionsAttendance.WeekID) WHERE sessionsAttendance.SessionID = ? AND MemberID = ? AND sessionsAttendance.WeekID = ?");
+          $details->execute([
+            $sessionID,
+            $id,
+            $weekID
+          ]);
+        	$sessionInfo = $details->fetch(PDO::FETCH_ASSOC);
 
-        	$weekBeginning = $present['WeekDateBeginning'];
-        	$dayAdd = $present['SessionDay'];
+        	$weekBeginning = $sessionInfo['WeekDateBeginning'];
+        	$dayAdd = $sessionInfo['SessionDay'];
         	$date = date ('j F Y', strtotime($weekBeginning. ' + ' . $dayAdd . ' days'));
 
         	$dayText = "";
-        	switch ($present['SessionDay']) {
+        	switch ($sessionInfo['SessionDay']) {
         			case 0:
         					$dayText = "Sunday";
         					break;
@@ -102,7 +104,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 
           <tr>
         	  <td>
-              <?=htmlspecialchars($present['SessionName'])?>, <?=$dayText?> <?=$date?> at <?=$present['StartTime']?>
+              <?=htmlspecialchars($sessionInfo['SessionName'])?>, <?=$dayText?> <?=$date?> at <?=$sessionInfo['StartTime']?>
         	    <?php if ($present['MainSequence'] != 1) { ?>
                 (Not Mandatory)
               <?php } ?>
