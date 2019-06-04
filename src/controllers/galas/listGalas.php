@@ -4,7 +4,8 @@ $pagetitle = "Galas";
 
 global $db;
 
-$getGalas = $db->query("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength FROM galas WHERE GalaDate >= CURDATE()");
+$galas = $db->query("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength FROM galas WHERE GalaDate >= CURDATE()");
+$gala = $galas->fetch(PDO::FETCH_ASSOC);
 
 include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
@@ -17,21 +18,21 @@ include "galaMenu.php"; ?>
         Upcoming Galas
       </h2>
 
-      <?php if ($getGalas) { ?>
+      <?php if ($gala) { ?>
       <div class="news-grid mb-4">
-        <?php while ($row = $getGalas->fetch(PDO::FETCH_ASSOC)) {
+        <?php do {
           $now = new DateTime();
-          $closingDate = new DateTime($row['ClosingDate']);
-          $endDate = new DateTime($row['GalaDate']);
+          $closingDate = new DateTime($gala['ClosingDate']);
+          $endDate = new DateTime($gala['GalaDate']);
 
           ?>
-          <a href="<?=autoUrl("galas/" . $row['GalaID'])?>">
+          <a href="<?=autoUrl("galas/" . $gala['GalaID'])?>">
             <div>
               <span class="title mb-0 justify-content-between align-items-start">
-                <span><?=$row['GalaName']?></span>
+                <span><?=htmlspecialchars($gala['GalaName'])?></span>
                 <?php if ($now <= $closingDate) {?><span class="ml-2 badge badge-primary">ENTRIES OPEN</span><?php } ?>
               </span>
-              <span class="d-flex mb-3"><?=$row['GalaVenue']?></span>
+              <span class="d-flex mb-3"><?=htmlspecialchars($gala['GalaVenue'])?></span>
             </div>
             <?php if ($now <= $closingDate) { ?>
             <span class="category">Entries close on <?=$closingDate->format('j F Y')?></span>
@@ -39,7 +40,7 @@ include "galaMenu.php"; ?>
             <span class="category">Ends on <?=$endDate->format('j F Y')?></span>
             <?php } ?>
           </a>
-        <?php } ?>
+        <?php } while ($gala = $galas->fetch(PDO::FETCH_ASSOC)); ?>
       </div>
       <?php } ?>
 

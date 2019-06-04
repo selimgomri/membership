@@ -1,8 +1,10 @@
 <?php
-  $use_white_background = true;
-  $pagetitle = "Password Reset";
-  $preventLoginRedirect = true;
-  include BASE_PATH . "views/header.php";
+
+global $db;
+
+$pagetitle = "Password Reset";
+include BASE_PATH . "views/header.php";
+
 ?>
 <div class="container">
   <div class="">
