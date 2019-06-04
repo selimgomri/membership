@@ -43,11 +43,11 @@ include "galaMenu.php";
     <h1>Galas</h1>
     <p class="lead">Manage your gala entries</p>
 
+    <?php if ($gala) { ?>
     <h2 class="mb-4">
       Upcoming galas
     </h2>
 
-    <?php if ($gala) { ?>
     <div class="news-grid mb-3">
       <?php do {
         $now = new DateTime();
@@ -78,11 +78,11 @@ include "galaMenu.php";
     </p>
     <?php } ?>
 
+    <?php if ($entry) { ?>
     <h2 class="mb-4">
       Your gala entries
     </h2>
 
-    <?php if ($entry) { ?>
     <div class="news-grid mb-4">
       <?php do {
         $now = new DateTime();
@@ -103,6 +103,7 @@ include "galaMenu.php";
     </div>
     <?php } ?>
 
+    <?php if ($timesheet) { ?>
     <h2>
       Gala timesheets
     </h2>
@@ -112,8 +113,7 @@ include "galaMenu.php";
       along with their all-time personal bests and <?=date("Y")?> personal
       bests.
     </p>
-
-    <?php if ($timesheet) { ?>
+    
     <div class="news-grid mb-4">
       <?php do { ?>
         <a href="<?=autoUrl("galas/competitions/" . $timesheet['GalaID'] . "/timesheet")?>">
