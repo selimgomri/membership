@@ -1,14 +1,17 @@
 <?php
 
-$use_white_background = true;
+global $db;
+
+$squads = $db->query("SELECT SquadName name, SquadID id FROM squads ORDER BY SquadFee DESC, SquadName ASC");
+
 $fluidContainer = true;
 $squadID = $search = "";
-mysqli_real_escape_string($link, parse_str($_SERVER['QUERY_STRING'], $queries));
+parse_str($_SERVER['QUERY_STRING'], $queries);
 if (isset($queries['squadID'])) {
-  $squadID = mysqli_real_escape_string($link, intval($queries['squadID']));
+  $squadID = (int) $queries['squadID'];
 }
 if (isset($queries['search'])) {
-  $search = mysqli_real_escape_string($link, $queries['search']);
+  $search = $queries['search'];
 }
 
 $pagetitle = "Swimmers";
@@ -17,40 +20,37 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php";
 
 if (isset($_POST['squad'])) {
-  $squadID = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['squad'])));
+  $squadID = $_POST['squad'];
 } ?>
 <div class="container-fluid">
-  <h1>Swimmer Directory</h1>
+  <h1 class="mb-3">Swimmers</h1>
+
+  <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+  <p>
+    <a href="<?=autoUrl("swimmers/addmember")?>" class="btn btn-success">
+      Add new member
+    </a>
+  </p>
+  <?php } ?>
+
   <div class="d-print-none">
-    <p class="lead">Currently registered members.</p>
-    <?php
-  $sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
-  $result = mysqli_query($link, $sql);
-  $squadCount = mysqli_num_rows($result);
-  ?>
-  <div class="form-row">
-  <div class="col-md-6 mb-3">
-  <label class="sr-only" for="squad">Select a Squad</label>
-  <select class="custom-select" placeholder="Select a Squad" id="squad" name="squad">
-  <option value="allSquads">Show All Squads</option>;
-  <?php for ($i = 0; $i < $squadCount; $i++) {
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    $id = $row['SquadID'];
-    if ($squadID == $id) {
-      ?><option value="<?php echo $row['SquadID']; ?>" selected><?=htmlspecialchars($row['SquadName'])?></option><?php
-    }
-    else {
-      ?><option value="<?php echo $row['SquadID']; ?>"><?=htmlspecialchars($row['SquadName'])?></option><?php
-    }
-  } ?>
-    </select></div>
-    <div class="col-md-6 mb-3">
-      <label class="sr-only" for="search">Search by Name</label>
-      <input class="form-control" placeholder="Search by name" id="search" name="search" value="<?=htmlspecialchars($search)?>">
+    <div class="form-row">
+      <div class="col-md-6 mb-3">
+        <label for="squad">Select a squad</label>
+        <select class="custom-select" placeholder="Select a Squad" id="squad" name="squad">
+          <option value="allSquads">Show All Squads</option>;
+          <?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
+          <option value="<?=$squad['id']?>" <?php if ($squad['id'] == $squadID) { ?>selected<?php } ?>>
+            <?=htmlspecialchars($squad['name'])?> Squad
+          </option>
+          <?php } ?>
+        </select>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="search">Search by name</label>
+        <input class="form-control" placeholder="Search by name" id="search" name="search" value="<?=htmlspecialchars($search)?>">
+      </div>
     </div>
-
-  </div>
-
   </div>
 
   <div id="output">
@@ -69,21 +69,16 @@ function getResult() {
   var squadValue = squad.options[squad.selectedIndex].value;
   var search = document.getElementById("search");
   var searchValue = search.value;
-  console.log(squadValue);
-  console.log(searchValue);
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        console.log("We got here");
-        document.getElementById("output").innerHTML = this.responseText;
-        console.log(this.responseText);
-        window.history.replaceState("string", "Title", "<?php echo autoUrl("swimmers"); ?>?squadID=" + squadValue + "&search=" + searchValue);
-      }
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("output").innerHTML = this.responseText;
+      window.history.replaceState("string", "Title", "<?=autoUrl("swimmers")?>?squadID=" + squadValue + "&search=" + searchValue);
     }
-    xhttp.open("POST", "<?php echo autoURL("swimmers/ajax/swimmerDirectory"); ?>", true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("squadID=" + squadValue + "&search=" + searchValue);
-    console.log("Sent");
+  }
+  xhttp.open("POST", "<?=autoUrl("swimmers/ajax/swimmerDirectory")?>", true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send("squadID=" + squadValue + "&search=" + searchValue);
 }
 // Call getResult immediately
 getResult();
@@ -91,6 +86,7 @@ getResult();
 document.getElementById("squad").onchange=getResult;
 document.getElementById("search").oninput=getResult;
 </script>
+
 <?php
+
 include BASE_PATH . "views/footer.php";
-?>

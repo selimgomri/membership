@@ -133,8 +133,14 @@ if (($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE']) || $auth_via_google_authent
     unset($_SESSION['LoginSec']);
 
     try {
-      setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, time()+60*60*24*120 , "/", 'chesterlestreetasc.co.uk', true, false);
-      setcookie(COOKIE_PREFIX . "AutoLogin", $hash, time()+60*60*24*120, "/", 'chesterlestreetasc.co.uk', true, false);
+      $secure = true;
+        if (app('request')->protocol == 'http') {
+          $secure = false;
+        }
+        if (defined('IS_CLS') && IS_CLS) {
+          setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, time()+60*60*24*120 , "/", 'chesterlestreetasc.co.uk', $secure, false);
+        }
+        setcookie(COOKIE_PREFIX . "AutoLogin", $hash, time()+60*60*24*120, "/", app('request')->hostname('request')->hostname, $secure, false);
     } catch (Exception $e) {
       // Do nothing if caught
     }

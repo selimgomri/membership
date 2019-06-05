@@ -25,7 +25,7 @@ if (!isset($_SESSION['AC-CC-Expected'])) {
         $getNext->execute([$_SESSION['AC-Registration']['Hash'], $current]);
         $next = $getNext->fetch(PDO::FETCH_ASSOC);
         $_SESSION['AC-CC-Expected']['Current'] = $next['ID'];
-        $_SESSION['AC-CC-Expected']['URL'] = str_replace(' ', '', strtolower($next['First'] . '-' . $next['Last']));
+        $_SESSION['AC-CC-Expected']['URL'] = str_replace(' ', '', mb_strtolower($next['First'] . '-' . $next['Last']));
         header("Location: " . autoUrl("register/ac/code-of-conduct/" . $_SESSION['AC-CC-Expected']['URL']));
       } else {
         unset(['AC-CC-Expected']);
@@ -44,7 +44,7 @@ if (!isset($_SESSION['AC-CC-Expected'])) {
         $getNext->execute([$_SESSION['AC-Registration']['Hash'], $current]);
         $next = $getNext->fetch(PDO::FETCH_ASSOC);
         $_SESSION['AC-CC-Expected']['Current'] = $next['ID'];
-        $_SESSION['AC-CC-Expected']['URL'] = strtolower(trim($next['First']) . '-' . trim($next['First']));
+        $_SESSION['AC-CC-Expected']['URL'] = mb_strtolower(trim($next['First']) . '-' . trim($next['First']));
         header("Location: " . autoUrl("register/ac/code-of-conduct/" . $_SESSION['AC-CC-Expected']['URL']));
       } else {
         unset(['AC-CC-Expected']);

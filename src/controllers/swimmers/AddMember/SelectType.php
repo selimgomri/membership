@@ -1,4 +1,4 @@
-<?
+<?php
 
 if (isset($_SESSION['Swimmers-FamilyMode'])) {
 	header("Location: " . autoUrl("swimmers/new"));

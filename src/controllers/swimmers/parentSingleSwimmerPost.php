@@ -30,7 +30,7 @@ $sex = $row['Gender'];
 $otherNotes = $row['OtherNotes'];
 
 if (!empty($_POST['forename'])) {
-  $newForename = trim(ucwords($_POST['forename']));
+  $newForename = trim(mb_ucfirst($_POST['forename']));
 
   if ($newForename != $forename) {
     $update = $db->prepare("UPDATE `members` SET `MForename` = ? WHERE `MemberID` = ?");
@@ -40,7 +40,7 @@ if (!empty($_POST['forename'])) {
   }
 }
 if (isset($_POST['middlenames'])) {
-  $newMiddlenames = trim(ucwords($_POST['middlenames']));
+  $newMiddlenames = trim(mb_ucfirst($_POST['middlenames']));
   if ($newMiddlenames != $middlename) {
     $update = $db->prepare("UPDATE `members` SET `MMiddleNames` = ? WHERE `MemberID` = ?");
     $update->execute([$newMiddlenames, $id]);
@@ -49,17 +49,16 @@ if (isset($_POST['middlenames'])) {
   }
 }
 if (!empty($_POST['surname'])) {
-  $newSurname = mysqli_real_escape_string($link,
-  trim(htmlspecialchars(ucwords($_POST['surname']))));
+  $newSurname = trim(mb_ucfirst($_POST['surname']));
   if ($newSurname != $surname) {
-    $sql = "UPDATE `members` SET `MSurname` = '$newSurname' WHERE `MemberID` = '$id'";
-    mysqli_query($link, $sql);
+    $update = $db->prepare("UPDATE `members` SET `MSurname` = ? WHERE `MemberID` = ?");
+    $update->execute([$newSurname, $id]);
     $surnameUpdate = true;
     $update = true;
   }
 }
 if (!empty($_POST['datebirth'])) {
-  $newDateOfBirth = trim(ucwords($_POST['datebirth']));
+  $newDateOfBirth = trim(mb_ucfirst($_POST['datebirth']));
   if ($newDateOfBirth != $dateOfBirth && v::date()->validate($newDateOfBirth)) {
     $update = $db->prepare("UPDATE `members` SET `DateOfBirth` = ? WHERE `MemberID` = ?");
     $update->execute([$newDateOfBirth, $id]);
@@ -68,7 +67,7 @@ if (!empty($_POST['datebirth'])) {
   }
 }
 if (!empty($_POST['sex'])) {
-  $newSex = trim(ucwords($_POST['sex']));
+  $newSex = trim(mb_ucfirst($_POST['sex']));
   if ($newSex != $sex) {
     $update = $db->prepare("UPDATE `members` SET `Gender` = ? WHERE `MemberID` = ?");
     $update->execute([$newSex, $id]);

@@ -47,7 +47,7 @@ $payment_info = $sql->fetch(PDO::FETCH_ASSOC);
 $name = getUserName($payment_info['UserID']);
 
 $use_white_background = true;
-$PaymentID = strtoupper($PaymentID);
+$PaymentID = mb_strtoupper($PaymentID);
 $pagetitle = "Statement for " . $name . ", "
  . $PaymentID;
 

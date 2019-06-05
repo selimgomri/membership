@@ -45,6 +45,10 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <meta name="og:type" content="website">
     <meta name="og:locale" content="en_GB">
     <meta name="og:site_name" content="X Account">
+    <?php
+    // Check if user has opted out of tracking or has DNT headers set before serving Google Analytics
+    if (!$_SESSION['DisableTrackers'] && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1)) {
+    ?>
     <meta name="X-CLSW-Tracking" content="yes">
     <script async>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -59,10 +63,9 @@ Chester-le-Street ASC is a non profit unincorporated association.
       ga('send', 'pageview');
       <?php } ?>
     </script>
-	  <script>var shiftWindow = function() { scrollBy(0, -50) }; if
-	  (location.hash) shiftWindow(); window.addEventListener("hashchange",
-	  shiftWindow);</script>
-    <script src="<?php echo autoUrl("public/js/tinymce/tinymce.min.js"); ?>"></script>
+    <?php } else { ?>
+    <meta name="X-CLSW-Tracking" content="no">
+    <?php } ?>
     <link rel="stylesheet preload"
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700|Roboto+Mono|Merriweather:400,600">
     <link rel="stylesheet preload" href="<?php echo autoUrl("public/css/generic/generic-0.9-prefixed.css") ?>">
@@ -92,6 +95,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
     */ ?>
     <link rel="mask-icon" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterIcon.svg" color="#bd0000">
     <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src="<?php echo autoUrl("public/js/tinymce/tinymce.min.js"); ?>"></script>
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>

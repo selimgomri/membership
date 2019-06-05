@@ -31,11 +31,11 @@ if ($_SESSION['RegistrationMode'] == "Family-Manual") {
 
 $forename = trim(ucwords($_POST['forename']));
 $surname = trim(ucwords($_POST['surname']));
-//$username = mysqli_real_escape_string($link, strtolower(trim(htmlspecialchars($_POST['username']))));
+//$username = mysqli_real_escape_string($link, mb_strtolower(trim(htmlspecialchars($_POST['username']))));
 $username = $forename . $surname . "-" . md5(generateRandomString(20) . time());
 $password1 = trim($_POST['password1']);
 $password2 = trim($_POST['password2']);
-$email = strtolower(trim($_POST['email']));
+$email = mb_strtolower(trim($_POST['email']));
 $mobile = "+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", $_POST['mobile'])), '0'); // Removes anything that isn't a digit
 $emailAuth = 0;
 if ($_POST['emailAuthorise'] != 1) {

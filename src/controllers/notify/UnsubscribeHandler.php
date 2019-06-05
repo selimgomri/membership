@@ -5,7 +5,7 @@ global $db;
 $user_id = hexdec($userid);
 $email = str_replace(' ', '+', urldecode($email));
 
-$list_lc - strtolower($list);
+$list_lc - mb_strtolower($list);
 
 if ($list_lc != "notify" && $list_lc != "security" && $list_lc != "payments") {
 	halt(404);

@@ -25,6 +25,9 @@ $app->route     = System\Route::instance($app->request);
 
 $route          = $app->route;
 
+mb_internal_encoding('UTF-8');
+mb_http_output('UTF-8');
+
 header("Feature-Policy: fullscreen 'self' https://youtube.com");
 header("Referrer-Policy: strict-origin-when-cross-origin");
 //header("Content-Security-Policy: default-src https:; object-src data: 'unsafe-eval'; script-src * 'unsafe-inline'; style-src https://www.chesterlestreetasc.co.uk https://account.chesterlestreetasc.co.uk https://fonts.googleapis.com 'unsafe-inline'");
@@ -42,7 +45,11 @@ if (!(sizeof($_SESSION) > 0)) {
 */
 
 function currentUrl() {
-  return app('request')->protocol . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  $url = app('request')->protocol . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  if (mb_substr($url, -1) != '/') {
+    $url = $url . '/';
+  }
+  return $url;
 }
 
 $db = null;
@@ -55,7 +62,7 @@ if ($custom_domain_mode) {
 }
 
 $config_file = $config;
-if (strlen($cookie_prefix) > 0) {
+if (mb_strlen($cookie_prefix) > 0) {
   define('COOKIE_PREFIX', $cookie_prefix);
 } else {
   define('COOKIE_PREFIX', 'CLS-Membership-');
@@ -129,7 +136,7 @@ function halt(int $statusCode) {
 $link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 $db = null;
 try {
-  $db = new PDO("mysql:host=" . $dbhost . ";dbname=" . $dbname . "", $dbuser, $dbpass);
+  $db = new PDO("mysql:host=" . $dbhost . ";dbname=" . $dbname . ";charset=utf8mb4", $dbuser, $dbpass);
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (Exception $e) {
   halt(500);
@@ -214,8 +221,12 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
       'TopUAL'  => $row['AccessLevel']
     ]);
 
-    setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, $expiry_time , "/", 'chesterlestreetasc.co.uk', true, false);
-    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , "/", 'chesterlestreetasc.co.uk', true, false);
+    $secure = true;
+    if (app('request')->protocol == 'http') {
+      $secure = false;
+    }
+    setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, $expiry_time , "/", app('request')->hostname, $secure, false);
+    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , "/", app('request')->hostname, $secure, false);
   }
 }
 
@@ -229,11 +240,11 @@ if ($_SESSION['LoggedIn'] && !isset($_SESSION['DisableTrackers'])) {
 }
 
 $route->group($get_group, function($clubcode = "CLSE") {
-  //$_SESSION['ClubCode'] = strtolower($code);
+  //$_SESSION['ClubCode'] = mb_strtolower($code);
 
   $this->get('/auth/cookie/redirect', function() {
     //$target = urldecode($target);
-    setcookie(COOKIE_PREFIX . "SeenAccount", true, 0, "/", 'chesterlestreetasc.co.uk', true, false);
+    setcookie(COOKIE_PREFIX . "SeenAccount", true, 0, "/", ('request')->hostname, true, false);
     header("Location: https://www.chesterlestreetasc.co.uk");
   });
 

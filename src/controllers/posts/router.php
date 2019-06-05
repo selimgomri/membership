@@ -15,11 +15,10 @@ if ($people !== true) {
   	});
 
   	$this->get(['/{id}:int/edit', '/{string}/edit'], function($id) {
-  		global $link;
   		$int = false;
   		if (v::intVal()->validate($id)) {
-  			$int = true;
-  		}
+				$int = true;
+			}
   		include 'EditPost.php';
   	});
 
@@ -28,7 +27,8 @@ if ($people !== true) {
   		$int = false;
   		if (v::intVal()->validate($id)) {
   			$int = true;
-  		}
+			}
+			echo "HELLO";
   		include 'EditPostServer.php';
   	});
   }
@@ -61,7 +61,7 @@ if ($people !== true) {
     	global $link;
     	global $db;
     	$people = true;
-    	$id = strtolower(str_replace(' ', '', getUserName($_SESSION['UserID'])));
+    	$id = mb_strtolower(str_replace(' ', '', getUserName($_SESSION['UserID'])));
 
     	$sql = "SELECT * FROM `posts` WHERE `Path` = ?";
     	try {
@@ -88,7 +88,7 @@ if ($people !== true) {
     	global $link;
     	global $db;
     	$people = true;
-    	$id = strtolower(str_replace(' ', '', getUserName($_SESSION['UserID'])));
+    	$id = mb_strtolower(str_replace(' ', '', getUserName($_SESSION['UserID'])));
 
     	$sql = "SELECT * FROM `posts` WHERE `Path` = ?";
     	try {

@@ -81,7 +81,6 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
   	});
 
     $this->get('/squads', function() {
-      global $link;
       include "historyViews/squads.php";
   	});
 

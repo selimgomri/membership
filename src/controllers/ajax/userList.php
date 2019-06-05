@@ -1,45 +1,63 @@
 <?php
+
+global $db;
+
 $access = $_SESSION['AccessLevel'];
-$count = 0;
-if ($access == "Admin" || $access == "Galas") {
+
+if ($access != "Admin" && $access != "Galas") {
+  halt(404);
+}
+
+$users = null;
+if (isset($_POST["search"])) {
+  // get the search term parameter from post
+  $search = '%' . trim($_POST["search"]) . '%';
+
   $sql = "";
-  if (isset($_POST["search"])) {
-    // get the search term parameter from post
-    $search = mysqli_real_escape_string($link, htmlentities($_POST["search"]));
-    $sql = "SELECT * FROM users WHERE Surname LIKE '%$search%' ORDER BY Forename, Surname ASC;";
+  $search_terms = explode(' ', $_POST["search"]);
+  $names = [];
+  $sql = "";
+  for ($i = 0; $i < sizeof($search_terms); $i++) {
+    if ($i > 0) {
+      $sql .= " OR ";
+    }
+    $sql .= " Forename COLLATE utf8mb4_general_ci LIKE ? OR Surname COLLATE utf8mb4_general_ci LIKE ? ";
+    for ($y = 0; $y < 2; $y++) {
+      $names[] = "%" . $search_terms[$i] . "%";
+    }
   }
 
-  $result = mysqli_query($link, $sql);
-  $swimmerCount = mysqli_num_rows($result);
-  if ($swimmerCount > 0) {
-    $output = '
-      <table class="table table-hover bg-white">
-        <thead class="thead-light">
-          <tr>
-            <th>Name</th>
-            <th>Account Type</th>
-          </tr>
-        </thead>
-        <tbody>';
-    $resultX = mysqli_query($link, $sql);
-    for ($i = 0; $i < $swimmerCount; $i++) {
-      $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
-      $swimmerLink = autoUrl("users/" . $swimmersRowX['UserID'] . "");
-      $output .= "<tr>
-        <td><a href=\"" . $swimmerLink . "\">" . htmlspecialchars($swimmersRowX['Forename'] . " " . $swimmersRowX['Surname']) . "</a></td>
-        <td>" . $swimmersRowX['AccessLevel'] . "</td>
-      </tr>";
-    }
-    $output .= '
-        </tbody>
-      </table>
-    ';
+  $sql = "SELECT Forename, Surname, UserID, AccessLevel FROM users WHERE " . $sql . " ORDER BY Forename, Surname ASC";
+
+  try {
+    $users = $db->prepare($sql);
+    $users->execute($names);
+  } catch (Exception $e) {
+    halt(500);
   }
-  else {
-    $output = "<div class=\"alert alert-warning\"><strong>No users found for that name</strong> <br>Please try another search</div>";
-  }
-	echo $output;
-} else {
-  echo "Hello";
 }
-?>
+
+$user = $users->fetch(PDO::FETCH_ASSOC);
+
+if ($user != null) { ?>
+
+<div class="list-group">
+
+  <?php do { ?>
+  <a href="<?=autoUrl("users/" . $user['UserID'])?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+    <?=htmlspecialchars($user['Forename'] . " " . $user['Surname'])?>
+    <span class="badge badge-primary badge-pill">
+      <?=htmlspecialchars($user['AccessLevel'])?>
+    </span>
+  </a>
+  <?php } while ($user = $users->fetch(PDO::FETCH_ASSOC)); ?>
+</div>
+
+<?php } else { ?>
+
+<div class="alert alert-warning">
+  <strong>No users found for that name</strong><br>
+  Please try another search
+</div>
+
+<?php } ?>

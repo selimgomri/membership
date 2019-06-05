@@ -51,7 +51,7 @@ for ($i = 0; $i < $count_to_get; $i++) {
 	$user = $row[$i]['MemberID'];
 	//echo "I = $i, ";
 
-	if (!strpos($row[$i]['ASANumber'], 'CLSX') && $row[$i]['ASANumber'] != "") {
+	if (!strpos($row[$i]['ASANumber'], CLUB_SHORT_CODE) && $row[$i]['ASANumber'] != "") {
 		$curlres =
 		curl('https://www.swimmingresults.org/individualbest/personal_best.php?print=1&mode=L&tiref=' . $row[$i]['ASANumber']);
 		$array = getTimes($row[$i]['ASANumber']);

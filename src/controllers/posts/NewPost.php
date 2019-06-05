@@ -11,9 +11,8 @@ include BASE_PATH . "views/postsMenu.php";
 	<form method="post">
 		<div class="row">
 			<div class="col-md-8">
-				<div class="cell">
-					<h1 class="mb-0">New Post</h1>
-				  <hr>
+				<div>
+					<h1>New Post</h1>
 					<div class="form-group">
 						<label for="title">Title</label>
 						<input type="text" class="form-control" name="title" id="title"

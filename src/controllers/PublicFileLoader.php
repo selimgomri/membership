@@ -18,7 +18,7 @@ if (file_exists($file) && mime_content_type($file) != 'directory') {
   } else {
     header('Content-Disposition: attachment; filename="'.basename($filename).'"');
   }
-  if (strpos($file, '.css') || strpos($file, '.js')) {
+  if (strpos($file, '.css') || mb_strpos($file, '.js')) {
     header('Expires: ' . date('D, d M Y H:i:s', strtotime("+28 days")) . ' GMT');
   } else {
     header('Expires: 0');

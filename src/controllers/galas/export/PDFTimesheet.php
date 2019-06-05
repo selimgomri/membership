@@ -120,6 +120,15 @@ ob_start();?>
       category or event.
     </p>
 
+    <div class="avoid-page-break-inside">
+      <?php if (defined('IS_CLS') && IS_CLS) { ?>
+      <p>&copy; Chester-le-Street ASC <?=date("Y")?></p>
+      <?php } else { ?>
+        <p class="mb-0">&copy; Swimming Club Data Systems <?=date("Y")?></p>
+      <p>Produced by Swimming Club Data Systems for <?=CLUB_NAME?></p>
+      <?php } ?>
+    </div>
+
     <div class="page-break"></div>
 
     <?php
@@ -244,11 +253,6 @@ ob_start();?>
       <?php
 
     } while ($data = $query->fetch(PDO::FETCH_ASSOC)); ?>
-
-    <div class="avoid-page-break-inside">
-      <p>&copy; Chester-le-Street ASC <?=date("Y")?></p>
-      <p>Produced by Swimming Club Data Systems on behalf of <?=CLUB_NAME?></p>
-    </div>
 
     <?php include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
   </body>

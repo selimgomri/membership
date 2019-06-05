@@ -2,19 +2,19 @@
 
 $use_white_background = true;
 
+global $db;
+
 if ($renewal_trap) {
 	header("Location: " . autoUrl("renewal/go"));
 	exit();
 }
 
-$user = mysqli_real_escape_string($link, $_SESSION['UserID']);
+$sql = $db->prepare("SELECT * FROM `users` WHERE `UserID` = ?");
+$sql->execute([$_SESSION['UserID']]);
+$row = $sql->fetch(PDO::FETCH_ASSOC);
 
-$sql = "SELECT * FROM `users` WHERE `UserID` = '$user';";
-$res = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($res, MYSQLI_ASSOC);
-
-$contacts = new EmergencyContacts($link);
-$contacts->byParent($user);
+$contacts = new EmergencyContacts($db);
+$contacts->byParent($_SESSION['UserID']);
 
 $contactsArray = $contacts->getContacts();
 
@@ -40,7 +40,7 @@ if ($renewal_trap) {
 		<p class="border-bottom border-gray pb-2 mb-0">
 			We'll use these emergency contacts for all swimmers connected to your
 			account if we can't reach you on your phone number. You can change your
-			phone number in <a href="<?php echo autoUrl("myaccount"); ?>">My Account</a>
+			phone number in <a href="<?=autoUrl("myaccount")?>">My Account</a>
 		</p>
 		<?php if (isset($_SESSION['AddNewSuccess'])) {
 			echo $_SESSION['AddNewSuccess'];

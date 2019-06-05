@@ -1,12 +1,14 @@
 <?php
 
+global $db;
+
 $user = mysqli_real_escape_string($link, $_SESSION['UserID']);
 
-$uSql = "SELECT * FROM `users` WHERE `UserID` = '$user';";
-$uRes = mysqli_query($link, $uSql);
-$uRow = mysqli_fetch_array($uRes, MYSQLI_ASSOC);
+$sql = $db->prepare("SELECT * FROM `users` WHERE `UserID` = ?");
+$sql->execute([$_SESSION['UserID']]);
+$uRow = $sql->fetch(PDO::FETCH_ASSOC);
 
-$contacts = new EmergencyContacts($link);
+$contacts = new EmergencyContacts($db);
 $contacts->byParent($user);
 
 $contactsArray = $contacts->getContacts();
@@ -47,11 +49,11 @@ include BASE_PATH . "views/renewalTitleBar.php";
   				<div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
 						<p class="mb-0">
 							<strong class="d-block">
-								<?php echo $uRow['Forename'] . " " . $uRow['Surname']; ?> (From My
+								<?=htmlspecialchars($uRow['Forename'] . " " . $uRow['Surname'])?> (From My
 								Account)
 							</strong>
-							<a href="tel:<?php echo $uRow['Mobile']; ?>">
-								<?php echo $uRow['Mobile']; ?>
+							<a href="tel:<?=htmlspecialchars($uRow['Mobile'])?>">
+								<?=htmlspecialchars($uRow['Mobile'])?>
 							</a>
 						</p>
   				</div>
@@ -64,16 +66,16 @@ include BASE_PATH . "views/renewalTitleBar.php";
 							<div class="col-9">
 								<p class="mb-0">
 									<strong class="d-block">
-										<?php echo $contactsArray[$i]->getName(); ?>
+										<?=htmlspecialchars($contactsArray[$i]->getName())?>
 									</strong>
-									<a href="tel:<?php echo $contactsArray[$i]->getContactNumber(); ?>">
-										<?php echo $contactsArray[$i]->getContactNumber(); ?>
+									<a href="tel:<?=htmlspecialchars($contactsArray[$i]->getContactNumber())?>">
+										<?=htmlspecialchars($contactsArray[$i]->getContactNumber())?>
 									</a>
 								</p>
 							</div>
 							<div class="col text-sm-right">
-								<a href="<?php echo autoUrl("renewal/emergencycontacts/edit/" .
-								$contactsArray[$i]->getID()); ?>" class="btn btn-primary">
+								<a href="<?=autoUrl("renewal/emergencycontacts/edit/" .
+								$contactsArray[$i]->getID());>" class="btn btn-primary">
 									Edit
 								</a>
 							</div>

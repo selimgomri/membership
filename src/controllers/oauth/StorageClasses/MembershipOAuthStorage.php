@@ -346,7 +346,7 @@ class MembershipOAuthStorage implements
     protected function getUserClaim($claim, $userDetails)
     {
         $userClaims = array();
-        $claimValuesString = constant(sprintf('self::%s_CLAIM_VALUES', strtoupper($claim)));
+        $claimValuesString = constant(sprintf('self::%s_CLAIM_VALUES', mb_strtoupper($claim)));
         $claimValues = explode(' ', $claimValuesString);
 
         foreach ($claimValues as $value) {

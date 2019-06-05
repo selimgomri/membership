@@ -19,6 +19,11 @@ if ($access == "Parent") {
 		include 'parentHome.php';
 	});
 
+  // Enter a gala
+	$this->get('/{id}:int', function($id) {
+		include 'Gala.php';
+	});
+
 	// Enter a gala
 	$this->get('/entergala', function() {
 		global $link;

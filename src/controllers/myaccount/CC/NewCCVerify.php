@@ -3,7 +3,7 @@
 $_SESSION['AddNotifyCC'] = [
   'AuthCode'          => random_int(100000, 999999),
   'Name'              => ucwords(trim($_POST['new-cc-name'])),
-  'EmailAddress'      => strtolower(trim($_POST['new-cc']))
+  'EmailAddress'      => mb_strtolower(trim($_POST['new-cc']))
 ];
 
 $message = '

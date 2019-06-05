@@ -91,10 +91,31 @@ include BASE_PATH . "views/header.php";
         <?php } ?>
       </p>
 
+      <?php if (defined('IS_CLS') && IS_CLS) { ?>
       <p class="small mb-0">
         Support Helpline: <a class=""
         href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>
       </p>
+
+      <p class="small mb-4">
+        Support Website: <a class=""
+        href="https://www.chesterlestreetasc.co.uk/support/onlinemembership">CLS
+        ASC Help and Support</a>
+      </p>
+      <?php } else { ?>
+      <p class="small mb-0">
+        For support, please contact your own club in the first instance.
+      </p>
+      <p class="small mb-0">
+        Support Helpline: <a class=""
+        href="mailto:support@myswimmingclub.co.uk">support@myswimmingclub.co.uk</a>
+      </p>
+
+      <p class="small mb-4">
+        Support Website: <a class=""
+        href="https://www.chesterlestreetasc.co.uk/support/onlinemembership">SCDS Help and Support (hosted by <a href="https://www.chesterlestreetasc.co.uk" target="_blank">CLS ASC</a>)</a>
+      </p>
+      <?php } ?>
 
       <p class="small mb-4">
         Support Website: <a class=""
