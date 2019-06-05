@@ -70,7 +70,7 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
     	$message = '<p>' . htmlentities(getUserName($_SESSION['UserID'])) . ' has added a new member, ' . htmlentities($forename . ' ' . $surname) . ' to our online membership system.</p><p>We have sent you this email to ensure you\'re aware of this.</p>';
     	while ($row = $getAdmins->fetch(PDO::FETCH_ASSOC)) {
     		try {
-    			$query->execute([$row['UserID'], $subject, $message]);
+    			$notify->execute([$row['UserID'], $subject, $message]);
     		} catch (PDOException $e) {
     			//halt(500);
     		}
