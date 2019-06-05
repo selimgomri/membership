@@ -42,7 +42,7 @@
 		    <div class="row">
 		      <div class="col-sm-6 col-lg-6">
 		        <address>
-		          <strong>Chester-le-Street ASC</strong><br>
+		          <strong><?=env('CLUB_NAME')?></strong><br>
 		          Burns Green Leisure Centre<br>
 		          Chester-le-Street<br>
 		          DH3 3QH

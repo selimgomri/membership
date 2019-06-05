@@ -27,11 +27,11 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <head>
     <meta charset="utf-8">
     <?php if ($pagetitle != "" || $pagetitle != null)  { ?>
-    <title><?php echo htmlspecialchars($pagetitle, ENT_QUOTES, 'UTF-8'); ?> - <?=CLUB_NAME?> Membership</title>
+    <title><?php echo htmlspecialchars($pagetitle, ENT_QUOTES, 'UTF-8'); ?> - <?=env('CLUB_NAME')?> Membership</title>
     <?php } else { ?>
-    <title><?=CLUB_NAME?> Membership</title>
+    <title><?=env('CLUB_NAME')?> Membership</title>
     <?php } ?>
-    <meta name="description" content="Your <?=CLUB_NAME?> Account lets you make gala entries online and gives you access to all your information about your swimmers, including attendance.">
+    <meta name="description" content="Your <?=env('CLUB_NAME')?> Account lets you make gala entries online and gives you access to all your information about your swimmers, including attendance.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0,
     user-scalable=no,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

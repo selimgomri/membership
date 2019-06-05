@@ -10,7 +10,7 @@
   		      <div class="col">
   		        <address>
                 <?php $club = json_decode(CLUB_JSON); ?>
-                <strong><?=CLUB_NAME?></strong><br>
+                <strong><?=env('CLUB_NAME')?></strong><br>
                 <?php
                 for ($i = 0; $i < sizeof($club->ClubAddress); $i++) { ?>
                   <?=$club->ClubAddress[$i]?><br>
@@ -75,7 +75,7 @@
               <img src="<?=autoUrl("public/img/corporate/scds.png")?>" width="100">
             </a>
             <p class="hidden-print">
-  						Designed and Built by <a class="text-white" href="https://corporate.myswimmingclub.co.uk" target="_blank">Swimming Club Data Systems</a>. Licenced to <?=CLUB_NAME?>.
+  						Designed and Built by <a class="text-white" href="https://corporate.myswimmingclub.co.uk" target="_blank">Swimming Club Data Systems</a>. Licenced to <?=env('CLUB_NAME')?>.
   					</p>
   					<?php
   					$executionEndTime = microtime();
