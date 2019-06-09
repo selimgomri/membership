@@ -129,7 +129,7 @@ function process_mandate_event($event) {
 
       try {
         $cancelMandate = $db->prepare("UPDATE `paymentMandates` SET `InUse` = ? WHERE `Mandate` = ?");
-        $cancelMandate->execute([false, $mandate]);
+        $cancelMandate->execute([0, $mandate]);
 
         $unsetDefault = $db->prepare("SELECT users.UserID, `Forename`, `Surname`, `EmailAddress`,
   			`MandateID` FROM `paymentMandates` INNER JOIN `users` ON users.UserID =
