@@ -117,12 +117,6 @@ include BASE_PATH . "views/header.php";
       </p>
       <?php } ?>
 
-      <p class="small mb-4">
-        Support Website: <a class=""
-        href="https://www.chesterlestreetasc.co.uk/support/onlinemembership">CLS
-        ASC Help and Support</a>
-      </p>
-
       <!--
       <p class="small mb-5">
         Unauthorised access to or misuse of this system is prohibited and

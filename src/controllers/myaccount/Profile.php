@@ -36,7 +36,7 @@
   if (!empty($_POST['forename'])) {
     if ($_POST['forename'] != $forename) {
       $update = $db->prepare("UPDATE `users` SET `Forename` = ? WHERE `UserID` = ?");
-      $update->execute([trim(ucwords($_POST['forename'])), $_SESSION['UserID']]);
+      $update->execute([trim(mb_convert_case($_POST['forename'], MB_CASE_TITLE_SIMPLE)), $_SESSION['UserID']]);
       $forenameUpdate = true;
       $update = true;
     }
@@ -44,7 +44,7 @@
   if (!empty($_POST['surname'])) {
     if ($_POST['surname'] != $surname) {
       $update = $db->prepare("UPDATE `users` SET `Surname` = ? WHERE `UserID` = ?");
-      $update->execute([trim(ucwords($_POST['surname'])), $_SESSION['UserID']]);
+      $update->execute([trim(mb_convert_case($_POST['surname'], MB_CASE_TITLE_SIMPLE)), $_SESSION['UserID']]);
       $surnameUpdate = true;
       $update = true;
     }

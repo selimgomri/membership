@@ -33,6 +33,8 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
   $statsCounter += $count;
 }
 
+$openGalas = false;
+
 $pagetitle = "Galas";
 include BASE_PATH . "views/header.php";
 include "galaMenu.php";
@@ -54,6 +56,10 @@ include "galaMenu.php";
         $closingDate = new DateTime($gala['ClosingDate']);
         $endDate = new DateTime($gala['GalaDate']);
 
+        if ($now <= $closingDate) {
+          $openGalas = true;
+        }
+
         ?>
         <a href="<?=autoUrl("galas/" . $gala['GalaID'])?>">
           <div>
@@ -71,11 +77,13 @@ include "galaMenu.php";
         </a>
       <?php } while ($gala = $galas->fetch(PDO::FETCH_ASSOC)); ?>
     </div>
+    <?php if ($openGalas) { ?>
     <p class="mb-4">
       <a href="<?=autoUrl("galas/entergala")?>" class="btn btn-success">
         Enter a gala
       </a>
     </p>
+    <?php } ?>
     <?php } ?>
 
     <?php if ($entry) { ?>
@@ -113,7 +121,7 @@ include "galaMenu.php";
       along with their all-time personal bests and <?=date("Y")?> personal
       bests.
     </p>
-    
+
     <div class="news-grid mb-4">
       <?php do { ?>
         <a href="<?=autoUrl("galas/competitions/" . $timesheet['GalaID'] . "/timesheet")?>">

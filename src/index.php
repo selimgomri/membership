@@ -133,10 +133,10 @@ function halt(int $statusCode) {
 //define("LINK", mysqli_connect($dbhost, $dbuser, $dbpass, $dbname));
 //$link = LINK;
 
-$link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+$link = mysqli_connect(env('DB_HOST'), env('DB_USER'), env('DB_PASS'), env('DB_NAME'));
 $db = null;
 try {
-  $db = new PDO("mysql:host=" . $dbhost . ";dbname=" . $dbname . ";charset=utf8mb4", $dbuser, $dbpass);
+  $db = new PDO("mysql:host=" . env('DB_HOST') . ";dbname=" . env('DB_NAME') . ";charset=utf8mb4", env('DB_USER'), env('DB_PASS'));
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (Exception $e) {
   halt(500);
@@ -148,11 +148,6 @@ if (mysqli_connect_errno()) {
 }
 
 require_once "database.php";
-
-if ($_SERVER['HTTP_HOST'] == 'account.chesterlestreetasc.co.uk' && app('request')->method == "GET") {
-  header("Location: " . autoUrl(ltrim(app('request')->path, '/')));
-  die();
-}
 
 $currentUser = null;
 if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && isset($_SESSION['UserID']) && $_SESSION['UserID'] != null) {
@@ -442,12 +437,6 @@ $route->group($get_group, function($clubcode = "CLSE") {
       global $link;
       include 'controllers/notify/Help.php';
     });
-
-    $this->group('/people', function() {
-      global $link;
-      $people = true;
-      include 'controllers/posts/router.php';
-    });
 /*
     $this->get('/files/*', function() {
       $filename = $this[0];
@@ -612,6 +601,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
     $this->group('/admin', function() {
       include 'controllers/qualifications/AdminRouter.php';
+    });
+
+    $this->group('/resources', function() {
+      include 'controllers/resources/router.php';
     });
 
     // Log out
