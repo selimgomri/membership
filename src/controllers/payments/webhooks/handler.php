@@ -131,54 +131,53 @@ function process_mandate_event($event) {
         $cancelMandate = $db->prepare("UPDATE `paymentMandates` SET `InUse` = ? WHERE `Mandate` = ?");
         $cancelMandate->execute([0, $mandate]);
 
-        $unsetDefault = $db->prepare("SELECT users.UserID, `Forename`, `Surname`, `EmailAddress`,
-  			`MandateID` FROM `paymentMandates` INNER JOIN `users` ON users.UserID =
-  			paymentMandates.UserID WHERE `Mandate` = ?");
+        $unsetDefault = $db->prepare("SELECT users.UserID, `Forename`, `Surname`, `EmailAddress`, `MandateID` FROM `paymentMandates` INNER JOIN `users` ON users.UserID = paymentMandates.UserID WHERE `Mandate` = ?");
         $unsetDefault->execute([$mandate]);
-        if ($row = $unsetDefault->fetch(PDO::FETCH_ASSOC)) {
+        $user = $unsetDefault->fetch(PDO::FETCH_ASSOC);
+        if ($user != null) {
           $mandateID = $user['MandateID'];
           $unsetDefaultMandate = $db->prepare("DELETE FROM `paymentPreferredMandate` WHERE `MandateID` = ?");
           $unsetDefaultMandate->execute([$mandateID]);
+
+          $userID = $user['UserID'];
+          $getNextMandate = $db->prepare("SELECT * FROM `paymentMandates` WHERE
+          `UserID` = ? AND `InUse` = ?");
+          $getNextMandate->execute([$userID, 1]);
+
+          if ($row = $getNextMandate->fetch(PDO::FETCH_ASSOC)) {
+            $mandateID = $row['MandateID'];
+            $setNewDefault = $db->prepare("INSERT INTO `paymentPreferredMandate` (`UserID`, `MandateID`) VALUES (?, ?)");
+            $setNewDefault->execute([$userID, $mandateID]);
+
+            $message = "<h1>Hello " . htmlspecialchars($user['Forename'] . " " . $user['Surname']) . ".</h1>
+            <p>Your Direct Debit Mandate for " . CLUB_NAME . " has been cancelled. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
+            <p>Go to " . autoUrl("") . " to make any changes.</p>
+            <p>Thank you, <br>" . CLUB_NAME . "";
+            notifySend(
+              $user['EmailAddress'],
+              "Your Direct Debit Mandate has been Cancelled",
+              $message,
+              $user['Forename'] . " " . $user['Surname'],
+              $user['EmailAddress'],
+              PAYMENT_EMAILS
+            );
+          } else {
+            $message = "<h1>Hello " . htmlspecialchars($user['Forename'] . " " . $user['Surname']) . ".</h1>
+            <p>Your Direct Debit Mandate for " . CLUB_NAME . " has been Cancelled. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("") . "</p>
+            <p>If you are leaving the club you can ignore the above.</p>
+            <p>Thank you, <br>" . CLUB_NAME . "</p>";
+            notifySend(
+              $user['EmailAddress'],
+              "Your Direct Debit Mandate has been Cancelled",
+              $message,
+              $user['Forename'] . " " .	$user['Surname'],
+              $user['EmailAddress'],
+              PAYMENT_EMAILS
+            );
+          }
         }
 
-        $userID = $user['UserID'];
-        $getNextMandate = $db->prepare("SELECT * FROM `paymentMandates` WHERE
-        `UserID` = ? AND `InUse` = ?");
-        $getNextMandate->execute([$userID, true]);
-
-        if ($row = $getNextMandate->fetch(PDO::FETCH_ASSOC)) {
-          $mandateID = $row['MandateID'];
-          $setNewDefault = $db->prepare("INSERT INTO `paymentPreferredMandate` (`UserID`, `MandateID`) VALUES (?, ?)");
-          $setNewDefault->execute([$userID, $mandateID]);
-
-          $message = "<h1>Hello " . htmlspecialchars($user['Forename'] . " " . $user['Surname']) . ".</h1>
-  				<p>Your Direct Debit Mandate for " . CLUB_NAME . " has been cancelled. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
-  				<p>Go to " . autoUrl("") . " to make any changes.</p>
-  				<p>Thank you, <br>" . CLUB_NAME . "";
-  				notifySend(
-            $user['EmailAddress'],
-            "Your Direct Debit Mandate has been Cancelled",
-            $message,
-            $user['Forename'] . " " . $user['Surname'],
-            $user['EmailAddress'],
-            PAYMENT_EMAILS
-          );
-        } else {
-          $message = "<h1>Hello " . htmlspecialchars($user['Forename'] . " " . $user['Surname']) . ".</h1>
-  				<p>Your Direct Debit Mandate for " . CLUB_NAME . " has been Cancelled. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("") . "</p>
-          <p>If you are leaving the club you can ignore the above.</p>
-  				<p>Thank you, <br>" . CLUB_NAME . "</p>";
-  				notifySend(
-            $user['EmailAddress'],
-            "Your Direct Debit Mandate has been Cancelled",
-            $message,
-            $user['Forename'] . " " .	$user['Surname'],
-            $user['EmailAddress'],
-            PAYMENT_EMAILS
-          );
-        }
-
-      } catch (Exception $e) {}
+      } catch (Exception $e) {echo $e; }
 
       break;
 		case "transferred":
