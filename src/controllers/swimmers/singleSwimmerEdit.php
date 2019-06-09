@@ -84,6 +84,14 @@ if (!empty($_POST['asa'])) {
 		$asaUpdate = true;
 		$update = true;
 	}
+} else if ($_POST['asa'] == "") {
+	$newASANumber = env('ASA_CLUB_CODE') . $id;
+	if ($newASANumber != $asaNumber) {
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `ASANumber` = ? WHERE `MemberID` = ?");
+		$updateSwimmer->execute([$newASANumber, $id]);
+		$asaUpdate = true;
+		$update = true;
+	}
 }
 if (!empty($_POST['userid'])) {
 	$newUserID = trim($_POST['userid']);

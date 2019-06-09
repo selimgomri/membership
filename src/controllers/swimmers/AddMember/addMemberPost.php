@@ -55,7 +55,7 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
   	$last_id = $db->lastInsertId();
 
   	if ($getASA) {
-  		$swimEnglandTemp = CLUB_CODE . $last_id;
+  		$swimEnglandTemp = env('ASA_CLUB_CODE') . $last_id;
       $addTempSwimEnglandCode = $db->prepare("UPDATE `members` SET `ASANumber` = ? WHERE `MemberID` = ?");
       $addTempSwimEnglandCode->execute([$swimEnglandTemp, $last_id]);
   	}
