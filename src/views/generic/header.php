@@ -1,5 +1,7 @@
 <?php
 
+global $db;
+
 require 'GlobalHead.php';
 
 $bg = "bg-white";
