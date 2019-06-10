@@ -6,6 +6,7 @@ global $db;
 
 $galas = $db->query("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength FROM galas WHERE GalaDate >= CURDATE()");
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
+$entriesOpen = false;
 
 $entries = $db->prepare("SELECT EntryID, GalaName, ClosingDate, GalaVenue, MForename, MSurname FROM ((galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE GalaDate >= CURDATE() AND members.UserID = ?");
 $entries->execute([$_SESSION['UserID']]);
@@ -65,7 +66,7 @@ include "galaMenu.php";
           <div>
             <span class="title mb-0 justify-content-between align-items-start">
               <span><?=htmlspecialchars($gala['GalaName'])?></span>
-              <?php if ($now <= $closingDate) {?><span class="ml-2 badge badge-success">ENTRIES OPEN</span><?php } ?>
+              <?php if ($now <= $closingDate) { $entriesOpen = true;?><span class="ml-2 badge badge-success">ENTRIES OPEN</span><?php } ?>
             </span>
             <span class="d-flex mb-3"><?=htmlspecialchars($gala['GalaVenue'])?></span>
           </div>

@@ -48,18 +48,25 @@ function verifyUser($user, $password) {
   return false;
 }
 
-function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = null, $from = ["Email" => "noreply@" . EMAIL_DOMAIN, "Name" => CLUB_NAME]) {
+function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = null, $from = null) {
+
+  if (!isset($from['Email'])) {
+    $from['Email'] = "noreply@" . env('EMAIL_DOMAIN');
+  }
+  if (!isset($from['Name'])) {
+    $from['Name'] = env('CLUB_NAME');
+  }
 
   $fontUrl = "https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700";
   $fontStack = '"Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
-  $image = "<h1>" . CLUB_NAME . "</h1>";
+  $image = "<h1>" . env('CLUB_NAME') . "</h1>";
   if (defined("IS_CLS") && IS_CLS) {
     $fontUrl = "https://fonts.googleapis.com/css?family=Open+Sans:400,700";
     $fontStack = '"Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
     $image = "<img src=\"" . autoUrl("public/img/notify/NotifyLogo.png") . "\"
     style=\"width:300px;max-width:100%;\" srcset=\"" .
     autoUrl("public/img/notify/NotifyLogo@2x.png") . " 2x, " .
-    autoUrl("public/img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"" . CLUB_NAME . " Logo\">";
+    autoUrl("public/img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"" . env('CLUB_NAME') . " Logo\">";
   }
 
   $head = "
@@ -109,7 +116,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
   $cellClass = 'style="display:table;background:#eee;padding:10px;margin 0 auto 10px auto;width:100%;"';
   $htmlMessage = str_replace('class="cell"', $cellClass, $emailMessage);
 
-  $address = "<p class=\"small\" align=\"center\"><strong>" . CLUB_NAME . "</strong><br>";
+  $address = "<p class=\"small\" align=\"center\"><strong>" . env('CLUB_NAME') . "</strong><br>";
   $club = json_decode(CLUB_JSON);
   for ($i = 0; $i < sizeof($club->ClubAddress); $i++) {
     $address .= $club->ClubAddress[$i] . "<br>";
@@ -127,7 +134,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
       <div
 class=\"bottom text-center\">";
 $message .= $address;
-$message .= "<p class=\"small\" align=\"center\">This email was sent automatically by the " . CLUB_NAME . " Membership System.</p>";
+$message .= "<p class=\"small\" align=\"center\">This email was sent automatically by the " . env('CLUB_NAME') . " Membership System.</p>";
 if (!defined('IS_CLS') || !IS_CLS) {
   $message .= '<p class="small" align="center">The Membership System was built by Chester-le-Street ASC.</p>';
 }
@@ -139,7 +146,7 @@ if ($from['Unsub']['Allowed']) {
   $message .= '<p class="small" align="center"><a href="' . autoUrl("notify/unsubscribe/" . dechex($from['Unsub']['User']) . '/' . urlencode($emailaddress) . '/' . urlencode($from['Unsub']['List'])) . '">Click to Unsubscribe</a></p>';
 }
 $message .= "
-<p class=\"small\" align=\"center\">&copy; " . CLUB_NAME . " " . date("Y") . "</p>
+<p class=\"small\" align=\"center\">&copy; " . env('CLUB_NAME') . " " . date("Y") . "</p>
       </div>
       </table>
     </table>
@@ -154,7 +161,7 @@ $message .= "
   if ($emailaddress != null && $name != null) {
 
     $email = new \SendGrid\Mail\Mail();
-    $email->setReplyTo(CLUB_EMAIL, CLUB_NAME);
+    $email->setReplyTo(CLUB_EMAIL, env('CLUB_NAME'));
     $email->setFrom($from['Email'], $from['Name']);
     $email->setSubject($subject);
     $email->addTo($emailaddress, $name);
@@ -172,7 +179,7 @@ $message .= "
       );
     }
 
-    if ($from['Email'] == "notify@" . EMAIL_DOMAIN || $from['Email'] == "payments@" . EMAIL_DOMAIN) {
+    if ($from['Email'] == "notify@" . env('EMAIL_DOMAIN') || $from['Email'] == "payments@" . env('EMAIL_DOMAIN')) {
       $email->addHeader("List-Archive", autoUrl("myaccount/notify/history"));
     }
 
@@ -183,22 +190,22 @@ $message .= "
     }
 
     if (IS_CLS === true) {
-      if ($from['Email'] == "notify@" . EMAIL_DOMAIN) {
-        $email->addHeader("List-ID", "CLS ASC Targeted Lists <targeted-lists@account." . EMAIL_DOMAIN . ">");
-      } else if ($from['Email'] == "payments@" . EMAIL_DOMAIN) {
-        $email->addHeader("List-ID", "Direct Debit Payment Information <payment-news@account." . EMAIL_DOMAIN . ">");
-      } else if ($from['Name'] == CLUB_NAME . " Security") {
-        $email->addHeader("List-ID", "Account Security Updates <account-updates@account." . EMAIL_DOMAIN . ">");
+      if ($from['Email'] == "notify@" . env('EMAIL_DOMAIN')) {
+        $email->addHeader("List-ID", "CLS ASC Targeted Lists <targeted-lists@account." . env('EMAIL_DOMAIN') . ">");
+      } else if ($from['Email'] == "payments@" . env('EMAIL_DOMAIN')) {
+        $email->addHeader("List-ID", "Direct Debit Payment Information <payment-news@account." . env('EMAIL_DOMAIN') . ">");
+      } else if ($from['Name'] == env('CLUB_NAME') . " Security") {
+        $email->addHeader("List-ID", "Account Security Updates <account-updates@account." . env('EMAIL_DOMAIN') . ">");
       }
 
-      if ($from['Email'] == "payments@" . EMAIL_DOMAIN) {
+      if ($from['Email'] == "payments@" . env('EMAIL_DOMAIN')) {
         $email->setReplyTo("payments+replytoautoemail@chesterlestreetasc.co.uk", "Payments Team");
-      } else if ($from['Email'] == "galas@" . EMAIL_DOMAIN) {
-        $email->setReplyTo("galas+replytoautoemail@" . EMAIL_DOMAIN, "Gala Administrator");
+      } else if ($from['Email'] == "galas@" . env('EMAIL_DOMAIN')) {
+        $email->setReplyTo("galas+replytoautoemail@" . env('EMAIL_DOMAIN'), "Gala Administrator");
       } else if ($from['Name'] == "Chester-le-Street ASC Security") {
-        $email->setReplyTo("support+security-replytoautoemail@" . EMAIL_DOMAIN, CLUB_SHORT_NAME . " Support");
+        $email->setReplyTo("support+security-replytoautoemail@" . env('EMAIL_DOMAIN'), env('CLUB_SHORT_NAME') . " Support");
       } else {
-        $email->setReplyTo("enquiries+replytoautoemail@" . EMAIL_DOMAIN, CLUB_SHORT_NAME . " Enquiries");
+        $email->setReplyTo("enquiries+replytoautoemail@" . env('EMAIL_DOMAIN'), env('CLUB_SHORT_NAME') . " Enquiries");
       }
 
       if ($from['Reply-To'] != null) {
@@ -946,45 +953,6 @@ function squadInfoTable($link, $enableLinks = false) {
   return $output;
 }
 
-function creditWallet($id, $amount, $description) {
-  // Get the balance
-  $sql = "SELECT `Balance` FROM `wallet` WHERE UserID = '$id';";
-  $result = mysqli_query(LINK, $sql);
-  $row = mysqli_fetch_array($result);
-  $balance = $row['Balance'];
-
-  // The new balance
-  $newBalance = $balance + $amount;
-
-  // Update the balance andd insert description
-  $sql = "
-  INSERT INTO walletHistory (Amount, Balance, TransactionDesc, UserID) VALUES
-  ('$amount', '$newBalance', '$description', '$id'); UPDATE wallet SET
-  Balance='$newBalance' WHERE UserID = '$id';";
-  mysqli_query(LINK, $sql);
-}
-
-function debitWallet($id, $amount, $description) {
-  // Get the balance
-  $sql = "SELECT `Balance` FROM `wallet` WHERE UserID = '$id';";
-  $result = mysqli_query(LINK, $sql);
-  $row = mysqli_fetch_array($result);
-  $balance = $row['Balance'];
-
-  // The new balance
-  $newBalance = $balance - $amount;
-  $amount = 0 - $amount;
-
-  // Update the balance andd insert description
-  $sql = "INSERT INTO walletHistory (Amount, Balance, TransactionDesc, UserID)
-  VALUES ('$amount', '$newBalance', '$description', '$id');";
-  mysqli_query(LINK, $sql);
-  $sql = "UPDATE wallet SET Balance='$newBalance' WHERE UserID = '$id';";
-  mysqli_query(LINK, $sql);
-  echo $newBalance;
-}
-
-
 function autoUrl($relative) {
   // Returns an absolute URL
   //return app('request')->url . ltrim($_SERVER['SCRIPT_NAME'], '/') . '/' . $relative;
@@ -1290,7 +1258,7 @@ function updatePaymentStatus($PMkey) {
         $message .= '<p>We have retried this payment request three times and it has still not succeeded. As a result, you will need to contact the club treasurer to take further action. Failure to pay may lead to the suspension or termination of your membership.</p>';
       }
 
-      $message .= '<p>Kind regards,<br>The ' . CLUB_NAME . ' Team</p>';
+      $message .= '<p>Kind regards,<br>The ' . env('CLUB_NAME') . ' Team</p>';
       $query = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (?, ?, ?, ?, ?, ?)");
       $query->execute([$details['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
 
@@ -1314,7 +1282,7 @@ function updatePaymentStatus($PMkey) {
       $subject = "Payment Failed for " . $details['Name'];
       $message = '
       <p>Your Direct Debit payment of £' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has failed because customer approval was denied. This means your bank requires two people two authorise a direct debit mandate on your account and that this authorisation has not been given. You will be contacted by the treasurer to arrange payment.</p>
-      <p>Kind regards,<br>The ' . CLUB_NAME . ' Team</p>';
+      <p>Kind regards,<br>The ' . env('CLUB_NAME') . ' Team</p>';
       $query = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (?, ?, ?, ?, ?, ?)");
       $query->execute([$details['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
 
@@ -1333,7 +1301,7 @@ function updatePaymentStatus($PMkey) {
       $message = '
       <p>Your Direct Debit payment of £' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has been charged back to us. You will be contacted by the treasurer to arrange payment of any outstanding amount.</p>
       <p>Please note that fraudulently charging back a Direct Debit payment is a criminal offence, covered by the 2006 Fraud Act. We recommend that if your are unsure about the amount we are charging you, you should try and contact us first.</p>
-      <p>Kind regards,<br>The ' . CLUB_NAME . ' Team</p>';
+      <p>Kind regards,<br>The ' . env('CLUB_NAME') . ' Team</p>';
       $query = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (?, ?, ?, ?, ?, ?)");
       $query->execute([$details['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
 
@@ -1354,7 +1322,7 @@ function updatePaymentStatus($PMkey) {
 function paymentStatusString($status) {
   switch ($status) {
     case "paid_out":
-      return "Paid to " . CLUB_SHORT_NAME;
+      return "Paid to " . env('CLUB_SHORT_NAME');
     case "paid_manually":
       return "Paid Manually";
     case "pending_customer_approval":

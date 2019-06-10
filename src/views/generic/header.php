@@ -32,7 +32,7 @@ $bg = "bg-white";
       	    aria-hidden="true"></i></a></strong>.
           </p>
           <p class="mb-0">
-            If JavaScript is not supported by your browser, <?=CLUB_NAME?>
+            If JavaScript is not supported by your browser, <?=env('CLUB_NAME')?>
             recommends you <strong><a class="text-dark"
             href="https://www.firefox.com">install Firefox by
             Mozilla</a></strong>.
@@ -57,7 +57,7 @@ $bg = "bg-white";
           class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
         </p>
         <p class="mb-0">
-          <?=CLUB_NAME?> recommends you <strong><a class="text-white"
+          <?=env('CLUB_NAME')?> recommends you <strong><a class="text-white"
           href="https://www.firefox.com">install Firefox by
           Mozilla</a></strong>.
         </p>
@@ -123,7 +123,7 @@ $bg = "bg-white";
       <div class="<?=$container_class?>">
         <h1 class="d-none d-md-flex pt-4 pb-1 mb-0">
           <a href="<?=autoUrl("")?>" class="text-white">
-              <?=mb_strtoupper(CLUB_NAME)?>
+              <?=mb_strtoupper(env('CLUB_NAME'))?>
           </a>
         </h1>
 
