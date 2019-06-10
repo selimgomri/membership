@@ -63,6 +63,21 @@ include BASE_PATH . 'views/header.php';
 
 	<div class="row">
 		<div class="col-md-8">
+
+			<?php if (isset($_SESSION['ChargeUsersSuccess'])) { 
+				unset($_SESSION['ChargeUsersSuccess']); ?>
+				<div class="alert alert-success">
+					<strong>We've successfully charged the parents</strong>
+				</div>
+			<?php } ?>
+
+			<?php if (isset($_SESSION['ChargeUsersFailure'])) { 
+				unset($_SESSION['ChargeUsersFailure']); ?>
+				<div class="alert alert-warning">
+					<strong>An error occurred.</strong> Please try again later.
+				</div>
+			<?php } ?>
+
 			<h2>How to charge parents</h2>
 			<p>
 				Please review the charges shown for all entries listed below. You can edit the amount to be charged for each entry.
@@ -132,7 +147,7 @@ include BASE_PATH . 'views/header.php';
 								<?php } ?>
 								<?php if ($entry['Charged']) { ?>
 								<p>
-									This entry has already been marked as being paid. This may mean it has been paid by Cash, Card or Cheque.
+									This entry has already been marked as being paid. This may mean it has been paid by Direct Debit, Cash, Card or Cheque.
 								</p>
 								<?php } ?>
 								<?php if ($notReady) { ?>
