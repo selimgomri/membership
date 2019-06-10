@@ -136,3 +136,26 @@ else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $
 		include 'AddManualTimePost.php';
 	});
 }
+
+if ($access == "Galas" || $access == "Admin") {
+
+	$this->get('/charges-and-refunds', function() {
+		include BASE_PATH . 'controllers/payments/galas/Home.php';
+	});
+
+	$this->get('/{id}:int/charges', function($id) {
+		include BASE_PATH . 'controllers/payments/galas/EntryCharge.php';
+	});
+
+	$this->post('/{id}:int/charges', function($id) {
+		include BASE_PATH . 'controllers/payments/galas/EntryChargeAction.php';
+	});
+
+	$this->get('/{id}:int/refunds', function($id) {
+		include BASE_PATH . 'controllers/payments/galas/RefundCharge.php';
+	});
+
+	$this->post('/{id}:int/refunds', function($id) {
+		include BASE_PATH . 'controllers/payments/galas/RefundChargePost.php';
+	});
+}

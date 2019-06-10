@@ -5,7 +5,7 @@ global $db;
 $user = $_SESSION['UserId'];
 $pagetitle = "Gala Payments";
 
-$galas = $db->query("SELECT * FROM `galas` WHERE `ClosingDate` <= CURDATE() AND `GalaDate` >= CURDATE()");
+$galas = $db->query("SELECT * FROM `galas` WHERE `GalaDate` >= CURDATE() AND `GalaDate` >= CURDATE()");
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
 
 include BASE_PATH . "views/header.php";
@@ -24,14 +24,23 @@ include BASE_PATH . "views/paymentsMenu.php";
       </div>
       <hr>
       <?php if ($gala != null) { ?>
-        <h2>Galas to Charge For</h2>
-        <div class="list-group">
+        <h2>Galas to Charge or Refund</h2>
+        <ul class="list-group">
           <?php do { ?>
-          <a class="list-group-item list-group-item-action" href="<?=autoUrl("payments/galas/" . $gala['GalaID']); ?>">
-            <?=htmlspecialchars($gala['GalaName'])?>
-          </a>
+          <li class="list-group-item list-group-item-action">
+            <p class="mb-0">
+              <strong>
+                <a href="<?=autoUrl("galas/" . $gala['GalaID']); ?>">
+                  <?=htmlspecialchars($gala['GalaName'])?>
+                </a>
+              </strong>
+            </p>
+            <p class="mb-0">
+              <a href="<?=autoUrl("galas/" . $gala['GalaID'] . '/charges'); ?>">Charge for Entries</a> or <a href="<?=autoUrl("galas/" . $gala['GalaID'] . '/refunds'); ?>">Issue Refunds</a>
+            </p>
+          </li>
           <?php } while ($gala = $galas->fetch(PDO::FETCH_ASSOC)); ?>
-        </div>
+        </ul>
       <?php } else { ?>
         <div class="alert alert-warning">
           <strong>There are no galas open for charges</strong>
