@@ -7,6 +7,7 @@ $disabled = "";
 $date = date("Y-m-d");
 $insertPayment = $db->prepare("INSERT INTO paymentsPending (`Date`, `Status`, UserID, `Name`, Amount, Currency, PMkey, `Type`, MetadataJSON) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 $markAsCharged = $db->prepare("UPDATE galaEntries SET Charged = ?, FeeToPay = ? WHERE EntryID = ?");
+$notify = $db->prepare("INSERT INTO notify (UserID, `Status`, `Subject`, `Message`, EmailType) VALUES (?, ?, ?, ?, ?)");
 
 $getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas WHERE GalaID = ?");
 $getGala->execute([$id]);
@@ -55,6 +56,7 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 		$db->beginTransaction();
 
 		$amount = (int) ($_POST[$entry['EntryID'] . '-amount']*100);
+		$amountString = number_format($_POST[$entry['EntryID'] . '-amount'], 2);
 
 		$name = $entry['MForename'] . ' ' . $entry['MSurname'] . '\'s Gala Entry into ' . $gala['name'] .  ' (Entry #' . $entry['EntryID'] . ')';
 
@@ -79,6 +81,19 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 			true,
 			$amount,
 			$entry['EntryID']
+		]);
+
+		$message = '<p>We\'ve added a charge to your bill for ' . htmlspecialchars($entry['MForename']) .  '\'s entry into ' . htmlspecialchars($gala['name']) . '. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(env('CLUB_NAME')) . '.</p>';
+
+		$message .= '<p>This charge is to the value of <strong>&pound;' . $amountString . '</strong>. You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement.</p>';
+		$message .= '<p>Kind Regards<br> The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
+
+		$notify->execute([
+			$entry['UserID'],
+			'Queued',
+			'Payments: ' . $entry['MForename'] .  '\'s ' . $gala['name'] . ' Entry',
+			$message,
+			'Galas'
 		]);
 
 		$db->commit();
