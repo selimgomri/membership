@@ -44,9 +44,9 @@ $swimsArray = [
 
 while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 	$amount = (int) ($_POST[$entry['EntryID'] . '-amount']*100);
+	$hasNoDD = ($entry['MandateID'] == null) || ($entry['OptOut']);
 
-	if ($amount > 0 && $amount <= 15000) {
-		$hasNoDD = ($entry['MandateID'] == null) || ($entry['OptOut']);
+	if ($amount > 0 && $amount <= 15000 && !$hasNoDD) {
 		$count = 0;
 
 		$swimsList = '<ul>';
