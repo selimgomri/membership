@@ -658,7 +658,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
       $this->group('/db', function() {
         // Handle database migrations
-        include 'controllers/db/router.php';
+        include 'controllers/migrations/router.php';
       });
 
       $this->get('/test', function() {

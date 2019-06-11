@@ -4,11 +4,11 @@ $userID = $_SESSION['UserID'];
 
 global $db;
 
-$galas = $db->query("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength FROM galas WHERE GalaDate >= CURDATE()");
+$galas = $db->query("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength FROM galas WHERE GalaDate >= CURDATE() ORDER BY GalaDate ASC");
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
 $entriesOpen = false;
 
-$entries = $db->prepare("SELECT EntryID, GalaName, ClosingDate, GalaVenue, MForename, MSurname FROM ((galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE GalaDate >= CURDATE() AND members.UserID = ?");
+$entries = $db->prepare("SELECT EntryID, GalaName, ClosingDate, GalaVenue, MForename, MSurname, EntryProcessed Processed, Charged, Refunded FROM ((galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE GalaDate >= CURDATE() AND members.UserID = ?");
 $entries->execute([$_SESSION['UserID']]);
 $entry = $entries->fetch(PDO::FETCH_ASSOC);
 
@@ -102,7 +102,10 @@ include "galaMenu.php";
           <div>
             <span class="title mb-0 justify-content-between align-items-start">
               <span><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?></span>
-              <?php if ($now <= $closingDate) {?><span class="ml-2 badge badge-success">EDITABLE</span><?php } ?>
+              <?php if ($now <= $closingDate && !$entry['Charged'] && !$entry['Processed']) {?><span class="ml-2 badge badge-success">EDITABLE</span><?php } ?>
+              <?php if ($entry['Charged']) {?><span class="ml-2 badge badge-warning"><i class="fa fa-money" aria-hidden="true"></i>
+ PAID</span><?php } ?>
+              <?php if ($entry['Refunded'] && $entry['FeeToPay'] > 0) {?><span class="ml-2 badge badge-warning">PART REFUNDED</span><?php } else if ($entry['Refunded'] && $entry['FeeToPay'] == 0) {?><span class="ml-2 badge badge-warning">FULLY REFUNDED</span><?php } ?>
             </span>
             <span class="d-flex mb-3"><?=htmlspecialchars($entry['GalaName'])?></span>
           </div>

@@ -54,7 +54,7 @@ include "galaMenu.php";
             <option value="<?=$gala['id']?>">
               <?=htmlspecialchars($gala['name'])?>
             </option>
-          <?php } while ($galas->fetch(PDO::FETCH_ASSOC)); ?>
+          <?php } while ($gala = $galas->fetch(PDO::FETCH_ASSOC)); ?>
           </select>
         </div>
       </div>
