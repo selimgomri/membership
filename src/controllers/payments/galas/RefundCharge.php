@@ -93,10 +93,6 @@ include BASE_PATH . 'views/header.php';
 				This software will prevent you from refunding more than the cost of a gala entry.
 			</p>
 
-			<p>
-				<strong>Warning:</strong> The software does not yet show that entries have been refunded previously!
-			</p>
-
 			<h2>Entries for this gala</h2>	
 
 			<form method="post" onsubmit="return confirm('Are you sure you want to refund parents? You won\'t be able to modify refunds once you proceed.');">
