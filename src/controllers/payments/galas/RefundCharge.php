@@ -90,6 +90,10 @@ include BASE_PATH . 'views/header.php';
 			<?php } ?>
 
 			<p>
+				This software will prevent you from refunding more than the cost of a gala entry.
+			</p>
+
+			<p>
 				<strong>Warning:</strong> The software does not yet show that entries have been refunded previously!
 			</p>
 
@@ -100,6 +104,7 @@ include BASE_PATH . 'views/header.php';
 				<ul class="list-group mb-3">
 					<?php do { ?>
 						<?php $hasNoDD = ($entry['MandateID'] == null) || ($entry['OptOut']); ?>
+						<?php $amountRefundable = ((int) $entry['FeeToPay']*100) - ($entry['AmountRefunded']); ?>
 					<?php if ($entry['Processed'] && $entry['Charged']) { $countChargeable++; } ?>
 					<li class="list-group-item">
 						<div class="row">
@@ -139,6 +144,13 @@ include BASE_PATH . 'views/header.php';
 								</p>
 								<?php } ?>
 
+								<?php if (isset($_SESSION['OverhighChargeAmount'][$entry['EntryID']]) && $_SESSION['OverhighChargeAmount'][$entry['EntryID']]) {
+									unset($_SESSION['OverhighChargeAmount'][$entry['EntryID']]); ?>
+								<div class="alert alert-danger">
+									<strong>Refund failed!</strong> You have attempted to refund more than the user has paid.
+								</div>
+								<?php } ?>
+
 								<div class="form-row">
 									<div class="col-xs col-sm-12 col-xl-6">
 										<div class="form-group mb-0">
@@ -164,7 +176,7 @@ include BASE_PATH . 'views/header.php';
 												<div class="input-group-prepend">
 													<div class="input-group-text mono">&pound;</div>
 												</div>
-												<input type="text" class="form-control mono" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00">
+												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00" min="0" max="<?=htmlspecialchars(number_format($amountRefundable/100, 2))?>" step="0.01">
 											</div>
 										</div>
 									</div>
@@ -213,6 +225,10 @@ include BASE_PATH . 'views/header.php';
 		</div>
 	</div>
 </div>
+
+<?php if (isset($_SESSION['OverhighChargeAmount'])) {
+	unset($_SESSION['OverhighChargeAmount']);
+} ?>
 
 <?php
 

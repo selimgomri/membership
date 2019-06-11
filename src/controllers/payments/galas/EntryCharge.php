@@ -105,6 +105,10 @@ include BASE_PATH . 'views/header.php';
 				Entries <strong><span class="text-danger">highlighted in Red</span></strong> cannot be paid for by Direct Debit as either the parent does not have a Direct Debit Mandate, the parent has opted out of Direct Debit gala payments or the swimmer has no connected parent.
 			</p>
 
+			<p>
+				This software will not let you charge more than &pound;150 for any individual gala entry.
+			</p>
+
 			<h2>Entries for this gala</h2>	
 
 			<form method="post" onsubmit="return confirm('Are you sure you want to charge parents? You won\'t be able to modify charges once you proceed.');">
@@ -156,6 +160,13 @@ include BASE_PATH . 'views/header.php';
 								</p>
 								<?php } ?>
 
+								<?php if (isset($_SESSION['OverhighChargeAmount'][$entry['EntryID']]) && $_SESSION['OverhighChargeAmount'][$entry['EntryID']]) {
+									unset($_SESSION['OverhighChargeAmount'][$entry['EntryID']]); ?>
+								<div class="alert alert-danger">
+									<strong>Refund failed!</strong> You have attempted to refund more than the user has paid.
+								</div>
+								<?php } ?>
+
 								<div class="form-group mb-0">
 									<label for="<?=$entry['EntryID']?>-amount">
 										Amount to charge
@@ -164,7 +175,7 @@ include BASE_PATH . 'views/header.php';
 										<div class="input-group-prepend">
 											<div class="input-group-text mono">&pound;</div>
 										</div>
-										<input type="text" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars(number_format($entry['FeeToPay'], 2))?>" <?php if ($hasNoDD || $entry['Charged'] || $notReady) { ?> disabled <?php } ?>>
+										<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars(number_format($entry['FeeToPay'], 2))?>" <?php if ($hasNoDD || $entry['Charged'] || $notReady) { ?> disabled <?php } ?> min="0" max="150" step="0.01">
 									</div>
 								</div>
 							</div>
@@ -211,6 +222,10 @@ include BASE_PATH . 'views/header.php';
 		</div>
 	</div>
 </div>
+
+<?php if (isset($_SESSION['OverhighChargeAmount'])) {
+	unset($_SESSION['OverhighChargeAmount']);
+} ?>
 
 <?php
 

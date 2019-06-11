@@ -21,86 +21,97 @@ $getEntries = $db->prepare("SELECT 50Free, 100Free, 200Free, 400Free, 800Free, 1
 $getEntries->execute([$id, '0', '1']);
 
 $swimsArray = [
-  '50Free' => '50&nbsp;Free',
-  '100Free' => '100&nbsp;Free',
-  '200Free' => '200&nbsp;Free',
-  '400Free' => '400&nbsp;Free',
-  '800Free' => '800&nbsp;Free',
-  '1500Free' => '1500&nbsp;Free',
-  '50Back' => '50&nbsp;Back',
-  '100Back' => '100&nbsp;Back',
-  '200Back' => '200&nbsp;Back',
-  '50Breast' => '50&nbsp;Breast',
-  '100Breast' => '100&nbsp;Breast',
-  '200Breast' => '200&nbsp;Breast',
-  '50Fly' => '50&nbsp;Fly',
-  '100Fly' => '100&nbsp;Fly',
-  '200Fly' => '200&nbsp;Fly',
-  '100IM' => '100&nbsp;IM',
-  '150IM' => '150&nbsp;IM',
-  '200IM' => '200&nbsp;IM',
-  '400IM' => '400&nbsp;IM'
+  '50Free' => '50 Free',
+  '100Free' => '100 Free',
+  '200Free' => '200 Free',
+  '400Free' => '400 Free',
+  '800Free' => '800 Free',
+  '1500Free' => '1500 Free',
+  '50Back' => '50 Back',
+  '100Back' => '100 Back',
+  '200Back' => '200 Back',
+  '50Breast' => '50 Breast',
+  '100Breast' => '100 Breast',
+  '200Breast' => '200 Breast',
+  '50Fly' => '50 Fly',
+  '100Fly' => '100 Fly',
+  '200Fly' => '200 Fly',
+  '100IM' => '100 IM',
+  '150IM' => '150 IM',
+  '200IM' => '200 IM',
+  '400IM' => '400 IM'
 ];
 
 while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
-  $hasNoDD = ($entry['MandateID'] == null) || ($entry['OptOut']);
-	$count = 0;
-	foreach($swimsArray as $colTitle => $text) {
+	$amount = (int) ($_POST[$entry['EntryID'] . '-amount']*100);
 
-		if ($entry[$colTitle]) {
-			//<li>$text</li>
+	if ($amount > 0 && $amount <= 15000) {
+		$hasNoDD = ($entry['MandateID'] == null) || ($entry['OptOut']);
+		$count = 0;
+
+		$swimsList = '<ul>';
+		foreach($swimsArray as $colTitle => $text) {
+			if ($entry[$colTitle]) {
+				$swimsList .= '<li>' . $text . '</li>';
+			}
 		}
-	}
+		$swimsList = '</ul>';
 
-	try {
-		$db->beginTransaction();
+		try {
+			$db->beginTransaction();
 
-		$amount = (int) ($_POST[$entry['EntryID'] . '-amount']*100);
-		$amountString = number_format($_POST[$entry['EntryID'] . '-amount'], 2);
+			$amountString = number_format($_POST[$entry['EntryID'] . '-amount'], 2);
 
-		$name = $entry['MForename'] . ' ' . $entry['MSurname'] . '\'s Gala Entry into ' . $gala['name'] .  ' (Entry #' . $entry['EntryID'] . ')';
+			$name = $entry['MForename'] . ' ' . $entry['MSurname'] . '\'s Gala Entry into ' . $gala['name'] .  ' (Entry #' . $entry['EntryID'] . ')';
 
-		$jsonArray = [
-			"Name" => $name
-		];
-		$json = json_encode($jsonArray);
+			$jsonArray = [
+				"Name" => $name
+			];
+			$json = json_encode($jsonArray);
 
-		$insertPayment->execute([
-			$date,
-			'Pending',
-			$entry['UserID'],
-			'Gala Entry (#' . $entry['EntryID'] . ')',
-			$amount,
-			'GBP',
-			null,
-			'Payment',
-			$json
-		]);
+			$insertPayment->execute([
+				$date,
+				'Pending',
+				$entry['UserID'],
+				'Gala Entry (#' . $entry['EntryID'] . ')',
+				$amount,
+				'GBP',
+				null,
+				'Payment',
+				$json
+			]);
 
-		$markAsCharged->execute([
-			true,
-			$amount,
-			$entry['EntryID']
-		]);
+			$markAsCharged->execute([
+				true,
+				$amount,
+				$entry['EntryID']
+			]);
 
-		$message = '<p>We\'ve added a charge to your bill for ' . htmlspecialchars($entry['MForename']) .  '\'s entry into ' . htmlspecialchars($gala['name']) . '. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(env('CLUB_NAME')) . '.</p>';
+			$message = '<p>We\'ve added a charge to your bill for ' . htmlspecialchars($entry['MForename']) .  '\'s entry into ' . htmlspecialchars($gala['name']) . '. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(env('CLUB_NAME')) . '.</p>';
 
-		$message .= '<p>This charge is to the value of <strong>&pound;' . $amountString . '</strong>. You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement.</p>';
-		$message .= '<p>Kind Regards<br> The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
+			$message .= '<p>This charge is to the value of <strong>&pound;' . $amountString . '</strong>. You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement.</p>';
 
-		$notify->execute([
-			$entry['UserID'],
-			'Queued',
-			'Payments: ' . $entry['MForename'] .  '\'s ' . $gala['name'] . ' Entry',
-			$message,
-			'Galas'
-		]);
+			$message .= '<p>For this gala you entered;</p>';
+			$message .= $swimsList;
 
-		$db->commit();
-	} catch (Exception $e) {
-		// A problem occured
-		$db->rollBack();
-		$_SESSION['ChargeUsersFailure'] = true;
+			$message .= '<p>Kind Regards<br> The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
+
+			$notify->execute([
+				$entry['UserID'],
+				'Queued',
+				'Payments: ' . $entry['MForename'] .  '\'s ' . $gala['name'] . ' Entry',
+				$message,
+				'Galas'
+			]);
+
+			$db->commit();
+		} catch (Exception $e) {
+			// A problem occured
+			$db->rollBack();
+			$_SESSION['ChargeUsersFailure'] = true;
+		}
+	} else if ($amount > 15000) {
+		$_SESSION['OverhighChargeAmount'][$entry['EntryID']] = true;
 	}
 }
 
