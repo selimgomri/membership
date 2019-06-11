@@ -55,7 +55,7 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 				$swimsList .= '<li>' . $text . '</li>';
 			}
 		}
-		$swimsList = '</ul>';
+		$swimsList .= '</ul>';
 
 		try {
 			$db->beginTransaction();
@@ -83,7 +83,7 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 
 			$markAsCharged->execute([
 				true,
-				$amount,
+				$amountString,
 				$entry['EntryID']
 			]);
 

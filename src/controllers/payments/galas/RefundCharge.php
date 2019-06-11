@@ -130,7 +130,7 @@ include BASE_PATH . 'views/header.php';
 
 								<?php if ($entry['Refunded']) { ?>
 								<p>
-									<strong>&pound;<?=number_format($entry['AmountRefunded']*100, 2)?></strong> has already been refunded!
+									<strong>&pound;<?=number_format($entry['AmountRefunded']/100, 2)?></strong> has already been refunded!
 								</p>
 								<?php } ?>
 
@@ -157,7 +157,7 @@ include BASE_PATH . 'views/header.php';
 												<div class="input-group-prepend">
 													<div class="input-group-text mono">&pound;</div>
 												</div>
-												<input type="text" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars(number_format($entry['FeeToPay'], 2))?>" disabled>
+												<input type="number" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars(number_format($entry['FeeToPay'], 2))?>" disabled>
 											</div>
 										</div>
 										<div class="d-none d-sm-block d-xl-none mb-3"></div>
@@ -172,7 +172,7 @@ include BASE_PATH . 'views/header.php';
 												<div class="input-group-prepend">
 													<div class="input-group-text mono">&pound;</div>
 												</div>
-												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00" min="0" max="<?=htmlspecialchars(number_format($amountRefundable/100, 2))?>" step="0.01">
+												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00" min="0" max="<?=htmlspecialchars(number_format($amountRefundable/100, 2))?>" step="0.01" <?php if ($amountRefundable == 0) { ?>disabled<?php } ?>>
 											</div>
 										</div>
 									</div>
