@@ -1,11 +1,12 @@
 <?php
 
+global $db;
+
 $user = $_SESSION['UserId'];
 $pagetitle = "Gala Payments";
 
-$sql = "SELECT * FROM `galas` WHERE `ClosingDate` <= CURDATE() AND `GalaDate` >= CURDATE();";
-$result = mysqli_query($link, $sql);
-$count = mysqli_num_rows($result);
+$galas = $db->query("SELECT * FROM `galas` WHERE `GalaDate` >= CURDATE() AND `GalaDate` >= CURDATE()");
+$gala = $galas->fetch(PDO::FETCH_ASSOC);
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
@@ -13,27 +14,39 @@ include BASE_PATH . "views/paymentsMenu.php";
  ?>
 
 <div class="container">
-  <div class="my-3 p-3 bg-white rounded shadow">
-		<h1 class="border-bottom border-gray pb-2 mb-2">Payments for Galas</h1>
-  	<p class="lead">Charge Parents for Galas</p>
-  	<div class="alert alert-info">
-  		<strong>When using Direct Debit, we charge parents after recieving Accepted Entries</strong> <br>
-  		This means that there is no need to handle refunds.
-  	</div>
-    <hr>
-    <?php if ($result > 0) { ?>
-      <h2>Galas to Charge For</h2>
-      <ul class="list-unstyled mb-0">
-        <?php for ($i = 0; $i < $count; $i++) {
-          $row = mysqli_fetch_array($result, MYSQLI_ASSOC); ?>
-          <li><a href="<?php echo autoUrl("payments/galas/" . $row['GalaID']); ?>"><?php echo $row['GalaName']; ?></a></li>
-        <?php } ?>
-      </ul>
-    <?php } else { ?>
-      <div class="alert alert-info mb-0">
-        <strong>There are no galas open for charges</strong>
+  <div class="row">
+    <div class="col-md-8">
+      <h1 class="">Payments for Galas</h1>
+      <p class="lead">Charge Parents for Galas</p>
+      <div class="cell">
+        <strong>When using Direct Debit, we charge parents after submitting entries</strong> <br>
+        Rejections are handled as soon as they are returned.
       </div>
-    <?php } ?>
+      <hr>
+      <?php if ($gala != null) { ?>
+        <h2>Galas to Charge or Refund</h2>
+        <ul class="list-group">
+          <?php do { ?>
+          <li class="list-group-item list-group-item-action">
+            <p class="mb-0">
+              <strong>
+                <a href="<?=autoUrl("galas/" . $gala['GalaID']); ?>">
+                  <?=htmlspecialchars($gala['GalaName'])?>
+                </a>
+              </strong>
+            </p>
+            <p class="mb-0">
+              <a href="<?=autoUrl("galas/" . $gala['GalaID'] . '/charges'); ?>">Charge for Entries</a> or <a href="<?=autoUrl("galas/" . $gala['GalaID'] . '/refunds'); ?>">Issue Refunds</a>
+            </p>
+          </li>
+          <?php } while ($gala = $galas->fetch(PDO::FETCH_ASSOC)); ?>
+        </ul>
+      <?php } else { ?>
+        <div class="alert alert-warning">
+          <strong>There are no galas open for charges</strong>
+        </div>
+      <?php } ?>
+    </div>
   </div>
 </div>
 

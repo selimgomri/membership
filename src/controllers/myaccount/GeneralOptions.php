@@ -25,6 +25,11 @@ if ($currentUser->getUserBooleanOption('EnableBeta')) {
 	$betasChecked = " checked ";
 }
 
+$notGalaDDChecked;
+if ($_SESSION['AccessLevel'] == "Parent" && $currentUser->getUserBooleanOption('GalaDirectDebitOptOut')) {
+	$notGalaDDChecked = " checked ";
+}
+
 $pagetitle = "General Account Options";
 include BASE_PATH . "views/header.php";
   $userID = $_SESSION['UserID'];
@@ -82,6 +87,24 @@ include BASE_PATH . "views/header.php";
       		</div>
           <?php } ?>
         </div>
+
+        <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+        <div class="cell">
+          <h2>
+            Advanced Payment Options
+          </h2>
+          <div class="alert alert-danger">
+            <strong>This feature is not yet in use.</strong> It will not do anything.
+          </div>
+      		<div class="form-group">
+      			<div class="custom-control custom-switch">
+      				<input type="checkbox" class="custom-control-input" value="1" id="gala-dd-opt-out" aria-describedby="gala-dd-opt-out-Help" name="gala-dd-opt-out" <?=$notGalaDDChecked?> >
+              <label class="custom-control-label" for="gala-dd-opt-out">Opt out of Direct Debit Gala Payments</label>
+      				<small id="gala-dd-opt-out-Help" class="form-text text-muted">This feature is only relevent if your club charges for galas by Direct Debit</small>
+      			</div>
+      		</div>
+        </div>
+        <?php } ?>
 
         <div class="cell">
           <h2>

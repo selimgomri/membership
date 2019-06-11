@@ -21,7 +21,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
   				$update->execute([true, $id]);
   			}
   			else {
-  				$update->execute([false, $id]);
+  				$update->execute([0, $id]);
   			}
   		}
   	} else if ($verify == "markPaid") {
@@ -32,7 +32,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
   				$markPaid->execute([true, $id]);
   			}
   			else {
-  				$markPaid->execute([false, $id]);
+  				$markPaid->execute([0, $id]);
   			}
   		}
     }

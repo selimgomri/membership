@@ -1,5 +1,7 @@
 <?php
 
+require 'EnvironmentVariableHelper.php';
+
 require 'EmergencyContacts.php';
 require 'EmergencyContact.php';
 
