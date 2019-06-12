@@ -279,3 +279,26 @@ if ($access == "Galas" || $access == "Admin") {
 		include 'galas/RefundChargePost.php';
 	});
 }
+
+// Only allow payment cards if not null
+if (env('STRIPE') != null) {
+
+	/*
+	* Payment Cards
+	* Available to all users
+	*/
+
+	$this->group('/cards', function() {
+		$this->get('/', function() {
+			include 'stripe/home.php';
+		});
+
+		$this->get('/add', function() {
+			include 'stripe/AddPaymentMethod.php';
+		});
+
+		$this->post('/add', function() {
+			include 'stripe/AddPaymentMethodPost.php';
+		});
+	});
+}

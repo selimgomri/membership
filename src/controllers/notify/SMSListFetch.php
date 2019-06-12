@@ -28,9 +28,9 @@ if (!$row) {
 } else {
 	for ($i = 0; $i < sizeof($row); $i++) {
 		if ($i < sizeof($row)-1) {
-			echo $row[$i]['Mobile'] . ", ";
+			echo htmlspecialchars($row[$i]['Mobile']) . ", ";
 		} else {
-			echo $row[$i]['Mobile'];
+			echo htmlspecialchars($row[$i]['Mobile']);
 		}
 	}
 }
