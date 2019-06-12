@@ -50,6 +50,14 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="container">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("payments/galas")?>">Galas</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Refund gala entries</li>
+		</ol>
+	</nav>
+
 	<h1>Refund Parents for <?=htmlspecialchars($gala['name'])?></h1>
 	<?php if ($gala['fixed']) { ?>
 	<p class="lead">

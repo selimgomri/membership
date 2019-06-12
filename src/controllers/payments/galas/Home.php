@@ -14,6 +14,13 @@ include BASE_PATH . "views/paymentsMenu.php";
  ?>
 
 <div class="container">
+  <nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Galas</li>
+		</ol>
+	</nav>
+
   <div class="row">
     <div class="col-md-8">
       <h1 class="">Payments for Galas</h1>

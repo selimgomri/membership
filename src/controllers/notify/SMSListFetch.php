@@ -1,5 +1,7 @@
 <?php
 
+global $db;
+
 $sql = null;
 
 if ($_POST['squadID'] == 'allSquads') {
