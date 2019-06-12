@@ -131,7 +131,7 @@ while ($currentMessage = $getPendingGroupMail->fetch(PDO::FETCH_ASSOC)) {
       }
       $completed->execute(['Sent', $user['EmailID']]);
     } else {
-      $completed->execute(['NoSub', $user['EmailID']]);
+      $completed->execute(['No_Sub', $user['EmailID']]);
     }
   }
   $subject = $currentMessage['Subject'];
