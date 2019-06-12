@@ -1,19 +1,29 @@
 <?php
-
-$id = mysqli_real_escape_string($link, $id);
+try {
+global $db;
 
 $user = $_SESSION['UserID'];
 
-$sql = "SELECT * FROM `notify` INNER JOIN `users` ON notify.UserID = users.UserID WHERE `EmailID` = '$id';";
-$result = mysqli_query($link, $sql);
+$sql = $db->prepare("SELECT Forename, Surname, notify.Subject PSubject, notifyHistory.Subject HSubject, notify.Message PMessage, notifyHistory.Message HMessage FROM ((`notify` LEFT JOIN notifyHistory ON notify.MessageID = notifyHistory.ID) INNER JOIN `users` ON notify.UserID = users.UserID) WHERE `EmailID` = ?");
+$sql->execute([$id]);
 
-if (mysqli_num_rows($result) == 0) {
+$row = $sql->fetch(PDO::FETCH_ASSOC);
+
+if ($row == null) {
 	halt(404);
 }
 
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+$subject = $row['PSubject'];
+if ($row['PSubject'] == null) {
+	$subject = $row['HSubject'];
+}
 
-$pagetitle = $row['Subject'] . " - " . $row['Forename'] . " " . $row['Surname'];
+$message = $row['PMessage'];
+if ($row['PMessage'] == null) {
+	$message = $row['HMessage'];
+}
+
+$pagetitle = htmlspecialchars($subject . " - " . $row['Forename'] . " " . $row['Surname']);
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";
@@ -21,15 +31,18 @@ include BASE_PATH . "views/notifyMenu.php";
  ?>
 
 <div class="container">
-	<div class="p-3 my-3 text-white bg-primary rounded shadow">
-		<h1 class="h6 mb-0"><strong><?php echo $row['Subject']; ?></strong></h1>
-		<p class="mb-0">To: <?php echo $row['Forename'] . " " . $row['Surname']; ?></p>
-	</div>
+	<h1><strong><?=htmlspecialchars($subject)?></strong></h1>
+	<p class="lead">Sent to <?=htmlspecialchars($row['Forename'] . " " . $row['Surname'])?></p>
 
-	<div class="my-3 p-3 bg-white rounded shadow">
-		<h2 class="border-bottom border-gray pb-2">Message</h2>
-		<?php echo $row['Message']; ?>
+	<div class="card">
+		<div class="card-body">
+			<h2 class="card-title">Message</h2>
+			<?=$message?>
+		</div>
 	</div>
 </div>
 
 <?php include BASE_PATH . "views/footer.php";
+} catch (Exception $e) {
+	pre($e);
+}
