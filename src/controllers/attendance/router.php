@@ -51,7 +51,6 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
     global $link;
 
     $this->get('/', function() {
-      global $link;
       include "sessions.php";
   	});
 
