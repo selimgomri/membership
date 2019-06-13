@@ -384,6 +384,16 @@ p.lead {
                   <a class="dropdown-item" href="https://manage-sandbox.gocardless.com" target="_blank">
                     Sandbox
                   </a>
+                  <?php if (env('STRIPE') != null) { ?>
+                  <div class="dropdown-divider"></div>
+                  <h6 class="dropdown-header">Payment Cards</h6>
+                  <a class="dropdown-item" href="<?=autoUrl("payments/cards")?>">
+                    Credit and Debit Cards
+                  </a>
+                  <a class="dropdown-item" href="<?=autoUrl("payments/cards/add")?>">
+                    Add a card
+                  </a>
+                  <?php } ?>
                 </div>
               </li>
               <?php } ?>
@@ -450,6 +460,16 @@ p.lead {
                   <a class="dropdown-item" href="<?=autoUrl("payments/mandates")?>">My Bank Account</a>
                   <a class="dropdown-item" href="<?=autoUrl("payments/statement/latest")?>">My Latest Statement</a>
                   <a class="dropdown-item" href="<?=autoUrl("payments/fees")?>">My Fees Since Last Bill</a>
+                  <?php if (env('STRIPE') != null) { ?>
+                  <div class="dropdown-divider"></div>
+                  <h6 class="dropdown-header">Payment Cards</h6>
+                  <a class="dropdown-item" href="<?=autoUrl("payments/cards")?>">
+                    Credit and Debit Cards
+                  </a>
+                  <a class="dropdown-item" href="<?=autoUrl("payments/cards/add")?>">
+                    Add a card
+                  </a>
+                  <?php } ?>
                 </div>
               </li>
               <?php } } ?>
