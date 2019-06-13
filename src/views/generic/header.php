@@ -217,6 +217,16 @@ $bg = "bg-white";
                         Squad Fee Payments, <?=$lms?>
                       </a>
                       <?php } ?>
+                      <?php if (env('STRIPE') != null) { ?>
+                      <div class="dropdown-divider"></div>
+                      <h6 class="dropdown-header">Payment Cards</h6>
+                      <a class="dropdown-item" href="<?=autoUrl("payments/cards")?>">
+                        Credit and Debit Cards
+                      </a>
+                      <a class="dropdown-item" href="<?=autoUrl("payments/cards/add")?>">
+                        Add a card
+                      </a>
+                      <?php } ?>
                     </div>
                   </li>
                   <?php if ($_SESSION['AccessLevel'] == "Admin" ||
@@ -345,6 +355,16 @@ $bg = "bg-white";
                       <a class="dropdown-item" href="<?=autoUrl("payments/mandates")?>">My Bank Account</a>
                       <a class="dropdown-item" href="<?=autoUrl("payments/statement/latest")?>">My Latest Statement</a>
                       <a class="dropdown-item" href="<?=autoUrl("payments/fees")?>">My Fees Since Last Bill</a>
+                      <?php if (env('STRIPE') != null) { ?>
+                      <div class="dropdown-divider"></div>
+                      <h6 class="dropdown-header">Payment Cards</h6>
+                      <a class="dropdown-item" href="<?=autoUrl("payments/cards")?>">
+                        Credit and Debit Cards
+                      </a>
+                      <a class="dropdown-item" href="<?=autoUrl("payments/cards/add")?>">
+                        Add a card
+                      </a>
+                      <?php } ?>
                     </div>
                   </li>
                   <?php } } ?>

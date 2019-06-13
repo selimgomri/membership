@@ -47,34 +47,33 @@ try {
     ]
   );
 
-  $card = \Stripe\Customer::createSource(
-    $customer->id,
-    [
-      'source' => $_POST['stripeToken'],
-    ]
-  );
 
-  $token = \Stripe\Token::retrieve($_POST['stripeToken']);
+  $pm = \Stripe\PaymentMethod::retrieve($_POST['stripeToken']);
+  $pm->attach(['customer' => $customer->id]);
+
+  $name = trim($_POST['name']);
 
   // Get the payment method details
-  $id = $card->id;
-  $nameOnCard = $card->name;
-  $city = $card->address_city;
-  $country = $card->address_country;
-  $line1 = $card->address_line1;
-  $line2 = $card->address_line2;
-  $postal_code = $card->address_zip;
-  $brand = $card->brand;
-  $issueCountry = $card->country;
+  $id = $pm->id;
+  $nameOnCard = $pm->card->name;
+  $city = $pm->billing_details->address->city;
+  $country = $pm->billing_details->address->country;
+  $line1 = $pm->billing_details->address->line1;
+  $line2 = $pm->billing_details->address->line2;
+  $postal_code = $pm->billing_details->address->postal_code;
+  $brand = $pm->card->brand;
+  $issueCountry = $pm->card->country;
   $expMonth = $card->exp_month;
-  $expYear = $card->exp_year;
-  $funding = $card->funding;
-  $last4 = $card->last4;
+  $expYear = $pm->card->exp_year;
+  $funding = $pm->card->funding;
+  $last4 = $pm->card->last4;
+  $threeDSecure = $pm->card->three_d_secure_usage->supported;
 
-  $addPaymentDetails = $db->prepare("INSERT INTO stripePayMethods (Customer, MethodID, CardName, City, Country, Line1, Line2, PostCode, Brand, IssueCountry, ExpMonth, ExpYear, Funding, Last4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+  $addPaymentDetails = $db->prepare("INSERT INTO stripePayMethods (Customer, MethodID, `Name`, CardName, City, Country, Line1, Line2, PostCode, Brand, IssueCountry, ExpMonth, ExpYear, Funding, Last4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
   $addPaymentDetails->execute([
     $customer->id,
     $id,
+    $name,
     $nameOnCard,
     $city,
     $country,
@@ -90,11 +89,12 @@ try {
   ]);
 
   $_SESSION['PayCardSetupSuccess'] = true;
-  $_SESSION['PayCardSetupSuccessBrand'] = $brand;
+  $_SESSION['PayCardSetupSuccessBrand'] = getCardBrand($brand);
   header("Location: " . autoUrl("payments/cards"));
 } catch (Exception $e) {
+  pre($e);
   // Unable to setup - May be invalid or stripe not setup
   $_SESSION['PayCardError'] = true;
-  $_SESSION['PayCardErrorMessage'] = $e->getDeclineCode();
-  header("Location: " . autoUrl("payments/cards/add"));
+  //$_SESSION['PayCardErrorMessage'] = $e->getDeclineCode();
+  //header("Location: " . autoUrl("payments/cards/add"));
 }

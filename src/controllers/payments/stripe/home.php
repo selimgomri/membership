@@ -2,30 +2,10 @@
 
 global $db;
 
-function getCard($brand) {
-  if ($brand == 'Visa') {
-    return 'fa-cc-visa';
-  } else if ($brand == 'MasterCard') {
-    return 'fa-cc-mastercard';
-  } else if ($brand == 'American Express') {
-    return 'fa-cc-amex';
-  } else if ($brand == 'Diners Club') {
-    return 'fa-cc-diners-club';
-  } else if ($brand == 'Discover') {
-    return 'fa-cc-discover';
-  } else if ($brand == 'JCB') {
-    return 'fa-cc-jcb';
-  } else if ($brand == 'UnionPay') {
-    return 'fa-cc-stripe';
-  } else {
-    return 'fa-cc-stripe';
-  }
-}
-
 \Stripe\Stripe::setApiKey(env('STRIPE'));
 $paymentsMeths = \Stripe\PaymentMethod::all(["customer" => "cus_FF5F1cnWIA7UAI", "type" => "card"]);
 
-$getCards = $db->prepare("SELECT Last4, Brand, ExpMonth, ExpYear, Funding, PostCode, Line1, Line2, CardName FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ?");
+$getCards = $db->prepare("SELECT stripePayMethods.ID, `Name`, Last4, Brand, ExpMonth, ExpYear, Funding, PostCode, Line1, Line2, CardName FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ?");
 $getCards->execute([$_SESSION['UserID']]);
 $card = $getCards->fetch(PDO::FETCH_ASSOC);
 
@@ -36,6 +16,13 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Cards</li>
+    </ol>
+  </nav>
+
   <div class="row">
     <div class="col-md-8">
       <h1>Payment Cards</h1>
@@ -51,6 +38,10 @@ include BASE_PATH . 'views/header.php';
           <?php } ?>
         </div>
       <?php } ?>
+      <?php
+      unset($_SESSION['PayCardSetupSuccessBrand']);
+      unset($_SESSION['PayCardSetupSuccess']);
+      ?>
 
       <div class="cell d-inline-block">
         <p>
@@ -62,18 +53,31 @@ include BASE_PATH . 'views/header.php';
       </div>
 
       <?php if ($card != null) { ?>
-      <ul class="list-group mb-3">
+      <div class="list-group mb-3">
       <?php do { ?>
-        <li class="list-group-item">
-          <p>
-            <i class="fa fa-3x <?=htmlspecialchars(getCard($card['Brand']))?>" aria-hidden="true"></i> <span class="sr-only"><?=htmlspecialchars($card['Brand'])?></span>
-          </p>
-          <p class="lead mb-0">
+        <a href="<?=autoUrl("payments/cards/" . $card['ID'])?>" class="list-group-item list-group-item-action">
+          <div class="row align-items-center mb-3 text-dark">
+            <div class="col-auto">
+              <i class="fa fa-3x <?=htmlspecialchars(getCardFA($card['Brand']))?>" aria-hidden="true"></i> <span class="sr-only"><?=htmlspecialchars($card['Brand'])?></span>
+            </div>
+            <div class="col-auto">
+              <h2 class="my-0">
+                <?=htmlspecialchars($card['Name'])?>
+              </h2>
+            </div>
+          </div>
+          <p class="lead">
             Card ending <?=htmlspecialchars($card['Last4'])?> (<?=htmlspecialchars($card['Funding'])?> card)
           </p>
-        </li>
+
+          <p class="mb-0">
+            <span class="text-primary">
+              Edit card
+            </span>
+          </p>
+        </a>
       <?php } while ($card = $getCards->fetch(PDO::FETCH_ASSOC)); ?>
-      </ul>
+      </div>
       <?php } else { ?>
       <div class="alert alert-warning">
         You have no payment cards available.

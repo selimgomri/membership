@@ -71,6 +71,14 @@ include BASE_PATH . 'views/header.php';
 </style>
 
 <div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("payments/cards")?>">Cards</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Add card</li>
+    </ol>
+  </nav>
+
   <div class="row">
     <div class="col-md-8">
       <h1>Add a payment card</h1>
@@ -87,7 +95,7 @@ include BASE_PATH . 'views/header.php';
       <?php unset($_SESSION['PayCardError']); unset($_SESSION['PayCardErrorMessage']); ?>
       <?php } ?>
 
-      <form action="<?=currentUrl()?>" method="post" id="payment-form">
+      <form action="<?=currentUrl()?>" method="post" id="payment-form" class="mb-5">
         <div class="form-group">
           <label for="name">Name</label>
           <input type="text" class="form-control" id="name" name="name" placeholder="Card Name" required
@@ -110,9 +118,10 @@ include BASE_PATH . 'views/header.php';
           <button class="btn btn-success">Add payment card</button>
         </p>
       </form>
-      <div class="small text-muted">
+
+      <div class="text-muted">
         <p class="mb-0">
-          Card payments are processed by <i class="fa fa-cc-stripe" aria-hidden="true"></i> Stripe.
+          Card payments are processed by <i class="fa fa-cc-stripe" aria-hidden="true"></i> <span class="sr-only">Stripe.</span>
         </p>
         <p>
           We accept Visa, MasterCard and American Express.
@@ -157,14 +166,14 @@ var form = document.getElementById('payment-form');
 form.addEventListener('submit', function(event) {
   event.preventDefault();
 
-  stripe.createToken(card).then(function(result) {
+  token = stripe.createPaymentMethod('card', card).then(function(result) {
     if (result.error) {
       // Inform the customer that there was an error.
       var errorElement = document.getElementById('card-errors');
       errorElement.textContent = result.error.message;
     } else {
       // Send the token to your server.
-      stripeTokenHandler(result.token);
+      stripeTokenHandler(result.paymentMethod);
     }
   });
 });
