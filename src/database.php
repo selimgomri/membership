@@ -1440,3 +1440,17 @@ if (!function_exists('mb_ucfirst')) {
     return $str;
   }
 }
+
+function helloGreeting() {
+  $date = new DateTime('now', new DateTimeZone('Europe/London'));
+  $hour = (int) $date->format('H');
+  if ($hour > 4 && $hour < 12) {
+    return "Good Morning";
+  } else if ($hour > 11 && $hour < 17) {
+    return "Good Afternoon";
+  } else if ($hour > 16 && $hour < 21) {
+    return "Good Evening";
+  } else {
+    return "Good Night";
+  }
+}

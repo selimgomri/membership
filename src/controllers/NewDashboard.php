@@ -93,7 +93,7 @@ include BASE_PATH . "views/header.php";
 <div class="front-page mb-n3">
   <div class="container">
 
-		<h1>Hello <?=$username?></h1>
+		<h1><?=helloGreeting()?> <?=$username?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
 
     <?php if (sizeof($sessions) > 0) { ?>

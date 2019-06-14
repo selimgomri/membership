@@ -84,7 +84,7 @@ if (($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE']) || $auth_via_google_authent
     }
 
     try {
-      $sql = "INSERT INTO `userLogins` (`UserID`, `IPAddress`, `GeoLocation`, `Browser`, `Platform`, `Mobile`, `Hash`, `HashActive`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+      $sql = "INSERT INTO `userLogins` (`UserID`, `IPAddress`, `GeoLocation`, `Browser`, `Platform`, `Mobile`, `Hash`, `HashActive`, `Time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
       global $db;
 
       $mobile = 0;
@@ -102,6 +102,9 @@ if (($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE']) || $auth_via_google_authent
         $remember_me = 1;
       }
 
+      $date = new DateTime('now', new DateTimeZone('UTC'));
+      $dbDate = $date->format('Y-m-d H:i:s');
+
       $login_details = [
         $_SESSION['UserID'],
         app('request')->ip(),
@@ -110,7 +113,8 @@ if (($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE']) || $auth_via_google_authent
         $browser_details->os->toString(),
         $mobile,
         $hash,
-        $remember_me
+        $remember_me,
+        $dbDate
       ];
 
       try {

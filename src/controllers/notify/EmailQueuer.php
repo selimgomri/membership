@@ -118,13 +118,14 @@ if ($_POST['from'] == "current-user") {
 }
 
 $json = json_encode($recipientGroups);
-$date = date("Y-m-d H:i:s");
+$date = new DateTime('now', new DateTimeZone('UTC'));
+$dbDate = $date->format('Y-m-d H:i:s');
 
 $sql = "INSERT INTO `notifyHistory` (`Sender`, `Subject`, `Message`,
 `ForceSend`, `Date`, `JSONData`) VALUES (?, ?, ?, ?, ?, ?)";
 try {
 	$pdo_query = $db->prepare($sql);
-  $pdo_query->execute([$_SESSION['UserID'], $subject, $message, $force, $date, $json]);
+  $pdo_query->execute([$_SESSION['UserID'], $subject, $message, $force, $dbDate, $json]);
 } catch (PDOException $e) {
 	halt(500);
 }

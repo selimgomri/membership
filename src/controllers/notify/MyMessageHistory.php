@@ -126,8 +126,13 @@ include BASE_PATH . "views/header.php";
               } ?>
             </dd>
             <dt class="col-sm-3 mb-0">Date</dt>
-            <dd class="col-sm-9 mb-0"><?php echo date("d F Y", strtotime($row['Date'])); ?></dd>
-            </dl>
+            <dd class="col-sm-9 mb-0">
+            <?php
+            $date = new DateTime($row['Date'], new DateTimeZone('UTC'));
+            $date->setTimezone(new DateTimeZone('Europe/London')); ?>
+            <?=$date->format('H:i \o\\n l j F Y')?>
+            </dd>
+          </dl>
         <?php } ?>
         </div>
         <div class="bg-light p-3 pt-0 force-wrap">
