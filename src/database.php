@@ -751,7 +751,7 @@ function getBillingDate($link, $user) {
   global $db;
   $sql = $db->prepare("SELECT * FROM `paymentSchedule` WHERE `UserID` = ?;");
   $sql->execute([$user]);
-  $row = $sql->fetch(PDO::FETCH_ASSOC)
+  $row = $sql->fetch(PDO::FETCH_ASSOC);
 
   if ($row != null) {
     $ordinal = null;
