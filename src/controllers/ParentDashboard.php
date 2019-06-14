@@ -121,7 +121,7 @@ include BASE_PATH . "views/header.php";
       </div>
 		<?php } ?>
 
-		<h1>Hello <?=$username?></h1>
+		<h1><?=helloGreeting()?> <?=$username?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
 
     <?php if (IS_CLS === true && time() < strtotime('2019-01-25')) { ?>

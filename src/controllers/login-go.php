@@ -116,7 +116,7 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
           $geo_string = "Location Information Unavailable";
         }
 
-        $sql = "INSERT INTO `userLogins` (`UserID`, `IPAddress`, `GeoLocation`, `Browser`, `Platform`, `Mobile`, `Hash`, `HashActive`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO `userLogins` (`UserID`, `IPAddress`, `GeoLocation`, `Browser`, `Platform`, `Mobile`, `Hash`, `HashActive`, `Time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         $mobile = 0;
 
@@ -133,6 +133,9 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
           $remember_me = 1;
         }
 
+        $date = new DateTime('now', new DateTimeZone('UTC'));
+        $dbDate = $date->format('Y-m-d H:i:s');
+
         $login_details = [
           $_SESSION['UserID'],
           app('request')->ip(),
@@ -141,7 +144,8 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
           $browser_details->os->toString(),
           $mobile,
           $hash,
-          $remember_me
+          $remember_me,
+          $dbDate
         ];
 
         try {
