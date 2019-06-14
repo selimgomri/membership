@@ -102,10 +102,12 @@ include "galaMenu.php";
           <div>
             <span class="title mb-0 justify-content-between align-items-start">
               <span><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?></span>
-              <?php if ($now <= $closingDate && !$entry['Charged'] && !$entry['Processed']) {?><span class="ml-2 badge badge-success">EDITABLE</span><?php } ?>
-              <?php if ($entry['Charged']) {?><span class="ml-2 badge badge-warning"><i class="fa fa-money" aria-hidden="true"></i>
- PAID</span><?php } ?>
-              <?php if ($entry['Refunded'] && $entry['FeeToPay'] > 0) {?><span class="ml-2 badge badge-warning">PART REFUNDED</span><?php } else if ($entry['Refunded'] && $entry['FeeToPay'] == 0) {?><span class="ml-2 badge badge-warning">FULLY REFUNDED</span><?php } ?>
+              <span>
+                <?php if ($now <= $closingDate && !$entry['Charged'] && !$entry['Processed']) {?><span class="ml-2 badge badge-success">EDITABLE</span><?php } ?>
+                <?php if ($entry['Charged']) {?><span class="ml-2 badge badge-warning"><i class="fa fa-money" aria-hidden="true"></i>
+  PAID</span><?php } ?>
+                <?php if ($entry['Refunded'] && $entry['FeeToPay'] > 0) {?><span class="ml-2 badge badge-warning">PART REFUNDED</span><?php } else if ($entry['Refunded'] && $entry['FeeToPay'] == 0) {?><span class="ml-2 badge badge-warning">FULLY REFUNDED</span><?php } ?>
+              </span>
             </span>
             <span class="d-flex mb-3"><?=htmlspecialchars($entry['GalaName'])?></span>
           </div>
