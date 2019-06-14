@@ -277,83 +277,59 @@ function getAttendanceByID($link, $id, $weeks = "all") {
 }
 
 function mySwimmersTable($link, $userID) {
-  // Get the last four weeks to calculate attendance
-  $sql = "SELECT `WeekID` FROM `sessionsWeek` ORDER BY `WeekDateBeginning` DESC
-  LIMIT 4;";
-  $resultWeeks = mysqli_query($link, $sql);
-  $weekCount = mysqli_num_rows($resultWeeks);
-    if ($weekCount > 0) {
-    $sqlWeeks = "";
-    // Produce stuff for query
-    for ($y=0; $y<$weekCount; $y++) {
-      $attRow = mysqli_fetch_array($resultWeeks, MYSQLI_ASSOC);
-      $weekID[$y] = $attRow['WeekID'];
-      if ($y < ($weekCount-1)) {
-        $sqlWeeks .= "`WeekID` = '$weekID[$y]' OR ";
-      }
-      else {
-        $sqlWeeks .= "`WeekID` = '$weekID[$y]'";
-      }
-    }
-  }
-
+  global $db;
   // Get the information about the swimmer
-  $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname,
+  $swimmers = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname,
   members.ClubPays, users.Forename, users.Surname, users.EmailAddress,
   members.ASANumber, squads.SquadName, squads.SquadFee FROM ((members INNER JOIN
   users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID =
-  squads.SquadID) WHERE members.UserID = '$userID';";
-  $result = mysqli_query($link, $sqlSwim);
-  $swimmerCount = mysqli_num_rows($result);
-  $output = "";
-  if ($swimmerCount > 0) {
-    $output = '
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead class="thead-light">
-          <tr>
-            <th>Name</th>
-            <th>Squad</th>
-            <th>Fee</th>
-            <th>Swim England Number</th>
-            <th><abbr title="Approximate attendance over the last 4
-            weeks">Attendance</abbr></th>
-          </tr>
-        </thead>
-        <tbody>';
-    $resultX = mysqli_query($link, $sqlSwim);
-    for ($i = 0; $i < $swimmerCount; $i++) {
-      $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
-      $swimmerLink = autoUrl("swimmers/" . $swimmersRowX['MemberID'] . "");
-      $output .= "<tr>
-        <td><a href=\"" . $swimmerLink . "\">" . $swimmersRowX['MForename'] . " " .
-        $swimmersRowX['MSurname'] . "</a></td>
-        <td>" . $swimmersRowX['SquadName'] . "</td>";
-        if ($swimmersRowX['ClubPays'] == 0) {
-          $output .= "<td>&pound;" . $swimmersRowX['SquadFee'] . "</td>";
-        } else {
-          $output .= "<td>&pound;0.00 - Exempt</td>";
-        }
-        $output .= "
-        <td><a
-        href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" .
-        $swimmersRowX['ASANumber'] . "\" target=\"_blank\" title=\"ASA
-        Biographical Data\">" . $swimmersRowX['ASANumber'] . " <i class=\"fa
-        fa-external-link\" aria-hidden=\"true\"></i></a></td>";
+  squads.SquadID) WHERE members.UserID = ?");
+  $swimmers->execute([$userID]);
+  $swimmer = $swimmers->fetch(PDO::FETCH_ASSOC);
 
-        // Get member ID for finding attendance
-        $id = $swimmersRowX['MemberID'];
-
-        $output .= "
-        <td>" . getAttendanceByID($link, $id, 4) . "%</td>
-      </tr>";
-    }
-    $output .= '
+  if ($swimmer != null) { ?>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th>Name</th>
+          <th>Squad</th>
+          <th>Fee</th>
+          <th>Swim England Number</th>
+          <th><abbr title="Approximate attendance over the last 4
+          weeks">Attendance</abbr></th>
+        </tr>
+      </thead>
+      <tbody>
+      <?php do { ?>
+      <tr>
+        <td>
+          <a href=<?=autoUrl("swimmers/" . $swimmer['MemberID'])?>">
+            <?=htmlspecialchars($swimmer['MForename'] . " " . $swimmer['MSurname'])?>
+          </a>
+        </td>
+        <td>
+          <?=htmlspecialchars($swimmer['SquadName'])?>
+        </td>
+        <?php if (!$swimmer['ClubPays']) { ?>
+          <td>&pound;<?=number_format($swimmer['SquadFee'], 2)?></td>
+        <?php } else { ?>
+          <td>&pound;0.00 - Exempt</td>
+        <?php } ?>
+        <td>
+          <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=<?=htmlspecialchars($swimmer['ASANumber'])?>"  target="_blank" title="Swim England Biographical Data">
+            <?=htmlspecialchars($swimmer['ASANumber'])?> <i class="fa fa-external-link" aria-hidden="true"></i>
+          </a>
+        </td>
+        <td>
+          <?=htmlspecialchars(getAttendanceByID($link, $swimmer['MemberID'], 4))?>%
+        </td>
+      </tr>
+    <?php } while ( $swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
         </tbody>
       </table>
-    </div>';
-  }
-  return $output;
+    </div>
+  <?php } 
 }
 
 function mySwimmersMedia($link, $userID) {
@@ -495,229 +471,27 @@ function upcomingGalas($link, $links = false, $userID = null) {
   return $output;
 }
 
-function upcomingGalasBySearch($link, $searchSQL = null) {
-  $sql = "";
-  if ($searchSQL != null) {
-    $sql = "SELECT * FROM (((`galaEntries` INNER JOIN `galas` ON
-    galaEntries.GalaID = galas.GalaID) INNER JOIN `members` ON
-    galaEntries.MemberID = members.MemberID) INNER JOIN `squads` ON
-    members.SquadID = squads.SquadID) WHERE " . $searchSQL . " ORDER BY
-    `members`.`MForename`, `members`.`MSurname` ASC;";
-    $result = mysqli_query($link, $sql);
-    $count = mysqli_num_rows($result);
-    $swimsArray = ['50Free', '100Free', '200Free', '400Free', '800Free',
-    '1500Free', '50Breast', '100Breast',  '200Breast', '50Fly', '100Fly',
-    '200Fly', '50Back', '100Back', '200Back', '100IM', '150IM', '200IM',
-    '400IM'];
-    $swimsTextArray = ['50 Free','100 Free','200 Free','400 Free','800
-    Free','1500 Free','50 Breast','100 Breast','200 Breast','50 Fly','100
-    Fly','200 Fly','50 Back','100 Back','200 Back','100 IM','150 IM','200
-    IM','400 IM',];
-    if ($count > 0) {
-      $output = "<p>" . $count . " entries for the selected competition(s)</p>";
-      $output .= "<div class=\"table-responsive\"><table class=\"table
-      table-hover\"><thead><tr><th>Gala</th><th>Swimmer</th><th>Squad</th><th>Swims</th><th>Gala
-      Fee</th></tr></thead><tbody>";
-      for ($i = 0; $i < $count; $i++) {
-        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-        $galaDate = new DateTime($row['GalaDate']);
-        $theDate = new DateTime('now');
-        $galaDate = $galaDate->format('Y-m-d');
-        $theDate = $theDate->format('Y-m-d');
-        $counter = 0;
-        if ($galaDate >= $theDate) {
-          $output .= "<tr><td>" . $row['GalaName'] . "<br><small><a href=\"" .
-          autoUrl("galas/entries/" . $row['EntryID'] . "") . "\">View
-          Entry</a></small></td>";
-          $output .= "<td>" . $row['MForename'] . " " . $row['MSurname'] .
-          "</td>";
-          $output .= "<td>" . $row['SquadName'] . "</td>";
-          $output .= "<td><ul class=\"list-unstyled\">";
-          for ($j=0; $j<sizeof($swimsArray); $j++) {
-            if ($row[$swimsArray[$j]] == 1) {
-              $output .= "<li>" . $swimsTextArray[$j] . "</li>";
-              $counter++;
-            }
-          }
-          $output .= "</ul></td>";
-          if ($row['GalaFeeConstant'] == 1) {
-            $output .= "<td>&pound;" .
-            number_format($row['GalaFee']*$counter,2,'.','') . "
-            Total</td></tr>";
-          }
-          else {
-            $output .= "<td>Fee Unavailable</td></tr>";
-          }
-        }
-      }
-      $output .= "</tbody></table></div>";
-    }
-    else {
-      $output = "<p class=\"lead\">There are no entries to display</p>";
-    }
-  }
-  else {
-    $output = "<p class=\"lead\">Search for entries to display results</p>";
-  }
-  return $output;
-}
-
-function enteredGalas($link, $userID) {
-  $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID =
-  members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE
-  `UserID` = '$userID' ORDER BY `galas`.`GalaDate` DESC;";
-  $result = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($result);
-  if ($count > 0) {
-    $output = "<div class=\"media pt-0\">";
-    for ($i = 0; $i < $count; $i++) {
-      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-      $endDate = new DateTime($row['GalaDate']);
-      $theDate = new DateTime('now');
-      $endDate = $endDate->format('Y-m-d');
-      $theDate = $theDate->format('Y-m-d');
-      if ($endDate >= $theDate) {
-        $output .= "<ul class=\"media-body pt-2 pb-2 mb-0 lh-125 border-bottom
-        border-gray list-unstyled\"> <li><strong><a href=\"" .
-        autoUrl("galas/entries/" . $row['EntryID'] . "") . "\">" .
-        $row['MForename'] . " " . $row['MSurname'] . "</a></strong></li>";
-        $output .= "<li>" . $row['GalaName'] . " (" .
-        courseLengthString($row['CourseLength']) . ")</li>";
-        $output .= "<li>" . $row['GalaVenue'] . "</li>";
-        $output .= "<li>Closing Date is " . date('j F Y',
-        strtotime($row['ClosingDate'])) . "</li>";
-        if ($row['GalaFee'] > 0) {
-          $output .= "<li>Entry Fee &pound;" .
-          number_format($row['GalaFee'],2,'.','') . "/Swim</li>";
-        }
-        else {
-          $output .= "<li>Entry fee varies by event</li>";
-        }
-        $output .= "</ul>";
-      }
-    }
-    $output .= "</div>";
-  }
-  else {
-    $output = "<p class=\"lead\">There are no upcoming galas that you have
-    entered</p>";
-  }
-  return $output;
-}
-
-function enteredGalasMedia($link, $userID) {
-  $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID =
-  members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE
-  `UserID` = '$userID' ORDER BY `galas`.`GalaDate` DESC, `galas`.`ClosingDate`
-  ASC LIMIT 3;";
-  $result = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($result);
-  if ($count > 0) {
-    $output = "<div class=\"\">
-    <h2 class=\"border-bottom border-gray pb-2 mb-0\">My Entries</h2>";
-    for ($i = 0; $i < $count; $i++) {
-      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-      $endDate = new DateTime($row['GalaDate']);
-      $theDate = new DateTime('now');
-      $endDate = $endDate->format('Y-m-d');
-      $theDate = $theDate->format('Y-m-d');
-      if ($endDate >= $theDate) {
-        $output .= "<div class=\"media text-muted pt-3\"><p class=\"media-body
-        pb-3 mb-0 lh-125 border-bottom border-gray\"><strong class=\"d-block
-        text-gray-dark\"><a href=\"" . autoUrl("galas/entries/" .
-        $row['EntryID'] . "") . "\">" . $row['MForename'] . " " .
-        $row['MSurname'] . "</a></strong> " . $row['GalaName'] . " </div>";
-      }
-    }
-    if ($count > 3) {
-      $output .= '
-      <span class="d-block text-right mt-3">
-        <a href="' . autoUrl('galas') . '">View all</a>
-      </span></div>';
-    }
-    else {
-      $output .= '
-      <span class="d-block text-right mt-3">
-        No more galas to show
-      </span></div>';
-    }
-  }
-  else {
-    $output = "<div class=\"\">
-    <h2>My Entries</h2><p class=\"mb-0\">There are no upcoming galas that you
-    have entered.</p></div>";
-  }
-  return $output;
-}
-
-
-function closedGalas($link, $links = false) {
-  $sql = "SELECT * FROM `galas` ORDER BY `galas`.`GalaDate` DESC LIMIT 0, 15;";
-  $result = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($result);
-  if ($count > 0) {
-    $output = "<div class=\"table-responsive\"><table class=\"table
-    table-hover\"><thead><tr><th>Gala
-    Name</th><th>Course</th><th>Venue</th><th>Closing Date</th><th>Last day of
-    Gala</th><th>Gala Fee</th></tr></thead><tbody>";
-    for ($i = 0; $i < $count; $i++) {
-      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-      $endDate = new DateTime($row['GalaDate']);
-      $entryDate = new DateTime($row['ClosingDate']);
-      $theDate = new DateTime('now');
-      $endDate = $endDate->format('Y-m-d');
-      $entryDate = $entryDate->format('Y-m-d');
-      $theDate = $theDate->format('Y-m-d');
-      if ($endDate >= $theDate && $theDate > $entryDate) {
-        if ($links == true) {
-          $output .= "<tr><td>" . $row['GalaName'] . "<br><small><a href=\"" .
-          autoUrl("galas/competitions/" . $row['GalaID'] . "") . "\">Edit
-          Gala</a></small></td>";
-        }
-        else {
-          $output .= "<tr><td>" . $row['GalaName'] . "</td>";
-        }
-        $output .= "<td>" . $row['CourseLength'] . "</td>";
-        $output .= "<td>" . $row['GalaVenue'] . "</td>";
-        $output .= "<td>" . date('j F Y', strtotime($row['ClosingDate'])) .
-        "</td>";
-        $output .= "<td>" . date('j F Y', strtotime($row['GalaDate'])) .
-        "</td>";
-        if ($row['GalaFee'] > 0) {
-          $output .= "<td>&pound;" . number_format($row['GalaFee'],2,'.','') .
-          "/Swim</td></tr>";
-        }
-        else {
-          $output .= "<td>Variable by Swim</td></tr>";
-        }
-      }
-    }
-    $output .= "</tbody></table></div>";
-  }
-  else {
-    $output = "<p class=\"lead\">There are no upcoming galas with closed
-    entries</p>";
-  }
-  return $output;
-}
-
 function myMonthlyFeeTable($link, $userID) {
-  $sql = "SELECT squads.SquadName, squads.SquadID, squads.SquadFee,
+  global $db;
+  $sql = $db->prepare("SELECT squads.SquadName, squads.SquadID, squads.SquadFee,
   members.MForename, members.MSurname FROM (members INNER JOIN squads ON
-  members.SquadID = squads.SquadID) WHERE members.UserID = '$userID' AND
-  members.ClubPays = '0' ORDER BY `squads`.`SquadFee` DESC;";
-  $result = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($result);
+  members.SquadID = squads.SquadID) WHERE members.UserID = ? AND
+  members.ClubPays = '0' ORDER BY `squads`.`SquadFee` DESC;");
+  $sql->execute([$userID]);
+
+  $rows = $sql->fetchAll(PDO::FETCH_ASSOC);
+  
+  $count = sizeof($rows);
   $totalsArray = [];
   $squadsOutput = "";
   $totalCost = 0;
   $reducedCost = 0;
   for ($i = 0; $i < $count; $i++) {
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $row = $rows[$i];
     $totalsArray[$i] = $row['SquadFee'];
     $totalCost += $totalsArray[$i];
-    $squadsOutput .= "<tr><td>" . $row['SquadName'] . " Squad <br>for " .
-    $row['MForename'] . " " . $row['MSurname'] . "</td><td>&pound;" .
+    $squadsOutput .= "<tr><td>" . htmlspecialchars($row['SquadName']) . " Squad <br>for " .
+    htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "</td><td>&pound;" .
     number_format($row['SquadFee'],2,'.','') . "</td></tr>";
   }
   for ($i = 0; $i < $count; $i++) {
@@ -729,19 +503,21 @@ function myMonthlyFeeTable($link, $userID) {
     }
     $reducedCost += $totalsArray[$i];
   }
-  $sql = "SELECT extras.ExtraName, extras.ExtraFee, members.MForename ,
+  $sql = $db->prepare("SELECT extras.ExtraName, extras.ExtraFee, members.MForename ,
   members.MSurname FROM ((extras INNER JOIN extrasRelations ON extras.ExtraID =
   extrasRelations.ExtraID) INNER JOIN members ON members.MemberID =
   extrasRelations.MemberID) WHERE extrasRelations.UserID = '$userID' ORDER BY
-  `extras`.`ExtraFee` DESC;";
-  $result = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($result);
+  `extras`.`ExtraFee` DESC;");
+  $sql->execute([$userID]);
+
+  $rows = $sql->fetchAll(PDO::FETCH_ASSOC);
+  $count = sizeof($rows);
   $monthlyExtras = "";
   $monthlyExtrasTotal = 0;
   for ($i=0; $i<$count; $i++) {
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    $monthlyExtras .= "<tr><td>" . $row['ExtraName'] . " <br>for " .
-    $row['MForename'] . " " . $row['MSurname'] . "</td><td>&pound;" .
+    $row = $rows[$i];
+    $monthlyExtras .= "<tr><td>" . htmlspecialchars($row['ExtraName']) . " <br>for " .
+    htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "</td><td>&pound;" .
     number_format($row['ExtraFee'],2,'.','') . "</td></tr>";
     $monthlyExtrasTotal += $row['ExtraFee'];
   }
@@ -767,195 +543,13 @@ function myMonthlyFeeTable($link, $userID) {
     return $output;
   }
   else {
-    return "<p class=\"mb-0\">You have no monthly fees to pay. You may need to
+    return "<p>You have no monthly fees to pay. You may need to
     add a swimmer to your account to see your fees.</p>";
   }
 }
 
-function myMonthlyFeeMedia($link, $userID) {
-  $sql = "SELECT squads.SquadName, squads.SquadID, squads.SquadFee,
-  members.MForename, members.MSurname FROM (members INNER JOIN squads ON
-  members.SquadID = squads.SquadID) WHERE members.UserID = '$userID' AND
-  members.ClubPays = '0' ORDER BY `squads`.`SquadFee` DESC;";
-  $result = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($result);
-  $totalsArray = [];
-  $squadsOutput = "";
-  $totalCost = 0;
-  $reducedCost = 0;
-  for ($i = 0; $i < $count; $i++) {
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    $totalsArray[$i] = $row['SquadFee'];
-    $totalCost += $totalsArray[$i];
-    $squadsOutput .= "<tr><td>" . $row['SquadName'] . " Squad <br>for " .
-    $row['MForename'] . " " . $row['MSurname'] . "</td><td>&pound;" .
-    number_format($row['SquadFee'],2,'.','') . "</td></tr>";
-  }
-  for ($i = 0; $i < $count; $i++) {
-    if ($i == 2) {
-      $totalsArray[$i] = $totalsArray[$i]*0.8;
-    }
-    elseif ($i > 2) {
-      $totalsArray[$i] = $totalsArray[$i]*0.6;
-    }
-    $reducedCost += $totalsArray[$i];
-  }
-  $monthlyExtrasTotal = monthlyExtraCost($link, $userID, "decimal");
-  if ($monthlyExtrasTotal+$reducedCost > 0) {
-    $output = "<div class=\"\">
-    <h2>My Fees</h2><p class=\"lead border-bottom border-gray pb-2
-    mb-0\">Showing monthly fees</p>
-    <div class=\"table-responsive\"><table class=\"table mb-0\">
-    <tbody>
-    <tr><td>The monthly subtotal for Squad Fees is</td><td>&pound;" .
-    number_format($totalCost,2,'.','') . "</td></tr>";
-    if (($totalCost - $reducedCost) > 0) {
-      $output .= "<tr><td>The monthly total payable for squads (with any
-      deductions) is</td><td>&pound;" . number_format($reducedCost,2,'.','') .
-      "</td></tr>";
-    }
-    $output .= "<tr><td>The monthly total for extras, such as CrossFit,
-    is</td><td>&pound;" . number_format($monthlyExtrasTotal,2,'.','') .
-    "</td></tr>
-    <tr class=\"bg-light\"><td><strong>The monthly total
-    is</strong></td><td>&pound;" . number_format(($reducedCost +
-    $monthlyExtrasTotal),2,'.','') . "</td></tr>
-    </tbody></table></div>
-    </div>";
-    return $output;
-  }
-  else {
-    return "<div class=\"\">
-    <h2>My Fees</h2>
-    <p class=\"mb-0\">You have no monthly fees to pay. You may need to add a
-    swimmer to see any fees.</p>
-    </div>";
-  }
-}
-
-function adminSwimmersTable($link, $squadID = null) {
-  if ($squadID != null) {
-    $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname,
-    members.ASANumber, squads.SquadName, members.DateOfBirth FROM (members INNER
-    JOIN squads ON members.SquadID = squads.SquadID) WHERE members.SquadID =
-    '$squadID' ORDER BY `members`.`MForename` , `members`.`MSurname` ASC ;";
-  }
-  else {
-    $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname,
-    members.ASANumber, squads.SquadName, members.DateOfBirth FROM (members INNER
-    JOIN squads ON members.SquadID = squads.SquadID) ORDER BY
-    `members`.`MForename` , `members`.`MSurname` ASC;";
-  }
-  $result = mysqli_query($link, $sqlSwim);
-  $swimmerCount = mysqli_num_rows($result);
-  if ($swimmerCount > 0) {
-    $output = '
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Squad</th>
-            <th>Date of Birth</th>
-            <th>Age</th>
-            <th><abbr title="Age at end of year">AEoY</abbr></th>
-            <th>Swim England Number</th>
-          </tr>
-        </thead>
-        <tbody>';
-    $resultX = mysqli_query($link, $sqlSwim);
-    for ($i = 0; $i < $swimmerCount; $i++) {
-      $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
-      $swimmerLink = autoUrl("swimmers/" . $swimmersRowX['MemberID'] . "");
-      $DOB = date('j F Y', strtotime($swimmersRowX['DateOfBirth']));
-      $age = date_diff(date_create($swimmersRowX['DateOfBirth']),
-      date_create('today'))->y;
-      $ageEoY = date('Y') - date('Y', strtotime($swimmersRowX['DateOfBirth']));
-      $output .= "<tr>
-        <td><a href=\"" . $swimmerLink . "\">" . $swimmersRowX['MForename'] . " " .
-        $swimmersRowX['MSurname'] . "</a></td>
-        <td>" . $swimmersRowX['SquadName'] . "</td>
-        <td>" . $DOB . "</td>
-        <td>" . $age . "</td>
-        <td>" . $ageEoY . "</td>
-        <td><a
-        href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" .
-        $swimmersRowX['ASANumber'] . "\" target=\"_blank\" title=\"ASA
-        Biographical Data\">" . $swimmersRowX['ASANumber'] . " <i class=\"fa
-        fa-external-link\" aria-hidden=\"true\"></i></a></td>
-      </tr>";
-    }
-    $output .= '
-        </tbody>
-      </table>
-    </div>';
-  }
-  else {
-    $output = "<div class=\"alert alert-warning\"><strong>No members found for
-    that squad</strong> <br>Please try another search</div>";
-  }
-  return $output;
-}
-
-function squadInfoTable($link, $enableLinks = false) {
-  $sql = "SELECT squads.SquadID, squads.SquadName, squads.SquadFee,
-  squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC FROM squads ORDER BY
-  `squads`.`SquadFee` DESC;";
-  $result = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($result);
-  $output = "";
-  if ($count > 0) {
-    $output = '
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead class="thead-light">
-          <tr>
-            <th>Name</th>
-            <th>Fee</th>
-            <th>Coach</th>
-            <th>Timetable</th>
-            <th>Code of Conduct</th>
-          </tr>
-        </thead>
-        <tbody>';
-    $result = mysqli_query($link, $sql);
-    for ($i = 0; $i < $count; $i++) {
-      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-      $output .= "<tr>";
-      if ($enableLinks) {
-        $output .= "<td><a href=\"" . autoUrl("squads/" . $row['SquadID']) . "\">" .
-        $row['SquadName'] . "</a></td>";
-      }
-      else {
-        $output .= "<td>" . $row['SquadName'] . "</td>";
-      }
-        $output .= "<td>&pound;" . $row['SquadFee'] . "</td>
-        <td>" . $row['SquadCoach'] . "</td>
-        <td>";
-        if ($row['SquadTimetable'] != "") {
-          $output .= "<a href=\"" . $row['SquadTimetable'] . "\"
-          target=\"_blank\">Timetable</a>";
-        }
-          $output .= "</td>
-        <td>";
-        if ($row['SquadCoC'] != "") {
-          $output .= "<a href=\"" . autoUrl("pages/codeofconduct/" . $row['SquadCoC']) . "\"
-          target=\"_blank\">Code of Conduct</a>";
-        }
-        $output .= "</td>
-      </tr>";
-    }
-    $output .= '
-        </tbody>
-      </table>
-    </div>';
-  }
-  return $output;
-}
-
 function autoUrl($relative) {
   // Returns an absolute URL
-  //return app('request')->url . ltrim($_SERVER['SCRIPT_NAME'], '/') . '/' . $relative;
   return env('ROOT_URL') . $relative;
 }
 
@@ -1030,22 +624,22 @@ function monthlyExtraCost($link, $userID, $format = "decimal") {
 }
 
 function swimmers($link, $userID, $fees = false) {
-  $sql = "SELECT squads.SquadName, squads.SquadFee, members.MForename,
+  global $db;
+  $sql = $db->prepare("SELECT squads.SquadName, squads.SquadFee, members.MForename,
   members.MSurname, members.ClubPays FROM (members INNER JOIN squads ON
-  members.SquadID = squads.SquadID) WHERE members.UserID = '$userID' ORDER BY
-  `squads`.`SquadFee` DESC;";
-  $result = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($result);
-  $content = "";
-  if ($count > 0) {
+  members.SquadID = squads.SquadID) WHERE members.UserID = ? ORDER BY
+  `squads`.`SquadFee` DESC;");
+  $sql->execute([$userID]);
+
+  $row = $sql->fetch(PDO::FETCH_ASSOC);
+  if ($row != null) {
     $content .= "<ul class=\"mb-0 list-unstyled\">";
 
-    for ($i = 0; $i < $count; $i++) {
-      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    do {
 
-      $content .= "<li>" . $row['MForename'] . " " . $row['MSurname'];
+      $content .= "<li>" . htmlspecialchars($row['MForename'] . " " . $row['MSurname']);
       if ($fees) {
-        $content .= ", " . $row['SquadName'] . " - &pound;";
+        $content .= ", " . htmlspecialchars($row['SquadName']) . " - &pound;";
         if ($row['ClubPays'] == 0) {
           $content .= number_format($row['SquadFee'],2,'.','');
         } else {
@@ -1053,7 +647,7 @@ function swimmers($link, $userID, $fees = false) {
         }
       }
       $content .= "</li>";
-    }
+    } while ($row = $sql->fetch(PDO::FETCH_ASSOC));
 
     $content .= "</ul>";
   } else {
@@ -1066,43 +660,43 @@ function swimmers($link, $userID, $fees = false) {
 }
 
 function paymentHistory($link, $user, $type = null) {
-  $sql = "SELECT * FROM `payments` WHERE `UserID` = '$user' ORDER BY `PaymentID`
-  DESC LIMIT 0, 5;";
-  $paymentResult = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($paymentResult);
-  if ($count > 0) { ?>
-        <?php for ($i = 0; $i < $count; $i++) {
-        $row = mysqli_fetch_array($paymentResult, MYSQLI_ASSOC);
-        if ($type == null) {
-          $statementUrl = autoUrl("payments/statement/" . $row['PMkey']);
-        } else if ($type == "admin") {
-          $statementUrl = autoUrl("payments/history/statement/" . $row['PMkey']);
-        }?>
-        <div class="media pt-2">
-          <?php if ($i != $count-1) { ?>
-          <div class="media-body pb-2 mb-0 border-bottom border-gray">
-          <?php } else { ?>
-          <div class="media-body pb-0 mb-0">
-          <?php } ?>
-            <p class="mb-0">
-              <strong>
-                <a href="<?php echo $statementUrl; ?>" title="Transaction Statement">
-                  <?php echo $row['Name']; ?>
-                </a>
-              </strong>
-            </p>
-            <p class="mb-0">
-              <?php echo date('j F Y', strtotime($row['Date'])); ?>
-            </p>
-            <p class="mb-0">
-              &pound;<?php echo number_format(($row['Amount']/100),2,'.',''); ?>
-            </p>
+  global $db;
+  $sql = $db->prepare("SELECT * FROM `payments` WHERE `UserID` = ? ORDER BY `PaymentID` DESC LIMIT 0, 5;");
+  $sql->execute([$user]);
+  $row = $sql->fetch(PDO::FETCH_ASSOC);
+
+  if ($row != null) {
+    do {
+      if ($type == null) {
+        $statementUrl = autoUrl("payments/statement/" . htmlspecialchars($row['PMkey']));
+      } else if ($type == "admin") {
+        $statementUrl = autoUrl("payments/history/statement/" . htmlspecialchars($row['PMkey']));
+      }?>
+      <div class="media pt-2">
+        <?php if ($i != $count-1) { ?>
+        <div class="media-body pb-2 mb-0 border-bottom border-gray">
+        <?php } else { ?>
+        <div class="media-body pb-0 mb-0">
+        <?php } ?>
           <p class="mb-0">
-            Status: <?php echo paymentStatusString($row['Status']); ?>
+            <strong>
+              <a href="<?=$statementUrl?>" title="Transaction Statement">
+                <?=htmlspecialchars($row['Name'])?>
+              </a>
+            </strong>
           </p>
-        </div>
+          <p class="mb-0">
+            <?php echo date('j F Y', strtotime($row['Date'])); ?>
+          </p>
+          <p class="mb-0">
+            &pound;<?php echo number_format(($row['Amount']/100),2,'.',''); ?>
+          </p>
+        <p class="mb-0">
+          Status: <?php echo paymentStatusString($row['Status']); ?>
+        </p>
       </div>
-      <?php } ?>
+    </div>
+    <?php } while ($row = $sql->fetch(PDO::FETCH_ASSOC)); ?>
   <?php } else { ?>
   <div class="alert alert-warning mb-0">
     <strong>You have no previous payments</strong> <br>
@@ -1113,14 +707,13 @@ function paymentHistory($link, $user, $type = null) {
 }
 
 function feesToPay($link, $user) {
-  $user = mysqli_real_escape_string($link, $user);
-  $sql = "SELECT * FROM `paymentsPending` WHERE `UserID` = '$user' AND `PMkey`
-  IS NULL AND `Status` = 'Pending' ORDER BY `Date` DESC LIMIT 0, 30;";
-  $pendingResult = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($pendingResult);
-  if ($count > 0) { ?>
-    <?php for ($i = 0; $i < $count; $i++) {
-    $row = mysqli_fetch_array($pendingResult, MYSQLI_ASSOC);	?>
+  global $db;
+  $sql = $db->prepare("SELECT * FROM `paymentsPending` WHERE `UserID` = '$user' AND `PMkey` IS NULL AND `Status` = 'Pending' ORDER BY `Date` DESC LIMIT 0, 30;");
+  $sql->execute([$user]);
+  $row = $sql->fetch(PDO::FETCH_ASSOC);
+
+  if ($row != null) { ?>
+    <?php do { ?>
     <div class="media pt-2">
       <?php if ($i != $count-1) { ?>
       <div class="media-body pb-2 mb-0 border-bottom border-gray">
@@ -1129,22 +722,22 @@ function feesToPay($link, $user) {
       <?php } ?>
         <p class="mb-0">
           <strong>
-            <?php echo $row['Name']; ?>
+            <?=htmlspecialchars($row['Name'])?>
           </strong>
         </p>
         <p class="mb-0">
-          <?php echo date('j F Y', strtotime($row['Date'])); ?>
+          <?=date('j F Y', strtotime($row['Date']))?>
         </p>
         <p class="mb-0">
           <?php if ($row['Type'] == 'Payment') { ?>
-          &pound;<?php echo number_format(($row['Amount']/100),2,'.',''); ?>
+          &pound;<?=number_format(($row['Amount']/100),2,'.','')?>
           <?php } else { ?>
-          -&pound;<?php echo number_format(($row['Amount']/100),2,'.',''); ?> (Credit)
+          -&pound;<?=number_format(($row['Amount']/100),2,'.','')?> (Credit)
           <?php } ?>
         </p>
       </div>
     </div>
-    <?php } ?>
+    <?php } while ($row = $sql->fetch(PDO::FETCH_ASSOC));  ?>
   <?php } else { ?>
   <div class="alert alert-warning mb-0">
     <strong>You have no current fees</strong> <br>
@@ -1155,9 +748,12 @@ function feesToPay($link, $user) {
 }
 
 function getBillingDate($link, $user) {
-  $sql = "SELECT * FROM `paymentSchedule` WHERE `UserID` = '$user';";
-  if (mysqli_num_rows(mysqli_query($link, $sql)) > 0) {
-    $row = mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC);
+  global $db;
+  $sql = $db->prepare("SELECT * FROM `paymentSchedule` WHERE `UserID` = ?;");
+  $sql->execute([$user]);
+  $row = $sql->fetch(PDO::FETCH_ASSOC);
+
+  if ($row != null) {
     $ordinal = null;
     if ($row['Day']%10 == 1) {
       $ordinal = "st";
@@ -1165,8 +761,11 @@ function getBillingDate($link, $user) {
     else if ($row['Day']%10 == 2) {
       $ordinal = "nd";
     }
-    else {
+    else if ($row['Day']%10 == 3) {
       $ordinal = "rd";
+    }
+    else {
+      $ordinal = "th";
     }
     return $row['Day'] . $ordinal;
   } else {
@@ -1175,21 +774,20 @@ function getBillingDate($link, $user) {
 }
 
 function userHasMandates($user) {
-  global $link;
-  $user = mysqli_real_escape_string($link, $user);
-  $sql = "SELECT * FROM `paymentPreferredMandate` WHERE `UserID` = '$user';";
-  if (mysqli_num_rows(mysqli_query($link, $sql)) == 1) {
+  global $db;
+  $sql = $db->prepare("SELECT COUNT(*) FROM `paymentPreferredMandate` WHERE `UserID` = ?");
+  $sql->execute([$user]);
+  if ($sql->fetchColumn() == 1) {
     return true;
   }
   return false;
 }
 
 function paymentExists($payment) {
-  global $link;
-  $payment = mysqli_real_escape_string($link, $payment);
-  $sql = "SELECT * FROM `payments` WHERE `PMkey` = '$payment';";
-  $count = mysqli_num_rows(mysqli_query($link, $sql));
-  if ($count == 1) {
+  global $db;
+  $sql = $db->prepare("SELECT COUNT(*) FROM `payments` WHERE `PMkey` = ?;");
+  $sql->execute([$payment]);
+  if ($sql->fetchColumn() == 1) {
     return true;
   } else {
     return false;
@@ -1197,11 +795,11 @@ function paymentExists($payment) {
 }
 
 function mandateExists($mandate) {
-  global $link;
-  $mandate = mysqli_real_escape_string($link, $mandate);
-  $sql = "SELECT * FROM `paymentMandates` WHERE `Mandate` = '$mandate';";
-  $count = mysqli_num_rows(mysqli_query($link, $sql));
-  if ($count == 1) {
+  global $db;
+  $sql = $db->prepare("SELECT COUNT(*) FROM `paymentMandates` WHERE `Mandate` = ?");
+  $sql->execute([$mandate]);
+  
+  if ($sql->fetchColumn() == 1) {
     return true;
   } else {
     return false;
