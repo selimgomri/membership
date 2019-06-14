@@ -122,7 +122,10 @@ include BASE_PATH . "views/notifyMenu.php";?>
           </dd>
           <dt class="col-sm-3 mb-0">Date</dt>
           <dd class="col-sm-9 mb-0">
-            <?php echo date("d F Y", strtotime($row['Date'])); ?>
+            <?php
+            $date = new DateTime($row['Date'], new DateTimeZone('UTC'));
+            $date->setTimezone(new DateTimeZone('Europe/London')); ?>
+            <?=$date->format('H:i \o\\n l j F Y')?>
           </dd>
         </dl>
         <?php } ?>
