@@ -286,11 +286,15 @@ $dompdf->setPaper('A4', 'portrait');
 // Render the HTML as PDF
 $dompdf->render();
 
-// Output the generated PDF to Browser
-header('Content-Description: File Transfer');
-header('Content-Type: application/pdf');
-header('Content-Disposition: inline');
-header('Expires: 0');
-header('Cache-Control: must-revalidate');
-header('Pragma: public');
-$dompdf->stream(str_replace(' ', '', $pagetitle) . ".pdf", ['Attachment' => 0]);
+if (!isset($attachment)) {
+  // Output the generated PDF to Browser
+  header('Content-Description: File Transfer');
+  header('Content-Type: application/pdf');
+  header('Content-Disposition: inline');
+  header('Expires: 0');
+  header('Cache-Control: must-revalidate');
+  header('Pragma: public');
+  $dompdf->stream(str_replace(' ', '', $pagetitle) . ".pdf", ['Attachment' => 0]);
+} else if ($attachment) {
+  $pdfOutput = $dompdf->output();
+}

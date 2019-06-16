@@ -50,6 +50,11 @@ function verifyUser($user, $password) {
 
 function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = null, $from = null) {
 
+  $email = new \SendGrid\Mail\Mail();
+  $mailObject = new \CLSASC\SuperMailer\CreateMail();
+  //echo $mailObject->getFormattedHtml();
+  //echo $mailObject->getFormattedPlain();
+
   if (!isset($from['Email'])) {
     $from['Email'] = "noreply@" . env('EMAIL_DOMAIN');
   }
@@ -57,171 +62,84 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
     $from['Name'] = env('CLUB_NAME');
   }
 
-  $fontUrl = "https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700";
-  $fontStack = '"Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
-  $image = "<h1>" . env('CLUB_NAME') . "</h1>";
-  if (defined("IS_CLS") && IS_CLS) {
-    $fontUrl = "https://fonts.googleapis.com/css?family=Open+Sans:400,700";
-    $fontStack = '"Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
-    $image = "<img src=\"" . autoUrl("public/img/notify/NotifyLogo.png") . "\"
-    style=\"width:300px;max-width:100%;\" srcset=\"" .
-    autoUrl("public/img/notify/NotifyLogo@2x.png") . " 2x, " .
-    autoUrl("public/img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"" . env('CLUB_NAME') . " Logo\">";
-  }
-
-  $head = "
-  <!DOCTYPE html>
-  <html lang=\"en-gb\">
-  <head>
-    <meta charset=\"utf-8\">
-    <link href=\"" . $fontUrl . "\" rel=\"stylesheet\" type=\"text/css\">
-    <style type=\"text/css\">
-
-      html, body {
-        font-family: " . $fontStack . ";
-        font-size: 16px;
-        background: #e3eef6;
-      }
-
-      p, h1, h2, h3, h4, h5, h6, ul, ol, img, .table, blockquote {
-        margin: 0 0 16px 0;
-        font-family: " . $fontStack . ";
-      }
-
-      .small {
-        font-size: 11px;
-        color: #868e96;
-        margin-bottom: 11px;
-      }
-
-      .text-center {
-        text-align: center;
-      }
-
-      .bottom {
-        margin: 16px 0 0 0;
-      }
-
-      cell {
-        display: table;
-        background: #eee;
-        padding: 1rem;
-        margin 0 0 1rem 0;
-        width: 100%;
-      }
-
-    </style>
-  </head>";
-
   $cellClass = 'style="display:table;background:#eee;padding:10px;margin 0 auto 10px auto;width:100%;"';
   $htmlMessage = str_replace('class="cell"', $cellClass, $emailMessage);
 
-  $address = "<p class=\"small\" align=\"center\"><strong>" . env('CLUB_NAME') . "</strong><br>";
-  $club = json_decode(CLUB_JSON);
-  for ($i = 0; $i < sizeof($club->ClubAddress); $i++) {
-    $address .= $club->ClubAddress[$i] . "<br>";
-  }
-  $address .= "</p>";
-
-  $message = "<body>
-  <div style=\"background:#e3eef6;\">
-    <table style=\"width:100%;border:0px;text-align:left;padding:10px 0px 10px 0px;background:#e3eef6;\"><tr><td align=\"center\">
-      <table style=\"width:100%;max-width:700px;border:0px;text-align:center;background:#ffffff;padding:10px 10px 0px 10px;\"><tr><td>" . $image . "</td></tr></table>
-      <table style=\"width:100%;max-width:700px;border:0px;text-align:left;background:#ffffff;padding:0px 10px;\"><tr><td>
-      " . $htmlMessage . "
-      </td></tr></table>
-      <table style=\"width:100%;max-width:700px;border:0px;background:#f8fcff;padding:0px 10px;\"><tr><td>
-      <div
-class=\"bottom text-center\">";
-$message .= $address;
-$message .= "<p class=\"small\" align=\"center\">This email was sent automatically by the " . env('CLUB_NAME') . " Membership System.</p>";
-if (!defined('IS_CLS') || !IS_CLS) {
-  $message .= '<p class="small" align="center">The Membership System was built by Chester-le-Street ASC.</p>';
-}
-$message .= "<p class=\"small\" align=\"center\">Have questions? Contact us at <a
-href=\"mailto:" . $club->ClubEmails->Main . "\">" . $club->ClubEmails->Main . "</a>.</p>
-<p class=\"small\" align=\"center\">To control your email options, go to <a href=\"" .
-autoUrl("myaccount/email") . "\">My Account</a>.</p>";
-if ($from['Unsub']['Allowed']) {
-  $message .= '<p class="small" align="center"><a href="' . autoUrl("notify/unsubscribe/" . dechex($from['Unsub']['User']) . '/' . urlencode($emailaddress) . '/' . urlencode($from['Unsub']['List'])) . '">Click to Unsubscribe</a></p>';
-}
-$message .= "
-<p class=\"small\" align=\"center\">&copy; " . env('CLUB_NAME') . " " . date("Y") . "</p>
-      </div>
-      </table>
-    </table>
-    </div>
-    </body>
-    </html>";
+  $mailObject->setHtmlContent($htmlMessage);
 
   if ($from['PlainText']) {
     $message = $emailMessage;
+    $mailObject->setHtmlContent($from['PlainText']);
+  }
+
+  if ($from['Unsub']['Allowed']) {
+    $mailObject->setUnsubscribable();
+  }
+
+  if ($from['Email'] == "notify@" . env('EMAIL_DOMAIN') || $from['Email'] == "payments@" . env('EMAIL_DOMAIN')) {
+    $email->addHeader("List-Archive", autoUrl("myaccount/notify/history"));
+  }
+
+  $email->addHeader("List-Help", autoUrl("notify"));
+
+  if (IS_CLS === true) {
+    if ($from['Email'] == "notify@" . env('EMAIL_DOMAIN')) {
+      $email->addHeader("List-ID", "CLS ASC Targeted Lists <targeted-lists@account." . env('EMAIL_DOMAIN') . ">");
+    } else if ($from['Email'] == "payments@" . env('EMAIL_DOMAIN')) {
+      $email->addHeader("List-ID", "Direct Debit Payment Information <payment-news@account." . env('EMAIL_DOMAIN') . ">");
+    } else if ($from['Name'] == env('CLUB_NAME') . " Security") {
+      $email->addHeader("List-ID", "Account Security Updates <account-updates@account." . env('EMAIL_DOMAIN') . ">");
+    }
+
+    if ($from['Email'] == "payments@" . env('EMAIL_DOMAIN')) {
+      $email->setReplyTo("payments+replytoautoemail@chesterlestreetasc.co.uk", "Payments Team");
+    } else if ($from['Email'] == "galas@" . env('EMAIL_DOMAIN')) {
+      $email->setReplyTo("galas+replytoautoemail@" . env('EMAIL_DOMAIN'), "Gala Administrator");
+    } else if ($from['Name'] == "Chester-le-Street ASC Security") {
+      $email->setReplyTo("support+security-replytoautoemail@" . env('EMAIL_DOMAIN'), env('CLUB_SHORT_NAME') . " Support");
+    } else {
+      $email->setReplyTo("enquiries+replytoautoemail@" . env('EMAIL_DOMAIN'), env('CLUB_SHORT_NAME') . " Enquiries");
+    }
+
+    if ($from['Reply-To'] != null) {
+      $email->setReplyTo($from['Reply-To']);
+    }
+  }
+
+  if ($from['CC'] != null) {
+    $email->addCcs($from['CC']);
+  }
+
+  if ($from['BCC'] != null) {
+    $email->addBccs($from['BCC']);
+  }
+
+  $plain = $mailObject->getFormattedPlain();
+  $html = $mailObject->getFormattedHtml();
+
+  if ($from['Unsub']['Allowed']) {
+    $unsubLink = autoUrl("notify/unsubscribe/" . dechex($from['Unsub']['User']) .  "/" . urlencode($emailaddress) . "/" . urlencode($from['Unsub']['List']));
+    $plain = str_replace('-unsub_link-', $unsubLink, $plain);
+    $html = str_replace('-unsub_link-', $unsubLink, $html);
   }
 
   if ($emailaddress != null && $name != null) {
-
-    $email = new \SendGrid\Mail\Mail();
     $email->setReplyTo(CLUB_EMAIL, env('CLUB_NAME'));
     $email->setFrom($from['Email'], $from['Name']);
     $email->setSubject($subject);
     $email->addTo($emailaddress, $name);
-    $text_plain = str_replace("&pound;", "£", str_replace("&copy;", "©",
-    strip_tags(str_replace(["</h1>", "</h2>", "</h3>", "</h4>", "</h5>",
-    "</h6>", "</p>", "</li>"], "\r\n\n", $message))));
-    $email->addContent("text/plain", $text_plain);
+    $email->addContent("text/plain", $plain);
     if ($from['PlainText']) {
       $email->addContent(
-        "text/html", $emailMessage . $address
+        "text/html", $plain
       );
     } else {
       $email->addContent(
-        "text/html", $head . $message
+        "text/html", $html
       );
     }
 
-    if ($from['Email'] == "notify@" . env('EMAIL_DOMAIN') || $from['Email'] == "payments@" . env('EMAIL_DOMAIN')) {
-      $email->addHeader("List-Archive", autoUrl("myaccount/notify/history"));
-    }
-
-    $email->addHeader("List-Help", autoUrl("notify"));
-
-    if ($from['Unsub']['Allowed']) {
-      //$email->addHeader("List-Unsubscribe", "<mailto:unsubscribe+" . dechex($from['Unsub']['User']) . "-" . urlencode($from['Unsub']['List']) . "-accounts@chesterlestreetasc.co.uk>, <" . autoUrl("notify/unsubscribe/" . dechex($from['Unsub']['User']) . '/' . urlencode($emailaddress) . '/' . urlencode($from['Unsub']['List'])) . ">");
-    }
-
-    if (IS_CLS === true) {
-      if ($from['Email'] == "notify@" . env('EMAIL_DOMAIN')) {
-        $email->addHeader("List-ID", "CLS ASC Targeted Lists <targeted-lists@account." . env('EMAIL_DOMAIN') . ">");
-      } else if ($from['Email'] == "payments@" . env('EMAIL_DOMAIN')) {
-        $email->addHeader("List-ID", "Direct Debit Payment Information <payment-news@account." . env('EMAIL_DOMAIN') . ">");
-      } else if ($from['Name'] == env('CLUB_NAME') . " Security") {
-        $email->addHeader("List-ID", "Account Security Updates <account-updates@account." . env('EMAIL_DOMAIN') . ">");
-      }
-
-      if ($from['Email'] == "payments@" . env('EMAIL_DOMAIN')) {
-        $email->setReplyTo("payments+replytoautoemail@chesterlestreetasc.co.uk", "Payments Team");
-      } else if ($from['Email'] == "galas@" . env('EMAIL_DOMAIN')) {
-        $email->setReplyTo("galas+replytoautoemail@" . env('EMAIL_DOMAIN'), "Gala Administrator");
-      } else if ($from['Name'] == "Chester-le-Street ASC Security") {
-        $email->setReplyTo("support+security-replytoautoemail@" . env('EMAIL_DOMAIN'), env('CLUB_SHORT_NAME') . " Support");
-      } else {
-        $email->setReplyTo("enquiries+replytoautoemail@" . env('EMAIL_DOMAIN'), env('CLUB_SHORT_NAME') . " Enquiries");
-      }
-
-      if ($from['Reply-To'] != null) {
-        $email->setReplyTo($from['Reply-To']);
-      }
-    }
-
-    if ($from['CC'] != null) {
-      $email->addCcs($from['CC']);
-    }
-
-    if ($from['BCC'] != null) {
-      $email->addBccs($from['BCC']);
-    }
-
-    $sendgrid = new \CLSASC\SuperMailer\SuperMailer(SENDGRID_API_KEY);
+    $sendgrid = new \CLSASC\SuperMailer\SuperMailer(env('SENDGRID_API_KEY'));
     try {
       $response = $sendgrid->send($email);
     } catch (Exception $e) {

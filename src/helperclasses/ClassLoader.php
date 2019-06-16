@@ -22,6 +22,8 @@ require 'OAuthClasses/Repositories/ScopeRepository.php';
 require 'OAuthClasses/Repositories/UserRepository.php';
 
 require 'SuperMailer/SuperMailer.php';
+require 'SuperMailer/CreateContent.php';
+//require 'SuperMailer/Mail.php';
 
 require 'Objects/User.php';
 

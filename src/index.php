@@ -666,7 +666,11 @@ $route->group($get_group, function($clubcode = "CLSE") {
       });
 
       $this->get('/test', function() {
-        notifySend("x", "A test", "Hello Christopher", "Chris Heppell", "clheppell1@sheffield.ac.uk", $from = ["Email" => "noreply@galas.uk", "Name" => "GALAS.UK"]);
+        notifySend("x", "A test", "Hello Christopher", "Chris Heppell", "clheppell1@sheffield.ac.uk", $from = ["Email" => "noreply@myswimmingclub.co.uk", "Name" => "SCDS", "Unsub" => [
+					"Allowed" => true,
+					"User" => 1,
+					"List" =>	"TestUnsub"
+				]]);
       });
     }
   }
