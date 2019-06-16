@@ -102,7 +102,7 @@ include "galaMenu.php";
           <div>
             <span class="title mb-0 justify-content-between align-items-start">
               <span><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?></span>
-              <span>
+              <span class="text-right">
                 <?php if ($now <= $closingDate && !$entry['Charged'] && !$entry['Processed']) {?><span class="ml-2 badge badge-success">EDITABLE</span><?php } ?>
                 <?php if ($entry['Charged']) {?><span class="ml-2 badge badge-warning"><i class="fa fa-money" aria-hidden="true"></i>
   PAID</span><?php } ?>

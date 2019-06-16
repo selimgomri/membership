@@ -33,6 +33,8 @@ if (!$errorState) {
 		$sql = "INSERT INTO `notify` (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, ?, ?)";
 		$notify_query = $db->prepare($sql);
 
+		$getParentName = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
+
 		$sql = "SELECT `SquadName`, `MForename`, `MSurname`, `SquadFee`, SquadCoC, `SquadTimetable`, `users`.`UserID` FROM (((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) WHERE members.MemberID = ?";
 		$email_info = $db->prepare($sql);
 		$email_info->execute([$id]);
@@ -50,7 +52,10 @@ if (!$errorState) {
 			$message .= '<p>As you pay by Direct Debit, you won\'t need to take any action. We\'ll automatically update your monthly fees.</p>';
       if ($email_info['SquadTimetable'] != "" && $email_info['SquadTimetable'] != null) {
 			  $message .= '<p>You can get the <a href="' . $email_info['SquadTimetable'] . '" target="_blank">timetable for ' . $squad . ' Squad on our website</a>.</p>';
-      }
+			}
+			if (env('IS_CLS') != null && env('IS_CLS')) {
+				$message .= '<p>We have attached the Code of Conduct agreement for ' . $squad . ' Squad to this email. You must print it off, sign it and return it to any squad coach or member of club staff before your first session in ' . $squad . ' Squad.</p>';
+			}
       if ($email_info['SquadCoC'] != "" && $email_info['SquadCoC'] != null) {
         $message .= '<p>The terms and conditions for ' . $squad . ' Squad are as follows;</p>';
         $message .= '<div class="cell">';
@@ -65,7 +70,7 @@ if (!$errorState) {
 			try {
 				$notify_query->execute([
 					$parent,
-					'Queued',
+					'Sent',
 					$subject,
 					$message,
 					1,
@@ -73,6 +78,40 @@ if (!$errorState) {
 				]);
 			} catch (Exception $e) {
 				halt(500);
+			}
+
+			$getParentName->execute([$parent]);
+			$name = $getParentName->fetch(PDO::FETCH_ASSOC);
+
+			$mailObject = new \CLSASC\SuperMailer\CreateMail();
+ 			$mailObject->setHtmlContent($message);
+			$mailObject->showName($name['Forename'] . ' ' . $name['Surname']);
+
+			$email = new \SendGrid\Mail\Mail();
+			$email->setFrom("noreply@" . env('EMAIL_DOMAIN'), env('CLUB_NAME'));
+			$email->setSubject($subject);
+			$email->addTo($name['EmailAddress'], $name['Forename'] . ' ' . $name['Surname']);
+			$email->addContent("text/plain", $mailObject->getFormattedPlain());
+			$email->addContent(
+				"text/html", $mailObject->getFormattedHtml()
+			);
+
+			if (env('IS_CLS') != null && env('IS_CLS')) {
+				$attachment = true;
+				include BASE_PATH . 'controllers/squads/SquadMoveContract.php';
+				$file_encoded = base64_encode($pdfOutput);
+				$email->addAttachment(
+					$file_encoded,
+					"application/pdf",
+					"SquadMoveContract.pdf",
+					"attachment"
+				);
+			}
+
+			$sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+			try {
+				$sendgrid->send($email);
+			} catch (Exception $e) {
 			}
 		}
 

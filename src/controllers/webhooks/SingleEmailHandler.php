@@ -6,14 +6,12 @@ set_time_limit(0);
 global $db;
 $getExtraEmails = $db->prepare("SELECT Name, EmailAddress FROM notifyAdditionalEmails WHERE UserID = ?");
 
-$sql = "SELECT `EmailID`, `notify`.`UserID`, `EmailType`, `notify`.`ForceSend`, `Forename`, `Surname`, `EmailAddress`, notify.Subject AS PlainSub, notify.Message AS PlainMess FROM `notify` INNER JOIN `users` ON notify.UserID = users.UserID WHERE notify.MessageID IS NULL AND `Status` = 'Queued' LIMIT 8;";
-$result = mysqli_query($link, $sql);
+$pending = $db->query("SELECT `EmailID`, `notify`.`UserID`, `EmailType`, `notify`.`ForceSend`, `Forename`, `Surname`, `EmailAddress`, notify.Subject AS PlainSub, notify.Message AS PlainMess FROM `notify` INNER JOIN `users` ON notify.UserID = users.UserID WHERE notify.MessageID IS NULL AND `Status` = 'Queued' LIMIT 8;");
 
 // Completed It PDO Object
 $completed = $db->prepare("UPDATE `notify` SET `Status` = ? WHERE `EmailID` = ?");
 
-for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 	$emailid = $row['EmailID'];
 	if (isSubscribed($row['UserID'], $row['EmailType']) || $row['ForceSend'] == 1) {
     $getExtraEmails->execute([$row['UserID']]);

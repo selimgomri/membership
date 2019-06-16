@@ -1,7 +1,6 @@
 <?php
 
 global $db;
-$id = mysqli_real_escape_string($link, $id);
 $access = $_SESSION['AccessLevel'];
 
 $markdown = new ParsedownExtra();
@@ -25,6 +24,10 @@ $sex = $row['Gender'];
 $otherNotes = $row['OtherNotes'];
 
 $parent_id;
+
+$mostRecentForms = $db->prepare("SELECT Form, `Date` FROM completedForms WHERE Member = ? ORDER BY `Date` DESC LIMIT 5");
+$mostRecentForms->execute([$id]);
+$mostRecentForm = $mostRecentForms->fetch(PDO::FETCH_ASSOC);
 
 $query = $db->prepare("SELECT members.UserID, members.MForename, members.MForename, members.MMiddleNames,
 members.MSurname, members.ASANumber, members.ASACategory, members.ClubPays,
@@ -131,8 +134,8 @@ $content .= '<!--
     <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
       <strong class="d-block text-gray-dark">Attendance</strong>
       <a href="' . autoUrl("swimmers/" . $id . "/attendance") . '">' .
-      getAttendanceByID($link, $id, 4) . '% over the last 4 weeks, ' .
-      getAttendanceByID($link, $id) . '% over all time</a>
+      getAttendanceByID(null, $id, 4) . '% over the last 4 weeks, ' .
+      getAttendanceByID(null, $id) . '% over all time</a>
     </p>
   </div>
   <div class="media pt-2">
@@ -266,7 +269,6 @@ $content .= '
       </p>
       <p class="mb-0">This is because there is no Parent account connected</p>';
     } else {
-      $pUserID = mysqli_real_escape_string($link, $row['UserID']);
       $contacts = new EmergencyContacts($db);
       $contacts->byParent($row['UserID']);
       $contactsArray = $contacts->getContacts();
@@ -512,7 +514,19 @@ if ($rowSwim['SquadCoach'] != "") {
     </p>
   </div>';
 }
-$content .= '</div></div></div>';
+$content .= '</div>';
+
+if ($mostRecentForm != null) {
+  $content .= '<div class="cell"><h2>Most Recent Returned Forms</h2><ul class="list-unstyled mb-0">';
+  do {
+    $datetime = new DateTime($mostRecentForm['Now'], new DateTimeZone('UTC'));
+    $datetime->setTimezone(new DateTimeZone('Europe/London'));
+    $formDate = $datetime->format('l j F Y');
+    $content .= '<li><strong>' . htmlspecialchars($mostRecentForm['Form']) . '</strong>, Returned ' . $formDate . '</li>';
+  } while ($mostRecentForm = $mostRecentForms->fetch(PDO::FETCH_ASSOC));
+}
+
+$content .= '</div></div>';
 
 $fluidContainer = true;
 

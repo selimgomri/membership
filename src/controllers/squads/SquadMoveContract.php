@@ -2,7 +2,7 @@
 
 global $db;
 
-$sql = "SELECT moves.SquadID, squads.SquadName, `MForename`, `MSurname`, Forename, Surname, DateOfBirth, squads.SquadFee, squads.SquadCoC, squads.SquadTimetable, `users`.`UserID`, MovingDate, old.SquadName AS OldSquad, old.SquadFee AS OldFee FROM ((((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) INNER JOIN squads AS old ON members.SquadID = old.SquadID) WHERE members.MemberID = ?";
+$sql = "SELECT MoveID, moves.SquadID, squads.SquadName, `MForename`, `MSurname`, Forename, Surname, DateOfBirth, squads.SquadFee, squads.SquadCoC, squads.SquadTimetable, `users`.`UserID`, MovingDate, old.SquadName AS OldSquad, old.SquadFee AS OldFee FROM ((((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) INNER JOIN squads AS old ON members.SquadID = old.SquadID) WHERE members.MemberID = ?";
 $email_info = $db->prepare($sql);
 $email_info->execute([$id]);
 $email_info = $email_info->fetch(PDO::FETCH_ASSOC);
@@ -44,12 +44,16 @@ ob_start();?>
     </p>
 
     <p>
+      Squad Move Reference Number: <span class="mono"><?=mb_substr(hash('sha256', $email_info['MoveID']), 0, 8)?></span>
+    </p>
+
+    <p>
       <strong><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></strong><br>
       Registered Parent/Carer
     </p>
 
     <div class="primary-box mb-3" id="title">
-      <h1>
+      <h1 class="mb-0">
         <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?>'s move to <?=htmlspecialchars($email_info['SquadName'])?> Squad
       </h1>
       <p class="lead mb-0">
@@ -58,15 +62,11 @@ ob_start();?>
     </div>
 
     <p>
-      We're very excited to let you know that <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> will be moving from <?=htmlspecialchars($email_info['OldSquad'])?> Squad to <?=htmlspecialchars($email_info['SquadName'])?> Squad on <?=date("l j F Y", strtotime($email_info['MovingDate']))?>.
-    </p>
-
-    <p>
-      The Squad Fee you will pay will be &pound;<?=number_format($email_info['SquadFee'], 2)?>*.
+      We're very excited to let you know that <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> will be moving from <?=htmlspecialchars($email_info['OldSquad'])?> Squad to <?=htmlspecialchars($email_info['SquadName'])?> Squad on <?=date("l j F Y", strtotime($email_info['MovingDate']))?>. The Squad Fee you will pay will be &pound;<?=number_format($email_info['SquadFee'], 2)?>*.
       <?php if ($email_info['SquadFee'] > $email_info['OldFee']) { ?>
       This is an increase of &pound;<?=number_format($email_info['SquadFee'] - $email_info['OldFee'], 2)?> on your existing squad fee.
       <?php } else if ($email_info['SquadFee'] < $email_info['OldFee']) { ?>
-      This is a decrease of &pound;<?=number_format($email_info['OldFee'] - $email_info['SquadFee'], 2)?> on your existing squad fee.
+      This is a decrease of &pound;<?=number_format($email_info['OldFee'] - $email_info['SquadFee'], 2)?> on your current squad fee.
       <?php } else { ?>
       This is the same as your current squad fee.
       <?php } ?>
@@ -234,7 +234,7 @@ ob_start();?>
       <div class="cell">
         <div class="row">
           <div class="split-30">
-            <img width="100" src="<?=autoUrl("services/qr-generator?size=600&text=" . urlencode(autoUrl("swimmers/" . $id . "/agreement-to-code-of-conduct/" . $email_info['SquadID'])))?>">
+            <img width="100" src="<?=autoUrl("services/qr-generator?size=600&text=" . urlencode(autoUrl("form-agreement/m/" . urlencode('CodeOfConduct') . '/' . urlencode(date("Y-m-d")) . "/" . urlencode($id) . '/' . urlencode("Squad: " . $email_info['SquadName']))))?>">
           </div>
           <div class="split-70">
             <p class="mb-0">
@@ -286,11 +286,15 @@ $dompdf->setPaper('A4', 'portrait');
 // Render the HTML as PDF
 $dompdf->render();
 
-// Output the generated PDF to Browser
-header('Content-Description: File Transfer');
-header('Content-Type: application/pdf');
-header('Content-Disposition: inline');
-header('Expires: 0');
-header('Cache-Control: must-revalidate');
-header('Pragma: public');
-$dompdf->stream(str_replace(' ', '', $pagetitle) . ".pdf", ['Attachment' => 0]);
+if (!isset($attachment)) {
+  // Output the generated PDF to Browser
+  header('Content-Description: File Transfer');
+  header('Content-Type: application/pdf');
+  header('Content-Disposition: inline');
+  header('Expires: 0');
+  header('Cache-Control: must-revalidate');
+  header('Pragma: public');
+  $dompdf->stream(str_replace(' ', '', $pagetitle) . ".pdf", ['Attachment' => 0]);
+} else if ($attachment) {
+  $pdfOutput = $dompdf->output();
+}
