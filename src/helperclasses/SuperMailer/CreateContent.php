@@ -27,9 +27,7 @@ class CreateMail {
 
   public function showName($name = null) {
     $this->showName = true;
-    if ($name != null) {
-      $this->name = $name;
-    }
+    $this->name = $name;
   }
 
   public function hideName() {
@@ -125,7 +123,7 @@ class CreateMail {
     if ($this->showName && $this->name == null) {
       $head .= '<p class="small text-muted">Hello -name-, </p>';
     } else if ($this->showName && $this->name != null) {
-      $head .= '<p class="small text-muted">Hello  ' . htmlspecialchars($name) .  ', </p>';
+      $head .= '<p class="small text-muted">Hello  ' . htmlspecialchars($this->name) .  ', </p>';
     }
 
     $foot = "</td></tr></table>
@@ -167,7 +165,7 @@ class CreateMail {
     if ($this->showName && $this->name == null) {
       $head .= "Hello -name-,\r\n\r\n";
     } else if ($this->showName && $this->name != null) {
-      $head .= "Hello " . htmlspecialchars($name) . ",\r\n\r\n";
+      $head .= "Hello " . htmlspecialchars($this->name) . ",\r\n\r\n";
     }
 
     $foot = "\r\n\n\n " . env('CLUB_NAME') . "\r\n\r\n";
