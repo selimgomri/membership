@@ -574,6 +574,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/payments/router.php';
     });
 
+    $this->group('/form-agreement', function() {
+      include 'controllers/forms/router.php';
+    });
+
     $this->group('/notify', function() {
       global $link;
       include 'controllers/notify/router.php';
