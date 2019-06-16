@@ -14,6 +14,12 @@ if ($info == null) {
 	$noTimeSheet = true;
 }
 
+$toHash = $info['GalaID'];
+if ($_SESSION['AccessLevel'] == 'Parent') {
+  $toHash .= $_SESSION['UserID'];
+}
+$hash = hash('sha256', $toHash);
+
 if ($_SESSION['AccessLevel'] == "Parent") {
   $uid = $_SESSION['UserID'];
 
@@ -90,6 +96,10 @@ ob_start();?>
       Generated at <?=date("H:i \o\\n d/m/Y")?>
     </p>
 
+    <p>
+      Timesheet Reference Number: <span class="mono"><?=mb_substr($hash, 0, 8)?></span>
+    </p>
+
     <!--
     <p>
       <strong><?=$name?></strong><br>
@@ -124,7 +134,7 @@ ob_start();?>
       <?php if (defined('IS_CLS') && IS_CLS) { ?>
       <p>&copy; Chester-le-Street ASC <?=date("Y")?></p>
       <?php } else { ?>
-        <p class="mb-0">&copy; Swimming Club Data Systems <?=date("Y")?></p>
+      <p class="mb-0">&copy; Swimming Club Data Systems <?=date("Y")?></p>
       <p>Produced by Swimming Club Data Systems for <?=CLUB_NAME?></p>
       <?php } ?>
     </div>
