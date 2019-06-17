@@ -401,6 +401,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
       require('controllers/registration/RegAuth.php');
     });
 
+    $this->group('/assisted-registration', function() {
+      include 'controllers/assisted-registration/setup/router.php';
+    });
+
     // Locked Out Password Reset
     $this->get('/resetpassword', function() {
       global $link;
@@ -437,6 +441,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
       global $link;
       include 'controllers/notify/Help.php';
     });
+
 /*
     $this->get('/files/*', function() {
       $filename = $this[0];
@@ -601,6 +606,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
     $this->group('/qualifications', function() {
       include 'controllers/qualifications/router.php';
+    });
+
+    $this->group('/assisted-registration', function() {
+      include 'controllers/assisted-registration/router.php';
     });
 
     $this->group('/admin', function() {
