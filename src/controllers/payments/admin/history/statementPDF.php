@@ -77,11 +77,11 @@ ob_start();?>
     </p>
 
     <div class="primary-box mb-3" id="title">
-      <h1>
-        Your Monthly Fees and Charges
+      <h1 class="mb-0" title="<?=htmlspecialchars($payment_info['Name'])?>">
+      <?=htmlspecialchars($payment_info['Name'])?>
       </h1>
-      <p class="lead mb-0" title="<?=htmlspecialchars($payment_info['Name'])?>">
-        <?=htmlspecialchars($payment_info['Name'])?>
+      <p class="lead mb-0">
+        Statement of Fees and Charges
       </p>
     </div>
 

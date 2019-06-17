@@ -222,7 +222,7 @@ function mySwimmersTable($link, $userID) {
       <?php do { ?>
       <tr>
         <td>
-          <a href=<?=autoUrl("swimmers/" . $swimmer['MemberID'])?>">
+          <a href="<?=autoUrl("swimmers/" . $swimmer['MemberID'])?>">
             <?=htmlspecialchars($swimmer['MForename'] . " " . $swimmer['MSurname'])?>
           </a>
         </td>

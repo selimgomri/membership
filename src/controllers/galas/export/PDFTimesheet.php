@@ -108,7 +108,7 @@ ob_start();?>
     -->
 
     <div class="primary-box mb-3" id="title">
-      <h1>
+      <h1 class="mb-0">
         <?=htmlspecialchars($info['GalaName'])?>
       </h1>
       <p class="lead mb-0">Gala Timesheet Report<?php if ($_SESSION['AccessLevel'] == "Parent") {?> for <?=htmlspecialchars(getUserName($_SESSION['UserID']))?><?php } ?></p>
