@@ -388,6 +388,7 @@ $bg = "bg-white";
                       <?php } ?>
                     </div>
                   </li>
+                  <!--
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="trialDropdown" role="button" data-toggle="dropdown"
                       aria-haspopup="true" aria-expanded="false">
@@ -398,6 +399,7 @@ $bg = "bg-white";
                       <a class="dropdown-item" href="<?=autoUrl("trials/accepted")?>">Accepted Swimmers</a>
                     </div>
                   </li>
+                  -->
                   <?php }
               } ?>
                   <?php if (empty($_SESSION['LoggedIn'])) { ?>
