@@ -30,7 +30,7 @@ include BASE_PATH . 'views/header.php';
           Their email address,
         </li>
         <li>
-          If possible their phone number
+          Their phone number
         </li>
       </ul>
 
