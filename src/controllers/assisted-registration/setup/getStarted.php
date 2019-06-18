@@ -2,8 +2,8 @@
 
 global $db;
 
-$getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile, `Password` FROM users WHERE UserID = ?");
-$getUser->execute([$_SESSION['AssRegGuestUser']]);
+$getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile, `Password` FROM users WHERE UserID = ? AND RR = ?");
+$getUser->execute([$_SESSION['AssRegGuestUser'], true]);
 $user = $getUser->fetch(PDO::FETCH_ASSOC);
 
 if ($user == null) {
