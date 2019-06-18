@@ -121,6 +121,11 @@ include "galaMenu.php";
       <h3>
         <?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?>
       </h3>
+
+      <p><small class="text-muted">
+        <strong>Date of Birth:</strong> <?=date('d/m/Y', strtotime($entry['DateOfBirth']))?>, <strong>Swim England:</strong> <?=htmlspecialchars($entry['ASANumber'])?>
+      </small></p>
+      
       <ul>
       <?php foreach ($swimsArray as $event => $name) { ?>
         <?php if ($entry[$event]) { ?>
@@ -128,9 +133,6 @@ include "galaMenu.php";
         <?php } ?>
       <?php } ?>
       </ul>
-      <p><small class="text-muted">
-        <strong>Date of Birth:</strong> <?=date('d/m/Y', strtotime($entry['DateOfBirth']))?>, <strong>Swim England:</strong> <?=htmlspecialchars($entry['ASANumber'])?>
-      </small></p>
     </div>
   <?php } while ($entry = $entries->fetch(PDO::FETCH_ASSOC)); ?>
   </div>
