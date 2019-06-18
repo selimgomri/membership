@@ -21,7 +21,7 @@ if ($_POST['smsAuthorise'] != 1) {
   $smsAuth = 1;
 }
 
-$statusMessage = "<ul>";
+$statusMessage = "<ul class=\"mb-0\">";
 
 if (!v::stringType()->length(7, null)->validate($password1)) {
   $status = false;

@@ -32,7 +32,7 @@ class Login {
   public function login() {
     $getUserDetails = $this->db->prepare("SELECT EmailAddress, Forename, Surname, UserID, AccessLevel FROM users WHERE UserID = ?");
     $getUserDetails->execute([$this->user]);
-    $details = $getUserDetails->fetch(PDO::FETCH_ASSOC);
+    $details = $getUserDetails->fetch(\PDO::FETCH_ASSOC);
     
     $_SESSION['EmailAddress'] = $details['EmailAddress'];
     $_SESSION['Forename'] = $details['Forename'];
@@ -41,14 +41,14 @@ class Login {
     $_SESSION['AccessLevel'] = $details['AccessLevel'];
     $_SESSION['LoggedIn'] = 1;
 
-    $currentUser = new User($_SESSION['UserID'], $this->db);
+    $currentUser = new \User($_SESSION['UserID'], $this->db);
 
     $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));
 
     $geo_string = "Location Information Unavailable";
 
     try {
-      $reader = new GeoIp2\Database\Reader(BASE_PATH . 'storage/geoip/GeoLite2-City.mmdb');
+      $reader = new \GeoIp2\Database\Reader(BASE_PATH . 'storage/geoip/GeoLite2-City.mmdb');
       $record = $reader->city(app('request')->ip());
       $city;
       if ($record->city->name != "") {
@@ -64,11 +64,11 @@ class Login {
       }
 
       $geo_string = $city . $subdivision . $country;
-    } catch (AddressNotFoundException $e) {
+    } catch (\GeoIp2\Exception\AddressNotFoundException $e) {
       $geo_string = "Unknown Location";
-    } catch (InvalidDatabaseException $e) {
+    } catch (\GeoIp2\Exception\InvalidDatabaseException $e) {
       $geo_string = "Location Information Unavailable";
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       $geo_string = "Location Information Unavailable";
     }
 
@@ -76,7 +76,7 @@ class Login {
 
     $mobile = 0;
 
-    $browser_details = new WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);
+    $browser_details = new \WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);
 
     $browser = $browser_details->browser->name . ' ' . $browser_details->browser->version->toString();
 
@@ -89,7 +89,7 @@ class Login {
       $remember_me = 1;
     }
 
-    $date = new DateTime('now', new DateTimeZone('UTC'));
+    $date = new \DateTime('now', new \DateTimeZone('UTC'));
     $dbDate = $date->format('Y-m-d H:i:s');
 
     $login_details = [
@@ -107,7 +107,7 @@ class Login {
     try {
       $query = $this->db->prepare($sql);
       $query->execute($login_details);
-    } catch (PDOException $e) {
+    } catch (\Exception $e) {
       halt(500);
     }
 
@@ -151,10 +151,12 @@ class Login {
       `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'Security')";
       try {
         $this->db->prepare($notify)->execute([$_SESSION['UserID'], $subject, $message]);
-      } catch (PDOException $e) {
+      } catch (\Exception $e) {
         halt(500);
       }
 
     }
+    
+    return $currentUser;
   }
 }
