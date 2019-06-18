@@ -48,7 +48,7 @@ class Login {
     $geo_string = "Location Information Unavailable";
 
     try {
-      $reader = new Reader(BASE_PATH . 'storage/geoip/GeoLite2-City.mmdb');
+      $reader = new GeoIp2\Database\Reader(BASE_PATH . 'storage/geoip/GeoLite2-City.mmdb');
       $record = $reader->city(app('request')->ip());
       $city;
       if ($record->city->name != "") {
@@ -72,7 +72,7 @@ class Login {
       $geo_string = "Location Information Unavailable";
     }
 
-    $sql = "INSERT INTO `userLogins` (`UserID`, `IPAddress`, `GeoLocation`, `Browser`, `Platform`, `Mobile`, `Hash`, `HashActive`, `Time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO `userLogins` (`UserID`, `IPAddress`, `GeoLocation`, `Browser`, `Platform`, `Mobile`, `Hash`, `HashActive`, `Time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $mobile = 0;
 
