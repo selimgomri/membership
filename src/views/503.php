@@ -3,7 +3,12 @@ http_response_code(503);
 header("Retry-After: " . date('D, d M Y H:i:s e', strtotime('+24 hours')));
 header("Retry-After: 86400");
 $pagetitle = "Error 503 - Service Unavailable";
-include BASE_PATH . "views/header.php";
+global $currentUser;
+if ($currentUser == null) {
+	include BASE_PATH . "views/head.php";
+} else {
+	include BASE_PATH . "views/header.php";
+}
 ?>
 
 <div class="container">

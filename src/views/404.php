@@ -12,7 +12,12 @@ if (sizeof($possible_answers) > 2) {
 
 http_response_code(404);
 $pagetitle = "Error 404 - Page not found";
-include BASE_PATH . "views/header.php";
+global $currentUser;
+if ($currentUser == null) {
+	include BASE_PATH . "views/head.php";
+} else {
+	include BASE_PATH . "views/header.php";
+}
 ?>
 
 <div class="container">

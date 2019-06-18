@@ -250,8 +250,18 @@ $bg = "bg-white";
                   <?php } ?>
                   <?php if ($_SESSION['AccessLevel'] == "Admin" ||
               $_SESSION['AccessLevel'] == "Galas") { ?>
-                  <li class="nav-item">
-                    <a class="nav-link" href="<?php echo autoUrl("users") ?>">Users</a>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="usersMenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Users
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="usersMenu">
+                      <a class="dropdown-item" href="<?=autoUrl("users")?>">
+                        All Users
+                      </a>
+                      <a class="dropdown-item" href="<?=autoUrl("assisted-registration")?>">
+                        Assisted Account Registration
+                      </a>
+                    </div>
                   </li>
                   <?php } ?>
                   <?php if ($_SESSION['AccessLevel'] == "Galas") { ?>

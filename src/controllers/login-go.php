@@ -1,5 +1,7 @@
 <?php
 
+use GeoIp2\Database\Reader;
+
 global $db;
 
 $errorMessage = "";
@@ -18,8 +20,6 @@ if ($_POST['LoginSecurityValue'] == $_SESSION['LoginSec']) {
 } else {
   $security_status = false;
 }
-
-use GeoIp2\Database\Reader;
 
 if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($security_status)) {
   // Let the user login
@@ -116,7 +116,7 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
           $geo_string = "Location Information Unavailable";
         }
 
-        $sql = "INSERT INTO `userLogins` (`UserID`, `IPAddress`, `GeoLocation`, `Browser`, `Platform`, `Mobile`, `Hash`, `HashActive`, `Time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO `userLogins` (`UserID`, `IPAddress`, `GeoLocation`, `Browser`, `Platform`, `Mobile`, `Hash`, `HashActive`, `Time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $mobile = 0;
 
