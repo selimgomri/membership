@@ -14,11 +14,13 @@ jQuery v3.1.0 is Copyright jQuery Foundation 2016
 
 Designed by Chris Heppell, www.chrisheppell.uk
 
-Yes! We built this in house. Not many clubs do. We don't cheat.
-
 Chester-le-Street ASC
 Swimming Club based in Chester-le-Street, North East England
 https://github.com/Chester-le-Street-ASC/
+
+web@chesterlestreetasc.co.uk
+
+https://corporate.myswimmingclub.co.uk
 
 Chester-le-Street ASC is a non profit unincorporated association.
 
@@ -28,10 +30,9 @@ Chester-le-Street ASC is a non profit unincorporated association.
 <head>
   <meta charset="utf-8">
   <?php if ($pagetitle != "" || $pagetitle != null)  { ?>
-  <title><?php echo htmlspecialchars($pagetitle, ENT_QUOTES, 'UTF-8'); ?> - <?=env('CLUB_NAME')?> Membership</title>
-  <?php }
-    else { ?>
-  <title><?=env('CLUB_NAME')?> Membership</title>
+    <title><?=$pagetitle?> - <?=htmlspecialchars(env('CLUB_NAME'))?> Membership</title>
+  <?php } else { ?>
+  <title><?=htmlspecialchars(env('CLUB_NAME'))?> Membership</title>
   <?php } ?>
   <meta name="description"
     content="Your <?=env('CLUB_NAME')?> Account lets you make gala entries online and gives you access to all your information about your swimmers, including attendance.">
