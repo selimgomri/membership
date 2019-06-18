@@ -43,10 +43,10 @@ $statusMessage .= "<ul>";
 if ($status) {
   $password = password_hash($password1, PASSWORD_BCRYPT);
   try {
-  $update = $db->prepare("UPDATE users SET `Password` = ?, EmailComms = ?, MobileComms = ? WHERE UserID = ?");
-  $update->execute([$password, $emailAuth, $smsAuth, $_SESSION['AssRegGuestUser']]);
+    $update = $db->prepare("UPDATE users SET `Password` = ?, EmailComms = ?, MobileComms = ?, RR = ? WHERE UserID = ?");
+    $update->execute([$password, $emailAuth, $smsAuth, $_SESSION['AssRegGuestUser'], 0]);
   } catch (Exception $e) {
-    pre($e);
+    halt(500);
   }
   $_SESSION['AssRegStage'] = 3;
   header("Location: " . autoUrl("assisted-registration/go-to-onboarding"));
