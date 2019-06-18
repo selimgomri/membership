@@ -1,25 +1,16 @@
 <?php
 
-$pagetitle = "Complete Registration";
+global $db;
 
-include BASE_PATH . 'views/header.php';
+$getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile, `Password` FROM users WHERE UserID = ?");
+$getUser->execute([$id]);
+$user = $getUser->fetch(PDO::FETCH_ASSOC);
 
-?>
+if (!(password_verify($password, $user['Password']))) {
+  halt(404);
+}
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-8">
-      <h1>Provide user details</h1>
-      <p class="lead">
-        Tell us the following...
-      </p>
+$_SESSION['AssRegGuestUser'] = $id;
+$_SESSION['AssRegStage'] = 1;
 
-    </div>
-  </div>
-</div>
-
-<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
-
-<?php
-
-include BASE_PATH . 'views/footer.php';
+header("Location: " . autoUrl("assisted-registration/get-started"));
