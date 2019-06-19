@@ -34,6 +34,10 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         array (
             'WhichBrowser\\' => 13,
         ),
+        'T' => 
+        array (
+            'Twilio\\' => 7,
+        ),
         'S' => 
         array (
             'System\\Support\\' => 15,
@@ -143,6 +147,10 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         array (
             0 => __DIR__ . '/..' . '/whichbrowser/parser/src',
             1 => __DIR__ . '/..' . '/whichbrowser/parser/tests/src',
+        ),
+        'Twilio\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/twilio/sdk/Twilio',
         ),
         'System\\Support\\' => 
         array (

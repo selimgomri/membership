@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66d951f84dd37f425ad310037696393f",
+    "content-hash": "7eeb4756548122119c5c061b6d439a29",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2517,16 +2517,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v6.37.1",
+            "version": "v6.38.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "8c8e430a57e2ff9d21243580dad9bfc8e1ad2cf9"
+                "reference": "8588b74aecd46ed5df3d97a132c922b020ca80bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/8c8e430a57e2ff9d21243580dad9bfc8e1ad2cf9",
-                "reference": "8c8e430a57e2ff9d21243580dad9bfc8e1ad2cf9",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/8588b74aecd46ed5df3d97a132c922b020ca80bc",
+                "reference": "8588b74aecd46ed5df3d97a132c922b020ca80bc",
                 "shasum": ""
             },
             "require": {
@@ -2569,7 +2569,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2019-06-14T23:21:35+00:00"
+            "time": "2019-06-18T06:29:48+00:00"
         },
         {
             "name": "symfony/browser-kit",
@@ -3742,6 +3742,52 @@
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
             "time": "2019-04-06T14:04:46+00:00"
+        },
+        {
+            "name": "twilio/sdk",
+            "version": "5.33.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twilio/twilio-php.git",
+                "reference": "1d66ddc57259d1e828821d2d28a04cb4ae6f8438"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/1d66ddc57259d1e828821d2d28a04cb4ae6f8438",
+                "reference": "1d66ddc57259d1e828821d2d28a04cb4ae6f8438",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "apigen/apigen": "^4.1",
+                "phpunit/phpunit": "4.5.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Twilio\\": "Twilio/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Twilio API Team",
+                    "email": "api@twilio.com"
+                }
+            ],
+            "description": "A PHP wrapper for Twilio's API",
+            "homepage": "http://github.com/twilio/twilio-php",
+            "keywords": [
+                "api",
+                "sms",
+                "twilio"
+            ],
+            "time": "2019-06-12T19:23:52+00:00"
         },
         {
             "name": "whichbrowser/parser",
