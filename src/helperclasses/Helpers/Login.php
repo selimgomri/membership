@@ -7,6 +7,7 @@ class Login {
   private $user;
   private $stayLoggedIn;
   private $noUserWarning;
+  private $reLogin;
 
   function __construct($db) {
     $this->db = $db;
@@ -23,6 +24,10 @@ class Login {
 
   public function stayLoggedIn($option = true) {
     $this->stayLoggedIn = $option;
+  }
+
+  public function reLogin($option = true) {
+    $this->reLogin = $option;
   }
 
   public function preventWarningEmail($option = true) {
@@ -104,11 +109,13 @@ class Login {
       $dbDate
     ];
 
-    try {
-      $query = $this->db->prepare($sql);
-      $query->execute($login_details);
-    } catch (\Exception $e) {
-      halt(500);
+    if (!$this->reLogin) {
+      try {
+        $query = $this->db->prepare($sql);
+        $query->execute($login_details);
+      } catch (\Exception $e) {
+        halt(500);
+      }
     }
 
     $user_info_cookie = json_encode([
@@ -129,7 +136,9 @@ class Login {
     if (env('IS_CLS') != null && env('IS_CLS')) {
       setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, time()+60*60*24*120 , "/", 'chesterlestreetasc.co.uk', $secure, false);
     }
-    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, time()+60*60*24*120, "/", app('request')->hostname('request')->hostname, $secure, false);
+    if (!$this->reLogin) {
+      setcookie(COOKIE_PREFIX . "AutoLogin", $hash, time()+60*60*24*120, "/", app('request')->hostname('request')->hostname, $secure, false);
+    }
 
     // Test if we've seen a login from here before
     $login_before_data = [
@@ -143,7 +152,7 @@ class Login {
     $login_before->execute($login_before_data);
     $login_before_count = $login_before->fetchColumn();
 
-    if ($login_before_count == 1 && !$this->noUserWarning) {
+    if ($login_before_count == 1 && !$this->noUserWarning && !$this->reLogin) {
 
       $subject = "New Account Login";
       $message = '<p>Somebody just logged into your ' . htmlspecialchars(env('CLUB_NAME')) . ' Account from ' . $browser . ', using a device running ' . $browser_details->os->toString() . ' we believe was located in ' . $geo_string . '*.</p><p>We haven\'t seen a login from this location and device before.</p><p>If this was you then you can ignore this email. If this was not you, please <a href="' . autoUrl("") . '">log in to your account</a> and <a href="' . autoUrl("myaccount/password") . '">change your password</a> as soon as possible.</p><p>Kind Regards, <br>The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p><p class="text-muted small">* We\'ve estimated your location from your public IP Address. The location given may not be where you live.</p>';

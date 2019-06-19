@@ -170,32 +170,23 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
     //halt(500);
   }
 
-  $row = $query->fetchAll(PDO::FETCH_ASSOC);
-  if (sizeof($row) == 1) {
-    $user = $row[0]['UserID'];
+  $row = $query->fetch(PDO::FETCH_ASSOC);
+  if ($row != null) {
+    $user = $row['UserID'];
     $utc = new DateTimeZone("UTC");
-    $time = new DateTime($row[0]['Time'], $utc);
-
-    $sql = "SELECT * FROM `users` WHERE `UserID` = ?";
+    $time = new DateTime($row['Time'], $utc);
 
     try {
-      $query = $db->prepare($sql);
-      $query->execute([$user]);
-    } catch (PDOException $e) {
-      //halt(500);
+      $login = new \CLSASC\Membership\Login($db);
+      $login->setUser($user);
+      $login->stayLoggedIn();
+      $login->preventWarningEmail();
+      $login->reLogin();
+      global $currentUser;
+      $currentUser = $login->login();
+    } catch (Exception $e) {
+      halt(403);
     }
-
-    $row = $query->fetchAll(PDO::FETCH_ASSOC);
-
-    $row = $row[0];
-
-    $_SESSION['Username'] = $row['Username'];
-    $_SESSION['EmailAddress'] = $row['EmailAddress'];
-    $_SESSION['Forename'] = $row['Forename'];
-    $_SESSION['Surname'] = $row['Surname'];
-    $_SESSION['UserID'] = $user;
-    $_SESSION['AccessLevel'] = $row['AccessLevel'];
-    $_SESSION['LoggedIn'] = true;
 
     $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));
 
@@ -220,7 +211,6 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
     if (app('request')->protocol == 'http') {
       $secure = false;
     }
-    setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, $expiry_time , "/", app('request')->hostname, $secure, false);
     setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , "/", app('request')->hostname, $secure, false);
   }
 }
@@ -312,7 +302,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
     $this->get('/barcode-generator', function() {
       include 'controllers/barcode-generation-system/gen.php';
     });
-
+    
     $this->get('/qr-generator', function() {
       include 'controllers/barcode-generation-system/qr.php';
     });
@@ -675,11 +665,30 @@ $route->group($get_group, function($clubcode = "CLSE") {
       });
 
       $this->get('/test', function() {
-        notifySend("x", "A test", "Hello Christopher", "Chris Heppell", "clheppell1@sheffield.ac.uk", $from = ["Email" => "noreply@myswimmingclub.co.uk", "Name" => "SCDS", "Unsub" => [
-					"Allowed" => true,
-					"User" => 1,
-					"List" =>	"TestUnsub"
-				]]);
+        //use \Twilio\Rest\Client;
+
+        try {
+          // Your Account SID and Auth Token from twilio.com/console
+          $account_sid = env('TWILIO_AC_SID');
+          $auth_token = env('TWILIO_AC_AUTH_TOKEN');
+          // In production, these should be environment variables. E.g.:
+          // $auth_token = $_ENV["TWILIO_ACCOUNT_SID"]
+
+          // A Twilio number you own with SMS capabilities
+          $twilio_number = env('TWILIO_NUMBER');
+
+          $client = new Twilio\Rest\Client($account_sid, $auth_token);
+          $client->messages->create(
+            // Where to send a text message (your cell phone?)
+            '+447577002981',
+            [
+              'from' => $twilio_number,
+              'body' => 'I sent this message in under 10 minutes!'
+            ]
+          );
+        } catch (Exception $e) {
+          pre($e);
+        }
       });
     }
   }
