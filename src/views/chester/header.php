@@ -13,6 +13,9 @@ if (!isset($_SESSION['AlphaBeta'])) {
 }
 
 $bg = "bg-white";
+if ($customBackground) {
+  $bg = $customBackground;
+}
 ?>
 
 <?php if (false /*$_SESSION['AlphaBeta']*/) { ?>

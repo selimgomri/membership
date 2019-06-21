@@ -5,6 +5,9 @@ global $db;
 require 'GlobalHead.php';
 
 $bg = "bg-white";
+if ($customBackground) {
+  $bg = $customBackground;
+}
 ?>
 
 <body class="<?=$bg?> account--body">

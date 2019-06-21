@@ -12,13 +12,17 @@ if ($currentUser == null) {
 ?>
 
 <div class="container">
-	<h1>Service Unavailable</h1>
-	<p class="lead">The service is currently unavailable because of maintenance.</p>
-	<hr>
-	<p>Please try again later</p>
-	<p>HTTP Error 503 - Service Unavailable.</p>
-	<hr>
-	<p class="mt-2">Contact our <a href="mailto:support@chesterlestreetasc.co.uk" title="Support Hotline">support address</a> if the issue persists.</p>
+	<div class="row">
+		<div class="col-lg-8">
+			<h1>Service Unavailable</h1>
+			<p class="lead">The service is currently unavailable because of maintenance.</p>
+			<hr>
+			<p>Please try again later</p>
+			<p>HTTP Error 503 - Service Unavailable.</p>
+			<hr>
+			<p class="mt-2">Contact our <a href="mailto:support@chesterlestreetasc.co.uk" title="Support Hotline">support address</a> if the issue persists.</p>
+		</div>
+	</div>
 </div>
 
 <?php include BASE_PATH . "views/footer.php"; ?>
