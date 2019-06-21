@@ -1,10 +1,10 @@
-<?
+<?php
+
+global $db;
 
 $fluidContainer = true;
 
 $null = $page;
-
-$user = mysqli_real_escape_string($link, $_SESSION['UserID']);
 
 $start = 0;
 
@@ -19,21 +19,27 @@ if ($page != null) {
   die();
 }*/
 
-$sql = "SELECT `notifyHistory`.`Subject` FROM ((`notifyHistory`
+$sql = $db->prepare("SELECT COUNT(*) FROM ((`notifyHistory`
 LEFT JOIN `users` ON notifyHistory.Sender = users.UserID) INNER JOIN `notify` ON
-notify.MessageID = notifyHistory.ID) WHERE notify.UserID = '$user';";
-$numMails  = mysqli_num_rows(mysqli_query($link, $sql));
+notify.MessageID = notifyHistory.ID) WHERE notify.UserID = ?;");
+$sql->execute([$_SESSION['UserID']]);
+$numMails  = $sql->fetchColumn();
 $numPages = ((int)($numMails/10)) + 1;
 
 if ($start > $numMails) {
   halt(404);
 }
 
-$sql = "SELECT `notifyHistory`.`Subject`, `notifyHistory`.`Message`,
-`notify`.`ForceSend`, `Forename`, `Surname`, `JSONData`, `Date` FROM ((`notifyHistory`
-LEFT JOIN `users` ON notifyHistory.Sender = users.UserID) INNER JOIN `notify` ON
-notify.MessageID = notifyHistory.ID) WHERE notify.UserID = '$user' ORDER BY `EmailID` DESC LIMIT $start, 10;";
-$result = mysqli_query($link, $sql);
+$sql = $db->prepare("SELECT `notifyHistory`.`Subject`, `notifyHistory`.`Message`, `notify`.`ForceSend`, `Forename`, `Surname`, `JSONData`, `Date` FROM ((`notifyHistory` LEFT JOIN `users` ON notifyHistory.Sender = users.UserID) INNER JOIN `notify` ON notify.MessageID = notifyHistory.ID) WHERE notify.UserID = :user ORDER BY `EmailID` DESC LIMIT :offset, :num;");
+$sql->bindValue(':user', $_SESSION['UserID'], PDO::PARAM_INT);
+$sql->bindValue(':offset', $start, PDO::PARAM_INT); 
+$sql->bindValue(':num', 10, PDO::PARAM_INT); 
+$sql->execute();
+$row = $sql->fetch(PDO::FETCH_ASSOC);
+
+if ($row == null) {
+  halt(404);
+}
 
 $pagetitle = "Message History";
 
@@ -80,13 +86,12 @@ include BASE_PATH . "views/header.php";
       <?php if ($numMails == 0) {
         ?>
         <p class="mb-0">There are no messages to view right now.</p>
-        <?
+        <?php
       } else { ?>
       <p class="lead">
-        Page <?php echo $page; ?> of <?php echo $numPages; ?>
+        Page <?=htmlspecialchars($page)?> of <?=$numPages?>
       </p>
-      <?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+      <?php do {
         $info = json_decode($row['JSONData']);
         $sender = null;
           if ($row['ForceSend']) {
@@ -98,38 +103,43 @@ include BASE_PATH . "views/header.php";
           <div class="p-3">
             <p>
               <strong>
-                <?php echo $row['Subject']; ?>
+                <?=htmlspecialchars($row['Subject'])?>
               </strong>
             </p>
             <dl class="row mb-0 small">
-            <?php echo $sender; ?>
+            <?=$sender?>
             <?php if ($row['JSONData'] != "") { ?>
             <dt class="col-sm-3">Sent To</dt>
             <dd class="col-sm-9">
-              <?
+              <?php
               $squads = (array) $info->To->Squads;
               $lists = (array) $info->To->Targeted_Lists;
               foreach ($squads as $s) { ?>
                 <span class="badge badge-pill rounded badge-dark">
-                  <?php echo $s; ?>
-                </span><?
+                  <?=htmlspecialchars($s)?>
+                </span><?php
               }
               foreach ($lists as $s) { ?>
                 <span class="badge badge-pill rounded badge-dark">
-                  <?php echo $s; ?>
-                </span><?
+                  <?=htmlspecialchars($s)?>
+                </span><?php
               } ?>
             </dd>
             <dt class="col-sm-3 mb-0">Date</dt>
-            <dd class="col-sm-9 mb-0"><?php echo date("d F Y", strtotime($row['Date'])); ?></dd>
-            </dl>
+            <dd class="col-sm-9 mb-0">
+            <?php
+            $date = new DateTime($row['Date'], new DateTimeZone('UTC'));
+            $date->setTimezone(new DateTimeZone('Europe/London')); ?>
+            <?=$date->format('H:i \o\\n l j F Y')?>
+            </dd>
+          </dl>
         <?php } ?>
         </div>
         <div class="bg-light p-3 pt-0 force-wrap">
-          <?php echo $row['Message']; ?>
+          <?=$row['Message']?>
         </div>
     </div>
-      <?php } ?>
+      <?php } while ($row = $sql->fetch(PDO::FETCH_ASSOC)); ?>
 
       <nav aria-label="Page navigation">
         <ul class="pagination mb-0">
@@ -174,5 +184,5 @@ include BASE_PATH . "views/header.php";
   </div>
 </div>
 
-<?
+<?php
 include BASE_PATH . "views/footer.php";

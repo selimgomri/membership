@@ -25,10 +25,10 @@ $email = $userInfo['EmailAddress'];
 $myName = $curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'];
 $myEmail; $canReply;
 
-if (strpos($curUserInfo['EmailAddress'], '@chesterlestreetasc.co.uk') == strlen(str_replace('@chesterlestreetasc.co.uk', '', $curUserInfo['EmailAddress']))) {
+if (strpos($curUserInfo['EmailAddress'], '@chesterlestreetasc.co.uk') == mb_strlen(str_replace('@chesterlestreetasc.co.uk', '', $curUserInfo['EmailAddress']))) {
   $myEmail = $curUserInfo['EmailAddress'];
 } else {
-  $myEmail = strtolower($curUserInfo['Forename'] . '.' . $curUserInfo['Surname'] . ".volunteer-noreply@chesterlestreetasc.co.uk");
+  $myEmail = mb_strtolower($curUserInfo['Forename'] . '.' . $curUserInfo['Surname'] . ".volunteer-noreply@chesterlestreetasc.co.uk");
   $canReply = "As you don't have a club email address, we can't allow parents to directly reply to you. If parents reply, their email will go to our enquiries team, who can forward it on to you.";
 }
 

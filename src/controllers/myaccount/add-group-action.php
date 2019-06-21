@@ -23,7 +23,7 @@ if (!$row) {
 		'FAM' => $fid,
 		'ACS' => $acs
 	];
-	header("Location: " . app('request')->curl);
+	header("Location: " . currentUrl());
 } else  {
 	$sql = "UPDATE `members` INNER JOIN familyMembers ON members.MemberID = familyMembers.MemberID SET members.UserID = ? WHERE familyMembers.FamilyID = ?";
 
@@ -36,5 +36,5 @@ if (!$row) {
 
 	$_SESSION['Success'] = true;
 
-	header("Location: " . app('request')->curl);
+	header("Location: " . currentUrl());
 }

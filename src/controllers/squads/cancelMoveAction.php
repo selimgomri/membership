@@ -7,13 +7,7 @@ if (!v::intVal()->validate($id)) {
 	halt(404);
 }
 
-$id = mysqli_real_escape_string($link, $id);
-$sql = "DELETE FROM `moves` WHERE `MoveID` = '$id';";
-
-$sqlx = "SELECT `MemberID` FROM `moves` WHERE `MoveID` = ?";
-$member = $db->prepare($sqlx);
-$member->execute([$id]);
-$member = $member->fetchColumn();
+$delete = $db->prepare("DELETE FROM `moves` WHERE `MemberID` = ?");
 
 // Notify the parent
 $sqlx = "INSERT INTO `notify` (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, ?, ?)";
@@ -21,7 +15,7 @@ $notify_query = $db->prepare($sqlx);
 
 $sqlx = "SELECT `SquadName`, `MForename`, `MSurname`, `SquadFee`, `SquadTimetable`, `users`.`UserID` FROM (((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) WHERE members.MemberID = ?";
 $email_info = $db->prepare($sqlx);
-$email_info->execute([$member]);
+$email_info->execute([$id]);
 $email_info = $email_info->fetch(PDO::FETCH_ASSOC);
 
 if ($email_info) {
@@ -49,8 +43,9 @@ if ($email_info) {
 	}
 }
 
-if (mysqli_query($link, $sql)) {
+try {
+  $delete->execute([$id]);
 	header("Location: " . autoUrl("squads/moves"));
-} else {
+} catch (Exception $e) {
 	halt(500);
 }

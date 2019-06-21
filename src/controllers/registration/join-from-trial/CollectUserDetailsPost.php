@@ -46,7 +46,7 @@ $_SESSION['UserDetailsPostData']['mobile'] = "+44" . ltrim(preg_replace('/\D/', 
 
 // If errors are set, kill
 if ($errorState) {
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
   die();
 }
 

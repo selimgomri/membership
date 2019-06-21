@@ -2,8 +2,7 @@
 
 $pagetitle = "SMS Lists";
 
-$sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
-$stmt = $db->query($sql);
+$squads = $db->query("SELECT SquadName `name`, SquadID id FROM `squads` ORDER BY SquadFee DESC, SquadName ASC");
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";
@@ -25,8 +24,8 @@ include BASE_PATH . "views/notifyMenu.php";
 		  <label class="sr-only" for="squad">Select a Squad</label>
 		  <select class="custom-select" placeholder="Select a Squad" id="squad" name="squad">
 			  <option value="allSquads">Show All Squads</option>;
-			  <?php foreach ($stmt as $row) { ?>
-				<option value="<?php echo $row['SquadID']; ?>"><?php echo $row['SquadName']; ?></option>
+			  <?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
+				<option value="<?=$squad['id']?>"><?=htmlspecialchars($squad['name'])?></option>
 				<?php } ?>
 	    </select>
 		</div>

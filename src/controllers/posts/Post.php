@@ -1,7 +1,12 @@
-<?
+<?php
 
 global $db;
 $query = null;
+
+$markdown = new ParsedownExtra();
+
+// Safe mode is disabled during the transition to markdown
+// $markdown->setSafeMode(true);
 
 if ($_SESSION['AccessLevel'] == 'Parent') {
   $sql = "SELECT COUNT(*) FROM `members` WHERE `UserID` = ?";
@@ -49,6 +54,7 @@ $use_white_background = true;
 $pagetitle = htmlentities($row['Title']);
 
 $allow_edit = true;
+$allow_edit_id = $row['ID'];
 
 $container_classes = "";
 if ($row['Type'] == "corporate_documentation") {
@@ -70,13 +76,13 @@ include BASE_PATH . "views/postsMenu.php";?>
 
 	<div class="row">
 		<div class="col-md-8">
-			<div id="post-content">
-				<?= $row['Content'] ?>
+			<div id="post-content" class="blog-main">
+				<?= $markdown->text($row['Content']) ?>
 			</div>
 		</div>
 	</div>
 </div>
 
-<?
+<?php
 }
 include BASE_PATH . "views/footer.php";

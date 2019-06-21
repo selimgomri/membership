@@ -1,61 +1,99 @@
 <?php
 
-$use_white_background = true;
+global $db;
+
+$moves = $db->query("SELECT
+  moves.MemberID,
+  MForename,
+  MSurname,
+  new.`SquadName` AS NewSquad,
+  current.SquadName CurrentSquad,
+  current.SquadID CurrentSquadID,
+  moves.SquadID,
+  `MovingDate`,
+  `MoveID`
+  FROM
+  (
+    (
+      (`moves`
+        JOIN squads AS new ON moves.SquadID = new.SquadID
+      )
+      JOIN `members` ON members.MemberID = moves.MemberID
+    )
+    JOIN `squads` AS current ON members.SquadID = current.SquadID
+  )
+  WHERE MovingDate >= CURDATE() ORDER BY `MForename` ASC, `MSurname` ASC
+");
+$move = $moves->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = "Squad Moves";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php";
-$sql = "SELECT moves.MemberID, `MForename`, `MSurname`, `SquadName`, moves.SquadID, `MovingDate`, `MoveID` FROM ((`moves` INNER JOIN `members` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON squads.SquadID = moves.SquadID) WHERE MovingDate >= CURDATE() ORDER BY `MForename` ASC, `MSurname` ASC;";
-$result = mysqli_query($link, $sql);
-$count = mysqli_num_rows($result);
 ?>
 <div class="container">
-	<h1>Squad Moves</h1>
-	<p class="lead">Upcoming Squad Moves (Sorted by Date)</p>
-	<p>To make a new squad move, <a href="<?php echo autoUrl("swimmers") ?>">select a swimmer</a>.</p>
-	<!-- TABLE HERE -->
-	<?php if ($count > 0) { ?>
-		<div class="table-resonsive">
-			<table class="table table-striped">
-				<thead class="thead-light">
-					<tr>
-						<th>Swimmer</th>
-						<th>New Squad</th>
-						<th>Moves on</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php for ($i=0; $i < $count; $i++) {
-					$row = mysqli_fetch_array($result, MYSQLI_ASSOC); ?>
-					<tr>
-						<td>
-							<a href="<?php echo autoUrl("swimmers/" . $row['MemberID']); ?>">
-								<?php echo $row['MForename'] . " " . $row['MSurname']; ?>
-							</a>
-						</td>
-						<td>
-							<a href="<?php echo autoUrl("squads/" . $row['SquadID']); ?>">
-								<?php echo $row['SquadName']; ?>
-							</a>
-						</td>
-						<td><?php echo date('j F Y', strtotime($row['MovingDate'])); ?></td>
-						<td>
-							<a href="<?php echo autoUrl("squads/moves/edit/" . $row['MoveID']); ?>">
-								Edit or Cancel Move
-							</a>
-						</td>
-					</tr>
-					<?php } ?>
-				</tbody>
-			</table>
-		</div>
-	<?php }
-	else { ?>
-	<div class="alert alert-warning">
-		<strong>There are no upcoming squad moves</strong> <br>
-		Check back regularly to see which swimmers may be moving into your squad
-	</div>
-	<?php } ?>
+  <div class="row">
+    <div class="col">
+    	<h1>Squad Moves</h1>
+    	<p class="lead">Upcoming Squad Moves (Sorted by Date)</p>
+    	<p>To make a new squad move, <a href="<?=autoUrl("swimmers")?>">select a swimmer</a>.</p>
+    	<!-- LIST -->
+    	<?php if ($move != null) { ?>
+        <div class="card">
+          <div class="card-header">
+            All moves
+          </div>
+          <ul class="list-group list-group-flush">
+    					<?php do { ?>
+    					<li class="list-group-item list-group-item-action">
+                <div class="form-row align-items-center">
+                  <div class="col">
+                    <p class="mb-0">
+                      <strong><a href="<?=autoUrl("swimmers/" .
+                      $move['MemberID'])?>"><?=htmlspecialchars($move['MForename'] . " " .
+                      $move['MSurname'])?></a></strong>
+                    </p>
+                    <p class="mb-0">
+                      <span class="sr-only">Moving from</span> <a
+                      href="<?=autoUrl("squads/" .
+                      $move['CurrentSquadID'])?>"><?=htmlspecialchars($move['CurrentSquad'])?>
+                      Squad</a> <i class="fa fa-long-arrow-right"
+                      aria-hidden="true"></i><span class="sr-only">to</span> <a
+                      href="<?=autoUrl("squads/" .
+                      $move['SquadID'])?>"><?=htmlspecialchars($move['NewSquad'])?>
+                      Squad</a> on <?=date('j F Y',
+                      strtotime($move['MovingDate']))?>
+                    </p>
+                    <div class="d-lg-none mb-3"></div>
+                  </div>
+                  <div class="col-md-4 col-lg-3">
+                    <div class="form-row">
+                      <div class="col-6 col-lg-12">
+            						<a class="btn btn-block btn-outline-dark" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/edit-move")?>">
+            							Edit or Cancel
+            						</a>
+                        <div class="d-none d-lg-block mb-1"></div>
+                      </div>
+                      <div class="col-6 col-lg-12">
+            						<a class="btn btn-block btn-outline-dark" href="<?=autoUrl("swimmers/" . $move['MemberID'] . "/move-contract")?>">
+            							Print Contract
+            						</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+    					</li>
+            <?php } while ($move = $moves->fetch(PDO::FETCH_ASSOC)); ?>
+          </ul>
+        </div>
+    	<?php }
+    	else { ?>
+    	<div class="alert alert-warning">
+    		<strong>There are no upcoming squad moves</strong> <br>
+    		Check back regularly to see which swimmers may be moving into your squad
+    	</div>
+    	<?php } ?>
+    </div>
+  </div>
 </div>
 <?php include BASE_PATH . "views/footer.php";

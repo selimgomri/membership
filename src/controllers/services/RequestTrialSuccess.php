@@ -23,7 +23,7 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <p>
-        <a href="<?=app('request')->curl?>" class="btn btn-success">Request another trial</a>
+        <a href="<?=currentUrl()?>" class="btn btn-success">Request another trial</a>
       </p>
     </div>
   </div>

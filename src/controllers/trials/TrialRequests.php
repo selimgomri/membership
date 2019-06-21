@@ -10,8 +10,6 @@ $count = $query->fetchColumn();
 $query = $db->prepare("SELECT ID, Hash, Email, joinSwimmers.First, joinSwimmers.Last, joinParents.First PFirst, joinParents.Last PLast FROM joinParents INNER JOIN joinSwimmers ON joinParents.Hash = joinSwimmers.Parent WHERE SquadSuggestion IS NULL ORDER BY ID DESC");
 $query->execute([$hash]);
 
-$parents = $query->fetchAll(PDO::FETCH_ASSOC);
-
 $pagetitle = "Trial Requests";
 $use_white_background = true;
 
@@ -34,11 +32,11 @@ include BASE_PATH . 'views/header.php';
       <?php } ?>
 
       <?php
-      foreach ($parents as $parent) { ?>
+      while ($parent = $query->fetch(PDO::FETCH_ASSOC)) { ?>
       <div class="cell">
-        <h2><?=$parent['First']?> <?=$parent['Last']?></h2>
+        <h2><?=htmlspecialchars($parent['First'] . ' ' . $parent['Last'])?></h2>
         <p>
-          Contact <?=$parent['PFirst']?> <?=$parent['PLast']?> via email at <a href="mailto:<?=$parent['Email']?>"><?=$parent['Email']?></a>
+          Contact <?=htmlspecialchars($parent['PFirst'] . ' ' . $parent['PLast'])?> via email at <a href="mailto:<?=htmlspecialchars($parent['Email'])?>"><?=htmlspecialchars($parent['Email'])?></a>
         </p>
 
         <div class="form-row">
@@ -66,7 +64,7 @@ include BASE_PATH . 'views/header.php';
                 Advanced
               </button>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="deleteDropdown">
-                <a class="dropdown-item" href="<?=autoUrl($url_path . $parent['Hash'] . "/cancel/" . $parent['ID'])?>?redirect=<?=urlencode(app('request')->curl)?>">Cancel Trial Request</a>
+                <a class="dropdown-item" href="<?=autoUrl($url_path . $parent['Hash'] . "/cancel/" . $parent['ID'])?>?redirect=<?=urlencode(currentUrl())?>">Cancel Trial Request</a>
               </div>
             </div>
           </div>

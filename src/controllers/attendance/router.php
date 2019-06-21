@@ -51,7 +51,6 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
     global $link;
 
     $this->get('/', function() {
-      global $link;
       include "sessions.php";
   	});
 
@@ -81,7 +80,6 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
   	});
 
     $this->get('/squads', function() {
-      global $link;
       include "historyViews/squads.php";
   	});
 

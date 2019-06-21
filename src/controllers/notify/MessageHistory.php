@@ -1,4 +1,6 @@
-<?
+<?php
+
+global $db;
 
 $null = $page;
 
@@ -17,21 +19,29 @@ if ($page == 1 && $null != null) {
   die();
 }
 
-$sql = "SELECT `Subject`, `Message` FROM `notifyHistory` ;";
-$numMails  = mysqli_num_rows(mysqli_query($link, $sql));
+$sql = $db->query("SELECT COUNT(*) FROM notifyHistory");
+$numMails  = $sql->fetchColumn();
 $numPages = ((int)($numMails/10)) + 1;
 
 if ($start > $numMails) {
   halt(404);
 }
 
-$sql = "SELECT `notifyHistory`.`Subject`, `notifyHistory`.`Message`,
+$sql = $db->prepare("SELECT `notifyHistory`.`Subject`, `notifyHistory`.`Message`,
 `notifyHistory`.`ForceSend`, `Forename`, `Surname`, `JSONData`, `Date` FROM
 (`notifyHistory` LEFT JOIN `users` ON notifyHistory.Sender = users.UserID) ORDER
-BY `Date` DESC LIMIT $start, 10;";
-$result = mysqli_query($link, $sql);
+BY `Date` DESC LIMIT :offset, :num");
+$sql->bindValue(':offset', $start, PDO::PARAM_INT); 
+$sql->bindValue(':num', 10, PDO::PARAM_INT); 
+$sql->execute();
 
-$pagetitle = "Message History - Notify";
+$row = $sql->fetch(PDO::FETCH_ASSOC);
+
+if ($row == null) {
+  halt(404);
+}
+
+$pagetitle = "Page " . $page . " - Message History - Notify";
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";?>
@@ -68,18 +78,17 @@ include BASE_PATH . "views/notifyMenu.php";?>
     <p class="lead">
       Page <?php echo $page; ?> of <?php echo $numPages; ?>
     </p>
-    <?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    <?php do {
       $info = json_decode($row['JSONData']);
       $sender = null;
       if ($row['Forename'] != "" && $row['Surname'] != "") {
-        $sender = "<dt class=\"col-sm-3\">Sent by</dt><dd class=\"col-sm-9\">" . $row['Forename'] . " " .
-        $row['Surname'] . "</dd>";
+        $sender = "<dt class=\"col-sm-3\">Sent by</dt><dd class=\"col-sm-9\">" .htmlspecialchars( $row['Forename'] . " " .
+        $row['Surname']) . "</dd>";
         if ($row['ForceSend']) {
           $sender .= "<dt class=\"col-sm-3\">Force Sent</dt><dd class=\"col-sm-9\">True</dd>";
         }
       } else {
-        $sender = "<dt class=\"col-sm-3\">Sent by</dt><dd class=\"col-sm-9\">" . $info->Sender->Name . "</dd>";
+        $sender = "<dt class=\"col-sm-3\">Sent by</dt><dd class=\"col-sm-9\">" . htmlspecialchars($info->Sender->Name) . "</dd>";
         if ($row['ForceSend']) {
           $sender .= "<dt class=\"col-sm-3\">Force Sent</dt><dd class=\"col-sm-9\">True</dd>";
         }
@@ -89,7 +98,7 @@ include BASE_PATH . "views/notifyMenu.php";?>
         <div class="p-3">
           <p>
             <strong>
-              <?php echo $row['Subject']; ?>
+              <?=htmlspecialchars($row['Subject'])?>
             </strong>
           </p>
           <dl class="row mb-0 small">
@@ -97,23 +106,26 @@ include BASE_PATH . "views/notifyMenu.php";?>
           <?php if ($row['JSONData'] != "") { ?>
           <dt class="col-sm-3">Sent To</dt>
           <dd class="col-sm-9">
-            <?
+            <?php
             $squads = (array) $info->To->Squads;
             $lists = (array) $info->To->Targeted_Lists;
             foreach ($squads as $s) { ?>
               <span class="badge badge-pill rounded badge-dark">
                 <?php echo $s; ?>
-              </span><?
+              </span><?php
             }
             foreach ($lists as $s) { ?>
               <span class="badge badge-pill rounded badge-dark">
-                <?php echo $s; ?>
-              </span><?
+                <?=htmlspecialchars($s)?>
+              </span><?php
             } ?>
           </dd>
           <dt class="col-sm-3 mb-0">Date</dt>
           <dd class="col-sm-9 mb-0">
-            <?php echo date("d F Y", strtotime($row['Date'])); ?>
+            <?php
+            $date = new DateTime($row['Date'], new DateTimeZone('UTC'));
+            $date->setTimezone(new DateTimeZone('Europe/London')); ?>
+            <?=$date->format('H:i \o\\n l j F Y')?>
           </dd>
         </dl>
         <?php } ?>
@@ -122,7 +134,7 @@ include BASE_PATH . "views/notifyMenu.php";?>
           <?php echo $row['Message']; ?>
         </div>
       </div>
-    <?php } ?>
+    <?php } while ($row = $sql->fetch(PDO::FETCH_ASSOC)); ?>
 
     <nav aria-label="Page navigation">
       <ul class="pagination mb-0">
@@ -165,5 +177,5 @@ include BASE_PATH . "views/notifyMenu.php";?>
   </div>
 </div>
 
-<?
+<?php
 include BASE_PATH . "views/footer.php";

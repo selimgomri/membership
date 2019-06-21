@@ -40,13 +40,13 @@ if ($info['AccessLevel'] == "Coach") {
 
 $bankName = $bank = $has_logo = $logo_path;
 if (userHasMandates($id)) {
-  $bankName = strtoupper(bankDetails($id, "account_holder_name"));
+  $bankName = mb_strtoupper(bankDetails($id, "account_holder_name"));
   if ($bankName != "UNKNOWN") {
     $bankName = $bankName . ', ';
   } else {
     $bankName = null;
   }
-  $bank = strtoupper(bankDetails($id, "bank_name"));
+  $bank = mb_strtoupper(bankDetails($id, "bank_name"));
   $has_logo = false;
   $logo_path = "";
 
@@ -204,7 +204,7 @@ include BASE_PATH . "views/header.php";
     </div>
 
     <p>
-      <a href="<?=app('request')->curl?>qualifications" class="btn rounded btn-success">
+      <a href="<?=currentUrl()?>qualifications" class="btn rounded btn-success">
         <span class="sr-only">View or add</span> Qualifications <span class="fa fa-chevron-right"></span>
       </a>
     </p>
@@ -250,8 +250,8 @@ include BASE_PATH . "views/header.php";
       <div class="col-sm-6 col-md-4">
         <h3 class="h6">Direct Debit Mandate</h3>
         <img class="img-fluid mb-3" style="max-height:35px;" src="<?=$logo_path?>.png" srcset="<?=$logo_path?>@2x.png 2x, <?=$logo_path?>@3x.png 3x">
-        <p class="mb-0"><?=$bankName?><?=strtoupper(bankDetails($id, "bank_name"))?></p>
-        <p class="mono">******<?=strtoupper(bankDetails($id, "account_number_end"))?></p>
+        <p class="mb-0"><?=$bankName?><?=mb_strtoupper(bankDetails($id, "bank_name"))?></p>
+        <p class="mono">******<?=mb_strtoupper(bankDetails($id, "account_number_end"))?></p>
       </div>
       <?php } ?>
     </div>

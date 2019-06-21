@@ -29,7 +29,7 @@ include BASE_PATH . 'views/header.php'; ?>
 		</p>
 	<?php } else { ?>
 		<p>Let us know what's wrong with the page so that we can fix it as quickly as possible.</p>
-		<form method="post" action="<?=app('request')->curl?>">
+		<form method="post" >
 			<div class="form-group">
 		    <label for="report_url">Page Address</label>
 		    <input type="url" value="<?=htmlspecialchars($target)?>" readonly class="form-control" id="report_url" name="report_url">
@@ -51,7 +51,7 @@ include BASE_PATH . 'views/header.php'; ?>
 	<?php } ?>
 </div>
 
-<?
+<?php
 
 if (isset($_SESSION['ErrorReportStatus'])) {
 	unset($_SESSION['ErrorReportStatus']);

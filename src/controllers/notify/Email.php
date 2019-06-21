@@ -5,11 +5,31 @@ $use_white_background = true;
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";
 
-$sql = "SELECT `SquadName`, `SquadID` FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC;";
-$result = mysqli_query($link, $sql);
+global $db;
 
-$sql = "SELECT * FROM `targetedLists` ORDER BY `Name` ASC;";
-$lists = mysqli_query($link, $sql);
+$squads = $db->query("SELECT `SquadName`, `SquadID` FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC;");
+
+$lists = $db->query("SELECT * FROM `targetedLists` ORDER BY `Name` ASC;");
+
+$query = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE
+UserID = ?");
+$query->execute([$_SESSION['UserID']]);
+$curUserInfo = $query->fetch(PDO::FETCH_ASSOC);
+
+$senderNames = explode(' ', $curUserInfo['Forename'] . ' ' . $curUserInfo['Surname']);
+$fromEmail = "";
+for ($i = 0; $i < sizeof($senderNames); $i++) {
+  $fromEmail .= urlencode(strtolower($senderNames[$i]));
+  if ($i < sizeof($senderNames) - 1) {
+    $fromEmail .= '.';
+  }
+}
+
+if (!(defined('IS_CLS') && IS_CLS)) {
+  $fromEmail .= '.' . urlencode(strtolower(str_replace(' ', '', CLUB_CODE)));
+}
+
+$fromEmail .= '@' . EMAIL_DOMAIN;
 
  ?>
 
@@ -21,16 +41,15 @@ $lists = mysqli_query($link, $sql);
     <div class="form-group">
 			<label>To parents of swimmers in the following targeted lists...</label>
 			<div class="row">
-			<?php for ($i = 0; $i < mysqli_num_rows($lists); $i++) {
-				$row = mysqli_fetch_array($lists, MYSQLI_ASSOC); ?>
+			<?php while ($list = $lists->fetch(PDO::FETCH_ASSOC)) { ?>
 				<div class="col-6 col-sm-6 col-md-4 col-lg-3">
 					<div class="custom-control custom-checkbox">
 					  <input type="checkbox" class="custom-control-input"
-            id="TL-<?php echo $row['ID']; ?>" name="TL-<?php echo $row['ID']; ?>"
+            id="TL-<?=$list['ID']?>" name="TL-<?=$list['ID']?>"
             value="1">
 					  <label class="custom-control-label"
-              for="TL-<?php echo $row['ID']; ?>">
-              <?php echo $row['Name']; ?>
+              for="TL-<?=$list['ID']?>">
+              <?=htmlspecialchars($list['Name'])?>
             </label>
 					</div>
 				</div>
@@ -40,21 +59,28 @@ $lists = mysqli_query($link, $sql);
 		<div class="form-group">
 			<label>To parents of swimmers in the following squads...</label>
 			<div class="row">
-			<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-				$row = mysqli_fetch_array($result, MYSQLI_ASSOC); ?>
+			<?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
 				<div class="col-6 col-sm-6 col-md-4 col-lg-3">
 					<div class="custom-control custom-checkbox">
 					  <input type="checkbox" class="custom-control-input"
-            id="<?php echo $row['SquadID']; ?>" name="<?php echo $row['SquadID']; ?>"
+            id="<?=$squad['SquadID']?>" name="<?=$squad['SquadID']?>"
             value="1">
 					  <label class="custom-control-label"
-              for="<?php echo $row['SquadID']; ?>">
-              <?php echo $row['SquadName']; ?> Squad
+              for="<?=$squad['SquadID']?>">
+              <?=htmlspecialchars($squad['SquadName'])?> Squad
             </label>
 					</div>
 				</div>
 			<?php } ?>
 			</div>
+		</div>
+
+    <div class="form-group">
+			<label for="from">From</label>
+      <select class="custom-select" name="from" id="from">
+        <option value="current-user"><?=htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'] . " <noreply@" . EMAIL_DOMAIN . ">  ")?></option>
+        <option value="club-sending-account" selected><?=htmlspecialchars(CLUB_NAME . " <noreply@" . EMAIL_DOMAIN . ">")?></option>
+      </select>
 		</div>
 
 		<div class="form-group">

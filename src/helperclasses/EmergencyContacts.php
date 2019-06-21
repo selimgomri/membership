@@ -1,4 +1,4 @@
-<?
+<?php
 
 class EmergencyContacts {
 	private $contacts;
@@ -10,11 +10,9 @@ class EmergencyContacts {
 	}
 
 	public function byParent($id) {
-		$id = mysqli_real_escape_string($this->dbconn, $id);
-		$sql = "SELECT * FROM `emergencyContacts` WHERE `UserID` = '$id';";
-		$result = mysqli_query($this->dbconn, $sql);
-		for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-			$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $sql = $this->dbconn->prepare("SELECT ID, UserID, Name, ContactNumber FROM `emergencyContacts` WHERE `UserID` = ?");
+    $sql->execute([$id]);
+		while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 			$new = new EmergencyContact();
 			$new->existing(
 				$row['ID'],
@@ -27,11 +25,9 @@ class EmergencyContacts {
 	}
 
 	public function bySwimmer($id) {
-		$sql = "SELECT * FROM `members` LEFT JOIN `emergencyContacts` ON
-		members.UserID = emergencyContacts.UserID WHERE `MemberID` = '$id';";
-		$result = mysqli_query($this->dbconn, $sql);
-		for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-			$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+		$sql = $this->dbconn->prepare("SELECT ID, UserID, Name, ContactNumber FROM `members` LEFT JOIN `emergencyContacts` ON members.UserID = emergencyContacts.UserID WHERE `MemberID` = ?");
+    $sql->execute([$id]);
+    while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 			$new = new EmergencyContact();
 			$new->existing(
 				$row['ID'],

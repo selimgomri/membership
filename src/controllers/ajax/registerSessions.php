@@ -1,8 +1,12 @@
 <?php
 
 use Respect\Validation\Validator as v;
+global $db;
+
+$getMemberAttendance = $db->prepare("SELECT AttendanceBoolean FROM `sessionsAttendance` WHERE `WeekID` = ? AND `SessionID` = ? AND `MemberID` = ?");
 
 $markdown = new ParsedownExtra();
+$markdown->setSafeMode(true);
 
 $access = $_SESSION['AccessLevel'];
 $swimmerCount = 0;
@@ -10,19 +14,20 @@ $swimmerCount = 0;
 if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
   if (isset($_REQUEST["squadID"]) && v::intVal()->validate($_REQUEST["squadID"])) {
     // get the squadID parameter from URL
-    $squadID = mysqli_real_escape_string($link, $_REQUEST["squadID"]);
+    $squadID = $_REQUEST["squadID"];
     $session = $_REQUEST['selected'];
 
     $response = "";
 
     if ($squadID != null) {
-      $sql = "SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE squads.SquadID = '$squadID' AND ((sessions.DisplayFrom <= CURDATE( )) AND (sessions.DisplayUntil >= CURDATE( ))) ORDER BY sessions.SessionDay ASC, sessions.StartTime ASC;";
-      $result = mysqli_query($link, $sql);
-      $swimmerCount = mysqli_num_rows($result);
+      $getSessions = $db->prepare("SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE squads.SquadID = ? AND ((sessions.DisplayFrom <= CURDATE( )) AND (sessions.DisplayUntil >= CURDATE( ))) ORDER BY sessions.SessionDay ASC, sessions.StartTime ASC");
+      $getSessions->execute([$squadID]);
       $content = '<option>Choose the session from the menu</option>';
-      for ($i=0; $i<$swimmerCount; $i++) {
-        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
+      $exists = false;
+
+      while ($row = $getSessions->fetch(PDO::FETCH_ASSOC)) {
+        $exists = true;
         $dayText = "";
         switch ($row['SessionDay']) {
             case 0:
@@ -52,11 +57,11 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
         if ($session == (int) $row['SessionID']) {
           $selected = " selected ";
         }
-        $content .= "<option value=\"" . $row['SessionID'] . "\" " . $selected . ">" . $row['SessionName'] . ", " . $dayText . " at " . (new DateTime($row['StartTime']))->format("H:i") . "</option>";
+        $content .= "<option value=\"" . $row['SessionID'] . "\" " . $selected . ">" . htmlspecialchars($row['SessionName']) . ", " . $dayText . " at " . (new DateTime($row['StartTime']))->format("H:i") . "</option>";
       }
     }
 
-    if ($swimmerCount > 0) {
+    if ($exists) {
       echo $content;
     }
     else {
@@ -66,55 +71,57 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 
   if (isset($_REQUEST["sessionID"]) && v::intVal()->validate($_REQUEST["sessionID"])) {
     if (isset($_REQUEST["date"]) && v::intVal()->validate($_REQUEST["date"])) {
-      $dateO = $date = mysqli_real_escape_string($link, $_REQUEST["date"]);
+      $dateO = $date = $_REQUEST["date"];
     }
 
-    $sessionID = mysqli_real_escape_string($link, $_REQUEST["sessionID"]);
+    $sessionID = $_REQUEST["sessionID"];
     $response = $content = $modalOutput = "";
 
     if ($sessionID != null) {
       // Check if the register has been done before
-      $sql = "SELECT `SessionID` FROM `sessionsAttendance` WHERE `WeekID` = '$date' AND `SessionID` = '$sessionID';";
-      $result = mysqli_query($link, $sql);
-      $sessionRecordExists = mysqli_num_rows($result);
-      $sql = "SELECT `WeekDateBeginning` FROM `sessionsWeek` WHERE `WeekID` = '$date';";
-      $result = mysqli_query($link, $sql);
-      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-      $weekBeginning = $row['WeekDateBeginning'];
-      $sql = "SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE sessions.SessionID = '$sessionID';";
-      $result = mysqli_query($link, $sql);
-      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+      $sessionRecord = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` WHERE `WeekID` = ? AND `SessionID` = ?");
+      $sessionRecord->execute([$date, $sessionID]);
+      $sessionRecordExists = $sessionRecord->fetchColumn();
+
+      $getWeekBeginning = $db->prepare("SELECT `WeekDateBeginning` FROM `sessionsWeek` WHERE `WeekID` = ?");
+      $getWeekBeginning->execute([$date]);
+      $weekBeginning = $getWeekBeginning->fetchColumn();
+
+      $sessionDetails = $db->prepare("SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE sessions.SessionID = ?");
+      $sessionDetails->execute([$sessionID]);
+      $row = $sessionDetails->fetch(PDO::FETCH_ASSOC);
       $dayAdd = $row['SessionDay'];
-      $date = date ('j F Y', strtotime($weekBeginning. ' + ' . $dayAdd . ' days'));
+      $sessionDate = strtotime($weekBeginning. ' + ' . $dayAdd . ' days');
+      $date = date ('j F Y', $sessionDate);
 
       $dayText = "";
       switch ($row['SessionDay']) {
-          case 0:
-              $dayText = "Sunday";
-              break;
-          case 1:
-              $dayText = "Monday";
-              break;
-          case 2:
-              $dayText = "Tuesday";
-              break;
-          case 3:
-              $dayText = "Wednesday";
-              break;
-          case 4:
-              $dayText = "Thursday";
-              break;
-          case 5:
-              $dayText = "Friday";
-              break;
-          case 6:
-              $dayText = "Saturday";
-              break;
+        case 0:
+          $dayText = "Sunday";
+          break;
+        case 1:
+          $dayText = "Monday";
+          break;
+        case 2:
+          $dayText = "Tuesday";
+          break;
+        case 3:
+          $dayText = "Wednesday";
+          break;
+        case 4:
+          $dayText = "Thursday";
+          break;
+        case 5:
+          $dayText = "Friday";
+          break;
+        case 6:
+          $dayText = "Saturday";
+          break;
       }
 
       $datetime1 = new DateTime($row['StartTime']);
       $datetime2 = new DateTime($row['EndTime']);
-      $content .= "<h2>Take register</h2><p>for " . $row['SquadName'] . " Squad, " . $row['SessionName'] . " on " . $dayText . " " . $date . " at " . $datetime1->format("H:i") . "</p>";
+      $content .= "<h2>Take register</h2><p>for " . htmlspecialchars($row['SquadName']) . " Squad, " . htmlspecialchars($row['SessionName']) . " on " . $dayText . " " . $date . " at " . $datetime1->format("H:i") . "</p>";
       $interval = $datetime1->diff($datetime2);
       $content .= "<p>This session is ";
 
@@ -140,10 +147,11 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       sessions.SquadID = members.SquadID) INNER JOIN squads ON sessions.SquadID =
       squads.SquadID) LEFT JOIN `memberPhotography` ON members.MemberID =
       memberPhotography.MemberID) LEFT JOIN `memberMedical` ON members.MemberID =
-      memberMedical.MemberID) WHERE sessions.SessionID = '$sessionID' AND members.Status = '1' ORDER BY
+      memberMedical.MemberID) WHERE sessions.SessionID = ? AND members.Status = '1' ORDER BY
       members.MForename, members.MSurname ASC";
-      $result = mysqli_query($link, $sql);
-      $swimmerCount = mysqli_num_rows($result);
+      $swimmers = $db->prepare($sql);
+      $swimmers->execute([$sessionID]);
+
       $content .= "<div class=\"table-responsive-md table-nomargin mb-1\">";
       if (app('request')->isMobile()) {
         $content .= '<table class="table">';
@@ -151,31 +159,33 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
         $content .= '<table class="table">';
       }
       $content .= "<thead class=\"thead-light\"><tr><th>Swimmer</th><th>Notes</th></tr></thead><tbody>";
-      for ($i=0; $i<$swimmerCount; $i++) {
-        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-        $age = date_diff(date_create($row['DateOfBirth']),
-        date_create('today'))->y;
+      while ($row = $swimmers->fetch(PDO::FETCH_ASSOC)) {
+        $swimmerCount += 1;
+        $age = date_diff(date_create($row['DateOfBirth']), date_create('today'))->y;
+        $ageOnSession = date_diff(date_create($row['DateOfBirth']), date_create($weekBeginning. ' + ' . $dayAdd . ' days'))->y;
         $checked = "";
         if ($sessionRecordExists > 0) {
           $member = $row['MemberID'];
-          $sqlHistory = "SELECT * FROM `sessionsAttendance` WHERE `WeekID` = '$dateO' AND `SessionID` = '$sessionID' AND `MemberID` = '$member';";
-          $resultHistory = mysqli_query($link, $sqlHistory);
-          $existsCount = mysqli_num_rows($resultHistory);
-          $rowHistory = mysqli_fetch_array($resultHistory, MYSQLI_ASSOC);
-          if ($rowHistory['AttendanceBoolean'] == 1) {
+          $getMemberAttendance->execute([$dateO, $sessionID, $row['MemberID']]);
+          $column = $getMemberAttendance->fetchColumn();
+
+          if ($column != null && $column) {
             $checked = "checked";
           }
         }
         $no_parent = "";
+        if (date("m-d", strtotime($row['DateOfBirth'])) == date("m-d", $sessionDate)) {
+          $no_parent .= '<span class="sr-only"><em>Birthday is today</em></span><span class="badge badge-success"><i class="fa fa-birthday-cake" aria-hidden="true"></i> ' . $ageOnSession . ' today</span>';
+        }
         if ($row['UserID'] == null && $age < 18) {
-          $no_parent = "<span class=\"badge badge-primary\">NO PARENT</span>";
+          $no_parent .= "<span class=\"badge badge-primary\">NO PARENT</span>";
         }
         $content .= "
         <tr>
           <td>
             <div class=\"custom-control custom-checkbox\">
             <input type=\"checkbox\" class=\"custom-control-input\" " . $checked . " name=\"Member-" . $row['MemberID'] . "\" value=\"1\" id=\"Member-" . $row['MemberID'] . "\">
-            <label class=\"custom-control-label\" for=\"Member-" . $row['MemberID'] . "\">" . $row['MForename'] . " " . $row['MSurname'] . " " . $no_parent . "</label>
+            <label class=\"custom-control-label\" for=\"Member-" . $row['MemberID'] . "\">" . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " " . $no_parent . "</label>
             </div>
           </td>
           <td>";

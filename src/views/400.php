@@ -1,7 +1,12 @@
 <?php
 http_response_code(400);
 $pagetitle = "Error 400 - Bad Request";
-include BASE_PATH . "views/header.php";
+global $currentUser;
+if ($currentUser == null) {
+	include BASE_PATH . "views/head.php";
+} else {
+	include BASE_PATH . "views/header.php";
+}
 ?>
 
 <div class="container">

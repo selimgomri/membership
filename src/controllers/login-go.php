@@ -1,5 +1,7 @@
 <?php
 
+use GeoIp2\Database\Reader;
+
 global $db;
 
 $errorMessage = "";
@@ -18,8 +20,6 @@ if ($_POST['LoginSecurityValue'] == $_SESSION['LoginSec']) {
 } else {
   $security_status = false;
 }
-
-use GeoIp2\Database\Reader;
 
 if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($security_status)) {
   // Let the user login
@@ -77,112 +77,19 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
         $_SESSION['TWO_FACTOR'] = true;
         header("Location: " . autoUrl("2fa"));
       } else {
-        $_SESSION['EmailAddress'] = $email;
-        $_SESSION['Forename'] = $forename;
-        $_SESSION['Surname'] = $surname;
-        $_SESSION['UserID'] = $userID;
-        $_SESSION['AccessLevel'] = $row['AccessLevel'];
-        $_SESSION['LoggedIn'] = 1;
-
-        $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));
-
-        $geo_string = "Location Information Unavailable";
-
         try {
-          $reader = new Reader(BASE_PATH . 'storage/geoip/GeoLite2-City.mmdb');
-          $record = $reader->city(app('request')->ip());
-          $city;
-          if ($record->city->name != "") {
-            $city = $record->city->name . ', ';
+          $login = new \CLSASC\Membership\Login($db);
+          $login->setUser($userID);
+          if ($_POST['RememberMe']) {
+            $login->stayLoggedIn();
           }
-          $subdivision;
-          if ($record->mostSpecificSubdivision->name != "" && $record->mostSpecificSubdivision->name != $record->city->name) {
-            $subdivision = $record->mostSpecificSubdivision->name . ', ';
-          }
-          $country;
-          if ($record->country->name != "") {
-            $country = $record->country->name;
-          }
-
-          $geo_string = $city . $subdivision . $country;
-        } catch (AddressNotFoundException $e) {
-          $geo_string = "Unknown Location";
-        } catch (InvalidDatabaseException $e) {
-          $geo_string = "Location Information Unavailable";
+          global $currentUser;
+          $currentUser = $login->login();
+        } catch (Exception $e) {
+          halt(403);
         }
-
-        $sql = "INSERT INTO `userLogins` (`UserID`, `IPAddress`, `GeoLocation`, `Browser`, `Platform`, `Mobile`, `Hash`, `HashActive`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-        $mobile = 0;
-
-        $browser_details = new WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);
-
-        $browser = $browser_details->browser->name . ' ' . $browser_details->browser->version->toString();
-
-        if ($browser_details->isType('mobile')) {
-          $mobile = 1;
-        }
-
-        $remember_me = 0;
-        if ($_POST['RememberMe']) {
-          $remember_me = 1;
-        }
-
-        $login_details = [
-          $_SESSION['UserID'],
-          app('request')->ip(),
-          $geo_string,
-          $browser,
-          $browser_details->os->toString(),
-          $mobile,
-          $hash,
-          $remember_me
-        ];
-
-        try {
-        	$query = $db->prepare($sql);
-        	$query->execute($login_details);
-        } catch (PDOException $e) {
-        	halt(500);
-        }
-
-        $user_info_cookie = json_encode([
-          'Forename' => $row['Forename'],
-          'Surname' => $row['Surname'],
-          'Account' => $_SESSION['UserID'],
-          'TopUAL'  => $row['AccessLevel']
-        ]);
 
         unset($_SESSION['LoginSec']);
-
-        setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, time()+60*60*24*120 , "/", 'chesterlestreetasc.co.uk', true, false);
-        setcookie(COOKIE_PREFIX . "AutoLogin", $hash, time()+60*60*24*120, "/", 'chesterlestreetasc.co.uk', true, false);
-
-        // Test if we've seen a login from here before
-        $login_before_data = [
-          $_SESSION['UserID'],
-          app('request')->ip(),
-          ucwords(app('request')->browser()),
-          ucwords(app('request')->platform())
-        ];
-
-        $login_before = $db->prepare("SELECT COUNT(*) FROM `userLogins` WHERE `UserID` = ? AND `IPAddress` = ? AND `Browser` = ? AND `Platform` = ?");
-        $login_before->execute($login_before_data);
-        $login_before_count = $login_before->fetchColumn();
-
-        if ($login_before_count == 1) {
-
-          $subject = "New Account Login";
-          $message = '<p>Somebody just logged into your ' . CLUB_NAME . ' Account from ' . $browser . ', using a device running ' . $browser_details->os->toString() . ' we believe was located in ' . $geo_string . '*.</p><p>We haven\'t seen a login from this location and device before.</p><p>If this was you then you can ignore this email. If this was not you, please <a href="' . autoUrl("") . '">log in to your account</a> and <a href="' . autoUrl("myaccount/password") . '">change your password</a> as soon as possible.</p><p>Kind Regards, <br>The ' . CLUB_NAME . ' Team</p><p class="text-muted small">* We\'ve estimated your location from your public IP Address. The location given may not be where you live.</p>';
-          $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
-          `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'Security')";
-          try {
-            $db->prepare($notify)->execute([$_SESSION['UserID'], $subject, $message]);
-          } catch (PDOException $e) {
-            halt(500);
-          }
-
-        }
       }
     } else {
       $_SESSION['ErrorState'] = true;

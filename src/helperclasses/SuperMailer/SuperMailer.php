@@ -9,5 +9,5 @@ namespace CLSASC\SuperMailer;
  * @author Chris Heppell https://github.com/clheppell
  */
 class SuperMailer extends \SendGrid {
-
+  
 }

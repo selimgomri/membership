@@ -6,7 +6,7 @@ use Respect\Validation\Validator as v;
 
   $userID = $_SESSION['UserID'];
   $asaNumber = mysqli_real_escape_string($link, trim(htmlspecialchars($asa)));
-  $accessKey = mysqli_real_escape_string($link, strtoupper(trim(htmlspecialchars($acs))));
+  $accessKey = mysqli_real_escape_string($link, mb_strtoupper(trim(htmlspecialchars($acs))));
 
   $searchSQL = "SELECT * FROM members WHERE ASANumber = '$asaNumber' AND AccessKey = '$accessKey' LIMIT 1;";
   $searchResult = mysqli_query($link, $searchSQL);
@@ -60,7 +60,7 @@ use Respect\Validation\Validator as v;
         <li>" . $row['MForename'] . " " . $row['MSurname'] . "</li>
         <li>Squad: " . $row['SquadName'] . "</li>
         <li>Monthly Fee: &pound;" . $row['SquadFee'] . "</li>
-        <li>ASA Number: " . $row['ASANumber'] . "</li>
+        <li>Swim England Number: " . $row['ASANumber'] . "</li>
         <li>" . CLUB_SHORT_NAME . " Member ID: " . $row['MemberID'] . "</li>
       </ul>
       <p>If this was not you, contact <a href=\"mailto:"  . CLUB_EMAIL . "\">

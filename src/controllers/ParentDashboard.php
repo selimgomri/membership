@@ -1,4 +1,4 @@
-<?
+<?php
 
 global $db;
 
@@ -121,7 +121,7 @@ include BASE_PATH . "views/header.php";
       </div>
 		<?php } ?>
 
-		<h1>Hello <?=$username?></h1>
+		<h1><?=helloGreeting()?> <?=$username?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
 
     <?php if (IS_CLS === true && time() < strtotime('2019-01-25')) { ?>
@@ -183,7 +183,7 @@ include BASE_PATH . "views/header.php";
 		<div class="mb-4">
       <h2 class="mb-4">My Swimmers</h2>
       <div class="news-grid">
-				<?
+				<?php
 				if (sizeof($swimmers) > 0) {
 				foreach ($swimmers as $s) {
 					$fee = "&pound;0.00 - Exempt from fees";
@@ -213,7 +213,7 @@ include BASE_PATH . "views/header.php";
     <div class="mb-4">
       <h2 class="mb-4">My Gala Entries</h2>
       <div class="news-grid">
-				<?
+				<?php
 				if (sizeof($galas) > 0) {
 				foreach ($galas as $g) { ?>
 				<a href="<?=autoUrl("galas/entries/" . $g['EntryID'])?>">
@@ -240,7 +240,7 @@ include BASE_PATH . "views/header.php";
     <div class="mb-4">
       <h2 class="mb-4">Club News</h2>
       <div class="news-grid">
-        <?
+        <?php
         $max_posts = 6;
         if (sizeof($obj) < $max_posts) {
           $max_posts = sizeof($obj);
@@ -265,7 +265,7 @@ include BASE_PATH . "views/header.php";
     <div class="mb-4">
       <h2 class="mb-4">Swim England News</h2>
       <div class="news-grid">
-        <?
+        <?php
         $max_posts = 6;
         if (sizeof($asa) < $max_posts) {
           $max_posts = sizeof($asa);
@@ -290,7 +290,7 @@ include BASE_PATH . "views/header.php";
     <div class="mb-4">
       <h2 class="mb-4">Swim England North East News</h2>
       <div class="news-grid">
-        <?
+        <?php
         $max_posts = 6;
         if (sizeof($asa_ne->channel->item) < $max_posts) {
           $max_posts = sizeof($asa_ne->channel->item);
@@ -314,6 +314,6 @@ include BASE_PATH . "views/header.php";
   </div>
 </div>
 
-<?
+<?php
 
 include BASE_PATH . "views/footer.php";

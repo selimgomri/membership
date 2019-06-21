@@ -1,21 +1,26 @@
-<?
+<?php
 
-$id = mysqli_real_escape_string($link, $id);
+global $db;
 
-$sql = "SELECT * FROM `members` INNER JOIN `squads` ON members.SquadID =
-squads.SquadID WHERE `MemberID` = '$id';";
-$result = mysqli_query($link, $sql);
+$sql = $db->prepare("SELECT * FROM `members` INNER JOIN `squads` ON members.SquadID = squads.SquadID WHERE `MemberID` = ?");
+$sql->execute([$id]);
 
-if (mysqli_num_rows($result) == 0) {
+$row = $sql->fetch(PDO::FETCH_ASSOC);
+
+if ($row == null) {
 	halt(404);
 }
+$swimEnglandText = "Swim England Number";
+if (mb_stripos($row['ASANumber'], env('ASA_CLUB_CODE')) > -1) {
+	$swimEnglandText = "Temporary Membership Number";
+}
 
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-$pagetitle = $row['MForename'] . " " . $row['MSurname'];
+$pagetitle = htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " Registration Information";
 
 include BASE_PATH . "views/header.php";
-include BASE_PATH . "views/swimmersMenu.php"; ?>
+include BASE_PATH . "views/swimmersMenu.php";
+
+?>
 <style>
 @media print {
 	.bg-primary {
@@ -59,7 +64,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 			</strong>
 		</p>
 		<p>
-			We successfully added <?php echo $row['MForename'] . " " . $row['MSurname']; ?>.
+			We successfully added <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>.
 		</p>
 		<p>
 			Please print out, email or copy the information below to give to the
@@ -82,11 +87,11 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 			</a></p>
     </form>
 		<p class="mb-0">
-			<a href="<?php echo autoUrl("swimmers"); ?>" class="btn btn-info">
+			<a href="<?=autoUrl("swimmers")?>" class="btn btn-info">
 				Return to Swimmers
 			</a>
 			<?php if ($_SESSION['AccessLevel'] != "Coach" && $_SESSION['AccessLevel'] != "Galas") { ?>
-			<a href="<?php echo autoUrl("swimmers/addmember"); ?>" class="btn btn-info">
+			<a href="<?=autoUrl("swimmers/addmember")?>" class="btn btn-info">
 				Add Another Swimmer
 			</a>
 			<?php } ?>
@@ -94,7 +99,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 	</div>
 
 	<div class="py-3 mb-3 text-right mono">
-		<?php echo $row['SquadName']; ?> Squad
+		<?=htmlspecialchars($row['SquadName'])?> Squad
 	</div>
 
 	<div class="mb-3 p-5 bg-primary text-white">
@@ -102,7 +107,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		<h1 class="h2 mb-4">Online Membership System</h1>
 		<p class="mb-0">
 			<strong>
-				Your Access Key for <?php echo $row['MForename'] . " " . $row['MSurname']; ?>
+				Your Access Key for <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
 			</strong>
 		</p>
 	</div>
@@ -110,9 +115,14 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
   <p>
     Here at <?=CLUB_NAME?>, we provide a number of online services to
     manage our members. Our services allow you to manage your swimmers, enter
-    competitions, stay up to date by email and make payments by Direct Debit
-    (from 2019).
+    competitions, stay up to date by email and make payments by Direct Debit.
   </p>
+
+	<?php if (!(defined('IS_CLS') && IS_CLS)) { ?>
+	<p>
+		<strong>Please note:</strong> Some services may not be provided by your club.
+	</p>
+	<?php } ?>
 
 	<p>
 		If you haven’t already done so, you will need to create an account on our
@@ -121,8 +131,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 	</p>
 
 	<p>
-		Here’s what you will need to do to add <?php echo $row['MForename'] . " " .
-		$row['MSurname']; ?> to your account in our Online Membership System. There
+		Here’s what you will need to do to add <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?> to your account in our Online Membership System. There
 		are two methods you can use to do this.
 	</p>
 
@@ -132,7 +141,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		If you have a device that can read QR Codes (A built in feature on iOS and
 		Android Devices), scan the QR Code below. You'll be taken to a page where
 		you'll be asked to log in, if you aren't already, and we'll automatically
-		add <?php echo $row['MForename']; ?> to your account.
+		add <?=htmlspecialchars($row['MForename'])?> to your account.
 	</p>
 
   <div class="border border-dark p-2 bg-white mb-3 px-5">
@@ -140,7 +149,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 			<div class="col-8">
 				<span class="h2">Already registered for an account?</span>
 				<p class="lead">
-					Scan this QR Code to add <?php echo $row['MForename']; ?> quickly.
+					Scan this QR Code to add <?=htmlspecialchars($row['MForename'])?> quickly.
 				</p>
 				<p class="mb-0">
 					This QR Code cannot be used once you've added this swimmer.
@@ -173,20 +182,19 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 	</p>
 
 	<p>
-		You'll be directed to a page and asked to enter your swimmer's ASA Number
-		and <?=CLUB_SHORT_NAME?> Access Key as below.
+		You'll be directed to a page and asked to enter your swimmer's <?=$swimEnglandText?> and <?=CLUB_SHORT_NAME?> Access Key as below.
 	</p>
 
 	<div class="mb-3">
 		<table class="table table-sm table-borderless d-inline mb-0">
 		  <tbody>
 		    <tr>
-		      <th scope="row" class="pl-0">ASA Number</th>
-		      <td class="pr-0"><span class="mono"><?php echo $row['ASANumber']; ?></span></td>
+		      <th scope="row" class="pl-0"><?=$swimEnglandText?></th>
+		      <td class="pr-0"><span class="mono"><?=htmlspecialchars($row['ASANumber'])?></span></td>
 		    </tr>
 		    <tr>
 		      <th scope="row" class="pl-0"><?=CLUB_SHORT_NAME?> Access Key</th>
-		      <td class="pr-0"><span class="mono"><?php echo $row['AccessKey']; ?></span></td>
+		      <td class="pr-0"><span class="mono"><?=htmlspecialchars($row['AccessKey'])?></span></td>
 		    </tr>
 		  </tbody>
 		</table>
@@ -202,25 +210,26 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 			may need to verify your identity.
 		</p>
 
+		<?php if (mb_stripos($row['ASANumber'], env('ASA_CLUB_CODE')) > -1) { ?>
 		<p>
-			Don’t have an ASA Number? If so, and you need to be registered in our
-			system as a member, we’ll give you a reference number starting with
-			<?=CLUB_CODE?> which you can use in place of an ASA Number in our systems
-			only.
+			At the time you were given this form we did not yet have a Swim England registration number for <?=htmlspecialchars($row['MForename'])?>. We have given you a temporary number which starts with <span class="mono"><?=htmlspecialchars(env('ASA_CLUB_CODE'))?></span> which you can use to add your swimmer to your account.
 		</p>
+		<?php } ?>
 
 		<p>
 			If you’d like more information about how we use data, contact
 			<?=CLUB_EMAIL?>.
 		</p>
 
+		<?php if (!(defined('IS_CLS') && IS_CLS)) { ?>
     <p>
       The user account service is provided to <?=CLUB_NAME?> by
       Chester-le-Street ASC Club Digital Services.
     </p>
+		<?php } ?>
 	</div>
 
-  <?
+  <?php
   $col = "col-sm-6";
   if ($row['ThriveNumber'] != "") {
     $col = "col-sm-4";
@@ -229,7 +238,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
   <div class="row mb-3 align-items-stretch">
     <div class="<?php echo $col; ?>">
       <div class="text-center border border-dark h-100 p-2 bg-white">
-        <span class="mb-2">ASA Number</span>
+        <span class="mb-2">Swim England Number</span>
         <img class="img-fluid mx-auto d-block"
         src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ASANumber'] . "&print=false"); ?>"
         srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ASANumber'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ASANumber'] . "&print=false"); ?> 3x"
@@ -242,10 +251,10 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
       <div class="text-center border border-dark h-100 p-2 bg-white">
         <span class="mb-2"><?=CLUB_SHORT_NAME?> Number</span>
         <img class="img-fluid mx-auto d-block"
-        src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . CLUB_CODE . "X" . $row['MemberID'] . "&print=false"); ?>"
-        srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . CLUB_CODE . "X" . $row['MemberID'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . CLUB_CODE . "X" . $row['MemberID'] . "&print=false"); ?> 3x"
+        src="<?=autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . htmlspecialchars(env('ASA_CLUB_CODE') . $row['MemberID']) . "&print=false")?>"
+        srcset="<?=autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . htmlspecialchars(env('ASA_CLUB_CODE') . $row['MemberID']) . "&print=false")?> 2x, <?=autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . htmlspecialchars(env('ASA_CLUB_CODE') . $row['MemberID']) . "&print=false")?> 3x"
         alt="<?=CLUB_CODE?>X<?php echo $row['MemberID']; ?>"></img>
-        <span class="mono"><?=CLUB_CODE?><?php echo $row['MemberID']; ?></span>
+        <span class="mono"><?=htmlspecialchars(env('ASA_CLUB_CODE') . $row['MemberID'])?></span>
       </div>
       <?php if ($row['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><?php } ?>
     </div>
@@ -265,8 +274,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 	<div class="small text-muted">
 		<p>
-			The above barcodes are provided because ASA Membership Cards are no longer
-			issued.
+			The above barcodes are provided because Swim England Membership Cards are no longer issued.
 		</p>
 	</div>
 

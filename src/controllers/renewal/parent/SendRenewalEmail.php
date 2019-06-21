@@ -205,7 +205,7 @@ $mailtext .= '
 		Chester-le-Street ASC may wish to take photographs of individuals and groups
 		of swimmers under the age of 18, which may include your child during their
 		membership of Chester-le-Street ASC. Photographs will only be taken and
-		published in accordance with the ASA policy which requires the club to
+		published in accordance with Swim England policy which requires the club to
 		obtain the consent of the Parent or Guardian to take and use photographs
 		under the following circumstances.
 	</p>
@@ -280,4 +280,4 @@ circumstances.
   $mailtext .= '<p>Contact the Membership Secretary if there are any issues.</p>';
 
   notifySend($email, "Your Membership Renewal", $mailtext, $forename . ' ' . $surname, $email, $from = ["Email" => "noreply@membership-renewal.service.chesterlestreetasc.co.uk", "Name" => "Chester-le-Street ASC"]);
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());

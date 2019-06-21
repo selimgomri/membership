@@ -12,52 +12,52 @@ if ($_POST['is-parent']) {
 
 if (!v::email()->validate($_POST['email-addr'])) {
   $_SESSION['RequestTrial-Errors']['Email'] = "The email address is invalid";
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 }
 
 $dob = $_POST['year'] . '-' . $_POST['month'] . '-' . $_POST['day'];
 
 if (!v::date()->validate($dob)) {
   $_SESSION['RequestTrial-Errors']['DOB'] = "The date of birth provided is not valid";
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 }
 
 if ($_POST['forename'] == "") {
   $_SESSION['RequestTrial-Errors']['Parent-FN'] = "No parent first name";
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 }
 
 if ($_POST['surname'] == "") {
   $_SESSION['RequestTrial-Errors']['Parent-LN'] = "No parent last name";
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 }
 
 if (!$isParent) {
   if ($_POST['swimmer-forename'] == "") {
     $_SESSION['RequestTrial-Errors']['Swimmer-FN'] = "No swimmer first name";
-    header("Location: " . app('request')->curl);
+    header("Location: " . currentUrl());
   }
 
   if ($_POST['swimmer-surname'] == "") {
     $_SESSION['RequestTrial-Errors']['Swimmer-LN'] = "No swimmer last name";
-    header("Location: " . app('request')->curl);
+    header("Location: " . currentUrl());
   }
 }
 
 if ($_POST['sex'] == "") {
   $_SESSION['RequestTrial-Errors']['Swimmer-LN'] = "No swimmer sex provided";
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 }
 
 if ($_POST['experience'] == "") {
   $_SESSION['RequestTrial-Errors']['Swimmer-Experience'] = "No experience option selected";
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 }
 
 /*
 if (true) {
   $_SESSION['RequestTrial-Errors']['TESTING'] = "Testing system";
-  header("Location: " . app('request')->curl);
+  header("Location: " . currentUrl());
 }
 */
 
@@ -119,7 +119,7 @@ if ($_POST['swimmer-club'] != "" || $_POST['swimmer-asa'] != "") {
     $email_club .= ' ';
   }
   if ($_POST['swimmer-asa'] != "") {
-    $email_club .= 'Their ASA Number is ' . $asa . '. <a href="' . $biog_link . '">View their biog</a>.';
+    $email_club .= 'Their Swim England Number is ' . $asa . '. <a href="' . $biog_link . '">View their biog</a>.';
   }
   $email_club .= '</p>';
 }
@@ -144,10 +144,10 @@ if ($isParent) {
 
 $email_parent = '
 <p>Hello ' . $parent . '</p>
-<p>Thanks for your interest in a trial ' . $forText . ' at ' . CLUB_NAME . '. We\'re working through your request and will get back to you as soon as we can.</p>
+<p>Thanks for your interest in a trial ' . $forText . ' at ' . env('CLUB_NAME') . '. We\'re working through your request and will get back to you as soon as we can.</p>
 <p>In the meantime, you may wish to <a href="' . CLUB_WEBSITE . '">visit our website</a>.</p>';
 
-$to_club = notifySend(null, 'New Trial Request', $email_club, 'Club Admins', CLUB_TRIAL_EMAIL, ["Email" => "join@" . EMAIL_DOMAIN, "Name" => CLUB_NAME, 'Reply-To' => $_POST['email-addr']]);
+$to_club = notifySend(null, 'New Trial Request', $email_club, 'Club Admins', CLUB_TRIAL_EMAIL, ["Email" => "join@" . env('EMAIL_DOMAIN'), "Name" => env('CLUB_NAME'), 'Reply-To' => $_POST['email-addr']]);
 
 $to_parent = notifySend(null, 'Your Trial Request', $email_parent, $parent, $_POST['email-addr']);
 
@@ -198,4 +198,4 @@ if ($to_club && $to_parent) {
   $_SESSION['RequestTrial-Success'] = false;
 }
 
-header("Location: " . app('request')->curl);
+header("Location: " . currentUrl());

@@ -1,15 +1,23 @@
 <?php
 
+global $db;
+
 $url_path = "payments";
 if ($renewal_trap) {
 	$url_path = "renewal/payments";
 }
 
 $user = $_SESSION['UserID'];
-$sql = "SELECT * FROM `paymentSchedule` WHERE `UserID` = '$user';";
-$scheduleExists = mysqli_num_rows(mysqli_query($link, $sql));
-if ($scheduleExists > 0) {
-	header("Location: " . autoUrl($url_path . "/setup/2"));
+
+try {
+  $getPaySchdeule = $db->prepare("SELECT * FROM `paymentSchedule` WHERE `UserID` = ?");
+  $getPaySchdeule->execute([$_SESSION['UserID']]);
+  $scheduleExists = $getPaySchdeule->fetch(PDO::FETCH_ASSOC);
+  if ($scheduleExists != null) {
+  	header("Location: " . autoUrl($url_path . "/setup/2"));
+  }
+} catch (Exception $e) {
+  halt(500);
 }
 
 require "datepost.php";

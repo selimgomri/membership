@@ -3,6 +3,11 @@
 $userID = $_SESSION['UserID'];
 $access = $_SESSION['AccessLevel'];
 
+// View a Swimmer
+$this->get('/{id}:int/x-mode', function($id) {
+	require('NewIndivSwimmer.php');
+});
+
 if ($access == "Parent") {
 	// My Swimmers
 	$this->get('/', function() {
@@ -68,6 +73,42 @@ else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {
     global $link;
 	  require('singleSwimmerView.php');
 	});
+
+  /*
+   * Squad moves
+   *
+   */
+  $this->get('/{id}:int/new-move', function($id) {
+    global $link;
+    require BASE_PATH . 'controllers/squads/newMove.php';
+  });
+
+  $this->post('/{id}:int/new-move', function($id) {
+    global $link;
+    require BASE_PATH . 'controllers/squads/newMoveAction.php';
+  });
+
+  $this->get('/{id}:int/edit-move', function($id) {
+    global $link;
+    require BASE_PATH . 'controllers/squads/editMove.php';
+  });
+
+  $this->post('/{id}:int/edit-move', function($id) {
+    global $link;
+    require BASE_PATH . 'controllers/squads/editMoveAction.php';
+  });
+
+  $this->get('/{id}:int/move-contract', function($id) {
+    require BASE_PATH . 'controllers/squads/SquadMoveContract.php';
+  });
+
+  $this->get('/{id}:int/cancel-move', function($id) {
+    global $link;
+    require BASE_PATH . 'controllers/squads/cancelMoveAction.php';
+  });
+  /*
+   * End of squad moves
+   */
 
   function getSwimmerParent($member) {
     global $db;
@@ -178,3 +219,9 @@ $this->post('/{id}:int/medical', function($id) {
 	global $link;
 	include 'medicalDetailsPost.php';
 });
+
+if ($_SESSION['AccessLevel'] != "Parent") {
+  $this->get('/{swimmer}:int/agreement-to-code-of-conduct/{squad}:int', function($swimmer, $squad) {
+  	include 'MarkCodeOfConductCompleted.php';
+  });
+}

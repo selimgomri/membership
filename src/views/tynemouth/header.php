@@ -417,7 +417,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
         		<a class="dropdown-item" href="<?php echo autoUrl("posts/new")?>">New Page</a>
         		<?php if ($allow_edit && $_SESSION['AccessLevel'] != "Parent" &&
         		$_SESSION['AccessLevel'] != "Coach") { ?>
-        		<a class="dropdown-item" href="<?=app('request')->curl?>edit">Edit Current Page</a>
+        		<a class="dropdown-item" href="<?=currentUrl()?>edit">Edit Current Page</a>
         		<?php } ?>
         		<?php if ($exit_edit && $_SESSION['AccessLevel'] != "Parent" &&
         		$_SESSION['AccessLevel'] != "Coach") { ?>

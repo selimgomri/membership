@@ -1,38 +1,44 @@
 <?php
-$id = mysqli_real_escape_string($link, $id);
-$name = getSwimmerName($id);
+
+global $db;
 
 $yes = $no = "";
 
-$userID = $_SESSION['UserID'];
-$pagetitle = $name . " - Medical Review";
+$getMed;
 
-$sql = "SELECT * FROM `members` LEFT JOIN `memberMedical` ON members.MemberID =
-memberMedical.MemberID WHERE members.MemberID = '$id';";
-$result = mysqli_query($link, $sql);
-
-if (mysqli_num_rows($result) == 0) {
-	halt(500);
+if ($_SESSION['AccessLevel'] == "Parent") {
+  $getMed = $db->prepare("SELECT MForename, MSurname, Conditions, Allergies,
+  Medication FROM `members` LEFT JOIN `memberMedical` ON members.MemberID =
+  memberMedical.MemberID WHERE members.MemberID = ? AND members.UserID = ?");
+  $getMed->execute([$id, $_SESSION['UserID']]);
+} else {
+  $getMed = $db->prepare("SELECT MForename, MSurname, Conditions, Allergies,
+  Medication FROM `members` LEFT JOIN `memberMedical` ON members.MemberID =
+  memberMedical.MemberID WHERE members.MemberID = ?");
+  $getMed->execute([$id]);
 }
 
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+$row = $getMed->fetch(PDO::FETCH_ASSOC);
 
-if (($_SESSION['AccessLevel'] == "Parent" || $_SESSION['AccessLevel'] == "Galas" ||
-$_SESSION['AccessLevel'] == "Coach") && $row['UserID'] != $_SESSION['UserID']) {
-	halt(404);
+if ($row == null) {
+  halt(404);
 }
+
+$pagetitle = "Medical Review - " . htmlspecialchars($row['MForename'] . ' ' . $row['MSurname']);
 
 include BASE_PATH . "views/header.php";
 ?>
 
 <div class="container">
-	<form method="post" action="<?php echo app('request')->curl; ?>" name="med" id="med">
+	<form method="post" action="<?=htmlspecialchars(currentUrl())?>" name="med" id="med">
 		<h1>Medical Form</h1>
 		<?php if (isset($_SESSION['ErrorState'])) {
 			echo $_SESSION['ErrorState'];
 			unset($_SESSION['ErrorState']);
 		} ?>
-		<p class="lead">Check the details for <?php echo $name; ?> are correct.</p>
+		<p class="lead">
+      Check the details for <?=htmlspecialchars($row['MForename'] . ' ' . $row['MSurname'])?> are correct.
+    </p>
 
     <div class="alert alert-info">
       <p class="mb-0">
@@ -54,7 +60,7 @@ include BASE_PATH . "views/header.php";
     </div>
 
 		<div class="mb-2">
-			<p class="mb-2">Does <?php echo $name; ?> have any specific medical conditions
+			<p class="mb-2">Does <?=htmlspecialchars($row['MForename'])?> have any specific medical conditions
 			or disabilities?</p>
 
 			<?php if ($row['Conditions'] != "") {
@@ -66,25 +72,25 @@ include BASE_PATH . "views/header.php";
 			} ?>
 
 			<div class="custom-control custom-radio">
-			  <input type="radio" value="0" <?php echo $no; ?> id="medConDisNo" name="medConDis" class="custom-control-input" onclick="toggleState('medConDisDetails', 'medConDis')">
+			  <input type="radio" value="0" <?=$no?> id="medConDisNo" name="medConDis" class="custom-control-input" onclick="toggleState('medConDisDetails', 'medConDis')">
 			  <label class="custom-control-label" for="medConDisNo">No</label>
 			</div>
 			<div class="custom-control custom-radio">
-			  <input type="radio" value="1" <?php echo $yes; ?> id="medConDisYes" name="medConDis" class="custom-control-input" onclick="toggleState('medConDisDetails', 'medConDis')">
+			  <input type="radio" value="1" <?=$yes?> id="medConDisYes" name="medConDis" class="custom-control-input" onclick="toggleState('medConDisDetails', 'medConDis')">
 			  <label class="custom-control-label" for="medConDisYes">Yes</label>
 			</div>
 		</div>
 
 		<div class="form-group">
 	    <label for="medConDisDetails">If yes give details</label>
-	    <textarea onkeyup="autoGrow(this)" class="form-control" id="medConDisDetails" name="medConDisDetails"
-	    rows="8" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Conditions']; ?></textarea>
+	    <textarea oninput="autoGrow(this)" class="form-control auto-grow" id="medConDisDetails" name="medConDisDetails"
+	    rows="8" <?php if($yes==""){?>disabled<?php } ?>><?=htmlspecialchars($row['Conditions'])?></textarea>
 	  </div>
 
 		<!-- -->
 
 		<div class="mb-2">
-			<p class="mb-2">Does <?php echo $name; ?> have any allergies?</p>
+			<p class="mb-2">Does <?=htmlspecialchars($row['MForename'])?> have any allergies?</p>
 
 			<?php if ($row['Allergies'] != "") {
 				$yes = " checked ";
@@ -95,12 +101,12 @@ include BASE_PATH . "views/header.php";
 			} ?>
 
 			<div class="custom-control custom-radio">
-			  <input type="radio" value="0" <?php echo $no; ?> id="allergiesNo"
+			  <input type="radio" value="0" <?=$no?> id="allergiesNo"
 			  name="allergies" class="custom-control-input" onclick="toggleState('allergiesDetails', 'allergies')">
 			  <label class="custom-control-label" for="allergiesNo">No</label>
 			</div>
 			<div class="custom-control custom-radio">
-			  <input type="radio" value="1" <?php echo $yes; ?> id="allergiesYes"
+			  <input type="radio" value="1" <?=$yes?> id="allergiesYes"
 			  name="allergies" class="custom-control-input" onclick="toggleState('allergiesDetails', 'allergies')">
 			  <label class="custom-control-label" for="allergiesYes">Yes</label>
 			</div>
@@ -108,14 +114,14 @@ include BASE_PATH . "views/header.php";
 
 		<div class="form-group">
 	    <label for="allergiesDetails">If yes give details</label>
-	    <textarea onkeyup="autoGrow(this)" class="form-control" id="allergiesDetails" name="allergiesDetails"
-	    rows="8" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Allergies']; ?></textarea>
+	    <textarea oninput="autoGrow(this)" class="form-control auto-grow" id="allergiesDetails" name="allergiesDetails"
+	    rows="8" <?php if($yes==""){?>disabled<?php } ?>><?=htmlspecialchars($row['Allergies'])?></textarea>
 	  </div>
 
 		<!-- -->
 
 		<div class="mb-2">
-			<p class="mb-2">Does <?php echo $name; ?> take any regular medication?</p>
+			<p class="mb-2">Does <?=htmlspecialchars($row['MForename'])?> take any regular medication?</p>
 
 			<?php if ($row['Medication'] != "") {
 				$yes = " checked ";
@@ -126,19 +132,19 @@ include BASE_PATH . "views/header.php";
 			} ?>
 
 			<div class="custom-control custom-radio">
-			  <input type="radio" value="0" <?php echo $no; ?> id="medicineNo" name="medicine" class="custom-control-input" onclick="toggleState('medicineDetails', 'medicine')">
+			  <input type="radio" value="0" <?=$no?> id="medicineNo" name="medicine" class="custom-control-input" onclick="toggleState('medicineDetails', 'medicine')">
 			  <label class="custom-control-label" for="medicineNo">No</label>
 			</div>
 			<div class="custom-control custom-radio">
-			  <input type="radio" value="1" <?php echo $yes; ?> id="medicineYes" name="medicine" class="custom-control-input" onclick="toggleState('medicineDetails', 'medicine')">
+			  <input type="radio" value="1" <?=$yes?> id="medicineYes" name="medicine" class="custom-control-input" onclick="toggleState('medicineDetails', 'medicine')">
 			  <label class="custom-control-label" for="medicineYes">Yes</label>
 			</div>
 		</div>
 
 		<div class="form-group">
 	    <label for="medConDisDetails">If yes give details</label>
-	    <textarea onkeyup="autoGrow(this)" class="form-control" id="medicineDetails" name="medicineDetails"
-	    rows="8" <?if($yes==""){?>disabled<?} ?>><?php echo $row['Medication']; ?></textarea>
+	    <textarea oninput="autoGrow(this)" class="form-control auto-grow" id="medicineDetails" name="medicineDetails"
+	    rows="8" <?php if($yes==""){?>disabled<?php } ?>><?=htmlspecialchars($row['Medication'])?></textarea>
 	  </div>
 
 		<div>

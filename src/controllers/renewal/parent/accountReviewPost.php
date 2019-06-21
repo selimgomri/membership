@@ -69,8 +69,7 @@ if ($status) {
       $renewal,
       $_SESSION['UserID']
     ]);
-
-		header("Location: " . app('request')->curl);
+        header("Location: " . currentUrl());
 	} catch (Exception $e) {
 		$status = false;
 		$statusMessage .= "<li>Database Error - Contact support</li>";
@@ -82,5 +81,5 @@ if (!$status) {
 	<div class=\"alert alert-danger\">
 	<strong>An error occured when we tried to update our records</strong>
 	<ul class=\"mb-0\">" . $statusMessage . "</ul></div>";
-	header("Location: " . app('request')->curl);
+	header("Location: " . currentUrl());
 }

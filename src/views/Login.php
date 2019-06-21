@@ -41,14 +41,14 @@ include BASE_PATH . "views/header.php";
       <form method="post" action="<?=autoUrl("")?>" name="loginform" id="loginform" class="needs-validation" novalidate>
         <div class="form-group">
           <label for="email-address">Email Address</label>
-          <input type="email" name="email-address" id="email-address" class="form-control form-control-lg" <?php if ($errorState) { ?> value="<?=htmlspecialchars($username)?>"<?php } ?> required autofocus placeholder="yourname@example.com">
+          <input type="email" name="email-address" id="email-address" class="form-control form-control-lg" <?php if ($errorState) { ?> value="<?=htmlspecialchars($username)?>"<?php } ?> required autofocus placeholder="yourname@example.com" autocomplete="email">
           <div class="invalid-feedback">
             Please enter a valid email address.
           </div>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" name="password" id="password" class="form-control form-control-lg" required placeholder="Password">
+          <input type="password" name="password" id="password" class="form-control form-control-lg" required placeholder="Password" autocomplete="current-password">
           <div class="invalid-feedback">
             Please enter a password.
           </div>
@@ -83,6 +83,7 @@ include BASE_PATH . "views/header.php";
         </div>
       </form>
 
+      <?php if (defined('IS_CLS') && IS_CLS) { ?>
       <p class="small mb-0">
         Support Helpline: <a class=""
         href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>
@@ -93,6 +94,20 @@ include BASE_PATH . "views/header.php";
         href="https://www.chesterlestreetasc.co.uk/support/onlinemembership">CLS
         ASC Help and Support</a>
       </p>
+      <?php } else { ?>
+      <p class="small mb-0">
+        For support, please contact your own club in the first instance.
+      </p>
+      <p class="small mb-0">
+        Support Helpline: <a class=""
+        href="mailto:support@myswimmingclub.co.uk">support@myswimmingclub.co.uk</a>
+      </p>
+
+      <p class="small mb-4">
+        Support Website: <a class=""
+        href="https://www.chesterlestreetasc.co.uk/support/onlinemembership">SCDS Help and Support (hosted by <a href="https://www.chesterlestreetasc.co.uk" target="_blank">CLS ASC</a>)</a>
+      </p>
+      <?php } ?>
 
       <!--
       <p class="small mb-5">

@@ -63,7 +63,7 @@ $_SESSION['RegistrationMode'] = $mode;
                   <label for="forename">First Name</label>
                   <input class="form-control" type="text" name="forename"
                   id="forename" placeholder="First" required
-                  value="<?=htmlspecialchars($_SESSION['RegistrationForename'])?>">
+                  value="<?=htmlspecialchars($_SESSION['RegistrationForename'])?>" autocomplete="given-name">
                 </div>
 
               </div>
@@ -74,7 +74,7 @@ $_SESSION['RegistrationMode'] = $mode;
                   <label for="surname">Last Name</label>
                   <input class="form-control" type="text" name="surname"
                   id="surname" placeholder="Last" required
-                  value="<?=htmlspecialchars($_SESSION['RegistrationSurname'])?>">
+                  value="<?=htmlspecialchars($_SESSION['RegistrationSurname'])?>" autocomplete="family-name">
                 </div>
 
               </div>
@@ -83,7 +83,7 @@ $_SESSION['RegistrationMode'] = $mode;
 
             <div class="form-group">
               <label for="email">Email Address</label>
-              <input class="form-control mb-0" type="email" name="email" id="email-address" placeholder="yourname@example.com" required value="<?=htmlspecialchars($_SESSION['RegistrationEmail'])?>">
+              <input class="form-control mb-0" type="email" name="email" id="email-address" placeholder="yourname@example.com" required value="<?=htmlspecialchars($_SESSION['RegistrationEmail'])?>" autocomplete="email">
               <small id="emailHelp" class="form-text text-muted">
                 Your email address will only be used inside <?=CLUB_NAME?> and
                 Chester-le-Street ASC Club Digital Services.<!-- Emails sent by
@@ -98,7 +98,7 @@ $_SESSION['RegistrationMode'] = $mode;
           <div class="col-md-8 col-lg-6">
             <div class="form-group">
               <label for="mobile">Mobile Number</label>
-              <input class="form-control" type="tel" name="mobile" id="mobile" placeholder="01234 567890" required value="<?=htmlspecialchars($_SESSION['RegistrationMobile'])?>">
+              <input class="form-control" type="tel" name="mobile" id="mobile" placeholder="01234 567890" required value="<?=htmlspecialchars($_SESSION['RegistrationMobile'])?>" autocomplete="tel">
               <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
             </div>
           </div>
@@ -111,7 +111,7 @@ $_SESSION['RegistrationMode'] = $mode;
               <div class="col">
                 <div class="form-group">
                   <label for="password1">Password</label>
-                  <input class="form-control" type="password" aria-describedby="pwHelp" name="password1" id="password1" placeholder="Password" required>
+                  <input class="form-control" type="password" aria-describedby="pwHelp" name="password1" id="password1" placeholder="Password" required autocomplete="new-password">
                   <small id="pwHelp" class="form-text text-muted">Use 8 characters or more</small>
                 </div>
               </div>
@@ -119,7 +119,7 @@ $_SESSION['RegistrationMode'] = $mode;
               <div class="col">
                 <div class="form-group">
                   <label for="password2">Confirm Password</label>
-                  <input class="form-control" type="password" name="password2" id="password2" placeholder="Password" required>
+                  <input class="form-control" type="password" name="password2" id="password2" placeholder="Password" required autocomplete="new-password">
                 </div>
               </div>
             </div>
@@ -128,7 +128,7 @@ $_SESSION['RegistrationMode'] = $mode;
 
         <h2>Notification Preferences</h2>
 
-        <?
+        <?php
 
         $email = $sms = "";
         if (isset($_SESSION['RegistrationEmailAuth'])) {

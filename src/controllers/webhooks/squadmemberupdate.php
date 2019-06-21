@@ -1,24 +1,20 @@
-<?
+<?php
 
 // Mandatory Startup Sequence to carry out squad updates
-$sql = "SELECT * FROM `moves` WHERE MovingDate <= CURDATE();";
-$result = mysqli_query($link, $sql);
-$count = mysqli_num_rows($result);
-for ($i = 0; $i < $count; $i++) {
+$moves = $db->query("SELECT * FROM `moves` WHERE MovingDate <= CURDATE()");
+while ($move = $moves->fetch(PDO::FETCH_ASSOC)) {
   try {
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    $squadID = $row['SquadID'];
-    $member = $row['MemberID'];
-
+    // Move the swimmer to their new squad
     $query = $db->prepare("UPDATE `members` SET `SquadID` = ? WHERE `MemberID` = ?");
-    $data = array($squadID, $member);
-    $query->execute($data);
+    $query->execute([$move['SquadID'], $move['MemberID']]);
 
+    // Delete the squad move from the database
     $query = $db->prepare("DELETE FROM `moves` WHERE `MemberID` = ?");
-    $data = array($member);
-    $query->execute($data);
+    $query->execute([$move['MemberID']]);
   }
-  catch (PDOException $e) {
+  catch (Exception $e) {
+    // Catch all exceptions and halt
+    // This causes the cron handler to catch the issue
     halt(500);
   }
 }

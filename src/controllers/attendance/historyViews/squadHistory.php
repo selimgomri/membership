@@ -1,37 +1,40 @@
 <?php
-$id = mysqli_real_escape_string($link, $id);
 
-$sql = "SELECT * FROM `sessionsWeek` ORDER BY `WeekDateBeginning` DESC LIMIT 1;";
-$result = mysqli_query($link, $sql);
-$week = (int) mysqli_fetch_array($result, MYSQLI_ASSOC)['WeekID'];
+global $db;
 
-$sql = "SELECT * FROM `squads` WHERE `SquadID` = '$id';";
-$result = mysqli_query($link, $sql);
-$squadName = mysqli_fetch_array($result, MYSQLI_ASSOC)['SquadName'];
+$latestWeek = $db->query("SELECT WeekID FROM `sessionsWeek` ORDER BY `WeekDateBeginning` DESC LIMIT 1;");
+$week = (int) $latestWeek->fetchColumn();
 
-$sql = "SELECT * FROM ((`members` LEFT JOIN `sessionsAttendance` ON
+$getSquadName = $db->prepare("SELECT SquadName FROM `squads` WHERE `SquadID` = ?");
+$getSquadName->execute([$id]);
+$squadName = $getSquadName->fetchColumn();
+
+$get = $db->prepare("SELECT * FROM ((`members` LEFT JOIN `sessionsAttendance` ON
 `sessionsAttendance`.`MemberID` = `members`.`MemberID`) INNER JOIN `sessions` ON
 `sessionsAttendance`.`SessionID` = `sessions`.`SessionID`) WHERE
-`sessions`.`SquadID` = '$id' AND `WeekID` = '$week' ORDER BY `MForename` ASC,
-`MSurname` ASC, `SessionDay` ASC, `StartTime` ASC;";
-$result = mysqli_query($link, $sql);
-$count = mysqli_num_rows($result);
+`sessions`.`SquadID` = ? AND `WeekID` = ? ORDER BY `MForename` ASC,
+`MSurname` ASC, `SessionDay` ASC, `StartTime` ASC");
+$get->execute([$id, $week]);
 
-if ($count == 0) {
-	halt(404);
-}
+$row = $get->fetch(PDO::FETCH_ASSOC);
 
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 $swimmerOld = null;
 
-$pagetitle = "Attendance History for " . $squadName;
+$pagetitle = "Attendance History for " . htmlspecialchars($squadName) . ' Squad';
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded shadow">
+	<div class="">
 
-		<h1>Attendance History for <?php echo $squadName; ?></h1>
+		<h1>Attendance History for <?=htmlspecialchars($squadName)?> Squad</h1>
 		<p class="lead">Squad History currently only shows the current week</p>
+
+    <?php if ($row == null) { ?>
+      <div class="alert alert-warning">
+        <strong>No swimmers or recorded sessions were found for <?=htmlspecialchars($squadName)?> Squad</strong><br>
+        You need to take a register before swimmers will appear here
+      </div>
+    <?php } else { ?>
 
 		<div class="table-responsive-md">
 			<table class="table table-sm">
@@ -46,7 +49,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 					</tr>
 				</thead>
 				<tbody>
-					<?php for ($i = 0; $i < $count; $i++) {
+					<?php do {
 						$outputname = false;
 						$swimmer = $row['MemberID'];
 						if ($swimmer != $swimmerOld) {
@@ -56,11 +59,11 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 							?>
 							<tr>
 								<td>
-									<?php echo $row['MForename'] . " " . $row['MSurname']; ?>
+									<?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
 								</td>
 								<td>
 									<ul class="list-unstyled mb-0">
-							<?
+							<?php
 						}
 
 						$dayAdd = $row['SessionDay'];
@@ -100,29 +103,22 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 							<?php echo $title; ?>
 						<?php } ?>
 						</li>
-						<?
+						<?php
 
 						$swimmerOld = $row['MemberID'];
-
-						if ($i < $count) {
-							$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-						}
-
-						if ($i == $count-1) {
-							$swimmer = null;
-						}
-
-						$swimmer = $row['MemberID'];
 						if ($swimmer != $swimmerOld) {
 							?>
 								</ul>
 							</td>
-						</tr><?
+						</tr><?php
 						}
-					}	?>
+					}	while ($row = $get->fetch(PDO::FETCH_ASSOC)); ?>
 				</tbody>
 			</table>
 		</div>
+
+    <?php } ?>
+
 	</div>
 
 </div>

@@ -4,21 +4,12 @@
 ini_set('mail.add_x_header', 'Off');
 ini_set('expose_php', 'Off');
 
-if ($_SESSION['AccessLevel'] = "Admin") {
-  //Show errors
-  //===================================
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  error_reporting(E_ALL);
-  //===================================
-}
-
 $time_start = microtime(true);
 
 $executionStartTime = microtime();
 
-define('DS', DIRECTORY_SEPARATOR, true);
-define('BASE_PATH', __DIR__ . DS, TRUE);
+define('DS', DIRECTORY_SEPARATOR);
+define('BASE_PATH', __DIR__ . DS);
 
 $_SERVER['SERVER_PORT'] = 443;
 
@@ -33,6 +24,9 @@ $app->request   = System\Request::instance();
 $app->route     = System\Route::instance($app->request);
 
 $route          = $app->route;
+
+mb_internal_encoding('UTF-8');
+mb_http_output('UTF-8');
 
 header("Feature-Policy: fullscreen 'self' https://youtube.com");
 header("Referrer-Policy: strict-origin-when-cross-origin");
@@ -50,6 +44,14 @@ if (!(sizeof($_SESSION) > 0)) {
 }
 */
 
+function currentUrl() {
+  $url = app('request')->protocol . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  if (mb_substr($url, -1) != '/') {
+    $url = $url . '/';
+  }
+  return $url;
+}
+
 $db = null;
 $link = null;
 
@@ -60,14 +62,20 @@ if ($custom_domain_mode) {
 }
 
 $config_file = $config;
-if (strlen($cookie_prefix) > 0) {
-  define('COOKIE_PREFIX', $cookie_prefix, true);
+if (mb_strlen($cookie_prefix) > 0) {
+  define('COOKIE_PREFIX', $cookie_prefix);
 } else {
-  define('COOKIE_PREFIX', 'CLS-Membership-', true);
+  define('COOKIE_PREFIX', 'CLS-Membership-');
 }
 
 require $config_file;
 require 'default-config-load.php';
+
+// This code is required so cookies work in dev environments
+$cookieSecure = 1;
+if (app('request')->protocol == 'http') {
+  $cookieSecure = 0;
+}
 
 session_start([
     //'cookie_lifetime' => 172800,
@@ -75,7 +83,7 @@ session_start([
     'cookie_httponly'     => 0,
     'gc_probability'      => 1,
     'use_only_cookies'    => 1,
-    'cookie_secure'       => 1,
+    'cookie_secure'       => $cookieSecure,
     'use_strict_mode'     => 1,
     'sid_length'          => 128,
     'name'                => COOKIE_PREFIX . 'SessionId',
@@ -112,18 +120,27 @@ function halt(int $statusCode) {
     // Unavailable due to GDPR
     include "views/901.php";
   }
+  else if ($statusCode == 902) {
+    // Unavailable due to no GC API Key
+    include "views/902.php";
+  }
   else {
     include "views/500.php";
   }
   exit();
 }
 //$link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-//define("LINK", mysqli_connect($dbhost, $dbuser, $dbpass, $dbname), true);
+//define("LINK", mysqli_connect($dbhost, $dbuser, $dbpass, $dbname));
 //$link = LINK;
 
-$link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-$db = new PDO("mysql:host=" . $dbhost . ";dbname=" . $dbname . "", $dbuser, $dbpass);
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$link = mysqli_connect(env('DB_HOST'), env('DB_USER'), env('DB_PASS'), env('DB_NAME'));
+$db = null;
+try {
+  $db = new PDO("mysql:host=" . env('DB_HOST') . ";dbname=" . env('DB_NAME') . ";charset=utf8mb4", env('DB_USER'), env('DB_PASS'));
+  $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (Exception $e) {
+  halt(500);
+}
 
 /* check connection */
 if (mysqli_connect_errno()) {
@@ -132,9 +149,9 @@ if (mysqli_connect_errno()) {
 
 require_once "database.php";
 
-if ($_SERVER['HTTP_HOST'] == 'account.chesterlestreetasc.co.uk' && app('request')->method == "GET") {
-  header("Location: " . autoUrl(ltrim(app('request')->path, '/')));
-  die();
+$currentUser = null;
+if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && isset($_SESSION['UserID']) && $_SESSION['UserID'] != null) {
+  $currentUser = new User($_SESSION['UserID'], $db);
 }
 
 if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'AutoLogin'] != "") {
@@ -153,32 +170,23 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
     //halt(500);
   }
 
-  $row = $query->fetchAll(PDO::FETCH_ASSOC);
-  if (sizeof($row) == 1) {
-    $user = $row[0]['UserID'];
+  $row = $query->fetch(PDO::FETCH_ASSOC);
+  if ($row != null) {
+    $user = $row['UserID'];
     $utc = new DateTimeZone("UTC");
-    $time = new DateTime($row[0]['Time'], $utc);
-
-    $sql = "SELECT * FROM `users` WHERE `UserID` = ?";
+    $time = new DateTime($row['Time'], $utc);
 
     try {
-      $query = $db->prepare($sql);
-      $query->execute([$user]);
-    } catch (PDOException $e) {
-      //halt(500);
+      $login = new \CLSASC\Membership\Login($db);
+      $login->setUser($user);
+      $login->stayLoggedIn();
+      $login->preventWarningEmail();
+      $login->reLogin();
+      global $currentUser;
+      $currentUser = $login->login();
+    } catch (Exception $e) {
+      halt(403);
     }
-
-    $row = $query->fetchAll(PDO::FETCH_ASSOC);
-
-    $row = $row[0];
-
-    $_SESSION['Username'] = $row['Username'];
-    $_SESSION['EmailAddress'] = $row['EmailAddress'];
-    $_SESSION['Forename'] = $row['Forename'];
-    $_SESSION['Surname'] = $row['Surname'];
-    $_SESSION['UserID'] = $user;
-    $_SESSION['AccessLevel'] = $row['AccessLevel'];
-    $_SESSION['LoggedIn'] = true;
 
     $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));
 
@@ -199,8 +207,11 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
       'TopUAL'  => $row['AccessLevel']
     ]);
 
-    setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, $expiry_time , "/", 'chesterlestreetasc.co.uk', true, false);
-    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , "/", 'chesterlestreetasc.co.uk', true, false);
+    $secure = true;
+    if (app('request')->protocol == 'http') {
+      $secure = false;
+    }
+    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , "/", app('request')->hostname, $secure, false);
   }
 }
 
@@ -214,11 +225,11 @@ if ($_SESSION['LoggedIn'] && !isset($_SESSION['DisableTrackers'])) {
 }
 
 $route->group($get_group, function($clubcode = "CLSE") {
-  //$_SESSION['ClubCode'] = strtolower($code);
+  //$_SESSION['ClubCode'] = mb_strtolower($code);
 
   $this->get('/auth/cookie/redirect', function() {
     //$target = urldecode($target);
-    setcookie(COOKIE_PREFIX . "SeenAccount", true, 0, "/", 'chesterlestreetasc.co.uk', true, false);
+    setcookie(COOKIE_PREFIX . "SeenAccount", true, 0, "/", ('request')->hostname, true, false);
     header("Location: https://www.chesterlestreetasc.co.uk");
   });
 
@@ -291,7 +302,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
     $this->get('/barcode-generator', function() {
       include 'controllers/barcode-generation-system/gen.php';
     });
-
+    
     $this->get('/qr-generator', function() {
       include 'controllers/barcode-generation-system/qr.php';
     });
@@ -299,7 +310,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
     include 'controllers/services/router.php';
   });
 
-  if ($_SESSION['TWO_FACTOR']) {
+  if (isset($_SESSION['TWO_FACTOR']) && $_SESSION['TWO_FACTOR']) {
     $this->group('/2fa', function() {
       $this->get('/', function() {
         include BASE_PATH . 'views/TwoFactorCodeInput.php';
@@ -380,6 +391,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
       require('controllers/registration/RegAuth.php');
     });
 
+    $this->group('/assisted-registration', function() {
+      include 'controllers/assisted-registration/setup/router.php';
+    });
+
     // Locked Out Password Reset
     $this->get('/resetpassword', function() {
       global $link;
@@ -417,11 +432,6 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/notify/Help.php';
     });
 
-    $this->group('/people', function() {
-      global $link;
-      $people = true;
-      include 'controllers/posts/router.php';
-    });
 /*
     $this->get('/files/*', function() {
       $filename = $this[0];
@@ -559,6 +569,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/payments/router.php';
     });
 
+    $this->group('/form-agreement', function() {
+      include 'controllers/forms/router.php';
+    });
+
     $this->group('/notify', function() {
       global $link;
       include 'controllers/notify/router.php';
@@ -584,8 +598,16 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/qualifications/router.php';
     });
 
+    $this->group('/assisted-registration', function() {
+      include 'controllers/assisted-registration/router.php';
+    });
+
     $this->group('/admin', function() {
       include 'controllers/qualifications/AdminRouter.php';
+    });
+
+    $this->group('/resources', function() {
+      include 'controllers/resources/router.php';
     });
 
     // Log out
@@ -639,11 +661,34 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
       $this->group('/db', function() {
         // Handle database migrations
-        include 'controllers/db/router.php';
+        include 'controllers/migrations/router.php';
       });
 
       $this->get('/test', function() {
-        notifySend("x", "A test", "Hello Christopher", "Chris Heppell", "clheppell1@sheffield.ac.uk", $from = ["Email" => "noreply@galas.uk", "Name" => "GALAS.UK"]);
+        //use \Twilio\Rest\Client;
+
+        try {
+          // Your Account SID and Auth Token from twilio.com/console
+          $account_sid = env('TWILIO_AC_SID');
+          $auth_token = env('TWILIO_AC_AUTH_TOKEN');
+          // In production, these should be environment variables. E.g.:
+          // $auth_token = $_ENV["TWILIO_ACCOUNT_SID"]
+
+          // A Twilio number you own with SMS capabilities
+          $twilio_number = env('TWILIO_NUMBER');
+
+          $client = new Twilio\Rest\Client($account_sid, $auth_token);
+          $client->messages->create(
+            // Where to send a text message (your cell phone?)
+            '+447577002981',
+            [
+              'from' => $twilio_number,
+              'body' => 'I sent this message in under 10 minutes!'
+            ]
+          );
+        } catch (Exception $e) {
+          pre($e);
+        }
       });
     }
   }
@@ -672,7 +717,12 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
 });
 
-$route->end();
+try {
+  $route->end();
+} catch (Exception $e) {
+  // This catches any uncaught exceptions.
+  halt(500);
+}
 
 // Close SQL Database Connections
 mysqli_close($link);

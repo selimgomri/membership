@@ -1,3 +1,9 @@
-<?
+<?php
 
-include CLUB_VIEW_PATH . '/header.php';
+global $currentUser;
+$cvp = CLUB_VIEW_PATH;
+if (defined('IS_CLS') && IS_CLS && $currentUser != null && $currentUser->getUserBooleanOption('UsesGenericTheme')) {
+  $cvp = 'generic';
+}
+
+include $cvp . '/header.php';

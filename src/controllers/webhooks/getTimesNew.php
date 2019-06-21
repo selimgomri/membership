@@ -1,4 +1,4 @@
-<?
+<?php
 
 /**
  * Cron Job to scrape times from the ASA
@@ -30,7 +30,7 @@ $update_time = $db->prepare($sql);
 
 use Symfony\Component\DomCrawler\Crawler;
 
-// Get some members and ASA numbers
+// Get some members and Swim England Numbers
 
 $sql = "SELECT DISTINCT `ASANumber`, `members`.`MemberID` FROM `members` LEFT JOIN `times` ON `members`.`MemberID` = `times`.`MemberID` WHERE `LastUpdate` IS NULL OR `LastUpdate` < CURDATE() LIMIT 4;";
 $result = $db->query($sql);
@@ -51,7 +51,7 @@ for ($i = 0; $i < $count_to_get; $i++) {
 	$user = $row[$i]['MemberID'];
 	//echo "I = $i, ";
 
-	if (!strpos($row[$i]['ASANumber'], 'CLSX') && $row[$i]['ASANumber'] != "") {
+	if (!strpos($row[$i]['ASANumber'], CLUB_SHORT_CODE) && $row[$i]['ASANumber'] != "") {
 		$curlres =
 		curl('https://www.swimmingresults.org/individualbest/personal_best.php?print=1&mode=L&tiref=' . $row[$i]['ASANumber']);
 		$array = getTimes($row[$i]['ASANumber']);

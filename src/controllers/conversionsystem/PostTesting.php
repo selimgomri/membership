@@ -25,7 +25,7 @@ try {
 	$time->setOutputAsString();
 } catch (\Exception $e) {
 	$_SESSION['Time']['Error'] = true;
-	header("Location: " . app('request')->curl);
+	header("Location: " . currentUrl());
 }
 
 if ($_POST['source'] == "50m") {
@@ -88,4 +88,4 @@ try {
 
 $_SESSION['Time']['Event'] = $_POST['event'];
 
-header("Location: " . app('request')->curl);
+header("Location: " . currentUrl());

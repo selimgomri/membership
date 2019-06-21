@@ -123,13 +123,13 @@ for ($i = 0; $i < sizeof($row); $i++) {
 
 if ($status) {
 	// Update the database with current renewal state
+  ]);
   $nextStage = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE
 	`RenewalID` = ? AND `UserID` = ?");
   $nextStage->execute([
     $renewal,
     $_SESSION['UserID']
-  ]);
-	header("Location: " . app('request')->curl);
+	header("Location: " . currentUrl());
 } else {
 	$_SESSION['ErrorState'] = "
 	<div class=\"alert alert-danger\">
@@ -138,5 +138,5 @@ if ($status) {
 	<p class=\"mb-0\">Please try again. You cannot renew your membership or
 	register if you cannot agree to the terms and conditions on this
 	page.</p></div>";
-	header("Location: " . app('request')->curl);
+	header("Location: " . currentUrl());
 }

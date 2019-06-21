@@ -116,7 +116,7 @@ if ($hasDD) {
 		}
 		header("Location: " . autoUrl(""));
 	} else {
-		header("Location: " . app('request')->curl);
+		header("Location: " . currentUrl());
 	}
 } else {
 	header("Location: " . autoUrl("renewal/payments/setup"));

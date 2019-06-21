@@ -1,4 +1,4 @@
-<?
+<?php
 
 global $db;
 $query = null;
@@ -76,6 +76,6 @@ include BASE_PATH . "views/postsMenu.php";?>
 	</div>
 </div>
 
-<?
-}
+<?php }
+
 include BASE_PATH . "views/footer.php";

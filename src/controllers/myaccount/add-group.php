@@ -20,7 +20,7 @@ $errorState = false;
         matching those details.</strong></p>
         <p class="mb-0">Please check them and try again.</p>
       </div>
-			<?
+			<?php
 			$fam = $_SESSION['ErrorState']['FAM'];
 			$acs = $_SESSION['ErrorState']['ACS'];
       unset($_SESSION['ErrorState']);

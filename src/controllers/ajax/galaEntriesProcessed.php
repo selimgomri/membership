@@ -1,27 +1,41 @@
 <?php
+
+global $db;
+$update = $db->prepare("UPDATE galaEntries SET EntryProcessed = ? WHERE EntryID = ?");
+$markPaid = $db->prepare("UPDATE galaEntries SET Charged = ? WHERE EntryID = ?");
+
 $access = $_SESSION['AccessLevel'];
 if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $access == "Galas") {
 	if ((isset($_POST["processedID"])) && (isset($_POST["clickedItemChecked"])) && (isset($_POST["verify"]))) {
 
 		// get the galaID parameter from POST
-    $id = mysqli_real_escape_string($link, htmlspecialchars($_POST["processedID"]));
-		$itemChecked = mysqli_real_escape_string($link, htmlspecialchars($_POST["clickedItemChecked"]));
-		$verify = mysqli_real_escape_string($link, htmlspecialchars($_POST["verify"]));
+    $id = $_POST["processedID"];
+		$itemChecked = $_POST["clickedItemChecked"];
+		$verify = $_POST["verify"];
 
-	if ($verify == "markProcessed" /*&& $itemChecked != null*/) {
-			if (strpos($id, 'processedEntry-') !== false) {
-			    // Okay it's what we want. Lets remove the "processedEntry" so we just have the ID left over
-					$id = substr($id, 15);
-					$sql = "";
-					if ($itemChecked == "true") {
-						$sql = "UPDATE `galaEntries` SET `EntryProcessed` = '1' WHERE `EntryID` = '$id'";
-					}
-					else {
-						$sql = "UPDATE `galaEntries` SET `EntryProcessed` = '0' WHERE `EntryID` = '$id'";
-					}
-					mysqli_query($link, $sql);
-			}
-		}
+  	if ($verify == "markProcessed" /*&& $itemChecked != null*/) {
+  		if (strpos($id, 'processedEntry-') !== false) {
+  	    // Okay it's what we want. Lets remove the "processedEntry" so we just have the ID left over
+  			$id = substr($id, 15);
+  			if ($itemChecked == "true") {
+  				$update->execute([true, $id]);
+  			}
+  			else {
+  				$update->execute([0, $id]);
+  			}
+  		}
+  	} else if ($verify == "markPaid") {
+      if (strpos($id, 'chargedEntry-') !== false) {
+  	    // Okay it's what we want. Lets remove the "chargedEntry" so we just have the ID left over
+  			$id = substr($id, 13);
+  			if ($itemChecked == "true") {
+  				$markPaid->execute([true, $id]);
+  			}
+  			else {
+  				$markPaid->execute([0, $id]);
+  			}
+  		}
+    }
   }
 }
 ?>

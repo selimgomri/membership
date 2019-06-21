@@ -1,6 +1,8 @@
-<?
+<?php
 
-$id = mysqli_real_escape_string($link, $id);
+global $db;
+use Respect\Validation\Validator as v;
+
 $userID = $_SESSION['UserID'];
 $forenameUpdate = false;
 $middlenameUpdate = false;
@@ -12,9 +14,13 @@ $photoUpdate = false;
 $update = false;
 $successInformation = "";
 
-$query = "SELECT * FROM members WHERE MemberID = '$id'";
-$result = mysqli_query($link, $query);
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+$getDetails = $db->prepare("SELECT * FROM members WHERE MemberID = ? and UserID = ?");
+$getDetails->execute([$id, $_SESSION['UserID']]);
+$row = $getDetails->fetch(PDO::FETCH_ASSOC);
+
+if ($row == null) {
+  halt(404);
+}
 
 $forename = $row['MForename'];
 $middlename = $row['MMiddleNames'];
@@ -23,160 +29,130 @@ $dateOfBirth = $row['DateOfBirth'];
 $sex = $row['Gender'];
 $otherNotes = $row['OtherNotes'];
 
-// Get the swimmer name
-$sqlSecurityCheck = "SELECT `MForename`, `MSurname`, `UserID` FROM `members`
-WHERE MemberID = '$id';";
-$resultSecurityCheck = mysqli_query($link, $sqlSecurityCheck);
-$swimmersSecurityCheck = mysqli_fetch_array($resultSecurityCheck, MYSQLI_ASSOC);
+if (!empty($_POST['forename'])) {
+  $newForename = trim(mb_ucfirst($_POST['forename']));
 
-if ($swimmersSecurityCheck['UserID'] != $userID) {
-  halt(404);
+  if ($newForename != $forename) {
+    $update = $db->prepare("UPDATE `members` SET `MForename` = ? WHERE `MemberID` = ?");
+    $update->execute([$newForename, $id]);
+    $forenameUpdate = true;
+    $update = true;
+  }
 }
-else {
-  if (!empty($_POST['forename'])) {
-    $newForename = mysqli_real_escape_string($link,
-    trim(htmlspecialchars(ucwords($_POST['forename']))));
-    if ($newForename != $forename) {
-      $sql = "UPDATE `members` SET `MForename` = '$newForename' WHERE `MemberID` =
-      '$id'";
-      mysqli_query($link, $sql);
-      $forenameUpdate = true;
-      $update = true;
-    }
+if (isset($_POST['middlenames'])) {
+  $newMiddlenames = trim(mb_ucfirst($_POST['middlenames']));
+  if ($newMiddlenames != $middlename) {
+    $update = $db->prepare("UPDATE `members` SET `MMiddleNames` = ? WHERE `MemberID` = ?");
+    $update->execute([$newMiddlenames, $id]);
+    $middlenameUpdate = true;
+    $update = true;
   }
-  if (isset($_POST['middlenames'])) {
-    $newMiddlenames = mysqli_real_escape_string($link,
-    trim(htmlspecialchars(ucwords($_POST['middlenames']))));
-    if ($newMiddlenames != $middlename) {
-      $sql = "UPDATE `members` SET `MMiddleNames` = '$newMiddlenames' WHERE
-      `MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      $middlenameUpdate = true;
-      $update = true;
-    }
-  }
-  if (!empty($_POST['surname'])) {
-    $newSurname = mysqli_real_escape_string($link,
-    trim(htmlspecialchars(ucwords($_POST['surname']))));
-    if ($newSurname != $surname) {
-      $sql = "UPDATE `members` SET `MSurname` = '$newSurname' WHERE `MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      $surnameUpdate = true;
-      $update = true;
-    }
-  }
-  if (!empty($_POST['datebirth'])) {
-    $newDateOfBirth = mysqli_real_escape_string($link,
-    trim(htmlspecialchars(ucwords($_POST['datebirth']))));
-    // NEEDS WORK FOR DATE TO BE RIGHT
-    if ($newDateOfBirth != $dateOfBirth) {
-      $sql = "UPDATE `members` SET `DateOfBirth` = '$newDateOfBirth' WHERE
-      `MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      $dateOfBirthUpdate = true;
-      $update = true;
-    }
-  }
-  if (!empty($_POST['sex'])) {
-    $newSex = mysqli_real_escape_string($link,
-    trim(htmlspecialchars(ucwords($_POST['sex']))));
-    if ($newSex != $sex) {
-      $sql = "UPDATE `members` SET `Gender` = '$newSex' WHERE `MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      $sexUpdate = true;
-      $update = true;
-    }
-  }
-  if (isset($_POST['otherNotes'])) {
-    $newOtherNotes = mysqli_real_escape_string($link,
-    trim(htmlspecialchars(ucfirst($_POST['otherNotes']))));
-    if ($newOtherNotes != $otherNotes) {
-      $sql = "UPDATE `members` SET `OtherNotes` = '$newOtherNotes' WHERE
-      `MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      $otherNotesUpdate = true;
-      $update = true;
-    }
-  }
-  if ((!empty($_POST['disconnect'])) && (!empty($_POST['disconnectKey']))) {
-    $disconnect = mysqli_real_escape_string($link,
-    trim(htmlspecialchars($_POST['disconnect'])));
-    $disconnectKey = mysqli_real_escape_string($link,
-    trim(htmlspecialchars($_POST['disconnectKey'])));
-    if ($disconnect == $disconnectKey) {
-      $newKey = generateRandomString(8);
-      $sql = "UPDATE `members` SET `UserID` = NULL, `AccessKey` = '$newKey'
-      WHERE `MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      header("Location: " . autoUrl("swimmers"));
-    }
-  }
-  if (!empty($_POST['swimmerDeleteDanger'])) {
-    $deleteKey = mysqli_real_escape_string($link,
-    trim(htmlspecialchars($_POST['swimmerDeleteDanger'])));
-    if ($deleteKey == $dbAccessKey) {
-      $sql = "DELETE FROM `members` WHERE `members`.`MemberID` = '$id'";
-      mysqli_query($link, $sql);
-      header("Location: " . autoUrl("swimmers"));
-    }
-  }
-  if (isset($_POST['webPhoto']) || isset($_POST['socPhoto']) || isset($_POST['noticePhoto']) || isset($_POST['trainFilm']) || isset($_POST['webPhoto'])) {
-    setupPhotoPermissions($id);
-  }
-  // Web Photo Permissions
-  $photo[0] = 1;
-  if (!isset($_POST['webPhoto']) || $_POST['webPhoto'] != 1) {
-    $photo[0] = 0;
-  }
-  $sql = "UPDATE `memberPhotography` SET `Website` = '$photo[0]' WHERE `MemberID` =
-  '$id';";
-  mysqli_query($link, $sql);
-  $photoUpdate = true;
-  $update = true;
-
-  // Social Media Photo Permissions
-  $photo[1] = 1;
-  if (!isset($_POST['socPhoto']) || $_POST['socPhoto'] != 1) {
-    $photo[1] = 0;
-  }
-  $sql = "UPDATE `memberPhotography` SET `Social` = '$photo[1]' WHERE `MemberID` =
-  '$id';";
-  mysqli_query($link, $sql);
-  $photoUpdate = true;
-  $update = true;
-
-  // Notice Board Photo Permissions
-  $photo[2] = 1;
-  if (!isset($_POST['noticePhoto']) || $_POST['noticePhoto'] != 1) {
-    $photo[2] = 0;
-  }
-  $sql = "UPDATE `memberPhotography` SET `Noticeboard` = '$photo[2]' WHERE
-  `MemberID` = '$id';";
-  mysqli_query($link, $sql);
-  $photoUpdate = true;
-  $update = true;
-
-  // Filming in Training Permissions
-  $photo[3] = 1;
-  if (!isset($_POST['trainFilm']) || $_POST['trainFilm'] != 1) {
-    $photo[3] = 0;
-  }
-  $sql = "UPDATE `memberPhotography` SET `FilmTraining` = '$photo[3]' WHERE
-  `MemberID` = '$id';";
-  mysqli_query($link, $sql);
-  $photoUpdate = true;
-  $update = true;
-
-  // Pro Photographer Photo Permissions
-  $photo[4] = 1;
-  if (!isset($_POST['proPhoto']) || $_POST['proPhoto'] != 1) {
-    $photo[4] = 0;
-  }
-  $sql = "UPDATE `memberPhotography` SET `ProPhoto` = '$photo[4]' WHERE
-  `MemberID` = '$id';";
-  mysqli_query($link, $sql);
-  $photoUpdate = true;
-  $update = true;
 }
+if (!empty($_POST['surname'])) {
+  $newSurname = trim(mb_ucfirst($_POST['surname']));
+  if ($newSurname != $surname) {
+    $update = $db->prepare("UPDATE `members` SET `MSurname` = ? WHERE `MemberID` = ?");
+    $update->execute([$newSurname, $id]);
+    $surnameUpdate = true;
+    $update = true;
+  }
+}
+if (!empty($_POST['datebirth'])) {
+  $newDateOfBirth = trim(mb_ucfirst($_POST['datebirth']));
+  if ($newDateOfBirth != $dateOfBirth && v::date()->validate($newDateOfBirth)) {
+    $update = $db->prepare("UPDATE `members` SET `DateOfBirth` = ? WHERE `MemberID` = ?");
+    $update->execute([$newDateOfBirth, $id]);
+    $dateOfBirthUpdate = true;
+    $update = true;
+  }
+}
+if (!empty($_POST['sex'])) {
+  $newSex = trim(mb_ucfirst($_POST['sex']));
+  if ($newSex != $sex) {
+    $update = $db->prepare("UPDATE `members` SET `Gender` = ? WHERE `MemberID` = ?");
+    $update->execute([$newSex, $id]);
+    $sexUpdate = true;
+    $update = true;
+  }
+}
+if (isset($_POST['otherNotes'])) {
+  $newOtherNotes = trim(ucfirst($_POST['otherNotes']));
+  if ($newOtherNotes != $otherNotes) {
+    $update = $db->prepare("UPDATE `members` SET `OtherNotes` = ? WHERE `MemberID` = ?");
+    $update->execute([$newOtherNotes, $id]);
+    $otherNotesUpdate = true;
+    $update = true;
+  }
+}
+if ((!empty($_POST['disconnect'])) && (!empty($_POST['disconnectKey']))) {
+  $disconnect = trim($_POST['disconnect']);
+  $disconnectKey = trim($_POST['disconnectKey']);
+  if ($disconnect == $disconnectKey) {
+    $newKey = generateRandomString(8);
+    $update = $db->prepare("UPDATE `members` SET `UserID` = NULL, AccessKey = ? WHERE `MemberID` = ?");
+    $update->execute([$newKey, $id]);
+    header("Location: " . autoUrl("swimmers"));
+  }
+}
+if (!empty($_POST['swimmerDeleteDanger'])) {
+  $deleteKey = trim($_POST['swimmerDeleteDanger']);
+  if ($deleteKey == $dbAccessKey) {
+    $update = $db->prepare("DELETE FROM `members` WHERE members.MemberID = ?");
+    $update->execute([$id]);
+    header("Location: " . autoUrl("swimmers"));
+  }
+}
+if (isset($_POST['webPhoto']) || isset($_POST['socPhoto']) || isset($_POST['noticePhoto']) || isset($_POST['trainFilm']) || isset($_POST['webPhoto'])) {
+  setupPhotoPermissions($id);
+}
+// Web Photo Permissions
+$photo[0] = 1;
+if (!isset($_POST['webPhoto']) || $_POST['webPhoto'] != 1) {
+  $photo[0] = 0;
+}
+$update = $db->prepare("UPDATE `memberPhotography` SET `Website` = ? WHERE `MemberID` = ?");
+$update->execute([$photo[0], $id]);
+$photoUpdate = true;
+$update = true;
 
-header("Location: " . app('request')->curl);
+// Social Media Photo Permissions
+$photo[1] = 1;
+if (!isset($_POST['socPhoto']) || $_POST['socPhoto'] != 1) {
+  $photo[1] = 0;
+}
+$update = $db->prepare("UPDATE `memberPhotography` SET `Social` = ? WHERE `MemberID` = ?");
+$update->execute([$photo[1], $id]);
+$photoUpdate = true;
+$update = true;
+
+// Notice Board Photo Permissions
+$photo[2] = 1;
+if (!isset($_POST['noticePhoto']) || $_POST['noticePhoto'] != 1) {
+  $photo[2] = 0;
+}
+$update = $db->prepare("UPDATE `memberPhotography` SET `Noticeboard` = ? WHERE `MemberID` = ?");
+$update->execute([$photo[2], $id]);
+$photoUpdate = true;
+$update = true;
+
+// Filming in Training Permissions
+$photo[3] = 1;
+if (!isset($_POST['trainFilm']) || $_POST['trainFilm'] != 1) {
+  $photo[3] = 0;
+}
+$update = $db->prepare("UPDATE `memberPhotography` SET `FilmTraining` = ? WHERE `MemberID` = ?");
+$update->execute([$photo[3], $id]);
+$photoUpdate = true;
+$update = true;
+
+// Pro Photographer Photo Permissions
+$photo[4] = 1;
+if (!isset($_POST['proPhoto']) || $_POST['proPhoto'] != 1) {
+  $photo[4] = 0;
+}
+$update = $db->prepare("UPDATE `memberPhotography` SET `ProPhoto` = ? WHERE `MemberID` = ?");
+$update->execute([$photo[4], $id]);
+$photoUpdate = true;
+$update = true;
+
+header("Location: " . currentUrl());

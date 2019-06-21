@@ -1,49 +1,70 @@
-<?
+<?php
 
 use Respect\Validation\Validator as v;
 global $db;
+global $currentUser;
 
 $twofa = false;
-if (filter_var(getUserOption($_SESSION['UserID'], "Is2FA"), FILTER_VALIDATE_BOOLEAN)) {
+if ($currentUser->getUserBooleanOption('Is2FA')) {
 	$twofa = true;
 }
 
 $trackers = true;
-if (filter_var(getUserOption($_SESSION['UserID'], "DisableTrackers"), FILTER_VALIDATE_BOOLEAN)) {
+if ($currentUser->getUserBooleanOption('DisableTrackers')) {
 	$trackers = false;
 }
 
+$genericTheme = true;
+if ($currentUser->getUserBooleanOption('UsesGenericTheme')) {
+	$genericTheme = false;
+}
+
+$galaDDOptOut = false;
+if ($currentUser->getUserBooleanOption('GalaDirectDebitOptOut')) {
+	$galaDDOptOut = true;
+}
+
 $betas = true;
-if (filter_var(getUserOption($_SESSION['UserID'], "EnableBeta"), FILTER_VALIDATE_BOOLEAN)) {
+if ($currentUser->getUserBooleanOption('EnableBeta')) {
 	$betas = false;
 }
 
 if ($_POST['2FA'] == "1") {
-  setUserOption($_SESSION['UserID'], "Is2FA", "1");
+  $currentUser->setUserOption("Is2FA", "1");
 } else {
-  setUserOption($_SESSION['UserID'], "Is2FA", "0");
+  $currentUser->setUserOption("Is2FA", "0");
+}
+
+if ($_POST['generic-theme'] == "1") {
+  $currentUser->setUserOption("UsesGenericTheme", "1");
+} else {
+  $currentUser->setUserOption("UsesGenericTheme", "0");
 }
 
 if ($_POST['beta-features'] == "1") {
-  setUserOption($_SESSION['UserID'], "EnableBeta", "1");
+  $currentUser->setUserOption("EnableBeta", "1");
 } else {
-  setUserOption($_SESSION['UserID'], "EnableBeta", "0");
+  $currentUser->setUserOption("EnableBeta", "0");
 }
 
 if ($_POST['tracking-cookies'] == "1") {
-  setUserOption($_SESSION['UserID'], "DisableTrackers", "1");
+  $currentUser->setUserOption("DisableTrackers", "1");
 } else {
-  setUserOption($_SESSION['UserID'], "DisableTrackers", "0");
+  $currentUser->setUserOption("DisableTrackers", "0");
 }
 
-$_SESSION['DisableTrackers'] = filter_var(getUserOption($_SESSION['UserID'], "DisableTrackers"), FILTER_VALIDATE_BOOLEAN);
+if ($_SESSION['AccessLevel'] == "Parent") {
+  if ($_POST['gala-dd-opt-out'] == "1") {
+    $currentUser->setUserOption("GalaDirectDebitOptOut", "1");
+  } else {
+    $currentUser->setUserOption("GalaDirectDebitOptOut", "0");
+  }
+}
 
-if ($twofa != ($_POST['2FA'] == "1")) {
+$_SESSION['DisableTrackers'] = $currentUser->getUserBooleanOption('DisableTrackers');
+
+if ($twofa != ($_POST['2FA'] == "1") || $betas != ($_POST['beta-features'] == "1") || $trackers != ($_POST['tracking-cookies'] == "1") || $genericTheme != $currentUser->getUserBooleanOption('UsesGenericTheme') || $galaDDOptOut != ($_POST['gala-dd-opt-out'] == "1")) {
   $_SESSION['OptionsUpdate'] = true;
 }
 
-if ($trackers != ($_POST['tracking-cookies'] == "1")) {
-  $_SESSION['OptionsUpdate'] = true;
-}
-
-header("Location: " . app('request')->curl);
+header("Location: " . currentUrl());

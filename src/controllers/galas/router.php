@@ -19,11 +19,22 @@ if ($access == "Parent") {
 		include 'parentHome.php';
 	});
 
-	// Enter a gala
-	$this->get('/entergala', function() {
-		global $link;
-		include 'galaentries.php';
+  // View a gala
+	$this->get('/{id}:int', function($id) {
+		include 'Gala.php';
 	});
+
+	// Enter a gala
+	if (isset($_SESSION['SuccessfulGalaEntry'])) {
+		$this->get('/entergala', function() {
+			include 'GalaEntrySuccess.php';
+		});
+	} else {
+		$this->get('/entergala', function() {
+			global $link;
+			include 'galaentries.php';
+		});
+	}
 
 	$this->get('/ajax/entryForm', function() {
 		global $link;
@@ -69,14 +80,17 @@ else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $
 		include 'addGalaAction.php';
 	});
 
+	$this->get('/{id}:int', function($id) {
+		include 'Gala.php';
+	});
+
 	// View Competitions
-	$this->get(['/{id}:int', '/competitions/{id}:int'], function($id) {
+	$this->get(['/{id}:int/edit', '/competitions/{id}:int/edit'], function($id) {
 		global $link;
 		include "competitionSingle.php";
 	});
 
-	$this->post(['/{id}:int', '/competitions/{id}:int'], function($id) {
-		global $link;
+	$this->post(['/{id}:int/edit', '/competitions/{id}:int/edit'], function($id) {
 		include "CompetitionSinglePost.php";
 	});
 
@@ -120,5 +134,28 @@ else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $
 	$this->post('/entries/{id}:int/manualtime', function($id) {
 		global $link;
 		include 'AddManualTimePost.php';
+	});
+}
+
+if ($access == "Galas" || $access == "Admin") {
+
+	$this->get('/charges-and-refunds', function() {
+		include BASE_PATH . 'controllers/payments/galas/Home.php';
+	});
+
+	$this->get('/{id}:int/charges', function($id) {
+		include BASE_PATH . 'controllers/payments/galas/EntryCharge.php';
+	});
+
+	$this->post('/{id}:int/charges', function($id) {
+		include BASE_PATH . 'controllers/payments/galas/EntryChargeAction.php';
+	});
+
+	$this->get('/{id}:int/refunds', function($id) {
+		include BASE_PATH . 'controllers/payments/galas/RefundCharge.php';
+	});
+
+	$this->post('/{id}:int/refunds', function($id) {
+		include BASE_PATH . 'controllers/payments/galas/RefundChargePost.php';
 	});
 }

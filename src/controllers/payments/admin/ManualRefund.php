@@ -31,7 +31,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
     	    <label for="user">User Identification Number</label>
     			<div class="input-group">
     				<div class="input-group-prepend">
-    	        <div class="input-group-text mono">CLSU</div>
+    	        <div class="input-group-text mono">USER ID</div>
     	      </div>
     	  		<input type="number" class="form-control mono" id="user" name="user" aria-describedby="userHelp" placeholder="Enter number" required>
     			</div>

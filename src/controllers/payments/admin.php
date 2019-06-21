@@ -91,13 +91,13 @@ $income = $income->fetchAll(PDO::FETCH_ASSOC);
   					</span>
           </a>
 
-          <a href="<?=autoUrl('payments/galas')?>">
+          <a href="<?=autoUrl('galas/charges-and-refunds')?>">
   					<span class="mb-3">
   	          <span class="title mb-0">
   							Charge for gala entries
   						</span>
   						<span>
-  							After accepted entries are known
+  							Charge and issue refunds for gala entries
   						</span>
   					</span>
             <span class="category">

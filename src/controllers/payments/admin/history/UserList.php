@@ -3,7 +3,7 @@
 $search = null;
 
 if (isset($_GET['search'])) {
-	$search = mysqli_real_escape_string($link, $_GET['search']);
+	$search = trim($_GET['search']);
 }
 
 $use_white_background = true;
@@ -23,7 +23,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php'; ?>
 				<div class="input-group-prepend">
 			    <span class="input-group-text">Search</span>
 			  </div>
-	    	<input class="form-control" placeholder="Surname" id="search" name="search" value="<?php echo htmlspecialchars($search); ?>">
+	    	<input class="form-control" placeholder="Surname" id="search" name="search" value="<?=htmlspecialchars($search)?>">
 			</div>
 	  </div>
 		<div id="output">
@@ -49,7 +49,7 @@ function getResult() {
         console.log("We got here");
         document.getElementById("output").innerHTML = this.responseText;
         console.log(this.responseText);
-        window.history.replaceState("string", "Title", "<?php echo autoUrl("payments/history/users"); ?>?search=" + searchValue);
+        window.history.replaceState("string", "Title", "<?=autoUrl("payments/history/users")?>?search=" + searchValue);
       }
     }
     xhttp.open("POST", "<?php echo autoURL("payments/current/ajax"); ?>", true);

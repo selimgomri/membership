@@ -13,7 +13,7 @@ if (!v::intVal()->min(1970, true)->validate((int) $year) || !v::stringType()->le
 	halt(404);
 }
 
-$searchDate = mysqli_real_escape_string($link, $year . "-" . $month . "-") . "%";
+$searchDate = $year . "-" . $month . "-" . "%";
 $name_type = null;
 $title_string = null;
 
@@ -39,25 +39,25 @@ payments.PaymentID, `ClubPays` FROM (((((`individualFeeTrack` LEFT JOIN
 LEFT JOIN `members` ON members.MemberID = individualFeeTrack.MemberID) LEFT JOIN
 `payments` ON paymentsPending.PMkey = payments.PMkey) LEFT JOIN `users` ON
 users.UserID = individualFeeTrack.UserID) WHERE `paymentMonths`.`Date` LIKE
-'$searchDate' AND `individualFeeTrack`.`Type` = '$name_type' ORDER BY `Forename`
+? AND `individualFeeTrack`.`Type` = ? ORDER BY `Forename`
 ASC, `Surname` ASC, `users`.`UserID` ASC, `MForename` ASC, `MSurname` ASC;";
 
 $query = $db->prepare($sql);
-$query->execute([$name_type]);
+$query->execute([$searchDate, $name_type]);
 
-$result = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+$row = $query->fetch(PDO::FETCH_ASSOC);
 
 $user_id = $row['UserID'];
 $user_id_last = null;
+$while = true;
 
 $export_array = [
-	'Type'		=>	$name_type,
-	'Date'		=> [
-		'Year'		=> $year,
-		'Month'		=> $month
-	],
-	'Parents'	=> []
+  'Type'		=>	$name_type,
+  'Date'		=> [
+    'Year'		=> $year,
+    'Month'		=> $month
+  ],
+  'Parents'	=> []
 ];
 
 // output headers so that the file is downloaded rather than displayed
@@ -68,56 +68,64 @@ $parents = [];
 $parent = [];
 $swimmers = [];
 
-for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-	$name = null;
-	$member = null;
-	$amount = null;
-	$family_total = null;
+if ($row != null) {
+  do {
+  	$name = null;
+  	$member = null;
+  	$amount = null;
+  	$family_total = null;
 
-	if ($row['Forename'] != null && $row['Surname'] != null) {
-		if ($user_id_last != $user_id) {
-			$parent['Name'] = $row['Forename'] . " " . $row['Surname'];
-			$parent['FamilyTotal'] = monthlyFeeCost($link, $user_id, "int");
-			$parent['FamilyTotalString'] = '£' . number_format(monthlyFeeCost($link, $user_id, "decimal"),2,'.','');
-			$parent['PaymentStatus'] = $row['Status'];
-			$parent['PaymentStatusString'] = paymentStatusString($row['Status']);
-		}
-	} else {
-		$parent['Name'] = null;
-		$parent['FamilyTotal'] = (int) $row['Amount'];
-		$parent['FamilyTotalString'] = '£' . number_format(($row['Amount']/100),2,'.','');
-		$parent['PaymentStatusString'] = "No Parent or Direct Debit Available";
-	}
+  	if ($row['UserID'] != null) {
+  		if ($user_id_last != $user_id) {
+  			$parent['Name'] = $row['Forename'] . " " . $row['Surname'];
+  			$parent['FamilyTotal'] = monthlyFeeCost($link, $user_id, "int");
+  			$parent['FamilyTotalString'] = '£' . number_format(monthlyFeeCost($link, $user_id, "decimal"),2,'.','');
+  			$parent['PaymentStatus'] = $row['Status'];
+  			$parent['PaymentStatusString'] = paymentStatusString($row['Status']);
+  		}
+  	} else {
+  		$parent['Name'] = null;
+  		$parent['FamilyTotal'] = (int) $row['Amount'];
+  		$parent['FamilyTotalString'] = '£' . number_format(($row['Amount']/100),2,'.','');
+  		$parent['PaymentStatusString'] = "No Parent or Direct Debit Available";
+  	}
 
-	$swimmer = [
-		'Name'				=> $row['MForename'] . " " . $row['MSurname'],
-		'Description'	=> $row['Description'],
-		'Amount'			=> (int) $row['Amount'],
-		'AmountString'=> '£' . number_format(($row['Amount']/100),2,'.',''),
-		'ClubPaysFees'=> $row['ClubPays']
-	];
+  	$swimmer = [
+  		'Name'				=> $row['MForename'] . " " . $row['MSurname'],
+  		'Description'	=> $row['Description'],
+  		'Amount'			=> (int) $row['Amount'],
+  		'AmountString'=> '£' . number_format(($row['Amount']/100),2,'.',''),
+  		'ClubPaysFees'=> $row['ClubPays']
+  	];
 
-	if ($row['ClubPays']) {
-		$swimmer['ClubPaysFees'] = true;
-	} else {
-		$swimmer['ClubPaysFees'] = false;
-	}
+  	if ($row['ClubPays']) {
+  		$swimmer['ClubPaysFees'] = true;
+  	} else {
+  		$swimmer['ClubPaysFees'] = false;
+  	}
 
-	$swimmers[] = $swimmer;
-	$swimmer = [];
+  	$swimmers[] = $swimmer;
+  	$swimmer = [];
 
-	if ($i < mysqli_num_rows($result)-1) {
-		$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-		$user_id_last = $user_id;
-		$user_id = $row['UserID'];
+  	if ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+  		$user_id_last = $user_id;
+  		$user_id = $row['UserID'];
 
-		if ($user_id != $user_id_last || $user_id_last == null || $user_id_last == "") {
-			$parent['Swimmers'] = $swimmers;
-			$export_array['Parents'][] = $parent;
-			$parent = [];
-			$swimmers = [];
-		}
-	}
+  		if ($user_id != $user_id_last || $user_id_last == null) {
+  			$parent['Swimmers'] = $swimmers;
+  			$export_array['Parents'][] = $parent;
+  			$parent = [];
+  			$swimmers = [];
+  		}
+  	} else {
+      $while = false;
+
+      $parent['Swimmers'] = $swimmers;
+      $export_array['Parents'][] = $parent;
+      $parent = [];
+      $swimmers = [];
+    }
+  } while ($while);
 }
 
 echo json_encode($export_array);

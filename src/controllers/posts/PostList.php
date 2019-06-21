@@ -1,4 +1,4 @@
-<?
+<?php
 
 global $db;
 
@@ -69,7 +69,7 @@ include BASE_PATH . "views/postsMenu.php";?>
             <p class="mb-0 <?=$truncate?>">
               <?php
               $url = "posts/" . $row['ID'];
-              if ($row['Path'] != null && strlen($row['Path']) > 0) {
+              if ($row['Path'] != null && mb_strlen($row['Path']) > 0) {
                 $url = "pages/" . $row['Path'];
               }
               ?>
@@ -128,5 +128,6 @@ include BASE_PATH . "views/postsMenu.php";?>
   </main>
 </div>
 
-<?
+<?php
+
 include BASE_PATH . "views/footer.php";

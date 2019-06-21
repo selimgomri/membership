@@ -33,6 +33,6 @@ include BASE_PATH . "views/header.php";
 	</div>
 </div>
 
-<?
+<?php
 
 include BASE_PATH . "views/footer.php";

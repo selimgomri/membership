@@ -4,7 +4,8 @@ $pagetitle = "Galas";
 
 global $db;
 
-$getGalas = $db->query("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength FROM galas WHERE GalaDate >= CURDATE()");
+$galas = $db->query("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength FROM galas WHERE GalaDate >= CURDATE()");
+$gala = $galas->fetch(PDO::FETCH_ASSOC);
 
 include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
@@ -17,21 +18,21 @@ include "galaMenu.php"; ?>
         Upcoming Galas
       </h2>
 
-      <?php if ($getGalas) { ?>
+      <?php if ($gala) { ?>
       <div class="news-grid mb-4">
-        <?php while ($row = $getGalas->fetch(PDO::FETCH_ASSOC)) {
+        <?php do {
           $now = new DateTime();
-          $closingDate = new DateTime($row['ClosingDate']);
-          $endDate = new DateTime($row['GalaDate']);
+          $closingDate = new DateTime($gala['ClosingDate']);
+          $endDate = new DateTime($gala['GalaDate']);
 
           ?>
-          <a href="<?=autoUrl("galas/" . $row['GalaID'])?>">
+          <a href="<?=autoUrl("galas/" . $gala['GalaID'])?>">
             <div>
               <span class="title mb-0 justify-content-between align-items-start">
-                <span><?=$row['GalaName']?></span>
+                <span><?=htmlspecialchars($gala['GalaName'])?></span>
                 <?php if ($now <= $closingDate) {?><span class="ml-2 badge badge-primary">ENTRIES OPEN</span><?php } ?>
               </span>
-              <span class="d-flex mb-3"><?=$row['GalaVenue']?></span>
+              <span class="d-flex mb-3"><?=htmlspecialchars($gala['GalaVenue'])?></span>
             </div>
             <?php if ($now <= $closingDate) { ?>
             <span class="category">Entries close on <?=$closingDate->format('j F Y')?></span>
@@ -39,7 +40,7 @@ include "galaMenu.php"; ?>
             <span class="category">Ends on <?=$endDate->format('j F Y')?></span>
             <?php } ?>
           </a>
-        <?php } ?>
+        <?php } while ($gala = $galas->fetch(PDO::FETCH_ASSOC)); ?>
       </div>
       <?php } ?>
 
@@ -70,11 +71,11 @@ include "galaMenu.php"; ?>
       <p class="lead">
         Gala Time Sheets give a list of each swimmer's entries to a gala along with their all-time personal bests and <?=date("Y")?> personal bests.
       </p>
-      <?
+      <?php
       $sql = "SELECT DISTINCT `galas`.`GalaID`, `GalaName` FROM `galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID` WHERE `GalaDate` >= CURDATE() ORDER BY `GalaDate` ASC;";
       $res = mysqli_query($link, $sql);
       if (mysqli_num_rows($res) > 0) {
-        ?><ul class="list-unstyled mb-0"><?
+        ?><ul class="list-unstyled mb-0"><?php
         for ($i = 0; $i < mysqli_num_rows($res); $i++) {
           $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
           ?>
@@ -82,11 +83,11 @@ include "galaMenu.php"; ?>
             <a href="<?php echo autoUrl("galas/" . $row['GalaID'] .
             "/timesheet"); ?>" target="_blank"><?php echo $row['GalaName']; ?></a>
           </li>
-          <?
+          <?php
         }
-        ?></ul><?
+        ?></ul><?php
       } else {
-  			?><p class="mb-0">There are no galas with corresponding entries.</p><?
+  			?><p class="mb-0">There are no galas with corresponding entries.</p><?php
   		}?>
     </div>
 

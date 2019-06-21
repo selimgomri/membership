@@ -1,37 +1,33 @@
 <?php
 
-$id = mysqli_real_escape_string($link, $id);
+global $db;
 
-$sql = "SELECT * FROM galas WHERE galas.GalaID = '$id';";
-$info = mysqli_query($link, $sql);
+$sql = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ?");
+$sql->execute([$id]);
+$info = $sql->fetch(PDO::FETCH_ASSOC);
+
+$getTimes = $db->prepare("SELECT * FROM `times` WHERE `MemberID` = ? AND `Type` = ?");
 
 $noTimeSheet = false;
 
-if (mysqli_num_rows($info) == 0) {
+if ($info = null) {
   halt(404);
 	$noTimeSheet = true;
 }
 
-$info = mysqli_fetch_array($info, MYSQLI_ASSOC);
-
 $sql = null;
 
 if ($_SESSION['AccessLevel'] == "Parent") {
-  $uid = mysqli_real_escape_string($link, $_SESSION['UserID']);
-
-  $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID =
-  members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE
-  galas.GalaID = '$id' AND members.UserID = '$uid' ORDER BY members.MForename ASC,
-  members.MSurname ASC;";
+	$sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaID = '$id' AND members.UserID = '$uid' ORDER BY members.MForename ASC, members.MSurname ASC;");
+	$sql->execute([$id, $_SESSION['UserID']]);
 } else {
-  $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID =
-  members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE
-  galas.GalaID = '$id' ORDER BY members.MForename ASC, members.MSurname ASC;";
+	$sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaID = ? ORDER BY members.MForename ASC, members.MSurname ASC;");
+	$sql->execute([$id]);
 }
 
-$result = mysqli_query($link, $sql);
+$row = $sql->fetch(PDO::FETCH_ASSOC);
 
-if (mysqli_num_rows($result) == 0) {
+if ($row == null) {
 	$noTimeSheet = true;
 }
 
@@ -41,15 +37,13 @@ if ($noTimeSheet) {
   include "galaMenu.php"; ?>
   <div class="container">
     <h1>There is no Time Sheet available for the gala you requested</h1>
-    <?
-    if ($_SESSION['AccessLevel'] == "Parent") {
-      ?><p class="lead">This may be because your swimmers have not entered this gala.</p><?
-    } else {
-      ?><p class="lead">There are no entries yet for this gala.</p><?
-    }
-    ?>
+    <?php if ($_SESSION['AccessLevel'] == "Parent") {
+      ?><p class="lead">This may be because your swimmers have not entered this gala.</p>
+		<?php } else {
+      ?><p class="lead">There are no entries yet for this gala.</p>
+		<?php } ?>
   </div>
-  <?
+  <?php
   include BASE_PATH . "views/footer.php";
 } else {
 	// output headers so that the file is downloaded rather than displayed
@@ -70,8 +64,8 @@ if ($noTimeSheet) {
   fputcsv($output, array('Forename', 'Surname', 'Swims'));
 
 	// loop over the rows, outputting them
-  while ($row = mysqli_fetch_assoc($result)) {
-  	$member = mysqli_real_escape_string($link, $row['MemberID']);
+  do {
+  	$row['MemberID'];
   	$typeA = $typeB = null;
   	if ($info['CourseLength'] == "SHORT") {
   		$typeA = "SCPB";
@@ -79,11 +73,11 @@ if ($noTimeSheet) {
   	} else {
   		$typeA = "LCPB";
   		$typeB = "CY_LC";
-  	}
-  	$timesPB = mysqli_fetch_array(mysqli_query($link, "SELECT * FROM `times`
-  	WHERE `MemberID` = '$member' AND `Type` = '$typeA';"), MYSQLI_ASSOC);
-  	$timesCY = mysqli_fetch_array(mysqli_query($link, "SELECT * FROM `times`
-		WHERE `MemberID` = '$member' AND `Type` = '$typeB';"), MYSQLI_ASSOC);
+		}
+		$getTimes->execute([$row['MemberID'], $typeA]);
+		$timesPB = $getTimes->fetch(PDO::FETCH_ASSOC);
+		$getTimes->execute([$row['MemberID'], $typeB]);
+  	$timesCY = $getTimes->fetch(PDO::FETCH_ASSOC);
 		
 		//pre([$timesPB, $timesCY]);
 
@@ -118,5 +112,5 @@ if ($noTimeSheet) {
   	fputcsv($output, $heats);
   	fputcsv($output, $finalsA);
 		fputcsv($output, $finalsB);
-  }
+  } while ($row = $sql->fetch(PDO::FETCH_ASSOC));
 }

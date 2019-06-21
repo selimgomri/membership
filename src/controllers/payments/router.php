@@ -1,5 +1,45 @@
 <?php
 
+function getCardFA($brand) {
+  if ($brand == 'visa') {
+    return 'fa-cc-visa';
+  } else if ($brand == 'mastercard') {
+    return 'fa-cc-mastercard';
+  } else if ($brand == 'amex') {
+    return 'fa-cc-amex';
+  } else if ($brand == 'diners') {
+    return 'fa-cc-diners-club';
+  } else if ($brand == 'discover') {
+    return 'fa-cc-discover';
+  } else if ($brand == 'jcb') {
+    return 'fa-cc-jcb';
+  } else if ($brand == 'unionpay') {
+    return 'fa-cc-stripe';
+  } else {
+    return 'fa-cc-stripe';
+  }
+}
+
+function getCardBrand($brand) {
+  if ($brand == 'visa') {
+    return 'Visa';
+  } else if ($brand == 'mastercard') {
+    return 'MasterCard';
+  } else if ($brand == 'amex') {
+    return 'American Express';
+  } else if ($brand == 'diners') {
+    return 'Diners Club';
+  } else if ($brand == 'discover') {
+    return 'Discover';
+  } else if ($brand == 'jcb') {
+    return 'JCB';
+  } else if ($brand == 'unionpay') {
+    return 'UnionPay';
+  } else {
+    return 'Unknown Card';
+  }
+}
+
 $access = $_SESSION['AccessLevel'];
 
 if ($access == "Parent") {
@@ -267,5 +307,60 @@ if ($access == "Galas" || $access == "Admin") {
 	$this->post('/galas/{id}:int', function($id) {
 		global $link;
 		include 'galas/EntryChargeAction.php';
+	});
+
+	$this->get('/galas/{id}:int/refund', function($id) {
+		global $link;
+		include 'galas/RefundCharge.php';
+	});
+
+	$this->post('/galas/{id}:int/refund', function($id) {
+		global $link;
+		include 'galas/RefundChargePost.php';
+	});
+}
+
+// Only allow payment cards if not null
+if (env('STRIPE') != null) {
+
+	/*
+	* Payment Cards
+	* Available to all users
+	*/
+
+	$this->group('/cards', function() {
+		$this->get('/', function() {
+			include 'stripe/home.php';
+		});
+
+		$this->group('/pay', function() {
+			$this->get('/', function() {
+				include 'stripe/checkout/charges.php';
+			});
+
+			$this->get('/charge', function() {
+				include 'stripe/checkout/init-payment.php';
+			});
+
+			$this->get('/charge', function() {
+				include 'stripe/checkout/init-payment.php';
+			});
+		});
+
+		$this->get('/add', function() {
+			include 'stripe/AddPaymentMethod.php';
+		});
+
+		$this->post('/add', function() {
+			include 'stripe/AddPaymentMethodPost.php';
+		});
+
+		$this->get('/{id}:int', function($id) {
+			include 'stripe/EditPaymentMethod.php';
+		});
+
+		$this->post('/{id}:int', function($id) {
+			include 'stripe/EditPaymentMethodPost.php';
+		});
 	});
 }

@@ -35,7 +35,6 @@ try {
 	halt(500);
 }
 $row = $pdo_query->fetchAll(PDO::FETCH_ASSOC);
-//$result = mysqli_query($link, $sql);
 
 $sql = "SELECT * FROM `targetedLists` ORDER BY `Name` ASC";
 try {
@@ -44,38 +43,44 @@ try {
 } catch (PDOException $e) {
 	halt(500);
 }
-$lists = $pdo_query->fetchAll(PDO::FETCH_ASSOC);
+
+pre($db->query("SELECT CHARSET('')")->fetchColumn());
+while ($lists = $pdo_query->fetch(PDO::FETCH_ASSOC)) {
+  pre($lists);
+}
 
 $query = "";
 
 $squads = $listsArray = [];
 
 for ($i = 0; $i < sizeof($row); $i++) {
-	if ($query != "" && mysqli_real_escape_string($link, $_POST[$row[$i]['SquadID']]) == 1) {
+	if ($query != "" && $_POST[$row[$i]['SquadID']] == 1) {
 		$query .= "OR";
 	}
-	if (mysqli_real_escape_string($link, $_POST[$row[$i]['SquadID']]) == 1) {
+	if ($_POST[$row[$i]['SquadID']] == 1) {
 		$query .= " `SquadID` = '" . $row[$i]['SquadID'] . "' ";
     $squads[$row[$i]['SquadID']] = $row[$i]['SquadName'];
 	}
 }
 
 for ($i = 0; $i < sizeof($lists); $i++) {
-	if ($query != "" && mysqli_real_escape_string($link, $_POST["TL-" . $lists[$i]['ID']]) == 1) {
+	if ($query != "" && $_POST["TL-" . $lists[$i]['ID']] == 1) {
 		$query .= "OR";
 	}
-	if (mysqli_real_escape_string($link, $_POST["TL-" . $lists[$i]['ID']]) == 1) {
+	if ($_POST["TL-" . $lists[$i]['ID']] == 1) {
 		$id = "TL-" . $lists[$i]['ID'];
-		$id = mysqli_real_escape_string($link, substr_replace($id, '', 0, 3));
+		$id = substr_replace($id, '', 0, 3);
 		$query .= " `ListID` = '" . $lists[$i]['ID'] . "' ";
     $listsArray[$lists[$i]['ID']] = $lists[$i]['Name'];
 	}
 }
 
+$userSending = getUserName($sender);
+
 $recipientGroups = [
   "Sender" => [
     "ID" => $sender,
-    "Name" => getUserName($sender)
+    "Name" => $userSending
   ],
   "To" => [
     "Squads" => $squads,
@@ -90,37 +95,59 @@ $recipientGroups = [
   ]
 ];
 
+if ($_POST['from'] == "current-user") {
+  $senderNames = explode(' ', $userSending);
+  $fromEmail = "";
+  for ($i = 0; $i < sizeof($senderNames); $i++) {
+    $fromEmail .= urlencode(strtolower($senderNames[$i]));
+    if ($i < sizeof($senderNames) - 1) {
+      $fromEmail .= '.';
+    }
+  }
+
+  if (!(defined('IS_CLS') && IS_CLS)) {
+    $fromEmail .= '.' . urlencode(strtolower(str_replace(' ', '', CLUB_CODE)));
+  }
+
+  $fromEmail .= '@' . EMAIL_DOMAIN;
+
+  $recipientGroups["NamedSender"] = [
+    "Email" => $fromEmail,
+    "Name" => $userSending
+  ];
+}
+
 $json = json_encode($recipientGroups);
-$date = date("Y-m-d H:i:s");
+$date = new DateTime('now', new DateTimeZone('UTC'));
+$dbDate = $date->format('Y-m-d H:i:s');
 
 $sql = "INSERT INTO `notifyHistory` (`Sender`, `Subject`, `Message`,
 `ForceSend`, `Date`, `JSONData`) VALUES (?, ?, ?, ?, ?, ?)";
 try {
 	$pdo_query = $db->prepare($sql);
-  $pdo_query->execute([$_SESSION['UserID'], $subject, $message, $force, $date, $json]);
+  $pdo_query->execute([$_SESSION['UserID'], $subject, $message, $force, $dbDate, $json]);
 } catch (PDOException $e) {
 	halt(500);
 }
 $id = $db->lastInsertId();
 
-$sql = "SELECT DISTINCT users.UserID FROM ((`users` INNER JOIN `members` ON
+$sql = $db->query("SELECT users.UserID, users.UserID FROM ((`users` INNER JOIN `members` ON
 members.UserID = users.UserID) LEFT JOIN `targetedListMembers` ON
-targetedListMembers.ReferenceID = members.MemberID) WHERE " . $query;
-$result = mysqli_query($link, $sql);
+targetedListMembers.ReferenceID = members.MemberID) WHERE " . $query);
+$users = $sql->fetchAll(PDO::FETCH_KEY_PAIR);
+$count = 0;
 
-$recipient_count = mysqli_num_rows($result);
-
-for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+foreach ($users as $userid => $user) {
 	$sql = "INSERT INTO `notify` (`UserID`, `MessageID`, `Subject`, `Message`,
 	`Status`, `Sender`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, 'Queued', ?, ?,
 	'Notify')";
   try {
   	$pdo_query = $db->prepare($sql);
-    $pdo_query->execute([$row['UserID'], $id, null, null, $sender, $force]);
+    $pdo_query->execute([$userid, $id, null, null, $sender, $force]);
   } catch (PDOException $e) {
   	halt(500);
   }
+  $count++;
 }
 
 if ($_SESSION['AccessLevel'] != "Admin" && $force == 1) {
@@ -162,7 +189,7 @@ if ($_SESSION['AccessLevel'] != "Admin" && $force == 1) {
 }
 
 $_SESSION['NotifySuccess'] = [
-  "Count" => $recipient_count,
+  "Count" => $count,
   "Force" => $force
 ];
 

@@ -53,12 +53,12 @@ if ($_SESSION['AccessLevel'] == "Parent") { ?>
         <form method="post" class="cell" action="<?php echo autoUrl("myaccount/addswimmer"); ?>" name="register" id="register">
           <h2>Details</h2>
           <div class="form-group">
-            <label for="asa">Swimmer's ASA Number</label>
-            <input class="form-control mb-0" type="text" name="asa" id="asa" placeholder="123456" required value="<?php echo $id; ?>">
+            <label for="asa">Swimmer's Swim England Number or Temporary Membership Number</label>
+            <input class="form-control mb-0" type="text" name="asa" id="asa" placeholder="123456" required value="<?=htmlspecialchars($id)?>">
           </div>
           <div class="form-group">
             <label for="accessKey">Access Key</label>
-            <input class="form-control mb-0 mono" type="text" name="accessKey" id="accessKey" placeholder="1A3B5C" required value="<?php echo $acs; ?>">
+            <input class="form-control mb-0 mono" type="text" name="accessKey" id="accessKey" placeholder="1A3B5C" required value="<?=htmlspecialchars($acs)?>">
           </div>
 
           <input type="submit" class="btn btn-success" value="Add Swimmer">

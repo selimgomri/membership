@@ -19,7 +19,7 @@ $query->execute([$hash]);
 
 $swimmers = $query->fetchAll(PDO::FETCH_ASSOC);
 
-$pagetitle = "Join Club - " . $parent['First'] . ' ' . $parent['Last'];
+$pagetitle = "Join Club - " . htmlspecialchars($parent['First'] . ' ' . $parent['Last']);
 $use_white_background = true;
 
 include BASE_PATH . 'views/header.php';
@@ -27,23 +27,23 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="container">
-  <h1>Invite <?=$parent['First']?> <?=$parent['Last']?></h1>
+  <h1>Invite <?=htmlspecialchars($parent['First'] . ' ' . $parent['Last'])?></h1>
   <div class="row">
     <div class="col-sm-10 col-md-8">
       <form method="post">
         <p class="lead">
-          You are about to invite <?=$parent['First']?> <?=$parent['Last']?> as a
-          parent to join the club with their swimmers.
+          You are about to invite <?=htmlspecialchars($parent['First'] . ' ' .
+          $parent['Last'])?> as a parent to join the club with their swimmers.
         </p>
         <p>
-          <?=$parent['First']?> will receive an email from our system with
-          instructions on how to set a password. All swimmers will be connected
-          to the account automatically.
+          <?=htmlspecialchars($parent['First'])?> will receive an email from our
+          system with instructions on how to set a password. All swimmers will
+          be connected to the account automatically.
         </p>
         <p>
-          Swimmers will only be added to our database when <?=$parent['First']?>
-          sets up their user account. Swimmers will not appear on our systems
-          until this is done.
+          Swimmers will only be added to our database when
+          <?=htmlspecialchars($parent['First'])?> sets up their user account.
+          Swimmers will not appear on our systems until this is done.
         </p>
 
         <h2>Review Swimmers</h2>
@@ -55,21 +55,22 @@ include BASE_PATH . 'views/header.php';
         <?php foreach ($swimmers as $s) { ?>
           <div class="cell">
             <h3><?=htmlspecialchars($s['First'] . ' ' . $s['Last'])?></h3>
-            <p><?=$s['SquadName']?> at &pound;<?=number_format($s['SquadFee'], 2)?></p>
+            <p><?=htmlspecialchars($s['SquadName'])?> at &pound;<?=number_format($s['SquadFee'], 2)?></p>
           </div>
         <?php } ?>
 
         <h2>Review Parent Email Address</h2>
         <p>
-          Please check the email address for <?=$parent['First']?> is correct.
-          It will be used to set up their account. If a user account already
-          exists with the parent's email address, the swimmers will be added to
-          that existing account.
+          Please check the email address for
+          <?=htmlspecialchars($parent['First'])?> is correct. It will be used to
+          set up their account. If a user account already exists with the
+          parent's email address, the swimmers will be added to that existing
+          account.
         </p>
 
         <div class="form-group">
           <label for="email-addr">Email address</label>
-          <input type="email" class="form-control" id="email-addr" name="email-addr" placeholder="name@example.com" value="<?=$parent['Email']?>">
+          <input type="email" class="form-control" id="email-addr" name="email-addr" placeholder="name@example.com" value="<?=htmlspecialchars($parent['Email'])?>">
         </div>
 
         <p>

@@ -6,7 +6,7 @@ $userInfo = $db->prepare("SELECT Forename, Surname, Mobile FROM `users` WHERE `U
 $userInfo->execute([$_SESSION['UserID']]);
 $user = $userInfo->fetch(PDO::FETCH_ASSOC);
 
-$contacts = new EmergencyContacts($link);
+$contacts = new EmergencyContacts($db);
 $contacts->byParent($user);
 
 $contactsArray = $contacts->getContacts();
@@ -71,9 +71,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
 									</a>
 								</p>
 							</div>
-							<div class="col text-right">
+							<div class="col text-sm-right">
 								<a href="<?=autoUrl("renewal/emergencycontacts/edit/" .
-								$contactsArray[$i]->getID())?>" class="btn btn-primary">
+								$contactsArray[$i]->getID());>" class="btn btn-primary">
 									Edit
 								</a>
 							</div>

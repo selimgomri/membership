@@ -1,63 +1,68 @@
 <?php
 
 use CLSASC\EquivalentTime\EquivalentTime;
+global $db;
 
 $access = $_SESSION['AccessLevel'];
-$sex = mysqli_real_escape_string($link, $_REQUEST["sex"]);
-if ($sex == "all") {
-  $sex = "";
-} else if ($sex == "m") {
+$sex = "";
+if ($_REQUEST["sex"] == "m") {
   $sex = " AND `Gender` = 'Male' ";
-} else if ($sex == "f") {
+} else if ($_REQUEST["sex"] == "f") {
   $sex = " AND `Gender` = 'Female' ";
 } else {
-  halt(500);
+  //halt(500);
 }
+
+$sqlArgs = [];
 
 $count = 0;
 if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $access == "Galas") {
   $sql = "";
   if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["search"]))) {
     // get the galaID parameter from request
-    $galaID = mysqli_real_escape_string($link, $_REQUEST["galaID"]);
+    $galaID = $_REQUEST["galaID"];
     // get the search term parameter from request
-    $search = mysqli_real_escape_string($link, $_REQUEST["search"]);
+    $search = $_REQUEST["search"];
 
     // Search the database for the results
     if ($galaID == "allGalas") {
       $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
       galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
-      galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) " .
-      $sex . " AND members.MSurname LIKE '%$search%' ORDER BY galas.ClosingDate
-      ASC, galas.GalaDate DESC;";
+      galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE() " .
+      $sex . " AND members.MSurname LIKE ? ORDER BY galas.ClosingDate
+      ASC, galas.GalaDate DESC";
+      $sqlArgs[] = '%' . $search . '%';
     }
     else {
       $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
       galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
-      galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) " .
-      $sex . " AND galas.GalaID = '$galaID' AND members.MSurname LIKE
-      '%$search%';";
+      galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE() " .
+      $sex . " AND galas.GalaID = ? AND members.MSurname LIKE ?";
+      $sqlArgs[] = $galaID;
+      $sqlArgs[] = '%' . $search . '%';
     }
   }
   elseif ((!isset($_REQUEST["galaID"])) && (isset($_REQUEST["search"]))) {
     // get the search term parameter from request
-    $search = mysqli_real_escape_string($link, $_REQUEST["search"]);
+    $search = $_REQUEST["search"];
 
     // Search the database for the results
     $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
     galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
-    galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) " .
-    $sex . " AND members.MSurname LIKE '%$search%';";
+    galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE() " .
+    $sex . " AND members.MSurname LIKE ?";
+    $sqlArgs[] = '%' . $search . '%';
   }
   elseif ((isset($_REQUEST["galaID"])) && (!isset($_REQUEST["search"]))) {
     // get the search term parameter from request
-    $galaID = mysqli_real_escape_string($link, $_REQUEST["galaID"]);
+    $galaID = $_REQUEST["galaID"];
 
     // Search the database for the results
     $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
     galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
     galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE( ) " .
-    $sex . " AND galas.GalaID = '$galaID';";
+    $sex . " AND galas.GalaID = ?";
+    $sqlArgs[] = $galaID;
   }
   else {
     // Error
@@ -69,8 +74,8 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
   }
   else {
 
-    $result = mysqli_query($link, $sql);
-    $count = mysqli_num_rows($result);
+    $results = $db->prepare($sql);
+    $results->execute($sqlArgs);
 
 
     $content = "";
@@ -79,15 +84,12 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     } else {
       $content .= '<table class="table table-hover">';
     }
-    $content .= '<thead class="thead-light"><tr><th>Swimmer</th><th>Swims</th><th class="d-print-none"><abbr title="Tick to prevent editing this entry">Processed?</abbr></th></tr></thead><tbody>';
+    $content .= '<thead class="thead-light"><tr><th>Swimmer</th><th>Swims</th><th class="d-print-none"><abbr title="Lock entries and mark as paid">Admin</abbr></th></tr></thead><tbody>';
 
     // For loop iterates through the rows of the database result, producing rows for the table
-    for ($i=0; $i<$count; $i++) {
-
-      // Fetches the row as an array
-      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-      $member = mysqli_real_escape_string($link, $row['MemberID']);
+    while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
+      $count++;
+      $member = $row['MemberID'];
       $times = null;
 
       $hyTekPrintDate = "";
@@ -101,22 +103,25 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
           $type = "LCPB";
           $typeB = "SCPB";
         }
-        $times = mysqli_fetch_array(mysqli_query($link, "SELECT * FROM `times`
-        WHERE `MemberID` = '$member' AND `Type` = '$type';"), MYSQLI_ASSOC);
-        $timesB = mysqli_fetch_array(mysqli_query($link, "SELECT * FROM `times`
-        WHERE `MemberID` = '$member' AND `Type` = '$typeB';"), MYSQLI_ASSOC);
+        $getTimes = $db->prepare("SELECT * FROM `times` WHERE `MemberID` = ? AND `Type` = ?");
+
+        $getTimes->execute([$row['MemberID'], $type]);
+        $times = $getTimes->fetchAll(PDO::FETCH_ASSOC);
+
+        $getTimes->execute([$row['MemberID'], $typeB]);
+        $timesB = $getTimes->fetchAll(PDO::FETCH_ASSOC);
       }
 
       // First part of the row content
-      $content .= "<tr><td><strong>" . $row['MForename'] . " " .
-      $row['MSurname']  . "</strong>" . $hyTekPrintDate . "<br><a
+      $content .= "<tr><td><strong>" . htmlspecialchars($row['MForename'] . " " .
+      $row['MSurname'])  . "</strong>" . htmlspecialchars($hyTekPrintDate) . "<br><a
       class=\"d-print-none\"
       href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" .
-      $row['ASANumber'] . "\" target=\"_blank\" title=\"Click to see times\">" .
-      $row['ASANumber'] . " <i class=\"fa fa-external-link\"
-      aria-hidden=\"true\"></i></a><span class=\"d-none d-print-inline\">ASA: " .
-      $row['ASANumber'] . "</span><br>
-      <span class=\"small\">" . $row['GalaName'] . "<br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a><br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "/manualtime\">Set Manual Times</a></span></td>";
+      htmlspecialchars($row['ASANumber']) . "\" target=\"_blank\" title=\"Click to see times\">" .
+      htmlspecialchars($row['ASANumber']) . " <i class=\"fa fa-external-link\"
+      aria-hidden=\"true\"></i></a><span class=\"d-none d-print-inline\">Swim England: " .
+      htmlspecialchars($row['ASANumber']) . "</span><br>
+      <span class=\"small\">" . htmlspecialchars($row['GalaName']) . "<br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a><br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "/manualtime\">Set Manual Times</a></span></td>";
 
       // Arrays of swims used to check whever to print the name of the swim entered
       // BEWARE This is in an order to ease inputting data into SportSystems, contrary to these arrays in other files
@@ -132,7 +137,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       if ($row['HyTek'] != 1) {
         for ($y=0; $y<sizeof($swimsArray); $y++) {
           if ($row[$swimsArray[$y]] == 1) {
-            $content .= "<li>" . $swimsTextArray[$y] . "</li>";
+            $content .= "<li>" . ($swimsTextArray[$y]) . "</li>";
           }
         }
       }
@@ -185,7 +190,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
                 $time_double = (double) $time->getConversion($to);
               	$time->setOutputAsString(true);
                 if (($time_double_oc > 0 && $time_double > 0) && $time_double < $time_double_oc) {
-                  $output = ', <abbr title="Faster converted time available">FC:</abbr> ' . $time->getConversion($to);
+                  $output = ', <abbr title="Faster converted time available">FC:</abbr> ' . htmlspecialchars($time->getConversion($to));
                 } else {
                   $output = null;
                 }
@@ -193,9 +198,9 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
               	$output = null;
               }
             }
-            $content .= "<li><strong>" . $swimsTextArray[$y] . "</strong> <br>";
+            $content .= "<li><strong>" . htmlspecialchars($swimsTextArray[$y]) . "</strong> <br>";
             if ($times[$swimsArray[$y]] != "") {
-              $content .= $times[$swimsArray[$y]] . $output;;
+              $content .= $times[$swimsArray[$y]] . $output;
             } else if ($row[$swimsTimeArray[$y]]) {
               $content .= $row[$swimsTimeArray[$y]] . $output;
             } else {
@@ -208,23 +213,45 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       // End ul and cell
       $content .= "</ul></td>";
 
+      $content .= '<td class="d-print-none">';
+
       // If the entry has been processes, show a ticked checkbox
       if ($row['EntryProcessed'] == 1) {
-        $content .= "<td class=\"d-print-none\">
+        $content .= "
         <div class=\"custom-control custom-checkbox\">
-          <input type=\"checkbox\" value=\"1\" checked class=\"custom-control-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
+          <input type=\"checkbox\" value=\"1\" checked data-button-action=\"mark-processed\" class=\"custom-control-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
           <label class=\"custom-control-label\" for=\"processedEntry-" . $row['EntryID'] . "\">Processed?</label>
-        </div></td>";
+        </div>";
       }
 
       // Else output an empty cell
       else {
-        $content .= "<td class=\"d-print-none\">
+        $content .= "
         <div class=\"custom-control custom-checkbox\">
-          <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
+          <input type=\"checkbox\" value=\"1\" data-button-action=\"mark-processed\" class=\"custom-control-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
           <label class=\"custom-control-label\" for=\"processedEntry-" . $row['EntryID'] . "\">Processed?</label>
-        </div></td>";
+        </div>";
       }
+
+      // If the entry has been processes, show a ticked checkbox
+      if ($row['Charged'] == 1) {
+        $content .= "
+        <div class=\"custom-control custom-checkbox\">
+          <input type=\"checkbox\" value=\"1\" checked data-button-action=\"mark-paid\" class=\"custom-control-input\" id=\"chargedEntry-" . $row['EntryID'] . "\">
+          <label class=\"custom-control-label\" for=\"chargedEntry-" . $row['EntryID'] . "\">Paid?</label>
+        </div>";
+      }
+
+      // Else output an empty cell
+      else {
+        $content .= "
+        <div class=\"custom-control custom-checkbox\">
+          <input type=\"checkbox\" value=\"1\" data-button-action=\"mark-paid\" class=\"custom-control-input\" id=\"chargedEntry-" . $row['EntryID'] . "\">
+          <label class=\"custom-control-label\" for=\"chargedEntry-" . $row['EntryID'] . "\">Paid?</label>
+        </div>";
+      }
+
+      $content .= '</td>';
 
       // End the row
       $content .= "</tr>";

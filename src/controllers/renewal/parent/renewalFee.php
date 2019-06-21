@@ -87,7 +87,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		  There's just one more step to go. We now need you to confirm your membership renewal.
 		</p>
 		<p class="lead">
-			These Fees include your ASA membership fees for the governing bodies at
+			These Fees include your Swim England Membership fees for the governing bodies at
 			National, Regional and County Level.
 		</p>
 		<?php $nf = "next";
@@ -149,7 +149,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		} ?>
  		<p>Your club membership fee is &pound;<?php echo $clubFeeString; ?></p>
 
-		<h2>ASA Membership Fees</h2>
+		<h2>Swim England Membership Fees</h2>
 		<div class="table-responsive-md">
 			<table class="table">-->
 				<thead class="">

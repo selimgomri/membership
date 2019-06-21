@@ -14,6 +14,12 @@ if ($info == null) {
 	$noTimeSheet = true;
 }
 
+$toHash = $info['GalaID'];
+if ($_SESSION['AccessLevel'] == 'Parent') {
+  $toHash .= $_SESSION['UserID'];
+}
+$hash = hash('sha256', $toHash);
+
 if ($_SESSION['AccessLevel'] == "Parent") {
   $uid = $_SESSION['UserID'];
 
@@ -90,6 +96,10 @@ ob_start();?>
       Generated at <?=date("H:i \o\\n d/m/Y")?>
     </p>
 
+    <p>
+      Timesheet Reference Number: <span class="mono"><?=mb_substr($hash, 0, 8)?></span>
+    </p>
+
     <!--
     <p>
       <strong><?=$name?></strong><br>
@@ -98,7 +108,7 @@ ob_start();?>
     -->
 
     <div class="primary-box mb-3" id="title">
-      <h1>
+      <h1 class="mb-0">
         <?=htmlspecialchars($info['GalaName'])?>
       </h1>
       <p class="lead mb-0">Gala Timesheet Report<?php if ($_SESSION['AccessLevel'] == "Parent") {?> for <?=htmlspecialchars(getUserName($_SESSION['UserID']))?><?php } ?></p>
@@ -119,6 +129,15 @@ ob_start();?>
       *<strong>NT</strong> denotes the swimmer does not have a PB in the given
       category or event.
     </p>
+
+    <div class="avoid-page-break-inside">
+      <?php if (defined('IS_CLS') && IS_CLS) { ?>
+      <p>&copy; Chester-le-Street ASC <?=date("Y")?></p>
+      <?php } else { ?>
+      <p class="mb-0">&copy; Swimming Club Data Systems <?=date("Y")?></p>
+      <p>Produced by Swimming Club Data Systems for <?=CLUB_NAME?></p>
+      <?php } ?>
+    </div>
 
     <div class="page-break"></div>
 
@@ -244,11 +263,6 @@ ob_start();?>
       <?php
 
     } while ($data = $query->fetch(PDO::FETCH_ASSOC)); ?>
-
-    <div class="avoid-page-break-inside">
-      <p>&copy; Chester-le-Street ASC <?=date("Y")?></p>
-      <p>Produced by Swimming Club Data Systems on behalf of <?=CLUB_NAME?></p>
-    </div>
 
     <?php include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
   </body>

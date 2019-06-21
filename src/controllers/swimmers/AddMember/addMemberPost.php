@@ -1,4 +1,4 @@
-<?
+<?php
 
 global $db;
 
@@ -7,24 +7,24 @@ $added = $action = false;
 $forename = $middlenames = $surname = $dateOfBirth = $asaNumber = $sex = $squad = $cat = $cp = $sql = "";
 $getASA = false;
 
-if ((!empty($_POST['forename']))  && (!empty($_POST['surname'])) && (!empty($_POST['datebirth'])) && (!empty($_POST['sex'])) && (!empty($_POST['squad']))) {
-	$forename = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['forename']))));
-	$surname = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['surname']))));
-	$dateOfBirth = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['datebirth'])));
-	$sex = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['sex'])));
-	$squad = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['squad'])));
+if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POST['datebirth'])) && (!empty($_POST['sex'])) && (!empty($_POST['squad']))) {
+  $forename = trim(ucwords($_POST['forename']));
+	$surname = trim(ucwords($_POST['surname']));
+	$dateOfBirth = trim($_POST['datebirth']);
+	$sex = $_POST['sex'];
+	$squad = $_POST['squad'];
 	if ((!empty($_POST['middlenames']))) {
-		$middlenames = mysqli_real_escape_string($link, trim(htmlspecialchars(ucwords($_POST['middlenames']))));
+		$middlenames = trim(ucwords($_POST['middlenames']));
 	}
 	if ((!empty($_POST['asa']))) {
-		$asaNumber = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['asa'])));
+		$asaNumber = trim($_POST['asa']);
 	} else {
 		$getASA = true;
 	}
-	if ($asaNumber == "") {
+	if ($asaNumber == "" || $asaNumber == null) {
 		$getASA = true;
 	}
-	$cat = mysqli_real_escape_string($link, $_POST['cat']);
+	$cat = $_POST['cat'];
 	if ($cat != 1 && $cat != 2 && $cat != 3) {
 		halt(500);
 	}
@@ -36,50 +36,52 @@ if ((!empty($_POST['forename']))  && (!empty($_POST['surname'])) && (!empty($_PO
 
 	$accessKey = generateRandomString(6);
 
-	$sql = "INSERT INTO `members` (`MemberID`, `MForename`, `MMiddleNames`, `MSurname`, `DateOfBirth`, `ASANumber`, `Gender`, `SquadID`, `AccessKey`, `ASACategory`, `ClubPays`) VALUES (NULL, '$forename', '$middlenames', '$surname', '$dateOfBirth', '$asaNumber', '$sex', '$squad', '$accessKey', '$cat', '$cp');";
-	$action = mysqli_query($link, $sql);
+  try {
+    $insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, SquadID, AccessKey, ASACategory, ClubPays, OtherNotes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $insert->execute([
+      $forename,
+      $middlenames,
+      $surname,
+      $dateOfBirth,
+      $asaNumber,
+      $sex,
+      $squad,
+      $accessKey,
+      $cat,
+      $cp,
+      ""
+    ]);
 
-	$last_id = mysqli_insert_id($link);
+  	$last_id = $db->lastInsertId();
 
-	if (isset($_SESSION['Swimmers-FamilyMode'])) {
-		$sql = "INSERT INTO familyMembers (FamilyID, MemberID) VALUES (?, ?)";
-		try {
-			$db->prepare($sql)->execute([$_SESSION['Swimmers-FamilyMode']['FamilyId'], $last_id]);
-		} catch (PDOException $e) {
-			halt(500);
-		}
-	}
+  	if ($getASA) {
+  		$swimEnglandTemp = env('ASA_CLUB_CODE') . $last_id;
+      $addTempSwimEnglandCode = $db->prepare("UPDATE `members` SET `ASANumber` = ? WHERE `MemberID` = ?");
+      $addTempSwimEnglandCode->execute([$swimEnglandTemp, $last_id]);
+  	}
 
-	if ($getASA) {
-		$asa = mysqli_real_escape_string($link, CLUB_CODE . $last_id);
-		$sql = "UPDATE `members` SET `ASANumber` = '$asa' WHERE `MemberID` = '$last_id';";
-		mysqli_query($link, $sql);
-	}
+    $action = true;
 
-	try {
-		$query = $db->prepare("SELECT `UserID` FROM `users` WHERE `AccessLevel` = ? AND `UserID` != ?");
-		$query->execute(["Admin", $_SESSION['UserID']]);
-		$result = $query->fetchAll(PDO::FETCH_ASSOC);
-	} catch (PDOException $e) {
-		halt(500);
-	}
+    try {
+  		$getAdmins = $db->prepare("SELECT `UserID` FROM `users` WHERE `AccessLevel` = ? AND `UserID` != ?");
+  		$getAdmins->execute(["Admin", $_SESSION['UserID']]);
+  		$notify = $db->prepare("INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'NewMember')");
+    	$subject = "New Club Member";
+    	$message = '<p>' . htmlentities(getUserName($_SESSION['UserID'])) . ' has added a new member, ' . htmlentities($forename . ' ' . $surname) . ' to our online membership system.</p><p>We have sent you this email to ensure you\'re aware of this.</p>';
+    	while ($row = $getAdmins->fetch(PDO::FETCH_ASSOC)) {
+    		try {
+    			$notify->execute([$row['UserID'], $subject, $message]);
+    		} catch (PDOException $e) {
+    			//halt(500);
+    		}
+    	}
+    } catch (PDOException $e) {
+  		halt(500);
+  	}
 
-	try {
-		$notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
-		`ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'NewMember')";
-		$query = $db->prepare($notify);
-	} catch (PDOException $e) {
-		halt(500);
-	}
-	$subject = "New Club Member";
-	$message = '<p>' . htmlentities(getUserName($_SESSION['UserID'])) . ' has added a new member, ' . htmlentities($forename . ' ' . $surname) . ' to our online membership system.</p><p>We have sent you this email to ensure you\'re aware of this.</p>';
-	for ($i = 0; $i < sizeof($result); $i++) {
-		try {
-			$query->execute([$result[$i]['UserID'], $subject, $message]);
-		} catch (PDOException $e) {
-			halt(500);
-		}
-	}
+  } catch (Exception $e) {
+    $action = false;
+  }
 }
 
 if ($action) {
@@ -92,5 +94,5 @@ if ($action) {
 			Please try again
 		</p>
 	</div>';
-	header("Location: " . app('request')->curl);
+	//header("Location: " . currentUrl());
 }

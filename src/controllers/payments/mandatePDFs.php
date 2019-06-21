@@ -4,28 +4,31 @@ if (!isset($mandate) || $mandate == "") {
   halt(400);
 }
 
-$mandate = mysqli_real_escape_string($link, $mandate);
-
+global $db;
+$checkDetails = $db->prepare("SELECT `UserID` FROM `paymentMandates` WHERE `Mandate` = ?");
+$checkDetails->execute([$mandate]);
 $userID = $_SESSION['UserID'];
-$sql = "SELECT `UserID` FROM `paymentMandates` WHERE `Mandate` = '$mandate';";
-$result = mysqli_query($link, $sql);
-if (mysqli_num_rows($result) == 0) {
+
+$mandateUser = $checkDetails->fetchColumn();
+
+if ($mandateUser == null) {
   halt(404);
 }
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-$mandateUserID = $row['UserID'];
+
+if ($mandateUser != $_SESSION['UserID'] && $_SESSION['AccessLevel'] != "Admin") {
+  halt(404);
+}
+
 $access = $_SESSION['AccessLevel'];
 
 require "GoCardlessSetup.php";
 
-if ($userID == $mandateUserID || $access == "Admin") {
-
+try {
   $return = $client->mandatePdfs()->create([
     "params" => ["links" => ["mandate" => $mandate]]
   ]);
 
   header("Location: " . $return->url);
-
-} else {
-  halt(403);
+} catch (Exception $e) {
+  halt(500);
 }

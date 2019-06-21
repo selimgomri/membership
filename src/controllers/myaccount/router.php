@@ -1,4 +1,4 @@
-<?
+<?php
 
 // My Account
 $this->get('/', function() {

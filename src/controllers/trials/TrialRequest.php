@@ -35,12 +35,12 @@ $swimmer['TrialEnd'] == "" || $swimmer['TrialStart'] == null) {
   $fake_time = true;
 }
 
-$pagetitle = "Trial Request - " . $swimmer['First'] . ' ' . $swimmer['Last'];
+$pagetitle = "Trial Request - " . htmlspecialchars($swimmer['First'] . ' ' . $swimmer['Last']);
 $use_white_background = true;
 
 $value = $_SESSION['RequestTrial-FC'];
 
-if (isset($_SESSION['RequestTrial-AddAnother'])) {
+if (isset($_SESSION['RequestTrintial-AddAnother'])) {
   $value = $_SESSION['RequestTrial-AddAnother'];
 }
 
@@ -49,7 +49,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="container">
-  <h1 class="mb-4">Trial Request for <?=$swimmer['First']?> <?=$swimmer['Last']?></h1>
+  <h1 class="mb-4">Trial Request for <?=htmlspecialchars($swimmer['First'] . ' ' . $swimmer['Last'])?></h1>
   <div class="row">
     <div class="col-md-6">
 
@@ -62,14 +62,22 @@ include BASE_PATH . 'views/header.php';
       <?php if (!$fake_time && $swimmer['TrialStart'] != null &&
       $swimmer['TrialStart'] != "" && $swimmer['TrialEnd'] != null &&
       $swimmer['TrialEnd'] != "") { ?>
-      <p class="mb-0"><strong>Trial Appointment Time</strong></p>
-      <p>
-        <?=date("H:i, j F Y", strtotime($swimmer['TrialStart']))?> - <?=date("H:i, j F Y", strtotime($swimmer['TrialEnd']))?>
-      </p>
+      <div class="alert alert-success">
+        <p class="mb-0"><strong>Trial Appointment Time</strong></p>
+        <p class="mb-0">
+          <?=date("H:i, j F Y", strtotime($swimmer['TrialStart']))?> - <?=date("H:i, j F Y", strtotime($swimmer['TrialEnd']))?>
+        </p>
+      </div>
       <?php } else { ?>
-      <p>
-        No trial appointment time has been set
-      </p>
+      <div class="alert alert-warning">
+        <p class="mb-0">
+          <strong>No trial appointment time has been set</strong>
+        </p>
+        <p class="mb-0">
+          Use the form to set a trial appointment. The time shown is the
+          default.
+        </p>
+      </div>
       <?php } ?>
 
       <form method="post">
@@ -108,10 +116,10 @@ include BASE_PATH . 'views/header.php';
     <div class="col">
       <dl class="row mb-0 pb-0">
         <?php if ($swimmer['ASA'] != null && $swimmer['ASA'] != "") { ?>
-        <dt class="col-md-4">ASA Number</dt>
+        <dt class="col-md-4">Swim England Number</dt>
         <dd class="col-md-8">
-          <a target="_blank" href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=<?=$swimmer['ASA']?>">
-            <?=$swimmer['ASA']?>
+          <a target="_blank" href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=<?=htmlspecialchars($swimmer['ASA'])?>">
+            <?=htmlspecialchars($swimmer['ASA'])?>
           </a>
         </dd>
         <?php } ?>
@@ -126,7 +134,7 @@ include BASE_PATH . 'views/header.php';
         <?php if ($swimmer['Club'] != null && $swimmer['Club'] != "") { ?>
         <dt class="col-md-4">Current/Previous Club</dt>
         <dd class="col-md-8">
-          <?=$swimmer['Club']?>
+          <?=htmlspecialchars($swimmer['Club'])?>
         </dd>
         <?php } ?>
 
@@ -138,7 +146,7 @@ include BASE_PATH . 'views/header.php';
         <?php if ($swimmer['XPDetails'] != null && $swimmer['XPDetails'] != "") { ?>
         <dt class="col-md-4">Experience Details</dt>
         <dd class="col-md-8">
-          <?=$swimmer['XPDetails']?>
+          <?=htmlspecialchars($swimmer['XPDetails'])?>
         </dd>
         <?php } ?>
 
@@ -146,7 +154,7 @@ include BASE_PATH . 'views/header.php';
         <?php if ($swimmer['Medical'] != null && $swimmer['Medical'] != "") { ?>
         <dt class="col-md-4">Medical Info</dt>
         <dd class="col-md-8">
-          <?=$swimmer['Medical']?>
+          <?=htmlspecialchars($swimmer['Medical'])?>
         </dd>
         <?php } ?>
         <?php } ?>
@@ -154,7 +162,7 @@ include BASE_PATH . 'views/header.php';
         <?php if ($swimmer['Questions'] != null && $swimmer['Questions'] != "") { ?>
         <dt class="col-md-4">Questions and Comments</dt>
         <dd class="col-md-8">
-          <?=$swimmer['Questions']?>
+          <?=htmlspecialchars($swimmer['Questions'])?>
         </dd>
         <?php } ?>
       </dl>
@@ -163,7 +171,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<script defer src="<?=autoUrl("public/js/NeedsVadddation.js")?>"></script>
+<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 
 <?php
 

@@ -13,7 +13,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 
 require 'GoCardlessSetup.php';
 
- ?>
+?>
 
 <!--
 <div class="bg-warning box-shadow mb-3 py-2" style="margin-top:-1rem;">
@@ -33,15 +33,7 @@ require 'GoCardlessSetup.php';
     	<h1>Payments</h1>
     	<p class="lead mb-0">Manage your Direct Debit Payments</p>
     </div>
-    <!--<div class="col text-center">
-      <div class="p-3 text-white bg-primary rounded shadow">
-        <?php if (userHasMandates($user)) { ?>
-          <p class="mb-0">We currently collect payments from <?=strtoupper(
-          bankDetails($user, "bank_name"))?>, Account Ending <span class="mono">
-          ******<?=bankDetails($user, "account_number_end")?></span></p>
-        <?php } ?>
-      </div>
-    </div>-->
+
   </div>
   <hr>
   <div class="row">
@@ -50,7 +42,7 @@ require 'GoCardlessSetup.php';
       	<h2>Billing History</h2>
       	<p class="lead mb-0">Previous payments by Direct Debit</p>
       	<hr>
-        <?php echo paymentHistory($link, $user); ?>
+        <?=paymentHistory($link, $user)?>
       </div>
       <div class="cell">
         <h2>
@@ -58,7 +50,7 @@ require 'GoCardlessSetup.php';
         </h2>
         <p class="lead mb-0">Fees to pay on your next Billing Date, in addition to Squad Fees</p>
         <hr>
-      	<?php echo feesToPay($link, $user); ?>
+      	<?=feesToPay($link, $user)?>
       </div>
     </div>
     <div class="col-md-4">
@@ -68,13 +60,13 @@ require 'GoCardlessSetup.php';
         </h2>
         <hr>
         <?php if (userHasMandates($user)) {
-          $name = strtoupper(bankDetails($user, "account_holder_name"));
+          $name = mb_strtoupper(bankDetails($user, "account_holder_name"));
           if ($name != "UNKNOWN") {
             $name = $name . ', ';
           } else {
             $name = null;
           }
-          $bank = strtoupper(bankDetails($user, "bank_name"));
+          $bank = mb_strtoupper(bankDetails($user, "bank_name"));
           $has_logo = false;
           $logo_path = "";
 
@@ -116,8 +108,8 @@ require 'GoCardlessSetup.php';
           <?php if ($has_logo) { ?>
             <img class="img-fluid mb-3" style="max-height:35px;" src="<?=$logo_path?>.png" srcset="<?=$logo_path?>@2x.png 2x, <?=$logo_path?>@3x.png 3x">
           <?php } ?>
-          <p class="mb-0"><?=$name?><?=strtoupper(bankDetails($user, "bank_name"))?></p>
-          <p class="mono">******<?=strtoupper(bankDetails($user, "account_number_end"))?></p>
+          <p class="mb-0"><?=htmlspecialchars($name)?><?=htmlspecialchars(strtoupper(bankDetails($user, "bank_name")))?></p>
+          <p class="mono">******<?=htmlspecialchars(strtoupper(bankDetails($user, "account_number_end")))?></p>
           <p><?=CLUB_NAME?> does not store your bank details.</p>
         <?php } ?>
         <p class="mb-0">

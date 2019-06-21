@@ -1,11 +1,14 @@
 <?php
 
-$id = mysqli_real_escape_string($link, $id);
+global $db;
 
-$sql = "DELETE FROM `targetedLists` WHERE `ID` = '$id';";
-
-if (!mysqli_query($link, $sql)) {
-  halt(500);
+$sql = $db->prepare("SELECT COUNT(*) FROM `targetedLists` WHERE `ID` = ?;");
+$sql->execute([$id]);
+if ($sql->fetchColumn() == 0) {
+  halt(404);
 }
+
+$sql = $db->prepare("DELETE FROM `targetedLists` WHERE `ID` = ?;");
+$sql->execute([$id]);
 
 header("Location: " . autoUrl("notify/lists"));

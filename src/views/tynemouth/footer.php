@@ -17,7 +17,7 @@
 		        </address>
 		        <p><i class="fa fa-envelope fa-fw" aria-hidden="true"></i> <a href="mailto:enquiries@chesterlestreetasc.co.uk" target="new">E-Mail Us</a></p>
 		        <p class="mb-0"><i class="fa fa-commenting fa-fw" aria-hidden="true"></i> <a target="new" href="mailto:websitefeedback@chesterlestreetasc.co.uk">Website Feedback</a></p>
-						<p><i class="fa fa-flag fa-fw" aria-hidden="true"></i> <a href="https://account.chesterlestreetasc.co.uk/reportanissue?url=<?=urlencode(app('request')->curl)?>">Report an issue with this page</a></p>
+						<p><i class="fa fa-flag fa-fw" aria-hidden="true"></i> <a href="https://account.chesterlestreetasc.co.uk/reportanissue?url=<?=urlencode(currentUrl())?>">Report an issue with this page</a></p>
 		      </div>
 		      <div class="col-sm-6 col-lg-6">
 						<ul class="list-unstyled cls-global-footer-link-spacer">
@@ -107,7 +107,7 @@
 </div>
 
 <!-- Modals and Other Hidden HTML -->
-<script rel="preload" src="<?php echo autoUrl("js/jquery-3.2.1.slim.min.js") ?>"></script>
+<script rel="preload" src="<?php echo autoUrl("public/js/jquery-3.4.1.slim.min.js") ?>"></script>
 <script defer src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/js/popper.min.js"></script>
 <script defer src="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/js/bootstrap.min.js"></script>
 <script async src="https://www.chesterlestreetasc.co.uk/static/global/js/clscookies.js"></script>

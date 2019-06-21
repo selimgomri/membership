@@ -32,16 +32,16 @@ $content .= "
 </div>";
 $content .= "
 <div class=\"form-group\">
-	<label for=\"asa\">ASA Registration Number</label>
+	<label for=\"asa\">Swim England Registration Number</label>
 	<input type=\"test\" class=\"form-control\" id=\"asa\" name=\"asa\"
-	aria-describedby=\"asaHelp\" placeholder=\"ASA Registration Numer\">
+	aria-describedby=\"asaHelp\" placeholder=\"Swim England Registration Numer\">
 	<small id=\"asaHelp\" class=\"form-text text-muted\">If a swimmer does not yet
-	have an ASA Number, leave this blank and we'll generate a temporary internal
+	have a Swim England Number, leave this blank and we'll generate a temporary internal
 	membership number for this swimmer.</small>
 </div>";
 $content .= "
 <div class=\"form-group\">
-	<label for=\"squad\">ASA Membership Category</label>
+	<label for=\"squad\">Swim England Membership Category</label>
 	<select class=\"custom-select\" placeholder=\"Select a Category\" id=\"cat\" name=\"cat\">
 		<option value=\"1\">Category 1</option>
 		<option value=\"2\" selected>Category 2</option>

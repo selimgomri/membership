@@ -1,21 +1,25 @@
 <?php
 
 use Respect\Validation\Validator as v;
+global $db;
 
 $status = true;
 $statusMessage = "";
+$hash;
 
-$username = $_SESSION['Username'];
-$sql = "SELECT * FROM users WHERE Username = '$username' ";
-$result = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-mysqli_free_result($result);
-$hash = $row['Password'];
-$userID = $row['UserID'];
+$updatePassword = $db->prepare("UPDATE `users` SET `Password` = :new WHERE `UserID` = :user");
 
-$currentPW = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['current'])));
-$password1 = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['new1'])));
-$password2 = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['new2'])));
+try {
+  $getPassword = $db->prepare("SELECT Password FROM users WHERE UserID = ?");
+  $getPassword->execute([$_SESSION['UserID']]);
+  $hash = $getPassword->fetchColumn();
+} catch (Exception $e) {
+  halt(500);
+}
+
+$currentPW = trim($_POST['current']);
+$password1 = trim($_POST['new1']);
+$password2 = trim($_POST['new2']);
 
 if (!v::stringType()->length(7, null)->validate($password1)) {
   $status = false;
@@ -40,10 +44,15 @@ if (!password_verify($currentPW, $hash)) {
 }
 
 if ($status == true) {
-  $newHash = password_hash($password1, PASSWORD_BCRYPT);
-  $sql = "UPDATE `users` SET `Password` = '$newHash' WHERE `UserID` = '$userID'";
-  mysqli_query($link, $sql);
-  header("Location: " . autoUrl("myaccount"));
+  try {
+    $newHash = password_hash($password1, PASSWORD_BCRYPT);
+    $updatePassword->execute(['user' => $_SESSION['UserID'], 'new' => $newHash]);
+
+    $_SESSION['PasswordUpdate'] = true;
+    header("Location: " . autoUrl("myaccount/password"));
+  } catch (Exception $e) {
+    halt(500);
+  }
 }
 else {
   $_SESSION['ErrorState'] = '

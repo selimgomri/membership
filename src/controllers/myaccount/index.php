@@ -137,7 +137,7 @@
     </ul>
   </div>
   <?php  } ?>
-  <?
+  <?php
   if ($require_email_auth) {
     echo '
     <div class="alert alert-warning mt-3 mb-0">
@@ -188,7 +188,7 @@
           <div class="form-group" id="gravitar">
             <label for="mobile" class="d-block">Account Image</label>
             <?php
-            $grav_url = "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $_SESSION['EmailAddress'] ) ) ) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=240";
+            $grav_url = "https://www.gravatar.com/avatar/" . md5( mb_strtolower( trim( $_SESSION['EmailAddress'] ) ) ) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=240";
             ?>
             <img class="mr-3" src="<?php echo $grav_url ?>" alt="" width="80" height="80">
             <small class="form-text text-muted">If you have an image linked to your email with Gravitar, we'll display it in the system</small>
@@ -212,7 +212,7 @@
         <p class="border-bottom border-gray pb-2">Change your password regularly to keep your account safe</p>
         <p class="mb-0"><a href="<?php echo autoUrl("myaccount/password"); ?>" class="btn btn-outline-dark">Change my Password</a></p>
       </div>
-      <?
+      <?php
       if ($_SESSION['AccessLevel'] == "Parent") {
         $contacts = new EmergencyContacts($link);
         $contacts->byParent($userID);
@@ -252,7 +252,7 @@
       								</a>
       							</p>
       						</div>
-      						<div class="col text-right">
+      						<div class="col text-sm-right">
       							<a href="<?php echo autoUrl("emergencycontacts/edit/" .
       							$contactsArray[$i]->getID()); ?>" class="btn btn-primary">
       								Edit
@@ -261,7 +261,7 @@
       					</div>
       				</div>
       			</div>
-      			<?
+      			<?php
       		} ?>
       		</div>
           <?php } ?>
@@ -271,7 +271,7 @@
       			</a>
       		</p>
         </div>
-        <?
+        <?php
       } ?>
       <div class="cell">
         <h2>Technical Details</h2>

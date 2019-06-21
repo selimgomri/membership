@@ -45,7 +45,7 @@ $payment_info = $sql->fetch(PDO::FETCH_ASSOC);
 $name = getUserName($payment_info['UserID']);
 
 $use_white_background = true;
-$PaymentID = strtoupper($PaymentID);
+$PaymentID = mb_strtoupper($PaymentID);
 $pagetitle = "Statement for " . $name . ", "
  . $PaymentID;
 
@@ -60,26 +60,26 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 	<div class="">
     <span class="d-none d-print-block h1"><?=CLUB_NAME?> Payments</span>
     <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-    <h1 class="border-bottom border-gray pb-2 mb-2"><?=$payment_info['Name']?> Statement</h1>
+    <h1 class="border-bottom border-gray pb-2 mb-2"><?=htmlspecialchars($payment_info['Name'])?> Statement</h1>
     <?php } else { ?>
-		<h1 class="border-bottom border-gray pb-2 mb-2">Statement for <?=$name?></h1>
+		<h1 class="border-bottom border-gray pb-2 mb-2">Statement for <?=htmlspecialchars($name)?></h1>
     <?php } ?>
     <dl class="row">
       <dt class="col-md-4">Payment Identifier</dt>
-      <dd class="col-md-8"><span class="mono"><?=$PaymentID?></span></dd>
+      <dd class="col-md-8"><span class="mono"><?=htmlspecialchars($PaymentID)?></span></dd>
 
       <dt class="col-md-4">Total Fee</dt>
-      <dd class="col-md-8"><span class="mono">&pound;<?=number_format(($payment_info['Amount']/100),2,'.','')?></span></dd>
+      <dd class="col-md-8"><span class="mono">&pound;<?=htmlspecialchars(number_format(($payment_info['Amount']/100),2,'.',''))?></span></dd>
 
       <dt class="col-md-4">Payment Status</dt>
-      <dd class="col-md-8"><span class="mono"><?=paymentStatusString($payment_info['Status'])?></span></dd>
+      <dd class="col-md-8"><span class="mono"><?=htmlspecialchars(paymentStatusString($payment_info['Status']))?></span></dd>
     </dl>
 
     <?php if ($_SESSION['AccessLevel'] == "Admin" && ($payment_info['Status'] == 'customer_approval_denied' || $payment_info['Status'] == 'failed')) {
     $_SESSION['Token' . $PaymentID] = hash('sha256', random_int(0, 999999));
     ?>
     <p>
-      <a href="<?=app('request')->curl?>markpaid/<?=$_SESSION['Token' . $PaymentID]?>" class="btn btn-primary">
+      <a href="<?=currentUrl()?>markpaid/<?=$_SESSION['Token' . $PaymentID]?>" class="btn btn-primary">
         Mark as Paid
       </a>
     </p>
@@ -125,7 +125,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   					</tr>
   				</thead>
   				<tbody>
-  				<?
+  				<?php
   				do {
   					//$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
   					$data = "";
@@ -138,7 +138,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   							//echo $json->Members[0]->MemberName;
   							$numMems = (int) sizeof($json->Members);
   							for ($y = 0; $y < $numMems; $y++) {
-  								$data .= '<li>' . $json->Members[$y]->FeeName . " (&pound;" . $json->Members[$y]->Fee . ") for " . $json->Members[$y]->MemberName . '</li>';
+  								$data .= '<li>' . htmlspecialchars($json->Members[$y]->FeeName) . " (&pound;" . htmlspecialchars($json->Members[$y]->Fee) . ") for " . htmlspecialchars($json->Members[$y]->MemberName) . '</li>';
   							}
   							$data .= '</ul>';
   						}
@@ -149,18 +149,18 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   							<?=date("D j M Y",strtotime($row['Date']))?>
   						</td>
   						<td>
-  							<?=$row['Name']?>
+  							<?=htmlspecialchars($row['Name'])?>
   							<em><?=$data?></em>
   						</td>
   						<td>
                 <?php if ($row['Type'] == "Payment") { ?>
-  							&pound;<?=number_format(($row['Amount']/100),2,'.','')?>
+  							&pound;<?=htmlspecialchars(number_format(($row['Amount']/100),2,'.',''))?>
                 <?php } else { ?>
-                -&pound;<?=number_format(($row['Amount']/100),2,'.','')?> (Credit)
+                -&pound;<?=htmlspecialchars(number_format(($row['Amount']/100),2,'.',''))?> (Credit)
                 <?php } ?>
   						</td>
   						<td>
-  							<?=$row['Status']?>
+  							<?=htmlspecialchars($row['Status'])?>
   						</td>
   					</tr>
   					<?php
@@ -173,7 +173,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
     </div>
 
     <p>
-      <a href="<?=app('request')->curl?>pdf" target="_blank" class="btn btn-primary">
+      <a href="<?=currentUrl()?>pdf" target="_blank" class="btn btn-primary">
         PDF Download
       </a>
     </p>
@@ -189,7 +189,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
           Print off this page and club staff can scan this code to access your
           statement.
         </p>
-        <img class="img-fluid d-block mb-3" src="<?=autoUrl("services/qr-generator?size=150&amp;text=" . urlencode(autoUrl("payments/history/statement/" . strtoupper($PaymentID))))?>" srcset="<?=autoUrl("services/qr-generator?size=300&amp;text=" . urlencode(autoUrl("payments/history/statement/" . strtoupper($PaymentID))))?> 2x, <?=autoUrl("services/qr-generator?size=450&amp;text=" . urlencode(autoUrl("payments/history/statement/" . strtoupper($PaymentID))))?> 3x" alt="<?=autoUrl("payments/history/statement/" . strtoupper($PaymentID))?>">
+        <img class="img-fluid d-block mb-3" src="<?=autoUrl("services/qr-generator?size=150&amp;text=" . urlencode(autoUrl("payments/history/statement/" . htmlspecialchars(strtoupper($PaymentID)))))?>" srcset="<?=autoUrl("services/qr-generator?size=300&amp;text=" . urlencode(autoUrl("payments/history/statement/" . htmlspecialchars(strtoupper($PaymentID)))))?> 2x, <?=autoUrl("services/qr-generator?size=450&amp;text=" . urlencode(autoUrl("payments/history/statement/" . htmlspecialchars(strtoupper($PaymentID)))))?> 3x" alt="<?=autoUrl("payments/history/statement/" . htmlspecialchars(strtoupper($PaymentID)))?>">
       -->
 
         <h2>Questions about Direct Debit</h2>
@@ -199,7 +199,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
           target="_blank">Chester-le-Street ASC website</a>.
         </p>
         <p>
-          Payments to <?=CLUB_NAME?> are covered by the Direct Debit Guarantee.
+          Payments to <?=htmlspecialchars(CLUB_NAME)?> are covered by the Direct Debit Guarantee.
         </p>
       </div>
     </div>

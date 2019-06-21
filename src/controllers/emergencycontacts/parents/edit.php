@@ -1,6 +1,6 @@
-<?
+<?php
 
-$use_white_background = true;
+global $db;
 
 $url_path = "emergencycontacts";
 if ($renewal_trap) {
@@ -10,7 +10,7 @@ if ($renewal_trap) {
 $user = $_SESSION['UserID'];
 
 $contact = new EmergencyContact();
-$contact->connect($link);
+$contact->connect($db);
 $contact->getByContactID($id);
 
 if ($contact->getUserID() != $user) {
@@ -35,19 +35,19 @@ if ($renewal_trap) {
 		<form method="post">
 		  <div class="form-group">
 		    <label for="name">Name</label>
-		    <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="<?php echo $contact->getName();?>" required>
+		    <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="<?=htmlspecialchars($contact->getName())?>" required>
 		  </div>
 		  <div class="form-group">
 		    <label for="num">Contact Number</label>
-		    <input type="tel" class="form-control" id="num" name="num" placeholder="Phone" value="<?php echo $contact->getContactNumber();?>" required>
+		    <input type="tel" class="form-control" id="num" name="num" placeholder="Phone" value="<?=htmlspecialchars($contact->getContactNumber())?>" required>
 		  </div>
 		  <button type="submit" class="btn btn-success">Save</button>
-			<a href="<?php echo autoUrl($url_path . "/" . $id . "/delete"); ?>" class="btn btn-danger">Delete</a>
+			<a href="<?=autoUrl($url_path . "/" . $id . "/delete")?>" class="btn btn-danger">Delete</a>
 		</form>
 
 	</div>
 </div>
 
-<?
+<?php
 
 include BASE_PATH . 'views/footer.php';
