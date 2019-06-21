@@ -1,32 +1,31 @@
-<?
+<?php
 
 // Welcome to the Parent Renewal Autorouter
 // The script takes the user's saved state and continues where left off
 // Also controls single session progress.
 
-$user = mysqli_real_escape_string($link, $_SESSION['UserID']);
+global $db;
 
 function renewalProgress($user) {
-	global $link;
-	$sql;
-	$user = mysqli_real_escape_string($link, $user);
+  global $db;
+  $details = null;
 	if (user_needs_registration($user)) {
-		$sql = "SELECT * FROM `renewalProgress` WHERE `RenewalID` = 0 AND `UserID` =
-		'$user';";
+		$details = $db->prepare("SELECT * FROM `renewalProgress` WHERE `RenewalID` = 0 AND `UserID` = ?");
 	} else {
-		$sql = "SELECT * FROM `renewals` LEFT JOIN `renewalProgress` ON renewals.ID =
-		renewalProgress.RenewalID WHERE `StartDate` <= CURDATE() AND CURDATE() <=
-    `EndDate` AND `UserID` = '$user' ORDER BY renewals.ID DESC,
-    renewalProgress.ID DESC;";
+		$details = $db->prepare("SELECT * FROM `renewals` LEFT JOIN
+		`renewalProgress` ON renewals.ID = renewalProgress.RenewalID WHERE
+		`StartDate` <= CURDATE() AND CURDATE() <= `EndDate` AND `UserID` = ? ORDER
+		BY renewals.ID DESC, renewalProgress.ID DESC");
 	}
-	return mysqli_query($link, $sql);
+	$details->execute([$user]);
+	return $details->fetch(PDO::FETCH_ASSOC);
 }
 
 function latestRenewal() {
-	global $link;
-	$sql = "SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE() AND CURDATE() <= `EndDate`
-	ORDER BY renewals.ID DESC;";
-	return mysqli_query($link, $sql);
+	global $db;
+	$latest = $db->query("SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE()
+	AND CURDATE() <= `EndDate` ORDER BY renewals.ID DESC");
+	return $latest;
 }
 
 function getNextSwimmer($user, $current = 0, $rr_only = false) {
@@ -80,35 +79,41 @@ function isPartialRegistration() {
 	return false;
 }
 
-$result = renewalProgress($user);
+//$currentRenewal = renewalProgress($user);
+$currentRenewalDetails = renewalProgress($user);
 
 $renewal = null;
 
-if (mysqli_num_rows($result) == 0) {
+if ($currentRenewalDetails == null) {
 	// Create a new Progress Record
-	$result = latestRenewal();
-  if (mysqli_num_rows($result) == 0) {
+	$latestRenewal = latestRenewal();
+  if ($latestRenewal == null) {
     halt(404);
   }
-	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-	$renewal = mysqli_real_escape_string($link, $row['ID']);
+
+	$row = $latestRenewal->fetch(PDO::FETCH_ASSOC);
+	$renewal = $row['ID'];
 	if (user_needs_registration($user)) {
 		$renewal = 0;
 	}
-	$date = mysqli_real_escape_string($link, date("Y-m-d"));
-	$sql = "INSERT INTO `renewalProgress` (`UserID`, `RenewalID`, `Date`, `Stage`, `Substage`, `Part`) VALUES ('$user', '$renewal', '$date', '0', '0', '0');";
-	mysqli_query($link, $sql);
+	$date = date("Y-m-d");
+
+  $addRenewal = $db->prepare("INSERT INTO `renewalProgress` (`UserID`, `RenewalID`, `Date`, `Stage`, `Substage`, `Part`) VALUES (?, ?, ?, '0', '0', '0')");
+  $addRenewal->execute([
+    $_SESSION['UserID'],
+    $renewal,
+    $date
+  ]);
 } else {
-	$result = latestRenewal();
-	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-	$renewal = mysqli_real_escape_string($link, $row['ID']);
+	$latestRenewal = latestRenewal();
+	$row = $latestRenewal->fetch(PDO::FETCH_ASSOC);
+	$renewal = $row['ID'];
 	if (user_needs_registration($user)) {
 		$renewal = 0;
 	}
 }
 
-$result = renewalProgress($user);
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+$row = renewalProgress($user);
 
 $renewalName = $row['Name'];
 

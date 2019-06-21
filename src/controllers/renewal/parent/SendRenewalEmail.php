@@ -1,4 +1,4 @@
-<?
+<?php
 
 $userID = mysqli_real_escape_string($link, $_SESSION['UserID']);
 $renewal = mysqli_real_escape_string($link, $renewal);

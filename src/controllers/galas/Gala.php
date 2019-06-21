@@ -52,7 +52,7 @@ include "galaMenu.php";
 ?>
 
 <div class="container">
-  <div class="row">
+  <div class="row align-items-center">
     <div class="col-md-8">
       <h1>
         <?=htmlspecialchars($gala['GalaName'])?>
@@ -60,8 +60,16 @@ include "galaMenu.php";
       <p class="lead">
         <?=htmlspecialchars($gala['GalaVenue'])?>
       </p>
-
     </div>
+    <?php if ($_SESSION['AccessLevel'] == "Galas" || $_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach") { ?>
+    <div class="col text-md-right">
+      <p>
+        <a href="<?=autoUrl("galas/" . $id . "/edit")?>" class="btn btn-dark">
+          Edit
+        </a>
+      </p>
+    </div>
+    <?php } ?>
   </div>
 
   <h2>About this gala</h2>
@@ -81,7 +89,7 @@ include "galaMenu.php";
       <h3 class="h6">Category</h3>
       <?php if ($gala['CourseLength'] == "LONG") { ?>
       <p>This is a <strong>Long Course</strong> gala</p>
-      <?php } else if ($gala['CourseLength'] == "LONG") { ?>
+      <?php } else if ($gala['CourseLength'] == "SHORT") { ?>
       <p>This is a <strong>Short Course</strong> gala</p>
       <?php } else { ?>
       <p>This gala is neither short course or long course</p>

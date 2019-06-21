@@ -1,15 +1,15 @@
-<?
+<?php
 
-$id = mysqli_real_escape_string($link, $id);
+global $db;
 
 use Respect\Validation\Validator as v;
 
 $ok = true;
 $response = "";
 
-$name = mysqli_real_escape_string($link, trim($_POST['name']));
-$start = mysqli_real_escape_string($link, trim($_POST['start']));
-$end = mysqli_real_escape_string($link, trim($_POST['end']));
+$name = trim($_POST['name']);
+$start = trim($_POST['start']);
+$end = trim($_POST['end']);
 
 if ($name == null || $name == "") {
 	$ok = false;
@@ -41,17 +41,32 @@ if (!v::date()->validate($end)) {
 }
 
 if ($ok) {
-	$sql = "UPDATE `renewals` SET `Name` = '$name', `StartDate` = '$start', `EndDate` = '$end' WHERE `ID` = '$id';";
-	mysqli_query($link, $sql);
-
-	$_SESSION['NewRenewalErrorInfo'] = '
-	<div class="alert alert-success">
-		<p class="mb-0">
-			<strong>
-				We\'ve successfully updated this renewal period.
-			</strong>
-		</p>
-	</div>';
+	try {
+		$update = $db->prepare("UPDATE `renewals` SET `Name` = ?, `StartDate` = ?, `EndDate` = ? WHERE `ID` = ?;");
+		$update->execute([
+			$name,
+			$start,
+			$end,
+			$id
+		]);
+		$_SESSION['NewRenewalErrorInfo'] = '
+		<div class="alert alert-success">
+			<p class="mb-0">
+				<strong>
+					We\'ve successfully updated this renewal period.
+				</strong>
+			</p>
+		</div>';
+	} catch (Exception $e) {
+		$_SESSION['NewRenewalErrorInfo'] = '
+		<div class="alert alert-danger">
+			<p class="mb-0">
+				<strong>
+					A database error occured and we could not save the changes.
+				</strong>
+			</p>
+		</div>';
+	}
 
 	header("Location: " . currentUrl());
 } else {

@@ -1,6 +1,6 @@
-<?
+<?php
 
-$user = mysqli_real_escape_string($link, $_SESSION['UserID']);
+global $db;
 
 $status = true;
 $statusMessage = "";
@@ -8,14 +8,14 @@ $statusMessage = "";
 $forename = $surname = $email = $emailComms = $sms = $smsComms = "";
 
 if ($_POST['forename'] != "") {
-	$forename = mysqli_real_escape_string($link, $_POST['forename']);
+	$forename = $_POST['forename'];
 } else {
 	$status = false;
 	$statusMessage .= "<li>No Forename Supplied</li>";
 }
 
 if ($_POST['surname'] != "") {
-	$surname = mysqli_real_escape_string($link, $_POST['surname']);
+	$surname = $_POST['surname'];
 } else {
 	$status = false;
 	$statusMessage .= "<li>No Surname Supplied</li>";
@@ -37,7 +37,7 @@ if (isset($_POST['emailContactOK']) && $_POST['emailContactOK'] == 1) {
 }
 
 if ($_POST['mobile'] != "") {
-	$sms = mysqli_real_escape_string($link, $_POST['mobile']);
+	$sms = $_POST['mobile'];
 } else {
 	$status = false;
 	$statusMessage .= "<li>No Phone Number Provided</li>";
@@ -50,16 +50,27 @@ if (isset($_POST['smsContactOK']) && $_POST['smsContactOK'] == 1) {
 }
 
 if ($status) {
-	$sql = "UPDATE `users` SET `Forename` = '$forename', `Surname` = '$surname',
-	`EmailComms` = '$emailComms', `Mobile` = '$sms', `MobileComms` = '$smsComms'
-	WHERE `UserID` = '$user';";
-	if (mysqli_query($link, $sql)) {
+  try {
+    $updateUser = $db->prepare("UPDATE `users` SET `Forename` = >, `Surname` = ?,
+  	`EmailComms` = ?, `Mobile` = ?, `MobileComms` = ?
+  	WHERE `UserID` = ?");
+    $updateUser->execute([
+      $forename,
+      $surname,
+      $emailComms,
+      $sms,
+      $smsComms,
+      $_SESSION['UserID']
+    ]);
+
 		// Success move on
-		$renewal = mysqli_real_escape_string($link, $renewal);
-		$sql = "UPDATE `renewalProgress` SET `Substage` = `Substage` + 1 WHERE `RenewalID` = '$renewal' AND `UserID` = '$user';";
-		mysqli_query($link, $sql);
-		header("Location: " . currentUrl());
-	} else {
+		$updateRenewal = $db->prepare("UPDATE `renewalProgress` SET `Substage` = `Substage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
+    $updateRenewal->execute([
+      $renewal,
+      $_SESSION['UserID']
+    ]);
+        header("Location: " . currentUrl());
+	} catch (Exception $e) {
 		$status = false;
 		$statusMessage .= "<li>Database Error - Contact support</li>";
 	}

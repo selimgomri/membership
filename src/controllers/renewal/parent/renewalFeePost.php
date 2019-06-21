@@ -1,4 +1,4 @@
-<?
+<?php
 
 $user = mysqli_real_escape_string($link, $_SESSION['UserID']);
 $partial_reg = false; //isPartialRegistration();

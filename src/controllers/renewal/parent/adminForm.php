@@ -12,29 +12,29 @@ try {
 }
 $terms_Id = ($query->fetch(PDO::FETCH_ASSOC))['ID'];
 
-$userID = mysqli_real_escape_string($link, $_SESSION['UserID']);
-
 $row = [];
 
-$mySwimmers = mySwimmersTable($link, $userID);
-$name = getUserName($userID);
+$mySwimmers = mySwimmersTable($link, $_SESSION['UserID']);
+$name = getUserName($_SESSION['UserID']);
 
 if ($partial_reg) {
 	$sql = "SELECT members.MemberID, members.MForename, members.MSurname,
 	members.DateOfBirth, memberPhotography.Website, memberPhotography.Social,
 	memberPhotography.Noticeboard, memberPhotography.FilmTraining,
 	memberPhotography.ProPhoto FROM (`members` LEFT JOIN `memberPhotography` ON
-	members.MemberID = memberPhotography.MemberID) WHERE `UserID` = '$userID' AND
+	members.MemberID = memberPhotography.MemberID) WHERE `UserID` = ? AND
 	members.RR = 1 ORDER BY `MForename` ASC, `MSurname` ASC;";
 } else {
 	$sql = "SELECT members.MemberID, members.MForename, members.MSurname,
 	members.DateOfBirth, memberPhotography.Website, memberPhotography.Social,
 	memberPhotography.Noticeboard, memberPhotography.FilmTraining,
 	memberPhotography.ProPhoto FROM (`members` LEFT JOIN `memberPhotography` ON
-	members.MemberID = memberPhotography.MemberID) WHERE `UserID` = '$userID' ORDER
+	members.MemberID = memberPhotography.MemberID) WHERE `UserID` = ? ORDER
 	BY `MForename` ASC, `MSurname` ASC;";
 }
-$result = mysqli_query($link, $sql);
+
+$getInfo = $db->prepare($sql);
+$getInfo->execute([$_SESSION['UserID']]);
 
 $pagetitle = "Administration Form";
 include BASE_PATH . "views/header.php";
@@ -126,59 +126,66 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				</div>
 
 
-				<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-				$row[$i] = mysqli_fetch_array($result, MYSQLI_ASSOC);
-				$id[$i] = $row[$i]['MemberID'];
-				$age[$i] = date_diff(date_create($row[$i]['DateOfBirth']), date_create('today'))->y; ?>
+				<?php
+        $i = 0;
+        while ($row[$i] = $getInfo->fetch(PDO::FETCH_ASSOC)) {
+  				$id[$i] = $row[$i]['MemberID'];
+  				$age[$i] = date_diff(date_create($row[$i]['DateOfBirth']), date_create('today'))->y; ?>
 
-				<div class="my-3 p-3 bg-white rounded shadow">
+  				<div class="cell">
 
-					<h3><?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?></h3>
+  					<h3><?=htmlspecialchars($row[$i]['MForename'] . " " . $row[$i]['MSurname'])?></h3>
 
-					<div class="form-group <?php if ($age[$i] >= 12) { echo "mb-0"; } ?>">
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" value="1" class="custom-control-input" name="<?
-							echo $id[$i]; ?>-tc-confirm" id="<?php echo $id[$i]; ?>-tc-confirm">
-							<label class="custom-control-label" for="<?php echo $id[$i];
-							?>-tc-confirm">
-								I, <?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>
-								agree to the Terms and Conditions of <?=CLUB_NAME?> as outlined
-								above
-							</label>
-						</div>
-					</div>
+  					<div class="form-group <?php if ($age[$i] >= 12) { echo "mb-0"; } ?>">
+  						<div class="custom-control custom-checkbox">
+  							<input type="checkbox" value="1" class="custom-control-input"
+  							name="<?=htmlspecialchars($id[$i])?>-tc-confirm"
+  							id="<?=htmlspecialchars($id[$i])?>-tc-confirm">
+  							<label class="custom-control-label"
+  							for="<?=htmlspecialchars($id[$i])?>-tc-confirm">
+  								I, <?=htmlspecialchars($row[$i]['MForename'] . " " .
+  								$row[$i]['MSurname'])?> agree to the Terms and Conditions of
+  								<?=CLUB_NAME?> as outlined above
+  							</label>
+  						</div>
+  					</div>
 
-					<?
-					if ($age[$i] < 12) { ?>
+  					<?
+  					if ($age[$i] < 12) { ?>
 
-					<p>
-						In the case of a member under the age of twelve years the Parent or
-						Guardian undertakes to explain the content and implications of the Terms
-						and Conditions of Membership of <?=CLUB_NAME?>.
-					</p>
+  					<p>
+  						In the case of a member under the age of twelve years the Parent or
+  						Guardian undertakes to explain the content and implications of the Terms
+  						and Conditions of Membership of <?=CLUB_NAME?>.
+  					</p>
 
-					<div class="form-group mb-0">
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" value="1" class="custom-control-input" name="<?
-							echo $id[$i]; ?>-pg-understanding" id="<?php echo $id[$i];
-							?>-pg-understanding">
-							<label class="custom-control-label" for="<?php echo $id[$i];
-							?>-pg-understanding">
-								I, <?php echo $name; ?> have explained the content and
-								implications to <?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>
-								and can confirm that they understood.
-							</label>
-						</div>
-					</div>
+  					<div class="form-group mb-0">
+  						<div class="custom-control custom-checkbox">
+  							<input type="checkbox" value="1" class="custom-control-input"
+  							name="<?=htmlspecialchars($id[$i])?>-pg-understanding"
+  							id="<?=htmlspecialchars($id[$i])?>-pg-understanding">
+  							<label class="custom-control-label"
+  							for="<?=htmlspecialchars($id[$i])?>-pg-understanding">
+  								I, <?=htmlspecialchars($name)?> have explained the content and
+  								implications to <?=htmlspecialchars($row[$i]['MForename'] . " " .
+  								$row[$i]['MSurname'])?> and can confirm that they understood.
+  							</label>
+  						</div>
+  					</div>
 
-					<?php } ?>
+  					<?php } ?>
 
-				</div>
+  				</div>
 
-				<?php } ?>
+				  <?php
+
+          $i++;
+        }
+
+        ?>
 
 				<?
-				for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+				for ($i = 0; $i < sizeof($row); $i++) {
 					$y = 0;
 					if ($age[$i] < 18) {
 						$y++;
@@ -208,7 +215,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 					time by heading to Swimmers.
 				</p>
 
-				<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+				<?php for ($i = 0; $i < sizeof($row); $i++) {
 					if ($age[$i] < 18) {
 						$photo = [];
 			      if ($row[$i]['Website'] == 1) {
@@ -226,51 +233,62 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			      if ($row[$i]['ProPhoto'] == 1) {
 			        $photo[4] = " checked ";
 			      } ?>
-				<div class="my-3 p-3 bg-white rounded shadow">
-					<h3><?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?></h3>
+				<div class="cell">
+					<h3><?=htmlspecialchars($row[$i]['MForename'] . " " . $row[$i]['MSurname'])?></h3>
 					<p>
-						I, <?php echo $name; ?> agree to photography in the following
-			circumstances. Tick boxes only if you wish to grant us photography permission.
+						I, <?=htmlspecialchars($name)?> agree to photography in the
+						following circumstances. <strong>Tick boxes only if you wish to
+						grant us photography permission.</strong>
 					</p>
 					<div class="custom-control custom-checkbox">
-						<input type="checkbox" value="1" <?php echo $photo[0]; ?>
-						class="custom-control-input" name="<?php echo $id[$i]; ?>-photo-web" id="<?
-						echo $id[$i]; ?>-photo-web">
-						<label class="custom-control-label" for="<?php echo $id[$i]; ?>-photo-web">
+						<input type="checkbox" value="1" <?=$photo[0]?>
+						class="custom-control-input"
+						name="<?=htmlspecialchars($id[$i])?>-photo-web"
+						id="<?=htmlspecialchars($id[$i])?>-photo-web">
+						<label class="custom-control-label"
+						for="<?=htmlspecialchars($id[$i])?>-photo-web">
 							Take photographs to use on the clubs website
 						</label>
 					</div>
 					<div class="custom-control custom-checkbox">
-						<input type="checkbox" value="1" <?php echo $photo[1]; ?>
-						class="custom-control-input" name="<?php echo $id[$i]; ?>-photo-soc" id="<?
-						echo $id[$i]; ?>-photo-soc">
-						<label class="custom-control-label" for="<?php echo $id[$i]; ?>-photo-soc">
+						<input type="checkbox" value="1" <?=$photo[1]?>
+						class="custom-control-input"
+						name="<?=htmlspecialchars($id[$i])?>-photo-soc"
+						id="<?=htmlspecialchars($id[$i])?>-photo-soc">
+						<label class="custom-control-label"
+						for="<?=htmlspecialchars($id[$i])?>-photo-soc">
 							Take photographs to use on social media sites
 						</label>
 					</div>
 					<div class="custom-control custom-checkbox">
-						<input type="checkbox" value="1" <?php echo $photo[2]; ?>
-						class="custom-control-input" name="<?php echo $id[$i]; ?>-photo-nb" id="<?
-						echo $id[$i]; ?>-photo-nb">
-						<label class="custom-control-label" for="<?php echo $id[$i]; ?>-photo-nb">
+						<input type="checkbox" value="1" <?=$photo[2]?>
+						class="custom-control-input"
+						name="<?=htmlspecialchars($id[$i])?>-photo-nb"
+						id="<?=htmlspecialchars($id[$i])?>-photo-nb">
+						<label class="custom-control-label"
+						for="<?=htmlspecialchars($id[$i])?>-photo-nb">
 							Take photographs to use on club noticeboards
 						</label>
 					</div>
 					<div class="custom-control custom-checkbox">
-						<input type="checkbox" value="1" <?php echo $photo[3]; ?>
-						class="custom-control-input" name="<?php echo $id[$i]; ?>-photo-film" id="<?
-						echo $id[$i]; ?>-photo-film">
-						<label class="custom-control-label" for="<?php echo $id[$i]; ?>-photo-film">
+						<input type="checkbox" value="1" <?=$photo[3]?>
+						class="custom-control-input"
+						name="<?=htmlspecialchars($id[$i])?>-photo-film"
+						id="<?=htmlspecialchars($id[$i])?>-photo-film">
+						<label class="custom-control-label"
+						for="<?=htmlspecialchars($id[$i])?>-photo-film">
 							Filming for training purposes only
 						</label>
 					</div>
 					<div class="custom-control custom-checkbox">
-						<input type="checkbox" value="1" <?php echo $photo[4]; ?>
-						class="custom-control-input" name="<?php echo $id[$i]; ?>-photo-pro" id="<?
-						echo $id[$i]; ?>-photo-pro">
-						<label class="custom-control-label" for="<?php echo $id[$i]; ?>-photo-pro">
-							Employ a professional photographer (approved by the club) who will take
-							photographs in competitions and/or club events.
+						<input type="checkbox" value="1" <?=$photo[4]?>
+						class="custom-control-input"
+						name="<?=htmlspecialchars($id[$i])?>-photo-pro"
+						id="<?=htmlspecialchars($id[$i])?>-photo-pro">
+						<label class="custom-control-label"
+						for="<?=htmlspecialchars($id[$i])?>-photo-pro">
+							Employ a professional photographer (approved by the club) who will
+							take photographs in competitions and/or club events.
 						</label>
 					</div>
 				</div>
@@ -285,31 +303,34 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 				<?php } ?>
 
-				<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+				<?php for ($i = 0; $i < sizeof($row); $i++) {
 					if ($age[$i] < 18) { ?>
-				<div class="my-3 p-3 bg-white rounded shadow">
+				<div class="cell">
 
 					<h3>
-						Consent for <?php echo $row[$i]['MForename'] . " " . $row[$i]['MSurname']; ?>
+						Consent for <?=htmlspecialchars($row[$i]['MForename'] . " " . $row[$i]['MSurname'])?>
 					</h3>
 					<p>
-						I confirm that <?php echo $row[$i]['MForename'] . " " .
-						$row[$i]['MSurname']; ?> has not been advised by a doctor to not take
+						I confirm that <?=htmlspecialchars($row[$i]['MForename'] . " " .
+						$row[$i]['MSurname'])?> has not been advised by a doctor to not take
 						part in physical activities unless under medical supervision.
 					</p>
 
 					<p>
-						I, <?php echo $name; ?> hereby give permission for the coach or
-						other appropriate person to give the authority on my behalf for any medical
-						or surgical treatment recommended by competent medical authorities, where it
-						would be contrary to my child's interest, in the doctor's opinion, for any
-						delay to be incurred by seeking my personal consent.
+						I, <?=htmlspecialchars($name)?> hereby give permission for the coach
+						or other appropriate person to give the authority on my behalf for
+						any medical or surgical treatment recommended by competent medical
+						authorities, where it would be contrary to my child's interest, in
+						the doctor's opinion, for any delay to be incurred by seeking my
+						personal consent.
 					</p>
 
 					<div class="custom-control custom-checkbox">
-						<input type="checkbox" value="1" class="custom-control-input" name="<?
-						echo $id[$i]; ?>-med" id="<?php echo $id[$i]; ?>-med">
-						<label class="custom-control-label" for="<?php echo $id[$i]; ?>-med">
+						<input type="checkbox" value="1" class="custom-control-input"
+						name="<?=htmlspecialchars($id[$i])?>-med"
+						id="<?=htmlspecialchars($id[$i])?>-med">
+						<label class="custom-control-label"
+						for="<?=htmlspecialchars($id[$i])?>-med">
 							Confirm
 						</label>
 					</div>
