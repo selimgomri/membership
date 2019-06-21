@@ -59,23 +59,22 @@ if ($id > 0) {
 
 	<div class="container-fluid">
 		<div class="">
-			<h1><?php echo $renewalArray['Name']; ?> Status</h1>
+			<h1><?=htmlspecialchars($renewalArray['Name'])?> Status</h1>
 			<p class="lead">
 				This is the current status for this membership renewal which started on <?php
 				echo date("l j F Y", strtotime($renewalArray['StartDate'])); ?> and
 				finishes on <?php echo date("l j F Y", strtotime($renewalArray['EndDate'])); ?>
 			</p>
 			<p class="mb-0">
-				<?php echo $numRenewals; ?> Renewals (<?php echo $numC1Renewals; ?> Category 1, <?
-				echo $numC2Renewals; ?> Category 2, <?php echo $numC3Renewals; ?> Category 3)
-				of <?php echo $numMembers; ?> current* members.
+				<?=$numRenewals?> Renewals (<?=$numC1Renewals?> Category 1, <?=$numC2Renewals?> Category 2, <?=$numC3Renewals?> Category 3)
+				of <?=$numMembers?> current* members.
 			</p>
 			<p class="small text-muted">
 				* Current refers to at this moment. There may not have been this number of
 				members during this specific membership renewal
 			</p>
 			<p class="">
-				<a href="<?php echo autoUrl("renewal/" . $id . "/edit"); ?>" class="btn
+				<a href="<?=autoUrl("renewal/" . $id . "/edit")?>" class="btn
 				btn-dark">
 					Edit this Renewal Period
 				</a>

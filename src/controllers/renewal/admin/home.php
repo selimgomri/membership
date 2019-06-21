@@ -46,10 +46,10 @@ include BASE_PATH . "views/swimmersMenu.php";
 			<?php while ($row = $renewals->fetch(PDO::FETCH_ASSOC)) {
 				?>
 				<li>
-					<a href="<?php echo autoUrl("renewal/" . $row['ID']); ?>">
-						<?php echo $row['Name']; ?> (<?php echo date("j F Y",
-						strtotime($row['StartDate'])); ?> - <?php echo date("j F Y",
-						strtotime($row['EndDate'])); ?>)
+					<a href="<?=autoUrl("renewal/" . $row['ID'])?>">
+					<?=htmlspecialchars($row['Name'])?> (<?=date("j F Y",
+						strtotime($row['StartDate']))?> - <?=date("j F Y",
+						strtotime($row['EndDate']))?>)
 					</a>
 				</li>
 				<?php } ?>
