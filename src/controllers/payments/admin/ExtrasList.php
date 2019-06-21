@@ -17,7 +17,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 <div class="container">
   <div class="">
-  	<h1 class="border-bottom border-gray pb-2 mb-2">Extras</h1>
+  	<h1>Extras</h1>
     <p class="lead">Extras include CrossFit - Fees paid in addition to Squad Fees</p>
     <p>All extras are billed on a monthly basis</p>
     <?php if ($row != null) { ?>
