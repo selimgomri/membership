@@ -8,7 +8,7 @@ global $db;
 
 function renewalProgress($user) {
   global $db;
-  $details;
+  $details = null;
 	if (user_needs_registration($user)) {
 		$details = $db->prepare("SELECT * FROM `renewalProgress` WHERE `RenewalID` = 0 AND `UserID` = ?");
 	} else {
@@ -17,7 +17,8 @@ function renewalProgress($user) {
 		`StartDate` <= CURDATE() AND CURDATE() <= `EndDate` AND `UserID` = ? ORDER
 		BY renewals.ID DESC, renewalProgress.ID DESC");
 	}
-	return $details->execute([$user]);
+	$details->execute([$user]);
+	return $details->fetch(PDO::FETCH_ASSOC);
 }
 
 function latestRenewal() {
@@ -78,8 +79,8 @@ function isPartialRegistration() {
 	return false;
 }
 
-$currentRenewal = renewalProgress($user);
-$currentRenewalDetails = $currentRenewal->fetch(PDO::FETCH_ASSOC);
+//$currentRenewal = renewalProgress($user);
+$currentRenewalDetails = renewalProgress($user);
 
 $renewal = null;
 
@@ -112,8 +113,7 @@ if ($currentRenewalDetails == null) {
 	}
 }
 
-$progress = renewalProgress($user);
-$row = $progress->fetch(PDO::FETCH_ASSOC);
+$row = renewalProgress($user);
 
 $renewalName = $row['Name'];
 

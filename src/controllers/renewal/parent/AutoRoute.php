@@ -17,11 +17,23 @@ require 'AutoRouteStartup.php';
 if ($stage == 0) {
 	// Stage 0 - Reviews
 	if ($substage == 0) {
-		include 'accountReview.php';
+		if ($redirect) {
+			header("Location: " . autoUrl("renewal/go/account-review"));
+		} else {
+			include 'accountReview.php';
+		}
 	} else if ($substage == 1) {
-		include 'swimmerReview.php';
+		if ($redirect) {
+			header("Location: " . autoUrl("renewal/go/swimmer-review"));
+		} else {
+			include 'swimmerReview.php';
+		}
 	} else if ($substage == 2) {
-		include 'feeReview.php';
+		if ($redirect) {
+			header("Location: " . autoUrl("renewal/go/fee-review"));
+		} else {
+			include 'feeReview.php';
+		}
 	} else {
 		halt(404);
 	}
@@ -30,14 +42,22 @@ if ($stage == 0) {
 	// Medical Reviews
 	if ($substage == 0) {
 		$id = $part;
-		include 'medicalReview.php';
+		if ($redirect) {
+			header("Location: " . autoUrl("renewal/go/medical-review/" . $id));
+		} else {
+			include 'medicalReview.php';
+		}
 	} else {
 		halt(404);
 	}
 } else if ($stage == 2) {
 	// Emergency Contacts
 	if ($substage == 0) {
-		include 'emergencyContact.php';
+		if ($redirect) {
+			header("Location: " . autoUrl("renewal/go/emergency-contacts"));
+		} else {
+			include 'emergencyContact.php';
+		}
 	} else {
 		halt(404);
 	}
@@ -45,24 +65,40 @@ if ($stage == 0) {
 	$full_renewal = true;
 	// Code of Conduct
 	if ($full_renewal && $substage == 0) {
-		include 'conductForm.php';
+		if ($redirect) {
+			header("Location: " . autoUrl("renewal/go/parent-code-of-conduct"));
+		} else {
+			include 'conductForm.php';
+		}
 	} else if ($substage == 1) {
 		$id = $part;
-		include 'conductForm.php';
+		if ($redirect) {
+			header("Location: " . autoUrl("renewal/go/swimmer-code-of-conduct/" . $id));
+		} else {
+			include 'conductForm.php';
+		}
 	} else {
 		halt(404);
 	}
 } else if ($stage == 4) {
 	// Administration Form
 	if ($substage == 0) {
-		include 'adminForm.php';
+		if ($redirect) {
+			header("Location: " . autoUrl("renewal/go/administration-form"));
+		} else {
+			include 'adminForm.php';
+		}
 	} else {
 		halt(404);
 	}
 } else if ($stage == 5) {
 	// Fees to Pay - Membership Renewal
 	if ($substage == 0) {
-		include 'renewalFee.php';
+		if ($redirect) {
+			header("Location: " . autoUrl("renewal/go/renewal-fee"));
+		} else {
+			include 'renewalFee.php';
+		}
 	} else {
 		halt(404);
 	}
@@ -74,7 +110,11 @@ if ($stage == 0) {
 		halt(404);
 	}
 } else if ($stage == 7) {
-	include 'complete.php';
+	if ($redirect) {
+		header("Location: " . autoUrl("renewal/go/completed"));
+	} else {
+		include 'complete.php';
+	}
 } else {
 	halt(500);
 }

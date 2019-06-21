@@ -1,13 +1,16 @@
-<?
+<?php
+
+global $db;
 
 use Respect\Validation\Validator as v;
 
 $ok = true;
 $response = "";
 
-$name = mysqli_real_escape_string($link, trim($_POST['name']));
-$start = mysqli_real_escape_string($link, trim($_POST['start']));
-$end = mysqli_real_escape_string($link, trim($_POST['end']));
+$name = trim($_POST['name']);
+$start = trim($_POST['start']);
+$end = trim($_POST['end']);
+$year = (int) date("Y", strtotime("+1 year"));
 
 if ($name == null || $name == "") {
 	$ok = false;
@@ -39,11 +42,31 @@ if (!v::date()->validate($end)) {
 }
 
 if ($ok) {
-	$sql = "INSERT INTO `renewals` (`Name`, `StartDate`, `EndDate`) VALUES
-	('$name', '$start', '$end');";
-	mysqli_query($link, $sql);
-
-	header("Location: " . autoUrl("renewal"));
+	try {
+		$insert = $db->prepare("INSERT INTO `renewals` (`Name`, `StartDate`, `EndDate`, `Year`) VALUES (?, ?, ?, ?);");
+		$insert->execute([
+			$name,
+			$start,
+			$end,
+			$year
+		]);
+		header("Location: " . autoUrl("renewal"));
+	} catch (Exception $e) {
+		$_SESSION['NewRenewalErrorInfo'] = '
+		<div class="alert alert-danger">
+			<p class="mb-0">
+				<strong>
+					A database error occurred.
+				</strong>
+			</p>
+			<ul class="mb-0">
+				' . $response . '
+			</ul>
+		</div>';
+		$_SESSION['NewRenewalForm'] = [$name, $start, $end];
+		pre($e);
+		//header("Location: " . currentUrl());
+	}
 } else {
 	$_SESSION['NewRenewalErrorInfo'] = '
 	<div class="alert alert-danger">

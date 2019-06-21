@@ -1,4 +1,4 @@
-<?
+<?php
 
 if ($id > 0) {
 
@@ -61,7 +61,7 @@ if ($id > 0) {
 		<div class="">
 			<h1><?php echo $renewalArray['Name']; ?> Status</h1>
 			<p class="lead">
-				This is the current status for this membership renewal which started on <?
+				This is the current status for this membership renewal which started on <?php
 				echo date("l j F Y", strtotime($renewalArray['StartDate'])); ?> and
 				finishes on <?php echo date("l j F Y", strtotime($renewalArray['EndDate'])); ?>
 			</p>
@@ -105,42 +105,42 @@ if ($id > 0) {
   					$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
   					if ($row['RenewalID'] == "" || $row['RenewalID'] != $id ||
   					$row['Status'] == "failed" || $row['Status'] == "charged_back") {
-  						?><tr class="table-danger"><?
+  						?><tr class="table-danger"><?php
   					} else if ($row['Status'] == "paid_out" || $row['Status'] == "confirmed" || $row['Status'] == "paid_manually") {
-  						?><tr class="table-success"><?
+  						?><tr class="table-success"><?php
   					} else {
-  						?><tr><?
+  						?><tr><?php
   					}
   					?>
   						<td>
-  							<?php echo $row['MForename'] . " " . $row['MSurname']; ?>
+  							<?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
   						</td>
   						<td>
-  							<?php echo $row['Forename'] . " " . $row['Surname']; ?>
+  							<?=htmlspecialchars($row['Forename'] . " " . $row['Surname'])?>
   						</td>
   						<td>
   							<span class="mono">
-  								<?php echo $row['ASANumber']; ?>
+  								<?=htmlspecialchars($row['ASANumber'])?>
   							</span>
   						</td>
   						<td>
   							<?php if ($row['RenewalID'] == "" || $row['RenewalID'] != $id) {
-  								?>No Renewal Exists<?
+  								?>No Renewal Exists<?php
   							} else if ($row['Status'] == "") {
-  								?>Payment not yet processed<?
+  								?>Payment not yet processed<?php
   							} else {
   								echo paymentStatusString($row['Status']);
   							} ?>
   						</td>
   					</tr>
-  					<?
+  					<?php
   				} ?>
   			</tbody>
   		</table>
     </div>
 	</div>
 
-	<?
+	<?php
 
 	include BASE_PATH . "views/footer.php";
 } else {
@@ -229,39 +229,39 @@ if ($id > 0) {
 					$row['Status'] == "failed" || $row['Status'] == "charged_back") {
 						?><tr class="table-danger"><?
 					} else if ($row['Status'] == "paid_out" || $row['Status'] == "confirmed") {
-						?><tr class="table-success"><?
+						?><tr class="table-success"><?php
 					} else {
-						?><tr><?
+						?><tr><?php
 					}
 					?>
 						<td>
-							<?php echo $row['MForename'] . " " . $row['MSurname']; ?>
+							<?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
 						</td>
 						<td>
-							<?php echo $row['Forename'] . " " . $row['Surname']; ?>
+							<?=htmlspecialchars($row['Forename'] . " " . $row['Surname'])?>
 						</td>
 						<td>
 							<span class="mono">
-								<?php echo $row['ASANumber']; ?>
+								<?=htmlspecialchars($row['ASANumber'])?>
 							</span>
 						</td>
 						<td>
 							<?php if ($row['RenewalID'] == "" || $row['RenewalID'] != $id) {
-								?>No Renewal Exists<?
+								?>No Renewal Exists<?php
 							} else if ($row['Status'] == "") {
-								?>Payment not yet processed<?
+								?>Payment not yet processed<?php
 							} else {
 								echo paymentStatusString($row['Status']);
 							} ?>
 						</td>
 					</tr>
-					<?
+					<?php
 				} ?>
 			</tbody>
 		</table>
 	</div>
 
-	<?
+	<?php
 
 	include BASE_PATH . "views/footer.php";
 }

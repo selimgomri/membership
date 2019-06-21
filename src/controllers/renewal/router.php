@@ -9,7 +9,13 @@ if ($access == "Parent") {
 		include 'parent/home.php';
 	});
 
-	$this->get(['/go', '/go/*'], function() {
+	$this->get(['/go'], function() {
+		$redirect = true;
+		global $link;
+		include 'parent/AutoRoute.php';
+	});
+
+	$this->get(['/go/*'], function() {
 		global $link;
 		include 'parent/AutoRoute.php';
 	});
@@ -45,7 +51,7 @@ if ($access == "Parent") {
 	});
 
 	$this->group('/emergencycontacts', function() {
-		$this->get(['/'], function() {
+		$this->get('/', function() {
 			global $link;
 			$renewal_trap = true;
 			include BASE_PATH . 'controllers/emergencycontacts/parents/index.php';
@@ -86,7 +92,6 @@ if ($access == "Parent") {
 
 if ($access == "Admin") {
 	$this->get('/', function() {
-		global $link;
 		include 'admin/home.php';
 	});
 

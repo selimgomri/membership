@@ -51,8 +51,8 @@ include BASE_PATH . "views/swimmersMenu.php";
 						strtotime($row['StartDate'])); ?> - <?php echo date("j F Y",
 						strtotime($row['EndDate'])); ?>)
 					</a>
-				</li><?
-			} ?>
+				</li>
+				<?php } ?>
 		</ol>
 		<h2>Add a new Renewal Period</h2>
 		<p>
