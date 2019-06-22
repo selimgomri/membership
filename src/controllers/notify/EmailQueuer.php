@@ -43,36 +43,70 @@ try {
 } catch (PDOException $e) {
 	halt(500);
 }
+$lists = $pdo_query->fetchAll(PDO::FETCH_ASSOC);
 
-pre($db->query("SELECT CHARSET('')")->fetchColumn());
-while ($lists = $pdo_query->fetch(PDO::FETCH_ASSOC)) {
-  pre($lists);
-}
+$galas = $db->prepare("SELECT GalaName, GalaID FROM `galas` WHERE GalaDate >= ? ORDER BY `GalaName` ASC;");
+$date = new DateTime('-1 week', new DateTimeZone('Europe/London'));
+$galas->execute([$date->format('Y-m-d')]);
 
-$query = "";
+$query = $squadsQuery = $listsQuery = $galaQuery = "";
 
-$squads = $listsArray = [];
+$squads = $listsArray = $galasArray = [];
 
 for ($i = 0; $i < sizeof($row); $i++) {
-	if ($query != "" && $_POST[$row[$i]['SquadID']] == 1) {
-		$query .= "OR";
+	if ($squadsQuery != "" && $_POST[$row[$i]['SquadID']] == 1) {
+		$squadsQuery .= "OR";
 	}
 	if ($_POST[$row[$i]['SquadID']] == 1) {
-		$query .= " `SquadID` = '" . $row[$i]['SquadID'] . "' ";
+		$squadsQuery .= " `SquadID` = '" . $row[$i]['SquadID'] . "' ";
     $squads[$row[$i]['SquadID']] = $row[$i]['SquadName'];
 	}
 }
 
 for ($i = 0; $i < sizeof($lists); $i++) {
-	if ($query != "" && $_POST["TL-" . $lists[$i]['ID']] == 1) {
-		$query .= "OR";
+	if ($listsQuery != "" && $_POST["TL-" . $lists[$i]['ID']] == 1) {
+		$listsQuery .= "OR";
 	}
 	if ($_POST["TL-" . $lists[$i]['ID']] == 1) {
 		$id = "TL-" . $lists[$i]['ID'];
 		$id = substr_replace($id, '', 0, 3);
-		$query .= " `ListID` = '" . $lists[$i]['ID'] . "' ";
+		$listsQuery .= " `ListID` = '" . $lists[$i]['ID'] . "' ";
     $listsArray[$lists[$i]['ID']] = $lists[$i]['Name'];
 	}
+}
+
+while ($gala = $galas->fetch(PDO::FETCH_ASSOC)) {
+	if ($galaQuery != "" && $_POST["GALA-" . $gala['GalaID']]) {
+		$galaQuery .= "OR";
+	}
+	if ($_POST["GALA-" . $gala['GalaID']]) {
+		$id = "TL-" . $lists[$i]['ID'];
+		$id = substr_replace($id, '', 0, 3);
+		$galaQuery .= " `GalaID` = '" . $gala['GalaID'] . "' ";
+    $galasArray[$gala['GalaID']] = $gala['GalaName'];
+	}
+}
+
+$toSendTo = [];
+$squadUsers = $listUsers = $galaUsers = null;
+
+if ($squadsQuery) {
+  $squadUsers = $db->query("SELECT UserID FROM members WHERE (" . $squadsQuery . ") AND UserID IS NOT NULL");
+  while ($u = $squadUsers->fetch(PDO::FETCH_ASSOC)) {
+    $toSendTo[$u['UserID']] = $u['UserID'];
+  }
+}
+if ($listsQuery) {
+  $listUsers = $db->query("SELECT members.UserID FROM members INNER JOIN `targetedListMembers` ON targetedListMembers.ReferenceID = members.MemberID WHERE (" . $listsQuery . ") AND UserID IS NOT NULL");
+  while ($u = $listUsers->fetch(PDO::FETCH_ASSOC)) {
+    $toSendTo[$u['UserID']] = $u['UserID'];
+  }
+}
+if ($galaQuery) {
+  $galaUsers = $db->query("SELECT users.UserID FROM ((`users` INNER JOIN `members` ON members.UserID = users.UserID) INNER JOIN `galaEntries` ON galaEntries.MemberID = members.MemberID) WHERE " . $galaQuery);
+  while ($u = $galaUsers->fetch(PDO::FETCH_ASSOC)) {
+    $toSendTo[$u['UserID']] = $u['UserID'];
+  }
 }
 
 $userSending = getUserName($sender);
@@ -84,7 +118,8 @@ $recipientGroups = [
   ],
   "To" => [
     "Squads" => $squads,
-    "Targeted_Lists" => $listsArray
+    "Targeted_Lists" => $listsArray,
+    "Galas" => $galasArray
   ],
   "Message" => [
     "Subject" => $subject,
@@ -131,23 +166,16 @@ try {
 }
 $id = $db->lastInsertId();
 
-$sql = $db->query("SELECT users.UserID, users.UserID FROM ((`users` INNER JOIN `members` ON
-members.UserID = users.UserID) LEFT JOIN `targetedListMembers` ON
-targetedListMembers.ReferenceID = members.MemberID) WHERE " . $query);
-$users = $sql->fetchAll(PDO::FETCH_KEY_PAIR);
-$count = 0;
+$count = sizeof($toSendTo);
 
-foreach ($users as $userid => $user) {
-	$sql = "INSERT INTO `notify` (`UserID`, `MessageID`, `Subject`, `Message`,
-	`Status`, `Sender`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, 'Queued', ?, ?,
-	'Notify')";
+$insert = $db->prepare("INSERT INTO `notify` (`UserID`, `MessageID`, `Subject`, `Message`, `Status`, `Sender`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, 'Queued', ?, ?, 'Notify')");
+
+foreach ($toSendTo as $userid => $user) {
   try {
-  	$pdo_query = $db->prepare($sql);
-    $pdo_query->execute([$userid, $id, null, null, $sender, $force]);
+    $insert->execute([$userid, $id, null, null, $sender, $force]);
   } catch (PDOException $e) {
   	halt(500);
   }
-  $count++;
 }
 
 if ($_SESSION['AccessLevel'] != "Admin" && $force == 1) {
