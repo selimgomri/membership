@@ -5,6 +5,7 @@ $customBackground = "bg-warning";
 $reportedError = false;
 if (env('ERROR_REPORTING_EMAIL') != null) {
 	try {
+		global $e;
 		$emailMessage = '<p>This is an error report</p>';
 		if (isset($e)) {
 			ob_start();

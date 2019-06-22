@@ -11,6 +11,10 @@ $squads = $db->query("SELECT `SquadName`, `SquadID` FROM `squads` ORDER BY `Squa
 
 $lists = $db->query("SELECT * FROM `targetedLists` ORDER BY `Name` ASC;");
 
+$galas = $db->prepare("SELECT GalaName, GalaID FROM `galas` WHERE GalaDate >= ? ORDER BY `GalaName` ASC;");
+$date = new DateTime('-1 week', new DateTimeZone('Europe/London'));
+$galas->execute([$date->format('Y-m-d')]);
+
 $query = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE
 UserID = ?");
 $query->execute([$_SESSION['UserID']]);
@@ -76,6 +80,25 @@ $fromEmail .= '@' . EMAIL_DOMAIN;
 		</div>
 
     <div class="form-group">
+			<label>To parents of swimmers entered in the following galas...</label>
+			<div class="row">
+			<?php while ($gala = $galas->fetch(PDO::FETCH_ASSOC)) { ?>
+				<div class="col-6 col-sm-6 col-md-4 col-lg-3">
+					<div class="custom-control custom-checkbox">
+					  <input type="checkbox" class="custom-control-input"
+            id="GALA-<?=$gala['GalaID']?>" name="GALA-<?=$gala['GalaID']?>"
+            value="1">
+					  <label class="custom-control-label"
+              for="GALA-<?=$gala['GalaID']?>">
+              <?=htmlspecialchars($gala['GalaName'])?>
+            </label>
+					</div>
+				</div>
+			<?php } ?>
+			</div>
+		</div>
+
+    <div class="form-group">
 			<label for="from">From</label>
       <select class="custom-select" name="from" id="from">
         <option value="current-user"><?=htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'] . " <noreply@" . EMAIL_DOMAIN . ">  ")?></option>
@@ -86,7 +109,7 @@ $fromEmail .= '@' . EMAIL_DOMAIN;
 		<div class="form-group">
 			<label for="subject">Message Subject</label>
 			<input type="text" class="form-control" name="subject" id="subject"
-      placeholder="Message Subject" autocomplete="off">
+      placeholder="Message Subject" autocomplete="off" required>
 		</div>
 
 		<div class="form-group">
