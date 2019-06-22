@@ -114,12 +114,10 @@ include BASE_PATH . "views/header.php";
               <?php
               $squads = (array) $info->To->Squads;
               $lists = (array) $info->To->Targeted_Lists;
-              foreach ($squads as $s) { ?>
-                <span class="badge badge-pill rounded badge-dark">
-                  <?=htmlspecialchars($s)?>
-                </span><?php
-              }
-              foreach ($lists as $s) { ?>
+              $galas = (array) $info->To->Galas;
+              $array = array_merge($squads, $lists, $galas);
+              sort($array);
+              foreach ($array as $s) { ?>
                 <span class="badge badge-pill rounded badge-dark">
                   <?=htmlspecialchars($s)?>
                 </span><?php
