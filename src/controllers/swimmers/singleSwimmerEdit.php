@@ -43,8 +43,8 @@ $swimmerStatus = $row['Status'];
 $deleteKey = $_POST['swimmerDeleteDanger'];
 
 if ($deleteKey == $dbAccessKey) {
-	$sql = "DELETE FROM `members` WHERE `MemberID` = '$id'";
-	mysqli_query($link, $sql);
+	$delete = $db->prepare("DELETE FROM `members` WHERE `MemberID` = ?");
+	$delete->execute([$id]);
 	header("Location: " . autoUrl("swimmers"));
   die();
 }
@@ -84,7 +84,7 @@ if (!empty($_POST['asa'])) {
 		$asaUpdate = true;
 		$update = true;
 	}
-} else if ($_POST['asa'] == "") {
+} else if ($_POST['asa'] == "" && app('request')->method == "post") {
 	$newASANumber = env('ASA_CLUB_CODE') . $id;
 	if ($newASANumber != $asaNumber) {
 		$updateSwimmer = $db->prepare("UPDATE `members` SET `ASANumber` = ? WHERE `MemberID` = ?");
