@@ -38,7 +38,7 @@ class Login {
     $getUserDetails = $this->db->prepare("SELECT EmailAddress, Forename, Surname, UserID, AccessLevel FROM users WHERE UserID = ?");
     $getUserDetails->execute([$this->user]);
     $details = $getUserDetails->fetch(\PDO::FETCH_ASSOC);
-    
+
     $_SESSION['EmailAddress'] = $details['EmailAddress'];
     $_SESSION['Forename'] = $details['Forename'];
     $_SESSION['Surname'] = $details['Surname'];
@@ -119,10 +119,10 @@ class Login {
     }
 
     $user_info_cookie = json_encode([
-      'Forename' => $row['Forename'],
-      'Surname' => $row['Surname'],
-      'Account' => $_SESSION['UserID'],
-      'TopUAL'  => $row['AccessLevel']
+      'Forename' => $details['Forename'],
+      'Surname' => $details['Surname'],
+      'Account' => $details['UserID'],
+      'TopUAL'  => $details['AccessLevel']
     ]);
 
     if (isset($_SESSION['LoginSec'])) {
@@ -165,7 +165,7 @@ class Login {
       }
 
     }
-    
+
     return $currentUser;
   }
 }
