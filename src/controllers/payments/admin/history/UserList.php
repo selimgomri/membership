@@ -15,8 +15,15 @@ include BASE_PATH . "views/paymentsMenu.php";
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php'; ?>
 
 <div class="container">
+	<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("payments/history")?>">History &amp; Status</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Find a parent</li>
+    </ol>
+  </nav>
 	<div>
-		<h1 class="border-bottom border-gray pb-2 mb-3">Find a parent's transaction history.</h1>
+		<h1>Find a parent's transaction history</h1>
 		<div class="form-group">
 	    <label class="sr-only" for="search">Search by Surname</label>
 			<div class="input-group">

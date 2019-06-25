@@ -74,6 +74,14 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
  ?>
 
 <div class="container-fluid">
+	<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("payments/history")?>">History &amp; Status</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><?=$dateString?></li>
+    </ol>
+  </nav>
+
 	<h1>Status for <?=$dateString?></h1>
   <p class="lead"><?=$title_string?></p>
 	<p><a href="<?=currentUrl()?>csv" target="_blank">View as CSV (Comma Separated Values)</a> or <a href="<?=currentUrl()?>json" target="_blank">View as JSON (JavaScript Object Notation)</a></p>

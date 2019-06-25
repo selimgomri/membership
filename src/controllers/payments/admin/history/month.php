@@ -21,6 +21,13 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
  ?>
 
 <div class="container">
+	<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("payments/history")?>">History &amp; Status</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars(date("F Y", $date))?></li>
+    </ol>
+  </nav>
 	<div class="">
 		<h1>Payments for <?=htmlspecialchars(date("F Y", $date))?></h1>
 	  <p class="lead">

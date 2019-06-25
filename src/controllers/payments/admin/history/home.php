@@ -15,6 +15,14 @@ $date = date("Y/m");
  ?>
 
 <div class="container">
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
+      <li class="breadcrumb-item active" aria-current="page">History</li>
+    </ol>
+  </nav>
+
 	<h1>Payment History &amp; Status</h1>
   <div class="row">
     <div class="col-md-6 col-lg-4">
