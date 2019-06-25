@@ -628,10 +628,8 @@ $route->group($get_group, function($clubcode = "CLSE") {
     });*/
 
     if ($_SESSION['AccessLevel'] == "Admin") {
-      $this->group('/phpMyAdmin', function() {
-        $this->any(['/', '/*'], function() {
-          include '/customers/9/d/e/chesterlestreetasc.co.uk/httpd.private/phpMyAdmin/' . $this[0];
-        });
+      $this->group('/settings', function() {
+        include BASE_PATH . 'controllers/settings/router.php';
       });
 
       $this->get('/about:php', function() {

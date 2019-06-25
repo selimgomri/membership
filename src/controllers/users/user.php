@@ -38,6 +38,12 @@ if ($info['AccessLevel'] == "Coach") {
   $par = "selected";
 }
 
+$swimmers = null;
+if ($info['AccessLevel'] == "Parent") {
+  $swimmers = $db->prepare("SELECT MForename fn, MSurname sn, SquadName squad, SquadFee fee, ClubPays exempt FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID = ?");
+  $swimmers->execute([$id]);
+}
+
 $bankName = $bank = $has_logo = $logo_path;
 if (userHasMandates($id)) {
   $bankName = mb_strtoupper(bankDetails($id, "account_holder_name"));
@@ -92,6 +98,13 @@ include BASE_PATH . "views/header.php";
 ?>
 <div class="container">
 
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("users")?>">Users</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?></li>
+    </ol>
+  </nav>
+
   <h1>
     <?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?>
     <small><?=htmlspecialchars($info['AccessLevel'])?></small>
@@ -139,6 +152,28 @@ include BASE_PATH . "views/header.php";
         <h3 class="h6">Extra Fees</h3>
         <p><?=monthlyExtraCost($db, $id, "string")?></p>
       </div>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <h2>
+      Swimmers
+    </h2>
+    <p class="lead">
+      This parent's swimmers.
+    </p>
+
+    <div class="row">
+      <?php while ($s = $swimmers->fetch(PDO::FETCH_ASSOC)) { ?>
+      <div class="col-sm-6 col-md-4">
+        <h3 class="h6"><?=htmlspecialchars($s['fn'] . ' ' . $s['sn'])?></h3>
+        <?php if ($s['exempt'] || (int) $s['fee'] == 0) { ?>
+        <p><?=htmlspecialchars($s['squad'])?> Squad, No squad fee</p>
+        <?php } else { ?>
+        <p><?=htmlspecialchars($s['squad'])?> Squad, &pound;<?=number_format($s['fee'], 2)?></p>
+        <?php } ?>
+      </div>
+      <?php } ?>
     </div>
   </div>
   <?php } ?>

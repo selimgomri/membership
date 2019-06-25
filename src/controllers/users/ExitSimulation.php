@@ -2,6 +2,8 @@
 
 global $db;
 
+$target = $_SESSION['UserID'];
+
 try {
 	$query = $db->prepare("SELECT * FROM `users` WHERE `UserID` = ?");
 	$query->execute([$_SESSION['UserSimulation']['RealUser']]);
@@ -25,4 +27,4 @@ $_SESSION['UserID'] = 			$info['UserID'];
 $_SESSION['AccessLevel'] = 	$info['AccessLevel'];
 $_SESSION['LoggedIn'] = 		1;
 
-header("Location: " . autoUrl(""));
+header("Location: " . autoUrl("users/" . $target));
