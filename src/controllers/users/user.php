@@ -40,7 +40,7 @@ if ($info['AccessLevel'] == "Coach") {
 
 $swimmers = null;
 if ($info['AccessLevel'] == "Parent") {
-  $swimmers = $db->prepare("SELECT MForename fn, MSurname sn, SquadName squad, SquadFee fee, ClubPays exempt FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID = ?");
+  $swimmers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, SquadName squad, SquadFee fee, ClubPays exempt FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID = ?");
   $swimmers->execute([$id]);
 }
 
@@ -166,7 +166,7 @@ include BASE_PATH . "views/header.php";
     <div class="row">
       <?php while ($s = $swimmers->fetch(PDO::FETCH_ASSOC)) { ?>
       <div class="col-sm-6 col-md-4">
-        <h3 class="h6"><?=htmlspecialchars($s['fn'] . ' ' . $s['sn'])?></h3>
+        <h3 class="h6"><a href="<?=autoUrl("swimmers/" . $s['id'])?>" title="Full information about <?=htmlspecialchars($s['fn'] . ' ' . $s['sn'])?>"><?=htmlspecialchars($s['fn'] . ' ' . $s['sn'])?></a></h3>
         <?php if ($s['exempt'] || (int) $s['fee'] == 0) { ?>
         <p><?=htmlspecialchars($s['squad'])?> Squad, No squad fee</p>
         <?php } else { ?>

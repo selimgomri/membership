@@ -3,7 +3,11 @@
 global $db;
 
 $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
-$user->execute([$_SESSION['UserID']]);
+$user->execute([2]);
+
+$swimmers = $db->prepare("SELECT MForename fn, MSurname sn, SquadName squad, SquadFee fee FROM members INNER JOIN squads ON squads.SquadID = members.SquadID WHERE members.UserID = ? ORDER BY fn ASC");
+$swimmers->execute([2]);
+$swimmers = $swimmers->fetchAll(PDO::FETCH_ASSOC);
 
 $email_info = $user->fetch(PDO::FETCH_ASSOC);
 
@@ -52,9 +56,19 @@ ob_start();?>
       <h1 class="mb-0">
         Welcome to <?=htmlspecialchars(env('CLUB_NAME'))?>
       </h1>
-      <p class="lead mb-0">
-        Welcome Pack
+      <p class="lead">
+        Your Welcome Pack
       </p>
+
+      <p class="mb-0">
+        <strong>This welcome pack covers these swimmers;</strong>
+      </p>
+
+      <ul class="mb-0 list-unstyled"> 
+        <?php foreach ($swimmers as $s) { ?>
+        <li><?=htmlspecialchars($s['fn'] . ' ' . $s['sn'])?>, <?=htmlspecialchars($s['squad'])?> Squad</li>
+        <?php } ?>
+      </ul>
     </div>
 
     <h2>
@@ -71,7 +85,7 @@ ob_start();?>
       <li>Club Codes of Conduct (for you and your swimmers)</li>
       <li>Information about your fees</li>
       <li>Direct debit payment information</li>
-      <li>About galas</li>
+      <li>What are galas?</li>
       <li>How to enter galas</li>
       <li>Welfare information</li>
       <li>More about club policies</li>
