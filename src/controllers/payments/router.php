@@ -345,6 +345,10 @@ if (env('STRIPE') != null) {
 			$this->get('/charge', function() {
 				include 'stripe/checkout/init-payment.php';
 			});
+
+			$this->get('/custom-amount', function() {
+				include 'stripe/terminal/pay-custom-amount.php';
+			});
 		});
 
 		$this->get('/add', function() {
@@ -362,5 +366,11 @@ if (env('STRIPE') != null) {
 		$this->post('/{id}:int', function($id) {
 			include 'stripe/EditPaymentMethodPost.php';
 		});
+
+		if ($_SESSION['AccessLevel'] != "Parent") {
+			$this->group('/terminal', function() {
+				include 'stripe/terminal/router.php';
+			});
+		}
 	});
 }
