@@ -1,12 +1,14 @@
 <?php
 
+$id = 2;
+
 global $db;
 
 $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
-$user->execute([2]);
+$user->execute([$id]);
 
-$swimmers = $db->prepare("SELECT MForename fn, MSurname sn, SquadName squad, SquadFee fee, SquadCoC FROM members INNER JOIN squads ON squads.SquadID = members.SquadID WHERE members.UserID = ? ORDER BY fn ASC");
-$swimmers->execute([2]);
+$swimmers = $db->prepare("SELECT MForename fn, MSurname sn, SquadName squad, SquadFee fee, SquadCoC, ClubPays exempt FROM members INNER JOIN squads ON squads.SquadID = members.SquadID WHERE members.UserID = ? ORDER BY fn ASC");
+$swimmers->execute([$id]);
 $swimmers = $swimmers->fetchAll(PDO::FETCH_ASSOC);
 
 $email_info = $user->fetch(PDO::FETCH_ASSOC);
@@ -141,7 +143,7 @@ ob_start();?>
 
     <h1>Information about your fees</h1>
 
-    <p class="lead">You will payy squad fees on a monthly basis.</p>
+    <p class="lead">You will pay squad fees on a monthly basis.</p>
 
     <?php if (env('IS_CLS') && sizeof($swimmers) > 2) { ?>
     <p>As you have <?=sizeof($swimmers)?> swimmers, you qualify for a reduction on your squad fees.</p>
@@ -153,6 +155,82 @@ ob_start();?>
     <p>If you have 3 swimmers, we'll order your swimmers by monthly fee and give you a reduction of 20% on your lowest cost swimmer.</p>
     <p>If you have 4 or more swimmers, we'll order your swimmers by monthly fee and give you a reduction of 20% on your third lowest cost swimmer and 40% on all further swimmers.</p>
     <?php } ?>
+
+    <h2>Squad Fees</h2>
+
+    <p>Your squad fees are as follows;</p>
+
+    <?php
+
+    $monthlyFee = monthlyFeeCost($db, $id, "int")/100;
+    $preDiscountTotal = 0;
+
+    ?>
+
+    <table>
+      <thead>
+        <tr>
+          <td>
+            Swimmer
+          </td>
+          <td>
+            Squad
+          </td>
+          <td>
+            Price/month
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($swimmers as $s) { ?>
+        <tr>
+          <td>
+            <?=htmlspecialchars($s['fn'] . ' ' . $s['sn'])?>
+          </td>
+          <td>
+            <?=htmlspecialchars($s['squad'])?>
+          </td>
+          <td>
+            <?php if ($s['exempt']) { ?>
+            Exempt
+            <?php } else { ?>
+            &pound;<?=number_format($s['fee'], 2)?>
+            <?php $preDiscountTotal += $s['fee']; ?>
+            <?php } ?>
+          </td>
+        </tr>
+        <?php } ?>
+        <?php if (env('IS_CLS')) { ?>
+        <tr>
+          <td></td>
+          <td>
+            <strong>Subtotal</strong>
+          </td>
+          <td>
+            &pound;<?=number_format($preDiscountTotal, 2)?>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <strong>Discounts</strong>
+          </td>
+          <td>
+            &pound;<?=number_format($preDiscountTotal - $monthlyFee , 2)?>
+          </td>
+        </tr>
+        <?php } ?>
+        <tr>
+          <td></td>
+          <td>
+            <strong>Total</strong>
+          </td>
+          <td>
+            &pound;<?=number_format($monthlyFee, 2)?>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
     <div class="page-break"></div>
 
@@ -168,7 +246,7 @@ ob_start();?>
     </p>
 
     <p>
-      Full help and support for payments by Direct Debit is available on the Membership System Support Website at <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">https://www.chesterlestreetasc.co.uk/support/onlinemembership/</a>. Help and Support Documentation is provided by Chester-le-Street ASC<?php if (env('IS_CLS') != null && env('IS_CLS')) { ?> to all clubs and users that use this service. If you need somebody to help you, please contact your own club in the first instance<?php } ?>.
+      Full help and support for payments by Direct Debit is available on the Membership System Support Website at <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">https://www.chesterlestreetasc.co.uk/support/onlinemembership/</a>. Help and Support Documentation is provided by Chester-le-Street ASC<?php if (!(env('IS_CLS') != null && env('IS_CLS'))) { ?> to all clubs and users that use this service. If you need somebody to help you, please contact your own club in the first instance<?php } ?>.
     </p>
 
     <div class="row" id="payment-dd-guarantee">
@@ -208,6 +286,27 @@ ob_start();?>
     <?php } ?>
 
     <h1>What are galas?</h1>
+
+    <p>Thousands of swimming competitions take place in England for kids and adults every year and most include swimmers with disabilities. Just get involved.</p>
+
+    <p>Swimmers must be at least 9 years old and be a Swim England Category 2 Member for most competitions in England. 8 year old Category 1 swimmers can compete in some special galas and some galas may have stricter minimum or maximum age restrictions.</p>
+
+    <p>For most swimming competitions athletes are split into groups based on their age on 31 December that year. However, there are some competitions for which age groups are based on a swimmer’s age on the day of competition.</p>
+
+    <p>They take place in either a 25m or a 50m pool. The 25m events are called short course and the 50m long course.</p>
+
+    <h2>Key swimming competitions in England</h2>
+
+    <p>Getting into the sport of swimming you will start competing at lower level Licensed Meets.</p>
+
+    <p>As you progress you work your way to the bigger events. Here are some key English competitions. All these events are inclusive of swimmers who hold a current national or international classification for functional, visually impaired or intellectual disability (S1-S14).</p>
+
+    <ol>
+      <li>Weeks 2 – 9: English County Championships – the beginning of each calendar year is marked by the staging of the respective English County Championships as well as the Welsh Regional and Scottish District events. There is no requirement for these competitions to be held in a 50m pool so some counties chose to stage their in a short course pool and some in a long course pool. Age Groups: 10/11 Years, 12 Years, 13 Years, 14 Years, 15 Years, 16+ Years</li>
+      <li>Weeks 14 – 22: English Regional Championships – the English Regional Championships take place during April or May, as do the Scottish and Welsh National Age Group Championships. Unlike the county events, the eight regional championships are all held in a long course pool. There is also a one year difference in the age groups and the addition of club relays. Age Groups: 11/12 Years, 13 Years, 14 Years, 15 Years, 16 Years, 17+ Years</li>
+      <li>Weeks 29 – 33: Swim England National Summer Meet – our National Summer Meet takes place in the week after the British Summer Championships and is a long course event. The event uses the same qualification window and rankings as the British Summer Championships and is for the top ranked English swimmers who did not qualify for the British competition. Age Groups: 12/13 Years, 14 Years, 15 Years, 16/17 Years, 18+ Years</li>
+      <li>Week 51: Swim England National Winter Meet – our National Winter Meet brings the calendar year to an end with Great Britain’s top swimmers battling it out in the short course pool.</li>
+    </ol>
 
     <div class="page-break"></div>
 

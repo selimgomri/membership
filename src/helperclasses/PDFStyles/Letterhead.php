@@ -10,15 +10,15 @@ $club = json_decode(CLUB_JSON);
     <?php if ($club->Logo != null) { ?>
     <img src="<?=BASE_PATH . $club->Logo?>" class="logo">
     <?php } else { ?>
-      <h1 class="primary"><?=CLUB_NAME?></h1>
+      <h1 class="primary"><?=htmlspecialchars(env('CLUB_NAME'))?></h1>
     <?php } ?>
   </div>
   <div class="split-50 text-right">
     <p>
-      <strong><?=CLUB_NAME?></strong><br>
+      <strong><?=htmlspecialchars(env('CLUB_NAME'))?></strong><br>
       <?php
       for ($i = 0; $i < sizeof($club->ClubAddress); $i++) { ?>
-        <?=$club->ClubAddress[$i]?><br>
+        <?=htmlspecialchars($club->ClubAddress[$i])?><br>
       <?php } ?>
     </p>
   </div>
