@@ -40,14 +40,14 @@ require 'GoCardlessSetup.php';
       <div class="cell">
       	<h2>Billing History</h2>
       	<p class="lead">Previous payments by Direct Debit</p>
-        <?=paymentHistory($link, $user)?>
+        <?=paymentHistory(null, $user)?>
       </div>
       <div class="cell">
         <h2>
           Extra Fees this month
         </h2>
         <p class="lead">Fees to pay on your next Billing Date, in addition to Squad Fees</p>
-      	<?=feesToPay($link, $user)?>
+      	<?=feesToPay(null, $user)?>
       </div>
     </div>
     <div class="col-md-4">

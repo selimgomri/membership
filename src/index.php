@@ -259,6 +259,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
     echo "User-agent: *\r\nDisallow: /webhooks/\r\nDisallow: /webhooks\r\nDisallow: /css\r\nDisallow: /js\r\nDisallow: /public\r\nDisallow: /files";
   });
 
+  $this->get(['/help-and-support', '/help-and-support/*'], function() {
+    include BASE_PATH . 'controllers/help/help-documentation.php';
+  });
+
   $this->get('/public/*/viewer', function() {
     $filename = $this[0];
     $type = 'public';

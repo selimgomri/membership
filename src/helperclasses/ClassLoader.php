@@ -30,3 +30,5 @@ require 'Helpers/Login.php';
 require 'Objects/User.php';
 
 require 'Components/ListGroup.php';
+
+require 'Markdown/ParsedownForMembership.php';
