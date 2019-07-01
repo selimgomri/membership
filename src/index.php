@@ -215,6 +215,14 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
   }
 }
 
+if (!isset($_SESSION['Browser'])) {
+  $browser = new \WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);
+
+  $_SESSION['Browser']['Name'] = $browser->browser->name;
+  $_SESSION['Browser']['OS'] = $browser->os->toString();
+  $_SESSION['Browser']['Version'] = $browser->browser->version->value;
+}
+
 $currentUser = null;
 if (isset($_SESSION['UserID'])) {
   $currentUser = new User($_SESSION['UserID'], $db);

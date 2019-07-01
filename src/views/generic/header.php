@@ -43,8 +43,8 @@ if ($customBackground) {
       </div>
     </noscript>
 
-    <!--[if IE]>
-    <div class="bg-dark text-white box-shadow py-3 d-print-none">
+    <?php if ($_SESSION['Browser']['Name'] == "Internet Explorer") {?> 
+    <div class="bg-warning py-3 d-print-none">
       <div class="<?=$container_class?>">
         <p class="h2">
           <strong>
@@ -52,20 +52,14 @@ if ($customBackground) {
           </strong>
         </p>
         <p>
-          It looks like you're using Internet Explorer which we no longer
-          support so we recommend you upgrade to a new browser which we do
-          support as soon as possible. <strong><a href="http://browsehappy.com/"
-          class="text-white" target="_blank">Upgrade your browser today <i
-          class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
+          It looks like you're using Internet Explorer which we no longer support so we recommend you upgrade to a new browser which we do support as soon as possible. <strong><a href="http://browsehappy.com/" target="_blank">Upgrade your browser today <i class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
         </p>
         <p class="mb-0">
-          <?=env('CLUB_NAME')?> recommends you <strong><a class="text-white"
-          href="https://www.firefox.com">install Firefox by
-          Mozilla</a></strong>.
+          <?=htmlspecialchars(env('CLUB_NAME'))?> recommends you <strong><a  href="https://www.firefox.com">install Firefox by Mozilla</a></strong>. Firefox has great protections for your privacy with built in features including tracking protection.
         </p>
       </div>
     </div>
-    <![endif]-->
+    <?php } ?>
 
     <?php if (IS_EVALUATION_COPY === true) { ?>
     <div class="bg-secondary text-white py-2 d-print-none">
