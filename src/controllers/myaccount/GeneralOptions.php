@@ -64,25 +64,25 @@ include BASE_PATH . "views/header.php";
           <div class="form-group">
       			<div class="custom-control custom-switch">
       				<input type="checkbox" class="custom-control-input" value="1" id="tracking-cookies" aria-describedby="tracking-cookies-help" name="tracking-cookies" <?=$trackersChecked?> >
-              <label class="custom-control-label" for="tracking-cookies">Disable Tracking Cookies</label>
-      				<small id="2FAHelp" class="form-text text-muted">Tracking cookies (including Google Analytics) help us gain insight into how this software is used</small>
+              <label class="custom-control-label" for="tracking-cookies">Disable tracking cookies</label>
+      				<small id="2FAHelp" class="form-text text-muted">Tracking cookies (including Google Analytics) help us gain insight into how this software is used and make improvements.</small>
       			</div>
       		</div>
 
           <div class="form-group">
       			<div class="custom-control custom-switch">
       				<input type="checkbox" class="custom-control-input" value="1" id="beta-features" aria-describedby="beta-features-help" name="beta-features" <?=$betasChecked?> >
-              <label class="custom-control-label" for="beta-features">Enable Beta features</label>
-      				<small id="beta-features-help" class="form-text text-muted">Help us test new features by opting in to beta trials</small>
+              <label class="custom-control-label" for="beta-features">Enable beta features</label>
+      				<small id="beta-features-help" class="form-text text-muted">Help us test new features by opting in to small beta trials.</small>
       			</div>
       		</div>
 
-          <?php if (defined('IS_CLS') && IS_CLS) { ?>
+          <?php if (env('IS_CLS')) { ?>
           <div class="form-group">
       			<div class="custom-control custom-switch">
       				<input type="checkbox" class="custom-control-input" value="1" id="generic-theme" aria-describedby="generic-theme-help" name="generic-theme" <?=$genericThemeChecked?> >
               <label class="custom-control-label" for="generic-theme">Use the generic theme</label>
-      				<small id="generic-theme-help" class="form-text text-muted">Use this software without Chester-le-Street ASC styling</small>
+      				<small id="generic-theme-help" class="form-text text-muted">Use this software without Chester-le-Street ASC styling.</small>
       			</div>
       		</div>
           <?php } ?>
@@ -99,7 +99,7 @@ include BASE_PATH . "views/header.php";
       		<div class="form-group">
       			<div class="custom-control custom-switch">
       				<input type="checkbox" class="custom-control-input" value="1" id="gala-dd-opt-out" aria-describedby="gala-dd-opt-out-Help" name="gala-dd-opt-out" <?=$notGalaDDChecked?> >
-              <label class="custom-control-label" for="gala-dd-opt-out">Opt out of Direct Debit Gala Payments</label>
+              <label class="custom-control-label" for="gala-dd-opt-out">Opt out of Direct Debit gala payments</label>
       				<small id="gala-dd-opt-out-Help" class="form-text text-muted">This feature is only relevent if your club charges for galas by Direct Debit</small>
       			</div>
       		</div>
@@ -114,8 +114,8 @@ include BASE_PATH . "views/header.php";
       		<div class="form-group">
       			<div class="custom-control custom-switch">
       				<input type="checkbox" class="custom-control-input" value="1" id="2FA" aria-describedby="2FAHelp" name="2FA" <?=$twofaChecked?> >
-              <label class="custom-control-label" for="2FA">Enable Two Factor Authentication</label>
-      				<small id="2FAHelp" class="form-text text-muted">2FA provides an increased level of security for your club account</small>
+              <label class="custom-control-label" for="2FA">Enable two-factor authentication</label>
+      				<small id="2FAHelp" class="form-text text-muted">2FA provides an increased level of security for your club account.</small>
       			</div>
       		</div>
           <?php } ?>
@@ -123,32 +123,29 @@ include BASE_PATH . "views/header.php";
           <?php if (filter_var(getUserOption($_SESSION['UserID'], "Is2FA"), FILTER_VALIDATE_BOOLEAN) || $_SESSION['AccessLevel'] != "Parent") { ?>
 
           <p>
-            You can use an Authenticator App such as Google Authenticator to get Two
-            Factor Authentication codes if you wish. You can always still get codes
-            by email if you don't have your device on you.
+            You can use an Authenticator App such as Google Authenticator to get Two-Factor Authentication codes if you wish. You can always still get codes by email if you don't have your device on you.
           </p>
 
           <?php if (!filter_var(getUserOption($_SESSION['UserID'], "hasGoogleAuth2FA"), FILTER_VALIDATE_BOOLEAN)) { ?>
           <p>
             <a href="<?=autoUrl("myaccount/googleauthenticator")?>" class="btn btn-primary">
-              Use an Authenticator App
+              Use an authenticator app
             </a>
           </p>
           <?php } else { ?>
           <p>
-            You can disable your Authenticator App and go back to getting codes by
-            email here.
+            You can disable your authenticator app and go back to getting codes by email here.
           </p>
 
           <p>
             <a href="<?=autoUrl("myaccount/googleauthenticator")?>" class="btn btn-primary">
-              Manage Authenticator App
+              Manage authenticator app
             </a>
           </p>
 
           <p>
             <a href="<?=autoUrl("myaccount/googleauthenticator/disable")?>" class="btn btn-dark">
-              Disable Authenticator App
+              Disable authenticator app
             </a>
           </p>
           <?php } ?>
@@ -162,8 +159,7 @@ include BASE_PATH . "views/header.php";
             <br><small>Export a copy</small>
           </h2>
           <p>
-            Under the General Data Protection Regulation, you can request for free
-            to download all personal data held about you by <?=CLUB_NAME?>.
+            Under the General Data Protection Regulation, you can request for free to download all personal data held about you by <?=htmlspecialchars(env('CLUB_NAME'))?>.
           </p>
           <p>
             <a href="<?=autoUrl("myaccount/general/download-personal-data")?>"
@@ -172,8 +168,7 @@ include BASE_PATH . "views/header.php";
             </a>
           </p>
           <p>
-            You can download the personal data for your swimmers from their
-            respective information pages.
+            You can download the personal data for your swimmers from their respective information pages.
           </p>
         </div>
 

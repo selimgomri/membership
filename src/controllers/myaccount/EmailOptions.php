@@ -142,9 +142,7 @@ include BASE_PATH . "views/header.php";
     				<strong>An error occurred and we were unable to add your new CC Email.</strong>
     			</p>
     			<p class="mb-0">
-    				Your verification code might have been wrong. If you need help, contact
-    				<a href="mailto:support@chesterlestreetasc.co.uk"
-    				class="alert-link">support@chesterlestreetasc.co.uk</a>
+    				Your verification code might have been wrong. If you need help, contact your support team.
     			</p>
     		</div>
     	<?php } ?>
@@ -152,36 +150,34 @@ include BASE_PATH . "views/header.php";
     	<div class="cell">
     		<form method="post">
     			<div class="form-group">
-    		    <label for="EmailAddress">Your Email address</label>
+    		    <label for="EmailAddress">Your email address</label>
     		    <input type="email" class="form-control" id="EmailAddress" name="EmailAddress" placeholder="name@example.com" value="<?=htmlentities($email)?>">
     				<?php if (isset($_SESSION['EmailUpdateNew'])) { ?>
-    				<small class="form-text">Once verified, your account email
-    				address will change to
-    				<?=htmlentities($_SESSION['EmailUpdateNew'])?></small>
+    				<small class="form-text">Once verified, your account email address will change to <?=htmlentities($_SESSION['EmailUpdateNew'])?></small>
     				<?php } ?>
     		  </div>
 
     			<div class="form-group">
     				<div class="custom-control custom-switch">
-    					<input type="checkbox" class="custom-control-input" value="1" id="EmailComms" aria-describedby="EmailCommsHelp" name="EmailComms" <?php echo $emailChecked; ?> >
-              <label class="custom-control-label" for="EmailComms">Receive Squad Updates by Email</label>
-    					<small id="EmailCommsHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small>
+    					<input type="checkbox" class="custom-control-input" value="1" id="EmailComms" aria-describedby="EmailCommsHelp" name="EmailComms" <?=$emailChecked?> >
+              <label class="custom-control-label" for="EmailComms">Receive squad updates by email</label>
+    					<small id="EmailCommsHelp" class="form-text text-muted">Squad updates include emails from your coaches. You'll still receive emails relating to your account if you don't receive updates.</small>
     				</div>
     			</div>
 
     			<div class="form-group">
     				<div class="custom-control custom-switch">
-    					<input type="checkbox" class="custom-control-input" value="1" id="SecurityComms" aria-describedby="SecurityCommsHelp" name="SecurityComms" <?php echo $emailChecked_security; ?> >
-              <label class="custom-control-label" for="SecurityComms">Receive Account Security Emails</label>
-    					<small id="SecurityCommsHelp" class="form-text text-muted">Receive emails whenever somebody logs in to your account from an unrecognised IP Address</small>
+    					<input type="checkbox" class="custom-control-input" value="1" id="SecurityComms" aria-describedby="SecurityCommsHelp" name="SecurityComms" <?=$emailChecked_security?> >
+              <label class="custom-control-label" for="SecurityComms">Receive account security emails</label>
+    					<small id="SecurityCommsHelp" class="form-text text-muted">Receive emails whenever somebody logs in to your account from an unrecognised <abbr title="Internet Protocol">IP</abbr> address.</small>
     				</div>
     			</div>
 
     			<div class="form-group">
     				<div class="custom-control custom-switch">
     					<input type="checkbox" class="custom-control-input" value="1" id="PaymentComms" aria-describedby="PaymentCommsHelp" name="PaymentComms" <?php echo $emailChecked_payments; ?> >
-              <label class="custom-control-label" for="PaymentComms">Receive Payment Emails</label>
-    					<small id="PaymentCommsHelp" class="form-text text-muted">If you opt out, you'll still receive emails required for regulatory purposes</small>
+              <label class="custom-control-label" for="PaymentComms">Receive payment emails</label>
+    					<small id="PaymentCommsHelp" class="form-text text-muted">If you opt out, you'll still receive emails required for regulatory purposes.</small>
     				</div>
     			</div>
 
@@ -189,14 +185,14 @@ include BASE_PATH . "views/header.php";
     			<div class="form-group">
     				<div class="custom-control custom-switch">
     					<input type="checkbox" class="custom-control-input" value="1" id="NewMemberComms" aria-describedby="NewMemberCommsHelp" name="NewMemberComms" <?php echo $emailChecked_new_member; ?> >
-              <label class="custom-control-label" for="NewMemberComms">Receive New Member Emails</label>
-    					<small id="NewMemberCommsHelp" class="form-text text-muted">Get notified when new members are added</small>
+              <label class="custom-control-label" for="NewMemberComms">Receive new member emails</label>
+    					<small id="NewMemberCommsHelp" class="form-text text-muted">Get notified when new members are added.</small>
     				</div>
     			</div>
     			<?php } ?>
 
     			<p class="mb-0">
-    				<button type="submit" class="btn btn-success">Update Details</button>
+    				<button type="submit" class="btn btn-success">Save Changes</button>
     			</p>
     		</form>
     	</div>
@@ -204,17 +200,13 @@ include BASE_PATH . "views/header.php";
       <div class="cell">
         <h2>Additional Recipients</h2>
         <p class="lead">
-          You can now have our group notify emails sent to additional email
-          addresses.
+          You can have squad update emails sent to additional email addresses.
         </p>
         <p>
-          This allows you to give your spouse, partner or other who is involved
-          with your swimmers to also be able to stay up to date.
+          This allows your partner or others involved with your swimmers to also be able to stay up to date.
         </p>
         <p>
-          Additional recipients must be with you at the time you add their email -
-          You will need to confirm their email address using a code we will send
-          to them. They will be able to unsubscribe themselves at any time.
+          Additional recipients must be with you at the time you add their email - You will need to confirm their email address using a code we will send to them. They will be able to unsubscribe at any time.
         </p>
 
         <ul class="list-unstyled">

@@ -458,9 +458,6 @@ if ($customBackground) {
                         History</a>
                       <a class="dropdown-item" href="<?php echo autoUrl("myaccount/addswimmer") ?>">Add a Swimmer</a>
                       <?php } ?>
-                      <?php if ($_SESSION['AccessLevel'] != "Parent") { ?>
-                      <a class="dropdown-item" href="<?php echo autoUrl("people/me") ?>">Your Personal Page</a>
-                      <?php } ?>
                       <a class="dropdown-item" href="<?php echo autoUrl("myaccount/loginhistory") ?>">Your Login
                         History</a>
                       <div class="dropdown-divider"></div>
