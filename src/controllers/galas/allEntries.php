@@ -77,6 +77,12 @@ $content .= "<div class=\"table-responsive-md\" id=\"output\"><div class=\"ajaxP
 include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
 <div class="container">
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Gala entries</li>
+  </ol>
+</nav>
 <?php echo "<h1>Gala Entries</h1>";
 echo $content; ?>
 </div>

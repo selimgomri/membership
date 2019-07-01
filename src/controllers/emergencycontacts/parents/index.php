@@ -20,7 +20,7 @@ $contactsArray = $contacts->getContacts();
 
 $pagetitle = "My Emergency Contacts";
 
-$url_path = "emergencycontacts";
+$url_path = "emergency-contacts";
 include BASE_PATH . 'views/header.php';
 if ($renewal_trap) {
 	include BASE_PATH . 'views/renewalTitleBar.php';
@@ -63,7 +63,7 @@ if ($renewal_trap) {
 						</div>
 						<?php if (!$renewal_trap) { ?>
 						<div class="col text-sm-right">
-							<a href="<?php echo autoUrl("myaccount"); ?>" class="btn
+							<a href="<?=autoUrl("myaccount")?>" class="btn
 							btn-primary">
 								Edit
 							</a>
@@ -88,8 +88,7 @@ if ($renewal_trap) {
 							</p>
 						</div>
 						<div class="col text-sm-right">
-							<a href="<?php echo autoUrl($url_path . "\/edit/" .
-							$contactsArray[$i]->getID()); ?>" class="btn btn-primary">
+							<a href="<?=autoUrl($url_path . "/edit/" . $contactsArray[$i]->getID())?>" class="btn btn-primary">
 								Edit
 							</a>
 						</div>

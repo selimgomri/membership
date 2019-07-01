@@ -2,7 +2,7 @@
 
 global $db;
 
-$url_path = "emergencycontacts";
+$url_path = "emergency-contacts";
 if ($renewal_trap) {
 	$url_path = "renewal/emergencycontacts";
 }
@@ -27,6 +27,14 @@ if ($renewal_trap) {
 ?>
 
 <div class="container">
+	
+	<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("emergency-contacts")?>">Galas</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Edit <?=htmlspecialchars($contact->getName())?></li>
+    </ol>
+  </nav>
+
 	<div class="">
 		<h1>
 			Edit <?=$contact->getName()?>

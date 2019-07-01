@@ -58,6 +58,13 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
 
 <div class="container">
 
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars($rowSwim["MForename"])?> <?=htmlspecialchars($rowSwim["MSurname"][0])?></li>
+    </ol>
+  </nav>
+
   <?php if (isset($_SESSION['AddSwimmerSuccessState'])) {
     echo $_SESSION['AddSwimmerSuccessState'];
     unset($_SESSION['AddSwimmerSuccessState']);

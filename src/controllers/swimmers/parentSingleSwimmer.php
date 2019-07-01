@@ -25,6 +25,15 @@ $title = null;
 ?>
 <?php include BASE_PATH . "views/header.php"; ?>
 <div class="container">
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers/" . $id)?>"><?=htmlspecialchars($row["MForename"])?> <?=htmlspecialchars($row["MSurname"][0])?></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Edit</li>
+    </ol>
+  </nav>
+
   <div class="row align-items-center">
     <div class="col-sm-8">
       <h1>Editing <?=htmlspecialchars($row['MForename'] . ' ' . $row['MSurname'])?></h1>

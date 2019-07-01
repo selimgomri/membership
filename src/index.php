@@ -582,7 +582,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/notify/router.php';
     });
 
-    $this->group('/emergencycontacts', function() {
+    $this->group(['/emergency-contacts', '/emergencycontacts'], function() {
       global $link;
 
       include 'controllers/emergencycontacts/router.php';

@@ -52,6 +52,12 @@ include "galaMenu.php";
 ?>
 
 <div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars($gala['GalaName'])?></li>
+    </ol>
+  </nav>
   <div class="row align-items-center">
     <div class="col-md-8">
       <h1>
@@ -112,6 +118,15 @@ include "galaMenu.php";
     </div>
   </div>
 
+  <?php if ($numEntries > 0) { ?>
+  <h2>Gala timesheet</h2>
+  <p class="lead">Download a timesheet for this gala.</p>
+  <p>Gala timesheets give a list of each swimmer's entries to a gala along with their all-time personal bests and <?=date("Y")?> personal bests.</p>
+  <p>
+    <a class="btn btn-success" href="<?=autoUrl("galas/" . $id . "/timesheet")?>">Download timesheet</a>
+  </p>
+  <?php } ?>
+
   <h2>Entries</h2>
   <p class="lead">
     There have been <?=$numEntries?> entries to this gala
@@ -131,7 +146,7 @@ include "galaMenu.php";
       </h3>
 
       <p><small class="text-muted">
-        <strong>Date of Birth:</strong> <?=date('d/m/Y', strtotime($entry['DateOfBirth']))?>, <strong>Swim England:</strong> <?=htmlspecialchars($entry['ASANumber'])?>
+        <strong>Date of Birth:</strong>&nbsp;<?=date('d/m/Y', strtotime($entry['DateOfBirth']))?>, <strong>Swim&nbsp;England:</strong>&nbsp;<?=htmlspecialchars($entry['ASANumber'])?>
       </small></p>
       
       <ul>

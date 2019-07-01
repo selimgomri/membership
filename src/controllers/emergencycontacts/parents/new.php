@@ -11,6 +11,14 @@ if ($renewal_trap) {
 ?>
 
 <div class="container">
+
+	<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("emergency-contacts")?>">Galas</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Add new</li>
+    </ol>
+  </nav>
+
 	<div class="">
 		<h1>
 			Add a new Emergency Contact
