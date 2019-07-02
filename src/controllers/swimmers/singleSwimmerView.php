@@ -543,6 +543,13 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 }
 </style>
 <div class="container-fluid">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars($rowSwim["MForename"])?> <?=htmlspecialchars($rowSwim["MSurname"][0])?></li>
+    </ol>
+  </nav>
+
 <?= $content ?>
 </div>
 <?php include BASE_PATH . "views/footer.php";
