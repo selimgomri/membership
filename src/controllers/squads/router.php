@@ -20,12 +20,12 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 
 	$this->get('/{id}:int/edit', function($id) {
 		global $link;
-		require 'SquadIndividual.php';
+		require 'EditSquad.php';
 	});
 
 	$this->post('/{id}:int/edit', function($id) {
 		global $link;
-		require 'SquadIndividual.php';
+		require 'EditSquadPost.php';
 	});
 
 	$this->get('/moves', function() {

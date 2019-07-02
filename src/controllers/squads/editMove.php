@@ -33,6 +33,12 @@ $pagetitle = "Squad Move for " . htmlspecialchars($name);
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php"; ?>
 <div class="container">
+	<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("squads/moves")?>">Squad Moves</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Edit - <?=htmlspecialchars($move['MForename'] . " " . $move['MSurname'][0])?></li>
+    </ol>
+  </nav>
 	<div class="">
 		<h1>Squad Move for <?=htmlspecialchars($name)?></h1>
 		<?php if (isset($_SESSION['ErrorState'])) {
