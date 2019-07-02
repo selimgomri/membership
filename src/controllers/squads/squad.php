@@ -144,7 +144,7 @@ var chart = new Chart(ctx, {
   data: {
     labels: ["Male", "Female"],
     datasets: [{
-      label: "<?=htmlspecialchars($row['SquadName'])?> Split",
+      label: <?=json_encode(htmlspecialchars($squad['SquadName']) . " Split")?>,
       data: [<?=$male?>, <?=$female?>],
       backgroundColor: [
         '#bd0000',
@@ -166,11 +166,24 @@ var chart = new Chart(ctx, {
 
   // The data for our dataset
   data: {
-    labels: [
-      <?php for ($i = $minAge; $i < $maxAge+1; $i++) { ?>"<?=$i?>",<?php } ?>],
+    labels: [<?php
+      if ($maxAge - $minAge > 10) {
+        foreach ($agesArray as $age => $count) {
+          ?>"<?=$age?> Year Olds",<?php
+        }
+      } else {
+        for ($i = $minAge; $i < $maxAge+1; $i++) { ?>"<?=$i?> Year Olds",<?php } 
+      } ?>],
     datasets: [{
-      label: "<?=htmlspecialchars($row['SquadName'])?> Squad Age Distribution",
-      data: [<?php for ($i = $minAge; $i < $maxAge+1; $i++) { ?>"<?=(int) $agesArray[$i]?>",<?php } ?>],
+      label: <?=json_encode(htmlspecialchars($squad['SquadName']))?>,
+      data: [<?php
+      if ($maxAge - $minAge > 10) {
+        foreach ($agesArray as $age => $count) {
+          ?><?=$count?>,<?php
+        }
+      } else {
+        for ($i = $minAge; $i < $maxAge+1; $i++) { ?><?=(int) $agesArray[$i]?>,<?php }
+      } ?>],
     }],
   },
 
@@ -181,14 +194,12 @@ var chart = new Chart(ctx, {
         ticks: {
           beginAtZero: true,
           stepSize: 1,
-          
         }
       }],
       xAxes: [{
         ticks: {
           beginAtZero: true,
           stepSize: 1,
-          
         }
       }]
     }

@@ -50,7 +50,7 @@ include BASE_PATH . "views/header.php";
 
 		<?php if ($access == "Admin") { ?>
 		<p>
-			<a href="<?php echo autoUrl("squads/addsquad"); ?>" class="btn btn-success">Add a Squad <span class="fa fa-chevron-right"></span></a>
+			<a href="<?=autoUrl("squads/new")?>" class="btn btn-success">Add a Squad <span class="fa fa-chevron-right"></span></a>
 		</p>
 		<?php } ?>
 	</div>

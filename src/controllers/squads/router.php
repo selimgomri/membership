@@ -36,13 +36,13 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 
 if ($access == "Admin") {
 	// Add a squad
-	$this->get('/addsquad', function() {
+	$this->get('/new', function() {
 		global $link;
-		require 'SquadAdd.php';
+		require 'AddSquad.php';
 	});
 
-	$this->post('/addsquad', function() {
+	$this->post('/new', function() {
 		global $link;
-		require 'SquadAddAction.php';
+		require 'AddSquadPost.php';
 	});
 }
