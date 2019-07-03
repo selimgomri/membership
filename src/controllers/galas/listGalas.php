@@ -72,19 +72,17 @@ include "galaMenu.php"; ?>
         Gala Time Sheets give a list of each swimmer's entries to a gala along with their all-time personal bests and <?=date("Y")?> personal bests.
       </p>
       <?php
-      $sql = "SELECT DISTINCT `galas`.`GalaID`, `GalaName` FROM `galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID` WHERE `GalaDate` >= CURDATE() ORDER BY `GalaDate` ASC;";
-      $res = mysqli_query($link, $sql);
-      if (mysqli_num_rows($res) > 0) {
+      $sql = $db->query("SELECT DISTINCT `galas`.`GalaID`, `GalaName` FROM `galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID` WHERE `GalaDate` >= CURDATE() ORDER BY `GalaDate` ASC;");
+      $row = $sql->fetch(PDO::FETCH_ASSOC);
+      if ($row != null) {
         ?><ul class="list-unstyled mb-0"><?php
-        for ($i = 0; $i < mysqli_num_rows($res); $i++) {
-          $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
-          ?>
+        do { ?>
           <li>
             <a href="<?php echo autoUrl("galas/" . $row['GalaID'] .
             "/timesheet"); ?>" target="_blank"><?php echo $row['GalaName']; ?></a>
           </li>
           <?php
-        }
+        } while ($row = $sql->fetch(PDO::FETCH_ASSOC));
         ?></ul><?php
       } else {
   			?><p class="mb-0">There are no galas with corresponding entries.</p><?php

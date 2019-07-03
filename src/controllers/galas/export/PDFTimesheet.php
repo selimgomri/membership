@@ -7,6 +7,11 @@ $query = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ?");
 $query->execute([$id]);
 $info = $query->fetch(PDO::FETCH_ASSOC);
 
+$dateOfGala = new DateTime($info['GalaDate'], new DateTimeZone('Europe/London'))
+;
+$lastDayOfYear = new DateTime('last day of December ' . $dateOfGala->format('Y'), new DateTimeZone('Europe/London'))
+;
+
 $noTimeSheet = false;
 
 if ($info == null) {
@@ -200,10 +205,16 @@ ob_start();?>
 
       ?>
 
+      <?php
+      $birth = new DateTime($data['DateOfBirth'], new DateTimeZone('Europe/London'));
+      $ageOnDay = $birth->diff($dateOfGala);
+      $ageEndOfYear = $birth->diff($lastDayOfYear);
+      ?>
+
       <div class="avoid-page-break-inside">
         <div class="mb-3">
           <h2 class="d-inline"><?=htmlspecialchars($data['MForename'] . ' ' . $data['MSurname'])?></h2>
-          <p class="d-inline"><?=htmlspecialchars($data['SquadName'])?> Squad, Born <?=date("j F Y", strtotime($data['DateOfBirth']))?></p>
+          <p class="d-inline"><?=htmlspecialchars($data['SquadName'])?> Squad, Born <?=$birth->format("j F Y")?>, Age on day: <?=$ageOnDay->format('%y')?>, Age at end of year: <?=$ageEndOfYear->format('%y')?></p>
         </div>
 
         <table>

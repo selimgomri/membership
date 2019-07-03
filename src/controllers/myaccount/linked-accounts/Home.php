@@ -24,6 +24,8 @@ include BASE_PATH . 'views/header.php';
       <main>
         <h1>Linked Accounts</h1>
 
+        <p class="lead">Sign in to multiple accounts on all of your devices.</p>
+
         <?php if ($_SESSION['LinkedUserSuccess']) { ?>
         <div class="alert alert-success">
           We've sent an email to the account you requested to link. Please follow the confirmation link inside.
