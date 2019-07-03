@@ -35,6 +35,14 @@
       "external": false
     },
     {
+      "id": "linked-accounts",
+      "name": "Linked Accounts",
+      "title": "Link accounts so you can easily switch between parent and admin roles",
+      "link": "myaccount/linked-accounts",
+      "target": "_self",
+      "external": false
+    },
+    {
       "id": "addswimmer",
       "name": "Add Swimmer",
       "title": "Connect a club member to your account",

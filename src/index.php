@@ -247,6 +247,11 @@ $route->group($get_group, function($clubcode = "CLSE") {
     require('controllers/myaccount/EmailUpdate.php');
   });
 
+  // Link Accounts
+  $this->get('/linked-accounts/auth/{id}:int/{key}', function($id, $key) {
+    include 'controllers/myaccount/linked-accounts/NewConfirm.php';
+  });
+
   $this->get('/notify/unsubscribe/{userid}/{email}/{list}', function($userid, $email, $list) {
     global $link;
     include 'controllers/notify/UnsubscribeHandlerAsk.php';

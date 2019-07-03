@@ -558,6 +558,8 @@ p.lead {
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" target="_blank"
                     href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">Help</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="<?php echo autoUrl("myaccount/linked-accounts") ?>">Switch Account</a>
                   <a class="dropdown-item" href="<?= autoUrl("logout") ?>">Logout</a>
                 </div>
               </li>
