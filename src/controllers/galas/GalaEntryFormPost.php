@@ -103,6 +103,7 @@ if ($row['GalaFeeConstant'] == 1) {
 } else {
   $message .= "<p>The <strong>total fee payable is &pound;" . $fee . "</strong>. If you have entered this amount incorrectly, you may incur extra charges from the club or gala host.</p>";
 }
+$message .= '<p>If you have any questions, please contact the ' . htmlspecialchars(env('CLUB_NAME')) . ' gala team as soon as possible.</p>';
 $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
 `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 1, 'Galas')";
 try {
