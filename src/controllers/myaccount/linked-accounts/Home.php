@@ -67,13 +67,14 @@ include BASE_PATH . 'views/header.php';
                 <p class="text-truncate mb-0">
                   <?=htmlspecialchars($linked['mal'])?> Account
                 </p>
+                <div class="d-lg-none mb-3"></div>
               </div>
-              <div class="col-md-4 col-lg-3">
+              <div class="col-md-5 col-lg-3">
                 <div class="form-row">
                   <div class="col-6 col-lg-12">
                     <a class="btn btn-block btn-success"
                       href="<?=autoUrl("myaccount/linked-accounts/" . $linked['muid'] . "/switch")?>">
-                      Switch to this
+                      Switch<span class="d-none d-xl-inline"> to this</span>
                     </a>
                     <div class="d-none d-lg-block mb-1"></div>
                   </div>
@@ -81,7 +82,7 @@ include BASE_PATH . 'views/header.php';
                     <a class="btn btn-block btn-outline-danger"
                       href="<?=autoUrl("myaccount/linked-accounts/" . $linked['ID'] . "/delete")?>"
                       onclick="return confirm('Are you sure you want to delete the link with <?=(htmlspecialchars($linked['memail']))?>?')">
-                      Delete Linked Account
+                      Delete<span class="d-none d-xl-inline"> linked account</span>
                     </a>
                   </div>
                 </div>
@@ -101,13 +102,14 @@ include BASE_PATH . 'views/header.php';
                 <p class="text-truncate mb-0">
                   <?=htmlspecialchars($linked['lal'])?> Account
                 </p>
+                <div class="d-lg-none mb-3"></div>
               </div>
-              <div class="col-md-4 col-lg-3">
+              <div class="col-md-5 col-lg-3">
                 <div class="form-row">
                   <div class="col-6 col-lg-12">
                     <a class="btn btn-block btn-success"
                       href="<?=autoUrl("myaccount/linked-accounts/" . $linked['luid'] . "/switch")?>">
-                      Switch to this
+                      Switch<span class="d-none d-xl-inline"> to this</span>
                     </a>
                     <div class="d-none d-lg-block mb-1"></div>
                   </div>
@@ -115,7 +117,7 @@ include BASE_PATH . 'views/header.php';
                     <a class="btn btn-block btn-outline-danger"
                       href="<?=autoUrl("myaccount/linked-accounts/" . $linked['ID'] . "/delete")?>"
                       onclick="return confirm('Are you sure you want to delete the link with <?=(htmlspecialchars($linked['lemail']))?>?')">
-                      Delete Linked Account
+                      Delete<span class="d-none d-xl-inline"> linked account</span>
                     </a>
                   </div>
                 </div>
