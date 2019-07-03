@@ -30,89 +30,84 @@ if ($renewal_trap) {
 ?>
 
 <div class="container">
-	<div class="">
-		<h1>
-			My Emergency Contacts
-		</h1>
-		<p class="lead">
-			Add, Edit or Remove Emergency Contacts
-		</p>
-		<p class="border-bottom border-gray pb-2 mb-0">
-			We'll use these emergency contacts for all swimmers connected to your
-			account if we can't reach you on your phone number. You can change your
-			phone number in <a href="<?=autoUrl("myaccount")?>">My Account</a>
-		</p>
-		<?php if (isset($_SESSION['AddNewSuccess'])) {
+  <div class="row">
+    <div class="col-lg-8">
+      <h1>
+        My Emergency Contacts
+      </h1>
+      <p class="lead">
+        Add, Edit or Remove Emergency Contacts
+      </p>
+      <p class="border-bottom border-gray pb-2 mb-0">
+        We'll use these emergency contacts for all swimmers connected to your account if we can't reach you on your
+        phone number. You can change your phone number in <a href="<?=autoUrl("myaccount")?>">My Account</a>
+      </p>
+      <?php if (isset($_SESSION['AddNewSuccess'])) {
 			echo $_SESSION['AddNewSuccess'];
 			unset($_SESSION['AddNewSuccess']);
 		} ?>
-		<div class="mb-3">
-			<div class="media pt-3">
-				<div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-					<div class="row align-items-center	">
-						<div class="col-9">
-							<p class="mb-0">
-								<strong class="d-block">
-									<?=htmlspecialchars($row['Forename'] . " " . $row['Surname'])?> (From My
-									Account)
-								</strong>
-								<a href="tel:<?=htmlspecialchars($row['Mobile'])?>">
-									<?=htmlspecialchars($row['Mobile'])?>
-								</a>
-							</p>
-						</div>
-						<?php if (!$renewal_trap) { ?>
-						<div class="col text-sm-right">
-							<a href="<?=autoUrl("myaccount")?>" class="btn
+      <div class="mb-3">
+        <div class="media pt-3">
+          <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+            <div class="row align-items-center	">
+              <div class="col-9">
+                <p class="mb-0">
+                  <strong class="d-block">
+                    <?=htmlspecialchars($row['Forename'] . " " . $row['Surname'])?> (From My
+                    Account)
+                  </strong>
+                  <a href="tel:<?=htmlspecialchars($row['Mobile'])?>">
+                    <?=htmlspecialchars($row['Mobile'])?>
+                  </a>
+                </p>
+              </div>
+              <?php if (!$renewal_trap) { ?>
+              <div class="col text-sm-right">
+                <a href="<?=autoUrl("myaccount")?>" class="btn
 							btn-primary">
-								Edit
-							</a>
-						</div>
-						<?php } ?>
-					</div>
-				</div>
-			</div>
-		<?php for ($i = 0; $i < sizeof($contactsArray); $i++) {
+                  Edit
+                </a>
+              </div>
+              <?php } ?>
+            </div>
+          </div>
+        </div>
+        <?php for ($i = 0; $i < sizeof($contactsArray); $i++) {
 			?>
-			<div class="media pt-3">
-				<div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-					<div class="row align-items-center">
-						<div class="col-9">
-							<p class="mb-0">
-								<strong class="d-block">
-									<?=htmlspecialchars($contactsArray[$i]->getName())?>
-								</strong>
-								<a href="tel:<?=htmlspecialchars($contactsArray[$i]->getContactNumber())?>">
-									<?=htmlspecialchars($contactsArray[$i]->getContactNumber())?>
-								</a>
-							</p>
-						</div>
-						<div class="col text-sm-right">
-							<a href="<?=autoUrl($url_path . "/edit/" . $contactsArray[$i]->getID())?>" class="btn btn-primary">
-								Edit
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<?php
+        <div class="media pt-3">
+          <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+            <div class="row align-items-center">
+              <div class="col-9">
+                <p class="mb-0">
+                  <strong class="d-block">
+                    <?=htmlspecialchars($contactsArray[$i]->getName())?>
+                  </strong>
+                  <a href="tel:<?=htmlspecialchars($contactsArray[$i]->getContactNumber())?>">
+                    <?=htmlspecialchars($contactsArray[$i]->getContactNumber())?>
+                  </a>
+                </p>
+              </div>
+              <div class="col text-sm-right">
+                <a href="<?=autoUrl($url_path . "/edit/" . $contactsArray[$i]->getID())?>" class="btn btn-primary">
+                  Edit
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <?php
 		} ?>
-		</div>
-		<p>
-			<a href="<?php echo autoUrl($url_path . "/new"); ?>" class="btn btn-success">
-				Add New
-			</a>
-		</p>
-		<p>
-			The GDPR law does not require you to obtain the permission of the person
-			whose contact details you are adding as this is essential operational
-			information required to ensure the safety of your children.
-		</p>
-    <p class="mb-0">
-      We do however kindly ask that you let someone know if you've put them down
-      as an emergency contact
-    </p>
-	</div>
+      </div>
+      <p>
+        <a href="<?php echo autoUrl($url_path . "/new"); ?>" class="btn btn-success">
+          Add New
+        </a>
+      </p>
+      <p>
+        Please let people know if you have assigned them as your emergency contacts.
+      </p>
+    </div>
+  </div>
 </div>
 
 <?php
