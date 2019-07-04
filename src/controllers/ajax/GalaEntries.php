@@ -29,7 +29,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
       galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
       galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE() " .
-      $sex . " AND members.MSurname LIKE ? ORDER BY galas.ClosingDate
+      $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci ORDER BY galas.ClosingDate
       ASC, galas.GalaDate DESC";
       $sqlArgs[] = '%' . $search . '%';
     }
@@ -37,7 +37,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
       galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
       galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE() " .
-      $sex . " AND galas.GalaID = ? AND members.MSurname LIKE ?";
+      $sex . " AND galas.GalaID = ? AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci";
       $sqlArgs[] = $galaID;
       $sqlArgs[] = '%' . $search . '%';
     }
@@ -50,7 +50,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
     galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
     galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE() " .
-    $sex . " AND members.MSurname LIKE ?";
+    $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci";
     $sqlArgs[] = '%' . $search . '%';
   }
   elseif ((isset($_REQUEST["galaID"])) && (!isset($_REQUEST["search"]))) {

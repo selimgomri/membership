@@ -215,6 +215,14 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
   }
 }
 
+if (!isset($_SESSION['Browser'])) {
+  $browser = new \WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);
+
+  $_SESSION['Browser']['Name'] = $browser->browser->name;
+  $_SESSION['Browser']['OS'] = $browser->os->toString();
+  $_SESSION['Browser']['Version'] = $browser->browser->version->value;
+}
+
 $currentUser = null;
 if (isset($_SESSION['UserID'])) {
   $currentUser = new User($_SESSION['UserID'], $db);
@@ -239,6 +247,11 @@ $route->group($get_group, function($clubcode = "CLSE") {
     require('controllers/myaccount/EmailUpdate.php');
   });
 
+  // Link Accounts
+  $this->get('/linked-accounts/auth/{id}:int/{key}', function($id, $key) {
+    include 'controllers/myaccount/linked-accounts/NewConfirm.php';
+  });
+
   $this->get('/notify/unsubscribe/{userid}/{email}/{list}', function($userid, $email, $list) {
     global $link;
     include 'controllers/notify/UnsubscribeHandlerAsk.php';
@@ -257,6 +270,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
   $this->get('/robots.txt', function() {
     header("Content-Type: text/plain");
     echo "User-agent: *\r\nDisallow: /webhooks/\r\nDisallow: /webhooks\r\nDisallow: /css\r\nDisallow: /js\r\nDisallow: /public\r\nDisallow: /files";
+  });
+
+  $this->get(['/help-and-support', '/help-and-support/*'], function() {
+    include BASE_PATH . 'controllers/help/help-documentation.php';
   });
 
   $this->get('/public/*/viewer', function() {
@@ -487,7 +504,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
       header("Location: " . autoUrl(""));
     });
 
-    $this->group('/myaccount', function() {
+    $this->group(['/my-account', '/myaccount'], function() {
       global $link;
       include 'controllers/myaccount/router.php';
     });
@@ -578,7 +595,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/notify/router.php';
     });
 
-    $this->group('/emergencycontacts', function() {
+    $this->group(['/emergency-contacts', '/emergencycontacts'], function() {
       global $link;
 
       include 'controllers/emergencycontacts/router.php';

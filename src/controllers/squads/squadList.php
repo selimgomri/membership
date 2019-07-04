@@ -18,6 +18,10 @@ include BASE_PATH . "views/header.php";
       For full details about squads, please visit out website.
     </p>
 
+		<?php if (isset($_SESSION['DeleteSuccess']) && $_SESSION['DeleteSuccess']) { ?>
+		<div class="alert alert-success">We've deleted that squad. That action cannot be undone.</div>
+		<?php unset($_SESSION['DeleteSuccess']); } ?>
+
     <div class="mb-4">
       <div class="news-grid">
 
@@ -46,7 +50,7 @@ include BASE_PATH . "views/header.php";
 
 		<?php if ($access == "Admin") { ?>
 		<p>
-			<a href="<?php echo autoUrl("squads/addsquad"); ?>" class="btn btn-success">Add a Squad <span class="fa fa-chevron-right"></span></a>
+			<a href="<?=autoUrl("squads/new")?>" class="btn btn-success">Add a Squad <span class="fa fa-chevron-right"></span></a>
 		</p>
 		<?php } ?>
 	</div>

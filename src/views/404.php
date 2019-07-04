@@ -14,7 +14,19 @@ http_response_code(404);
 $pagetitle = "Error 404 - Page not found";
 global $currentUser;
 if ($currentUser == null) {
-	include BASE_PATH . "views/head.php";
+	include BASE_PATH . "views/head.php"; ?>
+<div class="bg-primary py-3 mb-3 text-white">
+  <div class="container">
+    <h1 class="mb-0">
+      <a href="<?=autoUrl("")?>" class="text-white">
+        <strong>
+          <?=mb_strtoupper(htmlspecialchars(env('CLUB_NAME')))?>
+        </strong>
+      </a>
+    </h1>
+  </div>
+</div>
+<?php
 } else {
 	include BASE_PATH . "views/header.php";
 }
@@ -22,32 +34,34 @@ if ($currentUser == null) {
 
 <div class="container">
   <div class="row">
-		<div class="col-lg-8">
+    <div class="col-lg-8">
       <h1>The page you requested cannot be found</h1>
-      <p class="lead">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. You may also not be authorised to view the page.</p>
+      <p class="lead">The page you are looking for might have been removed, had its name changed, or is temporarily
+        unavailable. You may also not be authorised to view the page.</p>
       <hr>
 
       <!-- Trivia Section Woo -->
       <aside class="cell pb-0">
         <h2 class="h4 mb-0">Trivia</h2>
-        <p class="small text-muted mb-2"><?=$trivia->category?></p>
+        <p class="small text-muted mb-2"><?=($trivia->category)?></p>
         <table class="table table-borderless table-sm">
           <tr>
             <td><span class="mono">Q:</span></td>
-            <td><strong><?=$trivia->question?></strong></td>
+            <td><strong><?=($trivia->question)?></strong></td>
           </tr>
-        <?php if (sizeof($possible_answers) > 2) { ?>
-        <?php for ($i = 0; $i < sizeof($possible_answers); $i++) { ?>
+          <?php if (sizeof($possible_answers) > 2) { ?>
+          <?php for ($i = 0; $i < sizeof($possible_answers); $i++) { ?>
           <tr>
             <td></td>
-            <td><?=$possible_answers[$i]?></td>
+            <td><?=($possible_answers[$i])?></td>
           </tr>
-        <?php } ?>
-        <?php } ?>
+          <?php } ?>
+          <?php } ?>
         </table>
 
         <p class="mb-0">
-          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#page-404-show-answer" aria-expanded="false" aria-controls="page-404-show-answer">
+          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#page-404-show-answer"
+            aria-expanded="false" aria-controls="page-404-show-answer">
             Reveal answer
           </button>
         </p>
@@ -64,13 +78,16 @@ if ($currentUser == null) {
       <hr>
       <p>Please try the following:</p>
       <ul>
-        <li>Make sure that the Web site address displayed in the address bar of your browser is spelled and formatted correctly.</li>
-        <li>If you reached this page by clicking a link, contact the Web site administrator to alert them that the link is incorrectly formatted.</li>
+        <li>Make sure that the Web site address displayed in the address bar of your browser is spelled and formatted
+          correctly.</li>
+        <li>If you reached this page by clicking a link, contact the Web site administrator to alert them that the link
+          is incorrectly formatted.</li>
         <li>Click the <a href="javascript:history.back(1)">Back</a> button to try another link.</li>
       </ul>
       <p>HTTP Error 404 - File or directory not found.</p>
       <hr>
-      <p class="mt-2">Contact our <a href="mailto:support@chesterlestreetasc.co.uk" title="Support Hotline">support address</a> if the issue persists.</p>
+      <p class="mt-2">Contact our <a href="mailto:support@chesterlestreetasc.co.uk" title="Support Hotline">support
+          address</a> if the issue persists.</p>
     </div>
   </div>
 </div>

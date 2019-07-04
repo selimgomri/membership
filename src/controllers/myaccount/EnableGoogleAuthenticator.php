@@ -28,7 +28,7 @@ include BASE_PATH . 'views/header.php';
         generates timed codes used during the Two-Step Verification process.
       </p>
       <p>
-        <a href="<?=autoUrl("myaccount/googleauthenticator/setup")?>" class="btn btn-primary btn-lg">
+        <a href="<?=autoUrl("my-account/googleauthenticator/setup")?>" class="btn btn-primary btn-lg">
           Set up Google Authenticator
         </a>
       </p>
@@ -44,7 +44,7 @@ include BASE_PATH . 'views/header.php';
         previous devices that you have set up from working.
       </p>
       <p>
-        <a href="<?=autoUrl("myaccount/googleauthenticator/setup")?>" class="btn btn-dark">
+        <a href="<?=autoUrl("my-account/googleauthenticator/setup")?>" class="btn btn-dark">
           Setup Again
         </a>
       </p>
@@ -55,10 +55,10 @@ include BASE_PATH . 'views/header.php';
         time. To disable 2FA entirely, head to Account Options.
       </p>
       <p>
-        <a href="<?=autoUrl("myaccount/googleauthenticator/disable")?>" class="btn btn-dark">
+        <a href="<?=autoUrl("my-account/googleauthenticator/disable")?>" class="btn btn-dark">
           Disable Google Authenticator 2FA
         </a>
-        <a href="<?=autoUrl("myaccount/general")?>" class="btn btn-dark">
+        <a href="<?=autoUrl("my-account/general")?>" class="btn btn-dark">
           Disable All 2FA
         </a>
       </p>

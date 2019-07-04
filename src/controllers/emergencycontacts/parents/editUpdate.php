@@ -2,7 +2,7 @@
 
 global $db;
 
-$url_path = "emergencycontacts";
+$url_path = "emergency-contacts";
 if ($renewal_trap) {
 	$url_path = "renewal/emergencycontacts";
 }

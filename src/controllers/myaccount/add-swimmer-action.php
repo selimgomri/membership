@@ -82,13 +82,13 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
     <div class=\"alert alert-success\">
     <p class=\"mb-0\"><strong>We were able to successfully add your swimmer</strong></p>
     <p>We've sent an email confirming this to you.</p>
-    <p class=\"mb-0\"><a href=\"" . autoUrl("myaccount/addswimmer") . "\"
-    class=\"alert-link\">Add another</a> or <a href=\"" . autoUrl("myaccount") . "\"
+    <p class=\"mb-0\"><a href=\"" . autoUrl("my-account/addswimmer") . "\"
+    class=\"alert-link\">Add another</a> or <a href=\"" . autoUrl("my-account") . "\"
     class=\"alert-link\">return to My Account</a></p>
     </div>";
 
     // Return to My Account
-    header("Location: " . autoUrl("myaccount/addswimmer"));
+    header("Location: " . autoUrl("my-account/addswimmer"));
 
   }
   else {
@@ -99,7 +99,7 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
     <p>You may have got the Swim England Number or Access Key wrong</p>
     <p class=\"mb-0\">Please try again</p>
     </div>";
-    header("Location: " . autoUrl("myaccount/addswimmer"));
+    header("Location: " . autoUrl("my-account/addswimmer"));
   }
 }
 else {
@@ -110,6 +110,6 @@ else {
   <p>You may have got the Swim England Number or Access Key wrong</p>
   <p class=\"mb-0\">Please try again</p>
   </div>";
-  header("Location: " . autoUrl("myaccount/addswimmer"));
+  header("Location: " . autoUrl("my-account/addswimmer"));
 }
 ?>

@@ -30,6 +30,15 @@ include BASE_PATH . "views/header.php";
 ?>
 
 <div class="container">
+
+	<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers/" . $id)?>"><?=htmlspecialchars($row["MForename"])?> <?=htmlspecialchars($row["MSurname"][0])?></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Medical Form</li>
+    </ol>
+  </nav>
+
 	<form method="post" action="<?=htmlspecialchars(currentUrl())?>" name="med" id="med">
 		<h1>Medical Form</h1>
 		<?php if (isset($_SESSION['ErrorState'])) {

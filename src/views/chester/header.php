@@ -89,8 +89,8 @@ p.lead {
       </div>
     </noscript>
 
-    <!--[if IE]>
-    <div class="bg-dark text-white box-shadow py-3 d-print-none">
+    <?php if ($_SESSION['Browser']['Name'] == "Internet Explorer") {?> 
+    <div class="bg-warning py-3 d-print-none">
       <div class="<?=$container_class?>">
         <p class="h2">
           <strong>
@@ -98,20 +98,14 @@ p.lead {
           </strong>
         </p>
         <p>
-          It looks like you're using Internet Explorer which we no longer
-          support so we recommend you upgrade to a new browser which we do
-          support as soon as possible. <strong><a href="http://browsehappy.com/"
-          class="text-white" target="_blank">Upgrade your browser today <i
-          class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
+          It looks like you're using Internet Explorer which we no longer support so we recommend you upgrade to a new browser which we do support as soon as possible. <strong><a href="http://browsehappy.com/" target="_blank">Upgrade your browser today <i class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
         </p>
         <p class="mb-0">
-          <?=env('CLUB_NAME')?> recommends you <strong><a class="text-white"
-          href="https://www.firefox.com">install Firefox by
-          Mozilla</a></strong>.
+          <?=htmlspecialchars(env('CLUB_NAME'))?> recommends you <strong><a  href="https://www.firefox.com">install Firefox by Mozilla</a></strong>. Firefox has great protections for your privacy with built in features including tracking protection.
         </p>
       </div>
     </div>
-    <![endif]-->
+    <?php } ?>
 
     <?php
     $edit_link = null;
@@ -270,12 +264,12 @@ p.lead {
                   </a>
                   <?php } while ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC)); ?>
                   <?php } else { ?>
-                  <a class="dropdown-item" href="<?=autoUrl("myaccount/addswimmer")?>">Add a swimmer</a>
+                  <a class="dropdown-item" href="<?=autoUrl("my-account/addswimmer")?>">Add a swimmer</a>
                   <?php } ?>
                 </div>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="<?php echo autoUrl("emergencycontacts") ?>">Emergency Contacts</a>
+                <a class="nav-link" href="<?php echo autoUrl("emergency-contacts") ?>">Emergency Contacts</a>
               </li>
               <!--<li class="nav-item">
   			  <a class="nav-link" href="<?php echo autoUrl("renewal") ?>">
@@ -548,25 +542,24 @@ p.lead {
                 <div class="dropdown-menu dropdown-menu-right">
                   <span class="dropdown-item-text">Signed&nbsp;in&nbsp;as&nbsp;<strong><?= $user_name ?></strong></span>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="<?php echo autoUrl("myaccount") ?>">Your Profile</a>
-                  <a class="dropdown-item" href="<?php echo autoUrl("myaccount/email") ?>">Your Email Options</a>
-                  <a class="dropdown-item" href="<?php echo autoUrl("myaccount/general") ?>">Your General Options</a>
+                  <a class="dropdown-item" href="<?php echo autoUrl("my-account") ?>">Your Profile</a>
+                  <a class="dropdown-item" href="<?php echo autoUrl("my-account/email") ?>">Your Email Options</a>
+                  <a class="dropdown-item" href="<?php echo autoUrl("my-account/general") ?>">Your General Options</a>
                   <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-                  <a class="dropdown-item" href="<?php echo autoUrl("emergencycontacts") ?>">Your Emergency Contacts</a>
+                  <a class="dropdown-item" href="<?php echo autoUrl("emergency-contacts") ?>">Your Emergency Contacts</a>
                   <?php } ?>
-                  <a class="dropdown-item" href="<?php echo autoUrl("myaccount/password") ?>">Your Password</a>
+                  <a class="dropdown-item" href="<?php echo autoUrl("my-account/password") ?>">Your Password</a>
                   <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-                  <a class="dropdown-item" href="<?php echo autoUrl("myaccount/notifyhistory") ?>">Your Message
+                  <a class="dropdown-item" href="<?php echo autoUrl("my-account/notifyhistory") ?>">Your Message
                     History</a>
-                  <a class="dropdown-item" href="<?php echo autoUrl("myaccount/addswimmer") ?>">Add a Swimmer</a>
+                  <a class="dropdown-item" href="<?php echo autoUrl("my-account/addswimmer") ?>">Add a Swimmer</a>
                   <?php } ?>
-                  <?php if ($_SESSION['AccessLevel'] != "Parent") { ?>
-                  <a class="dropdown-item" href="<?php echo autoUrl("people/me") ?>">Your Personal Page</a>
-                  <?php } ?>
-                  <a class="dropdown-item" href="<?php echo autoUrl("myaccount/loginhistory") ?>">Your Login History</a>
+                  <a class="dropdown-item" href="<?php echo autoUrl("my-account/loginhistory") ?>">Your Login History</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" target="_blank"
                     href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">Help</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="<?php echo autoUrl("my-account/linked-accounts") ?>">Switch Account</a>
                   <a class="dropdown-item" href="<?= autoUrl("logout") ?>">Logout</a>
                 </div>
               </li>

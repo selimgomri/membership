@@ -26,7 +26,7 @@ $errorState = false;
       unset($_SESSION['ErrorState']);
     } ?>
     <hr>
-    <form method="post" action="<?php echo autoUrl("myaccount/addswimmergroup"); ?>" name="register" id="register">
+    <form method="post" action="<?php echo autoUrl("my-account/addswimmergroup"); ?>" name="register" id="register">
       <h2>Details</h2>
       <div class="form-group">
         <label for="fam">Family Registration Number</label>

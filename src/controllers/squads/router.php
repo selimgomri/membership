@@ -20,12 +20,12 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 
 	$this->get('/{id}:int/edit', function($id) {
 		global $link;
-		require 'SquadIndividual.php';
+		require 'EditSquad.php';
 	});
 
 	$this->post('/{id}:int/edit', function($id) {
 		global $link;
-		require 'SquadIndividual.php';
+		require 'EditSquadPost.php';
 	});
 
 	$this->get('/moves', function() {
@@ -36,13 +36,13 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 
 if ($access == "Admin") {
 	// Add a squad
-	$this->get('/addsquad', function() {
+	$this->get('/new', function() {
 		global $link;
-		require 'SquadAdd.php';
+		require 'AddSquad.php';
 	});
 
-	$this->post('/addsquad', function() {
+	$this->post('/new', function() {
 		global $link;
-		require 'SquadAddAction.php';
+		require 'AddSquadPost.php';
 	});
 }

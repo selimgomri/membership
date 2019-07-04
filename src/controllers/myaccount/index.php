@@ -202,7 +202,7 @@
           <h2>My Swimmers</h2>
           <p>Swimmers linked to your account</p>
           <?php echo mySwimmersTable($link, $userID) ?>
-          <p class="mb-0"><a href="<?php echo autoUrl("myaccount/addswimmer"); ?>" class="btn btn-outline-dark">Add a Swimmer</a></p>
+          <p class="mb-0"><a href="<?php echo autoUrl("my-account/addswimmer"); ?>" class="btn btn-outline-dark">Add a Swimmer</a></p>
         </div>
       <?php } ?>
     </div>
@@ -210,7 +210,7 @@
       <div class="cell">
         <h2>Password</h2>
         <p class="border-bottom border-gray pb-2">Change your password regularly to keep your account safe</p>
-        <p class="mb-0"><a href="<?php echo autoUrl("myaccount/password"); ?>" class="btn btn-outline-dark">Change my Password</a></p>
+        <p class="mb-0"><a href="<?php echo autoUrl("my-account/password"); ?>" class="btn btn-outline-dark">Change my Password</a></p>
       </div>
       <?php
       if ($_SESSION['AccessLevel'] == "Parent") {
@@ -253,7 +253,7 @@
       							</p>
       						</div>
       						<div class="col text-sm-right">
-      							<a href="<?php echo autoUrl("emergencycontacts/edit/" .
+      							<a href="<?php echo autoUrl("emergency-contacts/edit/" .
       							$contactsArray[$i]->getID()); ?>" class="btn btn-primary">
       								Edit
       							</a>
@@ -266,7 +266,7 @@
       		</div>
           <?php } ?>
       		<p class="mb-0">
-      			<a href="<?php echo autoUrl("emergencycontacts/new"); ?>" class="btn btn-outline-dark">
+      			<a href="<?php echo autoUrl("emergency-contacts/new"); ?>" class="btn btn-outline-dark">
       				Add New
       			</a>
       		</p>

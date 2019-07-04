@@ -50,7 +50,7 @@ if ($_SESSION['AccessLevel'] == "Parent") { ?>
             account.</p>
           </div>
         <?php } ?>
-        <form method="post" class="cell" action="<?php echo autoUrl("myaccount/addswimmer"); ?>" name="register" id="register">
+        <form method="post" class="cell" action="<?php echo autoUrl("my-account/addswimmer"); ?>" name="register" id="register">
           <h2>Details</h2>
           <div class="form-group">
             <label for="asa">Swimmer's Swim England Number or Temporary Membership Number</label>

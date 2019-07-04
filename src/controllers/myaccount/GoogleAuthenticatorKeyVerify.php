@@ -12,7 +12,7 @@ if ($success) {
   setUserOption($_SESSION['UserID'], "hasGoogleAuth2FA", true);
   setUserOption($_SESSION['UserID'], "GoogleAuth2FASecret", $_SESSION['G2FAKey']);
   unset($_SESSION['G2FAKey']);
-  header("Location: " . autoUrl("myaccount/googleauthenticator"));
+  header("Location: " . autoUrl("my-account/googleauthenticator"));
 } else {
   $_SESSION['G2FA_VerifyError'] = true;
   header("Location: " . currentUrl());

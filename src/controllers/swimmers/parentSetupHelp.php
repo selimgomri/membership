@@ -159,15 +159,15 @@ include BASE_PATH . "views/swimmersMenu.php";
 			<div class="col-4 text-center">
         <img class="img-fluid ml-auto d-block" src="<?php echo
         autoUrl("services/qr-generator?size=200&text=" .
-        rawurlencode(autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" .
+        rawurlencode(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" .
         $row['AccessKey'])) . ""); ?>" srcset="<?php echo
         autoUrl("services/qr-generator?size=400&text=" .
-        rawurlencode(autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" .
+        rawurlencode(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" .
         $row['AccessKey'])) . ""); ?> 2x, <?php echo
         autoUrl("services/qr-generator?size=400&text=" .
-        rawurlencode(autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" .
+        rawurlencode(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" .
         $row['AccessKey'])) . ""); ?> 3x" alt="<?php echo
-        autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" .
+        autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" .
         $row['AccessKey']); ?>"></img>
 			</div>
 		</div>

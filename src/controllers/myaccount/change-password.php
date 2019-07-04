@@ -28,26 +28,29 @@ if (isset($_SESSION['PasswordUpdate']) && $_SESSION['PasswordUpdate']) { ?>
   echo $_SESSION['ErrorState'];
   unset($_SESSION['ErrorState']);
 } ?>
-<form class="cell" method="post" action="<?=autoUrl("myaccount/password")?>">
+<div class="alert alert-warning">
+  <p class="mb-0">Passwords must consist of at least 8 characters.</p>
+</div>
+<form class="cell" method="post" action="<?=autoUrl("my-account/password")?>">
   <div class="form-group">
-    <label for="current">Confirm Current Password</label>
+    <label for="current">Confirm your current password</label>
     <input type="password" class="form-control" name="current" id="current" placeholder="Current Password" autocomplete="current-password">
   </div>
   <div class="form-row">
     <div class="col-sm">
       <div class="form-group">
-        <label for="new1">New Password</label>
+        <label for="new1">New password</label>
         <input type="password" class="form-control" name="new1" id="new1" placeholder="New Password" autocomplete="new-password">
       </div>
     </div>
     <div class="col-sm">
       <div class="form-group">
-        <label for="new2">Confirm New Password</label>
+        <label for="new2">Confirm new password</label>
         <input type="password" class="form-control" name="new2" id="new2" placeholder="Confirm New Password" autocomplete="new-password">
       </div>
     </div>
   </div>
-  <p><input type="submit" name="submit" id="submit" class="btn btn-success" value="Save Changes"></p>
+  <p><input type="submit" name="submit" id="submit" class="btn btn-success" value="Change password"></p>
 </form>
 </div>
 </div>

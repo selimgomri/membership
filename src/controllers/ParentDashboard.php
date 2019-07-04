@@ -113,7 +113,7 @@ include BASE_PATH . "views/header.php";
       	      </strong>
             </p>
             <p>
-      	      Head to <a href="<?=autoUrl("myaccount/email")?>">My Account</a>
+      	      Head to <a href="<?=autoUrl("my-account/email")?>">My Account</a>
       	      to change your email preferences and stay up to date!
       	    </p>
           </div>
@@ -236,7 +236,7 @@ include BASE_PATH . "views/header.php";
 			</div>
 		</div>
 
-    <?php if (IS_CLS === true) { ?>
+    <?php if (env('IS_CLS')) { ?>
     <div class="mb-4">
       <h2 class="mb-4">Club News</h2>
       <div class="news-grid">

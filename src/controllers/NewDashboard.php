@@ -170,7 +170,7 @@ include BASE_PATH . "views/header.php";
 			</div>
 		</div>
 
-    <?php if (IS_CLS === true) { ?>
+    <?php if (env('IS_CLS')) { ?>
     <div class="mb-4">
       <h2 class="mb-4">Club News</h2>
       <div class="news-grid">

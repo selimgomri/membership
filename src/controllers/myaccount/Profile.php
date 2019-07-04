@@ -178,9 +178,8 @@ include BASE_PATH . "views/header.php";
   ?>
   <div class="">
     <div class="">
-      <div class="cell">
+      <div class="">
         <h2>Your Details</h2>
-        <p class="border-bottom border-gray pb-2">What we know about you.</p>
         <form method="post">
           <div class="form-row">
             <div class="col-md">
@@ -200,8 +199,8 @@ include BASE_PATH . "views/header.php";
             <label for="email">Email</label>
             <input readonly type="email" class="form-control" disabled name="email" id="emailbox" placeholder="Email Address" value="<?=htmlspecialchars($email)?>" aria-describedby="emailHelp">
             <p class="mb-0 mt-3">
-              <a href="<?=autoUrl("myaccount/email")?>" class="btn btn-secondary">
-                Edit Email Address &amp; Subscriptions
+              <a href="<?=autoUrl("my-account/email")?>" class="btn btn-secondary">
+                Edit email address &amp; subscriptions
               </a>
             </p>
           </div>
@@ -224,6 +223,7 @@ include BASE_PATH . "views/header.php";
               <small id="smsContactOKHelp" class="form-text text-muted">We'll still use this number to contact you in an emergency</small>
             </div>
           </div>
+          <!--
           <div class="form-group" id="gravitar">
             <label for="mobile" class="d-block">Account Image</label>
             <?php
@@ -232,7 +232,8 @@ include BASE_PATH . "views/header.php";
             <img class="mr-3 rounded" src="<?=$grav_url?>" alt="" width="80" height="80">
             <small class="form-text text-muted">If you have <a href="https://en.gravatar.com/">an image linked to your email with Gravitar</a>, we'll display it in the system</small>
           </div>
-          <p class="mb-0"><input type="submit" class="btn btn-success" value="Save Changes"></p>
+          -->
+          <p><input type="submit" class="btn btn-success" value="Save Changes"></p>
         </form>
         </div>
 
@@ -241,16 +242,11 @@ include BASE_PATH . "views/header.php";
           <h2>My Swimmers</h2>
           <p>Swimmers linked to your account</p>
           <?php echo mySwimmersTable($link, $userID) ?>
-          <p class="mb-0"><a href="<?php echo autoUrl("myaccount/addswimmer"); ?>" class="btn btn-success">Add a Swimmer</a></p>
+          <p><a href="<?php echo autoUrl("my-account/addswimmer"); ?>" class="btn btn-success">Add a Swimmer</a></p>
         </div>
       <?php } ?>
     </div>
     <div class="">
-      <div class="cell">
-        <h2>Password</h2>
-        <p class="border-bottom border-gray pb-2">Change your password regularly to keep your account safe</p>
-        <p class="mb-0"><a href="<?php echo autoUrl("myaccount/password"); ?>" class="btn btn-success">Change my Password</a></p>
-      </div>
       <?php
       if ($_SESSION['AccessLevel'] == "Parent") {
         $contacts = new EmergencyContacts($db);
@@ -267,11 +263,11 @@ include BASE_PATH . "views/header.php";
             <div class="alert alert-warning mt-3">
               <p class="mb-0">
                 <strong>
-                  You have no Emergency Contacts
+                  You have no emergency contacts
                 </strong>
               </p>
               <p class="mb-0">
-                As a result, we'll only be able to try and contact you in an emergency
+                Swim England rules require us to have details on file for you and at least one other person to contact in an emergency.
               </p>
             </div>
           <?php } else { ?>
@@ -292,7 +288,7 @@ include BASE_PATH . "views/header.php";
                     </p>
                   </div>
                   <div class="col text-sm-right">
-                    <a href="<?=autoUrl("emergencycontacts/edit/" .
+                    <a href="<?=autoUrl("emergency-contacts/edit/" .
                     $contactsArray[$i]->getID())?>" class="btn btn-primary">
                       Edit
                     </a>
@@ -305,25 +301,13 @@ include BASE_PATH . "views/header.php";
           </div>
           <?php } ?>
           <p class="mb-0">
-            <a href="<?=autoUrl("emergencycontacts/new")?>" class="btn btn-success">
+            <a href="<?=autoUrl("emergency-contacts/new")?>" class="btn btn-success">
               Add New
             </a>
           </p>
         </div>
         <?php
       } ?>
-      <div class="cell">
-        <h2>Technical Details</h2>
-        <p class="border-bottom border-gray pb-2">These are some things you can't change about your account. We might ask you for these details when providing help and support.</p>
-        <div class="form-group">
-          <label for="id">Unique User Identifier</label>
-          <input type="text" class="form-control mono" name="id" id="id" placeholder="ID" value="<?=CLUB_CODE?>U<?=$userID?>" readonly>
-        </div>
-        <div class="form-group">
-          <label for="access">Access Level</label>
-          <input type="text" class="form-control" name="access" id="access" placeholder="Access Level" value="<?=$access?>" readonly>
-        </div>
-      </div>
     </div>
   </div>
 </div>

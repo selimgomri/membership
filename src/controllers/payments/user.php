@@ -31,34 +31,30 @@ require 'GoCardlessSetup.php';
   <div class="row align-items-center">
     <div class="col-md-6 col-lg-8">
     	<h1>Payments</h1>
-    	<p class="lead mb-0">Manage your Direct Debit Payments</p>
+    	<p class="lead">Manage your Direct Debit Payments</p>
     </div>
 
   </div>
-  <hr>
   <div class="row">
     <div class="col-md-8">
       <div class="cell">
       	<h2>Billing History</h2>
-      	<p class="lead mb-0">Previous payments by Direct Debit</p>
-      	<hr>
-        <?=paymentHistory($link, $user)?>
+      	<p class="lead">Previous payments by Direct Debit</p>
+        <?=paymentHistory(null, $user)?>
       </div>
       <div class="cell">
         <h2>
           Extra Fees this month
         </h2>
-        <p class="lead mb-0">Fees to pay on your next Billing Date, in addition to Squad Fees</p>
-        <hr>
-      	<?=feesToPay($link, $user)?>
+        <p class="lead">Fees to pay on your next Billing Date, in addition to Squad Fees</p>
+      	<?=feesToPay(null, $user)?>
       </div>
     </div>
     <div class="col-md-4">
       <div class="cell">
-      	<h2>
+      	<h2 class="mb-3">
           My Bank Account
         </h2>
-        <hr>
         <?php if (userHasMandates($user)) {
           $name = mb_strtoupper(bankDetails($user, "account_holder_name"));
           if ($name != "UNKNOWN") {

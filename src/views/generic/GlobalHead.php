@@ -50,9 +50,9 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <meta name="og:site_name" content="X Account">
   <?php
     // Check if user has opted out of tracking or has DNT headers set before serving Google Analytics
-    if (!$_SESSION['DisableTrackers'] && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1)) {
+    if (env('GOOGLE_ANALYTICS_ID') && (!$_SESSION['DisableTrackers'] && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1))) {
     ?>
-  <meta name="X-CLSW-Tracking" content="yes">
+  <meta name="X-SCDS-Membership-Tracking" content="yes">
   <script async>
   (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
@@ -65,16 +65,16 @@ Chester-le-Street ASC is a non profit unincorporated association.
     a.src = g;
     m.parentNode.insertBefore(a, m)
   })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-  ga('create', 'UA-78812259-4', 'auto');
+  ga('create', '<?=htmlspecialchars(env('GOOGLE_ANALYTICS_ID'))?>', 'auto');
   <?php if (isset($_SESSION['LoggedIn'])) { ?>
-  ga('set', 'userId', <?= $_SESSION['UserID'] ?>);
+  ga('set', 'userId', '<?=$_SESSION['UserID']?>');
   ga('send', 'event', 'authentication', 'user-id available');
   <?php } else { ?>
   ga('send', 'pageview');
   <?php } ?>
   </script>
   <?php } else { ?>
-  <meta name="X-CLSW-Tracking" content="no">
+  <meta name="X-SCDS-Membership-Tracking" content="no">
   <?php } ?>
   <link rel="stylesheet preload"
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700|Roboto+Mono|Merriweather:400,600">

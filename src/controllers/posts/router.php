@@ -28,7 +28,6 @@ if ($people !== true) {
   		if (v::intVal()->validate($id)) {
   			$int = true;
 			}
-			echo "HELLO";
   		include 'EditPostServer.php';
   	});
   }

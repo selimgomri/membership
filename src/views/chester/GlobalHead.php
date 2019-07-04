@@ -54,7 +54,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
     // Check if user has opted out of tracking or has DNT headers set before serving Google Analytics
     if (!$_SESSION['DisableTrackers'] && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1)) {
     ?>
-  <meta name="X-CLSE-Tracking" content="yes">
+  <meta name="X-SCDS-Membership-Tracking" content="yes">
   <script async>
   (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
@@ -76,7 +76,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <?php } ?>
   </script>
   <?php } else { ?>
-  <meta name="X-CLSE-Tracking" content="no">
+  <meta name="X-SCDS-Membership-Tracking" content="no">
   <?php } ?>
   <script src="https://js.stripe.com/v3/"></script>
   <link rel="stylesheet preload"

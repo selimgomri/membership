@@ -32,7 +32,7 @@ if ($access == "Parent") {
 	} else {
 		$this->get('/entergala', function() {
 			global $link;
-			include 'galaentries.php';
+			include 'GalaEntryForm.php';
 		});
 	}
 
@@ -43,7 +43,7 @@ if ($access == "Parent") {
 
 	$this->post('/entergala', function() {
 		global $link;
-		include 'galaentriesaction.php';
+		include 'GalaEntryFormPost.php';
 	});
 
 	// Gala Entries
@@ -54,12 +54,12 @@ if ($access == "Parent") {
 
 	$this->get('/entries/{id}', function($id) {
 		global $link;
-		include 'singleentry.php';
+		include 'EditEntry.php';
 	});
 
 	$this->post('/entries/{id}', function($id) {
 		global $link;
-		include 'entriesSingleaction.php';
+		include 'EditEntryPost.php';
 	});
 }
 else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $access == "Coach") {

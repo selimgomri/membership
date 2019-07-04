@@ -7,7 +7,7 @@ $moveCount->execute([$id]);
 
 $name = $currentSquad = "";
 
-if ($moveCount->fetchColumn() > 1) {
+if ($moveCount->fetchColumn() > 0) {
 	header("Location: " . autoUrl("swimmers/" . $id . "/edit-move"));
 } else {
   $getMemberInfo = $db->prepare("SELECT `MForename`, `MSurname`, `SquadName`, members.SquadID FROM `members` INNER JOIN `squads` ON members.SquadID = squads.SquadID WHERE `MemberID` = ?");
@@ -32,6 +32,12 @@ $pagetitle = "Squad Move for " . $name;
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php"; ?>
 <div class="container">
+	<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("squads/moves")?>">Squad Moves</a></li>
+      <li class="breadcrumb-item active" aria-current="page">New - <?=htmlspecialchars($member['MForename'] . " " . $member['MSurname'][0])?></li>
+    </ol>
+  </nav>
 	<div class="">
 		<h1>Squad Move for <?=htmlspecialchars($name)?></h1>
 		<?php if (isset($_SESSION['ErrorState'])) {

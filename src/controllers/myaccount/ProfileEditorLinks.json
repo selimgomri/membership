@@ -6,7 +6,7 @@
       "id": "profile",
       "name": "My Profile",
       "title": "My Profile",
-      "link": "myaccount",
+      "link": "my-account",
       "target": "_self",
       "external": false
     },
@@ -14,7 +14,7 @@
       "id": "email",
       "name": "My Email Options",
       "title": "My Email Options",
-      "link": "myaccount/email",
+      "link": "my-account/email",
       "target": "_self",
       "external": false
     },
@@ -22,7 +22,7 @@
       "id": "general",
       "name": "Advanced Options",
       "title": "My Advanced Options",
-      "link": "myaccount/general",
+      "link": "my-account/general",
       "target": "_self",
       "external": false
     },
@@ -30,7 +30,15 @@
       "id": "password",
       "name": "Change Password",
       "title": "Change Password",
-      "link": "myaccount/password",
+      "link": "my-account/password",
+      "target": "_self",
+      "external": false
+    },
+    {
+      "id": "linked-accounts",
+      "name": "Linked Accounts",
+      "title": "Link accounts so you can easily switch between parent and admin roles",
+      "link": "my-account/linked-accounts",
       "target": "_self",
       "external": false
     },
@@ -38,7 +46,7 @@
       "id": "addswimmer",
       "name": "Add Swimmer",
       "title": "Connect a club member to your account",
-      "link": "myaccount/addswimmer",
+      "link": "my-account/addswimmer",
       "target": "_self",
       "external": false,
       "include": [
@@ -49,7 +57,7 @@
       "id": "logins",
       "name": "My Login History",
       "title": "My Login History",
-      "link": "myaccount/loginhistory",
+      "link": "my-account/loginhistory",
       "target": "_self",
       "external": false
     },
@@ -57,7 +65,7 @@
       "id": "notify",
       "name": "My Email History",
       "title": "Emails sent to you by us",
-      "link": "myaccount/notifyhistory",
+      "link": "my-account/notifyhistory",
       "target": "_self",
       "external": false,
       "include": [

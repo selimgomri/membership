@@ -47,7 +47,7 @@ if (v::email()->validate($_POST['emailAddr'])) {
     add ' . htmlspecialchars($row['MForename']) . ' to your account.
   </p>';
   $text .= '<p>
-    <a href="' . autoUrl("myaccount/addswimmer/auto/" . $row['ASANumber'] . "/" .
+    <a href="' . autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" .
     $row['AccessKey']) . '">Click Here to add ' . htmlspecialchars($row['MForename']) . '</a>
   </p>';
   $text .= '<h2>Add Manually</h2><p>

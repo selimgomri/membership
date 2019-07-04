@@ -178,7 +178,7 @@ $swimmer->execute([$id]);
 $rowSwim = $swimmer->fetch(PDO::FETCH_ASSOC);
 $pagetitle = "Swimmer: " . htmlspecialchars($rowSwim['MForename'] . " " . $rowSwim['MSurname']);
 $title = null;
-$content = '<form method="post"><div class="row align-items-center"><div class="col-sm-8"><h1>Editing ' . htmlspecialchars($rowSwim['MForename'] . ' ' . $rowSwim['MSurname']) . '</h1></div><div class="col-sm-4 text-right"><button type="submit" class="btn btn-success">Update</button> <a class="btn btn-dark" href="../' . $id . '">Exit Edit Mode</a></div></div><hr>';
+$content = '<form method="post"><div class="row align-items-center mb-3"><div class="col-md-8"><h1>Editing ' . htmlspecialchars($rowSwim['MForename'] . ' ' . $rowSwim['MSurname']) . '</h1></div><div class="col text-md-right"><button type="submit" class="btn btn-success">Update</button> <a class="btn btn-dark" href="../' . $id . '">Exit Edit Mode</a></div></div>';
 $content .= "<div class=\"row\"><div class=\"col col-md-8\"><div class=\"\">";
 if ($update) {
 $content .= '<div class="alert alert-success">
@@ -334,6 +334,15 @@ $content .= "</div></div></form>";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>
 <div class="container">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
+
+			<li class="breadcrumb-item"><a href="<?=autoUrl("swimmers/" . $id)?>"><?=htmlspecialchars($rowSwim["MForename"])?> <?=htmlspecialchars($rowSwim["MSurname"][0])?></a></li>
+			<li class="breadcrumb-item active" aria-current="page">Edit</li>
+		</ol>
+	</nav>
+
 <?php
 echo $content; ?>
 </div>
