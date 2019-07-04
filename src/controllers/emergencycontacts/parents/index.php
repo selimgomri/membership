@@ -40,7 +40,7 @@ if ($renewal_trap) {
       </p>
       <p class="border-bottom border-gray pb-2 mb-0">
         We'll use these emergency contacts for all swimmers connected to your account if we can't reach you on your
-        phone number. You can change your phone number in <a href="<?=autoUrl("myaccount")?>">My Account</a>
+        phone number. You can change your phone number in <a href="<?=autoUrl("my-account")?>">My Account</a>
       </p>
       <?php if (isset($_SESSION['AddNewSuccess'])) {
 			echo $_SESSION['AddNewSuccess'];
@@ -63,7 +63,7 @@ if ($renewal_trap) {
               </div>
               <?php if (!$renewal_trap) { ?>
               <div class="col text-sm-right">
-                <a href="<?=autoUrl("myaccount")?>" class="btn
+                <a href="<?=autoUrl("my-account")?>" class="btn
 							btn-primary">
                   Edit
                 </a>

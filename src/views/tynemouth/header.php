@@ -240,12 +240,12 @@ Chester-le-Street ASC is a non profit unincorporated association.
                 ?></a>
               <?php } ?>
               <?php } else { ?>
-                <a class="dropdown-item" href="<?php echo autoUrl("myaccount/addswimmer") ?>">Add Swimmers</a>
+                <a class="dropdown-item" href="<?php echo autoUrl("my-account/addswimmer") ?>">Add Swimmers</a>
               <?php } ?>
             </div>
           </li>
         <li class="nav-item">
-  			  <a class="nav-link" href="<?php echo autoUrl("emergencycontacts") ?>">Emergency Contacts</a>
+  			  <a class="nav-link" href="<?php echo autoUrl("emergency-contacts") ?>">Emergency Contacts</a>
   		  </li>
         <?php }
         else { ?>
@@ -447,18 +447,18 @@ Chester-le-Street ASC is a non profit unincorporated association.
           <div class="dropdown-menu dropdown-menu-right">
             <span class="dropdown-item-text">Signed&nbsp;in&nbsp;as&nbsp;<strong><?= $user_name ?></strong></span>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="<?php echo autoUrl("myaccount") ?>">Your Profile</a>
-            <a class="dropdown-item" href="<?php echo autoUrl("myaccount/email") ?>">Your Email Options</a>
-            <a class="dropdown-item" href="<?php echo autoUrl("myaccount/general") ?>">Your General Options</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("my-account") ?>">Your Profile</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("my-account/email") ?>">Your Email Options</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("my-account/general") ?>">Your General Options</a>
             <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-              <a class="dropdown-item" href="<?php echo autoUrl("emergencycontacts") ?>">Your Emergency Contacts</a>
+              <a class="dropdown-item" href="<?php echo autoUrl("emergency-contacts") ?>">Your Emergency Contacts</a>
             <?php } ?>
-            <a class="dropdown-item" href="<?php echo autoUrl("myaccount/password") ?>">Your Password</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("my-account/password") ?>">Your Password</a>
             <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-            <a class="dropdown-item" href="<?php echo autoUrl("myaccount/notifyhistory") ?>">Your Message History</a>
-            <a class="dropdown-item" href="<?php echo autoUrl("myaccount/addswimmer") ?>">Add a Swimmer</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("my-account/notifyhistory") ?>">Your Message History</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("my-account/addswimmer") ?>">Add a Swimmer</a>
             <?php } ?>
-            <a class="dropdown-item" href="<?php echo autoUrl("myaccount/loginhistory") ?>">Your Login History</a>
+            <a class="dropdown-item" href="<?php echo autoUrl("my-account/loginhistory") ?>">Your Login History</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">Help</a>
             <a class="dropdown-item" href="<?= autoUrl("logout") ?>">Logout</a>

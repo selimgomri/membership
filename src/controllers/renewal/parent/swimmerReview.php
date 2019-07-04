@@ -16,7 +16,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			<h1>Review your swimmers</h1>
 			<p class="lead">
 				Make sure all of your swimmers are listed here. Make sure you
-				<a target="_blank" href="<?php echo autoUrl("myaccount/addswimmer"); ?>">
+				<a target="_blank" href="<?php echo autoUrl("my-account/addswimmer"); ?>">
 					add them
 				</a>
 				if not.

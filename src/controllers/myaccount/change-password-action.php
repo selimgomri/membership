@@ -49,7 +49,7 @@ if ($status == true) {
     $updatePassword->execute(['user' => $_SESSION['UserID'], 'new' => $newHash]);
 
     $_SESSION['PasswordUpdate'] = true;
-    header("Location: " . autoUrl("myaccount/password"));
+    header("Location: " . autoUrl("my-account/password"));
   } catch (Exception $e) {
     halt(500);
   }
@@ -60,6 +60,6 @@ else {
   <p><strong>Something wasn\'t right</strong></p>
   <ul class="mb-0">' . $statusMessage . '</ul></div>';
 
-  header("Location: " . autoUrl("myaccount/password"));
+  header("Location: " . autoUrl("my-account/password"));
 }
 ?>

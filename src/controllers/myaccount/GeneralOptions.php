@@ -128,7 +128,7 @@ include BASE_PATH . "views/header.php";
 
           <?php if (!filter_var(getUserOption($_SESSION['UserID'], "hasGoogleAuth2FA"), FILTER_VALIDATE_BOOLEAN)) { ?>
           <p>
-            <a href="<?=autoUrl("myaccount/googleauthenticator")?>" class="btn btn-primary">
+            <a href="<?=autoUrl("my-account/googleauthenticator")?>" class="btn btn-primary">
               Use an authenticator app
             </a>
           </p>
@@ -138,13 +138,13 @@ include BASE_PATH . "views/header.php";
           </p>
 
           <p>
-            <a href="<?=autoUrl("myaccount/googleauthenticator")?>" class="btn btn-primary">
+            <a href="<?=autoUrl("my-account/googleauthenticator")?>" class="btn btn-primary">
               Manage authenticator app
             </a>
           </p>
 
           <p>
-            <a href="<?=autoUrl("myaccount/googleauthenticator/disable")?>" class="btn btn-dark">
+            <a href="<?=autoUrl("my-account/googleauthenticator/disable")?>" class="btn btn-dark">
               Disable authenticator app
             </a>
           </p>
@@ -162,7 +162,7 @@ include BASE_PATH . "views/header.php";
             Under the General Data Protection Regulation, you can request for free to download all personal data held about you by <?=htmlspecialchars(env('CLUB_NAME'))?>.
           </p>
           <p>
-            <a href="<?=autoUrl("myaccount/general/download-personal-data")?>"
+            <a href="<?=autoUrl("my-account/general/download-personal-data")?>"
             class="btn btn-primary">
               Download your data
             </a>

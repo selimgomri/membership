@@ -38,7 +38,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			<p class="border-bottom border-gray pb-2 mb-0">
 				We'll use these emergency contacts for all swimmers connected to your
 				account if we can't reach you on your phone number. You can change your
-				phone number in <a href="<?=autoUrl("myaccount")?>">My Account</a>
+				phone number in <a href="<?=autoUrl("my-account")?>">My Account</a>
 			</p>
 			<?php } ?>
 

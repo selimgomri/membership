@@ -4,7 +4,7 @@ if (filter_var(getUserOption($_SESSION['UserID'], "hasGoogleAuth2FA"), FILTER_VA
 
   setUserOption($_SESSION['UserID'], "hasGoogleAuth2FA", false);
   setUserOption($_SESSION['UserID'], "GoogleAuth2FASecret", null);
-  header("Location: " . autoUrl("myaccount/googleauthenticator"));
+  header("Location: " . autoUrl("my-account/googleauthenticator"));
 
 } else {
   halt(404);

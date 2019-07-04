@@ -17,4 +17,4 @@ try {
   $_SESSION['LinkedAccountDeleteError'] = true;
 }
 
-header("Location: " . autoUrl("myaccount/linked-accounts"));
+header("Location: " . autoUrl("my-account/linked-accounts"));

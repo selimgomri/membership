@@ -504,7 +504,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
       header("Location: " . autoUrl(""));
     });
 
-    $this->group('/myaccount', function() {
+    $this->group(['/my-account', '/myaccount'], function() {
       global $link;
       include 'controllers/myaccount/router.php';
     });

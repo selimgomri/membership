@@ -216,7 +216,7 @@ include BASE_PATH . "views/header.php";
               <?=$extraEmails['EmailAddress']?>
             </p>
             <p>
-              <a href="<?=autoUrl("myaccount/email/cc/" . $extraEmails['ID'] . "/delete")?>">
+              <a href="<?=autoUrl("my-account/email/cc/" . $extraEmails['ID'] . "/delete")?>">
                 Delete this email
               </a>
             </p>
@@ -224,7 +224,7 @@ include BASE_PATH . "views/header.php";
         <?php } ?>
         </ul>
 
-        <form method="post" action="<?=autoUrl("myaccount/email/cc/new")?>" class="needs-validation" novalidate>
+        <form method="post" action="<?=autoUrl("my-account/email/cc/new")?>" class="needs-validation" novalidate>
           <div class="form-row">
             <div class="col-md">
               <div class="form-group">

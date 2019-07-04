@@ -25,4 +25,4 @@ try {
   $db->rollBack();
 }
 
-header("Location: " . autoUrl("myaccount/email"));
+header("Location: " . autoUrl("my-account/email"));

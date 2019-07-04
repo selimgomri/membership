@@ -199,7 +199,7 @@ include BASE_PATH . "views/header.php";
             <label for="email">Email</label>
             <input readonly type="email" class="form-control" disabled name="email" id="emailbox" placeholder="Email Address" value="<?=htmlspecialchars($email)?>" aria-describedby="emailHelp">
             <p class="mb-0 mt-3">
-              <a href="<?=autoUrl("myaccount/email")?>" class="btn btn-secondary">
+              <a href="<?=autoUrl("my-account/email")?>" class="btn btn-secondary">
                 Edit email address &amp; subscriptions
               </a>
             </p>
@@ -242,7 +242,7 @@ include BASE_PATH . "views/header.php";
           <h2>My Swimmers</h2>
           <p>Swimmers linked to your account</p>
           <?php echo mySwimmersTable($link, $userID) ?>
-          <p><a href="<?php echo autoUrl("myaccount/addswimmer"); ?>" class="btn btn-success">Add a Swimmer</a></p>
+          <p><a href="<?php echo autoUrl("my-account/addswimmer"); ?>" class="btn btn-success">Add a Swimmer</a></p>
         </div>
       <?php } ?>
     </div>
@@ -288,7 +288,7 @@ include BASE_PATH . "views/header.php";
                     </p>
                   </div>
                   <div class="col text-sm-right">
-                    <a href="<?=autoUrl("emergencycontacts/edit/" .
+                    <a href="<?=autoUrl("emergency-contacts/edit/" .
                     $contactsArray[$i]->getID())?>" class="btn btn-primary">
                       Edit
                     </a>
@@ -301,7 +301,7 @@ include BASE_PATH . "views/header.php";
           </div>
           <?php } ?>
           <p class="mb-0">
-            <a href="<?=autoUrl("emergencycontacts/new")?>" class="btn btn-success">
+            <a href="<?=autoUrl("emergency-contacts/new")?>" class="btn btn-success">
               Add New
             </a>
           </p>

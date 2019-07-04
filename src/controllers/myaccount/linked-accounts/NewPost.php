@@ -44,7 +44,7 @@ if (password_verify($_POST['password'], $user['Password'])) {
 }
 
 if ($_SESSION['LinkedUserIncorrectDetails']) {
-  header("Location: " . autoUrl("myaccount/linked-accounts/new"));
+  header("Location: " . autoUrl("my-account/linked-accounts/new"));
 } else {
-  header("Location: " . autoUrl("myaccount/linked-accounts"));
+  header("Location: " . autoUrl("my-account/linked-accounts"));
 }

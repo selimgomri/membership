@@ -31,7 +31,7 @@ if (isset($_SESSION['PasswordUpdate']) && $_SESSION['PasswordUpdate']) { ?>
 <div class="alert alert-warning">
   <p class="mb-0">Passwords must consist of at least 8 characters.</p>
 </div>
-<form class="cell" method="post" action="<?=autoUrl("myaccount/password")?>">
+<form class="cell" method="post" action="<?=autoUrl("my-account/password")?>">
   <div class="form-group">
     <label for="current">Confirm your current password</label>
     <input type="password" class="form-control" name="current" id="current" placeholder="Current Password" autocomplete="current-password">

@@ -127,7 +127,7 @@ include "galaMenu.php";
     <?php if (!$hasSwimmer) { ?>
     <div class="alert alert-warning">
       <strong>You don't have any swimmers associated with your account</strong> <br>
-      Please <a href="<?=autoUrl("myaccount/addswimmer")?>" class="alert-link">add some swimmers in My Account</a>, then try again
+      Please <a href="<?=autoUrl("my-account/addswimmer")?>" class="alert-link">add some swimmers in My Account</a>, then try again
     </div>
     <?php } ?>
 

@@ -466,7 +466,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
           <?=$rowSwim["MForename"]?> by <?=CLUB_NAME?>.
         </p>
         <p>
-          <a href="<?=autoUrl("myaccount/general/download-member-data/" . $id)?>"
+          <a href="<?=autoUrl("my-account/general/download-member-data/" . $id)?>"
           class="btn btn-primary">
             Download data
           </a>
