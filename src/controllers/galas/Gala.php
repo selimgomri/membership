@@ -218,11 +218,11 @@ var chart = new Chart(ctx, {
     labels: [<?php
       foreach ($countEntries as $key => $event) {
         if ($event['Count'] > 0) {
-          ?> "<?=html_entity_decode($event['Name'])?>", <?php
+          ?> <?=json_encode(html_entity_decode($event['Name']))?>, <?php
         }
       } ?>],
     datasets: [{
-      label: <?=json_encode(htmlspecialchars($gala['GalaName']))?>,
+      label: <?=json_encode(html_entity_decode($gala['GalaName']))?>,
       data: [<?php
       foreach ($countEntries as $key => $event) {
         if ($event['Count'] > 0) {
@@ -280,11 +280,11 @@ var chart = new Chart(ctx, {
     labels: [<?php
       foreach ($strokeCounts as $stroke => $count) {
         if ($count > 0) {
-          ?> "<?=$stroke?>", <?php
+          ?> <?=json_encode($stroke)?>, <?php
         }
       } ?>],
     datasets: [{
-      label: <?=json_encode(htmlspecialchars($gala['GalaName']))?>,
+      label: <?=json_encode(html_entity_decode($gala['GalaName']))?>,
       data: [<?php
       foreach ($strokeCounts as $stroke => $count) {
         if ($count > 0) {
