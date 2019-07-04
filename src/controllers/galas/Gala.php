@@ -46,6 +46,35 @@ $swimsArray = [
   '400IM' => '400&nbsp;IM'
 ];
 
+$strokeCounts = [
+  'Free' => 0,
+  'Back' => 0,
+  'Breast' => 0,
+  'Fly' => 0,
+  'IM' => 0
+];
+$distanceCounts = [
+  '50' => 0,
+  '100' => 0,
+  '150' => 0,
+  '200' => 0,
+  '400' => 0,
+  '800' => 0,
+  '1500' => 0
+];
+$countEntries = [];
+foreach ($swimsArray as $col => $name) {
+  $getCount = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE GalaID = ? AND `" . $col . "` = 1");
+  $getCount->execute([$id]);
+  $countEntries[$col]['Name'] = $name;
+  $countEntries[$col]['Event'] = $col;
+  $countEntries[$col]['Stroke'] = preg_replace("/[^a-zA-Z]+/", "", $col);
+  $countEntries[$col]['Distance'] = preg_replace("/[^0-9]/", '', $col);
+  $countEntries[$col]['Count'] = $getCount->fetchColumn();
+  $strokeCounts[$countEntries[$col]['Stroke']] += $countEntries[$col]['Count'];
+  $distanceCounts[$countEntries[$col]['Distance']] += $countEntries[$col]['Count'];
+}
+
 $pagetitle = htmlspecialchars($gala['GalaName']) . " - Galas";
 include BASE_PATH . "views/header.php";
 include "galaMenu.php";
@@ -121,17 +150,29 @@ include "galaMenu.php";
   <?php if ($numEntries > 0) { ?>
   <h2>Gala timesheet</h2>
   <p class="lead">Download a timesheet for this gala.</p>
-  <p>Gala timesheets give a list of each swimmer's entries to a gala along with their all-time personal bests and <?=date("Y")?> personal bests.</p>
+  <p>Gala timesheets give a list of each swimmer's entries to a gala along with their all-time personal bests and
+    <?=date("Y")?> personal bests.</p>
   <p>
     <a class="btn btn-success" href="<?=autoUrl("galas/" . $id . "/timesheet")?>">Download timesheet</a>
   </p>
+
+  <h2>Charts</h2>
+  <p class="lead">An easy overview of entry data.</p>
+  <div class="row">
+    <div class="col-lg-8">
+      <canvas id="eventEntries" class="mb-3"></canvas>
+    </div>
+    <div class="col-lg-4">
+      <canvas id="strokeEntries" class="mb-3"></canvas>
+    </div>
+  </div>
   <?php } ?>
 
   <h2>Entries</h2>
   <p class="lead">
     There have been <?=$numEntries?> entries to this gala
   </p>
-  
+
   <?php
 
   $entry = $entries->fetch(PDO::FETCH_ASSOC);
@@ -139,29 +180,146 @@ include "galaMenu.php";
   if ($entry != null) { ?>
 
   <div class="row">
-  <?php do { ?>
+    <?php do { ?>
     <div class="col-md-6 col-lg-4">
       <h3>
         <?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?>
       </h3>
 
       <p><small class="text-muted">
-        <strong>Date of Birth:</strong>&nbsp;<?=date('d/m/Y', strtotime($entry['DateOfBirth']))?>, <strong>Swim&nbsp;England:</strong>&nbsp;<?=htmlspecialchars($entry['ASANumber'])?>
-      </small></p>
-      
+          <strong>Date of Birth:</strong>&nbsp;<?=date('d/m/Y', strtotime($entry['DateOfBirth']))?>,
+          <strong>Swim&nbsp;England:</strong>&nbsp;<?=htmlspecialchars($entry['ASANumber'])?>
+        </small></p>
+
       <ul>
-      <?php foreach ($swimsArray as $event => $name) { ?>
+        <?php foreach ($swimsArray as $event => $name) { ?>
         <?php if ($entry[$event]) { ?>
         <li><?=$name?></li>
         <?php } ?>
-      <?php } ?>
+        <?php } ?>
       </ul>
     </div>
-  <?php } while ($entry = $entries->fetch(PDO::FETCH_ASSOC)); ?>
+    <?php } while ($entry = $entries->fetch(PDO::FETCH_ASSOC)); ?>
   </div>
 
   <?php } ?>
 
 </div>
+
+<script src="<?=autoUrl("public/js/Chart.min.js")?>"></script>
+<script>
+var ctx = document.getElementById('eventEntries').getContext('2d');
+var chart = new Chart(ctx, {
+  // The type of chart we want to create
+  type: 'bar',
+
+  // The data for our dataset
+  data: {
+    labels: [<?php
+      foreach ($countEntries as $key => $event) {
+        if ($event['Count'] > 0) {
+          ?> "<?=html_entity_decode($event['Name'])?>", <?php
+        }
+      } ?>],
+    datasets: [{
+      label: <?=json_encode(htmlspecialchars($gala['GalaName']))?>,
+      data: [<?php
+      foreach ($countEntries as $key => $event) {
+        if ($event['Count'] > 0) {
+          ?><?=$event['Count']?>, <?php
+        }
+      } ?>],
+      backgroundColor: [<?php
+      foreach ($countEntries as $key => $event) {
+        if ($event['Count'] > 0) {
+          if ($event['Stroke'] == 'Free') {
+            ?> '#bd0000'
+        <?php
+          } else if ($event['Stroke'] == 'Back') {
+            ?> '#bd00bd'
+        <?php
+          } else if ($event['Stroke'] == 'Breast') {
+            ?> '#00bd00'
+        <?php
+          } else if ($event['Stroke'] == 'Fly') {
+            ?> '#00bdbd'
+        <?php
+          } else if ($event['Stroke'] == 'IM') {
+            ?> '#bdbdbd'
+        <?php
+          }
+          ?>, <?php
+        }
+      } ?>
+      ],
+    }],
+  },
+
+  // Configuration options go here
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true,
+          precision: 0,
+        }
+      }]
+    }
+  }
+});
+</script>
+
+<script>
+var ctx = document.getElementById('strokeEntries').getContext('2d');
+var chart = new Chart(ctx, {
+  // The type of chart we want to create
+  type: 'pie',
+
+  // The data for our dataset
+  data: {
+    labels: [<?php
+      foreach ($strokeCounts as $stroke => $count) {
+        if ($count > 0) {
+          ?> "<?=$stroke?>", <?php
+        }
+      } ?>],
+    datasets: [{
+      label: <?=json_encode(htmlspecialchars($gala['GalaName']))?>,
+      data: [<?php
+      foreach ($strokeCounts as $stroke => $count) {
+        if ($count > 0) {
+          ?> "<?=$count?>", <?php
+        }
+      } ?>],
+      backgroundColor: [<?php
+      foreach ($strokeCounts as $stroke => $count) {
+        if ($count > 0) {
+          if ($stroke == 'Free') {
+            ?> '#bd0000'
+        <?php
+          } else if ($stroke == 'Back') {
+            ?> '#bd00bd'
+        <?php
+          } else if ($stroke == 'Breast') {
+            ?> '#00bd00'
+        <?php
+          } else if ($stroke == 'Fly') {
+            ?> '#00bdbd'
+        <?php
+          } else if ($stroke == 'IM') {
+            ?> '#bdbdbd'
+        <?php
+          }
+          ?>, <?php
+        }
+      } ?>
+      ],
+    }],
+  },
+
+  // Configuration options go here
+  // options: {}
+});
+</script>
 
 <?php include BASE_PATH . "views/footer.php"; ?>

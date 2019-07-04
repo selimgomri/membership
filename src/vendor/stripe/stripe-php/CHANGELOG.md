@@ -1,5 +1,17 @@
 # Changelog
 
+## 6.40.0 - 2019-06-27
+* [#675](https://github.com/stripe/stripe-php/pull/675) Add support for `SetupIntent` resource and APIs
+
+## 6.39.2 - 2019-06-26
+* [#676](https://github.com/stripe/stripe-php/pull/676) Fix exception message in `CustomerBalanceTransaction::update()`
+
+## 6.39.1 - 2019-06-25
+* [#674](https://github.com/stripe/stripe-php/pull/674) Add new constants for `collection_method` on `Invoice`
+
+## 6.39.0 - 2019-06-24
+* [#673](https://github.com/stripe/stripe-php/pull/673) Enable request latency telemetry by default
+
 ## 6.38.0 - 2019-06-17
 * [#649](https://github.com/stripe/stripe-php/pull/649) Add support for `CustomerBalanceTransaction` resource and APIs
 
