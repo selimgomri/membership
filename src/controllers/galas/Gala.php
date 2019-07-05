@@ -10,6 +10,29 @@ $numEntries = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE GalaID = ?");
 $numEntries->execute([$id]);
 $numEntries = $numEntries->fetchColumn();
 
+$amountPaid = $amountLeftToPay = $amountRefunded = $total = 0;
+if ($_SESSION['AccessLevel'] == 'Parent') {
+  $amountPaidQuery = $db->prepare("SELECT SUM(FeeToPay) FROM galaEntries INNER JOIN members ON members.MemberID = galaEntries.MemberID WHERE GalaID = ? AND Charged = ? AND members.UserID = ?");
+  $amountPaidQuery->execute([$id, 1, $_SESSION['UserID']]);
+  $amountPaid = $amountPaidQuery->fetchColumn();
+  $amountPaidQuery->execute([$id, 0, $_SESSION['UserID']]);
+  $amountLeftToPay = $amountPaidQuery->fetchColumn();
+  $total = $amountPaid + $amountLeftToPay;
+  $amountRefunded = $db->prepare("SELECT SUM(AmountRefunded) FROM galaEntries INNER JOIN members ON members.MemberID = galaEntries.MemberID WHERE GalaID = ? AND members.UserID = ?");
+  $amountRefunded->execute([$id, $_SESSION['UserID']]);
+  $amountRefunded = $amountRefunded->fetchColumn();
+} else {
+  $amountPaidQuery = $db->prepare("SELECT SUM(FeeToPay) FROM galaEntries WHERE GalaID = ? AND Charged = ?");
+  $amountPaidQuery->execute([$id, 1]);
+  $amountPaid = $amountPaidQuery->fetchColumn();
+  $amountPaidQuery->execute([$id, 0]);
+  $amountLeftToPay = $amountPaidQuery->fetchColumn();
+  $total = $amountPaid + $amountLeftToPay;
+  $amountRefunded = $db->prepare("SELECT SUM(AmountRefunded) FROM galaEntries WHERE GalaID = ?");
+  $amountRefunded->execute([$id]);
+  $amountRefunded = $amountRefunded->fetchColumn();
+}
+
 $entries = $db->prepare("SELECT * FROM galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID WHERE GalaID = ?");
 if ($_SESSION['AccessLevel'] == "Parent") {
   $entries = $db->prepare("SELECT * FROM galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID WHERE GalaID = ? AND UserID = ?");
@@ -144,6 +167,35 @@ include "galaMenu.php";
     <div class="col-sm-6 col-md-4">
       <h3 class="h6">Number of entries</h3>
       <p><?=$numEntries?></p>
+    </div>
+
+    <div class="col-sm-6 col-md-4">
+      <h3 class="h6"><?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>Total cost of your entries<?php } else { ?>Total cost of entries<?php } ?></h3>
+      <p>&pound;<?=number_format($total, 2)?></p>
+    </div>
+
+    <?php if ($_SESSION['AccessLevel'] != 'Parent' && $amountLeftToPay > 0) { ?>
+    <div class="col-sm-6 col-md-4">
+      <h3 class="h6">Total left to charge</h3>
+      <p>&pound;<?=number_format($amountLeftToPay, 2)?></p>
+    </div>
+    <?php } else if ($_SESSION['AccessLevel'] != 'Parent' && $amountRefunded > 0) { ?>
+    <div class="col-sm-6 col-md-4">
+      <h3 class="h6">Total after refunds</h3>
+      <p>&pound;<?=number_format($total - ($amountRefunded/100), 2)?></p>
+    </div>
+    <?php } ?>
+
+    <?php if ($_SESSION['AccessLevel'] == 'Parent' && $amountRefunded > 0) { ?>
+    <div class="col-sm-6 col-md-4">
+      <h3 class="h6">Total payable after refunds</h3>
+      <p>&pound;<?=number_format($total - ($amountRefunded/100), 2)?></p>
+    </div>
+    <?php } ?>
+
+    <div class="col-sm-6 col-md-4">
+      <h3 class="h6"><?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>Total refunded to you<?php } else { ?>Total refunded to parents<?php } ?></h3>
+      <p>&pound;<?=number_format($amountRefunded/100, 2)?></p>
     </div>
   </div>
 
