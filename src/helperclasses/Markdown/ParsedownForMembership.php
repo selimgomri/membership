@@ -3,6 +3,7 @@
 class ParsedownForMembership extends ParsedownExtra {
 
   private $allHeaders;
+  private $firstElementReturned;
 
   protected function inlineImage($excerpt) {
     $image = parent::inlineImage($excerpt);
@@ -30,8 +31,23 @@ class ParsedownForMembership extends ParsedownExtra {
     }
     $this->allHeaders[] = $Block['element']['text'];
 
-    return $Block;
+    if (sizeof($this->allHeaders) > 1) {
+      return $Block;
+    } else {
+      $Block['element']['name'] = 'span';
+      $Block['element']['text'] = 'Christopher Heppell, Chester-le-Street ASC and Swimming Club Data Systems';
+      $Block['element']['attributes'] = [
+        'class' => 'd-none vcard author',
+        'rel' => 'author',
+      ];
+      return $Block;
+    }
   }
+
+  protected function blockSetextHeader($Line, array $Block = null) {
+    return;
+  }
+
 
   public function getHeadings() {
     return $this->allHeaders;
