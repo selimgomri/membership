@@ -972,11 +972,22 @@ use Symfony\Component\DomCrawler\Crawler;
 
 function curl($url) {
   $ch = curl_init();  // Initialising cURL
+  curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36');
   curl_setopt($ch, CURLOPT_URL, $url);    // Setting cURL's URL option with the $url variable passed into the function
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); // Setting cURL's option to return the webpage data
   $data = curl_exec($ch); // Executing the cURL request and assigning the returned data to the $data variable
+  $error = true;
+  //pre(curl_getinfo($ch, CURLINFO_HTTP_CODE));
+  if (!curl_errno($ch) && (curl_getinfo($ch, CURLINFO_HTTP_CODE) == '200' || curl_getinfo($ch, CURLINFO_HTTP_CODE) || '404' && curl_getinfo($ch, CURLINFO_HTTP_CODE) || '400')) {
+    $error = false;
+  }
+  //pre($error);
   curl_close($ch);    // Closing cURL
-  return $data;   // Returning the data from the function
+  if (!$error) {
+    return $data;   // Returning the data from the function
+  } else {
+    return false;
+  }
 }
 
 function curl_scrape_between($data, $start, $end) {
@@ -993,61 +1004,63 @@ function curl_scrape_between($data, $start, $end) {
 }
 
 function getTimes($asa) {
-  global $link;
   $curlres =
   curl('https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' .
   $asa);
 
-  $start = '<table width="100%" style="page-break-before:always">';
-  $end = '</table>';
+  if ($curlres) {
+    $start = '<table width="100%" style="page-break-before:always">';
+    $end = '</table>';
 
-  $output = curl_scrape_between($curlres, $start, $end);
-  $output = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $output);
-  $output = preg_replace('/(<[^>]+) width=".*?"/i', '$1', $output);
+    $output = curl_scrape_between($curlres, $start, $end);
+    $output = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $output);
+    $output = preg_replace('/(<[^>]+) width=".*?"/i', '$1', $output);
 
-  $crawler = new Crawler($output);
-  $crawler = $crawler->filter('tr > td');
+    $crawler = new Crawler($output);
+    $crawler = $crawler->filter('tr > td');
 
-  $array = ['Event', 'CY_SC', 'SCPB', 'CY_LC', 'LCPB'];
-  $count = 0;
+    $array = ['Event', 'CY_SC', 'SCPB', 'CY_LC', 'LCPB'];
+    $count = 0;
 
-  foreach ($crawler as $domElement) {
-    $col = $count%5;
-    if ($col == 0) {
-      if ($domElement->textContent == "") {
-        $array['Event'][] = null;
-      } else {
-        $array['Event'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
+    foreach ($crawler as $domElement) {
+      $col = $count%5;
+      if ($col == 0) {
+        if ($domElement->textContent == "") {
+          $array['Event'][] = null;
+        } else {
+          $array['Event'][] = trim($domElement->textContent);
+        }
+      } else if ($col == 1) {
+        if ($domElement->textContent == "") {
+          $array['CY_SC'][] = null;
+        } else {
+          $array['CY_SC'][] = trim($domElement->textContent);
+        }
+      } else if ($col == 2) {
+        if ($domElement->textContent == "") {
+          $array['SCPB'][] = null;
+        } else {
+          $array['SCPB'][] = trim($domElement->textContent);
+        }
+      } else if ($col == 3) {
+        if ($domElement->textContent == "") {
+          $array['CY_LC'][] = null;
+        } else {
+          $array['CY_LC'][] = trim($domElement->textContent);
+        }
+      } else if ($col == 4) {
+        if ($domElement->textContent == "") {
+          $array['LCPB'][] = null;
+        } else {
+          $array['LCPB'][] = trim($domElement->textContent);
+        }
       }
-    } else if ($col == 1) {
-      if ($domElement->textContent == "") {
-        $array['CY_SC'][] = null;
-      } else {
-        $array['CY_SC'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
-      }
-    } else if ($col == 2) {
-      if ($domElement->textContent == "") {
-        $array['SCPB'][] = null;
-      } else {
-        $array['SCPB'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
-      }
-    } else if ($col == 3) {
-      if ($domElement->textContent == "") {
-        $array['CY_LC'][] = null;
-      } else {
-        $array['CY_LC'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
-      }
-    } else if ($col == 4) {
-      if ($domElement->textContent == "") {
-        $array['LCPB'][] = null;
-      } else {
-        $array['LCPB'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
-      }
+      $count++;
     }
-    $count++;
-  }
 
-  return $array;
+    return $array;
+  }
+  return false;
 }
 
 function getTimesInFull($asa, $swim, $course) {
