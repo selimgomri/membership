@@ -2,6 +2,7 @@
 
 <!-- THE HEPPELL FOOTER -->
 <footer>
+  <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
   <div
     class="cls-global-footer cls-global-footer-inverse cls-global-footer-body d-print-none mt-3 pb-0 focus-highlight">
     <div
@@ -74,6 +75,7 @@
       </div>
     </div>
   </div>
+  <?php } ?>
   <div class="cls-global-footer-legal">
     <div
       class="<?php if (isset($fluidContainer) && $fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
@@ -84,7 +86,7 @@
           </a>
           <p class="hidden-print">
             Designed and Built by <a class="text-white" href="https://corporate.myswimmingclub.co.uk"
-              target="_blank">Swimming Club Data Systems</a>. Licenced to <?=env('CLUB_NAME')?>.
+              target="_blank">Swimming Club Data Systems</a>. Licenced to <?=htmlspecialchars(env('CLUB_NAME'))?>.
           </p>
           <?php
   					$executionEndTime = microtime();

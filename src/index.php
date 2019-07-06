@@ -241,8 +241,13 @@ $route->group($get_group, function($clubcode = "CLSE") {
     header("Location: https://www.chesterlestreetasc.co.uk");
   });
 
+  // PWA Stuff
   $this->get('/manifest.webmanifest', function() {
     include 'controllers/pwa/manifest.php';
+  });
+
+  $this->get('/pwa', function() {
+    include 'controllers/pwa/set-pwa.php';
   });
 
   // Password Reset via Link

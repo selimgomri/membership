@@ -43,7 +43,7 @@ if ($customBackground) {
       </div>
     </noscript>
 
-    <?php if ($_SESSION['Browser']['Name'] == "Internet Explorer") {?> 
+    <?php if ($_SESSION['Browser']['Name'] == "Internet Explorer") {?>
     <div class="bg-warning py-3 d-print-none">
       <div class="<?=$container_class?>">
         <p class="h2">
@@ -61,7 +61,7 @@ if ($customBackground) {
     </div>
     <?php } ?>
 
-    <?php if (IS_EVALUATION_COPY === true) { ?>
+    <?php if (defined('IS_EVALUATION_COPY') && IS_EVALUATION_COPY) { ?>
     <div class="bg-secondary text-white py-2 d-print-none">
       <div class="<?=$container_class?>">
         <p class="mb-0">
@@ -117,11 +117,13 @@ if ($customBackground) {
 
     <div class="bg-dark">
       <div class="<?=$container_class?>">
+        <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
         <h1 class="d-none d-md-flex pt-4 pb-1 mb-0">
           <a href="<?=autoUrl("")?>" class="text-white">
             <?=mb_strtoupper(env('CLUB_NAME'))?>
           </a>
         </h1>
+        <?php } ?>
 
         <div class="">
           <div class="">
@@ -479,4 +481,8 @@ if ($customBackground) {
     <!-- END OF HEADERS -->
     <div class="mb-3"></div>
 
-    <div class="focus-highlight have-full-height" style="min-height:70vh">
+    <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
+    <div class="have-full-height" style="min-height:70vh">
+    <?php } else { ?>
+    <div class="have-full-height" style="min-height:calc(100vh - 7rem);">
+    <?php } ?>

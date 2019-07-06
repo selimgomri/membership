@@ -39,15 +39,14 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <meta name="viewport" content="width=device-width, initial-scale=1.0,
     user-scalable=no,maximum-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="apple-mobile-web-app-title" content="CLS ASC Accounts">
+  <meta name="apple-mobile-web-app-title" content="<?=htmlspecialchars(env('CLUB_SHORT_NAME'))?> Accounts">
   <meta name="format-detection" content="telephone=no">
   <meta name="googlebot" content="noarchive, nosnippet">
   <meta name="X-CLSW-System" content="Membership">
-  <meta name="twitter:site" content="@clsasc">
-  <meta name="twitter:creator" content="@clsasc">
   <meta name="og:type" content="website">
   <meta name="og:locale" content="en_GB">
-  <meta name="og:site_name" content="X Account">
+  <meta name="og:site_name" content="<?=htmlspecialchars(env('CLUB_NAME'))?> Account">
+  <link rel="manifest" href="<?=autoUrl("manifest.webmanifest")?>">
   <?php
     // Check if user has opted out of tracking or has DNT headers set before serving Google Analytics
     if (env('GOOGLE_ANALYTICS_ID') && (!$_SESSION['DisableTrackers'] && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1))) {
