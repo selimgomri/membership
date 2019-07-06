@@ -154,6 +154,10 @@ if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && isset($_SESSION['Us
   $currentUser = new User($_SESSION['UserID'], $db);
 }
 
+if (!isset($_SESSION['PWA']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])) {
+  $_SESSION['PWA'] = $_COOKIE[COOKIE_PREFIX . 'AutoLogin'];
+}
+
 if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'AutoLogin'] != "") {
   $sql = "SELECT `UserID`, `Time` FROM `userLogins` WHERE `Hash` = ? AND `Time` >= ? AND `HashActive` = ?";
 
