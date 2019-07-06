@@ -972,6 +972,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 function curl($url) {
   $ch = curl_init();  // Initialising cURL
+  curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 4); 
   curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36');
   curl_setopt($ch, CURLOPT_URL, $url);    // Setting cURL's URL option with the $url variable passed into the function
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); // Setting cURL's option to return the webpage data
