@@ -50,6 +50,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <meta name="og:type" content="website">
   <meta name="og:locale" content="en_GB">
   <meta name="og:site_name" content="Chester-le-Street ASC Account">
+  <link rel="manifest" href="<?=autoUrl("manifest.webmanifest")?>">
   <?php
     // Check if user has opted out of tracking or has DNT headers set before serving Google Analytics
     if (!$_SESSION['DisableTrackers'] && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1)) {

@@ -89,7 +89,7 @@ p.lead {
       </div>
     </noscript>
 
-    <?php if ($_SESSION['Browser']['Name'] == "Internet Explorer") {?> 
+    <?php if ($_SESSION['Browser']['Name'] == "Internet Explorer") {?>
     <div class="bg-warning py-3 d-print-none">
       <div class="<?=$container_class?>">
         <p class="h2">
@@ -128,6 +128,7 @@ p.lead {
     </div>
     <?php } ?>
 
+    <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
     <div class="text-white py-2 top-bar bg-primary-dark hide-a-underline" style="font-size:0.875rem;">
       <div class="<?=$container_class?> d-flex">
         <div class="mr-auto">
@@ -216,6 +217,7 @@ p.lead {
         </div>
       </div>
     </div>
+    <?php } ?>
 
     <div class="bg-primary">
       <div class="<?=$container_class?>">
@@ -578,4 +580,8 @@ p.lead {
     <!-- END OF HEADERS -->
     <div class="mb-3"></div>
 
+    <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
     <div class="have-full-height" style="min-height:70vh">
+    <?php } else { ?>
+    <div class="have-full-height" style="min-height:calc(100vh - 7rem);">
+    <?php } ?>

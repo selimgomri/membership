@@ -9,7 +9,12 @@ include BASE_PATH . "views/header.php";
 <div class="container">
   <div class="row">
     <div class="col-md-10 col-lg-8">
-      <h1>Welcome to the <?=CLUB_NAME?> Membership System</h1>
+
+      <?php if (isset($_SESSION['PWA']) && $_SESSION['PWA']) { ?>
+      <p class="lead">By proceeding to use this progressive web app you agree to our use of cookies.</p>
+      <?php } ?>
+
+      <h1>Welcome to the <?=htmlspecialchars(env('CLUB_NAME'))?> Membership System</h1>
       <p class="lead mb-5">
         The <?=CLUB_NAME?> Online Membership System allows you to manage your
         swimmers, enter competitions, stay up to date by email and make payments

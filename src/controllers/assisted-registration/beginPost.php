@@ -9,7 +9,7 @@ try {
 
   $forename = trim($_POST['first']);
   $surname = trim($_POST['last']);
-  $email = trim($_POST['email-address']);
+  $email = trim(mb_strtolower($_POST['email-address']));
   $mobile = "+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", trim($_POST['phone']))), '0'); // Removes anything that isn't a digit
   
   // The password will be used as a secure token allowing the parent to follow a link.
