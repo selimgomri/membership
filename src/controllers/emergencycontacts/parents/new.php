@@ -4,7 +4,7 @@ $use_white_background = true;
 $pagetitle = "New Emergency Contact";
 
 include BASE_PATH . 'views/header.php';
-if ($renewal_trap) {
+if (isset($renewal_trap) && $renewal_trap) {
 	include BASE_PATH . 'views/renewalTitleBar.php';
 }
 
@@ -12,12 +12,14 @@ if ($renewal_trap) {
 
 <div class="container">
 
+  <?php if (!isset($renewal_trap) || !$renewal_trap) { ?>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("emergency-contacts")?>">Emergency Contacts</a></li>
       <li class="breadcrumb-item active" aria-current="page">Add new</li>
     </ol>
   </nav>
+  <?php } ?>
 
   <div class="">
     <h1>

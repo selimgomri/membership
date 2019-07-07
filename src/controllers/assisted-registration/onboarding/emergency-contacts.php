@@ -7,7 +7,7 @@ $userInfo->execute([$_SESSION['UserID']]);
 $user = $userInfo->fetch(PDO::FETCH_ASSOC);
 
 $contacts = new EmergencyContacts($db);
-$contacts->byParent($_SESSION['UserID']);
+$contacts->byParent($user);
 
 $contactsArray = $contacts->getContacts();
 
@@ -21,26 +21,21 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		<?php if (isset($_SESSION['ErrorState'])) {
 			echo $_SESSION['ErrorState'];
 			unset($_SESSION['ErrorState']);
-			?><hr><?php
+			?><hr><?
 		} ?>
-		<form method="post">
+		<main>
 			<h1>Emergency Contacts</h1>
 			<p class="lead">These are your emergency contacts.</p>
 
-			<?php if (isset($_SESSION['AddNewSuccess'])) {
-			echo $_SESSION['AddNewSuccess'];
-			unset($_SESSION['AddNewSuccess']);
-		} ?>
-
 			<?php if (user_needs_registration($_SESSION['UserID'])) { ?>
-				<p class="border-bottom border-gray pb-3 mb-0">
+				<p class="border-bottom border-gray pb-2 mb-0">
 					We'll use these emergency contacts for all swimmers connected to your
 					account if we can't reach you on your phone number. You will be able
 					to change your phone number at any time in My Account, once you've
 					finished registration.</a>
 				</p>
 			<?php } else { ?>
-			<p class="border-bottom border-gray pb-3 mb-0">
+			<p class="border-bottom border-gray pb-2 mb-0">
 				We'll use these emergency contacts for all swimmers connected to your
 				account if we can't reach you on your phone number. You can change your
 				phone number in <a href="<?=autoUrl("my-account")?>">My Account</a>
@@ -85,27 +80,23 @@ include BASE_PATH . "views/renewalTitleBar.php";
 						</div>
 					</div>
 				</div>
-				<?php
+				<?
 			} ?>
 			</div>
 
-			<p class="">
+			<p class="mb-0">
 				<a href="<?= autoUrl("renewal/emergencycontacts/new") ?>" class="btn btn-secondary">Add a New Contact</a>
 			</p>
 
-			<p>Please inform people if you've added them as an emergency contact.</p>
+			<hr>
 
-			<?php if (sizeof($contactsArray) > 0) { ?>
 			<p>
 				Ready to move on?
 			</p>
-			<p>
-				<button type="submit" class="btn btn-success">Save and Continue</button>
+			<p class="mb-0">
+				<a href="<?=autoUrl("onboarding/emergency-contacts/done")?>" class="btn btn-success">Save and Continue</a>
 			</p>
-			<?php } else { ?>
-			<p>You must have at least two emergency contacts available (including yourself).</p>
-			<?php } ?>
-		</form>
+		</main>
 	</div>
 </div>
 

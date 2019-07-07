@@ -2,24 +2,23 @@
 
 if ($_SESSION['AccessLevel'] == "Parent") {
 	$this->get('/', function() {
-		global $link, $db;
-		$sql = "SELECT `MemberID` FROM `members` WHERE UserID = ?";
+		global $db;
+		
+		$query = $db->prepare("SELECT COUNT(*) FROM `members` WHERE UserID = ?");
 		try {
-			$query = $db->prepare($sql);
 			$query->execute([$_SESSION['UserID']]);
 		} catch (PDOException $e) {
 			halt(500);
 		}
-		$swimmers = sizeof($query->fetchAll(PDO::FETCH_ASSOC));
+		$swimmers = $query->fetchColumn();
 
-		$sql = "SELECT `MemberID` FROM `members` WHERE UserID = ? AND RR = ?";
+		$query = $db->prepare("SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = ?");
 		try {
-			$query = $db->prepare($sql);
-				$query->execute([$_SESSION['UserID'], 1]);
+			$query->execute([$_SESSION['UserID'], 1]);
 		} catch (PDOException $e) {
 			halt(500);
 		}
-		$new_swimmers = sizeof($query->fetchAll(PDO::FETCH_ASSOC));
+		$new_swimmers = $query->fetchColumn();
 
 		if ($swimmers != $new_swimmers) {
 			include 'newmember/Welcome.php';
@@ -29,8 +28,6 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 	});
 } else {
 	$this->get('/', function() {
-		global $link;
-
 		$id = 0;
 		include BASE_PATH . 'controllers/renewal/admin/list.php';
 	});

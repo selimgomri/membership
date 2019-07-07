@@ -51,9 +51,7 @@ if (isset($_POST['smsContactOK']) && $_POST['smsContactOK'] == 1) {
 
 if ($status) {
   try {
-    $updateUser = $db->prepare("UPDATE `users` SET `Forename` = >, `Surname` = ?,
-  	`EmailComms` = ?, `Mobile` = ?, `MobileComms` = ?
-  	WHERE `UserID` = ?");
+    $updateUser = $db->prepare("UPDATE `users` SET `Forename` = ?, `Surname` = ?, `EmailComms` = ?, `Mobile` = ?, `MobileComms` = ? WHERE `UserID` = ?");
     $updateUser->execute([
       $forename,
       $surname,
@@ -69,7 +67,7 @@ if ($status) {
       $renewal,
       $_SESSION['UserID']
     ]);
-        header("Location: " . currentUrl());
+		header("Location: " . currentUrl());
 	} catch (Exception $e) {
 		$status = false;
 		$statusMessage .= "<li>Database Error - Contact support</li>";

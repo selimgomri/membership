@@ -22,7 +22,7 @@ $pagetitle = "My Emergency Contacts";
 
 $url_path = "emergency-contacts";
 include BASE_PATH . 'views/header.php';
-if ($renewal_trap) {
+if (isset($renewal_trap) && $renewal_trap) {
 	include BASE_PATH . 'views/renewalTitleBar.php';
 	$url_path = "renewal/emergencycontacts";
 }

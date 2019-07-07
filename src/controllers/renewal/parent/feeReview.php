@@ -6,11 +6,11 @@ include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">
-	<div class="mb-3 p-3 bg-white rounded shadow">
+	<main class="">
 		<?php if (isset($_SESSION['ErrorState'])) {
 			echo $_SESSION['ErrorState'];
 			unset($_SESSION['ErrorState']);
-			?><hr><?
+			?><hr><?php
 		} ?>
 		<h1>Your Fees</h1>
 		<form method="post">
@@ -26,7 +26,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				<button type="submit" class="btn btn-success">Save and Continue</button>
 			</div>
 		</form>
-	</div>
+	</main>
 </div>
 
 <?php include BASE_PATH . "views/footer.php";

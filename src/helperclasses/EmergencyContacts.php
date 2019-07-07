@@ -5,13 +5,15 @@ class EmergencyContacts {
 	private $dbconn;
 
 	public function __construct($dbconn) {
-		$this->$contacts = [];
+		$this->contacts = [];
 		$this->dbconn = $dbconn;
 	}
 
 	public function byParent($id) {
     $sql = $this->dbconn->prepare("SELECT ID, UserID, Name, ContactNumber FROM `emergencyContacts` WHERE `UserID` = ?");
-    $sql->execute([$id]);
+    $sql->execute([
+			(int) $id
+		]);
 		while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 			$new = new EmergencyContact();
 			$new->existing(

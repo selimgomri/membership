@@ -1181,26 +1181,19 @@ function getTimesInFull($asa, $swim, $course) {
 }
 
 function user_needs_registration($user) {
-  /*
   global $db;
-  $sql = "SELECT `RR`, `AccessLevel` FROM `users` WHERE `UserID` = ?";
   try {
-  	$query = $db->prepare($sql);
-  	$query->execute([$user]);
-  } catch (PDOException $e) {
-  	halt(500);
-  }
+    $query = $db->prepare("SELECT RR FROM users WHERE UserID = ?");
+    $query->execute([$user]);
 
-  $row = $query->fetch(PDO::FETCH_ASSOC);
-
-  if (!$row) {
+    if ($query->fetchColumn()) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (Exception $e) {
     return false;
-  } else if ($row['AccessLevel'] != "Parent" || ($row['AccessLevel'] == "Parent" && $row['RR'] == 0)) {
-    return false;
-  } else {
-    return true;
   }
-  */
   return false;
 }
 

@@ -1,13 +1,16 @@
 <?php
 
+/*
 $this->get('/', function() {
   include 'AboutAC.php';
 });
+*/
 
 /**
  * Begin user data collection
  */
 
+ /*
 if ($_SESSION['AC-Registration']['Stage'] == 'UserDetails') {
   $this->get('/user-details', function() {
     include 'CollectUserDetails.php';
@@ -119,10 +122,13 @@ if ($_SESSION['AC-Registration']['Stage'] == 'AutoAccountSetup' || true) {
 		});
 	});
 
+*/
+	
 /**
  * Present users with splash screen
  */
 
+ /* 
 $this->get('/{hash}', function($hash) {
   include 'BeginRegistration.php';
 });
@@ -130,3 +136,4 @@ $this->get('/{hash}', function($hash) {
 $this->post('/{hash}', function($hash) {
   include 'BeginRegistrationPost.php';
 });
+*/

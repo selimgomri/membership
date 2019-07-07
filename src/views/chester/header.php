@@ -13,7 +13,7 @@ if (!isset($_SESSION['AlphaBeta'])) {
 }
 
 $bg = "bg-white";
-if ($customBackground) {
+if (isset($customBackground) && $customBackground) {
   $bg = $customBackground;
 }
 ?>
@@ -98,10 +98,15 @@ p.lead {
           </strong>
         </p>
         <p>
-          It looks like you're using Internet Explorer which we no longer support so we recommend you upgrade to a new browser which we do support as soon as possible. <strong><a href="http://browsehappy.com/" target="_blank">Upgrade your browser today <i class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
+          It looks like you're using Internet Explorer which we no longer support so we recommend you upgrade to a new
+          browser which we do support as soon as possible. <strong><a href="http://browsehappy.com/"
+              target="_blank">Upgrade your browser today <i class="fa fa-external-link"
+                aria-hidden="true"></i></a></strong>.
         </p>
         <p class="mb-0">
-          <?=htmlspecialchars(env('CLUB_NAME'))?> recommends you <strong><a  href="https://www.firefox.com">install Firefox by Mozilla</a></strong>. Firefox has great protections for your privacy with built in features including tracking protection.
+          <?=htmlspecialchars(env('CLUB_NAME'))?> recommends you <strong><a href="https://www.firefox.com">install
+              Firefox by Mozilla</a></strong>. Firefox has great protections for your privacy with built in features
+          including tracking protection.
         </p>
       </div>
     </div>
@@ -109,13 +114,11 @@ p.lead {
 
     <?php
     $edit_link = null;
-    if (!$people) {
+    if (isset($allow_edit_id)) {
       $edit_link = autoUrl("posts/" . $allow_edit_id . "/edit");
-    } else if ($people && $page_is_mine) {
-      $edit_link = autoUrl("people/me");
     }
 
-    if ($allow_edit && (($_SESSION['AccessLevel'] != "Parent" &&
+    if (isset($allow_edit) && $allow_edit && (($_SESSION['AccessLevel'] != "Parent" &&
     $_SESSION['AccessLevel'] != "Coach" && $edit_link != null) || $page_is_mine)) { ?>
     <div class="bg-dark text-white box-shadow py-2 d-print-none">
       <div class="<?=$container_class?>">
@@ -237,7 +240,7 @@ p.lead {
             <span class="navbar-toggler-icon"></span>
           </button>
 
-          <?php if (!$use_website_menu) { ?>
+          <?php if (!isset($use_website_menu) || !$use_website_menu) { ?>
           <div class="collapse navbar-collapse offcanvas-collapse" id="chesterNavbar">
             <?php if (!user_needs_registration($_SESSION['UserID'])) { ?>
             <ul class="navbar-nav mr-auto">
@@ -338,7 +341,8 @@ p.lead {
               <?php if ($_SESSION['AccessLevel'] == "Admin" ||
           $_SESSION['AccessLevel'] == "Galas") { ?>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="usersMenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="usersMenu" role="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
                   Users
                 </a>
                 <div class="dropdown-menu" aria-labelledby="usersMenu">
@@ -533,7 +537,7 @@ p.lead {
             </ul>
             <?php if (!empty($_SESSION['LoggedIn'])) {
         global $currentUser;
-        $user_name = mb_ereg_replace(" +" , '&nbsp;', htmlspecialchars($currentUser->getName())); ?>
+        $user_name = preg_replace(" +" , '&nbsp;', htmlspecialchars($currentUser->getName())); ?>
             <ul class="navbar-nav">
               <!--<a class="btn btn-sm btn-outline-light my-2 my-sm-0" href="<?=autoUrl("logout")?>">Logout</a>-->
               <li class="nav-item dropdown">
@@ -548,7 +552,8 @@ p.lead {
                   <a class="dropdown-item" href="<?php echo autoUrl("my-account/email") ?>">Your Email Options</a>
                   <a class="dropdown-item" href="<?php echo autoUrl("my-account/general") ?>">Your General Options</a>
                   <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-                  <a class="dropdown-item" href="<?php echo autoUrl("emergency-contacts") ?>">Your Emergency Contacts</a>
+                  <a class="dropdown-item" href="<?php echo autoUrl("emergency-contacts") ?>">Your Emergency
+                    Contacts</a>
                   <?php } ?>
                   <a class="dropdown-item" href="<?php echo autoUrl("my-account/password") ?>">Your Password</a>
                   <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
@@ -556,7 +561,8 @@ p.lead {
                     History</a>
                   <a class="dropdown-item" href="<?php echo autoUrl("my-account/addswimmer") ?>">Add a Swimmer</a>
                   <?php } ?>
-                  <a class="dropdown-item" href="<?php echo autoUrl("my-account/loginhistory") ?>">Your Login History</a>
+                  <a class="dropdown-item" href="<?php echo autoUrl("my-account/loginhistory") ?>">Your Login
+                    History</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" target="_blank"
                     href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">Help</a>
@@ -582,6 +588,6 @@ p.lead {
 
     <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
     <div class="have-full-height" style="min-height:70vh">
-    <?php } else { ?>
-    <div class="have-full-height" style="min-height:calc(100vh - 7rem);">
-    <?php } ?>
+      <?php } else { ?>
+      <div class="have-full-height" style="min-height:calc(100vh - 7rem);">
+        <?php } ?>
