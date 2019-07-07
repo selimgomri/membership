@@ -31,7 +31,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
 
 <head>
   <meta charset="utf-8">
-  <?php if ($pagetitle != "" || $pagetitle != null)  { ?>
+  <?php if (isset($pagetitle) && ($pagetitle != "" || $pagetitle != null))  { ?>
   <title><?=$pagetitle?> - <?=htmlspecialchars(env('CLUB_NAME'))?> Membership</title>
   <?php } else { ?>
   <title><?=htmlspecialchars(env('CLUB_NAME'))?> Membership</title>
@@ -53,7 +53,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <link rel="manifest" href="<?=autoUrl("manifest.webmanifest")?>">
   <?php
     // Check if user has opted out of tracking or has DNT headers set before serving Google Analytics
-    if (!$_SESSION['DisableTrackers'] && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1)) {
+    if ((!isset($_SESSION['DisableTrackers']) || !$_SESSION['DisableTrackers']) && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1)) {
     ?>
   <meta name="X-SCDS-Membership-Tracking" content="yes">
   <script async>

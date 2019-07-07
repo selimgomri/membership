@@ -153,7 +153,7 @@ p.lead {
         <span class="d-flex" id="top-bar-visible">
         </span>
 
-        <?php if ($_SESSION['LoggedIn']) { ?>
+        <?php if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn']) { ?>
         <span class="d-none" id="top-bar-login-status">1</span>
         <?php } else { ?>
         <span class="d-none" id="top-bar-login-status">0</span>
@@ -241,7 +241,7 @@ p.lead {
             <span class="navbar-toggler-icon"></span>
           </button>
 
-          <?php if ((isset($_SESSION['UserID']) && !user_needs_registration($_SESSION['UserID'])) && (!isset($use_website_menu) || !$use_website_menu)) { ?>
+          <?php if (!(isset($_SESSION['UserID']) && user_needs_registration($_SESSION['UserID'])) && (!isset($use_website_menu) || !$use_website_menu)) { ?>
           <div class="collapse navbar-collapse offcanvas-collapse" id="chesterNavbar">
             <ul class="navbar-nav mr-auto">
               <?php if (!empty($_SESSION['LoggedIn'])) { ?>

@@ -1,6 +1,6 @@
 <?php
 
-
+/*
 // ----------------------------------------------------------------------------------------------------
 // - Display Errors
 // ----------------------------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ function ErrorHandler($type, $message, $file, $line)
 };
 
 $old_error_handler = set_error_handler("ErrorHandler");
-
+*/
 
 // Do not reveal PHP when sending mail
 ini_set('mail.add_x_header', 'Off');
@@ -289,7 +289,7 @@ if (isset($_SESSION['UserID'])) {
   $currentUser = new User($_SESSION['UserID'], $db);
 }
 
-if ($_SESSION['LoggedIn'] && !isset($_SESSION['DisableTrackers'])) {
+if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && !isset($_SESSION['DisableTrackers'])) {
   $_SESSION['DisableTrackers'] = filter_var(getUserOption($_SESSION['UserID'], "DisableTrackers"), FILTER_VALIDATE_BOOLEAN);
 }
 

@@ -139,6 +139,13 @@ if ($hasDD) {
 		} catch (PDOException $e) {
 			halt(500);
 		}
+
+		// Remove from status tracker
+		$delete = $db->prepare("DELETE FROM renewalProgress WHERE UserID = ? AND RenewalID = ?");
+		$delete->execute([
+			$_SESSION['UserID'],
+			$renewal
+		]);
 		header("Location: " . autoUrl(""));
 	} else {
 		header("Location: " . autoUrl("renewal/go"));
