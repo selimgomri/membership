@@ -58,7 +58,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="form-group">
           <label for="email-address">Email Address</label>
-          <input type="email" class="form-control" id="email-address" name="email-address" placeholder="name@example.com" required value="<?=htmlspecialchars($email)?>">
+          <input type="email" class="form-control text-lowercase" id="email-address" name="email-address" placeholder="name@example.com" required value="<?=htmlspecialchars($email)?>">
           <div class="invalid-feedback">
             Please enter a valid email address.
           </div>

@@ -11,16 +11,16 @@ include BASE_PATH . "views/header.php";
     <h1>Reset your password</h1>
     <form method="post">
       <div class="row">
-        <div class="col-md-8 col-lg-5">
+        <div class="col-lg-8">
           <div class="form-group">
             <label for="email-address">
               Email Address
             </label>
-            <input type="email" class="form-control" name="email-address"
+            <input type="email" class="form-control text-lowercase" name="email-address"
             id="email-address" placeholder="hello@example.com" required>
            </div>
            <div class="g-recaptcha mb-3"
-           data-sitekey="6Lc4U0AUAAAAAOM613z7FDK5rsyPVR_IT0iXgBSA"
+           data-sitekey="<?=htmlspecialchars(env('GOOGLE_RECAPTCHA_PUBLIC'))?>"
            data-callback="enableBtn"></div>
 
           <p>
@@ -28,9 +28,8 @@ include BASE_PATH . "views/header.php";
             btn-primary btn-lg" value="Request Password Change">
           </p>
 
-          <p class="mb-0">
-            If an account exists with email address you submit, we will send you
-            a link by email to reset your password.
+          <p>
+            If an account exists with email address you submit, we will send you a link by email to reset your password.
           </p>
         </div>
       </div>

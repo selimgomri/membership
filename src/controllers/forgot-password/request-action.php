@@ -10,20 +10,16 @@ $captchaStatus = null;
 
 #
 # Verify captcha
-$post_data = http_build_query(
-  array(
-    'secret' => 	'6Lc4U0AUAAAAAIrWOxxxwvU6gz_149mZCZc8VEY8',
-    'response' => $_POST['g-recaptcha-response'],
-    'remoteip' => $_SERVER['REMOTE_ADDR']
-  )
-);
-$opts = array('http' =>
-  array(
-    'method'  => 'POST',
-    'header'  => 'Content-type: application/x-www-form-urlencoded',
-    'content' => $post_data
-  )
-);
+$post_data = http_build_query([
+  'secret' => env('GOOGLE_RECAPTCHA_SECRET'),
+  'response' => $_POST['g-recaptcha-response'],
+  'remoteip' => $_SERVER['REMOTE_ADDR']
+]);
+$opts = array('http' => [
+  'method'  => 'POST',
+  'header'  => 'Content-type: application/x-www-form-urlencoded',
+  'content' => $post_data
+]);
 $context  = stream_context_create($opts);
 $response = file_get_contents('https://www.google.com/recaptcha/api/siteverify', false, $context);
 $result = json_decode($response);
@@ -67,7 +63,6 @@ else {
 
     // PHP Email
     $subject = "Password Reset for " . $row['Forename'] . " " . $row['Surname'];
-    $to =  "" . $row['Forename'] . " " . $row['Surname'] . " <" . $row['EmailAddress'] . ">";
     $sContent = '
     <h1>Hello ' . htmlspecialchars($row['Forename']) . '</h1>
     <p>Here\'s your <a href="' . autoUrl("resetpassword/auth/" . $resetLink) . '">password reset link - ' . autoUrl("resetpassword/auth/" . $resetLink) . '</a>.</p>
@@ -75,9 +70,9 @@ else {
     <p>If you did not request a password reset, please delete and ignore this email.</p>
     ';
 
-    if (notifySend($to, $subject, $sContent, $row['Forename'] . " " .
+    if (notifySend(null, $subject, $sContent, $row['Forename'] . " " .
     $row['Surname'], $row['EmailAddress'], ["Email" =>
-    "password-help@chesterlestreetasc.co.uk", "Name" => CLUB_NAME . " Account Help"])) {
+    "password-help@" . env('EMAIL_DOMAIN'), "Name" => env('CLUB_NAME') . " Account Help"])) {
     ?>
       <div class="container-fluid">
         <div class="row justify-content-center">

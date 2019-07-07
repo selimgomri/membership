@@ -16,6 +16,12 @@ $_SERVER['SERVER_PORT'] = 443;
 require BASE_PATH .'vendor/autoload.php';
 require "helperclasses/ClassLoader.php";
 
+if (env('COOKIE_PREFIX')) {
+  define('COOKIE_PREFIX', env('COOKIE_PREFIX'));
+} else {
+  define('COOKIE_PREFIX', 'SCDS_MEMBERSHIP_SYSTEMS_');
+}
+
 use Symfony\Component\DomCrawler\Crawler;
 use GeoIp2\Database\Reader;
 
@@ -62,11 +68,6 @@ if ($custom_domain_mode) {
 }
 
 $config_file = $config;
-if (mb_strlen($cookie_prefix) > 0) {
-  define('COOKIE_PREFIX', $cookie_prefix);
-} else {
-  define('COOKIE_PREFIX', 'CLS-Membership-');
-}
 
 require $config_file;
 require 'default-config-load.php';
@@ -154,8 +155,8 @@ if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && isset($_SESSION['Us
   $currentUser = new User($_SESSION['UserID'], $db);
 }
 
-if (!isset($_SESSION['PWA']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])) {
-  $_SESSION['PWA'] = $_COOKIE[COOKIE_PREFIX . 'AutoLogin'];
+if (!isset($_SESSION['PWA']) && isset($_COOKIE[COOKIE_PREFIX . 'PWA'])) {
+  $_SESSION['PWA'] = $_COOKIE[COOKIE_PREFIX . 'PWA'];
 }
 
 if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'AutoLogin'] != "") {

@@ -18,7 +18,7 @@ include BASE_PATH . "views/header.php";
 ?>
 
 <div class="container">
-  <h1 class="mb-5">Sign in using your <?=CLUB_NAME?> Account</h1>
+  <h1 class="mb-5">Sign in using your <?=htmlspecialchars(env('CLUB_NAME'))?> Account</h1>
   <div class="row">
     <div class="col-md-8 col-lg-5">
       <!--
@@ -41,7 +41,7 @@ include BASE_PATH . "views/header.php";
       <form method="post" action="<?=autoUrl("")?>" name="loginform" id="loginform" class="needs-validation" novalidate>
         <div class="form-group">
           <label for="email-address">Email Address</label>
-          <input type="email" name="email-address" id="email-address" class="form-control form-control-lg" <?php if ($errorState) { ?> value="<?=htmlspecialchars($username)?>"<?php } ?> required autofocus placeholder="yourname@example.com" autocomplete="email">
+          <input type="email" name="email-address" id="email-address" class="form-control form-control-lg text-lowercase" <?php if ($errorState) { ?> value="<?=htmlspecialchars($username)?>"<?php } ?> required autofocus placeholder="yourname@example.com" autocomplete="email">
           <div class="invalid-feedback">
             Please enter a valid email address.
           </div>
@@ -83,7 +83,7 @@ include BASE_PATH . "views/header.php";
         </div>
       </form>
 
-      <?php if (defined('IS_CLS') && IS_CLS) { ?>
+      <?php if (env('IS_CLS')) { ?>
       <p class="small mb-0">
         Support Helpline: <a class=""
         href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>
@@ -111,13 +111,10 @@ include BASE_PATH . "views/header.php";
 
       <!--
       <p class="small mb-5">
-        Unauthorised access to or misuse of this system is prohibited and
-        constitutes an offence under the Computer Misuse Act 1990. If you
-        disclose any information obtained through this system without authority
-        then <?=CLUB_NAME?> or Chester-le-Street ASC Club Digital Services may
-        take legal action against you.
+        Unauthorised access to or misuse of this system is prohibited and constitutes an offence under the Computer Misuse Act 1990. If you disclose any information obtained through this system without authority then <?=htmlspecialchars(env('CLUB_NAME'))?> or Swimming Club Data Systems may take legal action against you.
       </p>
       -->
+        
     </div>
   </div>
 </div>

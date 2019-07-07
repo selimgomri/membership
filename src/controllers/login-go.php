@@ -23,7 +23,7 @@ if ($_POST['LoginSecurityValue'] == $_SESSION['LoginSec']) {
 
 if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($security_status)) {
   // Let the user login
-  $username = trim(htmlspecialchars($_POST['email-addresss']));
+  $username = trim(mb_strtolower($_POST['email-addresss']));
   $target = ltrim(trim($_POST['target']), '/');
 
   $username = preg_replace('/\s+/', '', $username);
