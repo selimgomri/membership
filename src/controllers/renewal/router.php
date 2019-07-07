@@ -1,8 +1,6 @@
 <?php
 
-$access = $_SESSION['AccessLevel'];
-
-if ($access == "Parent") {
+if ($_SESSION['AccessLevel'] == "Parent") {
 	// Renewal Home
 	$this->get('/', function() {
 		global $link;
@@ -60,37 +58,35 @@ if ($access == "Parent") {
 		$this->get('/edit/{id}:int', function($id) {
 			global $link;
 			$renewal_trap = true;
-			require('controllers/emergencycontacts/parents/edit.php');
+			require BASE_PATH . 'controllers/emergencycontacts/parents/edit.php';
 		});
 
 		$this->post('/edit/{id}:int', function($id) {
 			global $link;
 			$renewal_trap = true;
-			require('controllers/emergencycontacts/parents/editUpdate.php');
+			require BASE_PATH . 'controllers/emergencycontacts/parents/editUpdate.php';
 		});
 
 		$this->get('/new', function() {
-			global $link;
 			$renewal_trap = true;
-			require('controllers/emergencycontacts/parents/new.php');
+			require BASE_PATH . 'controllers/emergencycontacts/parents/new.php';
 		});
 
 		$this->post('/new', function() {
-			global $link;
 			$renewal_trap = true;
-			require('controllers/emergencycontacts/parents/newAction.php');
+			require BASE_PATH . 'controllers/emergencycontacts/parents/newAction.php';
 		});
 
 		$this->get('/{id}:int/delete', function($id) {
 			global $link;
 			$renewal_trap = true;
-			require('controllers/emergencycontacts/parents/delete.php');
+			require BASE_PATH . 'controllers/emergencycontacts/parents/delete.php';
 		});
 
 	});
 }
 
-if ($access == "Admin") {
+if ($_SESSION['AccessLevel'] == "Admin") {
 	$this->get('/', function() {
 		include 'admin/home.php';
 	});

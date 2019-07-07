@@ -191,7 +191,7 @@
 <?php } ?>
 <script defer src="<?=autoUrl("public/js/popper.min.js")?>"></script>
 <script defer src="<?=autoUrl("public/js/bootstrap.min.js")?>"></script>
-<?php if ($use_website_menu) { ?>
+<?php if (isset($use_website_menu) && $use_website_menu) { ?>
 <script defer src="https://static.chesterlestreetasc.co.uk/global/headers/MainSiteMenu.js"></script>
 <?php } ?>
 </body>

@@ -1,5 +1,4 @@
 <?php
-
 global $db;
 
 $userDetails = $db->prepare("SELECT * FROM users WHERE UserID = ?");
@@ -12,12 +11,10 @@ $surname = $row['Surname'];
 $access = $row['AccessLevel'];
 $userID = $row['UserID'];
 $mobile = $row['Mobile'];
-$emailComms = $row['EmailComms'];
-$mobileComms = $row['MobileComms'];
-if ($emailComms==1) {
+if ($row['EmailComms']) {
 	$emailChecked = " checked ";
 }
-if ($mobileComms==1) {
+if ($row['MobileComms']) {
 	$mobileChecked = " checked ";
 }
 
@@ -38,32 +35,31 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	<form method="post">
 		<div class="">
 		  <h2>Your Details</h2>
-		  <p class="border-bottom border-gray pb-2">What we know about you.</p>
 	    <div class="form-group">
 	        <label for="forename">Name</label>
-	        <input type="text" class="form-control" name="forename" id="forename" placeholder="Forename" value="<?php echo $forename ?>">
+	        <input type="text" class="form-control" name="forename" id="forename" placeholder="Forename" value="<?=htmlspecialchars($forename)?>">
 	     </div>
 	     <div class="form-group">
 	        <label for="surname">Surname</label>
-	        <input type="text" class="form-control" name="surname" id="surname" placeholder="Surname" value="<?php echo $surname ?>">
+	        <input type="text" class="form-control" name="surname" id="surname" placeholder="Surname" value="<?=htmlspecialchars($surname)?>">
 	    </div>
 	     <div class="form-group">
 	        <label for="email">Email</label>
-	        <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value="<?php echo $email ?>" disabled>
+	        <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value="<?=htmlspecialchars($email)?>" disabled>
 	    </div>
 	    <div class="form-group">
 	      <div class="custom-control custom-checkbox">
-	        <input type="checkbox" class="custom-control-input" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?php echo $emailChecked ?>>
-	        <label class="custom-control-label" for="emailContactOK">Check this to receive news by email</label>
+	        <input type="checkbox" class="custom-control-input" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?=$emailChecked?>>
+	        <label class="custom-control-label" for="emailContactOK">Check this to receive news and messages from squad coaches by email</label>
 	        <small id="emailContactOKHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small>
 	      </div>
 	    </div>
 	    <div class="form-group">
 	      <label for="mobile">Mobile Number</label>
-	      <input type="tel" class="form-control" name="mobile" id="mobile" aria-describedby="mobileHelp" placeholder="Mobile Number" value="<?php echo $mobile ?>">
+	      <input type="tel" class="form-control" name="mobile" id="mobile" aria-describedby="mobileHelp" placeholder="Mobile Number" value="<?=htmlspecialchars($mobile)?>">
 	      <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
 	    </div>
-	    <div class="form-group mb-0">
+	    <div class="form-group">
 	      <div class="custom-control custom-checkbox">
 	        <input type="checkbox" class="custom-control-input" value="1" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK" <?php echo $mobileChecked ?>>
 	        <label class="custom-control-label" for="smsContactOK">Check this if you would like to receive text messages</label>

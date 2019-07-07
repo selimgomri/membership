@@ -1,6 +1,9 @@
 <?php
 
-$user = mysqli_real_escape_string($link, $_SESSION['UserID']);
+global $db;
+global $systemInfo;
+
+$user = $_SESSION['UserID'];
 $partial_reg = false;//isPartialRegistration();
 
 $partial_reg_require_topup = false;
@@ -18,48 +21,52 @@ if ($partial_reg) {
 	}
 }
 
-$sql = "SELECT * FROM `members` WHERE `members`.`UserID` = '$user' AND
-`ClubPays` = '0';";
-$result = mysqli_query($link, $sql);
+$sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ? AND `ClubPays` = '0'");
+$sql->execute([$_SESSION['UserID']]);
 
 $clubFee = 0;
 $totalFee = 0;
 
-$payingSwimmerCount = mysqli_num_rows($result);
+$payingSwimmerCount = $sql->fetchColumn();
 
 if ($payingSwimmerCount == 1) {
-	$clubFee = 4000;
+	$clubFee = $systemInfo->getSystemOption('ClubFeeIndividual');
 } else if ($partial_reg_require_topup) {
-	$clubFee = 1000;
+	$clubFee = $systemInfo->getSystemOption('ClubFeeFamily') - $clubFee;
 } else if ($payingSwimmerCount > 1 && !$partial_reg) {
-	$clubFee = 5000;
+	$clubFee = $systemInfo->getSystemOption('ClubFeeIndividual');
 } else {
 	$clubFee = 0;
 }
 
 if ($partial_reg) {
 	$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
-	members.SquadID WHERE `members`.`UserID` = '$user' && `members`.`RR` = 1;";
+	members.SquadID WHERE `members`.`UserID` = ? && `members`.`RR` = 1";
 } else {
 	$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
-	members.SquadID WHERE `members`.`UserID` = '$user';";
+	members.SquadID WHERE `members`.`UserID` = ?";
 }
-$result = mysqli_query($link, $sql);
-$count = mysqli_num_rows($result);
+$getMembers = $db->prepare($sql);
+$getMembers->execute([$_SESSION['UserID']]);
+
+$member = $getMembers->fetchAll(PDO::FETCH_ASSOC);
+$count = sizeof($member);
 
 $totalFee += $clubFee;
 
 $asaFees = [];
-$member = [];
+
+$asa1 = $systemInfo->getSystemOption('ASA-County-Fee-L1') + $systemInfo->getSystemOption('ASA-Regional-Fee-L1') + $systemInfo->getSystemOption('ASA-National-Fee-L1');
+$asa2 = $systemInfo->getSystemOption('ASA-County-Fee-L2') + $systemInfo->getSystemOption('ASA-Regional-Fee-L2') + $systemInfo->getSystemOption('ASA-National-Fee-L2');
+$asa3 = $systemInfo->getSystemOption('ASA-County-Fee-L3') + $systemInfo->getSystemOption('ASA-Regional-Fee-L3') + $systemInfo->getSystemOption('ASA-National-Fee-L3');
 
 for ($i = 0; $i < $count; $i++) {
-	$member[$i] = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ClubPays']) {
-		$asaFees[$i] = ASA_FEE_1;
+		$asaFees[$i] = $asa1;
 	} else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ClubPays']) {
-		$asaFees[$i] = ASA_FEE_2;
+		$asaFees[$i] = $asa3;
 	} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ClubPays']) {
-		$asaFees[$i] = ASA_FEE_3;
+		$asaFees[$i] = $asa3;
 	}
 	$totalFee += $asaFees[$i];
 }
@@ -79,24 +86,22 @@ include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">
-	<form method="post" class="mb-3 p-3 bg-white rounded shadow">
-		<h1 class="border-bottom border-gray pb-2">
+	<form method="post">
+		<h1>
 			<?= $title ?>
 		</h1>
 		<p class="lead">
-		  There's just one more step to go. We now need you to confirm your membership renewal.
+		  There's just one more step to go. We now need you to confirm your membership <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?>.
 		</p>
 		<p class="lead">
-			These Fees include your Swim England Membership fees for the governing bodies at
-			National, Regional and County Level.
+			These fees include your Swim England membership fees for the sport's governing bodies at National, Regional and County Level.
 		</p>
 		<?php $nf = "next";
 		if ($renewal == 0) {
 			$nf = "first";
 		}; ?>
 		<p>
-			You will pay these fees as part of your <?= $nf ?> Direct Debit payment to
-			<?=CLUB_NAME?>.
+			You will pay these fees as part of your <?= $nf ?> Direct Debit payment to <?=htmlspecialchars(env('CLUB_NAME'))?>.
 		</p>
 
 		<h2>Your Membership Fees</h2>
@@ -142,12 +147,11 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		<?php if ($payingSwimmerCount > 1) {
 			?>
 			<p class="lead">
-				You <?php if ($renewal == 0) { ?>will <?php } ?>pay for a family membership,
-				covering all of your swimmers at a reduced cost.
+				You <?php if ($renewal == 0) { ?>will <?php } ?>pay for a family membership, covering all of your swimmers at a reduced cost.
 			</p>
-			<?
+			<?php
 		} ?>
- 		<p>Your club membership fee is &pound;<?php echo $clubFeeString; ?></p>
+ 		<p>Your club membership fee is &pound;<?=$clubFeeString?></p>
 
 		<h2>Swim England Membership Fees</h2>
 		<div class="table-responsive-md">
@@ -172,7 +176,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 					</tr>
 				</thead>
 				<tbody>
-			<?
+			<?php
 			for ($i = 0; $i < $count; $i++) {
 				$asaFeesString;
 				if ($member[$i]['ClubPays']) {
@@ -183,7 +187,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				?>
 				<tr>
 					<td>
-						<?php echo $member[$i]['MForename'] . " " . $member[$i]['MSurname']; ?>
+						<?=htmlspecialchars($member[$i]['MForename'] . " " . $member[$i]['MSurname'])?>
 					</td>
 					<td>
 						&pound;<?php echo $asaFeesString; ?>
@@ -205,23 +209,19 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		</div>
 
 		<p>
-			Your total renewal fee will be &pound;<?php echo $totalFeeString; ?>. By
-			continuing to complete your membership renewal, you confirm that you will
-			pay this amount as part of your next Direct Debit Payment.
+			Your total <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?> fee will be &pound;<?=$totalFeeString?>. By continuing to complete your membership <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?>, you confirm that you will pay this amount as part of your <?= $nf ?> Direct Debit Payment.
 		</p>
 		<?php if (!userHasMandates($_SESSION['UserID'])) { ?>
 			<p>
-				We now need you to set up your Direct Debit agreement with
-				<?=CLUB_NAME?>. We will redirect you to our payments system where
-				you will setup a Direct Debit.
+				We now need you to set up your Direct Debit agreement with <?=htmlspecialchars(env('CLUB_NAME'))?>. We will redirect you to our payments system where you will setup a Direct Debit.
 			</p>
 		<?php } else { ?>
 			<p>
 				You're now ready to complete your <?php if ($renewal == 0) {
-				?>Registration<?php } else { ?>Renewal<?php } ?>.
+				?>registration<?php } else { ?>renewal<?php } ?>.
 			</p>
 		<?php } ?>
-		<p class="mb-0">
+		<p>
 			<button type="submit" class="btn btn-success btn-lg">
 				<?php if (!userHasMandates($_SESSION['UserID'])) { ?>
 					Setup Direct Debit
@@ -235,5 +235,6 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	</form>
 </div>
 
-<?
+<?php
+
 include BASE_PATH . 'views/footer.php';

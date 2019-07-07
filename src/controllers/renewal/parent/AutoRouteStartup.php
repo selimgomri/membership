@@ -18,14 +18,16 @@ function renewalProgress($user) {
 		BY renewals.ID DESC, renewalProgress.ID DESC");
 	}
 	$details->execute([$user]);
-	return $details->fetch(PDO::FETCH_ASSOC);
+	$details = $details->fetch(PDO::FETCH_ASSOC);
+	return $details;
 }
 
 function latestRenewal() {
 	global $db;
 	$latest = $db->query("SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE()
-	AND CURDATE() <= `EndDate` ORDER BY renewals.ID DESC");
-	return $latest;
+	AND CURDATE() <= `EndDate` ORDER BY renewals.ID DESC LIMIT 1");
+	$latestRenewal = $latest->fetch(PDO::FETCH_ASSOC);
+	return $latestRenewal;
 }
 
 function getNextSwimmer($user, $current = 0, $rr_only = false) {
@@ -56,18 +58,16 @@ function getNextSwimmer($user, $current = 0, $rr_only = false) {
 
 function isPartialRegistration() {
 	global $db;
-	$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ?";
+	$query = $db->prepare("SELECT COUNT(*) FROM `members` WHERE UserID = ?");
 	try {
-		$query = $db->prepare($sql);
 		$query->execute([$_SESSION['UserID']]);
 	} catch (PDOException $e) {
 		halt(500);
 	}
 	$total_swimmers = (int) $query->fetchColumn();
-	$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = ? ORDER
-	BY `MemberID` ASC";
+	
+	$query = $db->prepare("SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = ? ORDER BY `MemberID` ASC");
 	try {
-		$query = $db->prepare($sql);
 		$query->execute([$_SESSION['UserID'], 1]);
 	} catch (PDOException $e) {
 		halt(500);
@@ -80,22 +80,22 @@ function isPartialRegistration() {
 }
 
 //$currentRenewal = renewalProgress($user);
-$currentRenewalDetails = renewalProgress($user);
+$currentRenewalDetails = renewalProgress($_SESSION['UserID']);
 
 $renewal = null;
 
 if ($currentRenewalDetails == null) {
 	// Create a new Progress Record
 	$latestRenewal = latestRenewal();
-  if ($latestRenewal == null) {
-    halt(404);
-  }
 
-	$row = $latestRenewal->fetch(PDO::FETCH_ASSOC);
-	$renewal = $row['ID'];
-	if (user_needs_registration($user)) {
+	if (user_needs_registration($_SESSION['UserID'])) {
 		$renewal = 0;
+	} else if ($latestRenewal == null) {
+    halt(404);
+	} else {
+		$renewal = $latestRenewal['ID'];
 	}
+
 	$date = date("Y-m-d");
 
   $addRenewal = $db->prepare("INSERT INTO `renewalProgress` (`UserID`, `RenewalID`, `Date`, `Stage`, `Substage`, `Part`) VALUES (?, ?, ?, '0', '0', '0')");
@@ -103,22 +103,27 @@ if ($currentRenewalDetails == null) {
     $_SESSION['UserID'],
     $renewal,
     $date
-  ]);
+	]);
+	$currentRenewalDetails = renewalProgress($_SESSION['UserID']);
 } else {
-	$latestRenewal = latestRenewal();
-	$row = $latestRenewal->fetch(PDO::FETCH_ASSOC);
+	$row = latestRenewal();
 	$renewal = $row['ID'];
-	if (user_needs_registration($user)) {
+	if (user_needs_registration($_SESSION['UserID'])) {
 		$renewal = 0;
+	} else if ($row == null) {
+		halt(404);
 	}
 }
 
-$row = renewalProgress($user);
+$renewalName = 'Renewal';
+if (isset($currentRenewalDetails['Name'])) {
+	$renewal = $currentRenewalDetails['Name'];
+} else if (user_needs_registration($_SESSION['UserID'])) {
+	$renewalName = '';
+}
 
-$renewalName = $row['Name'];
-
-$stage = $row['Stage'];
-$substage = $row['Substage'];
-$part = $row['Part'];
+$stage = $currentRenewalDetails['Stage'];
+$substage = $currentRenewalDetails['Substage'];
+$part = $currentRenewalDetails['Part'];
 
 // End of startup code

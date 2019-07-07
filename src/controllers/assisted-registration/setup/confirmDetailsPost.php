@@ -9,15 +9,11 @@ $status = true;
 $password1 = trim($_POST['password-1']);
 $password2 = trim($_POST['password-2']);
 $emailAuth = 0;
-if ($_POST['emailAuthorise'] != 1) {
-  $emailAuth = 0;
-} else {
+if ($_POST['emailAuthorise'] == '1') {
   $emailAuth = 1;
 }
 $smsAuth = 0;
-if ($_POST['smsAuthorise'] != 1) {
-  $smsAuth = 0;
-} else {
+if ($_POST['smsAuthorise'] == '1') {
   $smsAuth = 1;
 }
 

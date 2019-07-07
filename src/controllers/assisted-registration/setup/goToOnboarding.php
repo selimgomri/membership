@@ -17,4 +17,4 @@ try {
 
 unset($_SESSION['AssRegGuestUser']);
 
-header("Location: " . autoUrl(""));
+header("Location: " . autoUrl("onboarding/go"));

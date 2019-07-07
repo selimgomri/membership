@@ -61,7 +61,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			<div class="form-group">
 		    <label for="medConDisDetails">If yes give details</label>
 		    <textarea class="form-control" id="medConDisDetails" name="medConDisDetails"
-		    rows="3" <?if($yes==""){?>disabled<?} ?>><?=htmlspecialchars($row['Conditions'])?></textarea>
+		    rows="3" <?php if ($yes == "") { ?>disabled<?php } ?>><?=htmlspecialchars($row['Conditions'])?></textarea>
 		  </div>
 
 			<!-- -->
@@ -92,7 +92,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			<div class="form-group">
 		    <label for="allergiesDetails">If yes give details</label>
 		    <textarea class="form-control" id="allergiesDetails" name="allergiesDetails"
-		    rows="3" <?if($yes==""){?>disabled<?} ?>><?=htmlspecialchars($row['Allergies'])?></textarea>
+		    rows="3" <?php if ($yes == "") { ?>disabled<?php } ?>><?=htmlspecialchars($row['Allergies'])?></textarea>
 		  </div>
 
 			<!-- -->
@@ -121,7 +121,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			<div class="form-group">
 		    <label for="medConDisDetails">If yes give details</label>
 		    <textarea class="form-control" id="medicineDetails" name="medicineDetails"
-		    rows="3" <?if($yes==""){?>disabled<?} ?>><?=htmlspecialchars($row['Medication'])?></textarea>
+		    rows="3" <?php if ($yes == "") { ?>disabled<?php } ?>><?=htmlspecialchars($row['Medication'])?></textarea>
 		  </div>
 
 			<div>

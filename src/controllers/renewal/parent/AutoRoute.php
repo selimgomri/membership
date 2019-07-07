@@ -17,19 +17,19 @@ require 'AutoRouteStartup.php';
 if ($stage == 0) {
 	// Stage 0 - Reviews
 	if ($substage == 0) {
-		if ($redirect) {
+		if (isset($redirect) && $redirect) {
 			header("Location: " . autoUrl("renewal/go/account-review"));
 		} else {
 			include 'accountReview.php';
 		}
 	} else if ($substage == 1) {
-		if ($redirect) {
+		if (isset($redirect) && $redirect) {
 			header("Location: " . autoUrl("renewal/go/swimmer-review"));
 		} else {
 			include 'swimmerReview.php';
 		}
 	} else if ($substage == 2) {
-		if ($redirect) {
+		if (isset($redirect) && $redirect) {
 			header("Location: " . autoUrl("renewal/go/fee-review"));
 		} else {
 			include 'feeReview.php';
@@ -42,7 +42,7 @@ if ($stage == 0) {
 	// Medical Reviews
 	if ($substage == 0) {
 		$id = $part;
-		if ($redirect) {
+		if (isset($redirect) && $redirect) {
 			header("Location: " . autoUrl("renewal/go/medical-review/" . $id));
 		} else {
 			include 'medicalReview.php';
@@ -53,7 +53,7 @@ if ($stage == 0) {
 } else if ($stage == 2) {
 	// Emergency Contacts
 	if ($substage == 0) {
-		if ($redirect) {
+		if (isset($redirect) && $redirect) {
 			header("Location: " . autoUrl("renewal/go/emergency-contacts"));
 		} else {
 			include 'emergencyContact.php';
@@ -65,14 +65,14 @@ if ($stage == 0) {
 	$full_renewal = true;
 	// Code of Conduct
 	if ($full_renewal && $substage == 0) {
-		if ($redirect) {
+		if (isset($redirect) && $redirect) {
 			header("Location: " . autoUrl("renewal/go/parent-code-of-conduct"));
 		} else {
 			include 'conductForm.php';
 		}
 	} else if ($substage == 1) {
 		$id = $part;
-		if ($redirect) {
+		if (isset($redirect) && $redirect) {
 			header("Location: " . autoUrl("renewal/go/swimmer-code-of-conduct/" . $id));
 		} else {
 			include 'conductForm.php';
@@ -83,7 +83,7 @@ if ($stage == 0) {
 } else if ($stage == 4) {
 	// Administration Form
 	if ($substage == 0) {
-		if ($redirect) {
+		if (isset($redirect) && $redirect) {
 			header("Location: " . autoUrl("renewal/go/administration-form"));
 		} else {
 			include 'adminForm.php';
@@ -94,7 +94,7 @@ if ($stage == 0) {
 } else if ($stage == 5) {
 	// Fees to Pay - Membership Renewal
 	if ($substage == 0) {
-		if ($redirect) {
+		if (isset($redirect) && $redirect) {
 			header("Location: " . autoUrl("renewal/go/renewal-fee"));
 		} else {
 			include 'renewalFee.php';
@@ -110,7 +110,7 @@ if ($stage == 0) {
 		halt(404);
 	}
 } else if ($stage == 7) {
-	if ($redirect) {
+	if (isset($redirect) && $redirect) {
 		header("Location: " . autoUrl("renewal/go/completed"));
 	} else {
 		include 'complete.php';

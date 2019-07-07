@@ -4,7 +4,7 @@ $use_white_background = true;
 
 global $db;
 
-if ($renewal_trap) {
+if (isset($renewal_trap) && $renewal_trap) {
 	header("Location: " . autoUrl("renewal/go"));
 	exit();
 }
@@ -22,7 +22,7 @@ $pagetitle = "My Emergency Contacts";
 
 $url_path = "emergency-contacts";
 include BASE_PATH . 'views/header.php';
-if ($renewal_trap) {
+if (isset($renewal_trap) && $renewal_trap) {
 	include BASE_PATH . 'views/renewalTitleBar.php';
 	$url_path = "renewal/emergencycontacts";
 }
@@ -61,7 +61,7 @@ if ($renewal_trap) {
                   </a>
                 </p>
               </div>
-              <?php if (!$renewal_trap) { ?>
+              <?php if (!isset($renewal_trap) || !$renewal_trap) { ?>
               <div class="col text-sm-right">
                 <a href="<?=autoUrl("my-account")?>" class="btn
 							btn-primary">

@@ -12,30 +12,37 @@ include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">
-  <div class="my-3 p-3 bg-white rounded shadow">
-    <h1 class="border-bottom border-gray pb-2 mb-2">
-      Welcome to <?=CLUB_NAME?>
-    </h1>
-    <p class="lead">
-      We just need to run through the registration process with you for your new
-      swimmer. We'll ask you to fill out medical form, agree to the Club Code of
-      Conduct, and Terms and Conditions of Membership before paying any required
-      registration fees, which consist of Club and Swim England Fees.
-    </p>
+  <div class="row">
+    <div class="col-lg-8">
+      <h1>
+        Welcome to <?=htmlspecialchars(env('CLUB_NAME'))?>
+      </h1>
+      <p class="lead">
+        We now need to run through some forms to complete the registration process. You will need your swimmers with you as you continue.
+      </p>
+      
+      <p>We'll ask you to;</p>
+      
+      <ul>
+        <li>Fill out medical forms for your swimmer(s),</li>
+        <li>Provide us with emergency contact details,</li>
+        <li>Agree to all relevent Codes of Conduct,</li>
+        <li>Agree to the Terms and Conditions of Membership,</li>
+        <li>Setup a Direct Debit for payments to <?=htmlspecialchars(env('CLUB_NAME'))?> and finally</li>
+        <li>Pay your registration fees, which consist of Club and Swim England Fees.</li>
+      </ul>
 
-		<p>
-			Failure to complete registration before the end of the calendar month in
-			which you join the club may result in suspension of your new swimmer. This
-			is because your Swim England Membership Fee covers insurance for your
-			swimmers while taking part in the sport.
-		</p>
+      <p>
+        Failure to complete registration before the end of the calendar month in which you join the club may result in suspension of your swimmer(s).  This is because your Swim England Membership Fee covers insurance for your swimmers while taking part in the sport.
+      </p>
 
-		<p class="mb-0">
-			<a href="<?php echo autoUrl("renewal/go"); ?>" class="btn btn-success">
-				Start Registration
-			</a>
-		</p>
+      <p class="mb-0">
+        <a href="<?php echo autoUrl("renewal/go"); ?>" class="btn btn-success">
+          Start Registration
+        </a>
+      </p>
 
+    </div>
   </div>
 </div>
 

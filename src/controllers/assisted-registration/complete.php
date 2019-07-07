@@ -15,12 +15,17 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <p>
-        An email is on it's way to USER which includes instructions to set a password.
+        An email is on it's way to <?=htmlspecialchars($_SESSION['AssRegName'])?> which includes instructions to set a password.
       </p>
     </div>
   </div>
 </div>
 
 <?php
+
+unset($_SESSION['AssRegName']);
+unset($_SESSION['AssRegUser']);
+unset($_SESSION['AssRegPass']);
+unset($_SESSION['AssRegComplete']);
 
 include BASE_PATH . 'views/footer.php';

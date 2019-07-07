@@ -5,11 +5,18 @@ global $db;
 
 try {
 
+  $checkEmailCount = $db->prepare("SELECT COUNT(*) FROM users WHERE EmailAddress = ?");
+
   $insert = $db->prepare("INSERT INTO users (EmailAddress, `Password`, AccessLevel, Forename, Surname, Mobile, EmailComms, MobileComms, RR) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
   $forename = trim($_POST['first']);
   $surname = trim($_POST['last']);
   $email = trim(mb_strtolower($_POST['email-address']));
+  $checkEmailCount->execute([$email]);
+  if ($checkEmailCount->fetchColumn() > 0) {
+    // Can't register so throw an exception to get out of this code block.
+    throw new Exception();
+  }
   $mobile = "+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", trim($_POST['phone']))), '0'); // Removes anything that isn't a digit
   
   // The password will be used as a secure token allowing the parent to follow a link.

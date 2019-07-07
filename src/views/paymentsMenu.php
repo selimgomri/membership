@@ -1,4 +1,4 @@
-<?php if (!$renewal_trap) {
+<?php if (!isset($renewal_trap) || !$renewal_trap) {
 $access = $_SESSION['AccessLevel']; ?>
 
 <!--
