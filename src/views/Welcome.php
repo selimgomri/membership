@@ -16,7 +16,7 @@ include BASE_PATH . "views/header.php";
 
       <h1>Welcome to the <?=htmlspecialchars(env('CLUB_NAME'))?> Membership System</h1>
       <p class="lead mb-5">
-        The <?=CLUB_NAME?> Online Membership System allows you to manage your
+        The <?=htmlspecialchars(env('CLUB_NAME'))?> Online Membership System allows you to manage your
         swimmers, enter competitions, stay up to date by email and make payments
         by Direct Debit.
       </p>

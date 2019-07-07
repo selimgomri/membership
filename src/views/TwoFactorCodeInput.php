@@ -31,7 +31,7 @@ include BASE_PATH . "views/header.php";
   <?php } ?>
   <div class="row">
     <div class="col-md-8 col-lg-5">
-      <?php if ($_SESSION['TWO_FACTOR_GOOGLE'] !== true) { ?>
+      <?php if (!isset($_SESSION['TWO_FACTOR_GOOGLE']) && $_SESSION['TWO_FACTOR_GOOGLE'] !== true) { ?>
       <p class="lead mb-5">
         We've just sent you an authentication code by email. Please type this
         code below.
@@ -41,7 +41,7 @@ include BASE_PATH . "views/header.php";
         Enter the authentication code from your Authenticator App.
       </p>
       <?php } ?>
-      <?php if ($do_random_2FA) { ?>
+      <?php if (isset($do_random_2FA) && $do_random_2FA) { ?>
       <p class="mb-5">We've asked you to do this as part of a random security spot check.</p>
       <?php } ?>
       <!--
@@ -50,7 +50,7 @@ include BASE_PATH . "views/header.php";
         Our systems will not be sending emails between 23:00 on Friday 31 August and 15:00 on Saturday 1 September
       </div>
       -->
-      <?php if ($errorState == true) { ?>
+      <?php if (isset($errorState) && $errorState) { ?>
       <div class="alert alert-danger">
         <strong>Your authentication code was incorrect</strong> <br>
         Please try again
@@ -61,7 +61,7 @@ include BASE_PATH . "views/header.php";
       </div>
       <?php } ?>
 
-      <?php if ($_SESSION['TWO_FACTOR_RESEND']) { ?>
+      <?php if (isset($_SESSION['TWO_FACTOR_RESEND']) && $_SESSION['TWO_FACTOR_RESEND']) { ?>
       <div class="alert alert-success">
         <p class="mb-0"><strong>We have successfully sent your email</strong></p>
         <p class="mb-0">Please now check your inbox. It may take a moment to recieve the email.</p>
@@ -84,7 +84,7 @@ include BASE_PATH . "views/header.php";
 
       <p class="mb-5">
         <a href="<?=autoUrl("2fa/exit")?>" class="btn btn-dark">Cancel</a>
-        <?php if ($_SESSION['TWO_FACTOR_GOOGLE'] == true) { ?>
+        <?php if (isset($_SESSION['TWO_FACTOR_GOOGLE']) && $_SESSION['TWO_FACTOR_GOOGLE']) { ?>
         <a href="<?=autoUrl("2fa/resend")?>" class="btn btn-dark">Get code by email</a>
         <?php } else { ?>
         <a href="<?=autoUrl("2fa/resend")?>" class="btn btn-dark">Resend Email</a>
