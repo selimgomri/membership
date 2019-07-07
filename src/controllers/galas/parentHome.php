@@ -8,7 +8,7 @@ $galas = $db->query("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, 
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
 $entriesOpen = false;
 
-$entries = $db->prepare("SELECT EntryID, GalaName, ClosingDate, GalaVenue, MForename, MSurname, EntryProcessed Processed, Charged, Refunded FROM ((galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE GalaDate >= CURDATE() AND members.UserID = ?");
+$entries = $db->prepare("SELECT EntryID, GalaName, ClosingDate, GalaVenue, MForename, MSurname, EntryProcessed Processed, Charged, Refunded, FeeToPay FROM ((galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE GalaDate >= CURDATE() AND members.UserID = ?");
 $entries->execute([$_SESSION['UserID']]);
 $entry = $entries->fetch(PDO::FETCH_ASSOC);
 

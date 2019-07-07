@@ -28,14 +28,13 @@ if ($partial_reg) {
 }
 $getInfo = $db->prepare($sql);
 $getInfo->execute([$_SESSION['UserID']]);
+$row = $getInfo->fetch(PDO::FETCH_ASSOC);
 
-$i = 0;
-while ($row[$i] = $getInfo->fetch(PDO::FETCH_ASSOC)) {
+for ($i = 0; $i < sizeof($row); $i++) {
 	$id[$i] = $row['MemberID'];
 	$name[$i] = $row['MForename'] . " " . $row['MSurname'];
 	$age[$i] = date_diff(date_create($row['DateOfBirth']),
 	date_create('today'))->y;
-  $i++;
 }
 
 // Verify that all swimmers have agreed to Ts and Cs of Membership
@@ -123,13 +122,12 @@ for ($i = 0; $i < sizeof($row); $i++) {
 
 if ($status) {
 	// Update the database with current renewal state
-  ]);
-  $nextStage = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE
-	`RenewalID` = ? AND `UserID` = ?");
+  $nextStage = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
   $nextStage->execute([
     $renewal,
-    $_SESSION['UserID']
-	header("Location: " . currentUrl());
+		$_SESSION['UserID']
+	]);
+	header("Location: " . autoUrl("renewal/go"));
 } else {
 	$_SESSION['ErrorState'] = "
 	<div class=\"alert alert-danger\">

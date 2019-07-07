@@ -24,7 +24,7 @@ include BASE_PATH . 'views/header.php';
     <div class="col-md-8">
       <h1>Hello <?=htmlspecialchars($user['Forename'])?></h1>
       <p class="lead">
-        Welcome to <?=htmlspecialchars(env('CLUB_NAME'))?>. Let's complete your registration.
+        Welcome to <?=htmlspecialchars(env('CLUB_NAME'))?>. Let's complete your account registration.
       </p>
 
       <p>

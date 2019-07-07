@@ -583,38 +583,38 @@ function paymentHistory($link, $user, $type = null) {
   $sql->execute([$user]);
   $row = $sql->fetch(PDO::FETCH_ASSOC);
 
-  if ($row != null) {
-    do {
+  if ($row != null) { ?>
+    <div class="list-group">
+    <?php do {
       if ($type == null) {
         $statementUrl = autoUrl("payments/statement/" . htmlspecialchars($row['PMkey']));
       } else if ($type == "admin") {
         $statementUrl = autoUrl("payments/history/statement/" . htmlspecialchars($row['PMkey']));
-      }?>
-      <div class="media pt-2">
-        <?php if ($i != $count-1) { ?>
-        <div class="media-body pb-2 mb-0 border-bottom border-gray">
-        <?php } else { ?>
-        <div class="media-body pb-0 mb-0">
-        <?php } ?>
-          <p class="mb-0">
+      } ?>
+    <a class="list-group-item list-group-item-action" href="<?=$statementUrl?>" title="Transaction Statement">
+      <div class="row align-items-center">
+        <div class="col-9">
+          <p class="mb-0 text-primary">
             <strong>
-              <a href="<?=$statementUrl?>" title="Transaction Statement">
-                <?=htmlspecialchars($row['Name'])?>
-              </a>
+              <?=htmlspecialchars($row['Name'])?>
             </strong>
           </p>
           <p class="mb-0">
             <?php echo date('j F Y', strtotime($row['Date'])); ?>
           </p>
+        </div>
+        <div class="col text-right">
           <p class="mb-0">
-            &pound;<?php echo number_format(($row['Amount']/100),2,'.',''); ?>
+            <strong>&pound;<?php echo number_format(($row['Amount']/100),2,'.',''); ?></strong>
           </p>
-        <p class="mb-0">
-          Status: <?php echo paymentStatusString($row['Status']); ?>
-        </p>
+          <p class="mb-0">
+            Status: <?php echo paymentStatusString($row['Status']); ?>
+          </p>
+        </div>
       </div>
-    </div>
-    <?php } while ($row = $sql->fetch(PDO::FETCH_ASSOC)); ?>
+    </a>
+    <?php } while ($row = $sql->fetch(PDO::FETCH_ASSOC));  ?>
+  </div>
   <?php } else { ?>
   <div class="alert alert-warning mb-0">
     <strong>You have no previous payments</strong> <br>
@@ -626,36 +626,37 @@ function paymentHistory($link, $user, $type = null) {
 
 function feesToPay($link, $user) {
   global $db;
-  $sql = $db->prepare("SELECT * FROM `paymentsPending` WHERE `UserID` = '$user' AND `PMkey` IS NULL AND `Status` = 'Pending' ORDER BY `Date` DESC LIMIT 0, 30;");
+  $sql = $db->prepare("SELECT * FROM `paymentsPending` WHERE `UserID` = ? AND `PMkey` IS NULL AND `Status` = 'Pending' ORDER BY `Date` DESC LIMIT 0, 30;");
   $sql->execute([$user]);
   $row = $sql->fetch(PDO::FETCH_ASSOC);
-
   if ($row != null) { ?>
+  <ul class="list-group">
     <?php do { ?>
-    <div class="media pt-2">
-      <?php if ($i != $count-1) { ?>
-      <div class="media-body pb-2 mb-0 border-bottom border-gray">
-      <?php } else { ?>
-      <div class="media-body pb-0 mb-0">
-      <?php } ?>
-        <p class="mb-0">
-          <strong>
-            <?=htmlspecialchars($row['Name'])?>
-          </strong>
-        </p>
-        <p class="mb-0">
-          <?=date('j F Y', strtotime($row['Date']))?>
-        </p>
-        <p class="mb-0">
-          <?php if ($row['Type'] == 'Payment') { ?>
-          &pound;<?=number_format(($row['Amount']/100),2,'.','')?>
-          <?php } else { ?>
-          -&pound;<?=number_format(($row['Amount']/100),2,'.','')?> (Credit)
-          <?php } ?>
-        </p>
+    <li class="list-group-item">
+      <div class="row align-items-center">
+        <div class="col-9">
+          <p class="mb-0">
+            <strong>
+              <?=htmlspecialchars($row['Name'])?>
+            </strong>
+          </p>
+          <p class="mb-0">
+            <?=date('j F Y', strtotime($row['Date']))?>
+          </p>
+        </div>
+        <div class="col text-right">
+          <p class="mb-0">
+            <?php if ($row['Type'] == 'Payment') { ?>
+            &pound;<?=number_format(($row['Amount']/100),2,'.','')?>
+            <?php } else { ?>
+            -&pound;<?=number_format(($row['Amount']/100),2,'.','')?> (Credit)
+            <?php } ?>
+          </p>
+        </div>
       </div>
-    </div>
+    </li>
     <?php } while ($row = $sql->fetch(PDO::FETCH_ASSOC));  ?>
+  </ul>
   <?php } else { ?>
   <div class="alert alert-warning mb-0">
     <strong>You have no current fees</strong> <br>
@@ -838,7 +839,7 @@ function updatePaymentStatus($PMkey) {
 function paymentStatusString($status) {
   switch ($status) {
     case "paid_out":
-      return "Paid to " . env('CLUB_SHORT_NAME');
+      return "Paid to " . env('CLUB_CODE');
     case "paid_manually":
       return "Paid Manually";
     case "pending_customer_approval":

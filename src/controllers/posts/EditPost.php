@@ -46,13 +46,8 @@ include BASE_PATH . "views/postsMenu.php";
 					<h1>Editing <?=htmlspecialchars($row['Title'])?></h1>
 					<div class="form-group">
 						<label for="title">Title</label>
-						<?php if (!$people) { ?>
 						<input type="text" class="form-control" name="title" id="title"
 			      placeholder="Post Title" autocomplete="off" value="<?=htmlentities($row['Title'])?>">
-			            <?php } else { ?>
-			            <input type="text" class="form-control" name="title" id="title"
-			      placeholder="Post Title" autocomplete="off" <?php if ($people) { ?>value="<?=getUserName($_SESSION['UserID'])?>" readonly<?php } ?>>
-			            <?php } ?>
 					</div>
 
 					<div class="form-group mb-0">
@@ -75,9 +70,7 @@ include BASE_PATH . "views/postsMenu.php";
 					</p>
 					<p class="">We will publish this update immediately.</p>
           <p class="mb-0">
-            <?php if ($people) { ?>
-              View now at <a href="<?=autoUrl("people/" . $row['Path'])?>">/people/<?=$row['Path']?></a>
-            <?php } else if ($row['Path'] != "") { ?>
+            <?php if ($row['Path'] != "") { ?>
               View now at <a href="<?=autoUrl("posts/" . $row['Path'])?>">/posts/<?=$row['Path']?></a>
             <?php } else { ?>
               View now at <a href="<?=autoUrl("posts/" . $row['ID'])?>">/posts/<?=$row['ID']?></a>
@@ -85,7 +78,6 @@ include BASE_PATH . "views/postsMenu.php";
           </p>
 				</div>
 
-                <?php if (!$people) { ?>
 				<div class="cell">
 					<h3>Meta</h3>
 					<div class="form-group">
@@ -131,7 +123,6 @@ include BASE_PATH . "views/postsMenu.php";
 						</select>
 					</div>
 				</div>
-				<?php } ?>
 
 				<div class="cell">
 					<h3>SEO</h3>

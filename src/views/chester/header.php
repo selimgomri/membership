@@ -222,14 +222,15 @@ p.lead {
     </div>
     <?php } ?>
 
-    <div class="bg-primary">
+    <div
+      class="bg-primary <?php if (isset($_SESSION['UserID']) && user_needs_registration($_SESSION['UserID'])) { ?>d-lg-none<?php } ?>">
       <div class="<?=$container_class?>">
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary
     d-print-none justify-content-between px-0" <?php if ($use_website_menu) { ?>id="club-menu" <?php } ?>
           role="navigation">
 
-          <a class="navbar-brand d-lg-none" href="<?php echo autoUrl("") ?>">
-            <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+          <a class="navbar-brand d-lg-none" href="<?=autoUrl("")?>">
+            <?php if (isset($_SESSION['LoggedIn'])) { ?>
             <img src="<?php echo autoUrl("public/img/chesterIcon.svg"); ?>" width="20" height="20"> My Membership
             <?php } else { ?>
             <img src="<?php echo autoUrl("public/img/chesterIcon.svg"); ?>" width="20" height="20"> Club Membership
@@ -240,9 +241,8 @@ p.lead {
             <span class="navbar-toggler-icon"></span>
           </button>
 
-          <?php if (!isset($use_website_menu) || !$use_website_menu) { ?>
+          <?php if ((isset($_SESSION['UserID']) && !user_needs_registration($_SESSION['UserID'])) && (!isset($use_website_menu) || !$use_website_menu)) { ?>
           <div class="collapse navbar-collapse offcanvas-collapse" id="chesterNavbar">
-            <?php if (!user_needs_registration($_SESSION['UserID'])) { ?>
             <ul class="navbar-nav mr-auto">
               <?php if (!empty($_SESSION['LoggedIn'])) { ?>
               <li class="nav-item">
@@ -537,7 +537,7 @@ p.lead {
             </ul>
             <?php if (!empty($_SESSION['LoggedIn'])) {
         global $currentUser;
-        $user_name = preg_replace(" +" , '&nbsp;', htmlspecialchars($currentUser->getName())); ?>
+        $user_name = preg_replace("/( +)/" , '&nbsp;', htmlspecialchars($currentUser->getName())); ?>
             <ul class="navbar-nav">
               <!--<a class="btn btn-sm btn-outline-light my-2 my-sm-0" href="<?=autoUrl("logout")?>">Logout</a>-->
               <li class="nav-item dropdown">
@@ -572,8 +572,7 @@ p.lead {
                 </div>
               </li>
             </ul>
-            <?php }
-      }?>
+            <?php } ?>
           </div>
         </nav>
         <?php } ?>

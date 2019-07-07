@@ -93,6 +93,9 @@ class User {
     if (!$this->userOptionsRetrieved) {
       $this->getUserOptions();
     }
+    if (!isset($this->userOptions[$name])) {
+      return null;
+    }
     // Get the options
     if ($this->userOptions[$name] != null) {
       return $this->userOptions[$name];

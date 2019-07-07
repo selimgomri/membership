@@ -21,7 +21,8 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 		$new_swimmers = $query->fetchColumn();
 
 		if ($swimmers != $new_swimmers) {
-			include 'newmember/Welcome.php';
+			//include 'newmember/Welcome.php';
+			include 'newfamily/Welcome.php';
 		} else {
 			include 'newfamily/Welcome.php';
 		}

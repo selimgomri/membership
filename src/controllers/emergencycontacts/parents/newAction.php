@@ -14,8 +14,7 @@ $contact->connect($db);
 
 if ($_POST['name'] != null && $_POST['name'] != "" && $_POST['num'] != null && $_POST['num'] != "") {
 	$contact->new($_POST['name'], $_POST['num'], $user);
-	pre($contact);
-	pre($contact->add());
+	$contact->add();
 
 	$_SESSION['AddNewSuccess'] = '
 	<div class="alert alert-success">
@@ -28,9 +27,9 @@ if ($_POST['name'] != null && $_POST['name'] != "" && $_POST['num'] != null && $
 	';
 
 	if ($renewal_trap) {
-		//header("Location: " . autoUrl("renewal/go"));
+		header("Location: " . autoUrl("renewal/go"));
 	} else {
-		//header("Location: " . autoUrl($url_path));
+		header("Location: " . autoUrl($url_path));
 	}
 
 } else {
@@ -45,9 +44,9 @@ if ($_POST['name'] != null && $_POST['name'] != "" && $_POST['num'] != null && $
 	';
 
 	if ($renewal_trap) {
-		//header("Location: " . autoUrl("renewal/go"));
+		header("Location: " . autoUrl("renewal/go"));
 	} else {
-		//header("Location: " . autoUrl($url_path));
+		header("Location: " . autoUrl($url_path));
 	}
 
 }

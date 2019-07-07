@@ -1,10 +1,13 @@
 <?php
 
-$user = mysqli_real_escape_string($link, $_SESSION['UserID']);
-$partial_reg = false; //isPartialRegistration();
+global $db;
+global $systemInfo;
+
+$user = $_SESSION['UserID'];
+$partial_reg = false;//isPartialRegistration();
 
 $partial_reg_require_topup = false;
-/*if ($partial_reg) {
+if ($partial_reg) {
 	global $db;
 	$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = 0 AND ClubPays = 0";
 	try {
@@ -16,50 +19,54 @@ $partial_reg_require_topup = false;
 	if ($query->fetchColumn() == 1) {
 		$partial_reg_require_topup = true;
 	}
-}*/
+}
 
-$sql = "SELECT * FROM `members` WHERE `members`.`UserID` = '$user' AND
-`ClubPays` = '0';";
-$result = mysqli_query($link, $sql);
+$sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ? AND `ClubPays` = '0'");
+$sql->execute([$_SESSION['UserID']]);
 
 $clubFee = 0;
 $totalFee = 0;
 
-$payingSwimmerCount = mysqli_num_rows($result);
+$payingSwimmerCount = $sql->fetchColumn();
 
 if ($payingSwimmerCount == 1) {
-	$clubFee = 4000;
+	$clubFee = $systemInfo->getSystemOption('ClubFeeIndividual');
 } else if ($partial_reg_require_topup) {
-	$clubFee = 1000;
+	$clubFee = $systemInfo->getSystemOption('ClubFeeFamily') - $clubFee;
 } else if ($payingSwimmerCount > 1 && !$partial_reg) {
-	$clubFee = 5000;
+	$clubFee = $systemInfo->getSystemOption('ClubFeeIndividual');
 } else {
 	$clubFee = 0;
 }
 
 if ($partial_reg) {
 	$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
-	members.SquadID WHERE `members`.`UserID` = '$user' && `members`.`RR` = 1;";
+	members.SquadID WHERE `members`.`UserID` = ? && `members`.`RR` = 1";
 } else {
 	$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
-	members.SquadID WHERE `members`.`UserID` = '$user';";
+	members.SquadID WHERE `members`.`UserID` = ?";
 }
-$result = mysqli_query($link, $sql);
-$count = mysqli_num_rows($result);
+$getMembers = $db->prepare($sql);
+$getMembers->execute([$_SESSION['UserID']]);
+
+$member = $getMembers->fetchAll(PDO::FETCH_ASSOC);
+$count = sizeof($member);
 
 $totalFee += $clubFee;
 
 $asaFees = [];
-$member = [];
+
+$asa1 = $systemInfo->getSystemOption('ASA-County-Fee-L1') + $systemInfo->getSystemOption('ASA-Regional-Fee-L1') + $systemInfo->getSystemOption('ASA-National-Fee-L1');
+$asa2 = $systemInfo->getSystemOption('ASA-County-Fee-L2') + $systemInfo->getSystemOption('ASA-Regional-Fee-L2') + $systemInfo->getSystemOption('ASA-National-Fee-L2');
+$asa3 = $systemInfo->getSystemOption('ASA-County-Fee-L3') + $systemInfo->getSystemOption('ASA-Regional-Fee-L3') + $systemInfo->getSystemOption('ASA-National-Fee-L3');
 
 for ($i = 0; $i < $count; $i++) {
-	$member[$i] = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ClubPays']) {
-		$asaFees[$i] = ASA_FEE_1;
+		$asaFees[$i] = $asa1;
 	} else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ClubPays']) {
-		$asaFees[$i] = ASA_FEE_2;
+		$asaFees[$i] = $asa3;
 	} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ClubPays']) {
-		$asaFees[$i] = ASA_FEE_3;
+		$asaFees[$i] = $asa3;
 	}
 	$totalFee += $asaFees[$i];
 }
@@ -67,44 +74,55 @@ for ($i = 0; $i < $count; $i++) {
 $clubFeeString = number_format($clubFee/100,2,'.','');
 $totalFeeString = number_format($totalFee/100,2,'.','');
 
-$user = mysqli_real_escape_string($link, $_SESSION['UserID']);
-$sql = "SELECT * FROM `paymentPreferredMandate` WHERE `UserID` = '$user';";
+$sql = $db->prepare("SELECT COUNT(*) FROM `paymentPreferredMandate` WHERE `UserID` = ?");
+$sql->execute([$_SESSION['UserID']]);
 $hasDD = false;
-if (mysqli_num_rows(mysqli_query($link, $sql)) == 1) {
+if ($sql->fetchColumn() == 1) {
 	$hasDD = true;
 }
 
 if ($hasDD) {
 	// INSERT Payment into pending
-	$date = mysqli_real_escape_string($link, date("Y-m-d"));
+	$date = new \DateTime('now', new DateTimeZone('Europe/London'));
+	$date->setTimezone(new DateTimeZone('UTC'));
 	$description = "Membership Renewal";
+	if ($renewal == 0) {
+		$description = "Club Registration Fee";
+	}
 	for ($i = 0; $i < $count; $i++) {
 		$description .= ", " . $member[$i]['MForename'];
 	}
-	$sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`,
-	`Amount`, `Currency`, `Type`) VALUES ('$date', 'Pending', '$user',
-	'$description', '$totalFee', 'GBP', 'Payment');";
-	mysqli_query($link, $sql);
+	$insert = $db->prepare("INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES (?, ?, ?, ?, ?, ?, ?)");
+	$insert->execute([
+		$date->format('Y-m-d'),
+		'Pending',
+		$_SESSION['UserID'],
+		$description,
+		$totalFee,
+		'GBP',
+		'Payment'
+	]);
+	$payID = $db->lastInsertId();
 
-	// Add swimmers to renewal list
-	$sql = "SELECT `PaymentID` FROM `paymentsPending` WHERE `UserID` = '$user' AND
-	`Status` = 'Pending' AND `Amount` = '$totalFee' AND `Name` = '$description';";
-	$payID = mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC)['PaymentID'];
-	$renewal = mysqli_real_escape_string($link, $renewal);
-	for ($i = 0; $i < $count; $i++) {
-		$memID = $member[$i]['MemberID'];
-		$date = mysqli_real_escape_string($link, date("Y-m-d H:i:s"));
-		$sql = "INSERT INTO `renewalMembers` (`PaymentID`, `MemberID`, `RenewalID`, `Date`, `CountRenewal`)
-		VALUES ('$payID', '$memID', '$renewal', '$date', 1);";
-		mysqli_query($link, $sql);
+	if ($renewal != 0) {
+		$insert = $db->prepare("INSERT INTO `renewalMembers` (`PaymentID`, `MemberID`, `RenewalID`, `Date`, `CountRenewal`) VALUES ('$payID', '$memID', '$renewal', '$date', 1)");
+		for ($i = 0; $i < $count; $i++) {
+			$memID = $member[$i]['MemberID'];
+			$insert->execute([
+				$payID,
+				$memID,
+				$renewal,
+				$date->format("Y-m-d H:i:s"),
+				true
+			]);
+		}
 	}
 
-	// Update the database with current renewal state
-	$sql = "UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE
-	`RenewalID` = '$renewal' AND `UserID` = '$user';";
-	mysqli_query($link, $sql);
-
-	global $db;
+	$progress = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
+	$progress->execute([
+		$renewal,
+		$_SESSION['UserID']
+	]);
 
 	if (user_needs_registration($_SESSION['UserID'])) {
 		$sql = "UPDATE `users` SET `RR` = 0 WHERE `UserID` = ?";
@@ -114,9 +132,16 @@ if ($hasDD) {
 		} catch (PDOException $e) {
 			halt(500);
 		}
+		
+		try {
+			$query = $db->prepare("UPDATE `members` SET `RR` = 0 WHERE `UserID` = ?");
+			$query->execute([$_SESSION['UserID']]);
+		} catch (PDOException $e) {
+			halt(500);
+		}
 		header("Location: " . autoUrl(""));
 	} else {
-		header("Location: " . currentUrl());
+		header("Location: " . autoUrl("renewal/go"));
 	}
 } else {
 	header("Location: " . autoUrl("renewal/payments/setup"));

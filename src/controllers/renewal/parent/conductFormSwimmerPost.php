@@ -24,7 +24,7 @@ if (false/*isPartialRegistration() && !getNextSwimmer($_SESSION['UserID'], $id, 
 			halt(500);
 		}
 	} else {
-    $getNextMember = $db->prepare("SELECT MemeberID FROM `members` WHERE `UserID` = ? AND `MemberID` > ? ORDER BY `MemberID` ASC
+    $getNextMember = $db->prepare("SELECT MemberID FROM `members` WHERE `UserID` = ? AND `MemberID` > ? ORDER BY `MemberID` ASC
 		LIMIT 1");
     $getNextMember->execute([
       $_SESSION['UserID'],
@@ -60,4 +60,4 @@ if (false/*isPartialRegistration() && !getNextSwimmer($_SESSION['UserID'], $id, 
 	</div>';
 }
 
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("renewal/go"));

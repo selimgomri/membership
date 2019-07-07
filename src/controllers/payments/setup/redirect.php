@@ -58,21 +58,23 @@ if ($selectSchedule->fetchColumn() == 0) {
 		include BASE_PATH . "views/paymentsMenu.php";
 		 ?>
 
-		<div class="container">
-			<h1>You've successfully set up your new direct debit.</h1>
-			<p class="lead">GoCardless will appear on your bank statement when
-			payments are taken against this Direct Debit.</p>
-			<p>GoCardless handles direct debit payments for <?=CLUB_NAME?>. You
-			will see <span class="mono"><?=str_replace(' ', '', CLUB_SHORT_NAME)?>SWIM</span> at the start of the
-			reference for each payment.</p>
-			<?php if ($renewal_trap) { ?>
-				<a href="<?php echo autoUrl("renewal/go"); ?>" class="mb-3 btn btn-success">Continue Renewal</a>
-			<?php } else { ?>
-				<a href="<?php echo autoUrl("payments"); ?>" class="mb-3 btn btn-dark">Go to Payments</a>
-			<?php } ?>
-		</div>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8">
+      <h1>You've successfully set up your new direct debit.</h1>
+      <p class="lead">GoCardless will appear on your bank statement when
+        payments are taken against this Direct Debit.</p>
+      <p>GoCardless handles direct debit payments for <?=htmlspecialchars(env('CLUB_NAME'))?>.</p>
+      <?php if ($renewal_trap) { ?>
+      <a href="<?php echo autoUrl("renewal/go"); ?>" class="mb-3 btn btn-success">Continue registration or renewal</a>
+      <?php } else { ?>
+      <a href="<?php echo autoUrl("payments"); ?>" class="mb-3 btn btn-dark">Go to Payments</a>
+      <?php } ?>
+    </div>
+  </div>
+</div>
 
-		<?php include BASE_PATH . "views/footer.php";
+<?php include BASE_PATH . "views/footer.php";
 
 	}
 	catch (Exception $e) {

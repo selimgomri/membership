@@ -6,28 +6,27 @@ $member = null;
 if (false/*isPartialRegistration()*/) {
 	$member = getNextSwimmer($_SESSION['UserID'], 0, true);
 } else {
-	$user = mysqli_real_escape_string($link, $_SESSION['UserID']);
-	$sql = "SELECT * FROM `members` WHERE `UserID` = '$user' ORDER BY `MemberID` ASC
-	LIMIT 1;";
-	$result = mysqli_query($link, $sql);
+	$sql = $db->prepare("SELECT * FROM `members` WHERE `UserID` = ? ORDER BY `MemberID` ASC LIMIT 1");
+	$sql->execute([$_SESSION['UserID']]);
 
-	if (mysqli_num_rows($result) == 0) {
-		halt(403);
+	$row = $sql->fetch(PDO::FETCH_ASSOC);
+
+	if ($row == null) {
+		halt(404);
 	}
 
-	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-	$member = mysqli_real_escape_string($link, $row['MemberID']);
+	$member = $row['MemberID'];
 }
 
-$renewal = mysqli_real_escape_string($link, $renewal);
-
-$sql = "UPDATE `renewalProgress` SET `Stage` = `Stage` + 1, `Substage` = '0',
-`Part` = '$member' WHERE `RenewalID` = '$renewal' AND `UserID` = '$user';";
-
-if (mysqli_query($link, $sql)) {
-	header("Location: " . currentUrl());
-} else {
+try {
+	$sql = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1, `Substage` = '0', `Part` = ? WHERE `RenewalID` = ? AND `UserID` = ?");
+	$sql->execute([
+		$member,
+		$renewal,
+		$_SESSION['UserID']
+	]);
+	header("Location: " . autoUrl("renewal/go"));
+} catch (Exception $e) {
 	$_SESSION['ErrorState'] = "
 	<div class=\"alert alert-danger\">
 	<p class=\"mb-0\"><strong>An error occured when we tried to update our records</strong></p>

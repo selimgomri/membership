@@ -41,6 +41,8 @@ if ($_SESSION['AccessLevel'] == "Parent") {
   $entries->execute([$id]);
 }
 
+$entry = $entries->fetch(PDO::FETCH_ASSOC);
+
 if ($gala == null) {
   halt(404);
 }
@@ -169,6 +171,8 @@ include "galaMenu.php";
       <p><?=$numEntries?></p>
     </div>
 
+    <?php if ($entry != null) { ?>
+
     <div class="col-sm-6 col-md-4">
       <h3 class="h6"><?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>Total cost of your entries<?php } else { ?>Total cost of entries<?php } ?></h3>
       <p>&pound;<?=number_format($total, 2)?></p>
@@ -197,6 +201,8 @@ include "galaMenu.php";
       <h3 class="h6"><?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>Total refunded to you<?php } else { ?>Total refunded to parents<?php } ?></h3>
       <p>&pound;<?=number_format($amountRefunded/100, 2)?></p>
     </div>
+
+    <?php } ?>
   </div>
 
   <?php if ($numEntries > 0) { ?>
@@ -226,8 +232,6 @@ include "galaMenu.php";
   </p>
 
   <?php
-
-  $entry = $entries->fetch(PDO::FETCH_ASSOC);
 
   if ($entry != null) { ?>
 

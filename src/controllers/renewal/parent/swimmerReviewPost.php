@@ -3,10 +3,9 @@
 global $db;
 
 try {
-  $nextSection = $db->prepare("UPDATE `renewalProgress` SET `Substage` = `Substage` + 1 WHERE
-  `RenewalID` = ? AND `UserID` = ?");
+  $nextSection = $db->prepare("UPDATE `renewalProgress` SET `Substage` = `Substage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
   $nextSection->execute([$renewal, $_SESSION['UserID']]);
-  header("Location: " . currentUrl());
+  header("Location: " . autoUrl("renewal/go"));
 } catch (Exception $e) {
 	$_SESSION['ErrorState'] = "
 	<div class=\"alert alert-danger\">

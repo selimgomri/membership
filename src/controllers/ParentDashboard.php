@@ -64,7 +64,7 @@ try {
 }
 
 try {
-	$sql = 'SELECT `MemberID`, `MForename`, `MSurname`, `SquadFee`, `SquadName` FROM `members` INNER JOIN `squads` ON `members`.`SquadID` =
+	$sql = 'SELECT `MemberID`, `MForename`, `MSurname`, `SquadFee`, `SquadName`, ClubPays FROM `members` INNER JOIN `squads` ON `members`.`SquadID` =
 	`squads`.`SquadID` WHERE `members`.`UserID` = ? ORDER BY `MForename` ASC,
 	`MSurname` ASC';
 	$query = $db->prepare($sql);

@@ -44,7 +44,7 @@ if ($info['AccessLevel'] == "Parent") {
   $swimmers->execute([$id]);
 }
 
-$bankName = $bank = $has_logo = $logo_path;
+$bankName = $bank = $has_logo = $logo_path = null;
 if (userHasMandates($id)) {
   $bankName = mb_strtoupper(bankDetails($id, "account_holder_name"));
   if ($bankName != "UNKNOWN") {

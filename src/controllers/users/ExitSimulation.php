@@ -19,6 +19,8 @@ if (!$info) {
 
 unset($_SESSION['UserSimulation']);
 
+$_SESSION = null;
+
 $_SESSION['Username'] = 		$info['Username'];
 $_SESSION['EmailAddress'] = $info['EmailAddress'];
 $_SESSION['Forename'] = 		$info['Forename'];

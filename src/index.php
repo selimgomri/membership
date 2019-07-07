@@ -209,6 +209,8 @@ if (mysqli_connect_errno()) {
   halt(500);
 }
 
+$systemInfo = new \SystemInfo($db);
+
 require_once "database.php";
 
 $currentUser = null;
@@ -265,13 +267,6 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
     }
 
     $expiry_time = ($time->format('U'))+60*60*24*120;
-
-    $user_info_cookie = json_encode([
-      'Forename' => $row['Forename'],
-      'Surname' => $row['Surname'],
-      'Account' => $_SESSION['UserID'],
-      'TopUAL'  => $row['AccessLevel']
-    ]);
 
     $secure = true;
     if (app('request')->protocol == 'http') {
@@ -555,6 +550,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/registration/router.php';
     });
 
+    $this->group('/users', function() {
+      include 'controllers/users/router.php';
+    });
+
     $this->any(['/', '/*'], function() {
       header("Location: " . autoUrl("registration"));
     });
@@ -625,8 +624,6 @@ $route->group($get_group, function($clubcode = "CLSE") {
     });
 
     $this->group('/users', function() {
-      global $link;
-
       include 'controllers/users/router.php';
     });
 

@@ -18,7 +18,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
         Welcome to <?=htmlspecialchars(env('CLUB_NAME'))?>
       </h1>
       <p class="lead">
-        We now need to run through some forms to complete the registration process. You will need your swimmers with you as you continue.
+        We've saved your account details. We now need to run through some forms to complete the registration process. You will need your swimmers with you as you continue.
       </p>
       
       <p>We'll ask you to;</p>
@@ -28,7 +28,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
         <li>Provide us with emergency contact details,</li>
         <li>Agree to all relevent Codes of Conduct,</li>
         <li>Agree to the Terms and Conditions of Membership,</li>
-        <li>Setup a Direct Debit for payments to <?=htmlspecialchars(env('CLUB_NAME'))?> and finally</li>
+        <li>Setup a Direct Debit for payments to <?=htmlspecialchars(env('CLUB_NAME'))?> and finally,</li>
         <li>Pay your registration fees, which consist of Club and Swim England Fees.</li>
       </ul>
 

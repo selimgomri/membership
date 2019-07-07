@@ -67,7 +67,7 @@ if ($status) {
       $renewal,
       $_SESSION['UserID']
     ]);
-		header("Location: " . currentUrl());
+		header("Location: " . autoUrl("renewal/go"));
 	} catch (Exception $e) {
 		$status = false;
 		$statusMessage .= "<li>Database Error - Contact support</li>";
