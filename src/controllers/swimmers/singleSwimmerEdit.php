@@ -115,7 +115,7 @@ if (!empty($_POST['datebirth'])) {
 	$newDateOfBirth = trim($_POST['datebirth']);
 	// NEEDS WORK FOR DATE TO BE RIGHT
 	if ($newDateOfBirth != $dateOfBirth) {
-		$updateSwimmer = $db->prepare("UPDATE `members` SET `MForename` = ? WHERE `MemberID` = ?");
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `DateOfBirth` = ? WHERE `MemberID` = ?");
 		$updateSwimmer->execute([$newDateOfBirth, $id]);
 		$dateOfBirthUpdate = true;
 		$update = true;
