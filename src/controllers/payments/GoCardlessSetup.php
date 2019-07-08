@@ -4,7 +4,7 @@
 
 $client = null;
 try {
-  if (env('GOCARDLESS_USE_SANDBOX')) {
+  if (env('GOCARDLESS_USE_SANDBOX') === true) {
     $client = new \GoCardlessPro\Client([
       'access_token' 		=> env('GOCARDLESS_SANDBOX_ACCESS_TOKEN'),
       'environment' 		=> \GoCardlessPro\Environment::SANDBOX
