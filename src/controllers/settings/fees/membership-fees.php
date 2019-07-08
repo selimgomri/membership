@@ -3,6 +3,8 @@
 global $db;
 global $systemInfo;
 
+$fluidContainer = true;
+
 $systemInfo->setSystemOption('ClubFeesType', 'Family/Individual');
 
 $feeType = $systemInfo->getSystemOption('ClubFeesType');
@@ -34,51 +36,59 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div class="container">
-  <div class="row">
-    <main class="col-lg-8">
-      <h1>Club Membership Fee Management</h1>
-      <p class="lead">Set amounts for club membership fees</p>
+<div class="container-fluid">
+  <div class="row justify-content-between">
+    <aside class="col-md-3 d-none d-md-block">
+      <?php
+        $list = new \CLSASC\BootstrapComponents\ListGroup(file_get_contents(BASE_PATH . 'controllers/settings/SettingsLinkGroup.json'));
+        echo $list->render('settings-fees');
+      ?>
+    </aside>
+    <div class="col-md-9">
+      <main>
+        <h1>Club Membership Fee Management</h1>
+        <p class="lead">Set amounts for club membership fees</p>
 
-      <?php if (isset($_SESSION['Update-Success']) && $_SESSION['Update-Success']) { ?>
-      <div class="alert alert-success">Changes saved successfully</div>
-      <?php unset($_SESSION['Update-Success']); } ?>
+        <?php if (isset($_SESSION['Update-Success']) && $_SESSION['Update-Success']) { ?>
+        <div class="alert alert-success">Changes saved successfully</div>
+        <?php unset($_SESSION['Update-Success']); } ?>
 
-      <?php if (isset($_SESSION['Update-Error']) && $_SESSION['Update-Error']) { ?>
-      <div class="alert alert-danger">Changes could not be saved</div>
-      <?php unset($_SESSION['Update-Error']); } ?>
+        <?php if (isset($_SESSION['Update-Error']) && $_SESSION['Update-Error']) { ?>
+        <div class="alert alert-danger">Changes could not be saved</div>
+        <?php unset($_SESSION['Update-Error']); } ?>
 
-      <form method="post">
+        <form method="post">
 
-        <div class="form-group">
-          <label for="indv">Individual Fee</label>
-          <div class="input-group mono">
-            <div class="input-group-prepend">
-              <span class="input-group-text">&pound;</span>
+          <div class="form-group">
+            <label for="indv">Individual Fee</label>
+            <div class="input-group mono">
+              <div class="input-group-prepend">
+                <span class="input-group-text">&pound;</span>
+              </div>
+              <input type="number" class="form-control" id="indv" name="indv" placeholder="Enter amount" min="0"
+                step="0.01" value="<?=number_format($feesArray['Individual']/100, 2, '.', '')?>">
             </div>
-            <input type="number" class="form-control" id="indv" name="indv" placeholder="Enter amount" min="0"
-              step="0.01" value="<?=number_format($feesArray['Individual']/100, 2, '.', '')?>">
           </div>
-        </div>
 
-        <div class="form-group">
-          <label for="fam">Family Fee</label>
-          <div class="input-group mono">
-            <div class="input-group-prepend">
-              <span class="input-group-text">&pound;</span>
+          <div class="form-group">
+            <label for="fam">Family Fee</label>
+            <div class="input-group mono">
+              <div class="input-group-prepend">
+                <span class="input-group-text">&pound;</span>
+              </div>
+              <input type="number" class="form-control" id="fam" name="fam" placeholder="Enter amount" min="0"
+                step="0.01" value="<?=number_format($feesArray['Family']/100, 2, '.', '')?>">
             </div>
-            <input type="number" class="form-control" id="fam" name="fam" placeholder="Enter amount" min="0"
-              step="0.01" value="<?=number_format($feesArray['Family']/100, 2, '.', '')?>">
           </div>
-        </div>
 
-        <p>
-          <button class="btn btn-success" type="submit">
-            Save
-          </button>
-        </p>
-      </form>
-    </main>
+          <p>
+            <button class="btn btn-success" type="submit">
+              Save
+            </button>
+          </p>
+        </form>
+      </main>
+    </div>
   </div>
 </div>
 

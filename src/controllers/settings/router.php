@@ -1,5 +1,9 @@
 <?php
 
+$this->get('/', function() {
+  include 'home.php';
+});
+
 $this->group('/codes-of-conduct', function() {
   $this->get('/', function() {
     header("Location: " . autoUrl("settings/codes-of-conduct/parent"));

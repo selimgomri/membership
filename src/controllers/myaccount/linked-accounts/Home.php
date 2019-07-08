@@ -22,7 +22,7 @@ include BASE_PATH . 'views/header.php';
     </aside>
     <div class="col-md-9">
       <main>
-        <h1>Linked Accounts</h1>
+        <h1>Switch Accounts</h1>
 
         <p class="lead">Sign in to multiple accounts on all of your devices.</p>
 
@@ -74,7 +74,7 @@ include BASE_PATH . 'views/header.php';
               <div class="col-md-5 col-lg-3">
                 <div class="form-row">
                   <div class="col-6 col-lg-12">
-                    <a class="btn btn-block btn-success"
+                    <a class="btn btn-block btn-outline-dark"
                       href="<?=autoUrl("my-account/linked-accounts/" . $linked['muid'] . "/switch")?>">
                       Switch<span class="d-none d-xl-inline"> to this</span>
                     </a>
@@ -109,9 +109,9 @@ include BASE_PATH . 'views/header.php';
               <div class="col-md-5 col-lg-3">
                 <div class="form-row">
                   <div class="col-6 col-lg-12">
-                    <a class="btn btn-block btn-success"
+                    <a class="btn btn-block btn-outline-dark"
                       href="<?=autoUrl("my-account/linked-accounts/" . $linked['luid'] . "/switch")?>">
-                      Switch<span class="d-none d-xl-inline"> to this</span>
+                      Sign in<span class="d-none d-xl-inline"> to this</span>
                     </a>
                     <div class="d-none d-lg-block mb-1"></div>
                   </div>
