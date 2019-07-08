@@ -729,10 +729,10 @@ function updatePaymentStatus($PMkey) {
   global $link;
   global $db;
   require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
-  $sql2bool = null;
-  $payment = $client->payments()->get($PMkey);
-  $status = $payment->status;
+  $sql2bool = $payment = $status = null;
   try {
+    $payment = $client->payments()->get($PMkey);
+    $status = $payment->status;
     $update = $db->prepare("UPDATE `payments` SET `Status` = ? WHERE `PMkey` = ?");
     $update->execute([$status, $PMkey]);
   } catch (Exception $e) {
@@ -828,6 +828,9 @@ function updatePaymentStatus($PMkey) {
     }
   } else {
     $sql2bool = true;
+  }
+  if ($status == null) {
+    return false;
   }
   if ($sql2bool) {
     return true;
