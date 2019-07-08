@@ -12,11 +12,11 @@
           <div class="row">
             <div class="col">
               <address>
-                <?php $club = json_decode(CLUB_JSON); ?>
+                <?php $addr = json_decode(env('CLUB_ADDRESS')); ?>
                 <strong><?=env('CLUB_NAME')?></strong><br>
                 <?php
-                for ($i = 0; $i < sizeof($club->ClubAddress); $i++) { ?>
-                <?=$club->ClubAddress[$i]?><br>
+                for ($i = 0; $i < sizeof($addr); $i++) { ?>
+                <?=$addr[$i]?><br>
                 <?php } ?>
               </address>
               <!--<p><i class="fa fa-envelope fa-fw" aria-hidden="true"></i> <a href="mailto:enquiries@chesterlestreetasc.co.uk" target="new">E-Mail Us</a></p>-->

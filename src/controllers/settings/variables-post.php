@@ -24,6 +24,16 @@ try {
       $systemInfo->setSystemOption($key, $_POST[$key]);
     }
   }
+
+  $vars['CLUB_ADDRESS'] = null;
+  if (!$systemInfo->isExistingEnvVar('CLUB_ADDRESS')) {
+    $addr = $_POST['CLUB_ADDRESS'];
+    $addr = str_replace("\r\n", "\n", $addr);
+    $addr = explode("\n", $addr);
+    $addr = json_encode($addr);
+    $systemInfo->setSystemOption('CLUB_ADDRESS', $addr);
+  }
+
   $_SESSION['PCC-SAVED'] = true;
 } catch (Exception $e) {
   $_SESSION['PCC-ERROR'] = true;

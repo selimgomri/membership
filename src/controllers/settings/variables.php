@@ -18,6 +18,7 @@ $vars = [
   'GOCARDLESS_SANDBOX_ACCESS_TOKEN' => null,
   'GOCARDLESS_ACCESS_TOKEN' => null,
   'GOCARDLESS_WEBHOOK_KEY' => null,
+  'CLUB_ADDRESS' => null,
 ];
 
 $disabled = [];
@@ -30,6 +31,10 @@ foreach ($vars as $key => $value) {
     $vars[$key] = $systemInfo->getSystemOption($key);
     $disabled[$key] = '';
   }
+}
+
+if ($vars['CLUB_ADDRESS'] != null) {
+  $vars['CLUB_ADDRESS'] = json_decode($vars['CLUB_ADDRESS']);
 }
 
 $pagetitle = "System Variables";
@@ -87,6 +92,19 @@ include BASE_PATH . 'views/header.php';
             <input class="form-control mono" type="url" name="CLUB_WEBSITE" id="CLUB_WEBSITE" value="<?=htmlspecialchars($vars['CLUB_WEBSITE'])?>" <?=$disabled['CLUB_WEBSITE']?>>
           </div>
 
+          <div class="form-group">
+            <label for="CLUB_ADDRESS">Club Primary Addess</label>
+            <textarea class="form-control" rows="5" id="CLUB_ADDRESS" name="CLUB_ADDRESS" aria-describedby="CLUB_ADDRESS_HELP" <?=$disabled['CLUB_ADDRESS']?>><?php
+            for ($i = 0; $i < sizeof($vars['CLUB_ADDRESS']); $i++) {
+              echo htmlspecialchars($vars['CLUB_ADDRESS'][$i]);
+              if ($i+1 < sizeof($vars['CLUB_ADDRESS'])) {
+                echo "\r\n";
+              }
+            }
+            ?></textarea>
+            <small id="CLUB_ADDRESS_HELP" class="form-text text-muted">Enter the address of your primary location. Do not include your club name and do not place commas at the end of lines.</small>
+          </div>
+
           <h2>Email Options</h2>
 
           <div class="form-group">
@@ -101,7 +119,13 @@ include BASE_PATH . 'views/header.php';
 
           <div class="form-group">
             <label for="EMAIL_DOMAIN">Email Domain</label>
-            <input class="form-control" type="text" name="EMAIL_DOMAIN" id="EMAIL_DOMAIN" value="<?=htmlspecialchars($vars['EMAIL_DOMAIN'])?>" <?=$disabled['EMAIL_DOMAIN']?>> 
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">@</span>
+              </div>
+              <input class="form-control" type="text" name="EMAIL_DOMAIN" id="EMAIL_DOMAIN" value="<?=htmlspecialchars($vars['EMAIL_DOMAIN'])?>" <?=$disabled['EMAIL_DOMAIN']?> aria-describedby="EMAIL_DOMAIN_HELP">
+            </div>
+            <small id="EMAIL_DOMAIN_HELP" class="form-text text-muted">Your email domain must be listed in your Twilio SendGrid account.</small>
           </div>
 
           <?php if (!env('SENDGRID_API_KEY')) { ?>
@@ -110,7 +134,7 @@ include BASE_PATH . 'views/header.php';
             <input class="form-control mono" type="text" name="SENDGRID_API_KEY" id="SENDGRID_API_KEY" value="<?=htmlspecialchars($vars['SENDGRID_API_KEY'])?>" <?=$disabled['SENDGRID_API_KEY']?>> 
           </div>
           <?php } else { ?>
-          <p>Your <a href="">Twilio SendGrid API key is set at system level and cannot be viewed or modified here.</a></p>
+          <p>Your <a href="https://sendgrid.com/">Twilio SendGrid API key</a> is set at system level and cannot be viewed or modified here.</p>
           <?php } ?>
 
           <h2>GoCardless API keys (for direct debit)</h2>
