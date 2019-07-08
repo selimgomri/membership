@@ -36,7 +36,7 @@
     },
     {
       "id": "linked-accounts",
-      "name": "Linked Accounts",
+      "name": "Switch Accounts",
       "title": "Link accounts so you can easily switch between parent and admin roles",
       "link": "my-account/linked-accounts",
       "target": "_self",

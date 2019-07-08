@@ -1,0 +1,46 @@
+{
+  "menuType": "ProfileNavigation",
+  "title": "System Options",
+  "links": [
+    {
+      "id": "settings-home",
+      "name": "Settings Menu",
+      "title": "Settings home",
+      "link": "settings",
+      "target": "_self",
+      "external": false
+    },
+    {
+      "id": "settings-vars",
+      "name": "System Variables",
+      "title": "Edit system variables such as club name",
+      "link": "settings/variables",
+      "target": "_self",
+      "external": false
+    },
+    {
+      "id": "settings-fees",
+      "name": "Membership Fees",
+      "title": "Club and Swim England Membership Fees",
+      "link": "settings/fees",
+      "target": "_self",
+      "external": false
+    },
+    {
+      "id": "settings-codes-of-conduct",
+      "name": "Codes of Conduct",
+      "title": "Settings for club codes of conduct",
+      "link": "settings/codes-of-conduct",
+      "target": "_self",
+      "external": false
+    },
+    {
+      "id": "settings-terms",
+      "name": "Terms and Conditions",
+      "title": "CLub membership terms and conditions and privacy polices",
+      "link": "settings/terms-and-conditions",
+      "target": "_self",
+      "external": false
+    }
+  ]
+}

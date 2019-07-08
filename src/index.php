@@ -211,6 +211,8 @@ if (mysqli_connect_errno()) {
 
 $systemInfo = new \SystemInfo($db);
 
+include BASE_PATH . 'includes/GetVars.php';
+
 require_once "database.php";
 
 $currentUser = null;
