@@ -11,15 +11,32 @@ class SystemInfo {
   private $db;
   private $systemOptions;
   private $systemOptionsRetrieved;
+  private $serverEnvVar;
 
   public function __construct($db) {
     $this->db = $db;
     $this->systemOptionsRetrieved = false;
+    $this->serverEnvVar = [];
   }
 
   public function revalidate() {
     // Get all options
     $this->getSystemOptions();
+  }
+
+  public function setExistingEnvVar($key) {
+    $this->serverEnvVar[$key] = true;
+  }
+
+  public function unsetExistingEnvVar($key) {
+    $this->serverEnvVar[$key] = false;
+  }
+
+  public function isExistingEnvVar($key) {
+    if (isset($this->serverEnvVar[$key]) && $this->serverEnvVar[$key]) {
+      return true;
+    }
+    return false;
   }
 
   private function getSystemOptions() {

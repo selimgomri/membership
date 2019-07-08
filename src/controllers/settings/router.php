@@ -4,6 +4,16 @@ $this->get('/', function() {
   include 'home.php';
 });
 
+$this->group('/variables', function() {
+    $this->get('/', function() {
+      include 'variables.php';
+    });
+
+    $this->post('/', function() {
+      include 'variables-post.php';
+    });
+});
+
 $this->group('/codes-of-conduct', function() {
   $this->get('/', function() {
     header("Location: " . autoUrl("settings/codes-of-conduct/parent"));

@@ -11,6 +11,14 @@
       "external": false
     },
     {
+      "id": "settings-vars",
+      "name": "System Variables",
+      "title": "Edit system variables such as club name",
+      "link": "settings/variables",
+      "target": "_self",
+      "external": false
+    },
+    {
       "id": "settings-fees",
       "name": "Membership Fees",
       "title": "Club and Swim England Membership Fees",
