@@ -12,10 +12,16 @@ $access = $_SESSION['AccessLevel'];
 $swimmerCount = 0;
 
 if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
-  if (isset($_REQUEST["squadID"]) && v::intVal()->validate($_REQUEST["squadID"])) {
+  if ((isset($_REQUEST["squadID"]) && v::intVal()->validate($_REQUEST["squadID"])) || isset($preload) && $preload && $getSessions) {
     // get the squadID parameter from URL
-    $squadID = $_REQUEST["squadID"];
-    $session = $_REQUEST['selected'];
+    $squadID = $session = null;
+    if (isset($preload) && $preload) {
+      $squadID = $squad_init;
+      $session = $session_init;
+    } else {
+      $squadID = $_REQUEST["squadID"];
+      $session = $_REQUEST['selected'];
+    }
 
     $response = "";
 
@@ -30,27 +36,27 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
         $exists = true;
         $dayText = "";
         switch ($row['SessionDay']) {
-            case 0:
-                $dayText = "Sunday";
-                break;
-            case 1:
-                $dayText = "Monday";
-                break;
-            case 2:
-                $dayText = "Tuesday";
-                break;
-            case 3:
-                $dayText = "Wednesday";
-                break;
-            case 4:
-                $dayText = "Thursday";
-                break;
-            case 5:
-                $dayText = "Friday";
-                break;
-            case 6:
-                $dayText = "Saturday";
-                break;
+          case 0:
+            $dayText = "Sunday";
+            break;
+          case 1:
+            $dayText = "Monday";
+            break;
+          case 2:
+            $dayText = "Tuesday";
+            break;
+          case 3:
+            $dayText = "Wednesday";
+            break;
+          case 4:
+            $dayText = "Thursday";
+            break;
+          case 5:
+            $dayText = "Friday";
+            break;
+          case 6:
+            $dayText = "Saturday";
+            break;
         }
 
         $selected = "";
@@ -65,16 +71,23 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       echo $content;
     }
     else {
-      echo "<option selected value=\"0\">Couldn't find anything</option>";
+      echo "<option selected value=\"0\">No sessions to show</option>";
     }
   }
 
-  if (isset($_REQUEST["sessionID"]) && v::intVal()->validate($_REQUEST["sessionID"])) {
+  if ((isset($_REQUEST["sessionID"]) && v::intVal()->validate($_REQUEST["sessionID"])) || isset($preload) && $preload && $getRegister) {
     if (isset($_REQUEST["date"]) && v::intVal()->validate($_REQUEST["date"])) {
       $dateO = $date = $_REQUEST["date"];
     }
 
-    $sessionID = $_REQUEST["sessionID"];
+    $sessionID = null;
+
+    if (isset($preload) && $preload) {
+      $sessionID = $session_init;
+    } else {
+      $sessionID = $_REQUEST["sessionID"];
+    }
+
     $response = $content = $modalOutput = "";
 
     if ($sessionID != null) {
