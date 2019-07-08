@@ -22,7 +22,9 @@ try {
   foreach ($vars as $key => $value) {
     if (!env($key)) {
       $v = $systemInfo->getSystemOption($key);
-      define($key, $v);
+      if (!defined($key)) {
+        define($key, $v);
+      }
       putenv($key . "=" . $v);
     } else {
       $systemInfo->setExistingEnvVar($key);

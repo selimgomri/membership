@@ -3,6 +3,7 @@
 $preload = true;
 $getRegister = false;
 $getSessions = false;
+$week_to_get = null;
 
 global $db;
 
@@ -44,6 +45,9 @@ include "attendanceMenu.php";
                 $day = date('w');
                 $week_start = date('Y-m-d', strtotime('-'.$day.' days'));
                 while ($week = $getWeeks->fetch(PDO::FETCH_ASSOC)) { ?>
+                <?php if ($week_to_get == null) {
+                  $week_to_get = $week['WeekID'];
+                } ?>
               <option value="<?=$week['WeekID']?>">
                 Week Beginning <?=date('j F Y', strtotime($week['WeekDateBeginning']))?>
               </option>
@@ -91,6 +95,7 @@ include "attendanceMenu.php";
         <?php
         $getRegister = true;
         $getSessions = false;
+        $weekID = $week_to_get;
         include BASE_PATH . 'controllers/ajax/registerSessions.php';
         ?>
         <?php } else { ?>

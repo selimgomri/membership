@@ -8,10 +8,9 @@ $getMemberAttendance = $db->prepare("SELECT AttendanceBoolean FROM `sessionsAtte
 $markdown = new ParsedownExtra();
 $markdown->setSafeMode(true);
 
-$access = $_SESSION['AccessLevel'];
 $swimmerCount = 0;
 
-if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
+if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach") {
   if ((isset($_REQUEST["squadID"]) && v::intVal()->validate($_REQUEST["squadID"])) || isset($preload) && $preload && $getSessions) {
     // get the squadID parameter from URL
     $squadID = $session = null;
@@ -84,6 +83,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 
     if (isset($preload) && $preload) {
       $sessionID = $session_init;
+      $dateO = $date = $weekID;
     } else {
       $sessionID = $_REQUEST["sessionID"];
     }
