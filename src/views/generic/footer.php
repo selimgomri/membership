@@ -75,8 +75,13 @@
       </div>
     </div>
   </div>
-  <?php } ?>
   <div class="cls-global-footer-legal">
+
+  <?php } else { ?>
+
+  <div class="cls-global-footer-legal mt-3">
+
+  <?php } ?>
     <div
       class="<?php if (isset($fluidContainer) && $fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
       <div class="row">

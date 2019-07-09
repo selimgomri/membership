@@ -16,5 +16,5 @@ try {
     ]);
   }
 } catch (Exception $e) {
-  halt(902);
+  halt(902);  
 }

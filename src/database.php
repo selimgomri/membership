@@ -1304,7 +1304,7 @@ function updateSubscription($post, $list, $user = null) {
 
 function getUserOption($userID, $option) {
   global $db;
-  $query = $db->prepare("SELECT Value FROM userOptions WHERE User = ? AND Option = ?");
+  $query = $db->prepare("SELECT `Value` FROM userOptions WHERE User = ? AND `Option` = ?");
   $query->execute([$userID, $option]);
   $result = $query->fetchColumn();
 
@@ -1320,15 +1320,15 @@ function setUserOption($userID, $option, $value) {
   }
   try {
     global $db;
-    $query = $db->prepare("SELECT COUNT(*) FROM userOptions WHERE User = ? AND Option = ?");
+    $query = $db->prepare("SELECT COUNT(*) FROM userOptions WHERE User = ? AND `Option` = ?");
     $query->execute([$userID, $option]);
     $result = $query->fetchColumn();
 
     if ($result == 0) {
-      $query = $db->prepare("INSERT INTO userOptions (User, Option, Value) VALUES (?, ?, ?)");
+      $query = $db->prepare("INSERT INTO userOptions (`User`, `Option`, `Value`) VALUES (?, ?, ?)");
       $query->execute([$userID, $option, $value]);
     } else {
-      $query = $db->prepare("UPDATE userOptions SET Value = ? WHERE User = ? AND Option = ?");
+      $query = $db->prepare("UPDATE userOptions SET `Value` = ? WHERE User = ? AND `Option` = ?");
       $query->execute([$value, $userID, $option]);
     }
   } catch (Exception $e) {

@@ -222,10 +222,12 @@ p.lead {
     </div>
     <?php } ?>
 
+    <?php if (true || !isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
     <div
       class="bg-primary <?php if (isset($_SESSION['UserID']) && user_needs_registration($_SESSION['UserID'])) { ?>d-lg-none<?php } ?>">
       <div class="<?=$container_class?>">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary
+    <?php } ?>
+    <nav class="navbar <?php if (isset($_SESSION['PWA']) || $_SESSION['PWA']) { ?><?php } ?>  navbar-expand-lg navbar-dark bg-primary
     d-print-none justify-content-between px-0" <?php if ($use_website_menu) { ?>id="club-menu" <?php } ?>
           role="navigation">
 
@@ -576,9 +578,11 @@ p.lead {
           </div>
         </nav>
         <?php } ?>
+        <?php if (true || !isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
       </div>
 
     </div>
+    <?php } ?>
 
     <div id="maincontent"></div>
 

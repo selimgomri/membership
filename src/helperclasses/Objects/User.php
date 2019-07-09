@@ -80,7 +80,7 @@ class User {
 
   private function getUserOptions() {
     try {
-      $getOptions = $this->db->prepare("SELECT Option, Value FROM userOptions WHERE User = ? LIMIT 100");
+      $getOptions = $this->db->prepare("SELECT `Option`, `Value` FROM userOptions WHERE User = ? LIMIT 100");
       $getOptions->execute([$this->id]);
       $this->userOptions = $getOptions->fetchAll(PDO::FETCH_KEY_PAIR);
       $this->userOptionsRetrieved = true;
@@ -117,15 +117,15 @@ class User {
     $this->userOptions[$option] = $value;
 
     // Any PDO exceptions will be propagated
-    $query = $this->db->prepare("SELECT COUNT(*) FROM userOptions WHERE User = ? AND Option = ?");
+    $query = $this->db->prepare("SELECT COUNT(*) FROM userOptions WHERE User = ? AND `Option` = ?");
     $query->execute([$this->id, $option]);
     $result = $query->fetchColumn();
 
     if ($result == 0) {
-      $query = $this->db->prepare("INSERT INTO userOptions (User, Option, Value) VALUES (?, ?, ?)");
+      $query = $this->db->prepare("INSERT INTO userOptions (User, `Option`, `Value`) VALUES (?, ?, ?)");
       $query->execute([$this->id, $option, $value]);
     } else {
-      $query = $this->db->prepare("UPDATE userOptions SET Value = ? WHERE User = ? AND Option = ?");
+      $query = $this->db->prepare("UPDATE userOptions SET `Value` = ? WHERE User = ? AND `Option` = ?");
       $query->execute([$value, $this->id, $option]);
     }
   }
