@@ -463,7 +463,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
         <p>
           Under the General Data Protection Regulation, you can request for
           free to download all personal data held about
-          <?=$rowSwim["MForename"]?> by <?=CLUB_NAME?>.
+          <?=$rowSwim["MForename"]?> by <?=htmlspecialchars(env('CLUB_NAME'))?>.
         </p>
         <p>
           <a href="<?=autoUrl("my-account/general/download-member-data/" . $id)?>"

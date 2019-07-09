@@ -12,7 +12,7 @@ include "galaMenu.php"; ?>
 <div class="front-page" style="margin-bottom: -1rem;">
   <div class="container">
     <h1>Galas</h1>
-    <p class="lead">Gala Entry Management at <?=CLUB_NAME?></p>
+    <p class="lead">Gala Entry Management at <?=htmlspecialchars(env('CLUB_NAME'))?></p>
 
       <h2 class="mb-4">
         Upcoming Galas

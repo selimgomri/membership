@@ -103,7 +103,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 	</div>
 
 	<div class="mb-3 p-5 bg-primary text-white">
-		<span class="h3 mb-0"><?=CLUB_NAME?></span>
+		<span class="h3 mb-0"><?=htmlspecialchars(env('CLUB_NAME'))?></span>
 		<h1 class="h2 mb-4">Online Membership System</h1>
 		<p class="mb-0">
 			<strong>
@@ -113,7 +113,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 	</div>
 
   <p>
-    Here at <?=CLUB_NAME?>, we provide a number of online services to
+    Here at <?=htmlspecialchars(env('CLUB_NAME'))?>, we provide a number of online services to
     manage our members. Our services allow you to manage your swimmers, enter
     competitions, stay up to date by email and make payments by Direct Debit.
   </p>
@@ -182,7 +182,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 	</p>
 
 	<p>
-		You'll be directed to a page and asked to enter your swimmer's <?=$swimEnglandText?> and <?=CLUB_SHORT_NAME?> Access Key as below.
+		You'll be directed to a page and asked to enter your swimmer's <?=$swimEnglandText?> and <?=htmlspecialchars(env('CLUB_SHORT_NAME'))?> Access Key as below.
 	</p>
 
 	<div class="mb-3">
@@ -193,7 +193,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 		      <td class="pr-0"><span class="mono"><?=htmlspecialchars($row['ASANumber'])?></span></td>
 		    </tr>
 		    <tr>
-		      <th scope="row" class="pl-0"><?=CLUB_SHORT_NAME?> Access Key</th>
+		      <th scope="row" class="pl-0"><?=htmlspecialchars(env('CLUB_SHORT_NAME'))?> Access Key</th>
 		      <td class="pr-0"><span class="mono"><?=htmlspecialchars($row['AccessKey'])?></span></td>
 		    </tr>
 		  </tbody>
@@ -223,7 +223,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 
 		<?php if (!(defined('IS_CLS') && IS_CLS)) { ?>
     <p>
-      The user account service is provided to <?=CLUB_NAME?> by
+      The user account service is provided to <?=htmlspecialchars(env('CLUB_NAME'))?> by
       Chester-le-Street ASC Club Digital Services.
     </p>
 		<?php } ?>
@@ -249,11 +249,11 @@ include BASE_PATH . "views/swimmersMenu.php";
     </div>
     <div class="<?php echo $col; ?>">
       <div class="text-center border border-dark h-100 p-2 bg-white">
-        <span class="mb-2"><?=CLUB_SHORT_NAME?> Number</span>
+        <span class="mb-2"><?=htmlspecialchars(env('CLUB_SHORT_NAME'))?> Number</span>
         <img class="img-fluid mx-auto d-block"
         src="<?=autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . htmlspecialchars(env('ASA_CLUB_CODE') . $row['MemberID']) . "&print=false")?>"
         srcset="<?=autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . htmlspecialchars(env('ASA_CLUB_CODE') . $row['MemberID']) . "&print=false")?> 2x, <?=autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . htmlspecialchars(env('ASA_CLUB_CODE') . $row['MemberID']) . "&print=false")?> 3x"
-        alt="<?=CLUB_CODE?>X<?php echo $row['MemberID']; ?>"></img>
+        alt="<?=htmlspecialchars(env('ASA_CLUB_CODE'))?>X<?php echo $row['MemberID']; ?>"></img>
         <span class="mono"><?=htmlspecialchars(env('ASA_CLUB_CODE') . $row['MemberID'])?></span>
       </div>
       <?php if ($row['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><?php } ?>

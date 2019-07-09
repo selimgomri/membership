@@ -106,7 +106,7 @@ require 'GoCardlessSetup.php';
           <?php } ?>
           <p class="mb-0"><?=htmlspecialchars($name)?><?=htmlspecialchars(strtoupper(bankDetails($user, "bank_name")))?></p>
           <p class="mono">******<?=htmlspecialchars(strtoupper(bankDetails($user, "account_number_end")))?></p>
-          <p><?=CLUB_NAME?> does not store your bank details.</p>
+          <p><?=htmlspecialchars(env('CLUB_NAME'))?> does not store your bank details.</p>
         <?php } ?>
         <p class="mb-0">
         	<a href="<?=autoUrl("payments/setup")?>" class="btn btn-dark btn-block">Add Bank Account</a>

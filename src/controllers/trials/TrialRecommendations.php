@@ -98,7 +98,7 @@ include BASE_PATH . 'views/header.php';
 
         <p>
             Press <em>Mark ineligible</em> if the swimmer will not be offered a
-            place at <?=CLUB_NAME?>.
+            place at <?=htmlspecialchars(env('CLUB_NAME'))?>.
         </p>
       </form>
     </div>

@@ -147,10 +147,10 @@ ob_start();?>
 
     <?php if (env('IS_CLS') && sizeof($swimmers) > 2) { ?>
     <p>As you have <?=sizeof($swimmers)?> swimmers, you qualify for a reduction on your squad fees.</p>
-    <?php } else if (env('IS_CLS')) { ?>
+    <?php } else if (bool(env('IS_CLS'))) { ?>
     <p>If you ever have three or more swimmers while at <?=htmlspecialchars(env('CLUB_NAME'))?>, you'll qualify for a discount on your monthly fees.</p>
     <?php } ?>
-    <?php if (env('IS_CLS')) { ?>
+    <?php if (bool(env('IS_CLS'))) { ?>
     <p>Reductions are applied as follows;</p>
     <p>If you have 3 swimmers, we'll order your swimmers by monthly fee and give you a reduction of 20% on your lowest cost swimmer.</p>
     <p>If you have 4 or more swimmers, we'll order your swimmers by monthly fee and give you a reduction of 20% on your third lowest cost swimmer and 40% on all further swimmers.</p>
@@ -200,7 +200,7 @@ ob_start();?>
           </td>
         </tr>
         <?php } ?>
-        <?php if (env('IS_CLS')) { ?>
+        <?php if (bool(env('IS_CLS'))) { ?>
         <tr>
           <td></td>
           <td>

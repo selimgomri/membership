@@ -109,7 +109,7 @@ include BASE_PATH . "views/header.php";
 
             <p>
               <strong>
-      	        You're missing out on email updates from <?=CLUB_NAME?>
+      	        You're missing out on email updates from <?=htmlspecialchars(env('CLUB_NAME'))?>
       	      </strong>
             </p>
             <p>
@@ -236,7 +236,7 @@ include BASE_PATH . "views/header.php";
 			</div>
 		</div>
 
-    <?php if (env('IS_CLS')) { ?>
+    <?php if (bool(env('IS_CLS'))) { ?>
     <div class="mb-4">
       <h2 class="mb-4">Club News</h2>
       <div class="news-grid">

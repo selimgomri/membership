@@ -90,7 +90,7 @@ $_SESSION['LoginSec'] = $lsv;
             <p class="small mb-0">Unauthorised access to or misuse of this
             system is prohibited and constitutes an offence under the Computer
             Misuse Act 1990. If you disclose any information obtained through
-            this system without authority then <?=CLUB_NAME?> or
+            this system without authority then <?=htmlspecialchars(env('CLUB_NAME'))?> or
             Chester-le-Street ASC Club Digital Services may take legal action
             against you.</p>
           </div>

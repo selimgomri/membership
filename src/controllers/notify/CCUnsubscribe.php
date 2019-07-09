@@ -35,11 +35,11 @@ include BASE_PATH . "views/header.php";?>
 	<h1>Successfully Unsubscribed</h1>
 	<p>You will no longer receive emails from this list.</p>
 	<p>
-		For further help and support with emails from <?=CLUB_NAME?>, visit
+		For further help and support with emails from <?=htmlspecialchars(env('CLUB_NAME'))?>, visit
 		our <a href="<?=autoUrl("notify")?>">Notify Help Centre</a>.
 	</p>
 	<p>
-		Notify by <?=CLUB_NAME?>
+		Notify by <?=htmlspecialchars(env('CLUB_NAME'))?>
 	</p>
 </div>
 

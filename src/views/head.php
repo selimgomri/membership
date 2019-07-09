@@ -4,7 +4,7 @@ global $currentUser;
 $cvp = 'generic';
 if (env('IS_CLS') && $currentUser != null && $currentUser->getUserBooleanOption('UsesGenericTheme')) {
   $cvp = 'generic';
-} else if (env('IS_CLS')) {
+} else if (bool(env('IS_CLS'))) {
   $cvp = 'chester';
 }
 

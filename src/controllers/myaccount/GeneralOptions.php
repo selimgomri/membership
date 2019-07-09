@@ -77,7 +77,7 @@ include BASE_PATH . "views/header.php";
       			</div>
       		</div>
 
-          <?php if (env('IS_CLS')) { ?>
+          <?php if (bool(env('IS_CLS'))) { ?>
           <div class="form-group">
       			<div class="custom-control custom-switch">
       				<input type="checkbox" class="custom-control-input" value="1" id="generic-theme" aria-describedby="generic-theme-help" name="generic-theme" <?=$genericThemeChecked?> >

@@ -83,7 +83,7 @@ include BASE_PATH . "views/header.php";
         </div>
       </form>
 
-      <?php if (env('IS_CLS')) { ?>
+      <?php if (bool(env('IS_CLS'))) { ?>
       <p class="small mb-0">
         Support Helpline: <a class=""
         href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>

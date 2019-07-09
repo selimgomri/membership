@@ -34,7 +34,7 @@ include BASE_PATH . 'views/header.php';
         </div>
       <?php } ?>
       <p class="lead">
-        It's great that you want to request a trial at <?=CLUB_NAME?>. To help us
+        It's great that you want to request a trial at <?=htmlspecialchars(env('CLUB_NAME'))?>. To help us
         work out the best possible plan for you or your child, please fill in the
         details below.
       </p>
@@ -268,7 +268,7 @@ include BASE_PATH . 'views/header.php';
           </p>
           <div class="mb-3">
             <label for="swimmer-club">Current Swimming Club (Optional)</label>
-            <input type="test" name="swimmer-club" id="swimmer-club" class="form-control" placeholder="<?=CLUB_NAME?>" value="<?=htmlspecialchars(trim($value['swimmer-club']))?>">
+            <input type="test" name="swimmer-club" id="swimmer-club" class="form-control" placeholder="<?=htmlspecialchars(env('CLUB_NAME'))?>" value="<?=htmlspecialchars(trim($value['swimmer-club']))?>">
           </div>
           <div class="mb-3">
             <label for="swimmer-asa">Swim England Number (Optional)</label>
@@ -290,7 +290,7 @@ include BASE_PATH . 'views/header.php';
         </p>
 
         <p>
-          By submitting this form you agree to let <?=CLUB_NAME?> contact you by
+          By submitting this form you agree to let <?=htmlspecialchars(env('CLUB_NAME'))?> contact you by
           email in relation to a trial and becoming a member. Your email address
           will not be used for any other purpose unless you choose to become a
           member. The trial and membership systems will send you a small number
@@ -298,7 +298,7 @@ include BASE_PATH . 'views/header.php';
         </p>
 
         <p>
-          <?=CLUB_NAME?> will not use your email address for marketing purposes.
+          <?=htmlspecialchars(env('CLUB_NAME'))?> will not use your email address for marketing purposes.
         </p>
 
       </form>

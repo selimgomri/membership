@@ -54,7 +54,7 @@ include BASE_PATH . 'views/header.php';
 
   <p>
     Kind regards,<br>
-    The <?=CLUB_NAME?> Team.
+    The <?=htmlspecialchars(env('CLUB_NAME'))?> Team.
   </p>
 
 <?php } ?>

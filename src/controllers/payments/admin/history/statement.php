@@ -58,7 +58,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 <div class="container">
 	<div class="">
-    <span class="d-none d-print-block h1"><?=CLUB_NAME?> Payments</span>
+    <span class="d-none d-print-block h1"><?=htmlspecialchars(env('CLUB_NAME'))?> Payments</span>
     <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
     <h1 class="border-bottom border-gray pb-2 mb-2"><?=htmlspecialchars($payment_info['Name'])?> Statement</h1>
     <?php } else { ?>

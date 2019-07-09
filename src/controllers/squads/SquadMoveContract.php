@@ -73,7 +73,7 @@ ob_start();?>
     </p>
 
     <p>
-      <?php if (env('IS_CLS')) { ?>As you pay by Direct Debit<?php } else { ?>If you pay by Direct Debit<?php } ?>, you won't need to take any action. We'll automatically update your monthly fees.
+      <?php if (bool(env('IS_CLS'))) { ?>As you pay by Direct Debit<?php } else { ?>If you pay by Direct Debit<?php } ?>, you won't need to take any action. We'll automatically update your monthly fees.
     </p>
 
     <?php if ($email_info['SquadTimetable'] != "" && $email_info['SquadTimetable'] != null) { ?>
@@ -86,7 +86,7 @@ ob_start();?>
       If you do not think <?=htmlspecialchars($email_info['MForename'])?> will be able to take up their place in <?=htmlspecialchars($email_info['SquadName'])?> Squad, please contact us as soon as possible. We must however warn you that we may not be able keep <?=htmlspecialchars($email_info['MForename'])?> in <?=htmlspecialchars($email_info['OldSquad'])?> Squad if it would prevent us from moving up swimmers in our lower squads.
     </p>
 
-    <?php if ((env('IS_CLS'))) { ?>
+    <?php if ((bool(env('IS_CLS')))) { ?>
       <div class="cell">
         <h2>Instructions for parents</h2>
         <p>
@@ -116,7 +116,7 @@ ob_start();?>
     <div class="page-break"></div>
 
     <h1 id="payment-questions">Paying Squad Fees for <?=htmlspecialchars($email_info['SquadName'])?></h1>
-    <?php if (env('IS_CLS')) { ?>
+    <?php if (bool(env('IS_CLS'))) { ?>
     <p>
       Your monthly direct debit will be automatically adjusted accordingly. Payments by Direct Debit are covered by the <a href="#payment-dd-guarantee">Direct Debit Guarantee</a>.
     </p>
@@ -127,7 +127,7 @@ ob_start();?>
     <?php } ?>
 
     <p>
-      Full help and support for payments by Direct Debit is available on the Membership System Support Website at <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">https://www.chesterlestreetasc.co.uk/support/onlinemembership/</a>. Help and Support Documentation is provided by Chester-le-Street ASC<?php if (!(env('IS_CLS'))) { ?> to all clubs and users that use this service. If you need somebody to help you, please contact your own club in the first instance<?php } ?>.
+      Full help and support for payments by Direct Debit is available on the Membership System Support Website at <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">https://www.chesterlestreetasc.co.uk/support/onlinemembership/</a>. Help and Support Documentation is provided by Chester-le-Street ASC<?php if (!(bool(env('IS_CLS')))) { ?> to all clubs and users that use this service. If you need somebody to help you, please contact your own club in the first instance<?php } ?>.
     </p>
 
     <div class="row" id="payment-dd-guarantee">
@@ -173,7 +173,7 @@ ob_start();?>
     </h1>
 
     <p>
-      By moving into this squad, you must agree to its code of conduct. <?php if ((env('IS_CLS'))) { ?><strong>You are required to sign and return this form to the club before <?=date("l j F Y", strtotime($email_info['MovingDate']))?>.<?php } else { ?><strong>If instructed to do so</strong> by your club, you should sign and return this document.<?php } ?>
+      By moving into this squad, you must agree to its code of conduct. <?php if ((bool(env('IS_CLS')))) { ?><strong>You are required to sign and return this form to the club before <?=date("l j F Y", strtotime($email_info['MovingDate']))?>.<?php } else { ?><strong>If instructed to do so</strong> by your club, you should sign and return this document.<?php } ?>
     </p>
 
     <p>
@@ -189,7 +189,7 @@ ob_start();?>
     </h1>
 
     <p><strong>
-      <?php if ((env('IS_CLS'))) { ?>
+      <?php if ((bool(env('IS_CLS')))) { ?>
         Please sign and return this form to any squad coach before you move into this squad on <?=date("l j F Y", strtotime($email_info['MovingDate']))?>. If you've been sent this form by email, please print it out. Electronic signatures will not be accepted.
       <?php } else { ?>
         If required to do so by your club, please sign and return this form.
@@ -217,7 +217,7 @@ ob_start();?>
         <?php } ?>
 
         <p>
-          I, <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> agree to the Code of Conduct for <?=htmlspecialchars($email_info['SquadName'])?> Squad as outlined above as required by the Terms and Conditions of Membership of <?=CLUB_NAME?>.
+          I, <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> agree to the Code of Conduct for <?=htmlspecialchars($email_info['SquadName'])?> Squad as outlined above as required by the Terms and Conditions of Membership of <?=htmlspecialchars(env('CLUB_NAME'))?>.
         </p>
 
         <div class="signature-box mb-0">

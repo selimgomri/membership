@@ -11,7 +11,7 @@ header("Content-Type: application/manifest+json");
   "background_color": "#fff",
   "description": <?=json_encode("My " . env('CLUB_NAME') . " Membership")?>,
   <?php
-  if (env('IS_CLS')) { 
+  if (bool(env('IS_CLS'))) { 
   ?>"icons": [{
     "src": <?=json_encode(autoUrl("public/img/touchicons/touch-icon-72x72.png"))?>,
     "sizes": "72x72",

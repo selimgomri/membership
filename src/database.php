@@ -1,13 +1,8 @@
 <?php
 
-/*if ((!isset($preventLoginRedirect)) && (empty($_SESSION['LoggedIn']))) {
-  $preventLoginRedirect = false;
-  $_SESSION['requestedURL'] = mysqli_real_escape_string(LINK, $_SERVER['REQUEST_URI']);
+function bool($var) {
+  return filter_var($var, FILTER_VALIDATE_BOOLEAN);
 }
-elseif (!isset($preventLoginRedirect)) {
-  $preventLoginRedirect = false;
-  $_SESSION['requestedURL'] = mysqli_real_escape_string(LINK, $_SERVER['REQUEST_URI']);
-}*/
 
 function verifyUser($user, $password) {
   global $db;
