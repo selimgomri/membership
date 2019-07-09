@@ -140,7 +140,7 @@ if ($_POST['from'] == "current-user") {
     }
   }
 
-  if (!(defined('IS_CLS') && IS_CLS)) {
+  if (!bool(env('IS_CLS'))) {
     $fromEmail .= '.' . urlencode(strtolower(str_replace(' ', '', CLUB_CODE)));
   }
 

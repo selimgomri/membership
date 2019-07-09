@@ -114,7 +114,7 @@ try {
     $message_content = '';
     if (!$mandateInfo) {
       $message_content .= '<div class="cell"><p><strong>Warning: You do not have a direct debit set up with us.</strong>';
-      if (defined('IS_CLS') && IS_CLS) {
+      if (bool(env('IS_CLS'))) {
         $message_content .= ' If you are paying us manually, a £3 surcharge applies to your monthly fee. Login to <a href="' . autoUrl("payments") . '">the Membership System</a> to set up a direct debit before next month\'s bill.</p>';
         $message_content .= '<p class="mb-0">If you expected to pay us by direct debit this month, please contact the treasurer as soon as possible - Your swimmers could be suspended if you fail to pay squad fees.';
       }

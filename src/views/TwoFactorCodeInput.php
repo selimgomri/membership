@@ -91,7 +91,7 @@ include BASE_PATH . "views/header.php";
         <?php } ?>
       </p>
 
-      <?php if (defined('IS_CLS') && IS_CLS) { ?>
+      <?php if (bool(env('IS_CLS'))) { ?>
       <p class="small mb-0">
         Support Helpline: <a class=""
         href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>

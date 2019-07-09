@@ -9,7 +9,7 @@ $text = (isset($_GET["text"])?$_GET["text"]:"0");
 $size = (isset($_GET["size"])?$_GET["size"]:"300");
 $margin = (isset($_GET["margin"])?$_GET["margin"]:10);
 $ec = false;
-if ($_GET["error"] == "true") {
+if (isset($_GET["error"]) && $_GET["error"] == "true") {
 	$ec = true;
 }
 

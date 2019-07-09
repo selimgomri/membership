@@ -27,7 +27,7 @@ if (v::email()->validate($_POST['emailAddr'])) {
     competitions, stay up to date by email and make payments by Direct Debit.
   </p>';
 
-  if (!(defined('IS_CLS') && IS_CLS)) {
+  if (!bool(env('IS_CLS'))) {
   $text .= '<p><strong>Please note:</strong> Some services may not be provided by your club.</p>';
   }
 

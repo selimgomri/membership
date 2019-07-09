@@ -118,14 +118,14 @@ include BASE_PATH . "views/swimmersMenu.php";
     competitions, stay up to date by email and make payments by Direct Debit.
   </p>
 
-	<?php if (!(defined('IS_CLS') && IS_CLS)) { ?>
+	<?php if (!bool(env('IS_CLS'))) { ?>
 	<p>
 		<strong>Please note:</strong> Some services may not be provided by your club.
 	</p>
 	<?php } ?>
 
 	<p>
-		If you haven’t already done so, you will need to create an account on our
+		If you haven't already done so, you will need to create an account on our
 		membership system. This is easy to do - You only need to fill out one form
 		and then verify your email address.
 	</p>
@@ -157,18 +157,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 				</p>
 			</div>
 			<div class="col-4 text-center">
-        <img class="img-fluid ml-auto d-block" src="<?php echo
-        autoUrl("services/qr-generator?size=200&text=" .
-        rawurlencode(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" .
-        $row['AccessKey'])) . ""); ?>" srcset="<?php echo
-        autoUrl("services/qr-generator?size=400&text=" .
-        rawurlencode(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" .
-        $row['AccessKey'])) . ""); ?> 2x, <?php echo
-        autoUrl("services/qr-generator?size=400&text=" .
-        rawurlencode(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" .
-        $row['AccessKey'])) . ""); ?> 3x" alt="<?php echo
-        autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" .
-        $row['AccessKey']); ?>"></img>
+        <img class="img-fluid ml-auto d-block" src="<?=autoUrl("services/qr-generator?size=200&text=" . rawurlencode(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey'])) . "")?>" srcset="<<?=autoUrl("services/qr-generator?size=400&text=" . rawurlencode(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey'])) . "")?> 2x, <?=autoUrl("services/qr-generator?size=600&text=" . rawurlencode(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey'])) . "")?> 3x" alt="<?=htmlspecialchars(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey']))?>" title="<?=htmlspecialchars(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey']))?>"></img>
 			</div>
 		</div>
   </div>
@@ -221,7 +210,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 			<?=CLUB_EMAIL?>.
 		</p>
 
-		<?php if (!(defined('IS_CLS') && IS_CLS)) { ?>
+		<?php if (!bool(env('IS_CLS'))) { ?>
     <p>
       The user account service is provided to <?=htmlspecialchars(env('CLUB_NAME'))?> by
       Chester-le-Street ASC Club Digital Services.
