@@ -112,9 +112,18 @@ include BASE_PATH . "views/header.php";
             <dt class="col-sm-3">Sent To</dt>
             <dd class="col-sm-9">
               <?php
-              $squads = (array) $info->To->Squads;
-              $lists = (array) $info->To->Targeted_Lists;
-              $galas = (array) $info->To->Galas;
+              $squads = [];
+              if (isset($info->To->Squads)) {
+                $squads = (array) $info->To->Squads;
+              }
+              $lists = [];
+              if (isset($info->To->Targeted_Lists)) {
+                $lists = (array) $info->To->Targeted_Lists;
+              }
+              $galas = [];
+              if (isset($info->To->Galas)) {
+                $galas = (array) $info->To->Galas;
+              }
               $array = array_merge($squads, $lists, $galas);
               sort($array);
               foreach ($array as $s) { ?>

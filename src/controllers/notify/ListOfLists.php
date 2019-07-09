@@ -2,7 +2,7 @@
 
 global $db;
 
-$user = $_SESSION['UserId'];
+$user = $_SESSION['UserID'];
 $pagetitle = "Targetted Lists";
 $use_white_background = true;
 

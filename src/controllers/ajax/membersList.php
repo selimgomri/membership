@@ -33,7 +33,7 @@ if ((isset($_POST["squadID"])) && (isset($_POST["search"]))) {
 
   $query;
 
-  if ($_POST['type'] == "orphan") {
+  if (isset($_POST['type']) && $_POST['type'] == "orphan") {
     // Search the database for the results
 		if ($squadID == "allSquads") {
       $query = $db->prepare("SELECT members.MemberID, members.MForename,

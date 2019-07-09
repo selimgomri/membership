@@ -46,7 +46,7 @@ include BASE_PATH . "views/header.php";
       <h1>Advanced Account Options</h1>
       <p class="lead">Manage cookies and 2FA.</p>
 
-    	<?php if ($_SESSION['OptionsUpdate']) { ?>
+    	<?php if (isset($_SESSION['OptionsUpdate']) && $_SESSION['OptionsUpdate']) { ?>
     		<div class="alert alert-success">
     			<p class="mb-0">
     				<strong>We've successfully updated your general options</strong>

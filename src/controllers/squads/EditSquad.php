@@ -10,7 +10,6 @@ $row = $sql->fetch(PDO::FETCH_ASSOC);
 
 $title = $pagetitle = $row['SquadName'] . " Squad";
 
-
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php"; ?>
 
@@ -86,7 +85,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
           <div class="alert alert-danger">
             <div class="form-group mb-0">
               <label for="squadDeleteDanger"><strong>Danger Zone</strong> <br>Delete this Squad with this Key "<span
-                  class="mono"><?=htmlspecialchars($squadDeleteKey)?></span>"</label>
+                  class="mono"><?=htmlspecialchars($row['SquadKey'])?></span>"</label>
               <input type="text" class="form-control mono" id="squadDeleteDanger" name="squadDeleteDanger"
                 aria-describedby="squadDeleteDangerHelp" placeholder="Enter the key" onselectstart="return false"
                 onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false"

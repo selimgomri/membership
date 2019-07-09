@@ -60,7 +60,7 @@ include BASE_PATH . "views/header.php";
       <h1>Manage Email Options</h1>
       <p class="lead">Manage your email address and email options.</p>
 
-    	<?php if ($_SESSION['OptionsUpdate']) { ?>
+    	<?php if (isset($_SESSION['OptionsUpdate']) && $_SESSION['OptionsUpdate']) { ?>
     		<div class="alert alert-success">
     			<p class="mb-0">
     				<strong>We've successfully updated your email options</strong>
@@ -69,7 +69,7 @@ include BASE_PATH . "views/header.php";
     	<?php unset($_SESSION['OptionsUpdate']);
     	} ?>
 
-    	<?php if ($_SESSION['EmailUpdate']) { ?>
+    	<?php if (isset($_SESSION['EmailUpdate']) && $_SESSION['EmailUpdate']) { ?>
     		<div class="alert alert-success">
     			<p class="mb-0">
     				<strong>Just one more step to update your email address</strong>

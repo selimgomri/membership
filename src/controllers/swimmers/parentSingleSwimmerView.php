@@ -1,7 +1,7 @@
 <?php
 
 global $db;
-$getInfo = $db->prepare("SELECT members.MForename, members.MMiddleNames,
+$getInfo = $db->prepare("SELECT members.MemberID, members.MForename, members.MMiddleNames,
 members.MSurname, users.EmailAddress, members.ASANumber, members.ASACategory,
 members.ClubPays, squads.SquadName, squads.SquadFee, squads.SquadCoach,
 squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender,
@@ -266,11 +266,11 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
             <tr class="">
               <th class="">Swim</th>
               <th>Short Course</th>
-              <?php if (!$mob) { ?>
+              <?php if (!isset($mob) || !$mob) { ?>
               <th>SC: Last 12 Months</th>
               <?php } ?>
               <th>Long Course</th>
-              <?php if (!$mob) { ?>
+              <?php if (!isset($mob) || !$mob) { ?>
               <th>LC: Last 12 Months</th>
               <?php } ?>
             </thead>
@@ -283,7 +283,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
               echo $sc[$ev[$i]];
             }
             echo '</td><td>';
-            if (!$mob) {
+            if (!isset($mob) || !$mob) {
               if ($scy[$ev[$i]] != "") {
                 echo $scy[$ev[$i]];
               }
@@ -292,7 +292,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
             if ($lc[$ev[$i]] != "") {
               echo $lc[$ev[$i]];
             }
-            if (!$mob) {
+            if (!isset($mob) || !$mob) {
               echo '</td><td>';
               if ($lcy[$ev[$i]] != "") {
                 echo $lcy[$ev[$i]];
@@ -455,7 +455,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
       <div class="">
         <?php
         $col = "col-sm-6";
-        if ($rowSwim['ThriveNumber'] != "") {
+        if (isset($rowSwim['ThriveNumber']) != "") {
           $col = "col-sm-4";
         }
         ?>
@@ -510,14 +510,14 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
             <div class="text-center border p-2 bg-white">
               <span class="lead mb-2">CLSASC Number</span>
               <img class="img-fluid mx-auto d-block"
-              src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=CLSX" . $rowSwim['MemberID'] . "&print=false"); ?>"
-              srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=CLSX" . $rowSwim['MemberID'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=CLSX" . $rowSwim['MemberID'] . "&print=false"); ?> 3x"
+              src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . urlencode(env('ASA_CLUB_CODE')) . $rowSwim['MemberID'] . "&print=false"); ?>"
+              srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . urlencode(env('ASA_CLUB_CODE')) . $rowSwim['MemberID'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . urlencode(env('ASA_CLUB_CODE')) . $rowSwim['MemberID'] . "&print=false"); ?> 3x"
               alt="CLSX<?php echo $rowSwim['MemberID']; ?>"></img>
-              <span class="mono">CLSX<?php echo $rowSwim['MemberID']; ?></span>
+              <span class="mono"><?=htmlspecialchars(env('ASA_CLUB_CODE'))?><?php echo $rowSwim['MemberID']; ?></span>
             </div>
-            <?php if ($rowSwim['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><?php } ?>
+            <?php if (isset($rowSwim['ThriveNumber']) && $rowSwim['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><?php } ?>
           </div>
-          <?php if ($rowSwim['ThriveNumber'] != "") { ?>
+          <?php if (isset($rowSwim['ThriveNumber']) && $rowSwim['ThriveNumber'] != "") { ?>
           <div class="<?php echo $col; ?>">
             <div class="text-center border p-2 bg-white">
               <span class="lead mb-2">Thrive Card</span>

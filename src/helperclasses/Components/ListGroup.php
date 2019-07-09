@@ -35,21 +35,21 @@ class ListGroup {
         }
 
         $target = '';
-        if (strlen($link->target) > 0) {
+        if (isset($link->target) && strlen($link->target) > 0) {
           $target = 'target="' . $link->target . '"';
         } else {
           $target = 'target="_self"';
         }
 
         $title = '';
-        if (strlen($link->$title) > 0) {
+        if (isset($link->$title) && strlen($link->$title) > 0) {
           $target = 'title="' . $link->title . '"';
         } else {
           $target = 'title="' . $link->name . '"';
         }
 
         $url = $link->link;
-        if (!$link->external) {
+        if (!isset($link->external) || !$link->external) {
           $url = autoUrl($link->link);
         }
 

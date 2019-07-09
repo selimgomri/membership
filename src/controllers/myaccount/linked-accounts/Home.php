@@ -26,25 +26,25 @@ include BASE_PATH . 'views/header.php';
 
         <p class="lead">Sign in to multiple accounts on all of your devices.</p>
 
-        <?php if ($_SESSION['LinkedUserSuccess']) { ?>
+        <?php if (isset($_SESSION['LinkedUserSuccess']) && $_SESSION['LinkedUserSuccess']) { ?>
         <div class="alert alert-success">
           We've sent an email to the account you requested to link. Please follow the confirmation link inside.
         </div>
         <?php unset($_SESSION['LinkedUserSuccess']); } ?>
 
-        <?php if ($_SESSION['LinkedUserAlreadyExists']) { ?>
+        <?php if (isset($_SESSION['LinkedUserAlreadyExists']) && $_SESSION['LinkedUserAlreadyExists']) { ?>
         <div class="alert alert-warning">
           That account is already linked.
         </div>
         <?php unset($_SESSION['LinkedUserAlreadyExists']); } ?>
 
-        <?php if ($_SESSION['LinkedAccountDeleteSuccess']) { ?>
+        <?php if (isset($_SESSION['LinkedAccountDeleteSuccess']) && $_SESSION['LinkedAccountDeleteSuccess']) { ?>
         <div class="alert alert-success">
           We've deleted the link between those accounts.
         </div>
         <?php unset($_SESSION['LinkedAccountDeleteSuccess']); } ?>
 
-        <?php if ($_SESSION['LinkedAccountDeleteError']) { ?>
+        <?php if (isset($_SESSION['LinkedAccountDeleteError']) && $_SESSION['LinkedAccountDeleteError']) { ?>
         <div class="alert alert-danger">
           We could not delete the link between those accounts.
         </div>

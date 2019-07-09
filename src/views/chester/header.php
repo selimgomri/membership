@@ -498,11 +498,11 @@ p.lead {
                 <div class="dropdown-menu" aria-labelledby="postDropdown">
                   <a class="dropdown-item" href="<?php echo autoUrl("posts")?>">Home</a>
                   <a class="dropdown-item" href="<?php echo autoUrl("posts/new")?>">New Page</a>
-                  <?php if ($allow_edit && (($_SESSION['AccessLevel'] != "Parent" &&
+                  <?php if (isset($allow_edit) && $allow_edit && (($_SESSION['AccessLevel'] != "Parent" &&
             $_SESSION['AccessLevel'] != "Coach" && $edit_link != null) || $page_is_mine)) { ?>
                   <a class="dropdown-item" href="<?=$edit_link?>">Edit Current Page</a>
                   <?php } ?>
-                  <?php if ($exit_edit && $_SESSION['AccessLevel'] != "Parent" &&
+                  <?php if (isset($exit_edit) && $exit_edit && $_SESSION['AccessLevel'] != "Parent" &&
         		$_SESSION['AccessLevel'] != "Coach") { ?>
                   <a class="dropdown-item" href="<?=autoUrl("posts/" . $id)?>">View Page</a>
                   <?php } ?>

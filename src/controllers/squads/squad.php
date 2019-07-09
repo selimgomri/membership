@@ -29,7 +29,11 @@ while ($dob = $getBirths->fetchColumn()) {
   $timeBirth = new DateTime($dob, new DateTimeZone('Europe/London'));
   $interval = $timeNow->diff($timeBirth);
   $age = (int) $interval->format('%y');
-  $agesArray[$age] += 1;
+  if (isset($agesArray[$age])) {
+    $agesArray[$age] += 1;
+  } else {
+    $agesArray[$age] = 1;
+  }
 }
 $agesArrayKeys = array_keys($agesArray);
 $minAge = min($agesArrayKeys);
@@ -182,7 +186,7 @@ var chart = new Chart(ctx, {
           ?><?=$count?>,<?php
         }
       } else {
-        for ($i = $minAge; $i < $maxAge+1; $i++) { ?><?=(int) $agesArray[$i]?>,<?php }
+        for ($i = $minAge; $i < $maxAge+1; $i++) { if (isset($agesArray[$i])) { ?><?=(int) $agesArray[$i]?>,<?php } else { ?>0,<?php } }
       } ?>],
     }],
   },

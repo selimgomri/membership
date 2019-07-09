@@ -18,7 +18,7 @@ include BASE_PATH . 'views/header.php';
       <main>
         <h1>Add a new linked account</h1>
 
-        <?php if ($_SESSION['LinkedUserIncorrectDetails']) { ?>
+        <?php if (isset($_SESSION['LinkedUserIncorrectDetails']) && $_SESSION['LinkedUserIncorrectDetails']) { ?>
         <div class="alert alert-danger">
           Your email address or password was incorrect
         </div>
