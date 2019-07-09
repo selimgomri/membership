@@ -56,6 +56,24 @@ include "galaMenu.php";
         </a>
       <?php } while ($entry = $entries->fetch(PDO::FETCH_ASSOC)); ?>
     </div>
+    <?php } else { ?>
+    
+    <p>You don't have any gala entries at the moment.</p>
+
+    <p>When you make entries, all of your entries are listed here. You can edit entries until either;</p>
+
+    <ul>
+      <li>the closing data has passed,</li>
+      <li>the gala coordinator has processed your entry or,</li>
+      <li>you've paid for the gala entry</li>
+    </ul>
+
+    <p>If you need to make changes once your entry has been locked, you will need to contact your gala coordinator.</p>
+
+    <p>
+      <a href="<?=autoUrl("galas/entergala")?>" class="btn btn-success">Enter a gala</a>  
+    </p>
+
     <?php } ?>
 
     <?php if ($timesheet) { ?>

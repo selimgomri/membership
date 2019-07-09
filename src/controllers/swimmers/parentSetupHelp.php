@@ -220,7 +220,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 
   <?php
   $col = "col-sm-6";
-  if ($row['ThriveNumber'] != "") {
+  if (isset($row['ThriveNumber']) && $row['ThriveNumber'] != "") {
     $col = "col-sm-4";
   }
   ?>
@@ -229,10 +229,10 @@ include BASE_PATH . "views/swimmersMenu.php";
       <div class="text-center border border-dark h-100 p-2 bg-white">
         <span class="mb-2">Swim England Number</span>
         <img class="img-fluid mx-auto d-block"
-        src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ASANumber'] . "&print=false"); ?>"
-        srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ASANumber'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ASANumber'] . "&print=false"); ?> 3x"
-        alt="<?php echo $row['ASANumber']; ?>"></img>
-        <span class="mono"><?php echo $row['ASANumber']; ?></span>
+        src="<?=autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . urlencode($row['ASANumber']) . "&print=false")?>"
+        srcset="<?=autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . urlencode($row['ASANumber']) . "&print=false")?> 2x, <?=autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . urlencode($row['ASANumber']) . "&print=false")?> 3x"
+        alt="<?=htmlspecialchars($row['ASANumber'])?>"></img>
+        <span class="mono"><?=htmlspecialchars($row['ASANumber'])?></span>
       </div>
       <span class="d-block d-sm-none mb-3"></span>
     </div>
@@ -240,22 +240,22 @@ include BASE_PATH . "views/swimmersMenu.php";
       <div class="text-center border border-dark h-100 p-2 bg-white">
         <span class="mb-2"><?=htmlspecialchars(env('CLUB_SHORT_NAME'))?> Number</span>
         <img class="img-fluid mx-auto d-block"
-        src="<?=autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . htmlspecialchars(env('ASA_CLUB_CODE') . $row['MemberID']) . "&print=false")?>"
-        srcset="<?=autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . htmlspecialchars(env('ASA_CLUB_CODE') . $row['MemberID']) . "&print=false")?> 2x, <?=autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . htmlspecialchars(env('ASA_CLUB_CODE') . $row['MemberID']) . "&print=false")?> 3x"
-        alt="<?=htmlspecialchars(env('ASA_CLUB_CODE'))?>X<?php echo $row['MemberID']; ?>"></img>
+        src="<?=autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . urlencode(env('ASA_CLUB_CODE') . $row['MemberID']) . "&print=false")?>"
+        srcset="<?=autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . urlencode(env('ASA_CLUB_CODE') . $row['MemberID']) . "&print=false")?> 2x, <?=autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . urlencode(env('ASA_CLUB_CODE') . $row['MemberID']) . "&print=false")?> 3x"
+        alt="<?=urlencode(env('ASA_CLUB_CODE'))?>X<?=$row['MemberID']?>"></img>
         <span class="mono"><?=htmlspecialchars(env('ASA_CLUB_CODE') . $row['MemberID'])?></span>
       </div>
-      <?php if ($row['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><?php } ?>
+      <?php if (isset($row['ThriveNumber']) && $row['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><?php } ?>
     </div>
-    <?php if ($row['ThriveNumber'] != "") { ?>
+    <?php if (isset($row['ThriveNumber']) && $row['ThriveNumber'] != "") { ?>
     <div class="<?php echo $col; ?>">
       <div class="text-center border border-dark h-100 p-2 bg-white">
         <span class="mb-2">Thrive Card</span>
         <img class="img-fluid mx-auto d-block"
-        src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . $row['ThriveNumber'] . "&print=false"); ?>"
-        srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . $row['ThriveNumber'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . $row['ThriveNumber'] . "&print=false"); ?> 3x"
-        alt="<?php echo $row['ThriveNumber']; ?>"></img>
-        <span class="mono"><?php echo $row['ThriveNumber']; ?></span>
+        src="<?=autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . urlencode($row['ThriveNumber']) . "&print=false")?>"
+        srcset="<?=autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . urlencode($row['ThriveNumber']) . "&print=false")?> 2x, <?=autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . urlencode($row['ThriveNumber']) . "&print=false")?> 3x"
+        alt="<?=htmlspecialchars($row['ThriveNumber'])?>"></img>
+        <span class="mono"><?=htmlspecialchars($row['ThriveNumber'])?></span>
       </div>
     </div>
     <?php } ?>
