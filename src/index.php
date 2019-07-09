@@ -392,6 +392,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/barcode-generation-system/gen.php';
     });
 
+    $this->get('/qr/{number}:int/{sizeurl}?:int', function($number, $size_url) {
+      include 'controllers/barcode-generation-system/qr-safe.php';
+    });
+
     $this->get('/qr-generator', function() {
       include 'controllers/barcode-generation-system/qr.php';
     });

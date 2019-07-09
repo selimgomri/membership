@@ -16,8 +16,10 @@ if (!isset($_SESSION['G2FAKey'])) {
   $_SESSION['G2FAKey'] = $google2fa->generateSecretKey(32);
 }
 
-$use_white_background = true;
 $pagetitle = "Generate Key";
+
+$qr_url = urlencode($google2fa->getQRCodeUrl(env('CLUB_NAME'), $_SESSION['EmailAddress'], $_SESSION['G2FAKey']));
+$_SESSION['qr'][0]['text'] = $qr_url;
 
 include BASE_PATH . 'views/header.php';
 
@@ -40,10 +42,7 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <h2>Scan Code</h2>
-      <?php
-      $qr_url = urlencode($google2fa->getQRCodeUrl(CLUB_NAME, $_SESSION['EmailAddress'], $_SESSION['G2FAKey']));
-      ?>
-      <img src="<?=autoUrl("services/qr-generator?size=200&margin=0&text=" . $qr_url)?>" srcset="<?=autoUrl("services/qr-generator?size=400&margin=0&text=" . $qr_url)?> 2x, <?=autoUrl("services/qr-generator?size=600&margin=0&text=" . $qr_url)?> 3x" class="img-fluid mb-3">
+      <img src="<?=autoUrl("services/qr/0/200")?>" srcset="<?=autoUrl("services/qr/0/400")?> 2x, <?=autoUrl("services/qr/0/600")?> 3x" class="img-fluid mb-3">
       <p>
         Scan this QR Code with your Authenticator App.
       </p>
@@ -53,7 +52,7 @@ include BASE_PATH . 'views/header.php';
         We're going to ask you to enter the code shown on your device. This
         verifies Google Authenticator has been set up correctly.
       </p>
-      <?php if ($_SESSION['G2FA_VerifyError']) { ?>
+      <?php if (isset($_SESSION['G2FA_VerifyError']) && $_SESSION['G2FA_VerifyError']) { ?>
       <div class="alert alert-danger">
         <strong>The code you entered was not valid</strong>
       </div>

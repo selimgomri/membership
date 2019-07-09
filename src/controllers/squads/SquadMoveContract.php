@@ -9,14 +9,21 @@ $email_info = $email_info->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname']) . " Squad Move Contract";
 
+$_SESSION['qr'][0]['text'] = autoUrl("form-agreement/m/" . urlencode('CodeOfConduct') . '/' . urlencode(date("Y-m-d")) . "/" . urlencode($id) . '/' . urlencode("Squad: " . $email_info['SquadName']));
+$_SESSION['qr'][0]['size'] = 600;
+$qrFile = true;
+
 ob_start();?>
 
 <!DOCTYPE html>
 <html>
   <head>
   <meta charset='utf-8'>
+  <?php if (bool(env('IS_CLS'))) { ?>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i" rel="stylesheet" type="text/css">
+  <?php } else { ?>
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i" rel="stylesheet" type="text/css">
+  <?php } ?>
   <style>
   .signature-box {
     padding: 5pt;
@@ -230,7 +237,8 @@ ob_start();?>
       <div class="cell">
         <div class="row">
           <div class="split-30">
-            <img width="100" src="<?=autoUrl("services/qr-generator?size=600&text=" . urlencode(autoUrl("form-agreement/m/" . urlencode('CodeOfConduct') . '/' . urlencode(date("Y-m-d")) . "/" . urlencode($id) . '/' . urlencode("Squad: " . $email_info['SquadName']))))?>">
+            <?php include BASE_PATH . 'controllers/barcode-generation-system/qr-safe.php'; ?>
+            <img width="100" src="<?='data:image/png;base64,'.base64_encode($qrReturn)?>">
           </div>
           <div class="split-70">
             <p class="mb-0">
@@ -273,7 +281,7 @@ $dompdf->set_option('defaultFont', 'Open Sans');
 $dompdf->set_option('defaultMediaType', 'all');
 $dompdf->set_option("isPhpEnabled", true);
 $dompdf->set_option('isRemoteEnabled',true);
-$dompdf->set_option('isFontSubsettingEnabled', false);
+$dompdf->set_option('isFontSubsettingEnabled', true);
 $dompdf->loadHtml($html);
 
 // (Optional) Setup the paper size and orientation

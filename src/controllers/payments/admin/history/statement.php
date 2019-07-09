@@ -46,8 +46,9 @@ $name = getUserName($payment_info['UserID']);
 
 $use_white_background = true;
 $PaymentID = mb_strtoupper($PaymentID);
-$pagetitle = "Statement for " . $name . ", "
- . $PaymentID;
+$pagetitle = "Statement for " . htmlspecialchars($name) . ", " . htmlspecialchars($PaymentID);
+
+$_SESSION['qr'][0]['text'] = autoUrl("payments/history/statement/" . htmlspecialchars(strtoupper($PaymentID)));
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
@@ -189,7 +190,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
           Print off this page and club staff can scan this code to access your
           statement.
         </p>
-        <img class="img-fluid d-block mb-3" src="<?=autoUrl("services/qr-generator?size=150&amp;text=" . urlencode(autoUrl("payments/history/statement/" . htmlspecialchars(strtoupper($PaymentID)))))?>" srcset="<?=autoUrl("services/qr-generator?size=300&amp;text=" . urlencode(autoUrl("payments/history/statement/" . htmlspecialchars(strtoupper($PaymentID)))))?> 2x, <?=autoUrl("services/qr-generator?size=450&amp;text=" . urlencode(autoUrl("payments/history/statement/" . htmlspecialchars(strtoupper($PaymentID)))))?> 3x" alt="<?=autoUrl("payments/history/statement/" . htmlspecialchars(strtoupper($PaymentID)))?>">
+        <img class="img-fluid d-block mb-3" src="<?=autoUrl("services/qr/0/150")?>" srcset="<?=autoUrl("services/qr/0/300")?> 2x, <?=autoUrl("services/qr/0/450")?> 3x" alt="<?=htmlspecialchars(autoUrl("payments/history/statement/" . strtoupper($PaymentID)))?>">
       -->
 
         <h2>Questions about Direct Debit</h2>
@@ -199,7 +200,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
           target="_blank">Chester-le-Street ASC website</a>.
         </p>
         <p>
-          Payments to <?=htmlspecialchars(CLUB_NAME)?> are covered by the Direct Debit Guarantee.
+          Payments to <?=htmlspecialchars(env('CLUB_NAME'))?> are covered by the Direct Debit Guarantee.
         </p>
       </div>
     </div>

@@ -15,6 +15,8 @@ if (mb_stripos($row['ASANumber'], env('ASA_CLUB_CODE')) > -1) {
 	$swimEnglandText = "Temporary Membership Number";
 }
 
+$_SESSION['qr'][0]['text'] = autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey']);
+
 $pagetitle = htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " Registration Information";
 
 include BASE_PATH . "views/header.php";
@@ -157,7 +159,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 				</p>
 			</div>
 			<div class="col-4 text-center">
-        <img class="img-fluid ml-auto d-block" src="<?=autoUrl("services/qr-generator?size=200&text=" . rawurlencode(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey'])) . "")?>" srcset="<<?=autoUrl("services/qr-generator?size=400&text=" . rawurlencode(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey'])) . "")?> 2x, <?=autoUrl("services/qr-generator?size=600&text=" . rawurlencode(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey'])) . "")?> 3x" alt="<?=htmlspecialchars(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey']))?>" title="<?=htmlspecialchars(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey']))?>"></img>
+        <img class="img-fluid ml-auto d-block" src="<?=autoUrl("services/qr/0/200")?>" srcset="<?=autoUrl("services/qr/0/400")?> 2x, <?=autoUrl("services/qr/0/600")?> 3x" alt="<?=htmlspecialchars(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey']))?>" title="<?=htmlspecialchars(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey']))?>"></img>
 			</div>
 		</div>
   </div>
