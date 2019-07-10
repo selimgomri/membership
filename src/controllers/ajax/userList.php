@@ -29,12 +29,12 @@ if (isset($_POST["search"])) {
 
   $sql = "SELECT Forename, Surname, UserID, AccessLevel FROM users WHERE " . $sql . " ORDER BY Forename, Surname ASC";
 
-  try {
-    $users = $db->prepare($sql);
-    $users->execute($names);
-  } catch (Exception $e) {
-    halt(500);
-  }
+  $users = $db->prepare($sql);
+  $users->execute($names);
+}
+
+if ($users == null) {
+  halt(404);
 }
 
 $user = $users->fetch(PDO::FETCH_ASSOC);
