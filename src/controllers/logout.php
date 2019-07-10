@@ -9,7 +9,7 @@
     $secure = false;
   }
 
-  if (env('IS_CLS') != null && env('IS_CLS')) {
+  if (bool(env('IS_CLS'))) {
     setcookie(COOKIE_PREFIX . "UserInformation", "", 0 , "/", 'chesterlestreetasc.co.uk', $secure, false);
   }
   setcookie(COOKIE_PREFIX . "AutoLogin", "", 0, "/", app('request')->hostname('request')->hostname, $secure, false);

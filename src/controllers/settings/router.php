@@ -14,6 +14,16 @@ $this->group('/variables', function() {
     });
 });
 
+$this->group('/leavers-squad', function() {
+  $this->get('/', function() {
+    include 'leavers-squad.php';
+  });
+
+  $this->post('/', function() {
+    include 'leavers-squad-post.php';
+  });
+});
+
 $this->group('/codes-of-conduct', function() {
   $this->get('/', function() {
     header("Location: " . autoUrl("settings/codes-of-conduct/parent"));

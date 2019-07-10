@@ -4,7 +4,7 @@
   "links": [
     {
       "id": "settings-home",
-      "name": "Settings Menu",
+      "name": "Settings menu",
       "title": "Settings home",
       "link": "settings",
       "target": "_self",
@@ -12,7 +12,7 @@
     },
     {
       "id": "settings-vars",
-      "name": "System Variables",
+      "name": "System variables",
       "title": "Edit system variables such as club name",
       "link": "settings/variables",
       "target": "_self",
@@ -20,7 +20,7 @@
     },
     {
       "id": "settings-fees",
-      "name": "Membership Fees",
+      "name": "Membership fees",
       "title": "Club and Swim England Membership Fees",
       "link": "settings/fees",
       "target": "_self",
@@ -28,15 +28,23 @@
     },
     {
       "id": "settings-codes-of-conduct",
-      "name": "Codes of Conduct",
+      "name": "Codes of conduct",
       "title": "Settings for club codes of conduct",
       "link": "settings/codes-of-conduct",
       "target": "_self",
       "external": false
     },
     {
+      "id": "settings-leavers-squad",
+      "name": "Leaver's squad",
+      "title": "Set what the system does with club leavers",
+      "link": "settings/leavers-squad",
+      "target": "_self",
+      "external": false
+    },
+    {
       "id": "settings-terms",
-      "name": "Terms and Conditions",
+      "name": "Terms and conditions",
       "title": "CLub membership terms and conditions and privacy polices",
       "link": "settings/terms-and-conditions",
       "target": "_self",

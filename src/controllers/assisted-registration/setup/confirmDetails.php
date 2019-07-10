@@ -130,7 +130,7 @@ include BASE_PATH . 'views/header.php';
             We will be unable to provide this service (and your club membership) for technical reasons if you do not consent to the use of this data.
           </p>
 
-          <?php if (env('IS_CLS') != null && env('IS_CLS')) { ?>
+          <?php if (bool(env('IS_CLS'))) { ?>
           <p class="mb-0">
             Contact a member of your committee if you have any questions or email <a href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>.
           </p>

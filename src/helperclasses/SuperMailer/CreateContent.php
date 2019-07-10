@@ -56,7 +56,7 @@ class CreateMail {
 
   public function getFormattedHtml() {
     $fontStack = '"Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
-    if ((env('IS_CLS') != null && env('IS_CLS'))) {
+    if ((bool(env('IS_CLS')))) {
       $fontStack = '"Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
     }
     $head = "
@@ -64,7 +64,7 @@ class CreateMail {
     <html lang=\"en-gb\">
     <head>
       <meta charset=\"utf-8\">";
-      if ((env('IS_CLS') != null && env('IS_CLS'))) {
+      if ((bool(env('IS_CLS')))) {
         $head .= "<link href=\"https://fonts.googleapis.com/css?family=Open+Sans:400,700\" rel=\"stylesheet\" type=\"text/css\">";
       } else {
         $head .= "<link href=\"https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700\" rel=\"stylesheet\" type=\"text/css\">";
@@ -137,7 +137,7 @@ class CreateMail {
     }
     $foot .= "</p>
     <p class=\"small\" align=\"center\">This email was sent automatically by the " . env('CLUB_NAME') . " Membership System.</p>";
-    if (!(env('IS_CLS') != null && env('IS_CLS'))) {
+    if (!(bool(env('IS_CLS')))) {
     $foot .= '<p class="small" align="center">The Membership System was built by Chester-le-Street ASC.</p>';
     }
     $foot .= "<p class=\"small\" align=\"center\">Have questions? Contact us at <a
@@ -175,7 +175,7 @@ class CreateMail {
     $foot .= $club->ClubAddress[$i] . "\r\n";
     }
     $foot .= "\r\nThis email was sent automatically by the " . env('CLUB_NAME') . " Membership System.\r\n\r\n";
-    if (!(env('IS_CLS') != null && env('IS_CLS'))) {
+    if (!(bool(env('IS_CLS')))) {
       $foot .= "The Membership System was built by Chester-le-Street ASC.\r\n\r\n";
     }
     $foot .= "Have questions? Contact us at " . $club->ClubEmails->Main . ".\r\n\r\n";

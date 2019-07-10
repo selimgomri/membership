@@ -1,7 +1,7 @@
 <?php
 
 $pagetitle = "Add new linked account";
-
+$fluidContainer = true;
 include BASE_PATH . 'views/header.php';
 
 ?>

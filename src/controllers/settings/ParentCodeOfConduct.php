@@ -37,7 +37,7 @@ include BASE_PATH . 'views/header.php';
         echo $list->render('settings-codes-of-conduct');
       ?>
     </aside>
-    <div class="col-md-9">
+    <div class="col-md-9 col-lg-6 col-xl-6">
       <main>
         <h1>Parent Code of Conduct</h1>
         <form method="post">
@@ -84,10 +84,10 @@ include BASE_PATH . 'views/header.php';
         </div>
         <?php } ?>
       </main>
-      <aside class="col">
+    </div>
+    <aside class="col">
         <div class="alert alert-info">You can set squad codes of conduct in the edit squad pages.</div>
       </aside>
-    </div>
   </div>
 </div>
 
