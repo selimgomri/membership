@@ -2,6 +2,24 @@
 
 global $db;
 
+global $systemInfo;
+$privacy = $systemInfo->getSystemOption('PrivacyPolicy');
+
+$Extra = new ParsedownExtra();
+$Extra->setSafeMode(true);
+$search  = array("\n##### ", "\n#### ", "\n### ", "\n## ", "\n# ");
+$replace = array("\n###### ", "\n###### ", "\n##### ", "\n#### ", "\n### ");
+
+$privacyPolicy = null;
+if ($privacy != null && $privacy != "") {
+  $privacyPolicy = $db->prepare("SELECT Content FROM posts WHERE ID = ?");
+  $privacyPolicy->execute([$privacy]);
+  $privacyPolicy = str_replace($search, $replace, $privacyPolicy->fetchColumn());
+  if ($privacyPolicy[0] == '#') {
+    $privacyPolicy = '##' . $privacyPolicy;
+  }
+}
+
 $mode = "Default";
 $fam_keys = null;
 /*$fam_keys = [
@@ -173,6 +191,9 @@ $_SESSION['RegistrationMode'] = $mode;
 
         <div class="cell">
           <p class="mb-0"><strong>Legal Stuff Applies</strong></p>
+          <?php if ($privacyPolicy != null) { ?>
+          <?=$Extra->text($privacyPolicy)?>
+          <?php } else { ?>
           <p>
             In accordance with European Law, <?=htmlspecialchars(env('CLUB_NAME'))?>, Chester-le-Street
             ASC Club Digital Services, Swim England and British Swimming are
@@ -197,6 +218,7 @@ $_SESSION['RegistrationMode'] = $mode;
             <a
             href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>.
           </p>
+          <?php } ?>
         </div>
         <input type="submit" class="btn btn-primary btn-lg" value="Register">
       </form>

@@ -3,6 +3,23 @@
 $_SESSION['AssRegStage'] = 2;
 
 global $db;
+global $systemInfo;
+$privacy = $systemInfo->getSystemOption('PrivacyPolicy');
+
+$Extra = new ParsedownExtra();
+$Extra->setSafeMode(true);
+$search  = array("\n##### ", "\n#### ", "\n### ", "\n## ", "\n# ");
+$replace = array("\n###### ", "\n###### ", "\n##### ", "\n#### ", "\n### ");
+
+$privacyPolicy = null;
+if ($privacy != null && $privacy != "") {
+  $privacyPolicy = $db->prepare("SELECT Content FROM posts WHERE ID = ?");
+  $privacyPolicy->execute([$privacy]);
+  $privacyPolicy = str_replace($search, $replace, $privacyPolicy->fetchColumn());
+  if ($privacyPolicy[0] == '#') {
+    $privacyPolicy = '##' . $privacyPolicy;
+  }
+}
 
 $getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile, `Password` FROM users WHERE UserID = ?");
 $getUser->execute([$_SESSION['AssRegGuestUser']]);
@@ -118,25 +135,32 @@ include BASE_PATH . 'views/header.php';
 
         <div class="cell">
           <p class="mb-0"><strong>Legal Stuff Applies</strong></p>
-          <p>
-            In accordance with European Law, <?=htmlspecialchars(env('CLUB_NAME'))?>, Swim England and British Swimming are Data Controllers for the purposes of the General Data Protection Regulation.
-          </p>
-
-          <p>
-            By proceeding you agree to our <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy</a> and the use of your data by <?=htmlspecialchars(env('CLUB_NAME'))?>. Please note that you have also agreed to our use of you and your swimmer's data as part of your registration with the club and with British Swimming and Swim England (Formerly known as the ASA).
-          </p>
-
-          <p>
-            We will be unable to provide this service (and your club membership) for technical reasons if you do not consent to the use of this data.
-          </p>
-
-          <?php if (bool(env('IS_CLS'))) { ?>
-          <p class="mb-0">
-            Contact a member of your committee if you have any questions or email <a href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>.
-          </p>
+          <?php if ($privacyPolicy != null) { ?>
+          <?=$Extra->text($privacyPolicy)?>
           <?php } else { ?>
+          <p>
+            In accordance with European Law, <?=htmlspecialchars(env('CLUB_NAME'))?>, Chester-le-Street
+            ASC Club Digital Services, Swim England and British Swimming are
+            Data Controllers for the purposes of the General Data Protection
+            Regulation.
+          </p>
+          <p>
+            By proceeding you agree to our <a
+            href="https://www.chesterlestreetasc.co.uk/policies/privacy/"
+            target="_blank">Privacy Policy</a> and the use of your data by
+            <?=htmlspecialchars(env('CLUB_NAME'))?> and Chester-le-Street ASC Club Digital Services.
+            Please note that you have also agreed to our use of you and your
+            swimmer's data as part of your registration with the club and with
+            British Swimming and Swim England (Formerly known as the ASA).
+          </p>
+          <p>
+            We will be unable to provide this service for technical reasons if
+            you do not consent to the use of this data.
+          </p>
           <p class="mb-0">
-            Contact a member of your committee if you have any questions.
+            Contact a member of your committee if you have any questions or email
+            <a
+            href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>.
           </p>
           <?php } ?>
         </div>

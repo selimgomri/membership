@@ -21,7 +21,7 @@ $vars = [
 
 try {
   foreach ($vars as $key => $value) {
-    if (!env($key)) {
+    if (env($key) == null) {
       $v = $systemInfo->getSystemOption($key);
       if (!defined($key)) {
         define($key, $v);

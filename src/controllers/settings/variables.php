@@ -142,11 +142,11 @@ include BASE_PATH . 'views/header.php';
           <div class="form-group">
             <label>GoCardless Mode</label>
             <div class="custom-control custom-radio">
-              <input type="radio" value="1" id="GOCARDLESS_USE_SANDBOX_TRUE" name="GOCARDLESS_USE_SANDBOX" class="custom-control-input" <?php if (filter_var($vars['GOCARDLESS_USE_SANDBOX'], FILTER_VALIDATE_BOOLEAN)) { ?>checked<?php } ?> <?=$disabled['GOCARDLESS_USE_SANDBOX']?>>
+              <input type="radio" value="1" id="GOCARDLESS_USE_SANDBOX_TRUE" name="GOCARDLESS_USE_SANDBOX" class="custom-control-input" <?php if (bool($vars['GOCARDLESS_USE_SANDBOX'])) { ?>checked<?php } ?> <?=$disabled['GOCARDLESS_USE_SANDBOX']?>>
               <label class="custom-control-label" for="GOCARDLESS_USE_SANDBOX_TRUE">Use sandbox (development/testing) mode</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" value="0" id="GOCARDLESS_USE_SANDBOX_FALSE" name="GOCARDLESS_USE_SANDBOX" class="custom-control-input" <?php if (!filter_var($vars['GOCARDLESS_USE_SANDBOX'], FILTER_VALIDATE_BOOLEAN)) { ?>checked<?php } ?> <?=$disabled['GOCARDLESS_USE_SANDBOX']?>>
+              <input type="radio" value="0" id="GOCARDLESS_USE_SANDBOX_FALSE" name="GOCARDLESS_USE_SANDBOX" class="custom-control-input" <?php if (!bool($vars['GOCARDLESS_USE_SANDBOX'])) { ?>checked<?php } ?> <?=$disabled['GOCARDLESS_USE_SANDBOX']?>>
               <label class="custom-control-label" for="GOCARDLESS_USE_SANDBOX_FALSE">Use live (production) mode</label>
             </div>
           </div>

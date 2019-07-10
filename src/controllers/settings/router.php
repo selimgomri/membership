@@ -24,6 +24,16 @@ $this->group('/leavers-squad', function() {
   });
 });
 
+$this->group('/terms-and-conditions', function() {
+  $this->get('/', function() {
+    include 'terms.php';
+  });
+
+  $this->post('/', function() {
+    include 'terms-post.php';
+  });
+});
+
 $this->group('/codes-of-conduct', function() {
   $this->get('/', function() {
     header("Location: " . autoUrl("settings/codes-of-conduct/parent"));

@@ -49,7 +49,7 @@ include "galaMenu.php"; ?>
       <?php unset($_SESSION['UpdateError']); } ?>
 
       <?php if (isset($_SESSION['UpdateSuccess']) && $_SESSION['UpdateSuccess']) { ?>
-      <div class="alert alert-success">All changes saved to your gala entry have been saved.</div>
+      <div class="alert alert-success">All changes to your gala entry have been saved.</div>
       <?php unset($_SESSION['UpdateSuccess']); } ?>
 
       <?php

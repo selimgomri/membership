@@ -10,7 +10,8 @@ try {
 } catch (PDOException $e) {
 	halt(500);
 }
-$terms_Id = ($query->fetch(PDO::FETCH_ASSOC))['ID'];
+global $systemInfo;
+$terms_Id = $systemInfo->getSystemOption('TermsAndConditions');
 
 $row = [];
 

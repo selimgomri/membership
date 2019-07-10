@@ -322,11 +322,17 @@
                   <?php } ?>
                   <a class="dropdown-item" href="<?php echo autoUrl("my-account/loginhistory") ?>">Your Login
                     History</a>
+                  <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="<?=autoUrl("settings")?>">
+                    System Settings
+                  </a>
+                  <?php } ?>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" target="_blank"
                     href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">Help</a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="<?php echo autoUrl("my-account/linked-accounts") ?>">Switch Account</a>
+                  <a class="dropdown-item" href="<?=autoUrl("my-account/linked-accounts")?>">Switch Account</a>
                   <a class="dropdown-item" href="<?= autoUrl("logout") ?>">Logout</a>
                 </div>
               </li>

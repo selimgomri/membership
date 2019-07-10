@@ -17,4 +17,11 @@ try {
 
 unset($_SESSION['AssRegGuestUser']);
 
-header("Location: " . autoUrl("onboarding/go"));
+$requiresRegistration = $db->prepare("SELECT `RR` FROM users WHERE UserID = ?");
+$requiresRegistration->execute([$_SESSION['UserID']]);
+
+if (bool($requiresRegistration->fetchColumn())) {
+  header("Location: " . autoUrl("onboarding/go"));
+} else {
+  header("Location: " . autoUrl(""));
+}

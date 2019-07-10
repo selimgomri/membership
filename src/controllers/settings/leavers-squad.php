@@ -36,6 +36,15 @@ include BASE_PATH . 'views/header.php';
         <div class="alert alert-danger">Changes were not saved.</div>
         <?php unset($_SESSION['PCC-ERROR']); } ?>
 
+        <div id="leavers-squad-help">
+          <p>
+            Setting a leaver's squad allows parents to indicate a swimmer is leaving <?=htmlspecialchars(env('CLUB_NAME'))?>. This will remove the swimmer on the first day of the next calendar month.
+          </p>
+          <p>
+            e.g. if today a parent told the system a swimmer was leaving, that swimmer would be removed from squad registers on <?=$dateDeparture->format("j F Y")?>.
+          </p>
+        </div>
+
         <div class="form-group">
           <label for="leavers-squad">Leaver's Squad</label>
           <select class="custom-select" id="leavers-squad" name="leavers-squad" aria-describedby="leavers-squad-help">
@@ -49,9 +58,6 @@ include BASE_PATH . 'views/header.php';
             </option>
             <?php } ?>
           </select>
-          <small id="leavers-squad-help" class="form-text text-muted">
-            Select a leaver's squad to allow parents to indicate a swimmer is leaving <?=htmlspecialchars(env('CLUB_NAME'))?>. This will remove the swimmer on the first day of the next calendar month. e.g. if today a parent told the system a swimmer was leaving, that swimmer would be removed from squad registers on <?=$dateDeparture->format("j F Y")?>.
-          </small>
         </div>
 
         <p>
