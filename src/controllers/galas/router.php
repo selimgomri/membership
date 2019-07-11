@@ -61,8 +61,7 @@ if ($access == "Parent") {
 		global $link;
 		include 'EditEntryPost.php';
 	});
-}
-else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $access == "Coach") {
+} else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $access == "Coach") {
 	// Gala Home
 	$this->get(['/', '/competitions'], function() {
 		global $link;
@@ -157,5 +156,18 @@ if ($access == "Galas" || $access == "Admin") {
 
 	$this->post('/{id}:int/refunds', function($id) {
 		include BASE_PATH . 'controllers/payments/galas/RefundChargePost.php';
+	});
+
+
+	$this->get('/{id}:int/sessions', function($id) {
+		include 'indicate-openness/gala-sessions.php';
+	});
+
+	$this->get('/{id}:int/sessions/{session}:int/delete', function($id, $session) {
+		include 'indicate-openness/delete-session.php';
+	});
+
+	$this->post('/{id}:int/sessions', function($id) {
+		include 'indicate-openness/gala-sessions-post.php';
 	});
 }
