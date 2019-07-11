@@ -64,7 +64,7 @@ for ($i = 0; $i < $count; $i++) {
 	if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ClubPays']) {
 		$asaFees[$i] = $asa1;
 	} else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ClubPays']) {
-		$asaFees[$i] = $asa3;
+		$asaFees[$i] = $asa2;
 	} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ClubPays']) {
 		$asaFees[$i] = $asa3;
 	}
