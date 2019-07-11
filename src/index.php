@@ -488,6 +488,11 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/assisted-registration/setup/router.php';
     });
 
+    // Password Reset via Link
+    $this->get('/verify-cc-email/auth/{id}:int/{hash}', function($id, $hash) {
+      require('controllers/myaccount/CC/verify.php');
+    });
+
     // Locked Out Password Reset
     $this->get('/resetpassword', function() {
       global $link;

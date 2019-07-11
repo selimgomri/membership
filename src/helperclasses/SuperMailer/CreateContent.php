@@ -120,9 +120,9 @@ class CreateMail {
         $head .= "</td></tr></table>
         <table style=\"width:100%;max-width:700px;border:0px;text-align:left;background:#ffffff;padding:0px 10px;\"><tr><td>
     ";
-    if ($this->showName && $this->name == null) {
+    if (isset($this->showName) && $this->showName && (!isset($this->name) || $this->name == null)) {
       $head .= '<p class="small text-muted">Hello -name-, </p>';
-    } else if ($this->showName && $this->name != null) {
+    } else if (isset($this->showName) && $this->showName && isset($this->name) && $this->name != null) {
       $head .= '<p class="small text-muted">Hello  ' . htmlspecialchars($this->name) .  ', </p>';
     }
 
@@ -162,9 +162,9 @@ class CreateMail {
   public function getFormattedPlain() {
     $head = "";
 
-    if ($this->showName && $this->name == null) {
+    if (isset($this->showName) && $this->showName && (!isset($this->name) || $this->name == null)) {
       $head .= "Hello -name-,\r\n\r\n";
-    } else if ($this->showName && $this->name != null) {
+    } else if (isset($this->showName) && $this->showName && isset($this->name) && $this->name != null) {
       $head .= "Hello " . htmlspecialchars($this->name) . ",\r\n\r\n";
     }
 

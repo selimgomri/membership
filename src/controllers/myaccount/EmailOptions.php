@@ -206,7 +206,7 @@ include BASE_PATH . "views/header.php";
           This allows your partner or others involved with your swimmers to also be able to stay up to date.
         </p>
         <p>
-          Additional recipients must be with you at the time you add their email - You will need to confirm their email address using a code we will send to them. They will be able to unsubscribe at any time.
+          Additional recipients will be required to confirm they would like to receive emails. They will be able to unsubscribe at any time.
         </p>
 
         <ul class="list-unstyled">
