@@ -171,3 +171,13 @@ if ($access == "Galas" || $access == "Admin") {
 		include 'indicate-openness/gala-sessions-post.php';
 	});
 }
+
+if ($_SESSION['AccessLevel'] == 'Parent') {
+	$this->get('/{id}:int/indicate-availability', function($id) {
+		include 'indicate-openness/session-select.php';
+	});
+
+	$this->post('/{id}:int/indicate-availability', function($id) {
+		include 'indicate-openness/session-select-post.php';
+	});
+}

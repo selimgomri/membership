@@ -1,3 +1,15 @@
+<?php
+
+function chesterStandardMenu() {
+  
+  global $db;
+  global $use_website_menu;
+  global $allow_edit;
+  global $exit_edit;
+  global $edit_link;
+  
+  ?>
+
 <?php if (!(isset($_SESSION['UserID']) && user_needs_registration($_SESSION['UserID'])) && (!isset($use_website_menu) || !$use_website_menu)) { ?>
           <div class="collapse navbar-collapse offcanvas-collapse" id="chesterNavbar">
             <ul class="navbar-nav mr-auto">
@@ -154,7 +166,7 @@
                   <a class="dropdown-item" href="https://manage-sandbox.gocardless.com" target="_blank">
                     Sandbox
                   </a>
-                  <?php if (env('STRIPE') != null) { ?>
+                  <?php if (env('STRIPE')) { ?>
                   <div class="dropdown-divider"></div>
                   <h6 class="dropdown-header">Payment Cards</h6>
                   <a class="dropdown-item" href="<?=autoUrl("payments/cards")?>">
@@ -175,7 +187,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="notifyDropdown">
                   <a class="dropdown-item" href="<?php echo autoUrl("notify")?>">Notify Home</a>
-                  <a class="dropdown-item" href="<?php echo autoUrl("notify/newemail")?>">New Message</a>
+                  <a class="dropdown-item" href="<?php echo autoUrl("notify/newemail")?>">New Message</a> != null
                   <a class="dropdown-item" href="<?php echo autoUrl("notify/lists")?>">Targeted Lists</a>
                   <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
                   <a class="dropdown-item" href="<?php echo autoUrl("notify/sms")?>">SMS Lists</a>
@@ -262,7 +274,7 @@
                   <?php if (isset($exit_edit) && $exit_edit && $_SESSION['AccessLevel'] != "Parent" &&
         		$_SESSION['AccessLevel'] != "Coach") { ?>
                   <a class="dropdown-item" href="<?=autoUrl("posts/" . $id)?>">View Page</a>
-                  <?php } ?>
+                  <?php } ?> != null
                 </div>
               </li>
               <!--
@@ -341,3 +353,7 @@
           </div>
         </nav>
         <?php } ?>
+
+<?php }
+
+chesterStandardMenu();
