@@ -6,7 +6,7 @@ global $db;
 
 $getExtraEmails = null;
 try {
-  $getExtraEmails = $db->prepare("SELECT ID, Name, EmailAddress FROM notifyAdditionalEmails WHERE UserID = ?");
+  $getExtraEmails = $db->prepare("SELECT ID, Name, EmailAddress FROM notifyAdditionalEmails WHERE UserID = ? AND Verified = '1'");
   $getExtraEmails->execute([$_SESSION['UserID']]);
 } catch (Exception $e) {}
 
