@@ -77,7 +77,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
 
   $email->addHeader("List-Help", autoUrl("notify"));
 
-  if (IS_CLS === true) {
+  if (bool(env('IS_CLS'))) {
     if ($from['Email'] == "notify@" . env('EMAIL_DOMAIN')) {
       $email->addHeader("List-ID", "CLS ASC Targeted Lists <targeted-lists@account." . env('EMAIL_DOMAIN') . ">");
     } else if ($from['Email'] == "payments@" . env('EMAIL_DOMAIN')) {
@@ -96,16 +96,16 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
       $email->setReplyTo("enquiries+replytoautoemail@" . env('EMAIL_DOMAIN'), env('CLUB_SHORT_NAME') . " Enquiries");
     }
 
-    if ($from['Reply-To'] != null) {
+    if (isset($from['Reply-To']) && $from['Reply-To'] != null) {
       $email->setReplyTo($from['Reply-To']);
     }
   }
 
-  if ($from['CC'] != null) {
+  if (isset($from['CC']) && $from['CC'] != null) {
     $email->addCcs($from['CC']);
   }
 
-  if ($from['BCC'] != null) {
+  if (isset($from['BCC']) && $from['BCC'] != null) {
     $email->addBccs($from['BCC']);
   }
 
@@ -124,7 +124,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
     $email->setSubject($subject);
     $email->addTo($emailaddress, $name);
     $email->addContent("text/plain", $plain);
-    if ($from['PlainText']) {
+    if (isset($from['PlainText']) && $from['PlainText']) {
       $email->addContent(
         "text/html", $plain
       );
