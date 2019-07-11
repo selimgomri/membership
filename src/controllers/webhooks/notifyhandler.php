@@ -10,7 +10,7 @@ $club_address .= $club->ClubAddress[$i] . "\r\n";
 }
 
 global $db;
-$getExtraEmails = $db->prepare("SELECT Name, EmailAddress, ID FROM notifyAdditionalEmails WHERE UserID = ?");
+$getExtraEmails = $db->prepare("SELECT Name, EmailAddress, ID FROM notifyAdditionalEmails WHERE UserID = ? AND Verified = '1'");
 
 $getPendingGroupMail = $db->query("SELECT ID, notifyHistory.Subject, notifyHistory.Message, notifyHistory.ForceSend, notifyHistory.JSONData FROM notifyHistory INNER JOIN notify ON notifyHistory.ID = notify.MessageID WHERE Status = 'Queued' GROUP BY ID LIMIT 8");
 
