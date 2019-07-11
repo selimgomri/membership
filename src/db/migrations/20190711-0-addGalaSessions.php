@@ -6,7 +6,7 @@ $db->query(
     `Gala` int(11) NOT NULL,
     `Name` varchar(255) COLLATE utf8mb4_bin NOT NULL,
     PRIMARY KEY (`ID`),
-    FOREIGN KEY (Gala) REFERENCES galas(GalaID)
+    FOREIGN KEY (Gala) REFERENCES galas(GalaID) ON DELETE CASCADE
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;"
 );
 
@@ -17,7 +17,11 @@ $db->query(
     `Session` int(11) NOT NULL,
     `CanEnter` tinyint(1) NOT NULL,
     PRIMARY KEY (`ID`),
-    FOREIGN KEY (Member) REFERENCES members(MemberID),
-    FOREIGN KEY (`Session`) REFERENCES galaSessions(ID)
+    FOREIGN KEY (Member) REFERENCES members(MemberID) ON DELETE CASCADE,
+    FOREIGN KEY (`Session`) REFERENCES galaSessions(ID) ON DELETE CASCADE
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;"
+);
+
+$db->query(
+  "ALTER TABLE galas ADD `CoachEnters` BOOLEAN DEFAULT '0';"
 );

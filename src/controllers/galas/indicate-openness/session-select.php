@@ -1,11 +1,15 @@
 <?php
 
 global $db;
-$galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends` FROM galas WHERE GalaID = ?");
+$galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends`, CoachEnters FROM galas WHERE GalaID = ?");
 $galaDetails->execute([$id]);
 $gala = $galaDetails->fetch(PDO::FETCH_ASSOC);
 
 if ($gala == null) {
+  halt(404);
+}
+
+if (!$gala['CoachEnters']) {
   halt(404);
 }
 
