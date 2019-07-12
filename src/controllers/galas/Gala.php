@@ -236,7 +236,7 @@ include "galaMenu.php";
   <h2>Manage entries</h2>
   <p class="lead">Add and edit entries for all competing swimmers</p>
   <p>
-    <a href="<?=autoUrl("galas/" . $id . "/coaches-entries")?>" class="btn btn-success">
+    <a href="<?=autoUrl("galas/" . $id . "/select-entries")?>" class="btn btn-success">
       Manage entries
     </a>
   </p>
