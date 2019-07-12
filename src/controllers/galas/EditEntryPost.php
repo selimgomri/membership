@@ -22,7 +22,10 @@ if ($row == null) {
   halt(404);
 }
 
-if ($row['Paid'] || $row['EntryProcessed']) {
+$closingDate = new DateTime($row['ClosingDate'], new DateTimeZone('Europe/London'));
+$theDate = new DateTime('now', new DateTimeZone('Europe/London'));
+
+if ($row['Paid'] || $row['EntryProcessed'] || $row['Locked'] || $closingDate < $theDate) {
   halt(404);
 }
 

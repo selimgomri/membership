@@ -61,6 +61,15 @@ if ($access == "Parent") {
 		global $link;
 		include 'EditEntryPost.php';
 	});
+
+	$this->get('/entries/{id}/veto', function($id) {
+		include 'indicate-openness/veto.php';
+	});
+
+	$this->get('/entries/{id}/veto/do', function($id) {
+		global $link;
+		include 'indicate-openness/veto-do.php';
+	});
 } else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $access == "Coach") {
 	// Gala Home
 	$this->get(['/', '/competitions'], function() {
@@ -96,12 +105,12 @@ if ($access == "Parent") {
 	// Gala Entries
 	$this->get('/entries/{id}:int', function($id) {
 		global $link;
-		include 'singleentry.php';
+		include 'EditEntry.php';
 	});
 
 	$this->post('/entries/{id}:int', function($id) {
 		global $link;
-		include 'entriesSingleaction.php';
+		include 'EditEntryPost.php';
 	});
 
 	// Gala Entries

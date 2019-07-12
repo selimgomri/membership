@@ -8,7 +8,7 @@ $pagetitle = "Enter a Gala";
 $mySwimmers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM `members` WHERE `members`.`UserID` = ? ORDER BY fn ASC, sn ASC");
 $mySwimmers->execute([$_SESSION['UserID']]);
 
-$galas = $db->query("SELECT GalaID id, GalaName `name` FROM `galas` WHERE ClosingDate >= CURDATE() ORDER BY `galas`.`ClosingDate` ASC");
+$galas = $db->query("SELECT GalaID id, GalaName `name` FROM `galas` WHERE ClosingDate >= CURDATE() AND NOT CoachEnters ORDER BY `galas`.`ClosingDate` ASC");
 
 $mySwimmer = $mySwimmers->fetch(PDO::FETCH_ASSOC);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);

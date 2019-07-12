@@ -4,11 +4,11 @@ $userID = $_SESSION['UserID'];
 
 global $db;
 
-$galas = $db->query("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength FROM galas WHERE GalaDate >= CURDATE() ORDER BY GalaDate ASC");
+$galas = $db->query("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters FROM galas WHERE GalaDate >= CURDATE() ORDER BY GalaDate ASC");
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
 $entriesOpen = false;
 
-$entries = $db->prepare("SELECT EntryID, GalaName, ClosingDate, GalaVenue, MForename, MSurname, EntryProcessed Processed, Charged, Refunded, FeeToPay FROM ((galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE GalaDate >= CURDATE() AND members.UserID = ?");
+$entries = $db->prepare("SELECT EntryID, GalaName, ClosingDate, GalaVenue, MForename, MSurname, EntryProcessed Processed, Charged, Refunded, FeeToPay, Locked, Vetoable FROM ((galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE GalaDate >= CURDATE() AND members.UserID = ?");
 $entries->execute([$_SESSION['UserID']]);
 $entry = $entries->fetch(PDO::FETCH_ASSOC);
 
@@ -66,7 +66,8 @@ include "galaMenu.php";
           <div>
             <span class="title mb-0 justify-content-between align-items-start">
               <span><?=htmlspecialchars($gala['GalaName'])?></span>
-              <?php if ($now <= $closingDate) { $entriesOpen = true;?><span class="ml-2 badge badge-success">ENTRIES OPEN</span><?php } ?>
+              <?php if ($now <= $closingDate && !$gala['CoachEnters']) { $entriesOpen = true;?><span class="ml-2 badge badge-success">ENTRIES OPEN</span><?php } ?>
+              <?php if ($now <= $closingDate && $gala['CoachEnters']) { ?><span class="ml-2 badge badge-warning">COACH ENTERS</span><?php } ?>
             </span>
             <span class="d-flex mb-3"><?=htmlspecialchars($gala['GalaVenue'])?></span>
           </div>
@@ -103,9 +104,9 @@ include "galaMenu.php";
             <span class="title mb-0 justify-content-between align-items-start">
               <span><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?></span>
               <span class="text-right">
-                <?php if ($now <= $closingDate && !$entry['Charged'] && !$entry['Processed']) {?><span class="ml-2 badge badge-success">EDITABLE</span><?php } ?>
-                <?php if ($entry['Charged']) {?><span class="ml-2 badge badge-warning"><i class="fa fa-money" aria-hidden="true"></i>
-  PAID</span><?php } ?>
+                <?php if ($now <= $closingDate && !$entry['Charged'] && !$entry['Processed'] && !$entry['Locked']) {?><span class="ml-2 badge badge-success">EDITABLE</span><?php } ?>
+                <?php if ($entry['Charged']) {?><span class="ml-2 badge badge-warning"><i class="fa fa-money" aria-hidden="true"></i> PAID</span><?php } ?>
+                <?php if ($entry['Vetoable']) {?><span class="ml-2 badge badge-info">VETOABLE</span><?php } ?>
                 <?php if ($entry['Refunded'] && $entry['FeeToPay'] > 0) {?><span class="ml-2 badge badge-warning">PART REFUNDED</span><?php } else if ($entry['Refunded'] && $entry['FeeToPay'] == 0) {?><span class="ml-2 badge badge-warning">FULLY REFUNDED</span><?php } ?>
               </span>
             </span>

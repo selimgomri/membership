@@ -53,12 +53,12 @@ include "galaMenu.php"; ?>
       <?php unset($_SESSION['UpdateSuccess']); } ?>
 
       <?php
-      $closingDate = new DateTime($row['ClosingDate']);
-      $theDate = new DateTime('now');
+      $closingDate = new DateTime($row['ClosingDate'], new DateTimeZone('Europe/London'));
+      $theDate = new DateTime('now', new DateTimeZone('Europe/London'));
       $closingDate = $closingDate->format('Y-m-d');
       $theDate = $theDate->format('Y-m-d');
 
-      if ($row['Paid'] == 1 || $row['EntryProcessed'] == 1 || ($closingDate < $theDate)) { ?>
+      if ($row['Paid'] || $row['EntryProcessed'] || ($closingDate < $theDate) || $row['Locked']) { ?>
         <div class="alert alert-warning">
           <strong>We've already processed this gala entry, our closing date has passed or you have already paid</strong> <br>We can't let you make any changes here. Contact the Gala Administrator directly.
         </div>
@@ -93,7 +93,7 @@ include "galaMenu.php"; ?>
         <?php }
       }
 
-      if (!($closingDate < $theDate) && $row['EntryProcessed'] != 1 && $row['Paid'] != 1) {
+      if (!($closingDate < $theDate) && $row['EntryProcessed'] != 1 && $row['Paid'] != 1 && !$row['Locked']) {
         if ($row['GalaFeeConstant'] != 1) { ?>
         <div class="form-group">
           <label for="galaFee">Enter Total</label>
