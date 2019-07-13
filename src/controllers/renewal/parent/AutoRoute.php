@@ -34,6 +34,12 @@ if ($stage == 0) {
 		} else {
 			include 'feeReview.php';
 		}
+	} else if ($substage == 3) {
+		if (isset($redirect) && $redirect) {
+			header("Location: " . autoUrl("renewal/go/my-address"));
+		} else {
+			include 'address.php';
+		}
 	} else {
 		halt(404);
 	}

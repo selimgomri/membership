@@ -10,6 +10,8 @@ if ($stage == 0) {
 		include 'swimmerReviewPost.php';
 	} else if ($substage == 2) {
 		include 'feeReviewPost.php';
+	} else if ($substage == 3) {
+		include 'addressPost.php';
 	} else {
 		halt(404);
 	}

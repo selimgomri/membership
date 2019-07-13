@@ -3,7 +3,7 @@
 global $db;
 
 $url_path = "payments";
-if ($renewal_trap) {
+if (isset($renewal_trap) && $renewal_trap) {
 	$url_path = "renewal/payments";
 }
 
@@ -27,6 +27,33 @@ if ($scheduleExists == null) {
 
   $_SESSION['Token'] = hash('sha256', $_SESSION['UserID'] . "-" . rand(1000,9999));
 
+  $addr = null;
+  global $currentUser;
+  $json = $currentUser->getUserOption('MAIN_ADDRESS');
+  if ($json != null) {
+    $addr = json_decode($json);
+  }
+
+  $prefilledCustomer = [
+    "given_name" => $row['Forename'],
+    "family_name" => $row['Surname'],
+    "email" => $row['EmailAddress']
+  ];
+  if ($addr != null) {
+    if (isset($addr->streetAndNumber)) {
+      $prefilledCustomer += ['address_line1' => $addr->streetAndNumber];
+    }
+    if (isset($addr->flatOrBuilding)) {
+      $prefilledCustomer += ['address_line2' => $addr->flatOrBuilding];
+    }
+    if (isset($addr->city)) {
+      $prefilledCustomer += ['city' => $addr->city];
+    }
+    if (isset($addr->postCode)) {
+      $prefilledCustomer += ['postal_code' => $addr->postCode];
+    }
+  }
+  
   try {
     $redirectFlow = $client->redirectFlows()->create([
       "params" => [
@@ -36,11 +63,7 @@ if ($scheduleExists == null) {
         "session_token" => $_SESSION['Token'],
         "success_redirect_url" => autoUrl($url_path . "/setup/3"),
         // Optionally, prefill customer details on the payment page
-        "prefilled_customer" => [
-          "given_name" => $row['Forename'],
-          "family_name" => $row['Surname'],
-          "email" => $row['EmailAddress']
-        ]
+        "prefilled_customer" => $prefilledCustomer
       ]
     ]);
 

@@ -97,6 +97,9 @@
     font-weight: 400;
     font-style: normal;
   }
+  address {
+    font-style: normal;
+  }
   .lead {
     font-size: 18pt;
   }
@@ -125,7 +128,7 @@
     text-decoration: underline;
   }
 
-  <?php if (!defined('IS_CLS') || !IS_CLS) { ?>
+  <?php if (!bool(env('IS_CLS'))) { ?>
     .primary {
       color: #007bff;
     }
@@ -200,7 +203,7 @@
     break-inside: avoid;
   }
 
-  <?php if (!defined('IS_CLS') || !IS_CLS) { ?>
+  <?php if (!bool(env('IS_CLS'))) { ?>
   html, body {
     font-family: 'Source Sans Pro', 'Lato', 'Helvetica', sans-serif;
   }

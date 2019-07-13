@@ -13,6 +13,13 @@ $_SESSION['qr'][0]['text'] = autoUrl("form-agreement/m/" . urlencode('CodeOfCond
 $_SESSION['qr'][0]['size'] = 600;
 $qrFile = true;
 
+$userObj = new \User($email_info['UserID'], $db);
+$json = $userObj->getUserOption('MAIN_ADDRESS');
+$address = null;
+if ($json != null) {
+  $address = json_decode($json);
+}
+
 ob_start();?>
 
 <!DOCTYPE html>
@@ -54,10 +61,22 @@ ob_start();?>
       Squad Move Reference Number: <span class="mono"><?=mb_substr(hash('sha256', $email_info['MoveID']), 0, 8)?></span>
     </p>
 
+    <?php if ($addr != null && isset($address->streetAndNumber)) { ?>
+    <address class="mb-3">
+      <strong><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></strong><br>
+      <?=htmlspecialchars($address->streetAndNumber)?><br>
+      <?php if (isset($address->flatOrBuilding)) { ?>
+      <?=htmlspecialchars($address->streetAndNumber)?><br>
+      <?php } ?>
+      <?=htmlspecialchars(mb_strtoupper($address->city))?><br>
+      <?=htmlspecialchars(mb_strtoupper($address->postCode))?>
+    </address>
+    <?php } else { ?>
     <p>
       <strong><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></strong><br>
       Registered Parent/Carer
     </p>
+    <?php } ?>
 
     <div class="primary-box mb-3" id="title">
       <h1 class="mb-0">

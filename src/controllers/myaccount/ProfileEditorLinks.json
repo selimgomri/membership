@@ -19,6 +19,14 @@
       "external": false
     },
     {
+      "id": "postal-address",
+      "name": "Address",
+      "title": "Your home address",
+      "link": "my-account/address",
+      "target": "_self",
+      "external": false
+    },
+    {
       "id": "general",
       "name": "Advanced Options",
       "title": "My Advanced Options",

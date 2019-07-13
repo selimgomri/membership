@@ -51,6 +51,13 @@ $PaymentID = mb_strtoupper($PaymentID);
 $pagetitle = "Statement for " . $name . ", "
  . $PaymentID;
 
+$userObj = new \User($payment_info['UserID'], $db);
+$json = $userObj->getUserOption('MAIN_ADDRESS');
+$addr = null;
+if ($json != null) {
+  $addr = json_decode($json);
+}
+
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 ob_start();?>
@@ -71,10 +78,22 @@ ob_start();?>
       <?=date("d/m/Y", strtotime($payment_info['Date']))?>
     </p>
 
+    <?php if ($addr != null && isset($addr->streetAndNumber)) { ?>
+    <address class="mb-3">
+      <strong><?=htmlspecialchars($name)?></strong><br>
+      <?=htmlspecialchars($addr->streetAndNumber)?><br>
+      <?php if (isset($addr->flatOrBuilding)) { ?>
+      <?=htmlspecialchars($addr->streetAndNumber)?><br>
+      <?php } ?>
+      <?=htmlspecialchars(mb_strtoupper($addr->city))?><br>
+      <?=htmlspecialchars(mb_strtoupper($addr->postCode))?>
+    </address>
+    <?php } else { ?>
     <p>
       <strong><?=htmlspecialchars($name)?></strong><br>
       Parent
     </p>
+    <?php } ?>
 
     <div class="primary-box mb-3" id="title">
       <h1 class="mb-0" title="<?=htmlspecialchars($payment_info['Name'])?>">

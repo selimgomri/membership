@@ -65,7 +65,7 @@ if ($selectSchedule->fetchColumn() == 0) {
       <p class="lead">GoCardless will appear on your bank statement when
         payments are taken against this Direct Debit.</p>
       <p>GoCardless handles direct debit payments for <?=htmlspecialchars(env('CLUB_NAME'))?>.</p>
-      <?php if ($renewal_trap) { ?>
+      <?php if (isset($renewal_trap) && $renewal_trap) { ?>
       <a href="<?php echo autoUrl("renewal/go"); ?>" class="mb-3 btn btn-success">Continue registration or renewal</a>
       <?php } else { ?>
       <a href="<?php echo autoUrl("payments"); ?>" class="mb-3 btn btn-dark">Go to Payments</a>
