@@ -3,13 +3,14 @@
 // Inserts the standard letterhead on PDF pages
 $club = json_decode(CLUB_JSON);
 $addr = json_decode(env('CLUB_ADDRESS'));
+$logoPath = env('CLUB_LOGO');
 
 ?>
 
 <div class="row mb-3">
   <div class="split-50">
-    <?php if ($club->Logo != null) { ?>
-    <img src="<?=BASE_PATH . $club->Logo?>" class="logo">
+    <?php if ($logoPath != null) { ?>
+    <img src="<?=BASE_PATH . $logoPath?>" class="logo">
     <?php } else { ?>
       <h1 class="primary"><?=htmlspecialchars(env('CLUB_NAME'))?></h1>
     <?php } ?>

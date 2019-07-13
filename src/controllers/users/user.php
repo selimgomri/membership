@@ -92,6 +92,13 @@ if (userHasMandates($id)) {
   }
 }
 
+$userObj = new \User($id, $db);
+$json = $userObj->getUserOption('MAIN_ADDRESS');
+$addr = null;
+if ($json != null) {
+  $addr = json_decode($json);
+}
+
 $pagetitle = htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) . " Information";
 $title = null;
 include BASE_PATH . "views/header.php";
@@ -133,6 +140,22 @@ include BASE_PATH . "views/header.php";
       </div>
     </div>
   </div>
+
+  <?php if ($addr != null) { ?>
+  <div class="mb-4">
+    <h2>
+      Residential address
+    </h2>
+    <address>
+      <?=htmlspecialchars($addr->streetAndNumber)?><br>
+      <?php if (isset($addr->flatOrBuilding)) { ?>
+      <?=htmlspecialchars($addr->streetAndNumber)?><br>
+      <?php } ?>
+      <?=htmlspecialchars(mb_strtoupper($addr->city))?><br>
+      <?=htmlspecialchars(mb_strtoupper($addr->postCode))?>
+    </address>
+  </div>
+  <?php } ?>
 
   <?php if ($info['AccessLevel'] == "Parent") { ?>
   <div class="mb-4">

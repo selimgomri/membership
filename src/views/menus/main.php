@@ -307,8 +307,9 @@
                 <div class="dropdown-menu dropdown-menu-right">
                   <span class="dropdown-item-text">Signed&nbsp;in&nbsp;as&nbsp;<strong><?= $user_name ?></strong></span>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="<?php echo autoUrl("my-account") ?>">Your Profile</a>
-                  <a class="dropdown-item" href="<?php echo autoUrl("my-account/email") ?>">Your Email Options</a>
+                  <a class="dropdown-item" href="<?=autoUrl("my-account")?>">Your Profile</a>
+                  <a class="dropdown-item" href="<?=autoUrl("my-account/email")?>">Your Email Options</a>
+                  <a class="dropdown-item" href="<?=autoUrl("my-account/address")?>">Your Address</a>
                   <a class="dropdown-item" href="<?php echo autoUrl("my-account/general") ?>">Your General Options</a>
                   <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
                   <a class="dropdown-item" href="<?php echo autoUrl("emergency-contacts") ?>">Your Emergency

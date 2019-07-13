@@ -154,3 +154,13 @@ $this->group('/linked-accounts', function() {
   	include 'linked-accounts/Delete.php';
   });
 });
+
+$this->group('/address', function() {
+  $this->get('/', function() {
+  	include 'address.php';
+  });
+
+  $this->post('/', function() {
+		include 'address-post.php';
+  });
+});

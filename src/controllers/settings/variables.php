@@ -93,7 +93,7 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <div class="form-group">
-            <label for="CLUB_ADDRESS">Club Primary Addess</label>
+            <label for="CLUB_ADDRESS">Club Primary Address</label>
             <textarea class="form-control" rows="5" id="CLUB_ADDRESS" name="CLUB_ADDRESS" aria-describedby="CLUB_ADDRESS_HELP" <?=$disabled['CLUB_ADDRESS']?>><?php
             for ($i = 0; $i < sizeof($vars['CLUB_ADDRESS']); $i++) {
               echo htmlspecialchars($vars['CLUB_ADDRESS'][$i]);
