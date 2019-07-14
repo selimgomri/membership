@@ -42,6 +42,7 @@ ob_start();?>
   }
   .cell {
     padding: 10pt;
+    border: none;
     background: #eee;
     margin: 0 0 16pt 0;
     display: block;
@@ -53,24 +54,31 @@ ob_start();?>
   <body>
     <?php include BASE_PATH . 'helperclasses/PDFStyles/Letterhead.php'; ?>
 
-    <p>
-      <?=date("d/m/Y")?>
-    </p>
+    <div class="row mb-3 text-right">
+      <div class="split-50">
+      </div>
+      <div class="split-50">
+        <p>
+          <?=date("d/m/Y")?>
+        </p>
 
-    <p>
-      Squad Move Reference Number: <span class="mono"><?=mb_substr(hash('sha256', $email_info['MoveID']), 0, 8)?></span>
-    </p>
+        <p>
+          Internal Reference: <span class="mono">SM<?=$email_info['MoveID']?></span>
+        </p>
+      </div>
+    </div>
 
     <?php if ($addr != null && isset($address->streetAndNumber)) { ?>
-    <address class="mb-3">
+    <address class="mb-3 address-font address-box">
       <strong><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></strong><br>
       <?=htmlspecialchars($address->streetAndNumber)?><br>
       <?php if (isset($address->flatOrBuilding)) { ?>
-      <?=htmlspecialchars($address->streetAndNumber)?><br>
+      <?=htmlspecialchars($address->flatOrBuilding)?><br>
       <?php } ?>
-      <?=htmlspecialchars(mb_strtoupper($address->city))?><br>
+      <?=htmlspecialchars($address->city)?><br>
       <?=htmlspecialchars(mb_strtoupper($address->postCode))?>
     </address>
+    <div class="after-address-box"></div>
     <?php } else { ?>
     <p>
       <strong><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></strong><br>
@@ -113,7 +121,8 @@ ob_start();?>
     </p>
 
     <?php if ((bool(env('IS_CLS')))) { ?>
-      <div class="cell">
+    <div class="avoid-page-break-inside">
+      <div class="d-block">
         <h2>Instructions for parents</h2>
         <p>
           <strong>
@@ -128,13 +137,16 @@ ob_start();?>
           <?php } ?>
         </p>
       </div>
+    </div>
 
-      <div class="cell">
+    <div class="avoid-page-break-inside">
+      <div class="d-block">
         <h2>Instructions for staff</h2>
         <p class="mb-0">
           <strong>On receipt of this document and having confirmed it has been completed, please scan all QR codes to mark all required forms as completed.</strong> You must be signed in with your club account.
         </p>
       </div>
+    </div>
     <?php } ?>
 
     <p>*<em>Discounts may apply to squad fees</em></p>

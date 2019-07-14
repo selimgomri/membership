@@ -85,7 +85,8 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 }
 
 if ($action) {
-	header("Location: " . autoUrl("swimmers/parenthelp/" . $last_id));
+	$_SESSION['SwimmerAdded'] = true;
+	header("Location: " . autoUrl("swimmers/" . $last_id));
 } else {
 	$_SESSION['ErrorState'] = '
 	<div class="alert alert-danger">

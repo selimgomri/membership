@@ -76,21 +76,6 @@ ob_start();?>
     border: 0.2mm solid #ccc;
     padding: 2pt;
   }
-  .avoid-page-break-inside {
-    page-break-inside: avoid;
-  }
-  .d-inline {
-    display: inline;
-  }
-  .d-block {
-    display: block;
-  }
-  .pb-3 {
-    padding-bottom: 12pt;
-  }
-  .text-center {
-    text-align: center;
-  }
   </style>
   <title><?=htmlspecialchars($info['GalaName'])?> Timesheet</title>
   </head>

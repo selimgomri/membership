@@ -203,12 +203,50 @@
     break-inside: avoid;
   }
 
+  .address-font {
+    font-size: 11pt;
+  }
+
+  .address-box {
+    position: absolute;
+    top: 2.23cm;
+    left: 0.73cm;
+    height: 3.45cm;
+    width: 9cm;
+    padding: 0.5cm 0.75cm;
+    // background: #eee;
+  }
+
+  .after-address-box {
+    height: 4.5cm;
+    display: block;
+  }
+
+  .avoid-page-break-inside {
+    page-break-inside: avoid;
+  }
+  .d-inline {
+    display: inline;
+  }
+  .d-block {
+    display: block;
+  }
+  .pb-3 {
+    padding-bottom: 12pt;
+  }
+  .text-center {
+    text-align: center;
+  }
+
   <?php if (!bool(env('IS_CLS'))) { ?>
   html, body {
     font-family: 'Source Sans Pro', 'Lato', 'Helvetica', sans-serif;
   }
   h1, h2, h3, h4, h5, h6, strong, thead, th {
     font-family: 'Source Sans Pro Bold', 'Lato Bold';
+  }
+  .logo {
+    height: 2cm;
   }
   <?php } ?>
 </style>
