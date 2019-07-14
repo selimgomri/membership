@@ -550,6 +550,17 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
     </ol>
   </nav>
 
+  <?php if (isset($_SESSION['SwimmerAdded']) && $_SESSION['SwimmerAdded']) { ?>
+  <div class="alert alert-success">
+    <p class="mb-0">
+      <strong>Swimmer added successfully</strong>
+    </p>
+    <p class="mb-0">
+      <a href="<?=autoUrl("swimmers/new")?>" class="alert-link">Add another swimmer</a> or proceed to <a href="<?=autoUrl("assisted-registration")?>" class="alert-link">assisted registration</a>
+    </p>
+  </div>
+  <?php unset($_SESSION['SwimmerAdded']); } ?>
+
 <?= $content ?>
 </div>
 <?php include BASE_PATH . "views/footer.php";

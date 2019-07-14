@@ -169,8 +169,9 @@ if ($access == "Admin") {
 
 if ($access != "Parent") {
 	$this->get('/addmember', function() {
-    global $link;
-	  include 'AddMember/SelectType.php';
+    //global $link;
+		//include 'AddMember/SelectType.php';
+		header("Location: ". autoUrl("swimmers/new"));
 	});
 
   /*
