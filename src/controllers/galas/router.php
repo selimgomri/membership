@@ -61,8 +61,16 @@ if ($access == "Parent") {
 		global $link;
 		include 'EditEntryPost.php';
 	});
-}
-else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $access == "Coach") {
+
+	$this->get('/entries/{id}/veto', function($id) {
+		include 'indicate-openness/veto.php';
+	});
+
+	$this->get('/entries/{id}/veto/do', function($id) {
+		global $link;
+		include 'indicate-openness/veto-do.php';
+	});
+} else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $access == "Coach") {
 	// Gala Home
 	$this->get(['/', '/competitions'], function() {
 		global $link;
@@ -97,12 +105,12 @@ else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $
 	// Gala Entries
 	$this->get('/entries/{id}:int', function($id) {
 		global $link;
-		include 'singleentry.php';
+		include 'EditEntry.php';
 	});
 
 	$this->post('/entries/{id}:int', function($id) {
 		global $link;
-		include 'entriesSingleaction.php';
+		include 'EditEntryPost.php';
 	});
 
 	// Gala Entries
@@ -157,5 +165,44 @@ if ($access == "Galas" || $access == "Admin") {
 
 	$this->post('/{id}:int/refunds', function($id) {
 		include BASE_PATH . 'controllers/payments/galas/RefundChargePost.php';
+	});
+
+
+	$this->get('/{id}:int/sessions', function($id) {
+		include 'indicate-openness/gala-sessions.php';
+	});
+
+	$this->get('/{id}:int/sessions/{session}:int/delete', function($id, $session) {
+		include 'indicate-openness/delete-session.php';
+	});
+
+	$this->post('/{id}:int/sessions', function($id) {
+		include 'indicate-openness/gala-sessions-post.php';
+	});
+
+	$this->get('/{id}:int/select-entries', function($id) {
+		include 'indicate-openness/select-swims.php';
+	});
+
+	$this->post('/{id}:int/select-entries', function($id) {
+		include 'indicate-openness/select-swims-post.php';
+	});
+
+	$this->get('/{id}:int/invite-parents', function($id) {
+		include 'indicate-openness/invite-parents.php';
+	});
+
+	$this->post('/{id}:int/invite-parents', function($id) {
+		include 'indicate-openness/invite-parents-post.php';
+	});
+}
+
+if ($_SESSION['AccessLevel'] == 'Parent') {
+	$this->get('/{id}:int/indicate-availability', function($id) {
+		include 'indicate-openness/session-select.php';
+	});
+
+	$this->post('/{id}:int/indicate-availability', function($id) {
+		include 'indicate-openness/session-select-post.php';
 	});
 }

@@ -2,7 +2,7 @@
 
 global $db;
 
-$galas = $db->prepare("SELECT GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength FROM galas WHERE GalaID = ?");
+$galas = $db->prepare("SELECT GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters FROM galas WHERE GalaID = ?");
 $galas->execute([$id]);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
 
@@ -132,6 +132,10 @@ include "galaMenu.php";
     <?php } ?>
   </div>
 
+  <?php if (isset($_SESSION['GalaAddedSuccess']) && $_SESSION['GalaAddedSuccess']) { ?>
+  <div class="alert alert-success">We've successfully added this gala</div>
+  <?php unset($_SESSION['GalaAddedSuccess']); } ?>
+
   <h2>About this gala</h2>
 
   <div class="row">
@@ -165,6 +169,13 @@ include "galaMenu.php";
       <h3 class="h6">Finishes by</h3>
       <p><?=date("j F Y", strtotime($gala['GalaDate']))?></p>
     </div>
+
+    <?php if ($gala['CoachEnters']) { ?>
+    <div class="col-sm-6 col-md-4">
+      <h3 class="h6">Coach enters</h3>
+      <p>Coaches make all entries for this gala</p>
+    </div>
+    <?php } ?>
 
     <div class="col-sm-6 col-md-4">
       <h3 class="h6">Number of entries</h3>
@@ -204,6 +215,32 @@ include "galaMenu.php";
 
     <?php } ?>
   </div>
+
+  <?php if ($_SESSION['AccessLevel'] == 'Parent' && $gala['CoachEnters']) { ?>
+  <h2>Entries are managed by your coach</h2>
+  <p class="lead">Let them know you can enter this gala</p>
+  <p>
+    <a href="<?=autoUrl("galas/" . $id . "/indicate-availability")?>" class="btn btn-success">
+      Indicate availability
+    </a>
+  </p>
+  <?php } else if ($gala['CoachEnters'] && ($_SESSION['AccessLevel'] == 'Coach' || $_SESSION['AccessLevel'] == 'Galas' || $_SESSION['AccessLevel'] == 'Admin')) { ?>
+  <h2>Manage sessions</h2>
+  <p class="lead">Add sessions to this gala so parents can indicate availability</p>
+  <p>
+    <a href="<?=autoUrl("galas/" . $id . "/sessions")?>" class="btn btn-success">
+      Manage sessions
+    </a>
+  </p>
+
+  <h2>Manage entries</h2>
+  <p class="lead">Add and edit entries for all competing swimmers</p>
+  <p>
+    <a href="<?=autoUrl("galas/" . $id . "/select-entries")?>" class="btn btn-success">
+      Manage entries
+    </a>
+  </p>
+  <?php } ?>
 
   <?php if ($numEntries > 0) { ?>
   <h2>Gala timesheet</h2>

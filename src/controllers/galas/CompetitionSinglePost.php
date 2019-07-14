@@ -4,7 +4,7 @@ global $db;
 
 $hyTek = 0;
 
-$galaName = $courseLength = $galaVenue = $closingDate = $galaDate = $galaFeeConstant = $galaFee;
+$galaName = $courseLength = $galaVenue = $closingDate = $galaDate = $galaFeeConstant = $galaFee = $coachEnters = 0;
 
 if (!empty($_POST['galaname'])) {
   $galaName = trim($_POST['galaname']);
@@ -30,13 +30,16 @@ if (!empty($_POST['galaFee'])) {
 if ($_POST['HyTek']) {
   $hyTek = 1;
 }
+if ($_POST['coachDecides']) {
+  $coachEnters = 1;
+}
 if ($galaFeeConstant == 0 || $galaFeeConstant == null) {
   $galaFeeConstant = 0;
   $galaFee = 0.00;
 }
 
 try {
-  $update  = $db->prepare("UPDATE `galas` SET  GalaName = ?, CourseLength = ?, GalaVenue = ?, ClosingDate = ?, GalaDate = ?, GalaFeeConstant = ?, GalaFee = ?, HyTek = ? WHERE GalaID = ?");
+  $update  = $db->prepare("UPDATE `galas` SET  GalaName = ?, CourseLength = ?, GalaVenue = ?, ClosingDate = ?, GalaDate = ?, GalaFeeConstant = ?, GalaFee = ?, HyTek = ?, CoachEnters = ? WHERE GalaID = ?");
   $update->execute([
     $galaName,
     $courseLength,
@@ -46,6 +49,7 @@ try {
     $galaFeeConstant,
     $galaFee,
     $hyTek,
+    $coachEnters,
     $id
   ]);
   header("location: " . autoUrl("galas/" . $id));

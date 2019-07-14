@@ -67,9 +67,18 @@ $content .= "<div class=\"row\"><div class=\"col-md-10 col-lg-8\"><form method=\
     </div>
   </div>
 </div>
-<p><button class=\"btn btn-success\" type=\"submit\" id=\"submit\">Add Gala to Database</button></p>
+<div class=\"form-group row\">
+  <label for=\"coachDecides\" class=\"col-sm-2 col-form-label\">Coach decides entries?</label>
+  <div class=\"col-sm-10\">
+    <div class=\"custom-control custom-checkbox mt-2\">
+      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"coachDecides\" name=\"coachDecides\">
+      <label class=\"custom-control-label\" for=\"coachDecides\">Tick if a coach will make entries for this gala</label>
+    </div>
+  </div>
+</div>
+<p><button class=\"btn btn-success\" type=\"submit\" id=\"submit\">Add gala</button></p>
 </div></div></form>
-<p class=\"mb-0\">This gala will immediately be available for parents to enter</p>
+<p>This gala will immediately be available for parents to enter, unless coaches decide entries.</p>
 ";
 
 $use_white_background = true;

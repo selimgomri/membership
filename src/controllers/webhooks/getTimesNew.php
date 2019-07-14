@@ -54,11 +54,15 @@ for ($i = 0; $i < $count_to_get; $i++) {
 	//echo "I = $i, ";
 
 	if ($row[$i]['ASANumber'] && !(strpos($row[$i]['ASANumber'], env('ASA_CLUB_CODE')) !== false) && $row[$i]['ASANumber'] != "") {
-		$curlres =
-		curl('https://www.swimmingresults.org/individualbest/personal_best.php?print=1&mode=L&tiref=' . $row[$i]['ASANumber']);
+		// $curlres = curl('https://www.swimmingresults.org/individualbest/personal_best.php?print=1&mode=L&tiref=' . $row[$i]['ASANumber']);
+		$array = getTimes($row[$i]['ASANumber']);
+		$hasArray = true;
+		if ($array === false) {
+			$hasArray = false;
+		}
 
-		if ($curlres) {
-			$array = getTimes($row[$i]['ASANumber']);
+		if ($hasArray) {
+			pre($array);
 			$array12 = null;
 			for ($y = 0; $y < 4; $y++) {
 				//echo "Y = $y, ";
@@ -95,6 +99,8 @@ for ($i = 0; $i < $count_to_get; $i++) {
 					// Get the last 12 months
 
 					// Long Course
+
+					/*
 
 					$start = '<p class="rnk_sj">Long Course</p><table id="rankTable"><tbody>';
 					$end = '</tbody></table>';
@@ -140,9 +146,11 @@ for ($i = 0; $i < $count_to_get; $i++) {
 					$t16 = $array12['200 Individual Medley']['Long']['Time'];
 					$t17 = $array12['400 Individual Medley']['Long']['Time'];
 					$t18 = null;
+					*/
 
 				} else if ($y == 0) {
 
+					/*
 					$start = '<p class="rnk_sj">Short Course</p><table id="rankTable"><tbody>';
 					$end = '</tbody></table>';
 
@@ -187,6 +195,7 @@ for ($i = 0; $i < $count_to_get; $i++) {
 					$t16 = $array12['200 Individual Medley']['Short']['Time'];
 					$t17 = $array12['400 Individual Medley']['Short']['Time'];
 					$t18 = $array12['100 Individual Medley']['Short']['Time'];
+					*/
 
 				} else {
 					$t1 = $array[$type][1];
@@ -242,7 +251,7 @@ for ($i = 0; $i < $count_to_get; $i++) {
 					't18'			=> $t18,
 				];
 
-				if (($y == 1 || $y == 3 && $array) || ($y == 0 || $y == 2)) {
+				if ($hasArray) {
 					try {
 						if ($num == 0) {
 							try {

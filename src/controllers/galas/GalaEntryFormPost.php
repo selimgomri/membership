@@ -56,9 +56,13 @@ for ($i=0; $i<sizeof($entriesArray); $i++) {
   }
 }
 
-$getGalaInformation = $db->prepare("SELECT GalaFee, GalaFeeConstant, GalaName FROM galas WHERE GalaID = ?");
+$getGalaInformation = $db->prepare("SELECT GalaFee, GalaFeeConstant, GalaName FROM galas WHERE GalaID = ? AND NOT CoachEnters");
 $getGalaInformation->execute([$_POST['gala']]);
 $row = $getGalaInformation->fetch(PDO::FETCH_ASSOC);
+
+if ($row == null) {
+  halt(404);
+}
 
 if ($row['GalaFeeConstant']) {
   $fee = number_format(($counter*$row['GalaFee']),2,'.','');

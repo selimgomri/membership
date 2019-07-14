@@ -5,7 +5,7 @@ global $db;
 require 'GlobalHead.php';
 
 $bg = "bg-white";
-if ($customBackground) {
+if (isset($customBackground) && $customBackground) {
   $bg = $customBackground;
 }
 ?>
@@ -96,13 +96,13 @@ if ($customBackground) {
 
     <?php
     $edit_link = null;
-    if (!$people) {
+    if ((!isset($people) || !$people) && isset($allow_edit_id)) {
       $edit_link = autoUrl("posts/" . $allow_edit_id . "/edit");
-    } else if ($people && $page_is_mine) {
+    } else if (isset($people) && isset($page_is_mine) && $people && $page_is_mine) {
       $edit_link = autoUrl("people/me");
     }
 
-    if ($allow_edit && (($_SESSION['AccessLevel'] != "Parent" &&
+    if (isset($allow_edit) && $allow_edit && (($_SESSION['AccessLevel'] != "Parent" &&
     $_SESSION['AccessLevel'] != "Coach" && $edit_link != null) || $page_is_mine)) { ?>
     <div class="bg-secondary box-shadow py-2 d-print-none">
       <div class="<?=$container_class?>">
