@@ -245,5 +245,8 @@
   h1, h2, h3, h4, h5, h6, strong, thead, th {
     font-family: 'Source Sans Pro Bold', 'Lato Bold';
   }
+  .logo {
+    height: 2cm;
+  }
   <?php } ?>
 </style>
