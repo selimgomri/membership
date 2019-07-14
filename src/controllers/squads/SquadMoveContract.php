@@ -130,7 +130,7 @@ ob_start();?>
           </strong>
         </p>
 
-        <p class="mb-0">
+        <p>
           This document contains a form which your swimmer <strong>must sign before starting in their new squad</strong>.
           <?php if (date_diff(date_create($email_info['DateOfBirth']), date_create('today'))->y < 18) { ?>
           As <?=htmlspecialchars($email_info['MForename'])?> is under the age of 18, you must also sign to confirm that you have explained the content and implications of the code of conduct to <?=htmlspecialchars($email_info['MForename'])?>.
@@ -142,7 +142,7 @@ ob_start();?>
     <div class="avoid-page-break-inside">
       <div class="d-block">
         <h2>Instructions for staff</h2>
-        <p class="mb-0">
+        <p>
           <strong>On receipt of this document and having confirmed it has been completed, please scan all QR codes to mark all required forms as completed.</strong> You must be signed in with your club account.
         </p>
       </div>
