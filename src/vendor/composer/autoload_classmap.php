@@ -12,7 +12,6 @@ return array(
     'HTML5_Parser' => $vendorDir . '/dompdf/dompdf/lib/html5lib/Parser.php',
     'HTML5_Tokenizer' => $vendorDir . '/dompdf/dompdf/lib/html5lib/Tokenizer.php',
     'HTML5_TreeBuilder' => $vendorDir . '/dompdf/dompdf/lib/html5lib/TreeBuilder.php',
-    'JsonException' => $vendorDir . '/symfony/polyfill-php73/Resources/stubs/JsonException.php',
     'Twitter' => $vendorDir . '/dg/twitter-php/src/Twitter.php',
     'TwitterException' => $vendorDir . '/dg/twitter-php/src/Twitter.php',
     'Twitter_OAuthConsumer' => $vendorDir . '/dg/twitter-php/src/OAuth.php',
