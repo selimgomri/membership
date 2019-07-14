@@ -149,9 +149,12 @@ include BASE_PATH . "views/header.php";
     <address>
       <?=htmlspecialchars($addr->streetAndNumber)?><br>
       <?php if (isset($addr->flatOrBuilding)) { ?>
-      <?=htmlspecialchars($addr->streetAndNumber)?><br>
+      <?=htmlspecialchars($addr->flatOrBuilding)?><br>
       <?php } ?>
       <?=htmlspecialchars(mb_strtoupper($addr->city))?><br>
+      <?php if (isset($addr->county)) { ?>
+      <?=htmlspecialchars($addr->county)?><br>
+      <?php } ?>
       <?=htmlspecialchars(mb_strtoupper($addr->postCode))?>
     </address>
   </div>

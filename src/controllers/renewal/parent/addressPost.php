@@ -16,6 +16,9 @@ try {
     if (isset($_POST['flat-building']) && $_POST['flat-building']) {
       $addr += ['flatOrBuilding' => trim($_POST['flat-building'])];
     }
+    if (isset($_POST['county-province']) && $_POST['county-province']) {
+      $addr += ['county' => trim($_POST['county-province'])];
+    }
     $addr = json_encode($addr);
     $currentUser->setUserOption('MAIN_ADDRESS', $addr);
     $_SESSION['OptionsUpdate'] = true;

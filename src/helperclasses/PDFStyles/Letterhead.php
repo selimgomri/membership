@@ -16,11 +16,14 @@ $logoPath = env('CLUB_LOGO');
     <?php } ?>
   </div>
   <div class="split-50 text-right">
-    <p>
+    <p class="mb-0">
       <strong><?=htmlspecialchars(env('CLUB_NAME'))?></strong><br>
       <?php
-      for ($i = 0; $i < sizeof($club->ClubAddress); $i++) { ?>
-        <?=htmlspecialchars($club->ClubAddress[$i])?><br>
+      for ($i = 0; $i < sizeof($addr); $i++) { ?>
+        <?=htmlspecialchars($addr[$i])?><br>
+        <?php if (isset($addr[$i+1]) && $addr[$i+1] == "") {
+          break;
+        } ?>
       <?php } ?>
     </p>
   </div>

@@ -74,33 +74,44 @@ ob_start();?>
   <body>
     <?php include BASE_PATH . 'helperclasses/PDFStyles/Letterhead.php'; ?>
 
-    <p>
-      <?=date("d/m/Y", strtotime($payment_info['Date']))?>
-    </p>
+    <div class="row mb-3 text-right">
+      <div class="split-50">
+      </div>
+      <div class="split-50">
+        <p>
+          <?=date("d/m/Y", strtotime($payment_info['Date']))?>
+        </p>
+
+        <p>
+          Internal Reference: <span class="mono"><?=htmlspecialchars($PaymentID)?></span>
+        </p>
+      </div>
+    </div>
 
     <?php if ($address != null && isset($address->streetAndNumber)) { ?>
-    <address class="mb-3">
+    <address class="mb-3 address-font address-box">
       <strong><?=htmlspecialchars($name)?></strong><br>
       <?=htmlspecialchars($address->streetAndNumber)?><br>
       <?php if (isset($address->flatOrBuilding)) { ?>
-      <?=htmlspecialchars($address->streetAndNumber)?><br>
+      <?=htmlspecialchars($address->flatOrBuilding)?><br>
       <?php } ?>
-      <?=htmlspecialchars(mb_strtoupper($address->city))?><br>
+      <?=htmlspecialchars($address->city)?><br>
       <?=htmlspecialchars(mb_strtoupper($address->postCode))?>
     </address>
+    <div class="after-address-box"></div>
     <?php } else { ?>
     <p>
       <strong><?=htmlspecialchars($name)?></strong><br>
-      Parent
+      Parent/Carer
     </p>
     <?php } ?>
 
     <div class="primary-box mb-3" id="title">
       <h1 class="mb-0" title="<?=htmlspecialchars($payment_info['Name'])?>">
-      <?=htmlspecialchars($payment_info['Name'])?>
+        Statement of Fees and Charges
       </h1>
       <p class="lead mb-0">
-        Statement of Fees and Charges
+        <?=htmlspecialchars($payment_info['Name'])?>
       </p>
     </div>
 

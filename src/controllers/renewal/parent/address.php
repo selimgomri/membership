@@ -34,7 +34,7 @@ $userID = $_SESSION['UserID'];
       <address>
         <?=htmlspecialchars($addr->streetAndNumber)?><br>
         <?php if (isset($addr->flatOrBuilding)) { ?>
-        <?=htmlspecialchars($addr->streetAndNumber)?><br>
+        <?=htmlspecialchars($addr->flatOrBuilding)?><br>
         <?php } ?>
         <?=htmlspecialchars(mb_strtoupper($addr->city))?><br>
         <?=htmlspecialchars(mb_strtoupper($addr->postCode))?><br>
@@ -49,23 +49,28 @@ $userID = $_SESSION['UserID'];
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <label for="street-and-number">Street and number</label>
-              <input class="form-control" name="street-and-number" id="street-and-number" type="text" <?php if (isset($addr->streetAndNumber)) { ?>value="<?=htmlspecialchars($addr->streetAndNumber)?>"<?php } ?> required>
+              <label for="street-and-number">Address line 1 (street and number)</label>
+              <input class="form-control" name="street-and-number" id="street-and-number" type="text"autocomplete="address-line1"  <?php if (isset($addr->streetAndNumber)) { ?>value="<?=htmlspecialchars($addr->streetAndNumber)?>"<?php } ?> required>
             </div>
 
             <div class="form-group">
-              <label for="flat-building">Flat, Suite, Unit, Building etc (optional)</label>
-              <input class="form-control" name="flat-building" id="flat-building" type="text" <?php if (isset($addr->flatOrBuilding)) { ?>value="<?=htmlspecialchars($addr->flatOrBuilding)?>"<?php } ?>>
+              <label for="flat-building">Address line 2 (optional)</label>
+              <input class="form-control" name="flat-building" id="flat-building" type="text"autocomplete="address-line2"  <?php if (isset($addr->flatOrBuilding)) { ?>value="<?=htmlspecialchars($addr->flatOrBuilding)?>"<?php } ?>>
             </div>
 
             <div class="form-group">
               <label for="town-city">Town/City</label>
-              <input class="form-control" name="town-city" id="town-city" type="text" <?php if (isset($addr->city)) { ?>value="<?=htmlspecialchars($addr->city)?>"<?php } ?> required>
+              <input class="form-control" name="town-city" id="town-city" type="text" autocomplete="address-level2" <?php if (isset($addr->city)) { ?>value="<?=htmlspecialchars($addr->city)?>"<?php } ?> required>
+            </div>
+
+            <div class="form-group">
+              <label for="county-province">County</label>
+              <input class="form-control" name="county-province" id="county-province" type="text" autocomplete="address-level1" <?php if (isset($addr->county)) { ?>value="<?=htmlspecialchars($addr->county)?>"<?php } ?> required>
             </div>
 
             <div class="form-group">
               <label for="post-code">Post Code</label>
-              <input class="form-control" name="post-code" id="post-code" type="text" <?php if (isset($addr->postCode)) { ?>value="<?=htmlspecialchars($addr->postCode)?>"<?php } ?> required>
+              <input class="form-control" name="post-code" id="post-code" type="text" autocomplete="postal-code" <?php if (isset($addr->postCode)) { ?>value="<?=htmlspecialchars($addr->postCode)?>"<?php } ?> required>
             </div>
           </div>
         </div>
