@@ -77,7 +77,7 @@ include BASE_PATH . 'views/header.php';
           <div class="col-6 col-md-4 col-lg-3">
             <div class="form-group">
               <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Age" id="min-age" name="min-age" aria-label="Minimum age of swimmers">
+                <input type="num" min="0" max="150" value="9" class="form-control" placeholder="Age" id="min-age" name="min-age" aria-label="Minimum age of swimmers">
                 <div class="input-group-append">
                   <span class="input-group-text">years old</span>
                 </div>
