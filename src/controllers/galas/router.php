@@ -187,6 +187,14 @@ if ($access == "Galas" || $access == "Admin") {
 	$this->post('/{id}:int/select-entries', function($id) {
 		include 'indicate-openness/select-swims-post.php';
 	});
+
+	$this->get('/{id}:int/invite-parents', function($id) {
+		include 'indicate-openness/invite-parents.php';
+	});
+
+	$this->post('/{id}:int/invite-parents', function($id) {
+		include 'indicate-openness/invite-parents-post.php';
+	});
 }
 
 if ($_SESSION['AccessLevel'] == 'Parent') {

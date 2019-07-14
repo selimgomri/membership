@@ -51,7 +51,7 @@ include BASE_PATH . 'views/header.php';
       </div>
       <?php } ?>
 
-      <p>If you don't add sessions for a gala, parents will just be invited to indicate whether thay can attend the whole gala.</p>
+      <p>If you don't add sessions for a gala, parents will be unable indicate whether they can attend.</p>
 
       <form method="post">
 
