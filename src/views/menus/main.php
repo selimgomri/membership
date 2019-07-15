@@ -274,7 +274,7 @@ function chesterStandardMenu() {
                   <?php if (isset($exit_edit) && $exit_edit && $_SESSION['AccessLevel'] != "Parent" &&
         		$_SESSION['AccessLevel'] != "Coach") { ?>
                   <a class="dropdown-item" href="<?=autoUrl("posts/" . $id)?>">View Page</a>
-                  <?php } ?> != null
+                  <?php } ?>
                 </div>
               </li>
               <!--
