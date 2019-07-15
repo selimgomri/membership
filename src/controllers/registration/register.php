@@ -67,6 +67,24 @@ $_SESSION['RegistrationMode'] = $mode;
         echo $_SESSION['ErrorState'];
         unset($_SESSION['ErrorState']);
       } ?>
+
+      <div class="row">
+        <div class="col-md-8 col-lg-6">
+          <div class="alert alert-warning">
+            <p class="mb-0">
+              <strong>Stop. Are you a new parent?</strong>
+            </p>
+            <p>
+              We'll be sending you an email in the next few days with instructions on how to get your account set up. Your swimmers will already be connected to your new account when you receive it.
+            </p>
+            
+            <p class="mb-0">
+              Until then please bear with us otherwise your registration at <?=htmlspecialchars(env('CLUB_NAME'))?> may be delayed.
+            </p>
+          </div>
+        </div>
+      </div>
+      
       <form method="post" action="<?php echo autoUrl("register"); ?>" name="register" id="register">
 
         <h2>About you</h2>
