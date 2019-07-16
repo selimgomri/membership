@@ -130,13 +130,13 @@
 
   <?php if (!bool(env('IS_CLS'))) { ?>
     .primary {
-      color: #007bff;
+      color: <?=htmlspecialchars(env('SYSTEM_COLOUR'))?>;
     }
     .primary-box {
-      background-color: #007bff;
+      background-color: <?=htmlspecialchars(env('SYSTEM_COLOUR'))?>;
     }
     a, a:hover, a:active, a:visited {
-      color: #007bff;
+      color: <?=htmlspecialchars(env('SYSTEM_COLOUR'))?>;
       text-decoration: underline;
     }
   <?php } ?>

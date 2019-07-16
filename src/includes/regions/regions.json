@@ -1,0 +1,58 @@
+[
+  {
+    "id": "sener",
+    "name": "Swim England North East Region",
+    "shortName": "North East",
+    "website": "http://asaner.org.uk/",
+    "title": "Swim England North East Region"
+  },
+  {
+    "id": "seemr",
+    "name": "Swim England East Midlands Region",
+    "shortName": "East Midlands",
+    "website": "https://www.swimming.org/eastmidland/",
+    "title": "Swim England East Midlands Region"
+  },
+  {
+    "id": "sewmr",
+    "name": "Swim England West Midlands Region",
+    "shortName": "West Midlands",
+    "website": "https://www.westmidlandswimming.org/",
+    "title": "Swim England West Midlands Region"
+  },
+  {
+    "id": "senwr",
+    "name": "Swim England North West Region",
+    "shortName": "North West",
+    "website": "https://www.swimnorthwest.org/",
+    "title": "Swim England North West Region"
+  },
+  {
+    "id": "seer",
+    "name": "Swim England East Region",
+    "shortName": "East",
+    "website": "https://www.eastswimming.org/",
+    "title": "Swim England East Region"
+  },
+  {
+    "id": "selr",
+    "name": "Swim England London Region",
+    "shortName": "London",
+    "website": "https://www.londonswimming.org/",
+    "title": "Swim England London Region"
+  },
+  {
+    "id": "seser",
+    "name": "Swim England South East Region",
+    "shortName": "South East",
+    "website": "https://www.southeastswimming.org/",
+    "title": "Swim England South East Region"
+  },
+  {
+    "id": "seswr",
+    "name": "Swim England South West Region",
+    "shortName": "South West",
+    "website": "http://www.swimwest.org/",
+    "title": "Swim England South West Region"
+  }
+]
