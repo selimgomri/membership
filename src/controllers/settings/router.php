@@ -84,6 +84,16 @@ $this->group('/fees', function() {
       include 'fees/charge-months-post.php';
     });
   });
+
+  $this->group('/membership-discounts', function() {
+    $this->get('/', function() {
+      include 'fees/fee-discounts.php';
+    });
+
+    $this->post('/', function() {
+      include 'fees/fee-discounts-post.php';
+    });
+  });
 });
 
 $this->get('/welcome-pack', function() {
