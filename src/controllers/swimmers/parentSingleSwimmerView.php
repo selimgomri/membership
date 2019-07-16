@@ -1,5 +1,8 @@
 <?php
 
+global $systemInfo;
+$leavers = $systemInfo->getSystemOption('LeaversSquad');
+
 global $db;
 $getInfo = $db->prepare("SELECT members.MemberID, members.MForename, members.MMiddleNames,
 members.MSurname, users.EmailAddress, members.ASANumber, members.ASACategory,
@@ -97,9 +100,11 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
     <li class="nav-item">
       <a class="nav-link" id="squad-tab" data-toggle="tab" href="#squad" role="tab" aria-controls="squad" aria-selected="false">Squad</a>
     </li>
+    <?php if ($leavers != null) { ?>
     <li class="nav-item">
       <a class="nav-link" id="leave-club-tab" data-toggle="tab" href="#leave-club" role="tab" aria-controls="leave-club" aria-selected="false">Leave</a>
     </li>
+    <?php } ?>
     <li class="nav-item">
       <a class="nav-link" id="additional-info-tab" data-toggle="tab" href="#additional-details" role="tab" aria-controls="additional-details" aria-selected="false">More</a>
     </li>
@@ -428,6 +433,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
       </div>
     </div>
     </div>
+    <?php if ($leavers != null) { ?>
     <div class="tab-pane fade mt-3" id="leave-club" role="tabpanel" aria-labelledby="leave-club-tab">
       <h2>Leave the Club</h2>
       <p class="lead">
@@ -451,6 +457,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
         billing systems on this date.
       </p>
     </div>
+    <?php } ?>
     <div class="tab-pane fade mt-3" id="additional-details" role="tabpanel" aria-labelledby="additional-info-tab">
       <div class="">
         <?php
