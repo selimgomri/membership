@@ -21,11 +21,19 @@ if ($partial_reg) {
 	}
 }
 
+$discounts = json_decode($systemInfo->getSystemOption('MembershipDiscounts'), true);
+$clubDiscount = $swimEnglandDiscount = 0;
+if ($discounts != null && isset($discounts['CLUB'][date('m')])) {
+	$clubDiscount = $discounts['CLUB'][date('m')];
+}
+if ($discounts != null && isset($discounts['ASA'][date('m')])) {
+	$swimEnglandDiscount = $discounts['ASA'][date('m')];
+}
+
 $sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ? AND `ClubPays` = '0'");
 $sql->execute([$_SESSION['UserID']]);
 
-$clubFee = 0;
-$totalFee = 0;
+$clubFee = $totalFeeDiscounted = $totalFee = 0;
 
 $payingSwimmerCount = $sql->fetchColumn();
 
@@ -52,7 +60,13 @@ $getMembers->execute([$_SESSION['UserID']]);
 $member = $getMembers->fetchAll(PDO::FETCH_ASSOC);
 $count = sizeof($member);
 
-$totalFee += $clubFee;
+if ($clubDiscount > 0 && $renewal == 0) {
+	$totalFee += $clubFee;
+	$totalFeeDiscounted += $clubFee*(1-($clubDiscount/100));
+} else {
+	$totalFee += $clubFee;
+	$totalFeeDiscounted += $clubFee;
+}
 
 $asaFees = [];
 
@@ -68,7 +82,13 @@ for ($i = 0; $i < $count; $i++) {
 	} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ClubPays']) {
 		$asaFees[$i] = $asa3;
 	}
-	$totalFee += $asaFees[$i];
+	if ($swimEnglandDiscount > 0 && $renewal == 0) {
+		$totalFee += $asaFees[$i];
+		$totalFeeDiscounted += $asaFees[$i]*(1-($swimEnglandDiscount/100));
+	} else {
+		$totalFee += $asaFees[$i];
+		$totalFeeDiscounted += $asaFees[$i];
+	}
 }
 
 $clubFeeString = number_format($clubFee/100,2,'.','');
@@ -141,12 +161,22 @@ include BASE_PATH . "views/renewalTitleBar.php";
 							&pound;<?= $clubFeeString ?>
 						</td>
 					</tr>
+					<?php if ($clubDiscount > 0 && $renewal == 0) { ?>
+					<tr>
+						<td>
+							Discretionary discount at <?=htmlspecialchars($clubDiscount)?>%
+						</td>
+						<td>
+							-&pound;<?=number_format(((int)$clubFee*($clubDiscount/100)/100), 2, '.', '')?>
+						</td>
+					</tr>
+					<?php } ?>
 				</tbody>
 			<!--</table>
 		</div>
 		<?php if ($payingSwimmerCount > 1) {
 			?>
-			<p class="lead">
+			<p class="lead"<?=number_format($totalFee - $totalFeeDiscounted, 2, '.', '')?>>
 				You <?php if ($renewal == 0) { ?>will <?php } ?>pay for a family membership, covering all of your swimmers at a reduced cost.
 			</p>
 			<?php
@@ -193,6 +223,16 @@ include BASE_PATH . "views/renewalTitleBar.php";
 						&pound;<?php echo $asaFeesString; ?>
 					</td>
 				</tr>
+				<?php if ($swimEnglandDiscount > 0 && $renewal == 0) { ?>
+				<tr>
+					<td>
+						Discretionary discount at <?=htmlspecialchars($swimEnglandDiscount)?>%
+					</td>
+					<td>
+						-&pound;<?=number_format(((int)$asaFees[$i]*($swimEnglandDiscount/100))/100, 2, '.', '')?>
+					</td>
+				</tr>
+				<?php } ?>
 			<?php } ?>
 				</tbody>
 				<tbody>
@@ -204,12 +244,30 @@ include BASE_PATH . "views/renewalTitleBar.php";
 							&pound;<?= $totalFeeString ?>
 						</td>
 					</tr>
+					<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0)	 && $renewal == 0) { ?>
+					<tr class="table-active">
+						<td>
+							Total discounts
+						</td>
+						<td>
+							-&pound;<?=number_format(((int)$totalFee - $totalFeeDiscounted)/100, 2, '.', '')?>
+						</td>
+					</tr>
+					<tr class="table-active">
+						<td>
+							Total Membership Fee (with discounts)
+						</td>
+						<td>
+							&pound;<?=number_format(((int)$totalFeeDiscounted)/100, 2, '.', '')?>
+						</td>
+					</tr>
+					<?php } ?>
 				</tbody>
 			</table>
 		</div>
 
 		<p>
-			Your total <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?> fee will be &pound;<?=$totalFeeString?>. By continuing to complete your membership <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?>, you confirm that you will pay this amount as part of your <?= $nf ?> Direct Debit Payment.
+					Your total <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?> fee will be &pound;<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0) && $renewal == 0) { ?><?=number_format(((int)$totalFeeDiscounted)/100, 2, '.', '')?><?php } else { ?><?=$totalFeeString?><?php } ?>. By continuing to complete your membership <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?>, you confirm that you will pay this amount as part of your <?= $nf ?> Direct Debit Payment.
 		</p>
 		<?php if (!userHasMandates($_SESSION['UserID'])) { ?>
 			<p>

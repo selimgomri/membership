@@ -16,6 +16,8 @@ $vars = [
   'GOCARDLESS_SANDBOX_ACCESS_TOKEN' => null,
   'GOCARDLESS_ACCESS_TOKEN' => null,
   'GOCARDLESS_WEBHOOK_KEY' => null,
+  'CLUB_ADDRESS' => null,
+  'SYSTEM_COLOUR' => null,
 ];
 
 try {

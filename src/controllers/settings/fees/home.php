@@ -27,7 +27,13 @@ include BASE_PATH . 'views/header.php';
             Swim England County, Regional and National Fees
           </a>
           <a href="<?=autoUrl("settings/fees/membership-fees")?>" class="list-group-item list-group-item-action">
-            <?=htmlspecialchars(env('CLUB_NAME'))?> Membership Fees
+            <?=htmlspecialchars(env('CLUB_NAME'))?> membership fees
+          </a>
+          <a href="<?=autoUrl("settings/fees/membership-discounts")?>" class="list-group-item list-group-item-action">
+            Membership discounts by month
+          </a>
+          <a href="<?=autoUrl("settings/fees/charge-months")?>" class="list-group-item list-group-item-action">
+            Months without squad fees
           </a>
         </div>
       </main>

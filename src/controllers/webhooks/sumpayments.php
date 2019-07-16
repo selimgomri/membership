@@ -5,6 +5,10 @@ set_time_limit(0);
 
 global $db;
 global $link;
+global $systemInfo;
+
+$squadFeeMonths = json_decode($systemInfo->getSystemOption('SquadFeeMonths'), true);
+$squadFeeRequired = !bool($squadFeeMonths[date("m")]);
 
 $ms = date("Y-m");
 $date = date("Y-m") . "-01";
@@ -31,86 +35,88 @@ if (mysqli_num_rows($result) == 0) {
 
   $sql = "SELECT `UserID` FROM `users` WHERE `AccessLevel` = 'Parent';";
   $result = mysqli_query($link, $sql);
-  for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-    $row[$i] = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    $user = mysqli_real_escape_string($link, $row[$i]['UserID']);
-    $amount = monthlyFeeCost($link, $user, "int");
-    if ($amount > 0) {
-      $description = "Squad Fees";
+  if ($squadFeeRequired) {
+    for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+      $row[$i] = mysqli_fetch_array($result, MYSQLI_ASSOC);
+      $user = mysqli_real_escape_string($link, $row[$i]['UserID']);
+      $amount = monthlyFeeCost($link, $user, "int");
+      if ($amount > 0) {
+        $description = "Squad Fees";
 
-      // Put together JSON Metadata
-      $sql = "SELECT members.MemberID, members.MForename, members.MSurname, squads.SquadName,
-      squads.SquadID, squads.SquadFee FROM (members INNER JOIN squads ON
-      members.SquadID = squads.SquadID) WHERE members.UserID = '$user' ORDER
-      BY members.MForename ASC, members.MSurname ASC;";
-      $swimmers = mysqli_query($link, $sql);
-      $count = mysqli_num_rows($swimmers);
+        // Put together JSON Metadata
+        $sql = "SELECT members.MemberID, members.MForename, members.MSurname, squads.SquadName,
+        squads.SquadID, squads.SquadFee FROM (members INNER JOIN squads ON
+        members.SquadID = squads.SquadID) WHERE members.UserID = '$user' ORDER
+        BY members.MForename ASC, members.MSurname ASC;";
+        $swimmers = mysqli_query($link, $sql);
+        $count = mysqli_num_rows($swimmers);
 
-      $members = [];
+        $members = [];
 
-      for ($y = 0; $y < $count; $y++) {
-        $swimmerRow = mysqli_fetch_array($swimmers, MYSQLI_ASSOC);
-        $member = [
-          "Member"      => $swimmerRow['MemberID'],
-          "MemberName"  => $swimmerRow['MForename'] . " " . $swimmerRow['MSurname'],
-          "FeeName"     => $swimmerRow['SquadName'],
-          "Fee"         => $swimmerRow['SquadFee']
-        ];
-        $members[] = $member;
-
-        $name = $description . " (" . $swimmerRow['SquadName'] . ")";
-
-        if ($swimmerRow['SquadFee'] > 0) {
-          $track_info = [
-            $mid,
-            $swimmerRow['MemberID'],
-            $user,
-            $name,
-            floor($swimmerRow['SquadFee']*100)
+        for ($y = 0; $y < $count; $y++) {
+          $swimmerRow = mysqli_fetch_array($swimmers, MYSQLI_ASSOC);
+          $member = [
+            "Member"      => $swimmerRow['MemberID'],
+            "MemberName"  => $swimmerRow['MForename'] . " " . $swimmerRow['MSurname'],
+            "FeeName"     => $swimmerRow['SquadName'],
+            "Fee"         => $swimmerRow['SquadFee']
           ];
+          $members[] = $member;
 
-          try {
-            $tracker_sql = "INSERT INTO `individualFeeTrack` (`MonthID`, `MemberID`, `UserID`, `Description`, `Amount`, `Type`) VALUES (?, ?, ?, ?, ?, 'SquadFee')";
-            $track = $db->prepare($tracker_sql);
-            $track->execute($track_info);
-          } catch (Exception $e) {
-            pre($e);
-            pre("1");halt(500);
+          $name = $description . " (" . $swimmerRow['SquadName'] . ")";
+
+          if ($swimmerRow['SquadFee'] > 0) {
+            $track_info = [
+              $mid,
+              $swimmerRow['MemberID'],
+              $user,
+              $name,
+              floor($swimmerRow['SquadFee']*100)
+            ];
+
+            try {
+              $tracker_sql = "INSERT INTO `individualFeeTrack` (`MonthID`, `MemberID`, `UserID`, `Description`, `Amount`, `Type`) VALUES (?, ?, ?, ?, ?, 'SquadFee')";
+              $track = $db->prepare($tracker_sql);
+              $track->execute($track_info);
+            } catch (Exception $e) {
+              pre($e);
+              pre("1");halt(500);
+            }
+
+            // Add squad fee payment to payments
           }
 
-          // Add squad fee payment to payments
         }
 
+        $metadata = [
+          "PaymentType"         => "SquadFees",
+          "Members"             => $members
+        ];
+
+        $memID = mysqli_real_escape_string($link, $swimmerRow['MemberID']);
+        $fee = (int) (mysqli_real_escape_string($link, $swimmerRow['SquadFee'])*100);
+
+        $metadata = mysqli_real_escape_string($link, json_encode($metadata));
+
+        $sql = "";
+        if (userHasMandates($user)) {
+          $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
+        } else {
+          $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
+        }
+        mysqli_query($link, $sql);
+
+        // Get Payment ID
+        /*$sql = "SELECT `PaymentID` FROM `paymentsPending` WHERE `Date` = '$date'
+        AND `UserID` = '$user' AND `Amount` = '$amount' AND `Name` =
+        '$description';";
+        $paymentID = mysqli_real_escape_string($link,mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC)['PaymentID']);*/
+
+        $paymentID = mysqli_real_escape_string($link, mysqli_insert_id($link));
+
+        $sql = "UPDATE `individualFeeTrack` SET `PaymentID` = '$paymentID' WHERE `UserID` = '$user' AND `PaymentID` IS NULL;";
+        mysqli_query($link, $sql);
       }
-
-      $metadata = [
-        "PaymentType"         => "SquadFees",
-        "Members"             => $members
-      ];
-
-      $memID = mysqli_real_escape_string($link, $swimmerRow['MemberID']);
-      $fee = (int) (mysqli_real_escape_string($link, $swimmerRow['SquadFee'])*100);
-
-      $metadata = mysqli_real_escape_string($link, json_encode($metadata));
-
-      $sql = "";
-      if (userHasMandates($user)) {
-        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
-      } else {
-        $sql = "INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MetadataJSON`) VALUES ('$date', 'Pending', '$user', '$description', $amount, 'GBP', 'Payment', '$metadata');";
-      }
-      mysqli_query($link, $sql);
-
-      // Get Payment ID
-      /*$sql = "SELECT `PaymentID` FROM `paymentsPending` WHERE `Date` = '$date'
-      AND `UserID` = '$user' AND `Amount` = '$amount' AND `Name` =
-      '$description';";
-      $paymentID = mysqli_real_escape_string($link,mysqli_fetch_array(mysqli_query($link, $sql), MYSQLI_ASSOC)['PaymentID']);*/
-
-      $paymentID = mysqli_real_escape_string($link, mysqli_insert_id($link));
-
-      $sql = "UPDATE `individualFeeTrack` SET `PaymentID` = '$paymentID' WHERE `UserID` = '$user' AND `PaymentID` IS NULL;";
-      mysqli_query($link, $sql);
     }
   }
   for ($i = 0; $i < mysqli_num_rows($result); $i++) {
@@ -196,33 +202,35 @@ if (mysqli_num_rows($result) == 0) {
   $sql = "INSERT INTO `paymentSquadFees` (`MonthID`) VALUES ('$mid');";
   mysqli_query($link, $sql);
 
-  // Add Swimmers with No Parent to Fee Tracker
-  // // Squad Fees
-  $sql = "SELECT `members`.`MemberID`, `SquadFee`, `SquadName` FROM `members` INNER JOIN `squads` ON squads.SquadID = members.SquadID WHERE `members`.`UserID` IS NULL AND `ClubPays` = 0";
-  try {
-    $query = $db->prepare($sql);
-    $query->execute();
-  } catch (Exception $e) {
-    pre("3");halt(500);
-  }
+  if ($squadFeeRequired) {
+    // Add Swimmers with No Parent to Fee Tracker
+    // // Squad Fees
+    $sql = "SELECT `members`.`MemberID`, `SquadFee`, `SquadName` FROM `members` INNER JOIN `squads` ON squads.SquadID = members.SquadID WHERE `members`.`UserID` IS NULL AND `ClubPays` = 0";
+    try {
+      $query = $db->prepare($sql);
+      $query->execute();
+    } catch (Exception $e) {
+      pre("3");halt(500);
+    }
 
-  $row = $query->fetchAll(PDO::FETCH_ASSOC);
+    $row = $query->fetchAll(PDO::FETCH_ASSOC);
 
-  $add_track = $db->prepare("INSERT INTO `individualFeeTrack` (`MonthID`, `PaymentID`, `MemberID`, `UserID`, `Amount`, `Description`, `Type`, `NC`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $add_track = $db->prepare("INSERT INTO `individualFeeTrack` (`MonthID`, `PaymentID`, `MemberID`, `UserID`, `Amount`, `Description`, `Type`, `NC`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
-  for ($i = 0; $i < sizeof($row); $i++) {
-    // Add to tracker
-    if ($row[$i]['SquadFee'] > 0) {
-      $add_track->execute([
-        $mid,
-        null,
-        $row[$i]['MemberID'],
-        null,
-        floor($row[$i]['SquadFee']*100),
-        "Squad Fees (" . $row[$i]['SquadName'] . ")",
-        'SquadFee',
-        true
-      ]);
+    for ($i = 0; $i < sizeof($row); $i++) {
+      // Add to tracker
+      if ($row[$i]['SquadFee'] > 0) {
+        $add_track->execute([
+          $mid,
+          null,
+          $row[$i]['MemberID'],
+          null,
+          floor($row[$i]['SquadFee']*100),
+          "Squad Fees (" . $row[$i]['SquadName'] . ")",
+          'SquadFee',
+          true
+        ]);
+      }
     }
   }
 

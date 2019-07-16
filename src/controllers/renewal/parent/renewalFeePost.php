@@ -21,6 +21,15 @@ if ($partial_reg) {
 	}
 }
 
+$discounts = json_decode($systemInfo->getSystemOption('MembershipDiscounts'), true);
+$clubDiscount = $swimEnglandDiscount = 0;
+if ($discounts != null && isset($discounts['CLUB'][date('m')])) {
+	$clubDiscount = $discounts['CLUB'][date('m')];
+}
+if ($discounts != null && isset($discounts['ASA'][date('m')])) {
+	$swimEnglandDiscount = $discounts['ASA'][date('m')];
+}
+
 $sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ? AND `ClubPays` = '0'");
 $sql->execute([$_SESSION['UserID']]);
 
@@ -52,7 +61,11 @@ $getMembers->execute([$_SESSION['UserID']]);
 $member = $getMembers->fetchAll(PDO::FETCH_ASSOC);
 $count = sizeof($member);
 
-$totalFee += $clubFee;
+if ($clubDiscount > 0 && $renewal == 0) {
+	$totalFee += $clubFee*(1-($clubDiscount/100));
+} else {
+	$totalFee += $clubFee;
+}
 
 $asaFees = [];
 
@@ -68,7 +81,12 @@ for ($i = 0; $i < $count; $i++) {
 	} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ClubPays']) {
 		$asaFees[$i] = $asa3;
 	}
-	$totalFee += $asaFees[$i];
+
+	if ($swimEnglandDiscount > 0 && $renewal == 0) {
+		$totalFee += $asaFees[$i]*(1-($swimEnglandDiscount/100));
+	} else {
+		$totalFee += $asaFees[$i];
+	}
 }
 
 $clubFeeString = number_format($clubFee/100,2,'.','');
@@ -105,7 +123,7 @@ if ($hasDD) {
 	$payID = $db->lastInsertId();
 
 	if ($renewal != 0) {
-		$insert = $db->prepare("INSERT INTO `renewalMembers` (`PaymentID`, `MemberID`, `RenewalID`, `Date`, `CountRenewal`) VALUES ('$payID', '$memID', '$renewal', '$date', 1)");
+		$insert = $db->prepare("INSERT INTO `renewalMembers` (`PaymentID`, `MemberID`, `RenewalID`, `Date`, `CountRenewal`) VALUES (?, ?, ?, ?, ?)");
 		for ($i = 0; $i < $count; $i++) {
 			$memID = $member[$i]['MemberID'];
 			$insert->execute([

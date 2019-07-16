@@ -17,16 +17,19 @@ $vars = [
   'GOCARDLESS_ACCESS_TOKEN' => null,
   'GOCARDLESS_WEBHOOK_KEY' => null,
   'CLUB_ADDRESS' => null,
+  'SYSTEM_COLOUR' => '#007bff',
 ];
 
 try {
   foreach ($vars as $key => $value) {
     if (env($key) == null) {
       $v = $systemInfo->getSystemOption($key);
-      if (!defined($key)) {
-        define($key, $v);
+      if ($v != null) {
+        if (!defined($key)) {
+          define($key, $v);
+        }
+        putenv($key . "=" . $v);
       }
-      putenv($key . "=" . $v);
     } else {
       $systemInfo->setExistingEnvVar($key);
     }

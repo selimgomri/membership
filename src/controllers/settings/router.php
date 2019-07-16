@@ -74,6 +74,26 @@ $this->group('/fees', function() {
       include 'fees/asa-fees-post.php';
     });
   });
+
+  $this->group('/charge-months', function() {
+    $this->get('/', function() {
+      include 'fees/charge-months.php';
+    });
+
+    $this->post('/', function() {
+      include 'fees/charge-months-post.php';
+    });
+  });
+
+  $this->group('/membership-discounts', function() {
+    $this->get('/', function() {
+      include 'fees/fee-discounts.php';
+    });
+
+    $this->post('/', function() {
+      include 'fees/fee-discounts-post.php';
+    });
+  });
 });
 
 $this->get('/welcome-pack', function() {
