@@ -16,11 +16,13 @@ class User {
   private $accessLevel;
   private $userOptions;
   private $userOptionsRetrieved;
+  private $setSession;
 
-  public function __construct($id, $db) {
+  public function __construct($id, $db, $setSession = true) {
     $this->id = (int) $id;
     $this->db = $db;
     $this->userOptionsRetrieved = false;
+    $this->setSession = $setSession;
     $this->revalidate();
   }
 
@@ -36,11 +38,13 @@ class User {
       $this->emailAddress = $row['EmailAddress'];
       $this->accessLevel = $row['AccessLevel'];
 
-      // Set legacy user details
-      $_SESSION['Forename'] = $this->forename;
-      $_SESSION['Surname'] = $this->surname;
-      $_SESSION['EmailAddress'] = $this->emailAddress;
-      $_SESSION['AccessLevel'] = $this->accessLevel;
+      if ($this->setSession) {
+        // Set legacy user details
+        $_SESSION['Forename'] = $this->forename;
+        $_SESSION['Surname'] = $this->surname;
+        $_SESSION['EmailAddress'] = $this->emailAddress;
+        $_SESSION['AccessLevel'] = $this->accessLevel;
+      }
     } else {
       throw new Exception();
     }
@@ -105,7 +109,7 @@ class User {
   }
 
   public function getUserBooleanOption($name) {
-    return filter_var($this->getUserOption($name), FILTER_VALIDATE_BOOLEAN);
+    return bool($this->getUserOption($name));
   }
 
   public function setUserOption($option, $value) {

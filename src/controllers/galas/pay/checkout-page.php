@@ -4,6 +4,14 @@
 
 global $db;
 
+$numberOfCards = $db->prepare("SELECT COUNT(*) `count`, stripePayMethods.ID FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ?");
+$numberOfCards->execute([$_SESSION['UserID']]);
+$countCards = $numberOfCards->fetch(PDO::FETCH_ASSOC);
+
+if ($countCards['count'] == 1) {
+  $_SESSION['GalaPaymentMethodID'] = $countCards['ID'];
+}
+
 $getCards = $db->prepare("SELECT stripePayMethods.ID, `MethodID`, stripePayMethods.Customer, stripePayMethods.Name, stripePayMethods.Last4, stripePayMethods.Brand FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ?");
 $getCards->execute([$_SESSION['UserID']]);
 $card = $getCards->fetch(PDO::FETCH_ASSOC);
@@ -71,6 +79,14 @@ if (!isset($_SESSION['GalaPaymentIntent'])) {
   $_SESSION['GalaPaymentIntent'] = $intent->id;
 } else {
   $intent = \Stripe\PaymentIntent::retrieve($_SESSION['GalaPaymentIntent']);
+}
+
+if ($total != $intent->amount) {
+  \Stripe\PaymentIntent::update(
+    $_SESSION['GalaPaymentIntent'], [
+      'amount' => $total,
+    ]
+  );
 }
 
 $pagetitle = "Checkout";
@@ -168,7 +184,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
           <div class="row align-items-center">
             <div class="col-6">
               <p class="mb-0">
-                <strong>Total</strong>
+                <strong>Total to pay</strong>
               </p>
             </div>
             <div class="col text-right">

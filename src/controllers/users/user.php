@@ -92,7 +92,7 @@ if (userHasMandates($id)) {
   }
 }
 
-$userObj = new \User($id, $db);
+$userObj = new \User($id, $db, false);
 $json = $userObj->getUserOption('MAIN_ADDRESS');
 $addr = null;
 if ($json != null) {
