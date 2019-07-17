@@ -52,6 +52,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
     if (env('GOOGLE_ANALYTICS_ID') && (!$_SESSION['DisableTrackers'] && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1))) {
     ?>
   <meta name="X-SCDS-Membership-Tracking" content="yes">
+  <script src="https://js.stripe.com/v3/"></script>
   <script async>
   (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
