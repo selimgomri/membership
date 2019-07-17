@@ -180,6 +180,8 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
         </li>
       </ul>
 
+      <div id="alert-placeholder"></div>
+
       <form>
         <input id="cardholder-name" type="hidden">
         <!-- placeholder for Elements -->
@@ -210,7 +212,7 @@ cardButton.addEventListener('click', function(ev) {
     }
   ).then(function(result) {
     if (result.error) {
-      alert("Error");
+      document.getElementById('alert-placeholder').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment using card ending with ' + result.error.payment_method.card.last4 + '</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
       // Display error.message in your UI.
     } else {
       // The payment has succeeded. Display a success message.
