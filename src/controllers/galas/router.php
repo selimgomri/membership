@@ -70,6 +70,34 @@ if ($access == "Parent") {
 		global $link;
 		include 'indicate-openness/veto-do.php';
 	});
+
+	if (env('STRIPE')) {
+		$this->group('/pay-for-entries', function() {
+			$this->get('/', function() {
+				include 'pay/welcome.php';
+			});
+
+			$this->post('/', function() {
+				include 'pay/welcome-post.php';
+			});
+
+			$this->post('/switch-method', function() {
+				include 'pay/switch-method.php';
+			});
+
+			$this->get('/checkout', function() {
+				include 'pay/checkout-page.php';
+			});
+
+			$this->get('/complete', function() {
+				include 'pay/complete.php';
+			});
+
+			$this->get('/success', function() {
+				include 'pay/success.php';
+			});
+		});
+	}
 } else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $access == "Coach") {
 	// Gala Home
 	$this->get(['/', '/competitions'], function() {

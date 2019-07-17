@@ -2,7 +2,7 @@
 
 global $db;
 
-$user = $_SESSION['UserId'];
+$user = $_SESSION['UserID'];
 $pagetitle = "Payments Administration";
 
 include BASE_PATH . "views/header.php";

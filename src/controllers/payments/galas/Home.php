@@ -2,7 +2,7 @@
 
 global $db;
 
-$user = $_SESSION['UserId'];
+$user = $_SESSION['UserID'];
 $pagetitle = "Gala Payments";
 
 $galas = $db->query("SELECT * FROM `galas` WHERE `GalaDate` >= CURDATE() AND `GalaDate` >= CURDATE()");
