@@ -7,6 +7,15 @@ function chesterStandardMenu() {
   global $allow_edit;
   global $exit_edit;
   global $edit_link;
+
+  $canPayByCard = false;
+  if (env('STRIPE')) {
+    $getCardCount = $db->prepare("SELECT COUNT(*) FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ?");
+    $getCardCount->execute([$_SESSION['UserID']]);
+    if ($getCardCount->fetchColumn() > 0) {
+      $canPayByCard = true;
+    }
+  }
   
   ?>
 
@@ -204,23 +213,34 @@ function chesterStandardMenu() {
                   Galas
                 </a>
                 <div class="dropdown-menu" aria-labelledby="galaDropdown">
-                  <a class="dropdown-item" href="<?php echo autoUrl("galas")?>">Gala Home</a>
+                  <a class="dropdown-item" href="<?php echo autoUrl("galas")?>">
+                    Gala home
+                  </a>
                   <?php if ($_SESSION['AccessLevel'] == "Parent") {?>
-                  <a class="dropdown-item" href="<?php echo autoUrl("galas/entergala")?>">Enter a Gala</a>
-                  <a class="dropdown-item" href="<?php echo autoUrl("galas/entries")?>">My Entries</a>
+                  <a class="dropdown-item" href="<?php echo autoUrl("galas/entergala")?>">
+                    Enter a gala
+                  </a>
+                  <a class="dropdown-item" href="<?php echo autoUrl("galas/entries")?>">
+                    My entries
+                  </a>
+                  <?php if ($canPayByCard) { ?>
+                    <a class="dropdown-item" href="<?php echo autoUrl("galas/pay-for-entries")?>">
+                      Pay for entries
+                    </a>
+                  <?php } ?>
                   <?php } else {?>
-                  <a class="dropdown-item" href="<?php echo autoUrl("galas/addgala")?>">Add Gala</a>
-                  <a class="dropdown-item" href="<?php echo autoUrl("galas/entries")?>">View Entries</a>
+                  <a class="dropdown-item" href="<?php echo autoUrl("galas/addgala")?>">Add gala</a>
+                  <a class="dropdown-item" href="<?php echo autoUrl("galas/entries")?>">View entries</a>
                   <?php } ?>
                   <?php if (bool(env('IS_CLS'))) { ?>
                   <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/"
-                    target="_blank">Gala Website <i class="fa fa-external-link"></i></a>
+                    target="_blank">Gala website <i class="fa fa-external-link"></i></a>
                   <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/category/galas/"
-                    target="_blank">Upcoming Galas <i class="fa fa-external-link"></i></a>
+                    target="_blank">Upcoming galas <i class="fa fa-external-link"></i></a>
                   <?php if ($_SESSION['AccessLevel'] == "Parent") {?>
                   <a class="dropdown-item"
                     href="https://www.chesterlestreetasc.co.uk/competitions/enteracompetition/guidance/"
-                    target="_blank">Help with Entries <i class="fa fa-external-link"></i></a>
+                    target="_blank">Help with entries <i class="fa fa-external-link"></i></a>
                   <?php } ?>
                   <?php } ?>
                 </div>

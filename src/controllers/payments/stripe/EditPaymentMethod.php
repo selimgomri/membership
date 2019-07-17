@@ -48,7 +48,7 @@ include BASE_PATH . 'views/header.php';
 
       <form action="<?=currentUrl()?>" method="post" id="payment-form" class="mb-5">
         <div class="form-group">
-          <label for="name">Name</label>
+          <label for="name">Name this card</label>
           <input type="text" class="form-control" id="name" name="name" placeholder="Card Name" required aria-describedby="cardNameHelp" value="<?=htmlspecialchars($card['Name'])?>">
           <small id="cardNameHelp" class="form-text text-muted">Name your card to help you select it more easily</small>
         </div>
@@ -59,9 +59,6 @@ include BASE_PATH . 'views/header.php';
       </form>
 
       <div class="text-muted">
-        <p class="mb-0">
-          Card payments are processed by <i class="fa fa-cc-stripe" aria-hidden="true"></i> <span class="sr-only">Stripe.</span>
-        </p>
         <p>
           We accept Visa, MasterCard and American Express.
         </p>

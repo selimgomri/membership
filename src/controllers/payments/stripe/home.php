@@ -3,7 +3,7 @@
 global $db;
 
 \Stripe\Stripe::setApiKey(env('STRIPE'));
-$paymentsMeths = \Stripe\PaymentMethod::all(["customer" => "cus_FF5F1cnWIA7UAI", "type" => "card"]);
+//$paymentsMeths = \Stripe\PaymentMethod::all(["customer" => "cus_FF5F1cnWIA7UAI", "type" => "card"]);
 
 $getCards = $db->prepare("SELECT stripePayMethods.ID, `Name`, Last4, Brand, ExpMonth, ExpYear, Funding, PostCode, Line1, Line2, CardName FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ?");
 $getCards->execute([$_SESSION['UserID']]);
@@ -43,7 +43,7 @@ include BASE_PATH . 'views/header.php';
       unset($_SESSION['PayCardSetupSuccess']);
       ?>
 
-      <div class="cell d-inline-block">
+      <div>
         <p>
           We proudly accept all major credit and debit cards!
         </p>
@@ -58,7 +58,7 @@ include BASE_PATH . 'views/header.php';
         <a href="<?=autoUrl("payments/cards/" . $card['ID'])?>" class="list-group-item list-group-item-action">
           <div class="row align-items-center mb-3 text-dark">
             <div class="col-auto">
-              <i class="fa fa-3x <?=htmlspecialchars(getCardFA($card['Brand']))?>" aria-hidden="true"></i> <span class="sr-only"><?=htmlspecialchars($card['Brand'])?></span>
+              <i class="fa fa-3x <?=htmlspecialchars(getCardFA($card['Brand']))?>" aria-hidden="true"></i> <span class="sr-only"><?=htmlspecialchars(getCardBrand($card['Brand']))?></span>
             </div>
             <div class="col-auto">
               <h2 class="my-0">

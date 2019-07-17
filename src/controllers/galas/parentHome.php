@@ -34,6 +34,15 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
   $statsCounter += $count;
 }
 
+$canPayByCard = false;
+if (env('STRIPE')) {
+  $getCardCount = $db->prepare("SELECT COUNT(*) FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ?");
+  $getCardCount->execute([$_SESSION['UserID']]);
+  if ($getCardCount->fetchColumn() > 0) {
+    $canPayByCard = true;
+  }
+}
+
 $openGalas = false;
 
 $pagetitle = "Galas";
@@ -86,6 +95,40 @@ include "galaMenu.php";
       </a>
     </p>
     <?php } ?>
+    <?php } ?>
+
+    <?php if ($canPayByCard) { ?>
+    <div class="mb-4">
+      <h2 class="mb-4">
+        Make a payment
+      </h2>
+
+      <p class="lead">
+        Pay for gala entries by credit or debit card.
+      </p>
+
+      <p>
+        <a href="<?=autoUrl("galas/pay-for-entries")?>" class="btn btn-success ">
+          Pay now
+        </a>
+      </p>
+    </div>
+    <?php } else if (env('STRIPE')) { ?>
+      <div class="mb-4">
+      <h2 class="mb-4">
+        Pay by card
+      </h2>
+
+      <p class="lead">
+        You can pay for gala entries by credit or debit card.
+      </p>
+
+      <p>
+        <a href="<?=autoUrl("payments/cards/add")?>" class="btn btn-success ">
+          Add a card
+        </a>
+      </p>
+    </div>
     <?php } ?>
 
     <?php if ($entry) { ?>

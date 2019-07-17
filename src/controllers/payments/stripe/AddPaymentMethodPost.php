@@ -63,7 +63,7 @@ try {
   $postal_code = $pm->billing_details->address->postal_code;
   $brand = $pm->card->brand;
   $issueCountry = $pm->card->country;
-  $expMonth = $card->exp_month;
+  $expMonth = $pm->$card->exp_month;
   $expYear = $pm->card->exp_year;
   $funding = $pm->card->funding;
   $last4 = $pm->card->last4;
