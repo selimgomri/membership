@@ -12,7 +12,7 @@ if (!isset($_SESSION['GalaPaymentIntent'])) {
   halt(404);
 }
 
-$getCards = $db->prepare("SELECT COUNT(*) `count`, MethodID FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND stripePayMethods.ID = ?");
+$getCards = $db->prepare("SELECT COUNT(*) `count`, MethodID, CustomerID FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND stripePayMethods.ID = ?");
 $getCards->execute([$_SESSION['UserID'], $_POST['method']]);
 
 $details = $getCards->fetch(PDO::FETCH_ASSOC);

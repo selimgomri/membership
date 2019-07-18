@@ -12,7 +12,7 @@ if ($gala == null) {
 	halt(404);
 }
 
-$getEntries = $db->prepare("SELECT 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, userOptions.Value OptOut, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN userOptions ON users.UserID = userOptions.User) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) WHERE galaEntries.GalaID = ? AND (userOptions.Option = 'GalaDirectDebitOptOut' OR userOptions.Option IS NULL	) AND Charged = ? AND EntryProcessed = ? ORDER BY MForename ASC, MSurname ASC");
+$getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent FROM (((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) WHERE galaEntries.GalaID = ? AND Charged = ? AND EntryProcessed = ? ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id, '1', '1']);
 $entry = $getEntries->fetch(PDO::FETCH_ASSOC);
 
@@ -107,7 +107,7 @@ include BASE_PATH . 'views/header.php';
 				<?php if ($entry != null) { ?>
 				<ul class="list-group mb-3">
 					<?php do { ?>
-						<?php $hasNoDD = ($entry['MandateID'] == null) || ($entry['OptOut']); ?>
+						<?php $hasNoDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut')); ?>
 						<?php $amountRefundable = ((int) $entry['FeeToPay']*100) - ($entry['AmountRefunded']); ?>
 					<?php if ($entry['Processed'] && $entry['Charged']) { $countChargeable++; } ?>
 					<li class="list-group-item">

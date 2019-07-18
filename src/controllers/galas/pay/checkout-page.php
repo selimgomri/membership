@@ -82,7 +82,7 @@ if (!isset($_SESSION['GalaPaymentIntent'])) {
 }
 
 if ($total != $intent->amount) {
-  \Stripe\PaymentIntent::update(
+  $intent = \Stripe\PaymentIntent::update(
     $_SESSION['GalaPaymentIntent'], [
       'amount' => $total,
     ]
@@ -117,7 +117,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
           <select class="custom-select" name="method" id="method">
             <option>Select a payment card</option>
             <?php do { ?>
-            <option value="<?=$card['ID']?>" <?php if ($selected == $card['ID']) { ?>selected<?php } ?>>
+            <option value="<?=$card['ID']?>" <?php if ($selected == $card['ID']) { $methodId = $card['MethodID']; ?>selected<?php } ?>>
               <?=$card['Name']?> (<?=htmlspecialchars(getCardBrand($card['Brand']))?> ending <?=htmlspecialchars($card['Last4'])?>)
             </option>
             <?php } while ($card = $getCards->fetch(PDO::FETCH_ASSOC)); ?>

@@ -129,7 +129,6 @@ if ($access == "Admin") {
 		include 'admin/ManualChargeDo.php';
 	});
 
-
 	$this->group('/history', function() {
 		global $link;
 
@@ -334,3 +333,13 @@ if (env('STRIPE') != null) {
 		}
 	});
 }
+
+$this->group('/card-transactions', function() {
+	$this->get(['/', '/page/{page}:int'], function($page = null) {
+		include 'stripe/history/history.php';
+	});
+
+	$this->get('/{id}:int', function($id) {
+		include 'stripe/history/payment.php';
+	});
+});

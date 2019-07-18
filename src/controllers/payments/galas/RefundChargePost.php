@@ -8,6 +8,7 @@ $date = date("Y-m-d");
 $insertPayment = $db->prepare("INSERT INTO paymentsPending (`Date`, `Status`, UserID, `Name`, Amount, Currency, PMkey, `Type`, MetadataJSON) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 $markAsRefunded = $db->prepare("UPDATE galaEntries SET Refunded = ?, AmountRefunded = ? WHERE EntryID = ?");
 $notify = $db->prepare("INSERT INTO notify (UserID, `Status`, `Subject`, `Message`, EmailType) VALUES (?, ?, ?, ?, ?)");
+$setRefundAmount = $db->prepare("UPDATE stripePayments SET `AmountRefunded` = ? WHERE `Intent` = ?");
 
 $getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas WHERE GalaID = ?");
 $getGala->execute([$id]);
@@ -17,7 +18,7 @@ if ($gala == null) {
 	halt(404);
 }
 
-$getEntries = $db->prepare("SELECT 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, userOptions.Value OptOut, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, users.UserID FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN userOptions ON users.UserID = userOptions.User) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) WHERE galaEntries.GalaID = ? AND (userOptions.Option = 'GalaDirectDebitOptOut' OR userOptions.Option IS NULL	) AND Charged = ? AND EntryProcessed = ? ORDER BY MForename ASC, MSurname ASC");
+$getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, users.UserID FROM (((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) WHERE galaEntries.GalaID = ? AND Charged = ? AND EntryProcessed = ? ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id, '1', '1']);
 
 $swimsArray = [
@@ -48,7 +49,7 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 	$amountRefundable = $toPay - ($entry['AmountRefunded']);
 
 	if ($amount > 0 && $amount <= $amountRefundable) {
-		$hasNoDD = ($entry['MandateID'] == null) || ($entry['OptOut']);
+		$hasNoDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
 		$count = 0;
 		
 		$swimsList = '<ul>';
@@ -90,6 +91,14 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 				\Stripe\Stripe::setApiKey(env('STRIPE'));
 				$intent = \Stripe\PaymentIntent::retrieve($entry['Intent']);
 				$intent->charges->data[0]->refund(['amount' => $amount]);
+
+				// Update amount refunded on payment
+				if (isset($intent->charges->data[0]->amount_refunded)) {
+					$setRefundAmount->execute([
+						$intent->charges->data[0]->amount_refunded,
+						$intent->id,
+					]);
+				}
 			}
 
 			$markAsRefunded->execute([
@@ -106,7 +115,7 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 				$message .= '<p>Please note that this brings the total amount refunded for this gala to &pound;' . $totalString . '</p>';
 			}
 
-			if ($entry['MandateID'] != null && !$entry['OptOut'] && $entry['Intent'] == null) {
+			if ($entry['MandateID'] != null && !getUserOption($entry['user'], 'GalaDirectDebitOptOut') && $entry['Intent'] == null) {
 				$message .= '<p>This refund has been applied as a credit to your club account. This means you will either;</p>';
 				$message .= '<ul><li>If you have not paid the bill by direct debit for this gala yet, you will automatically charged the correct amount for ' . $gala['name'] . ' on your next bill as reductions will be applied automatically</li><li>If you have already paid the bill by direct debit for this gala, the credit applied to your account will give you a discount on next month\'s bill</li></ul>';
 			} else if ($entry['Intent'] != null) {

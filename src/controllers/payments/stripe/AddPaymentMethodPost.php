@@ -63,7 +63,7 @@ try {
   $postal_code = $pm->billing_details->address->postal_code;
   $brand = $pm->card->brand;
   $issueCountry = $pm->card->country;
-  $expMonth = $pm->$card->exp_month;
+  $expMonth = $pm->card->exp_month;
   $expYear = $pm->card->exp_year;
   $funding = $pm->card->funding;
   $last4 = $pm->card->last4;
@@ -92,9 +92,9 @@ try {
   $_SESSION['PayCardSetupSuccessBrand'] = getCardBrand($brand);
   header("Location: " . autoUrl("payments/cards"));
 } catch (Exception $e) {
-  pre($e);
-  // Unable to setup - May be invalid or stripe not setup
+  $body = $e->getJsonBody();
+  $err  = $body['error']['message'];
   $_SESSION['PayCardError'] = true;
-  //$_SESSION['PayCardErrorMessage'] = $e->getDeclineCode();
-  //header("Location: " . autoUrl("payments/cards/add"));
+  $_SESSION['PayCardErrorMessage'] = $err;
+  header("Location: " . autoUrl("payments/cards/add"));
 }

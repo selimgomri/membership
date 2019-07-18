@@ -89,7 +89,7 @@ include BASE_PATH . 'views/header.php';
           <strong>An error occurred</strong>
         </p>
         <?php if (isset($_SESSION['PayCardErrorMessage'])) { ?>
-        <p class="mb-0">Error Code: <?=htmlspecialchars($_SESSION['PayCardError'])?></p>
+        <p class="mb-0"><?=htmlspecialchars($_SESSION['PayCardErrorMessage'])?></p>
         <?php } ?>
       </div>
       <?php unset($_SESSION['PayCardError']); unset($_SESSION['PayCardErrorMessage']); ?>
