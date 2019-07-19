@@ -6,6 +6,7 @@ global $db;
 
 if (!isset($_POST['method'])) {
   header("Location: " . autoUrl("galas/pay-for-entries/checkout"));
+  return;
 }
 
 if (!isset($_SESSION['GalaPaymentIntent'])) {

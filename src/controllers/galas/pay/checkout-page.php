@@ -196,7 +196,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
           <label for="method">Payment card</label>
           <select class="custom-select" name="method" id="method" onchange="this.form.submit()">
             <option>Select a payment card</option>
-            <option value="new" <?php if (sizeof($cards) == 0 || (isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard'])) { ?>selected<?php } ?>>
+            <option value="new" <?php if ((isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard'])) { ?>selected<?php } ?>>
               Use mobile wallet or add a new card
             </option>
             <?php foreach ($cards as $card) { ?>
