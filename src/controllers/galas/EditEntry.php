@@ -58,7 +58,7 @@ include "galaMenu.php"; ?>
       $closingDate = $closingDate->format('Y-m-d');
       $theDate = $theDate->format('Y-m-d');
 
-      if ($row['Paid'] || $row['EntryProcessed'] || ($closingDate < $theDate) || $row['Locked']) { ?>
+      if ($row['Charged'] || $row['EntryProcessed'] || ($closingDate < $theDate) || $row['Locked']) { ?>
         <div class="alert alert-warning">
           <strong>We've already processed this gala entry, our closing date has passed or you have already paid</strong> <br>We can't let you make any changes here. Contact the Gala Administrator directly.
         </div>
@@ -93,7 +93,7 @@ include "galaMenu.php"; ?>
         <?php }
       }
 
-      if (!($closingDate < $theDate) && $row['EntryProcessed'] != 1 && $row['Paid'] != 1 && !$row['Locked']) {
+      if (!($closingDate < $theDate) && $row['EntryProcessed'] != 1 && $row['Charged'] != 1 && !$row['Locked']) {
         if ($row['GalaFeeConstant'] != 1) { ?>
         <div class="form-group">
           <label for="galaFee">Enter Total</label>
