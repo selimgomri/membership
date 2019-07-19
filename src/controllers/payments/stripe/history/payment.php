@@ -51,7 +51,7 @@ $date->setTimezone(new DateTimeZone('Europe/London'));
       <h2>Card information</h2>
       <dl class="row">
         <dt class="col-sm-3">Card</dt>
-        <dd class="col-sm-9"><i class="fa <?=htmlspecialchars(getCardFA($card->brand))?>" aria-hidden="true"></i> <span class="sr-only"><?=htmlspecialchars(getCardBrand($card->brand))?></span> **** <?=htmlspecialchars($card->last4)?></dd>
+        <dd class="col-sm-9"><i class="fa <?=htmlspecialchars(getCardFA($card->brand))?>" aria-hidden="true"></i> <span class="sr-only"><?=htmlspecialchars(getCardBrand($card->brand))?></span> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card->last4)?></dd>
 
         <dt class="col-sm-3">Type</dt>
         <dd class="col-sm-9"><?=htmlspecialchars(mb_convert_case ($card->funding, MB_CASE_TITLE))?></dd>

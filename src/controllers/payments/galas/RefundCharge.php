@@ -12,7 +12,7 @@ if ($gala == null) {
 	halt(404);
 }
 
-$getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent FROM (((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) WHERE galaEntries.GalaID = ? AND Charged = ? AND EntryProcessed = ? ORDER BY MForename ASC, MSurname ASC");
+$getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, stripePayMethods.Brand, stripePayMethods.Last4 FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? AND Charged = ? AND EntryProcessed = ? ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id, '1', '1']);
 $entry = $getEntries->fetch(PDO::FETCH_ASSOC);
 
@@ -128,6 +128,12 @@ include BASE_PATH . 'views/header.php';
 							</div>
 							<div class="col">
 								<div class="d-sm-none mb-3"></div>
+								<?php if ($entry['Intent'] != null) { ?>
+								<p>
+									<strong><i class="fa <?=htmlspecialchars(getCardFA($entry['Brand']))?>" aria-hidden="true"></i> <span class="sr-only"><?=htmlspecialchars(getCardBrand($entry['Brand']))?></span> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($entry['Last4'])?></strong>
+								</p>
+								<?php } ?>
+
 								<p>
 									<?php if ($gala['fixed']) { ?>
 									<?=$count?> &times; &pound;<?=htmlspecialchars(number_format($gala['fee'], 2))?>
@@ -148,7 +154,7 @@ include BASE_PATH . 'views/header.php';
 								</p>
 								<?php } else if ($entry['Intent'] != null) { ?>
 								<p>
-									This entry will be refunded to the payment card used.
+									This entry will be refunded to <?=htmlspecialchars(getCardBrand($entry['Brand']))?> <span class="mono"><?=htmlspecialchars($entry['Last4'])?></span>.
 								</p>
 								<?php } else { ?>
 								<p>

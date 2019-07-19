@@ -148,6 +148,11 @@ function chesterStandardMenu() {
                   <a class="dropdown-item" href="<?php echo autoUrl("payments") ?>">Payments Home</a>
                   <a class="dropdown-item" href="<?php echo autoUrl("payments/history") ?>">Payment Status</a>
                   <a class="dropdown-item" href="<?php echo autoUrl("payments/extrafees")?>">Extra Fees</a>
+                  <?php if ($_SESSION['AccessLevel'] == 'Admin' || $_SESSION['AccessLevel'] == 'Galas') { ?>
+                  <a class="dropdown-item" href="<?=autoUrl("payments/galas")?>">
+                    Charge or refund gala entries
+                  </a>
+                  <?php } ?>
                   <div class="dropdown-divider"></div>
                   <h6 class="dropdown-header"><?php echo date("F Y"); ?></h6>
                   <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . date("Y/m")) ?>">
@@ -181,8 +186,11 @@ function chesterStandardMenu() {
                   <a class="dropdown-item" href="<?=autoUrl("payments/cards")?>">
                     Credit and Debit Cards
                   </a>
+                  <a class="dropdown-item" href="<?=autoUrl("payments/card-transactions")?>">
+                    Card Transactions
+                  </a>
                   <a class="dropdown-item" href="<?=autoUrl("payments/cards/add")?>">
-                    Add a card
+                    Add a Credit or Debit Card
                   </a>
                   <?php } ?>
                 </div>
@@ -231,6 +239,11 @@ function chesterStandardMenu() {
                   <?php } else {?>
                   <a class="dropdown-item" href="<?php echo autoUrl("galas/addgala")?>">Add gala</a>
                   <a class="dropdown-item" href="<?php echo autoUrl("galas/entries")?>">View entries</a>
+                  <?php if ($_SESSION['AccessLevel'] == 'Admin' || $_SESSION['AccessLevel'] == 'Galas') { ?>
+                  <a class="dropdown-item" href="<?=autoUrl("payments/galas")?>">
+                    Charge or refund entries
+                  </a>
+                  <?php } ?>
                   <?php } ?>
                   <?php if (bool(env('IS_CLS'))) { ?>
                   <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/"
@@ -270,8 +283,11 @@ function chesterStandardMenu() {
                   <a class="dropdown-item" href="<?=autoUrl("payments/cards")?>">
                     Credit and Debit Cards
                   </a>
+                  <a class="dropdown-item" href="<?=autoUrl("payments/card-transactions")?>">
+                    Card Transactions
+                  </a>
                   <a class="dropdown-item" href="<?=autoUrl("payments/cards/add")?>">
-                    Add a card
+                    Add a Credit or Debit Card
                   </a>
                   <?php } ?>
                 </div>
