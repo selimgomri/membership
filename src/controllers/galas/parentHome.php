@@ -36,11 +36,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
 
 $canPayByCard = false;
 if (env('STRIPE')) {
-  $getCardCount = $db->prepare("SELECT COUNT(*) FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ?");
-  $getCardCount->execute([$_SESSION['UserID']]);
-  if ($getCardCount->fetchColumn() > 0) {
-    $canPayByCard = true;
-  }
+  $canPayByCard = true;
 }
 
 $openGalas = false;

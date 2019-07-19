@@ -4,11 +4,7 @@ global $db;
 
 $canPayByCard = false;
 if (env('STRIPE')) {
-  $getCardCount = $db->prepare("SELECT COUNT(*) FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ?");
-  $getCardCount->execute([$_SESSION['UserID']]);
-  if ($getCardCount->fetchColumn() > 0) {
-    $canPayByCard = true;
-  }
+  $canPayByCard = true;
 }
 
 $swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];

@@ -108,6 +108,38 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/galas/galaMenu.php";
 ?>
 
+<style>
+/**
+ * The CSS shown here will not be introduced in the Quickstart guide, but shows
+ * how you can use CSS to style your Element's container.
+ */
+.card-element {
+  box-sizing: border-box;
+
+  /* height: 40px; */
+
+  padding: 1rem;
+
+  color: #333;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+
+  border: 1px solid #ced4da;
+
+  background-color: white;
+
+  box-shadow: none;
+}
+</style>
+<?php if (bool(env('IS_CLS'))) { ?>
+<style>
+.card-element {
+  border-radius: 0px;
+}
+</style>
+<?php } ?>
+
+
 <div class="container">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -227,7 +259,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
           <label for="card-element">
             Credit or debit card
           </label>
-          <div id="card-element">
+          <div id="card-element" class="card-element">
             <!-- A Stripe Element will be inserted here. -->
           </div>
         </div>
@@ -266,22 +298,42 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 var stripe = Stripe(<?=json_encode(env('STRIPE_PUBLISHABLE'))?>);
 var cardButton = document.getElementById('card-button');
 var clientSecret = cardButton.dataset.secret;
-var elements = stripe.elements();
+var elements = stripe.elements({
+  fonts: [
+    {
+      cssSrc: 'https://fonts.googleapis.com/css?family=Open+Sans',
+    },
+  ]
+});
 
 <?php if (isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard']) { ?>
 // Custom styling can be passed to options when creating an Element.
 // (Note that this demo uses a wider set of styles than the guide below.)
 // Try to match bootstrap 4 styling
-var style = {
-  base: {
-    'lineHeight': '1.35',
-    'fontSize': '1rem',
-    'color': '#495057',
-    'fontFamily': '"Open Sans",apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif'
-  }
-};
 
-var cardElement = elements.create('card');
+var cardElement = elements.create('card', {
+  iconStyle: 'solid',
+  style: {
+    base: {
+      iconColor: '#ced4da',
+      color: '#212529',
+      fontWeight: 400,
+      fontFamily: 'Open Sans, Segoe UI, sans-serif',
+      fontSize: '16px',
+      fontSmoothing: 'antialiased',
+      ':-webkit-autofill': {
+        color: '#868e96',
+      },
+      '::placeholder': {
+        color: '#868e96',
+      },
+    },
+    invalid: {
+      iconColor: '#dc3545',
+      color: '#dc3545',
+    },
+  },
+});
 cardElement.mount('#card-element');
 
 var cardholderName = document.getElementById('cardholder-name');
@@ -319,7 +371,6 @@ var paymentRequest = stripe.paymentRequest({
   requestPayerEmail: true,
 });
 
-var elements = stripe.elements();
 var prButton = elements.create('paymentRequestButton', {
   paymentRequest: paymentRequest,
 });

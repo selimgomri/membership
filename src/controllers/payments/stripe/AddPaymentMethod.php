@@ -37,7 +37,7 @@ include BASE_PATH . 'views/header.php';
  * The CSS shown here will not be introduced in the Quickstart guide, but shows
  * how you can use CSS to style your Element's container.
  */
-.StripeElement {
+.card-element {
   box-sizing: border-box;
 
   /* height: 40px; */
@@ -48,27 +48,20 @@ include BASE_PATH . 'views/header.php';
   font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 1rem;
 
-  border: 1px solid #eee;
-  border-radius: 4px;
+  border: 1px solid #ced4da;
+
   background-color: white;
 
-  box-shadow: 0 1px 3px 0 #e6ebf1;
-  -webkit-transition: box-shadow 150ms ease;
-  transition: box-shadow 150ms ease;
-}
-
-.StripeElement--focus {
-  box-shadow: 0 1px 3px 0 #cfd7df;
-}
-
-.StripeElement--invalid {
-  border-color: #fa755a;
-}
-
-.StripeElement--webkit-autofill {
-  background-color: #fefde5 !important;
+  box-shadow: none;
 }
 </style>
+<?php if (bool(env('IS_CLS'))) { ?>
+<style>
+.card-element {
+  border-radius: 0px;
+}
+</style>
+<?php } ?>
 
 <div class="container">
   <nav aria-label="breadcrumb">
@@ -106,7 +99,7 @@ include BASE_PATH . 'views/header.php';
           <label for="card-element">
             Credit or debit card
           </label>
-          <div id="card-element">
+          <div id="card-element" class="card-element">
             <!-- A Stripe Element will be inserted here. -->
           </div>
 
@@ -130,7 +123,6 @@ include BASE_PATH . 'views/header.php';
 
 <script>
 var stripe = Stripe('<?=htmlspecialchars(env('STRIPE_PUBLISHABLE'))?>');
-var elements = stripe.elements();
 
 // Custom styling can be passed to options when creating an Element.
 // (Note that this demo uses a wider set of styles than the guide below.)
@@ -144,8 +136,44 @@ var style = {
   }
 };
 
+var options = {
+  options: {
+    style: style
+  }
+};
+
+var elements = stripe.elements({
+  fonts: [
+    {
+      cssSrc: 'https://fonts.googleapis.com/css?family=Open+Sans',
+    },
+  ]
+});
+
 // Create an instance of the card Element.
-var card = elements.create('card');
+var card = elements.create('card', {
+  iconStyle: 'solid',
+  style: {
+    base: {
+      iconColor: '#ced4da',
+      color: '#212529',
+      fontWeight: 400,
+      fontFamily: 'Open Sans, Segoe UI, sans-serif',
+      fontSize: '16px',
+      fontSmoothing: 'antialiased',
+      ':-webkit-autofill': {
+        color: '#868e96',
+      },
+      '::placeholder': {
+        color: '#868e96',
+      },
+    },
+    invalid: {
+      iconColor: '#dc3545',
+      color: '#dc3545',
+    },
+  },
+});
 
 // Add an instance of the card Element into the `card-element` <div>.
 card.mount('#card-element');
