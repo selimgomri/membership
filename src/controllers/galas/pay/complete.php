@@ -31,12 +31,22 @@ if (!isset($_SESSION['GalaPaymentIntent'])) {
   halt(404);
 }
 
-$reuse = 0;
+$reuse = 1;
 if (isset($_POST['reuse-card']) && bool($reuse)) {
   $reuse = 1;
 }
 
 $intent = \Stripe\PaymentIntent::retrieve($_SESSION['GalaPaymentIntent']);
+
+if (isset($intent->charges->data[0]->payment_method_details->card->wallet)) {
+  $reuse = 0;
+}
+
+$cardCount = 0;
+$customerId = null;
+
+$method = null;
+$pm = null;
 
 if (isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard']) {
   // Add payment intent
@@ -73,9 +83,14 @@ if (isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard']) {
 
     $method = $intent->payment_method;
     $pm = \Stripe\PaymentMethod::retrieve($method);
-    $pm->attach(['customer' => $customer->id]);
+
+    $customerId = $customer->id;
+
+    if (isset($pm->customer) && $pm->customer != $customerId) {
+      $pm->attach(['customer' => $customerId]);
+    }
   
-    $name = trim($_POST['name']);
+    $name = "Unnamed Card";
   
     // Get the payment method details
     $id = $pm->id;
@@ -93,13 +108,16 @@ if (isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard']) {
     $last4 = $pm->card->last4;
     $threeDSecure = $pm->card->three_d_secure_usage->supported;
 
-    $getCardCount = $db->prepare("SELECT COUNT(*) FROM stripePayMethods WHERE Customer = ? AND Fingerprint = ?");
+    $getCardCount = $db->prepare("SELECT COUNT(*) FROM stripePayMethods WHERE Customer = ? AND Fingerprint = ? AND Reusable = ?");
     $getCardCount->execute([
       $customer->id,
-      $pm->card->fingerprint
+      $pm->card->fingerprint,
+      1
     ]);
 
-    if ($getCardCount->fetchColumn() == 0) {  
+    $cardCount = $getCardCount->fetchColumn();
+
+    if ($cardCount == 0) {  
       $addPaymentDetails = $db->prepare("INSERT INTO stripePayMethods (Customer, MethodID, `Name`, CardName, City, Country, Line1, Line2, PostCode, Brand, IssueCountry, ExpMonth, ExpYear, Funding, Last4, Fingerprint, Reusable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
       $addPaymentDetails->execute([
         $customer->id,
@@ -144,8 +162,18 @@ if ($intent->status == 'succeeded') {
   $getPaymentMethod->execute([$intent->payment_method]);
   $paymentMethodId = $getPaymentMethod->fetchColumn();
   if ($paymentMethodId == null) {
-    echo "2";
-    halt(404);
+    if ($cardCount > 0) {
+      $getCardFromOtherDetails = $db->prepare("SELECT ID FROM stripePayMethods WHERE Customer = ? AND Fingerprint = ? AND Reusable = ?");
+      $getCardFromOtherDetails->execute([
+        $customerId,
+        $pm->card->fingerprint,
+        1
+      ]);
+      $paymentMethodId = $getCardFromOtherDetails->fetchColumn();
+      if ($paymentMethodId == null) {
+        halt(404);
+      }
+    }
   }
 
   $date = new DateTime('@' . $intent->created, new DateTimeZone('UTC'));
@@ -211,6 +239,7 @@ if ($intent->status == 'succeeded') {
     unset($_SESSION['GalaPaymentIntent']);
     unset($_SESSION['PaidEntries']);
     unset($_SESSION['GalaPaymentMethodID']);
+    unset($_SESSION['AddNewCard']);
 
     $_SESSION['GalaPaymentSuccess'] = true;
 

@@ -1,5 +1,23 @@
 <?php
 
+function getWalletName($name) {
+  if ($name == 'apple_pay') {
+    return 'Apple Pay';
+  } else if ($name == 'amex_express_checkout') {
+    return 'Amex Express Checkout';
+  } else if ($name == 'google_pay') {
+    return 'Google Pay';
+  } else if ($name == 'masterpass') {
+    return 'Masterpass  ';
+  } else if ($name == 'samsung_pay') {
+    return 'Samsung Pay';
+  } else if ($name == 'visa_checkout') {
+    return 'Visa Checkout';
+  } else {
+    return 'Other wallet';
+  }
+}
+
 global $db;
 
 $payment = $db->prepare("SELECT * FROM stripePayments INNER JOIN stripePaymentItems ON stripePaymentItems.Payment = stripePayments.ID WHERE stripePayments.ID = ?");
@@ -59,6 +77,16 @@ $date->setTimezone(new DateTimeZone('Europe/London'));
         <?php if (isset($card->three_d_secure->authenticated) && $card->three_d_secure->authenticated && isset($card->three_d_secure->succeeded) && $card->three_d_secure->succeeded) { ?>
         <dt class="col-sm-3">Verification</dt>
         <dd class="col-sm-9">Verified using 3D Secure</dd>
+        <?php } ?>
+
+        <?php if (isset($card->wallet)) { ?>
+        <dt class="col-sm-3">Mobile Wallet Payment</dt>
+        <dd class="col-sm-9"><?=getWalletName($card->wallet->type)?></dd>
+
+        <?php if (isset($card->wallet->dynamic_last4)) { ?>
+        <dt class="col-sm-3">Device Account Number</dt>
+        <dd class="col-sm-9">&#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card->wallet->dynamic_last4)?></dd>
+        <?php } ?>
         <?php } ?>
       </dl>
       <?php } ?>

@@ -69,10 +69,11 @@ try {
   $last4 = $pm->card->last4;
   $threeDSecure = $pm->card->three_d_secure_usage->supported;
 
-  $getCardCount = $db->prepare("SELECT COUNT(*) FROM stripePayMethods WHERE Customer = ? AND Fingerprint = ?");
+  $getCardCount = $db->prepare("SELECT COUNT(*) FROM stripePayMethods WHERE Customer = ? AND Fingerprint = ? AND Reusable = ?");
   $getCardCount->execute([
     $customer->id,
-    $pm->card->fingerprint
+    $pm->card->fingerprint,
+    1
   ]);
 
   if ($getCardCount->fetchColumn() > 0) {

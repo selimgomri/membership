@@ -5,7 +5,7 @@ global $db;
 \Stripe\Stripe::setApiKey(env('STRIPE'));
 
 if (!isset($_POST['method'])) {
-  halt(404);
+  header("Location: " . autoUrl("galas/pay-for-entries/checkout"));
 }
 
 if (!isset($_SESSION['GalaPaymentIntent'])) {
