@@ -5,8 +5,11 @@ global $db;
 \Stripe\Stripe::setApiKey(env('STRIPE'));
 //$paymentsMeths = \Stripe\PaymentMethod::all(["customer" => "cus_FF5F1cnWIA7UAI", "type" => "card"]);
 
-$getCards = $db->prepare("SELECT stripePayMethods.ID, `Name`, Last4, Brand, ExpMonth, ExpYear, Funding, PostCode, Line1, Line2, CardName FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? ORDER BY `Name` ASC");
-$getCards->execute([$_SESSION['UserID']]);
+$expMonth = date("m");
+$expYear = date("Y");
+
+$getCards = $db->prepare("SELECT stripePayMethods.ID, `Name`, Last4, Brand, ExpMonth, ExpYear, Funding, PostCode, Line1, Line2, CardName FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND Reusable = ? AND (ExpYear > ? OR (ExpYear = ? AND ExpMonth >= ?)) ORDER BY `Name` ASC");
+$getCards->execute([$_SESSION['UserID'], 1, $expYear, $expYear, $expMonth]);
 $card = $getCards->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = 'Payment Cards';

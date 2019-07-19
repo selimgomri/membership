@@ -69,7 +69,20 @@ try {
   $last4 = $pm->card->last4;
   $threeDSecure = $pm->card->three_d_secure_usage->supported;
 
-  $addPaymentDetails = $db->prepare("INSERT INTO stripePayMethods (Customer, MethodID, `Name`, CardName, City, Country, Line1, Line2, PostCode, Brand, IssueCountry, ExpMonth, ExpYear, Funding, Last4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+  $getCardCount = $db->prepare("SELECT COUNT(*) FROM stripePayMethods WHERE Customer = ? AND Fingerprint = ?");
+  $getCardCount->execute([
+    $customer->id,
+    $pm->card->fingerprint
+  ]);
+
+  if ($getCardCount->fetchColumn() > 0) {
+    $_SESSION['PayCardError'] = true;
+    $_SESSION['PayCardErrorMessage'] = 'This card is already connected to your account';
+    header("Location: " . autoUrl("payments/cards/add"));
+    return;
+  }
+
+  $addPaymentDetails = $db->prepare("INSERT INTO stripePayMethods (Customer, MethodID, `Name`, CardName, City, Country, Line1, Line2, PostCode, Brand, IssueCountry, ExpMonth, ExpYear, Funding, Last4, Fingerprint, Reusable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
   $addPaymentDetails->execute([
     $customer->id,
     $id,
@@ -85,7 +98,9 @@ try {
     $expMonth,
     $expYear,
     $funding,
-    $last4
+    $last4,
+    $pm->card->fingerprint,
+    true,
   ]);
 
   $_SESSION['PayCardSetupSuccess'] = true;

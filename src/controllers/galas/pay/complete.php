@@ -27,10 +27,110 @@ $swimsArray = [
 global $db;
 
 if (!isset($_SESSION['GalaPaymentIntent'])) {
+  echo "1";
   halt(404);
 }
 
+$reuse = 0;
+if (isset($_POST['reuse-card']) && bool($reuse)) {
+  $reuse = 1;
+}
+
 $intent = \Stripe\PaymentIntent::retrieve($_SESSION['GalaPaymentIntent']);
+
+if (isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard']) {
+  // Add payment intent
+
+  $getUserEmail = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
+  $getUserEmail->execute([$_SESSION['UserID']]);
+  $user = $getUserEmail->fetch(PDO::FETCH_ASSOC);
+
+  $checkIfCustomer = $db->prepare("SELECT COUNT(*) FROM stripeCustomers WHERE User = ?");
+  $checkIfCustomer->execute([$_SESSION['UserID']]);
+
+  $customer = null;
+  try {
+    if ($checkIfCustomer->fetchColumn() == 0) {
+      // Create a Customer:
+      $customer = \Stripe\Customer::create([
+        'payment_method' => $intent->payment_method,
+        "name" => $user['Forename'] . ' ' . $user['Surname'],
+        "description" => "Customer for " . $_SESSION['UserID'] . ' (' . $user['EmailAddress'] . ')'
+      ]);
+
+      // YOUR CODE: Save the customer ID and other info in a database for later.
+      $id = $customer->id;
+      $addCustomer = $db->prepare("INSERT INTO stripeCustomers (User, CustomerID) VALUES (?, ?)");
+      $addCustomer->execute([
+        $_SESSION['UserID'],
+        $id
+      ]);
+    } else {
+      $getCustID = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
+      $getCustID->execute([$_SESSION['UserID']]);
+      $customer = \Stripe\Customer::retrieve($getCustID->fetchColumn());
+    }
+
+    $method = $intent->payment_method;
+    $pm = \Stripe\PaymentMethod::retrieve($method);
+    $pm->attach(['customer' => $customer->id]);
+  
+    $name = trim($_POST['name']);
+  
+    // Get the payment method details
+    $id = $pm->id;
+    $nameOnCard = $pm->card->name;
+    $city = $pm->billing_details->address->city;
+    $country = $pm->billing_details->address->country;
+    $line1 = $pm->billing_details->address->line1;
+    $line2 = $pm->billing_details->address->line2;
+    $postal_code = $pm->billing_details->address->postal_code;
+    $brand = $pm->card->brand;
+    $issueCountry = $pm->card->country;
+    $expMonth = $pm->card->exp_month;
+    $expYear = $pm->card->exp_year;
+    $funding = $pm->card->funding;
+    $last4 = $pm->card->last4;
+    $threeDSecure = $pm->card->three_d_secure_usage->supported;
+
+    $getCardCount = $db->prepare("SELECT COUNT(*) FROM stripePayMethods WHERE Customer = ? AND Fingerprint = ?");
+    $getCardCount->execute([
+      $customer->id,
+      $pm->card->fingerprint
+    ]);
+
+    if ($getCardCount->fetchColumn() == 0) {  
+      $addPaymentDetails = $db->prepare("INSERT INTO stripePayMethods (Customer, MethodID, `Name`, CardName, City, Country, Line1, Line2, PostCode, Brand, IssueCountry, ExpMonth, ExpYear, Funding, Last4, Fingerprint, Reusable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+      $addPaymentDetails->execute([
+        $customer->id,
+        $id,
+        $name,
+        $nameOnCard,
+        $city,
+        $country,
+        $line1,
+        $line2,
+        $postal_code,
+        $brand,
+        $issueCountry,
+        $expMonth,
+        $expYear,
+        $funding,
+        $last4,
+        $pm->card->fingerprint,
+        $reuse
+      ]);
+    }
+  } catch (Exception $e) {
+    //pre($e);
+    $body = $e->getJsonBody();
+    $err  = $body['error']['message'];
+    $_SESSION['PayCardError'] = true;
+    $_SESSION['PayCardErrorMessage'] = $err;
+    header("Location: " . autoUrl("galas/pay-for-entries/checkout"));
+    return;
+  }
+}
 
 if ($intent->status == 'succeeded') {
   $db->beginTransaction();
@@ -44,6 +144,7 @@ if ($intent->status == 'succeeded') {
   $getPaymentMethod->execute([$intent->payment_method]);
   $paymentMethodId = $getPaymentMethod->fetchColumn();
   if ($paymentMethodId == null) {
+    echo "2";
     halt(404);
   }
 

@@ -4,28 +4,29 @@
 
 global $db;
 
-$numberOfCards = $db->prepare("SELECT COUNT(*) `count`, stripePayMethods.ID FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ?");
-$numberOfCards->execute([$_SESSION['UserID']]);
+$expMonth = date("m");
+$expYear = date("Y");
+
+$numberOfCards = $db->prepare("SELECT COUNT(*) `count`, stripePayMethods.ID FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND Reusable = ? AND (ExpYear > ? OR (ExpYear = ? AND ExpMonth >= ?))");
+$numberOfCards->execute([$_SESSION['UserID'], 1, $expYear, $expYear, $expMonth]);
 $countCards = $numberOfCards->fetch(PDO::FETCH_ASSOC);
 
-if ($countCards['count'] == 1) {
-  $_SESSION['GalaPaymentMethodID'] = $countCards['ID'];
-}
+$getCards = $db->prepare("SELECT stripePayMethods.ID, `MethodID`, stripePayMethods.Customer, stripePayMethods.Name, stripePayMethods.Last4, stripePayMethods.Brand FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND Reusable = ? AND (ExpYear > ? OR (ExpYear = ? AND ExpMonth >= ?)) ORDER BY `Name` ASC");
+$getCards->execute([$_SESSION['UserID'], 1, $expYear, $expYear, $expMonth]);
+$cards = $getCards->fetchAll(PDO::FETCH_ASSOC);
 
-$getCards = $db->prepare("SELECT stripePayMethods.ID, `MethodID`, stripePayMethods.Customer, stripePayMethods.Name, stripePayMethods.Last4, stripePayMethods.Brand FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ?");
-$getCards->execute([$_SESSION['UserID']]);
-$card = $getCards->fetch(PDO::FETCH_ASSOC);
-
-if ($card == null) {
-  halt(404);
-}
-
-$methodId = $card['MethodID'];
-$customerID = $card['Customer'];
+$methodId = $customerID = null;
 
 $selected = null;
 if (isset($_SESSION['GalaPaymentMethodID'])) {
   $selected = $_SESSION['GalaPaymentMethodID'];
+
+  foreach ($cards as $card) {
+    if ($card['ID'] == $_SESSION['GalaPaymentMethodID']) {
+      $methodId = $card['MethodID'];
+      $customerID = $card['Customer'];
+    }
+  }
 }
 
 $swimsArray = [
@@ -72,13 +73,26 @@ if (!isset($_SESSION['GalaPaymentIntent'])) {
     'amount' => $total,
     'currency' => 'gbp',
     'payment_method_types' => ['card'],
-    'payment_method' => $methodId,
-    'customer' => $customerID,
     'confirm' => false,
+    'setup_future_usage' => 'off_session',
   ]);
   $_SESSION['GalaPaymentIntent'] = $intent->id;
 } else {
   $intent = \Stripe\PaymentIntent::retrieve($_SESSION['GalaPaymentIntent']);
+}
+
+if ($intent->status == 'succeeded') {
+  header("Location: " . autoUrl("payments/card-transactions"));
+  return;
+}
+
+if ($methodId != null && $customerID != null) {
+  $intent = \Stripe\PaymentIntent::update(
+    $_SESSION['GalaPaymentIntent'], [
+      'payment_method' => $methodId,
+      'customer' => $customerID,
+    ]
+  );
 }
 
 if ($total != $intent->amount) {
@@ -116,11 +130,14 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
           <label for="method">Payment card</label>
           <select class="custom-select" name="method" id="method">
             <option>Select a payment card</option>
-            <?php do { ?>
-            <option value="<?=$card['ID']?>" <?php if ($selected == $card['ID']) { $methodId = $card['MethodID']; ?>selected<?php } ?>>
+            <option value="new" <?php if (sizeof($cards) == 0 || (isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard'])) { ?>selected<?php } ?>>
+              Add new card
+            </option>
+            <?php foreach ($cards as $card) { ?>
+            <option value="<?=$card['ID']?>" <?php if ($selected == $card['ID'] && !(isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard'])) { $methodId = $card['MethodID']; ?>selected<?php } ?>>
               <?=$card['Name']?> (<?=htmlspecialchars(getCardBrand($card['Brand']))?> ending <?=htmlspecialchars($card['Last4'])?>)
             </option>
-            <?php } while ($card = $getCards->fetch(PDO::FETCH_ASSOC)); ?>
+            <?php } ?>
           </select>
         </div>
 
@@ -132,7 +149,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
       </form>
 
-      <?php if (isset($_SESSION['GalaPaymentMethodID'])) { ?>
+      <?php if (isset($_SESSION['GalaPaymentMethodID']) || isset($_SESSION['AddNewCard'])) { ?>
 
       <h2>Payment details</h2>
 
@@ -198,10 +215,40 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
       <div id="alert-placeholder"></div>
 
-      <form>
-        <input id="cardholder-name" type="hidden">
+      <form id="payment-form">
+        
+        <?php if (isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard']) { ?>
+        <div class="form-group">
+          <label for="cardholder-name">Cardholder name</label>
+          <input id="cardholder-name" type="text" class="form-control">
+        </div>
         <!-- placeholder for Elements -->
-        <div id="card-element"></div>
+        <div class="form-group">
+          <label for="card-element">
+            Credit or debit card
+          </label>
+          <div id="card-element">
+            <!-- A Stripe Element will be inserted here. -->
+          </div>
+        </div>
+
+        <!--
+        <div class="form-group">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="reuse-card" name="reuse-card" checked>
+            <label class="custom-control-label" for="reuse-card">Save this card for future payments</label>
+          </div>
+        </div>
+        -->
+
+        <!-- Used to display form errors. -->
+        <div id="card-errors" role="alert"></div>
+
+        <div id="payment-request-button">
+          <!-- A Stripe Element will be inserted here. -->
+        </div>
+        <?php } ?>
+
         <p>
           <button id="card-button" class="btn btn-success" type="button" data-secret="<?= $intent->client_secret ?>">
             Pay now
@@ -214,12 +261,106 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
   </div>
 </div>
 
-<?php if (isset($_SESSION['GalaPaymentMethodID'])) { ?>
+<?php if (isset($_SESSION['GalaPaymentMethodID']) || isset($_SESSION['AddNewCard'])) { ?>
 <script>
 var stripe = Stripe(<?=json_encode(env('STRIPE_PUBLISHABLE'))?>);
 var cardButton = document.getElementById('card-button');
 var clientSecret = cardButton.dataset.secret;
+var elements = stripe.elements();
 
+<?php if (isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard']) { ?>
+// Custom styling can be passed to options when creating an Element.
+// (Note that this demo uses a wider set of styles than the guide below.)
+// Try to match bootstrap 4 styling
+var style = {
+  base: {
+    'lineHeight': '1.35',
+    'fontSize': '1rem',
+    'color': '#495057',
+    'fontFamily': '"Open Sans",apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif'
+  }
+};
+
+var cardElement = elements.create('card');
+cardElement.mount('#card-element');
+
+var cardholderName = document.getElementById('cardholder-name');
+var cardButton = document.getElementById('card-button');
+var clientSecret = cardButton.dataset.secret;
+
+cardButton.addEventListener('click', function(ev) {
+  stripe.handleCardPayment(
+    clientSecret, cardElement, {
+      payment_method_data: {
+        billing_details: {name: cardholderName.value}
+      }
+    }
+  ).then(function(result) {
+    if (result.error) {
+      // Display error.message in your UI.
+      console.log(result);
+      document.getElementById('card-errors').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment using card ending with ' + result.error.payment_method.card.last4 + '</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
+    } else {
+      // The payment has succeeded. Display a success message.
+      console.log(result);
+      window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete"))?>);
+    }
+  });
+});
+
+var paymentRequest = stripe.paymentRequest({
+  country: 'GB',
+  currency: <?=json_encode($intent->currency)?>,
+  total: {
+    label: 'Gala entries',
+    amount: <?=$intent->amount?>,
+  },
+  requestPayerName: true,
+  requestPayerEmail: true,
+});
+
+var elements = stripe.elements();
+var prButton = elements.create('paymentRequestButton', {
+  paymentRequest: paymentRequest,
+});
+
+// Check the availability of the Payment Request API first.
+paymentRequest.canMakePayment().then(function(result) {
+  if (result) {
+    prButton.mount('#payment-request-button');
+  } else {
+    document.getElementById('payment-request-button').style.display = 'none';
+  }
+});
+
+paymentRequest.on('paymentmethod', function(ev) {
+  stripe.confirmPaymentIntent(clientSecret, {
+    payment_method: ev.paymentMethod.id,
+  }).then(function(confirmResult) {
+    if (confirmResult.error) {
+      // Report to the browser that the payment failed, prompting it to
+      // re-show the payment interface, or show an error message and close
+      // the payment interface.
+      ev.complete('fail');
+    } else {
+      // Report to the browser that the confirmation was successful, prompting
+      // it to close the browser payment method collection interface.
+      ev.complete('success');
+      // Let Stripe.js handle the rest of the payment flow.
+      stripe.handleCardPayment(clientSecret).then(function(result) {
+        if (result.error) {
+          // The payment failed -- ask your customer for a new payment method.
+        } else {
+          // The payment has succeeded.
+        }
+      });
+    }
+  });
+});
+
+<?php } ?>
+
+<?php if (!isset($_SESSION['AddNewCard']) || !$_SESSION['AddNewCard']) { ?>
 cardButton.addEventListener('click', function(ev) {
   stripe.handleCardPayment(
     clientSecret,
@@ -236,6 +377,7 @@ cardButton.addEventListener('click', function(ev) {
     }
   });
 });
+<?php } ?>
 
 </script>
 <?php } ?>

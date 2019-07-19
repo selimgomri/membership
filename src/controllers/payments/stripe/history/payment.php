@@ -56,7 +56,7 @@ $date->setTimezone(new DateTimeZone('Europe/London'));
         <dt class="col-sm-3">Type</dt>
         <dd class="col-sm-9"><?=htmlspecialchars(mb_convert_case ($card->funding, MB_CASE_TITLE))?></dd>
 
-        <?php if ($card->three_d_secure->authenticated && $card->three_d_secure->succeeded) { ?>
+        <?php if (isset($card->three_d_secure->authenticated) && $card->three_d_secure->authenticated && isset($card->three_d_secure->succeeded) && $card->three_d_secure->succeeded) { ?>
         <dt class="col-sm-3">Verification</dt>
         <dd class="col-sm-9">Verified using 3D Secure</dd>
         <?php } ?>
