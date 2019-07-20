@@ -48,7 +48,7 @@ $customerId = null;
 $method = null;
 $pm = null;
 
-if (isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard']) {
+if (isset($newMethod) && $newMethod) {
   // Add payment intent
 
   $getUserEmail = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
@@ -86,7 +86,7 @@ if (isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard']) {
 
     $customerId = $customer->id;
 
-    if (isset($pm->customer) && $pm->customer != $customerId) {
+    if (!isset($pm->customer) || $pm->customer != $customerId) {
       $pm->attach(['customer' => $customerId]);
     }
   
@@ -210,6 +210,10 @@ if ($intent->status == 'succeeded') {
       ]);
     }
 
+    if ($pm == null) {
+      $pm = \Stripe\PaymentMethod::retrieve($intent->payment_method);
+    }
+
     $_SESSION['CompletedEntries'] = $_SESSION['PaidEntries'];
 
     $message = "<p>Your payment receipt for gala entries.</p>";
@@ -225,14 +229,45 @@ if ($intent->status == 'succeeded') {
         }
       }
       $message .= '</ul>';
-    } $message .= '<p>The total paid was £' . number_format($details['Amount']/100, 2) . '. The payment reference number is ' . $databaseId . '</p>';
+    }
+    
+    if ($pm != null && isset($pm->card)) {
+      $message .= '<p>Paid with ' . getCardBrand($pm->card->brand) . ' ' . $pm->card->last4 . '.</p>';
+    }
+    $message .= '<p>The total paid was £' . number_format($details['Amount']/100, 2) . '. The payment reference number is ' . $databaseId . '.</p>';
 
-    $email = $db->prepare("INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 1, 'Payments')");
-    $email->execute([
-      $_SESSION['UserID'],
-      'Payment Receipt',
-      $message
-    ]);
+    $emailDb = $db->prepare("INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, 1, 'Payments')");
+
+    if (isset($intent->charges->data[0]->billing_details->email)) {
+      $email = $intent->charges->data[0]->billing_details->email;
+      $name = $_SESSION['Forename'] . ' ' . $_SESSION['Surname'];
+      if (isset($intent->charges->data[0]->billing_details->name)) {
+        $name = $intent->charges->data[0]->billing_details->name;
+      }
+      $message .= '<p>This receipt has been sent to the email address indicated when the payment was made, which may not be your club account email address.</p>';
+      notifySend(null, 'Payment Receipt', $message, $name, $email, [
+				"Email" => "payments@chesterlestreetasc.co.uk",
+				"Name" => env('CLUB_NAME'),
+				"Unsub" => [
+					"Allowed" => true,
+					"User" => $_SESSION['UserID'],
+					"List" =>	"Payments"
+				]
+			]);
+      $emailDb->execute([
+        $_SESSION['UserID'],
+        'Sent',
+        'Payment Receipt',
+        $message
+      ]);
+    } else {
+      $emailDb->execute([
+        $_SESSION['UserID'],
+        'Queued',
+        'Payment Receipt',
+        $message
+      ]);
+    }
 
     $db->commit();
 

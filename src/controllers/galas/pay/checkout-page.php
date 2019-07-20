@@ -77,6 +77,8 @@ if (!$hasEntries) {
   halt(404);
 }
 
+$entryRequestDetails = [];
+
 if (!isset($_SESSION['PaidEntries'])) {
   halt(404);
 }
@@ -137,6 +139,10 @@ if ($total != $intent->amount) {
   );
 }
 
+if (!isset($_SESSION['GalaPaymentMethodID'])) {
+  $_SESSION['AddNewCard'] = true;
+}
+
 $pagetitle = "Checkout";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/galas/galaMenu.php";
@@ -188,44 +194,20 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
       <p class="lead">You can pay for gala entries by direct debit or by credit or debit card.</p>
       <p>If you haven't opted out of direct debit gala payments and you don't make a payment by card, you'll be automatically charged for gala entries as part of your monthly payment when the gala coordinator submits the entries to the host club.</p>
 
-      <h2>Payment method</h2>
-
-      <form action="<?=autoUrl("galas/pay-for-entries/switch-method")?>" method="post">
-
-        <div class="form-group">
-          <label for="method">Payment card</label>
-          <select class="custom-select" name="method" id="method" onchange="this.form.submit()">
-            <option>Select a payment card</option>
-            <option value="new" <?php if ((isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard'])) { ?>selected<?php } ?>>
-              Use mobile wallet or add a new card
-            </option>
-            <?php foreach ($cards as $card) { ?>
-            <option value="<?=$card['ID']?>" <?php if ($selected == $card['ID'] && !(isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard'])) { $methodId = $card['MethodID']; ?>selected<?php } ?>>
-              <?=$card['Name']?> (<?=htmlspecialchars(getCardBrand($card['Brand']))?> ending <?=htmlspecialchars($card['Last4'])?>)
-            </option>
-            <?php } ?>
-          </select>
-        </div>
-
-        <noscript>
-          <p>
-            <button type="submit" class="btn btn-success">
-              Use selected card
-            </button>
-          </p>
-        </noscript>
-
-      </form>
-
       <?php if (isset($_SESSION['GalaPaymentMethodID']) || isset($_SESSION['AddNewCard'])) { ?>
 
-      <h2>Payment details</h2>
+      <h2>Paying for</h2>
+      <p>You're paying for the following gala entries</p>
 
       <ul class="list-group mb-3">
         <?php foreach ($_SESSION['PaidEntries'] as $entry => $details) {
           $getEntry->execute([$entry, $_SESSION['UserID']]);
           $entry = $getEntry->fetch(PDO::FETCH_ASSOC);
           $notReady = !$entry['EntryProcessed'];
+          $entryRequestDetails[] = [
+            'label' => htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'][0]) . ' for ' . htmlspecialchars($entry['GalaName']),
+            'amount' => $details['Amount']
+          ];
         ?>
         <li class="list-group-item">
           <h3><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?> for <?=htmlspecialchars($entry['GalaName'])?></h3>
@@ -281,77 +263,121 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
         </li>
       </ul>
 
-      <form id="payment-form">
-        
-        <?php if (isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard']) { ?>
-        <div class="card mb-3" id="payment-request-card">
-          <div class="card-header">
-            Pay with your wallet
+      <h2 class="mb-3">Pay</h2>
+        <div id="payment-request-card">
+          <div class="card mb-3">
+            <form>
+              <div class="card-header" id="device-title">
+                Pay quickly and securely
+              </div>
+              <div class="card-body">
+                <div id="alert-placeholder"></div>
+                <div id="payment-request-button">
+                  <!-- A Stripe Element will be inserted here. -->
+                </div>
+              </div>
+            </form>
           </div>
-          <div class="card-body">
-            <div id="alert-placeholder"></div>
-            <div id="payment-request-button">
-              <!-- A Stripe Element will be inserted here. -->
-            </div>
-          </div>
+
+          <p class="text-center">Or</p>
         </div>
+
+        <?php if (sizeof($cards) > 0) { ?>
+        <div class="card mb-3" id="saved-cards">
+          <form action="<?=autoUrl("galas/pay-for-entries/switch-method")?>" method="post">
+            <div class="card-header" id="device-title">
+              Pay with a saved card
+            </div>
+            <div class="card-body">
+
+              <div class="form-group <?php if ($selected == null) { ?>mb-0<?php } ?>">
+                <label for="method">Payment card</label>
+                <select class="custom-select" name="method" id="method" onchange="this.form.submit()">
+                  <option value="select">Select a payment card</option>
+                  <?php foreach ($cards as $card) { ?>
+                  <option value="<?=$card['ID']?>" <?php if ($selected == $card['ID']) { $methodId = $card['MethodID']; ?>selected<?php } ?>>
+                    <?=$card['Name']?> (<?=htmlspecialchars(getCardBrand($card['Brand']))?> ending <?=htmlspecialchars($card['Last4'])?>)
+                  </option>
+                  <?php } ?>
+                </select>
+              </div>
+
+              <noscript>
+                <p>
+                  <button type="submit" class="btn btn-success">
+                    Use selected card
+                  </button>
+                </p>
+              </noscript>
+
+              <?php if ($selected != null) { ?>
+              <!-- Used to display form errors. -->
+              <div id="saved-card-errors" role="alert"></div>
+
+              <p class="mb-0">
+                <button id="saved-card-button" class="btn btn-success btn-block" type="button" data-secret="<?= $intent->client_secret ?>">
+                  Pay now
+                </button>
+              </p>
+              <?php } ?>
+            </div>
+          </form>
+        </div>
+
+        <p class="text-center">Or</p>
+        <?php } ?>
 
         <div class="card mb-3">
           <div class="card-header">
-            Add a new card
+            Pay with a new card
           </div>
           <div class="card-body">
-            <div class="form-group">
-              <label for="cardholder-name">Cardholder name</label>
-              <input id="cardholder-name" type="text" class="form-control">
-            </div>
-            <!-- placeholder for Elements -->
-            <div class="form-group">
-              <label for="card-element">
-                Credit or debit card
-              </label>
-              <div id="card-element" class="card-element">
-                <!-- A Stripe Element will be inserted here. -->
+            <form>
+              <div class="form-group">
+                <label for="new-cardholder-name">Cardholder name</label>
+                <input id="new-cardholder-name" type="text" class="form-control">
               </div>
-            </div>
-
-            <!--
-            <div class="form-group">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="reuse-card" name="reuse-card" checked>
-                <label class="custom-control-label" for="reuse-card">Save this card for future payments</label>
+              <!-- placeholder for Elements -->
+              <div class="form-group">
+                <label for="card-element">
+                  Credit or debit card
+                </label>
+                <div id="card-element" class="card-element">
+                  <!-- A Stripe Element will be inserted here. -->
+                </div>
               </div>
-            </div>
-            -->
 
-            <p>Your card details will be saved for use on future purchases</p>
+              <!--
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="reuse-card" name="reuse-card" checked>
+                  <label class="custom-control-label" for="reuse-card">Save this card for future payments</label>
+                </div>
+              </div>
+              -->
 
-        <?php } ?>
+              <p>Your card details will be saved for use on future purchases</p>
 
-            <!-- Used to display form errors. -->
-            <div id="card-errors" role="alert"></div>
+              <!-- Used to display form errors. -->
+              <div id="new-card-errors" role="alert"></div>
 
-        <p <?php if (isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard']) { ?> class="mb-0" <?php } ?>>
-              <button id="card-button" class="btn btn-success btn-block" type="button" data-secret="<?= $intent->client_secret ?>">
-                Pay now
-              </button>
-            </p>
-
-        <?php if (isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard']) { ?>
+              <p class="mb-0">
+                <button id="new-card-button" class="btn btn-success btn-block" type="button" data-secret="<?= $intent->client_secret ?>">
+                  Pay now
+                </button>
+              </p>
+            </form>
           </div>
         </div>
-        <?php }?>
-      </form>
 
       <?php } ?>
     </div>
   </div>
 </div>
 
-<?php if (isset($_SESSION['GalaPaymentMethodID']) || isset($_SESSION['AddNewCard'])) { ?>
 <script>
 var stripe = Stripe(<?=json_encode(env('STRIPE_PUBLISHABLE'))?>);
-var cardButton = document.getElementById('card-button');
+var cardButton = document.getElementById('new-card-button');
 var clientSecret = cardButton.dataset.secret;
 var elements = stripe.elements({
   fonts: [
@@ -361,7 +387,6 @@ var elements = stripe.elements({
   ]
 });
 
-<?php if (isset($_SESSION['AddNewCard']) && $_SESSION['AddNewCard']) { ?>
 // Custom styling can be passed to options when creating an Element.
 // (Note that this demo uses a wider set of styles than the guide below.)
 // Try to match bootstrap 4 styling
@@ -391,8 +416,10 @@ var cardElement = elements.create('card', {
 });
 cardElement.mount('#card-element');
 
-var cardholderName = document.getElementById('cardholder-name');
-var cardButton = document.getElementById('card-button');
+var cardholderName = document.getElementById('new-cardholder-name');
+<?php if ($selected != null) { ?>
+var savedCardButton = document.getElementById('saved-card-button');
+<?php } ?>
 var clientSecret = cardButton.dataset.secret;
 
 cardButton.addEventListener('click', function(ev) {
@@ -405,12 +432,10 @@ cardButton.addEventListener('click', function(ev) {
   ).then(function(result) {
     if (result.error) {
       // Display error.message in your UI.
-      console.log(result);
-      document.getElementById('card-errors').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment using card ending with ' + result.error.payment_method.card.last4 + '</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
+      document.getElementById('new-card-errors').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
     } else {
       // The payment has succeeded. Display a success message.
-      console.log(result);
-      window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete"))?>);
+      window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
     }
   });
 });
@@ -419,11 +444,19 @@ var paymentRequest = stripe.paymentRequest({
   country: 'GB',
   currency: <?=json_encode($intent->currency)?>,
   total: {
-    label: 'Gala entries',
+    label: <?=json_encode(env('CLUB_NAME'))?>,
     amount: <?=$intent->amount?>,
   },
+  displayItems: <?=json_encode($entryRequestDetails)?>,
   requestPayerName: true,
   requestPayerEmail: true,
+  style: {
+    paymentRequestButton: {
+      type: 'buy', // default: 'default'
+      theme: 'dark',// | 'light' | 'light-outline', // default: 'dark'
+      height: '38px', // default: '40px', the width is always '100%'
+    },
+  },
 });
 
 var prButton = elements.create('paymentRequestButton', {
@@ -448,30 +481,26 @@ paymentRequest.on('paymentmethod', function(ev) {
       // re-show the payment interface, or show an error message and close
       // the payment interface.
       ev.complete('fail');
-      console.log(ev);
     } else {
       // Report to the browser that the confirmation was successful, prompting
       // it to close the browser payment method collection interface.
-      ev.complete('success');
-      console.log('Success');
+      ev.complete('success'); 
       // Let Stripe.js handle the rest of the payment flow.
       stripe.handleCardPayment(clientSecret).then(function(result) {
         if (result.error) {
           // The payment failed -- ask your customer for a new payment method.
-          document.getElementById('alert-placeholder').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment using card ending with ' + result.error.payment_method.card.last4 + '</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
+          document.getElementById('alert-placeholder').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
         } else {
           // The payment has succeeded.
-          window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete"))?>);
+          window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
         }
       });
     }
   });
 });
 
-<?php } ?>
-
-<?php if (!isset($_SESSION['AddNewCard']) || !$_SESSION['AddNewCard']) { ?>
-cardButton.addEventListener('click', function(ev) {
+<?php if ($selected != null) { ?>
+savedCardButton.addEventListener('click', function(ev) {
   stripe.handleCardPayment(
     clientSecret,
     {
@@ -479,7 +508,7 @@ cardButton.addEventListener('click', function(ev) {
     }
   ).then(function(result) {
     if (result.error) {
-      document.getElementById('card-errors').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment using card ending with ' + result.error.payment_method.card.last4 + '</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
+      document.getElementById('saved-card-errors').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
       // Display error.message in your UI.
     } else {
       // The payment has succeeded. Display a success message.
@@ -490,7 +519,8 @@ cardButton.addEventListener('click', function(ev) {
 <?php } ?>
 
 </script>
-<?php } ?>
 
 
-<?php include BASE_PATH . "views/footer.php"; ?>
+<?php
+
+include BASE_PATH . "views/footer.php"; ?>

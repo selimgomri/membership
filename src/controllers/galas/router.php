@@ -89,7 +89,17 @@ if ($access == "Parent") {
 				include 'pay/checkout-page.php';
 			});
 
+			$this->get('/checkout/new', function() {
+				include 'pay/checkout-page.php';
+			});
+
 			$this->get('/complete', function() {
+				$newMethod = false;
+				include 'pay/complete.php';
+			});
+
+			$this->get('/complete/new', function() {
+				$newMethod = true;
 				include 'pay/complete.php';
 			});
 

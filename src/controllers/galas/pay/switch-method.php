@@ -13,7 +13,9 @@ if (!isset($_SESSION['GalaPaymentIntent'])) {
   halt(404);
 }
 
-if ($_POST['method'] == 'new') {
+$toId = '';
+
+if ($_POST['method'] == 'select') {
   $_SESSION['AddNewCard'] = true;
 
   try {
@@ -47,6 +49,7 @@ if ($_POST['method'] == 'new') {
         ]
       );
       $_SESSION['GalaPaymentMethodID'] = $_POST['method'];
+      $toId = '#saved-cards';
     } catch (Exception $e) {
       pre($e);
       halt(500);
@@ -56,4 +59,4 @@ if ($_POST['method'] == 'new') {
   }
 }
 
-header("Location: " . autoUrl("galas/pay-for-entries/checkout"));
+header("Location: " . autoUrl("galas/pay-for-entries/checkout" . $toId));

@@ -27,7 +27,7 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 
 		$from = [
 			"Email" => "notify@chesterlestreetasc.co.uk",
-			"Name" => CLUB_NAME,
+			"Name" => env('CLUB_NAME'),
 			"Unsub" => [
 				"Allowed" => true,
 				"User" => $row['UserID'],
@@ -38,7 +38,7 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
     if ($row['EmailType'] == 'Payments') {
 			$from = [
 				"Email" => "payments@chesterlestreetasc.co.uk",
-				"Name" => CLUB_NAME,
+				"Name" => env('CLUB_NAME'),
 				"Unsub" => [
 					"Allowed" => true,
 					"User" => $row['UserID'],
@@ -48,12 +48,12 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 		} else if ($row['EmailType'] == 'Galas') {
 			$from = [
 				"Email" => "galas@chesterlestreetasc.co.uk",
-				"Name" => CLUB_NAME . " Galas"
+				"Name" => env('CLUB_NAME') . " Galas"
 			];
 		} else if ($row['EmailType'] == 'Security') {
 			$from = [
 				"Email" => "security-support@chesterlestreetasc.co.uk",
-				"Name" => CLUB_NAME . " Security",
+				"Name" => env('CLUB_NAME') . " Security",
 				"Unsub" => [
 					"Allowed" => true,
 					"User" => $row['UserID'],
@@ -63,7 +63,7 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 		} else if ($row['EmailType'] == 'NewMember') {
 			$from = [
 				"Email" => "membership-updates@chesterlestreetasc.co.uk",
-				"Name" => CLUB_NAME,
+				"Name" => env('CLUB_NAME'),
 				"Unsub" => [
 					"Allowed" => true,
 					"User" => $row['UserID'],
@@ -73,7 +73,7 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 		} else if ($row['EmailType'] == 'APIAlert') {
 			$from = [
 				"Email" => "membership-api-alerts@chesterlestreetasc.co.uk",
-				"Name" => CLUB_SHORT_NAME . " API Alerts",
+				"Name" => env('CLUB_SHORT_NAME') . " API Alerts",
 				"Unsub" => [
 					"Allowed" => true,
 					"User" => $row['UserID'],
@@ -83,14 +83,14 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 		} else if ($row['EmailType'] == 'StaffBulletin') {
 			$from = [
 				"Email" => "team.notify@chesterlestreetasc.co.uk",
-				"Name" => CLUB_SHORT_NAME . " Staff"
+				"Name" => env('CLUB_SHORT_NAME') . " Staff"
 			];
 		}
 
 		if ($row['ForceSend'] == 1) {
 			$from = [
 				"Email" => "noreply@chesterlestreetasc.co.uk",
-				"Name" => CLUB_NAME
+				"Name" => env('CLUB_NAME')
 			];
 
       if ($from['Unsub']['Allowed']) {
@@ -101,7 +101,7 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 		if ($row['EmailType'] == 'SquadMove') {
 			$from = [
 				"Email" => "squad-moves@chesterlestreetasc.co.uk",
-				"Name" => CLUB_NAME
+				"Name" => env('CLUB_NAME')
 			];
 		} else if ($row['EmailType'] == 'Notify-Audit') {
       $from = [
