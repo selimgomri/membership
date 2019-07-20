@@ -29,7 +29,7 @@ $rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 
 
 
 try {
-$entries = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE members.UserID = ? AND NOT Charged AND FeeToPay > 0");
+$entries = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE members.UserID = ? AND NOT Charged AND FeeToPay > 0 AND galas.GalaDate > CURDATE()");
 $entries->execute([$_SESSION['UserID']]);
 } catch (Exception $e) {
   pre($e);

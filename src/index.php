@@ -313,6 +313,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
     include 'controllers/pwa/set-pwa.php';
   });
 
+  $this->group('/js', function() {
+    include 'dynamic-javascript/router.php';
+  });
+
   // Password Reset via Link
   $this->get('/email/auth/{id}:int/{auth}', function($id, $auth) {
     global $link;

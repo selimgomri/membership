@@ -55,15 +55,15 @@ class Login {
     try {
       $reader = new \GeoIp2\Database\Reader(BASE_PATH . 'storage/geoip/GeoLite2-City.mmdb');
       $record = $reader->city(app('request')->ip());
-      $city;
+      $city = '';
       if ($record->city->name != "") {
         $city = $record->city->name . ', ';
       }
-      $subdivision;
+      $subdivision = '';
       if ($record->mostSpecificSubdivision->name != "" && $record->mostSpecificSubdivision->name != $record->city->name) {
         $subdivision = $record->mostSpecificSubdivision->name . ', ';
       }
-      $country;
+      $country = '';
       if ($record->country->name != "") {
         $country = $record->country->name;
       }
