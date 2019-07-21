@@ -52,7 +52,6 @@ Chester-le-Street ASC is a non profit unincorporated association.
     if (env('GOOGLE_ANALYTICS_ID') && (!$_SESSION['DisableTrackers'] && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1))) {
     ?>
   <meta name="X-SCDS-Membership-Tracking" content="yes">
-  <script src="https://js.stripe.com/v3/"></script>
   <script async>
   (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
@@ -76,6 +75,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <?php } else { ?>
   <meta name="X-SCDS-Membership-Tracking" content="no">
   <?php } ?>
+  <script src="https://js.stripe.com/v3/"></script>
   <link rel="stylesheet preload"
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700|Roboto+Mono|Merriweather:400,600">
   <link rel="stylesheet preload" href="<?php echo autoUrl("public/css/generic/generic-0.10-prefixed.css") ?>">
