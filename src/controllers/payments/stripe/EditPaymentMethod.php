@@ -31,7 +31,16 @@ $pm = \Stripe\PaymentMethod::retrieve($card['MethodID']);
 
   <div class="row">
     <div class="col-md-8">
-      <h1><i class="fa <?=htmlspecialchars(getCardFA($card['Brand']))?>" aria-hidden="true"></i> <?=htmlspecialchars($card['Name'])?></h1>
+      <div class="row align-items-center mb-3 text-dark">
+        <div class="col-auto">
+          <img src="<?=autoUrl("public/img/stripe/" . $card['Brand'] . ".png")?>" srcset="<?=autoUrl("public/img/stripe/" . $card['Brand'] . "@2x.png")?> 2x, <?=autoUrl("public/img/stripe/" . $card['Brand'] . "@3x.png")?> 3x" style="width:48px;"> <span class="sr-only"><?=htmlspecialchars(getCardBrand($card['Brand']))?></span>
+        </div>
+        <div class="col-auto">
+          <h1 class="h1 my-0">
+            <?=htmlspecialchars($card['Name'])?>
+          </h1>
+        </div>
+      </div>
       <p class="lead">
         <?=getCardBrand($card['Brand'])?> <?=htmlspecialchars($card['Funding'])?> card ending in <spn class="mono"><?=htmlspecialchars($card['Last4'])?></span>.
       </p>
