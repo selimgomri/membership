@@ -143,6 +143,8 @@ if (!isset($_SESSION['GalaPaymentMethodID'])) {
   $_SESSION['AddNewCard'] = true;
 }
 
+$countries = getISOAlpha2Countries();
+
 $pagetitle = "Checkout";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/galas/galaMenu.php";
@@ -192,12 +194,9 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
     <div class="col-lg-8">
       <h1>Pay for gala entries</h1>
       <p class="lead">You can pay for gala entries by direct debit or by credit or debit card.</p>
-      <p>If you haven't opted out of direct debit gala payments and you don't make a payment by card, you'll be automatically charged for gala entries as part of your monthly payment when the gala coordinator submits the entries to the host club.</p>
 
-      <?php if (isset($_SESSION['GalaPaymentMethodID']) || isset($_SESSION['AddNewCard'])) { ?>
-
-      <h2>Paying for</h2>
-      <p>You're paying for the following gala entries</p>
+      <h2>Selected entries</h2>
+      <p>You'll pay for the following gala entries</p>
 
       <ul class="list-group mb-3">
         <?php foreach ($_SESSION['PaidEntries'] as $entry => $details) {
@@ -263,7 +262,8 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
         </li>
       </ul>
 
-      <h2 class="mb-3">Pay</h2>
+      <h2 class="mb-3">Payment Method</h2>
+      <p>Choose how to pay</p>
         <div id="payment-request-card">
           <div class="card mb-3">
             <form>
@@ -284,7 +284,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
         <?php if (sizeof($cards) > 0) { ?>
         <div class="card mb-3" id="saved-cards">
-          <form action="<?=autoUrl("galas/pay-for-entries/switch-method")?>" method="post">
+          <form action="<?=autoUrl("galas/pay-for-entries/switch-method")?>" method="post" id="saved-card-form">
             <div class="card-header" id="device-title">
               Pay with a saved card
             </div>
@@ -332,11 +332,32 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
             Pay with a new card
           </div>
           <div class="card-body">
-            <form>
+            <form id="new-card-form">
               <div class="form-group">
                 <label for="new-cardholder-name">Cardholder name</label>
-                <input id="new-cardholder-name" type="text" class="form-control">
+                <input type="text" class="form-control" id="new-cardholder-name" placeholder="C F Frost" required autocomplete="cc-name" aria-describedby="new-cardholder-name-help">
+                <small id="new-cardholder-name-help" class="form-text text-muted">The name shown on your card</small>
               </div>
+
+              <div class="form-group">
+                <label for="addr-line-1">Address line 1</label>
+                <input type="text" class="form-control" id="addr-line-1" placeholder="1 Burns Green" required autocomplete="address-line1">
+              </div>
+
+              <div class="form-group">
+                <label for="addr-post-code">Post Code</label>
+                <input type="text" class="form-control text-uppercase" id="addr-post-code" placeholder="NE99 1AA" required autocomplete="postal-code">
+              </div>
+
+              <div class="form-group">
+                <label for="addr-post-code">Country</label>
+                <select class="custom-select" required id="addr-country" autocomplete="country">
+                  <?php foreach ($countries as $code => $name) { ?>
+                  <option <?php if ($code == 'GB') { ?>selected<?php } ?> value="<?=htmlspecialchars($code)?>"><?=htmlspecialchars($name)?></option>
+                  <?php } ?>
+                </select>
+              </div>
+
               <!-- placeholder for Elements -->
               <div class="form-group">
                 <label for="card-element">
@@ -356,21 +377,19 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
               </div>
               -->
 
-              <p>Your card details will be saved for use on future purchases</p>
+              <p>Your card details will be saved for use with future purchases</p>
 
               <!-- Used to display form errors. -->
               <div id="new-card-errors" role="alert"></div>
 
               <p class="mb-0">
-                <button id="new-card-button" class="btn btn-success btn-block" type="button" data-secret="<?= $intent->client_secret ?>">
+                <button id="new-card-button" class="btn btn-success btn-block" type="submit" data-secret="<?= $intent->client_secret ?>">
                   Pay now
                 </button>
               </p>
             </form>
           </div>
         </div>
-
-      <?php } ?>
     </div>
   </div>
 </div>

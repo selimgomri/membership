@@ -143,6 +143,7 @@ var elements = stripe.elements({
 
 var cardElement = elements.create('card', {
   iconStyle: 'solid',
+  hidePostalCode: true,
   style: {
     base: {
       iconColor: '#ced4da',
@@ -167,14 +168,30 @@ var cardElement = elements.create('card', {
 cardElement.mount('#card-element');
 
 var cardholderName = document.getElementById('new-cardholder-name');
+var cardholderAddress1 = document.getElementById('addr-line-1');
+var cardholderZip = document.getElementById('addr-post-code');
+cardholderZip.addEventListener('change', function(event) {
+  cardElement.update({value: {postalCode: event.target.value.toUpperCase()}});
+});
+var cardholderCountry = document.getElementById('addr-country');
+
 var savedCardButton = document.getElementById('saved-card-button');
 var clientSecret = cardButton.dataset.secret;
 
-cardButton.addEventListener('click', function(ev) {
+var form = document.getElementById('new-card-form');
+form.addEventListener('submit', function(event) {
+  event.preventDefault();
   stripe.handleCardPayment(
     clientSecret, cardElement, {
       payment_method_data: {
-        billing_details: {name: cardholderName.value}
+        billing_details: {
+          name: cardholderName.value,
+          address: {
+            line1: cardholderAddress1.value,
+            zip: cardholderZip.postal_code,
+            country: cardholderCountry.value,
+          },
+        }
       }
     }
   ).then(function(result) {

@@ -1,5 +1,8 @@
 <?php
 
+// See your keys here: https://dashboard.stripe.com/account/apikeys
+\Stripe\Stripe::setApiKey(env('STRIPE'));
+
 global $db;
 
 $getUserEmail = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
@@ -27,6 +30,16 @@ if ($checkIfCustomer->fetchColumn() == 0) {
     $id
   ]);
 }
+
+$setupIntent = null;
+if (!isset($_SESSION['StripeSetupIntentId'])) {
+  $setupIntent = \Stripe\SetupIntent::create();
+  $_SESSION['StripeSetupIntentId'] = $setupIntent->id;
+} else {
+  $setupIntent = \Stripe\SetupIntent::retrieve($_SESSION['StripeSetupIntentId']);
+}
+
+$countries = getISOAlpha2Countries();
 
 include BASE_PATH . 'views/header.php';
 
@@ -91,10 +104,35 @@ include BASE_PATH . 'views/header.php';
       <form action="<?=currentUrl()?>" method="post" id="payment-form" class="mb-5">
         <div class="form-group">
           <label for="name">Name this card</label>
-          <input type="text" class="form-control" id="name" name="name" placeholder="Card Name" required
-            aria-describedby="cardNameHelp">
+          <input type="text" class="form-control" id="name" name="name" placeholder="Card Name" required aria-describedby="cardNameHelp">
           <small id="cardNameHelp" class="form-text text-muted">Name your card to help you select it more easily</small>
         </div>
+
+        <div class="form-group">
+          <label for="cardholder-name">Cardholder name</label>
+          <input type="text" class="form-control" id="cardholder-name" placeholder="C F Frost" required aria-describedby="cardholder-name-help" autocomplete="cc-name">
+          <small id="cardholder-name-help" class="form-text text-muted">The name shown on your card</small>
+        </div>
+
+        <div class="form-group">
+          <label for="addr-line-1">Address line 1</label>
+          <input type="text" class="form-control" id="addr-line-1" placeholder="1 Burns Green" required autocomplete="address-line1">
+        </div>
+
+        <div class="form-group">
+          <label for="addr-post-code">Post Code</label>
+          <input type="text" class="form-control text-uppercase" id="addr-post-code" placeholder="NE99 1AA" required autocomplete="postal-code">
+        </div>
+
+        <div class="form-group">
+          <label for="addr-post-code">Country</label>
+          <select class="custom-select" required id="addr-country" autocomplete="country">
+            <?php foreach ($countries as $code => $name) { ?>
+            <option <?php if ($code == 'GB') { ?>selected<?php } ?> value="<?=htmlspecialchars($code)?>"><?=htmlspecialchars($name)?></option>
+            <?php } ?>
+          </select>
+        </div>
+
         <div class="mb-3">
           <label for="card-element">
             Credit or debit card
@@ -102,13 +140,13 @@ include BASE_PATH . 'views/header.php';
           <div id="card-element" class="card-element">
             <!-- A Stripe Element will be inserted here. -->
           </div>
-
-          <!-- Used to display form errors. -->
-          <div id="card-errors" role="alert"></div>
         </div>
 
+        <!-- Used to display form errors. -->
+        <div id="card-errors" role="alert"></div>
+
         <p>
-          <button class="btn btn-success">Add payment card</button>
+          <button id="card-button" class="btn btn-success" data-secret="<?= $setupIntent->client_secret ?>">Add payment card</button>
         </p>
       </form>
 
@@ -124,24 +162,6 @@ include BASE_PATH . 'views/header.php';
 <script>
 var stripe = Stripe('<?=htmlspecialchars(env('STRIPE_PUBLISHABLE'))?>');
 
-// Custom styling can be passed to options when creating an Element.
-// (Note that this demo uses a wider set of styles than the guide below.)
-// Try to match bootstrap 4 styling
-var style = {
-  base: {
-    'lineHeight': '1.35',
-    'fontSize': '1.11rem',
-    'color': '#495057',
-    'fontFamily': 'apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif'
-  }
-};
-
-var options = {
-  options: {
-    style: style
-  }
-};
-
 var elements = stripe.elements({
   fonts: [
     {
@@ -151,8 +171,9 @@ var elements = stripe.elements({
 });
 
 // Create an instance of the card Element.
-var card = elements.create('card', {
+var cardElement = elements.create('card', {
   iconStyle: 'solid',
+  hidePostalCode: true,
   style: {
     base: {
       iconColor: '#ced4da',
@@ -176,45 +197,68 @@ var card = elements.create('card', {
 });
 
 // Add an instance of the card Element into the `card-element` <div>.
-card.mount('#card-element');
+cardElement.mount('#card-element');
 
-card.addEventListener('change', function(event) {
+cardElement.addEventListener('change', function(event) {
   var displayError = document.getElementById('card-errors');
   if (event.error) {
-    displayError.textContent = event.error.message;
+    displayError.innerHTML = '<div class="alert alert-danger" id="card-errors-message"></div>'
+    document.getElementById('card-errors-message').textContent = event.error.message;
   } else {
-    displayError.textContent = '';
+    displayError.innerHTML = '';
   }
 });
+
+var cardholderName = document.getElementById('cardholder-name');
+var cardholderAddress1 = document.getElementById('addr-line-1');
+var cardholderZip = document.getElementById('addr-post-code');
+cardholderZip.addEventListener('change', function(event) {
+  cardElement.update({value: {postalCode: event.target.value.toUpperCase()}});
+});
+var cardholderCountry = document.getElementById('addr-country');
+var cardButton = document.getElementById('card-button');
+var clientSecret = cardButton.dataset.secret;
 
 var form = document.getElementById('payment-form');
 form.addEventListener('submit', function(event) {
   event.preventDefault();
-
-  token = stripe.createPaymentMethod('card', card).then(function(result) {
+  stripe.handleCardSetup(
+    clientSecret, cardElement, {
+      payment_method_data: {
+        billing_details: {
+          name: cardholderName.value,
+          address: {
+            line1: cardholderAddress1.value,
+            zip: cardholderZip.postal_code,
+            country: cardholderCountry.value,
+          },
+        }
+      }
+    }
+  ).then(function(result) {
+    var displayError = document.getElementById('card-errors');
     if (result.error) {
-      // Inform the customer that there was an error.
-      var errorElement = document.getElementById('card-errors');
-      errorElement.textContent = result.error.message;
+      // Display error.message in your UI.
+      displayError.innerHTML = '<div class="alert alert-danger" id="card-errors-message"></div>'
+      document.getElementById('card-errors-message').textContent = result.error.message;
     } else {
-      // Send the token to your server.
-      stripeTokenHandler(result.paymentMethod);
+      // The setup has succeeded. Display a success message.
+      displayError.innerHTML = '<div class="alert alert-success" id="card-errors-message"></div>'
+      document.getElementById('card-errors-message').textContent = 'Card setup successfully. Please wait while we redirect you.';
+      // The payment has succeeded. Display a success message.
+      var form = document.getElementById('payment-form');
+      //var hiddenInput = document.createElement('input');
+      //hiddenInput.setAttribute('type', 'hidden');
+      //hiddenInput.setAttribute('name', 'stripeToken');
+      //hiddenInput.setAttribute('value', token.id);
+      //form.appendChild(hiddenInput);
+      // Submit the form
+      form.submit();
     }
   });
 });
 
-function stripeTokenHandler(token) {
-  // Insert the token ID into the form so it gets submitted to the server
-  var form = document.getElementById('payment-form');
-  var hiddenInput = document.createElement('input');
-  hiddenInput.setAttribute('type', 'hidden');
-  hiddenInput.setAttribute('name', 'stripeToken');
-  hiddenInput.setAttribute('value', token.id);
-  form.appendChild(hiddenInput);
 
-  // Submit the form
-  form.submit();
-}
 </script>
 
 <?php
