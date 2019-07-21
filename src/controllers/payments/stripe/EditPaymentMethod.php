@@ -2,7 +2,7 @@
 
 global $db;
 
-$getCard = $db->prepare("SELECT `Name`, Last4, Brand, ExpMonth, ExpYear, Funding, PostCode, Line1, Line2, CardName FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND stripePayMethods.ID = ?");
+$getCard = $db->prepare("SELECT `Name`, Last4, Brand, ExpMonth, ExpYear, Funding, PostCode, Line1, Line2, CardName, MethodID FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND stripePayMethods.ID = ?");
 $getCard->execute([$_SESSION['UserID'], $id]);
 
 $card = $getCard->fetch(PDO::FETCH_ASSOC);
@@ -14,6 +14,9 @@ if ($card == null) {
 $pagetitle = htmlspecialchars($card['Name']) . ' - ' . htmlspecialchars($card['Brand']) . ' ' . htmlspecialchars($card['Last4']);
 
 include BASE_PATH . 'views/header.php';
+
+\Stripe\Stripe::setApiKey(env('STRIPE'));
+$pm = \Stripe\PaymentMethod::retrieve($card['MethodID']);
 
 ?>
 
@@ -33,9 +36,25 @@ include BASE_PATH . 'views/header.php';
         <?=getCardBrand($card['Brand'])?> <?=htmlspecialchars($card['Funding'])?> card ending in <spn class="mono"><?=htmlspecialchars($card['Last4'])?></span>.
       </p>
 
+      <h2>Expiry</h2>
       <p>
         Expires at the end of <?=htmlspecialchars(date("F Y", strtotime($card['ExpYear'] . '-' . $card['ExpMonth'] . '-01')))?>.
       </p>
+
+      <?php if (isset($pm->billing_details->name) || isset($pm->billing_details->address->line1) || isset($pm->billing_details->address->postal_code)) { ?>
+      <h2>Billing details</h2>
+      <address class="mb-3">
+        <?php if (isset($pm->billing_details->name)) { ?>
+        <strong><?=htmlspecialchars($pm->billing_details->name)?><br></strong>
+        <?php } ?>
+        <?php if (isset($pm->billing_details->address->line1)) { ?>
+        <?=htmlspecialchars($pm->billing_details->address->line1)?><br>
+        <?php } ?>
+        <?php if (isset($pm->billing_details->address->postal_code)) { ?>
+        <?=htmlspecialchars(mb_strtoupper($pm->billing_details->address->postal_code))?>
+        <?php } ?>
+      </address>
+      <?php } ?>
 
       <?php if (isset($_SESSION['CardNameUpdate'])) { ?>
       <div class="alert alert-success">

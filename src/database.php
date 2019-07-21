@@ -1,5 +1,7 @@
 <?php
 
+include BASE_PATH . 'includes/regions/countries-iso3166.php';
+
 function bool($var) {
   return filter_var($var, FILTER_VALIDATE_BOOLEAN);
 }

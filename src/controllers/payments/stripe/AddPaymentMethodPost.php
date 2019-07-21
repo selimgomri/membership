@@ -5,6 +5,19 @@ global $db;
 // See your keys here: https://dashboard.stripe.com/account/apikeys
 \Stripe\Stripe::setApiKey(env('STRIPE'));
 
+$setupIntent = null;
+if (!isset($_SESSION['StripeSetupIntentId'])) {
+  halt(404);
+} else {
+  try {
+    $setupIntent = \Stripe\SetupIntent::retrieve($_SESSION['StripeSetupIntentId']);
+  } catch (Exception $e) {
+    unset($_SESSION['StripeSetupIntentId']);
+    header("Location: " . autoUrl("payments/cards/add"));
+    return;
+  }
+}
+
 $getUserEmail = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
 $getUserEmail->execute([$_SESSION['UserID']]);
 $user = $getUserEmail->fetch(PDO::FETCH_ASSOC);
@@ -33,10 +46,6 @@ if ($checkIfCustomer->fetchColumn() == 0) {
   $customer = \Stripe\Customer::retrieve($getCustID->fetchColumn());
 }
 
-if (!isset($_POST['stripeToken'])) {
-  halt(500);
-}
-
 try {
   // Attach payment method to the customer:
   \Stripe\Customer::update(
@@ -48,7 +57,7 @@ try {
   );
 
 
-  $pm = \Stripe\PaymentMethod::retrieve($_POST['stripeToken']);
+  $pm = \Stripe\PaymentMethod::retrieve($setupIntent->payment_method);
   $pm->attach(['customer' => $customer->id]);
 
   $name = trim($_POST['name']);
@@ -104,6 +113,7 @@ try {
     true,
   ]);
 
+  unset($_SESSION['StripeSetupIntentId']);
   $_SESSION['PayCardSetupSuccess'] = true;
   $_SESSION['PayCardSetupSuccessBrand'] = getCardBrand($brand);
   header("Location: " . autoUrl("payments/cards"));
