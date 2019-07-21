@@ -62,7 +62,7 @@ include "galaMenu.php"; ?>
         <div class="alert alert-warning">
           <strong>We've already processed this gala entry, our closing date has passed or you have already paid</strong> <br>We can't let you make any changes here. Contact the Gala Administrator directly.
         </div>
-        <?php $disabled .= " onclick=\"return false;\" ";
+        <?php $disabled .= " onclick=\"return false;\" disabled ";
       } else { ?>
         <h2>Select Swims</h2>
       <?php } ?>

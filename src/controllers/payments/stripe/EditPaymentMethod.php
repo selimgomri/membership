@@ -77,6 +77,14 @@ $pm = \Stripe\PaymentMethod::retrieve($card['MethodID']);
         </p>
       </form>
 
+      <h2>Forget card</h2>
+      <p class="lead">Forget this card to remove it from your list</p>
+      <p class="mb-5">
+        <a href="<?=autoUrl("payments/cards/" . $id . "/delete")?>" class="btn btn-danger">
+          Forget card
+        </a>
+      </p>
+
       <div class="text-muted">
         <p>
           We accept Visa, MasterCard and American Express.

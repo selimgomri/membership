@@ -58,7 +58,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
       <form action="" method="post">
         <?php if ($entry != null) { ?>
         <h2>Select entries to pay for</h2>
-        <p>Select which galas you would like to pay for. You can pay for all, some or just one of your gala entries.</p>
+        <p class="lead">Select which galas you would like to pay for. <strong>You can pay for all, some or just one of your gala entries in a single payment.</strong></p>
 
         <ul class="list-group mb-3">
 					<?php do { ?>
@@ -117,6 +117,15 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 					</li>
 					<?php } while ($entry = $entries->fetch(PDO::FETCH_ASSOC)); ?>
 				</ul>
+
+        <div class="alert alert-info">
+          <p class="mb-0">
+            <strong>Need to pay for more than one gala entry?</strong>
+          </p>
+          <p class="mb-0">
+            Select all entries you wish to pay for to pay for all in one payment.
+          </p>
+        </div>
 
         <p>
           <button type="submit" class="btn btn-success">

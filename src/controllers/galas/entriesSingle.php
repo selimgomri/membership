@@ -27,7 +27,7 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 
       if ($row['EntryProcessed'] == 1 || ($closingDate <= $theDate)) {
         $content .= "<div class=\"alert alert-warning\"><strong>We've already processed this gala entry, or our closing date has passed</strong> <br>If you need to make changes, contact the Gala Coordinator directly</div>";
-        $disabled .= " onclick=\"return false;\" ";
+        $disabled .= " onclick=\"return false;\" disabled ";
       }
       else {
         $content .= "<h2>Select Swims</h2>";

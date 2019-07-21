@@ -326,6 +326,10 @@ if (env('STRIPE') != null) {
 			include 'stripe/EditPaymentMethodPost.php';
 		});
 
+		$this->get('/{id}:int/delete', function($id) {
+			include 'stripe/DeleteCard.php';
+		});
+
 		if ($_SESSION['AccessLevel'] != "Parent") {
 			$this->group('/terminal', function() {
 				include 'stripe/terminal/router.php';

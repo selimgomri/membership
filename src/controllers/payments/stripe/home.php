@@ -46,6 +46,17 @@ include BASE_PATH . 'views/header.php';
       unset($_SESSION['PayCardSetupSuccess']);
       ?>
 
+      <?php if (isset($_SESSION['CardDeleted'])) { ?>
+        <div class="alert alert-success">
+          <p class="mb-0">
+            <strong>Card deleted</strong>
+          </p>
+          <p class="mb-0">
+            Your card details will no longer be shown in the list of saved cards.
+          </p>
+        </div>
+      <?php unset($_SESSION['CardDeleted']); } ?>
+
       <div>
         <p>
           We proudly accept all major credit and debit cards!

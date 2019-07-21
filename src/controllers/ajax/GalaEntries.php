@@ -216,40 +216,29 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       $content .= '<td class="d-print-none">';
 
       // If the entry has been processes, show a ticked checkbox
-      if ($row['EntryProcessed'] == 1) {
-        $content .= "
-        <div class=\"custom-control custom-checkbox\">
-          <input type=\"checkbox\" value=\"1\" checked data-button-action=\"mark-processed\" class=\"custom-control-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
-          <label class=\"custom-control-label\" for=\"processedEntry-" . $row['EntryID'] . "\">Processed?</label>
-        </div>";
-      }
-
-      // Else output an empty cell
-      else {
-        $content .= "
-        <div class=\"custom-control custom-checkbox\">
-          <input type=\"checkbox\" value=\"1\" data-button-action=\"mark-processed\" class=\"custom-control-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
-          <label class=\"custom-control-label\" for=\"processedEntry-" . $row['EntryID'] . "\">Processed?</label>
-        </div>";
-      }
+      $content .= "
+      <div class=\"custom-control custom-checkbox\">
+        <input type=\"checkbox\" value=\"1\" ";
+        if ($row['EntryProcessed'] == 1) {
+          $content .= ' checked ';
+        }
+        $content .= " data-button-action=\"mark-processed\" class=\"custom-control-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
+        <label class=\"custom-control-label\" for=\"processedEntry-" . $row['EntryID'] . "\">Processed?</label>
+      </div>";
 
       // If the entry has been processes, show a ticked checkbox
+      $content .= "
+      <div class=\"custom-control custom-checkbox\">
+        <input type=\"checkbox\" value=\"1\" ";
       if ($row['Charged'] == 1) {
-        $content .= "
-        <div class=\"custom-control custom-checkbox\">
-          <input type=\"checkbox\" value=\"1\" checked data-button-action=\"mark-paid\" class=\"custom-control-input\" id=\"chargedEntry-" . $row['EntryID'] . "\">
-          <label class=\"custom-control-label\" for=\"chargedEntry-" . $row['EntryID'] . "\">Paid?</label>
-        </div>";
+        $content .= ' checked ';
       }
-
-      // Else output an empty cell
-      else {
-        $content .= "
-        <div class=\"custom-control custom-checkbox\">
-          <input type=\"checkbox\" value=\"1\" data-button-action=\"mark-paid\" class=\"custom-control-input\" id=\"chargedEntry-" . $row['EntryID'] . "\">
-          <label class=\"custom-control-label\" for=\"chargedEntry-" . $row['EntryID'] . "\">Paid?</label>
-        </div>";
+      if ($row['StripePayment']) {
+        $content .= ' disabled ';
       }
+      $content .= " data-button-action=\"mark-paid\" class=\"custom-control-input\" id=\"chargedEntry-" . $row['EntryID'] . "\">
+        <label class=\"custom-control-label\" for=\"chargedEntry-" . $row['EntryID'] . "\">Paid?</label>
+      </div>";
 
       $content .= '</td>';
 
