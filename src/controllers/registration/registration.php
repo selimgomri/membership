@@ -1,6 +1,9 @@
 <?php
 
 use Respect\Validation\Validator as v;
+use Brick\PhoneNumber\PhoneNumber;
+use Brick\PhoneNumber\PhoneNumberParseException;
+use Brick\PhoneNumber\PhoneNumberFormat;
 
 global $db;
 
@@ -29,6 +32,10 @@ if ($_SESSION['RegistrationMode'] == "Family-Manual") {
 
 // Registration Form Handler
 
+
+$status = true;
+$statusMessage = "";
+
 $forename = trim(ucwords($_POST['forename']));
 $surname = trim(ucwords($_POST['surname']));
 //$username = mysqli_real_escape_string($link, mb_strtolower(trim(htmlspecialchars($_POST['username']))));
@@ -36,7 +43,18 @@ $username = $forename . $surname . "-" . md5(generateRandomString(20) . time());
 $password1 = trim($_POST['password1']);
 $password2 = trim($_POST['password2']);
 $email = mb_strtolower(trim($_POST['email']));
-$mobile = "+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", $_POST['mobile'])), '0'); // Removes anything that isn't a digit
+$mobile = null;
+try {
+  $number = PhoneNumber::parse($_POST['mobile'], 'GB');
+  $mobile = $number->format(PhoneNumberFormat::E164);
+}
+catch (PhoneNumberParseException $e) {
+  // 'The string supplied is too short to be a phone number.'
+  $status = false;
+  $statusMessage .= "
+  <li>That phone number is not valid</li>
+  ";
+}
 $emailAuth = 0;
 if ($_POST['emailAuthorise'] != 1) {
   $emailAuth = 0;
@@ -50,22 +68,6 @@ if ($_POST['smsAuthorise'] != 1) {
   $smsAuth = 1;
 }
 
-$status = true;
-$statusMessage = "";
-
-/*
-$username = preg_replace('/\s+/', '', $username);
-
-$usernameSQL = "SELECT * FROM users WHERE Username = '$username' LIMIT 0, 30 ";
-$usernameResult = mysqli_query($link, $usernameSQL);
-if (mysqli_num_rows($usernameResult) > 0) {
-  $status = false;
-  $statusMessage .= "
-  <li>An internal error occured</li>
-  ";
-}
-*/
-
 if (!v::stringType()->length(7, null)->validate($password1)) {
   $status = false;
   $statusMessage .= "
@@ -78,13 +80,6 @@ if (!v::email()->validate($email)) {
   $status = false;
   $statusMessage .= "
   <li>That email address is not valid</li>
-  ";
-}
-
-if (!v::phone()->validate($mobile)) {
-  $status = false;
-  $statusMessage .= "
-  <li>That phone number is not valid</li>
   ";
 }
 

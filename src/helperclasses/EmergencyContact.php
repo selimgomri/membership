@@ -22,7 +22,12 @@ class EmergencyContact {
 		if (!v::phone()->validate($contactNumber)) {
 			return false;
 		}
-		$this->contactNumber = "+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", $contactNumber)), '0');
+		try {
+			$number = \Brick\PhoneNumber\PhoneNumber::parse($contactNumber, 'GB');
+			$this->contactNumber = $number->format(\Brick\PhoneNumber\PhoneNumberFormat::E164);
+		} catch (PhoneNumberParseException $e) {
+			return false;
+		}
 		$this->user = $user;
   }
 
@@ -55,7 +60,39 @@ class EmergencyContact {
 	}
 
 	public function getContactNumber() {
-		return $this->contactNumber;
+		try {
+			$number = \Brick\PhoneNumber\PhoneNumber::parse($this->contactNumber);
+			return $this->contactNumber = $number->format(\Brick\PhoneNumber\PhoneNumberFormat::E164);
+		} catch (PhoneNumberParseException $e) {
+			return false;
+		}
+	}
+
+	public function getNationalContactNumber() {
+		try {
+			$number = \Brick\PhoneNumber\PhoneNumber::parse($this->contactNumber);
+			return $this->contactNumber = $number->format(\Brick\PhoneNumber\PhoneNumberFormat::NATIONAL);
+		} catch (PhoneNumberParseException $e) {
+			return false;
+		}
+	}
+
+	public function getInternationalContactNumber() {
+		try {
+			$number = \Brick\PhoneNumber\PhoneNumber::parse($this->contactNumber);
+			return $this->contactNumber = $number->format(\Brick\PhoneNumber\PhoneNumberFormat::INTERNATIONAL);
+		} catch (PhoneNumberParseException $e) {
+			return false;
+		}
+	}
+
+	public function getRFCContactNumber() {
+		try {
+			$number = \Brick\PhoneNumber\PhoneNumber::parse($this->contactNumber);
+			return $this->contactNumber = $number->format(\Brick\PhoneNumber\PhoneNumberFormat::RFC3966);
+		} catch (PhoneNumberParseException $e) {
+			return false;
+		}
 	}
 
 	public function getID() {
@@ -87,7 +124,12 @@ class EmergencyContact {
 		if (!v::phone()->validate($contactNumber)) {
 			return false;
 		}
-		$this->contactNumber = "+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", $contactNumber)), '0');
+		try {
+			$number = \Brick\PhoneNumber\PhoneNumber::parse($contactNumber, 'GB');
+			$this->contactNumber = $number->format(\Brick\PhoneNumber\PhoneNumberFormat::E164);
+		} catch (PhoneNumberParseException $e) {
+			return false;
+		}
     try {
   		$sql = $this->dbconn->prepare("UPDATE `emergencyContacts` SET `ContactNumber` = ? WHERE `ID` = ?");
       $sql->execute([$this->contactNumber, $this->contactId]);

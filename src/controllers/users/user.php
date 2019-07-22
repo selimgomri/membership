@@ -2,6 +2,10 @@
 
 $use_white_background = true;
 
+use Brick\PhoneNumber\PhoneNumber;
+use Brick\PhoneNumber\PhoneNumberParseException;
+use Brick\PhoneNumber\PhoneNumberFormat;
+
 global $db;
 
 $userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, AccessLevel FROM users WHERE UserID = ?");
@@ -99,6 +103,14 @@ if ($json != null) {
   $addr = json_decode($json);
 }
 
+$number = null;
+try {
+  $number = PhoneNumber::parse($info['Mobile']);
+}
+catch (PhoneNumberParseException $e) {
+  $number = false;
+}
+
 $pagetitle = htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) . " Information";
 $title = null;
 include BASE_PATH . "views/header.php";
@@ -134,10 +146,12 @@ include BASE_PATH . "views/header.php";
         <h3 class="h6">Email</h3>
         <p class="text-truncate"><a href="mailto:<?=htmlspecialchars($info['EmailAddress'])?>"><?=htmlspecialchars($info['EmailAddress'])?></a></p>
       </div>
+      <?php if ($number !== false) { ?>
       <div class="col-sm-6 col-md-4">
         <h3 class="h6">Phone</h3>
-        <p><a href="tel:<?=htmlspecialchars($info['Mobile'])?>"><?=htmlspecialchars($info['Mobile'])?></a></p>
+        <p><a href="<?=htmlspecialchars($number->format(PhoneNumberFormat::RFC3966))?>"><?=htmlspecialchars($number->format(PhoneNumberFormat::NATIONAL))?></a></p>
       </div>
+      <?php } ?>
     </div>
   </div>
 

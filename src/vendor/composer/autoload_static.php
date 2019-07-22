@@ -22,6 +22,10 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
     );
 
     public static $prefixLengthsPsr4 = array (
+        'l' => 
+        array (
+            'libphonenumber\\' => 15,
+        ),
         'Z' => 
         array (
             'Zxing\\' => 6,
@@ -90,6 +94,7 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
             'GuzzleHttp\\' => 11,
             'Goutte\\' => 7,
             'GoCardlessPro\\' => 14,
+            'Giggsey\\Locale\\' => 15,
             'GeoIp2\\' => 7,
         ),
         'F' => 
@@ -114,11 +119,17 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         ),
         'B' => 
         array (
+            'Brick\\Postcode\\' => 15,
+            'Brick\\PhoneNumber\\' => 18,
             'BaconQrCode\\' => 12,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'libphonenumber\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src',
+        ),
         'Zxing\\' => 
         array (
             0 => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib',
@@ -289,6 +300,10 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         array (
             0 => __DIR__ . '/..' . '/gocardless/gocardless-pro/lib',
         ),
+        'Giggsey\\Locale\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/giggsey/locale/src',
+        ),
         'GeoIp2\\' => 
         array (
             0 => __DIR__ . '/..' . '/geoip2/geoip2/src',
@@ -324,6 +339,14 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'CLSASC\\EquivalentTime\\' => 
         array (
             0 => __DIR__ . '/..' . '/clsasc/equivalent-time/src/CLSASC/EquivalentTime',
+        ),
+        'Brick\\Postcode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/brick/postcode/src',
+        ),
+        'Brick\\PhoneNumber\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/brick/phonenumber/src',
         ),
         'BaconQrCode\\' => 
         array (

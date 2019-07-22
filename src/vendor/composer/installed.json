@@ -51,6 +51,89 @@
         "homepage": "https://github.com/Bacon/BaconQrCode"
     },
     {
+        "name": "brick/phonenumber",
+        "version": "0.2.1",
+        "version_normalized": "0.2.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/brick/phonenumber.git",
+            "reference": "83515286b3ab4695fe7ff89e32bfba4857285821"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/brick/phonenumber/zipball/83515286b3ab4695fe7ff89e32bfba4857285821",
+            "reference": "83515286b3ab4695fe7ff89e32bfba4857285821",
+            "shasum": ""
+        },
+        "require": {
+            "giggsey/libphonenumber-for-php": "7.* || 8.*",
+            "php": ">=7.1"
+        },
+        "require-dev": {
+            "php-coveralls/php-coveralls": "2.*",
+            "phpunit/phpunit": "7.*"
+        },
+        "time": "2018-11-12T21:58:26+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Brick\\PhoneNumber\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "Phone number library",
+        "keywords": [
+            "brick",
+            "phone",
+            "phone number",
+            "phonenumber"
+        ]
+    },
+    {
+        "name": "brick/postcode",
+        "version": "0.2.1",
+        "version_normalized": "0.2.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/brick/postcode.git",
+            "reference": "9519199cffc50de6546efb3bcdae848d5a6b6c2c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/brick/postcode/zipball/9519199cffc50de6546efb3bcdae848d5a6b6c2c",
+            "reference": "9519199cffc50de6546efb3bcdae848d5a6b6c2c",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=7.1"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "7.*",
+            "satooshi/php-coveralls": "2.*"
+        },
+        "time": "2018-03-01T13:14:12+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Brick\\Postcode\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "A library to format and validate postcodes",
+        "keywords": [
+            "brick",
+            "postcode"
+        ]
+    },
+    {
         "name": "bshaffer/oauth2-server-php",
         "version": "v1.11.1",
         "version_normalized": "1.11.1.0",
@@ -733,6 +816,127 @@
             "geolocation",
             "maxmind"
         ]
+    },
+    {
+        "name": "giggsey/libphonenumber-for-php",
+        "version": "8.10.15",
+        "version_normalized": "8.10.15.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/giggsey/libphonenumber-for-php.git",
+            "reference": "e67ce0839ba448988d109c6c17718472a5d9ccff"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/e67ce0839ba448988d109c6c17718472a5d9ccff",
+            "reference": "e67ce0839ba448988d109c6c17718472a5d9ccff",
+            "shasum": ""
+        },
+        "require": {
+            "ext-mbstring": "*",
+            "giggsey/locale": "^1.7",
+            "php": ">=5.3.2"
+        },
+        "require-dev": {
+            "pear/pear-core-minimal": "^1.9",
+            "pear/pear_exception": "^1.0",
+            "pear/versioncontrol_git": "^0.5",
+            "phing/phing": "^2.7",
+            "php-coveralls/php-coveralls": "^1.0|^2.0",
+            "phpunit/phpunit": "^4.8.36|^5.0",
+            "symfony/console": "^2.8|^3.0"
+        },
+        "time": "2019-07-15T14:58:27+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "8.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "libphonenumber\\": "src/"
+            },
+            "exclude-from-classmap": [
+                "/src/data/",
+                "/src/carrier/data/",
+                "/src/geocoding/data/",
+                "/src/timezone/data/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Joshua Gigg",
+                "email": "giggsey@gmail.com",
+                "homepage": "https://giggsey.com/"
+            }
+        ],
+        "description": "PHP Port of Google's libphonenumber",
+        "homepage": "https://github.com/giggsey/libphonenumber-for-php",
+        "keywords": [
+            "geocoding",
+            "geolocation",
+            "libphonenumber",
+            "mobile",
+            "phonenumber",
+            "validation"
+        ]
+    },
+    {
+        "name": "giggsey/locale",
+        "version": "1.7.1",
+        "version_normalized": "1.7.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/giggsey/Locale.git",
+            "reference": "b8030fc8df13cdfbecba318588de2d52b49c9b50"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/giggsey/Locale/zipball/b8030fc8df13cdfbecba318588de2d52b49c9b50",
+            "reference": "b8030fc8df13cdfbecba318588de2d52b49c9b50",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "require-dev": {
+            "pear/pear-core-minimal": "^1.9",
+            "pear/pear_exception": "^1.0",
+            "pear/versioncontrol_git": "^0.5",
+            "phing/phing": "~2.7",
+            "phpunit/phpunit": "^4.8|^5.0",
+            "satooshi/php-coveralls": "^1.0",
+            "symfony/console": "^2.8|^3.0|^4.0",
+            "symfony/filesystem": "^2.8|^3.0|^4.0",
+            "symfony/finder": "^2.8|^3.0|^4.0",
+            "symfony/process": "^2.8|^3.0|^4.0"
+        },
+        "time": "2019-04-26T07:28:50+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Giggsey\\Locale\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Joshua Gigg",
+                "email": "giggsey@gmail.com",
+                "homepage": "http://giggsey.com/"
+            }
+        ],
+        "description": "Locale functions required by libphonenumber-for-php"
     },
     {
         "name": "gocardless/gocardless-pro",
