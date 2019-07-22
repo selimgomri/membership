@@ -1,6 +1,9 @@
 <?php
 
 use Respect\Validation\Validator as v;
+use Brick\PhoneNumber\PhoneNumber;
+use Brick\PhoneNumber\PhoneNumberParseException;
+use Brick\PhoneNumber\PhoneNumberFormat;
 global $db;
 
 try {
@@ -17,7 +20,6 @@ try {
     // Can't register so throw an exception to get out of this code block.
     throw new Exception();
   }
-  $mobile = "+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", trim($_POST['phone']))), '0'); // Removes anything that isn't a digit
   
   // The password will be used as a secure token allowing the parent to follow a link.
   $password = hash('sha256', random_int(0, 999999));
@@ -27,7 +29,13 @@ try {
     $status = false;
   }
 
-  if (!v::phone()->validate($mobile)) {
+  $mobile = null;
+  try {
+    $number = PhoneNumber::parse($_POST['phone'], 'GB');
+    $mobile = $number->format(PhoneNumberFormat::E164);
+  }
+  catch (PhoneNumberParseException $e) {
+    // 'The string supplied is too short to be a phone number.'
     $status = false;
   }
 

@@ -1,5 +1,9 @@
 <?php
 
+use Brick\PhoneNumber\PhoneNumber;
+use Brick\PhoneNumber\PhoneNumberParseException;
+use Brick\PhoneNumber\PhoneNumberFormat;
+
 global $db;
 $access = $_SESSION['AccessLevel'];
 
@@ -92,164 +96,166 @@ $content .= '<!--
 </ul>-->
 <div class="row justify-content-center mt-3">
   <div class="col-12 col-lg-4">
-<div class="mb-3 cell" id="about">
-  <h2 class="border-bottom border-gray pb-2 mb-0">About ' . $rowSwim["MForename"] . '</h2>
-  <div class="media pt-2">
-    <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
-      <strong class="d-block text-gray-dark">Date of Birth</strong>
-      ' . date('j F Y', strtotime($rowSwim['DateOfBirth'])) . '
-    </p>
+<div class="mb-3 card" id="about">
+  <div class="card-body">
+    <h2 class="mb-0">About ' . htmlspecialchars($rowSwim["MForename"]) . '</h2>
   </div>
-  <div class="media pt-2">
-    <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
-      <strong class="d-block text-gray-dark">Swim England Number</strong>
-      <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . htmlspecialchars($rowSwim["ASANumber"]) . '" target="_blank" title="ASA Biographical Data"><span class="mono">' . htmlspecialchars($rowSwim["ASANumber"]) . '</span> <i class="fa fa-external-link" aria-hidden="true"></i></a>
-    </p>
-  </div>
-  <div class="media pt-2">
-    <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
-      <strong class="d-block text-gray-dark">Swim England Membership Category</strong>
-      ' . htmlspecialchars($rowSwim["ASACategory"]) . '
-    </p>
-  </div>
-  <div class="media pt-2 d-print-none">
-    <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
-      <strong class="d-block text-gray-dark">Parent Account Setup
-      Information</strong>
-      <a href="' . autoUrl("swimmers/" . $id . "/parenthelp") . '">Access Key for ' .
-      htmlspecialchars($rowSwim["MForename"]) . '</a>
-    </p>
-  </div>';
-  if (defined("IS_CLS") && IS_CLS) {
-  $content .= '
-  <div class="media pt-2 d-print-none">
-    <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
-      <strong class="d-block text-gray-dark">Swimmer Membership Card</strong>
-      <a href="' . autoUrl("swimmers/" . $id . "/membershipcard") . '" target="_blank">Print Card</a>
-    </p>
-  </div>';
-  }
-  $content .= '
-  <div class="media pt-2">
-    <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
-      <strong class="d-block text-gray-dark">Attendance</strong>
-      <a href="' . autoUrl("swimmers/" . $id . "/attendance") . '">' .
-      getAttendanceByID(null, $id, 4) . '% over the last 4 weeks, ' .
-      getAttendanceByID(null, $id) . '% over all time</a>
-    </p>
-  </div>
-  <div class="media pt-2">
-    <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
-      <strong class="d-block text-gray-dark">Sex</strong>
-      ' . htmlspecialchars($rowSwim["Gender"]) . '
-    </p>
-  </div>';
-  if ($access == "Admin" || $access == "Committee" || $access == "Coach") {
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <p class="mb-0">
+        <strong class="d-block text-gray-dark">Date of Birth</strong>
+        ' . date('j F Y', strtotime($rowSwim['DateOfBirth'])) . '
+      </p>
+    </li>
+    <li class="list-group-item">
+      <p class="mb-0">
+        <strong class="d-block text-gray-dark">Swim England Number</strong>
+        <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . htmlspecialchars($rowSwim["ASANumber"]) . '" target="_blank" title="ASA Biographical Data"><span class="mono">' . htmlspecialchars($rowSwim["ASANumber"]) . '</span> <i class="fa fa-external-link" aria-hidden="true"></i></a>
+      </p>
+    </li>
+    <li class="list-group-item">
+      <p class="mb-0">
+        <strong class="d-block text-gray-dark">Swim England Membership Category</strong>
+        ' . htmlspecialchars($rowSwim["ASACategory"]) . '
+      </p>
+    </li>
+    <li class="list-group-item">
+      <p class="mb-0">
+        <strong class="d-block text-gray-dark">Parent Account Setup
+        Information</strong>
+        <a href="' . autoUrl("swimmers/" . $id . "/parenthelp") . '">Access Key for ' .
+        htmlspecialchars($rowSwim["MForename"]) . '</a>
+      </p>
+    </li>';
+    if (bool(env('IS_CLS'))) {
     $content .= '
-    <div class="media pt-2">
-      <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
+    <li class="list-group-item">
+      <p class="mb-0">
+        <strong class="d-block text-gray-dark">Swimmer Membership Card</strong>
+        <a href="' . autoUrl("swimmers/" . $id . "/membershipcard") . '" target="_blank">Print Card</a>
+      </p>
+    </li>';
+    }
+    $content .= '
+    <li class="list-group-item">
+      <p class="mb-0">
+        <strong class="d-block text-gray-dark">Attendance</strong>
+        <a href="' . autoUrl("swimmers/" . $id . "/attendance") . '">' .
+        getAttendanceByID(null, $id, 4) . '% over the last 4 weeks, ' .
+        getAttendanceByID(null, $id) . '% over all time</a>
+      </p>
+    </li>
+    <li class="list-group-item">
+      <p class="mb-0">
+        <strong class="d-block text-gray-dark">Sex</strong>
+        ' . htmlspecialchars($rowSwim["Gender"]) . '
+      </p>
+    </li>';
+    if ($access == "Admin" || $access == "Committee" || $access == "Coach") {
+    $content .= '
+    <li class="list-group-item">
+      <p class="mb-0">
         <strong class="d-block text-gray-dark">Move Swimmer to New Squad</strong>
         <a href="' . autoUrl("swimmers/" . $id . "/new-move") . '">New Move</a>
       </p>
-    </div>';
-  }
-  $content .= '
-  <div class="media pt-2">
-    <div class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
-      <h3>
-        Medical Notes
-      </h3>
-
-      <h4>
-        Medical Conditions or Disabilities
-      </h4>';
-      if ($rowSwim["Conditions"] != "") {
-        $content .= $markdown->text($rowSwim["Conditions"]);
-      } else {
-        $content .= '<p>None</p>';
-      }
-
-      $content .= '
-      <h4>
-        Allergies
-      </h4>';
-      if ($rowSwim["Allergies"] != "") {
-        $content .= $markdown->text($rowSwim["Allergies"]);
-      } else {
-        $content .= '<p>None</p>';
-      }
-
-      $content .= '
-      <h4>
-        Medication
-      </h4>';
-      if ($rowSwim["Medication"] != "") {
-        $content .= $markdown->text($rowSwim["Medication"]);
-      } else {
-        $content .= '<p>None</p>';
-      }
-
-    $content .= '</div>
-  </div>
-  ';
-  if ($rowSwim["OtherNotes"] != "") {
+    </li>';
+    }
     $content .= '
-    <div class="media pt-2">
-      <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
+    <li class="list-group-item">
+      <div class="mb-0">
+        <h3>
+          Medical Notes
+        </h3>
+
+        <h4>
+          Medical Conditions or Disabilities
+        </h4>';
+        if ($rowSwim["Conditions"] != "") {
+          $content .= $markdown->text($rowSwim["Conditions"]);
+        } else {
+          $content .= '<p>None</p>';
+        }
+
+        $content .= '
+        <h4>
+          Allergies
+        </h4>';
+        if ($rowSwim["Allergies"] != "") {
+          $content .= $markdown->text($rowSwim["Allergies"]);
+        } else {
+          $content .= '<p>None</p>';
+        }
+
+        $content .= '
+        <h4>
+          Medication
+        </h4>';
+        if ($rowSwim["Medication"] != "") {
+          $content .= $markdown->text($rowSwim["Medication"]);
+        } else {
+          $content .= '<p>None</p>';
+        }
+
+      $content .= '</div>
+    </li>
+    ';
+    if ($rowSwim["OtherNotes"] != "") {
+    $content .= '
+    <li class="list-group-item">
+      <p class="mb-0">
         <strong class="d-block text-gray-dark">Other Notes</strong>
         ' . htmlspecialchars($rowSwim["OtherNotes"]) . '
       </p>
-    </div>';
-  }
-  $content .= '
-  <div class="media pt-2">
-    <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
-      <strong class="d-block text-gray-dark">
-        Exempt from Squad and Membership Fees?
-      </strong>';
-  if ($rowSwim["ClubPays"] == 1){
-    $content .= 'Yes';
-  } else {
-    $content .= 'No <em>(Only swimmers at University are usually exempt from most
-    fees)</em>';
-  }
-  $content .= '
-    </p>
-  </div>';
+    </li>';
+    }
+    $content .= '
+    <li class="list-group-item">
+      <p class="mb-0">
+        <strong class="d-block text-gray-dark">
+          Exempt from Squad and Membership Fees?
+        </strong>';
+    if ($rowSwim["ClubPays"] == 1){
+      $content .= 'Yes';
+    } else {
+      $content .= 'No <em>(Only swimmers at University are usually exempt from most
+      fees)</em>';
+    }
+    $content .= '
+      </p>
+    </li></ul><div class="card-body">';
 	if ($access == "Admin" || $access == "Committee") {
-	  $content .= '
+    $content .= '
 	  <span class="d-block text-right mt-3 d-print-none">
 	    <a class="btn btn-success" href="' . autoUrl("swimmers/" . $id . "/edit") . '">Edit Details</a> <a class="btn btn-success" href="' . autoUrl("swimmers/" . $id . "/medical") . '">Edit Medical Notes</a>
-	  </span>
-		</div>';
+	  </span>';
 	}
 	else {
 		$content .= '
 	  <span class="d-block text-right mt-3 d-print-none">
 	    Please contact a Parent or Administrator if you need to make changes
-	  </span>
-		</div>';
-	}
+	  </span>';
+  }
+  $content .= '</div></div>';
 $content .= '
-  <div class="mb-3 cell" id="photo">
-    <h2 class="border-bottom border-gray pb-2 mb-2">Photography Permissions</h2>';
+  <div class="mb-3 card card-body" id="photo">
+    <h2>Photography Permissions</h2>';
     if (($rowSwim['Website'] != 1 || $rowSwim['Social'] != 1 || $rowSwim['Noticeboard'] != 1 || $rowSwim['FilmTraining'] != 1 || $rowSwim['ProPhoto'] != 1) && ($age < 18)) {
       $content .= '
       <p>There are limited photography permissions for this swimmer</p>
       <ul class="mb-0">';
-      if ($row['Website'] != 1) {
+      if (!isset($row['Website']) || !$row['Website']) {
         $content .= '<li>Photos <strong>must not</strong> be taken of this swimmer for our website</li>';
       }
-      if ($row['Social'] != 1) {
+      if (!isset($row['Social']) || !$row['Social']) {
         $content .= '<li>Photos <strong>must not</strong> be taken of this swimmer for our social media</li>';
       }
-      if ($row['Noticeboard'] != 1) {
+      if (!isset($row['Noticeboard']) || !$row['Noticeboard']) {
         $content .= '<li>Photos <strong>must not</strong> be taken of this swimmer for our noticeboard</li>';
       }
-      if ($row['FilmTraining'] != 1) {
+      if (!isset($row['FilmTraining']) || !$row['FilmTraining']) {
         $content .= '<li>This swimmer <strong>must not</strong> be filmed for the purposes of training</li>';
       }
-      if ($row['ProPhoto'] != 1) {
+      if (!isset($row['ProPhoto']) || !$row['ProPhoto']) {
         $content .= '<li>Photos <strong>must not</strong> be taken of this swimmer by photographers</li>';
       }
       $content .= '</ul>';
@@ -260,56 +266,54 @@ $content .= '
   $query = $db->prepare("SELECT `Forename`, `Surname`, users.UserID, `Mobile` FROM `members` INNER JOIN `users` ON users.UserID = members.UserID WHERE `MemberID` = ?");
   $query->execute([$id]);
   $row = $query->fetch(PDO::FETCH_ASSOC);
+  $mobile = PhoneNumber::parse($row['Mobile']);
   $content .= '
-    <div class="mb-3 cell" id="emergency">
+    <div class="mb-3 card" id="emergency">
+      <div class="card-body">
       <h2>Emergency Contacts</h2>';
       if ($row == null) {
       $content .= '<p class="lead">
         There are no contact details available.
       </p>
-      <p class="mb-0">This is because there is no Parent account connected</p>';
+      <p class="mb-0">This is because there is no Parent account connected</p></div>';
     } else {
       $contacts = new EmergencyContacts($db);
       $contacts->byParent($row['UserID']);
       $contactsArray = $contacts->getContacts();
-      $content .= '<p class="lead border-bottom border-gray pb-2 mb-0">
+      $content .= '<p class="lead mb-0">
         In an emergency you should try to contact
-      </p>';
-      $content .= '<div class="mb-3">';
-      $content .= '<div class="media pt-2">
-        <div class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
+      </p></div>';
+      $content .= '<ul class="list-group list-group-flush">';
+      $content .= '<li class="list-group-item">
           <p class="mb-0">
             <strong class="d-block">
               ' . htmlspecialchars($row['Forename'] . ' ' . $row['Surname']) . ' (Account Parent)
             </strong>
-            <a href="tel:' . htmlspecialchars($row['Mobile']) . '">
-              ' . htmlspecialchars($row['Mobile']) . '
+            <a href="' . htmlspecialchars($mobile->format(PhoneNumberFormat::RFC3966)) . '">
+              ' . htmlspecialchars($mobile->format(PhoneNumberFormat::NATIONAL)) . '
             </a>
           </p>
-        </div>
-      </div>';
+        </li>';
   		for ($i = 0; $i < sizeof($contactsArray); $i++) {
-  			$content .= '<div class="media pt-2">
-  				<div class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
+  			$content .= '<li class="list-group-item">
 						<p class="mb-0">
 							<strong class="d-block">
 								' . htmlspecialchars($contactsArray[$i]->getName()) . '
 							</strong>
-							<a href="tel:' . htmlspecialchars($contactsArray[$i]->getContactNumber()) . '">
-								' . htmlspecialchars($contactsArray[$i]->getContactNumber()) . '
+							<a href="tel:' . htmlspecialchars($contactsArray[$i]->getRFCContactNumber()) . '">
+								' . htmlspecialchars($contactsArray[$i]->getNationalContactNumber()) . '
 							</a>
 						</p>
-  				</div>
-  			</div>';
+  				</li>';
       }
-  		$content .= '</div>';
-      $content .= '<p class="mb-0">Make sure you understand the Emergency Operating Procedures</p>';
+  		$content .= '</ul>';
+      $content .= '<div class="card-body"><p class="mb-0">Make sure you know what to do in an emergency</p></div>';
     }
   $content .= '</div></div>
   <div class="col-12 col-lg-8">';
   $content.= '
-  <div class="mb-3 cell" id="times">
-    <h2 class="border-bottom border-gray pb-2 mb-2">Best Times</h2>';
+  <div class="mb-3 card card-body" id="times">
+    <h2>Best Times</h2>';
     $mob = app('request')->isMobile();
     $timeGet = $db->prepare("SELECT * FROM `times` WHERE `MemberID` = ? AND `Type` = ?");
     $timeGet->execute([$id, 'SCPB']);
@@ -327,7 +331,7 @@ $content .= '
     '50m Breast', '100m Breast', '200m Breast', '50m Fly', '100m Fly', '200m Fly',
     '50m Back', '100m Back', '200m Back', '100m IM', '200m IM', '400m IM'];
     $content.= '<table class="table table-sm table-borderless table-striped mb-2">
-    <thead class="thead-light"><tr class="pl-0"><th class="pl-0">Swim</th><th>Short Course</th>';
+    <thead class="thead-light"><tr><th>Swim</th><th>Short Course</th>';
     if (!$mob) {
       $content .= '<th>SC: Last 12 Months</th>';
     }
@@ -339,7 +343,7 @@ $content .= '
     <tbody>';
     for ($i = 0; $i < sizeof($ev); $i++) {
     if ($sc[$ev[$i]] != "" || $lc[$ev[$i]] != "") {
-      $content.= '<tr class="pl-0"><td class="pl-0"><strong>' . $evs[$i] . '</strong></td><td>';
+      $content.= '<tr><td><strong>' . $evs[$i] . '</strong></td><td>';
       if ($sc[$ev[$i]] != "") {
         $content.= $sc[$ev[$i]];
       }
@@ -358,8 +362,8 @@ $content .= '
     }
     $content.= '
     </tbody></table>
-    <div class="media d-print-none border-top border-gray pt-2">
-      <div class="media-body pb-0 mb-0 lh-125">
+    <div>
+      <div class="">
         <div class="row">
           <div class="col">
             <strong class="d-block text-gray-dark">View Online</strong>
@@ -460,24 +464,27 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
 	        chart.draw(data, options);
 	      }
 	    </script>
-      <div class=\"mb-3 cell w-100\">
-        <h2 class=\"border-bottom border-gray pb-2 mb-0\">Gala Statistics</h2>
+      <div class=\"mb-3 card card-body w-100\">
+        <h2>Gala Statistics</h2>
   	    <div class=\"w-100\" id=\"piechart\"></div>
   			<div class=\"w-100\" id=\"barchart\"></div>
       </div>
 	";
 }
 $content .= '
-<div class="mb-3 cell" id="squad">
-<h2 class="border-bottom border-gray pb-2 mb-0">Squad Information</h2>
-<div class="media pt-2">
-  <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
+<div class="mb-3 card" id="squad">
+<div class="card-body">
+<h2 class="mb-0">Squad Information</h2>
+</div>
+<ul class="list-group list-group-flush">
+<li class="list-group-item">
+  <p class="mb-0">
     <strong class="d-block text-gray-dark">Squad</strong>
     ' . htmlspecialchars($rowSwim["SquadName"]) . ' Squad
   </p>
-</div>
-<div class="media pt-2">
-  <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
+</li>
+<li class="list-group-item">
+  <p class="mb-0">
     <strong class="d-block text-gray-dark">Squad Fee</strong>';
     if ($rowSwim["ClubPays"] == 1) {
       $content .= $rowSwim['MForename'] . ' is Exempt from Squad Fees';
@@ -486,47 +493,47 @@ $content .= '
     }
     $content .= '
   </p>
-</div>';
+</li>';
 if ($rowSwim['SquadTimetable'] != "") {
   $content .= '
-  <div class="media pt-2 d-print-none">
-    <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
+  <li class="list-group-item">
+    <p class="mb-0">
       <strong class="d-block text-gray-dark">Squad Timetable</strong>
       <a href="' . htmlspecialchars($rowSwim["SquadTimetable"]) . '">Squad Timetable</a>
     </p>
-  </div>';
+  </li>';
 }
 if ($rowSwim['SquadCoC'] != "") {
   $content .= '
-  <div class="media pt-2 d-print-none">
-    <p class="media-body pb-2 mb-0 lh-125 border-bottom border-gray">
+  <li class="list-group-item">
+    <p class="mb-0">
       <strong class="d-block text-gray-dark">Squad Code of Conduct</strong>
       <a href="' . autoUrl("pages/codeofconduct/" . $rowSwim["SquadCoC"]) . '">Squad Code of Conduct</a>
     </p>
-  </div>';
+  </li>';
 }
 if ($rowSwim['SquadCoach'] != "") {
   $content .= '
-  <div class="media pt-2 mb-0">
-    <p class="media-body pb-2 mb-0 lh-125">
+  <li class="list-group-item">
+    <p class="mb-0">
       <strong class="d-block text-gray-dark">Squad Coach</strong>
       ' . htmlspecialchars($rowSwim["SquadCoach"]) . '
     </p>
-  </div>';
+  </li>';
 }
-$content .= '</div>';
+$content .= '</ul></div>';
 
 if ($mostRecentForm != null) {
-  $content .= '<div class="cell"><h2>Most Recent Returned Forms</h2><ul class="list-unstyled mb-0">';
+  $content .= '<div class="card"><div class="card-body"><h2 class="mb-0">Most Recent Returned Forms</h2></div><ul class="list-group list-group-flush">';
   do {
-    $datetime = new DateTime($mostRecentForm['Now'], new DateTimeZone('UTC'));
+    $datetime = new DateTime($mostRecentForm['Date'], new DateTimeZone('UTC'));
     $datetime->setTimezone(new DateTimeZone('Europe/London'));
     $formDate = $datetime->format('l j F Y');
-    $content .= '<li><strong>' . htmlspecialchars($mostRecentForm['Form']) . '</strong>, Returned ' . $formDate . '</li>';
+    $content .= '<li class="list-group-item"><strong>' . htmlspecialchars($mostRecentForm['Form']) . '</strong>, Returned ' . $formDate . '</li>';
   } while ($mostRecentForm = $mostRecentForms->fetch(PDO::FETCH_ASSOC));
 }
 
-$content .= '</div></div>';
+$content .= '</ul></div>';
 
 $fluidContainer = true;
 

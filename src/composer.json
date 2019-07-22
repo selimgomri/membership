@@ -16,6 +16,8 @@
         "pragmarx/google2fa": "^4.0",
         "dompdf/dompdf": "^0.8.3",
         "erusev/parsedown-extra": "^0.7.1",
-        "twilio/sdk": "^5.33"
+        "twilio/sdk": "^5.33",
+        "brick/phonenumber": "^0.2.1",
+        "brick/postcode": "^0.2.1"
     }
 }

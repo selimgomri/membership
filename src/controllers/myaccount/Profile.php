@@ -1,4 +1,9 @@
 <?php
+
+use Brick\PhoneNumber\PhoneNumber;
+use Brick\PhoneNumber\PhoneNumberParseException;
+use Brick\PhoneNumber\PhoneNumberFormat;
+
 $fluidContainer = true;
 
 
@@ -27,7 +32,8 @@ $forename = $row['Forename'];
 $surname = $row['Surname'];
 $access = $row['AccessLevel'];
 $userID = $row['UserID'];
-$mobile = $row['Mobile'];
+$mobile = PhoneNumber::parse($row['Mobile'], 'GB');
+$oldMobile = $mobile->format(PhoneNumberFormat::E164);
 $emailComms = $row['EmailComms'];
 $mobileComms = $row['MobileComms'];
 
@@ -51,15 +57,20 @@ if ($_POST['surname'] != $surname) {
 }
 
 if (!empty($_POST['mobile'])) {
-$newMobile = mysqli_real_escape_string($link, "+44" .
-ltrim(preg_replace('/\D/', '', str_replace('+44', '', $_POST['mobile'])),
-'0'));
-if ($newMobile != $mobile) {
-  $sql = "UPDATE `users` SET `Mobile` = '$newMobile' WHERE `UserID` = '$userID'";
-  mysqli_query($link, $sql);
-  $mobileUpdate = true;
-  $update = true;
-}
+  $newMobile = null;
+  try {
+    $mobile = PhoneNumber::parse($_POST['mobile'], 'GB');
+    $newMobile = $mobile->format(PhoneNumberFormat::E164);
+    if ($newMobile != $oldMobile) {
+      $sql = $db->prepare("UPDATE `users` SET `Mobile` = ? WHERE `UserID` = ?");
+      $sql->execute([$newMobile, $userID]);
+      $mobileUpdate = true;
+      $update = true;
+    }
+  }
+  catch (PhoneNumberParseException $e) {
+    $status = false;
+  }
 }
 $post = app('request')->body;
 if (app('request')->method == "POST") {
@@ -156,7 +167,6 @@ include BASE_PATH . "views/header.php";
     $surname = $row['Surname'];
     $access = $row['AccessLevel'];
     $userID = $row['UserID'];
-    $mobile = $row['Mobile'];
     $emailComms = $row['EmailComms'];
     $mobileComms = $row['MobileComms'];
     if ($emailComms==1) {
@@ -213,7 +223,7 @@ include BASE_PATH . "views/header.php";
           </div>
           <div class="form-group">
             <label for="mobile">Mobile Number</label>
-            <input type="tel" class="form-control" name="mobile" id="mobile" aria-describedby="mobileHelp" placeholder="Mobile Number" value="<?=htmlspecialchars($mobile)?>">
+            <input type="tel" class="form-control" name="mobile" id="mobile" aria-describedby="mobileHelp" placeholder="Mobile Number" value="<?=htmlspecialchars($mobile->format(PhoneNumberFormat::E164))?>">
             <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number. Only <abbr title="United Kingdom (+44)">UK phone numbers</abbr> are accepted.</small>
           </div>
           <div class="form-group">

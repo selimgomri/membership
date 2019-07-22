@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'libphonenumber\\' => array($vendorDir . '/giggsey/libphonenumber-for-php/src'),
     'Zxing\\' => array($vendorDir . '/khanamiryan/qrcode-detector-decoder/lib'),
     'WhichBrowser\\' => array($vendorDir . '/whichbrowser/parser/src', $vendorDir . '/whichbrowser/parser/tests/src'),
     'Twilio\\' => array($vendorDir . '/twilio/sdk/Twilio'),
@@ -48,6 +49,7 @@ return array(
     'GuzzleHttp\\' => array($vendorDir . '/guzzlehttp/guzzle/src'),
     'Goutte\\' => array($vendorDir . '/fabpot/goutte/Goutte'),
     'GoCardlessPro\\' => array($vendorDir . '/gocardless/gocardless-pro/lib'),
+    'Giggsey\\Locale\\' => array($vendorDir . '/giggsey/locale/src'),
     'GeoIp2\\' => array($vendorDir . '/geoip2/geoip2/src'),
     'FontLib\\' => array($vendorDir . '/phenx/php-font-lib/src/FontLib'),
     'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qr-code/src'),
@@ -57,5 +59,7 @@ return array(
     'DASPRiD\\Enum\\' => array($vendorDir . '/dasprid/enum/src'),
     'Composer\\CaBundle\\' => array($vendorDir . '/composer/ca-bundle/src'),
     'CLSASC\\EquivalentTime\\' => array($vendorDir . '/clsasc/equivalent-time/src/CLSASC/EquivalentTime'),
+    'Brick\\Postcode\\' => array($vendorDir . '/brick/postcode/src'),
+    'Brick\\PhoneNumber\\' => array($vendorDir . '/brick/phonenumber/src'),
     'BaconQrCode\\' => array($vendorDir . '/bacon/bacon-qr-code/src'),
 );

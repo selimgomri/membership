@@ -1,6 +1,8 @@
 <?php
 
-$use_white_background = true;
+use Brick\PhoneNumber\PhoneNumber;
+use Brick\PhoneNumber\PhoneNumberParseException;
+use Brick\PhoneNumber\PhoneNumberFormat;
 
 global $db;
 
@@ -12,6 +14,8 @@ if (isset($renewal_trap) && $renewal_trap) {
 $sql = $db->prepare("SELECT * FROM `users` WHERE `UserID` = ?");
 $sql->execute([$_SESSION['UserID']]);
 $row = $sql->fetch(PDO::FETCH_ASSOC);
+
+$mobile = PhoneNumber::parse($row['Mobile']);
 
 $contacts = new EmergencyContacts($db);
 $contacts->byParent($_SESSION['UserID']);
@@ -56,8 +60,8 @@ if (isset($renewal_trap) && $renewal_trap) {
                     <?=htmlspecialchars($row['Forename'] . " " . $row['Surname'])?> (From My
                     Account)
                   </strong>
-                  <a href="tel:<?=htmlspecialchars($row['Mobile'])?>">
-                    <?=htmlspecialchars($row['Mobile'])?>
+                  <a href="tel:<?=htmlspecialchars($mobile->format(PhoneNumberFormat::RFC3966))?>">
+                    <?=htmlspecialchars($mobile->format(PhoneNumberFormat::NATIONAL))?>
                   </a>
                 </p>
               </div>
@@ -82,8 +86,8 @@ if (isset($renewal_trap) && $renewal_trap) {
                   <strong class="d-block">
                     <?=htmlspecialchars($contactsArray[$i]->getName())?>
                   </strong>
-                  <a href="tel:<?=htmlspecialchars($contactsArray[$i]->getContactNumber())?>">
-                    <?=htmlspecialchars($contactsArray[$i]->getContactNumber())?>
+                  <a href="tel:<?=htmlspecialchars($contactsArray[$i]->getRFCContactNumber())?>">
+                    <?=htmlspecialchars($contactsArray[$i]->getNationalContactNumber())?>
                   </a>
                 </p>
               </div>
