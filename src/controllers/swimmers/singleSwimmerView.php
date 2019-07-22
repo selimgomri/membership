@@ -266,6 +266,7 @@ $content .= '
   $query = $db->prepare("SELECT `Forename`, `Surname`, users.UserID, `Mobile` FROM `members` INNER JOIN `users` ON users.UserID = members.UserID WHERE `MemberID` = ?");
   $query->execute([$id]);
   $row = $query->fetch(PDO::FETCH_ASSOC);
+  if ($row != null) {
   $mobile = PhoneNumber::parse($row['Mobile']);
   $content .= '
     <div class="mb-3 card" id="emergency">
@@ -300,7 +301,7 @@ $content .= '
 							<strong class="d-block">
 								' . htmlspecialchars($contactsArray[$i]->getName()) . '
 							</strong>
-							<a href="tel:' . htmlspecialchars($contactsArray[$i]->getRFCContactNumber()) . '">
+							<a href="' . htmlspecialchars($contactsArray[$i]->getRFCContactNumber()) . '">
 								' . htmlspecialchars($contactsArray[$i]->getNationalContactNumber()) . '
 							</a>
 						</p>
@@ -309,7 +310,9 @@ $content .= '
   		$content .= '</ul>';
       $content .= '<div class="card-body"><p class="mb-0">Make sure you know what to do in an emergency</p></div>';
     }
-  $content .= '</div></div>
+  $content .= '</div>';
+  }
+  $content .= '</div>
   <div class="col-12 col-lg-8">';
   $content.= '
   <div class="mb-3 card card-body" id="times">
