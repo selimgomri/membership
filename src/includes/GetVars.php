@@ -18,6 +18,8 @@ $vars = [
   'GOCARDLESS_WEBHOOK_KEY' => null,
   'CLUB_ADDRESS' => null,
   'SYSTEM_COLOUR' => '#007bff',
+  'ASA_DISTRICT' => 'E',
+  'ASA_COUNTY' => 'NDRE',
 ];
 
 try {

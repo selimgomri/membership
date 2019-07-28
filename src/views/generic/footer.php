@@ -1,3 +1,10 @@
+<?php
+
+$districts = json_decode(file_get_contents(BASE_PATH . 'includes/regions/regions.json'), true);
+$counties = json_decode(file_get_contents(BASE_PATH . 'includes/regions/counties.json'), true);
+
+?>
+
 </div>
 
 <!-- THE HEPPELL FOOTER -->
@@ -63,10 +70,10 @@
                     Swimming</a></li>
                 <li><a title="the Amateur Swimming Association" target="_blank"
                     href="https://www.swimming.org/swimengland/">Swim England</a></li>
-                <li><a title="<?=COUNTY['Region']?>" target="_blank"
-                    href="<?=COUNTY['Region_URL']?>"><?=COUNTY['Region']?></a></li>
-                <li><a title="<?=COUNTY['County']?>" target="_blank"
-                    href="<?=COUNTY['Region_URL']?>"><?=COUNTY['County']?></a></li>
+                <li><a title="<?=htmlspecialchars($districts[env('ASA_DISTRICT')]['title'])?>" target="_blank"
+                    href="<?=htmlspecialchars($districts[env('ASA_DISTRICT')]['website'])?>"><?=htmlspecialchars($districts[env('ASA_DISTRICT')]['name'])?></a></li>
+                <li><a title="<?=htmlspecialchars($counties[env('ASA_COUNTY')]['title'])?>" target="_blank"
+                    href="<?=htmlspecialchars($counties[env('ASA_COUNTY')]['website'])?>"><?=htmlspecialchars($counties[env('ASA_COUNTY')]['name'])?></a></li>
               </ul>
 
             </div>

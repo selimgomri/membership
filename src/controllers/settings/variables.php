@@ -20,6 +20,8 @@ $vars = [
   'GOCARDLESS_WEBHOOK_KEY' => null,
   'CLUB_ADDRESS' => null,
   'SYSTEM_COLOUR' => null,
+  'ASA_DISTRICT' => null,
+  'ASA_COUNTY' => null,
 ];
 
 $disabled = [];
@@ -40,6 +42,27 @@ if ($vars['CLUB_ADDRESS'] != null) {
 
 if ($vars['SYSTEM_COLOUR'] == null) {
   $vars['SYSTEM_COLOUR'] = '#007bff';
+}
+
+$districts = json_decode(file_get_contents(BASE_PATH . 'includes/regions/regions.json'), true);
+$counties = json_decode(file_get_contents(BASE_PATH . 'includes/regions/counties.json'), true);
+
+$clubs = [];
+$row = 1;
+if (($handle = fopen(BASE_PATH . "includes/regions/clubs.csv", "r")) !== FALSE) {
+  while (($data = fgetcsv($handle, 1000)) !== false) {
+    if ($row > 1) {
+      $clubs += [$data[1] => [
+        'Name' => $data[0],
+        'Code' => $data[1],
+        'District' => $data[2],
+        'County' => $data[3],
+        'MeetName' => $data[4],
+      ]];
+    }
+    $row++;
+  }
+  fclose($handle);
 }
 
 $pagetitle = "System Variables";
@@ -78,6 +101,18 @@ include BASE_PATH . 'views/header.php';
           <h2>Name and Code</h2>
 
           <div class="form-group">
+            <label for="CLUB_INFO">Select club</label>
+            <select class="custom-select" name="CLUB_INFO" id="CLUB_INFO">
+              <?php foreach ($clubs as $club) { ?>
+              <option <?php if ($club['Code'] == env('ASA_CLUB_CODE')) { ?>selected<?php } ?> value="<?=htmlspecialchars($club['Code'])?>">
+                <?=htmlspecialchars($club['Name'])?> (<?=htmlspecialchars($club['Code'])?>)
+              </option>
+              <?php } ?>
+            </select>
+            <small id="CLUB_ADDRESS_HELP" class="form-text text-muted">Selecting your club from this list lets us automatically fill out your clubs details including Swim England code, short name, county and district. We use your county and district to show useful links to your users. You can change your club name once you've selected it.</small>
+          </div>
+
+          <div class="form-group">
             <label for="CLUB_NAME">Club Name</label>
             <input class="form-control" type="text" name="CLUB_NAME" id="CLUB_NAME" value="<?=htmlspecialchars($vars['CLUB_NAME'])?>" <?=$disabled['CLUB_NAME']?>>
           </div>
@@ -90,6 +125,16 @@ include BASE_PATH . 'views/header.php';
           <div class="form-group">
             <label for="ASA_CLUB_CODE">Swim England Club Code</label>
             <input class="form-control mono" type="text" name="ASA_CLUB_CODE" id="CLUB_SHORT_NAME" value="<?=htmlspecialchars($vars['ASA_CLUB_CODE'])?>" <?=$disabled['ASA_CLUB_CODE']?>>
+          </div>
+
+          <div class="form-group">
+            <label for="ASA_COUNTY">Swim England County</label>
+            <input class="form-control" type="url" name="ASA_COUNTY" id="ASA_COUNTY" value="<?=htmlspecialchars($counties[$vars['ASA_COUNTY']]['name'])?>" disabled>
+          </div>
+
+          <div class="form-group">
+            <label for="ASA_DISTRICT">Swim England District</label>
+            <input class="form-control" type="url" name="ASA_DISTRICT" id="ASA_DISTRICT" value="<?=htmlspecialchars($districts[$vars['ASA_DISTRICT']]['name'])?>" disabled>
           </div>
 
           <div class="form-group">
