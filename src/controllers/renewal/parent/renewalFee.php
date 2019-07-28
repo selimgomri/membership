@@ -82,7 +82,10 @@ for ($i = 0; $i < $count; $i++) {
 	} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ClubPays']) {
 		$asaFees[$i] = $asa3;
 	}
-	if ($swimEnglandDiscount > 0 && $renewal == 0) {
+	if ($member[$i]['RRTransfer']) {
+		$totalFee += $asaFees[$i];
+		// $totalFeeDiscounted += 0;
+	} else if ($swimEnglandDiscount > 0 && $renewal == 0) {
 		$totalFee += $asaFees[$i];
 		$totalFeeDiscounted += $asaFees[$i]*(1-($swimEnglandDiscount/100));
 	} else {
@@ -223,7 +226,16 @@ include BASE_PATH . "views/renewalTitleBar.php";
 						&pound;<?php echo $asaFeesString; ?>
 					</td>
 				</tr>
-				<?php if ($swimEnglandDiscount > 0 && $renewal == 0) { ?>
+				<?php if ($member[$i]['RRTransfer']) { ?>
+				<tr>
+					<td>
+					<?=htmlspecialchars($member[$i]['MForename'] . " " . $member[$i]['MSurname'])?> (Swim England Membership Transfer Credit)
+					</td>
+					<td>
+						-&pound;<?=$asaFeesString?>
+					</td>
+				</tr>
+				<?php } else if ($swimEnglandDiscount > 0 && $renewal == 0) { ?>
 				<tr>
 					<td>
 						Discretionary discount at <?=htmlspecialchars($swimEnglandDiscount)?>%

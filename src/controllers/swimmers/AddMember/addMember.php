@@ -1,4 +1,7 @@
 <?php
+
+global $db;
+
 $pagetitle = "Add a member";
 $title = "Add a member";
 $content = "<p class=\"lead\">Add a member to the club system.</p>";
@@ -70,30 +73,32 @@ $content .= "
 		<option value=\"Female\">Female</option>
 	</select>
 </div>";
-$sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
-$result = mysqli_query($link, $sql);
-$squadCount = mysqli_num_rows($result);
+$sql = $db->query("SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;");
 $content .= "
 <div class=\"form-group\">
 	<label for=\"squad\">Squad</label>
 		<select class=\"custom-select\" placeholder=\"Select a Squad\" id=\"squad\" name=\"squad\">";
 //$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-for ($i = 0; $i < $squadCount; $i++) {
-	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 	$content .= "<option value=\"" . $row['SquadID'] . "\"";
-	$content .= ">" . $row['SquadName'] . "</option>";
+	$content .= ">" . htmlspecialchars($row['SquadName']) . "</option>";
 }
 $content .= "</select></div>";
 $content .= "
 <div class=\"form-group\">
-	<label for=\"clubpays\">Club Pays?</label>
-	<select class=\"custom-select\" placeholder=\"Do we pay>\" id=\"clubpays\" name=\"clubpays\" aria-describedby=\"cphelp\">
-		<option value=\"0\" selected>No</option>
-		<option value=\"1\">Yes</option>
-	</select>
-	<small id=\"cphelp\" class=\"form-text text-muted\">If this swimmer will not
-	pay any squad or membership fees, eg if they are at a university, select
-	Yes. They will still pay gala fees.</small>
+	<div class=\"custom-control custom-checkbox\">
+		<input type=\"checkbox\" class=\"custom-control-input\" id=\"clubpays\" name=\"clubpays\" value=\"1\" aria-describedby=\"cphelp\">
+		<label class=\"custom-control-label\" for=\"clubpays\">Club Pays?</label>
+	</div>
+	<small id=\"cphelp\" class=\"form-text text-muted\">Tick the box if this swimmer will not pay any squad or membership fees, eg if they are at a university.</small>
+</div>
+
+<div class=\"form-group\">
+	<div class=\"custom-control custom-checkbox\">
+		<input type=\"checkbox\" class=\"custom-control-input\" id=\"transfer\" name=\"transfer\" value=\"1\" aria-describedby=\"transfer-help\">
+		<label class=\"custom-control-label\" for=\"transfer\">Transferring from another club?</label>
+	</div>
+	<small id=\"transfer-help\" class=\"form-text text-muted\">Tick the box if this swimmer is transferring from another swimming club - They will not be charged for Swim England membership fees. If it is almost a new Swim England membership year and this swimmer will not be completing membership renewal then leave the box unticked so they pay Swim England membership fees when registering.</small>
 </div>";
 $content .= "<button type=\"submit\" class=\"btn btn-success\">Add Member</button>";
 $content .= "</div><div class=\"col-md-4\">";

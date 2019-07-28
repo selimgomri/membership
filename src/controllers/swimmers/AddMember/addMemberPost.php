@@ -4,7 +4,7 @@ global $db;
 
 $added = $action = false;
 
-$forename = $middlenames = $surname = $dateOfBirth = $asaNumber = $sex = $squad = $cat = $cp = $sql = "";
+$forename = $middlenames = $surname = $dateOfBirth = $asaNumber = $sex = $squad = $cat = $cp = $sql = $transfer = "";
 $getASA = false;
 
 if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POST['datebirth'])) && (!empty($_POST['sex'])) && (!empty($_POST['squad']))) {
@@ -28,16 +28,24 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 	if ($cat != 1 && $cat != 2 && $cat != 3) {
 		halt(500);
 	}
-	if ($_POST['clubpays'] == 1) {
+	
+	if (isset($_POST['clubpays']) && bool($_POST['clubpays'])) {
 		$cp = 1;
 	} else {
 		$cp = 0;
 	}
 
+	if (isset($_POST['transfer']) && bool($_POST['transfer'])) {
+		$transfer = 1;
+	} else {
+		$transfer = 0;
+	}
+
+
 	$accessKey = generateRandomString(6);
 
   try {
-    $insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, SquadID, AccessKey, ASACategory, ClubPays, OtherNotes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, SquadID, AccessKey, ASACategory, ClubPays, OtherNotes, RRTransfer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $insert->execute([
       $forename,
       $middlenames,
@@ -49,7 +57,8 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
       $accessKey,
       $cat,
       $cp,
-      ""
+			"",
+			$transfer
     ]);
 
   	$last_id = $db->lastInsertId();
