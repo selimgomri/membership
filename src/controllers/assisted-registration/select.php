@@ -4,7 +4,7 @@ $user = $_SESSION['AssRegUser'];
 
 global $db;
 
-$swimmers = $db->query("SELECT MForename `first`, MSurname `last`, SquadName `name`, MemberID `id` FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID IS NULL ORDER BY MemberID DESC, `first` ASC, `last` ASC");
+$swimmers = $db->query("SELECT MForename `first`, MSurname `last`, SquadName `name`, MemberID `id`, RRTransfer trans FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID IS NULL ORDER BY MemberID DESC, `first` ASC, `last` ASC");
 
 $user = $db->prepare("SELECT Forename `first` FROM users WHERE UserID = ?");
 $user->execute([$_SESSION['AssRegUser']]);
@@ -50,6 +50,9 @@ include BASE_PATH . 'views/header.php';
             <input type="checkbox" class="custom-control-input" id="member-<?=htmlspecialchars($swimmer['id'])?>" name="member-<?=htmlspecialchars($swimmer['id'])?>">
             <label class="custom-control-label" for="member-<?=htmlspecialchars($swimmer['id'])?>">
               <?=htmlspecialchars($swimmer['first'] . ' ' . $swimmer['last'])?> <em><?=htmlspecialchars($swimmer['name'])?> Squad</em>
+              <?php if (isset($swimmer['trans']) && $swimmer['trans']) { ?>
+                - <span class="text-success">Transferring from another club</span>
+              <?php } ?>
             </label>
           </div>
         </div>

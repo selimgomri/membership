@@ -82,7 +82,9 @@ for ($i = 0; $i < $count; $i++) {
 		$asaFees[$i] = $asa3;
 	}
 
-	if ($swimEnglandDiscount > 0 && $renewal == 0) {
+	if ($member[$i]['RRTransfer']) {
+		// $totalFee += $asaFees[$i];
+	} else if ($swimEnglandDiscount > 0 && $renewal == 0) {
 		$totalFee += $asaFees[$i]*(1-($swimEnglandDiscount/100));
 	} else {
 		$totalFee += $asaFees[$i];
@@ -152,7 +154,7 @@ if ($hasDD) {
 		}
 		
 		try {
-			$query = $db->prepare("UPDATE `members` SET `RR` = 0 WHERE `UserID` = ?");
+			$query = $db->prepare("UPDATE `members` SET `RR` = 0, `RRTransfer` = 0 WHERE `UserID` = ?");
 			$query->execute([$_SESSION['UserID']]);
 		} catch (PDOException $e) {
 			halt(500);
