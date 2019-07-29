@@ -39,8 +39,8 @@ $counties = json_decode(file_get_contents(BASE_PATH . 'includes/regions/counties
               <ul class="list-unstyled cls-global-footer-link-spacer">
                 <li><strong>Membership System Support</strong></li>
                 <li>
-                  <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank"
-                    title="CLS ASC General Privacy Policy">
+                  <a href="<?=autoUrl("privacy")?>" target="_blank"
+                    title="<?=htmlspecialchars(env('CLUB_NAME'))?> Privacy Policy">
                     Our Privacy Policy
                   </a>
                 </li>
@@ -58,7 +58,7 @@ $counties = json_decode(file_get_contents(BASE_PATH . 'includes/regions/counties
                 <li>
                   <a href="https://github.com/Chester-le-Street-ASC/Membership" target="_blank"
                     title="Membership by CLSASC on GitHub">
-                    Software by CLS ASC and SCDS on GitHub
+                    GitHub
                   </a>
                 </li>
               </ul>

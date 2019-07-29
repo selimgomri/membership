@@ -387,6 +387,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
     include 'controllers/about/router.php';
   });
 
+  $this->get('/privacy', function() {
+    include 'controllers/posts/privacy.php';
+  });
+
   $this->get('/cc/{id}/{hash}/unsubscribe', function($id, $hash) {
     include 'controllers/notify/CCUnsubscribe.php';
   });

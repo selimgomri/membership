@@ -119,7 +119,7 @@ if (isset($customBackground) && $customBackground) {
       <div class="<?=$container_class?>">
         <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
         <h1 class="d-none d-md-flex pt-4 pb-1 mb-0">
-          <a href="<?=autoUrl("")?>" class="text-white">
+          <a href="<?=autoUrl("")?>" class="text-white text-decoration-none">
             <?=mb_strtoupper(env('CLUB_NAME'))?>
           </a>
         </h1>
