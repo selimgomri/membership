@@ -4,9 +4,9 @@ global $db;
 
 $member = null;
 if (isPartialRegistration()) {
-  $member = getNextSwimmer($_SESSION['UserID'], $id, true);
+  $member = getNextSwimmer($_SESSION['UserID'], 0, true);
 } else {
-  $member = getNextSwimmer($_SESSION['UserID'], $id);
+  $member = getNextSwimmer($_SESSION['UserID'], 0);
 }
 
 if ($member == null) {
