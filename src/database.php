@@ -1420,3 +1420,5 @@ function getCardBrand($brand) {
     return 'Unknown Card';
   }
 }
+
+include BASE_PATH . 'includes/ErrorReporting.php';

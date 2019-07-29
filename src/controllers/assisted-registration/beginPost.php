@@ -37,6 +37,7 @@ try {
   catch (PhoneNumberParseException $e) {
     // 'The string supplied is too short to be a phone number.'
     $status = false;
+    reportError($e);
   }
 
   // A random password is generated. This process involves the user setting a password later.
@@ -57,6 +58,7 @@ try {
 
 } catch (Exception $e) {
   $status = false;
+  reportError($e);
 }
 
 if ($status) {

@@ -2,29 +2,8 @@
 
 $customBackground = "bg-warning";
 
-$reportedError = false;
-if (env('ERROR_REPORTING_EMAIL') != null) {
-	try {
-		global $e;
-		$emailMessage = '<p>This is an error report</p>';
-		if (isset($e)) {
-			ob_start();
-			pre($e);
-			$error = ob_get_clean();
-			$emailMessage .= $error;
-		}
-
-		ob_start();
-		pre(app('request'));
-		$error = ob_get_clean();
-		$emailMessage .= $error;
-
-		notifySend(null, 'System Error Report', $emailMessage, "System Admin", env('ERROR_REPORTING_EMAIL'));
-		$reportedError = true;
-	} catch (Exception $f) {
-		$reportedError = false;
-	}
-}
+global $e;
+$reportedError = reportError($e);
 
 http_response_code(500);
 $pagetitle = "Error 500 - Internal Server Error";
