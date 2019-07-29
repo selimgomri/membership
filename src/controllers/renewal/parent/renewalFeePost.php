@@ -4,7 +4,7 @@ global $db;
 global $systemInfo;
 
 $user = $_SESSION['UserID'];
-$partial_reg = false;//isPartialRegistration();
+$partial_reg = isPartialRegistration();
 
 $partial_reg_require_topup = false;
 if ($partial_reg) {
@@ -41,7 +41,7 @@ $payingSwimmerCount = $sql->fetchColumn();
 if ($payingSwimmerCount == 1) {
 	$clubFee = $systemInfo->getSystemOption('ClubFeeIndividual');
 } else if ($partial_reg_require_topup) {
-	$clubFee = $systemInfo->getSystemOption('ClubFeeFamily') - $clubFee;
+	$clubFee = $systemInfo->getSystemOption('ClubFeeFamily') - $systemInfo->getSystemOption('ClubFeeIndividual');
 } else if ($payingSwimmerCount > 1 && !$partial_reg) {
 	$clubFee = $systemInfo->getSystemOption('ClubFeeIndividual');
 } else {
