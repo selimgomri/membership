@@ -4,11 +4,10 @@ global $db;
 global $systemInfo;
 
 $user = $_SESSION['UserID'];
-$partial_reg = false;//isPartialRegistration();
+$partial_reg = isPartialRegistration();
 
 $partial_reg_require_topup = false;
 if ($partial_reg) {
-	global $db;
 	$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = 0 AND ClubPays = 0";
 	try {
 		$query = $db->prepare($sql);
@@ -40,7 +39,7 @@ $payingSwimmerCount = $sql->fetchColumn();
 if ($payingSwimmerCount == 1) {
 	$clubFee = $systemInfo->getSystemOption('ClubFeeIndividual');
 } else if ($partial_reg_require_topup) {
-	$clubFee = $systemInfo->getSystemOption('ClubFeeFamily') - $clubFee;
+	$clubFee = $systemInfo->getSystemOption('ClubFeeFamily') - $systemInfo->getSystemOption('ClubFeeIndividual');
 } else if ($payingSwimmerCount > 1 && !$partial_reg) {
 	$clubFee = $systemInfo->getSystemOption('ClubFeeIndividual');
 } else {
@@ -152,13 +151,15 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				<tbody>
 					<tr>
 						<td>
-							<?php if ($partial_reg && $partial_reg_require_topup) { ?>
-							Membership Top Up (Individual to Family)
-						<?php } else if ($payingSwimmerCount > 1) { ?>
-							Family Membership
-						<?php }else { ?>
+						<?php if ($payingSwimmerCount == 1) { ?>
 							Individual Membership
-							<?php } ?>
+						<?php } else if ($partial_reg_require_topup) { ?>
+							Membership Top Up (Individual to Family)
+						<?php } else if ($payingSwimmerCount > 1 && !$partial_reg) { ?>
+							Individual Membership
+						<?php } else { ?>
+							Membership
+						<?php } ?>
 						</td>
 						<td>
 							&pound;<?= $clubFeeString ?>

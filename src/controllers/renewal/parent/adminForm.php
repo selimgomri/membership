@@ -1,6 +1,6 @@
 <?php
 
-$partial_reg = false;//isPartialRegistration();
+$partial_reg = isPartialRegistration();
 
 global $db;
 $sql = "SELECT `ID` FROM `posts` WHERE `Type` = ? LIMIT 1";

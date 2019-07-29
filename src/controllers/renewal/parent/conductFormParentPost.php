@@ -2,10 +2,12 @@
 
 global $db;
 
-$getFirstMember = $db->prepare("SELECT MemberID FROM `members` WHERE `UserID` = ? ORDER BY `MemberID` ASC
-LIMIT 1");
-$getFirstMember->execute([$_SESSION['UserID']]);
-$member = $getFirstMember->fetchColumn();
+$member = null;
+if (isPartialRegistration()) {
+  $member = getNextSwimmer($_SESSION['UserID'], $id, true);
+} else {
+  $member = getNextSwimmer($_SESSION['UserID'], $id);
+}
 
 if ($member == null) {
 	halt(404);

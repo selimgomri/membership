@@ -16,10 +16,6 @@ try {
   $surname = trim($_POST['last']);
   $email = trim(mb_strtolower($_POST['email-address']));
   $checkEmailCount->execute([$email]);
-  if ($checkEmailCount->fetchColumn() > 0) {
-    // Can't register so throw an exception to get out of this code block.
-    throw new Exception();
-  }
   
   // The password will be used as a secure token allowing the parent to follow a link.
   $password = hash('sha256', random_int(0, 999999));
@@ -40,20 +36,35 @@ try {
     reportError($e);
   }
 
-  // A random password is generated. This process involves the user setting a password later.
-  $insert->execute([
-    $email,
-    password_hash($password, PASSWORD_BCRYPT),
-    'Parent',
-    $forename,
-    $surname,
-    $mobile,
-    0,
-    0,
-    true
-  ]);
+  if ($checkEmailCount->fetchColumn() > 0) {
+    $update = $db->prepare("UPDATE users SET `Password` = ?, RR = ? WHERE EmailAddress = ?");
+    $update->execute([
+      password_hash($password, PASSWORD_BCRYPT),
+      true,
+      $email
+    ]);
 
-  $_SESSION['AssRegUser'] = $db->lastInsertId(); 
+    $getUserId = $db->prepare("SELECT UserID FROM users WHERE EmailAddress = ?");
+    $getUserId->execute([$email]);
+    
+    $_SESSION['AssRegUser'] = $getUserId->fetchColumn();
+  } else {
+    // A random password is generated. This process involves the user setting a password later.
+    $insert->execute([
+      $email,
+      password_hash($password, PASSWORD_BCRYPT),
+      'Parent',
+      $forename,
+      $surname,
+      $mobile,
+      0,
+      0,
+      true
+    ]);
+
+    $_SESSION['AssRegUser'] = $db->lastInsertId(); 
+  }
+
   $_SESSION['AssRegPass'] = $password;
 
 } catch (Exception $e) {

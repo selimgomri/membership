@@ -2,7 +2,7 @@
 
 global $db;
 
-$partial_reg = false;//isPartialRegistration();
+$partial_reg = isPartialRegistration();
 
 $id = [];
 

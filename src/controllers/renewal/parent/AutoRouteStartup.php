@@ -32,28 +32,25 @@ function latestRenewal() {
 
 function getNextSwimmer($user, $current = 0, $rr_only = false) {
 	global $db;
-	$sql = "SELECT `MemberID` FROM `members` WHERE `UserID` = ? AND `MemberID` > ?";
-	$data = [
-		$user,
-		$current
-	];
-	if ($rr_only == true) {
-		$sql = "SELECT `MemberID` FROM `members` WHERE `UserID` = ? AND `MemberID` > ? AND `RR` = 1";
-	}
 
-	try {
-		$query = $db->prepare($sql);
-		$query->execute($data);
-	} catch (PDOException $e) {
-		halt(500);
+	if ($rr_only) {
+		$query = $db->prepare("SELECT `MemberID` FROM `members` WHERE `UserID` = ? AND `MemberID` > ? AND `RR` = ?");
+		$query->execute([
+			$user,
+			$current,
+			true
+		]);
+		$next = $query->fetchColumn();
+		return $next;
+	} else {
+		$query = $db->prepare("SELECT `MemberID` FROM `members` WHERE `UserID` = ? AND `MemberID` > ?");
+		$query->execute([
+			$user,
+			$current
+		]);
+		$next = $query->fetchColumn();
+		return $next;
 	}
-	$row = $query->fetch(PDO::FETCH_ASSOC);
-	$member = $row['MemberID'];
-
-	if (!$row) {
-		return false;
-	}
-	return $member;
 }
 
 function isPartialRegistration() {
@@ -66,14 +63,14 @@ function isPartialRegistration() {
 	}
 	$total_swimmers = (int) $query->fetchColumn();
 	
-	$query = $db->prepare("SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = ? ORDER BY `MemberID` ASC");
+	$query = $db->prepare("SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = ?");
 	try {
 		$query->execute([$_SESSION['UserID'], 1]);
 	} catch (PDOException $e) {
 		halt(500);
 	}
 	$new_swimmers = (int) $query->fetchColumn();
-	if ($total_swimmers != $new_swimmers) {
+	if ($total_swimmers > $new_swimmers) {
 		return true;
 	}
 	return false;
