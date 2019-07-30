@@ -766,7 +766,7 @@ function updatePaymentStatus($PMkey) {
         if ($num_retries < 2) {
           $message .= '<p>You don\'t need to take any action. Should this payment fail, we will retry the payment up to ' . (2-$num_retries) . ' times.</p>';
         } else if ($num_retries == 2) {
-          $message .= '<p>You don\'t need to take any action. Should this payment fail, you will need to contact the club treasurer as we will have retried this direct debit payment 3 times.</p>';
+          $message .= '<p>You don\'t need to take any action. Should this payment fail however, you will need to contact the club treasurer as we will have retried this direct debit payment 3 times.</p>';
         }
       } else {
         $message .= '<p>We have retried this payment request three times and it has still not succeeded. As a result, you will need to contact the club treasurer to take further action. Failure to pay may lead to the suspension or termination of your membership.</p>';

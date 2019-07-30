@@ -22,9 +22,7 @@ if (v::email()->validate($_POST['emailAddr'])) {
   $pagetitle = $row['MForename'] . " " . $row['MSurname'];
   $text = '<h1>Online Membership System</h1><p class="mb-0"><strong>Your Access Key for ' . $row['MForename'] . " " . $row['MSurname'] . '</strong></p>';
   $text .= '<p>
-    Here at ' . CLUB_NAME . ', we provide a number of online services to
-    manage our members. Our services allow you to manage your swimmers, enter
-    competitions, stay up to date by email and make payments by Direct Debit.
+    Here at ' . htmlspecialchars(env('CLUB_NAME')) . ', we provide a number of online services to manage our members. Our services allow you to manage your swimmers, enter competitions, stay up to date by email and make payments by Direct Debit.
   </p>';
 
   if (!bool(env('IS_CLS'))) {
@@ -56,7 +54,7 @@ if (v::email()->validate($_POST['emailAddr'])) {
     \'Add Swimmers\' from the menu at the top.
   </p>';
   if (!(mb_stripos($row['ASANumber'], env('ASA_CLUB_CODE')) > -1)) {
-  $text .= '<p>You\'ll be directed to a page and asked to enter your swimmer\'s Swim England Number and CLS ASC Access Key as below.</p>';
+  $text .= '<p>You\'ll be directed to a page and asked to enter your swimmer\'s Swim England Number and ' . htmlspecialchars(env('CLUB_SHORT_NAME')) . ' Access Key as below.</p>';
   } else {
   $text .= '<p>You will be asked to enter the temporary membership number and access key as below.</p>';
   }
@@ -68,7 +66,7 @@ if (v::email()->validate($_POST['emailAddr'])) {
         <td class="pr-0"><span class="mono">' . htmlspecialchars($row['ASANumber']) . '</span></td>
       </tr>
       <tr>
-        <th scope="row" class="pl-0">CLS ASC Access Key</th>
+        <th scope="row" class="pl-0">' . htmlspecialchars(env('CLUB_SHORT_NAME')) . ' Access Key</th>
         <td class="pr-0"><span class="mono">' . htmlspecialchars($row['AccessKey']) . '</span></td>
       </tr>
     </tbody>
@@ -99,12 +97,12 @@ if (v::email()->validate($_POST['emailAddr'])) {
 
     <p>
       If you\'d like more information about how we use data, contact
-      enquiries@chesterlestreetasc.co.uk.
+      ' . htmlspecialchars(env('CLUB_EMAIL')) . '.
     </p>
   </div>
   ';
 
-  if (notifySend(null, "Access Key for " . $row['MForename'] . " " . $row['MSurname'], $text, "Parent of " . $row['MForename'] . " " . $row['MSurname'], $_POST['emailAddr'], $from = ["Email" => "membership@" . EMAIL_DOMAIN, "Name" => CLUB_NAME])) {
+  if (notifySend(null, "Access Key for " . $row['MForename'] . " " . $row['MSurname'], $text, "Parent of " . $row['MForename'] . " " . $row['MSurname'], $_POST['emailAddr'], $from = ["Email" => "membership@" . env('EMAIL_DOMAIN'), "Name" => env('CLUB_NAME')])) {
     $_SESSION['EmailStatus'] = true;
   } else {
     $_SESSION['EmailStatus'] = false;

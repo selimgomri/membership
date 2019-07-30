@@ -62,11 +62,8 @@ include BASE_PATH . "views/swimmersMenu.php";
 	<div class="alert alert-info d-print-none">
 		<p class="mb-0">
 			<strong>
-				Notice to Staff
+				Instructions for if you are not using assisted registration.
 			</strong>
-		</p>
-		<p>
-			We successfully added <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>.
 		</p>
 		<p>
 			Please print out, email or copy the information below to give to the
