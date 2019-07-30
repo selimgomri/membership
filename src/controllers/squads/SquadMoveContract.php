@@ -13,6 +13,8 @@ $_SESSION['qr'][0]['text'] = autoUrl("form-agreement/m/" . urlencode('CodeOfCond
 $_SESSION['qr'][0]['size'] = 600;
 $qrFile = true;
 
+$hasDD = userHasMandates($email_info['UserID']);
+
 $userObj = new \User($email_info['UserID'], $db);
 $json = $userObj->getUserOption('MAIN_ADDRESS');
 $address = null;
@@ -106,9 +108,19 @@ ob_start();?>
       <?php } ?>
     </p>
 
+    <?php if ($hasDD) { ?>
     <p>
-      <?php if (bool(env('IS_CLS'))) { ?>As you pay by Direct Debit<?php } else { ?>If you pay by Direct Debit<?php } ?>, you won't need to take any action. We'll automatically update your monthly fees.
+      As you pay by Direct Debit, you won't need to take any action. We'll automatically update your monthly fees.
     </p>
+    <?php } else if ($email_info['SquadFee'] != $email_info['OldFee']) { ?>
+    <p>
+      You will need to manually adjust your monthly payment.
+    </p>
+    <?php } else { ?>
+    <p>
+      You won't need to adjust your monthly payment as it's not changing.
+    </p>
+    <?php } ?>
 
     <?php if ($email_info['SquadTimetable'] != "" && $email_info['SquadTimetable'] != null) { ?>
     <p>
@@ -151,6 +163,7 @@ ob_start();?>
 
     <p>*<em>Discounts may apply to squad fees</em></p>
 
+    <?php if ($hasDD) { ?>
     <div class="page-break"></div>
 
     <h1 id="payment-questions">Paying Squad Fees for <?=htmlspecialchars($email_info['SquadName'])?></h1>
@@ -201,6 +214,8 @@ ob_start();?>
     <p>Payments are handled by <a href="https://gocardless.com/">GoCardless</a> on behalf of <?=htmlspecialchars(env('CLUB_NAME'))?>.</p>
 
     <!--<p>&copy; <?=htmlspecialchars(env('CLUB_NAME'))?> <?=date("Y")?></p>-->
+
+    <?php } ?>
 
 
     <?php if ($email_info['SquadCoC'] != "" && $email_info['SquadCoC'] != null) { ?>

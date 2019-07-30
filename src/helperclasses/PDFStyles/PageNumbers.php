@@ -3,7 +3,10 @@
     $x = 36;
     $y = 813;
     $text = "{PAGE_NUM}"; //  of {PAGE_COUNT}
-    $font = $fontMetrics->get_font("Open Sans Bold", "normal");
+    $font = $fontMetrics->get_font("Open Sans", "normal");
+    if (!bool(env('IS_CLS'))) {
+      $font = $fontMetrics->get_font("Source Sans Pro", "normal");
+    }
     $size = 10;
     $color = array(0,0,0);
     $word_space = 0.0;  //  default
