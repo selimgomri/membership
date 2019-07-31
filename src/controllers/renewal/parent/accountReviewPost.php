@@ -21,15 +21,6 @@ if ($_POST['surname'] != "") {
 	$statusMessage .= "<li>No Surname Supplied</li>";
 }
 
-/*
-if ($_POST['email'] != "") {
-	$email = mysqli_real_escape_string($link, $_POST['email']);
-} else {
-	$status = false;
-	$statusMessage .= "<li>No Email Address Provided</li>";
-}
-*/
-
 if (isset($_POST['emailContactOK']) && $_POST['emailContactOK'] == 1) {
 	$emailComms = 1;
 } else {

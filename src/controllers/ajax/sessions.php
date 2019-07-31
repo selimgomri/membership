@@ -12,7 +12,7 @@ $count = 0;
 // A function is used to produce the View/Edit and Add Sections Stuff
 // This is because we will call it when a squad is selected, and after a session is added
 
-function sessionManagement($squadID, $link) {
+function sessionManagement($squadID, $old = null) {
   global $db;
 	$output = $content = $modals = "";
 	
@@ -254,7 +254,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 	// Get the action to work out what we're going to do
 	$action = $_POST["action"];
 	if ($action == "getSessions" && $_POST["squadID"] != null) {
-		echo sessionManagement($_POST["squadID"], $link);
+		echo sessionManagement($_POST["squadID"]);
 } elseif ($action == "addSession") {
 	$squadID = $_POST["squadID"];
 	$venueID = $_POST["venueID"];
@@ -295,7 +295,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 	} catch (Exception $e) {
 		halt(500);
 	}
-	echo sessionManagement($squadID, $link);
+	echo sessionManagement($squadID);
 
 	}
 } else {

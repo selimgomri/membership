@@ -29,7 +29,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php'; ?>
 			Transaction History for <?=htmlspecialchars($name)?>
 		</h1>
 		<p class="lead">Previous Payments and Refunds</p>
-		<?=paymentHistory($link, $id, "admin")?>
+		<?=paymentHistory(null, $id, "admin")?>
 	</div>
 </div>
 

@@ -38,7 +38,6 @@ $statusMessage = "";
 
 $forename = trim(ucwords($_POST['forename']));
 $surname = trim(ucwords($_POST['surname']));
-//$username = mysqli_real_escape_string($link, mb_strtolower(trim(htmlspecialchars($_POST['username']))));
 $username = $forename . $surname . "-" . md5(generateRandomString(20) . time());
 $password1 = trim($_POST['password1']);
 $password2 = trim($_POST['password2']);

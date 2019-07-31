@@ -1,7 +1,6 @@
 <?php
 
 global $db;
-global $link;
 
 use Respect\Validation\Validator as v;
 
@@ -13,7 +12,7 @@ if (!v::intVal()->min(1970, true)->validate((int) $year) || !v::stringType()->le
 	halt(404);
 }
 
-$searchDate = mysqli_real_escape_string($link, $year . "-" . $month . "-") . "%";
+$searchDate = $year . "-" . $month . "-" . "%";
 $name_type = null;
 $title_string = null;
 
@@ -33,7 +32,7 @@ if ($type == "squads") {
 
 $title = "Squad Fees - " . $dateString;
 
-$sql = "SELECT `users`.`UserID`, `Forename`, `Surname`, `MForename`, `MSurname`,
+$sql = $db->prepare("SELECT `users`.`UserID`, `Forename`, `Surname`, `MForename`, `MSurname`,
 individualFeeTrack.Amount, individualFeeTrack.Description, payments.Status, payments.PaymentID FROM
 (((((`individualFeeTrack` LEFT JOIN `paymentMonths` ON
 individualFeeTrack.MonthID = paymentMonths.MonthID) LEFT JOIN `paymentsPending`
@@ -41,11 +40,19 @@ ON individualFeeTrack.PaymentID = paymentsPending.PaymentID) LEFT JOIN
 `members` ON members.MemberID = individualFeeTrack.MemberID) LEFT JOIN
 `payments` ON paymentsPending.PMkey = payments.PMkey) LEFT JOIN `users` ON
 users.UserID = individualFeeTrack.UserID) WHERE `paymentMonths`.`Date` LIKE
-'$searchDate' AND `individualFeeTrack`.`Type` = '$name_type' ORDER BY `Forename`
-ASC, `Surname` ASC, `users`.`UserID` ASC, `MForename` ASC, `MSurname` ASC;";
+? AND `individualFeeTrack`.`Type` = ? ORDER BY `Forename`
+ASC, `Surname` ASC, `users`.`UserID` ASC, `MForename` ASC, `MSurname` ASC;");
+$sql->execute([
+	$searchDate,
+	$name_type
+]);
 
-$result = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+$rows = $sql->fetchAll(PDO::FETCH_ASSOC);
+$row = null;
+
+if (sizeof($rows) > 0) {
+	$row = $rows[0];
+}
 
 $user_id = $row['UserID'];
 $user_id_last = null;
@@ -78,7 +85,7 @@ $unconfirmed = [
   'submitted'
 ];
 
-for ($i = 0; $i < mysqli_num_rows($result); $i++) {
+for ($i = 0; $i < sizeof($rows); $i++) {
 	$name = null;
 	$member = null;
 	$amount = null;
@@ -87,7 +94,7 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 	if ($row['Forename'] != null && $row['Surname'] != null) {
 		if ($user_id_last != $user_id) {
 			$name = $row['Forename'] . " " . $row['Surname'];
-			$family_total = '£' . number_format(monthlyFeeCost($link, $user_id, "decimal"),2,'.','');
+			$family_total = '£' . number_format(monthlyFeeCost(null, $user_id, "decimal"),2,'.','');
 		}
 	} else {
 		$name = "N/A";
@@ -110,8 +117,8 @@ for ($i = 0; $i < mysqli_num_rows($result); $i++) {
 
 	fputcsv($output, array($name, $member, $row['Description'], $amount, $family_total, $status_text));
 
-	if ($i < mysqli_num_rows($result)-1) {
-		$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+	if ($i < sizeof($rows)-1) {
+		$row = $rows[$i+1];
 		$user_id_last = $user_id;
 		$user_id = $row['UserID'];
 	}

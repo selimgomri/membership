@@ -1,13 +1,15 @@
 <?php
 
+global $db;
+
 $fluidContainer = true;
 $squadID = $search = "";
-mysqli_real_escape_string($link, parse_str($_SERVER['QUERY_STRING'], $queries));
-if (isset($queries['squadID'])) {
-  $squadID = mysqli_real_escape_string($link, intval($queries['squadID']));
+
+if (isset($_GET['squadID'])) {
+  $squadID = intval($_GET['squadID']);
 }
-if (isset($queries['search'])) {
-  $search = mysqli_real_escape_string($link, $queries['search']);
+if (isset($_GET['search'])) {
+  $search = $_GET['search'];
 }
 
 $pagetitle = "Swimmers";
@@ -23,29 +25,21 @@ if (isset($_POST['squad'])) {
   <div class="d-print-none">
     <p class="lead">A list of swimmers.</p>
     <?php
-  $sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
-  $result = mysqli_query($link, $sql);
-  $squadCount = mysqli_num_rows($result);
+  $sql = $db->query("SELECT SquadID, SquadName FROM `squads` ORDER BY `squads`.`SquadFee` DESC;");
   ?>
   <div class="form-row">
   <div class="col-md-6 mb-3">
   <label class="sr-only" for="squad">Select a Squad</label>
   <select class="custom-select" placeholder="Select a Squad" id="squad" name="squad">
   <option value="allSquads">Show All Squads</option>;
-  <?php for ($i = 0; $i < $squadCount; $i++) {
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    $id = $row['SquadID'];
-    if ($squadID == $id) {
-      ?><option value="<?php echo $row['SquadID']; ?>" selected><?php echo $row['SquadName']; ?></option><?php
-    }
-    else {
-      ?><option value="<?php echo $row['SquadID']; ?>"><?php echo $row['SquadName']; ?></option><?php
-    }
-  } ?>
+  <?php while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+    $id = $row['SquadID']; ?>
+      <option value="<?=$row['SquadID']?>" <?php if ($squadID == $id) { ?>selected<?php } ?>><?=htmlspecialchars($row['SquadName'])?></option><?php
+    } ?>
     </select></div>
     <div class="col-md-6 mb-3">
       <label class="sr-only" for="search">Search by Name</label>
-      <input class="form-control" placeholder="Search by name" id="search" name="search" value="<?php echo $search; ?>">
+      <input class="form-control" placeholder="Search by name" id="search" name="search" value="<?=htmlspecialchars($search)?>">
     </div>
 
   </div>
@@ -73,13 +67,11 @@ function getResult() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-        console.log("We got here");
         document.getElementById("output").innerHTML = this.responseText;
-        console.log(this.responseText);
         window.history.replaceState("string", "Title", "<?php echo autoUrl("swimmers/orphaned"); ?>?squadID=" + squadValue + "&search=" + searchValue);
       }
     }
-    xhttp.open("POST", "<?php echo autoURL("swimmers/ajax/swimmerDirectory"); ?>", true);
+    xhttp.open("POST", <?=json_encode(autoUrl("swimmers/ajax/swimmerDirectory"))?>, true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("type=orphan&squadID=" + squadValue + "&search=" + searchValue);
     console.log("Sent");
@@ -90,6 +82,7 @@ getResult();
 document.getElementById("squad").onchange=getResult;
 document.getElementById("search").oninput=getResult;
 </script>
+
 <?php
+
 include BASE_PATH . "views/footer.php";
-?>

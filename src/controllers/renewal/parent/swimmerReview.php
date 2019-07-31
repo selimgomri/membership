@@ -31,7 +31,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
         our registers if they cannot renew.
       </p>
 
-      <?=mySwimmersTable($link, $userID)?>
+      <?=mySwimmersTable(null, $userID)?>
 
       <?php if ($rr) { ?>
       <p>

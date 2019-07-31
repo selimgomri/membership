@@ -48,9 +48,9 @@ $swimsTextArray = ['50 Free','100 Free','200 Free','400 Free','800 Free','1500 F
 $counter = 0;
 for ($i=0; $i<sizeof($swimsArray); $i++) {
   $col = $swimsArray[$i];
-  $sql = "SELECT `$col` FROM `galaEntries` WHERE `MemberID` = '$id' AND `$col` = '1'";
-  $result = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($result);
+  $sql = $db->prepare("SELECT COUNT(*) FROM `galaEntries` WHERE `MemberID` = ? AND `$col` = '1'");
+  $sql->execute([$id]);
+  $count = $sql->fetchColumn();
   $swimsCountArray[$i] = $count;
   $strokesCountArray[$strokesArray[$i]] += $count;
   $counter += $count;
@@ -134,8 +134,8 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
         <div class="col-sm-6 col-md-4">
           <h3 class="h6">Attendance</h3>
           <p>
-            <?=getAttendanceByID($link, $id, 4)?>% over the last 4 weeks,
-            <?=getAttendanceByID($link, $id)?>% over all time
+            <?=getAttendanceByID(null, $id, 4)?>% over the last 4 weeks,
+            <?=getAttendanceByID(null, $id)?>% over all time
           </p>
         </div>
         <div class="col-sm-6 col-md-4">
@@ -248,14 +248,15 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
       <div class="">
         <h2 class="border-bottom border-gray pb-2 mb-0">Best Times</h2>
         <?php
-        $sc = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'SCPB';";
-        $lc = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'LCPB';";
-        $scy = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'CY_SC';";
-        $lcy = "SELECT * FROM `times` WHERE `MemberID` = '$id' AND `Type` = 'CY_LC';";
-        $sc = mysqli_fetch_array(mysqli_query($link, $sc), MYSQLI_ASSOC);
-        $lc = mysqli_fetch_array(mysqli_query($link, $lc), MYSQLI_ASSOC);
-        $scy = mysqli_fetch_array(mysqli_query($link, $scy), MYSQLI_ASSOC);
-        $lcy = mysqli_fetch_array(mysqli_query($link, $lcy), MYSQLI_ASSOC);
+        $timeGet = $db->prepare("SELECT * FROM `times` WHERE `MemberID` = ? AND `Type` = ?");
+        $timeGet->execute([$id, 'SCPB']);
+        $sc = $timeGet->fetch(PDO::FETCH_ASSOC);
+        $timeGet->execute([$id, 'LCPB']);
+        $lc = $timeGet->fetch(PDO::FETCH_ASSOC);
+        $timeGet->execute([$id, 'CY_SC']);
+        $scy = $timeGet->fetch(PDO::FETCH_ASSOC);
+        $timeGet->execute([$id, 'CY_LC']);
+        $lcy = $timeGet->fetch(PDO::FETCH_ASSOC);
         $ev = ['50Free', '100Free', '200Free', '400Free', '800Free', '1500Free',
         '50Breast', '100Breast', '200Breast', '50Fly', '100Fly', '200Fly',
         '50Back', '100Back', '200Back', '100IM', '200IM', '400IM'];

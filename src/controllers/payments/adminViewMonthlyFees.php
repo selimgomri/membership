@@ -34,10 +34,10 @@ include BASE_PATH . 'views/header.php'; ?>
 				<?php while ($row = $getDetails->fetch(PDO::FETCH_ASSOC)) { ?>
 				<tr>
 					<td><?=htmlspecialchars($row['Forename'] . ' ' . $row['Surname'])?></td>
-					<td><?=swimmers($link, $row['UserID'], true)?></td>
+					<td><?=swimmers(null, $row['UserID'], true)?></td>
 					<td>
-						Squads: <?=(monthlyFeeCost($link, $row['UserID'], "string"))?> <br>
-						Extras Fees: <?=(monthlyExtraCost($link, $row['UserID'], "string"))?>
+						Squads: <?=(monthlyFeeCost(null, $row['UserID'], "string"))?> <br>
+						Extras Fees: <?=(monthlyExtraCost(null, $row['UserID'], "string"))?>
 					</td>
 				</tr>
 			<?php } ?>

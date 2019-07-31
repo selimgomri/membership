@@ -5,7 +5,7 @@
   $access = $_SESSION['AccessLevel'];
 
   $pos = mb_strrpos ($URI . "attendance/" , '/');
-  $url = mysqli_real_escape_string($link, $_SERVER['REQUEST_URI']);
+  $url = $_SERVER['REQUEST_URI'];
   $url = preg_replace('{/$}', '', $url);
   //$pos = mb_strrpos($url, '/');
   $id = $pos === false ? $url : substr($url, $pos + 1);
@@ -37,7 +37,7 @@
     elseif (($id == "sessions")) {
       $pagetitle = "Add or Edit Sessions";
       $title = "Add or Edit Sessions";
-      $content = "<p class=\"lead\">Every squad has sessions $linked to it. These are required for our attendance application. The data about sessions is also used to provide information to parents (in future).</p>";
+      $content = "<p class=\"lead\">Every squad has sessions linked to it. These are required for our attendance application. The data about sessions is also used to provide information to parents (in future).</p>";
       include "sessions.php";
     }
     elseif (($id == "sessions/" . $idLast)) {

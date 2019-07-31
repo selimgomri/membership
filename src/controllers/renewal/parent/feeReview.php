@@ -17,7 +17,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			<p class="lead">Here are the monthly fees you pay.</p>
 
 			<div class="mb-3">
-				<?php echo myMonthlyFeeTable($link, $userID); ?>
+				<?php echo myMonthlyFeeTable(null, $userID); ?>
 			</div>
 
 			<p>You will pay these fees by Direct Debit.</p>

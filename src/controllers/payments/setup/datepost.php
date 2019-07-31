@@ -8,7 +8,6 @@ if ($renewal_trap) {
 }
 
 $user = $_SESSION['UserID'];
-// $date = mysqli_real_escape_string($link, $_POST['chosenDay']);
 $date = 1;
 
 try {

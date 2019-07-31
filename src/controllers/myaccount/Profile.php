@@ -75,16 +75,20 @@ if (!empty($_POST['mobile'])) {
 $post = app('request')->body;
 if (app('request')->method == "POST") {
 if (isset($post['emailContactOK']) && $post['emailContactOK'] == 1) {
-  $sql = "UPDATE `users` SET `EmailComms` = '1' WHERE `UserID` = '$userID'";
-  mysqli_query($link, $sql);
+  $sql = $db->prepare("UPDATE `users` SET `EmailComms` = '1' WHERE `UserID` = ?");
+  $sql->execute([
+    $userID
+  ]);
   if ($emailComms != 1) {
     $emailCommsUpdate = true;
     $update = true;
     $emailComms = 1;
   }
 } else {
-  $sql = "UPDATE `users` SET `EmailComms` = '0' WHERE `UserID` = '$userID'";
-  mysqli_query($link, $sql);
+  $sql = $db->prepare("UPDATE `users` SET `EmailComms` = '0' WHERE `UserID` = ?");
+  $sql->execute([
+    $userID
+  ]);
   if ($emailComms == 1) {
     $emailCommsUpdate = true;
     $update = true;
@@ -92,16 +96,20 @@ if (isset($post['emailContactOK']) && $post['emailContactOK'] == 1) {
   }
 }
 if (isset($post['smsContactOK'])  && $post['smsContactOK'] == 1) {
-  $sql = "UPDATE `users` SET `MobileComms` = '1' WHERE `UserID` = '$userID'";
-  mysqli_query($link, $sql);
+  $sql = $db->prepare("UPDATE `users` SET `MobileComms` = '1' WHERE `UserID` = ?");
+  $sql->execute([
+    $userID
+  ]);
   if ($mobileComms != 1) {
     $mobileCommsUpdate = true;
     $mobileComms = 1;
     $update = true;
   }
 } else {
-  $sql = "UPDATE `users` SET `MobileComms` = '0' WHERE `UserID` = '$userID'";
-  mysqli_query($link, $sql);
+  $sql = $db->prepare("UPDATE `users` SET `MobileComms` = '0' WHERE `UserID` = ?");
+  $sql->execute([
+    $userID
+  ]);
   if ($mobileComms == 1) {
     $mobileCommsUpdate = true;
     $update = true;
@@ -158,10 +166,10 @@ include BASE_PATH . "views/header.php";
   <h1>Hello <?=htmlspecialchars($forename)?></h1>
   <p class="lead">Welcome to My Account where you can change your personal details, password, contact information and add swimmers to your account.</p>
   <?php if (isset($_SESSION['UserDetailsUpdate'])) {
-    $userID = mysqli_real_escape_string($link, $_SESSION['UserID']);
-    $query = "SELECT * FROM users WHERE UserID = '$userID';";
-    $result = mysqli_query($link, $query);
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $userID = $_SESSION['UserID'];
+    $query = $db->prepare("SELECT * FROM users WHERE UserID = ?;");
+    $query->execute([$userID]);
+    $row = $query->fetch(PDO::FETCH_ASSOC);
     $email = $row['EmailAddress'];
     $forename = $row['Forename'];
     $surname = $row['Surname'];
@@ -251,7 +259,7 @@ include BASE_PATH . "views/header.php";
         <div class="cell">
           <h2>My Swimmers</h2>
           <p>Swimmers linked to your account</p>
-          <?php echo mySwimmersTable($link, $userID) ?>
+          <?php echo mySwimmersTable(null, $userID) ?>
           <p><a href="<?php echo autoUrl("my-account/addswimmer"); ?>" class="btn btn-success">Add a Swimmer</a></p>
         </div>
       <?php } ?>

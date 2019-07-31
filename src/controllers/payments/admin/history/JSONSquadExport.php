@@ -1,7 +1,6 @@
 <?php
 
 global $db;
-global $link;
 
 use Respect\Validation\Validator as v;
 
@@ -78,8 +77,8 @@ if ($row != null) {
   	if ($row['UserID'] != null) {
   		if ($user_id_last != $user_id) {
   			$parent['Name'] = $row['Forename'] . " " . $row['Surname'];
-  			$parent['FamilyTotal'] = monthlyFeeCost($link, $user_id, "int");
-  			$parent['FamilyTotalString'] = '£' . number_format(monthlyFeeCost($link, $user_id, "decimal"),2,'.','');
+  			$parent['FamilyTotal'] = monthlyFeeCost(null, $user_id, "int");
+  			$parent['FamilyTotalString'] = '£' . number_format(monthlyFeeCost(null, $user_id, "decimal"),2,'.','');
   			$parent['PaymentStatus'] = $row['Status'];
   			$parent['PaymentStatusString'] = paymentStatusString($row['Status']);
   		}

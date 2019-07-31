@@ -1,4 +1,7 @@
 <?php
+
+global $db;
+
 $pagetitle = "Add a member";
 $title = "Add a member";
 $content = "<p class=\"lead\">Add a member to the club system.</p>";
@@ -56,16 +59,13 @@ $content .= "
 		<option value=\"Female\">Female</option>
 	</select>
 </div>";
-$sql = "SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;";
-$result = mysqli_query($link, $sql);
-$squadCount = mysqli_num_rows($result);
+$sql = $db->query("SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;");
 $content .= "
 <div class=\"form-group\">
 	<label for=\"squad\">Squad</label>
 		<select class=\"custom-select\" placeholder=\"Select a Squad\" id=\"squad\" name=\"squad\">";
 //$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-for ($i = 0; $i < $squadCount; $i++) {
-	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 	$content .= "<option value=\"" . $row['SquadID'] . "\"";
 	$content .= ">" . $row['SquadName'] . "</option>";
 }

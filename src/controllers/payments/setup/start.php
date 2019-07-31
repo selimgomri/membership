@@ -1,5 +1,7 @@
 <?php
 
+global $db;
+
 $use_white_background = true;
 
 $url_path = "payments";
@@ -8,8 +10,9 @@ if (isset($renewal_trap) && $renewal_trap) {
 }
 
 $user = $_SESSION['UserID'];
-$sql = "SELECT * FROM `paymentSchedule` WHERE `UserID` = '$user';";
-$scheduleExists = mysqli_num_rows(mysqli_query($link, $sql));
+$sql = $db->prepare("SELECT COUNT(*) FROM `paymentSchedule` WHERE `UserID` = '$user';");
+$sql->execute([$user]);
+$scheduleExists = $sql->fetchColumn();
 if ($scheduleExists > 0) {
 	$scheduleExists = true;
 } else {

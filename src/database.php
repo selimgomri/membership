@@ -247,69 +247,6 @@ function mySwimmersTable($link, $userID) {
   <?php } 
 }
 
-function mySwimmersMedia($link, $userID) {
-  $sqlSwim = "SELECT members.MemberID, members.MForename, members.MSurname,
-  members.ClubPays, users.Forename, users.Surname, users.EmailAddress,
-  members.ASANumber, squads.SquadName, squads.SquadFee FROM ((members INNER JOIN
-  users ON members.UserID = users.UserID) INNER JOIN squads ON members.SquadID =
-  squads.SquadID) WHERE members.UserID = '$userID';";
-  $result = mysqli_query($link, $sqlSwim);
-  $swimmerCount = mysqli_num_rows($result);
-  $swimmerS = $swimmers = '';
-  if ($swimmerCount == 0 || $swimmerCount > 1) {
-    $swimmerS = 'swimmers';
-  }
-  else {
-    $swimmerS = 'swimmer';
-  }
-  $swimmers = '<p class="lead border-bottom border-gray pb-2 mb-0">You have ' .
-  $swimmerCount . ' ' . $swimmerS . '</p>';
-  if ($swimmerCount == 0) {
-    $swimmers .= '<p><a href="' . autoUrl("myaccount/addswimmer") . '"
-    class="btn btn-outline-dark">Add a Swimmer</a></p>';
-  }
-  $output = "";
-  if ($swimmerCount > 0) {
-    $output = '
-    <div class="">
-    <h2>My Swimmers</h2>' . $swimmers;
-    $resultX = mysqli_query($link, $sqlSwim);
-    for ($i = 0; $i < $swimmerCount; $i++) {
-      $swimmersRowX = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
-      $swimmerLink = autoUrl("swimmers/" . $swimmersRowX['MemberID'] . "");
-      $output .= "<div class=\"media text-muted pt-3\"><p class=\"media-body
-      pb-3 mb-0 lh-125 border-bottom border-gray\"><strong class=\"d-block
-      text-gray-dark\"><a href=\"" . $swimmerLink . "\">" .
-      $swimmersRowX['MForename'] . " " . $swimmersRowX['MSurname'] .
-      "</a></strong>
-        " . $swimmersRowX['SquadName'] . " Squad, ";
-        if ($swimmersRowX['ClubPays'] == 0) {
-          $output .= $swimmersRowX['SquadFee'];
-        } else {
-          $output .= "&pound;0.00 <em>(Exempt)</em>";
-        }
-        $output .= ", " . getAttendanceByID($link,
-        $swimmersRowX['MemberID'], 4) . "% <abbr title=\"Attendance over the
-        last four weeks\">Attendance</abbr>
-    </div>";
-    }
-    $output .= '
-    <span class="d-block text-right mt-3">
-          <a href="' . autoUrl('swimmers') . '">Go to My Swimmers</a>
-        </span></div>';
-  }
-  else {
-    $output .= '
-    <div class="">
-    <h2>My Swimmers</h2>
-    <p class="mb-0">It looks like you have no swimmers connected to your
-    account. Why don\'t you <a href="' . autoUrl("myaccount/addswimmer") . '"
-    >add one now</a>?</p>
-    </div>';
-  }
-  return $output;
-}
-
 function generateRandomString($length) {
   $characters =
   '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -336,13 +273,12 @@ function courseLengthString($string) {
 }
 
 function upcomingGalas($link, $links = false, $userID = null) {
-  $sql = "SELECT * FROM `galas` WHERE `galas`.`ClosingDate` >= CURDATE() ORDER BY `galas`.`ClosingDate` ASC;";
-  $result = mysqli_query($link, $sql);
-  $count = mysqli_num_rows($result);
-  if ($count > 0) {
+  global $db;
+  $sql = $db->query("SELECT * FROM `galas` WHERE `galas`.`ClosingDate` >= CURDATE() ORDER BY `galas`.`ClosingDate` ASC;");
+  $row = $sql->fetch(PDO::FETCH_ASSOC);
+  if ($row != null) {
     $output= "<div class=\"media\">";
-    for ($i = 0; $i < $count; $i++) {
-      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    do {
       $output .= " <ul class=\"media-body pt-2 pb-2 mb-0 lh-125 ";
       if ($i != $count-1) {
         if (app('request')->ajax) {
@@ -354,7 +290,7 @@ function upcomingGalas($link, $links = false, $userID = null) {
       $output .= " list-unstyled\"> <li><strong class=\"d-block
       text-gray-dark\">";
       if ($links == true) {
-        $output .= $row['GalaName'] . " (" .
+        $output .= htmlspecialchars($row['GalaName']) . " (" .
         courseLengthString($row['CourseLength']) . ") <a href=\"" .
         autoUrl("galas/competitions/" . $row['GalaID'] . "") . "\"><span
         class=\"small\">Edit Gala and View Statistics</span></a></li>";         } else {
@@ -362,7 +298,7 @@ function upcomingGalas($link, $links = false, $userID = null) {
         courseLengthString($row['CourseLength']) . ")</li>";
       }
       $output .= "</strong></li>";
-      $output .= "<li>" . $row['GalaVenue'] . "<br>";
+      $output .= "<li>" . htmlspecialchars($row['GalaVenue']) . "<br>";
       $output .= "<li>Closing Date " . date('jS F Y',
       strtotime($row['ClosingDate'])) . "</li>";
       if ($userID == null) {
@@ -377,7 +313,7 @@ function upcomingGalas($link, $links = false, $userID = null) {
         $output .= "<li>Entry fee varies by event</li>";
       }
       $output .= "</ul>";
-    }
+    } while ($row = $sql->fetch(PDO::FETCH_ASSOC));
     $output .= "</div>";
   }
   else {
@@ -723,7 +659,6 @@ function mandateExists($mandate) {
 }
 
 function updatePaymentStatus($PMkey) {
-  global $link;
   global $db;
   require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   $sql2bool = $payment = $status = null;
@@ -867,18 +802,15 @@ function paymentStatusString($status) {
 }
 
 function bankDetails($user, $detail) {
-  global $link;
-  $user = mysqli_real_escape_string($link, $user);
-  $sql = "SELECT * FROM `paymentPreferredMandate`
-  INNER JOIN `paymentMandates` ON
-  paymentPreferredMandate.MandateID = paymentMandates.mandateID
-  WHERE paymentPreferredMandate.UserID = '$user';";
-  $result = mysqli_query($link, $sql);
-  if (mysqli_num_rows($result) != 1) {
+  global $db;
+  $sql = $db->prepare("SELECT * FROM `paymentPreferredMandate` INNER JOIN `paymentMandates` ON paymentPreferredMandate.MandateID = paymentMandates.mandateID WHERE paymentPreferredMandate.UserID = ?;");
+  $sql->execute([$user]);
+
+  $row = $sql->fetch(PDO::FETCH_ASSOC);
+
+  if ($row == null) {
     return "Unknown";
   }
-
-  $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
   switch ($detail) {
     case "bank_name":
@@ -899,55 +831,54 @@ function bankDetails($user, $detail) {
 }
 
 function getUserName($user) {
-  global $link;
-  $user = mysqli_real_escape_string($link, $user);
-  $sql = "SELECT `Forename`, `Surname` FROM `users` WHERE `UserID` = '$user';";
-  $result = mysqli_query($link, $sql);
-  if (mysqli_num_rows($result) == 1) {
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+  global $db;
+  $sql = $db->prepare("SELECT `Forename`, `Surname` FROM `users` WHERE `UserID` = ?;");
+  $sql->execute([$user]);
+  $row = $sql->fetch(PDO::FETCH_ASSOC);
+  if ($row != null) {
     return $row['Forename'] . " " . $row['Surname'];
   }
   return false;
 }
 
 function getSwimmerName($swimmer) {
-  global $link;
-  $swimmer = mysqli_real_escape_string($link, $swimmer);
-  $sql = "SELECT `MForename`, `MSurname` FROM `members` WHERE `MemberID` =
-  '$swimmer';";
-  $result = mysqli_query($link, $sql);
-  if (mysqli_num_rows($result) == 1) {
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+  global $db;
+  $sql = $db->prepare("SELECT `MForename`, `MSurname` FROM `members` WHERE `MemberID` = ?;");
+  $row = $sql->fetch(PDO::FETCH_ASSOC);
+  if ($row != null) {
     return $row['MForename'] . " " . $row['MSurname'];
   }
   return false;
 }
 
 function setupPhotoPermissions($id) {
-  global $link;
-  $id = mysqli_real_escape_string($link, $id);
-  $sql = "SELECT * FROM `memberPhotography` WHERE `MemberID` = '$id';";
-  if (mysqli_num_rows(mysqli_query($link, $sql)) == 0) {
-    $sql = "INSERT INTO `memberPhotography` (`MemberID`, `Website`, `Social`,
-    `Noticeboard`, `FilmTraining`, `ProPhoto`) VALUES ('$id', '0', '0', '0',
-    '0', '0');";
-    if (mysqli_query($link, $sql)) {
+  global $db;
+  try {
+    $sql = $db->prepare("SELECT COUNT(*) FROM `memberPhotography` WHERE `MemberID` = ?;");
+    $sql->execute([$id]);
+    if ($sql->fetchColumn() == 0) {
+      $sql = $db->prepare("INSERT INTO `memberPhotography` (`MemberID`, `Website`, `Social`, `Noticeboard`, `FilmTraining`, `ProPhoto`) VALUES (?, '0', '0', '0', '0', '0');");
+      $sql->execute([$id]);
       return true;
     }
+  } catch (Exception $e) {
+    return false;
   }
   return false;
 }
 
 function setupMedicalInfo($id) {
-  global $link;
-  $id = mysqli_real_escape_string($link, $id);
-  $sql = "SELECT * FROM `memberMedical` WHERE `MemberID` = '$id';";
-  if (mysqli_num_rows(mysqli_query($link, $sql)) == 0) {
-    $sql = "INSERT INTO `memberMedical` (`MemberID`, `Conditions`, `Allergies`,
-    `Medication`) VALUES ('$id', '', '', '');";
-    if (mysqli_query($link, $sql)) {
+  global $db;
+  try {
+    $sql = $db->prepare("SELECT * FROM `memberMedical` WHERE `MemberID` = ?;");
+    $sql->execute([$id]);
+    if ($sql->fetchColumn() == 0) {
+      $sql = $db->prepare("INSERT INTO `memberMedical` (`MemberID`, `Conditions`, `Allergies`, `Medication`) VALUES (?, '', '', '');");
+      $sql->execute([$id]);
       return true;
     }
+  } catch (Exception $e) {
+    return false;
   }
   return false;
 }
@@ -1063,122 +994,6 @@ function getTimes($asa) {
     return $array;
   }
   return false;
-}
-
-function getTimesInFull($asa, $swim, $course) {
-  global $link;
-
-  $swimsArray = [
-    '50Free' => '1',
-    '100Free' => '2',
-    '200Free' => '3',
-    '400Free' => '4',
-    '800Free' => '5',
-    '1500Free' => '6',
-    '50Breast' => '7',
-    '100Breast' => '8',
-    '200Breast' => '9',
-    '50Fly' => '10',
-    '100Fly' => '11',
-    '200Fly' => '12',
-    '50Back' => '13',
-    '100Back' => '14',
-    '200Back' => '15',
-    '100IM' => '18',
-    '200IM' => '16',
-    '400IM' => '17'
-  ];
-
-  $courseArray = [
-    'Long' => 'L',
-    'LongCourse' => 'L',
-    'LC' => 'L',
-    'Short' => 'S',
-    'ShortCourse' => 'S',
-    'SC' => 'S'
-  ];
-
-  $swim = $swimsArray[$swim];
-  $course = $courseArray[$course];
-
-
-  $curlres =
-  curl('https://www.swimmingresults.org/individualbest/personal_best_time_date.php?back=biogs&tiref=' .
-  $asa . '&mode=A&tstroke=' . $swim . '&tcourse=' . $course);
-
-  $start = '<p class="rnk_sj">Swims in Date Order</p><table id="rankTable"><tbody>';
-  $end = '</tbody></table>';
-
-  $output = curl_scrape_between($curlres, $start, $end);
-  $output = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $output);
-  $output = preg_replace('/(<[^>]+) width=".*?"/i', '$1', $output);
-
-  $crawler = new Crawler($output);
-  $crawler = $crawler->filter('tr > td');
-
-  $array = ['Time', 'FINA', 'Round', 'Date', 'Meet', 'Venue', 'Club', 'Level'];
-  $count = 0;
-
-  foreach ($crawler as $domElement) {
-    $col = $count%8;
-    if ($col == 0) {
-      if ($domElement->textContent == "") {
-        $array['Time'][] = null;
-      } else {
-        $array['Time'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
-      }
-    } else if ($col == 1) {
-      if ($domElement->textContent == "") {
-        $array['FINA'][] = null;
-      } else {
-        $array['FINA'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
-      }
-    } else if ($col == 2) {
-      if ($domElement->textContent == "") {
-        $array['ROUND'][] = 'H';
-      } else {
-        $array['ROUND'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
-      }
-    } else if ($col == 3) {
-      if ($domElement->textContent == "") {
-        $array['Date'][] = null;
-      } else {
-        $date = date_parse_from_format("d/m/y", $domElement->textContent);
-        $date = $date['year'] . "-" . sprintf('%02d', $date['month']) . "-" .
-        sprintf('%02d', $date['day']);
-        $array['Date'][] = mysqli_real_escape_string($link, trim($date));
-      }
-    } else if ($col == 4) {
-      if ($domElement->textContent == "") {
-        $array['Meet'][] = null;
-      } else {
-        $array['Meet'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
-      }
-    } else if ($col == 5) {
-      if ($domElement->textContent == "") {
-        $array['Venue'][] = null;
-      } else {
-        $array['Venue'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
-      }
-    } else if ($col == 4) {
-      if ($domElement->textContent == "") {
-        $array['License'][] = null;
-      } else {
-        $array['License'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
-      }
-    } else if ($col == 4) {
-      if ($domElement->textContent == "") {
-        $array['Level'][] = null;
-      } else {
-        $array['Level'][] = mysqli_real_escape_string($link, trim($domElement->textContent));
-      }
-    }
-    $count++;
-  }
-
-  return $array;
-
-  //return $crawler;
 }
 
 function user_needs_registration($user) {

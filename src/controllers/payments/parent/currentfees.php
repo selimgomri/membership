@@ -17,7 +17,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php'; ?>
   		<p>You'll be billed for these on the first working day of the next month.</p>
     </div>
   </div>
-	<?=feesToPay($link, $user)?>
+	<?=feesToPay(null, $user)?>
 </div>
 
 <?php

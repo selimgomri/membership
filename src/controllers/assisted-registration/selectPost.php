@@ -36,7 +36,10 @@ if ($success) {
   $subject = "Complete your registration at " . env('CLUB_NAME');
   $message = "<p>Hello " . htmlspecialchars($user['first']) . ", </p>";
   $message .= "<p>We've pre-registered you for a " . htmlspecialchars(env('CLUB_NAME')) . " account. To continue, <a href=\"" . autoUrl("assisted-registration/" . $_SESSION['AssRegUser'] . "/" . $_SESSION['AssRegPass']) . "\">please follow this link</a></p>";
-  $message .= "As part of the registration process, we'll ask you to set a password and let us know your communication preferences.";
+  $message .= "<p>As part of the registration process, we'll ask you to set a password and let us know your communication preferences.</p>";
+  if (!bool(env('IS_CLS'))) {
+    $message .= '<p>Please note that your club may not provide all services included in the membership software.</p>';
+  }
 
   notifySend(null, $subject, $message, $user['first'] . ' ' . $user['last'], $user['email']);
 

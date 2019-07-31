@@ -1,64 +1,85 @@
 <?php
+
+global $db;
+
+$errorStatus = false;
 $duplicateReg = false;
 if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["session"]))) {
 	// Happy Days. Now we just need the members
 
-	$weekBeginningID = mysqli_real_escape_string($link, htmlentities($_POST["date"]));
-	$squadID = mysqli_real_escape_string($link, htmlentities($_POST["squad"]));
-	$sessionID = mysqli_real_escape_string($link, htmlentities($_POST["session"]));
+	$weekBeginningID = $_POST["date"];
+	$squadID = $_POST["squad"];
+	$sessionID = $_POST["session"];
 
 	// SQL to check we've not done the register before
-	$sql = "SELECT * FROM `sessionsAttendance` WHERE `WeekID` = '$weekBeginningID' AND `SessionID` = '$sessionID';";
-	$result = mysqli_query($link, $sql);
-	$registerCount = mysqli_num_rows($result);
+	$sql = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` WHERE `WeekID` = ? AND `SessionID` = ?;");
+	$sql->execute([
+		$weekBeginningID,
+		$sessionID
+	]);
+	$registerCount = $sql->fetchColumn();
 
 	// SQL to get the member IDs
 	$sqlMembers = $sql = "SELECT `MemberID` FROM `members` WHERE `SquadID` = '$squadID';";
-	$result = mysqli_query($link, $sql);
-	$swimmerCount = mysqli_num_rows($result);
+	$sql = $db->prepare("SELECT `MemberID` FROM `members` WHERE `SquadID` = ?;");
+	$sql->execute([$squadID]);
 
 	// Initialise the attendance values string for MySQL
 	$values = "";
 
+	$insertRecord = $db->prepare("INSERT INTO `sessionsAttendance` (WeekID, MemberID, SessionID, AttendanceBoolean) VALUES (?, ?, ?, ?);");
+
 	// Insert the register data
 	if ($registerCount < 1) {
-		for ($i=0; $i<$swimmerCount; $i++) {
-			$attendance = 0;
-			// Get the attendance value, if it is set for each member
-			$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-			if (isset($_POST["Member-" . $row['MemberID']])) {
-				$attendance = 1;
+		try {
+			while ($member = $sql->fetchColumn()) {
+				$attendance = 0;
+				// Get the attendance value, if it is set for each member
+				if (isset($_POST["Member-" . $member])) {
+					$attendance = 1;
+				}
+				$insertRecord->execute([
+					$weekBeginningID,
+					$member,
+					$sessionID,
+					$attendance
+				]);
 			}
-			if ($i<($swimmerCount-1)) {
-				$values .= "(" . $weekBeginningID . "," . $row['MemberID'] . "," . $sessionID . "," . $attendance . "),";
-			}
-			else {
-				$values .= "(" . $weekBeginningID . "," . $row['MemberID'] . "," . $sessionID . "," . $attendance . ")";
-			}
-		}
 
-		$sql = "INSERT INTO `sessionsAttendance` (WeekID, MemberID, SessionID, AttendanceBoolean) VALUES " . $values . ";";
-		if (mysqli_query($link, $sql)) {
 			// Return info page
 			$return = "<strong>Successfully saved the session register</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-link\">mms@chesterlestreetasc.co.uk</a>";
 			$_SESSION['return'] = $return;
+		} catch (Exception $e) {
+			$errorStatus = true;
 		}
-	}
-	else {
-		$result = mysqli_query($link, $sqlMembers);
-		for ($i=0; $i<$swimmerCount; $i++) {
-			$attendance = 0;
-			$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-			if (isset($_POST["Member-" . $row['MemberID']])) {
-				$attendance = 1;
+	} else {
+		try {
+			$updateRecord = $db->prepare("UPDATE `sessionsAttendance` SET AttendanceBoolean = ? WHERE MemberID = ? AND SessionID = ? AND WeekID = ?;");
+			while ($member = $sql->fetchColumn()) {
+				$attendance = 0;
+				// Get the attendance value, if it is set for each member
+				if (isset($_POST["Member-" . $member])) {
+					$attendance = 1;
+				}
+				try {
+					$updateRecord->execute([
+						$attendance,
+						$member,
+						$sessionID,
+						$weekBeginningID,
+					]);
+				} catch (Exception $e) {
+					// This catches errors with members who were not in squad when register first taken
+				}
 			}
-			$sql = "UPDATE `sessionsAttendance` SET AttendanceBoolean = '$attendance' WHERE MemberID = " . $row['MemberID'] . " AND WeekID = '$weekBeginningID' AND SessionID = '$sessionID';";
-			mysqli_query($link, $sql);
-				// Return info page
-				//$return = "<strong>Successfully saved the session register</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-link\">mms@chesterlestreetasc.co.uk</a>";
-				//$_SESSION['return'] = $return;
+
+			// Return info page
+			$return = "<strong>Successfully saved the session register</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-link\">mms@chesterlestreetasc.co.uk</a>";
+			$_SESSION['return'] = $return;
+			$duplicateReg = true;
+		} catch (Exception $e) {
+			$errorStatus = true;
 		}
-		$duplicateReg = true;
 	}
 
 	if ($duplicateReg == true) {
@@ -66,9 +87,14 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 		$_SESSION['return'] = $return;
 	}
 
-}
-else {
+} else {
 	$return = "<p><strong>An Error Occurred</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-link\">mms@chesterlestreetasc.co.uk</a></p>";
 	$_SESSION['return'] = $return;
 }
+
+if ($errorStatus) {
+	$return = "<p><strong>An Error Occurred</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-link\">mms@chesterlestreetasc.co.uk</a></p>";
+	$_SESSION['return'] = $return;
+}
+
 header("Location: " . autoUrl("attendance/register/" . $squadID . "/" . $sessionID));

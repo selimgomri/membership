@@ -100,9 +100,8 @@ include "galaMenu.php"; ?>
   	$counter = 0;
   	for ($i=0; $i<sizeof($swimsArray); $i++) {
   		$col = $swimsArray[$i];
-  		$sql = "SELECT `$col` FROM `galaEntries` WHERE `$col` = '1'";
-  		$result = mysqli_query($link, $sql);
-  		$count = mysqli_num_rows($result);
+  		$sql = $db->query("SELECT COUNT(`$col`) FROM `galaEntries` WHERE `$col` = '1'");
+  		$count = $sql->fetchColumn();
   		$swimsCountArray[$i] = $count;
   		$strokesCountArray[$strokesArray[$i]] += $count;
   		$counter += $count;

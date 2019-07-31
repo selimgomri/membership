@@ -33,10 +33,6 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
 
   $row = $getUser->fetch(PDO::FETCH_ASSOC);
 
-  //$query = "SELECT * FROM users WHERE EmailAddress = '$username' LIMIT 0, 30 ";
-  //$result = mysqli_query($link, $query);
-  //$count = mysqli_num_rows($result);
-
   if ($row != null) {
     //$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     $hash = $row['Password'];
