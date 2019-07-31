@@ -5,7 +5,9 @@ function reportError($e) {
   if (env('ERROR_REPORTING_EMAIL') != null) {
     try {
       $emailMessage = '<p>This is an error report</p>';
-      $emailMessage .= '<p>The active user was ' . htmlspecialchars($_SESSION['Forename'] . ' ' . $_SESSION['Surname']) . ' (User ID #' . $_SESSION['UserID'] . ')</p>';
+      if (isset($_SESSION['UserID'])) {
+        $emailMessage .= '<p>The active user was ' . htmlspecialchars($_SESSION['Forename'] . ' ' . $_SESSION['Surname']) . ' (User ID #' . $_SESSION['UserID'] . ')</p>';
+      }
       if (isset($e)) {
         ob_start();
         pre($e);

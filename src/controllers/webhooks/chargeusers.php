@@ -20,7 +20,7 @@ $date = date("Y-m") . "-01";
 $day = date("d");
 
 try {
-  $getPayments = $db->prepare("SELECT payments.UserID, Amount, Currency, Name, PaymentID FROM payments LEFT JOIN paymentSchedule ON payments.UserID = paymentSchedule.UserID WHERE (Status = 'pending_api_request' AND Day <= ? AND Type = 'Payment') OR (Status = 'pending_api_request' AND `Day` IS NULL AND `Type` = 'Payment') LIMIT 4");
+  $getPayments = $db->prepare("SELECT payments.UserID, Amount, Currency, Name, PaymentID FROM payments LEFT JOIN paymentSchedule ON payments.UserID = paymentSchedule.UserID WHERE (Status = 'pending_api_request' AND `Day` <= ? AND Type = 'Payment') OR (Status = 'pending_api_request' AND `Day` IS NULL AND `Type` = 'Payment') LIMIT 4");
   $getPayments->execute([$day]);
   while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)) {
   	$userid = $row['UserID'];

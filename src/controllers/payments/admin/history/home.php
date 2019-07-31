@@ -31,7 +31,7 @@ $date = date("Y/m");
         <p class="lead">Select a year and month to view the status of Direct Debit Payments.</p>
         <ul>
           <?php for ($i = 0; $i < 12; $i++) {
-          $targetDate = strtotime($now . " - " . $i . " months"); ?>
+          $targetDate = strtotime("first day of -" . $i . " month"); ?>
           <li>
             <a href="<?=autoUrl("payments/history/" . date("Y/m", $targetDate)); ?>">
               <?=htmlspecialchars(date("F Y", $targetDate))?>
@@ -53,7 +53,7 @@ $date = date("Y/m");
         <p class="lead">Select to view Squad Fee Status by Month</p>
         <ul>
           <?php for ($i = 0; $i < 12; $i++) {
-          $targetDate = strtotime($now . " - " . $i . " months"); ?>
+          $targetDate = strtotime("first day of -" . $i . " month"); ?>
           <li>
             <a href="<?=autoUrl("payments/history/squads/" . date("Y/m", $targetDate))?>">
               <?=htmlspecialchars(date("F Y", $targetDate))?>
@@ -69,7 +69,7 @@ $date = date("Y/m");
         <p class="lead">Select to view Extra Fee Status by Month</p>
         <ul>
           <?php for ($i = 0; $i < 12; $i++) {
-          $targetDate = strtotime($now . " - " . $i . " months"); ?>
+          $targetDate = strtotime("first day of -" . $i . " month"); ?>
           <li>
             <a href="<?=autoUrl("payments/history/extras/" . date("Y/m", $targetDate))?>">
               <?=htmlspecialchars(date("F Y", $targetDate))?>
