@@ -774,7 +774,7 @@ function updatePaymentStatus($PMkey) {
 function paymentStatusString($status) {
   switch ($status) {
     case "paid_out":
-      return "Paid to " . env('CLUB_CODE');
+      return "Paid to " . env('CLUB_SHORT_NAME');
     case "paid_manually":
       return "Paid Manually";
     case "pending_customer_approval":

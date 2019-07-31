@@ -24,8 +24,17 @@ include "attendanceMenu.php";
 ?>
 
 <div class="container-fluid">
-  <h1>Register</h1>
-  <p class="lead">Take the register for your Squad</p>
+  <div class="row align-items-center">
+    <div class="col-sm-auto">
+    <h1>Register</h1>
+    <p class="lead">Take the register for your Squad</p>
+    </div>
+    <div class="col">
+      <p class="lead text-sm-right">
+        The time is <span id="dtOut" class="mono"></span>
+      </p>
+    </div>
+  </div>
   <?php if (isset($_SESSION['return'])) { ?>
   <div class="alert alert-success">
     <?=$_SESSION['return']?>
@@ -33,63 +42,65 @@ include "attendanceMenu.php";
   <?php unset($_SESSION['return']); } ?>
 
   <form method="post">
-    <div class="cell">
-      <h2>Select Session</h2>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="session">Select Week</label>
-            <select class="custom-select" name="date" id="date">
-              <?php
-                // Get the date of the week beginning
-                $day = date('w');
-                $week_start = date('Y-m-d', strtotime('-'.$day.' days'));
-                while ($week = $getWeeks->fetch(PDO::FETCH_ASSOC)) { ?>
-                <?php if ($week_to_get == null) {
-                  $week_to_get = $week['WeekID'];
-                } ?>
-              <option value="<?=$week['WeekID']?>">
-                Week Beginning <?=date('j F Y', strtotime($week['WeekDateBeginning']))?>
-              </option>
-              <?php } ?>
-            </select>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h2 class="card-title">Select Session</h2>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="session">Select Week</label>
+              <select class="custom-select" name="date" id="date">
+                <?php
+                  // Get the date of the week beginning
+                  $day = date('w');
+                  $week_start = date('Y-m-d', strtotime('-'.$day.' days'));
+                  while ($week = $getWeeks->fetch(PDO::FETCH_ASSOC)) { ?>
+                  <?php if ($week_to_get == null) {
+                    $week_to_get = $week['WeekID'];
+                  } ?>
+                <option value="<?=$week['WeekID']?>">
+                  Week Beginning <?=date('j F Y', strtotime($week['WeekDateBeginning']))?>
+                </option>
+                <?php } ?>
+              </select>
+            </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="squad">Select Squad</label>
-            <select class="custom-select" name="squad" id="squad">';
-              <?php if ($squad == null) { ?>
-              <option value="0">Choose your squad from the menu</option>
-              <?php } ?>
-              <?php while ($row = $getSquads->fetch(PDO::FETCH_ASSOC)) { ?>
-              <option value="<?=$row['SquadID']?>" <?php if ($squad == $row['SquadID']) { ?>selected<?php } ?>>
-                <?=htmlspecialchars($row['SquadName'])?> Squad
-              </option>
-              <?php } ?>
-            </select>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="squad">Select Squad</label>
+              <select class="custom-select" name="squad" id="squad">';
+                <?php if ($squad == null) { ?>
+                <option value="0">Choose your squad from the menu</option>
+                <?php } ?>
+                <?php while ($row = $getSquads->fetch(PDO::FETCH_ASSOC)) { ?>
+                <option value="<?=$row['SquadID']?>" <?php if ($squad == $row['SquadID']) { ?>selected<?php } ?>>
+                  <?=htmlspecialchars($row['SquadName'])?> Squad
+                </option>
+                <?php } ?>
+              </select>
+            </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group mb-0">
-            <label for="session">Select Session</label>
-            <select class="custom-select" id="session" name="session">
-              <?php if ($session_init && $squad_init) { ?>
-              <?php
-              $getRegister = false;
-              $getSessions = true;
-              include BASE_PATH . 'controllers/ajax/registerSessions.php';
-              ?>
-              <?php } else { ?>
-              <option selected>No squad selected</option>
-              <?php } ?>
-            </select>
+          <div class="col-md-4">
+            <div class="form-group mb-0">
+              <label for="session">Select Session</label>
+              <select class="custom-select" id="session" name="session">
+                <?php if ($session_init && $squad_init) { ?>
+                <?php
+                $getRegister = false;
+                $getSessions = true;
+                include BASE_PATH . 'controllers/ajax/registerSessions.php';
+                ?>
+                <?php } else { ?>
+                <option selected>No squad selected</option>
+                <?php } ?>
+              </select>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="cell">
+    <div class="card">
       <div id="register">
         <?php if ($session_init && $squad_init) { ?>
         <?php
@@ -99,7 +110,7 @@ include "attendanceMenu.php";
         include BASE_PATH . 'controllers/ajax/registerSessions.php';
         ?>
         <?php } else { ?>
-        <div class="ajaxPlaceholder mb-0">Fill in the details above to load a register. Hit refresh if loading fails.
+        <div class="ajaxPlaceholder mb-0">Fill in the details above to load a register.
         </div>
         <?php } ?>
       </div>
@@ -161,18 +172,15 @@ function getRegister(firstLoad = false) {
   }
   var date = document.getElementById("date");
   var dateValue = date.options[date.selectedIndex].value;
-  console.log(value);
-  console.log(dateValue);
   if (value == "") {
     document.getElementById("register").innerHTML =
-      '<div class="ajaxPlaceholder mb-0">Fill in the details above and we can load the register</div>';
+      '<div class="ajaxPlaceholder mb-0">Fill in the details above to load a register.</div>';
     return;
   } else {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         document.getElementById("register").innerHTML = this.responseText;
-        console.log(this.responseText);
       }
     }
     xmlhttp.open("GET", "<?=autoUrl("attendance/ajax/register/sessions")?>?sessionID=" + value + "&date=" + dateValue,
@@ -188,6 +196,22 @@ function getRegister(firstLoad = false) {
 
 document.getElementById("squad").onchange = getSessions;
 document.getElementById("session").onchange = getRegister;
+</script>
+
+<script>
+function updateTime() {
+  var datetimeScreenOutput = document.getElementById("dtOut");
+  if (datetimeScreenOutput != null) {
+    var today = new Date();
+    datetimeScreenOutput.textContent = today.toLocaleTimeString(undefined, {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+  }
+}
+
+var intervalID = window.setInterval(updateTime, 250);
 </script>
 <?php
 include BASE_PATH . "views/footer.php";
