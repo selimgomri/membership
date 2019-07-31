@@ -273,11 +273,11 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
               <th class="">Swim</th>
               <th>Short Course</th>
               <?php if (!isset($mob) || !$mob) { ?>
-              <th>SC: Last 12 Months</th>
+              <th><?=date("Y")?> Short Course</th>
               <?php } ?>
               <th>Long Course</th>
               <?php if (!isset($mob) || !$mob) { ?>
-              <th>LC: Last 12 Months</th>
+              <th><?=date("Y")?> Long Course</th>
               <?php } ?>
             </thead>
             <tbody>

@@ -153,7 +153,7 @@ ob_start();?>
 
       $swims[] = 'Event';
     	$timesArrayA[] = 'PB';
-    	$timesArrayB[] = '12mnth PB';
+    	$timesArrayB[] = date("Y") . ' PB';
     	$heats[] = 'Heats';
     	$finalsA[] = 'Semi-F';
     	$finalsB[] = 'Finals';

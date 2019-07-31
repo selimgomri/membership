@@ -336,11 +336,11 @@ $content .= '
     $content.= '<table class="table table-sm table-borderless table-striped mb-2">
     <thead class="thead-light"><tr><th>Swim</th><th>Short Course</th>';
     if (!$mob) {
-      $content .= '<th>SC: Last 12 Months</th>';
+      $content .= '<th>' . date("Y") . ' SC</th>';
     }
     $content .= '<th>Long Course</th>';
     if (!$mob) {
-      $content .= '<th>LC: Last 12 Months</th>';
+      $content .= '<th>' . date("Y") . ' LC</th>';
     }
     $content .= '</thead>
     <tbody>';

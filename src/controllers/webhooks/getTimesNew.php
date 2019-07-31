@@ -62,7 +62,7 @@ for ($i = 0; $i < $count_to_get; $i++) {
 		}
 
 		if ($hasArray) {
-			pre($array);
+			//pre($array);
 			$array12 = null;
 			for ($y = 0; $y < 4; $y++) {
 				//echo "Y = $y, ";
@@ -95,7 +95,7 @@ for ($i = 0; $i < $count_to_get; $i++) {
 				$t17 = null;
 				$t18 = null;
 
-				if ($y == 2) {
+				if (false /*$y == 2*/) {
 					// Get the last 12 months
 
 					// Long Course
@@ -148,7 +148,7 @@ for ($i = 0; $i < $count_to_get; $i++) {
 					$t18 = null;
 					*/
 
-				} else if ($y == 0) {
+				} else if (false /*$y == 0*/) {
 
 					/*
 					$start = '<p class="rnk_sj">Short Course</p><table id="rankTable"><tbody>';
