@@ -4,6 +4,10 @@
   padding: 1rem 0;
 }
 
+.have-full-height .front-page {
+  min-height:70vh;
+}
+
 .news-grid {
   list-style: none;
   display: grid;

@@ -9450,6 +9450,10 @@ a {
   padding: 1rem;
 }
 
+.have-full-height {
+  min-height: 70vh;
+}
+
 .cell, .well {
   border: none;
   margin: 0 0 1rem 0;
@@ -9711,7 +9715,7 @@ thead {
 }
 
 .flex-panel-link-group a:hover {
-  background: #e5e5e5;
+  background: #d6d6d6;
 }
 
 .flex-panel-group {
@@ -9739,7 +9743,7 @@ thead {
 }
 
 .flex-panel-link-group a:hover {
-  background: #e5e5e5;
+  background: #d6d6d6;
 }
 
 .flex-panel-group {
@@ -9781,12 +9785,12 @@ thead {
 }
 
 .cls-pager > a:hover {
-  background-color: #e5e5e5;
+  background-color: #d6d6d6;
   text-decoration: none;
 }
 
 .cls-pager > a:focus {
-  background-color: #e5e5e5;
+  background-color: #d6d6d6;
   text-decoration: none;
 }
 
@@ -10268,6 +10272,10 @@ thead {
   padding: 1rem 0;
 }
 
+.have-full-height .front-page {
+  min-height: 70vh;
+}
+
 .news-grid {
   list-style: none;
   display: grid;
@@ -10560,4 +10568,4 @@ Red BG Search Form
   color: rgba(255, 255, 255, 0.75);
 }
 
-/*# sourceMappingURL=chester-2.1.9.css.map */
+/*# sourceMappingURL=chester-2.1.10.css.map */

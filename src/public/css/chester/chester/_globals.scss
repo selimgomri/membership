@@ -137,7 +137,7 @@ body {
 .wp-caption-text {
   text-align: left;
   width: 100%;
-  background: #efefef;
+  background: $cell-bg;
   padding: 0.5rem 0.8rem;
   margin: 0 0 1rem 0;
 }
@@ -371,8 +371,12 @@ a {
 }
 
 .cell, .flex-panel-default, .well {
-  background-color: #efefef;
+  background-color: $cell-bg;
 	padding: 1rem;
+}
+
+.have-full-height {
+  min-height:70vh;
 }
 
 .cell, .well {
@@ -380,6 +384,9 @@ a {
   margin: 0 0 1rem 0;
   padding: 1rem;
   @include border-radius($alert-border-radius);
+  @if $cell-generic {
+    border: $card-border-width solid $card-border-color;
+  }
 }
 
 .cell p:last-child, .well p:last-child {

@@ -259,5 +259,5 @@ p.lead {
     <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
     <div class="have-full-height" style="min-height:70vh">
       <?php } else { ?>
-      <div class="have-full-height" style="min-height:calc(100vh - 7rem);">
+      <div class="have-full-height">
         <?php } ?>

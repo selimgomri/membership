@@ -60,7 +60,7 @@
     text-decoration: none;
 }
 .flex-panel-link-group a:hover {
-    background: #e5e5e5;
+    background: darken($cell-bg, 10%);
 }
 .flex-panel-group {
     margin-bottom: -1.1rem;
@@ -81,7 +81,7 @@
     text-decoration: none;
 }
 .flex-panel-link-group a:hover {
-    background: #e5e5e5;
+    background: darken($cell-bg, 10%);
 }
 .flex-panel-group {
     margin-bottom: -1.1rem;

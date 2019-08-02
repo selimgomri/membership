@@ -4,24 +4,24 @@
 	margin: 2rem 0 1rem 0;
 }
 .cls-post-footer {
-    background-color: #efefef;
+    background-color: $cell-bg;
     padding: 0.8rem 0.8rem 0rem 0.8rem;
     margin: 1rem 0 0 0;
 }
 
 .cls-pager>a {
-    background-color: #efefef;
+    background-color: $cell-bg;
     padding: 1rem 0.8rem;
     display: block;
     min-height: 2rem;
     font-size: 1.2rem;
 }
 .cls-pager>a:hover {
-    background-color: #e5e5e5;
+    background-color: darken($cell-bg, 10%);
     text-decoration: none;
 }
 .cls-pager>a:focus {
-    background-color: #e5e5e5;
+    background-color: darken($cell-bg, 10%);
     text-decoration: none;
 }
 .cls-pager-parent {

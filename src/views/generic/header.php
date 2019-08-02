@@ -157,7 +157,7 @@ if (isset($customBackground) && $customBackground) {
     <div class="mb-3"></div>
 
     <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
-    <div class="have-full-height" style="min-height:70vh">
+    <div class="have-full-height">
     <?php } else { ?>
-    <div class="have-full-height" style="min-height:calc(100vh - 7rem);">
+    <div class="have-full-height">
     <?php } ?>
