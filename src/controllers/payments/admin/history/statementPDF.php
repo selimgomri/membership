@@ -41,7 +41,7 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 
 $row = $payments->fetch(PDO::FETCH_ASSOC);
 
-$sql = $db->prepare("SELECT `UserID`, `Name`, `Amount`, `Status`, `Date` FROM `payments` WHERE `PMkey` = ?");
+$sql = $db->prepare("SELECT payments.`UserID`, payments.`Name`, `Amount`, `Status`, `Date`, BankName, AccountHolderName, AccountNumEnd FROM `payments` LEFT JOIN paymentMandates ON payments.MandateID = paymentMandates.MandateID WHERE `PMkey` = ?");
 $sql->execute([$PaymentID]);
 $payment_info = $sql->fetch(PDO::FETCH_ASSOC);
 $name = getUserName($payment_info['UserID']);
@@ -143,6 +143,37 @@ ob_start();?>
           </span>
         </dd>
       </div>
+
+      <?php if ($payment_info['BankName'] != null || $payment_info['AccountNumEnd'] != null || $payment_info['AccountHolderName'] != null) { ?>
+
+      <div class="row">
+        <dt class="split-30">Bank</dt>
+        <dd class="split-70">
+          <span class="mono">
+            <?=htmlspecialchars($payment_info['BankName'])?>
+          </span>
+        </dd>
+      </div>
+
+      <div class="row">
+        <dt class="split-30">Bank Account</dt>
+        <dd class="split-70">
+          <span class="mono">
+            &middot;&middot;&middot;&middot;&middot;&middot;<?=htmlspecialchars($payment_info['AccountNumEnd'])?>
+          </span>
+        </dd>
+      </div>
+
+      <div class="row">
+        <dt class="split-30">Account Name</dt>
+        <dd class="split-70">
+          <span class="mono">
+            <?=htmlspecialchars(mb_strtoupper($payment_info['AccountHolderName']))?>
+          </span>
+        </dd>
+      </div>
+
+      <?php } ?>
     </dl>
 
     <h2 id="payment-details">Itemised Details</h2>

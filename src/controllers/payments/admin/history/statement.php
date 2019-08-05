@@ -39,7 +39,7 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 
 $row = $payments->fetch(PDO::FETCH_ASSOC);
 
-$sql = $db->prepare("SELECT `UserID`, `Name`, `Amount`, `Status` FROM `payments` WHERE `PMkey` = ?");
+$sql = $db->prepare("SELECT payments.`UserID`, payments.`Name`, `Amount`, `Status`, `Date`, BankName, AccountHolderName, AccountNumEnd FROM `payments` LEFT JOIN paymentMandates ON payments.MandateID = paymentMandates.MandateID WHERE `PMkey` = ?");
 $sql->execute([$PaymentID]);
 $payment_info = $sql->fetch(PDO::FETCH_ASSOC);
 $name = getUserName($payment_info['UserID']);
@@ -73,7 +73,33 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
       <dd class="col-md-8"><span class="mono">&pound;<?=htmlspecialchars(number_format(($payment_info['Amount']/100),2,'.',''))?></span></dd>
 
       <dt class="col-md-4">Payment Status</dt>
-      <dd class="col-md-8"><span class="mono"><?=htmlspecialchars(paymentStatusString($payment_info['Status']))?></span></dd>
+      <dd class="col-md-8"><span class=""><?=htmlspecialchars(paymentStatusString($payment_info['Status']))?></span></dd>
+
+      <?php if ($payment_info['BankName'] != null || $payment_info['AccountNumEnd'] != null || $payment_info['AccountHolderName'] != null) { ?>
+
+      <dt class="col-md-4">Bank</dt>
+      <dd class="col-md-8">
+        <span>
+          <?=htmlspecialchars($payment_info['BankName'])?>
+        </span>
+      </dd>
+
+      <dt class="col-md-4">Bank Account</dt>
+      <dd class="col-md-8">
+        <span>
+          &middot;&middot;&middot;&middot;&middot;&middot;<?=htmlspecialchars($payment_info['AccountNumEnd'])?>
+        </span>
+      </dd>
+      
+      <dt class="col-md-4">Account Name</dt>
+      <dd class="col-md-8">
+        <span class="mono">
+          <?=htmlspecialchars(mb_strtoupper($payment_info['AccountHolderName']))?>
+        </span>
+      </dd>
+
+      <?php } ?>
+
     </dl>
 
     <?php if ($_SESSION['AccessLevel'] == "Admin" && ($payment_info['Status'] == 'customer_approval_denied' || $payment_info['Status'] == 'failed')) {
