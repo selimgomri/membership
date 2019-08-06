@@ -231,3 +231,7 @@ if ($_SESSION['AccessLevel'] != "Parent") {
   	include 'MarkCodeOfConductCompleted.php';
   });
 }
+
+$this->group('/{swimmer}:int/times', function() {
+	include 'times/router.php';
+});
