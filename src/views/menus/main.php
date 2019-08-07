@@ -1,10 +1,17 @@
 <?php
 
+if (isset($use_website_menu)) {
+  define('USE_CLS_MENU', $use_website_menu && bool(env('IS_CLS')));
+}
+
 if (!function_exists('chesterStandardMenu')) {
   function chesterStandardMenu() {
     
     global $db;
-    global $use_website_menu;
+    $use_website_menu = false;
+    if (defined('USE_CLS_MENU')) {
+      $use_website_menu = USE_CLS_MENU;
+    }
     global $allow_edit;
     global $exit_edit;
     global $edit_link;

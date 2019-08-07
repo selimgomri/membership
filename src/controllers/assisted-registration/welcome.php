@@ -15,7 +15,7 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <p>
-        Parent's will be led through a registration process to check their details and fill out required forms when they first log in.
+        Parents will be led through a registration process to check their details and fill out required forms when they first log in.
       </p>
 
       <p>
