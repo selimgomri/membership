@@ -100,17 +100,8 @@ $counties = json_decode(file_get_contents(BASE_PATH . 'includes/regions/counties
             Designed and Built by <a class="text-white" href="https://corporate.myswimmingclub.co.uk"
               target="_blank">Swimming Club Data Systems</a>. Licenced to <?=htmlspecialchars(env('CLUB_NAME'))?>.
           </p>
-          <?php
-  					$executionEndTime = microtime();
-  					$creationTime = number_format((float)($executionEndTime -
-  					$executionStartTime), 3, '.', '');
-  					?>
-          <!--<p class="hidden-print"><?php echo("Page produced in " . $creationTime . "
-  					seconds."); ?> Version v1.0, Production Build 267. <?php echo
-  					app('request')->browser() . " for " .
-  					ucwords(app('request')->platform()); ?>.</p>-->
-          <p class="mb-0" style="margin-bottom:0">&copy; <?php echo date( 'Y' ); ?>
-            <span class="org fn">Chester&#8209;le&#8209;Street ASC</span>. Swimming Club Data Systems is not responsible
+          <p class="mb-0">
+            &copy; <span class="org fn">Chris Heppell (Swimming Club Data Systems) and Chester&#8209;le&#8209;Street ASC</span>. Swimming Club Data Systems is not responsible
             for the content of external sites.
           </p>
         </div>

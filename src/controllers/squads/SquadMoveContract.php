@@ -49,6 +49,9 @@ ob_start();?>
     margin: 0 0 16pt 0;
     display: block;
   }
+  .qr {
+    image-rendering: pixelated;
+  }
   </style>
   <?php include BASE_PATH . 'helperclasses/PDFStyles/Main.php'; ?>
   <title><?=$pagetitle?></title>
@@ -284,7 +287,7 @@ ob_start();?>
         <div class="row">
           <div class="split-30">
             <?php include BASE_PATH . 'controllers/barcode-generation-system/qr-safe.php'; ?>
-            <img width="100" src="<?='data:image/png;base64,'.base64_encode($qrReturn)?>">
+            <img width="100" class="qr" src="<?='data:image/png;base64,'.base64_encode($qrReturn)?>">
           </div>
           <div class="split-70">
             <p class="mb-0">

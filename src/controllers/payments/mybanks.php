@@ -1,5 +1,7 @@
 <?php
 
+require 'GoCardlessSetup.php';
+
 global $db;
 
 $user = $_SESSION['UserID'];
@@ -8,8 +10,6 @@ $pagetitle = "Payments and Direct Debits";
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
-
-require 'GoCardlessSetup.php';
 
 //$customers = $client->customers()->list()->records;
 //print_r($customers);

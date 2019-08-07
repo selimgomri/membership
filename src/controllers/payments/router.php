@@ -152,6 +152,10 @@ if ($access == "Admin") {
 			include 'admin/history/month.php';
 		});
 
+		$this->get('/{year}:int/{month}:int/report.csv', function($year, $month) {
+			include 'admin/history/FinanceReport.csv.php';
+		});
+
 		$this->get('/statement/{PaymentID}', function($PaymentID) {
 			global $link;
 			include 'admin/history/statement.php';

@@ -1,10 +1,12 @@
 <?php
 
+require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+
 global $db;
 
 define("PAYMENT_EMAILS", [
-  "Email" => "payments@" . EMAIL_DOMAIN,
-  "Name" => CLUB_SHORT_NAME . " Payments"
+  "Email" => "payments@" . env('EMAIL_DOMAIN'),
+  "Name" => env('CLUB_SHORT_NAME') . " Payments"
 ]);
 
 //$token = "testsecret";
@@ -14,7 +16,7 @@ $raw_payload = file_get_contents('php://input');
 $headers = getallheaders();
 $provided_signature = $headers["Webhook-Signature"];
 
-$calculated_signature = hash_hmac("sha256", $raw_payload, GOCARDLESS_WEBHOOK_KEY);
+$calculated_signature = hash_hmac("sha256", $raw_payload, env('GOCARDLESS_WEBHOOK_KEY'));
 
 if ($provided_signature == $calculated_signature) {
   $payload = json_decode($raw_payload, true);
@@ -150,9 +152,9 @@ function process_mandate_event($event) {
             $setNewDefault->execute([$userID, $mandateID]);
 
             $message = "<h1>Hello " . htmlspecialchars($user['Forename'] . " " . $user['Surname']) . ".</h1>
-            <p>Your Direct Debit Mandate for " . CLUB_NAME . " has been cancelled. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
+            <p>Your Direct Debit Mandate for " . env('CLUB_NAME') . " has been cancelled. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
             <p>Go to " . autoUrl("") . " to make any changes.</p>
-            <p>Thank you, <br>" . CLUB_NAME . "";
+            <p>Thank you, <br>" . env('CLUB_NAME') . "";
             notifySend(
               $user['EmailAddress'],
               "Your Direct Debit Mandate has been Cancelled",
@@ -163,9 +165,9 @@ function process_mandate_event($event) {
             );
           } else {
             $message = "<h1>Hello " . htmlspecialchars($user['Forename'] . " " . $user['Surname']) . ".</h1>
-            <p>Your Direct Debit Mandate for " . CLUB_NAME . " has been Cancelled. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("") . "</p>
+            <p>Your Direct Debit Mandate for " . env('CLUB_NAME') . " has been Cancelled. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("") . "</p>
             <p>If you are leaving the club you can ignore the above.</p>
-            <p>Thank you, <br>" . CLUB_NAME . "</p>";
+            <p>Thank you, <br>" . env('CLUB_NAME') . "</p>";
             notifySend(
               $user['EmailAddress'],
               "Your Direct Debit Mandate has been Cancelled",
@@ -226,9 +228,9 @@ function process_mandate_event($event) {
 
 			if ($row == null) {
 				$message = "<h1>Hello " . htmlspecialchars($user['Forename'] . " " . $user['Surname']) . ".</h1>
-				<p>Your Direct Debit Mandate for " . CLUB_NAME . " has expired. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("payments") . ".</p>
+				<p>Your Direct Debit Mandate for " . env('CLUB_NAME') . " has expired. As this was your only mandate with us, you must set up a new direct debit as soon as possible at " . autoUrl("payments") . ".</p>
         <p>If you have left the club you can ignore this email.</p>
-				<p>Thank you, <br>" . CLUB_NAME . "";
+				<p>Thank you, <br>" . env('CLUB_NAME') . "";
 				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has
 				Expired", $message, $user['Forename'] . " " . $user['Surname'],
 				$user['EmailAddress'],PAYMENT_EMAILS);
@@ -237,9 +239,9 @@ function process_mandate_event($event) {
         $setNewDefault = $db->prepare("INSERT INTO paymentPreferredMandate (UserID, MandateID) VALUES (?, ?)");
         $setNewDefault->execute([$userID, $mandateID]);
 				$message = "<h1>Hello " . $user['Forename'] . " " . $user['Surname'] . ".</h1>
-				<p>Your Direct Debit Mandate for " . CLUB_NAME . " has expired. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
+				<p>Your Direct Debit Mandate for " . env('CLUB_NAME') . " has expired. As you had more than one direct debit set up, we've switched your default direct debit to the next available one in our list. You may want to check the details about this before we take any payments from you in order to ensure your're happy with us taking funds from that account.</p>
 				<p>Go to " . autoUrl("payments") . " to make any changes.</p>
-				<p>Thank you, <br>" . CLUB_NAME . "";
+				<p>Thank you, <br>" . env('CLUB_NAME') . "";
 				notifySend($user['EmailAddress'], "Your Direct Debit Mandate has
 				Expired", $message, $user['Forename'] . " " . $user['Surname'],
 				$user['EmailAddress'], PAYMENT_EMAILS);

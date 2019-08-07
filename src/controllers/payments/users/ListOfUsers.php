@@ -1,5 +1,7 @@
 <?php
 
+require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+
 $search = null;
 
 if (isset($_GET['search'])) {
@@ -11,7 +13,7 @@ $pagetitle = "Find a Parent's Current Fees";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
 
-require BASE_PATH . 'controllers/payments/GoCardlessSetup.php'; ?>
+?>
 
 <div class="container">
 	<div class="">

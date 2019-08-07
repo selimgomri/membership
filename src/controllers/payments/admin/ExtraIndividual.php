@@ -1,5 +1,7 @@
 <?php
 
+require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+
 global $db;
 
 $user = $_SESSION['UserID'];
@@ -18,8 +20,6 @@ $pagetitle = htmlspecialchars($row['ExtraName']) . " - Extras";
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
-
-require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
  ?>
 

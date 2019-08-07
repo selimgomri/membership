@@ -1,5 +1,7 @@
 <?php
 
+require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+
 $name = getUserName($id);
 
 if (!$name) {
@@ -13,7 +15,7 @@ $pagetitle = htmlspecialchars($name) . "'s Transaction History";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
 
-require BASE_PATH . 'controllers/payments/GoCardlessSetup.php'; ?>
+?>
 
 <div class="container">
 	<nav aria-label="breadcrumb">

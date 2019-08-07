@@ -5,10 +5,10 @@ global $db;
 $user = $_SESSION['UserID'];
 $pagetitle = "Payments Administration";
 
+require 'GoCardlessSetup.php';
+
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
-
-require 'GoCardlessSetup.php';
 
 $dateString = date("F Y");
 
