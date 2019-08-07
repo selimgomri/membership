@@ -4,7 +4,10 @@ $pagetitle = "Request a Trial Form";
 $use_white_background = true;
 $use_website_menu = true;
 
-$value = $_SESSION['RequestTrial-FC'];
+$value = null;
+if (isset($_SESSION['RequestTrial-FC'])) {
+  $value = $_SESSION['RequestTrial-FC'];
+}
 
 if (isset($_SESSION['RequestTrial-AddAnother'])) {
   $value = $_SESSION['RequestTrial-AddAnother'];
@@ -18,7 +21,7 @@ include BASE_PATH . 'views/header.php';
   <h1>Request a Trial</h1>
   <div class="row">
     <div class="col-md-10 col-lg-8">
-      <?php if ($_SESSION['RequestTrial-Success'] === false) { ?>
+      <?php if (isset($_SESSION['RequestTrial-Success']) && $_SESSION['RequestTrial-Success'] === false) { ?>
         <div class="alert alert-danger">
           We were unable to send you a confirmation email. We may not have received your request. Please check your email address or try again later.
         </div>
@@ -43,7 +46,7 @@ include BASE_PATH . 'views/header.php';
         times, this may take a few days.
       </p>
       <form method="post" <?php if ($value != null) { ?>class="was-validated"<?php } else { ?>class="needs-validation" novalidate<?php } ?>>
-        <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+        <?php if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Admin') { ?>
         <div id="begin">
           <h2>Before we start</h2>
           <p>

@@ -1,7 +1,7 @@
 <?php
 
 $this->get(['/request-a-trial', '/request-a-trial/{headless}'], function($headless = false) {
-  if ($_SESSION['RequestTrial-Success'] === true) {
+  if (isset($_SESSION['RequestTrial-Success']) && $_SESSION['RequestTrial-Success'] === true) {
     include 'RequestTrialSuccess.php';
   } else {
     include 'RequestTrialForm.php';

@@ -29,7 +29,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
 
 <head>
   <meta charset="utf-8">
-  <?php if ($pagetitle != "" || $pagetitle != null)  { ?>
+  <?php if (isset($pagetitle) && ($pagetitle != "" || $pagetitle != null))  { ?>
     <title><?=$pagetitle?> - <?=htmlspecialchars(env('CLUB_NAME'))?> Membership</title>
   <?php } else { ?>
   <title><?=htmlspecialchars(env('CLUB_NAME'))?> Membership</title>
