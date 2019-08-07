@@ -1,5 +1,7 @@
 <?php
 
+require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+
 global $db;
 
 $searchDate = $year . "-" . $month . "-" . "%";
@@ -15,8 +17,6 @@ $pagetitle = htmlspecialchars(date("F Y", $date)) . " Payments";
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
-
-require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
  ?>
 

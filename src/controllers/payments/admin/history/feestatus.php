@@ -1,5 +1,7 @@
 <?php
 
+require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+
 global $db;
 
 use Respect\Validation\Validator as v;
@@ -68,8 +70,6 @@ $row = $getPayments->fetch(PDO::FETCH_ASSOC);
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
-
-require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
  ?>
 

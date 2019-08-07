@@ -1,5 +1,7 @@
 <?php
 
+require 'GoCardlessSetup.php';
+
 $user = $_SESSION['UserID'];
 $pagetitle = "Payments and Direct Debits";
 
@@ -10,8 +12,6 @@ if (!userHasMandates($user)) {
 $use_white_background = true;
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
-
-require 'GoCardlessSetup.php';
 
 ?>
 

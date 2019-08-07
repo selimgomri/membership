@@ -1,5 +1,7 @@
 <?php
 
+require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+
 global $db;
 $user = $_SESSION['UserID'];
 
@@ -57,8 +59,6 @@ $address = null;
 if ($json != null) {
   $address = json_decode($json);
 }
-
-require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 ob_start();?>
 

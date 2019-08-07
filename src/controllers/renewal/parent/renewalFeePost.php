@@ -101,40 +101,42 @@ if ($sql->fetchColumn() == 1) {
 	$hasDD = true;
 }
 
-if ($hasDD) {
-	// INSERT Payment into pending
-	$date = new \DateTime('now', new DateTimeZone('Europe/London'));
-	$date->setTimezone(new DateTimeZone('UTC'));
-	$description = "Membership Renewal";
-	if ($renewal == 0) {
-		$description = "Club Registration Fee";
-	}
-	for ($i = 0; $i < $count; $i++) {
-		$description .= ", " . $member[$i]['MForename'];
-	}
-	$insert = $db->prepare("INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES (?, ?, ?, ?, ?, ?, ?)");
-	$insert->execute([
-		$date->format('Y-m-d'),
-		'Pending',
-		$_SESSION['UserID'],
-		$description,
-		$totalFee,
-		'GBP',
-		'Payment'
-	]);
-	$payID = $db->lastInsertId();
-
-	if ($renewal != 0) {
-		$insert = $db->prepare("INSERT INTO `renewalMembers` (`PaymentID`, `MemberID`, `RenewalID`, `Date`, `CountRenewal`) VALUES (?, ?, ?, ?, ?)");
+if ($hasDD || !env('GOCARDLESS_ACCESS_TOKEN')) {
+	if ($hasDD) {
+		// INSERT Payment into pending
+		$date = new \DateTime('now', new DateTimeZone('Europe/London'));
+		$date->setTimezone(new DateTimeZone('UTC'));
+		$description = "Membership Renewal";
+		if ($renewal == 0) {
+			$description = "Club Registration Fee";
+		}
 		for ($i = 0; $i < $count; $i++) {
-			$memID = $member[$i]['MemberID'];
-			$insert->execute([
-				$payID,
-				$memID,
-				$renewal,
-				$date->format("Y-m-d H:i:s"),
-				true
-			]);
+			$description .= ", " . $member[$i]['MForename'];
+		}
+		$insert = $db->prepare("INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES (?, ?, ?, ?, ?, ?, ?)");
+		$insert->execute([
+			$date->format('Y-m-d'),
+			'Pending',
+			$_SESSION['UserID'],
+			$description,
+			$totalFee,
+			'GBP',
+			'Payment'
+		]);
+		$payID = $db->lastInsertId();
+
+		if ($renewal != 0) {
+			$insert = $db->prepare("INSERT INTO `renewalMembers` (`PaymentID`, `MemberID`, `RenewalID`, `Date`, `CountRenewal`) VALUES (?, ?, ?, ?, ?)");
+			for ($i = 0; $i < $count; $i++) {
+				$memID = $member[$i]['MemberID'];
+				$insert->execute([
+					$payID,
+					$memID,
+					$renewal,
+					$date->format("Y-m-d H:i:s"),
+					true
+				]);
+			}
 		}
 	}
 

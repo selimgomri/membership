@@ -1,5 +1,7 @@
 <?php
 
+require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+
 $user = $_SESSION['UserId'];
 $pagetitle = "Payments Administration";
 
@@ -7,8 +9,6 @@ $use_white_background = true;
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
-
-require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
  ?>
 

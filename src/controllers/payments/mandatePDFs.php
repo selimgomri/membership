@@ -1,5 +1,7 @@
 <?php
 
+require "GoCardlessSetup.php";
+
 if (!isset($mandate) || $mandate == "") {
   halt(400);
 }
@@ -20,8 +22,6 @@ if ($mandateUser != $_SESSION['UserID'] && $_SESSION['AccessLevel'] != "Admin") 
 }
 
 $access = $_SESSION['AccessLevel'];
-
-require "GoCardlessSetup.php";
 
 try {
   $return = $client->mandatePdfs()->create([

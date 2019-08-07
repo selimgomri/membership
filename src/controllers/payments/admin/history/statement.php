@@ -1,5 +1,7 @@
 <?php
 
+require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+
 global $db;
 $user = $_SESSION['UserID'];
 
@@ -52,8 +54,6 @@ $_SESSION['qr'][0]['text'] = autoUrl("payments/history/statement/" . htmlspecial
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
-
-require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
  ?>
 

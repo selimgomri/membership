@@ -115,16 +115,18 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		<p class="lead">
 		  There's just one more step to go. We now need you to confirm your membership <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?>.
 		</p>
-		<p class="lead">
+		<p>
 			These fees include your Swim England membership fees for the sport's governing bodies at National, Regional and County Level.
 		</p>
 		<?php $nf = "next";
 		if ($renewal == 0) {
 			$nf = "first";
 		}; ?>
+		<?php if (env('GOCARDLESS_ACCESS_TOKEN')) { ?>
 		<p>
 			You will pay these fees as part of your <?= $nf ?> Direct Debit payment to <?=htmlspecialchars(env('CLUB_NAME'))?>.
 		</p>
+		<?php } ?>
 
 		<h2>Your Membership Fees</h2>
 		<div class="table-responsive-md">
@@ -279,8 +281,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			</table>
 		</div>
 
+		<?php if (env('GOCARDLESS_ACCESS_TOKEN')) { ?>
 		<p>
-					Your total <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?> fee will be &pound;<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0) && $renewal == 0) { ?><?=number_format(((int)$totalFeeDiscounted)/100, 2, '.', '')?><?php } else { ?><?=$totalFeeString?><?php } ?>. By continuing to complete your membership <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?>, you confirm that you will pay this amount as part of your <?= $nf ?> Direct Debit Payment.
+			Your total <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?> fee will be &pound;<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0) && $renewal == 0) { ?><?=number_format(((int)$totalFeeDiscounted)/100, 2, '.', '')?><?php } else { ?><?=$totalFeeString?><?php } ?>. By continuing to complete your membership <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?>, you confirm that you will pay this amount as part of your <?= $nf ?> Direct Debit Payment.
 		</p>
 		<?php if (!userHasMandates($_SESSION['UserID'])) { ?>
 			<p>
@@ -303,6 +306,20 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				<?php } ?>
 			</button>
 		</p>
+		<?php } else { ?>
+		<p>
+			You'll need to pay &pound;<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0) && $renewal == 0) { ?><?=number_format(((int)$totalFeeDiscounted)/100, 2, '.', '')?><?php } else { ?><?=$totalFeeString?><?php } ?> to your club as soon as possible. As <?=htmlspecialchars(env('CLUB_NAME'))?> does not use Direct Debit payments, they will tell you how they would like you to pay.
+		</p>
+		<p>
+			<button type="submit" class="btn btn-success btn-lg">
+				<?php if ($renewal == 0) { ?>
+					Complete Registration
+				<?php } else { ?>
+					Complete Renewal
+				<?php } ?>
+			</button>
+		</p>
+		<?php } ?>
 	</form>
 </div>
 

@@ -86,6 +86,10 @@ include BASE_PATH . "views/header.php";
       			</div>
       		</div>
           <?php } ?>
+
+          <p class="mb-0">
+            <button type="submit" class="btn btn-success">Save</button>
+          </p>
         </div>
 
         <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>

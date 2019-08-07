@@ -55,6 +55,18 @@ $t17 = $array12['400 Individual Medley']['Long']['Time'];
 $t18 = null;
 */
 
+$start = '<p class="rnk_sj">Short Course</p><table id="rankTable" border="0"><tbody>';
+$end = '</tbody></table>';
+
+//pre(htmlentities($contents));
+
+$output = curl_scrape_between($contents, $start, $end);
+$output = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $output);
+$output = preg_replace('/(<[^>]+) width=".*?"/i', '$1', $output);
+
+$crawler = new Crawler($output);
+$crawler = $crawler->filter('tr > td');
+
 $obj_to_array = [];
 foreach ($crawler as $domElement) {
   $obj_to_array[] = $domElement->textContent;
@@ -146,6 +158,18 @@ $t16 = $arrayAllTime['200 Individual Medley']['Long']['Time'];
 $t17 = $arrayAllTime['400 Individual Medley']['Long']['Time'];
 $t18 = null;
 */
+
+$start = '<p class="rnk_sj">Short Course</p><table id="rankTable" border="0"><tbody>';
+$end = '</tbody></table>';
+
+//pre(htmlentities($contents));
+
+$output = curl_scrape_between($contents, $start, $end);
+$output = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $output);
+$output = preg_replace('/(<[^>]+) width=".*?"/i', '$1', $output);
+
+$crawler = new Crawler($output);
+$crawler = $crawler->filter('tr > td');
 
 $obj_to_array = [];
 foreach ($crawler as $domElement) {

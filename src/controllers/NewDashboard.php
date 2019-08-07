@@ -3,24 +3,27 @@
 // https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts
 // https://www.swimming.org/sport/wp-json/wp/v2/posts
 
-$file = null;
-$cache_file = BASE_PATH . 'cache/CLS-ASC-News.json';
-if(file_exists($cache_file)) {
-  if(time() - filemtime($cache_file) > 10800) {
-    // too old , re-fetch
+$obj = null;
+if (bool(env('IS_CLS'))) {
+  $file = null;
+  $cache_file = BASE_PATH . 'cache/CLS-ASC-News.json';
+  if(file_exists($cache_file)) {
+    if(time() - filemtime($cache_file) > 10800) {
+      // too old , re-fetch
+      $cache = file_get_contents('https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts?rand_id=' . time());
+      file_put_contents($cache_file, $cache);
+      $file = $cache;
+    } else {
+      $file = file_get_contents($cache_file);
+    }
+  } else {
+    // no cache, create one
     $cache = file_get_contents('https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts?rand_id=' . time());
     file_put_contents($cache_file, $cache);
     $file = $cache;
-  } else {
-    $file = file_get_contents($cache_file);
   }
-} else {
-  // no cache, create one
-  $cache = file_get_contents('https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts?rand_id=' . time());
-  file_put_contents($cache_file, $cache);
-  $file = $cache;
+  $obj = json_decode($file);
 }
-$obj = json_decode($file);
 
 $file = null;
 $cache_file = BASE_PATH . 'cache/SE-News.json';
@@ -220,7 +223,7 @@ include BASE_PATH . "views/header.php";
 	</div>
   <?php } ?>
 
-  <?php if ($asa_ne != null) { ?>
+  <?php if (env('ASA_DISTRICT') == 'E' && $asa_ne != null) { ?>
   <div class="mb-4">
     <h2 class="mb-4">Swim England North East News</h2>
     <div class="news-grid">
