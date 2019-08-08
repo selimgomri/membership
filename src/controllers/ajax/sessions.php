@@ -221,7 +221,7 @@ function sessionManagement($squadID, $old = null) {
 						<div class="form-group">
 							<label for="newSessionStartDate">Show From</label>
 							<input type="date" aria-labelledby="newSessionStartDateHelp" class="form-control" name="newSessionStartDate"
-								id="newSessionStartDate" placeholder="0" value="<?=date("Y-m-d")?>">
+								id="newSessionStartDate" placeholder="<?=date("Y-m-d")?>" value="<?=date("Y-m-d")?>">
 							<small id="newSessionStartDateHelp" class="form-text text-muted">
 								The date from which the session will appear in the registers
 							</small>
@@ -231,7 +231,7 @@ function sessionManagement($squadID, $old = null) {
 						<div class="form-group">
 							<label for="newSessionEndDate">Show Until</label>
 							<input type="date" aria-labelledby="newSessionStartDateHelp" class="form-control" name="newSessionEndDate"
-								id="newSessionEndDate" placeholder="0">
+								id="newSessionEndDate" placeholder="<?=date("Y-m-d", strtotime('+1 year'))?>" value="<?=date("Y-m-d", strtotime('+1 year'))?>">
 							<small id="newSessionEndDateHelp" class="form-text text-muted">
 								If you know when this session will stop running, enter the last date here
 							</small>
