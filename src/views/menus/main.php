@@ -56,6 +56,11 @@ if (!function_exists('chesterStandardMenu')) {
                   </div>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link" href="<?=autoUrl("sessions")?>">
+                    Sessions
+                  </a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" href="<?php echo autoUrl("emergency-contacts") ?>">Emergency Contacts</a>
                 </li>
                 <!--<li class="nav-item">

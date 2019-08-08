@@ -61,7 +61,7 @@ include BASE_PATH . 'views/header.php';
 <div class="container">
   <div class="row">
     <div class="col-lg-8">
-      <h1>Sessions in <abbr title="ISO-8601 week number of year">week <?=$week?></abbr></h1>
+      <h1>Sessions in <abbr title="ISO-8601 week number of year">week <?=(int) $startWeek->format('W')?> / <?=$startWeek->format('o')?></abbr></h1>
       <p class="lead">A permanent web presence for all training sessions at <?=htmlspecialchars(env('CLUB_NAME'))?></p>
 
       <p>Showing sessions for the week beginning <strong><?=$startWeek->format('l j F Y')?></strong>.</p>
