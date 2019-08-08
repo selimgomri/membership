@@ -33,6 +33,7 @@ use Twilio\Version;
 class EnvironmentInstance extends InstanceResource {
     protected $_variables = null;
     protected $_deployments = null;
+    protected $_logs = null;
 
     /**
      * Initialize the EnvironmentInstance
@@ -95,6 +96,16 @@ class EnvironmentInstance extends InstanceResource {
     }
 
     /**
+     * Deletes the EnvironmentInstance
+     *
+     * @return boolean True if delete succeeds, false otherwise
+     * @throws TwilioException When an HTTP error occurs.
+     */
+    public function delete() {
+        return $this->proxy()->delete();
+    }
+
+    /**
      * Access the variables
      *
      * @return \Twilio\Rest\Serverless\V1\Service\Environment\VariableList
@@ -110,6 +121,15 @@ class EnvironmentInstance extends InstanceResource {
      */
     protected function getDeployments() {
         return $this->proxy()->deployments;
+    }
+
+    /**
+     * Access the logs
+     *
+     * @return \Twilio\Rest\Serverless\V1\Service\Environment\LogList
+     */
+    protected function getLogs() {
+        return $this->proxy()->logs;
     }
 
     /**

@@ -43,6 +43,7 @@ use Twilio\Rest\Preview\Wireless as PreviewWireless;
  * @property \Twilio\Rest\Preview\Wireless\CommandList $commands
  * @property \Twilio\Rest\Preview\Wireless\RatePlanList $ratePlans
  * @property \Twilio\Rest\Preview\Wireless\SimList $sims
+ * @property \Twilio\Rest\Preview\TrustedComms\BrandedCallList $brandedCalls
  * @property \Twilio\Rest\Preview\TrustedComms\DeviceList $devices
  * @property \Twilio\Rest\Preview\TrustedComms\PhoneCallList $phoneCalls
  * @property \Twilio\Rest\Preview\TrustedComms\CurrentCallList $currentCalls
@@ -389,6 +390,13 @@ class Preview extends Domain {
      */
     protected function contextSims($sid) {
         return $this->wireless->sims($sid);
+    }
+
+    /**
+     * @return \Twilio\Rest\Preview\TrustedComms\BrandedCallList
+     */
+    protected function getBrandedCalls() {
+        return $this->trustedComms->brandedCalls;
     }
 
     /**
