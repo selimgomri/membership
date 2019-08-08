@@ -43,6 +43,16 @@ class Connect extends TwiML {
     }
 
     /**
+     * Add Stream child.
+     *
+     * @param array $attributes Optional attributes
+     * @return Stream Child element.
+     */
+    public function stream($attributes = array()) {
+        return $this->nest(new Stream($attributes));
+    }
+
+    /**
      * Add Action attribute.
      *
      * @param string $action Action URL

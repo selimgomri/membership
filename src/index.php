@@ -317,6 +317,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
     include 'dynamic-javascript/router.php';
   });
 
+  $this->group('/sessions', function() {
+    include 'controllers/attendance/public_sessions/router.php';
+  });
+
   // Password Reset via Link
   $this->get('/email/auth/{id}:int/{auth}', function($id, $auth) {
     global $link;
