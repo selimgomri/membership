@@ -6,3 +6,4 @@ config.php
 "sendgrid.env"
 client_secret.json
 phinx.yml
+src/cache

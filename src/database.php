@@ -665,8 +665,15 @@ function updatePaymentStatus($PMkey) {
   try {
     $payment = $client->payments()->get($PMkey);
     $status = $payment->status;
-    $update = $db->prepare("UPDATE `payments` SET `Status` = ? WHERE `PMkey` = ?");
-    $update->execute([$status, $PMkey]);
+    $payout = null;
+    if (isset($payment->links->payout) && $payment->links->payout != null) {
+      $payout = $payment->links->payout;
+
+      // Check if payout exists or not
+      createOrUpdatePayout($payout);
+    }
+    $update = $db->prepare("UPDATE `payments` SET `Status` = ?, `Payout` = ? WHERE `PMkey` = ?");
+    $update->execute([$status, $payout, $PMkey]);
   } catch (Exception $e) {
     $sql2bool = false;
   }
@@ -1234,6 +1241,52 @@ function getCardBrand($brand) {
   } else {
     return 'Unknown Card';
   }
+}
+
+function createOrUpdatePayout($payout, $update = false) {
+  global $db;
+  require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+
+  $getCount = $db->prepare("SELECT COUNT(*) FROM paymentsPayouts WHERE ID = ?");
+  $getCount->execute([
+    $payout
+  ]);
+  $count = $getCount->fetchColumn() == 0;
+
+  if ($count) {
+    try {
+      $payout = $client->payouts()->get($payout);
+
+      $insert = $db->prepare("INSERT INTO paymentsPayouts (ID, Amount, Fees, Currency, ArrivalDate) VALUES (?, ?, ?, ?, ?)");
+      $insert->execute([
+        $payout->id,
+        $payout->amount,
+        $payout->deducted_fees,
+        $payout->currency,
+        $payout->arrival_date
+      ]);
+    } catch (Exception $e) {
+      reportError($e);
+      return false;
+    }
+  } else if ($count = 1 && $update) {
+    try {
+      $payout = $client->payouts()->get($payout);
+
+      $insert = $db->prepare("UPDATE paymentsPayouts SET Amount = ?, Fees = ?, Currency = ?, ArrivalDate = ? WHERE ID = ?");
+      $insert->execute([
+        $payout->amount,
+        $payout->deducted_fees,
+        $payout->currency,
+        $payout->arrival_date,
+        $payout->id
+      ]);
+    } catch (Exception $e) {
+      reportError($e);
+      return false;
+    }
+  }
+  return true;
 }
 
 include BASE_PATH . 'includes/ErrorReporting.php';

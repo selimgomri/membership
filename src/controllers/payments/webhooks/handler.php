@@ -44,6 +44,9 @@ if ($provided_signature == $calculated_signature) {
 				case "payments":
           process_payment_event($event);
           break;
+        case "payouts":
+          process_payout_event($event);
+          break;
         default:
           print("Don't know how to process an event with resource_type " . $event["resource_type"] . "\n");
           break;
@@ -57,6 +60,11 @@ if ($provided_signature == $calculated_signature) {
   header("HTTP/1.1 200 OK");
 } else {
   header("HTTP/1.1 498 Invalid Token");
+}
+
+function process_payout_event($event) {
+  global $db;
+  $payout = $event["links"]["payout"];
 }
 
 function process_mandate_event($event) {
