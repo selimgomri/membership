@@ -65,6 +65,7 @@ if ($provided_signature == $calculated_signature) {
 function process_payout_event($event) {
   global $db;
   $payout = $event["links"]["payout"];
+  createOrUpdatePayout($payout, true);
 }
 
 function process_mandate_event($event) {
