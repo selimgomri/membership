@@ -1,5 +1,7 @@
 <?php
 
+\Stripe\Stripe::setApiKey(env('STRIPE'));
+
 function stripe_handlePaymentMethodUpdate($pm) {
   global $db;
 
@@ -26,11 +28,8 @@ function stripe_handlePaymentMethodUpdate($pm) {
     $last4,
     $id
   ]);
+  echo "Success";
 }
-
-// Set your secret key: remember to change this to your live secret key in production
-// See your keys here: https://dashboard.stripe.com/account/apikeys
-\Stripe\Stripe::setApiKey(env('STRIPE'));
 
 $payload = @file_get_contents('php://input');
 $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
