@@ -48,7 +48,7 @@ try {
     	try {
     		$payment = $client->payments()->create([
     		  "params" => [
-    	      "amount" => $amount, // 10 GBP in pence
+    	      "amount" => $amount,
     	      "currency" => $currency,
     				"description" => $description,
     	      "links" => [

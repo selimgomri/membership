@@ -23,7 +23,7 @@ if ($count != 0) {
 if ($_SESSION['LeaveKey'] == $key) {
   try {
     $query = $db->prepare("INSERT INTO moves (MemberID, SquadID, MovingDate) VALUES (?, ?, ?)");
-    $query->execute([$id, leavers, date("Y-m-01", strtotime('+1 month'))]);
+    $query->execute([$id, $leavers, date("Y-m-01", strtotime('+1 month'))]);
 
     // Notify the parent
 		$sql = "INSERT INTO `notify` (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, ?, ?)";

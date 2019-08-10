@@ -532,6 +532,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
       require('controllers/payments/webhooks.php');
     });
 
+    $this->group('/payments/stripe/webhooks', function() {
+      require 'controllers/payments/stripe/webhooks.php' ;
+    });
+
     $this->group('/webhooks', function() {
       global $link;
       require('controllers/webhooks/router.php');
