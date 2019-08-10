@@ -20,7 +20,7 @@ $numberOfCards = $db->prepare("SELECT COUNT(*) `count`, stripePayMethods.ID FROM
 $numberOfCards->execute([$_SESSION['UserID'], 1, $expYear, $expYear, $expMonth]);
 $countCards = $numberOfCards->fetch(PDO::FETCH_ASSOC);
 
-$getCards = $db->prepare("SELECT stripePayMethods.ID, `MethodID`, stripePayMethods.Customer, stripePayMethods.Name, stripePayMethods.Last4, stripePayMethods.Brand FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND Reusable = ? AND (ExpYear > ? OR (ExpYear = ? AND ExpMonth >= ?)) ORDER BY `Name` ASC");
+$getCards = $db->prepare("SELECT stripePayMethods.ID, `MethodID`, stripePayMethods.Customer, stripePayMethods.Last4, stripePayMethods.Brand FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND Reusable = ? AND (ExpYear > ? OR (ExpYear = ? AND ExpMonth >= ?)) ORDER BY `Name` ASC");
 $getCards->execute([$_SESSION['UserID'], 1, $expYear, $expYear, $expMonth]);
 $cards = $getCards->fetchAll(PDO::FETCH_ASSOC);
 
@@ -296,7 +296,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                   <option value="select">Select a payment card</option>
                   <?php foreach ($cards as $card) { ?>
                   <option value="<?=$card['ID']?>" <?php if ($selected == $card['ID']) { $methodId = $card['MethodID']; ?>selected<?php } ?>>
-                    <?=$card['Name']?> (<?=htmlspecialchars(getCardBrand($card['Brand']))?> ending <?=htmlspecialchars($card['Last4'])?>)
+                    <?=htmlspecialchars(getCardBrand($card['Brand']))?> <?=htmlspecialchars($card['Funding'])?> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card['Last4'])?>
                   </option>
                   <?php } ?>
                 </select>
@@ -377,7 +377,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
               </div>
               -->
 
-              <p>Your card details will be saved for use with future purchases</p>
+              <p>Your card details will be saved for use with future payments</p>
 
               <!-- Used to display form errors. -->
               <div id="new-card-errors" role="alert"></div>

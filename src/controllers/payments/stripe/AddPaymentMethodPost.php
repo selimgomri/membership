@@ -60,7 +60,7 @@ try {
   $pm = \Stripe\PaymentMethod::retrieve($setupIntent->payment_method);
   $pm->attach(['customer' => $customer->id]);
 
-  $name = trim($_POST['name']);
+  $name = 'Payment Card';
 
   // Get the payment method details
   $id = $pm->id;

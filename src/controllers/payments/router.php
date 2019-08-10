@@ -326,10 +326,6 @@ if (env('STRIPE') != null) {
 			include 'stripe/EditPaymentMethod.php';
 		});
 
-		$this->post('/{id}:int', function($id) {
-			include 'stripe/EditPaymentMethodPost.php';
-		});
-
 		$this->get('/{id}:int/delete', function($id) {
 			include 'stripe/DeleteCard.php';
 		});

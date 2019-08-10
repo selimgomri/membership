@@ -103,12 +103,6 @@ include BASE_PATH . 'views/header.php';
 
       <form action="<?=currentUrl()?>" method="post" id="payment-form" class="mb-5">
         <div class="form-group">
-          <label for="name">Name this card</label>
-          <input type="text" class="form-control" id="name" name="name" placeholder="Card Name" required aria-describedby="cardNameHelp">
-          <small id="cardNameHelp" class="form-text text-muted">Name your card to help you select it more easily</small>
-        </div>
-
-        <div class="form-group">
           <label for="cardholder-name">Cardholder name</label>
           <input type="text" class="form-control" id="cardholder-name" placeholder="C F Frost" required aria-describedby="cardholder-name-help" autocomplete="cc-name">
           <small id="cardholder-name-help" class="form-text text-muted">The name shown on your card</small>

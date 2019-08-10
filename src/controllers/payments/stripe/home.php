@@ -70,18 +70,18 @@ include BASE_PATH . 'views/header.php';
       <div class="list-group mb-3">
       <?php do { ?>
         <a href="<?=autoUrl("payments/cards/" . $card['ID'])?>" class="list-group-item list-group-item-action">
-          <div class="row align-items-center mb-3 text-dark">
+          <div class="row align-items-center mb-2 text-dark">
             <div class="col-auto">
               <img src="<?=autoUrl("public/img/stripe/" . $card['Brand'] . ".png")?>" srcset="<?=autoUrl("public/img/stripe/" . $card['Brand'] . "@2x.png")?> 2x, <?=autoUrl("public/img/stripe/" . $card['Brand'] . "@3x.png")?> 3x" style="width:40px;"> <span class="sr-only"><?=htmlspecialchars(getCardBrand($card['Brand']))?></span>
             </div>
             <div class="col-auto">
               <h2 class="h1 my-0">
-                <?=htmlspecialchars($card['Name'])?>
+                &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card['Last4'])?> 
               </h2>
             </div>
           </div>
           <p class="lead">
-            Card ending <?=htmlspecialchars($card['Last4'])?> (<?=htmlspecialchars($card['Funding'])?> card)
+            <?=htmlspecialchars(mb_convert_case($card['Funding'], MB_CASE_TITLE))?> card
           </p>
 
           <p class="mb-0">

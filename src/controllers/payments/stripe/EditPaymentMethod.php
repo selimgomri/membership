@@ -31,18 +31,18 @@ $pm = \Stripe\PaymentMethod::retrieve($card['MethodID']);
 
   <div class="row">
     <div class="col-md-8">
-      <div class="row align-items-center mb-3 text-dark">
+      <div class="row align-items-center mb-2 text-dark">
         <div class="col-auto">
           <img src="<?=autoUrl("public/img/stripe/" . $card['Brand'] . ".png")?>" srcset="<?=autoUrl("public/img/stripe/" . $card['Brand'] . "@2x.png")?> 2x, <?=autoUrl("public/img/stripe/" . $card['Brand'] . "@3x.png")?> 3x" style="width:48px;"> <span class="sr-only"><?=htmlspecialchars(getCardBrand($card['Brand']))?></span>
         </div>
         <div class="col-auto">
           <h1 class="h1 my-0">
-            <?=htmlspecialchars($card['Name'])?>
+            <?=getCardBrand($card['Brand'])?> card &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card['Last4'])?>
           </h1>
         </div>
       </div>
       <p class="lead">
-        <?=getCardBrand($card['Brand'])?> <?=htmlspecialchars($card['Funding'])?> card ending in <spn class="mono"><?=htmlspecialchars($card['Last4'])?></span>.
+      <?=htmlspecialchars(mb_convert_case($card['Funding'], MB_CASE_TITLE))?> card
       </p>
 
       <h2>Expiry</h2>
@@ -64,27 +64,6 @@ $pm = \Stripe\PaymentMethod::retrieve($card['MethodID']);
         <?php } ?>
       </address>
       <?php } ?>
-
-      <?php if (isset($_SESSION['CardNameUpdate'])) { ?>
-      <div class="alert alert-success">
-        <p class="mb-0">
-          <strong>We've updated the name of your card to <?=htmlspecialchars($card['Name'])?></strong>
-        </p>
-      </div>
-      <?php unset($_SESSION['CardNameUpdate']); ?>
-      <?php } ?>
-
-      <form action="<?=currentUrl()?>" method="post" id="payment-form" class="mb-5">
-        <div class="form-group">
-          <label for="name">Name this card</label>
-          <input type="text" class="form-control" id="name" name="name" placeholder="Card Name" required aria-describedby="cardNameHelp" value="<?=htmlspecialchars($card['Name'])?>">
-          <small id="cardNameHelp" class="form-text text-muted">Name your card to help you select it more easily</small>
-        </div>
-
-        <p>
-          <button class="btn btn-success">Rename card</button>
-        </p>
-      </form>
 
       <h2>Forget card</h2>
       <p class="lead">Forget this card to remove it from your list</p>

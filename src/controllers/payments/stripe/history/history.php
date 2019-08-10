@@ -51,8 +51,17 @@ include BASE_PATH . 'views/header.php';
           $date = new DateTime($pm['DateTime'], new DateTimeZone('UTC'));
           $date->setTimezone(new DateTimeZone('Europe/London'));
         ?>
-        <a href="<?=autoUrl("payments/card-transactions/" . $pm['ID'])?>" class="list-group-item list-group-item-action">
-          <h2 class="mb-0"><i class="fa <?=htmlspecialchars(getCardFA($pm['Brand']))?>" aria-hidden="true"></i> <span class="sr-only"><?=htmlspecialchars(getCardBrand($pm['Brand']))?></span> <?=htmlspecialchars($pm['Last4'])?></h2>
+        <a href="<?=autoUrl("payments/card-transactions/" . $pm['ID'])?>" class="list-group-item list-group-item-action text-dark">
+          <div class="row align-items-center mb-2">
+            <div class="col-auto">
+              <img src="<?=autoUrl("public/img/stripe/" . $pm['Brand'] . ".png")?>" srcset="<?=autoUrl("public/img/stripe/" . $pm['Brand'] . "@2x.png")?> 2x, <?=autoUrl("public/img/stripe/" . $pm['Brand'] . "@3x.png")?> 3x" style="width:40px;"> <span class="sr-only"><?=htmlspecialchars(getCardBrand($pm['Brand']))?></span>
+            </div>
+            <div class="col-auto">
+              <h2 class="my-0">
+                &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($pm['Last4'])?> 
+              </h2>
+            </div>
+          </div>
           <p class="lead">At <?=$date->format("H:i \o\\n j F Y")?></p>
           <p class="mono mb-0">&pound;<?=number_format($pm['Amount']/100, 2, '.', '')?></p>
         </a>

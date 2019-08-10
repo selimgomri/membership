@@ -32,7 +32,6 @@ while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)) {
   if ($row['Type'] == 'Payments') {
     $date = new DateTime($row['Date']);
     $in = $out = 0;
-    fputcsv($output, [$row['CreditDebit']]);
     if ($row['DebitCredit'] == 'Payment') {
       $in = $row['Amount'];
     } else if ($row['DebitCredit'] == 'Refund') {
