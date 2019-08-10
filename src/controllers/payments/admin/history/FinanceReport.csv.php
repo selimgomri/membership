@@ -13,8 +13,8 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 global $db;
 $searchDate = $year . "-" . $month . "-" . "%";
-$getPayments = $db->prepare("SELECT * FROM `payments` INNER JOIN `users` ON users.UserID = payments.UserID WHERE `Date` LIKE ?");
-$getPayments->execute([$searchDate]);
+$getPayments = $db->prepare("SELECT 'Payments' AS Type, paymentsPending.Amount, paymentsPending.Type AS DebitCredit, CONCAT(users.Forename, ' ', users.Surname) AS `User`, MetadataJSON AS Info, payments.Status AS `Status`, paymentsPending.Date AS `Date`, NULL AS `Fees` FROM (((`paymentsPending` INNER JOIN `payments` ON paymentsPending.PMkey = payments.PMkey) INNER JOIN `users` ON users.UserID = payments.UserID) LEFT JOIN paymentsPayouts ON paymentsPayouts.ID = payments.Payout) WHERE paymentsPayouts.ArrivalDate LIKE :searchDate UNION ALL SELECT 'Payouts' AS Type, Amount, NULL AS DebitCredit, NULL AS `User`, NULL AS Info, NULL AS `Status`, ArrivalDate AS `Date`, Fees FROM paymentsPayouts WHERE paymentsPayouts.ArrivalDate LIKE :searchDate;");
+$getPayments->execute(['searchDate' => $searchDate]);
 
 // output headers so that the file is downloaded rather than displayed
 header('Content-Type: text/csv; charset=utf-8');
