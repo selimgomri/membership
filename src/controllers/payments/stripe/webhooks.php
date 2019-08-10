@@ -14,7 +14,7 @@ function stripe_handlePaymentMethodUpdate($pm) {
   $last4 = $pm->card->last4;
   $threeDSecure = $pm->card->three_d_secure_usage->supported;
 
-  $update = $db->prepare("UPDATE stripePayMethods SET City = ?, Country = ?, Line1 = ?, Line2 = ?, PostCode = ? ExpMonth = ?, ExpYear = ?, Last4 = ? WHERE MethodID = ?");
+  $update = $db->prepare("UPDATE stripePayMethods SET City = ?, Country = ?, Line1 = ?, Line2 = ?, PostCode = ?, ExpMonth = ?, ExpYear = ?, Last4 = ? WHERE MethodID = ?");
   $update->execute([
     $city,
     $country,
