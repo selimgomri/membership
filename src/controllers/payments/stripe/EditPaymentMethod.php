@@ -11,7 +11,7 @@ if ($card == null) {
   halt(404);
 }
 
-$pagetitle = htmlspecialchars($card['Name']) . ' - ' . htmlspecialchars($card['Brand']) . ' ' . htmlspecialchars($card['Last4']);
+$pagetitle = htmlspecialchars(getCardBrand($card['Brand'])) . ' &#0149;&#0149;&#0149;&#0149; ' . htmlspecialchars($card['Last4']);
 
 include BASE_PATH . 'views/header.php';
 
@@ -37,7 +37,7 @@ $pm = \Stripe\PaymentMethod::retrieve($card['MethodID']);
         </div>
         <div class="col-auto">
           <h1 class="h1 my-0">
-            <?=getCardBrand($card['Brand'])?> card &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card['Last4'])?>
+            <?=getCardBrand($card['Brand'])?> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card['Last4'])?>
           </h1>
         </div>
       </div>

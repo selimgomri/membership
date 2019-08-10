@@ -1227,7 +1227,7 @@ function getCardBrand($brand) {
   if ($brand == 'visa') {
     return 'Visa';
   } else if ($brand == 'mastercard') {
-    return 'MasterCard';
+    return 'Mastercard';
   } else if ($brand == 'amex') {
     return 'American Express';
   } else if ($brand == 'diners') {

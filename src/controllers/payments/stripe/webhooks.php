@@ -5,30 +5,34 @@
 function stripe_handlePaymentMethodUpdate($pm) {
   global $db;
 
-  $id = $pm->id;
-  $city = $pm->billing_details->address->city;
-  $country = $pm->billing_details->address->country;
-  $line1 = $pm->billing_details->address->line1;
-  $line2 = $pm->billing_details->address->line2;
-  $postal_code = $pm->billing_details->address->postal_code;
-  $expMonth = $pm->card->exp_month;
-  $expYear = $pm->card->exp_year;
-  $last4 = $pm->card->last4;
-  $threeDSecure = $pm->card->three_d_secure_usage->supported;
+  try {
+    $id = $pm->id;
+    $city = $pm->billing_details->address->city;
+    $country = $pm->billing_details->address->country;
+    $line1 = $pm->billing_details->address->line1;
+    $line2 = $pm->billing_details->address->line2;
+    $postal_code = $pm->billing_details->address->postal_code;
+    $expMonth = $pm->card->exp_month;
+    $expYear = $pm->card->exp_year;
+    $last4 = $pm->card->last4;
+    $threeDSecure = $pm->card->three_d_secure_usage->supported;
 
-  $update = $db->prepare("UPDATE stripePayMethods SET City = ?, Country = ?, Line1 = ?, Line2 = ?, PostCode = ?, ExpMonth = ?, ExpYear = ?, Last4 = ? WHERE MethodID = ?");
-  $update->execute([
-    $city,
-    $country,
-    $line1,
-    $line2,
-    $postal_code,
-    $expMonth,
-    $expYear,
-    $last4,
-    $id
-  ]);
-  echo "Success";
+    $update = $db->prepare("UPDATE stripePayMethods SET City = ?, Country = ?, Line1 = ?, Line2 = ?, PostCode = ?, ExpMonth = ?, ExpYear = ?, Last4 = ? WHERE MethodID = ?");
+    $update->execute([
+      $city,
+      $country,
+      $line1,
+      $line2,
+      $postal_code,
+      $expMonth,
+      $expYear,
+      $last4,
+      $id
+    ]);
+    echo "Success";
+  } catch (Exception $e) {
+    
+  }
 }
 
 $payload = @file_get_contents('php://input');
