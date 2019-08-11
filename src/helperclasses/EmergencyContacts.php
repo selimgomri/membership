@@ -10,7 +10,7 @@ class EmergencyContacts {
 	}
 
 	public function byParent($id) {
-    $sql = $this->dbconn->prepare("SELECT ID, UserID, Name, ContactNumber FROM `emergencyContacts` WHERE `UserID` = ?");
+    $sql = $this->dbconn->prepare("SELECT ID, UserID, `Name`, ContactNumber, `Relation` FROM `emergencyContacts` WHERE `UserID` = ?");
     $sql->execute([
 			(int) $id
 		]);
@@ -20,7 +20,8 @@ class EmergencyContacts {
 				$row['ID'],
 				$row['UserID'],
 				$row['Name'],
-				$row['ContactNumber']
+				$row['ContactNumber'],
+				$row['Relation']
 			);
 			$this->contacts[] = $new;
 		}

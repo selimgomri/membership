@@ -32,12 +32,14 @@ try {
       $member = getNextSwimmer($_SESSION['UserID'], 0);
     }
 
-    $sql = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1, `Substage` = '0', `Part` = ? WHERE `RenewalID` = ? AND `UserID` = ?");
-    $sql->execute([
-      $member,
-      $renewal,
-      $_SESSION['UserID']
-    ]);
+    if ($member != null) {
+      $sql = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1, `Substage` = '0', `Part` = ? WHERE `RenewalID` = ? AND `UserID` = ?");
+      $sql->execute([
+        $member,
+        $renewal,
+        $_SESSION['UserID']
+      ]);
+    }
     header("Location: " . autoUrl("renewal/go"));
   }
 } catch (Exception $e) {

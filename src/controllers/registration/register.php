@@ -85,7 +85,7 @@ $_SESSION['RegistrationMode'] = $mode;
         </div>
       </div>
       
-      <form method="post" action="<?php echo autoUrl("register"); ?>" name="register" id="register">
+      <form method="post" action="<?php echo autoUrl("register"); ?>" name="register" id="register" class="needs-validation" novalidate>
 
         <h2>About you</h2>
         <div class="row">
@@ -100,6 +100,9 @@ $_SESSION['RegistrationMode'] = $mode;
                   <input class="form-control" type="text" name="forename"
                   id="forename" placeholder="First" required
                   value="<?=htmlspecialchars($_SESSION['RegistrationForename'])?>" autocomplete="given-name">
+                  <div class="invalid-feedback">
+                    You must provide a first name
+                  </div>
                 </div>
 
               </div>
@@ -111,6 +114,9 @@ $_SESSION['RegistrationMode'] = $mode;
                   <input class="form-control" type="text" name="surname"
                   id="surname" placeholder="Last" required
                   value="<?=htmlspecialchars($_SESSION['RegistrationSurname'])?>" autocomplete="family-name">
+                  <div class="invalid-feedback">
+                    You must provide a surname
+                  </div>
                 </div>
 
               </div>
@@ -121,12 +127,11 @@ $_SESSION['RegistrationMode'] = $mode;
               <label for="email">Email Address</label>
               <input class="form-control mb-0 text-lowercase" type="email" name="email" id="email-address" placeholder="yourname@example.com" required value="<?=htmlspecialchars($_SESSION['RegistrationEmail'])?>" autocomplete="email">
               <small id="emailHelp" class="form-text text-muted">
-                Your email address will only be used inside <?=htmlspecialchars(env('CLUB_NAME'))?> and
-                Chester-le-Street ASC Club Digital Services.<!-- Emails sent by
-                Chester-le-Street ASC Club Digital Services are delivered by Google
-                Cloud and SendGrid. Both companies are EU-US Privacy Shield
-                certified.-->
+                Your email address will only be used inside <?=htmlspecialchars(env('CLUB_NAME'))?> and SCDS.
               </small>
+              <div class="invalid-feedback">
+                You must provide a valid email address
+              </div>
             </div>
           </div>
         </div>
@@ -134,8 +139,11 @@ $_SESSION['RegistrationMode'] = $mode;
           <div class="col-md-8 col-lg-6">
             <div class="form-group">
               <label for="mobile">Mobile Number</label>
-              <input class="form-control" type="tel" name="mobile" id="mobile" placeholder="01234 567890" required value="<?=htmlspecialchars($_SESSION['RegistrationMobile'])?>" autocomplete="tel">
+              <input class="form-control" type="tel" pattern="\+{0,1}[0-9]*" name="mobile" id="mobile" placeholder="01234 567890" required value="<?=htmlspecialchars($_SESSION['RegistrationMobile'])?>" autocomplete="tel">
               <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
+              <div class="invalid-feedback">
+                You must provide a valid UK phone number
+              </div>
             </div>
           </div>
         </div>
@@ -147,15 +155,22 @@ $_SESSION['RegistrationMode'] = $mode;
               <div class="col">
                 <div class="form-group">
                   <label for="password1">Password</label>
-                  <input class="form-control" type="password" aria-describedby="pwHelp" name="password1" id="password1" placeholder="Password" required autocomplete="new-password">
-                  <small id="pwHelp" class="form-text text-muted">Use 8 characters or more</small>
+                  <input class="form-control" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" aria-describedby="pwHelp" name="password1" id="password1" placeholder="Password" required autocomplete="new-password">
+                  <small id="pwHelp" class="form-text text-muted">Use 8 characters or more, with at least one lowercase letter, at least one uppercase letter and at least one number</small>
+                  <div class="invalid-feedback">
+                    You must provide password that is at least 8 characters long with at least one lowercase letter, at least one uppercase letter and at least one number
+                  </div>
                 </div>
               </div>
 
               <div class="col">
                 <div class="form-group">
                   <label for="password2">Confirm Password</label>
-                  <input class="form-control" type="password" name="password2" id="password2" placeholder="Password" required autocomplete="new-password">
+                  <input class="form-control" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="password2" id="password2" aria-describedby="pwConfirmHelp" placeholder="Password" required autocomplete="new-password">
+                  <small id="pwConfirmHelp" class="form-text text-muted">Repeat your password</small>
+                  <div class="invalid-feedback">
+                    You must provide password that is at least 8 characters long with at least one lowercase letter, at least one uppercase letter and at least one number
+                  </div>
                 </div>
               </div>
             </div>
@@ -232,6 +247,8 @@ $_SESSION['RegistrationMode'] = $mode;
     </div>
   </div>
 </div>
+
+<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 
 <?php include BASE_PATH . "views/footer.php";
 

@@ -1,10 +1,16 @@
 <?php
 
+use Brick\PhoneNumber\PhoneNumber;
+use Brick\PhoneNumber\PhoneNumberParseException;
+use Brick\PhoneNumber\PhoneNumberFormat;
+
 global $db;
 
 $userInfo = $db->prepare("SELECT Forename, Surname, Mobile FROM `users` WHERE `UserID` = ?");
 $userInfo->execute([$_SESSION['UserID']]);
 $user = $userInfo->fetch(PDO::FETCH_ASSOC);
+
+$mobile = PhoneNumber::parse($user['Mobile'], 'GB');
 
 $contacts = new EmergencyContacts($db);
 $contacts->byParent($_SESSION['UserID']);
@@ -51,12 +57,14 @@ include BASE_PATH . "views/renewalTitleBar.php";
         <div class="media pt-3">
   				<div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
 						<p class="mb-0">
-							<strong class="d-block">
-								<?=htmlspecialchars($user['Forename'] . " " . $user['Surname'])?> (From My
-								Account)
+							<strong>
+								<?=htmlspecialchars($user['Forename'] . " " . $user['Surname'])?>
 							</strong>
-							<a href="tel:<?=htmlspecialchars($user['Mobile'])?>">
-								<?=htmlspecialchars($user['Mobile'])?>
+							<em>(From My Account)</em>
+						</p>
+						<p class="mb-0">
+							<a href="tel:<?=$mobile->format(PhoneNumberFormat::RFC3966)?>">
+								<?=$mobile->format(PhoneNumberFormat::NATIONAL)?>
 							</a>
 						</p>
   				</div>
@@ -68,11 +76,16 @@ include BASE_PATH . "views/renewalTitleBar.php";
 						<div class="row align-items-center">
 							<div class="col-9">
 								<p class="mb-0">
-									<strong class="d-block">
+									<strong>
 										<?=htmlspecialchars($contactsArray[$i]->getName())?>
 									</strong>
-									<a href="tel:<?=htmlspecialchars($contactsArray[$i]->getContactNumber())?>">
-										<?=htmlspecialchars($contactsArray[$i]->getContactNumber())?>
+									<em>
+                    <?=htmlspecialchars($contactsArray[$i]->getRelation())?>
+                  </em>
+								</p>
+								<p class="mb-0">
+									<a href="tel:<?=htmlspecialchars($mobile->format(PhoneNumberFormat::RFC3966))?>">
+										<?=htmlspecialchars($mobile->format(PhoneNumberFormat::NATIONAL))?>
 									</a>
 								</p>
 							</div>

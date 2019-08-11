@@ -9,6 +9,7 @@ use Respect\Validation\Validator as v;
 class EmergencyContact {
 	private $name;
 	private $contactNumber;
+	private $relation;
 	private $dbconn;
 	private $contactId;
 	private $user;
@@ -17,25 +18,32 @@ class EmergencyContact {
 		// DO NOTHING
   }
 
-	public function new($name, $contactNumber, $user) {
+	public function new($name, $contactNumber, $user, $relation = null) {
 		$this->name = ucwords($name);
-		if (!v::phone()->validate($contactNumber)) {
-			return false;
-		}
 		try {
 			$number = \Brick\PhoneNumber\PhoneNumber::parse($contactNumber, 'GB');
 			$this->contactNumber = $number->format(\Brick\PhoneNumber\PhoneNumberFormat::E164);
+			if (!$number->isValidNumber()) {
+				// strict check relying on up-to-date metadata library
+				throw new Exception('Advanced check invalid');
+			}		
 		} catch (PhoneNumberParseException $e) {
-			return false;
+			throw new Exception('Parse exception');
 		}
 		$this->user = $user;
+		if ($relation != null) {
+			$this->relation = $relation;
+		}
   }
 
-	public function existing($contactId, $user, $name, $contactNumber) {
+	public function existing($contactId, $user, $name, $contactNumber, $relation = null) {
 		$this->contactId = $contactId;
 		$this->user = $user;
 		$this->name = $name;
 		$this->contactNumber = $contactNumber;
+		if ($relation != null) {
+			$this->relation = $relation;
+		}
   }
 
 	public function getByContactID($contactId) {
@@ -52,11 +60,19 @@ class EmergencyContact {
 		}
 		$this->user = $row['UserID'];
 		$this->name = $row['Name'];
+		$this->relation = $row['Relation'];
 		$this->contactNumber = $row['ContactNumber'];
   }
 
 	public function getName() {
 		return $this->name;
+	}
+
+	public function getRelation() {
+		if (isset($this->relation)) {
+			return $this->relation;
+		}
+		return null;
 	}
 
 	public function getContactNumber() {
@@ -117,6 +133,20 @@ class EmergencyContact {
     return true;
 	}
 
+	public function setRelation($relation) {
+		if ($this->dbconn == null) {
+			return false;
+		}
+		$this->relation = $relation;
+    try {
+  		$sql = $this->dbconn->prepare("UPDATE `emergencyContacts` SET `Relation` = ? WHERE `ID` = ?");
+      $sql->execute([$this->relation, $this->contactId]);
+    } catch (Exception $e) {
+      return false;
+    }
+    return true;
+	}
+
 	public function setContactNumber($contactNumber) {
 		if ($this->dbconn == null) {
 			return false;
@@ -127,8 +157,12 @@ class EmergencyContact {
 		try {
 			$number = \Brick\PhoneNumber\PhoneNumber::parse($contactNumber, 'GB');
 			$this->contactNumber = $number->format(\Brick\PhoneNumber\PhoneNumberFormat::E164);
+			if (!$number->isValidNumber()) {
+				// strict check relying on up-to-date metadata library
+				throw new Exception('Advanced check invalid');
+			}		
 		} catch (PhoneNumberParseException $e) {
-			return false;
+			throw new Exception('Parse exception');
 		}
     try {
   		$sql = $this->dbconn->prepare("UPDATE `emergencyContacts` SET `ContactNumber` = ? WHERE `ID` = ?");
@@ -157,11 +191,12 @@ class EmergencyContact {
 			return false;
 		}
     try {
-  		$sql = $this->dbconn->prepare("INSERT INTO `emergencyContacts` (`UserID`, `Name`, `ContactNumber`) VALUES (?, ?, ?)");
+  		$sql = $this->dbconn->prepare("INSERT INTO `emergencyContacts` (`UserID`, `Name`, `ContactNumber`, `Relation`) VALUES (?, ?, ?, ?)");
       $sql->execute([
         $this->user,
         $this->name,
-        $this->contactNumber
+				$this->contactNumber,
+				$this->relation
       ]);
     } catch (Exception $e) {
       return false;

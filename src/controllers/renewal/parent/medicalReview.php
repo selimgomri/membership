@@ -2,17 +2,17 @@
 
 global $db;
 
-$name = getSwimmerName($id);
-
 $yes = $no = "";
 
 $userID = $_SESSION['UserID'];
-$pagetitle = htmlspecialchars($name) . " - Medical Review";
 
-$medInfo = $db->prepare("SELECT * FROM `members` LEFT JOIN `memberMedical` ON members.MemberID =
-memberMedical.MemberID WHERE members.MemberID = ?");
+$medInfo = $db->prepare("SELECT * FROM `members` LEFT JOIN `memberMedical` ON members.MemberID = memberMedical.MemberID WHERE members.MemberID = ?");
 $medInfo->execute([$id]);
 $row = $medInfo->fetch(PDO::FETCH_ASSOC);
+
+$name = $row['MForename'] . ' ' . $row['MSurname'];
+
+$pagetitle = htmlspecialchars($name) . " - Medical Review";
 
 if ($row == null) {
 	halt(500);
@@ -25,7 +25,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 <div class="container">
 	<div class="">
 		<form method="post" name="med" id="med">
-			<h1>Medical Form</h1>
+			<h1>Medical Form for <?=htmlspecialchars($row['MForename'])?></h1>
 			<?php if (isset($_SESSION['ErrorState'])) {
 				echo $_SESSION['ErrorState'];
 				unset($_SESSION['ErrorState']);

@@ -40,7 +40,7 @@ if (isset($renewal_trap) && $renewal_trap) {
         My Emergency Contacts
       </h1>
       <p class="lead">
-        Add, Edit or Remove Emergency Contacts
+        Add, edit or remove emergency contacts
       </p>
       <p class="border-bottom border-gray pb-2 mb-0">
         We'll use these emergency contacts for all swimmers connected to your account if we can't reach you on your
@@ -56,10 +56,12 @@ if (isset($renewal_trap) && $renewal_trap) {
             <div class="row align-items-center	">
               <div class="col-9">
                 <p class="mb-0">
-                  <strong class="d-block">
-                    <?=htmlspecialchars($row['Forename'] . " " . $row['Surname'])?> (From My
-                    Account)
+                  <strong>
+                    <?=htmlspecialchars($row['Forename'] . " " . $row['Surname'])?>
                   </strong>
+                  <em>(From My Account)</em>
+                </p>
+                <p class="mb-0">
                   <a href="tel:<?=htmlspecialchars($mobile->format(PhoneNumberFormat::RFC3966))?>">
                     <?=htmlspecialchars($mobile->format(PhoneNumberFormat::NATIONAL))?>
                   </a>
@@ -83,9 +85,14 @@ if (isset($renewal_trap) && $renewal_trap) {
             <div class="row align-items-center">
               <div class="col-9">
                 <p class="mb-0">
-                  <strong class="d-block">
+                  <strong class="">
                     <?=htmlspecialchars($contactsArray[$i]->getName())?>
                   </strong>
+                  <em>
+                    (<?=htmlspecialchars($contactsArray[$i]->getRelation())?>)
+                  </em>
+                </p>
+                <p class="mb-0">
                   <a href="tel:<?=htmlspecialchars($contactsArray[$i]->getRFCContactNumber())?>">
                     <?=htmlspecialchars($contactsArray[$i]->getNationalContactNumber())?>
                   </a>

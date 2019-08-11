@@ -21,12 +21,22 @@ if ($_POST['name'] != null && $_POST['name'] != "") {
 	$contact->setName($_POST['name']);
 }
 
-if ($_POST['num'] != null && $_POST['num'] != "") {
-	$contact->setContactNumber($_POST['num']);
+if ($_POST['relation'] != null && $_POST['relation'] != "") {
+	$contact->setRelation($_POST['relation']);
 }
 
-if ($renewal_trap) {
-	header("Location: " . autoUrl("renewal/go"));
-} else {
-	header("Location: " . autoUrl($url_path));
+try {
+	if ($_POST['num'] != null && $_POST['num'] != "") {
+		$contact->setContactNumber($_POST['num']);
+	}
+
+	if ($renewal_trap) {
+		header("Location: " . autoUrl("renewal/go"));
+	} else {
+		header("Location: " . autoUrl($url_path));
+	}
+	
+} catch (Exception $e) {
+	$_SESSION['PhoneError'] = true;
+	header("Location: " . currentUrl());
 }

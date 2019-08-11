@@ -5,7 +5,7 @@ $pagetitle = "Provide User Details - Assisted Registration";
 $first = "";
 $last = "";
 $email = "";
-$mobile = "+44";
+$mobile = "";
 
 if (isset($_SESSION['AssRegPostData'])) {
   $first = $_SESSION['AssRegPostData']['first'];
@@ -33,7 +33,7 @@ include BASE_PATH . 'views/header.php';
       </div>
       <?php } ?>
 
-      <form method="post">
+      <form method="post" class="needs-validation" novalidate>
 
         <div class="form-row">
           <div class="col">
@@ -66,7 +66,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="form-group">
           <label for="phone">Mobile Number</label>
-          <input type="tel" class="form-control" id="phone" name="phone" value="+44" required value="<?=htmlspecialchars($mobile)?>">
+          <input type="tel" pattern="\+{0,1}[0-9]*" class="form-control" id="phone" name="phone" placeholder="01234 567891" required value="<?=htmlspecialchars($mobile)?>">
           <div class="invalid-feedback">
             Please enter a valid mobile number.
           </div>

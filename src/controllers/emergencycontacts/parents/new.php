@@ -8,6 +8,12 @@ if (isset($renewal_trap) && $renewal_trap) {
 	include BASE_PATH . 'views/renewalTitleBar.php';
 }
 
+$v = null;
+if (isset($_SESSION['POST_DATA'])) {
+  $v = $_SESSION['POST_DATA'];
+  unset($_SESSION['POST_DATA']);
+}
+
 ?>
 
 <div class="container">
@@ -29,19 +35,36 @@ if (isset($renewal_trap) && $renewal_trap) {
     <div class="row">
       <div class="col-lg-8">
 
-        <?php if (isset($_SESSION['AddNewError'])) {
+      <?php if (isset($_SESSION['AddNewError'])) {
 			echo $_SESSION['AddNewError'];
 			unset($_SESSION['AddNewError']);
-		} ?>
+		  } ?>
 
-        <form method="post">
+        <form method="post" class="needs-validation" novalidate>
           <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="<?=htmlspecialchars($v['name'])?>" required>
+            <div class="invalid-feedback">
+              You must provide the name of the emergency contact
+            </div>
           </div>
+          
+
+          <div class="form-group">
+            <label for="relation">Relation</label>
+            <input type="text" class="form-control" id="relation" name="relation" placeholder="Relation" value="<?=htmlspecialchars($v['relation'])?>" required>
+            <div class="invalid-feedback">
+              You must provide the relation so we can decide who is best to call
+            </div>
+          </div>
+
           <div class="form-group">
             <label for="num">Contact Number</label>
-            <input type="tel" class="form-control" id="num" name="num" placeholder="Phone" required>
+            <input type="tel" pattern="\+{0,1}[0-9]*" class="form-control" id="num" name="num" placeholder="Phone" value="<?=htmlspecialchars($v['num'])?>" required>
+            <div class="invalid-feedback">
+              You must provide a valid UK phone number
+            </div>
+
           </div>
           <button type="submit" class="btn btn-success">Add</button>
         </form>
@@ -51,6 +74,8 @@ if (isset($renewal_trap) && $renewal_trap) {
 
   </div>
 </div>
+
+<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 
 <?php
 

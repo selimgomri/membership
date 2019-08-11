@@ -45,17 +45,42 @@ if (isset($renewal_trap) && $renewal_trap) {
     <div class="row">
       <div class="col-lg-8">
 
-        <form method="post">
+        <?php if (isset($_SESSION['PhoneError']) && $_SESSION['PhoneError']) { ?>
+          <div class="alert alert-danger">
+            <p class="mb-0"><strong>
+              The number provided was not a valid UK phone number.
+            </strong></p>
+            <p class="mb-0">
+              Please try again
+            </p>
+          </div>
+        <?php unset($_SESSION['PhoneError']); } ?>
+
+        <form method="post" class="needs-validation" novalidate>
           <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Name"
-              value="<?=htmlspecialchars($contact->getName())?>" required>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="<?=htmlspecialchars($contact->getName())?>" required>
+            <div class="invalid-feedback">
+              You must provide the name of the emergency contact
+            </div>
           </div>
+
+          <div class="form-group">
+            <label for="relation">Relation</label>
+            <input type="text" class="form-control" id="relation" name="relation" placeholder="Relation" value="<?=htmlspecialchars($contact->getRelation())?>" required>
+            <div class="invalid-feedback">
+              You must provide the relation so we can decide who is best to call
+            </div>
+          </div>
+
           <div class="form-group">
             <label for="num">Contact Number</label>
-            <input type="tel" class="form-control" id="num" name="num" placeholder="Phone"
-              value="<?=htmlspecialchars($contact->getContactNumber())?>" required>
+            <input type="tel" pattern="\+{0,1}[0-9]*" class="form-control" id="num" name="num" placeholder="Phone" value="<?=htmlspecialchars($contact->getContactNumber())?>" required>
+            <div class="invalid-feedback">
+              You must provide a valid UK phone number
+            </div>
           </div>
+
           <p>
             <button type="submit" class="btn btn-success">Save</button>
             <a href="<?=autoUrl($url_path . "/" . $id . "/delete")?>" class="btn btn-danger">Delete</a>
@@ -67,6 +92,8 @@ if (isset($renewal_trap) && $renewal_trap) {
 
   </div>
 </div>
+
+<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 
 <?php
 

@@ -66,7 +66,7 @@ include BASE_PATH . 'views/header.php';
         We have to ask you some of these questions so that we comply with the General Data Protection Regulation.
       </p>
 
-      <form method="post">
+      <form method="post" class="needs-validation" novalidate>
         <h2>
           Create a password for your account
         </h2>
@@ -83,17 +83,24 @@ include BASE_PATH . 'views/header.php';
           <div class="col-sm">
             <div class="form-group">
               <label for="password-1">Create a password</label>
-              <input type="password" class="form-control" id="password-1" name="password-1" autocomplete="new-password" required aria-describedby="pwHelp">
+              <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="form-control" id="password-1" name="password-1" autocomplete="new-password" required aria-describedby="pwHelp">
               <small id="pwHelp" class="form-text text-muted">
-                Use 8 characters or more
+                Use 8 characters or more, with at least one lowercase letter, at least one uppercase letter and at least one number
               </small>
+              <div class="invalid-feedback">
+                You must provide password that is at least 8 characters long with at least one lowercase letter, at least one uppercase letter and at least one number
+              </div>
             </div>
           </div>
 
           <div class="col-sm">
             <div class="form-group">
               <label for="password-2">Confirm your password</label>
-              <input type="password" class="form-control" id="password-2" name="password-2" autocomplete="new-password" required>
+              <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="form-control" id="password-2" name="password-2" autocomplete="new-password" required aria-describedby="pwConfirmHelp">
+              <small id="pwConfirmHelp" class="form-text text-muted">Repeat your password</small>
+              <div class="invalid-feedback">
+                You must provide password that is at least 8 characters long with at least one lowercase letter, at least one uppercase letter and at least one number
+              </div>
             </div>
           </div>
         </div>
@@ -139,8 +146,10 @@ include BASE_PATH . 'views/header.php';
           <?=$Extra->text($privacyPolicy)?>
           <?php } else { ?>
           <p>
-            In accordance with European Law, <?=htmlspecialchars(env('CLUB_NAME'))?>, Chester-le-Street
-            ASC Club Digital Services, Swim England and British Swimming are
+            YOUR CLUB HAS NOT SET UP A PRIVACY POLICY. PLEASE DO NOT PROCEED.
+          </p>
+          <p>
+            In accordance with European Law, <?=htmlspecialchars(env('CLUB_NAME'))?>, SCDS, Swim England and British Swimming are
             Data Controllers for the purposes of the General Data Protection
             Regulation.
           </p>

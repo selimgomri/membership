@@ -33,7 +33,7 @@ $sessions->execute([
 
 $allSessions = $sessions->fetchAll(PDO::FETCH_ASSOC);
 
-$dayNum = (int) $now->format('N') + 1;
+$dayNum = (int) $now->format('N') % 7;
 $sessionToday = false;
 
 $otherDays = $sundays = [];
@@ -51,8 +51,6 @@ foreach ($sundays as $session) {
   $otherDays[] = $session;
 }
 $sessions = $otherDays;
-
-$dayNum = ($dayNum+6)%7;
 
 include BASE_PATH . 'views/header.php';
 
@@ -83,7 +81,7 @@ include BASE_PATH . 'views/header.php';
           $currentDay = $session['SessionDay'];
           $day = clone $startWeek;
           $day->add(new DateInterval('P' . ($currentDay+6)%7 . 'D')); ?>
-          <div class="list-group-item bg-primary text-white" id="day-<?=$day->format('N')?>">
+          <div class="list-group-item bg-primary text-white" id="day-<?=(int) $day->format('N') % 7?>">
             <h2 class="mb-0"><?=htmlspecialchars($day->format('l'))?></h2>
             <p class="lead mb-0"><?=htmlspecialchars($day->format('j F Y'))?></p>
           </div>
