@@ -33,6 +33,11 @@ include BASE_PATH . "views/paymentsMenu.php";
 	  <p class="lead">
       All Direct Debit payments requested in <?=htmlspecialchars(date("F Y", $date))?>
     </p>
+		<h2>Payout Reports</h2>
+		<p class="lead">For GoCardless payouts made in <?=htmlspecialchars(date("F Y", $date))?>.</p>
+		<p>View payments linked to <?=htmlspecialchars(date("F Y", $date))?> payouts from GoCardless to your club's bank account in <a href="<?=currentUrl()?>report.csv">CSV</a>, <a href="<?=currentUrl()?>report.json">JSON</a> or <a href="<?=currentUrl()?>report.pdf">PDF</a> formats.</p>
+
+		<h2>Payment Report</h2>
 		<p>Click on a description for a statement detailing the fees which went into this charge.
 			Some payments may not have a statement available</p>
 		<?php

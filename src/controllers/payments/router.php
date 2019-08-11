@@ -156,6 +156,14 @@ if ($access == "Admin") {
 			include 'admin/history/FinanceReport.csv.php';
 		});
 
+		$this->get('/{year}:int/{month}:int/report.json', function($year, $month) {
+			include 'admin/history/FinanceReportOutput.json.php';
+		});
+
+		$this->get('/{year}:int/{month}:int/report.pdf', function($year, $month) {
+			include 'admin/history/FinanceReport.pdf.php';
+		});
+
 		$this->get('/statement/{PaymentID}', function($PaymentID) {
 			global $link;
 			include 'admin/history/statement.php';
