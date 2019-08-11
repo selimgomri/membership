@@ -66,6 +66,7 @@ function process_payout_event($event) {
   global $db;
   $payout = $event["links"]["payout"];
   createOrUpdatePayout($payout, true);
+  echo $payout . ' processed';
 }
 
 function process_mandate_event($event) {
@@ -280,6 +281,9 @@ function process_payment_event($event) {
         $name = $payment->description;
         $currency = $payment->currency;
         $mandate = $payment->links->mandate;
+        if (isset($payment->links->payout) && $payment->links->payout != null) {
+          createOrUpdatePayout($payout);
+        }
 
         $getMandateAndUser = $db->prepare("SELECT MandateID, UserID FROM paymentMandates WHERE Mandate = ?");
         $getMandateAndUser->execute([$mandate]);

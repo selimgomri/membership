@@ -133,24 +133,27 @@ class CreateMail {
     <div
     class=\"bottom text-center\">
     <p class=\"small\" align=\"center\"><strong>" . htmlspecialchars(env('CLUB_NAME')) . "</strong><br>";
-    $club = json_decode(CLUB_JSON);
-    for ($i = 0; $i < sizeof($club->ClubAddress); $i++) {
-    $foot .= $club->ClubAddress[$i] . "<br>";
+    $addr = json_decode(env('CLUB_ADDRESS'));
+    for ($i = 0; $i < sizeof($addr); $i++) {
+      $foot .= htmlspecialchars($addr[$i]) . '<br>';
+      if (isset($addr[$i+1]) && $addr[$i+1] == "") {
+        break;
+      }
     }
     $foot .= "</p>
-    <p class=\"small\" align=\"center\">This email was sent automatically by the " . env('CLUB_NAME') . " Membership System.</p>";
+    <p class=\"small\" align=\"center\">This email was sent automatically by the " . htmlspecialchars(env('CLUB_NAME')) . " Membership System.</p>";
     if (!(bool(env('IS_CLS')))) {
     $foot .= '<p class="small" align="center">The Membership System was built by Chester-le-Street ASC.</p>';
     }
     $foot .= "<p class=\"small\" align=\"center\">Have questions? Contact us at <a
-    href=\"mailto:" . $club->ClubEmails->Main . "\">" . $club->ClubEmails->Main . "</a>.</p>
+    href=\"mailto:" . htmlspecialchars(env('CLUB_EMAIL')) . "\">" . htmlspecialchars(env('CLUB_EMAIL')) . "</a>.</p>
     <p class=\"small\" align=\"center\">To control your email options, go to <a href=\"" .
     autoUrl("myaccount/email") . "\">My Account</a>.</p>";
     if ($this->allowUnsubscribe) {
       $foot .= '<p class="small" align="center"><a href="-unsub_link-">Click to Unsubscribe</a></p>';
     }
     $foot .= "
-    <p class=\"small\" align=\"center\">&copy; " . htmlspecialchars(env('CLUB_NAME')) . " " . date("Y") . "</p>
+    <p class=\"small\" align=\"center\">&copy; " . htmlspecialchars(env('CLUB_NAME')) . " " . date("Y") . ", Design &copy; SCDS / Chris Heppell / Chester-le-Street ASC</p>
       </div>
       </table>
     </table>
@@ -172,20 +175,23 @@ class CreateMail {
 
     $foot = "\r\n\n\n " . env('CLUB_NAME') . "\r\n\r\n";
     $foot .= env('CLUB_NAME') . "\r\n";
-    $club = json_decode(CLUB_JSON);
-    for ($i = 0; $i < sizeof($club->ClubAddress); $i++) {
-    $foot .= $club->ClubAddress[$i] . "\r\n";
+    $addr = json_decode(env('CLUB_ADDRESS'));
+    for ($i = 0; $i < sizeof($addr); $i++) {
+      $foot .= $addr[$i] . "\r\n";
+      if (isset($addr[$i+1]) && $addr[$i+1] == "") {
+        break;
+      }
     }
     $foot .= "\r\nThis email was sent automatically by the " . env('CLUB_NAME') . " Membership System.\r\n\r\n";
     if (!(bool(env('IS_CLS')))) {
       $foot .= "The Membership System was built by Chester-le-Street ASC.\r\n\r\n";
     }
-    $foot .= "Have questions? Contact us at " . $club->ClubEmails->Main . ".\r\n\r\n";
+    $foot .= "Have questions? Contact us at " . env('CLUB_EMAIL') . ".\r\n\r\n";
     $foot .= "To control your email options go to My Account at " . autoUrl("myaccount") . ".\r\n\r\n";
     if ($this->allowUnsubscribe) {
       $foot .= "Unsubscribe at -unsub_link-\r\n\r\n";
     }
-    $foot .= "Copyright " . env('CLUB_NAME');
+    $foot .= "Content copyright " . date("Y") . " " . env('CLUB_NAME') . ", Design copyright SCDS/Chester-le-Street ASC";
 
     return $head . $this->getPlainContent() . $foot;
   }

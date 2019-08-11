@@ -64,12 +64,12 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
 
   $mailObject->setHtmlContent($htmlMessage);
 
-  if ($from['PlainText']) {
+  if (isset($from['PlainText']) && $from['PlainText']) {
     $message = $emailMessage;
     $mailObject->setHtmlContent($from['PlainText']);
   }
 
-  if ($from['Unsub']['Allowed']) {
+  if (isset($from['Unsub']['Allowed']) && $from['Unsub']['Allowed']) {
     $mailObject->setUnsubscribable();
   }
 
@@ -114,7 +114,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
   $plain = $mailObject->getFormattedPlain();
   $html = $mailObject->getFormattedHtml();
 
-  if ($from['Unsub']['Allowed']) {
+  if (isset($from['Unsub']['Allowed']) && $from['Unsub']['Allowed']) {
     $unsubLink = autoUrl("notify/unsubscribe/" . dechex($from['Unsub']['User']) .  "/" . urlencode($emailaddress) . "/" . urlencode($from['Unsub']['List']));
     $plain = str_replace('-unsub_link-', $unsubLink, $plain);
     $html = str_replace('-unsub_link-', $unsubLink, $html);
@@ -244,7 +244,7 @@ function mySwimmersTable($link, $userID) {
         </tbody>
       </table>
     </div>
-  <?php } 
+  <?php }
 }
 
 function generateRandomString($length) {
@@ -331,7 +331,7 @@ function myMonthlyFeeTable($link, $userID) {
   $sql->execute([$userID]);
 
   $rows = $sql->fetchAll(PDO::FETCH_ASSOC);
-  
+
   $count = sizeof($rows);
   $totalsArray = [];
   $squadsOutput = "";
@@ -650,7 +650,7 @@ function mandateExists($mandate) {
   global $db;
   $sql = $db->prepare("SELECT COUNT(*) FROM `paymentMandates` WHERE `Mandate` = ?");
   $sql->execute([$mandate]);
-  
+
   if ($sql->fetchColumn() == 1) {
     return true;
   } else {
@@ -684,6 +684,7 @@ function updatePaymentStatus($PMkey) {
     try {
       $updatePP = $db->prepare("UPDATE `paymentsPending` SET `Status` = ? WHERE `PMkey` = ?");
       $updatePP->execute(['Paid', $PMkey]);
+      $sql2bool = true;
     } catch (Exception $e) {
       $sql2bool = false;
     }
@@ -702,7 +703,7 @@ function updatePaymentStatus($PMkey) {
 
       $subject = "Payment Failed for " . $details['Name'];
       $message = '
-      <p>Your Direct Debit payment of £' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has failed.</p>';
+      <p>Your Direct Debit payment of �' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has failed.</p>';
       if ($num_retries < 3) {
         $message .= '<p>We will automatically retry this payment on ' . date("j F Y", strtotime("+10 days")) . ' (in ten days time).</p>';
         if ($num_retries < 2) {
@@ -714,7 +715,7 @@ function updatePaymentStatus($PMkey) {
         $message .= '<p>We have retried this payment request three times and it has still not succeeded. As a result, you will need to contact the club treasurer to take further action. Failure to pay may lead to the suspension or termination of your membership.</p>';
       }
 
-      $message .= '<p>Kind regards,<br>The ' . env('CLUB_NAME') . ' Team</p>';
+      $message .= '<p>Kind regards,<br>The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
       $query = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (?, ?, ?, ?, ?, ?)");
       $query->execute([$details['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
 
@@ -738,7 +739,7 @@ function updatePaymentStatus($PMkey) {
       $subject = "Payment Failed for " . $details['Name'];
       $message = '
       <p>Your Direct Debit payment of £' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has failed because customer approval was denied. This means your bank requires two people two authorise a direct debit mandate on your account and that this authorisation has not been given. You will be contacted by the treasurer to arrange payment.</p>
-      <p>Kind regards,<br>The ' . env('CLUB_NAME') . ' Team</p>';
+      <p>Kind regards,<br>The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
       $query = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (?, ?, ?, ?, ?, ?)");
       $query->execute([$details['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
 
@@ -755,9 +756,9 @@ function updatePaymentStatus($PMkey) {
 
       $subject = $details['Name'] . " Charged Back";
       $message = '
-      <p>Your Direct Debit payment of £' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has been charged back to us. You will be contacted by the treasurer to arrange payment of any outstanding amount.</p>
+      <p>Your Direct Debit payment of �' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has been charged back to us. You will be contacted by the treasurer to arrange payment of any outstanding amount.</p>
       <p>Please note that fraudulently charging back a Direct Debit payment is a criminal offence, covered by the 2006 Fraud Act. We recommend that if your are unsure about the amount we are charging you, you should try and contact us first.</p>
-      <p>Kind regards,<br>The ' . env('CLUB_NAME') . ' Team</p>';
+      <p>Kind regards,<br>The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
       $query = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (?, ?, ?, ?, ?, ?)");
       $query->execute([$details['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
 
@@ -911,7 +912,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 function curl($url) {
   $ch = curl_init();  // Initialising cURL
-  curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 4); 
+  curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 4);
   curl_setopt($ch, CURLOPT_HTTPHEADER, array('Origin: ' . app('request')->hostname));
   curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36');
   curl_setopt($ch, CURLOPT_URL, $url);    // Setting cURL's URL option with the $url variable passed into the function
