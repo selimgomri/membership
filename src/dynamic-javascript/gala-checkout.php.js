@@ -252,18 +252,26 @@ paymentRequest.on('paymentmethod', function(ev) {
       // it to close the browser payment method collection interface.
       ev.complete('success');
       // Let Stripe.js handle the rest of the payment flow.
-      window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
-      /*
-      stripe.handleCardPayment(clientSecret).then(function(result) {
-        console.trace();
-        if (result.error) {
-          // The payment failed -- ask your customer for a new payment method.
-        } else {
-          // The payment has succeeded.
-          //window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
+      stripe.retrievePaymentIntent(
+        clientSecret
+      ).then(function(result) {
+        if (!result.error) {
+          console.log(result.paymentIntent);
+          if (result.paymentIntent.status == 'succeeded') {
+            window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
+          } else {
+            stripe.handleCardPayment(clientSecret).then(function(result) {
+              if (result.error) {
+                // The payment failed -- ask your customer for a new payment method.
+                document.getElementById('alert-placeholder').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
+              } else {
+                // The payment has succeeded.
+                window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
+              }
+            });
+          }
         }
       });
-      */
     }
   });
 });
