@@ -91,10 +91,10 @@ ob_start();?>
             <?=htmlspecialchars($item->details)?>
           </td>
           <td class="mono">
-            <?=$item->credits?>
+            <?=number_format($item->credits/100, 2, '.', '')?>
           </td>
           <td class="mono">
-            <?=$item->debits?>
+            <?=number_format($item->debits/100, 2, '.', '')?>
           </td>
           <td>
             <?=htmlspecialchars($item->income)?>
