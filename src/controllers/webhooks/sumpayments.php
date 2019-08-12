@@ -11,7 +11,7 @@ $squadFeeMonths = json_decode($systemInfo->getSystemOption('SquadFeeMonths'), tr
 $squadFeeRequired = !bool($squadFeeMonths[date("m")]);
 
 // Prepare things
-$getSquadMetadata = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, squads.SquadName, squads.SquadID, squads.SquadFee FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = ? ORDER BY squads.SquadFee DESC, members.MForename ASC, members.MSurname ASC;");
+$getSquadMetadata = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, members.ClubPays, squads.SquadName, squads.SquadID, squads.SquadFee FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = ? ORDER BY squads.SquadFee DESC, members.MForename ASC, members.MSurname ASC;");
 
 $getExtraMetadata = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, extras.ExtraName, extras.ExtraFee FROM ((members INNER JOIN `extrasRelations` ON members.MemberID = extrasRelations.MemberID) INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) WHERE members.UserID = ? ORDER BY members.MForename ASC, members.MSurname ASC;");
 
@@ -74,7 +74,9 @@ try {
         $discount = 0;
 
         while ($swimmerRow = $getSquadMetadata->fetch(PDO::FETCH_ASSOC)) {
-          $numMembers++;
+          if (!bool($swimmerRow['ClubPays'])) {
+            $numMembers++;
+          }
           $metadata = [
             "PaymentType" => "SquadFees"
           ];
@@ -104,7 +106,7 @@ try {
           ];
           $track->execute($track_info);
 
-          if (bool(env('IS_CLS'))) {
+          if (!bool($swimmerRow['ClubPays']) && bool(env('IS_CLS'))) {
             // Calculate discounts if required.
             $swimmerDiscount = 0;
             if ($numMembers == 3) {
@@ -115,6 +117,17 @@ try {
               $swimmerDiscount = (int) $fee*0.40;
             }
             $discount += $swimmerDiscount;
+          }
+
+          if (bool($swimmerRow['ClubPays']))  {
+            // Add a credit covering fees if club pays
+            $addCreditToPaymentsPending->execute([
+              $date,
+              $user,
+              $swimmerRow['MForename'] . " " . $swimmerRow['MSurname'] . ' - ' . $swimmerRow['SquadName'] . ' Squad Fee Exemption',
+              $fee,
+              null
+            ]);
           }
         }
 
