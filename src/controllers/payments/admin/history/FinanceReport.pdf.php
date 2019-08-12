@@ -8,6 +8,7 @@ $items = $data->items;
 
 $pagetitle = 'Finance Report';
 
+$netCosts = $netIncome = 0;
 
 ob_start();?>
 
@@ -75,6 +76,10 @@ ob_start();?>
         <?php foreach ($items as $item) { ?>
         <?php
           $date = new DateTime($item->date);
+          if ($item->income == 'Net') {
+            $netIncome += $item->credits;
+            $netCosts += $item->debits;
+          }
         ?>
         <tr>
           <td>
@@ -104,6 +109,28 @@ ob_start();?>
           </td>
         </tr>
         <?php } ?>
+        <tr>
+          <td>
+          </td>
+          <td>
+            <strong>Total</strong>
+          </td>
+          <td>
+            Net Income
+          </td>
+          <td class="mono">
+            <?=number_format($netIncome/100, 2, '.', '')?>
+          </td>
+          <td class="mono">
+            <?=number_format($netCosts/100, 2, '.', '')?>
+          </td>
+          <td>
+            Net
+          </td>
+          <td>
+            Paid out
+          </td>
+        </tr>
       </tbody>
     </table>
 
@@ -122,7 +149,7 @@ ob_start();?>
 
     <p>Payments are handled by GoCardless on behalf of <?=htmlspecialchars(env('CLUB_NAME'))?>. You can also download reports from within the GoCardless user interface at <a href="https://manage.gocardless.com/">manage.gocardless.com</a>.</p>
 
-    <p>&copy; <?=htmlspecialchars(env('CLUB_NAME'))?> <?=date("Y", strtotime($data->date_produced))?></p>
+    <p>&copy; Swimming Club Data Systems <?=date("Y", strtotime($data->date_produced))?>. Produced for <?=htmlspecialchars(env('CLUB_NAME'))?>.</p>
 
     <?php include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
   </body>

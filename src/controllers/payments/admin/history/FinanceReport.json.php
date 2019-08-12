@@ -5,9 +5,9 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 /**
  * Exports of monthly financial reports
  * Shows payments by group and outgoings (GoCardless fees on payouts)
- * 
+ *
  * This means the system covers gross and net
- * 
+ *
  * TODO: Extend to cover Stripe card payments
  */
 
@@ -94,7 +94,7 @@ while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)) {
       'details' => $details . ' - Total banked',
       'credits' => ((int) $in) - ((int) $out),
       'debits' => 0,
-      'income' => 'Gross',
+      'income' => 'Net',
       'status' => $status
     ];
     $array[] = $item;

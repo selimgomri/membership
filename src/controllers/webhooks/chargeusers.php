@@ -80,6 +80,14 @@ try {
           'Payment',
           $date
         ]);
+        $updatePaymentsPending->execute([
+          'Requested',
+          $id,
+          $userid,
+          'Queued',
+          'Refund',
+          $date
+        ]);
 
     	} catch (Exception $e) {
       	halt(500);
@@ -103,6 +111,14 @@ try {
           $userid,
           'Queued',
           'Payment',
+          $date
+        ]);
+        $updatePaymentsPending->execute([
+          'Paid',
+          $id,
+          $userid,
+          'Queued',
+          'Refund',
           $date
         ]);
       } catch (Exception $e) {
