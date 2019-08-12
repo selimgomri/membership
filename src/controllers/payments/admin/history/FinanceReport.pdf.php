@@ -151,7 +151,7 @@ ob_start();?>
 
     <p>&copy; Swimming Club Data Systems <?=date("Y", strtotime($data->date_produced))?>. Produced for <?=htmlspecialchars(env('CLUB_NAME'))?>.</p>
 
-    <?php include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
+    <?php $landscape = true; include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
   </body>
 </html>
 
