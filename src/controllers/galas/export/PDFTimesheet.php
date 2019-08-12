@@ -260,7 +260,7 @@ ob_start();?>
 
     } while ($data = $query->fetch(PDO::FETCH_ASSOC)); ?>
 
-    <?php include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
+    <?php $landscape = true; include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
   </body>
 </html>
 

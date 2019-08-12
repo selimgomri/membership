@@ -36,7 +36,7 @@ try {
     $updatePayments = $db->prepare("UPDATE `payments` SET `Status` = ?, `MandateID` = ?, `PMkey` = ? WHERE `PaymentID` = ?");
     $updatePaymentsPending = $db->prepare("UPDATE `paymentsPending` SET `Status` = ?, `PMkey` = ? WHERE `UserID` = ? AND `Status` = ? AND `Type` = ? AND `Date` <= ?");
 
-    if ($mandateInfo) {
+    if ($mandateInfo && $row['Amount'] > 0) {
     	$amount = $row['Amount'];
     	$currency = $row['Currency'];
     	$description = $row['Name'];
