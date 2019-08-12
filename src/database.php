@@ -782,28 +782,27 @@ function updatePaymentStatus($PMkey) {
 function paymentStatusString($status) {
   switch ($status) {
     case "paid_out":
-      return "Paid to " . env('CLUB_SHORT_NAME');
+      return "Paid out";
     case "paid_manually":
-      return "Paid Manually";
+      return "Paid manually";
     case "pending_customer_approval":
-      return "Waiting for the customer to approve this payment";
+      return "Waiting for customer to approve payment";
     case "pending_submission":
-      return "Payment has been created, but not yet submitted to the bank";
+      return "Payment created, pending submission to bank";
     case "submitted":
-      return "Payment has been submitted to the bank";
+      return "Payment sent to bank";
     case "confirmed":
-      return "Payment has been confirmed as collected";
+      return "Payment confirmed as collected";
     case "cancelled":
       return "Payment cancelled";
     case "customer_approval_denied":
-      return "The customer has denied approval for the payment.
-      You should contact the customer directly";
+      return "Customer has denied approval for the payment. Contact the customer directly";
     case "failed":
-      return "The payment failed to be processed";
+      return "Payment failed";
     case "charged_back":
-      return "The payment has been charged back";
+      return "Payment charged back";
       case "cust_not_dd":
-        return "The customer does not have a Direct Debit set up";
+        return "Customer has no Direct Debit mandate";
     default:
       return "Unknown Status Code";
   }

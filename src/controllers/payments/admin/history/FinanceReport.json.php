@@ -62,7 +62,7 @@ while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)) {
     $status = 'Pending';
     if ($row['Date'] != null) {
       $date = new DateTime($row['Date']);
-      $dateString = $date->format("m/d/Y");
+      $dateString = $date->format("Y-m-d");
       $status = 'Paid out';
     }
     $details = "GoCardless bank payout";
