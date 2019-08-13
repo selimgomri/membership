@@ -22,7 +22,7 @@ if (!function_exists('chesterStandardMenu')) {
     }
 
     $renewalOpen = false;
-    if ($_SESSION['AccessLevel'] == 'Parent') {
+    if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Parent') {
       $date = new DateTime('now', new DateTimeZone('Europe/London'));
       $getRenewals = $db->prepare("SELECT COUNT(*) FROM renewals WHERE StartDate <= :today AND EndDate >= :today;");
       $getRenewals->execute([
