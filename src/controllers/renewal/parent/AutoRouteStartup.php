@@ -55,6 +55,11 @@ function getNextSwimmer($user, $current = 0, $rr_only = false) {
 
 function isPartialRegistration() {
 	global $db;
+	// Is user RR?
+	$query = $db->prepare("SELECT RR FROM users WHERE UserID = ?");
+	$query->execute([$_SESSION['UserID']]);
+	$userRR = bool($query->fetchColumn());
+
 	$query = $db->prepare("SELECT COUNT(*) FROM `members` WHERE UserID = ?");
 	try {
 		$query->execute([$_SESSION['UserID']]);
@@ -70,7 +75,7 @@ function isPartialRegistration() {
 		halt(500);
 	}
 	$new_swimmers = (int) $query->fetchColumn();
-	if ($total_swimmers > $new_swimmers) {
+	if ($userRR && $total_swimmers > $new_swimmers) {
 		return true;
 	}
 	return false;
@@ -114,7 +119,7 @@ if ($currentRenewalDetails == null) {
 
 $renewalName = 'Renewal';
 if (isset($currentRenewalDetails['Name'])) {
-	$renewal = $currentRenewalDetails['Name'];
+	$renewalName = $currentRenewalDetails['Name'];
 } else if (user_needs_registration($_SESSION['UserID'])) {
 	$renewalName = '';
 }

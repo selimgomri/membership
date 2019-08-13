@@ -20,6 +20,21 @@ if (!function_exists('chesterStandardMenu')) {
     if (env('STRIPE')) {
       $canPayByCard = true;
     }
+
+    $renewalOpen = false;
+    $renewalYear = null;
+    if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Parent') {
+      $date = new DateTime('now', new DateTimeZone('Europe/London'));
+      $getRenewals = $db->prepare("SELECT COUNT(*) AS `Count`, `Year` FROM renewals WHERE StartDate <= :today AND EndDate >= :today;");
+      $getRenewals->execute([
+        'today' => $date->format('Y-m-d')
+      ]);
+      $renewals = $getRenewals->fetch(PDO::FETCH_ASSOC);
+      if ($renewals['Count'] == 1) {
+        $renewalOpen = true;
+        $renewalYear = $renewals['Year'];
+      }
+    }
     
     ?>
 
@@ -63,11 +78,13 @@ if (!function_exists('chesterStandardMenu')) {
                 <li class="nav-item">
                   <a class="nav-link" href="<?php echo autoUrl("emergency-contacts") ?>">Emergency Contacts</a>
                 </li>
-                <!--<li class="nav-item">
-            <a class="nav-link" href="<?php echo autoUrl("renewal") ?>">
-              2019 Membership Renewal
-            </a>
-          </li>-->
+                <?php if ($renewalOpen) { ?>
+                <li class="nav-item">
+                  <a class="nav-link" href="<?php echo autoUrl("renewal") ?>">
+                    <?=htmlspecialchars($renewalYear)?> Membership Renewal
+                  </a>
+                </li>
+                <?php } ?>
                 <?php }
           else { ?>
                 <li class="nav-item dropdown">

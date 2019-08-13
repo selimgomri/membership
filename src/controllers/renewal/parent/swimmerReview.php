@@ -25,10 +25,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
       </p>
 
       <p>
-        If your swimmers are not listed here, their membership cannot be
-        renewed. This will lead to a lapse in their club and Swim England Membership.
-        Your swimmers will no longer be insured and automatically removed from
-        our registers if they cannot renew.
+        If your swimmers are not listed here then their membership cannot be renewed. Failure to renew can lead to them not being allowed to train or compete at galas.
       </p>
 
       <?=mySwimmersTable(null, $userID)?>

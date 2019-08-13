@@ -60,6 +60,7 @@ if ($status) {
     ]);
 		header("Location: " . autoUrl("renewal/go"));
 	} catch (Exception $e) {
+		reportError($e);
 		$status = false;
 		$statusMessage .= "<li>Database Error - Contact support</li>";
 	}

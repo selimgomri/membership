@@ -1,210 +1,92 @@
 <?php
 
-if ($id > 0) {
+global $db;
 
-	$id = mysqli_real_escape_string($link, $id);
+$id = mysqli_real_escape_string($link, $id);
 
-	$sql = "SELECT * FROM `renewals` WHERE `ID` = '$id';";
-	$result = mysqli_query($link, $sql);
+$sql = $db->prepare("SELECT * FROM `renewals` WHERE `ID` = ?;");
+$sql->execute([$id]);
+$renewalArray = $sql->fetch(PDO::FETCH_ASSOC);
 
-	if (mysqli_num_rows($result) == 0) {
-		halt(404);
-	}
+if ($renewalArray == null) {
+	halt(404);
+}
 
-	$renewalArray = mysqli_fetch_array($result, MYSQLI_ASSOC);
+$getNumRenewals = $db->prepare("SELECT COUNT(*) FROM `renewalMembers` WHERE `RenewalID` = ? AND Renewed = ?;");
+$getNumRenewals->execute([$id, true]);
+$numRenewals = $getNumRenewals->fetchColumn();
 
-	$sql = "SELECT * FROM `renewalMembers` WHERE `RenewalID` = '$id';";
-	$numRenewals = mysqli_num_rows(mysqli_query($link, $sql));
+$getNumRenewals->execute([$id, 0]);
+$numMembers = $numRenewals + $getNumRenewals->fetchColumn();
 
-	$sql = "SELECT * FROM (`renewalMembers` LEFT JOIN `members` ON
-	`members`.`MemberID` = `renewalMembers`.`MemberID`) WHERE `RenewalID` = '$id'
-	AND `ASACategory` = '1';";
-	$numC1Renewals = mysqli_num_rows(mysqli_query($link, $sql));
+$numRenewalsByCat = $db->prepare("SELECT COUNT(*) FROM (`renewalMembers` LEFT JOIN `members` ON `members`.`MemberID` = `renewalMembers`.`MemberID`) WHERE `RenewalID` = ? AND `ASACategory` = ? AND Renewed = ?;");
+$numRenewalsByCat->execute([$id, 1, true]);
+$numC1Renewals = $numRenewalsByCat->fetchColumn();
 
-	$sql = "SELECT * FROM (`renewalMembers` LEFT JOIN `members` ON
-	`members`.`MemberID` = `renewalMembers`.`MemberID`) WHERE `RenewalID` = '$id'
-	AND `ASACategory` = '2';";
-	$numC2Renewals = mysqli_num_rows(mysqli_query($link, $sql));
+$numRenewalsByCat->execute([$id, 2, true]);
+$numC2Renewals = $numRenewalsByCat->fetchColumn();
 
-	$sql = "SELECT * FROM (`renewalMembers` LEFT JOIN `members` ON
-	`members`.`MemberID` = `renewalMembers`.`MemberID`) WHERE `RenewalID` = '$id'
-	AND `ASACategory` = '3';";
-	$numC3Renewals = mysqli_num_rows(mysqli_query($link, $sql));
+$numRenewalsByCat->execute([$id, 3, true]);
+$numC3Renewals = $numRenewalsByCat->fetchColumn();
 
-	$sql = "SELECT * FROM `members`;";
-	$numMembers = mysqli_num_rows(mysqli_query($link, $sql));
+$sql = $db->prepare("SELECT `MForename`, `MSurname`, `Forename`, `Surname`, `ASANumber`, `payments`.`Status`, `RenewalID`, `Renewed` FROM ((((`renewalMembers` RIGHT JOIN `members`
+ON members.MemberID = renewalMembers.MemberID) LEFT JOIN `users` ON
+members.UserID = users.UserID) LEFT JOIN `paymentsPending` ON
+renewalMembers.PaymentID = paymentsPending.PaymentID) LEFT JOIN `payments` ON
+payments.PMkey = paymentsPending.PMkey) WHERE `renewalMembers`.`RenewalID` =
+? ORDER BY renewalMembers.Date DESC, `MSurname` ASC, `MForename` ASC;");
+$sql->execute([$id]);
 
-	$sql = "SELECT `MForename`, `MSurname`, `Forename`, `Surname`, `ASANumber`,
-	`payments`.`Status`, `RenewalID` FROM ((((`renewalMembers` RIGHT JOIN `members`
-	ON members.MemberID = renewalMembers.MemberID) LEFT JOIN `users` ON
-	members.UserID = users.UserID) LEFT JOIN `paymentsPending` ON
-	renewalMembers.PaymentID = paymentsPending.PaymentID) LEFT JOIN `payments` ON
-	payments.PMkey = paymentsPending.PMkey) WHERE (`renewalMembers`.`RenewalID` =
-	'$id' OR `renewalMembers`.`RenewalID` IS NULL OR `renewalMembers`.`RenewalID` IS
-	NOT NULL) AND (`CountRenewal` = 1 OR `CountRenewal` IS NULL) ORDER BY renewalMembers.Date DESC, `MSurname` ASC, `MForename` ASC;";
-	$result = mysqli_query($link, $sql);
+$fluidContainer = true;
 
-	if (mysqli_num_rows($result) == 0) {
-		halt(404);
-	}
+$pagetitle = "Membership Renewal";
+include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/swimmersMenu.php";
 
-	$fluidContainer = true;
-  $use_white_background = true;
+?>
 
-	$pagetitle = "Membership Renewal";
-	include BASE_PATH . "views/header.php";
-	include BASE_PATH . "views/swimmersMenu.php";
-
-	?>
-
-	<div class="container-fluid">
-		<div class="">
-			<h1><?=htmlspecialchars($renewalArray['Name'])?> Status</h1>
-			<p class="lead">
-				This is the current status for this membership renewal which started on <?php
-				echo date("l j F Y", strtotime($renewalArray['StartDate'])); ?> and
-				finishes on <?php echo date("l j F Y", strtotime($renewalArray['EndDate'])); ?>
-			</p>
-			<p class="mb-0">
-				<?=$numRenewals?> Renewals (<?=$numC1Renewals?> Category 1, <?=$numC2Renewals?> Category 2, <?=$numC3Renewals?> Category 3)
-				of <?=$numMembers?> current* members.
-			</p>
-			<p class="small text-muted">
-				* Current refers to at this moment. There may not have been this number of
-				members during this specific membership renewal
-			</p>
-			<p class="">
-				<a href="<?=autoUrl("renewal/" . $id . "/edit")?>" class="btn
-				btn-dark">
-					Edit this Renewal Period
-				</a>
-			</p>
-		</div>
-
-    <div class="table-responsive-sm">
-  		<table class="table <?php if (app('request')->isMobile()) { ?>table-sm small<?php } ?>">
-  			<thead class="thead-light">
-  				<tr>
-  					<th>
-  						Member
-  					</th>
-  					<th>
-  						Parent
-  					</th>
-  					<th>
-  						ASA
-  					</th>
-  					<th>
-  						Payment Status
-  					</th>
-  				</tr>
-  			</thead>
-  			<tbody>
-  				<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-  					$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-  					if ($row['RenewalID'] == "" || $row['RenewalID'] != $id ||
-  					$row['Status'] == "failed" || $row['Status'] == "charged_back") {
-  						?><tr class="table-danger"><?php
-  					} else if ($row['Status'] == "paid_out" || $row['Status'] == "confirmed" || $row['Status'] == "paid_manually") {
-  						?><tr class="table-success"><?php
-  					} else {
-  						?><tr><?php
-  					}
-  					?>
-  						<td>
-  							<?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
-  						</td>
-  						<td>
-  							<?=htmlspecialchars($row['Forename'] . " " . $row['Surname'])?>
-  						</td>
-  						<td>
-  							<span class="mono">
-  								<?=htmlspecialchars($row['ASANumber'])?>
-  							</span>
-  						</td>
-  						<td>
-  							<?php if ($row['RenewalID'] == "" || $row['RenewalID'] != $id) {
-  								?>No Renewal Exists<?php
-  							} else if ($row['Status'] == "") {
-  								?>Payment not yet processed<?php
-  							} else {
-  								echo paymentStatusString($row['Status']);
-  							} ?>
-  						</td>
-  					</tr>
-  					<?php
-  				} ?>
-  			</tbody>
-  		</table>
-    </div>
+<div class="container-fluid">
+	<div class="">
+		<h1><?=htmlspecialchars($renewalArray['Name'])?> Status</h1>
+		<p class="lead">
+			This is the current status for this membership renewal which started on <?php
+			echo date("l j F Y", strtotime($renewalArray['StartDate'])); ?> and
+			finishes on <?php echo date("l j F Y", strtotime($renewalArray['EndDate'])); ?>
+		</p>
+		<p class="mb-0">
+			<?=$numRenewals?> Renewals (<?=$numC1Renewals?> Category 1, <?=$numC2Renewals?> Category 2, <?=$numC3Renewals?> Category 3)
+			of <?=$numMembers?> members*.
+		</p>
+		<p class="small text-muted">
+			* Number of members on first day of renewal
+		</p>
+		<p class="">
+			<a href="<?=autoUrl("renewal/" . $id . "/edit")?>" class="btn
+			btn-dark">
+				Edit this Renewal Period
+			</a>
+		</p>
 	</div>
 
 	<?php
-
-	include BASE_PATH . "views/footer.php";
-} else {
-	$renewalArray = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-	$sql = "SELECT * FROM `renewalMembers` WHERE `RenewalID` = '0';";
-	$numRenewals = mysqli_num_rows(mysqli_query($link, $sql));
-
-	$sql = "SELECT * FROM (`renewalMembers` LEFT JOIN `members` ON
-	`members`.`MemberID` = `renewalMembers`.`MemberID`) WHERE `RenewalID` = '0'
-	AND `ASACategory` = '1';";
-	$numC1Renewals = mysqli_num_rows(mysqli_query($link, $sql));
-
-	$sql = "SELECT * FROM (`renewalMembers` LEFT JOIN `members` ON
-	`members`.`MemberID` = `renewalMembers`.`MemberID`) WHERE `RenewalID` = '0'
-	AND `ASACategory` = '2';";
-	$numC2Renewals = mysqli_num_rows(mysqli_query($link, $sql));
-
-	$sql = "SELECT * FROM (`renewalMembers` LEFT JOIN `members` ON
-	`members`.`MemberID` = `renewalMembers`.`MemberID`) WHERE `RenewalID` = '0'
-	AND `ASACategory` = '3';";
-	$numC3Renewals = mysqli_num_rows(mysqli_query($link, $sql));
-
-	$sql = "SELECT * FROM `members`;";
-	$numMembers = mysqli_num_rows(mysqli_query($link, $sql));
-
-	$date = date("Y-m-d", strtotime("first day of -2 month")) . " 00:00:00";
-
-	$sql = "SELECT `MForename`, `MSurname`, `Forename`, `Surname`, `ASANumber`,
-	`payments`.`Status`, `RenewalID` FROM ((((`renewalMembers` INNER JOIN `members`
-	ON members.MemberID = renewalMembers.MemberID) LEFT JOIN `users` ON
-	members.UserID = users.UserID) LEFT JOIN `paymentsPending` ON
-	renewalMembers.PaymentID = paymentsPending.PaymentID) LEFT JOIN `payments` ON
-	payments.PMkey = paymentsPending.PMkey) WHERE (`renewalMembers`.`RenewalID` =
-	'0' OR `renewalMembers`.`RenewalID` IS NULL OR `renewalMembers`.`RenewalID` IS
-	NOT NULL) AND `renewalMembers`.`Date` >= '$date' ORDER BY `MForename` ASC, `MSurname` ASC;";
-	$result = mysqli_query($link, $sql);
-
-	/*if (mysqli_num_rows($result) == 0) {
-		halt(404);
-	}*/
-
-	$fluidContainer = true;
-
-	$pagetitle = "Membership Renewal";
-	include BASE_PATH . "views/header.php";
-	include BASE_PATH . "views/swimmersMenu.php";
-
-	?>
-
-	<div class="container-fluid">
-		<div class="my-3 p-3 bg-white rounded shadow">
-			<h1>New Member Registration Status</h1>
-			<p class="lead">
-				This is the current status of online membership registrations since <?=
-				date("l j F Y", strtotime("first day of -2 month")) ?>.
+	$renewalItem = $sql->fetch(PDO::FETCH_ASSOC);
+	if ($renewalItem == null) {
+		// No renewals
+		?>
+		<div class="alert alert-warning">
+			<p class="mb-0">
+				<strong>
+					There are no renewals to display at this time.
+				</strong>
 			</p>
 			<p class="mb-0">
-				<?php echo $numRenewals; ?> Registrations (<?php echo $numC1Renewals; ?>
-				Category 1, <?php echo $numC2Renewals; ?> Category 2, <?php echo
-				$numC3Renewals; ?> Category 3).
+				Please try again later.
 			</p>
 		</div>
-
-		<table class="table bg-white">
+		<?php
+	} else {  ?>
+	<div class="table-responsive-sm">
+		<table class="table <?php if (app('request')->isMobile()) { ?>table-sm small<?php } ?>">
 			<thead class="thead-light">
 				<tr>
 					<th>
@@ -222,45 +104,44 @@ if ($id > 0) {
 				</tr>
 			</thead>
 			<tbody>
-				<?php for ($i = 0; $i < mysqli_num_rows($result); $i++) {
-					$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-					if ($row['RenewalID'] == "" || $row['RenewalID'] != $id ||
-					$row['Status'] == "failed" || $row['Status'] == "charged_back") {
-						?><tr class="table-danger"><?
-					} else if ($row['Status'] == "paid_out" || $row['Status'] == "confirmed") {
+				<?php do {
+					if ($renewalItem['Status'] == "failed" || $renewalItem['Status'] == "charged_back") {
+						?><tr class="table-danger"><?php
+					} else if ($renewalItem['Status'] == "paid_out" || $renewalItem['Status'] == "confirmed" || $renewalItem['Status'] == "paid_manually") {
 						?><tr class="table-success"><?php
 					} else {
 						?><tr><?php
 					}
 					?>
 						<td>
-							<?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
+							<?=htmlspecialchars($renewalItem['MForename'] . " " . $renewalItem['MSurname'])?>
 						</td>
 						<td>
-							<?=htmlspecialchars($row['Forename'] . " " . $row['Surname'])?>
+							<?=htmlspecialchars($renewalItem['Forename'] . " " . $renewalItem['Surname'])?>
 						</td>
 						<td>
 							<span class="mono">
-								<?=htmlspecialchars($row['ASANumber'])?>
+								<?=htmlspecialchars($renewalItem['ASANumber'])?>
 							</span>
 						</td>
 						<td>
-							<?php if ($row['RenewalID'] == "" || $row['RenewalID'] != $id) {
-								?>No Renewal Exists<?php
-							} else if ($row['Status'] == "") {
+							<?php if (!bool($renewalItem['Renewed'])) {
+								?>Not yet renewed<?php
+							} else if ($renewalItem['Status'] == "") {
 								?>Payment not yet processed<?php
 							} else {
-								echo paymentStatusString($row['Status']);
+								echo paymentStatusString($renewalItem['Status']);
 							} ?>
 						</td>
 					</tr>
 					<?php
-				} ?>
+				} while ($renewalItem = $sql->fetch(PDO::FETCH_ASSOC)); ?>
 			</tbody>
 		</table>
 	</div>
+	<?php } ?>
+</div>
 
-	<?php
+<?php
 
-	include BASE_PATH . "views/footer.php";
-}
+include BASE_PATH . "views/footer.php";

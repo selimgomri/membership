@@ -10,7 +10,7 @@
       <span class="text-dark mr-3">Membership Renewal System</span>
     <?php } else {
       $target = $renewalName;?>
-      <span class="text-dark mr-3"><strong>?=htmlspecialchars($renewalName)?></strong></span>
+      <span class="text-dark mr-3"><strong><?=htmlspecialchars($renewalName)?></strong></span>
       <?php } ?>
       <?php if (isset($renewal_trap) && $renewal_trap) { ?>
         <a class="" href="<?php echo autoUrl("renewal/go")?>">Return to <?= $target ?></a>

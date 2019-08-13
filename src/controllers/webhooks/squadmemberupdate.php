@@ -1,20 +1,77 @@
 <?php
 
+/**
+ * This webhook cron job moves members to new squads on their set day
+ * 
+ * It also adds members to a renewal on the day it starts
+ */
+
 // Mandatory Startup Sequence to carry out squad updates
-$moves = $db->query("SELECT * FROM `moves` WHERE MovingDate <= CURDATE()");
+$moves = $db->query("SELECT MemberID, SquadID FROM `moves` WHERE MovingDate <= CURDATE()");
+$update = $db->prepare("UPDATE `members` SET `SquadID` = ? WHERE `MemberID` = ?");
+$delete = $db->prepare("DELETE FROM `moves` WHERE `MemberID` = ?");
 while ($move = $moves->fetch(PDO::FETCH_ASSOC)) {
   try {
+    $db->beginTransaction();
     // Move the swimmer to their new squad
-    $query = $db->prepare("UPDATE `members` SET `SquadID` = ? WHERE `MemberID` = ?");
-    $query->execute([$move['SquadID'], $move['MemberID']]);
+    $update->execute([$move['SquadID'], $move['MemberID']]);
 
     // Delete the squad move from the database
-    $query = $db->prepare("DELETE FROM `moves` WHERE `MemberID` = ?");
-    $query->execute([$move['MemberID']]);
+    $delete->execute([$move['MemberID']]);
+    $db->commit();
+    echo "Squad move op success\r\n\r\n";
   }
   catch (Exception $e) {
     // Catch all exceptions and halt
     // This causes the cron handler to catch the issue
-    halt(500);
+    $db->rollBack();
   }
+}
+
+// Add renewal members to database
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
+
+// Select open membership renewals
+$getRenewals = $db->prepare("SELECT ID FROM renewals WHERE StartDate <= :today AND EndDate >= :today;");
+$getRenewals->execute([
+  'today' => $date->format('Y-m-d')
+]);
+
+$getNumMembers = $db->prepare("SELECT COUNT(*) FROM renewalMembers WHERE RenewalID = ?");
+$leavers = $systemInfo->getSystemOption('LeaversSquad');
+
+// Make sure we don't add members from leaver squad to renewal
+$getMembers = null;
+if ($leavers == null) {
+  $getMembers = $db->query("SELECT MemberID FROM members WHERE RR = 0;");
+} else {
+  $getMembers = $db->prepare("SELECT MemberID FROM members WHERE RR = 0 AND SquadID != ?;");
+  $getMembers->execute([$leavers]);
+}
+
+$addMember = $db->prepare("INSERT INTO renewalMembers (MemberID, RenewalID, CountRenewal) VALUES (?, ?, ?)");
+
+$db->beginTransaction();
+
+try {
+  while ($renewal = $getRenewals->fetchColumn()) {
+    // Check number of members for renewal
+
+    // If no members added to a renewal,
+    $getNumMembers->execute([$renewal]);
+    if ($getNumMembers->fetchColumn() == 0) {
+      // Get members to add to renewal
+      while ($member = $getMembers->fetchColumn()) {
+        $addMember->execute([
+          $member,
+          $renewal,
+          true
+        ]);
+      }
+    }
+  }
+  $db->commit();
+  echo "Renewal op success";
+} catch (Exception $e) {
+  $db->rollBack();
 }
