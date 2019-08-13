@@ -6,6 +6,8 @@
  * It also adds members to a renewal on the day it starts
  */
 
+global $db, $systemInfo;
+
 // Mandatory Startup Sequence to carry out squad updates
 $moves = $db->query("SELECT MemberID, SquadID FROM `moves` WHERE MovingDate <= CURDATE()");
 $update = $db->prepare("UPDATE `members` SET `SquadID` = ? WHERE `MemberID` = ?");
@@ -19,14 +21,16 @@ while ($move = $moves->fetch(PDO::FETCH_ASSOC)) {
     // Delete the squad move from the database
     $delete->execute([$move['MemberID']]);
     $db->commit();
-    echo "Squad move op success\r\n\r\n";
+    echo "Squad move op success<br>";
   }
   catch (Exception $e) {
     // Catch all exceptions and halt
     // This causes the cron handler to catch the issue
+    reportError($e);
     $db->rollBack();
   }
 }
+echo "Squad move work complete<br>";
 
 // Add renewal members to database
 $date = new DateTime('now', new DateTimeZone('Europe/London'));
@@ -71,7 +75,8 @@ try {
     }
   }
   $db->commit();
-  echo "Renewal op success";
+  echo "Renewal op success<br>";
 } catch (Exception $e) {
+  reportError($e);
   $db->rollBack();
 }
