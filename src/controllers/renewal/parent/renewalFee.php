@@ -41,7 +41,7 @@ if ($payingSwimmerCount == 1) {
 } else if ($partial_reg_require_topup) {
 	$clubFee = $systemInfo->getSystemOption('ClubFeeFamily') - $systemInfo->getSystemOption('ClubFeeIndividual');
 } else if ($payingSwimmerCount > 1 && !$partial_reg) {
-	$clubFee = $systemInfo->getSystemOption('ClubFeeIndividual');
+	$clubFee = $systemInfo->getSystemOption('ClubFeeFamily');
 } else {
 	$clubFee = 0;
 }

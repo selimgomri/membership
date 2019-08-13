@@ -130,6 +130,10 @@ if ($access == "Parent") {
 		include 'Gala.php';
 	});
 
+	$this->get('/{id}:int/export.pdf', function($id) {
+		include 'gala.pdf.php';
+	});
+
 	// View Competitions
 	$this->get(['/{id}:int/edit', '/competitions/{id}:int/edit'], function($id) {
 		global $link;

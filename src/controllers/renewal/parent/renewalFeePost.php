@@ -43,7 +43,7 @@ if ($payingSwimmerCount == 1) {
 } else if ($partial_reg_require_topup) {
 	$clubFee = $systemInfo->getSystemOption('ClubFeeFamily') - $systemInfo->getSystemOption('ClubFeeIndividual');
 } else if ($payingSwimmerCount > 1 && !$partial_reg) {
-	$clubFee = $systemInfo->getSystemOption('ClubFeeIndividual');
+	$clubFee = $systemInfo->getSystemOption('ClubFeeFamily');
 } else {
 	$clubFee = 0;
 }
@@ -104,7 +104,7 @@ if ($sql->fetchColumn() == 1) {
 if ($hasDD || !env('GOCARDLESS_ACCESS_TOKEN')) {
 	if ($hasDD) {
 		// INSERT Payment into pending
-		$date = new \DateTime('now', new DateTimeZone('Europe/London'));
+		$date = new \DateTime('now', new DateTimeZone('UTC'));
 		$date->setTimezone(new DateTimeZone('UTC'));
 		$description = "Membership Renewal";
 		if ($renewal == 0) {
@@ -126,16 +126,38 @@ if ($hasDD || !env('GOCARDLESS_ACCESS_TOKEN')) {
 		$payID = $db->lastInsertId();
 
 		if ($renewal != 0) {
-			$insert = $db->prepare("INSERT INTO `renewalMembers` (`PaymentID`, `MemberID`, `RenewalID`, `Date`, `CountRenewal`) VALUES (?, ?, ?, ?, ?)");
+			// Foreach check if in renewal members
+			$countInRenewalMembers = $db->prepare("SELECT COUNT(*) FROM renewalMembers WHERE MemberID = ? AND RenewalID = ?");
+			$insert = $db->prepare("INSERT INTO `renewalMembers` (`PaymentID`, `MemberID`, `RenewalID`, `Date`, `CountRenewal`, `Renewed`) VALUES (?, ?, ?, ?, ?, ?)");
+			$update = $db->prepare("UPDATE renewalMembers SET PaymentID = ?, `Date` = ?, CountRenewal = ?, Renewed = ? WHERE MemberID = ? AND RenewalID = ?");
+
 			for ($i = 0; $i < $count; $i++) {
-				$memID = $member[$i]['MemberID'];
-				$insert->execute([
-					$payID,
-					$memID,
-					$renewal,
-					$date->format("Y-m-d H:i:s"),
-					true
+				$countInRenewalMembers->execute([
+					$member[$i]['MemberID'],
+					$renewal
 				]);
+
+				if ($countInRenewalMembers->fetchColumn() > 0) {
+					// Update them
+					$update->execute([
+						$payID,
+						$date->format("Y-m-d H:i:s"),
+						true,
+						true,
+						$member[$i]['MemberID'],
+						$renewal
+					]);
+				} else {
+					// Add them
+					$insert->execute([
+						$payID,
+						$member[$i]['MemberID'],
+						$renewal,
+						$date->format("Y-m-d H:i:s"),
+						true,
+						true
+					]);
+				}
 			}
 		}
 	}

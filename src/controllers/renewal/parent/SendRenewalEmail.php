@@ -1,5 +1,17 @@
 <?php
 
+global $db;
+
+$nextStage = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?;");
+$nextStage->execute([
+	$renewal,
+	$_SESSION['UserID']
+]);
+
+header("Location: " . currentUrl());
+
+/*
+
 $userID = mysqli_real_escape_string($link, $_SESSION['UserID']);
 $renewal = mysqli_real_escape_string($link, $renewal);
 $sql = "UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE
@@ -281,3 +293,5 @@ circumstances.
 
   notifySend($email, "Your Membership Renewal", $mailtext, $forename . ' ' . $surname, $email, $from = ["Email" => "noreply@membership-renewal.service.chesterlestreetasc.co.uk", "Name" => "Chester-le-Street ASC"]);
   header("Location: " . currentUrl());
+
+	*/
