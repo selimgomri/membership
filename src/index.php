@@ -767,6 +767,18 @@ $route->group($get_group, function($clubcode = "CLSE") {
         halt((int) $code);
       });
 
+      $this->get('/update', function() {
+        try {
+          $old_path = getcwd();
+          chdir(BASE_PATH);
+          $output = shell_exec('bash ' . BASE_PATH . 'update.sh');
+          chdir($old_path);
+          pre($output);
+        } catch (Exception $e) {
+          halt(500);
+        }
+      });
+
       $this->get('/pdf-test', function() {
         include 'controllers/PDFTest.php';
       });
