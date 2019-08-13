@@ -209,6 +209,13 @@ if (mysqli_connect_errno()) {
   halt(500);
 }
 
+$path = realpath(BASE_PATH . '../');
+$headInfo = explode(' ', file_get_contents($path . '/.git/HEAD'));
+if ($headInfo[0] == 'ref:') {
+  $HEAD_hash = file_get_contents($path . '/.git/' . trim($headInfo[1]));
+  define('SOFTWARE_VERSION', $HEAD_hash);
+}
+
 $systemInfo = new \SystemInfo($db);
 
 include BASE_PATH . 'includes/GetVars.php';
