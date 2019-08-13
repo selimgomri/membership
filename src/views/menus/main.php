@@ -22,14 +22,17 @@ if (!function_exists('chesterStandardMenu')) {
     }
 
     $renewalOpen = false;
+    $renewalYear = null;
     if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Parent') {
       $date = new DateTime('now', new DateTimeZone('Europe/London'));
-      $getRenewals = $db->prepare("SELECT COUNT(*) FROM renewals WHERE StartDate <= :today AND EndDate >= :today;");
+      $getRenewals = $db->prepare("SELECT COUNT(*) AS `Count`, `Year` FROM renewals WHERE StartDate <= :today AND EndDate >= :today;");
       $getRenewals->execute([
         'today' => $date->format('Y-m-d')
       ]);
-      if ($getRenewals->fetchColumn() == 1) {
+      $renewals = $getRenewals->fetch(PDO::FETCH_ASSOC);
+      if ($renewals['Count'] == 1) {
         $renewalOpen = true;
+        $renewalYear = $renewals['Year'];
       }
     }
     
@@ -78,7 +81,7 @@ if (!function_exists('chesterStandardMenu')) {
                 <?php if ($renewalOpen) { ?>
                 <li class="nav-item">
                   <a class="nav-link" href="<?php echo autoUrl("renewal") ?>">
-                    Membership Renewal
+                    <?=htmlspecialchars($renewalYear)?> Membership Renewal
                   </a>
                 </li>
                 <?php } ?>
