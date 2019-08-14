@@ -170,7 +170,7 @@ include BASE_PATH . "views/header.php";
 <?php
 
 if (isset($_SESSION['SuccessfulGalaEntry'])) {
-  //unset($_SESSION['SuccessfulGalaEntry']);
+  unset($_SESSION['SuccessfulGalaEntry']);
 }
 
 include BASE_PATH . "views/footer.php";
