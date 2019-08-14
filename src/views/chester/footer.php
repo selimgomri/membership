@@ -176,8 +176,7 @@
 
       $seconds = $time_end - $time_start;
       ?>
-          <p class="hidden-print">Designed and Built by Chester&#8209;le&#8209;Street ASC. Page rendered in
-            <?=number_format($seconds, 3)?> seconds.</p>
+          <p class="hidden-print">Designed and Built by Chester&#8209;le&#8209;Street ASC. Page rendered in <?=number_format($seconds, 3)?> seconds. <?php if (defined('SOFTWARE_VERSION')) { ?>Version <?=mb_substr(SOFTWARE_VERSION, 0, 7);?>.<?php } ?></p>
           <p class="mb-0" style="margin-bottom:0">&copy; <?=date("Y")?> <span
               class="org fn">Chester&#8209;le&#8209;Street ASC</span>. CLS ASC is not responsible for the content of
             external sites.</p>
