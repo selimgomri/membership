@@ -279,10 +279,16 @@ include "galaMenu.php";
         <?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?>
       </h3>
 
-      <p><small class="text-muted">
+      <p>
+        <small class="text-muted">
           <strong>Date of Birth:</strong>&nbsp;<?=date('d/m/Y', strtotime($entry['DateOfBirth']))?>,
           <strong>Swim&nbsp;England:</strong>&nbsp;<?=htmlspecialchars($entry['ASANumber'])?>
-        </small></p>
+        </small>
+      </p>
+
+      <p>
+        <a href="<?=autoUrl("galas/entries/" . $entry['EntryID'] . "/")?>">Edit</a>
+      </p>
 
       <ul>
         <?php foreach ($swimsArray as $event => $name) { ?>

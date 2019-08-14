@@ -25,7 +25,7 @@ for ($y=0; $y<sizeof($swimsArray); $y++) {
   }
 }
 
-$get = $db->prepare("SELECT members.MForename, members.MSurname, galas.GalaName, galas.GalaFee, galas.GalaFeeConstant, users.EmailAddress, users.Forename, users.Surname, FeeToPay FROM (((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN users ON members.UserID = users.UserID) WHERE galaEntries.MemberID = ? AND galaEntries.GalaID = ?");
+$get = $db->prepare("SELECT members.MForename, members.MSurname, galas.GalaName, galas.GalaFee, galas.GalaFeeConstant, users.EmailAddress, users.Forename, users.Surname, FeeToPay, EntryID FROM (((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN users ON members.UserID = users.UserID) WHERE galaEntries.MemberID = ? AND galaEntries.GalaID = ?");
 $get->execute([
   $_SESSION['SuccessfulGalaEntry']['Swimmer'],
   $_SESSION['SuccessfulGalaEntry']['Gala']
@@ -56,6 +56,8 @@ include BASE_PATH . "views/header.php";
         </p>
       </div>
 
+      <h2>Swims</h2>
+
       <p>
         You have entered <?=htmlspecialchars($row['MForename'])?> into;
       </p>
@@ -74,22 +76,89 @@ include BASE_PATH . "views/header.php";
       </p>
       <?php } ?>
 
-      <p>
-        <a href="<?=autoUrl("galas")?>" class="btn btn-success">
-          Return to galas
-        </a>
+      <h2>Next steps</h2>
+      <p class="lead">
+        What do you need to do now?
       </p>
+
+      <?php if ($_SESSION['SuccessfulGalaEntry']['HyTek']) { ?>
+      <div class="cell">
+        <h3>Provide entry times</h3>
+        <p>
+          As this is a HyTek gala, we need you to provide times for each of your swimmers.
+        </p>
+
+        <p>
+          <a href="#why">Why is this?</a>
+        </p>
+
+        <p class="mb-0">
+          <a href="<?=autoUrl("galas/entries/" . $row['EntryID'] . "/manual-time")?>" class="btn btn btn-primary">Provide times</a>
+        </p>
+      </div>
+
+      <?php } ?>
+
+      <div class="cell">
+        <h3>Enter another gala</h3>
+
+        <p>Need to enter another gala?</p>
+
+        <p class="mb-0">
+          <a href="<?=autoUrl("galas/entergala")?>" class="btn btn-primary">
+            Enter a gala
+          </a>
+        </p>
+      </div>
+
+      <div class="cell">
+        <h3>If you're finished here</h3>
+
+        <p>If you've finished making entries, return to the gala homepage.</p>
+
+        <p class="mb-0">
+          <a href="<?=autoUrl("galas")?>" class="btn btn-primary">
+            Gala home
+          </a>
+        </p>
+      </div>
 
       <?php if ($canPayByCard) { ?>
+      <div class="cell">
+        <h3>Pay by card</h3>
+        <p>
+          Would you like to pay for this gala entry by card now?
+        </p>
 
+        <p>
+          If you have more entries to complete, please do them before paying as you can pay for all or some of your entries at once.
+        </p>
+
+        <p>
+          <a href="<?=autoUrl("galas/pay-for-entries")?>" class="btn btn btn-primary">
+            Pay now
+          </a>
+        </p>
+      </div>
+
+      <?php } ?>
+
+      <?php if ($_SESSION['SuccessfulGalaEntry']['HyTek']) { ?>
+      <h2 id="why">Why do I have to provide times?</h2>
       <p>
-        Would you like to pay for this gala entry by card now? You can also wait and pay for several entries in one go.
+        There are two main providers of software for running galas in the UK: SPORTSYSTEMS Meet Manager and HyTek Meet Manager.
+      </p>
+        
+      <p>
+        SPORTSYSTEMS is widely used and is used by Swim England and British Swimming for national championships. SPORTSYSTEMS also provide the software that runs the rankings database, meaning for a gala which is run using SPORTSYSTEMS, personal bests can be obtained automatically.
       </p>
 
       <p>
-        <a href="<?=autoUrl("galas/pay-for-entries")?>" class="btn btn-success">
-          Pay now
-        </a>
+        HyTek originated in the United States and is used as the meet software for most galas in the US. HyTek cannot automatically get a swimmer's times from the rankings, mostly because British Swimming and SPORTSYSTEMS won't make it possible for software that is not made by SPORTSYSTEMS to access times from the rankings.
+      </p>
+
+      <p>
+        We appreciate that this is an inconvenience for a lot of people in our sport. If the situation changes, we'll update our software so that providing manual times is no longer required.
       </p>
 
       <?php } ?>
@@ -101,7 +170,7 @@ include BASE_PATH . "views/header.php";
 <?php
 
 if (isset($_SESSION['SuccessfulGalaEntry'])) {
-  unset($_SESSION['SuccessfulGalaEntry']);
+  //unset($_SESSION['SuccessfulGalaEntry']);
 }
 
 include BASE_PATH . "views/footer.php";

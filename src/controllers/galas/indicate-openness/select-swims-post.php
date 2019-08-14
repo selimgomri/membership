@@ -31,7 +31,7 @@ if (isset($_POST['lock-entry']) && $_POST['lock-entry']) {
 }
 
 global $db;
-$galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends`, CoachEnters, GalaFee fee, GalaFeeConstant gfc FROM galas WHERE GalaID = ?");
+$galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends`, CoachEnters, GalaFee fee, GalaFeeConstant gfc, HyTek FROM galas WHERE GalaID = ?");
 $galaDetails->execute([$id]);
 $gala = $galaDetails->fetch(PDO::FETCH_ASSOC);
 
@@ -174,6 +174,10 @@ try {
 
     if (sizeof($entries) > 1) {
       $message .= '<p>The total cost of your swimmer\'s entries is &pound;' . number_format($totalCost, 2, '.', '') . '.<p>';
+    }
+
+    if (bool($gala['HyTek'])) {
+      $message .= '<p>This is a HyTek gala. As a result you must provide entry times manually. <a href="' . autoUrl("galas") . '">Log into your account to do this</a>.<p>';
     }
 
     if ($locked || $veto) {

@@ -114,14 +114,14 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
       // First part of the row content
       $content .= "<tr><td><strong>" . htmlspecialchars($row['MForename'] . " " .
-      $row['MSurname'])  . "</strong>" . htmlspecialchars($hyTekPrintDate) . "<br><a
+      $row['MSurname'])  . "</strong>" . $hyTekPrintDate . "<br><a
       class=\"d-print-none\"
       href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" .
       htmlspecialchars($row['ASANumber']) . "\" target=\"_blank\" title=\"Click to see times\">" .
       htmlspecialchars($row['ASANumber']) . " <i class=\"fa fa-external-link\"
       aria-hidden=\"true\"></i></a><span class=\"d-none d-print-inline\">Swim England: " .
       htmlspecialchars($row['ASANumber']) . "</span><br>
-      <span class=\"small\">" . htmlspecialchars($row['GalaName']) . "<br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a><br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "/manualtime\">Set Manual Times</a></span></td>";
+      <span class=\"small\">" . htmlspecialchars($row['GalaName']) . "<br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a><br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "/manual-time\">Set Manual Times</a></span></td>";
 
       // Arrays of swims used to check whever to print the name of the swim entered
       // BEWARE This is in an order to ease inputting data into SportSystems, contrary to these arrays in other files
@@ -137,7 +137,11 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       if ($row['HyTek'] != 1) {
         for ($y=0; $y<sizeof($swimsArray); $y++) {
           if ($row[$swimsArray[$y]] == 1) {
-            $content .= "<li>" . ($swimsTextArray[$y]) . "</li>";
+            $content .= "<li><strong>" . ($swimsTextArray[$y]) . '</strong>';
+            if (isset($row[$swimsTimeArray[$y]]) && $row[$swimsTimeArray[$y]]) {
+              $content .= '<br>' . htmlspecialchars($row[$swimsTimeArray[$y]]);
+            }
+            $content .= "</li>";
           }
         }
       }
@@ -154,7 +158,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
               $course = "25m";
               $to = "50m";
             }
-            if ($timesB[$swimsArray[$y]] != "") {
+            if (isset($timesB[$swimsArray[$y]]) && $timesB[$swimsArray[$y]] != "") {
               $time = explode(".", $timesB[$swimsArray[$y]]);
               $ms = explode(":", $time[0]);
               $mins = $secs = $hunds =  0;
@@ -198,13 +202,13 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
               	$output = null;
               }
             }
-            $content .= "<li><strong>" . htmlspecialchars($swimsTextArray[$y]) . "</strong> <br>";
-            if ($times[$swimsArray[$y]] != "") {
-              $content .= $times[$swimsArray[$y]] . $output;
-            } else if ($row[$swimsTimeArray[$y]]) {
-              $content .= $row[$swimsTimeArray[$y]] . $output;
+            $content .= "<li><strong>" . $swimsTextArray[$y] . "</strong> <br>";
+            if (isset($row[$swimsTimeArray[$y]]) && $row[$swimsTimeArray[$y]]) {
+              $content .= htmlspecialchars($row[$swimsTimeArray[$y]]) . $output;
+            } else if (isset($times[$swimsArray[$y]]) && $times[$swimsArray[$y]] != "") {
+              $content .= htmlspecialchars($times[$swimsArray[$y]]) . $output;
             } else {
-              $content .= "No Time Available";
+              $content .= "No time available";
             }
             $content .= "</li>";
           }

@@ -4,16 +4,23 @@ $userID = $_SESSION['UserID'];
 
 global $db;
 
-$galas = $db->query("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters FROM galas WHERE GalaDate >= CURDATE() ORDER BY GalaDate ASC");
+$now = new DateTime('now', new DateTimeZone('Europe/London'));
+$nowDay = $now->format('Y-m-d');
+
+$galas = $db->prepare("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters FROM galas WHERE GalaDate >= ? ORDER BY GalaDate ASC");
+$galas->execute([$nowDay]);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
 $entriesOpen = false;
 
-$entries = $db->prepare("SELECT EntryID, GalaName, ClosingDate, GalaVenue, MForename, MSurname, EntryProcessed Processed, Charged, Refunded, FeeToPay, Locked, Vetoable FROM ((galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE GalaDate >= CURDATE() AND members.UserID = ?");
-$entries->execute([$_SESSION['UserID']]);
+$entries = $db->prepare("SELECT EntryID, GalaName, ClosingDate, GalaVenue, MForename, MSurname, EntryProcessed Processed, Charged, Refunded, FeeToPay, Locked, Vetoable FROM ((galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE GalaDate >= ? AND members.UserID = ?");
+$entries->execute([$nowDay, $_SESSION['UserID']]);
 $entry = $entries->fetch(PDO::FETCH_ASSOC);
 
-$timesheets = $db->prepare("SELECT DISTINCT `galas`.`GalaID`, `GalaName`, `GalaVenue` FROM ((`galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID`) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE `GalaDate` >= CURDATE() AND members.UserID = ? ORDER BY `GalaDate` ASC");
-$timesheets->execute([$_SESSION['UserID']]);
+$manualTimeGalas = $db->prepare("SELECT EntryID, GalaName, ClosingDate, GalaVenue, MForename, MSurname, EntryProcessed Processed, Charged, Refunded, FeeToPay, Locked, Vetoable FROM ((galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE GalaDate >= ? AND members.UserID = ? AND galas.HyTek = 1;");
+$manualTimeGalas->execute([$nowDay, $_SESSION['UserID']]);
+
+$timesheets = $db->prepare("SELECT DISTINCT `galas`.`GalaID`, `GalaName`, `GalaVenue` FROM ((`galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID`) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE `GalaDate` >= ? AND members.UserID = ? ORDER BY `GalaDate` ASC");
+$timesheets->execute([$nowDay, $_SESSION['UserID']]);
 $timesheet = $timesheets->fetch(PDO::FETCH_ASSOC);
 
 /* Stats Section */
@@ -52,13 +59,13 @@ include "galaMenu.php";
     <p class="lead">Manage your gala entries</p>
 
     <?php if ($gala) { ?>
-    <h2 class="mb-4">
+    <h2>
       Upcoming galas
     </h2>
 
     <div class="news-grid mb-3">
       <?php do {
-        $now = new DateTime();
+        
         $closingDate = new DateTime($gala['ClosingDate']);
         $endDate = new DateTime($gala['GalaDate']);
 
@@ -93,48 +100,14 @@ include "galaMenu.php";
     <?php } ?>
     <?php } ?>
 
-    <?php if ($canPayByCard) { ?>
-    <div class="mb-4">
-      <h2 class="mb-4">
-        Make a payment
-      </h2>
-
-      <p class="lead">
-        Pay for gala entries by credit or debit card.
-      </p>
-
-      <p>
-        <a href="<?=autoUrl("galas/pay-for-entries")?>" class="btn btn-success ">
-          Pay now
-        </a>
-      </p>
-    </div>
-    <?php } else if (env('STRIPE')) { ?>
-      <div class="mb-4">
-      <h2 class="mb-4">
-        Pay by card
-      </h2>
-
-      <p class="lead">
-        You can pay for gala entries by credit or debit card.
-      </p>
-
-      <p>
-        <a href="<?=autoUrl("payments/cards/add")?>" class="btn btn-success ">
-          Add a card
-        </a>
-      </p>
-    </div>
-    <?php } ?>
-
     <?php if ($entry) { ?>
-    <h2 class="mb-4">
+    <h2>
       Your gala entries
     </h2>
 
     <div class="news-grid mb-4">
       <?php do {
-        $now = new DateTime();
+        
         $closingDate = new DateTime($entry['ClosingDate']);
 
         ?>
@@ -154,6 +127,80 @@ include "galaMenu.php";
           <span class="category"><?=htmlspecialchars($entry['GalaVenue'])?></span>
         </a>
       <?php } while ($entry = $entries->fetch(PDO::FETCH_ASSOC)); ?>
+    </div>
+    <?php } ?>
+
+    <?php
+
+    $gala = $manualTimeGalas->fetch(PDO::FETCH_ASSOC);
+
+    if ($gala != null) { ?>
+
+    <div class="mb-4">
+      <h2>
+        Manual times
+      </h2>
+
+      <p class="lead">
+        Times must be provided manually for the following galas.
+      </p>
+
+      <div class="news-grid mb-3">
+      <?php do {
+        
+        $closingDate = new DateTime($gala['ClosingDate']);
+
+        ?>
+        <a href="<?=autoUrl("galas/entries/" . $gala['EntryID'] . '/manual-time')?>">
+          <div>
+            <span class="title mb-0 justify-content-between align-items-start">
+              <span><?=htmlspecialchars($gala['MForename'] . ' ' . $gala['MSurname'])?></span>
+            </span>
+            <span class="d-flex mb-3"><?=htmlspecialchars($gala['GalaName'])?></span>
+          </div>
+          <span class="category"><div class="btn btn-success">Add or edit times</div></span>
+        </a>
+      <?php } while ($gala = $manualTimeGalas->fetch(PDO::FETCH_ASSOC)); ?>
+    </div>
+    </div>
+
+    <?php
+
+    }
+
+    ?>
+
+    <?php if ($canPayByCard) { ?>
+    <div class="mb-4">
+      <h2>
+        Make a payment
+      </h2>
+
+      <p class="lead">
+        Pay for gala entries by credit or debit card.
+      </p>
+
+      <p>
+        <a href="<?=autoUrl("galas/pay-for-entries")?>" class="btn btn-success ">
+          Pay now
+        </a>
+      </p>
+    </div>
+    <?php } else if (env('STRIPE')) { ?>
+      <div class="mb-4">
+      <h2>
+        Pay by card
+      </h2>
+
+      <p class="lead">
+        You can pay for gala entries by credit or debit card.
+      </p>
+
+      <p>
+        <a href="<?=autoUrl("payments/cards/add")?>" class="btn btn-success ">
+          Add a card
+        </a>
+      </p>
     </div>
     <?php } ?>
 
