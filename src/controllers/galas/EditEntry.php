@@ -52,6 +52,23 @@ include "galaMenu.php"; ?>
       <div class="alert alert-success">All changes to your gala entry have been saved.</div>
       <?php unset($_SESSION['UpdateSuccess']); } ?>
 
+      <?php if (bool($row['HyTek'])) { ?>
+      <h2>Provide times</h2>
+      <p class="lead">
+        Times must be provided manually at this gala.
+      </p>
+
+      <p>
+        We're sorry about the inconvenience this causes.
+      </p>
+
+      <p>
+        <a href="<?=autoUrl("galas/entries/" . $row['EntryID'] . "/manual-time")?>" class="btn btn-primary">
+          Provide times
+        </a>
+      </p>
+      <?php } ?>
+
       <?php
       $closingDate = new DateTime($row['ClosingDate'], new DateTimeZone('Europe/London'));
       $theDate = new DateTime('now', new DateTimeZone('Europe/London'));

@@ -62,6 +62,14 @@ if ($access == "Parent") {
 		include 'EditEntryPost.php';
 	});
 
+	$this->get('/entries/{id}:int/manual-time', function($id) {
+		include 'AddManualTime.php';
+	});
+
+	$this->post('/entries/{id}:int/manual-time', function($id) {
+		include 'AddManualTimePost.php';
+	});
+
 	$this->get('/entries/{id}/veto', function($id) {
 		include 'indicate-openness/veto.php';
 	});
@@ -176,13 +184,11 @@ if ($access == "Parent") {
 		include 'singleentry.php';
 	});
 
-	$this->get('/entries/{id}:int/manualtime', function($id) {
-		global $link;
+	$this->get('/entries/{id}:int/manual-time', function($id) {
 		include 'AddManualTime.php';
 	});
 
-	$this->post('/entries/{id}:int/manualtime', function($id) {
-		global $link;
+	$this->post('/entries/{id}:int/manual-time', function($id) {
 		include 'AddManualTimePost.php';
 	});
 }

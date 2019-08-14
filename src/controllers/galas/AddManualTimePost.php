@@ -16,6 +16,10 @@ if ($row == null) {
 	halt(404);
 }
 
+if ($_SESSION['AccessLevel'] == 'Parent' && $row['UserID'] != $_SESSION['UserID']) {
+	halt(404);
+}
+
 $member = $row['MemberID'];
 
 $type = null;
@@ -38,12 +42,18 @@ try {
 		$time = "";
 		if (isset($_POST[$swimsTimeArray[$i] . "Mins"]) && $_POST[$swimsTimeArray[$i] . "Mins"] != "") {
 			$time .= $_POST[$swimsTimeArray[$i] . "Mins"] . ':';
+		} else {
+			$time .= '0:';
 		}
 		if (isset($_POST[$swimsTimeArray[$i] . "Secs"]) && $_POST[$swimsTimeArray[$i] . "Secs"] != "") {
-			$time .= $_POST[$swimsTimeArray[$i] . "Secs"] . '.';
+			$time .= str_pad($_POST[$swimsTimeArray[$i] . "Secs"], 2, "0", STR_PAD_LEFT) . '.';
+		} else {
+			$time .= '00.';
 		}
 		if (isset($_POST[$swimsTimeArray[$i] . "Hunds"]) && $_POST[$swimsTimeArray[$i] . "Hunds"] != "") {
-			$time .= $_POST[$swimsTimeArray[$i] . "Hunds"];
+			$time .= str_pad($_POST[$swimsTimeArray[$i] . "Hunds"], 2, "0", STR_PAD_LEFT);
+		} else {
+			$time .= '00';
 		}
 
 		// Target string must be trusted
@@ -52,8 +62,10 @@ try {
 		$sql->execute([$time, $id]);
 	}
 	$db->commit();
+	$_SESSION['UpdateSuccess'] = true;
 } catch (Exception $e) {
 	$db->rollBack();
+	$_SESSION['UpdateSuccess'] = false;
 }
 
 header("Location: " . currentUrl());

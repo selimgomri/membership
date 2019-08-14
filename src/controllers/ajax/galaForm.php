@@ -44,8 +44,7 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
 		events may be available for " . $row['GalaName'] . "</p>";
 
     if ($row['HyTek'] == 1) {
-      $response .= '<p>This is a HyTek gala. Our systems will automatically
-      fetch your personal bests from Swim England for you.</p>';
+      $response .= '<p>This is a HyTek gala. Once you\'ve selected your swims, you\'ll need to provide times for each event.</p>';
     }
 
     $response .= "

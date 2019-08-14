@@ -17,6 +17,10 @@ if ($row == null) {
 	halt(404);
 }
 
+if ($_SESSION['AccessLevel'] == 'Parent' && $row['UserID'] != $_SESSION['UserID']) {
+	halt(404);
+}
+
 $member = $row['MemberID'];
 
 $type = null;
@@ -32,59 +36,125 @@ $getTimes->execute([
 ]);
 $times = $getTimes->fetch(PDO::FETCH_ASSOC);
 
-$pagetitle = "Add Manual Time: " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']);
+$pagetitle = "Add manual times for " . htmlspecialchars($row['MForename'][0] . $row['MSurname'][0] . ' at ' . $row['GalaName']);
 include BASE_PATH . 'views/header.php';
+
+$course = 'short';
+$altCourse = 'long';
+if ($row['CourseLength'] == 'LONG') {
+	$course = 'long';
+	$altCourse = 'short';
+}
 
 ?>
 
 <div class="container">
+
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("galas/entries")?>">Entries</a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("galas/entries/" . $row['EntryID'])?>"><?=htmlspecialchars($row['MForename'][0] . $row['MSurname'][0])?> (<?=htmlspecialchars($row['GalaName'])?>)</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Times</li>
+		</ol>
+	</nav>
+
+
 	<h1>Add Manual Times for <?=htmlspecialchars($row['MForename'] . ' ' . $row['MSurname'])?></h1>
 	<p class="lead">
 		<?=htmlspecialchars($row['GalaName'])?>
 	</p>
 
-	<form method="post" class="">
-		<h2>Swims</h2>
+	<div class="row">
+		<div class="col-lg-8">
 
-		<div>
-		<?php for ($i = 0; $i < sizeof($swimsArray); $i++) { ?>
-		<?php if ($row[$swimsArray[$i]] == 1) { ?>
-		<div>
-	    <div class="cell">
-	      <strong class="d-block">
-					<?=$swimsTextArray[$i]?>
-				</strong>
-				<?php if ($times[$swimsArray[$i]] != "") {
-					echo $times[$swimsArray[$i]];
-				} else if ($row[$swimsTimeArray[$i]] != "") {
-					echo $row[$swimsTimeArray[$i]];
-				} else {
-					?>
-				<div class="form-group mb-0">
-					<div class="row no-gutters">
-  			    <div class="col">
-  			      <input type="number" class="form-control" placeholder="Minutes" name="<?=$swimsTimeArray[$i]?>Mins" id="<?=$swimsTimeArray[$i]?>Mins" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0">
-  			    </div>
-  					<div class="col">
-  			      <input type="number" class="form-control" placeholder="Seconds" name="<?=$swimsTimeArray[$i]?>Secs" id="<?=$swimsTimeArray[$i]?>Secs" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="59">
-  			    </div>
-  					<div class="col">
-  			      <input type="number" class="form-control" placeholder="Hundreds" name="<?=$swimsTimeArray[$i]?>Hunds" id="<?=$swimsTimeArray[$i]?>Hunds" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="99">
-  			    </div>
-  				</div>
-  		  </div>
-					<?php
-				} ?>
-	    </div>
-		</div>
-		<?php } ?>
-		<?php } ?>
-		</div>
+			<?php if (isset($_SESSION['UpdateSuccess'])) {
+				if ($_SESSION['UpdateSuccess']) { ?>
+				<div class="alert alert-success">
+					<p class="mb-0">
+						<strong>
+							Your manual times have been saved successfully.
+						</strong>
+					</p>
+				</div>
+				<?php } else { ?>
+				<div class="alert alert-danger">
+					<p class="mb-0">
+						<strong>
+							We were unable to save your manual times.
+						</strong>
+					</p>
+					<p class="mb-0">
+						Please try again. If the issue persists, contact support.
+					</p>
+				</div>
+				<?php }
+				unset($_SESSION['UpdateSuccess']);
+			} ?>
 
-		<p>
-			<button class="btn btn-success" type="submit">Save</button>
-		</p>
-	</form>
+			<p>
+				Please enter <?=$course?> course times. If you have no <?=$course?> course time for an event but do have a <?=$altCourse?> course time, please <a href="<?=autoUrl("timeconverter")?>" target="_blank">use our online time converter (opens in new tab)</a> to convert it from <?=$altCourse?> course to <?=$course?> course.
+			</p>
+
+			<p>
+				If you do not have any short course or long course times for an event, leave it blank.
+			</p>
+
+			<form method="post" class="">
+				<h2>Swims</h2>
+				<p class="lead">
+					These are the events you entered.
+				</p>
+
+				<div>
+				<?php for ($i = 0; $i < sizeof($swimsArray); $i++) { ?>
+				<?php if ($row[$swimsArray[$i]] == 1) { ?>
+				<div>
+					<div class="cell">
+						<strong class="d-block">
+							<label>
+								<?=$swimsTextArray[$i]?>
+							</label>
+						</strong>
+						<?php if ($times[$swimsArray[$i]] != "") {
+							echo $times[$swimsArray[$i]];
+						} else {
+							$matches = $mins = $secs = $hunds = null;
+							if ($row[$swimsTimeArray[$i]] != "") {
+								if (preg_match('/([0-9]+)\:([0-9]{0,2})\.([0-9]{0,2})/', $row[$swimsTimeArray[$i]], $matches)) {
+									if (isset($matches[1]) && $matches[1] != 0) {
+										$mins = $matches[1];
+									}
+									if (isset($matches[2]) && $matches[2] != 0) {
+										$secs = $matches[2];
+									}
+									if (isset($matches[3]) && $matches[3] != 0) {
+										$hunds = $matches[3];
+									}
+								}
+							}
+							?>
+						<div class="form-group mb-0 mt-2">
+							<div class="input-group">
+								<input type="number" class="form-control" placeholder="Minutes" name="<?=$swimsTimeArray[$i]?>Mins" id="<?=$swimsTimeArray[$i]?>Mins" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" value="<?=htmlspecialchars($mins)?>">
+								<input type="number" class="form-control" placeholder="Seconds" name="<?=$swimsTimeArray[$i]?>Secs" id="<?=$swimsTimeArray[$i]?>Secs" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="59" value="<?=htmlspecialchars($secs)?>">
+								<input type="number" class="form-control" placeholder="Hundreds" name="<?=$swimsTimeArray[$i]?>Hunds" id="<?=$swimsTimeArray[$i]?>Hunds" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="99" value="<?=htmlspecialchars($hunds)?>">
+							</div>
+						</div>
+							<?php
+						} ?>
+					</div>
+				</div>
+				<?php } ?>
+				<?php } ?>
+				</div>
+
+				<p>
+					<button class="btn btn-success" type="submit">Save</button>
+				</p>
+			</form>
+		</div>
+	</div>
 
 </div>
 

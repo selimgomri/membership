@@ -114,7 +114,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
       // First part of the row content
       $content .= "<tr><td><strong>" . htmlspecialchars($row['MForename'] . " " .
-      $row['MSurname'])  . "</strong>" . htmlspecialchars($hyTekPrintDate) . "<br><a
+      $row['MSurname'])  . "</strong>" . $hyTekPrintDate . "<br><a
       class=\"d-print-none\"
       href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" .
       htmlspecialchars($row['ASANumber']) . "\" target=\"_blank\" title=\"Click to see times\">" .
@@ -154,7 +154,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
               $course = "25m";
               $to = "50m";
             }
-            if ($timesB[$swimsArray[$y]] != "") {
+            if (isset($timesB[$swimsArray[$y]]) && $timesB[$swimsArray[$y]] != "") {
               $time = explode(".", $timesB[$swimsArray[$y]]);
               $ms = explode(":", $time[0]);
               $mins = $secs = $hunds =  0;
@@ -198,13 +198,13 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
               	$output = null;
               }
             }
-            $content .= "<li><strong>" . htmlspecialchars($swimsTextArray[$y]) . "</strong> <br>";
-            if ($times[$swimsArray[$y]] != "") {
-              $content .= $times[$swimsArray[$y]] . $output;
-            } else if ($row[$swimsTimeArray[$y]]) {
+            $content .= "<li><strong>" . $swimsTextArray[$y] . "</strong> <br>";
+            if (isset($row[$swimsTimeArray[$y]]) && $row[$swimsTimeArray[$y]]) {
               $content .= $row[$swimsTimeArray[$y]] . $output;
+            } else if (isset($times[$swimsArray[$y]]) && $times[$swimsArray[$y]] != "") {
+              $content .= $times[$swimsArray[$y]] . $output;
             } else {
-              $content .= "No Time Available";
+              $content .= "No time available";
             }
             $content .= "</li>";
           }

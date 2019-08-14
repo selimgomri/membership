@@ -32,7 +32,7 @@ foreach ($swimsArray as $swim) {
     $counter++;
   }
   else {
-      $entriesArray[] = 0;
+    $entriesArray[] = 0;
   }
 }
 
@@ -56,7 +56,7 @@ for ($i=0; $i<sizeof($entriesArray); $i++) {
   }
 }
 
-$getGalaInformation = $db->prepare("SELECT GalaFee, GalaFeeConstant, GalaName FROM galas WHERE GalaID = ? AND NOT CoachEnters");
+$getGalaInformation = $db->prepare("SELECT GalaFee, GalaFeeConstant, GalaName, HyTek FROM galas WHERE GalaID = ? AND NOT CoachEnters");
 $getGalaInformation->execute([$_POST['gala']]);
 $row = $getGalaInformation->fetch(PDO::FETCH_ASSOC);
 
@@ -74,12 +74,12 @@ if ($row['GalaFeeConstant']) {
   }
 }
 
+$hyTek = bool($row['HyTek']);
+
 $insert = $db->prepare("INSERT INTO `galaEntries` (EntryProcessed, Charged, `MemberID`, `GalaID`, " . $swims . ", `TimesRequired`, `FeeToPay`) VALUES (?, ?, ?, ?, " . $values . ", ?, ?)");
 
 $array = array_merge([0, 0, $_POST['swimmer'], $_POST['gala']], $entriesArray);
 $array = array_merge($array, [0, $fee]);
-
-pre($array);
 
 $insert->execute($array);
 
@@ -102,10 +102,13 @@ $to = $row['Forename'] . " " . $row['Surname'] . "<" . $row['EmailAddress'] . ">
 $subject = $row['MForename'] . "'s Gala Entry to " . $row['GalaName'];
 $message .= "<p>Here's the details of your Gala Entry for " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " to " . htmlspecialchars($row['GalaName']) . ".</p>";
 $message .= "<ul>" . $entryList . "</ul>";
-if ($row['GalaFeeConstant'] == 1) {
+if (bool($row['GalaFeeConstant'])) {
   $message .= "<p>The fee for each swim is &pound;" . number_format($row['GalaFee'],2,'.','') . ", the <strong>total fee payable is &pound;" . number_format(($counter*$row['GalaFee']),2,'.','') . "</strong></p>";
 } else {
   $message .= "<p>The <strong>total fee payable is &pound;" . $fee . "</strong>. If you have entered this amount incorrectly, you may incur extra charges from the club or gala host.</p>";
+}
+if (bool($row['HyTek'])) {
+  $message .= "<p><strong>This is a HyTek gala.</strong> Please remember to add times for this entry.</p>";
 }
 $message .= '<p>If you have any questions, please contact the ' . htmlspecialchars(env('CLUB_NAME')) . ' gala team as soon as possible.</p>';
 $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
@@ -121,7 +124,8 @@ try {
 
 $_SESSION['SuccessfulGalaEntry'] = [
   "Gala" => $_POST['gala'],
-  "Swimmer" => $_POST['swimmer']
+  "Swimmer" => $_POST['swimmer'],
+  'HyTek' => $hyTek
 ];
 
 } catch (Exception $e) {
