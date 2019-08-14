@@ -56,6 +56,9 @@ try {
 			$time .= '00';
 		}
 
+		if ($time == '0:00.00') {
+			$time = null;
+		}
 		// Target string must be trusted
 		$target = $swimsTimeArray[$i];
 		$sql = $db->prepare("UPDATE `galaEntries` SET `$target` = ? WHERE `EntryID` = ?;");

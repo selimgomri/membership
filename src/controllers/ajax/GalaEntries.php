@@ -121,7 +121,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       htmlspecialchars($row['ASANumber']) . " <i class=\"fa fa-external-link\"
       aria-hidden=\"true\"></i></a><span class=\"d-none d-print-inline\">Swim England: " .
       htmlspecialchars($row['ASANumber']) . "</span><br>
-      <span class=\"small\">" . htmlspecialchars($row['GalaName']) . "<br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a><br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "/manualtime\">Set Manual Times</a></span></td>";
+      <span class=\"small\">" . htmlspecialchars($row['GalaName']) . "<br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a><br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "/manual-time\">Set Manual Times</a></span></td>";
 
       // Arrays of swims used to check whever to print the name of the swim entered
       // BEWARE This is in an order to ease inputting data into SportSystems, contrary to these arrays in other files
@@ -137,7 +137,11 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       if ($row['HyTek'] != 1) {
         for ($y=0; $y<sizeof($swimsArray); $y++) {
           if ($row[$swimsArray[$y]] == 1) {
-            $content .= "<li>" . ($swimsTextArray[$y]) . "</li>";
+            $content .= "<li><strong>" . ($swimsTextArray[$y]) . '</strong>';
+            if (isset($row[$swimsTimeArray[$y]]) && $row[$swimsTimeArray[$y]]) {
+              $content .= '<br>' . htmlspecialchars($row[$swimsTimeArray[$y]]);
+            }
+            $content .= "</li>";
           }
         }
       }
@@ -200,9 +204,9 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
             }
             $content .= "<li><strong>" . $swimsTextArray[$y] . "</strong> <br>";
             if (isset($row[$swimsTimeArray[$y]]) && $row[$swimsTimeArray[$y]]) {
-              $content .= $row[$swimsTimeArray[$y]] . $output;
+              $content .= htmlspecialchars($row[$swimsTimeArray[$y]]) . $output;
             } else if (isset($times[$swimsArray[$y]]) && $times[$swimsArray[$y]] != "") {
-              $content .= $times[$swimsArray[$y]] . $output;
+              $content .= htmlspecialchars($times[$swimsArray[$y]]) . $output;
             } else {
               $content .= "No time available";
             }
