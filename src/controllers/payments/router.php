@@ -263,7 +263,7 @@ if ($access == "Admin") {
 }
 
 if ($access == "Galas") {
-	$this->get('/', function() {
+	$this->get(['/', '/galas'], function() {
 		global $link;
 		include 'galas/Home.php';
 	});
