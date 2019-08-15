@@ -266,11 +266,28 @@ include "galaMenu.php";
       Gala timesheets
     </h2>
 
-    <p class="mb-4">
-      Gala Time Sheets give a list of each of your swimmer's entries to a gala
-      along with their all-time personal bests and <?=date("Y")?> personal
-      bests.
-    </p>
+    <div class="row">
+      <div class="col-lg-8">
+
+        <p class="mb-4">
+          Gala Time Sheets give a list of each of your swimmer's entries to a gala
+          along with their all-time personal bests and <?=date("Y")?> personal
+          bests.
+        </p>
+
+        <div class="alert alert-warning">
+          <p class="mb-0">
+            <strong>
+              Gala timesheets are deprecated
+            </strong>
+          </p>
+          <p class="mb-0">
+            They will be removed in a future software update
+          </p>
+        </div>
+
+      </div>
+    </div>
 
     <div class="news-grid mb-4">
       <?php do { ?>

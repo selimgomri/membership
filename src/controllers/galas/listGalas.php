@@ -128,12 +128,12 @@ include "galaMenu.php"; ?>
       <div class="row">
         <div class="col-md-5 py-4">
           <div class="panel bg-white">
-            <h3 class="panel-title">
-              Did you know?
+            <h3 class="panel-title bg-warning text-dark">
+              Warning!
             </h3>
 
             <p>
-              We're able to automatically fetch times for HyTek galas.
+              For HyTek galas, parents will be asked to manually enter times after selecting swims.
             </p>
           </div>
         </div>
@@ -142,26 +142,42 @@ include "galaMenu.php"; ?>
     GALA TIME SHEETS
     -->
     <div class="mb-4">
-      <h2>Generate a Gala Time Sheet</h2>
-      <p class="lead">
-        Gala Time Sheets give a list of each swimmer's entries to a gala along with their all-time personal bests and <?=date("Y")?> personal bests.
-      </p>
-      <?php
-      $sql = $db->query("SELECT DISTINCT `galas`.`GalaID`, `GalaName` FROM `galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID` WHERE `GalaDate` >= CURDATE() ORDER BY `GalaDate` ASC;");
-      $row = $sql->fetch(PDO::FETCH_ASSOC);
-      if ($row != null) {
-        ?><ul class="list-unstyled mb-0"><?php
-        do { ?>
-          <li>
-            <a href="<?php echo autoUrl("galas/" . $row['GalaID'] .
-            "/timesheet"); ?>" target="_blank"><?php echo $row['GalaName']; ?></a>
-          </li>
-          <?php
-        } while ($row = $sql->fetch(PDO::FETCH_ASSOC));
-        ?></ul><?php
-      } else {
-  			?><p class="mb-0">There are no galas with corresponding entries.</p><?php
-  		}?>
+			<div class="row">
+			  <div class="col-lg-8">
+					<h2>Generate a Gala Time Sheet</h2>
+					<p class="lead">
+						Gala Time Sheets give a list of each swimmer's entries to a gala along with their all-time personal bests and <?=date("Y")?> personal bests.
+					</p>
+
+					<div class="alert alert-warning">
+					  <p class="mb-0">
+						  <strong>
+								Gala timesheets are deprecated
+							</strong>
+						</p>
+						<p class="mb-0">
+							They will be removed in a future software update
+						</p>
+					</div>
+
+					<?php
+					$sql = $db->query("SELECT DISTINCT `galas`.`GalaID`, `GalaName` FROM `galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID` WHERE `GalaDate` >= CURDATE() ORDER BY `GalaDate` ASC;");
+					$row = $sql->fetch(PDO::FETCH_ASSOC);
+					if ($row != null) {
+						?><ul class="list-unstyled mb-0"><?php
+						do { ?>
+							<li>
+								<a href="<?php echo autoUrl("galas/" . $row['GalaID'] .
+								"/timesheet"); ?>" target="_blank"><?php echo $row['GalaName']; ?></a>
+							</li>
+							<?php
+						} while ($row = $sql->fetch(PDO::FETCH_ASSOC));
+						?></ul><?php
+					} else {
+						?><p class="mb-0">There are no galas with corresponding entries.</p><?php
+					}?>
+				</div>
+			</div>
     </div>
 
   	<?php if (sizeof($countEntries) > 0) { ?>
