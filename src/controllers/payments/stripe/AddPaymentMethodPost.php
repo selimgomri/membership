@@ -30,7 +30,9 @@ if ($checkIfCustomer->fetchColumn() == 0) {
   // Create a Customer:
   $customer = \Stripe\Customer::create([
     "name" => $user['Forename'] . ' ' . $user['Surname'],
-    "description" => "Customer for " . $_SESSION['UserID'] . ' (' . $user['EmailAddress'] . ')'
+    "description" => "Customer for " . $_SESSION['UserID'] . ' (' . $user['EmailAddress'] . ')',
+    'email' => $user['EmailAddress'],
+    'phone' => $user['Mobile']
   ]);
 
   // YOUR CODE: Save the customer ID and other info in a database for later.
@@ -44,6 +46,20 @@ if ($checkIfCustomer->fetchColumn() == 0) {
   $getCustID = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
   $getCustID->execute([$_SESSION['UserID']]);
   $customer = \Stripe\Customer::retrieve($getCustID->fetchColumn());
+
+  // Check whether we should update user details
+  if ($customer->name != $user['Forename'] . ' ' . $user['Surname'] || $customer->email != $user['EmailAddress'] || $customer->phone != $user['Mobile']) {
+    // Some details are not the same so let's update the stripe customer
+    $customer = \Stripe\Customer::update(
+      $customer->id,
+      [
+        "name" => $user['Forename'] . ' ' . $user['Surname'],
+        'email' => $user['EmailAddress'],
+        'phone' => $user['Mobile']
+      ]
+    );
+
+  }
 }
 
 try {

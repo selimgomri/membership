@@ -65,7 +65,9 @@ if (isset($newMethod) && $newMethod) {
       $customer = \Stripe\Customer::create([
         'payment_method' => $intent->payment_method,
         "name" => $user['Forename'] . ' ' . $user['Surname'],
-        "description" => "Customer for " . $_SESSION['UserID'] . ' (' . $user['EmailAddress'] . ')'
+        "description" => "Customer for " . $_SESSION['UserID'] . ' (' . $user['EmailAddress'] . ')',
+        'email' => $user['EmailAddress'],
+        'phone' => $user['Mobile']
       ]);
 
       // YOUR CODE: Save the customer ID and other info in a database for later.
@@ -79,6 +81,20 @@ if (isset($newMethod) && $newMethod) {
       $getCustID = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
       $getCustID->execute([$_SESSION['UserID']]);
       $customer = \Stripe\Customer::retrieve($getCustID->fetchColumn());
+
+      // Check whether we should update user details
+      if ($customer->name != $user['Forename'] . ' ' . $user['Surname'] || $customer->email != $user['EmailAddress'] || $customer->phone != $user['Mobile']) {
+        // Some details are not the same so let's update the stripe customer
+        $customer = \Stripe\Customer::update(
+          $customer->id,
+          [
+            "name" => $user['Forename'] . ' ' . $user['Surname'],
+            'email' => $user['EmailAddress'],
+            'phone' => $user['Mobile']
+          ]
+        );
+
+      }
     }
 
     $method = $intent->payment_method;
@@ -232,9 +248,9 @@ if ($intent->status == 'succeeded') {
     }
     
     if ($pm != null && isset($pm->card)) {
-      $message .= '<p>Paid with ' . getCardBrand($pm->card->brand) . ' ' . $pm->card->last4 . '.</p>';
+      $message .= '<p>Paid with ' . getCardBrand($pm->card->brand) . ' ' . $pm->card->funding . ' &middot;&middot;&middot;&middot; ' . $pm->card->last4 . '.</p>';
     }
-    $message .= '<p>The total paid was £' . number_format($details['Amount']/100, 2) . '. The payment reference number is ' . $databaseId . '.</p>';
+    $message .= '<p>Total paid £' . number_format($details['Amount']/100, 2) . '. Payment reference #' . $databaseId . '.</p>';
 
     $emailDb = $db->prepare("INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, 1, 'Payments')");
 
@@ -244,9 +260,9 @@ if ($intent->status == 'succeeded') {
       if (isset($intent->charges->data[0]->billing_details->name)) {
         $name = $intent->charges->data[0]->billing_details->name;
       }
-      $message .= '<p>This receipt has been sent to the email address indicated when the payment was made, which may not be your club account email address.</p>';
+      $message .= '<p>This receipt has been sent to the email address indicated by the payment service you used, which may not be your club account email address.</p>';
       notifySend(null, 'Payment Receipt', $message, $name, $email, [
-				"Email" => "payments@chesterlestreetasc.co.uk",
+				"Email" => "payments@" . env('EMAIL_DOMAIN'),
 				"Name" => env('CLUB_NAME'),
 				"Unsub" => [
 					"Allowed" => true,

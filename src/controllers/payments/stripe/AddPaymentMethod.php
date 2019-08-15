@@ -5,7 +5,7 @@
 
 global $db;
 
-$getUserEmail = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
+$getUserEmail = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
 $getUserEmail->execute([$_SESSION['UserID']]);
 $user = $getUserEmail->fetch(PDO::FETCH_ASSOC);
 
@@ -19,7 +19,9 @@ if ($checkIfCustomer->fetchColumn() == 0) {
   // Create a Customer:
   $customer = \Stripe\Customer::create([
     "name" => $user['Forename'] . ' ' . $user['Surname'],
-    "description" => "Customer for " . $_SESSION['UserID'] . ' (' . $user['EmailAddress'] . ')'
+    "description" => "Customer for " . $_SESSION['UserID'] . ' (' . $user['EmailAddress'] . ')',
+    'email' => $user['EmailAddress'],
+    'phone' => $user['Mobile']
   ]);
 
   // YOUR CODE: Save the customer ID and other info in a database for later.
