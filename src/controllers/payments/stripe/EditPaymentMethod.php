@@ -50,6 +50,14 @@ $pm = \Stripe\PaymentMethod::retrieve($card['MethodID']);
         Expires at the end of <?=htmlspecialchars(date("F Y", strtotime($card['ExpYear'] . '-' . $card['ExpMonth'] . '-01')))?>.
       </p>
 
+      <p>
+        Depending on your issuing bank, we may be able automatically update your card details when it expires or is replaced. If this is the case, we'll update the last 4 digits and expiry date.
+      </p>
+
+      <p>
+        If you don't want to have your cards automatically updated, you can opt out of these services by contacting your issuing bank.
+      </p>
+
       <?php if (isset($pm->billing_details->name) || isset($pm->billing_details->address->line1) || isset($pm->billing_details->address->postal_code)) { ?>
       <h2>Billing details</h2>
       <address class="mb-3">

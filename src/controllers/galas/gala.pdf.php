@@ -147,25 +147,46 @@ ob_start();?>
     <div style="">
 
       <?php do { ?>
-      <div class="avoid-page-break-inside">
-        <div class="mb-3" style="">
-          <h3 style="display: inline;">
-            <?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?>
-          </h3>
+      <div class="">
+        <div class="mb-3" style="border: 1pt solid #ddd; background: #fff; padding: 10pt;">
+          <div class="row">
+            <div class="split-50">
+              <h3 style="">
+                <?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?>
+              </h3>
 
-          <p style="display: inline;">
-            <strong>Date of Birth:</strong>&nbsp;<?=date('d/m/Y', strtotime($entry['DateOfBirth']))?>,
-            <strong>Swim&nbsp;England Number:</strong>&nbsp;<?=htmlspecialchars($entry['ASANumber'])?>
-          </p>
-          <ul style="list-style: none; margin:0; padding: 0;">
-          <?php foreach ($swimsArray as $event => $name) { ?>
-          <?php if ($entry[$event]) { ?>
-            <li style="margin: 0;padding: 0;">
-              <?=$name?>
-            </li>
-          <?php } ?>
-          <?php } ?>
-          </ul>
+              <p class="mb-0" style="">
+                <strong>Year of birth:</strong>&nbsp;<?=date('Y', strtotime($entry['DateOfBirth']))?>
+              </p>
+              <p class="mb-0">
+                <strong>Swim&nbsp;England Number:</strong>&nbsp;<?=htmlspecialchars($entry['ASANumber'])?>
+              </p>
+            </div>
+            <div class="split-50">
+              <table style="border: none;">
+                <tbody style="border: none;">
+                <?php $count = 0; ?>
+                <?php foreach ($swimsArray as $event => $name) { ?>
+                <?php if ($entry[$event]) { ?>
+                <?php if ($count%2 == 0) { ?>
+                  <tr style="border: none;">
+                <?php } ?>
+                  <td style="border: none; padding: 0pt;">
+                    <?=$name?>
+                  </td>
+                <?php if ($count%2 == 1) { ?>
+                  </tr>
+                <?php } ?>
+                <?php $count++; ?>
+                <?php } ?>
+                <?php } ?>
+                <?php if ($count > 0 && $count%2 == 0) { ?>
+                  </tr>
+                <?php } ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
       <?php } while ($entry = $entries->fetch(PDO::FETCH_ASSOC)); ?>

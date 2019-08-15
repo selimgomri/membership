@@ -296,7 +296,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                   <option value="select">Select a payment card</option>
                   <?php foreach ($cards as $card) { ?>
                   <option value="<?=$card['ID']?>" <?php if ($selected == $card['ID']) { $methodId = $card['MethodID']; ?>selected<?php } ?>>
-                    <?=htmlspecialchars(getCardBrand($card['Brand']))?> <?=htmlspecialchars($card['Funding'])?> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card['Last4'])?>
+                    <?=htmlspecialchars(getCardBrand($card['Brand']))?> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card['Last4'])?>
                   </option>
                   <?php } ?>
                 </select>
