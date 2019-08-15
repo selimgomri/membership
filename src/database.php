@@ -1290,3 +1290,4 @@ function createOrUpdatePayout($payout, $update = false) {
 }
 
 include BASE_PATH . 'includes/ErrorReporting.php';
+include BASE_PATH . 'includes/Colours.php';

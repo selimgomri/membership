@@ -38,23 +38,81 @@ date_create('today'))->y;
 
 $pagetitle = htmlspecialchars($rowSwim['MForename'] . " " . $rowSwim['MSurname']);
 
-/* Stats Section */
-$swimsCountArray = [];
-$strokesCountArray = [0, 0, 0, 0, 0];
-$strokesCountTextArray = ["Freestyle", "Breaststroke", "Butterfly", "Backstroke", "Individual Medley"];
-$swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];
-$strokesArray = ['0','0','0','0','0','0','1','1','1','2','2','2','3','3','3','4','4','4','4',];
-$swimsTextArray = ['50 Free','100 Free','200 Free','400 Free','800 Free','1500 Free','50 Breast','100 Breast','200 Breast','50 Fly','100 Fly','200 Fly','50 Back','100 Back','200 Back','100 IM','150 IM','200 IM','400 IM',];
-$counter = 0;
-for ($i=0; $i<sizeof($swimsArray); $i++) {
-  $col = $swimsArray[$i];
-  $sql = $db->prepare("SELECT COUNT(*) FROM `galaEntries` WHERE `MemberID` = ? AND `$col` = '1'");
-  $sql->execute([$id]);
-  $count = $sql->fetchColumn();
-  $swimsCountArray[$i] = $count;
-  $strokesCountArray[$strokesArray[$i]] += $count;
-  $counter += $count;
+// Arrays of swims used to check whever to print the name of the swim entered
+// BEWARE This is in an order to ease inputting data into SportSystems, contrary to these arrays in other files
+$swimsArray = [
+  '50Free' => '50&nbsp;Free',
+  '100Free' => '100&nbsp;Free',
+  '200Free' => '200&nbsp;Free',
+  '400Free' => '400&nbsp;Free',
+  '800Free' => '800&nbsp;Free',
+  '1500Free' => '1500&nbsp;Free',
+  '50Back' => '50&nbsp;Back',
+  '100Back' => '100&nbsp;Back',
+  '200Back' => '200&nbsp;Back',
+  '50Breast' => '50&nbsp;Breast',
+  '100Breast' => '100&nbsp;Breast',
+  '200Breast' => '200&nbsp;Breast',
+  '50Fly' => '50&nbsp;Fly',
+  '100Fly' => '100&nbsp;Fly',
+  '200Fly' => '200&nbsp;Fly',
+  '100IM' => '100&nbsp;IM',
+  '150IM' => '150&nbsp;IM',
+  '200IM' => '200&nbsp;IM',
+  '400IM' => '400&nbsp;IM'
+];
+
+$strokeCounts = [
+  'Free' => 0,
+  'Back' => 0,
+  'Breast' => 0,
+  'Fly' => 0,
+  'IM' => 0
+];
+$distanceCounts = [
+  '50' => 0,
+  '100' => 0,
+  '150' => 0,
+  '200' => 0,
+  '400' => 0,
+  '800' => 0,
+  '1500' => 0
+];
+$chartColours = chartColours(5);
+$countEntries = [];
+$countEntriesEvents = [];
+$countEntriesCount = [];
+$countEntriesColours = [];
+foreach ($swimsArray as $col => $name) {
+  $getCount = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE MemberID = ? AND `" . $col . "` = 1");
+  $getCount->execute([$id]);
+  $count = $getCount->fetchColumn();
+  if ($count > 0) {
+    $countEntries[$col]['Name'] = $name;
+    $countEntriesEvents[] = html_entity_decode($name);
+    $countEntries[$col]['Event'] = $col;
+    $countEntries[$col]['Stroke'] = preg_replace("/[^a-zA-Z]+/", "", $col);
+    $countEntries[$col]['Distance'] = preg_replace("/[^0-9]/", '', $col);
+    $countEntries[$col]['Count'] = $count;
+    $countEntriesCount[] = $count;
+    $strokeCounts[$countEntries[$col]['Stroke']] += $countEntries[$col]['Count'];
+    $distanceCounts[$countEntries[$col]['Distance']] += $countEntries[$col]['Count'];
+    if ($countEntries[$col]['Stroke'] == 'Free') {
+      $countEntriesColours[] = $chartColours[0];
+    } else if ($countEntries[$col]['Stroke'] == 'Back') {
+      $countEntriesColours[] = $chartColours[1];
+    } else if ($countEntries[$col]['Stroke'] == 'Breast') {
+      $countEntriesColours[] = $chartColours[2];
+    } else if ($countEntries[$col]['Stroke'] == 'Fly') {
+      $countEntriesColours[] = $chartColours[3];
+    } else if ($countEntries[$col]['Stroke'] == 'IM') {
+      $countEntriesColours[] = $chartColours[4];
+    }
+  }
 }
+
+$strokeCountsData = array_values($strokeCounts);
+
 ?>
 
 <?php include BASE_PATH . "views/header.php"; ?>
@@ -92,7 +150,7 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
     <li class="nav-item">
       <a class="nav-link" id="times-tab" data-toggle="tab" href="#times" role="tab" aria-controls="times" aria-selected="false">Times</a>
     </li>
-    <?php if ($counter>0) { ?>
+    <?php if (sizeof($countEntries) > 0) { ?>
     <li class="nav-item">
       <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="false">Stats</a>
     </li>
@@ -316,79 +374,18 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
       </div>
     </div>
     <div class="tab-pane fade mt-3" id="stats" role="tabpanel" aria-labelledby="stats-tab">
-      <?php	if ($counter>0) { ?>
-      	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type="text/javascript">
-          google.charts.load('current', {'packages':['corechart']});
 
-          google.charts.setOnLoadCallback(drawPieChart);
-    			google.charts.setOnLoadCallback(drawBarChart);
+      <!-- STATS SECTION -->
 
-          function drawPieChart() {
-
-            var data = google.visualization.arrayToDataTable([
-              ['Stroke', 'Total Number of Entries'],
-    					<?php for ($i=0; $i<sizeof($strokesCountArray); $i++) {
-              	echo "['" . $strokesCountTextArray[$i] . "', " . $strokesCountArray[$i] . "],";
-    					} ?>
-            ]);
-
-            var options = {
-              title: 'Gala Entries by Stroke',
-    					fontName: 'Open Sans',
-    					backgroundColor: {
-    						fill:'transparent'
-    					},
-    					chartArea: {
-    						left: '0',
-    						right: '0',
-    					}
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-            chart.draw(data, options);
-          }
-    			function drawBarChart() {
-
-            var data = google.visualization.arrayToDataTable([
-              ['Stroke', 'Total Number of Entries'],
-              <?php for ($i=0; $i<sizeof($swimsArray); $i++) {
-    						if ($swimsCountArray[$i] > 0) {
-              		echo "['" . $swimsTextArray[$i] . "', " . $swimsCountArray[$i] . "],";
-    						}
-    					} ?>
-            ]);
-
-            var options = {
-              title: 'Gala Entries by Event',
-    					fontName: 'Open Sans',
-    					backgroundColor: {
-    						fill:'transparent'
-    					},
-    					chartArea: {
-    						left: '0',
-    						right: '0',
-    					},
-    					backgroundColor: {
-    						fill:'transparent'
-    					},
-    					legend: {
-    						position: 'none',
-    					}
-            };
-
-            var chart = new google.visualization.ColumnChart(document.getElementById('barchart'));
-
-            chart.draw(data, options);
-          }
-        </script>
-        <div class="">
-          <h2 class="border-bottom border-gray pb-2 mb-0">Gala Statistics</h2>
-    	    <div class="chart" id="piechart"></div>
-    			<div class="chart" id="barchart"></div>
+      <div class="row">
+        <div class="col-lg-8">
+          <canvas id="eventEntries" class="mb-3"></canvas>
         </div>
-      <?php } ?>
+        <div class="col-lg-4">
+          <canvas id="strokeEntries" class="mb-3"></canvas>
+        </div>
+      </div>
+
     </div>
     <div class="tab-pane fade mt-3" id="squad" role="tabpanel" aria-labelledby="squad-tab">
       <div class="">
@@ -542,5 +539,59 @@ for ($i=0; $i<sizeof($swimsArray); $i++) {
     </div>
   </div>
 </div>
+
+<?php if (sizeof($countEntries) > 0) { ?>
+<script src="<?=autoUrl("public/js/Chart.min.js")?>"></script>
+<script>
+var ctx = document.getElementById('eventEntries').getContext('2d');
+var chart = new Chart(ctx, {
+  // The type of chart we want to create
+  type: 'bar',
+
+  // The data for our dataset
+  data: {
+    labels: <?=json_encode($countEntriesEvents)?>,
+    datasets: [{
+      label: <?=json_encode($rowSwim['MForename'] . " " . $rowSwim['MSurname'])?>,
+      data: <?=json_encode($countEntriesCount)?>,
+      backgroundColor: <?=json_encode($countEntriesColours)?>,
+    }],
+  },
+
+  // Configuration options go here
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true,
+          precision: 0,
+        }
+      }]
+    }
+  }
+});
+</script>
+
+<script>
+var ctx = document.getElementById('strokeEntries').getContext('2d');
+var chart = new Chart(ctx, {
+  // The type of chart we want to create
+  type: 'pie',
+
+  // The data for our dataset
+  data: {
+    labels: <?=json_encode(['Free', 'Back', 'Breast', 'Fly', 'IM'])?>,
+    datasets: [{
+      label: <?=json_encode(html_entity_decode($gala['GalaName']))?>,
+      data: <?=json_encode($strokeCountsData)?>,
+      backgroundColor: <?=json_encode($chartColours)?>,
+    }],
+  },
+
+  // Configuration options go here
+  // options: {}
+});
+</script>
+<?php } ?>
 
 <?php include BASE_PATH . "views/footer.php"; ?>
