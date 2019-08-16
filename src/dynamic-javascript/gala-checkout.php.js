@@ -263,7 +263,7 @@ paymentRequest.on('paymentmethod', function(ev) {
             stripe.handleCardPayment(clientSecret).then(function(result) {
               if (result.error) {
                 // The payment failed -- ask your customer for a new payment method.
-                document.getElementById('alert-placeholder').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
+                document.getElementById('alert-placeholder').innerHTML = '<div class="alert alert-danger mt-3"><p class="mb-0"><strong>An error occurred trying to take your payment</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
               } else {
                 // The payment has succeeded.
                 window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);

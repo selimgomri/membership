@@ -171,6 +171,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
   background-color: white;
 
   box-shadow: none;
+  border-radius: 0.25rem;
 }
 </style>
 <?php if (bool(env('IS_CLS'))) { ?>
@@ -263,19 +264,14 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
       </ul>
 
       <h2 class="mb-3">Payment Method</h2>
-      <p>Choose how to pay</p>
+      <p>Pay with a mobile wallet such as Apple Pay or Google Pay, a saved card or a new card.</p>
         <div id="payment-request-card">
-          <div class="card mb-3">
+          <div class="mb-3">
             <form>
-              <div class="card-header" id="device-title">
-                Pay quickly and securely
+              <div id="payment-request-button">
+                <!-- A Stripe Element will be inserted here. -->
               </div>
-              <div class="card-body">
-                <div id="alert-placeholder"></div>
-                <div id="payment-request-button">
-                  <!-- A Stripe Element will be inserted here. -->
-                </div>
-              </div>
+              <div id="alert-placeholder"></div>
             </form>
           </div>
 
@@ -332,21 +328,30 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
             Pay with a new card
           </div>
           <div class="card-body">
-            <form id="new-card-form">
+            <form id="new-card-form" class="needs-validation" novalidate>
               <div class="form-group">
                 <label for="new-cardholder-name">Cardholder name</label>
                 <input type="text" class="form-control" id="new-cardholder-name" placeholder="C F Frost" required autocomplete="cc-name" aria-describedby="new-cardholder-name-help">
                 <small id="new-cardholder-name-help" class="form-text text-muted">The name shown on your card</small>
+                <div class="invalid-feedback">
+                  You must provide your full name
+                </div>
               </div>
 
               <div class="form-group">
                 <label for="addr-line-1">Address line 1</label>
                 <input type="text" class="form-control" id="addr-line-1" placeholder="1 Burns Green" required autocomplete="address-line1">
+                <div class="invalid-feedback">
+                  You must provide your address
+                </div>
               </div>
 
               <div class="form-group">
                 <label for="addr-post-code">Post Code</label>
                 <input type="text" class="form-control text-uppercase" id="addr-post-code" placeholder="NE99 1AA" required autocomplete="postal-code">
+                <div class="invalid-feedback">
+                  You must provide your post code
+                </div>
               </div>
 
               <div class="form-group">
@@ -356,6 +361,9 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                   <option <?php if ($code == 'GB') { ?>selected<?php } ?> value="<?=htmlspecialchars($code)?>"><?=htmlspecialchars($name)?></option>
                   <?php } ?>
                 </select>
+                <div class="invalid-feedback">
+                  You must provide your country
+                </div>
               </div>
 
               <!-- placeholder for Elements -->
@@ -395,7 +403,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 </div>
 
 <script src="<?=autoUrl("js/gala-checkout.js")?>"></script>
-
+<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 
 <?php
 
