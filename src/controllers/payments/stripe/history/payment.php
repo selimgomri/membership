@@ -20,7 +20,7 @@ function getWalletName($name) {
 
 global $db;
 
-$payment = $db->prepare("SELECT * FROM stripePayments INNER JOIN stripePaymentItems ON stripePaymentItems.Payment = stripePayments.ID WHERE stripePayments.ID = ?");
+$payment = $db->prepare("SELECT * FROM ((stripePayments INNER JOIN stripePaymentItems ON stripePaymentItems.Payment = stripePayments.ID) INNER JOIN users ON stripePayments.User = users.UserID) WHERE stripePayments.ID = ?");
 $payment->execute([$id]);
 
 $paymentItems = $db->prepare("SELECT * FROM stripePaymentItems WHERE stripePaymentItems.Payment = ?");
@@ -28,7 +28,7 @@ $paymentItems->execute([$id]);
 
 $pm = $payment->fetch(PDO::FETCH_ASSOC);
 
-if ($pm == null || $pm['User'] != $_SESSION['UserID']) {
+if ($pm == null || ($_SESSION['AccessLevel'] != 'Admin' && $pm['User'] != $_SESSION['UserID'])) {
   halt(404);
 }
 
@@ -62,30 +62,30 @@ $date->setTimezone(new DateTimeZone('Europe/London'));
 
   <div class="row">
     <div class="col-md-8">
-      <h1>Card payment #<?=htmlspecialchars($id)?></h1>
+      <h1><?php if ($_SESSION['AccessLevel'] == 'Admin') { ?><?=htmlspecialchars($pm['Forename'] . ' ' . $pm['Surname'] . ':')?> <?php } ?>Card payment #<?=htmlspecialchars($id)?></h1>
       <p class="lead">At <?=$date->format("H:i \o\\n j F Y")?></p>
 
       <?php if ($card != null) { ?>
       <h2>Card information</h2>
       <dl class="row">
-        <dt class="col-sm-3">Card</dt>
-        <dd class="col-sm-9"><i class="fa <?=htmlspecialchars(getCardFA($card->brand))?>" aria-hidden="true"></i> <span class="sr-only"><?=htmlspecialchars(getCardBrand($card->brand))?></span> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card->last4)?></dd>
+        <dt class="col-sm-5 col-md-4">Card</dt>
+        <dd class="col-sm-7 col-md-8"><i class="fa <?=htmlspecialchars(getCardFA($card->brand))?>" aria-hidden="true"></i> <span class="sr-only"><?=htmlspecialchars(getCardBrand($card->brand))?></span> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card->last4)?></dd>
 
-        <dt class="col-sm-3">Type</dt>
-        <dd class="col-sm-9"><?=htmlspecialchars(mb_convert_case ($card->funding, MB_CASE_TITLE))?></dd>
+        <dt class="col-sm-5 col-md-4">Type</dt>
+        <dd class="col-sm-7 col-md-8"><?=htmlspecialchars(mb_convert_case ($card->funding, MB_CASE_TITLE))?></dd>
 
         <?php if (isset($card->three_d_secure->authenticated) && $card->three_d_secure->authenticated && isset($card->three_d_secure->succeeded) && $card->three_d_secure->succeeded) { ?>
-        <dt class="col-sm-3">Verification</dt>
-        <dd class="col-sm-9">Verified using 3D Secure</dd>
+        <dt class="col-sm-5 col-md-4">Verification</dt>
+        <dd class="col-sm-7 col-md-8">Verified using 3D Secure</dd>
         <?php } ?>
 
         <?php if (isset($card->wallet)) { ?>
-        <dt class="col-sm-3">Mobile Wallet Payment</dt>
-        <dd class="col-sm-9"><?=getWalletName($card->wallet->type)?></dd>
+        <dt class="col-sm-5 col-md-4">Mobile Wallet Payment</dt>
+        <dd class="col-sm-7 col-md-8"><?=getWalletName($card->wallet->type)?></dd>
 
         <?php if (isset($card->wallet->dynamic_last4)) { ?>
-        <dt class="col-sm-3">Device Account Number</dt>
-        <dd class="col-sm-9">&#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card->wallet->dynamic_last4)?></dd>
+        <dt class="col-sm-5 col-md-4">Device Account Number</dt>
+        <dd class="col-sm-7 col-md-8">&#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card->wallet->dynamic_last4)?></dd>
         <?php } ?>
         <?php } ?>
       </dl>
