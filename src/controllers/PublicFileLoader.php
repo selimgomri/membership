@@ -16,6 +16,22 @@ if (file_exists($file) && mime_content_type($file) != 'directory') {
     header('Content-Type: application/javascript');
     header('Age: 0');
     header('Cache-Control: max-age=31536000, private');
+  } else if (strpos($file, '.woff2')) {
+    header('Content-Type: font/woff2');
+    header('Age: 0');
+    header('Cache-Control: max-age=31536000, private');
+  } else if (strpos($file, '.png')) {
+    header('Content-Type: image/png');
+    header('Age: 0');
+    header('Cache-Control: max-age=31536000, private');
+  } else if (strpos($file, '.jpg') || strpos($file, '.jpeg')) {
+    header('Content-Type: image/jpeg');
+    header('Age: 0');
+    header('Cache-Control: max-age=31536000, private');
+  } else if (strpos($file, '.svg')) {
+    header('Content-Type: image/svg+xml');
+    header('Age: 0');
+    header('Cache-Control: max-age=31536000, private');
   } else {
     header('Content-Type: ' . mime_content_type($file));
     header('Cache-Control: must-revalidate');
