@@ -66,17 +66,16 @@ $total = 0;
 
 foreach ($_SESSION['PaidEntries'] as $entry => $details) {
   $total += $details['Amount'];
-  $getEntry->execute([$entry, $_SESSION['UserID']]);
-  $entry = $getEntry->fetch(PDO::FETCH_ASSOC);
-  $entryRequestDetails[] = [
-    'label' => $entry['MForename'] . ' ' . $entry['MSurname'][0] . ', ' . $entry['GalaName'],
-    'amount' => $details['Amount']
-  ];
 }
 
 if ($total == 0) {
   halt(404);
 }
+
+$entryRequestDetails[] = [
+  'label' => 'Subtotal',
+  'amount' => $total
+];
 
 $intent = null;
 
