@@ -6,24 +6,30 @@ if (file_exists($file) && mime_content_type($file) != 'directory') {
   header('Content-Description: File Transfer');
   if (strpos($file, '.css')) {
     header('Content-Type: text/css');
+    header('Age: 0');
+    header('Cache-Control: max-age=31536000, private');
   } else if (strpos($file, '.json')) {
     header('Content-Type: application/json');
+    header('Age: 0');
+    header('Cache-Control: max-age=31536000, private');
   } else if (strpos($file, '.js')) {
     header('Content-Type: application/javascript');
+    header('Age: 0');
+    header('Cache-Control: max-age=31536000, private');
   } else {
     header('Content-Type: ' . mime_content_type($file));
+    header('Cache-Control: must-revalidate');
   }
-  if (mime_content_type($file) == 'application/pdf' || mime_content_type($file) == 'text/html' || mime_content_type($file) == 'text/css' || mime_content_type($file) == 'application/javascript') {
+  if (mime_content_type($file) == 'application/pdf' || mime_content_type($file) == 'text/html' || mime_content_type($file) == 'text/css' || strpos($file, '.css') || mime_content_type($file) == 'application/javascript') {
     header('Content-Disposition: inline');
   } else {
     header('Content-Disposition: attachment; filename="'.basename($filename).'"');
   }
   if (strpos($file, '.css') || mb_strpos($file, '.js')) {
-    header('Expires: ' . date('D, d M Y H:i:s', strtotime("+28 days")) . ' GMT');
+    header('Expires: ' . date('D, d M Y H:i:s', strtotime("+1 year")) . ' GMT');
   } else {
     header('Expires: 0');
   }
-  header('Cache-Control: must-revalidate');
   header('Pragma: public');
   header('Content-Length: ' . filesize($file));
   readfile($file);

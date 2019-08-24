@@ -111,18 +111,6 @@ include BASE_PATH . "views/header.php";
         </p>
       </div>
 
-      <div class="cell">
-        <h3>If you're finished here</h3>
-
-        <p>If you've finished making entries, return to the gala homepage.</p>
-
-        <p class="mb-0">
-          <a href="<?=autoUrl("galas")?>" class="btn btn-primary">
-            Gala home
-          </a>
-        </p>
-      </div>
-
       <?php if ($canPayByCard) { ?>
       <div class="cell">
         <h3>Pay by card</h3>
@@ -142,6 +130,18 @@ include BASE_PATH . "views/header.php";
       </div>
 
       <?php } ?>
+
+      <div class="cell">
+        <h3>If you're finished here</h3>
+
+        <p>If you've finished making entries, return to the gala homepage.</p>
+
+        <p class="mb-0">
+          <a href="<?=autoUrl("galas")?>" class="btn btn-primary">
+            Gala home
+          </a>
+        </p>
+      </div>
 
       <?php if ($_SESSION['SuccessfulGalaEntry']['HyTek']) { ?>
       <h2 id="why">Why do I have to provide times?</h2>
