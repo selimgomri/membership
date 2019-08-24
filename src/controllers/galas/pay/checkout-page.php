@@ -12,6 +12,8 @@ global $db;
 $expMonth = date("m");
 $expYear = date("Y");
 
+$updateEntryPayment = $db->prepare("UPDATE galaEntries SET StripePayment = ? WHERE EntryID = ?");
+
 $customer = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
 $customer->execute([$_SESSION['UserID']]);
 $customerId = $customer->fetchColumn();
@@ -87,6 +89,10 @@ $total = 0;
 
 foreach ($_SESSION['PaidEntries'] as $entry => $details) {
   $total += $details['Amount'];
+  $updateEntryPayment->execute([
+    null,
+    $entry
+  ]);
 }
 
 if ($total == 0) {
@@ -105,8 +111,51 @@ if (!isset($_SESSION['GalaPaymentIntent'])) {
     'setup_future_usage' => 'off_session',
   ]);
   $_SESSION['GalaPaymentIntent'] = $intent->id;
+
+  $intentCreatedAt = new DateTime('@' . $intent->created, new DateTimeZone('UTC'));
+
+  // Add this payment intent to the database and assign the id to each entry
+  $addIntent = $db->prepare("INSERT INTO stripePayments (`User`, `DateTime`, Method, Intent, Amount, Currency, Paid, AmountRefunded) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+  $addIntent->execute([
+    $_SESSION['UserID'],
+    $intentCreatedAt->format("Y-m-d H:i:s"),
+    null,
+    $intent->id,
+    $intent->amount,
+    $intent->currency,
+    0,
+    0
+  ]);
+
+  $databaseId = $db->lastInsertId();
+
+  // Assign id to each entry
+  foreach ($_SESSION['PaidEntries'] as $entry) {
+    $updateEntryPayment->execute([
+      $databaseId,
+      $entry
+    ]);
+  }
 } else {
   $intent = \Stripe\PaymentIntent::retrieve($_SESSION['GalaPaymentIntent']);
+
+  $getId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
+  $getId->execute([
+    $intent->id
+  ]);
+  $databaseId = $getId->fetchColumn();
+
+  if ($databaseId == null) {
+    halt(404);
+  }
+
+  // Assign id to each entry
+  foreach ($_SESSION['PaidEntries'] as $entry => $entryData) {
+    $updateEntryPayment->execute([
+      $databaseId,
+      $entry
+    ]);
+  }
 }
 
 if ($intent->status == 'succeeded') {

@@ -169,8 +169,8 @@ if (isset($newMethod) && $newMethod) {
 if ($intent->status == 'succeeded') {
   $db->beginTransaction();
 
-  $updateEntries = $db->prepare("UPDATE galaEntries SET Charged = ?, StripePayment = ? WHERE EntryID = ?");
-  $addToStripePayments = $db->prepare("INSERT INTO stripePayments (`User`, `DateTime`, Method, Intent, Amount, Currency, ServedBy, Paid, AmountRefunded) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+  $updateEntries = $db->prepare("UPDATE galaEntries SET Charged = ? WHERE StripePayment = ?");
+  $addToStripePayments = $db->prepare("UPDATE stripePayments SET Method = ?, Amount = ?, Currency = ?, Paid = ?, AmountRefunded = ? WHERE Intent = ?");
   $addPaymentItems = $db->prepare("INSERT INTO stripePaymentItems (Payment, `Name`, `Description`, Amount, Currency, AmountRefunded) VALUES (?, ?, ?, ?, ?, ?)");
   $getEntry = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE EntryID = ? AND members.UserID = ?");
 
@@ -196,26 +196,30 @@ if ($intent->status == 'succeeded') {
 
   try {
     $addToStripePayments->execute([
-      $_SESSION['UserID'],
-      $date->format("Y-m-d H:i:s"),
       $paymentMethodId,
-      $intent->id,
       $intent->amount,
       $intent->currency,
-      null,
       true,
-      0
+      0,
+      $intent->id
     ]);
 
-    $databaseId = $db->lastInsertId();
+    $getId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
+    $getId->execute([
+      $intent->id
+    ]);
+    $databaseId = $getId->fetchColumn();
+
+    if ($databaseId == null) {
+      halt(404);
+    }
+
+    $updateEntries->execute([
+      true,
+      $databaseId
+    ]);
 
     foreach ($_SESSION['PaidEntries'] as $entry => $details) {
-      $updateEntries->execute([
-        true,
-        $databaseId, 
-        $entry
-      ]);
-
       $addPaymentItems->execute([
         $databaseId,
         'Gala entry',

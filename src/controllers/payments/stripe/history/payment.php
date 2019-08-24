@@ -82,9 +82,38 @@ function cardCheckInfo($value) {
   }
 }
 
+function paymentIntentStatus($value) {
+  switch ($value) {
+    case 'requires_payment_method':
+      return '<i class="text-warning fa fa-info-circle fa-fw" aria-hidden="true"></i> Requires payment method';
+      break;
+    case 'requires_confirmation':
+      return '<i class="text-muted fa fa-info-circle fa-fw" aria-hidden="true"></i> Requires confirmation';
+      break;
+    case 'requires_action':
+      return '<i class="text-warning fa fa-info-circle fa-fw" aria-hidden="true"></i> Requires action';
+      break;
+    case 'processing':
+      return '<i class="text-muted fa fa-info-circle fa-fw" aria-hidden="true"></i> Processing';
+      break;
+    case 'requires_capture':
+      return '<i class="text-muted fa fa-info-circle fa-fw" aria-hidden="true"></i> Required capture';
+      break;
+    case 'canceled':
+      return '<i class="text-warning fa fa-info-circle fa-fw" aria-hidden="true"></i> Cancelled';
+      break;
+    case 'succeeded':
+      return '<i class="text-success fa fa-check-circle fa-fw" aria-hidden="true"></i> Succeeded';
+      break;
+    default:
+      return 'Unknown status';
+      break;
+  }
+}
+
 global $db;
 
-$payment = $db->prepare("SELECT * FROM ((stripePayments INNER JOIN stripePaymentItems ON stripePaymentItems.Payment = stripePayments.ID) INNER JOIN users ON stripePayments.User = users.UserID) WHERE stripePayments.ID = ?");
+$payment = $db->prepare("SELECT * FROM ((stripePayments LEFT JOIN stripePaymentItems ON stripePaymentItems.Payment = stripePayments.ID) INNER JOIN users ON stripePayments.User = users.UserID) WHERE stripePayments.ID = ?");
 $payment->execute([$id]);
 
 $paymentItems = $db->prepare("SELECT * FROM stripePaymentItems WHERE stripePaymentItems.Payment = ?");
@@ -133,6 +162,23 @@ $countries = getISOAlpha2Countries();
     <div class="col-md-8">
       <h1><?php if ($_SESSION['AccessLevel'] == 'Admin') { ?><?=htmlspecialchars($pm['Forename'] . ' ' . $pm['Surname'] . ':')?> <?php } ?>Card payment #<?=htmlspecialchars($id)?></h1>
       <p class="lead">At <?=$date->format("H:i \o\\n j F Y")?></p>
+
+      <h2>Payment Status</h2>
+      <dl class="row">
+        <dt class="col-sm-5 col-md-4">Status</dt>
+        <dd class="col-sm-7 col-md-8"><?=paymentIntentStatus($payment->status)?></dd>
+
+        <dt class="col-sm-5 col-md-4">Amount</dt>
+        <dd class="col-sm-7 col-md-8">&pound;<?=number_format($payment->amount/100, 2, '.', '')?></dd>
+
+        <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+        <dt class="col-sm-5 col-md-4">Amount capturable</dt>
+        <dd class="col-sm-7 col-md-8">&pound;<?=number_format($payment->amount_capturable/100, 2, '.', '')?></dd>
+
+        <dt class="col-sm-5 col-md-4">Amount received</dt>
+        <dd class="col-sm-7 col-md-8">&pound;<?=number_format($payment->amount_received/100, 2, '.', '')?></dd>
+        <?php } ?>
+      </dl>
 
       <?php if ($card != null) { ?>
       <h2>Card information</h2>
@@ -266,7 +312,7 @@ $countries = getISOAlpha2Countries();
       <?php if (isset($payment->charges->data[0]->amount_refunded) && $payment->charges->data[0]->amount_refunded > 0) { ?>
       <h2>Payment refunds</h2>
       <p>&pound;<?=number_format($payment->charges->data[0]->amount_refunded/100, 2, '.', '')?> refunded to <?=htmlspecialchars(getCardBrand($card->brand))?> **** <?=htmlspecialchars($card->last4)?></p>
-      <?php } else { ?>
+      <?php } else if ($_SESSION['AccessLevel'] == 'Admin') { ?>
       <h2>Refund this transaction</h2>
       <p>To refund gala entries, use the gala refunds system.</p>
       <?php } ?>

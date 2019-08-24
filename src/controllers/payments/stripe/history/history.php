@@ -85,6 +85,7 @@ include BASE_PATH . 'views/header.php';
           <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
             <p class="h3 mb-3"><?=htmlspecialchars($pm['Forename'] . ' ' . $pm['Surname'])?></p>
           <?php } ?>
+          <?php if (isset($pm['Brand'])) { ?>
           <div class="row align-items-center mb-2">
             <div class="col-auto">
               <img src="<?=autoUrl("public/img/stripe/" . $pm['Brand'] . ".png")?>" srcset="<?=autoUrl("public/img/stripe/" . $pm['Brand'] . "@2x.png")?> 2x, <?=autoUrl("public/img/stripe/" . $pm['Brand'] . "@3x.png")?> 3x" style="width:40px;"> <span class="sr-only"><?=htmlspecialchars(getCardBrand($pm['Brand']))?></span>
@@ -95,6 +96,7 @@ include BASE_PATH . 'views/header.php';
               </h2>
             </div>
           </div>
+          <?php } ?>
           <p class="lead">At <?=$date->format("H:i \o\\n j F Y")?></p>
           <p class="mono mb-0">&pound;<?=number_format($pm['Amount']/100, 2, '.', '')?></p>
         </a>
