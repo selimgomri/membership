@@ -34,7 +34,12 @@ if ($pm == null || ($_SESSION['AccessLevel'] != 'Admin' && $pm['User'] != $_SESS
 
 \Stripe\Stripe::setApiKey(env('STRIPE'));
 
-$payment = \Stripe\PaymentIntent::retrieve($pm['Intent']);
+$payment = \Stripe\PaymentIntent::retrieve([
+  'id' => $pm['Intent'],
+  'expand' => ['customer', 'payment_method']
+]);
+
+pre($payment);
 
 $pagetitle = 'Card Payment #' . htmlspecialchars($id);
 
@@ -88,6 +93,38 @@ $date->setTimezone(new DateTimeZone('Europe/London'));
         <dd class="col-sm-7 col-md-8">&#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card->wallet->dynamic_last4)?></dd>
         <?php } ?>
         <?php } ?>
+        
+        <?php if (isset($payment->charges->data[0]->outcome->risk_level) && $payment->charges->data[0]->outcome->risk_level) { ?>
+        <dt class="col-sm-5 col-md-4">Risk level</dt>
+        <dd class="col-sm-7 col-md-8"><?=htmlspecialchars($payment->charges->data[0]->outcome->risk_level)?></dd>
+        <?php } ?>
+        
+        <?php if (isset($payment->charges->data[0]->outcome->risk_score) && $payment->charges->data[0]->outcome->risk_score) { ?>
+        <dt class="col-sm-5 col-md-4">Risk score</dt>
+        <dd class="col-sm-7 col-md-8"><?=htmlspecialchars($payment->charges->data[0]->outcome->risk_score)?></dd>
+        <?php } ?>
+        
+        <?php if (isset($payment->charges->data[0]->receipt_url) && $payment->charges->data[0]->receipt_url) { ?>
+        <dt class="col-sm-5 col-md-4">Stripe receipt</dt>
+        <dd class="col-sm-7 col-md-8"><a target="_blank" href="<?=htmlspecialchars($payment->charges->data[0]-> receipt_url)?>">Receipt</a></dd>
+        <?php } ?>
+        
+        <?php if (isset($payment->payment_method->card->checks->address_line1_check) && $payment->payment_method->card->checks->address_line1_check) { ?>
+        <dt class="col-sm-5 col-md-4">Address line 1</dt>
+        <dd class="col-sm-7 col-md-8"><?=htmlspecialchars($payment->payment_method->card->checks->address_line1_check)?></dd>
+        <?php } ?>
+        
+        <?php if (isset($payment->payment_method->card->checks->address_postal_code_check) && $payment->payment_method->card->checks->address_postal_code_check) { ?>
+        <dt class="col-sm-5 col-md-4">Post code</dt>
+        <dd class="col-sm-7 col-md-8"><?=htmlspecialchars($payment->payment_method->card->checks->address_postal_code_check)?></dd>
+        <?php } ?>
+        
+        <?php if (isset($payment->payment_method->card->checks->cvc_check) && $payment->payment_method->card->checks->cvc_check) { ?>
+        <dt class="col-sm-5 col-md-4">CVC</dt>
+        <dd class="col-sm-7 col-md-8"><?=htmlspecialchars($payment->payment_method->card->checks->cvc_check)?></dd>
+        <?php } ?>
+        
+        
       </dl>
       <?php } ?>
 
@@ -110,6 +147,9 @@ $date->setTimezone(new DateTimeZone('Europe/London'));
       <?php if (isset($payment->charges->data[0]->amount_refunded) && $payment->charges->data[0]->amount_refunded > 0) { ?>
       <h2>Payment refunds</h2>
       <p>&pound;<?=number_format($payment->charges->data[0]->amount_refunded/100, 2, '.', '')?> refunded to <?=htmlspecialchars(getCardBrand($card->brand))?> **** <?=htmlspecialchars($card->last4)?></p>
+      <?php } else { ?>
+      <h2>Refund this transaction</h2>
+      <p>To refund gala entries, use the gala refunds system.</p>
       <?php } ?>
 
     </div>
