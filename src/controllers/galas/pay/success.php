@@ -143,8 +143,8 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
 <?php
 
-//unset($_SESSION['CompletedEntries']);
-//unset($_SESSION['CompletedEntryInfo']);
-//unset($_SESSION['GalaPaymentSuccess']);
+unset($_SESSION['CompletedEntries']);
+unset($_SESSION['CompletedEntryInfo']);
+unset($_SESSION['GalaPaymentSuccess']);
 
 include BASE_PATH . "views/footer.php";
