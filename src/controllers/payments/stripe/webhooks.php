@@ -8,7 +8,7 @@ function stripe_handlePayment($pi) {
   // Check if there are gala entries for this payment intent
   $getIntentDbId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
   $getIntentDbId->execute([
-    $intent->id
+    $pi->id
   ]);
   $databaseId = $getIntentDbId->fetchColumn();
   if ($databaseId == null) {
@@ -21,7 +21,7 @@ function stripe_handlePayment($pi) {
   ]);
   if ($getGalaCount->fetchColumn() > 0) {
     // This payment was for galas so run the code for a successful gala payment
-    handleCompletedGalaPayments($intent->id);
+    handleCompletedGalaPayments($pi->id);
   } else {
     // Run code for any other type of payment
     // Such types do not exist yet but this is passive provision
