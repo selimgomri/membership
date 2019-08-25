@@ -76,6 +76,7 @@ var elements = stripe.elements({
     },
   ]
 });
+var successAlert = '<div class="alert alert-success"><p class="mb-0"><strong>Payment Successful</strong></p><p class="mb-0">Please wait while we redirect you</p></div>';
 
 // Custom styling can be passed to options when creating an Element.
 // (Note that this demo uses a wider set of styles than the guide below.)
@@ -141,6 +142,7 @@ form.addEventListener('submit', function(event) {
     } else {
       // Disable buttons
       disableButtons();
+      document.getElementById('new-card-errors').innerHTML = successAlert;
       // The payment has succeeded. Display a success message.
       window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
     }
@@ -201,6 +203,7 @@ paymentRequest.on('paymentmethod', function(ev) {
           if (result.paymentIntent.status == 'succeeded') {
             // Disable buttons
             disableButtons();
+            document.getElementById('alert-placeholder').innerHTML = successAlert;
             window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
           } else {
             stripe.handleCardPayment(clientSecret).then(function(result) {
@@ -211,6 +214,7 @@ paymentRequest.on('paymentmethod', function(ev) {
                 // The payment has succeeded.
                 // Disable buttons
                 disableButtons();
+                document.getElementById('new-card-errors').innerHTML = successAlert;
                 window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
               }
             });
@@ -234,6 +238,8 @@ if (savedCardButton != null) {
         // Display error.message in your UI.
       } else {
         // The payment has succeeded. Display a success message.
+        disableButtons();
+        document.getElementById('alert-placeholder').innerHTML = successAlert;
         window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete"))?>);
       }
     });
