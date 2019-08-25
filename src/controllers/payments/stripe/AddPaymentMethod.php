@@ -68,6 +68,7 @@ include BASE_PATH . 'views/header.php';
   background-color: white;
 
   box-shadow: none;
+  border-radius: 0.25rem;
 }
 </style>
 <?php if (bool(env('IS_CLS'))) { ?>
@@ -103,21 +104,30 @@ include BASE_PATH . 'views/header.php';
       <?php unset($_SESSION['PayCardError']); unset($_SESSION['PayCardErrorMessage']); ?>
       <?php } ?>
 
-      <form action="<?=currentUrl()?>" method="post" id="payment-form" class="mb-5">
+      <form action="<?=currentUrl()?>" method="post" id="payment-form" class="mb-5 needs-validation" novalidate>
         <div class="form-group">
           <label for="cardholder-name">Cardholder name</label>
           <input type="text" class="form-control" id="cardholder-name" placeholder="C F Frost" required aria-describedby="cardholder-name-help" autocomplete="cc-name">
           <small id="cardholder-name-help" class="form-text text-muted">The name shown on your card</small>
+          <div class="invalid-feedback">
+            You must provide your full name
+          </div>
         </div>
 
         <div class="form-group">
           <label for="addr-line-1">Address line 1</label>
           <input type="text" class="form-control" id="addr-line-1" placeholder="1 Burns Green" required autocomplete="address-line1">
+          <div class="invalid-feedback">
+            You must provide your address
+          </div>
         </div>
 
         <div class="form-group">
           <label for="addr-post-code">Post Code</label>
           <input type="text" class="form-control text-uppercase" id="addr-post-code" placeholder="NE99 1AA" required autocomplete="postal-code">
+          <div class="invalid-feedback">
+            You must provide your post code
+          </div>
         </div>
 
         <div class="form-group">
@@ -127,6 +137,9 @@ include BASE_PATH . 'views/header.php';
             <option <?php if ($code == 'GB') { ?>selected<?php } ?> value="<?=htmlspecialchars($code)?>"><?=htmlspecialchars($name)?></option>
             <?php } ?>
           </select>
+          <div class="invalid-feedback">
+            You must provide your country
+          </div>
         </div>
 
         <div class="mb-3">
@@ -256,6 +269,8 @@ form.addEventListener('submit', function(event) {
 
 
 </script>
+
+<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 
 <?php
 
