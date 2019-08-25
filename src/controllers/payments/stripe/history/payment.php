@@ -250,22 +250,22 @@ $countries = getISOAlpha2Countries();
               <?=htmlspecialchars($payment->charges->data[0]->billing_details->name)?>
             </strong><br>
             <?php } ?>
-            <?php if (isset($billingAddress->line1)) { ?>
+            <?php if (isset($billingAddress->line1) && $billingAddress->line1 != null) { ?>
               <?=htmlspecialchars($billingAddress->line1)?><br>
             <?php } ?>
-            <?php if (isset($billingAddress->line2)) { ?>
+            <?php if (isset($billingAddress->line2) && $billingAddress->line2 != null) { ?>
               <?=htmlspecialchars($billingAddress->line2)?><br>
             <?php } ?>
-            <?php if (isset($billingAddress->city)) { ?>
+            <?php if (isset($billingAddress->city) && $billingAddress->city != null) { ?>
               <?=htmlspecialchars($billingAddress->city)?><br>
             <?php } ?>
-            <?php if (isset($billingAddress->postal_code)) { ?>
+            <?php if (isset($billingAddress->postal_code) && $billingAddress->postal_code != null) { ?>
               <?=htmlspecialchars($billingAddress->postal_code)?><br>
             <?php } ?>
-            <?php if (isset($billingAddress->state)) { ?>
+            <?php if (isset($billingAddress->state) && $billingAddress->state != null) { ?>
               <?=htmlspecialchars($billingAddress->state)?><br>
             <?php } ?>
-            <?php if (isset($billingAddress->country)) { ?>
+            <?php if (isset($billingAddress->country) && $billingAddress->country != null) { ?>
               <?=htmlspecialchars($countries[$billingAddress->country])?>
             <?php } ?>
           </address>

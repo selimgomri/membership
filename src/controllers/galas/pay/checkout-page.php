@@ -1,5 +1,7 @@
 <?php
 
+global $db;
+
 \Stripe\Stripe::setApiKey(env('STRIPE'));
 if (env('STRIPE_APPLE_PAY_DOMAIN')) {
   \Stripe\ApplePayDomain::create([
@@ -7,12 +9,8 @@ if (env('STRIPE_APPLE_PAY_DOMAIN')) {
   ]);
 }
 
-global $db;
-
 $expMonth = date("m");
 $expYear = date("Y");
-
-$updateEntryPayment = $db->prepare("UPDATE galaEntries SET StripePayment = ? WHERE EntryID = ?");
 
 $customer = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
 $customer->execute([$_SESSION['UserID']]);
@@ -65,98 +63,25 @@ $swimsArray = [
 $rowArray = [1, null, null, null, null, 2, 1,  null, 2, 1, null, 2, 1, null, 2, 1, null, null, 2];
 $rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 2, "Butterfly", null, 2, "Freestyle", null, 2, "Individual Medley", null, null, 2];
 
-$getEntry = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE EntryID = ? AND NOT Charged AND members.UserID = ?");
-
-$hasEntries = false;
-foreach ($_SESSION['PaidEntries'] as $entry => $details) {
-  $getEntry->execute([$entry, $_SESSION['UserID']]);
-  $entry = $getEntry->fetch(PDO::FETCH_ASSOC);
-  if ($entry != null) {
-    $hasEntries = true;
-  }
-}
-if (!$hasEntries) {
-  halt(404);
-}
-
-$entryRequestDetails = [];
-
 if (!isset($_SESSION['PaidEntries'])) {
   halt(404);
 }
 
-$total = 0;
+$intent = null;
 
-foreach ($_SESSION['PaidEntries'] as $entry => $details) {
-  $total += $details['Amount'];
-  $updateEntryPayment->execute([
-    null,
-    $entry
-  ]);
-}
-
-if ($total == 0) {
+if (isset($_SESSION['GalaPaymentIntent'])) {
+  $intent = \Stripe\PaymentIntent::retrieve($_SESSION['GalaPaymentIntent']);
+} else {
   header("Location: " . autoUrl("galas/pay-for-entries"));
   return;
 }
 
-$intent = null;
-
-if (!isset($_SESSION['GalaPaymentIntent'])) {
-  $intent = \Stripe\PaymentIntent::create([
-    'amount' => $total,
-    'currency' => 'gbp',
-    'payment_method_types' => ['card'],
-    'confirm' => false,
-    'setup_future_usage' => 'off_session',
-  ]);
-  $_SESSION['GalaPaymentIntent'] = $intent->id;
-
-  $intentCreatedAt = new DateTime('@' . $intent->created, new DateTimeZone('UTC'));
-
-  // Add this payment intent to the database and assign the id to each entry
-  $addIntent = $db->prepare("INSERT INTO stripePayments (`User`, `DateTime`, Method, Intent, Amount, Currency, Paid, AmountRefunded) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-  $addIntent->execute([
-    $_SESSION['UserID'],
-    $intentCreatedAt->format("Y-m-d H:i:s"),
-    null,
-    $intent->id,
-    $intent->amount,
-    $intent->currency,
-    0,
-    0
-  ]);
-
-  $databaseId = $db->lastInsertId();
-
-  // Assign id to each entry
-  foreach ($_SESSION['PaidEntries'] as $entry) {
-    $updateEntryPayment->execute([
-      $databaseId,
-      $entry
-    ]);
-  }
-} else {
-  $intent = \Stripe\PaymentIntent::retrieve($_SESSION['GalaPaymentIntent']);
-
-  $getId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
-  $getId->execute([
-    $intent->id
-  ]);
-  $databaseId = $getId->fetchColumn();
-
-  if ($databaseId == null) {
-    halt(404);
-  }
-
-  // Assign id to each entry
-  foreach ($_SESSION['PaidEntries'] as $entry => $entryData) {
-    $updateEntryPayment->execute([
-      $databaseId,
-      $entry
-    ]);
-  }
-}
+$getId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
+$getId->execute([
+  $intent->id
+]);
+$databaseId = $getId->fetchColumn();
+$paymentDatabaseId = $databaseId;
 
 if ($intent->status == 'succeeded') {
   header("Location: " . autoUrl("payments/card-transactions"));
@@ -180,17 +105,14 @@ if ($customerId != null) {
   );
 }
 
-if ($total != $intent->amount) {
-  $intent = \Stripe\PaymentIntent::update(
-    $_SESSION['GalaPaymentIntent'], [
-      'amount' => $total,
-    ]
-  );
-}
-
 if (!isset($_SESSION['GalaPaymentMethodID'])) {
   $_SESSION['AddNewCard'] = true;
 }
+
+$getEntriesByPI = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE StripePayment = ?");
+$getEntriesByPI->execute([
+  $paymentDatabaseId
+]);
 
 $countries = getISOAlpha2Countries();
 
@@ -249,14 +171,8 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
       <p>You'll pay for the following gala entries</p>
 
       <ul class="list-group mb-3">
-        <?php foreach ($_SESSION['PaidEntries'] as $entry => $details) {
-          $getEntry->execute([$entry, $_SESSION['UserID']]);
-          $entry = $getEntry->fetch(PDO::FETCH_ASSOC);
+        <?php while ($entry = $getEntriesByPI->fetch(PDO::FETCH_ASSOC)) {
           $notReady = !$entry['EntryProcessed'];
-          $entryRequestDetails[] = [
-            'label' => htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'][0]) . ' for ' . htmlspecialchars($entry['GalaName']),
-            'amount' => $details['Amount']
-          ];
         ?>
         <li class="list-group-item">
           <h3><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?> for <?=htmlspecialchars($entry['GalaName'])?></h3>
@@ -285,12 +201,12 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
               <?php if ($notReady) { ?>
               <p>
-                This entry will be locked from editing when you pay.
+                Once you pay for this entry, you won't be able to edit it.
               </p>
               <?php } ?>
 
               <p>
-                <strong>Fee &pound;<?=htmlspecialchars(number_format($details['Amount']/100 ,2, '.', ''))?></strong>
+                <strong>Fee &pound;<?=htmlspecialchars(number_format($entry['FeeToPay'] ,2, '.', ''))?></strong>
               </p>
             </div>
           </div>
@@ -305,7 +221,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
             </div>
             <div class="col text-right">
               <p class="mb-0">
-                <strong>&pound;<?=htmlspecialchars(number_format($total/100 ,2, '.', ''))?></strong>
+                <strong>&pound;<?=htmlspecialchars(number_format($intent->amount/100 ,2, '.', ''))?></strong>
               </p>
             </div>
           </div>
@@ -349,7 +265,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
               <noscript>
                 <p>
-                  <button type="submit" class="btn btn-success">
+                  <button type="submit" class="btn btn-success" data-methodId="<?=$methodId?>">
                     Use selected card
                   </button>
                 </p>

@@ -120,8 +120,8 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
     $html = str_replace('-unsub_link-', $unsubLink, $html);
   }
 
-  if ($emailaddress != null && $name != null) {
-    $email->setReplyTo(CLUB_EMAIL, env('CLUB_NAME'));
+  if (env('SENDGRID_API_KEY') && $emailaddress != null && $name != null) {
+    $email->setReplyTo(env('CLUB_EMAIL'), env('CLUB_NAME'));
     $email->setFrom($from['Email'], $from['Name']);
     $email->setSubject($subject);
     $email->addTo($emailaddress, $name);
@@ -1291,3 +1291,4 @@ function createOrUpdatePayout($payout, $update = false) {
 
 include BASE_PATH . 'includes/ErrorReporting.php';
 include BASE_PATH . 'includes/Colours.php';
+include BASE_PATH . 'includes/stripe/HandleCompletedGalaPayments.php';
