@@ -46,7 +46,7 @@ function stripe_handleNewPaymentIntent($intent) {
     // Payments with no customer will be ignored
     $getCustomer = $db->prepare("SELECT `User` FROM stripeCustomers WHERE CustomerID = ?");
     $getCustomer->execute([$intent->customer]);
-    $user = $getCustomer->fetch(PDO::FETCH_ASSOC);
+    $user = $getCustomer->fetchColumn();
 
     if ($user != null) {
 
@@ -54,7 +54,7 @@ function stripe_handleNewPaymentIntent($intent) {
       if (isset($intent->charges->data[0]->refunds->data)) {
         $refunds = $intent->charges->data[0]->refunds->data;
         foreach ($refunds as $refund) {
-          $refunded += $refund->amount;
+          $refunded += (int) $refund->amount;
         }
       }
 
@@ -133,10 +133,12 @@ try {
   }
 } catch(\UnexpectedValueException $e) {
   // Invalid payload
+  reportError($e);
   http_response_code(400);
   exit();
 } catch(\Stripe\Error\SignatureVerification $e) {
   // Invalid signature
+  reportError($e);
   http_response_code(400);
   exit();
 }
@@ -154,21 +156,14 @@ switch ($event->type) {
   case 'payment_intent.succeeded':
     $paymentIntent = $event->data->object;
     stripe_handlePayment($paymentIntent);
-  /*
-  case 'payment_intent.payment_failed':
-    $paymentIntent = $event->data->object;
-    stripe_handlePayment($paymentIntent);
-  */
+    break;
   case 'payment_intent.created':
     $paymentIntent = $event->data->object;
     stripe_handleNewPaymentIntent($paymentIntent);
-  /*
-  case 'payment_intent.amount_capturable_updated':
-    $paymentIntent = $event->data->object;
-    stripe_handlePayment($paymentIntent);
-  */
+    break;
   default:
     // Unexpected event type
+    reportError(['Unexpected event type' => $event->type]);
     http_response_code(400);
     exit();
 }
