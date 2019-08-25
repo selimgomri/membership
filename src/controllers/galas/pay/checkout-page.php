@@ -236,7 +236,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
               <div id="payment-request-button">
                 <!-- A Stripe Element will be inserted here. -->
               </div>
-              <div id="alert-placeholder"></div>
+              <div id="alert-placeholder" class="mt-3"></div>
             </form>
           </div>
 
