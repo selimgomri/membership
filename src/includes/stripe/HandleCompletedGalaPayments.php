@@ -35,6 +35,45 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
 
   $intent = \Stripe\PaymentIntent::retrieve($paymentIntent);
 
+  $getId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
+  $getId->execute([
+    $intent->id
+  ]);
+  $databaseId = $getId->fetchColumn();
+
+  if ($databaseId == null) {
+    halt(404);
+  }
+
+  // Find out if already processed successfully
+  // Get count from gala entries with id
+  $getCountEntries = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE StripePayment = ?");
+  $getCountEntries->execute([
+    $databaseId
+  ]);
+  $countWithId = $getCountEntries->fetchColumn();
+  // Get count from gala entries with id and paid
+  $getCountEntries = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE StripePayment = ? AND Charged = ?");
+  $getCountEntries->execute([
+    $databaseId
+  ]);
+  $countPaidAndWithId = $getCountEntries->fetchColumn();
+
+  if ($countPaidAndWithId == $countWithId) {
+    if ($onSession) {
+      $_SESSION['CompletedEntryInfo'] = $databaseId;
+      unset($_SESSION['GalaPaymentIntent']);
+      unset($_SESSION['PaidEntries']);
+      unset($_SESSION['GalaPaymentMethodID']);
+      unset($_SESSION['AddNewCard']);
+
+      $_SESSION['GalaPaymentSuccess'] = true;
+
+      header("Location: " . autoUrl("galas/pay-for-entries/success"));
+    }
+    return true;
+  }
+
   // Get the user
   $getUser = $db->prepare("SELECT `User` FROM stripePayments WHERE Intent = ?");
   $getUser->execute([
@@ -230,16 +269,6 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
         0,
         $intent->id
       ]);
-
-      $getId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
-      $getId->execute([
-        $intent->id
-      ]);
-      $databaseId = $getId->fetchColumn();
-
-      if ($databaseId == null) {
-        halt(404);
-      }
 
       $updateEntries->execute([
         true,
