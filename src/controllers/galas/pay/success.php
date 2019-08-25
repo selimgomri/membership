@@ -29,7 +29,7 @@ $rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 
 
 $getEntry = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE EntryID = ? AND members.UserID = ?");
 
-if (!isset($_SESSION['CompletedEntries']) || !$_SESSION['CompletedEntries']) {
+if (!isset($_SESSION['CompletedEntryInfo']) || !$_SESSION['CompletedEntryInfo']) {
   halt(404);
 }
 
@@ -37,10 +37,26 @@ if (!isset($_SESSION['GalaPaymentSuccess']) || !$_SESSION['GalaPaymentSuccess'])
   halt(404);
 }
 
-$total = 0;
+$getEntriesByPI = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE StripePayment = ?");
+$getEntriesByPI->execute([
+  $_SESSION['CompletedEntryInfo']
+]);
 
-foreach ($_SESSION['CompletedEntries'] as $entry => $details) {
-  $total += $details['Amount'];
+$getIntent = $db->prepare("SELECT Intent FROM stripePayments WHERE ID = ?");
+$getIntent->execute([
+  $_SESSION['CompletedEntryInfo']
+]);
+$intentId = $getIntent->fetchColumn();
+if ($intentId == null) {
+  halt(404);
+}
+
+$intent = null;
+try {
+  \Stripe\Stripe::setApiKey(env('STRIPE'));
+  $intent = \Stripe\PaymentIntent::retrieve($intentId);
+} catch (Exception $e) {
+  halt(500);
 }
 
 $pagetitle = "Payment Success";
@@ -65,10 +81,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
       <h2>Payment details</h2>
 
       <ul class="list-group mb-3">
-        <?php foreach ($_SESSION['CompletedEntries'] as $entry => $details) {
-          $getEntry->execute([$entry, $_SESSION['UserID']]);
-          $entry = $getEntry->fetch(PDO::FETCH_ASSOC);
-        ?>
+        <?php while ($entry = $getEntriesByPI->fetch(PDO::FETCH_ASSOC)) { ?>
         <li class="list-group-item">
           <h3><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?> for <?=htmlspecialchars($entry['GalaName'])?></h3>
           <div class="row align-items-center">
@@ -95,7 +108,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
               </p>
 
               <p>
-                <strong>Fee &pound;<?=htmlspecialchars(number_format($details['Amount']/100 ,2, '.', ''))?></strong>
+                <strong>Fee &pound;<?=htmlspecialchars(number_format($entry['FeeToPay'] ,2, '.', ''))?></strong>
               </p>
             </div>
           </div>
@@ -110,7 +123,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
             </div>
             <div class="col text-right">
               <p class="mb-0">
-                <strong>&pound;<?=htmlspecialchars(number_format($total/100 ,2, '.', ''))?></strong>
+                <strong>&pound;<?=htmlspecialchars(number_format($intent->amount/100 ,2, '.', ''))?></strong>
               </p>
             </div>
           </div>
@@ -130,6 +143,8 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
 <?php
 
-unset($_SESSION['CompletedEntries']);
+//unset($_SESSION['CompletedEntries']);
+//unset($_SESSION['CompletedEntryInfo']);
+//unset($_SESSION['GalaPaymentSuccess']);
 
 include BASE_PATH . "views/footer.php";

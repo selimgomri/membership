@@ -2,6 +2,88 @@
 
 \Stripe\Stripe::setApiKey(env('STRIPE'));
 
+function stripe_handlePayment($pi) {
+  global $db;
+
+  // Check if there are gala entries for this payment intent
+  $getIntentDbId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
+  $getIntentDbId->execute([
+    $pi->id
+  ]);
+  $databaseId = $getIntentDbId->fetchColumn();
+  if ($databaseId == null) {
+    return;
+  }
+
+  $getGalaCount = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE StripePayment = ?");
+  $getGalaCount->execute([
+    $databaseId
+  ]);
+  if ($getGalaCount->fetchColumn() > 0) {
+    // This payment was for galas so run the code for a successful gala payment
+    handleCompletedGalaPayments($pi->id);
+  } else {
+    // Run code for any other type of payment
+    // Such types do not exist yet but this is passive provision
+  }
+
+}
+
+function stripe_handleNewPaymentIntent($intent) {
+  global $db;
+
+  $intentCreatedAt = new DateTime('@' . $intent->created, new DateTimeZone('UTC'));
+
+  // Check if intent already exists
+  $checkIntentCount = $db->prepare("SELECT COUNT(*) FROM stripePayments WHERE Intent = ?");
+  $checkIntentCount->execute([
+    $intent->id
+  ]);
+
+  $databaseId = null;
+  if ($checkIntentCount->fetchColumn() == 0) {
+    // Get the customer
+    // Payments with no customer will be ignored
+    $getCustomer = $db->prepare("SELECT `User` FROM stripeCustomers WHERE CustomerID = ?");
+    $getCustomer->execute([$intent->customer]);
+    $user = $getCustomer->fetchColumn();
+
+    if ($user != null) {
+
+      $refunded = 0;
+      if (isset($intent->charges->data[0]->refunds->data)) {
+        $refunds = $intent->charges->data[0]->refunds->data;
+        foreach ($refunds as $refund) {
+          $refunded += (int) $refund->amount;
+        }
+      }
+
+      // Add this payment intent to the database and assign the id to each entry
+      $addIntent = $db->prepare("INSERT INTO stripePayments (`User`, `DateTime`, Method, Intent, Amount, Currency, Paid, AmountRefunded) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+      $addIntent->execute([
+        $user,
+        $intentCreatedAt->format("Y-m-d H:i:s"),
+        null,
+        $intent->id,
+        $intent->amount,
+        $intent->currency,
+        0,
+        $refunded
+      ]);
+
+      $databaseId = $db->lastInsertId();
+
+    }
+  } else {
+    $getIntentDbId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
+    $getIntentDbId->execute([
+      $intent->id
+    ]);
+    $databaseId = $getIntentDbId->fetchColumn();
+  }
+  $paymentDatabaseId = $databaseId;
+}
+
 function stripe_handlePaymentMethodUpdate($pm) {
   global $db;
 
@@ -51,10 +133,12 @@ try {
   }
 } catch(\UnexpectedValueException $e) {
   // Invalid payload
+  reportError($e);
   http_response_code(400);
   exit();
 } catch(\Stripe\Error\SignatureVerification $e) {
   // Invalid signature
+  reportError($e);
   http_response_code(400);
   exit();
 }
@@ -69,8 +153,17 @@ switch ($event->type) {
     $paymentMethod = $event->data->object; // contains a \Stripe\PaymentMethod
     stripe_handlePaymentMethodUpdate($paymentMethod);
     break;
+  case 'payment_intent.succeeded':
+    $paymentIntent = $event->data->object;
+    stripe_handlePayment($paymentIntent);
+    break;
+  case 'payment_intent.created':
+    $paymentIntent = $event->data->object;
+    stripe_handleNewPaymentIntent($paymentIntent);
+    break;
   default:
     // Unexpected event type
+    reportError(['Unexpected event type' => $event->type]);
     http_response_code(400);
     exit();
 }

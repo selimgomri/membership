@@ -13,35 +13,6 @@ if (env('STRIPE_APPLE_PAY_DOMAIN')) {
 
 global $db;
 
-$expMonth = date("m");
-$expYear = date("Y");
-
-$customer = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
-$customer->execute([$_SESSION['UserID']]);
-$customerId = $customer->fetchColumn();
-
-$numberOfCards = $db->prepare("SELECT COUNT(*) `count`, stripePayMethods.ID FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND Reusable = ? AND (ExpYear > ? OR (ExpYear = ? AND ExpMonth >= ?))");
-$numberOfCards->execute([$_SESSION['UserID'], 1, $expYear, $expYear, $expMonth]);
-$countCards = $numberOfCards->fetch(PDO::FETCH_ASSOC);
-
-$getCards = $db->prepare("SELECT stripePayMethods.ID, `MethodID`, stripePayMethods.Customer, stripePayMethods.Name, stripePayMethods.Last4, stripePayMethods.Brand FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND Reusable = ? AND (ExpYear > ? OR (ExpYear = ? AND ExpMonth >= ?)) ORDER BY `Name` ASC");
-$getCards->execute([$_SESSION['UserID'], 1, $expYear, $expYear, $expMonth]);
-$cards = $getCards->fetchAll(PDO::FETCH_ASSOC);
-
-$methodId = $customerID = null;
-
-$selected = null;
-if (isset($_SESSION['GalaPaymentMethodID'])) {
-  $selected = $_SESSION['GalaPaymentMethodID'];
-
-  foreach ($cards as $card) {
-    if ($card['ID'] == $_SESSION['GalaPaymentMethodID']) {
-      $methodId = $card['MethodID'];
-      $customerID = $card['Customer'];
-    }
-  }
-}
-
 $getEntry = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE EntryID = ? AND NOT Charged AND members.UserID = ?");
 
 $hasEntries = false;
@@ -62,32 +33,10 @@ if (!isset($_SESSION['PaidEntries'])) {
   halt(404);
 }
 
-$total = 0;
-
-foreach ($_SESSION['PaidEntries'] as $entry => $details) {
-  $total += $details['Amount'];
-}
-
-if ($total == 0) {
-  halt(404);
-}
-
-$entryRequestDetails[] = [
-  'label' => 'Subtotal',
-  'amount' => $total
-];
-
 $intent = null;
 
 if (!isset($_SESSION['GalaPaymentIntent'])) {
-  $intent = \Stripe\PaymentIntent::create([
-    'amount' => $total,
-    'currency' => 'gbp',
-    'payment_method_types' => ['card'],
-    'confirm' => false,
-    'setup_future_usage' => 'off_session',
-  ]);
-  $_SESSION['GalaPaymentIntent'] = $intent->id;
+  halt(404);
 } else {
   $intent = \Stripe\PaymentIntent::retrieve($_SESSION['GalaPaymentIntent']);
 }
@@ -96,34 +45,26 @@ if ($intent->status == 'succeeded') {
   halt(404);
 }
 
-if ($methodId != null && $customerID != null) {
-  $intent = \Stripe\PaymentIntent::update(
-    $_SESSION['GalaPaymentIntent'], [
-      'payment_method' => $methodId,
-      'customer' => $customerID,
-    ]
-  );
-}
-
-if ($customerId != null) {
-  $intent = \Stripe\PaymentIntent::update(
-    $_SESSION['GalaPaymentIntent'], [
-      'customer' => $customerId,
-    ]
-  );
-}
-
-if ($total != $intent->amount) {
-  $intent = \Stripe\PaymentIntent::update(
-    $_SESSION['GalaPaymentIntent'], [
-      'amount' => $total,
-    ]
-  );
-}
+$entryRequestDetails[] = [
+  'label' => 'Subtotal',
+  'amount' => $intent->amount
+];
 
 header("content-type: application/x-javascript");
 
 ?>
+
+function disableButtons() {
+  document.querySelectorAll('button').forEach(elem => {
+    elem.disabled = true;
+  });
+}
+
+function enableButtons() {
+  document.querySelectorAll('button').forEach(elem => {
+    elem.disabled = false;
+  });
+}
 
 var stripe = Stripe(<?=json_encode(env('STRIPE_PUBLISHABLE'))?>);
 var cardButton = document.getElementById('new-card-button');
@@ -198,6 +139,8 @@ form.addEventListener('submit', function(event) {
       // Display error.message in your UI.
       document.getElementById('new-card-errors').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
     } else {
+      // Disable buttons
+      disableButtons();
       // The payment has succeeded. Display a success message.
       window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
     }
@@ -255,8 +198,9 @@ paymentRequest.on('paymentmethod', function(ev) {
         clientSecret
       ).then(function(result) {
         if (!result.error) {
-          console.log(result.paymentIntent);
           if (result.paymentIntent.status == 'succeeded') {
+            // Disable buttons
+            disableButtons();
             window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
           } else {
             stripe.handleCardPayment(clientSecret).then(function(result) {
@@ -265,6 +209,8 @@ paymentRequest.on('paymentmethod', function(ev) {
                 document.getElementById('alert-placeholder').innerHTML = '<div class="alert alert-danger mt-3"><p class="mb-0"><strong>An error occurred trying to take your payment</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
               } else {
                 // The payment has succeeded.
+                // Disable buttons
+                disableButtons();
                 window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
               }
             });
@@ -280,7 +226,7 @@ if (savedCardButton != null) {
     stripe.handleCardPayment(
       clientSecret,
       {
-        payment_method: <?=json_encode($methodId)?>,
+        payment_method: savedCardButton.dataset.methodId,
       }
     ).then(function(result) {
       if (result.error) {
