@@ -239,7 +239,7 @@ if (savedCardButton != null) {
       } else {
         // The payment has succeeded. Display a success message.
         disableButtons();
-        document.getElementById('alert-placeholder').innerHTML = successAlert;
+        document.getElementById('saved-card-errors').innerHTML = successAlert;
         window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete"))?>);
       }
     });
