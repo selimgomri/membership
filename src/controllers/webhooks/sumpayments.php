@@ -109,14 +109,28 @@ try {
           if (!bool($swimmerRow['ClubPays']) && bool(env('IS_CLS'))) {
             // Calculate discounts if required.
             $swimmerDiscount = 0;
+            $discountPercent = '0';
             if ($numMembers == 3) {
               // 20% discount applies
               $swimmerDiscount = (int) $fee*0.20;
+              $discountPercent = '20';
             } else if ($numMembers > 3) {
               // 40% discount applies
               $swimmerDiscount = (int) $fee*0.40;
+              $discountPercent = '40';
             }
-            $discount += $swimmerDiscount;
+
+            if ($swimmerDiscount > 0) {
+              // Apply credit to account for discount
+              $addCreditToPaymentsPending->execute([
+                $date,
+                $user,
+                $swimmerRow['MForename'] . " " . $swimmerRow['MSurname'] . ' - Multi swimmer squad fee discount (' . $discountPercent . '%)',
+                $swimmerDiscount,
+                null
+              ]);
+            }
+            //$discount += $swimmerDiscount;
           }
 
           if (bool($swimmerRow['ClubPays']))  {
@@ -131,6 +145,7 @@ try {
           }
         }
 
+        /*
         if (bool(env('IS_CLS')) && $discount > 0) {
           // Apply credit to account for discount
           $addCreditToPaymentsPending->execute([
@@ -141,6 +156,7 @@ try {
             null
           ]);
         }
+        */
       }
 
       // Now calculate extra fees payable
