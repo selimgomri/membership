@@ -55,7 +55,8 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
   // Get count from gala entries with id and paid
   $getCountEntries = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE StripePayment = ? AND Charged = ?");
   $getCountEntries->execute([
-    $databaseId
+    $databaseId,
+    true
   ]);
   $countPaidAndWithId = $getCountEntries->fetchColumn();
 
