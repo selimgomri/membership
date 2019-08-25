@@ -3,6 +3,11 @@
 ignore_user_abort(true);
 set_time_limit(0);
 
+$emailPrefix = '';
+if (!bool(env('IS_CLS'))) {
+	$emailPrefix = mb_strtolower(trim(env('ASA_CLUB_CODE'))) . '-';
+}
+
 $club_address = "";
 $club = json_decode(CLUB_JSON);
 for ($i = 0; $i < sizeof($club->ClubAddress); $i++) {
@@ -39,7 +44,7 @@ while ($currentMessage = $getPendingGroupMail->fetch(PDO::FETCH_ASSOC)) {
     $from = new \SendGrid\Mail\From("noreply@" . env('EMAIL_DOMAIN'), env('CLUB_NAME'));
   }
   if ($jsonData->NamedSender->Email != null && $jsonData->NamedSender->Name) {
-    $from = new \SendGrid\Mail\From("noreply@" . env('EMAIL_DOMAIN'), $jsonData->NamedSender->Name);
+    $from = new \SendGrid\Mail\From($emailPrefix . "noreply@" . env('EMAIL_DOMAIN'), $jsonData->NamedSender->Name);
   }
   $tos = [];
   while ($user = $getUsersForEmail->fetch(PDO::FETCH_ASSOC)) {
