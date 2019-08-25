@@ -2,8 +2,10 @@
 $pagetitle = "Notify Composer";
 $use_white_background = true;
 
-include BASE_PATH . "views/header.php";
-include BASE_PATH . "views/notifyMenu.php";
+$emailPrefix = '';
+if (!bool(env('IS_CLS'))) {
+	$emailPrefix = mb_strtolower(trim(env('ASA_CLUB_CODE'))) . '-';
+}
 
 global $db;
 
@@ -30,10 +32,13 @@ for ($i = 0; $i < sizeof($senderNames); $i++) {
 }
 
 if (!bool(env('IS_CLS'))) {
-  $fromEmail .= '.' . urlencode(strtolower(str_replace(' ', '', CLUB_CODE)));
+  $fromEmail .= '.' . urlencode(mb_strtolower(str_replace(' ', '', env('CLUB_CODE'))));
 }
 
-$fromEmail .= '@' . EMAIL_DOMAIN;
+$fromEmail .= '@' . env('EMAIL_DOMAIN');
+
+include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/notifyMenu.php";
 
  ?>
 
@@ -101,8 +106,8 @@ $fromEmail .= '@' . EMAIL_DOMAIN;
     <div class="form-group">
 			<label for="from">From</label>
       <select class="custom-select" name="from" id="from">
-        <option value="current-user"><?=htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'] . " <noreply@" . EMAIL_DOMAIN . ">  ")?></option>
-        <option value="club-sending-account" selected><?=htmlspecialchars(CLUB_NAME . " <noreply@" . EMAIL_DOMAIN . ">")?></option>
+        <option value="current-user"><?=htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'] . " <" . $emailPrefix . "noreply@" . env('EMAIL_DOMAIN') . ">  ")?></option>
+        <option value="club-sending-account" selected><?=htmlspecialchars(env('CLUB_NAME') . " <" . $emailPrefix . "noreply@" . env('EMAIL_DOMAIN') . ">")?></option>
       </select>
 		</div>
 
