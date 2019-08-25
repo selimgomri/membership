@@ -35,6 +35,34 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
 
   $intent = \Stripe\PaymentIntent::retrieve($paymentIntent);
 
+  $getId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
+  $getId->execute([
+    $intent->id
+  ]);
+  $databaseId = $getId->fetchColumn();
+
+  if ($databaseId == null) {
+    halt(404);
+  }
+
+  // If on session, go to success page
+  // Webhook handles fulfillment
+  if ($onSession && $intent->status == 'succeeded') {
+    $_SESSION['CompletedEntryInfo'] = $databaseId;
+    unset($_SESSION['GalaPaymentIntent']);
+    unset($_SESSION['PaidEntries']);
+    unset($_SESSION['GalaPaymentMethodID']);
+    unset($_SESSION['AddNewCard']);
+
+    $_SESSION['GalaPaymentSuccess'] = true;
+
+    header("Location: " . autoUrl("galas/pay-for-entries/success"));
+    return true;
+  } else if ($onSession && $intent->status != 'succeeded') {
+    header("Location: " . autoUrl("galas/pay-for-entries/checkout"));
+    return false;
+  }
+
   // Get the user
   $getUser = $db->prepare("SELECT `User` FROM stripePayments WHERE Intent = ?");
   $getUser->execute([
@@ -231,16 +259,6 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
         $intent->id
       ]);
 
-      $getId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
-      $getId->execute([
-        $intent->id
-      ]);
-      $databaseId = $getId->fetchColumn();
-
-      if ($databaseId == null) {
-        halt(404);
-      }
-
       $updateEntries->execute([
         true,
         $databaseId
@@ -284,12 +302,13 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
       }
       
       if ($pm != null && isset($pm->card)) {
-        $message .= '<p>Paid with ' . getCardBrand($pm->card->brand) . ' ' . $pm->card->funding . ' &middot;&middot;&middot;&middot; ' . $pm->card->last4 . '.</p>';
+        $message .= '<p>' . getCardBrand($pm->card->brand) . ' ' . $pm->card->funding . ' card &middot;&middot;&middot;&middot; ' . $pm->card->last4 . '.</p>';
       }
       $message .= '<p>Total paid £' . number_format($intent->amount/100, 2) . '. Payment reference #' . $databaseId . '.</p>';
 
       $emailDb = $db->prepare("INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, 1, 'Payments')");
 
+      $email = $name = '';
       if (isset($intent->charges->data[0]->billing_details->email)) {
         $email = $intent->charges->data[0]->billing_details->email;
         $name = $user['Forename'] . ' ' . $user['Surname'];
@@ -297,35 +316,31 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
           $name = $intent->charges->data[0]->billing_details->name;
         }
         $message .= '<p>This receipt has been sent to the email address indicated by the payment service you used, which may not be your club account email address.</p>';
-        $sendingEmail = null;
-        if (bool(env('IS_CLS'))) {
-          $sendingEmail = "payments@" . env('EMAIL_DOMAIN');
-        } else {
-          $sendingEmail = mb_strtolower(trim(env('ASA_CLUB_CODE'))) . "-payments@" . env('EMAIL_DOMAIN');
-        }
-        notifySend(null, 'Payment Receipt', $message, $name, $email, [
-          "Email" => $sendingEmail,
-          "Name" => env('CLUB_NAME'),
-          "Unsub" => [
-            "Allowed" => false,
-            "User" => $userId,
-            "List" =>	"Payments"
-          ]
-        ]);
-        $emailDb->execute([
-          $userId,
-          'Sent',
-          'Payment Receipt',
-          $message
-        ]);
       } else {
-        $emailDb->execute([
-          $userId,
-          'Queued',
-          'Payment Receipt',
-          $message
-        ]);
+        $email = $user['EmailAddress'];
+        $name = $user['Forename'] . ' ' . $user['Surname'];
       }
+      $sendingEmail = null;
+      if (bool(env('IS_CLS'))) {
+        $sendingEmail = "payments@" . env('EMAIL_DOMAIN');
+      } else {
+        $sendingEmail = mb_strtolower(trim(env('ASA_CLUB_CODE'))) . "-payments@" . env('EMAIL_DOMAIN');
+      }
+      notifySend(null, 'Payment Receipt', $message, $name, $email, [
+        "Email" => $sendingEmail,
+        "Name" => env('CLUB_NAME'),
+        "Unsub" => [
+          "Allowed" => false,
+          "User" => $userId,
+          "List" =>	"Payments"
+        ]
+      ]);
+      $emailDb->execute([
+        $userId,
+        'Sent',
+        'Payment Receipt',
+        $message
+      ]);
 
       $db->commit();
 
