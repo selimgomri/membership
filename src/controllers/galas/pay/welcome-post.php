@@ -60,12 +60,17 @@ if ($entry != null) {
         $allGood = true;
       } else {
         if (isset($_POST[$entry['EntryID'] . '-pay']) && $_POST[$entry['EntryID'] . '-pay']) {
-          $fee = (int) ($entry['FeeToPay']*100);
-          $allGood = true;
-          $updateTime->execute([
-            number_format($entry['FeeToPay'], 2, '.', ''),
-            $entry['EntryID']
-          ]);
+          if (isset($_POST[$entry['EntryID'] . '-amount']) && $_POST[$entry['EntryID'] . '-amount']) {
+            $fee = (int) ($_POST[$entry['EntryID'] . '-amount']*100);
+            $allGood = true;
+            $updateTime->execute([
+              number_format($_POST[$entry['EntryID'] . '-amount'], 2, '.', ''),
+              $entry['EntryID']
+            ]);
+          } else {
+            $fee = (int) ($entry['FeeToPay']*100);
+            $allGood = true;
+          }
         }
       }
 

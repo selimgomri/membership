@@ -265,7 +265,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
               <noscript>
                 <p>
-                  <button type="submit" class="btn btn-success" data-methodId="<?=$methodId?>">
+                  <button type="submit" class="btn btn-success btn-block pm-can-disable" data-methodId="<?=$methodId?>">
                     Use selected card
                   </button>
                 </p>
@@ -276,7 +276,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
               <div id="saved-card-errors" role="alert"></div>
 
               <p class="mb-0">
-                <button id="saved-card-button" class="btn btn-success btn-block" type="button" data-secret="<?= $intent->client_secret ?>">
+                <button id="saved-card-button" class="btn btn-success btn-block pm-can-disable" type="button" data-secret="<?= $intent->client_secret ?>">
                   Pay now
                 </button>
               </p>
@@ -356,7 +356,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
               <div id="new-card-errors" role="alert"></div>
 
               <p class="mb-0">
-                <button id="new-card-button" class="btn btn-success btn-block" type="submit" data-secret="<?= $intent->client_secret ?>">
+                <button id="new-card-button" class="btn btn-success btn-block pm-can-disable" type="submit" data-secret="<?= $intent->client_secret ?>">
                   Pay now
                 </button>
               </p>
