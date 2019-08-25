@@ -302,12 +302,13 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
       }
       
       if ($pm != null && isset($pm->card)) {
-        $message .= '<p>Paid with ' . getCardBrand($pm->card->brand) . ' ' . $pm->card->funding . ' &middot;&middot;&middot;&middot; ' . $pm->card->last4 . '.</p>';
+        $message .= '<p>' . getCardBrand($pm->card->brand) . ' ' . $pm->card->funding . ' card &middot;&middot;&middot;&middot; ' . $pm->card->last4 . '.</p>';
       }
       $message .= '<p>Total paid £' . number_format($intent->amount/100, 2) . '. Payment reference #' . $databaseId . '.</p>';
 
       $emailDb = $db->prepare("INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, 1, 'Payments')");
 
+      $email = $name = '';
       if (isset($intent->charges->data[0]->billing_details->email)) {
         $email = $intent->charges->data[0]->billing_details->email;
         $name = $user['Forename'] . ' ' . $user['Surname'];
@@ -315,35 +316,31 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
           $name = $intent->charges->data[0]->billing_details->name;
         }
         $message .= '<p>This receipt has been sent to the email address indicated by the payment service you used, which may not be your club account email address.</p>';
-        $sendingEmail = null;
-        if (bool(env('IS_CLS'))) {
-          $sendingEmail = "payments@" . env('EMAIL_DOMAIN');
-        } else {
-          $sendingEmail = mb_strtolower(trim(env('ASA_CLUB_CODE'))) . "-payments@" . env('EMAIL_DOMAIN');
-        }
-        notifySend(null, 'Payment Receipt', $message, $name, $email, [
-          "Email" => $sendingEmail,
-          "Name" => env('CLUB_NAME'),
-          "Unsub" => [
-            "Allowed" => false,
-            "User" => $userId,
-            "List" =>	"Payments"
-          ]
-        ]);
-        $emailDb->execute([
-          $userId,
-          'Sent',
-          'Payment Receipt',
-          $message
-        ]);
       } else {
-        $emailDb->execute([
-          $userId,
-          'Queued',
-          'Payment Receipt',
-          $message
-        ]);
+        $email = $user['EmailAddress'];
+        $name = $user['Forename'] . ' ' . $user['Surname'];
       }
+      $sendingEmail = null;
+      if (bool(env('IS_CLS'))) {
+        $sendingEmail = "payments@" . env('EMAIL_DOMAIN');
+      } else {
+        $sendingEmail = mb_strtolower(trim(env('ASA_CLUB_CODE'))) . "-payments@" . env('EMAIL_DOMAIN');
+      }
+      notifySend(null, 'Payment Receipt', $message, $name, $email, [
+        "Email" => $sendingEmail,
+        "Name" => env('CLUB_NAME'),
+        "Unsub" => [
+          "Allowed" => false,
+          "User" => $userId,
+          "List" =>	"Payments"
+        ]
+      ]);
+      $emailDb->execute([
+        $userId,
+        'Sent',
+        'Payment Receipt',
+        $message
+      ]);
 
       $db->commit();
 
