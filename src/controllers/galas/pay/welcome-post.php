@@ -92,7 +92,35 @@ if (sizeof($payingEntries) > 0) {
 
   $updateEntryPayment = $db->prepare("UPDATE galaEntries SET StripePayment = ? WHERE EntryID = ?");
 
-  if (!isset($_SESSION['GalaPaymentIntent'])) {
+  if (isset($_SESSION['GalaPaymentIntent']) && \Stripe\PaymentIntent::retrieve($_SESSION['GalaPaymentIntent'])->status != 'succeeded') {
+    $intent = \Stripe\PaymentIntent::retrieve($_SESSION['GalaPaymentIntent']);
+  
+    $getId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
+    $getId->execute([
+      $intent->id
+    ]);
+    $databaseId = $getId->fetchColumn();
+  
+    $paymentDatabaseId = $databaseId;
+  
+    if ($databaseId == null) {
+      halt(404);
+    }
+
+    $setPaymentToNull = $db->prepare("UPDATE galaEntries SET StripePayment = ? WHERE StripePayment = ?");
+    $setPaymentToNull->execute([
+      null,
+      $paymentDatabaseId
+    ]);
+  
+    // Assign id to each entry
+    foreach ($payingEntries as $entry => $entryData) {
+      $updateEntryPayment->execute([
+        $databaseId,
+        $entry
+      ]);
+    }
+  } else {
     $intent = \Stripe\PaymentIntent::create([
       'amount' => $total,
       'currency' => 'gbp',
@@ -137,34 +165,6 @@ if (sizeof($payingEntries) > 0) {
   
     // Assign id to each entry
     foreach ($payingEntries as $entry => $details) {
-      $updateEntryPayment->execute([
-        $databaseId,
-        $entry
-      ]);
-    }
-  } else {
-    $intent = \Stripe\PaymentIntent::retrieve($_SESSION['GalaPaymentIntent']);
-  
-    $getId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
-    $getId->execute([
-      $intent->id
-    ]);
-    $databaseId = $getId->fetchColumn();
-  
-    $paymentDatabaseId = $databaseId;
-  
-    if ($databaseId == null) {
-      halt(404);
-    }
-
-    $setPaymentToNull = $db->prepare("UPDATE galaEntries SET StripePayment = ? WHERE StripePayment = ?");
-    $setPaymentToNull->execute([
-      null,
-      $paymentDatabaseId
-    ]);
-  
-    // Assign id to each entry
-    foreach ($payingEntries as $entry => $entryData) {
       $updateEntryPayment->execute([
         $databaseId,
         $entry
