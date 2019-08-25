@@ -45,34 +45,22 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
     halt(404);
   }
 
-  // Find out if already processed successfully
-  // Get count from gala entries with id
-  $getCountEntries = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE StripePayment = ?");
-  $getCountEntries->execute([
-    $databaseId
-  ]);
-  $countWithId = $getCountEntries->fetchColumn();
-  // Get count from gala entries with id and paid
-  $getCountEntries = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE StripePayment = ? AND Charged = ?");
-  $getCountEntries->execute([
-    $databaseId,
-    true
-  ]);
-  $countPaidAndWithId = $getCountEntries->fetchColumn();
+  // If on session, go to success page
+  // Webhook handles fulfillment
+  if ($onSession && $intent->status == 'succeeded') {
+    $_SESSION['CompletedEntryInfo'] = $databaseId;
+    unset($_SESSION['GalaPaymentIntent']);
+    unset($_SESSION['PaidEntries']);
+    unset($_SESSION['GalaPaymentMethodID']);
+    unset($_SESSION['AddNewCard']);
 
-  if ($countPaidAndWithId == $countWithId) {
-    if ($onSession) {
-      $_SESSION['CompletedEntryInfo'] = $databaseId;
-      unset($_SESSION['GalaPaymentIntent']);
-      unset($_SESSION['PaidEntries']);
-      unset($_SESSION['GalaPaymentMethodID']);
-      unset($_SESSION['AddNewCard']);
+    $_SESSION['GalaPaymentSuccess'] = true;
 
-      $_SESSION['GalaPaymentSuccess'] = true;
-
-      header("Location: " . autoUrl("galas/pay-for-entries/success"));
-    }
+    header("Location: " . autoUrl("galas/pay-for-entries/success"));
     return true;
+  } else if ($onSession && $intent->status != 'succeeded') {
+    header("Location: " . autoUrl("galas/pay-for-entries/checkout"));
+    return false;
   }
 
   // Get the user
