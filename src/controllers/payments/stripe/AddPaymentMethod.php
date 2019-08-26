@@ -70,6 +70,7 @@ include BASE_PATH . 'views/header.php';
   box-shadow: none;
   border-radius: 0.25rem;
 }
+
 </style>
 <?php if (bool(env('IS_CLS'))) { ?>
 <style>
@@ -142,17 +143,43 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="mb-3">
-          <label for="card-element">
-            Credit or debit card
-          </label>
-          <div id="card-element" class="card-element">
-            <!-- A Stripe Element will be inserted here. -->
-          </div>
-        </div>
-
         <!-- Used to display form errors. -->
         <div id="card-errors" role="alert"></div>
+
+        <!-- Multiple Part Element -->
+        <div class="form-group">
+          <label for="card-number-element">
+            Card number
+          </label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="card-brand-element"><i class="fa fa-fw fa-credit-card" aria-hidden="true"></i></span>
+            </div>
+            <span id="card-number-element" class="form-control">
+          </div>
+          <div id="card-number-element-errors" class="text-danger mt-1"></div>
+        </div>
+
+        <div class="form-row">
+          <div class="col">
+            <div class="form-group">
+              <label for="card-expiry-element">
+                Expires
+              </label>
+              <span id="card-expiry-element" class="form-control"></span>
+              <div id="card-expiry-element-errors" class="text-danger mt-1"></div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="card-cvc-element">
+                CVC
+              </label>
+              <span id="card-cvc-element" class="form-control"></span>
+              <div id="card-cvc-element-errors" class="text-danger mt-1"></div>
+            </div>
+          </div>
+        </div>
 
         <p>
           <button id="card-button" class="btn btn-success" data-secret="<?= $setupIntent->client_secret ?>">Add payment card</button>
@@ -169,6 +196,19 @@ include BASE_PATH . 'views/header.php';
 </div>
 
 <script>
+
+function setCardBrandIcon(brand) {
+  var content = '<i class="fa fa-fw fa-credit-card" aria-hidden="true"></i>';
+  if (brand == 'visa') {
+    content = '<i class="fa fa-cc-visa" aria-hidden="true"></i>';
+  } else if (brand == 'mastercard') {
+    content = '<i class="fa fa-cc-mastercard" aria-hidden="true"></i>';
+} else if (brand == 'amex') {
+    content = '<i class="fa fa-cc-amex" aria-hidden="true"></i>';
+  }
+  document.getElementById('card-brand-element').innerHTML = content;
+}
+
 var stripe = Stripe('<?=htmlspecialchars(env('STRIPE_PUBLISHABLE'))?>');
 
 var elements = stripe.elements({
@@ -179,7 +219,27 @@ var elements = stripe.elements({
   ]
 });
 
+var style = {
+  base: {
+    iconColor: '#ced4da',
+    lineHeight: '1.5',
+    height: '1.5rem',
+    color: '#212529',
+    fontWeight: 400,
+    fontFamily: 'Open Sans, Segoe UI, sans-serif',
+    fontSize: '16px',
+    fontSmoothing: 'antialiased',
+    '::placeholder': {
+      color: '#868e96',
+    },
+  },
+  invalid: {
+    color: '#212529',
+  },
+}
+
 // Create an instance of the card Element.
+/*
 var cardElement = elements.create('card', {
   iconStyle: 'solid',
   hidePostalCode: true,
@@ -204,25 +264,51 @@ var cardElement = elements.create('card', {
     },
   },
 });
+*/
 
 // Add an instance of the card Element into the `card-element` <div>.
-cardElement.mount('#card-element');
+//cardElement.mount('#card-element');
 
-cardElement.addEventListener('change', function(event) {
-  var displayError = document.getElementById('card-errors');
+var cardNumberElement = elements.create('cardNumber', {
+  style: style
+});
+cardNumberElement.mount('#card-number-element');
+var cardExpiryElement = elements.create('cardExpiry', {
+  style: style
+});
+cardExpiryElement.mount('#card-expiry-element');
+var cardCvcElement = elements.create('cardCvc', {
+  style: style
+});
+cardCvcElement.mount('#card-cvc-element');
+
+function cardChangeEvent(event, elementId) {
+  var displayError = document.getElementById(elementId);
   if (event.error) {
-    displayError.innerHTML = '<div class="alert alert-danger" id="card-errors-message"></div>'
-    document.getElementById('card-errors-message').textContent = event.error.message;
+    displayError.textContent = event.error.message;
   } else {
-    displayError.innerHTML = '';
+    displayError.textContent = '';
   }
+}
+
+cardNumberElement.addEventListener('change', function(event) {
+  cardChangeEvent(event, 'card-number-element-errors');
+  if (event.brand) {
+  	setCardBrandIcon(event.brand);
+  }
+});
+cardExpiryElement.addEventListener('change', function(event) {
+  cardChangeEvent(event, 'card-expiry-element-errors');
+});
+cardCvcElement.addEventListener('change', function(event) {
+  cardChangeEvent(event, 'card-cvc-element-errors');
 });
 
 var cardholderName = document.getElementById('cardholder-name');
 var cardholderAddress1 = document.getElementById('addr-line-1');
 var cardholderZip = document.getElementById('addr-post-code');
 cardholderZip.addEventListener('change', function(event) {
-  cardElement.update({value: {postalCode: event.target.value.toUpperCase()}});
+  //cardNumberElement.update({value: {postalCode: event.target.value.toUpperCase()}});
 });
 var cardholderCountry = document.getElementById('addr-country');
 var cardButton = document.getElementById('card-button');
@@ -232,13 +318,13 @@ var form = document.getElementById('payment-form');
 form.addEventListener('submit', function(event) {
   event.preventDefault();
   stripe.handleCardSetup(
-    clientSecret, cardElement, {
+    clientSecret, cardNumberElement, {
       payment_method_data: {
         billing_details: {
           name: cardholderName.value,
           address: {
             line1: cardholderAddress1.value,
-            zip: cardholderZip.postal_code,
+            postal_code: cardholderZip.value,
             country: cardholderCountry.value,
           },
         }

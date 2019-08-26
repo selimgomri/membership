@@ -1850,6 +1850,10 @@ pre code {
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(189, 0, 0, 0.25);
 }
+.form-control:-ms-input-placeholder {
+  color: #868e96;
+  opacity: 1;
+}
 .form-control::placeholder {
   color: #868e96;
   opacity: 1;
@@ -2266,7 +2270,10 @@ textarea.form-control {
   color: #212529;
   text-align: center;
   vertical-align: middle;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   background-color: transparent;
   border: 1px solid transparent;
   padding: 0.375rem 0.75rem;
@@ -3374,7 +3381,9 @@ input[type=button].btn-block {
   background-color: #fff;
   border: 1px solid #ced4da;
   border-radius: 0;
-  appearance: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
 .custom-select:focus {
   border-color: #ff3e3e;
@@ -3479,7 +3488,9 @@ input[type=button].btn-block {
   height: calc(1rem + 0.4rem);
   padding: 0;
   background-color: transparent;
-  appearance: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
 .custom-range:focus {
   outline: none;
@@ -3503,7 +3514,8 @@ input[type=button].btn-block {
   background-color: #bd0000;
   border: 0;
   transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  appearance: none;
+  -webkit-appearance: none;
+          appearance: none;
 }
 @media screen and (prefers-reduced-motion: reduce) {
   .custom-range::-webkit-slider-thumb {
@@ -3527,7 +3539,8 @@ input[type=button].btn-block {
   background-color: #bd0000;
   border: 0;
   transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  appearance: none;
+  -moz-appearance: none;
+       appearance: none;
 }
 @media screen and (prefers-reduced-motion: reduce) {
   .custom-range::-moz-range-thumb {
@@ -4726,7 +4739,9 @@ button.close {
   padding: 0;
   background-color: transparent;
   border: 0;
-  appearance: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
 
 a.close.disabled {
@@ -5805,7 +5820,8 @@ button.bg-dark:focus {
 }
 
 .align-self-auto {
-  align-self: auto !important;
+  -ms-grid-row-align: auto !important;
+      align-self: auto !important;
 }
 
 .align-self-start {
@@ -5817,7 +5833,8 @@ button.bg-dark:focus {
 }
 
 .align-self-center {
-  align-self: center !important;
+  -ms-grid-row-align: center !important;
+      align-self: center !important;
 }
 
 .align-self-baseline {
@@ -5825,7 +5842,8 @@ button.bg-dark:focus {
 }
 
 .align-self-stretch {
-  align-self: stretch !important;
+  -ms-grid-row-align: stretch !important;
+      align-self: stretch !important;
 }
 
 @media (min-width: 576px) {
@@ -5942,7 +5960,8 @@ button.bg-dark:focus {
   }
 
   .align-self-sm-auto {
-    align-self: auto !important;
+    -ms-grid-row-align: auto !important;
+        align-self: auto !important;
   }
 
   .align-self-sm-start {
@@ -5954,7 +5973,8 @@ button.bg-dark:focus {
   }
 
   .align-self-sm-center {
-    align-self: center !important;
+    -ms-grid-row-align: center !important;
+        align-self: center !important;
   }
 
   .align-self-sm-baseline {
@@ -5962,7 +5982,8 @@ button.bg-dark:focus {
   }
 
   .align-self-sm-stretch {
-    align-self: stretch !important;
+    -ms-grid-row-align: stretch !important;
+        align-self: stretch !important;
   }
 }
 @media (min-width: 768px) {
@@ -6079,7 +6100,8 @@ button.bg-dark:focus {
   }
 
   .align-self-md-auto {
-    align-self: auto !important;
+    -ms-grid-row-align: auto !important;
+        align-self: auto !important;
   }
 
   .align-self-md-start {
@@ -6091,7 +6113,8 @@ button.bg-dark:focus {
   }
 
   .align-self-md-center {
-    align-self: center !important;
+    -ms-grid-row-align: center !important;
+        align-self: center !important;
   }
 
   .align-self-md-baseline {
@@ -6099,7 +6122,8 @@ button.bg-dark:focus {
   }
 
   .align-self-md-stretch {
-    align-self: stretch !important;
+    -ms-grid-row-align: stretch !important;
+        align-self: stretch !important;
   }
 }
 @media (min-width: 992px) {
@@ -6216,7 +6240,8 @@ button.bg-dark:focus {
   }
 
   .align-self-lg-auto {
-    align-self: auto !important;
+    -ms-grid-row-align: auto !important;
+        align-self: auto !important;
   }
 
   .align-self-lg-start {
@@ -6228,7 +6253,8 @@ button.bg-dark:focus {
   }
 
   .align-self-lg-center {
-    align-self: center !important;
+    -ms-grid-row-align: center !important;
+        align-self: center !important;
   }
 
   .align-self-lg-baseline {
@@ -6236,7 +6262,8 @@ button.bg-dark:focus {
   }
 
   .align-self-lg-stretch {
-    align-self: stretch !important;
+    -ms-grid-row-align: stretch !important;
+        align-self: stretch !important;
   }
 }
 @media (min-width: 1320px) {
@@ -6353,7 +6380,8 @@ button.bg-dark:focus {
   }
 
   .align-self-xl-auto {
-    align-self: auto !important;
+    -ms-grid-row-align: auto !important;
+        align-self: auto !important;
   }
 
   .align-self-xl-start {
@@ -6365,7 +6393,8 @@ button.bg-dark:focus {
   }
 
   .align-self-xl-center {
-    align-self: center !important;
+    -ms-grid-row-align: center !important;
+        align-self: center !important;
   }
 
   .align-self-xl-baseline {
@@ -6373,7 +6402,8 @@ button.bg-dark:focus {
   }
 
   .align-self-xl-stretch {
-    align-self: stretch !important;
+    -ms-grid-row-align: stretch !important;
+        align-self: stretch !important;
   }
 }
 .float-left {
@@ -6465,6 +6495,7 @@ button.bg-dark:focus {
 }
 
 .position-sticky {
+  position: -webkit-sticky !important;
   position: sticky !important;
 }
 
@@ -6484,8 +6515,9 @@ button.bg-dark:focus {
   z-index: 1030;
 }
 
-@supports (position: sticky) {
+@supports ((position: -webkit-sticky) or (position: sticky)) {
   .sticky-top {
+    position: -webkit-sticky;
     position: sticky;
     top: 0;
     z-index: 1020;
@@ -9128,25 +9160,16 @@ body {
 }
 
 .row-flex::before {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 
 .row-flex, .row-flex > div[class*=col-] {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-flex: 1;
-  -ms-flex: 1 1 auto;
   flex: 1 1 auto;
 }
 
 .row-flex-wrap {
-  -ms-flex-line-pack: start;
   align-content: flex-start;
-  -webkit-box-flex: 0;
-  -ms-flex: 0;
   flex: 0;
 }
 
@@ -9159,25 +9182,14 @@ body {
 }
 
 .flex-col {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   display: -webkit-flex;
-  -webkit-box-flex: 1;
-  -ms-flex: 1 100%;
   flex: 1 100%;
-  -ms-flex-flow: column nowrap;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
   flex-flow: column nowrap;
 }
 
 .flex-grow {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-flex: 2;
-  -ms-flex: 2;
   flex: 2;
 }
 
@@ -9283,7 +9295,6 @@ h3 #reply-title {
 }
 
 .is-flex, .vertical-align {
-  display: -webkit-box;
   display: -ms-flexbox;
 }
 
@@ -9337,10 +9348,6 @@ h3 #reply-title {
   color: #ffffff;
 }
 
-.list-group-flagship-content.list-group-item, ::-moz-selection {
-  text-shadow: none;
-}
-
 .list-group-flagship-content.list-group-item, ::selection {
   text-shadow: none;
 }
@@ -9350,20 +9357,12 @@ h3 #reply-title {
 }
 
 .is-flex {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
 }
 
 .is-flex > [class*=col-] {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
   flex-direction: column;
 }
 
@@ -9398,8 +9397,6 @@ h3 #reply-title {
   position: absolute;
   top: 50%;
   left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
 
@@ -9434,11 +9431,6 @@ a {
 .blog-main a[href*="//"]:not([href*="chesterlestreetasc.co.uk"]):after {
   font-family: "FontAwesome";
   content: " ";
-}
-
-::-moz-selection {
-  background: #b3d4fc;
-  text-shadow: none;
 }
 
 ::selection {
@@ -10228,7 +10220,6 @@ thead {
   font-weight: normal;
   text-align: center;
   vertical-align: middle;
-  -ms-touch-action: manipulation;
   touch-action: manipulation;
   cursor: pointer;
   background-image: none;
@@ -10278,23 +10269,28 @@ thead {
 
 .news-grid {
   list-style: none;
+  display: -ms-grid;
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  -ms-grid-columns: (1fr)[1];
+      grid-template-columns: repeat(1, 1fr);
   grid-gap: 1rem;
   padding: 0;
 }
 
 @media (min-width: 576px) {
   .news-grid {
-    grid-template-columns: repeat(2, 1fr);
+    -ms-grid-columns: (1fr)[2];
+        grid-template-columns: repeat(2, 1fr);
   }
 }
 @media (min-width: 992px) {
   .news-grid {
-    grid-template-columns: repeat(3, 1fr);
+    -ms-grid-columns: (1fr)[3];
+        grid-template-columns: repeat(3, 1fr);
   }
 }
 .news-grid a {
+  display: -ms-grid;
   display: grid;
   background: #fff;
   padding: 1rem;
@@ -10413,10 +10409,7 @@ thead {
   margin: -1rem 0 1rem 0;
 }
 .account-body .nav-scroller .nav {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: nowrap;
   flex-wrap: nowrap;
   padding-bottom: 1rem;
   margin-top: -1px;
@@ -10448,7 +10441,6 @@ thead {
   -ms-grid-columns: 1fr [1];
   grid-template-columns: repeat(1, 1fr);
   grid-column-gap: 20px;
-  -webkit-column-gap: 20px;
   column-gap: 20px;
   grid-row-gap: 1rem;
   row-gap: 1rem;
@@ -10509,32 +10501,39 @@ thead {
 
 #top-bar-more-content {
   list-style: none;
+  display: -ms-grid;
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  -ms-grid-columns: (1fr)[1];
+      grid-template-columns: repeat(1, 1fr);
   grid-gap: 0.25rem;
   padding: 0;
 }
 @media (min-width: 576px) {
   #top-bar-more-content {
-    grid-template-columns: repeat(3, 1fr);
+    -ms-grid-columns: (1fr)[3];
+        grid-template-columns: repeat(3, 1fr);
   }
 }
 @media (min-width: 768px) {
   #top-bar-more-content {
-    grid-template-columns: repeat(4, 1fr);
+    -ms-grid-columns: (1fr)[4];
+        grid-template-columns: repeat(4, 1fr);
   }
 }
 @media (min-width: 992px) {
   #top-bar-more-content {
-    grid-template-columns: repeat(5, 1fr);
+    -ms-grid-columns: (1fr)[5];
+        grid-template-columns: repeat(5, 1fr);
   }
 }
 @media (min-width: 1320px) {
   #top-bar-more-content {
-    grid-template-columns: repeat(5, 1fr);
+    -ms-grid-columns: (1fr)[5];
+        grid-template-columns: repeat(5, 1fr);
   }
 }
 #top-bar-more-content a {
+  display: -ms-grid;
   display: grid;
   padding: 0.25rem;
   color: #fff;
@@ -10564,8 +10563,239 @@ thead {
 /*
 Red BG Search Form
 */
+.bg-primary:-ms-input-placeholder {
+  color: rgba(255, 255, 255, 0.75);
+}
 .bg-primary::placeholder {
   color: rgba(255, 255, 255, 0.75);
 }
 
-/*# sourceMappingURL=chester-2.1.10.css.map */
+.StripeElement--focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #ff3e3e;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(189, 0, 0, 0.25);
+}
+
+.StripeElement--valid {
+  display: none;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 80%;
+  color: #28a745;
+}
+
+.valid-tooltip {
+  position: absolute;
+  top: 100%;
+  z-index: 5;
+  display: none;
+  max-width: 100%;
+  padding: 0.25rem 0.5rem;
+  margin-top: 0.1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #fff;
+  background-color: rgba(40, 167, 69, 0.9);
+}
+
+.form-control .was-validated .StripeElement--valid, .form-control.is-valid {
+  border-color: #28a745;
+  padding-right: 2.25rem;
+  background-repeat: no-repeat;
+  background-position: center right calc(2.25rem / 4);
+  background-size: calc(2.25rem / 2) calc(2.25rem / 2);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+}
+.form-control .was-validated .StripeElement--valid .StripeElement--focus, .form-control.is-valid .StripeElement--focus {
+  border-color: #28a745;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+.form-control .was-validated .StripeElement--valid ~ .valid-feedback,
+.form-control .was-validated .StripeElement--valid ~ .valid-tooltip, .form-control.is-valid ~ .valid-feedback,
+.form-control.is-valid ~ .valid-tooltip {
+  display: block;
+}
+
+textarea.form-control .was-validated .StripeElement--valid, textarea.form-control.is-valid {
+  padding-right: 2.25rem;
+  background-position: top calc(2.25rem / 4) right calc(2.25rem / 4);
+}
+
+.custom-select .was-validated .StripeElement--valid, .custom-select.is-valid {
+  border-color: #28a745;
+  padding-right: 3.4375rem;
+  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e") no-repeat center right 1.75rem/1.125rem 1.125rem;
+}
+.custom-select .was-validated .StripeElement--valid:focus, .custom-select.is-valid:focus {
+  border-color: #28a745;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+.custom-select .was-validated .StripeElement--valid ~ .valid-feedback,
+.custom-select .was-validated .StripeElement--valid ~ .valid-tooltip, .custom-select.is-valid ~ .valid-feedback,
+.custom-select.is-valid ~ .valid-tooltip {
+  display: block;
+}
+
+.form-control-file .was-validated .StripeElement--valid ~ .valid-feedback,
+.form-control-file .was-validated .StripeElement--valid ~ .valid-tooltip, .form-control-file.is-valid ~ .valid-feedback,
+.form-control-file.is-valid ~ .valid-tooltip {
+  display: block;
+}
+
+.form-check-input .was-validated .StripeElement--valid ~ .form-check-label, .form-check-input.is-valid ~ .form-check-label {
+  color: #28a745;
+}
+.form-check-input .was-validated .StripeElement--valid ~ .valid-feedback,
+.form-check-input .was-validated .StripeElement--valid ~ .valid-tooltip, .form-check-input.is-valid ~ .valid-feedback,
+.form-check-input.is-valid ~ .valid-tooltip {
+  display: block;
+}
+
+.custom-control-input .was-validated .StripeElement--valid ~ .custom-control-label, .custom-control-input.is-valid ~ .custom-control-label {
+  color: #28a745;
+}
+.custom-control-input .was-validated .StripeElement--valid ~ .custom-control-label::before, .custom-control-input.is-valid ~ .custom-control-label::before {
+  border-color: #28a745;
+}
+.custom-control-input .was-validated .StripeElement--valid ~ .valid-feedback,
+.custom-control-input .was-validated .StripeElement--valid ~ .valid-tooltip, .custom-control-input.is-valid ~ .valid-feedback,
+.custom-control-input.is-valid ~ .valid-tooltip {
+  display: block;
+}
+.custom-control-input .was-validated .StripeElement--valid:checked ~ .custom-control-label::before, .custom-control-input.is-valid:checked ~ .custom-control-label::before {
+  border-color: #34ce57;
+  background-color: #34ce57;
+}
+.custom-control-input .was-validated .StripeElement--valid:focus ~ .custom-control-label::before, .custom-control-input.is-valid:focus ~ .custom-control-label::before {
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+.custom-control-input .was-validated .StripeElement--valid:focus:not(:checked) ~ .custom-control-label::before, .custom-control-input.is-valid:focus:not(:checked) ~ .custom-control-label::before {
+  border-color: #28a745;
+}
+
+.custom-file-input .was-validated .StripeElement--valid ~ .custom-file-label, .custom-file-input.is-valid ~ .custom-file-label {
+  border-color: #28a745;
+}
+.custom-file-input .was-validated .StripeElement--valid ~ .valid-feedback,
+.custom-file-input .was-validated .StripeElement--valid ~ .valid-tooltip, .custom-file-input.is-valid ~ .valid-feedback,
+.custom-file-input.is-valid ~ .valid-tooltip {
+  display: block;
+}
+.custom-file-input .was-validated .StripeElement--valid:focus ~ .custom-file-label, .custom-file-input.is-valid:focus ~ .custom-file-label {
+  border-color: #28a745;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.StripeElement--invalid {
+  display: none;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 80%;
+  color: #dc3545;
+}
+
+.invalid-tooltip {
+  position: absolute;
+  top: 100%;
+  z-index: 5;
+  display: none;
+  max-width: 100%;
+  padding: 0.25rem 0.5rem;
+  margin-top: 0.1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #fff;
+  background-color: rgba(220, 53, 69, 0.9);
+}
+
+.form-control .was-validated .StripeElement--invalid, .form-control.is-invalid {
+  border-color: #dc3545;
+  padding-right: 2.25rem;
+  background-repeat: no-repeat;
+  background-position: center right calc(2.25rem / 4);
+  background-size: calc(2.25rem / 2) calc(2.25rem / 2);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23dc3545' viewBox='-2 -2 7 7'%3e%3cpath stroke='%23d9534f' d='M0 0l3 3m0-3L0 3'/%3e%3ccircle r='.5'/%3e%3ccircle cx='3' r='.5'/%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E");
+}
+.form-control .was-validated .StripeElement--invalid .StripeElement--focus, .form-control.is-invalid .StripeElement--focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+.form-control .was-validated .StripeElement--invalid ~ .invalid-feedback,
+.form-control .was-validated .StripeElement--invalid ~ .invalid-tooltip, .form-control.is-invalid ~ .invalid-feedback,
+.form-control.is-invalid ~ .invalid-tooltip {
+  display: block;
+}
+
+textarea.form-control .was-validated .StripeElement--invalid, textarea.form-control.is-invalid {
+  padding-right: 2.25rem;
+  background-position: top calc(2.25rem / 4) right calc(2.25rem / 4);
+}
+
+.custom-select .was-validated .StripeElement--invalid, .custom-select.is-invalid {
+  border-color: #dc3545;
+  padding-right: 3.4375rem;
+  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23dc3545' viewBox='-2 -2 7 7'%3e%3cpath stroke='%23d9534f' d='M0 0l3 3m0-3L0 3'/%3e%3ccircle r='.5'/%3e%3ccircle cx='3' r='.5'/%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E") no-repeat center right 1.75rem/1.125rem 1.125rem;
+}
+.custom-select .was-validated .StripeElement--invalid:focus, .custom-select.is-invalid:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+.custom-select .was-validated .StripeElement--invalid ~ .invalid-feedback,
+.custom-select .was-validated .StripeElement--invalid ~ .invalid-tooltip, .custom-select.is-invalid ~ .invalid-feedback,
+.custom-select.is-invalid ~ .invalid-tooltip {
+  display: block;
+}
+
+.form-control-file .was-validated .StripeElement--invalid ~ .invalid-feedback,
+.form-control-file .was-validated .StripeElement--invalid ~ .invalid-tooltip, .form-control-file.is-invalid ~ .invalid-feedback,
+.form-control-file.is-invalid ~ .invalid-tooltip {
+  display: block;
+}
+
+.form-check-input .was-validated .StripeElement--invalid ~ .form-check-label, .form-check-input.is-invalid ~ .form-check-label {
+  color: #dc3545;
+}
+.form-check-input .was-validated .StripeElement--invalid ~ .invalid-feedback,
+.form-check-input .was-validated .StripeElement--invalid ~ .invalid-tooltip, .form-check-input.is-invalid ~ .invalid-feedback,
+.form-check-input.is-invalid ~ .invalid-tooltip {
+  display: block;
+}
+
+.custom-control-input .was-validated .StripeElement--invalid ~ .custom-control-label, .custom-control-input.is-invalid ~ .custom-control-label {
+  color: #dc3545;
+}
+.custom-control-input .was-validated .StripeElement--invalid ~ .custom-control-label::before, .custom-control-input.is-invalid ~ .custom-control-label::before {
+  border-color: #dc3545;
+}
+.custom-control-input .was-validated .StripeElement--invalid ~ .invalid-feedback,
+.custom-control-input .was-validated .StripeElement--invalid ~ .invalid-tooltip, .custom-control-input.is-invalid ~ .invalid-feedback,
+.custom-control-input.is-invalid ~ .invalid-tooltip {
+  display: block;
+}
+.custom-control-input .was-validated .StripeElement--invalid:checked ~ .custom-control-label::before, .custom-control-input.is-invalid:checked ~ .custom-control-label::before {
+  border-color: #e4606d;
+  background-color: #e4606d;
+}
+.custom-control-input .was-validated .StripeElement--invalid:focus ~ .custom-control-label::before, .custom-control-input.is-invalid:focus ~ .custom-control-label::before {
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+.custom-control-input .was-validated .StripeElement--invalid:focus:not(:checked) ~ .custom-control-label::before, .custom-control-input.is-invalid:focus:not(:checked) ~ .custom-control-label::before {
+  border-color: #dc3545;
+}
+
+.custom-file-input .was-validated .StripeElement--invalid ~ .custom-file-label, .custom-file-input.is-invalid ~ .custom-file-label {
+  border-color: #dc3545;
+}
+.custom-file-input .was-validated .StripeElement--invalid ~ .invalid-feedback,
+.custom-file-input .was-validated .StripeElement--invalid ~ .invalid-tooltip, .custom-file-input.is-invalid ~ .invalid-feedback,
+.custom-file-input.is-invalid ~ .invalid-tooltip {
+  display: block;
+}
+.custom-file-input .was-validated .StripeElement--invalid:focus ~ .custom-file-label, .custom-file-input.is-invalid:focus ~ .custom-file-label {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/*# sourceMappingURL=chester-2.1.11-prefixed.css.map */
