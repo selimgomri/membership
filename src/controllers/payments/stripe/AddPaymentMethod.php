@@ -68,7 +68,9 @@ include BASE_PATH . 'views/header.php';
   background-color: white;
 
   box-shadow: none;
+  border-radius: 0.25rem;
 }
+
 </style>
 <?php if (bool(env('IS_CLS'))) { ?>
 <style>
@@ -103,21 +105,30 @@ include BASE_PATH . 'views/header.php';
       <?php unset($_SESSION['PayCardError']); unset($_SESSION['PayCardErrorMessage']); ?>
       <?php } ?>
 
-      <form action="<?=currentUrl()?>" method="post" id="payment-form" class="mb-5">
+      <form action="<?=currentUrl()?>" method="post" id="payment-form" class="mb-5 needs-validation" novalidate>
         <div class="form-group">
           <label for="cardholder-name">Cardholder name</label>
           <input type="text" class="form-control" id="cardholder-name" placeholder="C F Frost" required aria-describedby="cardholder-name-help" autocomplete="cc-name">
           <small id="cardholder-name-help" class="form-text text-muted">The name shown on your card</small>
+          <div class="invalid-feedback">
+            You must provide your full name
+          </div>
         </div>
 
         <div class="form-group">
           <label for="addr-line-1">Address line 1</label>
           <input type="text" class="form-control" id="addr-line-1" placeholder="1 Burns Green" required autocomplete="address-line1">
+          <div class="invalid-feedback">
+            You must provide your address
+          </div>
         </div>
 
         <div class="form-group">
           <label for="addr-post-code">Post Code</label>
           <input type="text" class="form-control text-uppercase" id="addr-post-code" placeholder="NE99 1AA" required autocomplete="postal-code">
+          <div class="invalid-feedback">
+            You must provide your post code
+          </div>
         </div>
 
         <div class="form-group">
@@ -127,14 +138,43 @@ include BASE_PATH . 'views/header.php';
             <option <?php if ($code == 'GB') { ?>selected<?php } ?> value="<?=htmlspecialchars($code)?>"><?=htmlspecialchars($name)?></option>
             <?php } ?>
           </select>
+          <div class="invalid-feedback">
+            You must provide your country
+          </div>
+            </div>
+
+        <!-- Multiple Part Element -->
+        <div class="form-group">
+          <label for="card-number-element">
+            Card number
+          </label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="card-brand-element"><i class="fa fa-fw fa-credit-card" aria-hidden="true"></i></span>
+            </div>
+            <div id="card-number-element" class="form-control stripe-form-control"></div>
+            <div id="card-number-element-errors" class="stripe-feedback"></div>
+          </div>
         </div>
 
-        <div class="mb-3">
-          <label for="card-element">
-            Credit or debit card
-          </label>
-          <div id="card-element" class="card-element">
-            <!-- A Stripe Element will be inserted here. -->
+        <div class="form-row">
+          <div class="col">
+            <div class="form-group">
+              <label for="card-expiry-element">
+                Expires
+              </label>
+              <span id="card-expiry-element" class="form-control"></span>
+              <div id="card-expiry-element-errors" class="stripe-feedback"></div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="card-cvc-element">
+                CVC
+              </label>
+              <span id="card-cvc-element" class="form-control"></span>
+              <div id="card-cvc-element-errors" class="stripe-feedback"></div>
+            </div>
           </div>
         </div>
 
@@ -156,6 +196,31 @@ include BASE_PATH . 'views/header.php';
 </div>
 
 <script>
+
+function setCardBrandIcon(brand) {
+  var content = '<i class="fa fa-fw fa-credit-card" aria-hidden="true"></i>';
+  if (brand == 'visa') {
+    content = '<i class="fa fa-cc-visa" aria-hidden="true"></i>';
+  } else if (brand == 'mastercard') {
+    content = '<i class="fa fa-cc-mastercard" aria-hidden="true"></i>';
+} else if (brand == 'amex') {
+    content = '<i class="fa fa-cc-amex" aria-hidden="true"></i>';
+  }
+  document.getElementById('card-brand-element').innerHTML = content;
+}
+
+function disableButtons() {
+  document.querySelectorAll('.pm-can-disable').forEach(elem => {
+    elem.disabled = true;
+  });
+}
+
+function enableButtons() {
+  document.querySelectorAll('.pm-can-disable').forEach(elem => {
+    elem.disabled = false;
+  });
+}
+
 var stripe = Stripe('<?=htmlspecialchars(env('STRIPE_PUBLISHABLE'))?>');
 
 var elements = stripe.elements({
@@ -166,7 +231,27 @@ var elements = stripe.elements({
   ]
 });
 
+var style = {
+  base: {
+    iconColor: '#ced4da',
+    lineHeight: '1.5',
+    height: '1.5rem',
+    color: '#212529',
+    fontWeight: 400,
+    fontFamily: 'Open Sans, Segoe UI, sans-serif',
+    fontSize: '16px',
+    fontSmoothing: 'antialiased',
+    '::placeholder': {
+      color: '#868e96',
+    },
+  },
+  invalid: {
+    color: '#212529',
+  },
+}
+
 // Create an instance of the card Element.
+/*
 var cardElement = elements.create('card', {
   iconStyle: 'solid',
   hidePostalCode: true,
@@ -191,25 +276,51 @@ var cardElement = elements.create('card', {
     },
   },
 });
+*/
 
 // Add an instance of the card Element into the `card-element` <div>.
-cardElement.mount('#card-element');
+//cardElement.mount('#card-element');
 
-cardElement.addEventListener('change', function(event) {
-  var displayError = document.getElementById('card-errors');
+var cardNumberElement = elements.create('cardNumber', {
+  style: style
+});
+cardNumberElement.mount('#card-number-element');
+var cardExpiryElement = elements.create('cardExpiry', {
+  style: style
+});
+cardExpiryElement.mount('#card-expiry-element');
+var cardCvcElement = elements.create('cardCvc', {
+  style: style
+});
+cardCvcElement.mount('#card-cvc-element');
+
+function cardChangeEvent(event, elementId) {
+  var displayError = document.getElementById(elementId);
   if (event.error) {
-    displayError.innerHTML = '<div class="alert alert-danger" id="card-errors-message"></div>'
-    document.getElementById('card-errors-message').textContent = event.error.message;
+    displayError.textContent = event.error.message;
   } else {
-    displayError.innerHTML = '';
+    displayError.textContent = '';
   }
+}
+
+cardNumberElement.addEventListener('change', function(event) {
+  cardChangeEvent(event, 'card-number-element-errors');
+  if (event.brand) {
+  	setCardBrandIcon(event.brand);
+  }
+});
+cardExpiryElement.addEventListener('change', function(event) {
+  cardChangeEvent(event, 'card-expiry-element-errors');
+});
+cardCvcElement.addEventListener('change', function(event) {
+  cardChangeEvent(event, 'card-cvc-element-errors');
 });
 
 var cardholderName = document.getElementById('cardholder-name');
 var cardholderAddress1 = document.getElementById('addr-line-1');
 var cardholderZip = document.getElementById('addr-post-code');
 cardholderZip.addEventListener('change', function(event) {
-  cardElement.update({value: {postalCode: event.target.value.toUpperCase()}});
+  //cardNumberElement.update({value: {postalCode: event.target.value.toUpperCase()}});
 });
 var cardholderCountry = document.getElementById('addr-country');
 var cardButton = document.getElementById('card-button');
@@ -219,13 +330,13 @@ var form = document.getElementById('payment-form');
 form.addEventListener('submit', function(event) {
   event.preventDefault();
   stripe.handleCardSetup(
-    clientSecret, cardElement, {
+    clientSecret, cardNumberElement, {
       payment_method_data: {
         billing_details: {
           name: cardholderName.value,
           address: {
             line1: cardholderAddress1.value,
-            zip: cardholderZip.postal_code,
+            postal_code: cardholderZip.value,
             country: cardholderCountry.value,
           },
         }
@@ -239,6 +350,7 @@ form.addEventListener('submit', function(event) {
       document.getElementById('card-errors-message').textContent = result.error.message;
     } else {
       // The setup has succeeded. Display a success message.
+      disableButtons();
       displayError.innerHTML = '<div class="alert alert-success" id="card-errors-message"></div>'
       document.getElementById('card-errors-message').textContent = 'Card setup successfully. Please wait while we redirect you.';
       // The payment has succeeded. Display a success message.
@@ -256,6 +368,8 @@ form.addEventListener('submit', function(event) {
 
 
 </script>
+
+<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 
 <?php
 

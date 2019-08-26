@@ -321,7 +321,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
               <div class="form-group">
                 <label for="addr-post-code">Country</label>
-                <select class="custom-select" required id="addr-country" autocomplete="country">
+                <select class="custom-select pm-can-disable" required id="addr-country" autocomplete="country">
                   <?php foreach ($countries as $code => $name) { ?>
                   <option <?php if ($code == 'GB') { ?>selected<?php } ?> value="<?=htmlspecialchars($code)?>"><?=htmlspecialchars($name)?></option>
                   <?php } ?>
@@ -331,13 +331,41 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                 </div>
               </div>
 
-              <!-- placeholder for Elements -->
+              <!-- Used to display form errors. -->
+              <div id="card-errors" role="alert"></div>
+
+              <!-- Multiple Part Element -->
               <div class="form-group">
-                <label for="card-element">
-                  Credit or debit card
+                <label for="card-number-element">
+                  Card number
                 </label>
-                <div id="card-element" class="card-element">
-                  <!-- A Stripe Element will be inserted here. -->
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="card-brand-element"><i class="fa fa-fw fa-credit-card" aria-hidden="true"></i></span>
+                  </div>
+                  <div id="card-number-element" class="form-control stripe-form-control"></div>
+                  <div id="card-number-element-errors" class="stripe-feedback"></div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="col">
+                  <div class="form-group">
+                    <label for="card-expiry-element">
+                      Expires
+                    </label>
+                    <span id="card-expiry-element" class="form-control"></span>
+                    <div id="card-expiry-element-errors" class="stripe-feedback"></div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-group">
+                    <label for="card-cvc-element">
+                      CVC
+                    </label>
+                    <span id="card-cvc-element" class="form-control"></span>
+                    <div id="card-cvc-element-errors" class="stripe-feedback"></div>
+                  </div>
                 </div>
               </div>
 

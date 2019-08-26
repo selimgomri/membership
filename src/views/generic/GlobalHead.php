@@ -1,6 +1,6 @@
 <?php
 
-$stylesheet = 'public/css/generic/generic-0.11-prefixed.css';
+$stylesheet = 'public/css/generic/generic-0.12-prefixed.css';
 $fa = 'public/css/font-awesome/css/font-awesome.min.css';
 
 header('Link: <' . autoUrl($stylesheet) . '>; rel=preload; as=style');

@@ -9430,7 +9430,7 @@ body {
 .wp-caption-text {
   text-align: left;
   width: 100%;
-  background: #efefef;
+  background: #f8f9fa;
   padding: 0.5rem 0.8rem;
   margin: 0 0 1rem 0;
 }
@@ -9642,8 +9642,12 @@ a {
 }
 
 .cell, .flex-panel-default, .well {
-  background-color: #efefef;
+  background-color: #f8f9fa;
   padding: 1rem;
+}
+
+.have-full-height {
+  min-height: 70vh;
 }
 
 .cell, .well {
@@ -9651,6 +9655,7 @@ a {
   margin: 0 0 1rem 0;
   padding: 1rem;
   border-radius: 0.25rem;
+  border: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 .cell p:last-child, .well p:last-child {
@@ -9908,7 +9913,7 @@ thead {
 }
 
 .flex-panel-link-group a:hover {
-  background: #e5e5e5;
+  background: #dae0e5;
 }
 
 .flex-panel-group {
@@ -9936,7 +9941,7 @@ thead {
 }
 
 .flex-panel-link-group a:hover {
-  background: #e5e5e5;
+  background: #dae0e5;
 }
 
 .flex-panel-group {
@@ -9964,13 +9969,13 @@ thead {
 }
 
 .cls-post-footer {
-  background-color: #efefef;
+  background-color: #f8f9fa;
   padding: 0.8rem 0.8rem 0rem 0.8rem;
   margin: 1rem 0 0 0;
 }
 
 .cls-pager > a {
-  background-color: #efefef;
+  background-color: #f8f9fa;
   padding: 1rem 0.8rem;
   display: block;
   min-height: 2rem;
@@ -9978,12 +9983,12 @@ thead {
 }
 
 .cls-pager > a:hover {
-  background-color: #e5e5e5;
+  background-color: #dae0e5;
   text-decoration: none;
 }
 
 .cls-pager > a:focus {
-  background-color: #e5e5e5;
+  background-color: #dae0e5;
   text-decoration: none;
 }
 
@@ -10464,6 +10469,10 @@ thead {
   padding: 1rem 0;
 }
 
+.have-full-height .front-page {
+  min-height: 70vh;
+}
+
 .news-grid {
   list-style: none;
   display: -ms-grid;
@@ -10631,7 +10640,7 @@ thead {
   padding: 10rem 0;
   margin: 0 0 1rem 0;
   text-align: center;
-  background: #efefef;
+  background: #f8f9fa;
 }
 .account-body .galaEntryTimes {
   display: -ms-grid;
@@ -10768,4 +10777,230 @@ Red BG Search Form
   color: rgba(255, 255, 255, 0.75);
 }
 
-/*# sourceMappingURL=generic-0.10-prefixed.css.map */
+.StripeElement--focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.was-validated .complete-tooltip {
+  position: absolute;
+  top: 100%;
+  z-index: 5;
+  display: none;
+  max-width: 100%;
+  padding: 0.25rem 0.5rem;
+  margin-top: 0.1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #fff;
+  background-color: rgba(40, 167, 69, 0.9);
+  border-radius: 0.25rem;
+}
+.was-validated .form-control.StripeElement--complete {
+  border-color: #28a745;
+  padding-right: 2.25rem;
+  background-repeat: no-repeat;
+  background-position: center right calc(2.25rem / 4);
+  background-size: calc(2.25rem / 2) calc(2.25rem / 2);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+}
+.was-validated .form-control.StripeElement--complete ~ .complete-feedback,
+.was-validated .form-control.StripeElement--complete ~ .complete-tooltip {
+  display: block;
+}
+.was-validated .form-control.StripeElement--complete.StripeElement--focus {
+  border-color: #28a745;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+.was-validated textarea.form-control .was-validated .StripeElement--complete, .was-validated textarea.form-control.is-complete {
+  padding-right: 2.25rem;
+  background-position: top calc(2.25rem / 4) right calc(2.25rem / 4);
+}
+.was-validated .custom-select .was-validated .StripeElement--complete, .was-validated .custom-select.is-complete {
+  border-color: #28a745;
+  padding-right: 3.4375rem;
+  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23dc3545' viewBox='-2 -2 7 7'%3e%3cpath stroke='%23d9534f' d='M0 0l3 3m0-3L0 3'/%3e%3ccircle r='.5'/%3e%3ccircle cx='3' r='.5'/%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E") no-repeat center right 1.75rem/1.125rem 1.125rem;
+}
+.was-validated .custom-select .was-validated .StripeElement--complete:focus, .was-validated .custom-select.is-complete:focus {
+  border-color: #28a745;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+.was-validated .custom-select .was-validated .StripeElement--complete ~ .complete-feedback,
+.was-validated .custom-select .was-validated .StripeElement--complete ~ .complete-tooltip, .was-validated .custom-select.is-complete ~ .complete-feedback,
+.was-validated .custom-select.is-complete ~ .complete-tooltip {
+  display: block;
+}
+.was-validated .form-control-file .was-validated .StripeElement--complete ~ .complete-feedback,
+.was-validated .form-control-file .was-validated .StripeElement--complete ~ .complete-tooltip, .was-validated .form-control-file.is-complete ~ .complete-feedback,
+.was-validated .form-control-file.is-complete ~ .complete-tooltip {
+  display: block;
+}
+.was-validated .form-check-input .was-validated .StripeElement--complete ~ .form-check-label, .was-validated .form-check-input.is-complete ~ .form-check-label {
+  color: #28a745;
+}
+.was-validated .form-check-input .was-validated .StripeElement--complete ~ .complete-feedback,
+.was-validated .form-check-input .was-validated .StripeElement--complete ~ .complete-tooltip, .was-validated .form-check-input.is-complete ~ .complete-feedback,
+.was-validated .form-check-input.is-complete ~ .complete-tooltip {
+  display: block;
+}
+.was-validated .custom-control-input .was-validated .StripeElement--complete ~ .custom-control-label, .was-validated .custom-control-input.is-complete ~ .custom-control-label {
+  color: #28a745;
+}
+.was-validated .custom-control-input .was-validated .StripeElement--complete ~ .custom-control-label::before, .was-validated .custom-control-input.is-complete ~ .custom-control-label::before {
+  border-color: #28a745;
+}
+.was-validated .custom-control-input .was-validated .StripeElement--complete ~ .complete-feedback,
+.was-validated .custom-control-input .was-validated .StripeElement--complete ~ .complete-tooltip, .was-validated .custom-control-input.is-complete ~ .complete-feedback,
+.was-validated .custom-control-input.is-complete ~ .complete-tooltip {
+  display: block;
+}
+.was-validated .custom-control-input .was-validated .StripeElement--complete:checked ~ .custom-control-label::before, .was-validated .custom-control-input.is-complete:checked ~ .custom-control-label::before {
+  border-color: #34ce57;
+  background-color: #34ce57;
+}
+.was-validated .custom-control-input .was-validated .StripeElement--complete:focus ~ .custom-control-label::before, .was-validated .custom-control-input.is-complete:focus ~ .custom-control-label::before {
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+.was-validated .custom-control-input .was-validated .StripeElement--complete:focus:not(:checked) ~ .custom-control-label::before, .was-validated .custom-control-input.is-complete:focus:not(:checked) ~ .custom-control-label::before {
+  border-color: #28a745;
+}
+.was-validated .custom-file-input .was-validated .StripeElement--complete ~ .custom-file-label, .was-validated .custom-file-input.is-complete ~ .custom-file-label {
+  border-color: #28a745;
+}
+.was-validated .custom-file-input .was-validated .StripeElement--complete ~ .complete-feedback,
+.was-validated .custom-file-input .was-validated .StripeElement--complete ~ .complete-tooltip, .was-validated .custom-file-input.is-complete ~ .complete-feedback,
+.was-validated .custom-file-input.is-complete ~ .complete-tooltip {
+  display: block;
+}
+.was-validated .custom-file-input .was-validated .StripeElement--complete:focus ~ .custom-file-label, .was-validated .custom-file-input.is-complete:focus ~ .custom-file-label {
+  border-color: #28a745;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.invalid-tooltip {
+  position: absolute;
+  top: 100%;
+  z-index: 5;
+  display: none;
+  max-width: 100%;
+  padding: 0.25rem 0.5rem;
+  margin-top: 0.1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #fff;
+  background-color: rgba(220, 53, 69, 0.9);
+  border-radius: 0.25rem;
+}
+
+.form-control.StripeElement--invalid {
+  border-color: #dc3545;
+  padding-right: 2.25rem;
+  background-repeat: no-repeat;
+  background-position: center right calc(2.25rem / 4);
+  background-size: calc(2.25rem / 2) calc(2.25rem / 2);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23dc3545' viewBox='-2 -2 7 7'%3e%3cpath stroke='%23d9534f' d='M0 0l3 3m0-3L0 3'/%3e%3ccircle r='.5'/%3e%3ccircle cx='3' r='.5'/%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E");
+}
+.form-control.StripeElement--invalid ~ .invalid-feedback,
+.form-control.StripeElement--invalid ~ .invalid-tooltip {
+  display: block;
+}
+
+.form-control.StripeElement--invalid.StripeElement--focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+textarea.form-control .was-validated .StripeElement--invalid, textarea.form-control.is-invalid {
+  padding-right: 2.25rem;
+  background-position: top calc(2.25rem / 4) right calc(2.25rem / 4);
+}
+
+.custom-select .was-validated .StripeElement--invalid, .custom-select.is-invalid {
+  border-color: #dc3545;
+  padding-right: 3.4375rem;
+  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23dc3545' viewBox='-2 -2 7 7'%3e%3cpath stroke='%23d9534f' d='M0 0l3 3m0-3L0 3'/%3e%3ccircle r='.5'/%3e%3ccircle cx='3' r='.5'/%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E") no-repeat center right 1.75rem/1.125rem 1.125rem;
+}
+.custom-select .was-validated .StripeElement--invalid:focus, .custom-select.is-invalid:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+.custom-select .was-validated .StripeElement--invalid ~ .invalid-feedback,
+.custom-select .was-validated .StripeElement--invalid ~ .invalid-tooltip, .custom-select.is-invalid ~ .invalid-feedback,
+.custom-select.is-invalid ~ .invalid-tooltip {
+  display: block;
+}
+
+.form-control-file .was-validated .StripeElement--invalid ~ .invalid-feedback,
+.form-control-file .was-validated .StripeElement--invalid ~ .invalid-tooltip, .form-control-file.is-invalid ~ .invalid-feedback,
+.form-control-file.is-invalid ~ .invalid-tooltip {
+  display: block;
+}
+
+.form-check-input .was-validated .StripeElement--invalid ~ .form-check-label, .form-check-input.is-invalid ~ .form-check-label {
+  color: #dc3545;
+}
+.form-check-input .was-validated .StripeElement--invalid ~ .invalid-feedback,
+.form-check-input .was-validated .StripeElement--invalid ~ .invalid-tooltip, .form-check-input.is-invalid ~ .invalid-feedback,
+.form-check-input.is-invalid ~ .invalid-tooltip {
+  display: block;
+}
+
+.custom-control-input .was-validated .StripeElement--invalid ~ .custom-control-label, .custom-control-input.is-invalid ~ .custom-control-label {
+  color: #dc3545;
+}
+.custom-control-input .was-validated .StripeElement--invalid ~ .custom-control-label::before, .custom-control-input.is-invalid ~ .custom-control-label::before {
+  border-color: #dc3545;
+}
+.custom-control-input .was-validated .StripeElement--invalid ~ .invalid-feedback,
+.custom-control-input .was-validated .StripeElement--invalid ~ .invalid-tooltip, .custom-control-input.is-invalid ~ .invalid-feedback,
+.custom-control-input.is-invalid ~ .invalid-tooltip {
+  display: block;
+}
+.custom-control-input .was-validated .StripeElement--invalid:checked ~ .custom-control-label::before, .custom-control-input.is-invalid:checked ~ .custom-control-label::before {
+  border-color: #e4606d;
+  background-color: #e4606d;
+}
+.custom-control-input .was-validated .StripeElement--invalid:focus ~ .custom-control-label::before, .custom-control-input.is-invalid:focus ~ .custom-control-label::before {
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+.custom-control-input .was-validated .StripeElement--invalid:focus:not(:checked) ~ .custom-control-label::before, .custom-control-input.is-invalid:focus:not(:checked) ~ .custom-control-label::before {
+  border-color: #dc3545;
+}
+
+.custom-file-input .was-validated .StripeElement--invalid ~ .custom-file-label, .custom-file-input.is-invalid ~ .custom-file-label {
+  border-color: #dc3545;
+}
+.custom-file-input .was-validated .StripeElement--invalid ~ .invalid-feedback,
+.custom-file-input .was-validated .StripeElement--invalid ~ .invalid-tooltip, .custom-file-input.is-invalid ~ .invalid-feedback,
+.custom-file-input.is-invalid ~ .invalid-tooltip {
+  display: block;
+}
+.custom-file-input .was-validated .StripeElement--invalid:focus ~ .custom-file-label, .custom-file-input.is-invalid:focus ~ .custom-file-label {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.stripe-feedback {
+  margin-top: 0.25rem;
+  font-size: 80%;
+  width: 100%;
+  display: block;
+}
+
+.form-control.StripeElement--complete ~ .stripe-feedback {
+  color: #28a745;
+}
+
+.form-control.StripeElement--invalid ~ .stripe-feedback {
+  color: #dc3545;
+}
+
+.stripe-form-control {
+  border-top-right-radius: 0.25rem !important;
+  border-bottom-right-radius: 0.25rem !important;
+}
+
+/*# sourceMappingURL=generic-0.12-prefixed.css.map */
