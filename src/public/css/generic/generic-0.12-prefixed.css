@@ -10785,7 +10785,7 @@ Red BG Search Form
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-.valid-tooltip {
+.was-validated .complete-tooltip {
   position: absolute;
   top: 100%;
   z-index: 5;
@@ -10799,8 +10799,7 @@ Red BG Search Form
   background-color: rgba(40, 167, 69, 0.9);
   border-radius: 0.25rem;
 }
-
-.form-control.StripeElement--valid {
+.was-validated .form-control.StripeElement--complete {
   border-color: #28a745;
   padding-right: 2.25rem;
   background-repeat: no-repeat;
@@ -10808,82 +10807,75 @@ Red BG Search Form
   background-size: calc(2.25rem / 2) calc(2.25rem / 2);
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
 }
-.form-control.StripeElement--valid ~ .valid-feedback,
-.form-control.StripeElement--valid ~ .valid-tooltip {
+.was-validated .form-control.StripeElement--complete ~ .complete-feedback,
+.was-validated .form-control.StripeElement--complete ~ .complete-tooltip {
   display: block;
 }
-
-.form-control.StripeElement--valid.StripeElement--focus {
+.was-validated .form-control.StripeElement--complete.StripeElement--focus {
   border-color: #28a745;
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
 }
-
-textarea.form-control .was-validated .StripeElement--valid, textarea.form-control.is-valid {
+.was-validated textarea.form-control .was-validated .StripeElement--complete, .was-validated textarea.form-control.is-complete {
   padding-right: 2.25rem;
   background-position: top calc(2.25rem / 4) right calc(2.25rem / 4);
 }
-
-.custom-select .was-validated .StripeElement--valid, .custom-select.is-valid {
+.was-validated .custom-select .was-validated .StripeElement--complete, .was-validated .custom-select.is-complete {
   border-color: #28a745;
   padding-right: 3.4375rem;
-  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e") no-repeat center right 1.75rem/1.125rem 1.125rem;
+  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23dc3545' viewBox='-2 -2 7 7'%3e%3cpath stroke='%23d9534f' d='M0 0l3 3m0-3L0 3'/%3e%3ccircle r='.5'/%3e%3ccircle cx='3' r='.5'/%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E") no-repeat center right 1.75rem/1.125rem 1.125rem;
 }
-.custom-select .was-validated .StripeElement--valid:focus, .custom-select.is-valid:focus {
+.was-validated .custom-select .was-validated .StripeElement--complete:focus, .was-validated .custom-select.is-complete:focus {
   border-color: #28a745;
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
 }
-.custom-select .was-validated .StripeElement--valid ~ .valid-feedback,
-.custom-select .was-validated .StripeElement--valid ~ .valid-tooltip, .custom-select.is-valid ~ .valid-feedback,
-.custom-select.is-valid ~ .valid-tooltip {
+.was-validated .custom-select .was-validated .StripeElement--complete ~ .complete-feedback,
+.was-validated .custom-select .was-validated .StripeElement--complete ~ .complete-tooltip, .was-validated .custom-select.is-complete ~ .complete-feedback,
+.was-validated .custom-select.is-complete ~ .complete-tooltip {
   display: block;
 }
-
-.form-control-file .was-validated .StripeElement--valid ~ .valid-feedback,
-.form-control-file .was-validated .StripeElement--valid ~ .valid-tooltip, .form-control-file.is-valid ~ .valid-feedback,
-.form-control-file.is-valid ~ .valid-tooltip {
+.was-validated .form-control-file .was-validated .StripeElement--complete ~ .complete-feedback,
+.was-validated .form-control-file .was-validated .StripeElement--complete ~ .complete-tooltip, .was-validated .form-control-file.is-complete ~ .complete-feedback,
+.was-validated .form-control-file.is-complete ~ .complete-tooltip {
   display: block;
 }
-
-.form-check-input .was-validated .StripeElement--valid ~ .form-check-label, .form-check-input.is-valid ~ .form-check-label {
+.was-validated .form-check-input .was-validated .StripeElement--complete ~ .form-check-label, .was-validated .form-check-input.is-complete ~ .form-check-label {
   color: #28a745;
 }
-.form-check-input .was-validated .StripeElement--valid ~ .valid-feedback,
-.form-check-input .was-validated .StripeElement--valid ~ .valid-tooltip, .form-check-input.is-valid ~ .valid-feedback,
-.form-check-input.is-valid ~ .valid-tooltip {
+.was-validated .form-check-input .was-validated .StripeElement--complete ~ .complete-feedback,
+.was-validated .form-check-input .was-validated .StripeElement--complete ~ .complete-tooltip, .was-validated .form-check-input.is-complete ~ .complete-feedback,
+.was-validated .form-check-input.is-complete ~ .complete-tooltip {
   display: block;
 }
-
-.custom-control-input .was-validated .StripeElement--valid ~ .custom-control-label, .custom-control-input.is-valid ~ .custom-control-label {
+.was-validated .custom-control-input .was-validated .StripeElement--complete ~ .custom-control-label, .was-validated .custom-control-input.is-complete ~ .custom-control-label {
   color: #28a745;
 }
-.custom-control-input .was-validated .StripeElement--valid ~ .custom-control-label::before, .custom-control-input.is-valid ~ .custom-control-label::before {
+.was-validated .custom-control-input .was-validated .StripeElement--complete ~ .custom-control-label::before, .was-validated .custom-control-input.is-complete ~ .custom-control-label::before {
   border-color: #28a745;
 }
-.custom-control-input .was-validated .StripeElement--valid ~ .valid-feedback,
-.custom-control-input .was-validated .StripeElement--valid ~ .valid-tooltip, .custom-control-input.is-valid ~ .valid-feedback,
-.custom-control-input.is-valid ~ .valid-tooltip {
+.was-validated .custom-control-input .was-validated .StripeElement--complete ~ .complete-feedback,
+.was-validated .custom-control-input .was-validated .StripeElement--complete ~ .complete-tooltip, .was-validated .custom-control-input.is-complete ~ .complete-feedback,
+.was-validated .custom-control-input.is-complete ~ .complete-tooltip {
   display: block;
 }
-.custom-control-input .was-validated .StripeElement--valid:checked ~ .custom-control-label::before, .custom-control-input.is-valid:checked ~ .custom-control-label::before {
+.was-validated .custom-control-input .was-validated .StripeElement--complete:checked ~ .custom-control-label::before, .was-validated .custom-control-input.is-complete:checked ~ .custom-control-label::before {
   border-color: #34ce57;
   background-color: #34ce57;
 }
-.custom-control-input .was-validated .StripeElement--valid:focus ~ .custom-control-label::before, .custom-control-input.is-valid:focus ~ .custom-control-label::before {
+.was-validated .custom-control-input .was-validated .StripeElement--complete:focus ~ .custom-control-label::before, .was-validated .custom-control-input.is-complete:focus ~ .custom-control-label::before {
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
 }
-.custom-control-input .was-validated .StripeElement--valid:focus:not(:checked) ~ .custom-control-label::before, .custom-control-input.is-valid:focus:not(:checked) ~ .custom-control-label::before {
+.was-validated .custom-control-input .was-validated .StripeElement--complete:focus:not(:checked) ~ .custom-control-label::before, .was-validated .custom-control-input.is-complete:focus:not(:checked) ~ .custom-control-label::before {
   border-color: #28a745;
 }
-
-.custom-file-input .was-validated .StripeElement--valid ~ .custom-file-label, .custom-file-input.is-valid ~ .custom-file-label {
+.was-validated .custom-file-input .was-validated .StripeElement--complete ~ .custom-file-label, .was-validated .custom-file-input.is-complete ~ .custom-file-label {
   border-color: #28a745;
 }
-.custom-file-input .was-validated .StripeElement--valid ~ .valid-feedback,
-.custom-file-input .was-validated .StripeElement--valid ~ .valid-tooltip, .custom-file-input.is-valid ~ .valid-feedback,
-.custom-file-input.is-valid ~ .valid-tooltip {
+.was-validated .custom-file-input .was-validated .StripeElement--complete ~ .complete-feedback,
+.was-validated .custom-file-input .was-validated .StripeElement--complete ~ .complete-tooltip, .was-validated .custom-file-input.is-complete ~ .complete-feedback,
+.was-validated .custom-file-input.is-complete ~ .complete-tooltip {
   display: block;
 }
-.custom-file-input .was-validated .StripeElement--valid:focus ~ .custom-file-label, .custom-file-input.is-valid:focus ~ .custom-file-label {
+.was-validated .custom-file-input .was-validated .StripeElement--complete:focus ~ .custom-file-label, .was-validated .custom-file-input.is-complete:focus ~ .custom-file-label {
   border-color: #28a745;
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
 }
@@ -10989,6 +10981,26 @@ textarea.form-control .was-validated .StripeElement--invalid, textarea.form-cont
 .custom-file-input .was-validated .StripeElement--invalid:focus ~ .custom-file-label, .custom-file-input.is-invalid:focus ~ .custom-file-label {
   border-color: #dc3545;
   box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.stripe-feedback {
+  margin-top: 0.25rem;
+  font-size: 80%;
+  width: 100%;
+  display: block;
+}
+
+.form-control.StripeElement--complete ~ .stripe-feedback {
+  color: #28a745;
+}
+
+.form-control.StripeElement--invalid ~ .stripe-feedback {
+  color: #dc3545;
+}
+
+.stripe-form-control {
+  border-top-right-radius: 0.25rem !important;
+  border-bottom-right-radius: 0.25rem !important;
 }
 
 /*# sourceMappingURL=generic-0.12-prefixed.css.map */

@@ -16,14 +16,6 @@
 }
 
 @mixin stripe-form-validation-state($state, $color) {
-  .StripeElement--#{$state} {
-    display: none;
-    width: 100%;
-    margin-top: $form-feedback-margin-top;
-    font-size: $form-feedback-font-size;
-    color: $color;
-  }
-
   .#{$state}-tooltip {
     position: absolute;
     top: 100%;
@@ -39,34 +31,31 @@
     @include border-radius($form-feedback-tooltip-border-radius);
   }
 
-  .form-control {
-    .was-validated .StripeElement--#{$state},
-    &.is-#{$state} {
-      border-color: $color;
+  .form-control.StripeElement--#{$state} {
+    border-color: $color;
 
-      @if $enable-validation-icons {
-        padding-right: $input-height-inner;
-        background-repeat: no-repeat;
-        background-position: center right calc(#{$input-height-inner} / 4);
-        background-size: calc(#{$input-height-inner} / 2) calc(#{$input-height-inner} / 2);
+    @if $enable-validation-icons {
+      padding-right: $input-height-inner;
+      background-repeat: no-repeat;
+      background-position: center right calc(#{$input-height-inner} / 4);
+      background-size: calc(#{$input-height-inner} / 2) calc(#{$input-height-inner} / 2);
 
-        @if $state == "valid" {
-          background-image: $form-feedback-icon-valid;
-        } @else {
-          background-image: $form-feedback-icon-invalid;
-        }
-      }
-
-      .StripeElement--focus {
-        border-color: $color;
-        box-shadow: 0 0 0 $input-focus-width rgba($color, .25);
-      }
-
-      ~ .#{$state}-feedback,
-      ~ .#{$state}-tooltip {
-        display: block;
+      @if $state == "complete" {
+        background-image: $form-feedback-icon-valid;
+      } @else {
+        background-image: $form-feedback-icon-invalid;
       }
     }
+
+    ~ .#{$state}-feedback,
+    ~ .#{$state}-tooltip {
+      display: block;
+    }
+  }
+
+  .form-control.StripeElement--#{$state}.StripeElement--focus {
+    border-color: $color;
+    box-shadow: 0 0 0 $input-focus-width rgba($color, .25);
   }
 
   // stylelint-disable-next-line selector-no-qualifying-type
@@ -189,6 +178,35 @@
 
 // Customize the `:focus` state to imitate native WebKit styles.
 @include stripe-form-control-focus();
-
-@include stripe-form-validation-state("valid", $form-feedback-valid-color);
+.was-validated {
+  @include stripe-form-validation-state("complete", $form-feedback-valid-color);
+}
 @include stripe-form-validation-state("invalid", $form-feedback-invalid-color);
+
+//.form-control.is-invalid ~ .invalid-feedback
+
+.stripe-feedback {
+  margin-top: $form-feedback-margin-top;
+  font-size: $form-feedback-font-size;
+  width: 100%;
+  display: block;
+}
+
+.form-control.StripeElement--complete {
+  ~ .stripe-feedback {
+    color: $form-feedback-valid-color;
+  }
+}
+
+.form-control.StripeElement--invalid {
+  ~ .stripe-feedback {
+    color: $form-feedback-invalid-color;
+  }
+}
+
+@if $enable-rounded {
+  .stripe-form-control {
+    border-top-right-radius: $border-radius !important;
+    border-bottom-right-radius: $border-radius !important;
+  }
+}

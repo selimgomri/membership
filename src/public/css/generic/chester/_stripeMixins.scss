@@ -40,7 +40,7 @@
       background-position: center right calc(#{$input-height-inner} / 4);
       background-size: calc(#{$input-height-inner} / 2) calc(#{$input-height-inner} / 2);
 
-      @if $state == "valid" {
+      @if $state == "complete" {
         background-image: $form-feedback-icon-valid;
       } @else {
         background-image: $form-feedback-icon-invalid;
@@ -178,6 +178,35 @@
 
 // Customize the `:focus` state to imitate native WebKit styles.
 @include stripe-form-control-focus();
-
-@include stripe-form-validation-state("valid", $form-feedback-valid-color);
+.was-validated {
+  @include stripe-form-validation-state("complete", $form-feedback-valid-color);
+}
 @include stripe-form-validation-state("invalid", $form-feedback-invalid-color);
+
+//.form-control.is-invalid ~ .invalid-feedback
+
+.stripe-feedback {
+  margin-top: $form-feedback-margin-top;
+  font-size: $form-feedback-font-size;
+  width: 100%;
+  display: block;
+}
+
+.form-control.StripeElement--complete {
+  ~ .stripe-feedback {
+    color: $form-feedback-valid-color;
+  }
+}
+
+.form-control.StripeElement--invalid {
+  ~ .stripe-feedback {
+    color: $form-feedback-invalid-color;
+  }
+}
+
+@if $enable-rounded {
+  .stripe-form-control {
+    border-top-right-radius: $border-radius !important;
+    border-bottom-right-radius: $border-radius !important;
+  }
+}

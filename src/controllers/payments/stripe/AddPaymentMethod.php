@@ -141,10 +141,7 @@ include BASE_PATH . 'views/header.php';
           <div class="invalid-feedback">
             You must provide your country
           </div>
-        </div>
-
-        <!-- Used to display form errors. -->
-        <div id="card-errors" role="alert"></div>
+            </div>
 
         <!-- Multiple Part Element -->
         <div class="form-group">
@@ -155,9 +152,9 @@ include BASE_PATH . 'views/header.php';
             <div class="input-group-prepend">
               <span class="input-group-text" id="card-brand-element"><i class="fa fa-fw fa-credit-card" aria-hidden="true"></i></span>
             </div>
-            <span id="card-number-element" class="form-control">
+            <div id="card-number-element" class="form-control stripe-form-control"></div>
+            <div id="card-number-element-errors" class="stripe-feedback"></div>
           </div>
-          <div id="card-number-element-errors" class="text-danger mt-1"></div>
         </div>
 
         <div class="form-row">
@@ -167,7 +164,7 @@ include BASE_PATH . 'views/header.php';
                 Expires
               </label>
               <span id="card-expiry-element" class="form-control"></span>
-              <div id="card-expiry-element-errors" class="text-danger mt-1"></div>
+              <div id="card-expiry-element-errors" class="stripe-feedback"></div>
             </div>
           </div>
           <div class="col">
@@ -176,10 +173,13 @@ include BASE_PATH . 'views/header.php';
                 CVC
               </label>
               <span id="card-cvc-element" class="form-control"></span>
-              <div id="card-cvc-element-errors" class="text-danger mt-1"></div>
+              <div id="card-cvc-element-errors" class="stripe-feedback"></div>
             </div>
           </div>
         </div>
+
+        <!-- Used to display form errors. -->
+        <div id="card-errors" role="alert"></div>
 
         <p>
           <button id="card-button" class="btn btn-success" data-secret="<?= $setupIntent->client_secret ?>">Add payment card</button>
@@ -207,6 +207,18 @@ function setCardBrandIcon(brand) {
     content = '<i class="fa fa-cc-amex" aria-hidden="true"></i>';
   }
   document.getElementById('card-brand-element').innerHTML = content;
+}
+
+function disableButtons() {
+  document.querySelectorAll('.pm-can-disable').forEach(elem => {
+    elem.disabled = true;
+  });
+}
+
+function enableButtons() {
+  document.querySelectorAll('.pm-can-disable').forEach(elem => {
+    elem.disabled = false;
+  });
 }
 
 var stripe = Stripe('<?=htmlspecialchars(env('STRIPE_PUBLISHABLE'))?>');
@@ -338,6 +350,7 @@ form.addEventListener('submit', function(event) {
       document.getElementById('card-errors-message').textContent = result.error.message;
     } else {
       // The setup has succeeded. Display a success message.
+      disableButtons();
       displayError.innerHTML = '<div class="alert alert-success" id="card-errors-message"></div>'
       document.getElementById('card-errors-message').textContent = 'Card setup successfully. Please wait while we redirect you.';
       // The payment has succeeded. Display a success message.

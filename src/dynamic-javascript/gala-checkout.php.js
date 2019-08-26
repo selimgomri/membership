@@ -54,14 +54,26 @@ header("content-type: application/x-javascript");
 
 ?>
 
+function setCardBrandIcon(brand) {
+  var content = '<i class="fa fa-fw fa-credit-card" aria-hidden="true"></i>';
+  if (brand == 'visa') {
+    content = '<i class="fa fa-cc-visa" aria-hidden="true"></i>';
+  } else if (brand == 'mastercard') {
+    content = '<i class="fa fa-cc-mastercard" aria-hidden="true"></i>';
+} else if (brand == 'amex') {
+    content = '<i class="fa fa-cc-amex" aria-hidden="true"></i>';
+  }
+  document.getElementById('card-brand-element').innerHTML = content;
+}
+
 function disableButtons() {
-  document.querySelectorAll('button').forEach(elem => {
+  document.querySelectorAll('.pm-can-disable').forEach(elem => {
     elem.disabled = true;
   });
 }
 
 function enableButtons() {
-  document.querySelectorAll('button').forEach(elem => {
+  document.querySelectorAll('.pm-can-disable').forEach(elem => {
     elem.disabled = false;
   });
 }
@@ -78,41 +90,66 @@ var elements = stripe.elements({
 });
 var successAlert = '<div class="alert alert-success"><p class="mb-0"><strong>Payment Successful</strong></p><p class="mb-0">Please wait while we redirect you</p></div>';
 
-// Custom styling can be passed to options when creating an Element.
-// (Note that this demo uses a wider set of styles than the guide below.)
-// Try to match bootstrap 4 styling
-
-var cardElement = elements.create('card', {
-  iconStyle: 'solid',
-  hidePostalCode: true,
-  style: {
-    base: {
-      iconColor: '#ced4da',
-      color: '#212529',
-      fontWeight: 400,
-      fontFamily: 'Open Sans, Segoe UI, sans-serif',
-      fontSize: '16px',
-      fontSmoothing: 'antialiased',
-      ':-webkit-autofill': {
-        color: '#868e96',
-      },
-      '::placeholder': {
-        color: '#868e96',
-      },
-    },
-    invalid: {
-      iconColor: '#dc3545',
-      color: '#dc3545',
+// Style for each element
+var style = {
+  base: {
+    iconColor: '#ced4da',
+    lineHeight: '1.5',
+    height: '1.5rem',
+    color: '#212529',
+    fontWeight: 400,
+    fontFamily: 'Open Sans, Segoe UI, sans-serif',
+    fontSize: '16px',
+    fontSmoothing: 'antialiased',
+    '::placeholder': {
+      color: '#868e96',
     },
   },
+  invalid: {
+    color: '#212529',
+  },
+}
+
+var cardNumberElement = elements.create('cardNumber', {
+  style: style
 });
-cardElement.mount('#card-element');
+cardNumberElement.mount('#card-number-element');
+var cardExpiryElement = elements.create('cardExpiry', {
+  style: style
+});
+cardExpiryElement.mount('#card-expiry-element');
+var cardCvcElement = elements.create('cardCvc', {
+  style: style
+});
+cardCvcElement.mount('#card-cvc-element');
+
+function cardChangeEvent(event, elementId) {
+  var displayError = document.getElementById(elementId);
+  if (event.error) {
+    displayError.textContent = event.error.message;
+  } else {
+    displayError.textContent = '';
+  }
+}
+
+cardNumberElement.addEventListener('change', function(event) {
+  cardChangeEvent(event, 'card-number-element-errors');
+  if (event.brand) {
+  	setCardBrandIcon(event.brand);
+  }
+});
+cardExpiryElement.addEventListener('change', function(event) {
+  cardChangeEvent(event, 'card-expiry-element-errors');
+});
+cardCvcElement.addEventListener('change', function(event) {
+  cardChangeEvent(event, 'card-cvc-element-errors');
+});
 
 var cardholderName = document.getElementById('new-cardholder-name');
 var cardholderAddress1 = document.getElementById('addr-line-1');
 var cardholderZip = document.getElementById('addr-post-code');
 cardholderZip.addEventListener('change', function(event) {
-  cardElement.update({value: {postalCode: event.target.value.toUpperCase()}});
+  //cardElement.update({value: {postalCode: event.target.value.toUpperCase()}});
 });
 var cardholderCountry = document.getElementById('addr-country');
 
@@ -123,13 +160,13 @@ var form = document.getElementById('new-card-form');
 form.addEventListener('submit', function(event) {
   event.preventDefault();
   stripe.handleCardPayment(
-    clientSecret, cardElement, {
+    clientSecret, cardNumberElement, {
       payment_method_data: {
         billing_details: {
           name: cardholderName.value,
           address: {
             line1: cardholderAddress1.value,
-            zip: cardholderZip.postal_code,
+            postal_code: cardholderZip.value,
             country: cardholderCountry.value,
           },
         }
