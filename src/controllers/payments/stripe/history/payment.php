@@ -1,23 +1,5 @@
 <?php
 
-function getWalletName($name) {
-  if ($name == 'apple_pay') {
-    return 'Apple Pay';
-  } else if ($name == 'amex_express_checkout') {
-    return 'Amex Express Checkout';
-  } else if ($name == 'google_pay') {
-    return 'Google Pay';
-  } else if ($name == 'masterpass') {
-    return 'Masterpass  ';
-  } else if ($name == 'samsung_pay') {
-    return 'Samsung Pay';
-  } else if ($name == 'visa_checkout') {
-    return 'Visa Checkout';
-  } else {
-    return 'Other wallet';
-  }
-}
-
 function outcomeTypeInfo($type) {
   switch ($type) {
     case 'authorized':
