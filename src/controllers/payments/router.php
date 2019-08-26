@@ -354,4 +354,8 @@ $this->group('/card-transactions', function() {
 	$this->get('/{id}:int', function($id) {
 		include 'stripe/history/payment.php';
 	});
+
+	$this->get('/{id}:int/receipt.pdf', function($id) {
+		include 'stripe/history/payment.pdf.php';
+	});
 });
