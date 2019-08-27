@@ -52,30 +52,6 @@ $entryRequestDetails[] = [
 
 ?>
 
-function setCardBrandIcon(brand) {
-  var content = '<i class="fa fa-fw fa-credit-card" aria-hidden="true"></i>';
-  if (brand == 'visa') {
-    content = '<i class="fa fa-cc-visa" aria-hidden="true"></i>';
-  } else if (brand == 'mastercard') {
-    content = '<i class="fa fa-cc-mastercard" aria-hidden="true"></i>';
-} else if (brand == 'amex') {
-    content = '<i class="fa fa-cc-amex" aria-hidden="true"></i>';
-  }
-  document.getElementById('card-brand-element').innerHTML = content;
-}
-
-function disableButtons() {
-  document.querySelectorAll('.pm-can-disable').forEach(elem => {
-    elem.disabled = true;
-  });
-}
-
-function enableButtons() {
-  document.querySelectorAll('.pm-can-disable').forEach(elem => {
-    elem.disabled = false;
-  });
-}
-
 var stripe = Stripe(<?=json_encode(env('STRIPE_PUBLISHABLE'))?>);
 var cardButton = document.getElementById('new-card-button');
 var clientSecret = cardButton.dataset.secret;
@@ -88,36 +64,16 @@ var elements = stripe.elements({
 });
 var successAlert = '<div class="alert alert-success"><p class="mb-0"><strong>Payment Successful</strong></p><p class="mb-0">Please wait while we redirect you</p></div>';
 
-// Style for each element
-var style = {
-  base: {
-    iconColor: '#ced4da',
-    lineHeight: '1.5',
-    height: '1.5rem',
-    color: '#212529',
-    fontWeight: 400,
-    fontFamily: 'Open Sans, Segoe UI, sans-serif',
-    fontSize: '16px',
-    fontSmoothing: 'antialiased',
-    '::placeholder': {
-      color: '#868e96',
-    },
-  },
-  invalid: {
-    color: '#212529',
-  },
-}
-
 var cardNumberElement = elements.create('cardNumber', {
-  style: style
+  style: stripeElementStyle
 });
 cardNumberElement.mount('#card-number-element');
 var cardExpiryElement = elements.create('cardExpiry', {
-  style: style
+  style: stripeElementStyle
 });
 cardExpiryElement.mount('#card-expiry-element');
 var cardCvcElement = elements.create('cardCvc', {
-  style: style
+  style: stripeElementStyle
 });
 cardCvcElement.mount('#card-cvc-element');
 

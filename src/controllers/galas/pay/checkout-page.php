@@ -395,6 +395,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
   </div>
 </div>
 
+<script src="<?=autoUrl("js/payment-helpers.js")?>"></script>
 <script src="<?=autoUrl("js/gala-checkout.js")?>"></script>
 <script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 
