@@ -1,8 +1,9 @@
 function clearOutput() {
+  enableBtn();
   document.getElementById("output").innerHTML = '<div class="ajaxPlaceholder">Select a swimmer and gala</div>';
 }
       
-function enableBtn(swimmer, gala) {
+function enableBtn() {
   var swimmer = document.getElementById("swimmer");
   var gala = document.getElementById("gala");
   if (swimmer.value != "null" && gala.value != "null") {
@@ -25,6 +26,7 @@ function getResult() {
     xmlhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         document.getElementById("output").innerHTML = this.responseText;
+        enableBtn();
       }
     }
     var ajaxRequest = "<?=autoUrl('galas/ajax/entryForm')?>?galaID=" + galaValue + "&swimmer=" + swimmerValue;
