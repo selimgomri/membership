@@ -23,17 +23,17 @@ var stripeElementStyle = {
 
 function setCardBrandIcon(brand) {
   var content = '<i class="fa fa-fw fa-credit-card" aria-hidden="true"></i>';
-  if (brand == 'visa') {
+  if (brand === 'visa') {
     content = '<i class="fa fa-cc-visa" aria-hidden="true"></i>';
-  } else if (brand == 'mastercard') {
+  } else if (brand === 'mastercard') {
     content = '<i class="fa fa-cc-mastercard" aria-hidden="true"></i>';
-  } else if (brand == 'amex') {
+  } else if (brand === 'amex') {
     content = '<i class="fa fa-cc-amex" aria-hidden="true"></i>';
-  } else if (brand == ' discover') {
+  } else if (brand === 'discover') {
     content = '<i class="fa fa-cc-discover" aria-hidden="true"></i>';
-  } else if (brand == 'diners') {
+  } else if (brand === 'diners') {
     content = '<i class="fa fa-cc-diners-club" aria-hidden="true"></i>';
-  } else if (brand == 'jcb') {
+  } else if (brand === 'jcb') {
     content = '<i class="fa fa-cc-jcb" aria-hidden="true"></i>';
   }
   document.getElementById('card-brand-element').innerHTML = content;
