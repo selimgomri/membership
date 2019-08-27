@@ -50,8 +50,6 @@ $entryRequestDetails[] = [
   'amount' => $intent->amount
 ];
 
-header("content-type: application/x-javascript");
-
 ?>
 
 function setCardBrandIcon(brand) {

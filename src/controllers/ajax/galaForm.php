@@ -7,7 +7,15 @@ $rows = 0;
 $sql = "";
 $response = "";
 
-if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
+$coachEnters = false;
+// Check if coach enters
+if (isset($_GET["galaID"])) {
+	$getCoachEnters = $db->prepare("SELECT CoachEnters FROM galas WHERE GalaID = ?");
+	$getCoachEnters->execute([$_GET["galaID"]]);
+	$coachEnters = bool($getCoachEnters->fetchColumn());
+}
+
+if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
   // get the galaID parameter from request
   $galaID = $_REQUEST["galaID"];
   $memberID = $_REQUEST["swimmer"];
@@ -39,7 +47,7 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
     $rowArray = [1, null, null, null, null, 2, 1,  null, 2, 1, null, 2, 1, null, 2, 1, null, null, 2];
     $rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 2, "Butterfly", null, 2, "Freestyle", null, 2, "Individual Medley", null, null, 2];
 
-		$response .= "
+		$response .= "<h2>Select Swims</h2>
 		<p>All swims possible under Swim England Rules are shown below. Not all of these
 		events may be available for " . $row['GalaName'] . "</p>";
 
@@ -195,8 +203,106 @@ if ((isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
 
 	echo $response;
 
-}
-else {
+} else if ($coachEnters && isset($_GET["galaID"]) && isset($_GET["swimmer"])) {
+
+	/**
+	 * This is a gala where the coach enters, so we will show
+	 * the select available sessions interface.
+	 */
+
+	// Get swimmer info
+	$getSwimmer = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, DateOfBirth dob, UserID parent FROM members WHERE MemberID = ?");
+	$getSwimmer->execute([
+	  $_GET['swimmer']
+	]);
+	$swimmer = $getSwimmer->fetch(PDO::FETCH_ASSOC);
+
+	if ($swimmer == null || $swimmer['parent'] != $_SESSION['UserID']) {
+		halt(404);
+	}
+
+	// Get gala info
+	$getGala = $db->prepare("SELECT GalaFeeConstant flatfee, GalaFee fee, HyTek, GalaName `name`, GalaVenue venue FROM galas WHERE GalaID = ?");
+	$getGala->execute([
+		$_GET["galaID"]
+	]);
+	$gala = $getGala->fetch(PDO::FETCH_ASSOC);
+
+	if ($gala == null) {
+		halt(404);
+	}
+
+	$galaDate = new DateTime($gala['ends'], new DateTimeZone('Europe/London'));
+	$nowDate = new DateTime('now', new DateTimeZone('Europe/London'));
+
+	$getSessions = $db->prepare("SELECT `Name`, `ID` FROM galaSessions WHERE Gala = ? ORDER BY `ID` ASC");
+	$getSessions->execute([$_GET["galaID"]]);
+	$sessions = $getSessions->fetchAll(PDO::FETCH_ASSOC);
+
+	$getCanAttend = $db->prepare("SELECT `Session`, `CanEnter` FROM galaSessionsCanEnter ca INNER JOIN galaSessions gs ON ca.Session = gs.ID WHERE gs.Gala = ? AND ca.Member = ?");
+	$getCanAttend->execute([
+		$_GET["galaID"],
+		$_GET['swimmer']
+	]);
+
+	// Output
+	?>
+		<h2>Select available sessions</h2>
+		<p class="lead">Select sessions which <?=htmlspecialchars($swimmer['fn'])?> will be able to swim at.</p>
+		<p>Your coaches will use this information when making suggested entries to this gala.</p>
+
+		<?php if ($sessions == null) { ?>
+		<div class="alert alert-danger">
+			<p class="mb-0"><strong>You cannot complete this form at this time.</strong></p>
+			<p class="mb-0">Please contact your club.</p>
+		</div>
+		<?php } else {
+			$canAtt = $getCanAttend->fetchAll(PDO::FETCH_KEY_PAIR);
+			$checked = [];
+			for ($i = 0; $i < sizeof($sessions); $i++) {
+				if (isset($canAtt[$sessions[$i]['ID']]) && $canAtt[$sessions[$i]['ID']]) {
+					$checked[] = " checked ";
+				} else {
+					$checked[] = "";
+				}
+			}
+
+		?>
+
+		<input type="hidden" name="is-select-sessions" value="1">
+
+		<!--
+		<h2><?=htmlspecialchars($swimmer['fn'] . ' ' . $swimmer['sn'])?></h2>
+		<p class="lead"><?=htmlspecialchars($swimmer['fn'])?> is able to enter;</p>
+		-->
+		<div class="row">
+		<?php for ($i = 0; $i < sizeof($sessions); $i++) { ?>
+		<div class="col-sm-6 col-lg-4 col-xl-3">
+			<div class="form-group">
+				<div class="custom-control custom-checkbox">
+					<input type="checkbox" class="custom-control-input" id="<?=$swimmer['id']?>-<?=$sessions[$i]['ID']?>" name="<?=$swimmer['id']?>-<?=$sessions[$i]['ID']?>" <?=$checked[$i]?>>
+					<label class="custom-control-label" for="<?=$swimmer['id']?>-<?=$sessions[$i]['ID']?>">
+						<?=htmlspecialchars($sessions[$i]['Name'])?>
+					</label>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+		</div>
+		<?php } ?>
+
+	 	<?php if (bool($gala['flatfee'])) { ?>
+		<p>When your coach completes entries, we will automatically work out the fee you'll need to pay. The fee for each entry is &pound;<?=number_format($gala['fee'], 2, '.', '')?>.</p>
+		<?php } else { ?>
+		<p>As some swims at this gala cost different amounts to other swims, your entry fee will be calculated manually by the coach who selects <?=htmlspecialchars($swimmer['fn'])?>'s swims. You should verify this amount when you are sent an email detailing which swims a coach has entered <?=htmlspecialchars($swimmer['fn'])?> for.</p>
+		<?php } ?>
+
+		<p>
+			You should pay for entries to this gala in the usual way. Your club has not provided guidance as to which payment methods are accepted, which would be displayed in place of this message. This system provides support for payments by card, account balance (paid off by direct debit or any other method supported by your club), 
+		</p>
+
+	 <?php
+
+} else {
 	halt(404);
 }
-?>

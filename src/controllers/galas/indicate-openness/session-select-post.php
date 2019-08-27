@@ -30,24 +30,26 @@ if ($swimmer != null && $nowDate < $galaDate) {
     do {
       if ($sessions != null) {
         for ($i = 0; $i < sizeof($sessions); $i++) {
-          $can = false;
-          if (isset($_POST[$swimmer['id'] . '-' . $sessions[$i]['ID']]) && bool($_POST[$swimmer['id'] . '-' . $sessions[$i]['ID']])) {
-            $can = true;
-          }
+          if (isset($_POST[$swimmer['id'] . '-' . $sessions[$i]['ID']])) {
+            $can = false;
+            if (bool($_POST[$swimmer['id'] . '-' . $sessions[$i]['ID']])) {
+              $can = true;
+            }
 
-          $checkCount->execute([$swimmer['id'], $sessions[$i]['ID']]);
-          if ($checkCount->fetchColumn() > 0) {
-            // UPDATE
-            $update->bindValue(1, $can, PDO::PARAM_BOOL);
-            $update->bindValue(2, $swimmer['id'], PDO::PARAM_INT);
-            $update->bindValue(3, $sessions[$i]['ID'], PDO::PARAM_INT);
-            $update->execute();
-          } else {
-            // INSERT
-            $insert->bindValue(1, $swimmer['id'], PDO::PARAM_INT);
-            $insert->bindValue(2, $sessions[$i]['ID'], PDO::PARAM_INT);
-            $insert->bindValue(3, $can, PDO::PARAM_BOOL);
-            $insert->execute();
+            $checkCount->execute([$swimmer['id'], $sessions[$i]['ID']]);
+            if ($checkCount->fetchColumn() > 0) {
+              // UPDATE
+              $update->bindValue(1, $can, PDO::PARAM_BOOL);
+              $update->bindValue(2, $swimmer['id'], PDO::PARAM_INT);
+              $update->bindValue(3, $sessions[$i]['ID'], PDO::PARAM_INT);
+              $update->execute();
+            } else {
+              // INSERT
+              $insert->bindValue(1, $swimmer['id'], PDO::PARAM_INT);
+              $insert->bindValue(2, $sessions[$i]['ID'], PDO::PARAM_INT);
+              $insert->bindValue(3, $can, PDO::PARAM_BOOL);
+              $insert->execute();
+            }
           }
         }
       }
@@ -59,4 +61,4 @@ if ($swimmer != null && $nowDate < $galaDate) {
   }
 }
 
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("galas/" . $id . "/indicate-availability"));
