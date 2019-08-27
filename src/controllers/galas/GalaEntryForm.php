@@ -8,7 +8,7 @@ $pagetitle = "Enter a Gala";
 $mySwimmers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM `members` WHERE `members`.`UserID` = ? ORDER BY fn ASC, sn ASC");
 $mySwimmers->execute([$_SESSION['UserID']]);
 
-$galas = $db->query("SELECT GalaID id, GalaName `name` FROM `galas` WHERE ClosingDate >= CURDATE() AND NOT CoachEnters ORDER BY `galas`.`ClosingDate` ASC");
+$galas = $db->query("SELECT GalaID id, GalaName `name` FROM `galas` WHERE ClosingDate >= CURDATE() ORDER BY `galas`.`ClosingDate` ASC");
 
 $mySwimmer = $mySwimmers->fetch(PDO::FETCH_ASSOC);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
@@ -58,7 +58,6 @@ include "galaMenu.php";
           </select>
         </div>
       </div>
-      <h2>Select Swims</h2>
       <div class="ajaxArea mb-3" id="output">
         <div class="ajaxPlaceholder">Select a swimmer and gala
         </div>
@@ -67,53 +66,6 @@ include "galaMenu.php";
         <button type="submit" id="submit" class="btn btn-success">Submit</button>
       </p>
       </div>
-      <script>
-      function clearOutput() {
-        document.getElementById("output").innerHTML = '<div class="ajaxPlaceholder">Select a swimmer and gala</div>';
-      }
-        function enableBtn(swimmer, gala) {
-          var swimmer = document.getElementById("swimmer");
-          var gala = document.getElementById("gala");
-          if (swimmer.value != "null" && gala.value != "null") {
-            document.getElementById("submit").disabled = false;
-          }
-          else {
-            document.getElementById("submit").disabled = true;
-          }
-         }
-        document.getElementById("submit").disabled = true;
-        var swimmer = document.getElementById("swimmer");
-        var gala = document.getElementById("gala");
-        swimmer.addEventListener("change", enableBtn);
-        gala.addEventListener("change", enableBtn);
-
-        function getResult() {
-          var gala = document.getElementById("gala");
-          var swimmer = document.getElementById("swimmer");
-          var swimmerValue = swimmer.value;
-          var galaValue = gala.options[gala.selectedIndex].value;
-          console.log(galaValue);
-          if (galaValue=="null") {
-            clearOutput();
-          }
-          else {
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() {
-              if (this.readyState == 4 && this.status == 200) {
-                console.log("We got here");
-                document.getElementById("output").innerHTML = this.responseText;
-                console.log(this.responseText);
-              }
-            }
-            var ajaxRequest = "<?php echo autoURL('galas/ajax/entryForm'); ?>?galaID=" + galaValue + "&swimmer=" + swimmerValue;
-            console.log(ajaxRequest);
-            xmlhttp.open("GET", ajaxRequest, true);
-            xmlhttp.send();
-          }
-        }
-        document.getElementById("swimmer").onchange=clearOutput;
-        document.getElementById("gala").onchange=getResult;
-      </script>
     </form>
     <?php
   } else { ?>
@@ -139,4 +91,7 @@ include "galaMenu.php";
 
   <?php } ?>
 </div>
+
+<script src="<?=autoUrl("js/gala-entry-form.js")?>"></script>
+
 <?php include BASE_PATH . "views/footer.php";

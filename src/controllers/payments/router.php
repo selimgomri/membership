@@ -129,6 +129,10 @@ if ($access == "Admin") {
 		include 'admin/ManualChargeDo.php';
 	});
 
+	$this->group('/confirmation', function() {
+		include 'admin/confirmation/router.php';
+	});
+
 	$this->group('/history', function() {
 		global $link;
 

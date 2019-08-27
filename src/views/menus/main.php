@@ -173,6 +173,8 @@ if (!function_exists('chesterStandardMenu')) {
                   <div class="dropdown-menu" aria-labelledby="paymentsAdminDropdown">
                     <a class="dropdown-item" href="<?php echo autoUrl("payments") ?>">Payments Home</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("payments/history") ?>">Payment Status</a>
+                    <!-- New feature coming soon -->
+                    <!-- <a class="dropdown-item" href="<?=autoUrl("payments/confirmation")?>">Payment Confirmation</a> -->
                     <a class="dropdown-item" href="<?php echo autoUrl("payments/extrafees")?>">Extra Fees</a>
                     <?php if ($_SESSION['AccessLevel'] == 'Admin' || $_SESSION['AccessLevel'] == 'Galas') { ?>
                     <a class="dropdown-item" href="<?=autoUrl("payments/galas")?>">
