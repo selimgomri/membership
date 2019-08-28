@@ -1,5 +1,7 @@
 <?php
 
+global $db;
+
 require 'GoCardlessSetup.php';
 
 $user = $_SESSION['UserID'];
@@ -8,6 +10,8 @@ $pagetitle = "Payments and Direct Debits";
 if (!userHasMandates($user)) {
   header("Location: " . autoUrl("payments/setup"));
 }
+
+$balance = getAccountBalance($_SESSION['UserID']);
 
 $use_white_background = true;
 include BASE_PATH . "views/header.php";
@@ -63,45 +67,9 @@ include BASE_PATH . "views/paymentsMenu.php";
             $name = null;
           }
           $bank = mb_strtoupper(bankDetails($user, "bank_name"));
-          $has_logo = false;
-          $logo_path = "";
-
-          if ($bank == "TSB BANK PLC") {
-            $has_logo = true;
-            $logo_path = autoUrl("public/img/directdebit/bank-logos/tsbbankplc");
-          } else if ($bank == "STARLING BANK LIMITED") {
-            $has_logo = true;
-            $logo_path = autoUrl("public/img/directdebit/bank-logos/starlingbanklimited");
-          } else if ($bank == "LLOYDS BANK PLC") {
-            $has_logo = true;
-            $logo_path = autoUrl("public/img/directdebit/bank-logos/lloydsbankplc");
-          } else if ($bank == "HALIFAX (A TRADING NAME OF BANK OF SCOTLAND PLC)") {
-            $has_logo = true;
-            $logo_path = autoUrl("public/img/directdebit/bank-logos/halifax");
-          } else if ($bank == "SANTANDER UK PLC") {
-            $has_logo = true;
-            $logo_path = autoUrl("public/img/directdebit/bank-logos/santanderukplc");
-          } else if ($bank == "BARCLAYS BANK UK PLC") {
-            $has_logo = true;
-            $logo_path = autoUrl("public/img/directdebit/bank-logos/barclaysbankukplc");
-          } else if ($bank == "NATIONAL WESTMINSTER BANK PLC") {
-            $has_logo = true;
-            $logo_path = autoUrl("public/img/directdebit/bank-logos/nationalwestminsterbankplc");
-          } else if ($bank == "HSBC BANK  PLC (RFB)" || $bank == "HSBC UK BANK PLC") {
-            $has_logo = true;
-            $logo_path = autoUrl("public/img/directdebit/bank-logos/hsbc");
-          } else if ($bank == "THE CO-OPERATIVE BANK PLC") {
-            $has_logo = true;
-            $logo_path = autoUrl("public/img/directdebit/bank-logos/coop");
-          } else if ($bank == "NATIONWIDE BUILDING SOCIETY") {
-            $has_logo = true;
-            $logo_path = autoUrl("public/img/directdebit/bank-logos/nationwide");
-          } else if ($bank == "THE ROYAL BANK OF SCOTLAND PLC") {
-            $has_logo = true;
-            $logo_path = autoUrl("public/img/directdebit/bank-logos/rbs");
-          }
+          $logo_path = getBankLogo($bank);
           ?>
-          <?php if ($has_logo) { ?>
+          <?php if ($logo_path) { ?>
             <img class="img-fluid mb-3" style="max-height:35px;" src="<?=$logo_path?>.png" srcset="<?=$logo_path?>@2x.png 2x, <?=$logo_path?>@3x.png 3x">
           <?php } ?>
           <p class="mb-0"><?=htmlspecialchars($name)?><?=htmlspecialchars(strtoupper(bankDetails($user, "bank_name")))?></p>
@@ -115,6 +83,13 @@ include BASE_PATH . "views/paymentsMenu.php";
           <?php } ?>
         </p>
       </div>
+
+      <div class="cell">
+        <h2>Account balance</h2>
+        <p>Your account balance includes pending and outstanding fees.</p>
+        <p>&pound;<?=number_format($balance/100, 2, '.', '')?></p>
+      </div>
+
       <div class="cell text-white bg-secondary">
         <p class="mb-0">
           <strong>
