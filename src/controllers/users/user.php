@@ -57,43 +57,7 @@ if (userHasMandates($id)) {
     $bankName = null;
   }
   $bank = mb_strtoupper(bankDetails($id, "bank_name"));
-  $has_logo = false;
-  $logo_path = "";
-
-  if ($bank == "TSB BANK PLC") {
-    $has_logo = true;
-    $logo_path = autoUrl("public/img/directdebit/bank-logos/tsbbankplc");
-  } else if ($bank == "STARLING BANK LIMITED") {
-    $has_logo = true;
-    $logo_path = autoUrl("public/img/directdebit/bank-logos/starlingbanklimited");
-  } else if ($bank == "LLOYDS BANK PLC") {
-    $has_logo = true;
-    $logo_path = autoUrl("public/img/directdebit/bank-logos/lloydsbankplc");
-  } else if ($bank == "HALIFAX (A TRADING NAME OF BANK OF SCOTLAND PLC)") {
-    $has_logo = true;
-    $logo_path = autoUrl("public/img/directdebit/bank-logos/halifax");
-  } else if ($bank == "SANTANDER UK PLC") {
-    $has_logo = true;
-    $logo_path = autoUrl("public/img/directdebit/bank-logos/santanderukplc");
-  } else if ($bank == "BARCLAYS BANK UK PLC") {
-    $has_logo = true;
-    $logo_path = autoUrl("public/img/directdebit/bank-logos/barclaysbankukplc");
-  } else if ($bank == "NATIONAL WESTMINSTER BANK PLC") {
-    $has_logo = true;
-    $logo_path = autoUrl("public/img/directdebit/bank-logos/nationalwestminsterbankplc");
-  } else if ($bank == "HSBC BANK  PLC (RFB)" || $bank == "HSBC UK BANK PLC") {
-    $has_logo = true;
-    $logo_path = autoUrl("public/img/directdebit/bank-logos/hsbc");
-  } else if ($bank == "THE CO-OPERATIVE BANK PLC") {
-    $has_logo = true;
-    $logo_path = autoUrl("public/img/directdebit/bank-logos/coop");
-  } else if ($bank == "NATIONWIDE BUILDING SOCIETY") {
-    $has_logo = true;
-    $logo_path = autoUrl("public/img/directdebit/bank-logos/nationwide");
-  } else if ($bank == "THE ROYAL BANK OF SCOTLAND PLC") {
-    $has_logo = true;
-    $logo_path = autoUrl("public/img/directdebit/bank-logos/rbs");
-  }
+  $logo_path = getBankLogo($bank);
 }
 
 $userObj = new \User($id, $db, false);
@@ -324,7 +288,9 @@ include BASE_PATH . "views/header.php";
       <?php if (userHasMandates($id)) { ?>
       <div class="col-sm-6 col-md-4">
         <h3 class="h6">Direct Debit Mandate</h3>
+        <?php if ($logo_path) { ?>
         <img class="img-fluid mb-3" style="max-height:35px;" src="<?=$logo_path?>.png" srcset="<?=$logo_path?>@2x.png 2x, <?=$logo_path?>@3x.png 3x">
+        <?php } ?>
         <p class="mb-0"><?=$bankName?><?=mb_strtoupper(bankDetails($id, "bank_name"))?></p>
         <p class="mono">******<?=mb_strtoupper(bankDetails($id, "account_number_end"))?></p>
       </div>
