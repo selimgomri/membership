@@ -44,21 +44,22 @@ $getRenewals->execute([
 $getNumMembers = $db->prepare("SELECT COUNT(*) FROM renewalMembers WHERE RenewalID = ?");
 $leavers = $systemInfo->getSystemOption('LeaversSquad');
 
-// Delete leavers
-$deleteFromLeavers = $db->prepare("DELETE FROM members WHERE SquadID = ?");
-$db->beginTransaction();
+if ($leavers != null) {
+  // Delete leavers
+  $deleteFromLeavers = $db->prepare("DELETE FROM members WHERE SquadID = ?");
+  $db->beginTransaction();
 
-try {
-  $deleteFromLeavers->execute([
-    $leavers
-  ]);
-  $db->commit();
-  echo "Members in leavers deleted<br>";
-} catch (Exception $e) {
-  reportError($e);
-  $db->rollBack();
+  try {
+    $deleteFromLeavers->execute([
+      $leavers
+    ]);
+    $db->commit();
+    echo "Members in leavers deleted<br>";
+  } catch (Exception $e) {
+    reportError($e);
+    $db->rollBack();
+  }
 }
-
 
 // Make sure we don't add members from leaver squad to renewal
 $getMembers = null;
