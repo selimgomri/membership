@@ -111,7 +111,11 @@ if ($added && $status) {
   }
   if ($id != null) {
     $_SESSION['GalaAddedSuccess'] = true;
-    header("Location: " . autoUrl("galas/" . $id));
+    if (bool($coachDoesEntries)) {
+      header("Location: " . autoUrl("galas/" . $id . "/sessions"));
+    } else {
+      header("Location: " . autoUrl("galas/" . $id));
+    }
   } else {
     header("Location: " . autoUrl("galas"));
   }

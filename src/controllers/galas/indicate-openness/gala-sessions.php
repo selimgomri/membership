@@ -32,6 +32,12 @@ include BASE_PATH . 'views/header.php';
   </nav>
   <div class="row">
     <div class="col-lg-8">
+      <?php if (isset($_SESSION['GalaAddedSuccess']) && $_SESSION['GalaAddedSuccess']) { ?>
+      <div class="alert alert-success">
+        <p class="mb-0"><strong>We've successfully added this gala</strong></p>
+        <p class="mb-0">Please now provide information about sessions at this gala</p>
+      </div>
+      <?php unset($_SESSION['GalaAddedSuccess']); } ?>
       <h1>Manage sessions at <?=htmlspecialchars($gala['name'])?></h1>
       <p class="lead">Adding sessions allows parents to indicate if a swimmer will be able to enter any given session.</p>
 
