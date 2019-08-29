@@ -265,9 +265,7 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
     $getPaymentMethod = $db->prepare("SELECT ID FROM stripePayMethods WHERE MethodID = ?");
     $getPaymentMethod->execute([$intent->payment_method->id]);
     $paymentMethodId = $getPaymentMethod->fetchColumn();
-    echo $paymentMethodId . "\r\n";
     if ($paymentMethodId == null) {
-      reportError("Payment method id is null");
       if ($cardCount > 0) {
         $getCardFromOtherDetails = $db->prepare("SELECT ID FROM stripePayMethods WHERE Customer = ? AND Fingerprint = ? AND Reusable = ?");
         $getCardFromOtherDetails->execute([
@@ -280,16 +278,12 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
           halt(404);
         }
       }
-    } else {
-      reportError($paymentMethodId);
     }
 
     // Set the date to now
     $date = new DateTime('now', new DateTimeZone('UTC'));
 
     try {
-      echo $paymentMethodId . "\r\n";
-      try {
       $addToStripePayments->execute([
         $paymentMethodId,
         $intent->amount,
@@ -299,11 +293,7 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
         $date->format('Y-m-d H:i:s'),
         $intent->id
       ]);
-      } catch (Exception $e) {
-        reportError($e);
-        throw new Exception();
-      }
-
+      
       $updateEntries->execute([
         true,
         $databaseId
