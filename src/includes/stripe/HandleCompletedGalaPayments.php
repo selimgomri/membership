@@ -173,7 +173,9 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
 
       $customerId = $customer->id;
 
-      if (!isset($pm->customer) || $pm->customer != $customerId) {
+      // Attach payment method to customer iff it's to be reused
+      // Otherwise we're saving loads of non reusable Apple Pay cards etc.
+      if (bool($reuse) && (!isset($pm->customer) || $pm->customer != $customerId)) {
         $pm->attach(['customer' => $customerId]);
       }
     
@@ -245,7 +247,7 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
     $db->beginTransaction();
 
     $updateEntries = $db->prepare("UPDATE galaEntries SET Charged = ? WHERE StripePayment = ?");
-    $addToStripePayments = $db->prepare("UPDATE stripePayments SET Method = ?, Amount = ?, Currency = ?, Paid = ?, AmountRefunded = ? WHERE Intent = ?");
+    $addToStripePayments = $db->prepare("UPDATE stripePayments SET Method = ?, Amount = ?, Currency = ?, Paid = ?, AmountRefunded = ?, `DateTime` = ? WHERE Intent = ?");
     $addPaymentItems = $db->prepare("INSERT INTO stripePaymentItems (Payment, `Name`, `Description`, Amount, Currency, AmountRefunded) VALUES (?, ?, ?, ?, ?, ?)");
     $getEntries = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE StripePayment = ?");
 
@@ -267,7 +269,8 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
       }
     }
 
-    $date = new DateTime('@' . $intent->created, new DateTimeZone('UTC'));
+    // Set the date to now
+    $date = new DateTime('now', new DateTimeZone('UTC'));
 
     try {
       $addToStripePayments->execute([
@@ -276,7 +279,8 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
         $intent->currency,
         true,
         0,
-        $intent->id
+        $intent->id,
+        $date->format('Y-m-d H:i:s')
       ]);
 
       $updateEntries->execute([
