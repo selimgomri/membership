@@ -172,12 +172,6 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
       $pm = \Stripe\PaymentMethod::retrieve($method->id);
 
       $customerId = $customer->id;
-
-      // Attach payment method to customer iff it's to be reused
-      // Otherwise we're saving loads of non reusable Apple Pay cards etc.
-      if (bool($reuse) && (!isset($pm->customer) || $pm->customer != $customerId)) {
-        $pm->attach(['customer' => $customerId]);
-      }
     
       $name = "Unnamed Card";
     
@@ -207,6 +201,13 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
       $cardCount = $getCardCount->fetchColumn();
 
       if ($cardCount == 0) {  
+        // Attach payment method to customer iff it's to be reused
+        // Also only if we can't see it in the DB for this user
+        // Otherwise we're saving loads of non reusable Apple Pay cards etc.
+        if (bool($reuse) && (!isset($pm->customer) || $pm->customer != $customerId)) {
+          $pm->attach(['customer' => $customerId]);
+        }
+
         $addPaymentDetails = $db->prepare("INSERT INTO stripePayMethods (Customer, MethodID, `Name`, CardName, City, Country, Line1, Line2, PostCode, Brand, IssueCountry, ExpMonth, ExpYear, Funding, Last4, Fingerprint, Reusable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $addPaymentDetails->execute([
           $customer->id,
