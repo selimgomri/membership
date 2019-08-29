@@ -419,7 +419,7 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
         return true;
       }
     } catch (Exception $e) {
-      pre($e);
+      reportError($e);
       $db->rollBack();
     }
   } else {
