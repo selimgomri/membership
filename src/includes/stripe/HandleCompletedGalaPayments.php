@@ -204,6 +204,18 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
         // Otherwise we're saving loads of non reusable Apple Pay cards etc.
         if (bool($reuse) && (!isset($pm->customer) || $pm->customer != $customerId)) {
           $pm->attach(['customer' => $customerId]);
+        } else {
+          $reuse = 0;
+        }
+
+        // Work out if card fingerprint exists for user
+        $getThisCardCount = $db->prepare("SELECT COUNT(*) FROM stripePayMethods WHERE Fingerprint = ? AND Customer = ?");
+        $getThisCardCount->execute([
+          $pm->card->fingerprint,
+          $customerId
+        ]);
+        if ($getThisCardCount->fetchColumn() > 0) {
+          $reuse = 0;
         }
 
         $addPaymentDetails = $db->prepare("INSERT INTO stripePayMethods (Customer, MethodID, `Name`, CardName, City, Country, Line1, Line2, PostCode, Brand, IssueCountry, ExpMonth, ExpYear, Funding, Last4, Fingerprint, Reusable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -253,7 +265,9 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
     $getPaymentMethod = $db->prepare("SELECT ID FROM stripePayMethods WHERE MethodID = ?");
     $getPaymentMethod->execute([$intent->payment_method->id]);
     $paymentMethodId = $getPaymentMethod->fetchColumn();
+    echo $paymentMethodId . "\r\n";
     if ($paymentMethodId == null) {
+      reportError("Payment method id is null");
       if ($cardCount > 0) {
         $getCardFromOtherDetails = $db->prepare("SELECT ID FROM stripePayMethods WHERE Customer = ? AND Fingerprint = ? AND Reusable = ?");
         $getCardFromOtherDetails->execute([
@@ -266,21 +280,29 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
           halt(404);
         }
       }
+    } else {
+      reportError($paymentMethodId);
     }
 
     // Set the date to now
     $date = new DateTime('now', new DateTimeZone('UTC'));
 
     try {
+      echo $paymentMethodId . "\r\n";
+      try {
       $addToStripePayments->execute([
         $paymentMethodId,
         $intent->amount,
         $intent->currency,
         true,
         0,
-        $intent->id,
-        $date->format('Y-m-d H:i:s')
+        $date->format('Y-m-d H:i:s'),
+        $intent->id
       ]);
+      } catch (Exception $e) {
+        reportError($e);
+        throw new Exception();
+      }
 
       $updateEntries->execute([
         true,
