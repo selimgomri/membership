@@ -191,16 +191,14 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
       $last4 = $pm->card->last4;
       $threeDSecure = $pm->card->three_d_secure_usage->supported;
 
-      $getCardCount = $db->prepare("SELECT COUNT(*) FROM stripePayMethods WHERE Customer = ? AND Fingerprint = ? AND Reusable = ?");
+      $getCardCount = $db->prepare("SELECT COUNT(*) FROM stripePayMethods WHERE MethodID = ?");
       $getCardCount->execute([
-        $customer->id,
-        $pm->card->fingerprint,
-        1
+        $pm->id
       ]);
 
       $cardCount = $getCardCount->fetchColumn();
 
-      if ($cardCount == 0) {  
+      if ($cardCount == 0) {
         // Attach payment method to customer iff it's to be reused
         // Also only if we can't see it in the DB for this user
         // Otherwise we're saving loads of non reusable Apple Pay cards etc.
