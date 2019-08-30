@@ -2,7 +2,7 @@
 
 global $db;
 
-$getCard = $db->prepare("SELECT `Name`, Last4, Brand, ExpMonth, ExpYear, Funding, PostCode, Line1, Line2, CardName, MethodID FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND stripePayMethods.ID = ?");
+$getCard = $db->prepare("SELECT `Name`, Last4, Brand, ExpMonth, ExpYear, Funding, PostCode, Line1, Line2, CardName, MethodID, Reusable FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND stripePayMethods.ID = ?");
 $getCard->execute([$_SESSION['UserID'], $id]);
 
 $card = $getCard->fetch(PDO::FETCH_ASSOC);
@@ -25,7 +25,7 @@ $pm = \Stripe\PaymentMethod::retrieve($card['MethodID']);
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
       <li class="breadcrumb-item"><a href="<?=autoUrl("payments/cards")?>">Cards</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Edit card</li>
+      <li class="breadcrumb-item active" aria-current="page">&#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card['Last4'])?></li>
     </ol>
   </nav>
 
@@ -50,6 +50,7 @@ $pm = \Stripe\PaymentMethod::retrieve($card['MethodID']);
         Expires at the end of <?=htmlspecialchars(date("F Y", strtotime($card['ExpYear'] . '-' . $card['ExpMonth'] . '-01')))?>.
       </p>
 
+      <?php if (bool($card['Reusable'])) { ?>
       <p>
         Depending on your issuing bank, we may be able automatically update your card details when it expires or is replaced. If this is the case, we'll update the last 4 digits and expiry date.
       </p>
@@ -57,6 +58,7 @@ $pm = \Stripe\PaymentMethod::retrieve($card['MethodID']);
       <p>
         If you don't want to have your cards automatically updated, you can opt out of these services by contacting your issuing bank.
       </p>
+      <?php } ?>
 
       <?php if (isset($pm->billing_details->name) || isset($pm->billing_details->address->line1) || isset($pm->billing_details->address->postal_code)) { ?>
       <h2>Billing details</h2>
@@ -73,6 +75,7 @@ $pm = \Stripe\PaymentMethod::retrieve($card['MethodID']);
       </address>
       <?php } ?>
 
+      <?php if (bool($card['Reusable'])) { ?>
       <h2>Forget card</h2>
       <p class="lead">Forget this card to remove it from your list</p>
       <p class="mb-5">
@@ -80,12 +83,8 @@ $pm = \Stripe\PaymentMethod::retrieve($card['MethodID']);
           Forget card
         </a>
       </p>
+      <?php } ?>
 
-      <div class="text-muted">
-        <p>
-          We accept Visa, MasterCard and American Express.
-        </p>
-      </div>
     </div>
   </div>
 </div>

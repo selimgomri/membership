@@ -185,12 +185,6 @@ include BASE_PATH . 'views/header.php';
           <button id="card-button" class="btn btn-success" data-secret="<?= $setupIntent->client_secret ?>">Add payment card</button>
         </p>
       </form>
-
-      <div class="text-muted">
-        <p>
-          We accept Visa, MasterCard and American Express.
-        </p>
-      </div>
     </div>
   </div>
 </div>
