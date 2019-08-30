@@ -84,6 +84,21 @@ function stripe_handleNewPaymentIntent($intent) {
   $paymentDatabaseId = $databaseId;
 }
 
+/**
+ * Disables a detached payment method, preventing future use, which would fail
+ *
+ * @param PaymentMethod $pm
+ * @return void
+ */
+function stripe_detachPaymentMethod($pm) {
+  global $db;
+  $update = $db->prepare("UPDATE stripePayMethods SET Reusable = ? WHERE MethodID = ?");
+  $update->execute([
+    0,
+    $pm->id
+  ]);
+}
+
 function stripe_handlePaymentMethodUpdate($pm) {
   global $db;
 
@@ -160,6 +175,10 @@ switch ($event->type) {
   case 'payment_intent.created':
     $paymentIntent = $event->data->object;
     stripe_handleNewPaymentIntent($paymentIntent);
+    break;
+  case 'payment_method.detached':
+    $paymentMethod = $event->data->object;
+    stripe_detachPaymentMethod($paymentMethod);
     break;
   default:
     // Unexpected event type
