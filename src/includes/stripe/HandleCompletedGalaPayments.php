@@ -204,6 +204,18 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
         // Otherwise we're saving loads of non reusable Apple Pay cards etc.
         if (bool($reuse) && (!isset($pm->customer) || $pm->customer != $customerId)) {
           $pm->attach(['customer' => $customerId]);
+        } else {
+          $reuse = 0;
+        }
+
+        // Work out if card fingerprint exists for user
+        $getThisCardCount = $db->prepare("SELECT COUNT(*) FROM stripePayMethods WHERE Fingerprint = ? AND Customer = ?");
+        $getThisCardCount->execute([
+          $pm->card->fingerprint,
+          $customerId
+        ]);
+        if ($getThisCardCount->fetchColumn() > 0) {
+          $reuse = 0;
         }
 
         $addPaymentDetails = $db->prepare("INSERT INTO stripePayMethods (Customer, MethodID, `Name`, CardName, City, Country, Line1, Line2, PostCode, Brand, IssueCountry, ExpMonth, ExpYear, Funding, Last4, Fingerprint, Reusable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -278,10 +290,10 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
         $intent->currency,
         true,
         0,
-        $intent->id,
-        $date->format('Y-m-d H:i:s')
+        $date->format('Y-m-d H:i:s'),
+        $intent->id
       ]);
-
+      
       $updateEntries->execute([
         true,
         $databaseId
