@@ -47,39 +47,6 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<style>
-/**
- * The CSS shown here will not be introduced in the Quickstart guide, but shows
- * how you can use CSS to style your Element's container.
- */
-.card-element {
-  box-sizing: border-box;
-
-  /* height: 40px; */
-
-  padding: 1rem;
-
-  color: #333;
-  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 1rem;
-
-  border: 1px solid #ced4da;
-
-  background-color: white;
-
-  box-shadow: none;
-  border-radius: 0.25rem;
-}
-
-</style>
-<?php if (bool(env('IS_CLS'))) { ?>
-<style>
-.card-element {
-  border-radius: 0px;
-}
-</style>
-<?php } ?>
-
 <div class="container">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -150,7 +117,7 @@ include BASE_PATH . 'views/header.php';
           </label>
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="card-brand-element"><i class="fa fa-fw fa-credit-card" aria-hidden="true"></i></span>
+              <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?=autoUrl("public/img/stripe/network-svgs/credit-card.svg")?>" aria-hidden="true"></span>
             </div>
             <div id="card-number-element" class="form-control stripe-form-control"></div>
             <div id="card-number-element-errors" class="stripe-feedback"></div>

@@ -22,19 +22,19 @@ var stripeElementStyle = {
 }
 
 function setCardBrandIcon(brand) {
-  var content = '<i class="fa fa-fw fa-credit-card" aria-hidden="true"></i>';
+  var content = '<img class="fa fa-fw" src="<?=autoUrl("public/img/stripe/network-svgs/credit-card.svg")?>" aria-hidden="true">';
   if (brand === 'visa') {
-    content = '<i class="fa fa-cc-visa" aria-hidden="true"></i>';
+    content = '<img class="fa fa-fw" src="<?=autoUrl("public/img/stripe/network-svgs/visa.svg")?>" aria-hidden="true">';
   } else if (brand === 'mastercard') {
-    content = '<i class="fa fa-cc-mastercard" aria-hidden="true"></i>';
+    content = '<img class="fa fa-fw" src="<?=autoUrl("public/img/stripe/network-svgs/mastercard.svg")?>" aria-hidden="true">';
   } else if (brand === 'amex') {
-    content = '<i class="fa fa-cc-amex" aria-hidden="true"></i>';
+    content = '<img class="fa fa-fw" src="<?=autoUrl("public/img/stripe/network-svgs/amex.svg")?>" aria-hidden="true">';
   } else if (brand === 'discover') {
-    content = '<i class="fa fa-cc-discover" aria-hidden="true"></i>';
+    content = '<img class="fa fa-fw" src="<?=autoUrl("public/img/stripe/network-svgs/discover.svg")?>" aria-hidden="true">';
   } else if (brand === 'diners') {
-    content = '<i class="fa fa-cc-diners-club" aria-hidden="true"></i>';
+    content = '<img class="fa fa-fw" src="<?=autoUrl("public/img/stripe/network-svgs/diners.svg")?>" aria-hidden="true">';
   } else if (brand === 'jcb') {
-    content = '<i class="fa fa-cc-jcb" aria-hidden="true"></i>';
+    content = '<img class="fa fa-fw" src="<?=autoUrl("public/img/stripe/network-svgs/jcb.svg")?>" aria-hidden="true">';
   }
   document.getElementById('card-brand-element').innerHTML = content;
 }
