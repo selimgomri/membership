@@ -20,6 +20,15 @@ try {
     $card['MethodID']
   ]);
 
+  try {
+    \Stripe\Stripe::setApiKey(env('STRIPE'));
+
+    $payment_method = \Stripe\PaymentMethod::retrieve($card['MethodID']);
+    $payment_method->detach();
+  } catch (Exception $e) {
+    // Probably isn't the end of the world if this fails since system disables use of card.
+  }
+
   $_SESSION['CardDeleted'] = true;
   header("Location: " . autoUrl("payments/cards"));
 } catch (Exception $e) {
