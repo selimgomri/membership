@@ -61,6 +61,11 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
   ]);
   $databaseId = $getId->fetchColumn();
 
+  // Set fees if possible
+  if (isset($intent->charges->data[0]->balance_transaction) && $intent->charges->data[0]->balance_transaction != null) {
+    stripe_handleBalanceTransactionForFees($intent->charges->data[0]->balance_transaction);
+  }
+
   if ($databaseId == null) {
     halt(404);
   }

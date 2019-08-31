@@ -2,6 +2,39 @@
 
 \Stripe\Stripe::setApiKey(env('STRIPE'));
 
+function stripe_handlePayout($payout) {
+  // Test if updating or new
+  global $db;
+  $getCount = $db->prepare("SELECT COUNT(*) FROM stripePayouts WHERE ID = ?");
+  $getCount->execute([
+    $payout->id
+  ]);
+
+  $amount = $payout->amount;
+  if (($payout->status == 'canceled' || $payout->status == 'failed') || (isset($payout->failure_code) && $payout->failure_code != null)) {
+    $amount = 0;
+  }
+  $date = new DateTime('@' . $payout->arrival_date, new DateTimeZone('UTC'));
+
+  if ($getCount->fetchColumn() > 0) {
+    // Update payout item
+    $update = $db->prepare("UPDATE stripePayouts SET `Amount` = ?, `ArrivalDate` = ? WHERE `ID` = ?");
+    $update->execute([
+      $amount,
+      $date->format("Y-m-d"),
+      $payout->id
+    ]);
+  } else {
+    // Add payout item
+    $update = $db->prepare("INSERT INTO stripePayouts (ID, Amount, ArrivalDate) VALUES (?, ?, ?)");
+    $update->execute([
+      $payout->id,
+      $amount,
+      $date->format("Y-m-d")
+    ]);
+  }
+}
+
 function stripe_handlePayment($pi) {
   global $db;
 
@@ -180,6 +213,13 @@ switch ($event->type) {
     $paymentMethod = $event->data->object;
     stripe_detachPaymentMethod($paymentMethod);
     break;
+  case 'payout.canceled':
+  case 'payout.created':
+  case 'payout.failed':
+  case 'payout.paid':
+  case 'payout.updated':
+    $payout = $event->data->object;
+    stripe_handlePayout($payout);
   default:
     // Unexpected event type
     reportError(['Unexpected event type' => $event->type]);
