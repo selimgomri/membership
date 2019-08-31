@@ -71,7 +71,12 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 				$name = 'REJECTIONS REFUND ' . $entry['MForename'] . ' ' . $entry['MSurname'] . '\'s Gala Entry into ' . $gala['name'] .  ' (Entry #' . $entry['EntryID'] . ')';
 
 				$jsonArray = [
-					"Name" => $name
+					"Name" => $name,
+					"type" => [
+						"object" => 'GalaEntry',
+						"id" => $id,
+						"name" => $gala['name']
+					]
 				];
 				$json = json_encode($jsonArray);
 
