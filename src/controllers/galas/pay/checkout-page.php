@@ -121,6 +121,13 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/galas/galaMenu.php";
 ?>
 
+<style>
+.accepted-network-logos img {
+  height: 2rem;
+  margin: 0 0.5rem 0 0;
+}
+</style>
+
 <div class="container">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -145,16 +152,23 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
           <h3><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?> for <?=htmlspecialchars($entry['GalaName'])?></h3>
           <div class="row">
             <div class="col-sm-5 col-md-4 col-lg-6">
-              <p class="mb-0">
-                <?=htmlspecialchars($entry['MForename'])?> is entered in;
+              <p>
+                <a data-toggle="collapse" href="#swims-<?=$entry['EntryID']?>" role="button" aria-expanded="false" aria-controls="swims-<?=$entry['EntryID']?>">
+                  Show swims
+                </a>
               </p>
-              <ul class="list-unstyled">
-              <?php $count = 0; ?>
-              <?php foreach($swimsArray as $colTitle => $text) { ?>
-                <?php if ($entry[$colTitle]) { $count++; ?>
-                <li><?=$text?></li>
+              <div class="collapse" id="swims-<?=$entry['EntryID']?>">
+                <p class="mb-0">
+                  <?=htmlspecialchars($entry['MForename'])?> is entered in;
+                </p>
+                <ul class="list-unstyled">
+                <?php $count = 0; ?>
+                <?php foreach($swimsArray as $colTitle => $text) { ?>
+                  <?php if ($entry[$colTitle]) { $count++; ?>
+                  <li><?=$text?></li>
+                  <?php } ?>
                 <?php } ?>
-              <?php } ?>
+              </div>
             </div>
             <div class="col text-right">
               <div class="d-sm-none mb-3"></div>
@@ -166,11 +180,11 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                 <?php } ?>
               </p>
 
-              <?php if ($notReady) { ?>
+              <!--<?php if ($notReady) { ?>
               <p>
                 Once you pay for this entry, you won't be able to edit it.
               </p>
-              <?php } ?>
+              <?php } ?>-->
 
               <p>
                 <strong>Fee &pound;<?=htmlspecialchars(number_format($entry['FeeToPay'] ,2, '.', ''))?></strong>
@@ -196,7 +210,14 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
       </ul>
 
       <h2 class="mb-3">Payment Method</h2>
-      <p>Pay with a mobile wallet such as Apple Pay or Google Pay, a saved card or a new card.</p>
+      <div class="accepted-network-logos">
+        <p>
+          We accept all major cards
+        </p>
+        <p class="mb-4">
+          <img src="<?=autoUrl("public/img/stripe/apple-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/google-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/visa.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/mastercard.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/amex.svg")?>" aria-hidden="true">
+        </p>
+      </div>
         <div id="payment-request-card">
           <div class="mb-3">
             <form>
@@ -219,9 +240,9 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
             <div class="card-body">
 
               <div class="form-group <?php if ($selected == null) { ?>mb-0<?php } ?>">
-                <label for="method">Payment card</label>
+                <label for="method">Choose a saved card</label>
                 <select class="custom-select pm-can-disable" name="method" id="method" onchange="this.form.submit()">
-                  <option value="select">Select a payment card</option>
+                  <option value="select">Select card</option>
                   <?php foreach ($cards as $card) { ?>
                   <option value="<?=$card['ID']?>" <?php if ($selected == $card['ID']) { $methodId = $card['MethodID']; ?>selected<?php } ?>>
                     <?=htmlspecialchars(getCardBrand($card['Brand']))?> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card['Last4'])?>

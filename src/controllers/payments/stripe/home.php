@@ -18,6 +18,13 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
+<style>
+.accepted-network-logos img {
+  height: 2rem;
+  margin: 0 0.5rem 0 0;
+}
+</style>
+
 <div class="container">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -57,12 +64,12 @@ include BASE_PATH . 'views/header.php';
         </div>
       <?php unset($_SESSION['CardDeleted']); } ?>
 
-      <div>
+      <div class="accepted-network-logos">
         <p>
           We proudly accept all major credit and debit cards!
         </p>
         <p>
-          <i class="fa fa-2x fa-cc-visa" aria-hidden="true"></i> <i class="fa fa-2x fa-cc-mastercard" aria-hidden="true"></i> <i class="fa fa-2x fa-cc-amex" aria-hidden="true"></i>
+        <img src="<?=autoUrl("public/img/stripe/apple-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/google-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/visa.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/mastercard.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/amex.svg")?>" aria-hidden="true">
         </p>
       </div>
 

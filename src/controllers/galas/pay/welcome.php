@@ -36,10 +36,20 @@ $entries->execute([$_SESSION['UserID']]);
 }
 $entry = $entries->fetch(PDO::FETCH_ASSOC);
 
+global $currentUser;
+$notByDirectDebit = $currentUser->getUserBooleanOption('GalaDirectDebitOptOut');
+
 $pagetitle = "Pay for entries - Galas";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/galas/galaMenu.php";
 ?>
+
+<style>
+.accepted-network-logos img {
+  height: 2rem;
+  margin: 0 0.5rem 0 0;
+}
+</style>
 
 <div class="container">
   <nav aria-label="breadcrumb">
@@ -53,12 +63,30 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
     <div class="col-lg-8">
       <h1>Pay for gala entries</h1>
       <p class="lead">You can pay for gala entries by direct debit or by credit or debit card.</p>
-      <p>If you haven't opted out of direct debit gala payments and you don't make a payment by card, you'll be automatically charged for gala entries as part of your monthly payment when the gala coordinator submits the entries to the host club.</p>
+
+      <div class="accepted-network-logos">
+        <p>
+          We proudly accept all major credit and debit cards!
+        </p>
+        <p>
+          <img src="<?=autoUrl("public/img/stripe/apple-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/google-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/visa.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/mastercard.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/amex.svg")?>" aria-hidden="true">
+        </p>
+      </div>
+
+      <?php if (bool($notByDirectDebit)) { ?>
+      <p>
+        You must pay for your entries by card or any other accepted method.
+      </p>
+      <?php } else { ?>
+      <p>
+        If you don't make a payment by card, you'll be automatically charged for gala entries as part of your next direct debit payment after the gala coordinator submits the entries to the host club.
+      </p>
+      <?php } ?>
 
       <form action="" method="post">
         <?php if ($entry != null) { ?>
         <h2>Select entries to pay for</h2>
-        <p class="lead">Select which galas you would like to pay for. <strong>You can pay for all, some or just one of your gala entries in a single payment.</strong></p>
+        <p class="">Select which galas you would like to pay for. <strong>You can pay for all, some or just one of your gala entries in a single payment.</strong></p>
 
         <ul class="list-group mb-3">
 					<?php do { ?>
@@ -90,7 +118,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
 								<?php if ($notReady) { ?>
 								<p>
-									This entry has not yet been processed by the gala coordinator. If you pay for this entry now, you'll no longer be able to edit it.
+                  Once you pay for this entry, you won't be able to edit it.
 								</p>
 								<?php } ?>
 
@@ -103,7 +131,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
 								<div class="form-group mb-0">
 									<label for="<?=$entry['EntryID']?>-amount">
-										Amount to charge
+										Amount to pay
 									</label>
 									<div class="input-group">
 										<div class="input-group-prepend">
