@@ -83,6 +83,11 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
     return false;
   }
 
+  // Set fees if possible
+  if (isset($intent->charges->data[0]->balance_transaction) && $intent->charges->data[0]->balance_transaction != null) {
+    stripe_handleBalanceTransactionForFees($intent->charges->data[0]->balance_transaction);
+  }
+
   // Get the user
   $getUser = $db->prepare("SELECT `User` FROM stripePayments WHERE Intent = ?");
   $getUser->execute([
