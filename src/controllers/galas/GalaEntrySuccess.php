@@ -38,6 +38,13 @@ include BASE_PATH . "views/header.php";
 
 ?>
 
+<style>
+.accepted-network-logos img {
+  height: 2rem;
+  margin: 0 0.5rem 0 0;
+}
+</style>
+
 <div class="container">
   <div class="row">
     <div class="col-md-8">
@@ -118,14 +125,23 @@ include BASE_PATH . "views/header.php";
           Would you like to pay for this gala entry by card now?
         </p>
 
-        <p>
-          If you have more entries to complete, please do them before paying as you can pay for all or some of your entries at once.
-        </p>
+        <div class="accepted-network-logos mb-3">
+          <p>
+            We proudly accept all major credit and debit cards. We also accept Apple Pay and Google Pay.
+          </p>
+          <p>
+            <img src="<?=autoUrl("public/img/stripe/apple-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/google-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/visa.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/mastercard.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/amex.svg")?>" aria-hidden="true">
+          </p>
+        </div>
 
         <p>
           <a href="<?=autoUrl("galas/pay-for-entries")?>" class="btn btn btn-primary">
             Pay now
           </a>
+        </p>
+
+        <p>
+          If you have more entries to complete, please do them before paying as you can pay for all or some of your entries at once.
         </p>
       </div>
 
