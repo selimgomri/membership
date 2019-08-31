@@ -8,6 +8,8 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 global $db;
 global $link;
 
+$sendEmail = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (:user, 'Queued', :subject, :message, 0, 'Payments')");
+
 $hasMandateQuery = null;
 try {
   $sql = "SELECT * FROM `paymentMandates` INNER JOIN `paymentPreferredMandate` ON paymentMandates.UserID = paymentPreferredMandate.UserID WHERE paymentMandates.UserID = ? AND `InUse` = '1'";
@@ -36,7 +38,7 @@ try {
     $updatePayments = $db->prepare("UPDATE `payments` SET `Status` = ?, `MandateID` = ?, `PMkey` = ? WHERE `PaymentID` = ?");
     $updatePaymentsPending = $db->prepare("UPDATE `paymentsPending` SET `Status` = ?, `PMkey` = ? WHERE `UserID` = ? AND `Status` = ? AND `Type` = ? AND `Date` <= ?");
 
-    if ($mandateInfo && $row['Amount'] > 0) {
+    if ($mandateInfo && $row['Amount'] > 100) {
     	$amount = $row['Amount'];
     	$currency = $row['Currency'];
     	$description = $row['Name'];
@@ -129,18 +131,18 @@ try {
     $message_subject = "Your bill for " . date("F Y") . " is now available";
     $message_content = '';
     if (!$mandateInfo) {
-      $message_content .= '<div class="cell"><p><strong>Warning: You do not have a direct debit set up with us.</strong>';
+      $message_content .= '<table style="margin: 0 0 1rem 0; padding: 1rem; border-radius: 0.25rem; border: 1px solid rgba(0, 0, 0, 0.125);background-color: #f8f9fa;"><tr><td><p><strong>Warning: You do not have a direct debit mandate set up with us.</strong>';
       if (bool(env('IS_CLS'))) {
         $message_content .= ' If you are paying us manually, a £3 surcharge applies to your monthly fee. Login to <a href="' . autoUrl("payments") . '">the Membership System</a> to set up a direct debit before next month\'s bill.</p>';
-        $message_content .= '<p class="mb-0">If you expected to pay us by direct debit this month, please contact the treasurer as soon as possible - Your swimmers could be suspended if you fail to pay squad fees.';
+        $message_content .= '<p class="mb-0" style="margin-bottom: 0;">If you expected to pay us by direct debit this month, please contact the treasurer as soon as possible - Your swimmers could be suspended if you fail to pay squad fees.';
       }
-      $message_content .= '</p></div>';
+      $message_content .= '</p></td></tr></table>';
     }
-    $message_content .= '<p>Your bill for ' . date("F Y") . ' is now available. Here are your squad fees for this month.</p>';
-    $message_content .= myMonthlyFeeTable($link, $row['UserID']);
-    $message_content .= '<p>Combined with any additional fees such as membership, your total fee for ' . date("F Y") . ' is, <strong>&pound;' . number_format(($row['Amount']/100), 2, '.', ',') . '</strong></p>';
-    $message_content .= '<p>Fees are calculated using the squad your swimmers were members of on 1 ' . date("F Y") . '.</p><hr>';
-    $message_content .= '<p>You can <a href="' . autoUrl("payments/statement/" . $id) . '">view a full itemised statement for this payment online</a> or <a href="' . autoUrl("payments/statement/" . $id . "/pdf") . '">download your full statement as a PDF</a>. Squad Fees for all of your swimmers are shown as one charge on statements. A breakdown of squad fees is contained in this email.</p>';
+    $message_content .= '<p>Your bill for ' . date("F Y") . ' is now available. The total amount payable for this month is <strong>&pound;' . number_format(($row['Amount']/100), 2, '.', ',') . '</strong>.</p>';
+
+    $message_content .= '<p>You can <a href="' . autoUrl("payments/statement/" . $id) . '">view a full itemised statement for this payment online</a> or <a href="' . autoUrl("payments/statement/" . $id . "/pdf") . '">download your full statement as a PDF</a>. Statements show each fee you have been charged or credited for.</p>';
+
+    $message_content .= '<p>Squad fees were calculated using the squad your swimmers were members of on 1 ' . date("F Y") . '.</p><hr>';
 
     if ($mandateInfo) {
       $message_content .= '<p>You will receive an email from our direct debit service provider GoCardless within the next three working days confirming the amount to be charged by direct debit.</p>';
@@ -154,8 +156,9 @@ try {
       "message" => $message_content
     ];
 
-    $sql = "INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (:user, 'Queued', :subject, :message, 0, 'Payments')";
-    $db->prepare($sql)->execute($email_info);
+    if ($row['Amount'] > 0) {
+      $sendEmail->execute($email_info);
+    }
   }
 } catch (Exception $e) {
   // Report error by halting

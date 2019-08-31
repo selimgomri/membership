@@ -21,7 +21,7 @@ include BASE_PATH . "views/postsMenu.php";
 
 					<div class="form-group mb-0">
 						<label for="content">Content</label>
-						<textarea class="form-control auto-grow" id="content" name="content" oninput="autoGrow(this)">
+						<textarea class="form-control auto-grow mono" id="content" name="content" oninput="autoGrow(this)">
 			      </textarea>
 						<small id="contentHelp" class="form-text text-muted">
 							Posts are written in <a href="https://www.markdownguide.org" target="_blank">Markdown</a>. HTML is not allowed for security reasons.
