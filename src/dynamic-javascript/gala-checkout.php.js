@@ -99,6 +99,20 @@ cardCvcElement.addEventListener('change', function(event) {
   cardChangeEvent(event, 'card-cvc-element-errors');
 });
 
+function verifyDetails() {
+  var status = true;
+  if (!document.getElementById('new-cardholder-name').value) {
+    status = false;
+  }
+  if (!document.getElementById('addr-line-1').value) {
+    status = false;
+  }
+  if (!document.getElementById('addr-post-code').value) {
+    status = false;
+  }
+  return status;
+}
+
 var cardholderName = document.getElementById('new-cardholder-name');
 var cardholderAddress1 = document.getElementById('addr-line-1');
 var cardholderZip = document.getElementById('addr-post-code');
@@ -113,31 +127,36 @@ var clientSecret = cardButton.dataset.secret;
 var form = document.getElementById('new-card-form');
 form.addEventListener('submit', function(event) {
   event.preventDefault();
-  stripe.handleCardPayment(
-    clientSecret, cardNumberElement, {
-      payment_method_data: {
-        billing_details: {
-          name: cardholderName.value,
-          address: {
-            line1: cardholderAddress1.value,
-            postal_code: cardholderZip.value,
-            country: cardholderCountry.value,
-          },
+
+  if (verifyDetails()) {
+    stripe.handleCardPayment(
+      clientSecret, cardNumberElement, {
+        payment_method_data: {
+          billing_details: {
+            name: cardholderName.value,
+            address: {
+              line1: cardholderAddress1.value,
+              postal_code: cardholderZip.value,
+              country: cardholderCountry.value,
+            },
+          }
         }
       }
-    }
-  ).then(function(result) {
-    if (result.error) {
-      // Display error.message in your UI.
-      document.getElementById('new-card-errors').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
-    } else {
-      // Disable buttons
-      disableButtons();
-      document.getElementById('new-card-errors').innerHTML = successAlert;
-      // The payment has succeeded. Display a success message.
-      window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
-    }
-  });
+    ).then(function(result) {
+      if (result.error) {
+        // Display error.message in your UI.
+        document.getElementById('new-card-errors').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
+      } else {
+        // Disable buttons
+        disableButtons();
+        document.getElementById('new-card-errors').innerHTML = successAlert;
+        // The payment has succeeded. Display a success message.
+        window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
+      }
+    });
+  } else {
+    document.getElementById('new-card-errors').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment</strong></p><p class="mb-0">You must provide all details required, including the cardholder\'s name and address</p></div>';
+  }
 });
 
 var paymentRequest = stripe.paymentRequest({

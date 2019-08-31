@@ -51,6 +51,20 @@ cardCvcElement.addEventListener('change', function(event) {
   cardChangeEvent(event, 'card-cvc-element-errors');
 });
 
+function verifyDetails() {
+  var status = true;
+  if (!document.getElementById('cardholder-name').value) {
+    status = false;
+  }
+  if (!document.getElementById('addr-line-1').value) {
+    status = false;
+  }
+  if (!document.getElementById('addr-post-code').value) {
+    status = false;
+  }
+  return status;
+}
+
 var cardholderName = document.getElementById('cardholder-name');
 var cardholderAddress1 = document.getElementById('addr-line-1');
 var cardholderZip = document.getElementById('addr-post-code');
@@ -64,34 +78,40 @@ var clientSecret = cardButton.dataset.secret;
 var form = document.getElementById('payment-form');
 form.addEventListener('submit', function(event) {
   event.preventDefault();
-  stripe.handleCardSetup(
-    clientSecret, cardNumberElement, {
-      payment_method_data: {
-        billing_details: {
-          name: cardholderName.value,
-          address: {
-            line1: cardholderAddress1.value,
-            postal_code: cardholderZip.value,
-            country: cardholderCountry.value,
-          },
+  var displayError = document.getElementById('card-errors');
+
+  if (verifyDetails()) {
+    stripe.handleCardSetup(
+      clientSecret, cardNumberElement, {
+        payment_method_data: {
+          billing_details: {
+            name: cardholderName.value,
+            address: {
+              line1: cardholderAddress1.value,
+              postal_code: cardholderZip.value,
+              country: cardholderCountry.value,
+            },
+          }
         }
       }
-    }
-  ).then(function(result) {
-    var displayError = document.getElementById('card-errors');
-    if (result.error) {
-      // Display error.message in your UI.
-      displayError.innerHTML = '<div class="alert alert-danger" id="card-errors-message"></div>'
-      document.getElementById('card-errors-message').textContent = result.error.message;
-    } else {
-      // The setup has succeeded. Display a success message.
-      disableButtons();
-      displayError.innerHTML = '<div class="alert alert-success" id="card-errors-message"></div>'
-      document.getElementById('card-errors-message').textContent = 'Card setup successfully. Please wait while we redirect you.';
-      // The payment has succeeded. Display a success message.
-      var form = document.getElementById('payment-form');
-      // Submit the form
-      form.submit();
-    }
-  });
+    ).then(function(result) {
+      if (result.error) {
+        // Display error.message in your UI.
+        displayError.innerHTML = '<div class="alert alert-danger" id="card-errors-message"></div>'
+        document.getElementById('card-errors-message').textContent = result.error.message;
+      } else {
+        // The setup has succeeded. Display a success message.
+        disableButtons();
+        displayError.innerHTML = '<div class="alert alert-success" id="card-errors-message"></div>'
+        document.getElementById('card-errors-message').textContent = 'Card setup successfully. Please wait while we redirect you.';
+        // The payment has succeeded. Display a success message.
+        var form = document.getElementById('payment-form');
+        // Submit the form
+        form.submit();
+      }
+    });
+  } else {
+    displayError.innerHTML = '<div class="alert alert-danger" id="card-errors-message"></div>'
+    document.getElementById('card-errors-message').textContent = 'You must provide all details required, including the cardholder\'s name and address';
+  }
 });

@@ -220,7 +220,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
               <div class="form-group <?php if ($selected == null) { ?>mb-0<?php } ?>">
                 <label for="method">Payment card</label>
-                <select class="custom-select" name="method" id="method" onchange="this.form.submit()">
+                <select class="custom-select pm-can-disable" name="method" id="method" onchange="this.form.submit()">
                   <option value="select">Select a payment card</option>
                   <?php foreach ($cards as $card) { ?>
                   <option value="<?=$card['ID']?>" <?php if ($selected == $card['ID']) { $methodId = $card['MethodID']; ?>selected<?php } ?>>
@@ -263,7 +263,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
             <form id="new-card-form" class="needs-validation" novalidate>
               <div class="form-group">
                 <label for="new-cardholder-name">Cardholder name</label>
-                <input type="text" class="form-control" id="new-cardholder-name" placeholder="C F Frost" required autocomplete="cc-name" aria-describedby="new-cardholder-name-help">
+                <input type="text" class="form-control pm-can-disable" id="new-cardholder-name" placeholder="C F Frost" required autocomplete="cc-name" aria-describedby="new-cardholder-name-help">
                 <small id="new-cardholder-name-help" class="form-text text-muted">The name shown on your card</small>
                 <div class="invalid-feedback">
                   You must provide your full name
@@ -272,7 +272,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
               <div class="form-group">
                 <label for="addr-line-1">Address line 1</label>
-                <input type="text" class="form-control" id="addr-line-1" placeholder="1 Burns Green" required autocomplete="address-line1">
+                <input type="text" class="form-control pm-can-disable" id="addr-line-1" placeholder="1 Burns Green" required autocomplete="address-line1">
                 <div class="invalid-feedback">
                   You must provide your address
                 </div>
@@ -280,7 +280,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
               <div class="form-group">
                 <label for="addr-post-code">Post Code</label>
-                <input type="text" class="form-control text-uppercase" id="addr-post-code" placeholder="NE99 1AA" required autocomplete="postal-code">
+                <input type="text" class="form-control pm-can-disable text-uppercase" id="addr-post-code" placeholder="NE99 1AA" required autocomplete="postal-code">
                 <div class="invalid-feedback">
                   You must provide your post code
                 </div>
@@ -288,7 +288,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
               <div class="form-group">
                 <label for="addr-post-code">Country</label>
-                <select class="custom-select pm-can-disable" required id="addr-country" autocomplete="country">
+                <select class="custom-select pm-can-disable pm-can-disable" required id="addr-country" autocomplete="country">
                   <?php foreach ($countries as $code => $name) { ?>
                   <option <?php if ($code == 'GB') { ?>selected<?php } ?> value="<?=htmlspecialchars($code)?>"><?=htmlspecialchars($name)?></option>
                   <?php } ?>
@@ -310,7 +310,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?=autoUrl("public/img/stripe/network-svgs/credit-card.svg")?>" aria-hidden="true"></span>
                   </div>
-                  <div id="card-number-element" class="form-control stripe-form-control"></div>
+                  <div id="card-number-element" class="form-control stripe-form-control pm-can-disable"></div>
                   <div id="card-number-element-errors" class="stripe-feedback"></div>
                 </div>
               </div>
@@ -321,7 +321,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                     <label for="card-expiry-element">
                       Expires
                     </label>
-                    <span id="card-expiry-element" class="form-control"></span>
+                    <span id="card-expiry-element" class="form-control pm-can-disable"></span>
                     <div id="card-expiry-element-errors" class="stripe-feedback"></div>
                   </div>
                 </div>
@@ -330,7 +330,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                     <label for="card-cvc-element">
                       CVC
                     </label>
-                    <span id="card-cvc-element" class="form-control"></span>
+                    <span id="card-cvc-element" class="form-control pm-can-disable"></span>
                     <div id="card-cvc-element-errors" class="stripe-feedback"></div>
                   </div>
                 </div>
