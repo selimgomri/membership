@@ -54,6 +54,9 @@ while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)) {
         'id' => $json->type->id,
         'name' => $json->type->name
       ];
+      if (!isset($types[$json->type->object])) {
+        $types += [$json->type->object => []];
+      }
       if (!isset($types[$json->type->object][$json->type->id])) {
         $types[$json->type->object] += [$json->type->id => $json->type->name];
       }

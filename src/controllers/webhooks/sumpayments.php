@@ -127,12 +127,20 @@ try {
 
             if ($swimmerDiscount > 0) {
               // Apply credit to account for discount
+              $metadata = [
+                "type" => [
+                  "object" => 'SquadFee',
+                  "id" => $swimmerRow['SquadID'],
+                  "name" => $swimmerRow['SquadName']
+                ]
+              ];
+
               $addCreditToPaymentsPending->execute([
                 $date,
                 $user,
                 $swimmerRow['MForename'] . " " . $swimmerRow['MSurname'] . ' - Multi swimmer squad fee discount (' . $discountPercent . '%)',
                 $swimmerDiscount,
-                null
+                json_encode($metadata)
               ]);
             }
             //$discount += $swimmerDiscount;
