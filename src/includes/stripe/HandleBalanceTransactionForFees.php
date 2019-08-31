@@ -6,7 +6,7 @@ function stripe_handleBalanceTransactionForFees($balanceTransaction) {
 
   try {
     $balanceTransaction = \Stripe\BalanceTransaction::retrieve([
-      'id' => $balanceTransaction->id,
+      'id' => $balanceTransaction,
       'expand' => ['source'],
     ]);
 
