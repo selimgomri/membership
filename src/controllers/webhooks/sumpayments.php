@@ -13,7 +13,7 @@ $squadFeeRequired = !bool($squadFeeMonths[date("m")]);
 // Prepare things
 $getSquadMetadata = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, members.ClubPays, squads.SquadName, squads.SquadID, squads.SquadFee FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = ? ORDER BY squads.SquadFee DESC, members.MForename ASC, members.MSurname ASC;");
 
-$getExtraMetadata = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, extras.ExtraName, extras.ExtraFee FROM ((members INNER JOIN `extrasRelations` ON members.MemberID = extrasRelations.MemberID) INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) WHERE members.UserID = ? ORDER BY members.MForename ASC, members.MSurname ASC;");
+$getExtraMetadata = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, extras.ExtraName, extras.ExtraID, extras.ExtraFee FROM ((members INNER JOIN `extrasRelations` ON members.MemberID = extrasRelations.MemberID) INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) WHERE members.UserID = ? ORDER BY members.MForename ASC, members.MSurname ASC;");
 
 $track = $db->prepare("INSERT INTO `individualFeeTrack` (`MonthID`, `MemberID`, `UserID`, `Description`, `Amount`, `Type`, `PaymentID`) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
@@ -78,7 +78,12 @@ try {
             $numMembers++;
           }
           $metadata = [
-            "PaymentType" => "SquadFees"
+            "PaymentType" => "SquadFees",
+            "type" => [
+              "object" => 'SquadFee',
+              "id" => $swimmerRow['SquadID'],
+              "name" => $swimmerRow['SquadName']
+            ]
           ];
 
           $fee = (int) $swimmerRow['SquadFee']*100;
@@ -165,7 +170,12 @@ try {
       while ($swimmerRow = $getExtraMetadata->fetch(PDO::FETCH_ASSOC)) {
         if ($swimmerRow['ExtraFee'] > 0) {
           $metadata = [
-            "PaymentType"         => "ExtraFees"
+            "PaymentType"         => "ExtraFees",
+            "type" => [
+              "object" => 'ExtraFee',
+              "id" => $swimmerRow['ExtraID'],
+              "name" => $swimmerRow['ExtraName']
+            ]
           ];
     
           $metadata = json_encode($metadata);
