@@ -18,7 +18,13 @@ if (isset($data->types)) {
   foreach ($data->types as $typeCat => $type) {
     foreach ($type as $id => $name) {
       $types[] = $typeCat . $id;
-      $fields[] = $name;
+      $nameText = $name;
+      if ($typeCat == 'SquadFee') {
+        $nameText .= ' Squad';
+      } else if ($typeCat == 'ExtraFee') {
+        $nameText .= ' (Extra Fee)';
+      }
+      $fields[] = $nameText;
     }
   }
 }
