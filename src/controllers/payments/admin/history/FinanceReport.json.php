@@ -24,6 +24,7 @@ $getPayments->execute(['searchDate' => $searchDate]);
 $now = new DateTime('now', new DateTimeZone('UTC'));
 
 $array = [];
+$types = [];
 
 // output the column headings
 //$array += ['about' => env('CLUB_NAME') . ' Finance Report'];
@@ -46,6 +47,20 @@ while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)) {
     }
     $details = $row['User'] . ', ' . $name . ' ' . $infoText;
     $status = paymentStatusString($row['Status']);
+    $grouping = null;
+    if (isset($json->type)) {
+      $grouping = [
+        'object' => $json->type->object,
+        'id' => $json->type->id,
+        'name' => $json->type->name
+      ];
+      if (!isset($types[$json->type->object])) {
+        $types += [$json->type->object => []];
+      }
+      if (!isset($types[$json->type->object][$json->type->id])) {
+        $types[$json->type->object] += [$json->type->id => $json->type->name];
+      }
+    }
     $item = [
       'object' => 'Payment',
       'type' => $row['DebitCredit'],
@@ -54,7 +69,8 @@ while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)) {
       'credits' => (int) $in,
       'debits' => (int) $out,
       'income' => 'Gross',
-      'status' => $status
+      'status' => $status,
+      'grouping' => $grouping
     ];
     $array[] = $item;
   } else if ($row['Type'] == 'Payouts') {
@@ -108,5 +124,6 @@ $output = [
   'month' => $month,
   'year' => $year,
   'date_produced' => $now->format("Y-m-d"),
+  'types' => $types,
   'items' => $array,
 ];
