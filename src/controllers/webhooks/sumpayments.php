@@ -226,7 +226,7 @@ try {
 
       $dateString = date("F Y", strtotime("first day of this month")) . " DD";
       // If amount is too low, it will wait for the next payment round
-      if ($amount > 100 || $amount == 0) {
+      if ($amount > 100) {
         $addPaymentForCharge->execute([
           $date,
           $user,
