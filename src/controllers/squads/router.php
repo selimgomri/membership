@@ -27,6 +27,9 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 		global $link;
 		require 'EditSquadPost.php';
 	});
+}
+
+if ($access == "Admin" || $access == "Coach") {
 
 	$this->get('/moves', function() {
 		require 'moves.php';

@@ -194,7 +194,9 @@ $content .= '<!--
         <strong class="d-block text-gray-dark">Swim England Membership Category</strong>
         ' . htmlspecialchars($rowSwim["ASACategory"]) . '
       </p>
-    </li>
+    </li>';
+    if ($_SESSION['AccessLevel'] != 'Committee') {
+    $content .= '
     <li class="list-group-item">
       <p class="mb-0">
         <strong class="d-block text-gray-dark">Parent Account Setup
@@ -203,6 +205,7 @@ $content .= '<!--
         htmlspecialchars($rowSwim["MForename"]) . '</a>
       </p>
     </li>';
+    }
     if (bool(env('IS_CLS'))) {
     $content .= '
     <li class="list-group-item">
@@ -212,6 +215,7 @@ $content .= '<!--
       </p>
     </li>';
     }
+    if ($_SESSION['AccessLevel'] != 'Committee') {
     $content .= '
     <li class="list-group-item">
       <p class="mb-0">
@@ -221,13 +225,16 @@ $content .= '<!--
         getAttendanceByID(null, $id) . '% over all time</a>
       </p>
     </li>
+    ';
+    }
+    $content .= '
     <li class="list-group-item">
       <p class="mb-0">
         <strong class="d-block text-gray-dark">Sex</strong>
         ' . htmlspecialchars($rowSwim["Gender"]) . '
       </p>
     </li>';
-    if ($access == "Admin" || $access == "Committee" || $access == "Coach") {
+    if ($access == "Admin" || $access == "Coach") {
     $content .= '
     <li class="list-group-item">
       <p class="mb-0">
@@ -284,6 +291,7 @@ $content .= '<!--
       </p>
     </li>';
     }
+    if ($_SESSION['AccessLevel'] != 'Committee') {
     $content .= '
     <li class="list-group-item">
       <p class="mb-0">
@@ -298,17 +306,19 @@ $content .= '<!--
     }
     $content .= '
       </p>
-    </li></ul><div class="card-body">';
-	if ($access == "Admin" || $access == "Committee") {
+    </li>';
+  }
+  $content .= '</ul><div class="card-body">';
+	if ($access == "Admin") {
     $content .= '
-	  <span class="d-block text-right mt-3 d-print-none">
+	  <span class="d-block text-right d-print-none">
 	    <a class="btn btn-success" href="' . autoUrl("swimmers/" . $id . "/edit") . '">Edit Details</a> <a class="btn btn-success" href="' . autoUrl("swimmers/" . $id . "/medical") . '">Edit Medical Notes</a>
 	  </span>';
 	}
 	else {
 		$content .= '
-	  <span class="d-block text-right mt-3 d-print-none">
-	    Please contact a Parent or Administrator if you need to make changes
+	  <span class="d-block text-right d-print-none">
+	    Please contact the parent or an administrator if you need to make changes
 	  </span>';
   }
   $content .= '</div></div>';
