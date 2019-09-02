@@ -53,7 +53,7 @@ include BASE_PATH . "views/notifyMenu.php";
 			<label for="from">From</label>
       <select class="custom-select" name="from" id="from">
         <option value="current-user" selected><?=htmlspecialchars($myName . " <" . $myEmail . ">")?></option>
-        <option value="club-sending-account"><?=htmlspecialchars(CLUB_NAME . " <noreply@" . EMAIL_DOMAIN . ">")?></option>
+        <option value="club-sending-account"><?=htmlspecialchars(env('CLUB_NAME') . " <noreply@" . env('EMAIL_DOMAIN') . ">")?></option>
       </select>
 		</div>
 

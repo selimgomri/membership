@@ -74,7 +74,7 @@ if (!$errorState) {
 					$message .= '<p>You must abide by the above code of conduct if you take your place in this squad as per the Membership Terms and Conditions. This new code of conduct may be different to that for your current squad, so please read it carefully.</p>';
 				}
 				$message .= '<hr><p>If you do not think ' . $swimmer . ' will be able to take up their place in ' . $squad . ' Squad, please reply to this email as soon as possible. We must however warn you that we may not be able keep ' . $swimmer . ' in their current squad if it would prevent us from moving up swimmers in our lower squads.</p>';
-				$message .= '<p>Kind Regards,<br>The ' . CLUB_NAME . ' Team</p>';
+				$message .= '<p>Kind Regards,<br>The ' . env('CLUB_NAME') . ' Team</p>';
 				$message .= '<p class="small text-muted">* Discounts may apply if you have multiple swimmers.</p>';
 
 				try {
