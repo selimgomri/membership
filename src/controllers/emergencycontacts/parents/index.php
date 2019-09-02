@@ -62,7 +62,7 @@ if (isset($renewal_trap) && $renewal_trap) {
                   <em>(From My Account)</em>
                 </p>
                 <p class="mb-0">
-                  <a href="tel:<?=htmlspecialchars($mobile->format(PhoneNumberFormat::RFC3966))?>">
+                  <a href="<?=htmlspecialchars($mobile->format(PhoneNumberFormat::RFC3966))?>">
                     <?=htmlspecialchars($mobile->format(PhoneNumberFormat::NATIONAL))?>
                   </a>
                 </p>
