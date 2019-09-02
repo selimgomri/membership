@@ -135,11 +135,23 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
       <li class="breadcrumb-item active" aria-current="page">Pay for entries</li>
     </ol>
   </nav>
-  
-  <div class="row">
-    <div class="col-lg-8">
+
+  <div class="row align-items-center justify-content-between mb-3">
+    <div class="col-lg-7">
       <h1>Pay for gala entries</h1>
-      <p class="lead">You can pay for gala entries by direct debit or by credit or debit card.</p>
+      <p class="lead">Checkout</p>
+    </div>
+    <div class="col text-lg-right">
+      <div class="accepted-network-logos">
+        <p>
+          <img src="<?=autoUrl("public/img/stripe/apple-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/google-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/visa.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/mastercard.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/amex.svg")?>" aria-hidden="true">
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row justify-content-between">
+    <div class="col-lg-4 order-lg-2">
 
       <h2>Selected entries</h2>
       <p>You'll pay for the following gala entries</p>
@@ -149,18 +161,15 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
           $notReady = !$entry['EntryProcessed'];
         ?>
         <li class="list-group-item">
-          <h3><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?> for <?=htmlspecialchars($entry['GalaName'])?></h3>
+          <h3><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?> <br><small><?=htmlspecialchars($entry['GalaName'])?></small></h3>
           <div class="row">
-            <div class="col-sm-5 col-md-4 col-lg-6">
+            <div class="col-4 col-sm-5 col-md-4 col-lg-6">
               <p>
                 <a data-toggle="collapse" href="#swims-<?=$entry['EntryID']?>" role="button" aria-expanded="false" aria-controls="swims-<?=$entry['EntryID']?>">
-                  Show swims
+                  View swims
                 </a>
               </p>
               <div class="collapse" id="swims-<?=$entry['EntryID']?>">
-                <p class="mb-0">
-                  <?=htmlspecialchars($entry['MForename'])?> is entered in;
-                </p>
                 <ul class="list-unstyled">
                 <?php $count = 0; ?>
                 <?php foreach($swimsArray as $colTitle => $text) { ?>
@@ -171,7 +180,6 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
               </div>
             </div>
             <div class="col text-right">
-              <div class="d-sm-none mb-3"></div>
               <p>
                 <?php if ($entry['GalaFeeConstant']) { ?>
                 <?=$count?> &times; &pound;<?=htmlspecialchars(number_format($entry['GalaFee'], 2))?>
@@ -186,7 +194,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
               </p>
               <?php } ?>-->
 
-              <p>
+              <p class="mb-0">
                 <strong>Fee &pound;<?=htmlspecialchars(number_format($entry['FeeToPay'] ,2, '.', ''))?></strong>
               </p>
             </div>
@@ -208,16 +216,10 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
           </div>
         </li>
       </ul>
-
-      <h2 class="mb-3">Payment Method</h2>
-      <div class="accepted-network-logos">
-        <p>
-          We accept all major cards
-        </p>
-        <p class="mb-4">
-          <img src="<?=autoUrl("public/img/stripe/apple-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/google-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/visa.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/mastercard.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/amex.svg")?>" aria-hidden="true">
-        </p>
-      </div>
+    </div>
+    <div class="col-lg-7 order-lg-1">
+      <h2 class="mb-3">Payment details</h2>
+      
         <div id="payment-request-card">
           <div class="mb-3">
             <form>
@@ -265,7 +267,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
               <p class="mb-0">
                 <button id="saved-card-button" class="btn btn-success btn-block pm-can-disable" type="button" data-secret="<?= $intent->client_secret ?>">
-                  Pay now
+                  Pay &pound;<?=htmlspecialchars(number_format($intent->amount/100 ,2, '.', ''))?> now
                 </button>
               </p>
               <?php } ?>
@@ -373,7 +375,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
               <p class="mb-0">
                 <button id="new-card-button" class="btn btn-success btn-block pm-can-disable" type="submit" data-secret="<?= $intent->client_secret ?>">
-                  Pay now
+                  Pay &pound;<?=htmlspecialchars(number_format($intent->amount/100 ,2, '.', ''))?> now
                 </button>
               </p>
             </form>

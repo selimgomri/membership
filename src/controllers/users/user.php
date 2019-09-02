@@ -199,7 +199,7 @@ include BASE_PATH . "views/header.php";
           <select class="custom-select" id="accountType" name="accountType">
             <option <?=$par?> value="Parent">Parent (Default)</option>
             <option <?=$coa?> value="Coach">Coach</option>
-            <option <?=$com?> value="Committee">General Committee Member</option>
+            <option <?=$com?> value="Committee">Team Manager</option>
             <option <?=$gal?> value="Galas">Galas</option>
             <option <?=$adm?> value="Admin">Admin</option>
           </select>
@@ -303,19 +303,15 @@ include BASE_PATH . "views/header.php";
 function apply() {
   var type = document.getElementById("accountType");
   var typeValue = type.value;
-  console.log(typeValue);
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        console.log("We got here");
-        document.getElementById("accountTypeOutput").innerHTML = this.responseText;
-        console.log(this.responseText);
-      }
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("accountTypeOutput").innerHTML = this.responseText;
     }
-    xhttp.open("POST", "<?=autoUrl("users/ajax/userSettings/" . $id)?>", true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("accountType=" + typeValue);
-    console.log("Sent");
+  }
+  xhttp.open("POST", "<?=autoUrl("users/ajax/userSettings/" . $id)?>", true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send("accountType=" + typeValue);
 }
 
 document.getElementById("accountType").onchange=apply;

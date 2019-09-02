@@ -54,7 +54,7 @@ if ($access == "Parent") {
 	  require 'parentSingleSwimmerPost.php';
 	});
 }
-else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {
+else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $access == "Admin") {
 	// Directory
 	$this->get('/', function() {
     global $link;
@@ -83,34 +83,36 @@ else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {
    * Squad moves
    *
    */
-  $this->get('/{id}:int/new-move', function($id) {
-    global $link;
-    require BASE_PATH . 'controllers/squads/newMove.php';
-  });
+	if ($access != "Committee") {
+		$this->get('/{id}:int/new-move', function($id) {
+			global $link;
+			require BASE_PATH . 'controllers/squads/newMove.php';
+		});
 
-  $this->post('/{id}:int/new-move', function($id) {
-    global $link;
-    require BASE_PATH . 'controllers/squads/newMoveAction.php';
-  });
+		$this->post('/{id}:int/new-move', function($id) {
+			global $link;
+			require BASE_PATH . 'controllers/squads/newMoveAction.php';
+		});
 
-  $this->get('/{id}:int/edit-move', function($id) {
-    global $link;
-    require BASE_PATH . 'controllers/squads/editMove.php';
-  });
+		$this->get('/{id}:int/edit-move', function($id) {
+			global $link;
+			require BASE_PATH . 'controllers/squads/editMove.php';
+		});
 
-  $this->post('/{id}:int/edit-move', function($id) {
-    global $link;
-    require BASE_PATH . 'controllers/squads/editMoveAction.php';
-  });
+		$this->post('/{id}:int/edit-move', function($id) {
+			global $link;
+			require BASE_PATH . 'controllers/squads/editMoveAction.php';
+		});
 
-  $this->get('/{id}:int/move-contract', function($id) {
-    require BASE_PATH . 'controllers/squads/SquadMoveContract.php';
-  });
+		$this->get('/{id}:int/move-contract', function($id) {
+			require BASE_PATH . 'controllers/squads/SquadMoveContract.php';
+		});
 
-  $this->get('/{id}:int/cancel-move', function($id) {
-    global $link;
-    require BASE_PATH . 'controllers/squads/cancelMoveAction.php';
-  });
+		$this->get('/{id}:int/cancel-move', function($id) {
+			global $link;
+			require BASE_PATH . 'controllers/squads/cancelMoveAction.php';
+		});
+	}
   /*
    * End of squad moves
    */
@@ -135,28 +137,30 @@ else if ($access == "Galas" || $access == "Coach" || $access == "Admin") {
 		include BASE_PATH . 'controllers/notify/EmailQueuerIndividual.php';
 	});
 
-  $this->get('/{id}:int/attendance', function($id) {
-      global $link;
-      include BASE_PATH . "controllers/attendance/historyViews/swimmerHistory.php";
-  	});
+	if ($access != "Committee") {
+		$this->get('/{id}:int/attendance', function($id) {
+				global $link;
+				include BASE_PATH . "controllers/attendance/historyViews/swimmerHistory.php";
+			});
 
-  // Swimmer Membership Card
-	$this->get('/{id}:int/membershipcard', function($id) {
-    global $link;
-	  require('Card.php');
-	});
+		// Swimmer Membership Card
+		$this->get('/{id}:int/membershipcard', function($id) {
+			global $link;
+			require('Card.php');
+		});
+		
+		// Access Keys
+		$this->get('/accesskeys', function() {
+			global $link;
+			require('accesskeys.php');
+		});
 
-	// Access Keys
-	$this->get('/accesskeys', function() {
-    global $link;
-	  require('accesskeys.php');
-	});
-
-	// Access Keys
-	$this->get('/accesskeys-csv', function() {
-    global $link;
-	  require('accesskeysCSV.php');
-	});
+		// Access Keys
+		$this->get('/accesskeys-csv', function() {
+			global $link;
+			require('accesskeysCSV.php');
+		});
+	}
 }
 
 if ($access == "Admin") {
@@ -172,7 +176,7 @@ if ($access == "Admin") {
 	});
 }
 
-if ($access != "Parent") {
+if ($access != "Parent" && $access != 'Committee') {
 	$this->get('/addmember', function() {
     //global $link;
 		//include 'AddMember/SelectType.php';
