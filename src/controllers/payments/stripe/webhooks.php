@@ -26,12 +26,16 @@ function stripe_handlePayout($payout) {
     ]);
   } else {
     // Add payout item
-    $update = $db->prepare("INSERT INTO stripePayouts (ID, Amount, ArrivalDate) VALUES (?, ?, ?)");
-    $update->execute([
-      $payout->id,
-      $amount,
-      $date->format("Y-m-d")
-    ]);
+    try {
+      $update = $db->prepare("INSERT INTO stripePayouts (ID, Amount, ArrivalDate) VALUES (?, ?, ?)");
+      $update->execute([
+        $payout->id,
+        $amount,
+        $date->format("Y-m-d")
+      ]);
+    } catch (Exception $e) {
+      // 
+    }
   }
 }
 
@@ -220,6 +224,7 @@ switch ($event->type) {
   case 'payout.updated':
     $payout = $event->data->object;
     stripe_handlePayout($payout);
+    break;
   default:
     // Unexpected event type
     reportError(['Unexpected event type' => $event->type]);
