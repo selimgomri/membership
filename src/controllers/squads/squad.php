@@ -15,30 +15,6 @@ $numSwimmers = $db->prepare("SELECT COUNT(*) FROM members WHERE SquadID = ?");
 $numSwimmers->execute([$id]);
 $numSwimmers = $numSwimmers->fetchColumn();
 
-$getNumSex = $db->prepare("SELECT COUNT(*) FROM members WHERE SquadID = ? AND Gender = ?");
-$getNumSex->execute([$id, 'Male']);
-$male = $getNumSex->fetchColumn();
-$getNumSex->execute([$id, 'Female']);
-$female = $getNumSex->fetchColumn();
-
-$getBirths = $db->prepare("SELECT DateOfBirth FROM members WHERE SquadID = ?");
-$getBirths->execute([$id]);
-$agesArray = [];
-$timeNow = new DateTime('now', new DateTimeZone('Europe/London'));
-while ($dob = $getBirths->fetchColumn()) {
-  $timeBirth = new DateTime($dob, new DateTimeZone('Europe/London'));
-  $interval = $timeNow->diff($timeBirth);
-  $age = (int) $interval->format('%y');
-  if (isset($agesArray[$age])) {
-    $agesArray[$age] += 1;
-  } else {
-    $agesArray[$age] = 1;
-  }
-}
-$agesArrayKeys = array_keys($agesArray);
-$minAge = min($agesArrayKeys);
-$maxAge = max($agesArrayKeys);
-
 $codeOfConduct = null;
 if ($squad['SquadCoC'] != null && $squad['SquadCoC'] != "") {
   $codeOfConduct = $db->prepare("SELECT Content FROM posts WHERE ID = ?");
@@ -136,81 +112,8 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<?php if ($numSwimmers > 0) { ?>
 <script src="<?=autoUrl("public/js/Chart.min.js")?>"></script>
-<script>
-var ctx = document.getElementById('sexSplit').getContext('2d');
-var chart = new Chart(ctx, {
-  // The type of chart we want to create
-  type: 'pie',
-
-  // The data for our dataset
-  data: {
-    labels: ["Male", "Female"],
-    datasets: [{
-      label: <?=json_encode(htmlspecialchars($squad['SquadName']) . " Split")?>,
-      data: [<?=$male?>, <?=$female?>],
-      backgroundColor: [
-        '#bd0000',
-        '#005fbd'
-      ],
-    }],
-  },
-
-  // Configuration options go here
-  options: {}
-});
-</script>
-
-<script>
-var ctx = document.getElementById('ageDistribution').getContext('2d');
-var chart = new Chart(ctx, {
-  // The type of chart we want to create
-  type: 'horizontalBar',
-
-  // The data for our dataset
-  data: {
-    labels: [<?php
-      if ($maxAge - $minAge > 10) {
-        foreach ($agesArray as $age => $count) {
-          ?>"<?=$age?> Year Olds",<?php
-        }
-      } else {
-        for ($i = $minAge; $i < $maxAge+1; $i++) { ?>"<?=$i?> Year Olds",<?php } 
-      } ?>],
-    datasets: [{
-      label: <?=json_encode(htmlspecialchars($squad['SquadName']))?>,
-      data: [<?php
-      if ($maxAge - $minAge > 10) {
-        foreach ($agesArray as $age => $count) {
-          ?><?=$count?>,<?php
-        }
-      } else {
-        for ($i = $minAge; $i < $maxAge+1; $i++) { if (isset($agesArray[$i])) { ?><?=(int) $agesArray[$i]?>,<?php } else { ?>0,<?php } }
-      } ?>],
-    }],
-  },
-
-  // Configuration options go here
-  options: {
-    scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true,
-          stepSize: 1,
-        }
-      }],
-      xAxes: [{
-        ticks: {
-          beginAtZero: true,
-          stepSize: 1,
-        }
-      }]
-    }
-  }
-});
-</script>
-<?php } ?>
+<script src="<?=autoUrl("js/charts/squad.js?squad=" . $id)?>"></script>
 
 <?php
 
