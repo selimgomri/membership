@@ -25,4 +25,6 @@ if ($getTableCount->fetchColumn() == 0) {
       // Could not add user
     }
   }
+} else {
+  halt(404);
 }
