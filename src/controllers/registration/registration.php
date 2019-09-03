@@ -133,7 +133,7 @@ if ($status) {
   $to = $email;
   $sContent = '
   <p class="small">Hello ' . htmlspecialchars($forename) . '</p>
-  <p>Thanks for signing up for your ' . CLUB_NAME . ' Account.</p>
+  <p>Thanks for signing up for your ' . env('CLUB_NAME') . ' Account.</p>
   <p>We need you to verify your email address by following this link - <a
   href="' . autoUrl($verifyLink) . '" target="_blank">' .
   autoUrl($verifyLink) . '</a></p>
@@ -154,7 +154,7 @@ if ($status) {
     "description": "Login to your accounts",
     "publisher": {
       "@type": "Organization",
-      "name": "' . CLUB_NAME . '",
+      "name": "' . env('CLUB_NAME') . '",
       "url": "https://www.chesterlestreetasc.co.uk",
       "url/googlePlus": "https://plus.google.com/110024389189196283575"
     }

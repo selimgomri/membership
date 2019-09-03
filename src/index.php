@@ -324,6 +324,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
     include 'dynamic-javascript/router.php';
   });
 
+  $this->get('/setup', function() {
+    include 'controllers/db/system-setup.php';
+  });
+
   $this->group('/sessions', function() {
     include 'controllers/attendance/public_sessions/router.php';
   });

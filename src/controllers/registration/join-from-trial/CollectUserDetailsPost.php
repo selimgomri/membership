@@ -69,7 +69,7 @@ if ($query->fetchColumn() != $_POST['email-addr']) {
   $mes = '<p>Hi ' . $_POST['forename'] . ' ' . $_POST['surname'] . '.</p>
   <p>We noticed that you changed your email address to a different one from the one you used to register for a trial. Please enter the code shown below in the box on your screen.</p>
   <p>Your code is <strong>' . $code . '</strong></p>
-  <p>Kind regards,<br>The ' . CLUB_NAME . ' Team</p>';
+  <p>Kind regards,<br>The ' . env('CLUB_NAME') . ' Team</p>';
 
   notifySend(null, $sub, $mes, $_POST['forename'] . ' ' . $_POST['surname'], $_POST['email-addr']);
   $_SESSION['AC-Registration']['Stage'] = 'VerifyEmail';

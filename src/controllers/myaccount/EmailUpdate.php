@@ -38,15 +38,15 @@ if ($found) {
 
 	$subject = "Your Email Address has been Changed";
 	$message = '
-	<p>Your ' . CLUB_NAME . ' Account Email Address has been changed from ' . $oldEmail . ' to ' . $newEmail . '.</p>
+	<p>Your ' . env('CLUB_NAME') . ' Account Email Address has been changed from ' . $oldEmail . ' to ' . $newEmail . '.</p>
 	<p>If this was you then you, then please ignore this email. If it was not you, please head to ' . autoUrl("") . ' and reset your password urgently.</p>
-	<p>Kind Regards, <br>The ' . CLUB_NAME . ' Team</p>
+	<p>Kind Regards, <br>The ' . env('CLUB_NAME') . ' Team</p>
 	';
 	$to = "";
 	$name = getUserName($user);
 	$from = [
-		"Email" => "support@chesterlestreetasc.co.uk",
-		"Name" => CLUB_NAME . " Security"
+		"Email" => "support@" . env('EMAIL_DOMAIN'),
+		"Name" => env('CLUB_NAME') . " Secretary"
 	];
 	notifySend($to, $subject, $message, $name, $oldEmail, $from);
 
