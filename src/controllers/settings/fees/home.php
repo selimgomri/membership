@@ -1,5 +1,7 @@
 <?php
 
+$fluidContainer = true;
+
 global $db;
 global $systemInfo;
 
