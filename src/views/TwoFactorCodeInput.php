@@ -31,7 +31,7 @@ include BASE_PATH . "views/header.php";
   <?php } ?>
   <div class="row">
     <div class="col-md-8 col-lg-5">
-      <?php if (!isset($_SESSION['TWO_FACTOR_GOOGLE']) && $_SESSION['TWO_FACTOR_GOOGLE'] !== true) { ?>
+      <?php if (!isset($_SESSION['TWO_FACTOR_GOOGLE']) || $_SESSION['TWO_FACTOR_GOOGLE'] !== true) { ?>
       <p class="lead mb-5">
         We've just sent you an authentication code by email. Please type this
         code below.

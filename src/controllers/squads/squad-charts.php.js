@@ -1,12 +1,25 @@
 <?php
 
-$id = $_GET['squad'];
+$id = 0;
+if (isset($_GET['squad'])) {
+  $id = $_GET['squad'];
+}
+
+if ((int) $id == 0) {
+  echo '// No squad selected';
+  return;
+}
 
 global $db;
 
 $getSquad = $db->prepare("SELECT SquadName, SquadFee, SquadCoC, SquadTimetable, SquadCoach FROM squads WHERE SquadID = ?");
 $getSquad->execute([$id]);
 $squad = $getSquad->fetch(PDO::FETCH_ASSOC);
+
+if ($squad == null) {
+  echo '// Squad not found';
+  return;
+}
 
 $numSwimmers = $db->prepare("SELECT COUNT(*) FROM members WHERE SquadID = ?");
 $numSwimmers->execute([$id]);
@@ -58,8 +71,6 @@ if ($maxAge - $minAge > 10) {
 }
 
 if ($numSwimmers > 0) { ?>
-
-var ages = <?=json_encode($output)?>;
   
 var sexSplit = document.getElementById('sexSplit').getContext('2d');
 var sexSplitChart = new Chart(sexSplit, {
