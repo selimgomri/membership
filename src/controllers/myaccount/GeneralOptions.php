@@ -97,9 +97,6 @@ include BASE_PATH . "views/header.php";
           <h2>
             Advanced Payment Options
           </h2>
-          <div class="alert alert-danger">
-            <strong>This feature is not yet in use.</strong> It will not do anything.
-          </div>
       		<div class="form-group">
       			<div class="custom-control custom-switch">
       				<input type="checkbox" class="custom-control-input" value="1" id="gala-dd-opt-out" aria-describedby="gala-dd-opt-out-Help" name="gala-dd-opt-out" <?=$notGalaDDChecked?> >

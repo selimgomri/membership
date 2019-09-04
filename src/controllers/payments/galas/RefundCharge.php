@@ -110,7 +110,7 @@ include BASE_PATH . 'views/header.php';
 						<?php $hasNoDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut')); ?>
 						<?php $amountRefundable = ((int) $entry['FeeToPay']*100) - ($entry['AmountRefunded']); ?>
 					<?php if ($entry['Processed'] && $entry['Charged']) { $countChargeable++; } ?>
-					<li class="list-group-item">
+					<li class="list-group-item" id="refund-box-<?=htmlspecialchars($entry['EntryID'])?>">
 						<div class="row">
 							<div class="col-sm-5 col-md-4 col-lg-6">
 								<h3><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?></h3>

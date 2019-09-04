@@ -114,6 +114,12 @@ $payment = \Stripe\PaymentIntent::retrieve([
   'expand' => ['customer', 'payment_method']
 ]);
 
+$getGalaEntries = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN galas ON galas.GalaID = galaEntries.GalaID) INNER JOIN members ON members.MemberID = galaEntries.MemberID) WHERE StripePayment = ?");
+$getGalaEntries->execute([
+  $id
+]);
+$ents = $getGalaEntries->fetch(PDO::FETCH_ASSOC);
+
 $pagetitle = 'Card Payment #' . htmlspecialchars($id);
 
 include BASE_PATH . 'views/header.php';
@@ -297,6 +303,36 @@ $countries = getISOAlpha2Countries();
       <?php } else if ($_SESSION['AccessLevel'] == 'Admin') { ?>
       <h2>Refund this transaction</h2>
       <p>To refund gala entries, use the gala refunds system.</p>
+      <?php } ?>
+
+      <?php if ($ents != null) { ?>
+      <h2>Gala entries</h2>
+      <p class="lead">
+        This payment has linked gala entries
+      </p>
+
+      <ul class="list-group mb-3">
+      <?php do { ?>
+        <li class="list-group-item">
+          <h3><?=htmlspecialchars($ents['GalaName'])?><br><small><?=htmlspecialchars($ents['MForename'] . ' ' . $ents['MSurname'])?></small></h3>
+
+          <p>Fee &pound;<?=number_format($ents['FeeToPay'], 2, '.', '')?></p>
+          <?php if (bool($ents['Refunded']) && $ents['AmountRefunded'] > 0) { ?>
+          <p class="mb-0">&pound;<?=number_format(($ents['AmountRefunded']/100), 2, '.', '')?></p>
+          <?php } else { ?>
+          <p class="mb-0">No money has been refunded for this entry.</p>
+          <?php } ?>
+
+          <?php if ($_SESSION['AccessLevel'] == 'Galas' || $_SESSION['AccessLevel'] == 'Admin') { ?>
+            <p class="mb-0 mt-3">
+              <a href="<?=autoUrl("galas/" . $ents['GalaID'] . "/refunds#refund-box-" . $ents['EntryID'])?>" class="btn btn-primary">
+                Refund entry
+              </a>
+            </p>
+          <?php } ?>
+        </li>
+      <?php } while ($ents = $getGalaEntries->fetch(PDO::FETCH_ASSOC)); ?>
+      </ul>
       <?php } ?>
 
     </div>
