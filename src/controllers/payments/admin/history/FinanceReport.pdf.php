@@ -138,18 +138,30 @@ ob_start();?>
 
     <img src="<?=BASE_PATH?>public/img/corporate/scds.png" style="height:1.5cm;" class="mb-3" alt="Swimming CLub Data Systems Logo">
 
-    <h2 id="about">SCDS Direct Debit Finance Reports</h2>
+    <h2 id="about">SCDS Payment Finance Reports</h2>
     <p>
-      SCDS Direct Debit Finance Reports are available as CSV, JSON and PDF files. These files can be used by your treasurer or accounting software for accounting costs and income.
+      SCDS Payment Finance Reports are available as CSV, JSON and PDF files. These files can be used by your treasurer or accounting software for accounting costs and income from direct debit and card payments.
+    </p>
+
+    <p>
+      Charged back payments may not be accurately reflected in this document. We're working to improve this.
     </p>
 
     <p>
       <strong>These reports are a new feature.</strong> Please tell us how we could improve these.
     </p>
 
-    <p>Payments are handled by GoCardless on behalf of <?=htmlspecialchars(env('CLUB_NAME'))?>. You can also download reports from within the GoCardless user interface at <a href="https://manage.gocardless.com/">manage.gocardless.com</a>.</p>
+    <p>
+      Payments are handled by Stripe (card payments) and GoCardless (direct debit payments) on behalf of <?=htmlspecialchars(env('CLUB_NAME'))?>. You can also download reports from the Stripe Dashboard at <a href="https://dashboard.stripe.com/">dashboard.stripe.com</a> and from within the GoCardless user interface at <a href="https://manage.gocardless.com/">manage.gocardless.com</a>.
+    </p>
 
-    <p>&copy; Swimming Club Data Systems <?=date("Y", strtotime($data->date_produced))?>. Produced for <?=htmlspecialchars(env('CLUB_NAME'))?>.</p>
+    <p>
+      Further auditing may be required for tax purposes - Talk to an accountant if you're not sure what is required. This software has <strong>not</strong> been written to produce reports which can be accepted electronically by HMRC.
+    </p>
+
+    <p>
+      &copy; Swimming Club Data Systems <?=date("Y", strtotime($data->date_produced))?>. Produced for <?=htmlspecialchars(env('CLUB_NAME'))?>.
+    </p>
 
     <?php $landscape = true; include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
   </body>

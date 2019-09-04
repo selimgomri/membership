@@ -20,6 +20,12 @@ $this->get('/payment-helpers.js', function() {
   include 'payment-helpers.php.js';
 });
 
+$this->group('/charts', function() {
+  $this->get('/squad.js', function() {
+    include BASE_PATH . 'controllers/squads/squad-charts.php.js';
+  });
+});
+
 $this->get('/*', function() {
   header("content-type: text/html");
   halt(404);
