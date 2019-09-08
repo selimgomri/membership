@@ -44,7 +44,7 @@ if(file_exists($cache_file)) {
 $asa = json_decode($file);
 
 $file = null;
-$cache_file = BASE_PATH . '/cache/SE-NE.xml';
+$cache_file = BASE_PATH . 'cache/SE-NE.xml';
 if (file_exists($cache_file)) {
   if (time() - filemtime($cache_file) > 10800) {
     // too old , re-fetch
