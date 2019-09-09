@@ -4,7 +4,7 @@ $pagetitle = "Squad Reps";
 
 global $db;
 
-$getMyReps = $db->prepare("SELECT Forename, Surname, MForename, MSurname, SquadName FROM (((members INNER JOIN squads ON members.SquadID = squads.SquadID) INNER JOIN squadReps ON squads.SquadID = squadReps.Squad) INNER JOIN users ON squadReps.User = users.UserID) WHERE members.UserID = ?");
+$getMyReps = $db->prepare("SELECT MForename, MSurname, Forename, Surname, MForename, MSurname, SquadName FROM (((members INNER JOIN squads ON members.SquadID = squads.SquadID) INNER JOIN squadReps ON squads.SquadID = squadReps.Squad) INNER JOIN users ON squadReps.User = users.UserID) WHERE members.UserID = ?");
 $getMyReps->execute([
   $_SESSION['UserID']
 ]);
@@ -33,12 +33,15 @@ include BASE_PATH . 'views/header.php';
         Reps for each of your swimmers
       </p>
 
-      <ul class="list-group">
+      <ul class="list-group mb-3">
       <?php do { ?>
         <li class="list-group-item">
-          <h3><?=htmlspecialchars($allReps['Forename'] . ' ' . $allReps['Surname'])?><br><small><?=htmlspecialchars($allReps['SquadName'])?> Squad</small></h3>
+          <h3><?=htmlspecialchars($myReps['MForename'] . ' ' . $myReps['MSurname'])?> <small>(<?=htmlspecialchars($myReps['SquadName'])?> Squad)</small></h3>
+          <p class="lead mb-0">
+            <?=htmlspecialchars($myReps['Forename'] . ' ' . $myReps['Surname'])?> is your rep
+          </p>
         </li>
-      <?php } while ($allReps = $getAllReps->fetch(PDO::FETCH_ASSOC)); ?>
+      <?php } while ($myReps = $getMyReps->fetch(PDO::FETCH_ASSOC)); ?>
       </ul>
       <?php } ?>
 
@@ -51,10 +54,13 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <?php if ($allReps != null) { ?>
-        <ul class="list-group">
+        <ul class="list-group mb-3">
         <?php do { ?>
           <li class="list-group-item">
-            <h3><?=htmlspecialchars($allReps['Forename'] . ' ' . $allReps['Surname'])?><br><small><?=htmlspecialchars($allReps['SquadName'])?> Squad</small></h3>
+            <h3><?=htmlspecialchars($allReps['Forename'] . ' ' . $allReps['Surname'])?> <small>(<?=htmlspecialchars($allReps['SquadName'])?> Squad)</small></h3>
+            <p class="lead mb-0">
+              Squad Rep
+            </p>
           </li>
         <?php } while ($allReps = $getAllReps->fetch(PDO::FETCH_ASSOC)); ?>
         </ul>

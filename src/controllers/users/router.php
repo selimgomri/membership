@@ -64,3 +64,21 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 		include 'usernameAjax.php';
 	});
 }
+
+if ($_SESSION['AccessLevel'] == 'Admin') {
+	$this->get('/{id}:int/rep', function($id) {
+		include 'squad-reps/list.php';
+	});
+
+	$this->get('/{id}:int/rep/add', function($id) {
+		include 'squad-reps/add.php';
+	});
+
+	$this->post('/{id}:int/rep/add', function($id) {
+		include 'squad-reps/add-post.php';
+	});
+
+	$this->get('/{id}:int/rep/remove', function($id) {
+		include 'squad-reps/remove.php';
+	});
+}
