@@ -11,11 +11,17 @@ header('Content-Disposition: attachment; filename=SCDSMembership-GalaEntriesSqua
 $output = fopen('php://output', 'w');
 
 fputcsv($output, [env('CLUB_NAME') . ' Squad Rep Gala Entry Report']);
-fputcsv($output, ['Swimmer', 'Row Type', '50 Free', '100 Free', '200 Free', '400 Free', '800 Free', '1500 Free', '50 Back', '100 Back', '200 Back', '50 Breast', '100 Breast', '200 Breast', '50 Fly', '100 Fly', '200 Fly', '100 IM', '200 IM', '400 IM', '150IM']);
+fputcsv($output, ['Swimmer', 'Age Now', 'Age Last Day', 'Age EoY', 'Row Type', '50 Free', '100 Free', '200 Free', '400 Free', '800 Free', '1500 Free', '50 Back', '100 Back', '200 Back', '50 Breast', '100 Breast', '200 Breast', '50 Fly', '100 Fly', '200 Fly', '100 IM', '200 IM', '400 IM', '150IM', 'Paid', 'Card details']);
 
 foreach ($data->entries as $entry) {
   $swimmerRow = $swimmerTimeRow = [];
-  $swimmerRow[] = $swimmerTimeRow[] = $entry->forename . ' ' . $entry->surname;
+  $swimmerRow[] = $entry->forename . ' ' . $entry->surname;
+  $swimmerRow[] = $entry->age_today;
+  $swimmerRow[] = $entry->age_on_last_day;
+  $swimmerRow[] = $entry->age_at_end_of_year;
+
+  $swimmerTimeRow[] = $swimmerTimeRow[] = $swimmerTimeRow[] = $swimmerTimeRow[] = '';
+
   $swimmerRow[] = 'Selected swims';
   //$swimmerTimeRow[] = '';
   $swimmerTimeRow[] = 'Entry times';
@@ -26,6 +32,16 @@ foreach ($data->entries as $entry) {
       $swimmerRow[] = '';
     }
     $swimmerTimeRow[] = $event->entry_time;
+  }
+  if ($entry->charged) {
+    $swimmerRow[] = '✓';
+  } else {
+    $swimmerRow[] = '';
+  }
+  if (isset($entry->payment_intent->brand) && $entry->payment_intent->brand != null) {
+    $swimmerRow[] = getCardBrand($entry->payment_intent->brand) . ' ' . $entry->payment_intent->funding . ' ' . $entry->payment_intent->last4;
+  } else {
+    $swimmerRow[] = '';
   }
   fputcsv($output, $swimmerRow);
   fputcsv($output, $swimmerTimeRow);
