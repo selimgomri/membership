@@ -70,8 +70,52 @@ include BASE_PATH . 'views/header.php';
 
 	<div class="row">
 
+    <div class="col order-lg-1">
+      <div class="cell">
+        <h2>Select a squad</h2>
+        <p class="lead">Select a squad to view entries for</p>
+        <div class="form-group mb-0">
+          <label for="squad-select">
+            Choose squad
+          </label>
+          <select class="custom-select" id="squad-select" name="squad-select">
+            <?php if ($noSquad) { ?>
+            <option selected>Select a squad</option>
+            <?php } ?>
+            <?php while ($s = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
+            <option value="<?=$s['id']?>" <?php if ((int) $s['id'] == $squad) { ?>selected<?php } ?>>
+                <?=htmlspecialchars($s['name'])?>
+              </option>
+            <?php } ?>
+          </select>
+        </div>
+      </div>
+
+      <?php if (!$noSquad) { ?>
+      <div class="cell">
+        <h2>Download entries</h2>
+        <p class="lead">Download entries for this squad</p>
+        <p>
+          <a href="<?=autoUrl("galas/" . $id . "/squad-rep-view.csv?squad=" . $squad)?>" target="_blank" class="btn btn-block btn-primary">
+            CSV (for Microsoft Excel)
+          </a>
+        </p>
+        <p>
+          <a href="<?=autoUrl("galas/" . $id . "/squad-rep-view.json?squad=" . $squad)?>" target="_blank" class="btn btn-block btn-primary">
+            JSON
+          </a>
+        </p>
+        <p>
+          <a href="<?=autoUrl("galas/" . $id . "/squad-rep-view.pdf?squad=" . $squad)?>" target="_blank" class="btn btn-block btn-primary disabled" disabled>
+            PDF (COMING SOON)
+          </a>
+        </p>
+      </div>
+      <?php } ?>
+    </div>
+
     <?php if (!$noSquad) { ?>
-    <div class="col-md-8">
+    <div class="col-md-8 order-lg-0">
 
 			<h2>Entries for this gala</h2>
       <p class="lead">
@@ -170,26 +214,6 @@ include BASE_PATH . 'views/header.php';
       <?php } ?>
     </div>
     <?php } ?>
-  
-    <div class="col">
-      <h2>Select a squad</h2>
-      <p class="lead">Select a squad to view entries for</p>
-      <div class="form-group">
-        <label for="squad-select">
-          Choose squad
-        </label>
-        <select class="custom-select" id="squad-select" name="squad-select">
-          <?php if ($noSquad) { ?>
-          <option selected>Select a squad</option>
-          <?php } ?>
-          <?php while ($s = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
-          <option value="<?=$s['id']?>" <?php if ((int) $s['id'] == $squad) { ?>selected<?php } ?>>
-              <?=htmlspecialchars($s['name'])?>
-            </option>
-          <?php } ?>
-        </select>
-      </div>
-    </div>
   </div>
 </div>
 
