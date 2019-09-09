@@ -159,6 +159,23 @@ include BASE_PATH . "views/header.php";
     </div>
   </div>
 
+  <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+  <div class="mb-4">
+    <h2>
+      Squad rep settings
+    </h2>
+    <p class="lead">
+      Make this parent a squad rep.
+    </p>
+
+    <p>
+      <a href="<?=autoUrl("users/" . $id . "/rep")?>" class="btn btn-primary">
+        Rep settings <span class="fa fa-chevron-right"></span>
+      </a>
+    </p>
+  </div>
+  <?php } ?>
+
   <div class="mb-4">
     <h2>
       Swimmers
@@ -243,7 +260,7 @@ include BASE_PATH . "views/header.php";
     </div>
 
     <p>
-      <a href="<?=currentUrl()?>qualifications" class="btn rounded btn-success">
+      <a href="<?=currentUrl()?>qualifications" class="btn btn-primary">
         <span class="sr-only">View or add</span> Qualifications <span class="fa fa-chevron-right"></span>
       </a>
     </p>
@@ -260,7 +277,7 @@ include BASE_PATH . "views/header.php";
       will be as if you have logged in as this user.
     </p>
 
-		<p><a href="<?=autoUrl("users/simulate/" . $id)?>" class="btn rounded btn-success">Simulate this user <span class="fa fa-chevron-right"></span> </a></p>
+		<p><a href="<?=autoUrl("users/simulate/" . $id)?>" class="btn btn-primary">Simulate this user <span class="fa fa-chevron-right"></span> </a></p>
 	</div>
 
   <h2>

@@ -11,6 +11,19 @@ $this->get(['/{id}:int/timesheet.csv', '/competitions/{id}:int/timesheet.csv'], 
   include "export/TimeSheet.php";
 });
 
+$this->get('/{id}:int/squad-rep-view', function($id) {
+	include 'squad-reps/info.php';
+});
+
+$this->get('/{id}:int/squad-rep-view.json', function($id) {
+	include 'squad-reps/infoOutput.json.php';
+});
+
+$this->get('/{id}:int/squad-rep-view.csv', function($id) {
+	include 'squad-reps/info.csv.php';
+});
+
+
 if ($access == "Parent") {
 	// Gala Home
 	$this->get('/', function() {

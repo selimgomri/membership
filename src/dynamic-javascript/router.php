@@ -26,6 +26,12 @@ $this->group('/charts', function() {
   });
 });
 
+$this->group('/squad-reps', function() {
+  $this->get('/select.js', function() {
+    include BASE_PATH . 'controllers/galas/squad-reps/list.php.js';
+  });
+});
+
 $this->get('/*', function() {
   header("content-type: text/html");
   halt(404);

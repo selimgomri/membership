@@ -631,6 +631,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/squads/router.php';
     });
 
+    $this->group('/squad-reps', function() {
+      include 'controllers/squads/squad-reps/router.php';
+    });
+
     if ($_SESSION['AccessLevel'] != "Parent") {
       $this->group('/trials', function() {
         include 'controllers/trials/router.php';
