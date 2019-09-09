@@ -6,15 +6,34 @@ $squad = null;
 
 if (isset($_GET['squad'])) {
   // Verify this squad is allowed for the user
-
   $squad = (int) $_GET['squad'];
+
+  if ($_SESSION['AccessLevel'] == 'Parent') {
+
+    // See if this squad is allowed
+    $isAllowed = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE User = ? AND Squad = ?");
+    $isAllowed->execute([
+      $_SESSION['UserID'],
+      $squad
+    ]);
+    if ($isAllowed->fetchColumn() == 0) {
+      // User cannot access this squad
+      $noSquad = true;
+
+      // Now if user has no squads, halt
+      $isAllowed = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE User = ?");
+      $isAllowed->execute([
+        $_SESSION['UserID']
+      ]);
+      if ($isAllowed->fetchColumn() == 0) {
+        // User is not a squad rep
+        halt(404);
+      }
+    }
+  }
 }
 
-if ($squad == null || $squad == 0) {
-  halt(404);
-}
-
-$getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas WHERE GalaID = ?");
+$getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed, GalaDate FROM galas WHERE GalaID = ?");
 $getGala->execute([$id]);
 $gala = $getGala->fetch(PDO::FETCH_ASSOC);
 
@@ -26,6 +45,7 @@ $squadInfo = $getSquad->fetch(PDO::FETCH_ASSOC);
 
 if ($gala == null || ($squadInfo == null && !$doNotHalt)) {
   halt(404);
+} else if ($squad == 0) {
   $noSquad = true;
 }
 
@@ -54,12 +74,13 @@ $swimsArray = [
   '400IM' => '400 IM'
 ];
 
+$today = new DateTime('now', new DateTimeZone('Europe/London'));
+$lastDay = new DateTime($gala['GalaDate'], new DateTimeZone('Europe/London'));
+$endOfYear = new DateTime('Last day of December ' . $lastDay->format("Y"), new DateTimeZone('Europe/London'));
+
 $entries = [];
 while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
   $birthday = new DateTime($entry['DateOfBirth'], new DateTimeZone('Europe/London'));
-  $today = new DateTime('now', new DateTimeZone('Europe/London'));
-  $lastDay = new DateTime($entry['GalaDate'], new DateTimeZone('Europe/London'));
-  $endOfYear = new DateTime('now', new DateTimeZone('Europe/London'));
 
   $ageToday = $birthday->diff($today)->format('%y');
   $ageLastDay = $birthday->diff($lastDay)->format('%y');

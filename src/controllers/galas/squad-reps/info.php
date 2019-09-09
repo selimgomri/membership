@@ -5,12 +5,20 @@ $doNotHalt = true;
 require 'info.json.php';
 $data = json_decode($output);
 
-$squad = null;
-
-if (isset($_GET['squad'])) {
-  // Verify this squad is allowed for the user
-
-  $squad = $_GET['squad'];
+$squads = null;
+global $systemInfo;
+$leavers = $systemInfo->getSystemOption('LeaversSquad');
+if ($_SESSION['AccessLevel'] != 'Parent') {
+  $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads WHERE `SquadID` != ? ORDER BY SquadFee DESC, `name` ASC");
+  $squads->execute([
+    $leavers
+  ]);
+} else {
+  $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads INNER JOIN squadReps ON squads.SquadID = squadReps.Squad WHERE squadReps.User = ? AND SquadID != ? ORDER BY SquadFee DESC, `name` ASC");
+  $squads->execute([
+    $_SESSION['UserID'],
+    $leavers
+  ]);
 }
 
 $swimsArray = [
@@ -52,7 +60,7 @@ include BASE_PATH . 'views/header.php';
 	<h1><?=htmlspecialchars($data->squad->name)?> Squad entries for <?=htmlspecialchars($data->gala->name)?></h1>
 	<?php if ($data->gala->fixed_fee) { ?>
 	<p class="lead">
-		This gala costs &pound;<?=number_format($data->gala->fee/100, 2, '.', '')?>
+		This gala costs &pound;<?=number_format($data->gala->fee/100, 2, '.', '')?>/swim
 	</p>
 	<?php } else { ?>
 	<p class="lead">
@@ -74,6 +82,10 @@ include BASE_PATH . 'views/header.php';
         This is currently a Minimum Viable Product (MVP) and does not allow you to mark entries as paid or approve them.
       </p>
 
+      <p>
+        Entries shown in green have been charged for.
+      </p>
+
       <?php if (sizeof($data->entries) > 0) { ?>
       <ul class="list-group mb-3">
         <?php foreach ($data->entries AS $entry) { ?>
@@ -84,11 +96,14 @@ include BASE_PATH . 'views/header.php';
               <h3><?=htmlspecialchars($entry->forename . ' ' . $entry->surname)?></h3>
 
               <p>
-                <strong>Swim England Number:</strong> <?=htmlspecialchars($entry->asa_number)?>
+                <strong>Swim England Number:</strong> <?=htmlspecialchars($entry->asa_number)?><br>
+                <strong>Age today:</strong> <?=htmlspecialchars($entry->age_today)?><br>
+                <strong>Age on day:</strong> <?=htmlspecialchars($entry->age_on_last_day)?><br>
+                <strong>Age at end of year:</strong> <?=htmlspecialchars($entry->age_at_end_of_year)?><br>
               </p>
 
               <p class="mb-0">
-                <?=htmlspecialchars($entry->forname)?> was entered in;
+                <?=htmlspecialchars($entry->forename)?> was entered in;
               </p>
               <ul class="list-unstyled">
               <?php $count = 0; ?>
@@ -157,18 +172,28 @@ include BASE_PATH . 'views/header.php';
     <?php } ?>
   
     <div class="col">
-      <?php if (true) { ?>
       <h2>Select a squad</h2>
       <p class="lead">Select a squad to view entries for</p>
-      <?php } else { ?>
-      <h2>You do not have squad rep permissions</h2>
-      <p class="lead">
-        Only squad reps can view entries
-      </p>
-      <?php } ?>
+      <div class="form-group">
+        <label for="squad-select">
+          Choose squad
+        </label>
+        <select class="custom-select" id="squad-select" name="squad-select">
+          <?php if ($noSquad) { ?>
+          <option selected>Select a squad</option>
+          <?php } ?>
+          <?php while ($s = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
+          <option value="<?=$s['id']?>" <?php if ((int) $s['id'] == $squad) { ?>selected<?php } ?>>
+              <?=htmlspecialchars($s['name'])?>
+            </option>
+          <?php } ?>
+        </select>
+      </div>
     </div>
   </div>
 </div>
+
+<script src="<?=autoUrl("js/squad-reps/select.js")?>"></script>
 
 <?php
 
