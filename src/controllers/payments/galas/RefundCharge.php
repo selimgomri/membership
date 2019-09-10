@@ -12,8 +12,8 @@ if ($gala == null) {
 	halt(404);
 }
 
-$getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, stripePayMethods.Brand, stripePayMethods.Last4 FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? AND Charged = ? AND EntryProcessed = ? ORDER BY MForename ASC, MSurname ASC");
-$getEntries->execute([$id, '1', '1']);
+$getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, stripePayMethods.Brand, stripePayMethods.Last4 FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? AND Charged = ? ORDER BY MForename ASC, MSurname ASC");
+$getEntries->execute([$id, '1']);
 $entry = $getEntries->fetch(PDO::FETCH_ASSOC);
 
 $swimsArray = [
@@ -110,7 +110,8 @@ include BASE_PATH . 'views/header.php';
 						<?php $hasNoDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut')); ?>
 						<?php $amountRefundable = ((int) $entry['FeeToPay']*100) - ($entry['AmountRefunded']); ?>
 					<?php if ($entry['Processed'] && $entry['Charged']) { $countChargeable++; } ?>
-					<li class="list-group-item" id="refund-box-<?=htmlspecialchars($entry['EntryID'])?>">
+					<?php $notReady = !$entry['Processed']; ?>
+					<li class="list-group-item <?php if ($notReady) { ?>list-group-item-danger<?php } ?>" id="refund-box-<?=htmlspecialchars($entry['EntryID'])?>">
 						<div class="row">
 							<div class="col-sm-5 col-md-4 col-lg-6">
 								<h3><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?></h3>
@@ -152,11 +153,11 @@ include BASE_PATH . 'views/header.php';
 								<p>
 									The parent does not have a Direct Debit set up or has requested to pay by other means. Refund should be by cash, cheque or bank transfer.
 								</p>
-								<?php } else if ($entry['Intent'] != null) { ?>
+								<?php } else if ($entry['Intent'] != null && $amountRefundable > 0) { ?>
 								<p>
 									This entry will be refunded to <?=htmlspecialchars(getCardBrand($entry['Brand']))?> <span class="mono"><?=htmlspecialchars($entry['Last4'])?></span>.
 								</p>
-								<?php } else { ?>
+								<?php } else if ($amountRefundable > 0) { ?>
 								<p>
 									This gala will be refunded as a discount on the parent's next direct debit payment.
 								</p>
@@ -194,7 +195,7 @@ include BASE_PATH . 'views/header.php';
 												<div class="input-group-prepend">
 													<div class="input-group-text mono">&pound;</div>
 												</div>
-												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00" min="0" max="<?=htmlspecialchars(number_format($amountRefundable/100, 2))?>" step="0.01" <?php if ($amountRefundable == 0) { ?>disabled<?php } ?>>
+												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00" min="0" max="<?=htmlspecialchars(number_format($amountRefundable/100, 2))?>" step="0.01" <?php if ($amountRefundable == 0 || $notReady) { ?>disabled<?php } ?>>
 											</div>
 										</div>
 									</div>
