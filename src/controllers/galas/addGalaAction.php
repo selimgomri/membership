@@ -62,13 +62,18 @@ if (isset($_POST['galaFeeConstant']) && $_POST['galaFeeConstant'] == 1) {
   $galaFee = 0.00;
 }
 
-if (isset($_POST['HyTek'])) {
+if (isset($_POST['HyTek']) && bool($_POST['HyTek'])) {
   $hyTek = 1;
 }
 
 $coachDoesEntries = 0;
-if (isset($_POST['coachDecides'])) {
+if (isset($_POST['coachDecides']) && bool($_POST['coachDecides'])) {
   $coachDoesEntries = 1;
+}
+
+$approvalNeeded = 0;
+if (isset($_POST['approvalNeeded']) && bool($_POST['approvalNeeded'])) {
+  $approvalNeeded = 1;
 }
 
 //$sql = "INSERT INTO `galas` (`GalaName`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`) VALUES ('$galaName', '$length', '$venue', '$closingDate', '$lastDate', '$galaFeeConstant', '$galaFee', '$hyTek');";
@@ -77,8 +82,19 @@ if (isset($_POST['coachDecides'])) {
 if ($status) {
   $id = null;
   try {
-    $query = $db->prepare("INSERT INTO `galas` (`GalaName`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`, `CoachEnters`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $query->execute([$galaName, $length, $venue, $closingDate, $lastDate, $galaFeeConstant, $galaFee, $hyTek, $coachDoesEntries]);
+    $query = $db->prepare("INSERT INTO `galas` (`GalaName`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`, `CoachEnters`, `RequiresApproval`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $query->execute([
+      $galaName,
+      $length,
+      $venue,
+      $closingDate,
+      $lastDate,
+      $galaFeeConstant,
+      $galaFee,
+      $hyTek,
+      $coachDoesEntries,
+      $approvalNeeded
+    ]);
     $added = true;
     $id = $db->lastInsertId();
   } catch (Exception $e) {

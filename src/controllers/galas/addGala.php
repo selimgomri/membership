@@ -76,6 +76,15 @@ $content .= "<div class=\"row\"><div class=\"col-md-10 col-lg-8\"><form method=\
     </div>
   </div>
 </div>
+<div class=\"form-group row\">
+  <label for=\"approvalNeeded\" class=\"col-sm-2 col-form-label\">Approval needed?</label>
+  <div class=\"col-sm-10\">
+    <div class=\"custom-control custom-checkbox mt-2\">
+      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"approvalNeeded\" name=\"approvalNeeded\">
+      <label class=\"custom-control-label\" for=\"approvalNeeded\">Tick if entries must first be approved by a squad rep. Entries are automatically approved if a squad does not have a squad rep.</label>
+    </div>
+  </div>
+</div>
 <p><button class=\"btn btn-success\" type=\"submit\" id=\"submit\">Add gala</button></p>
 </div></div></form>
 <p>This gala will immediately be available for parents to enter, unless coaches decide entries.</p>

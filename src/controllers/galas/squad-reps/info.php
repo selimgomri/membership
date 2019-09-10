@@ -123,7 +123,7 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <p>
-        This is currently a Minimum Viable Product (MVP) and does not allow you to mark entries as paid or approve them.
+        This allows you to mark an entry as paid or approve it (if the gala requires that entries are approved by a squad rep). If a parent pays by card, you will not be able to uncheck the paid box.
       </p>
 
       <p>
@@ -131,9 +131,9 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <?php if (sizeof($data->entries) > 0) { ?>
-      <ul class="list-group mb-3">
+      <ul class="list-group mb-3" id="entries-list">
         <?php foreach ($data->entries AS $entry) { ?>
-          <?php $hasNoDD = ($entry->MandateID == null) || (getUserOption($entry->user, 'GalaDirectDebitOptOut')); ?>
+          <?php $hasNoDD = (!isset($entry->mandate->id) || $entry->mandate->id == null) || (getUserOption($entry->user, 'GalaDirectDebitOptOut')); ?>
         <li class="list-group-item <?php if (bool($entry->charged)) {?>list-group-item-success<?php } ?>" id="refund-box-<?=htmlspecialchars($entry->id)?>">
           <div class="row">
             <div class="col-sm-5 col-md-4 col-lg-6">
@@ -202,6 +202,19 @@ include BASE_PATH . 'views/header.php';
                 <?php } ?>
               <?php } ?>
             </div>
+          </div>
+          <hr>
+          <div class="custom-control custom-checkbox custom-control-inline">
+            <input type="checkbox" class="custom-control-input" id="paid-<?=htmlspecialchars($entry->id)?>" name="paid-<?=htmlspecialchars($entry->id)?>" <?php if (isset($entry->charged) && $entry->charged) { ?>checked<?php } ?> <?php if (isset($entry->payment_intent->id) && $entry->payment_intent->id != null) { ?>disabled<?php } ?> data-ajax-action="mark-paid" data-entry-id="<?=htmlspecialchars($entry->id)?>">
+            <label class="custom-control-label" for="paid-<?=htmlspecialchars($entry->id)?>">Entry paid</label>
+          </div>
+          <div class="custom-control custom-checkbox custom-control-inline">
+            <input type="checkbox" class="custom-control-input" id="approved-<?=htmlspecialchars($entry->id)?>" name="approved-<?=htmlspecialchars($entry->id)?>" <?php if (isset($entry->approved) && $entry->approved) { ?>checked<?php } ?> data-ajax-action="approve-entry" data-entry-id="<?=htmlspecialchars($entry->id)?>">
+            <label class="custom-control-label" for="approved-<?=htmlspecialchars($entry->id)?>">Entry approved</label>
+          </div>
+          <div class="custom-control custom-checkbox custom-control-inline">
+            <input type="checkbox" class="custom-control-input" id="processed-<?=htmlspecialchars($entry->id)?>" name="processed-<?=htmlspecialchars($entry->id)?>" <?php if (isset($entry->processed) && $entry->processed) { ?>checked<?php } ?> disabled data-ajax-action="approve-entry" data-entry-id="<?=htmlspecialchars($entry->id)?>">
+            <label class="custom-control-label" for="processed-<?=htmlspecialchars($entry->id)?>"><abbr title="Only staff can mark an entry processed, meaning it has been entered into HyTek or SportSystems">Entry processed</abbr></label>
           </div>
         </li>
         <?php } ?>

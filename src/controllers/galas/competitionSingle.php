@@ -135,6 +135,16 @@ include "galaMenu.php"; ?>
             </div>
           </div>
         </div>
+
+        <div class="form-group row">
+          <label for="approvalNeeded" class="col-sm-4 col-form-label">Approval needed?</label>
+          <div class="col-sm-8">
+            <div class="custom-control custom-checkbox mt-2">
+        <input type="checkbox" value="1" class="custom-control-input" <?php if ($row['RequiresApproval']) { ?>checked<?php } ?> id="approvalNeeded" name="approvalNeeded">
+              <label class="custom-control-label" for="approvalNeeded">Tick if entries must first be approved by a squad rep. Entries are automatically approved if a squad does not have a squad rep.</label>
+            </div>
+          </div>
+        </div>
         
         <p>
           <button class="btn btn-success" type="submit" id="submit">

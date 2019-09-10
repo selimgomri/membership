@@ -23,6 +23,10 @@ $this->get('/{id}:int/squad-rep-view.csv', function($id) {
 	include 'squad-reps/info.csv.php';
 });
 
+$this->post('/squad-reps/entry-states', function() {
+	include 'squad-reps/handle-entry-state.php';
+});
+
 
 if ($access == "Parent") {
 	// Gala Home

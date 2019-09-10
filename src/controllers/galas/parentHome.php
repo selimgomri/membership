@@ -12,7 +12,7 @@ $galas->execute([$nowDay]);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
 $entriesOpen = false;
 
-$entries = $db->prepare("SELECT EntryID, GalaName, ClosingDate, GalaVenue, MForename, MSurname, EntryProcessed Processed, Charged, Refunded, FeeToPay, Locked, Vetoable FROM ((galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE GalaDate >= ? AND members.UserID = ?");
+$entries = $db->prepare("SELECT EntryID, GalaName, ClosingDate, GalaVenue, MForename, MSurname, EntryProcessed Processed, Charged, Refunded, FeeToPay, Locked, Vetoable, RequiresApproval, Approved FROM ((galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE GalaDate >= ? AND members.UserID = ?");
 $entries->execute([$nowDay, $_SESSION['UserID']]);
 $entry = $entries->fetch(PDO::FETCH_ASSOC);
 
@@ -176,6 +176,7 @@ include "galaMenu.php";
                 <?php if ($now <= $closingDate && !$entry['Charged'] && !$entry['Processed'] && !$entry['Locked']) {?><span class="ml-2 badge badge-success">EDITABLE</span><?php } ?>
                 <?php if ($entry['Charged']) {?><span class="ml-2 badge badge-warning"><i class="fa fa-money" aria-hidden="true"></i> PAID</span><?php } ?>
                 <?php if ($entry['Vetoable']) {?><span class="ml-2 badge badge-info">VETOABLE</span><?php } ?>
+                <?php if ($entry['RequiresApproval'] && $entry['Approved']) { ?><abbr title="Approved by squad rep"><span class="ml-2 badge badge-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span></abbr><?php } else if ($entry['Approved']) { ?><abbr title="Entry automatically approved"><span class="ml-2 badge badge-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span></abbr><?php } ?>
                 <?php if ($entry['Refunded'] && $entry['FeeToPay'] > 0) {?><span class="ml-2 badge badge-warning">PART REFUNDED</span><?php } else if ($entry['Refunded'] && $entry['FeeToPay'] == 0) {?><span class="ml-2 badge badge-warning">FULLY REFUNDED</span><?php } ?>
               </span>
             </span>

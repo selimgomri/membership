@@ -219,6 +219,13 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
       $content .= '<td class="d-print-none">';
 
+      // If approval not yet given and is required, show a warning
+      if ($row['RequiresApproval'] && !$row['Approved']) {
+        $content .= '<div class="p-3 bg-warning text-dark mb-3"><strong>This entry has not yet been approved</strong><br>Unless you are sure a squad rep will approve this entry, do not process this entry at this time.</div>';
+      } else if ($row['RequiresApproval'] && $row['Approved']) {
+        $content .= '<p>This entry has been approved by a rep</p>';
+      }
+
       // If the entry has been processes, show a ticked checkbox
       $content .= "
       <div class=\"custom-control custom-checkbox\">

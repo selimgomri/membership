@@ -33,7 +33,7 @@ if (isset($_GET['squad'])) {
   }
 }
 
-$getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed, GalaDate FROM galas WHERE GalaID = ?");
+$getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed, GalaDate, RequiresApproval FROM galas WHERE GalaID = ?");
 $getGala->execute([$id]);
 $gala = $getGala->fetch(PDO::FETCH_ASSOC);
 
@@ -49,7 +49,7 @@ if ($gala == null || ($squadInfo == null && !$doNotHalt)) {
   $noSquad = true;
 }
 
-$getEntries = $db->prepare("SELECT members.UserID `user`, DateOfBirth, GalaDate, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, 50FreeTime, 100FreeTime, 200FreeTime, 400FreeTime, 800FreeTime, 1500FreeTime, 50BackTime, 100BackTime, 200BackTime, 50BreastTime, 100BreastTime, 200BreastTime, 50FlyTime, 100FlyTime, 200FlyTime, 100IMTime, 150IMTime, 200IMTime, 400IMTime, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, stripePayMethods.Brand, stripePayMethods.Last4, Funding, ASANumber FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? AND members.SquadID = ? ORDER BY MForename ASC, MSurname ASC");
+$getEntries = $db->prepare("SELECT members.UserID `user`, DateOfBirth, GalaDate, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, 50FreeTime, 100FreeTime, 200FreeTime, 400FreeTime, 800FreeTime, 1500FreeTime, 50BackTime, 100BackTime, 200BackTime, 50BreastTime, 100BreastTime, 200BreastTime, 50FlyTime, 100FlyTime, 200FlyTime, 100IMTime, 150IMTime, 200IMTime, 400IMTime, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, stripePayMethods.Brand, stripePayMethods.Last4, Funding, ASANumber, Approved FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? AND members.SquadID = ? ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id, $squad]);
 
 $swimsArray = [
@@ -118,6 +118,11 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
       'brand' => $entry['Brand'],
       'last4' => $entry['Last4'],
       'funding' => $entry['Funding']
+    ],
+    'processed' => bool($entry['Processed']),
+    'approved' => bool($entry['Approved']),
+    'mandate' => [
+      'id' => (int) $entry['MandateID']
     ]
   ];
 }
@@ -128,7 +133,8 @@ $jsonArray = [
     'name' => $gala['name'],
     'venue' => $gala['venue'],
     'fixed_fee' => bool($gala['fixed']),
-    'fee' => (int) ($gala['fee']*100)
+    'fee' => (int) ($gala['fee']*100),
+    'entries_require_approval' => bool($gala['RequiresApproval'])
   ],
   'squad' => [
     'id' => (int) $squadInfo['id'],
