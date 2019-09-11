@@ -175,7 +175,7 @@ include BASE_PATH . 'views/header.php';
 								if ($hasNoDD && $entry['Intent'] == null) {
 									$refundSource = 'manual refund. No direct debit or payment card is available to issue an automatic refund';
 								} else if ($entry['Intent'] != null && $amountRefundable > 0) {
-									$refundSource = getCardBrand($entry['Brand']) . ' ' . $entry['Funding'] . ' card ending ' . $entry['Last4'];
+									$refundSource = $entry['Forename'] . ' ' . $entry['Surname'] . '\'s ' . getCardBrand($entry['Brand']) . ' ' . $entry['Funding'] . ' card ending ' . $entry['Last4'];
 								} else if ($amountRefundable > 0) {
 									$refundSource = 'This gala will be credited to ' . $entry['Forename'] . ' ' . $entry['Surname'] . '\'s account and discounted from their next direct debit payment';
 								}
@@ -223,7 +223,7 @@ include BASE_PATH . 'views/header.php';
 									<div class="col-12 mt-3">
 									  <span id="<?=$entry['EntryID']?>-refund-error-warning-box"></span>
 										<p class="mb-0">
-											<button type="button" id="<?=$entry['EntryID']?>-refund-button" class="refund-button btn btn-primary" data-entry-id="<?=$entry['EntryID']?>" data-refund-location="<?=htmlspecialchars($refundSource)?>">
+											<button type="button" id="<?=$entry['EntryID']?>-refund-button" class="refund-button btn btn-primary" data-entry-id="<?=$entry['EntryID']?>" data-refund-location="<?=htmlspecialchars($refundSource)?>" data-swimmer-name="<?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?>">
 												Refund
 											</button>
 										</p>

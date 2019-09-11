@@ -99,10 +99,10 @@ function clickPropogation(e) {
         document.getElementById('myModalTitle').textContent = 'Confirm refund amount';
 
         // Set modal body content
-        document.getElementById('myModalBody').innerHTML = '<p class="mb-0">Please confirm that you want to refund &pound;' + (refundAmount/100).toFixed(2) + ' to <span id="modal-refund-location"></span>.</p>';
+        document.getElementById('myModalBody').innerHTML = '<p class="mb-0">Please confirm that you want to refund &pound;' + (refundAmount/100).toFixed(2) + ' for <span id="modal-refund-swimmer-name"></span>\'s gala entry to <span id="modal-refund-location"></span>.</p>';
 
         document.getElementById('modal-refund-location').textContent = element.dataset.refundLocation;
-
+        document.getElementById('modal-refund-swimmer-name').textContent = element.dataset.swimmerName;
         modalButton.innerHTML = 'Confirm refund';
 
         modalButton.dataset.entry = element.dataset.entryId;
