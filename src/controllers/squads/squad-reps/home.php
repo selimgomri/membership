@@ -50,6 +50,18 @@ include BASE_PATH . 'views/header.php';
       <h2>
         Other services
       </h2>
+      <ul>
+        <li>
+          <a href="<?=autoUrl("notify")?>">
+            Email parents
+          </a>
+        </li>
+        <li>
+          <a href="<?=autoUrl("squad-reps/list")?>">
+            View list of Squad Reps
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </div>

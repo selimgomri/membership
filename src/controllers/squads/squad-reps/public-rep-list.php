@@ -10,8 +10,8 @@ $getMyReps->execute([
 ]);
 $myReps = $getMyReps->fetch(PDO::FETCH_ASSOC);
 
-$getAllReps = $db->query("SELECT Forename, Surname, SquadName FROM ((squadReps INNER JOIN squads ON squads.SquadID = squadReps.Squad) INNER JOIN users ON squadReps.User = users.UserID)");
-$allReps = $getAllReps->fetch(PDO::FETCH_ASSOC);
+$getAllReps = $db->query("SELECT SquadID, Forename, Surname, SquadName FROM ((squadReps INNER JOIN squads ON squads.SquadID = squadReps.Squad) INNER JOIN users ON squadReps.User = users.UserID) ORDER BY SquadFee DESC, SquadName ASC");
+$allReps = $getAllReps->fetchAll(PDO::FETCH_GROUP);
 
 include BASE_PATH . 'views/header.php';
 
@@ -47,22 +47,24 @@ include BASE_PATH . 'views/header.php';
 
 
       <h2>
-        All squad reps
+        All reps
       </h2>
       <p class="lead">
-        Reps for all squads
+        Here is a full list of squad reps
       </p>
 
-      <?php if ($allReps != null) { ?>
+      <?php if (sizeof($allReps) > 0) { ?>
         <ul class="list-group mb-3">
-        <?php do { ?>
+        <?php foreach ($allReps as $squad) { ?>
           <li class="list-group-item">
-            <h3><?=htmlspecialchars($allReps['Forename'] . ' ' . $allReps['Surname'])?> <small>(<?=htmlspecialchars($allReps['SquadName'])?> Squad)</small></h3>
-            <p class="lead mb-0">
-              Squad Rep
-            </p>
+            <h3><?=htmlspecialchars($squad[0]['SquadName'])?> Squad Rep<?php if (sizeof($squad) > 1) { ?>s<?php } ?></h3>
+            <ul class="list-unstyled">
+              <?php foreach ($squad as $reps) { ?>
+              <li><?=htmlspecialchars($reps['Forename'] . ' ' . $reps['Surname'])?></li>
+              <?php } ?>
+            </ul>
           </li>
-        <?php } while ($allReps = $getAllReps->fetch(PDO::FETCH_ASSOC)); ?>
+        <?php } ?>
         </ul>
       <?php } else { ?>
         <div class="alert alert-warning">

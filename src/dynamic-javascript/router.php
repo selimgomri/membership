@@ -32,6 +32,12 @@ $this->group('/squad-reps', function() {
   });
 });
 
+$this->group('/galas', function() {
+  $this->get('/refund-entries.js', function() {
+    include BASE_PATH . 'controllers/payments/galas/RefundCharge.js';
+  });
+});
+
 $this->get('/*', function() {
   header("content-type: text/html");
   halt(404);

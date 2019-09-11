@@ -12,7 +12,7 @@ if ($gala == null) {
 	halt(404);
 }
 
-$getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, stripePayMethods.Brand, stripePayMethods.Last4 FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? AND Charged = ? ORDER BY MForename ASC, MSurname ASC");
+$getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, Forename, Surname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, stripePayMethods.Brand, stripePayMethods.Last4, stripePayMethods.Funding FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? AND Charged = ? ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id, '1']);
 $entry = $getEntries->fetch(PDO::FETCH_ASSOC);
 
@@ -91,6 +91,10 @@ include BASE_PATH . 'views/header.php';
 				The amount paid by each parent for their gala entry is shown on next to each swimmer. In the box provided, enter the amount to be refunded for rejections, if there are any.
 			</p>
 
+			<p>
+			  For increased security, you must press the <strong>Refund</strong> button next next to each entry. The system will ask for confirmation and report back to you whether the refund was successful.
+			</p>
+
 			<?php if (!$gala['fixed']) { ?>
 			<p>
 				As there is no fixed fee for each swim at this gala, you will have to check the amount to refund very carefully as rejections reports by software such as SPORTSYSTEMS do not support events with different fees (eg 1500m events) and so may not show the right amount to refund.
@@ -103,15 +107,15 @@ include BASE_PATH . 'views/header.php';
 
 			<h2>Entries for this gala</h2>	
 
-			<form method="post" onsubmit="return confirm('Are you sure you want to refund parents? You won\'t be able to modify refunds once you proceed.');">
-				<?php if ($entry != null) { ?>
-				<ul class="list-group mb-3">
-					<?php do { ?>
-						<?php $hasNoDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut')); ?>
-						<?php $amountRefundable = ((int) $entry['FeeToPay']*100) - ($entry['AmountRefunded']); ?>
-					<?php if ($entry['Processed'] && $entry['Charged']) { $countChargeable++; } ?>
-					<?php $notReady = !$entry['Processed']; ?>
-					<li class="list-group-item <?php if ($notReady) { ?>list-group-item-danger<?php } ?>" id="refund-box-<?=htmlspecialchars($entry['EntryID'])?>">
+			<?php if ($entry != null) { ?>
+			<ul class="list-group mb-3" id="entries-list">
+				<?php do { ?>
+					<?php $hasNoDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut')); ?>
+					<?php $amountRefundable = ((int) $entry['FeeToPay']*100) - ($entry['AmountRefunded']); ?>
+				<?php if ($entry['Processed'] && $entry['Charged']) { $countChargeable++; } ?>
+				<?php $notReady = !$entry['Processed']; ?>
+				<li class="list-group-item <?php if ($notReady) { ?>list-group-item-danger<?php } ?>" id="refund-box-<?=htmlspecialchars($entry['EntryID'])?>">
+				  <form id="refund-form-<?=htmlspecialchars($entry['EntryID'])?>" novalidate>
 						<div class="row">
 							<div class="col-sm-5 col-md-4 col-lg-6">
 								<h3><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?></h3>
@@ -163,6 +167,19 @@ include BASE_PATH . 'views/header.php';
 								</p>
 								<?php } ?>
 
+								<?php
+
+								$refundSource = '';
+								if ($hasNoDD && $entry['Intent'] == null) {
+									$refundSource = 'manual refund. No direct debit or payment card is available to issue an automatic refund';
+								} else if ($entry['Intent'] != null && $amountRefundable > 0) {
+									$refundSource = getCardBrand($entry['Brand']) . ' ' . $entry['Funding'] . ' card ending ' . $entry['Last4'];
+								} else if ($amountRefundable > 0) {
+									$refundSource = 'This gala will be credited to ' . $entry['Forename'] . ' ' . $entry['Surname'] . '\'s account and discounted from their next direct debit payment';
+								}
+
+								?>
+
 								<?php if (isset($_SESSION['OverhighChargeAmount'][$entry['EntryID']]) && $_SESSION['OverhighChargeAmount'][$entry['EntryID']]) {
 									unset($_SESSION['OverhighChargeAmount'][$entry['EntryID']]); ?>
 								<div class="alert alert-danger">
@@ -195,47 +212,44 @@ include BASE_PATH . 'views/header.php';
 												<div class="input-group-prepend">
 													<div class="input-group-text mono">&pound;</div>
 												</div>
-												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00" min="0" max="<?=htmlspecialchars(number_format($amountRefundable/100, 2))?>" step="0.01" <?php if ($amountRefundable == 0 || $notReady) { ?>disabled<?php } ?>>
+												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono refund-amount-field" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00" min="0" max="<?=htmlspecialchars(number_format($amountRefundable/100, 2))?>" data-max-refundable="<?=$amountRefundable?>" data-amount-refunded="<?=$entry['AmountRefunded']?>" step="0.01" <?php if ($amountRefundable == 0 || $notReady) { ?>disabled<?php } ?>>
 											</div>
 										</div>
 									</div>
+
+									<?php if (!($amountRefundable == 0 || $notReady)) { ?>
+									<div class="col-12 mt-3">
+									  <span id="<?=$entry['EntryID']?>-refund-error-warning-box"></span>
+										<p class="mb-0">
+											<button type="button" class="refund-button btn btn-primary" data-entry-id="<?=$entry['EntryID']?>" data-refund-location="<?=htmlspecialchars($refundSource)?>">
+												Refund
+											</button>
+										</p>
+									</div>
+									<?php } ?>
 								</div>
 							</div>
 						</div>
-					</li>
-					<?php } while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)); ?>
+					</form>
+				</li>
+				<?php } while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)); ?>
+			</ul>
+
+			<?php if ($countChargeable > 0) { ?>
+			<?php } else { ?>
+			<div class="alert alert-warning">
+				<p><strong>There are no entries that can be charged for at this time</strong></p>
+				<p class="mb-0">
+					To charge for gala entries there must be at least one meeting the following criteria.
+				</p>
+				<ul class="mb-0">
+					<li>A direct debit mandate</li>
+					<li>Their parent must not have opted out for gala payments</li>
+					<li>The entry must be marked as processed</li>
+					<li>The entry must not already be marked as paid</li>
 				</ul>
-
-				<?php if ($countChargeable > 0) { ?>
-				<div class="cell bg-warning">
-					<h2>Are you sure you're ready?</h2>
-					<p class="lead">
-						You won't be able to modify refunds once you press submit.
-					</p>
-
-					<p>
-						If you spot a mistake, you will have to handle it as a <strong>Manual Charge</strong> or <strong>Manual Event</strong>.
-					</p>
-
-					<p>
-						<button class="btn btn-danger" type="submit">Refund parents</button>
-					</p>
-				</div>
-				<?php } else { ?>
-				<div class="alert alert-warning">
-					<p><strong>There are no entries that can be charged for at this time</strong></p>
-					<p class="mb-0">
-						To charge for gala entries there must be at least one meeting the following criteria.
-					</p>
-					<ul class="mb-0">
-						<li>A direct debit mandate</li>
-						<li>Their parent must not have opted out for gala payments</li>
-						<li>The entry must be marked as processed</li>
-						<li>The entry must not already be marked as paid</li>
-					</ul>
-				</div>
-				<?php } ?>
-			</form>
+			</div>
+			<?php } ?>
 			<?php } else { ?>
 			<div class="alert alert-warning">
 				<strong>There are no entries for this gala</strong>
@@ -248,6 +262,28 @@ include BASE_PATH . 'views/header.php';
 <?php if (isset($_SESSION['OverhighChargeAmount'])) {
 	unset($_SESSION['OverhighChargeAmount']);
 } ?>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="myModalBody">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="modalConfirmButton">Confirm refund</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="<?=autoUrl("js/galas/refund-entries.js")?>"></script>
 
 <?php
 
