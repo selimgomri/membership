@@ -5,7 +5,7 @@ selectMenu.addEventListener('change', function(event) {
   var gala = selectMenu.dataset.galaId;
   if (squad !== null) {
     // Redirect to new page
-    window.location.href = <?=json_encode(autoUrl('galas/' + gala + '/squad-rep-view?squad='))?> + squad;
+    window.location.href = <?=json_encode(autoUrl(''))?> + 'galas/' + gala + '/squad-rep-view?squad=' + squad;
   }
 });
 

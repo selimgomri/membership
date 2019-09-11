@@ -115,7 +115,7 @@ include BASE_PATH . 'views/header.php';
     </div>
 
     <?php if (!$noSquad) { ?>
-    <div class="col-md-8 order-lg-0">
+    <div class="col-md-8 order-lg-0" id="entries-list">
 
 			<h2>Entries for this gala</h2>
       <p class="lead">
@@ -131,7 +131,7 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <?php if (sizeof($data->entries) > 0) { ?>
-      <ul class="list-group mb-3" id="entries-list">
+      <ul class="list-group mb-3">
         <?php foreach ($data->entries AS $entry) { ?>
           <?php $hasNoDD = (!isset($entry->mandate->id) || $entry->mandate->id == null) || (getUserOption($entry->user, 'GalaDirectDebitOptOut')); ?>
         <li class="list-group-item <?php if (bool($entry->charged)) {?>list-group-item-success<?php } ?>" id="refund-box-<?=htmlspecialchars($entry->id)?>">
