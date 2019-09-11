@@ -106,8 +106,8 @@ include BASE_PATH . 'views/header.php';
           </a>
         </p>
         <p>
-          <a href="<?=autoUrl("galas/" . $id . "/squad-rep-view.pdf?squad=" . $squad)?>" target="_blank" class="btn btn-block btn-primary disabled" disabled>
-            PDF (COMING SOON)
+          <a href="<?=autoUrl("galas/" . $id . "/squad-rep-view.pdf?squad=" . $squad)?>" target="_blank" class="btn btn-block btn-primary">
+            PDF
           </a>
         </p>
       </div>
@@ -159,7 +159,7 @@ include BASE_PATH . 'views/header.php';
             </div>
             <div class="col">
               <div class="d-sm-none mb-3"></div>
-              <?php if (isset($entry->payment_intent->id) && $entry->payment_intent->id != null) { ?>
+              <?php if ($entry->charged && isset($entry->payment_intent->id) && $entry->payment_intent->id != null) { ?>
               <p>
                 <strong>
                   Paid with
