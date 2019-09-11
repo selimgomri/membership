@@ -288,11 +288,6 @@ if ($access == "Galas" || $access == "Admin") {
 		global $link;
 		include 'galas/RefundCharge.php';
 	});
-
-	$this->post('/galas/{id}:int/refund', function($id) {
-		global $link;
-		include 'galas/RefundChargePost.php';
-	});
 }
 
 // Only allow payment cards if not null

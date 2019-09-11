@@ -15,7 +15,9 @@ modalButton.addEventListener('click', function(event) {
   var entry = modalButton.dataset.entry;
   var refundAmount = modalButton.dataset.refundAmount;
   var amountRefunded = modalButton.dataset.amountRefunded;
-  // TODO GET AMOUNT ALREADY REFUNDED AND COMPARE SERVER SIDE TO AVOID ERRORS
+  
+  modalButton.disabled = true;
+  modalButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
   // On confirm make ajax request to server
   var xhttp = new XMLHttpRequest();
@@ -26,6 +28,31 @@ modalButton.addEventListener('click', function(event) {
       // Updated details must include max refund, total refunded, disabling
       // field and hiding button if no money is refundable
       console.log(this.responseText);
+      var response = JSON.parse(this.responseText);
+      $('#myModal').modal('hide');
+      if (response.status === 'success') {
+        // Refund succeeded
+        document.getElementById(entry + '-refund-error-warning-box').innerHTML = '<div class="alert alert-success alert-dismissible fade show" role="alert"><p class="mb-0"><strong>Payment successfully refunded</strong></p><p class="mb-0">The total amount refunded is now &pound;' + (response.amount_refunded/100).toFixed(2) + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+
+        // Update data shown
+        // Disable buttons and fields if required  
+        if (response.amount_refundable === 0) {
+          document.getElementById(entry + '-refund-button').disabled = true;
+          document.getElementById(entry + '-refund').disabled = true;
+        }
+
+        // Show refunded amount
+        document.getElementById(entry + '-amount-refunded').innerHTML = '<p><strong>&pound;' + (response.amount_refunded/100).toFixed(2) + '</strong> has already been refunded!</p>';
+        // Update max value
+        document.getElementById(entry + '-refund').max = (response.amount_refundable/100).toFixed(2);
+        document.getElementById(entry + '-refund').value = null;
+        document.getElementById(entry + '-refund').dataset.maxRefundable = response.amount_refundable;
+        document.getElementById(entry + '-refund').dataset.amountRefunded = response.amount_refunded;
+      } else {
+        // Alert user to error
+        document.getElementById(entry + '-refund-error-warning-box').innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert"><p class="mb-0"><strong>The refund request failed!</strong></p><p class="mb-0">' + response.error_message + '.</p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+      }
+      console.log(response);
     }
   };
   xhttp.open('POST', <?=json_encode(autoUrl('galas/payments/ajax-refund-handler'))?>, true);
@@ -76,16 +103,18 @@ function clickPropogation(e) {
 
         document.getElementById('modal-refund-location').textContent = element.dataset.refundLocation;
 
-        //confirm('Are you sure you want to refund £' + refundBox.value + '? You won\'t be able to modify refunds once you proceed.');
-        $('#myModal').modal('show');
+        modalButton.innerHTML = 'Confirm refund';
 
         modalButton.dataset.entry = element.dataset.entryId;
         modalButton.dataset.refundAmount = refundAmount;
         modalButton.dataset.amountRefunded = amountRefunded;
+        modalButton.disabled = false;
+
+        $('#myModal').modal('show');
       }
 
       element.blur();
     }
   }
-  e.stopPropagation();
+  //e.stopPropagation();
 }

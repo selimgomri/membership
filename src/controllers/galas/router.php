@@ -228,8 +228,8 @@ if ($access == "Galas" || $access == "Admin") {
 		include BASE_PATH . 'controllers/payments/galas/RefundCharge.php';
 	});
 
-	$this->post('/{id}:int/refunds', function($id) {
-		include BASE_PATH . 'controllers/payments/galas/RefundChargePost.php';
+	$this->post('/payments/ajax-refund-handler', function() {
+		include BASE_PATH . 'controllers/payments/galas/RefundChargeAjax.php';
 	});
 
 

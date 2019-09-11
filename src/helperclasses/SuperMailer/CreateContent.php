@@ -43,7 +43,7 @@ class CreateMail {
   }
 
   public function setPlainContent($plainContent) {
-    $this->plainContent = $plainContent;
+    $this->plainContent = html_entity_decode($plainContent);
   }
 
   public function getPlainContent() {

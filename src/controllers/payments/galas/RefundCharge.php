@@ -115,7 +115,7 @@ include BASE_PATH . 'views/header.php';
 				<?php if ($entry['Processed'] && $entry['Charged']) { $countChargeable++; } ?>
 				<?php $notReady = !$entry['Processed']; ?>
 				<li class="list-group-item <?php if ($notReady) { ?>list-group-item-danger<?php } ?>" id="refund-box-<?=htmlspecialchars($entry['EntryID'])?>">
-				  <form id="refund-form-<?=htmlspecialchars($entry['EntryID'])?>" novalidate>
+				  <form id="refund-form-<?=htmlspecialchars($entry['EntryID'])?>" novalidate autocomplete="off">
 						<div class="row">
 							<div class="col-sm-5 col-md-4 col-lg-6">
 								<h3><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?></h3>
@@ -147,11 +147,13 @@ include BASE_PATH . 'views/header.php';
 									<?php } ?>
 								</p>
 
+								<div id="<?=$entry['EntryID']?>-amount-refunded">
 								<?php if ($entry['Refunded']) { ?>
 								<p>
 									<strong>&pound;<?=number_format($entry['AmountRefunded']/100, 2)?></strong> has already been refunded!
 								</p>
 								<?php } ?>
+								</div>
 
 								<?php if ($hasNoDD && $entry['Intent'] == null) { ?>
 								<p>
@@ -221,7 +223,7 @@ include BASE_PATH . 'views/header.php';
 									<div class="col-12 mt-3">
 									  <span id="<?=$entry['EntryID']?>-refund-error-warning-box"></span>
 										<p class="mb-0">
-											<button type="button" class="refund-button btn btn-primary" data-entry-id="<?=$entry['EntryID']?>" data-refund-location="<?=htmlspecialchars($refundSource)?>">
+											<button type="button" id="<?=$entry['EntryID']?>-refund-button" class="refund-button btn btn-primary" data-entry-id="<?=$entry['EntryID']?>" data-refund-location="<?=htmlspecialchars($refundSource)?>">
 												Refund
 											</button>
 										</p>
@@ -276,8 +278,8 @@ include BASE_PATH . 'views/header.php';
         ...
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="modalConfirmButton">Confirm refund</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-primary" id="modalConfirmButton">Confirm refund</button>
       </div>
     </div>
   </div>
