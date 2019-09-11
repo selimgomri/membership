@@ -5,7 +5,7 @@ $pagetitle = "Squad Rep Home";
 global $db;
 
 $today = (new DateTime('now', new DateTimeZone('Europe/London')))->format("y-m-d");
-$getGalas = $db->prepare("SELECT GalaName, GalaID, GalaVenue FROM galas WHERE GalaDate <= ? ORDER BY GalaDate ASC");
+$getGalas = $db->prepare("SELECT GalaName, GalaID, GalaVenue FROM galas WHERE GalaDate >= ? ORDER BY GalaDate ASC");
 $getGalas->execute([
   $today
 ]);

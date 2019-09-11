@@ -1,8 +1,11 @@
-document.getElementById('squad-select').addEventListener('change', function(event) {
-  var squad = document.getElementById('squad-select').value;
+var selectMenu = document.getElementById('squad-select');
+
+selectMenu.addEventListener('change', function(event) {
+  var squad = selectMenu.value;
+  var gala = selectMenu.dataset.galaId;
   if (squad !== null) {
     // Redirect to new page
-    window.location.href = <?=json_encode(autoUrl("galas/3/squad-rep-view?squad="))?> + squad;
+    window.location.href = <?=json_encode(autoUrl('galas/' + gala + '/squad-rep-view?squad='))?> + squad;
   }
 });
 
