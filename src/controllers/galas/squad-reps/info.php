@@ -78,7 +78,7 @@ include BASE_PATH . 'views/header.php';
           <label for="squad-select">
             Choose squad
           </label>
-          <select class="custom-select" id="squad-select" name="squad-select">
+          <select class="custom-select" id="squad-select" name="squad-select" data-gala-id="<?=htmlspecialchars($id)?>">
             <?php if ($noSquad) { ?>
             <option selected>Select a squad</option>
             <?php } ?>
