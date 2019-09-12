@@ -9,9 +9,18 @@ if (!bool(env('IS_CLS'))) {
 
 global $db;
 
-$squads = $db->query("SELECT `SquadName`, `SquadID` FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC;");
+$squads = null;
+if ($_SESSION['AccessLevel'] != 'Parent') {
+  $squads = $db->query("SELECT `SquadName`, `SquadID` FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC;");
+} else {
+  $squads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` INNER JOIN squadReps ON squadReps.Squad = squads.SquadID WHERE squadReps.User = ? ORDER BY `SquadFee` DESC, `SquadName` ASC;");
+  $squads->execute([$_SESSION['UserID']]);
+}
 
-$lists = $db->query("SELECT * FROM `targetedLists` ORDER BY `Name` ASC;");
+$lists = null;
+if ($_SESSION['AccessLevel'] != 'Parent') {
+  $lists = $db->query("SELECT * FROM `targetedLists` ORDER BY `Name` ASC;");
+}
 
 $galas = $db->prepare("SELECT GalaName, GalaID FROM `galas` WHERE GalaDate >= ? ORDER BY `GalaName` ASC;");
 $date = new DateTime('-1 week', new DateTimeZone('Europe/London'));
@@ -46,7 +55,8 @@ include BASE_PATH . "views/notifyMenu.php";
 	<h1>Notify Composer</h1>
 	<p class="lead">Send Emails to targeted groups of parents</p>
   <hr>
-	<form method="post" onkeypress="return event.keyCode != 13;">
+  <form method="post" onkeypress="return event.keyCode != 13;">
+    <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
     <div class="form-group">
 			<label>To parents of swimmers in the following targeted lists...</label>
 			<div class="row">
@@ -64,7 +74,8 @@ include BASE_PATH . "views/notifyMenu.php";
 				</div>
 			<?php } ?>
 			</div>
-		</div>
+    </div>
+    <?php } ?>
 		<div class="form-group">
 			<label>To parents of swimmers in the following squads...</label>
 			<div class="row">
@@ -84,6 +95,7 @@ include BASE_PATH . "views/notifyMenu.php";
 			</div>
 		</div>
 
+    <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
     <div class="form-group">
 			<label>To parents of swimmers entered in the following galas...</label>
 			<div class="row">
@@ -101,13 +113,14 @@ include BASE_PATH . "views/notifyMenu.php";
 				</div>
 			<?php } ?>
 			</div>
-		</div>
+    </div>
+    <?php } ?>
 
     <div class="form-group">
 			<label for="from">From</label>
       <select class="custom-select" name="from" id="from">
-        <option value="current-user"><?=htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'] . " <" . $emailPrefix . "noreply@" . env('EMAIL_DOMAIN') . ">  ")?></option>
-        <option value="club-sending-account" selected><?=htmlspecialchars(env('CLUB_NAME') . " <" . $emailPrefix . "noreply@" . env('EMAIL_DOMAIN') . ">")?></option>
+        <option value="current-user" <?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>selected<?php } ?>><?=htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'] . " <" . $emailPrefix . "noreply@" . env('EMAIL_DOMAIN') . ">  ")?></option>
+      <option value="club-sending-account" <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>selected<?php } ?>><?=htmlspecialchars(env('CLUB_NAME') . " <" . $emailPrefix . "noreply@" . env('EMAIL_DOMAIN') . ">")?></option>
       </select>
 		</div>
 

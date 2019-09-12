@@ -2,16 +2,27 @@
 
 global $db;
 
+$rep = false;
+if ($_SESSION['AccessLevel'] == 'Parent') {
+	$getSquadCount = $db->prepare("SELECT COUNT(*) FROM squads INNER JOIN squadReps ON squads.SquadID = squadReps.Squad AND squadReps.User = ?");
+	$getSquadCount->execute([
+		$_SESSION['UserID']
+	]);
+	if ($getSquadCount->fetchColumn() > 0) {
+		$rep = true;
+	}
+}
+
 $access = $_SESSION['AccessLevel'];
 
-if ($access != "Admin" && $access != "Coach" && $access != "Galas") {
+if ($access != "Admin" && $access != "Coach" && $access != "Galas" && !$rep) {
 	$this->get('/', function() {
 		global $link;
 		include 'Help.php';
 	});
 }
 
-if ($access == "Admin" || $access == "Coach" || $access == "Galas") {
+if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
 	$this->get('/', function() {
 		global $link;
 		include 'Home.php';
@@ -62,49 +73,51 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas") {
 		});
   });
 
-	$this->group('/lists', function() {
-		global $link;
+	if (!$rep) {
 
-		$this->get('/', function() {
+		$this->group('/lists', function() {
 			global $link;
-			include 'ListOfLists.php';
-		});
 
-		$this->get('/new', function() {
-			global $link;
-			include 'NewList.php';
-		});
+			$this->get('/', function() {
+				global $link;
+				include 'ListOfLists.php';
+			});
 
-		$this->post('/new', function() {
-			global $link;
-			include 'NewListServer.php';
-		});
+			$this->get('/new', function() {
+				global $link;
+				include 'NewList.php';
+			});
 
-		$this->get('/{id}:int', function($id) {
-			global $link;
-			include 'ListIndividual.php';
-		});
+			$this->post('/new', function() {
+				global $link;
+				include 'NewListServer.php';
+			});
 
-		$this->post('ajax/{id}:int', function($id) {
-			global $link;
-			include 'ListIndividualServer.php';
-		});
+			$this->get('/{id}:int', function($id) {
+				global $link;
+				include 'ListIndividual.php';
+			});
 
-		$this->get('/{id}:int/edit', function($id) {
-			include 'EditList.php';
-		});
+			$this->post('ajax/{id}:int', function($id) {
+				global $link;
+				include 'ListIndividualServer.php';
+			});
 
-		$this->post('/{id}:int/edit', function($id) {
-			global $link;
-			include 'EditListServer.php';
-		});
+			$this->get('/{id}:int/edit', function($id) {
+				include 'EditList.php';
+			});
 
-		$this->get('/{id}:int/delete', function($id) {
-			global $link;
-			include 'DeleteList.php';
-		});
+			$this->post('/{id}:int/edit', function($id) {
+				global $link;
+				include 'EditListServer.php';
+			});
 
-	});
+			$this->get('/{id}:int/delete', function($id) {
+				global $link;
+				include 'DeleteList.php';
+			});
+		});
+	}
 
 	if ($_SESSION['AccessLevel'] == "Admin") {
 		$this->get('/sms', function() {

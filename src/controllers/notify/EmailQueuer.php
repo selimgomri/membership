@@ -27,23 +27,26 @@ if (isset($_POST['force']) && $_SESSION['AccessLevel'] != "Coach") {
   $force = 1;
 }
 
-$sql = "SELECT `SquadName`, `SquadID` FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC";
-try {
-	$pdo_query = $db->prepare($sql);
-  $pdo_query->execute();
-} catch (PDOException $e) {
-	halt(500);
+$squads = null;
+if ($_SESSION['AccessLevel'] != 'Parent') {
+  $squads = $db->query("SELECT `SquadName`, `SquadID` FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC;");
+} else {
+  $squads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` INNER JOIN squadReps ON squadReps.Squad = squads.SquadID WHERE squadReps.User = ? ORDER BY `SquadFee` DESC, `SquadName` ASC;");
+  $squads->execute([$_SESSION['UserID']]);
 }
-$row = $pdo_query->fetchAll(PDO::FETCH_ASSOC);
+$row = $squads->fetchAll(PDO::FETCH_ASSOC);
 
-$sql = "SELECT * FROM `targetedLists` ORDER BY `Name` ASC";
-try {
-	$pdo_query = $db->prepare($sql);
-  $pdo_query->execute();
-} catch (PDOException $e) {
-	halt(500);
+$lists = [];
+if ($_SESSION['AccessLevel'] != 'Parent') {
+  $sql = "SELECT * FROM `targetedLists` ORDER BY `Name` ASC";
+  try {
+    $pdo_query = $db->prepare($sql);
+    $pdo_query->execute();
+  } catch (PDOException $e) {
+    halt(500);
+  }
+  $lists = $pdo_query->fetchAll(PDO::FETCH_ASSOC);
 }
-$lists = $pdo_query->fetchAll(PDO::FETCH_ASSOC);
 
 $galas = $db->prepare("SELECT GalaName, GalaID FROM `galas` WHERE GalaDate >= ? ORDER BY `GalaName` ASC;");
 $date = new DateTime('-1 week', new DateTimeZone('Europe/London'));
@@ -102,7 +105,7 @@ if ($listsQuery) {
     $toSendTo[$u['UserID']] = $u['UserID'];
   }
 }
-if ($galaQuery) {
+if ($galaQuery && $_SESSION['AccessLevel'] != 'Parent') {
   $galaUsers = $db->query("SELECT users.UserID FROM ((`users` INNER JOIN `members` ON members.UserID = users.UserID) INNER JOIN `galaEntries` ON galaEntries.MemberID = members.MemberID) WHERE " . $galaQuery);
   while ($u = $galaUsers->fetch(PDO::FETCH_ASSOC)) {
     $toSendTo[$u['UserID']] = $u['UserID'];
