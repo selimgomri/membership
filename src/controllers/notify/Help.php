@@ -12,7 +12,7 @@ include BASE_PATH . "views/header.php";
 		<div class="col-lg-8 mb-5">
 			<h1>Notify from <?=htmlspecialchars(env('CLUB_NAME'))?></h1>
 			<p class="lead">
-				Notify is the Chester-le-Street ASC Club Digital Services member mailing
+				Notify is the SCDS member mailing
 				list solution.
 			</p>
 			<p>
