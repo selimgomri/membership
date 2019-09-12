@@ -106,6 +106,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?php echo autoUrl("renewal")?>">Membership Renewal</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("swimmers/orphaned")?>">Orphan Swimmers</a>
                     <?php } ?>
+                    <a class="dropdown-item" href="<?php echo autoUrl("squad-reps")?>">Squad Reps</a>
                     <?php if ($_SESSION['AccessLevel'] == "Coach") { ?>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . date("Y/m")) ?>">
