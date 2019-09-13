@@ -79,6 +79,18 @@ else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $
 	  require('singleSwimmerView.php');
 	});
 
+	$this->get('/{swimmer}:int/enter-gala', function($swimmer) {
+		require BASE_PATH . 'controllers/galas/GalaEntryForm.php';
+	});
+
+	$this->post('/{swimmer}:int/enter-gala', function($swimmer) {
+		require BASE_PATH . 'controllers/galas/GalaEntryFormPost.php';
+	});
+
+	$this->get('/{swimmer}:int/enter-gala-success', function($swimmer) {
+		require BASE_PATH . 'controllers/galas/GalaEntryStaffSuccess.php';
+	});
+
   /*
    * Squad moves
    *

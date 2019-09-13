@@ -31,6 +31,10 @@ $this->post('/squad-reps/entry-states', function() {
 	include 'squad-reps/handle-entry-state.php';
 });
 
+$this->get('/ajax/entryForm', function() {
+	include BASE_PATH . "controllers/ajax/galaForm.php";
+});
+
 
 if ($access == "Parent") {
 	// Gala Home
@@ -56,11 +60,6 @@ if ($access == "Parent") {
 			include 'GalaEntryForm.php';
 		});
 	}
-
-	$this->get('/ajax/entryForm', function() {
-		global $link;
-		include BASE_PATH . "controllers/ajax/galaForm.php";
-	});
 
 	$this->post('/entergala', function() {
 		global $link;

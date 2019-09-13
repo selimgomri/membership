@@ -18,7 +18,29 @@ if (isset($_GET["galaID"])) {
 if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]))) {
   // get the galaID parameter from request
   $galaID = $_REQUEST["galaID"];
-  $memberID = $_REQUEST["swimmer"];
+	$memberID = $_REQUEST["swimmer"];
+	
+	// Get swimmer info
+	$getSwimmer = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, DateOfBirth dob, UserID parent FROM members WHERE MemberID = ?");
+	$getSwimmer->execute([
+	  $_GET['swimmer']
+	]);
+	$swimmer = $getSwimmer->fetch(PDO::FETCH_ASSOC);
+
+	if ($swimmer == null || ($_SESSION['AccessLevel'] == 'Parent' && $swimmer['parent'] != $_SESSION['UserID'])) {
+		halt(404);
+	}
+
+	// Get gala info
+	$getGala = $db->prepare("SELECT GalaFeeConstant flatfee, GalaFee fee, HyTek, GalaName `name`, GalaVenue venue FROM galas WHERE GalaID = ?");
+	$getGala->execute([
+		$_GET["galaID"]
+	]);
+	$gala = $getGala->fetch(PDO::FETCH_ASSOC);
+
+	if ($gala == null) {
+		halt(404);
+	}
 
   $existing = $db->prepare("SELECT * FROM galaEntries WHERE GalaID = ? AND MemberID = ?");
   $existing->execute([$galaID, $memberID]);
@@ -217,7 +239,7 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 	]);
 	$swimmer = $getSwimmer->fetch(PDO::FETCH_ASSOC);
 
-	if ($swimmer == null || $swimmer['parent'] != $_SESSION['UserID']) {
+	if ($swimmer == null || ($_SESSION['AccessLevel'] == 'Parent' && $swimmer['parent'] != $_SESSION['UserID'])) {
 		halt(404);
 	}
 
@@ -232,7 +254,6 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 		halt(404);
 	}
 
-	$galaDate = new DateTime($gala['ends'], new DateTimeZone('Europe/London'));
 	$nowDate = new DateTime('now', new DateTimeZone('Europe/London'));
 
 	$getSessions = $db->prepare("SELECT `Name`, `ID` FROM galaSessions WHERE Gala = ? ORDER BY `ID` ASC");

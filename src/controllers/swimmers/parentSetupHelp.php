@@ -46,6 +46,14 @@ include BASE_PATH . "views/swimmersMenu.php";
 </style>
 <div class="container">
 
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers/" . $id)?>"><?=htmlspecialchars($row['MForename'])?> <?=htmlspecialchars(mb_substr($row['MSurname'], 0, 1, 'utf-8'))?></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Contact parent</li>
+    </ol>
+  </nav>
+
   <?php if (isset($_SESSION['EmailStatus']) && $_SESSION['EmailStatus']) { ?>
     <div class="alert alert-success d-print-none">
       <p class="mb-0">We've sent an email to that address.</p>
