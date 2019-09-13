@@ -36,6 +36,9 @@ $vars = [
   'GOCARDLESS_WEBHOOK_KEY' => null,
   'CLUB_ADDRESS' => null,
   'SYSTEM_COLOUR' => null,
+  'STRIPE' => null,
+  'STRIPE_PUBLISHABLE' => null,
+  'STRIPE_APPLE_PAY_DOMAIN' => null,
 ];
 
 try {

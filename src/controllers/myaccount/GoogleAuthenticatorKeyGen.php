@@ -18,9 +18,6 @@ if (!isset($_SESSION['G2FAKey'])) {
 
 $pagetitle = "Generate Key";
 
-$qr_url = urlencode($google2fa->getQRCodeUrl(env('CLUB_NAME'), $_SESSION['EmailAddress'], $_SESSION['G2FAKey']));
-$_SESSION['qr'][0]['text'] = $qr_url;
-
 include BASE_PATH . 'views/header.php';
 
 ?>
@@ -42,7 +39,10 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <h2>Scan Code</h2>
-      <img src="<?=autoUrl("services/qr/0/200")?>" srcset="<?=autoUrl("services/qr/0/400")?> 2x, <?=autoUrl("services/qr/0/600")?> 3x" class="img-fluid mb-3">
+      <?php
+      $qr_url = urlencode($google2fa->getQRCodeUrl(env('CLUB_NAME'), $_SESSION['EmailAddress'], $_SESSION['G2FAKey']));
+      ?>
+      <img src="<?=htmlspecialchars(autoUrl("services/qr-generator?size=200&margin=0&text=" . $qr_url))?>" srcset="<?=htmlspecialchars(autoUrl("services/qr-generator?size=400&margin=0&text=" . $qr_url))?> 2x, <?=htmlspecialchars(autoUrl("services/qr-generator?size=600&margin=0&text=" . $qr_url))?> 3x" class="img-fluid mb-3">
       <p>
         Scan this QR Code with your Authenticator App.
       </p>
