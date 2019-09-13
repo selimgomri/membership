@@ -17,6 +17,10 @@ if (sizeof($userInfo) != 1) {
   halt(400);
 }
 
+$swimmerDetails = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM `members` WHERE `members`.`MemberID` = ?");
+$swimmerDetails->execute([$id]);
+$mySwimmer = $swimmerDetails->fetch(PDO::FETCH_ASSOC);
+
 $userInfo = $userInfo[0];
 $curUserInfo = $curUserInfo[0];
 
@@ -39,6 +43,15 @@ include BASE_PATH . "views/notifyMenu.php";
  ?>
 
 <div class="container">
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers/" . $id)?>"><?=htmlspecialchars($mySwimmer['fn'])?> <?=htmlspecialchars(mb_substr($mySwimmer['sn'], 0, 1, 'utf-8'))?></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Contact parent</li>
+    </ol>
+  </nav>
+
 	<h1>Contact a parent</h1>
 	<p class="lead">Send an email</p>
   <hr>

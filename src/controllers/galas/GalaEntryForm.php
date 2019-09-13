@@ -5,8 +5,25 @@ global $db;
 $userID = $_SESSION['UserID'];
 $pagetitle = "Enter a Gala";
 
-$mySwimmers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM `members` WHERE `members`.`UserID` = ? ORDER BY fn ASC, sn ASC");
-$mySwimmers->execute([$_SESSION['UserID']]);
+$swimmerCount = 0;
+if ($_SESSION['AccessLevel'] == 'Parent') {
+  $count = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ?");
+  $count->execute([$_SESSION['UserID']]);
+  $swimmerCount = $count->fetchColumn();
+} else if (isset($swimmer)) {
+  $count = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`MemberID` = ?");
+  $count->execute([$swimmer]);
+  $swimmerCount = $count->fetchColumn();
+}
+
+$mySwimmers = null;
+if ($_SESSION['AccessLevel'] == 'Parent') {
+  $mySwimmers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM `members` WHERE `members`.`UserID` = ? ORDER BY fn ASC, sn ASC");
+  $mySwimmers->execute([$_SESSION['UserID']]);
+} else if (isset($swimmer)) {
+  $mySwimmers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM `members` WHERE `members`.`MemberID` = ?");
+  $mySwimmers->execute([$swimmer]);
+}
 
 $galas = $db->query("SELECT GalaID id, GalaName `name` FROM `galas` WHERE ClosingDate >= CURDATE() ORDER BY `galas`.`ClosingDate` ASC");
 
@@ -28,6 +45,17 @@ include BASE_PATH . "views/header.php";
 include "galaMenu.php";
 ?>
 <div class="container">
+
+  <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers/" . $swimmer)?>"><?=htmlspecialchars($mySwimmer['fn'])?> <?=htmlspecialchars(mb_substr($mySwimmer['sn'], 0, 1, 'utf-8'))?></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Enter a gala</li>
+    </ol>
+  </nav>
+  <?php } ?>
+
   <h1 class="mb-3">Enter a gala</h1>
 
   <?php if ($hasSwimmer && $hasGalas) { ?>
@@ -37,9 +65,9 @@ include "galaMenu.php";
       <div class="form-group row">
         <label for="swimmer" class="col-sm-2 col-form-label">Select Swimmer</label>
         <div class="col-sm-10">
-          <select class="custom-select" id="swimmer" name="swimmer" required><option value="null" selected>Select a swimmer</option>
+          <select class="custom-select" id="swimmer" name="swimmer" required><option value="null" <?php if ($count > 1) { ?>selected<?php } ?>>Select a swimmer</option>
           <?php do { ?>
-            <option value="<?=$mySwimmer['id']?>">
+            <option value="<?=$mySwimmer['id']?>" <?php if ($count == 1) { ?>selected<?php } ?>>
               <?=htmlspecialchars($mySwimmer['fn'] . " " . $mySwimmer['sn'])?>
             </option>
           <?php } while ($mySwimmer = $mySwimmers->fetch(PDO::FETCH_ASSOC)); ?>

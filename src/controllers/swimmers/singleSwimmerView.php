@@ -138,7 +138,20 @@ $content = '
 </div>';
 if ($parent_id != null) {
 $content .= '
-<p><a target="_self" href="' . autoUrl("swimmers/" . $id . "/contactparent") . '">Contact ' . htmlspecialchars($rowSwim["MForename"]) . '\'s parent/guardian by email</a></p>';
+<p>
+  <div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Quick actions
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" href="' . autoUrl("swimmers/" . $id . "/enter-gala") . '">Enter a gala</a>
+      <a class="dropdown-item" href="' . autoUrl("swimmers/" . $id . "/contactparent") . '">Email parent/guardian</a>
+      <a class="dropdown-item" href="' . autoUrl("swimmers/" . $id . "/new-move") . '">New squad move</a>
+      <a class="dropdown-item" href="' . autoUrl("swimmers/" . $id . "/parenthelp") . '">Print access key</a>
+    </div>
+  </div>
+</p>
+<p>Use the <strong>Quick actions</strong> menu to make gala entries, contact a parent/guardian, make a squad move and more.</p>';
 }
 if (isset($_SESSION['NotifyIndivSuccess'])) {
   if ($_SESSION['NotifyIndivSuccess']) {
@@ -567,7 +580,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
-      <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars($rowSwim["MForename"])?> <?=htmlspecialchars($rowSwim["MSurname"][0])?></li>
+      <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars($rowSwim["MForename"])?> <?=htmlspecialchars(mb_substr($rowSwim["MSurname"], 0, 1, 'utf-8'))?></li>
     </ol>
   </nav>
 

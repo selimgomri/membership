@@ -1,8 +1,15 @@
 <?php
 
+$galaId = null;
+if ($_SESSION['AccessLevel'] != 'Parent') {
+  $galaId = $_POST['gala'];
+} else {
+  $galaId = $id;
+}
+
 global $db;
 $galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends` FROM galas WHERE GalaID = ?");
-$galaDetails->execute([$id]);
+$galaDetails->execute([$galaId]);
 $gala = $galaDetails->fetch(PDO::FETCH_ASSOC);
 
 if ($gala == null) {
@@ -13,11 +20,17 @@ $galaDate = new DateTime($gala['ends'], new DateTimeZone('Europe/London'));
 $nowDate = new DateTime('now', new DateTimeZone('Europe/London'));
 
 $getSessions = $db->prepare("SELECT `Name`, `ID` FROM galaSessions WHERE Gala = ? ORDER BY `ID` ASC");
-$getSessions->execute([$id]);
+$getSessions->execute([$galaId]);
 $sessions = $getSessions->fetchAll(PDO::FETCH_ASSOC);
 
-$getSwimmers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn FROM members WHERE UserID = ?");
-$getSwimmers->execute([$_SESSION['UserID']]);
+$getSwimmers = null;
+if ($_SESSION['AccessLevel'] == 'Parent') {
+  $getSwimmers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn FROM members WHERE UserID = ?");
+  $getSwimmers->execute([$_SESSION['UserID']]);
+} else {
+  $getSwimmers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn FROM members WHERE MemberID = ?");
+  $getSwimmers->execute([$_POST['swimmer']]);
+}
 $swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC);
 
 $hasSwimmers = true;
@@ -61,4 +74,8 @@ if ($swimmer != null && $nowDate < $galaDate) {
   }
 }
 
-header("Location: " . autoUrl("galas/" . $id . "/indicate-availability"));
+if ($_SESSION['AccessLevel'] == 'Parent') {
+  header("Location: " . autoUrl("galas/" . $galaId . "/indicate-availability"));
+} else {
+  header("Location: " . autoUrl("swimmers/" . $_POST['swimmer'] . "/enter-gala-success"));
+}
