@@ -22,6 +22,9 @@ $vars = [
   'SYSTEM_COLOUR' => null,
   'ASA_DISTRICT' => null,
   'ASA_COUNTY' => null,
+  'STRIPE' => null,
+  'STRIPE_PUBLISHABLE' => null,
+  'STRIPE_APPLE_PAY_DOMAIN' => null,
 ];
 
 $disabled = [];
@@ -203,7 +206,7 @@ include BASE_PATH . 'views/header.php';
 
           <div class="form-group">
             <label for="GOCARDLESS_SANDBOX_ACCESS_TOKEN">GoCardless Sandbox (dev) Access Token</label>
-            <input class="form-control mono" type="text" name="GOCARDLESS_SANDBOX_ACCESS_TOKEN" id="EMAIL_DOMAIN" value="<?=htmlspecialchars($vars['GOCARDLESS_SANDBOX_ACCESS_TOKEN'])?>" <?=$disabled['GOCARDLESS_SANDBOX_ACCESS_TOKEN']?>> 
+            <input class="form-control mono" type="text" name="GOCARDLESS_SANDBOX_ACCESS_TOKEN" id="GOCARDLESS_SANDBOX_ACCESS_TOKEN" value="<?=htmlspecialchars($vars['GOCARDLESS_SANDBOX_ACCESS_TOKEN'])?>" <?=$disabled['GOCARDLESS_SANDBOX_ACCESS_TOKEN']?>> 
           </div>
 
           <div class="form-group">
@@ -219,6 +222,50 @@ include BASE_PATH . 'views/header.php';
           <p>Your GoCardless webhook endpoint URL is</p>
           <div class="form-group">
             <input class="form-control mono" type="text" readonly value="<?=autoUrl("payments/webhooks")?>"> 
+          </div>
+
+          <h2>Stripe API keys (for card payments)</h2>
+
+          <p>Warning: Please do not mix up your publishable and private keys. Mistakenly publishing your private key might give a bad actor full access to your Stripe account.</p>
+          
+          <div class="form-group">
+            <label for="STRIPE">Stripe Private Key</label>
+            <input class="form-control mono" type="text" name="STRIPE" id="STRIPE" value="<?=htmlspecialchars($vars['STRIPE'])?>" <?=$disabled['STRIPE']?>> 
+          </div>
+
+          <div class="form-group">
+            <label for="STRIPE_PUBLISHABLE">Stripe Publishable Key</label>
+            <input class="form-control mono" type="text" name="STRIPE_PUBLISHABLE" id="STRIPE_PUBLISHABLE" value="<?=htmlspecialchars($vars['STRIPE_PUBLISHABLE'])?>" <?=$disabled['STRIPE_PUBLISHABLE']?>> 
+          </div>
+
+          <div class="form-group">
+            <label for="STRIPE_APPLE_PAY_DOMAIN">Stripe Apple Pay Domain</label>
+            <input class="form-control mono" type="text" name="STRIPE_APPLE_PAY_DOMAIN" id="STRIPE_APPLE_PAY_DOMAIN" value="<?=htmlspecialchars($vars['STRIPE_APPLE_PAY_DOMAIN'])?>" <?=$disabled['STRIPE_APPLE_PAY_DOMAIN']?>> 
+          </div>
+
+          <div class="form-group">
+            <label for="STRIPE_WEBHOOK_URL">Your Stripe webhook endpoint URL is</label>
+            <input class="form-control mono" type="text" name="STRIPE_WEBHOOK_URL" id="STRIPE_WEBHOOK_URL" readonly value="<?=autoUrl("payments/stripe/webhooks")?>" aria-describedby="STRIPE_WEBHOOK_URL_HELP"> 
+            <small id="STRIPE_WEBHOOK_URL_HELP" class="form-text text-muted">
+              <p>We plan to automatically set up webhooks for you in future but for now you must do so manually.</p>
+            </small>
+
+            <p>You must tell Stripe that the webhook supports the following event types;</p>
+
+            <ul>
+              <li>payout.paid</li>
+              <li>payout.updated</li>
+              <li>payout.failed</li>
+              <li>payout.created</li>
+              <li>payout.canceled</li>
+              <li>payment_method.detached</li>
+              <li>payment_intent.succeeded</li>
+              <li>payment_intent.created</li>
+              <li>payment_method.updated</li>
+              <li>payment_method.card_automatically_updated</li>
+            </ul>
+              
+              
           </div>
 
           <h2>Customisation</h2>
@@ -239,13 +286,6 @@ include BASE_PATH . 'views/header.php';
             </button>
           </p>
         </form>
-
-        <?php if ($parentCode != null) { ?>
-        <div>
-          <h2>View the code of conduct</h2>
-          <?=$Extra->text($codeOfConduct)?>
-        </div>
-        <?php } ?>
       </main>
     </div>
   </div>

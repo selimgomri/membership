@@ -197,6 +197,8 @@ include BASE_PATH . "views/header.php";
     		</form>
     	</div>
 
+		  <?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>
+
       <div class="cell">
         <h2>Additional Recipients</h2>
         <p class="lead">
@@ -246,6 +248,9 @@ include BASE_PATH . "views/header.php";
         </form>
 
       </div>
+
+			<?php } ?>
+
     </div>
   </div>
 </div>

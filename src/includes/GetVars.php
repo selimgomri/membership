@@ -20,6 +20,9 @@ $vars = [
   'SYSTEM_COLOUR' => '#007bff',
   'ASA_DISTRICT' => 'E',
   'ASA_COUNTY' => 'NDRE',
+  'STRIPE' => null,
+  'STRIPE_PUBLISHABLE' => null,
+  'STRIPE_APPLE_PAY_DOMAIN' => null,
 ];
 
 try {
