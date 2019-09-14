@@ -13,6 +13,7 @@ $count = 0;
 // This is because we will call it when a squad is selected, and after a session is added
 
 function sessionManagement($squadID, $old = null) {
+	ob_start();
   global $db;
 	$output = $content = $modals = "";
 	
@@ -143,6 +144,8 @@ function sessionManagement($squadID, $old = null) {
 			<div class="card-body">
 				<h2>Add Session</h2>
 
+				<div id="status-message"></div>
+
 				<div class="form-group">
 					<label for="newSessionName">Session Name</label>
 					<input type="text" class="form-control" name="newSessionName" id="newSessionName" placeholder="Name">
@@ -184,7 +187,7 @@ function sessionManagement($squadID, $old = null) {
 				<div class="form-group">
 					<label for="newSessionMS">Include in attendance count</label>
 					<div class="custom-control custom-radio">
-						<input type="radio" id="newSessionMSYes" name="newSessionMS" class="custom-control-input" value="1">
+						<input type="radio" id="newSessionMSYes" name="newSessionMS" class="custom-control-input" value="1" checked>
 						<label class="custom-control-label" for="newSessionMSYes">
 							Yes, the session is for the full squad
 						</label>
@@ -246,7 +249,10 @@ function sessionManagement($squadID, $old = null) {
   </div>
 </div>
 
-<?php return $content . $modals;
+	<?php
+
+	$html = ob_get_clean();
+	return $html . $modals;
 
 }
 
@@ -293,11 +299,17 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 			date("Y-m-d", $displayUntil)
 		]);
 	} catch (Exception $e) {
-		halt(500);
+		halt(400);
 	}
-	echo sessionManagement($squadID);
+	$sessionsView = sessionManagement($squadID);
+	echo json_encode([
+		'displayFrom' => date("Y-m-d", $displayFrom),
+		'displayUntil' => date("Y-m-d", $displayUntil),
+		'will_display_in_future' => null,
+		'sessions_view' => $sessionsView
+	]);
 
 	}
 } else {
-	halt(500);
+	halt(404);
 }

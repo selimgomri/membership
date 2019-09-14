@@ -33,29 +33,6 @@ include BASE_PATH . "views/header.php";
 
 </div>
 
-<script>
-function getResult() {
-  var search = document.getElementById("search");
-  var searchValue = search.value;
-  console.log(searchValue);
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        console.log("We got here");
-        document.getElementById("output").innerHTML = this.responseText;
-        console.log(this.responseText);
-        window.history.replaceState("string", "Title", "<?php echo autoUrl("users"); ?>?search=" + searchValue);
-      }
-    }
-    xhttp.open("POST", "<?php echo autoURL("users/ajax/userList"); ?>", true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("search=" + searchValue);
-    console.log("Sent");
-}
-// Call getResult immediately
-getResult();
-
-document.getElementById("search").oninput=getResult;
-</script>
+<script src="<?=autoUrl("js/users/list.js")?>"></script>
 
 <?php include BASE_PATH . "views/footer.php";
