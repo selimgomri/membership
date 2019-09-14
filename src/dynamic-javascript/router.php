@@ -38,6 +38,12 @@ $this->group('/galas', function() {
   });
 });
 
+$this->group('/users', function() {
+  $this->get('/type-switch.js', function() {
+    include BASE_PATH . 'controllers/users/type-switch.js';
+  });
+});
+
 $this->get('/*', function() {
   header("content-type: text/html");
   halt(404);
