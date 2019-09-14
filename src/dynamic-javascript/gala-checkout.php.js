@@ -183,23 +183,32 @@ paymentRequest.on('paymentmethod', function(ev) {
   });
 });
 
-if (savedCardButton != null) {
-  savedCardButton.addEventListener('click', function(ev) {
-    stripe.handleCardPayment(
-      clientSecret,
-      {
-        payment_method: savedCardButton.dataset.methodId,
-      }
-    ).then(function(result) {
-      if (result.error) {
-        document.getElementById('saved-card-errors').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
-        // Display error.message in your UI.
-      } else {
-        // The payment has succeeded. Display a success message.
-        disableButtons();
-        document.getElementById('saved-card-errors').innerHTML = successAlert;
-        window.location.replace(document.getElementById('stripe-data').dataset.redirectUrl);
-      }
-    });
+document.getElementById('method').addEventListener('change', function(event) {
+  var boxArea = document.getElementById('save-card-box');
+  if (this.value !== 'select') {
+    // Card can be used
+    boxArea.classList.remove('d-none');
+  } else {
+    // Card cannot be used
+    boxArea.classList.add('d-none');
+  }
+});
+
+savedCardButton.addEventListener('click', function(ev) {
+  stripe.handleCardPayment(
+    clientSecret,
+    {
+      payment_method: document.getElementById('method').value,
+    }
+  ).then(function(result) {
+    if (result.error) {
+      document.getElementById('saved-card-errors').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
+      // Display error.message in your UI.
+    } else {
+      // The payment has succeeded. Display a success message.
+      disableButtons();
+      document.getElementById('saved-card-errors').innerHTML = successAlert;
+      window.location.replace(document.getElementById('stripe-data').dataset.redirectUrl);
+    }
   });
-}
+});

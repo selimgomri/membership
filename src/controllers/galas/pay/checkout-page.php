@@ -95,9 +95,7 @@ if ($methodId != null && $customerID != null) {
       'customer' => $customerID,
     ]
   );
-}
-
-if ($customerId != null) {
+} else if ($customerId != null) {
   $intent = \Stripe\PaymentIntent::update(
     $_SESSION['GalaPaymentIntent'], [
       'customer' => $customerId,
@@ -249,42 +247,35 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
         <?php if (sizeof($cards) > 0) { ?>
         <div class="card mb-3" id="saved-cards">
-          <form action="<?=autoUrl("galas/pay-for-entries/switch-method")?>" method="post" id="saved-card-form">
+          <form id="saved-card-form">
             <div class="card-header" id="device-title">
               Pay with a saved card
             </div>
-            <div class="card-body">
+            <div class="card-body pb-0">
 
-              <div class="form-group <?php if ($selected == null) { ?>mb-0<?php } ?>">
+              <div class="form-group">
                 <label for="method">Choose a saved card</label>
-                <select class="custom-select pm-can-disable" name="method" id="method" onchange="this.form.submit()">
+                <select class="custom-select pm-can-disable" name="method" id="method">
                   <option value="select">Select card</option>
                   <?php foreach ($cards as $card) { ?>
-                  <option value="<?=$card['ID']?>" <?php if ($selected == $card['ID']) { $methodId = $card['MethodID']; ?>selected<?php } ?>>
+                  <option value="<?=$card['MethodID']?>">
                     <?=htmlspecialchars(getCardBrand($card['Brand']))?> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card['Last4'])?>
                   </option>
                   <?php } ?>
                 </select>
               </div>
 
-              <noscript>
+              <div id="save-card-box" class="d-none">
+                <!-- Used to display form errors. -->
+                <div id="saved-card-errors" role="alert"></div>
+
                 <p>
-                  <button type="submit" class="btn btn-success btn-block pm-can-disable" data-methodId="<?=$methodId?>">
-                    Use selected card
+                  <button id="saved-card-button" class="btn btn-success btn-block pm-can-disable" type="button" data-secret="<?= $intent->client_secret ?>">
+                    Pay &pound;<?=htmlspecialchars(number_format($intent->amount/100 ,2, '.', ''))?> now
                   </button>
                 </p>
-              </noscript>
-
-              <?php if ($selected != null) { ?>
-              <!-- Used to display form errors. -->
-              <div id="saved-card-errors" role="alert"></div>
-
-              <p class="mb-0">
-                <button id="saved-card-button" class="btn btn-success btn-block pm-can-disable" type="button" data-secret="<?= $intent->client_secret ?>">
-                  Pay &pound;<?=htmlspecialchars(number_format($intent->amount/100 ,2, '.', ''))?> now
-                </button>
-              </p>
-              <?php } ?>
+              </div>
+              
             </div>
           </form>
         </div>
