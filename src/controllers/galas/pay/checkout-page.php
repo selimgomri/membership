@@ -116,10 +116,24 @@ $getEntriesByPI->execute([
 
 $countries = getISOAlpha2Countries();
 
+$fontCss = 'https://fonts.googleapis.com/css?family=Open+Sans';
+if (!bool(env('IS_CLS'))) {
+  $fontCss = 'https://fonts.googleapis.com/css?family=Source+Sans+Pro';
+}
+
+$entryRequestDetails = [];
+$entryRequestDetails[] = [
+  'label' => 'Subtotal',
+  'amount' => $intent->amount
+];
+
 $pagetitle = "Checkout";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/galas/galaMenu.php";
 ?>
+
+<div id="stripe-data" data-stripe-publishable="<?=htmlspecialchars(env('STRIPE_PUBLISHABLE'))?>" data-stripe-font-css="<?=htmlspecialchars($fontCss)?>" data-redirect-url-new="<?=htmlspecialchars(autoUrl("galas/pay-for-entries/complete/new"))?>" data-redirect-url="<?=htmlspecialchars(autoUrl("galas/pay-for-entries/complete"))?>" data-org-name="<?=htmlspecialchars(env('CLUB_NAME'))?>" data-intent-amount="<?=htmlspecialchars($intent->amount)?>" data-intent-currency="<?=htmlspecialchars($intent->currency)?>" data-payment-request-line-items="<?=htmlspecialchars(json_encode($entryRequestDetails))?>">
+</div>
 
 <style>
 .accepted-network-logos img {
