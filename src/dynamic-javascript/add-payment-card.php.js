@@ -3,12 +3,14 @@
  * Uses setup intents
  */
 
-var stripe = Stripe(<?=json_encode(env('STRIPE_PUBLISHABLE'))?>);
+var stripeData = document.getElementById('stripe-data');
+
+var stripe = Stripe(stripeData.dataset.stripePublishable);
 
 var elements = stripe.elements({
   fonts: [
     {
-      cssSrc: 'https://fonts.googleapis.com/css?family=Open+Sans',
+      cssSrc: stripeData.dataset.stripeFontCss,
     },
   ]
 });
@@ -102,8 +104,12 @@ form.addEventListener('submit', function(event) {
       } else {
         // The setup has succeeded. Display a success message.
         disableButtons();
-        displayError.innerHTML = '<div class="alert alert-success" id="card-errors-message"></div>'
-        document.getElementById('card-errors-message').textContent = 'Card setup successfully. Please wait while we redirect you.';
+        var hideForm = document.getElementById('form-hideable');
+        hideForm.classList.remove('show');
+        hideForm.classList.add('hidden');
+        hideForm.classList.add('d-none');
+        displayError.innerHTML = '<div class="alert alert-success text-center" id="card-errors-message"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div><div class="mb-0 mt-3 h3">Loading</div><hr>Card setup successfully. Please wait while we redirect you.</div>'
+        //document.getElementById('card-errors-message').textContent = 'Card setup successfully. Please wait while we redirect you.';
         // The payment has succeeded. Display a success message.
         var form = document.getElementById('payment-form');
         // Submit the form

@@ -9,7 +9,7 @@ var stripeElementStyle = {
     height: '1.5rem',
     color: '#212529',
     fontWeight: 400,
-    fontFamily: 'Open Sans, Segoe UI, sans-serif',
+    fontFamily: 'Source Sans Pro, Open Sans, Segoe UI, sans-serif',
     fontSize: '16px',
     fontSmoothing: 'antialiased',
     '::placeholder': {
