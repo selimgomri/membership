@@ -39,8 +39,18 @@ $this->group('/galas', function() {
 });
 
 $this->group('/users', function() {
+  $this->get('/list.js', function() {
+    include BASE_PATH . 'controllers/users/list.js';
+  });
+
   $this->get('/type-switch.js', function() {
     include BASE_PATH . 'controllers/users/type-switch.js';
+  });
+});
+
+$this->group('/attendance', function() {
+  $this->get('/sessions.js', function() {
+    include BASE_PATH . 'controllers/attendance/sessions.js';
   });
 });
 
