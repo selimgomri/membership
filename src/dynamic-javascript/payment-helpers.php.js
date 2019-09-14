@@ -50,3 +50,9 @@ function enableButtons() {
     elem.disabled = false;
   });
 }
+
+function jumpToPosition(h) {
+  var url = location.href;               //Save down the URL without hash.
+  location.href = "#"+h;                 //Go to the target element.
+  history.replaceState(null,null,url);   //Don't like hashes. Changing it back.
+}
