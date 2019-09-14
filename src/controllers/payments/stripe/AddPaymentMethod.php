@@ -43,9 +43,19 @@ if (!isset($_SESSION['StripeSetupIntentId'])) {
 
 $countries = getISOAlpha2Countries();
 
+$fontCss = 'https://fonts.googleapis.com/css?family=Open+Sans';
+if (!bool(env('IS_CLS'))) {
+  $fontCss = 'https://fonts.googleapis.com/css?family=Source+Sans+Pro';
+}
+
+$pagetitle = 'Add a payment card';
+
 include BASE_PATH . 'views/header.php';
 
 ?>
+
+<div id="stripe-data" data-stripe-publishable="<?=htmlspecialchars(env('STRIPE_PUBLISHABLE'))?>" data-stripe-font-css="<?=htmlspecialchars($fontCss)?>">
+</div>
 
 <div class="container">
   <nav aria-label="breadcrumb">
@@ -73,76 +83,79 @@ include BASE_PATH . 'views/header.php';
       <?php } ?>
 
       <form action="<?=currentUrl()?>" method="post" id="payment-form" class="mb-5 needs-validation" novalidate>
-        <div class="form-group">
-          <label for="cardholder-name">Cardholder name</label>
-          <input type="text" class="form-control pm-can-disable" id="cardholder-name" placeholder="C F Frost" required aria-describedby="cardholder-name-help" autocomplete="cc-name">
-          <small id="cardholder-name-help" class="form-text text-muted">The name shown on your card</small>
-          <div class="invalid-feedback">
-            You must provide your full name
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="addr-line-1">Address line 1</label>
-          <input type="text" class="form-control pm-can-disable" id="addr-line-1" placeholder="1 Burns Green" required autocomplete="address-line1">
-          <div class="invalid-feedback">
-            You must provide your address
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="addr-post-code">Post Code</label>
-          <input type="text" class="form-control pm-can-disable text-uppercase" id="addr-post-code" placeholder="NE99 1AA" required autocomplete="postal-code">
-          <div class="invalid-feedback">
-            You must provide your post code
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="addr-post-code">Country</label>
-          <select class="custom-select pm-can-disable" required id="addr-country" autocomplete="country">
-            <?php foreach ($countries as $code => $name) { ?>
-            <option <?php if ($code == 'GB') { ?>selected<?php } ?> value="<?=htmlspecialchars($code)?>"><?=htmlspecialchars($name)?></option>
-            <?php } ?>
-          </select>
-          <div class="invalid-feedback">
-            You must provide your country
-          </div>
-            </div>
-
-        <!-- Multiple Part Element -->
-        <div class="form-group">
-          <label for="card-number-element">
-            Card number
-          </label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?=autoUrl("public/img/stripe/network-svgs/credit-card.svg")?>" aria-hidden="true"></span>
-            </div>
-            <div id="card-number-element" class="form-control stripe-form-control"></div>
-            <div id="card-number-element-errors" class="stripe-feedback"></div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="col">
-            <div class="form-group">
-              <label for="card-expiry-element">
-                Expires
-              </label>
-              <span id="card-expiry-element" class="form-control pm-can-disable"></span>
-              <div id="card-expiry-element-errors" class="stripe-feedback"></div>
+        <div id="form-hideable" class="show fade">
+          <div class="form-group">
+            <label for="cardholder-name">Cardholder name</label>
+            <input type="text" class="form-control pm-can-disable" id="cardholder-name" placeholder="C F Frost" required aria-describedby="cardholder-name-help" autocomplete="cc-name">
+            <small id="cardholder-name-help" class="form-text text-muted">The name shown on your card</small>
+            <div class="invalid-feedback">
+              You must provide your full name
             </div>
           </div>
-          <div class="col">
-            <div class="form-group">
-              <label for="card-cvc-element">
-                CVC
-              </label>
-              <span id="card-cvc-element" class="form-control pm-can-disable"></span>
-              <div id="card-cvc-element-errors" class="stripe-feedback"></div>
+
+          <div class="form-group">
+            <label for="addr-line-1">Address line 1</label>
+            <input type="text" class="form-control pm-can-disable" id="addr-line-1" placeholder="1 Burns Green" required autocomplete="address-line1">
+            <div class="invalid-feedback">
+              You must provide your address
             </div>
           </div>
+
+          <div class="form-group">
+            <label for="addr-post-code">Post Code</label>
+            <input type="text" class="form-control pm-can-disable text-uppercase" id="addr-post-code" placeholder="NE99 1AA" required autocomplete="postal-code">
+            <div class="invalid-feedback">
+              You must provide your post code
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="addr-post-code">Country</label>
+            <select class="custom-select pm-can-disable" required id="addr-country" autocomplete="country">
+              <?php foreach ($countries as $code => $name) { ?>
+              <option <?php if ($code == 'GB') { ?>selected<?php } ?> value="<?=htmlspecialchars($code)?>"><?=htmlspecialchars($name)?></option>
+              <?php } ?>
+            </select>
+            <div class="invalid-feedback">
+              You must provide your country
+            </div>
+              </div>
+
+          <!-- Multiple Part Element -->
+          <div class="form-group">
+            <label for="card-number-element">
+              Card number
+            </label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?=autoUrl("public/img/stripe/network-svgs/credit-card.svg")?>" aria-hidden="true"></span>
+              </div>
+              <div id="card-number-element" class="form-control stripe-form-control"></div>
+              <div id="card-number-element-errors" class="stripe-feedback"></div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="col">
+              <div class="form-group">
+                <label for="card-expiry-element">
+                  Expires
+                </label>
+                <span id="card-expiry-element" class="form-control pm-can-disable"></span>
+                <div id="card-expiry-element-errors" class="stripe-feedback"></div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="card-cvc-element">
+                  CVC
+                </label>
+                <span id="card-cvc-element" class="form-control pm-can-disable"></span>
+                <div id="card-cvc-element-errors" class="stripe-feedback"></div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         <!-- Used to display form errors. -->

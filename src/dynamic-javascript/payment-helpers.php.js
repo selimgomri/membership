@@ -9,7 +9,7 @@ var stripeElementStyle = {
     height: '1.5rem',
     color: '#212529',
     fontWeight: 400,
-    fontFamily: 'Open Sans, Segoe UI, sans-serif',
+    fontFamily: 'Source Sans Pro, Open Sans, Segoe UI, sans-serif',
     fontSize: '16px',
     fontSmoothing: 'antialiased',
     '::placeholder': {
@@ -49,4 +49,10 @@ function enableButtons() {
   document.querySelectorAll('.pm-can-disable').forEach(elem => {
     elem.disabled = false;
   });
+}
+
+function jumpToPosition(h) {
+  var url = location.href;               //Save down the URL without hash.
+  location.href = "#"+h;                 //Go to the target element.
+  history.replaceState(null,null,url);   //Don't like hashes. Changing it back.
 }

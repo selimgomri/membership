@@ -1,64 +1,12 @@
-<?php
+var stripeData = document.getElementById('stripe-data');
 
-if (!isset($_SESSION['PaidEntries'])) {
-  halt(404);
-}
-
-\Stripe\Stripe::setApiKey(env('STRIPE'));
-if (env('STRIPE_APPLE_PAY_DOMAIN')) {
-  \Stripe\ApplePayDomain::create([
-    'domain_name' => env('STRIPE_APPLE_PAY_DOMAIN')
-  ]);
-}
-
-global $db;
-
-$getEntry = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE EntryID = ? AND NOT Charged AND members.UserID = ?");
-
-$hasEntries = false;
-foreach ($_SESSION['PaidEntries'] as $entry => $details) {
-  $getEntry->execute([$entry, $_SESSION['UserID']]);
-  $entry = $getEntry->fetch(PDO::FETCH_ASSOC);
-  if ($entry != null) {
-    $hasEntries = true;
-  }
-}
-if (!$hasEntries) {
-  halt(404);
-}
-
-$entryRequestDetails = [];
-
-if (!isset($_SESSION['PaidEntries'])) {
-  halt(404);
-}
-
-$intent = null;
-
-if (!isset($_SESSION['GalaPaymentIntent'])) {
-  halt(404);
-} else {
-  $intent = \Stripe\PaymentIntent::retrieve($_SESSION['GalaPaymentIntent']);
-}
-
-if ($intent->status == 'succeeded') {
-  halt(404);
-}
-
-$entryRequestDetails[] = [
-  'label' => 'Subtotal',
-  'amount' => $intent->amount
-];
-
-?>
-
-var stripe = Stripe(<?=json_encode(env('STRIPE_PUBLISHABLE'))?>);
+var stripe = Stripe(stripeData.dataset.stripePublishable);
 var cardButton = document.getElementById('new-card-button');
 var clientSecret = cardButton.dataset.secret;
 var elements = stripe.elements({
   fonts: [
     {
-      cssSrc: 'https://fonts.googleapis.com/css?family=Open+Sans',
+      cssSrc: stripeData.dataset.stripeFontCss,
     },
   ]
 });
@@ -151,7 +99,7 @@ form.addEventListener('submit', function(event) {
         disableButtons();
         document.getElementById('new-card-errors').innerHTML = successAlert;
         // The payment has succeeded. Display a success message.
-        window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
+        window.location.replace(document.getElementById('stripe-data').dataset.redirectUrlNew);
       }
     });
   } else {
@@ -161,12 +109,12 @@ form.addEventListener('submit', function(event) {
 
 var paymentRequest = stripe.paymentRequest({
   country: 'GB',
-  currency: <?=json_encode($intent->currency)?>,
+  currency: stripeData.dataset.intentCurrency,
   total: {
-    label: <?=json_encode(env('CLUB_NAME'))?>,
-    amount: <?=$intent->amount?>,
+    label: stripeData.dataset.orgName,
+    amount: parseInt(stripeData.dataset.intentAmount),
   },
-  displayItems: <?=json_encode($entryRequestDetails)?>,
+  displayItems: JSON.parse(stripeData.dataset.paymentRequestLineItems),
   requestPayerName: true,
   requestPayerEmail: true,
 });
@@ -214,7 +162,7 @@ paymentRequest.on('paymentmethod', function(ev) {
             // Disable buttons
             disableButtons();
             document.getElementById('alert-placeholder').innerHTML = successAlert;
-            window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
+            window.location.replace(document.getElementById('stripe-data').dataset.redirectUrlNew);
           } else {
             stripe.handleCardPayment(clientSecret).then(function(result) {
               if (result.error) {
@@ -225,7 +173,7 @@ paymentRequest.on('paymentmethod', function(ev) {
                 // Disable buttons
                 disableButtons();
                 document.getElementById('new-card-errors').innerHTML = successAlert;
-                window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete/new"))?>);
+                window.location.replace(document.getElementById('stripe-data').dataset.redirectUrlNew);
               }
             });
           }
@@ -235,23 +183,32 @@ paymentRequest.on('paymentmethod', function(ev) {
   });
 });
 
-if (savedCardButton != null) {
-  savedCardButton.addEventListener('click', function(ev) {
-    stripe.handleCardPayment(
-      clientSecret,
-      {
-        payment_method: savedCardButton.dataset.methodId,
-      }
-    ).then(function(result) {
-      if (result.error) {
-        document.getElementById('saved-card-errors').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
-        // Display error.message in your UI.
-      } else {
-        // The payment has succeeded. Display a success message.
-        disableButtons();
-        document.getElementById('saved-card-errors').innerHTML = successAlert;
-        window.location.replace(<?=json_encode(autoUrl("galas/pay-for-entries/complete"))?>);
-      }
-    });
+document.getElementById('method').addEventListener('change', function(event) {
+  var boxArea = document.getElementById('save-card-box');
+  if (this.value !== 'select') {
+    // Card can be used
+    boxArea.classList.remove('d-none');
+  } else {
+    // Card cannot be used
+    boxArea.classList.add('d-none');
+  }
+});
+
+savedCardButton.addEventListener('click', function(ev) {
+  stripe.handleCardPayment(
+    clientSecret,
+    {
+      payment_method: document.getElementById('method').value,
+    }
+  ).then(function(result) {
+    if (result.error) {
+      document.getElementById('saved-card-errors').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred trying to take your payment</strong></p><p class="mb-0">' + result.error.message + '</p></div>';
+      // Display error.message in your UI.
+    } else {
+      // The payment has succeeded. Display a success message.
+      disableButtons();
+      document.getElementById('saved-card-errors').innerHTML = successAlert;
+      window.location.replace(document.getElementById('stripe-data').dataset.redirectUrl);
+    }
   });
-}
+});

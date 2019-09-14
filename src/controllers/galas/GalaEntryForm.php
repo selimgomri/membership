@@ -65,9 +65,9 @@ include "galaMenu.php";
       <div class="form-group row">
         <label for="swimmer" class="col-sm-2 col-form-label">Select Swimmer</label>
         <div class="col-sm-10">
-          <select class="custom-select" id="swimmer" name="swimmer" required><option value="null" <?php if ($count > 1) { ?>selected<?php } ?>>Select a swimmer</option>
+          <select class="custom-select" id="swimmer" name="swimmer" required><option value="null" <?php if ($swimmerCount > 1) { ?>selected<?php } ?>>Select a swimmer</option>
           <?php do { ?>
-            <option value="<?=$mySwimmer['id']?>" <?php if ($count == 1) { ?>selected<?php } ?>>
+            <option value="<?=$mySwimmer['id']?>" <?php if ($swimmerCount == 1) { ?>selected<?php } ?>>
               <?=htmlspecialchars($mySwimmer['fn'] . " " . $mySwimmer['sn'])?>
             </option>
           <?php } while ($mySwimmer = $mySwimmers->fetch(PDO::FETCH_ASSOC)); ?>
