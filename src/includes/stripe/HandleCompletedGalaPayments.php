@@ -204,15 +204,6 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
       $cardCount = $getCardCount->fetchColumn();
 
       if ($cardCount == 0) {
-        // Attach payment method to customer iff it's to be reused
-        // Also only if we can't see it in the DB for this user
-        // Otherwise we're saving loads of non reusable Apple Pay cards etc.
-        if (bool($reuse) && (!isset($pm->customer) || $pm->customer == null)) {
-          $pm->attach(['customer' => $customerId]);
-        } else {
-          $reuse = 0;
-        }
-
         // Work out if card fingerprint exists for user
         $getThisCardCount = $db->prepare("SELECT COUNT(*) FROM stripePayMethods WHERE Fingerprint = ? AND Customer = ? AND Reusable = '1'");
         $getThisCardCount->execute([
@@ -220,6 +211,15 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
           $customerId
         ]);
         if ($getThisCardCount->fetchColumn() > 0) {
+          $reuse = 0;
+        }
+
+        // Attach payment method to customer iff it's to be reused
+        // Also only if we can't see it in the DB for this user
+        // Otherwise we're saving loads of non reusable Apple Pay cards etc.
+        if (bool($reuse) && (!isset($pm->customer) || $pm->customer == null)) {
+          $pm->attach(['customer' => $customerId]);
+        } else {
           $reuse = 0;
         }
 
