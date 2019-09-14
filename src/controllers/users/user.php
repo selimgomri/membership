@@ -213,7 +213,7 @@ include BASE_PATH . "views/header.php";
           <div class="input-group-prepend">
             <label class="input-group-text" for="accountType">Account Type</label>
           </div>
-          <select class="custom-select" id="accountType" name="accountType">
+          <select class="custom-select" id="accountType" name="accountType" data-user-id="<?=htmlspecialchars($id)?>">
             <option <?=$par?> value="Parent">Parent (Default)</option>
             <option <?=$coa?> value="Coach">Coach</option>
             <option <?=$com?> value="Committee">Team Manager</option>
@@ -297,8 +297,9 @@ include BASE_PATH . "views/header.php";
           // User has never logged in
           $details = "This user has never logged in";
         } else {
-          $time = new DateTime($loginInfo['Time']);
-          $details = $time->format('H:i \o\n j F Y') . " from " . htmlspecialchars($loginInfo['Browser']) . " on " . htmlspecialchars($loginInfo['Platform']) . " (" . htmlspecialchars($loginInfo['IPAddress']) . ")";
+          $time = new DateTime($loginInfo['Time'], new DateTimeZone('UTC'));
+          $time->setTimezone(new DateTimeZone('Europe/London'));
+          $details = $time->format('H:i T \o\n j F Y') . " from " . htmlspecialchars($loginInfo['Browser']) . " on " . htmlspecialchars($loginInfo['Platform']) . " (" . htmlspecialchars($loginInfo['IPAddress']) . ")";
         }?>
         <p><?=$details?></p>
       </div>
@@ -316,22 +317,6 @@ include BASE_PATH . "views/header.php";
   </div>
 </div>
 
-<script>
-function apply() {
-  var type = document.getElementById("accountType");
-  var typeValue = type.value;
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("accountTypeOutput").innerHTML = this.responseText;
-    }
-  }
-  xhttp.open("POST", "<?=autoUrl("users/ajax/userSettings/" . $id)?>", true);
-  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  xhttp.send("accountType=" + typeValue);
-}
-
-document.getElementById("accountType").onchange=apply;
-</script>
+<script src="<?=autoUrl("js/users/type-switch.js")?>"></script>
 
 <?php include BASE_PATH . "views/footer.php";

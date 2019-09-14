@@ -262,7 +262,7 @@ include BASE_PATH . 'views/header.php';
               <li>payment_intent.succeeded</li>
               <li>payment_intent.created</li>
               <li>payment_method.updated</li>
-              <li>payment_method.card_automatically_updated</li>
+              <li class="text-truncate">payment_method.card_automatically_updated</li>
             </ul>
               
               
