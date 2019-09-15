@@ -219,7 +219,7 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
         // Otherwise we're saving loads of non reusable Apple Pay cards etc.
         if (bool($reuse) && (!isset($pm->customer) || $pm->customer == null)) {
           $pm->attach(['customer' => $customerId]);
-        } else {
+        } else if (!isset($pm->customer) || $pm->customer == null) {
           $reuse = 0;
         }
 

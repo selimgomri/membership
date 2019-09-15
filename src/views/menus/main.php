@@ -288,7 +288,8 @@ if (!function_exists('chesterStandardMenu')) {
                   </div>
                 </li>
                 <?php if ($_SESSION['AccessLevel'] == "Parent") {
-            if (!userHasMandates($_SESSION['UserID'])) { ?>
+                  $hasMandate = !userHasMandates($_SESSION['UserID']);
+            if (!$hasMandate && !$canPayByCard) { ?>
                 <li class="nav-item">
                   <a class="nav-link" href="<?=autoUrl("payments")?>">
                     Payments
@@ -301,11 +302,13 @@ if (!function_exists('chesterStandardMenu')) {
                     Pay
                   </a>
                   <div class="dropdown-menu" aria-labelledby="paymentsParentDropdown">
+                    <?php if ($hasMandate) { ?>
                     <a class="dropdown-item" href="<?=autoUrl("payments")?>">Payments Home</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/transactions")?>">My Billing History</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/mandates")?>">My Bank Account</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/statement/latest")?>">My Latest Statement</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/fees")?>">My Fees Since Last Bill</a>
+                    <?php } ?>
                     <?php if (env('STRIPE') != null) { ?>
                     <div class="dropdown-divider"></div>
                     <h6 class="dropdown-header">Payment Cards</h6>
