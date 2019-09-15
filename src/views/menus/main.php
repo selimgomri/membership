@@ -288,7 +288,7 @@ if (!function_exists('chesterStandardMenu')) {
                   </div>
                 </li>
                 <?php if ($_SESSION['AccessLevel'] == "Parent") {
-                  $hasMandate = !userHasMandates($_SESSION['UserID']);
+                  $hasMandate = userHasMandates($_SESSION['UserID']);
             if (!$hasMandate && !$canPayByCard) { ?>
                 <li class="nav-item">
                   <a class="nav-link" href="<?=autoUrl("payments")?>">
