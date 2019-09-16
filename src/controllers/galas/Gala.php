@@ -2,7 +2,7 @@
 
 global $db;
 
-$galas = $db->prepare("SELECT GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters FROM galas WHERE GalaID = ?");
+$galas = $db->prepare("SELECT GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters, RequiresApproval FROM galas WHERE GalaID = ?");
 $galas->execute([$id]);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
 
@@ -177,6 +177,13 @@ include "galaMenu.php";
     </div>
     <?php } ?>
 
+    <?php if ($gala['RequiresApproval']) { ?>
+    <div class="col-sm-6 col-md-4">
+      <h3 class="h6">Requires approval</h3>
+      <p>Squad reps must approve entries for this gala. If a squad has no reps, entries are approved automatically</p>
+    </div>
+    <?php } ?>
+
     <div class="col-sm-6 col-md-4">
       <h3 class="h6">Number of entries</h3>
       <p><?=$numEntries?></p>
@@ -242,7 +249,8 @@ include "galaMenu.php";
   </p>
   <?php } ?>
 
-  <?php if ($numEntries > 0) { ?>
+  <!-- Gala timesheets temporarily hidden -->
+  <?php if ($numEntries > 0 && false) { ?>
   <h2>Gala timesheet</h2>
   <p class="lead">Download a timesheet for this gala.</p>
   <p>Gala timesheets give a list of each swimmer's entries to a gala along with their all-time personal bests and
@@ -306,6 +314,7 @@ include "galaMenu.php";
 </div>
 
 <script src="<?=autoUrl("public/js/Chart.min.js")?>"></script>
+<?php $chartColours = chartColours(5); ?>
 <script>
 var ctx = document.getElementById('eventEntries').getContext('2d');
 var chart = new Chart(ctx, {
@@ -332,19 +341,19 @@ var chart = new Chart(ctx, {
       foreach ($countEntries as $key => $event) {
         if ($event['Count'] > 0) {
           if ($event['Stroke'] == 'Free') {
-            ?> '#bd0000'
+            ?> <?=json_encode($chartColours[0])?>
         <?php
           } else if ($event['Stroke'] == 'Back') {
-            ?> '#bd00bd'
+            ?> <?=json_encode($chartColours[1])?>
         <?php
           } else if ($event['Stroke'] == 'Breast') {
-            ?> '#00bd00'
+            ?> <?=json_encode($chartColours[2])?>
         <?php
           } else if ($event['Stroke'] == 'Fly') {
-            ?> '#00bdbd'
+            ?> <?=json_encode($chartColours[3])?>
         <?php
           } else if ($event['Stroke'] == 'IM') {
-            ?> '#bdbdbd'
+            ?> <?=json_encode($chartColours[4])?>
         <?php
           }
           ?>, <?php
@@ -385,34 +394,8 @@ var chart = new Chart(ctx, {
     datasets: [{
       label: <?=json_encode(html_entity_decode($gala['GalaName']))?>,
       data: [<?php
-      foreach ($strokeCounts as $stroke => $count) {
-        if ($count > 0) {
-          ?> "<?=$count?>", <?php
-        }
-      } ?>],
-      backgroundColor: [<?php
-      foreach ($strokeCounts as $stroke => $count) {
-        if ($count > 0) {
-          if ($stroke == 'Free') {
-            ?> '#bd0000'
-        <?php
-          } else if ($stroke == 'Back') {
-            ?> '#bd00bd'
-        <?php
-          } else if ($stroke == 'Breast') {
-            ?> '#00bd00'
-        <?php
-          } else if ($stroke == 'Fly') {
-            ?> '#00bdbd'
-        <?php
-          } else if ($stroke == 'IM') {
-            ?> '#bdbdbd'
-        <?php
-          }
-          ?>, <?php
-        }
-      } ?>
-      ],
+      foreach ($strokeCounts as $stroke => $count) { ?> "<?=$count?>", <?php } ?>],
+      backgroundColor: <?=json_encode(chartColours(5))?>,
     }],
   },
 

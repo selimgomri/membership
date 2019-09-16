@@ -308,9 +308,16 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?=autoUrl("payments/mandates")?>">My Bank Account</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/statement/latest")?>">My Latest Statement</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/fees")?>">My Fees Since Last Bill</a>
+                    <?php } else if (env('GOCARDLESS_ACCESS_TOKEN')) { ?>
+                    <h6 class="dropdown-header">Direct Debit</h6>
+                    <a class="dropdown-item" href="<?=autoUrl("payments")?>">
+                      Setup a direct debit
+                    </a>
                     <?php } ?>
                     <?php if (env('STRIPE') != null) { ?>
+                    <?php if (env('GOCARDLESS_ACCESS_TOKEN')) { ?>
                     <div class="dropdown-divider"></div>
+                    <?php } ?>
                     <h6 class="dropdown-header">Payment Cards</h6>
                     <a class="dropdown-item" href="<?=autoUrl("payments/cards")?>">
                       Credit and Debit Cards
