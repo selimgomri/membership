@@ -262,7 +262,7 @@ include "galaMenu.php";
     </div>
     <?php } ?>
 
-    <?php if ($timesheet) { ?>
+    <?php if ($timesheet && false) { ?>
     <h2>
       Gala timesheets
     </h2>

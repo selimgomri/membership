@@ -125,6 +125,8 @@ include "galaMenu.php"; ?>
         </a>
       </p>
 
+      <!--
+
       <div class="row">
         <div class="col-md-5 py-4">
           <div class="panel bg-white">
@@ -138,9 +140,13 @@ include "galaMenu.php"; ?>
           </div>
         </div>
       </div>
+
+      -->
+      
     <!--
-    GALA TIME SHEETS
+    GALA TIME SHEETS (DEPRECATED FOR NOW)
     -->
+    <!--
     <div class="mb-4">
 			<div class="row">
 			  <div class="col-lg-8">
@@ -179,6 +185,7 @@ include "galaMenu.php"; ?>
 				</div>
 			</div>
     </div>
+    -->
 
   	<?php if (sizeof($countEntries) > 0) { ?>
   				<div class="mb-4">
