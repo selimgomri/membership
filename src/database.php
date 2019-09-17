@@ -1295,3 +1295,4 @@ include BASE_PATH . 'includes/stripe/HandleBalanceTransactionForFees.php';
 include BASE_PATH . 'includes/stripe/HandleCompletedGalaPayments.php';
 include BASE_PATH . 'includes/direct-debit/BankLogos.php';
 include BASE_PATH . 'includes/direct-debit/Balances.php';
+include BASE_PATH . 'includes/membership-fees/Loader.php';

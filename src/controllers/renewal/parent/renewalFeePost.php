@@ -38,15 +38,9 @@ $totalFee = 0;
 
 $payingSwimmerCount = $sql->fetchColumn();
 
-if ($payingSwimmerCount == 1) {
-	$clubFee = $systemInfo->getSystemOption('ClubFeeIndividual');
-} else if ($partial_reg_require_topup) {
-	$clubFee = $systemInfo->getSystemOption('ClubFeeFamily') - $systemInfo->getSystemOption('ClubFeeIndividual');
-} else if ($payingSwimmerCount > 1 && !$partial_reg) {
-	$clubFee = $systemInfo->getSystemOption('ClubFeeFamily');
-} else {
-	$clubFee = 0;
-}
+$clubFees = new \SCDS\Membership\IndividualAndFamily($db, $_SESSION['UserID'], $partial_reg);
+
+$clubFee = $clubFees->getFee();
 
 if ($partial_reg) {
 	$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
