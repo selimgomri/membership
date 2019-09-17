@@ -37,10 +37,6 @@ $sql->execute();
 
 $row = $sql->fetch(PDO::FETCH_ASSOC);
 
-if ($row == null) {
-  halt(404);
-}
-
 $pagetitle = "Page " . $page . " - Message History - Notify";
 
 include BASE_PATH . "views/header.php";
