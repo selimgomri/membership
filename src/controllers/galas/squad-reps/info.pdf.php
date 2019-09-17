@@ -152,7 +152,7 @@ ob_start();?>
                 <td>Entered</td>
                 <?php foreach ($entry->events as $event) { ?>
                   <td class="text-center">
-                    <?php if ($event->selected) { ?>YES<?php } else { ?>NO<?php } ?>
+                    <?php if ($event->selected) { ?>YES<?php } else { ?><?php } ?>
                   </td>
                 <?php } ?>
               </tr>

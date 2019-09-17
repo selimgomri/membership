@@ -28,6 +28,9 @@ if (!$row) {
   halt(404);
 }
 
+$date = new DateTime($row['Date'], new DateTimeZone('UTC'));
+$date->setTimezone(new DateTimeZone('Europe/London'));
+
 include 'support/PostTypes.php';
 include 'support/MimeTypes.php';
 
@@ -92,7 +95,7 @@ include BASE_PATH . "views/postsMenu.php";
 					<div class="form-group">
 						<label for="date">Date</label>
 						<input type="datetime-local" class="form-control" name="date"
-						id="date" value="<?=htmlentities($row['Date'])?>" disabled>
+						id="date" value="<?=$date->format("c")?>" disabled>
 					</div>
 					<div class="form-group">
 						<label for="type">Type</label>

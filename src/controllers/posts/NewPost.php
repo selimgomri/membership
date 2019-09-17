@@ -1,5 +1,6 @@
 <?php
-$use_white_background = true;
+
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
 
 $pagetitle = "New Post";
 include BASE_PATH . "views/header.php";
@@ -53,8 +54,8 @@ include BASE_PATH . "views/postsMenu.php";
 			      placeholder="Leave blank to use Post ID" autocomplete="off">
 					</div>
 					<div class="form-group">
-						<label for="date">Date</label>
-						<input type="datetime-local" class="form-control" name="date" id="date">
+						<label for="date">Date and time</label>
+						<input type="datetime-local" class="form-control" name="date" id="date" value="<?=$date->format("c")?>">
 					</div>
 					<div class="form-group">
 						<label for="type">Type</label>
@@ -73,6 +74,7 @@ include BASE_PATH . "views/postsMenu.php";
 						<select class="custom-select" name="mime">
 						  <option value="text/html">text/html</option>
 						  <option value="text/plain">text/plain</option>
+							<option value="text/markdown">text/markdown</option>
 						</select>
 					</div>
 				</div>

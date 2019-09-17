@@ -31,7 +31,7 @@ if ($_SESSION['AccessLevel'] != "Parent" && $_SESSION['AccessLevel'] != "Coach")
 	});
 }
 
-$this->get(['/', '/list/{page}:int'], function($page = null) {
+$this->get('/', function() {
 	global $link;
 
 	if ($_SESSION['AccessLevel'] == "Parent") {
