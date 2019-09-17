@@ -8,6 +8,10 @@ $data = json_decode($output);
 $squads = null;
 global $systemInfo;
 $leavers = $systemInfo->getSystemOption('LeaversSquad');
+if ($leavers == null) {
+  $leavers = 0;
+}
+
 if ($_SESSION['AccessLevel'] != 'Parent') {
   $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads WHERE `SquadID` != ? ORDER BY SquadFee DESC, `name` ASC");
   $squads->execute([
