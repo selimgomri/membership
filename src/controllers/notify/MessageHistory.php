@@ -75,6 +75,16 @@ include BASE_PATH . "views/notifyMenu.php";?>
 <div class="container">
   <div class="">
     <h1>Notify Message History</h1>
+    <?php if ($row == null) { ?>
+    <div class="alert alert-warning">
+      <p class="mb-0">
+        <strong>There are no previous messages to display</strong>
+      </p>
+      <p class="mb-0">
+        Send an email and it will show up here
+      </p>
+    </div>
+    <?php } else { ?>
     <p class="lead">
       Page <?php echo $page; ?> of <?php echo $numPages; ?>
     </p>
@@ -181,6 +191,9 @@ include BASE_PATH . "views/notifyMenu.php";?>
       <?php } ?>
       </ul>
     </nav>
+
+    <?php } ?>
+
   </div>
 </div>
 

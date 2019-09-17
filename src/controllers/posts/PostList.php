@@ -57,6 +57,7 @@ include BASE_PATH . "views/postsMenu.php";?>
 <div class="container">
   <main class="">
     <h1>All Posts</h1>
+    <?php if (sizeof($rows) > 0) { ?>
     <p class="lead pb-3 mb-0 border-bottom border-gray">
       Page <?php echo $page; ?> of <?php echo $numPages; ?>
     </p>
@@ -97,6 +98,16 @@ include BASE_PATH . "views/postsMenu.php";?>
           </div>
         </div>
       </div>
+    <?php } ?>
+    <?php } else { ?>
+    <div class="alert alert-warning">
+      <p class="mb-0">
+        <strong>There are no posts to display</strong>
+      </p>
+      <p class="mb-0">
+        Add a post and it will show up here
+      </p>
+    </div>
     <?php } ?>
 
     <nav aria-label="Page navigation">
