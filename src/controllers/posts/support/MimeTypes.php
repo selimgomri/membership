@@ -8,5 +8,9 @@ $mimes = [
 	[
 		"value" => "text/html",
 		"description" => "text/html"
-	]
+	],
+	[
+		"value" => "text/markdown",
+		"description" => "text/markdown"
+	],
 ];
