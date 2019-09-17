@@ -756,7 +756,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include BASE_PATH . 'views/footer.php';
     });*/
 
-    if ($_SESSION['AccessLevel'] == "Admin") {
+    if ($_SESSION['AccessLevel'] == "Admin" && bool(env('IS_CLS'))) {
       $this->group('/settings', function() {
         include BASE_PATH . 'controllers/settings/router.php';
       });
@@ -803,6 +803,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
         include 'controllers/migrations/router.php';
       });
 
+      /*
       $this->get('/test', function() {
         //use \Twilio\Rest\Client;
 
@@ -828,6 +829,14 @@ $route->group($get_group, function($clubcode = "CLSE") {
         } catch (Exception $e) {
           pre($e);
         }
+      });
+      */
+
+      $this->get('/test', function() {
+        global $db;
+        $fees = \SCDS\Membership\ClubMembership::create($db, 12, false);
+        pre($fees->getFeeItems());
+        pre($fees->getFee());
       });
     }
   }

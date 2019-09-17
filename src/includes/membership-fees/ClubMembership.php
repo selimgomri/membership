@@ -17,6 +17,20 @@ class ClubMembership {
     $this->upgrade = $upgrade;
   }
 
+  public static function create($db, $user, $upgrade) {
+    // Work out the fee object class and return it
+    $getType = $db->query("SELECT `Value` FROM systemOptions WHERE `Option` = 'ClubFeesType'");
+    $type = $getType->fetchColumn();
+
+    if ($type == 'Family/Individual') {
+      return new IndividualAndFamily($db, $user, $upgrade);
+    } else if ($type == 'NSwimmers') {
+      return new NSwimmers($db, $user, $upgrade);
+    } else {
+      return new ZeroFee($db, $user, $upgrade);
+    }
+  }
+
   public function getFeeItems() {
 
   }
@@ -37,6 +51,29 @@ class ClubMembership {
       $this->upgradeType = $type;
     }
 
+  }
+
+  protected function getSwimmers($db, $user) {
+    $getMemberCount = $db->prepare("SELECT COUNT(*) FROM members WHERE UserID = ? AND RR = ? AND NOT ClubPays");
+    $getMemberCount->execute([
+      $user,
+      '1'
+    ]);
+    $countReg = $getMemberCount->fetchColumn();
+
+    $getMemberCount->execute([
+      $user,
+      '0'
+    ]);
+    $count = $getMemberCount->fetchColumn();
+
+    $totalMembers = $countReg + $count;
+
+    return [
+      'RRCount' => $countReg,
+      'RCount' => $count,
+      'Total' => $totalMembers
+    ];
   }
 
   public function getUpgradeType() {

@@ -8,7 +8,7 @@
 
 namespace SCDS\Membership;
 
-class IndividualAndFamily extends ClubMembership {
+class NSwimmers extends ClubMembership {
 
   private $familyFee;
   private $individualFee;

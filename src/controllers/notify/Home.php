@@ -56,8 +56,9 @@ include BASE_PATH . "views/notifyMenu.php";
         will be personally addressed to each parent who reciceves them.
       </p>
       <p>
-        Emails are added to a queue to be sent. It could take up to thirty
-        minutes to send an email to all parents in the club. Parents who have
+        Emails are added to a queue to be sent. Emails will be sent to our 
+        service provider within one minute who will then send them to all 
+        parents almost instantaneously. Parents who have
         not opted in to recieving emails will not recieve messages.
       </p>
       <p>
@@ -79,7 +80,7 @@ include BASE_PATH . "views/notifyMenu.php";
         operational needs.
       </p>
       <p class="small">
-        Provided by Chester-le-Street ASC Club Digital Services.
+        Provided by Swimming Club Data Systems to <?=htmlspecialchars(env('CLUB_NAME'))?>.
       </p>
     </div>
   </div>

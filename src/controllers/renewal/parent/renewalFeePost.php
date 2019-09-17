@@ -38,7 +38,7 @@ $totalFee = 0;
 
 $payingSwimmerCount = $sql->fetchColumn();
 
-$clubFees = new \SCDS\Membership\IndividualAndFamily($db, $_SESSION['UserID'], $partial_reg);
+$clubFees = \SCDS\Membership\ClubMembership::create($db, $_SESSION['UserID'], $partial_reg);
 
 $clubFee = $clubFees->getFee();
 
