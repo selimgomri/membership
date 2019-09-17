@@ -756,31 +756,74 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include BASE_PATH . 'views/footer.php';
     });*/
 
-    if ($_SESSION['AccessLevel'] == "Admin" && bool(env('IS_CLS'))) {
+    if ($_SESSION['AccessLevel'] == "Admin") {
       $this->group('/settings', function() {
         include BASE_PATH . 'controllers/settings/router.php';
       });
 
-      $this->get('/about:php', function() {
-        echo phpinfo();
-      });
+      if (bool(env('IS_CLS'))) {
+        $this->get('/about:php', function() {
+          echo phpinfo();
+        });
 
-      $this->get('/about:session', function() {
-        pre($_SESSION);
-      });
+        $this->get('/about:session', function() {
+          pre($_SESSION);
+        });
 
-      $this->get('/about:server', function() {
-        pre($_SERVER);
-        pre($_ENV);
-      });
+        $this->get('/about:server', function() {
+          pre($_SERVER);
+          pre($_ENV);
+        });
 
-      $this->get('/about:cookies', function() {
-        pre($_COOKIE);
-      });
+        $this->get('/about:cookies', function() {
+          pre($_COOKIE);
+        });
 
-      $this->get('/about:stopcodes/{code}:int', function($code) {
-        halt((int) $code);
-      });
+        $this->get('/about:stopcodes/{code}:int', function($code) {
+          halt((int) $code);
+        });
+
+        $this->get('/pdf-test', function() {
+          include 'controllers/PDFTest.php';
+        });
+
+        /*
+        $this->get('/test', function() {
+          //use \Twilio\Rest\Client;
+
+          try {
+            // Your Account SID and Auth Token from twilio.com/console
+            $account_sid = env('TWILIO_AC_SID');
+            $auth_token = env('TWILIO_AC_AUTH_TOKEN');
+            // In production, these should be environment variables. E.g.:
+            // $auth_token = $_ENV["TWILIO_ACCOUNT_SID"]
+
+            // A Twilio number you own with SMS capabilities
+            $twilio_number = env('TWILIO_NUMBER');
+
+            $client = new Twilio\Rest\Client($account_sid, $auth_token);
+            $client->messages->create(
+              // Where to send a text message (your cell phone?)
+              '+447577002981',
+              [
+                'from' => $twilio_number,
+                'body' => 'I sent this message in under 10 minutes!'
+              ]
+            );
+          } catch (Exception $e) {
+            pre($e);
+          }
+        });
+        */
+
+        $this->get('/test', function() {
+          global $db;
+          $fees = \SCDS\Membership\ClubMembership::create($db, 12, false);
+          pre($fees->getFeeItems());
+          pre($fees->getFee());
+        });
+  
+      }
 
       $this->get('/update', function() {
         try {
@@ -794,49 +837,9 @@ $route->group($get_group, function($clubcode = "CLSE") {
         }
       });
 
-      $this->get('/pdf-test', function() {
-        include 'controllers/PDFTest.php';
-      });
-
       $this->group('/db', function() {
         // Handle database migrations
         include 'controllers/migrations/router.php';
-      });
-
-      /*
-      $this->get('/test', function() {
-        //use \Twilio\Rest\Client;
-
-        try {
-          // Your Account SID and Auth Token from twilio.com/console
-          $account_sid = env('TWILIO_AC_SID');
-          $auth_token = env('TWILIO_AC_AUTH_TOKEN');
-          // In production, these should be environment variables. E.g.:
-          // $auth_token = $_ENV["TWILIO_ACCOUNT_SID"]
-
-          // A Twilio number you own with SMS capabilities
-          $twilio_number = env('TWILIO_NUMBER');
-
-          $client = new Twilio\Rest\Client($account_sid, $auth_token);
-          $client->messages->create(
-            // Where to send a text message (your cell phone?)
-            '+447577002981',
-            [
-              'from' => $twilio_number,
-              'body' => 'I sent this message in under 10 minutes!'
-            ]
-          );
-        } catch (Exception $e) {
-          pre($e);
-        }
-      });
-      */
-
-      $this->get('/test', function() {
-        global $db;
-        $fees = \SCDS\Membership\ClubMembership::create($db, 12, false);
-        pre($fees->getFeeItems());
-        pre($fees->getFee());
       });
     }
   }
