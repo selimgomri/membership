@@ -9,6 +9,8 @@ $systemInfo->setSystemOption('ClubFeesType', 'Family/Individual');
 
 $feeType = $systemInfo->getSystemOption('ClubFeesType');
 
+$feeUpgradeType = $systemInfo->getSystemOption('ClubFeeUpgradeType');
+
 $family = false;
 $perMember = false;
 $monthlyPrecept = false;
@@ -58,6 +60,23 @@ include BASE_PATH . 'views/header.php';
         <?php unset($_SESSION['Update-Error']); } ?>
 
         <form method="post">
+
+          <p>When a new member is added to an existing account, how should the club membershio fee be handled? You can choose to charge nothing, charge the difference between the amount previously paid for x members and the amount with new members or charge the full membership fee.</p>
+          <div class="form-group">
+            <label for="upgrade">Upgrade setings</label>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="no-fee" value="None" name="upgrade" class="custom-control-input" <?php if ($feeUpgradeType == 'None') { ?>checked<?php } ?>>
+              <label class="custom-control-label" for="no-fee">Don't charge an upgrade fee</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="topup" value="TopUp" name="upgrade" class="custom-control-input" <?php if ($feeUpgradeType == 'TopUp') { ?>checked<?php } ?>>
+              <label class="custom-control-label" for="topup">Charge a topup fee (difference between amount previously paid and new total)</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="full" value="FullFee" name="upgrade" class="custom-control-input" <?php if ($feeUpgradeType == 'FullFee') { ?>checked<?php } ?>>
+              <label class="custom-control-label" for="full">Charge the full fee</label>
+            </div>
+          </div>
 
           <div class="form-group">
             <label for="indv">Individual Fee</label>

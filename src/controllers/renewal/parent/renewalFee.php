@@ -36,15 +36,9 @@ $clubFee = $totalFeeDiscounted = $totalFee = 0;
 
 $payingSwimmerCount = $sql->fetchColumn();
 
-if ($payingSwimmerCount == 1) {
-	$clubFee = $systemInfo->getSystemOption('ClubFeeIndividual');
-} else if ($partial_reg_require_topup) {
-	$clubFee = $systemInfo->getSystemOption('ClubFeeFamily') - $systemInfo->getSystemOption('ClubFeeIndividual');
-} else if ($payingSwimmerCount > 1 && !$partial_reg) {
-	$clubFee = $systemInfo->getSystemOption('ClubFeeFamily');
-} else {
-	$clubFee = 0;
-}
+$clubFees = \SCDS\Membership\ClubMembership::create($db, $_SESSION['UserID'], $partial_reg);
+
+$clubFee = $clubFees->getFee();
 
 if ($partial_reg) {
 	$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
@@ -151,22 +145,16 @@ include BASE_PATH . "views/renewalTitleBar.php";
 					</tr>
 				</thead>
 				<tbody>
+				  <?php foreach ($clubFees->getFeeItems() as $item) { ?>
 					<tr>
 						<td>
-						<?php if ($payingSwimmerCount == 1) { ?>
-							Individual Membership
-						<?php } else if ($partial_reg_require_topup) { ?>
-							Membership Top Up (Individual to Family)
-						<?php } else if ($payingSwimmerCount > 1 && !$partial_reg) { ?>
-							Individual Membership
-						<?php } else { ?>
-							Membership
-						<?php } ?>
+							<?=htmlspecialchars($item['description'])?>
 						</td>
 						<td>
-							&pound;<?= $clubFeeString ?>
+							&pound;<?=number_format($item['amount']/100, 2, '.', '')?>
 						</td>
 					</tr>
+					<?php } ?>
 					<?php if ($clubDiscount > 0 && $renewal == 0) { ?>
 					<tr>
 						<td>

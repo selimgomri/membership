@@ -5,6 +5,9 @@ global $systemInfo;
 $feeType = $systemInfo->getSystemOption('ClubFeesType');
 
 try {
+
+  $systemInfo->setSystemOption('ClubFeeUpgradeType', $_POST['upgrade']);
+
   if ($feeType == 'Family/Individual') {
     $family = true;
     $systemInfo->setSystemOption('ClubFeeIndividual', (int) ($_POST['indv']*100));

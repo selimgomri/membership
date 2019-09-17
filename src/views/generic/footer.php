@@ -93,9 +93,12 @@ $counties = json_decode(file_get_contents(BASE_PATH . 'includes/regions/counties
       class="<?php if (isset($fluidContainer) && $fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
       <div class="row">
         <div class="col source-org vcard copyright">
-          <a href="https://corporate.myswimmingclub.co.uk" target="_blank" class="d-block mb-3">
+          <a href="https://corporate.myswimmingclub.co.uk" target="_blank" title="Swimming Club Data Systems Website">
             <img src="<?=autoUrl("public/img/corporate/scds.png")?>" width="100">
           </a>
+
+          <div class="d-block mb-3"></div>
+
           <?php
       global $time_start;
       $time_end = microtime(true);

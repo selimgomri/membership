@@ -8,14 +8,14 @@ global $db;
 
 try {
 
-  $checkEmailCount = $db->prepare("SELECT COUNT(*) FROM users WHERE EmailAddress = ?");
+  $getUserInfo = $db->prepare("SELECT AccessLevel FROM users WHERE EmailAddress = ?");
 
   $insert = $db->prepare("INSERT INTO users (EmailAddress, `Password`, AccessLevel, Forename, Surname, Mobile, EmailComms, MobileComms, RR) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
   $forename = trim($_POST['first']);
   $surname = trim($_POST['last']);
   $email = trim(mb_strtolower($_POST['email-address']));
-  $checkEmailCount->execute([$email]);
+  $getUserInfo->execute([$email]);
   
   // The password will be used as a secure token allowing the parent to follow a link.
   $password = hash('sha256', random_int(0, 999999));
@@ -36,7 +36,9 @@ try {
     reportError($e);
   }
 
-  if ($checkEmailCount->fetchColumn() > 0) {
+  $info = $getUserInfo->fetchColumn();
+
+  if ($info == 'Parent') {
     $update = $db->prepare("UPDATE users SET `Password` = ?, RR = ? WHERE EmailAddress = ?");
     $update->execute([
       password_hash($password, PASSWORD_BCRYPT),
@@ -48,7 +50,7 @@ try {
     $getUserId->execute([$email]);
     
     $_SESSION['AssRegUser'] = $getUserId->fetchColumn();
-  } else {
+  } else if ($info == null) {
     // A random password is generated. This process involves the user setting a password later.
     $insert->execute([
       $email,
@@ -63,6 +65,8 @@ try {
     ]);
 
     $_SESSION['AssRegUser'] = $db->lastInsertId(); 
+  } else {
+    $status = false;
   }
 
   $_SESSION['AssRegPass'] = $password;

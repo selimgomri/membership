@@ -18,7 +18,7 @@ include BASE_PATH . "views/header.php";
 			<p>
 				This General Data Protection Regulation Compliant system enables rapid
 				communication with our members. The  system allows us to target emails
-				to parents of selected squads and supports modern email standards.
+				to parents of selected squads, those who have entered certain galas or those in select groups and supports modern email standards.
 			</p>
 			<p>
 				To unsubscribe or resubscribe to messages sent by Notify, go to <a
@@ -29,6 +29,8 @@ include BASE_PATH . "views/header.php";
         Many emails will also come with an unsubscribe link at the end, though
         mandatory information emails won't.
       </p>
+
+			<p>Please note that occasionally your club may send you an email regardless of your opt-in/opt-out settings if there is a legitimate business purpose behind doing so.</p>
 		</div>
 	</div>
 </div>

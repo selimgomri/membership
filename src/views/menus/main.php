@@ -303,6 +303,7 @@ if (!function_exists('chesterStandardMenu')) {
                   </a>
                   <div class="dropdown-menu" aria-labelledby="paymentsParentDropdown">
                     <?php if ($hasMandate) { ?>
+                    <h6 class="dropdown-header">Direct Debit</h6>
                     <a class="dropdown-item" href="<?=autoUrl("payments")?>">Payments Home</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/transactions")?>">My Billing History</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/mandates")?>">My Bank Account</a>
@@ -315,7 +316,7 @@ if (!function_exists('chesterStandardMenu')) {
                     </a>
                     <?php } ?>
                     <?php if (env('STRIPE') != null) { ?>
-                    <?php if (env('GOCARDLESS_ACCESS_TOKEN')) { ?>
+                    <?php if (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) { ?>
                     <div class="dropdown-divider"></div>
                     <?php } ?>
                     <h6 class="dropdown-header">Payment Cards</h6>
