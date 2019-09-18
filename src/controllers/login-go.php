@@ -23,10 +23,8 @@ if ($_POST['LoginSecurityValue'] == $_SESSION['LoginSec']) {
 
 if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($security_status)) {
   // Let the user login
-  $username = trim(mb_strtolower($_POST['email-addresss']));
+  $username = trim(mb_strtolower($_POST['email-address']));
   $target = ltrim(trim($_POST['target']), '/');
-
-  $username = preg_replace('/\s+/', '', $username);
 
   $getUser = $db->prepare("SELECT Forename, Surname, UserID, EmailAddress, Password, AccessLevel FROM users WHERE EmailAddress = ?");
   $getUser->execute([$_POST['email-address']]);
