@@ -18,6 +18,7 @@ include BASE_PATH . "views/header.php";
             </label>
             <input type="email" class="form-control text-lowercase" name="email-address"
             id="email-address" placeholder="hello@example.com" required>
+            <?=SCDS\CSRF::write()?>
            </div>
            <div class="g-recaptcha mb-3"
            data-sitekey="<?=htmlspecialchars(env('GOOGLE_RECAPTCHA_PUBLIC'))?>"

@@ -184,6 +184,9 @@ $title = null;
       		</div>
           <ul></ul>
         </div>
+
+        <?=SCDS\CSRF::write()?>
+
         <?php } ?>
         <p class="mb-5">
           <button type="submit" class="btn btn-success">Save Changes</button>

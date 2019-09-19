@@ -112,4 +112,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 	echo $content; ?>
 	</div>
 </div>
+
+<?=SCDS\CSRF::write()?>
+
 <?php include BASE_PATH . "views/footer.php";

@@ -1,5 +1,9 @@
 <?php
 
+if (!SCDS\CSRF::verify()) {
+  halt(403);
+}
+
 global $db;
 
 if ($_SESSION['AccessLevel'] == "Parent") {

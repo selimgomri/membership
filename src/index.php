@@ -152,7 +152,13 @@ session_start([
     'cookie_domain'       => $_SERVER['HTTP_HOST']
 ]);
 
-function halt(int $statusCode) {
+function halt(int $statusCode, $throwException = true) {
+  try {
+    ob_get_clean();
+  } catch (Exception | Error $e) {
+    // Can't clean ob
+  }
+
   if ($statusCode == 200) {
     include "views/200.php";
   }
@@ -189,7 +195,10 @@ function halt(int $statusCode) {
   else {
     include "views/500.php";
   }
-  exit();
+
+  if ($throwException) {
+    throw new \SCDS\HaltException('Status ' . $statusCode);
+  }
 }
 //$link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 //define("LINK", mysqli_connect($dbhost, $dbuser, $dbpass, $dbname));
@@ -869,10 +878,25 @@ $route->group($get_group, function($clubcode = "CLSE") {
 });
 
 try {
+  ob_get_clean();
   $route->end();
+  echo ob_get_clean();
+} catch (\SCDS\HaltException $e) {
+  // Do nothing, just stops execution
+} catch (\SCDS\CSRFValidityException $e) {
+  // Deals with any uncaught SCRF problems
+  ob_get_clean();
+  halt(403, false);
 } catch (Exception $e) {
   // This catches any uncaught exceptions.
-  halt(500);
+  ob_get_clean();
+  halt(500, false);
+} catch (Error $e) {
+  // This catches any fatal or recoverable errors.
+  ob_get_clean();
+  halt(500, false);
+} finally {
+  // Any actions which must always happen at end
 }
 
 // Close SQL Database Connections

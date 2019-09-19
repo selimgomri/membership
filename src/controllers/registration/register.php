@@ -241,6 +241,7 @@ $_SESSION['RegistrationMode'] = $mode;
           </p>
           <?php } ?>
         </div>
+        <?=SCDS\CSRF::write()?>
         <input type="submit" class="btn btn-primary btn-lg" value="Register">
       </form>
       <?php } ?>

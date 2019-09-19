@@ -156,6 +156,8 @@ include BASE_PATH . "views/header.php";
 	    rows="8" <?php if($yes==""){?>disabled<?php } ?>><?=htmlspecialchars($row['Medication'])?></textarea>
 	  </div>
 
+		<?=SCDS\CSRF::write()?>
+
 		<div>
 			<p>
 				<button type="submit" class="btn btn-success">Save</button>

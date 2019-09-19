@@ -1,5 +1,9 @@
 <?php
 
+if (!SCDS\CSRF::verify()) {
+  halt(403);
+}
+
 $pagetitle = "Password Reset";
 include BASE_PATH . "views/header.php";
 

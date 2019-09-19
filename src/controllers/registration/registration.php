@@ -1,5 +1,9 @@
 <?php
 
+if (!SCDS\CSRF::verify()) {
+  halt(403);
+}
+
 use Respect\Validation\Validator as v;
 use Brick\PhoneNumber\PhoneNumber;
 use Brick\PhoneNumber\PhoneNumberParseException;

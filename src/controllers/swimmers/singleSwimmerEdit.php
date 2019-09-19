@@ -2,6 +2,12 @@
 
 global $db;
 
+/** must go in form
+if (app('request')->method == 'POST' && !SCDS\CSRF::verify()) {
+	halt(403);
+}
+*/
+
 $access = $_SESSION['AccessLevel'];
 // Committee or Admin can see and change all data
 $forenameUpdate = false;

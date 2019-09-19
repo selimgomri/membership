@@ -8,9 +8,6 @@ if ( isset($_SESSION['ErrorState']) ) {
   $username = $_SESSION['EnteredUsername'];
 }
 
-$lsv = hash('sha256', random_bytes(100));
-$_SESSION['LoginSec'] = $lsv;
-
 $use_white_background = true;
 
 include BASE_PATH . "views/header.php";
@@ -63,7 +60,7 @@ include BASE_PATH . "views/header.php";
           </div>
         </div>
         <input type="hidden" name="target" value="<?=$_SESSION['TARGET_URL']?>">
-        <input type="hidden" name="LoginSecurityValue" value="<?=$lsv?>">
+        <?=SCDS\CSRF::write()?>
         <input type="hidden" name="SessionSecurity" value="<?=session_id()?>">
         <p class="mb-5"><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-primary"></p>
         <div class="mb-5">
