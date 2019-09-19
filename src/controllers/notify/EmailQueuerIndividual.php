@@ -4,6 +4,10 @@ if (is_null($user)) {
   halt(400);
 }
 
+if (!SCDS\FormIdempotency::verify()) {
+  halt(403);
+}
+
 global $db;
 $query = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE
 UserID = ?");

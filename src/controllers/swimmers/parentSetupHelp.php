@@ -92,6 +92,7 @@ include BASE_PATH . "views/swimmersMenu.php";
         <a target="_self" class="btn btn-info" href="javascript:window.print()">
 				<i class="fa fa-print" aria-hidden="true"></i> Print
 			</a></p>
+			<?=SCDS\CSRF::write()?>
     </form>
 		<p class="mb-0">
 			<a href="<?=autoUrl("swimmers")?>" class="btn btn-info">

@@ -1,5 +1,9 @@
 <?php
 
+if (!SCDS\CSRF::verify()) {
+  halt(403);
+}
+
 global $db;
 use Respect\Validation\Validator as v;
 

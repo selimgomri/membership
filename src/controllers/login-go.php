@@ -15,7 +15,8 @@ if ($_POST['SessionSecurity'] == session_id()) {
 } else {
   $security_status = false;
 }
-if ($_POST['LoginSecurityValue'] == $_SESSION['LoginSec']) {
+
+if (SCDS\CSRF::verify()) {
   $security_status = true;
 } else {
   $security_status = false;

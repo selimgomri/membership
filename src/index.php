@@ -870,6 +870,9 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
 try {
   $route->end();
+} catch (CSRFValidityException $e) {
+  // Deals with any uncaught SCRF problems
+  halt(403);
 } catch (Exception $e) {
   // This catches any uncaught exceptions.
   halt(500);
