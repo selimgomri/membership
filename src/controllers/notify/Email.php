@@ -162,6 +162,7 @@ include BASE_PATH . "views/notifyMenu.php";
 
     <?php } ?>
 
+    <?=SCDS\CSRF::write()?>
     <?=SCDS\FormIdempotency::write()?>
 
 		<p><button class="btn btn-success" id="submit" value="submitted" type="submit">Send the email</button></p>
