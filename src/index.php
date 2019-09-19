@@ -153,6 +153,12 @@ session_start([
 ]);
 
 function halt(int $statusCode, $throwException = true) {
+  try {
+    ob_get_clean();
+  } catch (Exception | Error $e) {
+    // Can't clean ob
+  }
+
   if ($statusCode == 200) {
     include "views/200.php";
   }
@@ -872,14 +878,22 @@ $route->group($get_group, function($clubcode = "CLSE") {
 });
 
 try {
+  ob_get_clean();
   $route->end();
+  echo ob_get_clean();
 } catch (\SCDS\HaltException $e) {
   // Do nothing, just stops execution
 } catch (\SCDS\CSRFValidityException $e) {
   // Deals with any uncaught SCRF problems
+  ob_get_clean();
   halt(403, false);
 } catch (Exception $e) {
   // This catches any uncaught exceptions.
+  ob_get_clean();
+  halt(500, false);
+} catch (Error $e) {
+  // This catches any fatal or recoverable errors.
+  ob_get_clean();
   halt(500, false);
 } finally {
   // Any actions which must always happen at end
