@@ -18,7 +18,7 @@ class FormIdempotency {
   public static function verify() {
     $status = null;
 
-    if (isset($_SESSION['SCDS-FORM-IDEMPOTENCY']) && isset($_POST['SCDS-SCDS-FORM-IDEMPOTENCY']) && $_SESSION['SCDS-FORM-IDEMPOTENCY'] == $_POST['SCDS-SCDS-FORM-IDEMPOTENCY']) {
+    if (isset($_SESSION['FORM-IDEMPOTENCY']) && isset($_POST['SCDS-FORM-IDEMPOTENCY']) && $_SESSION['FORM-IDEMPOTENCY'] == $_POST['SCDS-FORM-IDEMPOTENCY']) {
       // Verifies idempotency, proceed normally
       $status = true;
     } else {
