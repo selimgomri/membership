@@ -3,7 +3,7 @@
 ignore_user_abort(true);
 set_time_limit(0);
 
-if (!SCDS\FormIdempotency::verify() || !SCDS\CSRF::verify()) {
+if (/*!SCDS\FormIdempotency::verify() || */!SCDS\CSRF::verify()) {
   halt(403);
 }
 

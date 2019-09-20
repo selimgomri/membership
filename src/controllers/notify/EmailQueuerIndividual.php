@@ -4,7 +4,7 @@ if (is_null($user)) {
   halt(400);
 }
 
-if (!SCDS\FormIdempotency::verify() || !SCDS\CSRF::verify()) {
+if (/*!SCDS\FormIdempotency::verify() || */!SCDS\CSRF::verify()) {
   halt(403);
 }
 
