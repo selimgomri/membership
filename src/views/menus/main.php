@@ -35,6 +35,12 @@ if (!function_exists('chesterStandardMenu')) {
         $renewalYear = $renewals['Year'];
       }
     }
+
+    $haveSquadReps = false;
+    $getRepCount = $db->query("SELECT COUNT(*) FROM squadReps");
+    if ($getRepCount->fetchColumn() > 0) {
+      $haveSquadReps = true;
+    }
     
     ?>
 
@@ -253,7 +259,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?php echo autoUrl("galas")?>">
                       Gala home
                     </a>
-                    <?php if ($_SESSION['AccessLevel'] == "Parent") {?>
+                    <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("galas/entergala")?>">
                       Enter a gala
                     </a>
@@ -287,6 +293,13 @@ if (!function_exists('chesterStandardMenu')) {
                     <?php } ?>
                   </div>
                 </li>
+                <?php if ($_SESSION['AccessLevel'] == 'Parent' && $haveSquadReps) { ?>
+                <li class="nav-item">
+                  <a class="nav-link" href="<?=autoUrl("squad-reps")?>">
+                    Squad Reps
+                  </a>
+                </li>
+                <?php } ?>
                 <?php if ($_SESSION['AccessLevel'] == "Parent") {
                   $hasMandate = userHasMandates($_SESSION['UserID']);
             if (!$hasMandate && !$canPayByCard) { ?>

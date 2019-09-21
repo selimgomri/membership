@@ -8,6 +8,9 @@ $info = $userInfo->fetch(PDO::FETCH_ASSOC);
 
 global $systemInfo;
 $leavers = $systemInfo->getSystemOption('LeaversSquad');
+if ($leavers == null) {
+  $leavers = 0;
+}
 $getSquads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE SquadID != ? ORDER BY SquadFee DESC, SquadName ASC");
 $getSquads->execute([
   $leavers

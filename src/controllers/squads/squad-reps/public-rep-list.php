@@ -4,11 +4,11 @@ $pagetitle = "Squad Reps";
 
 global $db;
 
-$getMyReps = $db->prepare("SELECT MForename, MSurname, Forename, Surname, MForename, MSurname, SquadName FROM (((members INNER JOIN squads ON members.SquadID = squads.SquadID) INNER JOIN squadReps ON squads.SquadID = squadReps.Squad) INNER JOIN users ON squadReps.User = users.UserID) WHERE members.UserID = ?");
+$getMyReps = $db->prepare("SELECT members.MemberID, MForename, MSurname, Forename, Surname, SquadName FROM (((squadReps INNER JOIN squads ON squads.SquadID = squadReps.Squad) INNER JOIN users ON squadReps.User = users.UserID) INNER JOIN members ON members.SquadID = squads.SquadID) WHERE members.UserID = ? ORDER BY SquadFee DESC, SquadName ASC");
 $getMyReps->execute([
   $_SESSION['UserID']
 ]);
-$myReps = $getMyReps->fetch(PDO::FETCH_ASSOC);
+$myReps = $getMyReps->fetchAll(PDO::FETCH_GROUP);
 
 $getAllReps = $db->query("SELECT SquadID, Forename, Surname, SquadName FROM ((squadReps INNER JOIN squads ON squads.SquadID = squadReps.Squad) INNER JOIN users ON squadReps.User = users.UserID) ORDER BY SquadFee DESC, SquadName ASC");
 $allReps = $getAllReps->fetchAll(PDO::FETCH_GROUP);
@@ -25,7 +25,7 @@ include BASE_PATH . 'views/header.php';
         Squad reps are here to help
       </p>
 
-      <?php if ($myReps != null) { ?>
+      <?php if (sizeof($myReps) > 0) { ?>
       <h2>
         Your squad reps
       </h2>
@@ -34,14 +34,16 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <ul class="list-group mb-3">
-      <?php do { ?>
+      <?php foreach ($myReps as $swimmer) { ?>
         <li class="list-group-item">
-          <h3><?=htmlspecialchars($myReps['MForename'] . ' ' . $myReps['MSurname'])?> <small>(<?=htmlspecialchars($myReps['SquadName'])?> Squad)</small></h3>
-          <p class="lead mb-0">
-            <?=htmlspecialchars($myReps['Forename'] . ' ' . $myReps['Surname'])?> is your rep
-          </p>
+          <h3><?=htmlspecialchars($swimmer[0]['MForename'])?> <?=htmlspecialchars($swimmer[0]['MSurname'])?> <small><?=htmlspecialchars($swimmer[0]['SquadName'])?> squad</small><?php if (sizeof($squad) > 1) { ?>s<?php } ?></h3>
+          <ul class="list-unstyled">
+            <?php foreach ($swimmer as $reps) { ?>
+            <li><?=htmlspecialchars($reps['Forename'] . ' ' . $reps['Surname'])?></li>
+            <?php } ?>
+          </ul>
         </li>
-      <?php } while ($myReps = $getMyReps->fetch(PDO::FETCH_ASSOC)); ?>
+      <?php } ?>
       </ul>
       <?php } ?>
 
