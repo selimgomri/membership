@@ -37,7 +37,7 @@ include BASE_PATH . "views/header.php";
 
       <form method="post" action="<?=autoUrl("")?>" name="loginform" id="loginform" class="needs-validation" novalidate>
         <div class="form-group">
-          <label for="email-address">Email Address</label>
+          <label for="email-address">Email address</label>
           <input type="email" name="email-address" id="email-address" class="form-control form-control-lg text-lowercase" <?php if ($errorState) { ?> value="<?=htmlspecialchars($username)?>"<?php } ?> required <?php if (!$username) { ?>autofocus<?php } ?> placeholder="yourname@example.com" autocomplete="email">
           <div class="invalid-feedback">
             Please enter a valid email address.

@@ -8,13 +8,17 @@ try {
 
   $systemInfo->setSystemOption('ClubFeeUpgradeType', $_POST['upgrade']);
 
-  if ($feeType == 'Family/Individual') {
-    $family = true;
-    $systemInfo->setSystemOption('ClubFeeIndividual', (int) ($_POST['indv']*100));
-    $systemInfo->setSystemOption('ClubFeeFamily', (int) ($_POST['fam']*100));
-  } else if ($feeType == 'PerMember') {
-  } else if ($feeType == 'MonthlyPrecept') {
-  } else if ($feeType == 'MonthlyPreceptFamily') {
+  if ($feeType == 'NSwimmers') {
+    $feesArray = json_decode($systemInfo->getSystemOption('ClubFeeNSwimmers'), true);
+    $updatedFees = [];
+    for ($i = 0; $i < sizeof($feesArray)+1; $i++) {
+      if (isset($_POST[$i+1 . '-swimmers']) && (int) ($_POST[$i+1 . '-swimmers']*100) > 0) {
+        $updatedFees[] = (int) ($_POST[$i+1 . '-swimmers']*100);
+      } else {
+        break;
+      }
+    }
+    $systemInfo->setSystemOption('ClubFeeNSwimmers', json_encode($updatedFees));
   }
   $_SESSION['Update-Success'] = true;
 } catch (Exception $e) {

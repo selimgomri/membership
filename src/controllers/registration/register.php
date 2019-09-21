@@ -69,13 +69,13 @@ $_SESSION['RegistrationMode'] = $mode;
       } ?>
 
       <div class="row">
-        <div class="col-md-8 col-lg-6">
+        <div class="col-md-10 col-lg-8">
           <div class="alert alert-warning">
             <p class="mb-0">
               <strong>Stop. Are you a new parent?</strong>
             </p>
             <p>
-              We'll be sending you an email in the next few days with instructions on how to get your account set up. Your swimmers will already be connected to your new account when you receive it.
+              We'll be sending you an email in the next few days. This will include a personalised link to set up your account.
             </p>
             
             <p class="mb-0">
@@ -89,7 +89,7 @@ $_SESSION['RegistrationMode'] = $mode;
 
         <h2>About you</h2>
         <div class="row">
-          <div class="col-md-8 col-lg-6">
+          <div class="col-md-10 col-lg-8">
 
             <div class="form-row">
 
@@ -136,7 +136,7 @@ $_SESSION['RegistrationMode'] = $mode;
           </div>
         </div>
         <div class="row">
-          <div class="col-md-8 col-lg-6">
+          <div class="col-md-10 col-lg-8">
             <div class="form-group">
               <label for="mobile">Mobile Number</label>
               <input class="form-control" type="tel" pattern="\+{0,1}[0-9]*" name="mobile" id="mobile" placeholder="01234 567890" required value="<?=htmlspecialchars($_SESSION['RegistrationMobile'])?>" autocomplete="tel">
@@ -150,7 +150,7 @@ $_SESSION['RegistrationMode'] = $mode;
 
         <!--<h2>Password</h2>-->
         <div class="row">
-          <div class="col-md-8 col-lg-6">
+          <div class="col-md-10 col-lg-8">
             <div class="form-row">
               <div class="col">
                 <div class="form-group">
@@ -192,7 +192,7 @@ $_SESSION['RegistrationMode'] = $mode;
         } ?>
 
         <div class="row">
-          <div class="col-md-8 col-lg-6">
+          <div class="col-md-10 col-lg-8">
             <div class="form-group">
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input"
@@ -219,27 +219,28 @@ $_SESSION['RegistrationMode'] = $mode;
               account from time to time.
             </p>
 
-          </div>
-        </div>
+            <div class="cell">
+              <p class="mb-0"><strong>Legal Stuff Applies</strong></p>
+              <?php if ($privacyPolicy != null) { ?>
+              <?=$Extra->text($privacyPolicy)?>
+              <?php } else { ?>
+              <p>
+                In accordance with European Law, <?=htmlspecialchars(env('CLUB_NAME'))?>, Swim England and British Swimming are Data Controllers for the purposes of the General Data Protection Regulation.
+              </p>
+              <p>
+                By proceeding you agree to our <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy (this is an example policy)</a> and the use of your data by <?=htmlspecialchars(env('CLUB_NAME'))?>. Please note that you have also agreed to our use of you and your swimmer's data as part of your registration with the club and with British Swimming and Swim England (Formerly known as the ASA).
+              </p>
+              <p>
+                We will be unable to provide this service for technical reasons if you do not consent to the use of this data.
+              </p>
+              <p class="mb-0">
+                Contact a member of your committee if you have any questions or email <a href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>.
+              </p>
+              <?php } ?>
+            </div>
 
-        <div class="cell">
-          <p class="mb-0"><strong>Legal Stuff Applies</strong></p>
-          <?php if ($privacyPolicy != null) { ?>
-          <?=$Extra->text($privacyPolicy)?>
-          <?php } else { ?>
-          <p>
-            In accordance with European Law, <?=htmlspecialchars(env('CLUB_NAME'))?>, Swim England and British Swimming are Data Controllers for the purposes of the General Data Protection Regulation.
-          </p>
-          <p>
-            By proceeding you agree to our <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy (this is an example policy)</a> and the use of your data by <?=htmlspecialchars(env('CLUB_NAME'))?>. Please note that you have also agreed to our use of you and your swimmer's data as part of your registration with the club and with British Swimming and Swim England (Formerly known as the ASA).
-          </p>
-          <p>
-            We will be unable to provide this service for technical reasons if you do not consent to the use of this data.
-          </p>
-          <p class="mb-0">
-            Contact a member of your committee if you have any questions or email <a href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>.
-          </p>
-          <?php } ?>
+          </div>
+
         </div>
         <?=SCDS\CSRF::write()?>
         <input type="submit" class="btn btn-primary btn-lg" value="Register">

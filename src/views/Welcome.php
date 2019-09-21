@@ -16,12 +16,10 @@ include BASE_PATH . "views/header.php";
 
       <h1>Welcome to the <?=htmlspecialchars(env('CLUB_NAME'))?> Membership System</h1>
       <p class="lead mb-5">
-        The <?=htmlspecialchars(env('CLUB_NAME'))?> Online Membership System allows you to manage your
-        swimmers, enter competitions, stay up to date by email and make payments
-        by Direct Debit.
+        The <?=htmlspecialchars(env('CLUB_NAME'))?> Online Membership System allows you to manage your swimmers, enter competitions, stay up to date by email and make payments by Direct Debit.
       </p>
 
-      <h2>Already Registered?</h2>
+      <h2>Already registered?</h2>
       <p class="lead">
         Log in to your account now
       </p>
@@ -47,5 +45,3 @@ include BASE_PATH . "views/header.php";
 <?php
 
 include BASE_PATH . "views/footer.php";
-
-?>

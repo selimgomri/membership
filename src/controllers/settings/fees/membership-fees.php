@@ -5,7 +5,7 @@ global $systemInfo;
 
 $fluidContainer = true;
 
-$systemInfo->setSystemOption('ClubFeesType', 'Family/Individual');
+$systemInfo->setSystemOption('ClubFeesType', 'NSwimmers');
 
 $feeType = $systemInfo->getSystemOption('ClubFeesType');
 
@@ -17,19 +17,8 @@ $monthlyPrecept = false;
 
 $feesArray = [];
 
-if ($feeType == 'Family/Individual') {
-  $family = true;
-  $feesArray['Individual'] = $systemInfo->getSystemOption('ClubFeeIndividual');
-  $feesArray['Family'] = $systemInfo->getSystemOption('ClubFeeFamily');
-} else if ($feeType == 'PerMember') {
-  $perMember = true;
-  $feesArray['Individual'] = $systemInfo->getSystemOption('ClubFeeIndividual');
-} else if ($feeType == 'MonthlyPrecept') {
-  $monthlyPrecept = true;
-  $feesArray['Precept'] = $systemInfo->getSystemOption('ClubFeeIndividual');
-} else if ($feeType == 'MonthlyPreceptFamily') {
-  $monthlyFamilyPrecept = true;
-  $feesArray['Precept'] = $systemInfo->getSystemOption('ClubFeeFamily');
+if ($feeType == 'NSwimmers') {
+  $feesArray = json_decode($systemInfo->getSystemOption('ClubFeeNSwimmers'), true);
 }
 
 $pagetitle = "Club Membership Fee Options";
@@ -61,7 +50,9 @@ include BASE_PATH . 'views/header.php';
 
         <form method="post">
 
-          <p>When a new member is added to an existing account, how should the club membershio fee be handled? You can choose to charge nothing, charge the difference between the amount previously paid for x members and the amount with new members or charge the full membership fee.</p>
+          <h2>Upgrade settings</h2>
+
+          <p>When a new member is added to an existing account, how should the club membership fee be handled? You can choose to charge nothing, charge the difference between the amount previously paid for x members and the amount with new members or charge the full membership fee.</p>
           <div class="form-group">
             <label for="upgrade">Upgrade setings</label>
             <div class="custom-control custom-radio">
@@ -78,25 +69,30 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
 
+          <h2>Fees</h2>
+
+          <?php $i = 0; ?>
+          <?php for ($i = 0; $i < sizeof($feesArray); $i++) { ?>
           <div class="form-group">
-            <label for="indv">Individual Fee</label>
+          <label for="<?=$i+1?>-swimmers">Swimmer <?=$i+1?><?php if ($i == sizeof($feesArray)-1) { ?> or more<?php } ?></label>
             <div class="input-group mono">
               <div class="input-group-prepend">
                 <span class="input-group-text">&pound;</span>
               </div>
-              <input type="number" class="form-control" id="indv" name="indv" placeholder="Enter amount" min="0"
-                step="0.01" value="<?=number_format($feesArray['Individual']/100, 2, '.', '')?>">
+              <input type="number" class="form-control" id="<?=$i+1?>-swimmers" name="<?=$i+1?>-swimmers" placeholder="Enter amount" min="0"
+                step="0.01" value="<?=number_format($feesArray[$i]/100, 2, '.', '')?>">
             </div>
           </div>
+          <?php } ?>
 
           <div class="form-group">
-            <label for="fam">Family Fee</label>
+          <label for="<?=$i+1?>-swimmers">Add fee for <?=$i+1?> or more swimmers</label>
             <div class="input-group mono">
               <div class="input-group-prepend">
                 <span class="input-group-text">&pound;</span>
               </div>
-              <input type="number" class="form-control" id="fam" name="fam" placeholder="Enter amount" min="0"
-                step="0.01" value="<?=number_format($feesArray['Family']/100, 2, '.', '')?>">
+              <input type="number" class="form-control" id="<?=$i+1?>-swimmers" name="<?=$i+1?>-swimmers" placeholder="Enter amount" min="0"
+                step="0.01" value="">
             </div>
           </div>
 

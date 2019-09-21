@@ -7,7 +7,7 @@ function createDiv(){
     var bodytag = document.getElementsByTagName('body')[0];
     var div = document.createElement('div');
     div.setAttribute('id','cookie-law');
-    div.innerHTML = '<div class="container"><p>We use cookies for accounts, user tracking and third party social media content. By continuing we assume your permission to use cookies, as detailed in our <a class="alert-link" href="https://www.chesterlestreetasc.co.uk/policies/cookies/" rel="nofollow" title="Cookie Policy">cookie policy</a>.</p><a class="alert-link" href="javascript:void(0);" onclick="removeMe();">Continue</a></div>';
+    div.innerHTML = '<div class="container"><p>We use cookies for accounts, user tracking and third party social media content. By continuing we assume your permission to use cookies, as detailed in our cookie policy.</p><a class="alert-link" href="javascript:void(0);" onclick="removeMe();">Continue</a></div>';
  // Be advised the Close Banner 'X' link requires jQuery
 
     // bodytag.appendChild(div); // Adds the Cookie Law Banner just before the closing </body> tag
