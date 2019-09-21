@@ -34,7 +34,6 @@ class NSwimmers extends ClubMembership {
     $this->upgrade = $upgrade;
 
     $counts = $this->getSwimmers($db, $user);
-    pre($counts);
     $countReg = $counts['RRCount'];
     $count = $counts['RCount'];
     $totalMembers = $counts['Total'];
@@ -65,13 +64,13 @@ class NSwimmers extends ClubMembership {
     }
 
     if ($this->upgradeType == 'FullFee' || !$this->upgrade) {
-      $this->total = $fullAmount;
+      $this->total = (int) $fullAmount;
       $this->items[] = [
         'description' => 'Club membership (' . $numMemStr . ')',
         'amount' => $this->total
       ];
     } else if ($this->upgradeType == 'TopUp') {
-      $this->total = max([0, $fullAmount - $paidAmount]);
+      $this->total = (int) max([0, $fullAmount - $paidAmount]);
       $this->items[] = [
         'description' => 'Club membership (' . $numMemStr . ' (top up fee))',
         'amount' => $this->total
