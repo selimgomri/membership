@@ -28,8 +28,8 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 	if ($asaNumber == "" || $asaNumber == null) {
 		$getASA = true;
 	}
-	$cat = $_POST['cat'];
-	if ($cat != 1 && $cat != 2 && $cat != 3) {
+	$cat = (int) $_POST['cat'];
+	if ($cat != 0 && $cat != 1 && $cat != 2 && $cat != 3) {
 		halt(500);
 	}
 	

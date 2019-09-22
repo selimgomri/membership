@@ -58,6 +58,7 @@ $content .= "
 <div class=\"form-group\">
 	<label for=\"squad\">Swim England Membership Category</label>
 	<select class=\"custom-select\" placeholder=\"Select a Category\" id=\"cat\" name=\"cat\">
+		<option value=\"0\">Not a Swim England Member</option>
 		<option value=\"1\">Category 1</option>
 		<option value=\"2\" selected>Category 2</option>
 		<option value=\"3\">Category 3</option>

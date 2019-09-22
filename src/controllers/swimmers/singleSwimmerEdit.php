@@ -138,7 +138,7 @@ if (!empty($_POST['sex'])) {
 }
 if (isset($_POST['cat'])) {
 	$newCat = trim($_POST['cat']);
-	if ($newCat != $cat && ($newCat == 1 || $newCat == 2 || $newCat == 3)) {
+	if ($newCat != $cat && ($newCat == 0 || $newCat == 1 || $newCat == 2 || $newCat == 3)) {
 		$updateSwimmer = $db->prepare("UPDATE `members` SET `ASACategory` = ? WHERE `MemberID` = ?");
 		$updateSwimmer->execute([$newCat, $id]);
 		$catUpdate = true;
@@ -232,12 +232,13 @@ $content .= "
 	<label for=\"asa\">Swim England Registration Number</label>
 	<input type=\"test\" class=\"form-control\" id=\"asa\" name=\"asa\" placeholder=\"Swim England Registration Numer\" value=\"" . htmlspecialchars($rowSwim['ASANumber']) . "\">
 </div>";
-$cat = [];
+$cat = ['', '', '', ''];
 $cat[$rowSwim['ASACategory']] = " selected ";
 $content .= "
 <div class=\"form-group\">
 	<label for=\"cat\">Swim England Membership Category</label>
 	<select class=\"custom-select\" id=\"cat\" name=\"cat\" placeholder=\"Select\">
+		<option value=\"0\" " . $cat[0] . ">Not a Swim England Member</option>
 		<option value=\"1\" " . $cat[1] . ">Category 1</option>
 		<option value=\"2\" " . $cat[2] . ">Category 2</option>
 		<option value=\"3\" " . $cat[3] . ">Category 3</option>

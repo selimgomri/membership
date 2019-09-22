@@ -75,6 +75,11 @@ catch (PhoneNumberParseException $e) {
   $number = false;
 }
 
+$accessLevel = 'Team Manager';
+if ($info['AccessLevel'] != 'Committee') {
+  $accessLevel = $info['AccessLevel'];
+}
+
 $pagetitle = htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) . " Information";
 $title = null;
 include BASE_PATH . "views/header.php";
@@ -90,7 +95,7 @@ include BASE_PATH . "views/header.php";
 
   <h1>
     <?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?>
-    <small><?=htmlspecialchars($info['AccessLevel'])?></small>
+    <small><?=htmlspecialchars($accessLevel)?></small>
   </h1>
 
   <div class="mb-4">

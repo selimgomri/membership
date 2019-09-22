@@ -47,7 +47,7 @@ if ($user != null) { ?>
   <a href="<?=autoUrl("users/" . $user['UserID'])?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
     <?=htmlspecialchars($user['Forename'] . " " . $user['Surname'])?>
     <span class="badge badge-primary badge-pill">
-      <?=htmlspecialchars($user['AccessLevel'])?>
+      <?php if ($user['AccessLevel'] == 'Committee') { ?>Team Manager<?php } else { ?><?=htmlspecialchars($user['AccessLevel'])?><?php } ?>
     </span>
   </a>
   <?php } while ($user = $users->fetch(PDO::FETCH_ASSOC)); ?>
