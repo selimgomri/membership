@@ -95,7 +95,7 @@ if ($sql->fetchColumn() == 1) {
 	$hasDD = true;
 }
 
-if ($hasDD || !env('GOCARDLESS_ACCESS_TOKEN')) {
+if ($hasDD || !(env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN'))) {
 	if ($hasDD) {
 		// INSERT Payment into pending
 		$date = new \DateTime('now', new DateTimeZone('UTC'));

@@ -202,6 +202,23 @@ include BASE_PATH . "views/header.php";
       </a>
     </p>
   </div>
+
+  <?php if ((env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) && !userHasMandates($id)) { ?>
+  <div class="mb-4">
+    <h2>
+      Direct debit mandate settings
+    </h2>
+    <p class="lead">
+      Authorise a direct debit opt out for this parent
+    </p>
+
+    <p>
+      <a href="<?=autoUrl("users/" . $id . "/authorise-direct-debit-opt-out")?>" class="btn btn-primary">
+        Authorise opt out <span class="fa fa-chevron-right"></span>
+      </a>
+    </p>
+  </div>
+  <?php } ?>
   <?php } ?>
 
   <div class="mb-4">
