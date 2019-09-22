@@ -27,6 +27,14 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 		include 'user.php';
 	});
 
+	$this->get('/{id}:int/authorise-direct-debit-opt-out', function($person) {
+		include 'direct-debit/OptOutInfo.php';
+	});
+
+	$this->post('/{id}:int/authorise-direct-debit-opt-out', function($person) {
+		include 'direct-debit/OptOutPost.php';
+	});
+
   $this->get('/{id}:int/qualifications', function($person) {
 		include BASE_PATH . 'controllers/qualifications/MyQualifications.php';
 	});
