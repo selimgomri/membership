@@ -37,8 +37,7 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
       <h1>Hello " . htmlspecialchars($oldUser['Forename']) . "</h1>
       <p>Your swimmer, " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " has been removed
       from your account.</p>
-      <p>If this was not you, contact <a href=\"mailto:support@chesterlestreetasc.co.uk\">
-      support@chesterlestreetasc.co.uk</a> as soon as possible</p>";
+      <p>If this was not you, contact <a href=\"mailto:" . htmlspecialchars(env('CLUB_EMAIL')) . "\">" . htmlspecialchars(env('CLUB_EMAIL')) . "</a> as soon as possible</p>";
       notifySend("", "Swimmer removed from your account", $message,
       $oldUser['Forename'] . " " . $oldUser['Surname'],
       $oldUser['EmailAddress']);

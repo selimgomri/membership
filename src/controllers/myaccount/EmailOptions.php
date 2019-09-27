@@ -99,11 +99,6 @@ include BASE_PATH . "views/header.php";
     				address will change to
     				<?=htmlentities($_SESSION['EmailUpdateNew'])?></strong>
     			</p>
-    			<p class="mb-0">
-    				If you need help, contact <a
-    				href="mailto:support@chesterlestreetasc.co.uk"
-    				class="alert-link">support@chesterlestreetasc.co.uk</a>
-    			</p>
     		</div>
     	<?php } ?>
 
@@ -113,11 +108,6 @@ include BASE_PATH . "views/header.php";
     			<p class="mb-0">
     				<strong>We've deleted that CC</strong>
     			</p>
-    			<p class="mb-0">
-    				If you need help, contact <a
-    				href="mailto:support@chesterlestreetasc.co.uk"
-    				class="alert-link">support@chesterlestreetasc.co.uk</a>
-    			</p>
     		</div>
     	<?php } ?>
 
@@ -126,11 +116,6 @@ include BASE_PATH . "views/header.php";
     		<div class="alert alert-success">
     			<p class="mb-0">
     				<strong>We've added a new Carbon Copy Email</strong>
-    			</p>
-    			<p class="mb-0">
-    				If you need help, contact <a
-    				href="mailto:support@chesterlestreetasc.co.uk"
-    				class="alert-link">support@chesterlestreetasc.co.uk</a>
     			</p>
     		</div>
     	<?php } ?>

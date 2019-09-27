@@ -50,9 +50,9 @@ if (strpos($curUserInfo['EmailAddress'], '@chesterlestreetasc.co.uk') == mb_strl
     $myEmail => $myName
   ];
 } else {
-  $myEmail = mb_strtolower($curUserInfo['Forename'] . '.' . $curUserInfo['Surname'] . ".volunteer-noreply@" . EMAIL_DOMAIN);
+  $myEmail = mb_strtolower($curUserInfo['Forename'] . '.' . $curUserInfo['Surname'] . ".volunteer-noreply@" . env('EMAIL_DOMAIN'));
   $canReply = "As you don't have a club email address, we can't allow parents to directly reply to you. If parents reply, their email will go to our enquiries team, who can forward it on to you.";
-  $reply = "enquiries+replyto-" . mb_strtolower($curUserInfo['Forename'] . '-' . $curUserInfo['Surname']) . "@" . EMAIL_DOMAIN;
+  $reply = "enquiries+replyto-" . mb_strtolower($curUserInfo['Forename'] . '-' . $curUserInfo['Surname']) . "@" . env('EMAIL_DOMAIN');
   $message .= '<p class="small text-muted">This message was sent by ' . $myName . ', a volunteer at our club who does not have a club email address. In order to comply with the General Data Protection Regulation, we cannot provide you with the details to reply directly to their personal email address. If you reply to this email, it will go to our Enquiries Team who can pass your message on to ' . $myName . '.</p>';
 
   $bcc = [
@@ -61,8 +61,8 @@ if (strpos($curUserInfo['EmailAddress'], '@chesterlestreetasc.co.uk') == mb_strl
 }
 
 if ($_POST['from'] == 'club-sending-account') {
-  $myEmail = "noreply@" . EMAIL_DOMAIN;
-  $myName = CLUB_NAME;
+  $myEmail = "noreply@" . env('EMAIL_DOMAIN');
+  $myName = env('CLUB_NAME');
 }
 
 $subject = $_POST['subject'];

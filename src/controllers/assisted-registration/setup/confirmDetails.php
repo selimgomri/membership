@@ -167,9 +167,9 @@ include BASE_PATH . 'views/header.php';
             you do not consent to the use of this data.
           </p>
           <p class="mb-0">
-            Contact a member of your committee if you have any questions or email
-            <a
-            href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>.
+            Contact a member of your committee if you have any questions or email <?php if (bool(env('IS_CLS'))) { ?><a
+            href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a><?php } else { ?><a
+            href="mailto:<?=htmlspecialchars(env('CLUB_EMAIL'))?>"><?=htmlspecialchars(env('CLUB_EMAIL'))?></a><?php } ?>.          
           </p>
           <?php } ?>
         </div>

@@ -151,7 +151,7 @@ if ($_POST['from'] == "current-user") {
     $fromEmail .= '.' . urlencode(strtolower(str_replace(' ', '', CLUB_CODE)));
   }
 
-  $fromEmail .= '@' . EMAIL_DOMAIN;
+  $fromEmail .= '@' . env('EMAIL_DOMAIN');
 
   $recipientGroups["NamedSender"] = [
     "Email" => $fromEmail,

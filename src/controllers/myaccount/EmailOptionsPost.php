@@ -69,9 +69,9 @@ if ($_POST['EmailAddress'] != $row['EmailAddress']) {
 	  <p>You will need to use your email address, ' . $email . ' to sign in.</p>
 	  <p>If you did not make a change to your email address, please ignore this email and consider reseting your password.</p>
 	  <p>For help, send an email to <a
-	  href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>/</p>
+	  href="mailto:' . htmlspecialchars(env('CLUB_EMAIL')) . '">' . htmlspecialchars(env('CLUB_EMAIL')) . '</a>/</p>
 	  ';
-	  notifySend($to, $subject, $sContent, $name, $_POST['EmailAddress'], ["Email" => "support@chesterlestreetasc.co.uk", "Name" => env('CLUB_NAME') . " Security"]);
+	  notifySend($to, $subject, $sContent, $name, $_POST['EmailAddress'], ["Email" => "support@" . env('EMAIL_DOMAIN'), "Name" => env('CLUB_NAME') . " Security"]);
 		$_SESSION['EmailUpdate'] = true;
 		$_SESSION['EmailUpdateNew'] = $_POST['EmailAddress'];
 	} else {

@@ -102,7 +102,7 @@ include BASE_PATH . "views/header.php";
 
       <p class="small mb-4">
         Support Website: <a class=""
-        href="https://www.chesterlestreetasc.co.uk/support/onlinemembership">SCDS Help and Support (hosted by <a href="https://www.chesterlestreetasc.co.uk" target="_blank">CLS ASC</a>)</a>
+        href="https://www.chesterlestreetasc.co.uk/support/onlinemembership">SCDS Help and Support (hosted by CLS ASC)</a>
       </p>
       <?php } ?>
 
