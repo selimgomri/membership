@@ -9,7 +9,7 @@ return array(
     'libphonenumber\\' => array($vendorDir . '/giggsey/libphonenumber-for-php/src'),
     'Zxing\\' => array($vendorDir . '/khanamiryan/qrcode-detector-decoder/lib'),
     'WhichBrowser\\' => array($vendorDir . '/whichbrowser/parser/src', $vendorDir . '/whichbrowser/parser/tests/src'),
-    'Twilio\\' => array($vendorDir . '/twilio/sdk/Twilio'),
+    'Twilio\\' => array($vendorDir . '/twilio/sdk/src/Twilio'),
     'System\\Support\\' => array($vendorDir . '/nezamy/support'),
     'System\\' => array($vendorDir . '/nezamy/route/system'),
     'Symfony\\Polyfill\\Util\\' => array($vendorDir . '/symfony/polyfill-util'),

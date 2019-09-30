@@ -74,8 +74,9 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
     }
   }
 
-  $getGalaInformation = $db->prepare("SELECT GalaFee, GalaFeeConstant, GalaName, HyTek FROM galas WHERE GalaID = ? AND NOT CoachEnters");
-  $getGalaInformation->execute([$_POST['gala']]);
+  $now = new DateTime('now', new DateTimeZone('Europe/London'));
+  $getGalaInformation = $db->prepare("SELECT GalaFee, GalaFeeConstant, GalaName, HyTek FROM galas WHERE GalaID = ? AND NOT CoachEnters AND ClosingDate >= ?");
+  $getGalaInformation->execute([$_POST['gala'], $now->format('Y-m-d')]);
   $row = $getGalaInformation->fetch(PDO::FETCH_ASSOC);
 
   if ($row == null) {

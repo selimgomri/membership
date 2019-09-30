@@ -819,17 +819,17 @@
     },
     {
         "name": "giggsey/libphonenumber-for-php",
-        "version": "8.10.18",
-        "version_normalized": "8.10.18.0",
+        "version": "8.10.19",
+        "version_normalized": "8.10.19.0",
         "source": {
             "type": "git",
             "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-            "reference": "348bac99347a005263f9ec2ed9daf1a511fc5a5f"
+            "reference": "b8f2341692df067028445fee35ca7144d009e251"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/348bac99347a005263f9ec2ed9daf1a511fc5a5f",
-            "reference": "348bac99347a005263f9ec2ed9daf1a511fc5a5f",
+            "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/b8f2341692df067028445fee35ca7144d009e251",
+            "reference": "b8f2341692df067028445fee35ca7144d009e251",
             "shasum": ""
         },
         "require": {
@@ -846,7 +846,7 @@
             "phpunit/phpunit": "^4.8.36|^5.0",
             "symfony/console": "^2.8|^3.0"
         },
-        "time": "2019-09-06T10:36:55+00:00",
+        "time": "2019-09-18T15:37:43+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -3186,17 +3186,17 @@
     },
     {
         "name": "twilio/sdk",
-        "version": "5.35.0",
-        "version_normalized": "5.35.0.0",
+        "version": "5.36.0",
+        "version_normalized": "5.36.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/twilio/twilio-php.git",
-            "reference": "a0e74651cdfba6dda780084e3dfc83002c0a71f2"
+            "reference": "ad4093a19762b76b1ec316ebdb6e0766539859ff"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/twilio/twilio-php/zipball/a0e74651cdfba6dda780084e3dfc83002c0a71f2",
-            "reference": "a0e74651cdfba6dda780084e3dfc83002c0a71f2",
+            "url": "https://api.github.com/repos/twilio/twilio-php/zipball/ad4093a19762b76b1ec316ebdb6e0766539859ff",
+            "reference": "ad4093a19762b76b1ec316ebdb6e0766539859ff",
             "shasum": ""
         },
         "require": {
@@ -3205,17 +3205,17 @@
         "require-dev": {
             "apigen/apigen": "^4.1",
             "guzzlehttp/guzzle": "^6.3",
-            "phpunit/phpunit": "4.5.*"
+            "phpunit/phpunit": "^7.5"
         },
         "suggest": {
             "guzzlehttp/guzzle": "An HTTP client to execute the API requests"
         },
-        "time": "2019-09-04T23:10:35+00:00",
+        "time": "2019-09-18T22:10:18+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Twilio\\": "Twilio/"
+                "Twilio\\": "src/Twilio/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",

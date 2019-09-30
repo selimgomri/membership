@@ -142,7 +142,7 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         ),
         'Twilio\\' => 
         array (
-            0 => __DIR__ . '/..' . '/twilio/sdk/Twilio',
+            0 => __DIR__ . '/..' . '/twilio/sdk/src/Twilio',
         ),
         'System\\Support\\' => 
         array (

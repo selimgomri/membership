@@ -25,7 +25,10 @@ if ($_SESSION['AccessLevel'] == 'Parent') {
   $mySwimmers->execute([$swimmer]);
 }
 
-$galas = $db->query("SELECT GalaID id, GalaName `name` FROM `galas` WHERE ClosingDate >= CURDATE() ORDER BY `galas`.`ClosingDate` ASC");
+$now = new DateTime('now', new DateTimeZone('Europe/London'));
+$nowDay = $now->format('Y-m-d');
+$galas = $db->prepare("SELECT GalaID id, GalaName `name` FROM `galas` WHERE ClosingDate >= ? ORDER BY `galas`.`ClosingDate` ASC");
+$galas->execute([$nowDay]);
 
 $mySwimmer = $mySwimmers->fetch(PDO::FETCH_ASSOC);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
@@ -38,8 +41,6 @@ if ($mySwimmer == null) {
 if ($gala == null) {
   $hasGalas = false;
 }
-
-$use_white_background = true;
 
 include BASE_PATH . "views/header.php";
 include "galaMenu.php";

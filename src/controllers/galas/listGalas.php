@@ -2,9 +2,13 @@
 
 $pagetitle = "Galas";
 
+$now = new DateTime('now', new DateTimeZone('Europe/London'));
+$nowDay = $now->format('Y-m-d');
+
 global $db;
 
-$galas = $db->query("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength FROM galas WHERE GalaDate >= CURDATE()");
+$galas = $db->prepare("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength FROM galas WHERE GalaDate >= ?");
+$galas->execute([$nowDay]);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
 
 // Arrays of swims used to check whever to print the name of the swim entered
@@ -167,7 +171,8 @@ include "galaMenu.php"; ?>
 					</div>
 
 					<?php
-					$sql = $db->query("SELECT DISTINCT `galas`.`GalaID`, `GalaName` FROM `galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID` WHERE `GalaDate` >= CURDATE() ORDER BY `GalaDate` ASC;");
+          $sql = $db->prepare("SELECT DISTINCT `galas`.`GalaID`, `GalaName` FROM `galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID` WHERE `GalaDate` >= ? ORDER BY `GalaDate` ASC;");
+          $sql->execute([$nowDay]);
 					$row = $sql->fetch(PDO::FETCH_ASSOC);
 					if ($row != null) {
 						?><ul class="list-unstyled mb-0"><?php
