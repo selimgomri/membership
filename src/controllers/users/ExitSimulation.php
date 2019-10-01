@@ -14,10 +14,11 @@ try {
 $info = $query->fetch(PDO::FETCH_ASSOC);
 
 if ($info == null) {
+	reportError('Info is null');
 	halt(404);
 }
 
-$_SESSION['UserSimulation'] = null;
+$_SESSION['UserSimulation'] = [];
 unset($_SESSION['UserSimulation']);
 
 $_SESSION = null;
