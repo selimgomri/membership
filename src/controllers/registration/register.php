@@ -242,13 +242,23 @@ $_SESSION['RegistrationMode'] = $mode;
           </div>
 
         </div>
+
+        <div class="g-recaptcha mb-3" data-sitekey="<?=htmlspecialchars(env('GOOGLE_RECAPTCHA_PUBLIC'))?>" data-callback="enableBtn"></div>
+
         <?=SCDS\CSRF::write()?>
-        <input type="submit" class="btn btn-primary btn-lg" value="Register">
+        <input type="submit" id="submit" class="btn btn-primary btn-lg" value="Register">
       </form>
       <?php } ?>
     </div>
   </div>
 </div>
+
+<script>
+function enableBtn(){
+  document.getElementById("submit").disabled = false;
+  }
+document.getElementById("submit").disabled = true;
+</script>
 
 <script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 
