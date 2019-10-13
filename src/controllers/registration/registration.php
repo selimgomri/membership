@@ -11,6 +11,25 @@ use Brick\PhoneNumber\PhoneNumberFormat;
 
 global $db;
 
+$captcha = trim($_POST['g-recaptcha-response']);
+$captchaStatus = null;
+
+#
+# Verify captcha
+$post_data = http_build_query([
+  'secret' => env('GOOGLE_RECAPTCHA_SECRET'),
+  'response' => $_POST['g-recaptcha-response'],
+  'remoteip' => $_SERVER['REMOTE_ADDR']
+]);
+$opts = array('http' => [
+  'method'  => 'POST',
+  'header'  => 'Content-type: application/x-www-form-urlencoded',
+  'content' => $post_data
+]);
+$context  = stream_context_create($opts);
+$response = file_get_contents('https://www.google.com/recaptcha/api/siteverify', false, $context);
+$result = json_decode($response);
+
 if ($_SESSION['RegistrationMode'] == "Family-Manual") {
   $sql = "SELECT * FROM `familyIdentifiers` WHERE `ID` = ? AND `ACS` = ?";
 
@@ -90,6 +109,13 @@ if ($password1 != $password2) {
   $status = false;
   $statusMessage .= "
   <li>Passwords do not match</li>
+  ";
+}
+
+if (!$result->success) {
+  $status = false;
+  $statusMessage .= "
+  <li>We couldn't verify you're a human</li>
   ";
 }
 
