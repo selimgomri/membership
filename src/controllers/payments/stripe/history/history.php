@@ -18,9 +18,9 @@ $url = 'payments/card-transactions?';
 
 $getCount = null;
 if ($_SESSION['AccessLevel'] == 'Admin' && isset($_GET['users']) && $_GET['users'] == 'all') {
-  $getCount = $db->query("SELECT COUNT(*) FROM stripePayments");
+  $getCount = $db->query("SELECT COUNT(*) FROM stripePayments WHERE Paid");
 } else {
-  $getCount = $db->prepare("SELECT COUNT(*) FROM stripePayments WHERE User = ?");
+  $getCount = $db->prepare("SELECT COUNT(*) FROM stripePayments WHERE User = ? AND Paid");
   $getCount->execute([$_SESSION['UserID']]);
 }
 $count = $getCount->fetchColumn();
@@ -32,12 +32,12 @@ if ($start > $count) {
 $payments = null;
 if ($_SESSION['AccessLevel'] == 'Admin' && isset($_GET['users']) && $_GET['users'] == 'all') {
   $url .= 'users=all&';
-  $payments = $db->prepare("SELECT stripePayments.ID, stripePayments.DateTime, stripePayMethods.Brand, stripePayMethods.Last4, stripePayments.Amount, users.Forename, users.Surname FROM ((stripePayments LEFT JOIN stripePayMethods ON stripePayments.Method = stripePayMethods.ID) LEFT JOIN users ON stripePayments.User = users.UserID) ORDER BY `DateTime` DESC LIMIT :offset, :num;");
+  $payments = $db->prepare("SELECT stripePayments.ID, stripePayments.DateTime, stripePayMethods.Brand, stripePayMethods.Last4, stripePayments.Amount, users.Forename, users.Surname FROM ((stripePayments LEFT JOIN stripePayMethods ON stripePayments.Method = stripePayMethods.ID) LEFT JOIN users ON stripePayments.User = users.UserID) WHERE Paid ORDER BY `DateTime` DESC LIMIT :offset, :num;");
   $payments->bindValue(':offset', $start, PDO::PARAM_INT); 
   $payments->bindValue(':num', 10, PDO::PARAM_INT); 
   $payments->execute();
 } else {
-  $payments = $db->prepare("SELECT stripePayments.ID, stripePayments.DateTime, stripePayMethods.Brand, stripePayMethods.Last4, stripePayments.Amount FROM stripePayments LEFT JOIN stripePayMethods ON stripePayments.Method = stripePayMethods.ID WHERE User = :user ORDER BY `DateTime` DESC LIMIT :offset, :num;");
+  $payments = $db->prepare("SELECT stripePayments.ID, stripePayments.DateTime, stripePayMethods.Brand, stripePayMethods.Last4, stripePayments.Amount FROM stripePayments LEFT JOIN stripePayMethods ON stripePayments.Method = stripePayMethods.ID WHERE User = :user AND Paid ORDER BY `DateTime` DESC LIMIT :offset, :num;");
   $payments->bindValue(':user', $_SESSION['UserID'], PDO::PARAM_INT);
   $payments->bindValue(':offset', $start, PDO::PARAM_INT); 
   $payments->bindValue(':num', 10, PDO::PARAM_INT); 

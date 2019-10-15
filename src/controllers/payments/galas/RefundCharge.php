@@ -12,7 +12,7 @@ if ($gala == null) {
 	halt(404);
 }
 
-$getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, Forename, Surname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, stripePayMethods.Brand, stripePayMethods.Last4, stripePayMethods.Funding FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? AND Charged = ? ORDER BY MForename ASC, MSurname ASC");
+$getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, Forename, Surname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, stripePayMethods.Brand, stripePayMethods.Last4, stripePayMethods.Funding, stripePayments.Paid StripePaid FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? AND Charged = ? ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id, '1']);
 $entry = $getEntries->fetch(PDO::FETCH_ASSOC);
 
@@ -133,7 +133,7 @@ include BASE_PATH . 'views/header.php';
 							</div>
 							<div class="col">
 								<div class="d-sm-none mb-3"></div>
-								<?php if ($entry['Intent'] != null) { ?>
+								<?php if ($entry['Intent'] != null && bool($entry['StripePaid'])) { ?>
 								<p>
 									<strong><i class="fa <?=htmlspecialchars(getCardFA($entry['Brand']))?>" aria-hidden="true"></i> <span class="sr-only"><?=htmlspecialchars(getCardBrand($entry['Brand']))?></span> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($entry['Last4'])?></strong>
 								</p>
@@ -159,7 +159,7 @@ include BASE_PATH . 'views/header.php';
 								<p>
 									The parent does not have a Direct Debit set up or has requested to pay by other means. Refund should be by cash, cheque or bank transfer.
 								</p>
-								<?php } else if ($entry['Intent'] != null && $amountRefundable > 0) { ?>
+								<?php } else if ($entry['Intent'] != null && $amountRefundable > 0 && bool($entry['StripePaid'])) { ?>
 								<p>
 									This entry will be refunded to <?=htmlspecialchars(getCardBrand($entry['Brand']))?> <span class="mono"><?=htmlspecialchars($entry['Last4'])?></span>.
 								</p>
@@ -174,7 +174,7 @@ include BASE_PATH . 'views/header.php';
 								$refundSource = '';
 								if ($hasNoDD && $entry['Intent'] == null) {
 									$refundSource = 'manual refund. No direct debit or payment card is available to issue an automatic refund';
-								} else if ($entry['Intent'] != null && $amountRefundable > 0) {
+								} else if ($entry['Intent'] != null && $amountRefundable > 0 && bool($entry['StripePaid'])) {
 									$refundSource = $entry['Forename'] . ' ' . $entry['Surname'] . '\'s ' . getCardBrand($entry['Brand']) . ' ' . $entry['Funding'] . ' card ending ' . $entry['Last4'];
 								} else if ($amountRefundable > 0) {
 									$refundSource = 'This gala will be credited to ' . $entry['Forename'] . ' ' . $entry['Surname'] . '\'s account and discounted from their next direct debit payment';

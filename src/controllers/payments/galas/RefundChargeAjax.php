@@ -58,7 +58,7 @@ try {
     throw new Exception('We could not find a gala with the provided id number');
   }
 
-  $getEntry = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, users.UserID FROM (((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) WHERE galaEntries.EntryID = ? AND Charged = ? AND EntryProcessed = ?");
+  $getEntry = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, users.UserID, stripePayments.Paid StripePaid FROM (((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) WHERE galaEntries.EntryID = ? AND Charged = ? AND EntryProcessed = ?");
   $getEntry->execute([$entry, '1', '1']);
 
   $entryData = $getEntry->fetch(PDO::FETCH_ASSOC);
@@ -93,7 +93,7 @@ try {
   $amountString = number_format(($refundAmount/100), 2);
   $totalString = number_format(($refundAmount + $entryData['AmountRefunded'])/100, 2);
 
-  if (!$hasNoDD && $entryData['Intent'] == null) {
+  if (!$hasNoDD && ($entryData['Intent'] == null || !bool($entry['StripePaid']))) {
     // Refund via direct debit bills
     $name = 'REJECTIONS REFUND ' . $entryData['MForename'] . ' ' . $entryData['MSurname'] . '\'s Gala Entry into ' . $gala['name'] .  ' (Entry #' . $entryData['EntryID'] . ')';
 
@@ -118,7 +118,7 @@ try {
       'Refund',
       $json
     ]);
-  } else if ($entryData['Intent'] != null && env('STRIPE')) {
+  } else if ($entryData['Intent'] != null && bool($entry['StripePaid']) && env('STRIPE')) {
     // Refund to card used
 
     try {
