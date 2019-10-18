@@ -111,7 +111,7 @@ include BASE_PATH . 'views/header.php';
 			<ul class="list-group mb-3" id="entries-list">
 				<?php do { ?>
 					<?php $hasNoDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut')); ?>
-					<?php $amountRefundable = ((int) $entry['FeeToPay']*100) - ($entry['AmountRefunded']); ?>
+					<?php $amountRefundable = ((int) ($entry['FeeToPay']*100)) - ($entry['AmountRefunded']); ?>
 				<?php if ($entry['Processed'] && $entry['Charged']) { $countChargeable++; } ?>
 				<?php $notReady = !$entry['Processed']; ?>
 				<li class="list-group-item <?php if ($notReady) { ?>list-group-item-danger<?php } ?>" id="refund-box-<?=htmlspecialchars($entry['EntryID'])?>">
