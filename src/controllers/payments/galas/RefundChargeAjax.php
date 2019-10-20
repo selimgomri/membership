@@ -93,7 +93,8 @@ try {
   $amountString = number_format(($refundAmount/100), 2);
   $totalString = number_format(($refundAmount + $entryData['AmountRefunded'])/100, 2);
 
-  if (!$hasNoDD && ($entryData['Intent'] == null || !bool($entry['StripePaid']))) {
+  if (!$hasNoDD && ($entryData['Intent'] == null || !bool($entryData['StripePaid']))) {
+
     // Refund via direct debit bills
     $name = 'REJECTIONS REFUND ' . $entryData['MForename'] . ' ' . $entryData['MSurname'] . '\'s Gala Entry into ' . $gala['name'] .  ' (Entry #' . $entryData['EntryID'] . ')';
 
@@ -118,7 +119,7 @@ try {
       'Refund',
       $json
     ]);
-  } else if ($entryData['Intent'] != null && bool($entry['StripePaid']) && env('STRIPE')) {
+  } else if ($entryData['Intent'] != null && bool($entryData['StripePaid']) && env('STRIPE')) {
     // Refund to card used
 
     try {
@@ -128,6 +129,7 @@ try {
         "charge" => $intent->charges->data[0]->id,
         "amount" => $refundAmount
       ]);
+      
     } catch(\Stripe\Exception\CardException $e) {
       // Since it's a decline, \Stripe\Exception\CardException will be caught
       throw new Exception($e->getStripeError()->message);
@@ -147,7 +149,6 @@ try {
     } catch (\Stripe\Exception\ApiErrorException $e) {
       // Display a very generic error to the user, and maybe send
       // yourself an email
-      reportError($e);
       throw new Exception($e->getStripeError()->message);
     } catch (Exception $e) {
       // Something else happened, completely unrelated to Stripe
@@ -188,10 +189,10 @@ try {
     $message .= '<p>Please note that this brings the total amount refunded for this gala to &pound;' . $totalString . '</p>';
   }
 
-  if ($entryData['MandateID'] != null && !getUserOption($entryData['user'], 'GalaDirectDebitOptOut') && $entryData['Intent'] == null) {
+  if ($entryData['MandateID'] != null && !getUserOption($entryData['user'], 'GalaDirectDebitOptOut') && ($entryData['Intent'] == null || !bool($entryData['StripePaid']))) {
     $message .= '<p>This refund has been applied as a credit to your club account. This means you will either;</p>';
     $message .= '<ul><li>If you have not paid the bill by direct debit for this gala yet, you will automatically charged the correct amount for ' . $gala['name'] . ' on your next bill as reductions will be applied automatically</li><li>If you have already paid the bill by direct debit for this gala, the credit applied to your account will give you a discount on next month\'s bill</li></ul>';
-  } else if ($entryData['Intent'] != null) {
+  } else if ($entryData['Intent'] != null && bool($entryData['StripePaid'])) {
     $message .= '<p>We\'ve refunded this payment to your original payment card.</p>';
   } else {
     $message .= '<p>As you don\'t pay your club fees by direct debit or have opted out of paying for galas by direct debit, you\'ll need to collect this refund from the treasurer or gala coordinator.</p>';
