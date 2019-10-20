@@ -124,7 +124,10 @@ try {
     try {
       \Stripe\Stripe::setApiKey(env('STRIPE'));
       $intent = \Stripe\PaymentIntent::retrieve($entryData['Intent']);
-      $intent->charges->data[0]->refund(['amount' => $refundAmount]);
+      $re = \Stripe\Refund::create([
+        "charge" => $intent->charges->data[0]->id,
+        "amount" => $refundAmount
+      ]);
     } catch(\Stripe\Exception\CardException $e) {
       // Since it's a decline, \Stripe\Exception\CardException will be caught
       throw new Exception($e->getStripeError()->message);
