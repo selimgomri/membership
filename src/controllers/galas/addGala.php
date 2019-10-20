@@ -10,6 +10,15 @@ $content .= "<div class=\"row\"><div class=\"col-md-10 col-lg-8\"><form method=\
   </div>
 </div>
 <div class=\"form-group row\">
+  <label for=\"description\" class=\"col-sm-2 col-form-label\">Description (optional)</label>
+  <div class=\"col-sm-10\">
+    <textarea class=\"form-control mono\" id=\"description\" name=\"description\" aria-describedby=\"descriptionHelp\"></textarea>
+    <small id=\"descriptionHelp\" class=\"form-text text-muted\">
+      A description is optional and will only be displayed if you enter something. Markdown is supported here.
+    </small>
+  </div>
+</div>
+<div class=\"form-group row\">
   <label for=\"length\" class=\"col-sm-2 col-form-label\">Course Length</label>
   <div class=\"col-sm-10\">
     <select class=\"custom-select\" name=\"length\" id=\"length\" required>

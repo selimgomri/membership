@@ -5,9 +5,13 @@ global $db;
 $hyTek = 0;
 
 $galaName = $courseLength = $galaVenue = $closingDate = $galaDate = $galaFeeConstant = $galaFee = $coachEnters = $approvalNeeded = 0;
+$description = "";
 
 if (!empty($_POST['galaname'])) {
   $galaName = trim($_POST['galaname']);
+}
+if (!empty($_POST['description'])) {
+  $description = trim($_POST['description']);
 }
 if (!empty($_POST['length'])) {
   $courseLength = $_POST['length'];
@@ -42,9 +46,10 @@ if ($galaFeeConstant == 0 || $galaFeeConstant == null) {
 }
 
 try {
-  $update  = $db->prepare("UPDATE `galas` SET  GalaName = ?, CourseLength = ?, GalaVenue = ?, ClosingDate = ?, GalaDate = ?, GalaFeeConstant = ?, GalaFee = ?, HyTek = ?, CoachEnters = ?, RequiresApproval = ? WHERE GalaID = ?");
+  $update  = $db->prepare("UPDATE `galas` SET  GalaName = ?, `Description` = ?, CourseLength = ?, GalaVenue = ?, ClosingDate = ?, GalaDate = ?, GalaFeeConstant = ?, GalaFee = ?, HyTek = ?, CoachEnters = ?, RequiresApproval = ? WHERE GalaID = ?");
   $update->execute([
     $galaName,
+    $description,
     $courseLength,
     $galaVenue,
     $closingDate,

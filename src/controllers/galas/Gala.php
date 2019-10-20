@@ -2,7 +2,7 @@
 
 global $db;
 
-$galas = $db->prepare("SELECT GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters, RequiresApproval FROM galas WHERE GalaID = ?");
+$galas = $db->prepare("SELECT GalaName, `Description`, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters, RequiresApproval FROM galas WHERE GalaID = ?");
 $galas->execute([$id]);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
 
@@ -100,6 +100,9 @@ foreach ($swimsArray as $col => $name) {
   $distanceCounts[$countEntries[$col]['Distance']] += $countEntries[$col]['Count'];
 }
 
+$markdown = new ParsedownForMembership();
+$markdown->setSafeMode(false);
+
 $pagetitle = htmlspecialchars($gala['GalaName']) . " - Galas";
 include BASE_PATH . "views/header.php";
 include "galaMenu.php";
@@ -137,6 +140,8 @@ include "galaMenu.php";
   <?php unset($_SESSION['GalaAddedSuccess']); } ?>
 
   <h2>About this gala</h2>
+
+  <?=$markdown->text($gala['Description'])?>
 
   <div class="row">
     <div class="col-sm-6 col-md-4">
@@ -231,9 +236,9 @@ include "galaMenu.php";
       Indicate availability
     </a>
   </p>
-  <?php } else if ($gala['CoachEnters'] && ($_SESSION['AccessLevel'] == 'Coach' || $_SESSION['AccessLevel'] == 'Galas' || $_SESSION['AccessLevel'] == 'Admin')) { ?>
+  <?php } else if ($_SESSION['AccessLevel'] == 'Coach' || $_SESSION['AccessLevel'] == 'Galas' || $_SESSION['AccessLevel'] == 'Admin') { ?>
   <h2>Manage sessions</h2>
-  <p class="lead">Add sessions to this gala so parents can indicate availability</p>
+  <p class="lead">Add sessions <?php if ($gala['CoachEnters']) { ?>to this gala so parents can indicate availability or <?php } ?>so that you can take registers</p>
   <p>
     <a href="<?=autoUrl("galas/" . $id . "/sessions")?>" class="btn btn-success">
       Manage sessions

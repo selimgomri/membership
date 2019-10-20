@@ -6,7 +6,7 @@ use Respect\Validation\Validator as v;
 $status = true;
 $statusInfo = "";
 
-$galaName = $length = $venue = $closingDate = $lastDate = $galaFee = $added = null;
+$galaName = $description = $length = $venue = $closingDate = $lastDate = $galaFee = $added = "";
 $added = false;
 $galaFeeConstant = $hyTek = 0;
 $content = "";
@@ -17,6 +17,10 @@ if (!empty($_POST['galaname'])) {
     $status = false;
     $statusInfo .= "<li>No gala name was provided</li>";
   }
+}
+
+if (!empty($_POST['description'])) {
+  $description = trim($_POST['description']);
 }
 
 if (!empty($_POST['length'])) {
@@ -82,9 +86,10 @@ if (isset($_POST['approvalNeeded']) && bool($_POST['approvalNeeded'])) {
 if ($status) {
   $id = null;
   try {
-    $query = $db->prepare("INSERT INTO `galas` (`GalaName`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`, `CoachEnters`, `RequiresApproval`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $query = $db->prepare("INSERT INTO `galas` (`GalaName`, `Description`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`, `CoachEnters`, `RequiresApproval`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $query->execute([
       $galaName,
+      $description,
       $length,
       $venue,
       $closingDate,
