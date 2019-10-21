@@ -56,12 +56,25 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
       $response .= 'We\'ve already processed your gala entry - You\'ll need to contact your gala administrator if you need to make any chnages.';
     }
     $response .= '</div>';
-  }
-  else {
 
-    $details = $db->prepare("SELECT `HyTek`, `GalaName`, `GalaFeeConstant` FROM galas WHERE GalaID = ?");
+  } else {
+
+    $details = $db->prepare("SELECT `HyTek`, `GalaName`, `Description`, `GalaFeeConstant` FROM galas WHERE GalaID = ?");
     $details->execute([$galaID]);
     $row = $details->fetch(PDO::FETCH_ASSOC);
+    
+    if ($row['Description'] || $row['HyTek']) {
+      $response .= "<h2>About this gala</h2>";
+
+      $markdown = new ParsedownForMembership();
+      $markdown->setSafeMode(false);
+
+      $response .= $markdown->text($row['Description']);
+
+      if (bool($row['HyTek'])) {
+        $response .= '<p>This is a HyTek gala. Once you\'ve selected your swims, you\'ll need to provide times for each event.</p>';
+      }
+    }
 
   	$swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];
   	$swimsTimeArray = ['50FreeTime','100FreeTime','200FreeTime','400FreeTime','800FreeTime','1500FreeTime','50BreastTime','100BreastTime','200BreastTime','50FlyTime','100FlyTime','200FlyTime','50BackTime','100BackTime','200BackTime','100IMTime','150IMTime','200IMTime','400IMTime',];
@@ -72,10 +85,6 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 		$response .= "<h2>Select Swims</h2>
 		<p>All swims possible under Swim England Rules are shown below. Not all of these
 		events may be available for " . $row['GalaName'] . "</p>";
-
-    if ($row['HyTek'] == 1) {
-      $response .= '<p>This is a HyTek gala. Once you\'ve selected your swims, you\'ll need to provide times for each event.</p>';
-    }
 
     $response .= "
 	  <div class=\"row mb-3\">
@@ -244,7 +253,7 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 	}
 
 	// Get gala info
-	$getGala = $db->prepare("SELECT GalaFeeConstant flatfee, GalaFee fee, HyTek, GalaName `name`, GalaVenue venue FROM galas WHERE GalaID = ?");
+	$getGala = $db->prepare("SELECT GalaFeeConstant flatfee, GalaFee fee, HyTek, `Description`, GalaName `name`, GalaVenue venue FROM galas WHERE GalaID = ?");
 	$getGala->execute([
 		$_GET["galaID"]
 	]);
@@ -268,6 +277,22 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 
 	// Output
 	?>
+
+    <?php if ($gala['Description'] || $gala['HyTek']) {
+      
+    $markdown = new ParsedownForMembership();
+    $markdown->setSafeMode(false); ?>
+
+    <h2>About this gala</h2>
+
+    <?=$markdown->text($gala['Description'])?>
+
+    <?php if (bool($gala['HyTek'])) { ?>
+    <p>This is a HyTek gala. Once your coach has selected your swims, you'll be sent an email asking you to provide times for each event.</p>
+    <?php } ?>
+    <?php } ?>
+
+
 		<h2>Select available sessions</h2>
 		<p class="lead">Select sessions which <?=htmlspecialchars($swimmer['fn'])?> will be able to swim at.</p>
 		<p>Your coaches will use this information when making suggested entries to this gala.</p>

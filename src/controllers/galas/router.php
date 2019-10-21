@@ -274,3 +274,11 @@ if ($_SESSION['AccessLevel'] == 'Parent') {
 		include 'indicate-openness/session-select-post.php';
 	});
 }
+
+$this->get('/{id}:int/registers', function($id) {
+	include 'attendance/Register.php';
+});
+
+$this->post('/{id}:int/registers', function($id) {
+	include 'attendance/RegisterPost.php';
+});
