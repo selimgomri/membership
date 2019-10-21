@@ -74,6 +74,9 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 }
 
 if ($_SESSION['AccessLevel'] == 'Admin') {
+	/**
+	 * PAGES FOR SETTING SQUAD REPS
+	 */
 	$this->get('/{id}:int/rep', function($id) {
 		include 'squad-reps/list.php';
 	});
@@ -88,5 +91,24 @@ if ($_SESSION['AccessLevel'] == 'Admin') {
 
 	$this->get('/{id}:int/rep/remove', function($id) {
 		include 'squad-reps/remove.php';
+	});
+
+	/**
+	 * PAGES FOR SETTING GALA TEAM MANAGERS
+	 */
+	$this->get('/{id}:int/team-manager', function($id) {
+		include 'team-managers/list.php';
+	});
+
+	$this->get('/{id}:int/team-manager/add', function($id) {
+		include 'team-managers/add.php';
+	});
+
+	$this->post('/{id}:int/team-manager/add', function($id) {
+		include 'team-managers/add-post.php';
+	});
+
+	$this->get('/{id}:int/team-manager/remove', function($id) {
+		include 'team-managers/remove.php';
 	});
 }

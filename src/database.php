@@ -1290,6 +1290,7 @@ function createOrUpdatePayout($payout, $update = false) {
 }
 
 include BASE_PATH . 'includes/security/Loader.php';
+include BASE_PATH . 'includes/security/CanView.php';
 include BASE_PATH . 'includes/ErrorReporting.php';
 include BASE_PATH . 'includes/Colours.php';
 include BASE_PATH . 'includes/stripe/HandleBalanceTransactionForFees.php';

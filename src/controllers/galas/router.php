@@ -11,24 +11,55 @@ $this->get(['/{id}:int/timesheet.csv', '/competitions/{id}:int/timesheet.csv'], 
   include "export/TimeSheet.php";
 });
 
+/**
+ * SQUAD REP URLS
+ */
 $this->get('/{id}:int/squad-rep-view', function($id) {
-	include 'squad-reps/info.php';
+	$rep = true; $tm = false;
+	include 'squad-reps-and-team-managers/info.php';
 });
 
 $this->get('/{id}:int/squad-rep-view.json', function($id) {
-	include 'squad-reps/infoOutput.json.php';
+	$rep = true; $tm = false;
+	include 'squad-reps-and-team-managers/infoOutput.json.php';
 });
 
 $this->get('/{id}:int/squad-rep-view.csv', function($id) {
-	include 'squad-reps/info.csv.php';
+	$rep = true; $tm = false;
+	include 'squad-reps-and-team-managers/info.csv.php';
 });
 
 $this->get('/{id}:int/squad-rep-view.pdf', function($id) {
-	include 'squad-reps/info.pdf.php';
+	$rep = true; $tm = false;
+	include 'squad-reps-and-team-managers/info.pdf.php';
 });
 
 $this->post('/squad-reps/entry-states', function() {
-	include 'squad-reps/handle-entry-state.php';
+	include 'squad-reps-and-team-managers/handle-entry-state.php';
+});
+
+/**
+ * TEAM MANAGER URLS
+ */
+
+$this->get('/{id}:int/team-manager', function($id) {
+	$rep = false; $tm = true;
+	include 'squad-reps-and-team-managers/team-manager-gala-page.php';
+});
+
+$this->get('/{id}:int/team-manager-view.json', function($id) {
+	$rep = false; $tm = true;
+	include 'squad-reps-and-team-managers/infoOutput.json.php';
+});
+
+$this->get('/{id}:int/team-manager-view.csv', function($id) {
+	$rep = false; $tm = true;
+	include 'squad-reps-and-team-managers/info.csv.php';
+});
+
+$this->get('/{id}:int/team-manager-view.pdf', function($id) {
+	$rep = false; $tm = true;
+	include 'squad-reps-and-team-managers/info.pdf.php';
 });
 
 $this->get('/ajax/entryForm', function() {

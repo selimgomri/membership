@@ -220,6 +220,21 @@ include BASE_PATH . "views/header.php";
       </a>
     </p>
   </div>
+
+  <div class="mb-4">
+    <h2>
+      Team manager settings
+    </h2>
+    <p class="lead">
+      Make this parent a team manager for a specific gala.
+    </p>
+
+    <p>
+      <a href="<?=autoUrl("users/" . $id . "/team-manager")?>" class="btn btn-primary">
+        Team manager settings <span class="fa fa-chevron-right"></span>
+      </a>
+    </p>
+  </div>
   <?php } ?>
 
   <div class="mb-4">
