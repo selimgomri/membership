@@ -23,6 +23,7 @@ include BASE_PATH . 'views/header.php';
 
 <div class="container-fluid">
 
+  <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>
@@ -30,6 +31,16 @@ include BASE_PATH . 'views/header.php';
       <li class="breadcrumb-item active" aria-current="page">Registers</li>
     </ol>
   </nav>
+  <?php } else { ?>
+  <nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("galas/" . $id)?>">This Gala</a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("galas/" . $id . "/team-manager")?>">TM Dashboard</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Registers</li>
+		</ol>
+	</nav>
+  <?php } ?>
 
   <div class="row">
     <div class="col-md-8">
@@ -56,10 +67,10 @@ include BASE_PATH . 'views/header.php';
   <div class="accordion" id="registerAccordion">
     <?php do { ?>
     <div class="card">
-      <div class="card-header" id="heading-<?=htmlspecialchars($session['ID'])?>">
+      <div class="card-header py-2" id="heading-<?=htmlspecialchars($session['ID'])?>">
         <h2 class="mb-0">
-          <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse-<?=htmlspecialchars($session['ID'])?>" aria-expanded="true" aria-controls="collapse-<?=htmlspecialchars($session['ID'])?>">
-            <?=htmlspecialchars($session['Name'])?>
+          <button class="btn btn-primary collapsed" type="button" data-toggle="collapse" data-target="#collapse-<?=htmlspecialchars($session['ID'])?>" aria-expanded="true" aria-controls="collapse-<?=htmlspecialchars($session['ID'])?>">
+            <?=htmlspecialchars($session['Name'])?> <i class="fa fa-chevron-down" aria-hidden="true"></i>
           </button>
         </h2>
       </div>
