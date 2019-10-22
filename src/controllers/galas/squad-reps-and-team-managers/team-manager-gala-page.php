@@ -53,7 +53,7 @@ include BASE_PATH . 'views/header.php';
         </span>
       </a>
 
-      <a href="<?=autoUrl("galas/" . $id . "/swimmers")?>" disabled class="disabled">
+      <a href="<?=autoUrl("galas/" . $id . "/swimmers")?>">
         <span class="mb-3">
           <span class="title mb-0">
             View swimmer details
@@ -67,7 +67,8 @@ include BASE_PATH . 'views/header.php';
         </span>
       </a>
 
-      <a href="<?=autoUrl("galas/" . $id . "/registers")?>" disabled class="disabled">
+      <!--
+      <a href="<?=autoUrl("galas/" . $id . "/registers")?>">
         <span class="mb-3">
           <span class="title mb-0">
             Take a register
@@ -80,6 +81,7 @@ include BASE_PATH . 'views/header.php';
           Attendance
         </span>
       </a>
+      -->
     </div>
   </div>
 </div>

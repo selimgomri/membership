@@ -15,9 +15,22 @@ if ($gala == null) {
 }
 
 // GET SWIMMER INFO
-$getSwimmers = $db->prepare("SELECT MForename fn, MSurname sn, SquadName squad, Website, Social, Noticeboard, FilmTraining, ProPhoto, Conditions, Allergies, Medication FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) LEFT JOIN memberMedical ON galaEntries.MemberID = memberMedical.MemberID) LEFT JOIN memberPhotography ON galaEntries.MemberID = memberPhotography.MemberID) INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE galaEntries.GalaID = ?");
+$getSwimmers = $db->prepare("SELECT MForename fn, MSurname sn, SquadName squad, Website, Social, Noticeboard, FilmTraining, ProPhoto, Conditions, Allergies, Medication, Mobile, Forename pfn, Surname psn, users.UserID FROM (((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) LEFT JOIN memberMedical ON galaEntries.MemberID = memberMedical.MemberID) LEFT JOIN memberPhotography ON galaEntries.MemberID = memberPhotography.MemberID) INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN users ON members.UserID = users.UserID) WHERE galaEntries.GalaID = ?");
 $getSwimmers->execute([$id]);
 $swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC);
+
+$markdown = new ParsedownExtra();
+
+use Brick\PhoneNumber\PhoneNumber;
+use Brick\PhoneNumber\PhoneNumberParseException;
+use Brick\PhoneNumber\PhoneNumberFormat;
+
+$mobile = null;
+try {
+  $mobile = PhoneNumber::parse(strval($swimmer['Mobile']));
+} catch (PhoneNumberParseException | Exception $e) {
+  // Do nothing we'll test for null later
+}
 
 $pagetitle = htmlspecialchars($gala['name']) . " Swimmer Information";
 
@@ -42,6 +55,11 @@ include BASE_PATH . 'views/header.php';
       <h1><?=htmlspecialchars($gala['name'])?> swimmer information</h1>
       <p class="lead">View swimmer medical information and emergency contact details</p>
 
+      <div class="alert alert-danger">
+        <p>You <strong>must not disclose data about any swimmers on this page</strong> to other people. If somebody needs access to this data, they will have been granted access to it via their own account.</p>
+        <p class="mb-0">You could be prosecuted for sharing the data shown on this page without authorisation.</p>
+      </div>
+
       <?php if ($swimmer == null) { ?>
 
       <?php } else { ?>
@@ -49,20 +67,86 @@ include BASE_PATH . 'views/header.php';
       <ul class="list-group">
         <?php $i = 0; do { ?>
         <li class="list-group-item <?php if ($i%2 == 1) { ?>bg-light<?php } ?>">
-          <h2><?=htmlspecialchars($swimmer['fn'] . " " . $swimmer['sn'])?></h2>
-          <p class="lead">
-            <?=htmlspecialchars($swimmer['squad'])?> Squad
-          </p>
-
-          <div class="row">
-            <div class="col-sm">
-              <h3>Medical information</h3>
-              <h4>Medical conditions</h4>
-              <h4>Allergies</h4>
-              <h4>Medication</h4>
+          <div class="row align-items-center">
+            <div class="col-md">
+              <h2><?=htmlspecialchars($swimmer['fn'] . " " . $swimmer['sn'])?></h2>
+              <p class="lead mb-0">
+                <?=htmlspecialchars($swimmer['squad'])?> Squad
+              </p>
+              <div class="d-md-none mb-3"></div>
             </div>
-            <div class="col-sm">
-              <h3>Emergency contacts</h3>
+            <div class="col text-md-right">
+              <a class="btn btn-primary" data-toggle="collapse" href="#swimmer-info-box-<?=$i?>" role="button" aria-expanded="false" aria-controls="swimmer-info-box-<?=$i?>">
+                Show information <i class="fa fa-chevron-down" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="collapse" id="swimmer-info-box-<?=$i?>">
+
+            <div class="d-md-block mb-3"></div>
+
+            <hr>
+
+            <div class="row w-100">
+              <div class="col-md">
+                <h3>Medical information</h3>
+
+                <h4>Medical conditions</h4>
+                <?php if ($swimmer['Conditions']) { ?>
+                <?= $markdown->text($swimmer['Conditions']) ?>
+                <?php } else { ?>
+                <p>None</p>
+                <?php } ?>
+
+                <h4>Allergies</h4>
+                <?php if ($swimmer['Allergies']) { ?>
+                <?= $markdown->text($swimmer['Allergies']) ?>
+                <?php } else { ?>
+                <p>None</p>
+                <?php } ?>
+
+                <h4>Medication</h4>
+                <?php if ($swimmer['Medication']) { ?>
+                <?= $markdown->text($swimmer['Medication']) ?>
+                <?php } else { ?>
+                <p>None</p>
+                <?php } ?>
+              </div>
+              <div class="col-md">
+              <?php
+                $contacts = new EmergencyContacts($db);
+                $contacts->byParent($swimmer['UserID']);
+                $contactsArray = $contacts->getContacts();
+              ?>
+                <h3>Emergency contacts</h3>
+                <?php if (sizeof($contactsArray) > 0 || $mobile != null) { ?>
+                <ul class="list-group">
+                  <li class="list-group-item">
+                      <p class="mb-0">
+                        <strong><?=htmlspecialchars($swimmer['pfn'] . " " . $swimmer['psn'])?></strong>
+                      </p>
+                      <p class="mb-0">
+                        <a href="<?=htmlspecialchars($mobile->format(PhoneNumberFormat::RFC3966))?>">
+                          <?=htmlspecialchars($mobile->format(PhoneNumberFormat::NATIONAL))?>
+                        </a>
+                      </p>
+                    </li>
+                  <?php for ($i = 0; $i < sizeof($contactsArray); $i++) { ?>
+                    <li class="list-group-item">
+                      <p class="mb-0">
+                        <strong><?=htmlspecialchars($contactsArray[$i]->getName())?></strong>
+                      </p>
+                      <p class="mb-0">
+                        <a href="<?=htmlspecialchars($contactsArray[$i]->getRFCContactNumber())?>">
+                          <?=htmlspecialchars($contactsArray[$i]->getNationalContactNumber())?>
+                        </a>
+                      </p>
+                    </li>
+                  <?php } ?>
+                </ul>
+                <?php } ?>
+              </div>
             </div>
           </div>
 

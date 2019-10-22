@@ -9,10 +9,12 @@ function canView(String $section, int $user, int $event = null) {
       // All fine
       return true;
     } else {
-      $getTeamManager = $db->prepare("SELECT COUNT(*) FROM teamManagers WHERE User = ? AND Gala = ?");
+      $date = new DateTime('-1 day', new DateTimeZone('Europe/London'));
+      $getTeamManager = $db->prepare("SELECT COUNT(*) FROM teamManagers INNER JOIN galas ON galas.GalaID = teamManagers.Gala WHERE User = ? AND Gala = ? AND GalaDate >= ?");
       $getTeamManager->execute([
         $user,
-        $event
+        $event,
+        $date->format("Y-m-d")
       ]);
       if ($getTeamManager->fetchColumn() == 0) {
         halt(404);

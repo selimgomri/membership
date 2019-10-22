@@ -1,5 +1,7 @@
 <?php
 
+canView('TeamManager', $_SESSION['UserID'], $id);
+
 global $db;
 
 $getGala = $db->prepare("SELECT GalaName `name` FROM galas WHERE GalaID = ?");

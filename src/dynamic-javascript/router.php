@@ -28,7 +28,7 @@ $this->group('/charts', function() {
 
 $this->group('/squad-reps', function() {
   $this->get('/select.js', function() {
-    include BASE_PATH . 'controllers/galas/squad-reps/list.php.js';
+    include BASE_PATH . 'controllers/galas/squad-reps-and-team-managers/list.php.js';
   });
 });
 

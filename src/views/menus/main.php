@@ -41,6 +41,19 @@ if (!function_exists('chesterStandardMenu')) {
     if ($getRepCount->fetchColumn() > 0) {
       $haveSquadReps = true;
     }
+
+    $isTeamManager = false;
+    if ($_SESSION['AccessLevel'] == 'Parent') {
+      $date = new DateTime('-1 day', new DateTimeZone('Europe/London'));
+      $getGalas = $db->prepare("SELECT COUNT(*) FROM teamManagers INNER JOIN galas ON teamManagers.Gala = galas.GalaID WHERE teamManagers.User = ? AND galas.GalaDate >= ?");
+      $getGalas->execute([
+        $_SESSION['UserID'],
+        $date->format("Y-m-d")
+      ]);
+      if ($getGalas->fetchColumn()) {
+        $isTeamManager = true;
+      }
+    }
     
     ?>
 
@@ -271,6 +284,11 @@ if (!function_exists('chesterStandardMenu')) {
                         Pay for entries
                       </a>
                     <?php } ?>
+                    <?php if ($isTeamManager) { ?>
+                      <a class="dropdown-item" href="<?php echo autoUrl("team-managers")?>">
+                        Team manager dashboard
+                      </a>
+                    <?php } ?>
                     <?php } else {?>
                     <a class="dropdown-item" href="<?php echo autoUrl("galas/addgala")?>">Add gala</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("galas/entries")?>">View entries</a>
@@ -279,6 +297,9 @@ if (!function_exists('chesterStandardMenu')) {
                       Charge or refund entries
                     </a>
                     <?php } ?>
+                    <a class="dropdown-item" href="<?php echo autoUrl("team-managers")?>">
+                      Team manager dashboard
+                    </a>
                     <?php } ?>
                     <?php if (bool(env('IS_CLS'))) { ?>
                     <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/"
