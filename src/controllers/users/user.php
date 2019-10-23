@@ -351,6 +351,10 @@ include BASE_PATH . "views/header.php";
         <p class="mono">******<?=mb_strtoupper(bankDetails($id, "account_number_end"))?></p>
       </div>
       <?php } ?>
+      <div class="col-sm-6 col-md-4">
+        <h3 class="h6">Account balance</h3>
+        <p>&pound;<?=number_format(getAccountBalance($id)/100, 2, '.', '')?></p>
+      </div>
     </div>
   </div>
 </div>
