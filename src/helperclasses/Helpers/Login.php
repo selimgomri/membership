@@ -83,9 +83,12 @@ class Login {
 
     $browser_details = new \WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);
 
-    $browser = $browser_details->browser->name . ' ' . $browser_details->browser->version->toString();
+    $browser = "Unknown";
+    if ($browser_details->browser->version != null && $browser_details->browser->name != null) {
+      $browser = $browser_details->browser->name . ' ' . $browser_details->browser->version->toString();
+    }
 
-    if ($browser_details->isType('mobile')) {
+    if ($browser_details != null && $browser_details->isType('mobile')) {
       $mobile = 1;
     }
 
