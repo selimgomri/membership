@@ -12,7 +12,7 @@ $markdown->setSafeMode(true);
 
 $use_white_background = true;
 
-$query = $db->prepare("SELECT * FROM members WHERE MemberID = ?");
+$query = $db->prepare("SELECT * FROM members LEFT JOIN users ON members.UserID = users.UserID WHERE MemberID = ?");
 $query->execute([$id]);
 $row = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -26,6 +26,8 @@ $surname = $row['MSurname'];
 $dateOfBirth = $row['DateOfBirth'];
 $sex = $row['Gender'];
 $otherNotes = $row['OtherNotes'];
+
+$parentEmail = $row['EmailAddress'];
 
 $parent_id;
 
@@ -145,7 +147,7 @@ $content .= '
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       <a class="dropdown-item" href="' . autoUrl("swimmers/" . $id . "/enter-gala") . '">Enter a gala</a>
-      <a class="dropdown-item" href="' . autoUrl("swimmers/" . $id . "/contactparent") . '">Email parent/guardian</a>
+      <a class="dropdown-item" href="' . htmlspecialchars('mailto:' . $parentEmail) . '">Email parent/guardian</a>
       <a class="dropdown-item" href="' . autoUrl("swimmers/" . $id . "/new-move") . '">New squad move</a>
       <a class="dropdown-item" href="' . autoUrl("swimmers/" . $id . "/parenthelp") . '">Print access key</a>
     </div>
