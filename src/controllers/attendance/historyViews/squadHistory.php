@@ -2,8 +2,10 @@
 
 global $db;
 
-$latestWeek = $db->query("SELECT WeekID FROM `sessionsWeek` ORDER BY `WeekDateBeginning` DESC LIMIT 1;");
-$week = (int) $latestWeek->fetchColumn();
+$latestWeek = $db->query("SELECT WeekID, WeekDateBeginning FROM `sessionsWeek` ORDER BY `WeekDateBeginning` DESC LIMIT 1;");
+$latestWeek = $latestWeek->fetch(PDO::FETCH_ASSOC);
+$week = (int) $latestWeek['WeekID'];
+$weekDateBeginning = $latestWeek['WeekDateBeginning'];
 
 $getSquadName = $db->prepare("SELECT SquadName FROM `squads` WHERE `SquadID` = ?");
 $getSquadName->execute([$id]);
@@ -67,7 +69,9 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 						}
 
 						$dayAdd = $row['SessionDay'];
-			      $date = date ('j F Y', strtotime($weekBeginning. ' + ' . $dayAdd . ' days'));
+						$date = new DateTime($weekDateBeginning, new DateTimeZone('Europe/London'));
+						$date->add(new DateInterval('P' . $dayAdd . 'D'));
+			      $date = $date->format('j F Y');
 
 			      $dayText = "";
 			      switch ($row['SessionDay']) {
@@ -100,7 +104,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 						?>
 						<li>
 						<?php if ($row['AttendanceBoolean']) { ?>
-							<?php echo $title; ?>
+							<?=htmlspecialchars($title)?>
 						<?php } ?>
 						</li>
 						<?php

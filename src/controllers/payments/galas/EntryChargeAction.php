@@ -44,7 +44,7 @@ $swimsArray = [
 
 while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 	$amount = (int) ($_POST[$entry['EntryID'] . '-amount']*100);
-	$hasNoDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
+	$hasNoDD = ($entry['MandateID'] == null) || bool(getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
 
 	if ($amount > 0 && $amount <= 15000 && !$hasNoDD) {
 		$count = 0;
