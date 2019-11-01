@@ -20,13 +20,15 @@ if ($partial_reg) {
 	}
 }
 
+$month = new DateTime('now', new DateTimeZone('Europe/London'))->format('m');
+
 $discounts = json_decode($systemInfo->getSystemOption('MembershipDiscounts'), true);
 $clubDiscount = $swimEnglandDiscount = 0;
-if ($discounts != null && isset($discounts['CLUB'][date('m')])) {
-	$clubDiscount = $discounts['CLUB'][date('m')];
+if ($discounts != null && isset($discounts['CLUB'][$month])) {
+	$clubDiscount = $discounts['CLUB'][$month];
 }
-if ($discounts != null && isset($discounts['ASA'][date('m')])) {
-	$swimEnglandDiscount = $discounts['ASA'][date('m')];
+if ($discounts != null && isset($discounts['ASA'][$month])) {
+	$swimEnglandDiscount = $discounts['ASA'][$month];
 }
 
 $sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ? AND `ClubPays` = '0'");
