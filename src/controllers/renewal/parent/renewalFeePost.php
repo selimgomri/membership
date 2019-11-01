@@ -21,7 +21,7 @@ if ($partial_reg) {
 	}
 }
 
-$month = new DateTime('now', new DateTimeZone('Europe/London'))->format('m');
+$month = (new DateTime('now', new DateTimeZone('Europe/London')))->format('m');
 
 $discounts = json_decode($systemInfo->getSystemOption('MembershipDiscounts'), true);
 $clubDiscount = $swimEnglandDiscount = 0;
