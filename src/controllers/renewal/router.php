@@ -30,15 +30,14 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 			require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 			if ($stage == 0) {
 				require(BASE_PATH . 'controllers/payments/setup/start.php');
-			}
-			else if ($stage == 1) {
+			} else if ($stage == 1) {
 				require(BASE_PATH . 'controllers/payments/setup/date.php');
-			}
-			else if ($stage == 2) {
+			} else if ($stage == 2) {
 				require(BASE_PATH . 'controllers/payments/setup/initiate.php');
-			}
-			else if ($stage == 3) {
+			} else if ($stage == 3) {
 				require(BASE_PATH . 'controllers/payments/setup/redirect.php');
+			} else if ($stage == 4) {
+				require(BASE_PATH . 'controllers/payments/setup/status.php');
 			}
 		});
 

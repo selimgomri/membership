@@ -4,27 +4,32 @@ global $db;
 
 $user = $_SESSION['UserID'];
 
+$url_path = "payments";
+if ($renewal_trap) {
+  $url_path = "renewal/payments";
+}
+
 $selectSchedule = $db->prepare("SELECT COUNT(*) FROM `paymentSchedule` WHERE `UserID` = ?");
 $selectSchedule->execute([$_SESSION['UserID']]);
 
 if ($selectSchedule->fetchColumn() == 0) {
-	header("Location: " . autoUrl("payments/setup/0"));
+  header("Location: " . autoUrl("payments/setup/0"));
 } else {
-	try {
-		$redirectFlowId = $_REQUEST['redirect_flow_id'];
-		$redirectFlow = $client->redirectFlows()->complete(
-		    $_SESSION['GC_REDIRECTFLOW_ID'], //The redirect flow ID from above.
-		    ["params" => ["session_token" => $_SESSION['Token']]]
-		);
+  try {
+    $redirectFlowId = $_REQUEST['redirect_flow_id'];
+    $redirectFlow = $client->redirectFlows()->complete(
+      $_SESSION['GC_REDIRECTFLOW_ID'], //The redirect flow ID from above.
+      ["params" => ["session_token" => $_SESSION['Token']]]
+    );
 
-		$mandate = $redirectFlow->links->mandate;
-		$customer = $redirectFlow->links->customer;
-	  $bankAccount = $redirectFlow->links->customer_bank_account;
+    $mandate = $redirectFlow->links->mandate;
+    $customer = $redirectFlow->links->customer;
+    $bankAccount = $redirectFlow->links->customer_bank_account;
 
-	  $bank = $client->customerBankAccounts()->get($bankAccount);
-	  $accHolderName = $bank->account_holder_name;
-	  $accNumEnd = $bank->account_number_ending;
-	  $bankName = $bank->bank_name;
+    $bank = $client->customerBankAccounts()->get($bankAccount);
+    $accHolderName = $bank->account_holder_name;
+    $accNumEnd = $bank->account_number_ending;
+    $bankName = $bank->bank_name;
 
     $insertToMandates = $db->prepare("INSERT INTO `paymentMandates` (`UserID`, `Name`, `Mandate`, `Customer`, `BankAccount`, `BankName`, `AccountHolderName`, `AccountNumEnd`, `InUse`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $insertToMandates->execute([
@@ -39,45 +44,26 @@ if ($selectSchedule->fetchColumn() == 0) {
       true
     ]);
 
-		// If there is no preferred mandate existing, automatically set it to the one we've just added
-		$getPreferredCount = $db->prepare("SELECT COUNT(*) FROM `paymentPreferredMandate` WHERE `UserID` = ?");
+    // If there is no preferred mandate existing, automatically set it to the one we've just added
+    $getPreferredCount = $db->prepare("SELECT COUNT(*) FROM `paymentPreferredMandate` WHERE `UserID` = ?");
     $getPreferredCount->execute([$_SESSION['UserID']]);
-		if ($getPreferredCount->fetchColumn() == 0) {
+    if ($getPreferredCount->fetchColumn() == 0) {
       $getMandateId = $db->prepare("SELECT `MandateID` FROM `paymentMandates` WHERE `Mandate` = ?");
       $getMandateId->execute([$mandate]);
-			if ($mandateId = $getMandateId->fetchColumn()) {
+      if ($mandateId = $getMandateId->fetchColumn()) {
         $insertPreferred = $db->prepare("INSERT INTO `paymentPreferredMandate` (`MandateID`, `UserID`) VALUES (?, ?)");
         $insertPreferred->execute([$mandateId, $user]);
-			}
-		}
+      }
+    }
 
-    $use_white_background = true;
-		$pagetitle = "You've setup a Direct Debit";
-
-		include BASE_PATH . "views/header.php";
-		include BASE_PATH . "views/paymentsMenu.php";
-		 ?>
-
-<div class="container">
-  <div class="row">
-    <div class="col-lg-8">
-      <h1>You've successfully set up your new direct debit.</h1>
-      <p class="lead">GoCardless will appear on your bank statement when
-        payments are taken against this Direct Debit.</p>
-      <p>GoCardless handles direct debit payments for <?=htmlspecialchars(env('CLUB_NAME'))?>.</p>
-      <?php if (isset($renewal_trap) && $renewal_trap) { ?>
-      <a href="<?php echo autoUrl("renewal/go"); ?>" class="mb-3 btn btn-success">Continue registration or renewal</a>
-      <?php } else { ?>
-      <a href="<?php echo autoUrl("payments"); ?>" class="mb-3 btn btn-dark">Go to Payments</a>
-      <?php } ?>
-    </div>
-  </div>
-</div>
-
-<?php include BASE_PATH . "views/footer.php";
-
-	}
-	catch (Exception $e) {
-		halt(500);
-	}
+    $_SESSION['GC-Setup-Status'] = 'success';
+    header("Location: " . autoUrl($url_path . "/setup/4"));
+  } catch (\GoCardlessPro\Core\Exception\ApiException | \GoCardlessPro\Core\Exception\MalformedResponseException $e) {
+    $_SESSION['GC-Setup-Status'] = $e->getType();
+    header("Location: " . autoUrl($url_path . "/setup/4"));
+  } catch (\GoCardlessPro\Core\Exception\ApiConnectionException $e) {
+    halt(500);
+  } catch (Exception $e) {
+    halt(500);
+  }
 }

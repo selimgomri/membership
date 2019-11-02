@@ -24,6 +24,9 @@ if ($access == "Parent") {
 		else if ($stage == 3) {
 			require('setup/redirect.php');
 		}
+		else if ($stage == 4) {
+			require('setup/status.php');
+		}
 	});
 
 	$this->post('/setup/1', function() {
