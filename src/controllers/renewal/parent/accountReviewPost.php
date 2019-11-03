@@ -2,6 +2,11 @@
 
 global $db;
 
+use Respect\Validation\Validator as v;
+use Brick\PhoneNumber\PhoneNumber;
+use Brick\PhoneNumber\PhoneNumberParseException;
+use Brick\PhoneNumber\PhoneNumberFormat;
+
 $status = true;
 $statusMessage = "";
 
@@ -28,7 +33,17 @@ if (isset($_POST['emailContactOK']) && $_POST['emailContactOK'] == 1) {
 }
 
 if ($_POST['mobile'] != "") {
-	$sms = $_POST['mobile'];
+	$sms = null;
+	try {
+		$number = PhoneNumber::parse($_POST['mobile'], 'GB');
+		$sms = $number->format(PhoneNumberFormat::E164);
+	} catch (PhoneNumberParseException $e) {
+		// 'The string supplied is too short to be a phone number.'
+		$status = false;
+		$statusMessage .= "
+		<li>That phone number is not valid</li>
+		";
+	}
 } else {
 	$status = false;
 	$statusMessage .= "<li>No Phone Number Provided</li>";
