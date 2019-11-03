@@ -346,10 +346,10 @@ function myMonthlyFeeTable($link, $userID) {
     number_format($row['SquadFee'],2,'.','') . "</td></tr>";
   }
   for ($i = 0; $i < $count; $i++) {
-    if ($i == 2) {
+    if (env('IS_CLS') && $i == 2) {
       $totalsArray[$i] = $totalsArray[$i]*0.8;
     }
-    elseif ($i > 2) {
+    elseif (env('IS_CLS') && $i > 2) {
       $totalsArray[$i] = $totalsArray[$i]*0.6;
     }
     $reducedCost += $totalsArray[$i];
