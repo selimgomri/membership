@@ -14,16 +14,13 @@ try {
 
   $forename = trim($_POST['first']);
   $surname = trim($_POST['last']);
-  $email = trim(mb_strtolower($_POST['email-address']));
+  $email = $_SESSION['AssRegUserEmail'];
   $getUserInfo->execute([$email]);
   
   // The password will be used as a secure token allowing the parent to follow a link.
   $password = hash('sha256', random_int(0, 999999));
 
   $status = true;
-  if (!v::email()->validate($email)) {
-    $status = false;
-  }
 
   $mobile = null;
   try {
@@ -33,7 +30,6 @@ try {
   catch (PhoneNumberParseException $e) {
     // 'The string supplied is too short to be a phone number.'
     $status = false;
-    reportError($e);
   }
 
   $info = $getUserInfo->fetchColumn();
@@ -79,6 +75,9 @@ try {
 if ($status) {
   // Success move on
   header("Location: " . autoUrl("assisted-registration/select-swimmers"));
+  if (isset($_SESSION['AssRegUserEmail'])) {
+    unset($_SESSION['AssRegUserEmail']);
+  }
 } else {
   $_SESSION['AssRegFormError'] = true;
   $_SESSION['AssRegPostData'] = $_POST;

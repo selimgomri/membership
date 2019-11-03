@@ -251,3 +251,13 @@ if ($_SESSION['AccessLevel'] != "Parent") {
 $this->group('/{swimmer}:int/times', function() {
 	include 'times/router.php';
 });
+
+if ($_SESSION['AccessLevel'] == 'Admin') {
+	$this->get('/{id}:int/parent', function($id) {
+  	include 'parent.php';
+	});
+	
+	$this->post('/{id}:int/parent', function($id) {
+  	include 'parentPost.php';
+  });
+}

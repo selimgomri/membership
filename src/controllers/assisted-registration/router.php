@@ -5,7 +5,11 @@ if ($_SESSION['AccessLevel'] != 'Parent') {
     include 'welcome.php';
   });
 
-  if (!(isset($_SESSION['AssRegUser']) && $_SESSION['AssRegUser'])) {
+  $this->post('/', function() {
+    include 'welcomePost.php';
+  });
+
+  if (isset($_SESSION['AssRegUserEmail']) && !isset($_SESSION['AssRegUser']) && !isset($_SESSION['AssRegComplete'])) {
     $this->get('/start', function() {
       include 'begin.php';
     });
@@ -38,4 +42,8 @@ if ($_SESSION['AccessLevel'] != 'Parent') {
       header("Location: " . autoUrl("assisted-registration/complete"));
     });
   }
+
+  $this->get('/complete', function() {
+    header("Location: " . autoUrl("assisted-registration"));
+  });
 }

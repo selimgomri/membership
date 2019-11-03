@@ -7,6 +7,8 @@ $moveCount->execute([$id]);
 
 $name = $currentSquad = "";
 
+$getSquads = null;
+
 if ($moveCount->fetchColumn() > 0) {
 	header("Location: " . autoUrl("swimmers/" . $id . "/edit-move"));
 } else {

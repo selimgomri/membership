@@ -74,6 +74,15 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 }
 
 if ($_SESSION['AccessLevel'] == 'Admin') {
+
+	/**
+	 * EMAIL ADDRESS UPDATES
+	 */
+
+	$this->post('/{id}:int/update-email-address', function($id) {
+		include 'EditEmailPost.php';
+	});
+
 	/**
 	 * PAGES FOR SETTING SQUAD REPS
 	 */

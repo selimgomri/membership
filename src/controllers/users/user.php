@@ -93,6 +93,18 @@ include BASE_PATH . "views/header.php";
     </ol>
   </nav>
 
+  <?php if (isset($_SESSION['User-Update-Email-Error']) && $_SESSION['User-Update-Email-Error']) { ?>
+  <div class="alert alert-danger">
+    <strong>We were not able to update the user's email address because it was not valid</strong>
+  </div>
+  <?php unset($_SESSION['User-Update-Email-Error']); } ?>
+
+  <?php if (isset($_SESSION['User-Update-Email-Success']) && $_SESSION['User-Update-Email-Success']) { ?>
+  <div class="alert alert-success">
+    <strong>We've updated the user's email address</strong>
+  </div>
+  <?php unset($_SESSION['User-Update-Email-Success']); } ?>
+
   <h1>
     <?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?>
     <small><?=htmlspecialchars($accessLevel)?></small>
@@ -114,6 +126,27 @@ include BASE_PATH . "views/header.php";
       <div class="col-sm-6 col-md-4">
         <h3 class="h6">Email</h3>
         <p class="text-truncate"><a href="mailto:<?=htmlspecialchars($info['EmailAddress'])?>"><?=htmlspecialchars($info['EmailAddress'])?></a></p>
+        <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+        <p>
+          <a class="btn btn-primary" data-toggle="collapse" href="#editEmailAddress" role="button" aria-expanded="false" aria-controls="editEmailAddress">
+            Edit email address
+          </a>
+        </p>
+        <div class="collapse" id="editEmailAddress">
+          <form method="post" class="cell" action="<?=htmlspecialchars(autoUrl("users/" . $id . "/update-email-address"))?>">
+            <?=\SCDS\CSRF::write()?>
+            <div class="form-group">
+              <label for="new-user-email">New email address</label>
+              <input type="email" class="form-control" id="new-user-email" name="new-user-email" placeholder="Enter email">
+            </div>
+            <p>
+              <button type="submit" class="btn btn-primary">
+                Save email address
+              </button>
+            </p>
+          </form>
+        </div>
+        <?php } ?>
       </div>
       <?php if ($number !== false) { ?>
       <div class="col-sm-6 col-md-4">

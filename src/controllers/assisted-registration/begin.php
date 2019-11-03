@@ -11,7 +11,7 @@ if (isset($_SESSION['AssRegPostData'])) {
   $first = $_SESSION['AssRegPostData']['first'];
   $last = $_SESSION['AssRegPostData']['last'];
   $email = $_SESSION['AssRegPostData']['email-address'];
-  $mobile = "+44" . ltrim(preg_replace('/\D/', '', str_replace("+44", "", trim($_SESSION['AssRegPostData']['phone']))), '0');
+  $mobile = $_SESSION['AssRegPostData']['phone'];
   unset($_SESSION['AssRegPostData']);
 }
 
@@ -58,7 +58,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="form-group">
           <label for="email-address">Email Address</label>
-          <input type="email" class="form-control text-lowercase" id="email-address" name="email-address" placeholder="name@example.com" required value="<?=htmlspecialchars($email)?>">
+          <input disabled type="email" class="form-control text-lowercase" id="email-address" name="email-address" placeholder="name@example.com" required value="<?=htmlspecialchars($_SESSION['AssRegUserEmail'])?>">
           <div class="invalid-feedback">
             Please enter a valid email address.
           </div>
