@@ -63,7 +63,9 @@ if ($selectSchedule->fetchColumn() == 0) {
     header("Location: " . autoUrl($url_path . "/setup/4"));
   } catch (\GoCardlessPro\Core\Exception\ApiConnectionException $e) {
     halt(500);
+    reportError($e);
   } catch (Exception $e) {
     halt(500);
+    reportError($e);
   }
 }
