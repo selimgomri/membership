@@ -57,7 +57,7 @@ try {
       $mobile,
       0,
       0,
-      true
+      0
     ]);
 
     $_SESSION['AssRegUser'] = $db->lastInsertId(); 

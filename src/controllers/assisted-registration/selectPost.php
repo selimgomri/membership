@@ -7,6 +7,12 @@ $swimmers = $db->query("SELECT MForename `first`, MSurname `last`, SquadName `na
 
 $setParent = $db->prepare("UPDATE members SET UserID = ?, RR = ? WHERE MemberID = ?");
 
+$setUserRequiresRenewal = $db->prepare("UPDATE users SET RR = ? WHERE UserID = ?");
+$setUserRequiresRenewal->execute([
+  1,
+  $_SESSION['AssRegUser']
+]);
+
 $user = $db->prepare("SELECT Forename `first`, Surname `last`, EmailAddress `email` FROM users WHERE UserID = ?");
 $user->execute([$_SESSION['AssRegUser']]);
 $user = $user->fetch(PDO::FETCH_ASSOC);
