@@ -16,9 +16,11 @@ if ($selectSchedule->fetchColumn() == 0) {
   header("Location: " . autoUrl("payments/setup/0"));
 } else {
   try {
+    $db->beginTransaction();
+
     $redirectFlowId = $_REQUEST['redirect_flow_id'];
     $redirectFlow = $client->redirectFlows()->complete(
-      $_SESSION['GC_REDIRECTFLOW_ID'], //The redirect flow ID from above.
+      $redirectFlowId, //The redirect flow ID from above.
       ["params" => ["session_token" => $_SESSION['Token']]]
     );
 
@@ -56,16 +58,23 @@ if ($selectSchedule->fetchColumn() == 0) {
       }
     }
 
+    $db->commit();
+
     $_SESSION['GC-Setup-Status'] = 'success';
     header("Location: " . autoUrl($url_path . "/setup/4"));
   } catch (\GoCardlessPro\Core\Exception\ApiException | \GoCardlessPro\Core\Exception\MalformedResponseException $e) {
     $_SESSION['GC-Setup-Status'] = $e->getType();
+    $db->rollBack();
     header("Location: " . autoUrl($url_path . "/setup/4"));
   } catch (\GoCardlessPro\Core\Exception\ApiConnectionException $e) {
-    halt(500);
+    $db->rollBack();
     reportError($e);
+    
+    $_SESSION['GC-Setup-Status'] = $e->getType();
+    header("Location: " . autoUrl($url_path . "/setup/4"));
   } catch (Exception $e) {
-    halt(500);
+    $db->rollBack();
     reportError($e);
+    halt(500);
   }
 }
