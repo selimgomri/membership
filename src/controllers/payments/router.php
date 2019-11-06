@@ -34,6 +34,10 @@ if ($access == "Parent") {
 		include 'setup/datepost.php';
 	});
 
+	$this->get('/squad-fees', function() {
+		include 'parent/SquadFees.php';
+	});
+
 	$this->get('/mandates', function() {
 		global $link;
 		include 'mybanks.php';

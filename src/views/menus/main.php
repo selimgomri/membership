@@ -343,6 +343,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?=autoUrl("payments/mandates")?>">My Bank Account</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/statement/latest")?>">My Latest Statement</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/fees")?>">My Fees Since Last Bill</a>
+                    <a class="dropdown-item" href="<?=autoUrl("payments/squad-fees")?>">My Squad and Extra Fees</a>
                     <?php } else if (env('GOCARDLESS_ACCESS_TOKEN')) { ?>
                     <h6 class="dropdown-header">Direct Debit</h6>
                     <a class="dropdown-item" href="<?=autoUrl("payments")?>">

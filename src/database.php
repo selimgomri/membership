@@ -354,10 +354,10 @@ function myMonthlyFeeTable($link, $userID) {
     }
     $reducedCost += $totalsArray[$i];
   }
-  $sql = $db->prepare("SELECT extras.ExtraName, extras.ExtraFee, members.MForename ,
-  members.MSurname FROM ((extras INNER JOIN extrasRelations ON extras.ExtraID =
+  $sql = $db->prepare("SELECT extras.ExtraName, extras.ExtraFee, members.MForename,
+  members.MSurname FROM (((extras INNER JOIN extrasRelations ON extras.ExtraID =
   extrasRelations.ExtraID) INNER JOIN members ON members.MemberID =
-  extrasRelations.MemberID) WHERE extrasRelations.UserID = '$userID' ORDER BY
+  extrasRelations.MemberID) INNER JOIN users on users.UserID = members.UserID) WHERE users.UserID = ? ORDER BY
   `extras`.`ExtraFee` DESC;");
   $sql->execute([$userID]);
 
@@ -365,7 +365,7 @@ function myMonthlyFeeTable($link, $userID) {
   $count = sizeof($rows);
   $monthlyExtras = "";
   $monthlyExtrasTotal = 0;
-  for ($i=0; $i<$count; $i++) {
+  for ($i=0; $i < $count; $i++) {
     $row = $rows[$i];
     $monthlyExtras .= "<tr><td>" . htmlspecialchars($row['ExtraName']) . " <br>for " .
     htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "</td><td>&pound;" .
