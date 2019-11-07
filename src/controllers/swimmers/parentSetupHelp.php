@@ -215,7 +215,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 
 		<p>
 			If you’d like more information about how we use data, contact
-			<?=CLUB_EMAIL?>.
+			<?=htmlspecialchard(env('CLUB_EMAIL'))?>.
 		</p>
 
 		<?php if (!bool(env('IS_CLS'))) { ?>

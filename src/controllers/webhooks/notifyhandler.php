@@ -90,7 +90,7 @@ while ($currentMessage = $getPendingGroupMail->fetch(PDO::FETCH_ASSOC)) {
     $globalSubstitutions
   );
 
-  $email->setReplyTo(CLUB_EMAIL, env('CLUB_NAME') . ' Enquiries');
+  $email->setReplyTo(env('CLUB_EMAIL'), env('CLUB_NAME') . ' Enquiries');
 
   $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
   try {
