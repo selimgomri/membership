@@ -136,6 +136,7 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
     $email = $db->prepare($notify);
     $email->execute([$_SESSION['UserID'], $subject, $message]);
   } catch (PDOException $e) {
+    reportError($e);
     halt(500);
   }
 
@@ -146,6 +147,7 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
   ];
 
   } catch (Exception $e) {
+    reportError($e);
     halt(500);
   }
 
