@@ -239,34 +239,40 @@ include BASE_PATH . "views/header.php";
   <?php } ?>
 
   <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
-  <div class="mb-4">
-    <h2>
-      Squad rep settings
-    </h2>
-    <p class="lead">
-      Make this parent a squad rep.
-    </p>
+  <div class="row">
+    <div class="col-12">
+      <div class="mb-4">
+        <h2>
+          Squad rep settings
+        </h2>
+        <p class="lead">
+          Make this parent a squad rep.
+        </p>
 
-    <p>
-      <a href="<?=autoUrl("users/" . $id . "/rep")?>" class="btn btn-primary">
-        Rep settings <span class="fa fa-chevron-right"></span>
-      </a>
-    </p>
-  </div>
+        <p>
+          <a href="<?=autoUrl("users/" . $id . "/rep")?>" class="btn btn-primary">
+            Rep settings <span class="fa fa-chevron-right"></span>
+          </a>
+        </p>
+      </div>
+    </div>
 
-  <div class="mb-4">
-    <h2>
-      Team manager settings
-    </h2>
-    <p class="lead">
-      Make this parent a team manager for a specific gala.
-    </p>
+    <div class="col-12">
+      <div class="mb-4">
+        <h2>
+          Team manager settings
+        </h2>
+        <p class="lead">
+          Make this parent a team manager for a specific gala.
+        </p>
 
-    <p>
-      <a href="<?=autoUrl("users/" . $id . "/team-manager")?>" class="btn btn-primary">
-        Team manager settings <span class="fa fa-chevron-right"></span>
-      </a>
-    </p>
+        <p>
+          <a href="<?=autoUrl("users/" . $id . "/team-manager")?>" class="btn btn-primary">
+            Team manager settings <span class="fa fa-chevron-right"></span>
+          </a>
+        </p>
+      </div>
+    </div>
   </div>
   <?php } ?>
 
@@ -287,7 +293,6 @@ include BASE_PATH . "views/header.php";
           <select class="custom-select" id="accountType" name="accountType" data-user-id="<?=htmlspecialchars($id)?>">
             <option <?=$par?> value="Parent">Parent (Default)</option>
             <option <?=$coa?> value="Coach">Coach</option>
-            <option <?=$com?> value="Committee">Team Manager</option>
             <option <?=$gal?> value="Galas">Galas</option>
             <option <?=$adm?> value="Admin">Admin</option>
           </select>

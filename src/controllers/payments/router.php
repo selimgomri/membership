@@ -140,6 +140,10 @@ if ($access == "Admin") {
 		include 'admin/confirmation/router.php';
 	});
 
+	$this->get('/user-mandates', function() {
+		include 'admin/user-mandates/UserMandateList.php';
+	});
+
 	$this->group('/history', function() {
 		global $link;
 

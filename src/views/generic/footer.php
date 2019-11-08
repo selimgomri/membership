@@ -20,10 +20,10 @@ $counties = json_decode(file_get_contents(BASE_PATH . 'includes/regions/counties
             <div class="col">
               <address>
                 <?php $addr = json_decode(env('CLUB_ADDRESS')); ?>
-                <strong><?=env('CLUB_NAME')?></strong><br>
+                <strong><?=htmlspecialchars(env('CLUB_NAME'))?></strong><br>
                 <?php
                 for ($i = 0; $i < sizeof($addr); $i++) { ?>
-                <?=$addr[$i]?><br>
+                <?=htmlspecialchars($addr[$i])?><br>
                 <?php } ?>
               </address>
               <!--<p><i class="fa fa-envelope fa-fw" aria-hidden="true"></i> <a href="mailto:enquiries@chesterlestreetasc.co.uk" target="new">E-Mail Us</a></p>-->
@@ -51,7 +51,7 @@ $counties = json_decode(file_get_contents(BASE_PATH . 'includes/regions/counties
                   </a>
                 </li>
                 <li>
-                  <a href="<?php echo autoUrl("notify"); ?>" target="_self" title="About our Notify Email Service">
+                  <a href="<?=autoUrl("notify")?>" target="_self" title="About our Notify Email Service">
                     Emails from us
                   </a>
                 </li>
@@ -93,7 +93,7 @@ $counties = json_decode(file_get_contents(BASE_PATH . 'includes/regions/counties
       class="<?php if (isset($fluidContainer) && $fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
       <div class="row">
         <div class="col source-org vcard copyright">
-          <a href="https://corporate.myswimmingclub.co.uk" target="_blank" title="Swimming Club Data Systems Website">
+          <a href="https://www.myswimmingclub.uk" target="_blank" title="Swimming Club Data Systems Website">
             <img src="<?=autoUrl("public/img/corporate/scds.png")?>" width="100">
           </a>
 
@@ -112,7 +112,7 @@ $counties = json_decode(file_get_contents(BASE_PATH . 'includes/regions/counties
           <p>Page rendered in <?=number_format($seconds, 3)?> seconds. <?php if (defined('SOFTWARE_VERSION')) { ?>Software version <?=mb_substr(SOFTWARE_VERSION, 0, 7);?>.<?php } ?>
           </p>
           <p class="mb-0">
-            &copy; <span class="org fn">Chris Heppell (Swimming Club Data Systems) and Chester&#8209;le&#8209;Street ASC</span>. Swimming Club Data Systems is not responsible
+            &copy; <span class="org fn">Chris Heppell <span aria-hidden="true">T/A</span><span class="sr-only">trading as</span> Swimming Club Data Systems and Chester&#8209;le&#8209;Street ASC</span>. Swimming Club Data Systems is not responsible
             for the content of external sites.
           </p>
         </div>

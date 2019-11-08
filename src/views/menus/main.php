@@ -176,6 +176,11 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?=autoUrl("assisted-registration")?>">
                       Assisted Account Registration
                     </a>
+                    <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+                    <a class="dropdown-item" href="<?=autoUrl("payments/user-mandates")?>">
+                      User direct debit mandates
+                    </a>
+                    <?php } ?>
                   </div>
                 </li>
                 <?php } ?>

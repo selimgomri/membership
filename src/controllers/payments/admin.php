@@ -77,13 +77,13 @@ $income = $income->fetchAll(PDO::FETCH_ASSOC);
   					</span>
           </a>
 
-          <a href="<?=autoUrl('payments/newcharge')?>">
+          <a href="#" class="bg-light">
   					<span class="mb-3">
   	          <span class="title mb-0">
   							Create a manual charge
   						</span>
   						<span>
-  							Charge a parent for a non-automatic fee
+  							A new invoicing system will be coming soon
   						</span>
   					</span>
             <span class="category">

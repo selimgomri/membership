@@ -72,7 +72,7 @@ global $db;
 $username = htmlspecialchars(explode(" ", getUserName($_SESSION['UserID']))[0]);
 
 $day = date("w");
-$time = date("H:i:s");
+$time = date("H:i:s", strtotime("-15 minutes"));
 $time30 = date("H:i:s", strtotime("-30 minutes"));
 
 $sql = "SELECT SessionID, squads.SquadID, SessionName, SquadName, VenueName, StartTime, EndTime FROM ((`sessions` INNER JOIN squads ON squads.SquadID = sessions.SquadID) INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE SessionDay = :day AND StartTime <= :timenow AND (EndTime > :timenow OR EndTime > :time30) AND DisplayFrom <= CURDATE() AND DisplayUntil >= CURDATE() ORDER BY SquadFee DESC, SquadName ASC";
@@ -98,6 +98,8 @@ include BASE_PATH . "views/header.php";
 
 		<h1><?=helloGreeting()?> <?=$username?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
+
+    <p class="mb-4">We're always looking for feedback! If you have any, <a href="mailto:feedback@myswimmingclub.uk">send us an email</a>.</p>
 
     <?php if (sizeof($sessions) > 0) { ?>
       <div class="mb-4">

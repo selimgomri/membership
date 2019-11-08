@@ -127,9 +127,11 @@ include BASE_PATH . "views/header.php";
 		<h1><?=helloGreeting()?> <?=$username?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
 
+    <p class="mb-4">We're always looking for feedback! If you have any, <a href="mailto:feedback@myswimmingclub.uk">send us an email</a>.</p>
+
     <?php if (bool(env('IS_CLS')) && time() < strtotime('2019-01-25')) { ?>
     <div class="mb-4">
-      <h2 class="mb-4">Membership Renewal for 2019 is open now</h2>
+      <h2 class="mb-4">Membership Renewal for 2020 is open now</h2>
       <div class="news-grid">
         <a href="<?=autoUrl("renewal")?>">
           <span class="mb-3">
