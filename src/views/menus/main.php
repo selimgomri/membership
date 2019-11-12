@@ -157,7 +157,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?=autoUrl("attendance/venues")?>">Manage Venues</a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("attendance/history")?>">Attendance History</a>
-                    <?php if (bool(env('IS_CLS')) { ?>
+                    <?php if (bool(env('IS_CLS'))) { ?>
                     <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/squads/"
                       target="_blank">Timetables</a>
                     <?php } ?>
