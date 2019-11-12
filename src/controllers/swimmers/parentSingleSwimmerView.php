@@ -261,28 +261,28 @@ $strokeCountsData = array_values($strokeCounts);
       <h2>Photography Permissions</h2>
 
       <div class="">
-      <?php if (($rowSwim['Website'] != 1 || $rowSwim['Social'] != 1 ||
-      $rowSwim['Noticeboard'] != 1 || $rowSwim['FilmTraining'] != 1 ||
-      $rowSwim['ProPhoto'] != 1) && ($age < 18)) { ?>
+      <?php if ((!bool($rowSwim['Website']) || !bool($rowSwim['Social']) ||
+      !bool($rowSwim['Noticeboard']) || !bool($rowSwim['FilmTraining']) ||
+      !bool($rowSwim['ProPhoto'])) && ($age < 18)) { ?>
         <p>There are limited photography permissions for this swimmer</p>
         <ul> <?php
-        if ($row['Website'] != 1) { ?>
+        if (!bool($rowSwim['Website'])) { ?>
           <li>Photos <strong>must not</strong> be taken of this swimmer for our
           website</li><?php
         }
-        if ($row['Social'] != 1) { ?>
+        if (!bool($rowSwim['Social'])) { ?>
           <li>Photos <strong>must not</strong> be taken of this swimmer for our
           social media</li><?php
         }
-        if ($row['Noticeboard'] != 1) { ?>
+        if (!bool($rowSwim['Noticeboard'])) { ?>
           <li>Photos <strong>must not</strong> be taken of this swimmer for our
           noticeboard</li><?php
         }
-        if ($row['FilmTraining'] != 1) { ?>
+        if (!bool($rowSwim['FilmTraining'])) { ?>
           <li>This swimmer <strong>must not</strong> be filmed for the purposes
           of training</li><?php
         }
-        if ($row['ProPhoto'] != 1) { ?>
+        if (!bool($rowSwim['ProPhoto'])) { ?>
           <li>Photos <strong>must not</strong> be taken of this swimmer by
           photographers</li><?php
         }
