@@ -25,6 +25,7 @@ $vars = [
   'STRIPE' => null,
   'STRIPE_PUBLISHABLE' => null,
   'STRIPE_APPLE_PAY_DOMAIN' => null,
+  'HIDE_MEMBER_ATTENDANCE' => null
 ];
 
 $disabled = [];
@@ -189,6 +190,14 @@ include BASE_PATH . 'views/header.php';
           <?php } else { ?>
           <p>Your <a href="https://sendgrid.com/">Twilio SendGrid API key</a> is set at system level and cannot be viewed or modified here.</p>
           <?php } ?>
+
+          <h2>Display options</h2>
+          <div class="form-group">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="HIDE_MEMBER_ATTENDANCE" name="HIDE_MEMBER_ATTENDANCE" <?php if (!bool($vars['HIDE_MEMBER_ATTENDANCE'])) { ?>checked<?php } ?> <?=$disabled['HIDE_MEMBER_ATTENDANCE']?>>
+              <label class="custom-control-label" for="HIDE_MEMBER_ATTENDANCE">Show member attendance percentage to parents</label>
+            </div>
+          </div>
 
           <h2>GoCardless API keys (for direct debit)</h2>
 

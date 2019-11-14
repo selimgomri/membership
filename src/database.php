@@ -158,37 +158,42 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
 
 function getAttendanceByID($link, $id, $weeks = "all") {
   global $db;
+  global $systemInfo;
+  $hideAttendance = !bool($systemInfo->getSystemOption('HIDE_MEMBER_ATTENDANCE'));
+  if ($_SESSION['AccessLevel'] != 'Parent' || $hideAttendance) {
+    $output = "";
+    $startWeek = 1;
 
-  $output = "";
-  $startWeek = 1;
+    // Get the last four weeks to calculate attendance
+    $latestWeek = $db->query("SELECT MAX(WeekID) FROM `sessionsWeek`;")->fetchColumn();
 
-  // Get the last four weeks to calculate attendance
-  $latestWeek = $db->query("SELECT MAX(WeekID) FROM `sessionsWeek`;")->fetchColumn();
-
-  if ($weeks != "all") {
-    $startWeek = $latestWeek - $weeks;
-    if ($startWeek < 1) {
-      $startWeek = 1;
+    if ($weeks != "all") {
+      $startWeek = $latestWeek - $weeks;
+      if ($startWeek < 1) {
+        $startWeek = 1;
+      }
     }
+
+    $member = [
+      "week" => $startWeek,
+      "member" => $id
+    ];
+
+    $numPresent = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` WHERE WeekID >= :week && MemberID = :member && AttendanceBoolean = 1");
+    $numPresent->execute($member);
+    $numPresent = $numPresent->fetchColumn();
+    $totalNum = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` WHERE WeekID >= :week && MemberID = :member");
+    $totalNum->execute($member);
+    $totalNum = $totalNum->fetchColumn();
+
+    if ($totalNum == 0) {
+      return "No Data 0";
+    }
+
+    return number_format(($numPresent/$totalNum)*100, 1, ".", "");
   }
 
-  $member = [
-    "week" => $startWeek,
-    "member" => $id
-  ];
-
-  $numPresent = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` WHERE WeekID >= :week && MemberID = :member && AttendanceBoolean = 1");
-  $numPresent->execute($member);
-  $numPresent = $numPresent->fetchColumn();
-  $totalNum = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` WHERE WeekID >= :week && MemberID = :member");
-  $totalNum->execute($member);
-  $totalNum = $totalNum->fetchColumn();
-
-  if ($totalNum == 0) {
-    return "No Data 0";
-  }
-
-  return number_format(($numPresent/$totalNum)*100, 1, ".", "");
+  return 'DATA HIDDEN ';
 }
 
 function mySwimmersTable($link, $userID) {

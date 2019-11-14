@@ -67,6 +67,14 @@ try {
     }
   }
 
+  if (!$systemInfo->isExistingEnvVar('HIDE_MEMBER_ATTENDANCE')) {
+    $hide = 1;
+    if (bool($_POST['HIDE_MEMBER_ATTENDANCE'])) {
+      $hide = 0;
+    }
+    $systemInfo->setSystemOption('HIDE_MEMBER_ATTENDANCE', $hide);
+  }
+
   $vars['CLUB_ADDRESS'] = null;
   if (!$systemInfo->isExistingEnvVar('CLUB_ADDRESS')) {
     $addr = $_POST['CLUB_ADDRESS'];
@@ -78,6 +86,8 @@ try {
 
   $_SESSION['PCC-SAVED'] = true;
 } catch (Exception $e) {
+  pre($e);
+  exit();
   $_SESSION['PCC-ERROR'] = true;
 }
 
