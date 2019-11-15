@@ -49,7 +49,7 @@ $cache_file = BASE_PATH . '/cache/SE-NE.xml';
 if (file_exists($cache_file)) {
   if (time() - filemtime($cache_file) > 10800) {
     // too old , re-fetch
-    $cache = file_get_contents('http://asaner.org.uk/feed/');
+    $cache = file_get_contents('https://asaner.org.uk/feed/');
     file_put_contents($cache_file, $cache);
     $file = $cache;
   } else {
@@ -57,7 +57,7 @@ if (file_exists($cache_file)) {
   }
 } else {
   // no cache, create one
-  $cache = file_get_contents('http://asaner.org.uk/feed/');
+  $cache = file_get_contents('https://asaner.org.uk/feed/');
   file_put_contents($cache_file, $cache);
   $file = $cache;
 }

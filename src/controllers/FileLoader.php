@@ -1,6 +1,10 @@
 <?php
 
-$file = '/customers/9/d/e/chesterlestreetasc.co.uk/httpd.private/downloadable-content/';
+if (!env('FILE_STORE_PATH')) {
+  halt(404);
+}
+
+$file = env('FILE_STORE_PATH');
 $file = $file . $filename;
 if (file_exists($file)) {
   header('Content-Description: File Transfer');

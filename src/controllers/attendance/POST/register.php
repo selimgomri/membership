@@ -74,7 +74,7 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 			}
 
 			// Return info page
-			$return = "<strong>Successfully saved the session register</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-link\">mms@chesterlestreetasc.co.uk</a>";
+			$return = "<strong>Successfully saved the session register</strong>";
 			$_SESSION['return'] = $return;
 			$duplicateReg = true;
 		} catch (Exception $e) {
@@ -82,18 +82,18 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 		}
 	}
 
-	if ($duplicateReg == true) {
+	if ($duplicateReg) {
 		$return = "<p class=\"mb-0\"><strong>Saved register</strong></p>";
 		$_SESSION['return'] = $return;
 	}
 
 } else {
-	$return = "<p><strong>An Error Occurred</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-link\">mms@chesterlestreetasc.co.uk</a></p>";
+	$return = "<p><strong>An Error Occurred</strong></p>";
 	$_SESSION['return'] = $return;
 }
 
 if ($errorStatus) {
-	$return = "<p><strong>An Error Occurred</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-link\">mms@chesterlestreetasc.co.uk</a></p>";
+	$return = "<p><strong>An Error Occurred</strong></p>";
 	$_SESSION['return'] = $return;
 }
 
