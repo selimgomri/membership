@@ -33,6 +33,8 @@ function getBankLogo($bank) {
     $logo_path = autoUrl("public/img/directdebit/bank-logos/nationwide");
   } else if ($bank == "THE ROYAL BANK OF SCOTLAND PLC") {
     $logo_path = autoUrl("public/img/directdebit/bank-logos/rbs");
+  } else if ($bank == "VIRGIN MONEY PLC" || $bank == "YORKSHIRE BANK (A TRADING NAME OF CLYDESDALE BANK PLC)" || $bank == "CLYDESDALE BANK PLC") {
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/virginmoney");
   }
 
   return $logo_path;
