@@ -245,6 +245,11 @@ include "galaMenu.php";
     </a>
   </p>
 
+  <h2>Entry report</h2>
+  <p class="lead">Export a PDF entry report that can be shared with parents</p>
+  <p><a href="<?=htmlspecialchars(autoUrl("galas/" . $id . "/team-manager-view.pdf"))?>" class="btn btn-success">Export PDF</a></p>
+
+  <?php if (bool($gala['CoachEnters'])) { ?>
   <h2>Manage entries</h2>
   <p class="lead">Add and edit entries for all competing swimmers</p>
   <p>
@@ -252,6 +257,7 @@ include "galaMenu.php";
       Manage entries
     </a>
   </p>
+  <?php } ?>
   <?php } ?>
 
   <!-- Gala timesheets temporarily hidden -->
