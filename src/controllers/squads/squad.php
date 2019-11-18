@@ -91,12 +91,12 @@ include BASE_PATH . 'views/header.php';
       </div>
       <?php } ?>
 
+      <?php if ($_SESSION['AccessLevel'] != "Parent") { ?>
       <?php if ($numSwimmers > 0) { ?>
       <h2>Sex Split</h2>
       <canvas class="mb-3" id="sexSplit"></canvas>
       <?php } ?>
 
-      <?php if ($_SESSION['AccessLevel'] != "Parent") { ?>
       <h2>Age Distribution</h2>
       <p class="lead">The age distribution chart shows the number of swimmers of each age in this squad.</p>
       <canvas class="mb-3" id="ageDistribution"></canvas>
@@ -112,8 +112,10 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
+<?php if ($_SESSION['AccessLevel'] != "Parent") { ?>
 <script src="<?=autoUrl("public/js/Chart.min.js")?>"></script>
 <script src="<?=autoUrl("js/charts/squad.js?squad=" . $id)?>"></script>
+<?php } ?>
 
 <?php
 
