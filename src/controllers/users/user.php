@@ -385,7 +385,7 @@ include BASE_PATH . "views/header.php";
         <?php if ($logo_path) { ?>
         <img class="img-fluid mb-3" style="max-height:35px;" src="<?=$logo_path?>.png" srcset="<?=$logo_path?>@2x.png 2x, <?=$logo_path?>@3x.png 3x">
         <?php } ?>
-        <p class="mb-0"><?=$bankName?><?=mb_strtoupper(bankDetails($id, "bank_name"))?></p>
+        <p class="mb-0"><?=$bankName?><abbr title="<?=htmlspecialchars(mb_strtoupper(bankDetails($id, "bank_name")))?>"><?=htmlspecialchars(getBankName(bankDetails($id, "bank_name"))?></abbr></p>
         <p class="mono">******<?=mb_strtoupper(bankDetails($id, "account_number_end"))?></p>
       </div>
       <?php } ?>

@@ -65,7 +65,7 @@ $mandateDetails->execute([$_SESSION['UserID'], true]);
               </a>
             </td>
   					<td>
-              <?=htmlspecialchars($row['BankName'])?>
+              <?=htmlspecialchars(getBankName($row['BankName']))?>
             </td>
   					<td class="mono" title="Name on bank account">
               <?=htmlspecialchars($row['AccountHolderName'])?>
