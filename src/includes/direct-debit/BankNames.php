@@ -41,7 +41,7 @@ function getBankName($bank) {
   } else if ($bank == "AIB GROUP (UK) PLC (TRADING NAME FIRST TRUST BANK)") {
     return 'AIB';
   } else if ($bank == "HANDELSBANKEN PLC") {
-    return 'AIB';
+    return 'Handelsbanken';
   } else if ($bank == "BANK OF SCOTLAND PLC") {
     return 'Bank of Scotland';
   }
