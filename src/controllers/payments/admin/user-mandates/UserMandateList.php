@@ -37,7 +37,7 @@ include BASE_PATH . 'views/header.php';
           </div>
           <div class="col text-md-right">
             <?php if ($mandate['BankName']) { ?>
-            <p class="mono mb-0"><?=htmlspecialchars($mandate['BankName'])?></p>
+            <p class="mono mb-0"><?=htmlspecialchars(getBankName($mandate['BankName']))?></p>
             <p class="mono mb-0"><?=htmlspecialchars($mandate['AccountHolderName'])?>, &#0149;&#0149;&#0149;&#0149;&#0149;&#0149;<?=htmlspecialchars($mandate['AccountNumEnd'])?></p>
             <?php } else { ?>
             <p class="mono mb-0">No mandate</p>

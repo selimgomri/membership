@@ -72,7 +72,7 @@ include BASE_PATH . "views/paymentsMenu.php";
           <?php if ($logo_path) { ?>
             <img class="img-fluid mb-3" style="max-height:35px;" src="<?=$logo_path?>.png" srcset="<?=$logo_path?>@2x.png 2x, <?=$logo_path?>@3x.png 3x">
           <?php } ?>
-          <p class="mb-0"><?=htmlspecialchars($name)?><?=htmlspecialchars(strtoupper(bankDetails($user, "bank_name")))?></p>
+          <p class="mb-0"><?=htmlspecialchars($name)?><abbr title="<?=htmlspecialchars(strtoupper(bankDetails($user, "bank_name")))?>"><?=htmlspecialchars(getBankName(bankDetails($user, "bank_name")))?></abbr></p>
           <p class="mono">******<?=htmlspecialchars(strtoupper(bankDetails($user, "account_number_end")))?></p>
           <p><?=htmlspecialchars(env('CLUB_NAME'))?> does not store your bank details.</p>
         <?php } ?>

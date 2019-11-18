@@ -33,6 +33,14 @@ function getBankLogo($bank) {
     $logo_path = autoUrl("public/img/directdebit/bank-logos/nationwide");
   } else if ($bank == "THE ROYAL BANK OF SCOTLAND PLC") {
     $logo_path = autoUrl("public/img/directdebit/bank-logos/rbs");
+  } else if ($bank == "VIRGIN MONEY PLC" || $bank == "YORKSHIRE BANK (A TRADING NAME OF CLYDESDALE BANK PLC)" || $bank == "CLYDESDALE BANK PLC") {
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/virginmoney");
+  } else if ($bank == "MONZO BANK LIMITED") {
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/monzo");
+  } else if ($bank == "AIB GROUP (UK) PLC (TRADING NAME FIRST TRUST BANK)") {
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/aib");
+  } else if ($bank == "BANK OF SCOTLAND PLC") {
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/bankofscotland");
   }
 
   return $logo_path;
