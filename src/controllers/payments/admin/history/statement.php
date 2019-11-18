@@ -80,7 +80,7 @@ include BASE_PATH . "views/paymentsMenu.php";
       <dt class="col-md-4">Bank</dt>
       <dd class="col-md-8">
         <span>
-          <?=htmlspecialchars($payment_info['BankName'])?>
+          <?=htmlspecialchars(getBankName($payment_info['BankName']))?>
         </span>
       </dd>
 
