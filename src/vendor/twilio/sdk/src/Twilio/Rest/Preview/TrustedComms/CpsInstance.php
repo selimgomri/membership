@@ -17,8 +17,8 @@ use Twilio\Version;
 /**
  * PLEASE NOTE that this class contains preview products that are subject to change. Use them with caution. If you currently do not have developer preview access, please contact help@twilio.com.
  *
- * @property string $phoneNumber
  * @property string $cpsUrl
+ * @property string $phoneNumber
  * @property string $url
  */
 class CpsInstance extends InstanceResource {
@@ -34,8 +34,8 @@ class CpsInstance extends InstanceResource {
 
         // Marshaled Properties
         $this->properties = array(
-            'phoneNumber' => Values::array_get($payload, 'phone_number'),
             'cpsUrl' => Values::array_get($payload, 'cps_url'),
+            'phoneNumber' => Values::array_get($payload, 'phone_number'),
             'url' => Values::array_get($payload, 'url'),
         );
 

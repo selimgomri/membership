@@ -30,7 +30,7 @@ class InstalledAddOnContext extends InstanceContext {
      * Initialize the InstalledAddOnContext
      *
      * @param \Twilio\Version $version Version that contains the resource
-     * @param string $sid The unique Installed Add-on Sid
+     * @param string $sid The SID of the InstalledAddOn resource to fetch
      * @return \Twilio\Rest\Preview\Marketplace\InstalledAddOnContext
      */
     public function __construct(Version $version, $sid) {

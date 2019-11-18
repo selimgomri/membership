@@ -61,11 +61,11 @@ class NotificationInstance extends InstanceResource {
             'moreInfo' => Values::array_get($payload, 'more_info'),
             'requestMethod' => Values::array_get($payload, 'request_method'),
             'requestUrl' => Values::array_get($payload, 'request_url'),
-            'sid' => Values::array_get($payload, 'sid'),
-            'uri' => Values::array_get($payload, 'uri'),
             'requestVariables' => Values::array_get($payload, 'request_variables'),
             'responseBody' => Values::array_get($payload, 'response_body'),
             'responseHeaders' => Values::array_get($payload, 'response_headers'),
+            'sid' => Values::array_get($payload, 'sid'),
+            'uri' => Values::array_get($payload, 'uri'),
         );
 
         $this->solution = array('accountSid' => $accountSid, 'sid' => $sid ?: $this->properties['sid'], );
@@ -98,16 +98,6 @@ class NotificationInstance extends InstanceResource {
      */
     public function fetch() {
         return $this->proxy()->fetch();
-    }
-
-    /**
-     * Deletes the NotificationInstance
-     *
-     * @return boolean True if delete succeeds, false otherwise
-     * @throws TwilioException When an HTTP error occurs.
-     */
-    public function delete() {
-        return $this->proxy()->delete();
     }
 
     /**

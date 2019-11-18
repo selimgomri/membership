@@ -150,7 +150,7 @@ ob_start();?>
         <dt class="split-30">Bank</dt>
         <dd class="split-70">
           <span class="mono">
-            <?=htmlspecialchars($payment_info['BankName'])?>
+            <?=htmlspecialchars(getBankName($payment_info['BankName']))?>
           </span>
         </dd>
       </div>

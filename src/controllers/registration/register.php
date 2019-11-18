@@ -72,14 +72,14 @@ $_SESSION['RegistrationMode'] = $mode;
         <div class="col-md-10 col-lg-8">
           <div class="alert alert-warning">
             <p class="mb-0">
-              <strong>Stop. Are you a new parent?</strong>
+              <strong>Are you a parent?</strong>
             </p>
             <p>
-              We'll be sending you an email in the next few days. This will include a personalised link to set up your account.
+              We'll be sending you an email in the next few days. This will include a personalised link to set up your account which means you don't have to create an account this way.
             </p>
             
             <p class="mb-0">
-              Until then please bear with us otherwise your registration at <?=htmlspecialchars(env('CLUB_NAME'))?> may be delayed.
+              Until you get this, please bear with us otherwise your registration may be delayed.
             </p>
           </div>
         </div>

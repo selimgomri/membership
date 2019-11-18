@@ -121,7 +121,7 @@ class AvailableAddOnList extends ListResource {
     /**
      * Constructs a AvailableAddOnContext
      *
-     * @param string $sid The unique Available Add-on Sid
+     * @param string $sid The SID of the AvailableAddOn resource to fetch
      * @return \Twilio\Rest\Preview\Marketplace\AvailableAddOnContext
      */
     public function getContext($sid) {
