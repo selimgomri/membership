@@ -105,7 +105,6 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'E' => 
         array (
             'Endroid\\QrCode\\' => 15,
-            'Endroid\\Installer\\' => 18,
         ),
         'D' => 
         array (
@@ -320,10 +319,6 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'Endroid\\QrCode\\' => 
         array (
             0 => __DIR__ . '/..' . '/endroid/qr-code/src',
-        ),
-        'Endroid\\Installer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/endroid/installer/src',
         ),
         'Dompdf\\' => 
         array (

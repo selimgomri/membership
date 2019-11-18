@@ -54,7 +54,6 @@ return array(
     'GeoIp2\\' => array($vendorDir . '/geoip2/geoip2/src'),
     'FontLib\\' => array($vendorDir . '/phenx/php-font-lib/src/FontLib'),
     'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qr-code/src'),
-    'Endroid\\Installer\\' => array($vendorDir . '/endroid/installer/src'),
     'Dompdf\\' => array($vendorDir . '/dompdf/dompdf/src'),
     'Defuse\\Crypto\\' => array($vendorDir . '/defuse/php-encryption/src'),
     'DASPRiD\\Enum\\' => array($vendorDir . '/dasprid/enum/src'),

@@ -29,6 +29,7 @@ use Twilio\Version;
  * @property string $integrationType
  * @property array $integration
  * @property bool $longLived
+ * @property bool $janitorEnabled
  * @property string $url
  */
 class FlexFlowInstance extends InstanceResource {
@@ -37,7 +38,7 @@ class FlexFlowInstance extends InstanceResource {
      *
      * @param \Twilio\Version $version Version that contains the resource
      * @param mixed[] $payload The response payload
-     * @param string $sid The unique ID of the FlexFlow
+     * @param string $sid The SID that identifies the resource to fetch
      * @return \Twilio\Rest\FlexApi\V1\FlexFlowInstance
      */
     public function __construct(Version $version, array $payload, $sid = null) {
@@ -57,6 +58,7 @@ class FlexFlowInstance extends InstanceResource {
             'integrationType' => Values::array_get($payload, 'integration_type'),
             'integration' => Values::array_get($payload, 'integration'),
             'longLived' => Values::array_get($payload, 'long_lived'),
+            'janitorEnabled' => Values::array_get($payload, 'janitor_enabled'),
             'url' => Values::array_get($payload, 'url'),
         );
 
