@@ -45,9 +45,10 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
     You are now viewing attendance records for up to the last 20 weeks
   </p>
 
-  <?php if ($earliestWeek == null) { ?>
+  <?php if ($getPresent == null) { ?>
     <div class="alert alert-warning">
-      <strong>No information available</strong>
+      <p class="mb-0"><strong>No information available</strong></p>
+			<p class="mb-0">This is likely because no registers have been taken at sessions this swimmer could attend.</p>
     </div>
   <?php } else { ?>
 
