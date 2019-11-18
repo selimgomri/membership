@@ -134,7 +134,7 @@ $recipientGroups = [
   ],
   "Metadata" => [
     "ForceSend" => $force
-  ]
+  ],
 ];
 
 if ($_POST['from'] == "current-user") {
@@ -156,6 +156,14 @@ if ($_POST['from'] == "current-user") {
   $recipientGroups["NamedSender"] = [
     "Email" => $fromEmail,
     "Name" => $userSending
+  ];
+}
+
+$replyAddress = getUserOption($_SESSION['UserID'], 'NotifyReplyAddress');
+if ($replyAddress && isset($_POST['ReplyToMe']) && bool($_POST['ReplyToMe'])) {
+  $recipientGroups["ReplyToMe"] = [
+    "Email" => $replyAddress,
+    "Name" => $_SESSION['Forename'] . ' ' . $_SESSION['Surname'],
   ];
 }
 

@@ -90,7 +90,15 @@ while ($currentMessage = $getPendingGroupMail->fetch(PDO::FETCH_ASSOC)) {
     $globalSubstitutions
   );
 
-  $email->setReplyTo(env('CLUB_EMAIL'), env('CLUB_NAME') . ' Enquiries');
+  if ($jsonData->ReplyToMe->Email != null && $jsonData->ReplyToMe->Name != null) {
+    try {
+      $email->setReplyTo($jsonData->ReplyToMe->Email, $jsonData->ReplyToMe->Name);
+    } catch (Exception $e) {
+      $email->setReplyTo(env('CLUB_EMAIL'), env('CLUB_NAME') . ' Enquiries');
+    }
+  } else {
+    $email->setReplyTo(env('CLUB_EMAIL'), env('CLUB_NAME') . ' Enquiries');
+  }
 
   $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
   try {

@@ -116,12 +116,37 @@ include BASE_PATH . "views/notifyMenu.php";
     </div>
     <?php } ?>
 
-    <div class="form-group">
-			<label for="from">From</label>
-      <select class="custom-select" name="from" id="from">
-        <option value="current-user" <?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>selected<?php } ?>><?=htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'] . " <" . $emailPrefix . "noreply@" . env('EMAIL_DOMAIN') . ">  ")?></option>
-      <option value="club-sending-account" <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>selected<?php } ?>><?=htmlspecialchars(env('CLUB_NAME') . " <" . $emailPrefix . "noreply@" . env('EMAIL_DOMAIN') . ">")?></option>
-      </select>
+    <div class="row">
+      <div class="col-md">
+        <div class="form-group">
+          <label for="from">Send message as</label>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>checked<?php } ?>>
+            <label class="custom-control-label" for="from-club"><?=htmlspecialchars(env('CLUB_NAME'))?></label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="from-user" name="from" class="custom-control-input" value="current-user" <?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>checked<?php } ?>>
+            <label class="custom-control-label" for="from-user"><?=htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'])?></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md">
+        <div class="form-group">
+          <label for="ReplyToMe">Send replies to</label>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="ReplyTo-Club" name="ReplyToMe" class="custom-control-input" value="0" checked>
+            <label class="custom-control-label" for="ReplyTo-Club">Main club address</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="ReplyTo-Me" name="ReplyToMe" class="custom-control-input" value="1" <?php if (!getUserOption($_SESSION['UserID'], 'NotifyReplyAddress')) { ?>disabled<?php } ?>>
+            <label class="custom-control-label" for="ReplyTo-Me">My reply-to email address</label>
+          </div>
+          <small class="form-text text-muted">
+            <a href="<?=htmlspecialchars(autoUrl("notify/reply-to"))?>" target="_blank">Manage reply-to address</a>
+          </small>
+        </div>
+      </div>
 		</div>
 
 		<div class="form-group">
