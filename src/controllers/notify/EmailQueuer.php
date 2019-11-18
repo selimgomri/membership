@@ -157,14 +157,14 @@ if ($_POST['from'] == "current-user") {
     "Email" => $fromEmail,
     "Name" => $userSending
   ];
+}
 
-  $replyAddress = getUserOption($_SESSION['UserID'], 'NotifyReplyAddress');
-  if ($replyAddress && isset($_POST['ReplyToMe']) && bool($_POST['ReplyToMe'])) {
-    $recipientGroups["ReplyToMe"] = [
-      "Email" => $replyAddress,
-      "Name" => $_SESSION['Forename'] . ' ' . $_SESSION['Surname'],
-    ];
-  }
+$replyAddress = getUserOption($_SESSION['UserID'], 'NotifyReplyAddress');
+if ($replyAddress && isset($_POST['ReplyToMe']) && bool($_POST['ReplyToMe'])) {
+  $recipientGroups["ReplyToMe"] = [
+    "Email" => $replyAddress,
+    "Name" => $_SESSION['Forename'] . ' ' . $_SESSION['Surname'],
+  ];
 }
 
 $json = json_encode($recipientGroups);
