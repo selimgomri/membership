@@ -91,7 +91,7 @@ while ($currentMessage = $getPendingGroupMail->fetch(PDO::FETCH_ASSOC)) {
   );
 
   if ($jsonData->ReplyToMe->Email != null && $jsonData->ReplyToMe->Name != null) {
-    $email->setReplyTo($jsonData->ReplyToMe->Name, $jsonData->ReplyToMe->Email);
+    $email->setReplyTo($jsonData->ReplyToMe->Email, $jsonData->ReplyToMe->Name);
   } else {
     $email->setReplyTo(env('CLUB_EMAIL'), env('CLUB_NAME') . ' Enquiries');
   }
