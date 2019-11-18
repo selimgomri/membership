@@ -143,7 +143,7 @@ include BASE_PATH . "views/notifyMenu.php";
             <label class="custom-control-label" for="ReplyTo-Me">My reply-to email address</label>
           </div>
           <small class="form-text text-muted">
-            <a href="<?=htmlspecialchars(autoUrl("notify/reply-to"))?>">Manage reply-to address</a>
+            <a href="<?=htmlspecialchars(autoUrl("notify/reply-to"))?>" target="_blank">Manage reply-to address</a>
           </small>
         </div>
       </div>
