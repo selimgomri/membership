@@ -30,8 +30,9 @@ class AvailableAddOnExtensionInstance extends InstanceResource {
      *
      * @param \Twilio\Version $version Version that contains the resource
      * @param mixed[] $payload The response payload
-     * @param string $availableAddOnSid The available_add_on_sid
-     * @param string $sid The unique Extension Sid
+     * @param string $availableAddOnSid The SID of the AvailableAddOn resource to
+     *                                  which this extension applies
+     * @param string $sid The SID of the AvailableAddOn Extension resource to fetch
      * @return \Twilio\Rest\Preview\Marketplace\AvailableAddOn\AvailableAddOnExtensionInstance
      */
     public function __construct(Version $version, array $payload, $availableAddOnSid, $sid = null) {
