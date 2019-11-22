@@ -11,6 +11,10 @@ try {
     $systemInfo->setSystemOption('PrivacyPolicy', $_POST['PrivacyPolicy']);
   }
 
+  if (isset($_POST['WelcomeLetter'])) {
+    $systemInfo->setSystemOption('WelcomeLetter', $_POST['WelcomeLetter']);
+  }
+
   $_SESSION['PCC-SAVED'] = true;
 } catch (Exception $e) {
   $_SESSION['PCC-ERROR'] = true;

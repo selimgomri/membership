@@ -41,7 +41,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 			You'll need to add one first
 		</div>
 		<?php } ?>
-		<h2>Previous and Current Renewals</h2>
+		<h2>Recent renewals</h2>
 		<ol>
 			<?php while ($row = $renewals->fetch(PDO::FETCH_ASSOC)) {
 				?>
@@ -54,7 +54,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 				</li>
 				<?php } ?>
 		</ol>
-		<h2>Add a new Renewal Period</h2>
+		
 		<p>
 			<a href="<?php echo autoUrl("renewal/new"); ?>" class="btn
 			btn-success">

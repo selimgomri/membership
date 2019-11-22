@@ -1,8 +1,16 @@
 <?php
 
-$id = 2;
+if ($_SESSION['AccessLevel'] == 'Parent') {
+  $id = $_SESSION['UserID'];
+}
+
+if (!isset($id)) {
+  halt(404);
+}
 
 global $db;
+global $systemInfo;
+$welcome = $systemInfo->getSystemOption('WelcomeLetter');
 
 $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
 $user->execute([$id]);
@@ -19,6 +27,13 @@ $userExtras = $db->prepare("SELECT MForename fn, MSurname sn, ExtraName `name`, 
 $userExtras->execute([$id]);
 
 $pagetitle = env('CLUB_NAME') . " Welcome Pack";
+
+$userObj = new \User($id, $db);
+$json = $userObj->getUserOption('MAIN_ADDRESS');
+$address = null;
+if ($json != null) {
+  $address = json_decode($json);
+}
 
 ob_start();?>
 
@@ -50,14 +65,27 @@ ob_start();?>
   <body>
     <?php include BASE_PATH . 'helperclasses/PDFStyles/Letterhead.php'; ?>
 
-    <p>
+    <p class="text-right">
       <?=date("d/m/Y")?>
     </p>
 
+    <?php if ($address != null && isset($address->streetAndNumber)) { ?>
+    <address class="mb-3 address-font address-box">
+      <strong><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></strong><br>
+      <?=htmlspecialchars($address->streetAndNumber)?><br>
+      <?php if (isset($address->flatOrBuilding)) { ?>
+      <?=htmlspecialchars($address->flatOrBuilding)?><br>
+      <?php } ?>
+      <?=htmlspecialchars($address->city)?><br>
+      <?=htmlspecialchars(mb_strtoupper($address->postCode))?>
+    </address>
+    <div class="after-address-box"></div>
+    <?php } else { ?>
     <p>
       <strong><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></strong><br>
-      Registered Parent/Carer
+      Parent/Carer
     </p>
+    <?php } ?>
 
     <div class="primary-box mb-3" id="title">
       <h1 class="mb-0">
@@ -87,6 +115,9 @@ ob_start();?>
     </p>
 
     <ul>
+      <?php if ($welcome != null) { ?>
+      <li>Welcome message from your club</li>
+      <?php } ?>
       <li>Information about your swimmers and their squads</li>
       <li>Club Codes of Conduct (for you and your swimmers)</li>
       <li>Information about your fees</li>
@@ -120,6 +151,12 @@ ob_start();?>
 
       <p><em>* If you're trasferring from another Swim England affiliated club and still have time left on the current year's membership, you may not be required to pay the Swim England membership fee.</em></p>
     </div>
+
+    <?php if ($welcome != null) { ?>
+    <div class="page-break"></div>
+    <h1>Welcome to <?=htmlspecialchars(env('CLUB_NAME'))?></h1>
+    <?=pdfStringReplace(getPostContent($welcome))?>
+    <?php } ?>
 
     <div class="page-break"></div>
 
@@ -162,7 +199,7 @@ ob_start();?>
 
     <?php foreach ($swimmers as $s) { ?>
     <h1>Code of Conduct for <?=htmlspecialchars($s['fn'])?></h1>
-    <?=getPostContent($s['SquadCoC'])?>
+    <?=pdfStringReplace(getPostContent($s['SquadCoC']))?>
     <?php } ?>
 
     <div class="page-break"></div>
