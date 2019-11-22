@@ -304,7 +304,7 @@ $strokeCountsData = array_values($strokeCounts);
     </div>
     <div class="tab-pane fade mt-3" id="times" role="tabpanel" aria-labelledby="times-tab">
       <div class="">
-        <h2 class="">Best Times</h2>
+        <h2 class="">Best times</h2>
         <?php
         $timeGet = $db->prepare("SELECT * FROM `times` WHERE `MemberID` = ? AND `Type` = ?");
         $timeGet->execute([$id, 'SCPB']);
@@ -391,7 +391,7 @@ $strokeCountsData = array_values($strokeCounts);
     </div>
     <div class="tab-pane fade mt-3" id="squad" role="tabpanel" aria-labelledby="squad-tab">
       <div class="">
-        <h2 class="border-bottom border-gray pb-2 mb-0">Squad Information</h2>
+        <h2 class="border-bottom border-gray pb-2 mb-0">Squad information</h2>
         <div class="media pt-3">
           <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
             <strong class="d-block text-gray-dark">Squad</strong>
@@ -438,7 +438,7 @@ $strokeCountsData = array_values($strokeCounts);
       
       <div class="row">
         <div class="col-lg-8">
-          <h2>Leave the Club</h2>
+          <h2>Leave the club</h2>
           <p class="lead">
             You can leave the club at any time.
           </p>
@@ -477,12 +477,13 @@ $strokeCountsData = array_values($strokeCounts);
           $col = "col-sm-4";
         }
         ?>
-        <h2 class="">Personal Data</h2>
+        <h2 class="">Personal data</h2>
         <p>
-          Under the General Data Protection Regulation, you can request for
+          Under the EU General Data Protection Regulation, you can request for
           free to download all personal data held about
           <?=$rowSwim["MForename"]?> by <?=htmlspecialchars(env('CLUB_NAME'))?>.
         </p>
+        <p><em>GDPR will remain in force after brexit.</em></p>
         <p>
           <a href="<?=autoUrl("my-account/general/download-member-data/" . $id)?>"
           class="btn btn-primary">
@@ -494,17 +495,17 @@ $strokeCountsData = array_values($strokeCounts);
           options menu.
         </p>
 
-        <?php if (defined("IS_CLS") && IS_CLS) { ?>
+        <?php if (bool(env('IS_CLS'))) { ?>
 
-        <h2 class="">Membership Card</h2>
+        <h2 class="">Membership card</h2>
         <p>
           Your swimmer's club membership card can be used by our coaches in an
           emergency to access the medical forms and contact details for your
           swimmer.
         </p>
         <p>
-          <a href="<?=currentUrl()?>membershipcard" class="btn btn-primary" target="_blank">
-            Print Membership Card
+          <a href="<?=autoUrl("swimmers/" . $id . "/membershipcard")?>" class="btn btn-primary" target="_blank">
+            Print membership card
           </a>
         </p>
 
