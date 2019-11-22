@@ -304,7 +304,7 @@ $strokeCountsData = array_values($strokeCounts);
     </div>
     <div class="tab-pane fade mt-3" id="times" role="tabpanel" aria-labelledby="times-tab">
       <div class="">
-        <h2 class="border-bottom border-gray pb-2 mb-0">Best Times</h2>
+        <h2 class="">Best Times</h2>
         <?php
         $timeGet = $db->prepare("SELECT * FROM `times` WHERE `MemberID` = ? AND `Type` = ?");
         $timeGet->execute([$id, 'SCPB']);
@@ -377,6 +377,8 @@ $strokeCountsData = array_values($strokeCounts);
 
       <!-- STATS SECTION -->
 
+      <h2>Gala entry statistics</h2>
+
       <div class="row">
         <div class="col-lg-8">
           <canvas id="eventEntries" class="mb-3"></canvas>
@@ -433,27 +435,38 @@ $strokeCountsData = array_values($strokeCounts);
     </div>
     <?php if ($leavers != null) { ?>
     <div class="tab-pane fade mt-3" id="leave-club" role="tabpanel" aria-labelledby="leave-club-tab">
-      <h2>Leave the Club</h2>
-      <p class="lead">
-        You can leave the club at any time.
-      </p>
-      <p>
-        As we charge you on the first day of each month for that upcoming
-        month, it makes sense for our systems to remove your swimmer on the
-        first. It doesn't matter if you stop attending before this date.
-      </p>
+      
+      <div class="row">
+        <div class="col-lg-8">
+          <h2>Leave the Club</h2>
+          <p class="lead">
+            You can leave the club at any time.
+          </p>
+          <p>
+            As we charge you on the first day of each month for that upcoming
+            month, it makes sense for our systems to remove your swimmer on the
+            first. It doesn't matter if you stop attending before this date.
+          </p>
 
-      <p>
-        If <?=htmlspecialchars($rowSwim["MForename"])?> won't be returning to
-        the club from 1 <?=date("F Y", strtotime('+1 month'))?>, <a
-        href="<?=autoUrl("swimmers/" . $id . "/leaveclub/")?>">please click
-        here</a>.
-      </p>
-      <p>
-        This will update our systems and automatically remove
-        <?=htmlspecialchars($rowSwim["MForename"])?> from our registers and
-        billing systems on this date.
-      </p>
+          <div class="alert alert-danger">
+            <p>
+              If <?=htmlspecialchars($rowSwim["MForename"])?> won't be returning to
+              the club on or after 1 <?=date("F Y", strtotime('+1 month'))?>, press the button below to confirm.
+            </p>
+            <p>
+              This will update our systems and automatically remove
+              <?=htmlspecialchars($rowSwim["MForename"])?> from our registers and
+              billing systems on this date.
+            </p>
+            <p>
+              If you later decide you want to stay at <?=htmlspecialchars(env('CLUB_NAME'))?> then you will need to contact club staff to have the move cancelled.
+            </p>
+            <p class="mb-0">
+              <a class="btn btn-danger" href="<?=autoUrl("swimmers/" . $id . "/leaveclub")?>">Leave the club</a>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
     <?php } ?>
     <div class="tab-pane fade mt-3" id="additional-details" role="tabpanel" aria-labelledby="additional-info-tab">
@@ -497,28 +510,29 @@ $strokeCountsData = array_values($strokeCounts);
 
         <?php } ?>
         
-        <h2 class="">Membership Barcodes</h2>
-        <p>We'll let you know in advance if you'll ever need to print these out.</p>
+        <h2 class="">Membership information</h2>
+        <p class="lead">All members are issued with a Swim England (ASA) number and a club registration number.</p>
+        <p>You will probably never need your club membership number but your Swim England number is very important.</p>
         <div class="row">
           <div class="<?php echo $col; ?>">
             <div class="text-center border p-2 bg-white">
               <span class="lead mb-2">Swim England Number</span>
               <img class="img-fluid mx-auto d-block"
-              src="<?php echo autoUrl("services/barcode-generator?codetype=Code128a&size=60&text=" . $rowSwim['ASANumber'] . "&print=false"); ?>"
-              srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128a&size=120&text=" . $rowSwim['ASANumber'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128a&size=180&text=" . $rowSwim['ASANumber'] . "&print=false"); ?> 3x"
-              alt="<?php echo $rowSwim['ASANumber']; ?>"></img>
-              <span class="mono"><?php echo $rowSwim['ASANumber']; ?></span>
+              src="<?=htmlspecialchars(autoUrl("services/barcode-generator?codetype=Code128a&size=60&text=" . $rowSwim['ASANumber'] . "&print=false"))?>"
+              srcset="<?=htmlspecialchars(autoUrl("services/barcode-generator?codetype=Code128a&size=120&text=" . $rowSwim['ASANumber'] . "&print=false"))?> 2x, <?=htmlspecialchars(autoUrl("services/barcode-generator?codetype=Code128a&size=180&text=" . $rowSwim['ASANumber'] . "&print=false"))?> 3x"
+              alt="<?=htmlspecialchars($rowSwim['ASANumber'])?>"></img>
+              <span class="mono"><?=htmlspecialchars($rowSwim['ASANumber'])?></span>
             </div>
             <span class="d-block d-sm-none mb-3"></span>
           </div>
           <div class="<?php echo $col; ?>">
             <div class="text-center border p-2 bg-white">
-              <span class="lead mb-2">CLSASC Number</span>
+              <span class="lead mb-2"><?=htmlspecialchars(env('CLUB_SHORT_NAME'))?> Number</span>
               <img class="img-fluid mx-auto d-block"
-              src="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . urlencode(env('ASA_CLUB_CODE')) . $rowSwim['MemberID'] . "&print=false"); ?>"
-              srcset="<?php echo autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . urlencode(env('ASA_CLUB_CODE')) . $rowSwim['MemberID'] . "&print=false"); ?> 2x, <?php echo autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . urlencode(env('ASA_CLUB_CODE')) . $rowSwim['MemberID'] . "&print=false"); ?> 3x"
-              alt="CLSX<?php echo $rowSwim['MemberID']; ?>"></img>
-              <span class="mono"><?=htmlspecialchars(env('ASA_CLUB_CODE'))?><?php echo $rowSwim['MemberID']; ?></span>
+              src="<?=htmlspecialchars(autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . urlencode(env('ASA_CLUB_CODE')) . $rowSwim['MemberID'] . "&print=false"))?>"
+              srcset="<?=htmlspecialchars(autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . urlencode(env('ASA_CLUB_CODE')) . $rowSwim['MemberID'] . "&print=false"))?> 2x, <?=htmlspecialchars(autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . urlencode(env('ASA_CLUB_CODE')) . $rowSwim['MemberID'] . "&print=false"))?> 3x"
+              alt="<?=htmlspecialchars(env('ASA_CLUB_CODE') . $rowSwim['MemberID'])?>"></img>
+              <span class="mono"><?=htmlspecialchars(env('ASA_CLUB_CODE') . $rowSwim['MemberID'])?></span>
             </div>
             <?php if (isset($rowSwim['ThriveNumber']) && $rowSwim['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><?php } ?>
           </div>
