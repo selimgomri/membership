@@ -6,9 +6,13 @@ global $db;
 $termsDocuments = $db->query("SELECT Title, ID FROM posts WHERE `Type` = 'terms_conditions' ORDER BY Title ASC");
 $termsDocuments = $termsDocuments->fetchAll(PDO::FETCH_ASSOC);
 
+$welcomeDocuments = $db->query("SELECT Title, ID FROM posts WHERE `Type` = 'corporate_documentation' ORDER BY Title ASC");
+$welcomeDocuments = $welcomeDocuments->fetchAll(PDO::FETCH_ASSOC);
+
 global $systemInfo;
 $terms = $systemInfo->getSystemOption('TermsAndConditions');
 $privacy = $systemInfo->getSystemOption('PrivacyPolicy');
+$welcome = $systemInfo->getSystemOption('WelcomeLetter');
 
 $Extra = new ParsedownExtra();
 $Extra->setSafeMode(true);
@@ -84,6 +88,24 @@ include BASE_PATH . 'views/header.php';
             </select>
             <small id="PrivacyPolicyBlock" class="form-text text-muted">
               You can create a privacy policy document in the <strong>Posts</strong> section of this system with the type <strong>terms and conditions</strong> and select it here. It will be used in various parts of this system, including when new members sign up and when members renew.
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label for="WelcomeLetter">Welcome letter</label>
+            <select class="custom-select" id="WelcomeLetter" name="WelcomeLetter" aria-describedby="WelcomeLetterBlock">
+              <option <?php if ($welcome == null) { ?>selected<?php } ?>>
+                Select an option
+              </option>
+              <?php foreach ($welcomeDocuments as $welcomePosts) { ?>
+              <option value="<?=htmlspecialchars($welcomePosts['ID'])?>"
+                <?php if ($welcome == $welcomePosts['ID']) { ?>selected<?php } ?>>
+                <?=htmlspecialchars($welcomePosts['Title'])?>
+              </option>
+              <?php } ?>
+            </select>
+            <small id="WelcomeLetterBlock" class="form-text text-muted">
+              You can create a welcome letter in the <strong>Posts</strong> section of this system with the type <strong>terms and conditions</strong> and select it here. It will be used in various parts of this system, including when new members sign up.
             </small>
           </div>
 

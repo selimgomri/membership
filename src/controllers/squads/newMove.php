@@ -11,6 +11,7 @@ $getSquads = null;
 
 if ($moveCount->fetchColumn() > 0) {
 	header("Location: " . autoUrl("swimmers/" . $id . "/edit-move"));
+	return;
 } else {
   $getMemberInfo = $db->prepare("SELECT `MForename`, `MSurname`, `SquadName`, members.SquadID FROM `members` INNER JOIN `squads` ON members.SquadID = squads.SquadID WHERE `MemberID` = ?");
   $getMemberInfo->execute([$id]);

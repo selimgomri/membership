@@ -1304,3 +1304,4 @@ include BASE_PATH . 'includes/direct-debit/BankLogos.php';
 include BASE_PATH . 'includes/direct-debit/BankNames.php';
 include BASE_PATH . 'includes/direct-debit/Balances.php';
 include BASE_PATH . 'includes/membership-fees/Loader.php';
+include BASE_PATH . 'includes/pdf/StringReplacements.php';

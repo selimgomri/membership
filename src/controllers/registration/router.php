@@ -34,6 +34,11 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 	});
 }
 
-$this->group('/ac/', function() {
+$this->group('/ac', function() {
   include 'join-from-trial/router.php';
+});
+
+
+$this->get('/welcome-pack', function() {
+  include 'welcome-pack/PDF.php';
 });
