@@ -147,9 +147,13 @@ $content .= '
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       <a class="dropdown-item" href="' . autoUrl("swimmers/" . $id . "/enter-gala") . '">Enter a gala</a>
-      <a class="dropdown-item" href="' . htmlspecialchars('mailto:' . $parentEmail) . '">Email parent/guardian</a>
+      <a class="dropdown-item" href="' . htmlspecialchars('mailto:' . $parentEmail) . '">Email parent/guardian</a>';
+      if ($_SESSION['AccessLevel'] != 'Galas') {
+      $content .= '
       <a class="dropdown-item" href="' . autoUrl("swimmers/" . $id . "/new-move") . '">New squad move</a>
-      <a class="dropdown-item" href="' . autoUrl("swimmers/" . $id . "/parenthelp") . '">Print access key</a>
+      <a class="dropdown-item" href="' . autoUrl("swimmers/" . $id . "/parenthelp") . '">Print access key</a>';
+      }
+      $content .= '
     </div>
   </div>
 </p>
@@ -192,11 +196,23 @@ $content .= '<!--
     <h2 class="mb-0">About ' . htmlspecialchars($rowSwim["MForename"]) . '</h2>
   </div>
   <ul class="list-group list-group-flush">
-    <li class="list-group-item">
+    <li class="list-group-item">';
+    if ($_SESSION['AccessLevel'] != 'Galas') {
+      $content .= '
       <p class="mb-0">
         <strong class="d-block text-gray-dark">Date of Birth</strong>
         ' . date('j F Y', strtotime($rowSwim['DateOfBirth'])) . '
-      </p>
+      </p>';
+    } else {
+      $today = new DateTime('now', new DateTimeZone('Europe/London'));
+      $birthday = new DateTime($rowSwim['DateOfBirth'], new DateTimeZone('Europe/London'));
+      $content .= '
+      <p class="mb-0">
+        <strong class="d-block text-gray-dark">Age</strong>
+        ' . $birthday->diff($today)->format('%y') . '
+      </p>';
+    }
+    $content .= '
     </li>
     <li class="list-group-item">
       <p class="mb-0">
@@ -210,7 +226,7 @@ $content .= '<!--
         ' . htmlspecialchars($rowSwim["ASACategory"]) . '
       </p>
     </li>';
-    if ($_SESSION['AccessLevel'] != 'Committee') {
+    if ($_SESSION['AccessLevel'] != 'Galas') {
     $content .= '
     <li class="list-group-item">
       <p class="mb-0">
@@ -230,7 +246,7 @@ $content .= '<!--
       </p>
     </li>';
     }
-    if ($_SESSION['AccessLevel'] != 'Committee') {
+    if ($_SESSION['AccessLevel'] != 'Galas') {
     $content .= '
     <li class="list-group-item">
       <p class="mb-0">
@@ -257,7 +273,6 @@ $content .= '<!--
         <a href="' . autoUrl("swimmers/" . $id . "/new-move") . '">New Move</a>
       </p>
     </li>';
-    }
     $content .= '
     <li class="list-group-item">
       <div class="mb-0">
@@ -297,6 +312,7 @@ $content .= '<!--
       $content .= '</div>
     </li>
     ';
+    }
     if ($rowSwim["OtherNotes"] != "") {
     $content .= '
     <li class="list-group-item">
@@ -306,14 +322,14 @@ $content .= '<!--
       </p>
     </li>';
     }
-    if ($_SESSION['AccessLevel'] != 'Committee') {
+    if ($_SESSION['AccessLevel'] != 'Galas') {
     $content .= '
     <li class="list-group-item">
       <p class="mb-0">
         <strong class="d-block text-gray-dark">
           Exempt from Squad and Membership Fees?
         </strong>';
-    if ($rowSwim["ClubPays"] == 1){
+    if (bool($rowSwim["ClubPays"])){
       $content .= 'Yes';
     } else {
       $content .= 'No <em>(Only swimmers at University are usually exempt from most
@@ -329,15 +345,15 @@ $content .= '<!--
 	  <span class="d-block text-right d-print-none">
 	    <a class="btn btn-success" href="' . autoUrl("swimmers/" . $id . "/edit") . '">Edit Details</a> <a class="btn btn-success" href="' . autoUrl("swimmers/" . $id . "/medical") . '">Edit Medical Notes</a>
 	  </span>';
-	}
-	else {
+	} else {
 		$content .= '
-	  <span class="d-block text-right d-print-none">
-	    Please contact the parent or an administrator if you need to make changes
+	  <span class="d-block d-print-none">
+	    Please contact the parent or an administrator if you need to make changes to the details shown on this page.
 	  </span>';
   }
   $content .= '</div></div>';
-$content .= '
+  if ($access != 'Galas') {
+  $content .= '
   <div class="mb-3 card card-body" id="photo">
     <h2>Photography Permissions</h2>';
     if (($rowSwim['Website'] != 1 || $rowSwim['Social'] != 1 || $rowSwim['Noticeboard'] != 1 || $rowSwim['FilmTraining'] != 1 || $rowSwim['ProPhoto'] != 1) && ($age < 18)) {
@@ -412,6 +428,7 @@ $content .= '
       $content .= '<div class="card-body"><p class="mb-0">Make sure you know what to do in an emergency</p></div>';
     }
   $content .= '</div>';
+  }
   }
   $content .= '</div>
   <div class="col-12 col-lg-8">';

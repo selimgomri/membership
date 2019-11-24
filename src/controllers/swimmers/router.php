@@ -45,7 +45,7 @@ if ($access == "Parent") {
 	// Edit a Swimmer
 	$this->get('/{id}:int/edit', function($id) {
     global $link;
-	  require('parentSingleSwimmer.php');
+	  require 'parentSingleSwimmer.php';
 	});
 
 	// Edit a Swimmer
@@ -95,7 +95,7 @@ else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $
    * Squad moves
    *
    */
-	if ($access != "Committee") {
+	if ($access == "Coach" || $access == 'Admin') {
 		$this->get('/{id}:int/new-move', function($id) {
 			global $link;
 			require BASE_PATH . 'controllers/squads/newMove.php';
@@ -136,6 +136,7 @@ else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $
     return $query->fetchColumn();
   }
 
+	/*
   $this->get('/{id}:int/contactparent', function($id) {
 		global $link;
     $user = getSwimmerParent($id);
@@ -148,8 +149,9 @@ else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $
     $returnToSwimmer = true;
 		include BASE_PATH . 'controllers/notify/EmailQueuerIndividual.php';
 	});
+	*/
 
-	if ($access != "Committee") {
+	if ($access != "Galas") {
 		$this->get('/{id}:int/attendance', function($id) {
 				global $link;
 				include BASE_PATH . "controllers/attendance/historyViews/swimmerHistory.php";
@@ -188,7 +190,7 @@ if ($access == "Admin") {
 	});
 }
 
-if ($access != "Parent" && $access != 'Committee') {
+if ($access != "Parent" && $access != 'Galas') {
 	$this->get('/addmember', function() {
     //global $link;
 		//include 'AddMember/SelectType.php';
