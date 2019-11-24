@@ -104,11 +104,17 @@ $row = $query->fetch(PDO::FETCH_ASSOC);
       </div>
       <div class="col text-sm-right">
         <p class="mb-0">
+          <?php if ($_SESSION['AccessLevel'] != 'Galas') { ?>
           <strong>Born:</strong> <?=$DOB?> (<em>Age <?=htmlspecialchars($age)?></em>)
+          <?php } else { ?>
+          <strong>Age:</strong> <?=htmlspecialchars($age)?>
+          <?php } ?>
         </p>
+        <?php if ($_SESSION['AccessLevel'] != 'Galas') { ?>
         <p class="mb-0">
           <strong>Attendance:</strong> <?=getAttendanceByID($link, $row['MemberID'], 4)?>%
         </p>
+        <?php } ?>
         <p class="mb-0">
           <strong>SE Number:</strong> <?=htmlspecialchars($row['ASANumber'])?>
         </p>
