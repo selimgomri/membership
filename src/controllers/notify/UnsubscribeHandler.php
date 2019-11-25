@@ -7,7 +7,7 @@ $email = str_replace(' ', '+', urldecode($email));
 
 $list_lc - mb_strtolower($list);
 
-if ($list_lc != "notify" && $list_lc != "security" && $list_lc != "payments") {
+if ($list_lc != "notify" && $list_lc != "security" && $list_lc != "payments" && $list_lc != "newmember") {
 	halt(404);
 }
 
