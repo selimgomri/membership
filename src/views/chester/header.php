@@ -208,7 +208,7 @@ p.lead {
       </div>
     </div>
 
-    <div class="text-white py-3 d-none d-lg-flex bg-primary-darker">
+        <div class="text-white py-3 d-none d-lg-flex bg-primary-darker <?php if (date("m") == "12") { ?>festive<?php } ?>">
       <div class="<?=$container_class?>">
         <div class="row align-items-center">
           <div class="col">
