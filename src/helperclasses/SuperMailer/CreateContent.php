@@ -50,7 +50,7 @@ class CreateMail {
     if ($this->plainContent != null) {
       return $this->plainContent;
     } else {
-      return strip_tags($this->getHtmlContent());
+      return html_entity_decode(strip_tags($this->getHtmlContent()));
     }
   }
 
