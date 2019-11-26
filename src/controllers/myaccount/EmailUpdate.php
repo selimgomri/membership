@@ -94,4 +94,4 @@ if ($found) {
 	';
 }
 
-header("Location: " . autoUrl("/x"));
+header("Location: " . autoUrl(""));
