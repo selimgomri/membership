@@ -170,7 +170,7 @@ include BASE_PATH . "views/notifyMenu.php";
       </small>
 		</div>
 
-    <?php if ($_SESSION['AccessLevel'] != "Coach") { ?>
+    <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas") { ?>
 
     <div class="form-group">
       <div class="custom-control custom-checkbox">

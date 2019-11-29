@@ -29,7 +29,7 @@ if ($_SESSION['AccessLevel'] != "Admin" && !($replyAddress && isset($_POST['Repl
 }
 $force = 0;
 $sender = $_SESSION['UserID'];
-if (isset($_POST['force']) && $_SESSION['AccessLevel'] != "Coach") {
+if (isset($_POST['force']) && ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas")) {
   $force = 1;
 }
 
