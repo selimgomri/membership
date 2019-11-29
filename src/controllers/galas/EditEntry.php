@@ -5,10 +5,12 @@ global $db;
 $use_white_background = true;
 $disabled = "";
 
+$numFormat = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+
 $sql = null;
 
 if ($_SESSION['AccessLevel'] == "Parent") {
-  $sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE `EntryID` = ? AND members.UserID = ? ORDER BY `galas`.`GalaDate` DESC;");
+  $sql = $db->prepare("SELECT * FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE `EntryID` = ? AND members.UserID = ? ORDER BY `galas`.`GalaDate` DESC;");
   $sql->execute([$id, $_SESSION['UserID']]);
 } else {
   $sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE `EntryID` = ? ORDER BY `galas`.`GalaDate` DESC;");
@@ -16,9 +18,22 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 }
 $row = $sql->fetch(PDO::FETCH_ASSOC);
 
+//pre($row);
+
 if ($row == null) {
   halt(404);
 }
+
+$closingDate = new DateTime($row['ClosingDate'], new DateTimeZone('Europe/London'));
+$theDate = new DateTime('now', new DateTimeZone('Europe/London'));
+
+$locked = false;
+if (bool($row['Charged']) || bool($row['EntryProcessed']) || ($closingDate < $theDate && ($_SESSION['AccessLevel'] != 'Admin' && $_SESSION['AccessLevel'] != 'Galas')) || bool($row['Locked'])) {
+  $locked = true;
+}
+
+$closingDate = $closingDate->format('Y-m-d');
+$theDate = $theDate->format('Y-m-d');
 
 $swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];
 $swimsTimeArray = ['50FreeTime','100FreeTime','200FreeTime','400FreeTime','800FreeTime','1500FreeTime','50BreastTime','100BreastTime','200BreastTime','50FlyTime','100FlyTime','200FlyTime','50BackTime','100BackTime','200BackTime','100IMTime','150IMTime','200IMTime','400IMTime',];
@@ -42,7 +57,7 @@ include "galaMenu.php"; ?>
   </nav>
     <div>
       <h1><?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'][0])?>'s entry for <?=htmlspecialchars($row['GalaName'])?></h1>
-      <p class="lead">For <?=htmlspecialchars($row['GalaName'])?>, Closing Date: <?=date('j F Y', strtotime($row['ClosingDate']))?></p>
+      <p class="lead">Closing date: <?=date('j F Y', strtotime($row['ClosingDate']))?></p>
 
       <?php if (isset($_SESSION['UpdateError']) && $_SESSION['UpdateError']) { ?>
       <div class="alert alert-danger">A database error occured which prevented us saving the changes.</div>
@@ -69,20 +84,14 @@ include "galaMenu.php"; ?>
       </p>
       <?php } ?>
 
-      <?php
-      $closingDate = new DateTime($row['ClosingDate'], new DateTimeZone('Europe/London'));
-      $theDate = new DateTime('now', new DateTimeZone('Europe/London'));
-      $closingDate = $closingDate->format('Y-m-d');
-      $theDate = $theDate->format('Y-m-d');
-
-      if ($row['Charged'] || $row['EntryProcessed'] || ($closingDate < $theDate) || $row['Locked']) { ?>
+      <?php if ($locked) { ?>
         <div class="alert alert-warning">
-          <strong>We've already processed this gala entry, our closing date has passed or you have already paid</strong> <br>We can't let you make any changes here. Contact the Gala Administrator directly.
+          <strong>We've already processed this gala entry, our closing date has passed or you have already paid</strong> <br>If there are any changes you need to make, please contact the Gala Administrator directly.
         </div>
         <?php $disabled .= " onclick=\"return false;\" disabled ";
-      } else { ?>
-        <h2>Select Swims</h2>
-      <?php } ?>
+      } ?>
+      <h2>Select Swims</h2>
+      <p class="lead">Select the events to enter at this gala</p>
       <form method="post">
 
         <?php for ($i=0; $i<sizeof($swimsArray); $i++) {
@@ -110,7 +119,7 @@ include "galaMenu.php"; ?>
         <?php }
       }
 
-      if (!($closingDate < $theDate) && $row['EntryProcessed'] != 1 && $row['Charged'] != 1 && !$row['Locked']) {
+      if (!$locked) {
         if ($row['GalaFeeConstant'] != 1) { ?>
         <div class="form-group">
           <label for="galaFee">Enter Total</label>
@@ -127,6 +136,32 @@ include "galaMenu.php"; ?>
         <input type="hidden" value="<?=htmlspecialchars($row['EntryID'])?>" name="entryID">
         <p>
           <button type="submit" id="submit" class="btn btn-success">Update</button>
+        </p>
+      <?php } ?>
+
+      <?php if ($row['StripePayment'] != null && bool($row['Paid'])) {
+        $getEntryPaymentCount = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE galaEntries.StripePayment = ?");
+        $getEntryPaymentCount->execute([$row['StripePayment']]);
+        $countPaid = $getEntryPaymentCount->fetchColumn(); ?>
+        <h2>Payment</h2>
+        <p class="lead">You paid for this gala entry by card</p>
+        <div class="row align-items-center mb-2">
+          <div class="col-auto">
+            <img src="<?=autoUrl("public/img/stripe/" . $row['Brand'] . ".png")?>" srcset="<?=autoUrl("public/img/stripe/" . $row['Brand'] . "@2x.png")?> 2x, <?=autoUrl("public/img/stripe/" . $row['Brand'] . "@3x.png")?> 3x" style="width:40px;"> <span class="sr-only"><?=htmlspecialchars(getCardBrand($row['Brand']))?></span>
+          </div>
+          <div class="col-auto">
+            <p class="my-0">
+              &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($row['Last4'])?> 
+            </p>
+          </div>
+        </div>
+        <?php if ($countPaid > 1) { ?>
+        <p>
+          You paid for <?=htmlspecialchars($numFormat->format($countPaid))?> gala entries as part of this transaction.
+        </p>
+        <?php } ?>
+        <p>
+          <a href="<?=htmlspecialchars(autoUrl("payments/card-transactions/" . $row['StripePayment']))?>" class="btn btn-primary">View transaction</a>
         </p>
       <?php } ?>
     </form>
