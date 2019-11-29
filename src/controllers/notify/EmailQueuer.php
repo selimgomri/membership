@@ -9,6 +9,8 @@ if (!SCDS\FormIdempotency::verify() || !SCDS\CSRF::verify()) {
 
 global $db;
 
+$replyAddress = getUserOption($_SESSION['UserID'], 'NotifyReplyAddress');
+
 $to_remove = [
   "<p>&nbsp;</p>",
   "<p></p>",
@@ -21,7 +23,7 @@ $to_remove = [
 
 $subject = $_POST['subject'];
 $message = str_replace($to_remove, "", $_POST['message']);
-if ($_SESSION['AccessLevel'] != "Admin") {
+if ($_SESSION['AccessLevel'] != "Admin" && !($replyAddress && isset($_POST['ReplyToMe']) && bool($_POST['ReplyToMe']))) {
   $name = getUserName($_SESSION['UserID']);
   $message .= '<p class="small text-muted">Sent by ' . $name . '. Reply to this email to contact our Enquiries Team who can pass your message on to ' . $name . '.</p>';
 }
@@ -159,7 +161,6 @@ if ($_POST['from'] == "current-user") {
   ];
 }
 
-$replyAddress = getUserOption($_SESSION['UserID'], 'NotifyReplyAddress');
 if ($replyAddress && isset($_POST['ReplyToMe']) && bool($_POST['ReplyToMe'])) {
   $recipientGroups["ReplyToMe"] = [
     "Email" => $replyAddress,
