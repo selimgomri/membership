@@ -94,8 +94,38 @@ try {
         ]);
 
     	} catch (Exception $e) {
-        reportError($e);
-      	halt(500);
+        if ($e->getType() == 'invalid_state') {
+          $paymentID = $row['PaymentID'];
+          $id = "CASH" . $paymentID;
+          $email_statment_id = $id;
+
+          $updatePayments->execute([
+            'cust_not_dd',
+            null,
+            $id,
+            $paymentID
+          ]);
+
+          $updatePaymentsPending->execute([
+            'Paid',
+            $id,
+            $userid,
+            'Queued',
+            'Payment',
+            $date
+          ]);
+          $updatePaymentsPending->execute([
+            'Paid',
+            $id,
+            $userid,
+            'Queued',
+            'Refund',
+            $date
+          ]);
+        } else {
+          reportError($e);
+          halt(500);
+        }
     	}
     } else {
       try {
