@@ -15,6 +15,7 @@ try {
   $sql = "SELECT * FROM `paymentMandates` INNER JOIN `paymentPreferredMandate` ON paymentMandates.UserID = paymentPreferredMandate.UserID WHERE paymentMandates.UserID = ? AND `InUse` = '1'";
   $hasMandateQuery = $db->prepare($sql);
 } catch (Exception $e) {
+  reportError($e);
   halt(500);
 }
 
@@ -29,6 +30,7 @@ try {
     try {
       $hasMandateQuery->execute([$userid]);
     } catch (Exception $e) {
+      reportError($e);
       halt(500);
     }
     $mandateInfo = $hasMandateQuery->fetch(PDO::FETCH_ASSOC);
@@ -92,6 +94,7 @@ try {
         ]);
 
     	} catch (Exception $e) {
+        reportError($e);
       	halt(500);
     	}
     } else {
@@ -124,6 +127,7 @@ try {
           $date
         ]);
       } catch (Exception $e) {
+        reportError($e);
         halt(500);
       }
     }
@@ -162,5 +166,6 @@ try {
   }
 } catch (Exception $e) {
   // Report error by halting
+  reportError($e);
   halt(500);
 }
