@@ -44,6 +44,8 @@ function getBankName($bank) {
     return 'Handelsbanken';
   } else if ($bank == "BANK OF SCOTLAND PLC") {
     return 'Bank of Scotland';
+  } else if ($bank == "RBS ONE ACCOUNT") {
+    return 'The One account';
   }
 
   return $bank;
