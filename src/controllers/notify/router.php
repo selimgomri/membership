@@ -50,7 +50,15 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
   		include 'EmailQueuerIndividual.php';
   	});
 
-  });
+	});
+	
+	$this->get('/reply-to', function() {
+		include 'ReplyTo.php';
+	});
+
+	$this->post('/reply-to', function() {
+		include 'ReplyToPost.php';
+	});
 
   if ($_SESSION['AccessLevel'] == "Admin") {
   	$this->get('/email', function() {

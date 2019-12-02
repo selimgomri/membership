@@ -1,19 +1,39 @@
 <?php
 
-$id = 2;
+if ($_SESSION['AccessLevel'] == 'Parent') {
+  $id = $_SESSION['UserID'];
+}
+
+if (!isset($id)) {
+  halt(404);
+}
 
 global $db;
+global $systemInfo;
+$welcome = $systemInfo->getSystemOption('WelcomeLetter');
 
 $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
 $user->execute([$id]);
 
-$swimmers = $db->prepare("SELECT MForename fn, MSurname sn, SquadName squad, SquadFee fee, SquadCoC, ClubPays exempt FROM members INNER JOIN squads ON squads.SquadID = members.SquadID WHERE members.UserID = ? ORDER BY fn ASC");
+$swimmers = $db->prepare("SELECT MForename fn, MSurname sn, SquadName squad, SquadFee fee, SquadCoC, ClubPays exempt, members.MemberID id FROM members INNER JOIN squads ON squads.SquadID = members.SquadID WHERE members.UserID = ? ORDER BY fn ASC");
 $swimmers->execute([$id]);
 $swimmers = $swimmers->fetchAll(PDO::FETCH_ASSOC);
 
 $email_info = $user->fetch(PDO::FETCH_ASSOC);
 
+$swimmerExtras = $db->prepare("SELECT ExtraName `name`, ExtraFee `fee` FROM extrasRelations INNER JOIN extras ON extras.ExtraID = extrasRelations.ExtraID WHERE MemberID = ?");
+
+$userExtras = $db->prepare("SELECT MForename fn, MSurname sn, ExtraName `name`, ExtraFee `fee` FROM ((extrasRelations INNER JOIN extras ON extras.ExtraID = extrasRelations.ExtraID) INNER JOIN members ON members.MemberID = extrasRelations.MemberID) WHERE members.UserID = ?");
+$userExtras->execute([$id]);
+
 $pagetitle = env('CLUB_NAME') . " Welcome Pack";
+
+$userObj = new \User($id, $db);
+$json = $userObj->getUserOption('MAIN_ADDRESS');
+$address = null;
+if ($json != null) {
+  $address = json_decode($json);
+}
 
 ob_start();?>
 
@@ -45,14 +65,27 @@ ob_start();?>
   <body>
     <?php include BASE_PATH . 'helperclasses/PDFStyles/Letterhead.php'; ?>
 
-    <p>
+    <p class="text-right">
       <?=date("d/m/Y")?>
     </p>
 
+    <?php if ($address != null && isset($address->streetAndNumber)) { ?>
+    <address class="mb-3 address-font address-box">
+      <strong><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></strong><br>
+      <?=htmlspecialchars($address->streetAndNumber)?><br>
+      <?php if (isset($address->flatOrBuilding)) { ?>
+      <?=htmlspecialchars($address->flatOrBuilding)?><br>
+      <?php } ?>
+      <?=htmlspecialchars($address->city)?><br>
+      <?=htmlspecialchars(mb_strtoupper($address->postCode))?>
+    </address>
+    <div class="after-address-box"></div>
+    <?php } else { ?>
     <p>
       <strong><?=htmlspecialchars($email_info['Forename'] . " " . $email_info['Surname'])?></strong><br>
-      Registered Parent/Carer
+      Parent/Carer
     </p>
+    <?php } ?>
 
     <div class="primary-box mb-3" id="title">
       <h1 class="mb-0">
@@ -63,7 +96,7 @@ ob_start();?>
       </p>
 
       <p class="mb-0">
-<strong>This welcome pack covers these swimmer<?php if (sizeof($swimmers) > 1) { ?>s<?php } ?>;</strong>
+        <strong>This welcome pack covers these swimmer<?php if (sizeof($swimmers) > 1) { ?>s<?php } ?>;</strong>
       </p>
 
       <ul class="mb-0 list-unstyled"> 
@@ -82,15 +115,15 @@ ob_start();?>
     </p>
 
     <ul>
-      <li>Chairman's welcome</li>
-      <li>Information about your squads</li>
+      <?php if ($welcome != null) { ?>
+      <li>Welcome message from your club</li>
+      <?php } ?>
+      <li>Information about your swimmers and their squads</li>
       <li>Club Codes of Conduct (for you and your swimmers)</li>
       <li>Information about your fees</li>
       <li>Direct debit payment information</li>
       <li>What are galas?</li>
       <li>How to enter galas</li>
-      <li>Welfare information</li>
-      <li>More about club policies</li>
     </ul>
 
     <div class="page-break-after">
@@ -99,44 +132,74 @@ ob_start();?>
       </h2>
 
       <p>
-        If you haven't already done so, you'll need to set up your club account. Your account is an easy and secure way of managing your swimmers, gala (competition) entries, payments and more.
-      </p>
-
-      <p>
-        If you haven't already done so, you'll need to finish setting up your club account. We've sent you an email containing instructions on how to do that. You'll be asked to;
+        If you haven't already done so, you'll need to set up your club account. Your account is an easy and secure way of managing your swimmers, gala (competition) entries, payments and more. We've sent you an email containing instructions on how to do that. You'll be asked to;
       </p>
 
       <ul>
         <li>Create a password</li>
         <li>Confirm your email and sms options</li>
+        <li>Fill out our medical form</li>
+        <li>Add emergency contact details</li>
+        <li>Agree to our code of conduct and terms and conditions of membership</li>
+        <li>Set up a direct debit mandate</li>
+        <li>Pay your club and Swim England* membership fees as part of your first Direct Debit</li>
       </ul>
 
-      <p class="mb-0">
+      <p>
         We'll then automatically log you in.
       </p>
+
+      <p><em>* If you're trasferring from another Swim England affiliated club and still have time left on the current year's membership, you may not be required to pay the Swim England membership fee.</em></p>
     </div>
 
+    <?php if ($welcome != null) { ?>
+    <div class="page-break"></div>
+    <h1>Welcome to <?=htmlspecialchars(env('CLUB_NAME'))?></h1>
+    <?=pdfStringReplace(getPostContent($welcome))?>
+    <?php } ?>
+
     <div class="page-break"></div>
 
-    <h1>Chairman's Welcome</h1>
+    <h1>Your swimmers and their squads</h1>
 
-    <div class="page-break"></div>
+    <?php foreach ($swimmers as $s) { ?>
+    <h2><?=htmlspecialchars($s['fn'])?> <?=htmlspecialchars($s['sn'])?></h2>
+    
+    <p><?=htmlspecialchars($s['fn'])?> is in <?=htmlspecialchars($s['squad'])?> Squad which has a monthly fee of &pound;<?=htmlspecialchars(number_format($s['fee'], 2, '.', ''))?>.</p>
 
-    <h1>Your Squads</h1>
+    <?php
+
+    $swimmerExtras->execute([$s['id']]);
+    $extra = $swimmerExtras->fetch(PDO::FETCH_ASSOC);
+
+    if ($extra != null) { ?>
+      <p>There are additional monthly fees for <?=htmlspecialchars($s['fn'])?></p>
+      <ul>
+      <?php do { ?>
+        <li><?=htmlspecialchars($extra['name'])?> costing &pound;<?=htmlspecialchars(number_format($extra['fee'], 2, '.', ''))?></li>
+      <?php } while ($extra = $swimmerExtras->fetch(PDO::FETCH_ASSOC)); ?>
+      </ul>
+    <?php } else { ?>
+      <p>There are no additional monthly fees for this swimmer.</p>
+    <?php } ?>
+
+    <?php } ?>
 
     <div class="page-break"></div>
 
     <h1>Codes of Conduct</h1>
 
-    <p class="lead">Swimmers are required by Swimming England rules to agree to their squad's code of conduct.</p>
+    <p class="lead">Swimmers are required by Swim England rules to agree to their squad's code of conduct.</p>
 
     <p>Please review each code of conduct with your swimmers and ensure you explain the implication if these codes to your swimmers.</p>
 
+    <!--
     <p>There is a section at the end of this document for you and your swimmers to sign. You only need to sign for swimmers under 18.</p>
+    -->
 
     <?php foreach ($swimmers as $s) { ?>
     <h1>Code of Conduct for <?=htmlspecialchars($s['fn'])?></h1>
-    <?=getPostContent($s['SquadCoC'])?>
+    <?=pdfStringReplace(getPostContent($s['SquadCoC']))?>
     <?php } ?>
 
     <div class="page-break"></div>
@@ -232,6 +295,76 @@ ob_start();?>
       </tbody>
     </table>
 
+    <h2>Extra Fees</h2>
+
+    <?php
+
+    $total = 0;
+    $extra = $userExtras->fetch(PDO::FETCH_ASSOC);
+
+    if ($extra != null) {
+
+    ?>
+
+    <p>Your squad fees are as follows;</p>
+
+    <table>
+      <thead>
+        <tr>
+          <td>
+            Swimmer
+          </td>
+          <td>
+            Extra
+          </td>
+          <td>
+            Price/month
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <?php do { ?>
+        <tr>
+          <td>
+            <?=htmlspecialchars($extra['fn'] . ' ' . $extra['sn'])?>
+          </td>
+          <td>
+            <?=htmlspecialchars($extra['name'])?>
+          </td>
+          <td>
+            &pound;<?=number_format($extra['fee'], 2)?>
+            <?php $total += $extra['fee']; ?>
+          </td>
+        </tr>
+        <?php } while ($extra = $userExtras->fetch(PDO::FETCH_ASSOC)); ?>
+        <tr>
+          <td></td>
+          <td>
+            <strong>Total</strong>
+          </td>
+          <td>
+            &pound;<?=number_format($total, 2)?>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <?php } else { ?>
+
+    <p>Youy have no additional fees to pay each month.</p>
+
+    <?php } ?>
+
+    <?php
+
+    $totalFee = $monthlyFee + $total;
+
+    ?>
+
+    <p>Your total monthly fee is <strong>&pound;<?=number_format($totalFee, 2, '.', '')?></strong>.</p>
+
+    <p>Fees for gala entries will be added to your monthly direct debit payment unless you opt out of such payments or pay by another method.</p>
+
     <div class="page-break"></div>
 
     <?php if (env('GOCARDLESS_ACCESS_TOKEN') != null) { ?>
@@ -311,14 +444,6 @@ ob_start();?>
     <div class="page-break"></div>
 
     <h1>How to enter galas</h1>
-
-    <div class="page-break"></div>
-
-    <h1>Welfare Information</h1>
-
-    <div class="page-break"></div>
-
-    <h1>More about club policies</h1>
 
     <?php include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
   </body>

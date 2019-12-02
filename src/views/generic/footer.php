@@ -106,7 +106,7 @@ $counties = json_decode(file_get_contents(BASE_PATH . 'includes/regions/counties
       $seconds = $time_end - $time_start;
       ?>
           <p class="hidden-print">
-            Designed and Built by <a class="text-white" href="https://corporate.myswimmingclub.co.uk"
+            Designed and Built by <a class="text-white" href="https://www.myswimmingclub.uk"
               target="_blank">Swimming Club Data Systems</a>. Licenced to <?=htmlspecialchars(env('CLUB_NAME'))?>.
           </p>
           <p>Page rendered in <?=number_format($seconds, 3)?> seconds. <?php if (defined('SOFTWARE_VERSION')) { ?>Software version <?=mb_substr(SOFTWARE_VERSION, 0, 7);?>.<?php } ?>

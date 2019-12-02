@@ -2,6 +2,7 @@
 
 $date = new DateTime('now', new DateTimeZone('Europe/London'));
 
+include 'support/PostTypes.php';
 $pagetitle = "New Post";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/postsMenu.php";
@@ -60,13 +61,11 @@ include BASE_PATH . "views/postsMenu.php";
 					<div class="form-group">
 						<label for="type">Type</label>
 						<select class="custom-select" name="type">
-							<option value="user_notice">Notice to Users</option>
-							<option value="gala_notice">Gala Notice</option>
-						  <option value="conduct_code">Code of Conduct</option>
-						  <option value="terms_conditions">Terms and Conditions</option>
-						  <option value="staff_notice">Staff Notice</option>
-							<option value="account_help">Account Help</option>
-							<option value="people_pages">People</option>
+							<?php for ($i = 0; $i < sizeof($post_types); $i++) { ?>
+							<option value="<?=$post_types[$i]['value']?>">
+								<?=$post_types[$i]['description']?>
+							</option>
+							<?php } ?>
 						</select>
 					</div>
 					<div class="form-group mb-0">

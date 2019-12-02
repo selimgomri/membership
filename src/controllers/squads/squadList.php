@@ -10,7 +10,7 @@ include BASE_PATH . "views/header.php";
 
 ?>
 
-<div class="front-page mb-n3" style="min-height:100%;">
+<div class="front-page mb-n3">
 	<div class="container">
 		<h1>Squad Details</h1>
 		<p class="lead">Information about our squads</p>

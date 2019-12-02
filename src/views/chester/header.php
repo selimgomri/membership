@@ -99,12 +99,12 @@ p.lead {
         </p>
         <p>
           It looks like you're using Internet Explorer which we no longer support so we recommend you upgrade to a new
-          browser which we do support as soon as possible. <strong><a href="http://browsehappy.com/"
+          browser which we do support as soon as possible. <strong><a class="text-dark" href="http://browsehappy.com/"
               target="_blank">Upgrade your browser today <i class="fa fa-external-link"
                 aria-hidden="true"></i></a></strong>.
         </p>
         <p class="mb-0">
-          <?=htmlspecialchars(env('CLUB_NAME'))?> recommends you <strong><a href="https://www.firefox.com">install
+          <?=htmlspecialchars(env('CLUB_NAME'))?> recommends you <strong><a class="text-dark" href="https://www.firefox.com">install
               Firefox by Mozilla</a></strong>. Firefox has great protections for your privacy with built in features
           including tracking protection.
         </p>
@@ -208,7 +208,7 @@ p.lead {
       </div>
     </div>
 
-    <div class="text-white py-3 d-none d-lg-flex bg-primary-darker">
+        <div class="text-white py-3 d-none d-lg-flex bg-primary-darker <?php if (date("m") == "12") { ?>festive<?php } ?>">
       <div class="<?=$container_class?>">
         <div class="row align-items-center">
           <div class="col">

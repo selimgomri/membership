@@ -11,6 +11,15 @@ $getGalas->execute([
 ]);
 $gala = $getGalas->fetch(PDO::FETCH_ASSOC);
 
+$squads = null;
+if ($_SESSION['AccessLevel'] == 'Parent') {
+  $squads = $db->prepare("SELECT SquadName, SquadID, SquadCoach FROM squadReps INNER JOIN squads ON squadReps.Squad = squads.SquadID WHERE squadReps.User = ? ORDER BY squads.SquadFee DESC, squads.SquadName ASC");
+  $squads->execute([$_SESSION['UserID']]);
+} else {
+  $squads = $db->query("SELECT SquadName, SquadID, SquadCoach FROM squads ORDER BY squads.SquadFee DESC, squads.SquadName ASC");
+}
+$squad = $squads->fetch(PDO::FETCH_ASSOC);
+
 include BASE_PATH . 'views/header.php';
 
 ?>
@@ -23,7 +32,43 @@ include BASE_PATH . 'views/header.php';
         <p class="lead">This service allows you to view gala entries and their payment status for your squads.</p>
 
         <div class="mb-4">
-          <h2>
+          <h2 class="mb-3">
+            Your squads
+          </h2>
+          <?php if ($squad != null) { ?>
+            <div class="news-grid">
+            <?php do { ?>
+              <a href="<?=autoUrl("squads/" . $squad['SquadID'])?>">
+                <span class="mb-3">
+                  <span class="title mb-0">
+                    <?=htmlspecialchars($squad['SquadName'])?> Squad
+                  </span>
+                  <span>
+                    <?=htmlspecialchars($squad['SquadCoach'])?>
+                  </span>
+                </span>
+                <span class="category">
+                  Squads
+                </span>
+              </a>
+            <?php } while ($squad = $squads->fetch(PDO::FETCH_ASSOC)); ?>
+            </div>
+          <?php } else { ?>
+            <div class="alert alert-warning">
+              <p class="mb-0">
+                <strong>
+                  You have no squads to view right now
+                </strong>
+              </p>
+              <p class="mb-0">
+                Please check back later
+              </p>
+            </div>
+          <?php } ?>
+        </div>
+
+        <div class="mb-4">
+          <h2 class="mb-3">
             Upcoming galas
           </h2>
           <?php if ($gala != null) { ?>
@@ -59,7 +104,7 @@ include BASE_PATH . 'views/header.php';
         </div>
 
         <div class="mb-4">
-          <h2>
+          <h2 class="mb-3">
             Other services
           </h2>
           <div class="news-grid">

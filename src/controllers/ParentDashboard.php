@@ -127,7 +127,19 @@ include BASE_PATH . "views/header.php";
 		<h1><?=helloGreeting()?> <?=$username?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
 
-    <p class="mb-4">We're always looking for feedback! If you have any, <a href="mailto:feedback@myswimmingclub.uk">send us an email</a>.</p>
+    <?php if (date("Y-m-d") == "2019-11-26") { ?>
+    <aside class="row mb-4">
+      <div class="col-lg-6">
+        <div class="cell bg-primary text-white">
+          <h2>The deadline to register to vote is today!</h2>
+          <p class="lead">Make sure you're registered.</p>
+          <p class="mb-0"><a class="btn btn-light" href="https://www.gov.uk/register-to-vote" target="_blank" rel="noopener noreferrer">Register to vote</a></p>
+        </div>
+      </div>
+    </aside>
+    <?php } ?>
+
+    <!--<p class="mb-4">We're always looking for feedback! If you have any, <a href="mailto:feedback@myswimmingclub.uk">send us an email</a>.</p>-->
 
     <?php if (bool(env('IS_CLS')) && time() < strtotime('2019-01-25')) { ?>
     <div class="mb-4">

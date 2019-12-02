@@ -27,6 +27,14 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 		include 'user.php';
 	});
 
+	$this->get('/{id}:int/welcome-pack', function($id) {
+		include BASE_PATH . 'controllers/registration/welcome-pack/PDF.php';
+	});
+
+	$this->get('/{id}:int/welcome-letter', function($id) {
+		include BASE_PATH . 'controllers/registration/welcome-pack/letter.php';
+	});
+
 	$this->get('/{id}:int/authorise-direct-debit-opt-out', function($person) {
 		include 'direct-debit/OptOutInfo.php';
 	});

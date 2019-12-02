@@ -25,7 +25,7 @@ if ($row == null) {
 $closingDate = new DateTime($row['ClosingDate'], new DateTimeZone('Europe/London'));
 $theDate = new DateTime('now', new DateTimeZone('Europe/London'));
 
-if ($row['Paid'] || $row['EntryProcessed'] || $row['Locked'] || $closingDate < $theDate) {
+if (bool($row['Charged']) || bool($row['EntryProcessed']) || ($closingDate < $theDate && ($_SESSION['AccessLevel'] != 'Admin' && $_SESSION['AccessLevel'] != 'Galas')) || bool($row['Locked'])) {
   halt(404);
 }
 

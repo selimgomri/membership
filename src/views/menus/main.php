@@ -119,8 +119,8 @@ if (!function_exists('chesterStandardMenu')) {
                     <?php if ($_SESSION['AccessLevel'] != "Galas") { ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("squads")?>">Squads</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("squads/moves")?>">Squad Moves</a>
-                    <?php } ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("swimmers/accesskeys")?>">Access Keys</a>
+                    <?php } ?>
                     <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("renewal")?>">Membership Renewal</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("swimmers/orphaned")?>">Orphan Swimmers</a>
