@@ -34,8 +34,9 @@ $db->beginTransaction();
 
 try {
 
-  $ms = date("Y-m");
-  $date = date("Y-m") . "-01";
+  $dateTime = new DateTime('first day of this month', new DateTimeZone('Europe/London'));
+  $ms = $dateTime->format('Y-m');
+  $date = $dateTime->format('Y-m-d');
 
   $sql = $db->query("SELECT * FROM `paymentMonths` ORDER BY `Date` DESC LIMIT 1;");
   $row = $sql->fetch(PDO::FETCH_ASSOC);
@@ -189,7 +190,7 @@ try {
           $metadata = json_encode($metadata);
 
           $description = $swimmerRow['MForename'] . " " . $swimmerRow['MSurname'] . ' - ' . $swimmerRow['ExtraName'];
-          $fee = (int) $swimmerRow['ExtraFee']*100;
+          $fee = (int) ($swimmerRow['ExtraFee']*100);
 
           $addToPaymentsPending->execute([
             $date,
@@ -206,7 +207,7 @@ try {
             $swimmerRow['MemberID'],
             $user,
             'Extra Fees (' . $swimmerRow['ExtraName'] . ')',
-            floor($swimmerRow['ExtraFee']*100),
+            (int) ($swimmerRow['ExtraFee']*100),
             'ExtraFee',
             $paymentID
           ];

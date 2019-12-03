@@ -100,7 +100,7 @@ if ($sql->fetchColumn() == 1) {
 if ($hasDD || !(env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN'))) {
 	if ($hasDD) {
 		// INSERT Payment into pending
-		$date = new \DateTime('now', new DateTimeZone('UTC'));
+		$date = new \DateTime('now', new DateTimeZone('Europe/London'));
 		$date->setTimezone(new DateTimeZone('UTC'));
 		$description = "Membership Renewal";
 		if ($renewal == 0) {
