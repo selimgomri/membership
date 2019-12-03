@@ -86,7 +86,7 @@ try {
             ]
           ];
 
-          $fee = (int) $swimmerRow['SquadFee']*100;
+          $fee = (int) ($swimmerRow['SquadFee']*100);
 
           $metadata = json_encode($metadata);
 
@@ -105,7 +105,7 @@ try {
             $swimmerRow['MemberID'],
             $user,
             'Squad Fees (' . $swimmerRow['SquadName'] . ')',
-            floor($swimmerRow['SquadFee']*100),
+            (int) ($swimmerRow['SquadFee']*100),
             'SquadFee',
             $paymentID
           ];
