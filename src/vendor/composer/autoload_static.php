@@ -121,6 +121,8 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         array (
             'Brick\\Postcode\\' => 15,
             'Brick\\PhoneNumber\\' => 18,
+            'Brick\\Money\\' => 12,
+            'Brick\\Math\\' => 11,
             'BaconQrCode\\' => 12,
         ),
     );
@@ -347,6 +349,14 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'Brick\\PhoneNumber\\' => 
         array (
             0 => __DIR__ . '/..' . '/brick/phonenumber/src',
+        ),
+        'Brick\\Money\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/brick/money/src',
+        ),
+        'Brick\\Math\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/brick/math/src',
         ),
         'BaconQrCode\\' => 
         array (

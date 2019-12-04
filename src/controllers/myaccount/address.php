@@ -36,6 +36,15 @@ include BASE_PATH . "views/header.php";
     	<?php unset($_SESSION['OptionsUpdate']);
     	} ?>
 
+      <?php if (isset($_SESSION['OptionsUpdate']) && !$_SESSION['OptionsUpdate']) { ?>
+    		<div class="alert alert-danger">
+    			<p class="mb-0">
+    				<strong>Please check your details and try again</strong>
+    			</p>
+    		</div>
+    	<?php unset($_SESSION['OptionsUpdate']);
+    	} ?>
+
       <?php if (isset($addr->streetAndNumber)) { ?>
       <h2>Your address is</h2>
       <address>
@@ -54,6 +63,8 @@ include BASE_PATH . "views/header.php";
       <?php } else { ?>
       <h2>Add address</h2>
       <?php } ?>
+
+      <p>You must use a UK address or a British Forces address.</p>
 
     	<form method="post">
         <div class="row">

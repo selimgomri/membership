@@ -3,6 +3,10 @@
 global $db;
 global $currentUser;
 
+use Brick\Postcode\PostcodeFormatter;
+
+$PostcodeFormatter = new PostcodeFormatter();
+
 $allowed = false;
 
 try {
@@ -11,7 +15,7 @@ try {
     $addr = [
       'streetAndNumber' => trim($_POST['street-and-number']),
       'city' => trim($_POST['town-city']),
-      'postCode' => trim($_POST['post-code']),
+      'postCode' => (string) $PostcodeFormatter->format('GB', trim($_POST['post-code'])),
     ];
     if (isset($_POST['flat-building']) && $_POST['flat-building']) {
       $addr += ['flatOrBuilding' => trim($_POST['flat-building'])];
