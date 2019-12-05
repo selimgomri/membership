@@ -1,5 +1,13 @@
 <?php
 
+if (!SCDS\CSRF::verify()) {
+	halt(404);
+}
+
+if (!SCDS\FormIdempotency::verify()) {
+	halt(404);
+}
+
 global $db;
 
 $disabled = "";
