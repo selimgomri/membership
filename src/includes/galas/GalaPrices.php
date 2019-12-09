@@ -95,4 +95,24 @@ class GalaPrices {
     return (string) $price;
   }
 
+  /**
+   * Set the price of an event
+   *
+   * @param string $event
+   * @param integer $price
+   * @return void
+   */
+  public function setPrice(string $event, int $price) {
+
+  }
+
+  /**
+   * Save the gala data to the database
+   *
+   * @return void
+   */
+  public function save() {
+    // Turn data for events and prices into JSON data
+  }
+
 }
