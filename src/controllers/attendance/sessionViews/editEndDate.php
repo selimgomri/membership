@@ -94,7 +94,7 @@ function setDate(clickedItem, clickedItemChecked) {
 	xhttp.open("POST", <?=json_encode(autoUrl("attendance/sessions/ajax/endDateHandler"))?>, true);
 	console.log("POST", <?=json_encode(autoUrl("attendance/sessions/ajax/endDateHandler"))?>, true);
 	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	xhttp.send("sessionID=' . $row['SessionID'] . '&sessionEndDate=" + dateValue);
+	xhttp.send('sessionID=' + <?=htmlspecialchars(json_encode($row['SessionID']))?> + '&sessionEndDate=' + dateValue);
 	//console.log("sessionID=' . $row['SessionID'] . '&sessionEndDate=" + dateValue);
 	//console.log("Sent");
 }
