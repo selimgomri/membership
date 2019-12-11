@@ -5,6 +5,19 @@ $paymentItems = [];
 global $db;
 global $systemInfo;
 
+$date = new \DateTime('now', new DateTimeZone('UTC'));
+$asaDate = $clubDate = $date->format("Y-m-d");
+
+if (env('CUSTOM_SCDS_CLUB_CHARGE_DATE')) {
+	$date = new \DateTime(env('CUSTOM_SCDS_CLUB_CHARGE_DATE'), new DateTimeZone('UTC'));
+	$clubDate = $date->format("Y-m-d");
+}
+
+if (env('CUSTOM_SCDS_ASA_CHARGE_DATE')) {
+	$date = new \DateTime(env('CUSTOM_SCDS_ASA_CHARGE_DATE'), new DateTimeZone('UTC'));
+	$asaDate = $date->format("Y-m-d");
+}
+
 $user = $_SESSION['UserID'];
 $partial_reg = isPartialRegistration();
 
@@ -62,7 +75,8 @@ $count = sizeof($member);
 $paymentItems[] = [
 	'description' => 'Club Membership Fee',
 	'amount' => $clubFee,
-	'type' => 'debit'
+	'type' => 'debit',
+	'date' => $clubDate
 ];
 
 if ($clubDiscount > 0 && $renewal == 0) {
@@ -70,7 +84,8 @@ if ($clubDiscount > 0 && $renewal == 0) {
 	$paymentItems[] = [
 		'description' => 'Club Membership Fee',
 		'amount' => $clubFee* ($clubDiscount/100),
-		'type' => 'credit'
+		'type' => 'credit',
+		'date' => $clubDate
 	];
 } else {
 	$totalFee += $clubFee;
@@ -89,13 +104,16 @@ for ($i = 0; $i < $count; $i++) {
 		$asaFees[$i] = $asa2;
 	} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ClubPays']) {
 		$asaFees[$i] = $asa3;
+	} else {
+		$asaFees[$i] = 0;
 	}
 
 	$paymentItems[] = [
 		'description' => $member[$i]['MForename'] . ' Cat ' . $member[$i]['ASACategory'] . ' SE Membership',
 		'amount' => $asaFees[$i],
 		'type' => 'debit',
-		'member' => $member[$i]['MemberID']
+		'member' => $member[$i]['MemberID'],
+		'date' => $asaDate
 	];
 
 	if ($member[$i]['RRTransfer']) {
@@ -103,14 +121,16 @@ for ($i = 0; $i < $count; $i++) {
 		$paymentItems[] = [
 			'description' => $member[$i]['MForename'] . ' SE Transfer',
 			'amount' => $asaFees[$i],
-			'type' => 'credit'
+			'type' => 'credit',
+			'date' => $clubDate
 		];
 	} else if ($swimEnglandDiscount > 0 && $renewal == 0) {
 		$totalFee += $asaFees[$i]*(1-($swimEnglandDiscount/100));
 		$paymentItems[] = [
 			'description' => $member[$i]['MForename'] . ' SE Transfer',
 			'amount' => $asaFees[$i] * ($swimEnglandDiscount/100),
-			'type' => 'credit'
+			'type' => 'credit',
+			'date' => $clubDate
 		];
 	} else {
 		$totalFee += $asaFees[$i];
@@ -163,7 +183,7 @@ if ($hasDD || !(env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS
 				$type = 'Refund';
 			}
 			$insert->execute([
-				$date->format('Y-m-d'),
+				$charge['date'],
 				'Pending',
 				$_SESSION['UserID'],
 				$charge['description'],
