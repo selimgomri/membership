@@ -8,12 +8,12 @@ global $systemInfo;
 $date = new \DateTime('now', new DateTimeZone('UTC'));
 $asaDate = $clubDate = $date->format("Y-m-d");
 
-if (env('CUSTOM_SCDS_CLUB_CHARGE_DATE')) {
+if (env('CUSTOM_SCDS_CLUB_CHARGE_DATE') && $renewal != 0) {
 	$date = new \DateTime(env('CUSTOM_SCDS_CLUB_CHARGE_DATE'), new DateTimeZone('UTC'));
 	$clubDate = $date->format("Y-m-d");
 }
 
-if (env('CUSTOM_SCDS_ASA_CHARGE_DATE')) {
+if (env('CUSTOM_SCDS_ASA_CHARGE_DATE') && $renewal != 0) {
 	$date = new \DateTime(env('CUSTOM_SCDS_ASA_CHARGE_DATE'), new DateTimeZone('UTC'));
 	$asaDate = $date->format("Y-m-d");
 }
