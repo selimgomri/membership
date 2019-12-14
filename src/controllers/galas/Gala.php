@@ -86,8 +86,6 @@ $markdown->setSafeMode(false);
 // Get price and event information
 $galaData = new GalaPrices($db, $id);
 
-$galaData->setupDefault();
-
 $pagetitle = htmlspecialchars($gala['GalaName']) . " - Galas";
 include BASE_PATH . "views/header.php";
 include "galaMenu.php";

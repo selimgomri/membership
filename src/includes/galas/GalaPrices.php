@@ -26,20 +26,26 @@ class GalaPrices {
     $getEvents->execute([$this->gala]);
     $data = $getEvents->fetch(PDO::FETCH_ASSOC);
 
+    $sysEvents = GalaEvents::getEvents();
+
+    $this->events = [];
+    foreach ($sysEvents as $key => $value) {
+      $this->events[$key] = new GalaEvent($key);
+    }
+
     if ($data != null) {
       // Data exists for this gala
       // Data is stored in the JSON format
 
       try {
-
         $events = json_decode($data['Events']);
-        $prices = json_decode($data['Prices']);
+        $prices = json_decode($data['Prices'], true);
 
         // Events then prices
-        foreach ($events as $key => $value) {
-          if ($value) {
-            $this->events['Events'][$key] = true;
-            $this->events['Prices'][$key] = $prices->$key;
+        foreach ($sysEvents as $key => $value) {
+          if ($events->$key) {
+            $this->events[$key]->enableEvent();
+            $this->events[$key]->setPrice($prices[$key]);
           }
         }
       } catch (Exception $e) {
@@ -47,6 +53,20 @@ class GalaPrices {
       }
     } else {
       // There's no data for this gala so assume all events are allowed at the default price
+    }
+  }
+
+  /**
+   * Get the event object
+   *
+   * @param string $event
+   * @return GalaEvent
+   */
+  public function getEvent(string $event) {
+    if (isset($this->events[$event])) {
+      return $this->events[$event];
+    } else {
+      return null;
     }
   }
 
@@ -65,63 +85,6 @@ class GalaPrices {
   }
 
   /**
-   * Get the price of an event
-   *
-   * @param string $event the name of the event at the gala
-   * @return int price
-   */
-  public function getPrice(string $event) {
-    // Check if this event is allowed
-    if (!$this->isEvent($event)) {
-      throw new Exception('No such event');
-    }
-    
-    // Otherwise continue
-    return $event['Prices'][$event];
-  }
-
-  /**
-   * Get the price as a string formatted with a decimal point
-   *
-   * @param string $event
-   * @return string formatted event price
-   */
-  public function getPriceFormatted(string $event) {
-    // Get the integer price
-    $price = $this->getPrice($event);
-
-    $price = \Brick\Math\BigInteger::of($price).toBigDecimal().withPointMovedLeft(2);
-
-    return (string) $price;
-  }
-
-  /**
-   * Set the price of an event
-   *
-   * @param string $event
-   * @param integer $price
-   * @return void
-   */
-  public function setPrice(string $event, int $price) {
-    if (!$this->isEvent($event)) {
-      throw new Exception('No such event');
-    }
-
-    $this->events['Prices'][$event] = $price;
-  }
-
-  /**
-   * Set whether an event is allowed or not
-   *
-   * @param string $event
-   * @param boolean $allowed
-   * @return void
-   */
-  public function setEvent(string $event, bool $allowed) {
-    $this->events['Events'][$event] = $allowed;
-  }
-
-  /**
    * Save the gala data to the database
    *
    * @return void
@@ -131,18 +94,35 @@ class GalaPrices {
     $outputEvents = GalaEvents::getEvents();
     $outputPrices = GalaEvents::getEvents();
 
-    foreach (GalaEvents::getEvents() as $eventKey => $eventName) {
-      if ($this->isEvent($eventKey)) {
-        $outputEvents[$eventKey] = true;
-        $outputPrices[$eventKey] = $this->getPrice($eventKey);
+    foreach ($this->events as $key => $event) {
+      if ($event->isEnabled()) {
+        $outputEvents[$key] = true;
+        $outputPrices[$key] = $event->getPrice();
       } else {
-        $outputEvents[$eventKey] = false;
-        $outputPrices[$eventKey] = 0;
+        $outputEvents[$key] = false;
+        $outputPrices[$key] = 0;
       }
     }
 
-    pre(json_encode($outputEvents));
-    pre(json_encode($outputPrices));
+    // Check if data exists first
+    $dataCount = $this->db->prepare("SELECT COUNT(*) FROM galaData WHERE Gala = ?");
+    $dataCount->execute([$this->gala]);
+
+    if ($dataCount->fetchColumn() == 0) {
+      $insert = $this->db->prepare("INSERT INTO galaData (Gala, Events, Prices) VALUES (?, ?, ?)");
+      $insert->execute([
+        $this->gala,
+        json_encode($outputEvents),
+        json_encode($outputPrices)
+      ]);
+    } else {
+      $update = $this->db->prepare("UPDATE galaData SET Events = ?, Prices = ? WHERE Gala = ?");
+      $update->execute([
+        json_encode($outputEvents),
+        json_encode($outputPrices),
+        $this->gala
+      ]);
+    }
   }
 
   public function setupDefault() {
@@ -151,16 +131,12 @@ class GalaPrices {
     $getPrice->execute([$this->gala]);
     $priceFromDb = $getPrice->fetchColumn();
 
-    try {
-      $price = Brick\Math\BigDecimal::of((string) $priceFromDb);
-      $price = (string) $price->withPointMovedRight(2)->toBigInteger();
+    $price = \Brick\Math\BigDecimal::of((string) $priceFromDb);
+    $price = (string) $price->withPointMovedRight(2)->toBigInteger();
 
-      foreach (GalaEvents::getEvents() as $eventKey => $eventName) {
-        $this->setEvent($eventKey, true);
-        $this->setPrice($eventKey, $price);
-      }
-    } catch (Exception | Error $e) {
-      pre($e);
+    foreach ($this->events as $key => $event) {
+      $event->enableEvent();
+      $event->setPrice($price);
     }
 
     $this->save();

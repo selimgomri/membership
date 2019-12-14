@@ -9,32 +9,15 @@ if ($gala == null) {
   halt(404);
 }
 
+// Get price and event information
+$galaData = new GalaPrices($db, $id);
+
 $today = new DateTime('now', new DateTimeZone('Europe/London'));
 $closingDate = new DateTime($gala['ClosingDate'], new DateTimeZone('Europe/London'));
 
 // Arrays of swims used to check whever to print the name of the swim entered
 // BEWARE This is in an order to ease inputting data into SportSystems, contrary to these arrays in other files
-$swimsArray = [
-  '50Free' => '50&nbsp;Free',
-  '100Free' => '100&nbsp;Free',
-  '200Free' => '200&nbsp;Free',
-  '400Free' => '400&nbsp;Free',
-  '800Free' => '800&nbsp;Free',
-  '1500Free' => '1500&nbsp;Free',
-  '50Back' => '50&nbsp;Back',
-  '100Back' => '100&nbsp;Back',
-  '200Back' => '200&nbsp;Back',
-  '50Breast' => '50&nbsp;Breast',
-  '100Breast' => '100&nbsp;Breast',
-  '200Breast' => '200&nbsp;Breast',
-  '50Fly' => '50&nbsp;Fly',
-  '100Fly' => '100&nbsp;Fly',
-  '200Fly' => '200&nbsp;Fly',
-  '100IM' => '100&nbsp;IM',
-  '150IM' => '150&nbsp;IM',
-  '200IM' => '200&nbsp;IM',
-  '400IM' => '400&nbsp;IM'
-];
+$swimsArray = GalaEvents::getEvents();
 
 $pagetitle = 'Pricing and Events';
 include BASE_PATH . 'views/header.php';
@@ -64,30 +47,37 @@ include BASE_PATH . 'views/header.php';
 
         <ul class="list-group mb-3">
         <?php foreach ($swimsArray as $eventKey => $event) { ?>
-        <li class="list-group-item">
-          <h2><?=$event?></h2>
+          <li class="list-group-item">
+            <h2><?=$event?></h2>
 
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <div class="input-group-text">
-                <input type="checkbox" aria-label="Tick to confirm event">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <input type="checkbox" aria-label="Tick to confirm event" <?php if ($galaData->getEvent($eventKey)->isEnabled()) { ?> checked <?php } ?> value="1" name="<?=$eventKey?>-check">
+                </div>
+                <span class="input-group-text" id="<?=$eventKey?>-price-addon">&pound;</span>
               </div>
-              <span class="input-group-text" id="<?=$eventKey?>-price-addon">&pound;</span>
+              <input type="number" step="0.01" min="0" class="form-control" id="<?=$eventKey?>-price" name="<?=$eventKey?>-price" aria-label="<?=$event?> price" value="<?=htmlspecialchars($galaData->getEvent($eventKey)->getPriceAsString())?>">
             </div>
-            <input type="number" step="0.01" min="0" class="form-control" id="<?=$eventKey?>-price" name="<?=$eventKey?>-price" aria-label="<?=$event?> price">
-          </div>
-        </li>
+          </li>
         <?php } ?>
         </ul>
 
         <p>
-          <buttton type="submit" class="btn btn-primary">
+          <button type="submit" class="btn btn-primary">
             Save
-          </buttton>
+          </button>
         </p>
 
       </form>
 
+    </div>
+    <div class="col">
+      <div class="cell">
+        <h2>This is a new type of page</h2>
+        <p class="lead">We're working to add more features and improve your experience while using it.</p>
+        <p>Please bear with us while we do this.</p>
+      </div>
     </div>
   </div>
 </div>
