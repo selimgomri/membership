@@ -275,6 +275,25 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		<p>
 			Your total <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?> fee will be &pound;<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0) && $renewal == 0) { ?><?=number_format(((int)$totalFeeDiscounted)/100, 2, '.', '')?><?php } else { ?><?=$totalFeeString?><?php } ?>. By continuing to complete your membership <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?>, you confirm that you will pay this amount as part of your <?= $nf ?> Direct Debit Payment.
 		</p>
+
+		<?php if (env('CUSTOM_SCDS_CLUB_CHARGE_DATE') && $renewal != 0) { 
+			$date = new DateTime(env('CUSTOM_SCDS_CLUB_CHARGE_DATE'), new DateTimeZone('Europe/London'));
+			$chargeDate = $date->format("j F Y");
+			$date->modify('first day of next month');
+			$debitDate = $date->format("F");
+			?>
+			<p><strong>Your club has overridden the charge date for club membership fees meaning the charge for your club membership fee will be added to your account on <?=htmlspecialchars($chargeDate)?> and you will pay this charge as part of your <?=htmlspecialchars($debitDate)?> Direct Debit.</strong></p>
+		<?php } ?>
+
+		<?php if (env('CUSTOM_SCDS_ASA_CHARGE_DATE') && $renewal != 0) { 
+			$date = new DateTime(env('CUSTOM_SCDS_ASA_CHARGE_DATE'), new DateTimeZone('Europe/London'));
+			$chargeDate = $date->format("j F Y");
+			$date->modify('first day of next month');
+			$debitDate = $date->format("F");
+			?>
+			<p><strong>Your club has overridden the charge date for Swim England membership fees meaning the charge your Swim England membership fee will be added to your account on <?=htmlspecialchars($chargeDate)?> and you will pay this charge as part of your <?=htmlspecialchars($debitDate)?> Direct Debit.</strong></p>
+		<?php } ?>
+
 		<?php if (!userHasMandates($_SESSION['UserID'])) { ?>
 			<p>
 				We now need you to set up your Direct Debit agreement with <?=htmlspecialchars(env('CLUB_NAME'))?>. We will redirect you to our payments system where you will setup a Direct Debit.

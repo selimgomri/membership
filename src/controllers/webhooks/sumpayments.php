@@ -3,12 +3,15 @@
 ignore_user_abort(true);
 set_time_limit(0);
 
+use Brick\Math\BigDecimal;
+
 global $db;
 global $link;
 global $systemInfo;
 
 $squadFeeMonths = json_decode($systemInfo->getSystemOption('SquadFeeMonths'), true);
-$squadFeeRequired = !bool($squadFeeMonths[date("m")]);
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
+$squadFeeRequired = !bool($squadFeeMonths[$date->format("m")]);
 
 // Prepare things
 $getSquadMetadata = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, members.ClubPays, squads.SquadName, squads.SquadID, squads.SquadFee FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = ? ORDER BY squads.SquadFee DESC, members.MForename ASC, members.MSurname ASC;");
@@ -34,8 +37,9 @@ $db->beginTransaction();
 
 try {
 
-  $ms = date("Y-m");
-  $date = date("Y-m") . "-01";
+  $dateTime = new DateTime('first day of this month', new DateTimeZone('Europe/London'));
+  $ms = $dateTime->format('Y-m');
+  $date = $dateTime->format('Y-m-d');
 
   $sql = $db->query("SELECT * FROM `paymentMonths` ORDER BY `Date` DESC LIMIT 1;");
   $row = $sql->fetch(PDO::FETCH_ASSOC);
@@ -86,7 +90,7 @@ try {
             ]
           ];
 
-          $fee = (int) $swimmerRow['SquadFee']*100;
+          $fee = BigDecimal::of((string) $swimmerRow['SquadFee'])->withPointMovedRight(2)->toInt();
 
           $metadata = json_encode($metadata);
 
@@ -105,7 +109,7 @@ try {
             $swimmerRow['MemberID'],
             $user,
             'Squad Fees (' . $swimmerRow['SquadName'] . ')',
-            floor($swimmerRow['SquadFee']*100),
+            $fee,
             'SquadFee',
             $paymentID
           ];
@@ -189,7 +193,7 @@ try {
           $metadata = json_encode($metadata);
 
           $description = $swimmerRow['MForename'] . " " . $swimmerRow['MSurname'] . ' - ' . $swimmerRow['ExtraName'];
-          $fee = (int) $swimmerRow['ExtraFee']*100;
+          $fee = BigDecimal::of((string) $swimmerRow['ExtraFee'])->withPointMovedRight(2)->toInt();
 
           $addToPaymentsPending->execute([
             $date,
@@ -206,7 +210,7 @@ try {
             $swimmerRow['MemberID'],
             $user,
             'Extra Fees (' . $swimmerRow['ExtraName'] . ')',
-            floor($swimmerRow['ExtraFee']*100),
+            $fee,
             'ExtraFee',
             $paymentID
           ];
@@ -257,7 +261,7 @@ try {
             null,
             $row['MemberID'],
             null,
-            floor($row['SquadFee']*100),
+            BigDecimal::of((string) $row['SquadFee'])->withPointMovedRight(2)->toInt(),
             "Squad Fees (" . $row['SquadName'] . ")",
             'SquadFee',
             true
@@ -276,7 +280,7 @@ try {
           null,
           $row['MemberID'],
           null,
-          floor($row['ExtraFee']*100),
+          BigDecimal::of((string) $row['ExtraFee'])->withPointMovedRight(2)->toInt(),
           "Extra Fees (" . $row['ExtraName'] . ")",
           'ExtraFee',
           true

@@ -193,6 +193,9 @@ include BASE_PATH . 'views/header.php';
 					<?php } while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)); ?>
 				</ul>
 
+				<?=SCDS\CSRF::write()?>
+				<?=SCDS\FormIdempotency::write()?>
+
 				<?php if ($countChargeable > 0) { ?>
 				<div class="cell bg-warning">
 					<h2>Are you sure you're ready?</h2>

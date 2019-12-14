@@ -52,6 +52,10 @@ $this->group('/attendance', function() {
   $this->get('/sessions.js', function() {
     include BASE_PATH . 'controllers/attendance/sessions.js';
   });
+
+  $this->get('/edit-end-date.js', function() {
+    include 'attendance/sessions/edit-end-date.js';
+  });
 });
 
 $this->get('/*', function() {
