@@ -58,43 +58,35 @@ include BASE_PATH . 'views/header.php';
 
       <p>You can select events which will be run at this gala and enter the price for each of these events.</p>
 
-      <ul class="list-group mb-3">
-      <?php foreach ($swimsArray as $eventKey => $event) { ?>
-      <li class="list-group-item">
-        <h2><?=$event?></h2>
+      <p>To do this, tick or untick the box on the left of each event and enter the price on the right.</p>
 
-        <div class="row">
-          <div class="col-12">
-            <div class="form-group">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="<?=$eventKey?>-check" name="<?=$eventKey?>-check">
-                <label class="custom-control-label" for="<?=$eventKey?>-check">
-                  Enable <?=$event?>
-                </label>
-              </div>
-            </div>
-          </div>
+      <form method="post">
 
-          <div class="col-12">
-            <div class="form-group mb-0">
-              <label for="<?=$eventKey?>-price">Price</label>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="<?=$eventKey?>-price-addon">&pound;</span>
-                </div>
-                <input type="number" step="0.01" min="0" class="form-control" id="<?=$eventKey?>-price" name="<?=$eventKey?>-price">
+        <ul class="list-group mb-3">
+        <?php foreach ($swimsArray as $eventKey => $event) { ?>
+        <li class="list-group-item">
+          <h2><?=$event?></h2>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <input type="checkbox" aria-label="Tick to confirm event">
               </div>
+              <span class="input-group-text" id="<?=$eventKey?>-price-addon">&pound;</span>
             </div>
+            <input type="number" step="0.01" min="0" class="form-control" id="<?=$eventKey?>-price" name="<?=$eventKey?>-price" aria-label="<?=$event?> price">
           </div>
         </li>
-      <?php } ?>
-      </ul>
+        <?php } ?>
+        </ul>
 
-      <p>
-        <buttton type="submit" class="btn btn-primary">
-          Save
-        </buttton>
-      </p>
+        <p>
+          <buttton type="submit" class="btn btn-primary">
+            Save
+          </buttton>
+        </p>
+
+      </form>
 
     </div>
   </div>

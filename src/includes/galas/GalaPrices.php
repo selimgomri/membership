@@ -33,7 +33,7 @@ class GalaPrices {
       try {
 
         $events = json_decode($data['Events']);
-        $prices = json_decode($data['Events']);
+        $prices = json_decode($data['Prices']);
 
         // Events then prices
         foreach ($events as $key => $value) {
@@ -103,7 +103,22 @@ class GalaPrices {
    * @return void
    */
   public function setPrice(string $event, int $price) {
+    if (!$this->isEvent($event)) {
+      throw new Exception('No such event');
+    }
 
+    $this->events['Prices'][$event] = $price;
+  }
+
+  /**
+   * Set whether an event is allowed or not
+   *
+   * @param string $event
+   * @param boolean $allowed
+   * @return void
+   */
+  public function setEvent(string $event, bool $allowed) {
+    $this->events['Events'][$event] = $allowed;
   }
 
   /**
@@ -113,6 +128,42 @@ class GalaPrices {
    */
   public function save() {
     // Turn data for events and prices into JSON data
+    $outputEvents = GalaEvents::getEvents();
+    $outputPrices = GalaEvents::getEvents();
+
+    foreach (GalaEvents::getEvents() as $eventKey => $eventName) {
+      if ($this->isEvent($eventKey)) {
+        $outputEvents[$eventKey] = true;
+        $outputPrices[$eventKey] = $this->getPrice($eventKey);
+      } else {
+        $outputEvents[$eventKey] = false;
+        $outputPrices[$eventKey] = 0;
+      }
+    }
+
+    pre(json_encode($outputEvents));
+    pre(json_encode($outputPrices));
+  }
+
+  public function setupDefault() {
+    // Get the standard price
+    $getPrice = $this->db->prepare("SELECT GalaFee FROM galas WHERE GalaID = ?");
+    $getPrice->execute([$this->gala]);
+    $priceFromDb = $getPrice->fetchColumn();
+
+    try {
+      $price = Brick\Math\BigDecimal::of((string) $priceFromDb);
+      $price = (string) $price->withPointMovedRight(2)->toBigInteger();
+
+      foreach (GalaEvents::getEvents() as $eventKey => $eventName) {
+        $this->setEvent($eventKey, true);
+        $this->setPrice($eventKey, $price);
+      }
+    } catch (Exception | Error $e) {
+      pre($e);
+    }
+
+    $this->save();
   }
 
 }
