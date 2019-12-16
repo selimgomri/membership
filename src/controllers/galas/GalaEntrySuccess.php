@@ -73,15 +73,9 @@ include BASE_PATH . "views/header.php";
         <?=$entryList?>
       </ul>
 
-      <?php if ($row['GalaFeeConstant'] == 1) { ?>
       <p>
-        The fee for each swim is &pound;<?=number_format($row['GalaFee'],2,'.','')?>, the <strong>total fee payable is &pound;<?=number_format(($row['FeeToPay']),2,'.','')?></strong>
+        The <strong>total fee payable is &pound;<?=number_format(($row['FeeToPay']),2,'.','')?></strong>. You can view prices for each swim online.
       </p>
-      <?php } else { ?>
-      <p>
-        The <strong>total fee payable is &pound;<?=number_format(($row['FeeToPay']),2,'.','')?></strong>. If you have entered this amount incorrectly, you may incur extra charges from the club or gala host.
-      </p>
-      <?php } ?>
 
       <h2>Next steps</h2>
       <p class="lead">

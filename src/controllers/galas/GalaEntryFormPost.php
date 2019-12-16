@@ -32,128 +32,125 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
   $counter = 0;
   $entryCount = -1;
 
+  $galaData = new GalaPrices($db, $_POST['gala']);
+
   try {
 
-  // JS Should catch existing entries so fail if one exists
-  $getGalaEntries = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE GalaID = ? AND MemberID = ?");
-  $getGalaEntries->execute([
-    $_POST['gala'],
-    $_POST['swimmer']
-  ]);
-  if ($getGalaEntries->fetchColumn() > 0) {
-    halt(403);
-  }
+    // JS Should catch existing entries so fail if one exists
+    $getGalaEntries = $db->prepare("SELECT COUNT(*), EntryID FROM galaEntries WHERE GalaID = ? AND MemberID = ?");
+    $getGalaEntries->execute([
+      $_POST['gala'],
+      $_POST['swimmer']
+    ]);
+    if ($getGalaEntries->fetchColumn() > 0) {
+      header("Location: " . autoUrl("galas/entries/id"));
+    } else {
 
-  foreach ($swimsArray as $swim) {
-    if ($_POST[$swim]) {
-      $entriesArray[] = $_POST[$swim];
-      $counter++;
+      $allowedSwims = [];
+      foreach ($swimsArray as $swim) {
+        if ($galaData->getEvent($swim)->isEnabled()) {
+          $allowedSwims[] = $swim;
+        }
+      }
+
+      $totalPrice = 0;
+
+      foreach ($allowedSwims as $swim) {
+        if (bool($_POST[$swim])) {
+          $entriesArray[] = 1;
+          $counter++;
+          $price += $galaData->getEvent($swim)->getPrice();
+        } else {
+          $entriesArray[] = 0;
+        }
+      }
+
+      $swims = "";
+      for ($i=0; $i<sizeof($allowedSwims); $i++) {
+        if ($i < (sizeof($allowedSwims)-1)) {
+          $swims .= "`" . $allowedSwims[$i] . "`, ";
+        }
+        else {
+          $swims .= "`" . $allowedSwims[$i] . "` ";
+        }
+      }
+
+      $values = "";
+      for ($i=0; $i<sizeof($entriesArray); $i++) {
+        if ($i < (sizeof($entriesArray)-1)) {
+          $values .= "?, ";
+        }
+        else {
+          $values .= "? ";
+        }
+      }
+
+      $now = new DateTime('now', new DateTimeZone('Europe/London'));
+      $getGalaInformation = $db->prepare("SELECT GalaFee, GalaFeeConstant, GalaName, HyTek FROM galas WHERE GalaID = ? AND NOT CoachEnters AND ClosingDate >= ?");
+      $getGalaInformation->execute([$_POST['gala'], $now->format('Y-m-d')]);
+      $row = $getGalaInformation->fetch(PDO::FETCH_ASSOC);
+
+      if ($row == null) {
+        halt(404);
+      }
+
+      $fee = (string) (\Brick\Math\BigInteger::of((string) $price))->toBigDecimal()->withPointMovedLeft(2);
+
+      $hyTek = bool($row['HyTek']);
+
+      $insert = $db->prepare("INSERT INTO `galaEntries` (EntryProcessed, Charged, `MemberID`, `GalaID`, " . $swims . ", `TimesRequired`, `FeeToPay`) VALUES (?, ?, ?, ?, " . $values . ", ?, ?)");
+
+      $array = array_merge([0, 0, $_POST['swimmer'], $_POST['gala']], $entriesArray);
+      $array = array_merge($array, [0, $fee]);
+
+      $insert->execute($array);
+
+      $entryList = "";
+      $get = $db->prepare("SELECT * FROM (galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galaEntries.MemberID = ? AND galaEntries.GalaID = ?");
+      $get->execute([$_POST['swimmer'], $_POST['gala']]);
+      $row = $get->fetch(PDO::FETCH_ASSOC);
+      // Print <li>Swim Name</li> for each entry
+      for ($y=0; $y<sizeof($swimsArray); $y++) {
+        if ($row[$swimsArray[$y]] == 1) {
+          $entryList .= "<li>" . $swimsTextArray[$y] . "</li>";
+        }
+      }
+
+      $get = $db->prepare("SELECT members.MForename, members.MSurname, galas.GalaName, galas.GalaFee, galas.GalaFeeConstant, users.EmailAddress, users.Forename, users.Surname FROM (((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN users ON members.UserID = users.UserID) WHERE galaEntries.MemberID = ? AND galaEntries.GalaID = ?");
+      $get->execute([$_POST['swimmer'], $_POST['gala']]);
+      $row = $get->fetch(PDO::FETCH_ASSOC);
+      $to = $row['Forename'] . " " . $row['Surname'] . "<" . $row['EmailAddress'] . ">";
+
+      $subject = $row['MForename'] . "'s Gala Entry to " . $row['GalaName'];
+      $message .= "<p>Here's the details of your Gala Entry for " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " to " . htmlspecialchars($row['GalaName']) . ".</p>";
+      $message .= "<ul>" . $entryList . "</ul>";
+      $message .= "<p>The <strong>total fee payable is &pound;" . $fee . "</strong>. You can view the fee for each event online.</p>";
+      if (bool($row['HyTek'])) {
+        $message .= "<p><strong>This is a HyTek gala.</strong> Please remember to add times for this entry.</p>";
+      }
+      $message .= '<p>If you have any questions, please contact the ' . htmlspecialchars(env('CLUB_NAME')) . ' gala team as soon as possible.</p>';
+      $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
+      `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 1, 'Galas')";
+      
+      global $db;
+      $email = $db->prepare($notify);
+      $email->execute([$_SESSION['UserID'], $subject, $message]);
+
+      $_SESSION['SuccessfulGalaEntry'] = [
+        "Gala" => $_POST['gala'],
+        "Swimmer" => $_POST['swimmer'],
+        'HyTek' => $hyTek
+      ];
+
+      if ($_SESSION['AccessLevel'] == 'Parent') {
+        header("Location: " . autoUrl("galas/entergala"));
+      } else {
+        header("Location: " . autoUrl("swimmers/" . $_POST['swimmer'] . "/enter-gala-success"));
+      }
     }
-    else {
-      $entriesArray[] = 0;
-    }
-  }
-
-  $swims = "";
-  for ($i=0; $i<sizeof($swimsArray); $i++) {
-    if ($i < (sizeof($swimsArray)-1)) {
-      $swims .= "`" . $swimsArray[$i] . "`, ";
-    }
-    else {
-      $swims .= "`" . $swimsArray[$i] . "` ";
-    }
-  }
-
-  $values = "";
-  for ($i=0; $i<sizeof($entriesArray); $i++) {
-    if ($i < (sizeof($entriesArray)-1)) {
-      $values .= "?, ";
-    }
-    else {
-      $values .= "? ";
-    }
-  }
-
-  $now = new DateTime('now', new DateTimeZone('Europe/London'));
-  $getGalaInformation = $db->prepare("SELECT GalaFee, GalaFeeConstant, GalaName, HyTek FROM galas WHERE GalaID = ? AND NOT CoachEnters AND ClosingDate >= ?");
-  $getGalaInformation->execute([$_POST['gala'], $now->format('Y-m-d')]);
-  $row = $getGalaInformation->fetch(PDO::FETCH_ASSOC);
-
-  if ($row == null) {
-    halt(404);
-  }
-
-  if ($row['GalaFeeConstant']) {
-    $fee = number_format(($counter*$row['GalaFee']),2,'.','');
-  } else {
-    $fee = 0;
-    if (isset($_POST['galaFee'])) {
-      $fee = number_format(($_POST['galaFee']),2,'.','');
-    }
-  }
-
-  $hyTek = bool($row['HyTek']);
-
-  $insert = $db->prepare("INSERT INTO `galaEntries` (EntryProcessed, Charged, `MemberID`, `GalaID`, " . $swims . ", `TimesRequired`, `FeeToPay`) VALUES (?, ?, ?, ?, " . $values . ", ?, ?)");
-
-  $array = array_merge([0, 0, $_POST['swimmer'], $_POST['gala']], $entriesArray);
-  $array = array_merge($array, [0, $fee]);
-
-  $insert->execute($array);
-
-  $entryList = "";
-  $get = $db->prepare("SELECT * FROM (galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galaEntries.MemberID = ? AND galaEntries.GalaID = ?");
-  $get->execute([$_POST['swimmer'], $_POST['gala']]);
-  $row = $get->fetch(PDO::FETCH_ASSOC);
-  // Print <li>Swim Name</li> for each entry
-  for ($y=0; $y<sizeof($swimsArray); $y++) {
-    if ($row[$swimsArray[$y]] == 1) {
-      $entryList .= "<li>" . $swimsTextArray[$y] . "</li>";
-    }
-  }
-
-  $get = $db->prepare("SELECT members.MForename, members.MSurname, galas.GalaName, galas.GalaFee, galas.GalaFeeConstant, users.EmailAddress, users.Forename, users.Surname FROM (((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN users ON members.UserID = users.UserID) WHERE galaEntries.MemberID = ? AND galaEntries.GalaID = ?");
-  $get->execute([$_POST['swimmer'], $_POST['gala']]);
-  $row = $get->fetch(PDO::FETCH_ASSOC);
-  $to = $row['Forename'] . " " . $row['Surname'] . "<" . $row['EmailAddress'] . ">";
-
-  $subject = $row['MForename'] . "'s Gala Entry to " . $row['GalaName'];
-  $message .= "<p>Here's the details of your Gala Entry for " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " to " . htmlspecialchars($row['GalaName']) . ".</p>";
-  $message .= "<ul>" . $entryList . "</ul>";
-  if (bool($row['GalaFeeConstant'])) {
-    $message .= "<p>The fee for each swim is &pound;" . number_format($row['GalaFee'],2,'.','') . ", the <strong>total fee payable is &pound;" . number_format(($counter*$row['GalaFee']),2,'.','') . "</strong></p>";
-  } else {
-    $message .= "<p>The <strong>total fee payable is &pound;" . $fee . "</strong>. If you have entered this amount incorrectly, you may incur extra charges from the club or gala host.</p>";
-  }
-  if (bool($row['HyTek'])) {
-    $message .= "<p><strong>This is a HyTek gala.</strong> Please remember to add times for this entry.</p>";
-  }
-  $message .= '<p>If you have any questions, please contact the ' . htmlspecialchars(env('CLUB_NAME')) . ' gala team as soon as possible.</p>';
-  $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
-  `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 1, 'Galas')";
-  try {
-    global $db;
-    $email = $db->prepare($notify);
-    $email->execute([$_SESSION['UserID'], $subject, $message]);
-  } catch (PDOException $e) {
-    reportError($e);
-    halt(500);
-  }
-
-  $_SESSION['SuccessfulGalaEntry'] = [
-    "Gala" => $_POST['gala'],
-    "Swimmer" => $_POST['swimmer'],
-    'HyTek' => $hyTek
-  ];
 
   } catch (Exception $e) {
     reportError($e);
     halt(500);
-  }
-
-  if ($_SESSION['AccessLevel'] == 'Parent') {
-    header("Location: " . autoUrl("galas/entergala"));
-  } else {
-    header("Location: " . autoUrl("swimmers/" . $_POST['swimmer'] . "/enter-gala-success"));
   }
 }
