@@ -24,6 +24,8 @@ if ($row == null) {
   halt(404);
 }
 
+$galaData = new GalaPrices($db, $row["GalaID"]);
+
 $closingDate = new DateTime($row['ClosingDate'], new DateTimeZone('Europe/London'));
 $theDate = new DateTime('now', new DateTimeZone('Europe/London'));
 
@@ -98,40 +100,32 @@ include "galaMenu.php"; ?>
         if ($rowArray[$i] == 1) { ?>
           <div class="row mb-3">
         <?php }
-        if ($row[$swimsArray[$i]] == 1) { ?>
-          <div class="col-sm-4 col-md-2">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" checked <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
-              <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
+        if ($galaData->getEvent($swimsArray[$i])->isEnabled()) {
+          if ($row[$swimsArray[$i]] == 1) { ?>
+            <div class="col-sm-4 col-md-2">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" checked <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
+                <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
+              </div>
             </div>
-          </div>
-        <?php }
-        else { ?>
-          <div class="col-sm-4 col-md-2">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
-              <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
+          <?php } else { ?>
+            <div class="col-sm-4 col-md-2">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
+                <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
+              </div>
             </div>
-          </div>
-        <?php }
+          <?php }
+        }
         if ($rowArray[$i] == 2) { ?>
           </div>
         <?php }
       }
 
-      if (!$locked) {
-        if ($row['GalaFeeConstant'] != 1) { ?>
-        <div class="form-group">
-          <label for="galaFee">Enter Total</label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">&pound;</span>
-            </div>
-            <input aria-describedby="feeHelp" type="text" id="galaFee" name="galaFee" class="form-control" value="<?= number_format($row['FeeToPay'], 2, '.', '') ?>" required>
-          </div>
-          <small id="feeHelp" class="form-text text-muted">Sadly we can't automatically calculate the entry fee for this gala so we need you to tell us. If you enter this amount incorrectly or fail to tell us the amount, you may incur extra charges from the club or gala host.</small>
-        </div>
-        <?php } ?>
+      if (!$locked) { ?>
+        <p>
+          Your entry fee is &pound;<span id="total-field">0.00</span>.
+        </p>
 
         <input type="hidden" value="<?=htmlspecialchars($row['EntryID'])?>" name="entryID">
         <p>

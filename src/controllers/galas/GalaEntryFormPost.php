@@ -111,8 +111,8 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
       $row = $get->fetch(PDO::FETCH_ASSOC);
       // Print <li>Swim Name</li> for each entry
       for ($y=0; $y<sizeof($swimsArray); $y++) {
-        if ($row[$swimsArray[$y]] == 1) {
-          $entryList .= "<li>" . $swimsTextArray[$y] . "</li>";
+        if (bool($row[$swimsArray[$y]])) {
+          $entryList .= '<li>' . $swimsTextArray[$y] . ', <em>&pound;' . $galaData->getEvent($swimsArray[$y])->getPriceAsString() . '</em></li>';
         }
       }
 
@@ -122,9 +122,9 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
       $to = $row['Forename'] . " " . $row['Surname'] . "<" . $row['EmailAddress'] . ">";
 
       $subject = $row['MForename'] . "'s Gala Entry to " . $row['GalaName'];
-      $message .= "<p>Here's the details of your Gala Entry for " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " to " . htmlspecialchars($row['GalaName']) . ".</p>";
+      $message .= "<p>Here are the swims selected for " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "'s " . htmlspecialchars($row['GalaName']) . " entry.</p>";
       $message .= "<ul>" . $entryList . "</ul>";
-      $message .= "<p>The <strong>total fee payable is &pound;" . $fee . "</strong>. You can view the fee for each event online.</p>";
+      $message .= "<p>You have entered " . (new NumberFormatter("en", NumberFormatter::SPELLOUT))->format($counter) . " events. The <strong>total fee payable is &pound;" . $fee . "</strong>.</p>";
       if (bool($row['HyTek'])) {
         $message .= "<p><strong>This is a HyTek gala.</strong> Please remember to add times for this entry.</p>";
       }
