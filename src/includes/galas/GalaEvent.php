@@ -97,7 +97,7 @@ class GalaEvent {
    * @return string price
    */
   public function getPriceAsString() {
-    return (string) (\Brick\Math\BigInteger::of((string) $this->getPrice()))->toBigDecimal()->withPointMovedLeft(2);
+    return (string) (\Brick\Math\BigInteger::of((string) $this->getPrice()))->toBigDecimal()->withPointMovedLeft(2)->toScale(2);
   }
 
 }
