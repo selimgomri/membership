@@ -220,6 +220,15 @@ include "galaMenu.php";
     </a>
   </p>
   <?php } else if ($_SESSION['AccessLevel'] == 'Coach' || $_SESSION['AccessLevel'] == 'Galas' || $_SESSION['AccessLevel'] == 'Admin') { ?>
+
+  <h2>Manage events and prices</h2>
+  <p class="lead">Select which events are running and enter the price for each event</p>
+  <p>
+    <a href="<?=autoUrl("galas/" . $id . "/pricing-and-events")?>" class="btn btn-success">
+      Manage prices
+    </a>
+  </p>
+
   <h2>Manage sessions</h2>
   <p class="lead">Add sessions <?php if ($gala['CoachEnters']) { ?>to this gala so parents can indicate availability or <?php } ?>so that you can take registers</p>
   <p>
