@@ -146,11 +146,7 @@ include BASE_PATH . 'views/header.php';
 							<div class="col">
 								<div class="d-sm-none mb-3"></div>
 								<p>
-									<?php if ($gala['fixed']) { ?>
-									<?=$count?> &times; &pound;<?=htmlspecialchars(number_format($gala['fee'], 2))?>
-									<?php } else { ?>
-									<?=$count?> entries at no fixed fee
-									<?php } ?>
+									<?=mb_convert_case((new NumberFormatter("en", NumberFormatter::SPELLOUT))->format($count),   MB_CASE_TITLE_SIMPLE)?> entr<?php if ($count == 1) { ?>y<?php } else { ?>ies<?php } ?>
 								</p>
 
 								<?php if ($hasNoDD) { ?>
@@ -184,7 +180,7 @@ include BASE_PATH . 'views/header.php';
 										<div class="input-group-prepend">
 											<div class="input-group-text mono">&pound;</div>
 										</div>
-										<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars(number_format($entry['FeeToPay'], 2))?>" <?php if ($hasNoDD || $entry['Charged'] || $notReady) { ?> disabled <?php } ?> min="0" max="150" step="0.01">
+										<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?>" <?php if ($hasNoDD || $entry['Charged'] || $notReady) { ?> disabled <?php } ?> min="0" max="150" step="0.01">
 									</div>
 								</div>
 							</div>
