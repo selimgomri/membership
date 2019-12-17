@@ -96,6 +96,7 @@ include "galaMenu.php"; ?>
       <p class="lead">Select the events to enter at this gala</p>
       <form method="post">
 
+        <div id="gala-checkboxes">
         <?php for ($i=0; $i<sizeof($swimsArray); $i++) {
         if ($rowArray[$i] == 1) { ?>
           <div class="row mb-3">
@@ -104,14 +105,14 @@ include "galaMenu.php"; ?>
           if ($row[$swimsArray[$i]] == 1) { ?>
             <div class="col-sm-4 col-md-2">
               <div class="custom-control custom-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" checked <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
+                <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" checked <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>" data-event-fee="<?=htmlspecialchars($galaData->getEvent($swimsArray[$i])->getPrice())?>">
                 <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
               </div>
             </div>
           <?php } else { ?>
             <div class="col-sm-4 col-md-2">
               <div class="custom-control custom-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>">
+                <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>" data-event-fee="<?=htmlspecialchars($galaData->getEvent($swimsArray[$i])->getPrice())?>">
                 <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
               </div>
             </div>
@@ -120,11 +121,12 @@ include "galaMenu.php"; ?>
         if ($rowArray[$i] == 2) { ?>
           </div>
         <?php }
-      }
+        } ?>
+        </div>
 
-      if (!$locked) { ?>
+      <?php if (!$locked) { ?>
         <p>
-          Your entry fee is &pound;<span id="total-field">0.00</span>.
+          Your entry fee is <strong>&pound;<span id="total-field" data-total="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $row['FeeToPay'])->withPointMovedRight(2)->toInt()))?>"><?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $row['FeeToPay'])->toScale(2)))?></span></strong>.
         </p>
 
         <input type="hidden" value="<?=htmlspecialchars($row['EntryID'])?>" name="entryID">
@@ -161,5 +163,11 @@ include "galaMenu.php"; ?>
     </form>
   </div>
 </div>
+
+<?php if (!$locked) { ?>
+<script src="<?=autoUrl("public/js/numerical/bignumber.min.js")?>"></script>
+<script src="<?=autoUrl("public/js/gala-entries/EditEntry.js")?>"></script>
+<?php } ?>
+
 <?php
 include BASE_PATH . "views/footer.php";

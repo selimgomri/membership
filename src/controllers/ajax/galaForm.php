@@ -86,171 +86,173 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 <h2>Select Swims</h2>
 <p>Your club will have hidden events which will not run at this gala but some events may not be open for entries from some age groups.</p>
 
-<div class="row mb-3">
-	<?php if ($galaData->getEvent('50Free')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="50Free" name="50Free" data-event-fee="<?=htmlspecialchars($galaData->getEvent('50Free')->getPrice())?>">
-		<label class="custom-control-label" for="50Free">50 Freestyle</label>
+<div id="gala-checkboxes">
+	<div class="row mb-3">
+		<?php if ($galaData->getEvent('50Free')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="50Free" name="50Free" data-event-fee="<?=htmlspecialchars($galaData->getEvent('50Free')->getPrice())?>">
+			<label class="custom-control-label" for="50Free">50 Freestyle</label>
+		</div>
+		</div>
+		<?php } ?>
+		<?php if ($galaData->getEvent('100Free')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="100Free" name="100Free" data-event-fee="<?=htmlspecialchars($galaData->getEvent('100Free')->getPrice())?>">
+			<label class="custom-control-label" for="100Free">100 Freestyle</label>
+		</div>
+		</div>
+		<?php } ?>
+		<?php if ($galaData->getEvent('200Free')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="200Free" name="200Free" data-event-fee="<?=htmlspecialchars($galaData->getEvent('200Free')->getPrice())?>">
+			<label class="custom-control-label" for="200Free">200 Freestyle</label>
+		</div>
+		</div>
+		<?php } ?>
+		<?php if ($galaData->getEvent('400Free')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="400Free" name="400Free" data-event-fee="<?=htmlspecialchars($galaData->getEvent('400Free')->getPrice())?>">
+			<label class="custom-control-label" for="400Free">400 Freestyle</label>
+		</div>
+		</div>
+		<?php } ?>
+		<?php if ($galaData->getEvent('800Free')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="800Free" name="800Free" data-event-fee="<?=htmlspecialchars($galaData->getEvent('800Free')->getPrice())?>">
+			<label class="custom-control-label" for="800Free">800 Freestyle</label>
+		</div>
+		</div>
+		<?php } ?>
+		<?php if ($galaData->getEvent('1500Free')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="1500Free" name="1500Free" data-event-fee="<?=htmlspecialchars($galaData->getEvent('1500Free')->getPrice())?>">
+			<label class="custom-control-label" for="1500Free">1500 Freestyle</label>
+		</div>
+		</div>
+		<?php } ?>
 	</div>
+	<div class="row mb-3">
+		<?php if ($galaData->getEvent('50Breast')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="50Breast" name="50Breast" data-event-fee="<?=htmlspecialchars($galaData->getEvent('50Breast')->getPrice())?>">
+			<label class="custom-control-label" for="50Breast">50 Breaststroke</label>
+		</div>
+		</div>
+		<?php } ?>
+		<?php if ($galaData->getEvent('100Breast')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="100Breast" name="100Breast" data-event-fee="<?=htmlspecialchars($galaData->getEvent('100Breast')->getPrice())?>">
+			<label class="custom-control-label" for="100Breast">100 Breaststroke</label>
+		</div>
+		</div>
+		<?php } ?>
+		<?php if ($galaData->getEvent('200Breast')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="200Breast" name="200Breast" data-event-fee="<?=htmlspecialchars($galaData->getEvent('200Breast')->getPrice())?>">
+			<label class="custom-control-label" for="200Breast">200 Breaststroke</label>
+		</div>
+		</div>
+		<?php } ?>
 	</div>
-	<?php } ?>
-	<?php if ($galaData->getEvent('100Free')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="100Free" name="100Free" data-event-fee="<?=htmlspecialchars($galaData->getEvent('100Free')->getPrice())?>">
-		<label class="custom-control-label" for="100Free">100 Freestyle</label>
+	<div class="row mb-3">
+		<?php if ($galaData->getEvent('50Fly')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="50Fly" name="50Fly" data-event-fee="<?=htmlspecialchars($galaData->getEvent('50Fly')->getPrice())?>">
+			<label class="custom-control-label" for="50Fly">50 Butterfly</label>
+		</div>
+		</div>
+		<?php } ?>
+		<?php if ($galaData->getEvent('100Fly')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="100Fly" name="100Fly" data-event-fee="<?=htmlspecialchars($galaData->getEvent('100Fly')->getPrice())?>">
+			<label class="custom-control-label" for="100Fly">100 Butterfly</label>
+		</div>
+		</div>
+		<?php } ?>
+		<?php if ($galaData->getEvent('200Fly')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="200Fly" name="200Fly" data-event-fee="<?=htmlspecialchars($galaData->getEvent('200Fly')->getPrice())?>">
+			<label class="custom-control-label" for="200Fly">200 Butterfly</label>
+		</div>
+		</div>
+		<?php } ?>
 	</div>
+	<div class="row mb-3">
+		<?php if ($galaData->getEvent('50Back')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="50Back" name="50Back" data-event-fee="<?=htmlspecialchars($galaData->getEvent('50Back')->getPrice())?>">
+			<label class="custom-control-label" for="50Back">50 Backstroke</label>
+		</div>
+		</div>
+		<?php } ?>
+		<?php if ($galaData->getEvent('100Back')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="100Back" name="100Back" data-event-fee="<?=htmlspecialchars($galaData->getEvent('100Back')->getPrice())?>">
+			<label class="custom-control-label" for="100Back">100 Backstroke</label>
+		</div>
+		</div>
+		<?php } ?>
+		<?php if ($galaData->getEvent('200Back')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="200Back" name="200Back" data-event-fee="<?=htmlspecialchars($galaData->getEvent('200Back')->getPrice())?>">
+			<label class="custom-control-label" for="200Back">200 Backstroke</label>
+		</div>
+		</div>
+		<?php } ?>
 	</div>
-	<?php } ?>
-	<?php if ($galaData->getEvent('200Free')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="200Free" name="200Free" data-event-fee="<?=htmlspecialchars($galaData->getEvent('200Free')->getPrice())?>">
-		<label class="custom-control-label" for="200Free">200 Freestyle</label>
+	<div class="row mb-3">
+		<?php if ($galaData->getEvent('100IM')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="100IM" name="100IM" data-event-fee="<?=htmlspecialchars($galaData->getEvent('100IM')->getPrice())?>">
+			<label class="custom-control-label" for="100IM">100 IM</label>
+		</div>
+		</div>
+		<?php } ?>
+		<?php if ($galaData->getEvent('150IM')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="150IM" name="150IM" data-event-fee="<?=htmlspecialchars($galaData->getEvent('150IM')->getPrice())?>">
+			<label class="custom-control-label" for="150IM">150 IM</label>
+		</div>
+		</div>
+		<?php } ?>
+		<?php if ($galaData->getEvent('200IM')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="200IM" name="200IM" data-event-fee="<?=htmlspecialchars($galaData->getEvent('200IM')->getPrice())?>">
+			<label class="custom-control-label" for="200IM">200 IM</label>
+		</div>
+		</div>
+		<?php } ?>
+		<?php if ($galaData->getEvent('400IM')->isEnabled()) { ?>
+		<div class="col-sm-4 col-md-2">
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" value="1" class="custom-control-input" id="400IM" name="400IM" data-event-fee="<?=htmlspecialchars($galaData->getEvent('400IM')->getPrice())?>">
+			<label class="custom-control-label" for="400IM">400 IM</label>
+		</div>
+		</div>
+		<?php } ?>
 	</div>
-	</div>
-	<?php } ?>
-	<?php if ($galaData->getEvent('400Free')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="400Free" name="400Free" data-event-fee="<?=htmlspecialchars($galaData->getEvent('400Free')->getPrice())?>">
-		<label class="custom-control-label" for="400Free">400 Freestyle</label>
-	</div>
-	</div>
-	<?php } ?>
-	<?php if ($galaData->getEvent('800Free')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="800Free" name="800Free" data-event-fee="<?=htmlspecialchars($galaData->getEvent('800Free')->getPrice())?>">
-		<label class="custom-control-label" for="800Free">800 Freestyle</label>
-	</div>
-	</div>
-	<?php } ?>
-	<?php if ($galaData->getEvent('1500Free')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="1500Free" name="1500Free" data-event-fee="<?=htmlspecialchars($galaData->getEvent('1500Free')->getPrice())?>">
-		<label class="custom-control-label" for="1500Free">1500 Freestyle</label>
-	</div>
-	</div>
-	<?php } ?>
-</div>
-<div class="row mb-3">
-	<?php if ($galaData->getEvent('50Breast')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="50Breast" name="50Breast" data-event-fee="<?=htmlspecialchars($galaData->getEvent('50Breast')->getPrice())?>">
-		<label class="custom-control-label" for="50Breast">50 Breaststroke</label>
-	</div>
-	</div>
-	<?php } ?>
-	<?php if ($galaData->getEvent('100Breast')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="100Breast" name="100Breast" data-event-fee="<?=htmlspecialchars($galaData->getEvent('100Breast')->getPrice())?>">
-		<label class="custom-control-label" for="100Breast">100 Breaststroke</label>
-	</div>
-	</div>
-	<?php } ?>
-	<?php if ($galaData->getEvent('200Breast')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="200Breast" name="200Breast" data-event-fee="<?=htmlspecialchars($galaData->getEvent('200Breast')->getPrice())?>">
-		<label class="custom-control-label" for="200Breast">200 Breaststroke</label>
-	</div>
-	</div>
-	<?php } ?>
-</div>
-<div class="row mb-3">
-	<?php if ($galaData->getEvent('50Fly')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="50Fly" name="50Fly" data-event-fee="<?=htmlspecialchars($galaData->getEvent('50Fly')->getPrice())?>">
-		<label class="custom-control-label" for="50Fly">50 Butterfly</label>
-	</div>
-	</div>
-	<?php } ?>
-	<?php if ($galaData->getEvent('100Fly')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="100Fly" name="100Fly" data-event-fee="<?=htmlspecialchars($galaData->getEvent('100Fly')->getPrice())?>">
-		<label class="custom-control-label" for="100Fly">100 Butterfly</label>
-	</div>
-	</div>
-	<?php } ?>
-	<?php if ($galaData->getEvent('200Fly')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="200Fly" name="200Fly" data-event-fee="<?=htmlspecialchars($galaData->getEvent('200Fly')->getPrice())?>">
-		<label class="custom-control-label" for="200Fly">200 Butterfly</label>
-	</div>
-	</div>
-	<?php } ?>
-</div>
-<div class="row mb-3">
-	<?php if ($galaData->getEvent('50Back')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="50Back" name="50Back" data-event-fee="<?=htmlspecialchars($galaData->getEvent('50Back')->getPrice())?>">
-		<label class="custom-control-label" for="50Back">50 Backstroke</label>
-	</div>
-	</div>
-	<?php } ?>
-	<?php if ($galaData->getEvent('100Back')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="100Back" name="100Back" data-event-fee="<?=htmlspecialchars($galaData->getEvent('100Back')->getPrice())?>">
-		<label class="custom-control-label" for="100Back">100 Backstroke</label>
-	</div>
-	</div>
-	<?php } ?>
-	<?php if ($galaData->getEvent('200Back')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="200Back" name="200Back" data-event-fee="<?=htmlspecialchars($galaData->getEvent('200Back')->getPrice())?>">
-		<label class="custom-control-label" for="200Back">200 Backstroke</label>
-	</div>
-	</div>
-	<?php } ?>
-</div>
-<div class="row mb-3">
-	<?php if ($galaData->getEvent('100IM')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="100IM" name="100IM" data-event-fee="<?=htmlspecialchars($galaData->getEvent('100IM')->getPrice())?>">
-		<label class="custom-control-label" for="100IM">100 IM</label>
-	</div>
-	</div>
-	<?php } ?>
-	<?php if ($galaData->getEvent('150IM')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="150IM" name="150IM" data-event-fee="<?=htmlspecialchars($galaData->getEvent('150IM')->getPrice())?>">
-		<label class="custom-control-label" for="150IM">150 IM</label>
-	</div>
-	</div>
-	<?php } ?>
-	<?php if ($galaData->getEvent('200IM')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="200IM" name="200IM" data-event-fee="<?=htmlspecialchars($galaData->getEvent('200IM')->getPrice())?>">
-		<label class="custom-control-label" for="200IM">200 IM</label>
-	</div>
-	</div>
-	<?php } ?>
-	<?php if ($galaData->getEvent('400IM')->isEnabled()) { ?>
-	<div class="col-sm-4 col-md-2">
-	<div class="custom-control custom-checkbox">
-		<input type="checkbox" value="1" class="custom-control-input" id="400IM" name="400IM" data-event-fee="<?=htmlspecialchars($galaData->getEvent('400IM')->getPrice())?>">
-		<label class="custom-control-label" for="400IM">400 IM</label>
-	</div>
-	</div>
-	<?php } ?>
 </div>
 
 <p>
-	Your entry fee is &pound;<span id="total-field">0.00</span>.
+	Your entry fee is <strong>&pound;<span id="total-field" data-total="0">0.00</span></strong>.
 </p>
 
 <?php } ?>
