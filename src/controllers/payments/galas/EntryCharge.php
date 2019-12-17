@@ -12,6 +12,8 @@ if ($gala == null) {
 	halt(404);
 }
 
+$galaData = new GalaPrices($db, $id);
+
 $getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) WHERE galaEntries.GalaID = ? ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id]);
 $entry = $getEntries->fetch(PDO::FETCH_ASSOC);
@@ -139,14 +141,23 @@ include BASE_PATH . 'views/header.php';
 								<?php $count = 0; ?>
 								<?php foreach($swimsArray as $colTitle => $text) { ?>
 									<?php if ($entry[$colTitle]) { $count++; ?>
-									<li><?=$text?></li>
+									<li class="row">
+										<div class="col">
+											<?=$text?>
+										</div>
+										<?php if ($galaData->getEvent($colTitle)->isEnabled()) { ?>
+										<div class="col">
+											&pound;<?=$galaData->getEvent($colTitle)->getPriceAsString()?>
+										</div>
+										<?php } ?>
+									</li>
 									<?php } ?>
 								<?php } ?>
 							</div>
 							<div class="col">
 								<div class="d-sm-none mb-3"></div>
 								<p>
-									<?=mb_convert_case((new NumberFormatter("en", NumberFormatter::SPELLOUT))->format($count),   MB_CASE_TITLE_SIMPLE)?> entr<?php if ($count == 1) { ?>y<?php } else { ?>ies<?php } ?>
+									<?=mb_convert_case((new NumberFormatter("en", NumberFormatter::SPELLOUT))->format($count),   MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
 								</p>
 
 								<?php if ($hasNoDD) { ?>

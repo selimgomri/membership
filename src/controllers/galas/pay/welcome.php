@@ -91,6 +91,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
         <ul class="list-group mb-3">
 					<?php do { ?>
 					<?php $notReady = !$entry['EntryProcessed']; ?>
+          <?php $galaData = new GalaPrices($db, $entry['GalaID']); ?>
 					<li class="list-group-item">
             <h3><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?> for <?=htmlspecialchars($entry['GalaName'])?></h3>
 						<div class="row">
@@ -102,18 +103,23 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 								<?php $count = 0; ?>
 								<?php foreach($swimsArray as $colTitle => $text) { ?>
 									<?php if ($entry[$colTitle]) { $count++; ?>
-									<li><?=$text?></li>
+                  <li class="row">
+										<div class="col">
+											<?=$text?>
+										</div>
+										<?php if ($galaData->getEvent($colTitle)->isEnabled()) { ?>
+										<div class="col">
+											&pound;<?=$galaData->getEvent($colTitle)->getPriceAsString()?>
+										</div>
+										<?php } ?>
+									</li>
 									<?php } ?>
 								<?php } ?>
 							</div>
 							<div class="col">
 								<div class="d-sm-none mb-3"></div>
 								<p>
-									<?php if ($entry['GalaFeeConstant']) { ?>
-									<?=$count?> &times; &pound;<?=htmlspecialchars(number_format($entry['GalaFee'], 2))?>
-									<?php } else { ?>
-									<strong><?=$count?> entries at no fixed fee.</strong> Please make sure you enter the correct amount or you may face extra charges or may be withdrawn.
-									<?php } ?>
+                  <?=mb_convert_case((new NumberFormatter("en", NumberFormatter::SPELLOUT))->format($count),   MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
 								</p>
 
 								<?php if ($notReady) { ?>
@@ -129,6 +135,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                 </div>
                 </div>
 
+                <!-- USER INPUT IS LEGACY TO BE REMOVED IN FUTURE ONCE OLD GALAS CLEAR -->
 								<div class="form-group mb-0">
 									<label for="<?=$entry['EntryID']?>-amount">
 										Amount to pay
@@ -137,7 +144,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 										<div class="input-group-prepend">
 											<div class="input-group-text mono">&pound;</div>
 										</div>
-                    <input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars(number_format($entry['FeeToPay'], 2))?>" min="0" max="150" step="0.01" <?php if ($entry['GalaFeeConstant']) { ?>readonly<?php } ?>>
+                    <input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?>" min="0" max="150" step="0.01" <?php if ($entry['GalaFeeConstant']) { ?>readonly<?php } ?>>
 									</div>
 								</div>
 							</div>

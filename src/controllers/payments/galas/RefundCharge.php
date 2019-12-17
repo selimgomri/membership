@@ -12,6 +12,8 @@ if ($gala == null) {
 	halt(404);
 }
 
+$galaData = new GalaPrices($db, $id);
+
 $getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, Forename, Surname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, stripePayMethods.Brand, stripePayMethods.Last4, stripePayMethods.Funding, stripePayments.Paid StripePaid FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? AND Charged = ? ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id, '1']);
 $entry = $getEntries->fetch(PDO::FETCH_ASSOC);
@@ -111,7 +113,7 @@ include BASE_PATH . 'views/header.php';
 			<ul class="list-group mb-3" id="entries-list">
 				<?php do { ?>
 					<?php $hasNoDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut')); ?>
-					<?php $amountRefundable = ((int) ($entry['FeeToPay']*100)) - ($entry['AmountRefunded']); ?>
+					<?php $amountRefundable = (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay']))->withPointMovedRight(2)->toInt(); ?>
 				<?php if ($entry['Processed'] && $entry['Charged']) { $countChargeable++; } ?>
 				<?php $notReady = !$entry['Processed']; ?>
 				<li class="list-group-item <?php if ($notReady) { ?>list-group-item-danger<?php } ?>" id="refund-box-<?=htmlspecialchars($entry['EntryID'])?>">
@@ -127,7 +129,16 @@ include BASE_PATH . 'views/header.php';
 								<?php $count = 0; ?>
 								<?php foreach($swimsArray as $colTitle => $text) { ?>
 									<?php if ($entry[$colTitle]) { $count++; ?>
-									<li><?=$text?></li>
+									<li class="row">
+										<div class="col">
+											<?=$text?>
+										</div>
+										<?php if ($galaData->getEvent($colTitle)->isEnabled()) { ?>
+										<div class="col">
+											&pound;<?=$galaData->getEvent($colTitle)->getPriceAsString()?>
+										</div>
+										<?php } ?>
+									</li>
 									<?php } ?>
 								<?php } ?>
 							</div>
@@ -140,11 +151,7 @@ include BASE_PATH . 'views/header.php';
 								<?php } ?>
 
 								<p>
-									<?php if ($gala['fixed']) { ?>
-									<?=$count?> &times; &pound;<?=htmlspecialchars(number_format($gala['fee'], 2))?>
-									<?php } else { ?>
-									<?=$count?> entries at no fixed fee
-									<?php } ?>
+									<?=mb_convert_case((new NumberFormatter("en", NumberFormatter::SPELLOUT))->format($count),   MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
 								</p>
 
 								<div id="<?=$entry['EntryID']?>-amount-refunded">
@@ -199,7 +206,7 @@ include BASE_PATH . 'views/header.php';
 												<div class="input-group-prepend">
 													<div class="input-group-text mono">&pound;</div>
 												</div>
-												<input type="number" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars(number_format($entry['FeeToPay'], 2))?>" disabled>
+												<input type="number" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?>" disabled>
 											</div>
 										</div>
 										<div class="d-none d-sm-block d-xl-none mb-3"></div>
@@ -214,7 +221,7 @@ include BASE_PATH . 'views/header.php';
 												<div class="input-group-prepend">
 													<div class="input-group-text mono">&pound;</div>
 												</div>
-												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono refund-amount-field" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00" min="0" max="<?=htmlspecialchars(number_format($amountRefundable/100, 2))?>" data-max-refundable="<?=$amountRefundable?>" data-amount-refunded="<?=$entry['AmountRefunded']?>" step="0.01" <?php if ($amountRefundable == 0 || $notReady) { ?>disabled<?php } ?>>
+												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono refund-amount-field" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00" min="0" max="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $amountRefundable)->withPointMovedLeft(2)->toScale(2)))?>" data-max-refundable="<?=$amountRefundable?>" data-amount-refunded="<?=$entry['AmountRefunded']?>" step="0.01" <?php if ($amountRefundable == 0 || $notReady) { ?>disabled<?php } ?>>
 											</div>
 										</div>
 									</div>
@@ -285,6 +292,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
+<script src="<?=autoUrl("public/js/numerical/bignumber.min.js")?>"></script>
 <script src="<?=autoUrl("js/galas/refund-entries.js")?>"></script>
 
 <?php

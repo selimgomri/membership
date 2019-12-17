@@ -53,22 +53,23 @@ if ($entry != null) {
   do {
     $allGood = false;
 
-    if (isset($_POST[$entry['EntryID'] . '-pay']) && $_POST[$entry['EntryID'] . '-pay']) {
+    if (isset($_POST[$entry['EntryID'] . '-pay']) && bool($_POST[$entry['EntryID'] . '-pay'])) {
       $fee = 0;
-      if ($entry['GalaFeeConstant']) {
-        $fee = (int) ($entry['FeeToPay']*100);
+      // Relace with if (true) once legacy period is over
+      if (bool($entry['GalaFeeConstant'])) {
+        $fee = \Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->withPointMovedRight(2)->toInt();
         $allGood = true;
       } else {
         if (isset($_POST[$entry['EntryID'] . '-pay']) && $_POST[$entry['EntryID'] . '-pay']) {
           if (isset($_POST[$entry['EntryID'] . '-amount']) && $_POST[$entry['EntryID'] . '-amount']) {
-            $fee = (int) ($_POST[$entry['EntryID'] . '-amount']*100);
+            $fee = $fee = \Brick\Math\BigDecimal::of((string) $_POST[$entry['EntryID'] . '-amount'])->withPointMovedRight(2)->toInt();
             $allGood = true;
             $updateTime->execute([
               number_format($_POST[$entry['EntryID'] . '-amount'], 2, '.', ''),
               $entry['EntryID']
             ]);
           } else {
-            $fee = (int) ($entry['FeeToPay']*100);
+            $fee = \Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->withPointMovedRight(2)->toInt();
             $allGood = true;
           }
         }

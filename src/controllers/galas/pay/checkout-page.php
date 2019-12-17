@@ -171,6 +171,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
       <ul class="list-group mb-3">
         <?php while ($entry = $getEntriesByPI->fetch(PDO::FETCH_ASSOC)) {
           $notReady = !$entry['EntryProcessed'];
+          $galaData = new GalaPrices($db, $entry['GalaID']);
         ?>
         <li class="list-group-item">
           <h3><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?> <br><small><?=htmlspecialchars($entry['GalaName'])?></small></h3>
@@ -186,18 +187,23 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                 <?php $count = 0; ?>
                 <?php foreach($swimsArray as $colTitle => $text) { ?>
                   <?php if ($entry[$colTitle]) { $count++; ?>
-                  <li><?=$text?></li>
+                  <li class="row">
+										<div class="col">
+											<?=$text?>
+										</div>
+										<?php if ($galaData->getEvent($colTitle)->isEnabled()) { ?>
+										<div class="col">
+											&pound;<?=$galaData->getEvent($colTitle)->getPriceAsString()?>
+										</div>
+										<?php } ?>
+									</li>
                   <?php } ?>
                 <?php } ?>
               </div>
             </div>
             <div class="col text-right">
               <p>
-                <?php if ($entry['GalaFeeConstant']) { ?>
-                <?=$count?> &times; &pound;<?=htmlspecialchars(number_format($entry['GalaFee'], 2))?>
-                <?php } else { ?>
-                <strong><?=$count?> swims</strong>
-                <?php } ?>
+                <?=mb_convert_case((new NumberFormatter("en", NumberFormatter::SPELLOUT))->format($count),   MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
               </p>
 
               <!--<?php if ($notReady) { ?>
@@ -207,7 +213,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
               <?php } ?>-->
 
               <p class="mb-0">
-                <strong>Fee &pound;<?=htmlspecialchars(number_format($entry['FeeToPay'] ,2, '.', ''))?></strong>
+                <strong>Fee &pound;<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?></strong>
               </p>
             </div>
           </div>
@@ -222,7 +228,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
             </div>
             <div class="col text-right">
               <p class="mb-0">
-                <strong>&pound;<?=htmlspecialchars(number_format($intent->amount/100 ,2, '.', ''))?></strong>
+                <strong>&pound;<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $intent->amount))->withPointMovedLeft(2)->toScale(2))?></strong>
               </p>
             </div>
           </div>
@@ -271,7 +277,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
                 <p>
                   <button id="saved-card-button" class="btn btn-success btn-block pm-can-disable" type="button" data-secret="<?= $intent->client_secret ?>">
-                    Pay &pound;<?=htmlspecialchars(number_format($intent->amount/100 ,2, '.', ''))?> now
+                    Pay &pound;<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $intent->amount))->withPointMovedLeft(2)->toScale(2))?> now
                   </button>
                 </p>
               </div>
@@ -380,7 +386,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
               <p class="mb-0">
                 <button id="new-card-button" class="btn btn-success btn-block pm-can-disable" type="submit" data-secret="<?= $intent->client_secret ?>">
-                  Pay &pound;<?=htmlspecialchars(number_format($intent->amount/100 ,2, '.', ''))?> now
+                  Pay &pound;<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $intent->amount))->withPointMovedLeft(2)->toScale(2))?> now
                 </button>
               </p>
             </form>
