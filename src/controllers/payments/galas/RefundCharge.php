@@ -45,6 +45,8 @@ $rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 
 
 $countChargeable = 0;
 
+$numFormatter = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+
 $pagetitle = "Refund Parents for " . htmlspecialchars($gala['name']);
 
 include BASE_PATH . 'views/header.php';
@@ -113,7 +115,7 @@ include BASE_PATH . 'views/header.php';
 			<ul class="list-group mb-3" id="entries-list">
 				<?php do { ?>
 					<?php $hasNoDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut')); ?>
-					<?php $amountRefundable = (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay']))->withPointMovedRight(2)->toInt(); ?>
+					<?php $amountRefundable = ((\Brick\Math\BigDecimal::of((string) $entry['FeeToPay']))->withPointMovedRight(2)->toInt()) - $entry['AmountRefunded']; ?>
 				<?php if ($entry['Processed'] && $entry['Charged']) { $countChargeable++; } ?>
 				<?php $notReady = !$entry['Processed']; ?>
 				<li class="list-group-item <?php if ($notReady) { ?>list-group-item-danger<?php } ?>" id="refund-box-<?=htmlspecialchars($entry['EntryID'])?>">
@@ -151,7 +153,7 @@ include BASE_PATH . 'views/header.php';
 								<?php } ?>
 
 								<p>
-									<?=mb_convert_case((new NumberFormatter("en", NumberFormatter::SPELLOUT))->format($count),   MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
+									<?=mb_convert_case($numFormatter->format($count),   MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
 								</p>
 
 								<div id="<?=$entry['EntryID']?>-amount-refunded">
@@ -221,7 +223,7 @@ include BASE_PATH . 'views/header.php';
 												<div class="input-group-prepend">
 													<div class="input-group-text mono">&pound;</div>
 												</div>
-												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono refund-amount-field" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00" min="0" max="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $amountRefundable)->withPointMovedLeft(2)->toScale(2)))?>" data-max-refundable="<?=$amountRefundable?>" data-amount-refunded="<?=$entry['AmountRefunded']?>" step="0.01" <?php if ($amountRefundable == 0 || $notReady) { ?>disabled<?php } ?>>
+												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono refund-amount-field" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00" min="0" max="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $amountRefundable)->withPointMovedLeft(2)->toScale(2)))?>" data-max-refundable="<?=$amountRefundable?>" data-amount-refunded="<?=$entry['AmountRefunded']?>" step="0.01" <?php if ($amountRefundable == 0 || $notReady) { ?>disabled<?php } ?> >
 											</div>
 										</div>
 									</div>

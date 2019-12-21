@@ -45,6 +45,8 @@ $rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 
 
 $countChargeable = 0;
 
+$numFormatter = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+
 $pagetitle = "Charge Parents for " . htmlspecialchars($gala['name']);
 
 include BASE_PATH . 'views/header.php';
@@ -157,7 +159,7 @@ include BASE_PATH . 'views/header.php';
 							<div class="col">
 								<div class="d-sm-none mb-3"></div>
 								<p>
-									<?=mb_convert_case((new NumberFormatter("en", NumberFormatter::SPELLOUT))->format($count),   MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
+									<?=mb_convert_case($numFormatter->format($count),   MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
 								</p>
 
 								<?php if ($hasNoDD) { ?>

@@ -39,6 +39,8 @@ $entry = $entries->fetch(PDO::FETCH_ASSOC);
 global $currentUser;
 $notByDirectDebit = $currentUser->getUserBooleanOption('GalaDirectDebitOptOut');
 
+$numFormatter = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+
 $pagetitle = "Pay for entries - Galas";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/galas/galaMenu.php";
@@ -119,7 +121,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 							<div class="col">
 								<div class="d-sm-none mb-3"></div>
 								<p>
-                  <?=mb_convert_case((new NumberFormatter("en", NumberFormatter::SPELLOUT))->format($count),   MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
+                  <?=mb_convert_case($numFormatter->format($count),   MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
 								</p>
 
 								<?php if ($notReady) { ?>
@@ -144,7 +146,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 										<div class="input-group-prepend">
 											<div class="input-group-text mono">&pound;</div>
 										</div>
-                    <input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?>" min="0" max="150" step="0.01" <?php if ($entry['GalaFeeConstant']) { ?>readonly<?php } ?>>
+                    <input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?>" min="0" max="150" step="0.01" <?php if ($entry['GalaFeeConstant']) { ?>readonly<?php } ?> >
 									</div>
 								</div>
 							</div>

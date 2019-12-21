@@ -74,7 +74,7 @@ include BASE_PATH . "views/header.php";
       </ul>
 
       <p>
-        The <strong>total fee payable is &pound;<?=number_format(($row['FeeToPay']),2,'.','')?></strong>. You can view prices for each swim online.
+        The <strong>total fee payable is &pound;<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $row['FeeToPay'])->toScale(2)))?></strong>. You can view prices for each swim online.
       </p>
 
       <h2>Next steps</h2>
