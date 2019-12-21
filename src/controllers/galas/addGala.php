@@ -47,15 +47,6 @@ $content .= "<div class=\"row\"><div class=\"col-md-10 col-lg-8\"><form method=\
   </div>
 </div>
 <div class=\"form-group row\">
-  <label for=\"GalaFeeConstant\" class=\"col-sm-2 col-form-label\">Gala Fee Constant?</label>
-  <div class=\"col-sm-10\">
-    <div class=\"custom-control custom-checkbox mt-2\">
-      <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"GalaFeeConstant\" name=\"galaFeeConstant\">
-      <label class=\"custom-control-label\" for=\"GalaFeeConstant\">Tick if all swims are the same price</label>
-    </div>
-  </div>
-</div>
-<div class=\"form-group row\">
   <label for=\"galaFee\" class=\"col-sm-2 col-form-label\">Gala Fee</label>
   <div class=\"col-sm-10\">
     <div class=\"input-group\">
@@ -64,7 +55,7 @@ $content .= "<div class=\"row\"><div class=\"col-md-10 col-lg-8\"><form method=\
       </div>
       <input type=\"text\" class=\"form-control\" id=\"galaFee\" name=\"galaFee\" aria-describedby=\"galaFeeHelp\" placeholder=\"eg 5.00\">
     </div>
-    <small id=\"galaFeeHelp\" class=\"form-text text-muted\">If all swims at the gala are the same price, enter it here.</small>
+    <small id=\"galaFeeHelp\" class=\"form-text text-muted\">Enter the <strong>most common</strong> price for swims at this gala.</small>
   </div>
 </div>
 <div class=\"form-group row\">

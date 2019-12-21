@@ -43,6 +43,8 @@ if (!$gala['CoachEnters']) {
   halt(404);
 }
 
+$galaData = new GalaPrices($db, $id);
+
 $galaDate = new DateTime($gala['ends'], new DateTimeZone('Europe/London'));
 $nowDate = new DateTime('now', new DateTimeZone('Europe/London'));
 
@@ -99,23 +101,21 @@ try {
         'surname' => $info[0]['sn'],
       ];
       $count = 0;
+      $price = 0;
       $hasEntry = false;
       foreach ($swimsArray as $ev => $name) {
-        if (isset($_POST[$member . '-' . $ev])) {
+        if (isset($_POST[$member . '-' . $ev]) && bool($_POST[$member . '-' . $ev]) && $galaData->getEvent($ev)->isEnabled()) {
           $entering += [$ev => true];
           $hasEntry = true;
           $count++;
+          $price += $galaData->getEvent($ev)->getPrice();
         } else {
           $entering += [$ev => false];
         }
         $insert->bindValue('val' . $ev, $entering[$ev], PDO::PARAM_BOOL);
       }
 
-      if ($gala['gfc']) {
-        $entering['fee'] = $count*$gala['fee'];
-      } else if (isset($_POST[$member . '-entry-fee']) && $_POST[$member . '-entry-fee'] <= 150 && $_POST[$member . '-entry-fee'] > 0) {
-        $entering['fee'] = number_format($_POST[$member . '-entry-fee'], 2, '.', '');
-      }
+      $entering['fee'] = (string) (\Brick\Math\BigInteger::of((string) $price))->toBigDecimal()->withPointMovedLeft(2)->toScale(2);
 
       $insert->bindValue('gala', $entering['gala'], PDO::PARAM_INT);
       $insert->bindValue('member', $member, PDO::PARAM_INT);
@@ -159,21 +159,21 @@ try {
     }
     $message .= ' into ' . htmlspecialchars($gala['name']) . '. Full details of the entries are as follows;</p>';
 
-    $totalCost = 0;
+    $totalCost = \Brick\Math\BigDecimal::zero();
     foreach ($entries as $entry) {
       $message .= '<p>' . htmlspecialchars($entry['forename'] . ' ' . $entry['surname']) . ' has been entered into;</p><ul>';
       foreach ($swimsArray as $ev => $name) {
         if (isset($entry[$ev]) && $entry[$ev]) {
-          $message .= '<li>' . $name . '</li>';
+          $message .= '<li>' . $name . ', <em>&pound;' . $galaData->getEvent($ev)->getPriceAsString() . '</em></li>';
         }
       }
       $message .= '</ul>';
-      $message .= '<p>The cost of ' . htmlspecialchars($entry['forename']) . '\'s entry is &pound;' . number_format($entry['fee'], 2, '.', '') . '</p>';
-      $totalCost += $entry['fee'];
+      $message .= '<p>The cost of ' . htmlspecialchars($entry['forename']) . '\'s entry is <strong>&pound;' . $entry['fee'] . '</strong>.</p>';
+      $totalCost->plus($entry['fee']);
     }
 
     if (sizeof($entries) > 1) {
-      $message .= '<p>The total cost of your swimmer\'s entries is &pound;' . number_format($totalCost, 2, '.', '') . '.<p>';
+      $message .= '<p>The total cost of your swimmer\'s entries is <strong>&pound;' . (string) $totalCost->toScale(2) . '</strong>.<p>';
     }
 
     if (bool($gala['HyTek'])) {

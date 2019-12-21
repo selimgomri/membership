@@ -49,27 +49,7 @@ if ($gala == null) {
 
 // Arrays of swims used to check whever to print the name of the swim entered
 // BEWARE This is in an order to ease inputting data into SportSystems, contrary to these arrays in other files
-$swimsArray = [
-  '50Free' => '50&nbsp;Free',
-  '100Free' => '100&nbsp;Free',
-  '200Free' => '200&nbsp;Free',
-  '400Free' => '400&nbsp;Free',
-  '800Free' => '800&nbsp;Free',
-  '1500Free' => '1500&nbsp;Free',
-  '50Back' => '50&nbsp;Back',
-  '100Back' => '100&nbsp;Back',
-  '200Back' => '200&nbsp;Back',
-  '50Breast' => '50&nbsp;Breast',
-  '100Breast' => '100&nbsp;Breast',
-  '200Breast' => '200&nbsp;Breast',
-  '50Fly' => '50&nbsp;Fly',
-  '100Fly' => '100&nbsp;Fly',
-  '200Fly' => '200&nbsp;Fly',
-  '100IM' => '100&nbsp;IM',
-  '150IM' => '150&nbsp;IM',
-  '200IM' => '200&nbsp;IM',
-  '400IM' => '400&nbsp;IM'
-];
+$swimsArray = GalaEvents::getEvents();
 
 $strokeCounts = [
   'Free' => 0,
@@ -103,6 +83,9 @@ foreach ($swimsArray as $col => $name) {
 $markdown = new ParsedownForMembership();
 $markdown->setSafeMode(false);
 
+// Get price and event information
+$galaData = new GalaPrices($db, $id);
+
 $pagetitle = htmlspecialchars($gala['GalaName']) . " - Galas";
 include BASE_PATH . "views/header.php";
 include "galaMenu.php";
@@ -127,9 +110,25 @@ include "galaMenu.php";
     <?php if ($_SESSION['AccessLevel'] == "Galas" || $_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach") { ?>
     <div class="col text-md-right">
       <p>
-        <a href="<?=autoUrl("galas/" . $id . "/edit")?>" class="btn btn-dark">
-          Edit
-        </a>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Gala options
+          </button>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="<?=autoUrl("galas/" . $id . "/edit")?>">Edit</a>
+            <a class="dropdown-item" href="<?=autoUrl("galas/" . $id . "/pricing-and-events")?>">Events and prices</a>
+            <a class="dropdown-item" href="<?=autoUrl("galas/" . $id . "/sessions")?>">Sessions</a>
+            <?php if (bool($gala['CoachEnters'])) { ?>
+            <a class="dropdown-item" href="<?=autoUrl("galas/" . $id . "/select-entries")?>">Manage entries</a>
+            <?php } ?>
+            <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("galas/" . $id . "/team-manager-view.pdf"))?>">Entry report</a>
+            <!--<div class="dropdown-divider"></div>-->
+            <?php if ($numEntries > 0 && false) { ?>
+            <a class="dropdown-item" href="<?=autoUrl("galas/" . $id . "/timesheet")?>">Timesheet</a>
+            <?php } ?>
+            <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("galas/" . $id . "/team-manager-view.pdf"))?>">Entry report</a>
+          </div>
+        </div>
       </p>
     </div>
     <?php } ?>
@@ -237,6 +236,15 @@ include "galaMenu.php";
     </a>
   </p>
   <?php } else if ($_SESSION['AccessLevel'] == 'Coach' || $_SESSION['AccessLevel'] == 'Galas' || $_SESSION['AccessLevel'] == 'Admin') { ?>
+
+  <h2>Manage events and prices</h2>
+  <p class="lead">Select which events are running and enter the price for each event</p>
+  <p>
+    <a href="<?=autoUrl("galas/" . $id . "/pricing-and-events")?>" class="btn btn-success">
+      Manage prices
+    </a>
+  </p>
+
   <h2>Manage sessions</h2>
   <p class="lead">Add sessions <?php if ($gala['CoachEnters']) { ?>to this gala so parents can indicate availability or <?php } ?>so that you can take registers</p>
   <p>

@@ -6,7 +6,7 @@ var stripeElementStyle = {
   base: {
     iconColor: '#ced4da',
     lineHeight: '1.5',
-    height: '1.5rem',
+    height: '38px',
     color: '#212529',
     fontWeight: 400,
     fontFamily: 'Source Sans Pro, Open Sans, Segoe UI, sans-serif',
@@ -15,6 +15,7 @@ var stripeElementStyle = {
     '::placeholder': {
       color: '#868e96',
     },
+    padding: '0.375rem 0.75rem',
   },
   invalid: {
     color: '#212529',

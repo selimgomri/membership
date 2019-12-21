@@ -22,6 +22,8 @@ if ($row == null) {
   halt(404);
 }
 
+$galaData = new GalaPrices($db, $row["GalaID"]);
+
 $closingDate = new DateTime($row['ClosingDate'], new DateTimeZone('Europe/London'));
 $theDate = new DateTime('now', new DateTimeZone('Europe/London'));
 
@@ -29,20 +31,19 @@ if (bool($row['Charged']) || bool($row['EntryProcessed']) || ($closingDate < $th
   halt(404);
 }
 
+$entryList = "";
 $numEntered = 0;
+$price = 0;
 for ($i = 0; $i < sizeof($entriesArray); $i++) {
-  if ($_POST[$swimsArray[$i]]) {
+  if (bool($_POST[$swimsArray[$i]]) && $galaData->getEvent($swimsArray[$i])->isEnabled()) {
     $entriesArray[$i] = true;
     $numEntered++;
+    $price += $galaData->getEvent($swimsArray[$i])->getPrice();
+    $entryList .= '<li>' . $swimsTextArray[$i] . ', <em>&pound;' . $galaData->getEvent($swimsArray[$i])->getPriceAsString() . '</em></li>';
   }
 }
 
-$galaFee = 0;
-if ($row['GalaFeeConstant']) {
-  $galaFee = number_format($row['GalaFee'] * $numEntered, 2);
-} else {
-  $galaFee = number_format($_POST['galaFee'], 2);
-}
+$galaFee = (string) (\Brick\Math\BigInteger::of((string) $price))->toBigDecimal()->withPointMovedLeft(2);
 
 try {
   $update = $db->prepare("UPDATE galaEntries SET 50Free = ?, 100Free = ?, 200Free = ?, 400Free = ?, 800Free = ?, 1500Free = ?, 50Breast = ?, 100Breast = ?, 200Breast = ?, 50Fly = ?, 100Fly = ?, 200Fly = ?, 50Back = ?, 100Back = ?, 200Back = ?, 100IM = ?, 150IM = ?, 200IM = ?, 400IM = ?, FeeToPay = ? WHERE EntryID = ?");
@@ -58,20 +59,9 @@ try {
   if ($_SESSION['AccessLevel'] != 'Parent') {
     $message .= "<p><strong>Changes have been made to this gala entry by a member if staff. This is a courtesy email for you.</strong></p>";
   }
-  $message .= "<p>Here are the details of your updated Gala Entry for " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " to " . htmlspecialchars($row['GalaName']) . ".</p>";
+  $message .= "<p>Here are the swims selected for " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "'s updated " . htmlspecialchars($row['GalaName']) . " entry.</p>";
   $message .= "<ul>" . $entryList . "</ul>";
-  if ($row['GalaFeeConstant']) {
-    $message .= "<p>The fee for each swim is &pound;" . number_format($row['GalaFee'],2,'.','') . ", the <strong>total fee payable is &pound;" . $galaFee . "</strong></p>";
-  } else {
-    $message .= "<p>The <strong>total fee payable is &pound;" . $galaFee . "</strong>. If you have entered this amount incorrectly, you may incur extra charges from the club or gala host.</p>";
-  }
-  $message .= '<p>You have entered ' . htmlspecialchars($row['MForename']) . ' into the following events;</p><ul>';
-  for ($i = 0; $i < sizeof($entriesArray); $i++) {
-    if ($entriesArray[$i]) {
-      $message .= '<li>' . $swimsTextArray[$i] . '</li>';
-    }
-  }
-  $message .= '</ul>';
+  $message .= "<p>You have entered " . (new NumberFormatter("en", NumberFormatter::SPELLOUT))->format($numEntered) . " events. The <strong>total fee payable is &pound;" . $galaFee . "</strong>.</p>";
   $message .= '<p>If you have any questions, please contact the ' . htmlspecialchars(env('CLUB_NAME')) . ' gala team as soon as possible.</p>';
   $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
   `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 1, 'Galas')";

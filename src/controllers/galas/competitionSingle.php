@@ -81,40 +81,7 @@ include "galaMenu.php"; ?>
             <input type="date" class="form-control" id="galaDate" name="galaDate" placeholder="YYYY-MM-DD" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" value="<?=htmlspecialchars($row['GalaDate'])?>" required>
           </div>
         </div>
-        <?php if ($row['GalaFeeConstant'] == 1) { ?>
-        <div class="form-group row">
-          <label for="GalaFeeConstant" class="col-sm-4 col-form-label">Gala Fee Constant?</label>
-          <div class="col-sm-8">
-            <div class="custom-control custom-checkbox mt-2">
-              <input type="checkbox" value="1" class="custom-control-input" checked id="GalaFeeConstant" name="GalaFeeConstant">
-              <label class="custom-control-label" for="GalaFeeConstant">Tick if all swims are the same price</label>
-            </div>
-          </div>
-        </div>
-        <?php } else { ?>
-        <div class="form-group row">
-          <label for="GalaFeeConstant" class="col-sm-4 col-form-label">Gala Fee Constant?</label>
-          <div class="col-sm-8">
-            <div class="custom-control custom-checkbox mt-2">
-              <input type="checkbox" value="1" class="custom-control-input" id="GalaFeeConstant" name="GalaFeeConstant">
-              <label class="custom-control-label" for="GalaFeeConstant">Tick if all swims are the same price</label>
-            </div>
-          </div>
-        </div>
-        <?php } ?>
-
-        <div class="form-group row">
-          <label for="galaFee" class="col-sm-4 col-form-label">Gala Fee</label>
-          <div class="col-sm-8">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text">&pound;</span>
-              </div>
-              <input type="text" class="form-control" id="galaFee" name="galaFee" aria-describedby="galaFeeHelp" placeholder="eg 5.00" value="<?=htmlspecialchars($row['GalaFee'])?>">
-            </div>
-            <small id="galaFeeHelp" class="form-text text-muted">If all swims at the gala are the same price, enter it here.</small>
-          </div>
-        </div>
+        
         <?php if ($row['HyTek'] == 1) { ?>
         <div class="form-group row">
           <label for="HyTek" class="col-sm-4 col-form-label">Require times?</label>

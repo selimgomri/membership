@@ -55,13 +55,8 @@ if (!empty($_POST['lastDate']) && v::date()->validate($_POST['lastDate'])) {
   $statusInfo .= "<li>The gala date was malformed and not understood clearly by the system</li>";
 }
 
-if (isset($_POST['galaFeeConstant']) && $_POST['galaFeeConstant'] == 1) {
-  $galaFeeConstant = 1;
-  if (!empty($_POST['galaFee'])) {
-    $galaFee = trim($_POST['galaFee']);
-  } else {
-    $galaFee = 0.00;
-  }
+if (!empty($_POST['galaFee'])) {
+  $galaFee = trim($_POST['galaFee']);
 } else {
   $galaFee = 0.00;
 }
@@ -94,7 +89,7 @@ if ($status) {
       $venue,
       $closingDate,
       $lastDate,
-      $galaFeeConstant,
+      true,
       $galaFee,
       $hyTek,
       $coachDoesEntries,
@@ -105,6 +100,11 @@ if ($status) {
   } catch (Exception $e) {
     $statusInfo .= "<li>Database error</li>";
   }
+}
+
+if ($id != null) {
+  $galaData = new GalaPrices($db, $id);
+  $galaData->setupDefault();
 }
 
 if ($added && $status) {
@@ -135,7 +135,7 @@ if ($added && $status) {
     if (bool($coachDoesEntries)) {
       header("Location: " . autoUrl("galas/" . $id . "/sessions"));
     } else {
-      header("Location: " . autoUrl("galas/" . $id));
+      header("Location: " . autoUrl("galas/" . $id . "/pricing-and-events"));
     }
   } else {
     header("Location: " . autoUrl("galas"));
@@ -154,16 +154,3 @@ else {
   </div>';
   header("location: " . autoUrl("galas/addgala"));
 }
-include BASE_PATH . "views/header.php";
-include "galaMenu.php"; ?>
-<div class="container">
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Add gala</li>
-  </ol>
-</nav>
-<?php echo "<h1>" . $title . "</h1>";
-echo $content; ?>
-</div>
-<?php include BASE_PATH . "views/footer.php";

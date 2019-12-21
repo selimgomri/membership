@@ -334,18 +334,23 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
       $getEntries->execute([$databaseId]);
 
       while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
+        $galaData = new GalaPrices($db, $entry['GalaID']);
         $count = 0;
         $message .= '<p>' . htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) . ' for ' . htmlspecialchars($entry['GalaName']) . '</p><ul>';
         foreach($swimsArray as $colTitle => $text) {
           if ($entry[$colTitle]) {
             $count++;
-            $message .= '<li>' . $text . '</li>';
+            $pricingInfo = '';
+            if ($galaData->getEvent($colTitle)->isEnabled()) {
+              $pricingInfo = ', <em>&pound;' . $galaData->getEvent($colTitle)->getPriceAsString() . '</em>';
+            }
+            $message .= '<li>' . $text . $pricingInfo . '</li>';
           }
         }
         $message .= '</ul>';
       }
       
-      $message .= '<p><strong>Total</strong> <br>£' . number_format($intent->amount/100, 2) . '</p><p><strong>Payment reference</strong> <br>SPM' . $databaseId . '</p>';
+      $message .= '<p><strong>Total</strong> <br>&pound;' . htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $intent->amount))->withPointMovedLeft(2)->toScale(2)) . '</p><p><strong>Payment reference</strong> <br>SPM' . $databaseId . '</p>';
 
       if (isset($intent->charges->data[0]->payment_method_details->card) && $intent->charges->data[0]->payment_method_details->card != null) {
         $message .= '<p><strong>Card</strong> <br>' . getCardBrand($intent->charges->data[0]->payment_method_details->card->brand) . ' ' . $intent->charges->data[0]->payment_method_details->card->funding . ' card <br>&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; ' . $intent->charges->data[0]->payment_method_details->card->last4 . '</p>';
