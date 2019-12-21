@@ -110,9 +110,25 @@ include "galaMenu.php";
     <?php if ($_SESSION['AccessLevel'] == "Galas" || $_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach") { ?>
     <div class="col text-md-right">
       <p>
-        <a href="<?=autoUrl("galas/" . $id . "/edit")?>" class="btn btn-dark">
-          Edit
-        </a>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Gala options
+          </button>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="<?=autoUrl("galas/" . $id . "/edit")?>">Edit</a>
+            <a class="dropdown-item" href="<?=autoUrl("galas/" . $id . "/pricing-and-events")?>">Events and prices</a>
+            <a class="dropdown-item" href="<?=autoUrl("galas/" . $id . "/sessions")?>">Sessions</a>
+            <?php if (bool($gala['CoachEnters'])) { ?>
+            <a class="dropdown-item" href="<?=autoUrl("galas/" . $id . "/select-entries")?>">Manage entries</a>
+            <?php } ?>
+            <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("galas/" . $id . "/team-manager-view.pdf"))?>">Entry report</a>
+            <!--<div class="dropdown-divider"></div>-->
+            <?php if ($numEntries > 0 && false) { ?>
+            <a class="dropdown-item" href="<?=autoUrl("galas/" . $id . "/timesheet")?>">Timesheet</a>
+            <?php } ?>
+            <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("galas/" . $id . "/team-manager-view.pdf"))?>">Entry report</a>
+          </div>
+        </div>
       </p>
     </div>
     <?php } ?>
