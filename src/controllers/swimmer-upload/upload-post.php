@@ -18,6 +18,9 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
   if (bool($_FILES['file-upload']['error'])) {
     // Error
     $_SESSION['UploadError'] = true;
+  } else if ($_FILES['file-upload']['type'] != 'text/csv') {
+    // Probably not a CSV
+    $_SESSION['UploadError'] = true;
   } else if ($_FILES['file-upload']['size'] > 30000) {
     // Too large, stop
     $_SESSION['TooLargeError'] = true;
