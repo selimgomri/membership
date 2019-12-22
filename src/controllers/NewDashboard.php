@@ -99,13 +99,11 @@ include BASE_PATH . "views/header.php";
 		<h1><?=helloGreeting()?> <?=$username?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
 
-    <?php if (date("Y-m-d") == "2019-11-26") { ?>
+    <?php if (date("Y-m-d") == "2019-12-25") { ?>
     <aside class="row mb-4">
       <div class="col-lg-6">
         <div class="cell bg-primary text-white">
-          <h2>The deadline to register to vote is today!</h2>
-          <p class="lead">Make sure you're registered.</p>
-          <p class="mb-0"><a class="btn btn-light" href="https://www.gov.uk/register-to-vote" target="_blank" rel="noopener noreferrer">Register to vote</a></p>
+          <h2 class="mb-0">Merry Christmas!</h2>
         </div>
       </div>
     </aside>
@@ -114,12 +112,13 @@ include BASE_PATH . "views/header.php";
     <!--<p class="mb-4">We're always looking for feedback! If you have any, <a href="mailto:feedback@myswimmingclub.uk">send us an email</a>.</p>-->
 
     <?php if (sizeof($sessions) > 0) { ?>
+    <?php $date = (new DateTime('now', new DateTimeZone('Europe/London')))->format("Y-m-d"); ?>
       <div class="mb-4">
         <h2 class="mb-4">Take Register for Current Sessions</h2>
         <div class="mb-4">
           <div class="news-grid">
         <?php for ($i = 0; $i < sizeof($sessions); $i++) { ?>
-          <a href="<?=autoUrl("attendance/register/" . $sessions[$i]['SquadID'] . "/" . $sessions[$i]['SessionID'])?>" title="<?=$sessions[$i]['SquadName']?> Squad Register, <?=$sessions[$i]['SessionName']?>">
+          <a href="<?=autoUrl("attendance/register?date=" . urlencode($date) . "&squad=" . urlencode($sessions[$i]['SquadID']) . "&session=" . urlencode($sessions[$i]['SessionID']))?>" title="<?=$sessions[$i]['SquadName']?> Squad Register, <?=$sessions[$i]['SessionName']?>">
             <div>
               <span class="title mb-0">
                 Take <?=$sessions[$i]['SquadName']?> Squad Register

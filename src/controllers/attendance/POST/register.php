@@ -7,14 +7,31 @@ $duplicateReg = false;
 if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["session"]))) {
 	// Happy Days. Now we just need the members
 
-	$weekBeginningID = $_POST["date"];
+	$date = new DateTime($_POST["date"], new DateTimeZone('Europe/London'));
+	$dateOriginal = clone $date;
+
+	if ((int) $date->format('N') != '7') {
+		$date->modify('last Sunday');
+	}
+
+	$weekBeginning = $date->format("Y-m-d");
+
+	// Get the week id
+	$getWeekId = $db->prepare("SELECT WeekID FROM sessionsWeek WHERE WeekDateBeginning = ?");
+	$getWeekId->execute([$date->format("Y-m-d")]);
+	$weekId = $getWeekId->fetchColumn();
+
+	if ($weekId == null) {
+		halt(404);
+	}
+	
 	$squadID = $_POST["squad"];
 	$sessionID = $_POST["session"];
 
 	// SQL to check we've not done the register before
 	$sql = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` WHERE `WeekID` = ? AND `SessionID` = ?;");
 	$sql->execute([
-		$weekBeginningID,
+		$weekId,
 		$sessionID
 	]);
 	$registerCount = $sql->fetchColumn();
@@ -39,7 +56,7 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 					$attendance = 1;
 				}
 				$insertRecord->execute([
-					$weekBeginningID,
+					$weekId,
 					$member,
 					$sessionID,
 					$attendance
@@ -47,7 +64,7 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 			}
 
 			// Return info page
-			$return = "<strong>Successfully saved the session register</strong> <br>For more information, contact <a href=\"mailto:mms@chesterlestreetasc.co.uk\" class=\"alert-link\">mms@chesterlestreetasc.co.uk</a>";
+			$return = "<strong>Successfully saved the session register</strong>";
 			$_SESSION['return'] = $return;
 		} catch (Exception $e) {
 			$errorStatus = true;
@@ -66,7 +83,7 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 						$attendance,
 						$member,
 						$sessionID,
-						$weekBeginningID,
+						$weekId,
 					]);
 				} catch (Exception $e) {
 					// This catches errors with members who were not in squad when register first taken
@@ -97,4 +114,4 @@ if ($errorStatus) {
 	$_SESSION['return'] = $return;
 }
 
-header("Location: " . autoUrl("attendance/register/" . $squadID . "/" . $sessionID));
+header("Location: " . autoUrl("attendance/register?date=" . urlencode($dateOriginal->format("Y-m-d")) . "&squad=" . urlencode($squadID) . "&session=" . urlencode($sessionID)));
