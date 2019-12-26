@@ -30,7 +30,7 @@ All updates to this library is documented in our [CHANGELOG](https://github.com/
 
 ## Prerequisites
 
-- PHP version 5.6 or 7.0
+- PHP version 5.6 or higher
 
 ## Install with Composer
 
@@ -39,7 +39,7 @@ Add php-http-client to your `composer.json` file. If you are not using [Composer
 ```json
 {
   "require": {
-    "sendgrid/php-http-client": "~3.9.6"
+    "sendgrid/php-http-client": "~3.10.0"
   }
 }
 ```
@@ -146,6 +146,9 @@ var_dump(
     $response->body()
 );
 ```
+
+If there is an issues with the request, such as misconfigured CURL SSL options, an `InvalidRequest` will be thrown
+with message from CURL on why the request failed. Use the message as a hit to troubleshooting steps of your environment. 
 
 <a name="usage"></a>
 # Usage

@@ -53,7 +53,7 @@ $_SESSION['RegistrationMode'] = $mode;
         </p>
 
         <p class="mb-0">
-          If you've just recieved a letter about getting registered today, don't
+          If you've just received a letter about getting registered today, don't
           worry. If you don't need to make gala entries there's no rush yet -
           We'll be back by tomorrow. You will need to ensure you register for
           this system and connect your swimmers to your account by 1 September
@@ -72,10 +72,14 @@ $_SESSION['RegistrationMode'] = $mode;
         <div class="col-md-10 col-lg-8">
           <div class="alert alert-warning">
             <p class="mb-0">
-              <strong>Are you a parent?</strong>
+              <strong>Are you a parent or club member?</strong>
             </p>
             <p>
-              We'll be sending you an email in the next few days. This will include a personalised link to set up your account which means you don't have to create an account this way.
+              We'll be sending you an email in the next few days. This will include a personalised link to set up your account.
+            </p>
+
+            <p>
+              Setting up your account using the link sent to you by email allows us to automatically link you/your members to your account and take you through the onboarding process.
             </p>
             
             <p class="mb-0">
@@ -198,7 +202,7 @@ $_SESSION['RegistrationMode'] = $mode;
                 <input type="checkbox" class="custom-control-input"
                 name="emailAuthorise" id="emailAuthorise" value="1" <?=$email?>>
                 <label class="custom-control-label" for="emailAuthorise">
-                  I wish to recieve important email updates about my squads.
+                  I wish to receive important email updates about my squads.
                   This includes emails about session cancellations.
                 </label>
               </div>
@@ -209,7 +213,7 @@ $_SESSION['RegistrationMode'] = $mode;
                 <input type="checkbox" class="custom-control-input"
                 name="smsAuthorise" id="smsAuthorise" value="1" <?=$sms?>>
                 <label class="custom-control-label" for="smsAuthorise">
-                  I wish to recieve text message notifications
+                  I wish to receive text message notifications
                 </label>
               </div>
             </div>
@@ -225,10 +229,13 @@ $_SESSION['RegistrationMode'] = $mode;
               <?=$Extra->text($privacyPolicy)?>
               <?php } else { ?>
               <p>
+                YOUR CLUB HAS NOT SET UP A PRIVACY POLICY. PLEASE DO NOT PROCEED.
+              </p>
+              <p>
                 In accordance with European Law, <?=htmlspecialchars(env('CLUB_NAME'))?>, Swim England and British Swimming are Data Controllers for the purposes of the General Data Protection Regulation.
               </p>
               <p>
-                By proceeding you agree to our <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy (this is an example policy)</a> and the use of your data by <?=htmlspecialchars(env('CLUB_NAME'))?>. Please note that you have also agreed to our use of you and your swimmer's data as part of your registration with the club and with British Swimming and Swim England (Formerly known as the ASA).
+                By proceeding you agree to our <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy (this is an example policy)</a> and the use of your data by <?=htmlspecialchars(env('CLUB_NAME'))?>. Please note that you have also agreed to our use of you and/or your swimmer's data as part of your registration with the club and with British Swimming and Swim England.
               </p>
               <p>
                 We will be unable to provide this service for technical reasons if you do not consent to the use of this data.

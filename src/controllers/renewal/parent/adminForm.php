@@ -53,15 +53,16 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				} ?>
         <p class="lead">
           <?php if ($partial_reg) { ?>
-          You must now complete the Club Administration Form. This form relates to Data Protection, Photoraphy Permissions and the agreement to the Terms and Conditions of the club.
+          You must now complete the Club Administration Form. This form relates to Data Protection, Photoraphy
+          Permissions and the agreement to the Terms and Conditions of the club.
           <?php } else { ?>
-          In this next step you, and your swimmers will need to agree to the terms and conditions of the club.
+          In this next step you, and/or your members will need to agree to the terms and conditions of the club.
           <?php } ?>
         </p>
 
         <?php if (!$partial_reg) { ?>
         <p>
-          This form relates to yourself and the swimmers listed below.
+          This form relates to yourself and the members listed below.
         </p>
 
         <?php echo mySwimmersTable($link, $_SESSION['UserID']); ?>
@@ -81,11 +82,13 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
         <div class="form-group">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" value="1" class="custom-control-input" name="data-agree" id="data-agree" <?php if ($partial_reg) { ?>checked
-            <?php } ?>>
+            <input type="checkbox" value="1" class="custom-control-input" name="data-agree" id="data-agree"
+              <?php if ($partial_reg) { ?>checked <?php } ?>>
             <label class="custom-control-label" for="data-agree">
-              I (<?=htmlspecialchars($name)?>) agree to the use of my data by <?=htmlspecialchars(env('CLUB_NAME'))?> as outlined above
-              <?php if ($partial_reg) { ?> (You have already registered with a previous swimmer, so have already consented to these terms)
+              I (<?=htmlspecialchars($name)?>) agree to the use of my data by <?=htmlspecialchars(env('CLUB_NAME'))?> as
+              outlined above
+              <?php if ($partial_reg) { ?> (You have already registered with a previous member, so have already
+              consented to these terms)
               <?php } ?>
             </label>
           </div>
@@ -97,18 +100,26 @@ include BASE_PATH . "views/renewalTitleBar.php";
         </div>
 
         <p>
-          The Member, and the Parent or Guardian (in the case of a person under the age of 18 years), hereby acknowledges that they have read the Club Rules and the Policies and Procedures Documentation of <?=htmlspecialchars(env('CLUB_NAME'))?>, copies of which can be obtained from <a href="<?=htmlspecialchars(env('CLUB_WEBSITE'))?>" target="_blank">our website</a>. I confirm my understanding and acceptance that such rules (as amended from time to time) shall govern my membership of the club. I further acknowledge and accept the responsibilities of membership as set out in these rules and understand that it is my duty to read and abide by them (including any amendments). By providing my agreement, I consent to be bound by the Code of Conduct, Constitution, Rules and Policy Documents of the
+          The Member, and the Parent or Guardian (in the case of a person under the age of 18 years), hereby
+          acknowledges that they have read the Club Rules and the Policies and Procedures Documentation of
+          <?=htmlspecialchars(env('CLUB_NAME'))?>, copies of which can be obtained from <a
+            href="<?=htmlspecialchars(env('CLUB_WEBSITE'))?>" target="_blank">our website</a>. I confirm my
+          understanding and acceptance that such rules (as amended from time to time) shall govern my membership of the
+          club. I further acknowledge and accept the responsibilities of membership as set out in these rules and
+          understand that it is my duty to read and abide by them (including any amendments). By providing my agreement,
+          I consent to be bound by the Code of Conduct, Constitution, Rules and Policy Documents of the
           club.
         </p>
 
         <div class="alert alert-warning">
           <p>
             <strong>
-              Each swimmer must agree to this section separately
+              Each member must agree to this section separately
             </strong>
           </p>
           <p class="mb-0">
-            We've provided a box where each swimmer can tick for themselves. Ticking this checkbox is legally equivalent to signing an agreement on paper.
+            We've provided a box where each member can tick for themselves. Ticking this checkbox is legally equivalent
+            to signing an agreement on paper.
           </p>
         </div>
 
@@ -126,7 +137,8 @@ include BASE_PATH . "views/renewalTitleBar.php";
               <input type="checkbox" value="1" class="custom-control-input"
                 name="<?=htmlspecialchars($id[$i])?>-tc-confirm" id="<?=htmlspecialchars($id[$i])?>-tc-confirm">
               <label class="custom-control-label" for="<?=htmlspecialchars($id[$i])?>-tc-confirm">
-                I, <?=htmlspecialchars($row[$i]['MForename'] . " " . $row[$i]['MSurname'])?> agree to the Terms and Conditions of <?=htmlspecialchars(env('CLUB_NAME'))?> as outlined above
+                I, <?=htmlspecialchars($row[$i]['MForename'] . " " . $row[$i]['MSurname'])?> agree to the Terms and
+                Conditions of <?=htmlspecialchars(env('CLUB_NAME'))?> as outlined above
               </label>
             </div>
           </div>
@@ -145,7 +157,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
                 name="<?=htmlspecialchars($id[$i])?>-pg-understanding"
                 id="<?=htmlspecialchars($id[$i])?>-pg-understanding">
               <label class="custom-control-label" for="<?=htmlspecialchars($id[$i])?>-pg-understanding">
-                I, <?=htmlspecialchars($name)?> have explained the content and implications to <?=htmlspecialchars($row[$i]['MForename'] . " " . $row[$i]['MSurname'])?> and can confirm that they understood.
+                I, <?=htmlspecialchars($name)?> have explained the content and implications to
+                <?=htmlspecialchars($row[$i]['MForename'] . " " . $row[$i]['MSurname'])?> and can confirm that they
+                understood.
               </label>
             </div>
           </div>
@@ -168,15 +182,21 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
         <h2>Photography Consent</h2>
         <p>
-          Please read the Swim England/<?=htmlspecialchars(env('CLUB_NAME'))?> Photography Policy before you continue to give or withold consent for photography.
+          Please read the Swim England/<?=htmlspecialchars(env('CLUB_NAME'))?> Photography Policy before you continue to
+          give or withold consent for photography.
         </p>
 
         <p>
-					<?=htmlspecialchars(env('CLUB_NAME'))?> may wish to take photographs of individuals and groups of swimmers under the age of 18, which may include your child during their membership of <?=htmlspecialchars(env('CLUB_NAME'))?>. Photographs will only be taken and published in accordance with Swim England policy which requires the club to obtain the consent of the Parent or Guardian to take and use photographs under the following circumstances.
+          <?=htmlspecialchars(env('CLUB_NAME'))?> may wish to take photographs of individuals and groups of swimmers
+          under the age of 18, which may include your child during their membership of
+          <?=htmlspecialchars(env('CLUB_NAME'))?>. Photographs will only be taken and published in accordance with Swim
+          England policy which requires the club to obtain the consent of the Parent or Guardian to take and use
+          photographs under the following circumstances.
         </p>
 
         <p>
-          It is entirely up to you whether or not you choose to allow us to take photographs and/or video of your child. You can change your choices at any time by heading to Swimmers.
+          It is entirely up to you whether or not you choose to allow us to take photographs and/or video of your child.
+          You can change your choices at any time by heading to Swimmers.
         </p>
 
         <?php for ($i = 0; $i < sizeof($row); $i++) {
@@ -200,7 +220,8 @@ include BASE_PATH . "views/renewalTitleBar.php";
         <div class="cell">
           <h3><?=htmlspecialchars($row[$i]['MForename'] . " " . $row[$i]['MSurname'])?></h3>
           <p>
-            I, <?=htmlspecialchars($name)?> agree to photography in the following circumstances. <strong>Tick boxes only if you wish to grant us photography permission.</strong>
+            I, <?=htmlspecialchars($name)?> agree to photography in the following circumstances. <strong>Tick boxes only
+              if you wish to grant us photography permission.</strong>
           </p>
           <div class="custom-control custom-checkbox">
             <input type="checkbox" value="1" <?=$photo[0]?> class="custom-control-input"
@@ -258,11 +279,23 @@ include BASE_PATH . "views/renewalTitleBar.php";
             Consent for <?=htmlspecialchars($row[$i]['MForename'] . " " . $row[$i]['MSurname'])?>
           </h3>
           <p>
-            I confirm that <?=htmlspecialchars($row[$i]['MForename'] . " " . $row[$i]['MSurname'])?> has not been advised by a doctor to not take part in physical activities unless under medical supervision.
+            I confirm that <?=htmlspecialchars($row[$i]['MForename'] . " " . $row[$i]['MSurname'])?> has not been
+            advised by a doctor to not take part in physical activities unless under medical supervision.
           </p>
 
+          <!-- <div class="custom-control custom-checkbox">
+            <input type="checkbox" value="1" class="custom-control-input" name="<?=htmlspecialchars($id[$i])?>-med"
+              id="<?=htmlspecialchars($id[$i])?>-med">
+            <label class="custom-control-label" for="<?=htmlspecialchars($id[$i])?>-med">
+              Confirm
+            </label>
+          </div> -->
+
           <p>
-            I, <?=htmlspecialchars($name)?> hereby give permission for the coach or other appropriate person to give the authority on my behalf for any medical or surgical treatment recommended by competent medical authorities, where it would be contrary to my child's interest, in the doctor's opinion, for any delay to be incurred by seeking my personal consent.
+            I, <?=htmlspecialchars($name)?> hereby give permission for the coach or other appropriate person to give the
+            authority on my behalf for any medical or surgical treatment recommended by competent medical authorities,
+            where it would be contrary to my child's interest, in the doctor's opinion, for any delay to be incurred by
+            seeking my personal consent.
           </p>
 
           <div class="custom-control custom-checkbox">

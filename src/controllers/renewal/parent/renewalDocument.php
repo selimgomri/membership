@@ -58,7 +58,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 	<hr>
 
-	<h2>Your Swimmers</h2>
+	<h2>Your members</h2>
 	<?php echo mySwimmersTable($link, $userID); ?>
 
 	<hr>
