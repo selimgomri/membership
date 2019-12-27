@@ -11,7 +11,7 @@ if (bool(env('IS_CLS'))) {
 $file = getCachedFile(BASE_PATH . 'cache/SE-News.json', 'https://www.swimming.org/sport/wp-json/wp/v2/posts?rand_id=' . time(), 10800);
 $asa = json_decode($file);
 
-$file = getCachedFile(BASE_PATH . 'cache/SE-NE.xml', 'https://asaner.org.uk/feed?rand_id' . time(), 10800);
+$file = getCachedFile(BASE_PATH . 'cache/SE-NE.xml', 'https://asaner.org.uk/feed?rand_id=' . time(), 10800);
 $asa_ne = null;
 try {
   $asa_ne = new SimpleXMLElement($file);
