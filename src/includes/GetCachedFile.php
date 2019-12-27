@@ -8,14 +8,18 @@ function getCachedFile($cacheFile, $url, $maxAge) {
     // Use the cached file
     $file = file_get_contents($cacheFile);
   } else {
-    $res = $httpClient->request('GET', $url, [
-    ]);
-    if ($res->getStatusCode() == "200") {
-      $cache = $res->getBody();
-      file_put_contents($cacheFile, $cache);
-      $file = $cache;
-    } else if (file_exists($cacheFile)) {
-      $file = file_get_contents($cacheFile);
+    try {
+      $res = $httpClient->request('GET', $url, [
+      ]);
+      if ($res->getStatusCode() == "200") {
+        $cache = $res->getBody();
+        file_put_contents($cacheFile, $cache);
+        $file = $cache;
+      } else if (file_exists($cacheFile)) {
+        $file = file_get_contents($cacheFile);
+      }
+    } catch (Exception $e) {
+      // Do nothing
     }
   }
 
