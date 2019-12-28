@@ -48,6 +48,10 @@ function getBankName($bank) {
     return 'The One account';
   } else if ($bank == "BANK OF AMERICA, NA") {
     return 'Bank of America';
+  } else if ($bank == "THE ROYAL BANK OF SCOTLAND INTERNATIONAL LTD") {
+    return 'RBS International';
+  } else if ($bank == "MODULR FS LTD") {
+    return 'Modulr';
   }
 
   return $bank;
