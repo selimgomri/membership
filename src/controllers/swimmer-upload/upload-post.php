@@ -18,7 +18,7 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
   if (bool($_FILES['file-upload']['error'])) {
     // Error
     $_SESSION['UploadError'] = true;
-  } else if ($_FILES['file-upload']['type'] != 'text/csv') {
+  } else if ($_FILES['file-upload']['type'] != 'text/csv' && $_FILES['file-upload']['type'] != 'application/vnd.ms-excel') {
     // Probably not a CSV
     $_SESSION['UploadError'] = true;
   } else if ($_FILES['file-upload']['size'] > 30000) {
@@ -31,12 +31,14 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
 
       $filePointer = fopen($_FILES['file-upload']['tmp_name'], 'r');
       while ($row = fgetcsv($filePointer)) {
-        pre($row[2]);
         $findSquadId->execute([$row[2]]);
 
         $fn = mb_convert_case($row[1], MB_CASE_TITLE_SIMPLE);
         $sn = mb_convert_case($row[0], MB_CASE_TITLE_SIMPLE);
         $dob = DateTime::createFromFormat('d/m/Y', $row[3]);
+        if ($dob == false) {
+          throw new Exception('Incorrectly formatted date of birth');
+        }
         $sex = 'Male';
         if ($row[4] == 'Female' || $row[4] == 'F') {
           $sex = 'Female';
