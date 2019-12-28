@@ -31,8 +31,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 	});
 
   // Registers
-  $this->get(['/register', '/register/{squad}:int/{session}:int'], function($squad = null, $session = null) {
-    global $link;
+  $this->get('/register', function($squad = null, $session = null) {
     include 'register.php';
 	});
 
@@ -41,8 +40,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
     include BASE_PATH . 'controllers/ajax/registerSessions.php';
 	});
 
-  $this->post(['/register', '/register/{squad}:int/{session}:int'], function() {
-    global $link;
+  $this->post('/register', function() {
     include 'POST/register.php';
 	});
 

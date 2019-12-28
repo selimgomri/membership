@@ -25,6 +25,8 @@ if ($gala == null) {
 	halt(404);
 }
 
+$galaData = new GalaPrices($db, $id);
+
 $getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, members.UserID FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) WHERE galaEntries.GalaID = ? AND Charged = ? AND EntryProcessed = ? AND MandateID IS NOT NULL ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id, '0', '1']);
 
@@ -51,7 +53,8 @@ $swimsArray = [
 ];
 
 while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
-	$amount = (int) ($_POST[$entry['EntryID'] . '-amount']*100);
+	$amountDec = \Brick\Math\BigDecimal::of((string) $_POST[$entry['EntryID'] . '-amount']);
+	$amount = $amountDec->withPointMovedRight(2)->toInt();
 	$hasNoDD = ($entry['MandateID'] == null) || bool(getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
 
 	if ($amount > 0 && $amount <= 15000 && !$hasNoDD) {
@@ -60,7 +63,11 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 		$swimsList = '<ul>';
 		foreach($swimsArray as $colTitle => $text) {
 			if ($entry[$colTitle]) {
-				$swimsList .= '<li>' . $text . '</li>';
+				$price = "";
+				if ($galaData->getEvent($colTitle)->isEnabled()) {
+					$price = ', <em>&pound;' . $galaData->getEvent($colTitle)->getPriceAsString() . '</em>';
+				}
+				$swimsList .= '<li>' . $text . $price . '</li>';
 			}
 		}
 		$swimsList .= '</ul>';
@@ -68,7 +75,7 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 		try {
 			$db->beginTransaction();
 
-			$amountString = number_format($_POST[$entry['EntryID'] . '-amount'], 2);
+			$amountString = (string) $amountDec->toScale(2);
 
 			$name = $entry['MForename'] . ' ' . $entry['MSurname'] . '\'s Gala Entry into ' . $gala['name'] .  ' (Entry #' . $entry['EntryID'] . ')';
 
@@ -100,11 +107,9 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 				$entry['EntryID']
 			]);
 
-			$message = '<p>We\'ve added a charge to your bill for ' . htmlspecialchars($entry['MForename']) .  '\'s entry into ' . htmlspecialchars($gala['name']) . '. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(env('CLUB_NAME')) . '.</p>';
+			$message = '<p>We\'ve charged <strong>&pound;' . $amountString . '</strong> to your account for ' . htmlspecialchars($entry['MForename']) .  '\'s entry into ' . htmlspecialchars($gala['name']) . '.</p><p>You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(env('CLUB_NAME')) . '.</p>';
 
-			$message .= '<p>This charge is to the value of <strong>&pound;' . $amountString . '</strong>. You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement.</p>';
-
-			$message .= '<p>For this gala you entered;</p>';
+			$message .= '<p>You entered the following events;</p>';
 			$message .= $swimsList;
 
 			$message .= '<p>Kind Regards<br> The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
@@ -112,7 +117,7 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 			$notify->execute([
 				$entry['UserID'],
 				'Queued',
-				'Payments: ' . $entry['MForename'] .  '\'s ' . $gala['name'] . ' Entry',
+				'Payments: ' . $entry['MForename'] .  '\'s ' . $gala['name'] . ' entry',
 				$message,
 				'Galas'
 			]);

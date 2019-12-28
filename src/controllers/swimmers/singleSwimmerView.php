@@ -500,6 +500,7 @@ $content .= '<!--
         </div>
       </div>
     </div>
+    <p class="mt-3 mb-0"><a href="' . htmlspecialchars(autoUrl("swimmers/" . $id . "/times")) . '" class="btn btn-primary">Edit times</a></p>
   </div>';
 
 	if (sizeof($countEntries) > 0) {

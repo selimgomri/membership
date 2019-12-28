@@ -22,7 +22,7 @@ include BASE_PATH . "views/header.php";
       <p>The application is built on a database of club members. Members are assigned to squads and parents can link swimmers to their account. This allows us to automatically calculate monthly fees and other things.</p>
 
       <h3>Online Gala Entries</h3>
-      <p>Galas are added to the system by admins. Parents can enter their children into swims by selecting their name, gala and swims. This cuts down on duplicated data from existing arrangements. Parents recieve emails detailing their entries.</p>
+      <p>Galas are added to the system by admins. Parents can enter their children into swims by selecting their name, gala and swims. This cuts down on duplicated data from existing arrangements. Parents receive emails detailing their entries.</p>
 
       <h3>Online Attendance Records</h3>
       <p>Attendance records are online, facilitating automatic attendance calculation. Squads are managed online and swimmer moves between squads can be scheduled in the system.</p>

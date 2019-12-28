@@ -120,7 +120,7 @@ include BASE_PATH . 'views/header.php';
             <input type="checkbox" class="custom-control-input"
             name="allow-email" id="allow-email" value="1" <?=$email?> checked>
             <label class="custom-control-label" for="allow-email">
-              I wish to recieve important email updates about my squads
+              I wish to receive important email updates about my squads
             </label>
           </div>
 
@@ -128,7 +128,7 @@ include BASE_PATH . 'views/header.php';
             <input type="checkbox" class="custom-control-input" name="allow-sms"
             id="allow-sms" value="1" <?=$sms?> checked>
             <label class="custom-control-label" for="allow-sms">
-              I wish to recieve text message notifications
+              I wish to receive text message notifications
             </label>
           </div>
         </div>

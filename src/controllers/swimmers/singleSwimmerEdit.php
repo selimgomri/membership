@@ -345,7 +345,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
 
-			<li class="breadcrumb-item"><a href="<?=autoUrl("swimmers/" . $id)?>"><?=htmlspecialchars($rowSwim["MForename"])?> <?=htmlspecialchars($rowSwim["MSurname"][0])?></a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("swimmers/" . $id)?>"><?=htmlspecialchars($rowSwim["MForename"])?> <?=htmlspecialchars(mb_substr($rowSwim["MSurname"], 0, 1, 'utf-8'))?></a></li>
 			<li class="breadcrumb-item active" aria-current="page">Edit</li>
 		</ol>
 	</nav>

@@ -660,10 +660,8 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/posts/router.php';
     });
 
-    $this->group('/people', function() {
-      global $link;
-      $people = true;
-      include 'controllers/posts/router.php';
+    $this->group('/file-manager', function() {
+      include 'controllers/file-manager/router.php';
     });
 
     $this->group('/registration', function() {
@@ -718,6 +716,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
     $this->group('/notify', function() {
       global $link;
       include 'controllers/notify/router.php';
+    });
+
+    $this->group('/swimmer-upload', function() {
+      include 'controllers/swimmer-upload/router.php';
     });
 
     $this->group(['/emergency-contacts', '/emergencycontacts'], function() {

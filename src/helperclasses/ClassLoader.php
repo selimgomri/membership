@@ -33,3 +33,8 @@ require 'Objects/SystemInfo.php';
 require 'Components/ListGroup.php';
 
 require 'Markdown/ParsedownForMembership.php';
+
+// Gala Classes
+require BASE_PATH . 'includes/galas/GalaEvents.php';
+require BASE_PATH . 'includes/galas/GalaEvent.php';
+require BASE_PATH . 'includes/galas/GalaPrices.php';

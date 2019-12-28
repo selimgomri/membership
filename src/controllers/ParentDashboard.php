@@ -4,62 +4,14 @@ global $db;
 
 $obj = null;
 if (bool(env('IS_CLS'))) {
-  $file = null;
-  $cache_file = BASE_PATH . 'cache/CLS-ASC-News.json';
-  if(file_exists($cache_file)) {
-    if(time() - filemtime($cache_file) > 10800) {
-      // too old , re-fetch
-      $cache = file_get_contents('https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts?rand_id=' . time());
-      file_put_contents($cache_file, $cache);
-      $file = $cache;
-    } else {
-      $file = file_get_contents($cache_file);
-    }
-  } else {
-    // no cache, create one
-    $cache = file_get_contents('https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts?rand_id=' . time());
-    file_put_contents($cache_file, $cache);
-    $file = $cache;
-  }
+  $file = getCachedFile(BASE_PATH . 'cache/CLS-ASC-News.json', 'https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts?rand_id=' . time(), 10800);
   $obj = json_decode($file);
 }
 
-$file = null;
-$cache_file = BASE_PATH . 'cache/SE-News.json';
-if(file_exists($cache_file)) {
-  if(time() - filemtime($cache_file) > 10800) {
-    // too old , re-fetch
-    $cache = file_get_contents('https://www.swimming.org/sport/wp-json/wp/v2/posts?rand_id=' . time());
-    file_put_contents($cache_file, $cache);
-    $file = $cache;
-  } else {
-    $file = file_get_contents($cache_file);
-  }
-} else {
-  // no cache, create one
-  $cache = file_get_contents('https://www.swimming.org/sport/wp-json/wp/v2/posts?rand_id=' . time());
-  file_put_contents($cache_file, $cache);
-  $file = $cache;
-}
+$file = getCachedFile(BASE_PATH . 'cache/SE-News.json', 'https://www.swimming.org/sport/wp-json/wp/v2/posts?rand_id=' . time(), 10800);
 $asa = json_decode($file);
 
-$file = null;
-$cache_file = BASE_PATH . 'cache/SE-NE.xml';
-if (file_exists($cache_file)) {
-  if (time() - filemtime($cache_file) > 10800) {
-    // too old , re-fetch
-    $cache = file_get_contents('https://asaner.org.uk/feed/');
-    file_put_contents($cache_file, $cache);
-    $file = $cache;
-  } else {
-    $file = file_get_contents($cache_file);
-  }
-} else {
-  // no cache, create one
-  $cache = file_get_contents('https://asaner.org.uk/feed/');
-  file_put_contents($cache_file, $cache);
-  $file = $cache;
-}
+$file = getCachedFile(BASE_PATH . 'cache/SE-NE.xml', 'https://asaner.org.uk/feed?rand_id=' . time(), 10800);
 $asa_ne = null;
 try {
   $asa_ne = new SimpleXMLElement($file);
