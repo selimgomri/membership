@@ -159,41 +159,48 @@ function halt(int $statusCode, $throwException = true) {
     // Can't clean ob
   }
 
-  if ($statusCode == 200) {
-    include "views/200.php";
-  }
-  else if ($statusCode == 400) {
-    include "views/400.php";
-  }
-  else if ($statusCode == 401) {
-    include "views/401.php";
-  }
-  else if ($statusCode == 403) {
-    include "views/403.php";
-  }
-  else if ($statusCode == 404) {
-    include "views/404.php";
-  }
-  else if ($statusCode == 503) {
-    include "views/503.php";
-  }
-  else if ($statusCode == 0) {
-    include "views/000.php";
-  }
-  else if ($statusCode == 900) {
-    // Unavailable for Regulatory Reasons
-    include "views/900.php";
-  }
-  else if ($statusCode == 901) {
-    // Unavailable due to GDPR
-    include "views/901.php";
-  }
-  else if ($statusCode == 902) {
-    // Unavailable due to no GC API Key
-    include "views/902.php";
-  }
-  else {
-    include "views/500.php";
+  try {
+    if ($statusCode == 200) {
+      require "views/200.php";
+    }
+    else if ($statusCode == 400) {
+      require "views/400.php";
+    }
+    else if ($statusCode == 401) {
+      require "views/401.php";
+    }
+    else if ($statusCode == 403) {
+      require "views/403.php";
+    }
+    else if ($statusCode == 404) {
+      require "views/404.php";
+    }
+    else if ($statusCode == 503) {
+      require "views/503.php";
+    }
+    else if ($statusCode == 0) {
+      require "views/000.php";
+    }
+    else if ($statusCode == 900) {
+      // Unavailable for Regulatory Reasons
+      require "views/900.php";
+    }
+    else if ($statusCode == 901) {
+      // Unavailable due to GDPR
+      require "views/901.php";
+    }
+    else if ($statusCode == 902) {
+      // Unavailable due to no GC API Key
+      require "views/902.php";
+    }
+    else {
+      require "views/500.php";
+    }
+  } catch (Exception | Error $e) {
+    // Show emergency plain error page
+    ob_get_clean();
+
+    require 'views/LastResort500.php';
   }
 
   if ($throwException) {
@@ -890,7 +897,7 @@ try {
 } catch (\SCDS\HaltException $e) {
   // Do nothing, just stops execution
 } catch (\SCDS\CSRFValidityException $e) {
-  // Deals with any uncaught SCRF problems
+  // Deals with any uncaught CSRF problems
   ob_get_clean();
   halt(403, false);
 } catch (Exception $e) {

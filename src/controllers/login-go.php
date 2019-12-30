@@ -4,6 +4,9 @@ use GeoIp2\Database\Reader;
 
 global $db;
 
+$incrementFailedLoginCount = $db->prepare("UPDATE users SET WrongPassCount = WrongPassCount + 1 WHERE UserID = ?");
+$resetFailedLoginCount = $db->prepare("UPDATE users SET WrongPassCount = 0 WHERE UserID = ?");
+
 $errorMessage = "";
 $errorState = false;
 $target = "";
@@ -27,7 +30,7 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
   $username = trim(mb_strtolower($_POST['email-address']));
   $target = ltrim(trim($_POST['target']), '/');
 
-  $getUser = $db->prepare("SELECT Forename, Surname, UserID, EmailAddress, Password, AccessLevel FROM users WHERE EmailAddress = ?");
+  $getUser = $db->prepare("SELECT Forename, Surname, UserID, EmailAddress, Password, AccessLevel, WrongPassCount FROM users WHERE EmailAddress = ?");
   $getUser->execute([$_POST['email-address']]);
 
   $row = $getUser->fetch(PDO::FETCH_ASSOC);
@@ -41,15 +44,15 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
     $userID = $row['UserID'];
 
     if (password_verify($_POST['password'], $hash)) {
-      $do_random_2FA = random_int(0, 99) < 5 || filter_var(getUserOption($userID, "IsSpotCheck2FA"), FILTER_VALIDATE_BOOLEAN);
-      if ($row['AccessLevel'] != "Parent" || filter_var(getUserOption($userID, "Is2FA"), FILTER_VALIDATE_BOOLEAN) || $do_random_2FA) {
+      $do_random_2FA = random_int(0, 99) < 5 || bool(getUserOption($userID, "IsSpotCheck2FA")) || $row['WrongPassCount'] > 2;
+      if ($row['AccessLevel'] != "Parent" || bool(getUserOption($userID, "Is2FA")) || $do_random_2FA) {
         // Do 2FA
-        if (filter_var(getUserOption($userID, "hasGoogleAuth2FA"), FILTER_VALIDATE_BOOLEAN)) {
+        if (bool(getUserOption($userID, "hasGoogleAuth2FA"))) {
           $_SESSION['TWO_FACTOR_GOOGLE'] = true;
         } else {
           $code = random_int(100000, 999999);
 
-          if ($do_random_2FA) {
+          if ($do_random_2FA && !($row['AccessLevel'] != "Parent" || bool(getUserOption($userID, "Is2FA")))) {
             setUserOption($userID, "IsSpotCheck2FA", true);
           }
 
@@ -80,6 +83,7 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
           }
           global $currentUser;
           $currentUser = $login->login();
+          $resetFailedLoginCount->execute([$userID]);
         } catch (Exception $e) {
           halt(403);
         }
@@ -87,9 +91,14 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
         unset($_SESSION['LoginSec']);
       }
     } else {
+      // Incorrect PW
+      // Don't notify user of error
+      // Increment failed login count
+      $incrementFailedLoginCount->execute([$userID]);
+
+      // Set error state
       $_SESSION['ErrorState'] = true;
       $_SESSION['EnteredUsername'] = $username;
-
     }
   }
   else {
@@ -106,7 +115,7 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
 }
 $_SESSION['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['LoginSec']];
 unset($_SESSION['LoginSec']);
-if ($_SESSION['ErrorState'] === true && $_POST['target'] == "") {
+if (isset($_SESSION['ErrorState']) && $_SESSION['ErrorState'] && $_POST['target'] == "" || isset($_SESSION['ErrorAccountLocked']) && $_SESSION['ErrorAccountLocked'] && $_POST['target'] == "") {
   header("Location: " . autoUrl("login"));
 } else {
   header("Location: " . autoUrl(ltrim($_POST['target'], '/')));
