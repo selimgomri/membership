@@ -43,6 +43,25 @@ include BASE_PATH . 'views/header.php';
 
       <p>To do this, tick or untick the box on the left of each event and enter the price on the right.</p>
 
+      <?php if (isset($_SESSION['PricesSaved']) && $_SESSION['PricesSaved']) { ?>
+        <div class="alert alert-success">
+          <p class="mb-0">
+            <strong>Your changes have been saved successfully.</strong>
+          </p>
+        </div>
+      <?php unset($_SESSION['PricesSaved']); } ?>
+
+      <?php if (isset($_SESSION['PricesNotSaved']) && $_SESSION['PricesNotSaved']) { ?>
+        <div class="alert alert-warning">
+          <p>
+            <strong>We may have not been able to save all of your changes.</strong>
+          </p>
+          <p class="mb-0">
+            Please double check the events and prices below. If you see anything you don't expect, please try changing it and saving again.
+          </p>
+        </div>
+      <?php unset($_SESSION['PricesNotSaved']); } ?>
+
       <form method="post">
 
         <ul class="list-group mb-3">
