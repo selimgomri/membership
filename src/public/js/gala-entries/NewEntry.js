@@ -1,6 +1,6 @@
 function clearOutput() {
-  enableBtn();
   document.getElementById('output').innerHTML = '<div class="ajaxPlaceholder">Select a swimmer and gala</div>';
+  enableBtn();
 }
       
 function enableBtn() {
@@ -63,6 +63,7 @@ function setupSumming() {
         boxes[i].onclick = function() {
           // Get the total
           var total = document.getElementById('total-field');
+          var entries = document.getElementById('entries-field');
 
           var newTotal = 0;
           var newCount = 0;
@@ -77,6 +78,14 @@ function setupSumming() {
           total.dataset.count = newCount;
           total.dataset.total = newTotal;
           total.textContent = (new BigNumber(newTotal)).shiftedBy(-2).decimalPlaces(2).toFormat(2);
+
+          if (total.dataset.count == 1) {
+            entries.textContent = ' for ' + total.dataset.count + ' entry';
+          } else if (total.dataset.count > 1) {
+            entries.textContent = ' for ' + total.dataset.count + ' entries';
+          } else {
+            entries.textContent = '';
+          }
 
           // Call enable button - If count is zero, disables button.
           enableBtn();
