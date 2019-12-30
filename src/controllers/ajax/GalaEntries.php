@@ -241,10 +241,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       $content .= "
       <div class=\"custom-control custom-checkbox\">
         <input type=\"checkbox\" value=\"1\" ";
-      if ($row['Charged']) {
+      if ($row['Charged'] || $row['PaymentID'] != null) {
         $content .= ' checked ';
       }
-      if ($row['StripePayment'] && $row['Charged']) {
+      if ($row['StripePayment'] && $row['Charged'] || $row['PaymentID'] != null) {
         $content .= ' disabled ';
       }
       $content .= " data-button-action=\"mark-paid\" class=\"custom-control-input\" id=\"chargedEntry-" . $row['EntryID'] . "\">

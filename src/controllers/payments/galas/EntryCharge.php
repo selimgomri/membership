@@ -155,11 +155,12 @@ include BASE_PATH . 'views/header.php';
 									</li>
 									<?php } ?>
 								<?php } ?>
+								</ul>
 							</div>
 							<div class="col">
 								<div class="d-sm-none mb-3"></div>
 								<p>
-									<?=mb_convert_case($numFormatter->format($count),   MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
+									<?=mb_convert_case($numFormatter->format($count), MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
 								</p>
 
 								<?php if ($hasNoDD) { ?>

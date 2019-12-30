@@ -14,7 +14,7 @@ $disabled = "";
 
 $date = date("Y-m-d");
 $insertPayment = $db->prepare("INSERT INTO paymentsPending (`Date`, `Status`, UserID, `Name`, Amount, Currency, PMkey, `Type`, MetadataJSON) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-$markAsCharged = $db->prepare("UPDATE galaEntries SET Charged = ?, FeeToPay = ? WHERE EntryID = ?");
+$markAsCharged = $db->prepare("UPDATE galaEntries SET Charged = ?, PaymentID = ?, FeeToPay = ? WHERE EntryID = ?");
 $notify = $db->prepare("INSERT INTO notify (UserID, `Status`, `Subject`, `Message`, EmailType) VALUES (?, ?, ?, ?, ?)");
 
 $getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas WHERE GalaID = ?");
@@ -102,8 +102,11 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 					$json
 				]);
 
+				$paymentId = $db->lastInsertId();
+
 				$markAsCharged->execute([
 					true,
+					$paymentId,
 					$amountString,
 					$entry['EntryID']
 				]);

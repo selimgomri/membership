@@ -47,6 +47,8 @@ $swimsArray = [
   '400IM' => '400&nbsp;IM'
 ];
 
+$numFormatter = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+
 $pagetitle = htmlspecialchars($data->squad->name) . " Squad Rep View for " . htmlspecialchars($data->gala->name);
 
 include BASE_PATH . 'views/header.php';
@@ -62,15 +64,9 @@ include BASE_PATH . 'views/header.php';
 	</nav>
 
 	<h1><?=htmlspecialchars($data->squad->name)?> Squad entries for <?=htmlspecialchars($data->gala->name)?></h1>
-	<?php if ($data->gala->fixed_fee) { ?>
 	<p class="lead">
-		This gala costs &pound;<?=number_format($data->gala->fee/100, 2, '.', '')?>/swim
+		<?=htmlspecialchars($data->gala->venue)?>
 	</p>
-	<?php } else { ?>
-	<p class="lead">
-		There is no fixed fee for this gala
-	</p>
-  <?php } ?>
 
 	<div class="row">
 
@@ -86,10 +82,15 @@ include BASE_PATH . 'views/header.php';
             <?php if ($noSquad) { ?>
             <option selected>Select a squad</option>
             <?php } ?>
+            <?php if ($_SESSION['AccessLevel'] != "Parent") { ?>
+            <option value="all" <?php if ("all" == $squad) { ?>selected<?php } ?>>
+              All squads
+            </option>
+            <?php } ?>
             <?php while ($s = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
             <option value="<?=$s['id']?>" <?php if ((int) $s['id'] == $squad) { ?>selected<?php } ?>>
-                <?=htmlspecialchars($s['name'])?>
-              </option>
+              <?=htmlspecialchars($s['name'])?>
+            </option>
             <?php } ?>
           </select>
         </div>
@@ -127,11 +128,11 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <p>
-        This allows you to mark an entry as paid or approve it (if the gala requires that entries are approved by a squad rep). If a parent pays by card, you will not be able to uncheck the paid box.
+        This allows you to mark an entry as paid or approve it (if the gala requires that entries are approved by a squad rep). If a parent pays by card or has had the entry charged to their account, you will not be able to uncheck the paid box.
       </p>
 
       <p>
-        Entries shown in green have been charged for.
+        Entries shown in green have been paid or charged for.
       </p>
 
       <?php if (sizeof($data->entries) > 0) { ?>
@@ -157,9 +158,19 @@ include BASE_PATH . 'views/header.php';
               <?php $count = 0; ?>
               <?php foreach($entry->events as $event) { ?>
                 <?php if ($event->selected) { $count++; ?>
-                <li><?=htmlspecialchars($event->name)?><?php if (isset($event->entry_time) && $event->entry_time != null) { ?> <em><?=htmlspecialchars($event->entry_time)?></em><?php } ?></li>
+                <li class="row">
+                  <div class="col">
+                    <?=htmlspecialchars($event->name)?><?php if (isset($event->entry_time) && $event->entry_time != null) { ?> <em><?=htmlspecialchars($event->entry_time)?></em><?php } ?>
+                  </div>
+                  <?php if ($event->allowed) { ?>
+                  <div class="col">
+                    &pound;<?=htmlspecialchars($event->price_string)?>
+                  </div>
+                  <?php } ?>
+                </li>
                 <?php } ?>
               <?php } ?>
+              </ul>
             </div>
             <div class="col">
               <div class="d-sm-none mb-3"></div>
@@ -173,18 +184,14 @@ include BASE_PATH . 'views/header.php';
               <?php } ?>
 
               <p>
-                <?php if ($data->gala->fixed_fee) { ?>
-                <?=$count?> &times; &pound;<?=htmlspecialchars(number_format($data->gala->fee/100, 2))?>
-                <?php } else { ?>
-                <?=$count?> entries at no fixed fee
-                <?php } ?>
+                <?=mb_convert_case($numFormatter->format($count), MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
               </p>
 
               <p class="mb-0">
                 <strong>
                 <?php if (bool($entry->charged)) { ?>Amount charged<?php } else { ?>Fee to pay<?php } ?>
                 </strong><br>
-                &pound;<?=htmlspecialchars(number_format($entry->amount_charged/100, 2))?>
+                &pound;<?=htmlspecialchars($entry->amount_charged_string)?>
               </p>
 
               <?php if ($entry->refunded) { ?>
@@ -192,7 +199,7 @@ include BASE_PATH . 'views/header.php';
                 <strong>
                   Amount refunded
                 </strong><br>
-                &pound;<?=number_format($entry->amount_refunded/100, 2)?> has been refunded<?php if ($entry->payment_intent->id != null) { ?> to <?=htmlspecialchars(getCardBrand($entry->payment_intent->brand))?> <?=htmlspecialchars($entry->payment_intent->funding)?> card ending <?=htmlspecialchars($entry->payment_intent->last4)?><?php } ?>
+                &pound;<?=htmlspecialchars($entry->amount_refunded_string)?> has been refunded<?php if ($entry->payment_intent->id != null) { ?> to <?=htmlspecialchars(getCardBrand($entry->payment_intent->brand))?> <?=htmlspecialchars($entry->payment_intent->funding)?> card ending <?=htmlspecialchars($entry->payment_intent->last4)?><?php } ?>
               </p>
 
                 <?php if ($hasNoDD && (!isset($entry->payment_intent->id) || $entry->payment_intent->id == null)) { ?>
@@ -209,7 +216,7 @@ include BASE_PATH . 'views/header.php';
           </div>
           <hr>
           <div class="custom-control custom-checkbox custom-control-inline">
-            <input type="checkbox" class="custom-control-input" id="paid-<?=htmlspecialchars($entry->id)?>" name="paid-<?=htmlspecialchars($entry->id)?>" <?php if (isset($entry->charged) && $entry->charged) { ?>checked<?php } ?> <?php if (isset($entry->payment_intent->id) && $entry->payment_intent->id != null) { ?>disabled<?php } ?> data-ajax-action="mark-paid" data-entry-id="<?=htmlspecialchars($entry->id)?>">
+            <input type="checkbox" class="custom-control-input" id="paid-<?=htmlspecialchars($entry->id)?>" name="paid-<?=htmlspecialchars($entry->id)?>" <?php if (isset($entry->charged) && $entry->charged) { ?>checked<?php } ?> <?php if (isset($entry->charge_lock) && $entry->charge_lock) { ?>disabled<?php } ?> data-ajax-action="mark-paid" data-entry-id="<?=htmlspecialchars($entry->id)?>">
             <label class="custom-control-label" for="paid-<?=htmlspecialchars($entry->id)?>">Entry paid</label>
           </div>
           <div class="custom-control custom-checkbox custom-control-inline">

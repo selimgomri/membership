@@ -6,28 +6,32 @@ $squad = null;
 
 if (isset($_GET['squad'])) {
   // Verify this squad is allowed for the user
-  $squad = (int) $_GET['squad'];
+  if ($_SESSION['AccessLevel'] != 'Parent' && $_GET['squad'] == 'all') {
+    $squad = "all";
+  } else {
+    $squad = (int) $_GET['squad'];
 
-  if ($_SESSION['AccessLevel'] == 'Parent') {
+    if ($_SESSION['AccessLevel'] == 'Parent') {
 
-    // See if this squad is allowed
-    $isAllowed = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE User = ? AND Squad = ?");
-    $isAllowed->execute([
-      $_SESSION['UserID'],
-      $squad
-    ]);
-    if ($isAllowed->fetchColumn() == 0) {
-      // User cannot access this squad
-      $noSquad = true;
-
-      // Now if user has no squads, halt
-      $isAllowed = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE User = ?");
+      // See if this squad is allowed
+      $isAllowed = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE User = ? AND Squad = ?");
       $isAllowed->execute([
-        $_SESSION['UserID']
+        $_SESSION['UserID'],
+        $squad
       ]);
       if ($isAllowed->fetchColumn() == 0) {
-        // User is not a squad rep
-        halt(404);
+        // User cannot access this squad
+        $noSquad = true;
+
+        // Now if user has no squads, halt
+        $isAllowed = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE User = ?");
+        $isAllowed->execute([
+          $_SESSION['UserID']
+        ]);
+        if ($isAllowed->fetchColumn() == 0) {
+          // User is not a squad rep
+          halt(404);
+        }
       }
     }
   }
@@ -37,20 +41,36 @@ $getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, G
 $getGala->execute([$id]);
 $gala = $getGala->fetch(PDO::FETCH_ASSOC);
 
-$getSquad = $db->prepare("SELECT SquadID id, SquadName `name` FROM squads WHERE SquadID = ?");
-$getSquad->execute([
-  $squad
-]);
-$squadInfo = $getSquad->fetch(PDO::FETCH_ASSOC);
+$galaData = new GalaPrices($db, $id);
+
+$getEntries = null;
+$squadInfo = [];
+if ($squad == "all") {
+  $squadInfo = [
+    'id' => 'all',
+    'name' => 'All',
+  ];
+} else {
+  $getSquad = $db->prepare("SELECT SquadID id, SquadName `name` FROM squads WHERE SquadID = ?");
+  $getSquad->execute([
+    $squad
+  ]);
+  $squadInfo = $getSquad->fetch(PDO::FETCH_ASSOC);
+}
 
 if ($gala == null || ($squadInfo == null && !$doNotHalt)) {
   halt(404);
-} else if ($squad == 0) {
+} else if ($squad === 0 || $squad === null) {
   $noSquad = true;
 }
 
-$getEntries = $db->prepare("SELECT members.UserID `user`, DateOfBirth, GalaDate, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, 50FreeTime, 100FreeTime, 200FreeTime, 400FreeTime, 800FreeTime, 1500FreeTime, 50BackTime, 100BackTime, 200BackTime, 50BreastTime, 100BreastTime, 200BreastTime, 50FlyTime, 100FlyTime, 200FlyTime, 100IMTime, 150IMTime, 200IMTime, 400IMTime, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, stripePayMethods.Brand, stripePayMethods.Last4, Funding, ASANumber, Approved FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? AND members.SquadID = ? ORDER BY MForename ASC, MSurname ASC");
-$getEntries->execute([$id, $squad]);
+if ($squad == "all") {
+  $getEntries = $db->prepare("SELECT members.UserID `user`, DateOfBirth, GalaDate, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, 50FreeTime, 100FreeTime, 200FreeTime, 400FreeTime, 800FreeTime, 1500FreeTime, 50BackTime, 100BackTime, 200BackTime, 50BreastTime, 100BreastTime, 200BreastTime, 50FlyTime, 100FlyTime, 200FlyTime, 100IMTime, 150IMTime, 200IMTime, 400IMTime, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, galaEntries.PaymentID StatementItem, Intent, stripePayMethods.Brand, stripePayMethods.Last4, Funding, ASANumber, Approved FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? ORDER BY MForename ASC, MSurname ASC");
+  $getEntries->execute([$id]);
+} else {
+  $getEntries = $db->prepare("SELECT members.UserID `user`, DateOfBirth, GalaDate, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, 50FreeTime, 100FreeTime, 200FreeTime, 400FreeTime, 800FreeTime, 1500FreeTime, 50BackTime, 100BackTime, 200BackTime, 50BreastTime, 100BreastTime, 200BreastTime, 50FlyTime, 100FlyTime, 200FlyTime, 100IMTime, 150IMTime, 200IMTime, 400IMTime, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, galaEntries.PaymentID StatementItem, Intent, stripePayMethods.Brand, stripePayMethods.Last4, Funding, ASANumber, Approved FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? AND members.SquadID = ? ORDER BY MForename ASC, MSurname ASC");
+  $getEntries->execute([$id, $squad]);
+}
 
 $swimsArray = [
   '50Free' => '50 Free',
@@ -96,7 +116,10 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
       'event' => $key,
       'selected' => bool($entry[$key]),
       'name' => $value,
-      'entry_time' => $entryTime
+      'entry_time' => $entryTime,
+      'allowed' => $galaData->getEvent($key)->isEnabled(),
+      'price' => $galaData->getEvent($key)->getPrice(),
+      'price_string' => $galaData->getEvent($key)->getPriceAsString(),
     ];
   }
   $entries[] = [
@@ -110,19 +133,25 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
     'age_at_end_of_year' => $ageEndOfYear,
     'events' => $events,
     'charged' => bool($entry['Charged']),
-    'amount_charged' => (int) ($entry['FeeToPay']*100),
+    'charge_lock' => ($entry['Intent'] || $entry['StatementItem']),
+    'amount_charged' => \Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->withPointMovedRight(2)->toInt(),
+    'amount_charged_string' => (string) \Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2),
     'refunded' => bool($entry['Refunded']),
     'amount_refunded' => (int) $entry['AmountRefunded'],
+    'amount_refunded_string' => (string) (\Brick\Math\BigDecimal::of((string) $entry['AmountRefunded'])->withPointMovedLeft(2)->toScale(2)),
     'payment_intent' => [
       'id' => $entry['Intent'],
       'brand' => $entry['Brand'],
       'last4' => $entry['Last4'],
-      'funding' => $entry['Funding']
+      'funding' => $entry['Funding'],
+    ],
+    'payment_item' => [
+      'id' => $entry['StatementItem'],
     ],
     'processed' => bool($entry['Processed']),
     'approved' => bool($entry['Approved']),
     'mandate' => [
-      'id' => (int) $entry['MandateID']
+      'id' => (int) $entry['MandateID'],
     ]
   ];
 }
@@ -132,8 +161,6 @@ $jsonArray = [
     'id' => (int) $id,
     'name' => $gala['name'],
     'venue' => $gala['venue'],
-    'fixed_fee' => bool($gala['fixed']),
-    'fee' => (int) ($gala['fee']*100),
     'entries_require_approval' => bool($gala['RequiresApproval'])
   ],
   'squad' => [
