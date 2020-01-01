@@ -3,7 +3,7 @@ name: update-dev
 on:
   push:
     branches:
-      - development-maib
+      - development-main
 
 # env:
   # FIRST_NAME: Mona
