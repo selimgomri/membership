@@ -101,7 +101,6 @@ include BASE_PATH . 'views/header.php';
             </p>
           </div>
         </div>
-
       </form>
     </div>
   </div>
