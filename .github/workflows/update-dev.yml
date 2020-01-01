@@ -1,0 +1,23 @@
+
+name: update-dev
+on:
+  push:
+    branches:
+      - development-maib
+
+# env:
+  # FIRST_NAME: Mona
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: git pull on CLS (DEV)
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            cd ~/MembershipDev/
+            git pull
+          host: ${{ secrets.HOST_CLS }}
+          user: ${{ secrets.USER_CLS }}
+          # key: ${{ secrets.PRIVATE_KEY}}
+          pass: ${{ secrets.PASS_CLS }}
