@@ -19,6 +19,13 @@ $income = $income->fetchAll(PDO::FETCH_ASSOC);
 
  <div class="front-page" style="margin-bottom: -1rem;">
    <div class="container">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb bg-light">
+        <li class="breadcrumb-item active" aria-current="page">Payments</li>
+      </ol>
+    </nav>
+
   	<h1>Payment Administration</h1>
   	<p class="lead">Control Direct Debit Payments</p>
 
@@ -77,13 +84,13 @@ $income = $income->fetchAll(PDO::FETCH_ASSOC);
   					</span>
           </a>
 
-          <a href="#" class="bg-light">
+          <a href="<?=htmlspecialchars(autoUrl('payments/invoice-payments'))?>">
   					<span class="mb-3">
   	          <span class="title mb-0">
-  							Create a manual charge
+  							Invoice payments
   						</span>
   						<span>
-  							A new invoicing system will be coming soon
+  							Manually create charges and credits
   						</span>
   					</span>
             <span class="category">
