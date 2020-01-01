@@ -6,7 +6,7 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div class="front-page">
+<div class="front-page mb-n3">
   <div class="container">
 
     <nav aria-label="breadcrumb">

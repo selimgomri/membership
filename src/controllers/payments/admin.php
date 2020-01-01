@@ -17,7 +17,7 @@ $income = $income->fetchAll(PDO::FETCH_ASSOC);
 
  ?>
 
- <div class="front-page" style="margin-bottom: -1rem;">
+ <div class="front-page mb-n3">
    <div class="container">
 
     <nav aria-label="breadcrumb">
