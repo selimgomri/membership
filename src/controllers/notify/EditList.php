@@ -29,7 +29,7 @@ include BASE_PATH . "views/notifyMenu.php";
       <h1 class="">
   			Edit <?=htmlspecialchars($row['Name'])?>
   		</h1>
-      <p class="lead">Edit this targetted list.</p>
+      <p class="lead">Edit this targeted list.</p>
 
       <?php
       if (isset($_SESSION['ErrorState'])) {

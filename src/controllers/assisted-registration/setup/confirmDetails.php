@@ -116,7 +116,7 @@ include BASE_PATH . 'views/header.php';
                 <input type="checkbox" class="custom-control-input"
                 name="emailAuthorise" id="emailAuthorise" value="1" <?=$email?>>
                 <label class="custom-control-label" for="emailAuthorise">
-                  I wish to recieve important email updates about my squads.
+                  I wish to receive important email updates about my squads.
                   This includes emails about session cancellations.
                 </label>
               </div>
@@ -127,7 +127,7 @@ include BASE_PATH . 'views/header.php';
                 <input type="checkbox" class="custom-control-input"
                 name="smsAuthorise" id="smsAuthorise" value="1" <?=$sms?>>
                 <label class="custom-control-label" for="smsAuthorise">
-                  I wish to recieve text message notifications
+                  I wish to receive text message notifications
                 </label>
               </div>
             </div>
@@ -149,18 +149,10 @@ include BASE_PATH . 'views/header.php';
             YOUR CLUB HAS NOT SET UP A PRIVACY POLICY. PLEASE DO NOT PROCEED.
           </p>
           <p>
-            In accordance with European Law, <?=htmlspecialchars(env('CLUB_NAME'))?>, SCDS, Swim England and British Swimming are
-            Data Controllers for the purposes of the General Data Protection
-            Regulation.
+            In accordance with European Law, <?=htmlspecialchars(env('CLUB_NAME'))?>, Swim England and British Swimming are Data Controllers for the purposes of the General Data Protection Regulation.
           </p>
           <p>
-            By proceeding you agree to our <a
-            href="https://www.chesterlestreetasc.co.uk/policies/privacy/"
-            target="_blank">Privacy Policy</a> and the use of your data by
-            <?=htmlspecialchars(env('CLUB_NAME'))?> and Chester-le-Street ASC Club Digital Services.
-            Please note that you have also agreed to our use of you and your
-            swimmer's data as part of your registration with the club and with
-            British Swimming and Swim England (Formerly known as the ASA).
+            By proceeding you agree to our <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy (this is an example policy)</a> and the use of your data by <?=htmlspecialchars(env('CLUB_NAME'))?>. Please note that you have also agreed to our use of you and/or your swimmer's data as part of your registration with the club and with British Swimming and Swim England.
           </p>
           <p>
             We will be unable to provide this service for technical reasons if

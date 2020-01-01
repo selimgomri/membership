@@ -3,7 +3,7 @@
 global $db;
 
 $user = $_SESSION['UserID'];
-$pagetitle = "Targetted Lists";
+$pagetitle = "Targeted Lists";
 $use_white_background = true;
 
 $lists = $db->query("SELECT * FROM `targetedLists` ORDER BY `Name` ASC");
@@ -18,10 +18,9 @@ include BASE_PATH . "views/notifyMenu.php";
   <div class="">
     <div class="row">
       <div class="col-md-8">
-      	<h1>Targetted Lists</h1>
+      	<h1>Targeted Lists</h1>
         <p class="lead">
-          Targetted lists are custom mailing lists for messaging groups of parents
-          outside of normal squads.
+          Targeted lists are custom mailing lists for messaging groups of members outside of normal squads.
         </p>
         <p>
           A useful use case would be for the Junior League

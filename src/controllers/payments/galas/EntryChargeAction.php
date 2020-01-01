@@ -1,12 +1,20 @@
 <?php
 
+if (!SCDS\CSRF::verify()) {
+	halt(404);
+}
+
+if (!SCDS\FormIdempotency::verify()) {
+	halt(404);
+}
+
 global $db;
 
 $disabled = "";
 
 $date = date("Y-m-d");
 $insertPayment = $db->prepare("INSERT INTO paymentsPending (`Date`, `Status`, UserID, `Name`, Amount, Currency, PMkey, `Type`, MetadataJSON) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-$markAsCharged = $db->prepare("UPDATE galaEntries SET Charged = ?, FeeToPay = ? WHERE EntryID = ?");
+$markAsCharged = $db->prepare("UPDATE galaEntries SET Charged = ?, PaymentID = ?, FeeToPay = ? WHERE EntryID = ?");
 $notify = $db->prepare("INSERT INTO notify (UserID, `Status`, `Subject`, `Message`, EmailType) VALUES (?, ?, ?, ?, ?)");
 
 $getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas WHERE GalaID = ?");
@@ -16,6 +24,8 @@ $gala = $getGala->fetch(PDO::FETCH_ASSOC);
 if ($gala == null) {
 	halt(404);
 }
+
+$galaData = new GalaPrices($db, $id);
 
 $getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, members.UserID FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) WHERE galaEntries.GalaID = ? AND Charged = ? AND EntryProcessed = ? AND MandateID IS NOT NULL ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id, '0', '1']);
@@ -43,80 +53,88 @@ $swimsArray = [
 ];
 
 while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
-	$amount = (int) ($_POST[$entry['EntryID'] . '-amount']*100);
-	$hasNoDD = ($entry['MandateID'] == null) || bool(getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
+	if ((string) $_POST[$entry['EntryID'] . '-amount'] != "") {
+		$amountDec = \Brick\Math\BigDecimal::of((string) $_POST[$entry['EntryID'] . '-amount']);
+		$amount = $amountDec->withPointMovedRight(2)->toInt();
+		$hasNoDD = ($entry['MandateID'] == null) || bool(getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
 
-	if ($amount > 0 && $amount <= 15000 && !$hasNoDD) {
-		$count = 0;
+		if ($amount > 0 && $amount <= 15000 && !$hasNoDD) {
+			$count = 0;
 
-		$swimsList = '<ul>';
-		foreach($swimsArray as $colTitle => $text) {
-			if ($entry[$colTitle]) {
-				$swimsList .= '<li>' . $text . '</li>';
+			$swimsList = '<ul>';
+			foreach($swimsArray as $colTitle => $text) {
+				if ($entry[$colTitle]) {
+					$price = "";
+					if ($galaData->getEvent($colTitle)->isEnabled()) {
+						$price = ', <em>&pound;' . $galaData->getEvent($colTitle)->getPriceAsString() . '</em>';
+					}
+					$swimsList .= '<li>' . $text . $price . '</li>';
+				}
 			}
+			$swimsList .= '</ul>';
+
+			try {
+				$db->beginTransaction();
+
+				$amountString = (string) $amountDec->toScale(2);
+
+				$name = $entry['MForename'] . ' ' . $entry['MSurname'] . '\'s Gala Entry into ' . $gala['name'] .  ' (Entry #' . $entry['EntryID'] . ')';
+
+				$jsonArray = [
+					"Name" => $name,
+					"type" => [
+						"object" => 'GalaEntry',
+						"id" => $id,
+						"name" => $gala['name']
+					]
+				];
+				$json = json_encode($jsonArray);
+
+				$insertPayment->execute([
+					$date,
+					'Pending',
+					$entry['UserID'],
+					'Gala Entry (#' . $entry['EntryID'] . ')',
+					$amount,
+					'GBP',
+					null,
+					'Payment',
+					$json
+				]);
+
+				$paymentId = $db->lastInsertId();
+
+				$markAsCharged->execute([
+					true,
+					$paymentId,
+					$amountString,
+					$entry['EntryID']
+				]);
+
+				$message = '<p>We\'ve charged <strong>&pound;' . $amountString . '</strong> to your account for ' . htmlspecialchars($entry['MForename']) .  '\'s entry into ' . htmlspecialchars($gala['name']) . '.</p><p>You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(env('CLUB_NAME')) . '.</p>';
+
+				$message .= '<p>You entered the following events;</p>';
+				$message .= $swimsList;
+
+				$message .= '<p>Kind Regards<br> The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
+
+				$notify->execute([
+					$entry['UserID'],
+					'Queued',
+					'Payments: ' . $entry['MForename'] .  '\'s ' . $gala['name'] . ' entry',
+					$message,
+					'Galas'
+				]);
+
+				$db->commit();
+			} catch (Exception $e) {
+				// A problem occured
+				$db->rollBack();
+				$_SESSION['ChargeUsersFailure'] = true;
+			}
+		} else if ($amount > 15000) {
+			$_SESSION['OverhighChargeAmount'][$entry['EntryID']] = true;
 		}
-		$swimsList .= '</ul>';
-
-		try {
-			$db->beginTransaction();
-
-			$amountString = number_format($_POST[$entry['EntryID'] . '-amount'], 2);
-
-			$name = $entry['MForename'] . ' ' . $entry['MSurname'] . '\'s Gala Entry into ' . $gala['name'] .  ' (Entry #' . $entry['EntryID'] . ')';
-
-			$jsonArray = [
-				"Name" => $name,
-				"type" => [
-					"object" => 'GalaEntry',
-					"id" => $id,
-					"name" => $gala['name']
-				]
-			];
-			$json = json_encode($jsonArray);
-
-			$insertPayment->execute([
-				$date,
-				'Pending',
-				$entry['UserID'],
-				'Gala Entry (#' . $entry['EntryID'] . ')',
-				$amount,
-				'GBP',
-				null,
-				'Payment',
-				$json
-			]);
-
-			$markAsCharged->execute([
-				true,
-				$amountString,
-				$entry['EntryID']
-			]);
-
-			$message = '<p>We\'ve added a charge to your bill for ' . htmlspecialchars($entry['MForename']) .  '\'s entry into ' . htmlspecialchars($gala['name']) . '. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(env('CLUB_NAME')) . '.</p>';
-
-			$message .= '<p>This charge is to the value of <strong>&pound;' . $amountString . '</strong>. You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement.</p>';
-
-			$message .= '<p>For this gala you entered;</p>';
-			$message .= $swimsList;
-
-			$message .= '<p>Kind Regards<br> The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
-
-			$notify->execute([
-				$entry['UserID'],
-				'Queued',
-				'Payments: ' . $entry['MForename'] .  '\'s ' . $gala['name'] . ' Entry',
-				$message,
-				'Galas'
-			]);
-
-			$db->commit();
-		} catch (Exception $e) {
-			// A problem occured
-			$db->rollBack();
-			$_SESSION['ChargeUsersFailure'] = true;
-		}
-	} else if ($amount > 15000) {
-		$_SESSION['OverhighChargeAmount'][$entry['EntryID']] = true;
 	}
 }
 

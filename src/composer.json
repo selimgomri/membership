@@ -18,6 +18,9 @@
         "erusev/parsedown-extra": "^0.7.1",
         "twilio/sdk": "^5.33",
         "brick/phonenumber": "^0.2.1",
-        "brick/postcode": "^0.2.1"
+        "brick/postcode": "^0.2.1",
+        "brick/money": "^0.4.2",
+        "brick/math": "^0.8.8",
+        "guzzlehttp/guzzle": "^6.5"
     }
 }

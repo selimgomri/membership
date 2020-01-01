@@ -12,6 +12,8 @@ if ($gala == null) {
 	halt(404);
 }
 
+$galaData = new GalaPrices($db, $id);
+
 $getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) WHERE galaEntries.GalaID = ? ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id]);
 $entry = $getEntries->fetch(PDO::FETCH_ASSOC);
@@ -42,6 +44,8 @@ $rowArray = [1, null, null, null, null, 2, 1,  null, 2, 1, null, 2, 1, null, 2, 
 $rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 2, "Butterfly", null, 2, "Freestyle", null, 2, "Individual Medley", null, null, 2];
 
 $countChargeable = 0;
+
+$numFormatter = new NumberFormatter("en", NumberFormatter::SPELLOUT);
 
 $pagetitle = "Charge Parents for " . htmlspecialchars($gala['name']);
 
@@ -139,18 +143,24 @@ include BASE_PATH . 'views/header.php';
 								<?php $count = 0; ?>
 								<?php foreach($swimsArray as $colTitle => $text) { ?>
 									<?php if ($entry[$colTitle]) { $count++; ?>
-									<li><?=$text?></li>
+									<li class="row">
+										<div class="col">
+											<?=$text?>
+										</div>
+										<?php if ($galaData->getEvent($colTitle)->isEnabled()) { ?>
+										<div class="col">
+											&pound;<?=$galaData->getEvent($colTitle)->getPriceAsString()?>
+										</div>
+										<?php } ?>
+									</li>
 									<?php } ?>
 								<?php } ?>
+								</ul>
 							</div>
 							<div class="col">
 								<div class="d-sm-none mb-3"></div>
 								<p>
-									<?php if ($gala['fixed']) { ?>
-									<?=$count?> &times; &pound;<?=htmlspecialchars(number_format($gala['fee'], 2))?>
-									<?php } else { ?>
-									<?=$count?> entries at no fixed fee
-									<?php } ?>
+									<?=mb_convert_case($numFormatter->format($count), MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
 								</p>
 
 								<?php if ($hasNoDD) { ?>
@@ -184,7 +194,7 @@ include BASE_PATH . 'views/header.php';
 										<div class="input-group-prepend">
 											<div class="input-group-text mono">&pound;</div>
 										</div>
-										<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars(number_format($entry['FeeToPay'], 2))?>" <?php if ($hasNoDD || $entry['Charged'] || $notReady) { ?> disabled <?php } ?> min="0" max="150" step="0.01">
+										<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?>" <?php if ($hasNoDD || $entry['Charged'] || $notReady) { ?> disabled <?php } ?> min="0" max="150" step="0.01">
 									</div>
 								</div>
 							</div>
@@ -192,6 +202,9 @@ include BASE_PATH . 'views/header.php';
 					</li>
 					<?php } while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)); ?>
 				</ul>
+
+				<?=SCDS\CSRF::write()?>
+				<?=SCDS\FormIdempotency::write()?>
 
 				<?php if ($countChargeable > 0) { ?>
 				<div class="cell bg-warning">

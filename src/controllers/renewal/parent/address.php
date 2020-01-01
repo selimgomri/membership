@@ -45,6 +45,8 @@ $userID = $_SESSION['UserID'];
       <h2>Add address</h2>
       <?php } ?>
 
+      <p>You must use a UK address or a British Forces address.</p>
+
     	<form method="post">
         <div class="row">
           <div class="col-md-6">

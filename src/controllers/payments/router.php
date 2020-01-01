@@ -140,6 +140,10 @@ if ($access == "Admin") {
 		include 'admin/confirmation/router.php';
 	});
 
+	$this->group('/invoice-payments', function() {
+		require 'admin/invoicing/router.php';
+	});
+
 	$this->get('/user-mandates', function() {
 		include 'admin/user-mandates/UserMandateList.php';
 	});

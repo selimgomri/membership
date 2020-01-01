@@ -255,9 +255,11 @@ p.lead {
 
     <!-- END OF HEADERS -->
     <div class="mb-3"></div>
+  </div>
 
-    <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
-    <div class="have-full-height" style="min-height:70vh">
-      <?php } else { ?>
-      <div class="have-full-height">
-        <?php } ?>
+
+  <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
+  <div class="have-full-height" style="min-height:70vh">
+    <?php } else { ?>
+    <div class="have-full-height">
+      <?php } ?>

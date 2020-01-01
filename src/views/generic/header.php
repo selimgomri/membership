@@ -116,15 +116,19 @@ if (isset($customBackground) && $customBackground) {
     <?php } ?>
 
     <div class="bg-dark">
-      <div class="<?=$container_class?>">
-        <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
-        <h1 class="d-none d-md-flex pt-4 pb-1 mb-0 <?php if (date("m") == "12") { ?>festive<?php } ?>">
-          <a href="<?=autoUrl("")?>" class="text-white text-decoration-none">
-            <?=mb_strtoupper(env('CLUB_NAME'))?>
-          </a>
-        </h1>
-        <?php } ?>
+      <div class="<?php if (date("m") == "12") { ?>festive<?php } ?>">
+        <div class="<?=$container_class?>">
+          <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
+          <h1 class="d-none d-md-flex pt-3 pb-2 mb-0">
+            <a href="<?=autoUrl("")?>" class="text-white text-decoration-none">
+              <?=mb_strtoupper(env('CLUB_NAME'))?>
+            </a>
+          </h1>
+          <?php } ?>
+        </div>
+      </div>
 
+      <div class="<?=$container_class?>">
         <div class="">
           <div class="">
             <nav class="navbar navbar-expand-lg navbar-dark
@@ -155,6 +159,8 @@ if (isset($customBackground) && $customBackground) {
 
     <!-- END OF HEADERS -->
     <div class="mb-3"></div>
+  
+  </div>
 
     <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
     <div class="have-full-height">

@@ -57,6 +57,8 @@ include "galaMenu.php";
   </nav>
   <?php } ?>
 
+  <div id="gala-data" data-ajax-url="<?=htmlspecialchars(autoUrl('galas/ajax/entryForm'))?>"></div>
+
   <h1 class="mb-3">Enter a gala</h1>
 
   <?php if ($hasSwimmer && $hasGalas) { ?>
@@ -92,7 +94,7 @@ include "galaMenu.php";
         </div>
       </div>
       <p>
-        <button type="submit" id="submit" class="btn btn-success">Submit</button>
+        <button type="submit" id="submit" disabled class="btn btn-success">Submit</button>
       </p>
       </div>
     </form>
@@ -121,6 +123,8 @@ include "galaMenu.php";
   <?php } ?>
 </div>
 
-<script src="<?=autoUrl("js/gala-entry-form.js")?>"></script>
+<script src="<?=autoUrl("public/js/numerical/bignumber.min.js")?>"></script>
+<script src="<?=autoUrl("public/js/gala-entries/NewEntry.js")?>"></script>
+<!-- <script src="<?=autoUrl("js/gala-entry-form.js")?>"></script> -->
 
 <?php include BASE_PATH . "views/footer.php";

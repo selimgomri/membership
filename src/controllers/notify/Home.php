@@ -29,7 +29,7 @@ include BASE_PATH . "views/notifyMenu.php";
       <?php if (isset($_SESSION['NotifySuccess'])) { ?>
       <div class="alert alert-success">
     		We've successfully queued your email. <?=
-    		$_SESSION['NotifySuccess']['Count'] ?> people will recieve your
+    		$_SESSION['NotifySuccess']['Count'] ?> people will receive your
     		message<?php if (!$_SESSION['NotifySuccess']['Force']) { ?> if they have
     		opted in to recieving emails from us<?php } ?>.
     	</div>
@@ -59,7 +59,7 @@ include BASE_PATH . "views/notifyMenu.php";
         Emails are added to a queue to be sent. Emails will be sent to our 
         service provider within one minute who will then send them to all 
         parents almost instantaneously. Parents who have
-        not opted in to recieving emails will not recieve messages.
+        not opted in to recieving emails will not receive messages.
       </p>
       <p>
         <strong>

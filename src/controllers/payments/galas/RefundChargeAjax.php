@@ -71,7 +71,7 @@ try {
     throw new Exception('A verification check fail. Please refresh the page to refund this entry');
   }
 
-  $toPay = (int) ($entryData['FeeToPay']*100);
+  $toPay = (int) (\Brick\Math\BigDecimal::of((string) $entryData['FeeToPay']))->withPointMovedRight(2)->toInt();
   $amountRefundable = $toPay - ($entryData['AmountRefunded']);
 
   if ($refundAmount < 0 || $refundAmount > $amountRefundable) {
@@ -90,8 +90,12 @@ try {
 
   $db->beginTransaction();
 
-  $amountString = number_format(($refundAmount/100), 2);
-  $totalString = number_format(($refundAmount + $entryData['AmountRefunded'])/100, 2);
+  $refundAm = (\Brick\Math\BigDecimal::of((string) $refundAmount))->withPointMovedLeft(2);
+  $amountString = (string) (\Brick\Math\BigDecimal::of((string) $refundAmount))->withPointMovedLeft(2)->toScale(2);
+
+  $prevRef = (\Brick\Math\BigDecimal::of((string) $entryData['AmountRefunded']))->withPointMovedLeft(2);
+  $refundTotal = $refundAm->plus($prevRef);
+  $totalString = (string) $refundTotal->toScale(2);
 
   if (!$hasNoDD && ($entryData['Intent'] == null || !bool($entryData['StripePaid']))) {
 
@@ -191,7 +195,7 @@ try {
 
   if ($entryData['MandateID'] != null && !getUserOption($entryData['user'], 'GalaDirectDebitOptOut') && ($entryData['Intent'] == null || !bool($entryData['StripePaid']))) {
     $message .= '<p>This refund has been applied as a credit to your club account. This means you will either;</p>';
-    $message .= '<ul><li>If you have not paid the bill by direct debit for this gala yet, you will automatically charged the correct amount for ' . $gala['name'] . ' on your next bill as reductions will be applied automatically</li><li>If you have already paid the bill by direct debit for this gala, the credit applied to your account will give you a discount on next month\'s bill</li></ul>';
+    $message .= '<ul><li>If you have not paid the bill by direct debit for this gala yet, you will automatically be charged the correct amount for ' . htmlspecialchars($gala['name']) . ' on your next bill as refunds will be applied automatically</li><li>If you have already paid the bill by direct debit for this gala, the credit applied to your account will give you a discount on next month\'s bill</li></ul>';
   } else if ($entryData['Intent'] != null && bool($entryData['StripePaid'])) {
     $message .= '<p>We\'ve refunded this payment to your original payment card.</p>';
   } else {
@@ -219,7 +223,7 @@ try {
   $reponse = [
     'status' => 'success',
     'request_data' => $requestData,
-    'amount_refundable' => (int) ($amounts['FeeToPay']*100) - $amounts['AmountRefunded'],
+    'amount_refundable' => (int) (\Brick\Math\BigDecimal::of((string) $amounts['FeeToPay']))->withPointMovedRight(2)->toInt() - $amounts['AmountRefunded'],
     'amount_refunded' => (int) $amounts['AmountRefunded']
   ];
 

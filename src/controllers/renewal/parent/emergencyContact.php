@@ -40,9 +40,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 			<?php if (user_needs_registration($_SESSION['UserID'])) { ?>
 				<p class="border-bottom border-gray pb-3 mb-0">
-					We'll use these emergency contacts for all swimmers connected to your
+					We'll use these emergency contacts for all members connected to your
 					account if we can't reach you on your phone number. You will be able
-					to change your phone number at any time in My Account, once you've
+					to change your phone number and emergency contacts at any time, once you've
 					finished registration.</a>
 				</p>
 			<?php } else { ?>
@@ -106,7 +106,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				<a href="<?= autoUrl("renewal/emergencycontacts/new") ?>" class="btn btn-secondary">Add a New Contact</a>
 			</p>
 
-			<p>Please inform people if you've added them as an emergency contact.</p>
+			<p>Please inform people if you have added them as an emergency contact.</p>
 
 			<?php if (sizeof($contactsArray) > 0) { ?>
 			<p>

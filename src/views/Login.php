@@ -24,7 +24,7 @@ include BASE_PATH . "views/header.php";
         Our systems will not be sending emails between 23:00 on Friday 31 August and 15:00 on Saturday 1 September
       </div>
       -->
-      <?php if ($errorState == true) { ?>
+      <?php if ($errorState) { ?>
       <div class="alert alert-danger">
         <strong>Your details were incorrect</strong> <br>
         Please try again
@@ -34,6 +34,13 @@ include BASE_PATH . "views/header.php";
         } ?>
       </div>
       <?php } ?>
+
+      <?php if (isset($_SESSION['ErrorAccountLocked']) && $_SESSION['ErrorAccountLocked']) { ?>
+      <div class="alert alert-danger">
+        <strong>Your account has been locked due to a number of failed login attempts</strong> <br>
+        Please <a href="<?=htmlspecialchars(autoUrl("resetpassword"))?>" class="alert-link">reset your password</a> in order to continue
+      </div>
+      <?php unset($_SESSION['ErrorAccountLocked']); } ?>
 
       <form method="post" action="<?=autoUrl("")?>" name="loginform" id="loginform" class="needs-validation" novalidate>
         <div class="form-group">
@@ -68,12 +75,12 @@ include BASE_PATH . "views/header.php";
             Not yet registered? It's easy to get started.
           </p>
           <span>
-            <a href="<?=autoUrl("register")?>" class="btn btn-dark">
+            <a href="<?=htmlspecialchars(autoUrl("register"))?>" class="btn btn-dark">
               Create an account
             </a>
           </span>
           <span>
-            <a href="<?=autoUrl("resetpassword")?>" class="btn btn-dark">
+            <a href="<?=htmlspecialchars(autoUrl("resetpassword"))?>" class="btn btn-dark">
               Forgot password?
             </a>
           </span>
@@ -116,7 +123,7 @@ include BASE_PATH . "views/header.php";
   </div>
 </div>
 
-<script src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
+<script src="<?=htmlspecialchars(autoUrl("public/js/NeedsValidation.js"))?>"></script>
 
 <?php
 

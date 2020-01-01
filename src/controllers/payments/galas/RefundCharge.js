@@ -44,7 +44,7 @@ modalButton.addEventListener('click', function(event) {
         // Show refunded amount
         document.getElementById(entry + '-amount-refunded').innerHTML = '<p><strong>&pound;' + (response.amount_refunded/100).toFixed(2) + '</strong> has already been refunded!</p>';
         // Update max value
-        document.getElementById(entry + '-refund').max = (response.amount_refundable/100).toFixed(2);
+        document.getElementById(entry + '-refund').max = (new BigNumber(response.amount_refundable)).shiftedBy(-2).decimalPlaces(2).toFormat(2);
         document.getElementById(entry + '-refund').value = null;
         document.getElementById(entry + '-refund').dataset.maxRefundable = response.amount_refundable;
         document.getElementById(entry + '-refund').dataset.amountRefunded = response.amount_refunded;
@@ -73,18 +73,23 @@ function clickPropogation(e) {
       var refundBox = document.getElementById(element.dataset.entryId + '-refund');
       var refundAmount = 0;
       if (refundBox.value) {
-        refundAmount = parseFloat(refundBox.value);
+        refundAmount = parseInt((new BigNumber(refundBox.value)).shiftedBy(2).toFixed());
+      } else {
+        refundAmount = null;
       }
-      refundAmount = parseInt(refundAmount*100);
       var maxRefundable = parseFloat(refundBox.dataset.maxRefundable);
-      var amountRefunded = parseFloat(refundBox.dataset.amountRefunded);
+      var maxRefundableString = (new BigNumber(refundBox.dataset.maxRefundable)).shiftedBy(-2).decimalPlaces(2).toFormat(2);
+
+      var amountRefunded = refundBox.dataset.amountRefunded;
+
+      var refundAmountString = (new BigNumber(refundBox.value)).decimalPlaces(2).toFormat(2);
 
       document.getElementById('refund-form-' + element.dataset.entryId).classList.remove('was-validated');
 
-      if (isNaN(refundAmount) || refundAmount === 0) {
+      if (refundAmount == null || refundAmount === 0) {
         document.getElementById(element.dataset.entryId + '-refund-error-warning-box').innerHTML = '<div class="alert alert-warning alert-dismissible fade show" role="alert"><p class="mb-0"><strong>Sorry!</strong></p><p class="mb-0">You cannot make a refund for &pound;0.00.</p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
       } else if (refundAmount > maxRefundable) {
-        document.getElementById(element.dataset.entryId + '-refund-error-warning-box').innerHTML = '<div class="alert alert-warning alert-dismissible fade show" role="alert"><p class="mb-0"><strong>You can\'t refund that much!</strong></p><p>You tried to make a refund for &pound;' + (refundAmount/100).toFixed(2) + ' when the maximum you can refund is &pound;' + (maxRefundable/100).toFixed(2) + '.</p><p class="mb-0">This safeguard is in place to prevent you refunding more than was paid for the gala entry.</p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        document.getElementById(element.dataset.entryId + '-refund-error-warning-box').innerHTML = '<div class="alert alert-warning alert-dismissible fade show" role="alert"><p class="mb-0"><strong>You can\'t refund that much!</strong></p><p>You tried to make a refund for &pound;' + refundAmountString + ' when the maximum you can refund is &pound;' + maxRefundableString + '.</p><p class="mb-0">This safeguard is in place to prevent you refunding more than was paid for the gala entry.</p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
 
         document.getElementById('refund-form-' + element.dataset.entryId).classList.add('was-validated');
       } else if (refundAmount < 0) {
@@ -99,7 +104,7 @@ function clickPropogation(e) {
         document.getElementById('myModalTitle').textContent = 'Confirm refund amount';
 
         // Set modal body content
-        document.getElementById('myModalBody').innerHTML = '<p class="mb-0">Please confirm that you want to refund &pound;' + (refundAmount/100).toFixed(2) + ' for <span id="modal-refund-swimmer-name"></span>\'s gala entry to <span id="modal-refund-location"></span>.</p>';
+        document.getElementById('myModalBody').innerHTML = '<p class="mb-0">Please confirm that you want to refund &pound;' + refundAmountString + ' for <span id="modal-refund-swimmer-name"></span>\'s gala entry to <span id="modal-refund-location"></span>.</p>';
 
         document.getElementById('modal-refund-location').textContent = element.dataset.refundLocation;
         document.getElementById('modal-refund-swimmer-name').textContent = element.dataset.swimmerName;

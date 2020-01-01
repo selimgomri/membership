@@ -59,6 +59,8 @@ try {
   halt(500);
 }
 
+$numFormatter = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+
 $pagetitle = "Payment Success";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/galas/galaMenu.php";
@@ -81,34 +83,51 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
       <h2>Payment details</h2>
 
       <ul class="list-group mb-3">
-        <?php while ($entry = $getEntriesByPI->fetch(PDO::FETCH_ASSOC)) { ?>
+        <?php while ($entry = $getEntriesByPI->fetch(PDO::FETCH_ASSOC)) {
+          $notReady = !$entry['EntryProcessed'];
+          $galaData = new GalaPrices($db, $entry['GalaID']);
+        ?>
         <li class="list-group-item">
-          <h3><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?> for <?=htmlspecialchars($entry['GalaName'])?></h3>
-          <div class="row align-items-center">
-            <div class="col-sm-5 col-md-4 col-lg-6">
-              <p class="mb-0">
-                <?=htmlspecialchars($entry['MForename'])?> is entered in;
+          <h3><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?> <br><small><?=htmlspecialchars($entry['GalaName'])?></small></h3>
+          <div class="row">
+            <div class="col-4 col-sm-5 col-md-4 col-lg-6">
+              <p>
+                <a data-toggle="collapse" href="#swims-<?=$entry['EntryID']?>" role="button" aria-expanded="false" aria-controls="swims-<?=$entry['EntryID']?>">
+                  View swims
+                </a>
               </p>
-              <ul class="list-unstyled">
-              <?php $count = 0; ?>
-              <?php foreach($swimsArray as $colTitle => $text) { ?>
-                <?php if ($entry[$colTitle]) { $count++; ?>
-                <li><?=$text?></li>
+              <div class="collapse" id="swims-<?=$entry['EntryID']?>">
+                <ul class="list-unstyled">
+                <?php $count = 0; ?>
+                <?php foreach($swimsArray as $colTitle => $text) { ?>
+                  <?php if ($entry[$colTitle]) { $count++; ?>
+                  <li class="row">
+										<div class="col">
+											<?=$text?>
+										</div>
+										<?php if ($galaData->getEvent($colTitle)->isEnabled()) { ?>
+										<div class="col">
+											&pound;<?=$galaData->getEvent($colTitle)->getPriceAsString()?>
+										</div>
+										<?php } ?>
+									</li>
+                  <?php } ?>
                 <?php } ?>
-              <?php } ?>
+              </div>
             </div>
             <div class="col text-right">
-              <div class="d-sm-none mb-3"></div>
               <p>
-                <?php if ($entry['GalaFeeConstant']) { ?>
-                <?=$count?> &times; &pound;<?=htmlspecialchars(number_format($entry['GalaFee'], 2))?>
-                <?php } else { ?>
-                <strong><?=$count?> swims</strong>
-                <?php } ?>
+                <?=mb_convert_case($numFormatter->format($count),   MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
               </p>
 
+              <!--<?php if ($notReady) { ?>
               <p>
-                <strong>Fee &pound;<?=htmlspecialchars(number_format($entry['FeeToPay'] ,2, '.', ''))?></strong>
+                Once you pay for this entry, you won't be able to edit it.
+              </p>
+              <?php } ?>-->
+
+              <p class="mb-0">
+                <strong>Fee &pound;<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?></strong>
               </p>
             </div>
           </div>
@@ -118,12 +137,12 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
           <div class="row align-items-center">
             <div class="col-6">
               <p class="mb-0">
-                <strong>Total</strong>
+                <strong>Total paid</strong>
               </p>
             </div>
             <div class="col text-right">
               <p class="mb-0">
-                <strong>&pound;<?=htmlspecialchars(number_format($intent->amount/100 ,2, '.', ''))?></strong>
+                <strong>&pound;<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $intent->amount))->withPointMovedLeft(2)->toScale(2))?></strong>
               </p>
             </div>
           </div>

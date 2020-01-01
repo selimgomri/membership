@@ -2,6 +2,8 @@
 
 global $db;
 
+$resetFailedLoginCount = $db->prepare("UPDATE users SET WrongPassCount = 0 WHERE UserID = ?");
+
 use GeoIp2\Database\Reader;
 
 $security_status = false;
@@ -44,6 +46,7 @@ if (($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE']) || $auth_via_google_authent
     }
     global $currentUser;
     $currentUser = $login->login();
+    $resetFailedLoginCount->execute([$_SESSION['2FAUserID']]);
   } catch (Exception $e) {
     halt(403);
   }
@@ -56,7 +59,7 @@ if (($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE']) || $auth_via_google_authent
   }
 }
 
-if (isset($_SESSION['UserID']) && filter_var(getUserOption($_SESSION['UserID'], "IsSpotCheck2FA"), FILTER_VALIDATE_BOOLEAN)) {
+if (isset($_SESSION['UserID']) && bool(getUserOption($_SESSION['UserID'], "IsSpotCheck2FA"))) {
   setUserOption($_SESSION['UserID'], "IsSpotCheck2FA", false);
 }
 

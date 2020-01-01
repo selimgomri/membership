@@ -1,6 +1,6 @@
 <?php
 
-$pagetitle = "Add a Targetted List";
+$pagetitle = "Add a Targeted List";
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";
@@ -11,11 +11,10 @@ include BASE_PATH . "views/notifyMenu.php";
   <div class="row">
     <div class="col-lg-8">
       <h1 class="">
-        Create a New Targetted List
+        Create a New Targeted List
       </h1>
       <p class="lead">
-        Targetted lists are custom mailing lists for messaging groups of parents
-        outside of normal squads.
+        Targeted lists are custom mailing lists for messaging groups of members outside of normal squads.
       </p>
       <p>
         A useful use case would be for the Junior League.

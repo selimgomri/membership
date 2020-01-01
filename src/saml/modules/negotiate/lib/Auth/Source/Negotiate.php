@@ -163,7 +163,7 @@ class sspmod_negotiate_Auth_Source_Negotiate extends SimpleSAML_Auth_Source
                     assert('FALSE');
                 }
             } else {
-                // Some error in the recieved ticket. Expired?
+                // Some error in the received ticket. Expired?
                 SimpleSAML\Logger::info('Negotiate - authenticate(): Kerberos authN failed. Skipping.');
             }
         } else {

@@ -61,5 +61,7 @@ return array(
     'CLSASC\\EquivalentTime\\' => array($vendorDir . '/clsasc/equivalent-time/src/CLSASC/EquivalentTime'),
     'Brick\\Postcode\\' => array($vendorDir . '/brick/postcode/src'),
     'Brick\\PhoneNumber\\' => array($vendorDir . '/brick/phonenumber/src'),
+    'Brick\\Money\\' => array($vendorDir . '/brick/money/src'),
+    'Brick\\Math\\' => array($vendorDir . '/brick/math/src'),
     'BaconQrCode\\' => array($vendorDir . '/bacon/bacon-qr-code/src'),
 );

@@ -25,12 +25,7 @@ if (!empty($_POST['closingDate'])) {
 if (!empty($_POST['galaDate'])) {
   $galaDate = $_POST['galaDate'];
 }
-if (!empty($_POST['GalaFeeConstant'])) {
-  $galaFeeConstant = $_POST['GalaFeeConstant'];
-}
-if (!empty($_POST['galaFee'])) {
-  $galaFee = number_format($_POST['galaFee'],2,'.','');
-}
+$galaFeeConstant = $_POST['GalaFeeConstant'] = true;
 if (isset($_POST['HyTek']) && bool($_POST['HyTek'])) {
   $hyTek = 1;
 }
@@ -46,7 +41,7 @@ if ($galaFeeConstant == 0 || $galaFeeConstant == null) {
 }
 
 try {
-  $update  = $db->prepare("UPDATE `galas` SET  GalaName = ?, `Description` = ?, CourseLength = ?, GalaVenue = ?, ClosingDate = ?, GalaDate = ?, GalaFeeConstant = ?, GalaFee = ?, HyTek = ?, CoachEnters = ?, RequiresApproval = ? WHERE GalaID = ?");
+  $update  = $db->prepare("UPDATE `galas` SET  GalaName = ?, `Description` = ?, CourseLength = ?, GalaVenue = ?, ClosingDate = ?, GalaDate = ?, HyTek = ?, CoachEnters = ?, RequiresApproval = ? WHERE GalaID = ?");
   $update->execute([
     $galaName,
     $description,
@@ -54,8 +49,6 @@ try {
     $galaVenue,
     $closingDate,
     $galaDate,
-    $galaFeeConstant,
-    $galaFee,
     $hyTek,
     $coachEnters,
     $approvalNeeded,

@@ -31,7 +31,7 @@ function getBankLogo($bank) {
     $logo_path = autoUrl("public/img/directdebit/bank-logos/coop");
   } else if ($bank == "NATIONWIDE BUILDING SOCIETY") {
     $logo_path = autoUrl("public/img/directdebit/bank-logos/nationwide");
-  } else if ($bank == "THE ROYAL BANK OF SCOTLAND PLC") {
+  } else if ($bank == "THE ROYAL BANK OF SCOTLAND PLC" || $bank == "THE ROYAL BANK OF SCOTLAND INTERNATIONAL LTD") {
     $logo_path = autoUrl("public/img/directdebit/bank-logos/rbs");
   } else if ($bank == "VIRGIN MONEY PLC" || $bank == "YORKSHIRE BANK (A TRADING NAME OF CLYDESDALE BANK PLC)" || $bank == "CLYDESDALE BANK PLC") {
     $logo_path = autoUrl("public/img/directdebit/bank-logos/virginmoney");
@@ -41,6 +41,14 @@ function getBankLogo($bank) {
     $logo_path = autoUrl("public/img/directdebit/bank-logos/aib");
   } else if ($bank == "BANK OF SCOTLAND PLC") {
     $logo_path = autoUrl("public/img/directdebit/bank-logos/bankofscotland");
+  } else if ($bank == "RBS ONE ACCOUNT") {
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/oneaccount");
+  } else if ($bank == "HANDELSBANKEN PLC") {
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/handlesbanken");
+  } else if ($bank == "BANK OF AMERICA, NA") {
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/bankofamerica");
+  } else if ($bank == "MODULR FS LTD") {
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/modulr");
   }
 
   return $logo_path;

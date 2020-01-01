@@ -175,15 +175,16 @@ if ($access == "Parent") {
 	});
 
 	// Add a gala
-	$this->get('/addgala', function() {
+	$this->get(['/addgala', '/new'], function() {
 		global $link;
 		include 'addGala.php';
 	});
 
-	$this->post('/addgala', function() {
+	$this->post(['/addgala', '/new'], function() {
 		global $link;
 		include 'addGalaAction.php';
 	});
+	
 
 	$this->get('/{id}:int', function($id) {
 		include 'Gala.php';
@@ -191,6 +192,15 @@ if ($access == "Parent") {
 
 	$this->get('/{id}:int/export.pdf', function($id) {
 		include 'gala.pdf.php';
+	});
+
+	// Manage pricing and events
+	$this->get(['/{id}:int/pricing-and-events'], function($id) {
+		include "pricing-and-events/edit.php";
+	});
+
+	$this->post(['/{id}:int/pricing-and-events'], function($id) {
+		include "pricing-and-events/edit-post.php";
 	});
 
 	// View Competitions

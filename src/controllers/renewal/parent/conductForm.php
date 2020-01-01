@@ -52,7 +52,7 @@ if (isset($id)) {
 						</p>
 
             <p class="mb-0">
-							Membership <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?> agreements are legally binding once the process is completed.
+							Membership <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?> agreements are binding once the process is completed.
             </p>
           </div>
 
@@ -264,6 +264,16 @@ if (isset($id)) {
           <p class="lead">
             You must accept the terms of this code of conduct to continue
           </p>
+
+          <div class="alert alert-warning">
+            <p>
+              If you are not a parent of any members but a club member in your own right, please skip this step.
+            </p>
+
+            <p class="mb-0">
+              <button type="submit" class="btn btn-warning">Skip parent agreement</button>
+            </p>
+          </div>
 
           <div id="code_of_conduct">
             <?= getPostContent($parentCode) ?>

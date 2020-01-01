@@ -59,7 +59,7 @@ include BASE_PATH . "views/header.php";
       <?php if (isset($_SESSION['TWO_FACTOR_RESEND']) && $_SESSION['TWO_FACTOR_RESEND']) { ?>
       <div class="alert alert-success">
         <p class="mb-0"><strong>We have successfully sent your email</strong></p>
-        <p class="mb-0">Please now check your inbox. It may take a moment to recieve the email.</p>
+        <p class="mb-0">Please now check your inbox. It may take a moment to receive the email.</p>
       </div>
       <?php } ?>
 

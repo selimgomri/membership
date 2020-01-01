@@ -86,12 +86,12 @@ ob_start();?>
       <h1 class="mb-0">
         <?=htmlspecialchars($data->gala->name)?>
       </h1>
-      <p class="lead mb-0"><?=htmlspecialchars($data->squad->name)?> Squad Gala Entry Report</p>
+      <p class="lead mb-0"><?php if ($data->squad->id != "all") { ?><?=htmlspecialchars($data->squad->name)?> Squad <?php } ?>Gala Entry Report</p>
     </div>
 
     <h2>How to use this document</h2>
     <p class="lead">
-      This document lists all entries by swimmers in <?=htmlspecialchars($data->squad->name)?> Squad. 
+      This document lists all entries by swimmers <?php if ($data->squad->id != "all") { ?>in <?=htmlspecialchars($data->squad->name)?> Squad<?php } else { ?>for <?=htmlspecialchars($data->gala->name)?><?php } ?>. 
     </p>
     <p>
       When printing this document, you may need to select
@@ -130,9 +130,15 @@ ob_start();?>
             <div class="split-50 text-right">
               <?php if ($entry->charged && isset($entry->payment_intent->id) && $entry->payment_intent->id != null) { ?>
               <p>Paid for by credit/debit card</p>
+              <?php } else if ($entry->charged && isset($entry->payment_item->id) && $entry->payment_item->id != null) { ?>
+              <p>Paid on account</p>
               <?php } else if ($entry->charged) { ?>
               <p>Paid</p>
+              <?php } else { ?>
+              <p>Not yet paid</p>
               <?php } ?>
+              <p class="mb-0">Total &pound;<?=htmlspecialchars($entry->amount_charged_string)?></p>
+              <p class="mb-0">Refunded &pound;<?=htmlspecialchars($entry->amount_refunded_string)?></p>
             </div>
           </div>
 

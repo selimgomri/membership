@@ -10,6 +10,12 @@ $markdown->setSafeMode(true);
 
 $swimmerCount = 0;
 
+if (!isset($_REQUEST["date"]) || !v::date()->validate($_REQUEST["date"])) {
+  halt(404);
+}
+
+$date = new DateTime($_REQUEST["date"], new DateTimeZone('Europe/London'));
+
 if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach") {
   if ((isset($_REQUEST["squadID"]) && v::intVal()->validate($_REQUEST["squadID"])) || isset($preload) && $preload && $getSessions) {
     // get the squadID parameter from URL
@@ -25,8 +31,8 @@ if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admi
     $response = "";
 
     if ($squadID != null) {
-      $getSessions = $db->prepare("SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE squads.SquadID = ? AND ((sessions.DisplayFrom <= CURDATE( )) AND (sessions.DisplayUntil >= CURDATE( ))) ORDER BY sessions.SessionDay ASC, sessions.StartTime ASC");
-      $getSessions->execute([$squadID]);
+      $getSessions = $db->prepare("SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE squads.SquadID = :squad AND ((sessions.DisplayFrom <= :date) AND (sessions.DisplayUntil >= :date)) AND sessions.SessionDay = :dayNum ORDER BY sessions.SessionDay ASC, sessions.StartTime ASC");
+      $getSessions->execute(['squad' => $squadID, 'date' => $date->format("Y-m-d"), 'dayNum' => ((int) $date->format("N"))%7]);
       $content = '<option>Choose the session from the menu</option>';
 
       $exists = false;
@@ -74,31 +80,33 @@ if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admi
     }
   }
 
-  if ((isset($_REQUEST["sessionID"]) && v::intVal()->validate($_REQUEST["sessionID"])) || isset($preload) && $preload && $getRegister) {
-    if (isset($_REQUEST["date"]) && v::intVal()->validate($_REQUEST["date"])) {
-      $dateO = $date = $_REQUEST["date"];
-    }
+  if ((isset($_REQUEST["sessionID"]) && v::intVal()->validate($_REQUEST["sessionID"]))) {
 
-    $sessionID = null;
-
-    if (isset($preload) && $preload) {
-      $sessionID = $session_init;
-      $dateO = $date = $weekID;
-    } else {
-      $sessionID = $_REQUEST["sessionID"];
-    }
+    $sessionID = $_REQUEST["sessionID"];
 
     $response = $content = $modalOutput = "";
 
     if ($sessionID != null) {
+      // Get the date on sunday
+      if ((int) $date->format('N') != '7') {
+        $date->modify('last Sunday');
+      }
+
+      $weekBeginning = $date->format("Y-m-d");
+
+      // Get the week id
+      $getWeekId = $db->prepare("SELECT WeekID FROM sessionsWeek WHERE WeekDateBeginning = ?");
+      $getWeekId->execute([$date->format("Y-m-d")]);
+      $weekId = $getWeekId->fetchColumn();
+
+      if ($weekId == null) {
+        halt(404);
+      }
+
       // Check if the register has been done before
       $sessionRecord = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` WHERE `WeekID` = ? AND `SessionID` = ?");
-      $sessionRecord->execute([$date, $sessionID]);
+      $sessionRecord->execute([$weekId, $sessionID]);
       $sessionRecordExists = $sessionRecord->fetchColumn();
-
-      $getWeekBeginning = $db->prepare("SELECT `WeekDateBeginning` FROM `sessionsWeek` WHERE `WeekID` = ?");
-      $getWeekBeginning->execute([$date]);
-      $weekBeginning = $getWeekBeginning->fetchColumn();
 
       $sessionDetails = $db->prepare("SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE sessions.SessionID = ?");
       $sessionDetails->execute([$sessionID]);
@@ -183,7 +191,7 @@ if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admi
         $checked = "";
         if ($sessionRecordExists > 0) {
           $member = $row['MemberID'];
-          $getMemberAttendance->execute([$dateO, $sessionID, $row['MemberID']]);
+          $getMemberAttendance->execute([$weekId, $sessionID, $row['MemberID']]);
           $column = $getMemberAttendance->fetchColumn();
 
           if ($column != null && $column) {
@@ -337,14 +345,11 @@ if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admi
     if ($swimmerCount > 0) {
       echo $content;
       echo $modalOutput;
-    }
-    else {
+    } else {
       echo "<p class=\"lead\">No swimmers were found for this squad and session</p>";
     }
   }
 
-}
-else {
+} else {
   halt(404);
 }
-?>
