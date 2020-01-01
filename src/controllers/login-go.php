@@ -60,9 +60,11 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
           <p>Hello. Confirm your login by entering the following code in your web browser.</p>
           <p><strong>' . $code . '</strong></p>
           <p>If you did not just try to log in, you can ignore this email. You may want to reset your password.</p>
-          <p>Kind Regards,<br>The ' . env('CLUB_NAME') . ' Team</p>';
+          <p>Kind Regards, <br>The ' . env('CLUB_NAME') . ' Team</p>';
 
-          if (notifySend(null, "Verification Code", $message, $forename . " " . $surname, $email)) {
+          $date = new DateTime('now', new DateTimeZone('Europe/London'));
+
+          if (notifySend(null, "Verification Code - Requested at " . $date->format("H:i:s \o\\n d/m/Y"), $message, $forename . " " . $surname, $email)) {
             $_SESSION['TWO_FACTOR_CODE'] = $code;
           } else {
             halt(500);

@@ -13,7 +13,7 @@ function getUser() {
       if (this.readyState == 4 && this.status == 200) {
         var result = JSON.parse(this.responseText);
         if (result.has_result) {
-          document.getElementById('user-info-box').innerHTML = '<div class="cell"><h2 id="user-info-name"></h2><dl class="row mb-0"><dt class="col-sm-3">Email</dt><dd class="col-sm-9"><a href="" id="user-info-email"></a></dd><dt class="col-sm-3">Phone</dt><dd class="col-sm-9"><a href="" id="user-info-phone"></a></dd><dt class="col-sm-3">Address</dt><dd class="col-sm-9 mb-0"><span id="user-info-address"></span></dd></div>';
+          document.getElementById('user-info-box').innerHTML = '<div class="cell"><h2 id="user-info-name"></h2><dl class="row mb-0"><dt class="col-sm-3">Email</dt><dd class="col-sm-9 text-truncate"><a href="" id="user-info-email"></a></dd><dt class="col-sm-3">Phone</dt><dd class="col-sm-9"><a href="" id="user-info-phone"></a></dd><dt class="col-sm-3">Address</dt><dd class="col-sm-9 mb-0"><span id="user-info-address"></span></dd></div>';
           document.getElementById('user-info-name').textContent = result.forename + ' ' + result.surname;
           document.getElementById('user-info-email').textContent = result.email;
           document.getElementById('user-info-email').href = 'mailto:' + result.email;

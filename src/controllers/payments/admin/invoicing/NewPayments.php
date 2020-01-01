@@ -101,7 +101,6 @@ include BASE_PATH . 'views/header.php';
             </p>
           </div>
         </div>
-
       </form>
     </div>
   </div>
@@ -122,7 +121,7 @@ include BASE_PATH . 'views/header.php';
           <h2 id="confirmation-modal-user-info-name"></h2>
           <dl class="row mb-0">
             <dt class="col-sm-3">Email</dt>
-            <dd class="col-sm-9"><a href="" id="confirmation-modal-user-info-email"></a></dd>
+            <dd class="col-sm-9 text-truncate"><a href="" id="confirmation-modal-user-info-email"></a></dd>
             
             <dt class="col-sm-3">Phone</dt>
             <dd class="col-sm-9"><a href="" id="confirmation-modal-user-info-phone"></a></dd>
