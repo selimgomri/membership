@@ -63,29 +63,31 @@ try {
     $type,
   ]);
 
-  // Send an email to the user
-  $subject = 'Payments: New ';
-  if ($type == 'Payment') {
-    $subject .= 'charge on account';
-  } else {
-    $subject .= 'credit/refund on account';
+  if ($amount > 0) {
+    // Send an email to the user
+    $subject = 'Payments: New ';
+    if ($type == 'Payment') {
+      $subject .= 'charge on account';
+    } else {
+      $subject .= 'credit/refund on account';
+    }
+    $message .= '<p>Hi ' . htmlspecialchars($user['Forename']) . ', </p>';
+    $message .= '<p>We\'ve manually added a ' . $typeString . ' of <strong>&pound;' . $amountString . '</strong> to your account for <strong>' . htmlspecialchars($description) .  '</strong>.</p><p>You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(env('CLUB_NAME')) . '.</p>';
+
+    $message .= '<p>Kind Regards, <br>The ' . htmlspecialchars(env('CLUB_NAME')) . ' Payments Team</p>';
+
+    $notify = $db->prepare("INSERT INTO notify (UserID, `Status`, `Subject`, `Message`, EmailType) VALUES (?, ?, ?, ?, ?)");
+
+    notifySend(null, $subject, $message, $user['Forename'] . " " . $user['Surname'], $user['EmailAddress']);
+
+    $notify->execute([
+      $_POST['user-id'],
+      'Sent',
+      $subject,
+      $message,
+      'Payments'
+    ]);
   }
-  $message .= '<p>Hi ' . htmlspecialchars($user['Forename']) . ', </p>';
-  $message .= '<p>We\'ve manually added a ' . $typeString . ' of <strong>&pound;' . $amountString . '</strong> to your account for <strong>' . htmlspecialchars($description) .  '</strong>.</p><p>You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(env('CLUB_NAME')) . '.</p>';
-
-  $message .= '<p>Kind Regards, <br>The ' . htmlspecialchars(env('CLUB_NAME')) . ' Payments Team</p>';
-
-  $notify = $db->prepare("INSERT INTO notify (UserID, `Status`, `Subject`, `Message`, EmailType) VALUES (?, ?, ?, ?, ?)");
-
-  notifySend(null, $subject, $message, $user['Forename'] . " " . $user['Surname'], $user['EmailAddress']);
-
-  $notify->execute([
-    $_POST['user-id'],
-    'Sent',
-    $subject,
-    $message,
-    'Payments'
-  ]);
 
   $db->commit();
 
