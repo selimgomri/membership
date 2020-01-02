@@ -21,14 +21,18 @@ function getUser() {
           document.getElementById('user-info-phone').href = result.mobile_rfc3966;
 
           var addressSpan = document.getElementById('user-info-address');
-          if (result.hasOwnProperty('address') && result.address.hasOwnProperty('streetAndNumber')) {
-            addressSpan.textContent = result.address.streetAndNumber;
-          }
-          if (result.hasOwnProperty('address') && result.address.hasOwnProperty('city')) {
-            addressSpan.textContent = addressSpan.textContent + ', ' + result.address.city;
-          }
-          if (result.hasOwnProperty('address') && result.address.hasOwnProperty('postCode')) {
-            addressSpan.textContent = addressSpan.textContent + ', ' + result.address.postCode;
+          if (result.hasOwnProperty('address') && result.address !== null) {
+            if (result.address.hasOwnProperty('streetAndNumber')) {
+              addressSpan.textContent = result.address.streetAndNumber;
+            }
+            if (result.address.hasOwnProperty('city')) {
+              addressSpan.textContent = addressSpan.textContent + ', ' + result.address.city;
+            }
+            if (result.address.hasOwnProperty('postCode')) {
+              addressSpan.textContent = addressSpan.textContent + ', ' + result.address.postCode;
+            }
+          } else {
+            addressSpan.textContent = 'No address on file';
           }
 
           document.getElementById('user-id').value = result.id;
