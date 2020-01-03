@@ -680,6 +680,7 @@ function updatePaymentStatus($PMkey) {
     $update = $db->prepare("UPDATE `payments` SET `Status` = ?, `Payout` = ? WHERE `PMkey` = ?");
     $update->execute([$status, $payout, $PMkey]);
   } catch (Exception $e) {
+    reportError($e);
     $sql2bool = false;
   }
 
@@ -691,6 +692,7 @@ function updatePaymentStatus($PMkey) {
       $updatePP->execute(['Paid', $PMkey]);
       $sql2bool = true;
     } catch (Exception $e) {
+      reportError($e);
       $sql2bool = false;
     }
   } else if ($status == "failed") {
@@ -722,7 +724,7 @@ function updatePaymentStatus($PMkey) {
           $query = $db->prepare("INSERT INTO paymentRetries (`UserID`, `Day`, `PMKey`, `Tried`) VALUES (?, ?, ?, ?)");
           $query->execute([$details['UserID'], $newDay, $PMkey, 0]);
         }
-        
+
         $subject = "Payment Failed for " . $details['Name'];
         $message = '
         <p>Your Direct Debit payment of &pound;' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has failed.</p>';
@@ -764,6 +766,7 @@ function updatePaymentStatus($PMkey) {
 
       $sql2bool = true;
     } catch (Exception $e) {
+      reportError($e);
       $sql2bool = false;
     }
   } else if ($status == "charged_back") {
@@ -783,6 +786,7 @@ function updatePaymentStatus($PMkey) {
 
       $sql2bool = true;
     } catch (Exception $e) {
+      reportError($e);
       $sql2bool = false;
     }
   } else {
