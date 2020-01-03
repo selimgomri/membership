@@ -51,11 +51,12 @@ include BASE_PATH . "views/header.php";
 		<h1><?=helloGreeting()?> <?=$username?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
 
-    <?php if (date("Y-m-d") == "2019-12-25") { ?>
+    <?php if ($bankHoliday = isBankHoliday()) { ?>
     <aside class="row mb-4">
       <div class="col-lg-6">
         <div class="cell bg-primary text-white">
-          <h2 class="mb-0">Merry Christmas!</h2>
+					<h2 class="mb-0"><?php if ($bankHoliday['bunting']) { ?>It's <?=htmlspecialchars($bankHoliday['title'])?>!<?php if ($bankHoliday['notes']) { ?> <em><?=htmlspecialchars($bankHoliday['notes'])?></em>.<?php } ?><?php } else { ?>Today is <?=htmlspecialchars($bankHoliday['title'])?>.<?php if ($bankHoliday['notes']) { ?> <em><?=htmlspecialchars($bankHoliday['notes'])?></em>.<?php } ?><?php } ?></h2>
+					<p class="lead mb-0">There may be session cancellations or alterations today.</p>
         </div>
       </div>
     </aside>
