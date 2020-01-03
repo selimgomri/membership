@@ -708,7 +708,7 @@ function updatePaymentStatus($PMkey) {
 
       $subject = "Payment Failed for " . $details['Name'];
       $message = '
-      <p>Your Direct Debit payment of �' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has failed.</p>';
+      <p>Your Direct Debit payment of &pound;' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has failed.</p>';
       if ($num_retries < 3) {
         $message .= '<p>We will automatically retry this payment on ' . date("j F Y", strtotime("+10 days")) . ' (in ten days time).</p>';
         if ($num_retries < 2) {
@@ -731,6 +731,7 @@ function updatePaymentStatus($PMkey) {
 
       $sql2bool = true;
     } catch (Exception $e) {
+      reportError($e);
       $sql2bool = false;
       echo "Failure in event process";
     }
