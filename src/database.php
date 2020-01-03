@@ -700,7 +700,9 @@ function updatePaymentStatus($PMkey) {
       $query->execute([$PMkey]);
       $details = $query->fetch(PDO::FETCH_ASSOC);
 
-      $new_day = date("Y-m-d", strtotime("+10 days"));
+      $today = new DateTime('now', new DateTimeZone('Europe/London'));
+      $today->add(new DateInterval('P10D'));
+      $newDay = $today->format("Y-m-d");
 
       $query = $db->prepare("SELECT COUNT(*) FROM paymentRetries WHERE PMKey = ?");
       $query->execute([$PMkey]);
@@ -710,7 +712,7 @@ function updatePaymentStatus($PMkey) {
       $message = '
       <p>Your Direct Debit payment of &pound;' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has failed.</p>';
       if ($num_retries < 3) {
-        $message .= '<p>We will automatically retry this payment on ' . date("j F Y", strtotime("+10 days")) . ' (in ten days time).</p>';
+        $message .= '<p>We will automatically retry this payment on ' . htmlspecialchars($newDay->format("j F Y")) . ' (in ten days time).</p>';
         if ($num_retries < 2) {
           $message .= '<p>You don\'t need to take any action. Should this payment fail, we will retry the payment up to ' . (2-$num_retries) . ' times.</p>';
         } else if ($num_retries == 2) {
@@ -725,8 +727,8 @@ function updatePaymentStatus($PMkey) {
       $query->execute([$details['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
 
       if ($num_retries < 3) {
-        $query = $db->prepare("INSERT INTO paymentRetries (UserID, Day, PMKey, Tried) VALUES (?, ?, ?, ?)");
-        $query->execute([$details['UserID'], $new_day, $PMkey, false]);
+        $query = $db->prepare("INSERT INTO paymentRetries (`UserID`, `Day`, `PMKey`, `Tried`) VALUES (?, ?, ?, ?)");
+        $query->execute([$details['UserID'], $newDay, $PMkey, 0]);
       }
 
       $sql2bool = true;
