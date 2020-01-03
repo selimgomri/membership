@@ -54,38 +54,37 @@ include BASE_PATH . "views/header.php";
 <div class="front-page mb-n3">
   <div class="container">
 
-		<?php if (!isSubscribed($_SESSION['UserID'], 'Notify')) { ?>
-      <div class="row">
-        <div class="col-md-9 py-4">
-          <div class="panel bg-white">
-            <h3 class="panel-title">
-              Emails from us
-            </h3>
-
-            <p>
-              <strong>
-      	        You're missing out on email updates from <?=htmlspecialchars(env('CLUB_NAME'))?>
-      	      </strong>
-            </p>
-            <p>
-      	      Head to <a href="<?=autoUrl("my-account/email")?>">My Account</a>
-      	      to change your email preferences and stay up to date!
-      	    </p>
-          </div>
-        </div>
-      </div>
-		<?php } ?>
-
-		<h1><?=helloGreeting()?> <?=$username?></h1>
+    <h1><?=helloGreeting()?> <?=$username?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
 
-    <?php if (date("Y-m-d") == "2019-11-26") { ?>
+		<?php if (!isSubscribed($_SESSION['UserID'], 'Notify')) { ?>
     <aside class="row mb-4">
       <div class="col-lg-6">
         <div class="cell bg-primary text-white">
-          <h2>The deadline to register to vote is today!</h2>
-          <p class="lead">Make sure you're registered.</p>
-          <p class="mb-0"><a class="btn btn-light" href="https://www.gov.uk/register-to-vote" target="_blank" rel="noopener noreferrer">Register to vote</a></p>
+					<h2 class="mb-0">
+            Emails from us
+          </h2>
+
+          <p>
+            <strong>
+              You're missing out on email updates from <?=htmlspecialchars(env('CLUB_NAME'))?>
+            </strong>
+          </p>
+          <p>
+            Head to <a href="<?=autoUrl("my-account/email")?>">My Account</a>
+            to change your email preferences and stay up to date!
+          </p>
+        </div>
+      </div>
+    </aside>
+		<?php } ?>
+
+    <?php if ($bankHoliday = isBankHoliday()) { ?>
+    <aside class="row mb-4">
+      <div class="col-lg-6">
+        <div class="cell bg-primary text-white">
+					<h2 class="mb-0"><?php if ($bankHoliday['bunting']) { ?>It's <?=htmlspecialchars($bankHoliday['title'])?>!<?php if ($bankHoliday['notes']) { ?> <em><?=htmlspecialchars($bankHoliday['notes'])?></em>.<?php } ?><?php } else { ?>Today is <?=htmlspecialchars($bankHoliday['title'])?>.<?php if ($bankHoliday['notes']) { ?> <em><?=htmlspecialchars($bankHoliday['notes'])?></em>.<?php } ?><?php } ?></h2>
+					<p class="lead mb-0">There may be session cancellations or alterations today.</p>
         </div>
       </div>
     </aside>
