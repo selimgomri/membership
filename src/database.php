@@ -712,7 +712,7 @@ function updatePaymentStatus($PMkey) {
       $message = '
       <p>Your Direct Debit payment of &pound;' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has failed.</p>';
       if ($num_retries < 3) {
-        $message .= '<p>We will automatically retry this payment on ' . htmlspecialchars($newDay->format("j F Y")) . ' (in ten days time).</p>';
+        $message .= '<p>We will automatically retry this payment on ' . htmlspecialchars($today->format("j F Y")) . ' (in ten days time).</p>';
         if ($num_retries < 2) {
           $message .= '<p>You don\'t need to take any action. Should this payment fail, we will retry the payment up to ' . (2-$num_retries) . ' times.</p>';
         } else if ($num_retries == 2) {
