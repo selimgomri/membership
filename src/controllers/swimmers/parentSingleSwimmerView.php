@@ -325,7 +325,7 @@ $strokeCountsData = array_values($strokeCounts);
         <?php for ($i = 0; $i < sizeof($ev); $i++) {
         if ($sc[$ev[$i]] != "" || $lc[$ev[$i]] != "") {
         if (!$openedTable) { ?>
-        <table class="table table-sm table-borderless table-striped mb-0">
+        <table class="table table-sm table-borderless table-striped">
           <thead class="thead-light">
             <tr class="">
               <th class="">Swim</th>
@@ -371,6 +371,12 @@ $strokeCountsData = array_values($strokeCounts);
         <?php } else { ?>
         <p class="lead mt-2 mb-0">There are no times available for this swimmer.</p>
         <?php } ?>
+
+        <p>
+          <a href="<?=htmlspecialchars(autoUrl("swimmers/" . $id . "/times"))?>" class="btn btn-success">
+            Edit times
+          </a>
+        </p>
       </div>
     </div>
     <div class="tab-pane fade mt-3" id="stats" role="tabpanel" aria-labelledby="stats-tab">

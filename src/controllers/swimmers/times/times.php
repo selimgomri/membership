@@ -2,12 +2,16 @@
 
 global $db;
 
-$swimmer = $db->prepare("SELECT MForename, MSurname FROM members WHERE MemberID = ?");
+$swimmer = $db->prepare("SELECT MForename, MSurname, UserID FROM members WHERE MemberID = ?");
 $swimmer->execute([$id]);
 $swimmer = $swimmer->fetch(PDO::FETCH_ASSOC);
 
 if ($swimmer == null) {
   halt(404);
+}
+
+if ($_SESSION['AccessLevel'] == 'Parent' && $swimmer['UserID'] !== $_SESSION['UserID']) {
+	halt(404);
 }
 
 $pagetitle = htmlspecialchars($swimmer['MForename'] . ' ' . $swimmer['MSurname']) . ' Times';

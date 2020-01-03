@@ -199,10 +199,10 @@ include BASE_PATH . "views/header.php";
 
   <div class="mb-4">
     <h2>
-      Swimmers
+      Members
     </h2>
     <p class="lead">
-      This parent's swimmers.
+      Members linked to this account
     </p>
 
     <div class="row">

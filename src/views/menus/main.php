@@ -72,20 +72,20 @@ if (!function_exists('chesterStandardMenu')) {
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="swimmersDropdown" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
-                    My Swimmers
+                    My Members
                   </a>
                   <div class="dropdown-menu" aria-labelledby="swimmersDropdown">
-                    <a class="dropdown-item" href="<?php echo autoUrl("swimmers") ?>">Swimmers Home</a>
+                    <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("swimmers"))?>">Members home</a>
                     <?php if ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC)) { ?>
                     <div class="dropdown-divider"></div>
-                    <h6 class="dropdown-header">My Swimmers</h6>
+                    <h6 class="dropdown-header">My members</h6>
                     <?php do { ?>
                     <a class="dropdown-item" href="<?=autoUrl("swimmers/" . $swimmer['ID'])?>">
                       <?=htmlspecialchars($swimmer['Name'] . " " . $swimmer['Surname'])?>
                     </a>
                     <?php } while ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC)); ?>
                     <?php } else { ?>
-                    <a class="dropdown-item" href="<?=autoUrl("my-account/addswimmer")?>">Add a swimmer</a>
+                    <a class="dropdown-item" href="<?=autoUrl("my-account/addswimmer")?>">Link a new member</a>
                     <?php } ?>
                   </div>
                 </li>
