@@ -2,6 +2,18 @@
 
 global $db;
 
+$swimmer = $db->prepare("SELECT MForename, MSurname, UserID FROM members WHERE MemberID = ?");
+$swimmer->execute([$id]);
+$swimmer = $swimmer->fetch(PDO::FETCH_ASSOC);
+
+if ($swimmer == null) {
+  halt(404);
+}
+
+if ($_SESSION['AccessLevel'] == 'Parent' && $swimmer['UserID'] !== $_SESSION['UserID']) {
+	halt(404);
+}
+
 $types = ['SC', 'LC'];
 
 // Get count of times and add row if required

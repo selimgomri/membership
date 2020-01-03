@@ -91,17 +91,6 @@ else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $
 		require BASE_PATH . 'controllers/galas/GalaEntryStaffSuccess.php';
 	});
 
-	/**
-	 * Manager times for swimmers
-	 */
-	$this->get('/{id}:int/times', function($id) {
-	  require 'times/times.php';
-	});
-
-	$this->post('/{id}:int/times', function($id) {
-	  require 'times/times-post.php';
-	});
-
   /*
    * Squad moves
    *
@@ -200,6 +189,17 @@ if ($access == "Admin") {
 	  require('singleSwimmerEdit.php');
 	});
 }
+
+/**
+ * Manage times for swimmers
+ */
+$this->get('/{id}:int/times', function($id) {
+	require 'times/times.php';
+});
+
+$this->post('/{id}:int/times', function($id) {
+	require 'times/times-post.php';
+});
 
 if ($access != "Parent" && $access != 'Galas') {
 	$this->get('/addmember', function() {
