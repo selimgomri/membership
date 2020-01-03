@@ -708,27 +708,38 @@ function updatePaymentStatus($PMkey) {
       $query->execute([$PMkey]);
       $num_retries = $query->fetchColumn();
 
-      $subject = "Payment Failed for " . $details['Name'];
-      $message = '
-      <p>Your Direct Debit payment of &pound;' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has failed.</p>';
-      if ($num_retries < 3) {
-        $message .= '<p>We will automatically retry this payment on ' . htmlspecialchars($today->format("j F Y")) . ' (in ten days time).</p>';
-        if ($num_retries < 2) {
-          $message .= '<p>You don\'t need to take any action. Should this payment fail, we will retry the payment up to ' . (2-$num_retries) . ' times.</p>';
-        } else if ($num_retries == 2) {
-          $message .= '<p>You don\'t need to take any action. Should this payment fail however, you will need to contact the club treasurer as we will have retried this direct debit payment 3 times.</p>';
+      // Check if the retry has been added to database
+      $getCount = $db->prepare("SELECT COUNT(*) FROM paymentRetries WHERE UserID = ? AND `Day` = ? AND PMKey = ? AND Tried = ?");
+      $getCount->execute([
+        $details['UserID'],
+        $newDay,
+        $PMkey,
+        0
+      ]);
+
+      if ($getCount->fetchColumn() == 0) {
+        if ($num_retries < 3) {
+          $query = $db->prepare("INSERT INTO paymentRetries (`UserID`, `Day`, `PMKey`, `Tried`) VALUES (?, ?, ?, ?)");
+          $query->execute([$details['UserID'], $newDay, $PMkey, 0]);
         }
-      } else {
-        $message .= '<p>We have retried this payment request three times and it has still not succeeded. As a result, you will need to contact the club treasurer to take further action. Failure to pay may lead to the suspension or termination of your membership.</p>';
-      }
+        
+        $subject = "Payment Failed for " . $details['Name'];
+        $message = '
+        <p>Your Direct Debit payment of &pound;' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has failed.</p>';
+        if ($num_retries < 3) {
+          $message .= '<p>We will automatically retry this payment on ' . htmlspecialchars($today->format("j F Y")) . ' (in ten days time).</p>';
+          if ($num_retries < 2) {
+            $message .= '<p>You don\'t need to take any action. Should this payment fail, we will retry the payment up to ' . (2-$num_retries) . ' times.</p>';
+          } else if ($num_retries == 2) {
+            $message .= '<p>You don\'t need to take any action. Should this payment fail however, you will need to contact the club treasurer as we will have retried this direct debit payment 3 times.</p>';
+          }
+        } else {
+          $message .= '<p>We have retried this payment request three times and it has still not succeeded. As a result, you will need to contact the club treasurer to take further action. Failure to pay may lead to the suspension or termination of your membership.</p>';
+        }
 
-      $message .= '<p>Kind regards,<br>The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
-      $query = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (?, ?, ?, ?, ?, ?)");
-      $query->execute([$details['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
-
-      if ($num_retries < 3) {
-        $query = $db->prepare("INSERT INTO paymentRetries (`UserID`, `Day`, `PMKey`, `Tried`) VALUES (?, ?, ?, ?)");
-        $query->execute([$details['UserID'], $newDay, $PMkey, 0]);
+        $message .= '<p>Kind regards,<br>The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
+        $query = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (?, ?, ?, ?, ?, ?)");
+        $query->execute([$details['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
       }
 
       $sql2bool = true;
