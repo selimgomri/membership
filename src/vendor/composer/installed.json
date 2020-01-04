@@ -3295,18 +3295,62 @@
         ]
     },
     {
-        "name": "whichbrowser/parser",
-        "version": "v2.0.40",
-        "version_normalized": "2.0.40.0",
+        "name": "umpirsky/country-list",
+        "version": "2.0.5",
+        "version_normalized": "2.0.5.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/WhichBrowser/Parser-PHP.git",
-            "reference": "eebd583e67ef3633a6fc607f877daadf4579dfe6"
+            "url": "https://github.com/umpirsky/country-list.git",
+            "reference": "05fda51cd97b3294e8175ffed06104c44b3c71d7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/WhichBrowser/Parser-PHP/zipball/eebd583e67ef3633a6fc607f877daadf4579dfe6",
-            "reference": "eebd583e67ef3633a6fc607f877daadf4579dfe6",
+            "url": "https://api.github.com/repos/umpirsky/country-list/zipball/05fda51cd97b3294e8175ffed06104c44b3c71d7",
+            "reference": "05fda51cd97b3294e8175ffed06104c44b3c71d7",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^7.0"
+        },
+        "require-dev": {
+            "slowprog/composer-copy-file": "^0.2",
+            "symfony/intl": "^4.2",
+            "umpirsky/list-generator": "^1.2"
+        },
+        "time": "2019-04-12T14:29:29+00:00",
+        "type": "library",
+        "extra": {
+            "copy-file": {
+                "vendor/umpirsky/list-generator/Dockerfile": "./",
+                "vendor/umpirsky/list-generator/docker-compose.yml": "./"
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Saša Stamenković",
+                "email": "umpirsky@gmail.com"
+            }
+        ],
+        "description": "List of all countries with names and ISO 3166-1 codes in all languages and data formats."
+    },
+    {
+        "name": "whichbrowser/parser",
+        "version": "v2.0.41",
+        "version_normalized": "2.0.41.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/WhichBrowser/Parser-PHP.git",
+            "reference": "c7b71a46f5f51b5b7284ed36a5b16c62b6f9dc8c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/WhichBrowser/Parser-PHP/zipball/c7b71a46f5f51b5b7284ed36a5b16c62b6f9dc8c",
+            "reference": "c7b71a46f5f51b5b7284ed36a5b16c62b6f9dc8c",
             "shasum": ""
         },
         "require": {
@@ -3324,7 +3368,7 @@
         "suggest": {
             "cache/array-adapter": "Allows testing of the caching functionality"
         },
-        "time": "2019-12-09T11:34:11+00:00",
+        "time": "2020-01-02T14:36:46+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
