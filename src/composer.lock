@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "34af6b0406ffdcc893d102ef70e38ac2",
+    "content-hash": "e59c23e73d6cfe4c7c562b7fdba2f6a8",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -3182,17 +3182,59 @@
             "time": "2019-12-18T19:43:22+00:00"
         },
         {
-            "name": "whichbrowser/parser",
-            "version": "v2.0.40",
+            "name": "umpirsky/country-list",
+            "version": "2.0.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/WhichBrowser/Parser-PHP.git",
-                "reference": "eebd583e67ef3633a6fc607f877daadf4579dfe6"
+                "url": "https://github.com/umpirsky/country-list.git",
+                "reference": "05fda51cd97b3294e8175ffed06104c44b3c71d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WhichBrowser/Parser-PHP/zipball/eebd583e67ef3633a6fc607f877daadf4579dfe6",
-                "reference": "eebd583e67ef3633a6fc607f877daadf4579dfe6",
+                "url": "https://api.github.com/repos/umpirsky/country-list/zipball/05fda51cd97b3294e8175ffed06104c44b3c71d7",
+                "reference": "05fda51cd97b3294e8175ffed06104c44b3c71d7",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "slowprog/composer-copy-file": "^0.2",
+                "symfony/intl": "^4.2",
+                "umpirsky/list-generator": "^1.2"
+            },
+            "type": "library",
+            "extra": {
+                "copy-file": {
+                    "vendor/umpirsky/list-generator/Dockerfile": "./",
+                    "vendor/umpirsky/list-generator/docker-compose.yml": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Saša Stamenković",
+                    "email": "umpirsky@gmail.com"
+                }
+            ],
+            "description": "List of all countries with names and ISO 3166-1 codes in all languages and data formats.",
+            "time": "2019-04-12T14:29:29+00:00"
+        },
+        {
+            "name": "whichbrowser/parser",
+            "version": "v2.0.41",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/WhichBrowser/Parser-PHP.git",
+                "reference": "c7b71a46f5f51b5b7284ed36a5b16c62b6f9dc8c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/WhichBrowser/Parser-PHP/zipball/c7b71a46f5f51b5b7284ed36a5b16c62b6f9dc8c",
+                "reference": "c7b71a46f5f51b5b7284ed36a5b16c62b6f9dc8c",
                 "shasum": ""
             },
             "require": {
@@ -3238,7 +3280,7 @@
                 "ua",
                 "useragent"
             ],
-            "time": "2019-12-09T11:34:11+00:00"
+            "time": "2020-01-02T14:36:46+00:00"
         }
     ],
     "packages-dev": [],
