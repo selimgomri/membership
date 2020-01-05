@@ -19,7 +19,10 @@ if ($_SESSION['AccessLevel'] != 'Parent') {
 
 $lists = null;
 if ($_SESSION['AccessLevel'] != 'Parent') {
-  $lists = $db->query("SELECT * FROM `targetedLists` ORDER BY `Name` ASC;");
+  $lists = $db->query("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` ORDER BY `Name` ASC;");
+} else {
+  $lists = $db->prepare("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` INNER JOIN listSenders ON listSenders.List = targetedLists.ID WHERE listSenders.User = ? ORDER BY `Name` ASC;");
+  $lists->execute([$_SESSION['UserID']]);
 }
 
 $galas = $db->prepare("SELECT GalaName, GalaID FROM `galas` WHERE GalaDate >= ? ORDER BY `GalaName` ASC;");
@@ -56,7 +59,7 @@ include BASE_PATH . "views/notifyMenu.php";
 	<p class="lead">Send Emails to targeted groups of parents</p>
   <hr>
   <form method="post" onkeypress="return event.keyCode != 13;">
-    <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
+
     <div class="form-group">
 			<label>To parents of swimmers in the following targeted lists...</label>
 			<div class="row">
@@ -75,7 +78,7 @@ include BASE_PATH . "views/notifyMenu.php";
 			<?php } ?>
 			</div>
     </div>
-    <?php } ?>
+    
 		<div class="form-group">
 			<label>To parents of swimmers in the following squads...</label>
 			<div class="row">

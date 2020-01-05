@@ -246,12 +246,29 @@ include BASE_PATH . "views/header.php";
           Squad rep settings
         </h2>
         <p class="lead">
-          Make this parent a squad rep.
+          Make this user a squad rep.
         </p>
 
         <p>
           <a href="<?=autoUrl("users/" . $id . "/rep")?>" class="btn btn-primary">
             Rep settings <span class="fa fa-chevron-right"></span>
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="mb-4">
+        <h2>
+          Targeted list settings
+        </h2>
+        <p class="lead">
+          Grant a user permission to use a notify targeted list
+        </p>
+
+        <p>
+          <a href="<?=autoUrl("users/" . $id . "/targeted-lists")?>" class="btn btn-primary">
+            Notify lists <span class="fa fa-chevron-right"></span>
           </a>
         </p>
       </div>

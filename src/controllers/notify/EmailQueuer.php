@@ -42,17 +42,14 @@ if ($_SESSION['AccessLevel'] != 'Parent') {
 }
 $row = $squads->fetchAll(PDO::FETCH_ASSOC);
 
-$lists = [];
+$lists = null;
 if ($_SESSION['AccessLevel'] != 'Parent') {
-  $sql = "SELECT * FROM `targetedLists` ORDER BY `Name` ASC";
-  try {
-    $pdo_query = $db->prepare($sql);
-    $pdo_query->execute();
-  } catch (PDOException $e) {
-    halt(500);
-  }
-  $lists = $pdo_query->fetchAll(PDO::FETCH_ASSOC);
+  $lists = $db->query("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` ORDER BY `Name` ASC;");
+} else {
+  $lists = $db->prepare("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` INNER JOIN listSenders ON listSenders.List = targetedLists.ID WHERE listSenders.User = ? ORDER BY `Name` ASC;");
+  $lists->execute([$_SESSION['UserID']]);
 }
+$lists = $lists->fetchAll(PDO::FETCH_ASSOC);
 
 $galas = $db->prepare("SELECT GalaName, GalaID FROM `galas` WHERE GalaDate >= ? ORDER BY `GalaName` ASC;");
 $date = new DateTime('-1 week', new DateTimeZone('Europe/London'));

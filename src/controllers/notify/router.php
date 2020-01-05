@@ -11,6 +11,14 @@ if ($_SESSION['AccessLevel'] == 'Parent') {
 	if ($getSquadCount->fetchColumn() > 0) {
 		$rep = true;
 	}
+
+	$getListCount = $db->prepare("SELECT COUNT(*) FROM `targetedLists` INNER JOIN listSenders ON listSenders.List = targetedLists.ID WHERE listSenders.User = ?");
+	$getListCount->execute([
+		$_SESSION['UserID']
+	]);
+	if ($getListCount->fetchColumn() > 0) {
+		$rep = true;
+	}
 }
 
 $access = $_SESSION['AccessLevel'];
