@@ -128,4 +128,23 @@ if ($_SESSION['AccessLevel'] == 'Admin') {
 	$this->get('/{id}:int/team-manager/remove', function($id) {
 		include 'team-managers/remove.php';
 	});
+
+	/**
+	 * PAGES FOR SETTING ACCESS TO TARGETED LISTS
+	 */
+	$this->get('/{id}:int/targeted-lists', function($id) {
+		include 'notify-lists/list.php';
+	});
+
+	$this->get('/{id}:int/targeted-lists/add', function($id) {
+		include 'notify-lists/add.php';
+	});
+
+	$this->post('/{id}:int/targeted-lists/add', function($id) {
+		include 'notify-lists/add-post.php';
+	});
+
+	$this->get('/{id}:int/targeted-lists/remove', function($id) {
+		include 'notify-lists/remove.php';
+	});
 }
