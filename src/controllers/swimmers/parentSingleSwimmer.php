@@ -34,33 +34,34 @@ $title = null;
     </ol>
   </nav>
 
-  <div class="row align-items-center">
-    <div class="col-sm-8">
-      <h1>Editing <?=htmlspecialchars($row['MForename'] . ' ' . $row['MSurname'])?></h1>
-    </div>
-    <div class="col-sm-4 text-right">
-      <button type="submit" class="btn btn-success">Save</button> <a
-      class="btn btn-dark" href="<?=autoUrl("swimmers/" . $id)?>">Exit
-      Edit Mode</a>
-    </div>
-  </div>
-  <?php
-  if ($update) { ?>
-  <div class="alert alert-success">
-    <strong>We have updated</strong>
-    <ul class="mb-0"><?php
-      if ($forenameUpdate) { ?><li>Your first name</li><?php }
-      if ($middlenameUpdate) { ?><li>Your middle name(s)</li><?php }
-      if ($surnameUpdate) { ?><li>Your last address</li><?php }
-      if ($dateOfBirthUpdate) { ?><li>Your date of birth</li><?php }
-      if ($sexUpdate) { ?><li>Your sex</li><?php }
-      if ($otherNotesUpdate) { ?><li>Your other notes</li><?php }
-      if ($photoUpdate) { ?><li>Your photography permissions</li><?php } ?>
-    </ul>
-  </div>
-  <?php } ?>
-  <!-- Main Info Content -->
   <form method="post">
+
+    <div class="row align-items-center">
+      <div class="col-sm-8">
+        <h1>Editing <?=htmlspecialchars($row['MForename'] . ' ' . $row['MSurname'])?></h1>
+      </div>
+      <div class="col-sm-4 text-right">
+        <button type="submit" class="btn btn-success">Save</button> <a
+        class="btn btn-dark" href="<?=autoUrl("swimmers/" . $id)?>">Exit
+        Edit Mode</a>
+      </div>
+    </div>
+    <?php
+    if ($update) { ?>
+    <div class="alert alert-success">
+      <strong>We have updated</strong>
+      <ul class="mb-0"><?php
+        if ($forenameUpdate) { ?><li>Your first name</li><?php }
+        if ($middlenameUpdate) { ?><li>Your middle name(s)</li><?php }
+        if ($surnameUpdate) { ?><li>Your last address</li><?php }
+        if ($dateOfBirthUpdate) { ?><li>Your date of birth</li><?php }
+        if ($sexUpdate) { ?><li>Your sex</li><?php }
+        if ($otherNotesUpdate) { ?><li>Your other notes</li><?php }
+        if ($photoUpdate) { ?><li>Your photography permissions</li><?php } ?>
+      </ul>
+    </div>
+    <?php } ?>
+    <!-- Main Info Content -->
     <div class="row">
       <div class="col-md-8">
         <div class="form-row">
@@ -185,9 +186,10 @@ $title = null;
           <ul></ul>
         </div>
 
-        <?=SCDS\CSRF::write()?>
-
         <?php } ?>
+
+        <?=\SCDS\CSRF::write()?>
+
         <p class="mb-5">
           <button type="submit" class="btn btn-success">Save Changes</button>
         </p>
