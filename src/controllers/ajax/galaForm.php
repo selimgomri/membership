@@ -5,7 +5,6 @@ global $db;
 $count = 0;
 $rows = 0;
 $sql = "";
-$response = "";
 
 $coachEnters = false;
 // Check if coach enters
@@ -21,7 +20,7 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 	$memberID = $_REQUEST["swimmer"];
 	
 	// Get swimmer info
-	$getSwimmer = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, DateOfBirth dob, UserID parent FROM members WHERE MemberID = ?");
+	$getSwimmer = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, DateOfBirth dob, UserID parent, SquadID squad FROM members WHERE MemberID = ?");
 	$getSwimmer->execute([
 	  $_GET['swimmer']
 	]);
@@ -32,7 +31,7 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 	}
 
 	// Get gala info
-	$getGala = $db->prepare("SELECT GalaFeeConstant flatfee, GalaFee fee, HyTek, GalaName `name`, GalaVenue venue FROM galas WHERE GalaID = ?");
+	$getGala = $db->prepare("SELECT GalaFeeConstant flatfee, GalaFee fee, HyTek, GalaName `name`, GalaVenue venue, RequiresApproval, `Description` FROM galas WHERE GalaID = ?");
 	$getGala->execute([
 		$_GET["galaID"]
 	]);
@@ -63,18 +62,34 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 		$row = $details->fetch(PDO::FETCH_ASSOC);
 		
 		$galaData = new GalaPrices($db, $_GET["galaID"]);
+
+		$getNumReps = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE Squad = ?");
+		$getNumReps->execute([
+			$swimmer['squad']
+		]);
+		$numReps = $getNumReps->fetchColumn();
     
-    if ($row['Description'] || $row['HyTek']) {
-      $response .= "<h2>About this gala</h2>";
+    if ($gala['Description'] || bool($gala['HyTek']) || (bool($gala['RequiresApproval']) && $numReps > 0)) { ?>
+      <h2>About this gala</h2>
+
+			<?php
 
       $markdown = new ParsedownForMembership();
-      $markdown->setSafeMode(false);
+			$markdown->setSafeMode(false);
+			
+			?>
 
-      $response .= $markdown->text($row['Description']);
+      <?=$markdown->text($row['Description'])?>
 
-      if (bool($row['HyTek'])) {
-        $response .= '<p>This is a HyTek gala. Once you\'ve selected your swims, you\'ll need to provide times for each event.</p>';
-      }
+      <?php if (bool($gala['HyTek'])) { ?>
+        <p>This is a HyTek gala. Once you've selected your swims, you'll need to provide times for each event.</p>
+			<?php } ?>
+			
+			<?php if (bool($gala['RequiresApproval']) && $numReps > 0) { ?>
+        <p>This entry must be approved by a squad rep before the gala team will submit it to the host club.</p>
+      <?php } else if (bool($gala['RequiresApproval'])) { ?>
+				<p>There is no squad rep assigned to <?=htmlspecialchars($swimmer['fn'])?>'s squad. This means nobody will be able to review your entry before it goes to the gala team.</p>
+			<?php }
     }
 
   	$swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];
