@@ -10,11 +10,13 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
   global $db;
 
   // Get swimmer info
-	$getSwimmer = $db->prepare("SELECT UserID FROM members WHERE MemberID = ?");
+	$getSwimmer = $db->prepare("SELECT UserID, SquadID FROM members WHERE MemberID = ?");
 	$getSwimmer->execute([
 	  $_POST['swimmer']
-	]);
-	$swimmer = $getSwimmer->fetchColumn();
+  ]);
+  $swimmerDetails = $getSwimmer->fetch(PDO::FETCH_ASSOC);
+  $swimmer = $swimmerDetails['UserID'];
+  $squad = $swimmerDetails['SquadID'];
 
 	if ($swimmer == null || ($_SESSION['AccessLevel'] == 'Parent' && $swimmer != $_SESSION['UserID'])) {
 		halt(404);
@@ -101,13 +103,19 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
 
       $fee = (string) (\Brick\Math\BigInteger::of((string) $price))->toBigDecimal()->withPointMovedLeft(2);
 
+      $getNumReps = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE Squad = ?");
+      $getNumReps->execute([
+        $squad
+      ]);
+      $numReps = $getNumReps->fetchColumn();
+
       $hyTek = bool($row['HyTek']);
       $approved = 1;
-      if (bool($row['RequiresApproval'])) {
+      if (bool($row['RequiresApproval']) && $numReps > 0) {
         $approved = 0;
       }
 
-      $insert = $db->prepare("INSERT INTO `galaEntries` (EntryProcessed, Charged, `MemberID`, `GalaID`, `Approved`, " . $swims . ", `TimesRequired`, `FeeToPay`) VALUES (?, ?, ?, ?, " . $values . ", ?, ?)");
+      $insert = $db->prepare("INSERT INTO `galaEntries` (EntryProcessed, Charged, `MemberID`, `GalaID`, `Approved`, " . $swims . ", `TimesRequired`, `FeeToPay`) VALUES (?, ?, ?, ?, ?, " . $values . ", ?, ?)");
 
       $array = array_merge([0, 0, $_POST['swimmer'], $_POST['gala'], $approved], $entriesArray);
       $array = array_merge($array, [0, $fee]);
