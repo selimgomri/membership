@@ -36,14 +36,19 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
 
   try {
 
-    // JS Should catch existing entries so fail if one exists
-    $getGalaEntries = $db->prepare("SELECT COUNT(*), EntryID FROM galaEntries WHERE GalaID = ? AND MemberID = ?");
+    // JS Should catch existing entries but redirect if one exists
+    $getGalaEntries = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE GalaID = ? AND MemberID = ?");
     $getGalaEntries->execute([
       $_POST['gala'],
       $_POST['swimmer']
     ]);
     if ($getGalaEntries->fetchColumn() > 0) {
-      header("Location: " . autoUrl("galas/entries/id"));
+      $getGalaEntries = $db->prepare("SELECT EntryID FROM galaEntries WHERE GalaID = ? AND MemberID = ?");
+      $getGalaEntries->execute([
+        $_POST['gala'],
+        $_POST['swimmer']
+      ]);
+      header("Location: " . autoUrl("galas/entries/" . $getGalaEntries->fetchColumn()));
     } else {
 
       $allowedSwims = [];
@@ -86,7 +91,7 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
       }
 
       $now = new DateTime('now', new DateTimeZone('Europe/London'));
-      $getGalaInformation = $db->prepare("SELECT GalaFee, GalaFeeConstant, GalaName, HyTek FROM galas WHERE GalaID = ? AND NOT CoachEnters AND ClosingDate >= ?");
+      $getGalaInformation = $db->prepare("SELECT GalaFee, GalaFeeConstant, GalaName, HyTek, RequiresApproval FROM galas WHERE GalaID = ? AND NOT CoachEnters AND ClosingDate >= ?");
       $getGalaInformation->execute([$_POST['gala'], $now->format('Y-m-d')]);
       $row = $getGalaInformation->fetch(PDO::FETCH_ASSOC);
 
@@ -97,10 +102,14 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
       $fee = (string) (\Brick\Math\BigInteger::of((string) $price))->toBigDecimal()->withPointMovedLeft(2);
 
       $hyTek = bool($row['HyTek']);
+      $requiresApproval = 0;
+      if (bool($row['RequiresApproval'])) {
+        $requiresApproval = 1;
+      }
 
-      $insert = $db->prepare("INSERT INTO `galaEntries` (EntryProcessed, Charged, `MemberID`, `GalaID`, " . $swims . ", `TimesRequired`, `FeeToPay`) VALUES (?, ?, ?, ?, " . $values . ", ?, ?)");
+      $insert = $db->prepare("INSERT INTO `galaEntries` (EntryProcessed, Charged, `MemberID`, `GalaID`, `Approved`, " . $swims . ", `TimesRequired`, `FeeToPay`) VALUES (?, ?, ?, ?, " . $values . ", ?, ?)");
 
-      $array = array_merge([0, 0, $_POST['swimmer'], $_POST['gala']], $entriesArray);
+      $array = array_merge([0, 0, $_POST['swimmer'], $_POST['gala'], $requiresApproval], $entriesArray);
       $array = array_merge($array, [0, $fee]);
 
       $insert->execute($array);

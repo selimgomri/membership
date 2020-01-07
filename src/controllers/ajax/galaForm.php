@@ -5,7 +5,6 @@ global $db;
 $count = 0;
 $rows = 0;
 $sql = "";
-$response = "";
 
 $coachEnters = false;
 // Check if coach enters
@@ -64,17 +63,21 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 		
 		$galaData = new GalaPrices($db, $_GET["galaID"]);
     
-    if ($row['Description'] || $row['HyTek']) {
-      $response .= "<h2>About this gala</h2>";
+    if ($row['Description'] || $row['HyTek']) { ?>
+      <h2>About this gala</h2>
+
+			<?php
 
       $markdown = new ParsedownForMembership();
-      $markdown->setSafeMode(false);
+			$markdown->setSafeMode(false);
+			
+			?>
 
-      $response .= $markdown->text($row['Description']);
+      <?=$markdown->text($row['Description'])?>
 
-      if (bool($row['HyTek'])) {
-        $response .= '<p>This is a HyTek gala. Once you\'ve selected your swims, you\'ll need to provide times for each event.</p>';
-      }
+      <?php if (bool($row['HyTek'])) { ?>
+        <p>This is a HyTek gala. Once you've selected your swims, you'll need to provide times for each event.</p>
+      <?php }
     }
 
   	$swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];
