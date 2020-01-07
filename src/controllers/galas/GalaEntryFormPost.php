@@ -102,14 +102,14 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
       $fee = (string) (\Brick\Math\BigInteger::of((string) $price))->toBigDecimal()->withPointMovedLeft(2);
 
       $hyTek = bool($row['HyTek']);
-      $requiresApproval = 0;
+      $approved = 1;
       if (bool($row['RequiresApproval'])) {
-        $requiresApproval = 1;
+        $approved = 0;
       }
 
       $insert = $db->prepare("INSERT INTO `galaEntries` (EntryProcessed, Charged, `MemberID`, `GalaID`, `Approved`, " . $swims . ", `TimesRequired`, `FeeToPay`) VALUES (?, ?, ?, ?, " . $values . ", ?, ?)");
 
-      $array = array_merge([0, 0, $_POST['swimmer'], $_POST['gala'], $requiresApproval], $entriesArray);
+      $array = array_merge([0, 0, $_POST['swimmer'], $_POST['gala'], $approved], $entriesArray);
       $array = array_merge($array, [0, $fee]);
 
       $insert->execute($array);
