@@ -4,7 +4,7 @@ global $db;
 
 // output headers so that the file is downloaded rather than displayed
 header('Content-Type: text/csv; charset=utf-8');
-header('Content-Disposition: attachment; filename=accessKeys.csv');
+header('Content-Disposition: attachment; filename=access-keys.csv');
 
 // create a file pointer connected to the output stream
 $output = fopen('php://output', 'w');

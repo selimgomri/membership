@@ -1312,6 +1312,13 @@ function createOrUpdatePayout($payout, $update = false) {
   return true;
 }
 
+function getSwimmerParent($member) {
+  global $db;
+  $query = $db->prepare("SELECT UserID FROM members WHERE MemberID = ?");
+  $query->execute([$member]);
+  return $query->fetchColumn();
+}
+
 include BASE_PATH . 'includes/security/Loader.php';
 include BASE_PATH . 'includes/security/CanView.php';
 include BASE_PATH . 'includes/ErrorReporting.php';

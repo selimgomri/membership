@@ -33,7 +33,7 @@ include BASE_PATH . "views/header.php"; ?>
         <?=date("F Y", strtotime('+1 month'))?>.
       </p>
       <p>
-        <a href="<?=autoUrl("swimmers/" . $id . "/leaveclub/" . $_SESSION['LeaveKey'])?>" class="btn btn-danger">
+        <a href="<?=autoUrl("members/" . $id . "/leaveclub/" . $_SESSION['LeaveKey'])?>" class="btn btn-danger">
           I Confirm
         </a>
       </p>
@@ -52,7 +52,7 @@ include BASE_PATH . "views/header.php"; ?>
         We hope to see you again one day.
       </p>
       <p>
-        <a href="<?=autoUrl("swimmers/" . $id)?>" class="btn btn-danger">
+        <a href="<?=autoUrl("members/" . $id)?>" class="btn btn-danger">
           Return to swimmer
         </a>
       </p>

@@ -91,7 +91,7 @@ $row = $query->fetch(PDO::FETCH_ASSOC);
   $age = date_diff(date_create($row['DateOfBirth']), date_create('today'))->y;
   //$ageEoY = date('Y') - date('Y', strtotime($row['DateOfBirth'])); ?>
 
-  <a href="<?=autoUrl("swimmers/" . $row['MemberID'])?>" class="list-group-item list-group-item-action">
+  <a href="<?=htmlspecialchars(autoUrl("members/" . $row['MemberID']))?>" class="list-group-item list-group-item-action">
     <div class="row align-items-center">
       <div class="col-12 col-sm-4 col-md-3">
         <p class="mb-0">
@@ -112,7 +112,7 @@ $row = $query->fetch(PDO::FETCH_ASSOC);
         </p>
         <?php if ($_SESSION['AccessLevel'] != 'Galas') { ?>
         <p class="mb-0">
-          <strong>Attendance:</strong> <?=getAttendanceByID($link, $row['MemberID'], 4)?>%
+          <strong>Attendance:</strong> <?=getAttendanceByID(null, $row['MemberID'], 4)?>%
         </p>
         <?php } ?>
         <p class="mb-0">

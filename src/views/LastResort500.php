@@ -38,6 +38,8 @@
           </ul>
 
           <p>HTTP Error 500 - Internal Server Error.</p>
+
+          <p>&copy; Swimming Club Data Systems</p>
         </div>
       </div>
     </div>

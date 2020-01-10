@@ -40,8 +40,8 @@ include BASE_PATH . 'views/header.php';
 
   <nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
-			<li class="breadcrumb-item"><a href="<?=autoUrl("swimmers/" . $id)?>"><?=htmlspecialchars($swimmer["MForename"])?> <?=htmlspecialchars(mb_substr($swimmer["MSurname"], 0, 1, 'utf-8'))?></a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("members")?>">Members</a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("members/" . $id)?>"><?=htmlspecialchars($swimmer["MForename"])?> <?=htmlspecialchars(mb_substr($swimmer["MSurname"], 0, 1, 'utf-8'))?></a></li>
 			<li class="breadcrumb-item active" aria-current="page">Edit times</li>
 		</ol>
 	</nav>

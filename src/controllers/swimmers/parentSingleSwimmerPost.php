@@ -95,7 +95,7 @@ if ((!empty($_POST['disconnect'])) && (!empty($_POST['disconnectKey']))) {
     $newKey = generateRandomString(8);
     $update = $db->prepare("UPDATE `members` SET `UserID` = NULL, AccessKey = ? WHERE `MemberID` = ?");
     $update->execute([$newKey, $id]);
-    header("Location: " . autoUrl("swimmers"));
+    header("Location: " . autoUrl("members"));
   }
 }
 if (!empty($_POST['swimmerDeleteDanger'])) {
@@ -103,7 +103,7 @@ if (!empty($_POST['swimmerDeleteDanger'])) {
   if ($deleteKey == $dbAccessKey) {
     $update = $db->prepare("DELETE FROM `members` WHERE members.MemberID = ?");
     $update->execute([$id]);
-    header("Location: " . autoUrl("swimmers"));
+    header("Location: " . autoUrl("members"));
   }
 }
 if (isset($_POST['webPhoto']) || isset($_POST['socPhoto']) || isset($_POST['noticePhoto']) || isset($_POST['trainFilm']) || isset($_POST['webPhoto'])) {

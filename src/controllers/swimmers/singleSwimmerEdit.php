@@ -51,7 +51,7 @@ $deleteKey = $_POST['swimmerDeleteDanger'];
 if ($deleteKey == $dbAccessKey) {
 	$delete = $db->prepare("DELETE FROM `members` WHERE `MemberID` = ?");
 	$delete->execute([$id]);
-	header("Location: " . autoUrl("swimmers"));
+	header("Location: " . autoUrl("members"));
   die();
 }
 
@@ -291,7 +291,7 @@ $content .= "
 </div>";
 
 $content .= '<div class="form-group"> <label>Medical Notes</label>';
-$content .= '<a class="d-block" href="' . autoUrl("swimmers/" . $id . "/medical") . '"
+$content .= '<a class="d-block" href="' . autoUrl("members/" . $id . "/medical") . '"
 target="_self">Edit medical notes</a>';
 $content .= '</div>';
 $content .= "
@@ -343,9 +343,9 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 <div class="container">
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("members")?>">Members</a></li>
 
-			<li class="breadcrumb-item"><a href="<?=autoUrl("swimmers/" . $id)?>"><?=htmlspecialchars($rowSwim["MForename"])?> <?=htmlspecialchars(mb_substr($rowSwim["MSurname"], 0, 1, 'utf-8'))?></a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("members/" . $id)?>"><?=htmlspecialchars($rowSwim["MForename"])?> <?=htmlspecialchars(mb_substr($rowSwim["MSurname"], 0, 1, 'utf-8'))?></a></li>
 			<li class="breadcrumb-item active" aria-current="page">Edit</li>
 		</ol>
 	</nav>

@@ -193,6 +193,10 @@ function halt(int $statusCode, $throwException = true) {
       // Unavailable due to no GC API Key
       require "views/902.php";
     }
+    else if ($statusCode == 999) {
+      // Show last report 500 error
+      require 'views/LastResort500.php';
+    }
     else {
       require "views/500.php";
     }
@@ -635,7 +639,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/myaccount/router.php';
     });
 
-    $this->group('/swimmers', function() {
+    $this->group(['/swimmers', '/members', '/divers','/water-polo-players'], function() {
       global $link;
 
       include 'controllers/swimmers/router.php';
@@ -783,7 +787,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
         include BASE_PATH . 'controllers/settings/router.php';
       });
 
-      if (bool(env('IS_CLS'))) {
+      if (bool(env('IS_DEV')) || bool(env('IS_CLS'))) {
         $this->get('/about:php', function() {
           echo phpinfo();
         });

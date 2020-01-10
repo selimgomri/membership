@@ -15,7 +15,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 <div class="container">
   <h1>Member Access Keys</h1>
   <p class="lead">See access keys.</p>
-  <p><a href="<?=autoUrl("swimmers/accesskeys-csv")?>" class="btn btn-dark" download>Download as a CSV for Mailmerge</a></p>
+  <p><a href="<?=autoUrl("members/access-keys.csv")?>" class="btn btn-dark" download>Download as a CSV for Mailmerge</a></p>
 
 <?php
 

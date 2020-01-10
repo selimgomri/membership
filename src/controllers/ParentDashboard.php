@@ -71,7 +71,7 @@ include BASE_PATH . "views/header.php";
             </strong>
           </p>
           <p>
-            Head to <a href="<?=autoUrl("my-account/email")?>">My Account</a>
+            Head to <a class="text-white" href="<?=autoUrl("my-account/email")?>">My Account</a>
             to change your email preferences and stay up to date!
           </p>
         </div>

@@ -69,4 +69,4 @@ try {
 	$_SESSION['UpdateSuccess'] = false;
 }
 
-header("Location: " . autoUrl("swimmers/" . $id . "/times"));
+header("Location: " . autoUrl("members/" . $id . "/times"));

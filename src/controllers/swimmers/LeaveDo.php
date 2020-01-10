@@ -47,7 +47,7 @@ if ($_SESSION['LeaveKey'] == $key) {
 
     unset($_SESSION['LeaveKey']);
     $_SESSION['ConfirmLeave'] = true;
-    header("Location: " . autoUrl("swimmers/" . $id . "/leaveclub/"));
+    header("Location: " . autoUrl("members/" . $id . "/leaveclub/"));
   } catch (Exception $e) {
     halt(500);
   }

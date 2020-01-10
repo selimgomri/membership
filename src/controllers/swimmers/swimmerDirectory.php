@@ -14,7 +14,7 @@ if (isset($queries['search'])) {
   $search = $queries['search'];
 }
 
-$pagetitle = "Swimmers";
+$pagetitle = "Members";
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php";
@@ -23,11 +23,11 @@ if (isset($_POST['squad'])) {
   $squadID = $_POST['squad'];
 } ?>
 <div class="container-fluid">
-  <h1 class="mb-3">Swimmers</h1>
+  <h1 class="mb-3">Members</h1>
 
   <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
   <p>
-    <a href="<?=autoUrl("swimmers/addmember")?>" class="btn btn-success">
+    <a href="<?=autoUrl("members/new")?>" class="btn btn-success">
       Add new member
     </a>
   </p>
@@ -73,10 +73,10 @@ function getResult() {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       document.getElementById("output").innerHTML = this.responseText;
-      window.history.replaceState("string", "Title", "<?=autoUrl("swimmers")?>?squadID=" + squadValue + "&search=" + searchValue);
+      window.history.replaceState("string", "Title", "<?=autoUrl("members")?>?squadID=" + squadValue + "&search=" + searchValue);
     }
   }
-  xhttp.open("POST", "<?=autoUrl("swimmers/ajax/swimmerDirectory")?>", true);
+  xhttp.open("POST", "<?=autoUrl("members/ajax/swimmerDirectory")?>", true);
   xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhttp.send("squadID=" + squadValue + "&search=" + searchValue);
 }

@@ -48,8 +48,8 @@ include BASE_PATH . "views/swimmersMenu.php";
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
-      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers/" . $id)?>"><?=htmlspecialchars($row['MForename'])?> <?=htmlspecialchars(mb_substr($row['MSurname'], 0, 1, 'utf-8'))?></a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("members")?>">Members</a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("members/" . $id)?>"><?=htmlspecialchars($row['MForename'])?> <?=htmlspecialchars(mb_substr($row['MSurname'], 0, 1, 'utf-8'))?></a></li>
       <li class="breadcrumb-item active" aria-current="page">Contact parent</li>
     </ol>
   </nav>
@@ -95,11 +95,11 @@ include BASE_PATH . "views/swimmersMenu.php";
 			<?=SCDS\CSRF::write()?>
     </form>
 		<p class="mb-0">
-			<a href="<?=autoUrl("swimmers")?>" class="btn btn-info">
+			<a href="<?=autoUrl("members")?>" class="btn btn-info">
 				Return to Swimmers
 			</a>
 			<?php if ($_SESSION['AccessLevel'] != "Coach" && $_SESSION['AccessLevel'] != "Galas") { ?>
-			<a href="<?=autoUrl("swimmers/addmember")?>" class="btn btn-info">
+			<a href="<?=autoUrl("members/new")?>" class="btn btn-info">
 				Add Another Swimmer
 			</a>
 			<?php } ?>
