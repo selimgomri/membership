@@ -14,4 +14,8 @@ if (env('SYSTEM_COLOUR')) {
   background-color: <?=env('SYSTEM_COLOUR')?>;
   border-color: <?=env('SYSTEM_COLOUR')?>;
 }
+
+.badge-primary {
+  background-color: <?=env('SYSTEM_COLOUR')?>;
+}
 <?php } ?>

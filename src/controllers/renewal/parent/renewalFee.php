@@ -44,7 +44,7 @@ $clubFee = $clubFees->getFee();
 
 if ($partial_reg) {
 	$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
-	members.SquadID WHERE `members`.`UserID` = ? && `members`.`RR` = 1";
+	members.SquadID WHERE `members`.`UserID` = ? AND `members`.`RR` = 1";
 } else {
 	$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
 	members.SquadID WHERE `members`.`UserID` = ?";
