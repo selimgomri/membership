@@ -54,7 +54,7 @@ if ($row['CourseLength'] == 'LONG') {
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>
 			<li class="breadcrumb-item"><a href="<?=autoUrl("galas/entries")?>">Entries</a></li>
-			<li class="breadcrumb-item"><a href="<?=autoUrl("galas/entries/" . $row['EntryID'])?>"><?=htmlspecialchars($row['MForename'][0] . $row['MSurname'][0])?> (<?=htmlspecialchars($row['GalaName'])?>)</a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("galas/entries/" . $row['EntryID'])?>"><?=htmlspecialchars(mb_substr($row["MForename"], 0, 1, 'utf-8') . mb_substr($row["MSurname"], 0, 1, 'utf-8'))?> (<?=htmlspecialchars($row['GalaName'])?>)</a></li>
 			<li class="breadcrumb-item active" aria-current="page">Times</li>
 		</ol>
 	</nav>

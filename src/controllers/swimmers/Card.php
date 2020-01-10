@@ -41,7 +41,7 @@ html {
 
     <p style="position:fixed;font-size:9pt;margin:4.83cm 0 0 0.25cm;max-width:5.76cm;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1">Issued <?=date("d/m/Y")?></p>
 
-    <img src="<?=autoUrl("services/qr-generator?size=300&text=" . urlencode(autoUrl("swimmers/" . $swimmer['MemberID'])))?>" style="position:fixed;height:2.3cm;width:auto;margin:2.848cm 0 0 6.01cm">
+    <img src="<?=autoUrl("services/qr-generator?size=300&text=" . urlencode(autoUrl("members/" . $swimmer['MemberID'])))?>" style="position:fixed;height:2.3cm;width:auto;margin:2.848cm 0 0 6.01cm">
   </div>
 </body>
 

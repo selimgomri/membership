@@ -1,7 +1,7 @@
 <?php
 
 if (isset($_SESSION['Swimmers-FamilyMode'])) {
-	header("Location: " . autoUrl("swimmers/new"));
+	header("Location: " . autoUrl("members/new"));
 	die();
 }
 
@@ -26,7 +26,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 					swimmer using a Swim England Number and Access Key</p>
 				</div>
 		    <div class="card-footer">
-		      <a href="<?=autoUrl("swimmers/new")?>">
+		      <a href="<?=autoUrl("members/new")?>">
 						Add a new member
 					</a>
 		    </div>

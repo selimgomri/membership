@@ -121,8 +121,8 @@ $strokeCountsData = array_values($strokeCounts);
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
-      <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars($rowSwim["MForename"])?> <?=htmlspecialchars($rowSwim["MSurname"][0])?></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("members")?>">Members</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars($rowSwim["MForename"])?> <?=htmlspecialchars(mb_substr($rowSwim["MSurname"], 0, 1, 'utf-8'))?></li>
     </ol>
   </nav>
 
@@ -139,7 +139,7 @@ $strokeCountsData = array_values($strokeCounts);
       } ?>
       <?=htmlspecialchars($rowSwim["MSurname"])?>
       <br>
-      <small>Swimmer, <?=htmlspecialchars($rowSwim["SquadName"])?> Squad</small>
+      <small>Member, <?=htmlspecialchars($rowSwim["SquadName"])?> Squad</small>
     </h1>
   </div>
 
@@ -295,9 +295,9 @@ $strokeCountsData = array_values($strokeCounts);
       </div>
 
       <div class="mt-3">
-        <a class="btn btn-success" href="<?=autoUrl("swimmers/" .
+        <a class="btn btn-success" href="<?=autoUrl("members/" .
         $id . "/edit")?>">Edit Details</a>
-        <a class="btn btn-success" href="<?=autoUrl("swimmers/" . $id .
+        <a class="btn btn-success" href="<?=autoUrl("members/" . $id .
         "/medical");?>">Edit Medical Notes</a>
       </div>
 
@@ -373,7 +373,7 @@ $strokeCountsData = array_values($strokeCounts);
         <?php } ?>
 
         <p>
-          <a href="<?=htmlspecialchars(autoUrl("swimmers/" . $id . "/times"))?>" class="btn btn-success">
+          <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times"))?>" class="btn btn-success">
             Edit times
           </a>
         </p>
@@ -468,7 +468,7 @@ $strokeCountsData = array_values($strokeCounts);
               If you later decide you want to stay at <?=htmlspecialchars(env('CLUB_NAME'))?> then you will need to contact club staff to have the move cancelled.
             </p>
             <p class="mb-0">
-              <a class="btn btn-danger" href="<?=autoUrl("swimmers/" . $id . "/leaveclub")?>">Leave the club</a>
+              <a class="btn btn-danger" href="<?=autoUrl("members/" . $id . "/leaveclub")?>">Leave the club</a>
             </p>
           </div>
         </div>
@@ -510,7 +510,7 @@ $strokeCountsData = array_values($strokeCounts);
           swimmer.
         </p>
         <p>
-          <a href="<?=autoUrl("swimmers/" . $id . "/membershipcard")?>" class="btn btn-primary" target="_blank">
+          <a href="<?=autoUrl("members/" . $id . "/membershipcard")?>" class="btn btn-primary" target="_blank">
             Print membership card
           </a>
         </p>

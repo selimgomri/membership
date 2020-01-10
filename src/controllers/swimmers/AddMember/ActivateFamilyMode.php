@@ -3,7 +3,7 @@
 global $db;
 
 if (isset($_SESSION['Swimmers-FamilyMode'])) {
-	header("Location: " . autoUrl("swimmers/new"));
+	header("Location: " . autoUrl("members/new"));
 	die();
 } else {
 	$uid = md5(generateRandomString(20) . time());
@@ -22,4 +22,4 @@ if (isset($_SESSION['Swimmers-FamilyMode'])) {
 	];
 }
 
-header("Location: " . autoUrl("swimmers/new"));
+header("Location: " . autoUrl("members/new"));

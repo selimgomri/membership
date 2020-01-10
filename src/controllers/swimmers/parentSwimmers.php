@@ -2,7 +2,7 @@
 
 global $db;
 
-$pagetitle = "My Swimmers";
+$pagetitle = "My Members";
 $userID = $_SESSION['UserID'];
 
 include BASE_PATH . "views/header.php";
@@ -14,22 +14,22 @@ $getSwimmers->execute([$_SESSION['UserID']]);
 
 <div class="front-page mb-n3">
 	<div class="container">
-		<h1>My Swimmers</h1>
+		<h1>My members</h1>
 		<?php if ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC)) { ?>
 		<div class="row">
 			<div class="col-md-8">
 				<p class="lead">
-					Here are your swimmers
+					Members linked to your account
 				</p>
 				<p>
-					Please remember that it is your responsibility to also keep the Swim England Membership System up to date with personal details.
+					Please remember that it is your own responsibility to also keep the Swim England Membership System up to date with personal details.
 				</p>
 			</div>
 		</div>
 
 		<div class="news-grid mb-4">
 			<?php do { ?>
-				<a href="<?=autoUrl("swimmers/" . $swimmer['id'])?>">
+				<a href="<?=autoUrl("members/" . $swimmer['id'])?>">
 					<span class="mb-3">
 						<span class="title mb-0">
 							<?=htmlspecialchars($swimmer['first'] . ' ' . $swimmer['last'])?>
@@ -40,9 +40,9 @@ $getSwimmers->execute([$_SESSION['UserID']]);
 					</span>
 					<span class="category">
 						<?php if ($swimmer['free']) { ?>
-						This swimmer doesn't pay
+						This member doesn't pay
 						<?php } else { ?>
-						&pound;<?=number_format($swimmer['fee'], 2, '.', '')?> per month
+						&pound;<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $swimmer['fee']))->toScale(2))?> per month
 						<?php } ?>
 					</span>
 				</a>
@@ -52,14 +52,14 @@ $getSwimmers->execute([$_SESSION['UserID']]);
 		<div class="row">
 			<div class="col-md-8">
 				<p class="lead">
-					Swimmers connected to your account will be shown here once you add some.
+					Members connected to your account will be shown here once you add some.
 				</p>
 			</div>
 		</div>
 		<?php } ?>
 
 		<p>
-			<a href="<?php echo autoUrl('myaccount/addswimmer'); ?>" class="btn btn-success">Add a Swimmer</a>
+			<a href="<?php echo autoUrl('myaccount/addswimmer'); ?>" class="btn btn-success">Link a member</a>
 		</p>
 	</div>
 </div>

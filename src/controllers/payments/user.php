@@ -87,7 +87,7 @@ include BASE_PATH . "views/paymentsMenu.php";
       <div class="cell">
         <h2>Account balance</h2>
         <p>Your account balance includes pending and outstanding fees.</p>
-        <p>&pound;<?=number_format($balance/100, 2, '.', '')?></p>
+        <p>&pound;<?=(string) (\Brick\Math\BigDecimal::of((string) $balance))->withPointMovedLeft(2)->toScale(2)?></p>
       </div>
 
       <div class="cell text-white bg-secondary">

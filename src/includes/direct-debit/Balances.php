@@ -10,18 +10,18 @@
 function getAccountBalance($user) {
   global $db;
 
-  $getBalance = $db->prepare("SELECT SUM(Amount) FROM paymentsPending WHERE UserID = ? AND (`Status` = 'Pending' OR `Status` = 'Queued' OR `Status` = 'Requested' AND `Type` = ?)");
+  $getBalance = $db->prepare("SELECT SUM(Amount) FROM paymentsPending WHERE UserID = ? AND (`Status` = 'Pending' OR `Status` = 'Queued' OR `Status` = 'Requested') AND `Type` = ?");
   $getBalance->execute([
-    $_SESSION['UserID'],
+    $user,
     'Payment'
   ]);
   $balance = $getBalance->fetchColumn();
 
   $getBalance->execute([
-    $_SESSION['UserID'],
+    $user,
     'Refund'
   ]);
   $credits = $getBalance->fetchColumn();
   
-  return ($balance - $credits);
+  return ((int) $balance - (int) $credits);
 }

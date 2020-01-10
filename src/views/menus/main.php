@@ -109,21 +109,21 @@ if (!function_exists('chesterStandardMenu')) {
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="swimmerDropdown" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
-                    Swimmers &amp; Squads
+                    Members &amp; Squads
                   </a>
                   <div class="dropdown-menu" aria-labelledby="swimmerDropdown">
-                    <a class="dropdown-item" href="<?php echo autoUrl("swimmers")?>">Swimmer Directory</a>
+                    <a class="dropdown-item" href="<?php echo autoUrl("members")?>">Member Directory</a>
                     <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
-                    <a class="dropdown-item" href="<?php echo autoUrl("swimmers/addmember")?>">Add Member</a>
+                    <a class="dropdown-item" href="<?php echo autoUrl("members/new")?>">Add Member</a>
                     <?php } ?>
                     <?php if ($_SESSION['AccessLevel'] != "Galas") { ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("squads")?>">Squads</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("squads/moves")?>">Squad Moves</a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("swimmers/accesskeys")?>">Access Keys</a>
+                    <a class="dropdown-item" href="<?php echo autoUrl("members/access-keys")?>">Access Keys</a>
                     <?php } ?>
                     <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("renewal")?>">Membership Renewal</a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("swimmers/orphaned")?>">Orphan Swimmers</a>
+                    <a class="dropdown-item" href="<?php echo autoUrl("members/orphaned")?>">Orphan Swimmers</a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("squad-reps")?>">Squad Reps</a>
                     <?php if ($_SESSION['AccessLevel'] == "Coach") { ?>
@@ -329,14 +329,7 @@ if (!function_exists('chesterStandardMenu')) {
                 </li>
                 <?php } ?>
                 <?php if ($_SESSION['AccessLevel'] == "Parent") {
-                  $hasMandate = userHasMandates($_SESSION['UserID']);
-            if (!$hasMandate && !$canPayByCard) { ?>
-                <li class="nav-item">
-                  <a class="nav-link" href="<?=autoUrl("payments")?>">
-                    Payments
-                  </a>
-                </li>
-                <?php } else { ?>
+                  $hasMandate = userHasMandates($_SESSION['UserID']); ?>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="paymentsParentDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -350,18 +343,27 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?=autoUrl("payments/mandates")?>">My Bank Account</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/statement/latest")?>">My Latest Statement</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/fees")?>">My Fees Since Last Bill</a>
-                    <a class="dropdown-item" href="<?=autoUrl("payments/squad-fees")?>">My Squad and Extra Fees</a>
-                    <?php } else if (env('GOCARDLESS_ACCESS_TOKEN')) { ?>
-                    <h6 class="dropdown-header">Direct Debit</h6>
+                    <?php } else if (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN') && bool(env('IS_DEV'))) { ?>
+                    <h6 class="dropdown-header">Direct debit</h6>
                     <a class="dropdown-item" href="<?=autoUrl("payments")?>">
                       Setup a direct debit
                     </a>
                     <?php } ?>
+                    <?php if (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN') && bool(env('IS_DEV'))) { ?>
+                    <div class="dropdown-divider"></div>
+                    <?php } ?>
+                    <h6 class="dropdown-header">Fee information</h6>
+                    <a class="dropdown-item" href="<?=autoUrl("payments/squad-fees")?>">
+                      Squad and extra fees
+                    </a>
+                    <a class="dropdown-item" href="<?=autoUrl("payments/membership-fees")?>">
+                      Annual membership fees
+                    </a>
                     <?php if (env('STRIPE') != null) { ?>
                     <?php if (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) { ?>
                     <div class="dropdown-divider"></div>
                     <?php } ?>
-                    <h6 class="dropdown-header">Payment Cards</h6>
+                    <h6 class="dropdown-header">Card payments</h6>
                     <a class="dropdown-item" href="<?=autoUrl("payments/cards")?>">
                       Credit and Debit Cards
                     </a>
@@ -374,7 +376,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <?php } ?>
                   </div>
                 </li>
-                <?php } } ?>
+                <?php } ?>
                 <?php if ($_SESSION['AccessLevel'] != "Parent" &&
           $_SESSION['AccessLevel'] != "Coach") { ?>
                 <li class="nav-item dropdown">
@@ -411,16 +413,16 @@ if (!function_exists('chesterStandardMenu')) {
             } ?>
                 <?php if (empty($_SESSION['LoggedIn'])) { ?>
                 <li class="nav-item">
-                  <a class="nav-link" href="<?php echo autoUrl("login") ?>">Login</a>
+                  <a class="nav-link" href="<?=htmlspecialchars(autoUrl("login"))?>">Login</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="<?php echo autoUrl("register") ?>">Create Account</a>
+                  <a class="nav-link" href="<?=htmlspecialchars(autoUrl("register"))?>">Create Account</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="<?php echo autoUrl("timeconverter") ?>">Time Converter</a>
+                  <a class="nav-link" href="<?=htmlspecialchars(autoUrl("timeconverter"))?>">Time Converter</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="<?php echo autoUrl("services/request-a-trial") ?>">Request a Trial</a>
+                  <a class="nav-link" href="<?=htmlspecialchars(autoUrl("services/request-a-trial"))?>">Request a Trial</a>
                 </li>
                 <?php } ?>
               </ul>

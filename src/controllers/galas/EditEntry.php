@@ -54,7 +54,7 @@ include "galaMenu.php"; ?>
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>
       <li class="breadcrumb-item"><a href="<?=autoUrl("galas/entries")?>">My entries</a></li>
-      <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars($row['MForename'][0] . $row['MSurname'][0])?> (<?=htmlspecialchars($row['GalaName'])?>)</li>
+      <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars(mb_substr($row["MForename"], 0, 1, 'utf-8') . mb_substr($row["MSurname"], 0, 1, 'utf-8'))?> (<?=htmlspecialchars($row['GalaName'])?>)</li>
     </ol>
   </nav>
     <div>

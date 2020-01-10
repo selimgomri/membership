@@ -136,7 +136,7 @@ $content = '
        $content .= ' ' . htmlspecialchars($rowSwim["MMiddleNames"]);
     }
     $content .= ' ' . htmlspecialchars($rowSwim["MSurname"]) . '
-    <small>Swimmer, ' . htmlspecialchars($rowSwim["SquadName"]) . ' Squad</small></h1>
+    <small>Member, ' . htmlspecialchars($rowSwim["SquadName"]) . ' Squad</small></h1>
 </div>';
 if ($parent_id != null) {
 $content .= '
@@ -146,12 +146,12 @@ $content .= '
       Quick actions
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <a class="dropdown-item" href="' . autoUrl("swimmers/" . $id . "/enter-gala") . '">Enter a gala</a>
+      <a class="dropdown-item" href="' . autoUrl("members/" . $id . "/enter-gala") . '">Enter a gala</a>
       <a class="dropdown-item" href="' . htmlspecialchars('mailto:' . $parentEmail) . '">Email parent/guardian</a>';
       if ($_SESSION['AccessLevel'] != 'Galas') {
       $content .= '
-      <a class="dropdown-item" href="' . autoUrl("swimmers/" . $id . "/new-move") . '">New squad move</a>
-      <a class="dropdown-item" href="' . autoUrl("swimmers/" . $id . "/parenthelp") . '">Print access key</a>';
+      <a class="dropdown-item" href="' . autoUrl("members/" . $id . "/new-move") . '">New squad move</a>
+      <a class="dropdown-item" href="' . autoUrl("members/" . $id . "/parenthelp") . '">Print access key</a>';
       }
       $content .= '
     </div>
@@ -232,7 +232,7 @@ $content .= '<!--
       <p class="mb-0">
         <strong class="d-block text-gray-dark">Parent Account Setup
         Information</strong>
-        <a href="' . autoUrl("swimmers/" . $id . "/parenthelp") . '">Access Key for ' .
+        <a href="' . autoUrl("members/" . $id . "/parenthelp") . '">Access Key for ' .
         htmlspecialchars($rowSwim["MForename"]) . '</a>
       </p>
     </li>';
@@ -242,7 +242,7 @@ $content .= '<!--
     <li class="list-group-item">
       <p class="mb-0">
         <strong class="d-block text-gray-dark">Swimmer Membership Card</strong>
-        <a href="' . autoUrl("swimmers/" . $id . "/membershipcard") . '" target="_blank">Print Card</a>
+        <a href="' . autoUrl("members/" . $id . "/membershipcard") . '" target="_blank">Print Card</a>
       </p>
     </li>';
     }
@@ -251,7 +251,7 @@ $content .= '<!--
     <li class="list-group-item">
       <p class="mb-0">
         <strong class="d-block text-gray-dark">Attendance</strong>
-        <a href="' . autoUrl("swimmers/" . $id . "/attendance") . '">' .
+        <a href="' . autoUrl("members/" . $id . "/attendance") . '">' .
         getAttendanceByID(null, $id, 4) . '% over the last 4 weeks, ' .
         getAttendanceByID(null, $id) . '% over all time</a>
       </p>
@@ -270,7 +270,7 @@ $content .= '<!--
     <li class="list-group-item">
       <p class="mb-0">
         <strong class="d-block text-gray-dark">Move Swimmer to New Squad</strong>
-        <a href="' . autoUrl("swimmers/" . $id . "/new-move") . '">New Move</a>
+        <a href="' . autoUrl("members/" . $id . "/new-move") . '">New Move</a>
       </p>
     </li>';
     $content .= '
@@ -343,7 +343,7 @@ $content .= '<!--
 	if ($access == "Admin") {
     $content .= '
 	  <span class="d-block text-right d-print-none">
-	    <a class="btn btn-success" href="' . autoUrl("swimmers/" . $id . "/edit") . '">Edit Details</a> <a class="btn btn-success" href="' . autoUrl("swimmers/" . $id . "/medical") . '">Edit Medical Notes</a>
+	    <a class="btn btn-success" href="' . autoUrl("members/" . $id . "/edit") . '">Edit Details</a> <a class="btn btn-success" href="' . autoUrl("members/" . $id . "/medical") . '">Edit Medical Notes</a>
 	  </span>';
 	} else {
 		$content .= '
@@ -453,11 +453,11 @@ $content .= '<!--
     '50m Back', '100m Back', '200m Back', '100m IM', '200m IM', '400m IM'];
     $content.= '<table class="table table-sm table-borderless table-striped mb-2">
     <thead class="thead-light"><tr><th>Swim</th><th>Short Course</th>';
-    if (!$mob) {
+    if (!$mob && $scy) {
       $content .= '<th>' . date("Y") . ' SC</th>';
     }
     $content .= '<th>Long Course</th>';
-    if (!$mob) {
+    if (!$mob && $lcy) {
       $content .= '<th>' . date("Y") . ' LC</th>';
     }
     $content .= '</thead>
@@ -468,14 +468,14 @@ $content .= '<!--
       if ($sc[$ev[$i]] != "") {
         $content.= $sc[$ev[$i]];
       }
-      if (!$mob) {
+      if (!$mob && $scy) {
         $content .= '</td><td>' . $scy[$ev[$i]];
       }
       $content .= '</td><td>';
       if ($lc[$ev[$i]] != "") {
         $content.= $lc[$ev[$i]];
       }
-      if (!$mob) {
+      if (!$mob && $lcy) {
         $content .= '</td><td>' . $lcy[$ev[$i]];
       }
       $content.= '</td></tr>';
@@ -500,7 +500,7 @@ $content .= '<!--
         </div>
       </div>
     </div>
-    <p class="mt-3 mb-0"><a href="' . htmlspecialchars(autoUrl("swimmers/" . $id . "/times")) . '" class="btn btn-primary">Edit times</a></p>
+    <p class="mt-3 mb-0"><a href="' . htmlspecialchars(autoUrl("members/" . $id . "/times")) . '" class="btn btn-primary">Edit times</a></p>
   </div>';
 
 	if (sizeof($countEntries) > 0) {
@@ -599,7 +599,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 <div class="container-fluid">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("members")?>">Members</a></li>
       <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars($rowSwim["MForename"])?> <?=htmlspecialchars(mb_substr($rowSwim["MSurname"], 0, 1, 'utf-8'))?></li>
     </ol>
   </nav>
@@ -610,7 +610,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
       <strong>Swimmer added successfully</strong>
     </p>
     <p class="mb-0">
-      <a href="<?=autoUrl("swimmers/new")?>" class="alert-link">Add another swimmer</a> or proceed to <a href="<?=autoUrl("assisted-registration")?>" class="alert-link">assisted registration</a>
+      <a href="<?=autoUrl("members/new")?>" class="alert-link">Add another swimmer</a> or proceed to <a href="<?=autoUrl("assisted-registration")?>" class="alert-link">assisted registration</a>
     </p>
   </div>
   <?php unset($_SESSION['SwimmerAdded']); } ?>

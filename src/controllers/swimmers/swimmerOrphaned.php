@@ -68,10 +68,10 @@ function getResult() {
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         document.getElementById("output").innerHTML = this.responseText;
-        window.history.replaceState("string", "Title", "<?php echo autoUrl("swimmers/orphaned"); ?>?squadID=" + squadValue + "&search=" + searchValue);
+        window.history.replaceState("string", "Title", "<?php echo autoUrl("members/orphaned"); ?>?squadID=" + squadValue + "&search=" + searchValue);
       }
     }
-    xhttp.open("POST", <?=json_encode(autoUrl("swimmers/ajax/swimmerDirectory"))?>, true);
+    xhttp.open("POST", <?=json_encode(autoUrl("members/ajax/swimmerDirectory"))?>, true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("type=orphan&squadID=" + squadValue + "&search=" + searchValue);
     console.log("Sent");

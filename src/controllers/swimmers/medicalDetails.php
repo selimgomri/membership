@@ -33,8 +33,8 @@ include BASE_PATH . "views/header.php";
 
 	<nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
-      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers/" . $id)?>"><?=htmlspecialchars($row["MForename"])?> <?=htmlspecialchars($row["MSurname"][0])?></a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("members")?>">Members</a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("members/" . $id)?>"><?=htmlspecialchars($row["MForename"])?> <?=htmlspecialchars($row["MSurname"][0])?></a></li>
       <li class="breadcrumb-item active" aria-current="page">Medical Form</li>
     </ol>
   </nav>

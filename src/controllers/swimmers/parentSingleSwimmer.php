@@ -28,8 +28,8 @@ $title = null;
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
-      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers/" . $id)?>"><?=htmlspecialchars($row["MForename"])?> <?=htmlspecialchars($row["MSurname"][0])?></a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("members")?>">Members</a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("members/" . $id)?>"><?=htmlspecialchars($row["MForename"])?> <?=htmlspecialchars($row["MSurname"][0])?></a></li>
       <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
   </nav>
@@ -42,7 +42,7 @@ $title = null;
       </div>
       <div class="col-sm-4 text-right">
         <button type="submit" class="btn btn-success">Save</button> <a
-        class="btn btn-dark" href="<?=autoUrl("swimmers/" . $id)?>">Exit
+        class="btn btn-dark" href="<?=autoUrl("members/" . $id)?>">Exit
         Edit Mode</a>
       </div>
     </div>
@@ -114,7 +114,7 @@ $title = null;
         <div class="mb-3">
           <p>Medical Notes</p>
           <p class="mb-0">
-            <a class="btn btn-primary" href="<?=autoUrl("swimmers/" . $id .
+            <a class="btn btn-primary" href="<?=autoUrl("members/" . $id .
             "/medical")?>" target="_blank">Edit medical details</a>
           </p>
         </div>
