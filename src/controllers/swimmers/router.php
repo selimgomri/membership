@@ -156,12 +156,12 @@ else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $
 		
 		// Access Keys
 		$this->get('/access-keys', function() {
-			require('access-keys.php');
+			require('accesskeys.php');
 		});
 
 		// Access Keys
 		$this->get('/access-keys.csv', function() {
-			require('access-keysCSV.php');
+			require('accesskeysCSV.php');
 		});
 	}
 }
