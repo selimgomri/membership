@@ -416,41 +416,41 @@ function monthlyFeeCost($link, $userID, $format = "decimal") {
   ? AND `ClubPays` = '0' ORDER BY `squads`.`SquadFee` DESC");
   $query->execute([$userID]);
 
-  $totalCost = 0;
-  $reducedCost = 0;
+  $totalCost = \Brick\Math\BigDecimal::zero();
+  $reducedCost = \Brick\Math\BigDecimal::zero();
 
   $i = 0;
   while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-    $squadCost = $row['SquadFee'];
-    if (defined("IS_CLS") && IS_CLS) {
+    $squadCost = \Brick\Math\BigDecimal::of((string) $row['SquadFee']);
+    if (bool(env('IS_CLS'))) {
       if ($i < 2) {
-        $totalCost += $squadCost;
-        $reducedCost += $squadCost;
+        // $totalCost->plus($squadCost);
+        $reducedCost = $reducedCost->plus($squadCost);
       }
       else if ($i == 2) {
-        $totalCost += $squadCost*0.8;
-        $reducedCost += $squadCost*0.8;
+        // $totalCost->plus($squadCost->multipliedBy('0.8'));
+        $reducedCost = $reducedCost->plus($squadCost->multipliedBy('0.8'));
       }
       else {
-        $totalCost += $squadCost*0.6;
-        $reducedCost += $squadCost*0.6;
+        // $totalCost->plus($squadCost->multipliedBy('0.6'));
+        $reducedCost = $reducedCost->plus($squadCost->multipliedBy('0.6'));
       }
     } else {
-      $totalCost += $squadCost;
-      $reducedCost += $squadCost;
+      // $totalCost->plus($squadCost);
+      $reducedCost = $reducedCost->plus($squadCost);
     }
     $i++;
   }
 
   $format = strtolower($format);
   if ($format == "decimal") {
-    return $reducedCost;
+    return (string) $reducedCost->toScale(2);
   }
   else if ($format == "int") {
-    return ((int) ($reducedCost*100));
+    return $reducedCost->withPointMovedRight(2)->toInt();
   }
   else if ($format == "string") {
-    return "&pound;" . number_format($reducedCost,2,'.','');
+    return "&pound;" . (string) $reducedCost->toScale(2);
   }
 }
 
@@ -461,21 +461,21 @@ function monthlyExtraCost($link, $userID, $format = "decimal") {
   INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) WHERE
   members.UserID = ?");
   $query->execute([$userID]);
-  $totalCost = 0;
+  $totalCost = \Brick\Math\BigDecimal::zero();
 
   while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-    $totalCost += $row['ExtraFee'];
+    $totalCost = $totalCost->plus(\Brick\Math\BigDecimal::of((string) $row['ExtraFee']));
   }
 
   $format = strtolower($format);
   if ($format == "decimal") {
-    return $totalCost;
+    return (string) $totalCost->toScale(2);
   }
   else if ($format == "int") {
-    return ((int) ($totalCost*100));
+    return $totalCost->withPointMovedRight(2)->toInt();
   }
   else if ($format == "string") {
-    return "&pound;" . number_format($totalCost,2,'.','');
+    return "&pound;" . (string) $totalCost->toScale(2);
   }
 }
 
