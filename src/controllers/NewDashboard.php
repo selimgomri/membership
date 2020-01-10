@@ -60,7 +60,16 @@ include BASE_PATH . "views/header.php";
         </div>
       </div>
     </aside>
-    <?php } ?>
+		<?php } ?>
+		
+		<aside class="row mb-4">
+      <div class="col-lg-6">
+        <div class="cell bg-primary text-white">
+					<h2 class="mb-0">We've had a slight refresh!</h2>
+					<p class="lead mb-0">Don't worry, everything is in the same place.</p>
+        </div>
+      </div>
+    </aside>
 
     <!--<p class="mb-4">We're always looking for feedback! If you have any, <a href="mailto:feedback@myswimmingclub.uk">send us an email</a>.</p>-->
 

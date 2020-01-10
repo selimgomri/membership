@@ -1,6 +1,6 @@
 <?php
 
-$stylesheet = 'public/css/chester/chester-2.1.11-prefixed.css';
+$stylesheet = 'public/css/chester/chester-2.2.0-prefixed.css';
 $fa = 'public/css/font-awesome/css/font-awesome.min.css';
 
 header('Link: <' . autoUrl($stylesheet) . '>; rel=preload; as=style');
