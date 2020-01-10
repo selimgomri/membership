@@ -10,7 +10,7 @@
 function getAccountBalance($user) {
   global $db;
 
-  $getBalance = $db->prepare("SELECT SUM(Amount) FROM paymentsPending WHERE UserID = ? AND (`Status` = 'Pending' OR `Status` = 'Queued' OR `Status` = 'Requested' AND `Type` = ?)");
+  $getBalance = $db->prepare("SELECT SUM(Amount) FROM paymentsPending WHERE UserID = ? AND (`Status` = 'Pending' OR `Status` = 'Queued' OR `Status` = 'Requested') AND `Type` = ?");
   $getBalance->execute([
     $_SESSION['UserID'],
     'Payment'

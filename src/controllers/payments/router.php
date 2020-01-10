@@ -38,6 +38,10 @@ if ($access == "Parent") {
 		include 'parent/SquadFees.php';
 	});
 
+	$this->get('/membership-fees', function() {
+		include 'parent/MembershipFees.php';
+	});
+
 	$this->get('/mandates', function() {
 		global $link;
 		include 'mybanks.php';

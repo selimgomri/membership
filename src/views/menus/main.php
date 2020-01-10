@@ -329,14 +329,7 @@ if (!function_exists('chesterStandardMenu')) {
                 </li>
                 <?php } ?>
                 <?php if ($_SESSION['AccessLevel'] == "Parent") {
-                  $hasMandate = userHasMandates($_SESSION['UserID']);
-            if (!$hasMandate && !$canPayByCard) { ?>
-                <li class="nav-item">
-                  <a class="nav-link" href="<?=autoUrl("payments")?>">
-                    Payments
-                  </a>
-                </li>
-                <?php } else { ?>
+                  $hasMandate = userHasMandates($_SESSION['UserID']); ?>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="paymentsParentDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -350,18 +343,27 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?=autoUrl("payments/mandates")?>">My Bank Account</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/statement/latest")?>">My Latest Statement</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/fees")?>">My Fees Since Last Bill</a>
-                    <a class="dropdown-item" href="<?=autoUrl("payments/squad-fees")?>">My Squad and Extra Fees</a>
-                    <?php } else if (env('GOCARDLESS_ACCESS_TOKEN')) { ?>
-                    <h6 class="dropdown-header">Direct Debit</h6>
+                    <?php } else if (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN') && bool(env('IS_DEV'))) { ?>
+                    <h6 class="dropdown-header">Direct debit</h6>
                     <a class="dropdown-item" href="<?=autoUrl("payments")?>">
                       Setup a direct debit
                     </a>
                     <?php } ?>
+                    <?php if (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN') && bool(env('IS_DEV'))) { ?>
+                    <div class="dropdown-divider"></div>
+                    <?php } ?>
+                    <h6 class="dropdown-header">Fee information</h6>
+                    <a class="dropdown-item" href="<?=autoUrl("payments/squad-fees")?>">
+                      Squad and extra fees
+                    </a>
+                    <a class="dropdown-item" href="<?=autoUrl("payments/membership-fees")?>">
+                      Annual membership fees
+                    </a>
                     <?php if (env('STRIPE') != null) { ?>
                     <?php if (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) { ?>
                     <div class="dropdown-divider"></div>
                     <?php } ?>
-                    <h6 class="dropdown-header">Payment Cards</h6>
+                    <h6 class="dropdown-header">Card payments</h6>
                     <a class="dropdown-item" href="<?=autoUrl("payments/cards")?>">
                       Credit and Debit Cards
                     </a>
@@ -374,7 +376,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <?php } ?>
                   </div>
                 </li>
-                <?php } } ?>
+                <?php } ?>
                 <?php if ($_SESSION['AccessLevel'] != "Parent" &&
           $_SESSION['AccessLevel'] != "Coach") { ?>
                 <li class="nav-item dropdown">

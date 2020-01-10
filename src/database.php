@@ -543,10 +543,10 @@ function paymentHistory($link, $user, $type = null) {
         </div>
         <div class="col text-right">
           <p class="mb-0">
-            <strong>&pound;<?php echo number_format(($row['Amount']/100),2,'.',''); ?></strong>
+            <strong>&pound;<?=(string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2)?></strong>
           </p>
           <p class="mb-0">
-            Status: <?php echo paymentStatusString($row['Status']); ?>
+            View for status
           </p>
         </div>
       </div>
@@ -585,9 +585,9 @@ function feesToPay($link, $user) {
         <div class="col text-right">
           <p class="mb-0">
             <?php if ($row['Type'] == 'Payment') { ?>
-            &pound;<?=number_format(($row['Amount']/100),2,'.','')?>
+            &pound;<?=(string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2)?>
             <?php } else { ?>
-            -&pound;<?=number_format(($row['Amount']/100),2,'.','')?> (Credit)
+            -&pound;<?=(string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2)?> (Credit)
             <?php } ?>
           </p>
         </div>
