@@ -33,7 +33,7 @@ include "galaMenu.php"; ?>
   <h1>Gala entries</h1>
   <p class="lead">Search entries for upcoming galas. Search by Gala or Gala and Surname.</p>
 
-  <?php if (isset($_SESSION['Browser']['Name']) && ($_SESSION['Browser']['Internet Explorer'] || $_SESSION['Browser']['Name'] == 'Edge')) { ?>
+  <?php if (isset($_SESSION['Browser']['Name']) && ($_SESSION['Browser']['Name'] == 'Internet Explorer' || $_SESSION['Browser']['Name'] == 'Edge')) { ?>
     <div class="alert alert-warning">
       <p class="mb-0"><strong>We're aware of an issue affecting this page in Internet Explorer and Microsoft Edge.</strong></p>
       <p class="mb-0">We're investigating the issue. In the meantime, this page works as expected in other common browsers such as <a href="https://firefox.com" class="alert-link">Mozilla Firefox</a> and <a href="https://www.google.com/chrome/" class="alert-link">Google Chrome</a>.</p>
