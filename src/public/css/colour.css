@@ -1,0 +1,17 @@
+<?php
+
+header("Content-Type: text/css;charset=UTF-8");
+header("Content-Disposition: inline");
+
+if (env('SYSTEM_COLOUR')) {
+
+?>
+.bg-primary {
+  background-color: <?=env('SYSTEM_COLOUR')?> !important;
+}
+
+.list-group-item.active {
+  background-color: <?=env('SYSTEM_COLOUR')?>;
+  border-color: <?=env('SYSTEM_COLOUR')?>;
+}
+<?php } ?>

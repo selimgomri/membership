@@ -90,15 +90,6 @@ include BASE_PATH . "views/header.php";
     </aside>
     <?php } ?>
 
-    <aside class="row mb-4">
-      <div class="col-lg-6">
-        <div class="cell bg-primary text-white">
-					<h2 class="mb-0">We've had a slight refresh!</h2>
-					<p class="lead mb-0">Don't worry, everything is in the same place.</p>
-        </div>
-      </div>
-    </aside>
-
     <?php if (env('GOCARDLESS_ACCESS_TOKEN') && !userHasMandates($_SESSION['UserID'])) { ?>
     <div class="mb-4">
       <h2 class="mb-4">Want to set up a Direct Debit?</h2>

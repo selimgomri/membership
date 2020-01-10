@@ -398,6 +398,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
     require BASE_PATH . 'controllers/public/Viewer.php';
   });
 
+  $this->get('/public/css/colour.css', function() {
+    require BASE_PATH . 'public/css/colour.css';
+  });
+
   $this->get('/public/*', function() {
     $filename = $this[0];
     require BASE_PATH . 'controllers/PublicFileLoader.php';
