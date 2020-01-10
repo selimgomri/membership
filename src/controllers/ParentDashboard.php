@@ -90,35 +90,14 @@ include BASE_PATH . "views/header.php";
     </aside>
     <?php } ?>
 
-    <!--<p class="mb-4">We're always looking for feedback! If you have any, <a href="mailto:feedback@myswimmingclub.uk">send us an email</a>.</p>-->
-
-    <?php if (bool(env('IS_CLS')) && time() < strtotime('2019-01-25')) { ?>
-    <div class="mb-4">
-      <h2 class="mb-4">Membership Renewal for 2020 is open now</h2>
-      <div class="news-grid">
-        <a href="<?=autoUrl("renewal")?>">
-          <span class="mb-3">
-            <span class="title mb-0">
-              Complete membership renewal online
-            </span>
-          </span>
-          <span class="category">
-            Renewal
-          </span>
-        </a>
-        <a target="_blank" href="https://www.chesterlestreetasc.co.uk/support/membershiprenewal/completing-your-membership-renewal/">
-          <span class="mb-3">
-            <span class="title mb-0">
-              Help with membership renewal
-            </span>
-          </span>
-          <span class="category">
-            Help and Support
-          </span>
-        </a>
+    <aside class="row mb-4">
+      <div class="col-lg-6">
+        <div class="cell bg-primary text-white">
+					<h2 class="mb-0">We've had a slight refresh!</h2>
+					<p class="lead mb-0">Don't worry, everything is in the same place.</p>
+        </div>
       </div>
-    </div>
-    <?php } ?>
+    </aside>
 
     <?php if (env('GOCARDLESS_ACCESS_TOKEN') && !userHasMandates($_SESSION['UserID'])) { ?>
     <div class="mb-4">
@@ -149,14 +128,14 @@ include BASE_PATH . "views/header.php";
     <?php } ?>
 
 		<div class="mb-4">
-      <h2 class="mb-4">My Swimmers</h2>
+      <h2 class="mb-4">My Members</h2>
       <div class="news-grid">
 				<?php
 				if (sizeof($swimmers) > 0) {
 				foreach ($swimmers as $s) {
-					$fee = "&pound;0.00 - Exempt from fees";
+					$fee = "Exempt from fees";
 					if (!$s['ClubPays']) {
-						$fee = "&pound;" . htmlspecialchars($s['SquadFee']);
+						$fee = "&pound;" . (string) (\Brick\Math\BigDecimal::of((string) $s['SquadFee']))->toScale(2);
 					}?>
 				<a href="<?=autoUrl("swimmers/" . $s['MemberID'])?>">
 					<span class="mb-3">

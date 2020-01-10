@@ -60,7 +60,16 @@ include BASE_PATH . "views/header.php";
         </div>
       </div>
     </aside>
-    <?php } ?>
+		<?php } ?>
+		
+		<aside class="row mb-4">
+      <div class="col-lg-6">
+        <div class="cell bg-primary text-white">
+					<h2 class="mb-0">We've had a slight refresh!</h2>
+					<p class="lead mb-0">Don't worry, everything is in the same place.</p>
+        </div>
+      </div>
+    </aside>
 
     <!--<p class="mb-4">We're always looking for feedback! If you have any, <a href="mailto:feedback@myswimmingclub.uk">send us an email</a>.</p>-->
 
@@ -71,17 +80,17 @@ include BASE_PATH . "views/header.php";
         <div class="mb-4">
           <div class="news-grid">
         <?php for ($i = 0; $i < sizeof($sessions); $i++) { ?>
-          <a href="<?=autoUrl("attendance/register?date=" . urlencode($date) . "&squad=" . urlencode($sessions[$i]['SquadID']) . "&session=" . urlencode($sessions[$i]['SessionID']))?>" title="<?=$sessions[$i]['SquadName']?> Squad Register, <?=$sessions[$i]['SessionName']?>">
+          <a href="<?=htmlspecialchars(autoUrl("attendance/register?date=" . urlencode($date) . "&squad=" . urlencode($sessions[$i]['SquadID']) . "&session=" . urlencode($sessions[$i]['SessionID'])))?>" title="<?=htmlspecialchars($sessions[$i]['SquadName'])?> Squad Register, <?=htmlspecialchars($sessions[$i]['SessionName'])?>">
             <div>
               <span class="title mb-0">
-                Take <?=$sessions[$i]['SquadName']?> Squad Register
+                Take <?=htmlspecialchars($sessions[$i]['SquadName'])?> Squad Register
               </span>
               <span class="d-flex mb-3">
                 <?=date("H:i", strtotime($sessions[$i]['StartTime']))?> - <?=date("H:i", strtotime($sessions[$i]['EndTime']))?>
               </span>
             </div>
             <span class="category">
-              <?=$sessions[$i]['SessionName']?>, <?=$sessions[$i]['VenueName']?>
+              <?=htmlspecialchars($sessions[$i]['SessionName'])?>, <?=htmlspecialchars($sessions[$i]['VenueName'])?>
             </span>
           </a>
         <?php } ?>

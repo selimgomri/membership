@@ -691,6 +691,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/users/router.php';
     });
 
+    $this->group('/admin', function() {
+      include 'controllers/admin-tools/router.php';
+    });
+
     $this->group('/galas', function() {
       global $link;
 

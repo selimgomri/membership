@@ -2,6 +2,7 @@
 
 $districts = json_decode(file_get_contents(BASE_PATH . 'includes/regions/regions.json'), true);
 $counties = json_decode(file_get_contents(BASE_PATH . 'includes/regions/counties.json'), true);
+$time = new DateTime('now', new DateTimeZone('Europe/London'));
 
 ?>
 
@@ -112,7 +113,7 @@ $counties = json_decode(file_get_contents(BASE_PATH . 'includes/regions/counties
           <p>Page rendered in <?=number_format($seconds, 3)?> seconds. <?php if (defined('SOFTWARE_VERSION')) { ?>Software version <?=mb_substr(SOFTWARE_VERSION, 0, 7);?>.<?php } ?>
           </p>
           <p class="mb-0">
-            &copy; <span class="org fn">Chris Heppell <span aria-hidden="true">T/A</span><span class="sr-only">trading as</span> Swimming Club Data Systems and Chester&#8209;le&#8209;Street ASC</span>. Swimming Club Data Systems is not responsible
+            &copy; <?=$time->format('Y')?> <span class="org fn">Chris Heppell <span aria-hidden="true">T/A</span><span class="sr-only">trading as</span> Swimming Club Data Systems, and Chester&#8209;le&#8209;Street ASC</span>. Swimming Club Data Systems is not responsible
             for the content of external sites.
           </p>
         </div>
