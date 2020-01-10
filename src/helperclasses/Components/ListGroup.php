@@ -42,7 +42,7 @@ class ListGroup {
         }
 
         $title = '';
-        if (isset($link->$title) && strlen($link->$title) > 0) {
+        if (isset($link->title) && strlen($link->title) > 0) {
           $target = 'title="' . $link->title . '"';
         } else {
           $target = 'title="' . $link->name . '"';

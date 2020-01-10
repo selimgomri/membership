@@ -63,6 +63,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 		include BASE_PATH . 'controllers/qualifications/admin/NewQualification.php';
 	});
 
+	$this->get('/{id}:int/membership-fees', function($id) {
+		include BASE_PATH . 'controllers/payments/parent/MembershipFees.php';
+	});
+
 	if (!isset($_SESSION['UserSimulation'])) {
 		$this->get('/simulate/{id}:int', function($id) {
 			global $link;

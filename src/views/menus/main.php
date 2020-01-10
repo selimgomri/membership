@@ -397,6 +397,13 @@ if (!function_exists('chesterStandardMenu')) {
                     <?php } ?>
                   </div>
                 </li>
+                <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+                <li class="nav-item">
+                  <a class="nav-link" href="<?=autoUrl("admin")?>">
+                    Admin <span class="badge badge-secondary">New</span>
+                  </a>
+                </li>
+                <?php } ?>
                 <!--
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="trialDropdown" role="button" data-toggle="dropdown"
@@ -455,12 +462,6 @@ if (!function_exists('chesterStandardMenu')) {
                     <?php } ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("my-account/loginhistory") ?>">Your Login
                       History</a>
-                    <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="<?=autoUrl("settings")?>">
-                      System Settings
-                    </a>
-                    <?php } ?>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" target="_blank"
                       href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">Help</a>

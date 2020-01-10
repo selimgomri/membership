@@ -3,6 +3,19 @@
 global $db;
 global $systemInfo;
 
+$user = $_SESSION['UserID'];
+$info = null;
+if ($_SESSION['AccessLevel'] != 'Parent' && isset($id) && $id != null) {
+  $user = $id;
+  $userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, AccessLevel FROM users WHERE UserID = ?");
+  $userInfo->execute([$id]);
+  $info = $userInfo->fetch(PDO::FETCH_ASSOC);
+
+  if ($info == null || $info['AccessLevel'] != 'Parent') {
+    halt(404);
+  }
+}
+
 $month = (new DateTime('now', new DateTimeZone('Europe/London')))->format('m');
 
 $discounts = json_decode($systemInfo->getSystemOption('MembershipDiscounts'), true);
@@ -15,18 +28,18 @@ if ($discounts != null && isset($discounts['ASA'][$month])) {
 }
 
 $sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ? AND `ClubPays` = '0'");
-$sql->execute([$_SESSION['UserID']]);
+$sql->execute([$user]);
 
 $clubFee = $totalFeeDiscounted = $totalFee = 0;
 
 $payingSwimmerCount = $sql->fetchColumn();
 
-$clubFees = \SCDS\Membership\ClubMembership::create($db, $_SESSION['UserID'], false);
+$clubFees = \SCDS\Membership\ClubMembership::create($db, $user, false);
 
 $clubFee = $clubFees->getFee();
 
 $getMembers = $db->prepare("SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID = members.SquadID WHERE `members`.`UserID` = ?");
-$getMembers->execute([$_SESSION['UserID']]);
+$getMembers->execute([$user]);
 
 $member = $getMembers->fetchAll(PDO::FETCH_ASSOC);
 $count = sizeof($member);
@@ -63,9 +76,27 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="container">
+
+  <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("users")?>">Users</a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("users/" . $id)?>"><?=htmlspecialchars(mb_substr($info["Forename"], 0, 1, 'utf-8') . mb_substr($info["Surname"], 0, 1, 'utf-8'))?></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Annual membership</li>
+    </ol>
+  </nav>
+  <?php } else { ?>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Annual membership</li>
+    </ol>
+  </nav>
+  <?php } ?>
+
   <div class="row">
     <div class="col-lg-8">
-      <h1>Membership fees</h1>
+      <h1>Membership fees<?php if ($_SESSION['AccessLevel'] != 'Parent') { ?> for <?=htmlspecialchars($info['Forename'])?><?php } ?></h1>
       <p class="lead">Club and Swim England membership fees are paid yearly and are due on 1 January.</p>
 
       <p>The fees you're charged are dependent on the number of members linked to this account and the type of each member.</p>
