@@ -23,5 +23,5 @@ function getAccountBalance($user) {
   ]);
   $credits = $getBalance->fetchColumn();
   
-  return ($balance - $credits);
+  return ((int) $balance - (int) $credits);
 }

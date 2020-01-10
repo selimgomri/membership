@@ -408,7 +408,7 @@ include BASE_PATH . "views/header.php";
       <?php } ?>
       <div class="col-sm-6 col-md-4">
         <h3 class="h6">Account balance</h3>
-        <p>&pound;<?=number_format(getAccountBalance($id)/100, 2, '.', '')?></p>
+        <p>&pound;<?=(string) (\Brick\Math\BigDecimal::of((string) getAccountBalance($id)))->withPointMovedLeft(2)->toScale(2)?></p>
       </div>
     </div>
   </div>
