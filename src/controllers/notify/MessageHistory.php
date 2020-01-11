@@ -143,10 +143,10 @@ include BASE_PATH . "views/notifyMenu.php";?>
             </dd>
             <?php } ?>
             <?php if (isset($info->ReplyToMe->Name) && isset($info->ReplyToMe->Email)) { ?>
-            <dt class="col-sm-3">Reply to</dt>
+            <dt class="col-sm-3">Custom reply to</dt>
             <dd class="col-sm-9 text-truncate">
               <a href="mailto:<?=htmlspecialchars($info->ReplyToMe->Email)?>">
-                <?=htmlspecialchars($info->ReplyToMe->Name)?> <<?=htmlspecialchars($info->ReplyToMe->Email)?>>
+                <?=htmlspecialchars($info->ReplyToMe->Name)?> &lt;<?=htmlspecialchars($info->ReplyToMe->Email)?>&gt;
               </a>
             </dd>
             <?php } ?>
