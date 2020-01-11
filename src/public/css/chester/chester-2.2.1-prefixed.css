@@ -323,6 +323,11 @@ legend {
   color: inherit;
   white-space: normal;
 }
+@media (max-width: 1200px) {
+  legend {
+    font-size: calc(1.275rem + 0.3vw);
+  }
+}
 
 progress {
   vertical-align: baseline;
@@ -374,17 +379,37 @@ h1, h2, h3, h4, h5, h6,
 h1, .h1 {
   font-size: 2.5rem;
 }
+@media (max-width: 1200px) {
+  h1, .h1 {
+    font-size: calc(1.375rem + 1.5vw);
+  }
+}
 
 h2, .h2 {
   font-size: 2rem;
+}
+@media (max-width: 1200px) {
+  h2, .h2 {
+    font-size: calc(1.325rem + 0.9vw);
+  }
 }
 
 h3, .h3 {
   font-size: 1.75rem;
 }
+@media (max-width: 1200px) {
+  h3, .h3 {
+    font-size: calc(1.3rem + 0.6vw);
+  }
+}
 
 h4, .h4 {
   font-size: 1.5rem;
+}
+@media (max-width: 1200px) {
+  h4, .h4 {
+    font-size: calc(1.275rem + 0.3vw);
+  }
 }
 
 h5, .h5 {
@@ -405,11 +430,21 @@ h6, .h6 {
   font-weight: 300;
   line-height: 1.2;
 }
+@media (max-width: 1200px) {
+  .display-1 {
+    font-size: calc(1.725rem + 5.7vw);
+  }
+}
 
 .display-2 {
   font-size: 5.5rem;
   font-weight: 300;
   line-height: 1.2;
+}
+@media (max-width: 1200px) {
+  .display-2 {
+    font-size: calc(1.675rem + 5.1vw);
+  }
 }
 
 .display-3 {
@@ -417,11 +452,21 @@ h6, .h6 {
   font-weight: 300;
   line-height: 1.2;
 }
+@media (max-width: 1200px) {
+  .display-3 {
+    font-size: calc(1.575rem + 3.9vw);
+  }
+}
 
 .display-4 {
   font-size: 3.5rem;
   font-weight: 300;
   line-height: 1.2;
+}
+@media (max-width: 1200px) {
+  .display-4 {
+    font-size: calc(1.475rem + 2.7vw);
+  }
 }
 
 hr {
@@ -5017,6 +5062,11 @@ a.badge-dark:focus, a.badge-dark.focus {
   color: #000;
   text-shadow: 0 1px 0 #fff;
   opacity: 0.5;
+}
+@media (max-width: 1200px) {
+  .close {
+    font-size: calc(1.275rem + 0.3vw);
+  }
 }
 .close:hover {
   color: #000;
@@ -9929,7 +9979,7 @@ thead {
 }
 
 .cls-global-footer-inverse {
-  background: #333;
+  background: #343a40;
   color: #FFF;
 }
 
@@ -9942,7 +9992,7 @@ thead {
 }
 
 .cls-global-footer-sponsors {
-  background: #777;
+  background: #495057;
   color: #FFF;
   padding: 1.4rem 0 0;
   margin: 1rem 0 0;
@@ -9950,7 +10000,7 @@ thead {
 
 .cls-global-footer-legal {
   padding: 1rem 0;
-  background: #222;
+  background: #212529;
   color: #fff;
 }
 
@@ -10927,6 +10977,10 @@ Red BG Search Form
   color: rgba(255, 255, 255, 0.75);
 }
 
+.membership-header {
+  background-color: #343a40;
+}
+
 .StripeElement--focus {
   color: #495057;
   background-color: #fff;
@@ -11146,4 +11200,4 @@ textarea.form-control .was-validated .StripeElement--invalid, textarea.form-cont
   color: #dc3545;
 }
 
-/*# sourceMappingURL=chester-2.2.0-prefixed.css.map */
+/*# sourceMappingURL=chester-2.2.1-prefixed.css.map */
