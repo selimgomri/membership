@@ -32,7 +32,7 @@ include BASE_PATH . "views/header.php";
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("users")?>">Users</a></li>
-      <li class="breadcrumb-item"><a href="<?=autoUrl("users/" . $id)?>"><?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?></a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("users/" . $id)?>"><?=htmlspecialchars(mb_substr($info['Forename'], 0, 1, 'utf-8') . mb_substr($info['Surname'], 0, 1, 'utf-8'))?></a></li>
       <li class="breadcrumb-item"><a href="<?=autoUrl("users/" . $id . "/rep")?>">Rep Settings</a></li>
       <li class="breadcrumb-item active" aria-current="page">Assign</li>
     </ol>

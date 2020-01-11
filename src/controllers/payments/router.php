@@ -125,21 +125,6 @@ if ($access == "Admin") {
 		include 'adminViewMonthlyFees.php';
 	});
 
-	$this->get('/newcharge', function() {
-		global $link;
-		include 'admin/ManualCharge.php';
-	});
-
-	$this->post('/newcharge', function() {
-		global $link;
-		include 'admin/ManualChargeDo.php';
-	});
-
-	$this->post('/newcharge', function() {
-		global $link;
-		include 'admin/ManualChargeDo.php';
-	});
-
 	$this->group('/confirmation', function() {
 		include 'admin/confirmation/router.php';
 	});
@@ -260,23 +245,6 @@ if ($access == "Admin") {
   		include 'admin/ExtraIndividualServer.php';
   	});
 
-	});
-
-	$this->get('/testpay', function() {
-		global $link;
-		include 'testpay.php';
-	});
-
-	// Credit Accounts
-
-	$this->get('/newrefund', function() {
-		global $link;
-		include 'admin/ManualRefund.php';
-	});
-
-	$this->post('/newrefund', function() {
-		global $link;
-		include 'admin/ManualRefundDo.php';
 	});
 
 	$this->get('/galas', function() {

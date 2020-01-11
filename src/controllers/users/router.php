@@ -151,4 +151,12 @@ if ($_SESSION['AccessLevel'] == 'Admin') {
 	$this->get('/{id}:int/targeted-lists/remove', function($id) {
 		include 'notify-lists/remove.php';
 	});
+
+	/**
+	 * FINANCIAL INFORMATION
+	 */
+
+	$this->get('/{id}:int/pending-fees', function($id) {
+		include 'CurrentFees.php';
+	});
 }

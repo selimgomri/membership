@@ -160,7 +160,7 @@ include BASE_PATH . "views/header.php";
 							<?=htmlspecialchars($g['MForename'] . ' ' . $g['MSurname'])?>
 						</span>
 						<span>
-							&pound;<?=htmlspecialchars(number_format($g['FeeToPay'], 2, '.', ','))?>
+							&pound;<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $g['FeeToPay']))->toScale(2))?>
 						</span>
 					</span>
           <span class="category">
