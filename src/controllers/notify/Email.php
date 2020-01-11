@@ -69,7 +69,7 @@ include BASE_PATH . "views/notifyMenu.php";
   <form method="post" onkeypress="return event.keyCode != 13;">
 
     <div class="form-group">
-			<label>To parents of swimmers in the following targeted lists...</label>
+			<label>To members in the following targeted lists...</label>
 			<div class="row">
 			<?php while ($list = $lists->fetch(PDO::FETCH_ASSOC)) { ?>
 				<div class="col-6 col-sm-6 col-md-4 col-lg-3">
@@ -88,7 +88,7 @@ include BASE_PATH . "views/notifyMenu.php";
     </div>
     
 		<div class="form-group">
-			<label>To parents of swimmers in the following squads...</label>
+			<label>To members in the following squads...</label>
 			<div class="row">
 			<?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
 				<div class="col-6 col-sm-6 col-md-4 col-lg-3">
@@ -108,7 +108,7 @@ include BASE_PATH . "views/notifyMenu.php";
 
     <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
     <div class="form-group">
-			<label>To parents of swimmers entered in the following galas...</label>
+			<label>To members entered in the following galas...</label>
 			<div class="row">
 			<?php while ($gala = $galas->fetch(PDO::FETCH_ASSOC)) { ?>
 				<div class="col-6 col-sm-6 col-md-4 col-lg-3">
@@ -171,7 +171,7 @@ include BASE_PATH . "views/notifyMenu.php";
       <p>
         <em>
           Your message will begin with "Hello
-          <span class="mono">Parent Name</span>,".
+          <span class="mono">User Name</span>,".
         </em>
       </p>
 			<textarea class="form-control" id="message" name="message" rows="10">

@@ -36,7 +36,7 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
 		include 'Home.php';
 	});
 
-  $this->group('/newemail', function() {
+  $this->group(['/new', '/newemail'], function() {
 
   	$this->get('/', function() {
   		global $link;
@@ -69,7 +69,7 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
 	});
 
   if ($_SESSION['AccessLevel'] == "Admin") {
-  	$this->get('/email', function() {
+  	$this->get('/pending', function() {
   		global $link;
   		include 'EmailList.php';
   	});

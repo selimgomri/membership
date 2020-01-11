@@ -61,6 +61,8 @@ include BASE_PATH . "views/notifyMenu.php";
         users almost instantaneously. Users who have
         not opted in to recieving emails will not receive messages.
       </p>
+
+      <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
       <p>
         <strong>
           Please be aware:
@@ -79,6 +81,8 @@ include BASE_PATH . "views/notifyMenu.php";
         Other use cases are allowed but must be justifiable in terms of our
         operational needs.
       </p>
+      <?php } ?>
+
       <p class="small">
         Provided by Swimming Club Data Systems to <?=htmlspecialchars(env('CLUB_NAME'))?>.
       </p>

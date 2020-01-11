@@ -259,11 +259,10 @@ if (!function_exists('chesterStandardMenu')) {
                   </a>
                   <div class="dropdown-menu" aria-labelledby="notifyDropdown">
                     <a class="dropdown-item" href="<?php echo autoUrl("notify")?>">Notify Home</a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("notify/newemail")?>">New Message</a>
+                    <a class="dropdown-item" href="<?php echo autoUrl("notify/new")?>">New Message</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("notify/lists")?>">Targeted Lists</a>
                     <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("notify/sms")?>">SMS Lists</a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("notify/email")?>">Pending Messages</a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("notify/history")?>">Previous Messages</a>
                   </div>
