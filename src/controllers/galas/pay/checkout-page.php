@@ -205,7 +205,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
             </div>
             <div class="col text-right">
               <p>
-                <?=mb_convert_case($numFormatter->format($count),   MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
+                <?=mb_convert_case($numFormatter->format($count), MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
               </p>
 
               <!--<?php if ($notReady) { ?>

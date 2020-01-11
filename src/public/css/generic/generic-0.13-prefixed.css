@@ -11160,6 +11160,10 @@ Red BG Search Form
   color: rgba(255, 255, 255, 0.75);
 }
 
+.membership-header {
+  background-color: #343a40;
+}
+
 .StripeElement--focus {
   color: #495057;
   background-color: #fff;

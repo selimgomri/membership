@@ -115,7 +115,7 @@ if (isset($customBackground) && $customBackground) {
     </div>
     <?php } ?>
 
-    <div class="bg-primary">
+    <div class="membership-header">
       <div class="<?php if (date("m") == "12") { ?>festive<?php } ?>">
         <div class="<?=$container_class?>">
           <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
