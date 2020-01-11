@@ -8,16 +8,25 @@ include BASE_PATH . "views/notifyMenu.php";
 ?>
 
 <div class="container">
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("notify"))?>">Notify</a></li>
+      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("notify/lists"))?>">Lists</a></li>
+      <li class="breadcrumb-item active" aria-current="page">New</li>
+    </ol>
+  </nav>
+
   <div class="row">
     <div class="col-lg-8">
       <h1 class="">
-        Create a New Targeted List
+        Create a new targeted list
       </h1>
       <p class="lead">
         Targeted lists are custom mailing lists for messaging groups of members outside of normal squads.
       </p>
       <p>
-        A useful use case would be for the Junior League.
+        A useful use case would be for the Junior League or National Arena League.
       </p>
 
       <?php

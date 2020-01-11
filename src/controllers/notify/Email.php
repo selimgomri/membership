@@ -55,13 +55,21 @@ include BASE_PATH . "views/notifyMenu.php";
  ?>
 
 <div class="container">
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("notify"))?>">Notify</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Composer</li>
+    </ol>
+  </nav>
+
 	<h1>Notify Composer</h1>
-	<p class="lead">Send Emails to targeted groups of parents</p>
+	<p class="lead">Send emails to targeted groups</p>
   <hr>
   <form method="post" onkeypress="return event.keyCode != 13;">
 
     <div class="form-group">
-			<label>To parents of swimmers in the following targeted lists...</label>
+			<label>To members in the following targeted lists...</label>
 			<div class="row">
 			<?php while ($list = $lists->fetch(PDO::FETCH_ASSOC)) { ?>
 				<div class="col-6 col-sm-6 col-md-4 col-lg-3">
@@ -80,7 +88,7 @@ include BASE_PATH . "views/notifyMenu.php";
     </div>
     
 		<div class="form-group">
-			<label>To parents of swimmers in the following squads...</label>
+			<label>To members in the following squads...</label>
 			<div class="row">
 			<?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
 				<div class="col-6 col-sm-6 col-md-4 col-lg-3">
@@ -100,7 +108,7 @@ include BASE_PATH . "views/notifyMenu.php";
 
     <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
     <div class="form-group">
-			<label>To parents of swimmers entered in the following galas...</label>
+			<label>To members entered in the following galas...</label>
 			<div class="row">
 			<?php while ($gala = $galas->fetch(PDO::FETCH_ASSOC)) { ?>
 				<div class="col-6 col-sm-6 col-md-4 col-lg-3">
@@ -163,7 +171,7 @@ include BASE_PATH . "views/notifyMenu.php";
       <p>
         <em>
           Your message will begin with "Hello
-          <span class="mono">Parent Name</span>,".
+          <span class="mono">User Name</span>,".
         </em>
       </p>
 			<textarea class="form-control" id="message" name="message" rows="10">
