@@ -83,7 +83,7 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
   $this->group('/history', function() {
 		global $link;
 
-    $this->get(['/', '/page/{page}:int'], function($page = null) {
+    $this->get('/', function() {
 			global $link;
 			include 'MessageHistory.php';
 		});
