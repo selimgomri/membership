@@ -1,0 +1,38 @@
+{
+  "menuType": "ProfileNavigation",
+  "title": "Notify tools",
+  "links": [
+    {
+      "id": "notify-home",
+      "name": "Notify home",
+      "title": "Help and information about notify",
+      "link": "notify",
+      "target": "_self",
+      "external": false
+    },
+    {
+      "id": "notify-history",
+      "name": "Sent emails",
+      "title": "Previously sent notify emails",
+      "link": "notify/history",
+      "target": "_self",
+      "external": false
+    },
+    {
+      "id": "notify-lists",
+      "name": "Targeted lists",
+      "title": "Manage targeted lists for notify",
+      "link": "notify/lists",
+      "target": "_self",
+      "external": false
+    },
+    {
+      "id": "notify-reply-to",
+      "name": "Reply-to settings",
+      "title": "Choose the email address used for email replies",
+      "link": "notify/reply-to",
+      "target": "_self",
+      "external": false
+    }
+  ]
+}

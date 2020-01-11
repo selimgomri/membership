@@ -55,8 +55,16 @@ include BASE_PATH . "views/notifyMenu.php";
  ?>
 
 <div class="container">
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("notify"))?>">Notify</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Composer</li>
+    </ol>
+  </nav>
+
 	<h1>Notify Composer</h1>
-	<p class="lead">Send Emails to targeted groups of parents</p>
+	<p class="lead">Send emails to targeted groups</p>
   <hr>
   <form method="post" onkeypress="return event.keyCode != 13;">
 

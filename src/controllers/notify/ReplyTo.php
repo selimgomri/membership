@@ -7,6 +7,14 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="container">
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("notify"))?>">Notify</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Reply address</li>
+    </ol>
+  </nav>
+
   <div class="row">
     <div class="col-lg-8">
       <h1>Your Reply-To Address</h1>

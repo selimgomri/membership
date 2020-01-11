@@ -24,6 +24,16 @@ include BASE_PATH . "views/notifyMenu.php";
 ?>
 
 <div class="container">
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("notify"))?>">Notify</a></li>
+      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("notify/lists"))?>">Lists</a></li>
+      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("notify/lists/" . $id))?>"><?=htmlspecialchars($row['Name'])?></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Edit</li>
+    </ol>
+  </nav>
+
   <div class="row">
     <div class="col-lg-8">
       <h1 class="">
