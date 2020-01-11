@@ -89,7 +89,9 @@ include BASE_PATH . "views/header.php";
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("users")?>">Users</a></li>
-      <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars(mb_substr($info["Forename"], 0, 1, 'utf-8') . mb_substr($info["Surname"], 0, 1, 'utf-8'))?></li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <?=htmlspecialchars(mb_substr($info["Forename"], 0, 1, 'utf-8') . mb_substr($info["Surname"], 0, 1, 'utf-8'))?>
+      </li>
     </ol>
   </nav>
 
@@ -125,19 +127,24 @@ include BASE_PATH . "views/header.php";
       </div>
       <div class="col-sm-6 col-md-4">
         <h3 class="h6">Email</h3>
-        <p class="text-truncate"><a href="mailto:<?=htmlspecialchars($info['EmailAddress'])?>"><?=htmlspecialchars($info['EmailAddress'])?></a></p>
+        <p class="text-truncate"><a
+            href="mailto:<?=htmlspecialchars($info['EmailAddress'])?>"><?=htmlspecialchars($info['EmailAddress'])?></a>
+        </p>
         <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
         <p>
-          <a class="btn btn-primary" data-toggle="collapse" href="#editEmailAddress" role="button" aria-expanded="false" aria-controls="editEmailAddress">
+          <a class="btn btn-primary" data-toggle="collapse" href="#editEmailAddress" role="button" aria-expanded="false"
+            aria-controls="editEmailAddress">
             Edit email address
           </a>
         </p>
         <div class="collapse" id="editEmailAddress">
-          <form method="post" class="cell" action="<?=htmlspecialchars(autoUrl("users/" . $id . "/update-email-address"))?>">
+          <form method="post" class="cell"
+            action="<?=htmlspecialchars(autoUrl("users/" . $id . "/update-email-address"))?>">
             <?=\SCDS\CSRF::write()?>
             <div class="form-group">
               <label for="new-user-email">New email address</label>
-              <input type="email" class="form-control" id="new-user-email" name="new-user-email" placeholder="Enter email">
+              <input type="email" class="form-control" id="new-user-email" name="new-user-email"
+                placeholder="Enter email">
             </div>
             <p>
               <button type="submit" class="btn btn-primary">
@@ -151,7 +158,9 @@ include BASE_PATH . "views/header.php";
       <?php if ($number !== false) { ?>
       <div class="col-sm-6 col-md-4">
         <h3 class="h6">Phone</h3>
-        <p><a href="<?=htmlspecialchars($number->format(PhoneNumberFormat::RFC3966))?>"><?=htmlspecialchars($number->format(PhoneNumberFormat::NATIONAL))?></a></p>
+        <p><a
+            href="<?=htmlspecialchars($number->format(PhoneNumberFormat::RFC3966))?>"><?=htmlspecialchars($number->format(PhoneNumberFormat::NATIONAL))?></a>
+        </p>
       </div>
       <?php } ?>
     </div>
@@ -196,7 +205,25 @@ include BASE_PATH . "views/header.php";
       </div>
     </div>
 
-    <p><a href="<?=htmlspecialchars(autoUrl("users/" . $id . "/membership-fees"))?>" class="btn btn-primary">Annual membership fees <span class="fa fa-chevron-right"></span></a></p>
+    <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+    <p>
+      <a href="<?=htmlspecialchars(autoUrl("users/" . $id . "/membership-fees"))?>" class="btn btn-primary">
+        Annual membership fees <span class="fa fa-chevron-right"></span>
+      </a>
+    </p>
+
+    <p>
+      <a href="<?=autoUrl("users/" . $id . "/pending-fees")?>" class="btn btn-primary">
+        Pending payments <span class="fa fa-chevron-right"></span>
+      </a>
+    </p>
+
+    <p>
+      <a href="<?=autoUrl("payments/history/users/" . $id)?>" class="btn btn-primary">
+        Previous bills <span class="fa fa-chevron-right"></span>
+      </a>
+    </p>
+    <?php } ?>
   </div>
 
   <div class="mb-4">
@@ -210,11 +237,14 @@ include BASE_PATH . "views/header.php";
     <div class="row">
       <?php while ($s = $swimmers->fetch(PDO::FETCH_ASSOC)) { ?>
       <div class="col-sm-6 col-md-4">
-        <h3 class="h6"><a href="<?=autoUrl("swimmers/" . $s['id'])?>" title="Full information about <?=htmlspecialchars($s['fn'] . ' ' . $s['sn'])?>"><?=htmlspecialchars($s['fn'] . ' ' . $s['sn'])?></a></h3>
+        <h3 class="h6"><a href="<?=autoUrl("swimmers/" . $s['id'])?>"
+            title="Full information about <?=htmlspecialchars($s['fn'] . ' ' . $s['sn'])?>"><?=htmlspecialchars($s['fn'] . ' ' . $s['sn'])?></a>
+        </h3>
         <?php if ($s['exempt'] || (int) $s['fee'] == 0) { ?>
         <p><?=htmlspecialchars($s['squad'])?> Squad, No squad fee</p>
         <?php } else { ?>
-        <p><?=htmlspecialchars($s['squad'])?> Squad, &pound;<?=number_format($s['fee'], 2)?></p>
+        <p><?=htmlspecialchars($s['squad'])?> Squad,
+          &pound;<?=(string) (\Brick\Math\BigDecimal::of((string) $s['fee']))->toScale(2)?></p>
         <?php } ?>
       </div>
       <?php } ?>
@@ -332,26 +362,27 @@ include BASE_PATH . "views/header.php";
     </p>
 
     <div class="row">
-    <?php
+      <?php
     $count = 0;
     while ($qualification = $qualifications->fetch(PDO::FETCH_ASSOC)) {
       $count += 1; ?>
-    <div class="col-sm-6 col-md-4">
-      <h3 class="h6"><?=htmlspecialchars($qualification['Name'])?></h3>
-      <p><?=htmlspecialchars($qualification['Info'])?></p>
-      <p>
-        Valid since <?=date("d/m/Y", strtotime($qualification['From']))?><?php if ($qualification['To'] != null) { ?>, <strong>Expires <?=date("d/m/Y", strtotime($qualification['To']))?></strong><?php } ?>.
-      </p>
-    </div>
-    <?php } ?>
-    <?php if ($count == 0) { ?>
+      <div class="col-sm-6 col-md-4">
+        <h3 class="h6"><?=htmlspecialchars($qualification['Name'])?></h3>
+        <p><?=htmlspecialchars($qualification['Info'])?></p>
+        <p>
+          Valid since <?=date("d/m/Y", strtotime($qualification['From']))?><?php if ($qualification['To'] != null) { ?>,
+          <strong>Expires <?=date("d/m/Y", strtotime($qualification['To']))?></strong><?php } ?>.
+        </p>
+      </div>
+      <?php } ?>
+      <?php if ($count == 0) { ?>
       <div class="col">
         <div class="alert alert-info">
           <strong>This user has no listed qualifications</strong><br>
           They may not have had any added
         </div>
       </div>
-    <?php } ?>
+      <?php } ?>
     </div>
 
     <p>
@@ -361,8 +392,8 @@ include BASE_PATH . "views/header.php";
     </p>
   </div>
 
-	<div class="mb-4">
-		<h2>Simulate this user</h2>
+  <div class="mb-4">
+    <h2>Simulate this user</h2>
     <p class="lead">
       Act as this user.
     </p>
@@ -372,8 +403,9 @@ include BASE_PATH . "views/header.php";
       will be as if you have logged in as this user.
     </p>
 
-		<p><a href="<?=autoUrl("users/simulate/" . $id)?>" class="btn btn-primary">Simulate this user <span class="fa fa-chevron-right"></span> </a></p>
-	</div>
+    <p><a href="<?=autoUrl("users/simulate/" . $id)?>" class="btn btn-primary">Simulate this user <span
+          class="fa fa-chevron-right"></span> </a></p>
+  </div>
 
   <h2>
     Advanced Information
@@ -402,15 +434,20 @@ include BASE_PATH . "views/header.php";
       <div class="col-sm-6 col-md-4">
         <h3 class="h6">Direct Debit Mandate</h3>
         <?php if ($logo_path) { ?>
-        <img class="img-fluid mb-3" style="max-height:35px;" src="<?=$logo_path?>.png" srcset="<?=$logo_path?>@2x.png 2x, <?=$logo_path?>@3x.png 3x">
+        <img class="img-fluid mb-3" style="max-height:35px;" src="<?=$logo_path?>.png"
+          srcset="<?=$logo_path?>@2x.png 2x, <?=$logo_path?>@3x.png 3x">
         <?php } ?>
-        <p class="mb-0"><?=$bankName?><abbr title="<?=htmlspecialchars(mb_strtoupper(bankDetails($id, "bank_name")))?>"><?=htmlspecialchars(getBankName(bankDetails($id, "bank_name")))?></abbr></p>
+        <p class="mb-0"><?=$bankName?><abbr
+            title="<?=htmlspecialchars(mb_strtoupper(bankDetails($id, "bank_name")))?>"><?=htmlspecialchars(getBankName(bankDetails($id, "bank_name")))?></abbr>
+        </p>
         <p class="mono">******<?=mb_strtoupper(bankDetails($id, "account_number_end"))?></p>
       </div>
       <?php } ?>
       <div class="col-sm-6 col-md-4">
         <h3 class="h6">Account balance</h3>
-        <p>&pound;<?=(string) (\Brick\Math\BigDecimal::of((string) getAccountBalance($id)))->withPointMovedLeft(2)->toScale(2)?></p>
+        <p>
+          &pound;<?=(string) (\Brick\Math\BigDecimal::of((string) getAccountBalance($id)))->withPointMovedLeft(2)->toScale(2)?>
+        </p>
       </div>
     </div>
   </div>

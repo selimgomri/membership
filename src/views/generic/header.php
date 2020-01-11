@@ -116,17 +116,17 @@ if (isset($customBackground) && $customBackground) {
     <?php } ?>
 
     <div class="membership-header">
-      <div class="<?php if (date("m") == "12") { ?>festive<?php } ?>">
+      <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
+      <div class="club-name-header <?php if (date("m") == "12") { ?>festive<?php } ?>">
         <div class="<?=$container_class?>">
-          <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
-          <h1 class="d-none d-md-flex pt-3 pb-2 mb-0">
+          <h1 class="d-none d-md-flex py-3 mb-0">
             <a href="<?=autoUrl("")?>" class="text-white text-decoration-none">
-              <?=mb_strtoupper(env('CLUB_NAME'))?>
+              <?=htmlspecialchars(mb_strtoupper(env('CLUB_NAME')))?>
             </a>
           </h1>
-          <?php } ?>
         </div>
       </div>
+      <?php } ?>
 
       <div class="<?=$container_class?>">
         <div class="">

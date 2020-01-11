@@ -6,16 +6,8 @@ header("Content-Disposition: inline");
 if (env('SYSTEM_COLOUR')) {
 
 ?>
-.bg-primary {
-  background-color: <?=env('SYSTEM_COLOUR')?> !important;
-}
-
-.list-group-item.active {
+.club-name-header {
   background-color: <?=env('SYSTEM_COLOUR')?>;
-  border-color: <?=env('SYSTEM_COLOUR')?>;
-}
-
-.badge-primary {
-  background-color: <?=env('SYSTEM_COLOUR')?>;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
 }
 <?php } ?>
