@@ -5,7 +5,7 @@
     padding: 1rem 0;
 }
 .cls-global-footer-inverse {
-    background: #333;
+    background: $gray-800;
     color: #FFF;
 }
 .cls-global-footer-inverse a {
@@ -15,13 +15,13 @@
     color: #FFF;
 }
 .cls-global-footer-sponsors {
-    background: #777;
+    background: $gray-700;
     color: #FFF;
     padding: 1.4rem 00 0;
     margin: 1rem 0 0;
 }
 .cls-global-footer-legal {
   padding: 1rem 0;
-  background: #222;
+  background: $gray-900;
   color: #fff;
 }
