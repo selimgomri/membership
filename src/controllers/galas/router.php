@@ -62,8 +62,16 @@ $this->get('/{id}:int/swimmers', function($id) {
 	include 'squad-reps-and-team-managers/tm-swimmer-info.php';
 });
 
+$this->get('/{id}:int/register', function($id) {
+	include 'attendance/PaperRegister.php';
+});
+
 $this->get('/ajax/entryForm', function() {
 	include BASE_PATH . "controllers/ajax/galaForm.php";
+});
+
+$this->get('/entergala/help', function() {
+	include 'help/entry.php';
 });
 
 
@@ -81,20 +89,20 @@ if ($access == "Parent") {
 	});
 
 	// Enter a gala
-	if (isset($_SESSION['SuccessfulGalaEntry'])) {
-		$this->get('/entergala', function() {
-			include 'GalaEntrySuccess.php';
+	$this->group(['/entergala'], function () {
+		if (isset($_SESSION['SuccessfulGalaEntry'])) {
+			$this->get('/', function() {
+				include 'GalaEntrySuccess.php';
+			});
+		} else {
+			$this->get('/', function() {
+				include 'GalaEntryForm.php';
+			});
+		}
+	
+		$this->post('/', function() {
+			include 'GalaEntryFormPost.php';
 		});
-	} else {
-		$this->get('/entergala', function() {
-			global $link;
-			include 'GalaEntryForm.php';
-		});
-	}
-
-	$this->post('/entergala', function() {
-		global $link;
-		include 'GalaEntryFormPost.php';
 	});
 
 	// Gala Entries
