@@ -13,7 +13,7 @@ If you are looking for the SendGrid API client library, please see [this repo](h
 
 # Announcements
 
-All updates to this library is documented in our [CHANGELOG](https://github.com/sendgrid/php-http-client/blob/master/CHANGELOG.md).
+All updates to this library are documented in our [CHANGELOG](https://github.com/sendgrid/php-http-client/blob/master/CHANGELOG.md).
 
 # Table of Contents
 - [Installation](#installation)
@@ -39,7 +39,7 @@ Add php-http-client to your `composer.json` file. If you are not using [Composer
 ```json
 {
   "require": {
-    "sendgrid/php-http-client": "~3.10.0"
+    "sendgrid/php-http-client": "~3.10.1"
   }
 }
 ```
@@ -148,14 +148,14 @@ var_dump(
 ```
 
 If there is an issues with the request, such as misconfigured CURL SSL options, an `InvalidRequest` will be thrown
-with message from CURL on why the request failed. Use the message as a hit to troubleshooting steps of your environment. 
+with message from CURL on why the request failed. Use the message as a hit to troubleshooting steps of your environment.
 
 <a name="usage"></a>
 # Usage
 
 - [Usage Examples](USAGE.md)
 
-## Environment Variables 
+## Environment Variables
 
 You can do the following to create a .env file:
 

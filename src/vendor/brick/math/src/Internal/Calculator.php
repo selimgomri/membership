@@ -10,7 +10,7 @@ use Brick\Math\Exception\RoundingNecessaryException;
 /**
  * Performs basic operations on arbitrary size integers.
  *
- * All parameters must be validated as non-empty strings of digits,
+ * Unless otherwise specified, all parameters must be validated as non-empty strings of digits,
  * without leading zero, and with an optional leading minus sign if the number is not zero.
  *
  * Any other parameter format will lead to undefined behaviour.
@@ -26,9 +26,9 @@ abstract class Calculator
     public const MAX_POWER = 1000000;
 
     /**
-     * The dictionary for reading and writing in base 2 to 36.
+     * The alphabet for converting from and to base 2 to 36, lowercase.
      */
-    public const DICTIONARY = '0123456789abcdefghijklmnopqrstuvwxyz';
+    public const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz';
 
     /**
      * The Calculator instance in use.
@@ -46,7 +46,7 @@ abstract class Calculator
      *
      * @return void
      */
-    public static function set(?Calculator $calculator) : void
+    final public static function set(?Calculator $calculator) : void
     {
         self::$instance = $calculator;
     }
@@ -58,7 +58,7 @@ abstract class Calculator
      *
      * @return Calculator
      */
-    public static function get() : Calculator
+    final public static function get() : Calculator
     {
         if (self::$instance === null) {
             self::$instance = self::detect();
@@ -88,7 +88,7 @@ abstract class Calculator
     }
 
     /**
-     * Extracts the digits, sign, and length of the operands.
+     * Extracts the digits and sign of the operands.
      *
      * @param string $a    The first operand.
      * @param string $b    The second operand.
@@ -96,21 +96,16 @@ abstract class Calculator
      * @param string $bDig A variable to store the digits of the second operand.
      * @param bool   $aNeg A variable to store whether the first operand is negative.
      * @param bool   $bNeg A variable to store whether the second operand is negative.
-     * @param bool   $aLen A variable to store the number of digits in the first operand.
-     * @param bool   $bLen A variable to store the number of digits in the second operand.
      *
      * @return void
      */
-    final protected function init(string $a, string $b, & $aDig, & $bDig, & $aNeg, & $bNeg, & $aLen, & $bLen) : void
+    final protected function init(string $a, string $b, & $aDig, & $bDig, & $aNeg, & $bNeg) : void
     {
         $aNeg = ($a[0] === '-');
         $bNeg = ($b[0] === '-');
 
         $aDig = $aNeg ? \substr($a, 1) : $a;
         $bDig = $bNeg ? \substr($b, 1) : $b;
-
-        $aLen = \strlen($aDig);
-        $bLen = \strlen($bDig);
     }
 
     /**
@@ -120,7 +115,7 @@ abstract class Calculator
      *
      * @return string The absolute value.
      */
-    public function abs(string $n) : string
+    final public function abs(string $n) : string
     {
         return ($n[0] === '-') ? \substr($n, 1) : $n;
     }
@@ -132,7 +127,7 @@ abstract class Calculator
      *
      * @return string The negated value.
      */
-    public function neg(string $n) : string
+    final public function neg(string $n) : string
     {
         if ($n === '0') {
             return '0';
@@ -153,9 +148,9 @@ abstract class Calculator
      *
      * @return int [-1, 0, 1] If the first number is less than, equal to, or greater than the second number.
      */
-    public function cmp(string $a, string $b) : int
+    final public function cmp(string $a, string $b) : int
     {
-        $this->init($a, $b, $aDig, $bDig, $aNeg, $bNeg, $aLen, $bLen);
+        $this->init($a, $b, $aDig, $bDig, $aNeg, $bNeg);
 
         if ($aNeg && ! $bNeg) {
             return -1;
@@ -164,6 +159,9 @@ abstract class Calculator
         if ($bNeg && ! $aNeg) {
             return 1;
         }
+
+        $aLen = \strlen($aDig);
+        $bLen = \strlen($bDig);
 
         if ($aLen < $bLen) {
             $result = -1;
@@ -295,27 +293,7 @@ abstract class Calculator
      */
     public function fromBase(string $number, int $base) : string
     {
-        $number = \strtolower($number);
-
-        $result = '0';
-        $power = '1';
-
-        for ($i = \strlen($number) - 1; $i >= 0; $i--) {
-            $index = \strpos(self::DICTIONARY, $number[$i]);
-
-            if ($index !== 0) {
-                $result = $this->add($result, ($index === 1)
-                    ? $power
-                    : $this->mul($power, (string) $index)
-                );
-            }
-
-            if ($i !== 0) {
-                $power = $this->mul($power, (string) $base);
-            }
-        }
-
-        return $result;
+        return $this->fromArbitraryBase(\strtolower($number), self::ALPHABET, $base);
     }
 
     /**
@@ -331,29 +309,91 @@ abstract class Calculator
      */
     public function toBase(string $number, int $base) : string
     {
-        $value = $number;
-        $negative = ($value[0] === '-');
+        $negative = ($number[0] === '-');
 
         if ($negative) {
-            $value = \substr($value, 1);
+            $number = \substr($number, 1);
+        }
+
+        $number = $this->toArbitraryBase($number, self::ALPHABET, $base);
+
+        if ($negative) {
+            return '-' . $number;
+        }
+
+        return $number;
+    }
+
+    /**
+     * Converts a non-negative number in an arbitrary base using a custom alphabet, to base 10.
+     *
+     * @param string $number   The number to convert, validated as a non-empty string,
+     *                         containing only chars in the given alphabet/base.
+     * @param string $alphabet The alphabet that contains every digit, validated as 2 chars minimum.
+     * @param int    $base     The base of the number, validated from 2 to alphabet length.
+     *
+     * @return string The number in base 10, following the Calculator conventions.
+     */
+    final public function fromArbitraryBase(string $number, string $alphabet, int $base) : string
+    {
+        // remove leading "zeros"
+        $number = \ltrim($number, $alphabet[0]);
+
+        if ($number === '') {
+            return '0';
+        }
+
+        // optimize for "one"
+        if ($number === $alphabet[1]) {
+            return '1';
+        }
+
+        $result = '0';
+        $power = '1';
+
+        $base = (string) $base;
+
+        for ($i = \strlen($number) - 1; $i >= 0; $i--) {
+            $index = \strpos($alphabet, $number[$i]);
+
+            if ($index !== 0) {
+                $result = $this->add($result, ($index === 1)
+                    ? $power
+                    : $this->mul($power, (string) $index)
+                );
+            }
+
+            if ($i !== 0) {
+                $power = $this->mul($power, $base);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Converts a non-negative number to an arbitrary base using a custom alphabet.
+     *
+     * @param string $number   The number to convert, positive or zero, following the Calculator conventions.
+     * @param string $alphabet The alphabet that contains every digit, validated as 2 chars minimum.
+     * @param int    $base     The base to convert to, validated from 2 to alphabet length.
+     *
+     * @return string The converted number in the given alphabet.
+     */
+    final public function toArbitraryBase(string $number, string $alphabet, int $base) : string
+    {
+        if ($number === '0') {
+            return $alphabet[0];
         }
 
         $base = (string) $base;
         $result = '';
 
-        while ($value !== '0') {
-            [$value, $remainder] = $this->divQR($value, $base);
+        while ($number !== '0') {
+            [$number, $remainder] = $this->divQR($number, $base);
             $remainder = (int) $remainder;
 
-            $result .= self::DICTIONARY[$remainder];
-        }
-
-        if ($result === '') {
-            return '0';
-        }
-
-        if ($negative) {
-            $result .= '-';
+            $result .= $alphabet[$remainder];
         }
 
         return \strrev($result);
@@ -373,7 +413,7 @@ abstract class Calculator
      * @throws \InvalidArgumentException  If the rounding mode is invalid.
      * @throws RoundingNecessaryException If RoundingMode::UNNECESSARY is provided but rounding is necessary.
      */
-    public function divRound(string $a, string $b, int $roundingMode) : string
+    final public function divRound(string $a, string $b, int $roundingMode) : string
     {
         [$quotient, $remainder] = $this->divQR($a, $b);
 
@@ -503,7 +543,7 @@ abstract class Calculator
      */
     private function bitwise(string $operator, string $a, string $b) : string
     {
-        $this->init($a, $b, $aDig, $bDig, $aNeg, $bNeg, $aLen, $bLen);
+        $this->init($a, $b, $aDig, $bDig, $aNeg, $bNeg);
 
         $aBin = $this->toBinary($aDig);
         $bBin = $this->toBinary($bDig);
@@ -540,8 +580,10 @@ abstract class Calculator
                 $negative = ($aNeg xor $bNeg);
                 break;
 
+            // @codeCoverageIgnoreStart
             default:
                 throw new \InvalidArgumentException('Invalid bitwise operator.');
+            // @codeCoverageIgnoreEnd
         }
 
         if ($negative) {
@@ -587,12 +629,10 @@ abstract class Calculator
      */
     private function toBinary(string $number) : string
     {
-        $calculator = Calculator::get();
-
         $result = '';
 
         while ($number !== '0') {
-            [$number, $remainder] = $calculator->divQR($number, '256');
+            [$number, $remainder] = $this->divQR($number, '256');
             $result .= \chr((int) $remainder);
         }
 
@@ -608,8 +648,6 @@ abstract class Calculator
      */
     private function toDecimal(string $bytes) : string
     {
-        $calculator = Calculator::get();
-
         $result = '0';
         $power = '1';
 
@@ -617,14 +655,14 @@ abstract class Calculator
             $index = \ord($bytes[$i]);
 
             if ($index !== 0) {
-                $result = $calculator->add($result, ($index === 1)
+                $result = $this->add($result, ($index === 1)
                     ? $power
-                    : $calculator->mul($power, (string) $index)
+                    : $this->mul($power, (string) $index)
                 );
             }
 
             if ($i !== 0) {
-                $power = $calculator->mul($power, '256');
+                $power = $this->mul($power, '256');
             }
         }
 
