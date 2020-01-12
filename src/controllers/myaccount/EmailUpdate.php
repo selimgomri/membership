@@ -2,14 +2,9 @@
 
 global $db;
 
-$sql = "SELECT * FROM `newUsers` WHERE `AuthCode` = ? AND `ID` = ? AND `Type` = ?";
-try {
-	$query = $db->prepare($sql);
-	$query->execute([$auth, $id, 'EmailUpdate']);
-	$id = $db->lastInsertId();
-} catch (PDOException $e) {
-	halt(500);
-}
+$query = $db->prepare("SELECT * FROM `newUsers` WHERE `AuthCode` = ? AND `ID` = ? AND `Type` = ?");
+$query->execute([$auth, $id, 'EmailUpdate']);
+$id = $db->lastInsertId();
 
 $rows = $query->fetchAll(PDO::FETCH_ASSOC);
 $row = $rows[0];
@@ -25,16 +20,12 @@ if ($found) {
 
 	//pre($array);
 
-	$user 					= $array->User;
+	$user 				= $array->User;
 	$oldEmail 			= $array->OldEmail;
 	$newEmail 			= $array->NewEmail;
 
-	$sql = "UPDATE `users` SET `EmailAddress` = ? WHERE `UserID` = ?";
-	try {
-		$db->prepare($sql)->execute([$newEmail, $user]);
-	} catch (PDOException $e) {
-		halt(500);
-	}
+	$sql = ;
+	($db->prepare("UPDATE `users` SET `EmailAddress` = ? WHERE `UserID` = ?"))->execute([$newEmail, $user]);
 
 	$subject = "Your Email Address has been Changed";
 	$message = '
@@ -65,11 +56,7 @@ if ($found) {
   ';
 
 	$sql = "DELETE FROM `newUsers` WHERE `AuthCode` = ? AND `ID` = ?;";
-	try {
-		$db->prepare($sql)->execute([$authCode, $id]);
-	} catch (PDOException $e) {
-		halt(500);
-	}
+	($db->prepare("DELETE FROM `newUsers` WHERE `AuthCode` = ? AND `ID` = ?;"))->execute([$authCode, $id]);
 
 } else {
 
