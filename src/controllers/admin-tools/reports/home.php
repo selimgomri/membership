@@ -1,5 +1,7 @@
 <?php
 
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
+
 $pagetitle = "Admin Reports";
 
 include BASE_PATH . 'views/header.php';
@@ -20,8 +22,15 @@ include BASE_PATH . 'views/header.php';
       <h1>Admin reports</h1>
       <p class="lead">Welcome to the admin reports dashboard.</p>
 
+      <h2>Membership reports</h2>
       <ul>
         <li><a download href="<?=htmlspecialchars(autoUrl("admin/reports/membership-data-export.csv"))?>">Membership report (CSV download)</a></li>
+      </ul>
+
+      <h2>Finance reports</h2>
+      <ul>
+        <li><a download href="<?=htmlspecialchars(autoUrl("admin/reports/pending-payments-data-export.csv"))?>">Pending payments report (CSV download)</a></li>
+        <li><a href="<?=htmlspecialchars(autoUrl("payments/history/" . $date->format("Y/m")))?>">Payment payout report for <?=htmlspecialchars($date->format("M Y"))?> (various formats)</a></li>
       </ul>
 
     </div>
