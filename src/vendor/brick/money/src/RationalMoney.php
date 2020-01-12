@@ -9,8 +9,6 @@ use Brick\Money\Exception\MoneyMismatchException;
 use Brick\Math\BigNumber;
 use Brick\Math\BigRational;
 use Brick\Math\Exception\MathException;
-use Brick\Math\Exception\RoundingNecessaryException;
-use Brick\Math\RoundingMode;
 
 /**
  * An exact monetary amount, represented as a rational number. This class is immutable.
@@ -46,7 +44,7 @@ final class RationalMoney extends AbstractMoney
      * Convenience factory method.
      *
      * @param BigNumber|number|string $amount   The monetary amount.
-     * @param Currency|string         $currency The Currency instance, ISO currency code or ISO numeric currency code.
+     * @param Currency|string|int     $currency The Currency instance, ISO currency code or ISO numeric currency code.
      *
      * @return RationalMoney
      */

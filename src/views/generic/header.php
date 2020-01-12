@@ -128,7 +128,7 @@ if (isset($customBackground) && $customBackground) {
       </div>
       <?php } ?>
 
-      <?php if (user_needs_registration($_SESSION['UserID'])) { ?>
+      <?php if (!user_needs_registration($_SESSION['UserID'])) { ?>
       <div class="<?=$container_class?>">
         <div class="">
           <div class="">

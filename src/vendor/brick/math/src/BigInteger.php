@@ -54,30 +54,6 @@ final class BigInteger extends BigNumber
     }
 
     /**
-     * Parses a string containing an integer in an arbitrary base.
-     *
-     * @deprecated will be removed in version 0.9 - use fromBase() instead
-     *
-     * The string can optionally be prefixed with the `+` or `-` sign.
-     * For bases greater than 10, both uppercase and lowercase letters are allowed.
-     *
-     * @param string $number The number to parse.
-     * @param int    $base   The base of the number, between 2 and 36.
-     *
-     * @return BigInteger
-     *
-     * @throws \InvalidArgumentException If the number is invalid or the base is out of range.
-     */
-    public static function parse(string $number, int $base = 10) : BigInteger
-    {
-        try {
-            return self::fromBase($number, $base);
-        } catch (NumberFormatException $e) {
-            throw new \InvalidArgumentException($e->getMessage(), 0, $e);
-        }
-    }
-
-    /**
      * Creates a number from a string in a given base.
      *
      * The string can optionally be prefixed with the `+` or `-` sign.
@@ -88,7 +64,7 @@ final class BigInteger extends BigNumber
      *
      * For bases greater than 36, and/or custom alphabets, use the fromArbitraryBase() method.
      *
-     * @param string $number The number to parse.
+     * @param string $number The number to convert, in the given base.
      * @param int    $base   The base of the number, between 2 and 36.
      *
      * @return BigInteger
@@ -132,7 +108,7 @@ final class BigInteger extends BigNumber
             return new BigInteger($sign . '1');
         }
 
-        $pattern = '/[^' . \substr(Calculator::DICTIONARY, 0, $base) . ']/';
+        $pattern = '/[^' . \substr(Calculator::ALPHABET, 0, $base) . ']/';
 
         if (\preg_match($pattern, \strtolower($number), $matches) === 1) {
             throw new NumberFormatException(\sprintf('"%s" is not a valid character in base %d.', $matches[0], $base));
@@ -173,31 +149,15 @@ final class BigInteger extends BigNumber
             throw new \InvalidArgumentException('The alphabet must contain at least 2 chars.');
         }
 
-        $result = '0';
-        $power = '1';
+        $pattern = '/[^' . \preg_quote($alphabet, '/') . ']/';
 
-        $calculator = Calculator::get();
-
-        for ($i = \strlen($number) - 1; $i >= 0; $i--) {
-            $index = \strpos($alphabet, $number[$i]);
-
-            if ($index === false) {
-                throw NumberFormatException::charNotInAlphabet($number[$i]);
-            }
-
-            if ($index !== 0) {
-                $result = $calculator->add($result, ($index === 1)
-                    ? $power
-                    : $calculator->mul($power, (string) $index)
-                );
-            }
-
-            if ($i !== 0) {
-                $power = $calculator->mul($power, (string) $base);
-            }
+        if (\preg_match($pattern, $number, $matches) === 1) {
+            throw NumberFormatException::charNotInAlphabet($matches[0]);
         }
 
-        return new BigInteger($result);
+        $number = Calculator::get()->fromArbitraryBase($number, $alphabet, $base);
+
+        return new BigInteger($number);
     }
 
     /**
@@ -265,6 +225,10 @@ final class BigInteger extends BigNumber
             return $this;
         }
 
+        if ($this->value === '0') {
+            return $that;
+        }
+
         $value = Calculator::get()->add($this->value, $that->value);
 
         return new BigInteger($value);
@@ -307,6 +271,10 @@ final class BigInteger extends BigNumber
 
         if ($that->value === '1') {
             return $this;
+        }
+
+        if ($this->value === '1') {
+            return $that;
         }
 
         $value = Calculator::get()->mul($this->value, $that->value);
@@ -730,25 +698,7 @@ final class BigInteger extends BigNumber
             throw new NegativeNumberException(__FUNCTION__ . '() does not support negative numbers.');
         }
 
-        $value = $this->value;
-
-        if ($value === '0') {
-            return $alphabet[0];
-        }
-
-        $base = (string) $base;
-        $result = '';
-
-        $calculator = Calculator::get();
-
-        while ($value !== '0') {
-            [$value, $remainder] = $calculator->divQR($value, $base);
-            $remainder = (int) $remainder;
-
-            $result .= $alphabet[$remainder];
-        }
-
-        return \strrev($result);
+        return Calculator::get()->toArbitraryBase($this->value, $alphabet, $base);
     }
 
     /**

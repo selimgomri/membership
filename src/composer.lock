@@ -57,16 +57,16 @@
         },
         {
             "name": "brick/math",
-            "version": "0.8.8",
+            "version": "0.8.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brick/math.git",
-                "reference": "b77bf303449ac66e46d521e5022cedd1663ab6bd"
+                "reference": "2667c1659c1dcc681b4207f722180024d12a3626"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/b77bf303449ac66e46d521e5022cedd1663ab6bd",
-                "reference": "b77bf303449ac66e46d521e5022cedd1663ab6bd",
+                "url": "https://api.github.com/repos/brick/math/zipball/2667c1659c1dcc681b4207f722180024d12a3626",
+                "reference": "2667c1659c1dcc681b4207f722180024d12a3626",
                 "shasum": ""
             },
             "require": {
@@ -93,23 +93,24 @@
                 "BigRational",
                 "arithmetic",
                 "bigdecimal",
+                "bignum",
                 "brick",
                 "math"
             ],
-            "time": "2019-04-25T14:55:49+00:00"
+            "time": "2020-01-08T09:40:28+00:00"
         },
         {
             "name": "brick/money",
-            "version": "0.4.2",
+            "version": "0.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brick/money.git",
-                "reference": "259f9f566dc72fd63a178f43850959c51e7236e4"
+                "reference": "091cbe9733fae70b7b7788f9965a795f484a68be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/money/zipball/259f9f566dc72fd63a178f43850959c51e7236e4",
-                "reference": "259f9f566dc72fd63a178f43850959c51e7236e4",
+                "url": "https://api.github.com/repos/brick/money/zipball/091cbe9733fae70b7b7788f9965a795f484a68be",
+                "reference": "091cbe9733fae70b7b7788f9965a795f484a68be",
                 "shasum": ""
             },
             "require": {
@@ -142,7 +143,7 @@
                 "currency",
                 "money"
             ],
-            "time": "2019-07-04T15:08:30+00:00"
+            "time": "2020-01-09T10:27:49+00:00"
         },
         {
             "name": "brick/phonenumber",
@@ -2157,16 +2158,16 @@
         },
         {
             "name": "sendgrid/php-http-client",
-            "version": "3.10.0",
+            "version": "3.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sendgrid/php-http-client.git",
-                "reference": "be68345f8849797e87c360bde7c71b23e76b67bc"
+                "reference": "06c9f889076e90580b7ae92a55340d6bb84cb1c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sendgrid/php-http-client/zipball/be68345f8849797e87c360bde7c71b23e76b67bc",
-                "reference": "be68345f8849797e87c360bde7c71b23e76b67bc",
+                "url": "https://api.github.com/repos/sendgrid/php-http-client/zipball/06c9f889076e90580b7ae92a55340d6bb84cb1c3",
+                "reference": "06c9f889076e90580b7ae92a55340d6bb84cb1c3",
                 "shasum": ""
             },
             "require": {
@@ -2205,20 +2206,20 @@
                 "rest",
                 "sendgrid"
             ],
-            "time": "2019-12-11T19:27:05+00:00"
+            "time": "2020-01-09T18:52:45+00:00"
         },
         {
             "name": "sendgrid/sendgrid",
-            "version": "7.4.0",
+            "version": "7.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sendgrid/sendgrid-php.git",
-                "reference": "c14768e463e001a5fdd65f47ea788c0d58074062"
+                "reference": "556cc87f8e5938abde4f67e98942c0c7db9b31ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sendgrid/sendgrid-php/zipball/c14768e463e001a5fdd65f47ea788c0d58074062",
-                "reference": "c14768e463e001a5fdd65f47ea788c0d58074062",
+                "url": "https://api.github.com/repos/sendgrid/sendgrid-php/zipball/556cc87f8e5938abde4f67e98942c0c7db9b31ff",
+                "reference": "556cc87f8e5938abde4f67e98942c0c7db9b31ff",
                 "shasum": ""
             },
             "require": {
@@ -2262,7 +2263,7 @@
                 "sendgrid",
                 "twilio sendgrid"
             ],
-            "time": "2019-12-11T19:48:08+00:00"
+            "time": "2020-01-09T16:07:47+00:00"
         },
         {
             "name": "stripe/stripe-php",
@@ -3133,16 +3134,16 @@
         },
         {
             "name": "twilio/sdk",
-            "version": "5.41.1",
+            "version": "5.42.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twilio/twilio-php.git",
-                "reference": "b10341d50d647b1015dd264c530f3b8bca345b6c"
+                "reference": "e1ea30f30e424ae76de01cfd8d582a5d29b13267"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/b10341d50d647b1015dd264c530f3b8bca345b6c",
-                "reference": "b10341d50d647b1015dd264c530f3b8bca345b6c",
+                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/e1ea30f30e424ae76de01cfd8d582a5d29b13267",
+                "reference": "e1ea30f30e424ae76de01cfd8d582a5d29b13267",
                 "shasum": ""
             },
             "require": {
@@ -3179,7 +3180,7 @@
                 "sms",
                 "twilio"
             ],
-            "time": "2019-12-18T19:43:22+00:00"
+            "time": "2020-01-08T21:00:51+00:00"
         },
         {
             "name": "umpirsky/country-list",
