@@ -77,7 +77,7 @@ if (isset($customBackground) && $customBackground) {
     <?php } ?>
 
     <?php if (isset($_SESSION['UserSimulation'])) { ?>
-    <div class="bg-secondary text-white py-2 d-print-none">
+    <div class="bg-dark text-white py-2 d-print-none">
       <div class="<?=$container_class?>">
         <p class="mb-0">
           <strong>
@@ -86,7 +86,7 @@ if (isset($customBackground) && $customBackground) {
           </strong>
         </p>
         <p class="mb-0">
-          <a href="<?=autoUrl("users/simulate/exit")?>" class="text-white">
+          <a href="<?=htmlspecialchars(autoUrl("users/simulate/exit"))?>" class="text-white">
             Exit User Simulation Mode
           </a>
         </p>
@@ -104,10 +104,10 @@ if (isset($customBackground) && $customBackground) {
 
     if (isset($allow_edit) && $allow_edit && (($_SESSION['AccessLevel'] != "Parent" &&
     $_SESSION['AccessLevel'] != "Coach" && $edit_link != null) || $page_is_mine)) { ?>
-    <div class="bg-secondary box-shadow py-2 d-print-none">
+    <div class="bg-dark box-shadow py-2 d-print-none">
       <div class="<?=$container_class?>">
         <p class="mb-0">
-          <a href="<?=$edit_link?>" class="text-white">
+          <a href="<?=htmlspecialchars($edit_link)?>" class="text-white">
             Edit this page
           </a>
         </p>
@@ -120,7 +120,7 @@ if (isset($customBackground) && $customBackground) {
       <div class="club-name-header <?php if (date("m") == "12") { ?>festive<?php } ?>">
         <div class="<?=$container_class?>">
           <h1 class="d-none d-md-flex py-3 mb-0">
-            <a href="<?=autoUrl("")?>" class="text-white text-decoration-none">
+            <a href="<?=htmlspecialchars(autoUrl(""))?>" class="text-white text-decoration-none">
               <?=htmlspecialchars(mb_strtoupper(env('CLUB_NAME')))?>
             </a>
           </h1>
@@ -128,13 +128,14 @@ if (isset($customBackground) && $customBackground) {
       </div>
       <?php } ?>
 
+      <?php if (user_needs_registration($_SESSION['UserID'])) { ?>
       <div class="<?=$container_class?>">
         <div class="">
           <div class="">
             <nav class="navbar navbar-expand-lg navbar-dark
         d-print-none justify-content-between px-0" role="navigation">
 
-              <a class="navbar-brand d-lg-none" href="<?php echo autoUrl("") ?>">
+              <a class="navbar-brand d-lg-none" href="<?=htmlspecialchars(autoUrl(""))?>">
                 <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
                 My Membership
                 <?php } else { ?>
@@ -150,8 +151,8 @@ if (isset($customBackground) && $customBackground) {
             </nav>
           </div>
         </div>
-
       </div>
+      <?php } ?>
 
     </div>
 
