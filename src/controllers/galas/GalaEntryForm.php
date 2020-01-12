@@ -50,16 +50,35 @@ include "galaMenu.php";
   <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers")?>">Swimmers</a></li>
-      <li class="breadcrumb-item"><a href="<?=autoUrl("swimmers/" . $swimmer)?>"><?=htmlspecialchars($mySwimmer['fn'])?> <?=htmlspecialchars(mb_substr($mySwimmer['sn'], 0, 1, 'utf-8'))?></a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("members")?>">Swimmers</a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("members/" . $swimmer)?>"><?=htmlspecialchars($mySwimmer['fn'])?> <?=htmlspecialchars(mb_substr($mySwimmer['sn'], 0, 1, 'utf-8'))?></a></li>
       <li class="breadcrumb-item active" aria-current="page">Enter a gala</li>
+    </ol>
+  </nav>
+  <?php } else { ?>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("galas"))?>">Galas</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Enter gala</li>
     </ol>
   </nav>
   <?php } ?>
 
   <div id="gala-data" data-ajax-url="<?=htmlspecialchars(autoUrl('galas/ajax/entryForm'))?>"></div>
 
-  <h1 class="mb-3">Enter a gala</h1>
+  <div class="row align-items-center">
+    <div class="col-md-8">
+      <h1 class="mb-3">Enter a gala</h1>
+    </div>
+    <div class="col text-md-right">
+      <aside>
+        <a href="<?=htmlspecialchars(autoUrl("galas/entergala/help"))?>" class="btn btn-info">
+          Gala entry help <i class="fa fa-info-circle" aria-hidden="true"></i>
+        </a>
+        <div class="d-md-none mb-3"></div>
+      </aside>
+    </div>
+  </div>
 
   <?php if ($hasSwimmer && $hasGalas) { ?>
     <div>
