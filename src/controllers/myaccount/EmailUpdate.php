@@ -24,7 +24,6 @@ if ($found) {
 	$oldEmail 			= $array->OldEmail;
 	$newEmail 			= $array->NewEmail;
 
-	$sql = ;
 	($db->prepare("UPDATE `users` SET `EmailAddress` = ? WHERE `UserID` = ?"))->execute([$newEmail, $user]);
 
 	$subject = "Your Email Address has been Changed";
@@ -36,7 +35,7 @@ if ($found) {
 	$to = "";
 	$name = getUserName($user);
 	$from = [
-		"Email" => "support@" . env('EMAIL_DOMAIN'),
+		"Email" => "noreply@" . env('EMAIL_DOMAIN'),
 		"Name" => env('CLUB_NAME') . " Secretary"
 	];
 	notifySend($to, $subject, $message, $name, $oldEmail, $from);
@@ -55,8 +54,7 @@ if ($found) {
   </div>
   ';
 
-	$sql = "DELETE FROM `newUsers` WHERE `AuthCode` = ? AND `ID` = ?;";
-	($db->prepare("DELETE FROM `newUsers` WHERE `AuthCode` = ? AND `ID` = ?;"))->execute([$authCode, $id]);
+($db->prepare("DELETE FROM `newUsers` WHERE `AuthCode` = ? AND `ID` = ?;"))->execute([$authCode, $id]);
 
 } else {
 
