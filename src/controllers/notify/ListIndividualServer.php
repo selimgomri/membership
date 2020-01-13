@@ -80,8 +80,7 @@ if ($_POST['response'] == "getSwimmers") {
         'Member'
       ]);
       if ($getCount->fetchColumn() > 0) {
-        reportError($e);
-        halt(500);
+        halt(403);
       } else {
         $insert = $db->prepare("INSERT INTO `targetedListMembers` (`ListID`, `ReferenceID`, `ReferenceType`) VALUES (?, ?, ?)");
         $insert->execute([
@@ -91,8 +90,7 @@ if ($_POST['response'] == "getSwimmers") {
         ]);
       }
     } catch (Exception $e) {
-      reportError($e);
-      halt(500);
+      halt(403);
     }
   }
 } else if ($_POST['response'] == "dropRelation") {
@@ -100,8 +98,7 @@ if ($_POST['response'] == "getSwimmers") {
     $drop = $db->prepare("DELETE FROM `targetedListMembers` WHERE `ReferenceID` = ?");
     $drop->execute([$_POST['relation']]);
   } catch (Exception $e) {
-    reportError($e);
-    halt(500);
+    halt(403);
   }
 } else {
   halt(404);
