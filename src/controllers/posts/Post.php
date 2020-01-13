@@ -75,10 +75,17 @@ include BASE_PATH . "views/postsMenu.php";?>
 	<h1><?= htmlentities($row['Title']) ?></h1>
 
 	<div class="row">
-		<div class="col-md-8">
+		<div class="col-lg-8">
 			<div id="post-content" class="blog-main">
 				<?= $markdown->text($row['Content']) ?>
 			</div>
+		</div>
+		<div class="col">
+			<p class="text-lg-right">
+				<a href="<?=htmlspecialchars(autoUrl("posts/" . $row['ID'] . "/print.pdf"))?>" class="btn btn-primary">
+					Print document <i class="fa fa-print" aria-hidden="true"></i>
+				</a>
+			</p>
 		</div>
 	</div>
 </div>

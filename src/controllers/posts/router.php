@@ -47,6 +47,12 @@ $this->get(['/{id}:int', '/*/{id}:int'], function($id) {
 	include 'Post.php';
 });
 
+$this->get(['/{id}:int/print.pdf', '/*/{id}:int/print.pdf'], function($id) {
+	global $link;
+	$int = true;
+	include 'PrintPost.php';
+});
+
 $this->get(['/*'], function() {
 	global $link;
 	$int = false;
