@@ -325,6 +325,12 @@ if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && !isset($_SESSION['D
 $route->group($get_group, function($clubcode = "CLSE") {
   //$_SESSION['ClubCode'] = mb_strtolower($code);
 
+  if (bool(env('IS_DEV'))) {
+    $this->group('/dev', function() {
+      include 'controllers/dev/router.php';
+    });
+  }
+
   $this->get('/auth/cookie/redirect', function() {
     //$target = urldecode($target);
     setcookie(COOKIE_PREFIX . "SeenAccount", true, 0, "/", ('request')->hostname, true, false);

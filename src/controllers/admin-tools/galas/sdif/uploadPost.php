@@ -1,0 +1,207 @@
+<?php
+
+global $db;
+$checkForExistingGala = $db->prepare("SELECT `Meet` FROM `meetsWithResults` WHERE `Name` = ? AND `City` = ? AND (`Start` = ? OR `End` = ?) AND `Course` = ?");
+$checkForExistingResult = $db->prepare("SELECT COUNT(*) FROM `meetResults` WHERE `Member` = ? AND `Date` = ? AND `IntTime` = ? AND `ChronologicalOrder` = ? AND `Round` = ? AND `Stroke` = ? AND `Distance` = ? AND `Course` = ?");
+$addResult = $db->prepare("INSERT INTO `meetResults` (`Meet`, `Member`, `Date`, `Time`, `IntTime`, `ChronologicalOrder`, `Round`, `Stroke`, `Distance`, `Course`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$getMember = $db->prepare("SELECT MemberID FROM members WHERE ASANumber = ?");
+
+if (!\SCDS\FormIdempotency::verify()) {
+  halt(404);
+}
+if (!\SCDS\CSRF::verify()) {
+  halt(404);
+}
+
+if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
+
+  if (bool($_FILES['file-upload']['error'])) {
+    // Error
+    $_SESSION['UploadError'] = true;
+  } else if ($_FILES['file-upload']['type'] != 'text/plain' && $_FILES['file-upload']['type'] != 'application/octet-stream') {
+    // Probably not a text file
+    $_SESSION['UploadError'] = true;
+  } else if ($_FILES['file-upload']['size'] > 300000) {
+    // Too large, stop
+    $_SESSION['TooLargeError'] = true;
+  } else {
+    try {
+      $db->beginTransaction();
+      $filePointer = fopen($_FILES['file-upload']['tmp_name'], 'r');
+
+      $meetData = null;
+
+      while (!feof($filePointer)) {
+        $line = fgets($filePointer);
+        // pre($line);
+      
+        if (mb_strlen($line) > 1 && substr($line, 0, 2) == 'B1') {
+          $b1 = new \CLSASC\SDIF\B1();
+          $b1->createFromLine($line);
+          $meetData = [
+            'name' => $b1->getMeetName(),
+            'city' => $b1->getMeetCity(),
+            'start' => $b1->getMeetStartDate(),
+            'end' => $b1->getMeetEndDate(),
+            'course' => $b1->getCourse()
+          ];
+
+          $startDate = null;
+          if ($meetData['start']) {
+            $startDate = $meetData['start']->format("Y-m-d");
+          }
+          $endDate = null;
+          if ($meetData['end']) {
+            $endDate = $meetData['end']->format("Y-m-d");
+          }
+
+          $checkForExistingGala->bindParam(1, $meetData['name'], PDO::PARAM_STR);
+          $checkForExistingGala->bindParam(2, $meetData['city'], PDO::PARAM_STR);
+          if ($startDate != null) {
+            $checkForExistingGala->bindParam(3, $startDate, PDO::PARAM_STR);
+          } else {
+            $checkForExistingGala->bindParam(3, $endDate, PDO::PARAM_NULL);
+          }
+          if ($endDate != null) {
+            $checkForExistingGala->bindParam(4, $endDate, PDO::PARAM_STR);
+          } else {
+            $checkForExistingGala->bindParam(4, $endDate, PDO::PARAM_NULL);
+          }
+          $checkForExistingGala->bindParam(5, $meetData['course'], PDO::PARAM_STR);
+          $checkForExistingGala->execute();
+          $meet = $checkForExistingGala->fetchColumn();
+
+          if ($meet == null) {
+            // New gala add record
+            $addGala = $db->prepare("INSERT INTO meetsWithResults (`Name`, `City`, `Start`, `End`, `Course`) VALUES (?, ?, ?, ?, ?)");
+            $addGala->execute([
+              $meetData['name'],
+              $meetData['city'],
+              $startDate,
+              $endDate,
+              $meetData['course'],
+            ]);
+            $meet = $db->lastInsertId();
+          }
+        }
+      
+        if (mb_strlen($line) > 1 && substr($line, 0, 2) == 'D0') {
+          $d0 = new \CLSASC\SDIF\D0();
+          $d0->createFromLine($line);
+
+          $getMember->execute([
+            $d0->getSwimmerNumber()
+          ]);
+          $member = $getMember->fetchColumn();
+          if ($member != null) {
+            $prelims = null;
+            if ($d0->hasPrelimTime()) {
+              $time = $d0->getPrelim();
+              $checkForExistingResult->execute([
+                $member,
+                $d0->getDateOfSwimDB(),
+                \CLSASC\SDIF\D0::timeAsInt($time),
+                0,
+                'P',
+                $d0->getStroke(),
+                $d0->getDistance(),
+                $d0->getPrelimCourse(),
+              ]);
+              $count = $checkForExistingResult->fetchColumn();
+              if ($count == 0) {
+                // Add new result
+                // (`Meet`, `Date`, `Time`, `IntTime`, `ChronologicalOrder`, `Round`, `Stroke`, `Distance`, `Course`)
+                $addResult->execute([
+                  $meet,
+                  $member,
+                  $d0->getDateOfSwimDB(),
+                  $time,
+                  \CLSASC\SDIF\D0::timeAsInt($time),
+                  0,
+                  'P',
+                  $d0->getStroke(),
+                  $d0->getDistance(),
+                  $d0->getPrelimCourse(),
+                ]);
+              }
+            }
+
+            if ($d0->hasSwimOffTime()) {
+              $time = $d0->getSwimOff();
+              $checkForExistingResult->execute([
+                $member,
+                $d0->getDateOfSwimDB(),
+                \CLSASC\SDIF\D0::timeAsInt($time),
+                1,
+                'S',
+                $d0->getStroke(),
+                $d0->getDistance(),
+                $d0->getSwimOffCourse(),
+              ]);
+              $count = $checkForExistingResult->fetchColumn();
+              if ($count == 0) {
+                // Add new result
+                // (`Meet`, `Date`, `Time`, `IntTime`, `ChronologicalOrder`, `Round`, `Stroke`, `Distance`, `Course`)
+                $addResult->execute([
+                  $meet,
+                  $member,
+                  $d0->getDateOfSwimDB(),
+                  $time,
+                  \CLSASC\SDIF\D0::timeAsInt($time),
+                  1,
+                  'S',
+                  $d0->getStroke(),
+                  $d0->getDistance(),
+                  $d0->getSwimOffCourse(),
+                ]);
+              }
+            }
+
+            if ($d0->hasFinalsTime()) {
+              $time = $d0->getFinals();
+              $checkForExistingResult->execute([
+                $member,
+                $d0->getDateOfSwimDB(),
+                \CLSASC\SDIF\D0::timeAsInt($time),
+                2,
+                'F',
+                $d0->getStroke(),
+                $d0->getDistance(),
+                $d0->getFinalsCourse(),
+              ]);
+              $count = $checkForExistingResult->fetchColumn();
+              if ($count == 0) {
+                // Add new result
+                // (`Meet`, `Date`, `Time`, `IntTime`, `ChronologicalOrder`, `Round`, `Stroke`, `Distance`, `Course`)
+                $addResult->execute([
+                  $meet,
+                  $member,
+                  $d0->getDateOfSwimDB(),
+                  $time,
+                  \CLSASC\SDIF\D0::timeAsInt($time),
+                  2,
+                  'F',
+                  $d0->getStroke(),
+                  $d0->getDistance(),
+                  $d0->getFinalsCourse(),
+                ]);
+              }
+            }
+          }
+        }
+      }
+      
+      fclose($filePointer);
+      $db->commit();
+      $_SESSION['UploadSuccess'] = true;
+    } catch (Exception $e) {
+      $db->rollBack();
+      $_SESSION['UploadError'] = true;
+      reportError($e);
+    }
+  }
+} else {
+  $_SESSION['UploadError'] = true;
+}
+
+header("Location: " . autoUrl("admin/galas/sdif/upload"));
