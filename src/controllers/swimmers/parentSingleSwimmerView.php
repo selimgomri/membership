@@ -305,6 +305,20 @@ $strokeCountsData = array_values($strokeCounts);
     <div class="tab-pane fade mt-3" id="times" role="tabpanel" aria-labelledby="times-tab">
       <div class="">
         <h2 class="">Best times</h2>
+
+        <div class="alert alert-info">
+          <p>
+            <strong>Try our new best times system now!*</strong>
+          </p>
+          <p>
+            <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times"))?>" class="btn btn-info">
+              View times
+            </a>
+          </p>
+
+          <p class="mb-0"><small>* Selected customer clubs only.</small></p>
+        </div>
+
         <?php
         $timeGet = $db->prepare("SELECT * FROM `times` WHERE `MemberID` = ? AND `Type` = ?");
         $timeGet->execute([$id, 'SCPB']);
