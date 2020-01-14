@@ -373,7 +373,7 @@ $strokeCountsData = array_values($strokeCounts);
         <?php } ?>
 
         <p>
-          <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times"))?>" class="btn btn-success">
+          <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/edit-times"))?>" class="btn btn-success">
             Edit times
           </a>
         </p>
