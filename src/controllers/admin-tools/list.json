@@ -19,6 +19,14 @@
       "external": false
     },
     {
+      "id": "admin-galas",
+      "name": "Galas",
+      "title": "Upload SDIF files",
+      "link": "admin/galas",
+      "target": "_self",
+      "external": false
+    },
+    {
       "id": "admin-editors",
       "name": "Bulk editors <span class=\"badge badge-info float-right\">COMING SOON</span>",
       "title": "Edit details quickly",

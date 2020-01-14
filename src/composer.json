@@ -1,4 +1,10 @@
 {
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Chester-le-Street-ASC/SDIFParser.git"
+        }
+    ],
     "require": {
         "dg/twitter-php": "^3.6",
         "nezamy/route": "^1.1",
@@ -10,6 +16,7 @@
         "sendgrid/sendgrid": "^7.0",
         "bshaffer/oauth2-server-php": "^1.10",
         "clsasc/equivalent-time": "^1.1",
+        "clsasc/sdif-parser": "dev-master",
         "geoip2/geoip2": "^2.0",
         "whichbrowser/parser": "^2.0",
         "stripe/stripe-php": "^6.26",

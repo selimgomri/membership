@@ -321,18 +321,60 @@
         "homepage": "https://github.com/Chester-le-Street-ASC/EquivalentTime"
     },
     {
-        "name": "composer/ca-bundle",
-        "version": "1.2.5",
-        "version_normalized": "1.2.5.0",
+        "name": "clsasc/sdif-parser",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
-            "url": "https://github.com/composer/ca-bundle.git",
-            "reference": "62e8fc2dc550e5d6d8c9360c7721662670f58149"
+            "url": "https://github.com/Chester-le-Street-ASC/SDIFParser.git",
+            "reference": "db98c66fb943d464da9623ad02741b2c37f3fcb6"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/composer/ca-bundle/zipball/62e8fc2dc550e5d6d8c9360c7721662670f58149",
-            "reference": "62e8fc2dc550e5d6d8c9360c7721662670f58149",
+            "url": "https://api.github.com/repos/Chester-le-Street-ASC/SDIFParser/zipball/db98c66fb943d464da9623ad02741b2c37f3fcb6",
+            "reference": "db98c66fb943d464da9623ad02741b2c37f3fcb6",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=7.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^8"
+        },
+        "time": "2020-01-14T19:18:50+00:00",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "CLSASC\\SDIFParser\\": "src/CLSASC/SDIFParser/",
+                "CLSASC\\SDIF\\": "src/CLSASC/SDIF/",
+                "CLSASC\\SDIF\\Code\\": "src/CLSASC/SDIF/code/",
+                "CLSASC\\SDIF\\Code\\Exceptions\\": "src/CLSASC/SDIF/code/exceptions"
+            }
+        },
+        "license": [
+            "Apache-2.0"
+        ],
+        "description": "A class based Standard Data Interchange Format parser for swimming data files.",
+        "homepage": "https://github.com/Chester-le-Street-ASC/SDIFParser",
+        "support": {
+            "source": "https://github.com/Chester-le-Street-ASC/SDIFParser/tree/master",
+            "issues": "https://github.com/Chester-le-Street-ASC/SDIFParser/issues"
+        }
+    },
+    {
+        "name": "composer/ca-bundle",
+        "version": "1.2.6",
+        "version_normalized": "1.2.6.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/composer/ca-bundle.git",
+            "reference": "47fe531de31fca4a1b997f87308e7d7804348f7e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/composer/ca-bundle/zipball/47fe531de31fca4a1b997f87308e7d7804348f7e",
+            "reference": "47fe531de31fca4a1b997f87308e7d7804348f7e",
             "shasum": ""
         },
         "require": {
@@ -345,7 +387,7 @@
             "psr/log": "^1.0",
             "symfony/process": "^2.5 || ^3.0 || ^4.0 || ^5.0"
         },
-        "time": "2019-12-11T14:44:42+00:00",
+        "time": "2020-01-13T10:02:55+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {

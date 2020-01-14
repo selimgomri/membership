@@ -115,6 +115,10 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'C' => 
         array (
             'Composer\\CaBundle\\' => 18,
+            'CLSASC\\SDIF\\Code\\Exceptions\\' => 28,
+            'CLSASC\\SDIF\\Code\\' => 17,
+            'CLSASC\\SDIF\\' => 12,
+            'CLSASC\\SDIFParser\\' => 18,
             'CLSASC\\EquivalentTime\\' => 22,
         ),
         'B' => 
@@ -337,6 +341,22 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'Composer\\CaBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/ca-bundle/src',
+        ),
+        'CLSASC\\SDIF\\Code\\Exceptions\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/clsasc/sdif-parser/src/CLSASC/SDIF/code/exceptions',
+        ),
+        'CLSASC\\SDIF\\Code\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/clsasc/sdif-parser/src/CLSASC/SDIF/code',
+        ),
+        'CLSASC\\SDIF\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/clsasc/sdif-parser/src/CLSASC/SDIF',
+        ),
+        'CLSASC\\SDIFParser\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/clsasc/sdif-parser/src/CLSASC/SDIFParser',
         ),
         'CLSASC\\EquivalentTime\\' => 
         array (

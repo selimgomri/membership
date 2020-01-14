@@ -28,4 +28,24 @@ if ($_SESSION['AccessLevel'] == 'Admin') {
       include 'editors/membership-cat/editor.php';
     });
   });
+
+  $this->group('/galas', function () {
+    $this->get('/', function () {
+      include 'galas/home.php';
+    });
+
+    $this->group('/sdif', function () {
+      // $this->get('/', function () {
+      //   include 'galas/sdif/home.php';
+      // });
+  
+      $this->get('/upload', function () {
+        include 'galas/sdif/upload.php';
+      });
+
+      $this->post('/upload', function () {
+        include 'galas/sdif/uploadPost.php';
+      });
+    });
+  });
 }
