@@ -182,11 +182,11 @@ if ($access == "Admin") {
 /**
  * Manage times for swimmers
  */
-$this->get('/{id}:int/times', function($id) {
+$this->get('/{id}:int/edit-times', function($id) {
 	require 'times/times.php';
 });
 
-$this->post('/{id}:int/times', function($id) {
+$this->post('/{id}:int/edit-times', function($id) {
 	require 'times/times-post.php';
 });
 
