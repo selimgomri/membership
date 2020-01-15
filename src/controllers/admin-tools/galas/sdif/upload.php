@@ -75,8 +75,8 @@ include BASE_PATH . 'views/header.php';
         <div class="form-group">
           <label>Select a result file to upload</label>
           <div class="custom-file">
-            <input type="file" class="custom-file-input" id="file-upload" name="file-upload" accept="text/plain,.sd3">
-            <label class="custom-file-label" for="file-upload">Choose file</label>
+            <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" accept="text/plain,.sd3" multiple>
+            <label class="custom-file-label text-truncate" for="file-upload">Choose file(s)</label>
           </div>
         </div>
 
