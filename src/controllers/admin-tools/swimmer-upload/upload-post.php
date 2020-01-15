@@ -90,4 +90,4 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
   $_SESSION['UploadError'] = true;
 }
 
-header("Location: " . autoUrl("swimmer-upload"));
+header("Location: " . autoUrl("admin/member-upload"));

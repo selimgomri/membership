@@ -5,9 +5,17 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="container">
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("admin"))?>">Admin</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Member upload</li>
+    </ol>
+  </nav>
+
   <div class="row">
     <div class="col-lg-8">
-      <h1>Swimmer upload</h1>
+      <h1>Member upload</h1>
       <p class="lead">Batch upload swimmers from a <span class="mono">CSV</span> file.</p>
 
       <?php if (isset($_SESSION['UploadSuccess']) && $_SESSION['UploadSuccess']) { ?>
@@ -82,6 +90,13 @@ include BASE_PATH . 'views/header.php';
         </p>
 
       </form>
+    </div>
+
+    <div class="col">
+      <?php
+        $list = new \CLSASC\BootstrapComponents\ListGroup(file_get_contents(BASE_PATH . 'controllers/admin-tools/list.json'));
+        echo $list->render('admin-member-upload');
+      ?>
     </div>
   </div>
 </div>

@@ -27,6 +27,14 @@
       "external": false
     },
     {
+      "id": "admin-member-upload",
+      "name": "Member upload",
+      "title": "Upload members via CSV",
+      "link": "admin/member-upload",
+      "target": "_self",
+      "external": false
+    },
+    {
       "id": "admin-editors",
       "name": "Bulk editors <span class=\"badge badge-info float-right\">COMING SOON</span>",
       "title": "Edit details quickly",

@@ -743,10 +743,6 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/notify/router.php';
     });
 
-    $this->group('/swimmer-upload', function() {
-      include 'controllers/swimmer-upload/router.php';
-    });
-
     $this->group(['/emergency-contacts', '/emergencycontacts'], function() {
       global $link;
 
