@@ -53,7 +53,7 @@ $distances = [
   ],
 ];
 
-$getTime = $db->prepare("SELECT `Time`, `Date`, `Round`, `Stroke`, `Distance`, `Name`, `City`, `GalaName` FROM ((meetResults INNER JOIN meetsWithResults ON meetResults.Meet = meetsWithResults.Meet) LEFT JOIN galas ON meetsWithResults.Gala = galas.GalaID) WHERE Member = ? AND Stroke = ? AND Distance = ? AND meetResults.Course = ? ORDER BY IntTime ASC");
+$getTime = $db->prepare("SELECT `Time`, `Date`, `Round`, `Stroke`, `Distance`, `Name`, `City`, `GalaName` FROM ((meetResults INNER JOIN meetsWithResults ON meetResults.Meet = meetsWithResults.Meet) LEFT JOIN galas ON meetsWithResults.Gala = galas.GalaID) WHERE Member = ? AND Stroke = ? AND Distance = ? AND meetResults.Course = ? ORDER BY IntTime ASC LIMIT 1");
 $getTime->execute([$id, 1, 200, 'S']);
 
 $pagetitle = htmlspecialchars($swimmer['MForename'] . ' ' . $swimmer['MSurname']) . ' Times';
@@ -66,7 +66,7 @@ include BASE_PATH . 'views/header.php';
   <nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="<?=autoUrl("members")?>">Members</a></li>
-			<li class="breadcrumb-item"><a href="<?=autoUrl("members/" . $id)?>"><?=htmlspecialchars($swimmer["MForename"])?> <?=htmlspecialchars(mb_substr($swimmer["MSurname"], 0, 1, 'utf-8'))?></a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("members/" . $id)?>"><?=htmlspecialchars(mb_substr($swimmer["MForename"], 0, 1, 'utf-8'))?><?=htmlspecialchars(mb_substr($swimmer["MSurname"], 0, 1, 'utf-8'))?></a></li>
 			<li class="breadcrumb-item active" aria-current="page">Best times</li>
 		</ol>
 	</nav>
@@ -88,7 +88,7 @@ include BASE_PATH . 'views/header.php';
         <div class="col-lg-2">
           <strong>Date</strong>
         </div>
-        <div class="col-lg-2">
+        <div class="col-lg-4">
           <strong>Gala</strong>
         </div>
         <div class="col-lg-2">
@@ -105,17 +105,17 @@ include BASE_PATH . 'views/header.php';
         <div class="py-1 px-2  <?php if ($count%2 == 0) { ?>bg-light<?php } ?>">
           <div class="row">
             <div class="col-4 col-md-4 col-lg-2 text-truncate">
-              <?=$distance?>m <?=$stroke?>
+              <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times/event?course=S&stroke=" . $strokeCode . "&distance=" . $distance))?>"><?=$distance?>m <?=$stroke?></a>
             </div>
             <div class="col-4 col-md-4 col-lg-2 text-right">
               <span class="mono"><?=htmlspecialchars($row['Time'])?></span>
             </div>
             <div class="col-4 col-md-4 col-lg-2 text-truncate text-right text-lg-left">
-              <?=htmlspecialchars((new DateTime($row['Date'], new DateTimeZone('Europe/London')))->format("j/n/Y"))?>
+              <?=htmlspecialchars((new DateTime($row['Date'], new DateTimeZone('Europe/London')))->format("d/m/Y"))?>
             </div>
-            <div class="col-8 col-lg-2 text-truncate" title="<?php if ($row['GalaName'] == null) { ?><?=htmlspecialchars($row['Name'])?><?php } else { ?><?=htmlspecialchars($row['GalaName'])?><?php } ?>">
+            <div class="col-8 col-lg-4 text-truncate" title="<?php if ($row['GalaName'] == null) { ?><?=htmlspecialchars($row['Name'])?><?php } else { ?><?=htmlspecialchars($row['GalaName'])?><?php } ?>">
               <?php if ($row['GalaName'] == null) { ?>
-              <?=htmlspecialchars($row['Name'])?>
+              <?=htmlspecialchars($row['Name'])?><?php if (mb_strlen($row['Name']) == 30) { ?>&hellip;<?php } ?>
               <?php } else { ?>
               <?=htmlspecialchars($row['GalaName'])?>
               <?php } ?>
@@ -143,7 +143,7 @@ include BASE_PATH . 'views/header.php';
         <div class="col-lg-2">
           <strong>Date</strong>
         </div>
-        <div class="col-lg-2">
+        <div class="col-lg-4">
           <strong>Gala</strong>
         </div>
         <div class="col-lg-2">
@@ -160,17 +160,17 @@ include BASE_PATH . 'views/header.php';
         <div class="py-1 px-2 <?php if ($count%2 == 0) { ?>bg-light<?php } ?>">
           <div class="row">
             <div class="col-4 col-md-4 col-lg-2 text-truncate">
-              <?=$distance?>m <?=$stroke?>
+              <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times/event?course=L&stroke=" . $strokeCode . "&distance=" . $distance))?>"><?=$distance?>m <?=$stroke?></a>
             </div>
             <div class="col-4 col-md-4 col-lg-2 text-right">
               <span class="mono"><?=htmlspecialchars($row['Time'])?></span>
             </div>
             <div class="col-4 col-md-4 col-lg-2 text-truncate text-right text-lg-left">
-              <?=htmlspecialchars((new DateTime($row['Date'], new DateTimeZone('Europe/London')))->format("j/n/Y"))?>
+              <?=htmlspecialchars((new DateTime($row['Date'], new DateTimeZone('Europe/London')))->format("d/m/Y"))?>
             </div>
-            <div class="col-8 col-lg-2 text-truncate" title="<?php if ($row['GalaName'] == null) { ?><?=htmlspecialchars($row['Name'])?><?php } else { ?><?=htmlspecialchars($row['GalaName'])?><?php } ?>">
+            <div class="col-8 col-lg-4 text-truncate" title="<?php if ($row['GalaName'] == null) { ?><?=htmlspecialchars($row['Name'])?><?php } else { ?><?=htmlspecialchars($row['GalaName'])?><?php } ?>">
               <?php if ($row['GalaName'] == null) { ?>
-              <?=htmlspecialchars($row['Name'])?>
+              <?=htmlspecialchars($row['Name'])?><?php if (mb_strlen($row['Name']) == 30) { ?>&hellip;<?php } ?>
               <?php } else { ?>
               <?=htmlspecialchars($row['GalaName'])?>
               <?php } ?>
