@@ -5,15 +5,24 @@ $checkForExistingGala = $db->prepare("SELECT `Meet` FROM `meetsWithResults` WHER
 $checkForExistingResult = $db->prepare("SELECT COUNT(*) FROM `meetResults` WHERE `Member` = ? AND `Date` = ? AND `IntTime` = ? AND `ChronologicalOrder` = ? AND `Round` = ? AND `Stroke` = ? AND `Distance` = ? AND `Course` = ?");
 $addResult = $db->prepare("INSERT INTO `meetResults` (`Meet`, `Member`, `Date`, `Time`, `IntTime`, `ChronologicalOrder`, `Round`, `Stroke`, `Distance`, `Course`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 $getMember = $db->prepare("SELECT MemberID FROM members WHERE ASANumber = ?");
+$getGala = $db->prepare("SELECT COUNT(*) FROM galas WHERE GalaID = ?");
+$gala = null;
+if (isset($_POST['gala']) && $_POST['gala'] != 0) {
+  $getGala->execute([$_POST['gala']]);
+  if ($getGala->fetchColumn() == 1) {
+    $gala = $_POST['gala'];
+  }
+}
 
+$formInvalid = false;
 if (!\SCDS\FormIdempotency::verify()) {
-  halt(404);
+  $formInvalid = true;
 }
 if (!\SCDS\CSRF::verify()) {
-  halt(404);
+  $formInvalid = true;
 }
 
-if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
+if (is_uploaded_file($_FILES['file-upload']['tmp_name']) && !$formInvalid) {
 
   if (bool($_FILES['file-upload']['error'])) {
     // Error
@@ -73,13 +82,14 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
 
           if ($meet == null) {
             // New gala add record
-            $addGala = $db->prepare("INSERT INTO meetsWithResults (`Name`, `City`, `Start`, `End`, `Course`) VALUES (?, ?, ?, ?, ?)");
+            $addGala = $db->prepare("INSERT INTO meetsWithResults (`Name`, `City`, `Start`, `End`, `Course`, `Gala`) VALUES (?, ?, ?, ?, ?, ?)");
             $addGala->execute([
               $meetData['name'],
               $meetData['city'],
               $startDate,
               $endDate,
               $meetData['course'],
+              $gala,
             ]);
             $meet = $db->lastInsertId();
           }
@@ -200,6 +210,8 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
       reportError($e);
     }
   }
+} else if ($formInvalid) {
+  $_SESSION['FormError'] = true;
 } else {
   $_SESSION['UploadError'] = true;
 }

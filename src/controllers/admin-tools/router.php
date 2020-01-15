@@ -48,4 +48,8 @@ if ($_SESSION['AccessLevel'] == 'Admin') {
       });
     });
   });
+
+  $this->group('/member-upload', function () {
+    include 'swimmer-upload/router.php';
+  });
 }

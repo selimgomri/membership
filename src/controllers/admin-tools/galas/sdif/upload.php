@@ -1,5 +1,15 @@
 <?php
 
+global $db;
+$getRecentGalas = $db->prepare("SELECT `GalaName`, `GalaID` FROM `galas` WHERE `GalaDate` >= ? AND `GalaDate` <= ?");
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
+$today = $date->format("Y-m-d");
+$threeWeeksAgo = ($date->sub(new DateInterval('P21D')))->format("Y-m-d");
+$getRecentGalas->execute([
+  $threeWeeksAgo,
+  $today
+]);
+
 $pagetitle = "SDIF Upload";
 
 include BASE_PATH . 'views/header.php';
@@ -28,6 +38,14 @@ include BASE_PATH . 'views/header.php';
       </div>
       <?php
         unset($_SESSION['UploadSuccess']);
+      } ?>
+
+      <?php if (isset($_SESSION['FormError']) && $_SESSION['FormError']) { ?>
+      <div class="alert alert-danger">
+        <p class="mb-0"><strong>We could not verify the integrity of the submitted form</strong>. Please try again.</p>
+      </div>
+      <?php
+        unset($_SESSION['FormError']);
       } ?>
 
       <?php if (isset($_SESSION['UploadError']) && $_SESSION['UploadError']) { ?>
@@ -60,6 +78,19 @@ include BASE_PATH . 'views/header.php';
             <input type="file" class="custom-file-input" id="file-upload" name="file-upload" accept="text/plain,.sd3">
             <label class="custom-file-label" for="file-upload">Choose file</label>
           </div>
+        </div>
+
+        <div class="form-group">
+          <label for="gala">Select a gala to link this file to</label>
+          <select class="custom-select" id="gala" name="gala" aria-describedby="galaHelp">
+            <option value="0" selected>Don't link to an existing gala</option>
+            <?php while ($gala = $getRecentGalas->fetch(PDO::FETCH_ASSOC)) { ?>
+            <option value="<?=htmlspecialchars($gala['GalaID'])?>">
+              <?=htmlspecialchars($gala['GalaName'])?>
+            </option>
+            <?php } ?>
+          </select>
+          <small id="galaHelp" class="form-text text-muted">If the gala finished in the last three weeks, you can link this uploaded file to the gala in the system which users used to make entries.</small>
         </div>
 
         <p>
