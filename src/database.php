@@ -179,10 +179,10 @@ function getAttendanceByID($link, $id, $weeks = "all") {
       "member" => $id
     ];
 
-    $numPresent = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` WHERE WeekID >= :week && MemberID = :member && AttendanceBoolean = 1");
+    $numPresent = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` INNER JOIN sessions ON sessions.SessionID = sessionsAttendance.SessionID WHERE WeekID >= :week AND MemberID = :member AND AttendanceBoolean = 1 AND MainSequence = 1");
     $numPresent->execute($member);
     $numPresent = $numPresent->fetchColumn();
-    $totalNum = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` WHERE WeekID >= :week && MemberID = :member");
+    $totalNum = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` INNER JOIN sessions ON sessions.SessionID = sessionsAttendance.SessionID WHERE WeekID >= :week AND MemberID = :member AND MainSequence = 1");
     $totalNum->execute($member);
     $totalNum = $totalNum->fetchColumn();
 
