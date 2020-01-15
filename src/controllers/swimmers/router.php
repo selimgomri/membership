@@ -225,11 +225,6 @@ if ($access != "Parent" && $access != 'Galas') {
 		global $link;
 		include 'parentSetupHelp.php';
 	});
-
-  $this->post(['/{id}:int/parenthelp', '/parenthelp/{id}:int'], function($id) {
-		global $link;
-		include 'parentSetupHelpPost.php';
-	});
 }
 
 // View Medical Notes
