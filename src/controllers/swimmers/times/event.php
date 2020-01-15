@@ -124,7 +124,7 @@ include BASE_PATH . 'views/header.php';
     <div class="py-1 px-2  <?php if ($count%2 == 0) { ?>bg-light<?php } ?>">
       <div class="row">
         <div class="col-4 col-md-4 col-lg-2 text-truncate text-right text-lg-left">
-          <?=htmlspecialchars((new DateTime($result['Date'], new DateTimeZone('Europe/London')))->format("j/n/Y"))?>
+          <?=htmlspecialchars((new DateTime($result['Date'], new DateTimeZone('Europe/London')))->format("d/m/Y"))?>
         </div>
         <div class="col-4 col-md-4 col-lg-2 text-right">
           <span class="mono"><?=htmlspecialchars($result['Time'])?></span>
