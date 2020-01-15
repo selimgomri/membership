@@ -92,29 +92,27 @@ include BASE_PATH . 'views/header.php';
 	</nav>
 
   <h1><?=htmlspecialchars((int) $_GET['distance'])?>m <?=$strokes[(int) $_GET['stroke']]?> - <?=htmlspecialchars($swimmer["MForename"])?> <?=htmlspecialchars($swimmer["MSurname"])?></h1>
-  <p class="lead">Welcome to our new best times system.</p>
-  <p>Our new system uses a results file for every gala so has only been populated with results going back a reasonable period of time.</p>
 
   <?php if ($order == 'time') { ?>
-  <p>Swims in time order. <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times/event?course=" . $_GET['course'] . "&stroke=" . $_GET['stroke'] . "&distance=" . $_GET['distance'] . "&order=date"))?>">Switch to date order</a></p>
+  <p>Swims in time order. <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times/event?course=" . $_GET['course'] . "&stroke=" . $_GET['stroke'] . "&distance=" . $_GET['distance'] . "&order=date"))?>">Switch to date order</a>.</p>
   <?php } else { ?>
-  <p>Swims in date order. <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times/event?course=" . $_GET['course'] . "&stroke=" . $_GET['stroke'] . "&distance=" . $_GET['distance'] . "&order=time"))?>">Switch to time order</a></p>
+  <p>Swims in date order. <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times/event?course=" . $_GET['course'] . "&stroke=" . $_GET['stroke'] . "&distance=" . $_GET['distance'] . "&order=time"))?>">Switch to time order</a>.</p>
   <?php } ?>
 
   <?php if ($result) { ?>
   <div class="mb-3">
-    <div class="d-none d-lg-block py-1 px-2 bg-primary text-white">
+    <div class="py-1 px-2 bg-primary text-white">
       <div class="row">
-        <div class="col-lg-2">
+        <div class="col-4 col-sm-3 col-md-2 text-truncate">
           <strong>Date</strong>
         </div>
-        <div class="col-lg-2 text-right">
+        <div class="col-4 col-sm-3 col-md-2 text-right">
           <strong>Time</strong>
         </div>
-        <div class="col-lg-4">
+        <div class="col-8 col-sm-6 col-md-5 col-lg-4 text-truncate d-none d-sm-block">
           <strong>Gala</strong>
         </div>
-        <div class="col-lg-4">
+        <div class="col-4 col-sm-6 col-md-3 text-right text-lg-left col-lg-2 d-sm-none d-md-block text-truncate">
           <strong>City</strong>
         </div>
       </div>
@@ -123,20 +121,20 @@ include BASE_PATH . 'views/header.php';
     <?php do { ?>
     <div class="py-1 px-2  <?php if ($count%2 == 0) { ?>bg-light<?php } ?>">
       <div class="row">
-        <div class="col-4 col-md-4 col-lg-2 text-truncate text-right text-lg-left">
+        <div class="col-4 col-sm-3 col-md-2 text-truncate">
           <?=htmlspecialchars((new DateTime($result['Date'], new DateTimeZone('Europe/London')))->format("d/m/Y"))?>
         </div>
-        <div class="col-4 col-md-4 col-lg-2 text-right">
+        <div class="col-4 col-sm-3 col-md-2 text-right">
           <span class="mono"><?=htmlspecialchars($result['Time'])?></span>
         </div>
-        <div class="col-8 col-lg-4 text-truncate" title="<?php if ($result['GalaName'] == null) { ?><?=htmlspecialchars($result['Name'])?><?php } else { ?><?=htmlspecialchars($result['GalaName'])?><?php } ?>">
+        <div class="col-8 col-sm-6 col-md-5 col-lg-4 text-truncate d-none d-sm-block" title="<?php if ($result['GalaName'] == null) { ?><?=htmlspecialchars($result['Name'])?><?php } else { ?><?=htmlspecialchars($result['GalaName'])?><?php } ?>">
           <?php if ($result['GalaName'] == null) { ?>
-          <?=htmlspecialchars($result['Name'])?>
+          <?=htmlspecialchars($result['Name'])?><?php if (mb_strlen($result['Name']) == 30) { ?>&hellip;<?php } ?>
           <?php } else { ?>
           <?=htmlspecialchars($result['GalaName'])?>
           <?php } ?>
         </div>
-        <div class="col-4 text-right text-lg-left col-lg-4 text-truncate">
+        <div class="col-4 col-sm-6 col-md-3 text-right text-lg-left col-lg-2 d-sm-none d-md-block text-truncate">
           <?=htmlspecialchars($result['City'])?>
         </div>
       </div>
