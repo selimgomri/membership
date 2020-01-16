@@ -416,8 +416,8 @@ if (!function_exists('chesterStandardMenu')) {
                 </li>
                 <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
                 <li class="nav-item">
-                  <a class="nav-link" href="<?=autoUrl("admin")?>">
-                    Admin <span class="badge badge-secondary">New</span>
+                  <a class="nav-link" href="<?=autoUrl("admin")?>" title="Adminstrative tools">
+                    Admin
                   </a>
                 </li>
                 <?php } ?>
