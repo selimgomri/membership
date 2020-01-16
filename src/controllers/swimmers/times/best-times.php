@@ -77,21 +77,21 @@ include BASE_PATH . 'views/header.php';
 
   <div class="mb-3">
     <h2>Short course</h2>
-    <div class="d-none d-lg-block py-1 px-2 bg-primary text-white">
+    <div class="py-1 px-2 bg-primary text-white">
       <div class="row">
-        <div class="col-lg-2">
+        <div class="col-4 col-sm-3 col-lg-2">
           <strong>Event</strong>
         </div>
-        <div class="col-lg-2 text-right">
+        <div class="col-4 col-sm-3 col-md-2 text-right">
           <strong>Time</strong>
         </div>
-        <div class="col-lg-2">
+        <div class="col-4 col-sm-3 col-md-2 text-truncate text-right text-lg-center">
           <strong>Date</strong>
         </div>
-        <div class="col-lg-4">
+        <div class="col-8 col-sm-5 col-lg-4 text-truncate d-none d-md-block">
           <strong>Gala</strong>
         </div>
-        <div class="col-lg-2">
+        <div class="col-4 col-sm-3 text-right text-lg-left col-lg-2 text-truncate d-none d-sm-block d-md-none d-lg-block">
           <strong>City</strong>
         </div>
       </div>
@@ -104,23 +104,23 @@ include BASE_PATH . 'views/header.php';
         if ($row != null) { ?>
         <div class="py-1 px-2  <?php if ($count%2 == 0) { ?>bg-light<?php } ?>">
           <div class="row">
-            <div class="col-4 col-md-4 col-lg-2 text-truncate">
+            <div class="col-4 col-sm-3 col-lg-2 text-truncate">
               <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times/event?course=S&stroke=" . $strokeCode . "&distance=" . $distance))?>"><?=$distance?>m <?=$stroke?></a>
             </div>
-            <div class="col-4 col-md-4 col-lg-2 text-right">
+            <div class="col-4 col-sm-3 col-md-2 text-right">
               <span class="mono"><?=htmlspecialchars($row['Time'])?></span>
             </div>
-            <div class="col-4 col-md-4 col-lg-2 text-truncate text-right text-lg-left">
+            <div class="col-4 col-sm-3 col-md-2 text-truncate text-right text-lg-center">
               <?=htmlspecialchars((new DateTime($row['Date'], new DateTimeZone('Europe/London')))->format("d/m/Y"))?>
             </div>
-            <div class="col-8 col-lg-4 text-truncate" title="<?php if ($row['GalaName'] == null) { ?><?=htmlspecialchars($row['Name'])?><?php } else { ?><?=htmlspecialchars($row['GalaName'])?><?php } ?>">
+            <div class="col-8 col-sm-5 col-lg-4 text-truncate d-none d-md-block" title="<?php if ($row['GalaName'] == null) { ?><?=htmlspecialchars($row['Name'])?><?php } else { ?><?=htmlspecialchars($row['GalaName'])?><?php } ?>">
               <?php if ($row['GalaName'] == null) { ?>
               <?=htmlspecialchars($row['Name'])?><?php if (mb_strlen($row['Name']) == 30) { ?>&hellip;<?php } ?>
               <?php } else { ?>
               <?=htmlspecialchars($row['GalaName'])?>
               <?php } ?>
             </div>
-            <div class="col-4 text-right text-lg-left col-lg-2 text-truncate">
+            <div class="col-4 col-sm-3 text-right text-lg-left col-lg-2 text-truncate d-none d-sm-block d-md-none d-lg-block">
               <?=htmlspecialchars($row['City'])?>
             </div>
           </div>
@@ -132,21 +132,21 @@ include BASE_PATH . 'views/header.php';
 
   <div class="mb-3">
     <h2>Long course</h2>
-    <div class="d-none d-lg-block py-1 px-2 bg-primary text-white">
+    <div class="py-1 px-2 bg-primary text-white">
       <div class="row">
-        <div class="col-lg-2">
+        <div class="col-4 col-sm-3 col-lg-2">
           <strong>Event</strong>
         </div>
-        <div class="col-lg-2 text-right">
+        <div class="col-4 col-sm-3 col-md-2 text-right">
           <strong>Time</strong>
         </div>
-        <div class="col-lg-2">
+        <div class="col-4 col-sm-3 col-md-2 text-truncate text-right text-lg-center">
           <strong>Date</strong>
         </div>
-        <div class="col-lg-4">
+        <div class="col-8 col-sm-5 col-lg-4 text-truncate d-none d-md-block">
           <strong>Gala</strong>
         </div>
-        <div class="col-lg-2">
+        <div class="col-4 col-sm-3 text-right text-lg-left col-lg-2 text-truncate d-none d-sm-block d-md-none d-lg-block">
           <strong>City</strong>
         </div>
       </div>
@@ -157,25 +157,25 @@ include BASE_PATH . 'views/header.php';
         $getTime->execute([$id, $strokeCode, $distance, 'L']);
         $row = $getTime->fetch(PDO::FETCH_ASSOC);
         if ($row != null) { ?>
-        <div class="py-1 px-2 <?php if ($count%2 == 0) { ?>bg-light<?php } ?>">
+        <div class="py-1 px-2  <?php if ($count%2 == 0) { ?>bg-light<?php } ?>">
           <div class="row">
-            <div class="col-4 col-md-4 col-lg-2 text-truncate">
-              <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times/event?course=L&stroke=" . $strokeCode . "&distance=" . $distance))?>"><?=$distance?>m <?=$stroke?></a>
+            <div class="col-4 col-sm-3 col-lg-2 text-truncate">
+              <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times/event?course=S&stroke=" . $strokeCode . "&distance=" . $distance))?>"><?=$distance?>m <?=$stroke?></a>
             </div>
-            <div class="col-4 col-md-4 col-lg-2 text-right">
+            <div class="col-4 col-sm-3 col-md-2 text-right">
               <span class="mono"><?=htmlspecialchars($row['Time'])?></span>
             </div>
-            <div class="col-4 col-md-4 col-lg-2 text-truncate text-right text-lg-left">
+            <div class="col-4 col-sm-3 col-md-2 text-truncate text-right text-lg-center">
               <?=htmlspecialchars((new DateTime($row['Date'], new DateTimeZone('Europe/London')))->format("d/m/Y"))?>
             </div>
-            <div class="col-8 col-lg-4 text-truncate" title="<?php if ($row['GalaName'] == null) { ?><?=htmlspecialchars($row['Name'])?><?php } else { ?><?=htmlspecialchars($row['GalaName'])?><?php } ?>">
+            <div class="col-8 col-sm-5 col-lg-4 text-truncate d-none d-md-block" title="<?php if ($row['GalaName'] == null) { ?><?=htmlspecialchars($row['Name'])?><?php } else { ?><?=htmlspecialchars($row['GalaName'])?><?php } ?>">
               <?php if ($row['GalaName'] == null) { ?>
               <?=htmlspecialchars($row['Name'])?><?php if (mb_strlen($row['Name']) == 30) { ?>&hellip;<?php } ?>
               <?php } else { ?>
               <?=htmlspecialchars($row['GalaName'])?>
               <?php } ?>
             </div>
-            <div class="col-4 text-right text-lg-left col-lg-2 text-truncate">
+            <div class="col-4 col-sm-3 text-right text-lg-left col-lg-2 text-truncate d-none d-sm-block d-md-none d-lg-block">
               <?=htmlspecialchars($row['City'])?>
             </div>
           </div>
