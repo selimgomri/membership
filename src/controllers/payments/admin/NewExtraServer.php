@@ -19,11 +19,22 @@ if ($_POST['price'] != null && $_POST['price'] != "") {
 	$errorMessage .= "<li>There was a problem with that price</li>";
 }
 
+$type = 'Payment';
+if (isset($_POST['pay-credit-type']) && ($_POST['pay-credit-type'] == 'Payment' || $_POST['pay-credit-type'] == 'Refund')) {
+	if ($_POST['pay-credit-type'] == 'Refund') {
+		$type = 'Refund';
+	}
+} else {
+	$errorState = true;
+	$errorMessage .= "<li>There was a problem with the type of this item.</li>";
+}
+
 if (!$errorState) {
   try {
-    $insert = $db->prepare("INSERT INTO `extras` (`ExtraName`, `ExtraFee`) VALUES (?, ?)");
-    $insert->execute([$name, $price]);
-    header("Location: " . autoUrl("payments/extrafees"));
+    $insert = $db->prepare("INSERT INTO `extras` (`ExtraName`, `ExtraFee`, `Type`) VALUES (?, ?, ?)");
+		$insert->execute([$name, $price, $type]);
+		$id = $db->lastInsertId();
+    header("Location: " . autoUrl("payments/extrafees/" . $id));
   } catch (Exception $e) {
     $errorState = true;
 		$errorMessage .= "<li>Unable to add to database</li>";

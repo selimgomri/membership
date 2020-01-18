@@ -16,6 +16,14 @@ include BASE_PATH . "views/paymentsMenu.php";
  ?>
 
 <div class="container">
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-light">
+      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl('payments'))?>">Payments</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Extras</li>
+    </ol>
+  </nav>
+
   <div class="">
   	<h1>Extras</h1>
     <p class="lead">Extras include CrossFit - Fees paid in addition to Squad Fees</p>
@@ -37,7 +45,7 @@ include BASE_PATH . "views/paymentsMenu.php";
                   <?=htmlspecialchars($row['ExtraName'])?>
                 </a>
               </td>
-              <td>&pound;<?=htmlspecialchars($row['ExtraFee'])?></td>
+              <td>&pound;<?=htmlspecialchars($row['ExtraFee'])?><?php if ($row['Type'] == 'Refund') { ?> (credit/refund)<?php } ?></td>
             </tr>
           <?php } while ($row = $extras->fetch(PDO::FETCH_ASSOC)); ?>
         </tbody>
