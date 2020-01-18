@@ -41,6 +41,17 @@ if (!function_exists('chesterStandardMenu')) {
     if ($getRepCount->fetchColumn() > 0) {
       $haveSquadReps = true;
     }
+    
+    $hasNotifyAccess = false;
+    if ($_SESSION['AccessLevel'] == 'Parent') {
+      $getNotify = $db->prepare("SELECT COUNT(*) FROM (SELECT User FROM squadReps UNION SELECT User FROM listSenders) AS T WHERE T.User = ?");
+      $getNotify->execute([
+        $_SESSION['UserID'],
+      ]);
+      if ($getNotify->fetchColumn()) {
+        $hasNotifyAccess = true;
+      }
+    }
 
     $isTeamManager = false;
     if ($_SESSION['AccessLevel'] == 'Parent') {
@@ -327,6 +338,13 @@ if (!function_exists('chesterStandardMenu')) {
                   </a>
                 </li>
                 <?php } ?>
+                <?php if ($hasNotifyAccess) { ?>
+                <li class="nav-item">
+                  <a class="nav-link" href="<?=autoUrl("notify")?>">
+                    Notify
+                  </a>
+                </li>
+                <?php } ?>
                 <?php if ($_SESSION['AccessLevel'] == "Parent") {
                   $hasMandate = userHasMandates($_SESSION['UserID']); ?>
                 <li class="nav-item dropdown">
@@ -398,8 +416,8 @@ if (!function_exists('chesterStandardMenu')) {
                 </li>
                 <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
                 <li class="nav-item">
-                  <a class="nav-link" href="<?=autoUrl("admin")?>">
-                    Admin <span class="badge badge-secondary">New</span>
+                  <a class="nav-link" href="<?=autoUrl("admin")?>" title="Adminstrative tools">
+                    Admin
                   </a>
                 </li>
                 <?php } ?>

@@ -260,6 +260,22 @@ if ($access == "Parent") {
 	$this->post('/entries/{id}:int/manual-time', function($id) {
 		include 'AddManualTimePost.php';
 	});
+
+	$this->get('/{id}:int/select-entries', function($id) {
+		include 'indicate-openness/select-swims.php';
+	});
+
+	$this->post('/{id}:int/select-entries', function($id) {
+		include 'indicate-openness/select-swims-post.php';
+	});
+
+	$this->get('/{id}:int/invite-parents', function($id) {
+		include 'indicate-openness/invite-parents.php';
+	});
+
+	$this->post('/{id}:int/invite-parents', function($id) {
+		include 'indicate-openness/invite-parents-post.php';
+	});
 }
 
 if ($access == "Galas" || $access == "Admin") {
@@ -295,22 +311,6 @@ if ($access == "Galas" || $access == "Admin") {
 
 	$this->post('/{id}:int/sessions', function($id) {
 		include 'indicate-openness/gala-sessions-post.php';
-	});
-
-	$this->get('/{id}:int/select-entries', function($id) {
-		include 'indicate-openness/select-swims.php';
-	});
-
-	$this->post('/{id}:int/select-entries', function($id) {
-		include 'indicate-openness/select-swims-post.php';
-	});
-
-	$this->get('/{id}:int/invite-parents', function($id) {
-		include 'indicate-openness/invite-parents.php';
-	});
-
-	$this->post('/{id}:int/invite-parents', function($id) {
-		include 'indicate-openness/invite-parents-post.php';
 	});
 }
 
