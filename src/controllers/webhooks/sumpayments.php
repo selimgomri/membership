@@ -32,6 +32,8 @@ $addPaymentForCharge = $db->prepare("INSERT INTO `payments` (`Date`, `Status`, `
 
 $setPaymentsPending = $db->prepare("UPDATE `paymentsPending` SET `Status` = ? WHERE `UserID` = ? AND `Status` = 'Pending' AND `Date` <= ?");
 
+$getCountPending = $db->prepare("SELECT COUNT(*) FROM `paymentsPending` WHERE `UserID` = ? AND `Status` = 'Pending';");
+
 // Begin transaction
 $db->beginTransaction();
 
@@ -255,7 +257,7 @@ try {
           $user,
           $date
         ]);
-      } else if ($amount == 0) {
+      } else if ($amount == 0 && ($getCountPending->execute([$user]))->fetchColumn() > 0) {
         $addPaymentForCharge->execute([
           $date,
           'paid_out',
