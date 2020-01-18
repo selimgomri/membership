@@ -3,12 +3,15 @@
 global $db;
 
 if ($_POST['response'] == "getSwimmers") {
-  $swimmers = $db->prepare("SELECT MForename, MSurname, SquadName, ReferenceID FROM (((`targetedListMembers` INNER JOIN `members` ON
-  members.MemberID = targetedListMembers.ReferenceID) INNER JOIN `targetedLists`
-  ON targetedLists.ID = targetedListMembers.ListID) INNER JOIN `squads` ON
-  members.SquadID = squads.SquadID) WHERE `targetedListMembers`.`ListID` =
-  ? ORDER BY ReferenceID ASC");
-  $swimmers->execute([$id]);
+  // $swimmers = $db->prepare("SELECT MForename, MSurname, SquadName, ReferenceID FROM (((`targetedListMembers` INNER JOIN `members` ON
+  // members.MemberID = targetedListMembers.ReferenceID) INNER JOIN `targetedLists`
+  // ON targetedLists.ID = targetedListMembers.ListID) INNER JOIN `squads` ON
+  // members.SquadID = squads.SquadID) WHERE `targetedListMembers`.`ListID` =
+  // ? ORDER BY ReferenceID ASC");
+
+  $swimmers = $db->prepare("SELECT combined.MForename, combined.MSurname, combined.SquadName, combined.ID FROM (SELECT MForename, MSurname, SquadName, targetedListMembers.ID FROM ((`targetedListMembers` INNER JOIN `members` ON members.MemberID = targetedListMembers.ReferenceID) INNER JOIN `squads` ON members.SquadID = squads.SquadID) WHERE `targetedListMembers`.`ListID` = :list AND targetedListMembers.ReferenceType = 'Member' UNION SELECT Forename AS MForename, Surname AS MSurname, 'User' AS SquadName, targetedListMembers.ID FROM (`targetedListMembers` INNER JOIN `users` ON users.UserID = targetedListMembers.ReferenceID) WHERE `targetedListMembers`.`ListID` = :list AND targetedListMembers.ReferenceType = 'User') AS combined ORDER BY combined.ID ASC ");
+
+  $swimmers->execute(['list' => $id]);
   $row = $swimmers->fetch(PDO::FETCH_ASSOC);
 
   ?>
@@ -34,8 +37,8 @@ if ($_POST['response'] == "getSwimmers") {
               </p>
             </div>
             <div class="col text-right">
-              <button type="button" id="RelationDrop-<?=$row['ReferenceID']?>"
-                class="btn btn-link" value="<?=$row['ReferenceID']?>">
+              <button type="button" id="RelationDrop-<?=$row['ID']?>"
+                class="btn btn-link" value="<?=$row['ID']?>">
                 Remove
               </button>
             </div>
@@ -93,9 +96,34 @@ if ($_POST['response'] == "getSwimmers") {
       halt(403);
     }
   }
+} else if ($_POST['response'] == "insert-user") {
+  $swimmer = $_POST['swimmerInsert'];
+  if ($swimmer != null && $swimmer != "") {
+    try {
+      // Check count
+      $getCount = $db->prepare("SELECT COUNT(*) FROM targetedListMembers WHERE ListID = ? AND ReferenceID = ? AND ReferenceType = ?");
+      $getCount->execute([
+        $id,
+        $swimmer,
+        'User'
+      ]);
+      if ($getCount->fetchColumn() > 0) {
+        halt(403);
+      } else {
+        $insert = $db->prepare("INSERT INTO `targetedListMembers` (`ListID`, `ReferenceID`, `ReferenceType`) VALUES (?, ?, ?)");
+        $insert->execute([
+          $id,
+          $swimmer,
+          'User'
+        ]);
+      }
+    } catch (Exception $e) {
+      halt(403);
+    }
+  }
 } else if ($_POST['response'] == "dropRelation") {
   try {
-    $drop = $db->prepare("DELETE FROM `targetedListMembers` WHERE `ReferenceID` = ?");
+    $drop = $db->prepare("DELETE FROM `targetedListMembers` WHERE `ID` = ?");
     $drop->execute([$_POST['relation']]);
   } catch (Exception $e) {
     halt(403);
