@@ -28,9 +28,9 @@ $updateIndivFeeTrack = $db->prepare("UPDATE `individualFeeTrack` SET `PaymentID`
 
 $getMonthSum = $db->prepare("SELECT SUM(`Amount`) FROM `paymentsPending` WHERE `UserID` = ? AND `Status` = 'Pending' AND `Date` <= ? AND `Type` = ?;");
 
-$addPaymentForCharge = $db->prepare("INSERT INTO `payments` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MandateID`, `PMkey`) VALUES (?, 'pending_api_request', ?, ?, ?, 'GBP', 'Payment', ?, ?);");
+$addPaymentForCharge = $db->prepare("INSERT INTO `payments` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MandateID`, `PMkey`) VALUES (?, ?, ?, ?, ?, 'GBP', 'Payment', ?, ?);");
 
-$setPaymentsPending = $db->prepare("UPDATE `paymentsPending` SET `Status` = 'Queued' WHERE `UserID` = ? AND `Status` = 'Pending' AND `Date` <= ? AND (`Type` = 'Payment' OR `Type` = 'Refund');");
+$setPaymentsPending = $db->prepare("UPDATE `paymentsPending` SET `Status` = ? WHERE `UserID` = ? AND `Status` = 'Pending' AND `Date` <= ?");
 
 // Begin transaction
 $db->beginTransaction();
@@ -203,7 +203,7 @@ try {
               $fee,
               $metadata
             ]);
-          } else if ($swimmerRow['Type'] == 'Credit') {
+          } else if ($swimmerRow['Type'] == 'Refund') {
             $addCreditToPaymentsPending->execute([
               $date,
               $user,
@@ -243,6 +243,7 @@ try {
       if ($amount > 100) {
         $addPaymentForCharge->execute([
           $date,
+          'pending_api_request',
           $user,
           $dateString,
           $amount,
@@ -250,6 +251,28 @@ try {
           null
         ]);
         $setPaymentsPending->execute([
+          'Pending',
+          $user,
+          $date
+        ]);
+      } else if ($amount == 0) {
+        $addPaymentForCharge->execute([
+          $date,
+          'paid_out',
+          $user,
+          $dateString,
+          $amount,
+          null,
+          null
+        ]);
+        $id = $db->lastInsertId();
+        $setKey = $db->prepare("UPDATE payments SET PMkey = ? WHERE PaymentID = ?");
+        $setKey->execute([
+          'NA' . $id,
+          $id
+        ]);
+        $setPaymentsPending->execute([
+          'Paid',
           $user,
           $date
         ]);
