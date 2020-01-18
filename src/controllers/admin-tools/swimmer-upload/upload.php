@@ -78,7 +78,7 @@ include BASE_PATH . 'views/header.php';
         <div class="form-group">
           <label>Select a swimmer file to upload</label>
           <div class="custom-file">
-            <input type="file" class="custom-file-input" id="file-upload" name="file-upload" accept="text/csv">
+            <input type="file" class="custom-file-input" id="file-upload" name="file-upload" accept="text/csv" required>
             <label class="custom-file-label" for="file-upload">Choose file</label>
           </div>
         </div>
