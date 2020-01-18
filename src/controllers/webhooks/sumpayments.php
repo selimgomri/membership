@@ -240,6 +240,8 @@ try {
 
       $amount = $amount - $userDiscount;
 
+      $getCountPending->execute([$user]);
+
       $dateString = date("F Y", strtotime("first day of this month")) . " DD";
       // If amount is too low, it will wait for the next payment round
       if ($amount > 100) {
@@ -257,7 +259,7 @@ try {
           $user,
           $date
         ]);
-      } else if ($amount == 0 && ($getCountPending->execute([$user]))->fetchColumn() > 0) {
+      } else if ($amount == 0 && $getCountPending->fetchColumn() > 0) {
         $addPaymentForCharge->execute([
           $date,
           'paid_out',
