@@ -30,8 +30,13 @@ if (!$formInvalid) {
 
         if (bool($_FILES['file-upload']['error'][$i])) {
           // Error
-          reportError($_FILES['file-upload']['error'][$i]);
-          $_SESSION['UploadError'] = true;
+          // reportError($_FILES['file-upload']['error'][$i]);
+          if ($_FILES['file-upload']['error'][$i] == 2) {
+            // Too large
+            $_SESSION['TooLargeError'] = true;
+          } else {
+            $_SESSION['UploadError'] = true;
+          }
           throw new Exception();
         } else if ($_FILES['file-upload']['type'][$i] != 'text/plain' && $_FILES['file-upload']['type'][$i] != 'application/octet-stream') {
           // Probably not a text file
@@ -40,7 +45,7 @@ if (!$formInvalid) {
           throw new Exception();
         } else if ($_FILES['file-upload']['size'][$i] > 3000000) {
           // Too large, stop
-          reportError($_FILES['file-upload']['size'][$i]);
+          // reportError($_FILES['file-upload']['size'][$i]);
           $_SESSION['TooLargeError'] = true;
           throw new Exception();
         } else {
