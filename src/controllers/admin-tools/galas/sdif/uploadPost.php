@@ -38,7 +38,7 @@ if (!$formInvalid) {
           reportError($_FILES['file-upload']['type'][$i]);
           $_SESSION['UploadError'] = true;
           throw new Exception();
-        } else if ($_FILES['file-upload']['size'][$i] > 300000) {
+        } else if ($_FILES['file-upload']['size'][$i] > 3000000) {
           // Too large, stop
           reportError($_FILES['file-upload']['size'][$i]);
           $_SESSION['TooLargeError'] = true;

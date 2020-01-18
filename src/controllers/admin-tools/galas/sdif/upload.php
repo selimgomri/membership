@@ -70,7 +70,7 @@ include BASE_PATH . 'views/header.php';
 
         <?=\SCDS\FormIdempotency::write()?>
         <?=\SCDS\CSRF::write()?>
-        <input type="hidden" name="MAX_FILE_SIZE" value="300000">
+        <input type="hidden" name="MAX_FILE_SIZE" value="3000000">
 
         <div class="form-group">
           <label>Select a result file to upload</label>
