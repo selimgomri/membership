@@ -16,7 +16,7 @@ $squadFeeRequired = !bool($squadFeeMonths[$date->format("m")]);
 // Prepare things
 $getSquadMetadata = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, members.ClubPays, squads.SquadName, squads.SquadID, squads.SquadFee FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = ? ORDER BY squads.SquadFee DESC, members.MForename ASC, members.MSurname ASC;");
 
-$getExtraMetadata = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, extras.ExtraName, extras.ExtraID, extras.ExtraFee FROM ((members INNER JOIN `extrasRelations` ON members.MemberID = extrasRelations.MemberID) INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) WHERE members.UserID = ? ORDER BY members.MForename ASC, members.MSurname ASC;");
+$getExtraMetadata = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, extras.ExtraName, extras.ExtraID, extras.ExtraFee, extras.Type FROM ((members INNER JOIN `extrasRelations` ON members.MemberID = extrasRelations.MemberID) INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) WHERE members.UserID = ? ORDER BY members.MForename ASC, members.MSurname ASC;");
 
 $track = $db->prepare("INSERT INTO `individualFeeTrack` (`MonthID`, `MemberID`, `UserID`, `Description`, `Amount`, `Type`, `PaymentID`) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
@@ -28,9 +28,11 @@ $updateIndivFeeTrack = $db->prepare("UPDATE `individualFeeTrack` SET `PaymentID`
 
 $getMonthSum = $db->prepare("SELECT SUM(`Amount`) FROM `paymentsPending` WHERE `UserID` = ? AND `Status` = 'Pending' AND `Date` <= ? AND `Type` = ?;");
 
-$addPaymentForCharge = $db->prepare("INSERT INTO `payments` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MandateID`, `PMkey`) VALUES (?, 'pending_api_request', ?, ?, ?, 'GBP', 'Payment', ?, ?);");
+$addPaymentForCharge = $db->prepare("INSERT INTO `payments` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MandateID`, `PMkey`) VALUES (?, ?, ?, ?, ?, 'GBP', 'Payment', ?, ?);");
 
-$setPaymentsPending = $db->prepare("UPDATE `paymentsPending` SET `Status` = 'Queued' WHERE `UserID` = ? AND `Status` = 'Pending' AND `Date` <= ? AND (`Type` = 'Payment' OR `Type` = 'Refund');");
+$setPaymentsPending = $db->prepare("UPDATE `paymentsPending` SET `Status` = ? WHERE `UserID` = ? AND `Status` = 'Pending' AND `Date` <= ?");
+
+$getCountPending = $db->prepare("SELECT COUNT(*) FROM `paymentsPending` WHERE `UserID` = ? AND `Status` = 'Pending';");
 
 // Begin transaction
 $db->beginTransaction();
@@ -195,13 +197,23 @@ try {
           $description = $swimmerRow['MForename'] . " " . $swimmerRow['MSurname'] . ' - ' . $swimmerRow['ExtraName'];
           $fee = BigDecimal::of((string) $swimmerRow['ExtraFee'])->withPointMovedRight(2)->toInt();
 
-          $addToPaymentsPending->execute([
-            $date,
-            $user,
-            $description,
-            $fee,
-            $metadata
-          ]);
+          if ($swimmerRow['Type'] == 'Payment') {
+            $addToPaymentsPending->execute([
+              $date,
+              $user,
+              $description,
+              $fee,
+              $metadata
+            ]);
+          } else if ($swimmerRow['Type'] == 'Refund') {
+            $addCreditToPaymentsPending->execute([
+              $date,
+              $user,
+              $description,
+              $fee,
+              $metadata
+            ]);
+          }
 
           $paymentID = $db->lastInsertId();
 
@@ -228,11 +240,14 @@ try {
 
       $amount = $amount - $userDiscount;
 
+      $getCountPending->execute([$user]);
+
       $dateString = date("F Y", strtotime("first day of this month")) . " DD";
       // If amount is too low, it will wait for the next payment round
       if ($amount > 100) {
         $addPaymentForCharge->execute([
           $date,
+          'pending_api_request',
           $user,
           $dateString,
           $amount,
@@ -240,6 +255,28 @@ try {
           null
         ]);
         $setPaymentsPending->execute([
+          'Queued',
+          $user,
+          $date
+        ]);
+      } else if ($amount == 0 && $getCountPending->fetchColumn() > 0) {
+        $addPaymentForCharge->execute([
+          $date,
+          'paid_out',
+          $user,
+          $dateString,
+          $amount,
+          null,
+          null
+        ]);
+        $id = $db->lastInsertId();
+        $setKey = $db->prepare("UPDATE payments SET PMkey = ? WHERE PaymentID = ?");
+        $setKey->execute([
+          'NA' . $id,
+          $id
+        ]);
+        $setPaymentsPending->execute([
+          'Paid',
           $user,
           $date
         ]);

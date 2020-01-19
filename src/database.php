@@ -359,7 +359,7 @@ function myMonthlyFeeTable($link, $userID) {
     }
     $reducedCost += $totalsArray[$i];
   }
-  $sql = $db->prepare("SELECT extras.ExtraName, extras.ExtraFee, members.MForename,
+  $sql = $db->prepare("SELECT extras.ExtraName, extras.ExtraFee, extras.Type, members.MForename,
   members.MSurname FROM (((extras INNER JOIN extrasRelations ON extras.ExtraID =
   extrasRelations.ExtraID) INNER JOIN members ON members.MemberID =
   extrasRelations.MemberID) INNER JOIN users on users.UserID = members.UserID) WHERE users.UserID = ? ORDER BY
@@ -370,12 +370,17 @@ function myMonthlyFeeTable($link, $userID) {
   $count = sizeof($rows);
   $monthlyExtras = "";
   $monthlyExtrasTotal = 0;
+  $monthlyExtrasCreditTotal = 0;
   for ($i=0; $i < $count; $i++) {
     $row = $rows[$i];
     $monthlyExtras .= "<tr><td>" . htmlspecialchars($row['ExtraName']) . " <br>for " .
     htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "</td><td>&pound;" .
     number_format($row['ExtraFee'],2,'.','') . "</td></tr>";
-    $monthlyExtrasTotal += $row['ExtraFee'];
+    if ($row['Type'] == 'Payment') {
+      $monthlyExtrasTotal += $row['ExtraFee'];
+    } else if ($row['Type'] == 'Refund') {
+      $monthlyExtrasCreditTotal += $row['ExtraFee'];
+    }
   }
   if ($monthlyExtrasTotal+$reducedCost > 0) {
     $output = "<div class=\"table-responsive\"><table class=\"table mb-0\">
@@ -393,9 +398,10 @@ function myMonthlyFeeTable($link, $userID) {
       "</td></tr>";
     }
     $output .= "<tr><td>The monthly subtotal for extras is</td><td>&pound;" . number_format($monthlyExtrasTotal,2,'.','') .
+    "</td></tr> <tr><td>The monthly subtotal for credit (refund) extras is</td><td>&pound;" . number_format($monthlyExtrasCreditTotal,2,'.','') .
     "</td></tr> <tr class=\"bg-light\"><td><strong>The monthly total
     is</strong></td><td>&pound;" . number_format(($reducedCost +
-    $monthlyExtrasTotal),2,'.','') . "</td></tr> </tbody></table></div>";
+    $monthlyExtrasTotal - $monthlyExtrasCreditTotal),2,'.','') . "</td></tr> </tbody></table></div>";
     return $output;
   }
   else {

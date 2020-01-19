@@ -24,9 +24,18 @@ include BASE_PATH . "views/paymentsMenu.php";
  ?>
 
 <div class="container">
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-light">
+      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl('payments'))?>">Payments</a></li>
+      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl('payments/extrafees'))?>">Extras</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars($row['ExtraName'])?></li>
+    </ol>
+  </nav>
+
   <div class="row align-items-center mb-3">
     <div class="col-md-6">
-	    <h1><?=htmlspecialchars($row['ExtraName'])?> <small>&pound;<?=htmlspecialchars(number_format($row['ExtraFee'], 2))?>/month</small></h1>
+	    <h1><?=htmlspecialchars($row['ExtraName'])?> <small>&pound;<?=htmlspecialchars(number_format($row['ExtraFee'], 2))?>/month (<?php if ($row['Type'] == 'Payment') { ?>payment<?php } else { ?>credit/refund<?php } ?>)</small></h1>
     </div>
     <div class="col text-sm-right">
       <a href="<?=autoUrl("payments/extrafees/" . $id . "/edit")?>"

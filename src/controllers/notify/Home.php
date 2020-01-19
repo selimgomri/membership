@@ -88,7 +88,7 @@ include BASE_PATH . "views/notifyMenu.php";
       </p>
     </div>
 
-    <div class="col d-none d-md-block">
+    <div class="col">
       <?php $list = new \CLSASC\BootstrapComponents\ListGroup(file_get_contents(BASE_PATH . 'controllers/notify/list.json')); ?>
       <?=$list->render('notify-home')?>
     </div>

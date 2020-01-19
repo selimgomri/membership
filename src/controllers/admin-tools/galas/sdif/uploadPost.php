@@ -223,7 +223,7 @@ if (!$formInvalid) {
     }
     $db->commit();
     $_SESSION['UploadSuccess'] = true;
-  } catch (Exception $e) {
+  } catch (Exception | Error $e) {
     $db->rollBack();
     $_SESSION['UploadError'] = true;
     reportError($e);

@@ -63,6 +63,44 @@ function addSwimmerToList() {
   }
 }
 
+function addUserToList() {
+  var swimmer = (document.getElementById('user-select')).value;
+  if (swimmer !== 'Select user') {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        getSwimmers();
+        document.getElementById("user-status").innerHTML =
+        '<div class="mt-3 mb-0 alert alert-success alert-dismissible fade show" role="alert">' +
+        '<strong>Successfully Added Swimmer</strong>'  +
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+        '<span aria-hidden="true">&times;</span>' +
+        '</button>' +
+        '</div>';
+      } else {
+        document.getElementById("user-status").innerHTML =
+        '<div class="mt-3 mb-0 alert alert-warning alert-dismissible fade show" role="alert">' +
+        '<strong>Unable to add swimmer</strong><br>They may already be on the list' +
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+        '<span aria-hidden="true">&times;</span>' +
+        '</button>' +
+        '</div>';
+      }
+    }
+    xhttp.open('POST', document.getElementById('user-add').dataset.ajaxUrl, true);
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhttp.send('response=insert-user&swimmerInsert=' + swimmer);
+  } else {
+    document.getElementById('user-status').innerHTML =
+    '<div class="mt-3 mb-0 alert alert-warning alert-dismissible fade show" role="alert">' +
+    '<strong>No swimmer selected</strong><br>Please select a user to add to this list' +
+    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+    '<span aria-hidden="true">&times;</span>' +
+    '</button>' +
+    '</div>';
+  }
+}
+
 function dropSwimmerFromList(relation) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -95,4 +133,4 @@ function clickPropogation(e) {
 getSwimmers();
 getSwimmersForSquad();
 document.getElementById('squadSelect').onchange=getSwimmersForSquad;
-document.getElementById('addSwimmer').onclick=addSwimmerToList;
+document.getElementById('addSwimmer').onclick=addSwimmerToList;document.getElementById('user-add').onclick=addUserToList;

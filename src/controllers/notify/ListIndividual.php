@@ -2,6 +2,10 @@
 
 global $db;
 
+// Get users for list
+$getUsers = $db->query("SELECT Forename, Surname, UserID FROM users ORDER BY Forename ASC, Surname ASC");
+$userDetails = $getUsers->fetch(PDO::FETCH_ASSOC);
+
 $user = $_SESSION['UserID'];
 
 $list = $db->prepare("SELECT * FROM `targetedLists` WHERE `ID` = ?");
@@ -45,9 +49,9 @@ include BASE_PATH . "views/notifyMenu.php";
   </div>
   <div class="row">
     <div class="col order-md-1 mb-3">
-      <div class="card">
+      <div class="card mb-3">
         <div class="card-header">
-          Add to list
+          Add member to list
         </div>
         <form class="card-body">
           <div class="form-group">
@@ -62,15 +66,41 @@ include BASE_PATH . "views/notifyMenu.php";
             </select>
           </div>
           <div class="form-group">
-            <label for="swimmerSelect">Select Swimmer</label>
+            <label for="swimmerSelect">Select member</label>
             <select class="custom-select" id="swimmerSelect" name="swimmerSelect">
               <option selected>Select squad first</option>
             </select>
           </div>
             <button type="button" class="btn btn-success" id="addSwimmer" data-ajax-url="<?=htmlspecialchars(autoUrl("notify/lists/ajax/" . $id))?>">
-              Add Swimmer to Targeted List
+              Add member to list
             </button>
             <div id="status">
+            </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          Add user to list
+        </div>
+        <form class="card-body">
+          <div class="form-group">
+            <label for="user-select">Select user</label>
+            <select class="custom-select" id="user-select" name="user-select" <?php if ($userDetails == null) { ?>disabled<?php } ?>>
+            <?php if ($userDetails == null) { ?>
+              <option selected>No users</option>
+            <?php } else { ?>
+            <option selected>Select user</option>
+            <?php do { ?>
+              <option value="<?=htmlspecialchars($userDetails['UserID'])?>"><?=htmlspecialchars($userDetails['Forename'] . ' ' . $userDetails['Surname'])?></option>
+            <?php } while ($userDetails = $getUsers->fetch(PDO::FETCH_ASSOC)); ?>
+            <?php } ?>
+            </select>
+          </div>
+            <button type="button" class="btn btn-success" id="user-add" data-ajax-url="<?=htmlspecialchars(autoUrl("notify/lists/ajax/" . $id))?>">
+              Add user to list
+            </button>
+            <div id="user-status">
             </div>
         </form>
       </div>

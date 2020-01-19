@@ -103,7 +103,12 @@ if ($squadsQuery) {
   }
 }
 if ($listsQuery) {
-  $listUsers = $db->query("SELECT members.UserID FROM members INNER JOIN `targetedListMembers` ON targetedListMembers.ReferenceID = members.MemberID WHERE (" . $listsQuery . ") AND UserID IS NOT NULL");
+  $listUsers = $db->query("SELECT members.UserID FROM members INNER JOIN `targetedListMembers` ON targetedListMembers.ReferenceID = members.MemberID WHERE (" . $listsQuery . ") AND ReferenceType = 'Member' AND UserID IS NOT NULL");
+  while ($u = $listUsers->fetch(PDO::FETCH_ASSOC)) {
+    $toSendTo[$u['UserID']] = $u['UserID'];
+  }
+
+  $listUsers = $db->query("SELECT users.UserID FROM users INNER JOIN `targetedListMembers` ON targetedListMembers.ReferenceID = users.UserID WHERE (" . $listsQuery . ") AND ReferenceType = 'User'");
   while ($u = $listUsers->fetch(PDO::FETCH_ASSOC)) {
     $toSendTo[$u['UserID']] = $u['UserID'];
   }
