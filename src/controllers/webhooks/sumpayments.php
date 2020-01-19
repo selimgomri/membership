@@ -255,7 +255,7 @@ try {
           null
         ]);
         $setPaymentsPending->execute([
-          'Pending',
+          'Queued',
           $user,
           $date
         ]);
