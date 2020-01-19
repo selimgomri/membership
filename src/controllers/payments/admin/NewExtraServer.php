@@ -14,6 +14,10 @@ if ($_POST['name'] != null && $_POST['name'] != "") {
 
 if ($_POST['price'] != null && $_POST['price'] != "") {
 	$price = number_format($_POST['price'],2,'.','');
+	if ($_POST['price'] < 0) {
+		$errorState = true;
+		$errorMessage .= "<li>The price was negative. Set a positive (or 0 value) price and choose payment or credit/refund.</li>";
+	}
 } else {
 	$errorState = true;
 	$errorMessage .= "<li>There was a problem with that price</li>";

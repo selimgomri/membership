@@ -55,8 +55,7 @@ include BASE_PATH . "views/paymentsMenu.php";
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon3">&pound;</span>
               </div>
-              <input type="text" class="form-control" id="price" name="price"
-							placeholder="Enter price" value="<?=htmlspecialchars($row['ExtraFee'])?>">
+              <input type="number" min="0" step="0.01"  class="form-control" id="price" name="price" placeholder="Enter price" value="<?=htmlspecialchars($row['ExtraFee'])?>">
             </div>
           </div>
 
