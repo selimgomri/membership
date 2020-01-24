@@ -384,16 +384,21 @@ $content .= '<!--
   $query->execute([$id]);
   $row = $query->fetch(PDO::FETCH_ASSOC);
   if ($row != null) {
-  $mobile = PhoneNumber::parse($row['Mobile']);
+    $mobile = null;
+    try {
+      $mobile = PhoneNumber::parse($row['Mobile']);
+    } catch (Exception $e) {
+      
+    }
   $content .= '
     <div class="mb-3 card" id="emergency">
       <div class="card-body">
       <h2>Emergency Contacts</h2>';
-      if ($row == null) {
+      if ($row == null || $mobile == null) {
       $content .= '<p class="lead">
         There are no contact details available.
       </p>
-      <p class="mb-0">This is because there is no Parent account connected</p></div>';
+      <p class="mb-0">This is because there is no account connected or their phone number is invalid.</p></div>';
     } else {
       $contacts = new EmergencyContacts($db);
       $contacts->byParent($row['UserID']);
