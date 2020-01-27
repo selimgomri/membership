@@ -160,7 +160,7 @@ include BASE_PATH . 'views/header.php';
         <div class="py-1 px-2  <?php if ($count%2 == 0) { ?>bg-light<?php } ?>">
           <div class="row">
             <div class="col-4 col-sm-3 col-lg-2 text-truncate">
-              <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times/event?course=S&stroke=" . $strokeCode . "&distance=" . $distance))?>"><?=$distance?>m <?=$stroke?></a>
+              <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times/event?course=L&stroke=" . $strokeCode . "&distance=" . $distance))?>"><?=$distance?>m <?=$stroke?></a>
             </div>
             <div class="col-4 col-sm-3 col-md-2 text-right">
               <span class="mono"><?=htmlspecialchars($row['Time'])?></span>
