@@ -47,8 +47,14 @@
     font-weight: 400;
     src: url('<?=autoUrl('public/fonts/RobotoMono-Regular.ttf')?>') format('truetype');
   }
+  @font-face {
+    font-family: 'Noto Emoji';
+    font-style: normal;
+    font-weight: 400;
+    src: url('<?=autoUrl('public/fonts/NotoEmoji-Regular.ttf')?>') format('truetype');
+  }
   html {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Open Sans', 'Noto Emoji', sans-serif;
     color: black;
     margin: 1.27cm;
   }
@@ -61,7 +67,7 @@
     box-sizing: border-box;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Open Sans Bold', 'Open Sans', 'Helvetica', sans-serif;
+    font-family: 'Open Sans Bold', 'Open Sans', 'Helvetica', 'Noto Emoji', sans-serif;
     font-weight: 400;
     font-style: normal;
     margin: 0 0 10pt 0;
@@ -93,7 +99,7 @@
     padding: 0;
   }
   strong, thead, th {
-    font-family: 'Open Sans Bold', 'Open Sans', 'Helvetica', sans-serif;
+    font-family: 'Open Sans Bold', 'Open Sans', 'Helvetica', 'Noto Emoji', sans-serif;
     font-weight: 400;
     font-style: normal;
   }
@@ -192,7 +198,7 @@
     padding: 0;
   }
   .mono {
-    font-family: 'Roboto Mono', monospace;
+    font-family: 'Roboto Mono', 'Noto Emoji', monospace;
   }
   .page-break {
     page-break-after: always;
@@ -240,10 +246,10 @@
 
   <?php if (!bool(env('IS_CLS'))) { ?>
   html, body {
-    font-family: 'Source Sans Pro', 'Lato', 'Helvetica', sans-serif;
+    font-family: 'Source Sans Pro', 'Lato', 'Helvetica', 'Noto Emoji', sans-serif;
   }
   h1, h2, h3, h4, h5, h6, strong, thead, th {
-    font-family: 'Source Sans Pro Bold', 'Lato Bold';
+    font-family: 'Source Sans Pro Bold', 'Lato Bold' 'Noto Emoji';
   }
   .logo {
     height: 2cm;
