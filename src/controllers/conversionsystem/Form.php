@@ -1,4 +1,5 @@
 <form method="post" class="needs-validation" novalidate>
+	<?=\SCDS\CSRF::write()?>
 	<div class="form-group">
 		<label for="event">Select an Event</label>
 		<div class="row mb-2">

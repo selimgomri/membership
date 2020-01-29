@@ -384,11 +384,6 @@ $route->group($get_group, function($clubcode = "CLSE") {
     include 'controllers/notify/UnsubscribeHandler.php';
   });
 
-  $this->get('/timeconverter', function() {
-    global $link;
-    include 'controllers/conversionsystem/testing.php';
-  });
-
   $this->get('/robots.txt', function() {
     header("Content-Type: text/plain");
     echo "User-agent: *\r\nDisallow: /webhooks/\r\nDisallow: /webhooks\r\nDisallow: /css\r\nDisallow: /js\r\nDisallow: /public\r\nDisallow: /files";
@@ -413,9 +408,14 @@ $route->group($get_group, function($clubcode = "CLSE") {
     require BASE_PATH . 'controllers/PublicFileLoader.php';
   });
 
-  $this->post('/timeconverter', function() {
-    global $link;
-    include 'controllers/conversionsystem/PostTesting.php';
+  $this->group(['/timeconverter', '/time-converter'], function() {
+    $this->get('/', function() {
+      include 'controllers/conversionsystem/testing.php';
+    });
+
+    $this->post('/', function() {
+      include 'controllers/conversionsystem/PostTesting.php';
+    });
   });
 
   $this->get('/reportanissue', function() {
