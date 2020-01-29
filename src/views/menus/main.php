@@ -329,6 +329,9 @@ if (!function_exists('chesterStandardMenu')) {
                       target="_blank">Help with entries <i class="fa fa-external-link"></i></a>
                     <?php } ?>
                     <?php } ?>
+                    <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("time-converter"))?>">
+                      Time converter
+                    </a>
                   </div>
                 </li>
                 <?php if ($_SESSION['AccessLevel'] == 'Parent' && $haveSquadReps) { ?>
