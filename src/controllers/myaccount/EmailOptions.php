@@ -6,7 +6,7 @@ global $db;
 
 $getExtraEmails = null;
 try {
-  $getExtraEmails = $db->prepare("SELECT ID, Name, EmailAddress FROM notifyAdditionalEmails WHERE UserID = ? AND Verified = '1'");
+  $getExtraEmails = $db->prepare("SELECT ID, Name, EmailAddress, Verified FROM notifyAdditionalEmails WHERE UserID = ?");
   $getExtraEmails->execute([$_SESSION['UserID']]);
 } catch (Exception $e) {}
 
@@ -102,36 +102,6 @@ include BASE_PATH . "views/header.php";
     		</div>
     	<?php } ?>
 
-      <?php if (isset($_SESSION['DeleteCCSuccess'])) {
-        unset($_SESSION['DeleteCCSuccess']); ?>
-    		<div class="alert alert-success">
-    			<p class="mb-0">
-    				<strong>We've deleted that CC</strong>
-    			</p>
-    		</div>
-    	<?php } ?>
-
-      <?php if (isset($_SESSION['AddNotifySuccess'])) {
-        unset($_SESSION['AddNotifySuccess']); ?>
-    		<div class="alert alert-success">
-    			<p class="mb-0">
-    				<strong>We've added a new Carbon Copy Email</strong>
-    			</p>
-    		</div>
-    	<?php } ?>
-
-      <?php if (isset($_SESSION['AddNotifyError'])) {
-        unset($_SESSION['AddNotifyError']); ?>
-    		<div class="alert alert-warning">
-    			<p class="mb-0">
-    				<strong>An error occurred and we were unable to add your new CC Email.</strong>
-    			</p>
-    			<p class="mb-0">
-    				Your verification code might have been wrong. If you need help, contact your support team.
-    			</p>
-    		</div>
-    	<?php } ?>
-
     	<div class="cell">
     		<form method="post">
     			<div class="form-group">
@@ -200,9 +170,9 @@ include BASE_PATH . "views/header.php";
 
         <ul class="list-unstyled">
         <?php while ($extraEmails = $getExtraEmails->fetch(PDO::FETCH_ASSOC)) { ?>
-          <li>
+          <li class="mb-2">
             <p class="text-truncate mb-0">
-              <?=$extraEmails['EmailAddress']?>
+							<strong><?=htmlspecialchars($extraEmails['EmailAddress'])?></strong> <?php if (!bool($extraEmails['Verified'])) { ?><i title="Email awaiting verification" class="text-warning fa fa-times-circle fa-fw" aria-hidden="true"></i><?php } else { ?><i title="Email address verified" class="text-success fa fa-check-circle fa-fw" aria-hidden="true"></i><?php } ?>
             </p>
             <p>
               <a href="<?=autoUrl("my-account/email/cc/" . $extraEmails['ID'] . "/delete")?>">
@@ -213,7 +183,24 @@ include BASE_PATH . "views/header.php";
         <?php } ?>
         </ul>
 
-        <form method="post" action="<?=autoUrl("my-account/email/cc/new")?>" class="needs-validation" novalidate>
+        <form id="cc" method="post" action="<?=autoUrl("my-account/email/cc/new")?>" class="needs-validation" novalidate>
+
+					<?php if (isset($_SESSION['VerifyEmailError']) && bool($_SESSION['VerifyEmailError'])) { ?>
+					<div class="alert alert-warning">
+						<p class="mb-0"><strong>There was a problem with the information you supplied.</strong></p>
+						<p class="mb-0">Please try again.</p>
+					</div>
+					<?php unset($_SESSION['VerifyEmailError']); } ?>
+
+					<?php if (isset($_SESSION['DeleteCCSuccess'])) {
+						unset($_SESSION['DeleteCCSuccess']); ?>
+						<div class="alert alert-success">
+							<p class="mb-0">
+								<strong>We've deleted that additional email</strong>
+							</p>
+						</div>
+					<?php } ?>
+
           <div class="form-row">
             <div class="col-md">
               <div class="form-group">

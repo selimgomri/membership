@@ -67,13 +67,17 @@ $this->group('/email', function() {
 
   $this->group('/cc', function() {
 
-    if (isset($_SESSION['AddNotifyCC'])) {
-      $this->post('/new', function() {
-      	include 'CC/NewCCVerifyPost.php';
+    if (isset($_SESSION['VerifyEmailSent']) && bool($_SESSION['VerifyEmailSent'])) {
+      $this->get('/new', function() {
+      	include 'CC/CCEmailSent.php';
       });
     } else {
       $this->post('/new', function() {
       	include 'CC/NewCCVerify.php';
+			});
+			
+			$this->get('/new', function() {
+      	header("Location: " . autoUrl("my-account/email"));
       });
     }
 

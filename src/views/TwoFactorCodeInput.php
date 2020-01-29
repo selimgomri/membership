@@ -66,7 +66,7 @@ include BASE_PATH . "views/header.php";
       <form method="post" action="<?=autoUrl("2fa")?>" name="2faform" id="2faform" class="needs-validation" novalidate>
         <div class="form-group">
           <label for="auth">Authentication Code</label>
-          <input type="number" name="auth" id="auth" class="form-control form-control-lg" required autofocus placeholder="654321" pattern="[0-9]*" inputmode="numeric">
+          <input type="number" name="auth" id="auth" class="form-control form-control-lg" required autofocus placeholder="654321" pattern="[0-9]*" inputmode="numeric" min="0" max="999999" step="1">
           <div class="invalid-feedback">
             Please enter a numeric authentication code.
           </div>
