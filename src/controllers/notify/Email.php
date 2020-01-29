@@ -49,6 +49,18 @@ if (!bool(env('IS_CLS'))) {
 
 $fromEmail .= '@' . env('EMAIL_DOMAIN');
 
+function fieldChecked($name) {
+  if (isset($_SESSION['NotifyPostData'][$name]) && bool($_SESSION['NotifyPostData'][$name])) {
+    return ' checked ';
+  }
+}
+
+function fieldValue($name) {
+  if (isset($_SESSION['NotifyPostData'][$name])) {
+    return 'value="' . htmlspecialchars($_SESSION['NotifyPostData'][$name]) . '"';
+  }
+}
+
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";
 
@@ -65,8 +77,48 @@ include BASE_PATH . "views/notifyMenu.php";
 
 	<h1>Notify Composer</h1>
 	<p class="lead">Send emails to targeted groups</p>
-  <hr>
-  <form method="post" onkeypress="return event.keyCode != 13;">
+
+  <?php if (isset($_SESSION['UploadSuccess']) && $_SESSION['UploadSuccess']) { ?>
+  <div class="alert alert-success">
+    <p class="mb-0"><strong>Results have been uploaded</strong>.</p>
+  </div>
+  <?php
+    unset($_SESSION['UploadSuccess']);
+  } ?>
+
+  <?php if (isset($_SESSION['FormError']) && $_SESSION['FormError']) { ?>
+  <div class="alert alert-danger">
+    <p class="mb-0"><strong>We could not verify the integrity of the submitted form</strong>. Please try again.</p>
+  </div>
+  <?php
+    unset($_SESSION['FormError']);
+  } ?>
+
+  <?php if (isset($_SESSION['UploadError']) && $_SESSION['UploadError']) { ?>
+  <div class="alert alert-danger">
+    <p class="mb-0"><strong>There was a problem with the file uploaded</strong>. Please try again.</p>
+  </div>
+  <?php
+    unset($_SESSION['UploadError']);
+  } ?>
+
+  <?php if (isset($_SESSION['TooLargeError']) && $_SESSION['TooLargeError']) { ?>
+  <div class="alert alert-danger">
+    <p class="mb-0"><strong>A file you uploaded was too large</strong>. The maximum size for an individual file is 300000 bytes.</p>
+  </div>
+  <?php
+    unset($_SESSION['TooLargeError']);
+  } ?>
+
+  <?php if (isset($_SESSION['CollectiveSizeTooLargeError']) && $_SESSION['CollectiveSizeTooLargeError']) { ?>
+  <div class="alert alert-danger">
+    <p class="mb-0"><strong>The files you uploaded were collectively too large</strong>. Attachments may not exceed a total of 10000000 bytes in size.</p>
+  </div>
+  <?php
+    unset($_SESSION['CollectiveSizeTooLargeError']);
+  } ?>
+  
+  <form method="post" onkeypress="return event.keyCode != 13;" enctype="multipart/form-data">
 
     <div class="form-group">
 			<label>To members in the following targeted lists...</label>
@@ -76,7 +128,7 @@ include BASE_PATH . "views/notifyMenu.php";
 					<div class="custom-control custom-checkbox">
 					  <input type="checkbox" class="custom-control-input"
             id="TL-<?=$list['ID']?>" name="TL-<?=$list['ID']?>"
-            value="1">
+            value="1" <?=fieldChecked('TL-' . $list['ID'])?>>
 					  <label class="custom-control-label"
               for="TL-<?=$list['ID']?>">
               <?=htmlspecialchars($list['Name'])?>
@@ -95,7 +147,7 @@ include BASE_PATH . "views/notifyMenu.php";
 					<div class="custom-control custom-checkbox">
 					  <input type="checkbox" class="custom-control-input"
             id="<?=$squad['SquadID']?>" name="<?=$squad['SquadID']?>"
-            value="1">
+            value="1" <?=fieldChecked($squad['SquadID'])?>>
 					  <label class="custom-control-label"
               for="<?=$squad['SquadID']?>">
               <?=htmlspecialchars($squad['SquadName'])?> Squad
@@ -115,7 +167,7 @@ include BASE_PATH . "views/notifyMenu.php";
 					<div class="custom-control custom-checkbox">
 					  <input type="checkbox" class="custom-control-input"
             id="GALA-<?=$gala['GalaID']?>" name="GALA-<?=$gala['GalaID']?>"
-            value="1">
+            value="1" <?=fieldChecked('GALA-' . $gala['GalaID'])?>>
 					  <label class="custom-control-label"
               for="GALA-<?=$gala['GalaID']?>">
               <?=htmlspecialchars($gala['GalaName'])?>
@@ -163,7 +215,7 @@ include BASE_PATH . "views/notifyMenu.php";
 		<div class="form-group">
 			<label for="subject">Message Subject</label>
 			<input type="text" class="form-control" name="subject" id="subject"
-      placeholder="Message Subject" autocomplete="off" required>
+      placeholder="Message Subject" autocomplete="off" required <?=fieldValue('subject')?>>
 		</div>
 
 		<div class="form-group">
@@ -174,12 +226,21 @@ include BASE_PATH . "views/notifyMenu.php";
           <span class="mono">User Name</span>,".
         </em>
       </p>
-			<textarea class="form-control" id="message" name="message" rows="10">
-      </textarea>
+			<textarea class="form-control" id="message" name="message" rows="10"><?php if (isset($_SESSION['NotifyPostData']['message'])) {?><?=htmlspecialchars($_SESSION['NotifyPostData']['message'])?><?php } ?></textarea>
 			<small id="messageHelp" class="form-text text-muted">
         Styling will be stripped from this message
       </small>
 		</div>
+
+    <input type="hidden" name="MAX_FILE_SIZE" value="3000000">
+
+    <div class="form-group">
+      <label>Select files to attach</label>
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" multiple>
+        <label class="custom-file-label text-truncate" for="file-upload">Choose file(s)</label>
+      </div>
+    </div>
 
     <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas") { ?>
 
@@ -232,4 +293,7 @@ include BASE_PATH . "views/notifyMenu.php";
   });
 });
 </script>
+<script src="<?=htmlspecialchars(autoUrl("public/js/bs-custom-file-input.min.js"))?>"></script>
+<script src="<?=htmlspecialchars(autoUrl("public/js/file-input-init.js"))?>"></script>
+
 <?php include BASE_PATH . "views/footer.php";
