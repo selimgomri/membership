@@ -1,31 +1,39 @@
 <?php
 
-ignore_user_abort(true);
-set_time_limit(0);
-
-if (!SCDS\FormIdempotency::verify() || !SCDS\CSRF::verify()) {
-  halt(403);
-}
-
-global $db;
-
 $_SESSION['NotifyPostData'] = $_POST;
 
-$replyAddress = getUserOption($_SESSION['UserID'], 'NotifyReplyAddress');
-
-$to_remove = [
-  "<p>&nbsp;</p>",
-  "<p></p>",
-  "<p> </p>",
-  "\r",
-  "\n",
-  '<div dir="auto">&nbsp;</div>',
-  '&nbsp;'
-];
+global $db;
 
 $db->beginTransaction();
 
 try {
+  if (sizeof($_POST) == 0) {
+    $_SESSION['TooLargeError'] = true;
+    throw new Exception();
+  }
+
+  if (!SCDS\FormIdempotency::verify()) {
+    $_SESSION['FormError'] = true;
+    throw new Exception();
+  }
+
+  if (!SCDS\CSRF::verify()) {
+    $_SESSION['FormError'] = true;
+    throw new Exception();
+  }
+
+  $replyAddress = getUserOption($_SESSION['UserID'], 'NotifyReplyAddress');
+
+  $to_remove = [
+    "<p>&nbsp;</p>",
+    "<p></p>",
+    "<p> </p>",
+    "\r",
+    "\n",
+    '<div dir="auto">&nbsp;</div>',
+    '&nbsp;'
+  ];
+
   // Handle attachments early doors
   $attachments = [];
   $collectiveSize = 0;
@@ -225,12 +233,9 @@ try {
 
   $sql = "INSERT INTO `notifyHistory` (`Sender`, `Subject`, `Message`,
   `ForceSend`, `Date`, `JSONData`) VALUES (?, ?, ?, ?, ?, ?)";
-  try {
-    $pdo_query = $db->prepare($sql);
-    $pdo_query->execute([$_SESSION['UserID'], $subject, $message, $force, $dbDate, $json]);
-  } catch (PDOException $e) {
-    halt(500);
-  }
+  $pdo_query = $db->prepare($sql);
+  $pdo_query->execute([$_SESSION['UserID'], $subject, $message, $force, $dbDate, $json]);
+
   $id = $db->lastInsertId();
 
   $count = sizeof($toSendTo);
@@ -241,7 +246,7 @@ try {
     try {
       $insert->execute([$userid, $id, null, null, $sender, $force]);
     } catch (PDOException $e) {
-      halt(500);
+      reportError($e);
     }
   }
 
@@ -251,16 +256,13 @@ try {
       $pdo_query = $db->prepare($sql);
       $pdo_query->execute([$userid, $id, $subject, $message, $sender, $force]);
     } catch (PDOException $e) {
-      halt(500);
+      reportError($e);
     }
 
-    $sql = "INSERT INTO `notify` (`UserID`, `MessageID`, `Subject`, `Message`,
-    `Status`, `Sender`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, 'Sent', ?, ?,
-    'Notify-Audit')";
     try {
-      $sendToTeam = $db->prepare($sql);
+      $sendToTeam = $db->prepare("INSERT INTO `notify` (`UserID`, `MessageID`, `Subject`, `Message`, `Status`, `Sender`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, 'Queued', ?, ?, 'Notify-Audit')");
     } catch (PDOException $e) {
-      halt(500);
+      reportError($e);
     }
 
     $gdpr_question = '<p>You have force sent the below message. Please contact <a href="mailto:gdpr@chesterlestreetasc.co.uk">gdpr@chesterlestreetasc.co.uk</a> to explain the rationale for using <strong>Force Send</strong> for this email.</p><hr>' . $message . '<p class="small text-muted">Sent via Notify, our custom built email notification service.</p>';
@@ -278,7 +280,7 @@ try {
       try {
         $sendToTeam->execute([$row[$i]['UserID'], null, "GDPR Alert: " . $subject, $message_admin, $sender, $force]);
       } catch (PDOException $e) {
-        halt(500);
+        reportError($e);
       }
     }
   }
