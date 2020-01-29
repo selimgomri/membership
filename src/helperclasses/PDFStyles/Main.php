@@ -51,7 +51,7 @@
     font-family: 'Noto Emoji';
     font-style: normal;
     font-weight: 400;
-    src: url('<?=autoUrl('public/fonts/NotoEmoji-Regular.ttf')?>') format('truetype');
+    src: url('<?=autoUrl('public/fonts/NotoColorEmoji.ttf')?>') format('truetype');
   }
   html {
     font-family: 'Open Sans', 'Noto Emoji', sans-serif;
