@@ -157,11 +157,13 @@ include BASE_PATH . 'views/header.php';
           <tbody>
         <?php
         for ($i = 0; $i < $count; $i++) {
-          $asaFeesString;
+          $asaFeesString = "";
           if ($member[$i]['ClubPays']) {
             $asaFeesString = "0.00 (Paid by club)";
           } else {
-            $asaFeesString = (string) (\Brick\Math\BigDecimal::of((string) $asaFees[$i]))->withPointMovedLeft(2)->toScale(2);
+            if ((string) $asaFees[$i] != "") {
+              $asaFeesString = (string) (\Brick\Math\BigDecimal::of((string) $asaFees[$i]))->withPointMovedLeft(2)->toScale(2);
+            }
           }
           ?>
           <tr>

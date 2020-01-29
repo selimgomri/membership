@@ -66,12 +66,15 @@ include BASE_PATH . "views/header.php";
 
       <p>You must use a UK address or a British Forces address.</p>
 
-    	<form method="post">
+    	<form method="post" class="needs-validation" novalidate>
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
               <label for="street-and-number">Address line 1 (street and number)</label>
               <input class="form-control" name="street-and-number" id="street-and-number" type="text" autocomplete="address-line1" <?php if (isset($addr->streetAndNumber)) { ?>value="<?=htmlspecialchars($addr->streetAndNumber)?>"<?php } ?> required>
+              <div class="invalid-feedback">
+                Please enter your street and number.
+              </div>
             </div>
 
             <div class="form-group">
@@ -82,16 +85,25 @@ include BASE_PATH . "views/header.php";
             <div class="form-group">
               <label for="town-city">Town/City</label>
               <input class="form-control" name="town-city" id="town-city" type="text" autocomplete="address-level2" <?php if (isset($addr->city)) { ?>value="<?=htmlspecialchars($addr->city)?>"<?php } ?> required>
+              <div class="invalid-feedback">
+                Please enter your town or city.
+              </div>
             </div>
 
             <div class="form-group">
               <label for="county-province">County</label>
               <input class="form-control" name="county-province" id="county-province" type="text" autocomplete="address-level1" <?php if (isset($addr->county)) { ?>value="<?=htmlspecialchars($addr->county)?>"<?php } ?> required>
+              <div class="invalid-feedback">
+                Please enter your county (historic or ceremonial).
+              </div>
             </div>
 
             <div class="form-group">
               <label for="post-code">Post Code</label>
-              <input class="form-control" name="post-code" id="post-code" type="text" autocomplete="postal-code" <?php if (isset($addr->postCode)) { ?>value="<?=htmlspecialchars($addr->postCode)?>"<?php } ?> required>
+              <input class="form-control" name="post-code" id="post-code" type="text" autocomplete="postal-code" <?php if (isset($addr->postCode)) { ?>value="<?=htmlspecialchars($addr->postCode)?>"<?php } ?> required pattern="[A-Za-z]{1,2}[0-9Rr][0-9A-Za-z]?[\s]{0,1}[0-9][ABD-HJLNP-UW-Zabd-hjlnp-uw-z]{2}">
+              <div class="invalid-feedback">
+                Please enter a valid post code.
+              </div>
             </div>
           </div>
         </div>
@@ -103,5 +115,7 @@ include BASE_PATH . "views/header.php";
     </div>
   </div>
 </div>
+
+<script src="<?=htmlspecialchars(autoUrl("public/js/NeedsValidation.js"))?>"></script>
 
 <?php include BASE_PATH . "views/footer.php"; ?>

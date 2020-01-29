@@ -31,22 +31,32 @@ if (isset($_SESSION['PasswordUpdate']) && $_SESSION['PasswordUpdate']) { ?>
 <div class="alert alert-warning">
   <p class="mb-0">Passwords must consist of at least 8 characters.</p>
 </div>
-<form class="cell" method="post" action="<?=autoUrl("my-account/password")?>">
+<form class="cell needs-validation" method="post" action="<?=htmlspecialchars(autoUrl("my-account/password"))?>" novalidate>
+  <?=SCDS\CSRF::write()?>
   <div class="form-group">
     <label for="current">Confirm your current password</label>
-    <input type="password" class="form-control" name="current" id="current" placeholder="Current Password" autocomplete="current-password">
+    <input type="password" class="form-control" name="current" id="current" placeholder="Current Password" autocomplete="current-password" required>
+    <div class="invalid-feedback">
+      Please enter your current password.
+    </div>
   </div>
   <div class="form-row">
     <div class="col-sm">
       <div class="form-group">
         <label for="new1">New password</label>
-        <input type="password" class="form-control" name="new1" id="new1" placeholder="New Password" autocomplete="new-password">
+        <input type="password" class="form-control" name="new1" id="new1" placeholder="New Password" autocomplete="new-password" minlength="8" required>
+        <div class="invalid-feedback">
+          Please enter a password that is at least 8 characters in length.
+        </div>
       </div>
     </div>
     <div class="col-sm">
       <div class="form-group">
         <label for="new2">Confirm new password</label>
-        <input type="password" class="form-control" name="new2" id="new2" placeholder="Confirm New Password" autocomplete="new-password">
+        <input type="password" class="form-control" name="new2" id="new2" placeholder="Confirm New Password" autocomplete="new-password" minlength="8" required>
+        <div class="invalid-feedback">
+          Please enter a password that is at least 8 characters in length.
+        </div>
       </div>
     </div>
   </div>
@@ -55,5 +65,7 @@ if (isset($_SESSION['PasswordUpdate']) && $_SESSION['PasswordUpdate']) { ?>
 </div>
 </div>
 </div>
+
+<script src="<?=htmlspecialchars(autoUrl("public/js/NeedsValidation.js"))?>"></script>
 
 <?php include BASE_PATH . "views/footer.php"; ?>
