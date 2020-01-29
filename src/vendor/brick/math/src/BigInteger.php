@@ -369,6 +369,8 @@ final class BigInteger extends BigNumber
     /**
      * Returns the remainder of the division of this number by the given one.
      *
+     * The remainder, when non-zero, has the same sign as the dividend.
+     *
      * @param BigNumber|number|string $that The divisor. Must be convertible to a BigInteger.
      *
      * @return BigInteger
@@ -411,6 +413,64 @@ final class BigInteger extends BigNumber
             new BigInteger($quotient),
             new BigInteger($remainder)
         ];
+    }
+
+    /**
+     * Returns the modulo of this number and the given one.
+     *
+     * The modulo operation yields the same result as the remainder operation when both operands are of the same sign,
+     * and may differ when signs are different.
+     *
+     * The result of the modulo operation, when non-zero, has the same sign as the divisor.
+     *
+     * @param BigNumber|number|string $that The divisor. Must be convertible to a BigInteger.
+     *
+     * @return BigInteger
+     *
+     * @throws DivisionByZeroException If the divisor is zero.
+     */
+    public function mod($that) : BigInteger
+    {
+        $that = BigInteger::of($that);
+
+        if ($that->value === '0') {
+            throw DivisionByZeroException::divisionByZero();
+        }
+
+        return $this->remainder($that)->plus($that)->remainder($that);
+    }
+
+    /**
+     * Returns this number raised into power with modulo.
+     *
+     * This operation only works on positive numbers.
+     *
+     * Algorithm from: https://www.geeksforgeeks.org/modular-exponentiation-power-in-modular-arithmetic/
+     *
+     * @param BigNumber|number|string $exp The positive exponent.
+     * @param BigNumber|number|string $mod The modulo. Must not be zero.
+     *
+     * @return BigInteger
+     *
+     * @throws NegativeNumberException If any of the operands is negative.
+     * @throws DivisionByZeroException If the modulo is zero.
+     */
+    public function powerMod($exp, $mod) : BigInteger
+    {
+        $exp = BigInteger::of($exp);
+        $mod = BigInteger::of($mod);
+
+        if ($this->isNegative() || $exp->isNegative() || $mod->isNegative()) {
+            throw new NegativeNumberException('The operands cannot be negative.');
+        }
+
+        if ($mod->isZero()) {
+            throw DivisionByZeroException::divisionByZero();
+        }
+
+        $result = Calculator::get()->powmod($this->value, $exp->value, $mod->value);
+
+        return new BigInteger($result);
     }
 
     /**

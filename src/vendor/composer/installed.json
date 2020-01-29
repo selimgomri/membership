@@ -52,17 +52,17 @@
     },
     {
         "name": "brick/math",
-        "version": "0.8.9",
-        "version_normalized": "0.8.9.0",
+        "version": "0.8.11",
+        "version_normalized": "0.8.11.0",
         "source": {
             "type": "git",
             "url": "https://github.com/brick/math.git",
-            "reference": "2667c1659c1dcc681b4207f722180024d12a3626"
+            "reference": "bf4894d6373d396666d280a42ecdf1ad75f8222f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/brick/math/zipball/2667c1659c1dcc681b4207f722180024d12a3626",
-            "reference": "2667c1659c1dcc681b4207f722180024d12a3626",
+            "url": "https://api.github.com/repos/brick/math/zipball/bf4894d6373d396666d280a42ecdf1ad75f8222f",
+            "reference": "bf4894d6373d396666d280a42ecdf1ad75f8222f",
             "shasum": ""
         },
         "require": {
@@ -72,7 +72,7 @@
             "php-coveralls/php-coveralls": "2.*",
             "phpunit/phpunit": "7.*"
         },
-        "time": "2020-01-08T09:40:28+00:00",
+        "time": "2020-01-23T00:19:01+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -98,17 +98,17 @@
     },
     {
         "name": "brick/money",
-        "version": "0.4.3",
-        "version_normalized": "0.4.3.0",
+        "version": "0.4.4",
+        "version_normalized": "0.4.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/brick/money.git",
-            "reference": "091cbe9733fae70b7b7788f9965a795f484a68be"
+            "reference": "6f3d8caf21b2c2d3242455fda4a29b56ff4de3dd"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/brick/money/zipball/091cbe9733fae70b7b7788f9965a795f484a68be",
-            "reference": "091cbe9733fae70b7b7788f9965a795f484a68be",
+            "url": "https://api.github.com/repos/brick/money/zipball/6f3d8caf21b2c2d3242455fda4a29b56ff4de3dd",
+            "reference": "6f3d8caf21b2c2d3242455fda4a29b56ff4de3dd",
             "shasum": ""
         },
         "require": {
@@ -125,7 +125,7 @@
         "suggest": {
             "ext-intl": "Required to format Money objects"
         },
-        "time": "2020-01-09T10:27:49+00:00",
+        "time": "2020-01-23T18:11:30+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -575,36 +575,36 @@
     },
     {
         "name": "dompdf/dompdf",
-        "version": "v0.8.3",
-        "version_normalized": "0.8.3.0",
+        "version": "v0.8.4",
+        "version_normalized": "0.8.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/dompdf/dompdf.git",
-            "reference": "75f13c700009be21a1965dc2c5b68a8708c22ba2"
+            "reference": "8f49b3b01693f51037dd50da81090beba1b5c005"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/dompdf/dompdf/zipball/75f13c700009be21a1965dc2c5b68a8708c22ba2",
-            "reference": "75f13c700009be21a1965dc2c5b68a8708c22ba2",
+            "url": "https://api.github.com/repos/dompdf/dompdf/zipball/8f49b3b01693f51037dd50da81090beba1b5c005",
+            "reference": "8f49b3b01693f51037dd50da81090beba1b5c005",
             "shasum": ""
         },
         "require": {
             "ext-dom": "*",
             "ext-mbstring": "*",
-            "phenx/php-font-lib": "0.5.*",
-            "phenx/php-svg-lib": "0.3.*",
-            "php": ">=5.4.0"
+            "phenx/php-font-lib": "^0.5.1",
+            "phenx/php-svg-lib": "^0.3.3",
+            "php": "^7.1"
         },
         "require-dev": {
-            "phpunit/phpunit": "^4.8|^5.5|^6.5",
-            "squizlabs/php_codesniffer": "2.*"
+            "phpunit/phpunit": "^7.5",
+            "squizlabs/php_codesniffer": "^3.5"
         },
         "suggest": {
             "ext-gd": "Needed to process images",
             "ext-gmagick": "Improves image processing performance",
             "ext-imagick": "Improves image processing performance"
         },
-        "time": "2018-12-14T02:40:31+00:00",
+        "time": "2020-01-20T17:00:46+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -911,17 +911,17 @@
     },
     {
         "name": "giggsey/libphonenumber-for-php",
-        "version": "8.11.1",
-        "version_normalized": "8.11.1.0",
+        "version": "8.11.3",
+        "version_normalized": "8.11.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-            "reference": "f6a367f08e323edc1c27546d8d5818bb016d812e"
+            "reference": "0329cf6a6ede750a78e7165b61fcc83cd72e9768"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/f6a367f08e323edc1c27546d8d5818bb016d812e",
-            "reference": "f6a367f08e323edc1c27546d8d5818bb016d812e",
+            "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/0329cf6a6ede750a78e7165b61fcc83cd72e9768",
+            "reference": "0329cf6a6ede750a78e7165b61fcc83cd72e9768",
             "shasum": ""
         },
         "require": {
@@ -938,7 +938,7 @@
             "phpunit/phpunit": "^4.8.36|^5.0",
             "symfony/console": "^2.8|^3.0"
         },
-        "time": "2019-12-11T10:03:19+00:00",
+        "time": "2020-01-28T11:48:03+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2277,17 +2277,17 @@
     },
     {
         "name": "sendgrid/php-http-client",
-        "version": "3.10.1",
-        "version_normalized": "3.10.1.0",
+        "version": "3.10.2",
+        "version_normalized": "3.10.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/sendgrid/php-http-client.git",
-            "reference": "06c9f889076e90580b7ae92a55340d6bb84cb1c3"
+            "reference": "a3891dfe1130014e46b59e3c76be0c1c9d4fd540"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/sendgrid/php-http-client/zipball/06c9f889076e90580b7ae92a55340d6bb84cb1c3",
-            "reference": "06c9f889076e90580b7ae92a55340d6bb84cb1c3",
+            "url": "https://api.github.com/repos/sendgrid/php-http-client/zipball/a3891dfe1130014e46b59e3c76be0c1c9d4fd540",
+            "reference": "a3891dfe1130014e46b59e3c76be0c1c9d4fd540",
             "shasum": ""
         },
         "require": {
@@ -2297,7 +2297,7 @@
             "phpunit/phpunit": "~4.4",
             "squizlabs/php_codesniffer": "~2.0"
         },
-        "time": "2020-01-09T18:52:45+00:00",
+        "time": "2020-01-22T20:51:56+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -2331,17 +2331,17 @@
     },
     {
         "name": "sendgrid/sendgrid",
-        "version": "7.4.1",
-        "version_normalized": "7.4.1.0",
+        "version": "7.4.2",
+        "version_normalized": "7.4.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/sendgrid/sendgrid-php.git",
-            "reference": "556cc87f8e5938abde4f67e98942c0c7db9b31ff"
+            "reference": "d697c9e1677516314c28d2b946cc3062ee9537ff"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/sendgrid/sendgrid-php/zipball/556cc87f8e5938abde4f67e98942c0c7db9b31ff",
-            "reference": "556cc87f8e5938abde4f67e98942c0c7db9b31ff",
+            "url": "https://api.github.com/repos/sendgrid/sendgrid-php/zipball/d697c9e1677516314c28d2b946cc3062ee9537ff",
+            "reference": "d697c9e1677516314c28d2b946cc3062ee9537ff",
             "shasum": ""
         },
         "require": {
@@ -2360,7 +2360,7 @@
             "squizlabs/php_codesniffer": "3.*",
             "swaggest/json-diff": "^3.4"
         },
-        "time": "2020-01-09T16:07:47+00:00",
+        "time": "2020-01-22T20:59:57+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -2448,17 +2448,17 @@
     },
     {
         "name": "symfony/browser-kit",
-        "version": "v5.0.2",
-        "version_normalized": "5.0.2.0",
+        "version": "v5.0.3",
+        "version_normalized": "5.0.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/browser-kit.git",
-            "reference": "a195f83b0ba20e622a5baa726af96826b8f5616b"
+            "reference": "b0294489a7fbb4f3f39c39efe6f0328cb09731b9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/browser-kit/zipball/a195f83b0ba20e622a5baa726af96826b8f5616b",
-            "reference": "a195f83b0ba20e622a5baa726af96826b8f5616b",
+            "url": "https://api.github.com/repos/symfony/browser-kit/zipball/b0294489a7fbb4f3f39c39efe6f0328cb09731b9",
+            "reference": "b0294489a7fbb4f3f39c39efe6f0328cb09731b9",
             "shasum": ""
         },
         "require": {
@@ -2474,7 +2474,7 @@
         "suggest": {
             "symfony/process": ""
         },
-        "time": "2019-11-18T17:27:11+00:00",
+        "time": "2020-01-04T14:08:26+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2509,23 +2509,23 @@
     },
     {
         "name": "symfony/css-selector",
-        "version": "v5.0.2",
-        "version_normalized": "5.0.2.0",
+        "version": "v5.0.3",
+        "version_normalized": "5.0.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/css-selector.git",
-            "reference": "19d29e7098b7b2c3313cb03902ca30f100dcb837"
+            "reference": "ff60c90cb7950b592ebc84ad1289d0345bf24f9f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/css-selector/zipball/19d29e7098b7b2c3313cb03902ca30f100dcb837",
-            "reference": "19d29e7098b7b2c3313cb03902ca30f100dcb837",
+            "url": "https://api.github.com/repos/symfony/css-selector/zipball/ff60c90cb7950b592ebc84ad1289d0345bf24f9f",
+            "reference": "ff60c90cb7950b592ebc84ad1289d0345bf24f9f",
             "shasum": ""
         },
         "require": {
             "php": "^7.2.5"
         },
-        "time": "2019-11-18T17:27:11+00:00",
+        "time": "2020-01-04T14:08:26+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2564,17 +2564,17 @@
     },
     {
         "name": "symfony/dom-crawler",
-        "version": "v5.0.2",
-        "version_normalized": "5.0.2.0",
+        "version": "v5.0.3",
+        "version_normalized": "5.0.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/dom-crawler.git",
-            "reference": "0a0a73a0836926898b6fcd6817fe697487a73d97"
+            "reference": "439c3c7be4daa569deef0dd1e30cf3562108d062"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/0a0a73a0836926898b6fcd6817fe697487a73d97",
-            "reference": "0a0a73a0836926898b6fcd6817fe697487a73d97",
+            "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/439c3c7be4daa569deef0dd1e30cf3562108d062",
+            "reference": "439c3c7be4daa569deef0dd1e30cf3562108d062",
             "shasum": ""
         },
         "require": {
@@ -2592,7 +2592,7 @@
         "suggest": {
             "symfony/css-selector": ""
         },
-        "time": "2019-11-18T17:27:11+00:00",
+        "time": "2020-01-04T14:08:26+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2627,17 +2627,17 @@
     },
     {
         "name": "symfony/http-foundation",
-        "version": "v5.0.2",
-        "version_normalized": "5.0.2.0",
+        "version": "v5.0.3",
+        "version_normalized": "5.0.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/http-foundation.git",
-            "reference": "5dd7f6be6e62d86ba6f3154cf40e78936367978b"
+            "reference": "5dc0db5026f2b611cb8910a1f465e95eafd84c2e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/5dd7f6be6e62d86ba6f3154cf40e78936367978b",
-            "reference": "5dd7f6be6e62d86ba6f3154cf40e78936367978b",
+            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/5dc0db5026f2b611cb8910a1f465e95eafd84c2e",
+            "reference": "5dc0db5026f2b611cb8910a1f465e95eafd84c2e",
             "shasum": ""
         },
         "require": {
@@ -2649,7 +2649,7 @@
             "predis/predis": "~1.0",
             "symfony/expression-language": "^4.4|^5.0"
         },
-        "time": "2019-12-19T16:01:11+00:00",
+        "time": "2020-01-04T14:08:26+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2684,24 +2684,24 @@
     },
     {
         "name": "symfony/inflector",
-        "version": "v5.0.2",
-        "version_normalized": "5.0.2.0",
+        "version": "v5.0.3",
+        "version_normalized": "5.0.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/inflector.git",
-            "reference": "aaeb5e293294070d1b061fa3d7889bac69909320"
+            "reference": "e375603b6bd12e8e3aec3fc1b640ac18a4ef4cb2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/inflector/zipball/aaeb5e293294070d1b061fa3d7889bac69909320",
-            "reference": "aaeb5e293294070d1b061fa3d7889bac69909320",
+            "url": "https://api.github.com/repos/symfony/inflector/zipball/e375603b6bd12e8e3aec3fc1b640ac18a4ef4cb2",
+            "reference": "e375603b6bd12e8e3aec3fc1b640ac18a4ef4cb2",
             "shasum": ""
         },
         "require": {
             "php": "^7.2.5",
             "symfony/polyfill-ctype": "~1.8"
         },
-        "time": "2019-11-18T17:27:11+00:00",
+        "time": "2020-01-04T14:08:26+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2744,17 +2744,17 @@
     },
     {
         "name": "symfony/mime",
-        "version": "v5.0.2",
-        "version_normalized": "5.0.2.0",
+        "version": "v5.0.3",
+        "version_normalized": "5.0.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/mime.git",
-            "reference": "0e6a4ced216e49d457eddcefb61132173a876d79"
+            "reference": "2a3c7fee1f1a0961fa9cf360d5da553d05095e59"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/mime/zipball/0e6a4ced216e49d457eddcefb61132173a876d79",
-            "reference": "0e6a4ced216e49d457eddcefb61132173a876d79",
+            "url": "https://api.github.com/repos/symfony/mime/zipball/2a3c7fee1f1a0961fa9cf360d5da553d05095e59",
+            "reference": "2a3c7fee1f1a0961fa9cf360d5da553d05095e59",
             "shasum": ""
         },
         "require": {
@@ -2769,7 +2769,7 @@
             "egulias/email-validator": "^2.1.10",
             "symfony/dependency-injection": "^4.4|^5.0"
         },
-        "time": "2019-11-30T14:12:50+00:00",
+        "time": "2020-01-04T14:08:26+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2808,23 +2808,23 @@
     },
     {
         "name": "symfony/options-resolver",
-        "version": "v5.0.2",
-        "version_normalized": "5.0.2.0",
+        "version": "v5.0.3",
+        "version_normalized": "5.0.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/options-resolver.git",
-            "reference": "1ad3d0ffc00cc1990e5c9c7bb6b81578ec3f5f68"
+            "reference": "b1ab86ce52b0c0abe031367a173005a025e30e04"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/options-resolver/zipball/1ad3d0ffc00cc1990e5c9c7bb6b81578ec3f5f68",
-            "reference": "1ad3d0ffc00cc1990e5c9c7bb6b81578ec3f5f68",
+            "url": "https://api.github.com/repos/symfony/options-resolver/zipball/b1ab86ce52b0c0abe031367a173005a025e30e04",
+            "reference": "b1ab86ce52b0c0abe031367a173005a025e30e04",
             "shasum": ""
         },
         "require": {
             "php": "^7.2.5"
         },
-        "time": "2019-11-18T17:27:11+00:00",
+        "time": "2020-01-04T14:08:26+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -3218,17 +3218,17 @@
     },
     {
         "name": "symfony/property-access",
-        "version": "v5.0.2",
-        "version_normalized": "5.0.2.0",
+        "version": "v5.0.3",
+        "version_normalized": "5.0.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/property-access.git",
-            "reference": "b597c4f4dffc522bc4ed4bedcef9ed08d3ae3d23"
+            "reference": "18617a8c26b97a262f816c78765eb3cd91630e19"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/property-access/zipball/b597c4f4dffc522bc4ed4bedcef9ed08d3ae3d23",
-            "reference": "b597c4f4dffc522bc4ed4bedcef9ed08d3ae3d23",
+            "url": "https://api.github.com/repos/symfony/property-access/zipball/18617a8c26b97a262f816c78765eb3cd91630e19",
+            "reference": "18617a8c26b97a262f816c78765eb3cd91630e19",
             "shasum": ""
         },
         "require": {
@@ -3241,7 +3241,7 @@
         "suggest": {
             "psr/cache-implementation": "To cache access methods."
         },
-        "time": "2019-12-10T11:06:55+00:00",
+        "time": "2020-01-04T14:08:26+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -3287,17 +3287,17 @@
     },
     {
         "name": "twilio/sdk",
-        "version": "5.42.0",
-        "version_normalized": "5.42.0.0",
+        "version": "5.42.1",
+        "version_normalized": "5.42.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/twilio/twilio-php.git",
-            "reference": "e1ea30f30e424ae76de01cfd8d582a5d29b13267"
+            "reference": "aa93c45dda3ac28f0fd01aa775313017af7aa8c2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/twilio/twilio-php/zipball/e1ea30f30e424ae76de01cfd8d582a5d29b13267",
-            "reference": "e1ea30f30e424ae76de01cfd8d582a5d29b13267",
+            "url": "https://api.github.com/repos/twilio/twilio-php/zipball/aa93c45dda3ac28f0fd01aa775313017af7aa8c2",
+            "reference": "aa93c45dda3ac28f0fd01aa775313017af7aa8c2",
             "shasum": ""
         },
         "require": {
@@ -3311,7 +3311,7 @@
         "suggest": {
             "guzzlehttp/guzzle": "An HTTP client to execute the API requests"
         },
-        "time": "2020-01-08T21:00:51+00:00",
+        "time": "2020-01-22T21:27:31+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
