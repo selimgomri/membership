@@ -27,6 +27,22 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 		include 'user.php';
 	});
 
+	if ($access == "Admin") {
+		$this->group('/{id}:int/edit', function($id) {
+			$this->get('/', function($id) {
+				include 'Edit.php';
+			});
+
+			$this->post('/', function($id) {
+				include 'EditPost.php';
+			});
+
+			$this->post('/email', function($id) {
+				include 'EditEmailAjax.php';
+			});
+		});
+	}
+
 	$this->get('/{id}:int/welcome-pack', function($id) {
 		include BASE_PATH . 'controllers/registration/welcome-pack/PDF.php';
 	});
