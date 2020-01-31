@@ -203,11 +203,12 @@ include BASE_PATH . 'views/header.php';
 
           <div class="form-group">
             <label for="last-name">Club Membership Category</label>
-            <select class="custom-select" name="club-category" id="club-category">
+            <select class="custom-select" name="club-category" id="club-category" aria-describedby="club-category-help">
               <?php if ($info['ClubCategory'] == null) { ?><option selected>Select a category</option><?php } ?>
-              <option value="1" <?php if ($info['ClubCategory'] == 1) { ?>selected<?php } ?>>Type One</option>
-              <option value="2" <?php if ($info['ClubCategory'] == 2) { ?>selected<?php } ?>>Type Two</option>
+              <option value="1" <?php if ($info['ClubCategory'] == 1) { ?>selected<?php } ?>>Standard club membership</option>
+              <option value="2" <?php if ($info['ClubCategory'] == 2) { ?>selected<?php } ?>>Standalone club membership</option>
             </select>
+            <small id="club-category-help" class="form-text text-muted">Standard club membership counts this person as part of a family when calculating fees. Standalone membership is a fixed fee for each member.</small>
           </div>
 
           <div class="form-group mb-0">
