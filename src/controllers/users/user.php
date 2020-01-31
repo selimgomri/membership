@@ -8,7 +8,7 @@ use Brick\PhoneNumber\PhoneNumberFormat;
 
 global $db;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, AccessLevel FROM users WHERE UserID = ?");
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, AccessLevel, ASANumber, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory FROM users WHERE UserID = ?");
 $userInfo->execute([$id]);
 
 $qualifications;
@@ -47,6 +47,14 @@ if ($info['AccessLevel'] == "Parent") {
   $swimmers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, SquadName squad, SquadFee fee, ClubPays exempt FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID = ?");
   $swimmers->execute([$id]);
 }
+
+// Is this parent also a swimmer member?
+$swimmerToo = $db->prepare("SELECT MemberID FROM members WHERE UserID = ? AND ASANumber = ?");
+$swimmerToo->execute([
+  $id,
+  $info['ASANumber']
+]);
+$swimmerToo = $swimmerToo->fetchColumn();
 
 $bankName = $bank = $has_logo = $logo_path = null;
 if (userHasMandates($id)) {
@@ -161,6 +169,51 @@ include BASE_PATH . "views/header.php";
         <p><a
             href="<?=htmlspecialchars($number->format(PhoneNumberFormat::RFC3966))?>"><?=htmlspecialchars($number->format(PhoneNumberFormat::NATIONAL))?></a>
         </p>
+      </div>
+      <?php } ?>
+      <?php if ($info['ASANumber'] != null) { ?>
+      <div class="col-sm-6 col-md-4">
+        <h3 class="h6">Swim England Number</h3>
+        <p><a target="_blank" href="<?=htmlspecialchars('https://www.swimmingresults.org/membershipcheck/member_details.php?myiref=' . urlencode($info['ASANumber']))?>"><?=htmlspecialchars($info['ASANumber'])?> <i class="fa fa-external-link" aria-hidden="true"></i></a>
+        </p>
+      </div>
+
+      <div class="col-sm-6 col-md-4">
+        <h3 class="h6">Swim England Category</h3>
+        <p><?php if($info['ASACategory'] != 0) { ?><?=htmlspecialchars($info['ASACategory'])?><?php } else { ?><strong><span class="text-danger">Not set</span></strong><?php } ?>
+        </p>
+      </div>
+
+      <div class="col-sm-6 col-md-4">
+        <h3 class="h6">Swim England Payment</h3>
+        <p><?php if(bool($info['ASAPaid'])) { ?>Club pays <?=htmlspecialchars($info['Forename'])?>'s SE Membership<?php } else { ?><?=htmlspecialchars($info['Forename'])?> pays their own SE Membership<?php } ?>
+        </p>
+      </div>
+      <?php } ?>
+
+      <div class="col-sm-6 col-md-4">
+        <h3 class="h6">Club Membership</h3>
+        <p><?php if (bool($info['ClubMember'])) { ?><?=htmlspecialchars($info['Forename'])?> is a club member<?php } else { ?><?=htmlspecialchars($info['Forename'])?> is not a club member<?php } ?></p>
+      </div>
+
+      <?php if (bool($info['ClubMember'])) { ?>
+      <div class="col-sm-6 col-md-4">
+        <h3 class="h6">Club Membership Category</h3>
+        <p><?php if($info['ClubCategory'] != null) { ?><?=htmlspecialchars($info['ClubCategory'])?><?php } else { ?><strong><span class="text-danger">Not set</span></strong><?php } ?>
+        </p>
+      </div>
+
+      <div class="col-sm-6 col-md-4">
+        <h3 class="h6">Club Membership Payment</h3>
+        <p><?php if(bool($info['ClubPaid'])) { ?>Club pays <?=htmlspecialchars($info['Forename'])?>'s Club Membership<?php } else { ?><?=htmlspecialchars($info['Forename'])?> pays their own Club Membership<?php } ?>
+        </p>
+      </div>
+      <?php } ?>
+
+      <?php if ($swimmerToo) { ?>
+      <div class="col-sm-6 col-md-4">
+        <h3 class="h6">Sport</h3>
+        <p><a href="<?=htmlspecialchars(autoUrl("members/" . $swimmerToo))?>"><?=htmlspecialchars($info['Forename'])?> is also a member</a></p>
       </div>
       <?php } ?>
     </div>
