@@ -2448,8 +2448,8 @@
     },
     {
         "name": "symfony/browser-kit",
-        "version": "v5.0.3",
-        "version_normalized": "5.0.3.0",
+        "version": "v5.0.4",
+        "version_normalized": "5.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/browser-kit.git",
@@ -2509,8 +2509,8 @@
     },
     {
         "name": "symfony/css-selector",
-        "version": "v5.0.3",
-        "version_normalized": "5.0.3.0",
+        "version": "v5.0.4",
+        "version_normalized": "5.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/css-selector.git",
@@ -2564,8 +2564,8 @@
     },
     {
         "name": "symfony/dom-crawler",
-        "version": "v5.0.3",
-        "version_normalized": "5.0.3.0",
+        "version": "v5.0.4",
+        "version_normalized": "5.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/dom-crawler.git",
@@ -2627,17 +2627,17 @@
     },
     {
         "name": "symfony/http-foundation",
-        "version": "v5.0.3",
-        "version_normalized": "5.0.3.0",
+        "version": "v5.0.4",
+        "version_normalized": "5.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/http-foundation.git",
-            "reference": "5dc0db5026f2b611cb8910a1f465e95eafd84c2e"
+            "reference": "2832d8cffc3a91df550ac42bcdce602f8c08be3e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/5dc0db5026f2b611cb8910a1f465e95eafd84c2e",
-            "reference": "5dc0db5026f2b611cb8910a1f465e95eafd84c2e",
+            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/2832d8cffc3a91df550ac42bcdce602f8c08be3e",
+            "reference": "2832d8cffc3a91df550ac42bcdce602f8c08be3e",
             "shasum": ""
         },
         "require": {
@@ -2649,7 +2649,7 @@
             "predis/predis": "~1.0",
             "symfony/expression-language": "^4.4|^5.0"
         },
-        "time": "2020-01-04T14:08:26+00:00",
+        "time": "2020-01-31T09:13:47+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2684,8 +2684,8 @@
     },
     {
         "name": "symfony/inflector",
-        "version": "v5.0.3",
-        "version_normalized": "5.0.3.0",
+        "version": "v5.0.4",
+        "version_normalized": "5.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/inflector.git",
@@ -2744,8 +2744,8 @@
     },
     {
         "name": "symfony/mime",
-        "version": "v5.0.3",
-        "version_normalized": "5.0.3.0",
+        "version": "v5.0.4",
+        "version_normalized": "5.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/mime.git",
@@ -2808,8 +2808,8 @@
     },
     {
         "name": "symfony/options-resolver",
-        "version": "v5.0.3",
-        "version_normalized": "5.0.3.0",
+        "version": "v5.0.4",
+        "version_normalized": "5.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/options-resolver.git",
@@ -3218,8 +3218,8 @@
     },
     {
         "name": "symfony/property-access",
-        "version": "v5.0.3",
-        "version_normalized": "5.0.3.0",
+        "version": "v5.0.4",
+        "version_normalized": "5.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/property-access.git",
