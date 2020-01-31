@@ -19,7 +19,7 @@ $numRenewals = $getNumRenewals->fetchColumn();
 $getNumRenewals->execute([$id, 0]);
 $numMembers = $numRenewals + $getNumRenewals->fetchColumn();
 
-$numRenewalsByCat = $db->prepare("SELECT COUNT(*) FROM (`renewalMembers` LEFT JOIN `members` ON `members`.`MemberID` = `renewalMembers`.`MemberID`) WHERE `RenewalID` = ? AND `ASACategory` = ? AND Renewed = ?;");
+$numRenewalsByCat = $db->prepare("SELECT COUNT(*) FROM (`renewalMembers` LEFT JOIN `members` ON `members`.`MemberID` = `renewalMembers`.`MemberID`) WHERE `RenewalID` = ? AND members.`ASACategory` = ? AND Renewed = ?;");
 $numRenewalsByCat->execute([$id, 1, true]);
 $numC1Renewals = $numRenewalsByCat->fetchColumn();
 
@@ -29,7 +29,7 @@ $numC2Renewals = $numRenewalsByCat->fetchColumn();
 $numRenewalsByCat->execute([$id, 3, true]);
 $numC3Renewals = $numRenewalsByCat->fetchColumn();
 
-$sql = $db->prepare("SELECT `MForename`, `MSurname`, `Forename`, `Surname`, `ASANumber`, `payments`.`Status`, `RenewalID`, `Renewed` FROM ((((`renewalMembers` RIGHT JOIN `members`
+$sql = $db->prepare("SELECT `MForename`, `MSurname`, `Forename`, `Surname`, members.`ASANumber`, `payments`.`Status`, `RenewalID`, `Renewed` FROM ((((`renewalMembers` RIGHT JOIN `members`
 ON members.MemberID = renewalMembers.MemberID) LEFT JOIN `users` ON
 members.UserID = users.UserID) LEFT JOIN `paymentsPending` ON
 renewalMembers.PaymentID = paymentsPending.PaymentID) LEFT JOIN `payments` ON
