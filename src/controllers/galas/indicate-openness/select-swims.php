@@ -23,7 +23,7 @@ $getSessions->execute([$id]);
 $sessions = $getSessions->fetchAll(PDO::FETCH_ASSOC);
 
 try {
-$getAvailableSwimmers = $db->prepare("SELECT Member, MForename fn, MSurname sn, DateOfBirth dob, gs.`Name` gsname, `ASANumber` `se` FROM ((((galaSessionsCanEnter ca INNER JOIN galaSessions gs ON gs.ID = ca.Session) INNER JOIN members ON ca.Member = members.MemberID) INNER JOIN squads ON squads.SquadID = members.SquadID) LEFT JOIN galaEntries ge ON ge.GalaID = gs.Gala AND ge.MemberID = members.MemberID) WHERE gs.Gala = ? AND ca.CanEnter = ? AND ge.EntryID IS NULL ORDER BY SquadFee DESC, SquadName ASC, sn ASC, fn ASC");
+$getAvailableSwimmers = $db->prepare("SELECT Member, MForename fn, MSurname sn, DateOfBirth dob, gs.`Name` gsname, members.ASANumber `se` FROM ((((galaSessionsCanEnter ca INNER JOIN galaSessions gs ON gs.ID = ca.Session) INNER JOIN members ON ca.Member = members.MemberID) INNER JOIN squads ON squads.SquadID = members.SquadID) LEFT JOIN galaEntries ge ON ge.GalaID = gs.Gala AND ge.MemberID = members.MemberID) WHERE gs.Gala = ? AND ca.CanEnter = ? AND ge.EntryID IS NULL ORDER BY SquadFee DESC, SquadName ASC, sn ASC, fn ASC");
 $getAvailableSwimmers->execute([$id, true]);
 $swimmers = $getAvailableSwimmers->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
 } catch (Exception $e) {

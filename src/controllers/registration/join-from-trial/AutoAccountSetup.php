@@ -49,7 +49,7 @@ try {
   $swimmers = $getSwimmers->fetchAll(PDO::FETCH_ASSOC);
 
   // Add the swimmers in suspended state
-  $insertSwimmer = $db->prepare("INSERT INTO members (SquadID, UserID, Status, RR, MForename, MSurname, ASANumber, ASACategory, ClubPays, DateOfBirth, Gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+  $insertSwimmer = $db->prepare("INSERT INTO members (SquadID, UserID, Status, RR, MForename, MSurname, members.ASANumber, ASACategory, ClubPays, DateOfBirth, Gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
   // For each swimmer, insert to database in suspended state, connected to this user.
   foreach ($swimmers as $swimmer) {
