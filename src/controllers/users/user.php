@@ -115,10 +115,26 @@ include BASE_PATH . "views/header.php";
   </div>
   <?php unset($_SESSION['User-Update-Email-Success']); } ?>
 
-  <h1>
-    <?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?>
-    <small><?=htmlspecialchars($accessLevel)?></small>
-  </h1>
+  <div class="row mb-3">
+    <div class="col-sm-9 col-md-10 col-lg-11">
+      <h1 class="mb-0">
+        <?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?>
+        <small><?=htmlspecialchars($accessLevel)?></small>
+      </h1>
+      <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+      <div class="mb-3 d-md-none"></div>
+      <?php } ?>
+    </div>
+    <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+    <div class="col text-sm-right">
+      <p class="mb-0">
+        <a href="<?=htmlspecialchars(autoUrl("users/id/edit"))?>" class="btn btn-success">
+          Edit
+        </a>
+      </p>
+    </div>
+    <?php } ?>
+  </div>
 
   <div class="mb-4">
     <h2>
@@ -138,30 +154,6 @@ include BASE_PATH . "views/header.php";
         <p class="text-truncate"><a
             href="mailto:<?=htmlspecialchars($info['EmailAddress'])?>"><?=htmlspecialchars($info['EmailAddress'])?></a>
         </p>
-        <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
-        <p>
-          <a class="btn btn-primary" data-toggle="collapse" href="#editEmailAddress" role="button" aria-expanded="false"
-            aria-controls="editEmailAddress">
-            Edit email address
-          </a>
-        </p>
-        <div class="collapse" id="editEmailAddress">
-          <form method="post" class="cell"
-            action="<?=htmlspecialchars(autoUrl("users/" . $id . "/update-email-address"))?>">
-            <?=\SCDS\CSRF::write()?>
-            <div class="form-group">
-              <label for="new-user-email">New email address</label>
-              <input type="email" class="form-control" id="new-user-email" name="new-user-email"
-                placeholder="Enter email">
-            </div>
-            <p>
-              <button type="submit" class="btn btn-primary">
-                Save email address
-              </button>
-            </p>
-          </form>
-        </div>
-        <?php } ?>
       </div>
       <?php if ($number !== false) { ?>
       <div class="col-sm-6 col-md-4">
