@@ -2,7 +2,7 @@
 
 global $db;
 
-$getInfo = $db->prepare("SELECT members.UserID `uid`, Forename ufn, Surname usn, MForename mfn, MSurname msn, ASANumber asa, ASACategory cat, DateOfBirth dob, SquadName squad, SquadFee fee, ClubPays exempt, Mandate, BankName, AccountHolderName, AccountNumEnd FROM ((((members INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN paymentMandates ON paymentPreferredMandate.MandateID = paymentMandates.MandateID) ORDER BY usn ASC, ufn ASC, users.UserID ASC, msn ASC, mfn ASC");
+$getInfo = $db->prepare("SELECT members.UserID `uid`, Forename ufn, Surname usn, MForename mfn, MSurname msn, members.ASANumber asa, ASACategory cat, DateOfBirth dob, SquadName squad, SquadFee fee, ClubPays exempt, Mandate, BankName, AccountHolderName, AccountNumEnd FROM ((((members INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN paymentMandates ON paymentPreferredMandate.MandateID = paymentMandates.MandateID) ORDER BY usn ASC, ufn ASC, users.UserID ASC, msn ASC, mfn ASC");
 $getInfo->execute([]);
 
 $logins = $db->prepare("SELECT `Time`, `IPAddress`, Browser, `Platform`, `GeoLocation` FROM userLogins WHERE UserID = ? ORDER BY `Time` DESC LIMIT 1");
