@@ -128,7 +128,7 @@ include BASE_PATH . "views/header.php";
     <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
     <div class="col text-sm-right">
       <p class="mb-0">
-        <a href="<?=htmlspecialchars(autoUrl("users/id/edit"))?>" class="btn btn-success">
+        <a href="<?=htmlspecialchars(autoUrl("users/" . $id . "/edit"))?>" class="btn btn-success">
           Edit
         </a>
       </p>
