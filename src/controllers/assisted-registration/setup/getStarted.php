@@ -6,7 +6,8 @@ $getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile,
 $getUser->execute([$_SESSION['AssRegGuestUser'], true]);
 $user = $getUser->fetch(PDO::FETCH_ASSOC);
 
-$um = userMember($user['UserID']);
+// $um = userMember($user['UserID']);
+$um = false;
 
 if ($user == null) {
   halt(404);
