@@ -6,6 +6,9 @@ $getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile,
 $getUser->execute([$_SESSION['AssRegGuestUser'], true]);
 $user = $getUser->fetch(PDO::FETCH_ASSOC);
 
+// $um = userMember($user['UserID']);
+$um = false;
+
 if ($user == null) {
   halt(404);
 }
@@ -27,9 +30,15 @@ include BASE_PATH . 'views/header.php';
         Welcome to <?=htmlspecialchars(env('CLUB_NAME'))?>. Let's complete your account registration.
       </p>
 
+      <?php if ($um) { ?>
       <p>
-        You will register yourself (for a parent account) and the following swimmers:
+        You will register for a user account for the following members:
       </p>
+      <?php } else { ?>
+      <p>
+        You will register yourself (for a parent account) and the following members:
+      </p>
+      <?php } ?>
 
       <ul>
       <?php while ($s = $getUserSwimmers->fetch(PDO::FETCH_ASSOC)) { ?>
@@ -38,7 +47,7 @@ include BASE_PATH . 'views/header.php';
       </ul>
 
       <p>
-        If any of your swimmers are missing from this list, please contact the membership secretary before you continue.
+        If any of your members are missing from this list, please contact the membership secretary before you continue.
       </p>
 
       <p>
