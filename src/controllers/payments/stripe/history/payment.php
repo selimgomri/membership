@@ -157,14 +157,14 @@ $countries = getISOAlpha2Countries();
         <dd class="col-sm-7 col-md-8"><?=paymentIntentStatus($payment->status)?></dd>
 
         <dt class="col-sm-5 col-md-4">Amount</dt>
-        <dd class="col-sm-7 col-md-8">&pound;<?=number_format($payment->amount/100, 2, '.', '')?></dd>
+        <dd class="col-sm-7 col-md-8">&pound;<?=(string) \Brick\Math\BigDecimal::of((string) $payment->amount)->withPointMovedLeft(2)->toScale(2)?></dd>
 
         <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
         <dt class="col-sm-5 col-md-4">Amount capturable</dt>
-        <dd class="col-sm-7 col-md-8">&pound;<?=number_format($payment->amount_capturable/100, 2, '.', '')?></dd>
+        <dd class="col-sm-7 col-md-8">&pound;<?=(string) \Brick\Math\BigDecimal::of((string) $payment->amount_capturable)->withPointMovedLeft(2)->toScale(2)?></dd>
 
         <dt class="col-sm-5 col-md-4">Amount received</dt>
-        <dd class="col-sm-7 col-md-8">&pound;<?=number_format($payment->amount_received/100, 2, '.', '')?></dd>
+        <dd class="col-sm-7 col-md-8">&pound;<?=(string) \Brick\Math\BigDecimal::of((string) $payment->amount_received)->withPointMovedLeft(2)->toScale(2)?></dd>
         <?php } ?>
       </dl>
 
@@ -291,7 +291,7 @@ $countries = getISOAlpha2Countries();
           <h3><?=htmlspecialchars($item['Name'])?></h3>
           <p><?=htmlspecialchars($item['Description'])?></p>
 
-          <p class="mb-0">&pound;<?=number_format($item['Amount']/100, 2, '.', '')?></p>
+          <p class="mb-0">&pound;<?=(string) \Brick\Math\BigDecimal::of((string) $item['Amount'])->withPointMovedLeft(2)->toScale(2)?></p>
         </li>
         <?php } while ($item = $paymentItems->fetch(PDO::FETCH_ASSOC)); ?>
       </ul>
@@ -299,7 +299,7 @@ $countries = getISOAlpha2Countries();
 
       <?php if (isset($payment->charges->data[0]->amount_refunded) && $payment->charges->data[0]->amount_refunded > 0) { ?>
       <h2>Payment refunds</h2>
-      <p>&pound;<?=number_format($payment->charges->data[0]->amount_refunded/100, 2, '.', '')?> refunded to <?=htmlspecialchars(getCardBrand($card->brand))?> **** <?=htmlspecialchars($card->last4)?></p>
+      <p>&pound;<?=(string) \Brick\Math\BigDecimal::of((string) $payment->charges->data[0]->amount_refunded)->withPointMovedLeft(2)->toScale(2)?>refunded to <?=htmlspecialchars(getCardBrand($card->brand))?> **** <?=htmlspecialchars($card->last4)?></p>
       <?php } else if ($_SESSION['AccessLevel'] == 'Admin') { ?>
       <h2>Refund this transaction</h2>
       <p>To refund gala entries, use the gala refunds system.</p>
@@ -316,9 +316,9 @@ $countries = getISOAlpha2Countries();
         <li class="list-group-item">
           <h3><?=htmlspecialchars($ents['GalaName'])?><br><small><?=htmlspecialchars($ents['MForename'] . ' ' . $ents['MSurname'])?></small></h3>
 
-          <p>Fee &pound;<?=number_format($ents['FeeToPay'], 2, '.', '')?></p>
+          <p>Fee &pound;<?=(string) \Brick\Math\BigDecimal::of((string) $ents['FeeToPay'])->withPointMovedLeft(2)->toScale(2)?></p>
           <?php if (bool($ents['Refunded']) && $ents['AmountRefunded'] > 0) { ?>
-          <p class="mb-0">&pound;<?=number_format(($ents['AmountRefunded']/100), 2, '.', '')?></p>
+          <p class="mb-0">&pound;<?=(string) \Brick\Math\BigDecimal::of((string) $ents['AmountRefunded'])->withPointMovedLeft(2)->toScale(2)?></p>
           <?php } else { ?>
           <p class="mb-0">No money has been refunded for this entry.</p>
           <?php } ?>

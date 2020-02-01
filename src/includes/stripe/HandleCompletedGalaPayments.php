@@ -311,7 +311,7 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
           $databaseId,
           'Gala entry',
           'Gala entry number ' . $entry['EntryID'],
-          (int) $entry['FeeToPay']*100,
+          \Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->withPointMovedRight(2)->toInt(),
           $intent->currency,
           0
         ]);
