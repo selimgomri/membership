@@ -316,7 +316,7 @@ $countries = getISOAlpha2Countries();
         <li class="list-group-item">
           <h3><?=htmlspecialchars($ents['GalaName'])?><br><small><?=htmlspecialchars($ents['MForename'] . ' ' . $ents['MSurname'])?></small></h3>
 
-          <p>Fee &pound;<?=(string) \Brick\Math\BigDecimal::of((string) $ents['FeeToPay'])->withPointMovedLeft(2)->toScale(2)?></p>
+          <p>Fee &pound;<?=(string) \Brick\Math\BigDecimal::of((string) $ents['FeeToPay'])->toScale(2)?></p>
           <?php if (bool($ents['Refunded']) && $ents['AmountRefunded'] > 0) { ?>
           <p class="mb-0">&pound;<?=(string) \Brick\Math\BigDecimal::of((string) $ents['AmountRefunded'])->withPointMovedLeft(2)->toScale(2)?></p>
           <?php } else { ?>
