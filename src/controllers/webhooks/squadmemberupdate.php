@@ -56,7 +56,7 @@ if ($leavers != null) {
     $db->commit();
     echo "Members in leavers deleted<br>";
   } catch (Exception $e) {
-    reportError($e);
+    // reportError($e);
     $db->rollBack();
   }
 }
