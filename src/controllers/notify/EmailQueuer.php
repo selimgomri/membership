@@ -67,7 +67,7 @@ try {
           $date = new DateTime('now', new DateTimeZone('Europe/London'));
           $urlPath = 'notify/attachments/' . $date->format("Y/m/d") . '/';
           $path = env('FILE_STORE_PATH') . $urlPath;
-          $hash = basename($_FILES['file-upload']['tmp_name'][$i]);
+          $hash = str_replace(' ', '', basename($_FILES['file-upload']['name'][$i]));
           $filenamePath = $path . $hash;
           $url = $urlPath . $hash;
           $count = 0; $countText = "";
@@ -109,8 +109,8 @@ try {
         $dir = explode('/', $attachments[$i]['store_name']);
         $path = "";
         $tried = [];
-        for ($i = 0; $i < sizeof($dir)-1; $i++) {
-          $path .= $dir[$i];
+        for ($y = 0; $y < sizeof($dir)-1; $y++) {
+          $path .= $dir[$y];
           if (!is_dir($path)) {
             mkdir($path);
             $tried[] = $path;
@@ -118,13 +118,17 @@ try {
           $path .= '/';
         }
         if (!is_writeable($path)) {
-          reportError([$tried, $path, $attachments[$i]['store_name']]);
+          // reportError([$tried, $path, $attachments[$i]['store_name']]);
+        } else {
+          // reportError([$tried, $path, $attachments[$i]['store_name']]);
         }
+      } else {
+        // reportError("Filepath is writeable");
       }
       if (move_uploaded_file($attachments[$i]['tmp_name'], $attachments[$i]['store_name'])) {
         $attachments[$i]['uploaded'] = true;
       } else {
-        reportError($_FILES['file-upload']);
+        // reportError([$attachments[$i]['tmp_name'], $attachments[$i]['store_name'], $_FILES['file-upload']]);
       }
     }
   }
@@ -280,7 +284,7 @@ try {
     ];
   }
 
-  reportError($attachments);
+  // reportError($attachments);
   if (sizeof($attachments) > 0) {
     $recipientGroups["Attachments"] = [];
   }
