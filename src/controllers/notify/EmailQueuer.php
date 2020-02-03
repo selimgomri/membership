@@ -119,7 +119,7 @@ try {
         }
         if (!is_writeable($attachment['store_name'])) {
           reportError([$tried, $path, $attachment['store_name']]);
-          throw new Exception('Not writable');
+          // throw new Exception('Not writable');
         }
       }
       if (move_uploaded_file($attachment['tmp_name'], $attachment['store_name'])) {
