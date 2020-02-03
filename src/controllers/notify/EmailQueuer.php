@@ -278,6 +278,7 @@ try {
     ];
   }
 
+  reportError($attachments);
   if (sizeof($attachments) > 0) {
     $recipientGroups["Attachments"] = [];
   }
