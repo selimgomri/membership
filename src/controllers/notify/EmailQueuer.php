@@ -123,6 +123,8 @@ try {
       }
       if (move_uploaded_file($attachments[$i]['tmp_name'], $attachments[$i]['store_name'])) {
         $attachments[$i]['uploaded'] = true;
+      } else {
+        reportError($_FILES['file-upload']);
       }
     }
   }
