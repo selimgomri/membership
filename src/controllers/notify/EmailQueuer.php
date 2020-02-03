@@ -117,16 +117,12 @@ try {
           }
           $path .= '/';
         }
-        if (!is_writeable($attachment['store_name'])) {
+        if (!is_writeable($path)) {
           reportError([$tried, $path, $attachment['store_name']]);
-          // throw new Exception('Not writable');
         }
       }
       if (move_uploaded_file($attachment['tmp_name'], $attachment['store_name'])) {
         $attachment['uploaded'] = true;
-        reportError("UPLOADED");
-      } else {
-        reportError($_FILES['file-upload']['error']);
       }
     }
   }
@@ -280,6 +276,19 @@ try {
       "Email" => $replyAddress,
       "Name" => $_SESSION['Forename'] . ' ' . $_SESSION['Surname'],
     ];
+  }
+
+  if (sizeof($attachments) > 0) {
+    $recipientGroups["Attachments"] = [];
+  }
+  foreach($attachments as $attachment) {
+    if ($attachment['uploaded']) {
+      $recipientGroups["Attachments"][] = [
+        'Filename' => $attachment['filename'],
+        'URI' => $attachment['url'],
+        'MIME' => $attachment['mime'],
+      ];
+    }
   }
 
   $json = json_encode($recipientGroups);

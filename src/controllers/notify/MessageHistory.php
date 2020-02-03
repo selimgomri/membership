@@ -150,6 +150,20 @@ include BASE_PATH . "views/notifyMenu.php";?>
               </a>
             </dd>
             <?php } ?>
+            <?php if (isset($info->Attachments)) { ?>
+            <dt class="col-sm-3">Attachments</dt>
+            <dd class="col-sm-9">
+              <?php $attachments = (array) $info->Attachments;
+              foreach ($attachments as $a) { ?>
+                <div class="mb-0 text-truncate">
+                  <a href="<?=htmlspecialchars(autoUrl("files/" . $a['URI']))?>" download class="badge badge-pill rounded badge-primary">
+                    <?=htmlspecialchars($a['Filename'])?>
+                  </a>
+                </div>
+                <?php
+              } ?>
+            </dd>
+            <?php } ?>
             <dt class="col-sm-3 mb-0">Date</dt>
             <dd class="col-sm-9 mb-0">
               <?php
