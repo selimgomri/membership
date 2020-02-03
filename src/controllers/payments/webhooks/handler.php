@@ -100,12 +100,12 @@ function process_mandate_event($event) {
             $addMandate->execute([
               $user,
               'Mandate',
-              $mandate,
-              $customer,
-              $bankAccount,
-              $bankName,
-              $accHolderName,
-              $accNumEnd,
+              mb_strimwidth($mandate, 0, 20),
+              mb_strimwidth($customer, 0, 20),
+              mb_strimwidth($bankAccount, 0, 20),
+              mb_strimwidth($bankName, 0, 100),
+              mb_strimwidth($accHolderName, 0, 30),
+              mb_strimwidth($accNumEnd, 0, 2),
               true
             ]);
 
@@ -204,11 +204,11 @@ function process_mandate_event($event) {
 
       $setNewBank = $db->prepare("UPDATE `paymentMandates` SET `BankAccount` = ?, `AccountHolderName` = ?, `AccountNumEnd` = ?, `BankName` = ? WHERE `Mandate` = ?");
       $setNewBank->execute([
-        $bankAccount,
-        $accHolderName,
+        mb_strimwidth($bankAccount, 0, 20),
+        mb_strimwidth($accHolderName, 0, 30),
         $accNumEnd,
-        $bankName,
-        $mandate
+        mb_strimwidth($bankName, 0, 100),
+        mb_strimwidth($mandate, 0, 20)
       ]);
 
 			break;
@@ -296,7 +296,7 @@ function process_payment_event($event) {
             $status,
             $user,
             $mandate,
-            $name,
+            mb_strimwidth($name, 0, 50),
             $amount,
             $currency,
             $PMkey,
