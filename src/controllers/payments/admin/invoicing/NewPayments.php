@@ -49,7 +49,7 @@ include BASE_PATH . 'views/header.php';
 
           <div class="form-group">
             <label for="description">Payment description</label>
-            <input required type="text" class="form-control" name="description" id="description" aria-describedby="description-help">
+            <input required mmaxlength="500" type="text" class="form-control" name="description" id="description" aria-describedby="description-help">
             <div class="invalid-feedback">
               Invalid description
             </div>
