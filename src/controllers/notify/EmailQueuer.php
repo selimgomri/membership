@@ -103,10 +103,10 @@ try {
   }
 
   if (env('FILE_STORE_PATH')) {
-    foreach($attachments as $attachment) {
-      if (!is_writeable($attachment['store_name'])) {
+    for ($i = 0; $i < sizeof($attachments); $i++) {
+      if (!is_writeable($attachments[$i]['store_name'])) {
         // Try making folders
-        $dir = explode('/', $attachment['store_name']);
+        $dir = explode('/', $attachments[$i]['store_name']);
         $path = "";
         $tried = [];
         for ($i = 0; $i < sizeof($dir)-1; $i++) {
@@ -118,11 +118,11 @@ try {
           $path .= '/';
         }
         if (!is_writeable($path)) {
-          reportError([$tried, $path, $attachment['store_name']]);
+          reportError([$tried, $path, $attachments[$i]['store_name']]);
         }
       }
-      if (move_uploaded_file($attachment['tmp_name'], $attachment['store_name'])) {
-        $attachment['uploaded'] = true;
+      if (move_uploaded_file($attachments[$i]['tmp_name'], $attachments[$i]['store_name'])) {
+        $attachments[$i]['uploaded'] = true;
       }
     }
   }
