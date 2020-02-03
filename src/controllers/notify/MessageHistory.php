@@ -150,13 +150,25 @@ include BASE_PATH . "views/notifyMenu.php";?>
               </a>
             </dd>
             <?php } ?>
-            <dt class="col-sm-3 mb-0">Date</dt>
-            <dd class="col-sm-9 mb-0">
+            <dt class="col-sm-3">Date</dt>
+            <dd class="col-sm-9">
               <?php
               $date = new DateTime($row['Date'], new DateTimeZone('UTC'));
               $date->setTimezone(new DateTimeZone('Europe/London')); ?>
               <?=$date->format('H:i \o\\n l j F Y')?>
             </dd>
+            <?php if (isset($info->Attachments)) { ?>
+            <dt class="col-sm-3 mb-0">Attachments</dt>
+            <dd class="col-sm-9 mb-0">
+              <?php $attachments = (array) $info->Attachments;
+              foreach ($attachments as $a) { ?>
+                <a href="<?=htmlspecialchars(autoUrl("files/" . $a->URI))?>" download target="_blank" class="d-block mb-1 text-truncate">
+                  <?=htmlspecialchars($a->Filename)?>
+                </a>
+                <?php
+              } ?>
+            </dd>
+            <?php } ?>
           </dl>
           <?php } ?>
           </div>

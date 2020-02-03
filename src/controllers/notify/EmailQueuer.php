@@ -61,12 +61,36 @@ try {
         $_SESSION['TooLargeError'] = true;
         throw new Exception();
       } else {
+        // Store uploaded files in filestore, if exists
+        if (env('FILE_STORE_PATH')) {
+          // Work out filename for upload
+          $date = new DateTime('now', new DateTimeZone('Europe/London'));
+          $urlPath = 'notify/attachments/' . $date->format("Y/m/d") . '/';
+          $path = env('FILE_STORE_PATH') . $urlPath;
+          $hash = str_replace(' ', '', basename($_FILES['file-upload']['name'][$i]));
+          $filenamePath = $path . $hash;
+          $url = $urlPath . $hash;
+          $count = 0; $countText = "";
+          while (file_exists($path . $countText . $hash)) {
+            $count++;
+            $countText = ((string) $count) . '-';
+          }
+          if ($count > 0) {
+            $filenamePath = $path . $countText . $hash;
+            $url = $urlPath . $countText . $hash;
+          }
+        }
+
         $collectiveSize += $_FILES['file-upload']['size'][$i];
         $attachments[] = [
           'encoded' => base64_encode(file_get_contents($_FILES['file-upload']['tmp_name'][$i])),
           'mime' => mime_content_type($_FILES['file-upload']['tmp_name'][$i]),
           'filename' => $_FILES['file-upload']['name'][$i],
           'disposition' => 'attachment',
+          'tmp_name' => $_FILES['file-upload']['tmp_name'][$i],
+          'store_name' => $filenamePath,
+          'url' => $url,
+          'uploaded' => false,
         ];
       }
     }
@@ -77,6 +101,39 @@ try {
     $_SESSION['CollectiveSizeTooLargeError'] = true;
     throw new Exception();
   }
+
+  if (env('FILE_STORE_PATH')) {
+    for ($i = 0; $i < sizeof($attachments); $i++) {
+      if (!is_writeable($attachments[$i]['store_name'])) {
+        // Try making folders
+        $dir = explode('/', $attachments[$i]['store_name']);
+        $path = "";
+        $tried = [];
+        for ($y = 0; $y < sizeof($dir)-1; $y++) {
+          $path .= $dir[$y];
+          if (!is_dir($path)) {
+            mkdir($path);
+            $tried[] = $path;
+          }
+          $path .= '/';
+        }
+        if (!is_writeable($path)) {
+          // reportError([$tried, $path, $attachments[$i]['store_name']]);
+        } else {
+          // reportError([$tried, $path, $attachments[$i]['store_name']]);
+        }
+      } else {
+        // reportError("Filepath is writeable");
+      }
+      if (move_uploaded_file($attachments[$i]['tmp_name'], $attachments[$i]['store_name'])) {
+        $attachments[$i]['uploaded'] = true;
+      } else {
+        // reportError([$attachments[$i]['tmp_name'], $attachments[$i]['store_name'], $_FILES['file-upload']]);
+      }
+    }
+  }
+
+  // reportError($attachments);
 
   $subject = $_POST['subject'];
   $message = str_replace($to_remove, "", $_POST['message']);
@@ -225,6 +282,20 @@ try {
       "Email" => $replyAddress,
       "Name" => $_SESSION['Forename'] . ' ' . $_SESSION['Surname'],
     ];
+  }
+
+  // reportError($attachments);
+  if (sizeof($attachments) > 0) {
+    $recipientGroups["Attachments"] = [];
+  }
+  foreach($attachments as $attachment) {
+    if ($attachment['uploaded']) {
+      $recipientGroups["Attachments"][] = [
+        'Filename' => $attachment['filename'],
+        'URI' => $attachment['url'],
+        'MIME' => $attachment['mime'],
+      ];
+    }
   }
 
   $json = json_encode($recipientGroups);
