@@ -67,13 +67,13 @@ try {
           $date = new DateTime('now', new DateTimeZone('Europe/London'));
           $urlPath = 'notify/attachments/' . $date->format("Y/m/d") . '/';
           $path = env('FILE_STORE_PATH') . $urlPath;
-          $hash = hash('sha256', $_FILES['file-upload']['tmp_name'][$i]);
+          $hash = basename($_FILES['file-upload']['tmp_name'][$i]);
           $filenamePath = $path . $hash;
           $url = $urlPath . $hash;
           $count = 0; $countText = "";
           while (file_exists($path . $countText . $hash)) {
             $count++;
-            $countText = (string) $count;
+            $countText = ((string) $count) . '-';
           }
           if ($count > 0) {
             $filenamePath = $path . $countText . $hash;
