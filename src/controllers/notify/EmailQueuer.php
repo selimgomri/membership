@@ -102,30 +102,32 @@ try {
     throw new Exception();
   }
 
-  foreach($attachments as $attachment) {
-    // if (!is_writeable($attachment['store_name'])) {
-    //   // Try making folders
-    //   $dir = explode('/', $attachment['store_name']);
-    //   $path = "";
-    //   $tried = [];
-    //   for ($i = 0; $i < sizeof($dir)-1; $i++) {
-    //     $path .= $dir[$i];
-    //     if (!is_dir($path)) {
-    //       mkdir($path);
-    //       $tried[] = $path;
-    //     }
-    //     $path .= '/';
-    //   }
-    //   if (!is_writeable($attachment['store_name'])) {
-    //     reportError([$tried, $path, $attachment['store_name']]);
-    //     throw new Exception('Not writable');
-    //   }
-    // }
-    if (move_uploaded_file($attachment['tmp_name'], $attachment['store_name'])) {
-      $attachment['uploaded'] = true;
-      reportError("UPLOADED");
-    } else {
-      reportError($_FILES['file-upload']['error']);
+  if (env('FILE_STORE_PATH')) {
+    foreach($attachments as $attachment) {
+      if (!is_writeable($attachment['store_name'])) {
+        // Try making folders
+        $dir = explode('/', $attachment['store_name']);
+        $path = "";
+        $tried = [];
+        for ($i = 0; $i < sizeof($dir)-1; $i++) {
+          $path .= $dir[$i];
+          if (!is_dir($path)) {
+            mkdir($path);
+            $tried[] = $path;
+          }
+          $path .= '/';
+        }
+        if (!is_writeable($attachment['store_name'])) {
+          reportError([$tried, $path, $attachment['store_name']]);
+          throw new Exception('Not writable');
+        }
+      }
+      if (move_uploaded_file($attachment['tmp_name'], $attachment['store_name'])) {
+        $attachment['uploaded'] = true;
+        reportError("UPLOADED");
+      } else {
+        reportError($_FILES['file-upload']['error']);
+      }
     }
   }
 
