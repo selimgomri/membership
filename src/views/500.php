@@ -31,15 +31,16 @@ if ($currentUser == null) {
 			<p>Please try the following:</p>
 			<ul>
 				<li>If this is the first time you have seen this error, try reloading the page.</li>
+				<li>If you are asked to confirm form resubmission, say <strong>no</strong> and press <a href="javascript:history.back(1)">Back</a> instead.</li>
 				<li>If you keep seeing this error, please try again later.</li>
 			</ul>
 			<p>HTTP Error 500 - Internal Server Error.</p>
 			<hr>
 			
-			<p class="mt-2">Contact our <a class="text-dark" href="mailto:support@chesterlestreetasc.co.uk" title="Support Hotline">support hotline</a><?php if (!bool(env('IS_CLS'))) { ?>*<?php } ?> if the issue persists.</p>
+			<p class="mt-2">Contact our <a href="mailto:support@myswimmingclub.uk" title="Support Hotline">support hotline</a><?php if (!bool(env('IS_CLS'))) { ?>*<?php } ?> if the issue persists.</p>
 
       <?php if (!bool(env('IS_CLS'))) { ?>
-      <p>* The support email address is provided by Chester-le-Street ASC and operated by SCDS. <a class="text-dark" href="mailto:<?=htmlspecialchars(env('CLUB_EMAIL'))?>" title="<?=htmlspecialchars(env('CLUB_NAME'))?>">Contact your own club</a> in the first instance</p>
+      <p>* <a href="mailto:<?=htmlspecialchars(env('CLUB_EMAIL'))?>" title="<?=htmlspecialchars(env('CLUB_NAME'))?>">Contact your own club</a> in the first instance</p>
       <?php } ?>
 		</div>
 	</div>
