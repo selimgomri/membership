@@ -21,8 +21,9 @@ include "galaMenu.php"; ?>
 <div class="container">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Edit <?=htmlspecialchars($row['GalaName'])?></li>
+      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("galas"))?>">Galas</a></li>
+      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("galas/" . $id))?>"><?=htmlspecialchars($row['GalaName'])?></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
   </nav>
   <div class="row">
@@ -31,7 +32,7 @@ include "galaMenu.php"; ?>
         <div class="form-group row">
           <label for="galaname" class="col-sm-4 col-form-label">Gala Name</label>
           <div class="col-sm-8">
-            <input type="text" class="form-control" id="galaname" name="galaname" placeholder="eg Chester-le-Street Open" value="<?=htmlspecialchars($row['GalaName'])?>" required>
+            <input type="text" class="form-control" id="galaname" name="galaname" placeholder="<?=htmlspecialchars('e.g. ' . env('CLUB_NAME') . ' Open Meet')?>" value="<?=htmlspecialchars($row['GalaName'])?>" required>
           </div>
         </div>
 
@@ -66,7 +67,7 @@ include "galaMenu.php"; ?>
         <div class="form-group row">
           <label for="venue" class="col-sm-4 col-form-label">Gala Venue</label>
           <div class="col-sm-8">
-            <input type="text" class="form-control" id="venue" name="venue" value="<?=htmlspecialchars($row['GalaVenue'])?>" placeholder="eg Chester-le-Street" required>
+            <input type="text" class="form-control" id="venue" name="venue" value="<?=htmlspecialchars($row['GalaVenue'])?>" placeholder="<?=htmlspecialchars('e.g. ' . env('CLUB_NAME') . ' Pool')?>" required>
           </div>
         </div>
         <div class="form-group row">
