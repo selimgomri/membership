@@ -60,47 +60,8 @@ Composer. They will come with the application, so we recommend that you do not
 update them via composer yourself, as this may cause issues.
 
 ### Included Packages
-* bacon/bacon-qr-code                 1.0.3    BaconQrCode is a QR code
-* generator for PHP. bshaffer/oauth2-server-php          v1.10.0  OAuth2 Server
-* for PHP clsasc/equivalent-time              v1.1     A class based
-* implementation of the British Swimming/SPORTSYSTEMS E... composer/ca-bundle
-* 1.1.2    Lets you find a path to the system CA bundle, and includes a
-* fallba... defuse/php-encryption               v2.2.1   Secure PHP Encryption
-* Library dg/twitter-php                      v3.7     Small and easy Twitter
-* library for PHP endroid/installer                   1.0.5 endroid/qr-code
-* 3.4.4    Endroid QR Code fabpot/goutte                       v3.2.3   A simple
-* PHP Web Scraper geoip2/geoip2                       v2.9.0   MaxMind GeoIP2
-* PHP API gocardless/gocardless-pro           1.7.0    GoCardless Pro PHP Client
-* Library guzzlehttp/guzzle                   6.3.3    Guzzle is a PHP HTTP
-* client library guzzlehttp/promises                 v1.3.1   Guzzle promises
-* library guzzlehttp/psr7                     1.4.2    PSR-7 message
-* implementation that also provides common utility methods
-* khanamiryan/qrcode-detector-decoder 1.0.2    QR code decoder / reader
-* lcobucci/jwt                        3.2.4    A simple library to work with
-* JSON Web Token and JSON Web Signature league/event
-* 2.1.2    Event package league/oauth2-server                7.2.0    A
-* lightweight and powerful OAuth 2.0 authorization and resource ser...
-* maxmind-db/reader                   v1.3.0   MaxMind DB Reader API
-* maxmind/web-service-common          v0.5.0   Internal MaxMind Web Service API
-* myclabs/php-enum                    1.6.2    PHP Enum implementation
-* nezamy/route                        v1.1.0   Route - Fast, flexible routing
-* for PHP, enabling you to quickly and... paragonie/random_compat
-* v9.99.99 PHP 5.x polyfill for random_bytes() and random_int() from PHP 7
-* psr/cache                           1.0.1    Common interface for caching
-* libraries psr/http-message                    1.0.1    Common interface for
-* HTTP messages respect/validation                  1.1.23   The most awesome
-* validation engine ever created for PHP sendgrid/php-http-client
-* 3.9.6    HTTP REST client, simplified for PHP sendgrid/sendgrid
-* 7.2.0    This library allows you to quickly and easily send emails through
-* S... symfony/browser-kit                 v4.1.3   Symfony BrowserKit Component
-* symfony/css-selector                v4.1.3   Symfony CssSelector Component
-* symfony/dom-crawler                 v4.1.3   Symfony DomCrawler Component
-* symfony/inflector                   v4.1.3   Symfony Inflector Component
-* symfony/options-resolver            v4.1.3   Symfony OptionsResolver Component
-* symfony/polyfill-ctype              v1.9.0   Symfony polyfill for ctype
-* functions symfony/polyfill-mbstring           v1.9.0   Symfony polyfill for
-* the Mbstring extension symfony/property-access             v4.1.3   Symfony
-* PropertyAccess Component whichbrowser/parser                 v2.0.37
-* Useragent sniffing library for PHP 
+
+For a list of included packages, view [DEPENDENCIES.md](./DEPENDENCIES.md).
+
 This product includes GeoLite2 data created by MaxMind, available from
 [http://www.maxmind.com](http://www.maxmind.com).
