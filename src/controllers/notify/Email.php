@@ -227,9 +227,6 @@ include BASE_PATH . "views/notifyMenu.php";
         </em>
       </p>
 			<textarea class="form-control" id="message" name="message" rows="10" data-tinymce-css-location="<?=htmlspecialchars(autoUrl("public/css/tinymce.css"))?>"><?php if (isset($_SESSION['NotifyPostData']['message'])) {?><?=htmlspecialchars($_SESSION['NotifyPostData']['message'])?><?php } ?></textarea>
-			<small id="messageHelp" class="form-text text-muted">
-        Styling will be stripped from this message
-      </small>
 		</div>
 
     <input type="hidden" name="MAX_FILE_SIZE" value="3000000">

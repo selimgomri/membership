@@ -7,7 +7,7 @@ tinymce.init({
     'contextmenu paste code help wordcount'
   ],
   paste_as_text: true,
-  toolbar: 'insert | undo redo |  formatselect | bold italic backcolor | bullist numlist outdent indent | removeformat | help',
+  toolbar: 'insert | undo redo |  formatselect | bold italic | bullist numlist outdent indent | removeformat | help',
   content_css: [
     'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i',
     document.getElementById('message').dataset.tinymceCssLocation
@@ -43,12 +43,12 @@ tinymce.init({
     file: { title: 'File', items: 'newdocument restoredraft | preview | print ' },
     edit: { title: 'Edit', items: 'undo redo | cut copy paste | selectall | searchreplace' },
     view: { title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen' },
-    insert: { title: 'Insert', items: 'image link media template codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor toc | insertdatetime' },
+    insert: { title: 'Insert', items: 'image link template codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor toc | insertdatetime' },
     format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | formats blockformats | removeformat' },
     tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | code wordcount' },
     table: { title: 'Table', items: 'inserttable | cell row column | tableprops deletetable' },
     help: { title: 'Help', items: 'help' }
-  }
+  },
 
   //toolbar: "link",
 });
