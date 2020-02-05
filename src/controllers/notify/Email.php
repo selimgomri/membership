@@ -226,10 +226,7 @@ include BASE_PATH . "views/notifyMenu.php";
           <span class="mono">User Name</span>,".
         </em>
       </p>
-			<textarea class="form-control" id="message" name="message" rows="10"><?php if (isset($_SESSION['NotifyPostData']['message'])) {?><?=htmlspecialchars($_SESSION['NotifyPostData']['message'])?><?php } ?></textarea>
-			<small id="messageHelp" class="form-text text-muted">
-        Styling will be stripped from this message
-      </small>
+			<textarea class="form-control" id="message" name="message" rows="10" data-tinymce-css-location="<?=htmlspecialchars(autoUrl("public/css/tinymce.css"))?>"><?php if (isset($_SESSION['NotifyPostData']['message'])) {?><?=htmlspecialchars($_SESSION['NotifyPostData']['message'])?><?php } ?></textarea>
 		</div>
 
     <input type="hidden" name="MAX_FILE_SIZE" value="3000000">
@@ -266,33 +263,7 @@ include BASE_PATH . "views/notifyMenu.php";
 	</form>
 </div>
 
-<script>
- tinymce.init({
-    selector: '#message',
-    branding: false,
-    plugins: [
-      'autolink lists link image charmap print preview anchor textcolor',
-      'searchreplace visualblocks code autoresize insertdatetime media table',
-      'contextmenu paste code help wordcount'
-    ],
-    paste_as_text: true,
-    toolbar: 'insert | undo redo |  formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-    content_css: [
-      'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i',
-      '<?php echo autoUrl("css/tinymce.css"); ?>'
-    ]
-      //toolbar: "link",
- });
-
- $(document).ready(function() {
-  $(window).keydown(function(event){
-    if(event.keyCode == 13) {
-      event.preventDefault();
-      return false;
-    }
-  });
-});
-</script>
+<script src="<?=htmlspecialchars(autoUrl("public/js/notify/TinyMCE.js"))?>"></script>
 <script src="<?=htmlspecialchars(autoUrl("public/js/bs-custom-file-input.min.js"))?>"></script>
 <script src="<?=htmlspecialchars(autoUrl("public/js/file-input-init.js"))?>"></script>
 
