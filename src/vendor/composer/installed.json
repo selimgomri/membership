@@ -52,17 +52,17 @@
     },
     {
         "name": "brick/math",
-        "version": "0.8.11",
-        "version_normalized": "0.8.11.0",
+        "version": "0.8.12",
+        "version_normalized": "0.8.12.0",
         "source": {
             "type": "git",
             "url": "https://github.com/brick/math.git",
-            "reference": "bf4894d6373d396666d280a42ecdf1ad75f8222f"
+            "reference": "ea9a095b902f5d42126aba4455a64476f5528241"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/brick/math/zipball/bf4894d6373d396666d280a42ecdf1ad75f8222f",
-            "reference": "bf4894d6373d396666d280a42ecdf1ad75f8222f",
+            "url": "https://api.github.com/repos/brick/math/zipball/ea9a095b902f5d42126aba4455a64476f5528241",
+            "reference": "ea9a095b902f5d42126aba4455a64476f5528241",
             "shasum": ""
         },
         "require": {
@@ -70,9 +70,10 @@
         },
         "require-dev": {
             "php-coveralls/php-coveralls": "2.*",
-            "phpunit/phpunit": "7.*"
+            "phpunit/phpunit": "7.*",
+            "vimeo/psalm": "3.*"
         },
-        "time": "2020-01-23T00:19:01+00:00",
+        "time": "2020-01-27T13:00:05+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

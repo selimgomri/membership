@@ -11,6 +11,8 @@ use Brick\Math\Internal\Calculator;
 
 /**
  * Immutable, arbitrary-precision signed decimal numbers.
+ *
+ * @psalm-immutable
  */
 final class BigDecimal extends BigNumber
 {
@@ -49,11 +51,13 @@ final class BigDecimal extends BigNumber
     /**
      * Creates a BigDecimal of the given value.
      *
-     * @param BigNumber|number|string $value
+     * @param BigNumber|int|float|string $value
      *
      * @return BigDecimal
      *
      * @throws MathException If the value cannot be converted to a BigDecimal.
+     *
+     * @psalm-pure
      */
     public static function of($value) : BigNumber
     {
@@ -65,12 +69,14 @@ final class BigDecimal extends BigNumber
      *
      * Example: `(12345, 3)` will result in the BigDecimal `12.345`.
      *
-     * @param BigNumber|number|string $value The unscaled value. Must be convertible to a BigInteger.
-     * @param int                     $scale The scale of the number, positive or zero.
+     * @param BigNumber|int|float|string $value The unscaled value. Must be convertible to a BigInteger.
+     * @param int                        $scale The scale of the number, positive or zero.
      *
      * @return BigDecimal
      *
      * @throws \InvalidArgumentException If the scale is negative.
+     *
+     * @psalm-pure
      */
     public static function ofUnscaledValue($value, int $scale = 0) : BigDecimal
     {
@@ -85,10 +91,13 @@ final class BigDecimal extends BigNumber
      * Returns a BigDecimal representing zero, with a scale of zero.
      *
      * @return BigDecimal
+     *
+     * @psalm-pure
      */
     public static function zero() : BigDecimal
     {
-        static $zero = null;
+        /** @psalm-suppress ImpureStaticVariable */
+        static $zero;
 
         if ($zero === null) {
             $zero = new BigDecimal('0');
@@ -101,10 +110,13 @@ final class BigDecimal extends BigNumber
      * Returns a BigDecimal representing one, with a scale of zero.
      *
      * @return BigDecimal
+     *
+     * @psalm-pure
      */
     public static function one() : BigDecimal
     {
-        static $one = null;
+        /** @psalm-suppress ImpureStaticVariable */
+        static $one;
 
         if ($one === null) {
             $one = new BigDecimal('1');
@@ -117,10 +129,13 @@ final class BigDecimal extends BigNumber
      * Returns a BigDecimal representing ten, with a scale of zero.
      *
      * @return BigDecimal
+     *
+     * @psalm-pure
      */
     public static function ten() : BigDecimal
     {
-        static $ten = null;
+        /** @psalm-suppress ImpureStaticVariable */
+        static $ten;
 
         if ($ten === null) {
             $ten = new BigDecimal('10');
@@ -134,7 +149,7 @@ final class BigDecimal extends BigNumber
      *
      * The result has a scale of `max($this->scale, $that->scale)`.
      *
-     * @param BigNumber|number|string $that The number to add. Must be convertible to a BigDecimal.
+     * @param BigNumber|int|float|string $that The number to add. Must be convertible to a BigDecimal.
      *
      * @return BigDecimal The result.
      *
@@ -165,7 +180,7 @@ final class BigDecimal extends BigNumber
      *
      * The result has a scale of `max($this->scale, $that->scale)`.
      *
-     * @param BigNumber|number|string $that The number to subtract. Must be convertible to a BigDecimal.
+     * @param BigNumber|int|float|string $that The number to subtract. Must be convertible to a BigDecimal.
      *
      * @return BigDecimal The result.
      *
@@ -192,7 +207,7 @@ final class BigDecimal extends BigNumber
      *
      * The result has a scale of `$this->scale + $that->scale`.
      *
-     * @param BigNumber|number|string $that The multiplier. Must be convertible to a BigDecimal.
+     * @param BigNumber|int|float|string $that The multiplier. Must be convertible to a BigDecimal.
      *
      * @return BigDecimal The result.
      *
@@ -219,9 +234,9 @@ final class BigDecimal extends BigNumber
     /**
      * Returns the result of the division of this number by the given one, at the given scale.
      *
-     * @param BigNumber|number|string $that         The divisor.
-     * @param int|null                $scale        The desired scale, or null to use the scale of this number.
-     * @param int                     $roundingMode An optional rounding mode.
+     * @param BigNumber|int|float|string $that         The divisor.
+     * @param int|null                   $scale        The desired scale, or null to use the scale of this number.
+     * @param int                        $roundingMode An optional rounding mode.
      *
      * @return BigDecimal
      *
@@ -259,7 +274,7 @@ final class BigDecimal extends BigNumber
      *
      * The scale of the result is automatically calculated to fit all the fraction digits.
      *
-     * @param BigNumber|number|string $that The divisor. Must be convertible to a BigDecimal.
+     * @param BigNumber|int|float|string $that The divisor. Must be convertible to a BigDecimal.
      *
      * @return BigDecimal The result.
      *
@@ -334,7 +349,7 @@ final class BigDecimal extends BigNumber
      *
      * The quotient has a scale of `0`.
      *
-     * @param BigNumber|number|string $that The divisor. Must be convertible to a BigDecimal.
+     * @param BigNumber|int|float|string $that The divisor. Must be convertible to a BigDecimal.
      *
      * @return BigDecimal The quotient.
      *
@@ -361,7 +376,7 @@ final class BigDecimal extends BigNumber
      *
      * The remainder has a scale of `max($this->scale, $that->scale)`.
      *
-     * @param BigNumber|number|string $that The divisor. Must be convertible to a BigDecimal.
+     * @param BigNumber|int|float|string $that The divisor. Must be convertible to a BigDecimal.
      *
      * @return BigDecimal The remainder.
      *
@@ -390,7 +405,7 @@ final class BigDecimal extends BigNumber
      *
      * The quotient has a scale of `0`, and the remainder has a scale of `max($this->scale, $that->scale)`.
      *
-     * @param BigNumber|number|string $that The divisor. Must be convertible to a BigDecimal.
+     * @param BigNumber|int|float|string $that The divisor. Must be convertible to a BigDecimal.
      *
      * @return BigDecimal[] An array containing the quotient and the remainder.
      *
@@ -772,8 +787,10 @@ final class BigDecimal extends BigNumber
      *
      * @param BigDecimal $x The first decimal number.
      * @param BigDecimal $y The second decimal number.
-     * @param string     $a A variable to store the scaled integer value of $x.
-     * @param string     $b A variable to store the scaled integer value of $y.
+     * @param null       $a A variable to store the scaled integer value of $x.
+     * @param-out string $a
+     * @param null       $b A variable to store the scaled integer value of $y.
+     * @param-out string $b
      *
      * @return void
      */

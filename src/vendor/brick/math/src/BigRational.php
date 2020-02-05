@@ -13,6 +13,8 @@ use Brick\Math\Exception\RoundingNecessaryException;
  * An arbitrarily large rational number.
  *
  * This class is immutable.
+ *
+ * @psalm-immutable
  */
 final class BigRational extends BigNumber
 {
@@ -59,11 +61,13 @@ final class BigRational extends BigNumber
     /**
      * Creates a BigRational of the given value.
      *
-     * @param BigNumber|number|string $value
+     * @param BigNumber|int|float|string $value
      *
      * @return BigRational
      *
      * @throws MathException If the value cannot be converted to a BigRational.
+     *
+     * @psalm-pure
      */
     public static function of($value) : BigNumber
     {
@@ -76,14 +80,16 @@ final class BigRational extends BigNumber
      * If the denominator is negative, the signs of both the numerator and the denominator
      * will be inverted to ensure that the denominator is always positive.
      *
-     * @param BigNumber|number|string $numerator   The numerator. Must be convertible to a BigInteger.
-     * @param BigNumber|number|string $denominator The denominator. Must be convertible to a BigInteger.
+     * @param BigNumber|int|float|string $numerator   The numerator. Must be convertible to a BigInteger.
+     * @param BigNumber|int|float|string $denominator The denominator. Must be convertible to a BigInteger.
      *
      * @return BigRational
      *
      * @throws NumberFormatException      If an argument does not represent a valid number.
      * @throws RoundingNecessaryException If an argument represents a non-integer number.
      * @throws DivisionByZeroException    If the denominator is zero.
+     *
+     * @psalm-pure
      */
     public static function nd($numerator, $denominator) : BigRational
     {
@@ -97,9 +103,12 @@ final class BigRational extends BigNumber
      * Returns a BigRational representing zero.
      *
      * @return BigRational
+     *
+     * @psalm-pure
      */
     public static function zero() : BigRational
     {
+        /** @psalm-suppress ImpureStaticVariable */
         static $zero;
 
         if ($zero === null) {
@@ -113,9 +122,12 @@ final class BigRational extends BigNumber
      * Returns a BigRational representing one.
      *
      * @return BigRational
+     *
+     * @psalm-pure
      */
     public static function one() : BigRational
     {
+        /** @psalm-suppress ImpureStaticVariable */
         static $one;
 
         if ($one === null) {
@@ -129,9 +141,12 @@ final class BigRational extends BigNumber
      * Returns a BigRational representing ten.
      *
      * @return BigRational
+     *
+     * @psalm-pure
      */
     public static function ten() : BigRational
     {
+        /** @psalm-suppress ImpureStaticVariable */
         static $ten;
 
         if ($ten === null) {
@@ -190,7 +205,7 @@ final class BigRational extends BigNumber
     /**
      * Returns the sum of this number and the given one.
      *
-     * @param BigNumber|number|string $that The number to add.
+     * @param BigNumber|int|float|string $that The number to add.
      *
      * @return BigRational The result.
      *
@@ -210,7 +225,7 @@ final class BigRational extends BigNumber
     /**
      * Returns the difference of this number and the given one.
      *
-     * @param BigNumber|number|string $that The number to subtract.
+     * @param BigNumber|int|float|string $that The number to subtract.
      *
      * @return BigRational The result.
      *
@@ -230,7 +245,7 @@ final class BigRational extends BigNumber
     /**
      * Returns the product of this number and the given one.
      *
-     * @param BigNumber|number|string $that The multiplier.
+     * @param BigNumber|int|float|string $that The multiplier.
      *
      * @return BigRational The result.
      *
@@ -249,7 +264,7 @@ final class BigRational extends BigNumber
     /**
      * Returns the result of the division of this number by the given one.
      *
-     * @param BigNumber|number|string $that The divisor.
+     * @param BigNumber|int|float|string $that The divisor.
      *
      * @return BigRational The result.
      *
