@@ -273,10 +273,11 @@ function process_payment_event($event) {
       print("Payment " . $event["links"]["payment"] . " has been created!\n");
       if (!paymentExists($event["links"]["payment"])) {
         // Create a new Payment
+        $date = new DateTime($payment->created_at, new DateTimeZone('UTC'));
+        $date = $date->format("Y-m-d");
         $PMkey = $event["links"]["payment"];
         $payment = $client->payments()->get($PMkey);
         $status = $payment->status;
-        $date = date("Y-m-d", strtotime($payment->created_at));
         $amount = $payment->amount;
         $name = $payment->description;
         $currency = $payment->currency;
@@ -302,6 +303,26 @@ function process_payment_event($event) {
             $PMkey,
             'Payment'
           ]);
+
+          // Add item to payments pending
+          $getCountFromPP = $db->prepare("SELECT COUNT(*) FROM paymentsPending WHERE PMkey = ?");
+          $getCountFromPP->execute([
+            $PMkey
+          ]);
+
+          if ($getCountFromPP->fetchColumn() == 0) {
+            $addToPP = $db->prepare("INSERT INTO paymentsPending (Date, Status, UserID, Name, Amount, Currency, PMkey, Type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $addToPP->execute([
+              $date,
+              'Pending',
+              $user,
+              mb_strimwidth($name, 0, 500),
+              $amount,
+              $currency,
+              $PMkey,
+              'Payment'
+            ]);
+          }
         }
       }
       break;
