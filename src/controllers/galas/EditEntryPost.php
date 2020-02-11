@@ -57,7 +57,7 @@ try {
   $subject = "Your Updated " . $row['GalaName'] . " Entry";
   $message = "";
   if ($_SESSION['AccessLevel'] != 'Parent') {
-    $message .= "<p><strong>Changes have been made to this gala entry by a member if staff. This is a courtesy email for you.</strong></p>";
+    $message .= "<p><strong>Changes have been made to this gala entry by a member of staff. This is a courtesy email for you.</strong></p>";
   }
   $message .= "<p>Here are the swims selected for " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "'s updated " . htmlspecialchars($row['GalaName']) . " entry.</p>";
   $message .= "<ul>" . $entryList . "</ul>";
