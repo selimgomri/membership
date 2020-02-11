@@ -39,7 +39,7 @@ class PhoneNumber
      *
      * @throws PhoneNumberParseException
      */
-    public static function parse(string $phoneNumber, string $regionCode = null) : PhoneNumber
+    public static function parse(string $phoneNumber, ?string $regionCode = null) : PhoneNumber
     {
         try {
             return new PhoneNumber(
@@ -79,6 +79,31 @@ class PhoneNumber
     public function getCountryCode() : string
     {
         return (string) $this->phoneNumber->getCountryCode();
+    }
+
+    /**
+     * Returns the geographical area code of this PhoneNumber.
+     *
+     * Notes:
+     *
+     *  - geographical area codes change over time, and this method honors those changes; therefore, it doesn't
+     *    guarantee the stability of the result it produces;
+     *  - most non-geographical numbers have no area codes, including numbers from non-geographical entities;
+     *  - some geographical numbers have no area codes.
+     *
+     * If this number has no area code, an empty string is returned.
+     *
+     * @return string
+     */
+    public function getGeographicalAreaCode() : string
+    {
+        $phoneNumberUtil = PhoneNumberUtil::getInstance();
+
+        $nationalSignificantNumber = $phoneNumberUtil->getNationalSignificantNumber($this->phoneNumber);
+
+        $areaCodeLength = $phoneNumberUtil->getLengthOfGeographicalAreaCode($this->phoneNumber);
+
+        return substr($nationalSignificantNumber, 0, $areaCodeLength);
     }
 
     /**
