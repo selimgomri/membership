@@ -54,8 +54,8 @@ try {
     $id,
   ]);
 
-  $updateASA = $db->prepare("UPDATE users SET ASANumber = ?, ASACategory = ?, ASAPrimary = ?, ASAPaid = ? WHERE UserID = ?");
-  $updateMemberASA = $db->prepare("UPDATE members SET ASACategory = ?, ASAPrimary = ?, ASAPaid = ? WHERE ASANumber = ?");
+  $updateASA = $db->prepare("UPDATE users SET ASAMember = ?, ASANumber = ?, ASACategory = ?, ASAPrimary = ?, ASAPaid = ? WHERE UserID = ?");
+  $updateMemberASA = $db->prepare("UPDATE members SET ASAMember = ?, ASACategory = ?, ASAPrimary = ?, ASAPaid = ? WHERE ASANumber = ?");
   if (bool($_POST['is-se-member'])) {
     // Update ASA things
 
@@ -66,8 +66,10 @@ try {
     if (!bool($asaPrimary)) {
       $asaPaid = 0;
     }
+    $asaMember = (int) bool($_POST['is-se-member']);
 
     $updateASA->execute([
+      $asaMember,
       $asa,
       $asaCat,
       $asaPrimary,
@@ -76,6 +78,7 @@ try {
     ]);
 
     $updateMemberASA->execute([
+      $asaMember,
       $asaCat,
       $asaPrimary,
       $asaPaid,
@@ -85,6 +88,7 @@ try {
   } else {
     // Make sure ASA things are unset
     $updateASA->execute([
+      $asaMember,
       null,
       0,
       0,

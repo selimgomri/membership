@@ -2,7 +2,7 @@
 
 global $db;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, AccessLevel, ASANumber, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory FROM users WHERE UserID = ?");
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, AccessLevel, ASAMember, ASANumber, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory FROM users WHERE UserID = ?");
 $userInfo->execute([$id]);
 
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
@@ -117,16 +117,16 @@ include BASE_PATH . 'views/header.php';
         <h2>Swim England Membership</h2>
         <div class="form-group">
           <div class="custom-control custom-radio">
-            <input type="radio" id="is-not-se-member" name="is-se-member" class="custom-control-input" <?php if ($info['ASANumber'] == null) { ?>checked<?php } ?> value="0">
+            <input type="radio" id="is-not-se-member" name="is-se-member" class="custom-control-input" <?php if (!bool($info['ASAMember'])) { ?>checked<?php } ?> value="0">
             <label class="custom-control-label" for="is-not-se-member"><?=htmlspecialchars($info['Forename'])?> is not a Swim England member</label>
           </div>
           <div class="custom-control custom-radio">
-            <input type="radio" id="is-se-member" name="is-se-member" class="custom-control-input" <?php if ($info['ASANumber'] != null) { ?>checked<?php } ?> value="1">
+            <input type="radio" id="is-se-member" name="is-se-member" class="custom-control-input" <?php if (bool($info['ASAMember'])) { ?>checked<?php } ?> value="1">
             <label class="custom-control-label" for="is-se-member"><?=htmlspecialchars($info['Forename'])?> is a Swim England member</label>
           </div>
         </div>
 
-        <div class="cell <?php if ($info['ASANumber'] == null) { ?>d-none<?php } ?>" id="asa-details">
+        <div class="cell <?php if (!bool($info['ASAMember'])) { ?>d-none<?php } ?>" id="asa-details">
 
           <?php if ($swimmerToo) { ?>
             <p class="text-danger"> 
@@ -174,7 +174,7 @@ include BASE_PATH . 'views/header.php';
                 </div>
                 <div class="custom-control custom-radio">
                   <input type="radio" id="se-club-pays" name="se-club-pays" class="custom-control-input" <?php if (bool($info['ASAPaid'])) { ?>checked<?php } ?>  <?php if (!bool($info['ASAPrimary'])) { ?>disabled<?php } ?> value="1">
-                  <label class="custom-control-label" for="se-club-pays">Club pays Swim England fees</label>
+                  <label class="custom-control-label" for="se-club-pays">Club pays <?=htmlspecialchars($info['Forename'])?>'s Swim England fees</label>
                 </div>
               </div>
             </div>
@@ -218,7 +218,7 @@ include BASE_PATH . 'views/header.php';
             </div>
             <div class="custom-control custom-radio">
               <input type="radio" id="club-club-pays" name="club-club-pays" class="custom-control-input" <?php if (bool($info['ClubPaid'])) { ?>checked<?php } ?> value="1">
-              <label class="custom-control-label" for="club-club-pays">Club pays club membership fees</label>
+              <label class="custom-control-label" for="club-club-pays">Club pays <?=htmlspecialchars($info['Forename'])?>'s club membership fees</label>
             </div>
           </div>
         </div>

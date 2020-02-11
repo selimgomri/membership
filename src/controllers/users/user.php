@@ -8,7 +8,7 @@ use Brick\PhoneNumber\PhoneNumberFormat;
 
 global $db;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, AccessLevel, ASANumber, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory FROM users WHERE UserID = ?");
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, AccessLevel, ASANumber, ASAMember, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory, RR FROM users WHERE UserID = ?");
 $userInfo->execute([$id]);
 
 $qualifications;
@@ -163,7 +163,7 @@ include BASE_PATH . "views/header.php";
         </p>
       </div>
       <?php } ?>
-      <?php if ($info['ASANumber'] != null) { ?>
+      <?php if (bool($info['ASAMember'])) { ?>
       <div class="col-sm-6 col-md-4">
         <h3 class="h6">Swim England Number</h3>
         <p><a target="_blank" href="<?=htmlspecialchars('https://www.swimmingresults.org/membershipcheck/member_details.php?myiref=' . urlencode($info['ASANumber']))?>"><?=htmlspecialchars($info['ASANumber'])?> <i class="fa fa-external-link" aria-hidden="true"></i></a>
@@ -210,6 +210,21 @@ include BASE_PATH . "views/header.php";
       <?php } ?>
     </div>
   </div>
+
+  <?php if ($info['AccessLevel'] == "Parent" && bool($info['RR'])) { ?>
+  <div class="mb-4">
+    <h2>
+      User registration
+    </h2>
+    <p class="lead">Registration is still pending for this user.</p>
+    <p>
+      <button id="registration-resend-button" class="btn btn-primary" data-ajax-url="<?=htmlspecialchars(autoUrl("users/ajax/resend-registration-email"))?>" data-user-name="<?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?>" data-user-edit-link="<?=htmlspecialchars(autoUrl("users/" . $id . "/edit"))?>" data-user="<?=htmlspecialchars($id)?>">
+        Resend registration email <span class="fa fa-chevron-right"></span>
+      </button>
+    </p>
+    <div id="resend-status"></div>
+  </div>
+  <?php } ?>
 
   <?php if ($addr != null) { ?>
   <div class="mb-4">
@@ -384,7 +399,7 @@ include BASE_PATH . "views/header.php";
           <div class="input-group-prepend">
             <label class="input-group-text" for="accountType">Account Type</label>
           </div>
-          <select class="custom-select" id="accountType" name="accountType" data-user-id="<?=htmlspecialchars($id)?>">
+          <select class="custom-select" id="accountType" name="accountType" data-user-id="<?=htmlspecialchars($id)?>" data-ajax-url="<?=htmlspecialchars(autoUrl('users/ajax/userSettings/'))?>">
             <option <?=$par?> value="Parent">Parent (Default)</option>
             <option <?=$coa?> value="Coach">Coach</option>
             <option <?=$gal?> value="Galas">Galas</option>
@@ -396,7 +411,14 @@ include BASE_PATH . "views/header.php";
     </div>
   </div>
 
-  <div class="mb-4">
+  <div class="alert alert-info p-3 mb-4">
+    <h2>Qualifications</h2>
+    <p class="lead">Qualification tracking for coaching qualifications, team managers and more is coming soon.</p>
+    <p>The system will be able to warn you in advance of qualifications expiring and details of qualifications will be visible to both staff and the users who hold those qualifications.</p>
+    <p class="mb-0">We'll be trialling this with one customer club before rolling it out to all clubs by the end of summer.</p>
+  </div>
+
+  <!-- <div class="mb-4">
     <h2>
       Qualifications
     </h2>
@@ -435,7 +457,7 @@ include BASE_PATH . "views/header.php";
         <span class="sr-only">View or add</span> Qualifications <span class="fa fa-chevron-right"></span>
       </a>
     </p>
-  </div>
+  </div> -->
 
   <div class="mb-4">
     <h2>Simulate this user</h2>
@@ -498,6 +520,27 @@ include BASE_PATH . "views/header.php";
   </div>
 </div>
 
-<script src="<?=autoUrl("js/users/type-switch.js")?>"></script>
+<!-- Modal for use by JS code -->
+<div class="modal fade" id="main-modal" tabindex="-1" role="dialog" aria-labelledby="main-modal-title" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="main-modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="main-modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+        <button type="button" id="modal-confirm-button" class="btn btn-success">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="<?=autoUrl("public/js/users/UserEdit.js")?>"></script>
 
 <?php include BASE_PATH . "views/footer.php";

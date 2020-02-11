@@ -22,6 +22,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 		include BASE_PATH . "controllers/ajax/userList.php";
 	});
 
+	$this->any('/ajax/resend-registration-email', function() {
+		include 'ResendRegEmail.php';
+	});
+
 	$this->get('/{id}:int', function($id) {
 		global $link;
 		include 'user.php';
