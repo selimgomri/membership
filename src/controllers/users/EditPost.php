@@ -66,7 +66,7 @@ try {
     if (!bool($asaPrimary)) {
       $asaPaid = 0;
     }
-    $asaMember = (int) bool($_POST['is-se-member']);
+    $asaMember = (int) $_POST['is-se-member'];
 
     $updateASA->execute([
       $asaMember,
