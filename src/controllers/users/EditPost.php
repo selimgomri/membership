@@ -66,10 +66,9 @@ try {
     if (!bool($asaPrimary)) {
       $asaPaid = 0;
     }
-    $asaMember = (int) $_POST['is-se-member'];
 
     $updateASA->execute([
-      $asaMember,
+      1,
       $asa,
       $asaCat,
       $asaPrimary,
@@ -78,7 +77,7 @@ try {
     ]);
 
     $updateMemberASA->execute([
-      $asaMember,
+      1,
       $asaCat,
       $asaPrimary,
       $asaPaid,
@@ -88,7 +87,7 @@ try {
   } else {
     // Make sure ASA things are unset
     $updateASA->execute([
-      $asaMember,
+      0,
       null,
       0,
       0,
