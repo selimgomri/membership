@@ -122,6 +122,8 @@ if (isset($customBackground) && $customBackground) {
       $headerLink = env('CLUB_WEBSITE');
     }
 
+    ?>
+
     <div class="membership-header">
       <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
       <div class="club-name-header <?php if (date("m") == "12") { ?>festive<?php } ?>">
