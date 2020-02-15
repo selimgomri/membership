@@ -42,7 +42,7 @@ squads.SquadCoC, members.DateOfBirth, members.Gender, members.OtherNotes,
 members.AccessKey, memberPhotography.Website, memberPhotography.Social,
 memberPhotography.Noticeboard, memberPhotography.FilmTraining,
 memberPhotography.ProPhoto, memberMedical.Conditions, memberMedical.Allergies,
-memberMedical.Medication FROM (((members INNER JOIN squads ON members.SquadID =
+memberMedical.Medication, members.Country FROM (((members INNER JOIN squads ON members.SquadID =
 squads.SquadID) LEFT JOIN `memberPhotography` ON members.MemberID =
 memberPhotography.MemberID) LEFT JOIN `memberMedical` ON members.MemberID =
 memberMedical.MemberID) WHERE members.MemberID = ?");
@@ -265,6 +265,24 @@ $content .= '<!--
         ' . htmlspecialchars($rowSwim["Gender"]) . '
       </p>
     </li>';
+
+    $country = 'England';
+    if ($rowSwim['Country'] == 'GB-NIR') {
+      $country = 'Northern Ireland';
+    } else if ($rowSwim['Country'] == 'GB-SCT') {
+      $country = 'Scotland';
+    } else if ($rowSwim['Country'] == 'GB-WLS') {
+      $country = 'Wales';
+    }
+    
+    $content .= '
+    <li class="list-group-item">
+      <p class="mb-0">
+        <strong class="d-block text-gray-dark">Country</strong>
+        ' . htmlspecialchars($country) . '
+      </p>
+    </li>';
+
     if ($access == "Admin" || $access == "Coach") {
     $content .= '
     <li class="list-group-item">

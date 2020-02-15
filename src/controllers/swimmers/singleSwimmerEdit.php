@@ -21,6 +21,7 @@ $sexUpdate = false;
 $otherNotesUpdate = false;
 $catUpdate = $cpUpdate = false;
 $update = false;
+$countryUpdate = false;
 $successInformation = "";
 
 $query = $db->prepare("SELECT * FROM members WHERE MemberID = ?");
@@ -172,13 +173,27 @@ if (isset($_POST['swimmerStatus']) && $_SESSION['AccessLevel'] == "Admin") {
 		$update = true;
 	}
 }
+if ($_POST['country'] == 'GB-ENG' || $_POST['country'] == 'GB-NIR' || $_POST['country'] == 'GB-SCT' || $_POST['country'] == 'GB-WLS') {
+
+	if ($row['Country'] != $_POST['country']) {
+		// Update
+		$updateCountry = $db->prepare("UPDATE members SET Country = ? WHERE MemberID = ?");
+		$updateCountry->execute([
+			$_POST['country'],
+			$id
+		]);
+		$countryUpdate = true;
+		$update = true;
+	}
+
+}
 
 $sqlSwim = "";
 $swimmer = $db->prepare("SELECT members.MForename, members.MForename, members.MMiddleNames,
 members.MSurname, members.ASANumber, members.ASACategory, members.ClubPays,
 squads.SquadName, squads.SquadID, squads.SquadFee, squads.SquadCoach,
 squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender,
-members.OtherNotes, members.AccessKey, members.Status FROM (members INNER JOIN squads ON
+members.OtherNotes, members.AccessKey, members.Status, members.Country FROM (members INNER JOIN squads ON
 members.SquadID = squads.SquadID) WHERE members.MemberID = ?");
 $swimmer->execute([$id]);
 $rowSwim = $swimmer->fetch(PDO::FETCH_ASSOC);
@@ -202,7 +217,8 @@ $content .= '<div class="alert alert-success">
 		if ($cpUpdate) { $content .= '<li>Whether or not the club pays swimmer\'s
 		fees</li>'; }
 		if ($otherNotesUpdate) { $content .= '<li>Other notes</li>'; }
-    if ($swimmerStatusUpdate) { $content .= '<li>Swimmer Membership Status</li>'; }
+		if ($swimmerStatusUpdate) { $content .= '<li>Swimmer Membership Status</li>'; }
+		if ($countryUpdate) { $content .= '<li>Home nations meet country</li>'; }
 $content .= '
 	</ul>
 </div>';
@@ -265,6 +281,20 @@ else {
 		</select>
 	</div>";
 }
+
+$cat = ['GB-ENG' => '', 'GB-NIR' => '', 'GB-SCT' => '', 'GB-WLS' => ''];
+$cat[$rowSwim['Country']] = " selected ";
+$content .= "
+<div class=\"form-group\">
+	<label for=\"country\">Home Nations Country</label>
+	<select class=\"custom-select\" id=\"country\" name=\"country\" placeholder=\"Select\">
+		<option value=\"GB-ENG\" " . $cat['GB-ENG'] . ">England</option>
+		<option value=\"GB-NIR\" " . $cat['GB-NIR'] . ">Northern Ireland</option>
+		<option value=\"GB-SCT\" " . $cat['GB-SCT'] . ">Scotland</option>
+		<option value=\"GB-WLS\" " . $cat['GB-WLS'] . ">Wales</option>
+	</select>
+</div>";
+
 $squads = $db->query("SELECT SquadName, SquadID FROM `squads` ORDER BY `squads`.`SquadFee` DESC");
 $content .= "
 <div class=\"form-group\">

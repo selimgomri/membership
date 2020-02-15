@@ -11,7 +11,7 @@ squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender,
 members.OtherNotes, members.AccessKey, memberPhotography.Website,
 memberPhotography.Social, memberPhotography.Noticeboard,
 memberPhotography.FilmTraining, memberPhotography.ProPhoto,
-memberMedical.Conditions, memberMedical.Allergies, memberMedical.Medication
+memberMedical.Conditions, memberMedical.Allergies, memberMedical.Medication, members.Country
 FROM ((((members INNER JOIN users ON members.UserID = users.UserID) INNER JOIN
 squads ON members.SquadID = squads.SquadID) LEFT JOIN `memberPhotography` ON
 members.MemberID = memberPhotography.MemberID) LEFT JOIN `memberMedical` ON
@@ -113,6 +113,15 @@ foreach ($swimsArray as $col => $name) {
 
 $strokeCountsData = array_values($strokeCounts);
 
+$country = 'England';
+if ($rowSwim['Country'] == 'GB-NIR') {
+  $country = 'Northern Ireland';
+} else if ($rowSwim['Country'] == 'GB-SCT') {
+  $country = 'Scotland';
+} else if ($rowSwim['Country'] == 'GB-WLS') {
+  $country = 'Wales';
+}
+
 ?>
 
 <?php include BASE_PATH . "views/header.php"; ?>
@@ -199,6 +208,10 @@ $strokeCountsData = array_values($strokeCounts);
         <div class="col-sm-6 col-md-4">
           <h3 class="h6">Sex</h3>
           <p><?=htmlspecialchars($rowSwim["Gender"])?></p>
+        </div>
+        <div class="col-sm-6 col-md-4">
+          <h3 class="h6">Country</h3>
+          <p><?=htmlspecialchars($country)?></p>
         </div>
       </div>
 

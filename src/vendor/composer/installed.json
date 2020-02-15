@@ -2391,6 +2391,57 @@
         ]
     },
     {
+        "name": "sokil/php-isocodes",
+        "version": "3.0.4",
+        "version_normalized": "3.0.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/sokil/php-isocodes.git",
+            "reference": "9260e3108ef956958f1184075682fc9e0e356ae2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/sokil/php-isocodes/zipball/9260e3108ef956958f1184075682fc9e0e356ae2",
+            "reference": "9260e3108ef956958f1184075682fc9e0e356ae2",
+            "shasum": ""
+        },
+        "require": {
+            "ext-gettext": "*",
+            "ext-json": "*",
+            "php": ">=7.1"
+        },
+        "require-dev": {
+            "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+            "php-coveralls/php-coveralls": "^2.1",
+            "phpbench/phpbench": "^0.16.9",
+            "phpmd/phpmd": "@stable",
+            "phpunit/phpunit": "^7.0",
+            "slevomat/coding-standard": "^5.0",
+            "squizlabs/php_codesniffer": "^3.4"
+        },
+        "time": "2019-11-28T06:58:13+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Sokil\\IsoCodes\\": [
+                    "src/"
+                ]
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Dmytro Sokil",
+                "email": "dmytro.sokil@gmail.com"
+            }
+        ],
+        "description": "ISO country, subdivision, language, currency and script definitions and their translations. Based on pythons pycountry."
+    },
+    {
         "name": "stripe/stripe-php",
         "version": "v6.43.1",
         "version_normalized": "6.43.1.0",
