@@ -55,7 +55,7 @@ try {
         reportError($_FILES['file-upload']['type'][$i]);
         $_SESSION['UploadError'] = true;
         throw new Exception();
-      } else if ($_FILES['file-upload']['size'][$i] > 3000000) {
+      } else if ($_FILES['file-upload']['size'][$i] > 3145728) {
         // Too large, stop
         // reportError($_FILES['file-upload']['size'][$i]);
         $_SESSION['TooLargeError'] = true;
@@ -96,7 +96,7 @@ try {
     }
   }
 
-  if ($collectiveSize > 10000000) {
+  if ($collectiveSize > 10485760) {
     // Collectively too large attachments
     $_SESSION['CollectiveSizeTooLargeError'] = true;
     throw new Exception();

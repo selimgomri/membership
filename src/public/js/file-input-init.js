@@ -1,1 +1,3 @@
-bsCustomFileInput.init();
+document.addEventListener('DOMContentLoaded', function(event) {
+  bsCustomFileInput.init();
+});
