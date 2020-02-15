@@ -115,12 +115,21 @@ if (isset($customBackground) && $customBackground) {
     </div>
     <?php } ?>
 
+    <?php
+
+    $headerLink = autoUrl("");
+    if (isset($_SESSION['UserID']) && $_SESSION['UserID'] % 2 == 0) {
+      $headerLink = env('CLUB_WEBSITE');
+    }
+
+    ?>
+
     <div class="membership-header">
       <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
       <div class="club-name-header <?php if (date("m") == "12") { ?>festive<?php } ?>">
         <div class="<?=$container_class?>">
           <h1 class="d-none d-md-flex py-3 mb-0">
-            <a href="<?=htmlspecialchars(autoUrl(""))?>" class="text-white text-decoration-none">
+            <a href="<?=htmlspecialchars($headerLink)?>" class="text-white text-decoration-none">
               <?=htmlspecialchars(mb_strtoupper(env('CLUB_NAME')))?>
             </a>
           </h1>

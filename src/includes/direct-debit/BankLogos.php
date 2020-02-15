@@ -49,6 +49,8 @@ function getBankLogo($bank) {
     $logo_path = autoUrl("public/img/directdebit/bank-logos/bankofamerica");
   } else if ($bank == "MODULR FS LTD") {
     $logo_path = autoUrl("public/img/directdebit/bank-logos/modulr");
+  } else if ($bank == "TRANSFERWISE LIMITED") {
+    $logo_path = autoUrl("public/img/directdebit/bank-logos/transferwise");
   }
 
   return $logo_path;
