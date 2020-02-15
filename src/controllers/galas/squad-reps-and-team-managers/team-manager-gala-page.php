@@ -67,6 +67,20 @@ include BASE_PATH . 'views/header.php';
         </span>
       </a>
 
+      <a href="<?=autoUrl("galas/" . $id . "/photography-permissions.pdf")?>">
+        <span class="mb-3">
+          <span class="title mb-0">
+            View photography permissions
+          </span>
+          <span>
+            Check what you can do with photos of swimmers
+          </span>
+        </span>
+        <span class="category">
+          Swimmers
+        </span>
+      </a>
+
       <!--
       <a href="<?=autoUrl("galas/" . $id . "/registers")?>">
         <span class="mb-3">
