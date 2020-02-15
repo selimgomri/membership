@@ -60,7 +60,7 @@ try {
         // reportError($_FILES['file-upload']['size'][$i]);
         $_SESSION['TooLargeError'] = true;
         throw new Exception();
-      } else {
+      } else if ($_FILES['file-upload']['size'][$i] > 0) {
         // Store uploaded files in filestore, if exists
         if (env('FILE_STORE_PATH')) {
           // Work out filename for upload
@@ -92,6 +92,11 @@ try {
           'url' => $url,
           'uploaded' => false,
         ];
+      } else {
+        // File upload error (no size)
+        reportError($_FILES);
+        $_SESSION['UploadError'] = true;
+        throw new Exception();
       }
     }
   }
