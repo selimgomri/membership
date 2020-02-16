@@ -6,8 +6,13 @@ header("Content-Disposition: inline");
 if (env('SYSTEM_COLOUR')) {
 
 ?>
+.membership-header {
+  background-color: <?=env('SYSTEM_COLOUR')?>;
+}
 .club-name-header {
   background-color: <?=env('SYSTEM_COLOUR')?>;
+}
+.logo-text-shadow {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
 }
 <?php } ?>

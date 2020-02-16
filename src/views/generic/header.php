@@ -4,6 +4,52 @@ global $db;
 
 require 'GlobalHead.php';
 
+function getContrastColor($hexColor) {
+
+  // hexColor RGB
+  $R1 = hexdec(substr($hexColor, 1, 2));
+  $G1 = hexdec(substr($hexColor, 3, 2));
+  $B1 = hexdec(substr($hexColor, 5, 2));
+
+  // Black RGB
+  $blackColor = "#000000";
+  $R2BlackColor = hexdec(substr($blackColor, 1, 2));
+  $G2BlackColor = hexdec(substr($blackColor, 3, 2));
+  $B2BlackColor = hexdec(substr($blackColor, 5, 2));
+
+   // Calc contrast ratio
+   $L1 = 0.2126 * pow($R1 / 255, 2.2) +
+         0.7152 * pow($G1 / 255, 2.2) +
+         0.0722 * pow($B1 / 255, 2.2);
+
+  $L2 = 0.2126 * pow($R2BlackColor / 255, 2.2) +
+        0.7152 * pow($G2BlackColor / 255, 2.2) +
+        0.0722 * pow($B2BlackColor / 255, 2.2);
+
+  $contrastRatio = 0;
+  if ($L1 > $L2) {
+    $contrastRatio = (int)(($L1 + 0.05) / ($L2 + 0.05));
+  } else {
+    $contrastRatio = (int)(($L2 + 0.05) / ($L1 + 0.05));
+  }
+
+  // If contrast is more than 5, return black color
+  if ($contrastRatio > 5) {
+    return true;
+  } else { 
+    // if not, return white color.
+    return false;
+  }
+}
+
+$clubLogoColour = 'text-white logo-text-shadow';
+$navTextColour = 'navbar-dark';
+
+if (env('SYSTEM_COLOUR') && getContrastColor(env('SYSTEM_COLOUR'))) {
+  $clubLogoColour = 'text-dark';
+  $navTextColour = 'navbar-light';
+}
+
 $bg = "bg-white";
 if (isset($customBackground) && $customBackground) {
   $bg = $customBackground;
@@ -128,8 +174,8 @@ if (isset($customBackground) && $customBackground) {
       <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
       <div class="club-name-header <?php if (date("m") == "12") { ?>festive<?php } ?>">
         <div class="<?=$container_class?>">
-          <h1 class="d-none d-md-flex py-3 mb-0">
-            <a href="<?=htmlspecialchars($headerLink)?>" class="text-white text-decoration-none">
+          <h1 class="d-none d-md-flex pt-3 pb-1 mb-0">
+            <a href="<?=htmlspecialchars($headerLink)?>" class="<?=$clubLogoColour?> text-decoration-none">
               <?=htmlspecialchars(mb_strtoupper(env('CLUB_NAME')))?>
             </a>
           </h1>
@@ -141,7 +187,7 @@ if (isset($customBackground) && $customBackground) {
       <div class="<?=$container_class?>">
         <div class="">
           <div class="">
-            <nav class="navbar navbar-expand-lg navbar-dark
+            <nav class="navbar navbar-expand-lg <?=$navTextColour?>
         d-print-none justify-content-between px-0" role="navigation">
 
               <a class="navbar-brand d-lg-none" href="<?=htmlspecialchars(autoUrl(""))?>">
