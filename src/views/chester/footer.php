@@ -88,9 +88,15 @@
                   </a>
                 </li>
                 <li>
-                  <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/" target="_self"
+                  <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/" target="_blank"
                     title="Chester-le-Street ASC Help and Support">
                     Help and Support
+                  </a>
+                </li>
+                <li>
+                  <a href="https://membership.git.myswimmingclub.uk/whats-new/" target="_blank"
+                    title="New membership system features">
+                    What's new?
                   </a>
                 </li>
                 <li>
