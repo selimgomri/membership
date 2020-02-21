@@ -62,6 +62,10 @@ $this->get('/{id}:int/swimmers', function($id) {
 	include 'squad-reps-and-team-managers/tm-swimmer-info.php';
 });
 
+$this->get('/{id}:int/photography-permissions.pdf', function($id) {
+	include 'export/PhotoPermissions.php';
+});
+
 $this->get('/{id}:int/register', function($id) {
 	include 'attendance/PaperRegister.php';
 });

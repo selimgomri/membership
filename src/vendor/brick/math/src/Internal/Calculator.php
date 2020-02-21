@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Brick\Math\Internal;
 
-use Brick\Math\RoundingMode;
 use Brick\Math\Exception\RoundingNecessaryException;
+use Brick\Math\RoundingMode;
 
 /**
  * Performs basic operations on arbitrary size integers.
@@ -17,6 +17,8 @@ use Brick\Math\Exception\RoundingNecessaryException;
  * All methods must return strings respecting this format, unless specified otherwise.
  *
  * @internal
+ *
+ * @psalm-immutable
  */
 abstract class Calculator
 {
@@ -57,10 +59,13 @@ abstract class Calculator
      * If none has been explicitly set, the fastest available implementation will be returned.
      *
      * @return Calculator
+     *
+     * @psalm-pure
      */
     final public static function get() : Calculator
     {
         if (self::$instance === null) {
+            /** @psalm-suppress ImpureMethodCall */
             self::$instance = self::detect();
         }
 
@@ -90,12 +95,16 @@ abstract class Calculator
     /**
      * Extracts the digits and sign of the operands.
      *
-     * @param string $a    The first operand.
-     * @param string $b    The second operand.
-     * @param string $aDig A variable to store the digits of the first operand.
-     * @param string $bDig A variable to store the digits of the second operand.
-     * @param bool   $aNeg A variable to store whether the first operand is negative.
-     * @param bool   $bNeg A variable to store whether the second operand is negative.
+     * @param string     $a    The first operand.
+     * @param string     $b    The second operand.
+     * @param null       $aDig A variable to store the digits of the first operand.
+     * @param-out string $aDig
+     * @param null       $bDig A variable to store the digits of the second operand.
+     * @param-out string $bDig
+     * @param null       $aNeg A variable to store whether the first operand is negative.
+     * @param-out bool   $aNeg
+     * @param null       $bNeg A variable to store whether the second operand is negative.
+     * @param-out bool   $bNeg
      *
      * @return void
      */

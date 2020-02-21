@@ -112,13 +112,13 @@ include BASE_PATH . "views/notifyMenu.php";
 
   <?php if (isset($_SESSION['CollectiveSizeTooLargeError']) && $_SESSION['CollectiveSizeTooLargeError']) { ?>
   <div class="alert alert-danger">
-    <p class="mb-0"><strong>The files you uploaded were collectively too large</strong>. Attachments may not exceed a total of 10000000 bytes in size.</p>
+    <p class="mb-0"><strong>The files you uploaded were collectively too large</strong>. Attachments may not exceed a total of 10 megabytes in size.</p>
   </div>
   <?php
     unset($_SESSION['CollectiveSizeTooLargeError']);
   } ?>
   
-  <form method="post" onkeypress="return event.keyCode != 13;" enctype="multipart/form-data">
+  <form method="post" id="notify-form" onkeypress="return event.keyCode != 13;" enctype="multipart/form-data" novalidate>
 
     <div class="form-group">
 			<label>To members in the following targeted lists...</label>
@@ -184,12 +184,15 @@ include BASE_PATH . "views/notifyMenu.php";
         <div class="form-group">
           <label for="from">Send message as</label>
           <div class="custom-control custom-radio">
-            <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>checked<?php } ?>>
+            <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>checked<?php } ?> required>
             <label class="custom-control-label" for="from-club"><?=htmlspecialchars(env('CLUB_NAME'))?></label>
           </div>
           <div class="custom-control custom-radio">
             <input type="radio" id="from-user" name="from" class="custom-control-input" value="current-user" <?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>checked<?php } ?>>
             <label class="custom-control-label" for="from-user"><?=htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'])?></label>
+          </div>
+          <div class="invalid-feedback">
+            Choose a send-as option
           </div>
         </div>
       </div>
@@ -198,7 +201,7 @@ include BASE_PATH . "views/notifyMenu.php";
         <div class="form-group">
           <label for="ReplyToMe">Send replies to</label>
           <div class="custom-control custom-radio">
-            <input type="radio" id="ReplyTo-Club" name="ReplyToMe" class="custom-control-input" value="0" checked>
+            <input type="radio" id="ReplyTo-Club" name="ReplyToMe" class="custom-control-input" value="0" checked required>
             <label class="custom-control-label" for="ReplyTo-Club">Main club address</label>
           </div>
           <div class="custom-control custom-radio">
@@ -208,6 +211,9 @@ include BASE_PATH . "views/notifyMenu.php";
           <small class="form-text text-muted">
             <a href="<?=htmlspecialchars(autoUrl("notify/reply-to"))?>" target="_blank">Manage reply-to address</a>
           </small>
+          <div class="invalid-feedback">
+            Choose a reply-to address
+          </div>
         </div>
       </div>
 		</div>
@@ -216,6 +222,9 @@ include BASE_PATH . "views/notifyMenu.php";
 			<label for="subject">Message Subject</label>
 			<input type="text" class="form-control" name="subject" id="subject"
       placeholder="Message Subject" autocomplete="off" required <?=fieldValue('subject')?>>
+      <div class="invalid-feedback">
+        Please include a message subject
+      </div>
 		</div>
 
 		<div class="form-group">
@@ -226,16 +235,19 @@ include BASE_PATH . "views/notifyMenu.php";
           <span class="mono">User Name</span>,".
         </em>
       </p>
-			<textarea class="form-control" id="message" name="message" rows="10" data-tinymce-css-location="<?=htmlspecialchars(autoUrl("public/css/tinymce.css"))?>"><?php if (isset($_SESSION['NotifyPostData']['message'])) {?><?=htmlspecialchars($_SESSION['NotifyPostData']['message'])?><?php } ?></textarea>
+			<textarea class="form-control" id="message" name="message" rows="10" data-tinymce-css-location="<?=htmlspecialchars(autoUrl("public/css/tinymce.css"))?>" required><?php if (isset($_SESSION['NotifyPostData']['message'])) {?><?=htmlspecialchars($_SESSION['NotifyPostData']['message'])?><?php } ?></textarea>
 		</div>
 
-    <input type="hidden" name="MAX_FILE_SIZE" value="3000000">
+    <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
 
     <div class="form-group">
       <label>Select files to attach</label>
       <div class="custom-file">
-        <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" multiple>
+        <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="file-upload-invalid-feedback">
         <label class="custom-file-label text-truncate" for="file-upload">Choose file(s)</label>
+        <div class="invalid-feedback" id="file-upload-invalid-feedback">
+          Oh no!
+        </div>
       </div>
     </div>
 
@@ -264,7 +276,6 @@ include BASE_PATH . "views/notifyMenu.php";
 </div>
 
 <script src="<?=htmlspecialchars(autoUrl("public/js/notify/TinyMCE.js"))?>"></script>
-<script src="<?=htmlspecialchars(autoUrl("public/js/bs-custom-file-input.min.js"))?>"></script>
-<script src="<?=htmlspecialchars(autoUrl("public/js/file-input-init.js"))?>"></script>
+<script src="<?=htmlspecialchars(autoUrl("public/js/notify/FileUpload.js"))?>"></script>
 
 <?php include BASE_PATH . "views/footer.php";

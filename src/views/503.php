@@ -20,7 +20,10 @@ if ($currentUser == null) {
 			<p>Please try again later</p>
 			<p>HTTP Error 503 - Service Unavailable.</p>
 			<hr>
-			<p class="mt-2">Contact our <a href="mailto:support@chesterlestreetasc.co.uk" title="Support Hotline">support address</a> if the issue persists.</p>
+			<p class="mt-2">Contact our <a href="mailto:support@myswimmingclub.uk" title="Support Hotline">support hotline</a><?php if (!bool(env('IS_CLS'))) { ?>*<?php } ?> if the issue persists.</p>
+
+      <?php if (!bool(env('IS_CLS'))) { ?>
+      <p>* <a href="mailto:<?=htmlspecialchars(env('CLUB_EMAIL'))?>" title="<?=htmlspecialchars(env('CLUB_NAME'))?>">Contact your own club</a> in the first instance</p>
 		</div>
 	</div>
 </div>

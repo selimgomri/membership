@@ -42,10 +42,6 @@ $this->group('/users', function() {
   $this->get('/list.js', function() {
     include BASE_PATH . 'controllers/users/list.js';
   });
-
-  $this->get('/type-switch.js', function() {
-    include BASE_PATH . 'controllers/users/type-switch.js';
-  });
 });
 
 $this->group('/attendance', function() {

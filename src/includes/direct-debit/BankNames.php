@@ -52,6 +52,8 @@ function getBankName($bank) {
     return 'RBS International';
   } else if ($bank == "MODULR FS LTD") {
     return 'Modulr';
+  } else if ($bank == "TRANSFERWISE LIMITED") {
+    return 'TransferWise';
   }
 
   return $bank;

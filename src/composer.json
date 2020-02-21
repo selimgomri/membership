@@ -29,6 +29,7 @@
         "brick/money": "^0.4.2",
         "brick/math": "^0.8.8",
         "guzzlehttp/guzzle": "^6.5",
-        "umpirsky/country-list": "^2.0"
+        "umpirsky/country-list": "^2.0",
+        "sokil/php-isocodes": "^3.0"
     }
 }

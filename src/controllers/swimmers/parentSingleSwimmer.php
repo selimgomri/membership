@@ -7,7 +7,7 @@ squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC,
 members.DateOfBirth, members.Gender, members.OtherNotes, members.AccessKey,
 memberPhotography.Website, memberPhotography.Social,
 memberPhotography.Noticeboard, memberPhotography.FilmTraining,
-memberPhotography.ProPhoto FROM (((members INNER JOIN users ON members.UserID =
+memberPhotography.ProPhoto, members.Country FROM (((members INNER JOIN users ON members.UserID =
 users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN
 `memberPhotography` ON members.MemberID = memberPhotography.MemberID) WHERE
 members.MemberID = ? AND members.UserID = ?");
@@ -46,6 +46,7 @@ $title = null;
         Edit Mode</a>
       </div>
     </div>
+
     <?php
     if ($update) { ?>
     <div class="alert alert-success">
@@ -64,6 +65,26 @@ $title = null;
     <!-- Main Info Content -->
     <div class="row">
       <div class="col-md-8">
+
+        <?php if (isset($_SESSION['SwimmerSaved']) && $_SESSION['SwimmerSaved']) { ?>
+        <div class="alert alert-success">
+          <p class="mb-0">
+            <strong>We have saved your changes</strong>
+          </p>
+        </div>
+        <?php unset($_SESSION['SwimmerSaved']); } ?>
+
+        <?php if (isset($_SESSION['SwimmerNotSaved']) && $_SESSION['SwimmerNotSaved']) { ?>
+        <div class="alert alert-danger">
+          <p class="mb-0">
+            <strong>We could not save your changes</strong>
+          </p>
+          <p class="mb-0">
+            Please check and try again
+          </p>
+        </div>
+        <?php unset($_SESSION['SwimmerNotSaved']); } ?>
+
         <div class="form-row">
           <div class="col-sm-4">
             <div class="form-group">
@@ -94,6 +115,21 @@ $title = null;
           <label for="asaregnumber">Swim England Registration Number</label>
           <input type="test" class="form-control" id="asaregnumber" name="asaregnumber" placeholder="Swim England Registration Numer" value="<?=htmlspecialchars($row['ASANumber'])?>" readonly>
         </div>
+
+        <?php
+        $cat = ['GB-ENG' => '', 'GB-NIR' => '', 'GB-SCT' => '', 'GB-WLS' => ''];
+        $cat[$row['Country']] = " selected ";
+        ?>
+        <div class="form-group">
+          <label for="country">Home Nations Country</label>
+          <select class="custom-select" id="country" name="country" placeholder="Select">
+            <option value="GB-ENG" <?=$cat['GB-ENG']?>>England</option>
+            <option value="GB-NIR" <?=$cat['GB-NIR']?>>Northern Ireland</option>
+            <option value="GB-SCT" <?=$cat['GB-SCT']?>>Scotland</option>
+            <option value="GB-WLS" <?=$cat['GB-WLS']?>>Wales</option>
+          </select>
+        </div>
+
         <?php if ($row['Gender'] == "Male") { ?>
           <div class="form-group">
             <label for="sex">Sex</label>

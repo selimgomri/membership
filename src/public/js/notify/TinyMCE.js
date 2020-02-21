@@ -2,9 +2,9 @@ tinymce.init({
   selector: '#message',
   branding: false,
   plugins: [
-    'autolink lists link image charmap print preview anchor textcolor',
+    'autolink lists link image charmap print preview anchor',
     'searchreplace visualblocks code autoresize insertdatetime media table',
-    'contextmenu paste code help wordcount'
+    'paste code help wordcount'
   ],
   paste_as_text: true,
   toolbar: 'insert | undo redo |  formatselect | bold italic | bullist numlist outdent indent | removeformat | help',
@@ -40,7 +40,6 @@ tinymce.init({
     ]}
   ],  
   menu: {
-    file: { title: 'File', items: 'newdocument restoredraft | preview | print ' },
     edit: { title: 'Edit', items: 'undo redo | cut copy paste | selectall | searchreplace' },
     view: { title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen' },
     insert: { title: 'Insert', items: 'image link template codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor toc | insertdatetime' },

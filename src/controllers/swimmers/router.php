@@ -177,6 +177,12 @@ if ($access == "Admin") {
 
 	  require('singleSwimmerEdit.php');
 	});
+
+	$this->group('/reports', function() {
+		$this->get('/upgradeable', function() {
+			include "reports/UpgradeableMembers.php";
+		});
+	});
 }
 
 /**

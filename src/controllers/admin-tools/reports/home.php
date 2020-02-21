@@ -25,6 +25,8 @@ include BASE_PATH . 'views/header.php';
       <h2>Membership reports</h2>
       <ul>
         <li><a download href="<?=htmlspecialchars(autoUrl("admin/reports/membership-data-export.csv"))?>">Membership report (CSV download)</a></li>
+        <li><a download href="<?=htmlspecialchars(autoUrl("admin/reports/photography-permissions-export.csv"))?>">Photography permissions (CSV download)</a></li>
+        <li><a href="<?=htmlspecialchars(autoUrl("members/reports/upgradeable"))?>">Upgradeable to Category 2</a></li>
       </ul>
 
       <h2>Finance reports</h2>

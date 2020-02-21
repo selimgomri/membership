@@ -126,7 +126,9 @@ include "galaMenu.php";
             <?php if ($numEntries > 0 && false) { ?>
             <a class="dropdown-item" href="<?=autoUrl("galas/" . $id . "/timesheet")?>">Timesheet</a>
             <?php } ?>
-            <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("galas/" . $id . "/team-manager-view.pdf"))?>">Entry report</a>
+            <?php if ($numEntries > 0) { ?>
+            <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("galas/" . $id . "/photography-permissions.pdf"))?>">Photography permissions</a>
+            <?php } ?>
           </div>
         </div>
       </p>
