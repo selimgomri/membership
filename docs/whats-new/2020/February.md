@@ -52,6 +52,8 @@ We now create a payment item if a payment is created via the GoCardless UI allow
 
 We've upgraded the notify composer from TinyMCE 4 to TinyMCE 5. This delivers user experience improvements for our notify users.
 
+**This change was reverted on Friday 21 February following user complaints of slow load times for the TinyMCE textarea. We have also compiled all TinyMCE plugins into a single JS file to dramatically reduce the time taken for HTTP requests.**
+
 ## Improved colour styling for customer clubs
 
 We've improved the header at the top of each page so a club's custom colour is also applied to the menu at the top of each page. We've also added code to dynamically adjust the text contrast on these coloured backgrounds.
