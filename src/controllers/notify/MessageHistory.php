@@ -132,7 +132,7 @@ include BASE_PATH . "views/notifyMenu.php";?>
               sort($array);
               foreach ($array as $s) { ?>
                 <span class="badge badge-pill rounded badge-dark">
-                  <?=htmlspecialchars($s)?>
+                  <?=htmlspecialchars(mb_strimwidth($s, 0, 40))?>
                 </span><?php
               } ?>
             </dd>
