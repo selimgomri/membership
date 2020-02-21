@@ -4,7 +4,7 @@ tinymce.init({
   plugins: [
     'autolink lists link image charmap print preview anchor',
     'searchreplace visualblocks code autoresize insertdatetime media table',
-    'paste code help wordcount'
+    'paste help wordcount'
   ],
   paste_as_text: true,
   toolbar: 'insert | undo redo |  formatselect | bold italic | bullist numlist outdent indent | removeformat | help',
