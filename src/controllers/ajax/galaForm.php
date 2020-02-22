@@ -359,9 +359,8 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 			<?php } ?>
 			</dl>
 
-			<p>Make sure your happy with these events and fees before you enter this gala.</p>
+			<p>Make sure you're happy with these events and fees before you enter this gala.</p>
 		</div>
-
 
 		<h2>Select available sessions</h2>
 		<p class="lead">Select sessions which <?=htmlspecialchars($swimmer['fn'])?> will be able to swim at.</p>
