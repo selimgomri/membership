@@ -35,7 +35,7 @@ include BASE_PATH . "views/squadMenu.php";
     <div class="col">
     	<h1>Squad Moves</h1>
     	<p class="lead">Upcoming Squad Moves (Sorted by Date)</p>
-    	<p>To make a new squad move, <a href="<?=autoUrl("swimmers")?>">select a swimmer</a>.</p>
+    	<p>To make a new squad move, <a href="<?=autoUrl("members")?>">select a member</a>.</p>
     	<!-- LIST -->
     	<?php if ($move != null) { ?>
         <div class="card">
