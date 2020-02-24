@@ -6,6 +6,8 @@ $getMove = $db->prepare("SELECT members.MemberID, `MForename`, `MSurname`, `Squa
 $getMove->execute([$id]);
 $move = $getMove->fetch(PDO::FETCH_ASSOC);
 
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
+
 if ($move == null) {
 	halt(404);
 }
@@ -72,7 +74,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
 			<div class="form-group row">
 		    <label for="movingDate" class="col-sm-2 col-form-label">Moving Date</label>
 		    <div class="col-sm-10">
-		      <input type="date" class="form-control" id="movingDate" name="movingDate" value="<?=htmlspecialchars($movingDate)?>">
+		      <input type="date" class="form-control" id="movingDate" name="movingDate" min="<?=htmlspecialchars($date->format("Y-m-d"))?>" value="<?=htmlspecialchars($movingDate)?>">
 		    </div>
 		  </div>
 			<button type="submit" class="btn btn-dark">Save Move</button> <a class="btn btn-danger" href="<?=autoUrl("swimmers/" . $id . "/cancel-move")?>">Cancel Move</a>

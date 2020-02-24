@@ -27,9 +27,19 @@ if ($movingDate == "" || !v::date()->validate($movingDate)) {
 	$errorMessage .= "<li>A moving date was not supplied or was malformed</li>";
 }
 
-if (strtotime($movingDate) < strtotime('+9 days')) {
+$moveDate = null;
+try {
+	$moveDate = new DateTime($movingDate, new DateTimeZone('Europe/London'));
+	$now = new DateTime('now', new DateTimeZone('Europe/London'));
+	$now->setTime(0, 0, 0);
+
+	if ($moveDate < $now) {
+		$errorState = true;
+		$errorMessage .= "<li>Squad moves must be now or in the future</li>";
+	}
+} catch (Exception $e) {
 	$errorState = true;
-	$errorMessage .= "<li>10 days notice must be given before a squad move</li>";
+	$errorMessage .= "<li>Date formatting error</li>";
 }
 
 if (!$errorState) {
@@ -61,9 +71,9 @@ if (!$errorState) {
 				$squad_fee = number_format($email_info['SquadFee'], 2, '.', ',');
 
 				$subject = $swimmer . " is moving to " . $squad . " Squad";
-				$message = '<p>We\'re very excited to let you know that ' . $swimmer . ' will be moving to ' . $squad . ' Squad on ' . date("l j F Y", strtotime($movingDate)) . '.</p>';
+				$message = '<p>We\'re very excited to let you know that ' . $swimmer . ' will be moving to ' . $squad . ' Squad on ' . htmlspecialchars($moveDate->format("l j F Y")) . '.</p>';
 				$message .= '<p>The Squad Fee you will pay will be &pound;' . $squad_fee . '*.</p>';
-				$message .= '<p>As you pay by Direct Debit, you won\'t need to take any action. We\'ll automatically update your monthly fees.</p>';
+				$message .= '<p>If you pay by Direct Debit, you won\'t need to take any action. We\'ll automatically update your monthly fees.</p>';
 				if ($email_info['SquadTimetable'] != "" && $email_info['SquadTimetable'] != null) {
 					$message .= '<p>You can get the <a href="' . $email_info['SquadTimetable'] . '" target="_blank">timetable for ' . $squad . ' Squad on our website</a>.</p>';
 				}
@@ -90,31 +100,27 @@ if (!$errorState) {
 						1,
 						'SquadMove'
 					]);
-				} catch (Exception $e) {
-					halt(500);
-				}
 
-				$getParentName->execute([$parent]);
-				$name = $getParentName->fetch(PDO::FETCH_ASSOC);
+					$getParentName->execute([$parent]);
+					$name = $getParentName->fetch(PDO::FETCH_ASSOC);
 
-				$mailObject = new \CLSASC\SuperMailer\CreateMail();
-				$mailObject->setHtmlContent($message);
-				$mailObject->showName($name['Forename'] . ' ' . $name['Surname']);
+					$mailObject = new \CLSASC\SuperMailer\CreateMail();
+					$mailObject->setHtmlContent($message);
+					$mailObject->showName($name['Forename'] . ' ' . $name['Surname']);
 
-				$email = new \SendGrid\Mail\Mail();
-				$email->setFrom("noreply@" . env('EMAIL_DOMAIN'), env('CLUB_NAME'));
-				$email->setFrom("noreply@" . env('EMAIL_DOMAIN'), env('CLUB_NAME'));
-				if (env('CLUB_EMAIL')) {
-					$email->setReplyTo(env('CLUB_EMAIL'), env('CLUB_NAME') . ' Team');
-				}
-				$email->setSubject($subject);
-				$email->addTo($name['EmailAddress'], $name['Forename'] . ' ' . $name['Surname']);
-				$email->addContent("text/plain", $mailObject->getFormattedPlain());
-				$email->addContent(
-					"text/html", $mailObject->getFormattedHtml()
-				);
+					$email = new \SendGrid\Mail\Mail();
+					$email->setFrom("noreply@" . env('EMAIL_DOMAIN'), env('CLUB_NAME'));
+					$email->setFrom("noreply@" . env('EMAIL_DOMAIN'), env('CLUB_NAME'));
+					if (env('CLUB_EMAIL')) {
+						$email->setReplyTo(env('CLUB_EMAIL'), env('CLUB_NAME') . ' Team');
+					}
+					$email->setSubject($subject);
+					$email->addTo($name['EmailAddress'], $name['Forename'] . ' ' . $name['Surname']);
+					$email->addContent("text/plain", $mailObject->getFormattedPlain());
+					$email->addContent(
+						"text/html", $mailObject->getFormattedHtml()
+					);
 
-				if (bool(env('IS_CLS'))) {
 					$attachment = true;
 					include BASE_PATH . 'controllers/squads/SquadMoveContract.php';
 					$file_encoded = base64_encode($pdfOutput);
@@ -124,12 +130,17 @@ if (!$errorState) {
 						"SquadMoveContract.pdf",
 						"attachment"
 					);
-				}
 
-				$sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
-				try {
+					$sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
 					$sendgrid->send($email);
+
 				} catch (Exception $e) {
+					// Set error message
+					$errorState = true;
+					$errorMessage .= "<li>Unable to send an email to the user</li>";
+
+					// Propagate the exception
+					throw new Exception();
 				}
 
 			}
