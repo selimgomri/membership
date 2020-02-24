@@ -43,7 +43,9 @@ include BASE_PATH . "views/squadMenu.php";
             All moves
           </div>
           <ul class="list-group list-group-flush">
-    					<?php do { ?>
+    					<?php do { 
+                $moveDate = new DateTime($move['MovingDate'], new DateTimeZone('Europe/London')); 
+              ?>
     					<li class="list-group-item list-group-item-action">
                 <div class="form-row align-items-center">
                   <div class="col">
@@ -60,8 +62,7 @@ include BASE_PATH . "views/squadMenu.php";
                       aria-hidden="true"></i><span class="sr-only">to</span> <a
                       href="<?=autoUrl("squads/" .
                       $move['SquadID'])?>"><?=htmlspecialchars($move['NewSquad'])?>
-                      Squad</a> on <?=date('j F Y',
-                      strtotime($move['MovingDate']))?>
+                      Squad</a> on <?=htmlspecialchars($moveDate->format("j F Y"))?>
                     </p>
                     <div class="d-lg-none mb-3"></div>
                   </div>
