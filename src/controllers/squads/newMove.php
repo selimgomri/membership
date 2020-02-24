@@ -5,6 +5,8 @@ global $db;
 $moveCount = $db->prepare("SELECT COUNT(*) FROM `moves` WHERE `MemberID` = ?");
 $moveCount->execute([$id]);
 
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
+
 $name = $currentSquad = "";
 
 $getSquads = null;
@@ -31,7 +33,7 @@ if ($moveCount->fetchColumn() > 0) {
   $squad = $getSquads->fetch(PDO::FETCH_ASSOC);
 }
 
-$pagetitle = "Squad Move for " . $name;
+$pagetitle = "Squad Move for " . htmlspecialchars($name);
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php"; ?>
 <div class="container">
@@ -75,10 +77,9 @@ include BASE_PATH . "views/squadMenu.php"; ?>
 			<div class="form-group row">
 		    <label for="movingDate" class="col-sm-2 col-form-label">Moving Date</label>
 		    <div class="col-sm-10">
-		      <input type="date" class="form-control" id="movingDate" name="movingDate" min="<?=date("Y-m-d", strtotime("+10 days"))?>" value="<?=date("Y-m-d", strtotime("+10 days"))?>" aria-describedby="dateHelper">
+		      <input type="date" class="form-control" id="movingDate" name="movingDate" min="<?=htmlspecialchars($date->format("Y-m-d"))?>" value="<?=htmlspecialchars($date->format("Y-m-d"))?>" aria-describedby="dateHelper">
           <small id="dateHelper" class="form-text text-muted">
-            The date must be at least 10 days from now so that the parent has
-            enough warning that their squad fees have changed.
+            Pick a date that is either now or in the future.
           </small>
 		    </div>
 		  </div>
