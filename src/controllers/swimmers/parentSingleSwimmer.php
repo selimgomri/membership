@@ -124,7 +124,7 @@ $title = null;
           <select class="custom-select" id="country" name="country" placeholder="Select">
             <?php foreach ($countries as $key => $value) {
               $selected = '';
-              if ($rowSwim['Country'] == $key) {
+              if ($row['Country'] == $key) {
                 $selected = ' selected ';
               } ?>
             <option value="<?=htmlspecialchars($key)?>" <?=$selected?>><?=htmlspecialchars($value)?></option>
