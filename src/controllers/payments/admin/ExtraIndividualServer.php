@@ -51,24 +51,21 @@ if ($_POST['response'] == "getSwimmers") {
 } else if ($_POST['response'] == "squadSelect") {
 
   if ($_POST['squadSelect'] == 'Choose...') {
-    ?>
-    <option selected>
-      Please select a squad
-    </option>
-    <?php
+    echo json_encode([
+      'state' => false,
+      'swimmerSelectContent' => '<option value="null" selected>Please select a squad</option>'
+    ]);
   } else {
     $getSwimmers = $db->prepare("SELECT MemberID, MForename, MSurname FROM `members` WHERE SquadID = ? ORDER BY `MForename` ASC, `MSurname` ASC");
     $getSwimmers->execute([$_POST['squadSelect']]);
-  ?>
-  <option selected>
-    Select a swimmer
-  </option>
-  <?php
-  while ($row = $getSwimmers->fetch(PDO::FETCH_ASSOC)) { ?>
-    <option value="<?=htmlspecialchars($row['MemberID'])?>">
-      <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
-    </option>
-  <?php }
+    $output = '<option value="null" selected>Select a swimmer</option>';
+    while ($row = $getSwimmers->fetch(PDO::FETCH_ASSOC)) {
+      $output .= '<option value="' . htmlspecialchars($row['MemberID']) . '">' . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . '</option>';
+    }
+    echo json_encode([
+      'state' => true,
+      'swimmerSelectContent' => $output
+    ]);
   }
 } else if ($_POST['response'] == "insert") {
 

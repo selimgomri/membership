@@ -34,7 +34,7 @@ include BASE_PATH . "views/paymentsMenu.php";
   </nav>
 
   <div class="row align-items-center mb-3">
-    <div class="col-md-6">
+    <div class="col-md-8">
 	    <h1><?=htmlspecialchars($row['ExtraName'])?> <small>&pound;<?=htmlspecialchars(number_format($row['ExtraFee'], 2))?>/month (<?php if ($row['Type'] == 'Payment') { ?>payment<?php } else { ?>credit/refund<?php } ?>)</small></h1>
     </div>
     <div class="col text-sm-right">
@@ -52,7 +52,7 @@ include BASE_PATH . "views/paymentsMenu.php";
         </div>
         <form class="card-body">
           <div class="form-group">
-            <label for="squadSelect">Select Squad</label>
+            <label for="squadSelect">Select squad</label>
             <select class="custom-select" id="squadSelect" name="squadSelect">
               <option selected>Choose...</option>
               <?php while ($squadsRow = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
@@ -63,13 +63,13 @@ include BASE_PATH . "views/paymentsMenu.php";
             </select>
           </div>
           <div class="form-group">
-            <label for="swimmerSelect">Select Swimmer</label>
-            <select class="custom-select" id="swimmerSelect" name="swimmerSelect">
-              <option selected>Select squad first</option>
+            <label for="swimmerSelect">Select member</label>
+            <select disabled class="custom-select" id="swimmerSelect" name="swimmerSelect">
+              <option selected>Please select a squad</option>
             </select>
           </div>
-            <button type="button" class="btn btn-success" id="addSwimmer" data-ajax-url="<?=htmlspecialchars(autoUrl("payments/extrafees/ajax/" . $id))?>">
-              Add Swimmer to Extra
+            <button disabled type="button" class="btn btn-success" id="addSwimmer" data-ajax-url="<?=htmlspecialchars(autoUrl("payments/extrafees/ajax/" . $id))?>">
+              Add member to extra
             </button>
             <div id="status">
             </div>

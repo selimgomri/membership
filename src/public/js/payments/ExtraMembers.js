@@ -3,31 +3,45 @@ function getSwimmers() {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      console.log("We got here");
       document.getElementById("output").innerHTML = this.responseText;
-      console.log(this.responseText);
     }
   }
   xhttp.open("POST", document.getElementById('addSwimmer').dataset.ajaxUrl, true);
   xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhttp.send("response=getSwimmers");
-  console.log("Sent");
 }
 
 function getSwimmersForSquad() {
-var squad = (document.getElementById("squadSelect")).value;
+  var squad = (document.getElementById("squadSelect")).value;
+  var button = document.getElementById('addSwimmer');
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
+    var swimmerSelect = document.getElementById('swimmerSelect');
     if (this.readyState == 4 && this.status == 200) {
-      console.log("We got here");
-      document.getElementById("swimmerSelect").innerHTML = this.responseText;
-      console.log(this.responseText);
+      var response = JSON.parse(this.responseText);
+      if (response.state) {
+        swimmerSelect.disabled = false;
+      } else {
+        swimmerSelect.disabled = true;
+        button.disabled = true;
+      }
+      swimmerSelect.innerHTML = response.swimmerSelectContent;
+    } else if (this.readyState == 4) {
+      swimmerSelect.disabled = true;
+      button.disabled = true;
     }
   }
-  xhttp.open("POST", document.getElementById('addSwimmer').dataset.ajaxUrl, true);
-  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.open("POST", button.dataset.ajaxUrl, true);
+  xhttp.setRequestHeader("content-type", "application/x-www-form-urlencoded");
   xhttp.send("response=squadSelect&squadSelect=" + squad);
-  console.log("Sent");
+}
+
+function swimmerSelectChange(event) {
+  if (document.getElementById('swimmerSelect').value != 'null') {
+    document.getElementById('addSwimmer').disabled = false;
+  } else {
+    document.getElementById('addSwimmer').disabled = true;
+  }
 }
 
 function addSwimmerToExtra() {
@@ -49,6 +63,8 @@ function addSwimmerToExtra() {
       '</button>' +
       '</div>';
       document.getElementById('status-alert-box').classList.add(response.alertClass);
+      document.getElementById('swimmerSelect').value = 'null';
+      swimmerSelectChange();
     } else if (this.readyState == 4) {
       button.disabled = false;
       status.innerHTML =
@@ -63,8 +79,6 @@ function addSwimmerToExtra() {
   xhttp.open('POST', ajaxUrl, true);
   xhttp.setRequestHeader("content-type", "application/x-www-form-urlencoded");
   xhttp.send("response=insert&swimmerInsert=" + swimmer);
-  console.log("response=insert&swimmerInsert=" + swimmer);
-  console.log("Sent");
 }
 
 function dropSwimmerFromExtra(relation) {
@@ -98,3 +112,4 @@ function clickPropogation(e) {
 getSwimmers();
 document.getElementById("squadSelect").onchange=getSwimmersForSquad;
 document.getElementById("addSwimmer").onclick=addSwimmerToExtra;
+document.getElementById('swimmerSelect').addEventListener('change', swimmerSelectChange);
