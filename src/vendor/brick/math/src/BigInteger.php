@@ -462,8 +462,6 @@ final class BigInteger extends BigNumber
      *
      * This operation only works on positive numbers.
      *
-     * Algorithm from: https://www.geeksforgeeks.org/modular-exponentiation-power-in-modular-arithmetic/
-     *
      * @param BigNumber|int|float|string $exp The positive exponent.
      * @param BigNumber|int|float|string $mod The modulo. Must not be zero.
      *
@@ -648,6 +646,88 @@ final class BigInteger extends BigNumber
         }
 
         return $this->dividedBy($operand, RoundingMode::UP);
+    }
+
+    /**
+     * Returns the number of bits in the minimal two's-complement representation of this BigInteger, excluding a sign bit.
+     *
+     * For positive BigIntegers, this is equivalent to the number of bits in the ordinary binary representation.
+     * Computes (ceil(log2(this < 0 ? -this : this+1))).
+     *
+     * @return int
+     */
+    public function getBitLength() : int
+    {
+        if ($this->value === '0') {
+            return 0;
+        }
+
+        if ($this->isNegative()) {
+            return $this->abs()->minus(1)->getBitLength();
+        }
+
+        return strlen($this->toBase(2));
+    }
+
+    /**
+     * Returns the index of the rightmost (lowest-order) one bit in this BigInteger.
+     *
+     * Returns -1 if this BigInteger contains no one bits.
+     *
+     * @return int
+     */
+    public function getLowestSetBit() : int
+    {
+        $n = $this;
+        $bitLength = $this->getBitLength();
+
+        for ($i = 0; $i <= $bitLength; $i++) {
+            if ($n->isOdd()) {
+                return $i;
+            }
+
+            $n = $n->shiftedRight(1);
+        }
+
+        return -1;
+    }
+
+    /**
+     * Returns whether this number is even.
+     *
+     * @return bool
+     */
+    public function isEven() : bool
+    {
+        return in_array($this->value[-1], ['0', '2', '4', '6', '8'], true);
+    }
+
+    /**
+     * Returns whether this number is odd.
+     *
+     * @return bool
+     */
+    public function isOdd() : bool
+    {
+        return in_array($this->value[-1], ['1', '3', '5', '7', '9'], true);
+    }
+
+    /**
+     * Returns true if and only if the designated bit is set.
+     *
+     * Computes ((this & (1<<n)) != 0).
+     *
+     * @param int $n The bit to test, 0-based.
+     *
+     * @return bool
+     */
+    public function testBit(int $n) : bool
+    {
+        if ($n < 0) {
+            throw new \InvalidArgumentException('The bit to test cannot be negative.');
+        }
+
+        return $this->shiftedRight($n)->isOdd();
     }
 
     /**

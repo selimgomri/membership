@@ -241,7 +241,6 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'SendGrid\\' => 
         array (
             0 => __DIR__ . '/..' . '/sendgrid/php-http-client/lib',
-            1 => __DIR__ . '/..' . '/sendgrid/sendgrid/lib',
         ),
         'Respect\\Validation\\' => 
         array (
