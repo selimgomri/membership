@@ -56,8 +56,8 @@ if ($_POST['response'] == "getSwimmers") {
       'swimmerSelectContent' => '<option value="null" selected>Please select a squad</option>'
     ]);
   } else {
-    $getSwimmers = $db->prepare("SELECT MemberID, MForename, MSurname FROM `members` WHERE SquadID = ? ORDER BY `MForename` ASC, `MSurname` ASC");
-    $getSwimmers->execute([$_POST['squadSelect']]);
+    $getSwimmers = $db->prepare("SELECT members.MemberID, MForename, MSurname FROM `members` WHERE SquadID = ? AND MemberID NOT IN (SELECT MemberID FROM extrasRelations WHERE ExtraID = ?) ORDER BY `MForename` ASC, `MSurname` ASC ");
+    $getSwimmers->execute([$_POST['squadSelect'], $id]);
     $output = '<option value="null" selected>Select a swimmer</option>';
     while ($row = $getSwimmers->fetch(PDO::FETCH_ASSOC)) {
       $output .= '<option value="' . htmlspecialchars($row['MemberID']) . '">' . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . '</option>';
