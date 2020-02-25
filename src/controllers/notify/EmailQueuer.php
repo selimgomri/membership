@@ -366,17 +366,6 @@ try {
     "Force" => $force
   ];
 
-  $emailPrefix = '';
-  if (!bool(env('IS_CLS'))) {
-    $emailPrefix = mb_strtolower(trim(env('ASA_CLUB_CODE'))) . '-';
-  }
-
-  $club_address = "";
-  $club = json_decode(CLUB_JSON);
-  for ($i = 0; $i < sizeof($club->ClubAddress); $i++) {
-  $club_address .= $club->ClubAddress[$i] . "\r\n";
-  }
-
   global $db;
   $getExtraEmails = $db->prepare("SELECT Name, EmailAddress, ID FROM notifyAdditionalEmails WHERE UserID = ? AND Verified = '1'");
 
@@ -406,7 +395,7 @@ try {
       $from = new \SendGrid\Mail\From("noreply@" . env('EMAIL_DOMAIN'), env('CLUB_NAME'));
     }
     if ($jsonData->NamedSender->Email != null && $jsonData->NamedSender->Name) {
-      $from = new \SendGrid\Mail\From($emailPrefix . "noreply@" . env('EMAIL_DOMAIN'), $jsonData->NamedSender->Name);
+      $from = new \SendGrid\Mail\From("noreply@" . env('EMAIL_DOMAIN'), $jsonData->NamedSender->Name);
     }
     $tos = [];
     while ($user = $getUsersForEmail->fetch(PDO::FETCH_ASSOC)) {
