@@ -17,6 +17,7 @@ function getSwimmersForSquad() {
   
   // On squad change, disable buttons and select immediately
   swimmerSelect.value = 'null';
+  swimmerSelect.disabled = true;
   swimmerSelectChange();
 
   var squad = squadSelect.value;
