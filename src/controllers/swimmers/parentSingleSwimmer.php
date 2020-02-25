@@ -1,5 +1,8 @@
 <?php
 
+// Get all countries
+$countries = getISOAlpha2CountriesWithHomeNations();
+
 global $db;
 $getSwimmer = $db->prepare("SELECT members.MForename, members.MForename, members.MMiddleNames,
 members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName,
@@ -116,17 +119,16 @@ $title = null;
           <input type="test" class="form-control" id="asaregnumber" name="asaregnumber" placeholder="Swim England Registration Numer" value="<?=htmlspecialchars($row['ASANumber'])?>" readonly>
         </div>
 
-        <?php
-        $cat = ['GB-ENG' => '', 'GB-NIR' => '', 'GB-SCT' => '', 'GB-WLS' => ''];
-        $cat[$row['Country']] = " selected ";
-        ?>
         <div class="form-group">
           <label for="country">Home Nations Country</label>
           <select class="custom-select" id="country" name="country" placeholder="Select">
-            <option value="GB-ENG" <?=$cat['GB-ENG']?>>England</option>
-            <option value="GB-NIR" <?=$cat['GB-NIR']?>>Northern Ireland</option>
-            <option value="GB-SCT" <?=$cat['GB-SCT']?>>Scotland</option>
-            <option value="GB-WLS" <?=$cat['GB-WLS']?>>Wales</option>
+            <?php foreach ($countries as $key => $value) {
+              $selected = '';
+              if ($row['Country'] == $key) {
+                $selected = ' selected ';
+              } ?>
+            <option value="<?=htmlspecialchars($key)?>" <?=$selected?>><?=htmlspecialchars($value)?></option>
+		        <?php } ?>
           </select>
         </div>
 

@@ -8,6 +8,9 @@ if (app('request')->method == 'POST' && !SCDS\CSRF::verify()) {
 }
 */
 
+// Get all countries
+$countries = getISOAlpha2CountriesWithHomeNations();
+
 $access = $_SESSION['AccessLevel'];
 // Committee or Admin can see and change all data
 $forenameUpdate = false;
@@ -173,9 +176,9 @@ if (isset($_POST['swimmerStatus']) && $_SESSION['AccessLevel'] == "Admin") {
 		$update = true;
 	}
 }
-if ($_POST['country'] == 'GB-ENG' || $_POST['country'] == 'GB-NIR' || $_POST['country'] == 'GB-SCT' || $_POST['country'] == 'GB-WLS') {
+if (isset($_POST['country'])) {
 
-	if ($row['Country'] != $_POST['country']) {
+	if ($row['Country'] != $_POST['country'] && isset($countries[$_POST['country']])) {
 		// Update
 		$updateCountry = $db->prepare("UPDATE members SET Country = ? WHERE MemberID = ?");
 		$updateCountry->execute([
@@ -282,16 +285,18 @@ else {
 	</div>";
 }
 
-$cat = ['GB-ENG' => '', 'GB-NIR' => '', 'GB-SCT' => '', 'GB-WLS' => ''];
-$cat[$rowSwim['Country']] = " selected ";
 $content .= "
 <div class=\"form-group\">
 	<label for=\"country\">Home Nations Country</label>
-	<select class=\"custom-select\" id=\"country\" name=\"country\" placeholder=\"Select\">
-		<option value=\"GB-ENG\" " . $cat['GB-ENG'] . ">England</option>
-		<option value=\"GB-NIR\" " . $cat['GB-NIR'] . ">Northern Ireland</option>
-		<option value=\"GB-SCT\" " . $cat['GB-SCT'] . ">Scotland</option>
-		<option value=\"GB-WLS\" " . $cat['GB-WLS'] . ">Wales</option>
+	<select class=\"custom-select\" id=\"country\" name=\"country\" placeholder=\"Select\">";
+		foreach ($countries as $key => $value) {
+			$selected = '';
+			if ($rowSwim['Country'] == $key) {
+				$selected = ' selected ';
+			}
+			$content .= "<option value=\"" . htmlspecialchars($key) . "\" " . $selected . ">" . htmlspecialchars($value) . "</option>";
+		}
+		$content .= "
 	</select>
 </div>";
 

@@ -113,13 +113,12 @@ foreach ($swimsArray as $col => $name) {
 
 $strokeCountsData = array_values($strokeCounts);
 
-$country = 'England';
-if ($rowSwim['Country'] == 'GB-NIR') {
-  $country = 'Northern Ireland';
-} else if ($rowSwim['Country'] == 'GB-SCT') {
-  $country = 'Scotland';
-} else if ($rowSwim['Country'] == 'GB-WLS') {
-  $country = 'Wales';
+// Get all countries
+$countries = getISOAlpha2CountriesWithHomeNations();
+
+$country = '';
+if (isset($countries[$rowSwim['Country']])) {
+  $country = $countries[$rowSwim['Country']];
 }
 
 ?>
