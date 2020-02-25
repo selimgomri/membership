@@ -36,9 +36,9 @@
     },
     {
       "id": "admin-editors",
-      "name": "Bulk editors <span class=\"badge badge-info float-right\">COMING SOON</span>",
+      "name": "Bulk editors",
       "title": "Edit details quickly",
-      "link": "admin#editors",
+      "link": "admin/editors",
       "target": "_self",
       "external": false
     },

@@ -31,6 +31,10 @@ if ($_SESSION['AccessLevel'] == 'Admin') {
     $this->get('/member-se-categories', function () {
       include 'editors/membership-cat/editor.php';
     });
+
+    $this->get('/', function () {
+      include 'editors/home.php';
+    });
   });
 
   $this->group('/galas', function () {
