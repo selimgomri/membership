@@ -12,7 +12,15 @@ function getSwimmers() {
 }
 
 function getSwimmersForSquad() {
-  var squad = (document.getElementById("squadSelect")).value;
+  var squadSelect = document.getElementById("squadSelect");
+  var swimmerSelect = document.getElementById('swimmerSelect');
+  
+  // On squad change, disable buttons and select immediately
+  swimmerSelect.value = 'null';
+  swimmerSelect.disabled = true;
+  swimmerSelectChange();
+
+  var squad = squadSelect.value;
   var button = document.getElementById('addSwimmer');
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {

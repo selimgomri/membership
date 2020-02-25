@@ -65,7 +65,7 @@ include BASE_PATH . "views/paymentsMenu.php";
           <div class="form-group">
             <label for="swimmerSelect">Select member</label>
             <select disabled class="custom-select" id="swimmerSelect" name="swimmerSelect">
-              <option selected>Please select a squad</option>
+              <option value="null " selected>Please select a squad</option>
             </select>
           </div>
             <button disabled type="button" class="btn btn-success" id="addSwimmer" data-ajax-url="<?=htmlspecialchars(autoUrl("payments/extrafees/ajax/" . $id))?>">

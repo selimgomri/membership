@@ -58,12 +58,14 @@ if ($_POST['response'] == "getSwimmers") {
   } else {
     $getSwimmers = $db->prepare("SELECT members.MemberID, MForename, MSurname FROM `members` WHERE SquadID = ? AND MemberID NOT IN (SELECT MemberID FROM extrasRelations WHERE ExtraID = ?) ORDER BY `MForename` ASC, `MSurname` ASC ");
     $getSwimmers->execute([$_POST['squadSelect'], $id]);
+    $state = false;
     $output = '<option value="null" selected>Select a swimmer</option>';
     while ($row = $getSwimmers->fetch(PDO::FETCH_ASSOC)) {
       $output .= '<option value="' . htmlspecialchars($row['MemberID']) . '">' . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . '</option>';
+      $state = true;
     }
     echo json_encode([
-      'state' => true,
+      'state' => $state,
       'swimmerSelectContent' => $output
     ]);
   }
