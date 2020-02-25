@@ -182,6 +182,10 @@ if ($access == "Admin") {
 		$this->get('/upgradeable', function() {
 			include "reports/UpgradeableMembers.php";
 		});
+
+		$this->post('/upgradeable', function() {
+			include "reports/UpgradeableMembersPost.php";
+		});
 	});
 }
 

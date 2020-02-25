@@ -57,3 +57,9 @@ We've upgraded the notify composer from TinyMCE 4 to TinyMCE 5. This delivers us
 ## Improved colour styling for customer clubs
 
 We've improved the header at the top of each page so a club's custom colour is also applied to the menu at the top of each page. We've also added code to dynamically adjust the text contrast on these coloured backgrounds.
+
+## Home Nations Meet Choice/Country of International Representation Choice
+
+Members can pick their country of international representation. This includes a full list of ISO countries, with GB removed and replaced with the four Home Nations for Home Nations Meet Choice. For Home Nations, CoIR is GB, though NIR members have the right to choose Northern Ireland (for GB) or the Republic of Ireland.
+
+The general list of countries is linked to a third party library which gets updated should any countries appear/disappear.
