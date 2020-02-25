@@ -22,3 +22,23 @@ function getISOAlpha2Countries() {
 	// Else return the default
 	return require BASE_PATH . 'vendor/umpirsky/country-list/data/en_GB/country.php';
 }
+
+function getISOAlpha2CountriesWithHomeNations($noGreatBritain = true) {
+
+	$homeNations = [
+		'GB-ENG' => 'England',
+		'GB-NIR' => 'Northern Ireland (Ulster Swimming)',
+		'GB-SCT' => 'Scotland',
+		'GB-WLS' => 'Wales'
+	];
+	
+	// Get all countries
+	$countries = getISOAlpha2Countries();
+
+	if ($noGreatBritain) {
+		unset($countries['GB']);
+	}
+
+	$array = $homeNations + $countries;
+
+}

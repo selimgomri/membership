@@ -7,6 +7,9 @@ use Brick\PhoneNumber\PhoneNumberFormat;
 global $db;
 $access = $_SESSION['AccessLevel'];
 
+// Get all countries
+$countries = getISOAlpha2CountriesWithHomeNations();
+
 $markdown = new ParsedownExtra();
 $markdown->setSafeMode(true);
 
@@ -266,13 +269,9 @@ $content .= '<!--
       </p>
     </li>';
 
-    $country = 'England';
-    if ($rowSwim['Country'] == 'GB-NIR') {
-      $country = 'Northern Ireland';
-    } else if ($rowSwim['Country'] == 'GB-SCT') {
-      $country = 'Scotland';
-    } else if ($rowSwim['Country'] == 'GB-WLS') {
-      $country = 'Wales';
+    $country = '';
+    if (isset($countries[$rowSwim['Country']])) {
+      $country = $countries[$rowSwim['Country']];
     }
     
     $content .= '

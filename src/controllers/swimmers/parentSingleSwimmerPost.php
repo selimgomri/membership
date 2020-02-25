@@ -161,9 +161,9 @@ try {
   $photoUpdate = true;
   $update = true;
 
-  if ($_POST['country'] == 'GB-ENG' || $_POST['country'] == 'GB-NIR' || $_POST['country'] == 'GB-SCT' || $_POST['country'] == 'GB-WLS') {
+  if (isset($_POST['country'])) {
 
-    if ($row['Country'] != $_POST['country']) {
+    if ($row['Country'] != $_POST['country'] && isset($countries[$_POST['country']])) {
       // Update
       $updateCountry = $db->prepare("UPDATE members SET Country = ? WHERE MemberID = ?");
       $updateCountry->execute([
@@ -173,7 +173,7 @@ try {
       $countryUpdate = true;
       $update = true;
     }
-
+  
   }
 
   $_SESSION['SwimmerSaved'] = true;
