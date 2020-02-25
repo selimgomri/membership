@@ -34,7 +34,7 @@ include BASE_PATH . "views/paymentsMenu.php";
   </nav>
 
   <div class="row align-items-center mb-3">
-    <div class="col-md-6">
+    <div class="col-md-8">
 	    <h1><?=htmlspecialchars($row['ExtraName'])?> <small>&pound;<?=htmlspecialchars(number_format($row['ExtraFee'], 2))?>/month (<?php if ($row['Type'] == 'Payment') { ?>payment<?php } else { ?>credit/refund<?php } ?>)</small></h1>
     </div>
     <div class="col text-sm-right">
@@ -52,7 +52,7 @@ include BASE_PATH . "views/paymentsMenu.php";
         </div>
         <form class="card-body">
           <div class="form-group">
-            <label for="squadSelect">Select Squad</label>
+            <label for="squadSelect">Select squad</label>
             <select class="custom-select" id="squadSelect" name="squadSelect">
               <option selected>Choose...</option>
               <?php while ($squadsRow = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
@@ -63,13 +63,13 @@ include BASE_PATH . "views/paymentsMenu.php";
             </select>
           </div>
           <div class="form-group">
-            <label for="swimmerSelect">Select Swimmer</label>
-            <select class="custom-select" id="swimmerSelect" name="swimmerSelect">
-              <option selected>Select squad first</option>
+            <label for="swimmerSelect">Select member</label>
+            <select disabled class="custom-select" id="swimmerSelect" name="swimmerSelect">
+              <option selected>Please select a squad</option>
             </select>
           </div>
-            <button type="button" class="btn btn-success" id="addSwimmer">
-              Add Swimmer to Extra
+            <button disabled type="button" class="btn btn-success" id="addSwimmer" data-ajax-url="<?=htmlspecialchars(autoUrl("payments/extrafees/ajax/" . $id))?>">
+              Add member to extra
             </button>
             <div id="status">
             </div>
@@ -89,102 +89,6 @@ include BASE_PATH . "views/paymentsMenu.php";
   </div>
 </div>
 
-<script>
-function getSwimmers() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        console.log("We got here");
-        document.getElementById("output").innerHTML = this.responseText;
-        console.log(this.responseText);
-      }
-    }
-    xhttp.open("POST", "<?=autoUrl("payments/extrafees/ajax/" . $id)?>", true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("response=getSwimmers");
-    console.log("Sent");
-}
-
-function getSwimmersForSquad() {
-  var squad = (document.getElementById("squadSelect")).value;
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        console.log("We got here");
-        document.getElementById("swimmerSelect").innerHTML = this.responseText;
-        console.log(this.responseText);
-      }
-    }
-    xhttp.open("POST", "<?=autoUrl("payments/extrafees/ajax/" . $id)?>", true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("response=squadSelect&squadSelect=" + squad);
-    console.log("Sent");
-}
-
-function addSwimmerToExtra() {
-  var swimmer = (document.getElementById("swimmerSelect")).value;
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        getSwimmers();
-        //document.getElementById("squadSelect").innerHTML = "<option selected>Choose...</option>";
-        //document.getElementById("swimmerSelect").innerHTML = "<option selected>Select squad first</option>";
-        document.getElementById("status").innerHTML =
-        '<div class="mt-3 mb-0 alert alert-success alert-dismissible fade show" role="alert">' +
-        '<strong>Successfully Added Swimmer</strong>'  +
-        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-        '<span aria-hidden="true">&times;</span>' +
-        '</button>' +
-        '</div>';
-      } else {
-        document.getElementById("status").innerHTML =
-        '<div class="mt-3 mb-0 alert alert-warning alert-dismissible fade show" role="alert">' +
-        '<strong>Unable to add swimmer</strong><br>They may already be on the list' +
-        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-        '<span aria-hidden="true">&times;</span>' +
-        '</button>' +
-        '</div>';
-      }
-    }
-    xhttp.open("POST", "<?=autoUrl("payments/extrafees/ajax/" . $id)?>", true);
-    console.log("POST", "<?=autoUrl("payments/extrafees/ajax/" . $id)?>", true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("response=insert&swimmerInsert=" + swimmer);
-    console.log("response=insert&swimmerInsert=" + swimmer);
-    console.log("Sent");
-}
-
-function dropSwimmerFromExtra(relation) {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      getSwimmers();
-    }
-  }
-  xhttp.open("POST", "<?=autoUrl("payments/extrafees/ajax/" . $id)?>", true);
-  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  xhttp.send("response=dropRelation&relation=" + relation);
-}
-
-var entryTable = document.querySelector("#output");
-entryTable.addEventListener("click", clickPropogation, false);
-
-function clickPropogation(e) {
-    if (e.target !== e.currentTarget) {
-        var clickedItem = e.target.id;
-        var clickedItemValue;
-        if (clickedItem != "") {
-          var clickedItemValue = document.getElementById(clickedItem).value;
-          dropSwimmerFromExtra(clickedItemValue);
-        }
-    }
-    e.stopPropagation();
-}
-
-// Call getResult immediately
-getSwimmers();
-document.getElementById("squadSelect").onchange=getSwimmersForSquad;
-document.getElementById("addSwimmer").onclick=addSwimmerToExtra;
-</script>
+<script src="<?=htmlspecialchars(autoUrl("public/js/payments/ExtraMembers.js"))?>"></script>
 
 <?php include BASE_PATH . "views/footer.php";
