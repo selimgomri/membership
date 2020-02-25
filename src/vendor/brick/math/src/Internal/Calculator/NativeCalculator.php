@@ -67,7 +67,7 @@ class NativeCalculator extends Calculator
             return $a;
         }
 
-        $this->init($a, $b, $aDig, $bDig, $aNeg, $bNeg);
+        [$aNeg, $bNeg, $aDig, $bDig] = $this->init($a, $b);
 
         if ($aNeg === $bNeg) {
             $result = $this->doAdd($aDig, $bDig);
@@ -121,7 +121,7 @@ class NativeCalculator extends Calculator
             return $this->neg($a);
         }
 
-        $this->init($a, $b, $aDig, $bDig, $aNeg, $bNeg);
+        [$aNeg, $bNeg, $aDig, $bDig] = $this->init($a, $b);
 
         $result = $this->doMul($aDig, $bDig);
 
@@ -189,7 +189,7 @@ class NativeCalculator extends Calculator
             }
         }
 
-        $this->init($a, $b, $aDig, $bDig, $aNeg, $bNeg);
+        [$aNeg, $bNeg, $aDig, $bDig] = $this->init($a, $b);
 
         [$q, $r] = $this->doDiv($aDig, $bDig);
 
@@ -231,6 +231,8 @@ class NativeCalculator extends Calculator
     }
 
     /**
+     * Algorithm from: https://www.geeksforgeeks.org/modular-exponentiation-power-in-modular-arithmetic/
+     *
      * {@inheritdoc}
      */
     public function powmod(string $base, string $exp, string $mod) : string
@@ -304,7 +306,7 @@ class NativeCalculator extends Calculator
      */
     private function doAdd(string $a, string $b) : string
     {
-        $length = $this->pad($a, $b);
+        [$a, $b, $length] = $this->pad($a, $b);
 
         $carry = 0;
         $result = '';
@@ -372,7 +374,7 @@ class NativeCalculator extends Calculator
             $b = $c;
         }
 
-        $length = $this->pad($a, $b);
+        [$a, $b, $length] = $this->pad($a, $b);
 
         $carry = 0;
         $result = '';
@@ -590,9 +592,9 @@ class NativeCalculator extends Calculator
      * @param string $a The first operand.
      * @param string $b The second operand.
      *
-     * @return int The length of both strings.
+     * @return array{0: string, 1: string, 2: int}
      */
-    private function pad(string & $a, string & $b) : int
+    private function pad(string $a, string $b) : array
     {
         $x = \strlen($a);
         $y = \strlen($b);
@@ -600,15 +602,15 @@ class NativeCalculator extends Calculator
         if ($x > $y) {
             $b = \str_repeat('0', $x - $y) . $b;
 
-            return $x;
+            return [$a, $b, $x];
         }
 
         if ($x < $y) {
             $a = \str_repeat('0', $y - $x) . $a;
 
-            return $y;
+            return [$a, $b, $y];
         }
 
-        return $x;
+        return [$a, $b, $x];
     }
 }
