@@ -163,6 +163,9 @@ try {
 
   if (isset($_POST['country'])) {
 
+    // Get all countries
+    $countries = getISOAlpha2CountriesWithHomeNations();
+
     if ($row['Country'] != $_POST['country'] && isset($countries[$_POST['country']])) {
       // Update
       $updateCountry = $db->prepare("UPDATE members SET Country = ? WHERE MemberID = ?");
