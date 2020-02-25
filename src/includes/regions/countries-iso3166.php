@@ -41,4 +41,6 @@ function getISOAlpha2CountriesWithHomeNations($noGreatBritain = true) {
 
 	$array = $homeNations + $countries;
 
+	return $array;
+
 }
