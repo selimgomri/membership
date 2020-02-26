@@ -55,22 +55,62 @@ if ($_POST['response'] == "getSwimmers") {
   </div>
 <?php
 } else if ($_POST['response'] == "squadSelect") {
-  $squad = $_POST['squadSelect'];
-  $members == null;
-  if ($squad != "all") {
-    $members = $db->prepare("SELECT MemberID, MForename, MSurname FROM `members` WHERE `SquadID` = ? ORDER BY `MForename` ASC, `MSurname` ASC");
-    $members->execute([$squad]);
-  } else {
-    $members = $db->query("SELECT MemberID, MForename, MSurname FROM `members` ORDER BY `MForename` ASC, `MSurname` ASC");
-  } ?>
-  <option selected>
-    Select a swimmer
-  </option>
-  <?php while ($row = $members->fetch(PDO::FETCH_ASSOC)) { ?>
-    <option value="<?=$row['MemberID']?>">
-      <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
-    </option>
-  <?php }
+  $status = false;
+  $output = ' <option value="null" selected>Select a member</option>';
+
+  try {
+    $squad = $_POST['squadSelect'];
+    $members == null;
+    if ($squad != "all") {
+      $members = $db->prepare("SELECT MemberID, MForename, MSurname FROM `members` WHERE `SquadID` = ? AND MemberID NOT IN (SELECT ReferenceID FROM targetedListMembers WHERE ListID = ? AND ReferenceType = 'Member') ORDER BY `MForename` ASC, `MSurname` ASC");
+      $members->execute([$squad, $id]);
+    } else {
+      $members = $db->prepare("SELECT MemberID, MForename, MSurname FROM `members` WHERE MemberID NOT IN (SELECT ReferenceID FROM targetedListMembers WHERE ListID = ? AND ReferenceType = 'Member') ORDER BY `MForename` ASC, `MSurname` ASC");
+      $members->execute([$id]);
+    }
+    while ($row = $members->fetch(PDO::FETCH_ASSOC)) {
+      $output .= '<option value="' . htmlspecialchars($row['MemberID']) . '">' . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . '</option>';
+      $status = true;
+    }
+  } catch (Exception $e) {
+    // Do nothing, an empty, disabled select will be returned.
+  }
+
+  echo json_encode([
+    'swimmerSelectContent' => $output,
+    'status' => $status
+  ]);
+} else if ($_POST['response'] == "userSelect") {
+  $status = false;
+  $output = ' <option value="null" selected>Search for a user</option>';
+
+  try {
+    if (mb_strlen($_POST['searchTerm']) > 0) {
+      $searchTerm = '%' . $_POST['searchTerm'] . '%';
+      $members == null;
+      $members = $db->prepare("SELECT UserID, Forename, Surname FROM `users` WHERE `Forename` COLLATE utf8mb4_general_ci LIKE :searchTerm OR `Surname` COLLATE utf8mb4_general_ci LIKE :searchTerm AND UserID NOT IN (SELECT ReferenceID FROM targetedListMembers WHERE ListID = :list AND ReferenceType = 'User') ORDER BY `Forename` ASC, `Surname` ASC");
+      $members->execute([
+        'searchTerm' => $searchTerm,
+        'list' => $id
+      ]);
+      
+      $usersOutput = '<option value="null" selected>Select a user</option>';
+      while ($row = $members->fetch(PDO::FETCH_ASSOC)) {
+        $usersOutput .= '<option value="' . htmlspecialchars($row['UserID']) . '">' . htmlspecialchars($row['Forename'] . " " . $row['Surname']) . '</option>';
+        $status = true;
+      }
+      if ($status) {
+        $output = $usersOutput;
+      }
+    }
+  } catch (Exception $e) {
+    // Do nothing, an empty, disabled select will be returned.
+  }
+
+  echo json_encode([
+    'userSelectContent' => $output,
+    'status' => $status
+  ]); 
 } else if ($_POST['response'] == "insert") {
   $swimmer = $_POST['swimmerInsert'];
   if ($swimmer != null && $swimmer != "") {

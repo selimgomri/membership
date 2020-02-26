@@ -67,11 +67,11 @@ include BASE_PATH . "views/notifyMenu.php";
           </div>
           <div class="form-group">
             <label for="swimmerSelect">Select member</label>
-            <select class="custom-select" id="swimmerSelect" name="swimmerSelect">
-              <option selected>Select squad first</option>
+            <select class="custom-select" id="swimmerSelect" name="swimmerSelect" disabled>
+              <option value="null" selected>Select squad first</option>
             </select>
           </div>
-            <button type="button" class="btn btn-success" id="addSwimmer" data-ajax-url="<?=htmlspecialchars(autoUrl("notify/lists/ajax/" . $id))?>">
+            <button type="button" class="btn btn-success" id="addSwimmer" data-ajax-url="<?=htmlspecialchars(autoUrl("notify/lists/ajax/" . $id))?>" disabled>
               Add member to list
             </button>
             <div id="status">
@@ -85,19 +85,17 @@ include BASE_PATH . "views/notifyMenu.php";
         </div>
         <form class="card-body">
           <div class="form-group">
-            <label for="user-select">Select user</label>
-            <select class="custom-select" id="user-select" name="user-select" <?php if ($userDetails == null) { ?>disabled<?php } ?>>
-            <?php if ($userDetails == null) { ?>
-              <option selected>No users</option>
-            <?php } else { ?>
-            <option selected>Select user</option>
-            <?php do { ?>
-              <option value="<?=htmlspecialchars($userDetails['UserID'])?>"><?=htmlspecialchars($userDetails['Forename'] . ' ' . $userDetails['Surname'])?></option>
-            <?php } while ($userDetails = $getUsers->fetch(PDO::FETCH_ASSOC)); ?>
-            <?php } ?>
+            <label for="user-select">Search by name for user</label>
+            <input type="text" name="user-name-search" id="user-name-search" class="form-control">
             </select>
           </div>
-            <button type="button" class="btn btn-success" id="user-add" data-ajax-url="<?=htmlspecialchars(autoUrl("notify/lists/ajax/" . $id))?>">
+          <div class="form-group">
+            <label for="user-select">Select user</label>
+            <select class="custom-select" id="user-select" name="user-select" disabled>
+              <option value="null" selected>Search for a user</option>
+            </select>
+          </div>
+            <button type="button" class="btn btn-success" id="user-add" data-ajax-url="<?=htmlspecialchars(autoUrl("notify/lists/ajax/" . $id))?>" disabled>
               Add user to list
             </button>
             <div id="user-status">
