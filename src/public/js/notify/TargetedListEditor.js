@@ -12,16 +12,39 @@ function getSwimmers() {
 }
 
 function getSwimmersForSquad() {
-  var squad = (document.getElementById('squadSelect')).value;
+  var squad = document.getElementById('squadSelect').value;
+  var swimmerSelect = document.getElementById('swimmerSelect');
+  var addButton = document.getElementById('addSwimmer');
+  swimmerSelect.value = 'null';
+  swimmerSelect.disabled = true;
+  addButton.disabled = true;
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      document.getElementById('swimmerSelect').innerHTML = this.responseText;
+      var response = JSON.parse(this.responseText);
+      swimmerSelect.innerHTML = response.swimmerSelectContent;
+      swimmerSelect.disabled = !response.status;
     }
   }
-  xhttp.open('POST', document.getElementById('addSwimmer').dataset.ajaxUrl, true);
-  xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  xhttp.open('POST', addButton.dataset.ajaxUrl, true);
+  xhttp.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
   xhttp.send('response=squadSelect&squadSelect=' + squad);
+}
+
+function swimmerSelectChange(event) {
+  if (document.getElementById('swimmerSelect').value != 'null') {
+    document.getElementById('addSwimmer').disabled = false;
+  } else {
+    document.getElementById('addSwimmer').disabled = true;
+  }
+}
+
+function userSelectChange(event) {
+  if (document.getElementById('user-select').value != 'null') {
+    document.getElementById('user-add').disabled = false;
+  } else {
+    document.getElementById('user-add').disabled = true;
+  }
 }
 
 function addSwimmerToList() {
@@ -61,6 +84,26 @@ function addSwimmerToList() {
     '</button>' +
     '</div>';
   }
+}
+
+function getUsers() {
+  var userSearchTerm = document.getElementById('user-name-search').value;
+  var userSelect = document.getElementById('user-select');
+  var addButton = document.getElementById('user-add');
+  userSelect.value = 'null';
+  userSelect.disabled = true;
+  addButton.disabled = true;
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var response = JSON.parse(this.responseText);
+      userSelect.innerHTML = response.userSelectContent;
+      userSelect.disabled = !response.status;
+    }
+  }
+  xhttp.open('POST', addButton.dataset.ajaxUrl, true);
+  xhttp.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+  xhttp.send('response=userSelect&searchTerm=' + userSearchTerm);
 }
 
 function addUserToList() {
@@ -134,3 +177,6 @@ getSwimmers();
 getSwimmersForSquad();
 document.getElementById('squadSelect').onchange=getSwimmersForSquad;
 document.getElementById('addSwimmer').onclick=addSwimmerToList;document.getElementById('user-add').onclick=addUserToList;
+document.getElementById('swimmerSelect').addEventListener('change', swimmerSelectChange);
+document.getElementById('user-select').addEventListener('change', userSelectChange);
+document.getElementById('user-name-search').addEventListener('input', getUsers);
