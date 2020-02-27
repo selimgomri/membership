@@ -373,23 +373,23 @@ $content .= '<!--
   $content .= '
   <div class="mb-3 card card-body" id="photo">
     <h2>Photography Permissions</h2>';
-    if (($rowSwim['Website'] != 1 || $rowSwim['Social'] != 1 || $rowSwim['Noticeboard'] != 1 || $rowSwim['FilmTraining'] != 1 || $rowSwim['ProPhoto'] != 1) && ($age < 18)) {
+    if ((!bool($rowSwim['Website']) || !bool($rowSwim['Social']) || !bool($rowSwim['Noticeboard']) || !bool($rowSwim['FilmTraining']) || !bool($rowSwim['ProPhoto'])) && ($age < 18)) {
       $content .= '
       <p>There are limited photography permissions for this swimmer</p>
       <ul class="mb-0">';
-      if (!isset($row['Website']) || !$row['Website']) {
+      if (!bool($rowSwim['Website'])) {
         $content .= '<li>Photos <strong>must not</strong> be taken of this swimmer for our website</li>';
       }
-      if (!isset($row['Social']) || !$row['Social']) {
+      if (!bool($rowSwim['Social'])) {
         $content .= '<li>Photos <strong>must not</strong> be taken of this swimmer for our social media</li>';
       }
-      if (!isset($row['Noticeboard']) || !$row['Noticeboard']) {
+      if (!bool($rowSwim['Noticeboard'])) {
         $content .= '<li>Photos <strong>must not</strong> be taken of this swimmer for our noticeboard</li>';
       }
-      if (!isset($row['FilmTraining']) || !$row['FilmTraining']) {
+      if (!bool($rowSwim['FilmTraining'])) {
         $content .= '<li>This swimmer <strong>must not</strong> be filmed for the purposes of training</li>';
       }
-      if (!isset($row['ProPhoto']) || !$row['ProPhoto']) {
+      if (!bool($rowSwim['ProPhoto'])) {
         $content .= '<li>Photos <strong>must not</strong> be taken of this swimmer by photographers</li>';
       }
       $content .= '</ul>';
