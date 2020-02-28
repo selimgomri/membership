@@ -182,4 +182,5 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 </div>
 
 
-<?php include BASE_PATH . "views/footer.php"; ?>
+<?php $footer = new \SDCS\Footer();
+$footer->render(); ?>

@@ -109,7 +109,8 @@ include "attendanceMenu.php";
   </form>
 </div>
 
-<script src="<?=htmlspecialchars(autoUrl("public/js/attendance/register.js"))?>"></script>
-
 <?php
-include BASE_PATH . "views/footer.php";
+$footer = new \SDCS\Footer();
+$footer->addJs("public/js/attendance/register.js");
+$footer->useFluidContainer();
+$footer->render();

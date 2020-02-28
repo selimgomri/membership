@@ -101,7 +101,6 @@ $_SESSION['LoginSec'] = $lsv;
   <div class="mt-auto"></div>
 </div>
 
-<script src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 <?php
   $detes = [$lsv, $_SESSION['LoginSec']];
   //pre($detes);
@@ -109,5 +108,7 @@ $_SESSION['LoginSec'] = $lsv;
   if ( isset($_SESSION['ErrorState']) ) {
     unset($_SESSION['ErrorState']);
   }
-  include BASE_PATH . "views/footer.php";
+$footer = new \SDCS\Footer();
+$footer->addJs(("public/js/NeedsValidation.js");
+$footer->render();
 ?>

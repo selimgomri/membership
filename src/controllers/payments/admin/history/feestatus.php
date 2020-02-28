@@ -179,4 +179,6 @@ include BASE_PATH . "views/paymentsMenu.php";
 	<?php } ?>
 </div>
 
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->useFluidContainer();
+$footer->render();

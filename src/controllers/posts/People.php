@@ -78,4 +78,5 @@ include BASE_PATH . "views/postsMenu.php";?>
 
 <?php }
 
-include BASE_PATH . "views/footer.php";
+$footer = new \SDCS\Footer();
+$footer->render();

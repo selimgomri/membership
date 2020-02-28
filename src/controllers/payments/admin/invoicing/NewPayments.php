@@ -139,10 +139,10 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<script src="<?=autoUrl("public/js/numerical/bignumber.min.js")?>"></script>
-<script src="<?=htmlspecialchars(autoUrl("public/js/payments/NewInvoice.js"))?>"></script>
-<script src="<?=htmlspecialchars(autoUrl("public/js/NeedsValidation.js"))?>"></script>
-
 <?php
 
-include BASE_PATH . 'views/footer.php';
+$footer = new \SDCS\Footer();
+$footer->addJs("public/js/numerical/bignumber.min.js");
+$footer->addJs("public/js/payments/NewInvoice.js");
+$footer->addJs("public/js/NeedsValidation.js");
+$footer->render();

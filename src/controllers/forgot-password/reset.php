@@ -41,9 +41,10 @@ if ($user = $getUser->fetchColumn()) {
       </div>
 		</form>
 	</div>
-  <script src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
 	<?php
-	include BASE_PATH . 'views/footer.php';
+	$footer = new \SDCS\Footer();
+	$footer->addJs("public/js/NeedsValidation.js");
+$footer->render();
 } else {
 	halt(404);
 }

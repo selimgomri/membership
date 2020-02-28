@@ -75,8 +75,8 @@ if (isset($_SESSION['POST_DATA'])) {
   </div>
 </div>
 
-<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
-
 <?php
 
-include BASE_PATH . 'views/footer.php';
+$footer = new \SDCS\Footer();
+$footer->addJs("public/js/NeedsValidation.js");
+$footer->render();

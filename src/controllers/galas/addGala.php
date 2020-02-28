@@ -107,5 +107,6 @@ include "galaMenu.php"; ?>
   <?php echo "<h1>" . $title . "</h1>";
   echo $content; ?>
 </div>
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->render();
 ?>

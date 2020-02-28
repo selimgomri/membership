@@ -52,11 +52,10 @@ include BASE_PATH . "views/notifyMenu.php";
   </div>
 </div>
 
-<script src="<?=htmlspecialchars(autoUrl("public/js/notify/GetSMS.js"))?>"></script>
-
-
 <?php
 
-include BASE_PATH . "views/footer.php";
+$footer = new \SDCS\Footer();
+$footer->addJs("public/js/notify/GetSMS.js");
+$footer->render();
 
 ?>

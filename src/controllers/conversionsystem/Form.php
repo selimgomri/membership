@@ -160,5 +160,3 @@
 		<button class="btn btn-success" type="submit">Convert</button>
 	</p>
 </form>
-
-<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>

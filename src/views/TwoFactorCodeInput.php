@@ -125,11 +125,11 @@ include BASE_PATH . "views/header.php";
   </div>
 </div>
 
-<script src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
-
 <?php
 
-include BASE_PATH . "views/footer.php";
+$footer = new \SDCS\Footer();
+$footer->addJs("public/js/NeedsValidation.js");
+$footer->render();
 
 unset($_SESSION['ErrorState']);
 unset($_SESSION['TWO_FACTOR_RESEND']);

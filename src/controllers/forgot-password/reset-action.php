@@ -35,7 +35,8 @@ if ($user = $getUser->fetchColumn()) {
       </div>
     </div>
 		<?php
-		include BASE_PATH . 'views/footer.php';
+		$footer = new \SDCS\Footer();
+$footer->render();
 	} else {
 		// Return as password error
 		include BASE_PATH . 'views/header.php';
@@ -52,7 +53,8 @@ if ($user = $getUser->fetchColumn()) {
       </div>
     </div>
 		<?php
-		include BASE_PATH . 'views/footer.php';
+		$footer = new \SDCS\Footer();
+$footer->render();
 	}
 } else {
 	halt(404);

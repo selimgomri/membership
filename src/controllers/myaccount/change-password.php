@@ -66,6 +66,7 @@ if (isset($_SESSION['PasswordUpdate']) && $_SESSION['PasswordUpdate']) { ?>
 </div>
 </div>
 
-<script src="<?=htmlspecialchars(autoUrl("public/js/NeedsValidation.js"))?>"></script>
-
-<?php include BASE_PATH . "views/footer.php"; ?>
+<?php $footer = new \SDCS\Footer();
+$footer->addJs("public/js/NeedsValidation.js");
+$footer->useFluidContainer();
+$footer->render(); ?>

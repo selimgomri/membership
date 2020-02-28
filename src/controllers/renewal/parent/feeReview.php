@@ -29,4 +29,5 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	</main>
 </div>
 
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->render();

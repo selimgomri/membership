@@ -398,10 +398,10 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
   </div>
 </div>
 
-<script src="<?=autoUrl("js/payment-helpers.js")?>"></script>
-<script src="<?=autoUrl("js/gala-checkout.js")?>"></script>
-<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
-
 <?php
 
-include BASE_PATH . "views/footer.php"; ?>
+$footer = new \SDCS\Footer();
+$footer->addJs("js/payment-helpers.js");
+$footer->addJs("js/gala-checkout.js");
+$footer->addJs("public/js/NeedsValidation.js");
+$footer->render(); ?>

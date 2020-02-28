@@ -56,10 +56,10 @@ include BASE_PATH . "views/header.php";
   </div>
 </div>
 
-<script async src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
-
 <?php
 
 unset($_SESSION['NewVenueError']);
 
-include BASE_PATH . "views/footer.php";
+$footer = new \SDCS\Footer();
+$footer->addJs("public/js/NeedsValidation.js");
+$footer->render();

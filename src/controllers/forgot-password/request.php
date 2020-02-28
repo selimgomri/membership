@@ -43,5 +43,7 @@ include BASE_PATH . "views/header.php";
     </script>
   </div>
 </div>
-<script src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
-<?php include BASE_PATH . "views/footer.php"; ?>
+
+<?php $footer = new \SDCS\Footer();
+$footer->addJs("public/js/NeedsValidation.js");
+$footer->render(); ?>

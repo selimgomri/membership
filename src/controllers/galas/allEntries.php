@@ -92,7 +92,8 @@ include "galaMenu.php"; ?>
   </form>
 </div>
 
-<script src="<?=htmlspecialchars(autoUrl("public/js/gala-entries/ViewEntries.js"))?>"></script>
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->addJs("public/js/gala-entries/ViewEntries.js");
+$footer->render();
 
 ?>

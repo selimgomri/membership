@@ -142,8 +142,7 @@ include "galaMenu.php";
   <?php } ?>
 </div>
 
-<script src="<?=autoUrl("public/js/numerical/bignumber.min.js")?>"></script>
-<script src="<?=autoUrl("public/js/gala-entries/NewEntry.js")?>"></script>
-<!-- <script src="<?=autoUrl("js/gala-entry-form.js")?>"></script> -->
-
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->addJs("public/js/numerical/bignumber.min.js");
+$footer->addJs("public/js/gala-entries/NewEntry.js");
+$footer->render();

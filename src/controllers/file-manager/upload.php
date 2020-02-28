@@ -84,9 +84,9 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<script src="<?=htmlspecialchars(autoUrl("public/js/bs-custom-file-input.min.js"))?>"></script>
-<script src="<?=htmlspecialchars(autoUrl("public/js/file-input-init.js"))?>"></script>
-
 <?php
 
-include BASE_PATH . 'views/footer.php';
+$footer = new \SDCS\Footer();
+$footer->addJs("public/js/bs-custom-file-input.min.js");
+$footer->addJs("public/js/file-input-init.js");
+$footer->render();

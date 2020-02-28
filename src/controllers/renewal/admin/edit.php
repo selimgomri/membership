@@ -56,4 +56,5 @@ include BASE_PATH . "views/swimmersMenu.php";
 	</form>
 </div>
 
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->render();

@@ -28,4 +28,5 @@ unset($_SESSION['AssRegUser']);
 unset($_SESSION['AssRegPass']);
 unset($_SESSION['AssRegComplete']);
 
-include BASE_PATH . 'views/footer.php';
+$footer = new \SDCS\Footer();
+$footer->render();

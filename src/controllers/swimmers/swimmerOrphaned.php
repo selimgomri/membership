@@ -85,4 +85,6 @@ document.getElementById("search").oninput=getResult;
 
 <?php
 
-include BASE_PATH . "views/footer.php";
+$footer = new \SDCS\Footer();
+$footer->useFluidContainer();
+$footer->render();

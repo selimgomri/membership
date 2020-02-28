@@ -241,8 +241,8 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<script src="<?=autoUrl("js/squad-reps/select.js")?>"></script>
-
 <?php
 
-include BASE_PATH . 'views/footer.php';
+$footer = new \SDCS\Footer();
+$footer->addJs("js/squad-reps/select.js");
+$footer->render();

@@ -294,9 +294,9 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<script src="<?=autoUrl("public/js/numerical/bignumber.min.js")?>"></script>
-<script src="<?=autoUrl("js/galas/refund-entries.js")?>"></script>
-
 <?php
 
-include BASE_PATH . 'views/footer.php';
+$footer = new \SDCS\Footer();
+$footer->addJs("public/js/numerical/bignumber.min.js");
+$footer->addJs("js/galas/refund-entries.js");
+$footer->render();

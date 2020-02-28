@@ -230,4 +230,5 @@ include BASE_PATH . "views/swimmersMenu.php";
     <?php } ?>
   </div>
 </div>
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->render();

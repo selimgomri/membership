@@ -235,8 +235,8 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<script src="<?=htmlspecialchars(autoUrl("public/js/users/Edit.js"))?>"></script>
-
 <?php
 
-include BASE_PATH . 'views/footer.php';
+$footer = new \SDCS\Footer();
+$footer->addJs("public/js/users/Edit.js");
+$footer->render();

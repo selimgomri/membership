@@ -3,7 +3,7 @@
 <!-- THE HEPPELL FOOTER -->
 <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
 <div class="cls-global-footer cls-global-footer-sponsors d-print-none">
-  <?php if (isset($fluidContainer) && $fluidContainer == true) { ?>
+  <?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>
   <div class="container-fluid">
     <?php } else { ?>
     <div class="container">
@@ -55,7 +55,7 @@
   </div>
 </div>
 <div class="cls-global-footer cls-global-footer-inverse cls-global-footer-body d-print-none pb-0">
-  <?php if (isset($fluidContainer) && $fluidContainer == true) { ?>
+  <?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>
   <div class="container-fluid">
     <?php } else { ?>
     <div class="container">
@@ -169,7 +169,7 @@
 <div class="cls-global-footer-legal d-print-none mt-3">
 
 <?php } ?>
-  <?php if (isset($fluidContainer) && $fluidContainer == true) { ?>
+  <?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>
   <div class="container-fluid">
   <?php } else { ?>
   <div class="container">
@@ -200,6 +200,11 @@
 <?php if (isset($use_website_menu) && $use_website_menu) { ?>
 <script defer src="https://static.chesterlestreetasc.co.uk/global/headers/MainSiteMenu.js"></script>
 <?php } ?>
+<?php if (isset($this->js)) {
+  foreach ($this->js as $script) {
+    ?><script src="<?=htmlspecialchars($script)?>"></script><?php
+  }
+} ?>
 </body>
 
 </html>

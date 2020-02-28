@@ -44,7 +44,8 @@ if ($noTimeSheet) {
 		<?php } ?>
   </div>
   <?php
-  include BASE_PATH . "views/footer.php";
+  $footer = new \SDCS\Footer();
+$footer->render();
 } else {
 	// output headers so that the file is downloaded rather than displayed
   header('Content-Type: text/csv; charset=utf-8');
