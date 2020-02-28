@@ -136,10 +136,13 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
 <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
 <script async src="<?=autoUrl("public/js/Cookies.js")?>"></script>
 <?php } ?>
-<?php if (isset($this->js)) {
-  foreach ($this->js as $script) {
+</body>
+
+<?php if (isset($this->js)) { ?>
+  <!-- Load per page JS -->
+  <?php foreach ($this->js as $script) {
     ?><script src="<?=htmlspecialchars($script)?>"></script><?php
   }
 } ?>
-</body>
+
 </html>

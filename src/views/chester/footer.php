@@ -200,11 +200,14 @@
 <?php if (isset($use_website_menu) && $use_website_menu) { ?>
 <script defer src="https://static.chesterlestreetasc.co.uk/global/headers/MainSiteMenu.js"></script>
 <?php } ?>
-<?php if (isset($this->js)) {
-  foreach ($this->js as $script) {
+
+</body>
+
+<?php if (isset($this->js)) { ?>
+  <!-- Load per page JS -->
+  <?php foreach ($this->js as $script) {
     ?><script src="<?=htmlspecialchars($script)?>"></script><?php
   }
 } ?>
-</body>
 
 </html>
