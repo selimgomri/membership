@@ -189,6 +189,8 @@
   </div>
 </div>
 
+</body>
+
 <!-- Modals and Other Hidden HTML -->
 <script rel="preload" src="<?=autoUrl("public/js/jquery-3.4.1.slim.min.js")?>"></script>
 <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
@@ -200,8 +202,6 @@
 <?php if (isset($use_website_menu) && $use_website_menu) { ?>
 <script defer src="https://static.chesterlestreetasc.co.uk/global/headers/MainSiteMenu.js"></script>
 <?php } ?>
-
-</body>
 
 <?php if (isset($this->js)) { ?>
   <!-- Load per page JS -->

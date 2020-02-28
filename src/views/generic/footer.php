@@ -129,6 +129,8 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
   </div>
 </footer>
 
+</body>
+
 <!-- Modals and Other Hidden HTML -->
 <script rel="preload" src="<?=autoUrl("public/js/jquery-3.4.1.slim.min.js")?>"></script>
 <script defer src="<?=autoUrl("public/js/popper.min.js")?>"></script>
@@ -136,7 +138,6 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
 <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
 <script async src="<?=autoUrl("public/js/Cookies.js")?>"></script>
 <?php } ?>
-</body>
 
 <?php if (isset($this->js)) { ?>
   <!-- Load per page JS -->
