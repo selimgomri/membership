@@ -77,6 +77,6 @@ if (isset($_SESSION['POST_DATA'])) {
 
 <?php
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
 $footer->render();

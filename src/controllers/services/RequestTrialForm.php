@@ -315,7 +315,7 @@ unset($_SESSION['RequestTrial-FC']);
 unset($_SESSION['RequestTrial-Errors']);
 unset($_SESSION['RequestTrial-AddAnother']);
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
 $footer->addJs("public/js/request-a-trial/IsItYouOrYourChild.js");
 $footer->addJs("public/js/request-a-trial/MultiSwimmers.js");

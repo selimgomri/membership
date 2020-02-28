@@ -68,5 +68,5 @@ include BASE_PATH . "views/notifyMenu.php";
   </div>
 </div>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->render();

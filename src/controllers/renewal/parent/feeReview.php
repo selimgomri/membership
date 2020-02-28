@@ -29,5 +29,5 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	</main>
 </div>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->render();

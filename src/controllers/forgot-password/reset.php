@@ -42,7 +42,7 @@ if ($user = $getUser->fetchColumn()) {
 		</form>
 	</div>
 	<?php
-	$footer = new \SDCS\Footer();
+	$footer = new \SCDS\Footer();
 	$footer->addJs("public/js/NeedsValidation.js");
 $footer->render();
 } else {

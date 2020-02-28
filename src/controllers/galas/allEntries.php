@@ -92,7 +92,7 @@ include "galaMenu.php"; ?>
   </form>
 </div>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->addJs("public/js/gala-entries/ViewEntries.js");
 $footer->render();
 

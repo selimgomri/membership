@@ -66,7 +66,7 @@ if (isset($_SESSION['PasswordUpdate']) && $_SESSION['PasswordUpdate']) { ?>
 </div>
 </div>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
 $footer->useFluidContainer();
 $footer->render(); ?>

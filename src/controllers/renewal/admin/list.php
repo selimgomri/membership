@@ -144,6 +144,6 @@ include BASE_PATH . "views/swimmersMenu.php";
 
 <?php
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->useFluidContainer();
 $footer->render();

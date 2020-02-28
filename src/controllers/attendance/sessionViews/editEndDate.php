@@ -75,6 +75,6 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php";
 	<p><strong>You can't edit a session once it has been created</strong>  <br>Sessions are immutable. This is because swimmers may be marked as present at a session in the past, changing the session in any way, such as altering the start or finish time would distort the attendance records. Instead, set a DisplayUntil date for the session, after which it will not appear in the register, but will still be visible in attendance history</p>
 </div>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->addJs("js/attendance/edit-end-date.js");
 $footer->render();

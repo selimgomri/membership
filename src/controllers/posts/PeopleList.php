@@ -112,5 +112,5 @@ include BASE_PATH . "views/postsMenu.php";?>
 </div>
 
 <?php
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->render();

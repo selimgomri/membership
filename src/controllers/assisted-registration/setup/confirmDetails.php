@@ -189,6 +189,6 @@ if (isset($_SESSION['AssRegGetDetailsPostData'])) {
   unset($_SESSION['AssRegGetDetailsPostData']);
 }
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
 $footer->render();

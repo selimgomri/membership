@@ -160,5 +160,5 @@ unset($_SESSION['CompletedEntries']);
 unset($_SESSION['CompletedEntryInfo']);
 unset($_SESSION['GalaPaymentSuccess']);
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->render();

@@ -70,6 +70,6 @@ if ($_SESSION['AccessLevel'] == "Parent") { ?>
 </div>
 <?php }
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->useFluidContainer();
 $footer->render(); ?>

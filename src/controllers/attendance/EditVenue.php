@@ -85,6 +85,6 @@ unset($_SESSION['EditVenueError']);
 unset($_SESSION['EditVenueSuccess']);
 unset($_SESSION['NewVenueSuccess']);
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
 $footer->render();

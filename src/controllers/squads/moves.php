@@ -97,5 +97,5 @@ include BASE_PATH . "views/squadMenu.php";
     </div>
   </div>
 </div>
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->render();

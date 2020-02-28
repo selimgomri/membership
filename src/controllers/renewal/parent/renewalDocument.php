@@ -466,5 +466,5 @@ circumstances. (Ticked boxes confirm photography permission.)
 	</div>
 </div>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->render();

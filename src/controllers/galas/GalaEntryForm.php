@@ -142,7 +142,7 @@ include "galaMenu.php";
   <?php } ?>
 </div>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->addJs("public/js/numerical/bignumber.min.js");
 $footer->addJs("public/js/gala-entries/NewEntry.js");
 $footer->render();

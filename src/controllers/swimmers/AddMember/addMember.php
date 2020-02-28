@@ -116,5 +116,5 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 <?=SCDS\CSRF::write()?>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->render();

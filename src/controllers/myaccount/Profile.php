@@ -332,7 +332,7 @@ include BASE_PATH . "views/header.php";
 </div>
 </div>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->useFluidContainer();
 $footer->render(); ?>
 

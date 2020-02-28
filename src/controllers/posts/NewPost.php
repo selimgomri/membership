@@ -92,6 +92,6 @@ include BASE_PATH . "views/postsMenu.php";
 	</form>
 </div>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->addJs("public/js/posts/PostEditor.js");
 $footer->render();

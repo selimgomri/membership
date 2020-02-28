@@ -91,5 +91,5 @@ $pm = \Stripe\PaymentMethod::retrieve($card['MethodID']);
 
 <?php
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->render();

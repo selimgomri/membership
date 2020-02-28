@@ -114,5 +114,5 @@ include BASE_PATH . "views/notifyMenu.php";
       //toolbar: "link",
  });
 </script>
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->render();

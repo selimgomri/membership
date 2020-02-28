@@ -88,6 +88,6 @@ if (isset($_SESSION['AssRegFormError'])) {
   unset($_SESSION['AssRegFormError']);
 }
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
 $footer->render();

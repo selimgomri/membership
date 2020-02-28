@@ -267,7 +267,7 @@ function enableBtn(){
 document.getElementById("submit").disabled = true;
 </script>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
 $footer->render();
 
