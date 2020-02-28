@@ -541,6 +541,6 @@ include BASE_PATH . "views/header.php";
   </div>
 </div>
 
-<script src="<?=autoUrl("public/js/users/UserEdit.js")?>"></script>
-
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->addJs("public/js/users/UserEdit.js");
+$footer->render();

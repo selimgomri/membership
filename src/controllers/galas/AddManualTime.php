@@ -160,4 +160,5 @@ if ($row['CourseLength'] == 'LONG') {
 
 <?php
 
-include BASE_PATH . 'views/footer.php';
+$footer = new \SDCS\Footer();
+$footer->render();

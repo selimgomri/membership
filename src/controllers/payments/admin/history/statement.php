@@ -233,4 +233,5 @@ include BASE_PATH . "views/paymentsMenu.php";
 	</div>
 </div>
 
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->render();

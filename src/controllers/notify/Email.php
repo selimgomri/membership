@@ -275,7 +275,8 @@ include BASE_PATH . "views/notifyMenu.php";
 	</form>
 </div>
 
-<script src="<?=htmlspecialchars(autoUrl("public/js/notify/TinyMCE.js"))?>"></script>
-<script src="<?=htmlspecialchars(autoUrl("public/js/notify/FileUpload.js"))?>"></script>
-
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->addJS("public/js/tinymce/tinymce.min.js");
+$footer->addJS("public/js/notify/TinyMCE.js");
+$footer->addJS("public/js/notify/FileUpload.js");
+$footer->render();

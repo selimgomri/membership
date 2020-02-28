@@ -18,4 +18,5 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   </div>
 </div>
 
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->render();

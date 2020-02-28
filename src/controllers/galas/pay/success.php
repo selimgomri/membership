@@ -160,4 +160,5 @@ unset($_SESSION['CompletedEntries']);
 unset($_SESSION['CompletedEntryInfo']);
 unset($_SESSION['GalaPaymentSuccess']);
 
-include BASE_PATH . "views/footer.php";
+$footer = new \SDCS\Footer();
+$footer->render();

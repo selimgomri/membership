@@ -131,6 +131,6 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	</div>
 </div>
 
-<script src="<?=autoUrl("public/js/medical-forms/MedicalForm.js")?>"></script>
-
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->addJs("public/js/medical-forms/MedicalForm.js");
+$footer->render();

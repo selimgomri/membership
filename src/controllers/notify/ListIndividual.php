@@ -116,6 +116,6 @@ include BASE_PATH . "views/notifyMenu.php";
   </div>
 </div>
 
-<script src="<?=htmlspecialchars(autoUrl("public/js/notify/TargetedListEditor.js"))?>"></script>
-
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->addJs("public/js/notify/TargetedListEditor.js");
+$footer->render();

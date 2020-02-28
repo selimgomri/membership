@@ -248,7 +248,8 @@ if (isset($id)) {
   </div>
 </div>
 
-<?php include BASE_PATH . "views/footer.php"; } else {
+<?php $footer = new \SDCS\Footer();
+$footer->render(); } else {
     $pagetitle = "Code of	Conduct Acceptance";
     include BASE_PATH . "views/header.php";
 		include BASE_PATH . "views/renewalTitleBar.php";
@@ -298,5 +299,6 @@ if (isset($id)) {
   </div>
 </div>
 
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->render();
 }

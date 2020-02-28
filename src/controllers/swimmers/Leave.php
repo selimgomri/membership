@@ -80,4 +80,5 @@ if (isset($_SESSION['ConfirmLeave'])) {
   unset($_SESSION['ConfirmLeave']);
 }
 
-include BASE_PATH . "views/footer.php";
+$footer = new \SDCS\Footer();
+$footer->render();

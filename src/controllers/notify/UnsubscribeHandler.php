@@ -40,4 +40,5 @@ include BASE_PATH . "views/header.php";?>
 	</p>
 </div>
 
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->render();

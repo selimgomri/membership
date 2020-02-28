@@ -14,7 +14,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
   <div
     class="cls-global-footer cls-global-footer-inverse cls-global-footer-body d-print-none mt-3 pb-0 focus-highlight">
     <div
-      class="<?php if (isset($fluidContainer) && $fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
+      class="<?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
       <div class="row">
         <div class="col-lg-6">
           <div class="row">
@@ -97,7 +97,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
 
   <?php } ?>
     <div
-      class="<?php if (isset($fluidContainer) && $fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
+      class="<?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
       <div class="row">
         <div class="col source-org vcard copyright">
           <a href="https://www.myswimmingclub.uk" target="_blank" title="Swimming Club Data Systems Website">
@@ -129,6 +129,8 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
   </div>
 </footer>
 
+</body>
+
 <!-- Modals and Other Hidden HTML -->
 <script rel="preload" src="<?=autoUrl("public/js/jquery-3.4.1.slim.min.js")?>"></script>
 <script defer src="<?=autoUrl("public/js/popper.min.js")?>"></script>
@@ -136,7 +138,12 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
 <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
 <script async src="<?=autoUrl("public/js/Cookies.js")?>"></script>
 <?php } ?>
-</body>
+
+<?php if (isset($this->js)) { ?>
+  <!-- Load per page JS -->
+  <?php foreach ($this->js as $script) {
+    ?><script src="<?=htmlspecialchars($script)?>"></script><?php
+  }
+} ?>
 
 </html>
-<?php //mysqli_close(LINK); ?>

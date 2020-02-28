@@ -309,14 +309,14 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
-<script defer src="<?=autoUrl("public/js/request-a-trial/IsItYouOrYourChild.js")?>"></script>
-<script defer src="<?=autoUrl("public/js/request-a-trial/MultiSwimmers.js")?>"></script>
-
 <?php
 
 unset($_SESSION['RequestTrial-FC']);
 unset($_SESSION['RequestTrial-Errors']);
 unset($_SESSION['RequestTrial-AddAnother']);
 
-include BASE_PATH . 'views/footer.php';
+$footer = new \SDCS\Footer();
+$footer->addJs("public/js/NeedsValidation.js");
+$footer->addJs("public/js/request-a-trial/IsItYouOrYourChild.js");
+$footer->addJs("public/js/request-a-trial/MultiSwimmers.js");
+$footer->render();

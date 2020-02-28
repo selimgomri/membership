@@ -141,5 +141,6 @@ include BASE_PATH . "views/postsMenu.php";
 	</form>
 </div>
 
-<script src="<?=autoUrl("public/js/posts/PostEditor.js")?>"></script>
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->addJs("public/js/posts/PostEditor.js");
+$footer->render();

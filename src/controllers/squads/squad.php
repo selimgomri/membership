@@ -164,11 +164,11 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<?php if ($_SESSION['AccessLevel'] != "Parent") { ?>
-<script src="<?=autoUrl("public/js/Chart.min.js")?>"></script>
-<script src="<?=autoUrl("js/charts/squad.js?squad=" . $id)?>"></script>
-<?php } ?>
-
 <?php
 
-include BASE_PATH . 'views/footer.php';
+$footer = new \SDCS\Footer();
+if ($_SESSION['AccessLevel'] != "Parent") {
+  $footer->addJs("public/js/Chart.min.js");
+  $footer->addJs("js/charts/squad.js?squad=" . $id);
+}
+$footer->render();

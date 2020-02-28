@@ -33,4 +33,5 @@ include BASE_PATH . 'views/header.php';
 
 unset($_SESSION['RequestTrial-Success']);
 
-include BASE_PATH . 'views/footer.php';
+$footer = new \SDCS\Footer();
+$footer->render();

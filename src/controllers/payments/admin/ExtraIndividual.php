@@ -89,6 +89,6 @@ include BASE_PATH . "views/paymentsMenu.php";
   </div>
 </div>
 
-<script src="<?=htmlspecialchars(autoUrl("public/js/payments/ExtraMembers.js"))?>"></script>
-
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->addJs("public/js/payments/ExtraMembers.js");
+$footer->render();

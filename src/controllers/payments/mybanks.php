@@ -103,4 +103,5 @@ $mandateDetails->execute([$_SESSION['UserID'], true]);
 	<?php } ?>
 </div>
 
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->render();

@@ -42,7 +42,8 @@ include BASE_PATH . "views/notifyMenu.php";
 	</div>
 </div>
 
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->render();
 } catch (Exception $e) {
 	pre($e);
 }

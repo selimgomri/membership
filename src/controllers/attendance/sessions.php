@@ -55,8 +55,9 @@ include "attendanceMenu.php";
   </div>
 </div>
 
-<script src="<?=autoUrl('js/attendance/sessions.js')?>"></script>
-
 <?php
 
-include BASE_PATH . "views/footer.php";
+$footer = new \SDCS\Footer();
+$footer->addJs("js/attendance/register.js");
+$footer->useFluidContainer();
+$footer->render();

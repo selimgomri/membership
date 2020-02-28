@@ -72,6 +72,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 
 <?php
 
-include BASE_PATH . "views/footer.php";
+$footer = new \SDCS\Footer();
+$footer->render();
 
 ?>

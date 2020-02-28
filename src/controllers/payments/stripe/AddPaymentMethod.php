@@ -169,11 +169,10 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-
-<script src="<?=autoUrl("js/payment-helpers.js")?>"></script>
-<script src="<?=autoUrl("js/add-payment-card.js")?>"></script>
-<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
-
 <?php
 
-include BASE_PATH . 'views/footer.php';
+$footer = new \SDCS\Footer();
+$footer->addJs("js/payment-helpers.js");
+$footer->addJs("js/add-payment-card.js");
+$footer->addJs("public/js/NeedsValidation.js");
+$footer->render();

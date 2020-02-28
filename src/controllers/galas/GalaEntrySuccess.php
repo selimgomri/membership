@@ -183,4 +183,5 @@ if (isset($_SESSION['SuccessfulGalaEntry'])) {
   unset($_SESSION['SuccessfulGalaEntry']);
 }
 
-include BASE_PATH . "views/footer.php";
+$footer = new \SDCS\Footer();
+$footer->render();

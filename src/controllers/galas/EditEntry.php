@@ -164,10 +164,10 @@ include "galaMenu.php"; ?>
   </div>
 </div>
 
-<?php if (!$locked) { ?>
-<script src="<?=autoUrl("public/js/numerical/bignumber.min.js")?>"></script>
-<script src="<?=autoUrl("public/js/gala-entries/EditEntry.js")?>"></script>
-<?php } ?>
-
 <?php
-include BASE_PATH . "views/footer.php";
+$footer = new \SDCS\Footer();
+if (!$locked) {
+  $footer->addJs("public/js/numerical/bignumber.min.js");
+  $footer->addJs("public/js/gala-entries/EditEntry.js");
+}
+$footer->render();

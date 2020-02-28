@@ -68,12 +68,12 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<script defer src="<?=autoUrl("public/js/NeedsValidation.js")?>"></script>
-
 <?php
 
 if (isset($_SESSION['AssRegFormError'])) {
   unset($_SESSION['AssRegFormError']);
 }
 
-include BASE_PATH . 'views/footer.php';
+$footer = new \SDCS\Footer();
+$footer->addJs("public/js/NeedsValidation.js");
+$footer->render();

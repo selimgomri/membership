@@ -33,6 +33,6 @@ include BASE_PATH . "views/header.php";
 
 </div>
 
-<script src="<?=autoUrl("js/users/list.js")?>"></script>
-
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->addJs("js/users/list.js");
+$footer->render();

@@ -706,4 +706,6 @@ var chart = new Chart(ctx, {
 </script>
 <?php } ?>
 
-<?php include BASE_PATH . "views/footer.php";
+<?php $footer = new \SDCS\Footer();
+$footer->useFluidContainer();
+$footer->render();
