@@ -243,6 +243,6 @@ include BASE_PATH . 'views/header.php';
 
 <?php
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->addJs("js/squad-reps/select.js");
 $footer->render();

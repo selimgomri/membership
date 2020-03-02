@@ -69,6 +69,15 @@ include BASE_PATH . "views/header.php";
     	<?php unset($_SESSION['OptionsUpdate']);
     	} ?>
 
+			<?php if (isset($_SESSION['EmailUpdateError'])) { ?>
+    		<div class="alert alert-success">
+    			<p class="mb-0">
+    				<?=$_SESSION['EmailUpdateError']?>
+    			</p>
+    		</div>
+    	<?php unset($_SESSION['EmailUpdateError']);
+    	} ?>
+
     	<?php if (isset($_SESSION['EmailUpdate']) && $_SESSION['EmailUpdate']) { ?>
     		<div class="alert alert-success">
     			<p class="mb-0">
@@ -229,7 +238,7 @@ include BASE_PATH . "views/header.php";
   </div>
 </div>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
 $footer->useFluidContainer();
 $footer->render(); ?>

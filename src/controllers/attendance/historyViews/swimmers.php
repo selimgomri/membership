@@ -81,6 +81,6 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
   </script>
 
 </div>
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->render();
 ?>

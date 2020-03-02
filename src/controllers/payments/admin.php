@@ -163,5 +163,5 @@ var chart = new Chart(ctx, {
 });
 </script>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->render();

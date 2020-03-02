@@ -80,5 +80,5 @@ if (isset($_SESSION['ConfirmLeave'])) {
   unset($_SESSION['ConfirmLeave']);
 }
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->render();

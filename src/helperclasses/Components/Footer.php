@@ -1,6 +1,6 @@
 <?php
 
-namespace SDCS;
+namespace SCDS;
 
 /**
  * Class for footer

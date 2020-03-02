@@ -89,6 +89,6 @@ document.getElementById("search").oninput=getResult;
 
 <?php
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->useFluidContainer();
 $footer->render();

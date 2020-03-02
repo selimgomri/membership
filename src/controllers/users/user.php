@@ -541,6 +541,6 @@ include BASE_PATH . "views/header.php";
   </div>
 </div>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->addJs("public/js/users/UserEdit.js");
 $footer->render();

@@ -8,7 +8,7 @@ try {
 	$query = $db->prepare($sql);
 	$query->execute([$_SESSION['UserID']]);
 } catch (Exception $e) {
-	halt(500);
+	halt(404);
 }
 $row = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -22,11 +22,13 @@ if ($_POST['EmailComms']) {
 if ($email_comms != $row['EmailComms']) {
 	$email_comms_update = true;
 	$_SESSION['OptionsUpdate'] = true;
+	$emailCommsDb = (int) $email_comms;
   $sql = "UPDATE `users` SET `EmailComms` = ? WHERE `UserID` = ?";
   try {
-  	$db->prepare($sql)->execute([$email_comms, $_SESSION['UserID']]);
+  	$db->prepare($sql)->execute([$emailCommsDb, $_SESSION['UserID']]);
   } catch (Exception $e) {
-  	halt(500);
+		// Could not update settings
+		$_SESSION['EmailUpdateError'] = '<p class="mb-0"><strong>We were unable to change your email subscription preferences</strong></p><p class="mb-0">Please try again. If the issue persists, please contact support referencing <span class="mono">Email Preferences Update Error</span></p>';
   }
 }
 
@@ -51,7 +53,9 @@ if ($_POST['EmailAddress'] != $row['EmailAddress']) {
 		try {
 			$db->prepare($sql)->execute([$authCode, $user_details, 'EmailUpdate']);
 		} catch (Exception $e) {
-			halt(500);
+			// Could not add to db
+			reportError($e);
+			$_SESSION['EmailUpdateError'] = '<p class="mb-0"><strong>We were unable to add your new email address to our awaiting confirmation list</strong></p><p class="mb-0">Please try again. If the issue persists, please contact support referencing <span class="mono">Email Address Update Error</span></p>';
 		}
 		$id = $db->lastInsertId();
 

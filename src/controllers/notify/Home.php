@@ -98,5 +98,5 @@ include BASE_PATH . "views/notifyMenu.php";
 <?php
 
 unset($_SESSION['NotifyIndivSuccess']);
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->render();

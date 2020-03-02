@@ -103,5 +103,5 @@ $mandateDetails->execute([$_SESSION['UserID'], true]);
 	<?php } ?>
 </div>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->render();

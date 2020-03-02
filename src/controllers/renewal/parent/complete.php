@@ -38,5 +38,5 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	</div>
 </div>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->render();

@@ -35,7 +35,7 @@ if ($user = $getUser->fetchColumn()) {
       </div>
     </div>
 		<?php
-		$footer = new \SDCS\Footer();
+		$footer = new \SCDS\Footer();
 $footer->render();
 	} else {
 		// Return as password error
@@ -53,7 +53,7 @@ $footer->render();
       </div>
     </div>
 		<?php
-		$footer = new \SDCS\Footer();
+		$footer = new \SCDS\Footer();
 $footer->render();
 	}
 } else {

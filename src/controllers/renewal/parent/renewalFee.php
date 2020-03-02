@@ -334,5 +334,5 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 <?php
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->render();

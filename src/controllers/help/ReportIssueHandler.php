@@ -56,5 +56,5 @@ include BASE_PATH . 'views/header.php'; ?>
 if (isset($_SESSION['ErrorReportStatus'])) {
 	unset($_SESSION['ErrorReportStatus']);
 }
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->render();

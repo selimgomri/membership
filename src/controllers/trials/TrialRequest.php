@@ -174,6 +174,6 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 unset($_SESSION['TrialAppointmentUpdated']);
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
 $footer->render();

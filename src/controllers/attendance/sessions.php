@@ -57,7 +57,7 @@ include "attendanceMenu.php";
 
 <?php
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->addJs("js/attendance/register.js");
 $footer->useFluidContainer();
 $footer->render();

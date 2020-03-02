@@ -166,7 +166,7 @@ include BASE_PATH . 'views/header.php';
 
 <?php
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 if ($_SESSION['AccessLevel'] != "Parent") {
   $footer->addJs("public/js/Chart.min.js");
   $footer->addJs("js/charts/squad.js?squad=" . $id);

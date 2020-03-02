@@ -166,6 +166,6 @@ include BASE_PATH . "views/header.php";
 	</form>
 </div>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->addJs("public/js/medical-forms/MedicalForm.js");
 $footer->render();

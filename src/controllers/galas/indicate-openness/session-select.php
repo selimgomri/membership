@@ -130,5 +130,5 @@ include BASE_PATH . 'views/header.php';
 
 <?php
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->render();

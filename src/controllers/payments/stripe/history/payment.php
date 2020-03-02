@@ -341,5 +341,5 @@ $countries = getISOAlpha2Countries();
 
 <?php
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->render();

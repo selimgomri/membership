@@ -28,5 +28,5 @@ unset($_SESSION['AssRegUser']);
 unset($_SESSION['AssRegPass']);
 unset($_SESSION['AssRegComplete']);
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->render();

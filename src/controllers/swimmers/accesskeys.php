@@ -64,7 +64,7 @@ if ($row = $swimmers->fetch(PDO::FETCH_ASSOC)) { ?>
 
 <?php
 
-  $footer = new \SDCS\Footer();
+  $footer = new \SCDS\Footer();
 $footer->render();
 
   ?>

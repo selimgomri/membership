@@ -706,6 +706,6 @@ var chart = new Chart(ctx, {
 </script>
 <?php } ?>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->useFluidContainer();
 $footer->render();

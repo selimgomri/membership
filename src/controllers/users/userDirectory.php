@@ -33,6 +33,6 @@ include BASE_PATH . "views/header.php";
 
 </div>
 
-<?php $footer = new \SDCS\Footer();
+<?php $footer = new \SCDS\Footer();
 $footer->addJs("js/users/list.js");
 $footer->render();

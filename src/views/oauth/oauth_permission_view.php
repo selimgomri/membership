@@ -54,6 +54,6 @@ include BASE_PATH . "views/head.php";
 <div class="mt-auto"></div>
 </div>
 <?php
-  $footer = new \SDCS\Footer();
+  $footer = new \SCDS\Footer();
 $footer->render();
 ?>

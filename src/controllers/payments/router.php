@@ -2,6 +2,12 @@
 
 $access = $_SESSION['AccessLevel'];
 
+if ($access == 'Admin') {
+	$this->group('/categories', function() {
+		include 'categories/router.php';
+	});
+}
+
 if ($access == "Parent") {
 
 	$this->get('/', function() {

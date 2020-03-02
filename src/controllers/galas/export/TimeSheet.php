@@ -44,7 +44,7 @@ if ($noTimeSheet) {
 		<?php } ?>
   </div>
   <?php
-  $footer = new \SDCS\Footer();
+  $footer = new \SCDS\Footer();
 $footer->render();
 } else {
 	// output headers so that the file is downloaded rather than displayed

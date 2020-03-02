@@ -154,5 +154,5 @@ if (isset($_SESSION['SuccessfulGalaEntry'])) {
   unset($_SESSION['SuccessfulGalaEntry']);
 }
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->render();

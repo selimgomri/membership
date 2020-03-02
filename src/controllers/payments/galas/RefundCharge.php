@@ -296,7 +296,7 @@ include BASE_PATH . 'views/header.php';
 
 <?php
 
-$footer = new \SDCS\Footer();
+$footer = new \SCDS\Footer();
 $footer->addJs("public/js/numerical/bignumber.min.js");
 $footer->addJs("js/galas/refund-entries.js");
 $footer->render();
