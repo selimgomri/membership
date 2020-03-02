@@ -2,6 +2,8 @@
 
 global $db;
 
+$pagetitle = "Categories";
+
 include BASE_PATH . 'views/header.php';
 
 ?>
