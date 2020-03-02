@@ -1338,4 +1338,5 @@ include BASE_PATH . 'includes/membership-fees/Loader.php';
 include BASE_PATH . 'includes/pdf/StringReplacements.php';
 include BASE_PATH . 'includes/GetCachedFile.php';
 include BASE_PATH . 'includes/BankHolidays.php';
+include BASE_PATH . 'includes/GetContrastColour.php';
 require BASE_PATH . 'helperclasses/Components/Footer.php';

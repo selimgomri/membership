@@ -204,9 +204,6 @@ ob_start();?>
             <th>
               Amount
             </th>
-            <th>
-              Status
-            </th>
           </tr>
         </thead>
         <tbody>
@@ -243,9 +240,6 @@ ob_start();?>
               <?php } else { ?>
               -&pound;<?=htmlspecialchars(number_format(($row['Amount']/100),2,'.',''))?> (Credit)
               <?php } ?>
-            </td>
-            <td>
-              <?=htmlspecialchars($row['Status'])?>
             </td>
           </tr>
           <?php

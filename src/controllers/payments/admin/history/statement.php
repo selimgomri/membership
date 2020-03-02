@@ -146,9 +146,6 @@ include BASE_PATH . "views/paymentsMenu.php";
   						<th>
   							Amount
   						</th>
-  						<th>
-  							Status
-  						</th>
   					</tr>
   				</thead>
   				<tbody>
@@ -185,9 +182,6 @@ include BASE_PATH . "views/paymentsMenu.php";
                 <?php } else { ?>
                 -&pound;<?=htmlspecialchars(number_format(($row['Amount']/100),2,'.',''))?> (Credit)
                 <?php } ?>
-  						</td>
-  						<td>
-  							<?=htmlspecialchars($row['Status'])?>
   						</td>
   					</tr>
   					<?php
