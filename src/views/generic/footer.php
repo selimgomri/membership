@@ -113,13 +113,13 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
       $seconds = $time_end - $time_start;
       ?>
           <p class="hidden-print">
-            Designed and Built by <a class="text-white" href="https://www.myswimmingclub.uk"
+            Membership is designed and built by <a class="text-white" href="https://www.myswimmingclub.uk"
               target="_blank">Swimming Club Data Systems</a>. Licenced to <?=htmlspecialchars(env('CLUB_NAME'))?>.
           </p>
           <p>Page rendered in <?=number_format($seconds, 3)?> seconds. <?php if (defined('SOFTWARE_VERSION')) { ?>Software version <?=mb_substr(SOFTWARE_VERSION, 0, 7);?>.<?php } ?>
           </p>
           <p class="mb-0">
-            &copy; <?=$time->format('Y')?> <span class="org fn">Chris Heppell <span aria-hidden="true">T/A</span><span class="sr-only">trading as</span> Swimming Club Data Systems, and Chester&#8209;le&#8209;Street ASC</span>. Swimming Club Data Systems is not responsible
+            &copy; <?=$time->format('Y')?> <span class="org fn">Swimming Club Data Systems</span>. Swimming Club Data Systems is not responsible
             for the content of external sites.
           </p>
         </div>
