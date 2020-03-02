@@ -32,6 +32,8 @@ $addPaymentForCharge = $db->prepare("INSERT INTO `payments` (`Date`, `Status`, `
 
 $setPaymentsPending = $db->prepare("UPDATE `paymentsPending` SET `Status` = ? WHERE `UserID` = ? AND `Status` = 'Pending' AND `Date` <= ?");
 
+$setPaymentsPendingPM = $db->prepare("UPDATE `paymentsPending` SET `PMkey` = ?WHERE `UserID` = ? AND `Status` = 'Pending' AND `Date` <= ?");
+
 $getCountPending = $db->prepare("SELECT COUNT(*) FROM `paymentsPending` WHERE `UserID` = ? AND `Status` = 'Pending';");
 
 // Begin transaction
@@ -277,6 +279,13 @@ try {
         ]);
         $setPaymentsPending->execute([
           'Paid',
+          $user,
+          $date
+        ]);
+
+        // Set items on bill
+        $setPaymentsPendingPM->execute([
+          'NA' . $id,
           $user,
           $date
         ]);
