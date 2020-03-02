@@ -10,7 +10,7 @@
 function getAccountBalance($user) {
   global $db;
 
-  $getBalance = $db->prepare("SELECT SUM(Amount) FROM paymentsPending WHERE UserID = ? AND (`Status` = 'Pending' OR `Status` = 'Queued' OR `Status` = 'Requested') AND `Type` = ?");
+  $getBalance = $db->prepare("SELECT SUM(paymentsPending.Amount) FROM paymentsPending LEFT JOIN payments ON paymentsPending.PMkey = payments.PMkey WHERE paymentsPending.UserID = ? AND (paymentsPending.Status = 'Pending' OR paymentsPending.Status = 'Queued' OR payments.Status = 'pending_api_request' OR payments.Status = 'pending_customer_approval' OR payments.Status = 'pending_submission' OR payments.Status = 'submitted') AND paymentsPending.Type = ?");
   $getBalance->execute([
     $user,
     'Payment'
