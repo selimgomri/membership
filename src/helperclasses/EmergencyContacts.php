@@ -27,7 +27,7 @@ class EmergencyContacts {
 		}
 	}
 
-	public function bySwimmer($id) {
+	public function bySwimmer(int $id) {
 		$sql = $this->dbconn->prepare("SELECT ID, UserID, `Name`, ContactNumber FROM `members` LEFT JOIN `emergencyContacts` ON members.UserID = emergencyContacts.UserID WHERE `MemberID` = ?");
     $sql->execute([$id]);
     while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {

@@ -18,7 +18,7 @@ class EmergencyContact {
 		// DO NOTHING
   }
 
-	public function new($name, $contactNumber, $user, $relation = null) {
+	public function new($name, $contactNumber, int $user, $relation = null) {
 		$this->name = ucwords($name);
 		try {
 			$number = \Brick\PhoneNumber\PhoneNumber::parse($contactNumber, 'GB');
@@ -36,7 +36,7 @@ class EmergencyContact {
 		}
   }
 
-	public function existing($contactId, $user, $name, $contactNumber, $relation = null) {
+	public function existing(int $contactId, int $user, $name, $contactNumber, $relation = null) {
 		$this->contactId = $contactId;
 		$this->user = $user;
 		$this->name = $name;
@@ -46,7 +46,7 @@ class EmergencyContact {
 		}
   }
 
-	public function getByContactID($contactId) {
+	public function getByContactID(int $contactId) {
 		$this->contactId = $contactId;
 		if ($this->dbconn == null) {
 			return false;
