@@ -12,6 +12,12 @@ $v = null;
 if (isset($_SESSION['POST_DATA'])) {
   $v = $_SESSION['POST_DATA'];
   unset($_SESSION['POST_DATA']);
+} else {
+  $v = [
+    'name' => '',
+    'relation' => '',
+    'num' => ''
+  ];
 }
 
 ?>

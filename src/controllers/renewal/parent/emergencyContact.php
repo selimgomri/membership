@@ -84,8 +84,8 @@ include BASE_PATH . "views/renewalTitleBar.php";
                   </em>
 								</p>
 								<p class="mb-0">
-									<a href="tel:<?=htmlspecialchars($mobile->format(PhoneNumberFormat::RFC3966))?>">
-										<?=htmlspecialchars($mobile->format(PhoneNumberFormat::NATIONAL))?>
+									<a href="tel:<?=htmlspecialchars($contactsArray[$i]->getRFCContactNumber())?>">
+										<?=htmlspecialchars($contactsArray[$i]->getNationalContactNumber())?>
 									</a>
 								</p>
 							</div>
