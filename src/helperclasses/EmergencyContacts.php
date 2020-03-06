@@ -9,10 +9,10 @@ class EmergencyContacts {
 		$this->dbconn = $dbconn;
 	}
 
-	public function byParent($id) {
+	public function byParent(int $id) {
     $sql = $this->dbconn->prepare("SELECT ID, UserID, `Name`, ContactNumber, `Relation` FROM `emergencyContacts` WHERE `UserID` = ?");
     $sql->execute([
-			(int) $id
+			$id
 		]);
 		while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 			$new = new EmergencyContact();
@@ -28,7 +28,7 @@ class EmergencyContacts {
 	}
 
 	public function bySwimmer($id) {
-		$sql = $this->dbconn->prepare("SELECT ID, UserID, Name, ContactNumber FROM `members` LEFT JOIN `emergencyContacts` ON members.UserID = emergencyContacts.UserID WHERE `MemberID` = ?");
+		$sql = $this->dbconn->prepare("SELECT ID, UserID, `Name`, ContactNumber FROM `members` LEFT JOIN `emergencyContacts` ON members.UserID = emergencyContacts.UserID WHERE `MemberID` = ?");
     $sql->execute([$id]);
     while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 			$new = new EmergencyContact();
