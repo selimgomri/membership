@@ -12,6 +12,14 @@ include BASE_PATH . "views/paymentsMenu.php";
 ?>
 
 <div class="container">
+	<?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Latest fees</li>
+    </ol>
+  </nav>
+  <?php } ?>
 	<div class="row">
     <div class="col-md-8">
   		<h1 class="">Charges since last bill</h1>

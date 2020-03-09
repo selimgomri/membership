@@ -33,6 +33,33 @@ if ($selectSchedule->fetchColumn() == 0) {
     $accNumEnd = $bank->account_number_ending;
     $bankName = $bank->bank_name;
 
+    // So all good so far, disable any old direct debits and cancel
+    $getMandates = $db->prepare("SELECT Mandate, MandateID FROM paymentMandates WHERE UserID = ? AND InUse = 1");
+    $getMandates->execute([
+      $_SESSION['UserID']
+    ]);
+    $setOutOfUse = $db->prepare("UPDATE paymentMandates SET InUse = 0 WHERE MandateID = ?");
+    while ($oldMandate = $getMandates->fetch(PDO::FETCH_ASSOC)) {
+      try {
+        // Cancel the mandate
+        $client->mandates()->cancel($oldMandate['Mandate']);
+
+        // Only set OOU in DB if above does not throw exception
+        $setOutOfUse->execute([
+          $oldMandate['MandateID']
+        ]);
+      } catch (Exception $e) {
+        // Returns cancellation_failed error on failure
+        // Oops can't cancel
+      }
+    }
+
+    // Delete old preferred mandates if existing
+    $deletePref = $db->prepare("DELETE FROM paymentPreferredMandate WHERE UserID = ?");
+    $deletePref->execute([
+      $_SESSION['UserID']
+    ]);
+
     $insertToMandates = $db->prepare("INSERT INTO `paymentMandates` (`UserID`, `Name`, `Mandate`, `Customer`, `BankAccount`, `BankName`, `AccountHolderName`, `AccountNumEnd`, `InUse`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $insertToMandates->execute([
       $_SESSION['UserID'],
@@ -46,17 +73,14 @@ if ($selectSchedule->fetchColumn() == 0) {
       true
     ]);
 
-    // If there is no preferred mandate existing, automatically set it to the one we've just added
-    $getPreferredCount = $db->prepare("SELECT COUNT(*) FROM `paymentPreferredMandate` WHERE `UserID` = ?");
-    $getPreferredCount->execute([$_SESSION['UserID']]);
-    if ($getPreferredCount->fetchColumn() == 0) {
-      $getMandateId = $db->prepare("SELECT `MandateID` FROM `paymentMandates` WHERE `Mandate` = ?");
-      $getMandateId->execute([$mandate]);
-      if ($mandateId = $getMandateId->fetchColumn()) {
-        $insertPreferred = $db->prepare("INSERT INTO `paymentPreferredMandate` (`MandateID`, `UserID`) VALUES (?, ?)");
-        $insertPreferred->execute([$mandateId, $user]);
-      }
-    }
+    $mandateDbId = $db->lastInsertId();
+
+    // Set as preferred mandate
+    $setPref = $db->prepare("INSERT INTO paymentPreferredMandate (UserID, MandateID) VALUES (?, ?)");
+    $setPref->execute([
+      $_SESSION['UserID'],
+      $mandateDbId
+    ]);
 
     $db->commit();
 

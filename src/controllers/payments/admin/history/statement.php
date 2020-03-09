@@ -52,12 +52,30 @@ $pagetitle = "Statement for " . htmlspecialchars($name) . ", " . htmlspecialchar
 
 $_SESSION['qr'][0]['text'] = autoUrl("payments/history/statement/" . htmlspecialchars(strtoupper($PaymentID)));
 
+$billDate = null;
+try {
+  $billDate = new DateTime($payment_info['Date'], new DateTimeZone('UTC'));
+  $billDate->setTimezone(new DateTimeZone('Europe/London'));
+} catch (Exception $e) {
+  $billDate = new DateTime('now', new DateTimeZone('Europe/London'));
+}
+
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
 
  ?>
 
 <div class="container">
+  <?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("payments/transactions")?>">History</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars($billDate->format("j M Y"))?></li>
+    </ol>
+  </nav>
+  <?php } ?>
+
 	<div class="">
     <span class="d-none d-print-block h1"><?=htmlspecialchars(env('CLUB_NAME'))?> Payments</span>
     <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
@@ -151,7 +169,6 @@ include BASE_PATH . "views/paymentsMenu.php";
   				<tbody>
   				<?php
   				do {
-  					//$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
   					$data = "";
   					if ($row['MetadataJSON'] != "" || $row['MetadataJSON'] != "") {
   						$json = json_decode($row['MetadataJSON']);
@@ -159,11 +176,14 @@ include BASE_PATH . "views/paymentsMenu.php";
   							$data .= '<ul class="list-unstyled mb-0">';
   							//echo sizeof($json->Members);
   							//pre($json->Members);
-  							//echo $json->Members[0]->MemberName;
-  							$numMems = (int) sizeof($json->Members);
-  							for ($y = 0; $y < $numMems; $y++) {
-  								$data .= '<li>' . htmlspecialchars($json->Members[$y]->FeeName) . " (&pound;" . htmlspecialchars($json->Members[$y]->Fee) . ") for " . htmlspecialchars($json->Members[$y]->MemberName) . '</li>';
-  							}
+                //echo $json->Members[0]->MemberName;
+                $numMems = 0;
+                if (isset($json->Members) && $json->Members != null) {
+                  $numMems = (int) sizeof($json->Members);
+                  for ($y = 0; $y < $numMems; $y++) {
+                    $data .= '<li>' . htmlspecialchars($json->Members[$y]->FeeName) . " (&pound;" . htmlspecialchars($json->Members[$y]->Fee) . ") for " . htmlspecialchars($json->Members[$y]->MemberName) . '</li>';
+                  }
+                }
   							$data .= '</ul>';
   						}
   					}
