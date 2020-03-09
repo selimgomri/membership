@@ -32,6 +32,13 @@ include BASE_PATH . "views/paymentsMenu.php";
 -->
 
 <div class="container">
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Payments</li>
+    </ol>
+  </nav>
+
   <div class="row align-items-center">
     <div class="col-md-6 col-lg-8">
     	<h1>Payments</h1>
@@ -77,9 +84,10 @@ include BASE_PATH . "views/paymentsMenu.php";
           <p><?=htmlspecialchars(env('CLUB_NAME'))?> does not store your bank details.</p>
         <?php } ?>
         <p class="mb-0">
-        	<a href="<?=autoUrl("payments/setup")?>" class="btn btn-dark btn-block">Add Bank Account</a>
           <?php if (userHasMandates($user)) { ?>
-        	<a href="<?=autoUrl("payments/mandates")?>" class="btn btn-dark btn-block">Switch or Manage Bank Account</a>
+        	<a href="<?=autoUrl("payments/mandates")?>" class="btn btn-dark btn-block">Manage your bank account</a>
+          <?php } else { ?>
+          <a href="<?=autoUrl("payments/setup")?>" class="btn btn-dark btn-block">Setup a Direct Debit</a>
           <?php } ?>
         </p>
       </div>
