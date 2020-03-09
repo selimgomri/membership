@@ -134,7 +134,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       $content .= "<td><ul class=\"mb-0 list-unstyled\">";
 
       // Print <li>Swim Name</li> for each entry
-      if ($row['HyTek'] != 1) {
+      if (!bool($row['HyTek'])) {
         for ($y=0; $y<sizeof($swimsArray); $y++) {
           if ($row[$swimsArray[$y]] == 1) {
             $content .= "<li><strong>" . ($swimsTextArray[$y]) . '</strong>';
@@ -144,8 +144,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
             $content .= "</li>";
           }
         }
-      }
-      else {
+      } else {
         for ($y=0; $y<sizeof($swimsArray); $y++) {
           $output = "";
           $mins = $secs = $hunds = 0;

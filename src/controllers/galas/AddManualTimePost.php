@@ -20,23 +20,29 @@ if ($_SESSION['AccessLevel'] == 'Parent' && $row['UserID'] != $_SESSION['UserID'
 	halt(404);
 }
 
-$member = $row['MemberID'];
-
-$type = null;
-if ($row['CourseLength'] == "SHORT") {
-	$type = "SCPB";
-} else {
-	$type = "LCPB";
-}
-$getTimes = $db->prepare("SELECT * FROM `times` WHERE `MemberID` = ? AND `Type` = ?;");
-$getTimes->execute([
-	$member,
-	$type
-]);
-$times = $getTimes->fetch(PDO::FETCH_ASSOC);
-
 try {
 	$db->beginTransaction();
+
+	$member = $row['MemberID'];
+
+	$type = null;
+	if ($row['CourseLength'] == "SHORT") {
+		$type = "SCPB";
+	} else {
+		$type = "LCPB";
+	}
+	$getTimes = $db->prepare("SELECT * FROM `times` WHERE `MemberID` = ? AND `Type` = ?;");
+	$getTimes->execute([
+		$member,
+		$type
+	]);
+	$times = $getTimes->fetch(PDO::FETCH_ASSOC);
+
+	if (bool($row['EntryProcessed']) && $_SESSION['AccessLevel'] == 'Parent') {
+		// Cannot change times as entry processed
+		$errorMessage = "Your entry has already been processed. As a result you are no longer able to edit your entry times. Please speak to your gala coordinator if you need to make changes.";
+		throw new Exception($errorMessage);
+	}
 
 	for ($i = 0; $i < sizeof($swimsArray); $i++) {
 		$time = "";
@@ -66,9 +72,11 @@ try {
 	}
 	$db->commit();
 	$_SESSION['UpdateSuccess'] = true;
-} catch (Exception $e) {
+} catch (PDOException $e) {
 	$db->rollBack();
 	$_SESSION['UpdateSuccess'] = false;
+} catch (Exception $e) {
+	$_SESSION['UpdateError'] = $e->getMessage();
 }
 
 header("Location: " . currentUrl());
