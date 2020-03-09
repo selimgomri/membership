@@ -13,6 +13,13 @@ $sql->execute([$id]);
 
 $row = $sql->fetch(PDO::FETCH_ASSOC);
 
+$locked = "";
+$processed = false;
+if ($_SESSION['AccessLevel'] == 'Parent' && bool($row['EntryProcessed'])) {
+	$locked = " disabled ";
+	$processed = true;
+}
+
 if ($row == null) {
 	halt(404);
 }
@@ -68,6 +75,36 @@ if ($row['CourseLength'] == 'LONG') {
 	<div class="row">
 		<div class="col-lg-8">
 
+			<?php if ($processed) { ?>
+			<div class="alert alert-warning">
+				<p class="mb-0">
+					<strong>This entry has already been processed.</strong>
+				</p>
+				<p class="mb-0">
+					As a result you are no longer able to edit your entry times. Please speak to your gala coordinator if you need to make changes.
+				</p>
+				<?php if (isset($_SESSION['UpdateError'])) { ?>
+				<p class="mb-0 mt-3">
+					<?=htmlspecialchars($_SESSION['UpdateError'])?>
+				</p>
+				<?php unset($_SESSION['UpdateError']); } ?>
+			</div>
+			<?php } else if (bool($row['EntryProcessed'])) { ?>
+			<div class="alert alert-warning">
+				<p class="mb-0">
+					<strong>This entry has already been processed.</strong>
+				</p>
+				<p class="mb-0">
+					You may make changes, but any changes you make may not necessarily be submitted to the gala host.
+				</p>
+				<?php if (isset($_SESSION['UpdateError'])) { ?>
+				<p class="mb-0 mt-3">
+					<?=htmlspecialchars($_SESSION['UpdateError'])?>
+				</p>
+				<?php unset($_SESSION['UpdateError']); } ?>
+			</div>
+			<?php } ?>
+
 			<?php if (isset($_SESSION['UpdateSuccess'])) {
 				if ($_SESSION['UpdateSuccess']) { ?>
 				<div class="alert alert-success">
@@ -116,33 +153,41 @@ if ($row['CourseLength'] == 'LONG') {
 								<?=$swimsTextArray[$i]?>
 							</label>
 						</strong>
-						<?php if ($times[$swimsArray[$i]] != "") {
-							echo $times[$swimsArray[$i]];
-						} else {
-							$matches = $mins = $secs = $hunds = null;
-							if ($row[$swimsTimeArray[$i]] != "") {
-								if (preg_match('/([0-9]+)\:([0-9]{0,2})\.([0-9]{0,2})/', $row[$swimsTimeArray[$i]], $matches)) {
-									if (isset($matches[1]) && $matches[1] != 0) {
-										$mins = $matches[1];
-									}
-									if (isset($matches[2]) && $matches[2] != 0) {
-										$secs = $matches[2];
-									}
-									if (isset($matches[3]) && $matches[3] != 0) {
-										$hunds = $matches[3];
-									}
+						<?php
+						$matches = $mins = $secs = $hunds = "";
+						if ($row[$swimsTimeArray[$i]] != "") {
+							if (preg_match('/([0-9]+)\:([0-9]{0,2})\.([0-9]{0,2})/', $row[$swimsTimeArray[$i]], $matches)) {
+								if (isset($matches[1]) && $matches[1] != 0) {
+									$mins = $matches[1];
+								}
+								if (isset($matches[2]) && $matches[2] != 0) {
+									$secs = $matches[2];
+								}
+								if (isset($matches[3]) && $matches[3] != 0) {
+									$hunds = $matches[3];
 								}
 							}
-							?>
+						} else if ($times[$swimsArray[$i]] != "") {
+							if (preg_match('/([0-9]+)\:([0-9]{0,2})\.([0-9]{0,2})/', $times[$swimsArray[$i]], $matches)) {
+								if (isset($matches[1]) && $matches[1] != 0) {
+									$mins = $matches[1];
+								}
+								if (isset($matches[2]) && $matches[2] != 0) {
+									$secs = $matches[2];
+								}
+								if (isset($matches[3]) && $matches[3] != 0) {
+									$hunds = $matches[3];
+								}
+							}
+						}
+						?>
 						<div class="form-group mb-0 mt-2">
 							<div class="input-group">
-								<input type="number" class="form-control" placeholder="Minutes" name="<?=$swimsTimeArray[$i]?>Mins" id="<?=$swimsTimeArray[$i]?>Mins" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" value="<?=htmlspecialchars($mins)?>">
-								<input type="number" class="form-control" placeholder="Seconds" name="<?=$swimsTimeArray[$i]?>Secs" id="<?=$swimsTimeArray[$i]?>Secs" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="59" value="<?=htmlspecialchars($secs)?>">
-								<input type="number" class="form-control" placeholder="Hundreds" name="<?=$swimsTimeArray[$i]?>Hunds" id="<?=$swimsTimeArray[$i]?>Hunds" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="99" value="<?=htmlspecialchars($hunds)?>">
+								<input type="number" class="form-control" placeholder="Minutes" name="<?=$swimsTimeArray[$i]?>Mins" id="<?=$swimsTimeArray[$i]?>Mins" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" value="<?=htmlspecialchars($mins)?>" <?=$locked?>>
+								<input type="number" class="form-control" placeholder="Seconds" name="<?=$swimsTimeArray[$i]?>Secs" id="<?=$swimsTimeArray[$i]?>Secs" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="59" value="<?=htmlspecialchars($secs)?>" <?=$locked?>>
+								<input type="number" class="form-control" placeholder="Hundreds" name="<?=$swimsTimeArray[$i]?>Hunds" id="<?=$swimsTimeArray[$i]?>Hunds" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="99" value="<?=htmlspecialchars($hunds)?>" <?=$locked?>>
 							</div>
 						</div>
-							<?php
-						} ?>
 					</div>
 				</div>
 				<?php } ?>
@@ -150,7 +195,7 @@ if ($row['CourseLength'] == 'LONG') {
 				</div>
 
 				<p>
-					<button class="btn btn-success" type="submit">Save</button>
+					<button class="btn btn-success" type="submit" <?=$locked?>>Save</button>
 				</p>
 			</form>
 		</div>
