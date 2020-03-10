@@ -6,24 +6,22 @@ const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
-  [
-    '/',
-    'pwa/offline',
-    'public/colour.css',
-    'public/css/font-awesome/css/font-awesome.min.css',
-    'public/css/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0',
-    'public/css/generic/generic-0.14-prefixed.css',
-    'public/css/chester/chester-2.2.1-prefixed.css',
-    'public/img/corporate/scds.png',
-    'public/js/Cookies.js',
-    'public/js/NeedsValidation.js',
-    'public/js/bootstrap.min.js',
-    'public/js/jquery-3.4.1.slim.min.js',
-    'public/js/popper.min.js',
-    'public/js/tinymce/tinymce.min.js',
-    'public/js/notify/TinyMCE.js',
-    'public/js/notify/FileUpload.js'
-  ]
+  // '/',
+  '/pwa/offline',
+  '/public/colour.css',
+  '/public/css/font-awesome/css/font-awesome.min.css',
+  '/public/css/font-awesome/fonts/fontawesome-webfont.woff2',
+  '/public/css/generic/generic-0.14-prefixed.css',
+  '/public/css/chester/chester-2.2.1-prefixed.css',
+  '/public/img/corporate/scds.png',
+  '/public/js/Cookies.js',
+  '/public/js/NeedsValidation.js',
+  '/public/js/bootstrap.min.js',
+  '/public/js/jquery-3.4.1.slim.min.js',
+  '/public/js/popper.min.js',
+  '/public/js/tinymce/tinymce.min.js',
+  '/public/js/notify/TinyMCE.js',
+  '/public/js/notify/FileUpload.js'
 ];
 
 // The install handler takes care of precaching the resources we always need.
@@ -53,7 +51,7 @@ self.addEventListener('activate', event => {
 // If no response is found, it populates the runtime cache with the response
 // from the network before returning it to the page.
 self.addEventListener('fetch', event => {
-  console.log(event);
+  // console.log(event);
   // Skip cross-origin requests, like those for Google Analytics.
   if (event.request.url.startsWith(self.location.origin + '/public') && event.request.method == 'GET') {
     event.respondWith(
@@ -72,14 +70,15 @@ self.addEventListener('fetch', event => {
         });
       })
     );
-  } else if (event.request.url.startsWith(self.location.origin) && event.request.method == 'GET') {
-    event.respondWith(
-      fetch(event.request).then(response => {
-        // Don't cache - will start caching in future
-        return response;
-      }).catch(function(err) {
-        return caches.match('pwa/offline');
-      })
-    );
   }
+  // } else if (event.request.url.startsWith(self.location.origin) && event.request.method == 'GET') {
+  //   // event.respondWith(
+  //   //   fetch(event.request).then(response => {
+  //   //     // Don't cache - will start caching in future
+  //   //     return response;
+  //   //   }).catch(err => {
+  //   //     return caches.match('pwa/offline');
+  //   //   })
+  //   // );
+  // }
 });
