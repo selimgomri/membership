@@ -1,7 +1,7 @@
 <?php
 
 $this->get('/', function() {
-  include 'controllers/pwa/set-pwa.php';
+  include 'set-pwa.php';
 });
 
 $this->get('/offline', function() {
