@@ -6,22 +6,22 @@ const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
-  ['manifest.webmanifest',],
-  ['pwa/offline',],
-  ['public/css/colour.css',],
-  ['public/css/font-awesome/css/font-awesome.min.css',],
-  ['public/css/font-awesome/fonts/fontawesome-webfont.woff2',],
-  ['public/css/generic/generic-0.14-prefixed.css',],
-  ['public/css/chester/chester-2.2.1-prefixed.css',],
-  ['public/img/corporate/scds.png',],
-  ['public/js/Cookies.js',],
-  ['public/js/NeedsValidation.js',],
-  ['public/js/bootstrap.min.js',],
-  ['public/js/jquery-3.4.1.slim.min.js',],
-  ['public/js/popper.min.js',],
-  ['public/js/tinymce/tinymce.min.js',],
-  ['public/js/notify/TinyMCE.js',],
-  ['public/js/notify/FileUpload.js']
+  ['/manifest.webmanifest',],
+  ['/pwa/offline',],
+  ['/public/css/colour.css',],
+  ['/public/css/font-awesome/css/font-awesome.min.css',],
+  ['/public/css/font-awesome/fonts/fontawesome-webfont.woff2',],
+  ['/public/css/generic/generic-0.14-prefixed.css',],
+  ['/public/css/chester/chester-2.2.1-prefixed.css',],
+  ['/public/img/corporate/scds.png',],
+  ['/public/js/Cookies.js',],
+  ['/public/js/NeedsValidation.js',],
+  ['/public/js/bootstrap.min.js',],
+  ['/public/js/jquery-3.4.1.slim.min.js',],
+  ['/public/js/popper.min.js',],
+  ['/public/js/tinymce/tinymce.min.js',],
+  ['/public/js/notify/TinyMCE.js',],
+  ['/public/js/notify/FileUpload.js']
 ];
 
 // The install handler takes care of precaching the resources we always need.
@@ -31,9 +31,6 @@ self.addEventListener('install', event => {
       console.log('Opened cache');
       return cache.addAll(PRECACHE_URLS);
     }).catch(error => {
-      console.log("ERRRRR")
-      console.log(error.stack);
-      console.log("ERRRRX")
     })
   );
 });
