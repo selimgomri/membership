@@ -127,6 +127,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
     </div>
   </div><!-- /.container -->
   </div>
+  <div id="app-js-info" data-service-worker-url="<?=htmlspecialchars(autoUrl("sw.js"))?>"></div>
 </footer>
 
 </body>
@@ -137,6 +138,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
 <script defer src="<?=autoUrl("public/js/bootstrap.min.js")?>"></script>
 <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
 <script async src="<?=autoUrl("public/js/Cookies.js")?>"></script>
+<script src="<?=autoUrl("public/js/app.js")?>"></script>
 <?php } ?>
 
 <?php if (isset($this->js)) { ?>
