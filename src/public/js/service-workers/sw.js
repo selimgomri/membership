@@ -1,35 +1,39 @@
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
-const PRECACHE = 'precache-v2';
+const PRECACHE = 'precache-v3';
 const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
-  // '/',
-  '/pwa/offline',
-  '/public/colour.css',
-  '/public/css/font-awesome/css/font-awesome.min.css',
-  '/public/css/font-awesome/fonts/fontawesome-webfont.woff2',
-  '/public/css/generic/generic-0.14-prefixed.css',
-  '/public/css/chester/chester-2.2.1-prefixed.css',
-  '/public/img/corporate/scds.png',
-  '/public/js/Cookies.js',
-  '/public/js/NeedsValidation.js',
-  '/public/js/bootstrap.min.js',
-  '/public/js/jquery-3.4.1.slim.min.js',
-  '/public/js/popper.min.js',
-  '/public/js/tinymce/tinymce.min.js',
-  '/public/js/notify/TinyMCE.js',
-  '/public/js/notify/FileUpload.js'
+  ['pwa/offline',],
+  ['public/css/colour.css',],
+  ['public/css/font-awesome/css/font-awesome.min.css',],
+  ['public/css/font-awesome/fonts/fontawesome-webfont.woff2',],
+  ['public/css/generic/generic-0.14-prefixed.css',],
+  ['public/css/chester/chester-2.2.1-prefixed.css',],
+  ['public/img/corporate/scds.png',],
+  ['public/js/Cookies.js',],
+  ['public/js/NeedsValidation.js',],
+  ['public/js/bootstrap.min.js',],
+  ['public/js/jquery-3.4.1.slim.min.js',],
+  ['public/js/popper.min.js',],
+  ['public/js/tinymce/tinymce.min.js',],
+  ['public/js/notify/TinyMCE.js',],
+  ['public/js/notify/FileUpload.js']
 ];
 
 // The install handler takes care of precaching the resources we always need.
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(PRECACHE)
-      .then(cache => cache.addAll(PRECACHE_URLS))
-      .then(self.skipWaiting())
+    caches.open(PRECACHE).then(function(cache) {
+      console.log('Opened cache');
+      return cache.addAll(PRECACHE_URLS);
+    }).catch(error => {
+      console.log("ERRRRR")
+      console.log(error.stack);
+      console.log("ERRRRX")
+    })
   );
 });
 
@@ -43,7 +47,9 @@ self.addEventListener('activate', event => {
       return Promise.all(cachesToDelete.map(cacheToDelete => {
         return caches.delete(cacheToDelete);
       }));
-    }).then(() => self.clients.claim())
+    }).then(() => self.clients.claim()).catch((error) => {
+      console.log(error);
+    })
   );
 });
 
@@ -70,15 +76,14 @@ self.addEventListener('fetch', event => {
         });
       })
     );
+  } else if (event.request.url.startsWith(self.location.origin) && event.request.method == 'GET') {
+    // event.respondWith(
+    //   fetch(event.request).then(response => {
+    //     // Don't cache - will start caching in future
+    //     return response;
+    //   }).catch(err => {
+    //     return caches.match('pwa/offline');
+    //   })
+    // );
   }
-  // } else if (event.request.url.startsWith(self.location.origin) && event.request.method == 'GET') {
-  //   // event.respondWith(
-  //   //   fetch(event.request).then(response => {
-  //   //     // Don't cache - will start caching in future
-  //   //     return response;
-  //   //   }).catch(err => {
-  //   //     return caches.match('pwa/offline');
-  //   //   })
-  //   // );
-  // }
 });
