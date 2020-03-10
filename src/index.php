@@ -342,8 +342,13 @@ $route->group($get_group, function($clubcode = "CLSE") {
     include 'controllers/pwa/manifest.php';
   });
 
-  $this->get('/pwa', function() {
-    include 'controllers/pwa/set-pwa.php';
+  $this->group('/pwa', function() {
+    include BASE_PATH . 'controllers/pwa/router.php';
+  });
+
+  $this->get('/sw.js', function() {
+    $filename = 'js/service-workers/sw.js';
+    require BASE_PATH . 'controllers/PublicFileLoader.php';
   });
 
   $this->group('/js', function() {

@@ -189,6 +189,8 @@
   </div>
 </div>
 
+<div id="app-js-info" data-service-worker-url="<?=htmlspecialchars(autoUrl("sw.js"))?>"></div>
+
 </body>
 
 <!-- Modals and Other Hidden HTML -->
@@ -202,6 +204,7 @@
 <?php if (isset($use_website_menu) && $use_website_menu) { ?>
 <script defer src="https://static.chesterlestreetasc.co.uk/global/headers/MainSiteMenu.js"></script>
 <?php } ?>
+<script src="<?=autoUrl("public/js/app.js")?>"></script>
 
 <?php if (isset($this->js)) { ?>
   <!-- Load per page JS -->
