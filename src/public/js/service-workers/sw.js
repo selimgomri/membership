@@ -1,13 +1,28 @@
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
-const PRECACHE = 'precache-v1';
+const PRECACHE = 'precache-v2';
 const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
   [
     '/',
+    'pwa/offline',
+    'public/colour.css',
+    'public/css/font-awesome/css/font-awesome.min.css',
+    'public/css/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0',
+    'public/css/generic/generic-0.14-prefixed.css',
+    'public/css/chester/chester-2.2.1-prefixed.css',
+    'public/img/corporate/scds.png',
+    'public/js/Cookies.js',
+    'public/js/NeedsValidation.js',
+    'public/js/bootstrap.min.js',
+    'public/js/jquery-3.4.1.slim.min.js',
+    'public/js/popper.min.js',
+    'public/js/tinymce/tinymce.min.js',
+    'public/js/notify/TinyMCE.js',
+    'public/js/notify/FileUpload.js'
   ]
 ];
 
@@ -63,7 +78,9 @@ self.addEventListener('fetch', event => {
         // Don't cache - will start caching in future
         return response;
       }).catch(function(err) {
-        console.warn('[conn test failure]:', err);
+        const cache = await caches.open(PRECACHE);
+        const cachedResponse = await cache.match('pwa/offline');
+        return cachedResponse;
       })
     );
   }
