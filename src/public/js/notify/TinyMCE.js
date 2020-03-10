@@ -1,4 +1,7 @@
 tinymce.init({
+  relative_urls : false,
+  remove_script_host : false,
+  document_base_url : document.getElementById('message').dataset.documentBaseUrl,
   selector: '#message',
   branding: false,
   plugins: [
