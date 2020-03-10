@@ -1,7 +1,6 @@
 </div>
 
 <!-- THE HEPPELL FOOTER -->
-<?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
 <div class="cls-global-footer cls-global-footer-sponsors d-print-none">
   <?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>
   <div class="container-fluid">
@@ -163,12 +162,6 @@
 </div>
 
 <div class="cls-global-footer-legal d-print-none">
-
-<?php } else { ?>
-
-<div class="cls-global-footer-legal d-print-none mt-3">
-
-<?php } ?>
   <?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>
   <div class="container-fluid">
   <?php } else { ?>

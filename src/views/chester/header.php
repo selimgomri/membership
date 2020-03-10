@@ -131,7 +131,6 @@ p.lead {
     </div>
     <?php } ?>
 
-    <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
     <div class="text-white py-2 top-bar bg-primary-dark hide-a-underline" style="font-size:0.875rem;">
       <div class="<?=$container_class?> d-flex">
         <div class="mr-auto">
@@ -220,7 +219,6 @@ p.lead {
         </div>
       </div>
     </div>
-    <?php } ?>
 
     <?php if (true || !isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
     <div

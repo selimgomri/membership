@@ -113,7 +113,8 @@ $data = [
   'icons' => $icons,
   'theme_color' => $themeColour,
   'lang' => 'en-GB',
-  'orientation' => 'portrait-primary'
+  'orientation' => 'portrait-primary',
+  'scope' => autoUrl("")
 ];
 
 echo json_encode($data);
