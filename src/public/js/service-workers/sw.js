@@ -6,6 +6,7 @@ const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
+  ['manifest.webmanifest',],
   ['pwa/offline',],
   ['public/css/colour.css',],
   ['public/css/font-awesome/css/font-awesome.min.css',],
