@@ -57,5 +57,14 @@ self.addEventListener('fetch', event => {
         });
       })
     );
+  } else if (event.request.url.startsWith(self.location.origin) && event.request.method == 'GET') {
+    event.respondWith(
+      fetch(event.request).then(response => {
+        // Don't cache - will start caching in future
+        return response;
+      }).catch(function(err) {
+        console.warn('[conn test failure]:', err);
+      })
+    );
   }
 });
