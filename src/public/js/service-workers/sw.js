@@ -78,9 +78,7 @@ self.addEventListener('fetch', event => {
         // Don't cache - will start caching in future
         return response;
       }).catch(function(err) {
-        const cache = caches.open(PRECACHE);
-        const cachedResponse = await cache.match('pwa/offline');
-        return cachedResponse;
+        return caches.match('pwa/offline');
       })
     );
   }
