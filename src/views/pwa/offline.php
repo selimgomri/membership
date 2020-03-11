@@ -15,7 +15,7 @@ include BASE_PATH . "views/header.php";
       <hr>
       <p>Please try the following:</p>
       <ul>
-        <li>Check your WiFi is turned on and connected or that your ethernet cables are securly plugged into your computer and the wall.</li>
+        <li>Check your WiFi is turned on and connected or that your ethernet cables are securely plugged into your computer and the wall.</li>
         <li>Check whether you can access any other websites.</li>
         <li>Restart your router or access point if issues persist.</li>
       </ul>
