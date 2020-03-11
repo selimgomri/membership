@@ -177,7 +177,7 @@ function process_mandate_event($event) {
           ]);
           $currentMandate = $getCurrentPref->fetch(PDO::FETCH_ASSOC);
 
-          $oldMandate = $db->prepare("SELECT Mandate, BankName, AccountHolderName, AccountNumEnd FROM paymentMandate WHERE MandateID = ?");
+          $oldMandate = $db->prepare("SELECT Mandate, BankName, AccountHolderName, AccountNumEnd FROM paymentMandates WHERE MandateID = ?");
           $oldMandate->execute([
             $user['MandateID']
           ]);
