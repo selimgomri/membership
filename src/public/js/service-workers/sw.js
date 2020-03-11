@@ -57,7 +57,6 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   // console.log(event);
   // Skip cross-origin requests, like those for Google Analytics.
-  console.log(self.location.origin + '/public');
   if (event.request.url.startsWith(self.location.origin + '/public') && event.request.method == 'GET') {
     event.respondWith(
       caches.match(event.request).then(cachedResponse => {
