@@ -57,8 +57,8 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   // console.log(event);
   // Skip cross-origin requests, like those for Google Analytics.
-  console.log(self.registration.scope);
-  if (event.request.url.startsWith(self.location.origin + '/public') && event.request.method == 'GET') {
+  let swRoot = self.registration.scope;
+  if (event.request.url.startsWith(swRoot + 'public') && event.request.method == 'GET') {
     event.respondWith(
       caches.match(event.request).then(cachedResponse => {
         if (cachedResponse) {
@@ -75,7 +75,7 @@ self.addEventListener('fetch', event => {
         });
       })
     );
-  } else if (event.request.url.startsWith(self.location.origin) && event.request.method == 'GET') {
+  } else if (event.request.url.startsWith(swRoot) && event.request.method == 'GET') {
     event.respondWith(
       fetch(event.request).then(response => {
         // Don't cache - will start caching in future
