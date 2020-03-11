@@ -1,14 +1,53 @@
 <?php
 
-$access = $_SESSION['AccessLevel'];
+$this->group('/mandates', function() {
+	if ($_SESSION['AccessLevel'] == "Parent") {
+		$this->get('/', function() {
+			include 'mybanks.php';
+		});
 
-if ($access == 'Admin') {
+		$this->get('/{id}:int/set-default', function($id) {
+			include 'setup/makedefault.php';
+		});
+	}
+
+	if ($_SESSION['AccessLevel'] == "Parent" || $_SESSION['AccessLevel'] == "Admin") {
+		$this->get('/{mandate}/print', function($mandate) {
+			include 'mandatePDFs.php';
+		});
+	}
+
+	$this->get('/{mandate}/', function($mandate) {
+		if ($_SESSION['AccessLevel'] == 'Admin') {
+			include 'admin/user-mandates/mandate-info.php';
+		} else {
+			header("location: " . autoUrl("payments/mandates/" . $mandate . "/print"));
+		}
+	});
+
+	if ($_SESSION['AccessLevel'] == "Admin") {
+		$this->get('/', function() {
+			include 'admin/user-mandates/mandates.php';
+		});
+
+		$this->get('/{mandate}/cancel', function($mandate) {
+			include 'admin/user-mandates/mandate-cancel.php';
+		});
+
+		// API TOOL FOR FUTURE?
+		$this->delete('/{mandate}', function($mandate) {
+			include 'admin/user-mandates/mandate-cancel.php';
+		});
+	}
+});
+
+if ($_SESSION['AccessLevel'] == 'Admin') {
 	$this->group('/categories', function() {
 		include 'categories/router.php';
 	});
 }
 
-if ($access == "Parent") {
+if ($_SESSION['AccessLevel'] == "Parent") {
 
 	$this->get('/', function() {
 		global $link;
@@ -48,16 +87,6 @@ if ($access == "Parent") {
 		include 'parent/MembershipFees.php';
 	});
 
-	$this->get('/mandates', function() {
-		global $link;
-		include 'mybanks.php';
-	});
-
-	$this->get('/mandates/makedefault/{id}:int', function($id) {
-		global $link;
-		include 'setup/makedefault.php';
-	});
-
 	$this->get(['/currentfees', '/fees'], function() {
 		global $link;
 		include 'parent/currentfees.php';
@@ -83,14 +112,7 @@ if ($access == "Parent") {
 	});
 }
 
-if ($access == "Parent" || $access == "Admin") {
-	$this->get('/mandates/{mandate}', function($mandate) {
-	  global $link;
-		include 'mandatePDFs.php';
-	});
-}
-
-if ($access == "Coach") {
+if ($_SESSION['AccessLevel'] == "Coach") {
 	$this->get('/history/{type}/{year}:int/{month}:int', function($type, $year, $month) {
 		global $link;
 		include 'admin/history/feestatus.php';
@@ -105,7 +127,7 @@ if ($access == "Coach") {
 	});
 }
 
-if ($access == "Admin") {
+if ($_SESSION['AccessLevel'] == "Admin") {
 	$this->get('/', function() {
 		global $link;
 		include 'admin.php';
@@ -259,14 +281,14 @@ if ($access == "Admin") {
 	});
 }
 
-if ($access == "Galas") {
+if ($_SESSION['AccessLevel'] == "Galas") {
 	$this->get(['/', '/galas'], function() {
 		global $link;
 		include 'galas/Home.php';
 	});
 }
 
-if ($access == "Galas" || $access == "Admin") {
+if ($_SESSION['AccessLevel'] == "Galas" || $_SESSION['AccessLevel'] == "Admin") {
 	$this->get('/galas/{id}:int', function($id) {
 		global $link;
 		include 'galas/EntryCharge.php';

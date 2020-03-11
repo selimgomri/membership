@@ -283,6 +283,12 @@ include BASE_PATH . "views/header.php";
         Previous bills <span class="fa fa-chevron-right"></span>
       </a>
     </p>
+
+    <p>
+      <a href="<?=autoUrl("users/" . $id . "/mandates")?>" class="btn btn-primary">
+        Direct debit mandates <span class="fa fa-chevron-right"></span>
+      </a>
+    </p>
     <?php } ?>
   </div>
 

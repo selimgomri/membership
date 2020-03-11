@@ -61,7 +61,7 @@ $mandateDetails->execute([$_SESSION['UserID'], true]);
         <?php do { ?>
         <tr>
           <td class="mono">
-            <a target="_blank" href="<?=autoUrl("payments/mandates/" . htmlspecialchars($row['Mandate']))?>" title="View Mandate Details">
+            <a target="_blank" href="<?=autoUrl("payments/mandates/" . $row['Mandate'] . '/print')?>" title="View Mandate Details">
               <?=htmlspecialchars($row['Mandate'])?>
             </a>
           </td>
@@ -76,7 +76,7 @@ $mandateDetails->execute([$_SESSION['UserID'], true]);
           </td>
           <?php if ($defaultAcc != null > 1 && $defaultAcc != $row['MandateID']) { ?>
           <td>
-            <a href="<?=autoUrl("payments/mandates/makedefault/" . htmlspecialchars($row['MandateID']))?>">
+            <a href="<?=htmlspecialchars(autoUrl("payments/mandates/" . $row['MandateID'] . '/set-default'))?>">
               Make Default
             </a>
           </td>
