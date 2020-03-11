@@ -25,7 +25,7 @@ try {
     $newMandate = $mandate->links->new_mandate;
   }
 
-  $data[] = [
+  $data = [
     'status' => 200,
     'message' => null,
     'mandate' => [
@@ -49,7 +49,7 @@ try {
   // Api request failed / record couldn't be created.
   $code = $e->getCode();
   http_response_code($code);
-  $data[] = [
+  $data = [
     'status' => $code,
     'message' => $e->getMessage(),
     'mandate' => null
@@ -58,7 +58,7 @@ try {
   // Unexpected non-JSON response
   $code = $e->getCode();
   http_response_code($code);
-  $data[] = [
+  $data = [
     'status' => $code,
     'message' => $e->getMessage(),
     'mandate' => null
@@ -67,14 +67,14 @@ try {
   // Network error
   $code = $e->getCode();
   http_response_code($code);
-  $data[] = [
+  $data = [
     'status' => $code,
     'message' => $e->getMessage(),
     'mandate' => null
   ];
 } catch (Exception $e) {
   http_response_code(500);
-  $data[] = [
+  $data = [
     'status' => 500,
     'message' => $e->getMessage(),
     'mandate' => null

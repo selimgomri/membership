@@ -21,7 +21,7 @@ try {
   $db->beginTransaction();
   $mandateObj = $client->mandates()->cancel($mandate);
 
-  $data[] = [
+  $data = [
     'status' => 200,
     'message' => null,
     'deleted' => true
@@ -65,7 +65,7 @@ try {
 
   $code = $e->getCode();
   http_response_code($code);
-  $data[] = [
+  $data = [
     'status' => $code,
     'message' => $e->getMessage(),
     'deleted' => false
@@ -76,7 +76,7 @@ try {
 
   $code = $e->getCode();
   http_response_code($code);
-  $data[] = [
+  $data = [
     'status' => $code,
     'message' => $e->getMessage(),
     'deleted' => false
@@ -87,7 +87,7 @@ try {
 
   $code = $e->getCode();
   http_response_code($code);
-  $data[] = [
+  $data = [
     'status' => $code,
     'message' => $e->getMessage(),
     'deleted' => false
@@ -96,7 +96,7 @@ try {
   $db->rollBack();
 
   http_response_code(500);
-  $data[] = [
+  $data = [
     'status' => 500,
     'message' => $e->getMessage(),
     'deleted' => false

@@ -127,4 +127,4 @@ if ($row != null) {
   } while ($while);
 }
 
-echo json_encode($export_array);
+echo json_encode($export_array, JSON_PRETTY_PRINT);
