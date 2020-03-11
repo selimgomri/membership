@@ -48,6 +48,7 @@ if (file_exists($file) && mime_content_type($file) != 'directory') {
   }
   header('pragma: public');
   header('content-length: ' . filesize($file));
+  header("service-worker-allowed: " . autoUrl(""));
   readfile($file);
   exit;
 } else {
