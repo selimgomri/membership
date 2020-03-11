@@ -89,13 +89,13 @@ $mandateDetails->execute([$user, true]);
           <div class="mb-3 d-md-none"></div>
         </div>
         <div class="col-12 col-md-4">
-          <a target="_blank" download class="btn btn-block btn-dark" href="<?=htmlspecialchars(autoUrl("payments/mandates/" . $row['Mandate']))?>" title="View full details about this mandate">
+          <a target="_blank" class="btn btn-block btn-dark" href="<?=htmlspecialchars(autoUrl("payments/mandates/" . $row['Mandate']))?>" title="View full details about this mandate">
             View full details
           </a>
           <div class="mb-3 d-md-none"></div>
         </div>
         <div class="col-12 col-md-4">
-          <a target="_blank" download class="btn btn-block btn-danger" href="<?=htmlspecialchars(autoUrl("payments/mandates/" . $row['Mandate'] . '/cancel'))?>" title="Cancel this mandate">
+          <a class="btn btn-block btn-danger" href="<?=htmlspecialchars(autoUrl("payments/mandates/" . $row['Mandate'] . '/cancel'))?>" title="Cancel this mandate">
             Cancel mandate
           </a>
         </div>
