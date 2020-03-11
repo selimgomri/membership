@@ -7,7 +7,6 @@ const RUNTIME = 'runtime';
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
   ['manifest.webmanifest',],
-  ['pwa/offline',],
   ['public/css/colour.css',],
   ['public/css/font-awesome/css/font-awesome.min.css',],
   ['public/css/font-awesome/fonts/fontawesome-webfont.woff2',],
@@ -21,7 +20,8 @@ const PRECACHE_URLS = [
   ['public/js/popper.min.js',],
   ['public/js/tinymce/tinymce.min.js',],
   ['public/js/notify/TinyMCE.js',],
-  ['public/js/notify/FileUpload.js']
+  ['public/js/notify/FileUpload.js'],
+  ['pwa/offline',],
 ];
 
 // The install handler takes care of precaching the resources we always need.
