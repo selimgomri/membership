@@ -45,6 +45,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 				include 'EditEmailAjax.php';
 			});
 		});
+
+		$this->get('/{user}:int/mandates', function($user) {
+			include BASE_PATH . 'controllers/payments/admin/user-mandates/user-mandates.php';
+		});
 	}
 
 	$this->get('/{id}:int/welcome-pack', function($id) {
