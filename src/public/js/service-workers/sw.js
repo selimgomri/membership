@@ -20,7 +20,7 @@ const PRECACHE_URLS = [
   'public/js/popper.min.js',
   'public/js/tinymce/tinymce.min.js',
   'public/js/notify/TinyMCE.js',
-  'public/js/notify/FileUpload.js'
+  'public/js/notify/FileUpload.js',
   'pwa/offline',
 ];
 
