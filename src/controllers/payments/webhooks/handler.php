@@ -206,7 +206,7 @@ function process_mandate_event($event) {
           );
         }
 
-      } catch (Exception $e) {echo $e; }
+      } catch (Exception $e) { reportError($e); }
 
       break;
 		case "transferred":
