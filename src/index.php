@@ -348,7 +348,6 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
   $this->get('/sw.js', function() {
     $filename = 'js/service-workers/sw.js';
-    header("service-worker-allowed: " . autoUrl(""));
     require BASE_PATH . 'controllers/PublicFileLoader.php';
   });
 
