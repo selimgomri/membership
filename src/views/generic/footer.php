@@ -10,7 +10,6 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
 
 <!-- THE HEPPELL FOOTER -->
 <footer>
-  <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
   <div
     class="cls-global-footer cls-global-footer-inverse cls-global-footer-body d-print-none mt-3 pb-0 focus-highlight">
     <div
@@ -90,12 +89,6 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
     </div>
   </div>
   <div class="cls-global-footer-legal">
-
-  <?php } else { ?>
-
-  <div class="cls-global-footer-legal mt-3">
-
-  <?php } ?>
     <div
       class="<?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
       <div class="row">

@@ -119,7 +119,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <link rel="apple-touch-icon-precomposed"
     href="<?=autoUrl("public/img/touchicons/apple-touch-icon-precomposed.png")?>"><!-- 57×57px -->
   <link rel="mask-icon" href="<?=autoUrl("public/img/touchicons/icon-mask.svg")?>" color="#bd0000">
-  <script src='https://www.google.com/recaptcha/api.js'></script>
+  <script src="https://www.google.com/recaptcha/api.js"></script>
 
   <style>
   .festive {

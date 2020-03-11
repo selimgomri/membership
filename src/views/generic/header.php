@@ -133,7 +133,6 @@ if (isset($customBackground) && $customBackground) {
     ?>
 
     <div class="membership-header">
-      <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
       <div class="club-name-header <?php if (date("m") == "12") { ?>festive<?php } ?>">
         <div class="<?=$container_class?>">
           <h1 class="d-none d-md-flex pt-3 pb-1 mb-0">
@@ -143,7 +142,6 @@ if (isset($customBackground) && $customBackground) {
           </h1>
         </div>
       </div>
-      <?php } ?>
 
       <?php if (!user_needs_registration($_SESSION['UserID'])) { ?>
       <div class="<?=$container_class?>">
