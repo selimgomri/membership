@@ -3,51 +3,52 @@
 $file = BASE_PATH . 'public/';
 $file = $file . $filename;
 if (file_exists($file) && mime_content_type($file) != 'directory') {
-  header('Content-Description: File Transfer');
+  // header('content-length: ' . filesize($file));
+  header('content-description: File Transfer');
   if (strpos($file, '.css')) {
-    header('Content-Type: text/css');
-    header('Age: 0');
-    header('Cache-Control: max-age=31536000, private');
+    header('content-type: text/css');
+    header('age: 0');
+    header('cache-control: max-age=31536000, private');
   } else if (strpos($file, '.json')) {
-    header('Content-Type: application/json');
-    header('Age: 0');
-    header('Cache-Control: max-age=31536000, private');
+    header('content-type: application/json');
+    header('age: 0');
+    header('cache-control: max-age=31536000, private');
   } else if (strpos($file, '.js')) {
-    header('Content-Type: application/javascript');
-    header('Age: 0');
-    header('Cache-Control: max-age=31536000, private');
+    header('content-type: application/javascript');
+    header('age: 0');
+    header('cache-control: max-age=31536000, private');
   } else if (strpos($file, '.woff2')) {
-    header('Content-Type: font/woff2');
-    header('Age: 0');
-    header('Cache-Control: max-age=31536000, private');
+    header('content-type: font/woff2');
+    header('age: 0');
+    header('cache-control: max-age=31536000, private');
   } else if (strpos($file, '.png')) {
-    header('Content-Type: image/png');
-    header('Age: 0');
-    header('Cache-Control: max-age=31536000, private');
+    header('content-type: image/png');
+    header('age: 0');
+    header('cache-control: max-age=31536000, private');
   } else if (strpos($file, '.jpg') || strpos($file, '.jpeg')) {
-    header('Content-Type: image/jpeg');
-    header('Age: 0');
-    header('Cache-Control: max-age=31536000, private');
+    header('content-type: image/jpeg');
+    header('age: 0');
+    header('cache-control: max-age=31536000, private');
   } else if (strpos($file, '.svg')) {
-    header('Content-Type: image/svg+xml');
-    header('Age: 0');
-    header('Cache-Control: max-age=31536000, private');
+    header('content-type: image/svg+xml');
+    header('age: 0');
+    header('cache-control: max-age=31536000, private');
   } else {
-    header('Content-Type: ' . mime_content_type($file));
-    header('Cache-Control: must-revalidate');
+    header('content-type: ' . mime_content_type($file));
+    header('cache-control: must-revalidate');
   }
   if (mime_content_type($file) == 'application/pdf' || mime_content_type($file) == 'text/html' || mime_content_type($file) == 'text/css' || strpos($file, '.css') || mime_content_type($file) == 'application/javascript') {
-    header('Content-Disposition: inline');
+    header('content-disposition: inline');
   } else {
-    header('Content-Disposition: attachment; filename="'.basename($filename).'"');
+    header('content-disposition: attachment; filename="'.basename($filename).'"');
   }
   if (strpos($file, '.css') || mb_strpos($file, '.js')) {
-    header('Expires: ' . date('D, d M Y H:i:s', strtotime("+1 year")) . ' GMT');
+    header('expires: ' . date('D, d M Y H:i:s', strtotime("+1 year")) . ' GMT');
   } else {
-    header('Expires: 0');
+    header('expires: 0');
   }
-  header('Pragma: public');
-  // header('Content-Length: ' . filesize($file));
+  header('pragma: public');
+  header("service-worker-allowed: " . autoUrl(""));
   readfile($file);
   exit;
 } else {
