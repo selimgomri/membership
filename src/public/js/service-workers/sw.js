@@ -28,7 +28,7 @@ const PRECACHE_URLS = [
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(PRECACHE).then(function(cache) {
-      console.log('Opened cache');
+      // console.log('Opened cache');
       return cache.addAll(PRECACHE_URLS);
     }).catch(error => {
     })
@@ -57,6 +57,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   // console.log(event);
   // Skip cross-origin requests, like those for Google Analytics.
+  console.log(self.registration.scope);
   if (event.request.url.startsWith(self.location.origin + '/public') && event.request.method == 'GET') {
     event.respondWith(
       caches.match(event.request).then(cachedResponse => {
