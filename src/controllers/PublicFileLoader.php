@@ -46,8 +46,8 @@ if (file_exists($file) && mime_content_type($file) != 'directory') {
   } else {
     header('Expires: 0');
   }
-  header('Pragma: public');
-  // header('Content-Length: ' . filesize($file));
+  header('pragma: public');
+  header('content-length: ' . filesize($file));
   readfile($file);
   exit;
 } else {
