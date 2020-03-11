@@ -187,7 +187,7 @@ function process_mandate_event($event) {
           <p>Your Direct Debit Mandate for " . htmlspecialchars(env('CLUB_NAME')) . " has been cancelled.</p>";
 
           if ($oldMandate != null) {
-            $message .= '<p>The cancelled mandate was ' . htmlspecialchars($oldMandate['Mandate']) . ' for ' . htmlspecialchars($oldMandate['AccountHolderName']) . '\'s account with ' . htmlspecialchars(getBankName($oldMandate['BankName'])) . '. Account number ending in &middot;&middot;&middot;&middot;&middot;&middot;' . htmlspecialchars($oldMandate['AccountNumEnd']) . '.</p>';
+            $message .= '<p>The cancelled mandate was on ' . htmlspecialchars($oldMandate['AccountHolderName']) . '\'s account with ' . htmlspecialchars(getBankName($oldMandate['BankName'])) . '. Account number ending in &middot;&middot;&middot;&middot;&middot;&middot;' . htmlspecialchars($oldMandate['AccountNumEnd']) . '. Our internal reference for the mandate was ' . htmlspecialchars($oldMandate['Mandate']) . '.</p>';
           }
 
           if ($currentMandate != null) {
