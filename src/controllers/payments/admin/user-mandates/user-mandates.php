@@ -55,7 +55,7 @@ $mandateDetails->execute([$user, true]);
     </p>
     <p class="mb-0">Check below to see if the user needs to set up another mandate to pay by direct debit in future.</p>
   </div>
-  <?php } ?>
+  <?php unset($_SESSION['MandateDeletedTrue']); } ?>
 
   <p>
     You can view the status of a mandate or cancel it from this page.
