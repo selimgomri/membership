@@ -23,6 +23,17 @@ include BASE_PATH . 'views/header.php';
 
       <p>Only admin users will be able to access the reports available here and improved navigation will be introduced in due course.</p>
 
+      <div class="cell">
+        <h2>Emergency Message</h2>
+        <p class="lead">Set a system-wide emergency message.</p>
+
+        <p>
+          <a href="<?=htmlspecialchars(autoUrl("emergency-message"))?>" class="btn btn-danger">
+            Set message
+          </a>
+        </p>
+      </div>
+
     </div>
 
     <div class="col">

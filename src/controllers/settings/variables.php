@@ -25,7 +25,9 @@ $vars = [
   'STRIPE' => null,
   'STRIPE_PUBLISHABLE' => null,
   'STRIPE_APPLE_PAY_DOMAIN' => null,
-  'HIDE_MEMBER_ATTENDANCE' => null
+  'HIDE_MEMBER_ATTENDANCE' => null,
+  'EMERGENCY_MESSAGE' => false,
+  'EMERGENCY_MESSAGE_TYPE' => 'NONE',
 ];
 
 $disabled = [];
@@ -97,6 +99,48 @@ include BASE_PATH . 'views/header.php';
           <?php if (isset($_SESSION['PCC-ERROR']) && $_SESSION['PCC-ERROR']) { ?>
           <div class="alert alert-danger">Changes were not saved.</div>
           <?php unset($_SESSION['PCC-ERROR']); } ?>
+
+          <h2 id="emergency-message">Emergency Message</h2>
+          <div class="row">
+            <div class="col col-lg-8">
+              <p>
+                To help clubs during the coronavirus (COVID-19) outbreak, we've added an emergency message function. The emergency message will be shown in a banner at the top of every page.
+              </p>
+              <p>
+                You can see an example of this banner in the image to the right.
+              </p>
+            </div>
+            <div class="col col-lg-4">
+              <img src="<?=htmlspecialchars(autoUrl("public/img/settings/emergency-message.png"))?>" class="border" alt="Picture of membership software displaying emergency message">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Message type</label>
+            <div class="custom-control custom-radio">
+              <input type="radio" value="NONE" id="EMERGENCY_MESSAGE_TYPE_NONE" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'NONE') { ?>checked<?php } ?> <?=$disabled['EMERGENCY_MESSAGE_TYPE']?>>
+              <label class="custom-control-label" for="EMERGENCY_MESSAGE_TYPE_NONE">No emergency message</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input type="radio" value="WARN" id="EMERGENCY_MESSAGE_TYPE_WARN" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'WARN') { ?>checked<?php } ?> <?=$disabled['EMERGENCY_MESSAGE_TYPE']?>>
+              <label class="custom-control-label" for="EMERGENCY_MESSAGE_TYPE_WARN">Warning (yellow)</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input type="radio" value="DANGER" id="EMERGENCY_MESSAGE_TYPE_DANGER" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'DANGER') { ?>checked<?php } ?> <?=$disabled['EMERGENCY_MESSAGE_TYPE']?>>
+              <label class="custom-control-label" for="EMERGENCY_MESSAGE_TYPE_DANGER">Danger (red)</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="EMERGENCY_MESSAGE">Emergency message</label>
+            <textarea class="form-control mono" rows="7" name="EMERGENCY_MESSAGE" id="EMERGENCY_MESSAGE" <?=$disabled['EMERGENCY_MESSAGE']?>><?=htmlspecialchars($vars['EMERGENCY_MESSAGE'])?></textarea>
+          </div>
+
+          <p>
+            <button type="submit" class="btn btn-success">
+              Save changes
+            </button>
+          </p>
 
           <h2>SQL Database Connection Details</h2>
 

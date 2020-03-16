@@ -39,6 +39,8 @@ $vars = [
   'STRIPE' => null,
   'STRIPE_PUBLISHABLE' => null,
   'STRIPE_APPLE_PAY_DOMAIN' => null,
+  'EMERGENCY_MESSAGE' => false,
+  'EMERGENCY_MESSAGE_TYPE' => 'NONE',
 ];
 
 try {
@@ -64,6 +66,21 @@ try {
     }
     if (!$systemInfo->isExistingEnvVar('ASA_COUNTY')) {
       $systemInfo->setSystemOption('ASA_COUNTY', $clubs[$_POST['CLUB_INFO']]['County']);
+    }
+  }
+
+  if (!$systemInfo->isExistingEnvVar('EMERGENCY_MESSAGE')) {
+    $message = $_POST['EMERGENCY_MESSAGE'];
+    if (mb_strlen($message) == 0) {
+      $message = null;
+    }
+    $systemInfo->setSystemOption('EMERGENCY_MESSAGE', $message);
+  }
+
+  if (!$systemInfo->isExistingEnvVar('EMERGENCY_MESSAGE_TYPE')) {
+    $type = $_POST['EMERGENCY_MESSAGE_TYPE'];
+    if ($type == 'NONE' || $type == 'WARN' || $type == 'DANGER') {
+      $systemInfo->setSystemOption('EMERGENCY_MESSAGE_TYPE', $type);
     }
   }
 

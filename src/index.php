@@ -670,6 +670,13 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/squads/squad-reps/router.php';
     });
 
+    /**
+     * CORONAVIRUS (COVID-19) EMERGENCY MESSAGE
+     */
+    $this->get('/emergency-message', function() {
+      header("location: " . autoUrl("settings/variables#emergency-message"));
+    });
+
     $this->get('/team-managers', function() {
       include 'controllers/galas/squad-reps-and-team-managers/team-manager-event-list.php';
     });
