@@ -58,6 +58,7 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
             'Symfony\\Component\\BrowserKit\\' => 29,
             'Svg\\' => 4,
             'Stripe\\' => 7,
+            'Soundasleep\\' => 12,
             'Sokil\\IsoCodes\\' => 15,
             'SendGrid\\Stats\\' => 15,
             'SendGrid\\Mail\\' => 14,
@@ -221,6 +222,10 @@ class ComposerStaticInit95bfe0a5f02f9c65da791788ac09dda3
         'Stripe\\' => 
         array (
             0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
+        ),
+        'Soundasleep\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/soundasleep/html2text/src',
         ),
         'Sokil\\IsoCodes\\' => 
         array (

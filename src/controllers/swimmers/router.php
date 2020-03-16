@@ -129,20 +129,20 @@ else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $
    * End of squad moves
    */
 
-	/*
-  $this->get('/{id}:int/contactparent', function($id) {
+	// /*
+  $this->get('/{id}:int/contact-parent', function($id) {
 		global $link;
     $user = getSwimmerParent($id);
 		include BASE_PATH . 'controllers/notify/EmailIndividual.php';
 	});
 
-	$this->post('/{id}:int/contactparent', function($id) {
+	$this->post('/{id}:int/contact-parent', function($id) {
 		global $link;
     $user = getSwimmerParent($id);
     $returnToSwimmer = true;
 		include BASE_PATH . 'controllers/notify/EmailQueuerIndividual.php';
 	});
-	*/
+	// */
 
 	if ($access != "Galas") {
 		$this->get('/{id}:int/attendance', function($id) {

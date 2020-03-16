@@ -149,12 +149,12 @@ $content .= '
       Quick actions
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <a class="dropdown-item" href="' . autoUrl("members/" . $id . "/enter-gala") . '">Enter a gala</a>
-      <a class="dropdown-item" href="' . htmlspecialchars('mailto:' . $parentEmail) . '">Email parent/guardian</a>';
+      <a class="dropdown-item" href="' . htmlspecialchars(autoUrl("members/" . $id . "/enter-gala")) . '">Enter a gala</a>
+      <a class="dropdown-item" href="' . htmlspecialchars(autoUrl("members/" . $id . "/contact-parent")/*'mailto:' . $parentEmail*/) . '">Email parent/guardian</a>';
       if ($_SESSION['AccessLevel'] != 'Galas') {
       $content .= '
-      <a class="dropdown-item" href="' . autoUrl("members/" . $id . "/new-move") . '">New squad move</a>
-      <a class="dropdown-item" href="' . autoUrl("members/" . $id . "/parenthelp") . '">Print access key</a>';
+      <a class="dropdown-item" href="' . htmlspecialchars(autoUrl("members/" . $id . "/new-move")) . '">New squad move</a>
+      <a class="dropdown-item" href="' . htmlspecialchars(autoUrl("members/" . $id . "/parenthelp")) . '">Print access key</a>';
       }
       $content .= '
     </div>
