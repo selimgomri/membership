@@ -121,10 +121,6 @@ include BASE_PATH . "views/notifyMenu.php";
       </small>
 		</div>
 
-    <?php if ($canReply) { ?>
-      <p><?=$canReply?></p>
-    <?php } ?>
-
     <?=SCDS\CSRF::write()?>
     <?=SCDS\FormIdempotency::write()?>
 
@@ -132,7 +128,7 @@ include BASE_PATH . "views/notifyMenu.php";
 	</form>
 </div>
 
-<script>
+<!-- <script>
  tinymce.init({
     selector: '#message',
     branding: false,
@@ -149,6 +145,8 @@ include BASE_PATH . "views/notifyMenu.php";
     ]
       //toolbar: "link",
  });
-</script>
+</script> -->
 <?php $footer = new \SCDS\Footer();
+$footer->addJS("public/js/tinymce/tinymce.min.js");
+$footer->addJS("public/js/notify/TinyMCE.js");
 $footer->render();
