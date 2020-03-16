@@ -33,10 +33,19 @@ $to_remove = [
 $message = $message = str_replace($to_remove, "", $_POST['message']);
 
 $name = $userInfo['Forename'] . ' ' . $userInfo['Surname'];
-$email = $userInfo['EmailAddress'];
 $myName = $curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'];
-$myNakedEmail = $curUserInfo['EmailAddress'];
-$myEmail; $canReply; $reply;
+
+$from = "noreply@" . env('EMAIL_DOMAIN');
+$fromName = env('CLUB_NAME');
+if ($_POST['from'] == "current-user") {
+  $fromName = $myName;
+}
+
+$replyAddress = getUserOption($_SESSION['UserID'], 'NotifyReplyAddress');
+
+if (!($replyAddress && isset($_POST['ReplyToMe']) && bool($_POST['ReplyToMe']))) {
+  $replyAddress = env('CLUB_EMAIL');
+}
 
 $cc = $bcc = null;
 
@@ -44,7 +53,7 @@ $subject = $_POST['subject'];
 
 $messagePlain = \Soundasleep\Html2Text::convert($message);
 
-if (notifySend("", $subject, $messagePlain, $name, $email, ["Email" => $myEmail, "Name" => $myName, "Reply-To" => $reply, "CC" => $cc, "BCC" => $bcc, 'PlainText' => true])) {
+if (notifySend("", $subject, $messagePlain, $name, $email, ["Email" => $from, "Name" => $fromName, "Reply-To" => $replyAddress, "CC" => $cc, "BCC" => $bcc, 'PlainText' => true])) {
   $_SESSION['NotifyIndivSuccess'] = true;
 } else {
   $_SESSION['NotifyIndivSuccess'] = false;
