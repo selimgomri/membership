@@ -23,6 +23,8 @@ $vars = [
   'STRIPE' => null,
   'STRIPE_PUBLISHABLE' => null,
   'STRIPE_APPLE_PAY_DOMAIN' => null,
+  'EMERGENCY_MESSAGE' => false,
+  'EMERGENCY_MESSAGE_TYPE' => 'NONE',
 ];
 
 try {

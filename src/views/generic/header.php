@@ -26,6 +26,20 @@ if (isset($customBackground) && $customBackground) {
 
   <div class="d-print-none">
 
+    <?php if (env('EMERGENCY_MESSAGE_TYPE') != 'NONE' && env('EMERGENCY_MESSAGE')) {
+      $markdown = new ParsedownExtra();
+    ?>
+    <div class="py-5 <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'DANGER') { ?>bg-danger text-white<?php } ?> <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'WARN') { ?>bg-warning text-body<?php } ?>">
+      <div class="<?=$container_class?>">
+        <?php try { ?>
+        <?=$markdown->text(env('EMERGENCY_MESSAGE'))?>
+        <?php } catch (Exception $e) { ?>
+        <p>An emergency message has been set but cannot be rendered.</p>
+        <?php } ?>
+      </div>
+    </div>
+    <?php } ?>
+
     <noscript>
       <div class="bg-warning box-shadow py-3 d-print-none">
         <div class="<?=$container_class?>">
