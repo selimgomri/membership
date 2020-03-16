@@ -1,79 +1,74 @@
 <?php
 
-if (is_null($user)) {
-  halt(400);
-}
+try {
 
-if (!SCDS\FormIdempotency::verify() || !SCDS\CSRF::verify()) {
-  halt(403);
-}
+  if ($user == null) {
+    halt(400);
+  }
 
-global $db;
-$query = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE
-UserID = ?");
-$query->execute([$user]);
-$userInfo = $query->fetchAll(PDO::FETCH_ASSOC);
-$query->execute([$_SESSION['UserID']]);
-$curUserInfo = $query->fetchAll(PDO::FETCH_ASSOC);
+  if (!SCDS\FormIdempotency::verify() || !SCDS\CSRF::verify()) {
+    halt(403);
+  }
 
-if (sizeof($userInfo) != 1) {
-  halt(400);
-}
+  global $db;
+  $query = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE
+  UserID = ?");
+  $query->execute([$user]);
+  $userInfo = $query->fetch(PDO::FETCH_ASSOC);
+  $query->execute([$_SESSION['UserID']]);
+  $curUserInfo = $query->fetch(PDO::FETCH_ASSOC);
 
-$to_remove = [
-  "<p>&nbsp;</p>",
-  "<p></p>",
-  "<p> </p>",
-  "\r",
-  "\n",
-  '<div dir="auto">&nbsp;</div>',
-  '&nbsp;'
-];
+  if ($userInfo == null) {
+    halt(400);
+  }
 
-$message = $message = str_replace($to_remove, "", $_POST['message']);
-
-$userInfo = $userInfo[0];
-$curUserInfo = $curUserInfo[0];
-
-$name = $userInfo['Forename'] . ' ' . $userInfo['Surname'];
-$email = $userInfo['EmailAddress'];
-$myName = $curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'];
-$myNakedEmail = $curUserInfo['EmailAddress'];
-$myEmail; $canReply; $reply;
-
-$cc = $bcc = null;
-
-if (strpos($curUserInfo['EmailAddress'], '@chesterlestreetasc.co.uk') == mb_strlen(str_replace('@chesterlestreetasc.co.uk', '', $curUserInfo['EmailAddress']))) {
-  $myEmail = $curUserInfo['EmailAddress'];
-  $reply = $myEmail;
-  $bcc = [
-    $myEmail => $myName
+  $to_remove = [
+    "<p>&nbsp;</p>",
+    "<p></p>",
+    "<p> </p>",
+    "\r",
+    "\n",
+    '<div dir="auto">&nbsp;</div>',
+    '&nbsp;'
   ];
-} else {
-  $myEmail = mb_strtolower($curUserInfo['Forename'] . '.' . $curUserInfo['Surname'] . ".volunteer-noreply@" . env('EMAIL_DOMAIN'));
-  $canReply = "As you don't have a club email address, we can't allow parents to directly reply to you. If parents reply, their email will go to our enquiries team, who can forward it on to you.";
-  $reply = "enquiries+replyto-" . mb_strtolower($curUserInfo['Forename'] . '-' . $curUserInfo['Surname']) . "@" . env('EMAIL_DOMAIN');
-  $message .= '<p class="small text-muted">This message was sent by ' . $myName . ', a volunteer at our club who does not have a club email address. In order to comply with the General Data Protection Regulation, we cannot provide you with the details to reply directly to their personal email address. If you reply to this email, it will go to our Enquiries Team who can pass your message on to ' . $myName . '.</p>';
 
-  $bcc = [
-    $myNakedEmail => $myName
-  ];
-}
+  $message = $message = str_replace($to_remove, "", $_POST['message']);
 
-if ($_POST['from'] == 'club-sending-account') {
-  $myEmail = "noreply@" . env('EMAIL_DOMAIN');
-  $myName = env('CLUB_NAME');
-}
+  $name = $userInfo['Forename'] . ' ' . $userInfo['Surname'];
+  $email = $userInfo['EmailAddress'];
+  $myName = $curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'];
 
-$subject = $_POST['subject'];
+  $from = "noreply@" . env('EMAIL_DOMAIN');
+  $fromName = env('CLUB_NAME');
+  if ($_POST['from'] == "current-user") {
+    $fromName = $myName;
+  }
 
-if (notifySend("", $subject, $message, $name, $email, ["Email" => $myEmail, "Name" => $myName, "Reply-To" => $reply, "CC" => $cc, "BCC" => $bcc, 'PlainText' => true])) {
-  $_SESSION['NotifyIndivSuccess'] = true;
-} else {
+  $replyAddress = getUserOption($_SESSION['UserID'], 'NotifyReplyAddress');
+
+  if (!($replyAddress && isset($_POST['ReplyToMe']) && bool($_POST['ReplyToMe']))) {
+    $replyAddress = env('CLUB_EMAIL');
+  }
+
+  $cc = $bcc = null;
+
+  $subject = $_POST['subject'];
+
+  $messagePlain = \Soundasleep\Html2Text::convert($message);
+
+  if (notifySend("", $subject, $messagePlain, $name, $email, ["Email" => $from, "Name" => $fromName, "Reply-To" => $replyAddress, "CC" => $cc, "BCC" => $bcc, 'PlainText' => true])) {
+    $_SESSION['NotifyIndivSuccess'] = true;
+  } else {
+    $_SESSION['NotifyIndivSuccess'] = false;
+  }
+} catch (Exception $e) {
   $_SESSION['NotifyIndivSuccess'] = false;
-}
-if ($returnToSwimmer) {
-  header("Location: " . autoUrl("swimmers/" . $id));
-} else {
-  header("Location: " . autoUrl("notify"));
+} finally {
+
+  if ($returnToSwimmer) {
+    header("Location: " . autoUrl("members/" . $id));
+  } else {
+    header("Location: " . autoUrl("notify"));
+  }
+
 }

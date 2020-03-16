@@ -64,10 +64,10 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
 
   $mailObject->setHtmlContent($htmlMessage);
 
-  if (isset($from['PlainText']) && $from['PlainText']) {
-    $message = $emailMessage;
-    $mailObject->setHtmlContent($from['PlainText']);
-  }
+  // if (isset($from['PlainText']) && $from['PlainText']) {
+  //   // $message = $emailMessage;
+  //   // $mailObject->setHtmlContent($from['PlainText']);
+  // }
 
   if (isset($from['Unsub']['Allowed']) && $from['Unsub']['Allowed']) {
     $mailObject->setUnsubscribable();
@@ -126,13 +126,9 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
     $email->setSubject($subject);
     $email->addTo($emailaddress, $name);
     $email->addContent("text/plain", $plain);
-    if (isset($from['PlainText']) && $from['PlainText']) {
+    if (!(isset($from['PlainText']) && $from['PlainText'])) {
       $email->addContent(
         "text/html", $plain
-      );
-    } else {
-      $email->addContent(
-        "text/html", $html
       );
     }
 

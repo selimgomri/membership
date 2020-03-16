@@ -36,6 +36,11 @@ if (strpos($curUserInfo['EmailAddress'], '@chesterlestreetasc.co.uk') == mb_strl
   $canReply = "As you don't have a club email address, we can't allow parents to directly reply to you. If parents reply, their email will go to our enquiries team, who can forward it on to you.";
 }
 
+$replyMe = false;
+if (getUserOption($_SESSION['UserID'], 'NotifyReplyAddress')) {
+  $replyMe = true;
+}
+
 $pagetitle = "Email " . $name;
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";
@@ -62,12 +67,43 @@ include BASE_PATH . "views/notifyMenu.php";
       placeholder="Recipient" autocomplete="off" value="<?=htmlspecialchars($name . " <" . $email . ">")?>" disabled>
 		</div>
 
-    <div class="form-group">
-			<label for="from">From</label>
-      <select class="custom-select" name="from" id="from">
-        <option value="current-user" selected><?=htmlspecialchars($myName . " <" . $myEmail . ">")?></option>
-        <option value="club-sending-account"><?=htmlspecialchars(env('CLUB_NAME') . " <noreply@" . env('EMAIL_DOMAIN') . ">")?></option>
-      </select>
+    <div class="row">
+      <div class="col-md">
+        <div class="form-group">
+          <label for="from">Send message as</label>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" required>
+            <label class="custom-control-label" for="from-club"><?=htmlspecialchars(env('CLUB_NAME'))?></label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="from-user" name="from" class="custom-control-input" value="current-user" checked>
+            <label class="custom-control-label" for="from-user"><?=htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'])?></label>
+          </div>
+          <div class="invalid-feedback">
+            Choose a send-as option
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md">
+        <div class="form-group">
+          <label for="ReplyToMe">Send replies to</label>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="ReplyTo-Club" name="ReplyToMe" class="custom-control-input" value="0" <?php if (!$replyMe) { ?>checked<?php } ?> required>
+            <label class="custom-control-label" for="ReplyTo-Club">Main club address</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="ReplyTo-Me" name="ReplyToMe" class="custom-control-input" value="1" <?php if (!$replyMe) { ?>disabled<?php } else { ?>checked<?php } ?>>
+            <label class="custom-control-label" for="ReplyTo-Me">My reply-to email address</label>
+          </div>
+          <small class="form-text text-muted">
+            <a href="<?=htmlspecialchars(autoUrl("notify/reply-to"))?>" target="_blank">Manage reply-to address</a>
+          </small>
+          <div class="invalid-feedback">
+            Choose a reply-to address
+          </div>
+        </div>
+      </div>
 		</div>
 
 		<div class="form-group">
@@ -85,10 +121,6 @@ include BASE_PATH . "views/notifyMenu.php";
       </small>
 		</div>
 
-    <?php if ($canReply) { ?>
-      <p><?=$canReply?></p>
-    <?php } ?>
-
     <?=SCDS\CSRF::write()?>
     <?=SCDS\FormIdempotency::write()?>
 
@@ -96,7 +128,7 @@ include BASE_PATH . "views/notifyMenu.php";
 	</form>
 </div>
 
-<script>
+<!-- <script>
  tinymce.init({
     selector: '#message',
     branding: false,
@@ -113,6 +145,8 @@ include BASE_PATH . "views/notifyMenu.php";
     ]
       //toolbar: "link",
  });
-</script>
+</script> -->
 <?php $footer = new \SCDS\Footer();
+$footer->addJS("public/js/tinymce/tinymce.min.js");
+$footer->addJS("public/js/notify/TinyMCE.js");
 $footer->render();
