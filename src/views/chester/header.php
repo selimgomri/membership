@@ -50,19 +50,19 @@ p.lead {
       $markdown = new ParsedownExtra();
     ?>
     <style>
-    .emergency-message .text-white a {
+    .text-white .emergency-message a {
       color: #fff;
       font-weight: bold;
       text-decoration: underline;
     }
 
-    .emergency-message .text-body a {
+    .text-body .emergency-message a {
       color: #212529;
       font-weight: bold;
       text-decoration: underline;
     }
 
-    .emergency-message .text-white thead {
+    .text-white .emergency-message thead {
       color: #212529;
     }
 
