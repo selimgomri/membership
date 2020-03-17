@@ -19,7 +19,7 @@ if (env('EMERGENCY_MESSAGE_TYPE') != 'NONE' && env('EMERGENCY_MESSAGE')) {
     $message .= 'bg-warning text-body';
   }
 
-  $message .= '<div class="container">';
+  $message .= '"><div class="container">';
   try {
     $message .= $markdown->text(env('EMERGENCY_MESSAGE'));
   } catch (Exception $e) {
