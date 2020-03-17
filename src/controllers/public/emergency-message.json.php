@@ -11,6 +11,10 @@ if (env('EMERGENCY_MESSAGE_TYPE') != 'NONE' && env('EMERGENCY_MESSAGE')) {
 
   $message .= '<div class="py-5 ';
 
+  if (env('EMERGENCY_MESSAGE_TYPE') == 'SUCCESS') {
+    $message .= 'bg-success text-white';
+  }
+
   if (env('EMERGENCY_MESSAGE_TYPE') == 'DANGER') {
     $message .= 'bg-danger text-white';
   }
@@ -19,7 +23,7 @@ if (env('EMERGENCY_MESSAGE_TYPE') != 'NONE' && env('EMERGENCY_MESSAGE')) {
     $message .= 'bg-warning text-body';
   }
 
-  $message .= '"><div class="container">';
+  $message .= '"><div class="container emergency-message">';
   try {
     $message .= $markdown->text(env('EMERGENCY_MESSAGE'));
   } catch (Exception $e) {

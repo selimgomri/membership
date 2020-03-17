@@ -122,6 +122,10 @@ include BASE_PATH . 'views/header.php';
               <label class="custom-control-label" for="EMERGENCY_MESSAGE_TYPE_NONE">No emergency message</label>
             </div>
             <div class="custom-control custom-radio">
+              <input type="radio" value="SUCCESS" id="EMERGENCY_MESSAGE_TYPE_SUCCESS" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'SUCCESS') { ?>checked<?php } ?> <?=$disabled['EMERGENCY_MESSAGE_TYPE']?>>
+              <label class="custom-control-label" for="EMERGENCY_MESSAGE_TYPE_SUCCESS">Safe/good (green)</label>
+            </div>
+            <div class="custom-control custom-radio">
               <input type="radio" value="WARN" id="EMERGENCY_MESSAGE_TYPE_WARN" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'WARN') { ?>checked<?php } ?> <?=$disabled['EMERGENCY_MESSAGE_TYPE']?>>
               <label class="custom-control-label" for="EMERGENCY_MESSAGE_TYPE_WARN">Warning (yellow)</label>
             </div>

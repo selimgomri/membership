@@ -49,8 +49,31 @@ p.lead {
     <?php if (env('EMERGENCY_MESSAGE_TYPE') != 'NONE' && env('EMERGENCY_MESSAGE')) {
       $markdown = new ParsedownExtra();
     ?>
-    <div class="py-5 <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'DANGER') { ?>bg-danger text-white<?php } ?> <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'WARN') { ?>bg-warning text-body<?php } ?>">
-      <div class="<?=$container_class?>">
+    <style>
+    .text-white a {
+      color: #fff;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .text-body a {
+      color: #212529;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .text-white thead {
+      color: #212529;
+    }
+
+    .emergency-message p:last-child {
+      margin-bottom: 0 !important;
+      padding-bottom: 0 !important;
+    }
+    </style>
+
+    <div class="py-5 <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'DANGER') { ?>bg-danger text-white<?php } ?> <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'WARN') { ?>bg-warning text-body<?php } ?> <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'SUCCESS') { ?>bg-success text-white<?php } ?>">
+      <div class="<?=$container_class?> emergency-message">
         <?php try { ?>
         <?=$markdown->text(env('EMERGENCY_MESSAGE'))?>
         <?php } catch (Exception $e) { ?>

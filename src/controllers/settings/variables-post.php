@@ -79,7 +79,7 @@ try {
 
   if (!$systemInfo->isExistingEnvVar('EMERGENCY_MESSAGE_TYPE')) {
     $type = $_POST['EMERGENCY_MESSAGE_TYPE'];
-    if ($type == 'NONE' || $type == 'WARN' || $type == 'DANGER') {
+    if ($type == 'NONE' || $type == 'SUCCESS' || $type == 'WARN' || $type == 'DANGER') {
       $systemInfo->setSystemOption('EMERGENCY_MESSAGE_TYPE', $type);
     }
   }
