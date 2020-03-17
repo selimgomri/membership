@@ -355,6 +355,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
     include 'dynamic-javascript/router.php';
   });
 
+  $this->get('/emergency-message.json', function() {
+    include 'controllers/public/emergency-message.json.php';
+  });
+
   $this->get('/setup', function() {
     include 'controllers/db/system-setup.php';
   });
