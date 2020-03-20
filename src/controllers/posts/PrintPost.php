@@ -118,7 +118,7 @@ if (!isset($attachment)) {
   header('Expires: 0');
   header('Cache-Control: must-revalidate');
   header('Pragma: public');
-  $dompdf->stream(str_replace(' ', '', $pagetitle) . ".pdf", ['Attachment' => 0]);
+  $dompdf->stream(str_replace(' ', '', $row['Title']) . ".pdf", ['Attachment' => 0]);
 } else if ($attachment) {
   $pdfOutput = $dompdf->output();
 }
