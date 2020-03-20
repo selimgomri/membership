@@ -112,7 +112,7 @@ if (!(sizeof($_SESSION) > 0)) {
 */
 
 function currentUrl() {
-  $url = app('request')->protocol . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  $url = autoUrl($_SERVER["REQUEST_URI"]);
   if (mb_substr($url, -1) != '/') {
     $url = $url . '/';
   }
