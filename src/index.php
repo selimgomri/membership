@@ -112,7 +112,8 @@ if (!(sizeof($_SESSION) > 0)) {
 */
 
 function currentUrl() {
-  $url = autoUrl($_SERVER["REQUEST_URI"]);
+  $uri = ltrim($_SERVER["REQUEST_URI"], '/');
+  $url = autoUrl($uri);
   if (mb_substr($url, -1) != '/') {
     $url = $url . '/';
   }
