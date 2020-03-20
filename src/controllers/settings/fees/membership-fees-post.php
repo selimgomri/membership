@@ -25,4 +25,4 @@ try {
   $_SESSION['Update-Error'] = true;
 }
 
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("settings/fees/membership-fees"));

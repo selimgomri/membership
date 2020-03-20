@@ -40,4 +40,4 @@ try {
 
 $_SESSION['PostStatus'] = "Successfully updated";
 
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("posts/" . $id));

@@ -64,8 +64,7 @@ if ($ok) {
 			</ul>
 		</div>';
 		$_SESSION['NewRenewalForm'] = [$name, $start, $end];
-		pre($e);
-		//header("Location: " . currentUrl());
+		header("Location: " . autoUrl("renewal/new"));
 	}
 } else {
 	$_SESSION['NewRenewalErrorInfo'] = '
@@ -80,5 +79,5 @@ if ($ok) {
 		</ul>
 	</div>';
 	$_SESSION['NewRenewalForm'] = [$name, $start, $end];
-	header("Location: " . currentUrl());
+	header("Location: " . autoUrl("renewal/new"));
 }

@@ -15,5 +15,5 @@ if ($success) {
   header("Location: " . autoUrl("my-account/googleauthenticator"));
 } else {
   $_SESSION['G2FA_VerifyError'] = true;
-  header("Location: " . currentUrl());
+  header("Location: " . autoUrl("my-account/googleauthenticator/setup"));
 }

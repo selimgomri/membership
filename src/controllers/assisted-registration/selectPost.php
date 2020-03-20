@@ -58,5 +58,5 @@ if ($success) {
   $_SESSION['AssRegName'] = $user['first'] . ' ' . $user['last'];
   header("Location: " . autoUrl("assisted-registration/complete"));
 } else {
-  header("Location: " . currentUrl());
+  header("Location: " . autoUrl("assisted-registration/select-swimmers"));
 }

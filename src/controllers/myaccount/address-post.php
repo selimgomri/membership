@@ -28,4 +28,4 @@ try {
   $_SESSION['OptionsUpdate'] = false;
 }
 
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("my-account/address"));

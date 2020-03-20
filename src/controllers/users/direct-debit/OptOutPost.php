@@ -41,5 +41,5 @@ try {
 } catch (Excption $e) {
 
 } finally {
-  header("Location: " . currentUrl());
+  header("Location: " . autoUrl("users/" . $person . "/authorise-direct-debit-opt-out"));
 }

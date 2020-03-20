@@ -108,5 +108,5 @@ if ($action) {
 			Please try again
 		</p>
 	</div>';
-	//header("Location: " . currentUrl());
+	header("Location: " . autoUrl("members/new"));
 }

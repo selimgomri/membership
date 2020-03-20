@@ -34,4 +34,4 @@ for ($i = 1; $i < 4; $i++) {
   }
 }
 
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("settings/fees/swim-england-fees"));

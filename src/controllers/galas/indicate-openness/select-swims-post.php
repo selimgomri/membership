@@ -212,4 +212,4 @@ try {
   $_SESSION['ErrorStatus'] = true;
 }
 
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("galas/" . $id . "/select-entries")));

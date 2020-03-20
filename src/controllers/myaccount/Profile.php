@@ -143,7 +143,7 @@ $updateText .= '
 }
 
 if (app('request')->method == "POST") {
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("my-account"));
 } else {
 
 ?>

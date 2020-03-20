@@ -39,7 +39,7 @@ include BASE_PATH . "views/header.php";
     </ol>
   </nav>
 
-	<form method="post" action="<?=htmlspecialchars(currentUrl())?>" name="med" id="med">
+	<form method="post" action="<?=htmlspecialchars(autoUrl("members/" . $id . "/medical"))?>" name="med" id="med">
 		<h1>Medical Form</h1>
 		<?php if (isset($_SESSION['ErrorState'])) {
 			echo $_SESSION['ErrorState'];

@@ -62,5 +62,5 @@ if ($status) {
   $_SESSION['AssRegGetDetailsError'] = true;
   $_SESSION['AssRegGetDetailsPostData'] = $_POST;
   $_SESSION['AssRegGetDetailsMessage'] = $statusMessage;
-  header("Location: " . currentUrl());
+  header("Location: " . autoUrl("assisted-registration/confirm-details"));
 }

@@ -20,4 +20,4 @@ try {
   $_SESSION['PCC-ERROR'] = true;
 }
 
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("settings/codes-of-conduct/terms-and-conditions"));

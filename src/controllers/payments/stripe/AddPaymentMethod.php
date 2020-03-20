@@ -82,7 +82,7 @@ include BASE_PATH . 'views/header.php';
       <?php unset($_SESSION['PayCardError']); unset($_SESSION['PayCardErrorMessage']); ?>
       <?php } ?>
 
-      <form action="<?=currentUrl()?>" method="post" id="payment-form" class="mb-5 needs-validation" novalidate>
+      <form action="<?=htmlspecialchars(autoUrl("payments/cards/add"))?>" method="post" id="payment-form" class="mb-5 needs-validation" novalidate>
         <div id="form-hideable" class="show fade">
           <div class="form-group">
             <label for="cardholder-name">Cardholder name</label>
