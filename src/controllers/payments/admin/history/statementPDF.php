@@ -8,7 +8,8 @@ $user = $_SESSION['UserID'];
 $sql = $payments = null;
 $count = 0;
 
-$club = json_decode(CLUB_JSON);
+// $club = json_decode(CLUB_JSON);
+// $addr = json_decode(env('CLUB_ADDRESS'));
 
 // Check the thing exists
 
