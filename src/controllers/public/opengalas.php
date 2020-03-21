@@ -1,5 +1,7 @@
 <?php
 
+header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
+
 global $db;
 
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
