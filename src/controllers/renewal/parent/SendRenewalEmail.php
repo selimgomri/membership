@@ -8,7 +8,7 @@ $nextStage->execute([
 	$_SESSION['UserID']
 ]);
 
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("renewal/go"));
 
 /*
 

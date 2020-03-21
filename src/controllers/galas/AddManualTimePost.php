@@ -79,4 +79,4 @@ try {
 	$_SESSION['UpdateError'] = $e->getMessage();
 }
 
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("galas/entries/" . $id . "/manual-time"));

@@ -38,5 +38,5 @@ try {
 	
 } catch (Exception $e) {
 	$_SESSION['PhoneError'] = true;
-	header("Location: " . currentUrl());
+	header("Location: " . autoUrl($url_path . "/edit/" . $id));
 }

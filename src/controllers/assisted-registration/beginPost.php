@@ -81,5 +81,5 @@ if ($status) {
 } else {
   $_SESSION['AssRegFormError'] = true;
   $_SESSION['AssRegPostData'] = $_POST;
-  header("Location: " . currentUrl());
+  header("Location: " . autoUrl("assisted-registration/start"));
 }

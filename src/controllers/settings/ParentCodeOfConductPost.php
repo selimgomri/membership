@@ -10,4 +10,4 @@ if (isset($_POST['CodeOfConduct'])) {
   }
 }
 
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("settings/codes-of-conduct/parent"));

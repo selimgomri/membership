@@ -1,7 +1,6 @@
 <?php
 
 // Inserts the standard letterhead on PDF pages
-$club = json_decode(CLUB_JSON);
 $addr = json_decode(env('CLUB_ADDRESS'));
 $logoPath = env('CLUB_LOGO');
 

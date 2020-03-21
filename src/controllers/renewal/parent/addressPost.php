@@ -52,5 +52,5 @@ try {
 	<p class=\"mb-0\"><strong>An error occured when we tried to update our records</strong></p>
 	<p class=\"mb-0\">Please try again</p>
 	</div>";
-	header("Location: " . currentUrl());
+	header("Location: " . autoUrl("renewal/go"));
 }

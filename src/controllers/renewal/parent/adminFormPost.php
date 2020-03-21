@@ -136,5 +136,5 @@ if ($status) {
 	<p class=\"mb-0\">Please try again. You cannot renew your membership or
 	register if you cannot agree to the terms and conditions on this
 	page.</p></div>";
-	header("Location: " . currentUrl());
+	header("Location: " . autoUrl("renewal/go"));
 }

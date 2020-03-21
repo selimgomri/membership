@@ -86,5 +86,5 @@ if (!$status) {
 	<div class=\"alert alert-danger\">
 	<strong>An error occured when we tried to update our records</strong>
 	<ul class=\"mb-0\">" . $statusMessage . "</ul></div>";
-	header("Location: " . currentUrl());
+	header("Location: " . autoUrl("renewal/go"));
 }

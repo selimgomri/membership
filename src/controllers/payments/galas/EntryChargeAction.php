@@ -141,4 +141,4 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 if (!isset($_SESSION['ChargeUsersFailure'])) {
 	$_SESSION['ChargeUsersSuccess'] = true;
 }
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("payments/galas/" . $id));

@@ -187,4 +187,4 @@ try {
 
 }
 
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("members/" . $id . "/edit"));

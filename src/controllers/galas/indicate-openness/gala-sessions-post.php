@@ -67,4 +67,4 @@ if ($nowDate < $galaDate) {
 
 }
 
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("galas/" . $id . "/sessions"));

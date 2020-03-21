@@ -68,7 +68,7 @@ if ($ok) {
 		</div>';
 	}
 
-	header("Location: " . currentUrl());
+	header("Location: " . autoUrl("renewal/" . $id . "/edit"));
 } else {
 	$_SESSION['NewRenewalErrorInfo'] = '
 	<div class="alert alert-danger">
@@ -82,5 +82,5 @@ if ($ok) {
 			' . $response . '
 		</ul>
 	</div>';
-	header("Location: " . currentUrl());
+	header("Location: " . autoUrl("renewal/" . $id . "/edit"));
 }

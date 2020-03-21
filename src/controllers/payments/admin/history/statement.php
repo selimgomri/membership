@@ -8,6 +8,8 @@ $user = $_SESSION['UserID'];
 $sql = $payments = null;
 $count = 0;
 
+$pdfUrl = "";
+
 // Check the thing exists
 
 if ($_SESSION['AccessLevel'] == "Parent") {
@@ -24,6 +26,8 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 
 	$payments = $db->prepare("SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `PMkey` = ? AND paymentsPending.UserID = ?");
   $payments->execute([$PaymentID, $user]);
+
+  $pdfUrl = autoUrl("payments/statement/" . $PaymentID . "/pdf");
 } else {
   $sql = $db->prepare("SELECT COUNT(*) FROM payments WHERE PMkey = ?");
   $sql->execute([$PaymentID]);
@@ -37,6 +41,7 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 
 	$payments = $db->prepare("SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `PMkey` = ?");
   $payments->execute([$PaymentID]);
+  $pdfUrl = autoUrl("payments/history/statement/" . $PaymentID . "/pdf");
 }
 
 $row = $payments->fetch(PDO::FETCH_ASSOC);
@@ -122,9 +127,10 @@ include BASE_PATH . "views/paymentsMenu.php";
 
     <?php if ($_SESSION['AccessLevel'] == "Admin" && ($payment_info['Status'] == 'customer_approval_denied' || $payment_info['Status'] == 'failed')) {
     $_SESSION['Token' . $PaymentID] = hash('sha256', random_int(0, 999999));
+    $url = autoUrl("payments/history/statement/" . $PaymentID . "/markpaid/" . $_SESSION['Token' . $PaymentID]);
     ?>
     <p>
-      <a href="<?=currentUrl()?>markpaid/<?=$_SESSION['Token' . $PaymentID]?>" class="btn btn-primary">
+      <a href="<?=htmlspecialchars($url)?>" class="btn btn-primary">
         Mark as Paid
       </a>
     </p>
@@ -214,7 +220,7 @@ include BASE_PATH . "views/paymentsMenu.php";
     </div>
 
     <p>
-      <a href="<?=currentUrl()?>pdf" target="_blank" class="btn btn-primary">
+      <a href="<?=htmlspecialchars($pdfUrl)?>" target="_blank" class="btn btn-primary">
         PDF Download
       </a>
     </p>

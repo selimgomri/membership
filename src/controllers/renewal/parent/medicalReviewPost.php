@@ -53,5 +53,5 @@ try {
 	<strong>An error occured when we tried to update our records</strong>
 	<p class=\"mb-0\">Please try again. Your membership renewal will not be
 	affected by this error.</p></div>";
-	header("Location: " . currentUrl());
+	header("Location: " . autoUrl("renewal/go"));
 }

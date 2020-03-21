@@ -10,4 +10,4 @@ if (isset($_POST['leavers-squad'])) {
   }
 }
 
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("settings/leavers-squad"));

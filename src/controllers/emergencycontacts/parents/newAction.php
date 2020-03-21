@@ -48,7 +48,7 @@ if ($_POST['name'] != null && $_POST['name'] != "" && $_POST['num'] != null && $
 		</div>
 		';
 		$_SESSION['POST_DATA'] = $_POST;
-		header("Location: " . currentUrl());
+		header("Location: " . autoUrl($url_path . "/new"));
 	}
 
 } else {

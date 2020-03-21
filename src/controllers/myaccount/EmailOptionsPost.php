@@ -83,4 +83,4 @@ if ($_POST['EmailAddress'] != $row['EmailAddress']) {
 	}
 }
 
-header("Location: " . currentUrl());
+header("Location: " . autoUrl("my-account/email"));

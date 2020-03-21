@@ -459,7 +459,7 @@ include BASE_PATH . "views/header.php";
     </div>
 
     <p>
-      <a href="<?=currentUrl()?>qualifications" class="btn btn-primary">
+      <a href="<?=htmlspecialchars(autoUrl("users/" . $id . "/qualifications"))?>" class="btn btn-primary">
         <span class="sr-only">View or add</span> Qualifications <span class="fa fa-chevron-right"></span>
       </a>
     </p>

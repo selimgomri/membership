@@ -49,12 +49,11 @@ try {
     $medicine,
     $id
   ]);
-	header("Location: " . currentUrl());
+	header("Location: " . autoUrl("members/" . $id . "/medical"));
 } catch (Exception $e) {
 	$_SESSION['ErrorState'] = "
 	<div class=\"alert alert-danger\">
 	<strong>An error occured when we tried to update our records</strong>
-	<p class=\"mb-0\">Please try again. Your membership renewal will not be
-	affected by this error.</p></div>";
-	header("Location: " . currentUrl());
+	<p class=\"mb-0\">Please try again.</p></div>";
+	header("Location: " . autoUrl("members/" . $id . "/medical"));
 }
