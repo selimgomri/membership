@@ -161,7 +161,10 @@ function halt(int $statusCode, $throwException = true) {
   }
 
   try {
-    if ($statusCode == 200) {
+    if ($statusCode == 000) {
+      require "views/000.php";
+    }
+    else if ($statusCode == 200) {
       require "views/200.php";
     }
     else if ($statusCode == 400) {
@@ -321,6 +324,12 @@ if (isset($_SESSION['UserID'])) {
 
 if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && !isset($_SESSION['DisableTrackers'])) {
   $_SESSION['DisableTrackers'] = filter_var(getUserOption($_SESSION['UserID'], "DisableTrackers"), FILTER_VALIDATE_BOOLEAN);
+}
+
+if (env('MAINTENANCE')) {
+  $route->any('/', function() {
+    halt(000);
+  });
 }
 
 $route->group($get_group, function($clubcode = "CLSE") {
