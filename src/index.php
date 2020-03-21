@@ -384,7 +384,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
   });
 
   if (env('MAINTENANCE')) {
-    $route->any(['/', '/*'], function() {
+    $this->any(['/', '/*'], function() {
       halt(000);
     });
   }
