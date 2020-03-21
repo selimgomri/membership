@@ -326,12 +326,6 @@ if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && !isset($_SESSION['D
   $_SESSION['DisableTrackers'] = filter_var(getUserOption($_SESSION['UserID'], "DisableTrackers"), FILTER_VALIDATE_BOOLEAN);
 }
 
-if (env('MAINTENANCE')) {
-  $route->any(['/', '/*'], function() {
-    halt(000);
-  });
-}
-
 $route->group($get_group, function($clubcode = "CLSE") {
   //$_SESSION['ClubCode'] = mb_strtolower($code);
 
@@ -369,6 +363,32 @@ $route->group($get_group, function($clubcode = "CLSE") {
     include 'controllers/public/emergency-message.json.php';
   });
 
+  $this->get('/robots.txt', function() {
+    header("Content-Type: text/plain");
+    echo "User-agent: *\r\nDisallow: /webhooks/\r\nDisallow: /webhooks\r\nDisallow: /css\r\nDisallow: /js\r\nDisallow: /public\r\nDisallow: /files";
+  });
+
+  $this->get('/public/*/viewer', function() {
+    $filename = $this[0];
+    $type = 'public';
+    require BASE_PATH . 'controllers/public/Viewer.php';
+  });
+
+  $this->get('/public/css/colour.css', function() {
+    require BASE_PATH . 'public/css/colour.css';
+  });
+
+  $this->get('/public/*', function() {
+    $filename = $this[0];
+    require BASE_PATH . 'controllers/PublicFileLoader.php';
+  });
+
+  if (env('MAINTENANCE')) {
+    $route->any(['/', '/*'], function() {
+      halt(000);
+    });
+  }
+
   $this->get('/setup', function() {
     include 'controllers/db/system-setup.php';
   });
@@ -403,28 +423,8 @@ $route->group($get_group, function($clubcode = "CLSE") {
     include 'controllers/notify/UnsubscribeHandler.php';
   });
 
-  $this->get('/robots.txt', function() {
-    header("Content-Type: text/plain");
-    echo "User-agent: *\r\nDisallow: /webhooks/\r\nDisallow: /webhooks\r\nDisallow: /css\r\nDisallow: /js\r\nDisallow: /public\r\nDisallow: /files";
-  });
-
   $this->get(['/help-and-support', '/help-and-support/*'], function() {
     include BASE_PATH . 'controllers/help/help-documentation.php';
-  });
-
-  $this->get('/public/*/viewer', function() {
-    $filename = $this[0];
-    $type = 'public';
-    require BASE_PATH . 'controllers/public/Viewer.php';
-  });
-
-  $this->get('/public/css/colour.css', function() {
-    require BASE_PATH . 'public/css/colour.css';
-  });
-
-  $this->get('/public/*', function() {
-    $filename = $this[0];
-    require BASE_PATH . 'controllers/PublicFileLoader.php';
   });
 
   $this->group(['/timeconverter', '/time-converter'], function() {
