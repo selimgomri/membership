@@ -327,7 +327,7 @@ if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && !isset($_SESSION['D
 }
 
 if (env('MAINTENANCE')) {
-  $route->any('/', function() {
+  $route->any('/*', function() {
     halt(000);
   });
 }
