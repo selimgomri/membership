@@ -126,9 +126,9 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
     $email->setSubject($subject);
     $email->addTo($emailaddress, $name);
     $email->addContent("text/plain", $plain);
-    if (!(isset($from['PlainText']) && $from['PlainText'])) {
+    if (!(isset($from['PlainTextOnly']) && $from['PlainTextOnly'])) {
       $email->addContent(
-        "text/html", $plain
+        "text/html", $html
       );
     }
 

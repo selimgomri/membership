@@ -56,7 +56,7 @@ try {
 
   $messagePlain = \Soundasleep\Html2Text::convert($message);
 
-  if (notifySend("", $subject, $messagePlain, $name, $email, ["Email" => $from, "Name" => $fromName, "Reply-To" => $replyAddress, "CC" => $cc, "BCC" => $bcc, 'PlainText' => true])) {
+  if (notifySend("", $subject, $messagePlain, $name, $email, ["Email" => $from, "Name" => $fromName, "Reply-To" => $replyAddress, "CC" => $cc, "BCC" => $bcc, 'PlainTextOnly' => true])) {
     $_SESSION['NotifyIndivSuccess'] = true;
   } else {
     $_SESSION['NotifyIndivSuccess'] = false;
