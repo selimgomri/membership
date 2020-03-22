@@ -15,7 +15,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            cd /var/wwww/membership.myswimmingclub.uk/software/
+            cd /var/www/membership.myswimmingclub.uk/software/
             git pull
           host: ${{ secrets.HOST_SCDS }}
           user: ${{ secrets.USER_SCDS }}
