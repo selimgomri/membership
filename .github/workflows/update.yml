@@ -11,33 +11,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: git pull on CLS
-        uses: fifsky/ssh-action@master
-        with:
-          command: |
-            cd ~/MembershipEnv/
-            git pull
-          host: ${{ secrets.HOST_CLS }}
-          user: ${{ secrets.USER_CLS }}
-          # key: ${{ secrets.PRIVATE_KEY}}
-          pass: ${{ secrets.PASS_CLS }}
       - name: git pull on SCDS Managed Hosting
         uses: fifsky/ssh-action@master
         with:
           command: |
-            cd ~/Membership/
+            cd /var/wwww/membership.myswimmingclub.uk/software/
             git pull
           host: ${{ secrets.HOST_SCDS }}
           user: ${{ secrets.USER_SCDS }}
-          # key: ${{ secrets.PRIVATE_KEY}}
-          pass: ${{ secrets.PASS_SCDS }}
-      - name: git pull on RDASC
-        uses: fifsky/ssh-action@master
-        with:
-          command: |
-            cd ~/Membership/
-            git pull
-          host: ${{ secrets.HOST_RDASC }}
-          user: ${{ secrets.USER_RDASC }}
-          # key: ${{ secrets.PRIVATE_KEY}}
-          pass: ${{ secrets.PASS_RDASC }}
+          key: ${{ secrets.USER_PRIVATE_KEY_SCDS}}
+          # pass: ${{ secrets.PASS_SCDS }}
