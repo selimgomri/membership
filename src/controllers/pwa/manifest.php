@@ -101,6 +101,12 @@ if (bool(env('IS_CLS'))) {
     'sizes' => '180x180',
     'type' => 'image/png'
   ];
+  if (env('CLUB_LOGO')) {
+    $icons[] = [
+      'src' => autoUrl(env('CLUB_LOGO')),
+      'type' => 'image/png'
+    ];
+  }
 }
 
 $data = [
@@ -113,7 +119,6 @@ $data = [
   'icons' => $icons,
   'theme_color' => $themeColour,
   'lang' => 'en-GB',
-  'orientation' => 'portrait-primary',
   'scope' => autoUrl("")
 ];
 
