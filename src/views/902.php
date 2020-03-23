@@ -28,6 +28,7 @@ if ($currentUser == null) {
 
       <?php if (!bool(env('IS_CLS'))) { ?>
       <p>* <a href="mailto:<?=htmlspecialchars(env('CLUB_EMAIL'))?>" title="<?=htmlspecialchars(env('CLUB_NAME'))?>">Contact your own club</a> in the first instance</p>
+			<?php } ?>
 		</div>
 	</div>
 </div>
