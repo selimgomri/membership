@@ -397,6 +397,11 @@ $route->group($get_group, function($clubcode = "CLSE") {
     include 'controllers/attendance/public_sessions/router.php';
   });
 
+  $this->get('/log-book', function() {
+    http_response_code(303);
+    header("location: " . autoUrl("log-books"));
+  });
+
   // Password Reset via Link
   $this->get('/verify-cc-email/auth/{id}:int/{hash}', function($id, $hash) {
     require('controllers/myaccount/CC/verify.php');
@@ -606,6 +611,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/notify/Help.php';
     });
 
+    $this->group('/log-books', function() {
+      include 'controllers/log-books/router.php';
+    });
+
 /*
     $this->get('/files/*', function() {
       $filename = $this[0];
@@ -767,6 +776,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
     $this->group('/notify', function() {
       global $link;
       include 'controllers/notify/router.php';
+    });
+
+    $this->group('/log-books', function() {
+      include 'controllers/log-books/router.php';
     });
 
     $this->group(['/emergency-contacts', '/emergencycontacts'], function() {

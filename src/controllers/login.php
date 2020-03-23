@@ -109,6 +109,6 @@ $_SESSION['LoginSec'] = $lsv;
     unset($_SESSION['ErrorState']);
   }
 $footer = new \SCDS\Footer();
-$footer->addJs(("public/js/NeedsValidation.js");
+$footer->addJs("public/js/NeedsValidation.js");
 $footer->render();
 ?>

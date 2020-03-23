@@ -3,7 +3,7 @@
 include "../../database.php";
 
 class Wallet {
-	$sql = "SELECT * FROM wallet WHERE UserID = '$id'";
+	private $sql = "SELECT * FROM wallet WHERE UserID = ";
 
 	private $balance = 0;
 	private $id = null;
