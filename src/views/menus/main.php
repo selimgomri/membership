@@ -106,12 +106,15 @@ if (!function_exists('chesterStandardMenu')) {
                   </a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link" href="<?=htmlspecialchars(autoUrl("log-books"))?>">Log Books</a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" href="<?php echo autoUrl("emergency-contacts") ?>">Emergency Contacts</a>
                 </li>
                 <?php if ($renewalOpen) { ?>
                 <li class="nav-item">
                   <a class="nav-link" href="<?php echo autoUrl("renewal") ?>">
-                    <?=htmlspecialchars($renewalYear)?> Membership Renewal
+                    Membership Renewal
                   </a>
                 </li>
                 <?php } ?>
@@ -123,20 +126,21 @@ if (!function_exists('chesterStandardMenu')) {
                     Members &amp; Squads
                   </a>
                   <div class="dropdown-menu" aria-labelledby="swimmerDropdown">
-                    <a class="dropdown-item" href="<?php echo autoUrl("members")?>">Member Directory</a>
+                    <a class="dropdown-item" href="<?php echo autoUrl("members")?>">Member directory</a>
                     <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
-                    <a class="dropdown-item" href="<?php echo autoUrl("members/new")?>">Add Member</a>
+                    <a class="dropdown-item" href="<?php echo autoUrl("members/new")?>">Add member</a>
                     <?php } ?>
                     <?php if ($_SESSION['AccessLevel'] != "Galas") { ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("squads")?>">Squads</a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("squads/moves")?>">Squad Moves</a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("members/access-keys")?>">Access Keys</a>
+                    <a class="dropdown-item" href="<?php echo autoUrl("squads/moves")?>">Squad moves</a>
+                    <a class="dropdown-item" href="<?php echo autoUrl("members/access-keys")?>">Access keys</a>
                     <?php } ?>
                     <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
-                    <a class="dropdown-item" href="<?php echo autoUrl("renewal")?>">Membership Renewal</a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("members/orphaned")?>">Orphan Swimmers</a>
+                    <a class="dropdown-item" href="<?php echo autoUrl("renewal")?>">Membership renewal</a>
+                    <a class="dropdown-item" href="<?php echo autoUrl("members/orphaned")?>">Orphan swimmers</a>
                     <?php } ?>
-                    <a class="dropdown-item" href="<?php echo autoUrl("squad-reps")?>">Squad Reps</a>
+                    <a class="dropdown-item" href="<?php echo autoUrl("squad-reps")?>">Squad reps</a>
+                    <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("log-books"))?>">Log books</a>
                     <?php if ($_SESSION['AccessLevel'] == "Coach") { ?>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . date("Y/m")) ?>">
