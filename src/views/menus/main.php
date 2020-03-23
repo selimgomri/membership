@@ -106,7 +106,7 @@ if (!function_exists('chesterStandardMenu')) {
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="<?=htmlspecialchars(autoUrl("log-books"))?>">Log Books</a>
+                  <a class="nav-link" href="<?=htmlspecialchars(autoUrl("log-books"))?>">Log Books <span class="badge badge-info">BETA</span></a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="<?php echo autoUrl("emergency-contacts") ?>">Emergency Contacts</a>
@@ -140,7 +140,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?php echo autoUrl("members/orphaned")?>">Orphan swimmers</a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("squad-reps")?>">Squad reps</a>
-                    <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("log-books"))?>">Log books</a>
+                    <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("log-books"))?>">Log books <span class="badge badge-info">BETA</span></a>
                     <?php if ($_SESSION['AccessLevel'] == "Coach") { ?>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . date("Y/m")) ?>">
