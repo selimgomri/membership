@@ -83,6 +83,12 @@ if (env('COOKIE_PREFIX')) {
   define('COOKIE_PREFIX', 'SCDS_MEMBERSHIP_SYSTEMS_');
 }
 
+if (env('CACHE_DIR')) {
+  define('CACHE_DIR', env('CACHE_DIR'));
+} else {
+  define('CACHE_DIR', BASE_PATH . 'cache/');
+}
+
 use Symfony\Component\DomCrawler\Crawler;
 use GeoIp2\Database\Reader;
 
