@@ -10,8 +10,10 @@
         if (form.checkValidity() === false) {
           event.preventDefault();
           event.stopPropagation();
+
+          // Only add .was-validated here - otherwise gives flash of green
+          form.classList.add('was-validated');
         }
-        form.classList.add('was-validated');
       }, false);
     });
   }, false);

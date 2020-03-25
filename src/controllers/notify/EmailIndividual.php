@@ -36,6 +36,26 @@ if (getUserOption($_SESSION['UserID'], 'NotifyReplyAddress')) {
   $replyMe = true;
 }
 
+$subject = $content = $reply = "";
+$from = "current-user";
+if (!$replyMe) {
+  $reply = "0";
+} else {
+  $reply = "1";
+}
+if (isset($_SESSION['NotifyIndivPostContent']['from'])) {
+  $from = $_SESSION['NotifyIndivPostContent']['from'];
+}
+if (isset($_SESSION['NotifyIndivPostContent']['ReplyToMe'])) {
+  $reply = $_SESSION['NotifyIndivPostContent']['ReplyToMe'];
+}
+if (isset($_SESSION['NotifyIndivPostContent']['subject'])) {
+  $subject = $_SESSION['NotifyIndivPostContent']['subject'];
+}
+if (isset($_SESSION['NotifyIndivPostContent']['message'])) {
+  $content = $_SESSION['NotifyIndivPostContent']['message'];
+}
+
 $pagetitle = "Email " . htmlspecialchars($name);
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";
@@ -71,7 +91,47 @@ include BASE_PATH . "views/notifyMenu.php";
 
 <div class="container">
 
-	<form method="post" onkeypress="return event.keyCode != 13;" class="needs-validation" novalidate>
+  <?php if (isset($_SESSION['UploadSuccess']) && $_SESSION['UploadSuccess']) { ?>
+  <div class="alert alert-success">
+    <p class="mb-0"><strong>Results have been uploaded</strong>.</p>
+  </div>
+  <?php
+    unset($_SESSION['UploadSuccess']);
+  } ?>
+
+  <?php if (isset($_SESSION['FormError']) && $_SESSION['FormError']) { ?>
+  <div class="alert alert-danger">
+    <p class="mb-0"><strong>We could not verify the integrity of the submitted form</strong>. Please try again.</p>
+  </div>
+  <?php
+    unset($_SESSION['FormError']);
+  } ?>
+
+  <?php if (isset($_SESSION['UploadError']) && $_SESSION['UploadError']) { ?>
+  <div class="alert alert-danger">
+    <p class="mb-0"><strong>There was a problem with the file uploaded</strong>. Please try again.</p>
+  </div>
+  <?php
+    unset($_SESSION['UploadError']);
+  } ?>
+
+  <?php if (isset($_SESSION['TooLargeError']) && $_SESSION['TooLargeError']) { ?>
+  <div class="alert alert-danger">
+    <p class="mb-0"><strong>A file you uploaded was too large</strong>. The maximum size for an individual file is 300000 bytes.</p>
+  </div>
+  <?php
+    unset($_SESSION['TooLargeError']);
+  } ?>
+
+  <?php if (isset($_SESSION['CollectiveSizeTooLargeError']) && $_SESSION['CollectiveSizeTooLargeError']) { ?>
+  <div class="alert alert-danger">
+    <p class="mb-0"><strong>The files you uploaded were collectively too large</strong>. Attachments may not exceed a total of 10 megabytes in size.</p>
+  </div>
+  <?php
+    unset($_SESSION['CollectiveSizeTooLargeError']);
+  } ?>
+
+	<form method="post" onkeypress="return event.keyCode != 13;" class="needs-validation" novalidate id="notify-form" enctype="multipart/form-data">
     <div class="form-group">
 			<label for="recipient">To</label>
 			<input type="text" class="form-control" name="recipient" id="recipient"
@@ -83,11 +143,11 @@ include BASE_PATH . "views/notifyMenu.php";
         <div class="form-group">
           <label for="from">Send message as</label>
           <div class="custom-control custom-radio">
-            <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" required>
+            <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" <?php if ($from == "club-sending-account") { ?>checked<?php } ?> required>
             <label class="custom-control-label" for="from-club"><?=htmlspecialchars(env('CLUB_NAME'))?></label>
           </div>
           <div class="custom-control custom-radio">
-            <input type="radio" id="from-user" name="from" class="custom-control-input" value="current-user" checked>
+            <input type="radio" id="from-user" name="from" class="custom-control-input" value="current-user" <?php if ($from == "current-user") { ?>checked<?php } ?>>
             <label class="custom-control-label" for="from-user"><?=htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'])?></label>
           </div>
           <div class="invalid-feedback">
@@ -100,11 +160,11 @@ include BASE_PATH . "views/notifyMenu.php";
         <div class="form-group">
           <label for="ReplyToMe">Send replies to</label>
           <div class="custom-control custom-radio">
-            <input type="radio" id="ReplyTo-Club" name="ReplyToMe" class="custom-control-input" value="0" <?php if (!$replyMe) { ?>checked<?php } ?> required>
+            <input type="radio" id="ReplyTo-Club" name="ReplyToMe" class="custom-control-input" value="0" <?php if ($reply == "0") { ?>checked<?php } ?> required>
             <label class="custom-control-label" for="ReplyTo-Club">Main club address</label>
           </div>
           <div class="custom-control custom-radio">
-            <input type="radio" id="ReplyTo-Me" name="ReplyToMe" class="custom-control-input" value="1" <?php if (!$replyMe) { ?>disabled<?php } else { ?>checked<?php } ?>>
+            <input type="radio" id="ReplyTo-Me" name="ReplyToMe" class="custom-control-input" value="1" <?php if (!$replyMe) { ?>disabled<?php } ?> <?php if ($reply == "1") { ?>checked<?php } ?>>
             <label class="custom-control-label" for="ReplyTo-Me">My reply-to email address</label>
           </div>
           <small class="form-text text-muted">
@@ -120,7 +180,7 @@ include BASE_PATH . "views/notifyMenu.php";
 		<div class="form-group">
 			<label for="subject">Message Subject</label>
 			<input type="text" class="form-control" name="subject" id="subject"
-      placeholder="Message Subject" autocomplete="off" required>
+      placeholder="Message Subject" autocomplete="off" value="<?=htmlspecialchars($subject)?>" required>
       <div class="invalid-feedback">
         You must enter a subject
       </div>
@@ -128,15 +188,27 @@ include BASE_PATH . "views/notifyMenu.php";
 
 		<div class="form-group">
 			<label for="message">Your Message</label>
-			<textarea class="form-control" id="message" name="message" rows="10" required>
-      </textarea>
+			<textarea class="form-control" id="message" name="message" rows="10" required><?=htmlspecialchars($content)?></textarea>
 			<small id="messageHelp" class="form-text text-muted">
         Styling will be stripped from this message
       </small>
       <div class="invalid-feedback">
         Include content in your email
       </div>
-		</div>
+    </div>
+    
+    <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
+
+    <div class="form-group">
+      <label>Select files to attach</label>
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="file-upload-invalid-feedback">
+        <label class="custom-file-label text-truncate" for="file-upload">Choose file(s)</label>
+        <div class="invalid-feedback" id="file-upload-invalid-feedback">
+          Oh no!
+        </div>
+      </div>
+    </div>
 
     <?=SCDS\CSRF::write()?>
 
@@ -147,5 +219,5 @@ include BASE_PATH . "views/notifyMenu.php";
 <?php $footer = new \SCDS\Footer();
 $footer->addJS("public/js/tinymce/tinymce.min.js");
 $footer->addJS("public/js/notify/TinyMCE.js");
-$footer->addJS("public/js/NeedsValidation.js");
+$footer->addJS("public/js/notify/FileUpload.js");
 $footer->render();
