@@ -83,6 +83,12 @@ if (env('COOKIE_PREFIX')) {
   define('COOKIE_PREFIX', 'SCDS_MEMBERSHIP_SYSTEMS_');
 }
 
+if (env('COOKIE_PATH')) {
+  define('COOKIE_PATH', env('COOKIE_PATH'));
+} else {
+  define('COOKIE_PATH', '/');
+}
+
 if (env('CACHE_DIR')) {
   define('CACHE_DIR', env('CACHE_DIR'));
 } else {
@@ -156,7 +162,8 @@ session_start([
     'use_strict_mode'     => 1,
     'sid_length'          => 128,
     'name'                => COOKIE_PREFIX . 'SessionId',
-    'cookie_domain'       => $_SERVER['HTTP_HOST']
+    'cookie_domain'       => $_SERVER['HTTP_HOST'],
+    'cookie_path'         => COOKIE_PATH,
 ]);
 
 function halt(int $statusCode, $throwException = true) {
@@ -308,10 +315,10 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
     $expiry_time = ($time->format('U'))+60*60*24*120;
 
     $secure = true;
-    if (app('request')->protocol == 'http') {
+    if (app('request')->protocol == 'http' && bool(env('IS_DEV'))) {
       $secure = false;
     }
-    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , "/", app('request')->hostname, $secure, false);
+    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , COOKIE_PATH, app('request')->hostname, $secure, false);
   }
 }
 
