@@ -124,7 +124,7 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <p class="mb-0">
+        <p>
           <button type="submit" class="btn btn-success">Save <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
         </p>
 
