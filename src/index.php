@@ -83,6 +83,12 @@ if (env('COOKIE_PREFIX')) {
   define('COOKIE_PREFIX', 'SCDS_MEMBERSHIP_SYSTEMS_');
 }
 
+if (env('COOKIE_PATH')) {
+  define('COOKIE_PATH', env('COOKIE_PATH'));
+} else {
+  define('COOKIE_PATH', '/');
+}
+
 if (env('CACHE_DIR')) {
   define('CACHE_DIR', env('CACHE_DIR'));
 } else {
@@ -156,7 +162,8 @@ session_start([
     'use_strict_mode'     => 1,
     'sid_length'          => 128,
     'name'                => COOKIE_PREFIX . 'SessionId',
-    'cookie_domain'       => $_SERVER['HTTP_HOST']
+    'cookie_domain'       => $_SERVER['HTTP_HOST'],
+    'cookie_path'         => COOKIE_PATH,
 ]);
 
 function halt(int $statusCode, $throwException = true) {
