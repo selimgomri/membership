@@ -115,6 +115,12 @@ include BASE_PATH . "views/header.php";
   </div>
   <?php unset($_SESSION['User-Update-Email-Success']); } ?>
 
+  <?php if (isset($_SESSION['NotifyIndivSuccess']) && $_SESSION['NotifyIndivSuccess']) { ?>
+  <div class="alert alert-success">
+    <strong>We've sent your email to <?=htmlspecialchars($info['Forename'])?></strong>
+  </div>
+  <?php unset($_SESSION['NotifyIndivSuccess']); } ?>
+
   <div class="row mb-3">
     <div class="col-sm-9 col-md-10 col-lg-11">
       <h1 class="mb-0">
@@ -152,7 +158,7 @@ include BASE_PATH . "views/header.php";
       <div class="col-sm-6 col-md-4">
         <h3 class="h6">Email</h3>
         <p class="text-truncate"><a
-            href="mailto:<?=htmlspecialchars($info['EmailAddress'])?>"><?=htmlspecialchars($info['EmailAddress'])?></a>
+            href="<?=htmlspecialchars(autoUrl("users/" . $id . "/email"))?>"><?=htmlspecialchars($info['EmailAddress'])?></a>
         </p>
       </div>
       <?php if ($number !== false) { ?>
@@ -211,6 +217,8 @@ include BASE_PATH . "views/header.php";
     </div>
   </div>
 
+  <hr>
+
   <?php if ($info['AccessLevel'] == "Parent" && bool($info['RR'])) { ?>
   <div class="mb-4">
     <h2>
@@ -224,6 +232,8 @@ include BASE_PATH . "views/header.php";
     </p>
     <div id="resend-status"></div>
   </div>
+
+  <hr>
   <?php } ?>
 
   <?php if ($addr != null) { ?>
@@ -243,54 +253,73 @@ include BASE_PATH . "views/header.php";
       <?=htmlspecialchars(mb_strtoupper($addr->postCode))?>
     </address>
   </div>
+
+  <hr>
   <?php } ?>
 
   <?php if ($info['AccessLevel'] == "Parent") { ?>
   <div class="mb-4">
     <h2>
-      Monthly Fees
+      Payment information
     </h2>
     <p class="lead">
-      Monthly fees paid by this parent.
+      Account details and monthly fees paid by this user.
     </p>
 
     <div class="row">
-      <div class="col-sm-6 col-md-4">
-        <h3 class="h6">Squad Fees</h3>
-        <p><?=monthlyFeeCost($db, $id, "string")?></p>
+      <div class="col-sm-6 col-md-8">
+        <div class="row">
+          <div class="col-md-6">
+            <h3 class="h6">Squad Fees</h3>
+            <p><?=monthlyFeeCost($db, $id, "string")?></p>
+          </div>
+          <div class="col-md-6">
+            <h3 class="h6">Extra Fees</h3>
+            <p><?=monthlyExtraCost($db, $id, "string")?></p>
+          </div>
+          <div class="col-md-6">
+            <h3 class="h6">Direct Debit</h3>
+            <?php if (userHasMandates($id)) { ?>
+            <?php if ($logo_path) { ?>
+            <img class="img-fluid mb-3" style="max-height:35px;" src="<?=$logo_path?>.png"
+              srcset="<?=$logo_path?>@2x.png 2x, <?=$logo_path?>@3x.png 3x">
+            <?php } ?>
+            <p class="mb-0"><?=$bankName?><abbr
+                title="<?=htmlspecialchars(mb_strtoupper(bankDetails($id, "bank_name")))?>"><?=htmlspecialchars(getBankName(bankDetails($id, "bank_name")))?></abbr>
+            </p>
+            <p class="mono">******<?=mb_strtoupper(bankDetails($id, "account_number_end"))?></p>
+            <?php } else { ?>
+            <p>No Direct Debit set up</p>
+            <?php } ?>
+          </div>
+          <div class="col-md-6">
+            <h3 class="h6">Account balance</h3>
+            <p>
+              &pound;<?=(string) (\Brick\Math\BigDecimal::of((string) getAccountBalance($id)))->withPointMovedLeft(2)->toScale(2)?>
+            </p>
+          </div>
+        </div>
       </div>
+
       <div class="col-sm-6 col-md-4">
-        <h3 class="h6">Extra Fees</h3>
-        <p><?=monthlyExtraCost($db, $id, "string")?></p>
+      <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+        <div class="card">
+          <div class="card-header">
+            Payment links
+          </div>
+          <div class="list-group list-group-flush">
+            <a href="<?=htmlspecialchars(autoUrl("users/" . $id . "/membership-fees"))?>" class="list-group-item list-group-item-action">Annual membership fees <span class="fa fa-chevron-right"></span></a>
+            <a href="<?=autoUrl("users/" . $id . "/pending-fees")?>" class="list-group-item list-group-item-action">Pending payments <span class="fa fa-chevron-right"></span></a>
+            <a href="<?=autoUrl("payments/history/users/" . $id)?>" class="list-group-item list-group-item-action">Previous bills <span class="fa fa-chevron-right"></span></a>
+            <a href="<?=autoUrl("users/" . $id . "/mandates")?>" class="list-group-item list-group-item-action">Direct debit mandates <span class="fa fa-chevron-right"></span></a>
+          </div>
+        </div>
+      <?php } ?>
       </div>
     </div>
-
-    <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
-    <p>
-      <a href="<?=htmlspecialchars(autoUrl("users/" . $id . "/membership-fees"))?>" class="btn btn-primary">
-        Annual membership fees <span class="fa fa-chevron-right"></span>
-      </a>
-    </p>
-
-    <p>
-      <a href="<?=autoUrl("users/" . $id . "/pending-fees")?>" class="btn btn-primary">
-        Pending payments <span class="fa fa-chevron-right"></span>
-      </a>
-    </p>
-
-    <p>
-      <a href="<?=autoUrl("payments/history/users/" . $id)?>" class="btn btn-primary">
-        Previous bills <span class="fa fa-chevron-right"></span>
-      </a>
-    </p>
-
-    <p>
-      <a href="<?=autoUrl("users/" . $id . "/mandates")?>" class="btn btn-primary">
-        Direct debit mandates <span class="fa fa-chevron-right"></span>
-      </a>
-    </p>
-    <?php } ?>
   </div>
+
+  <hr>
 
   <div class="mb-4">
     <h2>
@@ -317,6 +346,8 @@ include BASE_PATH . "views/header.php";
     </div>
   </div>
 
+  <hr>
+
   <?php if ($_SESSION['AccessLevel'] == 'Admin' && (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) && !userHasMandates($id)) { ?>
   <div class="mb-4">
     <h2>
@@ -332,6 +363,8 @@ include BASE_PATH . "views/header.php";
       </a>
     </p>
   </div>
+
+  <hr>
   <?php } ?>
 
   <?php } ?>
@@ -353,6 +386,7 @@ include BASE_PATH . "views/header.php";
           </a>
         </p>
       </div>
+      <hr>
     </div>
 
     <div class="col-12">
@@ -370,6 +404,7 @@ include BASE_PATH . "views/header.php";
           </a>
         </p>
       </div>
+      <hr>
     </div>
 
     <div class="col-12">
@@ -387,6 +422,7 @@ include BASE_PATH . "views/header.php";
           </a>
         </p>
       </div>
+      <hr>
     </div>
   </div>
   <?php } ?>
@@ -415,6 +451,7 @@ include BASE_PATH . "views/header.php";
         <div class="mt-2" id="accountTypeOutput"></div>
       </div>
     </div>
+    <hr>
   </div>
 
   <div class="alert alert-info p-3 mb-4">
@@ -423,6 +460,8 @@ include BASE_PATH . "views/header.php";
     <p>The system will be able to warn you in advance of qualifications expiring and details of qualifications will be visible to both staff and the users who hold those qualifications.</p>
     <p class="mb-0">We'll be trialling this with one customer club before rolling it out to all clubs by the end of summer.</p>
   </div>
+
+  <hr>
 
   <!-- <div class="mb-4">
     <h2>
@@ -480,6 +519,8 @@ include BASE_PATH . "views/header.php";
           class="fa fa-chevron-right"></span> </a></p>
   </div>
 
+  <hr>
+
   <h2>
     Advanced Information
   </h2>
@@ -502,25 +543,6 @@ include BASE_PATH . "views/header.php";
           $details = $time->format('H:i T \o\n j F Y') . " from " . htmlspecialchars($loginInfo['Browser']) . " on " . htmlspecialchars($loginInfo['Platform']) . " (" . htmlspecialchars($loginInfo['IPAddress']) . ")";
         }?>
         <p><?=$details?></p>
-      </div>
-      <?php if (userHasMandates($id)) { ?>
-      <div class="col-sm-6 col-md-4">
-        <h3 class="h6">Direct Debit Mandate</h3>
-        <?php if ($logo_path) { ?>
-        <img class="img-fluid mb-3" style="max-height:35px;" src="<?=$logo_path?>.png"
-          srcset="<?=$logo_path?>@2x.png 2x, <?=$logo_path?>@3x.png 3x">
-        <?php } ?>
-        <p class="mb-0"><?=$bankName?><abbr
-            title="<?=htmlspecialchars(mb_strtoupper(bankDetails($id, "bank_name")))?>"><?=htmlspecialchars(getBankName(bankDetails($id, "bank_name")))?></abbr>
-        </p>
-        <p class="mono">******<?=mb_strtoupper(bankDetails($id, "account_number_end"))?></p>
-      </div>
-      <?php } ?>
-      <div class="col-sm-6 col-md-4">
-        <h3 class="h6">Account balance</h3>
-        <p>
-          &pound;<?=(string) (\Brick\Math\BigDecimal::of((string) getAccountBalance($id)))->withPointMovedLeft(2)->toScale(2)?>
-        </p>
       </div>
     </div>
   </div>

@@ -6,7 +6,7 @@ try {
     halt(400);
   }
 
-  if (!SCDS\FormIdempotency::verify() || !SCDS\CSRF::verify()) {
+  if (!SCDS\CSRF::verify()) {
     halt(403);
   }
 
@@ -19,7 +19,7 @@ try {
   $curUserInfo = $query->fetch(PDO::FETCH_ASSOC);
 
   if ($userInfo == null) {
-    halt(400);
+    halt(404);
   }
 
   $to_remove = [
@@ -65,10 +65,12 @@ try {
   $_SESSION['NotifyIndivSuccess'] = false;
 } finally {
 
-  if ($returnToSwimmer) {
-    header("Location: " . autoUrl("members/" . $id));
+  if (isset($returnToSwimmer) && $returnToSwimmer) {
+    header("location: " . autoUrl("members/" . $id));
+  } else if (isset($userOnly) && $userOnly) {
+    header("location: " . autoUrl("users/" . $user));
   } else {
-    header("Location: " . autoUrl("notify"));
+    header("location: " . autoUrl("notify"));
   }
 
 }
