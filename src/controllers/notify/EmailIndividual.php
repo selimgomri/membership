@@ -76,7 +76,7 @@ include BASE_PATH . "views/notifyMenu.php";
     <?php } else { ?>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("swimmers"))?>">Swimmers</a></li>
+        <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("swimmers"))?>">Members</a></li>
         <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("swimmers/" . $id))?>"><?=htmlspecialchars(mb_substr($mySwimmer['fn'], 0, 1))?><?=htmlspecialchars(mb_substr($mySwimmer['sn'], 0, 1))?></a></li>
         <li class="breadcrumb-item active" aria-current="page">Contact parent</li>
       </ol>
