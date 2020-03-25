@@ -315,10 +315,10 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
     $expiry_time = ($time->format('U'))+60*60*24*120;
 
     $secure = true;
-    if (app('request')->protocol == 'http') {
+    if (app('request')->protocol == 'http' && bool(env('IS_DEV'))) {
       $secure = false;
     }
-    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , "/", app('request')->hostname, $secure, false);
+    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , COOKIE_PATH, app('request')->hostname, $secure, false);
   }
 }
 

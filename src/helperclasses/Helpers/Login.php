@@ -133,7 +133,7 @@ class Login {
     }
 
     $secure = true;
-    if (app('request')->protocol == 'http') {
+    if (app('request')->protocol == 'http' && bool(env('IS_DEV'))) {
       $secure = false;
     }
     if (bool(env('IS_CLS'))) {
