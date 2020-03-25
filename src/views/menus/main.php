@@ -453,6 +453,9 @@ if (!function_exists('chesterStandardMenu')) {
                   <a class="nav-link" href="<?=htmlspecialchars(autoUrl("timeconverter"))?>">Time Converter</a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link" href="<?=htmlspecialchars(autoUrl("log-books"))?>">Log Books <span class="badge badge-info">BETA</span></a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" href="<?=htmlspecialchars(autoUrl("services/request-a-trial"))?>">Request a Trial</a>
                 </li>
                 <?php } ?>

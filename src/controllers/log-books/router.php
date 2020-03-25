@@ -89,4 +89,82 @@ if (isset($_SESSION['LoggedIn']) && bool($_SESSION['LoggedIn'])) {
 
 } else {
   // Public access to log-books
+
+  if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-MemberLoggedIn'])) {
+
+    $this->get('/', function() {
+      $member = $_SESSION['LogBooks-Member'];
+      include 'member-logs.php';
+    });
+
+    $this->get('/members/{id}:int', function() {
+      http_response_code(302);
+      header("location: " . autoUrl("log-books"));
+    });
+
+    $this->group('/members/{member}:int/new', function($member) {
+      $this->get('/', function($member) {
+        if ($member == $_SESSION['LogBooks-Member']) {
+          include 'new-log.php';
+        } else {
+          halt(404);
+        }
+      });
+
+      $this->post('/', function($member) {
+        if ($member == $_SESSION['LogBooks-Member']) {
+          include 'new-log-post.php';
+        } else {
+          halt(404);
+        }
+      });
+    });
+
+    $this->group('/logs/{id}:int', function($id) {
+      $this->get('/', function($id) {
+        include 'log.php';
+      });
+
+      $this->get('/edit', function($id) {
+        include 'edit-log.php';
+      });
+
+      $this->post('/edit', function($id) {
+        include 'edit-log-post.php';
+      });
+    });
+
+    $this->group('/member-services', function() {
+      $member = $_SESSION['LogBooks-Member'];
+      $this->get('/', function() {
+        $member = $_SESSION['LogBooks-Member'];
+        include 'member-logs.php';
+      });
+    });
+
+    $this->any('/*', function() {
+      halt(404);
+    });
+
+  } else {
+    $this->get('/', function() {
+      include 'public/welcome.php';
+    });
+
+    $this->group('/login', function() {
+      $this->get('/', function() {
+        include 'public/login.php';
+      });
+
+      $this->post('/', function() {
+        include 'public/login-post.php';
+      });
+    });
+
+    // Send all non-logged in users to login
+    $this->any('/*', function() {
+      http_response_code(303);
+      header("location: " . autoUrl("log-books"));
+    });
+  }
 }
