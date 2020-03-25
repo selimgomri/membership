@@ -183,4 +183,20 @@ if ($_SESSION['AccessLevel'] == 'Admin') {
 	$this->get('/{id}:int/pending-fees', function($id) {
 		include 'CurrentFees.php';
 	});
+
+	/**
+	 * CONTACT BY EMAIL
+	 */
+
+	$this->group('/{user}:int/email', function($user) {
+		$this->get('/', function($user) {
+			$userOnly = true;
+			include BASE_PATH . 'controllers/notify/EmailIndividual.php';
+		});
+
+		$this->post('/', function($user) {
+			$userOnly = true;
+			include BASE_PATH . 'controllers/notify/EmailQueuerIndividual.php';
+		});
+	});
 }
