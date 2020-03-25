@@ -131,7 +131,7 @@ include BASE_PATH . "views/notifyMenu.php";
     unset($_SESSION['CollectiveSizeTooLargeError']);
   } ?>
 
-	<form method="post" onkeypress="return event.keyCode != 13;" class="needs-validation" novalidate id="notify-form">
+	<form method="post" onkeypress="return event.keyCode != 13;" class="needs-validation" novalidate id="notify-form" enctype="multipart/form-data">
     <div class="form-group">
 			<label for="recipient">To</label>
 			<input type="text" class="form-control" name="recipient" id="recipient"
