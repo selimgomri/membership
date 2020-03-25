@@ -52,6 +52,14 @@ include BASE_PATH . 'views/header.php';
   <div class="bg-light mt-n3 py-3 mb-3">
     <div class="container">
 
+      <?php if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-MemberLoggedIn'])) { ?>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("log-books"))?>">Log book</a></li>
+          <li class="breadcrumb-item active" aria-current="page">New</li>
+        </ol>
+      </nav>
+      <?php } else { ?>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("log-books"))?>">Members</a></li>
@@ -59,6 +67,7 @@ include BASE_PATH . 'views/header.php';
           <li class="breadcrumb-item active" aria-current="page">New</li>
         </ol>
       </nav>
+      <?php } ?>
 
       <div class="row align-items-center">
         <div class="col-lg-8">
@@ -107,7 +116,7 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <p class="mb-0">
+        <p>
           <button type="submit" class="btn btn-success">Save <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
         </p>
 

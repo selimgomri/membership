@@ -498,6 +498,11 @@ $route->group($get_group, function($clubcode = "CLSE") {
     include 'controllers/services/router.php';
   });
 
+  // Log out
+  $this->any(['/logout', '/logout.php'], function() {
+    require('controllers/logout.php');
+  });
+
   if (isset($_SESSION['TWO_FACTOR']) && $_SESSION['TWO_FACTOR']) {
     $this->group('/2fa', function() {
       $this->get('/', function() {
@@ -825,12 +830,6 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
     $this->group('/resources', function() {
       include 'controllers/resources/router.php';
-    });
-
-    // Log out
-    $this->any(['/logout', '/logout.php'], function() {
-      global $link;
-      require('controllers/logout.php');
     });
 
     /*$this->any('test', function() {
