@@ -45,9 +45,11 @@ try {
   }
 
   $replyAddress = getUserOption($_SESSION['UserID'], 'NotifyReplyAddress');
+  $replyName = $myName;
 
   if (!($replyAddress && isset($_POST['ReplyToMe']) && bool($_POST['ReplyToMe']))) {
     $replyAddress = env('CLUB_EMAIL');
+    $replyName = env('CLUB_NAME');
   }
 
   $cc = $bcc = null;
@@ -118,7 +120,7 @@ try {
   $email->setSubject($subject);
   $email->addTo($userEmail, $name);
   $email->addContent("text/plain", $plain_text);
-  $email->setReplyTo($replyAddress, $from);
+  $email->setReplyTo($replyAddress, $replyName);
 
   // reportError([
   //   $_POST,
