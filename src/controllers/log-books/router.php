@@ -134,11 +134,18 @@ if (isset($_SESSION['LoggedIn']) && bool($_SESSION['LoggedIn'])) {
       });
     });
 
-    $this->group('/member-services', function() {
-      $member = $_SESSION['LogBooks-Member'];
-      $this->get('/', function() {
-        $member = $_SESSION['LogBooks-Member'];
-        include 'member-logs.php';
+    $this->group('/settings', function() {
+      $this->get('/password', function() {
+        include 'member-password.php';
+      });
+
+      $this->post('/password', function() {
+        include 'member-password-post.php';
+      });
+
+      $this->get(['/', '/*'], function() {
+        http_response_code(303);
+        header("location: " . autoUrl("log-books/settings/password"));
       });
     });
 

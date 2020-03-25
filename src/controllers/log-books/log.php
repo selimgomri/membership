@@ -20,7 +20,7 @@ if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-Memb
   }
 }
 
-$pagetitle = htmlspecialchars("Edit log entry - " . $info['fn'] . ' ' . $info['sn']);
+$pagetitle = htmlspecialchars("Log #" . htmlspecialchars($id) . " - " . $info['fn'] . ' ' . $info['sn']);
 
 $contentType = "text/plain";
 if (isset($info['ContentType'])) {

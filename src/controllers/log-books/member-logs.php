@@ -73,9 +73,14 @@ include BASE_PATH . 'views/header.php';
         <div class="mb-3 d-lg-none"></div>
       </div>
       <div class="col text-right">
-        <p class="mb-0">
+        <div class="btn-group" role="group" aria-label="Quick options">
+          <?php if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-MemberLoggedIn'])) { ?>
+          <a href="<?=htmlspecialchars(autoUrl("log-books/settings"))?>" class="btn btn-dark">
+            Settings <i class="fa fa-cog" aria-hidden="true"></i>
+          </a>
+          <?php } ?>
           <a href="<?=htmlspecialchars(autoUrl("log-books/members/" . $member . "/new"))?>" class="btn btn-success">New <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-        </p>
+        </div>
       </div>
     </div>
 
@@ -104,7 +109,7 @@ include BASE_PATH . 'views/header.php';
   <?php unset($_SESSION['SetMemberPassSuccess']); } ?>
 
   <div class="row">
-    <div class="col-lg-8">
+    <div class="col-lg-8 mb-3">
       <?php if ($log) { ?>
       <div class="row mb-3">
         <div class="col">
@@ -156,7 +161,7 @@ include BASE_PATH . 'views/header.php';
 
       <!-- Pagination -->
       <nav aria-label="Page navigation">
-        <ul class="pagination">
+        <ul class="pagination mb-3">
           <?php if ($numLogs <= 10) { ?>
           <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("log-books/members/" . $member . "?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
           <?php } else if ($numLogs <= 20) { ?>
@@ -233,6 +238,27 @@ include BASE_PATH . 'views/header.php';
             Password settings
           </a>
         </p>
+
+      </div>
+      <?php } ?>
+
+      <?php if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-MemberLoggedIn'])) { ?>
+      <div class="cell">
+        <h2>My account</h2>
+        <p class="lead">
+          Hey <?=htmlspecialchars($memberInfo['fn'])?>! Welcome to your account.
+        </p>
+        <p>
+          Need to change account settings?
+        </p>
+        <div class="btn-group" role="group" aria-label="Account options">
+          <a href="<?=htmlspecialchars(autoUrl("log-books/settings"))?>" class="btn btn-primary">
+            Account settings <i class="fa fa-cog" aria-hidden="true"></i>
+          </a>
+          <a href="<?=htmlspecialchars(autoUrl("logout"))?>" class="btn btn-danger">
+            Sign out
+          </a>
+        </div>
 
       </div>
       <?php } ?>
