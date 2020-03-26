@@ -65,6 +65,15 @@ $title = null;
       </ul>
     </div>
     <?php } ?>
+
+    <?php if (isset($_SESSION['SetMemberPassSuccess'])) { ?>
+    <div class="alert alert-success">
+      <p class="mb-0">
+        <strong>Member password updated.</strong>
+      </p>
+    </div>
+    <?php unset($_SESSION['SetMemberPassSuccess']); } ?>
+
     <!-- Main Info Content -->
     <div class="row">
       <div class="col-md-8">

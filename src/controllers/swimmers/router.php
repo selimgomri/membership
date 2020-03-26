@@ -53,6 +53,16 @@ if ($access == "Parent") {
 
 	  require 'parentSingleSwimmerPost.php';
 	});
+
+	$this->group('/{id}:int/password', function($id) {
+		$this->get('/', function($id) {
+			include 'member-accounts/password.php';
+		});
+
+		$this->post('/', function($id) {
+			include 'member-accounts/password-post.php';
+		});
+	});
 }
 else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $access == "Admin") {
 	// Directory

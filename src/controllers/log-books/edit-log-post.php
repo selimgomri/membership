@@ -2,7 +2,7 @@
 
 global $db;
 
-$getInfo = $db->prepare("SELECT MForename fn, MSurname sn, members.UserID, trainingLogs.Title, trainingLogs.Content, trainingLogs.ContentType, trainingLogs.DateTime FROM trainingLogs INNER JOIN members ON trainingLogs.Member = members.MemberID WHERE trainingLogs.ID = ?");
+$getInfo = $db->prepare("SELECT members.MemberID, MForename fn, MSurname sn, members.UserID, trainingLogs.Title, trainingLogs.Content, trainingLogs.ContentType, trainingLogs.DateTime FROM trainingLogs INNER JOIN members ON trainingLogs.Member = members.MemberID WHERE trainingLogs.ID = ?");
 $getInfo->execute([$id]);
 $info = $getInfo->fetch(PDO::FETCH_ASSOC);
 
@@ -12,6 +12,12 @@ if ($info == null) {
 
 if ($_SESSION['AccessLevel'] == 'Parent' && $info['UserID'] != $_SESSION['UserID']) {
   halt(404);
+}
+
+if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-MemberLoggedIn'])) {
+  if ($_SESSION['LogBooks-Member'] != $info['MemberID']) {
+    halt(404);
+  }
 }
 
 // Authenticated by above code
@@ -51,7 +57,7 @@ if (sizeof($errors) > 0) {
   $_SESSION['EditLogErrorMessage'] = $errorMessage;
 
   http_response_code(303);
-  header("location: " . autoUrl("log-books/members/" . $id . "/new"));
+  header("location: " . autoUrl("log-books/logs/" . $id . "/edit"));
 
 } else {
   // All good, insert to db
