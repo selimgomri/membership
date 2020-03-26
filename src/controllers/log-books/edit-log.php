@@ -124,14 +124,13 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <p>
-          <button type="submit" class="btn btn-success">Save <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
-        </p>
-
       </div>
       <div class="col">
         <div class="cell">
           <h2>More options</h2>
+          <p>
+            You can edit the time and date for this activity.
+          </p>
           <div class="form-group">
             <label for="date">Date</label>
             <input class="form-control" id="date" name="date" type="date" value="<?=htmlspecialchars($date)?>">
@@ -165,6 +164,11 @@ include BASE_PATH . 'views/header.php';
         </div>
       </div>
     </div>
+
+    <p>
+      <button type="submit" class="btn btn-success">Save <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+    </p>
+
   </div>
 
 </form>

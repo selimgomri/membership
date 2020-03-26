@@ -78,6 +78,10 @@ include BASE_PATH . 'views/header.php';
           <a href="<?=htmlspecialchars(autoUrl("log-books/settings"))?>" class="btn btn-dark">
             Settings <i class="fa fa-cog" aria-hidden="true"></i>
           </a>
+          <?php } else { ?>
+          <a href="<?=htmlspecialchars(autoUrl("members/" . $member . "/password?return=" . urlencode(autoUrl("log-books/members/" . $member))))?>" class="btn btn-dark">
+            Password settings <i class="fa fa-cog" aria-hidden="true"></i>
+          </a>
           <?php } ?>
           <a href="<?=htmlspecialchars(autoUrl("log-books/members/" . $member . "/new"))?>" class="btn btn-success">New <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
         </div>
@@ -103,7 +107,7 @@ include BASE_PATH . 'views/header.php';
   <?php if (isset($_SESSION['SetMemberPassSuccess'])) { ?>
   <div class="alert alert-success">
     <p class="mb-0">
-      <strong>Member password updated.</strong>
+      <strong><?php if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-MemberLoggedIn'])) { ?>We've saved your new password.<?php } else { ?>Member password updated.<?php } ?></strong>
     </p>
   </div>
   <?php unset($_SESSION['SetMemberPassSuccess']); } ?>

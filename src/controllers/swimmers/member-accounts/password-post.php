@@ -8,7 +8,11 @@ $getMember->execute([
 ]);
 $member = $getMember->fetch(PDO::FETCH_ASSOC);
 
-if ($member['uid'] != $_SESSION['UserID']) {
+if ($member == null) {
+  halt(404);
+}
+
+if ($_SESSION['AccessLevel'] == 'Parent' && $member['uid'] != $_SESSION['UserID']) {
   halt(404);
 }
 

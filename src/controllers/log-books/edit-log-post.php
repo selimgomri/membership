@@ -78,7 +78,7 @@ if (sizeof($errors) > 0) {
     $update->execute([
       $time,
       $_POST['title'],
-      $_POST['entry'],
+      rtrim($_POST['entry']),
       $_POST['content-type'],
       $id
     ]);

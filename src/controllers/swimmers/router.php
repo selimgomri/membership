@@ -139,6 +139,20 @@ else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $
    * End of squad moves
    */
 
+	/**
+	 * Member access passwords
+	 */
+
+	$this->group('/{id}:int/password', function($id) {
+		$this->get('/', function($id) {
+			include 'member-accounts/password.php';
+		});
+
+		$this->post('/', function($id) {
+			include 'member-accounts/password-post.php';
+		});
+	});
+
 	// /*
   $this->get('/{id}:int/contact-parent', function($id) {
     $user = getSwimmerParent($id);

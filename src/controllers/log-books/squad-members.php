@@ -26,7 +26,7 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
     <div class="col-md-8">
       <?php if ($member) { ?>
-      <div class="list-group">
+      <div class="list-group mb-3">
         <?php do { ?>
         <a href="<?=htmlspecialchars(autoUrl("log-books/members/" . $member['id']))?>" class="list-group-item list-group-item-action">
           <p class="mb-0">
