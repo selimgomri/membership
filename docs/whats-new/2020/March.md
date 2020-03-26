@@ -21,3 +21,19 @@ Users can now edit pre-filled entry times when required for galas. Previously th
 
 ## Emergency contacts
 A bug which affected the display of emergency contact details during registration and renewal has been fixed.
+
+## Log books
+We have added a new Log Books feature to allow members to log their home based land training during the COVID-19 shutdown.
+
+See [our help pages on log books](../../log-books/README.md) to find out more.
+
+## Emergency message banners
+We've added support for emergency banners during the coronavirus (COVID-19) shutdown. Banners can be;
+
+* Green
+* Amber
+* Red
+
+And support [Markdown](https://en.wikipedia.org/wiki/Markdown).
+
+Banners can be loaded into SCDS WordPress sites via JavaScript XHR requests.
