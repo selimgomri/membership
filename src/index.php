@@ -62,7 +62,6 @@ $old_error_handler = set_error_handler("ErrorHandler");
 */
 
 // Do not reveal PHP when sending mail
-ini_set('mail.add_x_header', 'Off');
 ini_set('expose_php', 'Off');
 
 $time_start = microtime(true);
@@ -228,9 +227,6 @@ function halt(int $statusCode, $throwException = true) {
     throw new \SCDS\HaltException('Status ' . $statusCode);
   }
 }
-//$link = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-//define("LINK", mysqli_connect($dbhost, $dbuser, $dbpass, $dbname));
-//$link = LINK;
 
 $link = mysqli_connect(env('DB_HOST'), env('DB_USER'), env('DB_PASS'), env('DB_NAME'));
 $db = null;
