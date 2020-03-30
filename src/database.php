@@ -408,7 +408,7 @@ function myMonthlyFeeTable($link, $userID) {
 
 function autoUrl($relative) {
   // Returns an absolute URL
-  return env('ROOT_URL') . $relative;
+  return rtrim(env('ROOT_URL') . $relative, '/');
 }
 
 function monthlyFeeCost($link, $userID, $format = "decimal") {
