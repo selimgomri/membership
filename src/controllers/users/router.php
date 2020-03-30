@@ -120,6 +120,13 @@ if ($_SESSION['AccessLevel'] == 'Admin') {
 	});
 
 	/**
+	 * Set/revoke squad (AJAX)
+	 */
+	$this->get('/assign-revoke-squad', function($id) {
+		include 'coaches/assign-revoke-squad-post.php';
+	});
+
+	/**
 	 * PAGES FOR SETTING SQUAD REPS
 	 */
 	$this->get('/{id}:int/rep', function($id) {
