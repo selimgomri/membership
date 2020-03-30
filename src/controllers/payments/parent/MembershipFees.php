@@ -7,11 +7,14 @@ $user = $_SESSION['UserID'];
 $info = null;
 if ($_SESSION['AccessLevel'] != 'Parent' && isset($id) && $id != null) {
   $user = $id;
-  $userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, AccessLevel FROM users WHERE UserID = ?");
+  $userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
   $userInfo->execute([$id]);
   $info = $userInfo->fetch(PDO::FETCH_ASSOC);
 
-  if ($info == null || $info['AccessLevel'] != 'Parent') {
+  $isParent = $db->prepare("SELECT COUNT(*) FROM permissions WHERE User = ? AND Permission = 'Parent'");
+  $isParent->execute([$id]);
+
+  if ($info == null || $isParent->fetchColumn() == 0) {
     halt(404);
   }
 }

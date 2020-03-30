@@ -8,7 +8,7 @@ use Brick\PhoneNumber\PhoneNumberFormat;
 
 global $db;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, AccessLevel, ASANumber, ASAMember, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory, RR FROM users WHERE UserID = ?");
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, ASANumber, ASAMember, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory, RR FROM users WHERE UserID = ?");
 $userInfo->execute([$id]);
 
 $qualifications;
@@ -83,9 +83,10 @@ catch (PhoneNumberParseException $e) {
   $number = false;
 }
 
-$accessLevel = 'Team Manager';
-if ($info['AccessLevel'] != 'Committee') {
-  $accessLevel = $info['AccessLevel'];
+$accessLevel = "";
+$perms = $userObj->getPrintPermissions();
+foreach ($perms as $key => $value) {
+  $accessLevel .= $value . ', ';
 }
 
 $pagetitle = htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) . " Information";
@@ -427,7 +428,7 @@ include BASE_PATH . "views/header.php";
   </div>
   <?php } ?>
 
-  <div class="mb-4">
+  <div class="mb-4 d-none">
     <h2>
       Access Control
     </h2>

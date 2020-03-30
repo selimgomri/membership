@@ -7,7 +7,7 @@ $alertContent;
 $alertContextualClass;
 $status = false;
 
-$getUser = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ? AND RR = 1 AND AccessLevel = 'Parent'");
+$getUser = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE UserID = ? AND RR = 1 AND `permissions`.`Permission` = 'Parent'");
 $getUser->execute([
   $_POST['user']
 ]);

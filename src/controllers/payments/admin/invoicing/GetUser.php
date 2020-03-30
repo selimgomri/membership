@@ -6,7 +6,7 @@ use Brick\PhoneNumber\PhoneNumberFormat;
 
 global $db;
 
-$getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile FROM users WHERE EmailAddress LIKE ? AND AccessLevel = 'Parent'");
+$getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile FROM users INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE EmailAddress LIKE ? AND  `permissions`.`Permission` = 'Parent'");
 $getUser->execute(['%' . mb_strtolower($_POST['email']) . '%']);
 
 $row = $getUser->fetch(PDO::FETCH_ASSOC);

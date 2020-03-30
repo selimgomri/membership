@@ -10,7 +10,7 @@ try {
 
   $getUserInfo = $db->prepare("SELECT AccessLevel FROM users WHERE EmailAddress = ?");
 
-  $insert = $db->prepare("INSERT INTO users (EmailAddress, `Password`, AccessLevel, Forename, Surname, Mobile, EmailComms, MobileComms, RR) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+  $insert = $db->prepare("INSERT INTO users (EmailAddress, `Password`, Forename, Surname, Mobile, EmailComms, MobileComms, RR) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
   $forename = trim($_POST['first']);
   $surname = trim($_POST['last']);
@@ -51,7 +51,6 @@ try {
     $insert->execute([
       $email,
       password_hash($password, PASSWORD_BCRYPT),
-      'Parent',
       $forename,
       $surname,
       $mobile,
@@ -60,7 +59,13 @@ try {
       0
     ]);
 
-    $_SESSION['AssRegUser'] = $db->lastInsertId(); 
+    $_SESSION['AssRegUser'] = $db->lastInsertId();
+
+    $addAccessLevel = $db->prepare("INSERT INTO `permissions` (`Permission`, `User`) VALUES (?, ?)");
+    $addAccessLevel->execute([
+      'Parent',
+      $_SESSION['AssRegUser']
+    ]);
   } else {
     $status = false;
   }

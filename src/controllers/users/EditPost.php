@@ -7,7 +7,7 @@ use Respect\Validation\Validator as v;
 
 global $db;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, AccessLevel, ASANumber, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory FROM users WHERE UserID = ?");
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, ASANumber, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory FROM users WHERE UserID = ?");
 $userInfo->execute([$id]);
 
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
@@ -118,6 +118,41 @@ try {
       0,
       $id
     ]);
+  }
+
+  // Set access permissions
+  $baseRequired = true;
+  $userObject = new \User($id, $db, false);
+
+  // Galas
+  if (bool($_POST['permissions-gala'])) {
+    $userObject->grantPermission('Galas');
+    $baseRequired = false;
+  } else {
+    $userObject->revokePermission('Galas');
+  }
+
+  // Coach
+  if (bool($_POST['permissions-coach'])) {
+    $userObject->grantPermission('Coach');
+    $baseRequired = false;
+  } else {
+    $userObject->revokePermission('Coach');
+  }
+
+  // Admin
+  if (bool($_POST['permissions-admin'])) {
+    $userObject->grantPermission('Admin');
+    $baseRequired = false;
+  } else {
+    $userObject->revokePermission('Admin');
+  }
+
+  // Parent
+  if (bool($_POST['permissions-parent']) || $baseRequired) {
+    $userObject->grantPermission('Parent');
+  } else {
+    $userObject->revokePermission('Parent');
   }
 
   $_SESSION['Success'] = true;

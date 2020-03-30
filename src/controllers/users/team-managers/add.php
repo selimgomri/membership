@@ -2,7 +2,7 @@
 
 global $db;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, AccessLevel FROM users WHERE UserID = ?");
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
 $userInfo->execute([$id]);
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
 

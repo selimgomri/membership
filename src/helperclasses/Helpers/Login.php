@@ -43,7 +43,6 @@ class Login {
     $_SESSION['Forename'] = $details['Forename'];
     $_SESSION['Surname'] = $details['Surname'];
     $_SESSION['UserID'] = $details['UserID'];
-    $_SESSION['AccessLevel'] = $details['AccessLevel'];
     $_SESSION['LoggedIn'] = 1;
 
     $currentUser = new \User($_SESSION['UserID'], $this->db);

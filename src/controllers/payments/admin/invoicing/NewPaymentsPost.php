@@ -19,7 +19,7 @@ try {
     throw new Exception('Invalid payment item type (must be Payment or Credit).');
   }
 
-  $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ? AND AccessLevel = 'Parent'");
+  $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
   $user->execute([$_POST['user-id']]);
   $user = $user->fetch(PDO::FETCH_ASSOC);
 

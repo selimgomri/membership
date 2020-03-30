@@ -27,11 +27,13 @@ if (isset($_POST["search"])) {
     }
   }
 
-  $sql = "SELECT Forename, Surname, UserID, AccessLevel FROM users WHERE " . $sql . " ORDER BY Forename, Surname ASC";
+  $sql = "SELECT Forename, Surname, UserID FROM users WHERE " . $sql . " ORDER BY Forename, Surname ASC";
 
   $users = $db->prepare($sql);
   $users->execute($names);
 }
+
+$getAccessLevels = $db->prepare("SELECT `Permission` FROM `permissions` WHERE User = ?");
 
 if ($users == null) {
   halt(404);
@@ -43,12 +45,20 @@ if ($user != null) { ?>
 
 <div class="list-group">
 
-  <?php do { ?>
+  <?php do {
+    $getAccessLevels->execute([
+      $user['UserID']
+    ]);
+      ?>
   <a href="<?=autoUrl("users/" . $user['UserID'])?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
     <?=htmlspecialchars($user['Forename'] . " " . $user['Surname'])?>
-    <span class="badge badge-primary badge-pill">
-      <?php if ($user['AccessLevel'] == 'Committee') { ?>Team Manager<?php } else { ?><?=htmlspecialchars($user['AccessLevel'])?><?php } ?>
-    </span>
+    <div class="text-right">
+    <?php while ($al = $getAccessLevels->fetchColumn()) { ?>
+      <span class="badge badge-primary badge-pill">
+        <?=$al?>
+      </span>
+    <?php } ?>
+    </div>
   </a>
   <?php } while ($user = $users->fetch(PDO::FETCH_ASSOC)); ?>
 </div>

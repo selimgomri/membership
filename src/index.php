@@ -682,6 +682,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
       });
     }
 
+    $this->get('/account-switch', function() {
+      include 'controllers/account-switch.php';
+    });
+
     $this->get('/login', function() {
       header("Location: " . autoUrl(""));
     });

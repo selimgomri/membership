@@ -28,7 +28,7 @@ $responseData = [
 try {
 
   // Get user details
-  $user = $db->prepare("SELECT Forename, Surname, EmailAddress, AccessLevel FROM users WHERE UserID = ?");
+  $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
   $user->execute([
     $_POST['user']
   ]);
