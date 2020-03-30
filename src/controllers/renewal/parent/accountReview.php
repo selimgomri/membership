@@ -8,7 +8,6 @@ $row = $userDetails->fetch(PDO::FETCH_ASSOC);
 $email = $row['EmailAddress'];
 $forename = $row['Forename'];
 $surname = $row['Surname'];
-$access = $row['AccessLevel'];
 $userID = $row['UserID'];
 $mobile = $row['Mobile'];
 if ($row['EmailComms']) {

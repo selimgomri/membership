@@ -9,7 +9,7 @@
  */
 class User {
   private $db;
-  private $userId;
+  private $id;
   private $forename;
   private $surname;
   private $emailAddress;
@@ -17,6 +17,7 @@ class User {
   private $userOptions;
   private $userOptionsRetrieved;
   private $setSession;
+  private $permissions;
 
   public function __construct($id, $db, $setSession = true) {
     $this->id = (int) $id;
@@ -28,15 +29,45 @@ class User {
 
   public function revalidate() {
     // Get the user
-    $query = $this->db->prepare("SELECT Forename, Surname, EmailAddress, AccessLevel FROM users WHERE UserID = ?");
+    $query = $this->db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
     $query->execute([$this->id]);
     $row = $query->fetch(PDO::FETCH_ASSOC);
 
-    if ($row == true) {
+    $this->permissions = [];
+    try {
+      // Get access permissions
+      $getPermissions = $this->db->prepare("SELECT `Permission` FROM `permissions` WHERE `User` = ?");
+      $getPermissions->execute([
+        $this->id
+      ]);
+      $this->permissions = $getPermissions->fetchAll(PDO::FETCH_COLUMN);
+    } catch (PDOException $e) {
+      // Table does not exist
+    }
+
+    if (sizeof($this->permissions) == 0) {
+      $this->permissions[] = 'Parent';
+    }
+
+    if ($row) {
+      $defaultAccessLevel = $this->getUserOption('DefaultAccessLevel');
+
+      if (isset($_SESSION['SelectedAccessLevel']) && in_array($_SESSION['SelectedAccessLevel'], $this->permissions)) {
+        $this->accessLevel = $_SESSION['SelectedAccessLevel'];
+      } else if (isset($_SESSION['AccessLevel']) && in_array($_SESSION['AccessLevel'], $this->permissions)) {
+        $this->accessLevel = $_SESSION['AccessLevel'];
+      } else if ($defaultAccessLevel != null && in_array($defaultAccessLevel, $this->permissions)) {
+        $this->accessLevel = $defaultAccessLevel;
+      } else if (in_array('Admin', $this->permissions)) {
+        $this->accessLevel = $defaultAccessLevel;
+      } else {
+        $this->accessLevel = $this->permissions[0];
+      }
+
+
       $this->forename = $row['Forename'];
       $this->surname = $row['Surname'];
       $this->emailAddress = $row['EmailAddress'];
-      $this->accessLevel = $row['AccessLevel'];
 
       if ($this->setSession) {
         // Set legacy user details
@@ -131,6 +162,56 @@ class User {
     } else {
       $query = $this->db->prepare("UPDATE userOptions SET `Value` = ? WHERE User = ? AND `Option` = ?");
       $query->execute([$value, $this->id, $option]);
+    }
+  }
+
+  public function getPermissions() {
+    return $this->permissions;
+  }
+
+  public function getPrintPermissions() {
+    $permissions = [];
+    foreach ($this->permissions as $perm) {
+      if ($perm == 'Admin') {
+        $permissions[$perm] = 'Admin';
+      } else if ($perm == 'Parent') {
+        $permissions[$perm] = 'Parent/Member';
+      } else if ($perm == 'Coach') {
+        $permissions[$perm] = 'Coach';
+      } else if ($perm == 'Galas') {
+        $permissions[$perm] = 'Gala Staff';
+      }
+    }
+    return $permissions;
+  }
+
+  public function hasPermission($permission) {
+    return in_array($permission, $this->permissions);
+  }
+
+  public function grantPermission($permission) {
+    try {
+      $setPerm = $this->db->prepare("INSERT INTO `permissions` (`Permission`, `User`) VALUES (?, ?)");
+      $setPerm->execute([
+        $permission,
+        $this->id
+      ]);
+      return true;
+    } catch (PDOException $e) {
+      return false;
+    }
+  }
+
+  public function revokePermission($permission) {
+    try {
+      $deletePerm = $this->db->prepare("DELETE FROM `permissions` WHERE `Permission` = ? AND `User` = ?");
+      $deletePerm->execute([
+        $permission,
+        $this->id
+      ]);
+      return true;
+    } catch (PDOException $e) {
+      return false;
     }
   }
 }

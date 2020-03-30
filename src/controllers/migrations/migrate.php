@@ -15,7 +15,9 @@ try {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;");
   }
 } catch (Exception $e) {
-  pre($e);
+  if ($_SESSION['AccessLevel'] == 'Admin') {
+    pre($e);
+  }
 }
 
 $getMigrations = $db->query("SELECT migration FROM schemaMigrations ORDER BY id ASC");
@@ -26,14 +28,21 @@ $migrations = [];
 while ($migration = $getMigrations->fetchColumn()) {
   $migrations[] = $migration . '.php';
 }
-pre($migrations);
+
+if ($_SESSION['AccessLevel'] == 'Admin') {
+  pre($migrations);
+}
 
 
 $files = array_diff(scandir(BASE_PATH . 'db/migrations'), ['.', '..']);
-pre($files);
+if ($_SESSION['AccessLevel'] == 'Admin') {
+  pre($files);
+}
 
 $undone = array_diff($files, $migrations);
-pre($undone);
+if ($_SESSION['AccessLevel'] == 'Admin') {
+  pre($undone);
+}
 
 foreach($undone as $file) {
   try {
@@ -56,8 +65,12 @@ foreach($undone as $file) {
     // Report this file was an error
     $_SESSION['MigrationErrorOccurred'][$file] = true;
 
-    pre($e);
+    if ($_SESSION['AccessLevel'] == 'Admin') {
+      pre($e);
+    }
   }
 }
 
-//header("Location: " . autoUrl("db"));
+if ($_SESSION['AccessLevel'] != 'Admin') {
+  header("Location: " . autoUrl(""));
+}

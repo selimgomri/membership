@@ -295,7 +295,8 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
       global $currentUser;
       $currentUser = $login->login();
     } catch (Exception $e) {
-      halt(403);
+      reportError($e);
+      // halt(403);
     }
 
     $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));
@@ -542,8 +543,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
   });
 
   if (empty($_SESSION['LoggedIn'])) {
-    $this->post(['/'], function() {
-      global $link;
+    $this->post('/login', function() {
     	include 'controllers/login-go.php';
     });
 
@@ -681,6 +681,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
       	include 'controllers/NewDashboard.php';
       });
     }
+
+    $this->get('/account-switch', function() {
+      include 'controllers/account-switch.php';
+    });
 
     $this->get('/login', function() {
       header("Location: " . autoUrl(""));
@@ -919,13 +923,13 @@ $route->group($get_group, function($clubcode = "CLSE") {
           halt(500);
         }
       });
-
-      $this->group('/db', function() {
-        // Handle database migrations
-        include 'controllers/migrations/router.php';
-      });
     }
   }
+
+  $this->group('/db', function() {
+    // Handle database migrations
+    include 'controllers/migrations/router.php';
+  });
 
   $this->get('/files/*/viewer', function() {
     $filename = $this[0];

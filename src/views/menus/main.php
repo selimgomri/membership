@@ -464,7 +464,6 @@ if (!function_exists('chesterStandardMenu')) {
           global $currentUser;
           $user_name = preg_replace("/( +)/" , '&nbsp;', htmlspecialchars($currentUser->getName())); ?>
               <ul class="navbar-nav">
-                <!--<a class="btn btn-sm btn-outline-light my-2 my-sm-0" href="<?=autoUrl("logout")?>">Logout</a>-->
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                     aria-expanded="false">
@@ -473,6 +472,16 @@ if (!function_exists('chesterStandardMenu')) {
                   <div class="dropdown-menu dropdown-menu-right">
                     <span class="dropdown-item-text">Signed&nbsp;in&nbsp;as&nbsp;<strong><?= $user_name ?></strong></span>
                     <div class="dropdown-divider"></div>
+                    <?php $perms = $currentUser->getPrintPermissions();
+                    if (sizeof($perms) > 1) { ?>
+                    <h6 class="dropdown-header">Switch account mode</h6>
+                    <a class="dropdown-item" href="<?=autoUrl("my-account/default-access-level")?>">Edit default access level</a>
+                    <?php foreach ($perms as $perm => $name) { ?>
+                    <a class="dropdown-item" href="<?=autoUrl("account-switch?type=" . urlencode($perm))?>"><?=htmlspecialchars($name)?><?php if ($perm == $_SESSION['AccessLevel']) { ?> <i class="text-primary fa fa-check-circle fa-fw" aria-hidden="true"></i><?php } ?></a>
+                    <?php } ?>
+                    <div class="dropdown-divider"></div>
+                    <?php } ?>
+                    <h6 class="dropdown-header">Account settings</h6>
                     <a class="dropdown-item" href="<?=autoUrl("my-account")?>">Your Profile</a>
                     <a class="dropdown-item" href="<?=autoUrl("my-account/email")?>">Your Email Options</a>
                     <a class="dropdown-item" href="<?=autoUrl("my-account/address")?>">Your Address</a>

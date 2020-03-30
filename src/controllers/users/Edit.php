@@ -2,7 +2,7 @@
 
 global $db;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, AccessLevel, ASAMember, ASANumber, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory FROM users WHERE UserID = ?");
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, ASAMember, ASANumber, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory FROM users WHERE UserID = ?");
 $userInfo->execute([$id]);
 
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
@@ -18,6 +18,17 @@ $swimmerToo->execute([
   $info['ASANumber']
 ]);
 $swimmerToo = $swimmerToo->fetchColumn();
+
+// User object for permissions
+$userObject = new \User($id, $db, false);
+
+function selected($userObject, $perm) {
+  if ($userObject->hasPermission($perm)) {
+    return " checked ";
+  } else {
+    return "";
+  }
+}
 
 $pagetitle = htmlspecialchars("Edit " . $info['Forename'] . ' ' . $info['Surname']);
 
@@ -114,116 +125,146 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <h2>Swim England Membership</h2>
-        <div class="form-group">
-          <div class="custom-control custom-radio">
-            <input type="radio" id="is-not-se-member" name="is-se-member" class="custom-control-input" <?php if (!bool($info['ASAMember'])) { ?>checked<?php } ?> value="0">
-            <label class="custom-control-label" for="is-not-se-member"><?=htmlspecialchars($info['Forename'])?> is not a Swim England member</label>
+        <div class="d-none">
+          <h2>Swim England Membership</h2>
+          <div class="form-group">
+            <div class="custom-control custom-radio">
+              <input type="radio" id="is-not-se-member" name="is-se-member" class="custom-control-input" <?php if (!bool($info['ASAMember'])) { ?>checked<?php } ?> value="0">
+              <label class="custom-control-label" for="is-not-se-member"><?=htmlspecialchars($info['Forename'])?> is not a Swim England member</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="is-se-member" name="is-se-member" class="custom-control-input" <?php if (bool($info['ASAMember'])) { ?>checked<?php } ?> value="1">
+              <label class="custom-control-label" for="is-se-member"><?=htmlspecialchars($info['Forename'])?> is a Swim England member</label>
+            </div>
           </div>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="is-se-member" name="is-se-member" class="custom-control-input" <?php if (bool($info['ASAMember'])) { ?>checked<?php } ?> value="1">
-            <label class="custom-control-label" for="is-se-member"><?=htmlspecialchars($info['Forename'])?> is a Swim England member</label>
+
+          <div class="cell <?php if (!bool($info['ASAMember'])) { ?>d-none<?php } ?>" id="asa-details">
+
+            <?php if ($swimmerToo) { ?>
+              <p class="text-danger"> 
+                <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <?=htmlspecialchars($info['Forename'])?> is also a club sport member. Changes here will apply to the member too.
+              </p>
+            <?php } ?>
+
+            <div class="form-row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="se-number">Swim England Number</label>
+                  <input type="text" class="form-control mono" id="se-number" name="se-number" placeholder="123456" value="<?=htmlspecialchars($info['ASANumber'])?>">
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="last-name">Swim England Category</label>
+                  <select class="custom-select" name="se-category" id="se-category">
+                    <option value="1" <?php if ($info['ASACategory'] == 1) { ?>selected<?php } ?>>Category One</option>
+                    <option value="2" <?php if ($info['ASACategory'] == 2) { ?>selected<?php } ?>>Category Two</option>
+                    <option value="3" <?php if ($info['ASACategory'] == 3) { ?>selected<?php } ?>>Category Three</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col">
+                <div class="form-group">
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="is-se-primary-club" name="is-se-primary-club" class="custom-control-input" <?php if (bool($info['ASAPrimary'])) { ?>checked<?php } ?> value="1">
+                    <label class="custom-control-label" for="is-se-primary-club">This is <?=htmlspecialchars($info['Forename'])?>'s paying club</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="is-not-se-primary-club" name="is-se-primary-club" class="custom-control-input" <?php if (!bool($info['ASAPrimary'])) { ?>checked<?php } ?> value="0">
+                    <label class="custom-control-label" for="is-not-se-primary-club"><?=htmlspecialchars($info['Forename'])?> pays with another club</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="se-user-pays" name="se-club-pays" class="custom-control-input" <?php if (!bool($info['ASAPaid'])) { ?>checked<?php } ?>  <?php if (!bool($info['ASAPrimary'])) { ?>disabled<?php } ?> value="0">
+                    <label class="custom-control-label" for="se-user-pays"><?=htmlspecialchars($info['Forename'])?> pays Swim England fees</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="se-club-pays" name="se-club-pays" class="custom-control-input" <?php if (bool($info['ASAPaid'])) { ?>checked<?php } ?>  <?php if (!bool($info['ASAPrimary'])) { ?>disabled<?php } ?> value="1">
+                    <label class="custom-control-label" for="se-club-pays">Club pays <?=htmlspecialchars($info['Forename'])?>'s Swim England fees</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        <div class="cell <?php if (!bool($info['ASAMember'])) { ?>d-none<?php } ?>" id="asa-details">
-
+        <div class="d-none">
+          <h2 id="club-membership-status" data-swimmer-too="<?=htmlspecialchars(json_encode(bool($swimmerToo)))?>">Club Membership</h2>
           <?php if ($swimmerToo) { ?>
             <p class="text-danger"> 
-              <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <?=htmlspecialchars($info['Forename'])?> is also a club sport member. Changes here will apply to the member too.
+              <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <?=htmlspecialchars($info['Forename'])?> is also a club sport member. You can only edit their club membership details on their <a class="text-danger alert-link" target="_blank" href="<?=htmlspecialchars(autoUrl("members/" . $swimmerToo))?>">member page</a>.
             </p>
-          <?php } ?>
-
-          <div class="form-row">
-            <div class="col">
-              <div class="form-group">
-                <label for="se-number">Swim England Number</label>
-                <input type="text" class="form-control mono" id="se-number" name="se-number" placeholder="123456" value="<?=htmlspecialchars($info['ASANumber'])?>">
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-group">
-                <label for="last-name">Swim England Category</label>
-                <select class="custom-select" name="se-category" id="se-category">
-                  <option value="1" <?php if ($info['ASACategory'] == 1) { ?>selected<?php } ?>>Category One</option>
-                  <option value="2" <?php if ($info['ASACategory'] == 2) { ?>selected<?php } ?>>Category Two</option>
-                  <option value="3" <?php if ($info['ASACategory'] == 3) { ?>selected<?php } ?>>Category Three</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="col">
-              <div class="form-group">
-                <div class="custom-control custom-radio">
-                  <input type="radio" id="is-se-primary-club" name="is-se-primary-club" class="custom-control-input" <?php if (bool($info['ASAPrimary'])) { ?>checked<?php } ?> value="1">
-                  <label class="custom-control-label" for="is-se-primary-club">This is <?=htmlspecialchars($info['Forename'])?>'s paying club</label>
-                </div>
-                <div class="custom-control custom-radio">
-                  <input type="radio" id="is-not-se-primary-club" name="is-se-primary-club" class="custom-control-input" <?php if (!bool($info['ASAPrimary'])) { ?>checked<?php } ?> value="0">
-                  <label class="custom-control-label" for="is-not-se-primary-club"><?=htmlspecialchars($info['Forename'])?> pays with another club</label>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-group">
-                <div class="custom-control custom-radio">
-                  <input type="radio" id="se-user-pays" name="se-club-pays" class="custom-control-input" <?php if (!bool($info['ASAPaid'])) { ?>checked<?php } ?>  <?php if (!bool($info['ASAPrimary'])) { ?>disabled<?php } ?> value="0">
-                  <label class="custom-control-label" for="se-user-pays"><?=htmlspecialchars($info['Forename'])?> pays Swim England fees</label>
-                </div>
-                <div class="custom-control custom-radio">
-                  <input type="radio" id="se-club-pays" name="se-club-pays" class="custom-control-input" <?php if (bool($info['ASAPaid'])) { ?>checked<?php } ?>  <?php if (!bool($info['ASAPrimary'])) { ?>disabled<?php } ?> value="1">
-                  <label class="custom-control-label" for="se-club-pays">Club pays <?=htmlspecialchars($info['Forename'])?>'s Swim England fees</label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <h2 id="club-membership-status" data-swimmer-too="<?=htmlspecialchars(json_encode(bool($swimmerToo)))?>">Club Membership</h2>
-        <?php if ($swimmerToo) { ?>
-          <p class="text-danger"> 
-            <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <?=htmlspecialchars($info['Forename'])?> is also a club sport member. You can only edit their club membership details on their <a class="text-danger alert-link" target="_blank" href="<?=htmlspecialchars(autoUrl("members/" . $swimmerToo))?>">member page</a>.
-          </p>
-        <?php } else { ?>
-        <div class="form-group">
-          <div class="custom-control custom-radio">
-            <input type="radio" id="is-not-club-member" name="is-club-member" class="custom-control-input" <?php if (!bool($info['ClubMember'])) { ?>checked<?php } ?> value="0">
-            <label class="custom-control-label" for="is-not-club-member"><?=htmlspecialchars($info['Forename'])?> is not a club member</label>
-          </div>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="is-club-member" name="is-club-member" class="custom-control-input" <?php if (bool($info['ClubMember'])) { ?>checked<?php } ?> value="1">
-            <label class="custom-control-label" for="is-club-member"><?=htmlspecialchars($info['Forename'])?> is a club member</label>
-          </div>
-        </div>
-
-        <div class="cell <?php if (!bool($info['ClubMember'])) { ?>d-none<?php } ?>" id="club-details">
-
+          <?php } else { ?>
           <div class="form-group">
-            <label for="last-name">Club Membership Category</label>
-            <select class="custom-select" name="club-category" id="club-category" aria-describedby="club-category-help">
-              <?php if ($info['ClubCategory'] == null) { ?><option selected>Select a category</option><?php } ?>
-              <option value="1" <?php if ($info['ClubCategory'] == 1) { ?>selected<?php } ?>>Standard club membership</option>
-              <option value="2" <?php if ($info['ClubCategory'] == 2) { ?>selected<?php } ?>>Standalone club membership</option>
-            </select>
-            <small id="club-category-help" class="form-text text-muted">Standard club membership counts this person as part of a family when calculating fees. Standalone membership is a fixed fee for each member.</small>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="is-not-club-member" name="is-club-member" class="custom-control-input" <?php if (!bool($info['ClubMember'])) { ?>checked<?php } ?> value="0">
+              <label class="custom-control-label" for="is-not-club-member"><?=htmlspecialchars($info['Forename'])?> is not a club member</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="is-club-member" name="is-club-member" class="custom-control-input" <?php if (bool($info['ClubMember'])) { ?>checked<?php } ?> value="1">
+              <label class="custom-control-label" for="is-club-member"><?=htmlspecialchars($info['Forename'])?> is a club member</label>
+            </div>
           </div>
 
-          <div class="form-group mb-0">
-            <div class="custom-control custom-radio">
-              <input type="radio" id="club-user-pays" name="club-club-pays" class="custom-control-input" <?php if (!bool($info['ClubPaid'])) { ?>checked<?php } ?> value="0">
-              <label class="custom-control-label" for="club-user-pays"><?=htmlspecialchars($info['Forename'])?> pays club membership fees</label>
+          <div class="cell <?php if (!bool($info['ClubMember'])) { ?>d-none<?php } ?>" id="club-details">
+
+            <div class="form-group">
+              <label for="last-name">Club Membership Category</label>
+              <select class="custom-select" name="club-category" id="club-category" aria-describedby="club-category-help">
+                <?php if ($info['ClubCategory'] == null) { ?><option selected>Select a category</option><?php } ?>
+                <option value="1" <?php if ($info['ClubCategory'] == 1) { ?>selected<?php } ?>>Standard club membership</option>
+                <option value="2" <?php if ($info['ClubCategory'] == 2) { ?>selected<?php } ?>>Standalone club membership</option>
+              </select>
+              <small id="club-category-help" class="form-text text-muted">Standard club membership counts this person as part of a family when calculating fees. Standalone membership is a fixed fee for each member.</small>
             </div>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="club-club-pays" name="club-club-pays" class="custom-control-input" <?php if (bool($info['ClubPaid'])) { ?>checked<?php } ?> value="1">
-              <label class="custom-control-label" for="club-club-pays">Club pays <?=htmlspecialchars($info['Forename'])?>'s club membership fees</label>
+
+            <div class="form-group mb-0">
+              <div class="custom-control custom-radio">
+                <input type="radio" id="club-user-pays" name="club-club-pays" class="custom-control-input" <?php if (!bool($info['ClubPaid'])) { ?>checked<?php } ?> value="0">
+                <label class="custom-control-label" for="club-user-pays"><?=htmlspecialchars($info['Forename'])?> pays club membership fees</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input type="radio" id="club-club-pays" name="club-club-pays" class="custom-control-input" <?php if (bool($info['ClubPaid'])) { ?>checked<?php } ?> value="1">
+                <label class="custom-control-label" for="club-club-pays">Club pays <?=htmlspecialchars($info['Forename'])?>'s club membership fees</label>
+              </div>
             </div>
+          </div>
+
+          <?php } ?>
+        </div>
+
+        <h2>Access permissions</h2>
+
+        <div class="form-group">
+          <p>
+            Select access permissions for <?=htmlspecialchars($info['Forename'])?>
+          </p>
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="permissions-parent" name="permissions-parent" value="1" <?=selected($userObject, 'Parent')?>>
+            <label class="custom-control-label" for="permissions-parent">Parent/user</label>
+          </div>
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="permissions-gala" name="permissions-gala" value="1" <?=selected($userObject, 'Galas')?>>
+            <label class="custom-control-label" for="permissions-gala">Gala coordinator</label>
+          </div>
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="permissions-coach" name="permissions-coach" value="1" <?=selected($userObject, 'Coach')?>>
+            <label class="custom-control-label" for="permissions-coach">Coach</label>
+          </div>
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="permissions-admin" name="permissions-admin" value="1" <?=selected($userObject, 'Admin')?>>
+            <label class="custom-control-label" for="permissions-admin">Admin</label>
           </div>
         </div>
 
-        <?php } ?>
+        <p>Users can switch access level by selecting their name in the main menu.</p>
 
         <p>
           <button type="submit" class="btn btn-success">

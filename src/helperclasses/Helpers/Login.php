@@ -35,7 +35,7 @@ class Login {
   }
 
   public function login() {
-    $getUserDetails = $this->db->prepare("SELECT EmailAddress, Forename, Surname, UserID, AccessLevel FROM users WHERE UserID = ?");
+    $getUserDetails = $this->db->prepare("SELECT EmailAddress, Forename, Surname, UserID FROM users WHERE UserID = ?");
     $getUserDetails->execute([$this->user]);
     $details = $getUserDetails->fetch(\PDO::FETCH_ASSOC);
 
@@ -43,7 +43,6 @@ class Login {
     $_SESSION['Forename'] = $details['Forename'];
     $_SESSION['Surname'] = $details['Surname'];
     $_SESSION['UserID'] = $details['UserID'];
-    $_SESSION['AccessLevel'] = $details['AccessLevel'];
     $_SESSION['LoggedIn'] = 1;
 
     $currentUser = new \User($_SESSION['UserID'], $this->db);
@@ -125,7 +124,7 @@ class Login {
       'Forename' => $details['Forename'],
       'Surname' => $details['Surname'],
       'Account' => $details['UserID'],
-      'TopUAL'  => $details['AccessLevel']
+      'TopUAL'  => null
     ]);
 
     if (isset($_SESSION['LoginSec'])) {

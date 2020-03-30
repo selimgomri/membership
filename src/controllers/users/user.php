@@ -8,7 +8,7 @@ use Brick\PhoneNumber\PhoneNumberFormat;
 
 global $db;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, AccessLevel, ASANumber, ASAMember, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory, RR FROM users WHERE UserID = ?");
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, ASANumber, ASAMember, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory, RR FROM users WHERE UserID = ?");
 $userInfo->execute([$id]);
 
 $qualifications;
@@ -29,21 +29,12 @@ if ($info == null) {
   halt(404);
 }
 
+$userObj = new \User($id, $db, false);
+
 $par = $coa = $com = $gal = $adm = "";
-if ($info['AccessLevel'] == "Coach") {
-  $coa = "selected";
-} else if ($info['AccessLevel'] == "Committee") {
-  $com = "selected";
-} else if ($info['AccessLevel'] == "Galas") {
-  $gal = "selected";
-} else if ($info['AccessLevel'] == "Admin") {
-  $adm = "selected";
-} else {
-  $par = "selected";
-}
 
 $swimmers = null;
-if ($info['AccessLevel'] == "Parent") {
+if ($userObj->hasPermission('Parent')) {
   $swimmers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, SquadName squad, SquadFee fee, ClubPays exempt FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID = ?");
   $swimmers->execute([$id]);
 }
@@ -68,7 +59,6 @@ if (userHasMandates($id)) {
   $logo_path = getBankLogo($bank);
 }
 
-$userObj = new \User($id, $db, false);
 $json = $userObj->getUserOption('MAIN_ADDRESS');
 $addr = null;
 if ($json != null) {
@@ -83,9 +73,10 @@ catch (PhoneNumberParseException $e) {
   $number = false;
 }
 
-$accessLevel = 'Team Manager';
-if ($info['AccessLevel'] != 'Committee') {
-  $accessLevel = $info['AccessLevel'];
+$accessLevel = "";
+$perms = $userObj->getPrintPermissions();
+foreach ($perms as $key => $value) {
+  $accessLevel .= $value . ', ';
 }
 
 $pagetitle = htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) . " Information";
@@ -219,7 +210,7 @@ include BASE_PATH . "views/header.php";
 
   <hr>
 
-  <?php if ($info['AccessLevel'] == "Parent" && bool($info['RR'])) { ?>
+  <?php if ($userObj->hasPermission('Parent') && bool($info['RR'])) { ?>
   <div class="mb-4">
     <h2>
       User registration
@@ -257,7 +248,7 @@ include BASE_PATH . "views/header.php";
   <hr>
   <?php } ?>
 
-  <?php if ($info['AccessLevel'] == "Parent") { ?>
+  <?php if ($userObj->hasPermission('Parent')) { ?>
   <div class="mb-4">
     <h2>
       Payment information
@@ -427,7 +418,7 @@ include BASE_PATH . "views/header.php";
   </div>
   <?php } ?>
 
-  <div class="mb-4">
+  <div class="mb-4 d-none">
     <h2>
       Access Control
     </h2>

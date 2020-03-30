@@ -16,10 +16,18 @@ if ($getTableCount->fetchColumn() == 0) {
 
   if (env('CLUB_EMAIL')) {
     try {
-      $addFirstUser = $db->prepare("INSERT INTO users (`Password`, AccessLevel, EmailAddress, EmailComms, Forename, Surname, Mobile, MobileComms) VALUES (?, 'Admin', ?, 1, 'Primary', 'Admin', '+44123456789', 1)");
+      $addFirstUser = $db->prepare("INSERT INTO users (`Password`, EmailAddress, EmailComms, Forename, Surname, Mobile, MobileComms) VALUES (?, 'Admin', ?, 1, 'Primary', 'Admin', '+44123456789', 1)");
       $addFirstUser->execute([
         password_hash('DEFAULTPASSWORD', PASSWORD_BCRYPT),
         env('CLUB_EMAIL')
+      ]);
+
+      $uid = $db->lastInsertId();
+
+      $addAccessLevel = $db->prepare("INSERT INTO `permissions` (`Permission`, `User`) VALUES (?, ?)");
+      $addAccessLevel->execute([
+        'Admin',
+        $uid
       ]);
     } catch (Exception $e) {
       // Could not add user

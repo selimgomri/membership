@@ -22,6 +22,14 @@ $this->post('/password', function() {
 	require 'change-password-action.php';
 });
 
+$this->get('/default-access-level', function() {
+	include 'default-mode.php';
+});
+
+$this->post('/default-access-level', function() {
+	include 'default-mode-post.php';
+});
+
 if ($_SESSION['AccessLevel'] == "Parent") {
 
 	// Add swimmer

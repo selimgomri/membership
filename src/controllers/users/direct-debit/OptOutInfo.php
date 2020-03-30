@@ -2,7 +2,7 @@
 
 global $db;
 
-$getUser = $db->prepare("SELECT Forename, Surname, RR FROM users WHERE UserID = ? AND AccessLevel = 'Parent';");
+$getUser = $db->prepare("SELECT Forename, Surname, RR FROM users INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE UserID = ? AND `permissions`.`Permission` = 'Parent';");
 $getUser->execute([$person]);
 
 $user = $getUser->fetch(PDO::FETCH_ASSOC);
