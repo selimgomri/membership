@@ -295,7 +295,8 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
       global $currentUser;
       $currentUser = $login->login();
     } catch (Exception $e) {
-      halt(403);
+      reportError($e);
+      // halt(403);
     }
 
     $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));

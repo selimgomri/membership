@@ -35,7 +35,7 @@ class Login {
   }
 
   public function login() {
-    $getUserDetails = $this->db->prepare("SELECT EmailAddress, Forename, Surname, UserID, AccessLevel FROM users WHERE UserID = ?");
+    $getUserDetails = $this->db->prepare("SELECT EmailAddress, Forename, Surname, UserID FROM users WHERE UserID = ?");
     $getUserDetails->execute([$this->user]);
     $details = $getUserDetails->fetch(\PDO::FETCH_ASSOC);
 

@@ -43,10 +43,10 @@
       "external": false
     },
     {
-      "id": "linked-accounts",
-      "name": "Switch Accounts",
-      "title": "Link accounts so you can easily switch between parent and admin roles",
-      "link": "my-account/linked-accounts",
+      "id": "default-access-level",
+      "name": "Default Access Level",
+      "title": "Choose the default account access level used when you log in",
+      "link": "my-account/default-access-level",
       "target": "_self",
       "external": false
     },
