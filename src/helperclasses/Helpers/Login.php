@@ -124,7 +124,7 @@ class Login {
       'Forename' => $details['Forename'],
       'Surname' => $details['Surname'],
       'Account' => $details['UserID'],
-      'TopUAL'  => $details['AccessLevel']
+      'TopUAL'  => null
     ]);
 
     if (isset($_SESSION['LoginSec'])) {

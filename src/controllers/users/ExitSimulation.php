@@ -30,7 +30,8 @@ $_SESSION['EmailAddress'] = $info['EmailAddress'];
 $_SESSION['Forename'] = 		$info['Forename'];
 $_SESSION['Surname'] = 			$info['Surname'];
 $_SESSION['UserID'] = 			$info['UserID'];
-$_SESSION['AccessLevel'] = 	$info['AccessLevel'];
 $_SESSION['LoggedIn'] = 		1;
+
+$userObject = new \User($id, $db);
 
 header("Location: " . autoUrl("users/" . $target));

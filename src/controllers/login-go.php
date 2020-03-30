@@ -50,15 +50,16 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
       $isJustParent->execute([
         $userID
       ]);
+      $isNotJustParent = $isJustParent->fetchColumn() > 0;
 
-      if ($isJustParent->fetchColumn() > 0 || bool(getUserOption($userID, "Is2FA")) || $do_random_2FA) {
+      if ($isNotJustParent || bool(getUserOption($userID, "Is2FA")) || $do_random_2FA) {
         // Do 2FA
         if (bool(getUserOption($userID, "hasGoogleAuth2FA"))) {
           $_SESSION['TWO_FACTOR_GOOGLE'] = true;
         } else {
           $code = random_int(100000, 999999);
 
-          if ($do_random_2FA && !($row['AccessLevel'] != "Parent" || bool(getUserOption($userID, "Is2FA")))) {
+          if ($do_random_2FA && !($isNotJustParent || bool(getUserOption($userID, "Is2FA")))) {
             setUserOption($userID, "IsSpotCheck2FA", true);
           }
 
