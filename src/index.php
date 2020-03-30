@@ -923,13 +923,13 @@ $route->group($get_group, function($clubcode = "CLSE") {
           halt(500);
         }
       });
-
-      $this->group('/db', function() {
-        // Handle database migrations
-        include 'controllers/migrations/router.php';
-      });
     }
   }
+
+  $this->group('/db', function() {
+    // Handle database migrations
+    include 'controllers/migrations/router.php';
+  });
 
   $this->get('/files/*/viewer', function() {
     $filename = $this[0];
