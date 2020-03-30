@@ -145,28 +145,6 @@ $this->group('/general', function() {
 
 });
 
-$this->group('/linked-accounts', function() {
-  $this->get('/', function() {
-  	include 'linked-accounts/Home.php';
-  });
-
-  $this->get('/new', function() {
-  	include 'linked-accounts/New.php';
-  });
-
-  $this->post('/new', function() {
-  	include 'linked-accounts/NewPost.php';
-	});
-
-	$this->get('/{id}:int/switch', function($account) {
-  	include 'linked-accounts/Switch.php';
-  });
-	
-	$this->get('/{id}:int/delete', function($id) {
-  	include 'linked-accounts/Delete.php';
-  });
-});
-
 $this->group('/address', function() {
   $this->get('/', function() {
   	include 'address.php';
