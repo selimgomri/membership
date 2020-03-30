@@ -543,8 +543,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
   });
 
   if (empty($_SESSION['LoggedIn'])) {
-    $this->post(['/'], function() {
-      global $link;
+    $this->post('/login', function() {
     	include 'controllers/login-go.php';
     });
 

@@ -42,7 +42,7 @@ include BASE_PATH . "views/header.php";
       </div>
       <?php unset($_SESSION['ErrorAccountLocked']); } ?>
 
-      <form method="post" action="<?=autoUrl("")?>" name="loginform" id="loginform" class="needs-validation" novalidate>
+      <form method="post" action="<?=htmlspecialchars(autoUrl("login"))?>" name="loginform" id="loginform" class="needs-validation" novalidate>
         <div class="form-group">
           <label for="email-address">Email address</label>
           <input type="email" name="email-address" id="email-address" class="form-control form-control-lg text-lowercase" <?php if ($errorState) { ?> value="<?=htmlspecialchars($username)?>"<?php } ?> required <?php if (!$username) { ?>autofocus<?php } ?> placeholder="yourname@example.com" autocomplete="email">

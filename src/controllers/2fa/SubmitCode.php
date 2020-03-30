@@ -48,9 +48,7 @@ if (($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE']) || $auth_via_google_authent
     $currentUser = $login->login();
     $resetFailedLoginCount->execute([$_SESSION['2FAUserID']]);
   } catch (Exception $e) {
-    pre($e);
-    exit();
-    // halt(403);
+    halt(403);
   }
 } else {
   $_SESSION['ErrorState'] = true;
