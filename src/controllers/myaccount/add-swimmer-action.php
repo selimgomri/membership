@@ -62,17 +62,17 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
     // Notify new parent with email
     $message = "
     <p>Hello " . htmlspecialchars($row['Forename']) . ",</p>
-    <p>Your swimmer, " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " has been registered
+    <p>Your member, " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " has been registered
     with your account.</p>
     <ul>
       <li>" . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "</li>
       <li>Squad: " . htmlspecialchars($row['SquadName']) . "</li>
       <li>Monthly Fee: &pound;" . number_format((int) $row['SquadFee'], 2, '.', ',') . "</li>
       <li>Swim England Number: " . htmlspecialchars($row['ASANumber']) . "</li>
-      <li>" . htmlspecialchars(CLUB_SHORT_NAME) . " Member ID: " . htmlspecialchars($row['MemberID']) . "</li>
+      <li>" . htmlspecialchars(env('CLUB_SHORT_NAME')) . " Member ID: " . htmlspecialchars($row['MemberID']) . "</li>
     </ul>
-    <p>If this was not you, contact <a href=\"mailto:"  . htmlspecialchars(CLUB_EMAIL) . "\">
-    "  . htmlspecialchars(CLUB_EMAIL) . "</a> as soon as possible</p>";
+    <p>If this was not you, contact <a href=\"mailto:"  . htmlspecialchars(env('CLUB_EMAIL')) . "\">
+    "  . htmlspecialchars(env('CLUB_EMAIL')) . "</a> as soon as possible</p>";
     notifySend($row['EmailAddress'], "You've added " . $row['MForename'] . " to your account",
     $message, $row['Forename'] . " " . $row['Surname'],
     $row['EmailAddress']);
@@ -94,7 +94,7 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
     // Error, too many records found - Database error
     $_SESSION['ErrorState'] = "
     <div class=\"alert alert-danger\">
-    <p class=\"mb-0\"><strong>An error occured when we tried to add a swimmer</strong></p>
+    <p class=\"mb-0\"><strong>An error occured when we tried to add a member</strong></p>
     <p>You may have got the Swim England Number or Access Key wrong</p>
     <p class=\"mb-0\">Please try again</p>
     </div>";
@@ -105,10 +105,10 @@ else {
   // Error, fields not filled out
   $_SESSION['ErrorState'] = "
   <div class=\"alert alert-danger\">
-  <p class=\"mb-0\"><strong>An error occured when we tried to add a swimmer</strong></p>
+  <p class=\"mb-0\"><strong>An error occured when we tried to add a member</strong></p>
   <p>You may have got the Swim England Number or Access Key wrong</p>
   <p class=\"mb-0\">Please try again</p>
   </div>";
-  header("Location: " . autoUrl("my-account/addswimmer"));
+  header("Location: " . autoUrl("my-account/add-member"));
 }
 ?>

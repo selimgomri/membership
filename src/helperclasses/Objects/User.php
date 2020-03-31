@@ -52,12 +52,10 @@ class User {
     if ($row) {
       $defaultAccessLevel = $this->getUserOption('DefaultAccessLevel');
 
-      if (isset($_SESSION['SelectedAccessLevel']) && in_array($_SESSION['SelectedAccessLevel'], $this->permissions)) {
-        $this->accessLevel = $_SESSION['SelectedAccessLevel'];
+      if ($defaultAccessLevel != null && in_array($defaultAccessLevel, $this->permissions)) {
+        $this->accessLevel = $defaultAccessLevel;
       } else if (isset($_SESSION['AccessLevel']) && in_array($_SESSION['AccessLevel'], $this->permissions)) {
         $this->accessLevel = $_SESSION['AccessLevel'];
-      } else if ($defaultAccessLevel != null && in_array($defaultAccessLevel, $this->permissions)) {
-        $this->accessLevel = $defaultAccessLevel;
       } else if (in_array('Admin', $this->permissions)) {
         $this->accessLevel = $defaultAccessLevel;
       } else {

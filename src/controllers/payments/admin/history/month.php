@@ -5,7 +5,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 global $db;
 
 $searchDate = $year . "-" . $month . "-" . "%";
-$getPayments = $db->prepare("SELECT * FROM `payments` INNER JOIN `users` ON users.UserID = payments.UserID WHERE `Date` LIKE ?");
+$getPayments = $db->prepare("SELECT * FROM `payments` INNER JOIN `users` ON users.UserID = payments.UserID WHERE `Date` LIKE ? ORDER BY Forename ASC, Surname ASC");
 $getPayments->execute([$searchDate]);
 
 $date = strtotime($year . "-" . $month . "-01");
