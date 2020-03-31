@@ -3,12 +3,16 @@
 global $db;
 
 try {
-  $query = $db->prepare("SELECT PMkey FROM payments WHERE UserID = ? ORDER BY `Date` DESC ");
+  $query = $db->prepare("SELECT PaymentID FROM payments WHERE UserID = ? ORDER BY `Date` DESC ");
   $query->execute([$_SESSION['UserID']]);
 
   $payment = $query->fetchColumn();
 
-  header("Location: " . autoUrl("payments/statement/" . $payment));
+  if ($payment == null) {
+    header("Location: " . autoUrl("payments/statements"));
+  } else {
+    header("Location: " . autoUrl("payments/statements/" . $payment));
+  }
 } catch (Exception $e) {
   halt(404);
 }

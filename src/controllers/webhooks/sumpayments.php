@@ -30,7 +30,7 @@ $getMonthSum = $db->prepare("SELECT SUM(`Amount`) FROM `paymentsPending` WHERE `
 
 $addPaymentForCharge = $db->prepare("INSERT INTO `payments` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`, `MandateID`, `PMkey`) VALUES (?, ?, ?, ?, ?, 'GBP', 'Payment', ?, ?);");
 
-$setPaymentsPending = $db->prepare("UPDATE `paymentsPending` SET `Status` = ? WHERE `UserID` = ? AND `Status` = 'Pending' AND `Date` <= ?");
+$setPaymentsPending = $db->prepare("UPDATE `paymentsPending` SET Payment = ?, `Status` = ? WHERE `UserID` = ? AND `Status` = 'Pending' AND `Date` <= ?");
 
 $setPaymentsPendingPM = $db->prepare("UPDATE `paymentsPending` SET `PMkey` = ?WHERE `UserID` = ? AND `Status` = 'Pending' AND `Date` <= ?");
 
@@ -256,7 +256,9 @@ try {
           null,
           null
         ]);
+        $id = $db->lastInsertId();
         $setPaymentsPending->execute([
+          $id,
           'Queued',
           $user,
           $date
@@ -278,12 +280,13 @@ try {
           $id
         ]);
         $setPaymentsPending->execute([
+          $id,
           'Paid',
           $user,
           $date
         ]);
 
-        // Set items on bill
+        // Set PM key - NOT NEEDED SOON
         $setPaymentsPendingPM->execute([
           'NA' . $id,
           $user,

@@ -1,18 +1,16 @@
 <?php
 
-$PaymentID;
-
 global $db;
 
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
-if ($_SESSION['Token' . $PaymentID] == $token) {
-  $db->prepare("UPDATE payments SET Status='paid_manually' WHERE PMkey = ?")->execute([$PaymentID]);
-  $db->prepare("UPDATE paymentsPending SET Status='Paid' WHERE PMkey = ?")->execute([$PaymentID]);
+if ($_SESSION['Token' . $id] == $token) {
+  $db->prepare("UPDATE payments SET Status='paid_manually' WHERE PaymentID = ?")->execute([$id]);
+  $db->prepare("UPDATE paymentsPending SET `Status` = 'Paid' WHERE Payment = ?")->execute([$id]);
 } else {
   halt(404);
 }
 
-unset($_SESSION['Token' . $PaymentID]);
+unset($_SESSION['Token' . $id]);
 
-header("Location: " . autoUrl("payments/history/statement/" . $PaymentID));
+header("Location: " . autoUrl("payments/statements/" . $id));

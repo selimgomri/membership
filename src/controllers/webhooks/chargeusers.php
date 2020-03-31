@@ -22,6 +22,9 @@ try {
 $date = date("Y-m") . "-01";
 $day = date("d");
 
+$updatePayments = $db->prepare("UPDATE `payments` SET `Status` = ?, `MandateID` = ?, `PMkey` = ? WHERE `PaymentID` = ?");
+$updatePaymentsPending = $db->prepare("UPDATE `paymentsPending` SET `Status` = ?, `PMkey` = ? WHERE Payment = ?");
+
 try {
   $getPayments = $db->prepare("SELECT payments.UserID, Amount, Currency, `Name`, PaymentID FROM payments LEFT JOIN paymentSchedule ON payments.UserID = paymentSchedule.UserID WHERE (Status = 'pending_api_request' AND `Day` <= ? AND Type = 'Payment') OR (Status = 'pending_api_request' AND `Day` IS NULL AND `Type` = 'Payment') LIMIT 4");
   $getPayments->execute([$day]);
@@ -36,9 +39,6 @@ try {
     $mandateInfo = $hasMandateQuery->fetch(PDO::FETCH_ASSOC);
 
     $email_statment_id;
-
-    $updatePayments = $db->prepare("UPDATE `payments` SET `Status` = ?, `MandateID` = ?, `PMkey` = ? WHERE `PaymentID` = ?");
-    $updatePaymentsPending = $db->prepare("UPDATE `paymentsPending` SET `Status` = ?, `PMkey` = ? WHERE `UserID` = ? AND `Status` = ? AND `Type` = ? AND `Date` <= ?");
 
     if ($mandateInfo && $row['Amount'] > 100) {
     	$amount = $row['Amount'];
@@ -79,18 +79,7 @@ try {
         $updatePaymentsPending->execute([
           'Requested',
           $id,
-          $userid,
-          'Queued',
-          'Payment',
-          $date
-        ]);
-        $updatePaymentsPending->execute([
-          'Requested',
-          $id,
-          $userid,
-          'Queued',
-          'Refund',
-          $date
+          $paymentID
         ]);
 
     	} catch (Exception $e) {
@@ -109,18 +98,7 @@ try {
           $updatePaymentsPending->execute([
             'Paid',
             $id,
-            $userid,
-            'Queued',
-            'Payment',
-            $date
-          ]);
-          $updatePaymentsPending->execute([
-            'Paid',
-            $id,
-            $userid,
-            'Queued',
-            'Refund',
-            $date
+            $paymentID
           ]);
 
           reportError($e);
@@ -145,18 +123,7 @@ try {
         $updatePaymentsPending->execute([
           'Paid',
           $id,
-          $userid,
-          'Queued',
-          'Payment',
-          $date
-        ]);
-        $updatePaymentsPending->execute([
-          'Paid',
-          $id,
-          $userid,
-          'Queued',
-          'Refund',
-          $date
+          $paymentID
         ]);
       } catch (Exception $e) {
         reportError($e);
@@ -176,7 +143,7 @@ try {
     }
     $message_content .= '<p>Your bill for ' . date("F Y") . ' is now available. The total amount payable for this month is <strong>&pound;' . number_format(($row['Amount']/100), 2, '.', ',') . '</strong>.</p>';
 
-    $message_content .= '<p>You can <a href="' . autoUrl("payments/statement/" . $id) . '">view a full itemised statement for this payment online</a> or <a href="' . autoUrl("payments/statement/" . $id . "/pdf") . '">download your full statement as a PDF</a>. Statements show each fee you have been charged or credited for.</p>';
+    $message_content .= '<p>You can <a href="' . autoUrl("payments/statements/" . $paymentID) . '">view a full itemised statement for this payment online</a> or <a href="' . autoUrl("payments/statements/" . $paymentID . "/pdf") . '">download your full statement as a PDF</a>. Statements show each item you have been charged or credited for.</p>';
 
     $message_content .= '<p>Squad fees were calculated using the squad your swimmers were members of on 1 ' . date("F Y") . '.</p><hr>';
 

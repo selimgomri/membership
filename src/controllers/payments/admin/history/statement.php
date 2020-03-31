@@ -8,54 +8,54 @@ $user = $_SESSION['UserID'];
 $sql = $payments = null;
 $count = 0;
 
-$pdfUrl = "";
+$pdfUrl = autoUrl("payments/statements/" . $id . "/pdf");
 
 // Check the thing exists
 
 if ($_SESSION['AccessLevel'] == "Parent") {
   // Check the payment exists and belongs to the user
-  $sql = $db->prepare("SELECT COUNT(*) FROM payments WHERE PMkey = ? AND UserID = ?");
-  $sql->execute([$PaymentID, $user]);
+  $sql = $db->prepare("SELECT COUNT(*) FROM payments WHERE PaymentID = ? AND UserID = ?");
+  $sql->execute([$id, $user]);
   if ($sql->fetchColumn() == 0) {
     halt(404);
   }
 
-  $sql = $db->prepare("SELECT COUNT(*) FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `PMkey` = ? AND paymentsPending.UserID = ?");
-  $sql->execute([$PaymentID, $user]);
+  $sql = $db->prepare("SELECT COUNT(*) FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `Payment` = ? AND paymentsPending.UserID = ?");
+  $sql->execute([$id, $user]);
   $count = $sql->fetchColumn();
 
-	$payments = $db->prepare("SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `PMkey` = ? AND paymentsPending.UserID = ?");
-  $payments->execute([$PaymentID, $user]);
-
-  $pdfUrl = autoUrl("payments/statement/" . $PaymentID . "/pdf");
+	$payments = $db->prepare("SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `Payment` = ? AND paymentsPending.UserID = ?");
+  $payments->execute([$id, $user]);
 } else {
-  $sql = $db->prepare("SELECT COUNT(*) FROM payments WHERE PMkey = ?");
-  $sql->execute([$PaymentID]);
+  $sql = $db->prepare("SELECT COUNT(*) FROM payments WHERE PaymentID = ?");
+  $sql->execute([$id]);
   if ($sql->fetchColumn() == 0) {
     halt(404);
   }
 
-  $sql = $db->prepare("SELECT COUNT(*) FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `PMkey` = ?");
-  $sql->execute([$PaymentID]);
+  $sql = $db->prepare("SELECT COUNT(*) FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `Payment` = ?");
+  $sql->execute([$id]);
   $count = $sql->fetchColumn();
 
-	$payments = $db->prepare("SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `PMkey` = ?");
-  $payments->execute([$PaymentID]);
-  $pdfUrl = autoUrl("payments/history/statement/" . $PaymentID . "/pdf");
+	$payments = $db->prepare("SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `Payment` = ?");
+  $payments->execute([$id]);
 }
 
 $row = $payments->fetch(PDO::FETCH_ASSOC);
 
-$sql = $db->prepare("SELECT payments.`UserID`, payments.`Name`, `Amount`, `Status`, `Date`, BankName, AccountHolderName, AccountNumEnd FROM `payments` LEFT JOIN paymentMandates ON payments.MandateID = paymentMandates.MandateID WHERE `PMkey` = ?");
-$sql->execute([$PaymentID]);
+$sql = $db->prepare("SELECT payments.`UserID`, payments.`Name`, `Amount`, `Status`, `Date`, BankName, AccountHolderName, AccountNumEnd, payments.PMKey FROM `payments` LEFT JOIN paymentMandates ON payments.MandateID = paymentMandates.MandateID WHERE `PaymentID` = ?");
+$sql->execute([$id]);
 $payment_info = $sql->fetch(PDO::FETCH_ASSOC);
 $name = getUserName($payment_info['UserID']);
 
 $use_white_background = true;
-$PaymentID = mb_strtoupper($PaymentID);
-$pagetitle = "Statement for " . htmlspecialchars($name) . ", " . htmlspecialchars($PaymentID);
+$PMKey = null;
+if ($payment_info['PMKey'] != null) {
+  $PMKey = mb_strtoupper($payment_info['PMKey']);
+}
+$pagetitle = "Statement for " . htmlspecialchars($name) . ", " . htmlspecialchars("Statement #" . $id);
 
-$_SESSION['qr'][0]['text'] = autoUrl("payments/history/statement/" . htmlspecialchars(strtoupper($PaymentID)));
+$_SESSION['qr'][0]['text'] = autoUrl("payments/statements/" . htmlspecialchars($id));
 
 $billDate = null;
 try {
@@ -84,16 +84,24 @@ include BASE_PATH . "views/paymentsMenu.php";
 	<div class="">
     <span class="d-none d-print-block h1"><?=htmlspecialchars(env('CLUB_NAME'))?> Payments</span>
     <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
-    <h1 class="border-bottom border-gray pb-2 mb-2"><?=htmlspecialchars($payment_info['Name'])?> Statement</h1>
+    <h1><?=htmlspecialchars($payment_info['Name'])?> Statement</h1>
     <?php } else { ?>
-		<h1 class="border-bottom border-gray pb-2 mb-2">Statement for <?=htmlspecialchars($name)?></h1>
+		<h1>Statement for <?=htmlspecialchars($name)?></h1>
     <?php } ?>
     <dl class="row">
-      <dt class="col-md-4">Payment Identifier</dt>
-      <dd class="col-md-8"><span class="mono"><?=htmlspecialchars($PaymentID)?></span></dd>
+      <dt class="col-md-4">Statement Identifier</dt>
+      <dd class="col-md-8"><span class="mono"><?=htmlspecialchars($id)?></span></dd>
+
+      <dt class="col-md-4">Statement Date</dt>
+      <dd class="col-md-8"><?=htmlspecialchars($billDate->format("j F Y"))?></dd>
+
+      <?php if ($PMKey != null) { ?>
+      <dt class="col-md-4">GoCardless Payment Identifier</dt>
+      <dd class="col-md-8"><span class="mono"><?=htmlspecialchars($PMKey)?></span></dd>
+      <?php } ?>
 
       <dt class="col-md-4">Total Fee</dt>
-      <dd class="col-md-8"><span class="mono">&pound;<?=htmlspecialchars(number_format(($payment_info['Amount']/100),2,'.',''))?></span></dd>
+      <dd class="col-md-8"><span class="mono">&pound;<?=(string) (\Brick\Math\BigDecimal::of((string) $payment_info['Amount']))->withPointMovedLeft(2)->toScale(2)?></span></dd>
 
       <dt class="col-md-4">Payment Status</dt>
       <dd class="col-md-8"><span class=""><?=htmlspecialchars(paymentStatusString($payment_info['Status']))?></span></dd>
@@ -126,8 +134,8 @@ include BASE_PATH . "views/paymentsMenu.php";
     </dl>
 
     <?php if ($_SESSION['AccessLevel'] == "Admin" && ($payment_info['Status'] == 'customer_approval_denied' || $payment_info['Status'] == 'failed')) {
-    $_SESSION['Token' . $PaymentID] = hash('sha256', random_int(0, 999999));
-    $url = autoUrl("payments/history/statement/" . $PaymentID . "/markpaid/" . $_SESSION['Token' . $PaymentID]);
+    $_SESSION['Token' . $id] = hash('sha256', random_int(0, 999999));
+    $url = autoUrl("payments/statements/" . $id . "/mark-paid/" . $_SESSION['Token' . $id]);
     ?>
     <p>
       <a href="<?=htmlspecialchars($url)?>" class="btn btn-primary">
@@ -204,9 +212,9 @@ include BASE_PATH . "views/paymentsMenu.php";
   						</td>
   						<td>
                 <?php if ($row['Type'] == "Payment") { ?>
-  							&pound;<?=htmlspecialchars(number_format(($row['Amount']/100),2,'.',''))?>
+  							&pound;<?=(string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2)?>
                 <?php } else { ?>
-                -&pound;<?=htmlspecialchars(number_format(($row['Amount']/100),2,'.',''))?> (Credit)
+                -&pound;<?=(string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2)?> (Credit)
                 <?php } ?>
   						</td>
   					</tr>
