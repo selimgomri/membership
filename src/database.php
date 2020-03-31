@@ -525,13 +525,8 @@ function paymentHistory($link, $user, $type = null) {
 
   if ($row != null) { ?>
     <div class="list-group">
-    <?php do {
-      if ($type == null) {
-        $statementUrl = autoUrl("payments/statement/" . htmlspecialchars($row['PMkey']));
-      } else if ($type == "admin") {
-        $statementUrl = autoUrl("payments/history/statement/" . htmlspecialchars($row['PMkey']));
-      } ?>
-    <a class="list-group-item list-group-item-action" href="<?=$statementUrl?>" title="Transaction Statement">
+    <?php do { ?>
+    <a class="list-group-item list-group-item-action" href="<?=htmlspecialchars((autoUrl("payments/statements/" . $row['PaymentID'])))?>" title="Transaction Statement">
       <div class="row align-items-center">
         <div class="col-9">
           <p class="mb-0 text-primary">

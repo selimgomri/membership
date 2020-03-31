@@ -88,7 +88,7 @@ include BASE_PATH . "views/paymentsMenu.php";
                 </small>
 							</td>
 							<td>
-								<a href="<?=autoUrl("payments/history/statement/" . htmlspecialchars($row['PMkey']))?>" title="<?=htmlspecialchars($row['PMkey'])?>">
+								<a href="<?=htmlspecialchars(autoUrl("payments/statements/" . $row['PaymentID']))?>" title="<?=htmlspecialchars("Statement " . $row['PaymentID'])?>">
                   <?=htmlspecialchars($row['Name'])?>
                 </a>
 							</td>

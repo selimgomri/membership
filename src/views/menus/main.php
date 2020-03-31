@@ -363,9 +363,9 @@ if (!function_exists('chesterStandardMenu')) {
                     <?php if ($hasMandate) { ?>
                     <h6 class="dropdown-header">Direct Debit</h6>
                     <a class="dropdown-item" href="<?=autoUrl("payments")?>">Payments Home</a>
-                    <a class="dropdown-item" href="<?=autoUrl("payments/transactions")?>">My Billing History</a>
+                    <a class="dropdown-item" href="<?=autoUrl("payments/statements")?>">My Billing History</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/mandates")?>">My Bank Account</a>
-                    <a class="dropdown-item" href="<?=autoUrl("payments/statement/latest")?>">My Latest Statement</a>
+                    <a class="dropdown-item" href="<?=autoUrl("payments/statements/latest")?>">My Latest Statement</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/fees")?>">My Fees Since Last Bill</a>
                     <?php } else if (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN') && bool(env('IS_DEV'))) { ?>
                     <h6 class="dropdown-header">Direct debit</h6>

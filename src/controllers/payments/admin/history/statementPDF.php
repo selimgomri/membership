@@ -15,44 +15,56 @@ $count = 0;
 
 if ($_SESSION['AccessLevel'] == "Parent") {
   // Check the payment exists and belongs to the user
-  $sql = $db->prepare("SELECT COUNT(*) FROM payments WHERE PMkey = ? AND UserID = ?");
-  $sql->execute([$PaymentID, $user]);
+  $sql = $db->prepare("SELECT COUNT(*) FROM payments WHERE PaymentID = ? AND UserID = ?");
+  $sql->execute([$id, $user]);
   if ($sql->fetchColumn() == 0) {
     halt(404);
   }
 
-  $sql = $db->prepare("SELECT COUNT(*) FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `PMkey` = ? AND paymentsPending.UserID = ?");
-  $sql->execute([$PaymentID, $user]);
+  $sql = $db->prepare("SELECT COUNT(*) FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `Payment` = ? AND paymentsPending.UserID = ?");
+  $sql->execute([$id, $user]);
   $count = $sql->fetchColumn();
 
-	$payments = $db->prepare("SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `PMkey` = ? AND paymentsPending.UserID = ?");
-  $payments->execute([$PaymentID, $user]);
+	$payments = $db->prepare("SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `Payment` = ? AND paymentsPending.UserID = ?");
+  $payments->execute([$id, $user]);
 } else {
-  $sql = $db->prepare("SELECT COUNT(*) FROM payments WHERE PMkey = ?");
-  $sql->execute([$PaymentID]);
+  $sql = $db->prepare("SELECT COUNT(*) FROM payments WHERE PaymentID = ?");
+  $sql->execute([$id]);
   if ($sql->fetchColumn() == 0) {
     halt(404);
   }
 
-  $sql = $db->prepare("SELECT COUNT(*) FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `PMkey` = ?");
-  $sql->execute([$PaymentID]);
+  $sql = $db->prepare("SELECT COUNT(*) FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `Payment` = ?");
+  $sql->execute([$id]);
   $count = $sql->fetchColumn();
 
-	$payments = $db->prepare("SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `PMkey` = ?");
-  $payments->execute([$PaymentID]);
+	$payments = $db->prepare("SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `Payment` = ?");
+  $payments->execute([$id]);
 }
 
 $row = $payments->fetch(PDO::FETCH_ASSOC);
 
-$sql = $db->prepare("SELECT payments.`UserID`, payments.`Name`, `Amount`, `Status`, `Date`, BankName, AccountHolderName, AccountNumEnd FROM `payments` LEFT JOIN paymentMandates ON payments.MandateID = paymentMandates.MandateID WHERE `PMkey` = ?");
-$sql->execute([$PaymentID]);
+$sql = $db->prepare("SELECT payments.`UserID`, payments.`Name`, `Amount`, `Status`, `Date`, BankName, AccountHolderName, AccountNumEnd, payments.PMKey FROM `payments` LEFT JOIN paymentMandates ON payments.MandateID = paymentMandates.MandateID WHERE `PaymentID` = ?");
+$sql->execute([$id]);
 $payment_info = $sql->fetch(PDO::FETCH_ASSOC);
 $name = getUserName($payment_info['UserID']);
 
 $use_white_background = true;
-$PaymentID = mb_strtoupper($PaymentID);
-$pagetitle = "Statement for " . $name . ", "
- . $PaymentID;
+$PMKey = null;
+if ($payment_info['PMKey'] != null) {
+  $PMKey = mb_strtoupper($payment_info['PMKey']);
+}
+$pagetitle = htmlspecialchars("Statement #" . $id);
+
+$_SESSION['qr'][0]['text'] = autoUrl("payments/statements/" . htmlspecialchars($id));
+
+$billDate = null;
+try {
+  $billDate = new DateTime($payment_info['Date'], new DateTimeZone('UTC'));
+  $billDate->setTimezone(new DateTimeZone('Europe/London'));
+} catch (Exception $e) {
+  $billDate = new DateTime('now', new DateTimeZone('Europe/London'));
+}
 
 $userObj = new \User($payment_info['UserID'], $db);
 $json = $userObj->getUserOption('MAIN_ADDRESS');
@@ -80,11 +92,11 @@ ob_start();?>
       </div>
       <div class="split-50">
         <p>
-          <?=date("d/m/Y", strtotime($payment_info['Date']))?>
+          <?=htmlspecialchars($billDate->format("d/m/Y"))?>
         </p>
 
         <p>
-          Internal Reference: <span class="mono"><?=htmlspecialchars($PaymentID)?></span>
+          Internal Reference: <span class="mono">#<?=htmlspecialchars($id)?></span>
         </p>
       </div>
     </div>
@@ -119,19 +131,39 @@ ob_start();?>
     <h2 id="payment-info">About this payment</h2>
     <dl>
       <div class="row">
-        <dt class="split-30">Payment Identifier</dt>
+        <dt class="split-30">Statement Identifier</dt>
         <dd class="split-70">
           <span class="mono">
-            <?=htmlspecialchars($PaymentID)?>
+            <?=htmlspecialchars($id)?>
           </span>
         </dd>
       </div>
 
       <div class="row">
+        <dt class="split-30">Statement Date</dt>
+        <dd class="split-70">
+          <span class="mono">
+            <?=htmlspecialchars($billDate->format("j F Y"))?>
+          </span>
+        </dd>
+      </div>
+
+      <?php if ($PMKey != null) { ?>
+      <div class="row">
+        <dt class="split-30">GoCardless Payment Identifier</dt>
+        <dd class="split-70">
+          <span class="mono">
+            <?=htmlspecialchars($PMKey)?>
+          </span>
+        </dd>
+      </div>
+      <?php } ?>
+
+      <div class="row">
         <dt class="split-30">Total Fee</dt>
         <dd class="split-70">
           <span class="mono">
-            &pound;<?=htmlspecialchars(number_format(($payment_info['Amount']/100),2,'.',''))?>
+            &pound;<?=(string) (\Brick\Math\BigDecimal::of((string) $payment_info['Amount']))->withPointMovedLeft(2)->toScale(2)?>
           </span>
         </dd>
       </div>
@@ -237,9 +269,9 @@ ob_start();?>
             </td>
             <td>
               <?php if ($row['Type'] == "Payment") { ?>
-              &pound;<?=htmlspecialchars(number_format(($row['Amount']/100),2,'.',''))?>
+              &pound;<?=(string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2)?>
               <?php } else { ?>
-              -&pound;<?=htmlspecialchars(number_format(($row['Amount']/100),2,'.',''))?> (Credit)
+              -&pound;<?=(string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2)?> (Credit)
               <?php } ?>
             </td>
           </tr>

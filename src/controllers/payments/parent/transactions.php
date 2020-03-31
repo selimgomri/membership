@@ -3,7 +3,7 @@
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $user = $_SESSION['UserID'];
-$pagetitle = "Transaction History";
+$pagetitle = "Statement History";
 
 $use_white_background = true;
 
@@ -22,7 +22,7 @@ include BASE_PATH . "views/paymentsMenu.php";
   </nav>
 
 	<div class="">
-		<h1 class="">Transaction History</h1>
+		<h1 class="">Statement History</h1>
 		<p class="lead">Previous Payments and Refunds</p>
 		<?=paymentHistory(null, $user)?>
 	</div>

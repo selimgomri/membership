@@ -93,22 +93,7 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 	});
 
 	$this->get('/transactions', function() {
-		global $link;
 		include 'parent/transactions.php';
-	});
-
-  $this->get('/statement/latest', function() {
-		include 'parent/LatestStatement.php';
-	});
-
-	$this->get('/statement/{PaymentID}', function($PaymentID) {
-		global $link;
-		include 'admin/history/statement.php';
-	});
-
-  $this->get('/statement/{PaymentID}/pdf', function($PaymentID) {
-		global $link;
-		include 'admin/history/statementPDF.php';
 	});
 }
 
@@ -198,21 +183,6 @@ if ($_SESSION['AccessLevel'] == "Admin") {
 
 		$this->get('/{year}:int/{month}:int/report.pdf', function($year, $month) {
 			include 'admin/history/FinanceReport.pdf.php';
-		});
-
-		$this->get('/statement/{PaymentID}', function($PaymentID) {
-			global $link;
-			include 'admin/history/statement.php';
-		});
-
-    $this->get('/statement/{PaymentID}/pdf', function($PaymentID) {
-			global $link;
-			include 'admin/history/statementPDF.php';
-		});
-
-    $this->get('/statement/{PaymentID}/markpaid/{token}', function($PaymentID, $token) {
-			global $link;
-			include 'admin/history/StatementMarkPaid.php';
 		});
 
 		$this->get('/{type}/{year}:int/{month}:int', function($type, $year, $month) {
@@ -373,3 +343,30 @@ $this->group('/card-transactions', function() {
 		include 'stripe/history/payment.pdf.php';
 	});
 });
+
+if ($_SESSION['AccessLevel'] == 'Parent' || $_SESSION['AccessLevel'] == 'Admin') {
+	$this->group('/statements', function() {
+		if ($_SESSION['AccessLevel'] == 'Parent') {
+			$this->get('/', function() {
+				include 'parent/transactions.php';
+			});
+
+			$this->get('/latest', function() {
+				include 'parent/LatestStatement.php';
+			});
+		}
+	
+		$this->get('/{id}:int', function($id) {
+			include 'admin/history/statement.php';
+		});
+	
+		$this->get('/{id}:int/pdf', function($id) {
+			include 'admin/history/statementPDF.php';
+		});
+
+		$this->get('/{id}:int/mark-paid/{token}', function($id, $token) {
+			global $link;
+			include 'admin/history/StatementMarkPaid.php';
+		});
+	});
+}
