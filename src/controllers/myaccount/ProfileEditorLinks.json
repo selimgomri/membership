@@ -43,18 +43,10 @@
       "external": false
     },
     {
-      "id": "default-access-level",
-      "name": "Default Access Level",
-      "title": "Choose the default account access level used when you log in",
-      "link": "my-account/default-access-level",
-      "target": "_self",
-      "external": false
-    },
-    {
       "id": "addswimmer",
-      "name": "Add Swimmer",
+      "name": "Add Member",
       "title": "Connect a club member to your account",
-      "link": "my-account/addswimmer",
+      "link": "my-account/add-member",
       "target": "_self",
       "external": false,
       "include": [

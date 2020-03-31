@@ -475,7 +475,6 @@ if (!function_exists('chesterStandardMenu')) {
                     <?php $perms = $currentUser->getPrintPermissions();
                     if (sizeof($perms) > 1) { ?>
                     <h6 class="dropdown-header">Switch account mode</h6>
-                    <a class="dropdown-item" href="<?=autoUrl("my-account/default-access-level")?>">Edit default access level</a>
                     <?php foreach ($perms as $perm => $name) { ?>
                     <a class="dropdown-item" href="<?=autoUrl("account-switch?type=" . urlencode($perm))?>"><?=htmlspecialchars($name)?><?php if ($perm == $_SESSION['AccessLevel']) { ?> <i class="text-primary fa fa-check-circle fa-fw" aria-hidden="true"></i><?php } ?></a>
                     <?php } ?>
@@ -494,7 +493,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("my-account/notifyhistory") ?>">Your Message
                       History</a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("my-account/addswimmer") ?>">Add a Swimmer</a>
+                    <a class="dropdown-item" href="<?php echo autoUrl("my-account/add-member") ?>">Add Member</a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("my-account/loginhistory") ?>">Your Login
                       History</a>

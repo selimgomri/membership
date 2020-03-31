@@ -22,29 +22,29 @@ $this->post('/password', function() {
 	require 'change-password-action.php';
 });
 
-$this->get('/default-access-level', function() {
-	include 'default-mode.php';
-});
+// $this->get('/default-access-level', function() {
+// 	include 'default-mode.php';
+// });
 
-$this->post('/default-access-level', function() {
-	include 'default-mode-post.php';
-});
+// $this->post('/default-access-level', function() {
+// 	include 'default-mode-post.php';
+// });
 
 if ($_SESSION['AccessLevel'] == "Parent") {
 
 	// Add swimmer
-	$this->get('/addswimmer', function() {
+	$this->get('/add-member', function() {
 		global $link;
 		require 'add-swimmer.php';
 	});
 
 	// Add swimmer
-	$this->get('/addswimmer/auto/{asa}/{acs}', function($asa, $acs) {
+	$this->get('/add-member/auto/{asa}/{acs}', function($asa, $acs) {
 		global $link;
 		require 'auto-add-swimmer.php';
 	});
 
-	$this->post('/addswimmer', function() {
+	$this->post('/add-member', function() {
 		global $link;
 		require 'add-swimmer-action.php';
 	});
