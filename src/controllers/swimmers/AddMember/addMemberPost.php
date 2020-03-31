@@ -76,7 +76,7 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
     $action = true;
 
     try {
-  		$getAdmins = $db->prepare("SELECT `UserID` FROM `users` WHERE `AccessLevel` = ? AND `UserID` != ?");
+  		$getAdmins = $db->prepare("SELECT `UserID` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE `Permission` = 'Admin' AND `UserID` != ?");
   		$getAdmins->execute(["Admin", $_SESSION['UserID']]);
   		$notify = $db->prepare("INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'NewMember')");
     	$subject = "New Club Member";

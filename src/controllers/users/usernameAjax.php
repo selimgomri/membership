@@ -6,7 +6,7 @@ if (isset($_POST['userID'])) {
 
 $userID = $_POST['userID'];
 
-	$sql = $db->prepare("SELECT `Forename`, `Surname` FROM `users` WHERE `UserID` = ? AND `AccessLevel` = 'Parent';");
+	$sql = $db->prepare("SELECT `Forename`, `Surname` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE `UserID` = ? AND `Permission` = 'Parent';");
 	$sql->execute([$userID]);
 	if ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 		echo htmlspecialchars($row['Forename'] . " " . $row['Surname']);
@@ -20,7 +20,7 @@ if (isset($_POST['userSur'])) {
 
 	$sur = "%" . $_POST['userSur'] . "%";
 
-	$sql = $db->prepare("SELECT `UserID`, `Forename`, `Surname` FROM `users` WHERE `Surname` LIKE ? AND `AccessLevel` = 'Parent' ORDER BY `Forename` ASC, `Surname` ASC;");
+	$sql = $db->prepare("SELECT `UserID`, `Forename`, `Surname` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE `Surname` LIKE ? AND `Permission` = 'Parent' ORDER BY `Forename` ASC, `Surname` ASC;");
 	$sql->execute([
 		$sur
 	]);

@@ -7,7 +7,7 @@ if ($access != "Admin") {
 
 global $db;
 
-$getDetails = $db->query("SELECT `Forename`, `Surname`, `UserID` FROM `users` WHERE `AccessLevel` = 'Parent' ORDER BY `Forename` ASC, `Surname` ASC");
+$getDetails = $db->query("SELECT `Forename`, `Surname`, `UserID` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE `Permission` = 'Parent' ORDER BY `Forename` ASC, `Surname` ASC");
 
 $pagetitle = "Administration";
 include BASE_PATH . 'views/header.php'; ?>
