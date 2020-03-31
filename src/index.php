@@ -828,6 +828,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/qualifications/AdminRouter.php';
     });
 
+    $this->group('/meet', function() {
+      include 'controllers/meet/router.php';
+    });
+
     $this->group('/resources', function() {
       include 'controllers/resources/router.php';
     });
