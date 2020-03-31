@@ -43,11 +43,22 @@ if (isset($array->FamilyIdentifier) || $array->FamilyIdentifier != null) {
 // Registration may be allowed
 // Success
 $addUser = $db->prepare("INSERT INTO `users`
-(`UserID`, `Username`, `Password`, `AccessLevel`, `EmailAddress`, `EmailComms`, `Forename`, `Surname`, `Mobile`, `MobileComms`, `RR`)
+(`UserID`, `Username`, `Password`, `EmailAddress`, `EmailComms`, `Forename`, `Surname`, `Mobile`, `MobileComms`, `RR`)
 VALUES
-(NULL, ?, ?, 'Parent', ?, ?, ?, ?, ?, ?, ?)");
+(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 $addUser->execute([$username, $hashedPassword, $email, $emailAuth, $forename, $surname, $mobile, $smsAuth, $rr]);
 $user_id = $db->lastInsertId();
+
+try {
+  $addPermission = $db->prepare("INSERT INTO `permissions` (`User`, `Permission`) VALUES (?, ?)");
+  $addPermission->execute([
+    $user_id,
+    'Parent'
+  ]);
+} catch (PDOException $e) {
+
+}
+
 // Check it went in
 $count = null;
 if ($user_id != null) {

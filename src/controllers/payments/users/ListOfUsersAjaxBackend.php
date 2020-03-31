@@ -9,7 +9,7 @@ $sql = "";
 if (isset($_POST["search"])) {
   // get the search term parameter from post
   $search = $_POST["search"];
-  $sql = "SELECT `Forename`, `Surname`, `MandateID`, `users`.`UserID` FROM users LEFT JOIN `paymentPreferredMandate` ON users.userID = paymentPreferredMandate.UserID WHERE Surname LIKE ? AND `AccessLevel` = 'Parent' ORDER BY Forename, Surname ASC;";
+  $sql = "SELECT `Forename`, `Surname`, `MandateID`, `users`.`UserID` FROM ((users LEFT JOIN `paymentPreferredMandate` ON users.userID = paymentPreferredMandate.UserID) INNER JOIN `permissions` ON users.UserID = `permissions`.`User`) WHERE Surname LIKE ? AND `Permission` = 'Parent' ORDER BY Forename, Surname ASC;";
 }
 
 $getSearch = $db->prepare($sql);

@@ -71,7 +71,7 @@ try {
       $mid
     ]);
 
-    $sql = $db->query("SELECT `UserID` FROM `users` WHERE `AccessLevel` = 'Parent';");
+    $sql = $db->query("SELECT `UserID` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE `Permission` = 'Parent';");
     while ($user = $sql->fetchColumn()) {
 
       if ($squadFeeRequired) {
