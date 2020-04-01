@@ -112,6 +112,14 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 if ($_SESSION['AccessLevel'] == 'Admin') {
 
 	/**
+	 * DELETION
+	 */
+
+	$this->post('/delete-user', function() {
+		include 'delete.php';
+	});
+
+	/**
 	 * EMAIL ADDRESS UPDATES
 	 */
 

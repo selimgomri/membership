@@ -27,7 +27,7 @@ if (isset($_POST["search"])) {
     }
   }
 
-  $sql = "SELECT Forename, Surname, UserID FROM users WHERE " . $sql . " ORDER BY Forename, Surname ASC";
+  $sql = "SELECT Forename, Surname, UserID FROM users WHERE Active AND (" . $sql . ") ORDER BY Forename, Surname ASC";
 
   $users = $db->prepare($sql);
   $users->execute($names);

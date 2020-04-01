@@ -378,6 +378,11 @@ $route->group($get_group, function($clubcode = "CLSE") {
     echo "User-agent: *\r\nDisallow: /webhooks/\r\nDisallow: /webhooks\r\nDisallow: /css\r\nDisallow: /js\r\nDisallow: /public\r\nDisallow: /files";
   });
 
+  $this->group('/db', function() {
+    // Handle database migrations
+    include 'controllers/migrations/router.php';
+  });
+
   $this->get('/public/*/viewer', function() {
     $filename = $this[0];
     $type = 'public';
@@ -929,11 +934,6 @@ $route->group($get_group, function($clubcode = "CLSE") {
       });
     }
   }
-
-  $this->group('/db', function() {
-    // Handle database migrations
-    include 'controllers/migrations/router.php';
-  });
 
   $this->get('/files/*/viewer', function() {
     $filename = $this[0];

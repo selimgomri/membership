@@ -8,7 +8,7 @@ use Brick\PhoneNumber\PhoneNumberFormat;
 
 global $db;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, ASANumber, ASAMember, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory, RR FROM users WHERE UserID = ?");
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, ASANumber, ASAMember, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory, RR FROM users WHERE UserID = ? AND Active");
 $userInfo->execute([$id]);
 
 $qualifications;
@@ -535,6 +535,15 @@ include BASE_PATH . "views/header.php";
         }?>
         <p><?=$details?></p>
       </div>
+
+      <div class="col-sm-6 col-md-4">
+        <h3 class="h6">Delete account</h3>
+        <p>
+          <button data-ajax-url="<?=htmlspecialchars(autoUrl("users/delete-user"))?>" data-users-url="<?=htmlspecialchars(autoUrl("users"))?>" data-user-id="<?=htmlspecialchars($id)?>" data-user-name="<?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?>" id="delete-button" class="btn btn-danger">
+            Delete account
+          </button>
+        </p>
+      </div>
     </div>
   </div>
 </div>
@@ -552,7 +561,7 @@ include BASE_PATH . "views/header.php";
       <div class="modal-body" id="main-modal-body">
         ...
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" id="main-modal-footer">
         <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
         <button type="button" id="modal-confirm-button" class="btn btn-success">Confirm</button>
       </div>
@@ -561,5 +570,5 @@ include BASE_PATH . "views/header.php";
 </div>
 
 <?php $footer = new \SCDS\Footer();
-$footer->addJs("public/js/users/UserEdit.js");
+$footer->addJs("public/js/users/main.js");
 $footer->render();

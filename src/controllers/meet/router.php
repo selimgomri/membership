@@ -5,41 +5,42 @@
  * (MEET)
  */
 
-if ($_SESSION['LoggedIn']) {
-  $this->get('/', function() {
-    include 'list.php';
-  });
+// Commented until official release
+// if ($_SESSION['LoggedIn']) {
+//   $this->get('/', function() {
+//     include 'list.php';
+//   });
 
-  $this->get('/{id}:int', function($id) {
-    include 'join.php';
-  });
+//   $this->get('/{id}:int', function($id) {
+//     include 'join.php';
+//   });
 
-  if ($_SESSION['AccessLevel'] != 'Parent') {
-    $this->get('/{id}:int/begin', function($id) {
-      include 'new.php';
-    });
+//   if ($_SESSION['AccessLevel'] != 'Parent') {
+//     $this->get('/{id}:int/begin', function($id) {
+//       include 'new.php';
+//     });
     
-    $this->get('/new', function() {
-      include 'new.php';
-    });
+//     $this->get('/new', function() {
+//       include 'new.php';
+//     });
 
-    $this->post('/new', function() {
-      include 'new-post.php';
-    });
+//     $this->post('/new', function() {
+//       include 'new-post.php';
+//     });
 
-    $this->get('/end', function() {
-      include 'cancel-end.php';
-    });
-  }
+//     $this->get('/end', function() {
+//       include 'cancel-end.php';
+//     });
+//   }
 
-} else {
+// } else {
 
-  $this->get('/', function() {
-    include 'list.php';
-  });
+//   $this->get('/', function() {
+//     include 'list.php';
+//   });
 
-  $this->get('/{id}:int', function($id) {
-    include 'join.php';
-  });
+//   $this->get('/{id}:int', function($id) {
+//     include 'join.php';
+//   });
 
-}
+// }
