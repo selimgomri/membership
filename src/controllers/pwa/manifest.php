@@ -106,7 +106,7 @@ if (bool(env('IS_CLS'))) {
 $data = [
   'name' => env('CLUB_NAME') . ' Membership',
   'short_name' => 'My Club',
-  'start_url' => autoUrl('pwa'),
+  'start_url' => autoUrl(''),
   'display' => 'minimal-ui',
   'background_color' => '#fff',
   'description' => 'My ' . env('CLUB_NAME') . ' Membership',
