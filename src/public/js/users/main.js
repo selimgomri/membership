@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     body = body + '<p>We will cancel all existing direct debit mandates for this use. This may cause any pending payments or payment retries to fail.</p>';
 
-    body = body + '<p>We will send a confirmation email to yourself and the user you are deleting when we have successfully deleted their information.</p>';
+    // body = body + '<p>We will send a confirmation email to yourself and the user you are deleting when we have successfully deleted their information.</p>';
 
     body = body + '<div class="form-group mb-0"><label for="confirm-password">Confirm your password to proceed</label><input autocomplete="current-password" type="password" class="form-control" id="confirm-password" aria-describedby="pwHelp"><small id="pwHelp" class="form-text text-muted">This is an added security measure. Deleting a user\'s account is not reversible.</small></div>';
 
@@ -116,7 +116,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
           } else {
             // Success
             document.getElementById('main-modal-body').innerHTML = '<div class="alert alert-success mb-0"><p class="mb-0"><strong>Success.</strong></p><p id="alert-text" class="mb-0"></p></div>';
-            document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>';
+            document.getElementById('main-modal-footer').innerHTML = '<a id="close-link" href="" class="btn btn-dark">Close</a>';
+            document.getElementById('close-link').href = document.getElementById('delete-button').dataset.usersUrl;
           }
           document.getElementById('alert-text').textContent = json.message;
         }

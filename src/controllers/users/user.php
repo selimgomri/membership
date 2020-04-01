@@ -539,7 +539,7 @@ include BASE_PATH . "views/header.php";
       <div class="col-sm-6 col-md-4">
         <h3 class="h6">Delete account</h3>
         <p>
-          <button data-ajax-url="<?=htmlspecialchars(autoUrl("users/delete-user"))?>" data-user-id="<?=htmlspecialchars($id)?>" data-user-name="<?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?>" id="delete-button" class="btn btn-danger">
+          <button data-ajax-url="<?=htmlspecialchars(autoUrl("users/delete-user"))?>" data-users-url="<?=htmlspecialchars(autoUrl("users"))?>" data-user-id="<?=htmlspecialchars($id)?>" data-user-name="<?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?>" id="delete-button" class="btn btn-danger">
             Delete account
           </button>
         </p>
@@ -570,6 +570,5 @@ include BASE_PATH . "views/header.php";
 </div>
 
 <?php $footer = new \SCDS\Footer();
-// $footer->addJs("public/js/users/UserEdit.js");
 $footer->addJs("public/js/users/main.js");
 $footer->render();

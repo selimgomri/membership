@@ -182,6 +182,9 @@ try {
   // Commit
   $db->commit();
 
+  // Send emails
+  // TODO
+
   $responseData['status'] = 200;
   $responseData['message'] = $deleteUser['Forename'] . '\'s account has been deleted successfully.';
 
