@@ -29,7 +29,7 @@ class User {
 
   public function revalidate() {
     // Get the user
-    $query = $this->db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
+    $query = $this->db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ? AND Active");
     $query->execute([$this->id]);
     $row = $query->fetch(PDO::FETCH_ASSOC);
 

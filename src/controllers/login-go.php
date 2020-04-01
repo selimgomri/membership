@@ -30,7 +30,7 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
   $username = trim(mb_strtolower($_POST['email-address']));
   $target = ltrim(trim($_POST['target']), '/');
 
-  $getUser = $db->prepare("SELECT Forename, Surname, UserID, EmailAddress, `Password`, WrongPassCount FROM users WHERE EmailAddress = ?");
+  $getUser = $db->prepare("SELECT Forename, Surname, UserID, EmailAddress, `Password`, WrongPassCount FROM users WHERE EmailAddress = ? AND Active");
   $getUser->execute([$_POST['email-address']]);
 
   $row = $getUser->fetch(PDO::FETCH_ASSOC);

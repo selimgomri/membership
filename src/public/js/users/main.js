@@ -80,4 +80,54 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   document.getElementById('accountType').onchange = apply;
+
+  let button = document.getElementById('delete-button');
+
+  button.addEventListener('click', function(event) {
+    document.getElementById('main-modal-title').textContent = 'Delete ' + button.dataset.userName + '\'s account';
+
+    let body = '<p>By deleting this account, we will remove all personal information. Financial information about direct debit or card payments will be retained for the completeness of your club\'s records.</p>';
+
+    body = body + '<p>We will cancel all existing direct debit mandates for this use. This may cause any pending payments or payment retries to fail.</p>';
+
+    body = body + '<p>We will send a confirmation email to yourself and the user you are deleting when we have successfully deleted their information.</p>';
+
+    body = body + '<div class="form-group mb-0"><label for="confirm-password">Confirm your password to proceed</label><input autocomplete="current-password" type="password" class="form-control" id="confirm-password" aria-describedby="pwHelp"><small id="pwHelp" class="form-text text-muted">This is an added security measure. Deleting a user\'s account is not reversible.</small></div>';
+
+    document.getElementById('main-modal-body').innerHTML = body;
+
+    document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button><button type="button" id="modal-confirm-button" class="btn btn-danger">Delete account</button>';
+
+    document.getElementById('modal-confirm-button').addEventListener('click', function(event) {
+      let button = document.getElementById('delete-button');
+      document.getElementById('modal-confirm-button').disabled = true;
+      let password = document.getElementById('confirm-password').value;
+      let oldContent = document.getElementById('main-modal-body').innerHTML;
+      document.getElementById('main-modal-body').innerHTML = '<div class="py-5 text-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>';
+      
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          var json = JSON.parse(this.responseText);
+          if (json.status == 500) {
+            // Failed
+            document.getElementById('main-modal-body').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred.</strong></p><p id="alert-text" class="mb-0"></p></div>' + oldContent;
+            document.getElementById('modal-confirm-button').disabled = false;
+          } else {
+            // Success
+            document.getElementById('main-modal-body').innerHTML = '<div class="alert alert-success mb-0"><p class="mb-0"><strong>Success.</strong></p><p id="alert-text" class="mb-0"></p></div>';
+            document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>';
+          }
+          document.getElementById('alert-text').textContent = json.message;
+        }
+      }
+      xhttp.open('POST', button.dataset.ajaxUrl, true);
+      xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xhttp.send('user=' + button.dataset.userId + '&password=' + password);
+    });
+
+    $('#main-modal').modal('show');
+
+    console.log(event);
+  });
 });
