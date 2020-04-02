@@ -390,10 +390,7 @@ try {
       $mailObject->setUnsubscribable();
     }
 
-    $from = new \SendGrid\Mail\From("notify@" . env('EMAIL_DOMAIN'), env('CLUB_NAME'));
-    if ($currentMessage['ForceSend']) {
-      $from = new \SendGrid\Mail\From("noreply@" . env('EMAIL_DOMAIN'), env('CLUB_NAME'));
-    }
+    $from = new \SendGrid\Mail\From("noreply@" . env('EMAIL_DOMAIN'), env('CLUB_NAME'));
     if ($jsonData->NamedSender->Email != null && $jsonData->NamedSender->Name) {
       $from = new \SendGrid\Mail\From("noreply@" . env('EMAIL_DOMAIN'), $jsonData->NamedSender->Name);
     }
@@ -459,6 +456,8 @@ try {
     } else {
       $email->setReplyTo(env('CLUB_EMAIL'), env('CLUB_NAME') . ' Enquiries');
     }
+
+    $email->addHeader("List-ID", env('CLUB NAME') . " Notify <" . mb_strtolower(env('ASA_CLUB_CODE')) . ".notify@" . env('EMAIL_DOMAIN') . ">");
 
     $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
     $response = $sendgrid->send($email);

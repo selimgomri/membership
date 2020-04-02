@@ -73,21 +73,13 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
     $mailObject->setUnsubscribable();
   }
 
-  if ($from['Email'] == "notify@" . env('EMAIL_DOMAIN') || $from['Email'] == "payments@" . env('EMAIL_DOMAIN')) {
-    $email->addHeader("List-Archive", autoUrl("myaccount/notify/history"));
-  }
+  // if ($from['Email'] == "notify@" . env('EMAIL_DOMAIN') || $from['Email'] == "payments@" . env('EMAIL_DOMAIN')) {
+  //   $email->addHeader("List-Archive", autoUrl("myaccount/notify/history"));
+  // }
 
   $email->addHeader("List-Help", autoUrl("notify"));
 
   if (bool(env('IS_CLS'))) {
-    if ($from['Email'] == "notify@" . env('EMAIL_DOMAIN')) {
-      $email->addHeader("List-ID", "CLS ASC Targeted Lists <targeted-lists@account." . env('EMAIL_DOMAIN') . ">");
-    } else if ($from['Email'] == "payments@" . env('EMAIL_DOMAIN')) {
-      $email->addHeader("List-ID", "Direct Debit Payment Information <payment-news@account." . env('EMAIL_DOMAIN') . ">");
-    } else if ($from['Name'] == env('CLUB_NAME') . " Security") {
-      $email->addHeader("List-ID", "Account Security Updates <account-updates@account." . env('EMAIL_DOMAIN') . ">");
-    }
-
     if ($from['Email'] == "payments@" . env('EMAIL_DOMAIN')) {
       $email->setReplyTo("payments+replytoautoemail@chesterlestreetasc.co.uk", "Payments Team");
     } else if ($from['Email'] == "galas@" . env('EMAIL_DOMAIN')) {
