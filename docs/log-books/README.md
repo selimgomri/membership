@@ -7,7 +7,7 @@ They were initially introduced as a response to the coronavirus (COVID-19) pande
 ## Log book help guides (parents/members)
 
 * [Finding your log book](FindingYourLogBook.md)
-* [Adding an entry](AddingAnLogEntry.md)
+* [Adding an entry](AddingALogEntry.md)
 * [Editing an entry](EditingALogEntry.md)
 
 ## Giving members access
