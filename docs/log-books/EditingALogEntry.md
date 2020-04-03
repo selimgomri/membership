@@ -13,7 +13,10 @@ You can then edit your log book entry. You can edit all fields;
 * Content
 * Date
 * Time
-* Content time
+* Content type
+  * You can use the default type
+  * Use a monospaced font
+  * or use the Markdown syntax
 
 Press save to save your changes.
 
