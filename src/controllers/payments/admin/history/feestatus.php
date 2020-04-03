@@ -68,7 +68,7 @@ ASC, `Surname` ASC, `users`.`UserID` ASC, `MForename` ASC, `MSurname` ASC
 //pre($sql);
 $row = $getPayments->fetch(PDO::FETCH_ASSOC);
 
-$url = autoUrl("payments/history/" . $type . "/" . $year . "/" . $month . "/");
+$url = autoUrl("payments/history/" . $type . "/" . $year . "/" . $month);
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
@@ -86,7 +86,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 
 	<h1>Status for <?=$dateString?></h1>
   <p class="lead"><?=$title_string?></p>
-	<p><a href="<?=htmlspecialchars($url . "csv")?>" target="_blank">View as CSV (Comma Separated Values)</a> or <a href="<?=htmlspecialchars($url . "json")?>" target="_blank">View as JSON (JavaScript Object Notation)</a></p>
+	<p><a href="<?=htmlspecialchars($url . "/csv")?>" target="_blank">View as CSV (Comma Separated Values)</a> or <a href="<?=htmlspecialchars($url . "/json")?>" target="_blank">View as JSON (JavaScript Object Notation)</a></p>
 	<?php if ($row == null) { ?>
 		<div class="alert alert-warning mb-0">
 			<p class="mb-0">
