@@ -31,7 +31,7 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 		$message = str_replace("\r\n", "", $message);
 
 		$from = [
-			"Email" => "notify@" . env('EMAIL_DOMAIN'),
+			"Email" => "noreply@" . env('EMAIL_DOMAIN'),
 			"Name" => env('CLUB_NAME'),
 			"Unsub" => [
 				"Allowed" => true,
