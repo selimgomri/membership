@@ -52,6 +52,8 @@ foreach ($sundays as $session) {
 }
 $sessions = $otherDays;
 
+$getCoaches = $db->prepare("SELECT Forename fn, Surname sn, coaches.Type code FROM coaches INNER JOIN users ON coaches.User = users.UserID WHERE coaches.Squad = ? ORDER BY coaches.Type ASC, Forename ASC, Surname ASC");
+
 include BASE_PATH . 'views/header.php';
 
 ?>
@@ -76,7 +78,12 @@ include BASE_PATH . 'views/header.php';
 
       <?php if (sizeof($sessions) > 0) { ?>
       <div class="list-group">
-        <?php foreach ($sessions as $session) { ?>
+        <?php foreach ($sessions as $session) {
+          $getCoaches->execute([
+            $session['SquadID']
+          ]);
+          $coaches = $getCoaches->fetchAll(PDO::FETCH_ASSOC);
+        ?>
         <?php if ($currentDay != $session['SessionDay']) {
           $currentDay = $session['SessionDay'];
           $day = clone $startWeek;
@@ -111,8 +118,17 @@ include BASE_PATH . 'views/header.php';
             <dt class="col-sm-3">Duration</dt>
             <dd class="col-sm-9"><?php if ($hours > 0) { ?><?=$hours?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?=$mins?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
 
-            <dt class="col-sm-3">Coach(es)</dt>
-            <dd class="col-sm-9"><?=htmlspecialchars($session['SquadCoach'])?></dd>
+            <dt class="col-sm-3">Squad Coach<?php if (sizeof($coaches) > 0) { ?>es<?php } ?></dt>
+            <dd class="col-sm-9">
+              <ul class="list-unstyled mb-0">
+              <?php for ($i=0; $i < sizeof($coaches); $i++) { ?>
+                <li><strong><?=htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn'])?></strong>, <?=htmlspecialchars(coachTypeDescription($coaches[$i]['code']))?></li>
+              <?php } ?>
+              <?php if (sizeof($coaches) == 0) { ?>
+                <li>None assigned</li>
+              <?php } ?>
+              </ul>
+            </dd>
 
             <?php
 

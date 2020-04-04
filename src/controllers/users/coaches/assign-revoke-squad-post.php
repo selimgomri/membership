@@ -1,8 +1,8 @@
 <?php
 
-if (!\SCDS\CSRF::verify()) {
-  halt(404);
-}
+// if (!\SCDS\CSRF::verify()) {
+//   halt(404);
+// }
 
 global $db;
 
@@ -46,6 +46,8 @@ try {
     throw new Exception();
   }
 
+  $userObj = new \User($_POST['user'], $db, false);
+
   // Add user info
   $responseData['user']['id'] = (int) $_POST['user'];
   $responseData['user']['forname'] = $user['Forename'];
@@ -68,21 +70,18 @@ try {
   $responseData['squad']['id'] = (int) $_POST['squad'];
   $responseData['squad']['name'] = $_POST['SquadName'];
 
-  // Temporary check code before coach accounts are deprecated
-  if ($user['AccessLevel'] != "Coach") {
-    $responseData['status'] = 400;
-    $responseData['message'] = 'The user is not a coach. (TEMP-ERROR-01)';
-    throw new Exception();
+  if (!$userObj->hasPermission('Coach')) {
+    // Auto assign or remove coach perms
   }
-  // END OF TEMP CHECK
 
   // Checks complete
   if ($_POST['operation'] == 'assign') {
     // now add to database
-    $insert = $db->prepare("INSERT INTO coaches (`Squad`, `User`) VALUES (?, ?)");
+    $insert = $db->prepare("INSERT INTO coaches (`Squad`, `User`, `Type`) VALUES (?, ?, ?)");
     $insert->execute([
       $_POST['squad'],
-      $_POST['user']
+      $_POST['user'],
+      $_POST['role']
     ]);
   } else if ($_POST['operation'] == 'revoke') {
     // now add to database
@@ -104,6 +103,6 @@ try {
 }
 
 // End of logic, return response
-http_response_code($responseData['status']);
+http_response_code(200);
 header("content-type: application/json");
 echo json_encode($responseData);

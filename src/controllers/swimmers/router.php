@@ -155,13 +155,15 @@ else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $
 
 	// /*
   $this->get('/{id}:int/contact-parent', function($id) {
-    $user = getSwimmerParent($id);
+		$user = getSwimmerParent($id);
+		$swimmer = $id;
 		include BASE_PATH . 'controllers/notify/EmailIndividual.php';
 	});
 
 	$this->post('/{id}:int/contact-parent', function($id) {
     $user = getSwimmerParent($id);
-    $returnToSwimmer = true;
+		$returnToSwimmer = true;
+		$swimmer = $id;
 		include BASE_PATH . 'controllers/notify/EmailQueuerIndividual.php';
 	});
 	// */

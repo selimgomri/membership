@@ -137,6 +137,28 @@ try {
     );
   }
 
+  // Get coaches
+  if (isset($swimmer) && isset($_POST['coach-send']) && bool($_POST['coach-send'])) {
+    // Get member squad(s)
+    $getSquad = $db->prepare("SELECT SquadID FROM members WHERE MemberID = ?");
+    $getSquad->execute([
+      $swimmer
+    ]);
+    $squad = $getSquad->fetchColumn();
+
+    // Get coaches for squads
+    $getCoaches = $db->prepare("SELECT Forename, Surname, EmailAddress FROM coaches INNER JOIN users ON users.UserID = coaches.User WHERE coaches.Squad = ?");
+    $getCoaches->execute([
+      $squad
+    ]);
+
+    $bccEmails = [];
+    while ($coach = $getCoaches->fetch(PDO::FETCH_ASSOC)) {
+      $bccEmails[$coach['EmailAddress']] = $coach['Forename'] . ' ' . $coach['Surname'];
+    }
+    $email->addBccs($bccEmails);
+  }
+
   $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
   $response = $sendgrid->send($email);
 

@@ -1,3 +1,116 @@
+function deleteCoachFromSquad(user, squad) {
+  let url = document.getElementById('coach-squad-assign').dataset.ajaxUrl;
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      // Decode
+      let json = JSON.parse(this.responseText);
+      if (json.status == 200) {
+        // All good
+        getCoachSquadList();
+      } else {
+        alert(json.message);
+      }
+    } else if (this.readyState == 4) {
+      // Not ok
+      alert('An error occurred which meant we could not delete this user\'s assignment to the squad.');
+    }
+  }
+  xhttp.open('POST', url, true);
+  xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  xhttp.send('operation=revoke&user=' + encodeURI(user) + '&squad=' + encodeURI(squad));
+}
+
+function getCoachSquadList() {
+  var listUrl = document.getElementById('coach-squad-list').dataset.ajaxUrl;
+  var userId = document.getElementById('coach-squad-list').dataset.userId;
+
+  // Get a list of assigned squads
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var json = JSON.parse(this.responseText);
+      if (json.status == 500) {
+        // Failed
+        document.getElementById('coach-squad-list').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred.</strong></p><p class="mb-0">We\'re unable to load the list of squads for this user. Please try refreshing the page.</p></div>';
+      } else {
+        // Success
+
+        // Update selectable squad list
+        if (json.squadSelects) {
+          document.getElementById('coach-squad').dataset.squadList = json.squadSelects;
+        }
+
+        // Control assign button visibility
+        if (json.canAssign) {
+          document.getElementById('coach-squad-assign-container').classList.remove('d-none');
+        } else {
+          document.getElementById('coach-squad-assign-container').classList.add('d-none');
+        }
+
+        // If array has items
+        if (json.squads.length > 0) {
+          document.getElementById('coach-squad-list').textContent = '';
+          let listGroup = document.createElement('UL');
+          listGroup.classList.add('list-group', 'mb-3');
+          json.squads.forEach(squad => {
+            // Create list item
+            let listItem = document.createElement('LI');
+            listItem.classList.add('list-group-item');
+
+            // Create row
+            let row = document.createElement('DIV');
+            row.classList.add('row', 'justify-content-between', 'align-items-center');
+
+            // Squad name field
+            let nameCol = document.createElement('DIV');
+            nameCol.classList.add('col-auto');
+            let squadBold = document.createElement('STRONG');
+            let squadText = document.createTextNode(squad.squad);
+            squadBold.appendChild(squadText);
+            let nameText = document.createTextNode(', ' + squad.coachTypeDescription);
+            nameCol.appendChild(squadBold);
+            nameCol.appendChild(nameText);
+
+            // Delete button field
+            let deleteCol = document.createElement('DIV');
+            deleteCol.classList.add('col-auto');
+            let deleteButton = document.createElement('BUTTON');
+            deleteButton.classList.add('btn', 'btn-danger');
+            let deleteText = document.createTextNode('Remove');
+            deleteButton.appendChild(deleteText);
+            deleteButton.dataset.id = squad.id;
+            deleteCol.appendChild(deleteButton);
+
+            // Add cols to row
+            row.appendChild(nameCol);
+            row.appendChild(deleteCol);
+
+            listItem.appendChild(row);
+            listGroup.appendChild(listItem);
+          });
+          
+          document.getElementById('coach-squad-list').appendChild(listGroup);
+
+          document.getElementById('coach-squad-list').addEventListener('click', function(event) {
+            if (event.target.tagName == 'BUTTON') {
+              // Delete
+              deleteCoachFromSquad(document.getElementById('coach-squad-list').dataset.userId, event.target.dataset.id);
+            }
+          });
+        } else {
+          // Note no squads
+          document.getElementById('coach-squad-list').innerHTML = '<div class="alert alert-warning"><p class="mb-0"><strong>User is not assigned to any squads.</strong></p></div>';
+        }
+      }
+    }
+  }
+  xhttp.open('POST', listUrl, true);
+  xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  xhttp.send('user=' + userId);
+}
+
+
 document.addEventListener("DOMContentLoaded", function(event) { 
   function apply() {
     var type = document.getElementById('accountType');
@@ -128,7 +241,128 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
 
     $('#main-modal').modal('show');
-
-    console.log(event);
   });
+
+  let coachSquad = document.getElementById('coach-squad');
+
+  if (coachSquad) {
+
+    getCoachSquadList();
+
+    // Handle assignment
+    document.getElementById('coach-squad-assign').addEventListener('click', function(event) {
+      json = JSON.parse(document.getElementById('coach-squad').dataset.squadList);
+      if (json) {
+        document.getElementById('main-modal-title').textContent = 'Assign a squad';
+
+        let body = document.getElementById('main-modal-body');
+
+        body.textContent = '';
+
+        let p = document.createElement('P');
+        p.appendChild(document.createTextNode('Please choose a squad and role for the user.'));
+
+        let roleInfo = document.createElement('P');
+        roleInfo.appendChild(document.createTextNode('Roles help indicate to members the seniority of this person with respect to the squad.'));
+
+        body.appendChild(p);
+        body.appendChild(roleInfo);
+
+        // SQUAD
+        let formGroup = document.createElement('DIV');
+        formGroup.classList.add('form-group');
+        let selectLabel = document.createElement('LABEL');
+        selectLabel.appendChild(document.createTextNode('Select a squad'));
+        selectLabel.setAttribute('for', 'squad-coach-select');
+
+        let select = document.createElement('SELECT');
+        select.classList.add('custom-select');
+        select.id = 'squad-coach-select';
+
+        let option = document.createElement('OPTION');
+        option.value = 'NONE';
+        option.appendChild(document.createTextNode('Select a squad'));
+        option.setAttribute('selected', true);
+        select.appendChild(option);
+
+        squads = json.squads;
+        squads.forEach(squad => {
+          let option = document.createElement('OPTION');
+          option.value = squad.id;
+          option.appendChild(document.createTextNode(squad.name));
+          select.appendChild(option);
+        });
+
+        formGroup.appendChild(selectLabel);
+        formGroup.appendChild(select);
+
+        body.appendChild(formGroup);
+
+        // TYPE
+        formGroup = document.createElement('DIV');
+        formGroup.classList.add('form-group', 'mb-0');
+        selectLabel = document.createElement('LABEL');
+        selectLabel.appendChild(document.createTextNode('Select a role'));
+        selectLabel.setAttribute('for', 'coach-role-select');
+
+        select = document.createElement('SELECT');
+        select.classList.add('custom-select');
+        select.id = 'coach-role-select';
+
+        option = document.createElement('OPTION');
+        option.value = 'NONE';
+        option.appendChild(document.createTextNode('Select a role'));
+        option.setAttribute('selected', true);
+        select.appendChild(option);
+
+        roles = json.roles;
+        roles.forEach(role => {
+          let option = document.createElement('OPTION');
+          option.value = role.code;
+          option.appendChild(document.createTextNode(role.description));
+          select.appendChild(option);
+        });
+
+        formGroup.appendChild(selectLabel);
+        formGroup.appendChild(select);
+
+        body.appendChild(formGroup);
+
+        document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button><button type="button" id="modal-confirm-button" class="btn btn-success">Assign squad</button>';
+
+        document.getElementById('modal-confirm-button').addEventListener('click', function(event) {
+          let assignButton = document.getElementById('coach-squad-assign');
+          let squadSelect = document.getElementById('squad-coach-select');
+          let roleSelect = document.getElementById('coach-role-select');
+          if (squadSelect.value != 'NONE' && roleSelect.value != 'NONE') {
+            document.getElementById('modal-confirm-button').disabled = true;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+              if (this.readyState == 4 && this.status == 200) {
+                var json = JSON.parse(this.responseText);
+                if (json.status == 200) {
+                  $('#main-modal').modal('hide');
+                  getCoachSquadList();
+                } else {
+                  document.getElementById('modal-confirm-button').disabled = false;
+                  alert(json.message);
+                }
+              }
+            }
+            xhttp.open('POST', assignButton.dataset.ajaxUrl, true);
+            xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhttp.send('operation=assign&user=' + encodeURI(assignButton.dataset.userId) + '&squad=' + encodeURI(squadSelect.value) + '&role=' + encodeURI(roleSelect.value));
+          } else {
+            // Report an error
+            alert('Please select a squad and role.');
+          }
+        });
+
+        $('#main-modal').modal('show');
+      } else {
+        alert('Squad list not loaded.');
+      }
+    });
+
+  }
 });

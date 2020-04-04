@@ -1322,4 +1322,5 @@ include BASE_PATH . 'includes/pdf/StringReplacements.php';
 include BASE_PATH . 'includes/GetCachedFile.php';
 include BASE_PATH . 'includes/BankHolidays.php';
 include BASE_PATH . 'includes/GetContrastColour.php';
+include BASE_PATH . 'includes/CoachTypes.php';
 require BASE_PATH . 'helperclasses/Components/Footer.php';

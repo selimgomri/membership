@@ -215,3 +215,17 @@ if ($_SESSION['AccessLevel'] == 'Admin') {
 		});
 	});
 }
+
+/**
+ * SQUAD COACHES
+ */
+
+$this->group('/squads', function() {
+	$this->post('/list', function() {
+		include 'coaches/squad-list.php';
+	});
+
+	$this->post('/assign-delete', function() {
+		include 'coaches/assign-revoke-squad-post.php';
+	});
+});

@@ -4,6 +4,8 @@
 global $db;
 $squads = $db->query("SELECT SquadID, SquadName, SquadFee, SquadCoach FROM squads ORDER BY SquadFee DESC, SquadName ASC");
 
+$getCoaches = $db->prepare("SELECT Forename fn, Surname sn FROM coaches INNER JOIN users ON coaches.User = users.UserID WHERE coaches.Squad = ? ORDER BY coaches.Type ASC, Forename ASC, Surname ASC");
+
 $access = $_SESSION['AccessLevel'];
 $pagetitle = "Squads";
 include BASE_PATH . "views/header.php";
@@ -27,6 +29,8 @@ include BASE_PATH . "views/header.php";
 
       <?php
       while ($row = $squads->fetch(PDO::FETCH_ASSOC)) {
+				$getCoaches->execute([$row['SquadID']]);
+				$coaches = $getCoaches->fetchAll(PDO::FETCH_ASSOC);
       ?>
         <a href="<?=htmlspecialchars(autoUrl("squads/" . $row['SquadID']))?>">
   				<span class="mb-3">
@@ -34,7 +38,13 @@ include BASE_PATH . "views/header.php";
   						<?=htmlspecialchars($row['SquadName'])?> Squad
   					</span>
   					<span>
-  						<?=htmlspecialchars($row['SquadCoach'])?>
+  						<?php for ($i=0; $i < min(sizeof($coaches), 3); $i++) { ?>
+								<?=htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn'])?><?php if ($i < min(sizeof($coaches), 3)-1) { ?>, <?php } ?>
+							<?php } ?>
+							<?php if (sizeof($coaches) > 3) { ?> <em>and more</em><?php } ?>
+							<?php if (sizeof($coaches) == 0) { ?>
+								No assigned coaches
+							<?php } ?>
   					</span>
   				</span>
           <span class="category">

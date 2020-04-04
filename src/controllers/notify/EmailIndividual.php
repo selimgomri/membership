@@ -210,6 +210,18 @@ include BASE_PATH . "views/notifyMenu.php";
       </div>
     </div>
 
+    <?php if (isset($swimmer)) { ?>
+    <div class="form-group">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" aria-describedby="coach-help" id="coach-send" name="coach-send" value="1" checked>
+        <label class="custom-control-label" for="coach-send">BCC coaches</label>
+        <small id="coach-help" class="form-text text-muted">
+          Send a blind carbon-copy of this email to coaches of this member's squads. The member will not be aware coaches were sent a copy of the email.
+        </small>
+      </div>
+    </div>
+    <?php } ?>
+
     <?=SCDS\CSRF::write()?>
 
 		<p><button class="btn btn-success" id="submit" value="submitted" type="submit">Send the email</button></p>

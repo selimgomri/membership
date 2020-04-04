@@ -47,6 +47,12 @@ if ($_SESSION['AccessLevel'] != 'Parent' || $canAccessSquadInfo) {
   $swimmers->execute([$id]);
 }
 
+$getCoaches = $db->prepare("SELECT Forename fn, Surname sn, coaches.Type code FROM coaches INNER JOIN users ON coaches.User = users.UserID WHERE coaches.Squad = ? ORDER BY coaches.Type ASC, Forename ASC, Surname ASC");
+$getCoaches->execute([
+  $id
+]);
+$coaches = $getCoaches->fetchAll(PDO::FETCH_ASSOC);
+
 $pagetitle = htmlspecialchars($squad['SquadName']) . ' Squad';
 
 include BASE_PATH . 'views/header.php';
@@ -83,8 +89,17 @@ include BASE_PATH . 'views/header.php';
         <dd class="col-sm-9">&pound;<?=htmlspecialchars(number_format($squad['SquadFee'],2))?></dd>
 
         <?php if ($squad['SquadCoach'] != null && $squad['SquadCoach'] != "") { ?>
-        <dt class="col-sm-3">Squad coach(s)</dt>
-        <dd class="col-sm-9"><?=htmlspecialchars($squad['SquadCoach'])?></dd>
+        <dt class="col-sm-3">Squad coach<?php if (sizeof($coaches) > 0) { ?>es<?php } ?></dt>
+        <dd class="col-sm-9">
+          <ul class="list-unstyled mb-0">
+          <?php for ($i=0; $i < sizeof($coaches); $i++) { ?>
+            <li><strong><?=htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn'])?></strong>, <?=htmlspecialchars(coachTypeDescription($coaches[$i]['code']))?></li>
+          <?php } ?>
+          <?php if (sizeof($coaches) == 0) { ?>
+            <li>None assigned</li>
+          <?php } ?>
+          </ul>
+        </dd>
         <?php } ?>
 
         <dt class="col-sm-3">Squad timetable</dt>
