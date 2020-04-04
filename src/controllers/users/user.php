@@ -248,6 +248,27 @@ include BASE_PATH . "views/header.php";
   <hr>
   <?php } ?>
 
+  <?php if ($userObj->hasPermission('Coach') && $_SESSION['AccessLevel'] == 'Admin') { ?>
+  <div class="mb-4" id="coach-squad" data-squad-list="<?=htmlspecialchars(json_encode(false))?>">
+    <h2>
+      Squads
+    </h2>
+    <p class="lead">
+      Assign <?=htmlspecialchars($info['Forename'])?> as a coach for a squad.
+    </p>
+
+    <div id="coach-squad-list" data-user-id="<?=htmlspecialchars($id)?>" data-ajax-url="<?=htmlspecialchars(autoUrl("users/squads/list"))?>"></div>
+
+    <p id="coach-squad-assign-container" class="d-none">
+      <button id="coach-squad-assign" class="btn btn-primary" data-user-id="<?=htmlspecialchars($id)?>" data-ajax-url="<?=htmlspecialchars(autoUrl("users/squads/assign-delete"))?>">
+        Assign a squad
+      </button>
+    </p>
+  </div>
+
+  <hr>
+  <?php } ?>
+
   <?php if ($userObj->hasPermission('Parent')) { ?>
   <div class="mb-4">
     <h2>
@@ -338,27 +359,6 @@ include BASE_PATH . "views/header.php";
   </div>
 
   <hr>
-
-  <?php if ($userObj->hasPermission('Coach') && $_SESSION['AccessLevel'] == 'Admin') { ?>
-  <div class="mb-4" id="coach-squad" data-squad-list="<?=htmlspecialchars(json_encode(false))?>">
-    <h2>
-      Squads
-    </h2>
-    <p class="lead">
-      Assign <?=htmlspecialchars($info['Forename'])?> as a coach for a squad.
-    </p>
-
-    <div id="coach-squad-list" data-user-id="<?=htmlspecialchars($id)?>" data-ajax-url="<?=htmlspecialchars(autoUrl("users/squads/list"))?>"></div>
-
-    <p id="coach-squad-assign-container" class="d-none">
-      <button id="coach-squad-assign" class="btn btn-primary" data-user-id="<?=htmlspecialchars($id)?>" data-ajax-url="<?=htmlspecialchars(autoUrl("users/squads/assign-delete"))?>">
-        Assign a squad
-      </button>
-    </p>
-  </div>
-
-  <hr>
-  <?php } ?>
 
   <?php if ($_SESSION['AccessLevel'] == 'Admin' && (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) && !userHasMandates($id)) { ?>
   <div class="mb-4">
