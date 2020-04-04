@@ -28,7 +28,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
   </div>
   <small id="squadFeeHelp" class="form-text text-muted">A squad can have a fee of &pound;0.00 if it represents a group for non paying members</small>
 </div>
-<div class="form-group">
+<div class="form-group d-none">
   <label for="squadCoach">Squad Coach</label>
   <input type="text" class="form-control" id="squadCoach" name="squadCoach" placeholder="Enter Squad Coach">
 </div>

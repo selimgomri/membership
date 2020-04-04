@@ -89,7 +89,7 @@ include BASE_PATH . 'views/header.php';
         <dd class="col-sm-9">&pound;<?=htmlspecialchars(number_format($squad['SquadFee'],2))?></dd>
 
         <?php if ($squad['SquadCoach'] != null && $squad['SquadCoach'] != "") { ?>
-        <dt class="col-sm-3">Squad coach<?php if (sizeof($coaches) > 0) { ?>es<?php } ?></dt>
+        <dt class="col-sm-3">Squad coach<?php if (sizeof($coaches) != 1) { ?>es<?php } ?></dt>
         <dd class="col-sm-9">
           <ul class="list-unstyled mb-0">
           <?php for ($i=0; $i < sizeof($coaches); $i++) { ?>
