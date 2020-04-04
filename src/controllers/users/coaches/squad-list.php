@@ -11,38 +11,6 @@ $responseData = [
 ];
 $squads = [];
 
-function coachTypeDescription($type) {
-  switch ($type) {
-    case 'LEAD_COACH':
-      return 'Lead Coach';
-      break;
-
-    case 'COACH':
-      return 'Coach';
-      break;
-
-    case 'ASSISTANT_COACH':
-      return 'Assistant Coach';
-      break;
-
-    case 'TEACHER':
-      return 'Teacher';
-      break;
-
-    case 'HELPER':
-      return 'Helper';
-      break;
-
-    case 'ADMINISTRATOR':
-      return 'Squad Administrator';
-      break;
-    
-    default:
-      return 'Unknown Coach Type';
-      break;
-  }
-}
-
 try {
 
   $getSquads = $db->prepare("SELECT SquadName squad, SquadID id, `Type` `type` FROM coaches INNER JOIN squads ON squads.SquadID = coaches.Squad WHERE coaches.User = ? ORDER BY SquadFee DESC, SquadName ASC");
@@ -82,27 +50,27 @@ try {
     'roles' => [
       [
         'code' => 'LEAD_COACH',
-        'description' => 'Lead Coach'
+        'description' => coachTypeDescription('LEAD_COACH')
       ],
       [
         'code' => 'COACH',
-        'description' => 'Coach'
+        'description' => coachTypeDescription('COACH')
       ],
       [
         'code' => 'ASSISTANT_COACH',
-        'description' => 'Assistant Coach'
+        'description' => coachTypeDescription('ASSISTANT_COACH')
       ],
       [
         'code' => 'TEACHER',
-        'description' => 'Teacher'
+        'description' => coachTypeDescription('TEACHER')
       ],
       [
         'code' => 'HELPER',
-        'description' => 'Helper'
+        'description' => coachTypeDescription('HELPER')
       ],
       [
         'code' => 'ADMINISTRATOR',
-        'description' => 'Squad Administrator'
+        'description' => coachTypeDescription('ADMINISTRATOR')
       ]
     ]
   ];

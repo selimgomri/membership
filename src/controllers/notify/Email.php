@@ -255,7 +255,7 @@ include BASE_PATH . "views/notifyMenu.php";
 
     <div class="form-group">
       <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" aria-describedby="forceHelp" id="force" name="force">
+        <input type="checkbox" class="custom-control-input" aria-describedby="forceHelp" id="force" name="force" value="1">
         <label class="custom-control-label" for="force">Force Send</label>
         <small id="forceHelp" class="form-text text-muted">
           Normally, messages will only be sent to those who have opted in to email
@@ -267,6 +267,16 @@ include BASE_PATH . "views/notifyMenu.php";
     </div>
 
     <?php } ?>
+
+    <div class="form-group">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" aria-describedby="coach-help" id="coach-send" name="coach-send" value="1" checked>
+        <label class="custom-control-label" for="coach-send">Send to coaches</label>
+        <small id="coach-help" class="form-text text-muted">
+          Send a copy of this email to coaches of all selected squads
+        </small>
+      </div>
+    </div>
 
     <?=SCDS\CSRF::write()?>
     <?=SCDS\FormIdempotency::write()?>

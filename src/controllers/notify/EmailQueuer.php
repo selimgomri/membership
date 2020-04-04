@@ -148,9 +148,16 @@ try {
   }
   $force = 0;
   $sender = $_SESSION['UserID'];
-  if (isset($_POST['force']) && ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas")) {
+  if (isset($_POST['force']) && bool($_POST['force']) && ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas")) {
     $force = 1;
   }
+
+  $coachSend = false;
+  if (isset($_POST['coach-send']) && bool($_POST['coach-send'])) {
+    $coachSend = true;
+  }
+
+  $getCoaches = $db->prepare("SELECT User FROM coaches WHERE Squad = ?");
 
   $squads = null;
   if ($_SESSION['AccessLevel'] != 'Parent') {
@@ -178,6 +185,8 @@ try {
 
   $squads = $listsArray = $galasArray = [];
 
+  $toSendTo = [];
+
   for ($i = 0; $i < sizeof($row); $i++) {
     if ($squadsQuery != "" && $_POST[$row[$i]['SquadID']] == 1) {
       $squadsQuery .= "OR";
@@ -185,6 +194,17 @@ try {
     if ($_POST[$row[$i]['SquadID']] == 1) {
       $squadsQuery .= " `SquadID` = '" . $row[$i]['SquadID'] . "' ";
       $squads[$row[$i]['SquadID']] = $row[$i]['SquadName'];
+
+      if ($coachSend) {
+        // Get coaches
+        $getCoaches->execute([
+          $row[$i]['SquadID']
+        ]);
+
+        while ($coach = $getCoaches->fetchColumn()) {
+          $toSendTo[$coach] = $coach;
+        }
+      }
     }
   }
 
@@ -212,7 +232,6 @@ try {
     }
   }
 
-  $toSendTo = [];
   $squadUsers = $listUsers = $galaUsers = null;
 
   if ($squadsQuery) {
