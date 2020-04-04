@@ -137,6 +137,12 @@ try {
     $_POST['user']
   ]);
 
+  // Delete coach assignments
+  $delete = $db->prepare("DELETE FROM coaches WHERE User = ?");
+  $delete->execute([
+    $_POST['user']
+  ]);
+
   // Get active direct debit mandates and try to cancel them
   $getMandates = $db->prepare("SELECT Mandate, MandateID FROM paymentMandates WHERE UserID = ? AND InUse = 1");
   $getMandates->execute([
