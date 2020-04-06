@@ -15,7 +15,7 @@
   ];
 ?>
 
-<div class="mt-n3 mb-3 text-center" style="background: #000000;">
+<div class="mt-3 mb-n3 text-center" style="background: #000000;">
   <div class="container">
     <video class="d-none d-sm-block mx-auto my-0 p-0 img-fluid" autoplay loop muted playsinline>
       <source src="<?=htmlspecialchars($covidVideos[rand(0, sizeof($covidVideos) - 1)])?>" type="video/mp4" />
