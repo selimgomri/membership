@@ -1,5 +1,23 @@
 </div>
 
+<!-- COVID ALERT ADVERT -->
+<?php
+  $covidVideos = [
+    'https://myswimmingclub.uk/assets/covid/act-like-youve-got-it.mov',
+    'https://myswimmingclub.uk/assets/covid/anyone-can-get-it.mov',
+    'https://myswimmingclub.uk/assets/covid/anyone-can-spread-it.mov'
+  ];
+?>
+
+<div class="mt-n3 mb-3 text-center" style="background: #000000;">
+  <div class="<?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
+    <video class="d-block mx-auto my-0 p-0 img-fluid" autoplay loop muted>
+      <source src="<?=htmlspecialchars($covidVideos[rand(0, sizeof($covidVideos) - 1)])?>" type="video/mp4" />
+      Your browser does not support the video element.
+    </video>
+  </div>
+</div>
+
 <!-- THE HEPPELL FOOTER -->
 <div class="cls-global-footer cls-global-footer-sponsors d-print-none">
   <?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>
