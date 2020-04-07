@@ -3,6 +3,7 @@
 $fluidContainer = true;
 
 global $db;
+global $currentUser;
 
 $getExtraEmails = null;
 try {
@@ -129,7 +130,7 @@ include BASE_PATH . "views/header.php";
     				</div>
     			</div>
 
-					<?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+					<?php if ($currentUser->hasPermission('Parent')) { ?>
     			<div class="form-group">
     				<div class="custom-control custom-switch">
     					<input type="checkbox" class="custom-control-input" value="1" id="SecurityComms" aria-describedby="SecurityCommsHelp" name="SecurityComms" <?=$emailChecked_security?> >
@@ -147,7 +148,7 @@ include BASE_PATH . "views/header.php";
     			</div>
 					<?php } ?>
 
-    			<?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
+    			<?php if ($currentUser->hasPermission('Admin')) { ?>
     			<div class="form-group">
     				<div class="custom-control custom-switch">
     					<input type="checkbox" class="custom-control-input" value="1" id="NewMemberComms" aria-describedby="NewMemberCommsHelp" name="NewMemberComms" <?php echo $emailChecked_new_member; ?> >
@@ -163,7 +164,7 @@ include BASE_PATH . "views/header.php";
     		</form>
     	</div>
 
-		  <?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>
+		  <?php if ($currentUser->hasPermission('Parent')) { ?>
 
       <div class="cell">
         <h2>Additional Recipients</h2>

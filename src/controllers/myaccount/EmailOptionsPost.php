@@ -2,6 +2,7 @@
 
 use Respect\Validation\Validator as v;
 global $db;
+global $currentUser;
 
 $sql = "SELECT `EmailAddress`, `EmailComms` FROM `users` WHERE `UserID` = ?";
 try {
@@ -34,7 +35,7 @@ if ($email_comms != $row['EmailComms']) {
 
 updateSubscription($_POST['SecurityComms'], 'Security');
 updateSubscription($_POST['PaymentComms'], 'Payments');
-if ($_SESSION['AccessLevel'] == "Admin") {
+if ($currentUser->hasPermission('Admin')) {
 	updateSubscription($_POST['NewMemberComms'], 'NewMember');
 }
 

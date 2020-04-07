@@ -271,15 +271,15 @@ include BASE_PATH . "views/header.php";
 
   <?php if ($userObj->hasPermission('Parent')) { ?>
   <div class="mb-4">
-    <h2>
-      Payment information
-    </h2>
-    <p class="lead">
-      Account details and monthly fees paid by this user.
-    </p>
-
     <div class="row">
       <div class="col-sm-6 col-md-8">
+        <h2>
+          Payment information
+        </h2>
+        <p class="lead">
+          Account details and monthly fees paid by this user.
+        </p>
+        
         <div class="row">
           <div class="col-md-6">
             <h3 class="h6">Squad Fees</h3>
