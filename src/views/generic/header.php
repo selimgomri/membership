@@ -53,7 +53,7 @@ if (isset($customBackground) && $customBackground) {
     }
     </style>
 
-    <div class="py-5 <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'DANGER') { ?>bg-danger text-white<?php } ?> <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'WARN') { ?>bg-warning text-body<?php } ?> <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'SUCCESS') { ?>bg-success text-white<?php } ?>">
+    <div class="py-3 <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'DANGER') { ?>bg-danger text-white<?php } ?> <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'WARN') { ?>bg-warning text-body<?php } ?> <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'SUCCESS') { ?>bg-success text-white<?php } ?>">
       <div class="<?=$container_class?> emergency-message">
         <?php try { ?>
         <?=$markdown->text(env('EMERGENCY_MESSAGE'))?>
@@ -107,7 +107,7 @@ if (isset($customBackground) && $customBackground) {
     </div>
     <?php } ?>
 
-    <?php if (defined('IS_EVALUATION_COPY') && IS_EVALUATION_COPY) { ?>
+    <?php if (bool(env('IS_EVALUATION_COPY'))) { ?>
     <div class="bg-secondary text-white py-2 d-print-none">
       <div class="<?=$container_class?>">
         <p class="mb-0">

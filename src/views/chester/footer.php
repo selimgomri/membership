@@ -4,8 +4,6 @@
 <?php
   $covidVideos = [
     'https://myswimmingclub.uk/assets/covid/act-like-youve-got-it.mov',
-    'https://myswimmingclub.uk/assets/covid/anyone-can-get-it.mov',
-    'https://myswimmingclub.uk/assets/covid/anyone-can-spread-it.mov'
   ];
 
   $covidMobileVideos = [

@@ -9,7 +9,7 @@ if (env('EMERGENCY_MESSAGE_TYPE') != 'NONE' && env('EMERGENCY_MESSAGE')) {
   $markdown = new ParsedownExtra();
   $message = "";
 
-  $message .= '<div class="py-5 ';
+  $message .= '<div class="py-3 ';
 
   if (env('EMERGENCY_MESSAGE_TYPE') == 'SUCCESS') {
     $message .= 'bg-success text-white';
