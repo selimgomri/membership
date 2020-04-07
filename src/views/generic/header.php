@@ -175,7 +175,7 @@ if (isset($customBackground) && $customBackground) {
         <div class="<?=$container_class?>">
           <h1 class="d-none d-md-flex pt-3 pb-1 mb-0">
             <a href="<?=htmlspecialchars($headerLink)?>" class="<?=$clubLogoColour?> text-decoration-none">
-              <?=htmlspecialchars(mb_strtoupper(env('CLUB_NAME')))?>
+              <?=htmlspecialchars(env('CLUB_NAME'))?>
             </a>
           </h1>
         </div>
