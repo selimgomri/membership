@@ -24,6 +24,8 @@ try {
 function halt(int $statusCode, bool $throwException = true) {
   if ($statusCode == 500) {
     // Report the error
+    global $e;
+    reportError($e);
   }
   
   if ($throwException) {
