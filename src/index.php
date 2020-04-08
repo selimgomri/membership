@@ -68,13 +68,9 @@ $time_start = microtime(true);
 
 $executionStartTime = microtime();
 
-define('DS', DIRECTORY_SEPARATOR);
-define('BASE_PATH', __DIR__ . DS);
+require 'common.php';
 
 $_SERVER['SERVER_PORT'] = 443;
-
-require BASE_PATH .'vendor/autoload.php';
-require "helperclasses/ClassLoader.php";
 
 if (env('COOKIE_PREFIX')) {
   define('COOKIE_PREFIX', env('COOKIE_PREFIX'));
@@ -110,7 +106,6 @@ header("Feature-Policy: fullscreen 'self' https://youtube.com");
 header("Referrer-Policy: strict-origin-when-cross-origin");
 //header("Content-Security-Policy: default-src https:; object-src data: 'unsafe-eval'; script-src * 'unsafe-inline'; style-src https://www.chesterlestreetasc.co.uk https://account.chesterlestreetasc.co.uk https://fonts.googleapis.com 'unsafe-inline'");
 //header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload');
-header('Server: Chester-le-Magic');
 header("Content-Security-Policy: block-all-mixed-content");
 header('Expect-CT: enforce, max-age=30, report-uri="https://chesterlestreetasc.report-uri.com/r/d/ct/enforce"');
 
