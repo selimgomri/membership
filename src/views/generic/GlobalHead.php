@@ -1,7 +1,12 @@
 <?php
 
-$stylesheet = 'public/css/generic/generic-0.14-prefixed.css';
-$fa = 'public/css/font-awesome/css/font-awesome.min.css';
+$stylesheet = autoUrl('public/css/generic/generic-0.15-prefixed.css');
+$fa = autoUrl('public/css/font-awesome/css/font-awesome.min.css');
+
+
+if (env('CUSTOM_CSS_PATH')) {
+  $stylesheet = env('CUSTOM_CSS_PATH');
+}
 
 header('Link: <' . autoUrl($stylesheet) . '>; rel=preload; as=style');
 header('Link: <' . autoUrl($fa) . '>; rel=preload; as=style');
@@ -85,9 +90,9 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <script src="https://js.stripe.com/v3/"></script>
   <link rel="stylesheet preload"
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700|Roboto+Mono|Merriweather:400,600">
-  <link rel="stylesheet preload" href="<?=autoUrl($stylesheet)?>">
+  <link rel="stylesheet preload" href="<?=htmlspecialchars($stylesheet)?>">
   <link rel="stylesheet preload" href="<?=htmlspecialchars(autoUrl("public/css/colour.css"))?>">
-  <link rel="stylesheet" href="<?=autoUrl($fa)?>">
+  <link rel="stylesheet" href="<?=htmlspecialchars($fa)?>">
 
   <!-- Generic icon first -->
   <?php if (env('CLUB_LOGO')) { ?>
