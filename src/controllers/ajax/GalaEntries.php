@@ -247,7 +247,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
         $content .= ' disabled ';
       }
       $content .= " data-button-action=\"mark-paid\" class=\"custom-control-input\" id=\"chargedEntry-" . $row['EntryID'] . "\">
-        <label class=\"custom-control-label\" for=\"chargedEntry-" . $row['EntryID'] . "\">Paid?</label>
+        <label class=\"custom-control-label\" for=\"chargedEntry-" . $row['EntryID'] . "\">Paid? (&pound;" . htmlspecialchars(htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $row['FeeToPay'])->toScale(2)))) . ")</label>
       </div>";
 
       $content .= '</td>';
