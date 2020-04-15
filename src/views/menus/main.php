@@ -336,6 +336,9 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("time-converter"))?>">
                       Time converter
                     </a>
+                    <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("galas/all-galas"))?>">
+                      Past and future galas
+                    </a>
                   </div>
                 </li>
                 <?php if ($_SESSION['AccessLevel'] == 'Parent' && $haveSquadReps) { ?>

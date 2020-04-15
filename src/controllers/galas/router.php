@@ -1,6 +1,10 @@
 <?php
 $access = $_SESSION['AccessLevel'];
 
+$this->get('/all-galas', function() {
+	include 'list.php';
+});
+
 // Gala Entry Time Sheet
 $this->get(['/{id}:int/timesheet', '/competitions/{id}:int/timesheet'], function($id) {
   global $link;
