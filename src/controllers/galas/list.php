@@ -16,11 +16,13 @@ $getCount = $db->query("SELECT COUNT(*) FROM galas");
 $numGalas  = $getCount->fetchColumn();
 $numPages = ((int)($numGalas/10)) + 1;
 
-$getGalas = $db->prepare("SELECT GalaID `id`, GalaName `name` FROM galas ORDER BY `GalaDate` DESC, ClosingDate DESC LIMIT :offset, :num");
+$getGalas = $db->prepare("SELECT GalaID `id`, GalaName `name`, GalaVenue venue, ClosingDate closes, GalaDate finishes FROM galas ORDER BY `GalaDate` DESC, ClosingDate DESC LIMIT :offset, :num");
 $getGalas->bindValue(':offset', $start, PDO::PARAM_INT); 
 $getGalas->bindValue(':num', 10, PDO::PARAM_INT); 
 $getGalas->execute();
 $gala = $getGalas->fetch(PDO::FETCH_ASSOC);
+
+$now = new DateTime('today midnight', new DateTimeZone('Europe/London'));
 
 $pagetitle = "All Galas - Page " . $page;
 
@@ -82,20 +84,34 @@ include BASE_PATH . 'views/header.php';
 
       <ul class="list-group">
         <?php do {
-          // $dateObject = new DateTime($log['DateTime'], new DateTimeZone('UTC'));
-          // $dateObject->setTimezone(new DateTimeZone('Europe/London'));
+          $closes = new DateTime($gala['closes'], new DateTimeZone('UTC'));
+          $closes->setTimezone(new DateTimeZone('Europe/London'));
+          $closed = $closes <= $now;
+
+          $finishes = new DateTime($gala['finishes'], new DateTimeZone('UTC'));
+          $finishes->setTimezone(new DateTimeZone('Europe/London'));
+          $finished = $finishes <= $now;
           ?>
         <li class="list-group-item" id="<?=htmlspecialchars("gala-" . $gala['id'])?>">
           <div class="row justify-content-between">
             <div class="col-auto">
               <h2><a href="<?=htmlspecialchars(autoUrl("galas/" . $gala['id']))?>"><?=htmlspecialchars($gala['name'])?></a></h2>
-              <p class="mb-0"><?=htmlspecialchars('$dateObject->format("H:i \\o\\n j F Y")')?></p>
+              <p class="lead">
+                <?=htmlspecialchars($gala['venue'])?>
+              </p>
+              <p class="mb-0"><strong>Close<?php if ($closed) { ?>d<?php } else { ?>s<?php } ?></strong> <?=htmlspecialchars($closes->format("j F Y"))?></p>
+              <p class="mb-0"><strong>Finishe<?php if ($finished) { ?>d<?php } else { ?>s<?php } ?></strong> <?=htmlspecialchars($finishes->format("j F Y"))?></p>
             </div>
             <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
             <div class="col-auto">
-              <p class="mb-0">
-                <a href="<?=htmlspecialchars(autoUrl("galas/" . $gala['id'] . "/edit"))?>" class="btn btn-light">Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-              </p>
+              <div class="btn-group" role="group">
+                <a href="<?=htmlspecialchars(autoUrl("galas/entries?gala=" . $gala['id']))?>" class="btn btn-primary">
+                  Entries
+                </a>
+                <a href="<?=htmlspecialchars(autoUrl("galas/" . $gala['id'] . "/edit"))?>" class="btn btn-dark">
+                  Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                </a>
+              </div>
             </div>
             <?php } ?>
           </div>

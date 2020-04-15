@@ -10,7 +10,7 @@ $use_white_background = true;
 
 $galaIDParam = $search = $sex = "";
 if (isset($_GET['gala'])) {
-  $galaIDParam = intval($_GET['gala']);
+  $galaIDParam = (int) $_GET['gala'];
 }
 if (isset($_GET['search'])) {
   $search = $_GET['search'];
@@ -19,7 +19,17 @@ if (isset($_GET['sex'])) {
   $sex = $_GET['sex'];
 }
 
-$galas = $db->query("SELECT GalaID, GalaName FROM `galas` WHERE GalaDate >= CURDATE() ORDER BY `galas`.`GalaDate` DESC");
+$galas = null;
+if ($galaIDParam == 0) {
+  $galas = $db->query("SELECT GalaID, GalaName FROM `galas` WHERE GalaDate >= CURDATE() ORDER BY `galas`.`GalaDate` DESC");
+} else {
+  $date = new DateTime('now', new DateTimeZone('Europe/london'));
+  $galas = $db->prepare("SELECT GalaID, GalaName FROM `galas` WHERE GalaDate >= ? OR GalaID = ? ORDER BY `galas`.`GalaDate` DESC");
+  $galas->execute([
+    $date->format("Y-m-d"),
+    $galaIDParam
+  ]);
+}
 
 include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
