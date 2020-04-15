@@ -22,7 +22,7 @@ include "galaMenu.php"; ?>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("galas"))?>">Galas</a></li>
-      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("galas/" . $id))?>"><?=htmlspecialchars($row['GalaName'])?></a></li>
+      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("galas/" . $id))?>">#<?=htmlspecialchars($id)?></a></li>
       <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
   </nav>

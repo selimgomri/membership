@@ -95,7 +95,7 @@ include "galaMenu.php";
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>
-      <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars($gala['GalaName'])?></li>
+      <li class="breadcrumb-item active" aria-current="page">#<?=htmlspecialchars($id)?></li>
     </ol>
   </nav>
   <div class="row align-items-center">

@@ -29,7 +29,7 @@ include BASE_PATH . 'views/header.php';
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>
-      <li class="breadcrumb-item"><a href="<?=autoUrl("galas/" . $id)?>">This gala</a></li>
+      <li class="breadcrumb-item"><a href="<?=autoUrl("galas/" . $id)?>">#<?=htmlspecialchars($id)?></a></li>
       <li class="breadcrumb-item active" aria-current="page">Prices and events</li>
     </ol>
   </nav>
