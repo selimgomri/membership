@@ -246,8 +246,14 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       if ($row['StripePayment'] && $row['Charged'] || $row['PaymentID'] != null) {
         $content .= ' disabled ';
       }
+      $amount = "0.00";
+      try {
+        $amount = (string) (\Brick\Math\BigDecimal::of((string) $row['FeeToPay'])->toScale(2));
+      } catch (Exception $e) {
+        $amount = "UNKNOWN";
+      }
       $content .= " data-button-action=\"mark-paid\" class=\"custom-control-input\" id=\"chargedEntry-" . $row['EntryID'] . "\">
-        <label class=\"custom-control-label\" for=\"chargedEntry-" . $row['EntryID'] . "\">Paid? (&pound;" . htmlspecialchars(htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $row['FeeToPay'])->toScale(2)))) . ")</label>
+        <label class=\"custom-control-label\" for=\"chargedEntry-" . $row['EntryID'] . "\">Paid? (&pound;" . htmlspecialchars($amount) . ")</label>
       </div>";
 
       $content .= '</td>';
