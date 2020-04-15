@@ -52,7 +52,7 @@ include BASE_PATH . 'views/header.php';
           All galas
         </h1>
         <p class="lead mb-0">
-          Find all upcoming and previous galas
+          Find all past and future galas
         </p>
         <div class="mb-3 d-lg-none"></div>
       </div>
@@ -91,16 +91,11 @@ include BASE_PATH . 'views/header.php';
           $finishes = new DateTime($gala['finishes'], new DateTimeZone('UTC'));
           $finishes->setTimezone(new DateTimeZone('Europe/London'));
           $finished = $finishes <= $now;
-          ?>
+        ?>
         <li class="list-group-item" id="<?=htmlspecialchars("gala-" . $gala['id'])?>">
           <div class="row justify-content-between">
-            <div class="col-auto">
-              <h2><a href="<?=htmlspecialchars(autoUrl("galas/" . $gala['id']))?>"><?=htmlspecialchars($gala['name'])?></a></h2>
-              <p class="lead">
-                <?=htmlspecialchars($gala['venue'])?>
-              </p>
-              <p class="mb-0"><strong>Close<?php if ($closed) { ?>d<?php } else { ?>s<?php } ?></strong> <?=htmlspecialchars($closes->format("j F Y"))?></p>
-              <p class="mb-0"><strong>Finishe<?php if ($finished) { ?>d<?php } else { ?>s<?php } ?></strong> <?=htmlspecialchars($finishes->format("j F Y"))?></p>
+            <div class="col">
+              <h2 class="mb-0"><a href="<?=htmlspecialchars(autoUrl("galas/" . $gala['id']))?>"><?=htmlspecialchars($gala['name'])?></a></h2>
             </div>
             <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
             <div class="col-auto">
@@ -113,8 +108,18 @@ include BASE_PATH . 'views/header.php';
                 </a>
               </div>
             </div>
-            <?php } ?>
           </div>
+          <p class="lead">
+            <?=htmlspecialchars($gala['venue'])?>
+          </p>
+          <dl class="row mb-0">
+            <dt class="col-3">Close<?php if ($closed) { ?>d<?php } else { ?>s<?php } ?></dt>
+            <dd class="col-9"><?=htmlspecialchars($closes->format("j F Y"))?></dd>
+
+            <dt class="col-3">Finishe<?php if ($closed) { ?>d<?php } else { ?>s<?php } ?></dt>
+            <dd class="col-9 mb-0"><?=htmlspecialchars($finishes->format("j F Y"))?></dd>
+          </dl>
+          <?php } ?>
         </li>
         <?php } while ($gala = $getGalas->fetch(PDO::FETCH_ASSOC)); ?>
       </ul>
