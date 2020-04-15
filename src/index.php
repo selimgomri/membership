@@ -108,6 +108,10 @@ header("Referrer-Policy: strict-origin-when-cross-origin");
 //header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload');
 header("Content-Security-Policy: block-all-mixed-content");
 header('Expect-CT: enforce, max-age=30, report-uri="https://chesterlestreetasc.report-uri.com/r/d/ct/enforce"');
+// Prevent framing of the membership system
+header("X-Frame-Options: DENY");
+// Prevent MIME sniffing
+header("X-Content-Type-Options: nosniff");
 
 //halt(901);
 

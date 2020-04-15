@@ -1,8 +1,8 @@
 <?php
 
-$day = date("w");
-$time = date("H:i:s");
-$time30 = date("H:i:s", strtotime("-30 minutes"));
+$day = (new DateTime('now', new DateTimeZone('Europe/London')))->format("w");
+$time = (new DateTime('-15 minutes', new DateTimeZone('Europe/London')))->format("H:i:s");
+$time30 = (new DateTime('-30 minutes', new DateTimeZone('Europe/London')))->format("H:i:s");
 
 $sql = "SELECT SessionID, squads.SquadID, SessionName, SquadName, VenueName, StartTime, EndTime FROM ((`sessions` INNER JOIN squads ON squads.SquadID = sessions.SquadID) INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE SessionDay = :day AND StartTime <= :timenow AND (EndTime > :timenow OR EndTime > :time30) AND DisplayFrom <= CURDATE() AND DisplayUntil >= CURDATE() ORDER BY SquadFee DESC, SquadName ASC";
 global $db;
