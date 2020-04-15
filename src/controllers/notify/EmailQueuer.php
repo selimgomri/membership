@@ -9,17 +9,17 @@ $db->beginTransaction();
 try {
   if (sizeof($_POST) == 0) {
     $_SESSION['TooLargeError'] = true;
-    throw new Exception();
+    throw new Exception('Filesize TooLargeError');
   }
 
   if (!SCDS\FormIdempotency::verify()) {
     $_SESSION['FormError'] = true;
-    throw new Exception();
+    throw new Exception('Form idempotency error');
   }
 
   if (!SCDS\CSRF::verify()) {
     $_SESSION['FormError'] = true;
-    throw new Exception();
+    throw new Exception('Form CSRF error');
   }
 
   $replyAddress = getUserOption($_SESSION['UserID'], 'NotifyReplyAddress');
