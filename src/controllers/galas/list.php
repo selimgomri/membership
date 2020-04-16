@@ -67,7 +67,7 @@ include BASE_PATH . 'views/header.php';
 <div class="container">
 
   <div class="row">
-    <div class="col-lg-8 mb-3">
+    <div class="col-lg-10 col-xl-8 mb-3">
       <?php if ($gala) { ?>
       <div class="row mb-3">
         <div class="col">
@@ -94,11 +94,15 @@ include BASE_PATH . 'views/header.php';
         ?>
         <li class="list-group-item" id="<?=htmlspecialchars("gala-" . $gala['id'])?>">
           <div class="row justify-content-between">
-            <div class="col">
+            <div class="col-12 col-sm">
               <h2 class="mb-0"><a href="<?=htmlspecialchars(autoUrl("galas/" . $gala['id']))?>"><?=htmlspecialchars($gala['name'])?></a></h2>
+              <p class="lead d-sm-none">
+                <?=htmlspecialchars($gala['venue'])?>
+              </p>
+              <div class="mb-3 d-sm-none"></div>
             </div>
             <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
-            <div class="col-auto">
+            <div class="col-12 col-sm-auto">
               <div class="btn-group" role="group">
                 <a href="<?=htmlspecialchars(autoUrl("galas/entries?gala=" . $gala['id']))?>" class="btn btn-primary">
                   Entries
@@ -107,9 +111,10 @@ include BASE_PATH . 'views/header.php';
                   Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                 </a>
               </div>
+              <div class="mb-3 d-sm-none"></div>
             </div>
           </div>
-          <p class="lead">
+          <p class="lead d-none d-sm-block">
             <?=htmlspecialchars($gala['venue'])?>
           </p>
           <dl class="row mb-0">
