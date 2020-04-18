@@ -400,7 +400,11 @@ function myMonthlyFeeTable($link, $userID) {
 
 function autoUrl($relative) {
   // Returns an absolute URL
-  return rtrim(env('ROOT_URL') . $relative, '/');
+  $rootUrl = env('ROOT_URL');
+  if (isset($_REQUEST['x-proxy-root-url'])) {
+    $rootUrl = $_REQUEST['x-proxy-root-url'];
+  }
+  return rtrim($rootUrl . $relative, '/');
 }
 
 function monthlyFeeCost($link, $userID, $format = "decimal") {
