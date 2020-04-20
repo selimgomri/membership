@@ -282,3 +282,9 @@ if ($_SESSION['AccessLevel'] != "Parent") {
 $this->group('/{swimmer}:int/times', function() {
 	include 'times/router.php';
 });
+
+if ($_SESSION['AccessLevel'] == 'Admin') {
+	$this->post('/delete', function() {
+		include 'delete.php';
+	});
+}

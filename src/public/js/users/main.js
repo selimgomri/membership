@@ -215,6 +215,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
       let button = document.getElementById('delete-button');
       document.getElementById('modal-confirm-button').disabled = true;
       let password = document.getElementById('confirm-password').value;
+      let removeableAlert = document.getElementById('main-modal-alert');
+      if (removeableAlert) {
+        removeableAlert.outerHTML = '';
+      }
       let oldContent = document.getElementById('main-modal-body').innerHTML;
       document.getElementById('main-modal-body').innerHTML = '<div class="py-5 text-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>';
       
@@ -224,7 +228,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
           var json = JSON.parse(this.responseText);
           if (json.status == 500) {
             // Failed
-            document.getElementById('main-modal-body').innerHTML = '<div class="alert alert-danger"><p class="mb-0"><strong>An error occurred.</strong></p><p id="alert-text" class="mb-0"></p></div>' + oldContent;
+            document.getElementById('main-modal-body').innerHTML = '<div class="alert alert-danger" id="main-modal-alert"><p class="mb-0"><strong>An error occurred.</strong></p><p id="alert-text" class="mb-0"></p></div>' + oldContent;
             document.getElementById('modal-confirm-button').disabled = false;
           } else {
             // Success
