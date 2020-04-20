@@ -401,8 +401,8 @@ function myMonthlyFeeTable($link, $userID) {
 function autoUrl($relative) {
   // Returns an absolute URL
   $rootUrl = env('ROOT_URL');
-  if (isset($_REQUEST['x-proxy-root-url'])) {
-    $rootUrl = $_REQUEST['x-proxy-root-url'];
+  if (isset($_SERVER['HTTP_X_PROXY_ROOT_URL'])) {
+    $rootUrl = $_SERVER['HTTP_X_PROXY_ROOT_URL'];
   }
   return rtrim($rootUrl . $relative, '/');
 }
