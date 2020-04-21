@@ -139,7 +139,6 @@ if ($custom_domain_mode) {
 $config_file = $config;
 
 require $config_file;
-require 'default-config-load.php';
 
 // This code is required so cookies work in dev environments
 $cookieSecure = 1;
