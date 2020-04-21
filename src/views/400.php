@@ -1,7 +1,7 @@
 <?php
 http_response_code(400);
 $pagetitle = "Error 400 - Bad Request";
-global $currentUser;
+$currentUser = app()->user;
 if ($currentUser == null) {
 	include BASE_PATH . "views/head.php";
 } else {

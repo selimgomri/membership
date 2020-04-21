@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 try {
 	$query = $db->prepare("SELECT * FROM `users` WHERE `UserID` = ? AND Active");

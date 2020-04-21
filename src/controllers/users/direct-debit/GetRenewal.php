@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 $latest = $db->query("SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE() AND CURDATE() <= `EndDate` ORDER BY renewals.ID DESC LIMIT 1");
 $latestRenewal = $latest->fetch(PDO::FETCH_ASSOC);
 

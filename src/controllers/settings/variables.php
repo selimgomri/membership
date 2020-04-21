@@ -2,8 +2,8 @@
 
 $fluidContainer = true;
 
-global $db;
-global $systemInfo;
+$db = app()->db;
+$systemInfo = app()->system;
 
 $vars = [
   'CLUB_NAME' => null,

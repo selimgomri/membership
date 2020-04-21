@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 $checkForExistingGala = $db->prepare("SELECT `Meet` FROM `meetsWithResults` WHERE `Name` = ? AND `City` = ? AND (`Start` = ? OR `End` = ?) AND `Course` = ?");
 $checkForExistingResult = $db->prepare("SELECT COUNT(*) FROM `meetResults` WHERE `Member` = ? AND `Date` = ? AND `IntTime` = ? AND `ChronologicalOrder` = ? AND `Round` = ? AND `Stroke` = ? AND `Distance` = ? AND `Course` = ?");
 $addResult = $db->prepare("INSERT INTO `meetResults` (`Meet`, `Member`, `Date`, `Time`, `IntTime`, `ChronologicalOrder`, `Round`, `Stroke`, `Distance`, `Course`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");

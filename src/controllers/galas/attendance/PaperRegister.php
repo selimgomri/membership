@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 // GET THE GALA
 $getGala = $db->prepare("SELECT GalaName `name` FROM galas WHERE GalaID = ?");

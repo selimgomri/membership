@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $query = $db->prepare("SELECT * FROM `newUsers` WHERE `AuthCode` = ? AND `ID` = ? AND `Type` = ?");
 $query->execute([$auth, $id, 'EmailUpdate']);

@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 setupMedicalInfo($id);
 
 $conditions = $allergies = $medicine = "";

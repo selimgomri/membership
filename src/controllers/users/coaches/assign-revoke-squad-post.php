@@ -4,7 +4,7 @@
 //   halt(404);
 // }
 
-global $db;
+$db = app()->db;
 
 $allowedTypes = ['assign', 'revoke'];
 

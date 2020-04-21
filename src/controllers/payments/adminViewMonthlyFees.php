@@ -5,7 +5,7 @@ if ($access != "Admin") {
 	halt(404);
 }
 
-global $db;
+$db = app()->db;
 
 $getDetails = $db->query("SELECT `Forename`, `Surname`, `UserID` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE `Permission` = 'Parent' ORDER BY `Forename` ASC, `Surname` ASC");
 

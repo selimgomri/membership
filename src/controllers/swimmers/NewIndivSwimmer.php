@@ -2,7 +2,7 @@
 
 $fluidContainer = true;
 
-global $db;
+$db = app()->db;
 
 $markdown = new ParsedownExtra();
 $markdown->setSafeMode(true);

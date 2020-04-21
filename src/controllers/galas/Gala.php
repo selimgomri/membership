@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $galas = $db->prepare("SELECT GalaName, `Description`, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters, RequiresApproval FROM galas WHERE GalaID = ?");
 $galas->execute([$id]);

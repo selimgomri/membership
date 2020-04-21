@@ -2,10 +2,10 @@
 
 $fluidContainer = true;
 
-global $db;
+$db = app()->db;
 $codesOfConduct = $db->query("SELECT Title, ID FROM posts WHERE `Type` = 'conduct_code' ORDER BY Title ASC");
 
-global $systemInfo;
+$systemInfo = app()->system;
 $parentCode = $systemInfo->getSystemOption('ParentCodeOfConduct');
 
 $Extra = new ParsedownExtra();

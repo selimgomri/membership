@@ -1,7 +1,7 @@
 <?php
 http_response_code(401);
 $pagetitle = "Error 401 - Unauthorised";
-global $currentUser;
+$currentUser = app()->user;
 if ($currentUser == null) {
 	include BASE_PATH . "views/head.php";
 } else {

@@ -6,7 +6,7 @@ if (trim($_POST['verify-code']) == $_SESSION['AC-Registration']['EmailConfirmati
   unset($_SESSION['AC-Registration']['EmailConfirmationCode']);
 
   try {
-    global $db;
+    $db = app()->db;
     $query = $db->prepare("UPDATE joinParents SET Email = ? WHERE Hash = ?");
     $query->execute([$_SESSION['AC-UserDetails']['email-addr'], $_SESSION['AC-Registration']['Hash']]);
 

@@ -1,7 +1,7 @@
 <?php
 http_response_code(403);
 $pagetitle = "Error 403 - Forbidden";
-global $currentUser;
+$currentUser = app()->user;
 if ($currentUser == null) {
 	include BASE_PATH . "views/head.php";
 } else {

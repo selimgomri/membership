@@ -144,9 +144,9 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
   return false;
 }
 
-function getAttendanceByID($link, $id, $weeks = "all") {
+function getAttendanceByID($link = null, $id, $weeks = "all") {
   global $db;
-  global $systemInfo;
+  $systemInfo = app()->system;
   $hideAttendance = !bool($systemInfo->getSystemOption('HIDE_MEMBER_ATTENDANCE'));
   if ($_SESSION['AccessLevel'] != 'Parent' || $hideAttendance) {
     $output = "";
@@ -184,7 +184,7 @@ function getAttendanceByID($link, $id, $weeks = "all") {
   return 'DATA HIDDEN ';
 }
 
-function mySwimmersTable($link, $userID) {
+function mySwimmersTable($link = null, $userID) {
   global $db;
   // Get the information about the swimmer
   $swimmers = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname,
@@ -230,7 +230,7 @@ function mySwimmersTable($link, $userID) {
           </a>
         </td>
         <td>
-          <?=htmlspecialchars(getAttendanceByID($link, $swimmer['MemberID'], 4))?>%
+          <?=htmlspecialchars(getAttendanceByID(null, $swimmer['MemberID'], 4))?>%
         </td>
       </tr>
     <?php } while ( $swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
@@ -265,7 +265,7 @@ function courseLengthString($string) {
   return $courseLength;
 }
 
-function upcomingGalas($link, $links = false, $userID = null) {
+function upcomingGalas($link = null, $links = false, $userID = null) {
   global $db;
   $sql = $db->query("SELECT * FROM `galas` WHERE `galas`.`ClosingDate` >= CURDATE() ORDER BY `galas`.`ClosingDate` ASC;");
   $row = $sql->fetch(PDO::FETCH_ASSOC);
@@ -315,7 +315,7 @@ function upcomingGalas($link, $links = false, $userID = null) {
   return $output;
 }
 
-function myMonthlyFeeTable($link, $userID) {
+function myMonthlyFeeTable($link = null, $userID) {
   global $db;
   $sql = $db->prepare("SELECT squads.SquadName, squads.SquadID, squads.SquadFee,
   members.MForename, members.MSurname FROM (members INNER JOIN squads ON
@@ -407,7 +407,7 @@ function autoUrl($relative) {
   return rtrim($rootUrl . $relative, '/');
 }
 
-function monthlyFeeCost($link, $userID, $format = "decimal") {
+function monthlyFeeCost($link = null, $userID, $format = "decimal") {
   global $db;
   $query = $db->prepare("SELECT squads.SquadName, squads.SquadID, squads.SquadFee FROM (members
   INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID =
@@ -452,7 +452,7 @@ function monthlyFeeCost($link, $userID, $format = "decimal") {
   }
 }
 
-function monthlyExtraCost($link, $userID, $format = "decimal") {
+function monthlyExtraCost($link = null, $userID, $format = "decimal") {
   global $db;
   $query = $db->prepare("SELECT extras.ExtraName, extras.ExtraFee FROM ((members
   INNER JOIN `extrasRelations` ON members.MemberID = extrasRelations.MemberID)
@@ -477,7 +477,7 @@ function monthlyExtraCost($link, $userID, $format = "decimal") {
   }
 }
 
-function swimmers($link, $userID, $fees = false) {
+function swimmers($link = null, $userID, $fees = false) {
   global $db;
   $sql = $db->prepare("SELECT squads.SquadName, squads.SquadFee, members.MForename,
   members.MSurname, members.ClubPays FROM (members INNER JOIN squads ON
@@ -513,7 +513,7 @@ function swimmers($link, $userID, $fees = false) {
 
 }
 
-function paymentHistory($link, $user, $type = null) {
+function paymentHistory($link = null, $user, $type = null) {
   global $db;
   $sql = $db->prepare("SELECT * FROM `payments` WHERE `UserID` = ? ORDER BY `PaymentID` DESC LIMIT 0, 5;");
   $sql->execute([$user]);
@@ -555,7 +555,7 @@ function paymentHistory($link, $user, $type = null) {
   <?php }
 }
 
-function feesToPay($link, $user) {
+function feesToPay($link = null, $user) {
   global $db;
   $sql = $db->prepare("SELECT * FROM `paymentsPending` WHERE `UserID` = ? AND `PMkey` IS NULL AND `Status` = 'Pending' ORDER BY `Date` DESC LIMIT 0, 30;");
   $sql->execute([$user]);
@@ -597,7 +597,7 @@ function feesToPay($link, $user) {
   <?php }
 }
 
-function getBillingDate($link, $user) {
+function getBillingDate($link = null, $user) {
   global $db;
   $sql = $db->prepare("SELECT * FROM `paymentSchedule` WHERE `UserID` = ?;");
   $sql->execute([$user]);

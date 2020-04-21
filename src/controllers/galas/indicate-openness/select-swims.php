@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 $galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends`, CoachEnters, GalaFee fee, GalaFeeConstant gfc FROM galas WHERE GalaID = ?");
 $galaDetails->execute([$id]);
 $gala = $galaDetails->fetch(PDO::FETCH_ASSOC);

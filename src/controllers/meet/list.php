@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $threeHoursAgo = new DateTime('-3 hours', new DateTimeZone('UTC'));
 

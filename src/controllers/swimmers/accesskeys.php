@@ -4,7 +4,7 @@ if ($access != "Admin" && $access != "Coach" && $access != "Galas") {
   halt(404);
 }
 
-global $db;
+$db = app()->db;
 
 $swimmers = $db->query("SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.AccessKey FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) ORDER BY `members`.`MForename` , `members`.`MSurname` ASC");
 $updateASA = $db->prepare("UPDATE `members` SET ASANumber = ? WHERE `MemberID` = ?");

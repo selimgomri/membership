@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 require 'GlobalHead.php';
 
@@ -181,7 +181,7 @@ if (isset($customBackground) && $customBackground) {
         </div>
       </div>
 
-      <?php if (!user_needs_registration($_SESSION['UserID'])) { ?>
+      <?php if (!isset($_SESSION['UserID']) || !user_needs_registration($_SESSION['UserID'])) { ?>
       <div class="<?=$container_class?>">
         <div class="">
           <div class="">

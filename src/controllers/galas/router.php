@@ -7,7 +7,7 @@ $this->get('/all-galas', function() {
 
 // Gala Entry Time Sheet
 $this->get(['/{id}:int/timesheet', '/competitions/{id}:int/timesheet'], function($id) {
-  global $link;
+  
   include "export/PDFTimesheet.php";
 });
 
@@ -87,7 +87,7 @@ if ($access == "Parent") {
 	// Gala Home
 	$this->get('/', function() {
 		// Check docs for route - this is a GET
-		global $link;
+		
 		include 'parentHome.php';
 	});
 
@@ -115,17 +115,17 @@ if ($access == "Parent") {
 
 	// Gala Entries
 	$this->get('/entries', function() {
-		global $link;
+		
 		include 'parententries.php';
 	});
 
 	$this->get('/entries/{id}', function($id) {
-		global $link;
+		
 		include 'EditEntry.php';
 	});
 
 	$this->post('/entries/{id}', function($id) {
-		global $link;
+		
 		include 'EditEntryPost.php';
 	});
 
@@ -142,7 +142,7 @@ if ($access == "Parent") {
 	});
 
 	$this->get('/entries/{id}/veto/do', function($id) {
-		global $link;
+		
 		include 'indicate-openness/veto-do.php';
 	});
 
@@ -186,18 +186,18 @@ if ($access == "Parent") {
 } else if ($access == "Galas" || $access == "Committee" || $access == "Admin" || $access == "Coach") {
 	// Gala Home
 	$this->get(['/', '/competitions'], function() {
-		global $link;
+		
 		include 'listGalas.php';
 	});
 
 	// Add a gala
 	$this->get(['/addgala', '/new'], function() {
-		global $link;
+		
 		include 'addGala.php';
 	});
 
 	$this->post(['/addgala', '/new'], function() {
-		global $link;
+		
 		include 'addGalaAction.php';
 	});
 	
@@ -221,7 +221,7 @@ if ($access == "Parent") {
 
 	// View Competitions
 	$this->get(['/{id}:int/edit', '/competitions/{id}:int/edit'], function($id) {
-		global $link;
+		
 		include "competitionSingle.php";
 	});
 
@@ -231,33 +231,33 @@ if ($access == "Parent") {
 
 	// Gala Entries
 	$this->get('/entries/{id}:int', function($id) {
-		global $link;
+		
 		include 'EditEntry.php';
 	});
 
 	$this->post('/entries/{id}:int', function($id) {
-		global $link;
+		
 		include 'EditEntryPost.php';
 	});
 
 	// Gala Entries
 	$this->get('/entries', function() {
-		global $link;
+		
 		include 'allEntries.php';
 	});
 
 	$this->get('/ajax/entries', function() {
-		global $link;
+		
 		require BASE_PATH . 'controllers/ajax/GalaEntries.php';
 	});
 
 	$this->post('/ajax/entryProcessed', function() {
-		global $link;
+		
 		include BASE_PATH . 'controllers/ajax/galaEntriesProcessed.php';
 	});
 
 	$this->get('/entries/{id}:int', function($id) {
-		global $link;
+		
 		include 'singleentry.php';
 	});
 

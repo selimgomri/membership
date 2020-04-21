@@ -1,8 +1,8 @@
 <?php
 
-global $db;
+$db = app()->db;
 
-global $systemInfo;
+$systemInfo = app()->system;
 $privacy = $systemInfo->getSystemOption('PrivacyPolicy');
 
 $Extra = new ParsedownExtra();

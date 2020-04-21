@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 $paymentMethods = $db->prepare("SELECT stripePayMethods.ID, `Name`, Last4, Brand, ExpMonth, ExpYear, Funding, PostCode, Line1, Line2, CardName FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ?");
 $paymentMethods->execute([$_SESSION['UserID']]);
 

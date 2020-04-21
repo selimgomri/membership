@@ -2,7 +2,7 @@
 
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
-global $db;
+$db = app()->db;
 
 define("PAYMENT_EMAILS", [
   "Email" => "noreply@" . env('EMAIL_DOMAIN'),
@@ -21,7 +21,7 @@ $calculated_signature = hash_hmac("sha256", $raw_payload, env('GOCARDLESS_WEBHOO
 if ($provided_signature == $calculated_signature) {
   $payload = json_decode($raw_payload, true);
 
-  global $db;
+  $db = app()->db;
 
   // Check if $event["id"] has been done before
   $getCount = $db->prepare("SELECT COUNT(*) FROM paymentWebhookOps WHERE EventID = ?");
@@ -63,15 +63,15 @@ if ($provided_signature == $calculated_signature) {
 }
 
 function process_payout_event($event) {
-  global $db;
+  $db = app()->db;
   $payout = $event["links"]["payout"];
   createOrUpdatePayout($payout, true);
   echo $payout . ' processed';
 }
 
 function process_mandate_event($event) {
-	global $link;
-  global $db;
+	
+  $db = app()->db;
 	include BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   switch ($event["action"]) {
     case "created":
@@ -286,8 +286,8 @@ function process_mandate_event($event) {
 }
 
 function process_payment_event($event) {
-	global $link;
-  global $db;
+	
+  $db = app()->db;
 	include BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   switch ($event["action"]) {
   	case "created":

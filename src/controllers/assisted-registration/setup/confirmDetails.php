@@ -2,8 +2,8 @@
 
 $_SESSION['AssRegStage'] = 2;
 
-global $db;
-global $systemInfo;
+$db = app()->db;
+$systemInfo = app()->system;
 $privacy = $systemInfo->getSystemOption('PrivacyPolicy');
 
 $Extra = new ParsedownExtra();

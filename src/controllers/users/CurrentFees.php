@@ -4,7 +4,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $user = $id;
 
-global $db;
+$db = app()->db;
 
 $getUser = $db->prepare("SELECT Forename, Surname FROM users WHERE UserID = ?");
 $getUser->execute([$user]);

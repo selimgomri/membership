@@ -3,7 +3,7 @@
 // Verify user has access
 canView('TeamManager', $_SESSION['UserID'], $id);
 
-global $db;
+$db = app()->db;
 
 // GET THE GALA
 $getGala = $db->prepare("SELECT GalaName `name`, GalaVenue venue FROM galas WHERE GalaID = ?");

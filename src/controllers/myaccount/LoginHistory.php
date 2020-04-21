@@ -2,7 +2,7 @@
 
 $fluidContainer = true;
 
-global $db;
+$db = app()->db;
 
 $null = $page;
 

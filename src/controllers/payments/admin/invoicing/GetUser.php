@@ -4,7 +4,7 @@ use Brick\PhoneNumber\PhoneNumber;
 use Brick\PhoneNumber\PhoneNumberParseException;
 use Brick\PhoneNumber\PhoneNumberFormat;
 
-global $db;
+$db = app()->db;
 
 $getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile FROM users INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE EmailAddress LIKE ? AND  `permissions`.`Permission` = 'Parent'");
 $getUser->execute(['%' . mb_strtolower($_POST['email']) . '%']);

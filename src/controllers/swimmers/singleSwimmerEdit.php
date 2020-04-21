@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 /** must go in form
 if (app('request')->method == 'POST' && !SCDS\CSRF::verify()) {

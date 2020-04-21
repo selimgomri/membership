@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 try {
   $delete = $db->prepare("DELETE FROM extras WHERE ExtraID = ?");
   $delete->execute([$id]);

@@ -40,7 +40,7 @@ $swimsArray = [
   '400IM' => '400&nbsp;IM'
 ];
 
-global $db;
+$db = app()->db;
 
 try {
 

@@ -1,6 +1,6 @@
 <?php
 
-/*
+
 // ----------------------------------------------------------------------------------------------------
 // - Display Errors
 // ----------------------------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ function ErrorHandler($type, $message, $file, $line)
 };
 
 $old_error_handler = set_error_handler("ErrorHandler");
-*/
+
 
 // Do not reveal PHP when sending mail
 ini_set('expose_php', 'Off');
@@ -129,9 +129,6 @@ function currentUrl() {
   }
   return $url;
 }
-
-$db = null;
-$link = null;
 
 $get_group = '/club/{clubcode}';
 
@@ -227,17 +224,11 @@ function halt(int $statusCode, $throwException = true) {
   }
 }
 
-$link = mysqli_connect(env('DB_HOST'), env('DB_USER'), env('DB_PASS'), env('DB_NAME'));
 $db = null;
 try {
   $db = new PDO("mysql:host=" . env('DB_HOST') . ";dbname=" . env('DB_NAME') . ";charset=utf8mb4", env('DB_USER'), env('DB_PASS'));
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (Exception $e) {
-  halt(500);
-}
-
-/* check connection */
-if (mysqli_connect_errno()) {
   halt(500);
 }
 
@@ -248,74 +239,10 @@ if ($headInfo[0] == 'ref:') {
   define('SOFTWARE_VERSION', $HEAD_hash);
 }
 
-$systemInfo = new \SystemInfo($db);
-
-include BASE_PATH . 'includes/GetVars.php';
-
 require_once "database.php";
-
-$currentUser = null;
-if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && isset($_SESSION['UserID']) && $_SESSION['UserID'] != null) {
-  $currentUser = new User($_SESSION['UserID'], $db);
-}
 
 if (!isset($_SESSION['PWA']) && isset($_COOKIE[COOKIE_PREFIX . 'PWA'])) {
   $_SESSION['PWA'] = $_COOKIE[COOKIE_PREFIX . 'PWA'];
-}
-
-if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'AutoLogin'] != "") {
-  $sql = "SELECT `UserID`, `Time` FROM `userLogins` WHERE `Hash` = ? AND `Time` >= ? AND `HashActive` = ?";
-
-  $data = [
-    $_COOKIE[COOKIE_PREFIX . 'AutoLogin'],
-    date('Y-m-d H:i:s', strtotime("120 days ago")),
-    1
-  ];
-
-  try {
-    $query = $db->prepare($sql);
-    $query->execute($data);
-  } catch (PDOException $e) {
-    //halt(500);
-  }
-
-  $row = $query->fetch(PDO::FETCH_ASSOC);
-  if ($row != null) {
-    $user = $row['UserID'];
-    $utc = new DateTimeZone("UTC");
-    $time = new DateTime($row['Time'], $utc);
-
-    try {
-      $login = new \CLSASC\Membership\Login($db);
-      $login->setUser($user);
-      $login->stayLoggedIn();
-      $login->preventWarningEmail();
-      $login->reLogin();
-      global $currentUser;
-      $currentUser = $login->login();
-    } catch (Exception $e) {
-      reportError($e);
-      // halt(403);
-    }
-
-    $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));
-
-    $sql = "UPDATE `userLogins` SET `Hash` = ? WHERE `Hash` = ?";
-    try {
-      $query = $db->prepare($sql);
-      $query->execute([$hash, $_COOKIE[COOKIE_PREFIX . 'AutoLogin']]);
-    } catch (PDOException $e) {
-      halt(500);
-    }
-
-    $expiry_time = ($time->format('U'))+60*60*24*120;
-
-    $secure = true;
-    if (app('request')->protocol == 'http' && bool(env('IS_DEV'))) {
-      $secure = false;
-    }
-    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , COOKIE_PATH, app('request')->hostname, $secure, false);
-  }
 }
 
 if (!isset($_SESSION['Browser'])) {
@@ -326,10 +253,90 @@ if (!isset($_SESSION['Browser'])) {
   $_SESSION['Browser']['Version'] = $browser->browser->version->value;
 }
 
-$currentUser = null;
-if (isset($_SESSION['UserID'])) {
-  $currentUser = new User($_SESSION['UserID'], $db);
-}
+$route->use(function (){
+  // Make req available
+  $req = app('request');
+
+  // Make db available
+  $db = null;
+  try {
+    $db = new PDO("mysql:host=" . env('DB_HOST') . ";dbname=" . env('DB_NAME') . ";charset=utf8mb4", env('DB_USER'), env('DB_PASS'));
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  } catch (Exception $e) {
+    halt(500);
+  }
+
+  app()->db = $db;
+
+  // System info stuff
+  $systemInfo = new \SystemInfo($db);
+  app()->system = $systemInfo;
+
+  // Load vars
+  include BASE_PATH . 'includes/GetVars.php';
+
+  // User login if required and make user var available
+  $currentUser = null;
+  if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'AutoLogin'] != "") {
+    $sql = "SELECT `UserID`, `Time` FROM `userLogins` WHERE `Hash` = ? AND `Time` >= ? AND `HashActive` = ?";
+  
+    $data = [
+      $_COOKIE[COOKIE_PREFIX . 'AutoLogin'],
+      date('Y-m-d H:i:s', strtotime("120 days ago")),
+      1
+    ];
+  
+    try {
+      $query = $db->prepare($sql);
+      $query->execute($data);
+    } catch (PDOException $e) {
+      //halt(500);
+    }
+  
+    $row = $query->fetch(PDO::FETCH_ASSOC);
+    if ($row != null) {
+      $user = $row['UserID'];
+      $utc = new DateTimeZone("UTC");
+      $time = new DateTime($row['Time'], $utc);
+  
+      try {
+        $login = new \CLSASC\Membership\Login($db);
+        $login->setUser($user);
+        $login->stayLoggedIn();
+        $login->preventWarningEmail();
+        $login->reLogin();
+        $currentUser = app()->user;
+        $currentUser = $login->login();
+      } catch (Exception $e) {
+        reportError($e);
+        // halt(403);
+      }
+  
+      $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));
+  
+      $sql = "UPDATE `userLogins` SET `Hash` = ? WHERE `Hash` = ?";
+      try {
+        $query = $db->prepare($sql);
+        $query->execute([$hash, $_COOKIE[COOKIE_PREFIX . 'AutoLogin']]);
+      } catch (PDOException $e) {
+        halt(500);
+      }
+  
+      $expiry_time = ($time->format('U'))+60*60*24*120;
+  
+      $secure = true;
+      if (app('request')->protocol == 'http' && bool(env('IS_DEV'))) {
+        $secure = false;
+      }
+      setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , COOKIE_PATH, app('request')->hostname, $secure, false);
+    }
+  } else if (isset($_SESSION['UserID'])) {
+    $currentUser = new User($_SESSION['UserID'], $db);
+  }
+  app()->user = $currentUser;
+
+  // pre('Do something before all routes', 3);
+});
 
 if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && !isset($_SESSION['DisableTrackers'])) {
   $_SESSION['DisableTrackers'] = filter_var(getUserOption($_SESSION['UserID'], "DisableTrackers"), FILTER_VALIDATE_BOOLEAN);
@@ -423,7 +430,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
   // Password Reset via Link
   $this->get('/email/auth/{id}:int/{auth}', function($id, $auth) {
-    global $link;
+    
     require('controllers/myaccount/EmailUpdate.php');
   });
 
@@ -433,12 +440,12 @@ $route->group($get_group, function($clubcode = "CLSE") {
   });
 
   $this->get('/notify/unsubscribe/{userid}/{email}/{list}', function($userid, $email, $list) {
-    global $link;
+    
     include 'controllers/notify/UnsubscribeHandlerAsk.php';
   });
 
   $this->get('/notify/unsubscribe/{userid}/{email}/{list}/do', function($userid, $email, $list) {
-    global $link;
+    
     include 'controllers/notify/UnsubscribeHandler.php';
   });
 
@@ -457,21 +464,21 @@ $route->group($get_group, function($clubcode = "CLSE") {
   });
 
   $this->get('/reportanissue', function() {
-    global $link;
+    
     include 'controllers/help/ReportIssueHandler.php';
   });
   $this->post('/reportanissue', function() {
-    global $link;
+    
     include 'controllers/help/ReportIssuePost.php';
   });
 
   $this->group('/ajax', function() {
-    global $link;
+    
     include 'controllers/public/router.php';
   });
 
   $this->group('/about', function() {
-    global $link;
+    
     include 'controllers/about/router.php';
   });
 
@@ -565,7 +572,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
     // Register
     $this->get(['/register', '/register/family', '/register/family/{fam}:int/{acs}:key'], function($fam = null, $acs = null) {
-      global $link;
+      
       require('controllers/registration/register.php');
     });
 
@@ -574,13 +581,13 @@ $route->group($get_group, function($clubcode = "CLSE") {
     });
 
     $this->post('/register', function() {
-      global $link;
+      
       require('controllers/registration/registration.php');
     });
 
     // Confirm Email via Link
     $this->get('/register/auth/{id}:int/new-user/{token}', function($id, $token) {
-      global $link;
+      
       require('controllers/registration/RegAuth.php');
     });
 
@@ -590,28 +597,28 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
     // Locked Out Password Reset
     $this->get('/resetpassword', function() {
-      global $link;
+      
       require('controllers/forgot-password/request.php');
     });
 
     $this->post('/resetpassword', function() {
-      global $link;
+      
       require('controllers/forgot-password/request-action.php');
     });
 
     // Password Reset via Link
     $this->get('/resetpassword/auth/{token}', function($token) {
-      global $link;
+      
       require('controllers/forgot-password/reset.php');
     });
 
     $this->post('/resetpassword/auth/{token}', function($token) {
-      global $link;
+      
       require('controllers/forgot-password/reset-action.php');
     });
 
     $this->group('/payments/webhooks', function() {
-      global $link;
+      
       require('controllers/payments/webhooks.php');
     });
 
@@ -620,12 +627,12 @@ $route->group($get_group, function($clubcode = "CLSE") {
     });
 
     $this->group('/webhooks', function() {
-      global $link;
+      
       require('controllers/webhooks/router.php');
     });
 
     $this->get('/notify', function() {
-      global $link;
+      
       include 'controllers/notify/Help.php';
     });
 
@@ -655,7 +662,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
     });
   } else if (user_needs_registration($_SESSION['UserID'])) {
     $this->group('/renewal', function() {
-      global $link;
+      
 
       include 'controllers/renewal/router.php';
     });
@@ -676,12 +683,12 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
     if ($_SESSION['AccessLevel'] == "Parent") {
       $this->get('/', function() {
-        global $link;
+        
       	include 'controllers/ParentDashboard.php';
       });
     } else {
       $this->get('/', function() {
-        global $link;
+        
       	include 'controllers/NewDashboard.php';
       });
     }
@@ -695,18 +702,18 @@ $route->group($get_group, function($clubcode = "CLSE") {
     });
 
     $this->group(['/my-account', '/myaccount'], function() {
-      global $link;
+      
       include 'controllers/myaccount/router.php';
     });
 
     $this->group(['/swimmers', '/members', '/divers','/water-polo-players'], function() {
-      global $link;
+      
 
       include 'controllers/swimmers/router.php';
     });
 
     $this->group('/squads', function() {
-      global $link;
+      
 
       include 'controllers/squads/router.php';
     });
@@ -733,7 +740,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
     }
 
     $this->group(['/posts', '/pages'], function() {
-      global $link;
+      
 
       include 'controllers/posts/router.php';
     });
@@ -743,13 +750,13 @@ $route->group($get_group, function($clubcode = "CLSE") {
     });
 
     $this->group('/registration', function() {
-      global $link;
+      
 
       include 'controllers/registration/router.php';
     });
 
     $this->group(['/attendance', '/registers'], function() {
-      global $link;
+      
 
       include 'controllers/attendance/router.php';
     });
@@ -763,30 +770,30 @@ $route->group($get_group, function($clubcode = "CLSE") {
     });
 
     $this->group('/galas', function() {
-      global $link;
+      
 
       include 'controllers/galas/router.php';
     });
 
     $this->group('/family', function() {
-      global $db;
+      
       require('controllers/family/router.php');
     });
 
     $this->group('/renewal', function() {
-      global $link;
+      
 
       include 'controllers/renewal/router.php';
     });
 
     $this->group('/registration', function() {
-      global $link;
+      
 
       include 'controllers/registration/router.php';
     });
 
     $this->group('/payments', function() {
-      global $link;
+      
 
       include 'controllers/payments/router.php';
     });
@@ -796,7 +803,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
     });
 
     $this->group('/notify', function() {
-      global $link;
+      
       include 'controllers/notify/router.php';
     });
 
@@ -805,16 +812,16 @@ $route->group($get_group, function($clubcode = "CLSE") {
     });
 
     $this->group(['/emergency-contacts', '/emergencycontacts'], function() {
-      global $link;
+      
 
       include 'controllers/emergencycontacts/router.php';
     });
 
     $this->group('/webhooks', function() {
-      global $link;
+      
 
       $this->group('/payments', function() {
-        global $link;
+        
 
         include 'controllers/payments/webhooks.php';
       });
@@ -839,17 +846,6 @@ $route->group($get_group, function($clubcode = "CLSE") {
     $this->group('/resources', function() {
       include 'controllers/resources/router.php';
     });
-
-    /*$this->any('test', function() {
-      global $link;
-      global $db;
-
-      include BASE_PATH . 'views/header.php';
-
-      echo myMonthlyFeeTable($link, 1);
-
-      include BASE_PATH . 'views/footer.php';
-    });*/
 
     if ($_SESSION['AccessLevel'] == "Admin") {
       $this->group('/settings', function() {
@@ -912,7 +908,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
         */
 
         $this->get('/test', function() {
-          global $db;
+          
           $fees = \SCDS\Membership\ClubMembership::create($db, 12, false);
           pre($fees->getFeeItems());
           pre($fees->getFee());
@@ -952,7 +948,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
 
   // Global Catch All 404
   $this->any('/*', function() {
-    global $link;
+    
     include 'views/404.php';
   });
 
@@ -981,5 +977,4 @@ try {
 }
 
 // Close SQL Database Connections
-mysqli_close($link);
 $db = null;

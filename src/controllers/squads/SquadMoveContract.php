@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $sql = "SELECT MoveID, moves.SquadID, squads.SquadName, `MForename`, `MSurname`, Forename, Surname, DateOfBirth, squads.SquadFee, squads.SquadCoC, squads.SquadTimetable, `users`.`UserID`, MovingDate, old.SquadName AS OldSquad, old.SquadFee AS OldFee FROM ((((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) INNER JOIN squads AS old ON members.SquadID = old.SquadID) WHERE members.MemberID = ?";
 $email_info = $db->prepare($sql);

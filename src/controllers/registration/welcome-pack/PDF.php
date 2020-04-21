@@ -8,8 +8,8 @@ if (!isset($id)) {
   halt(404);
 }
 
-global $db;
-global $systemInfo;
+$db = app()->db;
+$systemInfo = app()->system;
 $welcome = $systemInfo->getSystemOption('WelcomeLetter');
 
 $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");

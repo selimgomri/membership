@@ -2,7 +2,7 @@
 
 $partial_reg = isPartialRegistration();
 
-global $db;
+$db = app()->db;
 $sql = "SELECT `ID` FROM `posts` WHERE `Type` = ? LIMIT 1";
 try {
 	$query = $db->prepare($sql);
@@ -10,7 +10,7 @@ try {
 } catch (PDOException $e) {
 	halt(500);
 }
-global $systemInfo;
+$systemInfo = app()->system;
 $terms_Id = $systemInfo->getSystemOption('TermsAndConditions');
 
 $row = [];
@@ -65,7 +65,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
           This form relates to yourself and the members listed below.
         </p>
 
-        <?php echo mySwimmersTable($link, $_SESSION['UserID']); ?>
+        <?php echo mySwimmersTable(null, $_SESSION['UserID']); ?>
 
         <?php } ?>
 

@@ -10,7 +10,7 @@ if ((int) $id == 0) {
   return;
 }
 
-global $db;
+$db = app()->db;
 
 $getSquad = $db->prepare("SELECT SquadName, SquadFee, SquadCoC, SquadTimetable, SquadCoach FROM squads WHERE SquadID = ?");
 $getSquad->execute([$id]);

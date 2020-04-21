@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $obj = null;
 if (bool(env('IS_CLS'))) {

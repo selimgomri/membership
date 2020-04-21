@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $url_path = "payments";
 if (isset($renewal_trap) && $renewal_trap) {
@@ -28,7 +28,7 @@ if ($scheduleExists == null) {
   $_SESSION['Token'] = hash('sha256', $_SESSION['UserID'] . "-" . rand(1000,9999));
 
   $addr = null;
-  global $currentUser;
+  $currentUser = app()->user;
   $json = $currentUser->getUserOption('MAIN_ADDRESS');
   if ($json != null) {
     $addr = json_decode($json);

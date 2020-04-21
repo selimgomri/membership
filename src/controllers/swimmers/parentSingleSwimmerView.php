@@ -1,9 +1,9 @@
 <?php
 
-global $systemInfo;
+$systemInfo = app()->system;
 $leavers = $systemInfo->getSystemOption('LeaversSquad');
 
-global $db;
+$db = app()->db;
 $getInfo = $db->prepare("SELECT members.MemberID, members.MForename, members.MMiddleNames,
 members.MSurname, users.EmailAddress, members.ASANumber, members.ASACategory,
 members.ClubPays, squads.SquadName, squads.SquadFee, squads.SquadCoach,

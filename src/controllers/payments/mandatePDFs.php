@@ -6,7 +6,7 @@ if (!isset($mandate) || $mandate == "") {
   halt(400);
 }
 
-global $db;
+$db = app()->db;
 $checkDetails = $db->prepare("SELECT `UserID` FROM `paymentMandates` WHERE `Mandate` = ?");
 $checkDetails->execute([$mandate]);
 $userID = $_SESSION['UserID'];

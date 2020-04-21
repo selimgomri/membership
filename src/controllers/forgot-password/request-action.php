@@ -7,7 +7,7 @@ if (!SCDS\CSRF::verify()) {
 $pagetitle = "Password Reset";
 include BASE_PATH . "views/header.php";
 
-global $db;
+$db = app()->db;
 $userDetails = trim($_POST['email-address']);
 $captcha = trim($_POST['g-recaptcha-response']);
 $captchaStatus = null;

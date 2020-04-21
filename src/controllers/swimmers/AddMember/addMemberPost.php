@@ -4,7 +4,7 @@ if (!SCDS\CSRF::verify()) {
 	halt(403);
 }
 
-global $db;
+$db = app()->db;
 
 $added = $action = false;
 

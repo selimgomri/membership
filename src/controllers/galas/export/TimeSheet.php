@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $sql = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ?");
 $sql->execute([$id]);

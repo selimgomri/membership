@@ -1,7 +1,7 @@
 <?php
 
-global $db;
-global $systemInfo;
+$db = app()->db;
+$systemInfo = app()->system;
 
 $fluidContainer = true;
 

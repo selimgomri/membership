@@ -7,7 +7,7 @@ $valid = true;
 $message = 'Email address is allowed.';
 
 try {
-  global $db;
+  $db = app()->db;
 
   $get = $db->prepare("SELECT COUNT(*) FROM users WHERE EmailAddress = ? AND UserID != ?");
   $get->execute([

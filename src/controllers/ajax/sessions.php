@@ -4,7 +4,7 @@ if (!isset($_POST["action"])) {
 	halt(404);
 }
 
-global $db;
+$db = app()->db;
 
 $access = $_SESSION['AccessLevel'];
 $count = 0;
@@ -14,7 +14,7 @@ $count = 0;
 
 function sessionManagement($squadID, $old = null) {
 	ob_start();
-  global $db;
+  $db = app()->db;
 	$output = $content = $modals = "";
 	
 	$getSessions = $db->prepare("SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SquadID` = ? AND (ISNULL(sessions.DisplayFrom) OR (sessions.DisplayFrom <= CURDATE( ))) AND (ISNULL(sessions.DisplayUntil) OR (sessions.DisplayUntil >= CURDATE( ))) ORDER BY `SessionDay` ASC, `StartTime` ASC");

@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $pagetitle = "Add a member";
 $title = "Add a member";

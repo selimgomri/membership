@@ -7,7 +7,7 @@ $reportedError = reportError($e);
 
 http_response_code(500);
 $pagetitle = "Error 500 - Internal Server Error";
-global $currentUser;
+$currentUser = app()->user;
 if ($currentUser == null) {
 	include BASE_PATH . "views/head.php";
 } else {

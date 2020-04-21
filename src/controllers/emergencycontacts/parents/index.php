@@ -4,7 +4,7 @@ use Brick\PhoneNumber\PhoneNumber;
 use Brick\PhoneNumber\PhoneNumberParseException;
 use Brick\PhoneNumber\PhoneNumberFormat;
 
-global $db;
+$db = app()->db;
 
 if (isset($renewal_trap) && $renewal_trap) {
 	header("Location: " . autoUrl("renewal/go"));

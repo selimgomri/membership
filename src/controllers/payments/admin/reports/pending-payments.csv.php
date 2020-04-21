@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $getInfo = $db->prepare("SELECT Forename fn, Surname sn, EmailAddress email, paymentsPending.Name, paymentsPending.Date, Amount, Currency, paymentsPending.Type, paymentsPending.MetadataJSON FROM users INNER JOIN paymentsPending ON users.UserID = paymentsPending.UserID WHERE paymentsPending.Status = 'Pending' ORDER BY sn ASC, fn ASC, paymentsPending.Date ASC;");
 $getInfo->execute([]);

@@ -7,7 +7,7 @@ try {
   } else {
     try {
       // Get renewal
-      global $db;
+      $db = app()->db;
       
       include 'GetRenewal.php';
 

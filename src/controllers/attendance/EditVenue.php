@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $data = $db->prepare("SELECT VenueName, Location FROM sessionsVenues WHERE VenueID = ?");
 $data->execute([$id]);

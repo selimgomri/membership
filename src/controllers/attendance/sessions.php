@@ -5,7 +5,7 @@ if (isset($_GET['squad'])) {
   $selectedSquad = $_GET['squad'];
 }
 
-global $db;
+$db = app()->db;
 $squads = $db->query("SELECT SquadName `name`, SquadID id FROM squads ORDER BY SquadFee DESC, `name` ASC");
 $squad = $squads->fetch(PDO::FETCH_ASSOC);
 

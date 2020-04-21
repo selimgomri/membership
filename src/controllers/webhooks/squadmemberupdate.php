@@ -6,7 +6,8 @@
  * It also adds members to a renewal on the day it starts
  */
 
-global $db, $systemInfo;
+$systemInfo = app()->system;
+$db = app()->db;
 
 // Mandatory Startup Sequence to carry out squad updates
 $moves = $db->query("SELECT MemberID, SquadID FROM `moves` WHERE MovingDate <= CURDATE()");

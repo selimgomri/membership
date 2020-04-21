@@ -16,7 +16,7 @@
 
   if (isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])) {
     // Unset the hash.
-    global $db;
+    $db = app()->db;
     $unset = $db->prepare("UPDATE userLogins SET HashActive = ? WHERE Hash = ? AND UserID = ?");
     $unset->execute([
       0,

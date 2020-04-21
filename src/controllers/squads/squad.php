@@ -10,7 +10,7 @@ $search  = array("\n##### ", "\n#### ", "\n### ", "\n## ", "\n# ");
 $replace = array("\n###### ", "\n##### ", "\n#### ", "\n### ", "\n## ");
 //echo $Extra->text('# Header {.sth}'); # prints: <h1 class="sth">Header</h1>
 
-global $db;
+$db = app()->db;
 $getSquad = $db->prepare("SELECT SquadName, SquadFee, SquadCoC, SquadTimetable, SquadCoach FROM squads WHERE SquadID = ?");
 $getSquad->execute([$id]);
 $squad = $getSquad->fetch(PDO::FETCH_ASSOC);

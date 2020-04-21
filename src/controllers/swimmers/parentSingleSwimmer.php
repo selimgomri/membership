@@ -3,7 +3,7 @@
 // Get all countries
 $countries = getISOAlpha2CountriesWithHomeNations();
 
-global $db;
+$db = app()->db;
 $getSwimmer = $db->prepare("SELECT members.MForename, members.MForename, members.MMiddleNames,
 members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName,
 squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC,

@@ -7,7 +7,7 @@ if (isset($use_website_menu)) {
 if (!function_exists('chesterStandardMenu')) {
   function chesterStandardMenu() {
     
-    global $db;
+    $db = app()->db;
     $use_website_menu = false;
     if (defined('USE_CLS_MENU')) {
       $use_website_menu = USE_CLS_MENU;
@@ -43,7 +43,7 @@ if (!function_exists('chesterStandardMenu')) {
     }
     
     $hasNotifyAccess = false;
-    if ($_SESSION['AccessLevel'] == 'Parent') {
+    if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Parent') {
       $getNotify = $db->prepare("SELECT COUNT(*) FROM (SELECT User FROM squadReps UNION SELECT User FROM listSenders) AS T WHERE T.User = ?");
       $getNotify->execute([
         $_SESSION['UserID'],
@@ -54,7 +54,7 @@ if (!function_exists('chesterStandardMenu')) {
     }
 
     $isTeamManager = false;
-    if ($_SESSION['AccessLevel'] == 'Parent') {
+    if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Parent') {
       $date = new DateTime('-1 day', new DateTimeZone('Europe/London'));
       $getGalas = $db->prepare("SELECT COUNT(*) FROM teamManagers INNER JOIN galas ON teamManagers.Gala = galas.GalaID WHERE teamManagers.User = ? AND galas.GalaDate >= ?");
       $getGalas->execute([
@@ -464,7 +464,7 @@ if (!function_exists('chesterStandardMenu')) {
                 <?php } ?>
               </ul>
               <?php if (!empty($_SESSION['LoggedIn'])) {
-          global $currentUser;
+          $currentUser = app()->user;
           $user_name = preg_replace("/( +)/" , '&nbsp;', htmlspecialchars($currentUser->getName())); ?>
               <ul class="navbar-nav">
                 <li class="nav-item dropdown">

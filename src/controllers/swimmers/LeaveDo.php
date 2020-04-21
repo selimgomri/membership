@@ -1,7 +1,7 @@
 <?php
 
-global $db;
-global $systemInfo;
+$db = app()->db;
+$systemInfo = app()->system;
 
 $leavers = $systemInfo->getSystemOption('LeaversSquad');
 $query = $db->prepare("SELECT UserID, MForename, MSurname FROM members WHERE MemberID = ?");

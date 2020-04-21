@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $rep = false;
 if ($_SESSION['AccessLevel'] == 'Parent') {
@@ -25,36 +25,36 @@ $access = $_SESSION['AccessLevel'];
 
 if ($access != "Admin" && $access != "Coach" && $access != "Galas" && !$rep) {
 	$this->get('/', function() {
-		global $link;
+		
 		include 'Help.php';
 	});
 }
 
 if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
 	$this->get('/', function() {
-		global $link;
+		
 		include 'Home.php';
 	});
 
   $this->group(['/new', '/newemail'], function() {
 
   	$this->get('/', function() {
-  		global $link;
+  		
   		include 'Email.php';
   	});
 
   	$this->post('/', function() {
-  		global $link;
+  		
   		include 'EmailQueuer.php';
   	});
 
     $this->get('/individual/{user}?:int/', function($user = null) {
-  		global $link;
+  		
   		include 'EmailIndividual.php';
   	});
 
   	$this->post('/individual/{user}?:int/', function($user = null) {
-  		global $link;
+  		
   		include 'EmailQueuerIndividual.php';
   	});
 
@@ -70,21 +70,21 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
 
   if ($_SESSION['AccessLevel'] == "Admin") {
   	$this->get('/pending', function() {
-  		global $link;
+  		
   		include 'EmailList.php';
   	});
 
   	$this->get('/email/{id}:int', function($id) {
-  		global $link;
+  		
   		include 'EmailID.php';
   	});
   }
 
   $this->group('/history', function() {
-		global $link;
+		
 
     $this->get('/', function() {
-			global $link;
+			
 			include 'MessageHistory.php';
 		});
   });
@@ -92,30 +92,30 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
 	if (!$rep) {
 
 		$this->group('/lists', function() {
-			global $link;
+			
 
 			$this->get('/', function() {
-				global $link;
+				
 				include 'ListOfLists.php';
 			});
 
 			$this->get('/new', function() {
-				global $link;
+				
 				include 'NewList.php';
 			});
 
 			$this->post('/new', function() {
-				global $link;
+				
 				include 'NewListServer.php';
 			});
 
 			$this->get('/{id}:int', function($id) {
-				global $link;
+				
 				include 'ListIndividual.php';
 			});
 
 			$this->post('ajax/{id}:int', function($id) {
-				global $link;
+				
 				include 'ListIndividualServer.php';
 			});
 
@@ -124,12 +124,12 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
 			});
 
 			$this->post('/{id}:int/edit', function($id) {
-				global $link;
+				
 				include 'EditListServer.php';
 			});
 
 			$this->get('/{id}:int/delete', function($id) {
-				global $link;
+				
 				include 'DeleteList.php';
 			});
 		});
@@ -137,12 +137,12 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
 
 	if ($_SESSION['AccessLevel'] == "Admin") {
 		$this->get('/sms', function() {
-			global $link, $db;
+			$db = app()->db;
 			include 'SMSList.php';
 		});
 
 		$this->post('/sms/ajax', function() {
-			global $link, $db;
+			$db = app()->db;
 			include 'SMSListFetch.php';
 		});
 	}

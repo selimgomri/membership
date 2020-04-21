@@ -2,7 +2,7 @@
 
 if (isset($_POST['leavers-squad'])) {
   try {
-    global $systemInfo;
+    $systemInfo = app()->system;
     $systemInfo->setSystemOption('LeaversSquad', $_POST['leavers-squad']);
     $_SESSION['PCC-SAVED'] = true;
   } catch (Exception $e) {

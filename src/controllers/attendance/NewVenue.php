@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $venue_details = $_SESSION['NewVenueError']['Data'];
 

@@ -1,12 +1,12 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
 $userInfo->execute([$id]);
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
 
-global $systemInfo;
+$systemInfo = app()->system;
 $leavers = $systemInfo->getSystemOption('LeaversSquad');
 if ($leavers == null) {
   $leavers = 0;

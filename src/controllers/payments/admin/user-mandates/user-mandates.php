@@ -2,7 +2,7 @@
 
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
-global $db;
+$db = app()->db;
 
 $userName = $db->prepare("SELECT Forename, Surname FROM users WHERE UserID = ?");
 $userName->execute([

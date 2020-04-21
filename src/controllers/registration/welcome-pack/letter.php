@@ -8,8 +8,8 @@ if (!isset($id)) {
   halt(404);
 }
 
-global $db;
-global $systemInfo;
+$db = app()->db;
+$systemInfo = app()->system;
 $welcome = $systemInfo->getSystemOption('WelcomeLetter');
 
 if ($welcome == null) {

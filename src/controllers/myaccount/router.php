@@ -2,23 +2,23 @@
 
 // My Account
 $this->get('/', function() {
-	global $link;
+	
 	include 'Profile.php';
 });
 
 $this->post('/', function() {
-	global $link;
+	
 	include 'Profile.php';
 });
 
 // Manage Password
 $this->get('/password', function() {
-	global $link;
+	
 	require 'change-password.php';
 });
 
 $this->post('/password', function() {
-	global $link;
+	
 	require 'change-password-action.php';
 });
 
@@ -34,40 +34,40 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 
 	// Add swimmer
 	$this->get('/add-member', function() {
-		global $link;
+		
 		require 'add-swimmer.php';
 	});
 
 	// Add swimmer
 	$this->get('/add-member/auto/{asa}/{acs}', function($asa, $acs) {
-		global $link;
+		
 		require 'auto-add-swimmer.php';
 	});
 
 	$this->post('/add-member', function() {
-		global $link;
+		
 		require 'add-swimmer-action.php';
 	});
 
 	// Add swimmer
 	$this->get(['/addswimmergroup', '/addswimmergroup/{fam}/{acs}'], function($fam = null, $acs = null) {
-		global $link;
+		
 		require 'add-group.php';
 	});
 
 	$this->post('/addswimmergroup', function() {
-		global $link;
+		
 		require 'add-group-action.php';
 	});
 
 	$this->get(['notifyhistory/', 'notifyhistory/page/{page}:int'], function($page = null) {
-		global $link;
+		
 		include BASE_PATH . 'controllers/notify/MyMessageHistory.php';
 	});
 }
 
 $this->get(['loginhistory/', 'loginhistory/page/{page}:int'], function($page = null) {
-	global $link;
+	
 	include 'LoginHistory.php';
 });
 
@@ -96,12 +96,12 @@ $this->group('/email', function() {
   });
 
   $this->get('/', function() {
-  	global $link;
+  	
   	include 'EmailOptions.php';
   });
 
   $this->post('/', function() {
-  	global $link;
+  	
   	include 'EmailOptionsPost.php';
   });
 
@@ -126,12 +126,12 @@ $this->post('/googleauthenticator/setup', function() {
 $this->group('/general', function() {
 
   $this->get('/', function() {
-  	global $link;
+  	
   	include 'GeneralOptions.php';
   });
 
   $this->post('/', function() {
-  	global $link;
+  	
   	include 'GeneralOptionsPost.php';
   });
 

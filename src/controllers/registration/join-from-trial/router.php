@@ -67,7 +67,7 @@ if ($_SESSION['AC-Registration']['Stage'] == 'AutoAccountSetup' || true) {
 
 	$this->group('/payments', function() {
 		$this->get(['/setup', '/setup/{stage}:int'], function($stage = 0) {
-			global $link;
+			
 			$renewal_trap = true;
 			require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 			if ($stage == 0) {
@@ -84,39 +84,39 @@ if ($_SESSION['AC-Registration']['Stage'] == 'AutoAccountSetup' || true) {
 			}
 		});
 		$this->post('/setup/1', function() {
-			global $link;
+			
 			include BASE_PATH . 'controllers/payments/setup/datepost.php';
 		});
 	});
 
 	$this->group('/emergencycontacts', function() {
 		$this->get(['/'], function() {
-			global $link;
+			
 			$renewal_trap = true;
 			include BASE_PATH . 'controllers/emergencycontacts/parents/index.php';
 		});
 		$this->get('/edit/{id}:int', function($id) {
-			global $link;
+			
 			$renewal_trap = true;
 			require('controllers/emergencycontacts/parents/edit.php');
 		});
 		$this->post('/edit/{id}:int', function($id) {
-			global $link;
+			
 			$renewal_trap = true;
 			require('controllers/emergencycontacts/parents/editUpdate.php');
 		});
 		$this->get('/new', function() {
-			global $link;
+			
 			$renewal_trap = true;
 			require('controllers/emergencycontacts/parents/new.php');
 		});
 		$this->post('/new', function() {
-			global $link;
+			
 			$renewal_trap = true;
 			require('controllers/emergencycontacts/parents/newAction.php');
 		});
 		$this->get('/{id}:int/delete', function($id) {
-			global $link;
+			
 			$renewal_trap = true;
 			require('controllers/emergencycontacts/parents/delete.php');
 		});

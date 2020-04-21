@@ -2,7 +2,7 @@
 
 $fluidContainer = true;
 
-global $db;
+$db = app()->db;
 
 $getLinked = $db->prepare("SELECT linkedAccounts.ID, main.EmailAddress memail, main.UserID muid, main.AccessLevel mal, linked.EmailAddress lemail, linked.UserID luid, linked.AccessLevel lal FROM ((linkedAccounts INNER JOIN users main ON main.UserID = linkedAccounts.User) INNER JOIN users linked ON linked.UserID = linkedAccounts.LinkedUser) WHERE (linkedAccounts.User = ? OR linkedAccounts.LinkedUser = ?) AND Active = ?");
 $getLinked->execute([$_SESSION['UserID'], $_SESSION['UserID'], 1]);

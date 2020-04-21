@@ -2,8 +2,8 @@
 
 $fluidContainer = true;
 
-global $db;
-global $currentUser;
+$db = app()->db;
+$currentUser = app()->user;
 
 $addr = null;
 $json = $currentUser->getUserOption('MAIN_ADDRESS');

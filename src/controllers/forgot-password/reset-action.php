@@ -2,7 +2,7 @@
 
 use Respect\Validation\Validator as v;
 
-global $db;
+$db = app()->db;
 
 $getUser = $db->prepare("SELECT UserID FROM passwordTokens WHERE Token = ? ORDER BY TokenID DESC LIMIT 1");
 $getUser->execute([$token]);

@@ -2,7 +2,7 @@
 
 if ($_SESSION['AccessLevel'] == "Parent") {
 	$this->get('/', function() {
-		global $db;
+		$db = app()->db;
 		
 		$query = $db->prepare("SELECT COUNT(*) FROM `members` WHERE UserID = ?");
 		try {

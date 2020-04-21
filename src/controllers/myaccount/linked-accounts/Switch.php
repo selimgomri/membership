@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 try {
   $count = $db->prepare("SELECT COUNT(*) FROM linkedAccounts WHERE (`User` = :user AND LinkedUser = :switch) OR (`User` = :switch AND LinkedUser = :user)");
@@ -14,7 +14,7 @@ try {
         $login->stayLoggedIn();
       }
       $login->preventWarningEmail();
-      global $currentUser;
+      $currentUser = app()->user;
       $currentUser = $login->login();
     } catch (Exception $e) {
       halt(403);

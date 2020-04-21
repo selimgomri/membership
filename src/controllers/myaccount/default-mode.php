@@ -2,8 +2,8 @@
 
 $fluidContainer = true;
 
-global $db;
-global $currentUser;
+$db = app()->db;
+$currentUser = app()->user;
 
 $perms = $currentUser->getPrintPermissions();
 $default = $currentUser->getUserOption('DefaultAccessLevel');

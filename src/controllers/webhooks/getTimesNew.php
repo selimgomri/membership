@@ -7,7 +7,7 @@
 ignore_user_abort(true);
 set_time_limit(0);
 
-global $db;
+$db = app()->db;
 
 $dateUpdate = $db->prepare("UPDATE times SET LastUpdate = CURDATE() WHERE MemberID = ?");
 

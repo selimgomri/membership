@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 $qual = $db->prepare("SELECT `Name` FROM qualificationsAvailable WHERE ID = ?");
 $qual->execute([$id]);
 

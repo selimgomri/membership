@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $query = $db->prepare("SELECT COUNT(*) FROM joinSwimmers WHERE ID = ?");
 $query->execute([$request]);

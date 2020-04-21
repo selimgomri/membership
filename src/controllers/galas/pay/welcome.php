@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $swimsArray = [
   '50Free' => '50&nbsp;Free',
@@ -36,7 +36,7 @@ $entries->execute([$_SESSION['UserID']]);
 }
 $entry = $entries->fetch(PDO::FETCH_ASSOC);
 
-global $currentUser;
+$currentUser = app()->user;
 $notByDirectDebit = $currentUser->getUserBooleanOption('GalaDirectDebitOptOut');
 
 $numFormatter = new NumberFormatter("en", NumberFormatter::SPELLOUT);

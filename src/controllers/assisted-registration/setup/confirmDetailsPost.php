@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 use Respect\Validation\Validator as v;
 

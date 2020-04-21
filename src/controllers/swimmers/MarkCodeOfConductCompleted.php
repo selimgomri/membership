@@ -3,7 +3,7 @@
 $pagetitle = "Marked Complete";
 $type = null;
 
-global $db;
+$db = app()->db;
 $getMove = $db->prepare("SELECT MForename, MSurname, SquadName FROM moves INNER JOIN members ON moves.MemberID = members.MemberID INNER JOIN squads ON moves.SquadID = squads.SquadID WHERE moves.MemberID = ? AND moves.SquadID = ?");
 $getMove->execute([$swimmer, $squad]);
 $details = $getMove->fetch(PDO::FETCH_ASSOC);

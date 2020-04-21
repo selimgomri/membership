@@ -1,12 +1,12 @@
 <?php
 
 $this->any('/sumpayments', function() {
-	global $link;
+	
 	require 'sumpayments.php';
 });
 
 $this->any('/chargeusers', function() {
-	global $link;
+	
 	require 'chargeusers.php';
 });
 
@@ -15,8 +15,8 @@ $this->any('/retrypayments', function() {
 });
 
 $this->any('/notifysend', function() {
-	global $link;
-  global $db;
+	
+  $db = app()->db;
 	//echo "Service Suspended";
 	require 'SingleEmailHandler.php';
 });
@@ -26,21 +26,21 @@ $this->any('/newnotifysend', function() {
 });
 
 $this->any('/updatesquadmembers', function() {
-	global $db, $link;
+	$db = app()->db;;
 	require 'squadmemberupdate.php';
 });
 
 $this->any('/updateregisterweeks', function() {
-	global $db, $link;
+	$db = app()->db;;
 	require 'newWeek.php';
 });
 
 $this->any('/timeupdate', function() {
-	global $db, $link;
+	$db = app()->db;;
 	require 'getTimesNew.php';
 });
 
 /*$this->any('/timeupdatenew', function() {
-	global $db, $link;
+	$db = app()->db;;
 	require 'getTimesNew.php';
 });*/
