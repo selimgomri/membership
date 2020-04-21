@@ -9,6 +9,9 @@ function bool($var) {
   return filter_var($var, FILTER_VALIDATE_BOOLEAN);
 }
 
+/**
+ * Verify a user by email/pass
+ */
 function verifyUser($user, $password) {
   global $db;
 
