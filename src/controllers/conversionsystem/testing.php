@@ -148,7 +148,7 @@ include BASE_PATH . "views/header.php";
   <?php } } ?>
     <div class="col"><!-- consider order-lg-first -->
       <div class="cell">
-        <?php if ($_SESSION['Time']['Error']) { ?>
+        <?php if (isset($_SESSION['Time']['Error']) && $_SESSION['Time']['Error']) { ?>
         <div class="alert alert-warning">
           An error occured during calculation
         </div>
