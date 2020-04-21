@@ -2,6 +2,9 @@
 
 include BASE_PATH . 'includes/regions/countries-iso3166.php';
 
+/**
+ * Return value as a FILTER_VALIDATE_BOOLEAN
+ */
 function bool($var) {
   return filter_var($var, FILTER_VALIDATE_BOOLEAN);
 }
