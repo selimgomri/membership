@@ -118,9 +118,11 @@ try {
   $responseData['status'] = 500;
   $responseData['message'] = 'A database error occurred. All changes have been rolled back.';
   $db->rollBack();
+  reportError($e);
 } catch (Exception $e) {
   $responseData['status'] = 500;
   $responseData['message'] = $e->getMessage();
+  reportError($e);
   $db->rollBack();
 } finally {
   http_response_code(200);
