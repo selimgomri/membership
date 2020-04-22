@@ -252,24 +252,24 @@ if (!isset($_SESSION['Browser'])) {
   $_SESSION['Browser']['Version'] = $browser->browser->version->value;
 }
 
+// Make db available
+$db = null;
+try {
+$db = new PDO("mysql:host=" . env('DB_HOST') . ";dbname=" . env('DB_NAME') . ";charset=utf8mb4", env('DB_USER'), env('DB_PASS'));
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (Exception $e) {
+halt(500);
+}
+
+app()->db = $db;
+
+// System info stuff
+$systemInfo = new \SystemInfo($db);
+app()->system = $systemInfo;
+
 $route->use(function (){
   // Make req available
   $req = app('request');
-
-  // Make db available
-  $db = null;
-  try {
-    $db = new PDO("mysql:host=" . env('DB_HOST') . ";dbname=" . env('DB_NAME') . ";charset=utf8mb4", env('DB_USER'), env('DB_PASS'));
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  } catch (Exception $e) {
-    halt(500);
-  }
-
-  app()->db = $db;
-
-  // System info stuff
-  $systemInfo = new \SystemInfo($db);
-  app()->system = $systemInfo;
 
   // Load vars
   include BASE_PATH . 'includes/GetVars.php';
