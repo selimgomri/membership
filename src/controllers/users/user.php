@@ -29,7 +29,7 @@ if ($info == null) {
   halt(404);
 }
 
-$userObj = new \User($id, $db, false);
+$userObj = new \User($id);
 
 $par = $coa = $com = $gal = $adm = "";
 
