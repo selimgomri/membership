@@ -189,7 +189,7 @@ if (isset($customBackground) && $customBackground) {
         d-print-none justify-content-between px-0" role="navigation">
 
               <a class="navbar-brand d-lg-none" href="<?=htmlspecialchars(autoUrl(""))?>">
-                <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+                <?php if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == "Parent") { ?>
                 My Membership
                 <?php } else { ?>
                 Club Membership
