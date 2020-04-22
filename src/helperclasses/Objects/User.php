@@ -19,24 +19,24 @@ class User {
   private $setSession;
   private $permissions;
 
-  public function __construct($id, $db, $setSession = true) {
+  public function __construct($id, $setSession = false) {
     $this->id = (int) $id;
-    $this->db = $db;
     $this->userOptionsRetrieved = false;
     $this->setSession = $setSession;
     $this->revalidate();
   }
 
   public function revalidate() {
+    $db = app()->db;
     // Get the user
-    $query = $this->db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ? AND Active");
+    $query = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ? AND Active");
     $query->execute([$this->id]);
     $row = $query->fetch(PDO::FETCH_ASSOC);
 
     $this->permissions = [];
     try {
       // Get access permissions
-      $getPermissions = $this->db->prepare("SELECT `Permission` FROM `permissions` WHERE `User` = ?");
+      $getPermissions = $db->prepare("SELECT `Permission` FROM `permissions` WHERE `User` = ?");
       $getPermissions->execute([
         $this->id
       ]);
@@ -112,8 +112,10 @@ class User {
   }
 
   private function getUserOptions() {
+    $db = app()->db;
+
     try {
-      $getOptions = $this->db->prepare("SELECT `Option`, `Value` FROM userOptions WHERE User = ? LIMIT 100");
+      $getOptions = $db->prepare("SELECT `Option`, `Value` FROM userOptions WHERE User = ? LIMIT 100");
       $getOptions->execute([$this->id]);
       $this->userOptions = $getOptions->fetchAll(PDO::FETCH_KEY_PAIR);
       $this->userOptionsRetrieved = true;
@@ -142,6 +144,8 @@ class User {
   }
 
   public function setUserOption($option, $value) {
+    $db = app()->db;
+
     if ($value == "") {
       $value = null;
     }
@@ -150,15 +154,15 @@ class User {
     $this->userOptions[$option] = $value;
 
     // Any PDO exceptions will be propagated
-    $query = $this->db->prepare("SELECT COUNT(*) FROM userOptions WHERE User = ? AND `Option` = ?");
+    $query = $db->prepare("SELECT COUNT(*) FROM userOptions WHERE User = ? AND `Option` = ?");
     $query->execute([$this->id, $option]);
     $result = $query->fetchColumn();
 
     if ($result == 0) {
-      $query = $this->db->prepare("INSERT INTO userOptions (User, `Option`, `Value`) VALUES (?, ?, ?)");
+      $query = $db->prepare("INSERT INTO userOptions (User, `Option`, `Value`) VALUES (?, ?, ?)");
       $query->execute([$this->id, $option, $value]);
     } else {
-      $query = $this->db->prepare("UPDATE userOptions SET `Value` = ? WHERE User = ? AND `Option` = ?");
+      $query = $db->prepare("UPDATE userOptions SET `Value` = ? WHERE User = ? AND `Option` = ?");
       $query->execute([$value, $this->id, $option]);
     }
   }
@@ -188,8 +192,9 @@ class User {
   }
 
   public function grantPermission($permission) {
+    $db = app()->db;
     try {
-      $setPerm = $this->db->prepare("INSERT INTO `permissions` (`Permission`, `User`) VALUES (?, ?)");
+      $setPerm = $db->prepare("INSERT INTO `permissions` (`Permission`, `User`) VALUES (?, ?)");
       $setPerm->execute([
         $permission,
         $this->id
@@ -201,8 +206,9 @@ class User {
   }
 
   public function revokePermission($permission) {
+    $db = app()->db;
     try {
-      $deletePerm = $this->db->prepare("DELETE FROM `permissions` WHERE `Permission` = ? AND `User` = ?");
+      $deletePerm = $db->prepare("DELETE FROM `permissions` WHERE `Permission` = ? AND `User` = ?");
       $deletePerm->execute([
         $permission,
         $this->id

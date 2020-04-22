@@ -13,7 +13,7 @@ $row = $getUser->fetch(PDO::FETCH_ASSOC);
 
 $details = [];
 if ($row != null) {
-  $userObj = new \User($row['UserID'], $db, false);
+  $userObj = new \User($row['UserID']);
   $json = $userObj->getUserOption('MAIN_ADDRESS');
   $address = null;
   if ($json != null) {

@@ -20,7 +20,7 @@ $swimmerToo->execute([
 $swimmerToo = $swimmerToo->fetchColumn();
 
 // User object for permissions
-$userObject = new \User($id, $db, false);
+$userObject = new \User($id);
 
 function selected($userObject, $perm) {
   if ($userObject->hasPermission($perm)) {

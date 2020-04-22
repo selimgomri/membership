@@ -19,7 +19,7 @@ if ($welcome == null) {
 $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
 $user->execute([$id]);
 
-$userObj = new \User($id, $db);
+$userObj = new \User($id, true);
 $json = $userObj->getUserOption('MAIN_ADDRESS');
 $address = null;
 if ($json != null) {

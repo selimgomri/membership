@@ -28,7 +28,7 @@ $userExtras->execute([$id]);
 
 $pagetitle = env('CLUB_NAME') . " Welcome Pack";
 
-$userObj = new \User($id, $db);
+$userObj = new \User($id);
 $json = $userObj->getUserOption('MAIN_ADDRESS');
 $address = null;
 if ($json != null) {

@@ -122,7 +122,7 @@ try {
 
   // Set access permissions
   $baseRequired = true;
-  $userObject = new \User($id, $db, false);
+  $userObject = new \User($id);
 
   // Galas
   if (bool($_POST['permissions-gala'])) {

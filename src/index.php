@@ -330,7 +330,7 @@ $route->use(function (){
       setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , COOKIE_PATH, app('request')->hostname, $secure, false);
     }
   } else if (isset($_SESSION['UserID'])) {
-    $currentUser = new User($_SESSION['UserID'], $db);
+    $currentUser = new User($_SESSION['UserID'], true);
   }
   app()->user = $currentUser;
 
@@ -474,6 +474,10 @@ $route->group($get_group, function($clubcode = "CLSE") {
   $this->group('/ajax', function() {
     
     include 'controllers/public/router.php';
+  });
+
+  $this->group('/views', function() {
+    include 'views/routes/router.php';
   });
 
   $this->group('/about', function() {

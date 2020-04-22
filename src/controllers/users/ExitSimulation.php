@@ -29,7 +29,7 @@ try {
 	$_SESSION['UserID'] = 			$info['UserID'];
 	$_SESSION['LoggedIn'] = 		1;
 
-	$userObject = new \User($info['UserID'], $db);
+	$userObject = new \User($info['UserID'], true);
 
 	header("Location: " . autoUrl("users/" . $target));
 } catch (Exception $e) {

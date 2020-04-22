@@ -15,7 +15,7 @@ $qrFile = true;
 
 $hasDD = userHasMandates($email_info['UserID']);
 
-$userObj = new \User($email_info['UserID'], $db);
+$userObj = new \User($email_info['UserID']);
 $json = $userObj->getUserOption('MAIN_ADDRESS');
 $address = null;
 if ($json != null) {

@@ -66,7 +66,7 @@ try {
   $billDate = new DateTime('now', new DateTimeZone('Europe/London'));
 }
 
-$userObj = new \User($payment_info['UserID'], $db);
+$userObj = new \User($payment_info['UserID'], true);
 $json = $userObj->getUserOption('MAIN_ADDRESS');
 $address = null;
 if ($json != null) {
