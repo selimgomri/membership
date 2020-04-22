@@ -4,7 +4,7 @@ $db = app()->db;
 
 $obj = null;
 if (bool(env('IS_CLS'))) {
-  $file = getCachedFile(BASE_PATH . 'cache/CLS-ASC-News.json', 'https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts?rand_id=' . time(), 10800);
+  $file = getCachedFile(CACHE_DIR . 'CLS-ASC-News.json', 'https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts?rand_id=' . time(), 10800);
   $obj = json_decode($file);
 }
 
