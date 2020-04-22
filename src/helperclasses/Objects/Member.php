@@ -1,17 +1,17 @@
 <?php
 
-class Member {
+class Member extends Person {
   private $db;
-  private int $id;
-  private string $forename;
-  private string $middlenames;
-  private string $surname;
+  // private int $id;
+  // private string $forename;
+  private $middlenames;
+  // private string $surname;
   private $dob;
-  private int $user;
+  private $user;
   private bool $activeMembership;
   private bool $requiresRegistration;
   private string $sex;
-  private string $notes;
+  private $notes;
   private bool $swimEnglandMember;
   private string $swimEnglandNumber;
   private int $swimEnglandCategory;
@@ -46,16 +46,19 @@ class Member {
 
     // Basic info
     $this->forename = $info['MForename'];
-    $this->middlenames = $info['MMiddlenames'];
+    $this->middlenames = $info['MMiddleNames'];
     $this->surname = $info['MSurname'];
     $this->dob = new DateTime($info['DateOfBirth'], new DateTimeZone('Europe/London'));
     $this->user = $info['UserID'];
+    $this->squad = $info['SquadID'];
     $this->sex = $info['Gender'];
     $this->notes = $info['OtherNotes'];
 
     // Membership info
     $this->activeMembership = bool($info['Status']);
     $this->requiresRegistration = bool($info['RR']);
+    $this->requiresRegistrationIsTransfer = bool($info['RRTransfer']);
+    $this->clubMember = bool($info['ClubMember']);
     $this->swimEnglandMember = bool($info['ASAMember']);
     $this->swimEnglandNumber = $info['ASANumber'];
     $this->swimEnglandCategory = $info['ASACategory'];
@@ -70,5 +73,40 @@ class Member {
 
     // Other
     $this->accessKey = $info['AccessKey'];
+  }
+
+  /**
+   * Get member's middlename
+   */
+  public function getMiddlenames() {
+    return $this->middlenames;
+  }
+
+  /**
+   * Get a member's squads
+   * 
+   * @return Squad[] array of Squad objects
+   */
+  public function getSquads() {
+    return [
+      Squad::get($this->squad)
+    ];
+  }
+
+  /**
+   * Get the member age
+   * 
+   * @return string age in years
+   */
+  public function getAge($date = 'now') {
+    $date = new DateTime($date, new DateTimeZone('Europe/London'));
+    return $this->dob->diff($date)->y;
+  }
+
+  public function getUser() {
+    if ($this->user) {
+      return new User($this->user);
+    }
+    return null;
   }
 }

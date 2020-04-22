@@ -4,8 +4,8 @@ $userID = $_SESSION['UserID'];
 $access = $_SESSION['AccessLevel'];
 
 // View a Swimmer
-$this->get('/{id}:int/x-mode', function($id) {
-	require('NewIndivSwimmer.php');
+$this->get('/{id}:int/new', function($id) {
+	include 'view.php';
 });
 
 if ($access == "Parent") {

@@ -140,6 +140,20 @@ class Squad {
     }
 
     return $coaches;
+  }
 
+  public function getMembers() {
+    $db = app()->db;
+    $getMembers = $db->prepare("SELECT MemberID FROM members WHERE SquadID = ? ORDER BY MForename, MSurname");
+    $getMembers->execute([
+      $this->id
+    ]);
+
+    $members = [];
+    while ($member = $getMembers->fetchColumn()) {
+      $members[] = new Member($member);
+    }
+
+    return $members;
   }
 }

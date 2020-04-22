@@ -101,54 +101,58 @@ include BASE_PATH . 'views/header.php';
         <dt class="col-sm-3">Squad timetable</dt>
         <dd class="col-sm-9 text-truncate">
           <a href="<?=htmlspecialchars($squad->getTimetableUrl())?>" target="_blank">
-            <?=htmlspecialchars(str_replace(['https://www.', 'http://www.'], '', $squad->getTimetableUrl))?>
+            <?=htmlspecialchars(trim(str_replace(['https://www.', 'http://www.', 'http://', 'https://'], '', $squad->getTimetableUrl()), '/'))?>
           </a>
         </dd>
       </dl>
 
       <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
-      <h2>Swimmers in <?=htmlspecialchars($squad->getName())?> Squad</h2>
+      <?php $members = $squad->getMembers(); ?>
+      <h2><?=htmlspecialchars($squad->getName())?> Members</h2>
       <div class="list-group mb-3">
-      <?php while ($swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)) { ?>
-        <a href="<?=autoUrl("swimmers/" . $swimmer['id'])?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-          <?=htmlspecialchars($swimmer['first'] . ' ' . $swimmer['last'])?>
-          <span class="badge badge-primary badge-pill rounded">Age <?=date_diff(date_create($swimmer['dob']), date_create('now'))->y?></span>
+      <?php foreach ($members as $member) { ?>
+        <a href="<?=autoUrl("members/" . $member->getId())?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+          <?=htmlspecialchars($member->getFullName())?>
+          <span class="badge badge-primary badge-pill rounded">Age <?=htmlspecialchars(($member->getAge()))?></span>
         </a>
       <?php } ?>
       </div>
       <?php } ?>
 
       <?php if ($canAccessSquadInfo) { ?>
-      <h2>Swimmers in <?=htmlspecialchars($squad->getName())?> Squad</h2>
-      <ul class="list-group mb-3 accordion" id="swimmerContactAccordion">
-      <?php while ($swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)) { ?>
+      <?php $members = $squad->getMembers(); ?>
+      <h2><?=htmlspecialchars($squad->getName())?> Members</h2>
+      <ul class="list-group mb-3 accordion" id="memberContactAccordion">
+      <?php foreach ($members as $member) { ?>
         <li class="list-group-item">
           <div class="d-flex justify-content-between align-items-center">
-            <?=htmlspecialchars($swimmer['first'] . ' ' . $swimmer['last'])?>
-            <span class="badge badge-primary badge-pill rounded">Age <?=date_diff(date_create($swimmer['dob']), date_create('now'))->y?></span>
+            <?=htmlspecialchars($member->getFullName())?>
+            <span class="badge badge-primary badge-pill rounded">Age <?=htmlspecialchars(($member->getAge()))?></span>
           </div>
           
-          <?php if ($swimmer['user'] != null) { ?>
+          <?php if ($user = $member->getUser()) { ?>
           <p class="mb-0 mt-3">
-            <a data-toggle="collapse" href="#details-<?=htmlspecialchars($swimmer['id'])?>" role="button" aria-expanded="false" aria-controls="details-<?=htmlspecialchars($swimmer['id'])?>" class="btn btn-primary">Show contact details</a>
+            <a data-toggle="collapse" href="#details-<?=htmlspecialchars($member->getId())?>" role="button" aria-expanded="false" aria-controls="details-<?=htmlspecialchars($member->getId())?>" class="btn btn-primary">Show contact details</a>
           </p>
-          <div class="collapse" id="details-<?=htmlspecialchars($swimmer['id'])?>" data-parent="#swimmerContactAccordion">
+          <div class="collapse" id="details-<?=htmlspecialchars($member->getId())?>" data-parent="#memberContactAccordion">
             <div class="cell mb-0 mt-3">
-              <p>Contact <?=htmlspecialchars($swimmer['fn'])?> <?=htmlspecialchars($swimmer['sn'])?> by email or phone.</p>
-              <dl class="mb-0">
-                <dt>Email</dt>
-                <dd><a href="<?=htmlspecialchars("mailto:" . $swimmer['email'])?>"><?=htmlspecialchars($swimmer['email'])?></a></dd>
+              <p>Contact <?=htmlspecialchars($member->getFullName())?> by email or phone.</p>
+              <dl class="row mb-0">
+                <dt class="col-md-3">Email</dt>
+                <dd class="col-md-9"><a href="<?=htmlspecialchars("mailto:" . $user->getEmail())?>"><?=htmlspecialchars($user->getEmail())?></a></dd>
 
-                <dt>Phone</dt>
-                <?php try { $mobile = PhoneNumber::parse((string) $swimmer['mob']); ?>
-                <dd class="mb-0"><a href="<?=htmlspecialchars($mobile->format(PhoneNumberFormat::RFC3966))?>"><?=htmlspecialchars($mobile->format(PhoneNumberFormat::NATIONAL))?></a></dd>
+                <dt class="col-md-3">Phone</dt>
+                <dd class="col-md-9 mb-0">
+                <?php try { $mobile = PhoneNumber::parse((string) $user->getMobile()); ?>
+                <a href="<?=htmlspecialchars($mobile->format(PhoneNumberFormat::RFC3966))?>"><?=htmlspecialchars($mobile->format(PhoneNumberFormat::NATIONAL))?></a>
                 <?php } catch (PhoneNumberParseException | Exception $e) { ?>
-                <dd class="mb-0">The user's phone number is not valid</dd>
+                The user's phone number is not valid
                 <?php } ?>
+                </dd>
               </dl>
             </div>
-            <?php } ?>
           </div>
+          <?php } ?>
         </li>
       <?php } ?>
       </ul>

@@ -7,12 +7,9 @@
  * @copyright Chester-le-Street ASC https://github.com/Chester-le-Street-ASC
  * @author Chris Heppell https://github.com/clheppell
  */
-class User {
-  private $db;
-  private $id;
-  private $forename;
-  private $surname;
+class User extends Person {
   private $emailAddress;
+  private $mobile;
   private $accessLevel;
   private $userOptions;
   private $userOptionsRetrieved;
@@ -29,7 +26,7 @@ class User {
   public function revalidate() {
     $db = app()->db;
     // Get the user
-    $query = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ? AND Active");
+    $query = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ? AND Active");
     $query->execute([$this->id]);
     $row = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -66,6 +63,7 @@ class User {
       $this->forename = $row['Forename'];
       $this->surname = $row['Surname'];
       $this->emailAddress = $row['EmailAddress'];
+      $this->mobile = $row['Mobile'];
 
       if ($this->setSession) {
         // Set legacy user details
@@ -109,6 +107,10 @@ class User {
 
   public function getEmail() {
     return $this->getDirtyEmail();
+  }
+
+  public function getMobile() {
+    return $this->mobile;
   }
 
   private function getUserOptions() {
