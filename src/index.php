@@ -304,7 +304,6 @@ $route->use(function (){
         $login->stayLoggedIn();
         $login->preventWarningEmail();
         $login->reLogin();
-        $currentUser = app()->user;
         $currentUser = $login->login();
       } catch (Exception $e) {
         reportError($e);

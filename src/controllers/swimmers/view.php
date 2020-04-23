@@ -44,7 +44,7 @@ include BASE_PATH . 'views/header.php';
 
   <div class="row justify-content-between">
     <div class="col-md-4 col-lg-3 col-xl-3">
-      <div class="card mb-3">
+      <div class="position-sticky top-3 card mb-3">
         <div class="card-header">
           Jump to
         </div>
