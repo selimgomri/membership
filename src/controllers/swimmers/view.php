@@ -55,7 +55,7 @@ include BASE_PATH . 'views/header.php';
         <div class="card-header">
           Jump to
         </div>
-        <div class="list-group" id="member-page-menu">
+        <div class="list-group list-group-flush" id="member-page-menu">
           <a href="#basic-information" class="list-group-item list-group-item-action">
             Basic information
           </a>
