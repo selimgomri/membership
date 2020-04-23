@@ -8,8 +8,8 @@ class Squad {
   protected int $id;
   private string $name;
   private int $monthlyFee;
-  private string $timetableUrl;
-  private int $codeOfConduct;
+  private $timetableUrl;
+  private $codeOfConduct;
 
   /**
    * Create an empty squad object
