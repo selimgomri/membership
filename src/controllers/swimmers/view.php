@@ -159,15 +159,21 @@ include BASE_PATH . 'views/header.php';
       
       <?php $emergencyContacts = $member->getEmergencyContacts(); ?>
 
+      <?php if ($emergencyContacts) { ?>
+
+      <p>
+        In an emergency, dial one of the contact numbers shown below.
+      </p>
+
       <div class="row">
         <?php foreach ($emergencyContacts as $ec) { ?>
         
-        <div class="col-md-6 col-lg-4">
+        <div class="col-md-6 col-xl-4">
           <div class="cell p-2 mb-2">
             <div class="row align-items-center">
               <div class="col-6">
-                <strong><?=htmlspecialchars($ec->getName())?></strong><br>
-                <?=htmlspecialchars($ec->getRelation())?>
+                <div class="text-truncate"><strong><?=htmlspecialchars($ec->getName())?></strong></div>
+                <div class="text-truncate"><?=htmlspecialchars($ec->getRelation())?></div>
               </div>
               <div class="col-6">
                 <a href="<?=htmlspecialchars($ec->getRFCContactNumber())?>" class="btn btn-block btn-success">
@@ -180,6 +186,19 @@ include BASE_PATH . 'views/header.php';
 
         <?php } ?>
       </div>
+
+      <?php } else { ?>
+
+      <div class="alert alert-danger">
+        <p class="mb-0">
+          <strong>No emergency contact details are available.</strong>
+        </p>
+        <p class="mb-0">
+          <?=htmlspecialchars($member->getForename())?> should not be allowed to train until details have been provided.
+        </p>
+      </div>
+
+      <?php } ?>
 
       <!-- Squad details -->
       <h2 id="squads">Squad<?php if (sizeof($squads) != 1) { ?>s<?php } ?></h2>
