@@ -12,7 +12,7 @@ if (v::url()->validate($target)) {
 
 	$message = "<p>An error has been reported on the following page: " . $target . ".</p>";
 	if ($currentUser) {
-		$message .= "<p>The user was " . htmlspecialchars($currentUser->getFirstName() . ' ' . $currentUser->getLastName()) . ", " . htmlspecialchars($currentUser->getEmail()) . ".</p>"
+		$message .= "<p>The user was " . htmlspecialchars($currentUser->getFirstName() . ' ' . $currentUser->getLastName()) . ", " . htmlspecialchars($currentUser->getEmail()) . ".</p>";
 	}
 	$message .= "<p>The user said: " . $usr_message . "</p>";
 	$message .= "<p>Reported on " . date("l j F Y") . ".</p>";
