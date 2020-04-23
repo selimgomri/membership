@@ -142,21 +142,52 @@ class Member extends Person
     return $countries[$this->getCountryCode()];
   }
 
-  public function getMedicalNotes() {
+  public function getMedicalNotes()
+  {
     return new MedicalNotes($this->id);
   }
 
   /**
    * Get the user's emergency contacts
    * 
-   * @return EmergencyContact[] an array of emergency contacts
+   * @return NewEmergencyContact[] an array of emergency contacts
    */
-  public function getEmergencyContacts() {
+  public function getEmergencyContacts()
+  {
+    $contacts = [];
+
     if ($this->user) {
-      $ec = new EmergencyContacts(app()->db);
-      $ec->byParent($this->user);
-      return $ec->getContacts();
+      $db = app()->db;
+      $getECs = $db->prepare("SELECT Forename, Surname, Mobile FROM users WHERE UserID = ?");
+      $getECs->execute([
+        $this->user
+      ]);
+      $ec = $getECs->fetch(PDO::FETCH_ASSOC);
+
+      if ($ec) {
+        $contacts[] = new NewEmergencyContact(
+          $ec['Mobile'],
+          $ec['Forename'] . ' ' . $ec['Surname'],
+          null,
+          $this->user,
+          true
+        );
+      }
+
+      $getECs = $db->prepare("SELECT ID, `Name`, ContactNumber, Relation FROM emergencyContacts WHERE UserID = ?");
+      $getECs->execute([
+        $this->user
+      ]);
+      while ($ec = $getECs->fetch(PDO::FETCH_ASSOC)) {
+        $contacts[] = new NewEmergencyContact(
+          $ec['ContactNumber'],
+          $ec['Name'],
+          $ec['Relation'],
+          $this->user
+        );
+      }
     }
-    return [];
+
+    return $contacts;
   }
 }
