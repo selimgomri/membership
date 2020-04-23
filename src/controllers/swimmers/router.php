@@ -4,7 +4,7 @@ $userID = $_SESSION['UserID'];
 $access = $_SESSION['AccessLevel'];
 
 // View a Swimmer
-$this->get('/{id}:int/new', function($id) {
+$this->get('/{id}:int', function($id) {
 	include 'view.php';
 });
 
@@ -17,12 +17,6 @@ if ($access == "Parent") {
 	// My Swimmers
 	$this->get('/', function() {
 	  require('parentSwimmers.php');
-	});
-
-	// View a Swimmer
-	$this->get('/{id}:int', function($id) {
-
-	  require('parentSingleSwimmerView.php');
 	});
 
   // Swimmer Membership Card
@@ -85,12 +79,6 @@ else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $
 	$this->post('/ajax/swimmerDirectory', function() {
 
 	  include BASE_PATH . "controllers/ajax/membersList.php";
-	});
-
-	// Individual Swimmers
-	$this->get('/{id}:int', function($id) {
-
-	  require('singleSwimmerView.php');
 	});
 
 	$this->get('/{swimmer}:int/enter-gala', function($swimmer) {
