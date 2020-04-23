@@ -3,7 +3,7 @@
 namespace CLSASC\BootstrapComponents;
 
 /**
- * User Class to store in session
+ * 
  *
  * @copyright Chester-le-Street ASC https://github.com/Chester-le-Street-ASC
  * @author Chris Heppell https://github.com/clheppell
@@ -20,7 +20,7 @@ class ListGroup {
     $listGroupClass = '';
 
     if (strlen($this->items->title) > 0) {
-      $output .= '<div class="card">
+      $output .= '<div class="position-sticky top-3 card mb-3">
         <div class="card-header">' . $this->items->title . '</div>';
       $listGroupClass = ' list-group-flush ';
     }
