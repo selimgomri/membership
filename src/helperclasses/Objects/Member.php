@@ -190,4 +190,94 @@ class Member extends Person
 
     return $contacts;
   }
+
+  /**
+   * Is the member's squad fee paid
+   * 
+   * @return bool true if club pays fees
+   */
+  public function squadFeesPaid()
+  {
+    return $this->clubPaysFees;
+  }
+
+  /**
+   * Is the member's SE fee paid for them
+   * 
+   * @return bool true if club pays fees
+   */
+  public function swimEnglandFeesPaid()
+  {
+    return $this->clubPaysSwimEngland;
+  }
+
+  /**
+   * Is the member's club membership fee paid
+   * 
+   * @return bool true if club pays fees
+   */
+  public function clubMembershipPaid()
+  {
+    return $this->clubPaysMembership;
+  }
+
+  /**
+   * Get the members notes
+   * 
+   * @return string formatted HTML
+   */
+  public function getNotes() {
+    $md = $this->notes;
+    $markdown = new \ParsedownExtra();
+    $markdown->setSafeMode(true);
+    return $markdown->text($md);
+  }
+
+  /**
+   * Get the members notes as plain text
+   * 
+   * @return string markdown plain text
+   */
+  public function getNotesPlainText() {
+    return $this->notes;
+  }
+
+  public function getPhotoPermissions() {
+    $db = app()->db;
+    $getPerms = $db->prepare("SELECT Website, Social, Noticeboard, FilmTraining, ProPhoto FROM memberPhotography WHERE MemberID = ?");
+    $getPerms->execute([
+      $this->id
+    ]);
+    $perm = $getPerms->fetch(PDO::FETCH_ASSOC);
+    $allows = $disallowed = [];
+    $cats = [
+      'Website' => 'Take photos of this member for our website',
+      'Social' => 'Take photos of this member for our social media',
+      'Noticeboard' => 'Take photos of this member for our noticeboard',
+      'FilmTraining' => 'Film this member for the purposes of training',
+      'ProPhoto' => 'Take professional photographs of this member',
+    ];
+
+    foreach ($cats as $cat => $description) {
+
+      $allowed = $perm != null && isset($perm[$cat]) && bool($perm[$cat]);
+
+      $photoPermission = new PhotoPermission(
+        $cat,
+        $description,
+        $allowed
+      );
+
+      if ($allowed) {
+        $allows[] = $photoPermission;
+      } else {
+        $disallowed[] = $photoPermission;
+      }
+    }
+
+    return [
+      'allowed' => $allows,
+      'disallowed' => $disallowed
+    ];
+  }
 }

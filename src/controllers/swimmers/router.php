@@ -8,6 +8,11 @@ $this->get('/{id}:int/new', function($id) {
 	include 'view.php';
 });
 
+// View a swimmers (legacy system) times
+$this->get('/{id}:int/legacy-times', function($id) {
+	include 'legacy-times.php';
+});
+
 if ($access == "Parent") {
 	// My Swimmers
 	$this->get('/', function() {
