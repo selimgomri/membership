@@ -1,6 +1,6 @@
 <?php
 
-
+/*
 // ----------------------------------------------------------------------------------------------------
 // - Display Errors
 // ----------------------------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ function ErrorHandler($type, $message, $file, $line)
 };
 
 $old_error_handler = set_error_handler("ErrorHandler");
-
+*/
 
 // Do not reveal PHP when sending mail
 ini_set('expose_php', 'Off');
