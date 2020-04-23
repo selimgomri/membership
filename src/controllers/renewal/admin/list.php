@@ -1,8 +1,6 @@
 <?php
 
-global $db;
-
-$id = mysqli_real_escape_string($link, $id);
+$db = app()->db;
 
 $sql = $db->prepare("SELECT * FROM `renewals` WHERE `ID` = ?;");
 $sql->execute([$id]);

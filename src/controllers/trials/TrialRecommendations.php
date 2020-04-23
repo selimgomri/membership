@@ -1,7 +1,7 @@
 <?php
 
-global $db;
-global $currentUser;
+$db = app()->db;
+$currentUser = app()->user;
 
 $query = $db->prepare("SELECT COUNT(*) FROM joinSwimmers WHERE ID = ?");
 $query->execute([$request]);

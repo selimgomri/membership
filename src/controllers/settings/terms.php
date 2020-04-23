@@ -2,14 +2,14 @@
 
 $fluidContainer = true;
 
-global $db;
+$db = app()->db;
 $termsDocuments = $db->query("SELECT Title, ID FROM posts WHERE `Type` = 'terms_conditions' ORDER BY Title ASC");
 $termsDocuments = $termsDocuments->fetchAll(PDO::FETCH_ASSOC);
 
 $welcomeDocuments = $db->query("SELECT Title, ID FROM posts WHERE `Type` = 'corporate_documentation' ORDER BY Title ASC");
 $welcomeDocuments = $welcomeDocuments->fetchAll(PDO::FETCH_ASSOC);
 
-global $systemInfo;
+$systemInfo = app()->system;
 $terms = $systemInfo->getSystemOption('TermsAndConditions');
 $privacy = $systemInfo->getSystemOption('PrivacyPolicy');
 $welcome = $systemInfo->getSystemOption('WelcomeLetter');

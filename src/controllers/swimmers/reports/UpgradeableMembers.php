@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $date = new DateTime('-9 years last day of December', new DateTimeZone('Europe/London'));
 $now = new DateTime('now', new DateTimeZone('Europe/London'));

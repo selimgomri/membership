@@ -4,7 +4,7 @@ if (!SCDS\CSRF::verify()) {
   halt(403);
 }
 
-global $db;
+$db = app()->db;
 
 if ($_SESSION['AccessLevel'] == "Parent") {
   $getMed = $db->prepare("SELECT MForename, MSurname, Conditions, Allergies,

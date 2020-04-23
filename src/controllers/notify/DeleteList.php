@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $sql = $db->prepare("SELECT COUNT(*) FROM `targetedLists` WHERE `ID` = ?;");
 $sql->execute([$id]);

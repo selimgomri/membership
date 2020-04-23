@@ -9,7 +9,7 @@ use Brick\PhoneNumber\PhoneNumber;
 use Brick\PhoneNumber\PhoneNumberParseException;
 use Brick\PhoneNumber\PhoneNumberFormat;
 
-global $db;
+$db = app()->db;
 
 $captcha = trim($_POST['g-recaptcha-response']);
 $captchaStatus = null;

@@ -2,7 +2,7 @@
 http_response_code(200);
 $pagetitle = "Status 200 - OK";
 
-global $currentUser;
+$currentUser = app()->user;
 if ($currentUser == null) {
 	include BASE_PATH . "views/head.php";
 } else {

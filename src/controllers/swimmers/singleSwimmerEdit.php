@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 /** must go in form
 if (app('request')->method == 'POST' && !SCDS\CSRF::verify()) {
@@ -352,16 +352,8 @@ if ($access == "Admin") {
       </select>
 			<small id=\"swimmerStatusHelp\" class=\"form-text\">Suspended swimmers will not show on registers.</small>
 		</div>";
-$content .= "
-	<div class=\"alert alert-danger\">
-		<div class=\"form-group mb-0\">
-			<label for=\"swimmerDeleteDanger\"><strong>Danger Zone</strong> <br>Delete this Swimmer with this Key \"<span class=\"mono\">" . $rowSwim['AccessKey'] . "</span>\"</label>
-			<input type=\"text\" class=\"form-control mono\" id=\"swimmerDeleteDanger\" name=\"swimmerDeleteDanger\" aria-describedby=\"swimmerDeleteDangerHelp\" placeholder=\"Enter the key\" onselectstart=\"return false\" onpaste=\"return false;\" onCopy=\"return false\" onCut=\"return false\" onDrag=\"return false\" onDrop=\"return false\" autocomplete=off>
-			<small id=\"swimmerDeleteDangerHelp\" class=\"form-text\">Enter the key in quotes above and press submit. This will delete this swimmer.</small>
-		</div>
-	</div>";
 }
-$content .= "<button type=\"submit\" class=\"btn btn-success rounded\">Update</button>";
+$content .= "<p><button type=\"submit\" class=\"btn btn-success rounded\">Update</button></p>";
 $content .= "</div></div><div class=\"col-md-4\">";
 $content .= "<div class=\"cell\"><h2>Squad Information</h2><ul class=\"mb-0\"><li>Squad: " . htmlspecialchars($rowSwim['SquadName']) . "</li><li>Monthly Fee: &pound;" . $rowSwim['SquadFee'] . "</li>";
 if ($rowSwim['SquadTimetable'] != "") {
@@ -387,7 +379,47 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 <?php
 echo $content; ?>
+
 </div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-8">
+			<div class="cell">
+				<h2>Delete member</h2>
+				<p>
+					<button data-ajax-url="<?=htmlspecialchars(autoUrl("members/delete"))?>" data-members-url="<?=htmlspecialchars(autoUrl("members"))?>" data-member-id="<?=htmlspecialchars($id)?>" data-member-name="<?=htmlspecialchars($rowSwim['MForename'] . ' ' . $rowSwim['MSurname'])?>" id="delete-button" class="btn btn-danger">
+						Delete account
+					</button>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal for use by JS code -->
+<div class="modal fade" id="main-modal" tabindex="-1" role="dialog" aria-labelledby="main-modal-title" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="main-modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="main-modal-body">
+        ...
+      </div>
+      <div class="modal-footer" id="main-modal-footer">
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+        <button type="button" id="modal-confirm-button" class="btn btn-success">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php $footer = new \SCDS\Footer();
+$footer->addJs("public/js/members/delete.js");
 $footer->render();
 ?>

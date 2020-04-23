@@ -4,10 +4,10 @@ $dateDeparture = new DateTime('first day of next month', new DateTimeZone('Europ
 
 $fluidContainer = true;
 
-global $db;
+$db = app()->db;
 $getSquads = $db->query("SELECT SquadName `name`, SquadID id FROM squads ORDER BY SquadFee ASC, `name` ASC");
 
-global $systemInfo;
+$systemInfo = app()->system;
 $leavers = $systemInfo->getSystemOption('LeaversSquad');
 
 $pagetitle = "Leaver's Squad";

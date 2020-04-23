@@ -7,7 +7,7 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
   include 'indicate-openness/session-select-post.php';
 } else {
 
-  global $db;
+  $db = app()->db;
 
   // Get swimmer info
 	$getSwimmer = $db->prepare("SELECT UserID, SquadID FROM members WHERE MemberID = ?");
@@ -149,7 +149,7 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
       $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
       `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 1, 'Galas')";
       
-      global $db;
+      $db = app()->db;
       $email = $db->prepare($notify);
       $email->execute([$_SESSION['UserID'], $subject, $message]);
 

@@ -1,7 +1,7 @@
 <?php
 
 use Respect\Validation\Validator as v;
-global $db;
+$db = app()->db;
 
 $status = true;
 $statusMessage = "";

@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $swimmer = $db->prepare("SELECT MForename, MSurname, UserID FROM members WHERE MemberID = ?");
 $swimmer->execute([$id]);

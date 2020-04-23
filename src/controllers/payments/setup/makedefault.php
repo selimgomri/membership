@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 try {
   $getMandatesCount = $db->prepare("SELECT COUNT(*) FROM `paymentMandates` WHERE `MandateID` = ? AND `UserID` = ? AND `InUse` = ?");

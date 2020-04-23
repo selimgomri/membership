@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $canPayByCard = false;
 if (env('STRIPE')) {

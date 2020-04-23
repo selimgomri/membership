@@ -2,7 +2,7 @@
 
 $name = getUserName($_SESSION['UserID']);
 
-global $db;
+$db = app()->db;
 
 $acc_details = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, EmailComms, MobileComms FROM users WHERE UserID = ?");
 $acc_details->execute([$_SESSION['UserID']]);

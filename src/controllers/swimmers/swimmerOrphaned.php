@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $fluidContainer = true;
 $squadID = $search = "";
@@ -18,7 +18,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php";
 
 if (isset($_POST['squad'])) {
-  $squadID = mysqli_real_escape_string($link, trim(htmlspecialchars($_POST['squad'])));
+  $squadID = $_POST['squad'];
 } ?>
 <div class="container-fluid">
   <h1>Swimmers with no connected parent</h1>

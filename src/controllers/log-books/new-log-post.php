@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $getMember = $db->prepare("SELECT MForename fn, MSurname sn, members.UserID FROM members INNER JOIN squads ON squads.SquadID = members.SquadID WHERE members.MemberID = ?");
 $getMember->execute([$member]);

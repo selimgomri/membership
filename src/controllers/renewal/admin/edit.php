@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $renewal = $db->prepare("SELECT * FROM `renewals` WHERE `ID` = ?");
 $renewal->execute([$id]);

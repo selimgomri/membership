@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $userID = $_SESSION['UserID'];
 $pagetitle = "Enter a Gala";

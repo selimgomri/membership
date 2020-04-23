@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 unset($_SESSION['AssRegStage']);
 
@@ -9,7 +9,7 @@ try {
   $login->setUser($_SESSION['AssRegGuestUser']);
   $login->stayLoggedIn();
   $login->preventWarningEmail();
-  global $currentUser;
+  $currentUser = app()->user;
   $currentUser = $login->login();
 } catch (Exception $e) {
   halt(403);

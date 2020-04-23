@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, ASAMember, ASANumber, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory FROM users WHERE UserID = ?");
 $userInfo->execute([$id]);
@@ -20,7 +20,7 @@ $swimmerToo->execute([
 $swimmerToo = $swimmerToo->fetchColumn();
 
 // User object for permissions
-$userObject = new \User($id, $db, false);
+$userObject = new \User($id);
 
 function selected($userObject, $perm) {
   if ($userObject->hasPermission($perm)) {

@@ -1,12 +1,12 @@
 <?php
 
-global $db;
+$db = app()->db;
 use Respect\Validation\Validator as v;
 
 $errorState = false;
 $errorMessage = "";
 
-global $systemInfo;
+$systemInfo = app()->system;
 $leavers = $systemInfo->getSystemOption('LeaversSquad');
 
 $newSquad = $_POST['newSquad'];

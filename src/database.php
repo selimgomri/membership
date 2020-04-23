@@ -2,12 +2,18 @@
 
 include BASE_PATH . 'includes/regions/countries-iso3166.php';
 
+/**
+ * Return value as a FILTER_VALIDATE_BOOLEAN
+ */
 function bool($var) {
   return filter_var($var, FILTER_VALIDATE_BOOLEAN);
 }
 
+/**
+ * Verify a user by email/pass
+ */
 function verifyUser($user, $password) {
-  global $db;
+  $db = app()->db;
 
   $username = trim($user);
   $password = trim($password);
@@ -144,9 +150,9 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
   return false;
 }
 
-function getAttendanceByID($link, $id, $weeks = "all") {
-  global $db;
-  global $systemInfo;
+function getAttendanceByID($link = null, $id, $weeks = "all") {
+  $db = app()->db;
+  $systemInfo = app()->system;
   $hideAttendance = !bool($systemInfo->getSystemOption('HIDE_MEMBER_ATTENDANCE'));
   if ($_SESSION['AccessLevel'] != 'Parent' || $hideAttendance) {
     $output = "";
@@ -184,8 +190,8 @@ function getAttendanceByID($link, $id, $weeks = "all") {
   return 'DATA HIDDEN ';
 }
 
-function mySwimmersTable($link, $userID) {
-  global $db;
+function mySwimmersTable($link = null, $userID) {
+  $db = app()->db;
   // Get the information about the swimmer
   $swimmers = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname,
   members.ClubPays, users.Forename, users.Surname, users.EmailAddress,
@@ -230,7 +236,7 @@ function mySwimmersTable($link, $userID) {
           </a>
         </td>
         <td>
-          <?=htmlspecialchars(getAttendanceByID($link, $swimmer['MemberID'], 4))?>%
+          <?=htmlspecialchars(getAttendanceByID(null, $swimmer['MemberID'], 4))?>%
         </td>
       </tr>
     <?php } while ( $swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
@@ -265,8 +271,8 @@ function courseLengthString($string) {
   return $courseLength;
 }
 
-function upcomingGalas($link, $links = false, $userID = null) {
-  global $db;
+function upcomingGalas($link = null, $links = false, $userID = null) {
+  $db = app()->db;
   $sql = $db->query("SELECT * FROM `galas` WHERE `galas`.`ClosingDate` >= CURDATE() ORDER BY `galas`.`ClosingDate` ASC;");
   $row = $sql->fetch(PDO::FETCH_ASSOC);
   if ($row != null) {
@@ -315,8 +321,8 @@ function upcomingGalas($link, $links = false, $userID = null) {
   return $output;
 }
 
-function myMonthlyFeeTable($link, $userID) {
-  global $db;
+function myMonthlyFeeTable($link = null, $userID) {
+  $db = app()->db;
   $sql = $db->prepare("SELECT squads.SquadName, squads.SquadID, squads.SquadFee,
   members.MForename, members.MSurname FROM (members INNER JOIN squads ON
   members.SquadID = squads.SquadID) WHERE members.UserID = ? AND
@@ -407,8 +413,8 @@ function autoUrl($relative) {
   return rtrim($rootUrl . $relative, '/');
 }
 
-function monthlyFeeCost($link, $userID, $format = "decimal") {
-  global $db;
+function monthlyFeeCost($link = null, $userID, $format = "decimal") {
+  $db = app()->db;
   $query = $db->prepare("SELECT squads.SquadName, squads.SquadID, squads.SquadFee FROM (members
   INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID =
   ? AND `ClubPays` = '0' ORDER BY `squads`.`SquadFee` DESC");
@@ -452,8 +458,8 @@ function monthlyFeeCost($link, $userID, $format = "decimal") {
   }
 }
 
-function monthlyExtraCost($link, $userID, $format = "decimal") {
-  global $db;
+function monthlyExtraCost($link = null, $userID, $format = "decimal") {
+  $db = app()->db;
   $query = $db->prepare("SELECT extras.ExtraName, extras.ExtraFee FROM ((members
   INNER JOIN `extrasRelations` ON members.MemberID = extrasRelations.MemberID)
   INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) WHERE
@@ -477,8 +483,8 @@ function monthlyExtraCost($link, $userID, $format = "decimal") {
   }
 }
 
-function swimmers($link, $userID, $fees = false) {
-  global $db;
+function swimmers($link = null, $userID, $fees = false) {
+  $db = app()->db;
   $sql = $db->prepare("SELECT squads.SquadName, squads.SquadFee, members.MForename,
   members.MSurname, members.ClubPays FROM (members INNER JOIN squads ON
   members.SquadID = squads.SquadID) WHERE members.UserID = ? ORDER BY
@@ -513,8 +519,8 @@ function swimmers($link, $userID, $fees = false) {
 
 }
 
-function paymentHistory($link, $user, $type = null) {
-  global $db;
+function paymentHistory($link = null, $user, $type = null) {
+  $db = app()->db;
   $sql = $db->prepare("SELECT * FROM `payments` WHERE `UserID` = ? ORDER BY `PaymentID` DESC LIMIT 0, 5;");
   $sql->execute([$user]);
   $row = $sql->fetch(PDO::FETCH_ASSOC);
@@ -555,8 +561,8 @@ function paymentHistory($link, $user, $type = null) {
   <?php }
 }
 
-function feesToPay($link, $user) {
-  global $db;
+function feesToPay($link = null, $user) {
+  $db = app()->db;
   $sql = $db->prepare("SELECT * FROM `paymentsPending` WHERE `UserID` = ? AND `PMkey` IS NULL AND `Status` = 'Pending' ORDER BY `Date` DESC LIMIT 0, 30;");
   $sql->execute([$user]);
   $row = $sql->fetch(PDO::FETCH_ASSOC);
@@ -597,8 +603,8 @@ function feesToPay($link, $user) {
   <?php }
 }
 
-function getBillingDate($link, $user) {
-  global $db;
+function getBillingDate($link = null, $user) {
+  $db = app()->db;
   $sql = $db->prepare("SELECT * FROM `paymentSchedule` WHERE `UserID` = ?;");
   $sql->execute([$user]);
   $row = $sql->fetch(PDO::FETCH_ASSOC);
@@ -624,7 +630,7 @@ function getBillingDate($link, $user) {
 }
 
 function userHasMandates($user) {
-  global $db;
+  $db = app()->db;
   $sql = $db->prepare("SELECT COUNT(*) FROM `paymentPreferredMandate` WHERE `UserID` = ?");
   $sql->execute([$user]);
   if ($sql->fetchColumn() == 1) {
@@ -634,7 +640,7 @@ function userHasMandates($user) {
 }
 
 function paymentExists($payment) {
-  global $db;
+  $db = app()->db;
   $sql = $db->prepare("SELECT COUNT(*) FROM `payments` WHERE `PMkey` = ?;");
   $sql->execute([$payment]);
   if ($sql->fetchColumn() == 1) {
@@ -645,7 +651,7 @@ function paymentExists($payment) {
 }
 
 function mandateExists($mandate) {
-  global $db;
+  $db = app()->db;
   $sql = $db->prepare("SELECT COUNT(*) FROM `paymentMandates` WHERE `Mandate` = ?");
   $sql->execute([$mandate]);
 
@@ -657,7 +663,7 @@ function mandateExists($mandate) {
 }
 
 function updatePaymentStatus($PMkey) {
-  global $db;
+  $db = app()->db;
   require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   $sql2bool = $payment = $status = null;
   try {
@@ -689,7 +695,7 @@ function updatePaymentStatus($PMkey) {
       $sql2bool = false;
     }
   } else if ($status == "failed") {
-    global $db;
+    $db = app()->db;
     try {
       $query = $db->prepare("SELECT payments.UserID, Name, Amount, Forename, Surname FROM payments INNER JOIN users ON payments.UserID = users.UserID WHERE PMkey = ?");
       $query->execute([$PMkey]);
@@ -744,7 +750,7 @@ function updatePaymentStatus($PMkey) {
       echo "Failure in event process";
     }
   } else if ($status == "customer_approval_denied") {
-    global $db;
+    $db = app()->db;
     try {
       $query = $db->prepare("SELECT payments.UserID, Name, Amount, Forename, Surname FROM payments INNER JOIN users ON payments.UserID = users.UserID WHERE PMkey = ?");
       $query->execute([$PMkey]);
@@ -763,7 +769,7 @@ function updatePaymentStatus($PMkey) {
       $sql2bool = false;
     }
   } else if ($status == "charged_back") {
-    global $db;
+    $db = app()->db;
     try {
       $query = $db->prepare("SELECT payments.UserID, Name, Amount, Forename, Surname FROM payments INNER JOIN users ON payments.UserID = users.UserID WHERE PMkey = ?");
       $query->execute([$PMkey]);
@@ -825,7 +831,7 @@ function paymentStatusString($status) {
 }
 
 function bankDetails($user, $detail) {
-  global $db;
+  $db = app()->db;
   $sql = $db->prepare("SELECT * FROM `paymentPreferredMandate` INNER JOIN `paymentMandates` ON paymentPreferredMandate.MandateID = paymentMandates.mandateID WHERE paymentPreferredMandate.UserID = ?;");
   $sql->execute([$user]);
 
@@ -854,7 +860,7 @@ function bankDetails($user, $detail) {
 }
 
 function getUserName($user) {
-  global $db;
+  $db = app()->db;
   $sql = $db->prepare("SELECT `Forename`, `Surname` FROM `users` WHERE `UserID` = ?;");
   $sql->execute([$user]);
   $row = $sql->fetch(PDO::FETCH_ASSOC);
@@ -865,7 +871,7 @@ function getUserName($user) {
 }
 
 function getSwimmerName($swimmer) {
-  global $db;
+  $db = app()->db;
   $sql = $db->prepare("SELECT `MForename`, `MSurname` FROM `members` WHERE `MemberID` = ?;");
   $row = $sql->fetch(PDO::FETCH_ASSOC);
   if ($row != null) {
@@ -875,7 +881,7 @@ function getSwimmerName($swimmer) {
 }
 
 function setupPhotoPermissions($id) {
-  global $db;
+  $db = app()->db;
   try {
     $sql = $db->prepare("SELECT COUNT(*) FROM `memberPhotography` WHERE `MemberID` = ?;");
     $sql->execute([$id]);
@@ -891,7 +897,7 @@ function setupPhotoPermissions($id) {
 }
 
 function setupMedicalInfo($id) {
-  global $db;
+  $db = app()->db;
   try {
     $sql = $db->prepare("SELECT * FROM `memberMedical` WHERE `MemberID` = ?;");
     $sql->execute([$id]);
@@ -1020,7 +1026,7 @@ function getTimes($asa) {
 }
 
 function user_needs_registration($user) {
-  global $db;
+  $db = app()->db;
   try {
     $query = $db->prepare("SELECT RR FROM users WHERE UserID = ?");
     $query->execute([$user]);
@@ -1037,7 +1043,7 @@ function user_needs_registration($user) {
 }
 
 function getPostContent($id) {
-  global $db;
+  $db = app()->db;
   $sql = "SELECT `Content` FROM `posts` WHERE `ID` = ?";
   try {
   	$query = $db->prepare($sql);
@@ -1059,7 +1065,7 @@ function getPostContent($id) {
 }
 
 function isSubscribed($user, $email_type) {
-  global $db;
+  $db = app()->db;
   $sql = "SELECT `Subscribed` FROM `users` LEFT JOIN `notifyOptions` ON `users`.`UserID` = `notifyOptions`.`UserID` WHERE (`users`.`UserID` = :user AND `EmailType` = :type) OR (`users`.`UserID` = :user AND `EmailType` IS NULL)";
   $array = [
     'user' => $user,
@@ -1099,7 +1105,7 @@ function isSubscribed($user, $email_type) {
 }
 
 function updateSubscription($post, $list, $user = null) {
-	global $db;
+	$db = app()->db;
   if (isset($_SESSION['UserID'])) {
     $user = $_SESSION['UserID'];
   }
@@ -1143,7 +1149,7 @@ function updateSubscription($post, $list, $user = null) {
 }
 
 function getUserOption($userID, $option) {
-  global $db;
+  $db = app()->db;
   $query = $db->prepare("SELECT `Value` FROM userOptions WHERE User = ? AND `Option` = ?");
   $query->execute([$userID, $option]);
   $result = $query->fetchColumn();
@@ -1159,7 +1165,7 @@ function setUserOption($userID, $option, $value) {
     $value = null;
   }
   try {
-    global $db;
+    $db = app()->db;
     $query = $db->prepare("SELECT COUNT(*) FROM userOptions WHERE User = ? AND `Option` = ?");
     $query->execute([$userID, $option]);
     $result = $query->fetchColumn();
@@ -1260,7 +1266,7 @@ function getCardBrand($brand) {
 }
 
 function createOrUpdatePayout($payout, $update = false) {
-  global $db;
+  $db = app()->db;
   require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
   $getCount = $db->prepare("SELECT COUNT(*) FROM paymentsPayouts WHERE ID = ?");
@@ -1306,7 +1312,7 @@ function createOrUpdatePayout($payout, $update = false) {
 }
 
 function getSwimmerParent($member) {
-  global $db;
+  $db = app()->db;
   $query = $db->prepare("SELECT UserID FROM members WHERE MemberID = ?");
   $query->execute([$member]);
   return $query->fetchColumn();

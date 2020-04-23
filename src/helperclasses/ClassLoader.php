@@ -27,8 +27,7 @@ require 'SuperMailer/CreateContent.php';
 
 require 'Helpers/Login.php';
 
-require 'Objects/User.php';
-require 'Objects/SystemInfo.php';
+require 'Objects/ObjectsLoader.php';
 
 require 'Components/ListGroup.php';
 

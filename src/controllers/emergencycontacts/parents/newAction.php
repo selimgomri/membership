@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $url_path = "emergency-contacts";
 if ($renewal_trap) {

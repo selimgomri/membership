@@ -7,7 +7,7 @@
 
 // First check if an account for this email already exists
 
-global $db;
+$db = app()->db;
 
 try {
 

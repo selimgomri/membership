@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 use OAuth2\Storage\MembershipOAuthStorage;
 

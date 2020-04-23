@@ -12,7 +12,7 @@ $token = $server->getAccessTokenData(OAuth2\Request::createFromGlobals());
 
 $user_id = $token['user_id'];
 
-global $db;
+$db = app()->db;
 
 $user_details = $db->prepare("SELECT Forename, Surname, EmailAddress, Edit, Mobile FROM users WHERE UserID = ?");
 $user_details->execute([$user_id]);

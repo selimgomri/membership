@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $getAccount = $db->prepare("SELECT Forename, Surname, EmailAddress, `Password`, UserID id FROM users WHERE EmailAddress = ?");
 $getAccount->execute([$_POST['email-addr']]);

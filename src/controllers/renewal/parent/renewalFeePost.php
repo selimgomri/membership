@@ -2,8 +2,8 @@
 
 $paymentItems = [];
 
-global $db;
-global $systemInfo;
+$db = app()->db;
+$systemInfo = app()->system;
 
 $location = autoUrl("");
 
@@ -28,7 +28,7 @@ try {
 
 	$partial_reg_require_topup = false;
 	if ($partial_reg) {
-		global $db;
+		$db = app()->db;
 		$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = 0 AND ClubPays = 0";
 		$query = $db->prepare($sql);
 		$query->execute([$_SESSION['UserID']]);

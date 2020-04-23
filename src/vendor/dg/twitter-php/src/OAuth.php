@@ -976,7 +976,7 @@ class Twitter_OAuthUtil
 			$value = isset($split[1]) ? self::urldecode_rfc3986($split[1]) : '';
 
 			if (isset($parsed_parameters[$parameter])) {
-				// We have already received parameter(s) with this name, so add to the list
+				// We have already recieved parameter(s) with this name, so add to the list
 				// of parameters with this name
 
 				if (is_scalar($parsed_parameters[$parameter])) {

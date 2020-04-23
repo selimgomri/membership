@@ -13,7 +13,7 @@ try {
   $hash = hash('sha256', random_int(0, 999999999) . env('CLUB_NAME'));
   $name = mb_ucfirst(trim($_POST['new-cc-name']));
 
-  global $db;
+  $db = app()->db;
   $insert = $db->prepare("INSERT INTO notifyAdditionalEmails (`UserID`, `EmailAddress`, `Name`, `Hash`) VALUES (?, ?, ?, ?)");
   $insert->execute([
     $_SESSION['UserID'],

@@ -4,10 +4,10 @@
 // The script takes the user's saved state and continues where left off
 // Also controls single session progress.
 
-global $db;
+$db = app()->db;
 
 function renewalProgress($user) {
-  global $db;
+  $db = app()->db;
   $details = null;
 	if (user_needs_registration($user)) {
 		$details = $db->prepare("SELECT * FROM `renewalProgress` WHERE `RenewalID` = 0 AND `UserID` = ?");
@@ -23,7 +23,7 @@ function renewalProgress($user) {
 }
 
 function latestRenewal() {
-	global $db;
+	$db = app()->db;
 	$latest = $db->query("SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE()
 	AND CURDATE() <= `EndDate` ORDER BY renewals.ID DESC LIMIT 1");
 	$latestRenewal = $latest->fetch(PDO::FETCH_ASSOC);
@@ -31,7 +31,7 @@ function latestRenewal() {
 }
 
 function getNextSwimmer($user, $current = 0, $rr_only = false) {
-	global $db;
+	$db = app()->db;
 
 	if ($rr_only) {
 		$query = $db->prepare("SELECT `MemberID` FROM `members` WHERE `UserID` = ? AND `MemberID` > ? AND `RR` = ?");
@@ -54,7 +54,7 @@ function getNextSwimmer($user, $current = 0, $rr_only = false) {
 }
 
 function isPartialRegistration() {
-	global $db;
+	$db = app()->db;
 	// Is user RR?
 	$query = $db->prepare("SELECT RR FROM users WHERE UserID = ?");
 	$query->execute([$_SESSION['UserID']]);

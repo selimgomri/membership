@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 // Get entry from post data and check if user is a rep for the swimmer's squad
 // Non-Parents have auto permission

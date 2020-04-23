@@ -2,7 +2,7 @@
 
 canView('TeamManager', $_SESSION['UserID'], $id);
 
-global $db;
+$db = app()->db;
 
 $getGala = $db->prepare("SELECT GalaName `name` FROM galas WHERE GalaID = ?");
 $getGala->execute([$id]);

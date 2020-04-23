@@ -6,7 +6,7 @@ require 'AutoRouteStartup.php';
 	$substage = 2;
 	$sql = "UPDATE `renewalProgress` SET `Substage` = 2 WHERE `RenewalID` = 0 AND
 	`UserID` = ?";
-	global $db;
+	$db = app()->db;
 	try {
 		$db->prepare($sql)->execute([$_SESSION['UserID']]);
 	} catch (PDOException $e) {
@@ -44,7 +44,7 @@ if ($stage == 0) {
 		halt(404);
 	}
 } else if ($stage == 1) {
-	global $db;
+	$db = app()->db;
 	// Medical Reviews
 	if ($substage == 0) {
 		$id = $part;

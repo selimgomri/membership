@@ -5,7 +5,7 @@ use Brick\PhoneNumber\PhoneNumberParseException;
 use Brick\PhoneNumber\PhoneNumberFormat;
 use Respect\Validation\Validator as v;
 
-global $db;
+$db = app()->db;
 
 $userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, ASANumber, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory FROM users WHERE UserID = ?");
 $userInfo->execute([$id]);
@@ -122,7 +122,7 @@ try {
 
   // Set access permissions
   $baseRequired = true;
-  $userObject = new \User($id, $db, false);
+  $userObject = new \User($id);
 
   // Galas
   if (bool($_POST['permissions-gala'])) {

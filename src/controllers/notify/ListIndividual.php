@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 // Get users for list
 $getUsers = $db->query("SELECT Forename, Surname, UserID FROM users ORDER BY Forename ASC, Surname ASC");

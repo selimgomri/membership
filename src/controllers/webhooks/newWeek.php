@@ -1,9 +1,9 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 function insertWeekStart($week) {
-	global $db;
+	$db = app()->db;
 	$insert = $db->prepare("INSERT INTO sessionsWeek (WeekDateBeginning) VALUES (?)");
 	$insert->execute([$week]);
 }

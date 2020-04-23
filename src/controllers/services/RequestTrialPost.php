@@ -152,7 +152,7 @@ $to_club = notifySend(null, 'New Trial Request', $email_club, 'Club Admins', CLU
 $to_parent = notifySend(null, 'Your Trial Request', $email_parent, $parent, $_POST['email-addr']);
 
 if ($to_club && $to_parent) {
-  global $db;
+  $db = app()->db;
 
   $query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ?");
   $query->execute([$hash]);

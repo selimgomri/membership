@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $moves = $db->query("SELECT
   moves.MemberID,

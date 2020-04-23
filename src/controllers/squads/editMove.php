@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $getMove = $db->prepare("SELECT members.MemberID, `MForename`, `MSurname`, `SquadName`, moves.SquadID, `MovingDate` FROM ((`moves` INNER JOIN `members` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON squads.SquadID = moves.SquadID) WHERE moves.MemberID = ?");
 $getMove->execute([$id]);

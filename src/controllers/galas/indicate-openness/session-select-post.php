@@ -7,7 +7,7 @@ if ($_SESSION['AccessLevel'] != 'Parent') {
   $galaId = $id;
 }
 
-global $db;
+$db = app()->db;
 $galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends` FROM galas WHERE GalaID = ?");
 $galaDetails->execute([$galaId]);
 $gala = $galaDetails->fetch(PDO::FETCH_ASSOC);

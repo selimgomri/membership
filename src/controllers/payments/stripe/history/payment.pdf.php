@@ -92,7 +92,7 @@ function paymentIntentStatus($value) {
   }
 }
 
-global $db;
+$db = app()->db;
 
 $payment = $db->prepare("SELECT * FROM ((stripePayments LEFT JOIN stripePaymentItems ON stripePaymentItems.Payment = stripePayments.ID) INNER JOIN users ON stripePayments.User = users.UserID) WHERE stripePayments.ID = ?");
 $payment->execute([$id]);

@@ -10,7 +10,7 @@ try {
     halt(403);
   }
 
-  global $db;
+  $db = app()->db;
   $query = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE
   UserID = ?");
   $query->execute([$user]);

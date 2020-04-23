@@ -1,5 +1,5 @@
 <?php
-global $db;
+$db = app()->db;
 
 $userDetails = $db->prepare("SELECT * FROM users WHERE UserID = ?");
 $userDetails->execute([$_SESSION['UserID']]);

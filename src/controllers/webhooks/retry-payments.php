@@ -5,7 +5,7 @@ set_time_limit(0);
 
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
-global $db;
+$db = app()->db;
 
 $query = $db->prepare("SELECT PMKey, UserID FROM paymentRetries WHERE Day <= ? AND Tried = ? LIMIT 4");
 $query->execute([date("Y-m-d"), false]);

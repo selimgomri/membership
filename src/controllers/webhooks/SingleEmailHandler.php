@@ -8,7 +8,7 @@ if (!bool(env('IS_CLS'))) {
 ignore_user_abort(true);
 set_time_limit(0);
 
-global $db;
+$db = app()->db;
 $getExtraEmails = $db->prepare("SELECT Name, EmailAddress FROM notifyAdditionalEmails WHERE UserID = ?");
 
 $pending = $db->query("SELECT `EmailID`, `notify`.`UserID`, `EmailType`, `notify`.`ForceSend`, `Forename`, `Surname`, `EmailAddress`, notify.Subject AS PlainSub, notify.Message AS PlainMess FROM `notify` INNER JOIN `users` ON notify.UserID = users.UserID WHERE notify.MessageID IS NULL AND `Status` = 'Queued' LIMIT 8;");

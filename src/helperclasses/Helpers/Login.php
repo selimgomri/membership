@@ -45,7 +45,7 @@ class Login {
     $_SESSION['UserID'] = $details['UserID'];
     $_SESSION['LoggedIn'] = 1;
 
-    $currentUser = new \User($_SESSION['UserID'], $this->db);
+    $currentUser = new \User($_SESSION['UserID'], true);
 
     $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));
 

@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $getUser = $db->prepare("SELECT Forename, Surname, RR FROM users INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE UserID = ? AND `permissions`.`Permission` = 'Parent';");
 $getUser->execute([$person]);

@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 $getExtra = $db->prepare("SELECT * FROM `extras` WHERE `ExtraID` = ?");
 $getExtra->execute([$id]);
 $row = $getExtra->fetch(PDO::FETCH_ASSOC);

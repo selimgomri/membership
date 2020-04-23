@@ -1,8 +1,8 @@
 <?php
 
-global $db;
+$db = app()->db;
 
-global $systemInfo;
+$systemInfo = app()->system;
 $privacy = $systemInfo->getSystemOption('PrivacyPolicy');
 
 $Extra = new ParsedownExtra();
@@ -103,7 +103,7 @@ $_SESSION['RegistrationMode'] = $mode;
                   <label for="forename">First Name</label>
                   <input class="form-control" type="text" name="forename"
                   id="forename" placeholder="First" required
-                  value="<?=htmlspecialchars($_SESSION['RegistrationForename'])?>" autocomplete="given-name">
+                  value="<?php if (isset($_SESSION['RegistrationForename'])) { ?><?=htmlspecialchars($_SESSION['RegistrationForename'])?><?php } ?>" autocomplete="given-name">
                   <div class="invalid-feedback">
                     You must provide a first name
                   </div>
@@ -117,7 +117,7 @@ $_SESSION['RegistrationMode'] = $mode;
                   <label for="surname">Last Name</label>
                   <input class="form-control" type="text" name="surname"
                   id="surname" placeholder="Last" required
-                  value="<?=htmlspecialchars($_SESSION['RegistrationSurname'])?>" autocomplete="family-name">
+                  value="<?php if (isset($_SESSION['RegistrationSurname'])) { ?><?=htmlspecialchars($_SESSION['RegistrationSurname'])?><?php } ?>" autocomplete="family-name">
                   <div class="invalid-feedback">
                     You must provide a surname
                   </div>
@@ -129,7 +129,7 @@ $_SESSION['RegistrationMode'] = $mode;
 
             <div class="form-group">
               <label for="email">Email Address</label>
-              <input class="form-control mb-0 text-lowercase" type="email" name="email" id="email-address" placeholder="yourname@example.com" required value="<?=htmlspecialchars($_SESSION['RegistrationEmail'])?>" autocomplete="email">
+              <input class="form-control mb-0 text-lowercase" type="email" name="email" id="email-address" placeholder="yourname@example.com" required value="<?php if (isset($_SESSION['RegistrationEmail'])) { ?><?=htmlspecialchars($_SESSION['RegistrationEmail'])?><?php } ?>" autocomplete="email">
               <small id="emailHelp" class="form-text text-muted">
                 Your email address will only be used inside <?=htmlspecialchars(env('CLUB_NAME'))?> and SCDS.
               </small>
@@ -143,7 +143,7 @@ $_SESSION['RegistrationMode'] = $mode;
           <div class="col-md-10 col-lg-8">
             <div class="form-group">
               <label for="mobile">Mobile Number</label>
-              <input class="form-control" type="tel" pattern="\+{0,1}[0-9]*" name="mobile" id="mobile" placeholder="01234 567890" required value="<?=htmlspecialchars($_SESSION['RegistrationMobile'])?>" autocomplete="tel">
+              <input class="form-control" type="tel" pattern="\+{0,1}[0-9]*" name="mobile" id="mobile" placeholder="01234 567890" required value="<?php if (isset($_SESSION['RegistrationMobile'])) { ?><?=htmlspecialchars($_SESSION['RegistrationMobile'])?><?php } ?>" autocomplete="tel">
               <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
               <div class="invalid-feedback">
                 You must provide a valid UK phone number

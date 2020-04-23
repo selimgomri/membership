@@ -50,12 +50,12 @@ if ($_SESSION['AccessLevel'] == 'Admin') {
 if ($_SESSION['AccessLevel'] == "Parent") {
 
 	$this->get('/', function() {
-		global $link;
+		
 		include 'user.php';
 	});
 
 	$this->get(['setup', '/setup/{stage}:int'], function($stage = 0) {
-		global $link;
+		
 		require 'GoCardlessSetup.php';
 		if ($stage == 0) {
 			require('setup/start.php');
@@ -75,7 +75,7 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 	});
 
 	$this->post('/setup/1', function() {
-		global $link;
+		
 		include 'setup/datepost.php';
 	});
 
@@ -88,7 +88,7 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 	});
 
 	$this->get(['/currentfees', '/fees'], function() {
-		global $link;
+		
 		include 'parent/currentfees.php';
 	});
 
@@ -99,7 +99,7 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 
 if ($_SESSION['AccessLevel'] == "Coach") {
 	$this->get('/history/{type}/{year}:int/{month}:int', function($type, $year, $month) {
-		global $link;
+		
 		include 'admin/history/feestatus.php';
 	});
 
@@ -114,27 +114,27 @@ if ($_SESSION['AccessLevel'] == "Coach") {
 
 if ($_SESSION['AccessLevel'] == "Admin") {
 	$this->get('/', function() {
-		global $link;
+		
 		include 'admin.php';
 	});
 
 	$this->get('/current', function() {
-		global $link;
+		
 		include 'users/ListOfUsers.php';
 	});
 
 	$this->post('/current/ajax', function() {
-		global $link;
+		
 		include 'users/ListOfUsersAjaxBackend.php';
 	});
 
 	$this->get('/current/{id}', function($id) {
-		global $link;
+		
 		include 'users/current.php';
 	});
 
 	$this->get('/fees', function() {
-		global $link;
+		
 		include 'adminViewMonthlyFees.php';
 	});
 
@@ -151,25 +151,25 @@ if ($_SESSION['AccessLevel'] == "Admin") {
 	});
 
 	$this->group('/history', function() {
-		global $link;
+		
 
 		$this->get('/', function() {
-			global $link;
+			
 			include 'admin/history/home.php';
 		});
 
 		$this->get('/users', function() {
-			global $link;
+			
 			include 'admin/history/UserList.php';
 		});
 
 		$this->get('/users/{id}:int', function($id) {
-			global $link;
+			
 			include 'admin/history/users.php';
 		});
 
 		$this->get('/{year}:int/{month}:int', function($year, $month) {
-			global $link;
+			
 			include 'admin/history/month.php';
 		});
 
@@ -186,7 +186,7 @@ if ($_SESSION['AccessLevel'] == "Admin") {
 		});
 
 		$this->get('/{type}/{year}:int/{month}:int', function($type, $year, $month) {
-			global $link;
+			
 			include 'admin/history/feestatus.php';
 		});
 
@@ -201,76 +201,76 @@ if ($_SESSION['AccessLevel'] == "Admin") {
 	});
 
   $this->group('/extrafees', function() {
-		global $link;
+		
 
     $this->get('/', function() {
-  		global $link;
+  		
   		include 'admin/ExtrasList.php';
   	});
 
     $this->get('/new', function() {
-  		global $link;
+  		
   		include 'admin/NewExtra.php';
   	});
 
     $this->post('/new', function() {
-  		global $link;
+  		
   		include 'admin/NewExtraServer.php';
   	});
 
     $this->get('/{id}', function($id) {
-  		global $link;
+  		
   		include 'admin/ExtraIndividual.php';
   	});
 
 		$this->get('/{id}/edit', function($id) {
-  		global $link;
+  		
   		include 'admin/EditExtra.php';
   	});
 
 		$this->post('/{id}/edit', function($id) {
-  		global $link;
+  		
   		include 'admin/EditExtraServer.php';
   	});
 
     $this->get('/{id}/delete', function($id) {
-  		global $link;
+  		
   		include 'admin/ExtraDelete.php';
   	});
 
     $this->post('ajax/{id}:int', function($id) {
-  		global $link;
+  		
   		include 'admin/ExtraIndividualServer.php';
   	});
 
 	});
 
 	$this->get('/galas', function() {
-		global $link;
+		
 		include 'galas/Home.php';
 	});
 }
 
 if ($_SESSION['AccessLevel'] == "Galas") {
 	$this->get(['/', '/galas'], function() {
-		global $link;
+		
 		include 'galas/Home.php';
 	});
 }
 
 if ($_SESSION['AccessLevel'] == "Galas" || $_SESSION['AccessLevel'] == "Admin") {
 	$this->get('/galas/{id}:int', function($id) {
-		global $link;
+		
 		include 'galas/EntryCharge.php';
 	});
 
 	$this->post('/galas/{id}:int', function($id) {
-		global $link;
+		
 		include 'galas/EntryChargeAction.php';
 	});
 
 	$this->get('/galas/{id}:int/refund', function($id) {
-		global $link;
+		
 		include 'galas/RefundCharge.php';
 	});
 }
@@ -365,7 +365,7 @@ if ($_SESSION['AccessLevel'] == 'Parent' || $_SESSION['AccessLevel'] == 'Admin')
 		});
 
 		$this->get('/{id}:int/mark-paid/{token}', function($id, $token) {
-			global $link;
+			
 			include 'admin/history/StatementMarkPaid.php';
 		});
 	});

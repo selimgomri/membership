@@ -5,7 +5,7 @@ $time = (new DateTime('-15 minutes', new DateTimeZone('Europe/London')))->format
 $time30 = (new DateTime('-30 minutes', new DateTimeZone('Europe/London')))->format("H:i:s");
 
 $sql = "SELECT SessionID, squads.SquadID, SessionName, SquadName, VenueName, StartTime, EndTime FROM ((`sessions` INNER JOIN squads ON squads.SquadID = sessions.SquadID) INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE SessionDay = :day AND StartTime <= :timenow AND (EndTime > :timenow OR EndTime > :time30) AND DisplayFrom <= CURDATE() AND DisplayUntil >= CURDATE() ORDER BY SquadFee DESC, SquadName ASC";
-global $db;
+$db = app()->db;
 
 $query = $db->prepare($sql);
 $query->execute(['day' => $day, 'timenow' => $time, 'time30' => $time30]);

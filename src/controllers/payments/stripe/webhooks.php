@@ -4,7 +4,7 @@
 
 function stripe_handlePayout($payout) {
   // Test if updating or new
-  global $db;
+  $db = app()->db;
   $getCount = $db->prepare("SELECT COUNT(*) FROM stripePayouts WHERE ID = ?");
   $getCount->execute([
     $payout->id
@@ -40,7 +40,7 @@ function stripe_handlePayout($payout) {
 }
 
 function stripe_handlePayment($pi) {
-  global $db;
+  $db = app()->db;
 
   // Check if there are gala entries for this payment intent
   $getIntentDbId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
@@ -67,7 +67,7 @@ function stripe_handlePayment($pi) {
 }
 
 function stripe_handleNewPaymentIntent($intent) {
-  global $db;
+  $db = app()->db;
 
   $intentCreatedAt = new DateTime('@' . $intent->created, new DateTimeZone('UTC'));
 
@@ -128,7 +128,7 @@ function stripe_handleNewPaymentIntent($intent) {
  * @return void
  */
 function stripe_detachPaymentMethod($pm) {
-  global $db;
+  $db = app()->db;
   $update = $db->prepare("UPDATE stripePayMethods SET Reusable = ? WHERE MethodID = ?");
   $update->execute([
     0,
@@ -137,7 +137,7 @@ function stripe_detachPaymentMethod($pm) {
 }
 
 function stripe_handlePaymentMethodUpdate($pm) {
-  global $db;
+  $db = app()->db;
 
   try {
     $id = $pm->id;

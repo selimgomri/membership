@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $start = 0;
 $page = 0;

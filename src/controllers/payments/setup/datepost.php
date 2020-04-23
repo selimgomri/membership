@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $url_path = "payments";
 if ($renewal_trap) {

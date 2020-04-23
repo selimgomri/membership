@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $swimsArray = [
   '50Free' => '50&nbsp;Free',

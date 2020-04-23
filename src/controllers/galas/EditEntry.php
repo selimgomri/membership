@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $use_white_background = true;
 $disabled = "";

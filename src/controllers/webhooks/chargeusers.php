@@ -5,8 +5,8 @@ set_time_limit(0);
 
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
-global $db;
-global $link;
+$db = app()->db;
+
 
 $sendEmail = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (:user, 'Queued', :subject, :message, 0, 'Payments')");
 

@@ -6,7 +6,7 @@ require 'info.json.php';
 $data = json_decode($output);
 
 $squads = null;
-global $systemInfo;
+$systemInfo = app()->system;
 $leavers = $systemInfo->getSystemOption('LeaversSquad');
 if ($_SESSION['AccessLevel'] != 'Parent') {
   $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads WHERE `SquadID` != ? ORDER BY SquadFee DESC, `name` ASC");

@@ -4,7 +4,7 @@
 //   halt(404);
 // }
 
-global $db;
+$db = app()->db;
 
 $allowedTypes = ['assign', 'revoke'];
 
@@ -46,7 +46,7 @@ try {
     throw new Exception();
   }
 
-  $userObj = new \User($_POST['user'], $db, false);
+  $userObj = new \User($_POST['user']);
 
   // Add user info
   $responseData['user']['id'] = (int) $_POST['user'];

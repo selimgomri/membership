@@ -1,7 +1,6 @@
 <?php
 
-// $currentUser = app()->user;
-global $currentUser;
+$currentUser = app()->user;
 use Respect\Validation\Validator as v;
 
 $target = $_POST['report_url'];

@@ -3,7 +3,7 @@
 // See your keys here: https://dashboard.stripe.com/account/apikeys
 \Stripe\Stripe::setApiKey(env('STRIPE'));
 
-global $db;
+$db = app()->db;
 
 $getUserEmail = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
 $getUserEmail->execute([$_SESSION['UserID']]);

@@ -7,7 +7,7 @@ if (!\SCDS\CSRF::verify()) {
   halt(404);
 }
 
-global $db;
+$db = app()->db;
 
 $findSquadId = $db->prepare("SELECT SquadID FROM squads WHERE SquadName = ?");
 $insertIntoSwimmers = $db->prepare("INSERT INTO members (MForename, Msurname, SquadID, DateOfBirth, Gender, ASANumber, ASACategory, RR, AccessKey, ClubPays, OtherNotes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");

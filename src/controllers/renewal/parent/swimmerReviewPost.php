@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 try {
   $nextSection = $db->prepare("UPDATE `renewalProgress` SET `Substage` = `Substage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");

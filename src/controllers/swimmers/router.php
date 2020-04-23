@@ -4,14 +4,18 @@ $userID = $_SESSION['UserID'];
 $access = $_SESSION['AccessLevel'];
 
 // View a Swimmer
-$this->get('/{id}:int/x-mode', function($id) {
-	require('NewIndivSwimmer.php');
+$this->get('/{id}:int/new', function($id) {
+	include 'view.php';
+});
+
+// View a swimmers (legacy system) times
+$this->get('/{id}:int/legacy-times', function($id) {
+	include 'legacy-times.php';
 });
 
 if ($access == "Parent") {
 	// My Swimmers
 	$this->get('/', function() {
-    global $link, $userID;
 	  require('parentSwimmers.php');
 	});
 
@@ -27,7 +31,7 @@ if ($access == "Parent") {
 	  require('Card.php');
 	});
 
-	global $systemInfo;
+	$systemInfo = app()->system;
 	$leavers = $systemInfo->getSystemOption('LeaversSquad');
 
 	if ($leavers != null) {
@@ -107,22 +111,22 @@ else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $
    */
 	if ($access == "Coach" || $access == 'Admin') {
 		$this->get('/{id}:int/new-move', function($id) {
-			global $link;
+			
 			require BASE_PATH . 'controllers/squads/newMove.php';
 		});
 
 		$this->post('/{id}:int/new-move', function($id) {
-			global $link;
+			
 			require BASE_PATH . 'controllers/squads/newMoveAction.php';
 		});
 
 		$this->get('/{id}:int/edit-move', function($id) {
-			global $link;
+			
 			require BASE_PATH . 'controllers/squads/editMove.php';
 		});
 
 		$this->post('/{id}:int/edit-move', function($id) {
-			global $link;
+			
 			require BASE_PATH . 'controllers/squads/editMoveAction.php';
 		});
 
@@ -131,7 +135,7 @@ else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $
 		});
 
 		$this->get('/{id}:int/cancel-move', function($id) {
-			global $link;
+			
 			require BASE_PATH . 'controllers/squads/cancelMoveAction.php';
 		});
 	}
@@ -226,7 +230,7 @@ $this->post('/{id}:int/edit-times', function($id) {
 
 if ($access != "Parent" && $access != 'Galas') {
 	$this->get('/addmember', function() {
-    //global $link;
+    //
 		//include 'AddMember/SelectType.php';
 		header("Location: ". autoUrl("members/new"));
 	});
@@ -256,20 +260,20 @@ if ($access != "Parent" && $access != 'Galas') {
 	});
 
 	$this->get(['/{id}:int/parenthelp', '/parenthelp/{id}:int'], function($id) {
-		global $link;
+		
 		include 'parentSetupHelp.php';
 	});
 }
 
 // View Medical Notes
 $this->get('/{id}:int/medical', function($id) {
-	global $link;
+	
 	include 'medicalDetails.php';
 });
 
 // View Medical Notes
 $this->post('/{id}:int/medical', function($id) {
-	global $link;
+	
 	include 'medicalDetailsPost.php';
 });
 
@@ -282,3 +286,9 @@ if ($_SESSION['AccessLevel'] != "Parent") {
 $this->group('/{swimmer}:int/times', function() {
 	include 'times/router.php';
 });
+
+if ($_SESSION['AccessLevel'] == 'Admin') {
+	$this->post('/delete', function() {
+		include 'delete.php';
+	});
+}

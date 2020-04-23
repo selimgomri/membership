@@ -2,7 +2,7 @@
 
 if (isset($_POST['CodeOfConduct'])) {
   try {
-    global $systemInfo;
+    $systemInfo = app()->system;
     $systemInfo->setSystemOption('ParentCodeOfConduct', $_POST['CodeOfConduct']);
     $_SESSION['PCC-SAVED'] = true;
   } catch (Exception $e) {

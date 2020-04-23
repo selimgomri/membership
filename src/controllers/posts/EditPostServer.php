@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $data = [
 	$_POST['content'],

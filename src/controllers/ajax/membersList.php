@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $access = $_SESSION['AccessLevel'];
 $count = 0;
@@ -39,7 +39,7 @@ if ((isset($_POST["squadID"])) && (isset($_POST["search"]))) {
       $query = $db->prepare("SELECT members.MemberID, members.MForename,
       members.MSurname, members.ASANumber, squads.SquadName,
       members.DateOfBirth, squads.SquadID FROM (members INNER JOIN squads ON
-      members.SquadID = squads.SquadID) WHERE members.UserID IS NULL AND (" .
+      members.SquadID = squads.SquadID) WHERE members.UserID IS NULL AND members.Active AND (" .
       $selection . ") ORDER BY `members`.`MForename`, `members`.`MSurname`
       ASC");
 	  }
@@ -47,7 +47,7 @@ if ((isset($_POST["squadID"])) && (isset($_POST["search"]))) {
       $query = $db->prepare("SELECT members.MemberID, members.MForename,
       members.MSurname, members.ASANumber, squads.SquadName,
       members.DateOfBirth FROM (members INNER JOIN squads ON members.SquadID =
-      squads.SquadID) WHERE members.UserID IS NULL AND squads.SquadID = ? AND (" .
+      squads.SquadID) WHERE members.UserID IS NULL AND members.Active AND squads.SquadID = ? AND (" .
       $selection . ") ORDER BY `members`.`MForename` , `members`.`MSurname`
       ASC");
       $names = array_merge([$_POST["squadID"]], $names);
@@ -57,14 +57,14 @@ if ((isset($_POST["squadID"])) && (isset($_POST["search"]))) {
       $query = $db->prepare("SELECT members.MemberID, members.MForename,
       members.MSurname, members.ASANumber, squads.SquadName,
       members.DateOfBirth, squads.SquadID FROM (members INNER JOIN squads ON
-      members.SquadID = squads.SquadID) WHERE (" . $selection . ") ORDER BY
+      members.SquadID = squads.SquadID) WHERE members.Active AND (" . $selection . ") ORDER BY
       `members`.`MForename` , `members`.`MSurname` ASC");
 	  }
 	  else {
       $query = $db->prepare("SELECT members.MemberID, members.MForename,
       members.MSurname, members.ASANumber, squads.SquadName,
       members.DateOfBirth FROM (members INNER JOIN squads ON members.SquadID =
-      squads.SquadID) WHERE squads.SquadID = ? AND (" . $selection . ") ORDER
+      squads.SquadID) WHERE squads.SquadID = ? AND members.Active AND (" . $selection . ") ORDER
       BY `members`.`MForename` , `members`.`MSurname` ASC");
       $names = array_merge([$_POST["squadID"]], $names);
 	  }

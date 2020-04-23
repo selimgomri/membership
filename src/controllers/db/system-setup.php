@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 // Verify that there are no db tables.
 $getTableCount = $db->prepare("SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE' AND `TABLE_SCHEMA` = ?");

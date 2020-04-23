@@ -8,8 +8,8 @@ if (!isset($id)) {
   halt(404);
 }
 
-global $db;
-global $systemInfo;
+$db = app()->db;
+$systemInfo = app()->system;
 $welcome = $systemInfo->getSystemOption('WelcomeLetter');
 
 $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
@@ -28,7 +28,7 @@ $userExtras->execute([$id]);
 
 $pagetitle = env('CLUB_NAME') . " Welcome Pack";
 
-$userObj = new \User($id, $db);
+$userObj = new \User($id);
 $json = $userObj->getUserOption('MAIN_ADDRESS');
 $address = null;
 if ($json != null) {

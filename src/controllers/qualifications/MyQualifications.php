@@ -4,7 +4,7 @@ $user = $_SESSION['UserID'];
 $userInfo = null;
 $otherUser = false;
 
-global $db;
+$db = app()->db;
 
 if ($_SESSION['AccessLevel'] != "Parent" && $person != null) {
   $user = $person;

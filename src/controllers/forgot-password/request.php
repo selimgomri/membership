@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $pagetitle = "Password Reset";
 include BASE_PATH . "views/header.php";

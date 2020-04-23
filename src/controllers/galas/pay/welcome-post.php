@@ -7,7 +7,7 @@ if (env('STRIPE_APPLE_PAY_DOMAIN')) {
   ]);
 }
 
-global $db;
+$db = app()->db;
 
 $updateTime = $db->prepare("UPDATE galaEntries SET FeeToPay = ? WHERE EntryID = ?");
 

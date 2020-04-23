@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 // Instantiate variables to go in JSON
 $alertContent;

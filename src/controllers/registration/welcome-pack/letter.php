@@ -8,8 +8,8 @@ if (!isset($id)) {
   halt(404);
 }
 
-global $db;
-global $systemInfo;
+$db = app()->db;
+$systemInfo = app()->system;
 $welcome = $systemInfo->getSystemOption('WelcomeLetter');
 
 if ($welcome == null) {
@@ -19,7 +19,7 @@ if ($welcome == null) {
 $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
 $user->execute([$id]);
 
-$userObj = new \User($id, $db);
+$userObj = new \User($id, true);
 $json = $userObj->getUserOption('MAIN_ADDRESS');
 $address = null;
 if ($json != null) {

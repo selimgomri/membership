@@ -2,7 +2,7 @@
 
 $user = $_SESSION['AssRegUser'];
 
-global $db;
+$db = app()->db;
 
 $swimmers = $db->query("SELECT MForename `first`, MSurname `last`, SquadName `name`, MemberID `id`, RRTransfer trans FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID IS NULL ORDER BY MemberID DESC, `first` ASC, `last` ASC");
 

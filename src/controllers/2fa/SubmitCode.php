@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 $resetFailedLoginCount = $db->prepare("UPDATE users SET WrongPassCount = 0 WHERE UserID = ?");
 
@@ -44,7 +44,7 @@ if (($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE']) || $auth_via_google_authent
     if ($_SESSION['2FAUserRememberMe']) {
       $login->stayLoggedIn();
     }
-    global $currentUser;
+    $currentUser = app()->user;
     $currentUser = $login->login();
     $resetFailedLoginCount->execute([$_SESSION['2FAUserID']]);
   } catch (Exception $e) {

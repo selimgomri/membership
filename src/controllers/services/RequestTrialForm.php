@@ -4,13 +4,32 @@ $pagetitle = "Request a Trial Form";
 $use_white_background = true;
 $use_website_menu = true;
 
-$value = null;
+$value = [
+  'forename' => '',
+  'surname' => '',
+  'email-addr' => '',
+  'swimmer-forename' => '',
+  'swimmer-surname' => '',
+  'day' => '',
+  'month' => '',
+  'year' => '',
+  'sex' => '',
+  'experience' => '',
+  'swimmer-xp' => '',
+  'swimmer-med' => '',
+  'swimmer-club' => '',
+  'swimmer-asa' => '',
+  'questions' => '',
+];
+$noValues = true;
 if (isset($_SESSION['RequestTrial-FC'])) {
   $value = $_SESSION['RequestTrial-FC'];
+  $noValues = false;
 }
 
 if (isset($_SESSION['RequestTrial-AddAnother'])) {
   $value = $_SESSION['RequestTrial-AddAnother'];
+  $noValues = false;
 }
 
 include BASE_PATH . 'views/header.php';
@@ -45,7 +64,7 @@ include BASE_PATH . 'views/header.php';
         We'll be in touch as soon as we can with details about a trial. At busy
         times, this may take a few days.
       </p>
-      <form method="post" <?php if ($value != null) { ?>class="was-validated"<?php } else { ?>class="needs-validation" novalidate<?php } ?>>
+      <form method="post" <?php if (!$noValues) { ?>class="was-validated"<?php } else { ?>class="needs-validation" novalidate<?php } ?>>
         <?php if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Admin') { ?>
         <div id="begin">
           <h2>Before we start</h2>
@@ -318,5 +337,5 @@ unset($_SESSION['RequestTrial-AddAnother']);
 $footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
 $footer->addJs("public/js/request-a-trial/IsItYouOrYourChild.js");
-$footer->addJs("public/js/request-a-trial/MultiSwimmers.js");
+// $footer->addJs("public/js/request-a-trial/MultiSwimmers.js");
 $footer->render();

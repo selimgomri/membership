@@ -4,7 +4,7 @@ use Brick\PhoneNumber\PhoneNumber;
 use Brick\PhoneNumber\PhoneNumberParseException;
 use Brick\PhoneNumber\PhoneNumberFormat;
 
-global $db;
+$db = app()->db;
 
 $userInfo = $db->prepare("SELECT Forename, Surname, Mobile FROM `users` WHERE `UserID` = ?");
 $userInfo->execute([$_SESSION['UserID']]);

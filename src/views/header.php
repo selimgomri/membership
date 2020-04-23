@@ -1,6 +1,6 @@
 <?php
 
-global $currentUser;
+$currentUser = app()->user;
 $cvp = 'generic';
 if (env('IS_CLS') && $currentUser != null && $currentUser->getUserBooleanOption('UsesGenericTheme')) {
   $cvp = 'generic';

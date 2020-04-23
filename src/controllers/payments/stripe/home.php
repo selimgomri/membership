@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 \Stripe\Stripe::setApiKey(env('STRIPE'));
 //$paymentsMeths = \Stripe\PaymentMethod::all(["customer" => "cus_FF5F1cnWIA7UAI", "type" => "card"]);

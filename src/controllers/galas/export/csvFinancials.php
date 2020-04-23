@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 // output headers so that the file is downloaded rather than displayed
 header('Content-Type: text/csv; charset=utf-8');

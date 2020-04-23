@@ -2,7 +2,7 @@
 
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
-global $db;
+$db = app()->db;
 
 $searchDate = $year . "-" . $month . "-" . "%";
 $getPayments = $db->prepare("SELECT * FROM `payments` INNER JOIN `users` ON users.UserID = payments.UserID WHERE `Date` LIKE ? ORDER BY Forename ASC, Surname ASC");

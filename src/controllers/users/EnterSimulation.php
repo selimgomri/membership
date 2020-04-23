@@ -1,6 +1,6 @@
 <?php
 
-global $db;
+$db = app()->db;
 
 try {
 	$query = $db->prepare("SELECT * FROM `users` WHERE `UserID` = ? AND Active");
@@ -28,6 +28,6 @@ $_SESSION['Surname'] =      $info['Surname'];
 $_SESSION['UserID'] =       $info['UserID'];
 $_SESSION['LoggedIn'] =     1;
 
-$userObject = new \User($id, $db);
+$userObject = new \User($id, true);
 
 header("Location: " . autoUrl(""));
