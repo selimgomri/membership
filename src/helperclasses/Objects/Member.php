@@ -1,6 +1,7 @@
 <?php
 
-class Member extends Person {
+class Member extends Person
+{
   private $db;
   // private int $id;
   // private string $forename;
@@ -28,7 +29,8 @@ class Member extends Person {
   /**
    * Create an empty member object
    */
-  function __construct($id) {
+  function __construct($id)
+  {
     $this->id = $id;
 
     $db = app()->db;
@@ -78,7 +80,8 @@ class Member extends Person {
   /**
    * Get member's middlename
    */
-  public function getMiddlenames() {
+  public function getMiddlenames()
+  {
     return $this->middlenames;
   }
 
@@ -87,7 +90,8 @@ class Member extends Person {
    * 
    * @return Squad[] array of Squad objects
    */
-  public function getSquads() {
+  public function getSquads()
+  {
     return [
       Squad::get($this->squad)
     ];
@@ -98,15 +102,61 @@ class Member extends Person {
    * 
    * @return string age in years
    */
-  public function getAge($date = 'now') {
+  public function getAge($date = 'now')
+  {
     $date = new DateTime($date, new DateTimeZone('Europe/London'));
     return $this->dob->diff($date)->y;
   }
 
-  public function getUser() {
+  public function getUser()
+  {
     if ($this->user) {
       return new User($this->user);
     }
     return null;
+  }
+
+  public function getDateOfBirth()
+  {
+    return clone $this->dob;
+  }
+
+  public function getSwimEnglandNumber()
+  {
+    return $this->swimEnglandNumber;
+  }
+
+  public function getSwimEnglandCategory()
+  {
+    return $this->swimEnglandCategory;
+  }
+
+  public function getCountryCode()
+  {
+    return $this->country;
+  }
+
+  public function getCountry()
+  {
+    $countries = getISOAlpha2CountriesWithHomeNations();
+    return $countries[$this->getCountryCode()];
+  }
+
+  public function getMedicalNotes() {
+    return new MedicalNotes($this->id);
+  }
+
+  /**
+   * Get the user's emergency contacts
+   * 
+   * @return EmergencyContact[] an array of emergency contacts
+   */
+  public function getEmergencyContacts() {
+    if ($this->user) {
+      $ec = new EmergencyContacts(app()->db);
+      $ec->byParent($this->user);
+      return $ec->getContacts();
+    }
+    return [];
   }
 }

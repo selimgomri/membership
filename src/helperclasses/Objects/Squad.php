@@ -62,6 +62,15 @@ class Squad {
   }
 
   /**
+   * Get the squad id
+   * 
+   * @return int id
+   */
+  public function getId() : int {
+    return $this->id;
+  }
+
+  /**
    * Get the monthly fee for a squad
    * 
    * @param int whether to return the fee as an integer for formatted string, default is int

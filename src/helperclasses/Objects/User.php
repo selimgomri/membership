@@ -220,4 +220,15 @@ class User extends Person {
       return false;
     }
   }
+
+  /**
+   * Get the user's emergency contacts
+   * 
+   * @return EmergencyContact[] an array of emergency contacts
+   */
+  public function getEmergencyContacts() {
+    $ec = new EmergencyContacts(app()->db);
+    $ec->byParent($this->id);
+    return $ec->getContacts();
+  }
 }
