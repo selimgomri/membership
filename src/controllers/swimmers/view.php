@@ -20,6 +20,13 @@ $squads = $member->getSquads();
 
 $pagetitle = htmlspecialchars($member->getFullName());
 
+$pageHead = [
+  'body' => [
+    'data-spy="scroll"',
+    'data-target="#member-page-menu"'
+  ]
+];
+
 $fluidContainer = true;
 include BASE_PATH . 'views/header.php';
 
@@ -48,7 +55,7 @@ include BASE_PATH . 'views/header.php';
         <div class="card-header">
           Jump to
         </div>
-        <div class="list-group">
+        <div class="list-group" id="member-page-menu">
           <a href="#basic-information" class="list-group-item list-group-item-action">
             Basic information
           </a>

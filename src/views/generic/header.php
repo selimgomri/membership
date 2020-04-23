@@ -18,7 +18,7 @@ if (isset($customBackground) && $customBackground) {
 }
 ?>
 
-<body class="<?=$bg?> account--body">
+<body class="<?=$bg?> account--body" <?php if (isset($pageHead['body'])) { foreach ($pageHead['body'] as $item) { ?> <?=$item?> <?php } } ?>>
 
   <div class="sr-only sr-only-focusable">
     <a href="#maincontent">Skip to main content</a>
