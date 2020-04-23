@@ -172,10 +172,10 @@ include BASE_PATH . 'views/header.php';
       <?php } else { ?>
       <div class="alert alert-warning">
         <p class="mb-0">
-          <strong>There are no logs to display</strong>
+          <strong>There are no galas to display</strong>
         </p>
         <p class="mb-0">
-          <a href="<?=htmlspecialchars(autoUrl("galas/all-galas" . "/new"))?>" class="alert-link">Create a new training log</a> to get started.
+          This is likely because your club has never added any galas to the system.
         </p>
       </div>
       <?php } ?>
