@@ -215,57 +215,59 @@ include BASE_PATH . 'views/header.php';
       <?php } ?>
     </div>
     <div class="col">
-      <div class="cell">
-        <h2>Log books are new!</h2>
-        <p class="lead">
-          We have added log books to the membership system as a response to the coronavirus (COVID-19) outbreak.
-        </p>
-        <p>
-          This is to allow members to log their home based land training.
-        </p>
-        <p class="mb-0">
-          As always, feedback is very welcome. Send it to <a href="mailto:feedback@myswimmingclub.uk">feedback@myswimmingclub.uk</a>
-        </p>
-      </div>
-
-      <?php if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Parent') { ?>
-      <div class="cell">
-        <h2>Member access</h2>
-        <p class="lead">
-          You can give <?=htmlspecialchars($memberInfo['fn'])?> access to their log book with their own account!
-        </p>
-        <p>
-          You just need to create a password for them to get started. If <?=htmlspecialchars($memberInfo['fn'])?> ever forgets, you can reset their password yourself by coming back to this page.
-        </p>
-        <p>
-          <a href="<?=htmlspecialchars(autoUrl("members/" . $member . "/password?return=" . urlencode(autoUrl("log-books/members/" . $member))))?>" class="btn btn-primary">
-            Password settings
-          </a>
-        </p>
-
-      </div>
-      <?php } ?>
-
-      <?php if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-MemberLoggedIn'])) { ?>
-      <div class="cell">
-        <h2>My account</h2>
-        <p class="lead">
-          Hey <?=htmlspecialchars($memberInfo['fn'])?>! Welcome to your account.
-        </p>
-        <p>
-          Need to change account settings?
-        </p>
-        <div class="btn-group" role="group" aria-label="Account options">
-          <a href="<?=htmlspecialchars(autoUrl("log-books/settings"))?>" class="btn btn-primary">
-            Account settings <i class="fa fa-cog" aria-hidden="true"></i>
-          </a>
-          <a href="<?=htmlspecialchars(autoUrl("logout"))?>" class="btn btn-danger">
-            Sign out
-          </a>
+      <div class="position-sticky top-3">
+        <div class="cell">
+          <h2>Log books are new!</h2>
+          <p class="lead">
+            We have added log books to the membership system as a response to the coronavirus (COVID-19) outbreak.
+          </p>
+          <p>
+            This is to allow members to log their home based land training.
+          </p>
+          <p class="mb-0">
+            As always, feedback is very welcome. Send it to <a href="mailto:feedback@myswimmingclub.uk">feedback@myswimmingclub.uk</a>
+          </p>
         </div>
 
+        <?php if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Parent') { ?>
+        <div class="cell">
+          <h2>Member access</h2>
+          <p class="lead">
+            You can give <?=htmlspecialchars($memberInfo['fn'])?> access to their log book with their own account!
+          </p>
+          <p>
+            You just need to create a password for them to get started. If <?=htmlspecialchars($memberInfo['fn'])?> ever forgets, you can reset their password yourself by coming back to this page.
+          </p>
+          <p>
+            <a href="<?=htmlspecialchars(autoUrl("members/" . $member . "/password?return=" . urlencode(autoUrl("log-books/members/" . $member))))?>" class="btn btn-primary">
+              Password settings
+            </a>
+          </p>
+
+        </div>
+        <?php } ?>
+
+        <?php if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-MemberLoggedIn'])) { ?>
+        <div class="cell">
+          <h2>My account</h2>
+          <p class="lead">
+            Hey <?=htmlspecialchars($memberInfo['fn'])?>! Welcome to your account.
+          </p>
+          <p>
+            Need to change account settings?
+          </p>
+          <div class="btn-group" role="group" aria-label="Account options">
+            <a href="<?=htmlspecialchars(autoUrl("log-books/settings"))?>" class="btn btn-primary">
+              Account settings <i class="fa fa-cog" aria-hidden="true"></i>
+            </a>
+            <a href="<?=htmlspecialchars(autoUrl("logout"))?>" class="btn btn-danger">
+              Sign out
+            </a>
+          </div>
+
+        </div>
+        <?php } ?>
       </div>
-      <?php } ?>
     </div>
   </div>
 </div>

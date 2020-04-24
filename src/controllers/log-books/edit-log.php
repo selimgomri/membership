@@ -126,7 +126,7 @@ include BASE_PATH . 'views/header.php';
 
       </div>
       <div class="col">
-        <div class="cell">
+        <div class="cell position-sticky top-3">
           <h2>More options</h2>
           <p>
             You can edit the time and date for this activity.
