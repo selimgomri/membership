@@ -86,7 +86,7 @@ include BASE_PATH . 'views/header.php';
             <i class="fa fa-fw fa-phone" aria-hidden="true"></i>
           </a>
           <a href="#photography-permissions" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-            Photography permissions
+            Photography consent
             <i class="fa fa-fw fa-camera" aria-hidden="true"></i>
           </a>
           <a href="#squads" class="list-group-item list-group-item-action">
@@ -280,7 +280,7 @@ include BASE_PATH . 'views/header.php';
         <?php $perms = $member->getPhotoPermissions(); ?>
 
         <?php if (sizeof($perms['allowed']) > 0) { ?>
-        <div class="col-sm-6">
+        <div class="col-xl-6">
           <div class="card card-body border-success h-100">
             <p class="text-success">
               <i class="fa fa-check-circle" aria-hidden="true"></i> <strong>You may</strong>
@@ -293,10 +293,12 @@ include BASE_PATH . 'views/header.php';
             </ul>
           </div>
         </div>
+
+        <div class="col-12 mb-2 d-block d-xl-none"></div>
         <?php } ?>
 
         <?php if (sizeof($perms['disallowed']) > 0) { ?>
-        <div class="col-sm-6">
+        <div class="col-xl-6">
           <div class="card card-body border-danger h-100">
             <p class="text-danger">
               <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <strong>You must not</strong>

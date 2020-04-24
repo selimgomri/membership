@@ -219,18 +219,18 @@ include BASE_PATH . "views/header.php";
         </p>
 
         <div class="row">
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-lg-4">
             <h3 class="h6">Name</h3>
             <p><?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?></p>
           </div>
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-lg-4">
             <h3 class="h6">Email</h3>
             <p class="text-truncate"><a
                 href="<?=htmlspecialchars(autoUrl("users/" . $id . "/email"))?>"><?=htmlspecialchars($info['EmailAddress'])?></a>
             </p>
           </div>
           <?php if ($number !== false) { ?>
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-lg-4">
             <h3 class="h6">Phone</h3>
             <p><a
                 href="<?=htmlspecialchars($number->format(PhoneNumberFormat::RFC3966))?>"><?=htmlspecialchars($number->format(PhoneNumberFormat::NATIONAL))?></a>
@@ -238,38 +238,38 @@ include BASE_PATH . "views/header.php";
           </div>
           <?php } ?>
           <?php if (bool($info['ASAMember'])) { ?>
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-lg-4">
             <h3 class="h6">Swim England Number</h3>
             <p><a target="_blank" href="<?=htmlspecialchars('https://www.swimmingresults.org/membershipcheck/member_details.php?myiref=' . urlencode($info['ASANumber']))?>"><?=htmlspecialchars($info['ASANumber'])?> <i class="fa fa-external-link" aria-hidden="true"></i></a>
             </p>
           </div>
 
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-lg-4">
             <h3 class="h6">Swim England Category</h3>
             <p><?php if($info['ASACategory'] != 0) { ?><?=htmlspecialchars($info['ASACategory'])?><?php } else { ?><strong><span class="text-danger">Not set</span></strong><?php } ?>
             </p>
           </div>
 
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-lg-4">
             <h3 class="h6">Swim England Payment</h3>
             <p><?php if(bool($info['ASAPaid'])) { ?>Club pays <?=htmlspecialchars($info['Forename'])?>'s SE Membership<?php } else { ?><?=htmlspecialchars($info['Forename'])?> pays their own SE Membership<?php } ?>
             </p>
           </div>
           <?php } ?>
 
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-lg-4">
             <h3 class="h6">Club Membership</h3>
             <p><?php if (bool($info['ClubMember'])) { ?><?=htmlspecialchars($info['Forename'])?> is a club member<?php } else { ?><?=htmlspecialchars($info['Forename'])?> is not a club member<?php } ?></p>
           </div>
 
           <?php if (bool($info['ClubMember'])) { ?>
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-lg-4">
             <h3 class="h6">Club Membership Category</h3>
             <p><?php if($info['ClubCategory'] != null) { ?><?=htmlspecialchars($info['ClubCategory'])?><?php } else { ?><strong><span class="text-danger">Not set</span></strong><?php } ?>
             </p>
           </div>
 
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-lg-4">
             <h3 class="h6">Club Membership Payment</h3>
             <p><?php if(bool($info['ClubPaid'])) { ?>Club pays <?=htmlspecialchars($info['Forename'])?>'s Club Membership<?php } else { ?><?=htmlspecialchars($info['Forename'])?> pays their own Club Membership<?php } ?>
             </p>
@@ -277,7 +277,7 @@ include BASE_PATH . "views/header.php";
           <?php } ?>
 
           <?php if ($swimmerToo) { ?>
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-lg-4">
             <h3 class="h6">Sport</h3>
             <p><a href="<?=htmlspecialchars(autoUrl("members/" . $swimmerToo))?>"><?=htmlspecialchars($info['Forename'])?> is also a member</a></p>
           </div>
@@ -349,7 +349,7 @@ include BASE_PATH . "views/header.php";
       <?php if ($userObj->hasPermission('Parent')) { ?>
       <div class="mb-4">
         <div class="row">
-          <div class="col-sm-6 col-md-8">
+          <div class="col-md-6 col-lg-8">
             <h2 id="payment-information">
               Payment information
             </h2>
@@ -358,15 +358,15 @@ include BASE_PATH . "views/header.php";
             </p>
             
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-lg-6">
                 <h3 class="h6">Squad Fees</h3>
                 <p><?=monthlyFeeCost($db, $id, "string")?></p>
               </div>
-              <div class="col-md-6">
+              <div class="col-lg-6">
                 <h3 class="h6">Extra Fees</h3>
                 <p><?=monthlyExtraCost($db, $id, "string")?></p>
               </div>
-              <div class="col-md-6">
+              <div class="col-lg-6">
                 <h3 class="h6">Direct Debit</h3>
                 <?php if (userHasMandates($id)) { ?>
                 <?php if ($logo_path) { ?>
@@ -381,7 +381,7 @@ include BASE_PATH . "views/header.php";
                 <p>No Direct Debit set up</p>
                 <?php } ?>
               </div>
-              <div class="col-md-6">
+              <div class="col-lg-6">
                 <h3 class="h6">Account balance</h3>
                 <p>
                   &pound;<?=(string) (\Brick\Math\BigDecimal::of((string) getAccountBalance($id)))->withPointMovedLeft(2)->toScale(2)?>
@@ -390,7 +390,7 @@ include BASE_PATH . "views/header.php";
             </div>
           </div>
 
-          <div class="col-sm-6 col-md-4">
+          <div class="col-md-6 col-lg-4">
           <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
             <div class="card">
               <div class="card-header">
@@ -420,7 +420,7 @@ include BASE_PATH . "views/header.php";
 
         <div class="row">
           <?php while ($s = $swimmers->fetch(PDO::FETCH_ASSOC)) { ?>
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-lg-4">
             <h3 class="h6"><a href="<?=autoUrl("swimmers/" . $s['id'])?>"
                 title="Full information about <?=htmlspecialchars($s['fn'] . ' ' . $s['sn'])?>"><?=htmlspecialchars($s['fn'] . ' ' . $s['sn'])?></a>
             </h3>
@@ -525,7 +525,7 @@ include BASE_PATH . "views/header.php";
         </p>
 
         <div class="row">
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-lg-4">
             <div class="input-group">
               <div class="input-group-prepend">
                 <label class="input-group-text" for="accountType">Account Type</label>
@@ -567,7 +567,7 @@ include BASE_PATH . "views/header.php";
         $count = 0;
         while ($qualification = $qualifications->fetch(PDO::FETCH_ASSOC)) {
           $count += 1; ?>
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-lg-4">
             <h3 class="h6"><?=htmlspecialchars($qualification['Name'])?></h3>
             <p><?=htmlspecialchars($qualification['Info'])?></p>
             <p>
@@ -619,7 +619,7 @@ include BASE_PATH . "views/header.php";
 
       <div class="mb-4">
         <div class="row">
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-lg-4">
             <h3 class="h6">Last Login</h3>
             <?php
             $details = "";
@@ -634,7 +634,7 @@ include BASE_PATH . "views/header.php";
             <p><?=$details?></p>
           </div>
 
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-lg-4">
             <h3 class="h6">Delete account</h3>
             <p>
               <button data-ajax-url="<?=htmlspecialchars(autoUrl("users/delete-user"))?>" data-users-url="<?=htmlspecialchars(autoUrl("users"))?>" data-user-id="<?=htmlspecialchars($id)?>" data-user-name="<?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?>" id="delete-button" class="btn btn-danger">
