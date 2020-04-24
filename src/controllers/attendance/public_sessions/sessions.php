@@ -38,7 +38,7 @@ $sessionToday = false;
 
 $otherDays = $sundays = [];
 foreach ($allSessions as $session) {
-  if (!$sessionToday && $dayNum == $session['SessionDay']) {
+  if (($startWeek <= $now && $now <= $endWeek) && !$sessionToday && $dayNum == $session['SessionDay']) {
     $sessionToday = true;
   }
   if ($session['SessionDay'] == 0) {
