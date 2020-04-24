@@ -75,8 +75,13 @@ catch (PhoneNumberParseException $e) {
 
 $accessLevel = "";
 $perms = $userObj->getPrintPermissions();
+$firstDone = false;
 foreach ($perms as $key => $value) {
-  $accessLevel .= $value . ', ';
+  if ($firstDone) {
+    $accessLevel .= ', ';
+  }
+  $accessLevel .= $value;
+  $firstDone = true;
 }
 
 $pageHead = [
