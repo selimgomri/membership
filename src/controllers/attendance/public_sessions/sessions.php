@@ -54,26 +54,45 @@ $sessions = $otherDays;
 
 $getCoaches = $db->prepare("SELECT Forename fn, Surname sn, coaches.Type code FROM coaches INNER JOIN users ON coaches.User = users.UserID WHERE coaches.Squad = ? ORDER BY coaches.Type ASC, Forename ASC, Surname ASC");
 
+$days = [
+  0 => false,
+  1 => false,
+  2 => false,
+  3 => false,
+  4 => false,
+  5 => false,
+  6 => false,
+];
+
+$pageHead = [
+  'body' => [
+    'data-spy="scroll"',
+    'data-target="#member-page-menu"'
+  ]
+];
+$pagetitle = "Sessions";
+
 include BASE_PATH . 'views/header.php';
 
 ?>
 
 <div class="container">
+
+  <h1>Sessions in week <?=htmlspecialchars($startWeek->format('W'))?> / <?=htmlspecialchars($startWeek->format('o'))?></h1>
+  <p class="lead">Timetable information</p>
+
+  <p>Showing sessions for the week beginning <strong><?=htmlspecialchars($startWeek->format('l j F Y'))?></strong>.</p>
+
+  <?php if ($sessionToday) { ?>
+  <p><a href="#day-<?=$dayNum?>">Jump to today</a></p>
+  <?php } ?>
+
+  <div class="alert alert-warning">
+    <p class="mb-0"><strong>Please note:</strong> This system cannot currently indicate whether  or not a session is cancelled.</p>
+  </div>
+
   <div class="row">
-    <div class="col-lg-8">
-      <h1>Sessions in <abbr title="ISO-8601 week number of year">week <?=(int) $startWeek->format('W')?> / <?=$startWeek->format('o')?></abbr></h1>
-      <p class="lead">A permanent web presence for all training sessions at <?=htmlspecialchars(env('CLUB_NAME'))?></p>
-
-      <p>Showing sessions for the week beginning <strong><?=$startWeek->format('l j F Y')?></strong>.</p>
-
-      <?php if ($sessionToday) { ?>
-      <p><a href="#day-<?=$dayNum?>">Jump to today</a></p>
-      <?php } ?>
-
-      <div class="alert alert-warning">
-        <p class="mb-0"><strong>Please note:</strong> This system cannot currently indicate whether  or not a session is cancelled.</p>
-      </div>
-
+    <div class="col-lg-8 order-2 order-lg-1">
       <?php $currentDay = null; ?>
 
       <?php if (sizeof($sessions) > 0) { ?>
@@ -87,8 +106,9 @@ include BASE_PATH . 'views/header.php';
         <?php if ($currentDay != $session['SessionDay']) {
           $currentDay = $session['SessionDay'];
           $day = clone $startWeek;
-          $day->add(new DateInterval('P' . ($currentDay+6)%7 . 'D')); ?>
-          <div class="list-group-item bg-primary text-white" id="day-<?=(int) $day->format('N') % 7?>">
+          $day->add(new DateInterval('P' . ($currentDay+6)%7 . 'D'));
+          $days[(int) $day->format('N') % 7] = true; ?>
+          <div class="list-group-item bg-primary text-white" id="day-<?=htmlspecialchars($day->format('N') % 7)?>">
             <h2 class="mb-0"><?=htmlspecialchars($day->format('l'))?></h2>
             <p class="lead mb-0"><?=htmlspecialchars($day->format('j F Y'))?></p>
           </div>
@@ -180,8 +200,35 @@ include BASE_PATH . 'views/header.php';
         </ul>
       </nav>
     </div>
-    <div class="col">
-      
+    <div class="col order-1 order-lg-2">
+      <div class="position-sticky top-3 card mb-3">
+        <div class="card-header">
+          Jump to day
+        </div>
+        <div class="list-group list-group-flush" id="member-page-menu">
+          <a href="#day-1" <?php if (!$days[1]) { ?>tabindex="-1" aria-disabled="true"<?php } ?> class="list-group-item list-group-item-action <?php if (!$days[1]) { ?>disabled<?php } ?>">
+            Monday
+          </a>
+          <a href="#day-2" <?php if (!$days[2]) { ?>tabindex="-1" aria-disabled="true"<?php } ?> class="list-group-item list-group-item-action <?php if (!$days[2]) { ?>disabled<?php } ?>">
+            Tuesday
+          </a>
+          <a href="#day-3" <?php if (!$days[3]) { ?>tabindex="-1" aria-disabled="true"<?php } ?> class="list-group-item list-group-item-action <?php if (!$days[3]) { ?>disabled<?php } ?>">
+            Wednesday
+          </a>
+          <a href="#day-4" <?php if (!$days[4]) { ?>tabindex="-1" aria-disabled="true"<?php } ?> class="list-group-item list-group-item-action <?php if (!$days[4]) { ?>disabled<?php } ?>">
+            Thursday
+          </a>
+          <a href="#day-5" <?php if (!$days[5]) { ?>tabindex="-1" aria-disabled="true"<?php } ?> class="list-group-item list-group-item-action <?php if (!$days[5]) { ?>disabled<?php } ?>">
+            Friday
+          </a>
+          <a href="#day-6" <?php if (!$days[6]) { ?>tabindex="-1" aria-disabled="true"<?php } ?> class="list-group-item list-group-item-action <?php if (!$days[6]) { ?>disabled<?php } ?>">
+            Saturday
+          </a>
+          <a href="#day-0" <?php if (!$days[0]) { ?>tabindex="-1" aria-disabled="true"<?php } ?> class="list-group-item list-group-item-action <?php if (!$days[0]) { ?>disabled<?php } ?>">
+            Sunday
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
