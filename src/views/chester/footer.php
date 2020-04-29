@@ -13,7 +13,7 @@
   ];
 ?>
 
-<div class="mt-3 mb-n3 text-center" style="background: #000000;">
+<!-- <div class="mt-3 mb-n3 text-center" style="background: #000000;">
   <div class="container">
     <video class="d-none d-sm-block mx-auto my-0 p-0 img-fluid" autoplay loop muted playsinline>
       <source src="<?=htmlspecialchars($covidVideos[rand(0, sizeof($covidVideos) - 1)])?>" type="video/mp4" />
@@ -24,7 +24,7 @@
       A COVID-19 video message appears here but your browser does not support the video element.
     </video>
   </div>
-</div>
+</div> -->
 
 <!-- THE HEPPELL FOOTER -->
 <div class="cls-global-footer cls-global-footer-sponsors d-print-none">
