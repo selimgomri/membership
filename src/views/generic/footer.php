@@ -146,7 +146,6 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
       </div>
     </div>
   </div><!-- /.container -->
-  </div>
   <div id="app-js-info" data-service-worker-url="<?=htmlspecialchars(autoUrl("sw.js"))?>"></div>
 </footer>
 
