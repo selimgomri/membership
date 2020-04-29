@@ -210,8 +210,6 @@
 
 <div id="app-js-info" data-service-worker-url="<?=htmlspecialchars(autoUrl("sw.js"))?>"></div>
 
-</body>
-
 <!-- Modals and Other Hidden HTML -->
 <script rel="preload" src="<?=autoUrl("public/js/jquery-3.4.1.slim.min.js")?>"></script>
 <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
@@ -231,5 +229,7 @@
     ?><script src="<?=htmlspecialchars($script)?>"></script><?php
   }
 } ?>
+
+</body>
 
 </html>

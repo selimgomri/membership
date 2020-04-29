@@ -149,8 +149,6 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
   <div id="app-js-info" data-service-worker-url="<?=htmlspecialchars(autoUrl("sw.js"))?>"></div>
 </footer>
 
-</body>
-
 <!-- Modals and Other Hidden HTML -->
 <script rel="preload" src="<?=autoUrl("public/js/jquery-3.4.1.slim.min.js")?>"></script>
 <script defer src="<?=autoUrl("public/js/popper.min.js")?>"></script>
@@ -166,5 +164,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
     ?><script src="<?=htmlspecialchars($script)?>"></script><?php
   }
 } ?>
+
+</body>
 
 </html>
