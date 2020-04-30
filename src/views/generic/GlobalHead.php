@@ -1,6 +1,6 @@
 <?php
 
-$stylesheet = autoUrl('public/css/generic/generic-0.15-prefixed.css');
+$stylesheet = autoUrl('public/dist/css/generic.min.css');
 $fa = autoUrl('public/css/font-awesome/css/font-awesome.min.css');
 
 
