@@ -8,7 +8,7 @@ module.exports = {
     './scss/generic.scss'
   ],
   output: {
-    path: path.resolve(__dirname, 'public/dist/'),
+    path: path.resolve(__dirname, 'public/compiled/'),
     filename: 'js/main.js'
   },
   module: {
