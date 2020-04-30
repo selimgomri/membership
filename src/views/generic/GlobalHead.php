@@ -92,7 +92,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700|Roboto+Mono|Merriweather:400,600">
   <link rel="stylesheet preload" href="<?=htmlspecialchars($stylesheet)?>">
   <link rel="stylesheet preload" href="<?=htmlspecialchars(autoUrl("public/css/colour.css"))?>">
-  <link rel="stylesheet" href="<?=htmlspecialchars($fa)?>">
+  <!-- <link rel="stylesheet" href="<?=htmlspecialchars($fa)?>"> -->
 
   <!-- Generic icon first -->
   <?php if (env('CLUB_LOGO')) { ?>

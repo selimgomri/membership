@@ -211,13 +211,11 @@
 <div id="app-js-info" data-service-worker-url="<?=htmlspecialchars(autoUrl("sw.js"))?>"></div>
 
 <!-- Modals and Other Hidden HTML -->
-<script rel="preload" src="<?=autoUrl("public/js/jquery-3.4.1.slim.min.js")?>"></script>
+<script rel="preload" src="<?=autoUrl("public/compiled/js/main.js")?>"></script>
 <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
 <script defer src="https://static.chesterlestreetasc.co.uk/global/headers/GlobalNavigation.js"></script>
 <script async src="<?=autoUrl("public/js/Cookies.js")?>"></script>
 <?php } ?>
-<script defer src="<?=autoUrl("public/js/popper.min.js")?>"></script>
-<script defer src="<?=autoUrl("public/js/bootstrap.min.js")?>"></script>
 <?php if (isset($use_website_menu) && $use_website_menu) { ?>
 <script defer src="https://static.chesterlestreetasc.co.uk/global/headers/MainSiteMenu.js"></script>
 <?php } ?>

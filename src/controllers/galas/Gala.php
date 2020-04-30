@@ -334,94 +334,94 @@ include "galaMenu.php";
 
 </div>
 
-<script src="<?=autoUrl("public/js/Chart.min.js")?>"></script>
+
 <?php $chartColours = chartColours(5); ?>
 <script>
-var ctx = document.getElementById('eventEntries').getContext('2d');
-var chart = new Chart(ctx, {
-  // The type of chart we want to create
-  type: 'bar',
+document.addEventListener("DOMContentLoaded", function(event) { 
+  var ctx = document.getElementById('eventEntries').getContext('2d');
+  var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'bar',
 
-  // The data for our dataset
-  data: {
-    labels: [<?php
-      foreach ($countEntries as $key => $event) {
-        if ($event['Count'] > 0) {
-          ?> <?=json_encode(html_entity_decode($event['Name']))?>, <?php
-        }
-      } ?>],
-    datasets: [{
-      label: <?=json_encode(html_entity_decode($gala['GalaName']))?>,
-      data: [<?php
-      foreach ($countEntries as $key => $event) {
-        if ($event['Count'] > 0) {
-          ?><?=$event['Count']?>, <?php
-        }
-      } ?>],
-      backgroundColor: [<?php
-      foreach ($countEntries as $key => $event) {
-        if ($event['Count'] > 0) {
-          if ($event['Stroke'] == 'Free') {
-            ?> <?=json_encode($chartColours[0])?>
-        <?php
-          } else if ($event['Stroke'] == 'Back') {
-            ?> <?=json_encode($chartColours[1])?>
-        <?php
-          } else if ($event['Stroke'] == 'Breast') {
-            ?> <?=json_encode($chartColours[2])?>
-        <?php
-          } else if ($event['Stroke'] == 'Fly') {
-            ?> <?=json_encode($chartColours[3])?>
-        <?php
-          } else if ($event['Stroke'] == 'IM') {
-            ?> <?=json_encode($chartColours[4])?>
-        <?php
+    // The data for our dataset
+    data: {
+      labels: [<?php
+        foreach ($countEntries as $key => $event) {
+          if ($event['Count'] > 0) {
+            ?> <?=json_encode(html_entity_decode($event['Name']))?>, <?php
           }
-          ?>, <?php
-        }
-      } ?>
-      ],
-    }],
-  },
+        } ?>],
+      datasets: [{
+        label: <?=json_encode(html_entity_decode($gala['GalaName']))?>,
+        data: [<?php
+        foreach ($countEntries as $key => $event) {
+          if ($event['Count'] > 0) {
+            ?><?=$event['Count']?>, <?php
+          }
+        } ?>],
+        backgroundColor: [<?php
+        foreach ($countEntries as $key => $event) {
+          if ($event['Count'] > 0) {
+            if ($event['Stroke'] == 'Free') {
+              ?> <?=json_encode($chartColours[0])?>
+          <?php
+            } else if ($event['Stroke'] == 'Back') {
+              ?> <?=json_encode($chartColours[1])?>
+          <?php
+            } else if ($event['Stroke'] == 'Breast') {
+              ?> <?=json_encode($chartColours[2])?>
+          <?php
+            } else if ($event['Stroke'] == 'Fly') {
+              ?> <?=json_encode($chartColours[3])?>
+          <?php
+            } else if ($event['Stroke'] == 'IM') {
+              ?> <?=json_encode($chartColours[4])?>
+          <?php
+            }
+            ?>, <?php
+          }
+        } ?>
+        ],
+      }],
+    },
 
-  // Configuration options go here
-  options: {
-    scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true,
-          precision: 0,
-        }
-      }]
+    // Configuration options go here
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            precision: 0,
+          }
+        }]
+      }
     }
-  }
-});
-</script>
+  });
 
-<script>
-var ctx = document.getElementById('strokeEntries').getContext('2d');
-var chart = new Chart(ctx, {
-  // The type of chart we want to create
-  type: 'pie',
+  var ctx = document.getElementById('strokeEntries').getContext('2d');
+  var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'pie',
 
-  // The data for our dataset
-  data: {
-    labels: [<?php
-      foreach ($strokeCounts as $stroke => $count) {
-        if ($count > 0) {
-          ?> <?=json_encode($stroke)?>, <?php
-        }
-      } ?>],
-    datasets: [{
-      label: <?=json_encode(html_entity_decode($gala['GalaName']))?>,
-      data: [<?php
-      foreach ($strokeCounts as $stroke => $count) { ?> "<?=$count?>", <?php } ?>],
-      backgroundColor: <?=json_encode(chartColours(5))?>,
-    }],
-  },
+    // The data for our dataset
+    data: {
+      labels: [<?php
+        foreach ($strokeCounts as $stroke => $count) {
+          if ($count > 0) {
+            ?> <?=json_encode($stroke)?>, <?php
+          }
+        } ?>],
+      datasets: [{
+        label: <?=json_encode(html_entity_decode($gala['GalaName']))?>,
+        data: [<?php
+        foreach ($strokeCounts as $stroke => $count) { ?> "<?=$count?>", <?php } ?>],
+        backgroundColor: <?=json_encode(chartColours(5))?>,
+      }],
+    },
 
-  // Configuration options go here
-  // options: {}
+    // Configuration options go here
+    // options: {}
+  });
 });
 </script>
 

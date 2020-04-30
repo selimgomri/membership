@@ -51,5 +51,7 @@
 @import "../node_modules/bootstrap/scss/utilities";
 @import "../node_modules/bootstrap/scss/print";
 
+$fa-font-path: "../../fa-fonts";
+@import "font-awesome/font-awesome";
 
 @import "chester/chester";  // Bootstrap Source Files
