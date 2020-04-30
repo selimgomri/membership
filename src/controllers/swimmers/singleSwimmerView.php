@@ -653,55 +653,55 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 </div>
 
 <?php if (sizeof($countEntries) > 0) { ?>
-<script src="<?=autoUrl("public/js/Chart.min.js")?>"></script>
+
 <script>
-var ctx = document.getElementById('eventEntries').getContext('2d');
-var chart = new Chart(ctx, {
-  // The type of chart we want to create
-  type: 'bar',
+document.addEventListener("DOMContentLoaded", function(event) {
+  var ctx = document.getElementById('eventEntries').getContext('2d');
+  var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'bar',
 
-  // The data for our dataset
-  data: {
-    labels: <?=json_encode($countEntriesEvents)?>,
-    datasets: [{
-      label: <?=json_encode($rowSwim['MForename'] . " " . $rowSwim['MSurname'])?>,
-      data: <?=json_encode($countEntriesCount)?>,
-      backgroundColor: <?=json_encode($countEntriesColours)?>,
-    }],
-  },
+    // The data for our dataset
+    data: {
+      labels: <?=json_encode($countEntriesEvents)?>,
+      datasets: [{
+        label: <?=json_encode($rowSwim['MForename'] . " " . $rowSwim['MSurname'])?>,
+        data: <?=json_encode($countEntriesCount)?>,
+        backgroundColor: <?=json_encode($countEntriesColours)?>,
+      }],
+    },
 
-  // Configuration options go here
-  options: {
-    scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true,
-          precision: 0,
-        }
-      }]
+    // Configuration options go here
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            precision: 0,
+          }
+        }]
+      }
     }
-  }
-});
-</script>
+  });
 
-<script>
-var ctx = document.getElementById('strokeEntries').getContext('2d');
-var chart = new Chart(ctx, {
-  // The type of chart we want to create
-  type: 'pie',
+  var ctx = document.getElementById('strokeEntries').getContext('2d');
+  var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'pie',
 
-  // The data for our dataset
-  data: {
-    labels: <?=json_encode(['Free', 'Back', 'Breast', 'Fly', 'IM'])?>,
-    datasets: [{
-      label: <?=json_encode(html_entity_decode($gala['GalaName']))?>,
-      data: <?=json_encode($strokeCountsData)?>,
-      backgroundColor: <?=json_encode($chartColours)?>,
-    }],
-  },
+    // The data for our dataset
+    data: {
+      labels: <?=json_encode(['Free', 'Back', 'Breast', 'Fly', 'IM'])?>,
+      datasets: [{
+        label: <?=json_encode(html_entity_decode($gala['GalaName']))?>,
+        data: <?=json_encode($strokeCountsData)?>,
+        backgroundColor: <?=json_encode($chartColours)?>,
+      }],
+    },
 
-  // Configuration options go here
-  // options: {}
+    // Configuration options go here
+    // options: {}
+  });
 });
 </script>
 <?php } ?>

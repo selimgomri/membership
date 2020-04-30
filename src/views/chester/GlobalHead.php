@@ -1,6 +1,6 @@
 <?php
 
-$stylesheet = 'public/css/chester/chester-2.2.1-prefixed.css';
+$stylesheet = 'public/compiled/css/clse.min.css';
 $fa = 'public/css/font-awesome/css/font-awesome.min.css';
 
 header('Link: <' . autoUrl($stylesheet) . '>; rel=preload; as=style');
@@ -90,7 +90,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <link rel="stylesheet preload"
     href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono|Merriweather:400,600">
   <link rel="stylesheet preload" href="<?=autoUrl($stylesheet)?>">
-  <link rel="stylesheet" href="<?=autoUrl($fa)?>">
+  <!-- <link rel="stylesheet" href="<?=autoUrl($fa)?>"> -->
   <link rel="icon" sizes="196x196" href="<?=autoUrl("public/img/touchicons/touch-icon-196x196.png")?>">
   <!-- For Chrome for Android: -->
   <link rel="icon" sizes="192x192" href="<?=autoUrl("public/img/touchicons/touch-icon-192x192.png")?>">

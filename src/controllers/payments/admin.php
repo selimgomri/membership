@@ -1,5 +1,7 @@
 <?php
 
+use Brick\Math\RoundingMode;
+
 $db = app()->db;
 
 $user = $_SESSION['UserID'];
@@ -116,8 +118,24 @@ $income = $income->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <div class="mb-4">
+      <?php
+
+      $labels = [];
+      for ($i = sizeof($income); $i > 0; $i--) {
+        $date = new DateTime($income[$i-1]['Date'], new DateTimeZone('Europe/London'));
+        $labels[] = $date->format("F");
+      }
+
+      $data = [];
+      for ($i = sizeof($income); $i > 0; $i--) {
+        $data[] = \Brick\Math\BigDecimal::of((string) $income[$i-1]['Total'])->withPointMovedLeft(2)->toScale(2, RoundingMode::HALF_UP);
+      }
+
+      $json = json_encode(['labels' => $labels, 'data' => $data]);
+
+      ?>
       <h2 class="mb-4">Income Statistics</h2>
-      <canvas id="incomeChart" class="cell mb-1 bg-white"></canvas>
+      <canvas id="incomeChart" data-data="<?=htmlspecialchars($json)?>" class="cell mb-1 bg-white"></canvas>
       <p class="small text-muted mb-4">
         This is the amount charged to parents before GoCardless handling fees.
       </p>
@@ -125,43 +143,6 @@ $income = $income->fetchAll(PDO::FETCH_ASSOC);
   </div>
 </div>
 
-<script src="<?=autoUrl("public/js/Chart.min.js")?>"></script>
-<script>
-var ctx = document.getElementById('incomeChart').getContext('2d');
-var chart = new Chart(ctx, {
-  // The type of chart we want to create
-  type: 'bar',
-
-  // The data for our dataset
-  data: {
-    labels: [
-      <?php for ($i = sizeof($income); $i > 0; $i--) { ?>
-      "<?=date("F", strtotime($income[$i-1]['Date']))?>",
-      <?php } ?>
-    ],
-    datasets: [{
-        label: "Total charged (£ Pounds)",
-        data: [
-          <?php for ($i = sizeof($income); $i > 0; $i--) { ?>
-          <?=((int) $income[$i-1]['Total'])/100?>,
-          <?php } ?>
-        ],
-        backgroundColor: '#bd0000'
-    }],
-  },
-
-  // Configuration options go here
-  options: {
-    scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true
-        }
-      }]
-    }
-  }
-});
-</script>
-
 <?php $footer = new \SCDS\Footer();
+$footer->addJs('public/js/payments/admin-graph.js');
 $footer->render();
