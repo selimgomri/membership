@@ -155,11 +155,13 @@ include BASE_PATH . 'views/header.php';
         </button>
       </p> -->
 
+      <?php if ($_SESSION['AccessLevel'] == 'Parent' || $_SESSION['AccessLevel'] == 'Admin') { ?>
       <p>
         <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/edit"))?>" class="btn btn-success">
           Edit basic details
         </a>
       </p>
+      <?php } ?>
 
       <hr>
 
@@ -206,11 +208,13 @@ include BASE_PATH . 'views/header.php';
         </button>
       </p> -->
 
+      <?php if ($_SESSION['AccessLevel'] == 'Parent' || $_SESSION['AccessLevel'] == 'Admin') { ?>
       <p>
         <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/medical"))?>" class="btn btn-success">
           Edit medical notes
         </a>
       </p>
+      <?php } ?>
 
       <hr>
 
@@ -346,11 +350,13 @@ include BASE_PATH . 'views/header.php';
         </button>
       </p> -->
 
+      <?php if ($_SESSION['AccessLevel'] == 'Admin' || $_SESSION['AccessLevel'] == 'Coach') { ?>
       <p>
         <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/new-move"))?>" class="btn btn-success">
           Manage squads
         </a>
       </p>
+      <?php } ?>
 
       <hr>
 
