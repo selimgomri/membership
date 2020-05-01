@@ -211,15 +211,32 @@
 <div id="app-js-info" data-service-worker-url="<?=htmlspecialchars(autoUrl("sw.js"))?>"></div>
 
 <!-- Modals and Other Hidden HTML -->
-<script rel="preload" src="<?=autoUrl("public/compiled/js/main.js")?>"></script>
+<?php
+
+$script = "";
+if (env('IS_DEV')) {
+  $script = autoUrl('public/compiled/js/main.js');
+} else {
+  try {
+    $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
+    $hash = json_decode($hash);
+    $hash = $hash->resourcesHash;
+    $script = autoUrl('public/compiled/js/main.' . $hash . '.js');
+  } catch (Exception $e) {
+    $script = autoUrl('public/compiled/js/main.js');
+  }
+}
+
+?>
+<script rel="preload" src="<?=htmlspecialchars($script)?>"></script>
 <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
 <script defer src="https://static.chesterlestreetasc.co.uk/global/headers/GlobalNavigation.js"></script>
-<script async src="<?=autoUrl("public/js/Cookies.js")?>"></script>
+<script async src="<?=htmlspecialchars(autoUrl("public/js/Cookies.js"))?>"></script>
 <?php } ?>
 <?php if (isset($use_website_menu) && $use_website_menu) { ?>
 <script defer src="https://static.chesterlestreetasc.co.uk/global/headers/MainSiteMenu.js"></script>
 <?php } ?>
-<script src="<?=autoUrl("public/js/app.js")?>"></script>
+<script src="<?=htmlspecialchars(autoUrl("public/js/app.js"))?>"></script>
 
 <?php if (isset($this->js)) { ?>
   <!-- Load per page JS -->

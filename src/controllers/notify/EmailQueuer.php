@@ -492,7 +492,6 @@ try {
 
   header("Location: " . autoUrl("notify"));
 } catch (Exception $e) {
-  reportError($e);
   $db->rollback();
   header("Location: " . autoUrl("notify/new"));
 }
