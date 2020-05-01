@@ -95,9 +95,8 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <script src="https://js.stripe.com/v3/"></script>
   <link rel="stylesheet preload"
     href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono|Merriweather:400,600">
-  <link rel="stylesheet preload" href="<?=autoUrl($stylesheet)?>">
-  <!-- <link rel="stylesheet" href="<?=autoUrl($fa)?>"> -->
-  <link rel="icon" sizes="196x196" href="<?=autoUrl("public/img/touchicons/touch-icon-196x196.png")?>">
+  <link rel="stylesheet preload" href="<?=htmlspecialchars($stylesheet)?>">
+  <link rel="icon" sizes="196x196" href="<?=htmlspecialchars(autoUrl("public/img/touchicons/touch-icon-196x196.png"))?>">
   <!-- For Chrome for Android: -->
   <link rel="icon" sizes="192x192" href="<?=autoUrl("public/img/touchicons/touch-icon-192x192.png")?>">
   <!-- For iPhone 6 Plus with @3× display: -->
