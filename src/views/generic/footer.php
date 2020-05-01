@@ -153,17 +153,13 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
 <?php
 
 $script = "";
-if (env('IS_DEV')) {
+try {
+  $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
+  $hash = json_decode($hash);
+  $hash = $hash->resourcesHash;
+  $script = autoUrl('public/compiled/js/main.' . $hash . '.js');
+} catch (Exception $e) {
   $script = autoUrl('public/compiled/js/main.js');
-} else {
-  try {
-    $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
-    $hash = json_decode($hash);
-    $hash = $hash->resourcesHash;
-    $script = autoUrl('public/compiled/js/main.' . $hash . '.js');
-  } catch (Exception $e) {
-    $script = autoUrl('public/compiled/js/main.js');
-  }
 }
 
 ?>

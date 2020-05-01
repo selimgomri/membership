@@ -1,17 +1,13 @@
 <?php
 
 $stylesheet = "";
-if (env('IS_DEV')) {
+try {
+  $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
+  $hash = json_decode($hash);
+  $hash = $hash->resourcesHash;
+  $stylesheet = autoUrl('public/compiled/css/clse.' . $hash . '.min.css');
+} catch (Exception $e) {
   $stylesheet = autoUrl('public/compiled/css/clse.css');
-} else {
-  try {
-    $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
-    $hash = json_decode($hash);
-    $hash = $hash->resourcesHash;
-    $stylesheet = autoUrl('public/compiled/css/clse.' . $hash . '.min.css');
-  } catch (Exception $e) {
-    $stylesheet = autoUrl('public/compiled/css/clse.css');
-  }
 }
 
 header('Link: <' . autoUrl($stylesheet) . '>; rel=preload; as=style');

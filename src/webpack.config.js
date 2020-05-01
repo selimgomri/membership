@@ -45,7 +45,7 @@ module.exports = (env, options) => {
     ],
     output: {
       path: path.resolve(__dirname, 'public/compiled/'),
-      filename: inProduction ? 'js/main.' + compileTime + '.js' : 'js/main.js'
+      filename: 'js/main.' + compileTime + '.js'
     },
     module: {
       rules: [
@@ -55,7 +55,7 @@ module.exports = (env, options) => {
             loader: 'file-loader',
             options: {
               outputPath: 'css/',
-              name: inProduction ? '[name].' + compileTime + '.min.css' : '[name].css'
+              name: '[name].' + compileTime + '.min.css'
             }
           }, {
             loader: 'postcss-loader', // Run postcss actions
@@ -65,12 +65,12 @@ module.exports = (env, options) => {
                   require('autoprefixer')
                 ];
               },
-              sourceMap: inProduction ? false : true
+              sourceMap: true
             }
           }, {
             loader: 'sass-loader', // compiles Sass to CSS
             options: {
-              sourceMap: inProduction ? false : true
+              sourceMap: true
             }
           }]
         },
