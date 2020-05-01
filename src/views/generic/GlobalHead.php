@@ -1,8 +1,14 @@
 <?php
 
-$stylesheet = autoUrl('public/compiled/css/generic.min.css');
-$fa = autoUrl('public/css/font-awesome/css/font-awesome.min.css');
-
+$stylesheet = "";
+try {
+  $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
+  $hash = json_decode($hash);
+  $hash = $hash->resourcesHash;
+  $stylesheet = autoUrl('public/compiled/css/generic.' . $hash . '.min.css');
+} catch (Exception $e) {
+  $stylesheet = autoUrl('public/compiled/css/generic.css');
+}
 
 if (env('CUSTOM_CSS_PATH')) {
   $stylesheet = env('CUSTOM_CSS_PATH');
@@ -92,7 +98,6 @@ Chester-le-Street ASC is a non profit unincorporated association.
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700|Roboto+Mono|Merriweather:400,600">
   <link rel="stylesheet preload" href="<?=htmlspecialchars($stylesheet)?>">
   <link rel="stylesheet preload" href="<?=htmlspecialchars(autoUrl("public/css/colour.css"))?>">
-  <!-- <link rel="stylesheet" href="<?=htmlspecialchars($fa)?>"> -->
 
   <!-- Generic icon first -->
   <?php if (env('CLUB_LOGO')) { ?>
