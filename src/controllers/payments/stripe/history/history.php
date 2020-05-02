@@ -88,7 +88,7 @@ include BASE_PATH . 'views/header.php';
           <?php if (isset($pm['Brand'])) { ?>
           <div class="row align-items-center mb-2">
             <div class="col-auto">
-              <img src="<?=autoUrl("public/img/stripe/" . $pm['Brand'] . ".png")?>" srcset="<?=autoUrl("public/img/stripe/" . $pm['Brand'] . "@2x.png")?> 2x, <?=autoUrl("public/img/stripe/" . $pm['Brand'] . "@3x.png")?> 3x" style="width:40px;"> <span class="sr-only"><?=htmlspecialchars(getCardBrand($pm['Brand']))?></span>
+              <img src="<?=autoUrl("public/img/stripe/" . $pm['Brand'] . ".svg")?>" class="accepted-network-logo"> <span class="sr-only"><?=htmlspecialchars(getCardBrand($pm['Brand']))?></span>
             </div>
             <div class="col-auto">
               <h2 class="my-0">
