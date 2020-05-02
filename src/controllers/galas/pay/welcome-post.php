@@ -11,6 +11,8 @@ $db = app()->db;
 
 $updateTime = $db->prepare("UPDATE galaEntries SET FeeToPay = ? WHERE EntryID = ?");
 
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
+
 $swimsArray = [
   '50Free' => '50&nbsp;Free',
   '100Free' => '100&nbsp;Free',
@@ -38,8 +40,8 @@ $rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 
 
 
 try {
-$entries = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE members.UserID = ? AND (NOT RequiresApproval OR (RequiresApproval AND Approved)) AND NOT Charged AND FeeToPay > 0 AND galas.GalaDate > CURDATE()");
-$entries->execute([$_SESSION['UserID']]);
+$entries = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE members.UserID = ? AND (NOT RequiresApproval OR (RequiresApproval AND Approved)) AND NOT Charged AND FeeToPay > 0 AND galas.GalaDate >= ?");
+$entries->execute([$_SESSION['UserID'], $date->format("Y-m-d")]);
 } catch (Exception $e) {
   pre($e);
 }
