@@ -38,13 +38,6 @@ include BASE_PATH . "views/header.php";
 
 ?>
 
-<style>
-.accepted-network-logos img {
-  height: 2rem;
-  margin: 0 0.5rem 0 0;
-}
-</style>
-
 <div class="container">
   <div class="row">
     <div class="col-md-8">
@@ -124,7 +117,7 @@ include BASE_PATH . "views/header.php";
             We proudly accept all major credit and debit cards. We also accept Apple Pay and Google Pay.
           </p>
           <p>
-            <img src="<?=autoUrl("public/img/stripe/apple-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/google-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/visa.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/mastercard.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/amex.svg")?>" aria-hidden="true">
+            <img class="apple-pay-row" src="<?=autoUrl("public/img/stripe/apple-pay-mark.svg")?>" aria-hidden="true"><img class="google-pay-row" src="<?=autoUrl("public/img/stripe/google-pay-mark.svg")?>" aria-hidden="true"><img class="visa-row" src="<?=autoUrl("public/img/stripe/visa.svg")?>" aria-hidden="true"><img class="mastercard-row" src="<?=autoUrl("public/img/stripe/mastercard.svg")?>" aria-hidden="true"><img class="amex-row" src="<?=autoUrl("public/img/stripe/amex.svg")?>" aria-hidden="true">
           </p>
         </div>
 

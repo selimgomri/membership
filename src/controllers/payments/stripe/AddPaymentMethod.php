@@ -172,7 +172,7 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs("js/payment-helpers.js");
-$footer->addJs("js/add-payment-card.js");
+$footer->addJs("public/js/payment-helpers.js");
+$footer->addJs("public/js/add-payment-card.js");
 $footer->addJs("public/js/NeedsValidation.js");
 $footer->render();
