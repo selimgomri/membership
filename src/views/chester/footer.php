@@ -208,7 +208,7 @@
   </div>
 </div>
 
-<div id="app-js-info" data-service-worker-url="<?=htmlspecialchars(autoUrl("sw.js"))?>"></div>
+<div id="app-js-info" data-root="<?=htmlspecialchars(autoUrl(""))?>" data-service-worker-url="<?=htmlspecialchars(autoUrl("sw.js"))?>"></div>
 
 <!-- Modals and Other Hidden HTML -->
 <?php

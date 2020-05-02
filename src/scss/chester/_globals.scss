@@ -4,6 +4,25 @@
 //
 // Generate contextual modifier classes for colorizing the alert.
 
+.accepted-network-logos img {
+  margin: 0 0.5rem 0 0;
+}
+.apple-pay-row {
+  height: 2rem;
+}
+.google-pay-row {
+  height: 2rem;
+}
+.visa-row {
+  height: 15px;
+}
+.mastercard-row {
+  height: 17px;
+}
+.amex-row {
+  height: 21px;
+}
+
 .container-fluid {
   padding-left: 15px;
   padding-right: 15px;
