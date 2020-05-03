@@ -1,10 +1,16 @@
 <?php
 
-$stylesheet = 'public/css/chester/chester-2.2.1-prefixed.css';
-$fa = 'public/css/font-awesome/css/font-awesome.min.css';
+$stylesheet = "";
+try {
+  $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
+  $hash = json_decode($hash);
+  $hash = $hash->resourcesHash;
+  $stylesheet = autoUrl('public/compiled/css/clse.' . $hash . '.min.css');
+} catch (Exception $e) {
+  $stylesheet = autoUrl('public/compiled/css/clse.css');
+}
 
 header('Link: <' . autoUrl($stylesheet) . '>; rel=preload; as=style');
-header('Link: <' . autoUrl($fa) . '>; rel=preload; as=style');
 
 $container_class;
 if (isset($fluidContainer) && $fluidContainer == true) {
@@ -89,9 +95,8 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <script src="https://js.stripe.com/v3/"></script>
   <link rel="stylesheet preload"
     href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono|Merriweather:400,600">
-  <link rel="stylesheet preload" href="<?=autoUrl($stylesheet)?>">
-  <link rel="stylesheet" href="<?=autoUrl($fa)?>">
-  <link rel="icon" sizes="196x196" href="<?=autoUrl("public/img/touchicons/touch-icon-196x196.png")?>">
+  <link rel="stylesheet preload" href="<?=htmlspecialchars($stylesheet)?>">
+  <link rel="icon" sizes="196x196" href="<?=htmlspecialchars(autoUrl("public/img/touchicons/touch-icon-196x196.png"))?>">
   <!-- For Chrome for Android: -->
   <link rel="icon" sizes="192x192" href="<?=autoUrl("public/img/touchicons/touch-icon-192x192.png")?>">
   <!-- For iPhone 6 Plus with @3× display: -->

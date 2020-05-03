@@ -88,7 +88,8 @@ include BASE_PATH . "views/notifyMenu.php";
 
   <?php if (isset($_SESSION['FormError']) && $_SESSION['FormError']) { ?>
   <div class="alert alert-danger">
-    <p class="mb-0"><strong>We could not verify the integrity of the submitted form</strong>. Please try again.</p>
+    <p class="mb-0"><strong>An integrity or idempotency error has occurred</strong></p>
+    <p class="mb-0">We were unable to verify that you submitted the form. Please try again.</p>
   </div>
   <?php
     unset($_SESSION['FormError']);

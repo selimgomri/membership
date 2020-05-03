@@ -135,13 +135,6 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 <div id="stripe-data" data-stripe-publishable="<?=htmlspecialchars(env('STRIPE_PUBLISHABLE'))?>" data-stripe-font-css="<?=htmlspecialchars($fontCss)?>" data-redirect-url-new="<?=htmlspecialchars(autoUrl("galas/pay-for-entries/complete/new"))?>" data-redirect-url="<?=htmlspecialchars(autoUrl("galas/pay-for-entries/complete"))?>" data-org-name="<?=htmlspecialchars(env('CLUB_NAME'))?>" data-intent-amount="<?=htmlspecialchars($intent->amount)?>" data-intent-currency="<?=htmlspecialchars($intent->currency)?>" data-payment-request-line-items="<?=htmlspecialchars(json_encode($entryRequestDetails))?>">
 </div>
 
-<style>
-.accepted-network-logos img {
-  height: 2rem;
-  margin: 0 0.5rem 0 0;
-}
-</style>
-
 <div class="container">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -158,7 +151,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
     <div class="col text-lg-right">
       <div class="accepted-network-logos">
         <p>
-          <img src="<?=autoUrl("public/img/stripe/apple-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/google-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/visa.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/mastercard.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/amex.svg")?>" aria-hidden="true">
+          <img class="apple-pay-row" src="<?=autoUrl("public/img/stripe/apple-pay-mark.svg")?>" aria-hidden="true"><img class="google-pay-row" src="<?=autoUrl("public/img/stripe/google-pay-mark.svg")?>" aria-hidden="true"><img class="visa-row" src="<?=autoUrl("public/img/stripe/visa.svg")?>" aria-hidden="true"><img class="mastercard-row" src="<?=autoUrl("public/img/stripe/mastercard.svg")?>" aria-hidden="true"><img class="amex-row" src="<?=autoUrl("public/img/stripe/amex.svg")?>" aria-hidden="true">
         </p>
       </div>
     </div>
@@ -401,7 +394,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs("js/payment-helpers.js");
-$footer->addJs("js/gala-checkout.js");
+$footer->addJs("public/js/payment-helpers.js");
+$footer->addJs("public/js/gala-checkout.js");
 $footer->addJs("public/js/NeedsValidation.js");
 $footer->render(); ?>

@@ -1,6 +1,8 @@
-<?php
+  <?php
 
 $db = app()->db;
+
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
 
 $swimsArray = [
   '50Free' => '50&nbsp;Free',
@@ -29,8 +31,8 @@ $rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 
 
 
 try {
-$entries = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE members.UserID = ? AND (NOT RequiresApproval OR (RequiresApproval AND Approved)) AND NOT Charged AND FeeToPay > 0 AND galas.GalaDate > CURDATE()");
-$entries->execute([$_SESSION['UserID']]);
+$entries = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE members.UserID = ? AND (NOT RequiresApproval OR (RequiresApproval AND Approved)) AND NOT Charged AND FeeToPay > 0 AND galas.GalaDate >= ?");
+$entries->execute([$_SESSION['UserID'], $date->format("Y-m-d")]);
 } catch (Exception $e) {
   pre($e);
 }
@@ -45,13 +47,6 @@ $pagetitle = "Pay for entries - Galas";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/galas/galaMenu.php";
 ?>
-
-<style>
-.accepted-network-logos img {
-  height: 2rem;
-  margin: 0 0.5rem 0 0;
-}
-</style>
 
 <div class="container">
   <nav aria-label="breadcrumb">
@@ -71,7 +66,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
           We proudly accept all major credit and debit cards!
         </p>
         <p>
-          <img src="<?=autoUrl("public/img/stripe/apple-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/google-pay-mark.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/visa.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/mastercard.svg")?>" aria-hidden="true"><img src="<?=autoUrl("public/img/stripe/network-svgs/amex.svg")?>" aria-hidden="true">
+          <img class="apple-pay-row" src="<?=autoUrl("public/img/stripe/apple-pay-mark.svg")?>" aria-hidden="true"><img class="google-pay-row" src="<?=autoUrl("public/img/stripe/google-pay-mark.svg")?>" aria-hidden="true"><img class="visa-row" src="<?=autoUrl("public/img/stripe/visa.svg")?>" aria-hidden="true"><img class="mastercard-row" src="<?=autoUrl("public/img/stripe/mastercard.svg")?>" aria-hidden="true"><img class="amex-row" src="<?=autoUrl("public/img/stripe/amex.svg")?>" aria-hidden="true">
         </p>
       </div>
 

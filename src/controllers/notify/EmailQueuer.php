@@ -67,7 +67,10 @@ try {
           $date = new DateTime('now', new DateTimeZone('Europe/London'));
           $urlPath = 'notify/attachments/' . $date->format("Y/m/d") . '/';
           $path = env('FILE_STORE_PATH') . $urlPath;
-          $hash = str_replace(' ', '', basename($_FILES['file-upload']['name'][$i]));
+          $hash = preg_replace('@[^0-9a-z\.]+@i', '-', basename($_FILES['file-upload']['name'][$i]));
+          if (mb_strlen($hash) == 0) {
+            $hash = hash('sha256', $_FILES['file-upload']['name'][$i] . rand(0,1000000));
+          }
           $filenamePath = $path . $hash;
           $url = $urlPath . $hash;
           $count = 0; $countText = "";
@@ -489,7 +492,6 @@ try {
 
   header("Location: " . autoUrl("notify"));
 } catch (Exception $e) {
-  reportError($e);
   $db->rollback();
   header("Location: " . autoUrl("notify/new"));
 }
