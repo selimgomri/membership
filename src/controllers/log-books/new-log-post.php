@@ -66,7 +66,7 @@ if (sizeof($errors) > 0) {
       $dateTimeObject = DateTime::createFromFormat ("Y-m-d H:i", $_POST['date'] . ' ' . $_POST['time'], new DateTimeZone('Europe/London'));
       $dateTimeObject->setTimezone(new DateTimeZone('UTC'));
       $time = $dateTimeObject->format("Y-m-d H:i:s");
-    } catch (Exception $e) {
+    } catch (Exception | Error $e) {
       $time = (new DateTime('now', new DateTimeZone('UTC')))->format("Y-m-d H:i:s");
     }
 
