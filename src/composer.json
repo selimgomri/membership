@@ -31,6 +31,7 @@
         "guzzlehttp/guzzle": "^6.5",
         "umpirsky/country-list": "^2.0",
         "sokil/php-isocodes": "^3.0",
-        "soundasleep/html2text": "^1.1"
+        "soundasleep/html2text": "^1.1",
+        "adoy/oauth2": "^1.3"
     }
 }

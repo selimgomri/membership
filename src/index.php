@@ -1,6 +1,6 @@
 <?php
 
-/*
+
 // ----------------------------------------------------------------------------------------------------
 // - Display Errors
 // ----------------------------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ function ErrorHandler($type, $message, $file, $line)
 };
 
 $old_error_handler = set_error_handler("ErrorHandler");
-*/
+
 
 // Do not reveal PHP when sending mail
 ini_set('expose_php', 'Off');
@@ -340,8 +340,8 @@ if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && !isset($_SESSION['D
   $_SESSION['DisableTrackers'] = filter_var(getUserOption($_SESSION['UserID'], "DisableTrackers"), FILTER_VALIDATE_BOOLEAN);
 }
 
-$route->group($get_group, function($clubcode = "CLSE") {
-  //$_SESSION['ClubCode'] = mb_strtolower($code);
+$route->group('/{club}:([a-z]{4})', function($club) {
+  app()->club = $club;
 
   if (bool(env('IS_DEV'))) {
     $this->group('/dev', function() {
@@ -398,7 +398,9 @@ $route->group($get_group, function($clubcode = "CLSE") {
   });
 
   $this->get('/public/*', function() {
-    $filename = $this[0];
+    $filename = $this->getArrayCopy()[1];
+    // pre($this->getArrayCopy()[1]);
+
     require BASE_PATH . 'controllers/PublicFileLoader.php';
   });
 
@@ -841,12 +843,12 @@ $route->group($get_group, function($clubcode = "CLSE") {
       include 'controllers/qualifications/AdminRouter.php';
     });
 
-    $this->group('/meet', function() {
-      include 'controllers/meet/router.php';
+    $this->group('/resources', function() {
+      include 'controllers/resources/routes.php';
     });
 
-    $this->group('/resources', function() {
-      include 'controllers/resources/router.php';
+    $this->group('/tenant-services', function() {
+      require 'controllers/tenant-services/routes.php';
     });
 
     if ($_SESSION['AccessLevel'] == "Admin") {
@@ -955,6 +957,11 @@ $route->group($get_group, function($clubcode = "CLSE") {
   });
 
 });
+
+$route->group('/', function() {
+  include 'routes/root/routes.php';
+});
+
 
 try {
   ob_get_clean();

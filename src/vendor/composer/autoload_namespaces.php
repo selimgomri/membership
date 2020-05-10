@@ -9,5 +9,5 @@ return array(
     'Sabberworm\\CSS' => array($vendorDir . '/sabberworm/php-css-parser/lib'),
     'ParsedownExtra' => array($vendorDir . '/erusev/parsedown-extra'),
     'Parsedown' => array($vendorDir . '/erusev/parsedown'),
-    'OAuth2' => array($vendorDir . '/bshaffer/oauth2-server-php/src'),
+    'OAuth2' => array($vendorDir . '/adoy/oauth2/src', $vendorDir . '/bshaffer/oauth2-server-php/src'),
 );

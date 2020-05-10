@@ -404,12 +404,15 @@ function myMonthlyFeeTable($link = null, $userID) {
   }
 }
 
-function autoUrl($relative) {
+function autoUrl($relative, $includeClub = true) {
   // Returns an absolute URL
   $rootUrl = env('ROOT_URL');
-  if (isset($_SERVER['HTTP_X_PROXY_ROOT_URL'])) {
-    $rootUrl = $_SERVER['HTTP_X_PROXY_ROOT_URL'];
+
+  $club = app()->club;
+  if ($club && $includeClub) {
+    $rootUrl .= $club . '/';
   }
+
   return rtrim($rootUrl . $relative, '/');
 }
 
@@ -1334,3 +1337,4 @@ include BASE_PATH . 'includes/BankHolidays.php';
 include BASE_PATH . 'includes/GetContrastColour.php';
 include BASE_PATH . 'includes/CoachTypes.php';
 require BASE_PATH . 'helperclasses/Components/Footer.php';
+require BASE_PATH . 'helperclasses/Components/RootFooter.php';
