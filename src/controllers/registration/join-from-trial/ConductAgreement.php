@@ -107,7 +107,7 @@ include BASE_PATH . 'views/header.php';
             </p>
           </div>
 
-          <h2><?=htmlspecialchars(env('CLUB_NAME'))?> Squad Code of Conduct</h2>
+          <h2><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Squad Code of Conduct</h2>
     			<?php if ($CoCID != null) { ?>
     				<div id="code_of_conduct">
     					<?= getPostContent($CoCID) ?>
@@ -274,7 +274,7 @@ include BASE_PATH . 'views/header.php';
           <div class="custom-control custom-checkbox">
             <input type="checkbox" value="1" class="custom-control-input" name="agreement" id="agreement" required>
             <label class="custom-control-label" for="agreement">
-              I, <?=$name?> agree to the Code of Conduct of <?=htmlspecialchars(env('CLUB_NAME'))?> as
+              I, <?=$name?> agree to the Code of Conduct of <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> as
               outlined above
             </label>
             <div class="invalid-feedback">

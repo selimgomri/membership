@@ -15,7 +15,7 @@ include BASE_PATH . "views/header.php";
 ?>
 
 <div class="container">
-  <h1 class="mb-5">Sign in using your <?=htmlspecialchars(env('CLUB_NAME'))?> Account</h1>
+  <h1 class="mb-5">Sign in using your <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Account</h1>
   <div class="row">
     <div class="col-md-8 col-lg-5">
       <!--
@@ -115,7 +115,7 @@ include BASE_PATH . "views/header.php";
 
       <!--
       <p class="small mb-5">
-        Unauthorised access to or misuse of this system is prohibited and constitutes an offence under the Computer Misuse Act 1990. If you disclose any information obtained through this system without authority then <?=htmlspecialchars(env('CLUB_NAME'))?> or Swimming Club Data Systems may take legal action against you.
+        Unauthorised access to or misuse of this system is prohibited and constitutes an offence under the Computer Misuse Act 1990. If you disclose any information obtained through this system without authority then <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> or Swimming Club Data Systems may take legal action against you.
       </p>
       -->
         

@@ -95,7 +95,7 @@ if (!empty($_POST['asa'])) {
 		$update = true;
 	}
 } else if ($_POST['asa'] == "" && app('request')->method == "post") {
-	$newASANumber = env('ASA_CLUB_CODE') . $id;
+	$newASANumber = app()->tenant->getKey('ASA_CLUB_CODE') . $id;
 	if ($newASANumber != $asaNumber) {
 		$updateSwimmer = $db->prepare("UPDATE `members` SET `ASANumber` = ? WHERE `MemberID` = ?");
 		$updateSwimmer->execute([$newASANumber, $id]);

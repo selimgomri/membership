@@ -3,7 +3,6 @@
 $fluidContainer = true;
 
 $db = app()->db;
-$systemInfo = app()->system;
 
 $vars = [
   'CLUB_NAME' => null,
@@ -33,11 +32,11 @@ $vars = [
 $disabled = [];
 
 foreach ($vars as $key => $value) {
-  if ($systemInfo->isExistingEnvVar($key)) {
+  if (env($key)) {
     $vars[$key] = env($key);
     $disabled[$key] = ' disabled ';
   } else {
-    $vars[$key] = $systemInfo->getSystemOption($key);
+    $vars[$key] = app()->tenant->getKey($key);
     $disabled[$key] = '';
   }
 }
@@ -156,7 +155,7 @@ include BASE_PATH . 'views/header.php';
             <label for="CLUB_INFO">Select club</label>
             <select class="custom-select" name="CLUB_INFO" id="CLUB_INFO">
               <?php foreach ($clubs as $club) { ?>
-              <option <?php if ($club['Code'] == env('ASA_CLUB_CODE')) { ?>selected<?php } ?> value="<?=htmlspecialchars($club['Code'])?>">
+              <option <?php if ($club['Code'] == app()->tenant->getKey('ASA_CLUB_CODE')) { ?>selected<?php } ?> value="<?=htmlspecialchars($club['Code'])?>">
                 <?=htmlspecialchars($club['Name'])?> (<?=htmlspecialchars($club['Code'])?>)
               </option>
               <?php } ?>
@@ -197,10 +196,12 @@ include BASE_PATH . 'views/header.php';
           <div class="form-group">
             <label for="CLUB_ADDRESS">Club Primary Address</label>
             <textarea class="form-control" rows="5" id="CLUB_ADDRESS" name="CLUB_ADDRESS" aria-describedby="CLUB_ADDRESS_HELP" <?=$disabled['CLUB_ADDRESS']?>><?php
-            for ($i = 0; $i < sizeof($vars['CLUB_ADDRESS']); $i++) {
-              echo htmlspecialchars($vars['CLUB_ADDRESS'][$i]);
-              if ($i+1 < sizeof($vars['CLUB_ADDRESS'])) {
-                echo "\r\n";
+            if ($vars['CLUB_ADDRESS']) {
+              for ($i = 0; $i < sizeof($vars['CLUB_ADDRESS']); $i++) {
+                echo htmlspecialchars($vars['CLUB_ADDRESS'][$i]);
+                if ($i+1 < sizeof($vars['CLUB_ADDRESS'])) {
+                  echo "\r\n";
+                }
               }
             }
             ?></textarea>

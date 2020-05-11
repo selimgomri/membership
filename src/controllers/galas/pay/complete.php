@@ -1,6 +1,6 @@
 <?php
 
-\Stripe\Stripe::setApiKey(env('STRIPE'));
+\Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
 $db = app()->db;
 
 if (!isset($_SESSION['GalaPaymentIntent'])) {

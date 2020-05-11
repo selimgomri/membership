@@ -3,7 +3,7 @@
 $db = app()->db;
 
 $systemInfo = app()->system;
-$privacy = $systemInfo->getSystemOption('PrivacyPolicy');
+$privacy = app()->tenant->getKey('PrivacyPolicy');
 
 $Extra = new ParsedownExtra();
 $Extra->setSafeMode(true);
@@ -131,7 +131,7 @@ $_SESSION['RegistrationMode'] = $mode;
               <label for="email">Email Address</label>
               <input class="form-control mb-0 text-lowercase" type="email" name="email" id="email-address" placeholder="yourname@example.com" required value="<?php if (isset($_SESSION['RegistrationEmail'])) { ?><?=htmlspecialchars($_SESSION['RegistrationEmail'])?><?php } ?>" autocomplete="email">
               <small id="emailHelp" class="form-text text-muted">
-                Your email address will only be used inside <?=htmlspecialchars(env('CLUB_NAME'))?> and SCDS.
+                Your email address will only be used inside <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> and SCDS.
               </small>
               <div class="invalid-feedback">
                 You must provide a valid email address
@@ -232,10 +232,10 @@ $_SESSION['RegistrationMode'] = $mode;
                 YOUR CLUB HAS NOT SET UP A PRIVACY POLICY. PLEASE DO NOT PROCEED.
               </p>
               <p>
-                In accordance with European Law, <?=htmlspecialchars(env('CLUB_NAME'))?>, Swim England and British Swimming are Data Controllers for the purposes of the General Data Protection Regulation.
+                In accordance with European Law, <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>, Swim England and British Swimming are Data Controllers for the purposes of the General Data Protection Regulation.
               </p>
               <p>
-                By proceeding you agree to our <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy (this is an example policy)</a> and the use of your data by <?=htmlspecialchars(env('CLUB_NAME'))?>. Please note that you have also agreed to our use of you and/or your swimmer's data as part of your registration with the club and with British Swimming and Swim England.
+                By proceeding you agree to our <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy (this is an example policy)</a> and the use of your data by <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. Please note that you have also agreed to our use of you and/or your swimmer's data as part of your registration with the club and with British Swimming and Swim England.
               </p>
               <p>
                 We will be unable to provide this service for technical reasons if you do not consent to the use of this data.

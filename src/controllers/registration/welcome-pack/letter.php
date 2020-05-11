@@ -10,7 +10,7 @@ if (!isset($id)) {
 
 $db = app()->db;
 $systemInfo = app()->system;
-$welcome = $systemInfo->getSystemOption('WelcomeLetter');
+$welcome = app()->tenant->getKey('WelcomeLetter');
 
 if ($welcome == null) {
   halt(404);
@@ -32,7 +32,7 @@ $swimmers = $swimmers->fetchAll(PDO::FETCH_ASSOC);
 
 $email_info = $user->fetch(PDO::FETCH_ASSOC);
 
-$pagetitle = env('CLUB_NAME') . " Welcome Letter";
+$pagetitle = app()->tenant->getKey('CLUB_NAME') . " Welcome Letter";
 
 ob_start();?>
 
@@ -88,7 +88,7 @@ ob_start();?>
 
     <div class="primary-box mb-3" id="title">
       <h1 class="mb-0">
-        Welcome to <?=htmlspecialchars(env('CLUB_NAME'))?>
+        Welcome to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>
       </h1>
 
       <p class="mb-0">

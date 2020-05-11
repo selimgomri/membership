@@ -17,7 +17,7 @@ if (!function_exists('chesterStandardMenu')) {
     global $edit_link;
 
     $canPayByCard = false;
-    if (env('STRIPE')) {
+    if (app()->tenant->getKey('STRIPE')) {
       $canPayByCard = true;
     }
 
@@ -250,7 +250,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="https://manage-sandbox.gocardless.com" target="_blank">
                       Sandbox
                     </a>
-                    <?php if (env('STRIPE')) { ?>
+                    <?php if (app()->tenant->getKey('STRIPE')) { ?>
                     <div class="dropdown-divider"></div>
                     <h6 class="dropdown-header">Payment Cards</h6>
                     <a class="dropdown-item" href="<?=autoUrl("payments/cards")?>">
@@ -370,13 +370,13 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?=autoUrl("payments/mandates")?>">My Bank Account</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/statements/latest")?>">My Latest Statement</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/fees")?>">My Fees Since Last Bill</a>
-                    <?php } else if (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN') && bool(env('IS_DEV'))) { ?>
+                    <?php } else if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN') && bool(env('IS_DEV'))) { ?>
                     <h6 class="dropdown-header">Direct debit</h6>
                     <a class="dropdown-item" href="<?=autoUrl("payments")?>">
                       Setup a direct debit
                     </a>
                     <?php } ?>
-                    <?php if (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN') && bool(env('IS_DEV'))) { ?>
+                    <?php if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN') && bool(env('IS_DEV'))) { ?>
                     <div class="dropdown-divider"></div>
                     <?php } ?>
                     <h6 class="dropdown-header">Fee information</h6>
@@ -386,8 +386,8 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?=autoUrl("payments/membership-fees")?>">
                       Annual membership fees
                     </a>
-                    <?php if (env('STRIPE') != null) { ?>
-                    <?php if (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) { ?>
+                    <?php if (app()->tenant->getKey('STRIPE') != null) { ?>
+                    <?php if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) { ?>
                     <div class="dropdown-divider"></div>
                     <?php } ?>
                     <h6 class="dropdown-header">Card payments</h6>

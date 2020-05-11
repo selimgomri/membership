@@ -11,7 +11,7 @@ try {
 	halt(500);
 }
 $systemInfo = app()->system;
-$terms_Id = $systemInfo->getSystemOption('TermsAndConditions');
+$terms_Id = app()->tenant->getKey('TermsAndConditions');
 
 $row = [];
 
@@ -74,7 +74,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
           I understand that, in compliance with the General Data Protection
           Regulation, all efforts will be made to ensure that information is accurate,
           kept up to date and secure, and that it is used only in connection with the
-          purposes of <?=htmlspecialchars(env('CLUB_NAME'))?>. Information will be disclosed only to
+          purposes of <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. Information will be disclosed only to
           those members of the club for whom it is appropriate, and relevant officers
           of the Amateur Swimming Association (Swim England) or British Swimming.
           Information will not be kept once a person has left the club.
@@ -85,7 +85,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
             <input type="checkbox" value="1" class="custom-control-input" name="data-agree" id="data-agree"
               <?php if ($partial_reg) { ?>checked <?php } ?>>
             <label class="custom-control-label" for="data-agree">
-              I (<?=htmlspecialchars($name)?>) agree to the use of my data by <?=htmlspecialchars(env('CLUB_NAME'))?> as
+              I (<?=htmlspecialchars($name)?>) agree to the use of my data by <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> as
               outlined above
               <?php if ($partial_reg) { ?> (You have already registered with a previous member, so have already
               consented to these terms)
@@ -102,8 +102,8 @@ include BASE_PATH . "views/renewalTitleBar.php";
         <p>
           The Member, and the Parent or Guardian (in the case of a person under the age of 18 years), hereby
           acknowledges that they have read the Club Rules and the Policies and Procedures Documentation of
-          <?=htmlspecialchars(env('CLUB_NAME'))?>, copies of which can be obtained from <a
-            href="<?=htmlspecialchars(env('CLUB_WEBSITE'))?>" target="_blank">our website</a>. I confirm my
+          <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>, copies of which can be obtained from <a
+            href="<?=htmlspecialchars(app()->tenant->getKey('CLUB_WEBSITE'))?>" target="_blank">our website</a>. I confirm my
           understanding and acceptance that such rules (as amended from time to time) shall govern my membership of the
           club. I further acknowledge and accept the responsibilities of membership as set out in these rules and
           understand that it is my duty to read and abide by them (including any amendments). By providing my agreement,
@@ -138,7 +138,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
                 name="<?=htmlspecialchars($id[$i])?>-tc-confirm" id="<?=htmlspecialchars($id[$i])?>-tc-confirm">
               <label class="custom-control-label" for="<?=htmlspecialchars($id[$i])?>-tc-confirm">
                 I, <?=htmlspecialchars($row[$i]['MForename'] . " " . $row[$i]['MSurname'])?> agree to the Terms and
-                Conditions of <?=htmlspecialchars(env('CLUB_NAME'))?> as outlined above
+                Conditions of <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> as outlined above
               </label>
             </div>
           </div>
@@ -148,7 +148,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
           <p>
             In the case of a member under the age of twelve years the Parent or
             Guardian undertakes to explain the content and implications of the Terms
-            and Conditions of Membership of <?=htmlspecialchars(env('CLUB_NAME'))?>.
+            and Conditions of Membership of <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>.
           </p>
 
           <div class="form-group mb-0">
@@ -182,14 +182,14 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
         <h2>Photography Consent</h2>
         <p>
-          Please read the Swim England/<?=htmlspecialchars(env('CLUB_NAME'))?> Photography Policy before you continue to
+          Please read the Swim England/<?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Photography Policy before you continue to
           give or withold consent for photography.
         </p>
 
         <p>
-          <?=htmlspecialchars(env('CLUB_NAME'))?> may wish to take photographs of individuals and groups of swimmers
+          <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> may wish to take photographs of individuals and groups of swimmers
           under the age of 18, which may include your child during their membership of
-          <?=htmlspecialchars(env('CLUB_NAME'))?>. Photographs will only be taken and published in accordance with Swim
+          <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. Photographs will only be taken and published in accordance with Swim
           England policy which requires the club to obtain the consent of the Parent or Guardian to take and use
           photographs under the following circumstances.
         </p>

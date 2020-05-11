@@ -162,7 +162,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
                 today <i class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
           </p>
           <p class="mb-0">
-            If JavaScript is not supported by your browser, <?=env('CLUB_NAME')?>
+            If JavaScript is not supported by your browser, <?=app()->tenant->getKey('CLUB_NAME')?>
             recommends you <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by
                 Mozilla</a></strong>.
           </p>
@@ -182,64 +182,55 @@ Chester-le-Street ASC is a non profit unincorporated association.
           It looks like you're using Internet Explorer which we no longer support so we recommend you upgrade to a new browser which we do support as soon as possible. <strong><a class="text-dark" href="http://browsehappy.com/" target="_blank">Upgrade your browser today <i class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
         </p>
         <p class="mb-0">
-          <?=htmlspecialchars(env('CLUB_NAME'))?> recommends you <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by Mozilla</a></strong>. Firefox has great protections for your privacy with built in features including tracking protection.
+          <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> recommends you <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by Mozilla</a></strong>. Firefox has great protections for your privacy with built in features including tracking protection.
         </p>
       </div>
     </div>
     <?php } ?>
 
-    <div class="membership-header bg-light text-light">
-      <div class="club-name-header">
-        <div class="<?=$container_class?>">
-          <h1 class="sr-only">
-            SCDS Membership
+    <div class="container">
+      <div class="row align-items-center py-2">
+        <div class="col-auto">
+          <img src="<?=htmlspecialchars(autoUrl("public/img/corporate/scds.png"))?>" class="img-fluid rounded-top" style="height: 75px;">
+        </div>
+        <div class="col-auto">
+          <h1 class="mb-0">
+            <span class="sr-only">SCDS </span>Membership Software
           </h1>
-          <img src="<?=htmlspecialchars(autoUrl("public/img/corporate/scds.png"))?>" class="img-fluid" style="height: 75px;">
         </div>
       </div>
 
-      <div class="bg-dark">
-        <div class="container">
-          <div class="">
-            <div class="">
-              <nav class="navbar navbar-expand-lg navbar-dark d-print-none justify-content-between px-0" role="navigation">
+      <nav class="navbar navbar-expand-lg navbar-dark rounded-bottom rounded-right" style="background: #9D005B;">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-                <a class="navbar-brand d-lg-none" href="<?=htmlspecialchars(autoUrl(""))?>">Membership Software</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#chesterNavbar"
-                  aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                      </div>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                    </li>
-                  </ul>
-                </div>
-                
-              </nav>
-            </div>
-          </div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Dropdown
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            </li>
+          </ul>
         </div>
-      </div>
+      </nav>
     </div>
 
     <div id="maincontent"></div>

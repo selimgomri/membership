@@ -54,7 +54,7 @@ $footer->render();
 	// create a file pointer connected to the output stream
   $output = fopen('php://output', 'w');
 
-  fputcsv($output, array(env('CLUB_NAME') . ' Gala Time Sheet'));
+  fputcsv($output, array(app()->tenant->getKey('CLUB_NAME') . ' Gala Time Sheet'));
   fputcsv($output, array($info['GalaName'] . " - " . $info['GalaVenue'] . " - " . date("d/m/Y", strtotime($info['GalaDate']))));
   fputcsv($output, array('Time Sheet Report Generated on ' . date("d/m/Y, H:i")));
 	fputcsv($output, array(''));

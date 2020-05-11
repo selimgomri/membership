@@ -60,7 +60,7 @@ include BASE_PATH . 'views/header.php';
 
       <p>You can change your password quickly and easily on this page.</p>
 
-      <p>Usual <?=htmlspecialchars(env('CLUB_NAME'))?> password policies apply - Use 8 characters or more, with at least one lowercase letter, at least one uppercase letter and at least one number</p>
+      <p>Usual <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> password policies apply - Use 8 characters or more, with at least one lowercase letter, at least one uppercase letter and at least one number</p>
 
       <form method="post" class="needs-validation" novalidate>
         <?php if (isset($_GET['return'])) { ?>

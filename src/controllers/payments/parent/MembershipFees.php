@@ -21,7 +21,7 @@ if ($_SESSION['AccessLevel'] != 'Parent' && isset($id) && $id != null) {
 
 $month = (new DateTime('now', new DateTimeZone('Europe/London')))->format('m');
 
-$discounts = json_decode($systemInfo->getSystemOption('MembershipDiscounts'), true);
+$discounts = json_decode(app()->tenant->getKey('MembershipDiscounts'), true);
 $clubDiscount = $swimEnglandDiscount = 0;
 if ($discounts != null && isset($discounts['CLUB'][$month])) {
 	$clubDiscount = $discounts['CLUB'][$month];
@@ -52,9 +52,9 @@ $totalFeeDiscounted += $clubFee;
 
 $asaFees = [];
 
-$asa1 = $systemInfo->getSystemOption('ASA-County-Fee-L1') + $systemInfo->getSystemOption('ASA-Regional-Fee-L1') + $systemInfo->getSystemOption('ASA-National-Fee-L1');
-$asa2 = $systemInfo->getSystemOption('ASA-County-Fee-L2') + $systemInfo->getSystemOption('ASA-Regional-Fee-L2') + $systemInfo->getSystemOption('ASA-National-Fee-L2');
-$asa3 = $systemInfo->getSystemOption('ASA-County-Fee-L3') + $systemInfo->getSystemOption('ASA-Regional-Fee-L3') + $systemInfo->getSystemOption('ASA-National-Fee-L3');
+$asa1 = app()->tenant->getKey('ASA-County-Fee-L1') + app()->tenant->getKey('ASA-Regional-Fee-L1') + app()->tenant->getKey('ASA-National-Fee-L1');
+$asa2 = app()->tenant->getKey('ASA-County-Fee-L2') + app()->tenant->getKey('ASA-Regional-Fee-L2') + app()->tenant->getKey('ASA-National-Fee-L2');
+$asa3 = app()->tenant->getKey('ASA-County-Fee-L3') + app()->tenant->getKey('ASA-Regional-Fee-L3') + app()->tenant->getKey('ASA-National-Fee-L3');
 
 for ($i = 0; $i < $count; $i++) {
 	if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ClubPays']) {

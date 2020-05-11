@@ -18,7 +18,7 @@ try {
       $_POST['swim-england']
     ]);
     if ($getCount->fetchColumn() > 1) {
-      throw new Exception('Your Swim England number is not unique in the ' . env('CLUB_NAME') . ' database. We cannot log you in with ambiguous details.');
+      throw new Exception('Your Swim England number is not unique in the ' . app()->tenant->getKey('CLUB_NAME') . ' database. We cannot log you in with ambiguous details.');
     } 
 
     $getMember = $db->prepare("SELECT MemberID, ASANumber, PWHash, PWWrong FROM members WHERE ASANumber = ?");

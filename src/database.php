@@ -62,7 +62,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
     $from['Email'] = "noreply@" . env('EMAIL_DOMAIN');
   }
   if (!isset($from['Name'])) {
-    $from['Name'] = env('CLUB_NAME');
+    $from['Name'] = app()->tenant->getKey('CLUB_NAME');
   }
 
   $cellClass = 'style="display:table;background:#eee;padding:10px;margin 0 auto 10px auto;width:100%;"';
@@ -91,9 +91,9 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
     } else if ($from['Email'] == "galas@" . env('EMAIL_DOMAIN')) {
       $email->setReplyTo("galas+replytoautoemail@" . env('EMAIL_DOMAIN'), "Gala Administrator");
     } else if ($from['Name'] == "Chester-le-Street ASC Security") {
-      $email->setReplyTo("support+security-replytoautoemail@" . env('EMAIL_DOMAIN'), env('CLUB_SHORT_NAME') . " Support");
+      $email->setReplyTo("support+security-replytoautoemail@" . env('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_SHORT_NAME') . " Support");
     } else {
-      $email->setReplyTo("enquiries+replytoautoemail@" . env('EMAIL_DOMAIN'), env('CLUB_SHORT_NAME') . " Enquiries");
+      $email->setReplyTo("enquiries+replytoautoemail@" . env('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_SHORT_NAME') . " Enquiries");
     }
 
     if (isset($from['Reply-To']) && $from['Reply-To'] != null) {
@@ -119,7 +119,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
   }
 
   if (env('SENDGRID_API_KEY') && $emailaddress != null && $name != null) {
-    $email->setReplyTo(env('CLUB_EMAIL'), env('CLUB_NAME'));
+    $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME'));
     $email->setFrom($from['Email'], $from['Name']);
     $email->setSubject($subject);
     $email->addTo($emailaddress, $name);
@@ -153,7 +153,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
 function getAttendanceByID($link = null, $id, $weeks = "all") {
   $db = app()->db;
   $systemInfo = app()->system;
-  $hideAttendance = !bool($systemInfo->getSystemOption('HIDE_MEMBER_ATTENDANCE'));
+  $hideAttendance = !bool(app()->tenant->getKey('HIDE_MEMBER_ATTENDANCE'));
   if ($_SESSION['AccessLevel'] != 'Parent' || $hideAttendance) {
     $output = "";
     $startWeek = 1;
@@ -408,9 +408,13 @@ function autoUrl($relative, $includeClub = true) {
   // Returns an absolute URL
   $rootUrl = env('ROOT_URL');
 
-  $club = app()->club;
+  $club = app()->tenant;
   if ($club && $includeClub) {
-    $rootUrl .= $club . '/';
+    if ($club->getCode()) {
+      $rootUrl .= mb_strtolower($club->getCode()) . '/';
+    } else if ($club->getId()) {
+      $rootUrl .= $club->getId() . '/';
+    }
   }
 
   return rtrim($rootUrl . $relative, '/');
@@ -741,7 +745,7 @@ function updatePaymentStatus($PMkey) {
           $message .= '<p>We have retried this payment request three times and it has still not succeeded. As a result, you will need to contact the club treasurer to take further action. Failure to pay may lead to the suspension or termination of your membership.</p>';
         }
 
-        $message .= '<p>Kind regards,<br>The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
+        $message .= '<p>Kind regards,<br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
         $query = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (?, ?, ?, ?, ?, ?)");
         $query->execute([$details['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
       }
@@ -762,7 +766,7 @@ function updatePaymentStatus($PMkey) {
       $subject = "Payment Failed for " . $details['Name'];
       $message = '
       <p>Your Direct Debit payment of £' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has failed because customer approval was denied. This means your bank requires two people two authorise a direct debit mandate on your account and that this authorisation has not been given. You will be contacted by the treasurer to arrange payment.</p>
-      <p>Kind regards,<br>The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
+      <p>Kind regards,<br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
       $query = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (?, ?, ?, ?, ?, ?)");
       $query->execute([$details['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
 
@@ -782,7 +786,7 @@ function updatePaymentStatus($PMkey) {
       $message = '
       <p>Your Direct Debit payment of �' . number_format($details['Amount']/100, 2, '.', '') . ', ' . $details['Name'] . ' has been charged back to us. You will be contacted by the treasurer to arrange payment of any outstanding amount.</p>
       <p>Please note that fraudulently charging back a Direct Debit payment is a criminal offence, covered by the 2006 Fraud Act. We recommend that if your are unsure about the amount we are charging you, you should try and contact us first.</p>
-      <p>Kind regards,<br>The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
+      <p>Kind regards,<br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
       $query = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (?, ?, ?, ?, ?, ?)");
       $query->execute([$details['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
 

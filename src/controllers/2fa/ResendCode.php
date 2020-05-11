@@ -19,7 +19,7 @@ try {
   <p><strong>' . $_SESSION['TWO_FACTOR_CODE'] . '</strong></p>
   <p>If you did not just try to log in, you can ignore this email. You may want to reset your password.</p>
   <p>This email was resent to this address at the request of the user.</p>
-  <p>Kind Regards, <br>The ' . env('CLUB_NAME') . ' Team</p>';
+  <p>Kind Regards, <br>The ' . app()->tenant->getKey('CLUB_NAME') . ' Team</p>';
 
   if (notifySend(null, "Verification Code - Requested at " . $date->format("H:i:s \o\\n d/m/Y"), $message, $row['Forename'] . " " . $row['Surname'], $row['EmailAddress'])) {
     $_SESSION['TWO_FACTOR'] = true;

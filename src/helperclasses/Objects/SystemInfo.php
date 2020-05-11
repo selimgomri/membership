@@ -74,18 +74,18 @@ class SystemInfo {
     $this->systemOptions[$option] = $value;
 
     // Any PDO exceptions will be propagated
-    $query = $this->db->prepare("SELECT COUNT(*) FROM systemOptions WHERE `Option` = ?");
+    $query = $this->db->prepare("SELECT COUNT(*) FROM tenantOptions WHERE `Option` = ?");
     $query->execute([$option]);
     $result = $query->fetchColumn();
 
     if ($result == 0 && $value == null) {
-      $query = $this->db->prepare("DELETE FROM systemOptions WHERE `Option` = ?");
+      $query = $this->db->prepare("DELETE FROM tenantOptions WHERE `Option` = ?");
       $query->execute([$option]);
     } else if ($result == 0) {
-      $query = $this->db->prepare("INSERT INTO systemOptions (`Option`, `Value`) VALUES (?, ?)");
+      $query = $this->db->prepare("INSERT INTO tenantOptions (`Option`, `Value`) VALUES (?, ?)");
       $query->execute([$option, $value]);
     } else {
-      $query = $this->db->prepare("UPDATE systemOptions SET `Value` = ? WHERE `Option` = ?");
+      $query = $this->db->prepare("UPDATE tenantOptions SET `Value` = ? WHERE `Option` = ?");
       $query->execute([$value, $option]);
     }
   }

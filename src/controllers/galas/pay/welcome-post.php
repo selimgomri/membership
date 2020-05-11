@@ -1,9 +1,9 @@
 <?php
 
-\Stripe\Stripe::setApiKey(env('STRIPE'));
-if (env('STRIPE_APPLE_PAY_DOMAIN')) {
+\Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
+if (app()->tenant->getKey('STRIPE_APPLE_PAY_DOMAIN')) {
   \Stripe\ApplePayDomain::create([
-    'domain_name' => env('STRIPE_APPLE_PAY_DOMAIN')
+    'domain_name' => app()->tenant->getKey('STRIPE_APPLE_PAY_DOMAIN')
   ]);
 }
 

@@ -19,7 +19,7 @@ function getWalletName($name) {
 }
 
 function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
-  \Stripe\Stripe::setApiKey(env('STRIPE'));
+  \Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
   $swimsArray = [
     '50Free' => '50 Free',
     '100Free' => '100 Free',
@@ -408,11 +408,11 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
       if (bool(env('IS_CLS'))) {
         $sendingEmail = "payments@" . env('EMAIL_DOMAIN');
       } else {
-        $sendingEmail = mb_strtolower(trim(env('ASA_CLUB_CODE'))) . "-payments@" . env('EMAIL_DOMAIN');
+        $sendingEmail = mb_strtolower(trim(app()->tenant->getKey('ASA_CLUB_CODE'))) . "-payments@" . env('EMAIL_DOMAIN');
       }
       notifySend(null, 'Payment Receipt', $message, $name, $email, [
         "Email" => $sendingEmail,
-        "Name" => env('CLUB_NAME'),
+        "Name" => app()->tenant->getKey('CLUB_NAME'),
         "Unsub" => [
           "Allowed" => false,
           "User" => $userId,

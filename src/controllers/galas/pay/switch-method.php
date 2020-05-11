@@ -2,7 +2,7 @@
 
 $db = app()->db;
 
-\Stripe\Stripe::setApiKey(env('STRIPE'));
+\Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
 
 if (!isset($_POST['method'])) {
   header("Location: " . autoUrl("galas/pay-for-entries/checkout"));

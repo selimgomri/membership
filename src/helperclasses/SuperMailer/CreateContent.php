@@ -113,11 +113,11 @@ class CreateMail {
         $head .= "<img src=\"" . autoUrl("public/img/notify/NotifyLogo.png") . "\"
         style=\"width:300px;max-width:100%;\" srcset=\"" .
         autoUrl("public/img/notify/NotifyLogo@2x.png") . " 2x, " .
-        autoUrl("public/img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"" . htmlspecialchars(env('CLUB_NAME')) . " Logo\">";
+        autoUrl("public/img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
         } else if (env('CLUB_LOGO')) {
-          $head .= "<img src=\"" . autoUrl(env('CLUB_LOGO')) . "\" style=\"max-width:100%;max-height:150px;\" alt=\"" . htmlspecialchars(env('CLUB_NAME')) . " Logo\">";
+          $head .= "<img src=\"" . autoUrl(env('CLUB_LOGO')) . "\" style=\"max-width:100%;max-height:150px;\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
         } else {
-          $head .= htmlspecialchars(env('CLUB_NAME'));
+          $head .= htmlspecialchars(app()->tenant->getKey('CLUB_NAME'));
         }
         $head .= "</td></tr></table>
         <table style=\"width:100%;max-width:700px;border:0px;text-align:left;background:#ffffff;padding:0px 10px;\"><tr><td>
@@ -132,8 +132,8 @@ class CreateMail {
     <table style=\"width:100%;max-width:700px;border:0px;background:#f8fcff;padding:0px 10px;\"><tr><td>
     <div
     class=\"bottom text-center\">
-    <p class=\"small\" align=\"center\"><strong>" . htmlspecialchars(env('CLUB_NAME')) . "</strong><br>";
-    $addr = json_decode(env('CLUB_ADDRESS'));
+    <p class=\"small\" align=\"center\"><strong>" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . "</strong><br>";
+    $addr = json_decode(app()->tenant->getKey('CLUB_ADDRESS'));
     for ($i = 0; $i < sizeof($addr); $i++) {
       $foot .= htmlspecialchars($addr[$i]) . '<br>';
       if (isset($addr[$i+1]) && $addr[$i+1] == "") {
@@ -141,19 +141,19 @@ class CreateMail {
       }
     }
     $foot .= "</p>
-    <p class=\"small\" align=\"center\">This email was sent automatically by the " . htmlspecialchars(env('CLUB_NAME')) . " Membership System.</p>";
+    <p class=\"small\" align=\"center\">This email was sent automatically by the " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Membership System.</p>";
     if (!(bool(env('IS_CLS')))) {
     $foot .= '<p class="small" align="center">The Membership System was built by Chester-le-Street ASC.</p>';
     }
     $foot .= "<p class=\"small\" align=\"center\">Have questions? Contact us at <a
-    href=\"mailto:" . htmlspecialchars(env('CLUB_EMAIL')) . "\">" . htmlspecialchars(env('CLUB_EMAIL')) . "</a>.</p>
+    href=\"mailto:" . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "\">" . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "</a>.</p>
     <p class=\"small\" align=\"center\">To control your email options, go to <a href=\"" .
     autoUrl("myaccount/email") . "\">My Account</a>.</p>";
     if ($this->allowUnsubscribe) {
       $foot .= '<p class="small" align="center"><a href="-unsub_link-">Click to Unsubscribe</a></p>';
     }
     $foot .= "
-    <p class=\"small\" align=\"center\">&copy; " . htmlspecialchars(env('CLUB_NAME')) . " " . date("Y") . ", Design &copy; SCDS / Chris Heppell / Chester-le-Street ASC</p>
+    <p class=\"small\" align=\"center\">&copy; " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " " . date("Y") . ", Design &copy; SCDS / Chris Heppell / Chester-le-Street ASC</p>
       </div>
       </table>
     </table>
@@ -173,25 +173,25 @@ class CreateMail {
       $head .= "Hello " . htmlspecialchars($this->name) . ",\r\n\r\n";
     }
 
-    $foot = "\r\n\n\n " . env('CLUB_NAME') . "\r\n\r\n";
-    $foot .= env('CLUB_NAME') . "\r\n";
-    $addr = json_decode(env('CLUB_ADDRESS'));
+    $foot = "\r\n\n\n " . app()->tenant->getKey('CLUB_NAME') . "\r\n\r\n";
+    $foot .= app()->tenant->getKey('CLUB_NAME') . "\r\n";
+    $addr = json_decode(app()->tenant->getKey('CLUB_ADDRESS'));
     for ($i = 0; $i < sizeof($addr); $i++) {
       $foot .= $addr[$i] . "\r\n";
       if (isset($addr[$i+1]) && $addr[$i+1] == "") {
         break;
       }
     }
-    $foot .= "\r\nThis email was sent automatically by the " . env('CLUB_NAME') . " Membership System.\r\n\r\n";
+    $foot .= "\r\nThis email was sent automatically by the " . app()->tenant->getKey('CLUB_NAME') . " Membership System.\r\n\r\n";
     if (!(bool(env('IS_CLS')))) {
       $foot .= "The Membership System was built by Chester-le-Street ASC.\r\n\r\n";
     }
-    $foot .= "Have questions? Contact us at " . env('CLUB_EMAIL') . ".\r\n\r\n";
+    $foot .= "Have questions? Contact us at " . app()->tenant->getKey('CLUB_EMAIL') . ".\r\n\r\n";
     $foot .= "To control your email options go to My Account at " . autoUrl("myaccount") . ".\r\n\r\n";
     if ($this->allowUnsubscribe) {
       $foot .= "Unsubscribe at -unsub_link-\r\n\r\n";
     }
-    $foot .= "Content copyright " . date("Y") . " " . env('CLUB_NAME') . ", Design copyright SCDS/Chester-le-Street ASC";
+    $foot .= "Content copyright " . date("Y") . " " . app()->tenant->getKey('CLUB_NAME') . ", Design copyright SCDS/Chester-le-Street ASC";
 
     return $head . $this->getPlainContent() . $foot;
   }

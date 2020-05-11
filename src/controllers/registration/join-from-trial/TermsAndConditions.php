@@ -85,7 +85,7 @@ include BASE_PATH . 'views/header.php';
         <p>
 					The Member, and the Parent or Guardian (in the case of a person under
 					the age of 18 years), hereby acknowledges that they have read the Club
-					Rules and the Policies and Procedures Documentation of <?=htmlspecialchars(env('CLUB_NAME'))?>,
+					Rules and the Policies and Procedures Documentation of <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>,
 					copies of which can be obtained from <a
 					href="https://www.chesterlestreetasc.co.uk/policies"
 					target="_blank">our website</a>. I confirm my understanding and
@@ -116,7 +116,7 @@ include BASE_PATH . 'views/header.php';
 							<input type="checkbox" value="1" class="custom-control-input" name="<?=$id?>" id="<?=$id?>" <?=$selected[$id]?> required>
 							<label class="custom-control-label" for="<?=$id?>">
 								I, <?=$swimmer['First']?> <?=$swimmer['Last']?>
-								agree to the Terms and Conditions of <?=htmlspecialchars(env('CLUB_NAME'))?> as outlined
+								agree to the Terms and Conditions of <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> as outlined
 								above
 							</label>
               <div class="invalid-feedback">

@@ -27,7 +27,7 @@ include BASE_PATH . 'views/header.php';
 
       <p>
         If some children of a parent have been offered a place but won't be
-        joining <?=htmlspecialchars(env('CLUB_NAME'))?>, please press <em>Reject Squad Place</em> on each
+        joining <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>, please press <em>Reject Squad Place</em> on each
         swimmer so that they aren't added to the membership system.
       </p>
 

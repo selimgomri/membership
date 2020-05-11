@@ -107,7 +107,7 @@ if ($pm == null || ($_SESSION['AccessLevel'] != 'Admin' && $pm['User'] != $_SESS
   halt(404);
 }
 
-\Stripe\Stripe::setApiKey(env('STRIPE'));
+\Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
 
 $payment = \Stripe\PaymentIntent::retrieve([
   'id' => $pm['Intent'],

@@ -9,7 +9,7 @@ $db = app()->db;
 
 $systemInfo = app()->system;
 
-$squadFeeMonths = json_decode($systemInfo->getSystemOption('SquadFeeMonths'), true);
+$squadFeeMonths = json_decode(app()->tenant->getKey('SquadFeeMonths'), true);
 $date = new DateTime('now', new DateTimeZone('Europe/London'));
 $squadFeeRequired = !bool($squadFeeMonths[$date->format("m")]);
 

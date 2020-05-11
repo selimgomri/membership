@@ -3,7 +3,7 @@
 $db = app()->db;
 $systemInfo = app()->system;
 
-$leavers = $systemInfo->getSystemOption('LeaversSquad');
+$leavers = app()->tenant->getKey('LeaversSquad');
 $query = $db->prepare("SELECT UserID, MForename, MSurname FROM members WHERE MemberID = ?");
 $query->execute([$id]);
 $row = $query->fetch(PDO::FETCH_ASSOC);
@@ -30,11 +30,11 @@ if ($_SESSION['LeaveKey'] == $key) {
 		$notify_query = $db->prepare($sql);
 
     $date = date("Y-m-01", strtotime('+1 month'));
-    $subject = $row['MForename'] . ' ' . $row['MSurname'] . ' is leaving ' . env('CLUB_NAME');
+    $subject = $row['MForename'] . ' ' . $row['MSurname'] . ' is leaving ' . app()->tenant->getKey('CLUB_NAME');
     $message = '<p>We\'re sorry to see you go.</p>';
     $message .= '<p>' . htmlspecialchars($row['MForename'] . ' ' . $row['MSurname']) . ' will be removed from our computer systems on ' . date("l j F Y", strtotime($date)) . '.</p>';
     $message .= '<p>They will not be allowed to take part in any training sessions on or after this date. If you think this was a mistake, please contact the membership secretary.</p>';
-    $message .= '<p>Kind regards,<br>The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
+    $message .= '<p>Kind regards,<br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
 
     $notify_query->execute([
       $_SESSION['UserID'],

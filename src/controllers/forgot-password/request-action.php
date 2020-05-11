@@ -76,7 +76,7 @@ else {
 
     if (notifySend(null, $subject, $sContent, $row['Forename'] . " " .
     $row['Surname'], $row['EmailAddress'], ["Email" =>
-    "password-help@" . env('EMAIL_DOMAIN'), "Name" => env('CLUB_NAME') . " Account Help"])) {
+    "password-help@" . env('EMAIL_DOMAIN'), "Name" => app()->tenant->getKey('CLUB_NAME') . " Account Help"])) {
     ?>
       <div class="container-fluid">
         <div class="row justify-content-center">

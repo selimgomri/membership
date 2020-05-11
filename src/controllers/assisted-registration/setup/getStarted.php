@@ -16,7 +16,7 @@ if ($user == null) {
 $getUserSwimmers = $db->prepare("SELECT MForename fn, MSurname sn FROM members WHERE UserID = ?");
 $getUserSwimmers->execute([$_SESSION['AssRegGuestUser']]);
 
-$pagetitle = "Welcome to " . htmlspecialchars(env('CLUB_NAME')) . " - Assisted Registration";
+$pagetitle = "Welcome to " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " - Assisted Registration";
 
 include BASE_PATH . 'views/header.php';
 
@@ -27,7 +27,7 @@ include BASE_PATH . 'views/header.php';
     <div class="col-md-8">
       <h1>Hello <?=htmlspecialchars($user['Forename'])?></h1>
       <p class="lead">
-        Welcome to <?=htmlspecialchars(env('CLUB_NAME'))?>. Let's complete your account registration.
+        Welcome to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. Let's complete your account registration.
       </p>
 
       <?php if ($um) { ?>

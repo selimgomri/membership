@@ -2,14 +2,14 @@
 
 $systemInfo = app()->system;
 
-$feeType = $systemInfo->getSystemOption('ClubFeesType');
+$feeType = app()->tenant->getKey('ClubFeesType');
 
 try {
 
-  $systemInfo->setSystemOption('ClubFeeUpgradeType', $_POST['upgrade']);
+  app()->tenant->setKey('ClubFeeUpgradeType', $_POST['upgrade']);
 
   if ($feeType == 'NSwimmers') {
-    $feesArray = json_decode($systemInfo->getSystemOption('ClubFeeNSwimmers'), true);
+    $feesArray = json_decode(app()->tenant->getKey('ClubFeeNSwimmers'), true);
     $updatedFees = [];
     for ($i = 0; $i < sizeof($feesArray)+1; $i++) {
       if (isset($_POST[$i+1 . '-swimmers']) && (int) ($_POST[$i+1 . '-swimmers']*100) > 0) {
@@ -18,7 +18,7 @@ try {
         break;
       }
     }
-    $systemInfo->setSystemOption('ClubFeeNSwimmers', json_encode($updatedFees));
+    app()->tenant->setKey('ClubFeeNSwimmers', json_encode($updatedFees));
   }
   $_SESSION['Update-Success'] = true;
 } catch (Exception $e) {

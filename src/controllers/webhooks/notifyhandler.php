@@ -5,7 +5,7 @@ set_time_limit(0);
 
 $emailPrefix = '';
 if (!bool(env('IS_CLS'))) {
-	$emailPrefix = mb_strtolower(trim(env('ASA_CLUB_CODE'))) . '-';
+	$emailPrefix = mb_strtolower(trim(app()->tenant->getKey('ASA_CLUB_CODE'))) . '-';
 }
 
 $club_address = "";
@@ -39,9 +39,9 @@ while ($currentMessage = $getPendingGroupMail->fetch(PDO::FETCH_ASSOC)) {
     $mailObject->setUnsubscribable();
   }
 
-  $from = new \SendGrid\Mail\From("notify@" . env('EMAIL_DOMAIN'), env('CLUB_NAME'));
+  $from = new \SendGrid\Mail\From("notify@" . env('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_NAME'));
   if ($currentMessage['ForceSend']) {
-    $from = new \SendGrid\Mail\From("noreply@" . env('EMAIL_DOMAIN'), env('CLUB_NAME'));
+    $from = new \SendGrid\Mail\From("noreply@" . env('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_NAME'));
   }
   if ($jsonData->NamedSender->Email != null && $jsonData->NamedSender->Name) {
     $from = new \SendGrid\Mail\From($emailPrefix . "noreply@" . env('EMAIL_DOMAIN'), $jsonData->NamedSender->Name);
@@ -94,10 +94,10 @@ while ($currentMessage = $getPendingGroupMail->fetch(PDO::FETCH_ASSOC)) {
     try {
       $email->setReplyTo($jsonData->ReplyToMe->Email, $jsonData->ReplyToMe->Name);
     } catch (Exception $e) {
-      $email->setReplyTo(env('CLUB_EMAIL'), env('CLUB_NAME') . ' Enquiries');
+      $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME') . ' Enquiries');
     }
   } else {
-    $email->setReplyTo(env('CLUB_EMAIL'), env('CLUB_NAME') . ' Enquiries');
+    $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME') . ' Enquiries');
   }
 
   $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));

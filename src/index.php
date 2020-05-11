@@ -264,11 +264,11 @@ halt(500);
 app()->db = $db;
 
 // System info stuff
-$systemInfo = new \SystemInfo($db);
-app()->system = $systemInfo;
+// $systemInfo = new \SystemInfo($db);
+// app()->system = $systemInfo;
 
 // Load vars
-include BASE_PATH . 'includes/GetVars.php';
+// include BASE_PATH . 'includes/GetVars.php';
 
 // User login if required and make user var available
 $currentUser = null;
@@ -340,8 +340,24 @@ if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && !isset($_SESSION['D
   $_SESSION['DisableTrackers'] = filter_var(getUserOption($_SESSION['UserID'], "DisableTrackers"), FILTER_VALIDATE_BOOLEAN);
 }
 
-$route->group('/{club}:([a-z]{4})', function($club) {
+$route->group('/{club}:(([a-z]{4})|([0-9]+))', function($club) {
+
+  // Get the club
+  $clubObject = null;
+  if (gettype($club) == 'string') {
+    $clubObject = Tenant::fromCode($club);
+  } else if (gettype($club) == 'integer') {
+    $clubObject = Tenant::fromId($club);
+  }
+
+  if (!$clubObject) {
+    $this->any(['/', '/*'], function($club) {
+      include 'views/root/errors/no-club.php';
+    });
+  }
+
   app()->club = $club;
+  app()->tenant = $clubObject;  
 
   if (bool(env('IS_DEV'))) {
     $this->group('/dev', function() {
@@ -388,7 +404,9 @@ $route->group('/{club}:([a-z]{4})', function($club) {
   });
 
   $this->get('/public/*/viewer', function() {
-    $filename = $this[0];
+    $array = $this->getArrayCopy();
+    $filename = $array[sizeof($array) - 1];
+    // pre($filename);
     $type = 'public';
     require BASE_PATH . 'controllers/public/Viewer.php';
   });
@@ -398,8 +416,9 @@ $route->group('/{club}:([a-z]{4})', function($club) {
   });
 
   $this->get('/public/*', function() {
-    $filename = $this->getArrayCopy()[1];
-    // pre($this->getArrayCopy()[1]);
+    $array = $this->getArrayCopy();
+    $filename = $array[sizeof($array) - 1];
+    // pre($filename);
 
     require BASE_PATH . 'controllers/PublicFileLoader.php';
   });
@@ -979,8 +998,9 @@ try {
   halt(500, false);
 } catch (Error $e) {
   // This catches any fatal or recoverable errors.
-  ob_get_clean();
-  halt(500, false);
+  // ob_get_clean();
+  // halt(500, false);
+  pre($e);
 } finally {
   // Any actions which must always happen at end
 }

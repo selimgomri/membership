@@ -66,7 +66,7 @@ include BASE_PATH . 'views/header.php';
 
       <p>If they forget their password, you can come back here to reset it at any time.</p>
 
-      <p>Usual <?=htmlspecialchars(env('CLUB_NAME'))?> password policies apply - Use 8 characters or more, with at least one lowercase letter, at least one uppercase letter and at least one number</p>
+      <p>Usual <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> password policies apply - Use 8 characters or more, with at least one lowercase letter, at least one uppercase letter and at least one number</p>
 
       <?php if (isset($_GET['return'])) { ?>
       <p>When you press save, we will return you to the page you came from.</p>

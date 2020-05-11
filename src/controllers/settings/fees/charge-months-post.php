@@ -16,7 +16,7 @@ try {
     }
   }
 
-  $systemInfo->setSystemOption('SquadFeeMonths', json_encode($exemptMonths));
+  app()->tenant->setKey('SquadFeeMonths', json_encode($exemptMonths));
   $_SESSION['Update-Success'] = true;
 } catch (Exception $e) {
   $_SESSION['Update-Error'] = true;

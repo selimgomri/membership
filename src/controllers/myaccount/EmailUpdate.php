@@ -28,15 +28,15 @@ if ($found) {
 
 	$subject = "Your Email Address has been Changed";
 	$message = '
-	<p>Your ' . env('CLUB_NAME') . ' Account Email Address has been changed from ' . $oldEmail . ' to ' . $newEmail . '.</p>
+	<p>Your ' . app()->tenant->getKey('CLUB_NAME') . ' Account Email Address has been changed from ' . $oldEmail . ' to ' . $newEmail . '.</p>
 	<p>If this was you then you, then please ignore this email. If it was not you, please head to ' . autoUrl("") . ' and reset your password urgently.</p>
-	<p>Kind Regards, <br>The ' . env('CLUB_NAME') . ' Team</p>
+	<p>Kind Regards, <br>The ' . app()->tenant->getKey('CLUB_NAME') . ' Team</p>
 	';
 	$to = "";
 	$name = getUserName($user);
 	$from = [
 		"Email" => "noreply@" . env('EMAIL_DOMAIN'),
-		"Name" => env('CLUB_NAME') . " Secretary"
+		"Name" => app()->tenant->getKey('CLUB_NAME') . " Secretary"
 	];
 	notifySend($to, $subject, $message, $name, $oldEmail, $from);
 

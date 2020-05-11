@@ -192,21 +192,21 @@ ob_start();?>
         <img src="<?=BASE_PATH?>public/img/directdebit/directdebit@3x.png" style="height:1cm;" class="mb-3" alt="Direct Debit Logo">
       </div>
     </div>
-    <p>The Direct Debit Guarantee applies to payments made to <?=htmlspecialchars(env('CLUB_NAME'))?></p>
+    <p>The Direct Debit Guarantee applies to payments made to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></p>
 
     <ul>
       <li>
         This Guarantee is offered by all banks and building societies that accept instructions to pay Direct Debits
       </li>
       <li>
-        If there are any changes to the amount, date or frequency of your Direct Debit <?=htmlspecialchars(env('CLUB_NAME'))?> will notify you three working days in advance of your account being debited or as otherwise agreed. If you request <?=htmlspecialchars(env('CLUB_NAME'))?> to collect a payment, confirmation of the amount and date will be given to you at the time of the request
+        If there are any changes to the amount, date or frequency of your Direct Debit <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> will notify you three working days in advance of your account being debited or as otherwise agreed. If you request <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> to collect a payment, confirmation of the amount and date will be given to you at the time of the request
       </li>
       <li>
-        If an error is made in the payment of your Direct Debit, by <?=htmlspecialchars(env('CLUB_NAME'))?> or your bank or building society, you are entitled to a full and immediate refund of the amount paid from your bank or building society
+        If an error is made in the payment of your Direct Debit, by <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> or your bank or building society, you are entitled to a full and immediate refund of the amount paid from your bank or building society
       </li>
         <ul>
           <li>
-            If you receive a refund you are not entitled to, you must pay it back when <?=htmlspecialchars(env('CLUB_NAME'))?> asks you to
+            If you receive a refund you are not entitled to, you must pay it back when <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> asks you to
           </li>
         </ul>
       <li>
@@ -214,9 +214,9 @@ ob_start();?>
       </li>
     </ul>
 
-    <p>Payments are handled by <a href="https://gocardless.com/">GoCardless</a> on behalf of <?=htmlspecialchars(env('CLUB_NAME'))?>.</p>
+    <p>Payments are handled by <a href="https://gocardless.com/">GoCardless</a> on behalf of <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>.</p>
 
-    <!--<p>&copy; <?=htmlspecialchars(env('CLUB_NAME'))?> <?=date("Y")?></p>-->
+    <!--<p>&copy; <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> <?=date("Y")?></p>-->
 
     <?php } ?>
 
@@ -273,7 +273,7 @@ ob_start();?>
         <?php } ?>
 
         <p>
-          I, <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> agree to the Code of Conduct for <?=htmlspecialchars($email_info['SquadName'])?> Squad as outlined above as required by the Terms and Conditions of Membership of <?=htmlspecialchars(env('CLUB_NAME'))?>.
+          I, <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> agree to the Code of Conduct for <?=htmlspecialchars($email_info['SquadName'])?> Squad as outlined above as required by the Terms and Conditions of Membership of <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>.
         </p>
 
         <div class="signature-box mb-0">

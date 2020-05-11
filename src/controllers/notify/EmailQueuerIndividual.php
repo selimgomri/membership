@@ -39,7 +39,7 @@ try {
   $myName = $curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'];
 
   $from = "noreply@" . env('EMAIL_DOMAIN');
-  $fromName = env('CLUB_NAME');
+  $fromName = app()->tenant->getKey('CLUB_NAME');
   if ($_POST['from'] == "current-user") {
     $fromName = $myName;
   }
@@ -48,8 +48,8 @@ try {
   $replyName = $myName;
 
   if (!($replyAddress && isset($_POST['ReplyToMe']) && bool($_POST['ReplyToMe']))) {
-    $replyAddress = env('CLUB_EMAIL');
-    $replyName = env('CLUB_NAME');
+    $replyAddress = app()->tenant->getKey('CLUB_EMAIL');
+    $replyName = app()->tenant->getKey('CLUB_NAME');
   }
 
   $cc = $bcc = null;

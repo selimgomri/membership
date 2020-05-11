@@ -111,12 +111,12 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 					$entry['EntryID']
 				]);
 
-				$message = '<p>We\'ve charged <strong>&pound;' . $amountString . '</strong> to your account for ' . htmlspecialchars($entry['MForename']) .  '\'s entry into ' . htmlspecialchars($gala['name']) . '.</p><p>You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(env('CLUB_NAME')) . '.</p>';
+				$message = '<p>We\'ve charged <strong>&pound;' . $amountString . '</strong> to your account for ' . htmlspecialchars($entry['MForename']) .  '\'s entry into ' . htmlspecialchars($gala['name']) . '.</p><p>You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . '.</p>';
 
 				$message .= '<p>You entered the following events;</p>';
 				$message .= $swimsList;
 
-				$message .= '<p>Kind Regards<br> The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
+				$message .= '<p>Kind Regards<br> The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
 
 				$notify->execute([
 					$entry['UserID'],

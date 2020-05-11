@@ -39,13 +39,13 @@ while ($swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)) {
 
 if ($success) {
   // Go to next page
-  $subject = "Complete your registration at " . env('CLUB_NAME');
+  $subject = "Complete your registration at " . app()->tenant->getKey('CLUB_NAME');
   $message = "<p>Hello " . htmlspecialchars($user['first']) . ", </p>";
   if (isset($_SESSION['AssRegExisting']) && $_SESSION['AssRegExisting']) {
-    $message .= "<p>We've added a new swimmer to your " . htmlspecialchars(env('CLUB_NAME')) . " account. We now need you to <a href=\"" . autoUrl("") . "\">sign in and provide some information</a>.</p>";
+    $message .= "<p>We've added a new swimmer to your " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " account. We now need you to <a href=\"" . autoUrl("") . "\">sign in and provide some information</a>.</p>";
     unset($_SESSION['AssRegExisting']);
   } else {
-    $message .= "<p>We've pre-registered you for a " . htmlspecialchars(env('CLUB_NAME')) . " account. To continue, <a href=\"" . autoUrl("assisted-registration/" . $_SESSION['AssRegUser'] . "/" . $_SESSION['AssRegPass']) . "\">please follow this link</a></p>";
+    $message .= "<p>We've pre-registered you for a " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " account. To continue, <a href=\"" . autoUrl("assisted-registration/" . $_SESSION['AssRegUser'] . "/" . $_SESSION['AssRegPass']) . "\">please follow this link</a></p>";
     $message .= "<p>As part of the registration process, we'll ask you to set a password, let us know your communication preferences and fill in important information about you and/or your members.</p>";
   }
   if (!bool(env('IS_CLS'))) {

@@ -367,7 +367,7 @@ try {
   //   $sendToTeam->execute([$_SESSION['UserID'], null, "GDPR Compliance: " . $subject, $gdpr_question, $sender, $force]);
 
   //   $intro = '
-  //   <p>We\'re sending you this email because you\'re an administrator at ' . env('CLUB_NAME') . '.</p>
+  //   <p>We\'re sending you this email because you\'re an administrator at ' . app()->tenant->getKey('CLUB_NAME') . '.</p>
   //   <p>' . getUserName($_SESSION['UserID']) . ' has force sent the following email, overriding parent subscription options. We send these updates about emails which have been force sent in order to ensure compliance with GDPR rules.</p>
   //   <p>Emails should only be force sent when they are of high importance. An example would be to inform parents of a session cancellation.</p>
   //   <hr>';
@@ -412,7 +412,7 @@ try {
       $mailObject->setUnsubscribable();
     }
 
-    $from = new \SendGrid\Mail\From("noreply@" . env('EMAIL_DOMAIN'), env('CLUB_NAME'));
+    $from = new \SendGrid\Mail\From("noreply@" . env('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_NAME'));
     if ($jsonData->NamedSender->Email != null && $jsonData->NamedSender->Name) {
       $from = new \SendGrid\Mail\From("noreply@" . env('EMAIL_DOMAIN'), $jsonData->NamedSender->Name);
     }
@@ -473,13 +473,13 @@ try {
       try {
         $email->setReplyTo($jsonData->ReplyToMe->Email, $jsonData->ReplyToMe->Name);
       } catch (Exception $e) {
-        $email->setReplyTo(env('CLUB_EMAIL'), env('CLUB_NAME') . ' Enquiries');
+        $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME') . ' Enquiries');
       }
     } else {
-      $email->setReplyTo(env('CLUB_EMAIL'), env('CLUB_NAME') . ' Enquiries');
+      $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME') . ' Enquiries');
     }
 
-    $email->addHeader("List-ID", env('CLUB NAME') . " Notify <" . mb_strtolower(env('ASA_CLUB_CODE')) . ".notify@" . env('EMAIL_DOMAIN') . ">");
+    $email->addHeader("List-ID", env('CLUB NAME') . " Notify <" . mb_strtolower(app()->tenant->getKey('ASA_CLUB_CODE')) . ".notify@" . env('EMAIL_DOMAIN') . ">");
 
     $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
     $response = $sendgrid->send($email);

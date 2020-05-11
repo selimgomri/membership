@@ -41,7 +41,7 @@ if ($row['UserID'] != null) {
   $message = "
   <h1>Hello " . htmlspecialchars($oldUser['Forename']) . "</h1>
   <p>Your swimmer, " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " has been removed from your account.</p>
-  <p>If this was not you, contact <a  href=\"mailto:" . htmlspecialchars(env('CLUB_EMAIL')) . "\">" . htmlspecialchars(env('CLUB_EMAIL')) . "</a> as soon as possible</p>";
+  <p>If this was not you, contact <a  href=\"mailto:" . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "\">" . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "</a> as soon as possible</p>";
   notifySend($oldUser['EmailAddress'], $row['MForename'] . " has been
   removed", $message, $oldUser['Forename'] . " " . $oldUser['Surname'],
   $oldUser['EmailAddress']);
@@ -79,10 +79,10 @@ with your account.</p>
   <li>Squad: " . htmlspecialchars($row['SquadName']) . " Squad</li>
   <li>Monthly Fee: &pound;" . number_format($row['SquadFee'], 2) . "</li>
   <li>Swim England Number: " .htmlspecialchars($row['ASANumber']) . "</li>
-  <li>" . htmlspecialchars(env('CLUB_SHORT_NAME')) . " Member ID: " . htmlspecialchars($row['MemberID']) . "</li>
+  <li>" . htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME')) . " Member ID: " . htmlspecialchars($row['MemberID']) . "</li>
 </ul>
-<p>If this was not you, contact <a href=\"mailto:"  . htmlspecialchars(env('CLUB_EMAIL')) . "\">
-"  . htmlspecialchars(env('CLUB_EMAIL')) . "</a> as soon as possible</p>";
+<p>If this was not you, contact <a href=\"mailto:"  . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "\">
+"  . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "</a> as soon as possible</p>";
 notifySend($row['EmailAddress'], "You've added " . $row['MForename'] . "
 to your account", $message, $row['Forename'] . " " . $row['Surname'],
 $row['EmailAddress']);

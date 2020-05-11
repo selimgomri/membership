@@ -46,7 +46,7 @@ p.lead {
 
   <div class="d-print-none">
 
-    <?php if (env('EMERGENCY_MESSAGE_TYPE') != 'NONE' && env('EMERGENCY_MESSAGE')) {
+    <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') != 'NONE' && app()->tenant->getKey('EMERGENCY_MESSAGE')) {
       $markdown = new ParsedownExtra();
     ?>
     <style>
@@ -72,10 +72,10 @@ p.lead {
     }
     </style>
 
-    <div class="py-3 <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'DANGER') { ?>bg-danger text-white<?php } ?> <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'WARN') { ?>bg-warning text-body<?php } ?> <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'SUCCESS') { ?>bg-success text-white<?php } ?>">
+    <div class="py-3 <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') == 'DANGER') { ?>bg-danger text-white<?php } ?> <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') == 'WARN') { ?>bg-warning text-body<?php } ?> <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') == 'SUCCESS') { ?>bg-success text-white<?php } ?>">
       <div class="<?=$container_class?> emergency-message">
         <?php try { ?>
-        <?=$markdown->text(env('EMERGENCY_MESSAGE'))?>
+        <?=$markdown->text(app()->tenant->getKey('EMERGENCY_MESSAGE'))?>
         <?php } catch (Exception $e) { ?>
         <p>An emergency message has been set but cannot be rendered.</p>
         <?php } ?>
@@ -118,7 +118,7 @@ p.lead {
                 today <i class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
           </p>
           <p class="mb-0">
-            If JavaScript is not supported by your browser, <?=env('CLUB_NAME')?>
+            If JavaScript is not supported by your browser, <?=app()->tenant->getKey('CLUB_NAME')?>
             recommends you <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by
                 Mozilla</a></strong>.
           </p>
@@ -141,7 +141,7 @@ p.lead {
                 aria-hidden="true"></i></a></strong>.
         </p>
         <p class="mb-0">
-          <?=htmlspecialchars(env('CLUB_NAME'))?> recommends you <strong><a class="text-dark" href="https://www.firefox.com">install
+          <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> recommends you <strong><a class="text-dark" href="https://www.firefox.com">install
               Firefox by Mozilla</a></strong>. Firefox has great protections for your privacy with built in features
           including tracking protection.
         </p>

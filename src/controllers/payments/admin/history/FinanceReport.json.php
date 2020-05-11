@@ -27,7 +27,7 @@ $array = [];
 $types = [];
 
 // output the column headings
-//$array += ['about' => env('CLUB_NAME') . ' Finance Report'];
+//$array += ['about' => app()->tenant->getKey('CLUB_NAME') . ' Finance Report'];
 while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)) {
   if ($row['Type'] == 'Payments') {
     $date = new DateTime($row['Date']);
@@ -141,7 +141,7 @@ while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)) {
 }
 
 $output = [
-  'about' => env('CLUB_NAME') . ' Finance Report',
+  'about' => app()->tenant->getKey('CLUB_NAME') . ' Finance Report',
   'producer' => 'Swimming Club Data Systems - Membership Software',
   'month' => $month,
   'year' => $year,

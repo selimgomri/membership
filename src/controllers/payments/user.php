@@ -81,7 +81,7 @@ include BASE_PATH . "views/paymentsMenu.php";
           <?php } ?>
           <p class="mb-0"><?=htmlspecialchars($name)?><abbr title="<?=htmlspecialchars(strtoupper(bankDetails($user, "bank_name")))?>"><?=htmlspecialchars(getBankName(bankDetails($user, "bank_name")))?></abbr></p>
           <p class="mono">******<?=htmlspecialchars(strtoupper(bankDetails($user, "account_number_end")))?></p>
-          <p><?=htmlspecialchars(env('CLUB_NAME'))?> does not store your bank details.</p>
+          <p><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> does not store your bank details.</p>
         <?php } ?>
         <p class="mb-0">
           <?php if (userHasMandates($user)) { ?>

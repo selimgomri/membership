@@ -1,7 +1,7 @@
 <?php
 
 // See your keys here: https://dashboard.stripe.com/account/apikeys
-\Stripe\Stripe::setApiKey(env('STRIPE'));
+\Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
 
 $db = app()->db;
 
@@ -14,7 +14,7 @@ $checkIfCustomer->execute([$_SESSION['UserID']]);
 
 if ($checkIfCustomer->fetchColumn() == 0) {
   // See your keys here: https://dashboard.stripe.com/account/apikeys
-  \Stripe\Stripe::setApiKey(env('STRIPE'));
+  \Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
 
   // Create a Customer:
   $customer = \Stripe\Customer::create([
@@ -54,7 +54,7 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div id="stripe-data" data-stripe-publishable="<?=htmlspecialchars(env('STRIPE_PUBLISHABLE'))?>" data-stripe-font-css="<?=htmlspecialchars($fontCss)?>">
+<div id="stripe-data" data-stripe-publishable="<?=htmlspecialchars(app()->tenant->getKey('STRIPE_PUBLISHABLE'))?>" data-stripe-font-css="<?=htmlspecialchars($fontCss)?>">
 </div>
 
 <div class="container">

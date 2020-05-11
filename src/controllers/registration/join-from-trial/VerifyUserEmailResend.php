@@ -19,7 +19,7 @@ if ($query->fetchColumn() != $_POST['email-addr']) {
   $mes = '<p>Hi ' . $_SESSION['AC-UserDetails']['forename'] . ' ' . $_SESSION['AC-UserDetails']['surname'] . '.</p>
   <p>We noticed that you changed your email address to a different one from the one you used to register for a trial. Please enter the code shown below in the box on your screen.</p>
   <p>Your code is <strong>' . $code . '</strong></p>
-  <p>Kind regards,<br>The ' . env('CLUB_NAME') . ' Team</p>
+  <p>Kind regards,<br>The ' . app()->tenant->getKey('CLUB_NAME') . ' Team</p>
   <p class="small text-muted">This email was sent to ' . $_POST['email-addr'] . '. If you did not expect this email, please ignore it.';
 
   notifySend(null, $sub, $mes, $_SESSION['AC-UserDetails']['forename'] . ' ' . $_SESSION['AC-UserDetails']['surname'], $_POST['email-addr']);

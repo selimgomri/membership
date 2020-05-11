@@ -5,11 +5,11 @@ $systemInfo = app()->system;
 
 $fluidContainer = true;
 
-$systemInfo->setSystemOption('ClubFeesType', 'NSwimmers');
+app()->tenant->setKey('ClubFeesType', 'NSwimmers');
 
-$feeType = $systemInfo->getSystemOption('ClubFeesType');
+$feeType = app()->tenant->getKey('ClubFeesType');
 
-$feeUpgradeType = $systemInfo->getSystemOption('ClubFeeUpgradeType');
+$feeUpgradeType = app()->tenant->getKey('ClubFeeUpgradeType');
 
 $family = false;
 $perMember = false;
@@ -18,7 +18,7 @@ $monthlyPrecept = false;
 $feesArray = [];
 
 if ($feeType == 'NSwimmers') {
-  $feesArray = json_decode($systemInfo->getSystemOption('ClubFeeNSwimmers'), true);
+  $feesArray = json_decode(app()->tenant->getKey('ClubFeeNSwimmers'), true);
 }
 
 $pagetitle = "Club Membership Fee Options";

@@ -57,6 +57,6 @@ if (sizeof($swimmers) > 2) {
 $email .= '
 <p>If you wish to complete registration and join the club, <a href="' . autoUrl("register/ac/" . $parent['Hash']) . '">please click here</a>.</p>';
 
-notifySend(null, 'Join ' . env('CLUB_NAME'), $email, $parent['First'] . ' ' . $parent['Last'], $_POST['email-addr']);
+notifySend(null, 'Join ' . app()->tenant->getKey('CLUB_NAME'), $email, $parent['First'] . ' ' . $parent['Last'], $_POST['email-addr']);
 
 header("Location: " . currentUrl());

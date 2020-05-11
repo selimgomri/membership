@@ -7,7 +7,7 @@ if (isset($_GET['squad'])) {
 
 $db = app()->db;
 $systemInfo = app()->system;
-$leavers = $systemInfo->getSystemOption('LeaversSquad');
+$leavers = app()->tenant->getKey('LeaversSquad');
 if ($leavers == null) {
   $leavers = 0;
 }

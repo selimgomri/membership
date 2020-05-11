@@ -14,9 +14,9 @@ include BASE_PATH . "views/header.php";
       <p class="lead">By proceeding to use this progressive web app you agree to our use of cookies.</p>
       <?php } ?>
 
-      <h1>Welcome to the <?=htmlspecialchars(env('CLUB_NAME'))?> Membership System</h1>
+      <h1>Welcome to the <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Membership System</h1>
       <p class="lead mb-5">
-        The <?=htmlspecialchars(env('CLUB_NAME'))?> Online Membership System allows you to manage your swimmers, enter competitions, stay up to date by email and make payments by Direct Debit.
+        The <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Online Membership System allows you to manage your swimmers, enter competitions, stay up to date by email and make payments by Direct Debit.
       </p>
 
       <h2>Already registered?</h2>

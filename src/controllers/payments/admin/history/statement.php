@@ -82,7 +82,7 @@ include BASE_PATH . "views/paymentsMenu.php";
   <?php } ?>
 
 	<div class="">
-    <span class="d-none d-print-block h1"><?=htmlspecialchars(env('CLUB_NAME'))?> Payments</span>
+    <span class="d-none d-print-block h1"><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Payments</span>
     <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
     <h1><?=htmlspecialchars($payment_info['Name'])?> Statement</h1>
     <?php } else { ?>
@@ -254,7 +254,7 @@ include BASE_PATH . "views/paymentsMenu.php";
           target="_blank">Chester-le-Street ASC website</a>.
         </p>
         <p>
-          Payments to <?=htmlspecialchars(env('CLUB_NAME'))?> are covered by the Direct Debit Guarantee.
+          Payments to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> are covered by the Direct Debit Guarantee.
         </p>
       </div>
     </div>

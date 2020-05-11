@@ -144,7 +144,7 @@ include BASE_PATH . "views/notifyMenu.php";
           <label for="from">Send message as</label>
           <div class="custom-control custom-radio">
             <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" <?php if ($from == "club-sending-account") { ?>checked<?php } ?> required>
-            <label class="custom-control-label" for="from-club"><?=htmlspecialchars(env('CLUB_NAME'))?></label>
+            <label class="custom-control-label" for="from-club"><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></label>
           </div>
           <div class="custom-control custom-radio">
             <input type="radio" id="from-user" name="from" class="custom-control-input" value="current-user" <?php if ($from == "current-user") { ?>checked<?php } ?>>

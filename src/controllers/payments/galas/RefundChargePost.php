@@ -91,9 +91,9 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 					'Refund',
 					$json
 				]);
-			} else if ($entry['Intent'] != null && env('STRIPE')) {
+			} else if ($entry['Intent'] != null && app()->tenant->getKey('STRIPE')) {
 				// Refund to card used
-				\Stripe\Stripe::setApiKey(env('STRIPE'));
+				\Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
 				$intent = \Stripe\PaymentIntent::retrieve($entry['Intent']);
 				$intent->charges->data[0]->refund(['amount' => $amount]);
 
@@ -129,7 +129,7 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 				$message .= '<p>As you don\'t pay your club fees by direct debit or have opted out of paying for galas by direct debit, you\'ll need to collect this refund from the treasurer or gala coordinator.</p>';
 			}
 
-			$message .= '<p>Kind Regards<br> The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
+			$message .= '<p>Kind Regards<br> The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
 
 			$notify->execute([
 				$entry['UserID'],

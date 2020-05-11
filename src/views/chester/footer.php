@@ -90,7 +90,7 @@
           <div class="row">
             <div class="col-sm-6 col-lg-6">
               <address>
-                <strong><?=htmlspecialchars(env('CLUB_NAME'))?></strong><br>
+                <strong><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></strong><br>
                 Burns Green Leisure Centre<br>
                 Chester-le-Street<br>
                 DH3 3QH

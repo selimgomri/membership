@@ -1,7 +1,7 @@
 <?php
 
 // Inserts the standard letterhead on PDF pages
-$addr = json_decode(env('CLUB_ADDRESS'));
+$addr = json_decode(app()->tenant->getKey('CLUB_ADDRESS'));
 $logoPath = env('CLUB_LOGO');
 
 ?>
@@ -11,12 +11,12 @@ $logoPath = env('CLUB_LOGO');
     <?php if ($logoPath != null) { ?>
     <img src="<?=BASE_PATH . $logoPath?>" class="logo">
     <?php } else { ?>
-      <h1 class="primary"><?=htmlspecialchars(env('CLUB_NAME'))?></h1>
+      <h1 class="primary"><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></h1>
     <?php } ?>
   </div>
   <div class="split-50 text-right">
     <p class="mb-0">
-      <strong><?=htmlspecialchars(env('CLUB_NAME'))?></strong><br>
+      <strong><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></strong><br>
       <?php
       for ($i = 0; $i < sizeof($addr); $i++) { ?>
         <?=htmlspecialchars($addr[$i])?><br>

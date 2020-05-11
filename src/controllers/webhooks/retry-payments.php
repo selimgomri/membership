@@ -23,7 +23,7 @@ foreach ($retries as $retry) {
     $subject = 'Payment Retry (' . $retry['PMKey'] . ')';
     $message = '
     <p>We\'re now retrying payment ' . $retry['PMKey'] . '. The money should leave your account within the next few days, if enough money is available.</p>';
-    $message .= '<p>Kind regards,<br>The ' . env('CLUB_NAME') . ' Team</p>';
+    $message .= '<p>Kind regards,<br>The ' . app()->tenant->getKey('CLUB_NAME') . ' Team</p>';
     $email->execute([$retry['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
 
   } catch (Exception $e) {
@@ -34,7 +34,7 @@ foreach ($retries as $retry) {
     $message = '
     <p>We attempted to retry payment ' . $retry['PMKey'] . ' but an error occured before we were able to complete the retry request.</p>
     <p>Please contact the treasurer as soon as possible.</p>';
-    $message .= '<p>Kind regards,<br>The ' . env('CLUB_NAME') . ' Team</p>';
+    $message .= '<p>Kind regards,<br>The ' . app()->tenant->getKey('CLUB_NAME') . ' Team</p>';
     $email->execute([$retry['UserID'], 'Queued', $subject, $message, 1, 'Payments']);
   }
 }

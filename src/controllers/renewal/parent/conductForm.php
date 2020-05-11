@@ -3,7 +3,7 @@
 $db = app()->db;
 
 $systemInfo = app()->system;
-$parentCode = $systemInfo->getSystemOption('ParentCodeOfConduct');
+$parentCode = app()->tenant->getKey('ParentCodeOfConduct');
 
 if (isset($id)) {
 	$getDetails = $db->prepare("SELECT * FROM `squads` INNER JOIN `members` ON members.SquadID =
@@ -58,7 +58,7 @@ if (isset($id)) {
 
           <hr>
 
-          <h2 class="h1"><?=htmlspecialchars(env('CLUB_NAME'))?> Squad Code of Conduct</h2>
+          <h2 class="h1"><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Squad Code of Conduct</h2>
           <?php if ($linkExists) { ?>
           <div id="code_of_conduct">
             <?=getPostContent($link)?>

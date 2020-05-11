@@ -4,7 +4,7 @@ $_SESSION['AssRegStage'] = 2;
 
 $db = app()->db;
 $systemInfo = app()->system;
-$privacy = $systemInfo->getSystemOption('PrivacyPolicy');
+$privacy = app()->tenant->getKey('PrivacyPolicy');
 
 $Extra = new ParsedownExtra();
 $Extra->setSafeMode(true);
@@ -149,10 +149,10 @@ include BASE_PATH . 'views/header.php';
             YOUR CLUB HAS NOT SET UP A PRIVACY POLICY. PLEASE DO NOT PROCEED.
           </p>
           <p>
-            In accordance with European Law, <?=htmlspecialchars(env('CLUB_NAME'))?>, Swim England and British Swimming are Data Controllers for the purposes of the General Data Protection Regulation.
+            In accordance with European Law, <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>, Swim England and British Swimming are Data Controllers for the purposes of the General Data Protection Regulation.
           </p>
           <p>
-            By proceeding you agree to our <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy (this is an example policy)</a> and the use of your data by <?=htmlspecialchars(env('CLUB_NAME'))?>. Please note that you have also agreed to our use of you and/or your swimmer's data as part of your registration with the club and with British Swimming and Swim England.
+            By proceeding you agree to our <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy (this is an example policy)</a> and the use of your data by <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. Please note that you have also agreed to our use of you and/or your swimmer's data as part of your registration with the club and with British Swimming and Swim England.
           </p>
           <p>
             We will be unable to provide this service for technical reasons if
@@ -161,7 +161,7 @@ include BASE_PATH . 'views/header.php';
           <p class="mb-0">
             Contact a member of your committee if you have any questions or email <?php if (bool(env('IS_CLS'))) { ?><a
             href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a><?php } else { ?><a
-            href="mailto:<?=htmlspecialchars(env('CLUB_EMAIL'))?>"><?=htmlspecialchars(env('CLUB_EMAIL'))?></a><?php } ?>.          
+            href="mailto:<?=htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL'))?>"><?=htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL'))?></a><?php } ?>.          
           </p>
           <?php } ?>
         </div>

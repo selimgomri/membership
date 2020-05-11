@@ -64,7 +64,7 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
           if ($asa == 0) {
             $id = $db->lastInsertId();
             $setTempASA->execute([
-              env('ASA_CLUB_CODE') . $id,
+              app()->tenant->getKey('ASA_CLUB_CODE') . $id,
               $id
             ]);
           }

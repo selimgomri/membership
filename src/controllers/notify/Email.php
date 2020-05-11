@@ -4,7 +4,7 @@ $use_white_background = true;
 
 $emailPrefix = '';
 if (!bool(env('IS_CLS'))) {
-	$emailPrefix = mb_strtolower(trim(env('ASA_CLUB_CODE'))) . '-';
+	$emailPrefix = mb_strtolower(trim(app()->tenant->getKey('ASA_CLUB_CODE'))) . '-';
 }
 
 $db = app()->db;
@@ -186,7 +186,7 @@ include BASE_PATH . "views/notifyMenu.php";
           <label for="from">Send message as</label>
           <div class="custom-control custom-radio">
             <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>checked<?php } ?> required>
-            <label class="custom-control-label" for="from-club"><?=htmlspecialchars(env('CLUB_NAME'))?></label>
+            <label class="custom-control-label" for="from-club"><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></label>
           </div>
           <div class="custom-control custom-radio">
             <input type="radio" id="from-user" name="from" class="custom-control-input" value="current-user" <?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>checked<?php } ?>>

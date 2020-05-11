@@ -91,7 +91,7 @@ include BASE_PATH . "views/header.php";
 
       <!--
       <p class="small mb-5">
-        Unauthorised access to or misuse of this system is prohibited and constitutes an offence under the Computer Misuse Act 1990. If you disclose any information obtained through this system without authority then <?= htmlspecialchars(env('CLUB_NAME')) ?> or Swimming Club Data Systems may take legal action against you.
+        Unauthorised access to or misuse of this system is prohibited and constitutes an offence under the Computer Misuse Act 1990. If you disclose any information obtained through this system without authority then <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> or Swimming Club Data Systems may take legal action against you.
       </p>
       -->
 

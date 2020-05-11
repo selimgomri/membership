@@ -53,7 +53,7 @@ for ($i = 0; $i < $count_to_get; $i++) {
 	$user = $row[$i]['MemberID'];
 	//echo "I = $i, ";
 
-	if ($row[$i]['ASANumber'] && !(strpos($row[$i]['ASANumber'], env('ASA_CLUB_CODE')) !== false) && $row[$i]['ASANumber'] != "") {
+	if ($row[$i]['ASANumber'] && !(strpos($row[$i]['ASANumber'], app()->tenant->getKey('ASA_CLUB_CODE')) !== false) && $row[$i]['ASANumber'] != "") {
 		// $curlres = curl('https://www.swimmingresults.org/individualbest/personal_best.php?print=1&mode=L&tiref=' . $row[$i]['ASANumber']);
 		$array = getTimes($row[$i]['ASANumber']);
 		$hasArray = true;

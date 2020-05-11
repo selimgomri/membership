@@ -1,7 +1,7 @@
 <?php
 
 $systemInfo = app()->system;
-$leavers = $systemInfo->getSystemOption('LeaversSquad');
+$leavers = app()->tenant->getKey('LeaversSquad');
 
 $db = app()->db;
 $getInfo = $db->prepare("SELECT members.MemberID, members.MForename, members.MMiddleNames,
@@ -491,7 +491,7 @@ if (isset($countries[$rowSwim['Country']])) {
               billing systems on this date.
             </p>
             <p>
-              If you later decide you want to stay at <?=htmlspecialchars(env('CLUB_NAME'))?> then you will need to contact club staff to have the move cancelled.
+              If you later decide you want to stay at <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> then you will need to contact club staff to have the move cancelled.
             </p>
             <p class="mb-0">
               <a class="btn btn-danger" href="<?=autoUrl("members/" . $id . "/leaveclub")?>">Leave the club</a>
@@ -513,7 +513,7 @@ if (isset($countries[$rowSwim['Country']])) {
         <p>
           Under the EU General Data Protection Regulation, you can request for
           free to download all personal data held about
-          <?=$rowSwim["MForename"]?> by <?=htmlspecialchars(env('CLUB_NAME'))?>.
+          <?=$rowSwim["MForename"]?> by <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>.
         </p>
         <p><em>GDPR will remain in force after brexit.</em></p>
         <p>
@@ -560,12 +560,12 @@ if (isset($countries[$rowSwim['Country']])) {
           </div>
           <div class="<?php echo $col; ?>">
             <div class="text-center border p-2 bg-white">
-              <span class="lead mb-2"><?=htmlspecialchars(env('CLUB_SHORT_NAME'))?> Number</span>
+              <span class="lead mb-2"><?=htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME'))?> Number</span>
               <img class="img-fluid mx-auto d-block"
-              src="<?=htmlspecialchars(autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . urlencode(env('ASA_CLUB_CODE')) . $rowSwim['MemberID'] . "&print=false"))?>"
-              srcset="<?=htmlspecialchars(autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . urlencode(env('ASA_CLUB_CODE')) . $rowSwim['MemberID'] . "&print=false"))?> 2x, <?=htmlspecialchars(autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . urlencode(env('ASA_CLUB_CODE')) . $rowSwim['MemberID'] . "&print=false"))?> 3x"
-              alt="<?=htmlspecialchars(env('ASA_CLUB_CODE') . $rowSwim['MemberID'])?>"></img>
-              <span class="mono"><?=htmlspecialchars(env('ASA_CLUB_CODE') . $rowSwim['MemberID'])?></span>
+              src="<?=htmlspecialchars(autoUrl("services/barcode-generator?codetype=Code128&size=60&text=" . urlencode(app()->tenant->getKey('ASA_CLUB_CODE')) . $rowSwim['MemberID'] . "&print=false"))?>"
+              srcset="<?=htmlspecialchars(autoUrl("services/barcode-generator?codetype=Code128&size=120&text=" . urlencode(app()->tenant->getKey('ASA_CLUB_CODE')) . $rowSwim['MemberID'] . "&print=false"))?> 2x, <?=htmlspecialchars(autoUrl("services/barcode-generator?codetype=Code128&size=180&text=" . urlencode(app()->tenant->getKey('ASA_CLUB_CODE')) . $rowSwim['MemberID'] . "&print=false"))?> 3x"
+              alt="<?=htmlspecialchars(app()->tenant->getKey('ASA_CLUB_CODE') . $rowSwim['MemberID'])?>"></img>
+              <span class="mono"><?=htmlspecialchars(app()->tenant->getKey('ASA_CLUB_CODE') . $rowSwim['MemberID'])?></span>
             </div>
             <?php if (isset($rowSwim['ThriveNumber']) && $rowSwim['ThriveNumber'] != "") { ?><span class="d-block d-sm-none mb-3"></span><?php } ?>
           </div>

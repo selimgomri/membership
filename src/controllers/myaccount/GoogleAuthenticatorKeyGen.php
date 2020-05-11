@@ -40,7 +40,7 @@ include BASE_PATH . 'views/header.php';
 
       <h2>Scan Code</h2>
       <?php
-      $qr_url = urlencode($google2fa->getQRCodeUrl(env('CLUB_NAME'), $_SESSION['EmailAddress'], $_SESSION['G2FAKey']));
+      $qr_url = urlencode($google2fa->getQRCodeUrl(app()->tenant->getKey('CLUB_NAME'), $_SESSION['EmailAddress'], $_SESSION['G2FAKey']));
       ?>
       <img src="<?=htmlspecialchars(autoUrl("services/qr-generator?size=200&margin=0&text=" . $qr_url))?>" srcset="<?=htmlspecialchars(autoUrl("services/qr-generator?size=400&margin=0&text=" . $qr_url))?> 2x, <?=htmlspecialchars(autoUrl("services/qr-generator?size=600&margin=0&text=" . $qr_url))?> 3x" class="img-fluid mb-3">
       <p>

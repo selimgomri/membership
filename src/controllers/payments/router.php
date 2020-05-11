@@ -276,7 +276,7 @@ if ($_SESSION['AccessLevel'] == "Galas" || $_SESSION['AccessLevel'] == "Admin") 
 }
 
 // Only allow payment cards if not null
-if (env('STRIPE') != null) {
+if (app()->tenant->getKey('STRIPE') != null) {
 
 	/*
 	* Payment Cards

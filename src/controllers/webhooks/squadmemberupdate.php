@@ -43,7 +43,7 @@ $getRenewals->execute([
 ]);
 
 $getNumMembers = $db->prepare("SELECT COUNT(*) FROM renewalMembers WHERE RenewalID = ?");
-$leavers = $systemInfo->getSystemOption('LeaversSquad');
+$leavers = app()->tenant->getKey('LeaversSquad');
 
 if ($leavers != null) {
   // Delete leavers

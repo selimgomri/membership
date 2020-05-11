@@ -48,22 +48,22 @@ Chester-le-Street ASC is a non profit unincorporated association.
 <head>
   <meta charset="utf-8">
   <?php if (isset($pagetitle) && ($pagetitle != "" || $pagetitle != null))  { ?>
-    <title><?=$pagetitle?> - <?=htmlspecialchars(env('CLUB_NAME'))?> Membership</title>
+    <title><?=$pagetitle?> - <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Membership</title>
   <?php } else { ?>
-  <title><?=htmlspecialchars(env('CLUB_NAME'))?> Membership</title>
+  <title><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Membership</title>
   <?php } ?>
   <meta name="description"
-    content="Your <?=env('CLUB_NAME')?> Account lets you make gala entries online and gives you access to all your information about your swimmers, including attendance.">
+    content="Your <?=app()->tenant->getKey('CLUB_NAME')?> Account lets you make gala entries online and gives you access to all your information about your swimmers, including attendance.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0,
     user-scalable=no,maximum-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="apple-mobile-web-app-title" content="<?=htmlspecialchars(env('CLUB_SHORT_NAME'))?> Accounts">
+  <meta name="apple-mobile-web-app-title" content="<?=htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME'))?> Accounts">
   <meta name="format-detection" content="telephone=no">
   <meta name="googlebot" content="noarchive, nosnippet">
   <meta name="X-CLSW-System" content="Membership">
   <meta name="og:type" content="website">
   <meta name="og:locale" content="en_GB">
-  <meta name="og:site_name" content="<?=htmlspecialchars(env('CLUB_NAME'))?> Account">
+  <meta name="og:site_name" content="<?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Account">
   <link rel="manifest" href="<?=autoUrl("manifest.webmanifest")?>">
   <?php
     // Check if user has opted out of tracking or has DNT headers set before serving Google Analytics

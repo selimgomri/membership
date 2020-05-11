@@ -8,7 +8,7 @@ $db = app()->db;
 $getSquads = $db->query("SELECT SquadName `name`, SquadID id FROM squads ORDER BY SquadFee ASC, `name` ASC");
 
 $systemInfo = app()->system;
-$leavers = $systemInfo->getSystemOption('LeaversSquad');
+$leavers = app()->tenant->getKey('LeaversSquad');
 
 $pagetitle = "Leaver's Squad";
 
@@ -38,7 +38,7 @@ include BASE_PATH . 'views/header.php';
 
         <div id="leavers-squad-help">
           <p>
-            Setting a leaver's squad allows parents to indicate a swimmer is leaving <?=htmlspecialchars(env('CLUB_NAME'))?>. This will remove the swimmer on the first day of the next calendar month.
+            Setting a leaver's squad allows parents to indicate a swimmer is leaving <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. This will remove the swimmer on the first day of the next calendar month.
           </p>
           <p>
             e.g. if today a parent told the system a swimmer was leaving, that swimmer would be removed from squad registers on <?=$dateDeparture->format("j F Y")?>.

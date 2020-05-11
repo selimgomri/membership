@@ -11,7 +11,7 @@ if ($row == null) {
 	halt(404);
 }
 $swimEnglandText = "Swim England Number";
-if (mb_stripos($row['ASANumber'], env('ASA_CLUB_CODE')) > -1) {
+if (mb_stripos($row['ASANumber'], app()->tenant->getKey('ASA_CLUB_CODE')) > -1) {
 	$swimEnglandText = "Temporary Membership Number";
 }
 
@@ -115,7 +115,7 @@ include BASE_PATH . "views/swimmersMenu.php";
   </div>
 
   <div class="mb-3 p-5 bg-primary text-white">
-    <span class="h3 mb-0"><?=htmlspecialchars(env('CLUB_NAME'))?></span>
+    <span class="h3 mb-0"><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></span>
     <h1 class="h2 mb-4">Online Membership System</h1>
     <p class="mb-0">
       <strong>
@@ -125,7 +125,7 @@ include BASE_PATH . "views/swimmersMenu.php";
   </div>
 
   <p>
-    Here at <?=htmlspecialchars(env('CLUB_NAME'))?>, we provide a number of online services to
+    Here at <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>, we provide a number of online services to
     manage our members. Our services allow you to manage your swimmers, enter competitions, stay up to date by email and make payments by Direct Debit or credit/debit card.
   </p>
 
@@ -180,7 +180,7 @@ include BASE_PATH . "views/swimmersMenu.php";
   </p>
 
   <p>
-    You'll be directed to a page and asked to enter your swimmer's <?=$swimEnglandText?> and <?=htmlspecialchars(env('CLUB_SHORT_NAME'))?> Access Key as below.
+    You'll be directed to a page and asked to enter your swimmer's <?=$swimEnglandText?> and <?=htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME'))?> Access Key as below.
   </p>
 
   <div class="mb-3">
@@ -191,7 +191,7 @@ include BASE_PATH . "views/swimmersMenu.php";
           <td class="pr-0"><span class="mono"><?=htmlspecialchars($row['ASANumber'])?></span></td>
         </tr>
         <tr>
-          <th scope="row" class="pl-0"><?=htmlspecialchars(env('CLUB_SHORT_NAME'))?> Access Key</th>
+          <th scope="row" class="pl-0"><?=htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME'))?> Access Key</th>
           <td class="pr-0"><span class="mono"><?=htmlspecialchars($row['AccessKey'])?></span></td>
         </tr>
       </tbody>
@@ -208,23 +208,23 @@ include BASE_PATH . "views/swimmersMenu.php";
       may need to verify your identity.
     </p>
 
-    <?php if (mb_stripos($row['ASANumber'], env('ASA_CLUB_CODE')) > -1) { ?>
+    <?php if (mb_stripos($row['ASANumber'], app()->tenant->getKey('ASA_CLUB_CODE')) > -1) { ?>
     <p>
       At the time you were given this form we did not yet have a Swim England registration number for
       <?=htmlspecialchars($row['MForename'])?>. We have given you a temporary number which starts with <span
-        class="mono"><?=htmlspecialchars(env('ASA_CLUB_CODE'))?></span> which you can use to add your swimmer to your
+        class="mono"><?=htmlspecialchars(app()->tenant->getKey('ASA_CLUB_CODE'))?></span> which you can use to add your swimmer to your
       account.
     </p>
     <?php } ?>
 
     <p>
       If you’d like more information about how we use data, contact
-      <?=htmlspecialchars(env('CLUB_EMAIL'))?>.
+      <?=htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL'))?>.
     </p>
 
     <?php if (!bool(env('IS_CLS'))) { ?>
     <p>
-      The membership system is provided to <?=htmlspecialchars(env('CLUB_NAME'))?> by
+      The membership system is provided to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> by
       <a href="https://wwww.myswimmingclub.uk/">Swimming Club Data Systems</a>.
     </p>
     <?php } ?>

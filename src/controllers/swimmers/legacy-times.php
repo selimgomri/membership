@@ -1,7 +1,7 @@
 <?php
 
 $systemInfo = app()->system;
-$leavers = $systemInfo->getSystemOption('LeaversSquad');
+$leavers = app()->tenant->getKey('LeaversSquad');
 
 $db = app()->db;
 $getInfo = $db->prepare("SELECT members.UserID, members.MemberID, members.MForename, members.MMiddleNames,

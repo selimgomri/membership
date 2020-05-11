@@ -123,11 +123,11 @@ try {
       'Refund',
       $json
     ]);
-  } else if ($entryData['Intent'] != null && bool($entryData['StripePaid']) && env('STRIPE')) {
+  } else if ($entryData['Intent'] != null && bool($entryData['StripePaid']) && app()->tenant->getKey('STRIPE')) {
     // Refund to card used
 
     try {
-      \Stripe\Stripe::setApiKey(env('STRIPE'));
+      \Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
       $intent = \Stripe\PaymentIntent::retrieve($entryData['Intent']);
       $re = \Stripe\Refund::create([
         "charge" => $intent->charges->data[0]->id,
@@ -164,7 +164,7 @@ try {
     }
 
     try {
-      \Stripe\Stripe::setApiKey(env('STRIPE'));
+      \Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
       $intent = \Stripe\PaymentIntent::retrieve($entryData['Intent']);
 
       // Update amount refunded on payment
@@ -202,7 +202,7 @@ try {
     $message .= '<p>As you don\'t pay your club fees by direct debit or have opted out of paying for galas by direct debit, you\'ll need to collect this refund from the treasurer or gala coordinator.</p>';
   }
 
-  $message .= '<p>Kind Regards<br> The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
+  $message .= '<p>Kind Regards<br> The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
 
   $notify->execute([
     $entryData['UserID'],

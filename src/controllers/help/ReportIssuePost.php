@@ -18,7 +18,7 @@ if (v::url()->validate($target)) {
 	$message .= "<p>Reported on " . date("l j F Y") . ".</p>";
 	$message .= "<p>Sent Automatically by Swimming Club Data Systems.</p>";
 
-	notifySend("", "Website Error Report", $message, "Website Admin Team", "web@chesterlestreetasc.co.uk", ["Email" => "report-an-issue@" . env('EMAIL_DOMAIN'), "Name" => "Error Reports at " . env('CLUB_NAME')]);
+	notifySend("", "Website Error Report", $message, "Website Admin Team", "web@chesterlestreetasc.co.uk", ["Email" => "report-an-issue@" . env('EMAIL_DOMAIN'), "Name" => "Error Reports at " . app()->tenant->getKey('CLUB_NAME')]);
 
 	$_SESSION['ErrorReportStatus'] = true;
 	$_SESSION['ErrorReportTarget'] = $target;

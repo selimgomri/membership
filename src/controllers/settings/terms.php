@@ -10,9 +10,9 @@ $welcomeDocuments = $db->query("SELECT Title, ID FROM posts WHERE `Type` = 'corp
 $welcomeDocuments = $welcomeDocuments->fetchAll(PDO::FETCH_ASSOC);
 
 $systemInfo = app()->system;
-$terms = $systemInfo->getSystemOption('TermsAndConditions');
-$privacy = $systemInfo->getSystemOption('PrivacyPolicy');
-$welcome = $systemInfo->getSystemOption('WelcomeLetter');
+$terms = app()->tenant->getKey('TermsAndConditions');
+$privacy = app()->tenant->getKey('PrivacyPolicy');
+$welcome = app()->tenant->getKey('WelcomeLetter');
 
 $Extra = new ParsedownExtra();
 $Extra->setSafeMode(true);

@@ -5,17 +5,17 @@ $systemInfo = app()->system;
 
 $fluidContainer = true;
 
-$fees['County'][1] = $systemInfo->getSystemOption('ASA-County-Fee-L1')/100;
-$fees['Region'][1] = $systemInfo->getSystemOption('ASA-Regional-Fee-L1')/100;
-$fees['National'][1] = $systemInfo->getSystemOption('ASA-National-Fee-L1')/100;
+$fees['County'][1] = app()->tenant->getKey('ASA-County-Fee-L1')/100;
+$fees['Region'][1] = app()->tenant->getKey('ASA-Regional-Fee-L1')/100;
+$fees['National'][1] = app()->tenant->getKey('ASA-National-Fee-L1')/100;
 
-$fees['County'][2] = $systemInfo->getSystemOption('ASA-County-Fee-L2')/100;
-$fees['Region'][2] = $systemInfo->getSystemOption('ASA-Regional-Fee-L2')/100;
-$fees['National'][2] = $systemInfo->getSystemOption('ASA-National-Fee-L2')/100;
+$fees['County'][2] = app()->tenant->getKey('ASA-County-Fee-L2')/100;
+$fees['Region'][2] = app()->tenant->getKey('ASA-Regional-Fee-L2')/100;
+$fees['National'][2] = app()->tenant->getKey('ASA-National-Fee-L2')/100;
 
-$fees['County'][3] = $systemInfo->getSystemOption('ASA-County-Fee-L3')/100;
-$fees['Region'][3] = $systemInfo->getSystemOption('ASA-Regional-Fee-L3')/100;
-$fees['National'][3] = $systemInfo->getSystemOption('ASA-National-Fee-L3')/100;
+$fees['County'][3] = app()->tenant->getKey('ASA-County-Fee-L3')/100;
+$fees['Region'][3] = app()->tenant->getKey('ASA-Regional-Fee-L3')/100;
+$fees['National'][3] = app()->tenant->getKey('ASA-National-Fee-L3')/100;
 
 foreach ($fees as $region => $value) {
   foreach($value as $level => $amount) {

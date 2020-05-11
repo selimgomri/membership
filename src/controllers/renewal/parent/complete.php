@@ -25,7 +25,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		</p>
 		<p>
 			Your club's email address is <a
-			href="mailto:<?=htmlspecialchars(env('CLUB_EMAIL'))?>"><?=htmlspecialchars(env('CLUB_EMAIL'))?></a>
+			href="mailto:<?=htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL'))?>"><?=htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL'))?></a>
 		</p>
 		<?php } ?>
 

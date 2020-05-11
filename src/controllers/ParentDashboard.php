@@ -67,7 +67,7 @@ include BASE_PATH . "views/header.php";
 
           <p>
             <strong>
-              You're missing out on email updates from <?=htmlspecialchars(env('CLUB_NAME'))?>
+              You're missing out on email updates from <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>
             </strong>
           </p>
           <p>
@@ -90,7 +90,7 @@ include BASE_PATH . "views/header.php";
     </aside>
     <?php } ?>
 
-    <?php if (env('GOCARDLESS_ACCESS_TOKEN') && !userHasMandates($_SESSION['UserID'])) { ?>
+    <?php if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') && !userHasMandates($_SESSION['UserID'])) { ?>
     <div class="mb-4">
       <h2 class="mb-4">Want to set up a Direct Debit?</h2>
       <div class="news-grid">
@@ -224,7 +224,7 @@ include BASE_PATH . "views/header.php";
   	</div>
     <?php } ?>
 
-    <?php if (env('ASA_DISTRICT') == 'E' && $asa_ne != null) { ?>
+    <?php if (app()->tenant->getKey('ASA_DISTRICT') == 'E' && $asa_ne != null) { ?>
     <div class="mb-4">
       <h2 class="mb-4">Swim England North East News</h2>
       <div class="news-grid">

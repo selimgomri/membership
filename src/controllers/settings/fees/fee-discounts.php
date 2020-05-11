@@ -5,9 +5,9 @@ $systemInfo = app()->system;
 
 $fluidContainer = true;
 
-//$systemInfo->setSystemOption('SquadFeeMonths', '');
+//app()->tenant->setKey('SquadFeeMonths', '');
 
-$discounts = json_decode($systemInfo->getSystemOption('MembershipDiscounts'), true);
+$discounts = json_decode(app()->tenant->getKey('MembershipDiscounts'), true);
 
 foreach ($discounts['CLUB'] as $key => $value) {
   if ($value == null) {

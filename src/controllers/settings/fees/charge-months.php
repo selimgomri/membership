@@ -5,9 +5,9 @@ $systemInfo = app()->system;
 
 $fluidContainer = true;
 
-//$systemInfo->setSystemOption('SquadFeeMonths', '');
+//app()->tenant->setKey('SquadFeeMonths', '');
 
-$squadFeeMonths = json_decode($systemInfo->getSystemOption('SquadFeeMonths'), true);
+$squadFeeMonths = json_decode(app()->tenant->getKey('SquadFeeMonths'), true);
 
 $pagetitle = "Squad Fee Payment Months";
 

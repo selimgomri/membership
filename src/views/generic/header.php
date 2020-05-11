@@ -7,7 +7,7 @@ require 'GlobalHead.php';
 $clubLogoColour = 'text-white logo-text-shadow';
 $navTextColour = 'navbar-dark';
 
-if (env('SYSTEM_COLOUR') && getContrastColor(env('SYSTEM_COLOUR'))) {
+if (app()->tenant->getKey('SYSTEM_COLOUR') && getContrastColor(app()->tenant->getKey('SYSTEM_COLOUR'))) {
   $clubLogoColour = 'text-dark';
   $navTextColour = 'navbar-light';
 }
@@ -26,7 +26,7 @@ if (isset($customBackground) && $customBackground) {
 
   <div class="d-print-none">
 
-    <?php if (env('EMERGENCY_MESSAGE_TYPE') != 'NONE' && env('EMERGENCY_MESSAGE')) {
+    <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') != 'NONE' && app()->tenant->getKey('EMERGENCY_MESSAGE')) {
       $markdown = new ParsedownExtra();
     ?>
     <!-- Yes, this is quick and nasty, but it's an emergency -->
@@ -53,10 +53,10 @@ if (isset($customBackground) && $customBackground) {
     }
     </style>
 
-    <div class="py-3 <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'DANGER') { ?>bg-danger text-white<?php } ?> <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'WARN') { ?>bg-warning text-body<?php } ?> <?php if (env('EMERGENCY_MESSAGE_TYPE') == 'SUCCESS') { ?>bg-success text-white<?php } ?>">
+    <div class="py-3 <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') == 'DANGER') { ?>bg-danger text-white<?php } ?> <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') == 'WARN') { ?>bg-warning text-body<?php } ?> <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') == 'SUCCESS') { ?>bg-success text-white<?php } ?>">
       <div class="<?=$container_class?> emergency-message">
         <?php try { ?>
-        <?=$markdown->text(env('EMERGENCY_MESSAGE'))?>
+        <?=$markdown->text(app()->tenant->getKey('EMERGENCY_MESSAGE'))?>
         <?php } catch (Exception $e) { ?>
         <p>An emergency message has been set but cannot be rendered.</p>
         <?php } ?>
@@ -81,7 +81,7 @@ if (isset($customBackground) && $customBackground) {
                 today <i class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
           </p>
           <p class="mb-0">
-            If JavaScript is not supported by your browser, <?=env('CLUB_NAME')?>
+            If JavaScript is not supported by your browser, <?=app()->tenant->getKey('CLUB_NAME')?>
             recommends you <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by
                 Mozilla</a></strong>.
           </p>
@@ -101,7 +101,7 @@ if (isset($customBackground) && $customBackground) {
           It looks like you're using Internet Explorer which we no longer support so we recommend you upgrade to a new browser which we do support as soon as possible. <strong><a class="text-dark" href="http://browsehappy.com/" target="_blank">Upgrade your browser today <i class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
         </p>
         <p class="mb-0">
-          <?=htmlspecialchars(env('CLUB_NAME'))?> recommends you <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by Mozilla</a></strong>. Firefox has great protections for your privacy with built in features including tracking protection.
+          <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> recommends you <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by Mozilla</a></strong>. Firefox has great protections for your privacy with built in features including tracking protection.
         </p>
       </div>
     </div>
@@ -165,7 +165,7 @@ if (isset($customBackground) && $customBackground) {
 
     $headerLink = autoUrl("");
     if (isset($_SESSION['UserID']) && $_SESSION['UserID'] % 2 == 0) {
-      $headerLink = env('CLUB_WEBSITE');
+      $headerLink = app()->tenant->getKey('CLUB_WEBSITE');
     }
 
     ?>
@@ -175,7 +175,7 @@ if (isset($customBackground) && $customBackground) {
         <div class="<?=$container_class?>">
           <h1 class="d-none d-md-flex pt-3 pb-1 mb-0">
             <a href="<?=htmlspecialchars($headerLink)?>" class="<?=$clubLogoColour?> text-decoration-none">
-              <?=htmlspecialchars(env('CLUB_NAME'))?>
+              <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>
             </a>
           </h1>
         </div>

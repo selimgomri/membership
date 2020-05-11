@@ -67,7 +67,7 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
           <p>Hello. Confirm your login by entering the following code in your web browser.</p>
           <p><strong>' . $code . '</strong></p>
           <p>If you did not just try to log in, you can ignore this email. You may want to reset your password.</p>
-          <p>Kind Regards, <br>The ' . env('CLUB_NAME') . ' Team</p>';
+          <p>Kind Regards, <br>The ' . app()->tenant->getKey('CLUB_NAME') . ' Team</p>';
 
           $date = new DateTime('now', new DateTimeZone('Europe/London'));
 

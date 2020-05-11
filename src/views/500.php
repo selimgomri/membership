@@ -40,7 +40,7 @@ if ($currentUser == null) {
 			<p class="mt-2">Contact our <a href="mailto:support@myswimmingclub.uk" title="Support Hotline">support hotline</a><?php if (!bool(env('IS_CLS'))) { ?>*<?php } ?> if the issue persists.</p>
 
       <?php if (!bool(env('IS_CLS'))) { ?>
-      <p>* <a href="mailto:<?=htmlspecialchars(env('CLUB_EMAIL'))?>" title="<?=htmlspecialchars(env('CLUB_NAME'))?>">Contact your own club</a> in the first instance</p>
+      <p>* <a href="mailto:<?=htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL'))?>" title="<?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>">Contact your own club</a> in the first instance</p>
       <?php } ?>
 		</div>
 	</div>

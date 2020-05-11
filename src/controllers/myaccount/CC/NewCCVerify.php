@@ -10,7 +10,7 @@ try {
     throw new Exception();
   }
 
-  $hash = hash('sha256', random_int(0, 999999999) . env('CLUB_NAME'));
+  $hash = hash('sha256', random_int(0, 999999999) . app()->tenant->getKey('CLUB_NAME'));
   $name = mb_ucfirst(trim($_POST['new-cc-name']));
 
   $db = app()->db;
@@ -28,10 +28,10 @@ try {
 
   $message = '
   <p>Hello ' . htmlspecialchars($name) . ',</p>
-  <p>' . htmlspecialchars($_SESSION['Forename'] . ' ' . $_SESSION['Surname']) . ' wishes for you to also get emails from ' . htmlspecialchars(env('CLUB_NAME')) . '.</p>
+  <p>' . htmlspecialchars($_SESSION['Forename'] . ' ' . $_SESSION['Surname']) . ' wishes for you to also get emails from ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . '.</p>
   <p>Please follow the link below to verify your email address.</p>
   <p><strong><a href="' . autoUrl($link) . '">' . autoUrl($link) . '</a></strong></p>
-  <p>This will confirm your email address and send carbon copies of emails from coaches and committee members at ' . htmlspecialchars(env('CLUB_NAME')) . ' to this address.</p>
+  <p>This will confirm your email address and send carbon copies of emails from coaches and committee members at ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' to this address.</p>
   <p>If you did not request this, please ignore this email.</p>';
 
   if (!notifySend(null, "Verify your email", $message, $name, $email)) {

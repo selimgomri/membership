@@ -24,7 +24,7 @@
 
     <div class="primary-box mb-3 window-c5-spacer" id="test">
       <h1>
-        Welcome to <?=htmlspecialchars(env('CLUB_NAME'))?>
+        Welcome to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>
       </h1>
 
       <p class="mb-0">
@@ -230,7 +230,7 @@
     </h2>
 
     <p class="primary">
-      This paragraph and associated title is in the <?=htmlspecialchars(env('CLUB_NAME'))?> Membership House Colour
+      This paragraph and associated title is in the <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Membership House Colour
     </p>
 
     <h2>
@@ -243,7 +243,7 @@
       </h2>
 
       <p class="mb-0">
-        This paragraph and associated title is white in a box which is in the <?=htmlspecialchars(env('CLUB_NAME'))?> Membership House Colour
+        This paragraph and associated title is white in a box which is in the <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Membership House Colour
       </p>
     </div>
     <?php include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>

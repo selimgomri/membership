@@ -12,7 +12,7 @@ try {
   $dateTimeObject->setTimezone(new DateTimeZone('UTC'));
   $time = $dateTimeObject->format("Y-m-d H:i:s");
 
-  $meetUrl = "https://meet.myswimmingclub.uk/" . env('ASA_CLUB_CODE') . '-' . hash('sha256', $dateTimeObject->format("U") . random_int(PHP_INT_MIN, PHP_INT_MAX));
+  $meetUrl = "https://meet.myswimmingclub.uk/" . app()->tenant->getKey('ASA_CLUB_CODE') . '-' . hash('sha256', $dateTimeObject->format("U") . random_int(PHP_INT_MIN, PHP_INT_MAX));
 
   $insert = $db->prepare("INSERT INTO meets (`Name`, StartTime, Creator, Link) VALUES (?, ?, ?, ?)");
 

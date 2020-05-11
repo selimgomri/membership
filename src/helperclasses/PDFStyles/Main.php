@@ -134,13 +134,13 @@
 
   <?php if (!bool(env('IS_CLS'))) { ?>
     .primary {
-      color: <?=htmlspecialchars(env('SYSTEM_COLOUR'))?>;
+      color: <?=htmlspecialchars(app()->tenant->getKey('SYSTEM_COLOUR'))?>;
     }
     .primary-box {
-      background-color: <?=htmlspecialchars(env('SYSTEM_COLOUR'))?>;
+      background-color: <?=htmlspecialchars(app()->tenant->getKey('SYSTEM_COLOUR'))?>;
     }
     a, a:hover, a:active, a:visited {
-      color: <?=htmlspecialchars(env('SYSTEM_COLOUR'))?>;
+      color: <?=htmlspecialchars(app()->tenant->getKey('SYSTEM_COLOUR'))?>;
       text-decoration: underline;
     }
   <?php } ?>

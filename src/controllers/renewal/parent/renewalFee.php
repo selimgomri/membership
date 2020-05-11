@@ -22,7 +22,7 @@ if ($partial_reg) {
 
 $month = (new DateTime('now', new DateTimeZone('Europe/London')))->format('m');
 
-$discounts = json_decode($systemInfo->getSystemOption('MembershipDiscounts'), true);
+$discounts = json_decode(app()->tenant->getKey('MembershipDiscounts'), true);
 $clubDiscount = $swimEnglandDiscount = 0;
 if ($discounts != null && isset($discounts['CLUB'][$month])) {
 	$clubDiscount = $discounts['CLUB'][$month];
@@ -65,9 +65,9 @@ if ($clubDiscount > 0 && $renewal == 0) {
 
 $asaFees = [];
 
-$asa1 = $systemInfo->getSystemOption('ASA-County-Fee-L1') + $systemInfo->getSystemOption('ASA-Regional-Fee-L1') + $systemInfo->getSystemOption('ASA-National-Fee-L1');
-$asa2 = $systemInfo->getSystemOption('ASA-County-Fee-L2') + $systemInfo->getSystemOption('ASA-Regional-Fee-L2') + $systemInfo->getSystemOption('ASA-National-Fee-L2');
-$asa3 = $systemInfo->getSystemOption('ASA-County-Fee-L3') + $systemInfo->getSystemOption('ASA-Regional-Fee-L3') + $systemInfo->getSystemOption('ASA-National-Fee-L3');
+$asa1 = app()->tenant->getKey('ASA-County-Fee-L1') + app()->tenant->getKey('ASA-Regional-Fee-L1') + app()->tenant->getKey('ASA-National-Fee-L1');
+$asa2 = app()->tenant->getKey('ASA-County-Fee-L2') + app()->tenant->getKey('ASA-Regional-Fee-L2') + app()->tenant->getKey('ASA-National-Fee-L2');
+$asa3 = app()->tenant->getKey('ASA-County-Fee-L3') + app()->tenant->getKey('ASA-Regional-Fee-L3') + app()->tenant->getKey('ASA-National-Fee-L3');
 
 for ($i = 0; $i < $count; $i++) {
 	if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ClubPays']) {
@@ -118,9 +118,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		if ($renewal == 0) {
 			$nf = "first";
 		}; ?>
-		<?php if (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) { ?>
+		<?php if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) { ?>
 		<p>
-			You will pay these fees as part of your <?= $nf ?> Direct Debit payment to <?=htmlspecialchars(env('CLUB_NAME'))?>.
+			You will pay these fees as part of your <?= $nf ?> Direct Debit payment to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>.
 		</p>
 		<?php } ?>
 
@@ -271,7 +271,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			</table>
 		</div>
 
-		<?php if (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) { ?>
+		<?php if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) { ?>
 		<p>
 			Your total <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?> fee will be &pound;<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0) && $renewal == 0) { ?><?=number_format(((int)$totalFeeDiscounted)/100, 2, '.', '')?><?php } else { ?><?=$totalFeeString?><?php } ?>. By continuing to complete your membership <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?>, you confirm that you will pay this amount as part of your <?= $nf ?> Direct Debit Payment.
 		</p>
@@ -296,7 +296,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 		<?php if (!userHasMandates($_SESSION['UserID'])) { ?>
 			<p>
-				We now need you to set up your Direct Debit agreement with <?=htmlspecialchars(env('CLUB_NAME'))?>. We will redirect you to our payments system where you will setup a Direct Debit.
+				We now need you to set up your Direct Debit agreement with <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. We will redirect you to our payments system where you will setup a Direct Debit.
 			</p>
 		<?php } else { ?>
 			<p>
@@ -317,7 +317,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		</p>
 		<?php } else { ?>
 		<p>
-			You'll need to pay &pound;<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0) && $renewal == 0) { ?><?=number_format(((int)$totalFeeDiscounted)/100, 2, '.', '')?><?php } else { ?><?=$totalFeeString?><?php } ?> to your club as soon as possible. As <?=htmlspecialchars(env('CLUB_NAME'))?> does not use Direct Debit payments, they will tell you how they would like you to pay.
+			You'll need to pay &pound;<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0) && $renewal == 0) { ?><?=number_format(((int)$totalFeeDiscounted)/100, 2, '.', '')?><?php } else { ?><?=$totalFeeString?><?php } ?> to your club as soon as possible. As <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> does not use Direct Debit payments, they will tell you how they would like you to pay.
 		</p>
 		<p>
 			<button type="submit" class="btn btn-success btn-lg">

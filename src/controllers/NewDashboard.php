@@ -189,7 +189,7 @@ include BASE_PATH . "views/header.php";
 	</div>
   <?php } ?>
 
-  <?php if (env('ASA_DISTRICT') == 'E' && $asa_ne != null) { ?>
+  <?php if (app()->tenant->getKey('ASA_DISTRICT') == 'E' && $asa_ne != null) { ?>
   <div class="mb-4">
     <h2 class="mb-4">Swim England North East News</h2>
     <div class="news-grid">

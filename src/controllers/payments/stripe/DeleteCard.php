@@ -21,7 +21,7 @@ try {
   ]);
 
   try {
-    \Stripe\Stripe::setApiKey(env('STRIPE'));
+    \Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
 
     $payment_method = \Stripe\PaymentMethod::retrieve($card['MethodID']);
     $payment_method->detach();

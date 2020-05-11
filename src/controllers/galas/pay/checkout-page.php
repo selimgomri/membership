@@ -2,10 +2,10 @@
 
 $db = app()->db;
 
-\Stripe\Stripe::setApiKey(env('STRIPE'));
-if (env('STRIPE_APPLE_PAY_DOMAIN')) {
+\Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
+if (app()->tenant->getKey('STRIPE_APPLE_PAY_DOMAIN')) {
   \Stripe\ApplePayDomain::create([
-    'domain_name' => env('STRIPE_APPLE_PAY_DOMAIN')
+    'domain_name' => app()->tenant->getKey('STRIPE_APPLE_PAY_DOMAIN')
   ]);
 }
 
@@ -132,7 +132,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/galas/galaMenu.php";
 ?>
 
-<div id="stripe-data" data-stripe-publishable="<?=htmlspecialchars(env('STRIPE_PUBLISHABLE'))?>" data-stripe-font-css="<?=htmlspecialchars($fontCss)?>" data-redirect-url-new="<?=htmlspecialchars(autoUrl("galas/pay-for-entries/complete/new"))?>" data-redirect-url="<?=htmlspecialchars(autoUrl("galas/pay-for-entries/complete"))?>" data-org-name="<?=htmlspecialchars(env('CLUB_NAME'))?>" data-intent-amount="<?=htmlspecialchars($intent->amount)?>" data-intent-currency="<?=htmlspecialchars($intent->currency)?>" data-payment-request-line-items="<?=htmlspecialchars(json_encode($entryRequestDetails))?>">
+<div id="stripe-data" data-stripe-publishable="<?=htmlspecialchars(app()->tenant->getKey('STRIPE_PUBLISHABLE'))?>" data-stripe-font-css="<?=htmlspecialchars($fontCss)?>" data-redirect-url-new="<?=htmlspecialchars(autoUrl("galas/pay-for-entries/complete/new"))?>" data-redirect-url="<?=htmlspecialchars(autoUrl("galas/pay-for-entries/complete"))?>" data-org-name="<?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>" data-intent-amount="<?=htmlspecialchars($intent->amount)?>" data-intent-currency="<?=htmlspecialchars($intent->currency)?>" data-payment-request-line-items="<?=htmlspecialchars(json_encode($entryRequestDetails))?>">
 </div>
 
 <div class="container">

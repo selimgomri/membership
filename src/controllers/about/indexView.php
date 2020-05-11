@@ -9,7 +9,7 @@ include BASE_PATH . "views/header.php";
   <div class="row">
     <div class="col-md-8">
       <h1>About this system</h1>
-      <p class="lead">This software is licenced to <?=htmlspecialchars(env('CLUB_NAME'))?> by Swimming Club Data Systems, a partnership of <a href="https://www.chesterlestreetasc.co.uk/" target="_blank">Chester-le-Street ASC</a> and Chris Heppell.</p>
+      <p class="lead">This software is licenced to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> by Swimming Club Data Systems, a partnership of <a href="https://www.chesterlestreetasc.co.uk/" target="_blank">Chester-le-Street ASC</a> and Chris Heppell.</p>
 
       <p>You can use this software by subscribing to the <a href="https://corporate.myswimmingclub.co.uk/" target="_blank">Swimming Club Data Systems Software as a Service Package</a>.</p>
 
@@ -31,7 +31,7 @@ include BASE_PATH . "views/header.php";
       <p>Notify is our E-Mail mailing list solution. Administrators can send emails to selected groups of parents for each squad. The system is GDPR compliant and users can opt in or out of receiving emails at any time.</p>
 
       <h3>Direct Debit Payments</h3>
-      <p>This application has been integrated with GoCardless and their APIs to allow <?=htmlspecialchars(env('CLUB_NAME'))?> to bill members by Direct Debit. The GoCardless client library which is included in this software is copyright of GoCardless.</p>
+      <p>This application has been integrated with GoCardless and their APIs to allow <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> to bill members by Direct Debit. The GoCardless client library which is included in this software is copyright of GoCardless.</p>
 
       <h2>Legal</h2>
       This product includes GeoLite2 data created by MaxMind, available from <a href="https://www.maxmind.com">https://www.maxmind.com</a>.

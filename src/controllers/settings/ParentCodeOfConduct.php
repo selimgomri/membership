@@ -6,7 +6,7 @@ $db = app()->db;
 $codesOfConduct = $db->query("SELECT Title, ID FROM posts WHERE `Type` = 'conduct_code' ORDER BY Title ASC");
 
 $systemInfo = app()->system;
-$parentCode = $systemInfo->getSystemOption('ParentCodeOfConduct');
+$parentCode = app()->tenant->getKey('ParentCodeOfConduct');
 
 $Extra = new ParsedownExtra();
 $Extra->setSafeMode(true);

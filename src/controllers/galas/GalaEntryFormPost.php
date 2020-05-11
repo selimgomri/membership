@@ -145,7 +145,7 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
       if (bool($row['HyTek'])) {
         $message .= "<p><strong>This is a HyTek gala.</strong> Please remember to add times for this entry.</p>";
       }
-      $message .= '<p>If you have any questions, please contact the ' . htmlspecialchars(env('CLUB_NAME')) . ' gala team as soon as possible.</p>';
+      $message .= '<p>If you have any questions, please contact the ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' gala team as soon as possible.</p>';
       $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
       `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 1, 'Galas')";
       

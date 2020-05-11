@@ -2,7 +2,7 @@
 
 $db = app()->db;
 
-\Stripe\Stripe::setApiKey(env('STRIPE'));
+\Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
 
 $start = 0;
 $page = 0;

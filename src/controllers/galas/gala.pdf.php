@@ -181,7 +181,7 @@ ob_start();?>
 
     <h2 id="about">Gala Reports</h2>
 
-    <p>&copy; Swimming Club Data Systems <?=date("Y")?>. Produced for <?=htmlspecialchars(env('CLUB_NAME'))?>.</p>
+    <p>&copy; Swimming Club Data Systems <?=date("Y")?>. Produced for <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>.</p>
 
     <?php include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
   </body>

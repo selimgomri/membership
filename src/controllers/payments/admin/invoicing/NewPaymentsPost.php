@@ -72,9 +72,9 @@ try {
       $subject .= 'credit/refund on account';
     }
     $message .= '<p>Hi ' . htmlspecialchars($user['Forename']) . ', </p>';
-    $message .= '<p>We\'ve manually added a ' . $typeString . ' of <strong>&pound;' . $amountString . '</strong> to your account for <strong>' . htmlspecialchars($description) .  '</strong>.</p><p>You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(env('CLUB_NAME')) . '.</p>';
+    $message .= '<p>We\'ve manually added a ' . $typeString . ' of <strong>&pound;' . $amountString . '</strong> to your account for <strong>' . htmlspecialchars($description) .  '</strong>.</p><p>You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . '.</p>';
 
-    $message .= '<p>Kind Regards, <br>The ' . htmlspecialchars(env('CLUB_NAME')) . ' Payments Team</p>';
+    $message .= '<p>Kind Regards, <br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Payments Team</p>';
 
     $notify = $db->prepare("INSERT INTO notify (UserID, `Status`, `Subject`, `Message`, EmailType) VALUES (?, ?, ?, ?, ?)");
 

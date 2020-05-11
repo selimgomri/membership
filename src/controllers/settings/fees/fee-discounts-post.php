@@ -25,7 +25,7 @@ try {
     }
   }
 
-  $systemInfo->setSystemOption('MembershipDiscounts', json_encode($array));
+  app()->tenant->setKey('MembershipDiscounts', json_encode($array));
   $_SESSION['Update-Success'] = true;
 } catch (Exception $e) {
   $_SESSION['Update-Error'] = true;

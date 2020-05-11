@@ -30,7 +30,7 @@ $vars = [
 try {
   foreach ($vars as $key => $value) {
     if (env($key) == null) {
-      $v = $systemInfo->getSystemOption($key);
+      $v = app()->tenant->getKey($key);
       if ($v != null) {
         if (!defined($key)) {
           define($key, $v);

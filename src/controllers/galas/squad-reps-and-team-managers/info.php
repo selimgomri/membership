@@ -7,7 +7,7 @@ $data = json_decode($output);
 
 $squads = null;
 $systemInfo = app()->system;
-$leavers = $systemInfo->getSystemOption('LeaversSquad');
+$leavers = app()->tenant->getKey('LeaversSquad');
 if ($leavers == null) {
   $leavers = 0;
 }
