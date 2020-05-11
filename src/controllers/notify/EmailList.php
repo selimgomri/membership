@@ -1,12 +1,16 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $user = $_SESSION['UserID'];
 $pagetitle = "Pending Messages";
 $use_white_background = true;
 
-$mails = $db->query("SELECT users.UserID, EmailID, Forename, Surname, notify.Subject PSubject, notifyHistory.Subject HSubject FROM ((`notify` INNER JOIN `users` ON notify.UserID = users.UserID) LEFT JOIN notifyHistory ON notify.MessageID = notifyHistory.ID) WHERE `Status` = 'Queued'");
+$mails = $db->prepare("SELECT users.UserID, EmailID, Forename, Surname, notify.Subject PSubject, notifyHistory.Subject HSubject FROM ((`notify` INNER JOIN `users` ON notify.UserID = users.UserID) LEFT JOIN notifyHistory ON notify.MessageID = notifyHistory.ID) WHERE `Status` = 'Queued' AND users.Tenant = ?");
+$mails->execute([
+	$tenant->getId()
+]);
 $mail = $mails->fetch(PDO::FETCH_ASSOC);
 
 include BASE_PATH . "views/header.php";

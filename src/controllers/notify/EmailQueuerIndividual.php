@@ -11,9 +11,14 @@ try {
   }
 
   $db = app()->db;
+  $tenant = app()->tenant;
+
   $query = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE
-  UserID = ?");
-  $query->execute([$user]);
+  UserID = ? AND Tenant = ?");
+  $query->execute([
+    $user,
+    $tenant->getId()
+  ]);
   $userInfo = $query->fetch(PDO::FETCH_ASSOC);
   $query->execute([$_SESSION['UserID']]);
   $curUserInfo = $query->fetch(PDO::FETCH_ASSOC);
@@ -140,9 +145,10 @@ try {
   // Get coaches
   if (isset($swimmer) && isset($_POST['coach-send']) && bool($_POST['coach-send'])) {
     // Get member squad(s)
-    $getSquad = $db->prepare("SELECT SquadID FROM members WHERE MemberID = ?");
+    $getSquad = $db->prepare("SELECT SquadID FROM members WHERE MemberID = ? AND Tenant = ?");
     $getSquad->execute([
-      $swimmer
+      $swimmer,
+      $tenant->getId
     ]);
     $squad = $getSquad->fetchColumn();
 

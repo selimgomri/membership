@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $name = $desc = $errorMessage = null;
 $errorState = false;
@@ -21,8 +22,8 @@ if ($_POST['desc'] != null && $_POST['desc'] != "") {
 
 if (!$errorState) {
   try {
-    $update = $db->prepare("UPDATE `targetedLists` SET `Name` = ?, `Description` = ? WHERE `ID` = ?");
-    $update->execute([$name, $desc, $id]);
+    $update = $db->prepare("UPDATE `targetedLists` SET `Name` = ?, `Description` = ? WHERE `ID` = ? AND `Tenant` = ?");
+    $update->execute([$name, $desc, $id, $tenant->getId()]);
     header("Location: " . autoUrl("notify/lists/" . $id));
 	} catch (Exception $e) {
 		$errorState = true;

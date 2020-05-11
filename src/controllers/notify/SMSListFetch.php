@@ -1,21 +1,27 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $sql = null;
 
 if ($_POST['squadID'] == 'allSquads') {
-	$sql = "SELECT DISTINCT `Mobile` FROM `users` INNER JOIN `members` ON `members`.`UserID` = `users`.`UserID` WHERE `MobileComms` = 1";
+	$sql = "SELECT DISTINCT `Mobile` FROM `users` INNER JOIN `members` ON `members`.`UserID` = `users`.`UserID` WHERE members.Tenant = ? AND `MobileComms` = 1";
 } else {
-	$sql = "SELECT DISTINCT `Mobile` FROM `users` INNER JOIN `members` ON `members`.`UserID` = `users`.`UserID` WHERE `SquadID` = ? AND `MobileComms` = 1";
+	$sql = "SELECT DISTINCT `Mobile` FROM `users` INNER JOIN `members` ON `members`.`UserID` = `users`.`UserID` WHERE members.Tenant = ? AND `SquadID` = ? AND `MobileComms` = 1";
 }
 
 try {
 	$query = $db->prepare($sql);
 	if ($_POST['squadID'] == 'allSquads') {
-		$query->execute();
+		$query->execute([
+			$tenant->getId()
+		]);
 	} else {
-		$query->execute([$_POST['squadID']]);
+		$query->execute([
+			$tenant->getId(),
+			$_POST['squadID']
+		]);
 	}
 } catch (PDOException $e) {
 	halt(500);

@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 if ($_POST['response'] == "getSwimmers") {
   // $swimmers = $db->prepare("SELECT MForename, MSurname, SquadName, ReferenceID FROM (((`targetedListMembers` INNER JOIN `members` ON
@@ -9,9 +10,12 @@ if ($_POST['response'] == "getSwimmers") {
   // members.SquadID = squads.SquadID) WHERE `targetedListMembers`.`ListID` =
   // ? ORDER BY ReferenceID ASC");
 
-  $swimmers = $db->prepare("SELECT combined.MForename, combined.MSurname, combined.SquadName, combined.ID FROM (SELECT MForename, MSurname, SquadName, targetedListMembers.ID FROM ((`targetedListMembers` INNER JOIN `members` ON members.MemberID = targetedListMembers.ReferenceID) INNER JOIN `squads` ON members.SquadID = squads.SquadID) WHERE `targetedListMembers`.`ListID` = :list AND targetedListMembers.ReferenceType = 'Member' UNION SELECT Forename AS MForename, Surname AS MSurname, 'User' AS SquadName, targetedListMembers.ID FROM (`targetedListMembers` INNER JOIN `users` ON users.UserID = targetedListMembers.ReferenceID) WHERE `targetedListMembers`.`ListID` = :list AND targetedListMembers.ReferenceType = 'User') AS combined ORDER BY combined.ID ASC ");
+  $swimmers = $db->prepare("SELECT combined.MForename, combined.MSurname, combined.SquadName, combined.ID FROM (SELECT MForename, MSurname, SquadName, targetedListMembers.ID FROM ((`targetedListMembers` INNER JOIN `members` ON members.MemberID = targetedListMembers.ReferenceID) INNER JOIN `squads` ON members.SquadID = squads.SquadID) WHERE `targetedListMembers`.`ListID` = :list AND targetedListMembers.ReferenceType = 'Member' AND members.Tenant = :tenant UNION SELECT Forename AS MForename, Surname AS MSurname, 'User' AS SquadName, targetedListMembers.ID FROM (`targetedListMembers` INNER JOIN `users` ON users.UserID = targetedListMembers.ReferenceID) WHERE `targetedListMembers`.`ListID` = :list AND targetedListMembers.ReferenceType = 'User' AND users.Tenant = :tenant) AS combined ORDER BY combined.ID ASC ");
 
-  $swimmers->execute(['list' => $id]);
+  $swimmers->execute([
+    'list' => $id,
+    'tenant' => $tenant->getId()
+  ]);
   $row = $swimmers->fetch(PDO::FETCH_ASSOC);
 
   ?>
@@ -62,11 +66,18 @@ if ($_POST['response'] == "getSwimmers") {
     $squad = $_POST['squadSelect'];
     $members == null;
     if ($squad != "all") {
-      $members = $db->prepare("SELECT MemberID, MForename, MSurname FROM `members` WHERE `SquadID` = ? AND MemberID NOT IN (SELECT ReferenceID FROM targetedListMembers WHERE ListID = ? AND ReferenceType = 'Member') ORDER BY `MForename` ASC, `MSurname` ASC");
-      $members->execute([$squad, $id]);
+      $members = $db->prepare("SELECT MemberID, MForename, MSurname FROM `members` WHERE `SquadID` = ? AND Tenant = ? AND MemberID NOT IN (SELECT ReferenceID FROM targetedListMembers WHERE ListID = ? AND ReferenceType = 'Member') ORDER BY `MForename` ASC, `MSurname` ASC");
+      $members->execute([
+        $squad,
+        $tenant->getId(),
+        $id
+      ]);
     } else {
-      $members = $db->prepare("SELECT MemberID, MForename, MSurname FROM `members` WHERE MemberID NOT IN (SELECT ReferenceID FROM targetedListMembers WHERE ListID = ? AND ReferenceType = 'Member') ORDER BY `MForename` ASC, `MSurname` ASC");
-      $members->execute([$id]);
+      $members = $db->prepare("SELECT MemberID, MForename, MSurname FROM `members` WHERE Tenant = ? AND MemberID NOT IN (SELECT ReferenceID FROM targetedListMembers WHERE ListID = ? AND ReferenceType = 'Member') ORDER BY `MForename` ASC, `MSurname` ASC");
+      $members->execute([
+        $tenant->getId(),
+        $id
+      ]);
     }
     while ($row = $members->fetch(PDO::FETCH_ASSOC)) {
       $output .= '<option value="' . htmlspecialchars($row['MemberID']) . '">' . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . '</option>';
@@ -88,8 +99,9 @@ if ($_POST['response'] == "getSwimmers") {
     if (mb_strlen($_POST['searchTerm']) > 0) {
       $searchTerm = '%' . $_POST['searchTerm'] . '%';
       $members == null;
-      $members = $db->prepare("SELECT UserID, Forename, Surname FROM `users` WHERE `Forename` COLLATE utf8mb4_general_ci LIKE :searchTerm OR `Surname` COLLATE utf8mb4_general_ci LIKE :searchTerm AND UserID NOT IN (SELECT ReferenceID FROM targetedListMembers WHERE ListID = :list AND ReferenceType = 'User') ORDER BY `Forename` ASC, `Surname` ASC");
+      $members = $db->prepare("SELECT UserID, Forename, Surname FROM `users` WHERE Tenant = :tenant AND `Forename` COLLATE utf8mb4_general_ci LIKE :searchTerm OR `Surname` COLLATE utf8mb4_general_ci LIKE :searchTerm AND UserID NOT IN (SELECT ReferenceID FROM targetedListMembers WHERE ListID = :list AND ReferenceType = 'User') ORDER BY `Forename` ASC, `Surname` ASC");
       $members->execute([
+        'tenant' => $tenant->getId(),
         'searchTerm' => $searchTerm,
         'list' => $id
       ]);
@@ -115,6 +127,17 @@ if ($_POST['response'] == "getSwimmers") {
   $swimmer = $_POST['swimmerInsert'];
   if ($swimmer != null && $swimmer != "") {
     try {
+      // Check member belongs to tenant
+      $getCount = $db->prepare("SELECT COUNT(*) FROM members WHERE MemberID = ? AND Tenant = ?");
+      $getCount->execute([
+        $swimmer,
+        $tenant->getId()
+      ]);
+
+      if ($getCount->fetchColumn() == 0) {
+        throw new Exception();
+      }
+
       // Check count
       $getCount = $db->prepare("SELECT COUNT(*) FROM targetedListMembers WHERE ListID = ? AND ReferenceID = ? AND ReferenceType = ?");
       $getCount->execute([
@@ -122,16 +145,18 @@ if ($_POST['response'] == "getSwimmers") {
         $swimmer,
         'Member'
       ]);
+
       if ($getCount->fetchColumn() > 0) {
-        halt(403);
-      } else {
-        $insert = $db->prepare("INSERT INTO `targetedListMembers` (`ListID`, `ReferenceID`, `ReferenceType`) VALUES (?, ?, ?)");
-        $insert->execute([
-          $id,
-          $swimmer,
-          'Member'
-        ]);
+        throw new Exception();
       }
+
+      $insert = $db->prepare("INSERT INTO `targetedListMembers` (`ListID`, `ReferenceID`, `ReferenceType`) VALUES (?, ?, ?)");
+      $insert->execute([
+        $id,
+        $swimmer,
+        'Member'
+      ]);
+
     } catch (Exception $e) {
       halt(403);
     }
@@ -140,6 +165,17 @@ if ($_POST['response'] == "getSwimmers") {
   $swimmer = $_POST['swimmerInsert'];
   if ($swimmer != null && $swimmer != "") {
     try {
+      // Check user belongs to tenant
+      $getCount = $db->prepare("SELECT COUNT(*) FROM users WHERE UserID = ? AND Tenant = ?");
+      $getCount->execute([
+        $swimmer,
+        $tenant->getId()
+      ]);
+
+      if ($getCount->fetchColumn() == 0) {
+        throw new Exception();
+      }
+
       // Check count
       $getCount = $db->prepare("SELECT COUNT(*) FROM targetedListMembers WHERE ListID = ? AND ReferenceID = ? AND ReferenceType = ?");
       $getCount->execute([
@@ -148,21 +184,33 @@ if ($_POST['response'] == "getSwimmers") {
         'User'
       ]);
       if ($getCount->fetchColumn() > 0) {
-        halt(403);
-      } else {
-        $insert = $db->prepare("INSERT INTO `targetedListMembers` (`ListID`, `ReferenceID`, `ReferenceType`) VALUES (?, ?, ?)");
-        $insert->execute([
-          $id,
-          $swimmer,
-          'User'
-        ]);
+        throw new Exception();
       }
+    
+      $insert = $db->prepare("INSERT INTO `targetedListMembers` (`ListID`, `ReferenceID`, `ReferenceType`) VALUES (?, ?, ?)");
+      $insert->execute([
+        $id,
+        $swimmer,
+        'User'
+      ]);
+      
     } catch (Exception $e) {
       halt(403);
     }
   }
 } else if ($_POST['response'] == "dropRelation") {
   try {
+    // Is current tenant
+    $getCount = $db->prepare("SELECT COUNT(*) FROM targetedListMembers INNER JOIN targetedLists ON targetedLists.ID = targetedListMembers.ListID WHERE targetedListMembers.ID = ? AND targetedLists.Tenant = ?");
+    $getCount->execute([
+      $_POST['relation'],
+      $tenant->getId()
+    ]);
+
+    if ($getCount->fetchColumn() == 0) {
+      throw new Exception();
+    }
+
     $drop = $db->prepare("DELETE FROM `targetedListMembers` WHERE `ID` = ?");
     $drop->execute([$_POST['relation']]);
   } catch (Exception $e) {

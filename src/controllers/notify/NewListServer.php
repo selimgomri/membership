@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $name = $desc = $errorMessage = null;
 $errorState = false;
@@ -21,8 +22,12 @@ if ($_POST['desc'] != null && $_POST['desc'] != "") {
 
 if (!$errorState) {
   try {
-    $insert = $db->prepare("INSERT INTO `targetedLists` (`Name`, `Description`) VALUES (?, ?)");
-    $insert->execute([$name, $desc]);
+    $insert = $db->prepare("INSERT INTO `targetedLists` (`Name`, `Description`, `Tenant`) VALUES (?, ?, ?)");
+    $insert->execute([
+			$name,
+			$desc,
+			$tenant->getId()
+		]);
     header("Location: " . autoUrl("notify/lists"));
 	} catch (Exception $e) {
 		$errorState = true;

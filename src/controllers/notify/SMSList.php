@@ -2,7 +2,13 @@
 
 $pagetitle = "SMS Lists";
 
-$squads = $db->query("SELECT SquadName `name`, SquadID id FROM `squads` ORDER BY SquadFee DESC, SquadName ASC");
+$db = app()->db;
+$tenant = app()->tenant;
+
+$squads = $db->prepare("SELECT SquadName `name`, SquadID id FROM `squads` WHERE Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+$squads->execute([
+	$tenant->getId()
+]);
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";

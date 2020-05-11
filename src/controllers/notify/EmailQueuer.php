@@ -3,6 +3,7 @@
 $_SESSION['NotifyPostData'] = $_POST;
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $db->beginTransaction();
 
@@ -164,25 +165,36 @@ try {
 
   $squads = null;
   if ($_SESSION['AccessLevel'] != 'Parent') {
-    $squads = $db->query("SELECT `SquadName`, `SquadID` FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC;");
+    $squads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` WHERE Tenant = ? ORDER BY `SquadFee` DESC, `SquadName` ASC;");
+    $squads->execute([
+      $tenant->getId()
+    ]);
   } else {
     $squads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` INNER JOIN squadReps ON squadReps.Squad = squads.SquadID WHERE squadReps.User = ? ORDER BY `SquadFee` DESC, `SquadName` ASC;");
-    $squads->execute([$_SESSION['UserID']]);
+    $squads->execute([
+      $_SESSION['UserID']
+    ]);
   }
   $row = $squads->fetchAll(PDO::FETCH_ASSOC);
 
   $lists = null;
   if ($_SESSION['AccessLevel'] != 'Parent') {
-    $lists = $db->query("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` ORDER BY `Name` ASC;");
+    $lists = $db->prepare("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` WHERE Tenant = ? ORDER BY `Name` ASC;");
+    $lists->execute([
+      $tenant->getId()
+    ]);
   } else {
     $lists = $db->prepare("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` INNER JOIN listSenders ON listSenders.List = targetedLists.ID WHERE listSenders.User = ? ORDER BY `Name` ASC;");
     $lists->execute([$_SESSION['UserID']]);
   }
   $lists = $lists->fetchAll(PDO::FETCH_ASSOC);
 
-  $galas = $db->prepare("SELECT GalaName, GalaID FROM `galas` WHERE GalaDate >= ? ORDER BY `GalaName` ASC;");
+  $galas = $db->prepare("SELECT GalaName, GalaID FROM `galas` WHERE GalaDate >= ? AND Tenant = ? ORDER BY `GalaName` ASC;");
   $date = new DateTime('-1 week', new DateTimeZone('Europe/London'));
-  $galas->execute([$date->format('Y-m-d')]);
+  $galas->execute([
+    $date->format('Y-m-d'),
+    $tenant->getId()
+  ]);
 
   $query = $squadsQuery = $listsQuery = $galaQuery = "";
 
@@ -330,9 +342,17 @@ try {
   $dbDate = $date->format('Y-m-d H:i:s');
 
   $sql = "INSERT INTO `notifyHistory` (`Sender`, `Subject`, `Message`,
-  `ForceSend`, `Date`, `JSONData`) VALUES (?, ?, ?, ?, ?, ?)";
+  `ForceSend`, `Date`, `JSONData`, `Tenant`) VALUES (?, ?, ?, ?, ?, ?, ?)";
   $pdo_query = $db->prepare($sql);
-  $pdo_query->execute([$_SESSION['UserID'], $subject, $message, $force, $dbDate, $json]);
+  $pdo_query->execute([
+    $_SESSION['UserID'],
+    $subject,
+    $message,
+    $force,
+    $dbDate,
+    $json,
+    $tenant->getId()
+  ]);
 
   $id = $db->lastInsertId();
 

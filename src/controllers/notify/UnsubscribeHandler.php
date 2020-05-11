@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $user_id = hexdec($userid);
 $email = str_replace(' ', '+', urldecode($email));
@@ -12,8 +13,12 @@ if ($list_lc != "notify" && $list_lc != "security" && $list_lc != "payments" && 
 }
 
 try {
-	$query = $db->prepare("SELECT COUNT(*) FROM `users` WHERE `UserID` = ? AND `EmailAddress` = ?");
-	$query->execute([$user_id, $email]);
+	$query = $db->prepare("SELECT COUNT(*) FROM `users` WHERE `UserID` = ? AND `EmailAddress` = ? AND Tenant = ?");
+	$query->execute([
+		$user_id,
+		$email,
+		$tenant->getId()
+	]);
 } catch (Exception $e) {
 	halt(500);
 }

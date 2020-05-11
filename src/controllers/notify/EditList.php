@@ -1,12 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $row = null;
 
 try {
-  $list = $db->prepare("SELECT * FROM `targetedLists` WHERE `ID` = ?");
-  $list->execute([$id]);
+  $list = $db->prepare("SELECT * FROM `targetedLists` WHERE `ID` = ? AND `Tenant` = ?");
+  $list->execute([$id, $tenant->getId()]);
 } catch (Exception $e) {
   halt(500);
 }

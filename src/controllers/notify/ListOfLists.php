@@ -1,12 +1,16 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $user = $_SESSION['UserID'];
 $pagetitle = "Targeted Lists";
 $use_white_background = true;
 
-$lists = $db->query("SELECT * FROM `targetedLists` ORDER BY `Name` ASC");
+$lists = $db->prepare("SELECT * FROM `targetedLists` WHERE Tenant = ? ORDER BY `Name` ASC");
+$lists->execute([
+  $tenant->getId()
+]);
 $row = $lists->fetch(PDO::FETCH_ASSOC);
 
 include BASE_PATH . "views/header.php";

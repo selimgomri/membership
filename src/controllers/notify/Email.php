@@ -2,32 +2,34 @@
 $pagetitle = "Notify Composer";
 $use_white_background = true;
 
-$emailPrefix = '';
-if (!bool(env('IS_CLS'))) {
-	$emailPrefix = mb_strtolower(trim(app()->tenant->getKey('ASA_CLUB_CODE'))) . '-';
-}
-
 $db = app()->db;
+$tenant = app()->tenant;
 
 $squads = null;
 if ($_SESSION['AccessLevel'] != 'Parent') {
-  $squads = $db->query("SELECT `SquadName`, `SquadID` FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC;");
+  $squads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` WHERE `Tenant` = ? ORDER BY `SquadFee` DESC, `SquadName` ASC;");
+  $squads->execute([
+    $tenant->getId()
+  ]);
 } else {
-  $squads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` INNER JOIN squadReps ON squadReps.Squad = squads.SquadID WHERE squadReps.User = ? ORDER BY `SquadFee` DESC, `SquadName` ASC;");
-  $squads->execute([$_SESSION['UserID']]);
+  $squads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` INNER JOIN squadReps ON squadReps.Squad = squads.SquadID WHERE squadReps.User = ? AND `Tenant` = ? ORDER BY `SquadFee` DESC, `SquadName` ASC;");
+  $squads->execute([$_SESSION['UserID'], $tenant->getId()]);
 }
 
 $lists = null;
 if ($_SESSION['AccessLevel'] != 'Parent') {
-  $lists = $db->query("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` ORDER BY `Name` ASC;");
+  $lists = $db->prepare("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` WHERE `Tenant` = ? ORDER BY `Name` ASC;");
+  $lists->execute([
+    $tenant->getId()
+  ]);
 } else {
-  $lists = $db->prepare("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` INNER JOIN listSenders ON listSenders.List = targetedLists.ID WHERE listSenders.User = ? ORDER BY `Name` ASC;");
-  $lists->execute([$_SESSION['UserID']]);
+  $lists = $db->prepare("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` INNER JOIN listSenders ON listSenders.List = targetedLists.ID WHERE listSenders.User = ? AND `Tenant` = ? ORDER BY `Name` ASC;");
+  $lists->execute([$_SESSION['UserID'], $tenant->getId()]);
 }
 
-$galas = $db->prepare("SELECT GalaName, GalaID FROM `galas` WHERE GalaDate >= ? ORDER BY `GalaName` ASC;");
+$galas = $db->prepare("SELECT GalaName, GalaID FROM `galas` WHERE GalaDate >= ? AND `Tenant` = ? ORDER BY `GalaName` ASC;");
 $date = new DateTime('-1 week', new DateTimeZone('Europe/London'));
-$galas->execute([$date->format('Y-m-d')]);
+$galas->execute([$date->format('Y-m-d'), $tenant->getId()]);
 
 $query = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE
 UserID = ?");

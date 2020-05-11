@@ -6,9 +6,14 @@ if (is_null($user)) {
 }
 
 $db = app()->db;
+$tenant = app()->tenant;
+
 $query = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE
-UserID = ?");
-$query->execute([$user]);
+UserID = ? AND Tenant = ?");
+$query->execute([
+  $user,
+  $tenant->getId()
+]);
 $userInfo = $query->fetchAll(PDO::FETCH_ASSOC);
 $query->execute([$_SESSION['UserID']]);
 $curUserInfo = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -19,8 +24,11 @@ if (sizeof($userInfo) != 1) {
 
 $mySwimmer = null;
 if (!isset($userOnly) || !$userOnly) {
-  $swimmerDetails = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM `members` WHERE `members`.`MemberID` = ?");
-  $swimmerDetails->execute([$id]);
+  $swimmerDetails = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM `members` WHERE `members`.`MemberID` = ? AND members.Tenant = ?");
+  $swimmerDetails->execute([
+    $id,
+    $tenant->getId()
+  ]);
   $mySwimmer = $swimmerDetails->fetch(PDO::FETCH_ASSOC);
 }
 

@@ -1,22 +1,32 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 // Get users for list
-$getUsers = $db->query("SELECT Forename, Surname, UserID FROM users ORDER BY Forename ASC, Surname ASC");
+$getUsers = $db->prepare("SELECT Forename, Surname, UserID FROM users WHERE Tenant = ? ORDER BY Forename ASC, Surname ASC");
+$getUsers->execute([
+  $tenant->getId()
+]);
 $userDetails = $getUsers->fetch(PDO::FETCH_ASSOC);
 
 $user = $_SESSION['UserID'];
 
-$list = $db->prepare("SELECT * FROM `targetedLists` WHERE `ID` = ?");
-$list->execute([$id]);
+$list = $db->prepare("SELECT * FROM `targetedLists` WHERE `ID` = ? AND Tenant = ?");
+$list->execute([
+  $id,
+  $tenant->getId()
+]);
 $row = $list->fetch(PDO::FETCH_ASSOC);
 
 if ($row == null) {
   halt(404);
 }
 
-$squads = $db->query("SELECT * FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC");
+$squads = $db->prepare("SELECT * FROM `squads` WHERE Tenant = ? ORDER BY `SquadFee` DESC, `SquadName` ASC");
+$squads->execute([
+  $tenant->getId()
+]);
 
 $pagetitle = htmlspecialchars($row['Name']) . " - Lists";
 
