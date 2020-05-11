@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $date = $_POST['date'];
 if ($date == "") {
@@ -17,11 +18,12 @@ $data = [
 	$_POST['excerpt'],
 	$_POST['path'],
 	$_POST['type'],
-	$_POST['mime']
+	$_POST['mime'],
+	$tenant->getId()
 ];
 
 try {
-	$db->prepare("INSERT INTO `posts` (`Author`, `Date`, `Content`, `Title`, `Excerpt`, `Path`, `Type`, `MIME`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")->execute($data);
+	$db->prepare("INSERT INTO `posts` (`Author`, `Date`, `Content`, `Title`, `Excerpt`, `Path`, `Type`, `MIME`, `Tenant`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")->execute($data);
 } catch (PDOException $e) {
 	halt(500);
 }

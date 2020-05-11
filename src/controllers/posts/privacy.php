@@ -3,6 +3,8 @@
 $pagetitle = "Privacy Policy";
 
 $db = app()->db;
+$tenant = app()->tenant;
+
 $systemInfo = app()->system;
 $privacy = app()->tenant->getKey('PrivacyPolicy');
 
@@ -13,8 +15,11 @@ $replace = array("\n###### ", "\n######", "\n#### ", "\n### ", "\n## ");
 
 $privacyPolicy = null;
 if ($privacy != null && $privacy != "") {
-  $privacyPolicy = $db->prepare("SELECT Content FROM posts WHERE ID = ?");
-  $privacyPolicy->execute([$privacy]);
+  $privacyPolicy = $db->prepare("SELECT Content FROM posts WHERE ID = ? AND Tenant = ?");
+  $privacyPolicy->execute([
+    $privacy,
+    $tenant->getId()
+  ]);
   $privacyPolicy = str_replace($search, $replace, $privacyPolicy->fetchColumn());
   if ($privacyPolicy[0] == '#') {
     $privacyPolicy = '#' . $privacyPolicy;

@@ -1,6 +1,8 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
+
 $query = null;
 
 $markdown = new ParsedownExtra();
@@ -22,18 +24,24 @@ if ($_SESSION['AccessLevel'] == 'Parent') {
 }
 
 if ($int) {
-	$sql = "SELECT * FROM `posts` WHERE `ID` = ?";
+	$sql = "SELECT * FROM `posts` WHERE `ID` = ? AND Tenant = ?";
 	try {
 		$query = $db->prepare($sql);
-		$query->execute([$id]);
+		$query->execute([
+      $id,
+      $tenant->getId()
+    ]);
 	} catch (PDOException $e) {
 		halt(500);
 	}
 } else {
-	$sql = "SELECT * FROM `posts` WHERE `Path` = ?";
+	$sql = "SELECT * FROM `posts` WHERE `Path` = ? AND Tenant = ?";
 	try {
 		$query = $db->prepare($sql);
-		$query->execute([$id]);
+		$query->execute([
+      $id,
+      $tenant->getId()
+    ]);
 	} catch (PDOException $e) {
 		halt(500);
 	}

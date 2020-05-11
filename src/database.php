@@ -152,7 +152,6 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
 
 function getAttendanceByID($link = null, $id, $weeks = "all") {
   $db = app()->db;
-  $systemInfo = app()->system;
   $hideAttendance = !bool(app()->tenant->getKey('HIDE_MEMBER_ATTENDANCE'));
   if ($_SESSION['AccessLevel'] != 'Parent' || $hideAttendance) {
     $output = "";
