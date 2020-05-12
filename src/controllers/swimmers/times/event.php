@@ -1,9 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$swimmer = $db->prepare("SELECT MForename, MSurname, UserID FROM members WHERE MemberID = ?");
-$swimmer->execute([$id]);
+$swimmer = $db->prepare("SELECT MForename, MSurname, UserID FROM members WHERE Tenant = ? AND MemberID = ?");
+$swimmer->execute([
+  $tenant->getId(),
+  $id
+]);
 $swimmer = $swimmer->fetch(PDO::FETCH_ASSOC);
 
 if ($swimmer == null) {
@@ -85,7 +89,7 @@ include BASE_PATH . 'views/header.php';
   <nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="<?=autoUrl("members")?>">Members</a></li>
-			<li class="breadcrumb-item"><a href="<?=autoUrl("members/" . $id)?>"><?=htmlspecialchars(mb_substr($swimmer["MForename"], 0, 1, 'utf-8'))?><?=htmlspecialchars(mb_substr($swimmer["MSurname"], 0, 1, 'utf-8'))?></a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("members/" . $id)?>">#<?=htmlspecialchars($id)?></a></li>
       <li class="breadcrumb-item"><a href="<?=autoUrl("members/" . $id . "/times")?>">Best times</a></li>
 			<li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars((int) $_GET['distance'])?>m <?=$strokes[(int) $_GET['stroke']]?></li>
 		</ol>

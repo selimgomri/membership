@@ -1,9 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$sql = $db->prepare("SELECT * FROM `members` INNER JOIN `squads` ON members.SquadID = squads.SquadID WHERE `MemberID` = ?");
-$sql->execute([$id]);
+$sql = $db->prepare("SELECT * FROM `members` INNER JOIN `squads` ON members.SquadID = squads.SquadID WHERE members.Tenant = ? AND `MemberID` = ?");
+$sql->execute([
+  $tenant->getId(),
+  $id
+]);
 
 $row = $sql->fetch(PDO::FETCH_ASSOC);
 

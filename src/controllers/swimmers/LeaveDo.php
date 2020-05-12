@@ -1,11 +1,14 @@
 <?php
 
 $db = app()->db;
-$systemInfo = app()->system;
+$tenant = app()->tenant;
 
 $leavers = app()->tenant->getKey('LeaversSquad');
-$query = $db->prepare("SELECT UserID, MForename, MSurname FROM members WHERE MemberID = ?");
-$query->execute([$id]);
+$query = $db->prepare("SELECT UserID, MForename, MSurname FROM members WHERE MemberID = ? AND Tenant = ?");
+$query->execute([
+  $id,
+  $tenant->getId()
+]);
 $row = $query->fetch(PDO::FETCH_ASSOC);
 
 if ($row == null || $row['UserID'] != $_SESSION['UserID']) {

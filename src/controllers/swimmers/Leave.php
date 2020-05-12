@@ -1,8 +1,13 @@
 <?php
 
 $db = app()->db;
-$query = $db->prepare("SELECT UserID FROM members WHERE MemberID = ?");
-$query->execute([$id]);
+$tenant = app()->tenant;
+
+$query = $db->prepare("SELECT UserID FROM members WHERE MemberID = ? AND Tenant = ?");
+$query->execute([
+  $id,
+  $tenant->getId()
+]);
 $result = $query->fetchColumn();
 
 if ($result == null || $result != $_SESSION['UserID']) {

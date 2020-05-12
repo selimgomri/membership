@@ -3,6 +3,7 @@
 class Member extends Person
 {
   private $db;
+  private $tenant;
   // private int $id;
   // private string $forename;
   private $middlenames;
@@ -34,9 +35,12 @@ class Member extends Person
     $this->id = $id;
 
     $db = app()->db;
-    $getInfo = $db->prepare("SELECT * FROM members WHERE MemberID = ?");
+    $this->tenant = app()->tenant->getId();
+
+    $getInfo = $db->prepare("SELECT * FROM members WHERE MemberID = ? AND Tenant = ?");
     $getInfo->execute([
-      $this->id
+      $this->id,
+      $this->tenant
     ]);
     $info = $getInfo->fetch(PDO::FETCH_ASSOC);
 

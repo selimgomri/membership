@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 /** must go in form
 if (app('request')->method == 'POST' && !SCDS\CSRF::verify()) {
@@ -27,8 +28,11 @@ $update = false;
 $countryUpdate = false;
 $successInformation = "";
 
-$query = $db->prepare("SELECT * FROM members WHERE MemberID = ?");
-$query->execute([$id]);
+$query = $db->prepare("SELECT * FROM members WHERE MemberID = ? AND Tenant = ?");
+$query->execute([
+	$id,
+	$tenant->getId()
+]);
 $row = $query->fetch(PDO::FETCH_ASSOC);
 
 if ($row == null) {

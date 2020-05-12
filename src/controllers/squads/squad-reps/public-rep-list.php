@@ -3,6 +3,7 @@
 $pagetitle = "Squad Reps";
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $getMyReps = $db->prepare("SELECT members.MemberID, MForename, MSurname, Forename, Surname, SquadName FROM (((squadReps INNER JOIN squads ON squads.SquadID = squadReps.Squad) INNER JOIN users ON squadReps.User = users.UserID) INNER JOIN members ON members.SquadID = squads.SquadID) WHERE members.UserID = ? ORDER BY SquadFee DESC, SquadName ASC");
 $getMyReps->execute([
@@ -10,7 +11,10 @@ $getMyReps->execute([
 ]);
 $myReps = $getMyReps->fetchAll(PDO::FETCH_GROUP);
 
-$getAllReps = $db->query("SELECT SquadID, Forename, Surname, SquadName FROM ((squadReps INNER JOIN squads ON squads.SquadID = squadReps.Squad) INNER JOIN users ON squadReps.User = users.UserID) ORDER BY SquadFee DESC, SquadName ASC");
+$getAllReps = $db->prepare("SELECT SquadID, Forename, Surname, SquadName FROM ((squadReps INNER JOIN squads ON squads.SquadID = squadReps.Squad) INNER JOIN users ON squadReps.User = users.UserID) WHERE squads.Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+$getAllReps->execute([
+  $tenant->getId()
+]);
 $allReps = $getAllReps->fetchAll(PDO::FETCH_GROUP);
 
 include BASE_PATH . 'views/header.php';

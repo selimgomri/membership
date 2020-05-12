@@ -5,6 +5,7 @@ use Brick\PhoneNumber\PhoneNumberParseException;
 use Brick\PhoneNumber\PhoneNumberFormat;
 
 $db = app()->db;
+$tenant = app()->tenant;
 $access = $_SESSION['AccessLevel'];
 
 // Get all countries
@@ -15,8 +16,11 @@ $markdown->setSafeMode(true);
 
 $use_white_background = true;
 
-$query = $db->prepare("SELECT * FROM members LEFT JOIN users ON members.UserID = users.UserID WHERE MemberID = ?");
-$query->execute([$id]);
+$query = $db->prepare("SELECT * FROM members LEFT JOIN users ON members.UserID = users.UserID WHERE MemberID = ? AND members.Tenant = ?");
+$query->execute([
+  $id,
+  $tenant->getId()
+]);
 $row = $query->fetch(PDO::FETCH_ASSOC);
 
 if ($row == null) {

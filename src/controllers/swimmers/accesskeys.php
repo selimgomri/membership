@@ -5,8 +5,12 @@ if ($access != "Admin" && $access != "Coach" && $access != "Galas") {
 }
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$swimmers = $db->query("SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.AccessKey FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) ORDER BY `members`.`MForename` , `members`.`MSurname` ASC");
+$swimmers = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.AccessKey FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.Tenant = ? ORDER BY `members`.`MForename` , `members`.`MSurname` ASC");
+$swimmers->execute([
+  $tenant->getId()
+]);
 $updateASA = $db->prepare("UPDATE `members` SET ASANumber = ? WHERE `MemberID` = ?");
 
 include BASE_PATH . "views/header.php";

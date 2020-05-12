@@ -3,11 +3,13 @@
 $pagetitle = "Squad Rep Home";
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $today = (new DateTime('now', new DateTimeZone('Europe/London')))->format("y-m-d");
-$getGalas = $db->prepare("SELECT GalaName, GalaID, GalaVenue FROM galas WHERE GalaDate >= ? ORDER BY GalaDate ASC");
+$getGalas = $db->prepare("SELECT GalaName, GalaID, GalaVenue FROM galas WHERE GalaDate >= ? AND Tenant = ? ORDER BY GalaDate ASC");
 $getGalas->execute([
-  $today
+  $today,
+  $tenant->getId()
 ]);
 $gala = $getGalas->fetch(PDO::FETCH_ASSOC);
 
@@ -16,7 +18,10 @@ if ($_SESSION['AccessLevel'] == 'Parent') {
   $squads = $db->prepare("SELECT SquadName, SquadID, SquadCoach FROM squadReps INNER JOIN squads ON squadReps.Squad = squads.SquadID WHERE squadReps.User = ? ORDER BY squads.SquadFee DESC, squads.SquadName ASC");
   $squads->execute([$_SESSION['UserID']]);
 } else {
-  $squads = $db->query("SELECT SquadName, SquadID, SquadCoach FROM squads ORDER BY squads.SquadFee DESC, squads.SquadName ASC");
+  $squads = $db->prepare("SELECT SquadName, SquadID, SquadCoach FROM squads WHERE Tenant = ? ORDER BY squads.SquadFee DESC, squads.SquadName ASC");
+  $squads->execute([
+    $tenant->getId()
+  ]);
 }
 $squad = $squads->fetch(PDO::FETCH_ASSOC);
 

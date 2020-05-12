@@ -4,6 +4,8 @@
 $countries = getISOAlpha2CountriesWithHomeNations();
 
 $db = app()->db;
+$tenant = app()->tenant;
+
 $getSwimmer = $db->prepare("SELECT members.MForename, members.MForename, members.MMiddleNames,
 members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName,
 squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC,
@@ -12,9 +14,12 @@ memberPhotography.Website, memberPhotography.Social,
 memberPhotography.Noticeboard, memberPhotography.FilmTraining,
 memberPhotography.ProPhoto, members.Country FROM (((members INNER JOIN users ON members.UserID =
 users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN
-`memberPhotography` ON members.MemberID = memberPhotography.MemberID) WHERE
-members.MemberID = ? AND members.UserID = ?");
-$getSwimmer->execute([$id, $_SESSION['UserID']]);
+`memberPhotography` ON members.MemberID = memberPhotography.MemberID) WHERE members.Tenant = ? AND members.MemberID = ? AND members.UserID = ?");
+$getSwimmer->execute([
+  $tenant->getId(),
+  $id,
+  $_SESSION['UserID']
+]);
 
 $row = $getSwimmer->fetch(PDO::FETCH_ASSOC);
 

@@ -5,6 +5,7 @@ if (!SCDS\CSRF::verify()) {
 }
 
 $db = app()->db;
+$tenant = app()->db;
 
 $added = $action = false;
 
@@ -45,11 +46,20 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 		$transfer = 0;
 	}
 
+	// Check squads
+	$getSquads = $db->prepare("SELECT COUNT(*) FROM squads WHERE Tenant = ? AND SquadID = ?");
+	$getSquads->execute([
+		$tenant->getId(),
+		$squad
+	]);
+	if ($getSquads->fetchColumn() == 0) {
+		halt(404);
+	}
 
 	$accessKey = generateRandomString(6);
 
   try {
-    $insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, SquadID, AccessKey, ASACategory, ClubPays, OtherNotes, RRTransfer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, SquadID, AccessKey, ASACategory, ClubPays, OtherNotes, RRTransfer, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $insert->execute([
       $forename,
       $middlenames,
@@ -62,7 +72,8 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
       $cat,
       $cp,
 			"",
-			$transfer
+			$transfer,
+			$tenant->getId(),
     ]);
 
   	$last_id = $db->lastInsertId();
@@ -76,8 +87,10 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
     $action = true;
 
     try {
-  		$getAdmins = $db->prepare("SELECT `UserID` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE `Permission` = 'Admin' AND `UserID` != ?");
-  		$getAdmins->execute(["Admin", $_SESSION['UserID']]);
+  		$getAdmins = $db->prepare("SELECT `UserID` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE Tenant = ? AND `Permission` = 'Admin' AND `UserID` != ?");
+  		$getAdmins->execute([
+				$tenant->getId(),
+				$_SESSION['UserID']]);
   		$notify = $db->prepare("INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'NewMember')");
     	$subject = "New Club Member";
     	$message = '<p>' . htmlentities(getUserName($_SESSION['UserID'])) . ' has added a new member, ' . htmlentities($forename . ' ' . $surname) . ' to our online membership system.</p><p>We have sent you this email to ensure you\'re aware of this.</p>';

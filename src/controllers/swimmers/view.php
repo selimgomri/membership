@@ -372,12 +372,6 @@ include BASE_PATH . 'views/header.php';
         </a>
       </p>
 
-      <p>
-        <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/legacy-times"))?>" class="btn btn-dark btn-sm">
-          See legacy system PBs
-        </a>
-      </p>
-
       <hr>
 
       <!-- Membership administration details -->

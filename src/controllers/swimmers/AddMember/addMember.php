@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $pagetitle = "Add a member";
 $title = "Add a member";
@@ -74,7 +75,10 @@ $content .= "
 		<option value=\"Female\">Female</option>
 	</select>
 </div>";
-$sql = $db->query("SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;");
+$sql = $db->prepare("SELECT * FROM `squads` WHERE Tenant = ? ORDER BY `squads`.`SquadFee` DESC;");
+$sql->execute([
+	$tenant->getId()
+]);
 $content .= "
 <div class=\"form-group\">
 	<label for=\"squad\">Squad</label>

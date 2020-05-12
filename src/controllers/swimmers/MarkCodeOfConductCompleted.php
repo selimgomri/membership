@@ -4,14 +4,24 @@ $pagetitle = "Marked Complete";
 $type = null;
 
 $db = app()->db;
-$getMove = $db->prepare("SELECT MForename, MSurname, SquadName FROM moves INNER JOIN members ON moves.MemberID = members.MemberID INNER JOIN squads ON moves.SquadID = squads.SquadID WHERE moves.MemberID = ? AND moves.SquadID = ?");
-$getMove->execute([$swimmer, $squad]);
+$tenant = app()->tenant;
+
+$getMove = $db->prepare("SELECT MForename, MSurname, SquadName FROM moves INNER JOIN members ON moves.MemberID = members.MemberID INNER JOIN squads ON moves.SquadID = squads.SquadID WHERE members.Tenant = ? AND moves.MemberID = ? AND moves.SquadID = ?");
+$getMove->execute([
+  $tenant->getId(),
+  $swimmer,
+  $squad
+]);
 $details = $getMove->fetch(PDO::FETCH_ASSOC);
 
 if ($details == null) {
   // Not found
-  $getMove = $db->prepare("SELECT MForename, MSurname, SquadName FROM moves INNER JOIN squads ON moves.SquadID = squads.SquadID WHERE moves.MemberID = ? AND moves.SquadID = ?");
-  $getMove->execute([$swimmer, $squad]);
+  $getMove = $db->prepare("SELECT MForename, MSurname, SquadName FROM moves INNER JOIN squads ON moves.SquadID = squads.SquadID WHERE squads.Tenant = ? AND moves.MemberID = ? AND moves.SquadID = ?");
+  $getMove->execute([
+    $tenant->getId(),
+    $swimmer,
+    $squad
+  ]);
   $details = $getMove->fetch(PDO::FETCH_ASSOC);
 
   if ($details == null) {
