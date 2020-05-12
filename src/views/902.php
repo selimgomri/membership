@@ -24,11 +24,7 @@ if ($currentUser == null) {
 			</ul>
 			<p>HTTP Error 503 - Service Unavailable.</p>
 			<hr>
-			<p class="mt-2">Contact our <a href="mailto:support@myswimmingclub.uk" title="Support Hotline">support hotline</a><?php if (!bool(env('IS_CLS'))) { ?>*<?php } ?> if the issue persists.</p>
-
-      <?php if (!bool(env('IS_CLS'))) { ?>
-      <p>* <a href="mailto:<?=htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL'))?>" title="<?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>">Contact your own club</a> in the first instance</p>
-			<?php } ?>
+			<p class="mt-2"><a href="mailto:support@myswimmingclub.uk" title="Support Hotline">Email us</a> or <a href="tel:+441912494320">call us on +44 191 249 4320</a> for help and support if the issue persists.</p>
 		</div>
 	</div>
 </div>

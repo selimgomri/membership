@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $count = 0;
 $rows = 0;
@@ -9,8 +10,11 @@ $sql = "";
 $coachEnters = false;
 // Check if coach enters
 if (isset($_GET["galaID"])) {
-	$getCoachEnters = $db->prepare("SELECT CoachEnters FROM galas WHERE GalaID = ?");
-	$getCoachEnters->execute([$_GET["galaID"]]);
+	$getCoachEnters = $db->prepare("SELECT CoachEnters FROM galas WHERE GalaID = ? AND Tenant = ?");
+	$getCoachEnters->execute([
+		$_GET["galaID"],
+		$tenant->getId()
+	]);
 	$coachEnters = bool($getCoachEnters->fetchColumn());
 }
 
@@ -20,9 +24,10 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 	$memberID = $_REQUEST["swimmer"];
 	
 	// Get swimmer info
-	$getSwimmer = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, DateOfBirth dob, UserID parent, SquadID squad FROM members WHERE MemberID = ?");
+	$getSwimmer = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, DateOfBirth dob, UserID parent, SquadID squad FROM members WHERE MemberID = ? AND Tenant = ?");
 	$getSwimmer->execute([
-	  $_GET['swimmer']
+		$_GET['swimmer'],
+		$tenant->getId()
 	]);
 	$swimmer = $getSwimmer->fetch(PDO::FETCH_ASSOC);
 
@@ -31,9 +36,10 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 	}
 
 	// Get gala info
-	$getGala = $db->prepare("SELECT GalaFeeConstant flatfee, GalaFee fee, HyTek, GalaName `name`, GalaVenue venue, RequiresApproval, `Description` FROM galas WHERE GalaID = ?");
+	$getGala = $db->prepare("SELECT GalaFeeConstant flatfee, GalaFee fee, HyTek, GalaName `name`, GalaVenue venue, RequiresApproval, `Description` FROM galas WHERE GalaID = ? AND Tenant = ?");
 	$getGala->execute([
-		$_GET["galaID"]
+		$_GET["galaID"],
+		$tenant->getId()
 	]);
 	$gala = $getGala->fetch(PDO::FETCH_ASSOC);
 
@@ -51,8 +57,8 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 		<div id="gala-info" data-enterable=<?=htmlspecialchars(json_encode(false))?>></div>
 
 		<div class="alert alert-warning">
-			<strong>Oops. You've aleady entered this swimmer into this gala</strong> <br>
-			You might want to check that. <?php if ($row['EntryProcessed'] == 0) { ?>We've not processed your entry yet, so you <a class="alert-link" href="<?=autoUrl("galas/entries/" . $row["EntryID"])?>">can edit your gala entry</a> if you need to make changes.<?php } else { ?>We've already processed your gala entry - You'll need to contact your gala administrator if you need to make any changes.<?php } ?>
+			<strong>Oops. You've aleady entered this member into this gala</strong> <br>
+			You might want to check that. <?php if ($row['EntryProcessed'] == 0) { ?>We've not processed your entry yet, so you <a class="alert-link" href="<?=htmlspecialchars(autoUrl("galas/entries/" . $row["EntryID"]))?>">can edit your gala entry</a> if you need to make changes.<?php } else { ?>We've already processed your gala entry - You'll need to contact your gala administrator if you need to make any changes.<?php } ?>
     </div>
 
 <?php } else {
@@ -284,9 +290,10 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 	 */
 
 	// Get swimmer info
-	$getSwimmer = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, DateOfBirth dob, UserID parent FROM members WHERE MemberID = ?");
+	$getSwimmer = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, DateOfBirth dob, UserID parent FROM members WHERE MemberID = ? AND Tenant = ?");
 	$getSwimmer->execute([
-	  $_GET['swimmer']
+		$_GET['swimmer'],
+		$tenant->getId()
 	]);
 	$swimmer = $getSwimmer->fetch(PDO::FETCH_ASSOC);
 
@@ -295,9 +302,10 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 	}
 
 	// Get gala info
-	$getGala = $db->prepare("SELECT GalaFeeConstant flatfee, GalaFee fee, HyTek, `Description`, GalaName `name`, GalaVenue venue FROM galas WHERE GalaID = ?");
+	$getGala = $db->prepare("SELECT GalaFeeConstant flatfee, GalaFee fee, HyTek, `Description`, GalaName `name`, GalaVenue venue FROM galas WHERE GalaID = ? AND Tenant = ?");
 	$getGala->execute([
-		$_GET["galaID"]
+		$_GET["galaID"],
+		$tenant->getId()
 	]);
 	$gala = $getGala->fetch(PDO::FETCH_ASSOC);
 

@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $access = $_SESSION['AccessLevel'];
 
@@ -16,6 +17,7 @@ if (isset($_POST["search"])) {
   $sql = "";
   $search_terms = explode(' ', $_POST["search"]);
   $names = [];
+  $names[] = $tenant->getId();
   $sql = "";
   for ($i = 0; $i < sizeof($search_terms); $i++) {
     if ($i > 0) {
@@ -27,7 +29,7 @@ if (isset($_POST["search"])) {
     }
   }
 
-  $sql = "SELECT Forename, Surname, UserID FROM users WHERE Active AND (" . $sql . ") ORDER BY Forename, Surname ASC";
+  $sql = "SELECT Forename, Surname, UserID FROM users WHERE Tenant = ? AND Active AND (" . $sql . ") ORDER BY Forename, Surname ASC";
 
   $users = $db->prepare($sql);
   $users->execute($names);

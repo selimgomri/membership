@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $access = $_SESSION['AccessLevel'];
 $count = 0;
@@ -15,12 +16,19 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
     // Search the database for the results
 		if ($squadID == "allSquads") {
-      $get = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.DateOfBirth FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.MSurname COLLATE utf8mb4_general_ci LIKE ? ORDER BY members.MForename, members.MSurname ASC");
-      $get->execute(['%' . $search . '%']);
+      $get = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.DateOfBirth FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.Tenant = ? AND members.MSurname COLLATE utf8mb4_general_ci LIKE ? ORDER BY members.MForename, members.MSurname ASC");
+      $get->execute([
+        $tenant->getId(),
+        '%' . $search . '%'
+      ]);
 	  }
 	  else {
-      $get = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.DateOfBirth FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE squads.SquadID = ? AND members.MSurname COLLATE utf8mb4_general_ci LIKE ? ORDER BY members.MForename , members.MSurname ASC");
-      $get->execute([$squadID, '%' . $search . '%']);
+      $get = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.DateOfBirth FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.Tenant = ? AND squads.SquadID = ? AND members.MSurname COLLATE utf8mb4_general_ci LIKE ? ORDER BY members.MForename , members.MSurname ASC");
+      $get->execute([
+        $tenant->getId(),
+        $squadID,
+        '%' . $search . '%'
+      ]);
 	  }
   }
 

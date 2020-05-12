@@ -1,8 +1,10 @@
 <?php
 
 $db = app()->db;
-$update = $db->prepare("UPDATE galaEntries SET EntryProcessed = ? WHERE EntryID = ?");
-$markPaid = $db->prepare("UPDATE galaEntries SET Charged = ? WHERE EntryID = ?");
+$tenant = app()->tenant->getId();
+
+$update = $db->prepare("UPDATE galaEntries SET EntryProcessed = ? WHERE EntryID = ? AND Tenant = ?");
+$markPaid = $db->prepare("UPDATE galaEntries SET Charged = ? WHERE EntryID = ? AND Tenant = ?");
 
 $access = $_SESSION['AccessLevel'];
 if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $access == "Galas") {
@@ -16,26 +18,41 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
   	if ($verify == "markProcessed" /*&& $itemChecked != null*/) {
   		if (strpos($id, 'processedEntry-') !== false) {
   	    // Okay it's what we want. Lets remove the "processedEntry" so we just have the ID left over
-  			$id = substr($id, 15);
+  			$id = mb_substr($id, 15);
   			if ($itemChecked == "true") {
-  				$update->execute([true, $id]);
+  				$update->execute([
+						true,
+						$id,
+						$tenant
+					]);
   			}
   			else {
-  				$update->execute([0, $id]);
+  				$update->execute([
+						0,
+						$id,
+						$tenant
+					]);
   			}
   		}
   	} else if ($verify == "markPaid") {
       if (strpos($id, 'chargedEntry-') !== false) {
   	    // Okay it's what we want. Lets remove the "chargedEntry" so we just have the ID left over
-  			$id = substr($id, 13);
+  			$id = mb_substr($id, 13);
   			if ($itemChecked == "true") {
-  				$markPaid->execute([true, $id]);
+  				$markPaid->execute([
+						true,
+						$id,
+						$tenant
+					]);
   			}
   			else {
-  				$markPaid->execute([0, $id]);
+					$markPaid->execute([
+						0,
+						$id,
+						$tenant
+					]);
   			}
   		}
     }
   }
 }
-?>

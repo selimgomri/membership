@@ -407,12 +407,14 @@ function autoUrl($relative, $includeClub = true) {
   // Returns an absolute URL
   $rootUrl = env('ROOT_URL');
 
-  $club = app()->tenant;
-  if ($club && $includeClub) {
-    if ($club->getCode()) {
-      $rootUrl .= mb_strtolower($club->getCode()) . '/';
-    } else if ($club->getId()) {
-      $rootUrl .= $club->getId() . '/';
+  if (isset(app()->tenant)) {
+    $club = app()->tenant;
+    if ($club && $includeClub) {
+      if ($club->getCode()) {
+        $rootUrl .= mb_strtolower($club->getCode()) . '/';
+      } else if ($club->getId()) {
+        $rootUrl .= $club->getId() . '/';
+      }
     }
   }
 

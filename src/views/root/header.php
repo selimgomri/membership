@@ -12,9 +12,7 @@ try {
   $stylesheet = autoUrl('public/compiled/css/generic.css');
 }
 
-if (env('CUSTOM_CSS_PATH')) {
-  $stylesheet = env('CUSTOM_CSS_PATH');
-}
+$bg = null;
 
 header('Link: <' . autoUrl($stylesheet) . '>; rel=preload; as=style');
 
@@ -162,9 +160,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
                 today <i class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
           </p>
           <p class="mb-0">
-            If JavaScript is not supported by your browser, <?=app()->tenant->getKey('CLUB_NAME')?>
-            recommends you <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by
-                Mozilla</a></strong>.
+            If JavaScript is not supported by your browser, SCDS recommends you <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by Mozilla</a></strong>.
           </p>
         </div>
       </div>
@@ -182,7 +178,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
           It looks like you're using Internet Explorer which we no longer support so we recommend you upgrade to a new browser which we do support as soon as possible. <strong><a class="text-dark" href="http://browsehappy.com/" target="_blank">Upgrade your browser today <i class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
         </p>
         <p class="mb-0">
-          <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> recommends you <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by Mozilla</a></strong>. Firefox has great protections for your privacy with built in features including tracking protection.
+          SCDS recommends you <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by Mozilla</a></strong>. Firefox has great protections for your privacy with built in features including tracking protection.
         </p>
       </div>
     </div>
@@ -193,40 +189,29 @@ Chester-le-Street ASC is a non profit unincorporated association.
         <div class="col-auto">
           <img src="<?=htmlspecialchars(autoUrl("public/img/corporate/scds.png"))?>" class="img-fluid rounded-top" style="height: 75px;">
         </div>
-        <div class="col-auto">
+        <div class="col-auto d-none d-md-flex">
           <h1 class="mb-0">
             <span class="sr-only">SCDS </span>Membership Software
           </h1>
         </div>
       </div>
 
-      <nav class="navbar navbar-expand-lg navbar-dark rounded-bottom rounded-right" style="background: #9D005B;">
-        <a class="navbar-brand" href="#">Navbar</a>
+      <nav class="navbar navbar-expand-md navbar-dark rounded-bottom rounded-right" style="background: #9D005B;">
+        <a class="navbar-brand d-md-none" href="#">Navbar</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+              <a class="nav-link" href="<?=htmlspecialchars(autoUrl(""))?>">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropdown
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
-              </div>
+              <a class="nav-link" href="<?=htmlspecialchars(autoUrl("clubs"))?>">Clubs</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+              <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/" target="_blank">Help</a>
             </li>
           </ul>
         </div>
