@@ -1,5 +1,70 @@
 <?php
 
+$db = app()->db;
+$tenant = app()->tenant;
+
+$currentUser = null;
+if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'AutoLogin'] != "") {
+  $sql = "SELECT `UserID`, `Time` FROM `userLogins` WHERE `Hash` = ? AND `Time` >= ? AND `HashActive` = ?";
+
+  $data = [
+    $_COOKIE[COOKIE_PREFIX . 'AutoLogin'],
+    date('Y-m-d H:i:s', strtotime("120 days ago")),
+    1
+  ];
+
+  try {
+    $query = $db->prepare($sql);
+    $query->execute($data);
+  } catch (PDOException $e) {
+    //halt(500);
+  }
+
+  $row = $query->fetch(PDO::FETCH_ASSOC);
+  if ($row != null) {
+    $user = $row['UserID'];
+    $utc = new DateTimeZone("UTC");
+    $time = new DateTime($row['Time'], $utc);
+
+    try {
+      $login = new \CLSASC\Membership\Login($db);
+      $login->setUser($user);
+      $login->stayLoggedIn();
+      $login->preventWarningEmail();
+      $login->reLogin();
+      $currentUser = $login->login();
+    } catch (Exception $e) {
+      reportError($e);
+      // halt(403);
+    }
+
+    $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));
+
+    $sql = "UPDATE `userLogins` SET `Hash` = ? WHERE `Hash` = ?";
+    try {
+      $query = $db->prepare($sql);
+      $query->execute([$hash, $_COOKIE[COOKIE_PREFIX . 'AutoLogin']]);
+    } catch (PDOException $e) {
+      halt(500);
+    }
+
+    $expiry_time = ($time->format('U'))+60*60*24*120;
+
+    $secure = true;
+    if (app('request')->protocol == 'http' && bool(env('IS_DEV'))) {
+      $secure = false;
+    }
+    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , COOKIE_PATH, app('request')->hostname, $secure, false);
+  }
+} else if (isset($_SESSION['UserID'])) {
+  $currentUser = new User($_SESSION['UserID'], true);
+}
+app()->user = $currentUser;
+
+if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && !isset($_SESSION['DisableTrackers'])) {
+  $_SESSION['DisableTrackers'] = filter_var(getUserOption($_SESSION['UserID'], "DisableTrackers"), FILTER_VALIDATE_BOOLEAN);
+}
+
 if (bool(env('IS_DEV'))) {
   $this->group('/dev', function () {
     include BASE_PATH . 'controllers/dev/router.php';
