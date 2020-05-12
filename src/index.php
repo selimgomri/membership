@@ -118,12 +118,6 @@ function currentUrl()
   return $url;
 }
 
-$get_group = '/club/{clubcode}';
-
-if ($custom_domain_mode) {
-  $get_group = '/';
-}
-
 $config_file = $config;
 
 require $config_file;

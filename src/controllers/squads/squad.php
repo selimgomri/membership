@@ -74,8 +74,11 @@ while ($dob = $getBirths->fetchColumn()) {
   }
 }
 $agesArrayKeys = array_keys($agesArray);
-$minAge = min($agesArrayKeys);
-$maxAge = max($agesArrayKeys);
+$minAge = $maxAge = 0;
+if ($agesArrayKeys) {
+  $minAge = min($agesArrayKeys);
+  $maxAge = max($agesArrayKeys);
+}
 
 $output = [
   'Labels' => [],
