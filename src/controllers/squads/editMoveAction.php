@@ -1,7 +1,22 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
+
 use Respect\Validation\Validator as v;
+
+$getMove = $db->prepare("SELECT members.MemberID, `MForename`, `MSurname`, `SquadName`, moves.SquadID, `MovingDate` FROM ((`moves` INNER JOIN `members` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON squads.SquadID = moves.SquadID) WHERE moves.MemberID = ? AND Tenant = ?");
+$getMove->execute([
+	$id,
+	$tenant->getId()
+]);
+$move = $getMove->fetch(PDO::FETCH_ASSOC);
+
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
+
+if ($move == null) {
+	halt(404);
+}
 
 $errorState = false;
 $errorMessage = "";
@@ -11,6 +26,25 @@ $leavers = app()->tenant->getKey('LeaversSquad');
 
 $newSquad = $_POST['newSquad'];
 $movingDate = $_POST['movingDate'];
+
+// Verify new squad and member
+$checkMember = $db->prepare("SELECT COUNT(*) FROM members WHERE MemberID = ? AND Tenant = ?");
+$checkMember->execute([
+	$id,
+	$tenant->getId()
+]);
+if ($checkMember->fetchColumn() == 0) {
+	halt(404);
+}
+
+$checkSquad = $db->prepare("SELECT COUNT(*) FROM squads WHERE SquadID = ? AND Tenant = ?");
+$checkSquad->execute([
+	$newSquad,
+	$tenant->getId()
+]);
+if ($checkSquad->fetchColumn() == 0) {
+	halt(404);
+}
 
 $sendEmail = true;
 if ($newSquad == $leavers) {
@@ -44,8 +78,13 @@ try {
 
 if (!$errorState) {
   try {
-  	$update = $db->prepare("UPDATE `moves` SET `SquadID` = ?, `MovingDate` = ? WHERE `MemberID` = ?");
-		$update->execute([$newSquad, $movingDate, $id]);
+  	$update = $db->prepare("UPDATE `moves` SET `SquadID` = ?, `MovingDate` = ? WHERE `MemberID` = ? AND Tenant = ?");
+		$update->execute([
+			$newSquad,
+			$movingDate,
+			$id,
+			$tenant->getId()
+		]);
 		
 		if ($sendEmail) {
 
@@ -55,9 +94,12 @@ if (!$errorState) {
 
 			$getParentName = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
 
-			$sql = "SELECT `SquadName`, `MForename`, `MSurname`, `SquadFee`, SquadCoC, `SquadTimetable`, `users`.`UserID` FROM (((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) WHERE members.MemberID = ?";
+			$sql = "SELECT `SquadName`, `MForename`, `MSurname`, `SquadFee`, SquadCoC, `SquadTimetable`, `users`.`UserID` FROM (((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) WHERE members.MemberID = ? AND Tenant = ?";
 			$email_info = $db->prepare($sql);
-			$email_info->execute([$id]);
+			$email_info->execute([
+				$id,
+				$tenant->getId()
+			]);
 			$email_info = $email_info->fetch(PDO::FETCH_ASSOC);
 
 			if ($email_info) {

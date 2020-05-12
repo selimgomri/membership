@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 use Respect\Validation\Validator as v;
 
@@ -39,10 +40,11 @@ individualFeeTrack.MonthID = paymentMonths.MonthID) LEFT JOIN `paymentsPending`
 ON individualFeeTrack.PaymentID = paymentsPending.PaymentID) LEFT JOIN
 `members` ON members.MemberID = individualFeeTrack.MemberID) LEFT JOIN
 `payments` ON paymentsPending.PMkey = payments.PMkey) LEFT JOIN `users` ON
-users.UserID = individualFeeTrack.UserID) WHERE `paymentMonths`.`Date` LIKE
+users.UserID = individualFeeTrack.UserID) WHERE members.Tenant = ? AND `paymentMonths`.`Date` LIKE
 ? AND `individualFeeTrack`.`Type` = ? ORDER BY `Forename`
 ASC, `Surname` ASC, `users`.`UserID` ASC, `MForename` ASC, `MSurname` ASC;");
 $sql->execute([
+	$tenant->getId(),
 	$searchDate,
 	$name_type
 ]);

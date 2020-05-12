@@ -2,7 +2,12 @@
 $title = $pagetitle = "Add a Squad";
 
 $db = app()->db;
-$codesOfConduct = $db->query("SELECT Title, ID FROM posts WHERE `Type` = 'conduct_code' ORDER BY Title ASC");
+$tenant = app()->tenant;
+
+$codesOfConduct = $db->prepare("SELECT Title, ID FROM posts WHERE Tenant = ? AND `Type` = 'conduct_code' ORDER BY Title ASC");
+$codesOfConduct->execute([
+  $tenant->getId()
+]);
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php"; ?>

@@ -5,6 +5,7 @@
  */
 class Squad {
   private $db;
+  private int $tenant;
   protected int $id;
   private string $name;
   private int $monthlyFee;
@@ -35,10 +36,14 @@ class Squad {
    */
   public function revalidate() {
     $db = app()->db;
+    $tenant = app()->tenant;
 
-    $getSquad = $db->prepare("SELECT SquadName, SquadFee, SquadTimetable, SquadCoC FROM squads WHERE SquadID = ?");
+    $this->tenant = $tenant->getId();
+
+    $getSquad = $db->prepare("SELECT SquadName, SquadFee, SquadTimetable, SquadCoC FROM squads WHERE SquadID = ? AND Tenant = ?");
     $getSquad->execute([
-      $this->id
+      $this->id,
+      $this->tenant
     ]);
     $squad = $getSquad->fetch(PDO::FETCH_ASSOC);
 

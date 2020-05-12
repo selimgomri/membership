@@ -1,9 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getMove = $db->prepare("SELECT members.MemberID, `MForename`, `MSurname`, `SquadName`, moves.SquadID, `MovingDate` FROM ((`moves` INNER JOIN `members` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON squads.SquadID = moves.SquadID) WHERE moves.MemberID = ?");
-$getMove->execute([$id]);
+$getMove = $db->prepare("SELECT members.MemberID, `MForename`, `MSurname`, `SquadName`, moves.SquadID, `MovingDate` FROM ((`moves` INNER JOIN `members` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON squads.SquadID = moves.SquadID) WHERE moves.MemberID = ? AND Tenant = ?");
+$getMove->execute([
+	$id,
+	$tenant->getId()
+]);
 $move = $getMove->fetch(PDO::FETCH_ASSOC);
 
 $date = new DateTime('now', new DateTimeZone('Europe/London'));
@@ -17,8 +21,11 @@ $name = $move['MForename'] . " " . $move['MSurname'];
 $squadID = $move['SquadID'];
 $movingDate = $move['MovingDate'];
 
-$getSquad = $db->prepare("SELECT `SquadName`, squads.SquadID FROM `squads` INNER JOIN `members` ON squads.SquadID = members.SquadID WHERE `MemberID` = ?");
-$getSquad->execute([$id]);
+$getSquad = $db->prepare("SELECT `SquadName`, squads.SquadID FROM `squads` INNER JOIN `members` ON squads.SquadID = members.SquadID WHERE `MemberID` = ? AND members.Tenant = ?");
+$getSquad->execute([
+	$id,
+	$tenant->getId()
+]);
 $current = $getSquad->fetch(PDO::FETCH_ASSOC);
 
 if ($current == null) {
@@ -28,8 +35,11 @@ if ($current == null) {
 $currentSquad = $current['SquadName'];
 $currentSquadID = $current['SquadID'];
 
-$getSquads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` WHERE `SquadID` != ? ORDER BY `SquadFee` DESC, `SquadName` ASC");
-$getSquads->execute([$currentSquadID]);
+$getSquads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` WHERE Tenant = ? AND `SquadID` != ? ORDER BY `SquadFee` DESC, `SquadName` ASC");
+$getSquads->execute([
+	$tenant->getId(),
+	$currentSquadID
+]);
 
 $pagetitle = "Squad Move for " . htmlspecialchars($name);
 include BASE_PATH . "views/header.php";

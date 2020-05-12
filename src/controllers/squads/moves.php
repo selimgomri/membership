@@ -1,8 +1,9 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$moves = $db->query("SELECT
+$moves = $db->prepare("SELECT
   moves.MemberID,
   MForename,
   MSurname,
@@ -22,8 +23,12 @@ $moves = $db->query("SELECT
     )
     JOIN `squads` AS current ON members.SquadID = current.SquadID
   )
-  WHERE MovingDate >= CURDATE() ORDER BY `MForename` ASC, `MSurname` ASC
+  WHERE MovingDate >= ? AND members.Tenant = ? ORDER BY `MForename` ASC, `MSurname` ASC
 ");
+$moves->execute([
+  (new DateTime('now', new DateTimeZone('Europe/London')))->format('Y-m-d'),
+  $tenant->getId()
+]);
 $move = $moves->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = "Squad Moves";

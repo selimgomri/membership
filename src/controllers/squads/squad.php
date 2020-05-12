@@ -11,6 +11,7 @@ $replace = array("\n###### ", "\n##### ", "\n#### ", "\n### ", "\n## ");
 //echo $Extra->text('# Header {.sth}'); # prints: <h1 class="sth">Header</h1>
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $squad = null;
 try {
@@ -50,6 +51,76 @@ if ($_SESSION['AccessLevel'] != 'Parent' || $canAccessSquadInfo) {
 }
 
 $coaches = $squad->getCoaches();
+
+// Chart data section start
+$getNumSex = $db->prepare("SELECT COUNT(*) FROM members WHERE SquadID = ? AND Gender = ?");
+$getNumSex->execute([$id, 'Male']);
+$male = (int) $getNumSex->fetchColumn();
+$getNumSex->execute([$id, 'Female']);
+$female = (int) $getNumSex->fetchColumn();
+
+$getBirths = $db->prepare("SELECT DateOfBirth FROM members WHERE SquadID = ?");
+$getBirths->execute([$id]);
+$agesArray = [];
+$timeNow = new DateTime('now', new DateTimeZone('Europe/London'));
+while ($dob = $getBirths->fetchColumn()) {
+  $timeBirth = new DateTime($dob, new DateTimeZone('Europe/London'));
+  $interval = $timeNow->diff($timeBirth);
+  $age = (int) $interval->format('%y');
+  if (isset($agesArray[$age])) {
+    $agesArray[$age] += 1;
+  } else {
+    $agesArray[$age] = 1;
+  }
+}
+$agesArrayKeys = array_keys($agesArray);
+$minAge = min($agesArrayKeys);
+$maxAge = max($agesArrayKeys);
+
+$output = [
+  'Labels' => [],
+  'Data' => []
+];
+
+if ($maxAge - $minAge > 10) {
+  foreach ($agesArray as $age => $count) {
+    $output['Labels'][] = $age . " Year Olds";
+    $output['Data'][] = $count;
+  }
+} else {
+  for ($i = $minAge; $i < $maxAge+1; $i++) {
+    $output['Labels'][] = $i . " Year Olds";
+    if (isset($agesArray[$i])) {
+      $output['Data'][] = (int) $agesArray[$i];
+    } else {
+      $output['Data'][] = 0;
+    }
+  }
+}
+
+$pie = [
+  'labels' => [
+    'Male',
+    'Female'
+  ],
+  'datasets' => [[
+    'label' => $squad->getName() . ' Split',
+    'data' => [$male, $female],
+    'backgroundColor' => chartColours(2)
+  ]]
+];
+
+$bar = [
+  'labels' => $output['Labels'],
+  'datasets' => [[
+    'label' => $squad->getName() . ' Squad',
+    'data' => $output['Data'],
+    'backgroundColor' => chartColours(sizeof($output['Data']))
+  ]]
+];
+
+
+// Chart data section end
 
 $pagetitle = htmlspecialchars($squad->getName());
 
@@ -161,12 +232,12 @@ include BASE_PATH . 'views/header.php';
       <?php if ($_SESSION['AccessLevel'] != "Parent") { ?>
       <?php if ($numSwimmers > 0) { ?>
       <h2>Sex Split</h2>
-      <canvas class="mb-3" id="sexSplit"></canvas>
+      <canvas class="mb-3" id="sexSplit" data-data="<?=htmlspecialchars(json_encode($pie))?>"></canvas>
       <?php } ?>
 
       <h2>Age Distribution</h2>
       <p class="lead">The age distribution chart shows the number of swimmers of each age in this squad.</p>
-      <canvas class="mb-3" id="ageDistribution"></canvas>
+      <canvas class="mb-3" id="ageDistribution" data-data="<?=htmlspecialchars(json_encode($bar))?>"></canvas>
       <?php } ?>
 
       <?php if ($codeOfConduct != null) { ?>
@@ -183,7 +254,9 @@ include BASE_PATH . 'views/header.php';
 
 $footer = new \SCDS\Footer();
 if ($_SESSION['AccessLevel'] != "Parent") {
-  $footer->addJs("public/js/Chart.min.js");
-  $footer->addJs("js/charts/squad.js?squad=" . $id);
+  // $footer->addJs("public/js/Chart.min.js");
+  if ($numSwimmers > 0) {
+    $footer->addJs("public/js/squads/squad-charts.js");
+  }
 }
 $footer->render();

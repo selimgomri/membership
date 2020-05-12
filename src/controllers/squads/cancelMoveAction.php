@@ -1,21 +1,26 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
+
 use Respect\Validation\Validator as v;
 
 if (!v::intVal()->validate($id)) {
 	halt(404);
 }
 
-$delete = $db->prepare("DELETE FROM `moves` WHERE `MemberID` = ?");
+$delete = $db->prepare("DELETE FROM `moves` WHERE `MemberID` = ? AND Tenant = ?");
 
 // Notify the parent
 $sqlx = "INSERT INTO `notify` (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, ?, ?)";
 $notify_query = $db->prepare($sqlx);
 
-$sqlx = "SELECT `SquadName`, `MForename`, `MSurname`, `SquadFee`, `SquadTimetable`, `users`.`UserID` FROM (((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) WHERE members.MemberID = ?";
+$sqlx = "SELECT `SquadName`, `MForename`, `MSurname`, `SquadFee`, `SquadTimetable`, `users`.`UserID` FROM (((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) WHERE members.MemberID = ? AND Tenant = ?";
 $email_info = $db->prepare($sqlx);
-$email_info->execute([$id]);
+$email_info->execute([
+	$id,
+	$tenant->getId()
+]);
 $email_info = $email_info->fetch(PDO::FETCH_ASSOC);
 
 if ($email_info) {
@@ -44,7 +49,10 @@ if ($email_info) {
 }
 
 try {
-  $delete->execute([$id]);
+  $delete->execute([
+		$id,
+		$tenant->getId()
+	]);
 	header("Location: " . autoUrl("squads/moves"));
 } catch (Exception $e) {
 	halt(500);

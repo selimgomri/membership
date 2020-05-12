@@ -1,6 +1,8 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
+
 use Respect\Validation\Validator as v;
 
 $errorState = false;
@@ -11,6 +13,25 @@ $leavers = app()->tenant->getKey('LeaversSquad');
 
 $newSquad = $_POST['newSquad'];
 $movingDate = $_POST['movingDate'];
+
+// Verify new squad and member
+$checkMember = $db->prepare("SELECT COUNT(*) FROM members WHERE MemberID = ? AND Tenant = ?");
+$checkMember->execute([
+	$id,
+	$tenant->getId()
+]);
+if ($checkMember->fetchColumn() == 0) {
+	halt(404);
+}
+
+$checkSquad = $db->prepare("SELECT COUNT(*) FROM squads WHERE SquadID = ? AND Tenant = ?");
+$checkSquad->execute([
+	$newSquad,
+	$tenant->getId()
+]);
+if ($checkSquad->fetchColumn() == 0) {
+	halt(404);
+}
 
 $sendEmail = true;
 if ($newSquad == $leavers) {

@@ -1,10 +1,14 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$sql = "SELECT MoveID, moves.SquadID, squads.SquadName, `MForename`, `MSurname`, Forename, Surname, DateOfBirth, squads.SquadFee, squads.SquadCoC, squads.SquadTimetable, `users`.`UserID`, MovingDate, old.SquadName AS OldSquad, old.SquadFee AS OldFee FROM ((((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) INNER JOIN squads AS old ON members.SquadID = old.SquadID) WHERE members.MemberID = ?";
+$sql = "SELECT MoveID, moves.SquadID, squads.SquadName, `MForename`, `MSurname`, Forename, Surname, DateOfBirth, squads.SquadFee, squads.SquadCoC, squads.SquadTimetable, `users`.`UserID`, MovingDate, old.SquadName AS OldSquad, old.SquadFee AS OldFee FROM ((((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) INNER JOIN squads AS old ON members.SquadID = old.SquadID) WHERE members.MemberID = ? AND members.Tenant = ?";
 $email_info = $db->prepare($sql);
-$email_info->execute([$id]);
+$email_info->execute([
+  $id,
+  $tenant->getId()
+]);
 $email_info = $email_info->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname']) . " Squad Move Contract";

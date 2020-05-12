@@ -2,7 +2,12 @@
 
 
 $db = app()->db;
-$squads = $db->query("SELECT SquadID, SquadName, SquadFee, SquadCoach FROM squads ORDER BY SquadFee DESC, SquadName ASC");
+$tenant = app()->tenant;
+
+$squads = $db->prepare("SELECT SquadID, SquadName, SquadFee, SquadCoach FROM squads WHERE Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+$squads->execute([
+	$tenant->getId()
+]);
 
 $getCoaches = $db->prepare("SELECT Forename fn, Surname sn FROM coaches INNER JOIN users ON coaches.User = users.UserID WHERE coaches.Squad = ? ORDER BY coaches.Type ASC, Forename ASC, Surname ASC");
 

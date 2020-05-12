@@ -1,9 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$moveCount = $db->prepare("SELECT COUNT(*) FROM `moves` WHERE `MemberID` = ?");
-$moveCount->execute([$id]);
+$moveCount = $db->prepare("SELECT COUNT(*) FROM `moves` WHERE `MemberID` = ? AND Tenant = ?");
+$moveCount->execute([
+	$id,
+	$tenant->getId()
+]);
 
 $date = new DateTime('now', new DateTimeZone('Europe/London'));
 
@@ -15,8 +19,11 @@ if ($moveCount->fetchColumn() > 0) {
 	header("Location: " . autoUrl("swimmers/" . $id . "/edit-move"));
 	return;
 } else {
-  $getMemberInfo = $db->prepare("SELECT `MForename`, `MSurname`, `SquadName`, members.SquadID FROM `members` INNER JOIN `squads` ON members.SquadID = squads.SquadID WHERE `MemberID` = ?");
-  $getMemberInfo->execute([$id]);
+  $getMemberInfo = $db->prepare("SELECT `MForename`, `MSurname`, `SquadName`, members.SquadID FROM `members` INNER JOIN `squads` ON members.SquadID = squads.SquadID WHERE `MemberID` = ? AND Tenant = ?");
+  $getMemberInfo->execute([
+		$id,
+		$tenant->getId()
+	]);
 
 	$member = $getMemberInfo->fetch(PDO::FETCH_ASSOC);
 
@@ -28,8 +35,11 @@ if ($moveCount->fetchColumn() > 0) {
 	$currentSquad = $member['SquadName'];
 	$squadID = $member['SquadID'];
 
-  $getSquads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` WHERE `SquadID` != ? ORDER BY `SquadFee` DESC, `SquadName` ASC");
-  $getSquads->execute([$squadID]);
+  $getSquads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` WHERE `SquadID` != ? AND Tenant = ? ORDER BY `SquadFee` DESC, `SquadName` ASC");
+  $getSquads->execute([
+		$squadID,
+		$tenant->getId()
+	]);
   $squad = $getSquads->fetch(PDO::FETCH_ASSOC);
 }
 
