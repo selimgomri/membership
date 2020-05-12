@@ -1,7 +1,6 @@
 
 let sexSplit = document.getElementById('sexSplit').getContext('2d');
 let sexSplitData = JSON.parse(document.getElementById('sexSplit').dataset.data);
-console.log(sexSplitData);
 let sexSplitChart = new Chart(sexSplit, {
   // The type of chart we want to create
   type: 'pie',
@@ -15,7 +14,6 @@ let sexSplitChart = new Chart(sexSplit, {
 
 var ageDistribution = document.getElementById('ageDistribution').getContext('2d');
 let ageDistributionData = JSON.parse(document.getElementById('ageDistribution').dataset.data);
-console.log(ageDistributionData);
 var ageDistributionChart = new Chart(ageDistribution, {
   // The type of chart we want to create
   type: 'horizontalBar',
