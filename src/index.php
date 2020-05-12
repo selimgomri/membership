@@ -118,10 +118,6 @@ function currentUrl()
   return $url;
 }
 
-$config_file = $config;
-
-require $config_file;
-
 // This code is required so cookies work in dev environments
 $cookieSecure = 1;
 if (app('request')->protocol == 'http') {
