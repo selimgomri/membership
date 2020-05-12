@@ -301,14 +301,17 @@ try {
   echo ob_get_clean();
 } catch (\SCDS\HaltException $e) {
   // Do nothing, just stops execution
+  pre($e);
 } catch (\SCDS\CSRFValidityException $e) {
   // Deals with any uncaught CSRF problems
-  ob_get_clean();
-  halt(403, false);
+  //ob_get_clean();
+  //halt(403, false);
+  pre($e);
 } catch (Exception $e) {
   // This catches any uncaught exceptions.
-  ob_get_clean();
-  halt(500, false);
+  //ob_get_clean();
+  //halt(500, false);
+  pre($e);
 } catch (Error $e) {
   // This catches any fatal or recoverable errors.
   // ob_get_clean();
