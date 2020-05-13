@@ -1,10 +1,18 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getSquadInfo = $db->prepare("SELECT SquadName FROM squads WHERE SquadID = ?");
-$getSquadInfo->execute([$squad]);
+$getSquadInfo = $db->prepare("SELECT SquadName FROM squads WHERE SquadID = ? AND Tenant = ?");
+$getSquadInfo->execute([
+  $squad,
+  $tenant->getId()
+]);
 $squadInfo = $getSquadInfo->fetch(PDO::FETCH_ASSOC);
+
+if (!$squadInfo) {
+  halt(404);
+}
 
 $getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM members WHERE members.SquadID = ? ORDER BY fn ASC, sn ASC");
 $getMembers->execute([$squad]);

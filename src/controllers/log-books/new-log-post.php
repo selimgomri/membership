@@ -1,9 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getMember = $db->prepare("SELECT MForename fn, MSurname sn, members.UserID FROM members INNER JOIN squads ON squads.SquadID = members.SquadID WHERE members.MemberID = ?");
-$getMember->execute([$member]);
+$getMember = $db->prepare("SELECT MForename fn, MSurname sn, members.UserID FROM members INNER JOIN squads ON squads.SquadID = members.SquadID WHERE members.MemberID = ? AND members.Tenant = ?");
+$getMember->execute([
+  $member,
+  $tenant->getId()
+]);
 $memberInfo = $getMember->fetch(PDO::FETCH_ASSOC);
 
 if ($memberInfo == null) {

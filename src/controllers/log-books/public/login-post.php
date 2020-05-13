@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 try {
 
@@ -13,17 +14,19 @@ try {
 
     // Swim England numbers in system may not be unique
     // Check count is <= 1
-    $getCount = $db->prepare("SELECT COUNT(*) FROM members WHERE ASANumber = ?");
+    $getCount = $db->prepare("SELECT COUNT(*) FROM members WHERE ASANumber = ? AND Tenant = ?");
     $getCount->execute([
-      $_POST['swim-england']
+      $_POST['swim-england'],
+      $tenant->getId()
     ]);
     if ($getCount->fetchColumn() > 1) {
       throw new Exception('Your Swim England number is not unique in the ' . app()->tenant->getKey('CLUB_NAME') . ' database. We cannot log you in with ambiguous details.');
     } 
 
-    $getMember = $db->prepare("SELECT MemberID, ASANumber, PWHash, PWWrong FROM members WHERE ASANumber = ?");
+    $getMember = $db->prepare("SELECT MemberID, ASANumber, PWHash, PWWrong FROM members WHERE ASANumber = ? AND Tenant = ?");
     $getMember->execute([
-      trim($_POST['swim-england'])
+      trim($_POST['swim-england']),
+      $tenant->getId()
     ]);
 
     $member = $getMember->fetch(PDO::FETCH_ASSOC);

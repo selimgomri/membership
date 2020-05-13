@@ -1,10 +1,12 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getMember = $db->prepare("SELECT MForename fn, MSurname sn, ASANumber se, UserID `uid` FROM members WHERE MemberID = ?");
+$getMember = $db->prepare("SELECT MForename fn, MSurname sn, ASANumber se, UserID `uid` FROM members WHERE MemberID = ? AND Tenant = ?");
 $getMember->execute([
-  $_SESSION['LogBooks-Member']
+  $_SESSION['LogBooks-Member'],
+  $tenant->getId()
 ]);
 $member = $getMember->fetch(PDO::FETCH_ASSOC);
 
