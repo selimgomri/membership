@@ -1,7 +1,7 @@
 <?php
 
 $db = app()->db;
-$tenant = app()->db;
+$tenant = app()->tenant;
 
 $query = null;
 if ($int) {

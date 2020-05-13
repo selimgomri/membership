@@ -5,7 +5,7 @@ if (!SCDS\CSRF::verify()) {
 }
 
 $db = app()->db;
-$tenant = app()->db;
+$tenant = app()->tenant;
 
 $added = $action = false;
 
