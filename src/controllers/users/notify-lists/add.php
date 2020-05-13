@@ -1,12 +1,19 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
-$userInfo->execute([$id]);
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ? AND Tenant = ?");
+$userInfo->execute([
+  $id,
+  $tenant->getId()
+]);
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
 
-$getLists = $db->query("SELECT targetedLists.Name, targetedLists.ID FROM targetedLists");
+$getLists = $db->prepare("SELECT targetedLists.Name, targetedLists.ID FROM targetedLists WHERE Tenant = ?");
+$getLists->execute([
+  $tenant->getId()
+]);
 $list = $getLists->fetch(PDO::FETCH_ASSOC);
 
 if ($info == null) {

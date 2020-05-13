@@ -5,6 +5,7 @@
 // }
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $allowedTypes = ['assign', 'revoke'];
 
@@ -28,9 +29,10 @@ $responseData = [
 try {
 
   // Get user details
-  $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
+  $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ? AND Tenant = ?");
   $user->execute([
-    $_POST['user']
+    $_POST['user'],
+    $tenant->getId()
   ]);
   $user = $user->fetch(PDO::FETCH_ASSOC);
 
@@ -55,9 +57,10 @@ try {
   $responseData['user']['email'] = $user['EmailAddress'];
 
   // Get squad details
-  $squad = $db->prepare("SELECT SquadName FROM squads WHERE SquadID = ?");
+  $squad = $db->prepare("SELECT SquadName FROM squads WHERE SquadID = ? AND Tenant = ?");
   $squad->execute([
-    $_POST['squad']
+    $_POST['squad'],
+    $tenant->getId()
   ]);
   $squad = $squad->fetchColumn();
 

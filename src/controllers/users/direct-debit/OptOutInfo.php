@@ -1,9 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getUser = $db->prepare("SELECT Forename, Surname, RR FROM users INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE UserID = ? AND `permissions`.`Permission` = 'Parent';");
-$getUser->execute([$person]);
+$getUser = $db->prepare("SELECT Forename, Surname, RR FROM users INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE Tenant = ? AND UserID = ? AND `permissions`.`Permission` = 'Parent';");
+$getUser->execute([
+  $tenant->getId(),
+  $person
+]);
 
 $user = $getUser->fetch(PDO::FETCH_ASSOC);
 

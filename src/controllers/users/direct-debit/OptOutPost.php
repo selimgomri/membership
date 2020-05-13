@@ -1,5 +1,17 @@
 <?php
 
+$tenant = app()->tenant;
+
+$checkUser = $db->prepare("SELECT COUNT(*) FROM users WHERE UserID = ? AND Tenant = ?");
+$checkUser->execute([
+  $person,
+  $tenant->getId()
+]);
+
+if ($checkUser->fetchColumn() == 0) {
+  halt(404);
+}
+
 try {
 
   if (!\SCDS\FormIdempotency::verify() || !\SCDS\CSRF::verify()) {

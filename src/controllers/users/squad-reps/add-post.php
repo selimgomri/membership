@@ -1,6 +1,27 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
+
+// Check user
+$userCount = $db->prepare("SELECT COUNT(*) FROM users WHERE UserID = ? AND Tenant = ?");
+$userCount->execute([
+  $id,
+  $tenant->getId()
+]);
+if ($userCount->fetchColumn() == 0) {
+  halt(404);
+}
+
+// Check squad
+$squadCount = $db->prepare("SELECT COUNT(*) FROM squads WHERE SquadID = ? AND Tenant = ?");
+$squadCount->execute([
+  $_POST['squad-select'],
+  $tenant->getId()
+]);
+if ($squadCount->fetchColumn() == 0) {
+  halt(404);
+}
 
 try {
 

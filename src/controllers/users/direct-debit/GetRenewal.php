@@ -1,11 +1,19 @@
 <?php
 
 $db = app()->db;
-$latest = $db->query("SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE() AND CURDATE() <= `EndDate` ORDER BY renewals.ID DESC LIMIT 1");
+$tenant = app()->tenant;
+
+$latest = $db->prepare("SELECT * FROM `renewals` WHERE Tenant = ? `StartDate` <= CURDATE() AND CURDATE() <= `EndDate` ORDER BY renewals.ID DESC LIMIT 1");
+$latest->execute([
+  $tenant->getId()
+]);
 $latestRenewal = $latest->fetch(PDO::FETCH_ASSOC);
 
-$getUserDetails = $db->prepare("SELECT RR FROM users WHERE UserID = ?");
-$getUserDetails->execute([$person]);
+$getUserDetails = $db->prepare("SELECT RR FROM users WHERE UserID = ? AND Tenant = ?");
+$getUserDetails->execute([
+  $person,
+  $tenant->getId()
+]);
 $reg = $getUserDetails->fetchColumn();
 
 $renewal = null;
