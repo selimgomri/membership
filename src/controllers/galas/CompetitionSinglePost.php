@@ -1,6 +1,17 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
+
+// Verify comp
+$galaCount = $db->prepare("SELECT COUNT(*) FROM galas WHERE Tenant = ? AND GalaID = ?");
+$galaCount->execute([
+  $tenant->getId(),
+  $id
+]);
+if ($galaCount->fetchColumn() == 0) {
+  halt(404);
+}
 
 $hyTek = 0;
 

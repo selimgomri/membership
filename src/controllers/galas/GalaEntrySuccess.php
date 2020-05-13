@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $canPayByCard = false;
 if (app()->tenant->getKey('STRIPE')) {
@@ -12,10 +13,11 @@ $swimsTextArray = ['50 Free','100 Free','200 Free','400 Free','800 Free','1500 F
 $swimsTimeArray = ['50FreeTime','100FreeTime','200FreeTime','400FreeTime','800FreeTime','1500FreeTime','50BreastTime','100BreastTime','200BreastTime','50FlyTime','100FlyTime','200FlyTime','50BackTime','100BackTime','200BackTime','100IMTime','150IMTime','200IMTime','400IMTime',];
 
 $entryList = "";
-$get = $db->prepare("SELECT * FROM (galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galaEntries.MemberID = ? AND galaEntries.GalaID = ?");
+$get = $db->prepare("SELECT * FROM (galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galaEntries.MemberID = ? AND galaEntries.GalaID = ? AND galas.Tenant = ?");
 $get->execute([
   $_SESSION['SuccessfulGalaEntry']['Swimmer'],
-  $_SESSION['SuccessfulGalaEntry']['Gala']
+  $_SESSION['SuccessfulGalaEntry']['Gala'],
+  $tenant->getId()
 ]);
 $row = $get->fetch(PDO::FETCH_ASSOC);
 // Print <li>Swim Name</li> for each entry
@@ -25,10 +27,11 @@ for ($y=0; $y<sizeof($swimsArray); $y++) {
   }
 }
 
-$get = $db->prepare("SELECT members.MForename, members.MSurname, galas.GalaName, galas.GalaFee, galas.GalaFeeConstant, users.EmailAddress, users.Forename, users.Surname, FeeToPay, EntryID FROM (((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN users ON members.UserID = users.UserID) WHERE galaEntries.MemberID = ? AND galaEntries.GalaID = ?");
+$get = $db->prepare("SELECT members.MForename, members.MSurname, galas.GalaName, galas.GalaFee, galas.GalaFeeConstant, users.EmailAddress, users.Forename, users.Surname, FeeToPay, EntryID FROM (((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN users ON members.UserID = users.UserID) WHERE galaEntries.MemberID = ? AND galaEntries.GalaID = ? AND galas.Tenant = ?");
 $get->execute([
   $_SESSION['SuccessfulGalaEntry']['Swimmer'],
-  $_SESSION['SuccessfulGalaEntry']['Gala']
+  $_SESSION['SuccessfulGalaEntry']['Gala'],
+  $tenant->getId()
 ]);
 $row = $get->fetch(PDO::FETCH_ASSOC);
 

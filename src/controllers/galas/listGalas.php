@@ -6,9 +6,13 @@ $now = new DateTime('now', new DateTimeZone('Europe/London'));
 $nowDay = $now->format('Y-m-d');
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$galas = $db->prepare("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength FROM galas WHERE GalaDate >= ?");
-$galas->execute([$nowDay]);
+$galas = $db->prepare("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength FROM galas WHERE Tenant = ? AND GalaDate >= ?");
+$galas->execute([
+  $tenant->getId(),
+  $nowDay
+]);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
 
 // Arrays of swims used to check whever to print the name of the swim entered
@@ -57,8 +61,14 @@ $countEntriesEvents = [];
 $countEntriesCount = [];
 $countEntriesColours = [];
 foreach ($swimsArray as $col => $name) {
-  $getCount = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE `" . $col . "` = 1");
-  $getCount->execute([$_SESSION['UserID']]);
+  $getCount = null;
+  if ($_SESSION['AccessLevel'] == 'Parent') {
+    $getCount = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE Tenant = ? AND `" . $col . "` = 1");
+    $getCount->execute([$tenant->getId()]);
+  } else {
+    $getCount = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE Tenant = ? AND `" . $col . "` = 1");
+    $getCount->execute([$tenant->getId()]);
+  }
   $count = $getCount->fetchColumn();
   if ($count > 0) {
     $countEntries[$col]['Name'] = $name;
@@ -171,8 +181,11 @@ include "galaMenu.php"; ?>
 					</div>
 
 					<?php
-          $sql = $db->prepare("SELECT DISTINCT `galas`.`GalaID`, `GalaName` FROM `galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID` WHERE `GalaDate` >= ? ORDER BY `GalaDate` ASC;");
-          $sql->execute([$nowDay]);
+          $sql = $db->prepare("SELECT DISTINCT `galas`.`GalaID`, `GalaName` FROM `galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID` WHERE Tenant = ? AND `GalaDate` >= ? ORDER BY `GalaDate` ASC;");
+          $sql->execute([
+            $tenant->getId(),
+            $nowDay
+          ]);
 					$row = $sql->fetch(PDO::FETCH_ASSOC);
 					if ($row != null) {
 						?><ul class="list-unstyled mb-0"><?php

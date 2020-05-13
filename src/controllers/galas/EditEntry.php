@@ -1,8 +1,8 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$use_white_background = true;
 $disabled = "";
 
 $numFormat = new NumberFormatter("en", NumberFormatter::SPELLOUT);
@@ -11,13 +11,20 @@ $sql = null;
 
 $parentName = null;
 if ($_SESSION['AccessLevel'] == "Parent") {
-  $sql = $db->prepare("SELECT * FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE `EntryID` = ? AND members.UserID = ?;");
-  $sql->execute([$id, $_SESSION['UserID']]);
+  $sql = $db->prepare("SELECT * FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galas.Tenant = ? AND`EntryID` = ? AND members.UserID = ?;");
+  $sql->execute([
+    $tenant->getId(),
+    $id,
+    $_SESSION['UserID']
+  ]);
 } else {
-  $sql = $db->prepare("SELECT * FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE `EntryID` = ?");
-  $sql->execute([$id]);
+  $sql = $db->prepare("SELECT * FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galas.Tenant = ? AND `EntryID` = ?");
+  $sql->execute([
+    $tenant->getId(),
+    $id
+  ]);
 
-  $getParentName = $db->prepare("SELECT Forename, Surname FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN users ON members.UserID = users.UserID) WHERE galaEntries.EntryID = ?");
+  $getParentName = $db->prepare("SELECT Forename, Surname FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN users ON members.UserID = users.UserID) WHERE members.Tenant = ? AND galaEntries.EntryID = ?");
   $getParentName->execute([
     $id
   ]);

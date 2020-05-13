@@ -1,5 +1,7 @@
 <?php
 
+$tenant = app()->tenant;
+
 // If select sessions, include that code else continue
 
 if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
@@ -10,17 +12,33 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
   $db = app()->db;
 
   // Get swimmer info
-	$getSwimmer = $db->prepare("SELECT UserID, SquadID FROM members WHERE MemberID = ?");
+	$getSwimmer = $db->prepare("SELECT UserID, SquadID FROM members WHERE MemberID = ? AND Tenant = ?");
 	$getSwimmer->execute([
-	  $_POST['swimmer']
+    $_POST['swimmer'],
+    $tenant->getId()
   ]);
   $swimmerDetails = $getSwimmer->fetch(PDO::FETCH_ASSOC);
+
+  if ($swimmerDetails == null) {
+    halt(404);
+  }
+
   $swimmer = $swimmerDetails['UserID'];
   $squad = $swimmerDetails['SquadID'];
 
 	if ($swimmer == null || ($_SESSION['AccessLevel'] == 'Parent' && $swimmer != $_SESSION['UserID'])) {
 		halt(404);
-	}
+  }
+  
+  // Check galas
+  $getGalas = $db->prepare("SELECT COUNT(*) FROM galas WHERE GalaID = ? AND Tenant = ?");
+  $getGalas->execute([
+    $_POST['gala'],
+    $tenant->getId()
+  ]);
+  if ($getGalas->fetchColumn() == 0) {
+    halt(404);
+  }
 
   $swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];
   $swimsTextArray = ['50 Free','100 Free','200 Free','400 Free','800 Free','1500 Free','50 Breast','100 Breast','200 Breast','50 Fly','100 Fly','200 Fly','50 Back','100 Back','200 Back','100 IM','150 IM','200 IM','400 IM',];

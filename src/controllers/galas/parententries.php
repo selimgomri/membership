@@ -3,6 +3,7 @@
 $userID = $_SESSION['UserID'];
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $entries = $db->prepare("SELECT EntryID, GalaName, ClosingDate, GalaVenue, MForename, MSurname, EntryProcessed Processed, Charged, Refunded, Locked, Vetoable, FeeToPay, RequiresApproval, Approved FROM ((galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE GalaDate >= CURDATE() AND members.UserID = ?");
 $entries->execute([$_SESSION['UserID']]);

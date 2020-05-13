@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $start = 0;
 $page = 0;
@@ -12,12 +13,16 @@ if (isset($_GET['page']) && ((int) $_GET['page']) != 0) {
   $page = 1;
 }
 
-$getCount = $db->query("SELECT COUNT(*) FROM galas");
+$getCount = $db->prepare("SELECT COUNT(*) FROM galas WHERE Tenant = ?");
+$getCount->execute([
+  $tenant->getId()
+]);
 $numGalas  = $getCount->fetchColumn();
 $numPages = ((int)($numGalas/10)) + 1;
 
-$getGalas = $db->prepare("SELECT GalaID `id`, GalaName `name`, GalaVenue venue, ClosingDate closes, GalaDate finishes FROM galas ORDER BY `GalaDate` DESC, ClosingDate DESC LIMIT :offset, :num");
-$getGalas->bindValue(':offset', $start, PDO::PARAM_INT); 
+$getGalas = $db->prepare("SELECT GalaID `id`, GalaName `name`, GalaVenue venue, ClosingDate closes, GalaDate finishes FROM galas WHERE Tenant = :tenant ORDER BY `GalaDate` DESC, ClosingDate DESC LIMIT :offset, :num");
+$getGalas->bindValue(':tenant', $tenant->getId(), PDO::PARAM_INT);
+$getGalas->bindValue(':offset', $start, PDO::PARAM_INT);
 $getGalas->bindValue(':num', 10, PDO::PARAM_INT); 
 $getGalas->execute();
 $gala = $getGalas->fetch(PDO::FETCH_ASSOC);

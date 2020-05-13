@@ -1,10 +1,18 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$galas = $db->prepare("SELECT GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters FROM galas WHERE GalaID = ?");
-$galas->execute([$id]);
+$galas = $db->prepare("SELECT GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters FROM galas WHERE Tenant = ? AND GalaID = ?");
+$galas->execute([
+  $tenant->getId(),
+  $id
+]);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
+
+if ($gala == null) {
+  halt(404);
+}
 
 $numEntries = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE GalaID = ?");
 $numEntries->execute([$id]);
@@ -42,10 +50,6 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 }
 
 $entry = $entries->fetch(PDO::FETCH_ASSOC);
-
-if ($gala == null) {
-  halt(404);
-}
 
 // Arrays of swims used to check whever to print the name of the swim entered
 // BEWARE This is in an order to ease inputting data into SportSystems, contrary to these arrays in other files

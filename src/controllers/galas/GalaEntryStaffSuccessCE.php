@@ -1,10 +1,12 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getSwimmer = $db->prepare("SELECT MForename, MSurname FROM members WHERE MemberID = ?");
+$getSwimmer = $db->prepare("SELECT MForename, MSurname FROM members WHERE MemberID = ? AND Tenant = ?");
 $getSwimmer->execute([
-  $swimmer
+  $swimmer,
+  $tenant->getId()
 ]);
 $row = $getSwimmer->fetch(PDO::FETCH_ASSOC);
 

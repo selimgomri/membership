@@ -1,8 +1,12 @@
 <?php
 
 $db = app()->db;
-$getGala = $db->prepare("SELECT * FROM `galas` WHERE `GalaID` = ?");
-$getGala->execute([$id]);
+$tenant = app()->tenant;
+$getGala = $db->prepare("SELECT * FROM `galas` WHERE `GalaID` = ? AND Tenant = ?");
+$getGala->execute([
+  $id,
+  $tenant->getId()
+]);
 
 $row = $getGala->fetch(PDO::FETCH_ASSOC);
 $course = ['LONG', 'SHORT', 'IRREGULAR'];

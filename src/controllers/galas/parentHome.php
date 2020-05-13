@@ -3,12 +3,16 @@
 $userID = $_SESSION['UserID'];
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
 $nowDay = $now->format('Y-m-d');
 
-$galas = $db->prepare("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters FROM galas WHERE GalaDate >= ? ORDER BY GalaDate ASC");
-$galas->execute([$nowDay]);
+$galas = $db->prepare("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters FROM galas WHERE Tenant = ? AND GalaDate >= ? ORDER BY GalaDate ASC");
+$galas->execute([
+  $tenant->getId(),
+  $nowDay
+]);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
 $entriesOpen = false;
 
