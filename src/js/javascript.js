@@ -2,7 +2,9 @@
  * Imports
  */
 
-// import $ from 'jquery';
-// import 'popper.js';
+import $ from 'jquery';
 import 'bootstrap';
 import Chart from 'chart.js';
+
+window.jQuery = $;
+window.$ = $;

@@ -5,8 +5,11 @@ $db = app()->db;
 $target = $_SESSION['UserID'];
 
 try {
-	$query = $db->prepare("SELECT * FROM `users` WHERE `UserID` = ?");
-	$query->execute([$_SESSION['UserSimulation']['RealUser']]);
+	$query = $db->prepare("SELECT * FROM `users` WHERE `UserID` = ? AND Tenant = ?");
+	$query->execute([
+		$_SESSION['UserSimulation']['RealUser'],
+		$tenant->getId()
+	]);
 
 	$info = $query->fetch(PDO::FETCH_ASSOC);
 
