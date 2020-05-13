@@ -102,6 +102,11 @@ class Tenant
       $defaultKeys[$key] = $value;
     }
 
+    $defaultKeys['CLUB_NAME'] = $this->name;
+    if ($this->code) {
+      $defaultKeys['ASA_CLUB_CODE'] = mb_strtoupper($this->code);
+    }
+
     $this->keys = $defaultKeys;
   }
 

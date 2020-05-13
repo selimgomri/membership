@@ -53,6 +53,15 @@ $districts = json_decode(file_get_contents(BASE_PATH . 'includes/regions/regions
 $counties = json_decode(file_get_contents(BASE_PATH . 'includes/regions/counties.json'), true);
 
 $clubs = [];
+
+$clubs += ['0000' => [
+  'Name' => 'Custom Club',
+  'Code' => '0000',
+  'District' => 'NONE',
+  'County' => 'NONE',
+  'MeetName' => 'NONE',
+]];
+
 $row = 1;
 if (($handle = fopen(BASE_PATH . "includes/regions/clubs.csv", "r")) !== FALSE) {
   while (($data = fgetcsv($handle, 1000)) !== false) {
