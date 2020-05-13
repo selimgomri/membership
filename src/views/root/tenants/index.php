@@ -25,7 +25,7 @@ include BASE_PATH . "views/root/header.php";
           <?php do {
             $link = $club['ID'];
             if ($club['Code']) {
-              $link = $club['Code'];
+              $link = mb_strtolower($club['Code']);
             }
           ?>
           <a class="list-group-item list-group-item-action" href="<?=htmlspecialchars(autoUrl($link))?>"><?=htmlspecialchars($club['Name'])?></a>
