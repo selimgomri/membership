@@ -1,5 +1,9 @@
 <?php
 
+$db = app()->db;
+$getClubs = $db->query("SELECT ID, `Name`, Code, Verified FROM tenants ORDER BY `Name` ASC");
+$club = $getClubs->fetch(PDO::FETCH_ASSOC);
+
 $pagetitle = "Clubs";
 
 include BASE_PATH . "views/root/header.php";
@@ -12,16 +16,29 @@ include BASE_PATH . "views/root/header.php";
       <h1 class="">Clubs</h1>
       <p class="lead">Find your club to get started.</p>
 
+      <?php if ($club) { ?>
       <div class="card">
         <div class="card-header">
           Featured
         </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Cras justo odio</li>
-          <li class="list-group-item">Dapibus ac facilisis in</li>
-          <li class="list-group-item">Vestibulum at eros</li>
-        </ul>
+        <div class="list-group list-group-flush">
+          <?php do {
+            $link = $club['ID'];
+            if ($club['Code']) {
+              $link = $club['Code'];
+            }
+          ?>
+          <a class="list-group-item list-group-item-action" href="<?=htmlspecialchars(autoUrl($link))?>"><?=htmlspecialchars($club['Name'])?></a>
+          <?php } while ($club = $getClubs->fetch(PDO::FETCH_ASSOC)); ?>
+          </div>
       </div>
+      <?php } else { ?>
+      <div class="alert alert-info">
+        <p class="mb-0">
+          <strong>No clubs</strong>
+        </p>
+      </div>
+      <?php } ?>
     </div>
   </div>
 </div>
