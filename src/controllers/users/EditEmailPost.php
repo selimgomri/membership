@@ -5,6 +5,7 @@ if (!SCDS\CSRF::verify()) {
 }
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 use Respect\Validation\Validator as v;
 

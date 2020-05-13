@@ -7,9 +7,19 @@ use Brick\PhoneNumber\PhoneNumberParseException;
 use Brick\PhoneNumber\PhoneNumberFormat;
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, ASANumber, ASAMember, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory, RR FROM users WHERE UserID = ? AND Active");
-$userInfo->execute([$id]);
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, ASANumber, ASAMember, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory, RR FROM users WHERE Tenant = ? AND UserID = ? AND Active");
+$userInfo->execute([
+  $tenant->getId(),
+  $id
+]);
+
+$info = $userInfo->fetch(PDO::FETCH_ASSOC);
+
+if ($info == null) {
+  halt(404);
+}
 
 $qualifications;
 try {
@@ -22,12 +32,6 @@ try {
 $logins = $db->prepare("SELECT `Time`, `IPAddress`, Browser, `Platform`, `GeoLocation` FROM userLogins WHERE UserID = ? ORDER BY `Time` DESC LIMIT 1");
 $logins->execute([$id]);
 $loginInfo = $logins->fetch(PDO::FETCH_ASSOC);
-
-$info = $userInfo->fetch(PDO::FETCH_ASSOC);
-
-if ($info == null) {
-  halt(404);
-}
 
 $userObj = new \User($id);
 
@@ -515,33 +519,6 @@ include BASE_PATH . "views/header.php";
         </div>
       </div>
       <?php } ?>
-
-      <div class="mb-4 d-none">
-        <h2>
-          Access Control
-        </h2>
-        <p class="lead">
-          Access Control oversees access to resources.
-        </p>
-
-        <div class="row">
-          <div class="col-sm-6 col-lg-4">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <label class="input-group-text" for="accountType">Account Type</label>
-              </div>
-              <select class="custom-select" id="accountType" name="accountType" data-user-id="<?=htmlspecialchars($id)?>" data-ajax-url="<?=htmlspecialchars(autoUrl('users/ajax/userSettings/'))?>">
-                <option <?=$par?> value="Parent">Parent (Default)</option>
-                <option <?=$coa?> value="Coach">Coach</option>
-                <option <?=$gal?> value="Galas">Galas</option>
-                <option <?=$adm?> value="Admin">Admin</option>
-              </select>
-            </div>
-            <div class="mt-2" id="accountTypeOutput"></div>
-          </div>
-        </div>
-        <hr>
-      </div>
 
       <div class="alert alert-info p-3 mb-4">
         <h2 id="qualifications">Qualifications</h2>

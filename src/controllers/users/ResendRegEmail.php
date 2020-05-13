@@ -1,14 +1,16 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 // Instantiate variables to go in JSON
 $alertContent;
 $alertContextualClass;
 $status = false;
 
-$getUser = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE UserID = ? AND RR = 1 AND `permissions`.`Permission` = 'Parent'");
+$getUser = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE Tenant = ? AND UserID = ? AND RR = 1 AND `permissions`.`Permission` = 'Parent'");
 $getUser->execute([
+  $tenant->getId(),
   $_POST['user']
 ]);
 

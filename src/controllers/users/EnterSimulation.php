@@ -1,10 +1,14 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 try {
-	$query = $db->prepare("SELECT * FROM `users` WHERE `UserID` = ? AND Active");
-	$query->execute([$id]);
+	$query = $db->prepare("SELECT * FROM `users` WHERE Tenant = ? AND `UserID` = ? AND Active");
+	$query->execute([
+		$tenant->getId(),
+		$id
+	]);
 } catch (Exception $e) {
 	halt(500);
 }

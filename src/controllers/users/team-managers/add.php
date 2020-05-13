@@ -1,14 +1,19 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
-$userInfo->execute([$id]);
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ? AND Tenant = ?");
+$userInfo->execute([
+  $id,
+  $tenant->getId()
+]);
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
 
 $date = new DateTime('-1 day', new DateTimeZone('Europe/London'));
-$getGalas = $db->prepare("SELECT GalaName, GalaID FROM galas WHERE GalaDate >= ? ORDER BY GalaDate ASC, GalaName ASC");
+$getGalas = $db->prepare("SELECT GalaName, GalaID FROM galas WHERE Tenant = ? AND GalaDate >= ? ORDER BY GalaDate ASC, GalaName ASC");
 $getGalas->execute([
+  $tenant->getId(),
   $date->format("Y-m-d")
 ]);
 $gala = $getGalas->fetch(PDO::FETCH_ASSOC);

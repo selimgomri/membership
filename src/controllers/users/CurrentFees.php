@@ -5,9 +5,13 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 $user = $id;
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getUser = $db->prepare("SELECT Forename, Surname FROM users WHERE UserID = ?");
-$getUser->execute([$user]);
+$getUser = $db->prepare("SELECT Forename, Surname FROM users WHERE UserID = ? AND Tenant = ?");
+$getUser->execute([
+  $user,
+  $tenant->getId()
+]);
 $info = $getUser->fetch(PDO::FETCH_ASSOC);
 
 if ($info == null) {

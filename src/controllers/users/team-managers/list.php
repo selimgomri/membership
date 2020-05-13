@@ -1,10 +1,18 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
-$userInfo->execute([$id]);
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ? AND Tenant = ?");
+$userInfo->execute([
+  $id,
+  $tenant->getId()
+]);
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
+
+if ($info == null) {
+  halt(404);
+}
 
 $date = new DateTime('-1 day', new DateTimeZone('Europe/London'));
 $getGalas = $db->prepare("SELECT GalaName, GalaID FROM teamManagers INNER JOIN galas ON galas.GalaID = teamManagers.Gala WHERE teamManagers.User = ? AND galas.GalaDate >= ?");
@@ -13,10 +21,6 @@ $getGalas->execute([
   $date->format("Y-m-d")
 ]);
 $gala = $getGalas->fetch(PDO::FETCH_ASSOC);
-
-if ($info == null) {
-  halt(404);
-}
 
 $pagetitle = htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) . ' Team Manager Options';
 
