@@ -3,7 +3,7 @@
 $paymentItems = [];
 
 $db = app()->db;
-$systemInfo = app()->system;
+
 
 $location = autoUrl("");
 

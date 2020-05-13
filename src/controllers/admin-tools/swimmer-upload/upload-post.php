@@ -8,9 +8,10 @@ if (!\SCDS\CSRF::verify()) {
 }
 
 $db = app()->db;
+$tenant = app()->tenant->getId();
 
-$findSquadId = $db->prepare("SELECT SquadID FROM squads WHERE SquadName = ?");
-$insertIntoSwimmers = $db->prepare("INSERT INTO members (MForename, Msurname, SquadID, DateOfBirth, Gender, ASANumber, ASACategory, RR, AccessKey, ClubPays, OtherNotes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$findSquadId = $db->prepare("SELECT SquadID FROM squads WHERE SquadName = ? AND Tenant = ?");
+$insertIntoSwimmers = $db->prepare("INSERT INTO members (MForename, Msurname, SquadID, DateOfBirth, Gender, ASANumber, ASACategory, RR, AccessKey, ClubPays, OtherNotes, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 $setTempASA = $db->prepare("UPDATE members SET ASANumber = ? WHERE MemberID = ?");
 
 if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
@@ -31,7 +32,7 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
 
       $filePointer = fopen($_FILES['file-upload']['tmp_name'], 'r');
       while ($row = fgetcsv($filePointer)) {
-        $findSquadId->execute([$row[2]]);
+        $findSquadId->execute([$row[2], $tenant]);
 
         $fn = mb_convert_case($row[1], MB_CASE_TITLE_SIMPLE);
         $sn = mb_convert_case($row[0], MB_CASE_TITLE_SIMPLE);
@@ -58,7 +59,8 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
             true,
             generateRandomString(6),
             0,
-            ''
+            '',
+            $tenant
           ]);
 
           if ($asa == 0) {

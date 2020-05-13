@@ -1,7 +1,7 @@
 <?php
 
 try {
-  $systemInfo = app()->system;
+  
 
   if (isset($_POST['TermsAndConditions'])) {
     app()->tenant->setKey('TermsAndConditions', $_POST['TermsAndConditions']);

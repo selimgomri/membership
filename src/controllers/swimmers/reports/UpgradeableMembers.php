@@ -108,7 +108,7 @@ include BASE_PATH . 'views/header.php';
       <?php } else { ?>
         <div class="alert alert-info">
           <p class="mb-0"><strong>There are no upgradeable members at the moment.</strong></p>
-          <p>Upgradeable members are nine years old by the end of the year and are Category 1 Swim England members.</p>
+          <p class="mb-0">Upgradeable members are nine years old by the end of the year and are Category 1 Swim England members.</p>
         </div>
       <?php } ?>
 

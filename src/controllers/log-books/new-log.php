@@ -23,7 +23,7 @@ $pagetitle = htmlspecialchars("New log entry - " . $memberInfo['fn'] . ' ' . $me
 $title = $entry = "";
 $contentType = "text/plain";
 
-$dateObject = new DateTime($info['DateTime'], new DateTimeZone('UTC'));
+$dateObject = new DateTime('now', new DateTimeZone('UTC'));
 $dateObject->setTimezone(new DateTimeZone('Europe/London'));
 $date = $dateObject->format("Y-m-d");
 $time = $dateObject->format("H:i");

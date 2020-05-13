@@ -17,7 +17,7 @@ $welcomeDocuments->execute([
 ]);
 $welcomeDocuments = $welcomeDocuments->fetchAll(PDO::FETCH_ASSOC);
 
-$systemInfo = app()->system;
+
 $terms = app()->tenant->getKey('TermsAndConditions');
 $privacy = app()->tenant->getKey('PrivacyPolicy');
 $welcome = app()->tenant->getKey('WelcomeLetter');

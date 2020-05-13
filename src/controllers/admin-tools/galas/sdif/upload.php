@@ -1,11 +1,14 @@
 <?php
 
 $db = app()->db;
-$getRecentGalas = $db->prepare("SELECT `GalaName`, `GalaID` FROM `galas` WHERE `GalaDate` >= ? AND `GalaDate` <= ?");
+$tenant = app()->tenant;
+
+$getRecentGalas = $db->prepare("SELECT `GalaName`, `GalaID` FROM `galas` WHERE Tenant = ? AND `GalaDate` >= ? AND `GalaDate` <= ?");
 $date = new DateTime('now', new DateTimeZone('Europe/London'));
 $today = $date->format("Y-m-d");
 $threeWeeksAgo = ($date->sub(new DateInterval('P21D')))->format("Y-m-d");
 $getRecentGalas->execute([
+  $tenant->getId(),
   $threeWeeksAgo,
   $today
 ]);

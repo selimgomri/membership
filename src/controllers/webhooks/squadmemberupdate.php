@@ -6,7 +6,7 @@
  * It also adds members to a renewal on the day it starts
  */
 
-$systemInfo = app()->system;
+
 $db = app()->db;
 
 // Mandatory Startup Sequence to carry out squad updates

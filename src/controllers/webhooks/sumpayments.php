@@ -7,7 +7,7 @@ use Brick\Math\BigDecimal;
 
 $db = app()->db;
 
-$systemInfo = app()->system;
+
 
 $squadFeeMonths = json_decode(app()->tenant->getKey('SquadFeeMonths'), true);
 $date = new DateTime('now', new DateTimeZone('Europe/London'));

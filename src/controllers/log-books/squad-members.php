@@ -40,9 +40,6 @@ include BASE_PATH . 'views/header.php';
           <p class="mb-0">
             <strong><?=htmlspecialchars($member['fn'] . ' ' . $member['sn'])?>'s log book</strong>
           </p>
-          <p class="mb-0">
-            <?=htmlspecialchars($member['squad'])?>
-          </p>
         </a>
         <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>
       </div>

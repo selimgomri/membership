@@ -21,7 +21,7 @@ if ($move == null) {
 $errorState = false;
 $errorMessage = "";
 
-$systemInfo = app()->system;
+
 $leavers = app()->tenant->getKey('LeaversSquad');
 
 $newSquad = $_POST['newSquad'];

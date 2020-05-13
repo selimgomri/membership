@@ -14,7 +14,7 @@ if ($access == "Parent") {
 		require('parentSwimmers.php');
 	});
 
-	$systemInfo = app()->system;
+	
 	$leavers = app()->tenant->getKey('LeaversSquad');
 
 	if ($leavers != null) {

@@ -6,14 +6,16 @@ if (isset($_GET['squad'])) {
 }
 
 $db = app()->db;
-$systemInfo = app()->system;
+$tenant = app()->tenant;
+
 $leavers = app()->tenant->getKey('LeaversSquad');
 if ($leavers == null) {
   $leavers = 0;
 }
 
-$squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads WHERE `SquadID` != ? ORDER BY SquadFee DESC, `name` ASC");
+$squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads WHERE Tenant = ? AND `SquadID` != ? ORDER BY SquadFee DESC, `name` ASC");
 $squads->execute([
+  $tenant->getId(),
   $leavers
 ]);
 

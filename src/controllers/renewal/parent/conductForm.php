@@ -2,7 +2,7 @@
 
 $db = app()->db;
 
-$systemInfo = app()->system;
+
 $parentCode = app()->tenant->getKey('ParentCodeOfConduct');
 
 if (isset($id)) {

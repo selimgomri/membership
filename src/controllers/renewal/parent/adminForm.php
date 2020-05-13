@@ -10,7 +10,7 @@ try {
 } catch (PDOException $e) {
 	halt(500);
 }
-$systemInfo = app()->system;
+
 $terms_Id = app()->tenant->getKey('TermsAndConditions');
 
 $row = [];

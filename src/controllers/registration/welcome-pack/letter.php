@@ -9,7 +9,7 @@ if (!isset($id)) {
 }
 
 $db = app()->db;
-$systemInfo = app()->system;
+
 $welcome = app()->tenant->getKey('WelcomeLetter');
 
 if ($welcome == null) {

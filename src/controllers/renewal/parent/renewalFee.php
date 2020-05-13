@@ -1,7 +1,7 @@
 <?php
 
 $db = app()->db;
-$systemInfo = app()->system;
+
 
 $user = $_SESSION['UserID'];
 $partial_reg = isPartialRegistration();

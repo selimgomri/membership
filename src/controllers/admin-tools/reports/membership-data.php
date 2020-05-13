@@ -1,9 +1,12 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getInfo = $db->prepare("SELECT members.UserID `uid`, Forename ufn, Surname usn, MForename mfn, MSurname msn, members.ASANumber asa, members.ASACategory cat, DateOfBirth dob, SquadName squad, SquadFee fee, ClubPays exempt, Mandate, BankName, AccountHolderName, AccountNumEnd FROM ((((members INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN paymentMandates ON paymentPreferredMandate.MandateID = paymentMandates.MandateID) ORDER BY usn ASC, ufn ASC, users.UserID ASC, msn ASC, mfn ASC");
-$getInfo->execute([]);
+$getInfo = $db->prepare("SELECT members.UserID `uid`, Forename ufn, Surname usn, MForename mfn, MSurname msn, members.ASANumber asa, members.ASACategory cat, DateOfBirth dob, SquadName squad, SquadFee fee, ClubPays exempt, Mandate, BankName, AccountHolderName, AccountNumEnd FROM ((((members INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN paymentMandates ON paymentPreferredMandate.MandateID = paymentMandates.MandateID) WHERE members.Tenant = ? ORDER BY usn ASC, ufn ASC, users.UserID ASC, msn ASC, mfn ASC");
+$getInfo->execute([
+  $tenant->getId()
+]);
 
 $logins = $db->prepare("SELECT `Time`, `IPAddress`, Browser, `Platform`, `GeoLocation` FROM userLogins WHERE UserID = ? ORDER BY `Time` DESC LIMIT 1");
 
@@ -36,7 +39,9 @@ while ($info = $getInfo->fetch(PDO::FETCH_ASSOC)) {
   if (bool($info['exempt'])) {
     $exempt = 'Fee exemption';
   }
-  $logins->execute([$info['uid']]);
+  $logins->execute([
+    $info['uid']
+  ]);
   $loginInfo = $logins->fetch(PDO::FETCH_ASSOC);
   $lastLogin = 'Never';
   if ($loginInfo) {

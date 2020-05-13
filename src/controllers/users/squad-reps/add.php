@@ -10,7 +10,7 @@ $userInfo->execute([
 ]);
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
 
-$systemInfo = app()->system;
+
 $leavers = app()->tenant->getKey('LeaversSquad');
 if ($leavers == null) {
   $leavers = 0;

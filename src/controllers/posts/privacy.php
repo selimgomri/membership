@@ -5,7 +5,7 @@ $pagetitle = "Privacy Policy";
 $db = app()->db;
 $tenant = app()->tenant;
 
-$systemInfo = app()->system;
+
 $privacy = app()->tenant->getKey('PrivacyPolicy');
 
 $Extra = new ParsedownExtra();

@@ -2,7 +2,7 @@
 
 $db = app()->db;
 
-$systemInfo = app()->system;
+
 $privacy = app()->tenant->getKey('PrivacyPolicy');
 
 $Extra = new ParsedownExtra();
