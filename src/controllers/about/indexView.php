@@ -1,5 +1,7 @@
 <?php
 
+$tenant = app()->tenant;
+
 $pagetitle = "About this software";
 include BASE_PATH . "views/header.php";
 
@@ -9,9 +11,39 @@ include BASE_PATH . "views/header.php";
   <div class="row">
     <div class="col-md-8">
       <h1>About this system</h1>
-      <p class="lead">This software is licenced to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> by Swimming Club Data Systems, a partnership of <a href="https://www.chesterlestreetasc.co.uk/" target="_blank">Chester-le-Street ASC</a> and Chris Heppell.</p>
+      <p class="lead">This software is licenced to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> by Swimming Club Data Systems.</p>
 
-      <p>You can use this software by subscribing to the <a href="https://corporate.myswimmingclub.co.uk/" target="_blank">Swimming Club Data Systems Software as a Service Package</a>.</p>
+      <p>You can use this software by subscribing to the <a href="https://myswimmingclub.uk/" target="_blank">Swimming Club Data Systems Software as a Service Package</a>.</p>
+
+      <h2>
+        Support information
+      </h2>
+
+      <p class="lead">
+        If we've asked for your tenant details so that we can solve a problem, please send us the following:
+      </p>
+
+      <div class="card card-body mb-3">
+        <dl class="row mb-0">
+          <dt class="col-sm-3">Tenant ID</dt>
+          <dd class="col-sm-9 mono"><?=htmlspecialchars($tenant->getId())?></dd>
+
+          <dt class="col-sm-3">Tenant Name</dt>
+          <dd class="col-sm-9 mono"><?=htmlspecialchars($tenant->getName())?></dd>
+
+          <?php if ($tenant->getCode()) { ?>
+          <dt class="col-sm-3">Tenant Code</dt>
+          <dd class="col-sm-9 mono"><?=htmlspecialchars($tenant->getCode())?></dd>
+          <?php } ?>
+
+          <?php if (app()->user) { ?>
+          <dt class="col-sm-3">User</dt>
+          <dd class="col-sm-9 mono mb-0"><?=htmlspecialchars(app()->user->getId())?></dd>
+          <?php } else { ?>
+          <dt class="col-sm-3">User</dt>
+          <dd class="col-sm-9 mono mb-0">Not signed in</dd>
+          <?php } ?>
+        </div>
 
       <h2>Features</h2>
       <p class="lead">
