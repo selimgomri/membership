@@ -1,8 +1,13 @@
 <?php
 
 $db = app()->db;
-$getGala = $db->prepare("SELECT GalaName `name`, ClosingDate FROM galas WHERE GalaID = ?");
-$getGala->execute([$id]);
+$tenant = app()->tenant;
+
+$getGala = $db->prepare("SELECT GalaName `name`, ClosingDate FROM galas WHERE GalaID = ? AND Tenant = ?");
+$getGala->execute([
+  $id,
+  $tenant->getId()
+]);
 $gala = $getGala->fetch(PDO::FETCH_ASSOC);
 
 if ($gala == null) {

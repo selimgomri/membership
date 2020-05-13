@@ -1,11 +1,20 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 $user = $_SESSION['UserID'];
 
-$query = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ?");
-$query->execute([$id]);
+$query = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ? AND Tenant = ?");
+$query->execute([
+  $id,
+  $tenant->getId()
+]);
 $info = $query->fetch(PDO::FETCH_ASSOC);
+
+if ($info == null) {
+  halt(404);
+	$noTimeSheet = true;
+}
 
 $dateOfGala = new DateTime($info['GalaDate'], new DateTimeZone('Europe/London'))
 ;
@@ -13,11 +22,6 @@ $lastDayOfYear = new DateTime('last day of December ' . $dateOfGala->format('Y')
 ;
 
 $noTimeSheet = false;
-
-if ($info == null) {
-  halt(404);
-	$noTimeSheet = true;
-}
 
 $toHash = $info['GalaID'];
 if ($_SESSION['AccessLevel'] == 'Parent') {

@@ -8,6 +8,7 @@ if (app()->tenant->getKey('STRIPE_APPLE_PAY_DOMAIN')) {
 }
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $updateTime = $db->prepare("UPDATE galaEntries SET FeeToPay = ? WHERE EntryID = ?");
 

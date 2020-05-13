@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $swimsArray = [
   '50Free' => '50&nbsp;Free',

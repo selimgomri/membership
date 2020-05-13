@@ -1,6 +1,17 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
+
+// Check gala
+$getGalas = $db->prepare("SELECT COUNT(*) FROM galas WHERE GalaID = ? AND Tenant = ?");
+$getGalas->execute([
+  $id,
+  $tenant->getId()
+]);
+if ($getGalas->fetchColumn() == 0) {
+  halt(404);
+}
 
 try {
   // Get price and event information

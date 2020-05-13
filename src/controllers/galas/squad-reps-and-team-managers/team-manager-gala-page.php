@@ -7,9 +7,12 @@
 canView('TeamManager', $_SESSION['UserID'], $id);
 
 $db = app()->db;
-$galaInfo = $db->prepare("SELECT GalaName FROM galas WHERE GalaID = ?");
+$tenant = app()->tenant;
+
+$galaInfo = $db->prepare("SELECT GalaName FROM galas WHERE GalaID = ? AND Tenant = ?");
 $galaInfo->execute([
-  $id
+  $id,
+  $tenant->getId()
 ]);
 $gala = $galaInfo->fetch(PDO::FETCH_ASSOC);
 

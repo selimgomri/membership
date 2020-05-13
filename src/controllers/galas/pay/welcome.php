@@ -1,6 +1,7 @@
   <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $date = new DateTime('now', new DateTimeZone('Europe/London'));
 

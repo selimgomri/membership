@@ -1,23 +1,28 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
+
 $user = $_SESSION['UserID'];
 
 canView('TeamManager', $_SESSION['UserID'], $id);
 
-$query = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ?");
-$query->execute([$id]);
+$query = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ? AND Tenant = ?");
+$query->execute([
+  $id,
+  $tenant->getId()
+]);
 $info = $query->fetch(PDO::FETCH_ASSOC);
+
+if ($info == null) {
+  halt(404);
+}
 
 $dateOfGala = new DateTime($info['GalaDate'], new DateTimeZone('Europe/London'))
 ;
 $lastDayOfYear = new DateTime('last day of December ' . $dateOfGala->format('Y'), new DateTimeZone('Europe/London'))
 ;
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
-
-if ($info == null) {
-  halt(404);
-}
 
 $getSwimmers = $db->prepare("SELECT MForename first, MSurname last, SquadName squad, DateOfBirth dob, Website, Social, Noticeboard, FilmTraining, ProPhoto FROM (((galaEntries INNER JOIN members ON members.MemberID = galaEntries.MemberID) INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN memberPhotography ON members.MemberID = memberPhotography.MemberID) WHERE galaEntries.GalaID = ? ORDER BY MForename ASC, MSurname ASC");
 

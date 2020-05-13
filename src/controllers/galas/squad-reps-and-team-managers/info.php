@@ -6,7 +6,6 @@ require 'info.json.php';
 $data = json_decode($output);
 
 $squads = null;
-$systemInfo = app()->system;
 $leavers = app()->tenant->getKey('LeaversSquad');
 if ($leavers == null) {
   $leavers = 0;
@@ -78,7 +77,7 @@ include BASE_PATH . 'views/header.php';
           <label for="squad-select">
             Choose squad
           </label>
-          <select class="custom-select" id="squad-select" name="squad-select" data-gala-id="<?=htmlspecialchars($id)?>">
+          <select class="custom-select" id="squad-select" name="squad-select" data-gala-id="<?=htmlspecialchars($id)?>" data-page="<?=htmlspecialchars(autoUrl(''))?>" data-ajax-url="<?=htmlspecialchars(autoUrl('galas/squad-reps/entry-states'))?>">
             <?php if ($noSquad) { ?>
             <option selected>Select a squad</option>
             <?php } ?>
@@ -244,5 +243,5 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs("js/squad-reps/select.js");
+$footer->addJs("public/js/galas/squad-reps/squad-rep-approval.js");
 $footer->render();

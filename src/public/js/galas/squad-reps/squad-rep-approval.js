@@ -1,22 +1,29 @@
-var selectMenu = document.getElementById('squad-select');
+const selectMenu = document.getElementById('squad-select');
+const windowTitle = document.title;
 
 selectMenu.addEventListener('change', function(event) {
-  var squad = selectMenu.value;
-  var gala = selectMenu.dataset.galaId;
+  let squad = selectMenu.value;
+  let gala = selectMenu.dataset.galaId;
+  console.log(selectMenu);
   if (squad !== null) {
     // Redirect to new page
-    window.location.href = <?=json_encode(autoUrl(''))?> + 'galas/' + gala + '/squad-rep-view?squad=' + squad;
+    window.location.href = selectMenu.dataset.page + '/galas/' + gala + '/squad-rep-view?squad=' + squad;
+    // document.title = 'Test - ' + windowTitle;
+  } else {
+    // Redirect to new page
+    window.location.href = selectMenu.dataset.page + '/galas/' + gala + '/squad-rep-view';
+    // document.title = 'Test - ' + windowTitle;
   }
 });
 
 function ajaxUpdate(event, entryId, state) {
-  var xhttp = new XMLHttpRequest();
+  let xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       console.log(this.responseText);
     }
   };
-  xhttp.open('POST', <?=json_encode(autoUrl('galas/squad-reps/entry-states'))?>, true);
+  xhttp.open('POST', selectMenu.dataset.page, true);
   xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
   xhttp.send(encodeURI('entry=' + entryId + '&state=' + state + '&event=' + event));
 }
@@ -25,12 +32,12 @@ document.getElementById('entries-list').addEventListener("click", clickPropogati
 
 function clickPropogation(e) {
   if (e.target !== e.currentTarget) {
-    var clickedItem = e.target.id;
-    var clickedItemChecked;
+    let clickedItem = e.target.id;
+    let clickedItemChecked;
     if (clickedItem != "") {
-      var item = document.getElementById(clickedItem);
-      var clickedItemChecked = item.checked;
-      var entryId = item.dataset.entryId;
+      let item = document.getElementById(clickedItem);
+      let clickedItemChecked = item.checked;
+      let entryId = item.dataset.entryId;
       if (item.dataset.ajaxAction == 'mark-paid') {
         ajaxUpdate('mark-paid', entryId, clickedItemChecked);
       } else if (item.dataset.ajaxAction == 'approve-entry') {

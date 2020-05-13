@@ -1,6 +1,17 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
+
+// Check gala
+$getGalas = $db->prepare("SELECT COUNT(*) FROM galas INNER JOIN galaEntries ON galas.GalaID = galaEntries.GalaID WHERE galaEntries.EntryID = ? AND galas.Tenant = ?");
+$getGalas->execute([
+  $_POST['entry'],
+  $tenant->getId()
+]);
+if ($getGalas->fetchColumn() == 0) {
+  halt(404);
+}
 
 // Get entry from post data and check if user is a rep for the swimmer's squad
 // Non-Parents have auto permission

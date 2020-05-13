@@ -4,10 +4,14 @@
 canView('TeamManager', $_SESSION['UserID'], $id);
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 // GET THE GALA
-$getGala = $db->prepare("SELECT GalaName `name`, GalaVenue venue FROM galas WHERE GalaID = ?");
-$getGala->execute([$id]);
+$getGala = $db->prepare("SELECT GalaName `name`, GalaVenue venue FROM galas WHERE GalaID = ? AND Tenant = ?");
+$getGala->execute([
+  $id,
+  $tenant->getId()
+]);
 $gala = $getGala->fetch(PDO::FETCH_ASSOC);
 
 if ($gala == null) {

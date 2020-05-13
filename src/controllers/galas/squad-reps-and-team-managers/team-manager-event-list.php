@@ -1,20 +1,23 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $getGalas = null;
 $date = new DateTime('-1 day', new DateTimeZone('Europe/London'));
 
 if ($_SESSION['AccessLevel'] == 'Parent') {
-  $getGalas = $db->prepare("SELECT GalaID id, GalaName `name`, GalaVenue venue, GalaDate endDate FROM teamManagers INNER JOIN galas ON teamManagers.Gala = galas.GalaID WHERE teamManagers.User = ? AND galas.GalaDate >= ? ORDER BY GalaDate ASC");
+  $getGalas = $db->prepare("SELECT GalaID id, GalaName `name`, GalaVenue venue, GalaDate endDate FROM teamManagers INNER JOIN galas ON teamManagers.Gala = galas.GalaID WHERE teamManagers.User = ? AND galas.GalaDate >= ? AND galas.Tenant = ? ORDER BY GalaDate ASC");
   $getGalas->execute([
     $_SESSION['UserID'],
-    $date->format("Y-m-d")
+    $date->format("Y-m-d"),
+    $tenant->getId()
   ]);
 } else {
-  $getGalas = $db->prepare("SELECT GalaID id, GalaName `name`, GalaVenue venue, GalaDate endDate FROM galas WHERE galas.GalaDate >= ? ORDER BY GalaDate ASC");
+  $getGalas = $db->prepare("SELECT GalaID id, GalaName `name`, GalaVenue venue, GalaDate endDate FROM galas WHERE galas.GalaDate >= ? AND Tenant = ? ORDER BY GalaDate ASC");
   $getGalas->execute([
-    $date->format("Y-m-d")
+    $date->format("Y-m-d"),
+    $tenant->getId()
   ]);
 }
 $gala = $getGalas->fetch(PDO::FETCH_ASSOC);

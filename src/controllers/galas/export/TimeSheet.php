@@ -1,12 +1,14 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$sql = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ?");
-$sql->execute([$id]);
+$sql = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ? AND Tenant = ?");
+$sql->execute([
+	$id,
+	$tenant->getId()
+]);
 $info = $sql->fetch(PDO::FETCH_ASSOC);
-
-$getTimes = $db->prepare("SELECT * FROM `times` WHERE `MemberID` = ? AND `Type` = ?");
 
 $noTimeSheet = false;
 
@@ -75,10 +77,6 @@ $footer->render();
   		$typeA = "LCPB";
   		$typeB = "CY_LC";
 		}
-		$getTimes->execute([$row['MemberID'], $typeA]);
-		$timesPB = $getTimes->fetch(PDO::FETCH_ASSOC);
-		$getTimes->execute([$row['MemberID'], $typeB]);
-  	$timesCY = $getTimes->fetch(PDO::FETCH_ASSOC);
 		
 		//pre([$timesPB, $timesCY]);
 
@@ -102,8 +100,8 @@ $footer->render();
   	for ($i = 0; $i < sizeof($swimsArray); $i++) {
   		if ($row[$swimsArray[$i]] == 1) {
   			$swims[] = $swimsTextArray[$i];
-  			$timesArrayA[] = $timesPB[$swimsArray[$i]];
-  			$timesArrayB[] = $timesCY[$swimsArray[$i]];
+  			$timesArrayA[] = '';
+  			$timesArrayB[] = '';
   		}
   	}
 

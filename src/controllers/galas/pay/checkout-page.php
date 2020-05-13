@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 \Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
 if (app()->tenant->getKey('STRIPE_APPLE_PAY_DOMAIN')) {
