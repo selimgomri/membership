@@ -3,8 +3,6 @@
 use Brick\Money\Money;
 use Brick\Math\BigDecimal;
 
-$systemInfo = app()->system;
-
 for ($i = 1; $i < 4; $i++) {
   if (isset($_POST['county-' . $i]) && is_numeric($_POST['county-' . $i]) && $_POST['county-' . $i] >= 0) {
     try {

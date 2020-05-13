@@ -3,10 +3,18 @@
 $fluidContainer = true;
 
 $db = app()->db;
-$termsDocuments = $db->query("SELECT Title, ID FROM posts WHERE `Type` = 'terms_conditions' ORDER BY Title ASC");
+$tenant = app()->tenant;
+
+$termsDocuments = $db->prepare("SELECT Title, ID FROM posts WHERE Tenant = ? AND `Type` = 'terms_conditions' ORDER BY Title ASC");
+$termsDocuments->execute([
+  $tenant->getId()
+]);
 $termsDocuments = $termsDocuments->fetchAll(PDO::FETCH_ASSOC);
 
-$welcomeDocuments = $db->query("SELECT Title, ID FROM posts WHERE `Type` = 'corporate_documentation' ORDER BY Title ASC");
+$welcomeDocuments = $db->prepare("SELECT Title, ID FROM posts WHERE Tenant = ? AND `Type` = 'corporate_documentation' ORDER BY Title ASC");
+$welcomeDocuments->execute([
+  $tenant->getId()
+]);
 $welcomeDocuments = $welcomeDocuments->fetchAll(PDO::FETCH_ASSOC);
 
 $systemInfo = app()->system;

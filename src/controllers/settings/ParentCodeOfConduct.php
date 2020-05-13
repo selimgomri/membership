@@ -3,9 +3,13 @@
 $fluidContainer = true;
 
 $db = app()->db;
-$codesOfConduct = $db->query("SELECT Title, ID FROM posts WHERE `Type` = 'conduct_code' ORDER BY Title ASC");
+$tenant = app()->tenant;
 
-$systemInfo = app()->system;
+$codesOfConduct = $db->prepare("SELECT Title, ID FROM posts WHERE Tenant = ? AND `Type` = 'conduct_code' ORDER BY Title ASC");
+$codesOfConduct->execute([
+  $tenant->getId()
+]);
+
 $parentCode = app()->tenant->getKey('ParentCodeOfConduct');
 
 $Extra = new ParsedownExtra();
@@ -15,8 +19,11 @@ $replace = array("\n###### ", "\n###### ", "\n##### ", "\n#### ", "\n### ");
 
 $codeOfConduct = null;
 if ($parentCode != null && $parentCode != "") {
-  $codeOfConduct = $db->prepare("SELECT Content FROM posts WHERE ID = ?");
-  $codeOfConduct->execute([$parentCode]);
+  $codeOfConduct = $db->prepare("SELECT Content FROM posts WHERE ID = ? AND Tenant = ?");
+  $codeOfConduct->execute([
+    $parentCode,
+    $tenant->getId()
+  ]);
   $codeOfConduct = str_replace($search, $replace, $codeOfConduct->fetchColumn());
   if ($codeOfConduct[0] == '#') {
     $codeOfConduct = '##' . $codeOfConduct;

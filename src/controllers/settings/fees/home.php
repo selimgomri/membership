@@ -3,7 +3,6 @@
 $fluidContainer = true;
 
 $db = app()->db;
-$systemInfo = app()->system;
 
 $pagetitle = "Swim England and Membership Fee Options";
 

@@ -1,7 +1,5 @@
 <?php
 
-$systemInfo = app()->system;
-
 $feeType = app()->tenant->getKey('ClubFeesType');
 
 try {

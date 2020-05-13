@@ -1,7 +1,6 @@
 <?php
 
 $db = app()->db;
-$systemInfo = app()->system;
 
 try {
 
