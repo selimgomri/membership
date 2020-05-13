@@ -19,7 +19,7 @@ $row = $sql->fetch(PDO::FETCH_ASSOC);
 
 $locked = "";
 $processed = false;
-if ($_SESSION['AccessLevel'] == 'Parent' && bool($row['EntryProcessed'])) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && bool($row['EntryProcessed'])) {
 	$locked = " disabled ";
 	$processed = true;
 }
@@ -28,7 +28,7 @@ if ($row == null) {
 	halt(404);
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent' && $row['UserID'] != $_SESSION['UserID']) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $row['UserID'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
 	halt(404);
 }
 
@@ -81,11 +81,11 @@ if ($row['CourseLength'] == 'LONG') {
 				<p class="mb-0">
 					As a result you are no longer able to edit your entry times. Please speak to your gala coordinator if you need to make changes.
 				</p>
-				<?php if (isset($_SESSION['UpdateError'])) { ?>
+				<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError'])) { ?>
 				<p class="mb-0 mt-3">
-					<?=htmlspecialchars($_SESSION['UpdateError'])?>
+					<?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError'])?>
 				</p>
-				<?php unset($_SESSION['UpdateError']); } ?>
+				<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError']); } ?>
 			</div>
 			<?php } else if (bool($row['EntryProcessed'])) { ?>
 			<div class="alert alert-warning">
@@ -95,16 +95,16 @@ if ($row['CourseLength'] == 'LONG') {
 				<p class="mb-0">
 					You may make changes, but any changes you make may not necessarily be submitted to the gala host.
 				</p>
-				<?php if (isset($_SESSION['UpdateError'])) { ?>
+				<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError'])) { ?>
 				<p class="mb-0 mt-3">
-					<?=htmlspecialchars($_SESSION['UpdateError'])?>
+					<?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError'])?>
 				</p>
-				<?php unset($_SESSION['UpdateError']); } ?>
+				<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError']); } ?>
 			</div>
 			<?php } ?>
 
-			<?php if (isset($_SESSION['UpdateSuccess'])) {
-				if ($_SESSION['UpdateSuccess']) { ?>
+			<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess'])) {
+				if ($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess']) { ?>
 				<div class="alert alert-success">
 					<p class="mb-0">
 						<strong>
@@ -124,7 +124,7 @@ if ($row['CourseLength'] == 'LONG') {
 					</p>
 				</div>
 				<?php }
-				unset($_SESSION['UpdateSuccess']);
+				unset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess']);
 			} ?>
 
 			<p>

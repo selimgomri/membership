@@ -30,22 +30,22 @@ $rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 
 
 $getEntry = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE EntryID = ? AND members.UserID = ?");
 
-if (!isset($_SESSION['CompletedEntryInfo']) || !$_SESSION['CompletedEntryInfo']) {
+if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['CompletedEntryInfo']) || !$_SESSION['TENANT-' . app()->tenant->getId()]['CompletedEntryInfo']) {
   halt(404);
 }
 
-if (!isset($_SESSION['GalaPaymentSuccess']) || !$_SESSION['GalaPaymentSuccess']) {
+if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentSuccess']) || !$_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentSuccess']) {
   halt(404);
 }
 
 $getEntriesByPI = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE StripePayment = ?");
 $getEntriesByPI->execute([
-  $_SESSION['CompletedEntryInfo']
+  $_SESSION['TENANT-' . app()->tenant->getId()]['CompletedEntryInfo']
 ]);
 
 $getIntent = $db->prepare("SELECT Intent FROM stripePayments WHERE ID = ?");
 $getIntent->execute([
-  $_SESSION['CompletedEntryInfo']
+  $_SESSION['TENANT-' . app()->tenant->getId()]['CompletedEntryInfo']
 ]);
 $intentId = $getIntent->fetchColumn();
 if ($intentId == null) {
@@ -157,9 +157,9 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
 <?php
 
-unset($_SESSION['CompletedEntries']);
-unset($_SESSION['CompletedEntryInfo']);
-unset($_SESSION['GalaPaymentSuccess']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['CompletedEntries']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['CompletedEntryInfo']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentSuccess']);
 
 $footer = new \SCDS\Footer();
 $footer->render();

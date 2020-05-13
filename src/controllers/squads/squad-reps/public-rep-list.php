@@ -7,7 +7,7 @@ $tenant = app()->tenant;
 
 $getMyReps = $db->prepare("SELECT members.MemberID, MForename, MSurname, Forename, Surname, SquadName FROM (((squadReps INNER JOIN squads ON squads.SquadID = squadReps.Squad) INNER JOIN users ON squadReps.User = users.UserID) INNER JOIN members ON members.SquadID = squads.SquadID) WHERE members.UserID = ? ORDER BY SquadFee DESC, SquadName ASC");
 $getMyReps->execute([
-  $_SESSION['UserID']
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
 ]);
 $myReps = $getMyReps->fetchAll(PDO::FETCH_GROUP);
 

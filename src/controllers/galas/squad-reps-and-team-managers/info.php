@@ -11,7 +11,7 @@ if ($leavers == null) {
   $leavers = 0;
 }
 
-if ($_SESSION['AccessLevel'] != 'Parent') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') {
   $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads WHERE `SquadID` != ? ORDER BY SquadFee DESC, `name` ASC");
   $squads->execute([
     $leavers
@@ -19,7 +19,7 @@ if ($_SESSION['AccessLevel'] != 'Parent') {
 } else {
   $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads INNER JOIN squadReps ON squads.SquadID = squadReps.Squad WHERE squadReps.User = ? AND SquadID != ? ORDER BY SquadFee DESC, `name` ASC");
   $squads->execute([
-    $_SESSION['UserID'],
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
     $leavers
   ]);
 }
@@ -81,7 +81,7 @@ include BASE_PATH . 'views/header.php';
             <?php if ($noSquad) { ?>
             <option selected>Select a squad</option>
             <?php } ?>
-            <?php if ($_SESSION['AccessLevel'] != "Parent") { ?>
+            <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") { ?>
             <option value="all" <?php if ("all" == $squad) { ?>selected<?php } ?>>
               All squads
             </option>

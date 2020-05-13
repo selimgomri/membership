@@ -10,11 +10,11 @@ $markdown = new ParsedownExtra();
 // Safe mode is disabled during the transition to markdown
 // $markdown->setSafeMode(true);
 
-if ($_SESSION['AccessLevel'] == 'Parent') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
   $sql = "SELECT COUNT(*) FROM `members` WHERE `UserID` = ?";
 	try {
 		$query = $db->prepare($sql);
-		$query->execute([$_SESSION['UserID']]);
+		$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
     if ($query->fetchColumn() == 0) {
       halt(404);
     }

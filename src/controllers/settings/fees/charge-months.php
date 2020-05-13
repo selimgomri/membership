@@ -29,13 +29,13 @@ include BASE_PATH . 'views/header.php';
 
         <p>In selected months, we won't charge squad fees to parents. Other charges, such as extra fees will still be charged.</p>
 
-        <?php if (isset($_SESSION['Update-Success']) && $_SESSION['Update-Success']) { ?>
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['Update-Success']) && $_SESSION['TENANT-' . app()->tenant->getId()]['Update-Success']) { ?>
         <div class="alert alert-success">Changes saved successfully</div>
-        <?php unset($_SESSION['Update-Success']); } ?>
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['Update-Success']); } ?>
 
-        <?php if (isset($_SESSION['Update-Error']) && $_SESSION['Update-Error']) { ?>
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['Update-Error']) && $_SESSION['TENANT-' . app()->tenant->getId()]['Update-Error']) { ?>
         <div class="alert alert-danger">Changes could not be saved</div>
-        <?php unset($_SESSION['Update-Error']); } ?>
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['Update-Error']); } ?>
 
         <form method="post">
 

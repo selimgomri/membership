@@ -1,16 +1,16 @@
 <?php
 
-$userID = $_SESSION['UserID'];
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 $db = app()->db;
 $tenant = app()->tenant;
 
 $entries = $db->prepare("SELECT EntryID, GalaName, ClosingDate, GalaVenue, MForename, MSurname, EntryProcessed Processed, Charged, Refunded, Locked, Vetoable, FeeToPay, RequiresApproval, Approved FROM ((galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE GalaDate >= CURDATE() AND members.UserID = ?");
-$entries->execute([$_SESSION['UserID']]);
+$entries->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $entry = $entries->fetch(PDO::FETCH_ASSOC);
 
 $timesheets = $db->prepare("SELECT DISTINCT `galas`.`GalaID`, `GalaName`, `GalaVenue` FROM ((`galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID`) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE `GalaDate` >= CURDATE() AND members.UserID = ? ORDER BY `GalaDate` ASC");
-$timesheets->execute([$_SESSION['UserID']]);
+$timesheets->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $timesheet = $timesheets->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = "My Gala Entries";
@@ -29,7 +29,7 @@ include "galaMenu.php";
     <h1>My Gala Entries</h1>
     <p class="lead">Manage your gala entries</p>
 
-    <?php if (isset($_SESSION['VetoTrue']) && $_SESSION['VetoTrue']) { ?>
+    <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['VetoTrue']) && $_SESSION['TENANT-' . app()->tenant->getId()]['VetoTrue']) { ?>
     <div class="alert alert-success">
       <p class="mb-0">
         <strong>Your gala entry has been vetoed</strong>
@@ -38,7 +38,7 @@ include "galaMenu.php";
         All swims withdrawn.
       </p>
     </div>
-    <?php unset($_SESSION['VetoTrue']); } ?>
+    <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['VetoTrue']); } ?>
 
     <?php if ($entry) { ?>
     <h2 class="mb-4">

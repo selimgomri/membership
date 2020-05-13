@@ -29,26 +29,26 @@ try {
 
 	$nextSwimmer = null;
 	if (isPartialRegistration()) {
-		$nextSwimmer = getNextSwimmer($_SESSION['UserID'], $id, true);
+		$nextSwimmer = getNextSwimmer($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id, true);
 	} else {
-		$nextSwimmer = getNextSwimmer($_SESSION['UserID'], $id);
+		$nextSwimmer = getNextSwimmer($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id);
 	}
 
 	if ($nextSwimmer == null) {
 		$nextSection = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1, `Substage` = '0',
 		`Part` = '0' WHERE `RenewalID` = ? AND `UserID` = ?");
-		$nextSection->execute([$renewal, $_SESSION['UserID']]);
+		$nextSection->execute([$renewal, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 	} else {
 		if (false/*isPartialRegistration()*/) {
-			$nextSwimmer = getNextSwimmer($_SESSION['UserID'], $id, true);
+			$nextSwimmer = getNextSwimmer($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id, true);
 		}
 		$nextSection = $db->prepare("UPDATE `renewalProgress` SET `Part` = ?
 		WHERE `RenewalID` = ? AND `UserID` = ?");
-		$nextSection->execute([$nextSwimmer, $renewal, $_SESSION['UserID']]);
+		$nextSection->execute([$nextSwimmer, $renewal, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 	}
 	header("Location: " . autoUrl("renewal/go"));
 } catch (Exception $e) {
-	$_SESSION['ErrorState'] = "
+	$_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = "
 	<div class=\"alert alert-danger\">
 	<strong>An error occured when we tried to update our records</strong>
 	<p class=\"mb-0\">Please try again. Your membership renewal will not be

@@ -47,6 +47,6 @@ try {
 }
 
 
-$_SESSION['PostStatus'] = "Successfully updated";
+$_SESSION['TENANT-' . app()->tenant->getId()]['PostStatus'] = "Successfully updated";
 
 header("Location: " . autoUrl("posts/" . $id));

@@ -121,7 +121,7 @@ if ($added && $status) {
   class=\"btn btn-dark\">Add another gala</a></p>";
 
   if ($id != null) {
-    $_SESSION['GalaAddedSuccess'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['GalaAddedSuccess'] = true;
     if (bool($coachDoesEntries)) {
       header("Location: " . autoUrl("galas/" . $id . "/sessions"));
     } else {
@@ -132,7 +132,7 @@ if ($added && $status) {
   }
 }
 else {
-  $_SESSION['ErrorState'] = '
+  $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = '
   <div class="alert alert-danger">
   <p class="mb-0">
   <strong>We were unable to add this gala</strong>

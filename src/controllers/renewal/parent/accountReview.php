@@ -2,7 +2,7 @@
 $db = app()->db;
 
 $userDetails = $db->prepare("SELECT * FROM users WHERE UserID = ?");
-$userDetails->execute([$_SESSION['UserID']]);
+$userDetails->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $row = $userDetails->fetch(PDO::FETCH_ASSOC);
 
 $email = $row['EmailAddress'];
@@ -26,9 +26,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	<h1>Review your account</h1>
 	<p class="lead">Check your details are still up to date</p>
 
-	<?php if (isset($_SESSION['ErrorState'])) {
-		echo $_SESSION['ErrorState'];
-		unset($_SESSION['ErrorState']);
+	<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
+		echo $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+		unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
 	} ?>
 
 	<form method="post">

@@ -7,13 +7,13 @@ use Brick\PhoneNumber\PhoneNumberFormat;
 $db = app()->db;
 
 $userInfo = $db->prepare("SELECT Forename, Surname, Mobile FROM `users` WHERE `UserID` = ?");
-$userInfo->execute([$_SESSION['UserID']]);
+$userInfo->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $user = $userInfo->fetch(PDO::FETCH_ASSOC);
 
 $mobile = PhoneNumber::parse($user['Mobile'], 'GB');
 
 $contacts = new EmergencyContacts($db);
-$contacts->byParent($_SESSION['UserID']);
+$contacts->byParent($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
 
 $contactsArray = $contacts->getContacts();
 
@@ -24,21 +24,21 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 <div class="container">
 	<div class="">
-		<?php if (isset($_SESSION['ErrorState'])) {
-			echo $_SESSION['ErrorState'];
-			unset($_SESSION['ErrorState']);
+		<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
+			echo $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+			unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
 			?><hr><?php
 		} ?>
 		<form method="post">
 			<h1>Emergency Contacts</h1>
 			<p class="lead">These are your emergency contacts.</p>
 
-			<?php if (isset($_SESSION['AddNewSuccess'])) {
-			echo $_SESSION['AddNewSuccess'];
-			unset($_SESSION['AddNewSuccess']);
+			<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AddNewSuccess'])) {
+			echo $_SESSION['TENANT-' . app()->tenant->getId()]['AddNewSuccess'];
+			unset($_SESSION['TENANT-' . app()->tenant->getId()]['AddNewSuccess']);
 		} ?>
 
-			<?php if (user_needs_registration($_SESSION['UserID'])) { ?>
+			<?php if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) { ?>
 				<p class="border-bottom border-gray pb-3 mb-0">
 					We'll use these emergency contacts for all members connected to your
 					account if we can't reach you on your phone number. You will be able

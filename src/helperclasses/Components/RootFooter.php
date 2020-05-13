@@ -8,6 +8,7 @@ namespace SCDS;
 class RootFooter {
   private $js;
   private $fluidContainer;
+  private $chrome = true;
 
   public function __construct() {
     // new footer
@@ -28,5 +29,9 @@ class RootFooter {
 
   public function useFluidContainer($bool = true) {
     $this->fluidContainer = $bool;
+  }
+
+  public function chrome(bool $bool) {
+    $this->chrome = $bool;
   }
 }

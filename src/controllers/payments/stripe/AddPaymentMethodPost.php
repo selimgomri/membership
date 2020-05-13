@@ -6,31 +6,31 @@ $db = app()->db;
 \Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
 
 $setupIntent = null;
-if (!isset($_SESSION['StripeSetupIntentId'])) {
+if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['StripeSetupIntentId'])) {
   halt(404);
 } else {
   try {
-    $setupIntent = \Stripe\SetupIntent::retrieve($_SESSION['StripeSetupIntentId']);
+    $setupIntent = \Stripe\SetupIntent::retrieve($_SESSION['TENANT-' . app()->tenant->getId()]['StripeSetupIntentId']);
   } catch (Exception $e) {
-    unset($_SESSION['StripeSetupIntentId']);
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['StripeSetupIntentId']);
     header("Location: " . autoUrl("payments/cards/add"));
     return;
   }
 }
 
 $getUserEmail = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
-$getUserEmail->execute([$_SESSION['UserID']]);
+$getUserEmail->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $user = $getUserEmail->fetch(PDO::FETCH_ASSOC);
 
 $checkIfCustomer = $db->prepare("SELECT COUNT(*) FROM stripeCustomers WHERE User = ?");
-$checkIfCustomer->execute([$_SESSION['UserID']]);
+$checkIfCustomer->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 $customer = null;
 if ($checkIfCustomer->fetchColumn() == 0) {
   // Create a Customer:
   $customer = \Stripe\Customer::create([
     "name" => $user['Forename'] . ' ' . $user['Surname'],
-    "description" => "Customer for " . $_SESSION['UserID'] . ' (' . $user['EmailAddress'] . ')',
+    "description" => "Customer for " . $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'] . ' (' . $user['EmailAddress'] . ')',
     'email' => $user['EmailAddress'],
     'phone' => $user['Mobile']
   ]);
@@ -39,12 +39,12 @@ if ($checkIfCustomer->fetchColumn() == 0) {
   $id = $customer->id;
   $addCustomer = $db->prepare("INSERT INTO stripeCustomers (User, CustomerID) VALUES (?, ?)");
   $addCustomer->execute([
-    $_SESSION['UserID'],
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
     $id
   ]);
 } else {
   $getCustID = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
-  $getCustID->execute([$_SESSION['UserID']]);
+  $getCustID->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   $customer = \Stripe\Customer::retrieve($getCustID->fetchColumn());
 
   // Check whether we should update user details
@@ -102,8 +102,8 @@ try {
   ]);
 
   if ($getCardCount->fetchColumn() > 0) {
-    $_SESSION['PayCardError'] = true;
-    $_SESSION['PayCardErrorMessage'] = 'This card is already connected to your account';
+    $_SESSION['TENANT-' . app()->tenant->getId()]['PayCardError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['PayCardErrorMessage'] = 'This card is already connected to your account';
     header("Location: " . autoUrl("payments/cards/add"));
     return;
   }
@@ -129,14 +129,14 @@ try {
     true,
   ]);
 
-  unset($_SESSION['StripeSetupIntentId']);
-  $_SESSION['PayCardSetupSuccess'] = true;
-  $_SESSION['PayCardSetupSuccessBrand'] = getCardBrand($brand);
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['StripeSetupIntentId']);
+  $_SESSION['TENANT-' . app()->tenant->getId()]['PayCardSetupSuccess'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['PayCardSetupSuccessBrand'] = getCardBrand($brand);
   header("Location: " . autoUrl("payments/cards"));
 } catch (Exception $e) {
   $body = $e->getJsonBody();
   $err  = $body['error']['message'];
-  $_SESSION['PayCardError'] = true;
-  $_SESSION['PayCardErrorMessage'] = $err;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['PayCardError'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['PayCardErrorMessage'] = $err;
   header("Location: " . autoUrl("payments/cards/add"));
 }

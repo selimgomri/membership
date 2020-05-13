@@ -14,7 +14,7 @@ if ($_POST['name'] == "" || $_POST['name'] == null) {
 if (sizeof($form_errors) > 0) {
   // There was a problem, so send back to check details
 
-  $_SESSION['EditQualificationData'] = $_POST;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationData'] = $_POST;
   header("Location: " . currentUrl());
 
 } else {
@@ -29,7 +29,7 @@ if (sizeof($form_errors) > 0) {
   } catch (Exception $e) {
     halt(500);
   }
-  $_SESSION['EditQualificationSuccess'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationSuccess'] = true;
   header("Location: " . currentUrl());
 
 }

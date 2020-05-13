@@ -248,12 +248,12 @@ class NativeSessionStorage implements SessionStorageInterface
         $session = $_SESSION;
 
         foreach ($this->bags as $bag) {
-            if (empty($_SESSION[$key = $bag->getStorageKey()])) {
-                unset($_SESSION[$key]);
+            if (empty($_SESSION['TENANT-' . app()->tenant->getId()][$key = $bag->getStorageKey()])) {
+                unset($_SESSION['TENANT-' . app()->tenant->getId()][$key]);
             }
         }
         if ([$key = $this->metadataBag->getStorageKey()] === array_keys($_SESSION)) {
-            unset($_SESSION[$key]);
+            unset($_SESSION['TENANT-' . app()->tenant->getId()][$key]);
         }
 
         // Register error handler to add information about the current save handler

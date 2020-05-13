@@ -48,15 +48,15 @@ include BASE_PATH . 'views/header.php';
 
       <p>To do this, tick or untick the box on the left of each event and enter the price on the right.</p>
 
-      <?php if (isset($_SESSION['PricesSaved']) && $_SESSION['PricesSaved']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PricesSaved']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PricesSaved']) { ?>
         <div class="alert alert-success">
           <p class="mb-0">
             <strong>Your changes have been saved successfully.</strong>
           </p>
         </div>
-      <?php unset($_SESSION['PricesSaved']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PricesSaved']); } ?>
 
-      <?php if (isset($_SESSION['PricesNotSaved']) && $_SESSION['PricesNotSaved']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PricesNotSaved']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PricesNotSaved']) { ?>
         <div class="alert alert-warning">
           <p>
             <strong>We may have not been able to save all of your changes.</strong>
@@ -65,7 +65,7 @@ include BASE_PATH . 'views/header.php';
             Please double check the events and prices below. If you see anything you don't expect, please try changing it and saving again.
           </p>
         </div>
-      <?php unset($_SESSION['PricesNotSaved']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PricesNotSaved']); } ?>
 
       <form method="post">
 

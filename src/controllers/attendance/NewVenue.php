@@ -2,7 +2,7 @@
 
 $db = app()->db;
 
-$venue_details = $_SESSION['NewVenueError']['Data'];
+$venue_details = $_SESSION['TENANT-' . app()->tenant->getId()]['NewVenueError']['Data'];
 
 $pagetitle = "Add a venue";
 include BASE_PATH . "views/header.php";
@@ -14,7 +14,7 @@ include BASE_PATH . "views/header.php";
     <div class="col-md-8">
       <h1>Add a venue</h1>
 
-      <?php if (isset($_SESSION['NewVenueError']) && $_SESSION['NewVenueError']['Status']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NewVenueError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['NewVenueError']['Status']) { ?>
         <div class="alert alert-warning">
           <p class="mb-0">
             <strong>
@@ -58,7 +58,7 @@ include BASE_PATH . "views/header.php";
 
 <?php
 
-unset($_SESSION['NewVenueError']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewVenueError']);
 
 $footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");

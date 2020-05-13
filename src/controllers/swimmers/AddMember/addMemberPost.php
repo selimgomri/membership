@@ -90,10 +90,10 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
   		$getAdmins = $db->prepare("SELECT `UserID` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE Tenant = ? AND `Permission` = 'Admin' AND `UserID` != ?");
   		$getAdmins->execute([
 				$tenant->getId(),
-				$_SESSION['UserID']]);
+				$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   		$notify = $db->prepare("INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'NewMember')");
     	$subject = "New Club Member";
-    	$message = '<p>' . htmlentities(getUserName($_SESSION['UserID'])) . ' has added a new member, ' . htmlentities($forename . ' ' . $surname) . ' to our online membership system.</p><p>We have sent you this email to ensure you\'re aware of this.</p>';
+    	$message = '<p>' . htmlentities(getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) . ' has added a new member, ' . htmlentities($forename . ' ' . $surname) . ' to our online membership system.</p><p>We have sent you this email to ensure you\'re aware of this.</p>';
     	while ($row = $getAdmins->fetch(PDO::FETCH_ASSOC)) {
     		try {
     			$notify->execute([$row['UserID'], $subject, $message]);
@@ -111,10 +111,10 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 }
 
 if ($action) {
-	$_SESSION['SwimmerAdded'] = true;
+	$_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerAdded'] = true;
 	header("Location: " . autoUrl("members/" . $last_id));
 } else {
-	$_SESSION['ErrorState'] = '
+	$_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = '
 	<div class="alert alert-danger">
 		<p class="mb-0">
 			<strong>We were not able to add the new swimmer</strong>

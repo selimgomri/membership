@@ -20,7 +20,7 @@ try {
     $tenant->getId()
   ]);
   $userInfo = $query->fetch(PDO::FETCH_ASSOC);
-  $query->execute([$_SESSION['UserID']]);
+  $query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   $curUserInfo = $query->fetch(PDO::FETCH_ASSOC);
 
   if ($userInfo == null) {
@@ -49,7 +49,7 @@ try {
     $fromName = $myName;
   }
 
-  $replyAddress = getUserOption($_SESSION['UserID'], 'NotifyReplyAddress');
+  $replyAddress = getUserOption($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 'NotifyReplyAddress');
   $replyName = $myName;
 
   if (!($replyAddress && isset($_POST['ReplyToMe']) && bool($_POST['ReplyToMe']))) {
@@ -74,20 +74,20 @@ try {
         // reportError($_FILES['file-upload']['error'][$i]);
         if ($_FILES['file-upload']['error'][$i] == 2) {
           // Too large
-          $_SESSION['TooLargeError'] = true;
+          $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError'] = true;
         } else {
-          $_SESSION['UploadError'] = true;
+          $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
         }
         throw new Exception();
       } else if (false) {
         // Probably not a text file
         reportError($_FILES['file-upload']['type'][$i]);
-        $_SESSION['UploadError'] = true;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
         throw new Exception();
       } else if ($_FILES['file-upload']['size'][$i] > 3145728) {
         // Too large, stop
         // reportError($_FILES['file-upload']['size'][$i]);
-        $_SESSION['TooLargeError'] = true;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError'] = true;
         throw new Exception();
       } else if ($_FILES['file-upload']['size'][$i] > 0) {
         // Store uploaded files in filestore, if exists
@@ -102,7 +102,7 @@ try {
       } else {
         // File upload error (no size)
         reportError($_FILES);
-        $_SESSION['UploadError'] = true;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
         throw new Exception();
       }
     }
@@ -110,7 +110,7 @@ try {
 
   if ($collectiveSize > 10485760) {
     // Collectively too large attachments
-    $_SESSION['CollectiveSizeTooLargeError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['CollectiveSizeTooLargeError'] = true;
     throw new Exception();
   }
 
@@ -169,18 +169,18 @@ try {
   $response = $sendgrid->send($email);
 
   if ($response->statusCode() == "202") {
-    $_SESSION['NotifyIndivSuccess'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess'] = true;
   } else {
     throw new Exception('Invalid request to SendGrid');
   }
 
 } catch (Exception $e) {
-  $_SESSION['NotifyIndivSuccess'] = false;
-  $_SESSION['NotifyIndivPostContent'] = $_POST;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess'] = false;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivPostContent'] = $_POST;
   reportError($e);
 } finally {
 
-  if (isset($_SESSION['NotifyIndivSuccess']) && !$_SESSION['NotifyIndivSuccess']) {
+  if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess']) && !$_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess']) {
     // Return to composer
     if (isset($returnToSwimmer) && $returnToSwimmer) {
       header("location: " . autoUrl("members/" . $id . "/contact-parent"));

@@ -19,7 +19,7 @@ if (mb_stripos($row['ASANumber'], app()->tenant->getKey('ASA_CLUB_CODE')) > -1) 
 	$swimEnglandText = "Temporary Membership Number";
 }
 
-$_SESSION['qr'][0]['text'] = autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey']);
+$_SESSION['TENANT-' . app()->tenant->getId()]['qr'][0]['text'] = autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey']);
 
 $pagetitle = htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " Registration Information";
 
@@ -62,17 +62,17 @@ include BASE_PATH . "views/swimmersMenu.php";
     </ol>
   </nav>
 
-  <?php if (isset($_SESSION['EmailStatus']) && $_SESSION['EmailStatus']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EmailStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['EmailStatus']) { ?>
   <div class="alert alert-success d-print-none">
     <p class="mb-0">We've sent an email to that address.</p>
   </div>
-  <?php } else if (isset($_SESSION['EmailStatus']) && !$_SESSION['EmailStatus']) { ?>
+  <?php } else if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EmailStatus']) && !$_SESSION['TENANT-' . app()->tenant->getId()]['EmailStatus']) { ?>
   <div class="alert alert-danger d-print-none">
     <p class="mb-0">We were unable to send an email to that address.</p>
   </div>
   <?php }
-  if (isset($_SESSION['EmailStatus'])) {
-    unset($_SESSION['EmailStatus']);
+  if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EmailStatus'])) {
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['EmailStatus']);
   } ?>
 
 	<div class="alert alert-danger d-print-none">

@@ -104,7 +104,7 @@ mb_http_output('UTF-8');
 
 /*
 if (!(sizeof($_SESSION) > 0)) {
-  $_SESSION['TARGET_URL'] = app('request')->curl;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL'] = app('request')->curl;
 }
 */
 
@@ -206,10 +206,6 @@ if ($headInfo[0] == 'ref:') {
 }
 
 require_once "database.php";
-
-if (!isset($_SESSION['PWA']) && isset($_COOKIE[COOKIE_PREFIX . 'PWA'])) {
-  $_SESSION['PWA'] = $_COOKIE[COOKIE_PREFIX . 'PWA'];
-}
 
 if (!isset($_SESSION['Browser'])) {
   $browser = new \WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);

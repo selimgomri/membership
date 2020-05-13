@@ -15,7 +15,7 @@ $query->execute([
   $tenant->getId()
 ]);
 $userInfo = $query->fetchAll(PDO::FETCH_ASSOC);
-$query->execute([$_SESSION['UserID']]);
+$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $curUserInfo = $query->fetchAll(PDO::FETCH_ASSOC);
 
 if (sizeof($userInfo) != 1) {
@@ -40,7 +40,7 @@ $email = $userInfo['EmailAddress'];
 $myName = $curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'];
 
 $replyMe = false;
-if (getUserOption($_SESSION['UserID'], 'NotifyReplyAddress')) {
+if (getUserOption($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 'NotifyReplyAddress')) {
   $replyMe = true;
 }
 
@@ -51,17 +51,17 @@ if (!$replyMe) {
 } else {
   $reply = "1";
 }
-if (isset($_SESSION['NotifyIndivPostContent']['from'])) {
-  $from = $_SESSION['NotifyIndivPostContent']['from'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivPostContent']['from'])) {
+  $from = $_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivPostContent']['from'];
 }
-if (isset($_SESSION['NotifyIndivPostContent']['ReplyToMe'])) {
-  $reply = $_SESSION['NotifyIndivPostContent']['ReplyToMe'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivPostContent']['ReplyToMe'])) {
+  $reply = $_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivPostContent']['ReplyToMe'];
 }
-if (isset($_SESSION['NotifyIndivPostContent']['subject'])) {
-  $subject = $_SESSION['NotifyIndivPostContent']['subject'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivPostContent']['subject'])) {
+  $subject = $_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivPostContent']['subject'];
 }
-if (isset($_SESSION['NotifyIndivPostContent']['message'])) {
-  $content = $_SESSION['NotifyIndivPostContent']['message'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivPostContent']['message'])) {
+  $content = $_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivPostContent']['message'];
 }
 
 $pagetitle = "Email " . htmlspecialchars($name);
@@ -99,44 +99,44 @@ include BASE_PATH . "views/notifyMenu.php";
 
 <div class="container">
 
-  <?php if (isset($_SESSION['UploadSuccess']) && $_SESSION['UploadSuccess']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) { ?>
   <div class="alert alert-success">
     <p class="mb-0"><strong>Results have been uploaded</strong>.</p>
   </div>
   <?php
-    unset($_SESSION['UploadSuccess']);
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']);
   } ?>
 
-  <?php if (isset($_SESSION['FormError']) && $_SESSION['FormError']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['FormError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['FormError']) { ?>
   <div class="alert alert-danger">
     <p class="mb-0"><strong>We could not verify the integrity of the submitted form</strong>. Please try again.</p>
   </div>
   <?php
-    unset($_SESSION['FormError']);
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['FormError']);
   } ?>
 
-  <?php if (isset($_SESSION['UploadError']) && $_SESSION['UploadError']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError']) { ?>
   <div class="alert alert-danger">
     <p class="mb-0"><strong>There was a problem with the file uploaded</strong>. Please try again.</p>
   </div>
   <?php
-    unset($_SESSION['UploadError']);
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadError']);
   } ?>
 
-  <?php if (isset($_SESSION['TooLargeError']) && $_SESSION['TooLargeError']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError']) { ?>
   <div class="alert alert-danger">
     <p class="mb-0"><strong>A file you uploaded was too large</strong>. The maximum size for an individual file is 300000 bytes.</p>
   </div>
   <?php
-    unset($_SESSION['TooLargeError']);
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError']);
   } ?>
 
-  <?php if (isset($_SESSION['CollectiveSizeTooLargeError']) && $_SESSION['CollectiveSizeTooLargeError']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['CollectiveSizeTooLargeError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['CollectiveSizeTooLargeError']) { ?>
   <div class="alert alert-danger">
     <p class="mb-0"><strong>The files you uploaded were collectively too large</strong>. Attachments may not exceed a total of 10 megabytes in size.</p>
   </div>
   <?php
-    unset($_SESSION['CollectiveSizeTooLargeError']);
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['CollectiveSizeTooLargeError']);
   } ?>
 
 	<form method="post" onkeypress="return event.keyCode != 13;" class="needs-validation" novalidate id="notify-form" enctype="multipart/form-data">

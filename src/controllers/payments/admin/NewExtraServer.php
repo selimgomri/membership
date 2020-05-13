@@ -46,7 +46,7 @@ if (!$errorState) {
 }
 
 if ($errorState) {
-	$_SESSION['ErrorState'] = '
+	$_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = '
 	<div class="alert alert-danger">
 	Something went wrong and we couldn\'t carry out that operation
 	<ul class="mb-0">' . $errorMessage . '</ul></div>';

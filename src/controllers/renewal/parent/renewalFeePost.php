@@ -23,7 +23,7 @@ try {
 		$asaDate = $date->format("Y-m-d");
 	}
 
-	$user = $_SESSION['UserID'];
+	$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 	$partial_reg = isPartialRegistration();
 
 	$partial_reg_require_topup = false;
@@ -31,7 +31,7 @@ try {
 		$db = app()->db;
 		$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = 0 AND ClubPays = 0";
 		$query = $db->prepare($sql);
-		$query->execute([$_SESSION['UserID']]);
+		$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 		if ($query->fetchColumn() == 1) {
 			$partial_reg_require_topup = true;
 		}
@@ -49,14 +49,14 @@ try {
 	}
 
 	$sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ? AND `ClubPays` = '0'");
-	$sql->execute([$_SESSION['UserID']]);
+	$sql->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 	$clubFee = 0;
 	$totalFee = 0;
 
 	$payingSwimmerCount = $sql->fetchColumn();
 
-	$clubFees = \SCDS\Membership\ClubMembership::create($db, $_SESSION['UserID'], $partial_reg);
+	$clubFees = \SCDS\Membership\ClubMembership::create($db, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $partial_reg);
 
 	$clubFee = $clubFees->getFee();
 
@@ -68,7 +68,7 @@ try {
 		members.SquadID WHERE `members`.`UserID` = ?";
 	}
 	$getMembers = $db->prepare($sql);
-	$getMembers->execute([$_SESSION['UserID']]);
+	$getMembers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 	$member = $getMembers->fetchAll(PDO::FETCH_ASSOC);
 	$count = sizeof($member);
@@ -145,7 +145,7 @@ try {
 	$totalFeeString = number_format($totalFee/100,2,'.','');
 
 	$sql = $db->prepare("SELECT COUNT(*) FROM `paymentPreferredMandate` WHERE `UserID` = ?");
-	$sql->execute([$_SESSION['UserID']]);
+	$sql->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 	$hasDD = false;
 	if ($sql->fetchColumn() == 1) {
 		$hasDD = true;
@@ -169,7 +169,7 @@ try {
 			$insert->execute([
 				$date->format('Y-m-d'),
 				'Pending',
-				$_SESSION['UserID'],
+				$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
 				$description,
 				$totalFee,
 				'GBP',
@@ -186,7 +186,7 @@ try {
 				$insert->execute([
 					$charge['date'],
 					'Pending',
-					$_SESSION['UserID'],
+					$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
 					$charge['description'],
 					$charge['amount'],
 					'GBP',
@@ -238,21 +238,21 @@ try {
 		$progress = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
 		$progress->execute([
 			$renewal,
-			$_SESSION['UserID']
+			$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
 		]);
 
-		if (user_needs_registration($_SESSION['UserID'])) {
+		if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
 			$sql = "UPDATE `users` SET `RR` = 0 WHERE `UserID` = ?";
 			$query = $db->prepare($sql);
-			$query->execute([$_SESSION['UserID']]);
+			$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 			
 			$query = $db->prepare("UPDATE `members` SET `RR` = 0, `RRTransfer` = 0 WHERE `UserID` = ?");
-			$query->execute([$_SESSION['UserID']]);
+			$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 			
 			// Remove from status tracker
 			$delete = $db->prepare("DELETE FROM renewalProgress WHERE UserID = ? AND RenewalID = ?");
 			$delete->execute([
-				$_SESSION['UserID'],
+				$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
 				$renewal
 			]);
 			$location = autoUrl("");

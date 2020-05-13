@@ -3,7 +3,7 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $pagetitle = "Pending Messages";
 $use_white_background = true;
 

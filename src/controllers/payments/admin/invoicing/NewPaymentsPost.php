@@ -91,18 +91,18 @@ try {
 
   $db->commit();
 
-  $_SESSION['NewPaymentSuccessMessage'] = 'We\'ve added the ' . $typeString . ' to ' . $user['Forename'] . '\'s account to pay in their next bill.';
+  $_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentSuccessMessage'] = 'We\'ve added the ' . $typeString . ' to ' . $user['Forename'] . '\'s account to pay in their next bill.';
 
 } catch (PDOException $e) {
   $db->rollBack();
 
   reportError($e);
 
-  $_SESSION['NewPaymentErrorMessage'] = 'A database error occurred. Please try again. If the error occurs again, please try again later.';
+  $_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentErrorMessage'] = 'A database error occurred. Please try again. If the error occurs again, please try again later.';
 } catch (Exception $e) {
   $db->rollBack();
 
-  $_SESSION['NewPaymentErrorMessage'] = $e->getMessage();
+  $_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentErrorMessage'] = $e->getMessage();
 }
 
 header('Location: ' . autoUrl('payments/invoice-payments/new'));

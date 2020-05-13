@@ -37,23 +37,23 @@ include BASE_PATH . 'views/header.php';
   </nav>
   <div class="row">
     <div class="col-lg-8">
-      <?php if (isset($_SESSION['GalaAddedSuccess']) && $_SESSION['GalaAddedSuccess']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaAddedSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['GalaAddedSuccess']) { ?>
       <div class="alert alert-success">
         <p class="mb-0"><strong>We've successfully added this gala</strong></p>
         <p class="mb-0">Please now provide information about sessions at this gala</p>
       </div>
-      <?php unset($_SESSION['GalaAddedSuccess']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaAddedSuccess']); } ?>
       <h1>Manage sessions at <?=htmlspecialchars($gala['name'])?></h1>
       <p class="lead">Adding sessions allows parents to indicate if a swimmer will be able to enter any given session.</p>
 
-      <?php if (isset($_SESSION['SuccessStatus']) && $_SESSION['SuccessStatus']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']) { ?>
       <div class="alert alert-success">Saved</div>
-      <?php unset($_SESSION['SuccessStatus']);
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']);
       } ?>
 
-      <?php if (isset($_SESSION['ErrorStatus']) && $_SESSION['ErrorStatus']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus']) { ?>
       <div class="alert alert-danger">Changes were not saved</div>
-      <?php unset($_SESSION['ErrorStatus']);
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus']);
       } ?>
 
       <?php if ($nowDate > $galaDate) { ?>

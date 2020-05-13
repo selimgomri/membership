@@ -12,13 +12,13 @@ if (isset($renewal_trap) && $renewal_trap) {
 }
 
 $sql = $db->prepare("SELECT * FROM `users` WHERE `UserID` = ?");
-$sql->execute([$_SESSION['UserID']]);
+$sql->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $row = $sql->fetch(PDO::FETCH_ASSOC);
 
 $mobile = PhoneNumber::parse($row['Mobile']);
 
 $contacts = new EmergencyContacts($db);
-$contacts->byParent($_SESSION['UserID']);
+$contacts->byParent($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
 
 $contactsArray = $contacts->getContacts();
 
@@ -46,9 +46,9 @@ if (isset($renewal_trap) && $renewal_trap) {
         We'll use these emergency contacts for all swimmers connected to your account if we can't reach you on your
         phone number. You can change your phone number in <a href="<?=autoUrl("my-account")?>">My Account</a>
       </p>
-      <?php if (isset($_SESSION['AddNewSuccess'])) {
-			echo $_SESSION['AddNewSuccess'];
-			unset($_SESSION['AddNewSuccess']);
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AddNewSuccess'])) {
+			echo $_SESSION['TENANT-' . app()->tenant->getId()]['AddNewSuccess'];
+			unset($_SESSION['TENANT-' . app()->tenant->getId()]['AddNewSuccess']);
 		} ?>
       <div class="mb-3">
         <div class="media pt-3">

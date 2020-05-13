@@ -14,9 +14,9 @@ $getGalas->execute([
 $gala = $getGalas->fetch(PDO::FETCH_ASSOC);
 
 $squads = null;
-if ($_SESSION['AccessLevel'] == 'Parent') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
   $squads = $db->prepare("SELECT SquadName, SquadID, SquadCoach FROM squadReps INNER JOIN squads ON squadReps.Squad = squads.SquadID WHERE squadReps.User = ? ORDER BY squads.SquadFee DESC, squads.SquadName ASC");
-  $squads->execute([$_SESSION['UserID']]);
+  $squads->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 } else {
   $squads = $db->prepare("SELECT SquadName, SquadID, SquadCoach FROM squads WHERE Tenant = ? ORDER BY squads.SquadFee DESC, squads.SquadName ASC");
   $squads->execute([

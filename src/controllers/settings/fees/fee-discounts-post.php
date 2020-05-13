@@ -25,9 +25,9 @@ try {
   }
 
   app()->tenant->setKey('MembershipDiscounts', json_encode($array));
-  $_SESSION['Update-Success'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['Update-Success'] = true;
 } catch (Exception $e) {
-  $_SESSION['Update-Error'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['Update-Error'] = true;
 }
 
 header("Location: " . autoUrl("settings/fees/membership-discounts"));

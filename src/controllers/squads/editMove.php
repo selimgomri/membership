@@ -53,9 +53,9 @@ include BASE_PATH . "views/squadMenu.php"; ?>
   </nav>
 	<div class="">
 		<h1>Squad Move for <?=htmlspecialchars($name)?></h1>
-		<?php if (isset($_SESSION['ErrorState'])) {
-			echo $_SESSION['ErrorState'];
-			unset($_SESSION['ErrorState']);
+		<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
+			echo $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+			unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
 		} ?>
 		<form method="post">
 			<div class="form-group row">

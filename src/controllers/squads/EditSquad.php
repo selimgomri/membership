@@ -39,14 +39,14 @@ include BASE_PATH . "views/squadMenu.php"; ?>
           <h2>Details</h2>
           <p class="lead">View or edit the squad details</p>
 
-          <?php if (isset($_SESSION['UpdateDatabaseError']) && $_SESSION['UpdateDatabaseError']) { ?>
+          <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateDatabaseError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UpdateDatabaseError']) { ?>
             <div class="alert alert-danger">A database error occured. We did not save the changes.</div>
-          <?php unset($_SESSION['UpdateDatabaseError']);
+          <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateDatabaseError']);
           } ?>
 
-          <?php if (isset($_SESSION['UpdateSuccess']) && $_SESSION['UpdateSuccess']) { ?>
+          <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess']) { ?>
             <div class="alert alert-success">All changes saved</div>
-          <?php unset($_SESSION['UpdateSuccess']);
+          <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess']);
           } ?>
 
           <div class="form-group">

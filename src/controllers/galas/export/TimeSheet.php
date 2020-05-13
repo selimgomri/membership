@@ -19,9 +19,9 @@ if ($info = null) {
 
 $sql = null;
 
-if ($_SESSION['AccessLevel'] == "Parent") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 	$sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaID = '$id' AND members.UserID = '$uid' ORDER BY members.MForename ASC, members.MSurname ASC;");
-	$sql->execute([$id, $_SESSION['UserID']]);
+	$sql->execute([$id, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 } else {
 	$sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaID = ? ORDER BY members.MForename ASC, members.MSurname ASC;");
 	$sql->execute([$id]);
@@ -39,7 +39,7 @@ if ($noTimeSheet) {
   include "galaMenu.php"; ?>
   <div class="container">
     <h1>There is no Time Sheet available for the gala you requested</h1>
-    <?php if ($_SESSION['AccessLevel'] == "Parent") {
+    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
       ?><p class="lead">This may be because your swimmers have not entered this gala.</p>
 		<?php } else {
       ?><p class="lead">There are no entries yet for this gala.</p>

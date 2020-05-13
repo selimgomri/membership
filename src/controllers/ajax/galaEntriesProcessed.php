@@ -6,7 +6,7 @@ $tenant = app()->tenant->getId();
 $update = $db->prepare("UPDATE galaEntries SET EntryProcessed = ? WHERE EntryID = ? AND Tenant = ?");
 $markPaid = $db->prepare("UPDATE galaEntries SET Charged = ? WHERE EntryID = ? AND Tenant = ?");
 
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $access == "Galas") {
 	if ((isset($_POST["processedID"])) && (isset($_POST["clickedItemChecked"])) && (isset($_POST["verify"]))) {
 

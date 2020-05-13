@@ -1,23 +1,23 @@
 <?php
 
-$name = getUserName($_SESSION['UserID']);
+$name = getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
 
 $db = app()->db;
 
 $acc_details = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, EmailComms, MobileComms FROM users WHERE UserID = ?");
-$acc_details->execute([$_SESSION['UserID']]);
+$acc_details->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 $swimmers = $db->prepare("SELECT MForename, MMiddleNames, MSurname, DateOfBirth, SquadName, Gender, members.ASANumber, members.ASACategory FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID = ? ORDER BY MForename ASC, MSurname ASC");
-$swimmers->execute([$_SESSION['UserID']]);
+$swimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 $emergency_contacts = $db->prepare("SELECT Name, ContactNumber FROM emergencyContacts WHERE UserID = ?");
-$emergency_contacts->execute([$_SESSION['UserID']]);
+$emergency_contacts->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 $mandates = $db->prepare("SELECT BankName, AccountHolderName, AccountNumEnd, InUse FROM paymentMandates WHERE UserID = ?");
-$mandates->execute([$_SESSION['UserID']]);
+$mandates->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 $logins = $db->prepare("SELECT `Time`, IPAddress, GeoLocation, Browser, Platform, Mobile FROM userLogins WHERE UserID = ? AND `Time` >= ?");
-$logins->execute([$_SESSION['UserID'], date("Y-m-d", strtotime('-120 days'))]);
+$logins->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], date("Y-m-d", strtotime('-120 days'))]);
 
 // output headers so that the file is downloaded rather than displayed
 header('Content-Type: text/csv; charset=utf-8');

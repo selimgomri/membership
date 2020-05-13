@@ -68,13 +68,13 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
   // If on session, go to success page
   // Webhook handles fulfillment
   if ($onSession && $intent->status == 'succeeded') {
-    $_SESSION['CompletedEntryInfo'] = $databaseId;
-    unset($_SESSION['GalaPaymentIntent']);
-    unset($_SESSION['PaidEntries']);
-    unset($_SESSION['GalaPaymentMethodID']);
-    unset($_SESSION['AddNewCard']);
+    $_SESSION['TENANT-' . app()->tenant->getId()]['CompletedEntryInfo'] = $databaseId;
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent']);
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['PaidEntries']);
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentMethodID']);
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['AddNewCard']);
 
-    $_SESSION['GalaPaymentSuccess'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentSuccess'] = true;
 
     header("Location: " . autoUrl("galas/pay-for-entries/success"));
     return true;
@@ -95,7 +95,7 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
   ]);
   $userId = $getUser->fetchColumn();
   if ($userId == null) {
-    $userId = $_SESSION['UserID'];
+    $userId = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
   }
 
   if (isset($intent->charges->data[0]->payment_method_details->card->wallet)) {
@@ -249,8 +249,8 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
       $body = $e->getJsonBody();
       $err  = $body['error']['message'];
       if ($onSession) {
-        $_SESSION['PayCardError'] = true;
-        $_SESSION['PayCardErrorMessage'] = $err;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['PayCardError'] = true;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['PayCardErrorMessage'] = $err;
         header("Location: " . autoUrl("galas/pay-for-entries/checkout"));
       } else {
         reportError($e);
@@ -322,7 +322,7 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
       }
 
       if ($onSession) {
-        $_SESSION['CompletedEntryInfo'] = $databaseId;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['CompletedEntryInfo'] = $databaseId;
       }
 
       $message = "<p>Here is your payment receipt for your gala entries.</p>";
@@ -429,12 +429,12 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
       $db->commit();
 
       if ($onSession) {
-        unset($_SESSION['GalaPaymentIntent']);
-        unset($_SESSION['PaidEntries']);
-        unset($_SESSION['GalaPaymentMethodID']);
-        unset($_SESSION['AddNewCard']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['PaidEntries']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentMethodID']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['AddNewCard']);
 
-        $_SESSION['GalaPaymentSuccess'] = true;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentSuccess'] = true;
 
         header("Location: " . autoUrl("galas/pay-for-entries/success"));
       } else {

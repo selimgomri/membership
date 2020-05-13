@@ -76,15 +76,15 @@ include BASE_PATH . 'views/header.php';
 	<div class="row">
 		<div class="col-md-8">
 
-			<?php if (isset($_SESSION['ChargeUsersSuccess'])) { 
-				unset($_SESSION['ChargeUsersSuccess']); ?>
+			<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersSuccess'])) { 
+				unset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersSuccess']); ?>
 				<div class="alert alert-success">
 					<strong>We've successfully refunded the parents</strong>
 				</div>
 			<?php } ?>
 
-			<?php if (isset($_SESSION['ChargeUsersFailure'])) { 
-				unset($_SESSION['ChargeUsersFailure']); ?>
+			<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersFailure'])) { 
+				unset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersFailure']); ?>
 				<div class="alert alert-warning">
 					<strong>An error occurred.</strong> Please try again later.
 				</div>
@@ -191,8 +191,8 @@ include BASE_PATH . 'views/header.php';
 
 								?>
 
-								<?php if (isset($_SESSION['OverhighChargeAmount'][$entry['EntryID']]) && $_SESSION['OverhighChargeAmount'][$entry['EntryID']]) {
-									unset($_SESSION['OverhighChargeAmount'][$entry['EntryID']]); ?>
+								<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'][$entry['EntryID']]) && $_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'][$entry['EntryID']]) {
+									unset($_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'][$entry['EntryID']]); ?>
 								<div class="alert alert-danger">
 									<strong>Refund failed!</strong> You have attempted to refund more than the user has paid.
 								</div>
@@ -270,8 +270,8 @@ include BASE_PATH . 'views/header.php';
 	</div>
 </div>
 
-<?php if (isset($_SESSION['OverhighChargeAmount'])) {
-	unset($_SESSION['OverhighChargeAmount']);
+<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'])) {
+	unset($_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount']);
 } ?>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalTitle" aria-hidden="true">

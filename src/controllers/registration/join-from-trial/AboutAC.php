@@ -3,7 +3,7 @@
 $db = app()->db;
 
 $query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ? AND Invited = ?");
-$query->execute([$_SESSION['AC-Registration']['Hash'], true]);
+$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AC-Registration']['Hash'], true]);
 
 if ($query->fetchColumn() != 1) {
   halt(404);

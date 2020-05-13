@@ -14,7 +14,7 @@ if ($member == null) {
   halt(404);
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent' && $member['uid'] != $_SESSION['UserID']) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $member['uid'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
   halt(404);
 }
 
@@ -40,7 +40,7 @@ try {
       $id
     ]);
 
-    $_SESSION['SetMemberPassSuccess'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassSuccess'] = true;
 
     http_response_code(303);
     if (isset($_POST['return'])) {
@@ -55,7 +55,7 @@ try {
 
 } catch (Exception $e) {
 
-  $_SESSION['SetMemberPassError'] = $e->getMessage();
+  $_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassError'] = $e->getMessage();
   http_response_code(303);
   header("location: " . autoUrl("members/" . $id . "/password"));
 

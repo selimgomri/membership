@@ -3,7 +3,7 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 $count = 0;
 if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $access == "Galas") {
   $sql = "";

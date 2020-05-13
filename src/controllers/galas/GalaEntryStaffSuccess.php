@@ -1,11 +1,11 @@
 <?php
 
-if (isset($_SESSION['SuccessStatus'])) {
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus'])) {
   include 'GalaEntryStaffSuccessCE.php';
   return;
 }
 
-if (!isset($_SESSION['SuccessfulGalaEntry'])) {
+if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessfulGalaEntry'])) {
   halt(404);
 }
 
@@ -19,8 +19,8 @@ $swimsTimeArray = ['50FreeTime','100FreeTime','200FreeTime','400FreeTime','800Fr
 $entryList = "";
 $get = $db->prepare("SELECT * FROM (galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galaEntries.MemberID = ? AND galaEntries.GalaID = ? AND galas.Tenant = ?");
 $get->execute([
-  $_SESSION['SuccessfulGalaEntry']['Swimmer'],
-  $_SESSION['SuccessfulGalaEntry']['Gala'],
+  $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessfulGalaEntry']['Swimmer'],
+  $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessfulGalaEntry']['Gala'],
   $tenant->getId()
 ]);
 $row = $get->fetch(PDO::FETCH_ASSOC);
@@ -33,8 +33,8 @@ for ($y=0; $y<sizeof($swimsArray); $y++) {
 
 $get = $db->prepare("SELECT members.MForename, members.MSurname, galas.GalaName, galas.GalaFee, galas.GalaFeeConstant, users.EmailAddress, users.Forename, users.Surname, FeeToPay, EntryID FROM (((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN users ON members.UserID = users.UserID) WHERE galaEntries.MemberID = ? AND galaEntries.GalaID = ? AND galas.Tenant = ?");
 $get->execute([
-  $_SESSION['SuccessfulGalaEntry']['Swimmer'],
-  $_SESSION['SuccessfulGalaEntry']['Gala'],
+  $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessfulGalaEntry']['Swimmer'],
+  $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessfulGalaEntry']['Gala'],
   $tenant->getId()
 ]);
 $row = $get->fetch(PDO::FETCH_ASSOC);
@@ -82,7 +82,7 @@ include BASE_PATH . "views/header.php";
         What do you need to do now?
       </p>
 
-      <?php if ($_SESSION['SuccessfulGalaEntry']['HyTek']) { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessfulGalaEntry']['HyTek']) { ?>
       <div class="cell">
         <h3>Provide entry times</h3>
         <p>
@@ -106,7 +106,7 @@ include BASE_PATH . "views/header.php";
         <p>Return to the entry form to make another entry for <?=htmlspecialchars($row['MForename'])?>.</p>
 
         <p class="mb-0">
-          <a href="<?=autoUrl("swimmers/" . $_SESSION['SuccessfulGalaEntry']['Swimmer'] . "/enter-gala")?>" class="btn btn-primary">
+          <a href="<?=autoUrl("swimmers/" . $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessfulGalaEntry']['Swimmer'] . "/enter-gala")?>" class="btn btn-primary">
             Make another entry
           </a>
         </p>
@@ -121,13 +121,13 @@ include BASE_PATH . "views/header.php";
           <a href="<?=autoUrl("galas")?>" class="btn btn-primary">
             Gala home
           </a>
-          <a href="<?=autoUrl("swimmers/" . $_SESSION['SuccessfulGalaEntry']['Swimmer'])?>" class="btn btn-primary">
+          <a href="<?=autoUrl("swimmers/" . $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessfulGalaEntry']['Swimmer'])?>" class="btn btn-primary">
             <?=htmlspecialchars($row['MForename'])?>'s page
           </a>
         </p>
       </div>
 
-      <?php if ($_SESSION['SuccessfulGalaEntry']['HyTek']) { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessfulGalaEntry']['HyTek']) { ?>
       <h2 id="why">Why do I have to provide times?</h2>
       <p>
         There are two main providers of software for running galas in the UK: SPORTSYSTEMS Meet Manager and HyTek Meet Manager.
@@ -153,8 +153,8 @@ include BASE_PATH . "views/header.php";
 
 <?php
 
-if (isset($_SESSION['SuccessfulGalaEntry'])) {
-  unset($_SESSION['SuccessfulGalaEntry']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessfulGalaEntry'])) {
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessfulGalaEntry']);
 }
 
 $footer = new \SCDS\Footer();

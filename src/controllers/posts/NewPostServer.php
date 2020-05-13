@@ -11,7 +11,7 @@ if ($date == "") {
 }
 
 $data = [
-	$_SESSION['UserID'],
+	$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
 	$date->format("Y-m-d H:i:s"),
 	$_POST['content'],
 	$_POST['title'],
@@ -30,6 +30,6 @@ try {
 
 $id = $db->lastInsertId();
 
-$_SESSION['PostStatus'] = "Successfully added";
+$_SESSION['TENANT-' . app()->tenant->getId()]['PostStatus'] = "Successfully added";
 
 header("Location: " . autoUrl("posts/" . $id));

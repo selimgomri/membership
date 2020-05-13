@@ -14,19 +14,19 @@
     <div class="col-md-9">
 <?php
 
-if (isset($_SESSION['PasswordUpdate']) && $_SESSION['PasswordUpdate']) { ?>
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PasswordUpdate']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PasswordUpdate']) { ?>
   <div class="alert alert-success">
     <strong>You've successfully changed your password</strong>
   </div>
-<?php unset($_SESSION['PasswordUpdate']); } ?>
+<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PasswordUpdate']); } ?>
 
 <h1>Change your password</h1>
 <p class="lead">
   You should change your password regularly to keep you account safe and secure.
 </p>
-<?php if (isset($_SESSION['ErrorState'])) {
-  echo $_SESSION['ErrorState'];
-  unset($_SESSION['ErrorState']);
+<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
+  echo $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
 } ?>
 <div class="alert alert-warning">
   <p class="mb-0">Passwords must consist of at least 8 characters.</p>

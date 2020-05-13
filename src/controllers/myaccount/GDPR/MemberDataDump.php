@@ -7,12 +7,12 @@ $verify_user->execute([$id]);
 
 $parent = $verify_user->fetchColumn();
 
-if ($_SESSION['AccessLevel'] == "Parent" && $parent != $_SESSION['UserID']) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent" && $parent != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
   halt(404);
 }
 
 $parent_name = getUserName($parent);
-$downloader_name = getUserName($_SESSION['UserID']);
+$downloader_name = getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
 $swimmer_name = getSwimmerName($id);
 
 $db = app()->db;

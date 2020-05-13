@@ -31,7 +31,7 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 	]);
 	$swimmer = $getSwimmer->fetch(PDO::FETCH_ASSOC);
 
-	if ($swimmer == null || ($_SESSION['AccessLevel'] == 'Parent' && $swimmer['parent'] != $_SESSION['UserID'])) {
+	if ($swimmer == null || ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $swimmer['parent'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
 		halt(404);
 	}
 
@@ -297,7 +297,7 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 	]);
 	$swimmer = $getSwimmer->fetch(PDO::FETCH_ASSOC);
 
-	if ($swimmer == null || ($_SESSION['AccessLevel'] == 'Parent' && $swimmer['parent'] != $_SESSION['UserID'])) {
+	if ($swimmer == null || ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $swimmer['parent'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
 		halt(404);
 	}
 

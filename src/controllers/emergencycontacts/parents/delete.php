@@ -7,7 +7,7 @@ if ($renewal_trap) {
 	$url_path = "renewal/emergencycontacts";
 }
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 $contact = new EmergencyContact();
 $contact->connect($db);

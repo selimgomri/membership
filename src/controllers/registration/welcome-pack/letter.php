@@ -1,7 +1,7 @@
 <?php
 
-if ($_SESSION['AccessLevel'] == 'Parent') {
-  $id = $_SESSION['UserID'];
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
+  $id = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 }
 
 if (!isset($id)) {

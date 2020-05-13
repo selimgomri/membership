@@ -21,7 +21,7 @@ try {
 
 $db = app()->db;
 
-$username = htmlspecialchars(explode(" ", getUserName($_SESSION['UserID']))[0]);
+$username = htmlspecialchars(explode(" ", getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']))[0]);
 
 $day = (new DateTime('now', new DateTimeZone('Europe/London')))->format("w");
 $time = (new DateTime('-15 minutes', new DateTimeZone('Europe/London')))->format("H:i:s");
@@ -37,7 +37,7 @@ $sessions = $query->fetchAll(PDO::FETCH_ASSOC);
 $db = app()->db;
 $query = $db->prepare("SELECT EmailAddress FROM users WHERE
 UserID = ?");
-$query->execute([$_SESSION['UserID']]);
+$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $userInfo = $query->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = "Home";

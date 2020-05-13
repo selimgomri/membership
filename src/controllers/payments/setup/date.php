@@ -7,11 +7,11 @@ if ($renewal_trap) {
 	$url_path = "renewal/payments";
 }
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 try {
   $getPaySchdeule = $db->prepare("SELECT * FROM `paymentSchedule` WHERE `UserID` = ?");
-  $getPaySchdeule->execute([$_SESSION['UserID']]);
+  $getPaySchdeule->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   $scheduleExists = $getPaySchdeule->fetch(PDO::FETCH_ASSOC);
   if ($scheduleExists != null) {
   	header("Location: " . autoUrl($url_path . "/setup/2"));

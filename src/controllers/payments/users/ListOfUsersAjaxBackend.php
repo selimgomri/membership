@@ -4,7 +4,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $db = app()->db;
 
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 $sql = "";
 if (isset($_POST["search"])) {
   // get the search term parameter from post

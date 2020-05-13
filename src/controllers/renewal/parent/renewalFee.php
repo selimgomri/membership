@@ -3,7 +3,7 @@
 $db = app()->db;
 
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $partial_reg = isPartialRegistration();
 
 $partial_reg_require_topup = false;
@@ -11,7 +11,7 @@ if ($partial_reg) {
 	$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = 0 AND ClubPays = 0";
 	try {
 		$query = $db->prepare($sql);
-		$query->execute([$_SESSION['UserID']]);
+		$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 	} catch (PDOException $e) {
 		halt(500);
 	}
@@ -32,13 +32,13 @@ if ($discounts != null && isset($discounts['ASA'][$month])) {
 }
 
 $sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ? AND `ClubPays` = '0'");
-$sql->execute([$_SESSION['UserID']]);
+$sql->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 $clubFee = $totalFeeDiscounted = $totalFee = 0;
 
 $payingSwimmerCount = $sql->fetchColumn();
 
-$clubFees = \SCDS\Membership\ClubMembership::create($db, $_SESSION['UserID'], $partial_reg);
+$clubFees = \SCDS\Membership\ClubMembership::create($db, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $partial_reg);
 
 $clubFee = $clubFees->getFee();
 
@@ -50,7 +50,7 @@ if ($partial_reg) {
 	members.SquadID WHERE `members`.`UserID` = ?";
 }
 $getMembers = $db->prepare($sql);
-$getMembers->execute([$_SESSION['UserID']]);
+$getMembers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 $member = $getMembers->fetchAll(PDO::FETCH_ASSOC);
 $count = sizeof($member);
@@ -294,7 +294,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			<p><strong>Your club has overridden the charge date for Swim England membership fees meaning the charge your Swim England membership fee will be added to your account on <?=htmlspecialchars($chargeDate)?> and you will pay this charge as part of your <?=htmlspecialchars($debitDate)?> Direct Debit.</strong></p>
 		<?php } ?>
 
-		<?php if (!userHasMandates($_SESSION['UserID'])) { ?>
+		<?php if (!userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) { ?>
 			<p>
 				We now need you to set up your Direct Debit agreement with <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. We will redirect you to our payments system where you will setup a Direct Debit.
 			</p>
@@ -306,7 +306,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		<?php } ?>
 		<p>
 			<button type="submit" class="btn btn-success btn-lg">
-				<?php if (!userHasMandates($_SESSION['UserID'])) { ?>
+				<?php if (!userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) { ?>
 					Setup Direct Debit
 				<?php } else if ($renewal == 0) { ?>
 					Complete Registration

@@ -18,7 +18,7 @@ users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN
 $getSwimmer->execute([
   $tenant->getId(),
   $id,
-  $_SESSION['UserID']
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
 ]);
 
 $row = $getSwimmer->fetch(PDO::FETCH_ASSOC);
@@ -71,27 +71,27 @@ $title = null;
     </div>
     <?php } ?>
 
-    <?php if (isset($_SESSION['SetMemberPassSuccess'])) { ?>
+    <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassSuccess'])) { ?>
     <div class="alert alert-success">
       <p class="mb-0">
         <strong>Member password updated.</strong>
       </p>
     </div>
-    <?php unset($_SESSION['SetMemberPassSuccess']); } ?>
+    <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassSuccess']); } ?>
 
     <!-- Main Info Content -->
     <div class="row">
       <div class="col-md-8">
 
-        <?php if (isset($_SESSION['SwimmerSaved']) && $_SESSION['SwimmerSaved']) { ?>
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerSaved']) && $_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerSaved']) { ?>
         <div class="alert alert-success">
           <p class="mb-0">
             <strong>We have saved your changes</strong>
           </p>
         </div>
-        <?php unset($_SESSION['SwimmerSaved']); } ?>
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerSaved']); } ?>
 
-        <?php if (isset($_SESSION['SwimmerNotSaved']) && $_SESSION['SwimmerNotSaved']) { ?>
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerNotSaved']) && $_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerNotSaved']) { ?>
         <div class="alert alert-danger">
           <p class="mb-0">
             <strong>We could not save your changes</strong>
@@ -100,7 +100,7 @@ $title = null;
             Please check and try again
           </p>
         </div>
-        <?php unset($_SESSION['SwimmerNotSaved']); } ?>
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerNotSaved']); } ?>
 
         <div class="form-row">
           <div class="col-sm-4">

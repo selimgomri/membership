@@ -10,14 +10,14 @@ if ($_POST['name'] != "" && $_POST['name'] != null && $_POST['address'] != "" &&
     $add->execute([$_POST['name'], $_POST['address']]);
     $id = $db->lastInsertId();
     $db->commit();
-    $_SESSION['NewVenueSuccess'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['NewVenueSuccess'] = true;
     header("Location: " . autoUrl("attendance/venues/" . $id));
   } catch (Exception $e) {
     $db->rollback();
     halt(500);
   }
 } else {
-  $_SESSION['NewVenueError'] = [
+  $_SESSION['TENANT-' . app()->tenant->getId()]['NewVenueError'] = [
     "Status"      => true,
     "Data"        => $_POST
   ];

@@ -15,7 +15,7 @@ try {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;");
   }
 } catch (Exception $e) {
-  if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Admin') {
+  if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
     pre($e);
   }
 }
@@ -29,18 +29,18 @@ while ($migration = $getMigrations->fetchColumn()) {
   $migrations[] = $migration . '.php';
 }
 
-if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Admin') {
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
   pre($migrations);
 }
 
 
 $files = array_diff(scandir(BASE_PATH . 'db/migrations'), ['.', '..']);
-if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Admin') {
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
   pre($files);
 }
 
 $undone = array_diff($files, $migrations);
-if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Admin') {
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
   pre($undone);
 }
 
@@ -63,14 +63,14 @@ foreach($undone as $file) {
     $db->rollBack();
 
     // Report this file was an error
-    $_SESSION['MigrationErrorOccurred'][$file] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['MigrationErrorOccurred'][$file] = true;
 
-    if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Admin') {
+    if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
       pre($e);
     }
   }
 }
 
-if (!isset($_SESSION['AccessLevel']) || $_SESSION['AccessLevel'] != 'Admin') {
+if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Admin') {
   header("Location: " . autoUrl(""));
 }

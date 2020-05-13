@@ -3,12 +3,12 @@
 $db = app()->db;
 
 $pagetitle = "My Members";
-$userID = $_SESSION['UserID'];
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 include BASE_PATH . "views/header.php";
 
 $getSwimmers = $db->prepare("SELECT MemberID id, MForename `first`, MSurname `last`, SquadName `squad`, SquadFee `fee`, ClubPays free FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID = ? ORDER BY `first` ASC, `last` ASC");
-$getSwimmers->execute([$_SESSION['UserID']]);
+$getSwimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 ?>
 

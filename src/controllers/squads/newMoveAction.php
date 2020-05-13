@@ -177,7 +177,7 @@ if (!$errorState) {
 }
 
 if ($errorState) {
-	$_SESSION['ErrorState'] = '
+	$_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = '
 	<div class="alert alert-danger">
 	<strong>An error occured and we could not add the squad move</strong>
 	<ul class="mb-0">' . $errorMessage . '

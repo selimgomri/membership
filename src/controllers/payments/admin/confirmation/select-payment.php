@@ -4,7 +4,7 @@
 
 $pagetitle = 'More Details - Payment Confirmation';
 
-$ids = $_SESSION['PaymentConfSearch']['id'];
+$ids = $_SESSION['TENANT-' . app()->tenant->getId()]['PaymentConfSearch']['id'];
 
 $db = app()->db;
 $getPayments = $db->prepare("SELECT `Date`, `Name`, `Amount`, `Currency`, `Forename`, `Surname` FROM payments INNER JOIN users ON payments.UserID = users.UserID WHERE PaymentID = ? AND `Type` = 'Payment'");

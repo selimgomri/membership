@@ -6,9 +6,9 @@ if ($_POST['agree'] == 1) {
 	$done_by_renewal = false;
 	$nextMember = null;
 	if (isPartialRegistration()) {
-		$nextMember = getNextSwimmer($_SESSION['UserID'], $id, true);
+		$nextMember = getNextSwimmer($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id, true);
 	} else {
-		$nextMember = getNextSwimmer($_SESSION['UserID'], $id);
+		$nextMember = getNextSwimmer($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id);
 	}
 
 	if ($nextMember == null) {
@@ -16,18 +16,18 @@ if ($_POST['agree'] == 1) {
 		`Part` = '0' WHERE `RenewalID` = ? AND `UserID` = ?");
 		$nextSection->execute([
 			$renewal,
-			$_SESSION['UserID']
+			$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
 		]);
 	} else {
 		$nextSection = $db->prepare("UPDATE `renewalProgress` SET Part = ? WHERE `RenewalID` = ? AND `UserID` = ?");
 		$nextSection->execute([
 			$nextMember,
 			$renewal,
-			$_SESSION['UserID']
+			$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
 		]);
 	}
 } else {
-	$_SESSION['RenewalErrorInfo'] = '
+	$_SESSION['TENANT-' . app()->tenant->getId()]['RenewalErrorInfo'] = '
 	<div class="alert alert-danger">
 		<p class="mb-0">
 			<strong>

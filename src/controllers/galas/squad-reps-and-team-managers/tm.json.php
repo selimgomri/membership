@@ -1,6 +1,6 @@
 <?php
 
-canView('TeamManager', $_SESSION['UserID'], $id);
+canView('TeamManager', $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id);
 
 $db = app()->db;
 $tenant = app()->tenant;

@@ -4,7 +4,7 @@ use Brick\Math\RoundingMode;
 
 $db = app()->db;
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $pagetitle = "Payments Administration";
 
 require 'GoCardlessSetup.php';

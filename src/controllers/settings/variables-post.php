@@ -81,9 +81,9 @@ try {
   $addr = json_encode($addr);
   app()->tenant->setKey('CLUB_ADDRESS', $addr);
 
-  $_SESSION['PCC-SAVED'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED'] = true;
 } catch (Exception $e) {
-  $_SESSION['PCC-ERROR'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR'] = true;
 }
 
 header("Location: " . autoUrl("settings/variables"));

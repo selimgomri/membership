@@ -27,7 +27,7 @@ function generatePaymentResponse($intent) {
 \Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
 
 $getCustID = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
-$getCustID->execute([$_SESSION['UserID']]);
+$getCustID->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $customer = \Stripe\Customer::retrieve($getCustID->fetchColumn());
 
 $intent = \Stripe\PaymentIntent::create([

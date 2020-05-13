@@ -6,11 +6,11 @@
 $db = app()->db;
 
 $getUserEmail = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
-$getUserEmail->execute([$_SESSION['UserID']]);
+$getUserEmail->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $user = $getUserEmail->fetch(PDO::FETCH_ASSOC);
 
 $checkIfCustomer = $db->prepare("SELECT COUNT(*) FROM stripeCustomers WHERE User = ?");
-$checkIfCustomer->execute([$_SESSION['UserID']]);
+$checkIfCustomer->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 if ($checkIfCustomer->fetchColumn() == 0) {
   // See your keys here: https://dashboard.stripe.com/account/apikeys
@@ -19,7 +19,7 @@ if ($checkIfCustomer->fetchColumn() == 0) {
   // Create a Customer:
   $customer = \Stripe\Customer::create([
     "name" => $user['Forename'] . ' ' . $user['Surname'],
-    "description" => "Customer for " . $_SESSION['UserID'] . ' (' . $user['EmailAddress'] . ')',
+    "description" => "Customer for " . $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'] . ' (' . $user['EmailAddress'] . ')',
     'email' => $user['EmailAddress'],
     'phone' => $user['Mobile']
   ]);
@@ -28,17 +28,17 @@ if ($checkIfCustomer->fetchColumn() == 0) {
   $id = $customer->id;
   $addCustomer = $db->prepare("INSERT INTO stripeCustomers (User, CustomerID) VALUES (?, ?)");
   $addCustomer->execute([
-    $_SESSION['UserID'],
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
     $id
   ]);
 }
 
 $setupIntent = null;
-if (!isset($_SESSION['StripeSetupIntentId'])) {
+if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['StripeSetupIntentId'])) {
   $setupIntent = \Stripe\SetupIntent::create();
-  $_SESSION['StripeSetupIntentId'] = $setupIntent->id;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['StripeSetupIntentId'] = $setupIntent->id;
 } else {
-  $setupIntent = \Stripe\SetupIntent::retrieve($_SESSION['StripeSetupIntentId']);
+  $setupIntent = \Stripe\SetupIntent::retrieve($_SESSION['TENANT-' . app()->tenant->getId()]['StripeSetupIntentId']);
 }
 
 $countries = getISOAlpha2Countries();
@@ -70,16 +70,16 @@ include BASE_PATH . 'views/header.php';
     <div class="col-md-8">
       <h1>Add a payment card</h1>
 
-      <?php if (isset($_SESSION['PayCardError'])) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PayCardError'])) { ?>
       <div class="alert alert-danger">
         <p class="mb-0">
           <strong>An error occurred</strong>
         </p>
-        <?php if (isset($_SESSION['PayCardErrorMessage'])) { ?>
-        <p class="mb-0"><?=htmlspecialchars($_SESSION['PayCardErrorMessage'])?></p>
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PayCardErrorMessage'])) { ?>
+        <p class="mb-0"><?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['PayCardErrorMessage'])?></p>
         <?php } ?>
       </div>
-      <?php unset($_SESSION['PayCardError']); unset($_SESSION['PayCardErrorMessage']); ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PayCardError']); unset($_SESSION['TENANT-' . app()->tenant->getId()]['PayCardErrorMessage']); ?>
       <?php } ?>
 
       <form action="<?=htmlspecialchars(autoUrl("payments/cards/add"))?>" method="post" id="payment-form" class="mb-5 needs-validation" novalidate>

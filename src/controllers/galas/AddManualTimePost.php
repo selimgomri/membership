@@ -20,7 +20,7 @@ if ($row == null) {
 	halt(404);
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent' && $row['UserID'] != $_SESSION['UserID']) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $row['UserID'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
 	halt(404);
 }
 
@@ -36,7 +36,7 @@ try {
 		$type = "LCPB";
 	}
 
-	if (bool($row['EntryProcessed']) && $_SESSION['AccessLevel'] == 'Parent') {
+	if (bool($row['EntryProcessed']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
 		// Cannot change times as entry processed
 		$errorMessage = "Your entry has already been processed. As a result you are no longer able to edit your entry times. Please speak to your gala coordinator if you need to make changes.";
 		throw new Exception($errorMessage);
@@ -69,12 +69,12 @@ try {
 		$sql->execute([$time, $id]);
 	}
 	$db->commit();
-	$_SESSION['UpdateSuccess'] = true;
+	$_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess'] = true;
 } catch (PDOException $e) {
 	$db->rollBack();
-	$_SESSION['UpdateSuccess'] = false;
+	$_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess'] = false;
 } catch (Exception $e) {
-	$_SESSION['UpdateError'] = $e->getMessage();
+	$_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError'] = $e->getMessage();
 }
 
 header("Location: " . autoUrl("galas/entries/" . $id . "/manual-time"));

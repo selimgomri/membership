@@ -2,7 +2,7 @@
 
 function canView(String $section, int $user, int $event = null) {
   global $db;
-  $al = $_SESSION['AccessLevel'];
+  $al = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 
   if ($section == 'TeamManager') {
     if ($al == 'Admin' || $al == 'Galas' || $al == 'Coach') {

@@ -38,20 +38,20 @@ if (!$formInvalid) {
           // reportError($_FILES['file-upload']['error'][$i]);
           if ($_FILES['file-upload']['error'][$i] == 2) {
             // Too large
-            $_SESSION['TooLargeError'] = true;
+            $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError'] = true;
           } else {
-            $_SESSION['UploadError'] = true;
+            $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
           }
           throw new Exception();
         } else if ($_FILES['file-upload']['type'][$i] != 'text/plain' && $_FILES['file-upload']['type'][$i] != 'application/octet-stream') {
           // Probably not a text file
           reportError($_FILES['file-upload']['type'][$i]);
-          $_SESSION['UploadError'] = true;
+          $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
           throw new Exception();
         } else if ($_FILES['file-upload']['size'][$i] > 3000000) {
           // Too large, stop
           // reportError($_FILES['file-upload']['size'][$i]);
-          $_SESSION['TooLargeError'] = true;
+          $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError'] = true;
           throw new Exception();
         } else {
           $filePointer = fopen($_FILES['file-upload']['tmp_name'][$i], 'r');
@@ -224,19 +224,19 @@ if (!$formInvalid) {
           fclose($filePointer);
         }
       } else {
-        $_SESSION['UploadError'] = true;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
         throw new Exception();
       }
     }
     $db->commit();
-    $_SESSION['UploadSuccess'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess'] = true;
   } catch (Exception | Error $e) {
     $db->rollBack();
-    $_SESSION['UploadError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
     reportError($e);
   }
 } else if ($formInvalid) {
-  $_SESSION['FormError'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['FormError'] = true;
 }
 
 header("Location: " . autoUrl("admin/galas/sdif/upload"));

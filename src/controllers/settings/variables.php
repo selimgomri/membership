@@ -100,13 +100,13 @@ include BASE_PATH . 'views/header.php';
         <p>If you cannot edit a variable, it is because it has been set as an environment variable at a server level. Contact your administrator if you need to change these.</p>
         <form method="post">
 
-          <?php if (isset($_SESSION['PCC-SAVED']) && $_SESSION['PCC-SAVED']) { ?>
+          <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']) { ?>
           <div class="alert alert-success">System variables saved.</div>
-          <?php unset($_SESSION['PCC-SAVED']); } ?>
+          <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']); } ?>
 
-          <?php if (isset($_SESSION['PCC-ERROR']) && $_SESSION['PCC-ERROR']) { ?>
+          <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']) { ?>
           <div class="alert alert-danger">Changes were not saved.</div>
-          <?php unset($_SESSION['PCC-ERROR']); } ?>
+          <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']); } ?>
 
           <h2 id="emergency-message">Emergency Message</h2>
           <div class="row">

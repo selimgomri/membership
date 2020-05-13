@@ -1,6 +1,6 @@
 <?php
 
-$_SESSION['AssRegStage'] = 2;
+$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegStage'] = 2;
 
 $db = app()->db;
 
@@ -22,7 +22,7 @@ if ($privacy != null && $privacy != "") {
 }
 
 $getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile, `Password` FROM users WHERE UserID = ?");
-$getUser->execute([$_SESSION['AssRegGuestUser']]);
+$getUser->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGuestUser']]);
 $user = $getUser->fetch(PDO::FETCH_ASSOC);
 
 if ($user == null) {
@@ -32,11 +32,11 @@ if ($user == null) {
 $email = "";
 $sms = "";
 
-if (isset($_SESSION['AssRegGetDetailsError']) && $_SESSION['AssRegGetDetailsError']) {
-  if ($_SESSION['AssRegGetDetailsPostData']['emailAuthorise']) {
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError']) {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsPostData']['emailAuthorise']) {
     $email = " checked ";
   }
-  if ($_SESSION['AssRegGetDetailsPostData']['smsAuthorise']) {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsPostData']['smsAuthorise']) {
     $sms = " checked ";
   }
 } 
@@ -55,10 +55,10 @@ include BASE_PATH . 'views/header.php';
         We need a few more details from you
       </p>
 
-      <?php if (isset($_SESSION['AssRegGetDetailsError']) && $_SESSION['AssRegGetDetailsError']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError']) { ?>
       <div class="alert alert-danger">
         <p><strong>There was a problem</strong></p>
-        <?=$_SESSION['AssRegGetDetailsMessage']?>
+        <?=$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsMessage']?>
       </div>
       <?php } ?>
 
@@ -179,14 +179,14 @@ include BASE_PATH . 'views/header.php';
 
 <?php
 
-if (isset($_SESSION['AssRegGetDetailsMessage'])) {
-  unset($_SESSION['AssRegGetDetailsMessage']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsMessage'])) {
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsMessage']);
 }
-if (isset($_SESSION['AssRegGetDetailsError'])) {
-  unset($_SESSION['AssRegGetDetailsError']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError'])) {
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError']);
 }
-if (isset($_SESSION['AssRegGetDetailsPostData'])) {
-  unset($_SESSION['AssRegGetDetailsPostData']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsPostData'])) {
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsPostData']);
 }
 
 $footer = new \SCDS\Footer();

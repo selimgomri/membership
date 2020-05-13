@@ -14,7 +14,7 @@ if ($member == null) {
   halt(404);
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent' && $member['uid'] != $_SESSION['UserID']) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $member['uid'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
   halt(404);
 }
 
@@ -53,16 +53,16 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
     <div class="col-lg-8">
 
-      <?php if (isset($_SESSION['SetMemberPassError'])) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassError'])) { ?>
       <div class="alert alert-danger">
         <p class="mb-0">
           <strong>We could not set the password.</strong>
         </p>
         <p class="mb-0">
-          <?=htmlspecialchars($_SESSION['SetMemberPassError'])?>
+          <?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassError'])?>
         </p>
       </div>
-      <?php unset($_SESSION['SetMemberPassError']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassError']); } ?>
 
       <p>Set a password for <?=htmlspecialchars($member['fn'])?> to give them access to their log book.</p>
 

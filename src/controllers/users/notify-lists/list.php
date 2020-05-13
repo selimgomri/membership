@@ -42,7 +42,7 @@ include BASE_PATH . "views/header.php";
         <?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?><br><small>Targeted list access</small>
       </h1>
 
-      <?php if (isset($_SESSION['AssignListSuccess']) && $_SESSION['AssignListSuccess']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssignListSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssignListSuccess']) { ?>
       <div class="alert alert-success">
         <p class="mb-0">
           <strong>
@@ -51,10 +51,10 @@ include BASE_PATH . "views/header.php";
         </p>
       </div>
       <?php
-        unset($_SESSION['AssignListSuccess']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssignListSuccess']);
       } ?>
 
-      <?php if (isset($_SESSION['RemoveListSuccess']) && $_SESSION['RemoveListSuccess']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RemoveListSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['RemoveListSuccess']) { ?>
       <div class="alert alert-success">
         <p class="mb-0">
           <strong>
@@ -63,10 +63,10 @@ include BASE_PATH . "views/header.php";
         </p>
       </div>
       <?php
-        unset($_SESSION['RemoveListSuccess']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['RemoveListSuccess']);
       } ?>
 
-      <?php if (isset($_SESSION['RemoveListError']) && $_SESSION['RemoveListError']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RemoveListError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['RemoveListError']) { ?>
       <div class="alert alert-danger">
         <p class="mb-0">
           <strong>
@@ -75,7 +75,7 @@ include BASE_PATH . "views/header.php";
         </p>
       </div>
       <?php
-        unset($_SESSION['RemoveListError']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['RemoveListError']);
       } ?>
 
       <?php if ($list != null) { ?>

@@ -2,7 +2,7 @@
 
 $db = app()->db;
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $pagetitle = "Gala Payments";
 
 $earliestEndDate = new DateTime('first day of last month', new DateTimeZone('Europe/London'));

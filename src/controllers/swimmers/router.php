@@ -1,7 +1,7 @@
 <?php
 
-$userID = $_SESSION['UserID'];
-$access = $_SESSION['AccessLevel'];
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 
 // View a Swimmer
 $this->get('/{id}:int', function ($id) {
@@ -234,7 +234,7 @@ $this->post('/{id}:int/medical', function ($id) {
 	include 'medicalDetailsPost.php';
 });
 
-if ($_SESSION['AccessLevel'] != "Parent") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") {
 	$this->get('/{swimmer}:int/agreement-to-code-of-conduct/{squad}:int', function ($swimmer, $squad) {
 		include 'MarkCodeOfConductCompleted.php';
 	});
@@ -244,7 +244,7 @@ $this->group('/{swimmer}:int/times', function () {
 	include 'times/router.php';
 });
 
-if ($_SESSION['AccessLevel'] == 'Admin') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
 	$this->post('/delete', function () {
 		include 'delete.php';
 	});

@@ -4,7 +4,7 @@ $db = app()->db;
 
 $yes = $no = "";
 
-$userID = $_SESSION['UserID'];
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 $medInfo = $db->prepare("SELECT * FROM `members` LEFT JOIN `memberMedical` ON members.MemberID = memberMedical.MemberID WHERE members.MemberID = ?");
 $medInfo->execute([$id]);
@@ -26,9 +26,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	<div class="">
 		<form method="post" name="med" id="med">
 			<h1>Medical Form for <?=htmlspecialchars($row['MForename'])?></h1>
-			<?php if (isset($_SESSION['ErrorState'])) {
-				echo $_SESSION['ErrorState'];
-				unset($_SESSION['ErrorState']);
+			<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
+				echo $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+				unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
 			} ?>
 			<p class="lead">
         Check the details for <?=htmlspecialchars($name)?> are correct.

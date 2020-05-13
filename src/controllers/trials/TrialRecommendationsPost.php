@@ -18,5 +18,5 @@ if ($squad == "null") {
   $query->execute([htmlspecialchars(trim($_POST['comments'])), $squad, $request]);
 }
 
-$_SESSION['TrialRecommendationsUpdated'] = true;
+$_SESSION['TENANT-' . app()->tenant->getId()]['TrialRecommendationsUpdated'] = true;
 header("Location: " . currentUrl());

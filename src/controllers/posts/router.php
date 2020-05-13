@@ -2,7 +2,7 @@
 
 use Respect\Validation\Validator as v;
 
-if ($_SESSION['AccessLevel'] != "Parent" && $_SESSION['AccessLevel'] != "Coach") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent" && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Coach") {
 	$this->get('/new', function() {
 		
 		include 'NewPost.php';
@@ -32,7 +32,7 @@ if ($_SESSION['AccessLevel'] != "Parent" && $_SESSION['AccessLevel'] != "Coach")
 }
 
 $this->get('/', function() {
-	if ($_SESSION['AccessLevel'] == "Parent") {
+	if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 		header("Location: " . autoUrl(""));
 	} else {
 		include 'PostList.php';

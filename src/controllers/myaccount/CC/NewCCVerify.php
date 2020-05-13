@@ -16,7 +16,7 @@ try {
   $db = app()->db;
   $insert = $db->prepare("INSERT INTO notifyAdditionalEmails (`UserID`, `EmailAddress`, `Name`, `Hash`) VALUES (?, ?, ?, ?)");
   $insert->execute([
-    $_SESSION['UserID'],
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
     $email,
     $name,
     $hash
@@ -28,7 +28,7 @@ try {
 
   $message = '
   <p>Hello ' . htmlspecialchars($name) . ',</p>
-  <p>' . htmlspecialchars($_SESSION['Forename'] . ' ' . $_SESSION['Surname']) . ' wishes for you to also get emails from ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . '.</p>
+  <p>' . htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['Forename'] . ' ' . $_SESSION['TENANT-' . app()->tenant->getId()]['Surname']) . ' wishes for you to also get emails from ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . '.</p>
   <p>Please follow the link below to verify your email address.</p>
   <p><strong><a href="' . autoUrl($link) . '">' . autoUrl($link) . '</a></strong></p>
   <p>This will confirm your email address and send carbon copies of emails from coaches and committee members at ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' to this address.</p>
@@ -38,9 +38,9 @@ try {
     throw new Exception();
   }
 
-  $_SESSION['VerifyEmailSent'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['VerifyEmailSent'] = true;
   header("Location: " . autoUrl("my-account/email/cc/new"));
 } catch (Exception $e) {
-  $_SESSION['VerifyEmailError'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['VerifyEmailError'] = true;
   header("Location: " . autoUrl("my-account/email#cc"));
 }

@@ -1,6 +1,6 @@
 <?php
 
-if ($_SESSION['AccessLevel'] != 'Parent') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') {
   $this->get('/', function() {
     include 'welcome.php';
   });
@@ -9,7 +9,7 @@ if ($_SESSION['AccessLevel'] != 'Parent') {
     include 'welcomePost.php';
   });
 
-  if (isset($_SESSION['AssRegUserEmail']) && !isset($_SESSION['AssRegUser']) && !isset($_SESSION['AssRegComplete'])) {
+  if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUserEmail']) && !isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']) && !isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegComplete'])) {
     $this->get('/start', function() {
       include 'begin.php';
     });
@@ -21,7 +21,7 @@ if ($_SESSION['AccessLevel'] != 'Parent') {
     $this->get('/*', function() {
       header("Location: " . autoUrl("assisted-registration/start"));
     });
-  } else if (isset($_SESSION['AssRegUser']) && !isset($_SESSION['AssRegComplete'])) {
+  } else if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']) && !isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegComplete'])) {
     $this->get('/select-swimmers', function() {
       include 'select.php';
     });
@@ -33,7 +33,7 @@ if ($_SESSION['AccessLevel'] != 'Parent') {
     $this->get('/*', function() {
       header("Location: " . autoUrl("assisted-registration/select-swimmers"));
     });
-  } else if (isset($_SESSION['AssRegUser']) && isset($_SESSION['AssRegComplete']) && $_SESSION['AssRegComplete']) {
+  } else if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']) && isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegComplete']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegComplete']) {
     $this->get('/complete', function() {
       include 'complete.php';
     });

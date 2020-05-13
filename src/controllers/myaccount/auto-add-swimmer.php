@@ -6,7 +6,7 @@ use Respect\Validation\Validator as v;
 
 // Registration Form Handler
 
-$userID = $_SESSION['UserID'];
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $asaNumber = trim($asa);
 $accessKey = trim($acs);
 
@@ -87,7 +87,7 @@ notifySend($row['EmailAddress'], "You've added " . $row['MForename'] . "
 to your account", $message, $row['Forename'] . " " . $row['Surname'],
 $row['EmailAddress']);
 
-$_SESSION['AddSwimmerSuccessState'] = "
+$_SESSION['TENANT-' . app()->tenant->getId()]['AddSwimmerSuccessState'] = "
 <div class=\"alert alert-success\">
 <p class=\"mb-0\"><strong>We were able to successfully add your swimmer</strong></p>
 <p>We've sent an email confirming this to you.</p>

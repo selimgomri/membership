@@ -5,7 +5,7 @@ $db = app()->db;
 
 // Registration Form Handler
 
-$userID = $_SESSION['UserID'];
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $asaNumber = trim(($_POST['asa']));
 $accessKey = trim($_POST['accessKey']);
 
@@ -47,7 +47,7 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
 
     // SQL To set UserID foreign key
     $updateSwimmer = $db->prepare("UPDATE members SET UserID = ?, AccessKey = ? WHERE MemberID = ?");
-    $updateSwimmer->execute([$_SESSION['UserID'], $accessKey, $memberID]);
+    $updateSwimmer->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $accessKey, $memberID]);
 
     // Get info about swimmer and parent
     $sql = "SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee
@@ -77,7 +77,7 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
     $message, $row['Forename'] . " " . $row['Surname'],
     $row['EmailAddress']);
 
-    $_SESSION['AddSwimmerSuccessState'] = "
+    $_SESSION['TENANT-' . app()->tenant->getId()]['AddSwimmerSuccessState'] = "
     <div class=\"alert alert-success\">
     <p class=\"mb-0\"><strong>We were able to successfully add your swimmer</strong></p>
     <p>We've sent an email confirming this to you.</p>
@@ -92,7 +92,7 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
   }
   else {
     // Error, too many records found - Database error
-    $_SESSION['ErrorState'] = "
+    $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = "
     <div class=\"alert alert-danger\">
     <p class=\"mb-0\"><strong>An error occured when we tried to add a member</strong></p>
     <p>You may have got the Swim England Number or Access Key wrong</p>
@@ -103,7 +103,7 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
 }
 else {
   // Error, fields not filled out
-  $_SESSION['ErrorState'] = "
+  $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = "
   <div class=\"alert alert-danger\">
   <p class=\"mb-0\"><strong>An error occured when we tried to add a member</strong></p>
   <p>You may have got the Swim England Number or Access Key wrong</p>

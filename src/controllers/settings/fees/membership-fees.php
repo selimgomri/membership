@@ -39,13 +39,13 @@ include BASE_PATH . 'views/header.php';
         <h1>Club Membership Fee Management</h1>
         <p class="lead">Set amounts for club membership fees</p>
 
-        <?php if (isset($_SESSION['Update-Success']) && $_SESSION['Update-Success']) { ?>
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['Update-Success']) && $_SESSION['TENANT-' . app()->tenant->getId()]['Update-Success']) { ?>
         <div class="alert alert-success">Changes saved successfully</div>
-        <?php unset($_SESSION['Update-Success']); } ?>
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['Update-Success']); } ?>
 
-        <?php if (isset($_SESSION['Update-Error']) && $_SESSION['Update-Error']) { ?>
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['Update-Error']) && $_SESSION['TENANT-' . app()->tenant->getId()]['Update-Error']) { ?>
         <div class="alert alert-danger">Changes could not be saved</div>
-        <?php unset($_SESSION['Update-Error']); } ?>
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['Update-Error']); } ?>
 
         <form method="post">
 

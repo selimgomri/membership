@@ -5,7 +5,7 @@ $tenant = app()->tenant;
 
 $getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id, SquadName squad FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID = ? ORDER BY fn ASC, sn ASC");
 $getMembers->execute([
-  $_SESSION['UserID']
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
 ]);
 $member = $getMembers->fetch(PDO::FETCH_ASSOC);
 

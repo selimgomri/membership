@@ -40,7 +40,7 @@ if ($found) {
 	];
 	notifySend($to, $subject, $message, $name, $oldEmail, $from);
 
-	$_SESSION['RegistrationGoVerify'] = '
+	$_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationGoVerify'] = '
   <div class="alert alert-success mb-0">
     <p class="mb-0">
       <strong>
@@ -58,7 +58,7 @@ if ($found) {
 
 } else {
 
-	$_SESSION['RegistrationGoVerify'] = '
+	$_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationGoVerify'] = '
 	<div class="alert alert-warning mb-0">
     <p class="mb-0">
       <strong>

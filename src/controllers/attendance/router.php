@@ -1,5 +1,5 @@
 <?php
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 
 if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
   // Attendance Home

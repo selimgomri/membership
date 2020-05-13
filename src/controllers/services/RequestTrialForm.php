@@ -22,13 +22,13 @@ $value = [
   'questions' => '',
 ];
 $noValues = true;
-if (isset($_SESSION['RequestTrial-FC'])) {
-  $value = $_SESSION['RequestTrial-FC'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-FC'])) {
+  $value = $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-FC'];
   $noValues = false;
 }
 
-if (isset($_SESSION['RequestTrial-AddAnother'])) {
-  $value = $_SESSION['RequestTrial-AddAnother'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-AddAnother'])) {
+  $value = $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-AddAnother'];
   $noValues = false;
 }
 
@@ -40,16 +40,16 @@ include BASE_PATH . 'views/header.php';
   <h1>Request a Trial</h1>
   <div class="row">
     <div class="col-md-10 col-lg-8">
-      <?php if (isset($_SESSION['RequestTrial-Success']) && $_SESSION['RequestTrial-Success'] === false) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Success']) && $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Success'] === false) { ?>
         <div class="alert alert-danger">
           We were unable to send you a confirmation email. We may not have received your request. Please check your email address or try again later.
         </div>
       <?php } ?>
-      <?php if (isset($_SESSION['RequestTrial-Errors'])) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Errors'])) { ?>
         <div class="alert alert-danger">
           There was a problem with some of the information you supplied. Please check;
           <ul class="mb-0">
-          <?php foreach ($_SESSION['RequestTrial-Errors'] as $error) { ?>
+          <?php foreach ($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Errors'] as $error) { ?>
             <li><?=$error?></li>
           <?php } ?>
           </ul>
@@ -65,7 +65,7 @@ include BASE_PATH . 'views/header.php';
         times, this may take a few days.
       </p>
       <form method="post" <?php if (!$noValues) { ?>class="was-validated"<?php } else { ?>class="needs-validation" novalidate<?php } ?>>
-        <?php if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Admin') { ?>
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
         <div id="begin">
           <h2>Before we start</h2>
           <p>
@@ -330,9 +330,9 @@ include BASE_PATH . 'views/header.php';
 
 <?php
 
-unset($_SESSION['RequestTrial-FC']);
-unset($_SESSION['RequestTrial-Errors']);
-unset($_SESSION['RequestTrial-AddAnother']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-FC']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Errors']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-AddAnother']);
 
 $footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");

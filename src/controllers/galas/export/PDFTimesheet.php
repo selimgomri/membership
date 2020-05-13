@@ -2,7 +2,7 @@
 
 $db = app()->db;
 $tenant = app()->tenant;
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 $query = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ? AND Tenant = ?");
 $query->execute([
@@ -24,13 +24,13 @@ $lastDayOfYear = new DateTime('last day of December ' . $dateOfGala->format('Y')
 $noTimeSheet = false;
 
 $toHash = $info['GalaID'];
-if ($_SESSION['AccessLevel'] == 'Parent') {
-  $toHash .= $_SESSION['UserID'];
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
+  $toHash .= $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 }
 $hash = hash('sha256', $toHash);
 
-if ($_SESSION['AccessLevel'] == "Parent") {
-  $uid = $_SESSION['UserID'];
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
+  $uid = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
   $query = $db->prepare("SELECT * FROM (((galaEntries INNER JOIN members ON galaEntries.MemberID =
   members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN squads ON squads.SquadID = members.SquadID) WHERE
@@ -105,7 +105,7 @@ ob_start();?>
       <h1 class="mb-0">
         <?=htmlspecialchars($info['GalaName'])?>
       </h1>
-      <p class="lead mb-0">Gala Timesheet Report<?php if ($_SESSION['AccessLevel'] == "Parent") {?> for <?=htmlspecialchars(getUserName($_SESSION['UserID']))?><?php } ?></p>
+      <p class="lead mb-0">Gala Timesheet Report<?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {?> for <?=htmlspecialchars(getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']))?><?php } ?></p>
       <p class="lead mb-0"><?=htmlspecialchars($info['GalaVenue']) . " - " . date("d/m/Y", strtotime($info['GalaDate']))?></p>
     </div>
 

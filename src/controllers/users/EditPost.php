@@ -26,7 +26,7 @@ try {
   $mobile = trim($_POST['mobile-phone']);
 
   if (!v::email()->validate($email)) {
-    $_SESSION['InvalidEmail'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['InvalidEmail'] = true;
     throw new Exception();
   }
 
@@ -37,7 +37,7 @@ try {
   ]);
 
   if ($get->fetchColumn() > 0) {
-    $_SESSION['UsedEmail'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UsedEmail'] = true;
     throw new Exception();
   }
 
@@ -45,7 +45,7 @@ try {
     $mobile = PhoneNumber::parse($mobile, 'GB');
     $mobile = $mobile->format(PhoneNumberFormat::E164);
   } catch (PhoneNumberParseException $e) {
-    $_SESSION['InvalidPhone'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['InvalidPhone'] = true;
     throw new Exception();
   }
 
@@ -159,10 +159,10 @@ try {
     $userObject->revokePermission('Parent');
   }
 
-  $_SESSION['Success'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['Success'] = true;
 } catch (Exception $e) {
   reportError($e);
-  $_SESSION['GeneralError'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['GeneralError'] = true;
 }
 
 header("Location: " . autoUrl("users/" . $id . "/edit"));

@@ -112,23 +112,23 @@ include BASE_PATH . "views/header.php";
     </ol>
   </nav>
 
-  <?php if (isset($_SESSION['User-Update-Email-Error']) && $_SESSION['User-Update-Email-Error']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['User-Update-Email-Error']) && $_SESSION['TENANT-' . app()->tenant->getId()]['User-Update-Email-Error']) { ?>
   <div class="alert alert-danger">
     <strong>We were not able to update the user's email address because it was not valid</strong>
   </div>
-  <?php unset($_SESSION['User-Update-Email-Error']); } ?>
+  <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['User-Update-Email-Error']); } ?>
 
-  <?php if (isset($_SESSION['User-Update-Email-Success']) && $_SESSION['User-Update-Email-Success']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['User-Update-Email-Success']) && $_SESSION['TENANT-' . app()->tenant->getId()]['User-Update-Email-Success']) { ?>
   <div class="alert alert-success">
     <strong>We've updated the user's email address</strong>
   </div>
-  <?php unset($_SESSION['User-Update-Email-Success']); } ?>
+  <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['User-Update-Email-Success']); } ?>
 
-  <?php if (isset($_SESSION['NotifyIndivSuccess']) && $_SESSION['NotifyIndivSuccess']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess']) { ?>
   <div class="alert alert-success">
     <strong>We've sent your email to <?=htmlspecialchars($info['Forename'])?></strong>
   </div>
-  <?php unset($_SESSION['NotifyIndivSuccess']); } ?>
+  <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess']); } ?>
 
   <div class="row mb-3">
     <div class="col-sm-9 col-md-10 col-lg-11">
@@ -136,11 +136,11 @@ include BASE_PATH . "views/header.php";
         <?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?>
         <small><?=htmlspecialchars($accessLevel)?></small>
       </h1>
-      <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
       <div class="mb-3 d-md-none"></div>
       <?php } ?>
     </div>
-    <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
     <div class="col text-sm-right">
       <p class="mb-0">
         <a href="<?=htmlspecialchars(autoUrl("users/" . $id . "/edit"))?>" class="btn btn-success">
@@ -171,7 +171,7 @@ include BASE_PATH . "views/header.php";
             Residential address
           </a>
           <?php } ?>
-          <?php if ($userObj->hasPermission('Coach') && $_SESSION['AccessLevel'] == 'Admin') { ?>
+          <?php if ($userObj->hasPermission('Coach') && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
           <a href="#squads" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
             Squads
           </a>
@@ -183,13 +183,13 @@ include BASE_PATH . "views/header.php";
           <a href="#members" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
             Members
           </a>
-          <?php if ($_SESSION['AccessLevel'] == 'Admin' && (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) && !userHasMandates($id)) { ?>
+          <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' && (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) && !userHasMandates($id)) { ?>
           <a href="#direct-debit-mandate-opt-out" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
             Direct debit opt-out
           </a>
           <?php } ?>
           <?php } ?>
-          <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+          <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
           <a href="#squad-rep-settings" class="list-group-item list-group-item-action">
             Squad rep settings
           </a>
@@ -329,7 +329,7 @@ include BASE_PATH . "views/header.php";
       <hr>
       <?php } ?>
 
-      <?php if ($userObj->hasPermission('Coach') && $_SESSION['AccessLevel'] == 'Admin') { ?>
+      <?php if ($userObj->hasPermission('Coach') && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
       <div class="mb-4" id="coach-squad" data-squad-list="<?=htmlspecialchars(json_encode(false))?>">
         <h2 id="squads">
           Squads
@@ -395,7 +395,7 @@ include BASE_PATH . "views/header.php";
           </div>
 
           <div class="col-md-6 col-lg-4">
-          <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+          <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
             <div class="card">
               <div class="card-header">
                 Payment links
@@ -441,7 +441,7 @@ include BASE_PATH . "views/header.php";
 
       <hr>
 
-      <?php if ($_SESSION['AccessLevel'] == 'Admin' && (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) && !userHasMandates($id)) { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' && (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) && !userHasMandates($id)) { ?>
       <div class="mb-4">
         <h2 id="direct-debit-mandate-opt-out">
           Direct debit mandate settings
@@ -462,7 +462,7 @@ include BASE_PATH . "views/header.php";
 
       <?php } ?>
 
-      <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
       <div class="row">
         <div class="col-12">
           <div class="mb-4">

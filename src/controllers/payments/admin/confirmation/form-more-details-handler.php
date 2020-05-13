@@ -18,8 +18,8 @@ $db = app()->db;
 $_POST['payment-amount'];
 $_POST['payment-name'];
 
-$_SESSION['PaymentConfSearch']['payment-amount'] = $_POST['payment-amount'];
-$_SESSION['PaymentConfSearch']['payment-name'] = $_POST['payment-name'];
+$_SESSION['TENANT-' . app()->tenant->getId()]['PaymentConfSearch']['payment-amount'] = $_POST['payment-amount'];
+$_SESSION['TENANT-' . app()->tenant->getId()]['PaymentConfSearch']['payment-name'] = $_POST['payment-name'];
 
 // Search by reference
 $findPayments = $db->prepare("SELECT COUNT(*) FROM payments WHERE PMkey LIKE ? COLLATE utf8mb4_general_ci AND `Type` = 'Payment'");
@@ -41,7 +41,7 @@ if ($findPayments->fetchColumn() > 0) {
   while ($id = $findPayments->fetchColumn()) {
     $ids[] = $id;
   }
-  $_SESSION['PaymentConfSearch']['id'] = $ids;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['PaymentConfSearch']['id'] = $ids;
   header("Location: " . autoUrl("payments/confirmation/select-payment"));
 } else {
   // Ask user for more detail

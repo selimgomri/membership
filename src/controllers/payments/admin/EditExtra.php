@@ -37,9 +37,9 @@ include BASE_PATH . "views/paymentsMenu.php";
     <div class="row">
       <div class="col-lg-8">
         <?php
-        if (isset($_SESSION['ErrorState'])) {
-          echo $_SESSION['ErrorState'];
-          unset($_SESSION['ErrorState']);
+        if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
+          echo $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+          unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
         }
         ?>
         <form method="post">

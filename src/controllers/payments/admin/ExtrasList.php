@@ -4,7 +4,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $db = app()->db;
 
-$user = $_SESSION['UserId'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserId'];
 $pagetitle = "Extras";
 
 $extras = $db->query("SELECT * FROM `extras` ORDER BY `ExtraName` ASC");

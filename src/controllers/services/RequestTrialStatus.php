@@ -26,10 +26,10 @@ if ($use_membership_menu) {
   $use_website_menu = false;
 }
 
-$value = $_SESSION['RequestTrial-FC'];
+$value = $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-FC'];
 
-if (isset($_SESSION['RequestTrial-AddAnother'])) {
-  $value = $_SESSION['RequestTrial-AddAnother'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-AddAnother'])) {
+  $value = $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-AddAnother'];
 }
 
 include BASE_PATH . 'views/header.php';
@@ -119,7 +119,7 @@ include BASE_PATH . 'views/header.php';
           </dd>
           <?php } ?>
 
-          <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
+          <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") { ?>
           <dt class="col-md-4 col-lg-3">Date of Birth</dt>
           <dd class="col-md-8 col-lg-9">
             <?=date("j F Y", strtotime($swimmer['DoB']))?>
@@ -145,7 +145,7 @@ include BASE_PATH . 'views/header.php';
           </dd>
           <?php } ?>
 
-          <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
+          <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") { ?>
           <?php if ($swimmer['Medical'] != null && $swimmer['Medical'] != "") { ?>
           <dt class="col-md-4 col-lg-3">Medical Info</dt>
           <dd class="col-md-8 col-lg-9">

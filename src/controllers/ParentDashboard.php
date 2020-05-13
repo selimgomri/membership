@@ -23,7 +23,7 @@ try {
 	`squads`.`SquadID` WHERE `members`.`UserID` = ? ORDER BY `MForename` ASC,
 	`MSurname` ASC';
 	$query = $db->prepare($sql);
-	$query->execute([$_SESSION['UserID']]);
+	$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 } catch (Exception $e) {
 	halt(500);
 }
@@ -37,14 +37,14 @@ try {
 	`galaEntries`.`GalaID`) WHERE `members`.`UserID` = ? AND `GalaDate` >=
 	CURDATE() ORDER BY `GalaDate` ASC, `MForename` ASC, `MSurname` ASC';
 	$query = $db->prepare($sql);
-	$query->execute([$_SESSION['UserID']]);
+	$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 } catch (Exception $e) {
 	halt(500);
 }
 
 $galas = $query->fetchAll(PDO::FETCH_ASSOC);
 
-$username = htmlspecialchars(explode(" ", getUserName($_SESSION['UserID']))[0]);
+$username = htmlspecialchars(explode(" ", getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']))[0]);
 
 $pagetitle = "Home";
 include BASE_PATH . "views/header.php";
@@ -57,7 +57,7 @@ include BASE_PATH . "views/header.php";
     <h1><?=helloGreeting()?> <?=$username?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
 
-		<?php if (!isSubscribed($_SESSION['UserID'], 'Notify')) { ?>
+		<?php if (!isSubscribed($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 'Notify')) { ?>
     <aside class="row mb-4">
       <div class="col-lg-6">
         <div class="cell bg-primary text-white">
@@ -90,7 +90,7 @@ include BASE_PATH . "views/header.php";
     </aside>
     <?php } ?>
 
-    <?php if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') && !userHasMandates($_SESSION['UserID'])) { ?>
+    <?php if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') && !userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) { ?>
     <div class="mb-4">
       <h2 class="mb-4">Want to set up a Direct Debit?</h2>
       <div class="news-grid">

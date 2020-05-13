@@ -9,7 +9,7 @@ $tenant = app()->tenant;
 
 use Respect\Validation\Validator as v;
 
-$userID = $_SESSION['UserID'];
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $forenameUpdate = false;
 $middlenameUpdate = false;
 $surnameUpdate = false;
@@ -24,7 +24,7 @@ $getDetails = $db->prepare("SELECT * FROM members WHERE Tenant = ? AND MemberID 
 $getDetails->execute([
   $tenant->getId(),
   $id,
-  $_SESSION['UserID']
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
 ]);
 $row = $getDetails->fetch(PDO::FETCH_ASSOC);
 
@@ -185,11 +185,11 @@ try {
   
   }
 
-  $_SESSION['SwimmerSaved'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerSaved'] = true;
 
 } catch (Exception $e) {
 
-  $_SESSION['SwimmerNotSaved'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerNotSaved'] = true;
 
 }
 

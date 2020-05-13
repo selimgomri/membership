@@ -1,5 +1,5 @@
 <?php
-  $user = $_SESSION['UserID'];
+  $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
   $_SESSION = array();
   session_destroy();

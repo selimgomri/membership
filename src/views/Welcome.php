@@ -10,7 +10,7 @@ include BASE_PATH . "views/header.php";
   <div class="row">
     <div class="col-md-10 col-lg-8">
 
-      <?php if (isset($_SESSION['PWA']) && $_SESSION['PWA']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) { ?>
       <p class="lead">By proceeding to use this progressive web app you agree to our use of cookies.</p>
       <?php } ?>
 

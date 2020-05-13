@@ -9,13 +9,13 @@ if ($_POST['name'] != "" && $_POST['name'] != null && $_POST['address'] != "" &&
     $db->beginTransaction();
     $edit->execute([$_POST['name'], $_POST['address'], $id]);
     $db->commit();
-    $_SESSION['EditVenueSuccess'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['EditVenueSuccess'] = true;
   } catch (Exception $e) {
     $db->rollback();
     halt(500);
   }
 } else {
-  $_SESSION['EditVenueError'] = [
+  $_SESSION['TENANT-' . app()->tenant->getId()]['EditVenueError'] = [
     "Status"      => true,
     "Data"        => $_POST
   ];

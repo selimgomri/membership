@@ -1,12 +1,12 @@
 <?php
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $userInfo = null;
 $otherUser = false;
 
 $db = app()->db;
 
-if ($_SESSION['AccessLevel'] != "Parent" && $person != null) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent" && $person != null) {
   $user = $person;
   $otherUser = true;
 }
@@ -78,7 +78,7 @@ include BASE_PATH . 'views/header.php';
       <?php }
       } ?>
 
-      <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") { ?>
       <p>
         <a class="btn btn-success" href="<?=htmlspecialchars(autoUrl("qualifications/new"))?>new">
           Add Qualification <span class="fa fa-chevron-right"></span>

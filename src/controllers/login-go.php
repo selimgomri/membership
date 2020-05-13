@@ -55,7 +55,7 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
       if ($isNotJustParent || bool(getUserOption($userID, "Is2FA")) || $do_random_2FA) {
         // Do 2FA
         if (bool(getUserOption($userID, "hasGoogleAuth2FA"))) {
-          $_SESSION['TWO_FACTOR_GOOGLE'] = true;
+          $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE'] = true;
         } else {
           $code = random_int(100000, 999999);
 
@@ -72,16 +72,16 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
           $date = new DateTime('now', new DateTimeZone('Europe/London'));
 
           if (notifySend(null, "Verification Code - Requested at " . $date->format("H:i:s \o\\n d/m/Y"), $message, $forename . " " . $surname, $email)) {
-            $_SESSION['TWO_FACTOR_CODE'] = $code;
+            $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_CODE'] = $code;
           } else {
             halt(500);
           }
         }
-        $_SESSION['2FAUserID'] = $userID;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserID'] = $userID;
         if ($_POST['RememberMe']) {
-          $_SESSION['2FAUserRememberMe'] = 1;
+          $_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe'] = 1;
         }
-        $_SESSION['TWO_FACTOR'] = true;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR'] = true;
         header("Location: " . autoUrl("2fa"));
       } else {
         try {
@@ -97,7 +97,7 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
           halt(403);
         }
 
-        unset($_SESSION['LoginSec']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']);
       }
     } else {
       // Incorrect PW
@@ -106,25 +106,25 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
       $incrementFailedLoginCount->execute([$userID]);
 
       // Set error state
-      $_SESSION['ErrorState'] = true;
-      $_SESSION['EnteredUsername'] = $username;
+      $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = true;
+      $_SESSION['TENANT-' . app()->tenant->getId()]['EnteredUsername'] = $username;
     }
   }
   else {
-    $_SESSION['ErrorState'] = true;
-    $_SESSION['EnteredUsername'] = $username;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['EnteredUsername'] = $username;
 
   }
 } else {
   if (!$security_status) {
-    $_SESSION['ErrorState'] = true;
-    $_SESSION['ErrorStateLSVMessage'] = "We were unable to verify the integrity of your login attempt. The site you entered your email address and password on may have been attempting to capture your login details. Try reseting your password urgently.";
-    $_SESSION['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['LoginSec']];
+    $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStateLSVMessage'] = "We were unable to verify the integrity of your login attempt. The site you entered your email address and password on may have been attempting to capture your login details. Try reseting your password urgently.";
+    $_SESSION['TENANT-' . app()->tenant->getId()]['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']];
   }
 }
-$_SESSION['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['LoginSec']];
-unset($_SESSION['LoginSec']);
-if (isset($_SESSION['ErrorState']) && $_SESSION['ErrorState'] && $_POST['target'] == "" || isset($_SESSION['ErrorAccountLocked']) && $_SESSION['ErrorAccountLocked'] && $_POST['target'] == "") {
+$_SESSION['TENANT-' . app()->tenant->getId()]['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']];
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] && $_POST['target'] == "" || isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorAccountLocked']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorAccountLocked'] && $_POST['target'] == "") {
   header("Location: " . autoUrl("login"));
 } else {
   header("Location: " . autoUrl(ltrim($_POST['target'], '/')));

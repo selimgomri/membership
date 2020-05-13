@@ -10,12 +10,9 @@ try {
   $stylesheet = autoUrl('public/compiled/css/generic.css');
 }
 
-if (env('CUSTOM_CSS_PATH')) {
-  $stylesheet = env('CUSTOM_CSS_PATH');
-}
+$bg = null;
 
 header('Link: <' . autoUrl($stylesheet) . '>; rel=preload; as=style');
-header('Link: <' . autoUrl($fa) . '>; rel=preload; as=style');
 
 $container_class;
 if (isset($fluidContainer) && $fluidContainer == true) {
@@ -48,26 +45,26 @@ Chester-le-Street ASC is a non profit unincorporated association.
 <head>
   <meta charset="utf-8">
   <?php if (isset($pagetitle) && ($pagetitle != "" || $pagetitle != null))  { ?>
-    <title><?=$pagetitle?> - <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Membership</title>
+    <title><?=$pagetitle?></title>
   <?php } else { ?>
-  <title><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Membership</title>
+  <title>SCDS Membership</title>
   <?php } ?>
   <meta name="description"
-    content="Your <?=app()->tenant->getKey('CLUB_NAME')?> Account lets you make gala entries online and gives you access to all your information about your swimmers, including attendance.">
+    content="SCDS Membership helps clubs run more efficiently.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0,
     user-scalable=no,maximum-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="apple-mobile-web-app-title" content="<?=htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME'))?> Accounts">
+  <meta name="apple-mobile-web-app-title" content="SCDS Membership">
   <meta name="format-detection" content="telephone=no">
   <meta name="googlebot" content="noarchive, nosnippet">
   <meta name="X-CLSW-System" content="Membership">
   <meta name="og:type" content="website">
   <meta name="og:locale" content="en_GB">
-  <meta name="og:site_name" content="<?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Account">
+  <meta name="og:site_name" content="SCDS Membership">
   <link rel="manifest" href="<?=autoUrl("manifest.webmanifest")?>">
   <?php
     // Check if user has opted out of tracking or has DNT headers set before serving Google Analytics
-    if (env('GOOGLE_ANALYTICS_ID') && (!$_SESSION['DisableTrackers'] && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1))) {
+    if (env('GOOGLE_ANALYTICS_ID') && (!$_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers'] && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1))) {
     ?>
   <meta name="X-SCDS-Membership-Tracking" content="yes">
   <script async>
@@ -83,8 +80,8 @@ Chester-le-Street ASC is a non profit unincorporated association.
     m.parentNode.insertBefore(a, m)
   })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
   ga('create', '<?=htmlspecialchars(env('GOOGLE_ANALYTICS_ID'))?>', 'auto');
-  <?php if (isset($_SESSION['LoggedIn'])) { ?>
-  ga('set', 'userId', '<?=$_SESSION['UserID']?>');
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
+  ga('set', 'userId', '<?=$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']?>');
   ga('send', 'event', 'authentication', 'user-id available');
   <?php } else { ?>
   ga('send', 'pageview');
@@ -97,14 +94,9 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <link rel="stylesheet preload"
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700|Roboto+Mono|Merriweather:400,600">
   <link rel="stylesheet preload" href="<?=htmlspecialchars($stylesheet)?>">
-  <link rel="stylesheet preload" href="<?=htmlspecialchars(autoUrl("public/css/colour.css"))?>">
 
-  <!-- Generic icon first -->
-  <?php if (env('CLUB_LOGO')) { ?>
-  <link rel="icon" href="<?=htmlspecialchars(autoUrl(env('CLUB_LOGO')))?>">
-  <?php } else { ?>
+  <!-- Generic icon -->
   <link rel="icon" href="<?=htmlspecialchars(autoUrl("public/img/corporate/scds.png"))?>">
-  <?php } ?>
 
   <!-- For iPhone 6 Plus with @3× display: -->
   <link rel="apple-touch-icon-precomposed" sizes="180x180"
@@ -139,33 +131,55 @@ Chester-le-Street ASC is a non profit unincorporated association.
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-  <style>
-  .focus-highlight a:focus,
-  .blog-sidebar a:focus,
-  .event a:focus,
-  .hentry a:focus,
-  .blog-main a:focus {
-    background: #ffbf47;
-    outline: 3px solid #ffbf47;
-    outline-offset: 0;
-  }
-
-  footer .focus-highlight a:focus,
-  .cls-global-footer-inverse a:focus {
-    color: #000 !important;
-  }
-  .festive {
-    /*background:#005fbd;*/
-    background-image: url("https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/christmas.png");
-    background-size: 50% auto;
-    /*padding: 1rem;*/
-    color: #fff;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
-  }
-
-  .top-3 {
-    top: 1rem;
-  }
-  </style>
-
 </head>
+
+<body class="<?=$bg?> account--body" <?php if (isset($pageHead['body'])) { foreach ($pageHead['body'] as $item) { ?> <?=$item?> <?php } } ?>>
+
+  <div class="sr-only sr-only-focusable">
+    <a href="#maincontent">Skip to main content</a>
+  </div>
+
+  <div class="d-print-none">
+
+    <noscript>
+      <div class="bg-warning box-shadow py-3 d-print-none">
+        <div class="<?=$container_class?>">
+          <p class="h2">
+            <strong>
+              JavaScript is disabled or not supported
+            </strong>
+          </p>
+          <p>
+            It looks like you've got JavaScript disabled or your browser does
+            not support it. JavaScript is essential for our website to function
+            properly so we recommend you enable it or upgrade to a browser which
+            supports it as soon as possible. <strong><a class="text-dark" href="https://browsehappy.com/"
+                target="_blank">Upgrade your browser
+                today <i class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
+          </p>
+          <p class="mb-0">
+            If JavaScript is not supported by your browser, SCDS recommends you <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by Mozilla</a></strong>.
+          </p>
+        </div>
+      </div>
+    </noscript>
+
+    <?php if ($_SESSION['Browser']['Name'] == "Internet Explorer") {?>
+    <div class="bg-warning py-3 d-print-none">
+      <div class="<?=$container_class?>">
+        <p class="h2">
+          <strong>
+            Internet Explorer is not supported
+          </strong>
+        </p>
+        <p>
+          It looks like you're using Internet Explorer which we no longer support so we recommend you upgrade to a new browser which we do support as soon as possible. <strong><a class="text-dark" href="http://browsehappy.com/" target="_blank">Upgrade your browser today <i class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
+        </p>
+        <p class="mb-0">
+          SCDS recommends you <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by Mozilla</a></strong>. Firefox has great protections for your privacy with built in features including tracking protection.
+        </p>
+      </div>
+    </div>
+    <?php } ?>
+
+    

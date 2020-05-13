@@ -31,7 +31,7 @@ include BASE_PATH . 'views/header.php';
 
 <?php
 
-unset($_SESSION['RequestTrial-Success']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Success']);
 
 $footer = new \SCDS\Footer();
 $footer->render();

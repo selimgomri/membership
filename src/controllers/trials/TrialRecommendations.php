@@ -33,10 +33,10 @@ $use_white_background = true;
 
 $query = $db->query("SELECT SquadID, SquadName FROM squads ORDER BY SquadFee DESC, SquadName ASC");
 
-$value = $_SESSION['RequestTrial-FC'];
+$value = $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-FC'];
 
-if (isset($_SESSION['RequestTrial-AddAnother'])) {
-  $value = $_SESSION['RequestTrial-AddAnother'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-AddAnother'])) {
+  $value = $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-AddAnother'];
 }
 
 include BASE_PATH . 'views/header.php';
@@ -56,7 +56,7 @@ include BASE_PATH . 'views/header.php';
         also mark them as being ineligible to join.
       </p>
 
-      <?php if ($_SESSION['TrialRecommendationsUpdated'] === true) { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['TrialRecommendationsUpdated'] === true) { ?>
         <div class="alert alert-success">
           <strong>Successfully updated the recommendations</strong>
         </div>
@@ -175,7 +175,7 @@ include BASE_PATH . 'views/header.php';
 
 <?php
 
-unset($_SESSION['TrialRecommendationsUpdated']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['TrialRecommendationsUpdated']);
 $footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
 $footer->render();

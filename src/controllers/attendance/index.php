@@ -1,8 +1,8 @@
 <?php
   // Connections
   include_once "../database.php";
-  $userID = $_SESSION['UserID'];
-  $access = $_SESSION['AccessLevel'];
+  $userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
+  $access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 
   $pos = mb_strrpos ($URI . "attendance/" , '/');
   $url = $_SERVER['REQUEST_URI'];

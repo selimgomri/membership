@@ -23,7 +23,7 @@ if (!function_exists('chesterStandardMenu')) {
 
     $renewalOpen = false;
     $renewalYear = null;
-    if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Parent') {
+    if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
       $date = new DateTime('now', new DateTimeZone('Europe/London'));
       $getRenewals = $db->prepare("SELECT COUNT(*) AS `Count`, `Year` FROM renewals WHERE StartDate <= :today AND EndDate >= :today;");
       $getRenewals->execute([
@@ -43,10 +43,10 @@ if (!function_exists('chesterStandardMenu')) {
     }
     
     $hasNotifyAccess = false;
-    if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Parent') {
+    if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
       $getNotify = $db->prepare("SELECT COUNT(*) FROM (SELECT User FROM squadReps UNION SELECT User FROM listSenders) AS T WHERE T.User = ?");
       $getNotify->execute([
-        $_SESSION['UserID'],
+        $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
       ]);
       if ($getNotify->fetchColumn()) {
         $hasNotifyAccess = true;
@@ -54,11 +54,11 @@ if (!function_exists('chesterStandardMenu')) {
     }
 
     $isTeamManager = false;
-    if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Parent') {
+    if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
       $date = new DateTime('-1 day', new DateTimeZone('Europe/London'));
       $getGalas = $db->prepare("SELECT COUNT(*) FROM teamManagers INNER JOIN galas ON teamManagers.Gala = galas.GalaID WHERE teamManagers.User = ? AND galas.GalaDate >= ?");
       $getGalas->execute([
-        $_SESSION['UserID'],
+        $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
         $date->format("Y-m-d")
       ]);
       if ($getGalas->fetchColumn()) {
@@ -68,17 +68,17 @@ if (!function_exists('chesterStandardMenu')) {
     
     ?>
 
-  <?php if (!(isset($_SESSION['UserID']) && user_needs_registration($_SESSION['UserID'])) && (!isset($use_website_menu) || !$use_website_menu)) { ?>
+  <?php if (!(isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) && user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) && (!isset($use_website_menu) || !$use_website_menu)) { ?>
             <div class="collapse navbar-collapse offcanvas-collapse" id="chesterNavbar">
               <ul class="navbar-nav mr-auto">
-                <?php if (!empty($_SESSION['LoggedIn'])) { ?>
+                <?php if (!empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
                 <li class="nav-item">
                   <a class="nav-link" href="<?php echo autoUrl("") ?>">Home</a>
                 </li>
-                <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+                <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { ?>
                 <?php
             $getSwimmers = $db->prepare("SELECT MForename Name, MSurname Surname, MemberID ID FROM `members` WHERE `UserID` = ? ORDER BY Name ASC, Surname ASC");
-            $getSwimmers->execute([$_SESSION['UserID']]);
+            $getSwimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
             ?>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="swimmersDropdown" role="button" data-toggle="dropdown"
@@ -127,21 +127,21 @@ if (!function_exists('chesterStandardMenu')) {
                   </a>
                   <div class="dropdown-menu" aria-labelledby="swimmerDropdown">
                     <a class="dropdown-item" href="<?php echo autoUrl("members")?>">Member directory</a>
-                    <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
+                    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") { ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("members/new")?>">Add member</a>
                     <?php } ?>
-                    <?php if ($_SESSION['AccessLevel'] != "Galas") { ?>
+                    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Galas") { ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("squads")?>">Squads</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("squads/moves")?>">Squad moves</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("members/access-keys")?>">Access keys</a>
                     <?php } ?>
-                    <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
+                    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") { ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("renewal")?>">Membership renewal</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("members/orphaned")?>">Orphan swimmers</a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("squad-reps")?>">Squad reps</a>
                     <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("log-books"))?>">Log books <span class="badge badge-info">BETA</span></a>
-                    <?php if ($_SESSION['AccessLevel'] == "Coach") { ?>
+                    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Coach") { ?>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . date("Y/m")) ?>">
                       Squad Fee Payments, <?=date("F Y")?>
@@ -156,8 +156,8 @@ if (!function_exists('chesterStandardMenu')) {
                     <?php } ?>
                   </div>
                 </li>
-                <?php if ($_SESSION['AccessLevel'] == "Admin" ||
-            $_SESSION['AccessLevel'] == "Coach" || $_SESSION['AccessLevel'] ==
+                <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" ||
+            $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Coach" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] ==
             "Committee") { ?>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="swimmerDropdown" role="button" data-toggle="dropdown"
@@ -167,7 +167,7 @@ if (!function_exists('chesterStandardMenu')) {
                   <div class="dropdown-menu" aria-labelledby="registerDropdown">
                     <a class="dropdown-item" href="<?php echo autoUrl("attendance")?>">Attendance Home</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("attendance/register")?>">Take Register</a>
-                    <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Committee") {?>
+                    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee") {?>
                     <a class="dropdown-item" href="<?php echo autoUrl("attendance/sessions")?>">Manage Sessions</a>
                     <a class="dropdown-item" href="<?=autoUrl("attendance/venues")?>">Manage Venues</a>
                     <?php } ?>
@@ -179,8 +179,8 @@ if (!function_exists('chesterStandardMenu')) {
                   </div>
                 </li>
                 <?php } ?>
-                <?php if ($_SESSION['AccessLevel'] == "Admin" ||
-            $_SESSION['AccessLevel'] == "Galas") { ?>
+                <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" ||
+            $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas") { ?>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="usersMenu" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
@@ -193,7 +193,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?=autoUrl("assisted-registration")?>">
                       Assisted Account Registration
                     </a>
-                    <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+                    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
                     <a class="dropdown-item" href="<?=autoUrl("payments/user-mandates")?>">
                       User direct debit mandates
                     </a>
@@ -201,12 +201,12 @@ if (!function_exists('chesterStandardMenu')) {
                   </div>
                 </li>
                 <?php } ?>
-                <?php if ($_SESSION['AccessLevel'] == "Galas") { ?>
+                <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas") { ?>
                 <li class="nav-item">
                   <a class="nav-link" href="<?php echo autoUrl("payments") ?>">Pay</a>
                 </li>
                 <?php } ?>
-                <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
+                <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") { ?>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="paymentsAdminDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -218,7 +218,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <!-- New feature coming soon -->
                     <!-- <a class="dropdown-item" href="<?=autoUrl("payments/confirmation")?>">Payment Confirmation</a> -->
                     <a class="dropdown-item" href="<?php echo autoUrl("payments/extrafees")?>">Extra Fees</a>
-                    <?php if ($_SESSION['AccessLevel'] == 'Admin' || $_SESSION['AccessLevel'] == 'Galas') { ?>
+                    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Galas') { ?>
                     <a class="dropdown-item" href="<?=autoUrl("payments/galas")?>">
                       Charge or refund gala entries
                     </a>
@@ -266,7 +266,7 @@ if (!function_exists('chesterStandardMenu')) {
                   </div>
                 </li>
                 <?php } ?>
-                <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach" || $_SESSION['AccessLevel'] == "Galas") { ?>
+                <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Coach" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas") { ?>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="notifyDropdown" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
@@ -276,7 +276,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?php echo autoUrl("notify")?>">Notify Home</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("notify/new")?>">New Message</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("notify/lists")?>">Targeted Lists</a>
-                    <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
+                    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") { ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("notify/sms")?>">SMS Lists</a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("notify/history")?>">Previous Messages</a>
@@ -293,7 +293,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?php echo autoUrl("galas")?>">
                       Gala home
                     </a>
-                    <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+                    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("galas/entergala")?>">
                       Enter a gala
                     </a>
@@ -313,7 +313,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <?php } else {?>
                     <a class="dropdown-item" href="<?php echo autoUrl("galas/addgala")?>">Add gala</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("galas/entries")?>">View entries</a>
-                    <?php if ($_SESSION['AccessLevel'] == 'Admin' || $_SESSION['AccessLevel'] == 'Galas') { ?>
+                    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Galas') { ?>
                     <a class="dropdown-item" href="<?=autoUrl("payments/galas")?>">
                       Charge or refund entries
                     </a>
@@ -327,7 +327,7 @@ if (!function_exists('chesterStandardMenu')) {
                       target="_blank">Gala website <i class="fa fa-external-link"></i></a>
                     <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/category/galas/"
                       target="_blank">Upcoming galas <i class="fa fa-external-link"></i></a>
-                    <?php if ($_SESSION['AccessLevel'] == "Parent") {?>
+                    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {?>
                     <a class="dropdown-item"
                       href="https://www.chesterlestreetasc.co.uk/competitions/enteracompetition/guidance/"
                       target="_blank">Help with entries <i class="fa fa-external-link"></i></a>
@@ -341,7 +341,7 @@ if (!function_exists('chesterStandardMenu')) {
                     </a>
                   </div>
                 </li>
-                <?php if ($_SESSION['AccessLevel'] == 'Parent' && $haveSquadReps) { ?>
+                <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $haveSquadReps) { ?>
                 <li class="nav-item">
                   <a class="nav-link" href="<?=autoUrl("squad-reps")?>">
                     Squad Reps
@@ -355,8 +355,8 @@ if (!function_exists('chesterStandardMenu')) {
                   </a>
                 </li>
                 <?php } ?>
-                <?php if ($_SESSION['AccessLevel'] == "Parent") {
-                  $hasMandate = userHasMandates($_SESSION['UserID']); ?>
+                <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
+                  $hasMandate = userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']); ?>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="paymentsParentDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -404,8 +404,8 @@ if (!function_exists('chesterStandardMenu')) {
                   </div>
                 </li>
                 <?php } ?>
-                <?php if ($_SESSION['AccessLevel'] != "Parent" &&
-          $_SESSION['AccessLevel'] != "Coach") { ?>
+                <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent" &&
+          $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Coach") { ?>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="postDropdown" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
@@ -414,17 +414,17 @@ if (!function_exists('chesterStandardMenu')) {
                   <div class="dropdown-menu" aria-labelledby="postDropdown">
                     <a class="dropdown-item" href="<?php echo autoUrl("posts")?>">Home</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("posts/new")?>">New Page</a>
-                    <?php if (isset($allow_edit) && $allow_edit && (($_SESSION['AccessLevel'] != "Parent" &&
-              $_SESSION['AccessLevel'] != "Coach" && $edit_link != null))) { ?>
+                    <?php if (isset($allow_edit) && $allow_edit && (($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent" &&
+              $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Coach" && $edit_link != null))) { ?>
                     <a class="dropdown-item" href="<?=$edit_link?>">Edit Current Page</a>
                     <?php } ?>
-                    <?php if (isset($exit_edit) && isset($id) && $exit_edit && $_SESSION['AccessLevel'] != "Parent" &&
-              $_SESSION['AccessLevel'] != "Coach") { ?>
+                    <?php if (isset($exit_edit) && isset($id) && $exit_edit && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent" &&
+              $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Coach") { ?>
                     <a class="dropdown-item" href="<?=autoUrl("posts/" . $id)?>">View Page</a>
                     <?php } ?>
                   </div>
                 </li>
-                <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+                <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
                 <li class="nav-item">
                   <a class="nav-link" href="<?=autoUrl("admin")?>" title="Adminstrative tools">
                     Admin
@@ -445,7 +445,7 @@ if (!function_exists('chesterStandardMenu')) {
                 -->
                 <?php }
             } ?>
-                <?php if (empty($_SESSION['LoggedIn'])) { ?>
+                <?php if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
                 <li class="nav-item">
                   <a class="nav-link" href="<?=htmlspecialchars(autoUrl("login"))?>">Login</a>
                 </li>
@@ -463,7 +463,7 @@ if (!function_exists('chesterStandardMenu')) {
                 </li>
                 <?php } ?>
               </ul>
-              <?php if (!empty($_SESSION['LoggedIn'])) {
+              <?php if (!empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
           $currentUser = app()->user;
           $user_name = preg_replace("/( +)/" , '&nbsp;', htmlspecialchars($currentUser->getName())); ?>
               <ul class="navbar-nav">
@@ -479,7 +479,7 @@ if (!function_exists('chesterStandardMenu')) {
                     if (sizeof($perms) > 1) { ?>
                     <h6 class="dropdown-header">Switch account mode</h6>
                     <?php foreach ($perms as $perm => $name) { ?>
-                    <a class="dropdown-item" href="<?=autoUrl("account-switch?type=" . urlencode($perm))?>"><?=htmlspecialchars($name)?><?php if ($perm == $_SESSION['AccessLevel']) { ?> <i class="text-primary fa fa-check-circle fa-fw" aria-hidden="true"></i><?php } ?></a>
+                    <a class="dropdown-item" href="<?=autoUrl("account-switch?type=" . urlencode($perm))?>"><?=htmlspecialchars($name)?><?php if ($perm == $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) { ?> <i class="text-primary fa fa-check-circle fa-fw" aria-hidden="true"></i><?php } ?></a>
                     <?php } ?>
                     <div class="dropdown-divider"></div>
                     <?php } ?>
@@ -488,12 +488,12 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?=autoUrl("my-account/email")?>">Your Email Options</a>
                     <a class="dropdown-item" href="<?=autoUrl("my-account/address")?>">Your Address</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("my-account/general") ?>">Your General Options</a>
-                    <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+                    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("emergency-contacts") ?>">Your Emergency
                       Contacts</a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("my-account/password") ?>">Your Password</a>
-                    <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+                    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("my-account/notifyhistory") ?>">Your Message
                       History</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("my-account/add-member") ?>">Add Member</a>

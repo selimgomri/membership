@@ -1,6 +1,6 @@
 <?php
 
-if (!user_needs_registration($_SESSION['UserID'])) {
+if (!user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
   halt(404);
 }
 

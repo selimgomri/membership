@@ -1,5 +1,5 @@
 <?php
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 if ($access != "Admin" && $access != "Coach" && $access != "Galas") {
   halt(404);
 }

@@ -13,8 +13,8 @@ $email_info = $email_info->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname']) . " Squad Move Contract";
 
-$_SESSION['qr'][0]['text'] = autoUrl("form-agreement/m/" . urlencode('CodeOfConduct') . '/' . urlencode(date("Y-m-d")) . "/" . urlencode($id) . '/' . urlencode("Squad: " . $email_info['SquadName']));
-$_SESSION['qr'][0]['size'] = 600;
+$_SESSION['TENANT-' . app()->tenant->getId()]['qr'][0]['text'] = autoUrl("form-agreement/m/" . urlencode('CodeOfConduct') . '/' . urlencode(date("Y-m-d")) . "/" . urlencode($id) . '/' . urlencode("Squad: " . $email_info['SquadName']));
+$_SESSION['TENANT-' . app()->tenant->getId()]['qr'][0]['size'] = 600;
 $qrFile = true;
 
 $hasDD = userHasMandates($email_info['UserID']);

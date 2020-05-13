@@ -9,17 +9,17 @@ include BASE_PATH . 'views/header.php'; ?>
 
 <div class="container">
 	<h1>Report a Website Issue</h1>
-	<?php if ($_SESSION['ErrorReportStatus'] == true) { ?>
+	<?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportStatus'] == true) { ?>
 		<p>We have reported that page to our team.</p>
 		<p>Thank you for your feedback. It really helps us improve our website.</p>
 		<p>
-			<a href="<?=htmlspecialchars($_SESSION['ErrorReportTarget'])?>" class="btn btn-secondary">
+			<a href="<?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportTarget'])?>" class="btn btn-secondary">
 				Return to Page
 			</a>
 		</p>
-	<?php unset($_SESSION['ErrorReportTarget']); ?>
-	<?php } else if (!isset($_GET['url']) || (isset($_SESSION['ErrorReportStatus']) &&
-	$_SESSION['ErrorReportStatus'] == false)) { ?>
+	<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportTarget']); ?>
+	<?php } else if (!isset($_GET['url']) || (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportStatus']) &&
+	$_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportStatus'] == false)) { ?>
 		<p>We were unable to report that page. You may have not provided a URL or
 		the URL was malformed.</p>
 		<p>
@@ -53,8 +53,8 @@ include BASE_PATH . 'views/header.php'; ?>
 
 <?php
 
-if (isset($_SESSION['ErrorReportStatus'])) {
-	unset($_SESSION['ErrorReportStatus']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportStatus'])) {
+	unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportStatus']);
 }
 $footer = new \SCDS\Footer();
 $footer->render();

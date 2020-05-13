@@ -24,7 +24,7 @@ if ($memberInfo == null) {
   halt(404);
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent' && $memberInfo['UserID'] != $_SESSION['UserID']) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $memberInfo['UserID'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
   halt(404);
 }
 
@@ -51,7 +51,7 @@ include BASE_PATH . 'views/header.php';
 <div class="bg-light mt-n3 py-3 mb-3">
   <div class="container">
 
-    <?php if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-MemberLoggedIn'])) { ?>
+    <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn'])) { ?>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page">Log book</li>
@@ -78,7 +78,7 @@ include BASE_PATH . 'views/header.php';
       </div>
       <div class="col text-right">
         <div class="btn-group" role="group" aria-label="Quick options">
-          <?php if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-MemberLoggedIn'])) { ?>
+          <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn'])) { ?>
           <a href="<?=htmlspecialchars(autoUrl("log-books/settings"))?>" class="btn btn-dark">
             Settings <i class="fa fa-cog" aria-hidden="true"></i>
           </a>
@@ -97,24 +97,24 @@ include BASE_PATH . 'views/header.php';
 
 <div class="container">
 
-  <?php if (isset($_SESSION['AddLogSuccessMessage'])) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AddLogSuccessMessage'])) { ?>
   <div class="alert alert-success">
     <p>
       <strong>Your new entry has been added to your training log.</strong>
     </p>
     <p class="mb-0">
-      <a class="btn btn-success" href="<?=htmlspecialchars("#log-" . $_SESSION['AddLogSuccessMessage'])?>">Jump to log</a>
+      <a class="btn btn-success" href="<?=htmlspecialchars("#log-" . $_SESSION['TENANT-' . app()->tenant->getId()]['AddLogSuccessMessage'])?>">Jump to log</a>
     </p>
   </div>
-  <?php unset($_SESSION['AddLogSuccessMessage']); } ?>
+  <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['AddLogSuccessMessage']); } ?>
 
-  <?php if (isset($_SESSION['SetMemberPassSuccess'])) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassSuccess'])) { ?>
   <div class="alert alert-success">
     <p class="mb-0">
-      <strong><?php if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-MemberLoggedIn'])) { ?>We've saved your new password.<?php } else { ?>Member password updated.<?php } ?></strong>
+      <strong><?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn'])) { ?>We've saved your new password.<?php } else { ?>Member password updated.<?php } ?></strong>
     </p>
   </div>
-  <?php unset($_SESSION['SetMemberPassSuccess']); } ?>
+  <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassSuccess']); } ?>
 
   <div class="row">
     <div class="col-lg-8 mb-3">
@@ -233,7 +233,7 @@ include BASE_PATH . 'views/header.php';
           </p>
         </div>
 
-        <?php if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == 'Parent') { ?>
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>
         <div class="cell">
           <h2>Member access</h2>
           <p class="lead">
@@ -251,7 +251,7 @@ include BASE_PATH . 'views/header.php';
         </div>
         <?php } ?>
 
-        <?php if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-MemberLoggedIn'])) { ?>
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn'])) { ?>
         <div class="cell">
           <h2>My account</h2>
           <p class="lead">

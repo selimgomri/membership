@@ -10,12 +10,12 @@ $numFormat = new NumberFormatter("en", NumberFormatter::SPELLOUT);
 $sql = null;
 
 $parentName = null;
-if ($_SESSION['AccessLevel'] == "Parent") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
   $sql = $db->prepare("SELECT * FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galas.Tenant = ? AND`EntryID` = ? AND members.UserID = ?;");
   $sql->execute([
     $tenant->getId(),
     $id,
-    $_SESSION['UserID']
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
   ]);
 } else {
   $sql = $db->prepare("SELECT * FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galas.Tenant = ? AND `EntryID` = ?");
@@ -48,7 +48,7 @@ $closingDate = new DateTime($row['ClosingDate'], new DateTimeZone('Europe/London
 $theDate = new DateTime('now', new DateTimeZone('Europe/London'));
 
 $locked = false;
-if (bool($row['Charged']) || bool($row['EntryProcessed']) || ($closingDate < $theDate && ($_SESSION['AccessLevel'] != 'Admin' && $_SESSION['AccessLevel'] != 'Galas')) || bool($row['Locked'])) {
+if (bool($row['Charged']) || bool($row['EntryProcessed']) || ($closingDate < $theDate && ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Admin' && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas')) || bool($row['Locked'])) {
   $locked = true;
 }
 
@@ -79,13 +79,13 @@ include "galaMenu.php"; ?>
       <h1><?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'][0])?>'s entry for <?=htmlspecialchars($row['GalaName'])?></h1>
       <p class="lead">Closing date: <?=date('j F Y', strtotime($row['ClosingDate']))?></p>
 
-      <?php if (isset($_SESSION['UpdateError']) && $_SESSION['UpdateError']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError']) { ?>
       <div class="alert alert-danger">A database error occured which prevented us saving the changes.</div>
-      <?php unset($_SESSION['UpdateError']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError']); } ?>
 
-      <?php if (isset($_SESSION['UpdateSuccess']) && $_SESSION['UpdateSuccess']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess']) { ?>
       <div class="alert alert-success">All changes to your gala entry have been saved.</div>
-      <?php unset($_SESSION['UpdateSuccess']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess']); } ?>
 
       <?php if (bool($row['HyTek'])) { ?>
       <h2>Provide times</h2>
@@ -158,7 +158,7 @@ include "galaMenu.php"; ?>
         $getEntryPaymentCount->execute([$row['StripePayment']]);
         $countPaid = $getEntryPaymentCount->fetchColumn(); ?>
         <h2>Payment</h2>
-        <p class="lead"><?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>You<?php } else { ?><?=htmlspecialchars($parentName)?><?php } ?> paid for this gala entry by card</p>
+        <p class="lead"><?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>You<?php } else { ?><?=htmlspecialchars($parentName)?><?php } ?> paid for this gala entry by card</p>
         <div class="row align-items-center mb-3">
           <div class="col-auto">
             <img src="<?=autoUrl("public/img/stripe/" . $row['Brand'] . ".png")?>" srcset="<?=autoUrl("public/img/stripe/" . $row['Brand'] . "@2x.png")?> 2x, <?=autoUrl("public/img/stripe/" . $row['Brand'] . "@3x.png")?> 3x" style="width:40px;"> <span class="sr-only"><?=htmlspecialchars(getCardBrand($row['Brand']))?></span>
@@ -171,7 +171,7 @@ include "galaMenu.php"; ?>
         </div>
         <?php if ($countPaid > 1) { ?>
         <p>
-        <?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>You<?php } else { ?><?=htmlspecialchars($parentName)?><?php } ?> paid for <?=htmlspecialchars($numFormat->format($countPaid))?> gala entries as part of this transaction.
+        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>You<?php } else { ?><?=htmlspecialchars($parentName)?><?php } ?> paid for <?=htmlspecialchars($numFormat->format($countPaid))?> gala entries as part of this transaction.
         </p>
         <?php } ?>
         <p>

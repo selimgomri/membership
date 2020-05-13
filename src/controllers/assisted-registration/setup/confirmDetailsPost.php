@@ -5,7 +5,7 @@ $db = app()->db;
 use Respect\Validation\Validator as v;
 
 $countSwimmers = $db->prepare("SELECT COUNT(*) FROM members WHERE UserID = ?");
-$countSwimmers->execute([$_SESSION['AssRegGuestUser']]);
+$countSwimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGuestUser']]);
 $rr = false;
 if ($countSwimmers->fetchColumn() > 0) {
   $rr = true;
@@ -51,16 +51,16 @@ if ($status) {
     $update->bindValue(2, $emailAuth, PDO::PARAM_BOOL);
     $update->bindValue(3, $smsAuth, PDO::PARAM_BOOL);
     $update->bindValue(4, $rr, PDO::PARAM_BOOL);
-    $update->bindValue(5, $_SESSION['AssRegGuestUser'], PDO::PARAM_INT);
+    $update->bindValue(5, $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGuestUser'], PDO::PARAM_INT);
     $update->execute();
   } catch (Exception $e) {
     halt(500);
   }
-  $_SESSION['AssRegStage'] = 3;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegStage'] = 3;
   header("Location: " . autoUrl("assisted-registration/go-to-onboarding"));
 } else {
-  $_SESSION['AssRegGetDetailsError'] = true;
-  $_SESSION['AssRegGetDetailsPostData'] = $_POST;
-  $_SESSION['AssRegGetDetailsMessage'] = $statusMessage;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsPostData'] = $_POST;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsMessage'] = $statusMessage;
   header("Location: " . autoUrl("assisted-registration/confirm-details"));
 }

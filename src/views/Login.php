@@ -3,9 +3,9 @@ $pagetitle = "Login";
 
 $errorState = $username = null;
 
-if ( isset($_SESSION['ErrorState']) ) {
-  $errorState = $_SESSION['ErrorState'];
-  $username = $_SESSION['EnteredUsername'];
+if ( isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) ) {
+  $errorState = $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+  $username = $_SESSION['TENANT-' . app()->tenant->getId()]['EnteredUsername'];
 }
 
 $use_white_background = true;
@@ -28,19 +28,19 @@ include BASE_PATH . "views/header.php";
       <div class="alert alert-danger">
         <strong>Your details were incorrect</strong> <br>
         Please try again
-        <?php if (isset($_SESSION['ErrorStateLSVMessage'])) {
-          echo $_SESSION['ErrorStateLSVMessage'];
-          unset($_SESSION['ErrorStateLSVMessage']);
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStateLSVMessage'])) {
+          echo $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStateLSVMessage'];
+          unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStateLSVMessage']);
         } ?>
       </div>
       <?php } ?>
 
-      <?php if (isset($_SESSION['ErrorAccountLocked']) && $_SESSION['ErrorAccountLocked']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorAccountLocked']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorAccountLocked']) { ?>
       <div class="alert alert-danger">
         <strong>Your account has been locked due to a number of failed login attempts</strong> <br>
         Please <a href="<?=htmlspecialchars(autoUrl("resetpassword"))?>" class="alert-link">reset your password</a> in order to continue
       </div>
-      <?php unset($_SESSION['ErrorAccountLocked']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorAccountLocked']); } ?>
 
       <form method="post" action="<?=htmlspecialchars(autoUrl("login"))?>" name="loginform" id="loginform" class="needs-validation" novalidate>
         <div class="form-group">
@@ -66,7 +66,7 @@ include BASE_PATH . "views/header.php";
             </small>
           </div>
         </div>
-        <input type="hidden" name="target" value="<?=$_SESSION['TARGET_URL']?>">
+        <input type="hidden" name="target" value="<?=$_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL']?>">
         <?=SCDS\CSRF::write()?>
         <input type="hidden" name="SessionSecurity" value="<?=session_id()?>">
         <p class="mb-5"><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-primary"></p>
@@ -129,6 +129,6 @@ $footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
 $footer->render();
 
-unset($_SESSION['ErrorState']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
 
 ?>

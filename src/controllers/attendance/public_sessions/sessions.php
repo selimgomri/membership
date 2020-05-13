@@ -157,7 +157,7 @@ include BASE_PATH . 'views/header.php';
             ?>
 
             <dt class="col-sm-3">Location</dt>
-        <dd class="col-sm-9 mb-0"><?php if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn']) { ?><?=htmlspecialchars($session['Location'])?><?php } else { ?>You must be logged in to see the location<?php } ?></dd>
+        <dd class="col-sm-9 mb-0"><?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && $_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) { ?><?=htmlspecialchars($session['Location'])?><?php } else { ?>You must be logged in to see the location<?php } ?></dd>
           </dl>
 
           <?php if (!bool($session['MainSequence'])) { ?>

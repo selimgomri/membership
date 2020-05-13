@@ -8,9 +8,9 @@ $title = "Add a member";
 $content = "<p class=\"lead\">Add a member to the club system.</p>";
 
 $content .= "<div class=\"row\"><div class=\"col col-md-8\">";
-if (isset($_SESSION['ErrorState'])) {
-	$content .= $_SESSION['ErrorState'];
-	unset($_SESSION['ErrorState']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
+	$content .= $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+	unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
 }
 // Main Info Content
 $content .= "<form method=\"post\">";

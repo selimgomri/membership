@@ -42,14 +42,14 @@ include BASE_PATH . 'views/header.php';
       <h1>Invite parents to enter <?=htmlspecialchars($gala['name'])?></h1>
       <p class="lead">Send an email to parents letting them know their swimmers can enter this gala.</p>
 
-      <?php if (isset($_SESSION['SuccessStatus']) && $_SESSION['SuccessStatus']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']) { ?>
       <div class="alert alert-success">Saved</div>
-      <?php unset($_SESSION['SuccessStatus']);
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']);
       } ?>
 
-      <?php if (isset($_SESSION['ErrorStatus']) && $_SESSION['ErrorStatus']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus']) { ?>
       <div class="alert alert-danger">Email not sent</div>
-      <?php unset($_SESSION['ErrorStatus']);
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus']);
       } ?>
 
       <?php if ($nowDate > $galaDate) { ?>

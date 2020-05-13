@@ -62,7 +62,7 @@ $countEntriesCount = [];
 $countEntriesColours = [];
 foreach ($swimsArray as $col => $name) {
   $getCount = null;
-  if ($_SESSION['AccessLevel'] == 'Parent') {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
     $getCount = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE `" . $col . "` = 1");
     $getCount->execute([]);
   } else {

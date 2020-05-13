@@ -11,7 +11,7 @@ $query->execute([
 ]);
 $row = $query->fetch(PDO::FETCH_ASSOC);
 
-if ($row == null || $row['UserID'] != $_SESSION['UserID']) {
+if ($row == null || $row['UserID'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
   halt(404);
 }
 
@@ -23,7 +23,7 @@ if ($count != 0) {
   halt(500);
 }
 
-if ($_SESSION['LeaveKey'] == $key) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['LeaveKey'] == $key) {
   try {
     $query = $db->prepare("INSERT INTO moves (MemberID, SquadID, MovingDate) VALUES (?, ?, ?)");
     $query->execute([$id, $leavers, date("Y-m-01", strtotime('+1 month'))]);
@@ -40,7 +40,7 @@ if ($_SESSION['LeaveKey'] == $key) {
     $message .= '<p>Kind regards,<br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
 
     $notify_query->execute([
-      $_SESSION['UserID'],
+      $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
       'Queued',
       $subject,
       $message,
@@ -48,13 +48,13 @@ if ($_SESSION['LeaveKey'] == $key) {
       'ClubLeaver'
     ]);
 
-    unset($_SESSION['LeaveKey']);
-    $_SESSION['ConfirmLeave'] = true;
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['LeaveKey']);
+    $_SESSION['TENANT-' . app()->tenant->getId()]['ConfirmLeave'] = true;
     header("Location: " . autoUrl("members/" . $id . "/leaveclub/"));
   } catch (Exception $e) {
     halt(500);
   }
 } else {
-  unset($_SESSION['LeaveKey']);
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['LeaveKey']);
   halt(404);
 }

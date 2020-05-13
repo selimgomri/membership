@@ -54,7 +54,7 @@ try {
   }
 
   if (app('request')->method == 'GET' && $user != null) {
-    $_SESSION['MandateDeletedTrue'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['MandateDeletedTrue'] = true;
     header("location: " . autoUrl("users/" . $user['UserID'] . "/mandates"));
   }
 

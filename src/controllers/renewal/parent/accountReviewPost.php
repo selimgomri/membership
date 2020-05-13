@@ -64,14 +64,14 @@ if ($status) {
       $emailComms,
       $sms,
       $smsComms,
-      $_SESSION['UserID']
+      $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
     ]);
 
 		// Success move on
 		$updateRenewal = $db->prepare("UPDATE `renewalProgress` SET `Substage` = `Substage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
     $updateRenewal->execute([
       $renewal,
-      $_SESSION['UserID']
+      $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
     ]);
 		header("Location: " . autoUrl("renewal/go"));
 	} catch (Exception $e) {
@@ -82,7 +82,7 @@ if ($status) {
 }
 
 if (!$status) {
-	$_SESSION['ErrorState'] = "
+	$_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = "
 	<div class=\"alert alert-danger\">
 	<strong>An error occured when we tried to update our records</strong>
 	<ul class=\"mb-0\">" . $statusMessage . "</ul></div>";

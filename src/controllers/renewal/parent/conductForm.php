@@ -35,9 +35,9 @@ if (isset($id)) {
           <h1>Code of Conduct Acceptance</h1>
           <p class="lead">For <?=htmlspecialchars($row['MForename'] . ' ' . $row['MSurname'])?></p>
 
-          <?php if (isset($_SESSION['RenewalErrorInfo'])) {
-							echo $_SESSION['RenewalErrorInfo'];
-							unset($_SESSION['RenewalErrorInfo']);
+          <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RenewalErrorInfo'])) {
+							echo $_SESSION['TENANT-' . app()->tenant->getId()]['RenewalErrorInfo'];
+							unset($_SESSION['TENANT-' . app()->tenant->getId()]['RenewalErrorInfo']);
 						} ?>
 
           <div class="alert alert-warning">

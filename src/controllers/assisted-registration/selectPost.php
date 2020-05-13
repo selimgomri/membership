@@ -1,6 +1,6 @@
 <?php
 
-$user = $_SESSION['AssRegUser'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'];
 $db = app()->db;
 
 $swimmers = $db->query("SELECT MForename `first`, MSurname `last`, SquadName `name`, MemberID `id` FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID IS NULL ORDER BY MemberID DESC, `first` ASC, `last` ASC");
@@ -10,11 +10,11 @@ $setParent = $db->prepare("UPDATE members SET UserID = ?, RR = ? WHERE MemberID 
 $setUserRequiresRenewal = $db->prepare("UPDATE users SET RR = ? WHERE UserID = ?");
 $setUserRequiresRenewal->execute([
   1,
-  $_SESSION['AssRegUser']
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']
 ]);
 
 $user = $db->prepare("SELECT Forename `first`, Surname `last`, EmailAddress `email` FROM users WHERE UserID = ?");
-$user->execute([$_SESSION['AssRegUser']]);
+$user->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']]);
 $user = $user->fetch(PDO::FETCH_ASSOC);
 
 if ($user == null) {
@@ -29,7 +29,7 @@ while ($swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)) {
   if ($_POST['member-' . $swimmer['id']]) {
     $selectedSwimmers[] = $swimmer['id'];
     $setParent->execute([
-      $_SESSION['AssRegUser'],
+      $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'],
       1,
       $swimmer['id']
     ]);
@@ -41,11 +41,11 @@ if ($success) {
   // Go to next page
   $subject = "Complete your registration at " . app()->tenant->getKey('CLUB_NAME');
   $message = "<p>Hello " . htmlspecialchars($user['first']) . ", </p>";
-  if (isset($_SESSION['AssRegExisting']) && $_SESSION['AssRegExisting']) {
+  if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegExisting']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegExisting']) {
     $message .= "<p>We've added a new swimmer to your " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " account. We now need you to <a href=\"" . autoUrl("") . "\">sign in and provide some information</a>.</p>";
-    unset($_SESSION['AssRegExisting']);
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegExisting']);
   } else {
-    $message .= "<p>We've pre-registered you for a " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " account. To continue, <a href=\"" . autoUrl("assisted-registration/" . $_SESSION['AssRegUser'] . "/" . $_SESSION['AssRegPass']) . "\">please follow this link</a></p>";
+    $message .= "<p>We've pre-registered you for a " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " account. To continue, <a href=\"" . autoUrl("assisted-registration/" . $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'] . "/" . $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegPass']) . "\">please follow this link</a></p>";
     $message .= "<p>As part of the registration process, we'll ask you to set a password, let us know your communication preferences and fill in important information about you and/or your members.</p>";
   }
   if (!bool(env('IS_CLS'))) {
@@ -54,8 +54,8 @@ if ($success) {
 
   notifySend(null, $subject, $message, $user['first'] . ' ' . $user['last'], $user['email']);
 
-  $_SESSION['AssRegComplete'] = true;
-  $_SESSION['AssRegName'] = $user['first'] . ' ' . $user['last'];
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegComplete'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegName'] = $user['first'] . ' ' . $user['last'];
   header("Location: " . autoUrl("assisted-registration/complete"));
 } else {
   header("Location: " . autoUrl("assisted-registration/select-swimmers"));

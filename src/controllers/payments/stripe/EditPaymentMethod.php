@@ -3,7 +3,7 @@
 $db = app()->db;
 
 $getCard = $db->prepare("SELECT `Name`, Last4, Brand, ExpMonth, ExpYear, Funding, PostCode, Line1, Line2, CardName, MethodID, Reusable FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND stripePayMethods.ID = ?");
-$getCard->execute([$_SESSION['UserID'], $id]);
+$getCard->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id]);
 
 $card = $getCard->fetch(PDO::FETCH_ASSOC);
 

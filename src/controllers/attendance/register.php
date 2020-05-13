@@ -39,11 +39,11 @@ include "attendanceMenu.php";
       </p>
     </div>
   </div>
-  <?php if (isset($_SESSION['return'])) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['return'])) { ?>
   <div class="alert alert-success">
-    <?=$_SESSION['return']?>
+    <?=$_SESSION['TENANT-' . app()->tenant->getId()]['return']?>
   </div>
-  <?php unset($_SESSION['return']); } ?>
+  <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['return']); } ?>
 
   <form method="post">
     <div class="card mb-3">

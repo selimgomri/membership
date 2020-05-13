@@ -106,7 +106,7 @@ include BASE_PATH . 'views/header.php';
               </p>
               <div class="mb-3 d-sm-none"></div>
             </div>
-            <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
+            <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
             <div class="col-12 col-sm-auto">
               <div class="btn-group" role="group">
                 <a href="<?=htmlspecialchars(autoUrl("galas/entries?gala=" . $gala['id']))?>" class="btn btn-primary">

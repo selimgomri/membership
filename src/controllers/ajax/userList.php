@@ -3,7 +3,7 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 
 if ($access != "Admin" && $access != "Galas") {
   halt(404);

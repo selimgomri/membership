@@ -19,7 +19,7 @@ $_POST['payment-ref'];
 $_POST['payment-date'];
 $_POST['payment-fees'];
 
-$_SESSION['PaymentConfSearch'] = [
+$_SESSION['TENANT-' . app()->tenant->getId()]['PaymentConfSearch'] = [
   'payment-ref' => $_POST['payment-ref'],
   'payment-date' => $_POST['payment-date'],
   'payment-fees' => $_POST['payment-fees']
@@ -45,7 +45,7 @@ if ($findPayments->fetchColumn() > 0) {
   while ($id = $findPayments->fetchColumn()) {
     $ids[] = $id;
   }
-  $_SESSION['PaymentConfSearch']['id'] = $ids;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['PaymentConfSearch']['id'] = $ids;
   header("Location: " . autoUrl("payments/confirmation/select-payment"));
 } else {
   // Ask user for more detail

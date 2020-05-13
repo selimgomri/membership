@@ -12,7 +12,7 @@ $date = strtotime($year . "-" . $month . "-01");
 
 $use_white_background = true;
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $pagetitle = htmlspecialchars(date("F Y", $date)) . " Payments";
 
 $url = autoUrl("payments/history/" . $year . "/" . $month);

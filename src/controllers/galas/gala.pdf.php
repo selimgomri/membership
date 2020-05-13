@@ -19,15 +19,15 @@ $numEntries->execute([$id]);
 $numEntries = $numEntries->fetchColumn();
 
 $amountPaid = $amountLeftToPay = $amountRefunded = $total = 0;
-if ($_SESSION['AccessLevel'] == 'Parent') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
   $amountPaidQuery = $db->prepare("SELECT SUM(FeeToPay) FROM galaEntries INNER JOIN members ON members.MemberID = galaEntries.MemberID WHERE GalaID = ? AND Charged = ? AND members.UserID = ?");
-  $amountPaidQuery->execute([$id, 1, $_SESSION['UserID']]);
+  $amountPaidQuery->execute([$id, 1, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   $amountPaid = $amountPaidQuery->fetchColumn();
-  $amountPaidQuery->execute([$id, 0, $_SESSION['UserID']]);
+  $amountPaidQuery->execute([$id, 0, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   $amountLeftToPay = $amountPaidQuery->fetchColumn();
   $total = $amountPaid + $amountLeftToPay;
   $amountRefunded = $db->prepare("SELECT SUM(AmountRefunded) FROM galaEntries INNER JOIN members ON members.MemberID = galaEntries.MemberID WHERE GalaID = ? AND members.UserID = ?");
-  $amountRefunded->execute([$id, $_SESSION['UserID']]);
+  $amountRefunded->execute([$id, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   $amountRefunded = $amountRefunded->fetchColumn();
 } else {
   $amountPaidQuery = $db->prepare("SELECT SUM(FeeToPay) FROM galaEntries WHERE GalaID = ? AND Charged = ?");
@@ -42,9 +42,9 @@ if ($_SESSION['AccessLevel'] == 'Parent') {
 }
 
 $entries = $db->prepare("SELECT * FROM galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID WHERE GalaID = ?");
-if ($_SESSION['AccessLevel'] == "Parent") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
   $entries = $db->prepare("SELECT * FROM galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID WHERE GalaID = ? AND UserID = ?");
-  $entries->execute([$id, $_SESSION['UserID']]);
+  $entries->execute([$id, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 } else {
   $entries->execute([$id]);
 }

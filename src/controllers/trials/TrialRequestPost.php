@@ -31,5 +31,5 @@ $email_parent = '<p>Hello ' . $detail['F'] . ' ' . $detail['L'] . '</p>
 
 notifySend(null, 'Your Trial Appointment', $email_parent, $detail['F'] . ' ' . $detail['L'], $detail['Email']);
 
-$_SESSION['TrialAppointmentUpdated'] = true;
+$_SESSION['TENANT-' . app()->tenant->getId()]['TrialAppointmentUpdated'] = true;
 header("Location: " . currentUrl());

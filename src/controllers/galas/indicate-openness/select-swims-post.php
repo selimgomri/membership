@@ -153,7 +153,7 @@ try {
       $subject = 'Entries into ' . $gala['name'];
     }
 
-    $message = '<p>' . htmlspecialchars($_SESSION['Forename'] . ' ' . $_SESSION['Surname']) . ' has entered ';
+    $message = '<p>' . htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['Forename'] . ' ' . $_SESSION['TENANT-' . app()->tenant->getId()]['Surname']) . ' has entered ';
     for ($i = 0; $i < sizeof($entries); $i++) {
       $message .= htmlspecialchars($entries[$i]['forename']);
       if ($i < sizeof($entries) - 2) {
@@ -211,10 +211,10 @@ try {
   }
 
   $db->commit();
-  $_SESSION['SuccessStatus'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus'] = true;
 } catch (Exception $e) {
   $db->rollBack();
-  $_SESSION['ErrorStatus'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus'] = true;
 }
 
 header("Location: " . autoUrl("galas/" . $id . "/select-entries"));

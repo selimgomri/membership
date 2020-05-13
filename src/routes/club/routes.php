@@ -4,7 +4,7 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 $currentUser = null;
-if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'AutoLogin'] != "") {
+if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'AutoLogin'] != "") {
   $sql = "SELECT `UserID`, `Time` FROM `userLogins` WHERE `Hash` = ? AND `Time` >= ? AND `HashActive` = ?";
 
   $data = [
@@ -38,7 +38,7 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
       // halt(403);
     }
 
-    $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));
+    $hash = hash('sha512', time() . $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'] . random_bytes(64));
 
     $sql = "UPDATE `userLogins` SET `Hash` = ? WHERE `Hash` = ?";
     try {
@@ -56,13 +56,13 @@ if (empty($_SESSION['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])
     }
     setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , COOKIE_PATH, app('request')->hostname, $secure, false);
   }
-} else if (isset($_SESSION['UserID'])) {
-  $currentUser = new User($_SESSION['UserID'], true);
+} else if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
+  $currentUser = new User($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], true);
 }
 app()->user = $currentUser;
 
-if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn'] && !isset($_SESSION['DisableTrackers'])) {
-  $_SESSION['DisableTrackers'] = filter_var(getUserOption($_SESSION['UserID'], "DisableTrackers"), FILTER_VALIDATE_BOOLEAN);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && $_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'] && !isset($_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers'])) {
+  $_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers'] = filter_var(getUserOption($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], "DisableTrackers"), FILTER_VALIDATE_BOOLEAN);
 }
 
 if (bool(env('IS_DEV'))) {
@@ -240,7 +240,7 @@ $this->any(['/logout', '/logout.php'], function () {
   include BASE_PATH . 'controllers/logout.php';
 });
 
-if (isset($_SESSION['TWO_FACTOR']) && $_SESSION['TWO_FACTOR']) {
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR']) && $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR']) {
   $this->group('/2fa', function () {
     $this->get('/', function () {
       include BASE_PATH . 'views/TwoFactorCodeInput.php';
@@ -262,7 +262,7 @@ if (isset($_SESSION['TWO_FACTOR']) && $_SESSION['TWO_FACTOR']) {
   });
 
   $this->get(['/', '/*'], function () {
-    $_SESSION['TWO_FACTOR'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR'] = true;
     header("Location: " . autoUrl("2fa"));
   });
 }
@@ -282,7 +282,7 @@ $this->group('/oauth2', function () {
   });
 });
 
-if (empty($_SESSION['LoggedIn'])) {
+if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
   $this->post('/login', function () {
     include BASE_PATH . 'controllers/login-go.php';
   });
@@ -293,8 +293,8 @@ if (empty($_SESSION['LoggedIn'])) {
   });
 
   $this->get('/login', function () {
-    if (empty($_SESSION['TARGET_URL'])) {
-      $_SESSION['TARGET_URL'] = "";
+    if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL'])) {
+      $_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL'] = "";
     }
     include BASE_PATH . "views/Login.php";
   });
@@ -386,10 +386,10 @@ if (empty($_SESSION['LoggedIn'])) {
 
   // Global Catch All send to login
   $this->any('/*', function () {
-    $_SESSION['TARGET_URL'] = app('request')->path;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL'] = app('request')->path;
     header("Location: " . autoUrl("login"));
   });
-} else if (user_needs_registration($_SESSION['UserID'])) {
+} else if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
   $this->group('/renewal', function () {
 
 
@@ -410,7 +410,7 @@ if (empty($_SESSION['LoggedIn'])) {
 } else {
   // Home
 
-  if ($_SESSION['AccessLevel'] == "Parent") {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
     $this->get('/', function () {
 
       include BASE_PATH . 'controllers/ParentDashboard.php';
@@ -462,7 +462,7 @@ if (empty($_SESSION['LoggedIn'])) {
     include BASE_PATH . 'controllers/galas/squad-reps-and-team-managers/team-manager-event-list.php';
   });
 
-  if ($_SESSION['AccessLevel'] != "Parent") {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") {
     $this->group('/trials', function () {
       include BASE_PATH . 'controllers/trials/router.php';
     });
@@ -574,7 +574,7 @@ if (empty($_SESSION['LoggedIn'])) {
     include BASE_PATH . 'controllers/tenant-services/routes.php';
   });
 
-  if ($_SESSION['AccessLevel'] == "Admin") {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") {
     $this->group('/settings', function () {
       include BASE_PATH . 'controllers/settings/router.php';
     });

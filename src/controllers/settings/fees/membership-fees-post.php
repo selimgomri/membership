@@ -18,9 +18,9 @@ try {
     }
     app()->tenant->setKey('ClubFeeNSwimmers', json_encode($updatedFees));
   }
-  $_SESSION['Update-Success'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['Update-Success'] = true;
 } catch (Exception $e) {
-  $_SESSION['Update-Error'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['Update-Error'] = true;
 }
 
 header("Location: " . autoUrl("settings/fees/membership-fees"));

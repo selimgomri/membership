@@ -3,7 +3,7 @@
 use Respect\Validation\Validator as v;
 
 // Assign form content to SESSION
-$_SESSION['RequestTrial-FC'] = $_POST;
+$_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-FC'] = $_POST;
 
 $isParent = false;
 if ($_POST['is-parent']) {
@@ -11,57 +11,57 @@ if ($_POST['is-parent']) {
 }
 
 if (!v::email()->validate($_POST['email-addr'])) {
-  $_SESSION['RequestTrial-Errors']['Email'] = "The email address is invalid";
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Errors']['Email'] = "The email address is invalid";
   header("Location: " . autoUrl("services/request-a-trial"));
 }
 
 $dob = $_POST['year'] . '-' . $_POST['month'] . '-' . $_POST['day'];
 
 if (!v::date()->validate($dob)) {
-  $_SESSION['RequestTrial-Errors']['DOB'] = "The date of birth provided is not valid";
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Errors']['DOB'] = "The date of birth provided is not valid";
   header("Location: " . autoUrl("services/request-a-trial"));
 }
 
 if ($_POST['forename'] == "") {
-  $_SESSION['RequestTrial-Errors']['Parent-FN'] = "No parent first name";
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Errors']['Parent-FN'] = "No parent first name";
   header("Location: " . autoUrl("services/request-a-trial"));
 }
 
 if ($_POST['surname'] == "") {
-  $_SESSION['RequestTrial-Errors']['Parent-LN'] = "No parent last name";
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Errors']['Parent-LN'] = "No parent last name";
   header("Location: " . autoUrl("services/request-a-trial"));
 }
 
 if (!$isParent) {
   if ($_POST['swimmer-forename'] == "") {
-    $_SESSION['RequestTrial-Errors']['Swimmer-FN'] = "No swimmer first name";
+    $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Errors']['Swimmer-FN'] = "No swimmer first name";
     header("Location: " . autoUrl("services/request-a-trial"));
   }
 
   if ($_POST['swimmer-surname'] == "") {
-    $_SESSION['RequestTrial-Errors']['Swimmer-LN'] = "No swimmer last name";
+    $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Errors']['Swimmer-LN'] = "No swimmer last name";
     header("Location: " . autoUrl("services/request-a-trial"));
   }
 }
 
 if ($_POST['sex'] == "") {
-  $_SESSION['RequestTrial-Errors']['Swimmer-LN'] = "No swimmer sex provided";
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Errors']['Swimmer-LN'] = "No swimmer sex provided";
   header("Location: " . autoUrl("services/request-a-trial"));
 }
 
 if ($_POST['experience'] == "") {
-  $_SESSION['RequestTrial-Errors']['Swimmer-Experience'] = "No experience option selected";
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Errors']['Swimmer-Experience'] = "No experience option selected";
   header("Location: " . autoUrl("services/request-a-trial"));
 }
 
 /*
 if (true) {
-  $_SESSION['RequestTrial-Errors']['TESTING'] = "Testing system";
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Errors']['TESTING'] = "Testing system";
   header("Location: " . autoUrl("services/request-a-trial"));
 }
 */
 
-if (isset($_SESSION['RequestTrial-Errors'])) {
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Errors'])) {
   die();
 }
 
@@ -188,14 +188,14 @@ if ($to_club && $to_parent) {
     trim($_POST['sex'])
   ]);
 
-  $_SESSION['RequestTrial-Success'] = true;
-  $_SESSION['RequestTrial-AddAnother'] = [
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Success'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-AddAnother'] = [
     'forename' => $_POST['forename'],
     'surname' => $_POST['surname'],
     'email-addr' => $_POST['email-addr']
   ];
 } else {
-  $_SESSION['RequestTrial-Success'] = false;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Success'] = false;
 }
 
 header("Location: " . autoUrl("services/request-a-trial"));

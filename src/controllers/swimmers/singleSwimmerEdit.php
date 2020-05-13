@@ -12,7 +12,7 @@ if (app('request')->method == 'POST' && !SCDS\CSRF::verify()) {
 // Get all countries
 $countries = getISOAlpha2CountriesWithHomeNations();
 
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 // Committee or Admin can see and change all data
 $forenameUpdate = false;
 $middlenameUpdate = false;
@@ -171,7 +171,7 @@ if (isset($_POST['otherNotes'])) {
 		$update = true;
 	}
 }
-if (isset($_POST['swimmerStatus']) && $_SESSION['AccessLevel'] == "Admin") {
+if (isset($_POST['swimmerStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") {
 	$newSwimmerStatus = trim($_POST['swimmerStatus']);
 	if ($newSwimmerStatus != $swimmerStatus) {
 		$updateSwimmer = $db->prepare("UPDATE `members` SET `Status` = ? WHERE `MemberID` = ?");

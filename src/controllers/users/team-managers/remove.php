@@ -36,9 +36,9 @@ try {
   ]);
 
   // Success
-  $_SESSION['RemoveGalaSuccess'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RemoveGalaSuccess'] = true;
 } catch (Exception $e) {
-  $_SESSION['RemoveGalaError'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RemoveGalaError'] = true;
 }
 
 header("Location: " . autoUrl("users/" . $id . "/team-manager"));

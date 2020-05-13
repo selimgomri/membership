@@ -29,7 +29,7 @@ if (isset($_POST['squad'])) {
 <div class="container-fluid">
   <h1 class="mb-3">Members</h1>
 
-  <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+  <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
   <p>
     <a href="<?=autoUrl("members/new")?>" class="btn btn-success">
       Add new member

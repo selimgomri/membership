@@ -4,7 +4,7 @@ require 'GoCardlessSetup.php';
 
 $db = app()->db;
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $use_white_background = true;
 $pagetitle = "Direct Debit Mandate";
 
@@ -15,7 +15,7 @@ include BASE_PATH . "views/paymentsMenu.php";
  * Get the user's preferred mandate (if exists)
  */
 $getPreferred = $db->prepare("SELECT MandateID FROM `paymentPreferredMandate` WHERE `UserID` = ?");
-$getPreferred->execute([$_SESSION['UserID']]);
+$getPreferred->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $defaultAcc = null;
 if ($row = $getPreferred->fetch()) {
   $defaultAcc = $row['MandateID'];
@@ -25,7 +25,7 @@ if ($row = $getPreferred->fetch()) {
  * Get all mandates
  */
 $mandateDetails = $db->prepare("SELECT * FROM `paymentMandates` WHERE `UserID` = ? AND `InUse` = ?");
-$mandateDetails->execute([$_SESSION['UserID'], true]);
+$mandateDetails->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], true]);
 
 ?>
 

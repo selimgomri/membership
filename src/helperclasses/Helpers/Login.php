@@ -39,15 +39,15 @@ class Login {
     $getUserDetails->execute([$this->user]);
     $details = $getUserDetails->fetch(\PDO::FETCH_ASSOC);
 
-    $_SESSION['EmailAddress'] = $details['EmailAddress'];
-    $_SESSION['Forename'] = $details['Forename'];
-    $_SESSION['Surname'] = $details['Surname'];
-    $_SESSION['UserID'] = $details['UserID'];
-    $_SESSION['LoggedIn'] = 1;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['EmailAddress'] = $details['EmailAddress'];
+    $_SESSION['TENANT-' . app()->tenant->getId()]['Forename'] = $details['Forename'];
+    $_SESSION['TENANT-' . app()->tenant->getId()]['Surname'] = $details['Surname'];
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'] = $details['UserID'];
+    $_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'] = 1;
 
-    $currentUser = new \User($_SESSION['UserID'], true);
+    $currentUser = new \User($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], true);
 
-    $hash = hash('sha512', time() . $_SESSION['UserID'] . random_bytes(64));
+    $hash = hash('sha512', time() . $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'] . random_bytes(64));
 
     $geo_string = "Location Information Unavailable";
 
@@ -100,7 +100,7 @@ class Login {
     $dbDate = $date->format('Y-m-d H:i:s');
 
     $login_details = [
-      $_SESSION['UserID'],
+      $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
       app('request')->ip(),
       $geo_string,
       $browser,
@@ -127,8 +127,8 @@ class Login {
       'TopUAL'  => null
     ]);
 
-    if (isset($_SESSION['LoginSec'])) {
-      unset($_SESSION['LoginSec']);
+    if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec'])) {
+      unset($_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']);
     }
 
     $secure = true;
@@ -144,7 +144,7 @@ class Login {
 
     // Test if we've seen a login from here before
     $login_before_data = [
-      $_SESSION['UserID'],
+      $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
       app('request')->ip(),
       ucwords(app('request')->browser()),
       ucwords(app('request')->platform())
@@ -161,7 +161,7 @@ class Login {
       $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
       `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'Security')";
       try {
-        $this->db->prepare($notify)->execute([$_SESSION['UserID'], $subject, $message]);
+        $this->db->prepare($notify)->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $subject, $message]);
       } catch (\Exception $e) {
         halt(500);
       }

@@ -4,7 +4,7 @@ use CLSASC\EquivalentTime\EquivalentTime;
 $db = app()->db;
 $tenant = app()->tenant;
 
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 $sex = "";
 if ($_REQUEST["sex"] == "m") {
   $sex = " AND `Gender` = 'Male' ";

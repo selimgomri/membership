@@ -4,7 +4,7 @@ $db = app()->db;
 
 try {
   $query = $db->prepare("SELECT PaymentID FROM payments WHERE UserID = ? ORDER BY `Date` DESC ");
-  $query->execute([$_SESSION['UserID']]);
+  $query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
   $payment = $query->fetchColumn();
 

@@ -4,9 +4,9 @@ $db = app()->db;
 
 use Respect\Validation\Validator as v;
 
-if (isset($_SESSION['AssRegUser']) && $_SESSION['AssRegUser']) {
-  $_SESSION['AssRegUser'] = null;
-  unset($_SESSION['AssRegUser']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']) {
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'] = null;
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']);
 }
 
 $getUserInfo = $db->prepare("SELECT AccessLevel FROM users WHERE EmailAddress = ?");
@@ -25,20 +25,20 @@ if ($status && $info == 'Parent') {
   $getUserId = $db->prepare("SELECT UserID FROM users WHERE EmailAddress = ?");
   $getUserId->execute([$email]);
   
-  $_SESSION['AssRegUser'] = $getUserId->fetchColumn();
-  $_SESSION['AssRegExisting'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'] = $getUserId->fetchColumn();
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegExisting'] = true;
 
   header("Location: " . autoUrl("assisted-registration/select-swimmers"));
 } else if ($status && $info == null) {
   // USER DOES NOT EXIST
-  $_SESSION['AssRegUserEmail'] = $email;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUserEmail'] = $email;
   header("Location: " . autoUrl("assisted-registration/start"));
 } else if (!$status) {
   // INVALID EMAIL ADDRESS
-  $_SESSION['AssRegEmailError'] = 'INV-EMAIL';
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegEmailError'] = 'INV-EMAIL';
   header("Location: " . autoUrl("assisted-registration#get-started"));
 } else {
   // NOT A PARENT ACCOUNT
-  $_SESSION['AssRegEmailError'] = 'NOT-PARENT';
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegEmailError'] = 'NOT-PARENT';
   header("Location: " . autoUrl("assisted-registration#get-started"));
 }

@@ -3,9 +3,9 @@
 $db = app()->db;
 
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $info = null;
-if ($_SESSION['AccessLevel'] != 'Parent' && isset($id) && $id != null) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent' && isset($id) && $id != null) {
   $user = $id;
   $userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
   $userInfo->execute([$id]);
@@ -80,7 +80,7 @@ include BASE_PATH . 'views/header.php';
 
 <div class="container">
 
-  <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
+  <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("users")?>">Users</a></li>
@@ -99,7 +99,7 @@ include BASE_PATH . 'views/header.php';
 
   <div class="row">
     <div class="col-lg-8">
-      <h1>Membership fees<?php if ($_SESSION['AccessLevel'] != 'Parent') { ?> for <?=htmlspecialchars($info['Forename'])?><?php } ?></h1>
+      <h1>Membership fees<?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?> for <?=htmlspecialchars($info['Forename'])?><?php } ?></h1>
       <p class="lead">Club and Swim England membership fees are paid yearly and are due on 1 January.</p>
 
       <p>The fees you're charged are dependent on the number of members linked to this account and the type of each member.</p>

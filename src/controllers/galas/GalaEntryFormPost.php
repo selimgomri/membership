@@ -26,7 +26,7 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
   $swimmer = $swimmerDetails['UserID'];
   $squad = $swimmerDetails['SquadID'];
 
-	if ($swimmer == null || ($_SESSION['AccessLevel'] == 'Parent' && $swimmer != $_SESSION['UserID'])) {
+	if ($swimmer == null || ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $swimmer != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
 		halt(404);
   }
   
@@ -169,15 +169,15 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
       
       $db = app()->db;
       $email = $db->prepare($notify);
-      $email->execute([$_SESSION['UserID'], $subject, $message]);
+      $email->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $subject, $message]);
 
-      $_SESSION['SuccessfulGalaEntry'] = [
+      $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessfulGalaEntry'] = [
         "Gala" => $_POST['gala'],
         "Swimmer" => $_POST['swimmer'],
         'HyTek' => $hyTek
       ];
 
-      if ($_SESSION['AccessLevel'] == 'Parent') {
+      if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
         header("Location: " . autoUrl("galas/entergala"));
       } else {
         header("Location: " . autoUrl("swimmers/" . $_POST['swimmer'] . "/enter-gala-success"));

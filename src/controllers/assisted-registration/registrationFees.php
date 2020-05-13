@@ -3,9 +3,9 @@
 $db = app()->db;
 
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $info = null;
-if ($_SESSION['AccessLevel'] != 'Parent' && isset($id) && $id != null) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent' && isset($id) && $id != null) {
   $user = $id;
   $userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, AccessLevel FROM users WHERE UserID = ?");
   $userInfo->execute([$id]);

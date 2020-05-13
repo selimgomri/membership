@@ -7,17 +7,17 @@ $squad = 'all';
 
 if (isset($_GET['squad'])) {
   // Verify this squad is allowed for the user
-  if ($_SESSION['AccessLevel'] != 'Parent' && $_GET['squad'] == 'all') {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent' && $_GET['squad'] == 'all') {
     $squad = "all";
   } else {
     $squad = (int) $_GET['squad'];
 
-    if ($_SESSION['AccessLevel'] == 'Parent') {
+    if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
 
       // See if this squad is allowed
       $isAllowed = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE User = ? AND Squad = ?");
       $isAllowed->execute([
-        $_SESSION['UserID'],
+        $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
         $squad
       ]);
       if ($isAllowed->fetchColumn() == 0) {
@@ -27,7 +27,7 @@ if (isset($_GET['squad'])) {
         // Now if user has no squads, halt
         $isAllowed = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE User = ?");
         $isAllowed->execute([
-          $_SESSION['UserID']
+          $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
         ]);
         if ($isAllowed->fetchColumn() == 0) {
           // User is not a squad rep

@@ -19,7 +19,7 @@ include BASE_PATH . "views/head.php";
 							<?=$app_name?> wants to access your <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Account.
 						</h1>
 						<p class="lead mb-0 text-truncate">
-							<?=getUserName($_SESSION['UserID'])?> <em><?=$_SESSION['EmailAddress']?></em>
+							<?=getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])?> <em><?=$_SESSION['TENANT-' . app()->tenant->getId()]['EmailAddress']?></em>
 						</p>
 						<hr>
 						<p>

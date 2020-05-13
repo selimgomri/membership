@@ -3,7 +3,7 @@
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $db = app()->db;
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 $sql = $payments = null;
 $count = 0;
@@ -13,7 +13,7 @@ $count = 0;
 
 // Check the thing exists
 
-if ($_SESSION['AccessLevel'] == "Parent") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
   // Check the payment exists and belongs to the user
   $sql = $db->prepare("SELECT COUNT(*) FROM payments WHERE PaymentID = ? AND UserID = ?");
   $sql->execute([$id, $user]);
@@ -56,7 +56,7 @@ if ($payment_info['PMKey'] != null) {
 }
 $pagetitle = htmlspecialchars("Statement #" . $id);
 
-$_SESSION['qr'][0]['text'] = autoUrl("payments/statements/" . htmlspecialchars($id));
+$_SESSION['TENANT-' . app()->tenant->getId()]['qr'][0]['text'] = autoUrl("payments/statements/" . htmlspecialchars($id));
 
 $billDate = null;
 try {

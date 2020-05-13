@@ -3,8 +3,8 @@
 \Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
 $db = app()->db;
 
-if (!isset($_SESSION['GalaPaymentIntent'])) {
+if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'])) {
   halt(404);
 }
 
-handleCompletedGalaPayments($_SESSION['GalaPaymentIntent'], true);
+handleCompletedGalaPayments($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'], true);

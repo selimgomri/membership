@@ -14,7 +14,7 @@ if ($qualification == null) {
 
 $pagetitle = "Edit " . htmlspecialchars($qualification);
 
-$form = $_SESSION['EditQualificationData'];
+$form = $_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationData'];
 
 include BASE_PATH . 'views/header.php';
 
@@ -28,8 +28,8 @@ include BASE_PATH . 'views/header.php';
 
       <?php
 
-      if ($_SESSION['EditQualificationSuccess']) {
-        unset($_SESSION['EditQualificationSuccess']);
+      if ($_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationSuccess']) {
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationSuccess']);
         ?>
 
         <div class="alert alert-success">

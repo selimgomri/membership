@@ -43,7 +43,7 @@ include BASE_PATH . "views/header.php";
         Assign targeted list permissions to <?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?>
       </h1>
 
-      <?php if (isset($_SESSION['AssignListError']) && $_SESSION['AssignListError']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssignListError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssignListError']) { ?>
       <div class="alert alert-danger">
         <p class="mb-0">
           <strong>
@@ -52,7 +52,7 @@ include BASE_PATH . "views/header.php";
         </p>
       </div>
       <?php
-        unset($_SESSION['AssignListError']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssignListError']);
       } ?>
 
       <?php if ($list != null) { ?>

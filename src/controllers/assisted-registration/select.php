@@ -1,13 +1,13 @@
 <?php
 
-$user = $_SESSION['AssRegUser'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'];
 
 $db = app()->db;
 
 $swimmers = $db->query("SELECT MForename `first`, MSurname `last`, SquadName `name`, MemberID `id`, RRTransfer trans FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID IS NULL ORDER BY MemberID DESC, `first` ASC, `last` ASC");
 
 $user = $db->prepare("SELECT Forename `first` FROM users WHERE UserID = ?");
-$user->execute([$_SESSION['AssRegUser']]);
+$user->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']]);
 $user = $user->fetch(PDO::FETCH_ASSOC);
 
 if ($user == null) {
@@ -36,7 +36,7 @@ include BASE_PATH . 'views/header.php';
         </p>
       </div>
 
-      <?php if (isset($_SESSION['AssRegFormError']) && $_SESSION['AssRegFormError']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegFormError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegFormError']) { ?>
       <div class="alert alert-warning">
         <strong>There was a problem with some of the data supplied</strong>
       </div>
@@ -70,8 +70,8 @@ include BASE_PATH . 'views/header.php';
 
 <?php
 
-if (isset($_SESSION['AssRegFormError'])) {
-  unset($_SESSION['AssRegFormError']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegFormError'])) {
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegFormError']);
 }
 
 $footer = new \SCDS\Footer();

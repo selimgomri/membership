@@ -36,7 +36,7 @@ if ($codeOfConduct) {
 $canAccessSquadInfo = false;
 $isAllowed = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE User = ? AND Squad = ?");
 $isAllowed->execute([
-  $_SESSION['UserID'],
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
   $id
 ]);
 if ($isAllowed->fetchColumn() > 0) {
@@ -45,7 +45,7 @@ if ($isAllowed->fetchColumn() > 0) {
 }
 
 $swimmers = null;
-if ($_SESSION['AccessLevel'] != 'Parent' || $canAccessSquadInfo) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent' || $canAccessSquadInfo) {
   $swimmers = $db->prepare("SELECT MemberID id, MForename first, MSurname last, DateOfBirth dob, Forename fn, Surname sn, EmailAddress email, Mobile mob, members.UserID `user` FROM members LEFT JOIN users ON members.UserID = users.UserID WHERE SquadID = ? ORDER BY first ASC, last ASC");
   $swimmers->execute([$id]);
 }
@@ -145,7 +145,7 @@ include BASE_PATH . 'views/header.php';
         This squad has <?=htmlspecialchars($numSwimmers)?> swimmers
       </p>
     </div>
-    <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
     <div class="col text-sm-right">
       <a href="<?=autoUrl("squads/" . $id . "/edit")?>"
         class="btn btn-dark">Edit squad</a>
@@ -180,7 +180,7 @@ include BASE_PATH . 'views/header.php';
         </dd>
       </dl>
 
-      <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
       <?php $members = $squad->getMembers(); ?>
       <h2><?=htmlspecialchars($squad->getName())?> Members</h2>
       <div class="list-group mb-3">
@@ -232,7 +232,7 @@ include BASE_PATH . 'views/header.php';
       </ul>
       <?php } ?>
 
-      <?php if ($_SESSION['AccessLevel'] != "Parent") { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") { ?>
       <?php if ($numSwimmers > 0) { ?>
       <h2>Sex Split</h2>
       <canvas class="mb-3" id="sexSplit" data-data="<?=htmlspecialchars(json_encode($pie))?>"></canvas>
@@ -256,7 +256,7 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new \SCDS\Footer();
-if ($_SESSION['AccessLevel'] != "Parent") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") {
   // $footer->addJs("public/js/Chart.min.js");
   if ($numSwimmers > 0) {
     $footer->addJs("public/js/squads/squad-charts.js");

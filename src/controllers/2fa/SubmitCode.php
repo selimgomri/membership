@@ -24,15 +24,15 @@ if (SCDS\CSRF::verify()) {
 
 $auth_via_google_authenticator;
 try {
-  $auth_via_google_authenticator = $_SESSION['TWO_FACTOR_GOOGLE'] && $ga2fa->verifyKey(getUserOption($_SESSION['2FAUserID'], "GoogleAuth2FASecret"), $_POST['auth']);
+  $auth_via_google_authenticator = $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE'] && $ga2fa->verifyKey(getUserOption($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserID'], "GoogleAuth2FASecret"), $_POST['auth']);
 } catch (Exception $e) {
   $auth_via_google_authenticator = false;
 }
 
-if (($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE']) || $auth_via_google_authenticator && $security_status) {
-  unset($_SESSION['TWO_FACTOR']);
-  unset($_SESSION['TWO_FACTOR_CODE']);
-  unset($_SESSION['TWO_FACTOR_GOOGLE']);
+if (($_POST['auth'] == $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_CODE']) || $auth_via_google_authenticator && $security_status) {
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR']);
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_CODE']);
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE']);
 
   if ($auth_via_google_authenticator) {
     // Do work to prevent replay attacks etc.
@@ -40,30 +40,30 @@ if (($_POST['auth'] == $_SESSION['TWO_FACTOR_CODE']) || $auth_via_google_authent
 
   try {
     $login = new \CLSASC\Membership\Login($db);
-    $login->setUser($_SESSION['2FAUserID']);
-    if ($_SESSION['2FAUserRememberMe']) {
+    $login->setUser($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserID']);
+    if ($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe']) {
       $login->stayLoggedIn();
     }
     $currentUser = app()->user;
     $currentUser = $login->login();
-    $resetFailedLoginCount->execute([$_SESSION['2FAUserID']]);
+    $resetFailedLoginCount->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserID']]);
   } catch (Exception $e) {
     halt(403);
   }
 } else {
-  $_SESSION['ErrorState'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = true;
   if ($security_status == false) {
-    $_SESSION['ErrorState'] = true;
-    $_SESSION['ErrorStateLSVMessage'] = "We were unable to verify the integrity of your login attempt. The site you entered your username and password on may have been attempting to capture your login details. Try reseting your password urgently.";
-    $_SESSION['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['LoginSec']];
+    $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStateLSVMessage'] = "We were unable to verify the integrity of your login attempt. The site you entered your username and password on may have been attempting to capture your login details. Try reseting your password urgently.";
+    $_SESSION['TENANT-' . app()->tenant->getId()]['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']];
   }
 }
 
-if (isset($_SESSION['UserID']) && bool(getUserOption($_SESSION['UserID'], "IsSpotCheck2FA"))) {
-  setUserOption($_SESSION['UserID'], "IsSpotCheck2FA", false);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) && bool(getUserOption($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], "IsSpotCheck2FA"))) {
+  setUserOption($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], "IsSpotCheck2FA", false);
 }
 
-unset($_SESSION['LoginSec']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']);
 $target = ltrim($_POST['target'], '/');
 if ($target == null || $target == "") {
   $target = "";

@@ -2,9 +2,9 @@
 
 $db = app()->db;
 
-setUserOption($_SESSION['UserID'], 'DefaultAccessLevel', $_GET['type']);
-// $_SESSION['SelectedAccessLevel'] = $_GET['type'];
+setUserOption($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 'DefaultAccessLevel', $_GET['type']);
+// $_SESSION['TENANT-' . app()->tenant->getId()]['SelectedAccessLevel'] = $_GET['type'];
 
-$userObject = new \User($_SESSION['UserID'], true);
+$userObject = new \User($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], true);
 
 header("location: " . autoUrl(""));

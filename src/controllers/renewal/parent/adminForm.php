@@ -15,7 +15,7 @@ $terms_Id = app()->tenant->getKey('TermsAndConditions');
 
 $row = [];
 
-$name = getUserName($_SESSION['UserID']);
+$name = getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
 
 if ($partial_reg) {
 	$sql = "SELECT members.MemberID, members.MForename, members.MSurname,
@@ -34,7 +34,7 @@ if ($partial_reg) {
 }
 
 $getInfo = $db->prepare($sql);
-$getInfo->execute([$_SESSION['UserID']]);
+$getInfo->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $row = $getInfo->fetchAll(PDO::FETCH_ASSOC);
 
 $pagetitle = "Administration Form";
@@ -47,9 +47,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
     <div class="col-lg-8">
       <form method="post">
         <h1>Club Administration Form</h1>
-        <?php if (isset($_SESSION['ErrorState'])) {
-					echo $_SESSION['ErrorState'];
-					unset($_SESSION['ErrorState']);
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
+					echo $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+					unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
 				} ?>
         <p class="lead">
           <?php if ($partial_reg) { ?>
@@ -65,7 +65,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
           This form relates to yourself and the members listed below.
         </p>
 
-        <?php echo mySwimmersTable(null, $_SESSION['UserID']); ?>
+        <?php echo mySwimmersTable(null, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']); ?>
 
         <?php } ?>
 

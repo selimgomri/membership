@@ -22,10 +22,10 @@ try {
     }
     $addr = json_encode($addr);
     $currentUser->setUserOption('MAIN_ADDRESS', $addr);
-    $_SESSION['OptionsUpdate'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['OptionsUpdate'] = true;
   }
 } catch (Exception $e) {
-  $_SESSION['OptionsUpdate'] = false;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['OptionsUpdate'] = false;
 }
 
 header("Location: " . autoUrl("my-account/address"));

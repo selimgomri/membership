@@ -14,7 +14,7 @@ if ($swimmer == null) {
   halt(404);
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent' && $swimmer['UserID'] !== $_SESSION['UserID']) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $swimmer['UserID'] !== $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
 	halt(404);
 }
 

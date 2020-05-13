@@ -10,7 +10,7 @@ if (!(password_verify($password, $user['Password']))) {
   halt(404);
 }
 
-$_SESSION['AssRegGuestUser'] = $id;
-$_SESSION['AssRegStage'] = 1;
+$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGuestUser'] = $id;
+$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegStage'] = 1;
 
 header("Location: " . autoUrl("assisted-registration/get-started"));

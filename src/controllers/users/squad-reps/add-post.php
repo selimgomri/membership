@@ -36,10 +36,10 @@ try {
   ]);
 
   // Success
-  $_SESSION['AssignSquadSuccess'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssignSquadSuccess'] = true;
   header("Location: " . autoUrl("users/" . $id . "/rep"));
 } catch (Exception $e) {
   // Success
-  $_SESSION['AssignSquadError'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssignSquadError'] = true;
   header("Location: " . autoUrl("users/" . $id . "/rep/add"));
 }

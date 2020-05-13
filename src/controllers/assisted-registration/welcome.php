@@ -43,13 +43,13 @@ include BASE_PATH . 'views/header.php';
       <p class="lead">First we'll ask you for the parent's email address.</p>
       <p>This let's us check if they already have an account. If they don't we'll ask you some more details and make a new account. If they do, we'll take you straight to the select swimmers page.</p>
 
-      <?php if (isset($_SESSION['AssRegEmailError'])) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegEmailError'])) { ?>
       <div class="alert alert-danger">
-        <?php if ($_SESSION['AssRegEmailError'] == 'INV-EMAIL') { ?>
+        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegEmailError'] == 'INV-EMAIL') { ?>
         <strong>The email address provided was not valid</strong>
         <?php } else { ?>
         <strong>A user already exists but is not a parent account</strong>
-        <?php } unset($_SESSION['AssRegEmailError']); ?>
+        <?php } unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegEmailError']); ?>
       </div>
       <?php } ?>
 

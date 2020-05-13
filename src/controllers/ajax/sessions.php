@@ -7,7 +7,7 @@ if (!isset($_POST["action"])) {
 $db = app()->db;
 $tenant = app()->tenant;
 
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 $count = 0;
 
 // A function is used to produce the View/Edit and Add Sections Stuff

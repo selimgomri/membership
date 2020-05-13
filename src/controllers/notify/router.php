@@ -3,10 +3,10 @@
 $db = app()->db;
 
 $rep = false;
-if ($_SESSION['AccessLevel'] == 'Parent') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
 	$getSquadCount = $db->prepare("SELECT COUNT(*) FROM squads INNER JOIN squadReps ON squads.SquadID = squadReps.Squad AND squadReps.User = ?");
 	$getSquadCount->execute([
-		$_SESSION['UserID']
+		$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
 	]);
 	if ($getSquadCount->fetchColumn() > 0) {
 		$rep = true;
@@ -14,14 +14,14 @@ if ($_SESSION['AccessLevel'] == 'Parent') {
 
 	$getListCount = $db->prepare("SELECT COUNT(*) FROM `targetedLists` INNER JOIN listSenders ON listSenders.List = targetedLists.ID WHERE listSenders.User = ?");
 	$getListCount->execute([
-		$_SESSION['UserID']
+		$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
 	]);
 	if ($getListCount->fetchColumn() > 0) {
 		$rep = true;
 	}
 }
 
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 
 if ($access != "Admin" && $access != "Coach" && $access != "Galas" && !$rep) {
 	$this->get('/', function() {
@@ -68,7 +68,7 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
 		include 'ReplyToPost.php';
 	});
 
-  if ($_SESSION['AccessLevel'] == "Admin") {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") {
   	$this->get('/pending', function() {
   		
   		include 'EmailList.php';
@@ -135,7 +135,7 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
 		});
 	}
 
-	if ($_SESSION['AccessLevel'] == "Admin") {
+	if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") {
 		$this->get('/sms', function() {
 			$db = app()->db;
 			include 'SMSList.php';

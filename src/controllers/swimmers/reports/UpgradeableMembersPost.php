@@ -43,10 +43,10 @@ try {
 
   $db->commit();
   if ($changed) {
-    $_SESSION['CatChangesSavedSuccessfully'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['CatChangesSavedSuccessfully'] = true;
   }
 } catch (Exception $e) {
-  $_SESSION['CatChangesSaveError'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['CatChangesSaveError'] = true;
   $db->rollBack();
 }
 

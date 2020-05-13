@@ -3,20 +3,20 @@
 $db = app()->db;
 
 $query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ? AND Invited = ?");
-$query->execute([$_SESSION['AC-Registration']['Hash'], true]);
+$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AC-Registration']['Hash'], true]);
 
 if ($query->fetchColumn() != 1) {
   halt(404);
 }
 
 $query = $db->prepare("SELECT First, Last, Email, Hash FROM joinParents WHERE Hash = ?");
-$query->execute([$_SESSION['AC-Registration']['Hash']]);
+$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AC-Registration']['Hash']]);
 
 $parent = $query->fetch(PDO::FETCH_ASSOC);
 
-$value = $_SESSION['UserDetailsPostData'];
-if (isset($_SESSION['UserDetailsPostData'])) {
-  unset($_SESSION['UserDetailsPostData']);
+$value = $_SESSION['TENANT-' . app()->tenant->getId()]['UserDetailsPostData'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserDetailsPostData'])) {
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['UserDetailsPostData']);
 } else {
   $value['forename'] = $parent['First'];
   $value['surname'] = $parent['Last'];

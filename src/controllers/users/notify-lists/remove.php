@@ -36,9 +36,9 @@ try {
   ]);
 
   // Success
-  $_SESSION['RemoveSquadSuccess'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RemoveSquadSuccess'] = true;
 } catch (Exception $e) {
-  $_SESSION['RemoveSquadError'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RemoveSquadError'] = true;
 }
 
 header("Location: " . autoUrl("users/" . $id . "/rep"));

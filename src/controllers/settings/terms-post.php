@@ -15,9 +15,9 @@ try {
     app()->tenant->setKey('WelcomeLetter', $_POST['WelcomeLetter']);
   }
 
-  $_SESSION['PCC-SAVED'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED'] = true;
 } catch (Exception $e) {
-  $_SESSION['PCC-ERROR'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR'] = true;
 }
 
 header("Location: " . autoUrl("settings/codes-of-conduct/terms-and-conditions"));

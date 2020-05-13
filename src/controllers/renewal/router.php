@@ -1,6 +1,6 @@
 <?php
 
-if ($_SESSION['AccessLevel'] == "Parent") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 	// Renewal Home
 	$this->get('/', function() {
 		
@@ -85,7 +85,7 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 	});
 }
 
-if ($_SESSION['AccessLevel'] == "Admin") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") {
 	$this->get('/', function() {
 		include 'admin/home.php';
 	});

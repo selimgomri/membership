@@ -4,7 +4,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $db = app()->db;
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 $extra = $db->prepare("SELECT * FROM extras WHERE ExtraID = ?");
 $extra->execute([$id]);

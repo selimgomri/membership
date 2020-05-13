@@ -153,7 +153,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
 function getAttendanceByID($link = null, $id, $weeks = "all") {
   $db = app()->db;
   $hideAttendance = !bool(app()->tenant->getKey('HIDE_MEMBER_ATTENDANCE'));
-  if ($_SESSION['AccessLevel'] != 'Parent' || $hideAttendance) {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent' || $hideAttendance) {
     $output = "";
     $startWeek = 1;
 
@@ -1114,8 +1114,8 @@ function isSubscribed($user, $email_type) {
 
 function updateSubscription($post, $list, $user = null) {
 	$db = app()->db;
-  if (isset($_SESSION['UserID'])) {
-    $user = $_SESSION['UserID'];
+  if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
+    $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
   }
 	$email = 0;
 	$email_update = false;
@@ -1125,7 +1125,7 @@ function updateSubscription($post, $list, $user = null) {
 
 	if ($email != isSubscribed($user, $list)) {
 		$email_update = true;
-		$_SESSION['OptionsUpdate'] = true;
+		$_SESSION['TENANT-' . app()->tenant->getId()]['OptionsUpdate'] = true;
 	}
 
 	$sql = "SELECT COUNT(*) FROM `notifyOptions` WHERE `UserID` = ? AND `EmailType` = ?";
@@ -1194,11 +1194,11 @@ function setUserOption($userID, $option, $value) {
 $count = 0;
 
 /*
-if ( (empty($_SESSION['LoggedIn']) || empty($_SESSION['Username'])) && ($preventLoginRedirect != true)) {
+if ( (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) || empty($_SESSION['TENANT-' . app()->tenant->getId()]['Username'])) && ($preventLoginRedirect != true)) {
   // Allow access to main page
   header("Location: " . autoUrl("login.php"));
 }
-elseif (((!empty($_SESSION['LoggedIn'])) || (!empty($_SESSION['Username']))) && ($preventLoginRedirect == true)) {
+elseif (((!empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) || (!empty($_SESSION['TENANT-' . app()->tenant->getId()]['Username']))) && ($preventLoginRedirect == true)) {
   // Don't show login etc if logged in
   header("Location: " . autoUrl(""));
 }

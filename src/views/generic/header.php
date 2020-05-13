@@ -122,13 +122,13 @@ if (isset($customBackground) && $customBackground) {
     </div>
     <?php } ?>
 
-    <?php if (isset($_SESSION['UserSimulation'])) { ?>
+    <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserSimulation'])) { ?>
     <div class="bg-dark text-white py-2 d-print-none">
       <div class="<?=$container_class?>">
         <p class="mb-0">
           <strong>
             You are in User Simulation Mode simulating <?=
-              $_SESSION['UserSimulation']['SimUserName'] ?>
+              $_SESSION['TENANT-' . app()->tenant->getId()]['UserSimulation']['SimUserName'] ?>
           </strong>
         </p>
         <p class="mb-0">
@@ -148,8 +148,8 @@ if (isset($customBackground) && $customBackground) {
       $edit_link = autoUrl("people/me");
     }
 
-    if (isset($allow_edit) && $allow_edit && (($_SESSION['AccessLevel'] != "Parent" &&
-    $_SESSION['AccessLevel'] != "Coach" && $edit_link != null) || $page_is_mine)) { ?>
+    if (isset($allow_edit) && $allow_edit && (($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent" &&
+    $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Coach" && $edit_link != null) || $page_is_mine)) { ?>
     <div class="bg-dark box-shadow py-2 d-print-none">
       <div class="<?=$container_class?>">
         <p class="mb-0">
@@ -164,7 +164,7 @@ if (isset($customBackground) && $customBackground) {
     <?php
 
     $headerLink = autoUrl("");
-    if (isset($_SESSION['UserID']) && $_SESSION['UserID'] % 2 == 0) {
+    if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'] % 2 == 0) {
       $headerLink = app()->tenant->getKey('CLUB_WEBSITE');
     }
 
@@ -181,7 +181,7 @@ if (isset($customBackground) && $customBackground) {
         </div>
       </div>
 
-      <?php if (!isset($_SESSION['UserID']) || !user_needs_registration($_SESSION['UserID'])) { ?>
+      <?php if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) || !user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) { ?>
       <div class="<?=$container_class?>">
         <div class="">
           <div class="">
@@ -189,7 +189,7 @@ if (isset($customBackground) && $customBackground) {
         d-print-none justify-content-between px-0" role="navigation">
 
               <a class="navbar-brand d-lg-none" href="<?=htmlspecialchars(autoUrl(""))?>">
-                <?php if (isset($_SESSION['AccessLevel']) && $_SESSION['AccessLevel'] == "Parent") { ?>
+                <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { ?>
                 My Membership
                 <?php } else { ?>
                 Club Membership
@@ -216,7 +216,7 @@ if (isset($customBackground) && $customBackground) {
   
   </div>
 
-    <?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
+    <?php if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) || !$_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) { ?>
     <div class="have-full-height">
     <?php } else { ?>
     <div class="have-full-height">

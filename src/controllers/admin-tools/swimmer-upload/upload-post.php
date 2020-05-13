@@ -18,13 +18,13 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
 
   if (bool($_FILES['file-upload']['error'])) {
     // Error
-    $_SESSION['UploadError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
   } else if ($_FILES['file-upload']['type'] != 'text/csv' && $_FILES['file-upload']['type'] != 'application/vnd.ms-excel') {
     // Probably not a CSV
-    $_SESSION['UploadError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
   } else if ($_FILES['file-upload']['size'] > 30000) {
     // Too large, stop
-    $_SESSION['TooLargeError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError'] = true;
   } else {
     $failedSwimmers = [];
     try {
@@ -77,19 +77,19 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
       }
 
       $db->commit();
-      $_SESSION['UploadSuccess'] = true;
+      $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess'] = true;
     } catch (Exception $e) {
       $db->rollBack();
-      $_SESSION['UploadError'] = true;
+      $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
     }
 
     if (sizeof($failedSwimmers) > 0) {
-      $_SESSION['FailedSwimmers'] = $failedSwimmers;
+      $_SESSION['TENANT-' . app()->tenant->getId()]['FailedSwimmers'] = $failedSwimmers;
     }
 
   }
 } else {
-  $_SESSION['UploadError'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
 }
 
 header("Location: " . autoUrl("admin/member-upload"));

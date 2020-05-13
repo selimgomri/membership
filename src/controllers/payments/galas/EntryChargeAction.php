@@ -130,15 +130,15 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 			} catch (Exception $e) {
 				// A problem occured
 				$db->rollBack();
-				$_SESSION['ChargeUsersFailure'] = true;
+				$_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersFailure'] = true;
 			}
 		} else if ($amount > 15000) {
-			$_SESSION['OverhighChargeAmount'][$entry['EntryID']] = true;
+			$_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'][$entry['EntryID']] = true;
 		}
 	}
 }
 
-if (!isset($_SESSION['ChargeUsersFailure'])) {
-	$_SESSION['ChargeUsersSuccess'] = true;
+if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersFailure'])) {
+	$_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersSuccess'] = true;
 }
 header("Location: " . autoUrl("payments/galas/" . $id));

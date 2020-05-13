@@ -51,8 +51,8 @@ class User extends Person {
 
       if ($defaultAccessLevel != null && in_array($defaultAccessLevel, $this->permissions)) {
         $this->accessLevel = $defaultAccessLevel;
-      } else if (isset($_SESSION['AccessLevel']) && in_array($_SESSION['AccessLevel'], $this->permissions)) {
-        $this->accessLevel = $_SESSION['AccessLevel'];
+      } else if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && in_array($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'], $this->permissions)) {
+        $this->accessLevel = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
       } else if (in_array('Admin', $this->permissions)) {
         $this->accessLevel = $defaultAccessLevel;
       } else {
@@ -67,10 +67,10 @@ class User extends Person {
 
       if ($this->setSession) {
         // Set legacy user details
-        $_SESSION['Forename'] = $this->forename;
-        $_SESSION['Surname'] = $this->surname;
-        $_SESSION['EmailAddress'] = $this->emailAddress;
-        $_SESSION['AccessLevel'] = $this->accessLevel;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['Forename'] = $this->forename;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['Surname'] = $this->surname;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['EmailAddress'] = $this->emailAddress;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] = $this->accessLevel;
       }
     } else {
       throw new Exception();

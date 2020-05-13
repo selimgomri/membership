@@ -14,25 +14,25 @@ $expMonth = date("m");
 $expYear = date("Y");
 
 $customer = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
-$customer->execute([$_SESSION['UserID']]);
+$customer->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $customerId = $customer->fetchColumn();
 
 $numberOfCards = $db->prepare("SELECT COUNT(*) `count`, stripePayMethods.ID FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND Reusable = ? AND (ExpYear > ? OR (ExpYear = ? AND ExpMonth >= ?))");
-$numberOfCards->execute([$_SESSION['UserID'], 1, $expYear, $expYear, $expMonth]);
+$numberOfCards->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 1, $expYear, $expYear, $expMonth]);
 $countCards = $numberOfCards->fetch(PDO::FETCH_ASSOC);
 
 $getCards = $db->prepare("SELECT stripePayMethods.ID, `MethodID`, stripePayMethods.Customer, stripePayMethods.Last4, stripePayMethods.Brand FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND Reusable = ? AND (ExpYear > ? OR (ExpYear = ? AND ExpMonth >= ?)) ORDER BY `Name` ASC");
-$getCards->execute([$_SESSION['UserID'], 1, $expYear, $expYear, $expMonth]);
+$getCards->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 1, $expYear, $expYear, $expMonth]);
 $cards = $getCards->fetchAll(PDO::FETCH_ASSOC);
 
 $methodId = $customerID = null;
 
 $selected = null;
-if (isset($_SESSION['GalaPaymentMethodID'])) {
-  $selected = $_SESSION['GalaPaymentMethodID'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentMethodID'])) {
+  $selected = $_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentMethodID'];
 
   foreach ($cards as $card) {
-    if ($card['ID'] == $_SESSION['GalaPaymentMethodID']) {
+    if ($card['ID'] == $_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentMethodID']) {
       $methodId = $card['MethodID'];
       $customerID = $card['Customer'];
     }
@@ -64,14 +64,14 @@ $swimsArray = [
 $rowArray = [1, null, null, null, null, 2, 1,  null, 2, 1, null, 2, 1, null, 2, 1, null, null, 2];
 $rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 2, "Butterfly", null, 2, "Freestyle", null, 2, "Individual Medley", null, null, 2];
 
-if (!isset($_SESSION['PaidEntries'])) {
+if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['PaidEntries'])) {
   halt(404);
 }
 
 $intent = null;
 
-if (isset($_SESSION['GalaPaymentIntent'])) {
-  $intent = \Stripe\PaymentIntent::retrieve($_SESSION['GalaPaymentIntent']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'])) {
+  $intent = \Stripe\PaymentIntent::retrieve($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent']);
 } else {
   header("Location: " . autoUrl("galas/pay-for-entries"));
   return;
@@ -91,21 +91,21 @@ if ($intent->status == 'succeeded') {
 
 if ($methodId != null && $customerID != null) {
   $intent = \Stripe\PaymentIntent::update(
-    $_SESSION['GalaPaymentIntent'], [
+    $_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'], [
       'payment_method' => $methodId,
       'customer' => $customerID,
     ]
   );
 } else if ($customerId != null) {
   $intent = \Stripe\PaymentIntent::update(
-    $_SESSION['GalaPaymentIntent'], [
+    $_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'], [
       'customer' => $customerId,
     ]
   );
 }
 
-if (!isset($_SESSION['GalaPaymentMethodID'])) {
-  $_SESSION['AddNewCard'] = true;
+if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentMethodID'])) {
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AddNewCard'] = true;
 }
 
 $getEntriesByPI = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE StripePayment = ?");

@@ -8,7 +8,7 @@ $data = json_decode($output);
 $squads = null;
 
 $leavers = app()->tenant->getKey('LeaversSquad');
-if ($_SESSION['AccessLevel'] != 'Parent') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') {
   $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads WHERE `SquadID` != ? ORDER BY SquadFee DESC, `name` ASC");
   $squads->execute([
     $leavers
@@ -16,7 +16,7 @@ if ($_SESSION['AccessLevel'] != 'Parent') {
 } else {
   $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads INNER JOIN squadReps ON squads.SquadID = squadReps.Squad WHERE squadReps.User = ? AND SquadID != ? ORDER BY SquadFee DESC, `name` ASC");
   $squads->execute([
-    $_SESSION['UserID'],
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
     $leavers
   ]);
 }

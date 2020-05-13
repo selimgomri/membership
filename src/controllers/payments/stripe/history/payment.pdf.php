@@ -102,7 +102,7 @@ $paymentItems->execute([$id]);
 
 $pm = $payment->fetch(PDO::FETCH_ASSOC);
 
-if ($pm == null || ($_SESSION['AccessLevel'] != 'Admin' && $pm['User'] != $_SESSION['UserID'])) {
+if ($pm == null || ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Admin' && $pm['User'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
   halt(404);
 }
 

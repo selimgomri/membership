@@ -32,9 +32,9 @@ try {
 
   $galaData->save();
 
-  $_SESSION['PricesSaved'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['PricesSaved'] = true;
 } catch (Exception $e) {
-  $_SESSION['PricesNotSaved'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['PricesNotSaved'] = true;
 }
 
 header("Location: " . autoUrl("galas/" . $id . "/pricing-and-events"));

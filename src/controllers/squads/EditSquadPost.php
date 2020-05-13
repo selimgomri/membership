@@ -11,10 +11,10 @@ $getKey->execute([
 $squadDeleteKey = $getKey->fetchColumn();
 
 if (mb_strlen(trim($_POST['squadName'])) == 0) {
-  $_SESSION['UpdateError'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError'] = true;
 }
 if ($_POST['squadFee'] < 0) {
-  $_SESSION['UpdateError'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError'] = true;
 }
 
 if ($_POST['squadDeleteDanger'] ==  $squadDeleteKey) {
@@ -26,13 +26,13 @@ if ($_POST['squadDeleteDanger'] ==  $squadDeleteKey) {
       $tenant->getId()
     ]);
   } catch (Exception $e) {
-    $_SESSION['UpdateDatabaseError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UpdateDatabaseError'] = true;
   }
 
-  if ($_SESSION['UpdateDatabaseError']) {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateDatabaseError']) {
     header("Location: " . autoUrl("squads/" . $id . "/edit"));
   } else {
-    $_SESSION['DeleteSuccess'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['DeleteSuccess'] = true;
     header("Location: " . autoUrl("squads"));
   }
 } else {
@@ -48,9 +48,9 @@ if ($_POST['squadDeleteDanger'] ==  $squadDeleteKey) {
       $id,
       $tenant->getId()
     ]);
-    $_SESSION['UpdateSuccess'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess'] = true;
   } catch (Exception $e) {
-    $_SESSION['UpdateDatabaseError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UpdateDatabaseError'] = true;
   }
   header("Location: " . autoUrl("squads/" . $id . "/edit"));
 }

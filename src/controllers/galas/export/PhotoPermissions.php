@@ -3,9 +3,9 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
-canView('TeamManager', $_SESSION['UserID'], $id);
+canView('TeamManager', $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id);
 
 $query = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ? AND Tenant = ?");
 $query->execute([

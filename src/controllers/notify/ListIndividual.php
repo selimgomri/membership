@@ -10,7 +10,7 @@ $getUsers->execute([
 ]);
 $userDetails = $getUsers->fetch(PDO::FETCH_ASSOC);
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 $list = $db->prepare("SELECT * FROM `targetedLists` WHERE `ID` = ? AND Tenant = ?");
 $list->execute([

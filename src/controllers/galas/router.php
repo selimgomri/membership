@@ -1,5 +1,5 @@
 <?php
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 
 $this->get('/all-galas', function() {
 	include 'list.php';
@@ -98,7 +98,7 @@ if ($access == "Parent") {
 
 	// Enter a gala
 	$this->group(['/entergala'], function () {
-		if (isset($_SESSION['SuccessfulGalaEntry'])) {
+		if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessfulGalaEntry'])) {
 			$this->get('/', function() {
 				include 'GalaEntrySuccess.php';
 			});
@@ -322,7 +322,7 @@ if ($access == "Galas" || $access == "Admin") {
 	});
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
 	$this->get('/{id}:int/indicate-availability', function($id) {
 		include 'indicate-openness/session-select.php';
 	});

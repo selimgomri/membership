@@ -7,6 +7,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
 </div>
 
 <!-- THE HEPPELL FOOTER -->
+<?php if ($this->chrome) { ?>
 <footer>
   <div
     class="cls-global-footer cls-global-footer-inverse cls-global-footer-body d-print-none mt-3 pb-0 focus-highlight">
@@ -112,8 +113,10 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
       </div>
     </div>
   </div><!-- /.container -->
-  <div id="app-js-info" data-root="<?=htmlspecialchars(autoUrl(""))?>" data-service-worker-url="<?=htmlspecialchars(autoUrl("sw.js"))?>"></div>
 </footer>
+<?php } ?>
+
+<div id="app-js-info" data-root="<?=htmlspecialchars(autoUrl(""))?>" data-service-worker-url="<?=htmlspecialchars(autoUrl("sw.js"))?>"></div>
 
 <!-- Modals and Other Hidden HTML -->
 <?php
@@ -130,10 +133,7 @@ try {
 
 ?>
 <script rel="preload" src="<?=htmlspecialchars($script)?>"></script>
-<?php if (!isset($_SESSION['PWA']) || !$_SESSION['PWA']) { ?>
 <script async src="<?=htmlspecialchars(autoUrl("public/js/Cookies.js"))?>"></script>
-<script src="<?=htmlspecialchars(autoUrl("public/js/app.js"))?>"></script>
-<?php } ?>
 
 <?php if (isset($this->js)) { ?>
   <!-- Load per page JS -->

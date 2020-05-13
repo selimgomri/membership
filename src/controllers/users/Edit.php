@@ -58,35 +58,35 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
     <div class="col-lg-8">
 
-      <?php if (isset($_SESSION['Success']) && $_SESSION['Success']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['Success']) && $_SESSION['TENANT-' . app()->tenant->getId()]['Success']) { ?>
       <div class="alert alert-success">
         <p class="mb-0">User details updated.</p>
       </div>
-      <?php unset($_SESSION['Success']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['Success']); } ?>
 
-      <?php if (isset($_SESSION['InvalidEmail']) && $_SESSION['InvalidEmail']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['InvalidEmail']) && $_SESSION['TENANT-' . app()->tenant->getId()]['InvalidEmail']) { ?>
       <div class="alert alert-danger">
         <p class="mb-0">The email you entered is invalid.</p>
       </div>
-      <?php unset($_SESSION['InvalidEmail']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['InvalidEmail']); } ?>
 
-      <?php if (isset($_SESSION['UsedEmail']) && $_SESSION['UsedEmail']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UsedEmail']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UsedEmail']) { ?>
       <div class="alert alert-danger">
         <p class="mb-0">The email you entered is already in use by another account.</p>
       </div>
-      <?php unset($_SESSION['UsedEmail']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['UsedEmail']); } ?>
 
-      <?php if (isset($_SESSION['InvalidPhone']) && $_SESSION['InvalidPhone']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['InvalidPhone']) && $_SESSION['TENANT-' . app()->tenant->getId()]['InvalidPhone']) { ?>
       <div class="alert alert-danger">
         <p class="mb-0">The phone number you entered is invalid.</p>
       </div>
-      <?php unset($_SESSION['InvalidPhone']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['InvalidPhone']); } ?>
 
-      <?php if (isset($_SESSION['GeneralError']) && $_SESSION['GeneralError']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['GeneralError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['GeneralError']) { ?>
       <div class="alert alert-danger">
         <p class="mb-0">An unspecified error occurred. Please try again.</p>
       </div>
-      <?php unset($_SESSION['GeneralError']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['GeneralError']); } ?>
 
       <form method="post" id="main-form" class="needs-validation" novalidate>
         <h2>Personal details</h2>

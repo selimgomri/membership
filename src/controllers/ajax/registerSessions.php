@@ -17,7 +17,7 @@ if (!isset($_REQUEST["date"]) || !v::date()->validate($_REQUEST["date"])) {
 
 $date = new DateTime($_REQUEST["date"], new DateTimeZone('Europe/London'));
 
-if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Coach") {
   if ((isset($_REQUEST["squadID"]) && v::intVal()->validate($_REQUEST["squadID"])) || isset($preload) && $preload && $getSessions) {
     // get the squadID parameter from URL
     $squadID = $session = null;

@@ -7,7 +7,7 @@ if ($renewal_trap) {
 	$url_path = "renewal/emergencycontacts";
 }
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 $contact = new EmergencyContact();
 $contact->connect($db);
@@ -37,6 +37,6 @@ try {
 	}
 	
 } catch (Exception $e) {
-	$_SESSION['PhoneError'] = true;
+	$_SESSION['TENANT-' . app()->tenant->getId()]['PhoneError'] = true;
 	header("Location: " . autoUrl($url_path . "/edit/" . $id));
 }

@@ -12,7 +12,7 @@ try {
 
 $user = $member->getUser();
 
-if ($_SESSION['AccessLevel'] == 'Parent' && (!$user || $user->getId() != $_SESSION['UserID'])) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && (!$user || $user->getId() != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
   halt(404);
 }
 
@@ -49,7 +49,7 @@ include BASE_PATH . 'views/header.php';
     <?php if (sizeof($squads) > 0) { ?><?php for ($i=0; $i < sizeof($squads); $i++) { ?><?=htmlspecialchars($squads[$i]->getName())?><?php if ($i < sizeof($squads)-1) { ?>, <?php } ?><?php } ?> Squad<?php if (sizeof($squads) != 1) { ?>s<?php } ?><?php } else { ?>Not assigned to any squads<?php } ?>
   </p>
 
-  <?php if ($user && $_SESSION['AccessLevel'] != 'Parent') { ?>
+  <?php if ($user && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
   <p>
     <div class="dropdown">
       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -58,7 +58,7 @@ include BASE_PATH . 'views/header.php';
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("members/" . $id . "/enter-gala"))?>">Enter a gala</a>
         <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("members/" . $id . "/contact-parent"))?>">Email user/parent/guardian</a>
-        <?php if ($_SESSION['AccessLevel'] != 'Galas') { ?>
+        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') { ?>
         <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("members/" . $id . "/new-move"))?>">New squad move</a>
         <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("members/" . $id . "/parenthelp"))?>">Print access key</a>
         <?php } ?>
@@ -155,7 +155,7 @@ include BASE_PATH . 'views/header.php';
         </button>
       </p> -->
 
-      <?php if ($_SESSION['AccessLevel'] == 'Parent' || $_SESSION['AccessLevel'] == 'Admin') { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
       <p>
         <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/edit"))?>" class="btn btn-success">
           Edit basic details
@@ -208,7 +208,7 @@ include BASE_PATH . 'views/header.php';
         </button>
       </p> -->
 
-      <?php if ($_SESSION['AccessLevel'] == 'Parent' || $_SESSION['AccessLevel'] == 'Admin') { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
       <p>
         <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/medical"))?>" class="btn btn-success">
           Edit medical notes
@@ -318,7 +318,7 @@ include BASE_PATH . 'views/header.php';
         <?php } ?>
       </div>
 
-      <?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>
       <p>
         <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/edit"))?>" class="btn btn-success">
           Edit photography preferences
@@ -350,7 +350,7 @@ include BASE_PATH . 'views/header.php';
         </button>
       </p> -->
 
-      <?php if ($_SESSION['AccessLevel'] == 'Admin' || $_SESSION['AccessLevel'] == 'Coach') { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Coach') { ?>
       <p>
         <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/new-move"))?>" class="btn btn-success">
           Manage squads

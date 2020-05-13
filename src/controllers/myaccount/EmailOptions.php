@@ -8,13 +8,13 @@ $currentUser = app()->user;
 $getExtraEmails = null;
 try {
   $getExtraEmails = $db->prepare("SELECT ID, Name, EmailAddress, Verified FROM notifyAdditionalEmails WHERE UserID = ?");
-  $getExtraEmails->execute([$_SESSION['UserID']]);
+  $getExtraEmails->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 } catch (Exception $e) {}
 
 $sql = "SELECT `EmailAddress`, `EmailComms` FROM `users` WHERE `UserID` = ?";
 try {
 	$query = $db->prepare($sql);
-	$query->execute([$_SESSION['UserID']]);
+	$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 } catch (Exception $e) {
 	halt(500);
 }
@@ -28,17 +28,17 @@ if ($row['EmailComms']) {
 }
 
 $emailChecked_security;
-if (isSubscribed($_SESSION['UserID'], 'Security')) {
+if (isSubscribed($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 'Security')) {
 	$emailChecked_security = " checked ";
 }
 
 $emailChecked_payments;
-if (isSubscribed($_SESSION['UserID'], 'Payments')) {
+if (isSubscribed($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 'Payments')) {
 	$emailChecked_payments = " checked ";
 }
 
 $emailChecked_new_member;
-if ($_SESSION['AccessLevel'] == "Admin" && isSubscribed($_SESSION['UserID'], 'NewMember')) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" && isSubscribed($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 'NewMember')) {
 	$emailChecked_new_member = " checked ";
 }
 
@@ -47,7 +47,7 @@ $email = $row['EmailAddress'];
 
 $pagetitle = "Email Options";
 include BASE_PATH . "views/header.php";
-  $userID = $_SESSION['UserID'];
+  $userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 ?>
 <div class="container-fluid">
   <div class="row justify-content-between">
@@ -61,25 +61,25 @@ include BASE_PATH . "views/header.php";
       <h1>Manage Email Options</h1>
       <p class="lead">Manage your email address and email options.</p>
 
-    	<?php if (isset($_SESSION['OptionsUpdate']) && $_SESSION['OptionsUpdate']) { ?>
+    	<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['OptionsUpdate']) && $_SESSION['TENANT-' . app()->tenant->getId()]['OptionsUpdate']) { ?>
     		<div class="alert alert-success">
     			<p class="mb-0">
     				<strong>We've successfully updated your email options</strong>
     			</p>
     		</div>
-    	<?php unset($_SESSION['OptionsUpdate']);
+    	<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['OptionsUpdate']);
     	} ?>
 
-			<?php if (isset($_SESSION['EmailUpdateError'])) { ?>
+			<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateError'])) { ?>
     		<div class="alert alert-success">
     			<p class="mb-0">
-    				<?=$_SESSION['EmailUpdateError']?>
+    				<?=$_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateError']?>
     			</p>
     		</div>
-    	<?php unset($_SESSION['EmailUpdateError']);
+    	<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateError']);
     	} ?>
 
-    	<?php if (isset($_SESSION['EmailUpdate']) && $_SESSION['EmailUpdate']) { ?>
+    	<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdate']) && $_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdate']) { ?>
     		<div class="alert alert-success">
     			<p class="mb-0">
     				<strong>Just one more step to update your email address</strong>
@@ -89,8 +89,8 @@ include BASE_PATH . "views/header.php";
     				follow that link to confirm your new email address.
     			</p>
     		</div>
-    	<?php unset($_SESSION['EmailUpdate']);
-    	} else if (isset($_SESSION['EmailUpdate'])) { ?>
+    	<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdate']);
+    	} else if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdate'])) { ?>
     		<div class="alert alert-danger">
     			<p class="mb-0">
     				<strong>The email address provided is not valid</strong>
@@ -99,15 +99,15 @@ include BASE_PATH . "views/header.php";
     				Please try again
     			</p>
     		</div>
-    		<?php unset($_SESSION['EmailUpdate']);
+    		<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdate']);
     	} ?>
 
-    	<?php if (isset($_SESSION['EmailUpdateNew'])) { ?>
+    	<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateNew'])) { ?>
     		<div class="alert alert-info">
     			<p class="mb-0">
     				<strong>Once verified, your account email
     				address will change to
-    				<?=htmlentities($_SESSION['EmailUpdateNew'])?></strong>
+    				<?=htmlentities($_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateNew'])?></strong>
     			</p>
     		</div>
     	<?php } ?>
@@ -117,8 +117,8 @@ include BASE_PATH . "views/header.php";
     			<div class="form-group">
     		    <label for="EmailAddress">Your email address</label>
     		    <input type="email" class="form-control" id="EmailAddress" name="EmailAddress" placeholder="name@example.com" value="<?=htmlentities($email)?>">
-    				<?php if (isset($_SESSION['EmailUpdateNew'])) { ?>
-    				<small class="form-text">Once verified, your account email address will change to <?=htmlentities($_SESSION['EmailUpdateNew'])?></small>
+    				<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateNew'])) { ?>
+    				<small class="form-text">Once verified, your account email address will change to <?=htmlentities($_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateNew'])?></small>
     				<?php } ?>
     		  </div>
 
@@ -195,15 +195,15 @@ include BASE_PATH . "views/header.php";
 
         <form id="cc" method="post" action="<?=autoUrl("my-account/email/cc/new")?>" class="needs-validation" novalidate>
 
-					<?php if (isset($_SESSION['VerifyEmailError']) && bool($_SESSION['VerifyEmailError'])) { ?>
+					<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['VerifyEmailError']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['VerifyEmailError'])) { ?>
 					<div class="alert alert-warning">
 						<p class="mb-0"><strong>There was a problem with the information you supplied.</strong></p>
 						<p class="mb-0">Please try again.</p>
 					</div>
-					<?php unset($_SESSION['VerifyEmailError']); } ?>
+					<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['VerifyEmailError']); } ?>
 
-					<?php if (isset($_SESSION['DeleteCCSuccess'])) {
-						unset($_SESSION['DeleteCCSuccess']); ?>
+					<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['DeleteCCSuccess'])) {
+						unset($_SESSION['TENANT-' . app()->tenant->getId()]['DeleteCCSuccess']); ?>
 						<div class="alert alert-success">
 							<p class="mb-0">
 								<strong>We've deleted that additional email</strong>

@@ -9,7 +9,7 @@ if (isset($renewal_trap) && $renewal_trap) {
 	$url_path = "renewal/payments";
 }
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $sql = $db->prepare("SELECT COUNT(*) FROM `paymentSchedule` WHERE `UserID` = '$user';");
 $sql->execute([$user]);
 $scheduleExists = $sql->fetchColumn();
@@ -22,7 +22,7 @@ if ($scheduleExists > 0) {
 // Get count mandates
 $getCount = $db->prepare("SELECT COUNT(*) FROM paymentMandates WHERE UserID = ? AND InUse = 1");
 $getCount->execute([
-	$_SESSION['UserID']
+	$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
 ]);
 $mandateCount = $getCount->fetchColumn();
 

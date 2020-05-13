@@ -24,7 +24,7 @@ if (trim($_POST['email-addr']) != $parent['Email'] && v::email()->validate($_POS
   $query->execute([trim($_POST['email-addr']), $hash]);
 } else if (!v::email()->validate($_POST['email-addr'])) {
   // cannot send email
-  $_SESSION['EmailInvalid'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['EmailInvalid'] = true;
 }
 
 $query = $db->prepare("SELECT ID, First, Last, SquadSuggestion, SquadName, SquadFee FROM joinSwimmers INNER JOIN squads ON squads.SquadID = joinSwimmers.SquadSuggestion WHERE Parent = ? AND SquadSuggestion IS NOT NULL ORDER BY First ASC, Last ASC");

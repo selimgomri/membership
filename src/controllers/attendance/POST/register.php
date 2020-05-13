@@ -65,7 +65,7 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 
 			// Return info page
 			$return = "<strong>Successfully saved the session register</strong>";
-			$_SESSION['return'] = $return;
+			$_SESSION['TENANT-' . app()->tenant->getId()]['return'] = $return;
 		} catch (Exception $e) {
 			$errorStatus = true;
 		}
@@ -92,7 +92,7 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 
 			// Return info page
 			$return = "<strong>Successfully saved the session register</strong>";
-			$_SESSION['return'] = $return;
+			$_SESSION['TENANT-' . app()->tenant->getId()]['return'] = $return;
 			$duplicateReg = true;
 		} catch (Exception $e) {
 			$errorStatus = true;
@@ -101,17 +101,17 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 
 	if ($duplicateReg) {
 		$return = "<p class=\"mb-0\"><strong>Saved register</strong></p>";
-		$_SESSION['return'] = $return;
+		$_SESSION['TENANT-' . app()->tenant->getId()]['return'] = $return;
 	}
 
 } else {
 	$return = "<p><strong>An Error Occurred</strong></p>";
-	$_SESSION['return'] = $return;
+	$_SESSION['TENANT-' . app()->tenant->getId()]['return'] = $return;
 }
 
 if ($errorStatus) {
 	$return = "<p><strong>An Error Occurred</strong></p>";
-	$_SESSION['return'] = $return;
+	$_SESSION['TENANT-' . app()->tenant->getId()]['return'] = $return;
 }
 
 header("Location: " . autoUrl("attendance/register?date=" . urlencode($dateOriginal->format("Y-m-d")) . "&squad=" . urlencode($squadID) . "&session=" . urlencode($sessionID)));

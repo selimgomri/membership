@@ -5,11 +5,11 @@ $tenant = app()->tenant;
 
 $sql = null;
 
-if ($_SESSION['AccessLevel'] == "Parent") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
   $sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE `EntryID` = ? AND members.UserID = ? ORDER BY `galas`.`GalaDate` DESC;");
   $sql->execute([
     $id,
-    $_SESSION['UserID']
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
   ]);
 } else {
   $sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE `EntryID` = ? AND galas.Tenant = ? ORDER BY `galas`.`GalaDate` DESC;");
@@ -31,7 +31,7 @@ try {
   $update->bindValue('zero', 0, PDO::PARAM_INT);
   $update->bindValue('entryCode', $id, PDO::PARAM_INT);
   $update->execute();
-  $_SESSION['VetoTrue'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['VetoTrue'] = true;
 } catch (Exception $e) {
   halt(500);
 }

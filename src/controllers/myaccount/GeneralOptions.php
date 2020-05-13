@@ -26,13 +26,13 @@ if ($currentUser->getUserBooleanOption('EnableBeta')) {
 }
 
 $notGalaDDChecked;
-if ($_SESSION['AccessLevel'] == "Parent" && $currentUser->getUserBooleanOption('GalaDirectDebitOptOut')) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent" && $currentUser->getUserBooleanOption('GalaDirectDebitOptOut')) {
 	$notGalaDDChecked = " checked ";
 }
 
 $pagetitle = "General Account Options";
 include BASE_PATH . "views/header.php";
-  $userID = $_SESSION['UserID'];
+  $userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 ?>
 <div class="container-fluid">
   <div class="row justify-content-between">
@@ -46,13 +46,13 @@ include BASE_PATH . "views/header.php";
       <h1>Advanced Account Options</h1>
       <p class="lead">Manage cookies and 2FA.</p>
 
-    	<?php if (isset($_SESSION['OptionsUpdate']) && $_SESSION['OptionsUpdate']) { ?>
+    	<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['OptionsUpdate']) && $_SESSION['TENANT-' . app()->tenant->getId()]['OptionsUpdate']) { ?>
     		<div class="alert alert-success">
     			<p class="mb-0">
     				<strong>We've successfully updated your general options</strong>
     			</p>
     		</div>
-    	<?php unset($_SESSION['OptionsUpdate']);
+    	<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['OptionsUpdate']);
     	} ?>
 
     	<form method="post">
@@ -92,7 +92,7 @@ include BASE_PATH . "views/header.php";
           </p>
         </div>
 
-        <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { ?>
         <div class="cell">
           <h2>
             Advanced Payment Options
@@ -111,7 +111,7 @@ include BASE_PATH . "views/header.php";
           <h2>
             Account Security
           </h2>
-          <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+          <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { ?>
       		<div class="form-group">
       			<div class="custom-control custom-switch">
       				<input type="checkbox" class="custom-control-input" value="1" id="2FA" aria-describedby="2FAHelp" name="2FA" <?=$twofaChecked?> >
@@ -121,13 +121,13 @@ include BASE_PATH . "views/header.php";
       		</div>
           <?php } ?>
 
-          <?php if (filter_var(getUserOption($_SESSION['UserID'], "Is2FA"), FILTER_VALIDATE_BOOLEAN) || $_SESSION['AccessLevel'] != "Parent") { ?>
+          <?php if (filter_var(getUserOption($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], "Is2FA"), FILTER_VALIDATE_BOOLEAN) || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") { ?>
 
           <p>
             You can use an Authenticator App such as Google Authenticator to get Two-Factor Authentication codes if you wish. You can always still get codes by email if you don't have your device on you.
           </p>
 
-          <?php if (!filter_var(getUserOption($_SESSION['UserID'], "hasGoogleAuth2FA"), FILTER_VALIDATE_BOOLEAN)) { ?>
+          <?php if (!filter_var(getUserOption($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], "hasGoogleAuth2FA"), FILTER_VALIDATE_BOOLEAN)) { ?>
           <p>
             <a href="<?=autoUrl("my-account/googleauthenticator")?>" class="btn btn-primary">
               Use an authenticator app

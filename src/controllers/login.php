@@ -7,13 +7,13 @@ include BASE_PATH . "views/header.php";
 
 $errorState = false;
 
-if ( isset($_SESSION['ErrorState']) ) {
-  $errorState = $_SESSION['ErrorState'];
-  $username = $_SESSION['EnteredUsername'];
+if ( isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) ) {
+  $errorState = $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+  $username = $_SESSION['TENANT-' . app()->tenant->getId()]['EnteredUsername'];
 }
 
 $lsv = hash('sha256', random_bytes(100) . date("c-U"));
-$_SESSION['LoginSec'] = $lsv;
+$_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec'] = $lsv;
 
 ?>
 <div class="frontpage1 d-flex flex-column" style="margin:-1.0rem 0;min-height:calc(100vh - 10.9375rem);">
@@ -33,9 +33,9 @@ $_SESSION['LoginSec'] = $lsv;
                 <div class="alert alert-danger">
                   <strong>Incorrect details</strong> <br>
                   Please try again
-                  <?php if (isset($_SESSION['ErrorStateLSVMessage'])) {
-                    echo $_SESSION['ErrorStateLSVMessage'];
-                    unset($_SESSION['ErrorStateLSVMessage']);
+                  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStateLSVMessage'])) {
+                    echo $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStateLSVMessage'];
+                    unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStateLSVMessage']);
                   } ?>
                 </div>
                 <?php } ?>
@@ -102,11 +102,11 @@ $_SESSION['LoginSec'] = $lsv;
 </div>
 
 <?php
-  $detes = [$lsv, $_SESSION['LoginSec']];
+  $detes = [$lsv, $_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']];
   //pre($detes);
-  //pre($_SESSION['InfoSec']);
-  if ( isset($_SESSION['ErrorState']) ) {
-    unset($_SESSION['ErrorState']);
+  //pre($_SESSION['TENANT-' . app()->tenant->getId()]['InfoSec']);
+  if ( isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) ) {
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
   }
 $footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");

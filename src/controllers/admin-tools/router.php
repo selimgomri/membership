@@ -4,7 +4,7 @@
  * Admin tools routes
  */
 
-if ($_SESSION['AccessLevel'] == 'Admin') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
   $this->get('/', function () {
     include 'home.php';
   });

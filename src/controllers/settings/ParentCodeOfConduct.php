@@ -50,13 +50,13 @@ include BASE_PATH . 'views/header.php';
         <form method="post">
           <h2>Choose a code of conduct</h2>
 
-          <?php if (isset($_SESSION['PCC-SAVED']) && $_SESSION['PCC-SAVED']) { ?>
+          <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']) { ?>
           <div class="alert alert-success">Parent code of conduct saved.</div>
-          <?php unset($_SESSION['PCC-SAVED']); } ?>
+          <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']); } ?>
 
-          <?php if (isset($_SESSION['PCC-ERROR']) && $_SESSION['PCC-ERROR']) { ?>
+          <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']) { ?>
           <div class="alert alert-danger">Changes were not saved.</div>
-          <?php unset($_SESSION['PCC-ERROR']); } ?>
+          <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']); } ?>
 
           <div class="form-group">
             <label for="CodeOfConduct">Squad Code of Conduct</label>

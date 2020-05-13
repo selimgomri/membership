@@ -3,7 +3,7 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 if ($access == "Committee" || $access == "Admin") {
 	if ((isset($_POST["sessionID"])) && (isset($_POST["sessionEndDate"]))) {
 

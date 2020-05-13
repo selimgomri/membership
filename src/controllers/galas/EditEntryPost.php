@@ -10,12 +10,12 @@ $entriesArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 $sql = null;
 
-if ($_SESSION['AccessLevel'] == "Parent") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
   $sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.Tenant = ? AND `EntryID` = ? AND members.UserID = ? ORDER BY `galas`.`GalaDate` DESC;");
   $sql->execute([
     $tenant->getId(),
     $id,
-    $_SESSION['UserID']
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
   ]);
 } else {
   $sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.Tenant = ? AND `EntryID` = ? ORDER BY `galas`.`GalaDate` DESC;");
@@ -35,7 +35,7 @@ $galaData = new GalaPrices($db, $row["GalaID"]);
 $closingDate = new DateTime($row['ClosingDate'], new DateTimeZone('Europe/London'));
 $theDate = new DateTime('now', new DateTimeZone('Europe/London'));
 
-if (bool($row['Charged']) || bool($row['EntryProcessed']) || ($closingDate < $theDate && ($_SESSION['AccessLevel'] != 'Admin' && $_SESSION['AccessLevel'] != 'Galas')) || bool($row['Locked'])) {
+if (bool($row['Charged']) || bool($row['EntryProcessed']) || ($closingDate < $theDate && ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Admin' && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas')) || bool($row['Locked'])) {
   halt(404);
 }
 
@@ -64,7 +64,7 @@ try {
 
   $subject = "Your Updated " . $row['GalaName'] . " Entry";
   $message = "";
-  if ($_SESSION['AccessLevel'] != 'Parent') {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') {
     $message .= "<p><strong>Changes have been made to this gala entry by a member of staff. This is a courtesy email for you.</strong></p>";
   }
   $message .= "<p>Here are the swims selected for " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "'s updated " . htmlspecialchars($row['GalaName']) . " entry.</p>";
@@ -74,9 +74,9 @@ try {
   $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
   `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 1, 'Galas')";
   $db->prepare($notify)->execute([$row['UserID'], $subject, $message]);
-  $_SESSION['UpdateSuccess'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess'] = true;
 } catch (Exception $e) {
-  $_SESSION['UpdateError'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError'] = true;
 }
 
 header("Location: " . autoUrl("galas/entries/" . $id));
