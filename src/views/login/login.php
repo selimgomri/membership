@@ -53,11 +53,11 @@ include BASE_PATH . "views/root/head.php";
                   </h1>
                 </div>
               </div>
-              <p class="lead">
+              <p class="lead" id="login-box-text">
                 Sign in with your <?= htmlspecialchars($selectedClub) ?> account.
               </p>
 
-              <form action="<?= htmlspecialchars(autoUrl($club->getCodeId() . "/login", false)) ?>" method="post" id="login-form" class="needs-validation" novalidate data-prefilled="<?= htmlspecialchars((int) isset($_GET['user'])) ?>">
+              <form action="<?= htmlspecialchars(autoUrl($club->getCodeId() . "/login", false)) ?>" method="post" id="login-form" class="needs-validation" novalidate data-prefilled="<?= htmlspecialchars((int) isset($_GET['user'])) ?>" data-ajax-login-url="<?= htmlspecialchars(autoUrl("login", false)) ?>" data-ajax-two-factor-url="<?= htmlspecialchars(autoUrl("login/2fa", false)) ?>">
                 <div class="form-group">
                   <label for="email-address">Email address</label>
                   <input type="email" class="form-control form-control-lg text-lowercase" id="email-address" name="email-address" placeholder="yourname@example.com" required autocomplete="email" <?php if (isset($_GET['user'])) { ?>value="<?= htmlspecialchars(urldecode($_GET['user'])) ?>" <?php } else { ?> autofocus <?php } ?>>

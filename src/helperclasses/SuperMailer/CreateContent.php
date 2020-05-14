@@ -109,15 +109,17 @@ class CreateMail {
     <div style=\"background:#e3eef6;\">
       <table style=\"width:100%;border:0px;text-align:left;padding:10px 0px 10px 0px;background:#e3eef6;\"><tr><td align=\"center\">
         <table style=\"width:100%;max-width:700px;border:0px;text-align:center;background:#ffffff;padding:10px 10px 0px 10px;\"><tr><td>";
-        if (env('IS_CLS') != null) { 
+        if (bool(env('IS_CLS'))) { 
         $head .= "<img src=\"" . autoUrl("public/img/notify/NotifyLogo.png") . "\"
         style=\"width:300px;max-width:100%;\" srcset=\"" .
         autoUrl("public/img/notify/NotifyLogo@2x.png") . " 2x, " .
         autoUrl("public/img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
-        } else if (env('CLUB_LOGO')) {
+        } else if (env('CLUB_LOGO') && isset(app()->tenant)) {
           $head .= "<img src=\"" . autoUrl(env('CLUB_LOGO')) . "\" style=\"max-width:100%;max-height:150px;\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
-        } else {
+        } else if (isset(app()->tenant)) {
           $head .= htmlspecialchars(app()->tenant->getKey('CLUB_NAME'));
+        } else {
+          $head .= 'SCDS Membership MT';
         }
         $head .= "</td></tr></table>
         <table style=\"width:100%;max-width:700px;border:0px;text-align:left;background:#ffffff;padding:0px 10px;\"><tr><td>
@@ -131,20 +133,24 @@ class CreateMail {
     $foot = "</td></tr></table>
     <table style=\"width:100%;max-width:700px;border:0px;background:#f8fcff;padding:0px 10px;\"><tr><td>
     <div
-    class=\"bottom text-center\">
-    <p class=\"small\" align=\"center\"><strong>" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . "</strong><br>";
-    $addr = json_decode(app()->tenant->getKey('CLUB_ADDRESS'));
-    for ($i = 0; $i < sizeof($addr); $i++) {
-      $foot .= htmlspecialchars($addr[$i]) . '<br>';
-      if (isset($addr[$i+1]) && $addr[$i+1] == "") {
-        break;
+    class=\"bottom text-center\">";
+    if (isset(app()->tenant)) {
+      $foot .= "
+      <p class=\"small\" align=\"center\"><strong>" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . "</strong><br>";
+      $addr = json_decode(app()->tenant->getKey('CLUB_ADDRESS'));
+      for ($i = 0; $i < sizeof($addr); $i++) {
+        $foot .= htmlspecialchars($addr[$i]) . '<br>';
+        if (isset($addr[$i+1]) && $addr[$i+1] == "") {
+          break;
+        }
       }
+    } else {
+      $foot .= "<p class=\"small\" align=\"center\">SCDS Membership MT";
     }
-    $foot .= "</p>
+    $foot .= "</p>";
+    if (isset(app()->tenant)) {
+    $foot .= "
     <p class=\"small\" align=\"center\">This email was sent automatically by the " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Membership System.</p>";
-    if (!(bool(env('IS_CLS')))) {
-    $foot .= '<p class="small" align="center">The Membership System was built by Chester-le-Street ASC.</p>';
-    }
     $foot .= "<p class=\"small\" align=\"center\">Have questions? Contact us at <a
     href=\"mailto:" . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "\">" . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "</a>.</p>
     <p class=\"small\" align=\"center\">To control your email options, go to <a href=\"" .
@@ -153,7 +159,9 @@ class CreateMail {
       $foot .= '<p class="small" align="center"><a href="-unsub_link-">Click to Unsubscribe</a></p>';
     }
     $foot .= "
-    <p class=\"small\" align=\"center\">&copy; " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " " . date("Y") . ", Design &copy; SCDS / Chris Heppell / Chester-le-Street ASC</p>
+    <p class=\"small\" align=\"center\">&copy; " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " " . date("Y") . ", Design &copy; SCDS / Chris Heppell / Chester-le-Street ASC</p>";
+    }
+    $foot .= "
       </div>
       </table>
     </table>
@@ -173,25 +181,29 @@ class CreateMail {
       $head .= "Hello " . htmlspecialchars($this->name) . ",\r\n\r\n";
     }
 
-    $foot = "\r\n\n\n " . app()->tenant->getKey('CLUB_NAME') . "\r\n\r\n";
-    $foot .= app()->tenant->getKey('CLUB_NAME') . "\r\n";
-    $addr = json_decode(app()->tenant->getKey('CLUB_ADDRESS'));
-    for ($i = 0; $i < sizeof($addr); $i++) {
-      $foot .= $addr[$i] . "\r\n";
-      if (isset($addr[$i+1]) && $addr[$i+1] == "") {
-        break;
+    if (isset(app()->tenant)) {
+      $foot = "\r\n\n\n " . app()->tenant->getKey('CLUB_NAME') . "\r\n\r\n";
+      $foot .= app()->tenant->getKey('CLUB_NAME') . "\r\n";
+      $addr = json_decode(app()->tenant->getKey('CLUB_ADDRESS'));
+      for ($i = 0; $i < sizeof($addr); $i++) {
+        $foot .= $addr[$i] . "\r\n";
+        if (isset($addr[$i+1]) && $addr[$i+1] == "") {
+          break;
+        }
       }
+      $foot .= "\r\nThis email was sent automatically by the " . app()->tenant->getKey('CLUB_NAME') . " Membership System.\r\n\r\n";
+      if (!(bool(env('IS_CLS')))) {
+        $foot .= "The Membership System was built by Chester-le-Street ASC.\r\n\r\n";
+      }
+      $foot .= "Have questions? Contact us at " . app()->tenant->getKey('CLUB_EMAIL') . ".\r\n\r\n";
+      $foot .= "To control your email options go to My Account at " . autoUrl("myaccount") . ".\r\n\r\n";
+      if ($this->allowUnsubscribe) {
+        $foot .= "Unsubscribe at -unsub_link-\r\n\r\n";
+      }
+      $foot .= "Content copyright " . date("Y") . " " . app()->tenant->getKey('CLUB_NAME') . ", Design copyright SCDS";
+    } else {
+      $foot = "Copyright SCDS. Membership MT.";
     }
-    $foot .= "\r\nThis email was sent automatically by the " . app()->tenant->getKey('CLUB_NAME') . " Membership System.\r\n\r\n";
-    if (!(bool(env('IS_CLS')))) {
-      $foot .= "The Membership System was built by Chester-le-Street ASC.\r\n\r\n";
-    }
-    $foot .= "Have questions? Contact us at " . app()->tenant->getKey('CLUB_EMAIL') . ".\r\n\r\n";
-    $foot .= "To control your email options go to My Account at " . autoUrl("myaccount") . ".\r\n\r\n";
-    if ($this->allowUnsubscribe) {
-      $foot .= "Unsubscribe at -unsub_link-\r\n\r\n";
-    }
-    $foot .= "Content copyright " . date("Y") . " " . app()->tenant->getKey('CLUB_NAME') . ", Design copyright SCDS/Chester-le-Street ASC";
 
     return $head . $this->getPlainContent() . $foot;
   }

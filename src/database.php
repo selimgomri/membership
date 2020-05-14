@@ -61,8 +61,10 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
   if (!isset($from['Email'])) {
     $from['Email'] = "noreply@" . env('EMAIL_DOMAIN');
   }
-  if (!isset($from['Name'])) {
+  if (!isset($from['Name']) && isset(app()->tenant)) {
     $from['Name'] = app()->tenant->getKey('CLUB_NAME');
+  } else {
+    $from['Name'] = 'SCDS Membership MT';
   }
 
   $cellClass = 'style="display:table;background:#eee;padding:10px;margin 0 auto 10px auto;width:100%;"';
@@ -119,7 +121,9 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
   }
 
   if (env('SENDGRID_API_KEY') && $emailaddress != null && $name != null) {
-    $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME'));
+    if (isset(app()->tenant)) {
+      $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME'));
+    }
     $email->setFrom($from['Email'], $from['Name']);
     $email->setSubject($subject);
     $email->addTo($emailaddress, $name);

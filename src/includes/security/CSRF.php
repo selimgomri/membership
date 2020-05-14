@@ -25,4 +25,15 @@ class CSRF {
       return false;
     }
   }
+
+  public static function verifyCode($code, $throwException = false) {
+    if (isset($_SESSION['CSRF']) && $_SESSION['CSRF'] == $code) {
+      // Verifies CSRF, proceed normally
+      return true;
+    } else if ($throwException) {
+      throw new CSRFValidityException('Invalid Cross-Site Request Forgery Token');
+    } else {
+      return false;
+    }
+  }
 }
