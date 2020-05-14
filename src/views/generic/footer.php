@@ -48,10 +48,10 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
               <address>
                 <?php $addr = json_decode(app()->tenant->getKey('CLUB_ADDRESS')); ?>
                 <strong><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></strong><br>
-                <?php
+                <?php if ($addr) {
                 for ($i = 0; $i < sizeof($addr); $i++) { ?>
                 <?=htmlspecialchars($addr[$i])?><br>
-                <?php } ?>
+                <?php } } ?>
               </address>
               <!--<p><i class="fa fa-envelope fa-fw" aria-hidden="true"></i> <a href="mailto:enquiries@chesterlestreetasc.co.uk" target="new">E-Mail Us</a></p>-->
               <p><i class="fa fa-flag fa-fw" aria-hidden="true"></i> <a
