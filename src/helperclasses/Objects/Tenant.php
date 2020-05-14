@@ -242,7 +242,7 @@ class Tenant
   public function getCodeId()
   {
     if ($this->code) {
-      return $this->code;
+      return mb_strtolower($this->code);
     }
     return $this->id;
   }
