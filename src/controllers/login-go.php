@@ -3,6 +3,7 @@
 use GeoIp2\Database\Reader;
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $incrementFailedLoginCount = $db->prepare("UPDATE users SET WrongPassCount = WrongPassCount + 1 WHERE UserID = ?");
 $resetFailedLoginCount = $db->prepare("UPDATE users SET WrongPassCount = 0 WHERE UserID = ?");
@@ -30,8 +31,11 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
   $username = trim(mb_strtolower($_POST['email-address']));
   $target = ltrim(trim($_POST['target']), '/');
 
-  $getUser = $db->prepare("SELECT Forename, Surname, UserID, EmailAddress, `Password`, WrongPassCount FROM users WHERE EmailAddress = ? AND Active");
-  $getUser->execute([$_POST['email-address']]);
+  $getUser = $db->prepare("SELECT Forename, Surname, UserID, EmailAddress, `Password`, WrongPassCount FROM users WHERE EmailAddress = ? AND Tenant = ? AND Active");
+  $getUser->execute([
+    $_POST['email-address'],
+    $tenant->getId()
+  ]);
 
   $row = $getUser->fetch(PDO::FETCH_ASSOC);
 

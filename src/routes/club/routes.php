@@ -4,11 +4,12 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 $currentUser = null;
-if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'AutoLogin'] != "") {
-  $sql = "SELECT `UserID`, `Time` FROM `userLogins` WHERE `Hash` = ? AND `Time` >= ? AND `HashActive` = ?";
+if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_COOKIE['TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin']) && $_COOKIE['TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin'] != "") {
+  $sql = "SELECT `UserID`, `Time` FROM `userLogins` INNER JOIN users ON users.UserID = userLogins.UserID WHERE users.Tenant = ? AND `Hash` = ? AND `Time` >= ? AND `HashActive` = ?";
 
   $data = [
-    $_COOKIE[COOKIE_PREFIX . 'AutoLogin'],
+    $tenant->getId(),
+    $_COOKIE['TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin'],
     date('Y-m-d H:i:s', strtotime("120 days ago")),
     1
   ];
@@ -43,7 +44,7 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_
     $sql = "UPDATE `userLogins` SET `Hash` = ? WHERE `Hash` = ?";
     try {
       $query = $db->prepare($sql);
-      $query->execute([$hash, $_COOKIE[COOKIE_PREFIX . 'AutoLogin']]);
+      $query->execute([$hash, $_COOKIE['TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin']]);
     } catch (PDOException $e) {
       halt(500);
     }
@@ -54,7 +55,7 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_
     if (app('request')->protocol == 'http' && bool(env('IS_DEV'))) {
       $secure = false;
     }
-    setcookie(COOKIE_PREFIX . "AutoLogin", $hash, $expiry_time , COOKIE_PATH, app('request')->hostname, $secure, false);
+    setcookie('TENANT-' . app()->tenant->getId() . '-' . "AutoLogin", $hash, $expiry_time , COOKIE_PATH, app('request')->hostname, $secure, false);
   }
 } else if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
   $currentUser = new User($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], true);
@@ -73,7 +74,7 @@ if (bool(env('IS_DEV'))) {
 
 $this->get('/auth/cookie/redirect', function () {
   //$target = urldecode($target);
-  setcookie(COOKIE_PREFIX . "SeenAccount", true, 0, "/", ('request')->hostname, true, false);
+  setcookie('TENANT-' . app()->tenant->getId() . '-' . "SeenAccount", true, 0, "/", ('request')->hostname, true, false);
   header("Location: https://www.chesterlestreetasc.co.uk");
 });
 
