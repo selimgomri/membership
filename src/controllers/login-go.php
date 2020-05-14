@@ -82,7 +82,7 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
           $_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe'] = 1;
         }
         $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR'] = true;
-        header("Location: " . autoUrl("2fa"));
+        header("Location: " . autoUrl("2fa?target=" . urlencode($_POST['target'])));
       } else {
         try {
           $login = new \CLSASC\Membership\Login($db);

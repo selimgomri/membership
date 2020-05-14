@@ -288,37 +288,33 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
   });
 
   // Home
-  $this->get('/', function () {
-    include BASE_PATH . "views/Welcome.php";
-  });
+  // $this->get('/', function () {
+  //   include BASE_PATH . "views/Welcome.php";
+  // });
 
   $this->get('/login', function () {
-    if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL'])) {
-      $_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL'] = "";
-    }
-    include BASE_PATH . "views/Login.php";
+    http_response_code(303);
+    header("Location: " . autoUrl("login?club=" . mb_strtolower(app()->tenant->getCodeId()), false));
   });
 
-  // Register
-  $this->get(['/register', '/register/family', '/register/family/{fam}:int/{acs}:key'], function ($fam = null, $acs = null) {
+  // // Register
+  // $this->get(['/register', '/register/family', '/register/family/{fam}:int/{acs}:key'], function ($fam = null, $acs = null) {
+  //   include BASE_PATH . 'controllers/registration/register.php';
+  // });
 
-    include BASE_PATH . 'controllers/registration/register.php';
-  });
+  // $this->group(['/register/ac'], function () {
+  //   include BASE_PATH . 'controllers/registration/join-from-trial/router.php';
+  // });
 
-  $this->group(['/register/ac'], function () {
-    include BASE_PATH . 'controllers/registration/join-from-trial/router.php';
-  });
+  // $this->post('/register', function () {
+  //   include BASE_PATH . 'controllers/registration/registration.php';
+  // });
 
-  $this->post('/register', function () {
+  // // Confirm Email via Link
+  // $this->get('/register/auth/{id}:int/new-user/{token}', function ($id, $token) {
 
-    include BASE_PATH . 'controllers/registration/registration.php';
-  });
-
-  // Confirm Email via Link
-  $this->get('/register/auth/{id}:int/new-user/{token}', function ($id, $token) {
-
-    include BASE_PATH . 'controllers/registration/RegAuth.php';
-  });
+  //   include BASE_PATH . 'controllers/registration/RegAuth.php';
+  // });
 
   $this->group('/assisted-registration', function () {
     include BASE_PATH . 'controllers/assisted-registration/setup/router.php';
@@ -385,9 +381,9 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
   */
 
   // Global Catch All send to login
-  $this->any('/*', function () {
-    $_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL'] = app('request')->path;
-    header("Location: " . autoUrl("login"));
+  $this->any(['/', '/*'], function () {
+    http_response_code(303);
+    header("Location: " . autoUrl("login?club=" . mb_strtolower(app()->tenant->getCodeId() . '&target=' . urlencode(app('request')->path)), false));
   });
 } else if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
   $this->group('/renewal', function () {

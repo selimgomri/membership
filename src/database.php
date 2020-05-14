@@ -136,6 +136,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
     } catch (Exception $e) {
       //echo $e;
       return false;
+      reportError($e);
     }
     return true;
 

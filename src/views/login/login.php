@@ -11,10 +11,20 @@ if (isset($_GET['club']) && mb_strlen((string) $_GET['club']) > 0) {
   }
 }
 
+if (!$club) {
+  http_response_code(303);
+  header("location: " . autoUrl("clubs"));
+}
+
 $colour = null;
 if ($club) {
   $colour = $club->getKey('SYSTEM_COLOUR');
   $selectedClub = $club->getName();
+}
+
+$target = "";
+if (isset($_GET['target'])) {
+  $target = $_GET['target'];
 }
 
 $pagetitle = "Sign in to " . htmlspecialchars($selectedClub) . " Membership";
@@ -24,7 +34,7 @@ include BASE_PATH . "views/root/head.php";
 ?>
 
 <div class="bg-dark">
-<div <?php if ($colour) { ?>style="background: <?=htmlspecialchars($colour)?>" <?php } ?>>
+<div <?php if ($colour) { ?>style="background: <?= htmlspecialchars($colour) ?>" <?php } ?>>
   <div style="background: rgba(255, 255, 255, .5)">
 
     <div class="container-fluid">
@@ -33,7 +43,7 @@ include BASE_PATH . "views/root/head.php";
           <div class="card card-body text-dark mb-0" id="central-card">
             <div class="row align-items-center mb-3">
               <div class="col-auto">
-                <img src="<?=htmlspecialchars(autoUrl("public/img/corporate/scds.png"))?>" class="img-fluid rounded" style="height: 75px;">
+                <img src="<?= htmlspecialchars(autoUrl("public/img/corporate/scds.png")) ?>" class="img-fluid rounded" style="height: 75px;">
               </div>
               <div class="col-auto">
                 <h1 class="d-flex">
@@ -42,21 +52,33 @@ include BASE_PATH . "views/root/head.php";
               </div>
             </div>
             <p class="lead">
-              Sign in with your <?=htmlspecialchars($selectedClub)?> account.
+              Sign in with your <?= htmlspecialchars($selectedClub) ?> account.
             </p>
 
-            <form action="<?=htmlspecialchars(autoUrl("login"))?>" id="login-form" class="needs-validation" novalidate data-prefilled="<?=htmlspecialchars((int) isset($_GET['user']))?>">
+            <form action="<?= htmlspecialchars(autoUrl($club->getCodeId() . "/login")) ?>" method="post" id="login-form" class="needs-validation" novalidate data-prefilled="<?= htmlspecialchars((int) isset($_GET['user'])) ?>">
               <div class="form-group">
                 <label for="email-address">Email address</label>
-                <input type="email" class="form-control form-control-lg text-lowercase" id="email-address" name="email-address" placeholder="yourname@example.com" required autocomplete="email" <?php if (isset($_GET['user'])) { ?>value="<?=htmlspecialchars(urldecode($_GET['user']))?>"<?php } else { ?> autofocus <?php }?>>
+                <input type="email" class="form-control form-control-lg text-lowercase" id="email-address" name="email-address" placeholder="yourname@example.com" required autocomplete="email" <?php if (isset($_GET['user'])) { ?>value="<?= htmlspecialchars(urldecode($_GET['user'])) ?>" <?php } else { ?> autofocus <?php } ?>>
               </div>
 
               <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" class="form-control form-control-lg" required placeholder="Password"  autocomplete="current-password" <?php if (isset($_GET['user'])) { ?> autofocus <?php } ?>>
+                <input type="password" name="password" id="password" class="form-control form-control-lg" required placeholder="Password" autocomplete="current-password" <?php if (isset($_GET['user'])) { ?> autofocus <?php } ?>>
               </div>
 
-              <?=\SCDS\CSRF::write()?>
+              <input type="hidden" name="target" value="<?= htmlspecialchars($target) ?>">
+
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" name="remember-me" id="remember-me" checked aria-describedby="remember-me-help">
+                  <label class="custom-control-label" for="remember-me">Keep me logged in</label>
+                  <small id="remember-me-help" class="form-text text-muted">
+                    Untick this box if you are using a public or shared computer
+                  </small>
+                </div>
+              </div>
+
+              <?= \SCDS\CSRF::write() ?>
 
               <p class="mb-0">
                 <button type="submit" class="btn btn-primary btn-lg" id="submit" disabled>
@@ -85,7 +107,7 @@ include BASE_PATH . "views/root/head.php";
 </div>
 
 
-<?php $footer = new \SCDS\RootFooter();
-$footer->addJs('public/js/login/login.js');
-$footer->chrome(false);
-$footer->render(); ?>
+  <?php $footer = new \SCDS\RootFooter();
+  $footer->addJs('public/js/login/login.js');
+  $footer->chrome(false);
+  $footer->render(); ?>

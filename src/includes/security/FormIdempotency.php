@@ -8,25 +8,25 @@ namespace SCDS;
 class FormIdempotency {
   public static function write() {
     // If the token is not set, define it
-    if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['FORM-IDEMPOTENCY']) || $_SESSION['TENANT-' . app()->tenant->getId()]['FORM-IDEMPOTENCY'] == null) {
-      $_SESSION['TENANT-' . app()->tenant->getId()]['FORM-IDEMPOTENCY'] = hash('sha256', random_bytes(100));
+    if (!isset($_SESSION['FORM-IDEMPOTENCY']) || $_SESSION['FORM-IDEMPOTENCY'] == null) {
+      $_SESSION['FORM-IDEMPOTENCY'] = hash('sha256', random_bytes(100));
     }
 
-    echo '<input name="SCDS-FORM-IDEMPOTENCY" type="hidden" value="' . htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['FORM-IDEMPOTENCY']) . '">';
+    echo '<input id="SCDS-FORM-IDEMPOTENCY" name="SCDS-FORM-IDEMPOTENCY" type="hidden" value="' . htmlspecialchars($_SESSION['FORM-IDEMPOTENCY']) . '">';
   }
 
   public static function verify() {
     $status = null;
 
-    if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['FORM-IDEMPOTENCY']) && isset($_POST['SCDS-FORM-IDEMPOTENCY']) && $_SESSION['TENANT-' . app()->tenant->getId()]['FORM-IDEMPOTENCY'] == $_POST['SCDS-FORM-IDEMPOTENCY']) {
+    if (isset($_SESSION['FORM-IDEMPOTENCY']) && isset($_POST['SCDS-FORM-IDEMPOTENCY']) && $_SESSION['FORM-IDEMPOTENCY'] == $_POST['SCDS-FORM-IDEMPOTENCY']) {
       // Verifies idempotency, proceed normally
       $status = true;
     } else {
       $status = false;
     }
 
-    $_SESSION['TENANT-' . app()->tenant->getId()]['SCDS-FORM-IDEMPOTENCY'] = null;
-    unset($_SESSION['TENANT-' . app()->tenant->getId()]['SCDS-FORM-IDEMPOTENCY']);
+    $_SESSION['SCDS-FORM-IDEMPOTENCY'] = null;
+    unset($_SESSION['SCDS-FORM-IDEMPOTENCY']);
 
     return $status;
   }

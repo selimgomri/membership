@@ -233,4 +233,17 @@ class Tenant
 
     return $res;
   }
+
+  /**
+   * Get the code or id
+   * 
+   * @return string|int code if exists, else id
+   */
+  public function getCodeId()
+  {
+    if ($this->code) {
+      return $this->code;
+    }
+    return $this->id;
+  }
 }

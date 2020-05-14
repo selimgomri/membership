@@ -6,8 +6,9 @@ $do_random_2FA = filter_var(getUserOption($_SESSION['TENANT-' . app()->tenant->g
 
 $errorState = false;
 
-if ($_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL'] == '2fa') {
-  $_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL'] = '';
+$target = "";
+if (isset($_GET['target'])) {
+  $target = $_GET['target'];
 }
 
 if ( isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) ) {
@@ -71,7 +72,7 @@ include BASE_PATH . "views/header.php";
             Please enter a numeric authentication code.
           </div>
         </div>
-        <input type="hidden" name="target" value="<?=$_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL']?>">
+        <input type="hidden" name="target" value="<?=htmlspecialchars($target)?>">
         <?=SCDS\CSRF::write()?>
         <input type="hidden" name="SessionSecurity" value="<?=session_id()?>">
         <p class="mb-5"><input type="submit" name="verify" id="verify" value="Verify" class="btn btn-lg btn-primary"></p>
