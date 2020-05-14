@@ -13,7 +13,11 @@ function getCachedFile($cacheFile, $url, $maxAge) {
       ]);
       if ($res->getStatusCode() == "200") {
         $cache = $res->getBody();
-        file_put_contents($cacheFile, $cache);
+        try {
+          file_put_contents($cacheFile, $cache);
+        } catch (Error $e) {
+
+        }
         $file = $cache;
       } else if (file_exists($cacheFile)) {
         $file = file_get_contents($cacheFile);
