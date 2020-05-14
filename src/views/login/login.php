@@ -56,8 +56,10 @@ include BASE_PATH . "views/root/head.php";
                 <input type="password" name="password" id="password" class="form-control form-control-lg" required placeholder="Password"  autocomplete="current-password" <?php if (isset($_GET['user'])) { ?> autofocus <?php } ?>>
               </div>
 
+              <?=\SCDS\CSRF::write()?>
+
               <p class="mb-0">
-                <button type="submit" class="btn btn-primary btn-lg" disabled>
+                <button type="submit" class="btn btn-primary btn-lg" id="submit" disabled>
                   Sign in
                 </button>
               </p>
