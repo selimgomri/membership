@@ -1,8 +1,13 @@
 <?php
 
 $db = app()->db;
-$getExtra = $db->prepare("SELECT * FROM `extras` WHERE `ExtraID` = ?");
-$getExtra->execute([$id]);
+$tenant = app()->tenant;
+
+$getExtra = $db->prepare("SELECT * FROM `extras` WHERE `ExtraID` = ? AND Tenant = ?");
+$getExtra->execute([
+  $id,
+  $tenant->getId()
+]);
 $row = $getExtra->fetch(PDO::FETCH_ASSOC);
 
 if ($row == null) {

@@ -3,12 +3,18 @@
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$userName = $db->prepare("SELECT Forename, Surname FROM users WHERE UserID = ?");
+$userName = $db->prepare("SELECT Forename, Surname FROM users WHERE UserID = ? AND Tenant = ?");
 $userName->execute([
-  $user
+  $user,
+  $tenant->getId()
 ]);
 $un = $userName->fetch(PDO::FETCH_ASSOC);
+
+if (!$un) {
+  halt(404);
+}
 
 $pagetitle = htmlspecialchars($un['Forename'] . ' ' . $un['Surname'] . "'s Direct Debit Mandate");
 

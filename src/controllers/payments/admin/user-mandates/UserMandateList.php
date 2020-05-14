@@ -6,7 +6,12 @@
  */
 
 $db = app()->db;
-$getMandates = $db->query("SELECT Forename, Surname, users.UserID, Mandate, BankName, AccountHolderName, AccountNumEnd FROM (((users LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN paymentMandates ON paymentPreferredMandate.MandateID = paymentMandates.MandateID) INNER JOIN `permissions` ON users.UserID = `permissions`.`User`) WHERE `permissions`.`Permission` = 'Parent' ORDER BY Surname ASC, Forename ASC");
+$tenant = app()->tenant;
+
+$getMandates = $db->prepare("SELECT Forename, Surname, users.UserID, Mandate, BankName, AccountHolderName, AccountNumEnd FROM (((users LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN paymentMandates ON paymentPreferredMandate.MandateID = paymentMandates.MandateID) INNER JOIN `permissions` ON users.UserID = `permissions`.`User`) WHERE users.Tenant = ? AND `permissions`.`Permission` = 'Parent' ORDER BY Surname ASC, Forename ASC");
+$getMandates->execute([
+  $tenant->getId()
+]);
 $mandate = $getMandates->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = 'User Mandates';

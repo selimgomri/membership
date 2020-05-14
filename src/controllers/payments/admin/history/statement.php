@@ -3,6 +3,8 @@
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $db = app()->db;
+$tenant = app()->tenant;
+
 $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 $sql = $payments = null;
@@ -27,8 +29,11 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 	$payments = $db->prepare("SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `Payment` = ? AND paymentsPending.UserID = ?");
   $payments->execute([$id, $user]);
 } else {
-  $sql = $db->prepare("SELECT COUNT(*) FROM payments WHERE PaymentID = ?");
-  $sql->execute([$id]);
+  $sql = $db->prepare("SELECT COUNT(*) FROM payments INNER JOIN users ON users.UserID = payments.UserID WHERE PaymentID = ? AND users.Tenant = ?");
+  $sql->execute([
+    $id,
+    $tenant->getId()
+  ]);
   if ($sql->fetchColumn() == 0) {
     halt(404);
   }

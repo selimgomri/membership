@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $name = $price = $errorMessage = null;
 $errorState = false;
@@ -35,8 +36,13 @@ if (isset($_POST['pay-credit-type']) && ($_POST['pay-credit-type'] == 'Payment' 
 
 if (!$errorState) {
   try {
-    $insert = $db->prepare("INSERT INTO `extras` (`ExtraName`, `ExtraFee`, `Type`) VALUES (?, ?, ?)");
-		$insert->execute([$name, $price, $type]);
+    $insert = $db->prepare("INSERT INTO `extras` (`ExtraName`, `ExtraFee`, `Type`, Tenant) VALUES (?, ?, ?, ?)");
+		$insert->execute([
+			$name,
+			$price,
+			$type,
+			$tenant->getId()
+		]);
 		$id = $db->lastInsertId();
     header("Location: " . autoUrl("payments/extrafees/" . $id));
   } catch (Exception $e) {

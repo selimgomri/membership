@@ -1,10 +1,14 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 if ($_POST['response'] == "getSwimmers") {
-  $swimmers = $db->prepare("SELECT * FROM (((`extrasRelations` INNER JOIN `members` ON members.MemberID = extrasRelations.MemberID) INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) INNER JOIN `squads` ON members.SquadID = squads.SquadID) WHERE `extrasRelations`.`ExtraID` = ?");
-  $swimmers->execute([$id]);
+  $swimmers = $db->prepare("SELECT * FROM (((`extrasRelations` INNER JOIN `members` ON members.MemberID = extrasRelations.MemberID) INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) INNER JOIN `squads` ON members.SquadID = squads.SquadID) WHERE `extrasRelations`.`ExtraID` = ? AND extras.Tenant = ?");
+  $swimmers->execute([
+    $id,
+    $tenant->getId()
+  ]);
 
   $row = $swimmers->fetch(PDO::FETCH_ASSOC);
 
@@ -56,8 +60,12 @@ if ($_POST['response'] == "getSwimmers") {
       'swimmerSelectContent' => '<option value="null" selected>Please select a squad</option>'
     ]);
   } else {
-    $getSwimmers = $db->prepare("SELECT members.MemberID, MForename, MSurname FROM `members` WHERE SquadID = ? AND MemberID NOT IN (SELECT MemberID FROM extrasRelations WHERE ExtraID = ?) ORDER BY `MForename` ASC, `MSurname` ASC ");
-    $getSwimmers->execute([$_POST['squadSelect'], $id]);
+    $getSwimmers = $db->prepare("SELECT members.MemberID, MForename, MSurname FROM `members` WHERE members.Tenant = ? AND SquadID = ? AND MemberID NOT IN (SELECT MemberID FROM extrasRelations WHERE ExtraID = ?) ORDER BY `MForename` ASC, `MSurname` ASC ");
+    $getSwimmers->execute([
+      $tenant->getId(),
+      $_POST['squadSelect'],
+      $id
+    ]);
     $state = false;
     $output = '<option value="null" selected>Select a swimmer</option>';
     while ($row = $getSwimmers->fetch(PDO::FETCH_ASSOC)) {
@@ -76,8 +84,11 @@ if ($_POST['response'] == "getSwimmers") {
   $swimmer = $_POST['swimmerInsert'];
   if ($swimmer != null && $swimmer != "") {
     try {
-      $memberName = $db->prepare("SELECT MForename fn, MSurname sn FROM members WHERE MemberID = ?");
-      $memberName->execute([$swimmer]);
+      $memberName = $db->prepare("SELECT MForename fn, MSurname sn FROM members WHERE MemberID = ? AND Tenant = ?");
+      $memberName->execute([
+        $swimmer,
+        $tenant->getId()
+      ]);
       $name = $memberName->fetch(PDO::FETCH_ASSOC);
       
 
@@ -116,10 +127,28 @@ if ($_POST['response'] == "getSwimmers") {
   }
 } else if ($_POST['response'] == "dropRelation") {
   try {
+    $checkMember = $db->prepare("SELECT COUNT(*) FROM extrasRelations INNER JOIN members ON members.MemberID = extrasRelations.MemberID WHERE RelationID = ? AND members.Tenant = ?");
+    $checkMember->execute([
+      $_POST['relation'],
+      $tenant->getId()
+    ]);
+    $memberExists = $checkMember->fetchColumn() > 0;
+
+    $checkUser = $db->prepare("SELECT COUNT(*) FROM extrasRelations INNER JOIN users ON users.UserID = extrasRelations.UserID WHERE RelationID = ? AND users.Tenant = ?");
+    $checkUser->execute([
+      $_POST['relation'],
+      $tenant->getId()
+    ]);
+    $userExists = $checkUser->fetchColumn() > 0;
+
+    if (!$memberExists && !$userExists) {
+      throw new Exception('There is no such member');
+    }
+
     $delete = $db->prepare("DELETE FROM `extrasRelations` WHERE `RelationID` = ?");
     $delete->execute([$_POST['relation']]);
   } catch (Exception $e) {
-    halt(500);
+    halt(404);
   }
 } else {
   halt(404);

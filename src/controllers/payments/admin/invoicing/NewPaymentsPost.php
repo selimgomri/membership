@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 try {
 
@@ -19,8 +20,11 @@ try {
     throw new Exception('Invalid payment item type (must be Payment or Credit).');
   }
 
-  $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
-  $user->execute([$_POST['user-id']]);
+  $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ? AND Tenant = ?");
+  $user->execute([
+    $_POST['user-id'],
+    $tenant->getId()
+  ]);
   $user = $user->fetch(PDO::FETCH_ASSOC);
 
   if ($user == null) {

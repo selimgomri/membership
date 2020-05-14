@@ -7,7 +7,9 @@ $pagetitle = 'More Details - Payment Confirmation';
 $ids = $_SESSION['TENANT-' . app()->tenant->getId()]['PaymentConfSearch']['id'];
 
 $db = app()->db;
-$getPayments = $db->prepare("SELECT `Date`, `Name`, `Amount`, `Currency`, `Forename`, `Surname` FROM payments INNER JOIN users ON payments.UserID = users.UserID WHERE PaymentID = ? AND `Type` = 'Payment'");
+$tenant = app()->tenant;
+
+$getPayments = $db->prepare("SELECT `Date`, `Name`, `Amount`, `Currency`, `Forename`, `Surname` FROM payments INNER JOIN users ON payments.UserID = users.UserID WHERE PaymentID = ? AND `Type` = 'Payment' AND users.Tenant = ?");
 
 if (sizeof($ids) == 0) {
   halt(404);
@@ -31,7 +33,8 @@ include BASE_PATH . 'views/header.php';
 
           <?php
           $getPayments->execute([
-            $paymentId
+            $paymentId,
+            $tenant->getId()
           ]);
           $payment = $getPayments->fetch(PDO::FETCH_ASSOC);
           if ($payment == null) {

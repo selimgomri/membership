@@ -3,18 +3,25 @@
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
-$extra = $db->prepare("SELECT * FROM extras WHERE ExtraID = ?");
-$extra->execute([$id]);
+$extra = $db->prepare("SELECT * FROM extras WHERE ExtraID = ? AND Tenant = ?");
+$extra->execute([
+  $id,
+  $tenant->getId()
+]);
 $row = $extra->fetch(PDO::FETCH_ASSOC);
 
 if ($row == null) {
   halt(404);
 }
 
-$squads = $db->query("SELECT * FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC");
+$squads = $db->prepare("SELECT * FROM `squads` WHERE Tenant = ? ORDER BY `SquadFee` DESC, `SquadName` ASC");
+$squads->execute([
+  $tenant->getId()
+]);
 
 $pagetitle = htmlspecialchars($row['ExtraName']) . " - Extras";
 

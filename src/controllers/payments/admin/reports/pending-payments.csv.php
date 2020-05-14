@@ -1,9 +1,12 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getInfo = $db->prepare("SELECT Forename fn, Surname sn, EmailAddress email, paymentsPending.Name, paymentsPending.Date, Amount, Currency, paymentsPending.Type, paymentsPending.MetadataJSON FROM users INNER JOIN paymentsPending ON users.UserID = paymentsPending.UserID WHERE paymentsPending.Status = 'Pending' ORDER BY sn ASC, fn ASC, paymentsPending.Date ASC;");
-$getInfo->execute([]);
+$getInfo = $db->prepare("SELECT Forename fn, Surname sn, EmailAddress email, paymentsPending.Name, paymentsPending.Date, Amount, Currency, paymentsPending.Type, paymentsPending.MetadataJSON FROM users INNER JOIN paymentsPending ON users.UserID = paymentsPending.UserID WHERE users.Tenant = ? AND paymentsPending.Status = 'Pending' ORDER BY sn ASC, fn ASC, paymentsPending.Date ASC;");
+$getInfo->execute([
+  $tenant->getId()
+]);
 
 // output headers so that the file is downloaded rather than displayed
 header('Content-Type: text/csv; charset=utf-8');

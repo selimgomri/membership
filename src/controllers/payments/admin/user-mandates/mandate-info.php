@@ -4,6 +4,18 @@
 
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
+$db = app()->db;
+$tenant = app()->tenant;
+
+$getMandate = $db->prepare("SELECT COUNT(*) FROM paymentMandates INNER JOIN users ON paymentMandates.UserID = users.UserID WHERE Mandate = ? AND users.Tenant = ?");
+$getMandate->execute([
+  $mandate,
+  $tenant->getId()
+]);
+if ($getMandate->fetchColumn() == 0) {
+  halt(404);
+}
+
 header("content-type: application/json");
 
 $data = [];

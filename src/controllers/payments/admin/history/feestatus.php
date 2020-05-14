@@ -3,6 +3,7 @@
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 use Respect\Validation\Validator as v;
 
@@ -48,9 +49,13 @@ ON individualFeeTrack.PaymentID = paymentsPending.PaymentID) LEFT JOIN
 `members` ON members.MemberID = individualFeeTrack.MemberID) LEFT JOIN
 `payments` ON paymentsPending.PMkey = payments.PMkey) LEFT JOIN `users` ON
 users.UserID = individualFeeTrack.UserID) WHERE `paymentMonths`.`Date` LIKE
-? AND `individualFeeTrack`.`Type` = ? ORDER BY `Forename`
+? AND `individualFeeTrack`.`Type` = ? AND users.Tenant = ? ORDER BY `Forename`
 ASC, `Surname` ASC, `users`.`UserID` ASC, `MForename` ASC, `MSurname` ASC;");
-$getPayments->execute([$searchDate, $name_type]);
+$getPayments->execute([
+	$searchDate,
+	$name_type,
+	$tenant->getId()
+]);
 
 /*
 SELECT `Forename`, `Surname`, `MForename`, `MSurname`,

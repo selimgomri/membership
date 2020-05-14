@@ -1,6 +1,16 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
+
+$sql = $db->prepare("SELECT COUNT(*) FROM payments INNER JOIN users ON users.UserID = payments.UserID WHERE PaymentID = ? AND users.Tenant = ?");
+$sql->execute([
+  $id,
+  $tenant->getId()
+]);
+if ($sql->fetchColumn() == 0) {
+  halt(404);
+}
 
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
