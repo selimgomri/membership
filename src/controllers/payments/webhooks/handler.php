@@ -72,6 +72,7 @@ function process_payout_event($event) {
 function process_mandate_event($event) {
 	
   $db = app()->db;
+  $tenant = app()->tenant;
 	include BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
   switch ($event["action"]) {
     case "created":
@@ -143,8 +144,11 @@ function process_mandate_event($event) {
         $cancelMandate = $db->prepare("UPDATE `paymentMandates` SET `InUse` = ? WHERE `Mandate` = ?");
         $cancelMandate->execute([0, $mandate]);
 
-        $unsetDefault = $db->prepare("SELECT users.UserID, `Forename`, `Surname`, `EmailAddress`, `MandateID`, users.Active FROM `paymentMandates` INNER JOIN `users` ON users.UserID = paymentMandates.UserID WHERE `Mandate` = ?");
-        $unsetDefault->execute([$mandate]);
+        $unsetDefault = $db->prepare("SELECT users.UserID, `Forename`, `Surname`, `EmailAddress`, `MandateID`, users.Active FROM `paymentMandates` INNER JOIN `users` ON users.UserID = paymentMandates.UserID WHERE `Mandate` = ? AND Tenant = ?");
+        $unsetDefault->execute([
+          $mandate,
+          $tenant->getId()
+        ]);
         $user = $unsetDefault->fetch(PDO::FETCH_ASSOC);
         if ($user != null) {
           $mandateID = $user['MandateID'];

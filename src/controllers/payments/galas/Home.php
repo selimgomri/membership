@@ -1,14 +1,18 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $pagetitle = "Gala Payments";
 
 $earliestEndDate = new DateTime('first day of last month', new DateTimeZone('Europe/London'));
 
-$galas = $db->prepare("SELECT * FROM `galas` WHERE `GalaDate` >= ?");
-$galas->execute([$earliestEndDate->format("Y-m-d")]);
+$galas = $db->prepare("SELECT * FROM `galas` WHERE Tenant = ? AND `GalaDate` >= ?");
+$galas->execute([
+  $tenant->getId(),
+  $earliestEndDate->format("Y-m-d")
+]);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
 
 include BASE_PATH . "views/header.php";

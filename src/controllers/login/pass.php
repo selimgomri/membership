@@ -29,10 +29,10 @@ try {
 
   $target = "";
   if (isset($_GET['target'])) {
-    $target = ltrim($_GET['target'], [$club->getCodeId(), '/' . $club->getCodeId(), '/']);
+    $target = ltrim($_GET['target'], '/');
   }
 
-  header("location: " . autoUrl($target));
+  header("location: " . autoUrl($target, false));
 
 } catch (Exception $e) {
   http_response_code(303);

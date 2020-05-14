@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 \Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
 
@@ -18,7 +19,10 @@ $url = 'payments/card-transactions?';
 
 $getCount = null;
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' && isset($_GET['users']) && $_GET['users'] == 'all') {
-  $getCount = $db->query("SELECT COUNT(*) FROM stripePayments WHERE Paid");
+  $getCount = $db->prepare("SELECT COUNT(*) FROM stripePayments INNER JOIN users WHERE users.Tenant = ? AND Paid");
+  $getCount->execute([
+    $tenant->getId()
+  ]);
 } else {
   $getCount = $db->prepare("SELECT COUNT(*) FROM stripePayments WHERE User = ? AND Paid");
   $getCount->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
@@ -32,7 +36,8 @@ if ($start > $count) {
 $payments = null;
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' && isset($_GET['users']) && $_GET['users'] == 'all') {
   $url .= 'users=all&';
-  $payments = $db->prepare("SELECT stripePayments.ID, stripePayments.DateTime, stripePayMethods.Brand, stripePayMethods.Last4, stripePayments.Amount, users.Forename, users.Surname FROM ((stripePayments LEFT JOIN stripePayMethods ON stripePayments.Method = stripePayMethods.ID) LEFT JOIN users ON stripePayments.User = users.UserID) WHERE Paid ORDER BY `DateTime` DESC LIMIT :offset, :num;");
+  $payments = $db->prepare("SELECT stripePayments.ID, stripePayments.DateTime, stripePayMethods.Brand, stripePayMethods.Last4, stripePayments.Amount, users.Forename, users.Surname FROM ((stripePayments LEFT JOIN stripePayMethods ON stripePayments.Method = stripePayMethods.ID) LEFT JOIN users ON stripePayments.User = users.UserID) WHERE users.Tenant = :tenant AND Paid ORDER BY `DateTime` DESC LIMIT :offset, :num;");
+  $payments->bindValue(':tenant', $tenant->getId(), PDO::PARAM_INT); 
   $payments->bindValue(':offset', $start, PDO::PARAM_INT); 
   $payments->bindValue(':num', 10, PDO::PARAM_INT); 
   $payments->execute();

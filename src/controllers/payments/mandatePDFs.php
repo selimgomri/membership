@@ -7,8 +7,14 @@ if (!isset($mandate) || $mandate == "") {
 }
 
 $db = app()->db;
-$checkDetails = $db->prepare("SELECT `UserID` FROM `paymentMandates` WHERE `Mandate` = ?");
-$checkDetails->execute([$mandate]);
+$tenant = app()->tenant;
+
+$checkDetails = $db->prepare("SELECT paymentMandates.UserID FROM `paymentMandates` INNER JOIN users ON paymentMandates.UserID = users.UserID WHERE users.Tenant = ? AND `Mandate` = ?");
+$checkDetails->execute([
+  $tenant->getId(),
+  $mandate
+]);
+
 $userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 $mandateUser = $checkDetails->fetchColumn();

@@ -87,22 +87,6 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
 
   $email->addHeader("List-Help", autoUrl("notify"));
 
-  if (bool(env('IS_CLS'))) {
-    if ($from['Email'] == "payments@" . env('EMAIL_DOMAIN')) {
-      $email->setReplyTo("payments+replytoautoemail@chesterlestreetasc.co.uk", "Payments Team");
-    } else if ($from['Email'] == "galas@" . env('EMAIL_DOMAIN')) {
-      $email->setReplyTo("galas+replytoautoemail@" . env('EMAIL_DOMAIN'), "Gala Administrator");
-    } else if ($from['Name'] == "Chester-le-Street ASC Security") {
-      $email->setReplyTo("support+security-replytoautoemail@" . env('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_SHORT_NAME') . " Support");
-    } else {
-      $email->setReplyTo("enquiries+replytoautoemail@" . env('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_SHORT_NAME') . " Enquiries");
-    }
-
-    if (isset($from['Reply-To']) && $from['Reply-To'] != null) {
-      $email->setReplyTo($from['Reply-To']);
-    }
-  }
-
   if (isset($from['CC']) && $from['CC'] != null) {
     $email->addCcs($from['CC']);
   }

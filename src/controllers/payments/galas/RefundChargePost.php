@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $disabled = "";
 
@@ -10,8 +11,11 @@ $markAsRefunded = $db->prepare("UPDATE galaEntries SET Refunded = ?, AmountRefun
 $notify = $db->prepare("INSERT INTO notify (UserID, `Status`, `Subject`, `Message`, EmailType) VALUES (?, ?, ?, ?, ?)");
 $setRefundAmount = $db->prepare("UPDATE stripePayments SET `AmountRefunded` = ? WHERE `Intent` = ?");
 
-$getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas WHERE GalaID = ?");
-$getGala->execute([$id]);
+$getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas WHERE GalaID = ? AND Tenant = ?");
+$getGala->execute([
+	$id,
+	$tenant->getId()
+]);
 $gala = $getGala->fetch(PDO::FETCH_ASSOC);
 
 if ($gala == null) {

@@ -3,6 +3,7 @@
 use Brick\Math\RoundingMode;
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $pagetitle = "Payments Administration";
@@ -14,7 +15,10 @@ include BASE_PATH . "views/paymentsMenu.php";
 
 $dateString = date("F Y");
 
-$income = $db->query("SELECT `Date`, SUM(AMOUNT) AS Total FROM `payments` WHERE `Date` LIKE '%-01' GROUP BY `Date` ORDER BY `Date` DESC LIMIT 8");
+$income = $db->prepare("SELECT `Date`, SUM(AMOUNT) AS Total FROM `payments` INNER JOIN users ON users.UserID = payments.UserID WHERE users.Tenant = ? AND `Date` LIKE '%-01' GROUP BY `Date` ORDER BY `Date` DESC LIMIT 8");
+$income->execute([
+  $tenant->getId()
+]);
 $income = $income->fetchAll(PDO::FETCH_ASSOC);
 
  ?>

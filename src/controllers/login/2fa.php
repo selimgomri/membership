@@ -34,6 +34,8 @@ try {
     throw new Error('clubNotFound');
   }
 
+  app()->tenant = $club;
+
   if ($body->action == 'resend') {
 
     if ($_SESSION['TENANT-' . $club->getId()]['TWO_FACTOR_GOOGLE']) {
@@ -89,7 +91,7 @@ try {
       $response = [
         'next' => 'pass',
         'pass' => [
-          'redirect' => autoUrl("login/pass")
+          'redirect' => autoUrl("login/pass", false)
         ]
       ];
 

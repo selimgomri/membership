@@ -1,5 +1,7 @@
 <?php
 
+halt(404);
+
 function outcomeTypeInfo($type) {
   switch ($type) {
     case 'authorized':

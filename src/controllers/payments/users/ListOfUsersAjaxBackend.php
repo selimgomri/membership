@@ -3,17 +3,19 @@
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 $sql = "";
 if (isset($_POST["search"])) {
   // get the search term parameter from post
   $search = $_POST["search"];
-  $sql = "SELECT `Forename`, `Surname`, `MandateID`, `users`.`UserID` FROM ((users LEFT JOIN `paymentPreferredMandate` ON users.userID = paymentPreferredMandate.UserID) INNER JOIN `permissions` ON users.UserID = `permissions`.`User`) WHERE Surname LIKE ? AND `Permission` = 'Parent' ORDER BY Forename, Surname ASC;";
+  $sql = "SELECT `Forename`, `Surname`, `MandateID`, `users`.`UserID` FROM ((users LEFT JOIN `paymentPreferredMandate` ON users.userID = paymentPreferredMandate.UserID) INNER JOIN `permissions` ON users.UserID = `permissions`.`User`) WHERE users.Tenant = ? AND Surname LIKE ? AND `Permission` = 'Parent' ORDER BY Forename, Surname ASC;";
 }
 
 $getSearch = $db->prepare($sql);
 $getSearch->execute([
+  $tenant->getId(),
   '%' . trim($_POST["search"]) . '%'
 ]);
 
@@ -55,4 +57,3 @@ else {
   $output = "<div class=\"alert alert-warning mb-0\"><strong>No users found for that name</strong> <br>Please try another search</div>";
 }
 echo $output;
-?>

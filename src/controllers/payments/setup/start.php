@@ -10,7 +10,7 @@ if (isset($renewal_trap) && $renewal_trap) {
 }
 
 $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
-$sql = $db->prepare("SELECT COUNT(*) FROM `paymentSchedule` WHERE `UserID` = '$user';");
+$sql = $db->prepare("SELECT COUNT(*) FROM `paymentSchedule` WHERE `UserID` = ?;");
 $sql->execute([$user]);
 $scheduleExists = $sql->fetchColumn();
 if ($scheduleExists > 0) {

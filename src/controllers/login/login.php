@@ -36,6 +36,8 @@ try {
     throw new Error('clubNotFound');
   }
 
+  app()->tenant = $club;
+
   // Try finding user
   $email = mb_strtolower(trim($body->email));
   $password = $body->password;
@@ -119,7 +121,7 @@ try {
     $response = [
       'next' => 'pass',
       'pass' => [
-        'redirect' => autoUrl("login/pass")
+        'redirect' => autoUrl("login/pass", false)
       ]
     ];
   }

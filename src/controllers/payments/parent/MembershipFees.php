@@ -1,14 +1,17 @@
 <?php
 
 $db = app()->db;
-
+$tenant = app()->tenant;
 
 $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $info = null;
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent' && isset($id) && $id != null) {
   $user = $id;
-  $userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
-  $userInfo->execute([$id]);
+  $userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ? AND Tenant = ?");
+  $userInfo->execute([
+    $id,
+    $tenant->getId()
+  ]);
   $info = $userInfo->fetch(PDO::FETCH_ASSOC);
 
   $isParent = $db->prepare("SELECT COUNT(*) FROM permissions WHERE User = ? AND Permission = 'Parent'");

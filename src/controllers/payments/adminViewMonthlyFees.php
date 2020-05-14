@@ -6,8 +6,12 @@ if ($access != "Admin") {
 }
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getDetails = $db->query("SELECT `Forename`, `Surname`, `UserID` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE `Permission` = 'Parent' ORDER BY `Forename` ASC, `Surname` ASC");
+$getDetails = $db->prepare("SELECT `Forename`, `Surname`, `UserID` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE users.Tenant = ? AND `Permission` = 'Parent' ORDER BY `Forename` ASC, `Surname` ASC");
+$getDetails->execute([
+	$tenant->getId()
+]);
 
 $pagetitle = "Administration";
 include BASE_PATH . 'views/header.php'; ?>

@@ -94,16 +94,24 @@ function paymentIntentStatus($value) {
 }
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$payment = $db->prepare("SELECT * FROM ((stripePayments LEFT JOIN stripePaymentItems ON stripePaymentItems.Payment = stripePayments.ID) INNER JOIN users ON stripePayments.User = users.UserID) WHERE stripePayments.ID = ?");
-$payment->execute([$id]);
+$payment = $db->prepare("SELECT * FROM ((stripePayments LEFT JOIN stripePaymentItems ON stripePaymentItems.Payment = stripePayments.ID) INNER JOIN users ON stripePayments.User = users.UserID) WHERE users.Tenant = ? AND stripePayments.ID = ?");
+$payment->execute([
+  $tenant->getId(),
+  $id
+]);
+
+$pm = $payment->fetch(PDO::FETCH_ASSOC);
+
+if (!$pm) {
+  halt(404);
+}
 
 $paymentItems = $db->prepare("SELECT * FROM stripePaymentItems WHERE stripePaymentItems.Payment = ?");
 $paymentItems->execute([$id]);
 
-$pm = $payment->fetch(PDO::FETCH_ASSOC);
-
-if ($pm == null || ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Admin' && $pm['User'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Admin' && $pm['User'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
   halt(404);
 }
 
