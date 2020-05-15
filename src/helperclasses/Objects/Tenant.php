@@ -9,6 +9,9 @@ class Tenant
   private $email;
   private $verified;
   private $keys;
+  private $goCardlessAccessToken;
+  private $goCardlessOrganisationId;
+  private $goCardlessLoaded = false;
 
   public function __construct($details)
   {
@@ -245,5 +248,84 @@ class Tenant
       return mb_strtolower($this->code);
     }
     return $this->id;
+  }
+
+  /**
+   * Fetch GoCardless details from the database
+   * 
+   * To be called only once when required
+   */
+  private function loadGoCardless() {
+    $db = app()->db;
+    $getKey = $db->prepare("SELECT OrganisationId, AccessToken FROM gcCredentials WHERE Tenant = ?");
+    $getKey->execute([
+      $this->id
+    ]);
+
+    $keys = $getKey->fetch(PDO::FETCH_ASSOC);
+
+    if ($keys) {
+      $this->goCardlessAccessToken = $keys['AccessToken'];
+      $this->goCardlessOrganisationId = $keys['OrganisationId'];
+    }
+    $this->goCardlessLoaded = true;
+  }
+
+  /**
+   * Get a tenant's GoCardless access token
+   * 
+   * @return string token
+   */
+  public function getGoCardlessAccessToken() {
+    if (!$this->goCardlessLoaded) {
+      $this->loadGoCardless();
+    }
+    if ($this->goCardlessAccessToken) {
+      return $this->goCardlessAccessToken;
+    }
+    return null;
+  }
+
+  /**
+   * Assign GoCardless details to a tenant
+   * 
+   * @param string the GC Org ID
+   * @param string the GC Access Token
+   */
+  public function setGoCardlessAccessToken(string $orgId, string $accessToken) {
+    $count = app()->db->prepare("SELECT COUNT(*) FROM gcCredentials WHERE OrganisationId = ? OR Tenant = ?");
+    $count->execute([
+      $orgId,
+      $this->id
+    ]);
+
+    if ($count->fetchColumn() == 0) {
+      throw new Exception('Exists already');
+    }
+
+    $insert = app()->db->prepare("INSERT INTO gcCredentials (OrganisationId, AccessToken, Tenant) VALUES (?, ?, ?)");
+    $insert->execute([
+      $orgId,
+      $accessToken,
+      $this->id
+    ]);
+
+    $this->goCardlessAccessToken = $accessToken;
+    $this->goCardlessOrganisationId = $orgId;
+  }
+
+  /**
+   * Get a tenant's GoCardless Org ID
+   * 
+   * @return string org id
+   */
+  public function getGoCardlessOrgId() {
+    if (!$this->goCardlessLoaded) {
+      $this->loadGoCardless();
+    }
+    if ($this->goCardlessOrganisationId) {
+      return $this->goCardlessOrganisationId;
+    }
+    return null;
   }
 }
