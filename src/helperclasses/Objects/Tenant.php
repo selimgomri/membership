@@ -299,7 +299,7 @@ class Tenant
       $this->id
     ]);
 
-    if ($count->fetchColumn() == 0) {
+    if ($count->fetchColumn() > 0) {
       throw new Exception('Exists already');
     }
 
