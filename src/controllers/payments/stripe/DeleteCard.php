@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 try {
   $getCard = $db->prepare("SELECT MethodID FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND stripePayMethods.ID = ?");
@@ -21,9 +22,14 @@ try {
   ]);
 
   try {
-    \Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
+    \Stripe\Stripe::setApiKey(env('STRIPE'));
 
-    $payment_method = \Stripe\PaymentMethod::retrieve($card['MethodID']);
+    $payment_method = \Stripe\PaymentMethod::retrieve(
+      $card['MethodID'],
+      [
+        'stripe_account' => $tenant->getStripeAccount()
+      ]
+    );
     $payment_method->detach();
   } catch (Exception $e) {
     // Probably isn't the end of the world if this fails since system disables use of card.

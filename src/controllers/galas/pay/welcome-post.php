@@ -1,9 +1,9 @@
 <?php
 
-\Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
-if (app()->tenant->getKey('STRIPE_APPLE_PAY_DOMAIN')) {
+\Stripe\Stripe::setApiKey(env('STRIPE'));
+if (env('STRIPE_APPLE_PAY_DOMAIN')) {
   \Stripe\ApplePayDomain::create([
-    'domain_name' => app()->tenant->getKey('STRIPE_APPLE_PAY_DOMAIN')
+    'domain_name' => env('STRIPE_APPLE_PAY_DOMAIN')
   ]);
 }
 
@@ -101,8 +101,13 @@ if (sizeof($payingEntries) > 0) {
 
   $updateEntryPayment = $db->prepare("UPDATE galaEntries SET StripePayment = ? WHERE EntryID = ?");
 
-  if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent']) && \Stripe\PaymentIntent::retrieve($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'])->status != 'succeeded') {
-    $intent = \Stripe\PaymentIntent::retrieve($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent']);
+  if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent']) && \Stripe\PaymentIntent::retrieve($_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'], ['stripe_account' => $tenant->getStripeAccount()])->status != 'succeeded') {
+    $intent = \Stripe\PaymentIntent::retrieve(
+      $_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'],
+      [
+        'stripe_account' => $tenant->getStripeAccount()
+      ]
+    );
   
     $getId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
     $getId->execute([
@@ -136,8 +141,12 @@ if (sizeof($payingEntries) > 0) {
       'payment_method_types' => ['card'],
       'confirm' => false,
       'setup_future_usage' => 'off_session',
+    ], [
+      'stripe_account' => $tenant->getStripeAccount()
     ]);
     $_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'] = $intent->id;
+
+    reportError($intent);
   
     $intentCreatedAt = new DateTime('@' . $intent->created, new DateTimeZone('UTC'));
 
@@ -183,8 +192,12 @@ if (sizeof($payingEntries) > 0) {
 
   if ($total != $intent->amount) {
     $intent = \Stripe\PaymentIntent::update(
-      $_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'], [
+      $_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'],
+      [
         'amount' => $total,
+      ],
+      [
+        'stripe_account' => $tenant->getStripeAccount()
       ]
     );
   }

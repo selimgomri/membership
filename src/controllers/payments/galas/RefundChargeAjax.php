@@ -127,11 +127,11 @@ try {
       'Refund',
       $json
     ]);
-  } else if ($entryData['Intent'] != null && bool($entryData['StripePaid']) && app()->tenant->getKey('STRIPE')) {
+  } else if ($entryData['Intent'] != null && bool($entryData['StripePaid']) && env('STRIPE')) {
     // Refund to card used
 
     try {
-      \Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
+      \Stripe\Stripe::setApiKey(env('STRIPE'));
       $intent = \Stripe\PaymentIntent::retrieve($entryData['Intent']);
       $re = \Stripe\Refund::create([
         "charge" => $intent->charges->data[0]->id,
@@ -168,7 +168,7 @@ try {
     }
 
     try {
-      \Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
+      \Stripe\Stripe::setApiKey(env('STRIPE'));
       $intent = \Stripe\PaymentIntent::retrieve($entryData['Intent']);
 
       // Update amount refunded on payment

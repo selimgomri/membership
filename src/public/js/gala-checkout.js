@@ -1,6 +1,9 @@
 var stripeData = document.getElementById('stripe-data');
 
-var stripe = Stripe(stripeData.dataset.stripePublishable);
+var stripe = Stripe(stripeData.dataset.stripePublishable, {
+  stripeAccount: stripeData.dataset.stripeAccountId
+});
+
 var cardButton = document.getElementById('new-card-button');
 var clientSecret = cardButton.dataset.secret;
 var elements = stripe.elements({

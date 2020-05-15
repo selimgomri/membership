@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $target = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
@@ -23,7 +24,7 @@ try {
 
 	$_SESSION = [];
 
-	session_destroy();
+	// session_destroy();
 
 	$_SESSION['TENANT-' . app()->tenant->getId()]['Username'] = 		$info['Username'];
 	$_SESSION['TENANT-' . app()->tenant->getId()]['EmailAddress'] = $info['EmailAddress'];

@@ -1,16 +1,22 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 // See your keys here: https://dashboard.stripe.com/account/apikeys
-\Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
+\Stripe\Stripe::setApiKey(env('STRIPE'));
 
 $setupIntent = null;
 if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['StripeSetupIntentId'])) {
   halt(404);
 } else {
   try {
-    $setupIntent = \Stripe\SetupIntent::retrieve($_SESSION['TENANT-' . app()->tenant->getId()]['StripeSetupIntentId']);
+    $setupIntent = \Stripe\SetupIntent::retrieve(
+      $_SESSION['TENANT-' . app()->tenant->getId()]['StripeSetupIntentId'],
+      [
+        'stripe_account' => $tenant->getStripeAccount()
+      ]
+    );
   } catch (Exception $e) {
     unset($_SESSION['TENANT-' . app()->tenant->getId()]['StripeSetupIntentId']);
     header("Location: " . autoUrl("payments/cards/add"));
@@ -33,6 +39,8 @@ if ($checkIfCustomer->fetchColumn() == 0) {
     "description" => "Customer for " . $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'] . ' (' . $user['EmailAddress'] . ')',
     'email' => $user['EmailAddress'],
     'phone' => $user['Mobile']
+  ], [
+    'stripe_account' => $tenant->getStripeAccount()
   ]);
 
   // YOUR CODE: Save the customer ID and other info in a database for later.
@@ -45,7 +53,12 @@ if ($checkIfCustomer->fetchColumn() == 0) {
 } else {
   $getCustID = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
   $getCustID->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
-  $customer = \Stripe\Customer::retrieve($getCustID->fetchColumn());
+  $customer = \Stripe\Customer::retrieve(
+    $getCustID->fetchColumn(),
+    [
+      'stripe_account' => $tenant->getStripeAccount()
+    ]
+  );
 
   // Check whether we should update user details
   if ($customer->name != $user['Forename'] . ' ' . $user['Surname'] || $customer->email != $user['EmailAddress'] || $customer->phone != $user['Mobile']) {
@@ -56,6 +69,9 @@ if ($checkIfCustomer->fetchColumn() == 0) {
         "name" => $user['Forename'] . ' ' . $user['Surname'],
         'email' => $user['EmailAddress'],
         'phone' => $user['Mobile']
+      ],
+      [
+        'stripe_account' => $tenant->getStripeAccount()
       ]
     );
 
@@ -69,11 +85,19 @@ try {
     [
       'email' => $user['EmailAddress'],
       'phone' => $user['Mobile']
+    ],
+    [
+      'stripe_account' => $tenant->getStripeAccount()
     ]
   );
 
 
-  $pm = \Stripe\PaymentMethod::retrieve($setupIntent->payment_method);
+  $pm = \Stripe\PaymentMethod::retrieve(
+    $setupIntent->payment_method,
+    [
+      'stripe_account' => $tenant->getStripeAccount()
+    ]
+  );
   $pm->attach(['customer' => $customer->id]);
 
   $name = 'Payment Card';

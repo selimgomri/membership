@@ -54,8 +54,13 @@ if ($intentId == null) {
 
 $intent = null;
 try {
-  \Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
-  $intent = \Stripe\PaymentIntent::retrieve($intentId);
+  \Stripe\Stripe::setApiKey(env('STRIPE'));
+  $intent = \Stripe\PaymentIntent::retrieve(
+    $intentId,
+    [
+      'stripe_account' => $tenant->getStripeAccount()
+    ]
+  );
 } catch (Exception $e) {
   halt(500);
 }

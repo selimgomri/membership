@@ -17,7 +17,7 @@ if (!function_exists('chesterStandardMenu')) {
     global $edit_link;
 
     $canPayByCard = false;
-    if (app()->tenant->getKey('STRIPE')) {
+    if (env('STRIPE')) {
       $canPayByCard = true;
     }
 
@@ -250,7 +250,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="https://manage-sandbox.gocardless.com" target="_blank">
                       Sandbox
                     </a>
-                    <?php if (app()->tenant->getKey('STRIPE')) { ?>
+                    <?php if (env('STRIPE')) { ?>
                     <div class="dropdown-divider"></div>
                     <h6 class="dropdown-header">Payment Cards</h6>
                     <a class="dropdown-item" href="<?=autoUrl("payments/cards")?>">
@@ -386,7 +386,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?=autoUrl("payments/membership-fees")?>">
                       Annual membership fees
                     </a>
-                    <?php if (app()->tenant->getKey('STRIPE') != null) { ?>
+                    <?php if (env('STRIPE') != null) { ?>
                     <?php if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) { ?>
                     <div class="dropdown-divider"></div>
                     <?php } ?>

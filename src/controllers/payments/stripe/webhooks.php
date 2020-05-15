@@ -1,6 +1,6 @@
 <?php
 
-\Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
+\Stripe\Stripe::setApiKey(env('STRIPE'));
 
 function stripe_handlePayout($payout) {
   // Test if updating or new

@@ -108,7 +108,7 @@ if ($pm == null || ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']
   halt(404);
 }
 
-\Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
+\Stripe\Stripe::setApiKey(env('STRIPE'));
 
 $payment = \Stripe\PaymentIntent::retrieve([
   'id' => $pm['Intent'],

@@ -28,7 +28,7 @@ $timesheets->execute([$nowDay, $_SESSION['TENANT-' . app()->tenant->getId()]['Us
 $timesheet = $timesheets->fetch(PDO::FETCH_ASSOC);
 
 $canPayByCard = false;
-if (app()->tenant->getKey('STRIPE')) {
+if (env('STRIPE')) {
   $canPayByCard = true;
 }
 
@@ -248,7 +248,7 @@ include "galaMenu.php";
         </a>
       </p>
     </div>
-    <?php } else if (app()->tenant->getKey('STRIPE')) { ?>
+    <?php } else if (env('STRIPE')) { ?>
       <div class="mb-4">
       <h2>
         Pay by card

@@ -276,7 +276,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas" || $
 }
 
 // Only allow payment cards if not null
-if (app()->tenant->getKey('STRIPE') != null) {
+if (env('STRIPE') != null) {
 
 	/*
 	* Payment Cards

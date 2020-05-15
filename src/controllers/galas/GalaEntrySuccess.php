@@ -4,7 +4,7 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 $canPayByCard = false;
-if (app()->tenant->getKey('STRIPE')) {
+if (env('STRIPE')) {
   $canPayByCard = true;
 }
 

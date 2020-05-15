@@ -19,7 +19,7 @@ function getWalletName($name) {
 }
 
 function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
-  \Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
+  \Stripe\Stripe::setApiKey(env('STRIPE'));
   $swimsArray = [
     '50Free' => '50 Free',
     '100Free' => '100 Free',
@@ -53,6 +53,9 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
   $intent = \Stripe\PaymentIntent::retrieve([
     'id' => $paymentIntent,
     'expand' => ['customer', 'payment_method']
+  ],
+  [
+    'stripe_account' => app()->tenant->getStripeAccount()
   ]);
 
   $getId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");

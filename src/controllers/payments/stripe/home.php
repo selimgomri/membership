@@ -1,8 +1,9 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-\Stripe\Stripe::setApiKey(app()->tenant->getKey('STRIPE'));
+\Stripe\Stripe::setApiKey(env('STRIPE'));
 //$paymentsMeths = \Stripe\PaymentMethod::all(["customer" => "cus_FF5F1cnWIA7UAI", "type" => "card"]);
 
 $expMonth = date("m");
