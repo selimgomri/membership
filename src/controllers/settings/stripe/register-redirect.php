@@ -39,4 +39,4 @@ try {
   $_SESSION['TENANT-' . $tenant->getId()]['Stripe-Reg-Error'] = true;
 }
 
-  header("location: " . autoUrl($tenant->getCodeId() . "/settings/direct-debit"));
+  header("location: " . autoUrl($tenant->getCodeId() . "/settings/card-payments"));

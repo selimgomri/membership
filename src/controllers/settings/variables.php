@@ -13,17 +13,10 @@ $vars = [
   'EMAIL_DOMAIN' => null,
   'CLUB_WEBSITE' => null,
   'SENDGRID_API_KEY' => null,
-  'GOCARDLESS_USE_SANDBOX' => null,
-  'GOCARDLESS_SANDBOX_ACCESS_TOKEN' => null,
-  'GOCARDLESS_ACCESS_TOKEN' => null,
-  'GOCARDLESS_WEBHOOK_KEY' => null,
   'CLUB_ADDRESS' => null,
   'SYSTEM_COLOUR' => null,
   'ASA_DISTRICT' => null,
   'ASA_COUNTY' => null,
-  'STRIPE' => null,
-  'STRIPE_PUBLISHABLE' => null,
-  'STRIPE_APPLE_PAY_DOMAIN' => null,
   'HIDE_MEMBER_ATTENDANCE' => null,
   'EMERGENCY_MESSAGE' => false,
   'EMERGENCY_MESSAGE_TYPE' => 'NONE',
@@ -259,81 +252,11 @@ include BASE_PATH . 'views/header.php';
 
           <h2>GoCardless API keys (for direct debit)</h2>
 
-          <div class="form-group">
-            <label>GoCardless Mode</label>
-            <div class="custom-control custom-radio">
-              <input type="radio" value="1" id="GOCARDLESS_USE_SANDBOX_TRUE" name="GOCARDLESS_USE_SANDBOX" class="custom-control-input" <?php if (bool($vars['GOCARDLESS_USE_SANDBOX'])) { ?>checked<?php } ?> <?=$disabled['GOCARDLESS_USE_SANDBOX']?>>
-              <label class="custom-control-label" for="GOCARDLESS_USE_SANDBOX_TRUE">Use sandbox (development/testing) mode</label>
-            </div>
-            <div class="custom-control custom-radio">
-              <input type="radio" value="0" id="GOCARDLESS_USE_SANDBOX_FALSE" name="GOCARDLESS_USE_SANDBOX" class="custom-control-input" <?php if (!bool($vars['GOCARDLESS_USE_SANDBOX'])) { ?>checked<?php } ?> <?=$disabled['GOCARDLESS_USE_SANDBOX']?>>
-              <label class="custom-control-label" for="GOCARDLESS_USE_SANDBOX_FALSE">Use live (production) mode</label>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="GOCARDLESS_SANDBOX_ACCESS_TOKEN">GoCardless Sandbox (dev) Access Token</label>
-            <input class="form-control mono" type="text" name="GOCARDLESS_SANDBOX_ACCESS_TOKEN" id="GOCARDLESS_SANDBOX_ACCESS_TOKEN" value="<?=htmlspecialchars($vars['GOCARDLESS_SANDBOX_ACCESS_TOKEN'])?>" <?=$disabled['GOCARDLESS_SANDBOX_ACCESS_TOKEN']?>> 
-          </div>
-
-          <div class="form-group">
-            <label for="GOCARDLESS_ACCESS_TOKEN">GoCardless Live Access Token</label>
-            <input class="form-control mono" type="text" name="GOCARDLESS_ACCESS_TOKEN" id="GOCARDLESS_ACCESS_TOKEN" value="<?=htmlspecialchars($vars['GOCARDLESS_ACCESS_TOKEN'])?>" <?=$disabled['GOCARDLESS_ACCESS_TOKEN']?>> 
-          </div>
-
-          <div class="form-group">
-            <label for="GOCARDLESS_WEBHOOK_KEY">GoCardless Webhook Key</label>
-            <input class="form-control mono" type="text" name="GOCARDLESS_WEBHOOK_KEY" id="GOCARDLESS_WEBHOOK_KEY" value="<?=htmlspecialchars($vars['GOCARDLESS_WEBHOOK_KEY'])?>" <?=$disabled['GOCARDLESS_WEBHOOK_KEY']?>> 
-          </div>
-
-          <p>Your GoCardless webhook endpoint URL is</p>
-          <div class="form-group">
-            <input class="form-control mono" type="text" readonly value="<?=autoUrl("payments/webhooks")?>"> 
-          </div>
+          <p>GoCardless API keys and webhooks are not required in Membership MT. Instead you can grant SCDS access to your GoCardless account quickly and easily by going to <a href="<?=htmlspecialchars(autoUrl("settings/direct-debit"))?>">Direct Debit Settings</a></p>
 
           <h2>Stripe API keys (for card payments)</h2>
 
-          <p>Warning: Please do not mix up your publishable and private keys. Mistakenly publishing your private key might give a bad actor full access to your Stripe account.</p>
-          
-          <div class="form-group">
-            <label for="STRIPE">Stripe Private Key</label>
-            <input class="form-control mono" type="text" name="STRIPE" id="STRIPE" value="<?=htmlspecialchars($vars['STRIPE'])?>" <?=$disabled['STRIPE']?>> 
-          </div>
-
-          <div class="form-group">
-            <label for="STRIPE_PUBLISHABLE">Stripe Publishable Key</label>
-            <input class="form-control mono" type="text" name="STRIPE_PUBLISHABLE" id="STRIPE_PUBLISHABLE" value="<?=htmlspecialchars($vars['STRIPE_PUBLISHABLE'])?>" <?=$disabled['STRIPE_PUBLISHABLE']?>> 
-          </div>
-
-          <div class="form-group">
-            <label for="STRIPE_APPLE_PAY_DOMAIN">Stripe Apple Pay Domain</label>
-            <input class="form-control mono" type="text" name="STRIPE_APPLE_PAY_DOMAIN" id="STRIPE_APPLE_PAY_DOMAIN" value="<?=htmlspecialchars($vars['STRIPE_APPLE_PAY_DOMAIN'])?>" <?=$disabled['STRIPE_APPLE_PAY_DOMAIN']?>> 
-          </div>
-
-          <div class="form-group">
-            <label for="STRIPE_WEBHOOK_URL">Your Stripe webhook endpoint URL is</label>
-            <input class="form-control mono" type="text" name="STRIPE_WEBHOOK_URL" id="STRIPE_WEBHOOK_URL" readonly value="<?=autoUrl("payments/stripe/webhooks")?>" aria-describedby="STRIPE_WEBHOOK_URL_HELP"> 
-            <small id="STRIPE_WEBHOOK_URL_HELP" class="form-text text-muted">
-              <p>We plan to automatically set up webhooks for you in future but for now you must do so manually.</p>
-            </small>
-
-            <p>You must tell Stripe that the webhook supports the following event types;</p>
-
-            <ul>
-              <li>payout.paid</li>
-              <li>payout.updated</li>
-              <li>payout.failed</li>
-              <li>payout.created</li>
-              <li>payout.canceled</li>
-              <li>payment_method.detached</li>
-              <li>payment_intent.succeeded</li>
-              <li>payment_intent.created</li>
-              <li>payment_method.updated</li>
-              <li class="text-truncate">payment_method.card_automatically_updated</li>
-            </ul>
-              
-              
-          </div>
+          <p>Stripe API keys and webhooks are not required in Membership MT. Instead you can grant SCDS access to your Stripe account quickly and easily by going to <a href="<?=htmlspecialchars(autoUrl("settings/card-payments"))?>">Card Payment Settings</a></p>
 
           <h2>Customisation</h2>
 
