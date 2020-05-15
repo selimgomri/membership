@@ -138,10 +138,12 @@ class CreateMail {
       $foot .= "
       <p class=\"small\" align=\"center\"><strong>" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . "</strong><br>";
       $addr = json_decode(app()->tenant->getKey('CLUB_ADDRESS'));
-      for ($i = 0; $i < sizeof($addr); $i++) {
-        $foot .= htmlspecialchars($addr[$i]) . '<br>';
-        if (isset($addr[$i+1]) && $addr[$i+1] == "") {
-          break;
+      if ($addr) {
+        for ($i = 0; $i < sizeof($addr); $i++) {
+          $foot .= htmlspecialchars($addr[$i]) . '<br>';
+          if (isset($addr[$i+1]) && $addr[$i+1] == "") {
+            break;
+          }
         }
       }
     } else {
@@ -185,10 +187,12 @@ class CreateMail {
       $foot = "\r\n\n\n " . app()->tenant->getKey('CLUB_NAME') . "\r\n\r\n";
       $foot .= app()->tenant->getKey('CLUB_NAME') . "\r\n";
       $addr = json_decode(app()->tenant->getKey('CLUB_ADDRESS'));
-      for ($i = 0; $i < sizeof($addr); $i++) {
-        $foot .= $addr[$i] . "\r\n";
-        if (isset($addr[$i+1]) && $addr[$i+1] == "") {
-          break;
+      if ($addr) {
+        for ($i = 0; $i < sizeof($addr); $i++) {
+          $foot .= $addr[$i] . "\r\n";
+          if (isset($addr[$i+1]) && $addr[$i+1] == "") {
+            break;
+          }
         }
       }
       $foot .= "\r\nThis email was sent automatically by the " . app()->tenant->getKey('CLUB_NAME') . " Membership System.\r\n\r\n";
