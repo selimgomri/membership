@@ -2,19 +2,21 @@
 
 // Setup GoCardless Client
 
+$at = app()->tenant->getGoCardlessAccessToken();
+
 $client = null;
 try {
-  if (bool(app()->tenant->getKey('GOCARDLESS_USE_SANDBOX'))) {
+  if (bool(env('IS_DEV'))) {
     $client = new \GoCardlessPro\Client([
-      'access_token' 		=> app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN'),
+      'access_token' 		=> $at,
       'environment' 		=> \GoCardlessPro\Environment::SANDBOX
     ]);
   } else {
     $client = new \GoCardlessPro\Client([
-      'access_token' 		=> app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN'),
+      'access_token' 		=> $at,
       'environment' 		=> \GoCardlessPro\Environment::LIVE
     ]);
   }
 } catch (Exception $e) {
-  halt(902);  
+  halt(902);
 }
