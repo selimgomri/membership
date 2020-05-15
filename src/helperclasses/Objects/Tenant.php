@@ -12,6 +12,7 @@ class Tenant
   private $goCardlessAccessToken;
   private $goCardlessOrganisationId;
   private $goCardlessLoaded = false;
+  private $stripeAccountId;
 
   public function __construct($details)
   {
@@ -326,6 +327,20 @@ class Tenant
     if ($this->goCardlessOrganisationId) {
       return $this->goCardlessOrganisationId;
     }
+    return null;
+  }
+
+  public function getStripeAccount() {
+    if ($this->stripeAccountId) {
+      return $this->stripeAccountId;
+    }
+
+    $sid = $this->getKey('STRIPE_ACCOUNT_ID');
+
+    if ($sid) {
+      return $sid;
+    }
+
     return null;
   }
 }

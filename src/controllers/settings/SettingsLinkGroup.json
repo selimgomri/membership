@@ -35,6 +35,14 @@
       "external": false
     },
     {
+      "id": "settings-stripe",
+      "name": "Card payments",
+      "title": "Stripe Card Payment settings",
+      "link": "settings/card-payments",
+      "target": "_self",
+      "external": false
+    },
+    {
       "id": "settings-codes-of-conduct",
       "name": "Codes of conduct",
       "title": "Settings for club codes of conduct",

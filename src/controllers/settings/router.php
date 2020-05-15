@@ -8,6 +8,10 @@ $this->group('/direct-debit', function() {
   include 'gocardless/router.php';
 });
 
+$this->group('/card-payments', function() {
+  include 'stripe/router.php';
+});
+
 $this->group('/variables', function() {
     $this->get('/', function() {
       include 'variables.php';

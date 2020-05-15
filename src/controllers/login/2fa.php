@@ -12,6 +12,10 @@ $response = [
   ]
 ];
 
+use GeoIp2\Database\Reader;
+use PragmaRX\Google2FA\Google2FA;
+$ga2fa = new Google2FA();
+
 try {
 
   // Parse request
