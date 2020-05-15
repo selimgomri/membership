@@ -4,7 +4,7 @@ if (!isset($_SESSION['GC-Reg-OAuth'])) {
   halt(404);
 }
 
-$tenant = new Tenant::fromId($_SESSION['GC-Reg-OAuth']['tenant']);
+$tenant = \Tenant::fromId((int) $_SESSION['GC-Reg-OAuth']['tenant']);
 
 if (!$tenant || !isset($_GET['code'])) {
   halt(404);
