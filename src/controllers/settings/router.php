@@ -4,6 +4,10 @@ $this->get('/', function() {
   include 'home.php';
 });
 
+$this->group('/direct-debit', function() {
+  include 'gocardless/router.php';
+});
+
 $this->group('/variables', function() {
     $this->get('/', function() {
       include 'variables.php';

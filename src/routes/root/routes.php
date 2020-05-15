@@ -12,6 +12,10 @@ $this->group('/account', function() {
   include BASE_PATH . 'routes/login/routes.php';
 });
 
+$this->group('/services', function() {
+  include BASE_PATH . 'routes/services/routes.php';
+});
+
 $this->group('/shared-services', function() {
   include BASE_PATH . 'controllers/shared-services/router.php';
 });
