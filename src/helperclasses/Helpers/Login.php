@@ -139,7 +139,8 @@ class Login {
       setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, time()+60*60*24*120 , "/", 'chesterlestreetasc.co.uk', $secure, false);
     }
     if (!$this->reLogin) {
-      setcookie(COOKIE_PREFIX . "AutoLogin", $hash, time()+60*60*24*120, COOKIE_PATH, app('request')->hostname, $secure, false);
+      $cookiePath = '/' . app()->tenant->getCodeId();
+      setcookie(COOKIE_PREFIX . "AutoLogin", $hash, time()+60*60*24*120, $cookiePath, app('request')->hostname, $secure, false);
     }
 
     // Test if we've seen a login from here before

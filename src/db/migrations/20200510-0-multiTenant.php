@@ -26,7 +26,7 @@
  * sessionsVenues
  * squads
  * stripePayouts
- * systemOptions -> tenantOptions //
+ * tenantOptions -> tenantOptions //
  * targetedLists
  * REMOVE TIMES
  * users -> modified /
@@ -51,7 +51,7 @@ $db->query(
 );
 
 $db->query(
-  "RENAME TABLE systemOptions TO tenantOptions;"
+  "RENAME TABLE tenantOptions TO tenantOptions;"
 );
 
 $db->query(

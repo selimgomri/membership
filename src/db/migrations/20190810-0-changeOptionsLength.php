@@ -1,5 +1,5 @@
 <?php
 
 $db->query(
-  "ALTER TABLE systemOptions MODIFY `Option` varchar(255);"
+  "ALTER TABLE tenantOptions MODIFY `Option` varchar(255);"
 );

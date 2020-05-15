@@ -55,7 +55,8 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_
     if (app('request')->protocol == 'http' && bool(env('IS_DEV'))) {
       $secure = false;
     }
-    setcookie('TENANT-' . app()->tenant->getId() . '-' . "AutoLogin", $hash, $expiry_time , COOKIE_PATH, app('request')->hostname, $secure, false);
+    $cookiePath = '/' . app()->tenant->getCodeId();
+    setcookie('TENANT-' . app()->tenant->getId() . '-' . "AutoLogin", $hash, $expiry_time , $cookiePath, app('request')->hostname, $secure, false);
   }
 } else if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
   $currentUser = new User($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], true);

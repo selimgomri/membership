@@ -19,7 +19,7 @@ class IndividualAndFamily extends ClubMembership {
    * Object constructor
    */
   public function __construct($db, $user, $upgrade) {
-    $getValue = $db->prepare("SELECT `Value` FROM systemOptions WHERE `Option` = ?");
+    $getValue = $db->prepare("SELECT `Value` FROM tenantOptions WHERE `Option` = ?");
 
     // Verify type is IndividualAndFamily
     $getValue->execute(['ClubFeesType']);
