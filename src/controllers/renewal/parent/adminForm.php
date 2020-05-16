@@ -3,10 +3,15 @@
 $partial_reg = isPartialRegistration();
 
 $db = app()->db;
-$sql = "SELECT `ID` FROM `posts` WHERE `Type` = ? LIMIT 1";
+$tenant = app()->tenant;
+
+$sql = "SELECT `ID` FROM `posts` WHERE `Type` = ? AND Tenant = ? LIMIT 1";
 try {
 	$query = $db->prepare($sql);
-	$query->execute(['terms_conditions']);
+	$query->execute([
+    'terms_conditions',
+    $tenant->getId()
+  ]);
 } catch (PDOException $e) {
 	halt(500);
 }

@@ -6,9 +6,10 @@ $db = app()->db;
 $parentCode = app()->tenant->getKey('ParentCodeOfConduct');
 
 if (isset($id)) {
-	$getDetails = $db->prepare("SELECT * FROM `squads` INNER JOIN `members` ON members.SquadID =
-	squads.SquadID WHERE `MemberID` = ?");
-  $getDetails->execute([$id]);
+	$getDetails = $db->prepare("SELECT * FROM ((`squads` INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad) INNER JOIN `members` ON squadMembers.member = members.MemberID) WHERE `MemberID` = ?");
+  $getDetails->execute([
+    $id
+  ]);
 	$row = $getDetails->fetch(PDO::FETCH_ASSOC);
 
   if ($row == null) {

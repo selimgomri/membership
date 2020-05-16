@@ -5,27 +5,40 @@
 // Also controls single session progress.
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 function renewalProgress($user) {
-  $db = app()->db;
+	$db = app()->db;
+	$date = new DateTime('now', new DateTimeZone('Europe/London'));
+
   $details = null;
 	if (user_needs_registration($user)) {
 		$details = $db->prepare("SELECT * FROM `renewalProgress` WHERE `RenewalID` = 0 AND `UserID` = ?");
 	} else {
 		$details = $db->prepare("SELECT * FROM `renewals` LEFT JOIN
 		`renewalProgress` ON renewals.ID = renewalProgress.RenewalID WHERE
-		`StartDate` <= CURDATE() AND CURDATE() <= `EndDate` AND `UserID` = ? ORDER
+		`StartDate` <= :today AND `EndDate` >= :today AND `UserID` = :user ORDER
 		BY renewals.ID DESC, renewalProgress.ID DESC");
 	}
-	$details->execute([$user]);
+	$details->execute([
+		'user' => $user,
+		'today' => $date->format("Y-m-d")
+	]);
 	$details = $details->fetch(PDO::FETCH_ASSOC);
 	return $details;
 }
 
 function latestRenewal() {
 	$db = app()->db;
-	$latest = $db->query("SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE()
-	AND CURDATE() <= `EndDate` ORDER BY renewals.ID DESC LIMIT 1");
+	$tenant = app()->tenant;
+	$date = new DateTime('now', new DateTimeZone('Europe/London'));
+
+	$latest = $db->prepare("SELECT * FROM `renewals` WHERE `StartDate` <= :today
+	AND `EndDate` >= :today AND Tenant = ? ORDER BY renewals.ID DESC LIMIT 1");
+	$latest->execute([
+		'today' => $date->format("Y-m-d"),
+		'tenant' => $tenant->getId()
+	]);
 	$latestRenewal = $latest->fetch(PDO::FETCH_ASSOC);
 	return $latestRenewal;
 }

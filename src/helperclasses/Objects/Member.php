@@ -14,6 +14,7 @@ class Member extends Person
   private bool $requiresRegistration;
   private string $sex;
   private $notes;
+  private $squads;
   private bool $swimEnglandMember;
   private string $swimEnglandNumber;
   private int $swimEnglandCategory;
@@ -56,7 +57,6 @@ class Member extends Person
     $this->surname = $info['MSurname'];
     $this->dob = new DateTime($info['DateOfBirth'], new DateTimeZone('Europe/London'));
     $this->user = $info['UserID'];
-    $this->squad = $info['SquadID'];
     $this->sex = $info['Gender'];
     $this->notes = $info['OtherNotes'];
 
@@ -79,6 +79,13 @@ class Member extends Person
 
     // Other
     $this->accessKey = $info['AccessKey'];
+
+    // Get squads
+    $getSquads = $db->prepare("SELECT Squad FROM squadMembers WHERE Member = ?");
+    $getSquads->execute([
+      $this->id
+    ]);
+    $this->squads = $getSquads->fetchAll(PDO::FETCH_COLUMN);
   }
 
   /**
@@ -96,9 +103,11 @@ class Member extends Person
    */
   public function getSquads()
   {
-    return [
-      Squad::get($this->squad)
-    ];
+    $squads = [];
+    foreach ($this->squads as $squad) {
+      $squads[] = Squad::get($squad);
+    }
+    return $squads;
   }
 
   /**

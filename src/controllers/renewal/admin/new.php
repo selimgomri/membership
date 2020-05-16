@@ -1,6 +1,6 @@
 <?php
 
-$pagetitle = "Create New Renewal";
+$pagetitle = "Create New Renewal Period";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php";
 

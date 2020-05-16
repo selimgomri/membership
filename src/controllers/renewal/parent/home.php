@@ -1,8 +1,14 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$renewals = $db->query("SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE() AND CURDATE() <= `EndDate`");
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
+$renewals = $db->prepare("SELECT * FROM `renewals` WHERE `StartDate` <= :today AND `EndDate` >= :today AND Tenant = :tenant");
+$renewals->execute([
+  'tenant' => $tenant->getId(),
+  'today' => $date->format("Y-m-d")
+]);
 $row = $renewals->fetch(PDO::FETCH_ASSOC);
 
 $year = date("Y", strtotime('+1 year'));

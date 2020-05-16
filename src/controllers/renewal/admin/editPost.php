@@ -1,6 +1,19 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
+
+$renewal = $db->prepare("SELECT * FROM `renewals` WHERE `ID` = ? AND Tenant = ?");
+$renewal->execute([
+	$id,
+	$tenant->getId()
+]);
+
+$renewalInfo = $renewal->fetch(PDO::FETCH_ASSOC);
+
+if (!$renewalInfo) {
+	halt(404);
+}
 
 use Respect\Validation\Validator as v;
 

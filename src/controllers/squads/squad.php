@@ -20,7 +20,7 @@ try {
   halt(404);
 }
 
-$numSwimmers = $db->prepare("SELECT COUNT(*) FROM members WHERE SquadID = ?");
+$numSwimmers = $db->prepare("SELECT COUNT(*) FROM squadMembers WHERE Squad = ?");
 $numSwimmers->execute([$id]);
 $numSwimmers = $numSwimmers->fetchColumn();
 
@@ -46,20 +46,20 @@ if ($isAllowed->fetchColumn() > 0) {
 
 $swimmers = null;
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent' || $canAccessSquadInfo) {
-  $swimmers = $db->prepare("SELECT MemberID id, MForename first, MSurname last, DateOfBirth dob, Forename fn, Surname sn, EmailAddress email, Mobile mob, members.UserID `user` FROM members LEFT JOIN users ON members.UserID = users.UserID WHERE SquadID = ? ORDER BY first ASC, last ASC");
+  $swimmers = $db->prepare("SELECT MemberID id, MForename first, MSurname last, DateOfBirth dob, Forename fn, Surname sn, EmailAddress email, Mobile mob, members.UserID `user` FROM ((members INNER JOIN squadMembers ON squadMembers.Member = members.MemberID) LEFT JOIN users ON members.UserID = users.UserID) WHERE squadMembers.Squad = ? ORDER BY first ASC, last ASC");
   $swimmers->execute([$id]);
 }
 
 $coaches = $squad->getCoaches();
 
 // Chart data section start
-$getNumSex = $db->prepare("SELECT COUNT(*) FROM members WHERE SquadID = ? AND Gender = ?");
+$getNumSex = $db->prepare("SELECT COUNT(*) FROM members INNER JOIN squadMembers ON squadMembers.Member = members.MemberID WHERE Squad = ? AND Gender = ?");
 $getNumSex->execute([$id, 'Male']);
 $male = (int) $getNumSex->fetchColumn();
 $getNumSex->execute([$id, 'Female']);
 $female = (int) $getNumSex->fetchColumn();
 
-$getBirths = $db->prepare("SELECT DateOfBirth FROM members WHERE SquadID = ?");
+$getBirths = $db->prepare("SELECT DateOfBirth FROM members INNER JOIN squadMembers ON squadMembers.Member = members.MemberID WHERE Squad = ?");
 $getBirths->execute([$id]);
 $agesArray = [];
 $timeNow = new DateTime('now', new DateTimeZone('Europe/London'));

@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 use Respect\Validation\Validator as v;
 
@@ -43,12 +44,13 @@ if (!v::date()->validate($end)) {
 
 if ($ok) {
 	try {
-		$insert = $db->prepare("INSERT INTO `renewals` (`Name`, `StartDate`, `EndDate`, `Year`) VALUES (?, ?, ?, ?);");
+		$insert = $db->prepare("INSERT INTO `renewals` (`Name`, `StartDate`, `EndDate`, `Year`, Tenant) VALUES (?, ?, ?, ?, ?);");
 		$insert->execute([
 			$name,
 			$start,
 			$end,
-			$year
+			$year,
+			$tenant->getId()
 		]);
 		header("Location: " . autoUrl("renewal"));
 	} catch (Exception $e) {

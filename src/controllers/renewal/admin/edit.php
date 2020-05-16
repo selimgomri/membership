@@ -1,9 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$renewal = $db->prepare("SELECT * FROM `renewals` WHERE `ID` = ?");
-$renewal->execute([$id]);
+$renewal = $db->prepare("SELECT * FROM `renewals` WHERE `ID` = ? AND Tenant = ?");
+$renewal->execute([
+	$id,
+	$tenant->getId()
+]);
 
 $row = $renewal->fetch(PDO::FETCH_ASSOC);
 
