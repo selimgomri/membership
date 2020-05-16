@@ -3,7 +3,7 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id, SquadName squad FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID = ? ORDER BY fn ASC, sn ASC");
+$getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM members WHERE members.UserID = ? ORDER BY fn ASC, sn ASC");
 $getMembers->execute([
   $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
 ]);
@@ -36,9 +36,6 @@ include BASE_PATH . 'views/header.php';
         <a href="<?=htmlspecialchars(autoUrl("log-books/members/" . $member['id']))?>" class="list-group-item list-group-item-action">
           <p class="mb-0">
             <strong><?=htmlspecialchars($member['fn'] . ' ' . $member['sn'])?>'s log book</strong>
-          </p>
-          <p class="mb-0">
-            <?=htmlspecialchars($member['squad'])?>
           </p>
         </a>
         <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>

@@ -4,13 +4,15 @@ use Respect\Validation\Validator as v;
 use Brick\PhoneNumber\PhoneNumber;
 use Brick\PhoneNumber\PhoneNumberParseException;
 use Brick\PhoneNumber\PhoneNumberFormat;
+
 $db = app()->db;
+$tenant = app()->tenant;
 
 try {
 
   $getUserInfo = $db->prepare("SELECT UserID FROM users WHERE EmailAddress = ?");
 
-  $insert = $db->prepare("INSERT INTO users (EmailAddress, `Password`, Forename, Surname, Mobile, EmailComms, MobileComms, RR) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+  $insert = $db->prepare("INSERT INTO users (EmailAddress, `Password`, Forename, Surname, Mobile, EmailComms, MobileComms, RR, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
   $addAccessLevel = $db->prepare("INSERT INTO `permissions` (`Permission`, `User`) VALUES (?, ?)");
 
   $forename = trim($_POST['first']);
@@ -67,7 +69,8 @@ try {
       $mobile,
       0,
       0,
-      0
+      0,
+      $tenant->getId()
     ]);
 
     $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'] = $db->lastInsertId();

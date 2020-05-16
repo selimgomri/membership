@@ -1,9 +1,14 @@
 <?php
 
-$user = $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'];
 $db = app()->db;
+$tenant = app()->tenant;
 
-$swimmers = $db->query("SELECT MForename `first`, MSurname `last`, SquadName `name`, MemberID `id` FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID IS NULL ORDER BY MemberID DESC, `first` ASC, `last` ASC");
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'];
+
+$swimmers = $db->prepare("SELECT MemberID `id` FROM members WHERE Tenant = ? AND members.UserID IS NULL");
+$swimmers->execute([
+  $tenant->getId()
+]);
 
 $setParent = $db->prepare("UPDATE members SET UserID = ?, RR = ? WHERE MemberID = ?");
 
@@ -46,8 +51,8 @@ if ($success) {
     unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegExisting']);
   } else {
     $message .= "<p>We've created an account for you in our membership system. We use the system to keep track of all our members, information, gala entries, payments and more.</p>";
-    $message .= "<p>To continue, <a href=\"" . autoUrl("assisted-registration/" . $_SESSION['AssRegUser'] . "/" . $_SESSION['AssRegPass']) . "\">please follow this link</a></p>";
-    $message .= "<p>As part of the registration process, we'll ask you to set a password, let us know your communication preferences and fill in important information about you and/or your members. At the end, we'll set up a direct debit so that payments to " . htmlspecialchars(env('CLUB_NAME')) . " are taken automatically.</p>";
+    $message .= "<p>To continue, <a href=\"" . autoUrl("assisted-registration/" . $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'] . "/" . $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegPass']) . "\">please follow this link</a></p>";
+    $message .= "<p>As part of the registration process, we'll ask you to set a password, let us know your communication preferences and fill in important information about you and/or your members. At the end, we'll set up a direct debit so that payments to " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " are taken automatically.</p>";
     $message .= "<p>You'll also be given the opportunity to set up a direct debit.</p>";
   }
   if (!bool(env('IS_CLS'))) {

@@ -7,7 +7,7 @@ $userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 include BASE_PATH . "views/header.php";
 
-$getSwimmers = $db->prepare("SELECT MemberID id, MForename `first`, MSurname `last`, SquadName `squad`, SquadFee `fee`, ClubPays free FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID = ? ORDER BY `first` ASC, `last` ASC");
+$getSwimmers = $db->prepare("SELECT MemberID id, MForename `first`, MSurname `last`, ClubPays free FROM members WHERE members.UserID = ? ORDER BY `first` ASC, `last` ASC");
 $getSwimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 ?>
@@ -16,46 +16,46 @@ $getSwimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']])
 	<div class="container">
 		<h1>My members</h1>
 		<?php if ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC)) { ?>
-		<div class="row">
-			<div class="col-md-8">
-				<p class="lead">
-					Members linked to your account
-				</p>
-				<p>
-					Please remember that it is your own responsibility to also keep the Swim England Membership System up to date with personal details.
-				</p>
+			<div class="row">
+				<div class="col-md-8">
+					<p class="lead">
+						Members linked to your account
+					</p>
+					<p>
+						Please remember that it is your own responsibility to also keep the Swim England Membership System up to date with personal details.
+					</p>
+				</div>
 			</div>
-		</div>
 
-		<div class="news-grid mb-4">
-			<?php do { ?>
-				<a href="<?=autoUrl("members/" . $swimmer['id'])?>">
-					<span class="mb-3">
-						<span class="title mb-0">
-							<?=htmlspecialchars($swimmer['first'] . ' ' . $swimmer['last'])?>
+			<div class="news-grid mb-4">
+				<?php do { ?>
+					<a href="<?= autoUrl("members/" . $swimmer['id']) ?>">
+						<span class="mb-3">
+							<span class="title mb-0">
+								<?= htmlspecialchars($swimmer['first'] . ' ' . $swimmer['last']) ?>
+							</span>
+							<span>
+								<!-- Squads -->
+							</span>
 						</span>
-						<span>
-						<?=htmlspecialchars($swimmer['squad'])?> Squad
+						<span class="category">
+							<?php if ($swimmer['free']) { ?>
+								This member doesn't pay
+							<?php } else { ?>
+								Paying member
+							<?php } ?>
 						</span>
-					</span>
-					<span class="category">
-						<?php if ($swimmer['free']) { ?>
-						This member doesn't pay
-						<?php } else { ?>
-						&pound;<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $swimmer['fee']))->toScale(2))?> per month
-						<?php } ?>
-					</span>
-				</a>
-			<?php } while ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC)); ?>
-		</div>
-		<?php } else { ?>
-		<div class="row">
-			<div class="col-md-8">
-				<p class="lead">
-					Members connected to your account will be shown here once you add some.
-				</p>
+					</a>
+				<?php } while ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC)); ?>
 			</div>
-		</div>
+		<?php } else { ?>
+			<div class="row">
+				<div class="col-md-8">
+					<p class="lead">
+						Members connected to your account will be shown here once you add some.
+					</p>
+				</div>
+			</div>
 		<?php } ?>
 
 		<p>

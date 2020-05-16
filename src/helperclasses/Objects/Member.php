@@ -91,7 +91,7 @@ class Member extends Person
   /**
    * Get member's middlename
    */
-  public function getMiddlenames()
+  public function getMiddleNames()
   {
     return $this->middlenames;
   }

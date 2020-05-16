@@ -285,9 +285,9 @@ $this->group('/oauth2', function () {
 });
 
 if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
-  $this->post('/login', function () {
-    include BASE_PATH . 'controllers/login-go.php';
-  });
+  // $this->post('/login', function () {
+  //   include BASE_PATH . 'controllers/login-go.php';
+  // });
 
   // Home
   // $this->get('/', function () {

@@ -13,17 +13,20 @@ function renewalProgress($user) {
 
   $details = null;
 	if (user_needs_registration($user)) {
-		$details = $db->prepare("SELECT * FROM `renewalProgress` WHERE `RenewalID` = 0 AND `UserID` = ?");
+		$details = $db->prepare("SELECT * FROM `renewalProgress` WHERE `RenewalID` = 0 AND `UserID` = :user");
+		$details->execute([
+			'user' => $user,
+		]);
 	} else {
 		$details = $db->prepare("SELECT * FROM `renewals` LEFT JOIN
 		`renewalProgress` ON renewals.ID = renewalProgress.RenewalID WHERE
 		`StartDate` <= :today AND `EndDate` >= :today AND `UserID` = :user ORDER
 		BY renewals.ID DESC, renewalProgress.ID DESC");
+		$details->execute([
+			'user' => $user,
+			'today' => $date->format("Y-m-d")
+		]);
 	}
-	$details->execute([
-		'user' => $user,
-		'today' => $date->format("Y-m-d")
-	]);
 	$details = $details->fetch(PDO::FETCH_ASSOC);
 	return $details;
 }
@@ -34,7 +37,7 @@ function latestRenewal() {
 	$date = new DateTime('now', new DateTimeZone('Europe/London'));
 
 	$latest = $db->prepare("SELECT * FROM `renewals` WHERE `StartDate` <= :today
-	AND `EndDate` >= :today AND Tenant = ? ORDER BY renewals.ID DESC LIMIT 1");
+	AND `EndDate` >= :today AND Tenant = :tenant ORDER BY renewals.ID DESC LIMIT 1");
 	$latest->execute([
 		'today' => $date->format("Y-m-d"),
 		'tenant' => $tenant->getId()
@@ -122,7 +125,10 @@ if ($currentRenewalDetails == null) {
 	$currentRenewalDetails = renewalProgress($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
 } else {
 	$row = latestRenewal();
-	$renewal = $row['ID'];
+	$renewal = null;
+	if ($row) {
+		$renewal = $row['ID'];
+	}
 	if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
 		$renewal = 0;
 	} else if ($row == null) {

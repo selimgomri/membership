@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 use Respect\Validation\Validator as v;
 
@@ -9,10 +10,13 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']) && $_SESS
   unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']);
 }
 
-$getUserInfo = $db->prepare("SELECT UserID FROM users WHERE EmailAddress = ?");
+$getUserInfo = $db->prepare("SELECT UserID FROM users WHERE EmailAddress = ? AND Tenant = ?");
 
 $email = trim(mb_strtolower($_POST['email-address']));
-$getUserInfo->execute([$email]);
+$getUserInfo->execute([
+  $email,
+  $tenant->getId()
+]);
   
 $status = true;
 if (!v::email()->validate($email)) {

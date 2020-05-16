@@ -61,11 +61,11 @@ try {
 	$clubFee = $clubFees->getFee();
 
 	if ($partial_reg) {
-		$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
-		members.SquadID WHERE `members`.`UserID` = ? && `members`.`RR` = 1";
+		$sql = "SELECT * FROM ((`members` INNER JOIN squadMembers ON members.MemberID = squadMembers.Member) INNER JOIN `squads` ON squads.SquadID =
+		squadMembers.Squad) WHERE `members`.`UserID` = ? AND `members`.`RR` = 1";
 	} else {
-		$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
-		members.SquadID WHERE `members`.`UserID` = ?";
+		$sql = "SELECT * FROM ((`members` INNER JOIN squadMembers ON members.MemberID = squadMembers.Member) INNER JOIN `squads` ON squads.SquadID =
+		squadMembers.Squad) WHERE `members`.`UserID` = ?";
 	}
 	$getMembers = $db->prepare($sql);
 	$getMembers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);

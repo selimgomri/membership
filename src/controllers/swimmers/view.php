@@ -297,7 +297,9 @@ include BASE_PATH . 'views/header.php';
             </ul>
           </div>
         </div>
+        <?php } ?>
 
+        <?php if (sizeof($perms['allowed']) > 0 && sizeof($perms['disallowed']) > 0) { ?>
         <div class="col-12 mb-2 d-block d-xl-none"></div>
         <?php } ?>
 
@@ -319,7 +321,7 @@ include BASE_PATH . 'views/header.php';
       </div>
 
       <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>
-      <p>
+      <p class="mt-3">
         <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/edit"))?>" class="btn btn-success">
           Edit photography preferences
         </a>
