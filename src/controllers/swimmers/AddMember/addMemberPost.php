@@ -102,7 +102,6 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
     		}
     	}
     } catch (PDOException $e) {
-  		halt(500);
   	}
 
   } catch (Exception $e) {

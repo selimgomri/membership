@@ -8,9 +8,10 @@ $db = app()->db;
 
 try {
 
-  $getUserInfo = $db->prepare("SELECT AccessLevel FROM users WHERE EmailAddress = ?");
+  $getUserInfo = $db->prepare("SELECT UserID FROM users WHERE EmailAddress = ?");
 
   $insert = $db->prepare("INSERT INTO users (EmailAddress, `Password`, Forename, Surname, Mobile, EmailComms, MobileComms, RR) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+  $addAccessLevel = $db->prepare("INSERT INTO `permissions` (`Permission`, `User`) VALUES (?, ?)");
 
   $forename = trim($_POST['first']);
   $surname = trim($_POST['last']);
@@ -34,18 +35,28 @@ try {
 
   $info = $getUserInfo->fetchColumn();
 
-  if ($info == 'Parent') {
-    $update = $db->prepare("UPDATE users SET `Password` = ?, RR = ? WHERE EmailAddress = ?");
+  if ($info) {
+    $update = $db->prepare("UPDATE users SET RR = ? WHERE UserID = ?");
     $update->execute([
-      password_hash($password, PASSWORD_BCRYPT),
       true,
-      $email
+      $info['UserID']
     ]);
 
-    $getUserId = $db->prepare("SELECT UserID FROM users WHERE EmailAddress = ?");
-    $getUserId->execute([$email]);
+    // Check has parent permissions
+    $count = $db->prepare("SELECT COUNT(*) FROM `permissions` WHERE `User` = ? AND `Permission` = ?");
+    $count->execute([
+      $info['UserID'],
+      'Parent'
+    ]);
+    if ($count->fetchColumn() == 0) {
+      $addAccessLevel->execute([
+        'Parent',
+        $info['UserID']
+      ]);
+    }
     
-    $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'] = $getUserId->fetchColumn();
+    $_SESSION['AssRegUser'] = $info['UserID'];
+    $_SESSION['AssRegExisting'] = true;
   } else if ($info == null) {
     // A random password is generated. This process involves the user setting a password later.
     $insert->execute([
@@ -61,7 +72,6 @@ try {
 
     $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'] = $db->lastInsertId();
 
-    $addAccessLevel = $db->prepare("INSERT INTO `permissions` (`Permission`, `User`) VALUES (?, ?)");
     $addAccessLevel->execute([
       'Parent',
       $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']

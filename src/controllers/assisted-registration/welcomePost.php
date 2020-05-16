@@ -9,7 +9,7 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']) && $_SESS
   unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']);
 }
 
-$getUserInfo = $db->prepare("SELECT AccessLevel FROM users WHERE EmailAddress = ?");
+$getUserInfo = $db->prepare("SELECT UserID FROM users WHERE EmailAddress = ?");
 
 $email = trim(mb_strtolower($_POST['email-address']));
 $getUserInfo->execute([$email]);
@@ -19,14 +19,25 @@ if (!v::email()->validate($email)) {
   $status = false;
 }
 
-$info = $getUserInfo->fetchColumn();
+$info = $getUserInfo->fetch(PDO::FETCH_ASSOC);
 
-if ($status && $info == 'Parent') {
-  $getUserId = $db->prepare("SELECT UserID FROM users WHERE EmailAddress = ?");
-  $getUserId->execute([$email]);
-  
-  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'] = $getUserId->fetchColumn();
-  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegExisting'] = true;
+if ($status && $info) {
+  $_SESSION['AssRegUser'] = $info['UserID'];
+  $_SESSION['AssRegExisting'] = true;
+
+  // Check has parent permissions
+  $count = $db->prepare("SELECT COUNT(*) FROM `permissions` WHERE `User` = ? AND `Permission` = ?");
+  $count->execute([
+    $info['UserID'],
+    'Parent'
+  ]);
+  if ($count->fetchColumn() == 0) {
+    $addAccessLevel = $db->prepare("INSERT INTO `permissions` (`Permission`, `User`) VALUES (?, ?)");
+    $addAccessLevel->execute([
+      'Parent',
+      $info['UserID']
+    ]);
+  }
 
   header("Location: " . autoUrl("assisted-registration/select-swimmers"));
 } else if ($status && $info == null) {
