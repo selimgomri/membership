@@ -43,7 +43,8 @@ include BASE_PATH . "views/header.php";
           <dt class="col-sm-3">User</dt>
           <dd class="col-sm-9 mono mb-0">Not signed in</dd>
           <?php } ?>
-        </div>
+        </dl>
+      </div>
 
       <h2>Features</h2>
       <p class="lead">

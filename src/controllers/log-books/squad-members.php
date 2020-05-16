@@ -44,6 +44,11 @@ include BASE_PATH . 'views/header.php';
         <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>
       </div>
       <?php } else { ?>
+      <div class="alert alert-warning">
+        <p class="mb-0">
+          <strong>This squad has no members.</strong>
+        </p>
+      </div>
       <?php } ?>
     </div>
     <div class="col">

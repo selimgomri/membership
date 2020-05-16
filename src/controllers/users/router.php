@@ -221,3 +221,9 @@ $this->group('/squads', function () {
 		include 'coaches/assign-revoke-squad-post.php';
 	});
 });
+
+if (app()->user->hasPermission('Admin')) {
+	$this->group('/add', function () {
+		include 'new/router.php';
+	});
+}

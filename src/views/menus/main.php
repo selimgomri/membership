@@ -190,6 +190,9 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?=autoUrl("users")?>">
                       All Users
                     </a>
+                    <a class="dropdown-item" href="<?=autoUrl("users/add")?>">
+                      Add a user
+                    </a>
                     <a class="dropdown-item" href="<?=autoUrl("assisted-registration")?>">
                       Assisted Account Registration
                     </a>
