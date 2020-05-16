@@ -9,7 +9,7 @@ if (isset($_SESSION['AssRegUser']) && $_SESSION['AssRegUser']) {
   unset($_SESSION['AssRegUser']);
 }
 
-$getUserInfo = $db->prepare("SELECT AccessLevel FROM users WHERE EmailAddress = ?");
+$getUserInfo = $db->prepare("SELECT UserID FROM users WHERE EmailAddress = ?");
 
 $email = trim(mb_strtolower($_POST['email-address']));
 $getUserInfo->execute([$email]);
@@ -19,13 +19,10 @@ if (!v::email()->validate($email)) {
   $status = false;
 }
 
-$info = $getUserInfo->fetchColumn();
+$info = $getUserInfo->fetch(PDO::FETCH_ASSOC);
 
-if ($status && $info == 'Parent') {
-  $getUserId = $db->prepare("SELECT UserID FROM users WHERE EmailAddress = ?");
-  $getUserId->execute([$email]);
-  
-  $_SESSION['AssRegUser'] = $getUserId->fetchColumn();
+if ($status && $info) {
+  $_SESSION['AssRegUser'] = $info['UserID'];
   $_SESSION['AssRegExisting'] = true;
 
   header("Location: " . autoUrl("assisted-registration/select-swimmers"));

@@ -45,8 +45,10 @@ if ($success) {
     $message .= "<p>We've added a new swimmer to your " . htmlspecialchars(env('CLUB_NAME')) . " account. We now need you to <a href=\"" . autoUrl("") . "\">sign in and provide some information</a>.</p>";
     unset($_SESSION['AssRegExisting']);
   } else {
-    $message .= "<p>We've pre-registered you for a " . htmlspecialchars(env('CLUB_NAME')) . " account. To continue, <a href=\"" . autoUrl("assisted-registration/" . $_SESSION['AssRegUser'] . "/" . $_SESSION['AssRegPass']) . "\">please follow this link</a></p>";
-    $message .= "<p>As part of the registration process, we'll ask you to set a password, let us know your communication preferences and fill in important information about you and/or your members.</p>";
+    $message .= "<p>We've created an account for you in our membership system. We use the system to keep track of all our members, information, gala entries, payments and more.</p>";
+    $message .= "<p>To continue, <a href=\"" . autoUrl("assisted-registration/" . $_SESSION['AssRegUser'] . "/" . $_SESSION['AssRegPass']) . "\">please follow this link</a></p>";
+    $message .= "<p>As part of the registration process, we'll ask you to set a password, let us know your communication preferences and fill in important information about you and/or your members. At the end, we'll set up a direct debit so that payments to " . htmlspecialchars(env('CLUB_NAME')) . " are taken automatically.</p>";
+    $message .= "<p>You'll also be given the opportunity to set up a direct debit.</p>";
   }
   if (!bool(env('IS_CLS'))) {
     $message .= '<p>Please note that your club may not provide all services included in the membership software.</p>';
