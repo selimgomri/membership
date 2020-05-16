@@ -25,6 +25,20 @@ if ($status && $info) {
   $_SESSION['AssRegUser'] = $info['UserID'];
   $_SESSION['AssRegExisting'] = true;
 
+  // Check has parent permissions
+  $count = $db->prepare("SELECT COUNT(*) FROM `permissions` WHERE `User` = ? AND `Permission` = ?");
+  $count->execute([
+    $info['UserID'],
+    'Parent'
+  ]);
+  if ($count->fetchColumn() == 0) {
+    $addAccessLevel = $db->prepare("INSERT INTO `permissions` (`Permission`, `User`) VALUES (?, ?)");
+    $addAccessLevel->execute([
+      'Parent',
+      $info['UserID']
+    ]);
+  }
+
   header("Location: " . autoUrl("assisted-registration/select-swimmers"));
 } else if ($status && $info == null) {
   // USER DOES NOT EXIST
