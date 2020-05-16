@@ -73,6 +73,16 @@ $this->group('/fees', function() {
     });
   });
 
+  $this->group('/multiple-squads', function() {
+    $this->get('/', function() {
+      include 'fees/multiple-squads.php';
+    });
+
+    $this->post('/', function() {
+      include 'fees/multiple-squads-post.php';
+    });
+  });
+
   $this->group('/swim-england-fees', function() {
     $this->get('/', function() {
       include 'fees/asa-fees.php';

@@ -20,6 +20,10 @@ if ($feeType == 'NSwimmers') {
   $feesArray = json_decode(app()->tenant->getKey('ClubFeeNSwimmers'), true);
 }
 
+if (!$feesArray) {
+  $feesArray = [];
+}
+
 $pagetitle = "Club Membership Fee Options";
 
 include BASE_PATH . 'views/header.php';

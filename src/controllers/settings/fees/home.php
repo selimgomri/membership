@@ -24,6 +24,9 @@ include BASE_PATH . 'views/header.php';
         <p class="lead">Set amounts for Swim England membership fees and club membership fees</p>
 
         <div class="list-group mb-3">
+          <a href="<?=autoUrl("settings/fees/multiple-squads")?>" class="list-group-item list-group-item-action">
+            Fees for members in multiple squads
+          </a>
           <a href="<?=autoUrl("settings/fees/swim-england-fees")?>" class="list-group-item list-group-item-action">
             Swim England County, Regional and National Fees
           </a>
