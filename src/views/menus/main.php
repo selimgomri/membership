@@ -373,13 +373,13 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?=autoUrl("payments/mandates")?>">My Bank Account</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/statements/latest")?>">My Latest Statement</a>
                     <a class="dropdown-item" href="<?=autoUrl("payments/fees")?>">My Fees Since Last Bill</a>
-                    <?php } else if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN') && bool(env('IS_DEV'))) { ?>
+                    <?php } else if (app()->tenant->getGoCardlessAccessToken()) { ?>
                     <h6 class="dropdown-header">Direct debit</h6>
                     <a class="dropdown-item" href="<?=autoUrl("payments")?>">
                       Setup a direct debit
                     </a>
                     <?php } ?>
-                    <?php if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN') && bool(env('IS_DEV'))) { ?>
+                    <?php if (app()->tenant->getGoCardlessAccessToken() && bool(env('IS_DEV'))) { ?>
                     <div class="dropdown-divider"></div>
                     <?php } ?>
                     <h6 class="dropdown-header">Fee information</h6>
@@ -390,7 +390,7 @@ if (!function_exists('chesterStandardMenu')) {
                       Annual membership fees
                     </a>
                     <?php if (env('STRIPE') && app()->tenant->getStripeAccount()) { ?>
-                    <?php if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) { ?>
+                    <?php if (app()->tenant->getGoCardlessAccessToken()) { ?>
                     <div class="dropdown-divider"></div>
                     <?php } ?>
                     <h6 class="dropdown-header">Card payments</h6>

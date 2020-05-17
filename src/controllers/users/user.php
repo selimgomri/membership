@@ -187,7 +187,7 @@ include BASE_PATH . "views/header.php";
             <a href="#members" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
               Members
             </a>
-            <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' && (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) && !userHasMandates($id)) { ?>
+            <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' && (app()->tenant->getGoCardlessAccessToken()) && !userHasMandates($id)) { ?>
               <a href="#direct-debit-mandate-opt-out" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                 Direct debit opt-out
               </a>
@@ -460,7 +460,7 @@ include BASE_PATH . "views/header.php";
 
         <hr>
 
-        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' && (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) && !userHasMandates($id)) { ?>
+        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' && (app()->tenant->getGoCardlessAccessToken()) && !userHasMandates($id)) { ?>
           <div class="mb-4">
             <h2 id="direct-debit-mandate-opt-out">
               Direct debit mandate settings

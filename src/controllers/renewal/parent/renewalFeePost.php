@@ -151,7 +151,7 @@ try {
 		$hasDD = true;
 	}
 
-	if ($hasDD || !(app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN'))) {
+	if ($hasDD || !(app()->tenant->getGoCardlessAccessToken())) {
 		if ($hasDD) {
 			// INSERT Payment into pending
 			$date = new \DateTime('now', new DateTimeZone('Europe/London'));

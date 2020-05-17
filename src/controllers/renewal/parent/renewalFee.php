@@ -118,7 +118,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		if ($renewal == 0) {
 			$nf = "first";
 		}; ?>
-		<?php if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) { ?>
+		<?php if (app()->tenant->getGoCardlessAccessToken()) { ?>
 		<p>
 			You will pay these fees as part of your <?= $nf ?> Direct Debit payment to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>.
 		</p>
@@ -271,7 +271,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			</table>
 		</div>
 
-		<?php if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') || app()->tenant->getKey('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) { ?>
+		<?php if (app()->tenant->getGoCardlessAccessToken()) { ?>
 		<p>
 			Your total <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?> fee will be &pound;<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0) && $renewal == 0) { ?><?=number_format(((int)$totalFeeDiscounted)/100, 2, '.', '')?><?php } else { ?><?=$totalFeeString?><?php } ?>. By continuing to complete your membership <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?>, you confirm that you will pay this amount as part of your <?= $nf ?> Direct Debit Payment.
 		</p>

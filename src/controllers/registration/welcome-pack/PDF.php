@@ -367,7 +367,7 @@ ob_start();?>
 
     <div class="page-break"></div>
 
-    <?php if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') != null) { ?>
+    <?php if (app()->tenant->getGoCardlessAccessToken() != null) { ?>
 
     <h1>Direct Debit Payments</h1>
 

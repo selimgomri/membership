@@ -37,7 +37,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
     The Membership Renewal Period is open until <?=date("l j F Y",
 			strtotime($row['EndDate']))?>.
   </p>
-  <?php if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') != null) { ?>
+  <?php if (app()->tenant->getGoCardlessAccessToken() != null) { ?>
   <p>
     This year, we'll be charging you for your Membership Fees through your
     direct debit. This will be as an add-on to your usual fees.

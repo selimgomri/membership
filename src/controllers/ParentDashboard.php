@@ -91,7 +91,7 @@ include BASE_PATH . "views/header.php";
       </aside>
     <?php } ?>
 
-    <?php if (app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN') && !userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) { ?>
+    <?php if (app()->tenant->getGoCardlessAccessToken() && !userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) { ?>
       <div class="mb-4">
         <h2 class="mb-4">Want to set up a Direct Debit?</h2>
         <div class="news-grid">
