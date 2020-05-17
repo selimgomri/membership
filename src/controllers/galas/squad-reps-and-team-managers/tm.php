@@ -25,7 +25,7 @@ $swimsArray = [
   '400IM' => '400&nbsp;IM'
 ];
 
-$pagetitle = htmlspecialchars($data->squad->name) . " Team Manager View for " . htmlspecialchars($data->gala->name);
+$pagetitle = "Team Manager View for " . htmlspecialchars($data->gala->name);
 
 include BASE_PATH . 'views/header.php';
 

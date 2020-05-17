@@ -1,5 +1,8 @@
 <?php
 
+$db = app()->db;
+$tenant = app()->tenant;
+
 $noSquad = false;
 $doNotHalt = true;
 require 'info.json.php';
@@ -12,13 +15,15 @@ if ($leavers == null) {
 }
 
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') {
-  $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads WHERE `SquadID` != ? ORDER BY SquadFee DESC, `name` ASC");
+  $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads WHERE Tenant = ? AND `SquadID` != ? ORDER BY SquadFee DESC, `name` ASC");
   $squads->execute([
+    $tenant->getId(),
     $leavers
   ]);
 } else {
-  $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads INNER JOIN squadReps ON squads.SquadID = squadReps.Squad WHERE squadReps.User = ? AND SquadID != ? ORDER BY SquadFee DESC, `name` ASC");
+  $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads INNER JOIN squadReps ON squads.SquadID = squadReps.Squad WHERE Tenant = ? squadReps.User = ? AND SquadID != ? ORDER BY SquadFee DESC, `name` ASC");
   $squads->execute([
+    $tenant->getId(),
     $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
     $leavers
   ]);

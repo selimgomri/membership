@@ -14,7 +14,10 @@ if (isset($_GET['page']) && ((int) $_GET['page']) != 0) {
   $page = 1;
 }
 
-$sql = $db->query("SELECT COUNT(*) FROM notifyHistory");
+$sql = $db->prepare("SELECT COUNT(*) FROM notifyHistory WHERE Tenant = ?");
+$sql->execute([
+  $tenant->getId()
+]);
 $numMails  = $sql->fetchColumn();
 $numPages = ((int)($numMails/10)) + 1;
 

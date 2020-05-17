@@ -70,11 +70,12 @@ try {
           $path = env('FILE_STORE_PATH') . $urlPath;
           $hash = preg_replace('@[^0-9a-z\.]+@i', '-', basename($_FILES['file-upload']['name'][$i]));
           if (mb_strlen($hash) == 0) {
-            $hash = hash('sha256', $_FILES['file-upload']['name'][$i] . rand(0,1000000));
+            $hash = hash('sha256', $_FILES['file-upload']['name'][$i] . rand(0, 1000000));
           }
           $filenamePath = $path . $hash;
           $url = $urlPath . $hash;
-          $count = 0; $countText = "";
+          $count = 0;
+          $countText = "";
           while (file_exists($path . $countText . $hash)) {
             $count++;
             $countText = ((string) $count) . '-';
@@ -118,7 +119,7 @@ try {
         $dir = explode('/', $attachments[$i]['store_name']);
         $path = "";
         $tried = [];
-        for ($y = 0; $y < sizeof($dir)-1; $y++) {
+        for ($y = 0; $y < sizeof($dir) - 1; $y++) {
           $path .= $dir[$y];
           if (!is_dir($path)) {
             mkdir($path);
@@ -207,7 +208,7 @@ try {
       $squadsQuery .= "OR";
     }
     if ($_POST[$row[$i]['SquadID']] == 1) {
-      $squadsQuery .= " `SquadID` = '" . $row[$i]['SquadID'] . "' ";
+      $squadsQuery .= " `Squad` = '" . $row[$i]['SquadID'] . "' ";
       $squads[$row[$i]['SquadID']] = $row[$i]['SquadName'];
 
       if ($coachSend) {
@@ -250,7 +251,7 @@ try {
   $squadUsers = $listUsers = $galaUsers = null;
 
   if ($squadsQuery) {
-    $squadUsers = $db->query("SELECT UserID FROM members WHERE (" . $squadsQuery . ") AND UserID IS NOT NULL");
+    $squadUsers = $db->query("SELECT UserID FROM members INNER JOIN squadMembers ON members.MemberID = squadMembers.Member WHERE (" . $squadsQuery . ") AND UserID IS NOT NULL");
     while ($u = $squadUsers->fetch(PDO::FETCH_ASSOC)) {
       $toSendTo[$u['UserID']] = $u['UserID'];
     }
@@ -327,7 +328,7 @@ try {
   if (sizeof($attachments) > 0) {
     $recipientGroups["Attachments"] = [];
   }
-  foreach($attachments as $attachment) {
+  foreach ($attachments as $attachment) {
     if ($attachment['uploaded']) {
       $recipientGroups["Attachments"][] = [
         'Filename' => $attachment['filename'],
@@ -428,7 +429,7 @@ try {
     $mailObject->setHtmlContent($currentMessage['Message']);
 
     $mailObject->showName();
-    if (!$currentMessage['ForceSend']) { 
+    if (!$currentMessage['ForceSend']) {
       $mailObject->setUnsubscribable();
     }
 

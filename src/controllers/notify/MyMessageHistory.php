@@ -4,12 +4,17 @@ $db = app()->db;
 
 $fluidContainer = true;
 
+$page = null;
+if (isset($_GET['page'])) {
+  $page = $_GET['page'];
+}
+
 $null = $page;
 
 $start = 0;
 
 if ($page != null) {
-  $start = ($page-1)*10;
+  $start = ((int) $page-1)*10;
 } else {
   $page = 1;
 }
@@ -163,35 +168,35 @@ include BASE_PATH . "views/header.php";
       <nav aria-label="Page navigation">
         <ul class="pagination mb-0">
           <?php if ($numMails <= 10) { ?>
-          <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+          <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
           <?php } else if ($numMails <= 20) { ?>
             <?php if ($page == 1) { ?>
-            <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
-      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page+1 ?>">Next</a></li>
+            <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page+1 ?>">Next</a></li>
             <?php } else { ?>
-            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page-1 ?>">Previous</a></li>
-      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page-1 ?>"><?php echo $page-1 ?></a></li>
-      	    <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page-1 ?>">Previous</a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page-1 ?>"><?php echo $page-1 ?></a></li>
+      	    <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
             <?php } ?>
           <?php } else { ?>
       			<?php if ($page == 1) { ?>
-      			<li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
-      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page+2 ?>"><?php echo $page+2 ?></a></li>
-      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page+1 ?>">Next</a></li>
+      			<li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page+2 ?>"><?php echo $page+2 ?></a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page+1 ?>">Next</a></li>
             <?php } else { ?>
-      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page-1 ?>">Previous</a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page-1 ?>">Previous</a></li>
             <?php if ($page > 2) { ?>
-            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page-2 ?>"><?php echo $page-2 ?></a></li>
-      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page-1 ?>"><?php echo $page-1 ?></a></li>
-      	    <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page-2 ?>"><?php echo $page-2 ?></a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page-1 ?>"><?php echo $page-1 ?></a></li>
+      	    <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
       			<?php if ($numMails > $page*10) { ?>
-      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
             <?php if ($numMails > $page*10+10) { ?>
-            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page+2 ?>"><?php echo $page+2 ?></a></li>
+            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page+2 ?>"><?php echo $page+2 ?></a></li>
             <?php } ?>
-      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page+1 ?>">Next</a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page+1 ?>">Next</a></li>
             <?php } ?>
           <?php } ?>
         <?php }

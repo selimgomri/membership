@@ -146,7 +146,7 @@ if ($access == "Parent") {
 		include 'indicate-openness/veto-do.php';
 	});
 
-	if (env('STRIPE')) {
+	if (env('STRIPE') && app()->tenant->getStripeAccount()) {
 		$this->group('/pay-for-entries', function() {
 			$this->get('/', function() {
 				include 'pay/welcome.php';
