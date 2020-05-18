@@ -33,7 +33,7 @@ try {
   $responseData['squads'] = $squads;
   $responseData['squadCount'] = $i;
 
-  $getSquads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE Tenant = ? ABND `SquadID` NOT IN (SELECT Squad FROM coaches WHERE User = ?) ORDER BY SquadFee DESC, SquadName ASC");
+  $getSquads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE Tenant = ? AND `SquadID` NOT IN (SELECT Squad FROM coaches WHERE User = ?) ORDER BY SquadFee DESC, SquadName ASC");
   $getSquads->execute([
     $tenant->getId(),
     $_POST['user']

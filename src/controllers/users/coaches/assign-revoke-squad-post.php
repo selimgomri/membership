@@ -71,7 +71,7 @@ try {
 
   // Add squad info
   $responseData['squad']['id'] = (int) $_POST['squad'];
-  $responseData['squad']['name'] = $_POST['SquadName'];
+  $responseData['squad']['name'] = $squad;
 
   if (!$userObj->hasPermission('Coach')) {
     // Auto assign or remove coach perms

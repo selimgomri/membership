@@ -17,7 +17,7 @@ if (isset($fluidContainer) && $fluidContainer == true) {
   $container_class = "container-fluid";
 } else {
   $container_class = "container";
-}?>
+} ?>
 <!DOCTYPE html>
 <!--
 
@@ -44,13 +44,12 @@ Chester-le-Street ASC is a non profit unincorporated association.
 
 <head>
   <meta charset="utf-8">
-  <?php if (isset($pagetitle) && ($pagetitle != "" || $pagetitle != null))  { ?>
-  <title><?=$pagetitle?> - <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Membership</title>
+  <?php if (isset($pagetitle) && ($pagetitle != "" || $pagetitle != null)) { ?>
+    <title><?= $pagetitle ?> - <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> Membership</title>
   <?php } else { ?>
-  <title><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Membership</title>
+    <title><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> Membership</title>
   <?php } ?>
-  <meta name="description"
-    content="Your <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Account lets you make gala entries online and gives you access to all your information about your swimmers, including attendance.">
+  <meta name="description" content="Your <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> Account lets you make gala entries online and gives you access to all your information about your swimmers, including attendance.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0,
     user-scalable=no,maximum-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -63,81 +62,72 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <meta name="og:type" content="website">
   <meta name="og:locale" content="en_GB">
   <meta name="og:site_name" content="Chester-le-Street ASC Account">
-  <link rel="manifest" href="<?=autoUrl("manifest.webmanifest")?>">
+  <link rel="manifest" href="<?= autoUrl("manifest.webmanifest") ?>">
   <?php
-    // Check if user has opted out of tracking or has DNT headers set before serving Google Analytics
-    if ((!isset($_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers']) || !$_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers']) && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1)) {
-    ?>
-  <meta name="X-SCDS-Membership-Tracking" content="yes">
-  <script async>
-  (function(i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r;
-    i[r] = i[r] || function() {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date();
-    a = s.createElement(o),
-      m = s.getElementsByTagName(o)[0];
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-  ga('create', 'UA-78812259-4', 'auto');
-  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
-  ga('set', 'userId', '<?=$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']?>');
-  ga('send', 'event', 'authentication', 'user-id available');
+  // Check if user has opted out of tracking or has DNT headers set before serving Google Analytics
+  if ((!isset($_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers']) || !$_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers']) && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1)) {
+  ?>
+    <meta name="X-SCDS-Membership-Tracking" content="yes">
+    <script async>
+      (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+      ga('create', 'UA-78812259-4', 'auto');
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
+        ga('set', 'userId', '<?= $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'] ?>');
+        ga('send', 'event', 'authentication', 'user-id available');
+      <?php } else { ?>
+        ga('send', 'pageview');
+      <?php } ?>
+    </script>
   <?php } else { ?>
-  ga('send', 'pageview');
-  <?php } ?>
-  </script>
-  <?php } else { ?>
-  <meta name="X-SCDS-Membership-Tracking" content="no">
+    <meta name="X-SCDS-Membership-Tracking" content="no">
   <?php } ?>
   <script src="https://js.stripe.com/v3/"></script>
-  <link rel="stylesheet preload"
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono|Merriweather:400,600">
-  <link rel="stylesheet preload" href="<?=htmlspecialchars($stylesheet)?>">
-  <link rel="icon" sizes="196x196" href="<?=htmlspecialchars(autoUrl("public/img/touchicons/touch-icon-196x196.png"))?>">
+  <link rel="stylesheet preload" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono|Merriweather:400,600">
+  <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheet) ?>">
+  <link rel="icon" sizes="196x196" href="<?= htmlspecialchars(autoUrl("public/img/touchicons/touch-icon-196x196.png")) ?>">
   <!-- For Chrome for Android: -->
-  <link rel="icon" sizes="192x192" href="<?=autoUrl("public/img/touchicons/touch-icon-192x192.png")?>">
+  <link rel="icon" sizes="192x192" href="<?= autoUrl("public/img/touchicons/touch-icon-192x192.png") ?>">
   <!-- For iPhone 6 Plus with @3× display: -->
-  <link rel="apple-touch-icon-precomposed" sizes="180x180"
-    href="<?=autoUrl("public/img/touchicons/apple-touch-icon-180x180-precomposed.png")?>">
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<?= autoUrl("public/img/touchicons/apple-touch-icon-180x180-precomposed.png") ?>">
   <!-- For iPad with @2× display running iOS ≥ 7: -->
-  <link rel="apple-touch-icon-precomposed" sizes="152x152"
-    href="<?=autoUrl("public/img/touchicons/apple-touch-icon-152x152-precomposed.png")?>">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="<?= autoUrl("public/img/touchicons/apple-touch-icon-152x152-precomposed.png") ?>">
   <!-- For iPad with @2× display running iOS ≤ 6: -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144"
-    href="<?=autoUrl("public/img/touchicons/apple-touch-icon-144x144-precomposed.png")?>">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<?= autoUrl("public/img/touchicons/apple-touch-icon-144x144-precomposed.png") ?>">
   <!-- For iPhone with @2× display running iOS ≥ 7: -->
-  <link rel="apple-touch-icon-precomposed" sizes="120x120"
-    href="<?=autoUrl("public/img/touchicons/apple-touch-icon-120x120-precomposed.png")?>">
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="<?= autoUrl("public/img/touchicons/apple-touch-icon-120x120-precomposed.png") ?>">
   <!-- For iPhone with @2× display running iOS ≤ 6: -->
-  <link rel="apple-touch-icon-precomposed" sizes="114x114"
-    href="<?=autoUrl("public/img/touchicons/apple-touch-icon-114x114-precomposed.png")?>">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?= autoUrl("public/img/touchicons/apple-touch-icon-114x114-precomposed.png") ?>">
   <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
-  <link rel="apple-touch-icon-precomposed" sizes="76x76"
-    href="<?=autoUrl("public/img/touchicons/apple-touch-icon-76x76-precomposed.png")?>">
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="<?= autoUrl("public/img/touchicons/apple-touch-icon-76x76-precomposed.png") ?>">
   <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
-  <link rel="apple-touch-icon-precomposed" sizes="72x72"
-    href="<?=autoUrl("public/img/touchicons/apple-touch-icon-72x72-precomposed.png")?>">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?= autoUrl("public/img/touchicons/apple-touch-icon-72x72-precomposed.png") ?>">
   <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
-  <link rel="apple-touch-icon-precomposed"
-    href="<?=autoUrl("public/img/touchicons/apple-touch-icon-precomposed.png")?>"><!-- 57×57px -->
-  <link rel="mask-icon" href="<?=autoUrl("public/img/touchicons/icon-mask.svg")?>" color="#bd0000">
+  <link rel="apple-touch-icon-precomposed" href="<?= autoUrl("public/img/touchicons/apple-touch-icon-precomposed.png") ?>"><!-- 57×57px -->
+  <link rel="mask-icon" href="<?= autoUrl("public/img/touchicons/icon-mask.svg") ?>" color="#bd0000">
   <script src="https://www.google.com/recaptcha/api.js"></script>
 
   <style>
-  .festive {
-    /*background:#005fbd;*/
-    background-image: url("https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/christmas.png");
-    background-size: 50% auto;
-    color: #fff;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
-  }
+    .festive {
+      /*background:#005fbd;*/
+      background-image: url("https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/christmas.png");
+      background-size: 50% auto;
+      color: #fff;
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+    }
 
-  .top-3 {
-    top: 1rem;
-  }
+    .top-3 {
+      top: 1rem;
+    }
   </style>
 
   <!--[if lt IE 9]>

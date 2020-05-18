@@ -327,6 +327,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
               if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
                 var json = JSON.parse(this.responseText);
                 if (json.status == 200) {
                   $('#main-modal').modal('hide');

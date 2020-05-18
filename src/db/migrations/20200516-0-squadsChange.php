@@ -1,16 +1,23 @@
 <?php
 
+$db->query(
+  "ALTER TABLE squadMembers
+    ADD COLUMN `Pays` boolean DEFAULT 0
+  ;"
+);
+
 // Get members and squads
 $members = $db->query("SELECT MemberID, SquadID FROM members");
 
-$addNew = $db->prepare("INSERT INTO squadMembers (Member, Squad) VALUES (?, ?)");
+$addNew = $db->prepare("INSERT INTO squadMembers (Member, Squad, Pays) VALUES (?, ?, ?)");
 
 // For each add to new table
 while ($member = $members->fetch(PDO::FETCH_ASSOC)) {
   if ($member['SquadID']) {
     $addNew->execute([
       $member['MemberID'],
-      $member['SquadID']
+      $member['SquadID'],
+      1
     ]);
   }
 }
