@@ -208,12 +208,12 @@ ob_start();?>
 
     <p class="lead">You will pay squad fees on a monthly basis.</p>
 
-    <?php if (env('IS_CLS') && sizeof($swimmers) > 2) { ?>
+    <?php if (app()->tenant->isCLS() && sizeof($swimmers) > 2) { ?>
     <p>As you have <?=sizeof($swimmers)?> swimmers, you qualify for a reduction on your squad fees.</p>
-    <?php } else if (bool(env('IS_CLS'))) { ?>
+    <?php } else if (app()->tenant->isCLS()) { ?>
     <p>If you ever have three or more swimmers while at <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>, you'll qualify for a discount on your monthly fees.</p>
     <?php } ?>
-    <?php if (bool(env('IS_CLS'))) { ?>
+    <?php if (app()->tenant->isCLS()) { ?>
     <p>Reductions are applied as follows;</p>
     <p>If you have 3 swimmers, we'll order your swimmers by monthly fee and give you a reduction of 20% on your lowest cost swimmer.</p>
     <p>If you have 4 or more swimmers, we'll order your swimmers by monthly fee and give you a reduction of 20% on your third lowest cost swimmer and 40% on all further swimmers.</p>
@@ -263,7 +263,7 @@ ob_start();?>
           </td>
         </tr>
         <?php } ?>
-        <?php if (bool(env('IS_CLS'))) { ?>
+        <?php if (app()->tenant->isCLS()) { ?>
         <tr>
           <td></td>
           <td>
@@ -379,7 +379,7 @@ ob_start();?>
     </p>
 
     <p>
-      Full help and support for payments by Direct Debit is available on the Membership System Support Website at <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">https://www.chesterlestreetasc.co.uk/support/onlinemembership/</a>. Help and Support Documentation is provided by Chester-le-Street ASC<?php if (!(bool(env('IS_CLS')))) { ?> to all clubs and users that use this service. If you need somebody to help you, please contact your own club in the first instance<?php } ?>.
+      Full help and support for payments by Direct Debit is available on the Membership System Support Website at <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">https://www.chesterlestreetasc.co.uk/support/onlinemembership/</a>. Help and Support Documentation is provided by Chester-le-Street ASC<?php if (!(app()->tenant->isCLS())) { ?> to all clubs and users that use this service. If you need somebody to help you, please contact your own club in the first instance<?php } ?>.
     </p>
 
     <div class="row" id="payment-dd-guarantee">

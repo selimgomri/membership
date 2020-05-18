@@ -56,7 +56,7 @@ class CreateMail {
 
   public function getFormattedHtml() {
     $fontStack = '"Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
-    if ((bool(env('IS_CLS')))) {
+    if ((app()->tenant->isCLS())) {
       $fontStack = '"Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
     }
     $head = "
@@ -64,7 +64,7 @@ class CreateMail {
     <html lang=\"en-gb\">
     <head>
       <meta charset=\"utf-8\">";
-      if ((bool(env('IS_CLS')))) {
+      if ((app()->tenant->isCLS())) {
         $head .= "<link href=\"https://fonts.googleapis.com/css?family=Open+Sans:400,700\" rel=\"stylesheet\" type=\"text/css\">";
       } else {
         $head .= "<link href=\"https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700\" rel=\"stylesheet\" type=\"text/css\">";
@@ -109,7 +109,7 @@ class CreateMail {
     <div style=\"background:#e3eef6;\">
       <table style=\"width:100%;border:0px;text-align:left;padding:10px 0px 10px 0px;background:#e3eef6;\"><tr><td align=\"center\">
         <table style=\"width:100%;max-width:700px;border:0px;text-align:center;background:#ffffff;padding:10px 10px 0px 10px;\"><tr><td>";
-        if (bool(env('IS_CLS'))) { 
+        if (app()->tenant->isCLS()) { 
         $head .= "<img src=\"" . autoUrl("public/img/notify/NotifyLogo.png") . "\"
         style=\"width:300px;max-width:100%;\" srcset=\"" .
         autoUrl("public/img/notify/NotifyLogo@2x.png") . " 2x, " .
@@ -196,7 +196,7 @@ class CreateMail {
         }
       }
       $foot .= "\r\nThis email was sent automatically by the " . app()->tenant->getKey('CLUB_NAME') . " Membership System.\r\n\r\n";
-      if (!(bool(env('IS_CLS')))) {
+      if (!(app()->tenant->isCLS())) {
         $foot .= "The Membership System was built by Chester-le-Street ASC.\r\n\r\n";
       }
       $foot .= "Have questions? Contact us at " . app()->tenant->getKey('CLUB_EMAIL') . ".\r\n\r\n";

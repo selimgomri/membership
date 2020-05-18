@@ -55,7 +55,7 @@ if ($success) {
     $message .= "<p>As part of the registration process, we'll ask you to set a password, let us know your communication preferences and fill in important information about you and/or your members. At the end, we'll set up a direct debit so that payments to " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " are taken automatically.</p>";
     $message .= "<p>You'll also be given the opportunity to set up a direct debit.</p>";
   }
-  if (!bool(env('IS_CLS'))) {
+  if (!app()->tenant->isCLS()) {
     $message .= '<p>Please note that your club may not provide all services included in the membership software.</p>';
   }
 

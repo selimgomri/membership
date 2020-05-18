@@ -4,7 +4,7 @@
 // https://www.swimming.org/sport/wp-json/wp/v2/posts
 
 $obj = null;
-if (bool(env('IS_CLS'))) {
+if (app()->tenant->isCLS()) {
   $file = getCachedFile(CACHE_DIR . 'CLS-ASC-News.json', 'https://chesterlestreetasc.co.uk/wp-json/wp/v2/posts?rand_id=' . time(), 10800);
   $obj = json_decode($file);
 }
@@ -139,7 +139,7 @@ include BASE_PATH . "views/header.php";
 			</div>
 		</div>
 
-    <?php if (bool(env('IS_CLS'))) { ?>
+    <?php if (app()->tenant->isCLS()) { ?>
     <div class="mb-4">
       <h2 class="mb-4">Club News</h2>
       <div class="news-grid">

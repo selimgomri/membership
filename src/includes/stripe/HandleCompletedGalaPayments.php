@@ -408,7 +408,7 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false) {
         $name = $user['Forename'] . ' ' . $user['Surname'];
       }
       $sendingEmail = null;
-      if (bool(env('IS_CLS'))) {
+      if (app()->tenant->isCLS()) {
         $sendingEmail = "payments@" . env('EMAIL_DOMAIN');
       } else {
         $sendingEmail = mb_strtolower(trim(app()->tenant->getKey('ASA_CLUB_CODE'))) . "-payments@" . env('EMAIL_DOMAIN');

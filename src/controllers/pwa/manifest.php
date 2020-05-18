@@ -9,7 +9,7 @@ if (app()->tenant->getKey('SYSTEM_COLOUR')) {
   $themeColour = app()->tenant->getKey('SYSTEM_COLOUR');
 }
 
-if (bool(env('IS_CLS'))) { 
+if (app()->tenant->isCLS()) { 
   $icons[] = [
     'src' => autoUrl('public/img/touchicons/apple-touch-icon-precomposed.png'),
     'sizes' => '57x57',

@@ -135,7 +135,7 @@ class Login {
     if (app('request')->protocol == 'http' && bool(env('IS_DEV'))) {
       $secure = false;
     }
-    if (bool(env('IS_CLS'))) {
+    if (app()->tenant->isCLS()) {
       setcookie(COOKIE_PREFIX . "UserInformation", $user_info_cookie, time()+60*60*24*120 , "/", 'chesterlestreetasc.co.uk', $secure, false);
     }
     if (!$this->reLogin) {

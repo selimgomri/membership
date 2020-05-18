@@ -115,7 +115,7 @@ if (!$errorState) {
 				if ($email_info['SquadTimetable'] != "" && $email_info['SquadTimetable'] != null) {
 					$message .= '<p>You can get the <a href="' . $email_info['SquadTimetable'] . '" target="_blank">timetable for ' . $squad . ' Squad on our website</a>.</p>';
 				}
-				if (bool(env('IS_CLS'))) {
+				if (app()->tenant->isCLS()) {
 					$message .= '<p>We have attached the Code of Conduct agreement for ' . $squad . ' Squad to this email. You must print it off, sign it and return it to any squad coach or member of club staff before your first session in ' . $squad . ' Squad.</p>';
 				}
 				if ($email_info['SquadCoC'] != "" && $email_info['SquadCoC'] != null) {

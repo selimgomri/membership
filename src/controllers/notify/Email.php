@@ -45,7 +45,7 @@ for ($i = 0; $i < sizeof($senderNames); $i++) {
   }
 }
 
-if (!bool(env('IS_CLS'))) {
+if (!app()->tenant->isCLS()) {
   $fromEmail .= '.' . urlencode(mb_strtolower(str_replace(' ', '', env('CLUB_CODE'))));
 }
 

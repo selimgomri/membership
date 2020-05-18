@@ -330,6 +330,11 @@ class Tenant
     return null;
   }
 
+  /**
+   * Get a 
+   * 
+   * @return string stripe account id
+   */
   public function getStripeAccount() {
     if ($this->stripeAccountId) {
       return $this->stripeAccountId;
@@ -342,5 +347,14 @@ class Tenant
     }
 
     return null;
+  }
+
+  /**
+   * Test if this club is Chester-le-Street ASC (special legacy code reasons)
+   * 
+   * @return boolean true if clse
+   */
+  public function isCLS() {
+    return $this->code == 'CLSE';
   }
 }

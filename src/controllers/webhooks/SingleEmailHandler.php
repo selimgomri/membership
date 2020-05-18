@@ -1,7 +1,7 @@
 <?php
 
 $emailPrefix = '';
-if (!bool(env('IS_CLS'))) {
+if (!app()->tenant->isCLS()) {
 	$emailPrefix = mb_strtolower(trim(app()->tenant->getKey('ASA_CLUB_CODE'))) . '-';
 }
 

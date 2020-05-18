@@ -5,7 +5,7 @@
     $y = 813;
     $text = "{PAGE_NUM}"; //  of {PAGE_COUNT}
     $font = $fontMetrics->get_font("Open Sans", "normal");
-    if (!bool(env('IS_CLS'))) {
+    if (!app()->tenant->isCLS()) {
       $font = $fontMetrics->get_font("Source Sans Pro", "normal");
     }
     $size = 10;
@@ -23,7 +23,7 @@ if ( isset($pdf) ) {
   $y = 565;
   $text = "{PAGE_NUM}"; //  of {PAGE_COUNT}
   $font = $fontMetrics->get_font("Open Sans", "normal");
-  if (!bool(env('IS_CLS'))) {
+  if (!app()->tenant->isCLS()) {
     $font = $fontMetrics->get_font("Source Sans Pro", "normal");
   }
   $size = 10;

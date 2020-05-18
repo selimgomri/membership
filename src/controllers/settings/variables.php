@@ -82,8 +82,8 @@ include BASE_PATH . 'views/header.php';
   <div class="row justify-content-between">
     <aside class="col-md-3 d-none d-md-block">
       <?php
-        $list = new \CLSASC\BootstrapComponents\ListGroup(file_get_contents(BASE_PATH . 'controllers/settings/SettingsLinkGroup.json'));
-        echo $list->render('settings-vars');
+      $list = new \CLSASC\BootstrapComponents\ListGroup(file_get_contents(BASE_PATH . 'controllers/settings/SettingsLinkGroup.json'));
+      echo $list->render('settings-vars');
       ?>
     </aside>
     <div class="col-md-9">
@@ -94,12 +94,14 @@ include BASE_PATH . 'views/header.php';
         <form method="post">
 
           <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']) { ?>
-          <div class="alert alert-success">System variables saved.</div>
-          <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']); } ?>
+            <div class="alert alert-success">System variables saved.</div>
+          <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']);
+          } ?>
 
           <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']) { ?>
-          <div class="alert alert-danger">Changes were not saved.</div>
-          <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']); } ?>
+            <div class="alert alert-danger">Changes were not saved.</div>
+          <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']);
+          } ?>
 
           <h2 id="emergency-message">Emergency Message</h2>
           <div class="row">
@@ -112,33 +114,33 @@ include BASE_PATH . 'views/header.php';
               </p>
             </div>
             <div class="col col-lg-4">
-              <img src="<?=htmlspecialchars(autoUrl("public/img/settings/emergency-message.png"))?>" class="border" alt="Picture of membership software displaying emergency message">
+              <img src="<?= htmlspecialchars(autoUrl("public/img/settings/emergency-message.png")) ?>" class="border" alt="Picture of membership software displaying emergency message">
             </div>
           </div>
 
           <div class="form-group">
             <label>Message type</label>
             <div class="custom-control custom-radio">
-              <input type="radio" value="NONE" id="EMERGENCY_MESSAGE_TYPE_NONE" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'NONE') { ?>checked<?php } ?> <?=$disabled['EMERGENCY_MESSAGE_TYPE']?>>
+              <input type="radio" value="NONE" id="EMERGENCY_MESSAGE_TYPE_NONE" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'NONE') { ?>checked<?php } ?> <?= $disabled['EMERGENCY_MESSAGE_TYPE'] ?>>
               <label class="custom-control-label" for="EMERGENCY_MESSAGE_TYPE_NONE">No emergency message</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" value="SUCCESS" id="EMERGENCY_MESSAGE_TYPE_SUCCESS" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'SUCCESS') { ?>checked<?php } ?> <?=$disabled['EMERGENCY_MESSAGE_TYPE']?>>
+              <input type="radio" value="SUCCESS" id="EMERGENCY_MESSAGE_TYPE_SUCCESS" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'SUCCESS') { ?>checked<?php } ?> <?= $disabled['EMERGENCY_MESSAGE_TYPE'] ?>>
               <label class="custom-control-label" for="EMERGENCY_MESSAGE_TYPE_SUCCESS">Safe/good (green)</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" value="WARN" id="EMERGENCY_MESSAGE_TYPE_WARN" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'WARN') { ?>checked<?php } ?> <?=$disabled['EMERGENCY_MESSAGE_TYPE']?>>
+              <input type="radio" value="WARN" id="EMERGENCY_MESSAGE_TYPE_WARN" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'WARN') { ?>checked<?php } ?> <?= $disabled['EMERGENCY_MESSAGE_TYPE'] ?>>
               <label class="custom-control-label" for="EMERGENCY_MESSAGE_TYPE_WARN">Warning (yellow)</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" value="DANGER" id="EMERGENCY_MESSAGE_TYPE_DANGER" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'DANGER') { ?>checked<?php } ?> <?=$disabled['EMERGENCY_MESSAGE_TYPE']?>>
+              <input type="radio" value="DANGER" id="EMERGENCY_MESSAGE_TYPE_DANGER" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'DANGER') { ?>checked<?php } ?> <?= $disabled['EMERGENCY_MESSAGE_TYPE'] ?>>
               <label class="custom-control-label" for="EMERGENCY_MESSAGE_TYPE_DANGER">Danger (red)</label>
             </div>
           </div>
 
           <div class="form-group">
             <label for="EMERGENCY_MESSAGE">Emergency message</label>
-            <textarea class="form-control mono" rows="7" name="EMERGENCY_MESSAGE" id="EMERGENCY_MESSAGE" <?=$disabled['EMERGENCY_MESSAGE']?>><?=htmlspecialchars($vars['EMERGENCY_MESSAGE'])?></textarea>
+            <textarea class="form-control mono" rows="7" name="EMERGENCY_MESSAGE" id="EMERGENCY_MESSAGE" <?= $disabled['EMERGENCY_MESSAGE'] ?>><?= htmlspecialchars($vars['EMERGENCY_MESSAGE']) ?></textarea>
           </div>
 
           <p>
@@ -149,7 +151,7 @@ include BASE_PATH . 'views/header.php';
 
           <h2>SQL Database Connection Details</h2>
 
-          <p>SQL database connection details must be defined as environment variables in your server configuration. Your database name is <span class="mono"><?=htmlspecialchars(env('DB_NAME'))?></span> and the host is <span class="mono"><?=htmlspecialchars(env('DB_HOST'))?></span>.</p>
+          <p>SQL database connection details must be defined as environment variables in your server configuration. Your database name is <span class="mono"><?= htmlspecialchars(env('DB_NAME')) ?></span> and the host is <span class="mono"><?= htmlspecialchars(env('DB_HOST')) ?></span>.</p>
 
           <h2>Name and Code</h2>
 
@@ -157,9 +159,9 @@ include BASE_PATH . 'views/header.php';
             <label for="CLUB_INFO">Select club</label>
             <select class="custom-select" name="CLUB_INFO" id="CLUB_INFO">
               <?php foreach ($clubs as $club) { ?>
-              <option <?php if ($club['Code'] == app()->tenant->getKey('ASA_CLUB_CODE')) { ?>selected<?php } ?> value="<?=htmlspecialchars($club['Code'])?>">
-                <?=htmlspecialchars($club['Name'])?> (<?=htmlspecialchars($club['Code'])?>)
-              </option>
+                <option <?php if ($club['Code'] == app()->tenant->getKey('ASA_CLUB_CODE')) { ?>selected<?php } ?> value="<?= htmlspecialchars($club['Code']) ?>">
+                  <?= htmlspecialchars($club['Name']) ?> (<?= htmlspecialchars($club['Code']) ?>)
+                </option>
               <?php } ?>
             </select>
             <small id="CLUB_ADDRESS_HELP" class="form-text text-muted">Selecting your club from this list lets us automatically fill out your clubs details including Swim England code, short name, county and district. We use your county and district to show useful links to your users. You can change your club name once you've selected it.</small>
@@ -167,46 +169,46 @@ include BASE_PATH . 'views/header.php';
 
           <div class="form-group">
             <label for="CLUB_NAME">Club Name</label>
-            <input class="form-control" type="text" name="CLUB_NAME" id="CLUB_NAME" value="<?=htmlspecialchars($vars['CLUB_NAME'])?>" <?=$disabled['CLUB_NAME']?>>
+            <input class="form-control" type="text" name="CLUB_NAME" id="CLUB_NAME" value="<?= htmlspecialchars($vars['CLUB_NAME']) ?>" <?= $disabled['CLUB_NAME'] ?>>
           </div>
 
           <div class="form-group">
             <label for="CLUB_SHORT_NAME">Club Short Name</label>
-            <input class="form-control" type="text" name="CLUB_SHORT_NAME" id="CLUB_SHORT_NAME" value="<?=htmlspecialchars($vars['CLUB_SHORT_NAME'])?>" <?=$disabled['CLUB_SHORT_NAME']?>>
+            <input class="form-control" type="text" name="CLUB_SHORT_NAME" id="CLUB_SHORT_NAME" value="<?= htmlspecialchars($vars['CLUB_SHORT_NAME']) ?>" <?= $disabled['CLUB_SHORT_NAME'] ?>>
           </div>
 
           <div class="form-group">
             <label for="ASA_CLUB_CODE">Swim England Club Code</label>
-            <input class="form-control mono" type="text" name="ASA_CLUB_CODE" id="CLUB_SHORT_NAME" value="<?=htmlspecialchars($vars['ASA_CLUB_CODE'])?>" <?=$disabled['ASA_CLUB_CODE']?>>
+            <input class="form-control mono" type="text" name="ASA_CLUB_CODE" id="CLUB_SHORT_NAME" value="<?= htmlspecialchars($vars['ASA_CLUB_CODE']) ?>" <?= $disabled['ASA_CLUB_CODE'] ?>>
           </div>
 
           <div class="form-group">
             <label for="ASA_COUNTY">Swim England County</label>
-            <input class="form-control" type="url" name="ASA_COUNTY" id="ASA_COUNTY" value="<?=htmlspecialchars($counties[$vars['ASA_COUNTY']]['name'])?>" disabled>
+            <input class="form-control" type="url" name="ASA_COUNTY" id="ASA_COUNTY" value="<?= htmlspecialchars($counties[$vars['ASA_COUNTY']]['name']) ?>" disabled>
           </div>
 
           <div class="form-group">
             <label for="ASA_DISTRICT">Swim England District</label>
-            <input class="form-control" type="url" name="ASA_DISTRICT" id="ASA_DISTRICT" value="<?=htmlspecialchars($districts[$vars['ASA_DISTRICT']]['name'])?>" disabled>
+            <input class="form-control" type="url" name="ASA_DISTRICT" id="ASA_DISTRICT" value="<?= htmlspecialchars($districts[$vars['ASA_DISTRICT']]['name']) ?>" disabled>
           </div>
 
           <div class="form-group">
             <label for="CLUB_WEBSITE">Club Website</label>
-            <input class="form-control mono" type="url" name="CLUB_WEBSITE" id="CLUB_WEBSITE" value="<?=htmlspecialchars($vars['CLUB_WEBSITE'])?>" <?=$disabled['CLUB_WEBSITE']?>>
+            <input class="form-control mono" type="url" name="CLUB_WEBSITE" id="CLUB_WEBSITE" value="<?= htmlspecialchars($vars['CLUB_WEBSITE']) ?>" <?= $disabled['CLUB_WEBSITE'] ?>>
           </div>
 
           <div class="form-group">
             <label for="CLUB_ADDRESS">Club Primary Address</label>
-            <textarea class="form-control" rows="5" id="CLUB_ADDRESS" name="CLUB_ADDRESS" aria-describedby="CLUB_ADDRESS_HELP" <?=$disabled['CLUB_ADDRESS']?>><?php
-            if ($vars['CLUB_ADDRESS']) {
-              for ($i = 0; $i < sizeof($vars['CLUB_ADDRESS']); $i++) {
-                echo htmlspecialchars($vars['CLUB_ADDRESS'][$i]);
-                if ($i+1 < sizeof($vars['CLUB_ADDRESS'])) {
-                  echo "\r\n";
-                }
-              }
-            }
-            ?></textarea>
+            <textarea class="form-control" rows="5" id="CLUB_ADDRESS" name="CLUB_ADDRESS" aria-describedby="CLUB_ADDRESS_HELP" <?= $disabled['CLUB_ADDRESS'] ?>><?php
+                                                                                                                                                              if ($vars['CLUB_ADDRESS']) {
+                                                                                                                                                                for ($i = 0; $i < sizeof($vars['CLUB_ADDRESS']); $i++) {
+                                                                                                                                                                  echo htmlspecialchars($vars['CLUB_ADDRESS'][$i]);
+                                                                                                                                                                  if ($i + 1 < sizeof($vars['CLUB_ADDRESS'])) {
+                                                                                                                                                                    echo "\r\n";
+                                                                                                                                                                  }
+                                                                                                                                                                }
+                                                                                                                                                              }
+                                                                                                                                                              ?></textarea>
             <small id="CLUB_ADDRESS_HELP" class="form-text text-muted">Enter the address of your primary location. Do not include your club name and do not place commas at the end of lines.</small>
           </div>
 
@@ -214,12 +216,12 @@ include BASE_PATH . 'views/header.php';
 
           <div class="form-group">
             <label for="CLUB_EMAIL">Main Club Email Address</label>
-            <input class="form-control" type="email" name="CLUB_EMAIL" id="CLUB_EMAIL" value="<?=htmlspecialchars($vars['CLUB_EMAIL'])?>" <?=$disabled['CLUB_EMAIL']?>>
+            <input class="form-control" type="email" name="CLUB_EMAIL" id="CLUB_EMAIL" value="<?= htmlspecialchars($vars['CLUB_EMAIL']) ?>" <?= $disabled['CLUB_EMAIL'] ?>>
           </div>
 
           <div class="form-group">
             <label for="CLUB_TRIAL_EMAIL">Trial Request Email Address</label>
-            <input class="form-control" type="email" name="CLUB_TRIAL_EMAIL" id="CLUB_TRIAL_EMAIL" value="<?=htmlspecialchars($vars['CLUB_TRIAL_EMAIL'])?>" <?=$disabled['CLUB_TRIAL_EMAIL']?>>
+            <input class="form-control" type="email" name="CLUB_TRIAL_EMAIL" id="CLUB_TRIAL_EMAIL" value="<?= htmlspecialchars($vars['CLUB_TRIAL_EMAIL']) ?>" <?= $disabled['CLUB_TRIAL_EMAIL'] ?>>
           </div>
 
           <div class="form-group">
@@ -228,46 +230,46 @@ include BASE_PATH . 'views/header.php';
               <div class="input-group-prepend">
                 <span class="input-group-text">@</span>
               </div>
-              <input class="form-control" type="text" name="EMAIL_DOMAIN" id="EMAIL_DOMAIN" value="<?=htmlspecialchars($vars['EMAIL_DOMAIN'])?>" <?=$disabled['EMAIL_DOMAIN']?> aria-describedby="EMAIL_DOMAIN_HELP">
+              <input class="form-control" type="text" name="EMAIL_DOMAIN" id="EMAIL_DOMAIN" value="<?= htmlspecialchars($vars['EMAIL_DOMAIN']) ?>" <?= $disabled['EMAIL_DOMAIN'] ?> aria-describedby="EMAIL_DOMAIN_HELP">
             </div>
             <small id="EMAIL_DOMAIN_HELP" class="form-text text-muted">Your email domain must be listed in your Twilio SendGrid account.</small>
           </div>
 
           <?php if (!env('SENDGRID_API_KEY')) { ?>
-          <div class="form-group">
-            <label for="EMAIL_DOMAIN">Twilio SendGrid API Key</label>
-            <input class="form-control mono" type="text" name="SENDGRID_API_KEY" id="SENDGRID_API_KEY" value="<?=htmlspecialchars($vars['SENDGRID_API_KEY'])?>" <?=$disabled['SENDGRID_API_KEY']?>> 
-          </div>
+            <div class="form-group">
+              <label for="EMAIL_DOMAIN">Twilio SendGrid API Key</label>
+              <input class="form-control mono" type="text" name="SENDGRID_API_KEY" id="SENDGRID_API_KEY" value="<?= htmlspecialchars($vars['SENDGRID_API_KEY']) ?>" <?= $disabled['SENDGRID_API_KEY'] ?>>
+            </div>
           <?php } else { ?>
-          <p>Your <a href="https://sendgrid.com/">Twilio SendGrid API key</a> is set at system level and cannot be viewed or modified here.</p>
+            <p>Your <a href="https://sendgrid.com/">Twilio SendGrid API key</a> is set at system level and cannot be viewed or modified here.</p>
           <?php } ?>
 
           <h2>Display options</h2>
           <div class="form-group">
             <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="HIDE_MEMBER_ATTENDANCE" name="HIDE_MEMBER_ATTENDANCE" <?php if (!bool($vars['HIDE_MEMBER_ATTENDANCE'])) { ?>checked<?php } ?> <?=$disabled['HIDE_MEMBER_ATTENDANCE']?>>
+              <input type="checkbox" class="custom-control-input" id="HIDE_MEMBER_ATTENDANCE" name="HIDE_MEMBER_ATTENDANCE" <?php if (!bool($vars['HIDE_MEMBER_ATTENDANCE'])) { ?>checked<?php } ?> <?= $disabled['HIDE_MEMBER_ATTENDANCE'] ?>>
               <label class="custom-control-label" for="HIDE_MEMBER_ATTENDANCE">Show member attendance percentage to parents</label>
             </div>
           </div>
 
           <h2>GoCardless API keys (for direct debit)</h2>
 
-          <p>GoCardless API keys and webhooks are not required in Membership MT. Instead you can grant SCDS access to your GoCardless account quickly and easily by going to <a href="<?=htmlspecialchars(autoUrl("settings/direct-debit"))?>">Direct Debit Settings</a></p>
+          <p>GoCardless API keys and webhooks are not required in Membership MT. Instead you can grant SCDS access to your GoCardless account quickly and easily by going to <a href="<?= htmlspecialchars(autoUrl("settings/direct-debit")) ?>">Direct Debit Settings</a></p>
 
           <h2>Stripe API keys (for card payments)</h2>
 
-          <p>Stripe API keys and webhooks are not required in Membership MT. Instead you can grant SCDS access to your Stripe account quickly and easily by going to <a href="<?=htmlspecialchars(autoUrl("settings/card-payments"))?>">Card Payment Settings</a></p>
+          <p>Stripe API keys and webhooks are not required in Membership MT. Instead you can grant SCDS access to your Stripe account quickly and easily by going to <a href="<?= htmlspecialchars(autoUrl("settings/card-payments")) ?>">Card Payment Settings</a></p>
 
           <h2>Customisation</h2>
 
-          <?php if (!bool(env('IS_CLS'))) { ?>
-          <div class="form-group">
-            <label for="SYSTEM_COLOUR">Primary Colour</label>
-            <input class="form-control" type="color" name="SYSTEM_COLOUR" id="SYSTEM_COLOUR" value="<?=htmlspecialchars($vars['SYSTEM_COLOUR'])?>" <?=$disabled['SYSTEM_COLOUR']?> aria-describedby="SYSTEM_COLOUR_HELP">
-            <small id="SYSTEM_COLOUR_HELP" class="form-text text-muted">The system primary colour is used in PDF documents generated by the membership system.</small>
-          </div>
+          <?php if (!app()->tenant->isCLS()) { ?>
+            <div class="form-group">
+              <label for="SYSTEM_COLOUR">Primary Colour</label>
+              <input class="form-control" type="color" name="SYSTEM_COLOUR" id="SYSTEM_COLOUR" value="<?= htmlspecialchars($vars['SYSTEM_COLOUR']) ?>" <?= $disabled['SYSTEM_COLOUR'] ?> aria-describedby="SYSTEM_COLOUR_HELP">
+              <small id="SYSTEM_COLOUR_HELP" class="form-text text-muted">The system primary colour is used in PDF documents generated by the membership system.</small>
+            </div>
           <?php } else { ?>
-          <p>There are currently no customisation options available for your version of the membership system.</p>
+            <p>There are currently no customisation options available for your version of the membership system.</p>
           <?php } ?>
 
           <p>

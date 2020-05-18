@@ -87,7 +87,7 @@ include BASE_PATH . "views/header.php";
         </div>
       </form>
 
-      <?php if (bool(env('IS_CLS'))) { ?>
+      <?php if (app()->tenant->isCLS()) { ?>
       <p class="small mb-0">
         Support Helpline: <a class=""
         href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>

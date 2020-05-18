@@ -347,9 +347,9 @@ function myMonthlyFeeTable($link = null, $userID)
       number_format($row['SquadFee'], 2, '.', '') . "</td></tr>";
   }
   for ($i = 0; $i < $count; $i++) {
-    if (env('IS_CLS') && $i == 2) {
+    if (app()->tenant->isCLS() && $i == 2) {
       $totalsArray[$i] = $totalsArray[$i] * 0.8;
-    } elseif (env('IS_CLS') && $i > 2) {
+    } else if (app()->tenant->isCLS() && $i > 2) {
       $totalsArray[$i] = $totalsArray[$i] * 0.6;
     }
     $reducedCost += $totalsArray[$i];
@@ -437,7 +437,7 @@ function monthlyFeeCost($link = null, $userID, $format = "decimal")
   $i = 0;
   while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $squadCost = \Brick\Math\BigDecimal::of((string) $row['SquadFee']);
-    if (bool(env('IS_CLS'))) {
+    if (app()->tenant->isCLS()) {
       if ($i < 2) {
         // $totalCost->plus($squadCost);
         $reducedCost = $reducedCost->plus($squadCost);

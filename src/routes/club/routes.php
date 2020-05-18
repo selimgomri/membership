@@ -577,7 +577,7 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
       include BASE_PATH . 'controllers/settings/router.php';
     });
 
-    if (bool(env('IS_DEV')) || bool(env('IS_CLS'))) {
+    if (bool(env('IS_DEV')) || app()->tenant->isCLS()) {
       $this->get('/about:php', function () {
         echo phpinfo();
       });

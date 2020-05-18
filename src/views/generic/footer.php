@@ -113,7 +113,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
       <div class="row">
         <div class="col source-org vcard copyright">
           <a href="https://myswimmingclub.uk" target="_blank" title="Swimming Club Data Systems Website">
-            <img src="<?=autoUrl("public/img/corporate/scds.png")?>" width="100">
+            <img src="<?= autoUrl("public/img/corporate/scds.png") ?>" width="100">
           </a>
 
           <div class="d-block mb-3"></div>

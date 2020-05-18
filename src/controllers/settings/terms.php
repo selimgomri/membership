@@ -47,8 +47,8 @@ include BASE_PATH . 'views/header.php';
   <div class="row justify-content-between">
     <aside class="col-md-3 d-none d-md-block">
       <?php
-        $list = new \CLSASC\BootstrapComponents\ListGroup(file_get_contents(BASE_PATH . 'controllers/settings/SettingsLinkGroup.json'));
-        echo $list->render('settings-terms');
+      $list = new \CLSASC\BootstrapComponents\ListGroup(file_get_contents(BASE_PATH . 'controllers/settings/SettingsLinkGroup.json'));
+      echo $list->render('settings-terms');
       ?>
     </aside>
     <div class="col-md-9">
@@ -56,12 +56,14 @@ include BASE_PATH . 'views/header.php';
         <h1>Terms and Privacy Settings</h1>
         <form method="post">
           <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']) { ?>
-          <div class="alert alert-success">All changes saved.</div>
-          <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']); } ?>
+            <div class="alert alert-success">All changes saved.</div>
+          <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']);
+          } ?>
 
           <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']) { ?>
-          <div class="alert alert-danger">Changes were not saved.</div>
-          <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']); } ?>
+            <div class="alert alert-danger">Changes were not saved.</div>
+          <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']);
+          } ?>
 
           <div class="form-group">
             <label for="TermsAndConditions">Terms and Conditions Document</label>
@@ -70,10 +72,9 @@ include BASE_PATH . 'views/header.php';
                 Select an option
               </option>
               <?php foreach ($termsDocuments as $termsPosts) { ?>
-              <option value="<?=htmlspecialchars($termsPosts['ID'])?>"
-                <?php if ($terms == $termsPosts['ID']) { ?>selected<?php } ?>>
-                <?=htmlspecialchars($termsPosts['Title'])?>
-              </option>
+                <option value="<?= htmlspecialchars($termsPosts['ID']) ?>" <?php if ($terms == $termsPosts['ID']) { ?>selected<?php } ?>>
+                  <?= htmlspecialchars($termsPosts['Title']) ?>
+                </option>
               <?php } ?>
             </select>
             <small id="TermsAndConditionsBlock" class="form-text text-muted">
@@ -88,10 +89,9 @@ include BASE_PATH . 'views/header.php';
                 Select an option
               </option>
               <?php foreach ($termsDocuments as $termsPosts) { ?>
-              <option value="<?=htmlspecialchars($termsPosts['ID'])?>"
-                <?php if ($privacy == $termsPosts['ID']) { ?>selected<?php } ?>>
-                <?=htmlspecialchars($termsPosts['Title'])?>
-              </option>
+                <option value="<?= htmlspecialchars($termsPosts['ID']) ?>" <?php if ($privacy == $termsPosts['ID']) { ?>selected<?php } ?>>
+                  <?= htmlspecialchars($termsPosts['Title']) ?>
+                </option>
               <?php } ?>
             </select>
             <small id="PrivacyPolicyBlock" class="form-text text-muted">
@@ -106,10 +106,9 @@ include BASE_PATH . 'views/header.php';
                 Select an option
               </option>
               <?php foreach ($welcomeDocuments as $welcomePosts) { ?>
-              <option value="<?=htmlspecialchars($welcomePosts['ID'])?>"
-                <?php if ($welcome == $welcomePosts['ID']) { ?>selected<?php } ?>>
-                <?=htmlspecialchars($welcomePosts['Title'])?>
-              </option>
+                <option value="<?= htmlspecialchars($welcomePosts['ID']) ?>" <?php if ($welcome == $welcomePosts['ID']) { ?>selected<?php } ?>>
+                  <?= htmlspecialchars($welcomePosts['Title']) ?>
+                </option>
               <?php } ?>
             </select>
             <small id="WelcomeLetterBlock" class="form-text text-muted">

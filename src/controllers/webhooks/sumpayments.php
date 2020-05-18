@@ -119,7 +119,7 @@ try {
           ];
           $track->execute($track_info);
 
-          if (!bool($swimmerRow['ClubPays']) && bool(env('IS_CLS'))) {
+          if (!bool($swimmerRow['ClubPays']) && app()->tenant->isCLS()) {
             // Calculate discounts if required.
             $swimmerDiscount = 0;
             $discountPercent = '0';
@@ -167,7 +167,7 @@ try {
         }
 
         /*
-        if (bool(env('IS_CLS')) && $discount > 0) {
+        if (app()->tenant->isCLS() && $discount > 0) {
           // Apply credit to account for discount
           $addCreditToPaymentsPending->execute([
             $date,

@@ -1,7 +1,7 @@
 <?php
 
 if (isset($use_website_menu)) {
-  define('USE_CLS_MENU', $use_website_menu && bool(env('IS_CLS')));
+  define('USE_CLS_MENU', $use_website_menu && app()->tenant->isCLS());
 }
 
 if (!function_exists('chesterStandardMenu')) {
@@ -96,7 +96,7 @@ if (!function_exists('chesterStandardMenu')) {
                     </a>
                     <?php } while ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC)); ?>
                     <?php } else { ?>
-                    <a class="dropdown-item" href="<?=autoUrl("my-account/addswimmer")?>">Link a new member</a>
+                    <a class="dropdown-item" href="<?=autoUrl("my-account/add-swimmer")?>">Link a new member</a>
                     <?php } ?>
                   </div>
                 </li>
@@ -172,7 +172,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?=autoUrl("attendance/venues")?>">Manage Venues</a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("attendance/history")?>">Attendance History</a>
-                    <?php if (bool(env('IS_CLS'))) { ?>
+                    <?php if (app()->tenant->isCLS()) { ?>
                     <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/squads/"
                       target="_blank">Timetables</a>
                     <?php } ?>
@@ -325,7 +325,7 @@ if (!function_exists('chesterStandardMenu')) {
                       Team manager dashboard
                     </a>
                     <?php } ?>
-                    <?php if (bool(env('IS_CLS'))) { ?>
+                    <?php if (app()->tenant->isCLS()) { ?>
                     <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/"
                       target="_blank">Gala website <i class="fa fa-external-link"></i></a>
                     <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/competitions/category/galas/"

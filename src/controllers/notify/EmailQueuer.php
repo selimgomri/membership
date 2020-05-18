@@ -305,7 +305,7 @@ try {
       }
     }
 
-    if (!bool(env('IS_CLS'))) {
+    if (!app()->tenant->isCLS()) {
       $fromEmail .= '.' . urlencode(strtolower(str_replace(' ', '', CLUB_CODE)));
     }
 

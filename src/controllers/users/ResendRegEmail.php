@@ -37,7 +37,7 @@ if ($info != null) {
     $message .= "<p>We've pre-registered you for a " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " account. To continue, <a href=\"" . htmlspecialchars(autoUrl("assisted-registration/" . $_POST['user'] . "/" . $password)) . "\">please follow this link</a></p>";
     $message .= "<p>As part of the registration process, we'll ask you to set a password, let us know your communication preferences and fill in important information about you and/or your members.</p>";
 
-    if (!bool(env('IS_CLS'))) {
+    if (!app()->tenant->isCLS()) {
       $message .= '<p>Please note that your club may not provide all services included in the membership software.</p>';
     }
 

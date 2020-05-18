@@ -244,7 +244,7 @@ $content .= '<!--
       </p>
     </li>';
     }
-    if (bool(env('IS_CLS'))) {
+    if (app()->tenant->isCLS()) {
     $content .= '
     <li class="list-group-item">
       <p class="mb-0">

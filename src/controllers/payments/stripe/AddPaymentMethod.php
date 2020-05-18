@@ -59,7 +59,7 @@ if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['StripeSetupIntentId'])
 $countries = getISOAlpha2Countries();
 
 $fontCss = 'https://fonts.googleapis.com/css?family=Open+Sans';
-if (!bool(env('IS_CLS'))) {
+if (!app()->tenant->isCLS()) {
   $fontCss = 'https://fonts.googleapis.com/css?family=Source+Sans+Pro';
 }
 

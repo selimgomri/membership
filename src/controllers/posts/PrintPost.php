@@ -60,7 +60,7 @@ ob_start();?>
 <html>
   <head>
   <meta charset='utf-8'>
-  <?php if (bool(env('IS_CLS'))) { ?>
+  <?php if (app()->tenant->isCLS()) { ?>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i" rel="stylesheet" type="text/css">
   <?php } else { ?>
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i" rel="stylesheet" type="text/css">

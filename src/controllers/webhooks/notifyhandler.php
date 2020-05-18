@@ -4,7 +4,7 @@ ignore_user_abort(true);
 set_time_limit(0);
 
 $emailPrefix = '';
-if (!bool(env('IS_CLS'))) {
+if (!app()->tenant->isCLS()) {
 	$emailPrefix = mb_strtolower(trim(app()->tenant->getKey('ASA_CLUB_CODE'))) . '-';
 }
 

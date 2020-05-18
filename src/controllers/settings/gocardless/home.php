@@ -55,6 +55,10 @@ include BASE_PATH . 'views/header.php';
             Your GoCardless account is currently connected.
           </p>
 
+          <p>
+            You can revoke our access to your account by <a href="https://manage.gocardless.com/">signing in to GoCardless</a>.
+          </p>
+
         <?php } else { ?>
 
           <p>

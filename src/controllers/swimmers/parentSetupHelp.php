@@ -133,7 +133,7 @@ include BASE_PATH . "views/swimmersMenu.php";
     manage our members. Our services allow you to manage your swimmers, enter competitions, stay up to date by email and make payments by Direct Debit or credit/debit card.
   </p>
 
-  <?php if (!bool(env('IS_CLS'))) { ?>
+  <?php if (!app()->tenant->isCLS()) { ?>
   <p>
     <em>Some services may not be provided by your club.</em>
   </p>
@@ -226,7 +226,7 @@ include BASE_PATH . "views/swimmersMenu.php";
       <?=htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL'))?>.
     </p>
 
-    <?php if (!bool(env('IS_CLS'))) { ?>
+    <?php if (!app()->tenant->isCLS()) { ?>
     <p>
       The membership system is provided to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> by
       <a href="https://wwww.myswimmingclub.uk/">Swimming Club Data Systems</a>.

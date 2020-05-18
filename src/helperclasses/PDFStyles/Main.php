@@ -132,7 +132,7 @@
     text-decoration: underline;
   }
 
-  <?php if (!bool(env('IS_CLS'))) { ?>
+  <?php if (!app()->tenant->isCLS()) { ?>
     .primary {
       color: <?=htmlspecialchars(app()->tenant->getKey('SYSTEM_COLOUR'))?>;
     }
@@ -242,7 +242,7 @@
     text-align: center;
   }
 
-  <?php if (!bool(env('IS_CLS'))) { ?>
+  <?php if (!app()->tenant->isCLS()) { ?>
   html, body {
     font-family: 'Source Sans Pro', 'Lato', 'Helvetica', 'Noto Emoji', sans-serif;
   }
