@@ -22,7 +22,7 @@ include BASE_PATH . "views/squadMenu.php";
     <div class="col">
       <h1>Squad Moves</h1>
       <p class="lead">Upcoming Squad Moves (Sorted by Date)</p>
-      <p>To make a new squad move, <a href="<?= autoUrl("members") ?>">select a member</a>.</p>
+      <p>To make a new squad move, <a href="<?= htmlspecialchars(autoUrl("members")) ?>">select a member</a>.</p>
       <!-- LIST -->
       <?php if ($member) { ?>
         <div class="card">
@@ -54,7 +54,7 @@ include BASE_PATH . "views/squadMenu.php";
                               <!-- </p> -->
                             </div>
                             <div class="col-auto">
-                              <a class="btn btn-block btn-outline-dark" href="<?= autoUrl("squads/moves/" . $move['ID']) ?>">
+                              <a class="btn btn-block btn-outline-primary" href="<?= autoUrl("squads/moves/" . $move['ID']) ?>">
                                 Edit or Cancel
                               </a>
                             </div>

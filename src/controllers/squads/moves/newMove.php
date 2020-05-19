@@ -3,45 +3,34 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$moveCount = $db->prepare("SELECT COUNT(*) FROM `moves` WHERE `MemberID` = ? AND Tenant = ?");
-$moveCount->execute([
-	$id,
-	$tenant->getId()
-]);
-
 $date = new DateTime('now', new DateTimeZone('Europe/London'));
 
 $name = $currentSquad = "";
 
 $getSquads = null;
 
-if ($moveCount->fetchColumn() > 0) {
-	header("Location: " . autoUrl("swimmers/" . $id . "/edit-move"));
-	return;
-} else {
-  $getMemberInfo = $db->prepare("SELECT `MForename`, `MSurname`, `SquadName`, members.SquadID FROM `members` INNER JOIN `squads` ON members.SquadID = squads.SquadID WHERE `MemberID` = ? AND Tenant = ?");
-  $getMemberInfo->execute([
-		$id,
-		$tenant->getId()
-	]);
+$getMemberInfo = $db->prepare("SELECT `MForename`, `MSurname`, `SquadName`, members.SquadID FROM `members` INNER JOIN `squads` ON members.SquadID = squads.SquadID WHERE `MemberID` = ? AND Tenant = ?");
+$getMemberInfo->execute([
+	$id,
+	$tenant->getId()
+]);
 
-	$member = $getMemberInfo->fetch(PDO::FETCH_ASSOC);
+$member = $getMemberInfo->fetch(PDO::FETCH_ASSOC);
 
-	if ($member == null) {
-		halt(404);
-	}
-
-	$name = $member['MForename'] . " " . $member['MSurname'];
-	$currentSquad = $member['SquadName'];
-	$squadID = $member['SquadID'];
-
-  $getSquads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` WHERE `SquadID` != ? AND Tenant = ? ORDER BY `SquadFee` DESC, `SquadName` ASC");
-  $getSquads->execute([
-		$squadID,
-		$tenant->getId()
-	]);
-  $squad = $getSquads->fetch(PDO::FETCH_ASSOC);
+if ($member == null) {
+	halt(404);
 }
+
+$name = $member['MForename'] . " " . $member['MSurname'];
+$currentSquad = $member['SquadName'];
+$squadID = $member['SquadID'];
+
+$getSquads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` WHERE `SquadID` != ? AND Tenant = ? ORDER BY `SquadFee` DESC, `SquadName` ASC");
+$getSquads->execute([
+	$squadID,
+	$tenant->getId()
+]);
+$squad = $getSquads->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = "Squad Move for " . htmlspecialchars($name);
 include BASE_PATH . "views/header.php";

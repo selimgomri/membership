@@ -37,34 +37,34 @@ include BASE_PATH . 'views/header.php';
   <!-- Page header -->
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=autoUrl("members")?>">Members</a></li>
-      <li class="breadcrumb-item active" aria-current="page">#<?=htmlspecialchars($member->getId())?></li>
+      <li class="breadcrumb-item"><a href="<?= autoUrl("members") ?>">Members</a></li>
+      <li class="breadcrumb-item active" aria-current="page">#<?= htmlspecialchars($member->getId()) ?></li>
     </ol>
   </nav>
 
   <h1>
-    <?=htmlspecialchars($member->getFullName())?>
+    <?= htmlspecialchars($member->getFullName()) ?>
   </h1>
   <p class="lead">
-    <?php if (sizeof($squads) > 0) { ?><?php for ($i=0; $i < sizeof($squads); $i++) { ?><?=htmlspecialchars($squads[$i]->getName())?><?php if ($i < sizeof($squads)-1) { ?>, <?php } ?><?php } ?> Squad<?php if (sizeof($squads) != 1) { ?>s<?php } ?><?php } else { ?>Not assigned to any squads<?php } ?>
+    <?php if (sizeof($squads) > 0) { ?><?php for ($i = 0; $i < sizeof($squads); $i++) { ?><?= htmlspecialchars($squads[$i]->getName()) ?><?php if ($i < sizeof($squads) - 1) { ?>, <?php } ?><?php } ?> Squad<?php if (sizeof($squads) != 1) { ?>s<?php } ?><?php } else { ?>Not assigned to any squads<?php } ?>
   </p>
 
   <?php if ($user && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
-  <p>
-    <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Quick actions
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("members/" . $id . "/enter-gala"))?>">Enter a gala</a>
-        <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("members/" . $id . "/contact-parent"))?>">Email user/parent/guardian</a>
-        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') { ?>
-        <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("members/" . $id . "/new-move"))?>">New squad move</a>
-        <a class="dropdown-item" href="<?=htmlspecialchars(autoUrl("members/" . $id . "/parenthelp"))?>">Print access key</a>
-        <?php } ?>
+    <p>
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Quick actions
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/enter-gala")) ?>">Enter a gala</a>
+          <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/contact-parent")) ?>">Email user/parent/guardian</a>
+          <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') { ?>
+            <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/new-move")) ?>">New squad move</a>
+            <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/parenthelp")) ?>">Print access key</a>
+          <?php } ?>
+        </div>
       </div>
-    </div>
-  </p>
+    </p>
   <?php } ?>
 
   <div class="row justify-content-between">
@@ -115,7 +115,7 @@ include BASE_PATH . 'views/header.php';
             Date of birth
           </dt>
           <dd>
-            <?=htmlspecialchars($member->getDateOfBirth()->format("j F Y"))?>
+            <?= htmlspecialchars($member->getDateOfBirth()->format("j F Y")) ?>
           </dd>
         </div>
 
@@ -124,7 +124,7 @@ include BASE_PATH . 'views/header.php';
             Country
           </dt>
           <dd>
-            <?=htmlspecialchars($member->getCountry())?>
+            <?= htmlspecialchars($member->getCountry()) ?>
           </dd>
         </div>
 
@@ -133,8 +133,8 @@ include BASE_PATH . 'views/header.php';
             Swim England #
           </dt>
           <dd>
-            <a href="<?=htmlspecialchars('https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . $member->getSwimEnglandNumber())?>">
-              <?=htmlspecialchars($member->getSwimEnglandNumber())?>
+            <a href="<?= htmlspecialchars('https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . $member->getSwimEnglandNumber()) ?>">
+              <?= htmlspecialchars($member->getSwimEnglandNumber()) ?>
             </a>
           </dd>
         </div>
@@ -144,7 +144,7 @@ include BASE_PATH . 'views/header.php';
             Membership category
           </dt>
           <dd>
-            <?=htmlspecialchars($member->getSwimEnglandCategory())?>
+            <?= htmlspecialchars($member->getSwimEnglandCategory()) ?>
           </dd>
         </div>
       </dl>
@@ -156,11 +156,11 @@ include BASE_PATH . 'views/header.php';
       </p> -->
 
       <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
-      <p>
-        <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/edit"))?>" class="btn btn-success">
-          Edit basic details
-        </a>
-      </p>
+        <p>
+          <a href="<?= htmlspecialchars(autoUrl("members/" . $id . "/edit")) ?>" class="btn btn-success">
+            Edit basic details
+          </a>
+        </p>
       <?php } ?>
 
       <hr>
@@ -171,34 +171,34 @@ include BASE_PATH . 'views/header.php';
       <?php $medical = $member->getMedicalNotes(); ?>
       <?php if ($medical->hasMedicalNotes()) { ?>
 
-      <dl>
-        <dt class="text-truncate">
-          Medical Conditions or Disabilities
-        </dt>
-        <dd>
-          <div class="cell mt-1 mb-0"><?=$medical->getConditions()?></div>
-        </dd>
+        <dl>
+          <dt class="text-truncate">
+            Medical Conditions or Disabilities
+          </dt>
+          <dd>
+            <div class="cell mt-1 mb-0"><?= $medical->getConditions() ?></div>
+          </dd>
 
-        <dt class="text-truncate">
-          Allergies
-        </dt>
-        <dd>
-          <div class="cell mt-1 mb-0"><?=$medical->getAllergies()?></div>
-        </dd>
+          <dt class="text-truncate">
+            Allergies
+          </dt>
+          <dd>
+            <div class="cell mt-1 mb-0"><?= $medical->getAllergies() ?></div>
+          </dd>
 
-        <dt class="text-truncate">
-          Medication
-        </dt>
-        <dd>
-          <div class="cell mt-1 mb-0"><?=$medical->getMedication()?></div>
-        </dd>
-      </dl>
+          <dt class="text-truncate">
+            Medication
+          </dt>
+          <dd>
+            <div class="cell mt-1 mb-0"><?= $medical->getMedication() ?></div>
+          </dd>
+        </dl>
 
       <?php } else { ?>
 
-      <p>
-        <?=htmlspecialchars($member->getForename())?> does not have any medical notes to display.
-      </p>
+        <p>
+          <?= htmlspecialchars($member->getForename()) ?> does not have any medical notes to display.
+        </p>
 
       <?php } ?>
 
@@ -209,58 +209,58 @@ include BASE_PATH . 'views/header.php';
       </p> -->
 
       <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
-      <p>
-        <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/medical"))?>" class="btn btn-success">
-          Edit medical notes
-        </a>
-      </p>
+        <p>
+          <a href="<?= htmlspecialchars(autoUrl("members/" . $id . "/medical")) ?>" class="btn btn-success">
+            Edit medical notes
+          </a>
+        </p>
       <?php } ?>
 
       <hr>
 
       <!-- Emergency details -->
       <h2 id="emergency-contacts">Emergency contact details</h2>
-      
+
       <?php $emergencyContacts = $member->getEmergencyContacts(); ?>
 
       <?php if ($emergencyContacts) { ?>
 
-      <p>
-        In an emergency, dial one of the contact numbers shown below.
-      </p>
+        <p>
+          In an emergency, dial one of the contact numbers shown below.
+        </p>
 
-      <div class="row">
-        <?php foreach ($emergencyContacts as $ec) { ?>
-        
-        <div class="col-md-6 col-xl-4">
-          <div class="card card-body py-2 px-3 mb-2">
-            <div class="row align-items-center">
-              <div class="col-6">
-                <div class="text-truncate"><strong><?=htmlspecialchars($ec->getName())?></strong></div>
-                <div class="text-truncate"><?=htmlspecialchars($ec->getRelation())?></div>
-              </div>
-              <div class="col-6">
-                <a href="<?=htmlspecialchars($ec->getRFCContactNumber())?>" class="btn btn-block btn-success">
-                  <i class="fa fa-phone" aria-hidden="true"></i> <?=htmlspecialchars($ec->getNationalContactNumber())?>
-                </a>
+        <div class="row">
+          <?php foreach ($emergencyContacts as $ec) { ?>
+
+            <div class="col-md-6 col-xl-4">
+              <div class="card card-body py-2 px-3 mb-2">
+                <div class="row align-items-center">
+                  <div class="col-6">
+                    <div class="text-truncate"><strong><?= htmlspecialchars($ec->getName()) ?></strong></div>
+                    <div class="text-truncate"><?= htmlspecialchars($ec->getRelation()) ?></div>
+                  </div>
+                  <div class="col-6">
+                    <a href="<?= htmlspecialchars($ec->getRFCContactNumber()) ?>" class="btn btn-block btn-success">
+                      <i class="fa fa-phone" aria-hidden="true"></i> <?= htmlspecialchars($ec->getNationalContactNumber()) ?>
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <?php } ?>
-      </div>
+          <?php } ?>
+        </div>
 
       <?php } else { ?>
 
-      <div class="alert alert-danger">
-        <p class="mb-0">
-          <strong>No emergency contact details are available.</strong>
-        </p>
-        <p class="mb-0">
-          <?=htmlspecialchars($member->getForename())?> should not be allowed to train until details have been provided.
-        </p>
-      </div>
+        <div class="alert alert-danger">
+          <p class="mb-0">
+            <strong>No emergency contact details are available.</strong>
+          </p>
+          <p class="mb-0">
+            <?= htmlspecialchars($member->getForename()) ?> should not be allowed to train until details have been provided.
+          </p>
+        </div>
 
       <?php } ?>
 
@@ -270,63 +270,63 @@ include BASE_PATH . 'views/header.php';
       <h2 id="photography-permissions">Photography permissions</h2>
       <?php if ($member->getAge() >= 18) { ?>
 
-      <p>
-        <?=htmlspecialchars($member->getForename())?> is <?=htmlspecialchars($member->getAge())?> so has no photography restrictions in place.
-      </p>
+        <p>
+          <?= htmlspecialchars($member->getForename()) ?> is <?= htmlspecialchars($member->getAge()) ?> so has no photography restrictions in place.
+        </p>
 
       <?php } else { ?>
 
-      <p>
-        Club staff are required to follow Swim England's Wavepower as well as relevant club guidance when taking photos or videos.
-      </p>
+        <p>
+          Club staff are required to follow Swim England's Wavepower as well as relevant club guidance when taking photos or videos.
+        </p>
 
-      <div class="row d-flex align-items-stretch">
-        <?php $perms = $member->getPhotoPermissions(); ?>
+        <div class="row d-flex align-items-stretch">
+          <?php $perms = $member->getPhotoPermissions(); ?>
 
-        <?php if (sizeof($perms['allowed']) > 0) { ?>
-        <div class="col-xl-6">
-          <div class="card card-body border-success h-100">
-            <p class="text-success">
-              <i class="fa fa-check-circle" aria-hidden="true"></i> <strong>You may</strong>
-            </p>
+          <?php if (sizeof($perms['allowed']) > 0) { ?>
+            <div class="col-xl-6">
+              <div class="card card-body border-success h-100">
+                <p class="text-success">
+                  <i class="fa fa-check-circle" aria-hidden="true"></i> <strong>You may</strong>
+                </p>
 
-            <ul class="list-unstyled mb-0">
-              <?php foreach ($perms['allowed'] as $text) { ?>
-              <li><?=htmlspecialchars($text->getDescription())?></li>
-              <?php } ?>
-            </ul>
-          </div>
+                <ul class="list-unstyled mb-0">
+                  <?php foreach ($perms['allowed'] as $text) { ?>
+                    <li><?= htmlspecialchars($text->getDescription()) ?></li>
+                  <?php } ?>
+                </ul>
+              </div>
+            </div>
+          <?php } ?>
+
+          <?php if (sizeof($perms['allowed']) > 0 && sizeof($perms['disallowed']) > 0) { ?>
+            <div class="col-12 mb-2 d-block d-xl-none"></div>
+          <?php } ?>
+
+          <?php if (sizeof($perms['disallowed']) > 0) { ?>
+            <div class="col-xl-6">
+              <div class="card card-body border-danger h-100">
+                <p class="text-danger">
+                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <strong>You must not</strong>
+                </p>
+
+                <ul class="list-unstyled mb-0">
+                  <?php foreach ($perms['disallowed'] as $text) { ?>
+                    <li><?= htmlspecialchars($text->getDescription()) ?></li>
+                  <?php } ?>
+                </ul>
+              </div>
+            </div>
+          <?php } ?>
         </div>
+
+        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>
+          <p class="mt-3">
+            <a href="<?= htmlspecialchars(autoUrl("members/" . $id . "/edit")) ?>" class="btn btn-success">
+              Edit photography preferences
+            </a>
+          </p>
         <?php } ?>
-
-        <?php if (sizeof($perms['allowed']) > 0 && sizeof($perms['disallowed']) > 0) { ?>
-        <div class="col-12 mb-2 d-block d-xl-none"></div>
-        <?php } ?>
-
-        <?php if (sizeof($perms['disallowed']) > 0) { ?>
-        <div class="col-xl-6">
-          <div class="card card-body border-danger h-100">
-            <p class="text-danger">
-              <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <strong>You must not</strong>
-            </p>
-
-            <ul class="list-unstyled mb-0">
-              <?php foreach ($perms['disallowed'] as $text) { ?>
-              <li><?=htmlspecialchars($text->getDescription())?></li>
-              <?php } ?>
-            </ul>
-          </div>
-        </div>
-        <?php } ?>
-      </div>
-
-      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>
-      <p class="mt-3">
-        <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/edit"))?>" class="btn btn-success">
-          Edit photography preferences
-        </a>
-      </p>
-      <?php } ?>
 
       <?php } ?>
 
@@ -335,29 +335,23 @@ include BASE_PATH . 'views/header.php';
       <!-- Squad details -->
       <h2 id="squads">Squad<?php if (sizeof($squads) != 1) { ?>s<?php } ?></h2>
       <p>
-        <?=htmlspecialchars($member->getForename())?> is a member of <?=htmlspecialchars((new NumberFormatter("en", NumberFormatter::SPELLOUT))->format(sizeof($squads)))?> squad<?php if (sizeof($squads) != 1) { ?>s<?php } ?>.
+        <?= htmlspecialchars($member->getForename()) ?> is a member of <?= htmlspecialchars((new NumberFormatter("en", NumberFormatter::SPELLOUT))->format(sizeof($squads))) ?> squad<?php if (sizeof($squads) != 1) { ?>s<?php } ?>.
       </p>
 
       <div class="list-group mb-3">
         <?php foreach ($squads as $squad) { ?>
-          <a href="<?=htmlspecialchars(autoUrl('squads/' . $squad->getId()))?>" class="list-group-item list-group-item-action">
-            <?=htmlspecialchars($squad->getName())?>
+          <a href="<?= htmlspecialchars(autoUrl('squads/' . $squad->getId())) ?>" class="list-group-item list-group-item-action">
+            <?= htmlspecialchars($squad->getName()) ?>
           </a>
         <?php } ?>
       </div>
 
-      <!-- <p>
-        <button class="btn btn-success">
-          Manage squads
-        </button>
-      </p> -->
-
       <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Coach') { ?>
-      <p>
-        <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/new-move"))?>" class="btn btn-success">
-          Manage squads
-        </a>
-      </p>
+        <p>
+          <button class="btn btn-success" id="new-move-button" data-member="<?= htmlspecialchars($id) ?>">
+            Manage squads
+          </button>
+        </p>
       <?php } ?>
 
       <hr>
@@ -365,11 +359,11 @@ include BASE_PATH . 'views/header.php';
       <!-- Times -->
       <h2 id="personal-bests">Personal bests</h2>
       <p>
-        View <?=htmlspecialchars($member->getForename())?>'s personal best times.
+        View <?= htmlspecialchars($member->getForename()) ?>'s personal best times.
       </p>
 
       <p>
-        <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times"))?>" class="btn btn-success">
+        <a href="<?= htmlspecialchars(autoUrl("members/" . $id . "/times")) ?>" class="btn btn-success">
           See personal bests
         </a>
       </p>
@@ -419,7 +413,7 @@ include BASE_PATH . 'views/header.php';
             Swim England Membership category
           </dt>
           <dd>
-            <?=htmlspecialchars($member->getSwimEnglandCategory())?>
+            <?= htmlspecialchars($member->getSwimEnglandCategory()) ?>
           </dd>
         </div>
       </dl>
@@ -430,10 +424,10 @@ include BASE_PATH . 'views/header.php';
       <h2 id="other-details">Other details</h2>
       <?php $md = $member->getNotes(); ?>
       <?php if ($md) { ?>
-        <?=$md?>
+        <?= $md ?>
       <?php } else { ?>
         <p>
-          No additional notes for <?=htmlspecialchars($member->getForename())?>
+          No additional notes for <?= htmlspecialchars($member->getForename()) ?>
         </p>
       <?php } ?>
 
@@ -442,8 +436,26 @@ include BASE_PATH . 'views/header.php';
 
 </div>
 
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="modal-body" class="modal-body"></div>
+      <div id="modal-footer" class="modal-footer">
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php
 
 $footer = new \SCDS\Footer();
+$footer->addJs('public/js/members/main.js');
 $footer->useFluidContainer();
 $footer->render();
