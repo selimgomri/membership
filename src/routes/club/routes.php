@@ -4,12 +4,12 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 $currentUser = null;
-if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_COOKIE['TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin']) && $_COOKIE['TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin'] != "") {
-  $sql = "SELECT `UserID`, `Time` FROM `userLogins` INNER JOIN users ON users.UserID = userLogins.UserID WHERE users.Tenant = ? AND `Hash` = ? AND `Time` >= ? AND `HashActive` = ?";
+if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin'] != "") {
+  $sql = "SELECT users.UserID, `Time` FROM `userLogins` INNER JOIN users ON users.UserID = userLogins.UserID WHERE users.Tenant = ? AND `Hash` = ? AND `Time` >= ? AND `HashActive` = ?";
 
   $data = [
     $tenant->getId(),
-    $_COOKIE['TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin'],
+    $_COOKIE[COOKIE_PREFIX . 'TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin'],
     date('Y-m-d H:i:s', strtotime("120 days ago")),
     1
   ];
@@ -49,14 +49,14 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_
       halt(500);
     }
 
-    $expiry_time = ($time->format('U'))+60*60*24*120;
+    $expiry_time = ($time->format('U')) + 60 * 60 * 24 * 120;
 
     $secure = true;
     if (app('request')->protocol == 'http' && bool(env('IS_DEV'))) {
       $secure = false;
     }
     $cookiePath = '/' . app()->tenant->getCodeId();
-    setcookie('TENANT-' . app()->tenant->getId() . '-' . "AutoLogin", $hash, $expiry_time , $cookiePath, app('request')->hostname, $secure, false);
+    setcookie('TENANT-' . app()->tenant->getId() . '-' . "AutoLogin", $hash, $expiry_time, $cookiePath, app('request')->hostname, $secure, false);
   }
 } else if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
   $currentUser = new User($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], true);
@@ -99,6 +99,11 @@ $this->group('/js', function () {
 
 $this->get('/emergency-message.json', function () {
   include BASE_PATH . 'controllers/public/emergency-message.json.php';
+});
+
+$this->post('/check-login.json', function () {
+  header("content-type: application/json");
+  echo json_encode(['signed_in' => isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])]);
 });
 
 $this->get('/robots.txt', function () {

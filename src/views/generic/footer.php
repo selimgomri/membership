@@ -137,7 +137,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
       </div>
     </div>
   </div><!-- /.container -->
-  <div id="app-js-info" data-root="<?= htmlspecialchars(autoUrl("")) ?>" data-service-worker-url="<?= htmlspecialchars(autoUrl("sw.js")) ?>"></div>
+  <div id="app-js-info" data-root="<?= htmlspecialchars(autoUrl("")) ?>" data-check-login-url="<?= htmlspecialchars(autoUrl("check-login.json")) ?>" data-service-worker-url="<?= htmlspecialchars(autoUrl("sw.js")) ?>"></div>
 </footer>
 
 <!-- Modals and Other Hidden HTML -->
