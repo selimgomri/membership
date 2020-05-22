@@ -49,8 +49,8 @@ function handleLogin(event) {
         if (target) {
           targetString = target.toString()
         }
-        console.log(json.pass.redirect + '?club=' + encodeURIComponent(orgString) + '&target=' + encodeURIComponent(targetString) + '?remember=true');
-        window.location.href = json.pass.redirect + '?club=' + encodeURIComponent(orgString) + '&target=' + encodeURIComponent(targetString) + '?remember=true';
+        console.log(json.pass.redirect + '?club=' + encodeURIComponent(orgString) + '&target=' + encodeURIComponent(targetString) + '&remember=true');
+        window.location.href = json.pass.redirect + '?club=' + encodeURIComponent(orgString) + '&target=' + encodeURIComponent(targetString) + '&remember=true';
       } else if (json.next === 'twoFactor') {
         // Show Two Factor Auth
         let text = 'Enter your two factor authentication code';
@@ -146,8 +146,8 @@ function verify2FA(event) {
         if (target) {
           targetString = target.toString()
         }
-        console.log(json.pass.redirect + '?club=' + encodeURIComponent(orgString) + '&target=' + encodeURIComponent(targetString) + '?remember=true');
-        window.location.href = json.pass.redirect + '?club=' + encodeURIComponent(orgString) + '&target=' + encodeURIComponent(targetString) + '?remember=true';
+        console.log(json.pass.redirect + '?club=' + encodeURIComponent(orgString) + '&target=' + encodeURIComponent(targetString) + '&remember=true');
+        window.location.href = json.pass.redirect + '?club=' + encodeURIComponent(orgString) + '&target=' + encodeURIComponent(targetString) + '&remember=true';
       } else if (json.next === 'csrf') {
         // Handle invalid pw
         console.log(json.csrf);
