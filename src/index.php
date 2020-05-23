@@ -663,7 +663,7 @@ $route->group($get_group, function($clubcode = "CLSE") {
       header("Location: " . autoUrl("login"));
     });
   } else if (user_needs_registration($_SESSION['UserID'])) {
-    setUserOption($_SESSION['UserID'], 'DefaultAccessLevel', $_GET['type']);
+    setUserOption($_SESSION['UserID'], 'DefaultAccessLevel', 'Parent');
 
     $userObject = new \User($_SESSION['UserID'], true);
     app()->user = $userObject;
