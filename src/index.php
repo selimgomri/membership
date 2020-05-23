@@ -663,9 +663,12 @@ $route->group($get_group, function($clubcode = "CLSE") {
       header("Location: " . autoUrl("login"));
     });
   } else if (user_needs_registration($_SESSION['UserID'])) {
-    $this->group('/renewal', function() {
-      
+    setUserOption($_SESSION['UserID'], 'DefaultAccessLevel', $_GET['type']);
 
+    $userObject = new \User($_SESSION['UserID'], true);
+    app()->user = $userObject;
+
+    $this->group('/renewal', function() {
       include 'controllers/renewal/router.php';
     });
 
