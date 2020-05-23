@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "375321346c99d04e1b2d25fb8c6de235",
+    "content-hash": "b268ba027132243e06c127269803759f",
     "packages": [
         {
             "name": "adoy/oauth2",
@@ -1279,6 +1279,56 @@
                 "url"
             ],
             "time": "2019-07-01T23:21:34+00:00"
+        },
+        {
+            "name": "huwcbjones/rankings-db",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/huwcbjones/rankings-db-php.git",
+                "reference": "9ab1975e5b265a1912af2fdf5ef82d0c4036967c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/huwcbjones/rankings-db-php/zipball/9ab1975e5b265a1912af2fdf5ef82d0c4036967c",
+                "reference": "9ab1975e5b265a1912af2fdf5ef82d0c4036967c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-soap": "*",
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "RankingsDB\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Huw Jones",
+                    "email": "huw@huwcbjones.co.uk",
+                    "homepage": "https://www.huwcbjones.co.uk"
+                }
+            ],
+            "description": "Library to interact with British Swimming rankings database",
+            "homepage": "https://github.com/huwcbjones/rankings-db-php",
+            "keywords": [
+                "british",
+                "database",
+                "members",
+                "rankings",
+                "swimming",
+                "times"
+            ],
+            "time": "2019-10-26T18:45:20+00:00"
         },
         {
             "name": "khanamiryan/qrcode-detector-decoder",
