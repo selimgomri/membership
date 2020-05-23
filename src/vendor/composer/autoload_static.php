@@ -68,6 +68,7 @@ class ComposerStaticInit2fa1c4a6e39cf13a86ed79c946bf7f9a
         'R' => 
         array (
             'Respect\\Validation\\' => 19,
+            'RankingsDB\\' => 11,
         ),
         'P' => 
         array (
@@ -250,6 +251,10 @@ class ComposerStaticInit2fa1c4a6e39cf13a86ed79c946bf7f9a
         'Respect\\Validation\\' => 
         array (
             0 => __DIR__ . '/..' . '/respect/validation/library',
+        ),
+        'RankingsDB\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/huwcbjones/rankings-db/src',
         ),
         'Psr\\Http\\Message\\' => 
         array (
