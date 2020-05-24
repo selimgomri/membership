@@ -249,3 +249,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
 		include 'delete.php';
 	});
 }
+
+$this->post('/{id}:int/squads.json', function ($id) {
+	include 'moves/squads.php';
+});
