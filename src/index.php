@@ -248,12 +248,12 @@ $route->use(function () {
   header("X-Content-Type-Options: nosniff");
 });
 
-$route->route(['GET'], '/*', function () {
-  pre("TESTING");
-  $this->matched = true;
-}, [
-  'continue' => true
-]);
+// $route->route(['GET'], '/*', function () {
+//   pre("TESTING");
+//   $this->matched = true;
+// }, [
+//   'continue' => true
+// ]);
 
 $route->group('/{club}:int', function ($club) {
 
