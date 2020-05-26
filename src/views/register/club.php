@@ -25,17 +25,6 @@ include BASE_PATH . "views/root/header.php";
 
 ?>
 
-<aside class="bg-warning py-3 mb-3">
-  <div class="container">
-    <h1>
-      Warning
-    </h1>
-    <p class="lead mb-0 text-bf">
-      Not for production use. For development purposes only.
-    </p>
-  </div>
-</aside>
-
 <div class="container">
   <div class="row">
     <div class="col-lg-8">

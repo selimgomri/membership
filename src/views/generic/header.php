@@ -26,6 +26,14 @@ if (isset($customBackground) && $customBackground) {
     <a href="#maincontent">Skip to main content</a>
   </div>
 
+  <?php if (bool(env('IS_DEV'))) { ?>
+  <div class="bg-warning bg-striped py-1">
+    <div class="<?= $container_class ?>">
+      <small><strong>DEVELOPMENT PLATFORM</strong> NOT FOR PRODUCTION USE</small>
+    </div>
+  </div>
+  <?php } ?>
+
   <div class="d-print-none">
 
     <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') != 'NONE' && app()->tenant->getKey('EMERGENCY_MESSAGE')) {

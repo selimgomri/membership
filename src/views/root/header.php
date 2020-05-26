@@ -6,6 +6,19 @@ include 'head.php';
 
 ?>
 
+<?php if (bool(env('IS_DEV'))) { ?>
+<aside class="bg-warning py-3 mb-3">
+  <div class="container">
+    <h1>
+      Warning
+    </h1>
+    <p class="lead mb-0">
+      This is development software which is <strong>not for production use</strong>
+    </p>
+  </div>
+</aside>
+<?php } ?>
+
 <div class="container">
   <div class="row align-items-center py-2">
     <div class="col-auto">
@@ -31,6 +44,9 @@ include 'head.php';
         </li>
         <li class="nav-item">
           <a class="nav-link" href="<?=htmlspecialchars(autoUrl("clubs"))?>">Clubs</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?=htmlspecialchars(autoUrl("register"))?>">Register</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/" target="_blank">Help</a>
