@@ -262,7 +262,9 @@ $route->group('/{club}:int', function ($club) {
     $clubObject = Tenant::fromId($club);
 
     if (!$clubObject) {
-      $this->any(['/', '/*'], function ($club) {
+      define('CLUB_PROVIDED', $club);
+      $this->any(['/', '/*'], function () {
+        $club = CLUB_PROVIDED;
         include 'views/root/errors/no-club.php';
       });
     } else {
@@ -281,7 +283,9 @@ $route->group('/{club}:([a-z]{4})', function ($club) {
     $clubObject = Tenant::fromCode($club);
 
     if (!$clubObject) {
-      $this->any(['/', '/*'], function ($club) {
+      define('CLUB_PROVIDED', $club);
+      $this->any(['/', '/*'], function () {
+        $club = CLUB_PROVIDED;
         include 'views/root/errors/no-club.php';
       });
     } else {
