@@ -113,6 +113,12 @@ $addAccessLevel->execute([
   $uid
 ]);
 
+$message = '<p>Hello ' . htmlspecialchars(trim($_POST['fn'])) . '. Thanks for signing up for SCDS Membership MT.</p>';
+$message .= '<p>Your club\'s system url is ' . htmlspecialchars(autoUrl($tenant->getCodeId())) . '.</p>';
+$message .= '<p>Contact support@myswimmingclub.uk for support.</p>';
+
+notifySend(null, 'Welcome to Membership MT by SCDS', $message, trim($_POST['fn']) . ' ' . trim($_POST['sn']), $email);
+
 header("location: " . autoUrl($tenant->getCodeId()));
 
 /**
