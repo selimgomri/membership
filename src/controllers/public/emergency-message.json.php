@@ -37,6 +37,7 @@ if (env('EMERGENCY_MESSAGE_TYPE') != 'NONE' && env('EMERGENCY_MESSAGE')) {
   ];
 }
 
-header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
+header("cache-control: max-age=3600");
+header("access-control-allow-origin: " . $_SERVER['HTTP_ORIGIN']);
 header("content-type: application/json");
 echo json_encode($data);
