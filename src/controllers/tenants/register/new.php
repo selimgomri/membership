@@ -98,7 +98,7 @@ $insert->execute([
   $email,
   password_hash($_POST['user-password'], PASSWORD_BCRYPT),
   trim($_POST['fn']),
-  trim($_POST['sn']),
+  trim($_POST['ln']),
   $mobile,
   0,
   0,
@@ -117,7 +117,8 @@ $message = '<p>Hello ' . htmlspecialchars(trim($_POST['fn'])) . '. Thanks for si
 $message .= '<p>Your club\'s system url is ' . htmlspecialchars(autoUrl($tenant->getCodeId())) . '.</p>';
 $message .= '<p>Contact support@myswimmingclub.uk for support.</p>';
 
-notifySend(null, 'Welcome to Membership MT by SCDS', $message, trim($_POST['fn']) . ' ' . trim($_POST['sn']), $email);
+// Not quite ready yet
+// notifySend(null, 'Welcome to Membership MT by SCDS', $message, trim($_POST['fn']) . ' ' . trim($_POST['sn']), $email);
 
 header("location: " . autoUrl($tenant->getCodeId()));
 
