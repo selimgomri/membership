@@ -200,15 +200,15 @@ include BASE_PATH . 'views/header.php';
           <div class="form-group">
             <label for="CLUB_ADDRESS">Club Primary Address</label>
             <textarea class="form-control" rows="5" id="CLUB_ADDRESS" name="CLUB_ADDRESS" aria-describedby="CLUB_ADDRESS_HELP" <?= $disabled['CLUB_ADDRESS'] ?>><?php
-                                                                                                                                                              if ($vars['CLUB_ADDRESS']) {
-                                                                                                                                                                for ($i = 0; $i < sizeof($vars['CLUB_ADDRESS']); $i++) {
-                                                                                                                                                                  echo htmlspecialchars($vars['CLUB_ADDRESS'][$i]);
-                                                                                                                                                                  if ($i + 1 < sizeof($vars['CLUB_ADDRESS'])) {
-                                                                                                                                                                    echo "\r\n";
+                                                                                                                                                                if ($vars['CLUB_ADDRESS']) {
+                                                                                                                                                                  for ($i = 0; $i < sizeof($vars['CLUB_ADDRESS']); $i++) {
+                                                                                                                                                                    echo htmlspecialchars($vars['CLUB_ADDRESS'][$i]);
+                                                                                                                                                                    if ($i + 1 < sizeof($vars['CLUB_ADDRESS'])) {
+                                                                                                                                                                      echo "\r\n";
+                                                                                                                                                                    }
                                                                                                                                                                   }
                                                                                                                                                                 }
-                                                                                                                                                              }
-                                                                                                                                                              ?></textarea>
+                                                                                                                                                                ?></textarea>
             <small id="CLUB_ADDRESS_HELP" class="form-text text-muted">Enter the address of your primary location. Do not include your club name and do not place commas at the end of lines.</small>
           </div>
 

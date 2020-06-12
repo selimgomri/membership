@@ -59,7 +59,7 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 	$accessKey = generateRandomString(6);
 
   try {
-    $insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, SquadID, AccessKey, ASACategory, ClubPays, OtherNotes, RRTransfer, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, AccessKey, ASACategory, ClubPays, OtherNotes, RRTransfer, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $insert->execute([
       $forename,
       $middlenames,
@@ -67,7 +67,6 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
       $dateOfBirth,
       $asaNumber,
       $sex,
-      $squad,
       $accessKey,
       $cat,
       $cp,
@@ -76,7 +75,9 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 			$tenant->getId(),
     ]);
 
-  	$last_id = $db->lastInsertId();
+		$last_id = $db->lastInsertId();
+		
+		// If squad, add to squad
 
   	if ($getASA) {
   		$swimEnglandTemp = app()->tenant->getKey('ASA_CLUB_CODE') . $last_id;

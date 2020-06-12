@@ -120,6 +120,8 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Admin' && $
 $payment = \Stripe\PaymentIntent::retrieve([
   'id' => $pm['Intent'],
   'expand' => ['customer', 'payment_method']
+], [
+  'stripe_account' => $tenant->getStripeAccount()
 ]);
 
 $getGalaEntries = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN galas ON galas.GalaID = galaEntries.GalaID) INNER JOIN members ON members.MemberID = galaEntries.MemberID) WHERE StripePayment = ?");

@@ -154,6 +154,7 @@ function joinSquad(event) {
       let select = document.createElement('SELECT');
       select.classList.add('custom-select');
       select.id = 'join';
+      select.name = 'join';
 
       // Loop and add <option>s
       squads.can_join.forEach(squad => {
@@ -215,7 +216,7 @@ function joinSquad(event) {
       form.appendChild(fg);
 
       fg = document.createElement('DIV');
-      fg.classList.add('form-group', 'd-none');
+      fg.classList.add('form-group', 'collapse');
       fg.id = 'date-group'
 
       label = document.createElement('label');
@@ -228,6 +229,7 @@ function joinSquad(event) {
       date.min = today;
       date.value = today;
       date.id = 'move-date';
+      date.name = 'move-date';
       date.classList.add('form-control');
 
       fg.appendChild(label);
@@ -332,6 +334,7 @@ function leaveSquad(event) {
       let select = document.createElement('SELECT');
       select.classList.add('custom-select');
       select.id = 'leave';
+      select.name = 'leave';
 
       // Loop and add <option>s
       squads.current.forEach(squad => {
@@ -361,7 +364,7 @@ function leaveSquad(event) {
       radio.classList.add('custom-control-input');
 
       label = document.createElement('label');
-      label.appendChild(document.createTextNode('Move now'));
+      label.appendChild(document.createTextNode('Leave now'));
       label.classList.add('custom-control-label');
       label.htmlFor = 'move-when-1';
 
@@ -381,7 +384,7 @@ function leaveSquad(event) {
       radio.classList.add('custom-control-input');
 
       label = document.createElement('label');
-      label.appendChild(document.createTextNode('Move on a specified date'));
+      label.appendChild(document.createTextNode('Leave on a specified date'));
       label.classList.add('custom-control-label');
       label.htmlFor = 'move-when-2';
 
@@ -393,7 +396,7 @@ function leaveSquad(event) {
       form.appendChild(fg);
 
       fg = document.createElement('DIV');
-      fg.classList.add('form-group', 'd-none');
+      fg.classList.add('form-group', 'collapse');
       fg.id = 'date-group'
 
       label = document.createElement('label');
@@ -406,6 +409,7 @@ function leaveSquad(event) {
       date.min = today;
       date.value = today;
       date.id = 'move-date';
+      date.name = 'move-date';
       date.classList.add('form-control');
 
       fg.appendChild(label);
@@ -413,8 +417,48 @@ function leaveSquad(event) {
 
       form.appendChild(fg);
 
+      fg = document.createElement('P');
+      let submit = document.createElement('BUTTON');
+      submit.id = 'move-submit';
+      submit.classList.add('btn', 'btn-primary');
+      submit.textContent = 'Save';
+
+      fg.appendChild(submit);
+      form.appendChild(fg);
+
       // Display
       body.appendChild(form);
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        let fd = new FormData(event.target);
+        let button = document.getElementById('new-move-button');
+        fd.append('member', button.dataset.member);
+        fd.append('event', 'leave');
+
+        // Send form data ajax
+        var req = new XMLHttpRequest();
+        req.addEventListener('load', async (event) => {
+          if (event.target.status == 200) {
+            let result = JSON.parse(event.target.responseText);
+            if (result.success) {
+              body.innerHTML = '<div class="alert alert-success">Member removed from squad</div>';
+            } else {
+              body.innerHTML = '<div class="alert alert-warning">A problem occurred.</div>';
+            }
+          } else {
+          }
+        });
+        req.addEventListener('error', (event) => {
+          // Error
+        });
+        req.addEventListener('abort', (event) => {
+          // Error
+        });
+        req.open('POST', button.dataset.moveUrl);
+        req.send(fd);
+        body.innerHTML = '<div class="alert alert-success">SENT</div>';
+      });
 
       document.querySelectorAll('input[name="move-when"]').forEach((radio) => {
         radio.addEventListener('change', showHideDateGroup);
@@ -449,11 +493,10 @@ function getSquads() {
  * @param {Event} event 
  */
 function showHideDateGroup(event) {
-  let dateGroup = document.getElementById('date-group');
   if (document.querySelector('input[name="move-when"]:checked').value == true) {
-    dateGroup.classList.remove('d-none');
+    $('#date-group').collapse('show');
   } else {
-    dateGroup.classList.add('d-none');
+    $('#date-group').collapse('hide');
   }
 }
 
