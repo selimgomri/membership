@@ -253,3 +253,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
 $this->post('/{id}:int/squads.json', function ($id) {
 	include 'moves/squads.php';
 });
+
+$this->post('/move-squad', function () {
+	include 'moves/move.php';
+});

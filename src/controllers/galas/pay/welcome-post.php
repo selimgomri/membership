@@ -145,8 +145,6 @@ if (sizeof($payingEntries) > 0) {
       'stripe_account' => $tenant->getStripeAccount()
     ]);
     $_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'] = $intent->id;
-
-    reportError($intent);
   
     $intentCreatedAt = new DateTime('@' . $intent->created, new DateTimeZone('UTC'));
 

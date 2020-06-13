@@ -27,6 +27,17 @@ $pageHead = [
   ]
 ];
 
+$pbs = null;
+try {
+  $httpClient = new GuzzleHttp\Client();
+  $res = $httpClient->request('GET', 'https://dev.myswimmingclub.uk/bsdbc/members/' . $member->getSwimEnglandNumber() . '/times', []);
+  if ($res->getStatusCode() == "200") {
+    $pbs = json_decode($res->getBody());
+  }
+} catch (GuzzleHttp\Exception\ClientException $e) {
+  // 404 or something
+}
+
 $fluidContainer = true;
 include BASE_PATH . 'views/header.php';
 
@@ -235,11 +246,12 @@ include BASE_PATH . 'views/header.php';
             <div class="col-md-6 col-xl-4">
               <div class="card card-body py-2 px-3 mb-2">
                 <div class="row align-items-center">
-                  <div class="col-6">
+                  <div class="col-sm-6 col-md-12 col-lg-6">
                     <div class="text-truncate"><strong><?= htmlspecialchars($ec->getName()) ?></strong></div>
                     <div class="text-truncate"><?= htmlspecialchars($ec->getRelation()) ?></div>
+                    <div class="mb-2 d-sm-none d-md-flex d-lg-none"></div>
                   </div>
-                  <div class="col-6">
+                  <div class="col">
                     <a href="<?= htmlspecialchars($ec->getRFCContactNumber()) ?>" class="btn btn-block btn-success">
                       <i class="fa fa-phone" aria-hidden="true"></i> <?= htmlspecialchars($ec->getNationalContactNumber()) ?>
                     </a>
@@ -348,7 +360,7 @@ include BASE_PATH . 'views/header.php';
 
       <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Coach') { ?>
         <p>
-          <button class="btn btn-success" id="new-move-button" data-member="<?= htmlspecialchars($id) ?>" data-squads-url="<?= htmlspecialchars(autoUrl("members/$id/squads.json")) ?>">
+          <button class="btn btn-success" id="new-move-button" data-member="<?= htmlspecialchars($id) ?>" data-squads-url="<?= htmlspecialchars(autoUrl("members/$id/squads.json")) ?>" data-move-url="<?= htmlspecialchars(autoUrl("members/move-squad")) ?>">
             Manage squads
           </button>
         </p>
@@ -367,6 +379,32 @@ include BASE_PATH . 'views/header.php';
           See personal bests
         </a>
       </p>
+
+      <?php if ($pbs) { ?>
+        <h3><span class="badge badge-info">BETA</span> PBs <small class="text-muted">direct from British Swimming</small></h3>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <h4>Long Course</h4>
+            <ul class="list-unstyled">
+              <?php foreach ($pbs->long_course as $eventCode => $event) {
+                $swim = $event->swims[0]; ?>
+                <li><strong><?= htmlspecialchars($event->event_name) ?></strong><br><?=htmlspecialchars($swim->time)?> - <?=htmlspecialchars($swim->meet->name)?> on <?=htmlspecialchars((new DateTime($swim->swim_date, new DateTimeZone('Europe/London')))->format("j F Y"))?></li>
+              <?php } ?>
+            </ul>
+          </div>
+          <div class="col-sm-6">
+            <h4>Short Course</h4>
+            <ul class="list-unstyled">
+              <?php foreach ($pbs->short_course as $eventCode => $event) {
+                $swim = $event->swims[0]; ?>
+                <li><strong><?= htmlspecialchars($event->event_name) ?></strong><br><?=htmlspecialchars($swim->time)?> - <?=htmlspecialchars($swim->meet->name)?> on <?=htmlspecialchars((new DateTime($swim->swim_date, new DateTimeZone('Europe/London')))->format("j F Y"))?></li>
+              <?php } ?>
+            </ul>
+          </div>
+        </div>
+        
+      <?php } ?>
 
       <hr>
 
