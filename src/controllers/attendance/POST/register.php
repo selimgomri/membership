@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $errorStatus = false;
 $duplicateReg = false;
@@ -17,8 +18,11 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 	$weekBeginning = $date->format("Y-m-d");
 
 	// Get the week id
-	$getWeekId = $db->prepare("SELECT WeekID FROM sessionsWeek WHERE WeekDateBeginning = ?");
-	$getWeekId->execute([$date->format("Y-m-d")]);
+	$getWeekId = $db->prepare("SELECT WeekID FROM sessionsWeek WHERE Tenant = ? AND WeekDateBeginning = ?");
+	$getWeekId->execute([
+		$tenant->getId(),
+		$date->format("Y-m-d")
+	]);
 	$weekId = $getWeekId->fetchColumn();
 
 	if ($weekId == null) {
@@ -27,6 +31,17 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 	
 	$squadID = $_POST["squad"];
 	$sessionID = $_POST["session"];
+
+	// Verify session is for this tenant
+	$sessionCount = $db->prepare("SELECT COUNT(*) FROM `sessions` WHERE Tenant = ? AND SessionID = ?");
+	$sessionCount->execute([
+		$tenant->getId(),
+		$sessionID
+	]);
+
+	if ($sessionCount->fetchColumn() == 0) {
+		halt(404);
+	}
 
 	// SQL to check we've not done the register before
 	$sql = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` WHERE `WeekID` = ? AND `SessionID` = ?;");
@@ -37,9 +52,11 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 	$registerCount = $sql->fetchColumn();
 
 	// SQL to get the member IDs
-	$sqlMembers = $sql = "SELECT `MemberID` FROM `members` WHERE `SquadID` = '$squadID';";
-	$sql = $db->prepare("SELECT `MemberID` FROM `members` WHERE `SquadID` = ?;");
-	$sql->execute([$squadID]);
+	$sql = $db->prepare("SELECT `MemberID` FROM `members` WHERE `SquadID` = ? AND Tenant = ?;");
+	$sql->execute([
+		$squadID,
+		$tenant->getId()
+	]);
 
 	// Initialise the attendance values string for MySQL
 	$values = "";

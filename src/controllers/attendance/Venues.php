@@ -1,8 +1,12 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$venues = $db->query("SELECT VenueID, VenueName, Location FROM sessionsVenues ORDER BY VenueName ASC");
+$venues = $db->prepare("SELECT `VenueID`, `VenueName`, `Location` FROM sessionsVenues WHERE Tenant = ? ORDER BY VenueName ASC");
+$venues->execute([
+  $tenant->getId()
+]);
 
 $pagetitle = "Venues";
 include BASE_PATH . "views/header.php";

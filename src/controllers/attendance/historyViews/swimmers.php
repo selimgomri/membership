@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $pagetitle = "Attendance History by Swimmer";
 
@@ -13,7 +14,10 @@ if (isset($queries['search'])) {
   $search = $queries['search'];
 }
 
-$squads = $db->query("SELECT SquadName name, SquadID id FROM squads ORDER BY SquadFee DESC, SquadName ASC");
+$squads = $db->prepare("SELECT SquadName name, SquadID id FROM squads WHERE Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+$squads->execute([
+  $tenant->getId()
+]);
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>

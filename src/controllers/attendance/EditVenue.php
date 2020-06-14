@@ -1,9 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$data = $db->prepare("SELECT VenueName, Location FROM sessionsVenues WHERE VenueID = ?");
-$data->execute([$id]);
+$data = $db->prepare("SELECT `VenueName`, `Location` FROM sessionsVenues WHERE VenueID = ? AND Tenant = ?");
+$data->execute([
+  $id,
+  $tenant->getId()
+]);
 $venue = $data->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = "Editing " . htmlspecialchars($venue);

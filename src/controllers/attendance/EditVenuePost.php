@@ -1,13 +1,19 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$edit = $db->prepare("UPDATE sessionsVenues SET VenueName = ?, Location = ? WHERE VenueID = ?");
+$edit = $db->prepare("UPDATE sessionsVenues SET VenueName = ?, Location = ? WHERE VenueID = ? AND Tenant = ?");
 
 if ($_POST['name'] != "" && $_POST['name'] != null && $_POST['address'] != "" && $_POST['address'] != null) {
   try {
     $db->beginTransaction();
-    $edit->execute([$_POST['name'], $_POST['address'], $id]);
+    $edit->execute([
+      $_POST['name'],
+      $_POST['address'],
+      $id,
+      $tenant->getId()
+    ]);
     $db->commit();
     $_SESSION['TENANT-' . app()->tenant->getId()]['EditVenueSuccess'] = true;
   } catch (Exception $e) {

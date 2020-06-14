@@ -6,7 +6,12 @@ if (isset($_GET['squad'])) {
 }
 
 $db = app()->db;
-$squads = $db->query("SELECT SquadName `name`, SquadID id FROM squads ORDER BY SquadFee DESC, `name` ASC");
+$tenant = app()->tenant;
+
+$squads = $db->prepare("SELECT SquadName `name`, SquadID id FROM squads WHERE Tenant = ? ORDER BY SquadFee DESC, `name` ASC");
+$squads->execute([
+  $tenant->getId()
+]);
 $squad = $squads->fetch(PDO::FETCH_ASSOC);
 
 $fluidContainer = true;

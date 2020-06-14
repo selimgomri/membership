@@ -6,9 +6,16 @@ $getSessions = false;
 $week_to_get = null;
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getWeeks = $db->query("SELECT * FROM sessionsWeek ORDER BY WeekDateBeginning DESC LIMIT 4");
-$getSquads = $db->query("SELECT DISTINCT squads.SquadID, SquadName FROM squads INNER JOIN sessions ON squads.SquadID = sessions.SquadID ORDER BY SquadFee DESC, SquadName ASC");
+$getWeeks = $db->prepare("SELECT * FROM sessionsWeek WHERE Tenant = ? ORDER BY WeekDateBeginning DESC LIMIT 4");
+$getWeeks->execute([
+  $tenant->getId()
+]);
+$getSquads = $db->prepare("SELECT DISTINCT squads.SquadID, SquadName FROM squads INNER JOIN sessions ON squads.SquadID = sessions.SquadID WHERE squads.Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+$getSquads->execute([
+  $tenant->getId()
+]);
 
 $session_init = $session;
 $squad_init = $squad;

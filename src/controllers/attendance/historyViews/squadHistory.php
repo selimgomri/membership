@@ -1,20 +1,31 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$latestWeek = $db->query("SELECT WeekID, WeekDateBeginning FROM `sessionsWeek` ORDER BY `WeekDateBeginning` DESC LIMIT 1;");
+$latestWeek = $db->prepare("SELECT WeekID, WeekDateBeginning FROM `sessionsWeek` WHERE Tenant = ? ORDER BY `WeekDateBeginning` DESC LIMIT 1;");
+$latestWeek->execute([
+	$tenant->getId()
+]);
 $latestWeek = $latestWeek->fetch(PDO::FETCH_ASSOC);
 $week = (int) $latestWeek['WeekID'];
 $weekDateBeginning = $latestWeek['WeekDateBeginning'];
 
-$getSquadName = $db->prepare("SELECT SquadName FROM `squads` WHERE `SquadID` = ?");
-$getSquadName->execute([$id]);
+$getSquadName = $db->prepare("SELECT SquadName FROM `squads` WHERE `SquadID` = ? AND Tenant = ?");
+$getSquadName->execute([
+	$id,
+	$tenant->getId()
+]);
 $squadName = $getSquadName->fetchColumn();
+
+if (!$squadName) {
+	halt(404);
+}
 
 $get = $db->prepare("SELECT * FROM ((`members` LEFT JOIN `sessionsAttendance` ON
 `sessionsAttendance`.`MemberID` = `members`.`MemberID`) INNER JOIN `sessions` ON
 `sessionsAttendance`.`SessionID` = `sessions`.`SessionID`) WHERE
-`sessions`.`SquadID` = ? AND `WeekID` = ? ORDER BY `MForename` ASC,
+`sessions`.`SquadID` = ? AND `WeekID` = ? AND members.Tenant = ? ORDER BY `MForename` ASC,
 `MSurname` ASC, `SessionDay` ASC, `StartTime` ASC");
 $get->execute([$id, $week]);
 
