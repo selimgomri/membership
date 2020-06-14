@@ -1,10 +1,12 @@
 <?php
 
+$tenant = app()->tenant;
+
 if (!env('FILE_STORE_PATH')) {
   halt(404);
 }
 
-$file = env('FILE_STORE_PATH');
+$file = env('FILE_STORE_PATH') . $tenant->getId() . '/';
 $file = $file . $filename;
 if (file_exists($file)) {
   header('Content-Description: File Transfer');

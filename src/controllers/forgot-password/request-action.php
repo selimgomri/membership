@@ -8,6 +8,8 @@ $pagetitle = "Password Reset";
 include BASE_PATH . "views/header.php";
 
 $db = app()->db;
+$tenant = app()->tenant;
+
 $userDetails = trim($_POST['email-address']);
 $captcha = trim($_POST['g-recaptcha-response']);
 $captchaStatus = null;
@@ -46,8 +48,11 @@ else {
   $row = null;
 
   // Test for valid email
-  $findUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress FROM users WHERE EmailAddress = ?");
-  $findUser->execute([$userDetails]);
+  $findUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress FROM users WHERE EmailAddress = ? AND Tenant = ?");
+  $findUser->execute([
+    $userDetails,
+    $tenant->getId()
+  ]);
 
   if ($row = $findUser->fetch(PDO::FETCH_ASSOC)) {
     $found = true;
