@@ -1,17 +1,24 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 $currentUser = app()->user;
 
-$query = $db->prepare("SELECT COUNT(*) FROM joinSwimmers WHERE ID = ?");
-$query->execute([$request]);
+$query = $db->prepare("SELECT COUNT(*) FROM joinSwimmers WHERE ID = ? AND Tenant = ?");
+$query->execute([
+  $request,
+  $tenant->getId()
+]);
 
 if ($query->fetchColumn() != 1) {
   halt(404);
 }
 
-$query = $db->prepare("SELECT ID, joinSwimmers.First, joinSwimmers.Last, joinParents.First PFirst, joinParents.Last PLast, DoB, ASA, Club, XPDetails, XP, Medical, Questions, TrialStart, TrialEnd, SquadSuggestion, Comments FROM joinSwimmers JOIN joinParents WHERE ID = ? ORDER BY First ASC, Last ASC");
-$query->execute([$request]);
+$query = $db->prepare("SELECT ID, joinSwimmers.First, joinSwimmers.Last, joinParents.First PFirst, joinParents.Last PLast, DoB, ASA, Club, XPDetails, XP, Medical, Questions, TrialStart, TrialEnd, SquadSuggestion, Comments FROM joinSwimmers JOIN joinParents WHERE ID = ? AND Tenant = ? ORDER BY First ASC, Last ASC");
+$query->execute([
+  $request,
+  $tenant->getId()
+]);
 
 $swimmer = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -31,7 +38,10 @@ if ($swimmer['XP'] == 2) {
 $pagetitle = "Trial Request - " . htmlspecialchars($swimmer['First'] . ' ' . $swimmer['Last']);
 $use_white_background = true;
 
-$query = $db->query("SELECT SquadID, SquadName FROM squads ORDER BY SquadFee DESC, SquadName ASC");
+$query = $db->prepare("SELECT SquadID, SquadName FROM squads WHERE Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+$query->execute([
+  $tenant->getId()
+]);
 
 $value = $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-FC'];
 

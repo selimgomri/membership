@@ -1,14 +1,18 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$query = $db->prepare("SELECT COUNT(*) FROM joinParents");
+$query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ?");
 $query->execute([$hash]);
 
 $count = $query->fetchColumn();
 
-$query = $db->prepare("SELECT ID, Hash, Email, joinSwimmers.First, joinSwimmers.Last, joinParents.First PFirst, joinParents.Last PLast, Comments FROM joinParents INNER JOIN joinSwimmers ON joinParents.Hash = joinSwimmers.Parent WHERE SquadSuggestion IS NOT NULL ORDER BY ID DESC");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT ID, Hash, Email, joinSwimmers.First, joinSwimmers.Last, joinParents.First PFirst, joinParents.Last PLast, Comments FROM joinParents INNER JOIN joinSwimmers ON joinParents.Hash = joinSwimmers.Parent WHERE Hash = ? AND SquadSuggestion AND joinParents.Tenant = ? IS NOT NULL ORDER BY ID DESC");
+$query->execute([
+  $hash,
+  $tenant->getId()
+]);
 
 $pagetitle = "Accepted Swimmers";
 $use_white_background = true;

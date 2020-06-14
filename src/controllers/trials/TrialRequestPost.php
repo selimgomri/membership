@@ -1,16 +1,23 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$query = $db->prepare("SELECT COUNT(*) FROM joinSwimmers WHERE ID = ?");
-$query->execute([$request]);
+$query = $db->prepare("SELECT COUNT(*) FROM joinSwimmers WHERE ID = ? AND Tenant = ?");
+$query->execute([
+  $request,
+  $tenant->getId()
+]);
 
 if ($query->fetchColumn() != 1) {
   halt(404);
 }
 
-$query = $db->prepare("SELECT Hash, joinParents.First F, joinParents.Last L, joinSwimmers.First, joinSwimmers.Last, Email FROM joinSwimmers JOIN joinParents WHERE ID = ?");
-$query->execute([$request]);
+$query = $db->prepare("SELECT Hash, joinParents.First F, joinParents.Last L, joinSwimmers.First, joinSwimmers.Last, Email FROM joinSwimmers JOIN joinParents WHERE ID = ? AND joinParents.Tenant = ?");
+$query->execute([
+  $request,
+  $tenant->getId()
+]);
 
 $detail = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -21,8 +28,13 @@ $day = date("j F Y", strtotime($start));
 $start_string = date("H:i", strtotime($start));
 $end_string = date("H:i", strtotime($end));
 
-$query = $db->prepare("UPDATE joinSwimmers SET TrialStart = ?, TrialEnd = ? WHERE ID = ?");
-$query->execute([$start, $end, $request]);
+$query = $db->prepare("UPDATE joinSwimmers SET TrialStart = ?, TrialEnd = ? WHERE ID = ? AND Tenant = ?");
+$query->execute([
+  $start,
+  $end,
+  $request,
+  $tenant->getId()
+]);
 
 $email_parent = '<p>Hello ' . $detail['F'] . ' ' . $detail['L'] . '</p>
 <p>This is a confirmation that the trial appointment for ' . $detail['First'] . ' ' . $detail['Last'] . ' has been scheduled for ' . $day . ' at ' . $start_string . ' - ' . $end_string . '.</p>

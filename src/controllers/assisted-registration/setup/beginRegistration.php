@@ -1,9 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile, `Password` FROM users WHERE UserID = ?");
-$getUser->execute([$id]);
+$getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile, `Password` FROM users WHERE UserID = ? AND Tenant = ?");
+$getUser->execute([
+  $id,
+  $tenant->getId()
+]);
 $user = $getUser->fetch(PDO::FETCH_ASSOC);
 
 if (!(password_verify($password, $user['Password']))) {

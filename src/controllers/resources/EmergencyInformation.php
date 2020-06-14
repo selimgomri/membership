@@ -1,9 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 $currentUser = app()->user;
 
-$squads = $db->query("SELECT SquadID, SquadName FROM squads ORDER BY SquadFee DESC, SquadName ASC");
+$squads = $db->prepare("SELECT SquadID, SquadName FROM squads AND Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+$squads->execute([
+  $tenant->getId()
+]);
 
 $swimmers = $db->prepare("SELECT MForename fn, MSurname sn, Website, Social, Noticeboard, FilmTraining, ProPhoto, Conditions, Allergies, Medication, Mobile FROM (((members LEFT JOIN memberMedical ON members.MemberID = memberMedical.MemberID) LEFT JOIN memberPhotography ON members.MemberID = memberPhotography.MemberID) LEFT JOIN users ON members.UserID = users.UserID) WHERE members.SquadID = ?");
 
