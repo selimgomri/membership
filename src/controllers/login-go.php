@@ -131,5 +131,5 @@ unset($_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']);
 if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] && $_POST['target'] == "" || isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorAccountLocked']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorAccountLocked'] && $_POST['target'] == "") {
   header("Location: " . autoUrl("login"));
 } else {
-  header("Location: " . autoUrl(ltrim($_POST['target'], '/')));
+  header("Location: " . autoUrl(ltrim($_POST['target'], '/'), false));
 }

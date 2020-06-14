@@ -31,12 +31,10 @@ include BASE_PATH . "views/header.php";
 
       <h2>Not got an account?</h2>
       <p class="lead">
-        Registration is quick and easy. You can sign up in a flash.
+        Your club will create your account.
       </p>
       <p class="mb-5">
-        <a class="btn btn-lg btn-dark" href="<?=autoUrl("register")?>">
-          Register Now
-        </a>
+        If you've just joined, the person handling your application will be in touch soon.
       </p>
     </div>
   </div>

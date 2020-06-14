@@ -81,9 +81,9 @@ include BASE_PATH . "views/header.php";
       <p class="mb-5">
         <a href="<?=autoUrl("2fa/exit")?>" class="btn btn-dark">Cancel</a>
         <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE']) && $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE']) { ?>
-        <a href="<?=autoUrl("2fa/resend")?>" class="btn btn-dark">Get code by email</a>
+        <a href="<?=autoUrl("2fa/resend?target=" . urlencode($target))?>" class="btn btn-dark">Get code by email</a>
         <?php } else { ?>
-        <a href="<?=autoUrl("2fa/resend")?>" class="btn btn-dark">Resend Email</a>
+        <a href="<?=autoUrl("2fa/resend?target=" . urlencode($target))?>" class="btn btn-dark">Resend Email</a>
         <?php } ?>
       </p>
 

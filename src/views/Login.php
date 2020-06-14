@@ -1,4 +1,10 @@
 <?php
+
+$target = "";
+if (isset($_GET['target'])) {
+  $target = $_GET['target'];
+}
+
 $pagetitle = "Login";
 
 $errorState = $username = null;
@@ -66,7 +72,7 @@ include BASE_PATH . "views/header.php";
             </small>
           </div>
         </div>
-        <input type="hidden" name="target" value="<?=$_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL']?>">
+        <input type="hidden" name="target" value="<?=htmlspecialchars($target)?>">
         <?=SCDS\CSRF::write()?>
         <input type="hidden" name="SessionSecurity" value="<?=session_id()?>">
         <p class="mb-5"><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-primary"></p>
