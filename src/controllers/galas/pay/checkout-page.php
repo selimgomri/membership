@@ -99,12 +99,18 @@ if ($methodId != null && $customerID != null) {
     $_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'], [
       'payment_method' => $methodId,
       'customer' => $customerID,
+    ],
+    [
+      'stripe_account' => $tenant->getStripeAccount()
     ]
   );
 } else if ($customerId != null) {
   $intent = \Stripe\PaymentIntent::update(
     $_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'], [
       'customer' => $customerId,
+    ],
+    [
+      'stripe_account' => $tenant->getStripeAccount()
     ]
   );
 }
