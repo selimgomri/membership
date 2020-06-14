@@ -33,6 +33,11 @@ $this->get('/public/*', function() {
   require BASE_PATH . 'controllers/PublicFileLoader.php';
 });
 
+$this->group('/db', function () {
+  // Handle database migrations
+  include BASE_PATH . 'controllers/migrations/router.php';
+});
+
 $this->any('/*', function() {
   include BASE_PATH . 'views/root/errors/404.php';
 });
