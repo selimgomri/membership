@@ -140,10 +140,10 @@ include BASE_PATH . "views/header.php";
               </span>
               <span class="category">
                 <?php $squads = $s->getSquads();
-                for ($i=0; $i < min(sizeof($squads), 2); $i++) {
+                for ($i = 0; $i < min(sizeof($squads), 2); $i++) {
                   if ($i != 0) { ?>, <?php }
-                  ?><?=htmlspecialchars($squads[$i]->getName())?><?php
-                } ?>
+                                      ?><?= htmlspecialchars($squads[$i]->getName()) ?><?php
+                                                                } ?>
               </span>
             </a>
           <?php }

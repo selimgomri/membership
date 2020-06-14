@@ -9,15 +9,15 @@
     $secure = false;
   }
 
-  setcookie(COOKIE_PREFIX . "AutoLogin", "", 0, "/", app('request')->hostname('request')->hostname, $secure, false);
+  setcookie(COOKIE_PREFIX . 'TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin', "", 0, "/", app('request')->hostname('request')->hostname, $secure, false);
 
-  if (isset($_COOKIE[COOKIE_PREFIX . 'AutoLogin'])) {
+  if (isset($_COOKIE[COOKIE_PREFIX . 'TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin'])) {
     // Unset the hash.
     $db = app()->db;
     $unset = $db->prepare("UPDATE userLogins SET HashActive = ? WHERE Hash = ? AND UserID = ?");
     $unset->execute([
       0,
-      $_COOKIE[COOKIE_PREFIX . 'AutoLogin'],
+      $_COOKIE[COOKIE_PREFIX . 'TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin'],
       $user
     ]);
   }
