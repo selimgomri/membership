@@ -1,13 +1,15 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $user = null;
 
-$count = $db->prepare("SELECT COUNT(*) FROM notifyAdditionalEmails WHERE `ID` = ? AND `Hash` = ?");
+$count = $db->prepare("SELECT COUNT(*) FROM notifyAdditionalEmails INNER JOIN users ON users.UserID = notifyAdditionalEmails.UserID WHERE `ID` = ? AND `Hash` = ? AND users.Tenant = ?");
 $count->execute([
   $id,
-  $hash
+  $hash,
+  $tenant->getId()
 ]);
 
 if ($count->fetchColumn() > 0) {

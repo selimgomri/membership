@@ -1,10 +1,10 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $query = $db->prepare("SELECT * FROM `newUsers` WHERE `AuthCode` = ? AND `ID` = ? AND `Type` = ?");
 $query->execute([$auth, $id, 'EmailUpdate']);
-$id = $db->lastInsertId();
 
 $rows = $query->fetchAll(PDO::FETCH_ASSOC);
 $row = $rows[0];
@@ -23,6 +23,17 @@ if ($found) {
 	$user 				= $array->User;
 	$oldEmail 			= $array->OldEmail;
 	$newEmail 			= $array->NewEmail;
+
+	// Verify user and tenant
+	$check = $db->prepare("SELECT COUNT(*) FROM users WHERE UserID = ? AND Tenant = ?");
+	$check->execute([
+		$user,
+		$tenant->getId(),
+	]);
+
+	if ($check->fetchColumn() == 0) {
+		halt(404);
+	}
 
 	($db->prepare("UPDATE `users` SET `EmailAddress` = ? WHERE `UserID` = ?"))->execute([$newEmail, $user]);
 

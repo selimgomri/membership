@@ -10,7 +10,7 @@ $hash;
 $updatePassword = $db->prepare("UPDATE `users` SET `Password` = :new WHERE `UserID` = :user");
 
 try {
-  $getPassword = $db->prepare("SELECT Password FROM users WHERE UserID = ?");
+  $getPassword = $db->prepare("SELECT `Password` FROM users WHERE UserID = ?");
   $getPassword->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   $hash = $getPassword->fetchColumn();
 } catch (Exception $e) {
@@ -62,4 +62,3 @@ else {
 
   header("Location: " . autoUrl("my-account/password"));
 }
-?>

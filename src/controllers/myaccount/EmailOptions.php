@@ -7,7 +7,7 @@ $currentUser = app()->user;
 
 $getExtraEmails = null;
 try {
-  $getExtraEmails = $db->prepare("SELECT ID, Name, EmailAddress, Verified FROM notifyAdditionalEmails WHERE UserID = ?");
+  $getExtraEmails = $db->prepare("SELECT ID, `Name`, EmailAddress, Verified FROM notifyAdditionalEmails WHERE UserID = ?");
   $getExtraEmails->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 } catch (Exception $e) {}
 

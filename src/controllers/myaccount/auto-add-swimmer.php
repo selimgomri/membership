@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 use Respect\Validation\Validator as v;
 
@@ -10,10 +11,11 @@ $userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $asaNumber = trim($asa);
 $accessKey = trim($acs);
 
-$searchSQL = $db->prepare("SELECT * FROM members WHERE ASANumber = ? AND AccessKey = ?;");
+$searchSQL = $db->prepare("SELECT * FROM members WHERE ASANumber = ? AND AccessKey = ? AND Tenant = ?;");
 $searchSQL->execute([
   $asaNumber,
-  $accessKey
+  $accessKey,
+  $tenant->getId()
 ]);
 
 $row = $searchSQL->fetch(PDO::FETCH_ASSOC);

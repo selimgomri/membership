@@ -15,8 +15,6 @@ $parent_name = getUserName($parent);
 $downloader_name = getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
 $swimmer_name = getSwimmerName($id);
 
-$db = app()->db;
-
 $acc_details = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, EmailComms, MobileComms FROM users WHERE UserID = ?");
 $acc_details->execute([$parent]);
 

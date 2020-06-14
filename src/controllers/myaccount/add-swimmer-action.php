@@ -2,6 +2,7 @@
 
 use Respect\Validation\Validator as v;
 $db = app()->db;
+$tenant = app()->tenant;
 
 // Registration Form Handler
 
@@ -14,11 +15,11 @@ if (mb_stripos($asaNumber, app()->tenant->getKey('ASA_CLUB_CODE'))) {
   $asaNumber = str_replace(app()->tenant->getKey('ASA_CLUB_CODE'), '', $asaNumber);
 }
 
-$getSwimmer = $db->prepare("SELECT MemberID, SquadID, UserID FROM members WHERE ASANumber = ? AND AccessKey = ? LIMIT 1");
+$getSwimmer = $db->prepare("SELECT MemberID, SquadID, UserID FROM members WHERE ASANumber = ? AND Tenant = ? AND AccessKey = ? LIMIT 1");
 if ($isTemporaryNumber) {
-  $getSwimmer = $db->prepare("SELECT MemberID, SquadID, UserID FROM members WHERE MemberID = ? AND AccessKey = ? LIMIT 1");
+  $getSwimmer = $db->prepare("SELECT MemberID, SquadID, UserID FROM members WHERE MemberID = ? AND Tenant = ? AND AccessKey = ? LIMIT 1");
 }
-$getSwimmer->execute([$asaNumber, $accessKey]);
+$getSwimmer->execute([$asaNumber, $tenant->getId(), $accessKey]);
 $row = $getSwimmer->fetch(PDO::FETCH_ASSOC);
 
 if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber) && v::alnum()->validate($accessKey)) {
@@ -89,8 +90,7 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
     // Return to My Account
     header("Location: " . autoUrl("my-account/addswimmer"));
 
-  }
-  else {
+  } else {
     // Error, too many records found - Database error
     $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = "
     <div class=\"alert alert-danger\">
@@ -111,4 +111,3 @@ else {
   </div>";
   header("Location: " . autoUrl("my-account/add-member"));
 }
-?>
