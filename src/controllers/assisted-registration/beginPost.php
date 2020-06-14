@@ -10,7 +10,7 @@ $tenant = app()->tenant;
 
 try {
 
-  $getUserInfo = $db->prepare("SELECT UserID FROM users WHERE EmailAddress = ?");
+  $getUserInfo = $db->prepare("SELECT UserID FROM users WHERE EmailAddress = ? AND Tenant = ?");
 
   $insert = $db->prepare("INSERT INTO users (EmailAddress, `Password`, Forename, Surname, Mobile, EmailComms, MobileComms, RR, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
   $addAccessLevel = $db->prepare("INSERT INTO `permissions` (`Permission`, `User`) VALUES (?, ?)");
@@ -18,7 +18,7 @@ try {
   $forename = trim($_POST['first']);
   $surname = trim($_POST['last']);
   $email = $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUserEmail'];
-  $getUserInfo->execute([$email]);
+  $getUserInfo->execute([$email, $tenant->getId()]);
   
   // The password will be used as a secure token allowing the parent to follow a link.
   $password = hash('sha256', random_int(0, 999999));

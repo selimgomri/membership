@@ -1,17 +1,20 @@
 <?php
 
 $db = app()->db;
-
+$tenant = app()->tenant;
 
 $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $info = null;
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent' && isset($id) && $id != null) {
   $user = $id;
-  $userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, AccessLevel FROM users WHERE UserID = ?");
-  $userInfo->execute([$id]);
+  $userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ? AND Tenant = ?");
+  $userInfo->execute([
+    $id,
+    $tenant->getId()
+  ]);
   $info = $userInfo->fetch(PDO::FETCH_ASSOC);
 
-  if ($info == null || $info['AccessLevel'] != 'Parent') {
+  if (!$info) {
     halt(404);
   }
 }
@@ -124,12 +127,12 @@ include BASE_PATH . 'views/header.php';
             $asaFeesString = (string) (\Brick\Math\BigDecimal::of((string) $asaFees[$i]))->withPointMovedLeft(2)->toScale(2);
           } ?>
           <div class="form-group">
-          <label for="<?=htmlspecialchar($member[$id]['MemberID'])?>-se-fee"><?=htmlspecialchars($member[$i]['MForename'] . " " . $member[$i]['MSurname'])?> Swim England Fee</label>
+          <label for="<?=htmlspecialchars($member[$id]['MemberID'])?>-se-fee"><?=htmlspecialchars($member[$i]['MForename'] . " " . $member[$i]['MSurname'])?> Swim England Fee</label>
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="<?=htmlspecialchar($member[$id]['MemberID'])?>-se-fee-prepend">&pound;</span>
+              <span class="input-group-text" id="<?=htmlspecialchars($member[$id]['MemberID'])?>-se-fee-prepend">&pound;</span>
             </div>
-            <input type="number" min="0" step="0.01" class="form-control" id="<?=htmlspecialchar($member[$id]['MemberID'])?>-se-fee" name="<?=htmlspecialchar($member[$id]['MemberID'])?>-se-fee" value="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $asaFees[$i]))->withPointMovedLeft(2)->toScale(2))?>">
+            <input type="number" min="0" step="0.01" class="form-control" id="<?=htmlspecialchars($member[$id]['MemberID'])?>-se-fee" name="<?=htmlspecialchars($member[$id]['MemberID'])?>-se-fee" value="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $asaFees[$i]))->withPointMovedLeft(2)->toScale(2))?>">
           </div>
         </div>
         <?php } ?>
