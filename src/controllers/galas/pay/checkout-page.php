@@ -4,11 +4,34 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 \Stripe\Stripe::setApiKey(env('STRIPE'));
-if (env('STRIPE_APPLE_PAY_DOMAIN')) {
-  \Stripe\ApplePayDomain::create([
-    'domain_name' => env('STRIPE_APPLE_PAY_DOMAIN')
-  ]);
-}
+
+// try {
+//   \Stripe\ApplePayDomain::create([
+//     'domain_name' => app('request')->hostname
+//   ], [
+//     'stripe_account' => $tenant->getStripeAccount()
+//   ]);
+// } catch (Exception $e) {
+//   // Not the end of the world so report the error and continue.
+//   // Any errors can be resolved later.
+//   pre($e);
+// }
+
+// try {
+//   pre(\Stripe\ApplePayDomain::all([
+//     'limit' => 20
+//   ], [
+//     'stripe_account' => $tenant->getStripeAccount()
+//   ]));
+//   pre(\Stripe\ApplePayDomain::all([
+//     'limit' => 20
+//   ]));
+//   pre($tenant->getStripeAccount());
+// } catch (Exception $e) {
+//   // Not the end of the world so report the error and continue.
+//   // Any errors can be resolved later.
+//   pre($e);
+// }
 
 $expMonth = date("m");
 $expYear = date("Y");

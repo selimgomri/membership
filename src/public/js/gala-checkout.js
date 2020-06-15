@@ -139,6 +139,7 @@ paymentRequest.canMakePayment().then(function(result) {
     prButton.mount('#payment-request-button');
   } else {
     document.getElementById('payment-request-card').style.display = 'none';
+    // prButton.mount('#payment-request-button');
   }
 });
 

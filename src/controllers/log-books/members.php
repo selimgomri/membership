@@ -23,7 +23,7 @@ include BASE_PATH . 'views/header.php';
       </ol>
     </nav>
 
-  <h1>Log books <span class="badge badge-info">BETA</span></h1>
+  <h1>Log books</h1>
   <p class="lead">
     Members can log training sessions and other activity.
   </p>

@@ -14,7 +14,7 @@ if (env('CUSTOM_CSS_PATH')) {
   $stylesheet = env('CUSTOM_CSS_PATH');
 }
 
-header('Link: <' . autoUrl($stylesheet) . '>; rel=preload; as=style');
+// header('Link: <' . autoUrl($stylesheet) . '>; rel=preload; as=style');
 
 $container_class;
 if (isset($fluidContainer) && $fluidContainer == true) {

@@ -10,6 +10,8 @@ if (!$tenant || !isset($_GET['code'])) {
   halt(404);
 }
 
+\Stripe\Stripe::setApiKey(getenv('STRIPE'));
+
 try {
 
   if (isset($_GET['error'])) {
@@ -19,8 +21,6 @@ try {
   if (!isset($_GET['scope']) || (isset($_GET['scope']) && $_GET['scope'] != "read_write")) {
     throw new Exception('User denied access');
   }
-
-  \Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
   $response = \Stripe\OAuth::token([
     'grant_type' => 'authorization_code',
@@ -39,4 +39,16 @@ try {
   $_SESSION['TENANT-' . $tenant->getId()]['Stripe-Reg-Error'] = true;
 }
 
-  header("location: " . autoUrl($tenant->getCodeId() . "/settings/card-payments"));
+// Try to register Apple Pay domain
+try {
+  \Stripe\ApplePayDomain::create(
+    ['domain_name' => app('request')->hostname],
+    ['stripe_account' => $tenant->getStripeAccount()]
+  );
+} catch (Exception $e) {
+  // Not the end of the world so report the error and continue.
+  // Any errors can be resolved later.
+  reportError($e);
+}
+
+header("location: " . autoUrl($tenant->getCodeId() . "/settings/card-payments"));

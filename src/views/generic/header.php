@@ -170,22 +170,13 @@ if (isset($customBackground) && $customBackground) {
       </div>
     <?php } ?>
 
-    <?php
-
-    $headerLink = autoUrl("");
-    if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'] % 2 == 0) {
-      $headerLink = app()->tenant->getKey('CLUB_WEBSITE');
-    }
-
-    ?>
-
     <div class="membership-header">
       <div class="club-name-header <?php if (date("m") == "12") { ?>festive<?php } ?>" style="background: rgba(0, 0, 0, .075)">
         <div class="<?= $container_class ?>">
           <div class="row justify-content-between align-items-center py-3 mb-0 d-none d-md-flex">
             <div class="col-auto">
               <h1 class="mb-0">
-                <a href="<?= htmlspecialchars($headerLink) ?>" class="<?= $clubLogoColour ?> text-decoration-none">
+                <a href="<?= htmlspecialchars(autoUrl("")) ?>" class="<?= $clubLogoColour ?> text-decoration-none">
                   <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>
                 </a>
               </h1>
