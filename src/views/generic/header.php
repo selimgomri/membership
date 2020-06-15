@@ -136,7 +136,7 @@ if (isset($customBackground) && $customBackground) {
         <div class="<?= $container_class ?>">
           <p class="mb-0">
             <strong>
-              You are in User Simulation Mode simulating <?=
+              You are in user simulation mode simulating <?=
                                                             $_SESSION['TENANT-' . app()->tenant->getId()]['UserSimulation']['SimUserName'] ?>
             </strong>
           </p>
@@ -190,9 +190,11 @@ if (isset($customBackground) && $customBackground) {
                 </a>
               </h1>
             </div>
+            <?php if (app()->tenant->getKey('CLUB_WEBSITE')) { ?>
             <div class="col-auto">
-              <a href="" class="btn btn-dark">Club website</a>
+              <a href="<?=htmlspecialchars(app()->tenant->getKey('CLUB_WEBSITE'))?>" class="btn btn-dark">Club website</a>
             </div>
+            <?php } ?>
           </div>
         </div>
       </div>

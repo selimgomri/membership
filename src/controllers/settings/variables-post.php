@@ -42,7 +42,7 @@ try {
     }
   }
 
-  if (isset($_POST['CLUB_INFO']) && app()->tenant->getKey('ASA_CLUB_CODE') != $_POST['CLUB_INFO']) {
+  if (isset($_POST['CLUB_INFO']) && app()->tenant->getKey('ASA_CLUB_CODE') != $_POST['CLUB_INFO'] && $_POST['CLUB_INFO'] != '0000') {
     app()->tenant->setKey('CLUB_NAME', $clubs[$_POST['CLUB_INFO']]['Name']);
     app()->tenant->setKey('CLUB_SHORT_NAME', $clubs[$_POST['CLUB_INFO']]['MeetName']);
     app()->tenant->setKey('ASA_CLUB_CODE', $clubs[$_POST['CLUB_INFO']]['Code']);

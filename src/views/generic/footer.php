@@ -100,6 +100,9 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
                 <li><a title="the Amateur Swimming Association" target="_blank" href="https://www.swimming.org/swimengland/">Swim England</a></li>
                 <li><a title="<?= htmlspecialchars($districts[app()->tenant->getKey('ASA_DISTRICT')]['title']) ?>" target="_blank" href="<?= htmlspecialchars($districts[app()->tenant->getKey('ASA_DISTRICT')]['website']) ?>"><?= htmlspecialchars($districts[app()->tenant->getKey('ASA_DISTRICT')]['name']) ?></a></li>
                 <li><a title="<?= htmlspecialchars($counties[app()->tenant->getKey('ASA_COUNTY')]['title']) ?>" target="_blank" href="<?= htmlspecialchars($counties[app()->tenant->getKey('ASA_COUNTY')]['website']) ?>"><?= htmlspecialchars($counties[app()->tenant->getKey('ASA_COUNTY')]['name']) ?></a></li>
+                <?php if (app()->tenant->getKey('CLUB_WEBSITE')) { ?>
+                <li><a title="<?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> Website" target="_blank" href="<?= htmlspecialchars(app()->tenant->getKey('CLUB_WEBSITE')) ?>"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></a></li>
+                <?php } ?>
               </ul>
 
             </div>

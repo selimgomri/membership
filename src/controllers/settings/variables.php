@@ -149,10 +149,6 @@ include BASE_PATH . 'views/header.php';
             </button>
           </p>
 
-          <h2>SQL Database Connection Details</h2>
-
-          <p>SQL database connection details must be defined as environment variables in your server configuration. Your database name is <span class="mono"><?= htmlspecialchars(env('DB_NAME')) ?></span> and the host is <span class="mono"><?= htmlspecialchars(env('DB_HOST')) ?></span>.</p>
-
           <h2>Name and Code</h2>
 
           <div class="form-group">
