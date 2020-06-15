@@ -3,8 +3,11 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ?");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ? AND Tenant = ?");
+$query->execute([
+  $hash,
+  $tenant->getId()
+]);
 
 $count = $query->fetchColumn();
 

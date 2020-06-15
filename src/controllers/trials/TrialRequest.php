@@ -13,8 +13,11 @@ if ($query->fetchColumn() != 1) {
   halt(404);
 }
 
-$query = $db->prepare("SELECT ID, joinSwimmers.First, joinSwimmers.Last, joinParents.First PFirst, joinParents.Last PLast, DoB, ASA, Club, XP, XPDetails, Medical, Questions, TrialStart, TrialEnd FROM joinSwimmers JOIN joinParents WHERE ID = ? ORDER BY First ASC, Last ASC");
-$query->execute([$request]);
+$query = $db->prepare("SELECT ID, joinSwimmers.First, joinSwimmers.Last, joinParents.First PFirst, joinParents.Last PLast, DoB, ASA, Club, XP, XPDetails, Medical, Questions, TrialStart, TrialEnd FROM joinSwimmers JOIN joinParents WHERE ID = ? AND Tenant = ? ORDER BY First ASC, Last ASC");
+$query->execute([
+  $request,
+  $tenant->getId()
+]);
 
 $swimmer = $query->fetch(PDO::FETCH_ASSOC);
 

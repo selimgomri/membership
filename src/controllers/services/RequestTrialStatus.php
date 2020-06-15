@@ -1,21 +1,31 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ?");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ? AND Tenant = ?");
+$query->execute([
+  $hash,
+  $tenant->getId()
+]);
 
 if ($query->fetchColumn() != 1) {
   halt(404);
 }
 
-$query = $db->prepare("SELECT First, Last FROM joinParents WHERE Hash = ?");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT First, Last FROM joinParents WHERE Hash = ? AND Tenant = ?");
+$query->execute([
+  $hash,
+  $tenant->getId()
+]);
 
 $parent = $query->fetch(PDO::FETCH_ASSOC);
 
-$query = $db->prepare("SELECT ID, First, Last, DoB, ASA, Club, XPDetails, XP, Medical, Questions, TrialStart, TrialEnd, SquadSuggestion FROM joinSwimmers WHERE Parent = ? ORDER BY First ASC, Last ASC");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT ID, First, Last, DoB, ASA, Club, XPDetails, XP, Medical, Questions, TrialStart, TrialEnd, SquadSuggestion FROM joinSwimmers WHERE Parent = ? AND Tenant = ? ORDER BY First ASC, Last ASC");
+$query->execute([
+  $hash,
+  $tenant->getId()
+]);
 
 $swimmers = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -89,8 +99,8 @@ include BASE_PATH . 'views/header.php';
         </p>
         <?php } ?>
         <?php } else {
-        $query = $db->prepare("SELECT SquadName, SquadFee FROM squads WHERE SquadID = ?");
-        $query->execute([$swimmer['SquadSuggestion']]);
+        $query = $db->prepare("SELECT SquadName, SquadFee FROM squads WHERE SquadID = ? AND Tenant = ?");
+        $query->execute([$swimmer['SquadSuggestion']], $tenant->getId());
         $squad = $query->fetch(PDO::FETCH_ASSOC);?>
         <p>
           <strong>
