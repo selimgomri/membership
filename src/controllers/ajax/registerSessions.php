@@ -184,8 +184,8 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" 
       memberPhotography.Website, memberPhotography.Social,
       memberPhotography.Noticeboard, memberPhotography.FilmTraining,
       memberPhotography.ProPhoto, memberMedical.Conditions, memberMedical.Allergies,
-      memberMedical.Medication FROM ((((sessions INNER JOIN members ON
-      sessions.SquadID = members.SquadID) INNER JOIN squads ON sessions.SquadID =
+      memberMedical.Medication FROM (((((sessions INNER JOIN squadMembers ON sessions.SquadID = squadMembers.Squad) INNER JOIN members ON
+      squadMembers.Member = members.MemberID) INNER JOIN squads ON sessions.SquadID =
       squads.SquadID) LEFT JOIN `memberPhotography` ON members.MemberID =
       memberPhotography.MemberID) LEFT JOIN `memberMedical` ON members.MemberID =
       memberMedical.MemberID) WHERE sessions.Tenant = ? AND sessions.SessionID = ? AND members.Status = '1' ORDER BY

@@ -52,7 +52,7 @@ if ((isset($_POST["date"])) && (isset($_POST["squad"])) && (isset($_POST["sessio
 	$registerCount = $sql->fetchColumn();
 
 	// SQL to get the member IDs
-	$sql = $db->prepare("SELECT `MemberID` FROM `members` WHERE `SquadID` = ? AND Tenant = ?;");
+	$sql = $db->prepare("SELECT `MemberID` FROM `members` INNER JOIN squadMembers ON members.MemberID = squadMembers.Member WHERE squadMembers.Squad = ? AND members.Tenant = ?;");
 	$sql->execute([
 		$squadID,
 		$tenant->getId()

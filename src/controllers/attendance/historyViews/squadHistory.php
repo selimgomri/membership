@@ -27,7 +27,7 @@ $get = $db->prepare("SELECT * FROM ((`members` LEFT JOIN `sessionsAttendance` ON
 `sessionsAttendance`.`SessionID` = `sessions`.`SessionID`) WHERE
 `sessions`.`SquadID` = ? AND `WeekID` = ? AND members.Tenant = ? ORDER BY `MForename` ASC,
 `MSurname` ASC, `SessionDay` ASC, `StartTime` ASC");
-$get->execute([$id, $week]);
+$get->execute([$id, $week, $tenant->getId()]);
 
 $row = $get->fetch(PDO::FETCH_ASSOC);
 

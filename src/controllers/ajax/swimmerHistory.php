@@ -16,14 +16,14 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
     // Search the database for the results
 		if ($squadID == "allSquads") {
-      $get = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.DateOfBirth FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.Tenant = ? AND members.MSurname COLLATE utf8mb4_general_ci LIKE ? ORDER BY members.MForename, members.MSurname ASC");
+      $get = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.DateOfBirth FROM ((members INNER JOIN squadMembers ON members.MemberID = squadMembers.Member) INNER JOIN squads ON squadMembers.Squad = squads.SquadID) WHERE members.Tenant = ? AND members.MSurname COLLATE utf8mb4_general_ci LIKE ? ORDER BY members.MForename, members.MSurname ASC");
       $get->execute([
         $tenant->getId(),
         '%' . $search . '%'
       ]);
 	  }
 	  else {
-      $get = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.DateOfBirth FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.Tenant = ? AND squads.SquadID = ? AND members.MSurname COLLATE utf8mb4_general_ci LIKE ? ORDER BY members.MForename , members.MSurname ASC");
+      $get = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, members.ASANumber, squads.SquadName, members.DateOfBirth FROM ((members INNER JOIN squadMembers ON members.MemberID = squadMembers.Member) INNER JOIN squads ON squadMembers.Squad = squads.SquadID) WHERE members.Tenant = ? AND squads.SquadID = ? AND members.MSurname COLLATE utf8mb4_general_ci LIKE ? ORDER BY members.MForename , members.MSurname ASC");
       $get->execute([
         $tenant->getId(),
         $squadID,
