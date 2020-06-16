@@ -4,17 +4,27 @@ ignore_user_abort(true);
 set_time_limit(0);
 
 use Brick\Math\BigDecimal;
+use Brick\Math\RoundingMode;
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-
-
-$squadFeeMonths = json_decode(app()->tenant->getKey('SquadFeeMonths'), true);
+$squadFeeMonths = [];
+try {
+  $squadFeeMonths = json_decode(app()->tenant->getKey('SquadFeeMonths'), true);
+} catch (Exception | Error $e) {
+  // Do nothing
+}
 $date = new DateTime('now', new DateTimeZone('Europe/London'));
-$squadFeeRequired = !bool($squadFeeMonths[$date->format("m")]);
+$squadFeeRequired = true;
+if (isset($squadFeeMonths[$date->format("m")])) {
+  $squadFeeRequired = !bool($squadFeeMonths[$date->format("m")]);
+}
 
 // Prepare things
-$getSquadMetadata = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, members.ClubPays, squads.SquadName, squads.SquadID, squads.SquadFee FROM (members INNER JOIN squads ON members.SquadID = squads.SquadID) WHERE members.UserID = ? ORDER BY squads.SquadFee DESC, members.MForename ASC, members.MSurname ASC;");
+$getUserMembers = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname FROM members WHERE UserID = ?");
+
+$getSquadMetadata = $db->prepare("SELECT squads.SquadName, squads.SquadID, squads.SquadFee, squadMembers.Paying FROM squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad WHERE squadMembers.Member = ?;");
 
 $getExtraMetadata = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, extras.ExtraName, extras.ExtraID, extras.ExtraFee, extras.Type FROM ((members INNER JOIN `extrasRelations` ON members.MemberID = extrasRelations.MemberID) INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) WHERE members.UserID = ? ORDER BY members.MForename ASC, members.MSurname ASC;");
 
@@ -32,7 +42,7 @@ $addPaymentForCharge = $db->prepare("INSERT INTO `payments` (`Date`, `Status`, `
 
 $setPaymentsPending = $db->prepare("UPDATE `paymentsPending` SET Payment = ?, `Status` = ? WHERE `UserID` = ? AND `Status` = 'Pending' AND `Date` <= ?");
 
-$setPaymentsPendingPM = $db->prepare("UPDATE `paymentsPending` SET `PMkey` = ?WHERE `UserID` = ? AND `Status` = 'Pending' AND `Date` <= ?");
+$setPaymentsPendingPM = $db->prepare("UPDATE `paymentsPending` SET `PMkey` = ? WHERE `UserID` = ? AND `Status` = 'Pending' AND `Date` <= ?");
 
 $getCountPending = $db->prepare("SELECT COUNT(*) FROM `paymentsPending` WHERE `UserID` = ? AND `Status` = 'Pending';");
 
@@ -45,139 +55,169 @@ try {
   $ms = $dateTime->format('Y-m');
   $date = $dateTime->format('Y-m-d');
 
-  $sql = $db->query("SELECT * FROM `paymentMonths` ORDER BY `Date` DESC LIMIT 1;");
+  $sql = $db->prepare("SELECT * FROM `paymentMonths` WHERE Tenant = ? ORDER BY `Date` DESC LIMIT 1;");
+  $sql->execute([
+    $tenant->getId()
+  ]);
   $row = $sql->fetch(PDO::FETCH_ASSOC);
   if ($row != null) {
     if ($row['MonthStart'] != $ms) {
-      $sql = $db->prepare("INSERT INTO `paymentMonths` (`MonthStart`, `Date`) VALUES (?, ?);");
-      $sql->execute([$ms, $date]);
+      $sql = $db->prepare("INSERT INTO `paymentMonths` (`MonthStart`, `Date`, `Tenant`) VALUES (?, ?, ?);");
+      $sql->execute([$ms, $date, $tenant->getId()]);
     }
   } else {
-    $sql = $db->prepare("INSERT INTO `paymentMonths` (`MonthStart`, `Date`) VALUES (?, ?);");
-    $sql->execute([$ms, $date]);
+    $sql = $db->prepare("INSERT INTO `paymentMonths` (`MonthStart`, `Date`, `Tenant`) VALUES (?, ?, ?);");
+    $sql->execute([$ms, $date, $tenant->getId()]);
   }
 
-  $sql = $db->prepare("SELECT COUNT(*) FROM `paymentSquadFees` INNER JOIN `paymentMonths` ON paymentSquadFees.MonthID = paymentMonths.MonthID WHERE `MonthStart` = ? ORDER BY `Date` DESC LIMIT 1;");
-  $sql->execute([$ms]);
+  $sql = $db->prepare("SELECT COUNT(*) FROM `paymentSquadFees` INNER JOIN `paymentMonths` ON paymentSquadFees.MonthID = paymentMonths.MonthID WHERE `MonthStart` = ? AND paymentMonths.Tenant = ? ORDER BY `Date` DESC LIMIT 1;");
+  $sql->execute([$ms, $tenant->getId()]);
   if ($sql->fetchColumn() == 0) {
-    $sql = $db->prepare("SELECT `MonthID` FROM `paymentMonths` WHERE `MonthStart` = ? ORDER BY `Date` DESC LIMIT 1;");
-    $sql->execute([$ms]);
+    $sql = $db->prepare("SELECT `MonthID` FROM `paymentMonths` WHERE `MonthStart` = ? AND Tenant = ? ORDER BY `Date` DESC LIMIT 1;");
+    $sql->execute([$ms, $tenant->getId()]);
     $mid = $sql->fetchColumn();
     if ($mid == null) {
       throw new Exception("Month ID is NULL");
     }
-    $sql = $db->prepare("INSERT INTO `paymentSquadFees` (`MonthID`) VALUES (?);");
+    $sql = $db->prepare("INSERT INTO `paymentSquadFees` (`MonthID`, `Tenant`) VALUES (?, ?);");
     $sql->execute([
-      $mid
+      $mid,
+      $tenant->getId()
     ]);
 
-    $sql = $db->query("SELECT `UserID` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE `Permission` = 'Parent' AND Active;");
+    $sql = $db->prepare("SELECT `UserID` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE users.Tenant = ? AND `Permission` = 'Parent' AND Active;");
+    $sql->execute([
+      $tenant->getId()
+    ]);
     while ($user = $sql->fetchColumn()) {
 
       if ($squadFeeRequired) {
-        // Calculate squad fees payable
-        $getSquadMetadata->execute([$user]);
+        // Get user members
+        $getUserMembers->execute([
+          $user
+        ]);
 
         $numMembers = 0;
         $discount = 0;
 
-        while ($swimmerRow = $getSquadMetadata->fetch(PDO::FETCH_ASSOC)) {
-          if (!bool($swimmerRow['ClubPays'])) {
-            $numMembers++;
-          }
-          $metadata = [
-            "PaymentType" => "SquadFees",
-            "type" => [
-              "object" => 'SquadFee',
-              "id" => $swimmerRow['SquadID'],
-              "name" => $swimmerRow['SquadName']
-            ]
-          ];
+        $discountMembers = [];
 
-          $fee = BigDecimal::of((string) $swimmerRow['SquadFee'])->withPointMovedRight(2)->toInt();
-
-          $metadata = json_encode($metadata);
-
-          $addToPaymentsPending->execute([
-            $date,
-            $user,
-            $swimmerRow['MForename'] . " " . $swimmerRow['MSurname'] . ' - ' . $swimmerRow['SquadName'] . ' Squad Fees',
-            $fee,
-            $metadata
+        while ($member = $getUserMembers->fetch(PDO::FETCH_ASSOC)) {
+          $getSquadMetadata->execute([
+            $member['MemberID']
           ]);
 
-          $paymentID = $db->lastInsertId();
+          $paying = false;
+          $memberTotal = 0;
 
-          $track_info = [
-            $mid,
-            $swimmerRow['MemberID'],
-            $user,
-            'Squad Fees (' . $swimmerRow['SquadName'] . ')',
-            $fee,
-            'SquadFee',
-            $paymentID
-          ];
-          $track->execute($track_info);
+          while ($squad = $getSquadMetadata->fetch(PDO::FETCH_ASSOC)) {
+            if (bool($squad['Paying'])) {
+              $paying = true;
+            }
 
-          if (!bool($swimmerRow['ClubPays']) && app()->tenant->isCLS()) {
+            $metadata = [
+              "PaymentType" => "SquadFees",
+              "type" => [
+                "object" => 'SquadFee',
+                "id" => $squad['SquadID'],
+                "name" => $squad['SquadName']
+              ]
+            ];
+            $metadata = json_encode($metadata);
+
+            $fee = BigDecimal::of((string) $squad['SquadFee'])->withPointMovedRight(2)->toInt();
+            $memberTotal += $fee;
+
+            $addToPaymentsPending->execute([
+              $date,
+              $user,
+              $member['MForename'] . " " . $member['MSurname'] . ' - ' . $squad['SquadName'] . ' Squad Fees',
+              $fee,
+              $metadata
+            ]);
+
+            $paymentID = $db->lastInsertId();
+
+            $track_info = [
+              $mid,
+              $member['MemberID'],
+              $user,
+              'Squad Fees (' . $squad['SquadName'] . ')',
+              $fee,
+              'SquadFee',
+              $paymentID
+            ];
+            $track->execute($track_info);
+
+            if (!bool($squad['Paying'])) {
+              $addCreditToPaymentsPending->execute([
+                $date,
+                $user,
+                $member['MForename'] . " " . $member['MSurname'] . ' - ' . $squad['SquadName'] . ' Squad Fee Exemption',
+                $fee,
+                null
+              ]);
+
+              $memberTotal -= $fee;
+            }
+          }
+
+          if ($paying) {
+            $numMembers++;
+          }
+
+          if ($paying && app()->tenant->isCLS()) {
+            $memberFees = [
+              'fee' => $memberTotal,
+              'member' => $member['MForename'] . " " . $member['MSurname']
+            ];
+            $discountMembers[] = $memberFees;
+          }
+        }
+
+        // If is CLS handle discounts
+        if (app()->tenant->isCLS()) {
+          usort($discountMembers, function ($item1, $item2) {
+            return $item2['fee'] <=> $item1['fee'];
+          });
+
+          $number = 0;
+          foreach ($discountMembers as $member) {
+            $number++;
+
             // Calculate discounts if required.
+            // Always round discounted value down - Could save clubs pennies!
             $swimmerDiscount = 0;
             $discountPercent = '0';
-            if ($numMembers == 3) {
-              // 20% discount applies
-              $swimmerDiscount = (int) $fee*0.20;
-              $discountPercent = '20';
-            } else if ($numMembers > 3) {
-              // 40% discount applies
-              $swimmerDiscount = (int) $fee*0.40;
-              $discountPercent = '40';
+            try {
+              $memberTotalDec = \Brick\Math\BigInteger::of($member['fee'])->toBigDecimal();
+              if ($number == 3) {
+                // 20% discount applies
+                $swimmerDiscount = $memberTotalDec->multipliedBy('0.20')->toScale(2, RoundingMode::DOWN)->withPointMovedRight(2)->toInt();
+                $discountPercent = '20';
+              } else if ($number > 3) {
+                // 40% discount applies
+                $swimmerDiscount = $memberTotalDec->multipliedBy('0.40')->toScale(2, RoundingMode::DOWN)->withPointMovedRight(2)->toInt();
+                $discountPercent = '40';
+              }
+            } catch (Exception $e) {
+              // Something went wrong so ensure these stay zero!
+              $swimmerDiscount = 0;
+              $discountPercent = '0';
             }
 
             if ($swimmerDiscount > 0) {
               // Apply credit to account for discount
-              $metadata = [
-                "type" => [
-                  "object" => 'SquadFee',
-                  "id" => $swimmerRow['SquadID'],
-                  "name" => $swimmerRow['SquadName']
-                ]
-              ];
-
               $addCreditToPaymentsPending->execute([
                 $date,
                 $user,
-                $swimmerRow['MForename'] . " " . $swimmerRow['MSurname'] . ' - Multi swimmer squad fee discount (' . $discountPercent . '%)',
+                $member['member'] . ' - Multi swimmer squad fee discount (' . $discountPercent . '%)',
                 $swimmerDiscount,
-                json_encode($metadata)
+                null
               ]);
             }
-            //$discount += $swimmerDiscount;
-          }
-
-          if (bool($swimmerRow['ClubPays']))  {
-            // Add a credit covering fees if club pays
-            $addCreditToPaymentsPending->execute([
-              $date,
-              $user,
-              $swimmerRow['MForename'] . " " . $swimmerRow['MSurname'] . ' - ' . $swimmerRow['SquadName'] . ' Squad Fee Exemption',
-              $fee,
-              null
-            ]);
           }
         }
-
-        /*
-        if (app()->tenant->isCLS() && $discount > 0) {
-          // Apply credit to account for discount
-          $addCreditToPaymentsPending->execute([
-            $date,
-            $user,
-            'Multi swimmer squad fee discount',
-            $discount,
-            null
-          ]);
-        }
-        */
       }
 
       // Now calculate extra fees payable
@@ -193,7 +233,7 @@ try {
               "name" => $swimmerRow['ExtraName']
             ]
           ];
-    
+
           $metadata = json_encode($metadata);
 
           $description = $swimmerRow['MForename'] . " " . $swimmerRow['MSurname'] . ' - ' . $swimmerRow['ExtraName'];
@@ -298,7 +338,7 @@ try {
     // Add Swimmers with No Parent to Fee Tracker
     if ($squadFeeRequired) {
       // // Squad Fees
-      $sql = $db->query("SELECT `members`.`MemberID`, `SquadFee`, `SquadName` FROM `members` INNER JOIN `squads` ON squads.SquadID = members.SquadID WHERE `members`.`UserID` IS NULL AND `ClubPays` = 0");
+      $sql = $db->query("SELECT `members`.`MemberID`, `SquadFee`, `SquadName` FROM ((`members` INNER JOIN squadMembers ON members.MemberID = squadMembers.Member) INNER JOIN `squads` ON squads.SquadID = squadMembers.Squad) WHERE `members`.`UserID` IS NULL AND `ClubPays` = 0");
 
       $add_track = $db->prepare("INSERT INTO `individualFeeTrack` (`MonthID`, `PaymentID`, `MemberID`, `UserID`, `Amount`, `Description`, `Type`, `NC`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 

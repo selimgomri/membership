@@ -126,6 +126,13 @@ class Tenant
     return $this->id;
   }
 
+  public function __toString() {
+    if ($this->uuid) {
+      return $this->uuid;
+    }
+    return spl_object_hash($this->uuid);
+  }
+
   /**
    * Get the club code
    * 
