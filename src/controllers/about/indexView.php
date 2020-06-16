@@ -25,6 +25,9 @@ include BASE_PATH . "views/header.php";
 
       <div class="card card-body mb-3">
         <dl class="row mb-0">
+          <dt class="col-sm-3">Tenant</dt>
+          <dd class="col-sm-9 mono text-truncate"><?=htmlspecialchars($tenant->getUuid())?></dd>
+
           <dt class="col-sm-3">Tenant ID</dt>
           <dd class="col-sm-9 mono"><?=htmlspecialchars($tenant->getId())?></dd>
 

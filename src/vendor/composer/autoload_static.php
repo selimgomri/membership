@@ -18,6 +18,7 @@ class ComposerStaticInit2fa1c4a6e39cf13a86ed79c946bf7f9a
         'a9ed0d27b5a698798a89181429f162c5' => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib/Common/customFunctions.php',
         'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         '6195ccae414b7a82ab47247beb894d66' => __DIR__ . '/..' . '/nezamy/route/system/function.php',
+        'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
         '3f8bdd3b35094c73a26f0106e3c0f8b2' => __DIR__ . '/..' . '/sendgrid/sendgrid/lib/SendGrid.php',
     );
 
@@ -69,6 +70,8 @@ class ComposerStaticInit2fa1c4a6e39cf13a86ed79c946bf7f9a
         array (
             'Respect\\Validation\\' => 19,
             'RankingsDB\\' => 11,
+            'Ramsey\\Uuid\\' => 12,
+            'Ramsey\\Collection\\' => 18,
         ),
         'P' => 
         array (
@@ -255,6 +258,14 @@ class ComposerStaticInit2fa1c4a6e39cf13a86ed79c946bf7f9a
         'RankingsDB\\' => 
         array (
             0 => __DIR__ . '/..' . '/huwcbjones/rankings-db/src',
+        ),
+        'Ramsey\\Uuid\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ramsey/uuid/src',
+        ),
+        'Ramsey\\Collection\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ramsey/collection/src',
         ),
         'Psr\\Http\\Message\\' => 
         array (

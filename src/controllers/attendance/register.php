@@ -17,6 +17,12 @@ $getSquads->execute([
   $tenant->getId()
 ]);
 
+$getSquadsCount = $db->prepare("SELECT COUNT(DISTINCT squads.SquadID) FROM squads INNER JOIN sessions ON squads.SquadID = sessions.SquadID WHERE squads.Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+$getSquadsCount->execute([
+  $tenant->getId()
+]);
+$squadCount = $getSquadsCount->fetchColumn();
+
 $session_init = $session;
 $squad_init = $squad;
 
@@ -52,6 +58,17 @@ include "attendanceMenu.php";
   </div>
   <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['return']); } ?>
 
+  <?php if ($squadCount == 0) { ?>
+    <div class="alert alert-warning">
+      <p class="mb-0">
+        <strong>No squads have sessions</strong>
+      </p>
+      <p class="mb-0">
+        Your club needs to add sessions before you can take a register.
+      </p>
+    </div>
+  <?php } ?>
+
   <form method="post">
     <div class="card mb-3">
       <div class="card-body">
@@ -66,7 +83,7 @@ include "attendanceMenu.php";
           <div class="col-md-4">
             <div class="form-group">
               <label for="squad">Select squad</label>
-              <select class="custom-select" name="squad" id="squad">';
+              <select class="custom-select" name="squad" id="squad">
                 <?php if ($squad == null) { ?>
                 <option value="0">Choose your squad from the menu</option>
                 <?php } ?>

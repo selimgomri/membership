@@ -10,7 +10,11 @@ $data->execute([
 ]);
 $venue = $data->fetch(PDO::FETCH_ASSOC);
 
-$pagetitle = "Editing " . htmlspecialchars($venue);
+if (!$venue) {
+  halt(404);
+}
+
+$pagetitle = "Editing " . htmlspecialchars($venue['VenueName']);
 include BASE_PATH . "views/header.php";
 
 ?>

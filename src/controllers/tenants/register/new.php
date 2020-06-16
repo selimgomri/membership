@@ -60,13 +60,18 @@ if ($_POST['club'] != 'select' && $_POST['club'] != 'not-se') {
   }
 }
 
-$add = $db->prepare("INSERT INTO tenants (`Name`, `Code`, `Website`, `Email`, `Verified`) VALUES (?, ?, ?, ?, ?)");
+use Ramsey\Uuid\Uuid;
+
+$uuid = Uuid::uuid4();
+
+$add = $db->prepare("INSERT INTO tenants (`Name`, `Code`, `Website`, `Email`, `Verified`, `UniqueID`) VALUES (?, ?, ?, ?, ?, ?)");
 $add->execute([
   $_POST['CLUB_NAME'],
   $code,
   $_POST['CLUB_WEBSITE'],
   mb_strtolower($_POST['user-email']),
-  0
+  0,
+  $uuid->toString(),
 ]);
 
 $id = $db->lastInsertId();

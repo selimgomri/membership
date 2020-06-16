@@ -3,6 +3,17 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
+$data = $db->prepare("SELECT `VenueName`, `Location` FROM sessionsVenues WHERE VenueID = ? AND Tenant = ?");
+$data->execute([
+  $id,
+  $tenant->getId()
+]);
+$venue = $data->fetch(PDO::FETCH_ASSOC);
+
+if (!$venue) {
+  halt(404);
+}
+
 $edit = $db->prepare("UPDATE sessionsVenues SET VenueName = ?, Location = ? WHERE VenueID = ? AND Tenant = ?");
 
 if ($_POST['name'] != "" && $_POST['name'] != null && $_POST['address'] != "" && $_POST['address'] != null) {

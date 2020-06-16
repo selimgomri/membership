@@ -9,6 +9,7 @@ class Tenant
   private $email;
   private $verified;
   private $keys;
+  private string $uuid;
   private $goCardlessAccessToken;
   private $goCardlessOrganisationId;
   private $goCardlessLoaded = false;
@@ -22,6 +23,7 @@ class Tenant
     $this->website = $details['Website'];
     $this->email = $details['Email'];
     $this->verified = $details['Verified'];
+    $this->uuid = $details['UniqueID'];
 
     $this->getKeys();
   }
@@ -35,7 +37,7 @@ class Tenant
   public static function fromId(int $id)
   {
     $db = app()->db;
-    $getTenant = $db->prepare("SELECT `ID`, `Name`, `Code`, `Website`, `Email`, `Verified` FROM tenants WHERE ID = ?");
+    $getTenant = $db->prepare("SELECT `ID`, `Name`, `Code`, `Website`, `Email`, `Verified`, `UniqueID` FROM tenants WHERE ID = ?");
     $getTenant->execute([
       $id
     ]);
@@ -56,7 +58,7 @@ class Tenant
   public static function fromCode(string $code)
   {
     $db = app()->db;
-    $getTenant = $db->prepare("SELECT `ID`, `Name`, `Code`, `Website`, `Email`, `Verified` FROM tenants WHERE Code COLLATE utf8mb4_general_ci = ?");
+    $getTenant = $db->prepare("SELECT `ID`, `Name`, `Code`, `Website`, `Email`, `Verified`, `UniqueID` FROM tenants WHERE Code COLLATE utf8mb4_general_ci = ?");
     $getTenant->execute([
       $code
     ]);
@@ -249,6 +251,15 @@ class Tenant
       return mb_strtolower($this->code);
     }
     return $this->id;
+  }
+
+  /**
+   * Get a tenant's UUID
+   * 
+   * @return string uuid
+   */
+  public function getUuid() {
+    return $this->uuid;
   }
 
   /**

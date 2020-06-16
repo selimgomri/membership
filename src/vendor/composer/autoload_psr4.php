@@ -36,6 +36,8 @@ return array(
     'SendGrid\\' => array($vendorDir . '/sendgrid/php-http-client/lib'),
     'Respect\\Validation\\' => array($vendorDir . '/respect/validation/library'),
     'RankingsDB\\' => array($vendorDir . '/huwcbjones/rankings-db/src'),
+    'Ramsey\\Uuid\\' => array($vendorDir . '/ramsey/uuid/src'),
+    'Ramsey\\Collection\\' => array($vendorDir . '/ramsey/collection/src'),
     'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
     'Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
     'PragmaRX\\Google2FA\\Tests\\' => array($vendorDir . '/pragmarx/google2fa/tests'),

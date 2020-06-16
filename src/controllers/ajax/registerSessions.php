@@ -11,11 +11,11 @@ $markdown->setSafeMode(true);
 
 $swimmerCount = 0;
 
-if (!isset($_REQUEST["date"]) || !v::date()->validate($_REQUEST["date"])) {
-  halt(404);
+$dateString = 'now';
+if (isset($_REQUEST["date"]) && v::date()->validate($_REQUEST["date"])) {
+  $dateString = $_REQUEST["date"];
 }
-
-$date = new DateTime($_REQUEST["date"], new DateTimeZone('Europe/London'));
+$date = new DateTime($dateString, new DateTimeZone('Europe/London'));
 
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Coach") {
   if ((isset($_REQUEST["squadID"]) && v::intVal()->validate($_REQUEST["squadID"])) || isset($preload) && $preload && $getSessions) {

@@ -2,7 +2,13 @@
 
 $db = app()->db;
 
-$venue_details = $_SESSION['TENANT-' . app()->tenant->getId()]['NewVenueError']['Data'];
+$venue_details = [
+  'name' => '',
+  'address' => '',
+];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NewVenueError']['Data'])) {
+  $venue_details = $_SESSION['TENANT-' . app()->tenant->getId()]['NewVenueError']['Data'];
+}
 
 $pagetitle = "Add a venue";
 include BASE_PATH . "views/header.php";

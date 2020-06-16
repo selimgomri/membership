@@ -1,3 +1,4 @@
+const ajaxInfo = document.getElementById('ajax-info').dataset;
 
 function resetRegisterArea() {
   var register = document.getElementById('output');
@@ -15,10 +16,10 @@ function getSessions() {
     sessAjax.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         document.getElementById('output').innerHTML = this.responseText;
-        window.history.replaceState('string', 'Title', <?=json_encode(autoUrl('attendance/sessions'))?> + '?squad=' + squadValue);
+        window.history.replaceState('string', 'Title', ajaxInfo.pageUrl + '?squad=' + squadValue);
       }
     }
-    sessAjax.open('POST', '<?=autoURL('attendance/sessions/ajax/handler')?>', true);
+    sessAjax.open('POST', ajaxInfo.ajaxUrl, true);
     sessAjax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     sessAjax.send('action=getSessions&squadID=' + squadValue);
   }
@@ -74,7 +75,7 @@ function addSession() {
       document.getElementById('status-message').innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>We could not add the session!</strong> Please check the details and try again.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
     }
   }
-  sessAjax.open('POST', <?=json_encode(autoURL('attendance/sessions/ajax/handler'))?>, true);
+  sessAjax.open('POST', ajaxInfo.ajaxUrl, true);
   sessAjax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
   sessAjax.send('action=addSession&squadID=' + squadValue + '&sessionName=' + sessionNameValue + '&venueID=' + sessionVenueValue + '&sessionDay=' + sessionDayValue + '&startTime=' + sessionStartValue + '&endTime=' + sessionEndValue + '&newSessionMS=' + mainSequenceValue + '&newSessionStartDate=' + startDateValue + '&newSessionEndDate=' + endDateValue);
 }

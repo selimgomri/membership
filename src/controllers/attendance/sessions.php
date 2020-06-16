@@ -30,6 +30,8 @@ include "attendanceMenu.php";
 
 ?>
 
+<div id="ajax-info" data-page-url="<?=htmlspecialchars(autoUrl('attendance/sessions'))?>" data-ajax-url="<?=htmlspecialchars(autoUrl('attendance/sessions/ajax/handler'))?>"></div>
+
 <div class="container-fluid">
   <div class="card mb-3">
     <div class="card-body">
@@ -63,6 +65,6 @@ include "attendanceMenu.php";
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs("js/attendance/register.js");
+$footer->addJs("public/js/attendance/sessions.js");
 $footer->useFluidContainer();
 $footer->render();
