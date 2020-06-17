@@ -27,8 +27,8 @@ $updatePayments = $db->prepare("UPDATE `payments` SET `Status` = ?, `MandateID` 
 $updatePaymentsPending = $db->prepare("UPDATE `paymentsPending` SET `Status` = ?, `PMkey` = ? WHERE Payment = ?");
 
 try {
-  $getPayments = $db->prepare("SELECT payments.UserID, Amount, Currency, `Name`, PaymentID FROM payments LEFT JOIN paymentSchedule ON payments.UserID = paymentSchedule.UserID WHERE (Status = 'pending_api_request' AND `Day` <= ? AND Type = 'Payment') OR (Status = 'pending_api_request' AND `Day` IS NULL AND `Type` = 'Payment') LIMIT 4");
-  $getPayments->execute([$day]);
+  $getPayments = $db->prepare("SELECT payments.UserID, Amount, Currency, `Name`, PaymentID FROM ((payments INNER JOIN users ON users.UserID = payments.UserID) LEFT JOIN paymentSchedule ON payments.UserID = paymentSchedule.UserID) WHERE users.Tenant = ? AND (Status = 'pending_api_request' AND `Day` <= ? AND Type = 'Payment') OR (Status = 'pending_api_request' AND `Day` IS NULL AND `Type` = 'Payment') LIMIT 4");
+  $getPayments->execute([$tenant->getId(), $day]);
   while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)) {
   	$userid = $row['UserID'];
     try {
@@ -164,8 +164,20 @@ try {
       $sendEmail->execute($email_info);
     }
   }
+
+  header("content-type: application/json");
+  http_response_code(200);
+  echo json_encode([
+    'status' => 200,
+  ]);
+
 } catch (Exception $e) {
   // Report error by halting
   reportError($e);
-  halt(500);
+
+  header("content-type: application/json");
+  http_response_code(500);
+  echo json_encode([
+    'status' => 500,
+  ]);
 }

@@ -126,13 +126,15 @@ include BASE_PATH . "views/paymentsMenu.php";
 			<?php
       $link;
 			do {
-        $metadata = json_decode($row['metadataJSON']);
-        $swimmer_name = null;
-        for ($j = 0; $j < sizeof($metadata->Members); $j++) {
-          if ($metadata->Members[$j]->Member == $row['MemberID']) {
-            $swimmer_name = htmlspecialchars($metadata->Members[$j]->MemberName);
-          }
-        }
+				$metadata = json_decode($row['metadataJSON']);
+				$swimmer_name = null;
+				if (isset($metadata->Members)) {
+					for ($j = 0; $j < sizeof($metadata->Members); $j++) {
+						if ($metadata->Members[$j]->Member == $row['MemberID']) {
+							$swimmer_name = htmlspecialchars($metadata->Members[$j]->MemberName);
+						}
+					}
+				}
 				?>
 				<?php if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually") {
 					?><tr class="table-success"><?php
