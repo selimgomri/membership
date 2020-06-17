@@ -49,13 +49,21 @@ try {
   foreach ($currentSquads as $squad) {
     $current[] = [
       'id' => $squad->getId(),
-      'name' => $squad->getName()
+      'name' => $squad->getName(),
+      'url' => autoUrl('squads/' . $squad->getId()),
+      'price_string' => $squad->getFee(false),
+      'pays' => true,
     ];
   }
 
+  $squadsDescLine = $member->getForename() . ' is a member of ' . (new NumberFormatter("en", NumberFormatter::SPELLOUT))->format(sizeof($current)) . ' squad';
+  if (sizeof($current) != 1) $squadsDescLine .= 's';
+  $squadsDescLine .= '.';
+
   echo json_encode([
     'current' => $current,
-    'can_join' => $canMoveTo->fetchAll(PDO::FETCH_ASSOC)
+    'can_join' => $canMoveTo->fetchAll(PDO::FETCH_ASSOC),
+    'squads_desc_line' => $squadsDescLine
   ]);
 
 } catch (Exception $e) {

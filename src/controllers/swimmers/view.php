@@ -56,8 +56,8 @@ include BASE_PATH . 'views/header.php';
   <h1>
     <?= htmlspecialchars($member->getFullName()) ?>
   </h1>
-  <p class="lead">
-    <?php if (sizeof($squads) > 0) { ?><?php for ($i = 0; $i < sizeof($squads); $i++) { ?><?= htmlspecialchars($squads[$i]->getName()) ?><?php if ($i < sizeof($squads) - 1) { ?>, <?php } ?><?php } ?> Squad<?php if (sizeof($squads) != 1) { ?>s<?php } ?><?php } else { ?>Not assigned to any squads<?php } ?>
+  <p class="lead" id="leadDesc">
+    Member
   </p>
 
   <?php if ($user && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
@@ -346,7 +346,8 @@ include BASE_PATH . 'views/header.php';
 
       <!-- Squad details -->
       <h2 id="squads">Squad<?php if (sizeof($squads) != 1) { ?>s<?php } ?></h2>
-      <p>
+      <div id="squadDetails">
+      <!-- <p>
         <?= htmlspecialchars($member->getForename()) ?> is a member of <?= htmlspecialchars((new NumberFormatter("en", NumberFormatter::SPELLOUT))->format(sizeof($squads))) ?> squad<?php if (sizeof($squads) != 1) { ?>s<?php } ?>.
       </p>
 
@@ -356,11 +357,12 @@ include BASE_PATH . 'views/header.php';
             <?= htmlspecialchars($squad->getName()) ?>
           </a>
         <?php } ?>
+      </div> -->
       </div>
 
       <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Coach') { ?>
         <p>
-          <button class="btn btn-success" id="new-move-button" data-member="<?= htmlspecialchars($id) ?>" data-squads-url="<?= htmlspecialchars(autoUrl("members/$id/squads.json")) ?>" data-move-url="<?= htmlspecialchars(autoUrl("members/move-squad")) ?>">
+          <button class="btn btn-success" id="new-move-button" data-member="<?= htmlspecialchars($id) ?>" data-squads-url="<?= htmlspecialchars(autoUrl("members/$id/squads.json")) ?>" data-move-url="<?= htmlspecialchars(autoUrl("members/move-squad")) ?>" data-csrf="<?=htmlspecialchars(\SCDS\CSRF::getValue())?>">
             Manage squads
           </button>
         </p>

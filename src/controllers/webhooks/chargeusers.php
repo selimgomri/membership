@@ -83,7 +83,7 @@ try {
           $paymentID
         ]);
 
-    	} catch (Exception $e) {
+    	} catch (\GoCardlessPro\Core\Exception\ApiException $e) {
         if ($e->getType() == 'invalid_state') {
           $paymentID = $row['PaymentID'];
           $id = "CASH-DDFAIL" . $paymentID;
