@@ -16,9 +16,7 @@ class CSRF {
       $csrfName = 'CSRF-T' . app()->tenant->getId();
     }
 
-    if (!isset($_SESSION[$csrfName]) || $_SESSION[$csrfName] == null) {
-      $_SESSION[$csrfName] = hash('sha256', random_bytes(1000));
-    }
+    self::getValue();
 
     echo '<input id="SCDS-GLOBAL-CSRF" name="SCDS-GLOBAL-CSRF" type="hidden" value="' . htmlspecialchars($_SESSION[$csrfName]) . '">';
   }
@@ -30,6 +28,10 @@ class CSRF {
    */
   public static function getValue() {
     $csrfName = 'CSRF';
+    if (isset(app()->tenant)) {
+      $csrfName = 'CSRF-T' . app()->tenant->getId();
+    }
+
     if (!isset($_SESSION[$csrfName]) || $_SESSION[$csrfName] == null) {
       $_SESSION[$csrfName] = hash('sha256', random_bytes(100));
     }
@@ -44,6 +46,10 @@ class CSRF {
    */
   public static function verify($throwException = false) {
     $csrfName = 'CSRF';
+    if (isset(app()->tenant)) {
+      $csrfName = 'CSRF-T' . app()->tenant->getId();
+    }
+
     if (isset($_SESSION[$csrfName]) && isset($_POST['SCDS-GLOBAL-CSRF']) && $_SESSION[$csrfName] == $_POST['SCDS-GLOBAL-CSRF']) {
       // Verifies CSRF, proceed normally
       return true;
@@ -61,6 +67,10 @@ class CSRF {
    */
   public static function verifyCode($code, $throwException = false) {
     $csrfName = 'CSRF';
+    if (isset(app()->tenant)) {
+      $csrfName = 'CSRF-T' . app()->tenant->getId();
+    }
+    
     if (isset($_SESSION[$csrfName]) && $_SESSION[$csrfName] == $code) {
       // Verifies CSRF, proceed normally
       return true;

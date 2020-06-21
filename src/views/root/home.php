@@ -61,8 +61,8 @@ include BASE_PATH . "views/root/header.php";
 
 <div class="bg-indigo text-light py-5">
   <div class="container">
-    <div class="row">
-      <div class="col-6">
+    <div class="row align-items-center">
+      <div class="col-md-9">
         <h2>Automated payments</h2>
         <p class="lead">Collect payments by Direct Debit and one-off payments by card.</p>
 
@@ -71,7 +71,21 @@ include BASE_PATH . "views/root/header.php";
           <li>A white-label experience for card payments</li>
           <li>An optional white-label experience for direct-debit payments</li>
           <li>Automated billing - no need to set up plans for each family or member</li>
+          <li>Stripe Partner</li>
         </ul>
+
+        <div class="mb-5 d-md-none"></div>
+      </div>
+
+      <div class="col">
+        <div class="row align-items-center">
+          <div class="col">
+            <img class="img-fluid" src="<?= htmlspecialchars(autoUrl('public/img/stripe/stripe-white.svg')) ?>" alt="Stripe Logo">
+          </div>
+          <div class="col">
+            <img class="img-fluid" src="<?= htmlspecialchars(autoUrl('public/img/gocardless/gocardless-white.svg')) ?>" alt="GoCardless Logo">
+          </div>
+        </div>
       </div>
     </div>
   </div>

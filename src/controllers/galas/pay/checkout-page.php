@@ -5,24 +5,25 @@ $tenant = app()->tenant;
 
 \Stripe\Stripe::setApiKey(env('STRIPE'));
 
-// try {
-//   \Stripe\ApplePayDomain::create([
-//     'domain_name' => app('request')->hostname
-//   ], [
-//     'stripe_account' => $tenant->getStripeAccount()
-//   ]);
-// } catch (Exception $e) {
-//   // Not the end of the world so report the error and continue.
-//   // Any errors can be resolved later.
-//   pre($e);
-// }
+try {
+  $res = \Stripe\ApplePayDomain::create([
+    'domain_name' => app('request')->hostname
+  ], [
+    'stripe_account' => $tenant->getStripeAccount()
+  ]);
+  // pre($res);
+} catch (Exception $e) {
+  // Not the end of the world so report the error and continue.
+  // Any errors can be resolved later.
+  pre($e);
+}
 
 // try {
-//   pre(\Stripe\ApplePayDomain::all([
-//     'limit' => 20
-//   ], [
-//     'stripe_account' => $tenant->getStripeAccount()
-//   ]));
+  // pre(\Stripe\ApplePayDomain::all([
+  //   'limit' => 20
+  // ], [
+  //   'stripe_account' => $tenant->getStripeAccount()
+  // ]));
 //   pre(\Stripe\ApplePayDomain::all([
 //     'limit' => 20
 //   ]));

@@ -7,10 +7,14 @@ if (isset($_GET['target'])) {
 
 $pagetitle = "Login";
 
-$errorState = $username = null;
+$errorState = null;
+$username = '';
 
 if ( isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) ) {
   $errorState = $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+}
+
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EnteredUsername'])) {
   $username = $_SESSION['TENANT-' . app()->tenant->getId()]['EnteredUsername'];
 }
 
@@ -73,7 +77,7 @@ include BASE_PATH . "views/header.php";
           </div>
         </div>
         <input type="hidden" name="target" value="<?=htmlspecialchars($target)?>">
-        <?=SCDS\CSRF::write()?>
+        <?=\SCDS\CSRF::write()?>
         <input type="hidden" name="SessionSecurity" value="<?=session_id()?>">
         <p class="mb-5"><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-primary"></p>
         <div class="mb-5">

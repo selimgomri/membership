@@ -14,6 +14,7 @@ $contactsArray = $contacts->getContacts();
 $pagetitle = "Emergency Contacts";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/renewalTitleBar.php";
+
 ?>
 
 <div class="container">
@@ -100,5 +101,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	</div>
 </div>
 
-<?php $footer = new \SCDS\Footer();
+<?php
+
+$footer = new \SCDS\Footer();
 $footer->render();
