@@ -19,11 +19,11 @@ try {
 }
 
 // try {
-  // pre(\Stripe\ApplePayDomain::all([
-  //   'limit' => 20
-  // ], [
-  //   'stripe_account' => $tenant->getStripeAccount()
-  // ]));
+//   pre(\Stripe\ApplePayDomain::all([
+//     'limit' => 20
+//   ], [
+//     'stripe_account' => $tenant->getStripeAccount()
+//   ]));
 //   pre(\Stripe\ApplePayDomain::all([
 //     'limit' => 20
 //   ]));

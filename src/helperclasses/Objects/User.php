@@ -7,7 +7,8 @@
  * @copyright Chester-le-Street ASC https://github.com/Chester-le-Street-ASC
  * @author Chris Heppell https://github.com/clheppell
  */
-class User extends Person {
+class User extends Person
+{
   private $emailAddress;
   private $mobile;
   private $accessLevel;
@@ -16,14 +17,16 @@ class User extends Person {
   private $setSession;
   private $permissions;
 
-  public function __construct($id, $setSession = false) {
+  public function __construct($id, $setSession = false)
+  {
     $this->id = (int) $id;
     $this->userOptionsRetrieved = false;
     $this->setSession = $setSession;
     $this->revalidate();
   }
 
-  public function revalidate() {
+  public function revalidate()
+  {
     $db = app()->db;
     // Get the user
     $query = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ? AND Active");
@@ -77,43 +80,53 @@ class User extends Person {
     }
   }
 
-  public function getDirtyFirstName() {
+  public function getDirtyFirstName()
+  {
     return $this->forename;
   }
 
-  public function getFirstName() {
+  public function getFirstName()
+  {
     return $this->forename;
   }
 
-  public function getDirtyLastName() {
+  public function getDirtyLastName()
+  {
     return $this->surname;
   }
 
-  public function getLastName() {
+  public function getLastName()
+  {
     return $this->surname;
   }
 
-  public function getDirtyName() {
+  public function getDirtyName()
+  {
     return $this->forename . ' ' . $this->surname;
   }
 
-  public function getName() {
+  public function getName()
+  {
     return $this->forename . ' ' . $this->surname;
   }
 
-  public function getDirtyEmail() {
+  public function getDirtyEmail()
+  {
     return $this->emailAddress;
   }
 
-  public function getEmail() {
+  public function getEmail()
+  {
     return $this->getDirtyEmail();
   }
 
-  public function getMobile() {
+  public function getMobile()
+  {
     return $this->mobile;
   }
 
-  private function getUserOptions() {
+  private function getUserOptions()
+  {
     $db = app()->db;
 
     try {
@@ -126,7 +139,8 @@ class User extends Person {
     }
   }
 
-  public function getUserOption($name) {
+  public function getUserOption($name)
+  {
     if (!$this->userOptionsRetrieved) {
       $this->getUserOptions();
     }
@@ -141,11 +155,13 @@ class User extends Person {
     }
   }
 
-  public function getUserBooleanOption($name) {
+  public function getUserBooleanOption($name)
+  {
     return bool($this->getUserOption($name));
   }
 
-  public function setUserOption($option, $value) {
+  public function setUserOption($option, $value)
+  {
     $db = app()->db;
 
     if ($value == "") {
@@ -169,11 +185,13 @@ class User extends Person {
     }
   }
 
-  public function getPermissions() {
+  public function getPermissions()
+  {
     return $this->permissions;
   }
 
-  public function getPrintPermissions() {
+  public function getPrintPermissions()
+  {
     $permissions = [];
     foreach ($this->permissions as $perm) {
       if ($perm == 'Admin') {
@@ -189,11 +207,13 @@ class User extends Person {
     return $permissions;
   }
 
-  public function hasPermission($permission) {
+  public function hasPermission($permission)
+  {
     return in_array($permission, $this->permissions);
   }
 
-  public function grantPermission($permission) {
+  public function grantPermission($permission)
+  {
     $db = app()->db;
     try {
       $setPerm = $db->prepare("INSERT INTO `permissions` (`Permission`, `User`) VALUES (?, ?)");
@@ -207,7 +227,8 @@ class User extends Person {
     }
   }
 
-  public function revokePermission($permission) {
+  public function revokePermission($permission)
+  {
     $db = app()->db;
     try {
       $deletePerm = $db->prepare("DELETE FROM `permissions` WHERE `Permission` = ? AND `User` = ?");
@@ -226,9 +247,71 @@ class User extends Person {
    * 
    * @return EmergencyContact[] an array of emergency contacts
    */
-  public function getEmergencyContacts() {
+  public function getEmergencyContacts()
+  {
     $ec = new EmergencyContacts(app()->db);
     $ec->byParent($this->id);
     return $ec->getContacts();
+  }
+
+  public function getStripeCustomer()
+  {
+    if (!app()->tenant->getStripeAccount() || !env('STRIPE')) {
+      return null;
+    }
+
+    \Stripe\Stripe::setApiKey(env('STRIPE'));
+
+    $db = app()->db;
+    $checkIfCustomer = $db->prepare("SELECT COUNT(*) FROM stripeCustomers WHERE User = ?");
+    $checkIfCustomer->execute([$this->id]);
+
+    $customer = null;
+    if ($checkIfCustomer->fetchColumn() == 0) {
+      // Create a Customer:
+      $customer = \Stripe\Customer::create([
+        "name" => $this->getName(),
+        "description" => "Customer for " . $this->id . ' (' . $this->getEmail() . ')',
+        'email' => $this->getEmail(),
+        'phone' => $this->getMobile()
+      ], [
+        'stripe_account' => app()->tenant->getStripeAccount()
+      ]);
+
+      // YOUR CODE: Save the customer ID and other info in a database for later.
+      $id = $customer->id;
+      $addCustomer = $db->prepare("INSERT INTO stripeCustomers (User, CustomerID) VALUES (?, ?)");
+      $addCustomer->execute([
+        $this->id,
+        $id
+      ]);
+    } else {
+      $getCustID = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
+      $getCustID->execute([$this->id]);
+      $customer = \Stripe\Customer::retrieve(
+        $getCustID->fetchColumn(),
+        [
+          'stripe_account' => app()->tenant->getStripeAccount()
+        ]
+      );
+
+      // Check whether we should update user details
+      if ($customer->name != $this->getName() || $customer->email != $this->getEmail() || $customer->phone != $this->getMobile()) {
+        // Some details are not the same so let's update the stripe customer
+        $customer = \Stripe\Customer::update(
+          $customer->id,
+          [
+            "name" => $this->getName(),
+            'email' => $this->getEmail(),
+            'phone' => $this->getMobile()
+          ],
+          [
+            'stripe_account' => app()->tenant->getStripeAccount()
+          ]
+        );
+      }
+    }
+
+    return $customer;
   }
 }

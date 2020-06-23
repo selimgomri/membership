@@ -156,6 +156,13 @@ Chester-le-Street ASC is a non profit unincorporated association.
     .top-3 {
       top: 1rem;
     }
+
+    /* @media (prefers-color-scheme: dark) {
+      body, .front-page {
+        background: var(--dark);
+        color: var(--light);
+      }
+    } */
   </style>
 
 </head>

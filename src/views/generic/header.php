@@ -12,7 +12,7 @@ if (app()->tenant->getKey('SYSTEM_COLOUR') && getContrastColor(app()->tenant->ge
   $navTextColour = 'navbar-light';
 }
 
-$bg = "bg-white";
+$bg = "";
 if (isset($customBackground) && $customBackground) {
   $bg = $customBackground;
 }
@@ -27,7 +27,7 @@ if (isset($customBackground) && $customBackground) {
   </div>
 
   <?php if (bool(env('IS_DEV'))) { ?>
-  <div class="bg-warning bg-striped py-1">
+  <div class="bg-warning text-dark bg-striped py-1">
     <div class="<?= $container_class ?>">
       <small><strong>DEVELOPMENT PLATFORM</strong> NOT FOR PRODUCTION USE</small>
     </div>
@@ -75,7 +75,7 @@ if (isset($customBackground) && $customBackground) {
     <?php } ?>
 
     <noscript>
-      <div class="bg-warning box-shadow py-3 d-print-none">
+      <div class="bg-warning text-dark box-shadow py-3 d-print-none">
         <div class="<?= $container_class ?>">
           <p class="h2">
             <strong>
@@ -99,7 +99,7 @@ if (isset($customBackground) && $customBackground) {
     </noscript>
 
     <?php if ($_SESSION['Browser']['Name'] == "Internet Explorer") { ?>
-      <div class="bg-warning py-3 d-print-none">
+      <div class="bg-warning text-dark py-3 d-print-none">
         <div class="<?= $container_class ?>">
           <p class="h2">
             <strong>
@@ -117,7 +117,7 @@ if (isset($customBackground) && $customBackground) {
     <?php } ?>
 
     <?php if (bool(env('IS_EVALUATION_COPY'))) { ?>
-      <div class="bg-secondary text-white py-2 d-print-none">
+      <div class="bg-warning text-dark py-2 d-print-none">
         <div class="<?= $container_class ?>">
           <p class="mb-0">
             <strong>
