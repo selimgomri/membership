@@ -2,7 +2,8 @@
 
 // Setup GoCardless Client
 
-$at = app()->tenant->getGoCardlessAccessToken();
+// $at = app()->tenant->getGoCardlessAccessToken();
+$at = app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN');
 
 $client = null;
 try {

@@ -14,6 +14,7 @@ $db->query(
     `SortCode` varchar(8) NOT NULL,
     `Address` varchar(1024) NOT NULL,
     `Status` enum('pending', 'revoked', 'refused', 'accepted') NOT NULL,
+    `MandateStatus` enum('active', 'inactive', 'pending') NOT NULL,
     `Reference` varchar(64) NOT NULL,
     `URL` varchar(512) NOT NULL,
     PRIMARY KEY (`ID`),

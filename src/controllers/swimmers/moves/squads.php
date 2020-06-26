@@ -60,10 +60,46 @@ try {
   if (sizeof($current) != 1) $squadsDescLine .= 's';
   $squadsDescLine .= '.';
 
+  // Get information about planned moves
+  $moves = $db->prepare("SELECT `ID`, `Date`, `Paying`, oldSquad.SquadID OldID, oldSquad.SquadName OldName, newSquad.SquadID `NewID`, newSquad.SquadName `NewName` FROM ((squadMoves LEFT JOIN squads AS oldSquad ON squadMoves.Old = oldSquad.SquadID) LEFT JOIN squads AS newSquad ON squadMoves.New = newSquad.SquadID) WHERE Member = ?");
+  $moves->execute([
+    $member->getId()
+  ]);
+
+  $squadMoves = [];
+  while ($move = $moves->fetch(PDO::FETCH_ASSOC)) {
+    $newSquad = $oldSquad = null;
+
+    if ($move['OldID']) {
+      $oldSquad = [
+        'id' => (int) $move['OldID'],
+        'name' => $move['OldName'],
+        'url' => autoUrl('squads/' . $move['OldID']),
+      ];
+    }
+
+    if ($move['NewID']) {
+      $newSquad = [
+        'id' => (int) $move['NewID'],
+        'name' => $move['NewName'],
+        'url' => autoUrl('squads/' . $move['NewID']),
+      ];
+    }
+
+    $squadMoves[] = [
+      'id' => (int) $move['ID'],
+      'date' => $move['Date'],
+      'paying' => bool($move['Paying']),
+      'from' => $oldSquad,
+      'to' => $newSquad
+    ];
+  }
+
   echo json_encode([
     'current' => $current,
     'can_join' => $canMoveTo->fetchAll(PDO::FETCH_ASSOC),
-    'squads_desc_line' => $squadsDescLine
+    'squads_desc_line' => $squadsDescLine,
+    'moves' => $squadMoves,
   ]);
 
 } catch (Exception $e) {

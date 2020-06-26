@@ -12,6 +12,10 @@ try {
     'stripe_account' => $tenant->getStripeAccount()
   ]);
   // pre($res);
+  // $res = \Stripe\ApplePayDomain::create([
+  //   'domain_name' => app('request')->hostname
+  // ]);
+  // pre($res);
 } catch (Exception $e) {
   // Not the end of the world so report the error and continue.
   // Any errors can be resolved later.

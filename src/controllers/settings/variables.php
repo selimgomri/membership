@@ -20,6 +20,8 @@ $vars = [
   'HIDE_MEMBER_ATTENDANCE' => null,
   'EMERGENCY_MESSAGE' => false,
   'EMERGENCY_MESSAGE_TYPE' => 'NONE',
+  'GOCARDLESS_ACCESS_TOKEN' => null,
+  'GOCARDLESS_WEBHOOK_KEY' => null,
 ];
 
 $disabled = [];
@@ -250,11 +252,30 @@ include BASE_PATH . 'views/header.php';
 
           <h2>GoCardless API keys (for direct debit)</h2>
 
-          <p>GoCardless API keys and webhooks are not required in Membership MT. Instead you can grant SCDS access to your GoCardless account quickly and easily by going to <a href="<?= htmlspecialchars(autoUrl("settings/direct-debit")) ?>">Direct Debit Settings</a></p>
+          <p>GoCardless is our legacy Direct Debit system. We're phasing it out and will replace it with Stripe, who we already partner with for card payments. We'll get in touch when you need to make changes.</a></p>
+
+          <div class="form-group">
+            <label for="GOCARDLESS_ACCESS_TOKEN">GoCardless Access Token</label>
+            <input class="form-control mono" type="text" name="GOCARDLESS_ACCESS_TOKEN" id="GOCARDLESS_ACCESS_TOKEN" value="<?= htmlspecialchars($vars['GOCARDLESS_ACCESS_TOKEN']) ?>" <?= $disabled['GOCARDLESS_ACCESS_TOKEN'] ?>>
+          </div>
+
+          <div class="form-group">
+            <label for="GOCARDLESS_WEBHOOK_KEY">GoCardless Webhook Key</label>
+            <input class="form-control mono" type="text" name="GOCARDLESS_WEBHOOK_KEY" id="GOCARDLESS_WEBHOOK_KEY" value="<?= htmlspecialchars($vars['GOCARDLESS_WEBHOOK_KEY']) ?>" <?= $disabled['GOCARDLESS_WEBHOOK_KEY'] ?>>
+          </div>
+
+          <p>Your GoCardless webhook endpoint URL is</p>
+          <div class="form-group">
+            <input class="form-control mono" type="text" readonly value="<?= autoUrl("payments/webhooks") ?>">
+          </div>
 
           <h2>Stripe API keys (for card payments)</h2>
 
-          <p>Stripe API keys and webhooks are not required in Membership MT. Instead you can grant SCDS access to your Stripe account quickly and easily by going to <a href="<?= htmlspecialchars(autoUrl("settings/card-payments")) ?>">Card Payment Settings</a></p>
+          <p>Stripe API keys and webhooks are not required in Membership MT. Instead you can grant SCDS access to your Stripe account quickly and easily by going to <a href="<?= htmlspecialchars(autoUrl("settings/stripe")) ?>">Stripe Settings</a>.</p>
+
+          <p>
+            We will soon also be moving direct debit payments to Stripe. We will be in touch when this transition starts.
+          </p>
 
           <h2>Customisation</h2>
 

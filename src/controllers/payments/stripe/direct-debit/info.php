@@ -4,11 +4,11 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 // Get mandates
-$getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL` FROM stripeMandates WHERE Customer = ?");
+$getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending')");
 $getMandates->execute([
-  app()->user->getStripeCustomer()->id
+  app()->user->getStripeCustomer()->id,
 ]);
-$mandates = $getMandates->fetchAll(PDO::FETCH_ASSOC);
+$mandate = $getMandates->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = "Direct Debit";
 include BASE_PATH . "views/header.php";
@@ -47,11 +47,37 @@ include BASE_PATH . "views/header.php";
       <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['StripeDDSuccess']);
       } ?>
 
+      <?php if ($mandate) {
+        do { ?>
+          <div class="card card-body mb-3">
+            <h2>Your Direct Debit Mandate <span class="badge badge-secondary"><?php if ($mandate['Status'] == 'pending') { ?>Pending<?php } else if ($mandate['Status'] == 'accepted') { ?>Active<?php } ?></span></h2>
+            <dl class="row">
+              <dt class="col-sm-3">Sort code</dt>
+              <dd class="col-sm-9 mono"><?= htmlspecialchars(implode("-", str_split($mandate['SortCode'], 2))) ?></dd>
+
+              <dt class="col-sm-3">Account number</dt>
+              <dd class="col-sm-9 mono">&middot;&middot;&middot;&middot;<?= htmlspecialchars($mandate['Last4']) ?></dd>
+
+              <dt class="col-sm-3">Payment reference</dt>
+              <dd class="col-sm-9 mono"><?= htmlspecialchars($mandate['Reference']) ?></dd>
+            </dl>
+
+            <p class="mb-0">
+              <a href="<?= htmlspecialchars($mandate['URL']) ?>">
+                View Direct Debit Instruction
+              </a>
+            </p>
+          </div>
+      <?php } while ($mandate = $getMandates->fetch(PDO::FETCH_ASSOC));
+      } ?>
+
       <p>
         <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("payments/direct-debit/set-up")) ?>">Set up a new mandate</a>
       </p>
 
-      <?=pre($mandates)?>
+      <p>
+        We will always use the most recent mandate that you set up for your payments. Mandates are fully set up once they become active.
+      </p>
 
     </div>
   </div>

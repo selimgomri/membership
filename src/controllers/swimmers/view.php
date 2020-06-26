@@ -368,6 +368,8 @@ include BASE_PATH . 'views/header.php';
         </p>
       <?php } ?>
 
+      <div id="squad-moves-area"></div>
+
       <hr>
 
       <!-- Times -->

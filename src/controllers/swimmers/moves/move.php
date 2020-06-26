@@ -216,13 +216,23 @@ try {
         'success' => true,
       ]);
     } else {
-      // Remove at a later date
+      // Move on specified date
+      $date = new DateTime('now', new DateTimeZone('Europe/London'));
+      try {
+        $date = new DateTime($_POST['move-date'], new DateTimeZone('Europe/London'));
+      } catch (Exception $e) {
+        // Date invalid
+        throw new Exception('The date you provided is invalid');
+      }
 
-      // Remove now
-      $move = $db->prepare("DELETE FROM squadMembers WHERE Member = ? AND Squad = ?");
-      $move->execute([
-        $_POST['member'],
-        $_POST['leave']
+      // Add move to database
+      $add = $db->prepare("INSERT INTO squadMoves (`Member`, `Date`, `Old`, `New`, `Paying`) VALUES (?, ?, ?, ?, ?)");
+      $add->execute([
+        $member->getId(),
+        $date->format("Y-m-d"),
+        $_POST['leave'],
+        null,
+        0,
       ]);
 
       echo json_encode([

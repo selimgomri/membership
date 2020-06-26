@@ -4,11 +4,11 @@ $this->get('/', function() {
   include 'home.php';
 });
 
-$this->group('/direct-debit', function() {
-  include 'gocardless/router.php';
-});
+// $this->group('/direct-debit', function() {
+//   include 'gocardless/router.php';
+// });
 
-$this->group('/card-payments', function() {
+$this->group('/stripe', function() {
   include 'stripe/router.php';
 });
 

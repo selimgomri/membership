@@ -51,4 +51,4 @@ try {
   reportError($e);
 }
 
-header("location: " . autoUrl($tenant->getCodeId() . "/settings/card-payments"));
+header("location: " . autoUrl($tenant->getCodeId() . "/settings/stripe"));

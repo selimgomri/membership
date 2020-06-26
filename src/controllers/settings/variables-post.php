@@ -32,6 +32,8 @@ $vars = [
   'CLUB_ADDRESS' => null,
   'SYSTEM_COLOUR' => null,
   'EMERGENCY_MESSAGE' => false,
+  'GOCARDLESS_ACCESS_TOKEN' => null,
+  'GOCARDLESS_WEBHOOK_KEY' => null,
   'EMERGENCY_MESSAGE_TYPE' => 'NONE',
 ];
 

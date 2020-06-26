@@ -27,18 +27,10 @@
       "external": false
     },
     {
-      "id": "settings-gc",
-      "name": "Direct Debit",
-      "title": "GoCardless Direct Debit settings",
-      "link": "settings/direct-debit",
-      "target": "_self",
-      "external": false
-    },
-    {
       "id": "settings-stripe",
-      "name": "Card payments",
-      "title": "Stripe Card Payment settings",
-      "link": "settings/card-payments",
+      "name": "Stripe settings",
+      "title": "Stripe Payment Services settings",
+      "link": "settings/stripe",
       "target": "_self",
       "external": false
     },

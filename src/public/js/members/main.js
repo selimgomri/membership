@@ -8,6 +8,7 @@
 async function displaySquads() {
   try {
     let squads = await getSquads();
+    console.log(squads);
     let memberLeadDesc = '';
     let squadDiv = document.createElement('DIV');
     let squadList = document.createElement('DIV');
@@ -61,6 +62,117 @@ async function displaySquads() {
 
     document.getElementById('squadDetails').innerHTML = '';
     document.getElementById('squadDetails').appendChild(squadDiv);
+
+    // Display squad moves
+    let movesArea = document.getElementById('squad-moves-area');
+    movesArea.innerHTML = '';
+    if (squads.moves.length > 0) {
+      let title = document.createElement('H3');
+      title.textContent = 'Squad moves'
+      movesArea.appendChild(title);
+
+      // Create list group
+      let listGroup = document.createElement('UL');
+      listGroup.classList.add('list-group', 'mb-3');
+
+      squads.moves.forEach(move => {
+        let item = document.createElement('LI');
+        item.classList.add('list-group-item');
+
+        let row = document.createElement('DIV');
+        row.classList.add('row', 'align-items-center');
+
+        let moveCol = document.createElement('DIV');
+        moveCol.classList.add('col-sm-6');
+
+        let moveDesc = document.createElement('DIV');
+
+        if (move.from && move.to) {
+          let oldSquad = document.createElement('A');
+          oldSquad.href = move.from.url;
+          oldSquad.textContent = move.from.name;
+
+          let srText = document.createElement('SPAN');
+          srText.classList.add('sr-only');
+          srText.textContent = 'Moves from ';
+          moveDesc.appendChild(srText);
+
+          moveDesc.appendChild(oldSquad);
+
+          moveDesc.appendChild(document.createTextNode(' to '));
+
+          let arrow = document.createElement('I');
+          arrow.classList.add('fa', 'fa-long-arrow-right');
+          arrow.setAttribute('aria-hidden', 'true');
+          srText = document.createElement('SPAN');
+          srText.classList.add('sr-only');
+          srText.textContent = 'to';
+          moveDesc.appendChild(document.createTextNode(' '));
+          moveDesc.appendChild(arrow);
+          moveDesc.appendChild(srText);
+          moveDesc.appendChild(document.createTextNode(' '));
+
+          let newSquad = document.createElement('A');
+          newSquad.href = move.to.url;
+          newSquad.textContent = move.to.name;
+
+          moveDesc.appendChild(newSquad);
+
+          if (!move.paying) {
+            moveDesc.appendChild(document.createTextNode(' (not paying) '));
+          }
+
+          moveCol.appendChild(moveDesc);
+        } else if (move.to) {
+          let newSquad = document.createElement('A');
+          newSquad.href = move.to.url;
+          newSquad.textContent = move.to.name;
+
+          moveDesc.appendChild(document.createTextNode('Joins '));
+
+          moveDesc.appendChild(newSquad);
+
+          if (!move.paying) {
+            moveDesc.appendChild(document.createTextNode(' (not paying) '));
+          }
+
+          moveCol.appendChild(moveDesc);
+        } else if (move.from) {
+          let oldSquad = document.createElement('A');
+          oldSquad.href = move.from.url;
+          oldSquad.textContent = move.from.name;
+
+          moveDesc.appendChild(document.createTextNode('Leaves '));
+
+          moveDesc.appendChild(oldSquad);
+          moveCol.appendChild(moveDesc);
+        }
+
+        // Date
+        let date = new Date(move.date);
+        moveDesc.appendChild(document.createTextNode(' on '));
+        moveDesc.appendChild(document.createTextNode(date.toLocaleDateString(undefined, { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' })));
+
+        row.appendChild(moveCol);
+
+        let optCol = document.createElement('DIV');
+        optCol.classList.add('col');
+
+        let cancelButton = document.createElement('BUTTON');
+        cancelButton.classList.add('btn', 'btn-danger', 'btn-block');
+        cancelButton.textContent = 'Cancel move';
+
+        optCol.appendChild(cancelButton);
+
+        row.appendChild(optCol);
+
+        item.appendChild(row);
+        listGroup.appendChild(item);
+      });
+
+      movesArea.appendChild(listGroup);
+    }
+
   } catch (err) {
     console.error(err);
     document.getElementById('squadDetails').innerHTML = '<div class="alert alert-warning">We couldn\'t load the MEMBER NAME\'s squads</div>';

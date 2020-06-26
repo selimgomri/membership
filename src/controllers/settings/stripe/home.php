@@ -43,7 +43,7 @@ include BASE_PATH . 'views/header.php';
               <strong>We were unable to connect your Stripe Account</strong>
             </p>
             <p class="mb-0">
-              <a href="<?= htmlspecialchars(autoUrl("settings/card-payments/register")) ?>" class="alert-link">Try again now</a> or try again later.
+              <a href="<?= htmlspecialchars(autoUrl("settings/stripe/register")) ?>" class="alert-link">Try again now</a> or try again later.
             </p>
           </div>
         <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['Stripe-Reg-Error']);
@@ -62,7 +62,7 @@ include BASE_PATH . 'views/header.php';
           </p>
 
           <p>
-            <a href="<?= htmlspecialchars(autoUrl("settings/card-payments/register")) ?>" class="btn btn-primary">Get started</a>
+            <a href="<?= htmlspecialchars(autoUrl("settings/stripe/register")) ?>" class="btn btn-primary">Get started</a>
           </p>
 
           <p>

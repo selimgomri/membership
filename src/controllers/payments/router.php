@@ -330,26 +330,28 @@ if (env('STRIPE') && app()->tenant->getStripeAccount()) {
 	});
 }
 
-$this->group('/direct-debit', function() {
-	$this->get('/', function() {
-		include 'stripe/direct-debit/info.php';
-	});
-
-	$this->group('/set-up', function() {
+if (bool(env('IS_DEV'))) {
+	$this->group('/direct-debit', function() {
 		$this->get('/', function() {
-			include 'stripe/direct-debit/sign-up.php';
+			include 'stripe/direct-debit/info.php';
 		});
 
-		$this->get('/success', function() {
-			include 'stripe/direct-debit/success.php';
+		$this->group('/set-up', function() {
+			$this->get('/', function() {
+				include 'stripe/direct-debit/sign-up.php';
+			});
+
+			$this->get('/success', function() {
+				include 'stripe/direct-debit/success.php';
+			});
+
+			$this->get('/cancel', function() {
+				include 'stripe/direct-debit/failure.php';
+			});
 		});
 
-		$this->get('/cancel', function() {
-			pre("ERROR");
-		});
 	});
-
-});
+}
 
 $this->group('/card-transactions', function() {
 	$this->get(['/', '/page/{page}:int'], function($page = null) {
