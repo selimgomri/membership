@@ -19,7 +19,7 @@ if (isset($fluidContainer) && $fluidContainer == true) {
   $container_class = "container-fluid";
 } else {
   $container_class = "container";
-}?>
+} ?>
 <!DOCTYPE html>
 <!--
 
@@ -44,13 +44,12 @@ Chester-le-Street ASC is a non profit unincorporated association.
 
 <head>
   <meta charset="utf-8">
-  <?php if (isset($pagetitle) && ($pagetitle != "" || $pagetitle != null))  { ?>
-    <title><?=$pagetitle?></title>
+  <?php if (isset($pagetitle) && ($pagetitle != "" || $pagetitle != null)) { ?>
+    <title><?= $pagetitle ?></title>
   <?php } else { ?>
-  <title>SCDS Membership</title>
+    <title>SCDS Membership</title>
   <?php } ?>
-  <meta name="description"
-    content="SCDS Membership helps clubs run more efficiently.">
+  <meta name="description" content="SCDS Membership helps clubs run more efficiently.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0,
     user-scalable=no,maximum-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -61,67 +60,58 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <meta name="og:type" content="website">
   <meta name="og:locale" content="en_GB">
   <meta name="og:site_name" content="SCDS Membership">
-  <link rel="manifest" href="<?=autoUrl("manifest.webmanifest")?>">
+  <link rel="manifest" href="<?= autoUrl("manifest.webmanifest") ?>">
   <?php
-    // Check if user has opted out of tracking or has DNT headers set before serving Google Analytics
-    if (env('GOOGLE_ANALYTICS_ID') && (!$_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers'] && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1))) {
-    ?>
-  <meta name="X-SCDS-Membership-Tracking" content="yes">
-  <script async>
-  (function(i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r;
-    i[r] = i[r] || function() {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date();
-    a = s.createElement(o),
-      m = s.getElementsByTagName(o)[0];
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-  ga('create', '<?=htmlspecialchars(env('GOOGLE_ANALYTICS_ID'))?>', 'auto');
-  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
-  ga('set', 'userId', '<?=$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']?>');
-  ga('send', 'event', 'authentication', 'user-id available');
+  // Check if user has opted out of tracking or has DNT headers set before serving Google Analytics
+  if (env('GOOGLE_ANALYTICS_ID') && (!$_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers'] && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1))) {
+  ?>
+    <meta name="X-SCDS-Membership-Tracking" content="yes">
+    <script async>
+      (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+      ga('create', '<?= htmlspecialchars(env('GOOGLE_ANALYTICS_ID')) ?>', 'auto');
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
+        ga('set', 'userId', '<?= $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'] ?>');
+        ga('send', 'event', 'authentication', 'user-id available');
+      <?php } else { ?>
+        ga('send', 'pageview');
+      <?php } ?>
+    </script>
   <?php } else { ?>
-  ga('send', 'pageview');
-  <?php } ?>
-  </script>
-  <?php } else { ?>
-  <meta name="X-SCDS-Membership-Tracking" content="no">
+    <meta name="X-SCDS-Membership-Tracking" content="no">
   <?php } ?>
   <script src="https://js.stripe.com/v3/"></script>
-  <link rel="stylesheet preload"
-    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700|Roboto+Mono|Merriweather:400,600">
-  <link rel="stylesheet preload" href="<?=htmlspecialchars($stylesheet)?>">
+  <link rel="stylesheet preload" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700|Roboto+Mono|Merriweather:400,600">
+  <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheet) ?>">
 
   <!-- Generic icon -->
-  <link rel="icon" href="<?=htmlspecialchars(autoUrl("public/img/corporate/scds.png"))?>">
+  <link rel="icon" href="<?= htmlspecialchars(autoUrl("public/img/corporate/scds.png")) ?>">
 
   <!-- For iPhone 6 Plus with @3× display: -->
-  <link rel="apple-touch-icon-precomposed" sizes="180x180"
-    href="<?=autoUrl("public/img/corporate/icons/apple-touch-icon-180x180.png")?>">
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon-180x180.png") ?>">
   <!-- For iPad with @2× display running iOS ≥ 7: -->
-  <link rel="apple-touch-icon-precomposed" sizes="152x152"
-    href="<?=autoUrl("public/img/corporate/icons/apple-touch-icon-152x152.png")?>">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon-152x152.png") ?>">
   <!-- For iPad with @2× display running iOS ≤ 6: -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144"
-    href="<?=autoUrl("public/img/corporate/icons/apple-touch-icon-144x144.png")?>">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon-144x144.png") ?>">
   <!-- For iPhone with @2× display running iOS ≥ 7: -->
-  <link rel="apple-touch-icon-precomposed" sizes="120x120"
-    href="<?=autoUrl("public/img/corporate/icons/apple-touch-icon-120x120.png")?>">
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon-120x120.png") ?>">
   <!-- For iPhone with @2× display running iOS ≤ 6: -->
-  <link rel="apple-touch-icon-precomposed" sizes="114x114"
-    href="<?=autoUrl("public/img/corporate/icons/apple-touch-icon-114x114.png")?>">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon-114x114.png") ?>">
   <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
-  <link rel="apple-touch-icon-precomposed" sizes="76x76"
-    href="<?=autoUrl("public/img/corporate/icons/apple-touch-icon-76x76.png")?>">
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon-76x76.png") ?>">
   <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
-  <link rel="apple-touch-icon-precomposed" sizes="72x72"
-    href="<?=autoUrl("public/img/corporate/icons/apple-touch-icon-72x72.png")?>">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon-72x72.png") ?>">
   <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
-  <link rel="apple-touch-icon-precomposed"
-    href="<?=autoUrl("public/img/corporate/icons/apple-touch-icon.png")?>"><!-- 57×57px -->
+  <link rel="apple-touch-icon-precomposed" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon.png") ?>"><!-- 57×57px -->
   <!-- <link rel="mask-icon" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterIcon.svg"
     color="#bd0000"> -->
   <script src="https://www.google.com/recaptcha/api.js"></script>
@@ -131,19 +121,21 @@ Chester-le-Street ASC is a non profit unincorporated association.
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-<style>
-  .bg-indigo {
-    background: var(--purple);
-  }
+  <style>
+    .bg-indigo {
+      background: var(--purple);
+    }
 
-  .club-logos img {
-    max-height: 75px;
-  }
-</style>
+    .club-logos img {
+      max-height: 75px;
+    }
+  </style>
 
 </head>
 
-<body class="<?=$bg?> account--body" <?php if (isset($pageHead['body'])) { foreach ($pageHead['body'] as $item) { ?> <?=$item?> <?php } } ?>>
+<body class="<?= $bg ?> account--body" <?php if (isset($pageHead['body'])) {
+                                        foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
+                                                                                                                            } ?>>
 
   <div class="sr-only sr-only-focusable">
     <a href="#maincontent">Skip to main content</a>
@@ -153,7 +145,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
 
     <noscript>
       <div class="bg-warning box-shadow py-3 d-print-none">
-        <div class="<?=$container_class?>">
+        <div class="<?= $container_class ?>">
           <p class="h2">
             <strong>
               JavaScript is disabled or not supported
@@ -163,8 +155,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
             It looks like you've got JavaScript disabled or your browser does
             not support it. JavaScript is essential for our website to function
             properly so we recommend you enable it or upgrade to a browser which
-            supports it as soon as possible. <strong><a class="text-dark" href="https://browsehappy.com/"
-                target="_blank">Upgrade your browser
+            supports it as soon as possible. <strong><a class="text-dark" href="https://browsehappy.com/" target="_blank">Upgrade your browser
                 today <i class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
           </p>
           <p class="mb-0">
@@ -174,22 +165,20 @@ Chester-le-Street ASC is a non profit unincorporated association.
       </div>
     </noscript>
 
-    <?php if ($_SESSION['Browser']['Name'] == "Internet Explorer") {?>
-    <div class="bg-warning py-3 d-print-none">
-      <div class="<?=$container_class?>">
-        <p class="h2">
-          <strong>
-            Internet Explorer is not supported
-          </strong>
-        </p>
-        <p>
-          It looks like you're using Internet Explorer which we no longer support so we recommend you upgrade to a new browser which we do support as soon as possible. <strong><a class="text-dark" href="http://browsehappy.com/" target="_blank">Upgrade your browser today <i class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
-        </p>
-        <p class="mb-0">
-          SCDS recommends you <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by Mozilla</a></strong>. Firefox has great protections for your privacy with built in features including tracking protection.
-        </p>
+    <?php if ($_SESSION['Browser']['Name'] == "Internet Explorer") { ?>
+      <div class="bg-warning py-3 d-print-none">
+        <div class="<?= $container_class ?>">
+          <p class="h2">
+            <strong>
+              Internet Explorer is not supported
+            </strong>
+          </p>
+          <p>
+            It looks like you're using Internet Explorer which we no longer support so we recommend you upgrade to a new browser which we do support as soon as possible. <strong><a class="text-dark" href="http://browsehappy.com/" target="_blank">Upgrade your browser today <i class="fa fa-external-link" aria-hidden="true"></i></a></strong>.
+          </p>
+          <p class="mb-0">
+            SCDS recommends you <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by Mozilla</a></strong>. Firefox has great protections for your privacy with built in features including tracking protection.
+          </p>
+        </div>
       </div>
-    </div>
     <?php } ?>
-
-    

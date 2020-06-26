@@ -18,7 +18,7 @@ include BASE_PATH . "views/root/header.php";
 <div class="bg-indigo text-light py-5">
   <div class="container">
     <div class="row">
-      <div class="col-6">
+      <div class="col-md-6">
         <h2>Members and squads</h2>
         <p class="lead">Manage your squads and members.</p>
 
@@ -35,7 +35,7 @@ include BASE_PATH . "views/root/header.php";
 <div class="bg-light text-dark py-5">
   <div class="container">
     <div class="row">
-      <div class="col-6">
+      <div class="col-md-6">
         <h2>Member communications</h2>
         <p class="lead">Contact your members and parents easily.</p>
 
@@ -84,7 +84,7 @@ include BASE_PATH . "views/root/header.php";
 <div class="bg-light text-dark py-5">
   <div class="container">
     <div class="row">
-      <div class="col-6">
+      <div class="col-md-6">
         <h2>Online gala entries</h2>
         <p class="lead">Your members can enter their competitions online.</p>
 
@@ -102,7 +102,7 @@ include BASE_PATH . "views/root/header.php";
 <div class="bg-indigo text-light py-5">
   <div class="container">
     <div class="row">
-      <div class="col-6">
+      <div class="col-md-6">
         <h2>Online registers</h2>
         <p class="lead">Take your registers online and keep your coaches up to date.</p>
 
@@ -118,7 +118,7 @@ include BASE_PATH . "views/root/header.php";
 <div class="bg-light text-dark py-5">
   <div class="container">
     <div class="row">
-      <div class="col-6">
+      <div class="col-md-6">
         <h2>Paperless registration and renewal</h2>
         <p class="lead">Banish paper and make registration and renewal easy.</p>
 
@@ -135,7 +135,7 @@ include BASE_PATH . "views/root/header.php";
 <div class="bg-indigo text-light py-5">
   <div class="container">
     <div class="row">
-      <div class="col-6">
+      <div class="col-md-6">
         <h2>Much more</h2>
         <p class="lead">Online photo permissions, medical forms and more.</p>
 
