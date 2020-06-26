@@ -98,8 +98,12 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_S
     });
 
     $this->get('/members/{id}:int', function() {
+      $page = 1;
+      if (isset($_GET['page'])) {
+        $page = (int) $_GET['page'];
+      }
       http_response_code(302);
-      header("location: " . autoUrl("log-books"));
+      header("location: " . autoUrl("log-books?page=" . $page));
     });
 
     $this->group('/members/{member}:int/new', function($member) {
