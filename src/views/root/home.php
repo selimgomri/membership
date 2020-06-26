@@ -6,16 +6,6 @@ include BASE_PATH . "views/root/header.php";
 
 ?>
 
-<style>
-  .bg-indigo {
-    background: var(--purple);
-  }
-
-  .club-logos img {
-    max-height: 75px;
-  }
-</style>
-
 <div class="container">
   <div class="row">
     <div class="col-lg-8">

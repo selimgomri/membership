@@ -18,18 +18,23 @@ include BASE_PATH . "views/root/header.php";
 
       <?php if ($club) { ?>
       <div class="card">
-        <div class="card-header">
+        <!-- <div class="card-header">
           Featured
-        </div>
+        </div> -->
         <div class="list-group list-group-flush">
-          <?php do {
+          <a class="list-group-item list-group-item-action" href="<?=htmlspecialchars(autoUrl('clse'))?>">Chester-le-Street ASC</a>
+          <a class="list-group-item list-group-item-action" href="<?=htmlspecialchars(autoUrl('dare'))?>">Darlington ASC</a>
+          <a class="list-group-item list-group-item-action" href="<?=htmlspecialchars(autoUrl('newe'))?>">Newcastle Swim Team</a>
+          <a class="list-group-item list-group-item-action" href="https://membership.nasc.co.uk/">Northallerton ASC</a>
+          <a class="list-group-item list-group-item-action" href="<?=htmlspecialchars(autoUrl('rice'))?>">Richmond Dales ASC</a>
+          <!-- <?php do {
             $link = $club['ID'];
             if ($club['Code']) {
               $link = mb_strtolower($club['Code']);
             }
           ?>
           <a class="list-group-item list-group-item-action" href="<?=htmlspecialchars(autoUrl($link))?>"><?=htmlspecialchars($club['Name'])?></a>
-          <?php } while ($club = $getClubs->fetch(PDO::FETCH_ASSOC)); ?>
+          <?php } while ($club = $getClubs->fetch(PDO::FETCH_ASSOC)); ?> -->
           </div>
       </div>
       <?php } else { ?>

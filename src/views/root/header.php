@@ -45,9 +45,9 @@ include 'head.php';
         <li class="nav-item">
           <a class="nav-link" href="<?=htmlspecialchars(autoUrl("clubs"))?>">Clubs</a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="<?=htmlspecialchars(autoUrl("register"))?>">Register</a>
-        </li>
+        </li> -->
         <li class="nav-item">
           <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/" target="_blank">Help</a>
         </li>

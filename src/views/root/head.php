@@ -131,6 +131,16 @@ Chester-le-Street ASC is a non profit unincorporated association.
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+<style>
+  .bg-indigo {
+    background: var(--purple);
+  }
+
+  .club-logos img {
+    max-height: 75px;
+  }
+</style>
+
 </head>
 
 <body class="<?=$bg?> account--body" <?php if (isset($pageHead['body'])) { foreach ($pageHead['body'] as $item) { ?> <?=$item?> <?php } } ?>>
