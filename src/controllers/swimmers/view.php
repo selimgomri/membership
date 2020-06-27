@@ -16,6 +16,11 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && 
   halt(404);
 }
 
+$manageSquads = false;
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Coach') {
+  $manageSquads = true;
+}
+
 $squads = $member->getSquads();
 
 $pagetitle = htmlspecialchars($member->getFullName());
@@ -360,7 +365,7 @@ include BASE_PATH . 'views/header.php';
       </div> -->
       </div>
 
-      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Coach') { ?>
+      <?php if ($manageSquads) { ?>
         <p>
           <button class="btn btn-success" id="new-move-button" data-member="<?= htmlspecialchars($id) ?>" data-squads-url="<?= htmlspecialchars(autoUrl("members/$id/squads.json")) ?>" data-move-url="<?= htmlspecialchars(autoUrl("members/move-squad")) ?>" data-csrf="<?= htmlspecialchars(\SCDS\CSRF::getValue()) ?>">
             Manage squads
@@ -368,7 +373,7 @@ include BASE_PATH . 'views/header.php';
         </p>
       <?php } ?>
 
-      <div id="squad-moves-area" data-show-options="true" data-operations-url="<?= htmlspecialchars(autoUrl('members/move-operations')) ?>"></div>
+      <div id="squad-moves-area" data-show-options="<?php if ($manageSquads) { ?>true<?php } else { ?>false<?php } ?>" data-operations-url="<?= htmlspecialchars(autoUrl('members/move-operations')) ?>"></div>
 
       <hr>
 

@@ -6,6 +6,10 @@ try {
   $db = app()->db;
   $tenant = app()->tenant;
 
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Admin' && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Coach') {
+    throw new Exception('Incorrect permissions');
+  }
+
   if ($_POST['operation'] == 'delete') {
     $verifyMove = $db->prepare("SELECT * FROM squadMoves INNER JOIN members ON squadMoves.Member = members.MemberID WHERE members.Tenant = ? AND squadMoves.ID = ?");
     $verifyMove->execute([
