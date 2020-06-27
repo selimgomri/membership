@@ -14,7 +14,7 @@ if ($access == "Parent") {
 		require('parentSwimmers.php');
 	});
 
-	
+
 	$leavers = app()->tenant->getKey('LeaversSquad');
 
 	if ($leavers != null) {
@@ -256,4 +256,8 @@ $this->post('/{id}:int/squads.json', function ($id) {
 
 $this->post('/move-squad', function () {
 	include 'moves/move.php';
+});
+
+$this->post('/move-operations', function () {
+	include 'moves/operations.php';
 });

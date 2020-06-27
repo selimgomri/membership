@@ -5,6 +5,36 @@
  * - Squad moves
  */
 
+async function movesHandler(event) {
+  if (event.target.dataset.action) {
+    // Delete the squad move via ajax request
+    var fd = new FormData();
+    fd.append('move', event.target.dataset.moveId);
+    fd.append('operation', event.target.dataset.action);
+    var req = new XMLHttpRequest();
+    req.addEventListener('load', async (event) => {
+      if (event.target.status == 200) {
+        let result = JSON.parse(event.target.responseText);
+        if (result.success) {
+          displaySquads();
+        } else {
+          // TEMPORARY error message
+          window.alert(result.error_message);
+        }
+      } else {
+      }
+    });
+    req.addEventListener('error', (event) => {
+      // Error
+    });
+    req.addEventListener('abort', (event) => {
+      // Error
+    });
+    req.open('POST', document.getElementById('squad-moves-area').dataset.operationsUrl);
+    req.send(fd);
+  }
+}
+
 async function displaySquads() {
   try {
     let squads = await getSquads();
@@ -161,16 +191,21 @@ async function displaySquads() {
         let cancelButton = document.createElement('BUTTON');
         cancelButton.classList.add('btn', 'btn-danger', 'btn-block');
         cancelButton.textContent = 'Cancel move';
+        cancelButton.dataset.action = 'delete';
+        cancelButton.dataset.moveId = move.id;
 
         optCol.appendChild(cancelButton);
 
-        row.appendChild(optCol);
+        if (movesArea.dataset.showOptions == 'true') {
+          row.appendChild(optCol);
+        }
 
         item.appendChild(row);
         listGroup.appendChild(item);
       });
 
       movesArea.appendChild(listGroup);
+      movesArea.addEventListener('click', movesHandler);
     }
 
   } catch (err) {

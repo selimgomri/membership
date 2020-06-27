@@ -94,6 +94,23 @@ try {
         $_POST['join'],
         !bool($_POST['paying']),
       ]);
+
+      // Prepare an email to the parent
+      // Get squad info
+      $getParent = $db->prepare("SELECT Forename, Surname, EmailAddress FROM members INNER JOIN users ON members.UserID = users.UserID WHERE members.MemberID = ?");
+      $getParent->execute([
+        $member->getId(),
+      ]);
+      if ($user = $getParent->fetch(PDO::FETCH_ASSOC)) {
+        $leave = Squad::get($_POST['leave']);
+        $join = Squad::get($_POST['join']);
+        $subject = $member->getFullName() . ' is moving to ' . $join->getName();
+        $message = '<p>Hello ' . htmlspecialchars($user['Forename']) . ',</p><p>We\'re delighted to let you know that ' . htmlspecialchars($member->getForename()) . ' will be moving to ' . htmlspecialchars($join->getName()) . ' and leaving ' . htmlspecialchars($leave->getName()) . ' on ' . htmlspecialchars($date->format("l j F Y")) . '.</p>';
+        $message .= '<p>The fee for ' . htmlspecialchars($join->getName()) . ' is &pound;' . htmlspecialchars($join->getFee(false)) . '.</p>';
+        $message .= '<p>If you have any questions, please contact your coach or a member of club staff.</p>';
+        $message .= '<p>Kind Regards,<br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
+        notifySend(null, $subject, $message, $user['Forename'] . ' ' . $user['Surname'], $user['EmailAddress']);
+      }
     } else {
       // Move right now
       $move = $db->prepare("UPDATE squadMembers SET Squad = ?, Paying = ? WHERE Member = ? AND Squad = ?");
@@ -164,6 +181,22 @@ try {
         $_POST['join'],
         !bool($_POST['paying']),
       ]);
+
+      // Prepare an email to the parent
+      // Get squad info
+      $getParent = $db->prepare("SELECT Forename, Surname, EmailAddress FROM members INNER JOIN users ON members.UserID = users.UserID WHERE members.MemberID = ?");
+      $getParent->execute([
+        $member->getId(),
+      ]);
+      if ($user = $getParent->fetch(PDO::FETCH_ASSOC)) {
+        $join = Squad::get($_POST['join']);
+        $subject = $member->getFullName() . ' is joining ' . $join->getName();
+        $message = '<p>Hello ' . htmlspecialchars($user['Forename']) . ',</p><p>We\'re delighted to let you know that ' . htmlspecialchars($member->getForename()) . ' will be joining ' . htmlspecialchars($join->getName()) . ' on ' . htmlspecialchars($date->format("l j F Y")) . '.</p>';
+        $message .= '<p>The fee for ' . htmlspecialchars($join->getName()) . ' is &pound;' . htmlspecialchars($join->getFee(false)) . '.</p>';
+        $message .= '<p>If you have any questions, please contact your coach or a member of club staff.</p>';
+        $message .= '<p>Kind Regards,<br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
+        notifySend(null, $subject, $message, $user['Forename'] . ' ' . $user['Surname'], $user['EmailAddress']);
+      }
     } else {
       // Move right now
       $move = $db->prepare("INSERT INTO squadMembers (Squad, Member, Paying) VALUES (?, ?, ?)");
@@ -211,10 +244,20 @@ try {
         $_POST['leave']
       ]);
 
-      echo json_encode([
-        'status' => 200,
-        'success' => true,
+      // Prepare an email to the parent
+      // Get squad info
+      $getParent = $db->prepare("SELECT Forename, Surname, EmailAddress FROM members INNER JOIN users ON members.UserID = users.UserID WHERE members.MemberID = ?");
+      $getParent->execute([
+        $member->getId(),
       ]);
+      if ($user = $getParent->fetch(PDO::FETCH_ASSOC)) {
+        $leave = Squad::get($_POST['leave']);
+        $subject = $member->getFullName() . ' is leaving ' . $leave->getName();
+        $message = '<p>Hello ' . htmlspecialchars($user['Forename']) . ',</p><p>We\'re writing to let you know that ' . htmlspecialchars($member->getForename()) . ' will be leaving ' . htmlspecialchars($leave->getName()) . ' on ' . htmlspecialchars($date->format("l j F Y")) . '.</p>';
+        $message .= '<p>If you have any questions, please contact your coach or a member of club staff.</p>';
+        $message .= '<p>Kind Regards,<br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
+        notifySend(null, $subject, $message, $user['Forename'] . ' ' . $user['Surname'], $user['EmailAddress']);
+      }
     } else {
       // Move on specified date
       $date = new DateTime('now', new DateTimeZone('Europe/London'));
@@ -234,15 +277,13 @@ try {
         null,
         0,
       ]);
-
-      echo json_encode([
-        'status' => 200,
-        'success' => true,
-      ]);
     }
 
+    echo json_encode([
+      'status' => 200,
+      'success' => true,
+    ]);
   }
-
 } catch (Exception $e) {
 
   $message = $e->getMessage();
@@ -256,5 +297,4 @@ try {
     'success' => false,
     'error' => $e->getMessage()
   ]);
-
 }

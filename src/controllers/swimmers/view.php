@@ -347,7 +347,7 @@ include BASE_PATH . 'views/header.php';
       <!-- Squad details -->
       <h2 id="squads">Squad<?php if (sizeof($squads) != 1) { ?>s<?php } ?></h2>
       <div id="squadDetails">
-      <!-- <p>
+        <!-- <p>
         <?= htmlspecialchars($member->getForename()) ?> is a member of <?= htmlspecialchars((new NumberFormatter("en", NumberFormatter::SPELLOUT))->format(sizeof($squads))) ?> squad<?php if (sizeof($squads) != 1) { ?>s<?php } ?>.
       </p>
 
@@ -362,13 +362,13 @@ include BASE_PATH . 'views/header.php';
 
       <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Coach') { ?>
         <p>
-          <button class="btn btn-success" id="new-move-button" data-member="<?= htmlspecialchars($id) ?>" data-squads-url="<?= htmlspecialchars(autoUrl("members/$id/squads.json")) ?>" data-move-url="<?= htmlspecialchars(autoUrl("members/move-squad")) ?>" data-csrf="<?=htmlspecialchars(\SCDS\CSRF::getValue())?>">
+          <button class="btn btn-success" id="new-move-button" data-member="<?= htmlspecialchars($id) ?>" data-squads-url="<?= htmlspecialchars(autoUrl("members/$id/squads.json")) ?>" data-move-url="<?= htmlspecialchars(autoUrl("members/move-squad")) ?>" data-csrf="<?= htmlspecialchars(\SCDS\CSRF::getValue()) ?>">
             Manage squads
           </button>
         </p>
       <?php } ?>
 
-      <div id="squad-moves-area"></div>
+      <div id="squad-moves-area" data-show-options="true" data-operations-url="<?= htmlspecialchars(autoUrl('members/move-operations')) ?>"></div>
 
       <hr>
 
@@ -393,7 +393,7 @@ include BASE_PATH . 'views/header.php';
             <ul class="list-unstyled">
               <?php foreach ($pbs->long_course as $eventCode => $event) {
                 $swim = $event->swims[0]; ?>
-                <li><strong><?= htmlspecialchars($event->event_name) ?></strong><br><?=htmlspecialchars($swim->time)?> - <?=htmlspecialchars($swim->meet->name)?> on <?=htmlspecialchars((new DateTime($swim->swim_date, new DateTimeZone('Europe/London')))->format("j F Y"))?></li>
+                <li><strong><?= htmlspecialchars($event->event_name) ?></strong><br><?= htmlspecialchars($swim->time) ?> - <?= htmlspecialchars($swim->meet->name) ?> on <?= htmlspecialchars((new DateTime($swim->swim_date, new DateTimeZone('Europe/London')))->format("j F Y")) ?></li>
               <?php } ?>
             </ul>
           </div>
@@ -402,12 +402,12 @@ include BASE_PATH . 'views/header.php';
             <ul class="list-unstyled">
               <?php foreach ($pbs->short_course as $eventCode => $event) {
                 $swim = $event->swims[0]; ?>
-                <li><strong><?= htmlspecialchars($event->event_name) ?></strong><br><?=htmlspecialchars($swim->time)?> - <?=htmlspecialchars($swim->meet->name)?> on <?=htmlspecialchars((new DateTime($swim->swim_date, new DateTimeZone('Europe/London')))->format("j F Y"))?></li>
+                <li><strong><?= htmlspecialchars($event->event_name) ?></strong><br><?= htmlspecialchars($swim->time) ?> - <?= htmlspecialchars($swim->meet->name) ?> on <?= htmlspecialchars((new DateTime($swim->swim_date, new DateTimeZone('Europe/London')))->format("j F Y")) ?></li>
               <?php } ?>
             </ul>
           </div>
         </div>
-        
+
       <?php } ?>
 
       <hr>
