@@ -2,7 +2,7 @@
 
 // Inserts the standard letterhead on PDF pages
 $addr = json_decode(app()->tenant->getKey('CLUB_ADDRESS'));
-$logoPath = env('CLUB_LOGO');
+$logoPath = getenv('CLUB_LOGO');
 
 ?>
 

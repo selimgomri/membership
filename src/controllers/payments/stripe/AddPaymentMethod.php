@@ -1,7 +1,7 @@
 <?php
 
 // See your keys here: https://dashboard.stripe.com/account/apikeys
-\Stripe\Stripe::setApiKey(env('STRIPE'));
+\Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
 $db = app()->db;
 $tenant = app()->tenant;
@@ -69,7 +69,7 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div id="stripe-data" data-stripe-publishable="<?=htmlspecialchars(env('STRIPE_PUBLISHABLE'))?>" data-stripe-font-css="<?=htmlspecialchars($fontCss)?>" data-stripe-account-id="<?= htmlspecialchars($tenant->getStripeAccount()) ?>">
+<div id="stripe-data" data-stripe-publishable="<?=htmlspecialchars(getenv('STRIPE_PUBLISHABLE'))?>" data-stripe-font-css="<?=htmlspecialchars($fontCss)?>" data-stripe-account-id="<?= htmlspecialchars($tenant->getStripeAccount()) ?>">
 </div>
 
 <div class="container">

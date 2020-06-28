@@ -16,7 +16,7 @@ try {
                               getenv('GOCARDLESS_CLIENT_SECRET'));
 
   $url = 'https://connect.gocardless.com/oauth/access_token';
-  if (bool(env('IS_DEV'))) {
+  if (bool(getenv('IS_DEV'))) {
     $url = 'https://connect-sandbox.gocardless.com/oauth/access_token';
   }
 

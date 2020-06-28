@@ -63,11 +63,11 @@ try {
         throw new Exception();
       } else if ($_FILES['file-upload']['size'][$i] > 0) {
         // Store uploaded files in filestore, if exists
-        if (env('FILE_STORE_PATH')) {
+        if (getenv('FILE_STORE_PATH')) {
           // Work out filename for upload
           $date = new DateTime('now', new DateTimeZone('Europe/London'));
           $urlPath = 'notify/attachments/' . $date->format("Y/m/d") . '/';
-          $path = env('FILE_STORE_PATH') . $urlPath;
+          $path = getenv('FILE_STORE_PATH') . $urlPath;
           $hash = preg_replace('@[^0-9a-z\.]+@i', '-', basename($_FILES['file-upload']['name'][$i]));
           if (mb_strlen($hash) == 0) {
             $hash = hash('sha256', $_FILES['file-upload']['name'][$i] . rand(0, 1000000));
@@ -112,7 +112,7 @@ try {
     throw new Exception();
   }
 
-  if (env('FILE_STORE_PATH')) {
+  if (getenv('FILE_STORE_PATH')) {
     for ($i = 0; $i < sizeof($attachments); $i++) {
       if (!is_writeable($attachments[$i]['store_name'])) {
         // Try making folders
@@ -309,7 +309,7 @@ try {
       $fromEmail .= '.' . urlencode(strtolower(str_replace(' ', '', CLUB_CODE)));
     }
 
-    $fromEmail .= '@' . env('EMAIL_DOMAIN');
+    $fromEmail .= '@' . getenv('EMAIL_DOMAIN');
 
     $recipientGroups["NamedSender"] = [
       "Email" => $fromEmail,
@@ -433,9 +433,9 @@ try {
       $mailObject->setUnsubscribable();
     }
 
-    $from = new \SendGrid\Mail\From("noreply@" . env('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_NAME'));
+    $from = new \SendGrid\Mail\From("noreply@" . getenv('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_NAME'));
     if ($jsonData->NamedSender->Email != null && $jsonData->NamedSender->Name) {
-      $from = new \SendGrid\Mail\From("noreply@" . env('EMAIL_DOMAIN'), $jsonData->NamedSender->Name);
+      $from = new \SendGrid\Mail\From("noreply@" . getenv('EMAIL_DOMAIN'), $jsonData->NamedSender->Name);
     }
     $tos = [];
     while ($user = $getUsersForEmail->fetch(PDO::FETCH_ASSOC)) {
@@ -500,9 +500,9 @@ try {
       $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME') . ' Enquiries');
     }
 
-    $email->addHeader("List-ID", env('CLUB NAME') . " Notify <" . mb_strtolower(app()->tenant->getKey('ASA_CLUB_CODE')) . ".notify@" . env('EMAIL_DOMAIN') . ">");
+    $email->addHeader("List-ID", getenv('CLUB NAME') . " Notify <" . mb_strtolower(app()->tenant->getKey('ASA_CLUB_CODE')) . ".notify@" . getenv('EMAIL_DOMAIN') . ">");
 
-    $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
+    $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
     $response = $sendgrid->send($email);
   }
   $db->commit();

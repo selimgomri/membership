@@ -22,7 +22,7 @@ try {
   ]);
 
   try {
-    \Stripe\Stripe::setApiKey(env('STRIPE'));
+    \Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
     $payment_method = \Stripe\PaymentMethod::retrieve(
       $card['MethodID'],

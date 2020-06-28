@@ -29,7 +29,7 @@ $vars = [
 
 try {
   foreach ($vars as $key => $value) {
-    if (env($key) == null) {
+    if (getenv($key) == null) {
       $v = app()->tenant->getKey($key);
       if ($v != null) {
         if (!defined($key)) {

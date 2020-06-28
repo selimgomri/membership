@@ -27,8 +27,8 @@ $vars = [
 $disabled = [];
 
 foreach ($vars as $key => $value) {
-  if (env($key)) {
-    $vars[$key] = env($key);
+  if (getenv($key)) {
+    $vars[$key] = getenv($key);
     $disabled[$key] = ' disabled ';
   } else {
     $vars[$key] = app()->tenant->getKey($key);

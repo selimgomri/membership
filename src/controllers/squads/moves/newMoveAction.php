@@ -130,8 +130,8 @@ if (!$errorState) {
 					$mailObject->showName($name['Forename'] . ' ' . $name['Surname']);
 
 					$email = new \SendGrid\Mail\Mail();
-					$email->setFrom("noreply@" . env('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_NAME'));
-					$email->setFrom("noreply@" . env('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_NAME'));
+					$email->setFrom("noreply@" . getenv('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_NAME'));
+					$email->setFrom("noreply@" . getenv('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_NAME'));
 					if (app()->tenant->getKey('CLUB_EMAIL')) {
 						$email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME') . ' Team');
 					}

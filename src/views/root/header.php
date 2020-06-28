@@ -6,7 +6,7 @@ include 'head.php';
 
 ?>
 
-<?php if (bool(env('IS_DEV'))) { ?>
+<?php if (bool(getenv('IS_DEV'))) { ?>
   <aside class="bg-warning py-3 mb-3">
     <div class="container">
       <h1>

@@ -76,7 +76,7 @@ if ($_POST['EmailAddress'] != $row['EmailAddress']) {
 	  <p>For help, send an email to <a
 	  href="mailto:' . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . '">' . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . '</a>/</p>
 	  ';
-	  notifySend($to, $subject, $sContent, $name, $_POST['EmailAddress'], ["Email" => "support@" . env('EMAIL_DOMAIN'), "Name" => app()->tenant->getKey('CLUB_NAME') . " Security"]);
+	  notifySend($to, $subject, $sContent, $name, $_POST['EmailAddress'], ["Email" => "support@" . getenv('EMAIL_DOMAIN'), "Name" => app()->tenant->getKey('CLUB_NAME') . " Security"]);
 		$_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdate'] = true;
 		$_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateNew'] = $_POST['EmailAddress'];
 	} else {

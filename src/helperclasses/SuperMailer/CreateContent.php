@@ -114,8 +114,8 @@ class CreateMail {
         style=\"width:300px;max-width:100%;\" srcset=\"" .
         autoUrl("public/img/notify/NotifyLogo@2x.png") . " 2x, " .
         autoUrl("public/img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
-        } else if (env('CLUB_LOGO') && isset(app()->tenant)) {
-          $head .= "<img src=\"" . autoUrl(env('CLUB_LOGO')) . "\" style=\"max-width:100%;max-height:150px;\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
+        } else if (getenv('CLUB_LOGO') && isset(app()->tenant)) {
+          $head .= "<img src=\"" . autoUrl(getenv('CLUB_LOGO')) . "\" style=\"max-width:100%;max-height:150px;\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
         } else if (isset(app()->tenant)) {
           $head .= htmlspecialchars(app()->tenant->getKey('CLUB_NAME'));
         } else {

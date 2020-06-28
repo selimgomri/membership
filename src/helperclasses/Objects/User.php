@@ -260,7 +260,7 @@ class User extends Person
       return null;
     }
 
-    \Stripe\Stripe::setApiKey(env('STRIPE'));
+    \Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
     $db = app()->db;
     $checkIfCustomer = $db->prepare("SELECT COUNT(*) FROM stripeCustomers WHERE User = ?");

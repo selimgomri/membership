@@ -7,7 +7,7 @@ $at = app()->tenant->getKey('GOCARDLESS_ACCESS_TOKEN');
 
 $client = null;
 try {
-  if (bool(env('IS_DEV'))) {
+  if (bool(getenv('IS_DEV'))) {
     $client = new \GoCardlessPro\Client([
       'access_token' 		=> $at,
       'environment' 		=> \GoCardlessPro\Environment::SANDBOX

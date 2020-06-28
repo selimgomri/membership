@@ -62,7 +62,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
   //echo $mailObject->getFormattedPlain();
 
   if (!isset($from['Email'])) {
-    $from['Email'] = "noreply@" . env('EMAIL_DOMAIN');
+    $from['Email'] = "noreply@" . getenv('EMAIL_DOMAIN');
   }
   if (!isset($from['Name']) && isset(app()->tenant)) {
     $from['Name'] = app()->tenant->getKey('CLUB_NAME');
@@ -84,7 +84,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
     $mailObject->setUnsubscribable();
   }
 
-  // if ($from['Email'] == "notify@" . env('EMAIL_DOMAIN') || $from['Email'] == "payments@" . env('EMAIL_DOMAIN')) {
+  // if ($from['Email'] == "notify@" . getenv('EMAIL_DOMAIN') || $from['Email'] == "payments@" . getenv('EMAIL_DOMAIN')) {
   //   $email->addHeader("List-Archive", autoUrl("myaccount/notify/history"));
   // }
 
@@ -107,7 +107,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
     $html = str_replace('-unsub_link-', $unsubLink, $html);
   }
 
-  if (env('SENDGRID_API_KEY') && $emailaddress != null && $name != null) {
+  if (getenv('SENDGRID_API_KEY') && $emailaddress != null && $name != null) {
     if (isset(app()->tenant)) {
       $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME'));
     }
@@ -122,7 +122,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
       );
     }
 
-    $sendgrid = new \CLSASC\SuperMailer\SuperMailer(env('SENDGRID_API_KEY'));
+    $sendgrid = new \CLSASC\SuperMailer\SuperMailer(getenv('SENDGRID_API_KEY'));
     try {
       $response = $sendgrid->send($email);
     } catch (Exception $e) {
@@ -407,7 +407,7 @@ function myMonthlyFeeTable($link = null, $userID)
 function autoUrl($relative, $includeClub = true)
 {
   // Returns an absolute URL
-  $rootUrl = env('ROOT_URL');
+  $rootUrl = getenv('ROOT_URL');
 
   if (isset(app()->tenant)) {
     $club = app()->tenant;

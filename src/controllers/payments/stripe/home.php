@@ -3,7 +3,7 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-\Stripe\Stripe::setApiKey(env('STRIPE'));
+\Stripe\Stripe::setApiKey(getenv('STRIPE'));
 //$paymentsMeths = \Stripe\PaymentMethod::all(["customer" => "cus_FF5F1cnWIA7UAI", "type" => "card"]);
 
 $expMonth = date("m");

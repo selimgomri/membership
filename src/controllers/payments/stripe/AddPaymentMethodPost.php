@@ -4,7 +4,7 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 // See your keys here: https://dashboard.stripe.com/account/apikeys
-\Stripe\Stripe::setApiKey(env('STRIPE'));
+\Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
 $setupIntent = null;
 if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['StripeSetupIntentId'])) {

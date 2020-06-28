@@ -6,7 +6,7 @@ require '../common.php';
 
 $db = null;
 try {
-  $db = new PDO("mysql:host=" . env('DB_HOST') . ";dbname=" . env('DB_NAME') . ";charset=utf8mb4", env('DB_USER'), env('DB_PASS'));
+  $db = new PDO("mysql:host=" . getenv('DB_HOST') . ";dbname=" . getenv('DB_NAME') . ";charset=utf8mb4", getenv('DB_USER'), getenv('DB_PASS'));
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (Exception $e) {
   echo "\r\nUnable to connect to SQL database.";

@@ -40,7 +40,7 @@ p.lead {
 
 <body class="<?=$bg?> account--body" <?php if (isset($pageHead['body'])) { foreach ($pageHead['body'] as $item) { ?> <?=$item?> <?php } } ?>>
 
-  <?php if (bool(env('IS_DEV'))) { ?>
+  <?php if (bool(getenv('IS_DEV'))) { ?>
   <div class="bg-warning bg-striped py-1">
     <div class="<?= $container_class ?>">
       <small><strong>DEVELOPMENT PLATFORM</strong> NOT FOR PRODUCTION USE</small>

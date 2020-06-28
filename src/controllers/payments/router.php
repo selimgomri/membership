@@ -276,7 +276,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas" || $
 }
 
 // Only allow payment cards if not null
-if (env('STRIPE') && app()->tenant->getStripeAccount()) {
+if (getenv('STRIPE') && app()->tenant->getStripeAccount()) {
 
 	/*
 	* Payment Cards
@@ -330,7 +330,7 @@ if (env('STRIPE') && app()->tenant->getStripeAccount()) {
 	});
 }
 
-if (bool(env('IS_DEV'))) {
+if (bool(getenv('IS_DEV'))) {
 	$this->group('/direct-debit', function() {
 		$this->get('/', function() {
 			include 'stripe/direct-debit/info.php';

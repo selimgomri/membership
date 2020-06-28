@@ -70,20 +70,20 @@ require 'common.php';
 
 $_SERVER['SERVER_PORT'] = 443;
 
-if (env('COOKIE_PREFIX')) {
-  define('COOKIE_PREFIX', env('COOKIE_PREFIX'));
+if (getenv('COOKIE_PREFIX')) {
+  define('COOKIE_PREFIX', getenv('COOKIE_PREFIX'));
 } else {
   define('COOKIE_PREFIX', 'SCDS_MEMBERSHIP_SYSTEMS_');
 }
 
-if (env('COOKIE_PATH')) {
-  define('COOKIE_PATH', env('COOKIE_PATH'));
+if (getenv('COOKIE_PATH')) {
+  define('COOKIE_PATH', getenv('COOKIE_PATH'));
 } else {
   define('COOKIE_PATH', '/');
 }
 
-if (env('CACHE_DIR')) {
-  define('CACHE_DIR', env('CACHE_DIR'));
+if (getenv('CACHE_DIR')) {
+  define('CACHE_DIR', getenv('CACHE_DIR'));
 } else {
   define('CACHE_DIR', BASE_PATH . 'cache/');
 }
@@ -192,7 +192,7 @@ function halt(int $statusCode, $throwException = true)
 
 $db = null;
 try {
-  $db = new PDO("mysql:host=" . env('DB_HOST') . ";dbname=" . env('DB_NAME') . ";charset=utf8mb4", env('DB_USER'), env('DB_PASS'));
+  $db = new PDO("mysql:host=" . getenv('DB_HOST') . ";dbname=" . getenv('DB_NAME') . ";charset=utf8mb4", getenv('DB_USER'), getenv('DB_PASS'));
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (Exception $e) {
   halt(500);
@@ -218,7 +218,7 @@ if (!isset($_SESSION['Browser'])) {
 // Make db available
 $db = null;
 try {
-  $db = new PDO("mysql:host=" . env('DB_HOST') . ";dbname=" . env('DB_NAME') . ";charset=utf8mb4", env('DB_USER'), env('DB_PASS'));
+  $db = new PDO("mysql:host=" . getenv('DB_HOST') . ";dbname=" . getenv('DB_NAME') . ";charset=utf8mb4", getenv('DB_USER'), getenv('DB_PASS'));
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (Exception $e) {
   halt(500);

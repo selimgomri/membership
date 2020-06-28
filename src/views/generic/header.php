@@ -26,7 +26,7 @@ if (isset($customBackground) && $customBackground) {
     <a href="#maincontent">Skip to main content</a>
   </div>
 
-  <?php if (bool(env('IS_DEV'))) { ?>
+  <?php if (bool(getenv('IS_DEV'))) { ?>
   <div class="bg-warning text-dark bg-striped py-1">
     <div class="<?= $container_class ?>">
       <small><strong>DEVELOPMENT PLATFORM</strong> NOT FOR PRODUCTION USE</small>
@@ -116,7 +116,7 @@ if (isset($customBackground) && $customBackground) {
       </div>
     <?php } ?>
 
-    <?php if (bool(env('IS_EVALUATION_COPY'))) { ?>
+    <?php if (bool(getenv('IS_EVALUATION_COPY'))) { ?>
       <div class="bg-warning text-dark py-2 d-print-none">
         <div class="<?= $container_class ?>">
           <p class="mb-0">

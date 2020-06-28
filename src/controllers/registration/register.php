@@ -250,7 +250,7 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMode'] = $mode;
 
         </div>
 
-        <div class="g-recaptcha mb-3" data-sitekey="<?=htmlspecialchars(env('GOOGLE_RECAPTCHA_PUBLIC'))?>" data-callback="enableBtn"></div>
+        <div class="g-recaptcha mb-3" data-sitekey="<?=htmlspecialchars(getenv('GOOGLE_RECAPTCHA_PUBLIC'))?>" data-callback="enableBtn"></div>
 
         <?=SCDS\CSRF::write()?>
         <input type="submit" id="submit" class="btn btn-primary btn-lg" value="Register">

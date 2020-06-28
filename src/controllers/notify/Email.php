@@ -46,10 +46,10 @@ for ($i = 0; $i < sizeof($senderNames); $i++) {
 }
 
 if (!app()->tenant->isCLS()) {
-  $fromEmail .= '.' . urlencode(mb_strtolower(str_replace(' ', '', env('CLUB_CODE'))));
+  $fromEmail .= '.' . urlencode(mb_strtolower(str_replace(' ', '', getenv('CLUB_CODE'))));
 }
 
-$fromEmail .= '@' . env('EMAIL_DOMAIN');
+$fromEmail .= '@' . getenv('EMAIL_DOMAIN');
 
 function fieldChecked($name) {
   if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData'][$name]) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData'][$name])) {

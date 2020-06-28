@@ -17,7 +17,7 @@ $captchaStatus = null;
 #
 # Verify captcha
 $post_data = http_build_query([
-  'secret' => env('GOOGLE_RECAPTCHA_SECRET'),
+  'secret' => getenv('GOOGLE_RECAPTCHA_SECRET'),
   'response' => $_POST['g-recaptcha-response'],
   'remoteip' => $_SERVER['REMOTE_ADDR']
 ]);
@@ -81,7 +81,7 @@ else {
 
     if (notifySend(null, $subject, $sContent, $row['Forename'] . " " .
     $row['Surname'], $row['EmailAddress'], ["Email" =>
-    "password-help@" . env('EMAIL_DOMAIN'), "Name" => app()->tenant->getKey('CLUB_NAME') . " Account Help"])) {
+    "password-help@" . getenv('EMAIL_DOMAIN'), "Name" => app()->tenant->getKey('CLUB_NAME') . " Account Help"])) {
     ?>
       <div class="container-fluid">
         <div class="row justify-content-center">

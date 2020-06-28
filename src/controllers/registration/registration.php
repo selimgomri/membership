@@ -17,7 +17,7 @@ $captchaStatus = null;
 #
 # Verify captcha
 $post_data = http_build_query([
-  'secret' => env('GOOGLE_RECAPTCHA_SECRET'),
+  'secret' => getenv('GOOGLE_RECAPTCHA_SECRET'),
   'response' => $_POST['g-recaptcha-response'],
   'remoteip' => $_SERVER['REMOTE_ADDR']
 ]);
@@ -192,7 +192,7 @@ if ($status) {
   </script>
   ';
 
-  notifySend($to, $subject, $sContent, $forename . " " . $surname, $email, ["Email" => "registration@" . env('EMAIL_DOMAIN'), "Name" => app()->tenant->getKey('CLUB_NAME')]);
+  notifySend($to, $subject, $sContent, $forename . " " . $surname, $email, ["Email" => "registration@" . getenv('EMAIL_DOMAIN'), "Name" => app()->tenant->getKey('CLUB_NAME')]);
 
   $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationGoVerify'] = '
   <div class="alert alert-success mb-0">

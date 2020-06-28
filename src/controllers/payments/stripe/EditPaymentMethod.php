@@ -16,7 +16,7 @@ $pagetitle = htmlspecialchars(getCardBrand($card['Brand'])) . ' &#0149;&#0149;&#
 
 include BASE_PATH . 'views/header.php';
 
-\Stripe\Stripe::setApiKey(env('STRIPE'));
+\Stripe\Stripe::setApiKey(getenv('STRIPE'));
 $pm = \Stripe\PaymentMethod::retrieve(
   $card['MethodID'],
   [

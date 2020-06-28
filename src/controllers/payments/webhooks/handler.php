@@ -5,7 +5,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 $db = app()->db;
 
 define("PAYMENT_EMAILS", [
-  "Email" => "noreply@" . env('EMAIL_DOMAIN'),
+  "Email" => "noreply@" . getenv('EMAIL_DOMAIN'),
   "Name" => app()->tenant->getKey('CLUB_SHORT_NAME') . " Payments"
 ]);
 

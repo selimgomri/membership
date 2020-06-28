@@ -95,9 +95,9 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 					'Refund',
 					$json
 				]);
-			} else if ($entry['Intent'] != null && env('STRIPE')) {
+			} else if ($entry['Intent'] != null && getenv('STRIPE')) {
 				// Refund to card used
-				\Stripe\Stripe::setApiKey(env('STRIPE'));
+				\Stripe\Stripe::setApiKey(getenv('STRIPE'));
 				$intent = \Stripe\PaymentIntent::retrieve($entry['Intent']);
 				$intent->charges->data[0]->refund(['amount' => $amount]);
 

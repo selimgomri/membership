@@ -13,7 +13,7 @@ if ($at = app()->tenant->getGoCardlessAccessToken()) {
 $client = new OAuth2\Client(getenv('GOCARDLESS_CLIENT_ID'), getenv('GOCARDLESS_CLIENT_SECRET'));
 
 $url = 'https://connect.gocardless.com/oauth/authorize';
-if (bool(env('IS_DEV'))) {
+if (bool(getenv('IS_DEV'))) {
   $url = 'https://connect-sandbox.gocardless.com/oauth/authorize';
 }
 

@@ -63,7 +63,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <link rel="manifest" href="<?= autoUrl("manifest.webmanifest") ?>">
   <?php
   // Check if user has opted out of tracking or has DNT headers set before serving Google Analytics
-  if (env('GOOGLE_ANALYTICS_ID') && (!$_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers'] && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1))) {
+  if (getenv('GOOGLE_ANALYTICS_ID') && (!$_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers'] && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1))) {
   ?>
     <meta name="X-SCDS-Membership-Tracking" content="yes">
     <script async>
@@ -78,7 +78,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
         a.src = g;
         m.parentNode.insertBefore(a, m)
       })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-      ga('create', '<?= htmlspecialchars(env('GOOGLE_ANALYTICS_ID')) ?>', 'auto');
+      ga('create', '<?= htmlspecialchars(getenv('GOOGLE_ANALYTICS_ID')) ?>', 'auto');
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
         ga('set', 'userId', '<?= $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'] ?>');
         ga('send', 'event', 'authentication', 'user-id available');

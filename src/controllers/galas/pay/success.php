@@ -54,7 +54,7 @@ if ($intentId == null) {
 
 $intent = null;
 try {
-  \Stripe\Stripe::setApiKey(env('STRIPE'));
+  \Stripe\Stripe::setApiKey(getenv('STRIPE'));
   $intent = \Stripe\PaymentIntent::retrieve(
     $intentId,
     [

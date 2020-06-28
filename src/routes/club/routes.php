@@ -52,7 +52,7 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_
     $expiry_time = ($time->format('U')) + 60 * 60 * 24 * 120;
 
     $secure = true;
-    if (app('request')->protocol == 'http' && bool(env('IS_DEV'))) {
+    if (app('request')->protocol == 'http' && bool(getenv('IS_DEV'))) {
       $secure = false;
     }
     $cookiePath = '/' . app()->tenant->getCodeId();
@@ -67,7 +67,7 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && $_SESSIO
   $_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers'] = filter_var(getUserOption($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], "DisableTrackers"), FILTER_VALIDATE_BOOLEAN);
 }
 
-if (bool(env('IS_DEV'))) {
+if (bool(getenv('IS_DEV'))) {
   $this->group('/dev', function () {
     include BASE_PATH . 'controllers/dev/router.php';
   });
@@ -136,7 +136,7 @@ $this->get('/public/*', function () {
   require BASE_PATH . 'controllers/PublicFileLoader.php';
 });
 
-if (env('MAINTENANCE')) {
+if (getenv('MAINTENANCE')) {
   $this->any(['/', '/*'], function () {
     halt(000);
   });
@@ -592,7 +592,7 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
       include BASE_PATH . 'controllers/settings/router.php';
     });
 
-    if (bool(env('IS_DEV')) || app()->tenant->isCLS()) {
+    if (bool(getenv('IS_DEV')) || app()->tenant->isCLS()) {
       $this->get('/about:php', function () {
         echo phpinfo();
       });
@@ -624,13 +624,13 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
 
         try {
           // Your Account SID and Auth Token from twilio.com/console
-          $account_sid = env('TWILIO_AC_SID');
-          $auth_token = env('TWILIO_AC_AUTH_TOKEN');
+          $account_sid = getenv('TWILIO_AC_SID');
+          $auth_token = getenv('TWILIO_AC_AUTH_TOKEN');
           // In production, these should be environment variables. E.g.:
           // $auth_token = $_ENV["TWILIO_ACCOUNT_SID"]
 
           // A Twilio number you own with SMS capabilities
-          $twilio_number = env('TWILIO_NUMBER');
+          $twilio_number = getenv('TWILIO_NUMBER');
 
           $client = new Twilio\Rest\Client($account_sid, $auth_token);
           $client->messages->create(

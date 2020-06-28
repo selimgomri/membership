@@ -46,7 +46,7 @@ if ($found) {
 	$to = "";
 	$name = getUserName($user);
 	$from = [
-		"Email" => "noreply@" . env('EMAIL_DOMAIN'),
+		"Email" => "noreply@" . getenv('EMAIL_DOMAIN'),
 		"Name" => app()->tenant->getKey('CLUB_NAME') . " Secretary"
 	];
 	notifySend($to, $subject, $message, $name, $oldEmail, $from);

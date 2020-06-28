@@ -1,6 +1,6 @@
 <?php
 
-\Stripe\Stripe::setApiKey(env('STRIPE'));
+\Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
 $db = app()->db;
 $tenant = app()->tenant;
@@ -30,7 +30,7 @@ include BASE_PATH . "views/header.php";
 
 ?>
 
-<div id="stripe-data" data-stripe-publishable="<?= htmlspecialchars(env('STRIPE_PUBLISHABLE')) ?>" data-stripe-account-id="<?= htmlspecialchars($tenant->getStripeAccount()) ?>" data-session-id="<?= htmlspecialchars($session->id) ?>">
+<div id="stripe-data" data-stripe-publishable="<?= htmlspecialchars(getenv('STRIPE_PUBLISHABLE')) ?>" data-stripe-account-id="<?= htmlspecialchars($tenant->getStripeAccount()) ?>" data-session-id="<?= htmlspecialchars($session->id) ?>">
 </div>
 
 <div class="container">

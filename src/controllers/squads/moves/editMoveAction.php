@@ -147,7 +147,7 @@ if (!$errorState) {
 					$mailObject->showName($name['Forename'] . ' ' . $name['Surname']);
 
 					$email = new \SendGrid\Mail\Mail();
-					$email->setFrom("noreply@" . env('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_NAME'));
+					$email->setFrom("noreply@" . getenv('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_NAME'));
 					$email->setSubject($subject);
 					$email->addTo($name['EmailAddress'], $name['Forename'] . ' ' . $name['Surname']);
 					$email->addContent("text/plain", $mailObject->getFormattedPlain());

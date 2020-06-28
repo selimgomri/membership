@@ -6,6 +6,6 @@ define('BASE_PATH', __DIR__ . DS);
 require BASE_PATH . 'vendor/autoload.php';
 require "helperclasses/ClassLoader.php";
 
-if (env('ENV_JSON_FILE')) {
+if (getenv('ENV_JSON_FILE')) {
   require 'common/env/loader.php';
 }

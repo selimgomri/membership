@@ -43,7 +43,7 @@ try {
   $userEmail = $userInfo['EmailAddress'];
   $myName = $curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'];
 
-  $from = "noreply@" . env('EMAIL_DOMAIN');
+  $from = "noreply@" . getenv('EMAIL_DOMAIN');
   $fromName = app()->tenant->getKey('CLUB_NAME');
   if ($_POST['from'] == "current-user") {
     $fromName = $myName;
@@ -165,7 +165,7 @@ try {
     $email->addBccs($bccEmails);
   }
 
-  $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
+  $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
   $response = $sendgrid->send($email);
 
   if ($response->statusCode() == "202") {

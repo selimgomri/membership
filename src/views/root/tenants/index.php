@@ -22,7 +22,7 @@ include BASE_PATH . "views/root/header.php";
           Featured
         </div> -->
         <div class="list-group list-group-flush">
-          <?php if (!bool(env('IS_DEV'))) { ?>
+          <?php if (!bool(getenv('IS_DEV'))) { ?>
           <a class="list-group-item list-group-item-action" href="<?=htmlspecialchars(autoUrl('clse'))?>">Chester-le-Street ASC</a>
           <a class="list-group-item list-group-item-action" href="<?=htmlspecialchars(autoUrl('dare'))?>">Darlington ASC</a>
           <a class="list-group-item list-group-item-action" href="<?=htmlspecialchars(autoUrl('newe'))?>">Newcastle Swim Team</a>
