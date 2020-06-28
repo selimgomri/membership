@@ -39,7 +39,7 @@ $vars = [
 
 try {
   foreach ($vars as $key => $value) {
-    if (isset($_POST[$key]) && $_POST[$key] != null && !env($key)) {
+    if (isset($_POST[$key]) && $_POST[$key] != null && !getenv($key)) {
       app()->tenant->setKey($key, $_POST[$key]);
     }
   }

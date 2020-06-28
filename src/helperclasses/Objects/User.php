@@ -256,7 +256,7 @@ class User extends Person
 
   public function getStripeCustomer()
   {
-    if (!app()->tenant->getStripeAccount() || !env('STRIPE')) {
+    if (!app()->tenant->getStripeAccount() || !getenv('STRIPE')) {
       return null;
     }
 

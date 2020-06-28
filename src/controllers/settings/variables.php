@@ -233,7 +233,7 @@ include BASE_PATH . 'views/header.php';
             <small id="EMAIL_DOMAIN_HELP" class="form-text text-muted">Your email domain must be listed in your Twilio SendGrid account.</small>
           </div>
 
-          <?php if (!env('SENDGRID_API_KEY')) { ?>
+          <?php if (!getenv('SENDGRID_API_KEY')) { ?>
             <div class="form-group">
               <label for="EMAIL_DOMAIN">Twilio SendGrid API Key</label>
               <input class="form-control mono" type="text" name="SENDGRID_API_KEY" id="SENDGRID_API_KEY" value="<?= htmlspecialchars($vars['SENDGRID_API_KEY']) ?>" <?= $disabled['SENDGRID_API_KEY'] ?>>
