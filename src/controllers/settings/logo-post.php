@@ -25,7 +25,7 @@ try {
   $image->backup();
 
   if (!is_dir($filePath)) {
-    mkdir($filePath);
+    mkdir($filePath, 0755, true);
   }
 
   $sizes = [
