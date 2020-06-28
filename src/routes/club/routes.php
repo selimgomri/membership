@@ -75,7 +75,7 @@ if (bool(getenv('IS_DEV'))) {
 
 $this->get('/auth/cookie/redirect', function () {
   //$target = urldecode($target);
-  setcookie('TENANT-' . app()->tenant->getId() . '-' . "SeenAccount", true, 0, "/", ('request')->hostname, true, false);
+  setcookie('TENANT-' . app()->tenant->getId() . '-' . "SeenAccount", true, 0, "/", app('request')->hostname, true, false);
   header("Location: https://www.chesterlestreetasc.co.uk");
 });
 
@@ -134,6 +134,13 @@ $this->get('/public/*', function () {
   // pre($filename);
 
   require BASE_PATH . 'controllers/PublicFileLoader.php';
+});
+
+$this->get('/uploads/*', function () {
+  $array = $this->getArrayCopy();
+  $filename = 'public/' . $array[sizeof($array) - 1];
+  // $filename = 'public/' . $this[0];
+  require BASE_PATH . 'controllers/FileLoader.php';
 });
 
 if (getenv('MAINTENANCE')) {
@@ -647,25 +654,7 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
       });
       */
 
-      $this->get('/test', function () {
-
-        $fees = \SCDS\Membership\ClubMembership::create($db, 12, false);
-        pre($fees->getFeeItems());
-        pre($fees->getFee());
-      });
     }
-
-    $this->get('/update', function () {
-      try {
-        $old_path = getcwd();
-        chdir(BASE_PATH);
-        $output = shell_exec('bash ' . BASE_PATH . 'update.sh');
-        chdir($old_path);
-        pre($output);
-      } catch (Exception $e) {
-        halt(500);
-      }
-    });
   }
 }
 

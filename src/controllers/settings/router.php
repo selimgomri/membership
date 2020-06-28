@@ -32,15 +32,15 @@ $this->group('/logo', function() {
   });
 });
 
-$this->group('/leavers-squad', function() {
-  $this->get('/', function() {
-    include 'leavers-squad.php';
-  });
+// $this->group('/leavers-squad', function() {
+//   $this->get('/', function() {
+//     include 'leavers-squad.php';
+//   });
 
-  $this->post('/', function() {
-    include 'leavers-squad-post.php';
-  });
-});
+//   $this->post('/', function() {
+//     include 'leavers-squad-post.php';
+//   });
+// });
 
 $this->group('/terms-and-conditions', function() {
   $this->get('/', function() {

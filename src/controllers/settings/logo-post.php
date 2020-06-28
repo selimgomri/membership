@@ -1,16 +1,78 @@
 <?php
 
-pre($_FILES['file-upload']);
+// pre($_POST);
+// pre($_FILES);
 
-// // import the Intervention Image Manager Class
-// use Intervention\Image\ImageManager;
+// pre(file_get_contents($_FILES['file-upload']['tmp_name']));
 
-// // create an image manager instance with favored driver
-// $manager = new ImageManager(['driver' => 'gd']);
+use Ramsey\Uuid\Uuid;
+use Intervention\Image\ImageManagerStatic as Image;
 
-// // to finally create image instances
-// $image = $manager->make($_FILES['file-upload']['tmp_name']);
+try {
+  $uuid = Uuid::uuid4();
 
-// $image->resize(225, 150);
+  $tenant = app()->tenant;
+  $url = 'logos/' . $uuid->toString() . '/';
+  $relative = 'public/' . $url;
+  $filePath = $tenant->getFilePath() . $relative;
 
-// echo $image->response('jpg', 70);
+  // Image::configure(array('driver' => 'imagick'));
+
+  // to finally create image instances
+  $image = Image::make($_FILES['file-upload']['tmp_name']);
+  // $image = Intervention\Image\Image::make($_FILES['file-upload']['tmp_name']);
+
+  $image->backup();
+
+  if (!is_dir($filePath)) {
+    mkdir($filePath);
+  }
+
+  $sizes = [
+    150,
+    255,
+    512,
+    1024,
+  ];
+
+  foreach ($sizes as $size) {
+    for ($i = 1; $i < 4; $i++) {
+      $image->reset();
+      $image->heighten($size * $i);
+      $srcset = '';
+      if ($i > 1) {
+        $srcset = '@' . $i . 'x';
+      }
+      $image->save($filePath . 'logo-' . $size . $srcset . '.png', 80, 'png');
+    }
+  }
+
+  $sizes = [
+    196,
+    192,
+    180,
+    167,
+    152,
+    128,
+    114,
+    72,
+    32,
+  ];
+
+  foreach ($sizes as $size) {
+    $image->reset();
+    $image->resize($size, $size, function ($constraint) {
+      $constraint->aspectRatio();
+      $constraint->upsize();
+    });
+    $image->save($filePath . 'icon-' . $size . 'x' . $size . '.png', 80, 'png');
+  }
+
+  $tenant->setKey('LOGO_DIR', 'uploads/' . $url);
+
+  $_SESSION['TENANT-' . app()->tenant->getId()]['LOGO-SAVED'] = true;
+} catch (Exception $e) {
+  $_SESSION['TENANT-' . app()->tenant->getId()]['LOGO-ERROR'] = true;
+}
+
+header("location: " . autoUrl('settings/logo'));

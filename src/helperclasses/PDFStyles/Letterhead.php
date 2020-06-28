@@ -2,14 +2,17 @@
 
 // Inserts the standard letterhead on PDF pages
 $addr = json_decode(app()->tenant->getKey('CLUB_ADDRESS'));
-$logoPath = getenv('CLUB_LOGO');
+$logoPath = null;
+if ($logos = app()->tenant->getKey('LOGO_DIR')) {
+  $logoPath = app()->tenant->getFilePath() . 'public/' . mb_substr($logos, 8) . 'logo-1024.png';
+}
 
 ?>
 
 <div class="row mb-3">
   <div class="split-50">
-    <?php if ($logoPath != null) { ?>
-    <img src="<?=BASE_PATH . $logoPath?>" class="logo">
+    <?php if ($logoPath) { ?>
+    <img src="<?=$logoPath?>" class="logo">
     <?php } else { ?>
       <h1 class="primary"><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></h1>
     <?php } ?>

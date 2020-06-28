@@ -114,8 +114,10 @@ class CreateMail {
         style=\"width:300px;max-width:100%;\" srcset=\"" .
         autoUrl("public/img/notify/NotifyLogo@2x.png") . " 2x, " .
         autoUrl("public/img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
-        } else if (getenv('CLUB_LOGO') && isset(app()->tenant)) {
-          $head .= "<img src=\"" . autoUrl(getenv('CLUB_LOGO')) . "\" style=\"max-width:100%;max-height:150px;\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
+        } else if (isset(app()->tenant) && $logos = app()->tenant->getKey('LOGO_DIR')) {
+          $head .= "<img src=\"" . autoUrl($logos . 'logo-150.png') . "\" srcset=\"" .
+          autoUrl($logos . 'logo-150@2x.png') . " 2x, " .
+          autoUrl($logos . 'logo-150@3x.png') . " 3x\" style=\"max-width:100%;max-height:150px;\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
         } else if (isset(app()->tenant)) {
           $head .= htmlspecialchars(app()->tenant->getKey('CLUB_NAME'));
         } else {
@@ -152,7 +154,7 @@ class CreateMail {
     $foot .= "</p>";
     if (isset(app()->tenant)) {
     $foot .= "
-    <p class=\"small\" align=\"center\">This email was sent automatically by the " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Membership System.</p>";
+    <p class=\"small\" align=\"center\">This email was sent via the " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Membership System.</p>";
     $foot .= "<p class=\"small\" align=\"center\">Have questions? Contact us at <a
     href=\"mailto:" . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "\">" . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "</a>.</p>
     <p class=\"small\" align=\"center\">To control your email options, go to <a href=\"" .
@@ -161,7 +163,7 @@ class CreateMail {
       $foot .= '<p class="small" align="center"><a href="-unsub_link-">Click to Unsubscribe</a></p>';
     }
     $foot .= "
-    <p class=\"small\" align=\"center\">&copy; " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " " . date("Y") . ", Design &copy; SCDS / Chris Heppell / Chester-le-Street ASC</p>";
+    <p class=\"small\" align=\"center\">&copy; " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " " . date("Y") . ", Design &copy; SCDS</p>";
     }
     $foot .= "
       </div>
@@ -196,9 +198,6 @@ class CreateMail {
         }
       }
       $foot .= "\r\nThis email was sent automatically by the " . app()->tenant->getKey('CLUB_NAME') . " Membership System.\r\n\r\n";
-      if (!(app()->tenant->isCLS())) {
-        $foot .= "The Membership System was built by Chester-le-Street ASC.\r\n\r\n";
-      }
       $foot .= "Have questions? Contact us at " . app()->tenant->getKey('CLUB_EMAIL') . ".\r\n\r\n";
       $foot .= "To control your email options go to My Account at " . autoUrl("myaccount") . ".\r\n\r\n";
       if ($this->allowUnsubscribe) {

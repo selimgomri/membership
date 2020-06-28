@@ -375,4 +375,19 @@ class Tenant
   public function isCLS() {
     return $this->code == 'CLSE';
   }
+
+  /**
+   * Get the path to the tenant's file store
+   * String incloudes a trailing slash
+   * 
+   * @return string path
+   * @throws Exception if not file store available
+   */
+  public function getFilePath() {
+    if (!getenv('FILE_STORE_PATH')) {
+      throw new Exception('No file store available');
+    }
+
+    return getenv('FILE_STORE_PATH') . $this->getId() . '/';
+  }
 }

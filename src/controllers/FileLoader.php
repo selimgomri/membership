@@ -2,12 +2,14 @@
 
 $tenant = app()->tenant;
 
-if (!env('FILE_STORE_PATH')) {
+$file = '';
+try {
+  $file = $tenant->getFilePath();
+} catch (Exception $e) {
   halt(404);
 }
-
-$file = getenv('FILE_STORE_PATH') . $tenant->getId() . '/';
 $file = $file . $filename;
+
 if (file_exists($file)) {
   header('Content-Description: File Transfer');
   header('Content-Type: ' . mime_content_type($file));

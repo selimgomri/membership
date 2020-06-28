@@ -20,7 +20,7 @@
     },
     {
       "id": "settings-logo",
-      "name": "Club logos",
+      "name": "Club logo",
       "title": "Upload your club's logo",
       "link": "settings/logo",
       "target": "_self",
@@ -47,14 +47,6 @@
       "name": "Codes of conduct",
       "title": "Settings for club codes of conduct",
       "link": "settings/codes-of-conduct",
-      "target": "_self",
-      "external": false
-    },
-    {
-      "id": "settings-leavers-squad",
-      "name": "Leaver's squad",
-      "title": "Set what the system does with club leavers",
-      "link": "settings/leavers-squad",
       "target": "_self",
       "external": false
     },
