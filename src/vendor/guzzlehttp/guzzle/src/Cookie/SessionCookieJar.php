@@ -49,7 +49,7 @@ class SessionCookieJar extends CookieJar
             }
         }
 
-        $_SESSION['TENANT-' . app()->tenant->getId()][$this->sessionKey] = json_encode($json);
+        $_SESSION[$this->sessionKey] = json_encode($json);
     }
 
     /**
@@ -57,10 +57,10 @@ class SessionCookieJar extends CookieJar
      */
     protected function load()
     {
-        if (!isset($_SESSION['TENANT-' . app()->tenant->getId()][$this->sessionKey])) {
+        if (!isset($_SESSION[$this->sessionKey])) {
             return;
         }
-        $data = json_decode($_SESSION['TENANT-' . app()->tenant->getId()][$this->sessionKey], true);
+        $data = json_decode($_SESSION[$this->sessionKey], true);
         if (is_array($data)) {
             foreach ($data as $cookie) {
                 $this->setCookie(new SetCookie($cookie));

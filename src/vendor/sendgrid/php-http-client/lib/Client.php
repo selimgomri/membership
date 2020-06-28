@@ -2,13 +2,6 @@
 
 /**
  * HTTP Client library
- *
- * @author    Matt Bernier <dx@sendgrid.com>
- * @author    Elmer Thomas <dx@sendgrid.com>
- * @copyright 2018 SendGrid
- * @license   https://opensource.org/licenses/MIT The MIT License
- * @version   GIT: <git_id>
- * @link      http://packagist.org/packages/sendgrid/php-http-client
  */
 
 namespace SendGrid;
@@ -20,14 +13,14 @@ use SendGrid\Exception\InvalidRequest;
  * Class Client
  * @package SendGrid
  * @version 3.9.5
- * 
+ *
  * Quickly and easily access any REST or REST-like API.
  *
- * @method Response get($body = null, $query = null, $headers = null)
- * @method Response post($body = null, $query = null, $headers = null)
- * @method Response patch($body = null, $query = null, $headers = null)
- * @method Response put($body = null, $query = null, $headers = null)
- * @method Response delete($body = null, $query = null, $headers = null)
+ * @method Response get($body = null, $query = null, $headers = null, $retryOnLimit = null)
+ * @method Response post($body = null, $query = null, $headers = null, $retryOnLimit = null)
+ * @method Response patch($body = null, $query = null, $headers = null, $retryOnLimit = null)
+ * @method Response put($body = null, $query = null, $headers = null, $retryOnLimit = null)
+ * @method Response delete($body = null, $query = null, $headers = null, $retryOnLimit = null)
  *
  * @method Client version($value)
  * @method Client|Response send()
@@ -56,6 +49,7 @@ use SendGrid\Exception\InvalidRequest;
  * ASM
  * @method Client asm()
  * @method Client groups()
+ * @method Client suppressions()
  *
  * Browsers
  * @method Client browsers()
@@ -129,14 +123,14 @@ use SendGrid\Exception\InvalidRequest;
  * @method Client subusers()
  * @method Client reputations()
  *
- * Supressions
- * @method Client suppressions()
+ * Suppressions
+ * @method Client suppression()
  * @method Client global()
  * @method Client blocks()
  * @method Client bounces()
  * @method Client invalid_emails()
  * @method Client spam_reports()
- * @method Client unsubcribes()
+ * @method Client unsubscribes()
  *
  * Templates
  * @method Client templates()
@@ -438,6 +432,7 @@ class Client
      * @param array  $headers         original headers
      *
      * @return Response response object
+     * @throws InvalidRequest
      */
     private function retryRequest(array $responseHeaders, $method, $url, $body, $headers)
     {
@@ -568,6 +563,7 @@ class Client
      * @param array  $args parameters passed with the method call
      *
      * @return Client|Response|Response[]|null object
+     * @throws InvalidRequest
      */
     public function __call($name, $args)
     {
