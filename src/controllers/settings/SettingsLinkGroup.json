@@ -19,6 +19,14 @@
       "external": false
     },
     {
+      "id": "settings-logo",
+      "name": "Club logos",
+      "title": "Upload your club's logo",
+      "link": "settings/logo",
+      "target": "_self",
+      "external": false
+    },
+    {
       "id": "settings-fees",
       "name": "Membership fees",
       "title": "Club and Swim England Membership Fees",

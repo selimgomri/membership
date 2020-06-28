@@ -22,6 +22,16 @@ $this->group('/variables', function() {
     });
 });
 
+$this->group('/logo', function() {
+  $this->get('/', function() {
+    include 'logo.php';
+  });
+
+  $this->post('/', function() {
+    include 'logo-post.php';
+  });
+});
+
 $this->group('/leavers-squad', function() {
   $this->get('/', function() {
     include 'leavers-squad.php';
