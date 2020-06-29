@@ -2,6 +2,8 @@
 
 use GeoIp2\Database\Reader;
 
+$headerSent = false;
+
 $db = app()->db;
 $tenant = app()->tenant;
 
@@ -86,7 +88,14 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
           $_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe'] = 1;
         }
         $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR'] = true;
-        header("Location: " . autoUrl("2fa?target=" . urlencode($_POST['target'])));
+        // reportError([
+        //   '1',
+        //   autoUrl("2fa?target=" . urlencode($_POST['target'])),
+        // ]);
+        if (!$headerSent) {
+          header("Location: " . autoUrl("2fa?target=" . urlencode($_POST['target'])));
+          $headerSent = true;
+        }
       } else {
         try {
           $login = new \CLSASC\Membership\Login($db);
@@ -129,7 +138,27 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
 $_SESSION['TENANT-' . app()->tenant->getId()]['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']];
 unset($_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']);
 if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] && $_POST['target'] == "" || isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorAccountLocked']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorAccountLocked'] && $_POST['target'] == "") {
-  header("Location: " . autoUrl("login"));
+  // reportError([
+  //   '2',
+  //   autoUrl("login")
+  // ]);
+  if (!$headerSent) {
+    header("Location: " . autoUrl("login"));
+    $headerSent = true;
+  }
 } else {
-  header("Location: " . autoUrl(ltrim($_POST['target'], '/'), false));
+  // reportError([
+  //   '3',
+  //   autoUrl(ltrim($_POST['target'], '/'), false),
+  //   ltrim($_POST['target'], '/')
+  // ]);
+  if (!$headerSent) {
+    header("Location: " . autoUrl(ltrim($_POST['target'], '/'), false));
+    $headerSent = true;
+  }
+}
+
+if (!$headerSent) {
+  header("Location: " . autoUrl(''));
+  $headerSent = true;
 }

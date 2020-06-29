@@ -68,4 +68,4 @@ $target = ltrim($_POST['target'], '/');
 if ($target == null || $target == "") {
   $target = "";
 }
-header("Location: " . autoUrl($target));
+header("Location: " . autoUrl($target, false));
