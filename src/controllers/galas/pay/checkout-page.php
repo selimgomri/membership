@@ -214,7 +214,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
           ?>
             <li class="list-group-item">
               <div class="row">
-                <div class="col-4 col-sm-5 col-md-4 col-lg-6">
+                <div class="col-8 col-sm-5 col-md-4 col-lg-6">
                   <h3><?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?> <br><small><?= htmlspecialchars($entry['GalaName']) ?></small></h3>
                   <p class="mb-0">
                     <a data-toggle="collapse"  href="#swims-<?= $entry['EntryID'] ?>" role="button" aria-expanded="false" aria-controls="swims-<?= $entry['EntryID'] ?>">
