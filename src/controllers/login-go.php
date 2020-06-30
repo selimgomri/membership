@@ -153,7 +153,11 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) && $_SESS
   //   ltrim($_POST['target'], '/')
   // ]);
   if (!$headerSent) {
-    header("Location: " . autoUrl(ltrim($_POST['target'], '/'), false));
+    if (isset($_POST['target']) && $_POST['target']) {
+      header("Location: " . autoUrl(ltrim($_POST['target'], '/'), false));
+    } else {
+      header("Location: " . autoUrl(''));
+    }
     $headerSent = true;
   }
 }
