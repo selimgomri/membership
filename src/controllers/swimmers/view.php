@@ -372,6 +372,7 @@ include BASE_PATH . 'views/header.php';
           </button>
         </p>
       <?php } ?>
+      <div id="squads-data" data-squads-url="<?= htmlspecialchars(autoUrl("members/$id/squads.json")) ?>"></div>
 
       <div id="squad-moves-area" data-show-options="<?php if ($manageSquads) { ?>true<?php } else { ?>false<?php } ?>" data-operations-url="<?= htmlspecialchars(autoUrl('members/move-operations')) ?>"></div>
 

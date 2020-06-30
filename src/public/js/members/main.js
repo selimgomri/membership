@@ -38,14 +38,12 @@ async function movesHandler(event) {
 async function displaySquads() {
   try {
     let squads = await getSquads();
-    console.log(squads);
     let memberLeadDesc = '';
     let squadDiv = document.createElement('DIV');
     let squadList = document.createElement('DIV');
     squadList.classList.add('list-group', 'mb-3');
     let numSquads = 0;
     squads.current.forEach(squad => {
-      console.log(squad);
       numSquads += 1;
       let listItem = document.createElement('A');
       listItem.classList.add('list-group-item', 'list-group-item-action');
@@ -925,7 +923,7 @@ function getSquads() {
       else
         reject(JSON.parse(event.target.responseText));
     });
-    oReq.open('POST', document.getElementById('new-move-button').dataset.squadsUrl);
+    oReq.open('POST', document.getElementById('squads-data').dataset.squadsUrl);
     oReq.send();
   });
 }
@@ -960,7 +958,6 @@ function showGetSquadsFailure(event) {
 }
 
 let moveButton = document.getElementById('new-move-button');
-console.log(moveButton);
 if (moveButton) {
   moveButton.addEventListener('click', handleNewMove);
 }

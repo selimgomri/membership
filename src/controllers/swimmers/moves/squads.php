@@ -2,16 +2,11 @@
 
 use function GuzzleHttp\json_encode;
 
-if (!app()->user->hasPermission('Admin') && !app()->user->hasPermission('Coach')) {
-  halt(404);
-}
-
-$db = app()->db;
-$tenant = app()->tenant;
-
-header("content-type: application/json");
-
 try {
+  $db = app()->db;
+  $tenant = app()->tenant;
+
+  header("content-type: application/json");
 
   // Get member
   $member = $db->prepare("SELECT MemberID id FROM members WHERE MemberID = ? AND Tenant = ?");
@@ -34,6 +29,15 @@ try {
 
   // Need to get current squads, squads with planned moves and squads we can move to
   $member = new Member($id);
+
+  if (!app()->user->hasPermission('Admin') && !app()->user->hasPermission('Coach') && (isset($member) && $member->getUser()->getId() != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
+    http_response_code(404);
+    echo json_encode([
+      'status' => 404,
+      'message' => 'Not Found'
+    ]);
+    return;
+  }
 
   // Current
   $currentSquads = $member->getSquads();
