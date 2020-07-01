@@ -9,9 +9,14 @@ ignore_user_abort(true);
 set_time_limit(0);
 
 $db = app()->db;
+$tenant = app()->tenant;
+
 $getExtraEmails = $db->prepare("SELECT Name, EmailAddress FROM notifyAdditionalEmails WHERE UserID = ?");
 
-$pending = $db->query("SELECT `EmailID`, `notify`.`UserID`, `EmailType`, `notify`.`ForceSend`, `Forename`, `Surname`, `EmailAddress`, notify.Subject AS PlainSub, notify.Message AS PlainMess FROM `notify` INNER JOIN `users` ON notify.UserID = users.UserID WHERE notify.MessageID IS NULL AND `Status` = 'Queued' LIMIT 8;");
+$pending = $db->prepare("SELECT `EmailID`, `notify`.`UserID`, `EmailType`, `notify`.`ForceSend`, `Forename`, `Surname`, `EmailAddress`, notify.Subject AS PlainSub, notify.Message AS PlainMess FROM `notify` INNER JOIN `users` ON notify.UserID = users.UserID WHERE notify.MessageID IS NULL AND `Status` = 'Queued' AND users.Tenant = ? LIMIT 8;");
+$pending->execute([
+	$tenant->getId()
+]);
 
 // Completed It PDO Object
 $completed = $db->prepare("UPDATE `notify` SET `Status` = ? WHERE `EmailID` = ?");

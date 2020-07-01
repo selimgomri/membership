@@ -24,14 +24,12 @@ function handleVisibilityChange() {
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
-        console.log(this.responseText);
         let status = JSON.parse(this.responseText);
         if (!status.signed_in) {
           window.location.reload(true);
         }
       }
     }
-    console.log(appInfo.dataset.checkLoginUrl);
     xhttp.open('POST', appInfo.dataset.checkLoginUrl, true);
     xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhttp.send(JSON.stringify({}));

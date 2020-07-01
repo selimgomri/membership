@@ -7,7 +7,7 @@ try {
 
   $db = app()->db;
   $tenant = app()->tenant;
-  require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+  require BASE_PATH . 'controllers/payments/GoCardlessSetupClient.php';
 
 
   $sendEmail = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (:user, 'Queued', :subject, :message, 0, 'Payments')");
@@ -18,7 +18,7 @@ try {
     $hasMandateQuery = $db->prepare($sql);
   } catch (Exception $e) {
     reportError($e);
-    halt(500);
+    throw new Exception();
   }
 
   $date = date("Y-m") . "-01";
@@ -28,15 +28,18 @@ try {
   $updatePaymentsPending = $db->prepare("UPDATE `paymentsPending` SET `Status` = ?, `PMkey` = ? WHERE Payment = ?");
 
   try {
-    $getPayments = $db->prepare("SELECT payments.UserID, Amount, Currency, `Name`, PaymentID FROM payments LEFT JOIN paymentSchedule ON payments.UserID = paymentSchedule.UserID WHERE (Status = 'pending_api_request' AND `Day` <= ? AND Type = 'Payment') OR (Status = 'pending_api_request' AND `Day` IS NULL AND `Type` = 'Payment') LIMIT 4");
-    $getPayments->execute([$day]);
+    $getPayments = $db->prepare("SELECT payments.UserID, Amount, Currency, `Name`, PaymentID FROM ((payments INNER JOIN users ON payments.UserID = users.UserID) LEFT JOIN paymentSchedule ON payments.UserID = paymentSchedule.UserID) WHERE users.Tenant = ? AND (Status = 'pending_api_request' AND `Day` <= ? AND Type = 'Payment') OR (Status = 'pending_api_request' AND `Day` IS NULL AND `Type` = 'Payment') LIMIT 4");
+    $getPayments->execute([
+      $tenant->getId(),
+      $day
+    ]);
     while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)) {
       $userid = $row['UserID'];
       try {
         $hasMandateQuery->execute([$userid]);
       } catch (Exception $e) {
-        reportError($e);
-        halt(500);
+        // reportError($e);
+        throw new Exception();
       }
       $mandateInfo = $hasMandateQuery->fetch(PDO::FETCH_ASSOC);
 
@@ -84,7 +87,7 @@ try {
             $paymentID
           ]);
         } catch (\GoCardlessPro\Core\Exception\ApiException $e) {
-          if ($e->getType() == 'invalid_state') {
+          if ($e->getType() == 'invalid_state' || $e->getType() == 'invalid_api_usage') {
             $paymentID = $row['PaymentID'];
             $id = "CASH-DDFAIL" . $paymentID;
             $email_statment_id = $id;
@@ -102,12 +105,12 @@ try {
               $paymentID
             ]);
 
-            reportError($e);
+            // reportError($e);
           } else {
-            halt(500);
+            throw $e;
           }
         } catch (Exception $e) {
-          halt(500);
+          throw $e;
         }
       } else {
         try {
@@ -128,8 +131,8 @@ try {
             $paymentID
           ]);
         } catch (Exception $e) {
-          reportError($e);
-          halt(500);
+          // reportError($e);
+          throw new Exception();
         }
       }
 
@@ -165,19 +168,11 @@ try {
         $sendEmail->execute($email_info);
       }
     }
-
-    header('content-type: application/json');
-    echo (json_encode([
-      'status' => 200,
-    ]));
   } catch (Exception $e) {
     // Report error by halting
-    reportError($e);
+    // reportError($e);
 
-    header('content-type: application/json');
-    echo (json_encode([
-      'status' => 500,
-    ]));
+    throw $e;
   }
 
   header("content-type: application/json");
@@ -190,5 +185,9 @@ try {
   header('content-type: application/json');
   echo (json_encode([
     'status' => 500,
+    'error' => [
+      $e->getLine(),
+      $e->getMessage(),
+    ],
   ]));
 }

@@ -6,9 +6,16 @@ set_time_limit(0);
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$query = $db->prepare("SELECT PMKey, UserID FROM paymentRetries WHERE Day <= ? AND Tried = ? LIMIT 4");
-$query->execute([date("Y-m-d"), false]);
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
+
+$query = $db->prepare("SELECT PMKey, UserID FROM paymentRetries INNER JOIN users ON users.UserID = paymentRetries.UserID WHERE `Tenant` = ? AND `Day` <= ? AND `Tried` = ? LIMIT 4");
+$query->execute([
+  $tenant->getId(),
+  $date->format("Y-m-d"),
+  false
+]);
 
 $mark_tried = $db->prepare("UPDATE paymentRetries SET Tried = ? WHERE PMKey = ?");
 $email = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (?, ?, ?, ?, ?, ?)");
