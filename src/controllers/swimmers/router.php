@@ -15,19 +15,19 @@ if ($access == "Parent") {
 	});
 
 
-	$leavers = app()->tenant->getKey('LeaversSquad');
+	// $leavers = app()->tenant->getKey('LeaversSquad');
 
-	if ($leavers != null) {
-		// Swimmer is leaving
-		$this->get('/{id}:int/leaveclub', function ($id) {
-			require('Leave.php');
-		});
+	// if ($leavers != null) {
+	// 	// Swimmer is leaving
+	// 	$this->get('/{id}:int/leaveclub', function ($id) {
+	// 		require('Leave.php');
+	// 	});
 
-		// Swimmer is leaving
-		$this->get('/{id}:int/leaveclub/{key}', function ($id, $key) {
-			require('LeaveDo.php');
-		});
-	}
+	// 	// Swimmer is leaving
+	// 	$this->get('/{id}:int/leaveclub/{key}', function ($id, $key) {
+	// 		require('LeaveDo.php');
+	// 	});
+	// }
 
 	// Edit a Swimmer
 	$this->get('/{id}:int/edit', function ($id) {

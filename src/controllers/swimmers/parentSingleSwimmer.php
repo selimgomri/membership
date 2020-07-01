@@ -6,14 +6,15 @@ $countries = getISOAlpha2CountriesWithHomeNations();
 $db = app()->db;
 $tenant = app()->tenant;
 
+$update = false;
+
 $getSwimmer = $db->prepare("SELECT members.MForename, members.MForename, members.MMiddleNames,
-members.MSurname, users.EmailAddress, members.ASANumber, squads.SquadName,
-squads.SquadFee, squads.SquadCoach, squads.SquadTimetable, squads.SquadCoC,
+members.MSurname, users.EmailAddress, members.ASANumber,
 members.DateOfBirth, members.Gender, members.OtherNotes, members.AccessKey,
 memberPhotography.Website, memberPhotography.Social,
 memberPhotography.Noticeboard, memberPhotography.FilmTraining,
-memberPhotography.ProPhoto, members.Country FROM (((members INNER JOIN users ON members.UserID =
-users.UserID) INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN
+memberPhotography.ProPhoto, members.Country FROM ((members INNER JOIN users ON members.UserID =
+users.UserID) LEFT JOIN
 `memberPhotography` ON members.MemberID = memberPhotography.MemberID) WHERE members.Tenant = ? AND members.MemberID = ? AND members.UserID = ?");
 $getSwimmer->execute([
   $tenant->getId(),
@@ -194,7 +195,7 @@ $title = null;
             $photo[4] = " checked ";
           } ?>
           <p>
-      			I, <?php echo getUserName($userID); ?> agree to photography of
+      			I, <?php echo getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']); ?> agree to photography of
       			<?=htmlspecialchars($row['MForename'] . " " .
       			$row['MSurname'])?> in the following circumstances. Tick boxes only
       			if you wish to grant us photography permission.

@@ -33,7 +33,7 @@ if ($row != null) {
 
   $numberRFC3966 = null;
   $numberNational = null;
-  if ($number) {
+  if ($number != false) {
     $numberRFC3966 = $number->format(PhoneNumberFormat::RFC3966);
     $numberNational = $number->format(PhoneNumberFormat::NATIONAL);
   }

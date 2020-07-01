@@ -155,6 +155,17 @@ include BASE_PATH . "views/header.php";
     <?php } ?>
   </div>
 
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserCreationSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UserCreationSuccess']) { ?>
+    <div class="alert alert-success">
+      <p class="mb-0">
+        <strong>We've successfully created this user.</strong>
+      </p>
+      <p class="mb-0">
+        This user will be log in using the password you have created or by following the self-service password reset process.
+      </p>
+    </div>
+  <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['UserCreationSuccess']); } ?>
+
   <div class="row justify-content-between">
     <div class="col-md-4 col-lg-3 col-xl-3">
       <div class="position-sticky top-3 card mb-3">
