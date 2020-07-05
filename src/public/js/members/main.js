@@ -127,7 +127,10 @@ async function displaySquads() {
 
           moveDesc.appendChild(oldSquad);
 
-          moveDesc.appendChild(document.createTextNode(' to '));
+          srText = document.createElement('SPAN');
+          srText.classList.add('sr-only');
+          srText.textContent = ' to ';
+          moveDesc.appendChild(srText);
 
           let arrow = document.createElement('I');
           arrow.classList.add('fa', 'fa-long-arrow-right');
@@ -208,7 +211,7 @@ async function displaySquads() {
 
   } catch (err) {
     console.error(err);
-    document.getElementById('squadDetails').innerHTML = '<div class="alert alert-warning">We couldn\'t load the MEMBER NAME\'s squads</div>';
+    document.getElementById('squadDetails').innerHTML = '<div class="alert alert-warning">We couldn\'t load the member\'s squads</div>';
   }
 }
 
@@ -476,7 +479,8 @@ function squadToSquad(event) {
           if (event.target.status == 200) {
             let result = JSON.parse(event.target.responseText);
             if (result.success) {
-              body.innerHTML = '<div class="alert alert-success">Operation successful</div>';
+              body.innerHTML = '<div class="alert alert-success"><p class="mb-0"><strong>Success</strong></p><p class="mb-0" id="move-result-success-message"></p></div>';
+              document.getElementById('move-result-success-message').textContent = result.message;
               displaySquads();
             } else {
               body.innerHTML = '<div class="alert alert-warning"><p class="mb-0"><strong>A problem occurred</strong></p><p class="mb-0" id="errorMessage"></p></div>';
@@ -497,7 +501,7 @@ function squadToSquad(event) {
         });
         req.open('POST', button.dataset.moveUrl);
         req.send(fd);
-        body.innerHTML = '<div class="alert alert-success">SENT</div>';
+        body.innerHTML = '<div class="cell text-center"><strong>Loading</strong></div>';
       });
 
       document.querySelectorAll('input[name="move-when"]').forEach((radio) => {
@@ -699,7 +703,8 @@ function joinSquad(event) {
           if (event.target.status == 200) {
             let result = JSON.parse(event.target.responseText);
             if (result.success) {
-              body.innerHTML = '<div class="alert alert-success">Operation successful</div>';
+              body.innerHTML = '<div class="alert alert-success"><p class="mb-0"><strong>Success</strong></p><p class="mb-0" id="move-result-success-message"></p></div>';
+              document.getElementById('move-result-success-message').textContent = result.message;
               displaySquads();
             } else {
               body.innerHTML = '<div class="alert alert-warning"><p class="mb-0"><strong>A problem occurred</strong></p><p class="mb-0" id="errorMessage"></p></div>';
@@ -720,7 +725,7 @@ function joinSquad(event) {
         });
         req.open('POST', button.dataset.moveUrl);
         req.send(fd);
-        body.innerHTML = '<div class="alert alert-success">SENT</div>';
+        body.innerHTML = '<div class="cell text-center"><strong>Loading</strong></div>';
       });
 
       document.querySelectorAll('input[name="move-when"]').forEach((radio) => {
@@ -877,7 +882,8 @@ function leaveSquad(event) {
           if (event.target.status == 200) {
             let result = JSON.parse(event.target.responseText);
             if (result.success) {
-              body.innerHTML = '<div class="alert alert-success">Member removed from squad</div>';
+              body.innerHTML = '<div class="alert alert-success"><p class="mb-0"><strong>Success</strong></p><p class="mb-0" id="move-result-success-message"></p></div>';
+              document.getElementById('move-result-success-message').textContent = result.message;
               displaySquads();
             } else {
               body.innerHTML = '<div class="alert alert-warning"><p class="mb-0"><strong>A problem occurred</strong></p><p class="mb-0" id="errorMessage"></p></div>';

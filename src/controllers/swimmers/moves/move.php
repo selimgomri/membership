@@ -75,6 +75,7 @@ try {
     }
 
     // Proceed
+    $statusMessage = null;
     if (bool($_POST['move-when'])) {
       // Move on specified date
       $date = new DateTime('now', new DateTimeZone('Europe/London'));
@@ -111,6 +112,7 @@ try {
         $message .= '<p>Kind Regards,<br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
         notifySend(null, $subject, $message, $user['Forename'] . ' ' . $user['Surname'], $user['EmailAddress']);
       }
+      $statusMessage = 'We\'ve scheduled the squad move for ' . $member->getForename() . '.';
     } else {
       // Move right now
       $move = $db->prepare("UPDATE squadMembers SET Squad = ?, Paying = ? WHERE Member = ? AND Squad = ?");
@@ -120,11 +122,13 @@ try {
         $member->getId(),
         $_POST['leave'],
       ]);
+      $statusMessage = 'We\'ve moved ' . $member->getForename() . ' to their new squad.';
     }
 
     echo json_encode([
       'status' => 200,
       'success' => true,
+      'message' => $statusMessage,
     ]);
   } else if ($_POST['event'] == 'join') {
     // Verify squad
@@ -162,6 +166,7 @@ try {
     }
 
     // Proceed
+    $statusMessage = null;
     if (bool($_POST['move-when'])) {
       // Move on specified date
       $date = new DateTime('now', new DateTimeZone('Europe/London'));
@@ -197,6 +202,7 @@ try {
         $message .= '<p>Kind Regards,<br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
         notifySend(null, $subject, $message, $user['Forename'] . ' ' . $user['Surname'], $user['EmailAddress']);
       }
+      $statusMessage = 'We\'ve scheduled ' . $member->getForename() . ' joining their new squad.';
     } else {
       // Move right now
       $move = $db->prepare("INSERT INTO squadMembers (Squad, Member, Paying) VALUES (?, ?, ?)");
@@ -205,11 +211,13 @@ try {
         $member->getId(),
         !bool($_POST['paying'])
       ]);
+      $statusMessage = 'We\'ve added ' . $member->getForename() . ' to this squad.';
     }
 
     echo json_encode([
       'status' => 200,
       'success' => true,
+      'message' => $statusMessage,
     ]);
   } else if ($_POST['event'] == 'leave') {
     // Leave a squad
@@ -236,6 +244,7 @@ try {
       throw new Exception('An existing squad move is already in place for this squad and member. Cancel it first to make changes.');
     }
 
+    $statusMessage = null;
     if (!bool($_POST['move-when'])) {
       // Remove now
       $move = $db->prepare("DELETE FROM squadMembers WHERE Member = ? AND Squad = ?");
@@ -243,21 +252,7 @@ try {
         $_POST['member'],
         $_POST['leave']
       ]);
-
-      // Prepare an email to the parent
-      // Get squad info
-      $getParent = $db->prepare("SELECT Forename, Surname, EmailAddress FROM members INNER JOIN users ON members.UserID = users.UserID WHERE members.MemberID = ?");
-      $getParent->execute([
-        $member->getId(),
-      ]);
-      if ($user = $getParent->fetch(PDO::FETCH_ASSOC)) {
-        $leave = Squad::get($_POST['leave']);
-        $subject = $member->getFullName() . ' is leaving ' . $leave->getName();
-        $message = '<p>Hello ' . htmlspecialchars($user['Forename']) . ',</p><p>We\'re writing to let you know that ' . htmlspecialchars($member->getForename()) . ' will be leaving ' . htmlspecialchars($leave->getName()) . ' on ' . htmlspecialchars($date->format("l j F Y")) . '.</p>';
-        $message .= '<p>If you have any questions, please contact your coach or a member of club staff.</p>';
-        $message .= '<p>Kind Regards,<br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
-        notifySend(null, $subject, $message, $user['Forename'] . ' ' . $user['Surname'], $user['EmailAddress']);
-      }
+      $statusMessage = 'We\'ve removed ' . $member->getForename() . ' from that squad.';
     } else {
       // Move on specified date
       $date = new DateTime('now', new DateTimeZone('Europe/London'));
@@ -277,11 +272,29 @@ try {
         null,
         0,
       ]);
+
+      // Prepare an email to the parent
+      // Get squad info
+      $getParent = $db->prepare("SELECT Forename, Surname, EmailAddress FROM members INNER JOIN users ON members.UserID = users.UserID WHERE members.MemberID = ?");
+      $getParent->execute([
+        $member->getId(),
+      ]);
+      if ($user = $getParent->fetch(PDO::FETCH_ASSOC)) {
+        $leave = Squad::get($_POST['leave']);
+        $subject = $member->getFullName() . ' is leaving ' . $leave->getName();
+        $message = '<p>Hello ' . htmlspecialchars($user['Forename']) . ',</p><p>We\'re writing to let you know that ' . htmlspecialchars($member->getForename()) . ' will be leaving ' . htmlspecialchars($leave->getName()) . ' on ' . htmlspecialchars($date->format("l j F Y")) . '.</p>';
+        $message .= '<p>If you have any questions, please contact your coach or a member of club staff.</p>';
+        $message .= '<p>Kind Regards,<br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
+        notifySend(null, $subject, $message, $user['Forename'] . ' ' . $user['Surname'], $user['EmailAddress']);
+      }
+
+      $statusMessage = 'We\'ve scheduled ' . $member->getForename() . '\'s removal from that squad.';
     }
 
     echo json_encode([
       'status' => 200,
       'success' => true,
+      'message' => $statusMessage,
     ]);
   }
 } catch (Exception $e) {
@@ -295,6 +308,7 @@ try {
   echo json_encode([
     'status' => 200,
     'success' => false,
-    'error' => $e->getMessage()
+    'error' => $e->getMessage(),
+    'message' => null,
   ]);
 }
