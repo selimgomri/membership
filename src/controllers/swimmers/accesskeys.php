@@ -49,7 +49,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
               <tr>
                 <td><?= htmlspecialchars($row['MForename'] . " " . $row['MSurname']) ?></td>
                 <td><?php if ($squad) { ?>
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled mb-0">
                       <?php do { ?>
                         <li><?= htmlspecialchars($squad['SquadName']) ?></li>
                       <?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)); ?>
