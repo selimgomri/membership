@@ -19,9 +19,9 @@ try {
   $date = new DateTime('-9 years last day of December', new DateTimeZone('Europe/London'));
   $now = new DateTime('now', new DateTimeZone('Europe/London'));
 
-  $getMembers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, SquadName squad, DateOfBirth dob, ASACategory cat FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.Tenant = ? AND DateOfBirth <= ? AND ASACategory = ? ORDER BY MForename ASC, MSurname ASC");
+  $getMembers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, DateOfBirth dob, ASACategory cat FROM members WHERE members.Tenant = ? AND DateOfBirth <= ? AND ASACategory = ? ORDER BY MForename ASC, MSurname ASC");
   $getMembers->execute([
-  $tenant->getId(),
+    $tenant->getId(),
     $date->format("Y-m-d"),
     1
   ]);

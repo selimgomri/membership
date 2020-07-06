@@ -26,7 +26,7 @@ if ($currentUser == null) {
 		</div>
 		
 		<?php if (bool(getenv('IS_DEV')) && isset($e)) { ?>
-			<div class="col">
+			<div class="col-12">
 				<?php pre($e); ?>
 			</div>
 		<?php } ?>

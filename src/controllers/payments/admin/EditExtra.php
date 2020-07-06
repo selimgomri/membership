@@ -24,7 +24,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 <div class="container">
 
   <nav aria-label="breadcrumb">
-    <ol class="breadcrumb bg-light">
+    <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl('payments'))?>">Payments</a></li>
       <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl('payments/extrafees'))?>">Extras</a></li>
       <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl('payments/extrafees/' . $id))?>"><?=htmlspecialchars($row['ExtraName'])?></a></li>

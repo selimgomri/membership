@@ -14,7 +14,7 @@ if (!$squadInfo) {
   halt(404);
 }
 
-$getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM members WHERE members.SquadID = ? ORDER BY fn ASC, sn ASC");
+$getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM members INNER JOIN squadMembers ON squadMembers.Member = members.MemberID WHERE squadMembers.Squad = ? ORDER BY fn ASC, sn ASC");
 $getMembers->execute([$squad]);
 $member = $getMembers->fetch(PDO::FETCH_ASSOC);
 

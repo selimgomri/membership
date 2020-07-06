@@ -86,33 +86,8 @@ if ($access == "Parent") {
    *
    */
 	if ($access == "Coach" || $access == 'Admin') {
-		$this->get('/{id}:int/new-move', function ($id) {
-
-			require BASE_PATH . 'controllers/squads/newMove.php';
-		});
-
-		$this->post('/{id}:int/new-move', function ($id) {
-
-			require BASE_PATH . 'controllers/squads/newMoveAction.php';
-		});
-
-		$this->get('/{id}:int/edit-move', function ($id) {
-
-			require BASE_PATH . 'controllers/squads/editMove.php';
-		});
-
-		$this->post('/{id}:int/edit-move', function ($id) {
-
-			require BASE_PATH . 'controllers/squads/editMoveAction.php';
-		});
-
 		$this->get('/{id}:int/move-contract', function ($id) {
 			require BASE_PATH . 'controllers/squads/SquadMoveContract.php';
-		});
-
-		$this->get('/{id}:int/cancel-move', function ($id) {
-
-			require BASE_PATH . 'controllers/squads/cancelMoveAction.php';
 		});
 	}
 	/*

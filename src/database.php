@@ -491,36 +491,9 @@ function monthlyExtraCost($link = null, $userID, $format = "decimal")
 
 function swimmers($link = null, $userID, $fees = false)
 {
-  $db = app()->db;
-  $sql = $db->prepare("SELECT squads.SquadName, squads.SquadFee, members.MForename,
-  members.MSurname, members.ClubPays FROM (members INNER JOIN squads ON
-  members.SquadID = squads.SquadID) WHERE members.UserID = ? ORDER BY
-  `squads`.`SquadFee` DESC;");
-  $sql->execute([$userID]);
-
-  $row = $sql->fetch(PDO::FETCH_ASSOC);
-  if ($row != null) {
-    $content .= "<ul class=\"mb-0 list-unstyled\">";
-
-    do {
-
-      $content .= "<li>" . htmlspecialchars($row['MForename'] . " " . $row['MSurname']);
-      if ($fees) {
-        $content .= ", " . htmlspecialchars($row['SquadName']) . " - &pound;";
-        if ($row['ClubPays'] == 0) {
-          $content .= number_format($row['SquadFee'], 2, '.', '');
-        } else {
-          $content .= "0.00 <em>(Exempt)</em>";
-        }
-      }
-      $content .= "</li>";
-    } while ($row = $sql->fetch(PDO::FETCH_ASSOC));
-
-    $content .= "</ul>";
-  } else {
-    $content = '<span class="text-muted small">No swimmers on this
-    account</span>';
-  }
+  $content = '<div class="alert alert-info">';
+  $content .= '<p class="mb-0"><strong>See a list of your members on the member\'s page</strong></p>';
+  $content .= '</div>';
 
   return $content;
 }

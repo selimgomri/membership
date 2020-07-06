@@ -4,51 +4,61 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 if ($_POST['response'] == "getSwimmers") {
-  $swimmers = $db->prepare("SELECT * FROM (((`extrasRelations` INNER JOIN `members` ON members.MemberID = extrasRelations.MemberID) INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) INNER JOIN `squads` ON members.SquadID = squads.SquadID) WHERE `extrasRelations`.`ExtraID` = ? AND extras.Tenant = ?");
+  $swimmers = $db->prepare("SELECT members.MemberID, RelationID, MForename, MSurname FROM ((`extrasRelations` INNER JOIN `members` ON members.MemberID = extrasRelations.MemberID) INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) WHERE `extrasRelations`.`ExtraID` = ? AND extras.Tenant = ?");
   $swimmers->execute([
     $id,
     $tenant->getId()
   ]);
 
+  $getSquads = $db->prepare("SELECT SquadName FROM squads INNER JOIN squadMembers ON squadMembers.Squad = squads.SquadID WHERE squadMembers.Member = ?");
+
   $row = $swimmers->fetch(PDO::FETCH_ASSOC);
 
-  ?>
+?>
 
   <div class="">
     <?php if ($row != null) { ?>
-    <div class="card">
-      <div class="card-header">
-        Extra members
+      <div class="card">
+        <div class="card-header">
+          Extra members
+        </div>
+        <ul class="list-group list-group-flush">
+          <?php do {
+            $getSquads->execute([
+              $row['MemberID']
+            ]);
+            $squad = $getSquads->fetch(PDO::FETCH_ASSOC);
+          ?>
+            <li class="list-group-item">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <p class="mb-0">
+                    <strong>
+                      <?= htmlspecialchars($row['MForename'] . " " . $row['MSurname']) ?>
+                    </strong>
+                  </p>
+                  <?php if ($squad) { ?>
+                    <ul class="list-unstyled">
+                      <?php do { ?>
+                        <li><?= htmlspecialchars($squad['SquadName']) ?></li>
+                      <?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)); ?>
+                    </ul>
+                  <?php } ?>
+                </div>
+                <div class="col text-right">
+                  <button type="button" id="RelationDrop-<?= htmlspecialchars($row['RelationID']) ?>" class="btn btn-link" value="<?= htmlspecialchars($row['RelationID']) ?>">
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </li>
+          <?php } while ($row = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
+        </ul>
       </div>
-      <ul class="list-group list-group-flush">
-        <?php do { ?>
-        <li class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-auto">
-              <p class="mb-0">
-                <strong>
-                  <?php echo $row['MForename'] . " " . $row['MSurname']; ?>
-                </strong>
-              </p>
-              <p class="mb-0">
-                <?php echo $row['SquadName']; ?>
-              </p>
-            </div>
-            <div class="col text-right">
-              <button type="button" id="RelationDrop-<?php echo $row['RelationID']; ?>"
-                class="btn btn-link" value="<?php echo $row['RelationID']; ?>">
-                Remove
-              </button>
-            </div>
-          </div>
-        </li>
-        <?php } while ($row = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
-      </ul>
-    </div>
     <?php } else { ?>
-    <div class="alert alert-info mb-0">
-      <strong>There are no swimmers linked to this extra</strong>
-    </div>
+      <div class="alert alert-info mb-0">
+        <strong>There are no swimmers linked to this extra</strong>
+      </div>
     <?php } ?>
   </div>
 <?php
@@ -60,7 +70,7 @@ if ($_POST['response'] == "getSwimmers") {
       'swimmerSelectContent' => '<option value="null" selected>Please select a squad</option>'
     ]);
   } else {
-    $getSwimmers = $db->prepare("SELECT members.MemberID, MForename, MSurname FROM `members` WHERE members.Tenant = ? AND SquadID = ? AND MemberID NOT IN (SELECT MemberID FROM extrasRelations WHERE ExtraID = ?) ORDER BY `MForename` ASC, `MSurname` ASC ");
+    $getSwimmers = $db->prepare("SELECT members.MemberID, MForename, MSurname FROM `members` INNER JOIN squadMembers ON members.MemberID = squadMembers.Member WHERE members.Tenant = ? AND squadMembers.Squad = ? AND MemberID NOT IN (SELECT MemberID FROM extrasRelations WHERE ExtraID = ?) ORDER BY `MForename` ASC, `MSurname` ASC ");
     $getSwimmers->execute([
       $tenant->getId(),
       $_POST['squadSelect'],
@@ -90,7 +100,7 @@ if ($_POST['response'] == "getSwimmers") {
         $tenant->getId()
       ]);
       $name = $memberName->fetch(PDO::FETCH_ASSOC);
-      
+
 
       if (!$name) {
         throw new Exception('There is no such member');
@@ -123,7 +133,6 @@ if ($_POST['response'] == "getSwimmers") {
     }
 
     echo json_encode($responseData);
-
   }
 } else if ($_POST['response'] == "dropRelation") {
   try {

@@ -18,7 +18,7 @@ $swimmer_name = getSwimmerName($id);
 $acc_details = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, EmailComms, MobileComms FROM users WHERE UserID = ?");
 $acc_details->execute([$parent]);
 
-$swimmers = $db->prepare("SELECT MForename, MMiddleNames, MSurname, DateOfBirth, SquadName, Gender, members.ASANumber, members.ASACategory FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.MemberID = ? ORDER BY MForename ASC, MSurname ASC");
+$swimmers = $db->prepare("SELECT MForename, MMiddleNames, MSurname, DateOfBirth, Gender, members.ASANumber, members.ASACategory FROM members INNER JOIN squadMembers ON squadMembers.Member = members.MemberID INNER JOIN squads ON squadMembers.Squad = squads.SquadID WHERE members.MemberID = ? ORDER BY MForename ASC, MSurname ASC");
 $swimmers->execute([$id]);
 
 $med = $db->prepare("SELECT Conditions, Allergies, Medication FROM memberMedical WHERE MemberID = ?");

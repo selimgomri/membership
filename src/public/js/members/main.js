@@ -967,5 +967,9 @@ let moveButton = document.getElementById('new-move-button');
 if (moveButton) {
   moveButton.addEventListener('click', handleNewMove);
 }
+let moveDropdown = document.getElementById('new-move-dropdown');
+if (moveDropdown) {
+  moveDropdown.addEventListener('click', handleNewMove);
+}
 
 displaySquads();

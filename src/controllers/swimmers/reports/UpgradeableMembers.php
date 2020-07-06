@@ -6,13 +6,15 @@ $tenant = app()->tenant;
 $date = new DateTime('-9 years last day of December', new DateTimeZone('Europe/London'));
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
 
-$getMembers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, SquadName squad, DateOfBirth dob, ASACategory cat FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.Tenant = ? AND DateOfBirth <= ? AND ASACategory = ? ORDER BY MForename ASC, MSurname ASC");
+$getMembers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, DateOfBirth dob, ASACategory cat FROM members WHERE members.Tenant = ? AND DateOfBirth <= ? AND ASACategory = ? ORDER BY MForename ASC, MSurname ASC");
 $getMembers->execute([
   $tenant->getId(),
   $date->format("Y-m-d"),
   1
 ]);
 $member = $getMembers->fetch(PDO::FETCH_ASSOC);
+
+$getSqauds = $db->prepare("SELECT SquadName FROM squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad WHERE squadMembers.Member = ?");
 
 $pagetitle = "Upgradeable Members";
 
@@ -70,13 +72,25 @@ include BASE_PATH . 'views/header.php';
         <ul class="list-group mb-3">
           <?php do {
             $dob = new DateTime($member['dob'], new DateTimeZone('Europe/London'));
-            $age = $dob->diff($now)->y; ?>
+            $age = $dob->diff($now)->y;
+            $getSqauds->execute([$member['id']]);
+            $squads = $getSqauds->fetchColumn();
+          ?>
           <li class="list-group-item list-group-item-action">
             <div class="row align-items-center">
               <div class="col-md">
                 <a href="<?=htmlspecialchars(autoUrl("members/" . $member['id']))?>" class="">
-                  <strong><?=htmlspecialchars($member['fn'] . ' ' . $member['sn'])?></strong>, <?=htmlspecialchars($member['squad'])?>
+                  <strong><?=htmlspecialchars($member['fn'] . ' ' . $member['sn'])?></strong>
                 </a>
+                <?php if ($squads) { ?>
+                <ul class="list-unstyled">
+                  <?php do { ?>
+                  <li>
+                    <?=htmlspecialchars($squads)?>
+                  </li>
+                  <?php } while ($squads = $getSqauds->fetchColumn()); ?>
+                </ul>
+                <?php } ?>
                 <div class="mb-3 d-md-none"></div>
               </div>
               <div class="col-md">

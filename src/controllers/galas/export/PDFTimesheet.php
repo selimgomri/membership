@@ -32,14 +32,14 @@ $hash = hash('sha256', $toHash);
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
   $uid = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
-  $query = $db->prepare("SELECT * FROM (((galaEntries INNER JOIN members ON galaEntries.MemberID =
-  members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN squads ON squads.SquadID = members.SquadID) WHERE
+  $query = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID =
+  members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE
   galas.GalaID = ? AND members.UserID = ? ORDER BY members.MForename ASC,
   members.MSurname ASC");
   $query->execute([$id, $uid]);
 } else {
-  $query = $db->prepare("SELECT * FROM (((galaEntries INNER JOIN members ON galaEntries.MemberID =
-  members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN squads ON squads.SquadID = members.SquadID) WHERE
+  $query = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID =
+  members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE
   galas.GalaID = ? ORDER BY members.MForename ASC, members.MSurname ASC");
   $query->execute([$id]);
 }
@@ -203,7 +203,7 @@ ob_start();?>
       <div class="avoid-page-break-inside">
         <div class="mb-3">
           <h2 class="d-inline"><?=htmlspecialchars($data['MForename'] . ' ' . $data['MSurname'])?></h2>
-          <p class="d-inline"><?=htmlspecialchars($data['SquadName'])?> Squad, Born <?=$birth->format("j F Y")?>, Age on day: <?=$ageOnDay->format('%y')?>, Age at end of year: <?=$ageEndOfYear->format('%y')?></p>
+          <p class="d-inline">Born <?=$birth->format("j F Y")?>, Age on day: <?=$ageOnDay->format('%y')?>, Age at end of year: <?=$ageEndOfYear->format('%y')?></p>
         </div>
 
         <table>

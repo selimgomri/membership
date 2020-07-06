@@ -75,7 +75,7 @@ include BASE_PATH . 'views/header.php';
           <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/enter-gala")) ?>">Enter a gala</a>
           <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/contact-parent")) ?>">Email user/parent/guardian</a>
           <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') { ?>
-            <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/new-move")) ?>">New squad move</a>
+            <button class="dropdown-item" id="new-move-dropdown" type="button">New squad move</button>
             <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/parenthelp")) ?>">Print access key</a>
           <?php } ?>
         </div>

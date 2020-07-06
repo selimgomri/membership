@@ -30,7 +30,6 @@ if (!($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumbe
 
 // Allow addition
 $memberID = $row['MemberID'];
-$squadID = $row['SquadID'];
 $existingUserID = $row['UserID'];
 
 if ($row['UserID'] != null) {
@@ -60,11 +59,10 @@ $sql->execute([
 ]);
 
 // Get info about swimmer and parent
-$sql = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee
-        FROM ((members
+$sql = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber
+        FROM (members
           INNER JOIN users ON members.UserID = users.UserID)
-          INNER JOIN squads ON members.SquadID = squads.SquadID
-        ) WHERE users.UserID = ? AND members.MemberID = ?;");
+          WHERE users.UserID = ? AND members.MemberID = ?;");
 $sql->execute([
   $userID,
   $memberID
@@ -78,8 +76,6 @@ $message = "
 with your account.</p>
 <ul>
   <li>" . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "</li>
-  <li>Squad: " . htmlspecialchars($row['SquadName']) . " Squad</li>
-  <li>Monthly Fee: &pound;" . number_format($row['SquadFee'], 2) . "</li>
   <li>Swim England Number: " .htmlspecialchars($row['ASANumber']) . "</li>
   <li>" . htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME')) . " Member ID: " . htmlspecialchars($row['MemberID']) . "</li>
 </ul>

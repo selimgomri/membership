@@ -46,7 +46,7 @@ $clubFees = \SCDS\Membership\ClubMembership::create($db, $user, true);
 
 $clubFee = $clubFees->getFee();
 
-$getMembers = $db->prepare("SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID = members.SquadID WHERE `members`.`UserID` = ?");
+$getMembers = $db->prepare("SELECT * FROM `members` WHERE `members`.`UserID` = ?");
 $getMembers->execute([$user]);
 
 $member = $getMembers->fetchAll(PDO::FETCH_ASSOC);

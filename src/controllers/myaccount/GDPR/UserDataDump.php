@@ -7,7 +7,7 @@ $db = app()->db;
 $acc_details = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, EmailComms, MobileComms FROM users WHERE UserID = ?");
 $acc_details->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
-$swimmers = $db->prepare("SELECT MForename, MMiddleNames, MSurname, DateOfBirth, SquadName, Gender, members.ASANumber, members.ASACategory FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID = ? ORDER BY MForename ASC, MSurname ASC");
+$swimmers = $db->prepare("SELECT MForename, MMiddleNames, MSurname, DateOfBirth, SquadName, Gender, members.ASANumber, members.ASACategory FROM members INNER JOIN squadMembers ON members.MemberID = squadMembers.Member INNER JOIN squads ON squadMembers.Squad = squads.SquadID WHERE members.UserID = ? ORDER BY MForename ASC, MSurname ASC");
 $swimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 $emergency_contacts = $db->prepare("SELECT Name, ContactNumber FROM emergencyContacts WHERE UserID = ?");

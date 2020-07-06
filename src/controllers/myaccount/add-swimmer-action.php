@@ -15,9 +15,9 @@ if (mb_stripos($asaNumber, app()->tenant->getKey('ASA_CLUB_CODE'))) {
   $asaNumber = str_replace(app()->tenant->getKey('ASA_CLUB_CODE'), '', $asaNumber);
 }
 
-$getSwimmer = $db->prepare("SELECT MemberID, SquadID, UserID FROM members WHERE ASANumber = ? AND Tenant = ? AND AccessKey = ? LIMIT 1");
+$getSwimmer = $db->prepare("SELECT MemberID, UserID FROM members WHERE ASANumber = ? AND Tenant = ? AND AccessKey = ? LIMIT 1");
 if ($isTemporaryNumber) {
-  $getSwimmer = $db->prepare("SELECT MemberID, SquadID, UserID FROM members WHERE MemberID = ? AND Tenant = ? AND AccessKey = ? LIMIT 1");
+  $getSwimmer = $db->prepare("SELECT MemberID, UserID FROM members WHERE MemberID = ? AND Tenant = ? AND AccessKey = ? LIMIT 1");
 }
 $getSwimmer->execute([$asaNumber, $tenant->getId(), $accessKey]);
 $row = $getSwimmer->fetch(PDO::FETCH_ASSOC);
@@ -26,7 +26,6 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
   if ($row != null) {
     // Allow addition
     $memberID = $row['MemberID'];
-    $squadID = $row['SquadID'];
     $existingUserID = $row['UserID'];
 
     if ($row['UserID'] != null) {
@@ -51,11 +50,10 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
     $updateSwimmer->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $accessKey, $memberID]);
 
     // Get info about swimmer and parent
-    $sql = "SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee
-            FROM ((members
+    $sql = "SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber
+            FROM (members
               INNER JOIN users ON members.UserID = users.UserID)
-              INNER JOIN squads ON members.SquadID = squads.SquadID
-            ) WHERE members.MemberID = ?";
+              WHERE members.MemberID = ?";
     $getInfo = $db->prepare($sql);
     $getInfo->execute([$memberID]);
     $row = $getInfo->fetch(PDO::FETCH_ASSOC);
@@ -67,8 +65,6 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
     with your account.</p>
     <ul>
       <li>" . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "</li>
-      <li>Squad: " . htmlspecialchars($row['SquadName']) . "</li>
-      <li>Monthly Fee: &pound;" . number_format((int) $row['SquadFee'], 2, '.', ',') . "</li>
       <li>Swim England Number: " . htmlspecialchars($row['ASANumber']) . "</li>
       <li>" . htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME')) . " Member ID: " . htmlspecialchars($row['MemberID']) . "</li>
     </ul>
