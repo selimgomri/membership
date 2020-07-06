@@ -8,7 +8,7 @@ $sql = null;
 if ($_POST['squadID'] == 'allSquads') {
 	$sql = "SELECT DISTINCT `Mobile` FROM `users` INNER JOIN `members` ON `members`.`UserID` = `users`.`UserID` WHERE members.Tenant = ? AND `MobileComms` = 1";
 } else {
-	$sql = "SELECT DISTINCT `Mobile` FROM `users` INNER JOIN `members` ON `members`.`UserID` = `users`.`UserID` WHERE members.Tenant = ? AND `SquadID` = ? AND `MobileComms` = 1";
+	$sql = "SELECT DISTINCT `Mobile` FROM ((`users` INNER JOIN `members` ON `members`.`UserID` = `users`.`UserID`) INNER JOIN squadMembers ON members.MemberID = squadMembers.Member) WHERE members.Tenant = ? AND squadMembers.Squad = ? AND `MobileComms` = 1";
 }
 
 try {

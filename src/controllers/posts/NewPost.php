@@ -43,7 +43,6 @@ include BASE_PATH . "views/postsMenu.php";
 					<p class="mb-0">We will publish this immediately.</p>
 				</div>
 
-                <?php if (!$people) { ?>
 				<div class="cell">
 					<h3>Meta</h3>
 					<div class="form-group">
@@ -77,7 +76,6 @@ include BASE_PATH . "views/postsMenu.php";
 						</select>
 					</div>
 				</div>
-				<?php } ?>
 
 				<div class="cell">
 					<h3>SEO</h3>

@@ -10,7 +10,7 @@ if ($_POST['response'] == "getSwimmers") {
   // members.SquadID = squads.SquadID) WHERE `targetedListMembers`.`ListID` =
   // ? ORDER BY ReferenceID ASC");
 
-  $swimmers = $db->prepare("SELECT combined.MForename, combined.MSurname, combined.SquadName, combined.ID FROM (SELECT MForename, MSurname, SquadName, targetedListMembers.ID FROM ((`targetedListMembers` INNER JOIN `members` ON members.MemberID = targetedListMembers.ReferenceID) INNER JOIN `squads` ON members.SquadID = squads.SquadID) WHERE `targetedListMembers`.`ListID` = :list AND targetedListMembers.ReferenceType = 'Member' AND members.Tenant = :tenant UNION SELECT Forename AS MForename, Surname AS MSurname, 'User' AS SquadName, targetedListMembers.ID FROM (`targetedListMembers` INNER JOIN `users` ON users.UserID = targetedListMembers.ReferenceID) WHERE `targetedListMembers`.`ListID` = :list AND targetedListMembers.ReferenceType = 'User' AND users.Tenant = :tenant) AS combined ORDER BY combined.ID ASC ");
+  $swimmers = $db->prepare("SELECT combined.MForename, combined.MSurname, combined.SquadName, combined.ID FROM (SELECT MForename, MSurname, 'Member' AS SquadName, targetedListMembers.ID FROM (`targetedListMembers` INNER JOIN `members` ON members.MemberID = targetedListMembers.ReferenceID) WHERE `targetedListMembers`.`ListID` = :list AND targetedListMembers.ReferenceType = 'Member' AND members.Tenant = :tenant UNION SELECT Forename AS MForename, Surname AS MSurname, 'User' AS SquadName, targetedListMembers.ID FROM (`targetedListMembers` INNER JOIN `users` ON users.UserID = targetedListMembers.ReferenceID) WHERE `targetedListMembers`.`ListID` = :list AND targetedListMembers.ReferenceType = 'User' AND users.Tenant = :tenant) AS combined ORDER BY combined.ID ASC ");
 
   $swimmers->execute([
     'list' => $id,
@@ -64,9 +64,9 @@ if ($_POST['response'] == "getSwimmers") {
 
   try {
     $squad = $_POST['squadSelect'];
-    $members == null;
+    $members = null;
     if ($squad != "all") {
-      $members = $db->prepare("SELECT MemberID, MForename, MSurname FROM `members` WHERE `SquadID` = ? AND Tenant = ? AND MemberID NOT IN (SELECT ReferenceID FROM targetedListMembers WHERE ListID = ? AND ReferenceType = 'Member') ORDER BY `MForename` ASC, `MSurname` ASC");
+      $members = $db->prepare("SELECT MemberID, MForename, MSurname FROM `members` INNER JOIN squadMembers ON squadMembers.Member = members.MemberID WHERE squadMembers.Squad = ? AND members.Tenant = ? AND MemberID NOT IN (SELECT ReferenceID FROM targetedListMembers WHERE ListID = ? AND ReferenceType = 'Member') ORDER BY `MForename` ASC, `MSurname` ASC");
       $members->execute([
         $squad,
         $tenant->getId(),
@@ -98,7 +98,7 @@ if ($_POST['response'] == "getSwimmers") {
   try {
     if (mb_strlen($_POST['searchTerm']) > 0) {
       $searchTerm = '%' . $_POST['searchTerm'] . '%';
-      $members == null;
+      $members = null;
       $members = $db->prepare("SELECT UserID, Forename, Surname FROM `users` WHERE Tenant = :tenant AND `Forename` COLLATE utf8mb4_general_ci LIKE :searchTerm OR `Surname` COLLATE utf8mb4_general_ci LIKE :searchTerm AND UserID NOT IN (SELECT ReferenceID FROM targetedListMembers WHERE ListID = :list AND ReferenceType = 'User') ORDER BY `Forename` ASC, `Surname` ASC");
       $members->execute([
         'tenant' => $tenant->getId(),
