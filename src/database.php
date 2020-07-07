@@ -66,7 +66,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
   }
   if (!isset($from['Name']) && isset(app()->tenant)) {
     $from['Name'] = app()->tenant->getKey('CLUB_NAME');
-  } else {
+  } else if (!isset($from['Name'])) {
     $from['Name'] = 'SCDS Membership MT';
   }
 

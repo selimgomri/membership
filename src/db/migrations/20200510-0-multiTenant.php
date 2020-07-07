@@ -51,7 +51,7 @@ $db->query(
 );
 
 $db->query(
-  "RENAME TABLE tenantOptions TO tenantOptions;"
+  "RENAME TABLE systemOptions TO tenantOptions;"
 );
 
 $db->query(

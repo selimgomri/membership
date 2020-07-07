@@ -96,7 +96,7 @@ if (!function_exists('chesterStandardMenu')) {
                       </a>
                     <?php } while ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC)); ?>
                   <?php } else { ?>
-                    <a class="dropdown-item" href="<?= autoUrl("my-account/add-swimmer") ?>">Link a new member</a>
+                    <a class="dropdown-item" href="<?= autoUrl("my-account/add-member") ?>">Link a new member</a>
                   <?php } ?>
                 </div>
               </li>

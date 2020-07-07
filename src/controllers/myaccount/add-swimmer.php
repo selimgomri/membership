@@ -50,15 +50,21 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { 
                   account.</p>
               </div>
             <?php } ?>
-            <form method="post" class="cell" action="<?= htmlspecialchars(autoUrl("my-account/add-member")) ?>" name="register" id="register">
+            <form method="post" class="cell needs-validation" action="<?= htmlspecialchars(autoUrl("my-account/add-member")) ?>" name="register" id="register" novalidate>
               <h2>Details</h2>
               <div class="form-group">
                 <label for="asa">Member's Swim England Number or Temporary Membership Number</label>
                 <input class="form-control mb-0" type="text" name="asa" id="asa" placeholder="123456" required value="<?= htmlspecialchars($id) ?>">
+                <div class="invalid-feedback">
+                  A Swim England or Member Number is required
+                </div>
               </div>
               <div class="form-group">
                 <label for="accessKey">Access Key</label>
                 <input class="form-control mb-0 mono" type="text" name="accessKey" id="accessKey" placeholder="1A3B5C" required value="<?= htmlspecialchars($acs) ?>">
+                <div class="invalid-feedback">
+                  An access key is required
+                </div>
               </div>
 
               <button type="submit" class="btn btn-success">
@@ -73,5 +79,6 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { 
 <?php }
 
 $footer = new \SCDS\Footer();
+$footer->addJs('public/js/NeedsValidation.js');
 $footer->useFluidContainer();
 $footer->render(); ?>

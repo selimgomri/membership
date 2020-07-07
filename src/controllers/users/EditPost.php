@@ -30,10 +30,11 @@ try {
     throw new Exception();
   }
 
-  $get = $db->prepare("SELECT COUNT(*) FROM users WHERE EmailAddress = ? AND UserID != ?");
+  $get = $db->prepare("SELECT COUNT(*) FROM users WHERE EmailAddress = ? AND UserID != ? AND Tenant = ?");
   $get->execute([
     $email,
-    $id
+    $id,
+    $tenant->getId(),
   ]);
 
   if ($get->fetchColumn() > 0) {
@@ -161,7 +162,7 @@ try {
 
   $_SESSION['TENANT-' . app()->tenant->getId()]['Success'] = true;
 } catch (Exception $e) {
-  reportError($e);
+  // reportError($e);
   $_SESSION['TENANT-' . app()->tenant->getId()]['GeneralError'] = true;
 }
 

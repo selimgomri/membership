@@ -52,14 +52,14 @@ $getSwimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']])
 			<div class="row">
 				<div class="col-md-8">
 					<p class="lead">
-						Members connected to your account will be shown here once you add some.
+						Members connected to your account will be shown here once you add them.
 					</p>
 				</div>
 			</div>
 		<?php } ?>
 
 		<p>
-			<a href="<?php echo autoUrl('myaccount/addswimmer'); ?>" class="btn btn-success">Link a member</a>
+			<a href="<?php echo autoUrl('myaccount/add-member'); ?>" class="btn btn-success">Link a member</a>
 		</p>
 	</div>
 </div>
