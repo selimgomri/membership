@@ -19,7 +19,7 @@ $url = 'payments/card-transactions?';
 
 $getCount = null;
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' && isset($_GET['users']) && $_GET['users'] == 'all') {
-  $getCount = $db->prepare("SELECT COUNT(*) FROM stripePayments INNER JOIN users WHERE users.Tenant = ? AND Paid");
+  $getCount = $db->prepare("SELECT COUNT(*) FROM stripePayments INNER JOIN users ON stripePayments.User = users.UserID WHERE users.Tenant = ? AND Paid");
   $getCount->execute([
     $tenant->getId()
   ]);

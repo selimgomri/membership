@@ -244,12 +244,12 @@ if (!function_exists('chesterStandardMenu')) {
                       Extra Fees
                     </a>
                     <div class="dropdown-divider"></div>
-                    <h6 class="dropdown-header">GoCardless Accounts</h6>
+                    <h6 class="dropdown-header">Service Provider Accounts</h6>
                     <a class="dropdown-item" href="https://manage.gocardless.com" target="_blank">
-                      Live
+                      GoCardless Dashboard
                     </a>
-                    <a class="dropdown-item" href="https://manage-sandbox.gocardless.com" target="_blank">
-                      Sandbox
+                    <a class="dropdown-item" href="https://dashboard.stripe.com/" target="_blank">
+                      Stripe Dashboard
                     </a>
                     <?php if (getenv('STRIPE') && app()->tenant->getStripeAccount()) { ?>
                       <div class="dropdown-divider"></div>

@@ -491,9 +491,36 @@ function monthlyExtraCost($link = null, $userID, $format = "decimal")
 
 function swimmers($link = null, $userID, $fees = false)
 {
-  $content = '<div class="alert alert-info">';
-  $content .= '<p class="mb-0"><strong>See a list of your members on the member\'s page</strong></p>';
-  $content .= '</div>';
+  $db = app()->db;
+  $getSwimmers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM members WHERE members.UserID = ?");
+  $getSwimmers->execute([
+    $userID,
+  ]);
+
+  $getSquads = $db->prepare("SELECT COUNT(*) FROM squadMembers WHERE Member = ?");
+
+  $swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC);
+
+  $content = '';
+  if ($swimmer) {
+    $content .= '<ul class="mb-0 list-unstyled">';
+
+    do {
+      $getSquads->execute([
+        $swimmer['id']
+      ]);
+      $numSquads = $getSquads->fetchColumn();
+
+      $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+      $numSquadsText = $f->format($numSquads);
+
+      $content .= '<li>' . htmlspecialchars($swimmer['fn'] . ' ' . $swimmer['sn']) . ', in ' . htmlspecialchars($numSquadsText) . ' squads</li>';
+    } while ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC));
+
+    $content .= '</ul>';
+  } else {
+    $content .= '<p class="mb-0">No members</p>';
+  }
 
   return $content;
 }

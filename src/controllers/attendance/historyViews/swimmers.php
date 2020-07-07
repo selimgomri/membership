@@ -8,7 +8,7 @@ $pagetitle = "Attendance History by Swimmer";
 $squadID = $search = "";
 parse_str($_SERVER['QUERY_STRING'], $queries);
 if (isset($queries['squadID'])) {
-  $squadID = intval($queries['squadID']);
+  $squadID = (int) $queries['squadID'];
 }
 if (isset($queries['search'])) {
   $search = $queries['search'];
@@ -33,7 +33,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
       <select class="custom-select" placeholder="Select a Squad" id="squad" name="squad">
         <option value="allSquads">Show All Squads</option>
         <?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
-        <option value="<?=$squad['id']?>" <?php if ($squad['id'] == $id) { ?>selected<?php } ?>>
+        <option value="<?=$squad['id']?>" <?php if ($squad['id'] == $squadID) { ?>selected<?php } ?>>
           <?=htmlspecialchars($squad['name'])?> Squad
         </option>
         <?php } ?>
