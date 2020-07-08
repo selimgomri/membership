@@ -310,7 +310,7 @@ $cp = [
 $cp[$rowSwim['ClubPays']] = " selected ";
 $content .= "
 <div class=\"form-group\">
-	<label for=\"cp\">Club Pays Fees?</label>
+	<label for=\"cp\">Club pays Swim England/Club membership fees?</label>
 	<select class=\"custom-select\" id=\"cp\" name=\"cp\" placeholder=\"Select\">
 		<option value=\"0\" " . $cp[0] . ">No</option>
 		<option value=\"1\" " . $cp[1] . ">Yes</option>

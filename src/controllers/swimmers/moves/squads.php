@@ -50,13 +50,19 @@ try {
   ]);
 
   $current = [];
+  $memberPays = $db->prepare("SELECT Paying FROM squadMembers WHERE Squad = ? AND Member = ?");
   foreach ($currentSquads as $squad) {
+    $memberPays->execute([
+      $squad->getId(),
+      $member->getId(),
+    ]);
+    $pays = bool($memberPays->fetchColumn());
     $current[] = [
       'id' => $squad->getId(),
       'name' => $squad->getName(),
       'url' => autoUrl('squads/' . $squad->getId()),
       'price_string' => $squad->getFee(false),
-      'pays' => true,
+      'pays' => $pays,
     ];
   }
 

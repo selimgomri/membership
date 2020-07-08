@@ -371,6 +371,10 @@ include BASE_PATH . 'views/header.php';
             Manage squads
           </button>
         </p>
+
+        <p>
+          To change whether <?= htmlspecialchars($member->getForename()) ?> pays for a squad, remove them and add them again. The ability to modify this setting properly is coming soon.
+        </p>
       <?php } ?>
       <div id="squads-data" data-squads-url="<?= htmlspecialchars(autoUrl("members/$id/squads.json")) ?>"></div>
 

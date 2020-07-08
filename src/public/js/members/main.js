@@ -51,7 +51,8 @@ async function displaySquads() {
       listItem.appendChild(document.createTextNode(squad.name + ' '));
       let price = document.createElement('SPAN');
       let em = document.createElement('EM');
-      if (false) {
+      console.log(squad);
+      if (!squad.pays) {
         let strike = document.createElement('S');
         strike.textContent = '£' + squad.price_string;
         em.appendChild(strike);

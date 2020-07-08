@@ -423,45 +423,102 @@ function autoUrl($relative, $includeClub = true)
   return rtrim($rootUrl . $relative, '/');
 }
 
-function monthlyFeeCost($link = null, $userID, $format = "decimal")
+function monthlyFeeCost($link = null, $user, $format = "decimal")
 {
   $db = app()->db;
-  $query = $db->prepare("SELECT squads.SquadName, squads.SquadID, squads.SquadFee FROM ((members
-  INNER JOIN squadMembers ON members.MemberID = squadMembers.Member) INNER JOIN squads ON squadMembers.Squad = squads.SquadID) WHERE members.UserID =
-  ? AND `ClubPays` = '0' ORDER BY `squads`.`SquadFee` DESC");
-  $query->execute([$userID]);
 
-  $totalCost = \Brick\Math\BigDecimal::zero();
-  $reducedCost = \Brick\Math\BigDecimal::zero();
+  $getUserMembers = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname FROM members WHERE UserID = ?");
 
-  $i = 0;
-  while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-    $squadCost = \Brick\Math\BigDecimal::of((string) $row['SquadFee']);
-    if (app()->tenant->isCLS()) {
-      if ($i < 2) {
-        // $totalCost->plus($squadCost);
-        $reducedCost = $reducedCost->plus($squadCost);
-      } else if ($i == 2) {
-        // $totalCost->plus($squadCost->multipliedBy('0.8'));
-        $reducedCost = $reducedCost->plus($squadCost->multipliedBy('0.8'));
-      } else {
-        // $totalCost->plus($squadCost->multipliedBy('0.6'));
-        $reducedCost = $reducedCost->plus($squadCost->multipliedBy('0.6'));
+  $getSquadMetadata = $db->prepare("SELECT squads.SquadName, squads.SquadID, squads.SquadFee, squadMembers.Paying FROM squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad WHERE squadMembers.Member = ?;");
+
+  // Get user members
+  $getUserMembers->execute([
+    $user
+  ]);
+
+  $numMembers = 0;
+  $discount = 0;
+  $total = 0;
+
+  $discountMembers = [];
+
+  while ($member = $getUserMembers->fetch(PDO::FETCH_ASSOC)) {
+    $getSquadMetadata->execute([
+      $member['MemberID']
+    ]);
+
+    $paying = false;
+    $memberTotal = 0;
+
+    while ($squad = $getSquadMetadata->fetch(PDO::FETCH_ASSOC)) {
+      if (bool($squad['Paying'])) {
+        $paying = true;
       }
-    } else {
-      // $totalCost->plus($squadCost);
-      $reducedCost = $reducedCost->plus($squadCost);
+
+      $fee = Brick\Math\BigDecimal::of((string) $squad['SquadFee'])->withPointMovedRight(2)->toInt();
+      $memberTotal += $fee;
+
+      if (!bool($squad['Paying'])) {
+        $memberTotal -= $fee;
+      }
     }
-    $i++;
+
+    if ($paying) {
+      $numMembers++;
+
+      $memberFees = [
+        'fee' => $memberTotal,
+        'member' => $member['MForename'] . " " . $member['MSurname']
+      ];
+      $discountMembers[] = $memberFees;
+
+      $total += $memberTotal;
+    }
   }
+
+  // If is CLS handle discounts
+  if (app()->tenant->isCLS()) {
+    usort($discountMembers, function ($item1, $item2) {
+      return $item2['fee'] <=> $item1['fee'];
+    });
+
+    $number = 0;
+    foreach ($discountMembers as $member) {
+      $number++;
+
+      // Calculate discounts if required.
+      // Always round discounted value down - Could save clubs pennies!
+      $swimmerDiscount = 0;
+      try {
+        $memberTotalDec = \Brick\Math\BigInteger::of($member['fee'])->toBigDecimal();
+        if ($number == 3) {
+          // 20% discount applies
+          $swimmerDiscount = $memberTotalDec->multipliedBy('0.20')->toScale(2, Brick\Math\RoundingMode::DOWN)->withPointMovedRight(2)->toInt();
+        } else if ($number > 3) {
+          // 40% discount applies
+          $swimmerDiscount = $memberTotalDec->multipliedBy('0.40')->toScale(2, Brick\Math\RoundingMode::DOWN)->withPointMovedRight(2)->toInt();
+        }
+      } catch (Exception $e) {
+        // Something went wrong so ensure these stay zero!
+        $swimmerDiscount = 0;
+      }
+
+      if ($swimmerDiscount > 0) {
+        // Apply credit to account for discount
+        $total -= $swimmerDiscount;
+      }
+    }
+  }
+
+  // return $total;
 
   $format = strtolower($format);
   if ($format == "decimal") {
-    return (string) $reducedCost->toScale(2);
+    return (string) \Brick\Math\BigDecimal::of((string) $total)->withPointMovedLeft(2)->toScale(2);
   } else if ($format == "int") {
-    return $reducedCost->withPointMovedRight(2)->toInt();
+    return $total;
   } else if ($format == "string") {
-    return "&pound;" . (string) $reducedCost->toScale(2);
+    return "&pound;" . (string) \Brick\Math\BigDecimal::of((string) $total)->withPointMovedLeft(2)->toScale(2);
   }
 }
 
