@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $resetFailedLoginCount = $db->prepare("UPDATE users SET WrongPassCount = 0 WHERE UserID = ?");
 
@@ -64,8 +65,9 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) && bool(getUs
 }
 
 unset($_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']);
-$target = ltrim($_POST['target'], '/');
-if ($target == null || $target == "") {
-  $target = "";
+
+if (isset($_POST['target']) && $_POST['target']) {
+  header("Location: " . autoUrl(ltrim($_POST['target'], '/'), false));
+} else {
+  header("Location: " . autoUrl(''));
 }
-header("Location: " . autoUrl($target, false));
