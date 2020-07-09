@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $getUser = $db->prepare("SELECT UserID FROM passwordTokens INNER JOIN users ON users.UserID = passwordTokens.UserID WHERE Token = ? AND users.Tenant = ? ORDER BY TokenID DESC LIMIT 1");
 $getUser->execute([
