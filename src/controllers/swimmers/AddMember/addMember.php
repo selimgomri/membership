@@ -79,16 +79,16 @@ $sql = $db->prepare("SELECT * FROM `squads` WHERE Tenant = ? ORDER BY `squads`.`
 $sql->execute([
 	$tenant->getId()
 ]);
-$content .= "
-<div class=\"form-group\">
-	<label for=\"squad\">Squad</label>
-		<select class=\"custom-select\" placeholder=\"Select a Squad\" id=\"squad\" name=\"squad\">";
-//$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-	$content .= "<option value=\"" . $row['SquadID'] . "\"";
-	$content .= ">" . htmlspecialchars($row['SquadName']) . "</option>";
-}
-$content .= "</select></div>";
+// $content .= "
+// <div class=\"form-group\">
+// 	<label for=\"squad\">Squad</label>
+// 		<select class=\"custom-select\" placeholder=\"Select a Squad\" id=\"squad\" name=\"squad\">";
+// //$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+// while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+// 	$content .= "<option value=\"" . $row['SquadID'] . "\"";
+// 	$content .= ">" . htmlspecialchars($row['SquadName']) . "</option>";
+// }
+// $content .= "</select></div>";
 $content .= "
 <div class=\"form-group\">
 	<div class=\"custom-control custom-checkbox\">

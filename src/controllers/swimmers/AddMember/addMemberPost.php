@@ -9,7 +9,7 @@ $tenant = app()->tenant;
 
 $added = $action = false;
 
-$forename = $middlenames = $surname = $dateOfBirth = $asaNumber = $sex = $squad = $cat = $cp = $sql = $transfer = "";
+$forename = $middlenames = $surname = $dateOfBirth = $asaNumber = $sex = $cat = $cp = $sql = $transfer = "";
 $getASA = false;
 
 if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POST['datebirth'])) && (!empty($_POST['sex'])) && (!empty($_POST['squad']))) {
@@ -17,7 +17,6 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 	$surname = trim(ucwords($_POST['surname']));
 	$dateOfBirth = trim($_POST['datebirth']);
 	$sex = $_POST['sex'];
-	$squad = $_POST['squad'];
 	if ((!empty($_POST['middlenames']))) {
 		$middlenames = trim(ucwords($_POST['middlenames']));
 	}
@@ -44,16 +43,6 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 		$transfer = 1;
 	} else {
 		$transfer = 0;
-	}
-
-	// Check squads
-	$getSquads = $db->prepare("SELECT COUNT(*) FROM squads WHERE Tenant = ? AND SquadID = ?");
-	$getSquads->execute([
-		$tenant->getId(),
-		$squad
-	]);
-	if ($getSquads->fetchColumn() == 0) {
-		halt(404);
 	}
 
 	$accessKey = generateRandomString(6);
