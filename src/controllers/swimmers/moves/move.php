@@ -93,7 +93,7 @@ try {
         $date->format("Y-m-d"),
         $_POST['leave'],
         $_POST['join'],
-        !bool($_POST['paying']),
+        (int) !bool($_POST['paying']),
       ]);
 
       // Prepare an email to the parent
@@ -118,7 +118,7 @@ try {
       $move = $db->prepare("UPDATE squadMembers SET Squad = ?, Paying = ? WHERE Member = ? AND Squad = ?");
       $move->execute([
         $_POST['join'],
-        !bool($_POST['paying']),
+        (int) !bool($_POST['paying']),
         $member->getId(),
         $_POST['leave'],
       ]);
@@ -184,7 +184,7 @@ try {
         $date->format("Y-m-d"),
         null,
         $_POST['join'],
-        !bool($_POST['paying']),
+        (int) !bool($_POST['paying']),
       ]);
 
       // Prepare an email to the parent
@@ -209,7 +209,7 @@ try {
       $move->execute([
         $_POST['join'],
         $member->getId(),
-        !bool($_POST['paying'])
+        (int) !bool($_POST['paying'])
       ]);
       $statusMessage = 'We\'ve added ' . $member->getForename() . ' to this squad.';
     }
