@@ -297,9 +297,9 @@ $route->group('/{club}:([a-z]{4})', function ($club) {
   }
 });
 
-$route->get('/migrate', function () {
-  include 'controllers/db-increaseIds.php';
-});
+// $route->get('/migrate', function () {
+//   include 'controllers/db-increaseIds.php';
+// });
 
 // $route->get('/testing', function () {
 //   include 'controllers/dev/times.php';

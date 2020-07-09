@@ -2,8 +2,8 @@
 
 $db = app()->db;
 
-$amount = 50000;
-$tenant = 5;
+$amount = 300000;
+$tenant = 9;
 
 $db->query("SET FOREIGN_KEY_CHECKS=0;");
 
@@ -339,10 +339,10 @@ try {
     'tenant' => $tenant,
   ]);
 
-  $query = $db->prepare("UPDATE timesIndividual SET ID = ID + :amount, MemberID = MemberID + :amount");
-  $query->execute([
-    'amount' => $amount,
-  ]);
+  // $query = $db->prepare("UPDATE timesIndividual SET ID = ID + :amount, MemberID = MemberID + :amount");
+  // $query->execute([
+  //   'amount' => $amount,
+  // ]);
 
   $query = $db->prepare("UPDATE trainingLogs SET ID = ID + :amount, Member = Member + :amount");
   $query->execute([
