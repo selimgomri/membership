@@ -6,9 +6,13 @@ use Brick\PhoneNumber\PhoneNumberFormat;
 use Respect\Validation\Validator as v;
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, ASANumber, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory FROM users WHERE UserID = ?");
-$userInfo->execute([$id]);
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, ASANumber, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory FROM users WHERE UserID = ? AND Tenant = ?");
+$userInfo->execute([
+  $id,
+  $tenant->getId()
+]);
 
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
 
@@ -22,18 +26,19 @@ try {
   $mobile = trim($_POST['mobile-phone']);
 
   if (!v::email()->validate($email)) {
-    $_SESSION['InvalidEmail'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['InvalidEmail'] = true;
     throw new Exception();
   }
 
-  $get = $db->prepare("SELECT COUNT(*) FROM users WHERE EmailAddress = ? AND UserID != ?");
+  $get = $db->prepare("SELECT COUNT(*) FROM users WHERE EmailAddress = ? AND UserID != ? AND Tenant = ?");
   $get->execute([
     $email,
-    $id
+    $id,
+    $tenant->getId(),
   ]);
 
   if ($get->fetchColumn() > 0) {
-    $_SESSION['UsedEmail'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UsedEmail'] = true;
     throw new Exception();
   }
 
@@ -41,7 +46,7 @@ try {
     $mobile = PhoneNumber::parse($mobile, 'GB');
     $mobile = $mobile->format(PhoneNumberFormat::E164);
   } catch (PhoneNumberParseException $e) {
-    $_SESSION['InvalidPhone'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['InvalidPhone'] = true;
     throw new Exception();
   }
 
@@ -155,10 +160,10 @@ try {
     $userObject->revokePermission('Parent');
   }
 
-  $_SESSION['Success'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['Success'] = true;
 } catch (Exception $e) {
-  reportError($e);
-  $_SESSION['GeneralError'] = true;
+  // reportError($e);
+  $_SESSION['TENANT-' . app()->tenant->getId()]['GeneralError'] = true;
 }
 
 header("Location: " . autoUrl("users/" . $id . "/edit"));

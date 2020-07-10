@@ -3,7 +3,7 @@
 $db = app()->db;
 
 $query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ? AND Invited = ?");
-$query->execute([$_SESSION['AC-Registration']['Hash'], true]);
+$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AC-Registration']['Hash'], true]);
 
 if ($query->fetchColumn() != 1) {
   halt(404);
@@ -22,7 +22,7 @@ include BASE_PATH . 'views/header.php';
     <div class="col-sm-10 col-md-8">
       <form method="post" class="needs-validation" novalidate>
         <p class="lead">
-          AC is the modern registration system for new members at <?=htmlspecialchars(env('CLUB_NAME'))?>
+          AC is the modern registration system for new members at <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>
         </p>
 
         <p>

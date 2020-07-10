@@ -1,14 +1,19 @@
 <?php
 
 $db = app()->db;
-$checkForExistingGala = $db->prepare("SELECT `Meet` FROM `meetsWithResults` WHERE `Name` = ? AND `City` = ? AND (`Start` = ? OR `End` = ?) AND `Course` = ?");
+$tenant = app()->tenant;
+
+$checkForExistingGala = $db->prepare("SELECT `Meet` FROM `meetsWithResults` WHERE Tenant = ? AND `Name` = ? AND `City` = ? AND (`Start` = ? OR `End` = ?) AND `Course` = ?");
 $checkForExistingResult = $db->prepare("SELECT COUNT(*) FROM `meetResults` WHERE `Member` = ? AND `Date` = ? AND `IntTime` = ? AND `ChronologicalOrder` = ? AND `Round` = ? AND `Stroke` = ? AND `Distance` = ? AND `Course` = ?");
 $addResult = $db->prepare("INSERT INTO `meetResults` (`Meet`, `Member`, `Date`, `Time`, `IntTime`, `ChronologicalOrder`, `Round`, `Stroke`, `Distance`, `Course`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 $getMember = $db->prepare("SELECT MemberID FROM members WHERE ASANumber = ?");
-$getGala = $db->prepare("SELECT COUNT(*) FROM galas WHERE GalaID = ?");
+$getGala = $db->prepare("SELECT COUNT(*) FROM galas WHERE GalaID = ? AND Tenant = ?");
 $gala = null;
 if (isset($_POST['gala']) && $_POST['gala'] != 0) {
-  $getGala->execute([$_POST['gala']]);
+  $getGala->execute([
+    $_POST['gala'],
+    $tenant->getId()
+  ]);
   if ($getGala->fetchColumn() == 1) {
     $gala = $_POST['gala'];
   }
@@ -33,20 +38,20 @@ if (!$formInvalid) {
           // reportError($_FILES['file-upload']['error'][$i]);
           if ($_FILES['file-upload']['error'][$i] == 2) {
             // Too large
-            $_SESSION['TooLargeError'] = true;
+            $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError'] = true;
           } else {
-            $_SESSION['UploadError'] = true;
+            $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
           }
           throw new Exception();
         } else if ($_FILES['file-upload']['type'][$i] != 'text/plain' && $_FILES['file-upload']['type'][$i] != 'application/octet-stream') {
           // Probably not a text file
           reportError($_FILES['file-upload']['type'][$i]);
-          $_SESSION['UploadError'] = true;
+          $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
           throw new Exception();
         } else if ($_FILES['file-upload']['size'][$i] > 3000000) {
           // Too large, stop
           // reportError($_FILES['file-upload']['size'][$i]);
-          $_SESSION['TooLargeError'] = true;
+          $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError'] = true;
           throw new Exception();
         } else {
           $filePointer = fopen($_FILES['file-upload']['tmp_name'][$i], 'r');
@@ -77,25 +82,26 @@ if (!$formInvalid) {
                 $endDate = $meetData['end']->format("Y-m-d");
               }
 
-              $checkForExistingGala->bindParam(1, $meetData['name'], PDO::PARAM_STR);
-              $checkForExistingGala->bindParam(2, $meetData['city'], PDO::PARAM_STR);
+              $checkForExistingGala->bindParam(1, $tenant->getId(), PDO::PARAM_INT);
+              $checkForExistingGala->bindParam(2, $meetData['name'], PDO::PARAM_STR);
+              $checkForExistingGala->bindParam(3, $meetData['city'], PDO::PARAM_STR);
               if ($startDate != null) {
-                $checkForExistingGala->bindParam(3, $startDate, PDO::PARAM_STR);
-              } else {
-                $checkForExistingGala->bindParam(3, $endDate, PDO::PARAM_NULL);
-              }
-              if ($endDate != null) {
-                $checkForExistingGala->bindParam(4, $endDate, PDO::PARAM_STR);
+                $checkForExistingGala->bindParam(4, $startDate, PDO::PARAM_STR);
               } else {
                 $checkForExistingGala->bindParam(4, $endDate, PDO::PARAM_NULL);
               }
-              $checkForExistingGala->bindParam(5, $meetData['course'], PDO::PARAM_STR);
+              if ($endDate != null) {
+                $checkForExistingGala->bindParam(5, $endDate, PDO::PARAM_STR);
+              } else {
+                $checkForExistingGala->bindParam(5, $endDate, PDO::PARAM_NULL);
+              }
+              $checkForExistingGala->bindParam(6, $meetData['course'], PDO::PARAM_STR);
               $checkForExistingGala->execute();
               $meet = $checkForExistingGala->fetchColumn();
 
               if ($meet == null) {
                 // New gala add record
-                $addGala = $db->prepare("INSERT INTO meetsWithResults (`Name`, `City`, `Start`, `End`, `Course`, `Gala`) VALUES (?, ?, ?, ?, ?, ?)");
+                $addGala = $db->prepare("INSERT INTO meetsWithResults (`Name`, `City`, `Start`, `End`, `Course`, `Gala`, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 $addGala->execute([
                   $meetData['name'],
                   $meetData['city'],
@@ -103,6 +109,7 @@ if (!$formInvalid) {
                   $endDate,
                   $meetData['course'],
                   $gala,
+                  $tenant->getId(),
                 ]);
                 $meet = $db->lastInsertId();
               }
@@ -217,19 +224,19 @@ if (!$formInvalid) {
           fclose($filePointer);
         }
       } else {
-        $_SESSION['UploadError'] = true;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
         throw new Exception();
       }
     }
     $db->commit();
-    $_SESSION['UploadSuccess'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess'] = true;
   } catch (Exception | Error $e) {
     $db->rollBack();
-    $_SESSION['UploadError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
     reportError($e);
   }
 } else if ($formInvalid) {
-  $_SESSION['FormError'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['FormError'] = true;
 }
 
 header("Location: " . autoUrl("admin/galas/sdif/upload"));

@@ -5,7 +5,8 @@ use Brick\PhoneNumber\PhoneNumberParseException;
 use Brick\PhoneNumber\PhoneNumberFormat;
 
 $db = app()->db;
-$access = $_SESSION['AccessLevel'];
+$tenant = app()->tenant;
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 
 // Get all countries
 $countries = getISOAlpha2CountriesWithHomeNations();
@@ -15,8 +16,11 @@ $markdown->setSafeMode(true);
 
 $use_white_background = true;
 
-$query = $db->prepare("SELECT * FROM members LEFT JOIN users ON members.UserID = users.UserID WHERE MemberID = ?");
-$query->execute([$id]);
+$query = $db->prepare("SELECT * FROM members LEFT JOIN users ON members.UserID = users.UserID WHERE MemberID = ? AND members.Tenant = ?");
+$query->execute([
+  $id,
+  $tenant->getId()
+]);
 $row = $query->fetch(PDO::FETCH_ASSOC);
 
 if ($row == null) {
@@ -151,7 +155,7 @@ $content .= '
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       <a class="dropdown-item" href="' . htmlspecialchars(autoUrl("members/" . $id . "/enter-gala")) . '">Enter a gala</a>
       <a class="dropdown-item" href="' . htmlspecialchars(autoUrl("members/" . $id . "/contact-parent")/*'mailto:' . $parentEmail*/) . '">Email parent/guardian</a>';
-      if ($_SESSION['AccessLevel'] != 'Galas') {
+      if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') {
       $content .= '
       <a class="dropdown-item" href="' . htmlspecialchars(autoUrl("members/" . $id . "/new-move")) . '">New squad move</a>
       <a class="dropdown-item" href="' . htmlspecialchars(autoUrl("members/" . $id . "/parenthelp")) . '">Print access key</a>';
@@ -162,13 +166,13 @@ $content .= '
 </p>
 <p>Use the <strong>Quick actions</strong> menu to make gala entries, contact a parent/guardian, make a squad move and more.</p>';
 }
-if (isset($_SESSION['NotifyIndivSuccess'])) {
-  if ($_SESSION['NotifyIndivSuccess']) {
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess'])) {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess']) {
     $content .= '<div class="alert alert-success">We\'ve sent an email to ' . htmlspecialchars($rowSwim["MForename"]) . '\'s parent.</div>';
   } else {
     $content .= '<div class="alert alert-warning">We could not send an email to ' . htmlspecialchars($rowSwim["MForename"]) . '\'s parent.</div>';
   }
-  unset($_SESSION['NotifyIndivSuccess']);
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess']);
 }
 $content .= '<!--
 <ul class="nav nav-pills d-print-none">
@@ -200,7 +204,7 @@ $content .= '<!--
   </div>
   <ul class="list-group list-group-flush">
     <li class="list-group-item">';
-    if ($_SESSION['AccessLevel'] != 'Galas') {
+    if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') {
       $content .= '
       <p class="mb-0">
         <strong class="d-block text-gray-dark">Date of Birth</strong>
@@ -229,7 +233,7 @@ $content .= '<!--
         ' . htmlspecialchars($rowSwim["ASACategory"]) . '
       </p>
     </li>';
-    if ($_SESSION['AccessLevel'] != 'Galas') {
+    if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') {
     $content .= '
     <li class="list-group-item">
       <p class="mb-0">
@@ -240,7 +244,7 @@ $content .= '<!--
       </p>
     </li>';
     }
-    if (bool(env('IS_CLS'))) {
+    if (app()->tenant->isCLS()) {
     $content .= '
     <li class="list-group-item">
       <p class="mb-0">
@@ -249,7 +253,7 @@ $content .= '<!--
       </p>
     </li>';
     }
-    if ($_SESSION['AccessLevel'] != 'Galas') {
+    if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') {
     $content .= '
     <li class="list-group-item">
       <p class="mb-0">
@@ -339,7 +343,7 @@ $content .= '<!--
       </p>
     </li>';
     }
-    if ($_SESSION['AccessLevel'] != 'Galas') {
+    if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') {
     $content .= '
     <li class="list-group-item">
       <p class="mb-0">
@@ -638,7 +642,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
     </ol>
   </nav>
 
-  <?php if (isset($_SESSION['SwimmerAdded']) && $_SESSION['SwimmerAdded']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerAdded']) && $_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerAdded']) { ?>
   <div class="alert alert-success">
     <p class="mb-0">
       <strong>Swimmer added successfully</strong>
@@ -647,7 +651,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
       <a href="<?=autoUrl("members/new")?>" class="alert-link">Add another swimmer</a> or proceed to <a href="<?=autoUrl("assisted-registration")?>" class="alert-link">assisted registration</a>
     </p>
   </div>
-  <?php unset($_SESSION['SwimmerAdded']); } ?>
+  <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerAdded']); } ?>
 
 <?= $content ?>
 </div>

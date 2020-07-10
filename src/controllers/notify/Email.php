@@ -2,36 +2,38 @@
 $pagetitle = "Notify Composer";
 $use_white_background = true;
 
-$emailPrefix = '';
-if (!bool(env('IS_CLS'))) {
-	$emailPrefix = mb_strtolower(trim(env('ASA_CLUB_CODE'))) . '-';
-}
-
 $db = app()->db;
+$tenant = app()->tenant;
 
 $squads = null;
-if ($_SESSION['AccessLevel'] != 'Parent') {
-  $squads = $db->query("SELECT `SquadName`, `SquadID` FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC;");
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') {
+  $squads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` WHERE `Tenant` = ? ORDER BY `SquadFee` DESC, `SquadName` ASC;");
+  $squads->execute([
+    $tenant->getId()
+  ]);
 } else {
-  $squads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` INNER JOIN squadReps ON squadReps.Squad = squads.SquadID WHERE squadReps.User = ? ORDER BY `SquadFee` DESC, `SquadName` ASC;");
-  $squads->execute([$_SESSION['UserID']]);
+  $squads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` INNER JOIN squadReps ON squadReps.Squad = squads.SquadID WHERE squadReps.User = ? AND `Tenant` = ? ORDER BY `SquadFee` DESC, `SquadName` ASC;");
+  $squads->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $tenant->getId()]);
 }
 
 $lists = null;
-if ($_SESSION['AccessLevel'] != 'Parent') {
-  $lists = $db->query("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` ORDER BY `Name` ASC;");
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') {
+  $lists = $db->prepare("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` WHERE `Tenant` = ? ORDER BY `Name` ASC;");
+  $lists->execute([
+    $tenant->getId()
+  ]);
 } else {
-  $lists = $db->prepare("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` INNER JOIN listSenders ON listSenders.List = targetedLists.ID WHERE listSenders.User = ? ORDER BY `Name` ASC;");
-  $lists->execute([$_SESSION['UserID']]);
+  $lists = $db->prepare("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` INNER JOIN listSenders ON listSenders.List = targetedLists.ID WHERE listSenders.User = ? AND `Tenant` = ? ORDER BY `Name` ASC;");
+  $lists->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $tenant->getId()]);
 }
 
-$galas = $db->prepare("SELECT GalaName, GalaID FROM `galas` WHERE GalaDate >= ? ORDER BY `GalaName` ASC;");
+$galas = $db->prepare("SELECT GalaName, GalaID FROM `galas` WHERE GalaDate >= ? AND `Tenant` = ? ORDER BY `GalaName` ASC;");
 $date = new DateTime('-1 week', new DateTimeZone('Europe/London'));
-$galas->execute([$date->format('Y-m-d')]);
+$galas->execute([$date->format('Y-m-d'), $tenant->getId()]);
 
 $query = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE
 UserID = ?");
-$query->execute([$_SESSION['UserID']]);
+$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $curUserInfo = $query->fetch(PDO::FETCH_ASSOC);
 
 $senderNames = explode(' ', $curUserInfo['Forename'] . ' ' . $curUserInfo['Surname']);
@@ -43,21 +45,21 @@ for ($i = 0; $i < sizeof($senderNames); $i++) {
   }
 }
 
-if (!bool(env('IS_CLS'))) {
-  $fromEmail .= '.' . urlencode(mb_strtolower(str_replace(' ', '', env('CLUB_CODE'))));
+if (!app()->tenant->isCLS()) {
+  $fromEmail .= '.' . urlencode(mb_strtolower(str_replace(' ', '', getenv('CLUB_CODE'))));
 }
 
-$fromEmail .= '@' . env('EMAIL_DOMAIN');
+$fromEmail .= '@' . getenv('EMAIL_DOMAIN');
 
 function fieldChecked($name) {
-  if (isset($_SESSION['NotifyPostData'][$name]) && bool($_SESSION['NotifyPostData'][$name])) {
+  if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData'][$name]) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData'][$name])) {
     return ' checked ';
   }
 }
 
 function fieldValue($name) {
-  if (isset($_SESSION['NotifyPostData'][$name])) {
-    return 'value="' . htmlspecialchars($_SESSION['NotifyPostData'][$name]) . '"';
+  if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData'][$name])) {
+    return 'value="' . htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData'][$name]) . '"';
   }
 }
 
@@ -78,45 +80,45 @@ include BASE_PATH . "views/notifyMenu.php";
 	<h1>Notify Composer</h1>
 	<p class="lead">Send emails to targeted groups</p>
 
-  <?php if (isset($_SESSION['UploadSuccess']) && $_SESSION['UploadSuccess']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) { ?>
   <div class="alert alert-success">
     <p class="mb-0"><strong>Results have been uploaded</strong>.</p>
   </div>
   <?php
-    unset($_SESSION['UploadSuccess']);
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']);
   } ?>
 
-  <?php if (isset($_SESSION['FormError']) && $_SESSION['FormError']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['FormError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['FormError']) { ?>
   <div class="alert alert-danger">
     <p class="mb-0"><strong>An integrity or idempotency error has occurred</strong></p>
     <p class="mb-0">We were unable to verify that you submitted the form. Please try again.</p>
   </div>
   <?php
-    unset($_SESSION['FormError']);
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['FormError']);
   } ?>
 
-  <?php if (isset($_SESSION['UploadError']) && $_SESSION['UploadError']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError']) { ?>
   <div class="alert alert-danger">
     <p class="mb-0"><strong>There was a problem with the file uploaded</strong>. Please try again.</p>
   </div>
   <?php
-    unset($_SESSION['UploadError']);
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadError']);
   } ?>
 
-  <?php if (isset($_SESSION['TooLargeError']) && $_SESSION['TooLargeError']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError']) { ?>
   <div class="alert alert-danger">
     <p class="mb-0"><strong>A file you uploaded was too large</strong>. The maximum size for an individual file is 300000 bytes.</p>
   </div>
   <?php
-    unset($_SESSION['TooLargeError']);
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError']);
   } ?>
 
-  <?php if (isset($_SESSION['CollectiveSizeTooLargeError']) && $_SESSION['CollectiveSizeTooLargeError']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['CollectiveSizeTooLargeError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['CollectiveSizeTooLargeError']) { ?>
   <div class="alert alert-danger">
     <p class="mb-0"><strong>The files you uploaded were collectively too large</strong>. Attachments may not exceed a total of 10 megabytes in size.</p>
   </div>
   <?php
-    unset($_SESSION['CollectiveSizeTooLargeError']);
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['CollectiveSizeTooLargeError']);
   } ?>
   
   <form method="post" id="notify-form" onkeypress="return event.keyCode != 13;" enctype="multipart/form-data" novalidate>
@@ -159,7 +161,7 @@ include BASE_PATH . "views/notifyMenu.php";
 			</div>
 		</div>
 
-    <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
+    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
     <div class="form-group">
 			<label>To members entered in the following galas...</label>
 			<div class="row">
@@ -185,11 +187,11 @@ include BASE_PATH . "views/notifyMenu.php";
         <div class="form-group">
           <label for="from">Send message as</label>
           <div class="custom-control custom-radio">
-            <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>checked<?php } ?> required>
-            <label class="custom-control-label" for="from-club"><?=htmlspecialchars(env('CLUB_NAME'))?></label>
+            <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>checked<?php } ?> required>
+            <label class="custom-control-label" for="from-club"><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></label>
           </div>
           <div class="custom-control custom-radio">
-            <input type="radio" id="from-user" name="from" class="custom-control-input" value="current-user" <?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>checked<?php } ?>>
+            <input type="radio" id="from-user" name="from" class="custom-control-input" value="current-user" <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>checked<?php } ?>>
             <label class="custom-control-label" for="from-user"><?=htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'])?></label>
           </div>
           <div class="invalid-feedback">
@@ -206,7 +208,7 @@ include BASE_PATH . "views/notifyMenu.php";
             <label class="custom-control-label" for="ReplyTo-Club">Main club address</label>
           </div>
           <div class="custom-control custom-radio">
-            <input type="radio" id="ReplyTo-Me" name="ReplyToMe" class="custom-control-input" value="1" <?php if (!getUserOption($_SESSION['UserID'], 'NotifyReplyAddress')) { ?>disabled<?php } ?>>
+            <input type="radio" id="ReplyTo-Me" name="ReplyToMe" class="custom-control-input" value="1" <?php if (!getUserOption($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 'NotifyReplyAddress')) { ?>disabled<?php } ?>>
             <label class="custom-control-label" for="ReplyTo-Me">My reply-to email address</label>
           </div>
           <small class="form-text text-muted">
@@ -249,7 +251,7 @@ include BASE_PATH . "views/notifyMenu.php";
           <span class="mono">User Name</span>,".
         </em>
       </p>
-			<textarea class="form-control" id="message" name="message" rows="10" data-tinymce-css-location="<?=htmlspecialchars(autoUrl("public/css/tinymce.css"))?>" data-documentBaseUrl="<?=htmlspecialchars(autoUrl("notify/new/"))?>" required><?php if (isset($_SESSION['NotifyPostData']['message'])) {?><?=htmlspecialchars($_SESSION['NotifyPostData']['message'])?><?php } ?></textarea>
+			<textarea class="form-control" id="message" name="message" rows="10" data-tinymce-css-location="<?=htmlspecialchars(autoUrl("public/css/tinymce.css"))?>" data-documentBaseUrl="<?=htmlspecialchars(autoUrl("notify/new/"))?>" required><?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData']['message'])) {?><?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData']['message'])?><?php } ?></textarea>
 		</div>
 
     <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
@@ -265,7 +267,7 @@ include BASE_PATH . "views/notifyMenu.php";
       </div>
     </div>
 
-    <?php if ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas") { ?>
+    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas") { ?>
 
     <div class="form-group">
       <div class="custom-control custom-checkbox">

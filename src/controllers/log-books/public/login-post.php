@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 try {
 
@@ -13,17 +14,19 @@ try {
 
     // Swim England numbers in system may not be unique
     // Check count is <= 1
-    $getCount = $db->prepare("SELECT COUNT(*) FROM members WHERE ASANumber = ?");
+    $getCount = $db->prepare("SELECT COUNT(*) FROM members WHERE ASANumber = ? AND Tenant = ?");
     $getCount->execute([
-      $_POST['swim-england']
+      $_POST['swim-england'],
+      $tenant->getId()
     ]);
     if ($getCount->fetchColumn() > 1) {
-      throw new Exception('Your Swim England number is not unique in the ' . env('CLUB_NAME') . ' database. We cannot log you in with ambiguous details.');
+      throw new Exception('Your Swim England number is not unique in the ' . app()->tenant->getKey('CLUB_NAME') . ' database. We cannot log you in with ambiguous details.');
     } 
 
-    $getMember = $db->prepare("SELECT MemberID, ASANumber, PWHash, PWWrong FROM members WHERE ASANumber = ?");
+    $getMember = $db->prepare("SELECT MemberID, ASANumber, PWHash, PWWrong FROM members WHERE ASANumber = ? AND Tenant = ?");
     $getMember->execute([
-      trim($_POST['swim-england'])
+      trim($_POST['swim-england']),
+      $tenant->getId()
     ]);
 
     $member = $getMember->fetch(PDO::FETCH_ASSOC);
@@ -51,11 +54,11 @@ try {
       $member['MemberID']
     ]);
 
-    $_SESSION['LogBooks-MemberLoggedIn'] = true;
-    $_SESSION['LogBooks-Member'] = $member['MemberID'];
+    $_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-Member'] = $member['MemberID'];
 
-    if (isset($_SESSION['TARGET_URL'])) {
-      unset($_SESSION['TARGET_URL']);
+    if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL'])) {
+      unset($_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL']);
     }
 
     http_response_code(303);
@@ -72,8 +75,8 @@ try {
 
   // Invalid attempt
   // Return and report error to user
-  $_SESSION['LogBooks-SE-ID'] = $_POST['swim-england'];
-  $_SESSION['LogBooks-MemberLoginError'] = $e->getMessage();
+  $_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-SE-ID'] = $_POST['swim-england'];
+  $_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoginError'] = $e->getMessage();
 
   http_response_code(303);
   header("location: " . autoUrl("log-books/login"));

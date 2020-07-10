@@ -7,7 +7,7 @@ if ($renewal_trap) {
 	$url_path = "renewal/emergencycontacts";
 }
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 $contact = new EmergencyContact();
 $contact->connect($db);
@@ -21,7 +21,7 @@ if ($_POST['name'] != null && $_POST['name'] != "" && $_POST['num'] != null && $
 		}
 		$contact->add();
 
-		$_SESSION['AddNewSuccess'] = '
+		$_SESSION['TENANT-' . app()->tenant->getId()]['AddNewSuccess'] = '
 		<div class="alert alert-success">
 			<p class="mb-0">
 				<strong>
@@ -37,7 +37,7 @@ if ($_POST['name'] != null && $_POST['name'] != "" && $_POST['num'] != null && $
 			header("Location: " . autoUrl($url_path));
 		}
 	} catch (Exception $e) {
-		$_SESSION['AddNewError'] = '
+		$_SESSION['TENANT-' . app()->tenant->getId()]['AddNewError'] = '
 		<div class="alert alert-warning">
 			<p class="mb-0">
 				<strong>
@@ -47,12 +47,12 @@ if ($_POST['name'] != null && $_POST['name'] != "" && $_POST['num'] != null && $
 			<p class="mb-0">Your phone number might not be valid</p>
 		</div>
 		';
-		$_SESSION['POST_DATA'] = $_POST;
+		$_SESSION['TENANT-' . app()->tenant->getId()]['POST_DATA'] = $_POST;
 		header("Location: " . autoUrl($url_path . "/new"));
 	}
 
 } else {
-	$_SESSION['AddNewError'] = '
+	$_SESSION['TENANT-' . app()->tenant->getId()]['AddNewError'] = '
 	<div class="alert alert-warning">
 		<p class="mb-0">
 			<strong>

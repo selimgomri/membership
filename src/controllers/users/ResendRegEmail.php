@@ -1,14 +1,16 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 // Instantiate variables to go in JSON
 $alertContent;
 $alertContextualClass;
 $status = false;
 
-$getUser = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE UserID = ? AND RR = 1 AND `permissions`.`Permission` = 'Parent'");
+$getUser = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE Tenant = ? AND UserID = ? AND RR = 1 AND `permissions`.`Permission` = 'Parent'");
 $getUser->execute([
+  $tenant->getId(),
   $_POST['user']
 ]);
 
@@ -30,12 +32,12 @@ if ($info != null) {
   ]);
 
   try {
-    $subject = "Complete your registration at " . env('CLUB_NAME');
+    $subject = "Complete your registration at " . app()->tenant->getKey('CLUB_NAME');
     $message = "<p>Hello " . htmlspecialchars($info['Forename']) . ", </p>";
-    $message .= "<p>We've pre-registered you for a " . htmlspecialchars(env('CLUB_NAME')) . " account. To continue, <a href=\"" . htmlspecialchars(autoUrl("assisted-registration/" . $_POST['user'] . "/" . $password)) . "\">please follow this link</a></p>";
+    $message .= "<p>We've pre-registered you for a " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " account. To continue, <a href=\"" . htmlspecialchars(autoUrl("assisted-registration/" . $_POST['user'] . "/" . $password)) . "\">please follow this link</a></p>";
     $message .= "<p>As part of the registration process, we'll ask you to set a password, let us know your communication preferences and fill in important information about you and/or your members.</p>";
 
-    if (!bool(env('IS_CLS'))) {
+    if (!app()->tenant->isCLS()) {
       $message .= '<p>Please note that your club may not provide all services included in the membership software.</p>';
     }
 

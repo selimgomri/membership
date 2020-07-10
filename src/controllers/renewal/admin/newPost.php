@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 use Respect\Validation\Validator as v;
 
@@ -43,16 +44,17 @@ if (!v::date()->validate($end)) {
 
 if ($ok) {
 	try {
-		$insert = $db->prepare("INSERT INTO `renewals` (`Name`, `StartDate`, `EndDate`, `Year`) VALUES (?, ?, ?, ?);");
+		$insert = $db->prepare("INSERT INTO `renewals` (`Name`, `StartDate`, `EndDate`, `Year`, Tenant) VALUES (?, ?, ?, ?, ?);");
 		$insert->execute([
 			$name,
 			$start,
 			$end,
-			$year
+			$year,
+			$tenant->getId()
 		]);
 		header("Location: " . autoUrl("renewal"));
 	} catch (Exception $e) {
-		$_SESSION['NewRenewalErrorInfo'] = '
+		$_SESSION['TENANT-' . app()->tenant->getId()]['NewRenewalErrorInfo'] = '
 		<div class="alert alert-danger">
 			<p class="mb-0">
 				<strong>
@@ -63,11 +65,11 @@ if ($ok) {
 				' . $response . '
 			</ul>
 		</div>';
-		$_SESSION['NewRenewalForm'] = [$name, $start, $end];
+		$_SESSION['TENANT-' . app()->tenant->getId()]['NewRenewalForm'] = [$name, $start, $end];
 		header("Location: " . autoUrl("renewal/new"));
 	}
 } else {
-	$_SESSION['NewRenewalErrorInfo'] = '
+	$_SESSION['TENANT-' . app()->tenant->getId()]['NewRenewalErrorInfo'] = '
 	<div class="alert alert-danger">
 		<p class="mb-0">
 			<strong>
@@ -78,6 +80,6 @@ if ($ok) {
 			' . $response . '
 		</ul>
 	</div>';
-	$_SESSION['NewRenewalForm'] = [$name, $start, $end];
+	$_SESSION['TENANT-' . app()->tenant->getId()]['NewRenewalForm'] = [$name, $start, $end];
 	header("Location: " . autoUrl("renewal/new"));
 }

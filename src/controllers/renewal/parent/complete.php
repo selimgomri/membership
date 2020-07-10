@@ -12,22 +12,14 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			We'll charge you your renewal fee on or after the first day of next month.
 		</p>
 
-		<?php if (bool(env('IS_CLS'))) { ?>
-		<p>
-			If you have further questions about membership renewal, please contact the
-			membership officer by email - <a
-			href="mailto:membership@chesterlestreetasc.co.uk">membership@chesterlestreetasc.co.uk</a>.
-		</p>
-		<?php } else { ?>
 		<p>
 			If you have further questions about membership renewal, please contact the
 			membership officer.
 		</p>
+
 		<p>
-			Your club's email address is <a
-			href="mailto:<?=htmlspecialchars(env('CLUB_EMAIL'))?>"><?=htmlspecialchars(env('CLUB_EMAIL'))?></a>
+			Your club's email address is <a href="mailto:<?= htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) ?>"><?= htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) ?></a>
 		</p>
-		<?php } ?>
 
 		<p class="mb-0">
 			<a href="<?php echo autoUrl(""); ?>" class="btn btn-success">

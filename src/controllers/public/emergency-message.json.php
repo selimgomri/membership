@@ -5,27 +5,27 @@ $data = [
   'message' => null
 ];
 
-if (env('EMERGENCY_MESSAGE_TYPE') != 'NONE' && env('EMERGENCY_MESSAGE')) {
+if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') != 'NONE' && app()->tenant->getKey('EMERGENCY_MESSAGE')) {
   $markdown = new ParsedownExtra();
   $message = "";
 
   $message .= '<div class="py-3 ';
 
-  if (env('EMERGENCY_MESSAGE_TYPE') == 'SUCCESS') {
+  if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') == 'SUCCESS') {
     $message .= 'bg-success text-white';
   }
 
-  if (env('EMERGENCY_MESSAGE_TYPE') == 'DANGER') {
+  if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') == 'DANGER') {
     $message .= 'bg-danger text-white';
   }
 
-  if (env('EMERGENCY_MESSAGE_TYPE') == 'WARN') {
+  if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') == 'WARN') {
     $message .= 'bg-warning text-body';
   }
 
   $message .= '"><div class="container emergency-message">';
   try {
-    $message .= $markdown->text(env('EMERGENCY_MESSAGE'));
+    $message .= $markdown->text(app()->tenant->getKey('EMERGENCY_MESSAGE'));
   } catch (Exception $e) {
     $message .= '<p>An emergency message has been set but cannot be rendered.</p>';
   }

@@ -1,21 +1,25 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getInfo = $db->prepare("SELECT members.MemberID, MForename fn, MSurname sn, members.UserID, trainingLogs.Title, trainingLogs.Content, trainingLogs.ContentType, trainingLogs.DateTime FROM trainingLogs INNER JOIN members ON trainingLogs.Member = members.MemberID WHERE trainingLogs.ID = ?");
-$getInfo->execute([$id]);
+$getInfo = $db->prepare("SELECT members.MemberID, MForename fn, MSurname sn, members.UserID, trainingLogs.Title, trainingLogs.Content, trainingLogs.ContentType, trainingLogs.DateTime FROM trainingLogs INNER JOIN members ON trainingLogs.Member = members.MemberID WHERE trainingLogs.ID = ? AND members.Tenant = ?");
+$getInfo->execute([
+  $id,
+  $tenant->getId()
+]);
 $info = $getInfo->fetch(PDO::FETCH_ASSOC);
 
 if ($info == null) {
   halt(404);
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent' && $info['UserID'] != $_SESSION['UserID']) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $info['UserID'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
   halt(404);
 }
 
-if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-MemberLoggedIn'])) {
-  if ($_SESSION['LogBooks-Member'] != $info['MemberID']) {
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn'])) {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-Member'] != $info['MemberID']) {
     halt(404);
   }
 }
@@ -54,7 +58,7 @@ if (sizeof($errors) > 0) {
   }
   $errorMessage .= "</ul>";
 
-  $_SESSION['EditLogErrorMessage'] = $errorMessage;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['EditLogErrorMessage'] = $errorMessage;
 
   http_response_code(303);
   header("location: " . autoUrl("log-books/logs/" . $id . "/edit"));
@@ -83,7 +87,7 @@ if (sizeof($errors) > 0) {
       $id
     ]);
 
-    $_SESSION['EditLogSuccessMessage'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['EditLogSuccessMessage'] = true;
 
     http_response_code(303);
     // Temp redirect until log pages are added
@@ -94,7 +98,7 @@ if (sizeof($errors) > 0) {
     $errorMessage .= "<li>" . $e->getMessage() . "</li>";
     $errorMessage .= "</ul>";
 
-    $_SESSION['EditLogErrorMessage'] = $errorMessage;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['EditLogErrorMessage'] = $errorMessage;
 
     http_response_code(303);
     header("location: " . autoUrl("log-books/logs/" . $id . "/edit"));

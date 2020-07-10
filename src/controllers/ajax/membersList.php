@@ -1,11 +1,15 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 $count = 0;
 $selection = "";
 $sql = "";
+
+$getSquads = $db->prepare("SELECT SquadName FROM squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad WHERE Member = ?");
+
 if ((isset($_POST["squadID"])) && (isset($_POST["search"]))) {
   // get the squadID parameter from post
   $squadID = $_POST["squadID"];
@@ -37,36 +41,34 @@ if ((isset($_POST["squadID"])) && (isset($_POST["search"]))) {
     // Search the database for the results
 		if ($squadID == "allSquads") {
       $query = $db->prepare("SELECT members.MemberID, members.MForename,
-      members.MSurname, members.ASANumber, squads.SquadName,
-      members.DateOfBirth, squads.SquadID FROM (members INNER JOIN squads ON
-      members.SquadID = squads.SquadID) WHERE members.UserID IS NULL AND members.Active AND (" .
+      members.MSurname, members.ASANumber,
+      members.DateOfBirth FROM members WHERE members.Tenant = ? AND members.UserID IS NULL AND members.Active AND (" .
       $selection . ") ORDER BY `members`.`MForename`, `members`.`MSurname`
       ASC");
+      $names = array_merge([$tenant->getId()], $names);
 	  }
 	  else {
       $query = $db->prepare("SELECT members.MemberID, members.MForename,
-      members.MSurname, members.ASANumber, squads.SquadName,
-      members.DateOfBirth FROM (members INNER JOIN squads ON members.SquadID =
-      squads.SquadID) WHERE members.UserID IS NULL AND members.Active AND squads.SquadID = ? AND (" .
+      members.MSurname, members.ASANumber,
+      members.DateOfBirth FROM members INNER JOIN squadMembers WHERE members.Tenant = ? AND members.UserID IS NULL AND members.Active AND squadMembers.Squad = ? AND (" .
       $selection . ") ORDER BY `members`.`MForename` , `members`.`MSurname`
       ASC");
-      $names = array_merge([$_POST["squadID"]], $names);
+      $names = array_merge([$tenant->getId(), $_POST["squadID"]], $names);
 	  }
   } else {
     if ($squadID == "allSquads") {
       $query = $db->prepare("SELECT members.MemberID, members.MForename,
-      members.MSurname, members.ASANumber, squads.SquadName,
-      members.DateOfBirth, squads.SquadID FROM (members INNER JOIN squads ON
-      members.SquadID = squads.SquadID) WHERE members.Active AND (" . $selection . ") ORDER BY
+      members.MSurname, members.ASANumber,
+      members.DateOfBirth FROM members WHERE members.Tenant = ? AND members.Active AND (" . $selection . ") ORDER BY
       `members`.`MForename` , `members`.`MSurname` ASC");
+      $names = array_merge([$tenant->getId()], $names);
 	  }
 	  else {
       $query = $db->prepare("SELECT members.MemberID, members.MForename,
-      members.MSurname, members.ASANumber, squads.SquadName,
-      members.DateOfBirth FROM (members INNER JOIN squads ON members.SquadID =
-      squads.SquadID) WHERE squads.SquadID = ? AND members.Active AND (" . $selection . ") ORDER
+      members.MSurname, members.ASANumber,
+      members.DateOfBirth FROM members INNER JOIN squadMembers WHERE members.Tenant = ? AND squadMembers.Squad = ? AND members.Active AND (" . $selection . ") ORDER
       BY `members`.`MForename` , `members`.`MSurname` ASC");
-      $names = array_merge([$_POST["squadID"]], $names);
+      $names = array_merge([$tenant->getId(), $_POST["squadID"]], $names);
 	  }
   }
 }
@@ -85,6 +87,9 @@ $row = $query->fetch(PDO::FETCH_ASSOC);
 
 <?php do {
   $count += 1;
+  $getSquads->execute([
+    $row['MemberID']
+  ]);
   // $row = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
   $swimmerLink = autoUrl("swimmers/" . $row['MemberID'] . "");
   $DOB = date('j F Y', strtotime($row['DateOfBirth']));
@@ -99,18 +104,24 @@ $row = $query->fetch(PDO::FETCH_ASSOC);
             <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
           </strong>
         </p>
-        <p class="mb-0"><?=htmlspecialchars($row['SquadName'])?> Squad</p>
+        <ul class="mb-0 list-unstyled">
+        <?php if ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)) { do { ?>
+          <li><?=htmlspecialchars($squad['SquadName'])?></li>
+        <?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)); } else { ?>
+          <li>No squads</li>
+        <?php } ?>
+        </ul>
         <div class="mb-2 d-sm-none"></div>
       </div>
       <div class="col text-sm-right">
         <p class="mb-0">
-          <?php if ($_SESSION['AccessLevel'] != 'Galas') { ?>
+          <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') { ?>
           <strong>Born:</strong> <?=$DOB?> (<em>Age <?=htmlspecialchars($age)?></em>)
           <?php } else { ?>
           <strong>Age:</strong> <?=htmlspecialchars($age)?>
           <?php } ?>
         </p>
-        <?php if ($_SESSION['AccessLevel'] != 'Galas') { ?>
+        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') { ?>
         <p class="mb-0">
           <strong>Attendance:</strong> <?=getAttendanceByID(null, $row['MemberID'], 4)?>%
         </p>

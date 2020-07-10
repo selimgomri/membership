@@ -1,10 +1,10 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $query = $db->prepare("SELECT * FROM `newUsers` WHERE `AuthCode` = ? AND `ID` = ? AND `Type` = ?");
 $query->execute([$auth, $id, 'EmailUpdate']);
-$id = $db->lastInsertId();
 
 $rows = $query->fetchAll(PDO::FETCH_ASSOC);
 $row = $rows[0];
@@ -24,23 +24,34 @@ if ($found) {
 	$oldEmail 			= $array->OldEmail;
 	$newEmail 			= $array->NewEmail;
 
+	// Verify user and tenant
+	$check = $db->prepare("SELECT COUNT(*) FROM users WHERE UserID = ? AND Tenant = ?");
+	$check->execute([
+		$user,
+		$tenant->getId(),
+	]);
+
+	if ($check->fetchColumn() == 0) {
+		halt(404);
+	}
+
 	($db->prepare("UPDATE `users` SET `EmailAddress` = ? WHERE `UserID` = ?"))->execute([$newEmail, $user]);
 
 	$subject = "Your Email Address has been Changed";
 	$message = '
-	<p>Your ' . env('CLUB_NAME') . ' Account Email Address has been changed from ' . $oldEmail . ' to ' . $newEmail . '.</p>
+	<p>Your ' . app()->tenant->getKey('CLUB_NAME') . ' Account Email Address has been changed from ' . $oldEmail . ' to ' . $newEmail . '.</p>
 	<p>If this was you then you, then please ignore this email. If it was not you, please head to ' . autoUrl("") . ' and reset your password urgently.</p>
-	<p>Kind Regards, <br>The ' . env('CLUB_NAME') . ' Team</p>
+	<p>Kind Regards, <br>The ' . app()->tenant->getKey('CLUB_NAME') . ' Team</p>
 	';
 	$to = "";
 	$name = getUserName($user);
 	$from = [
-		"Email" => "noreply@" . env('EMAIL_DOMAIN'),
-		"Name" => env('CLUB_NAME') . " Secretary"
+		"Email" => "noreply@" . getenv('EMAIL_DOMAIN'),
+		"Name" => app()->tenant->getKey('CLUB_NAME') . " Secretary"
 	];
 	notifySend($to, $subject, $message, $name, $oldEmail, $from);
 
-	$_SESSION['RegistrationGoVerify'] = '
+	$_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationGoVerify'] = '
   <div class="alert alert-success mb-0">
     <p class="mb-0">
       <strong>
@@ -58,7 +69,7 @@ if ($found) {
 
 } else {
 
-	$_SESSION['RegistrationGoVerify'] = '
+	$_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationGoVerify'] = '
 	<div class="alert alert-warning mb-0">
     <p class="mb-0">
       <strong>

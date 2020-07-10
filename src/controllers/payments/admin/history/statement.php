@@ -3,7 +3,9 @@
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $db = app()->db;
-$user = $_SESSION['UserID'];
+$tenant = app()->tenant;
+
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 $sql = $payments = null;
 $count = 0;
@@ -12,7 +14,7 @@ $pdfUrl = autoUrl("payments/statements/" . $id . "/pdf");
 
 // Check the thing exists
 
-if ($_SESSION['AccessLevel'] == "Parent") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
   // Check the payment exists and belongs to the user
   $sql = $db->prepare("SELECT COUNT(*) FROM payments WHERE PaymentID = ? AND UserID = ?");
   $sql->execute([$id, $user]);
@@ -27,8 +29,11 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 	$payments = $db->prepare("SELECT * FROM `paymentsPending` INNER JOIN `users` ON users.UserID = paymentsPending.UserID WHERE `Payment` = ? AND paymentsPending.UserID = ?");
   $payments->execute([$id, $user]);
 } else {
-  $sql = $db->prepare("SELECT COUNT(*) FROM payments WHERE PaymentID = ?");
-  $sql->execute([$id]);
+  $sql = $db->prepare("SELECT COUNT(*) FROM payments INNER JOIN users ON users.UserID = payments.UserID WHERE PaymentID = ? AND users.Tenant = ?");
+  $sql->execute([
+    $id,
+    $tenant->getId()
+  ]);
   if ($sql->fetchColumn() == 0) {
     halt(404);
   }
@@ -55,7 +60,7 @@ if ($payment_info['PMKey'] != null) {
 }
 $pagetitle = "Statement for " . htmlspecialchars($name) . ", " . htmlspecialchars("Statement #" . $id);
 
-$_SESSION['qr'][0]['text'] = autoUrl("payments/statements/" . htmlspecialchars($id));
+$_SESSION['TENANT-' . app()->tenant->getId()]['qr'][0]['text'] = autoUrl("payments/statements/" . htmlspecialchars($id));
 
 $billDate = null;
 try {
@@ -71,7 +76,7 @@ include BASE_PATH . "views/paymentsMenu.php";
  ?>
 
 <div class="container">
-  <?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>
+  <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
@@ -82,8 +87,8 @@ include BASE_PATH . "views/paymentsMenu.php";
   <?php } ?>
 
 	<div class="">
-    <span class="d-none d-print-block h1"><?=htmlspecialchars(env('CLUB_NAME'))?> Payments</span>
-    <?php if ($_SESSION['AccessLevel'] == "Parent") { ?>
+    <span class="d-none d-print-block h1"><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Payments</span>
+    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { ?>
     <h1><?=htmlspecialchars($payment_info['Name'])?> Statement</h1>
     <?php } else { ?>
 		<h1>Statement for <?=htmlspecialchars($name)?></h1>
@@ -133,9 +138,9 @@ include BASE_PATH . "views/paymentsMenu.php";
 
     </dl>
 
-    <?php if ($_SESSION['AccessLevel'] == "Admin" && ($payment_info['Status'] == 'customer_approval_denied' || $payment_info['Status'] == 'failed')) {
-    $_SESSION['Token' . $id] = hash('sha256', random_int(0, 999999));
-    $url = autoUrl("payments/statements/" . $id . "/mark-paid/" . $_SESSION['Token' . $id]);
+    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" && ($payment_info['Status'] == 'customer_approval_denied' || $payment_info['Status'] == 'failed')) {
+    $_SESSION['TENANT-' . app()->tenant->getId()]['Token' . $id] = hash('sha256', random_int(0, 999999));
+    $url = autoUrl("payments/statements/" . $id . "/mark-paid/" . $_SESSION['TENANT-' . app()->tenant->getId()]['Token' . $id]);
     ?>
     <p>
       <a href="<?=htmlspecialchars($url)?>" class="btn btn-primary">
@@ -254,7 +259,7 @@ include BASE_PATH . "views/paymentsMenu.php";
           target="_blank">Chester-le-Street ASC website</a>.
         </p>
         <p>
-          Payments to <?=htmlspecialchars(env('CLUB_NAME'))?> are covered by the Direct Debit Guarantee.
+          Payments to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> are covered by the Direct Debit Guarantee.
         </p>
       </div>
     </div>

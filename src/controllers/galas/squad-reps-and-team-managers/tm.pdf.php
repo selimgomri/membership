@@ -92,11 +92,11 @@ ob_start();?>
     </p>
 
     <div class="avoid-page-break-inside">
-      <?php if (bool(env('IS_CLS'))) { ?>
+      <?php if (app()->tenant->isCLS()) { ?>
       <p>&copy; Chester-le-Street ASC <?=date("Y")?></p>
       <?php } else { ?>
       <p class="mb-0">&copy; Swimming Club Data Systems <?=date("Y")?></p>
-      <p>Produced by Swimming Club Data Systems for <?=htmlspecialchars(env('CLUB_NAME'))?></p>
+      <p>Produced by Swimming Club Data Systems for <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></p>
       <?php } ?>
     </div>
 

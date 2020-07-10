@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $disabled = "";
 
@@ -10,8 +11,11 @@ $markAsRefunded = $db->prepare("UPDATE galaEntries SET Refunded = ?, AmountRefun
 $notify = $db->prepare("INSERT INTO notify (UserID, `Status`, `Subject`, `Message`, EmailType) VALUES (?, ?, ?, ?, ?)");
 $setRefundAmount = $db->prepare("UPDATE stripePayments SET `AmountRefunded` = ? WHERE `Intent` = ?");
 
-$getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas WHERE GalaID = ?");
-$getGala->execute([$id]);
+$getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas WHERE GalaID = ? AND Tenant = ?");
+$getGala->execute([
+	$id,
+	$tenant->getId()
+]);
 $gala = $getGala->fetch(PDO::FETCH_ASSOC);
 
 if ($gala == null) {
@@ -91,9 +95,9 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 					'Refund',
 					$json
 				]);
-			} else if ($entry['Intent'] != null && env('STRIPE')) {
+			} else if ($entry['Intent'] != null && getenv('STRIPE')) {
 				// Refund to card used
-				\Stripe\Stripe::setApiKey(env('STRIPE'));
+				\Stripe\Stripe::setApiKey(getenv('STRIPE'));
 				$intent = \Stripe\PaymentIntent::retrieve($entry['Intent']);
 				$intent->charges->data[0]->refund(['amount' => $amount]);
 
@@ -129,7 +133,7 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 				$message .= '<p>As you don\'t pay your club fees by direct debit or have opted out of paying for galas by direct debit, you\'ll need to collect this refund from the treasurer or gala coordinator.</p>';
 			}
 
-			$message .= '<p>Kind Regards<br> The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
+			$message .= '<p>Kind Regards<br> The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
 
 			$notify->execute([
 				$entry['UserID'],
@@ -143,15 +147,15 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 		} catch (Exception $e) {
 			// A problem occured
 			$db->rollBack();
-			$_SESSION['ChargeUsersFailure'] = true;
+			$_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersFailure'] = true;
 		}
 	} else if ($amount > $amountRefundable) {
-		$_SESSION['OverhighChargeAmount'][$entry['EntryID']] = true;
+		$_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'][$entry['EntryID']] = true;
 	}
 }
 
-if (!isset($_SESSION['ChargeUsersFailure'])) {
-	$_SESSION['ChargeUsersSuccess'] = true;
+if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersFailure'])) {
+	$_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersSuccess'] = true;
 }
 
 header("Location: " . currentUrl());

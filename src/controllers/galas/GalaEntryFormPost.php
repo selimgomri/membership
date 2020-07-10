@@ -1,5 +1,7 @@
 <?php
 
+$tenant = app()->tenant;
+
 // If select sessions, include that code else continue
 
 if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
@@ -10,21 +12,36 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
   $db = app()->db;
 
   // Get swimmer info
-	$getSwimmer = $db->prepare("SELECT UserID, SquadID FROM members WHERE MemberID = ?");
-	$getSwimmer->execute([
-	  $_POST['swimmer']
+  $getSwimmer = $db->prepare("SELECT UserID FROM members WHERE MemberID = ? AND Tenant = ?");
+  $getSwimmer->execute([
+    $_POST['swimmer'],
+    $tenant->getId()
   ]);
   $swimmerDetails = $getSwimmer->fetch(PDO::FETCH_ASSOC);
+
+  if ($swimmerDetails == null) {
+    halt(404);
+  }
+
   $swimmer = $swimmerDetails['UserID'];
-  $squad = $swimmerDetails['SquadID'];
 
-	if ($swimmer == null || ($_SESSION['AccessLevel'] == 'Parent' && $swimmer != $_SESSION['UserID'])) {
-		halt(404);
-	}
+  if ($swimmer == null || ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $swimmer != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
+    halt(404);
+  }
 
-  $swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','50Back','100Back','200Back','100IM','150IM','200IM','400IM',];
-  $swimsTextArray = ['50 Free','100 Free','200 Free','400 Free','800 Free','1500 Free','50 Breast','100 Breast','200 Breast','50 Fly','100 Fly','200 Fly','50 Back','100 Back','200 Back','100 IM','150 IM','200 IM','400 IM',];
-  $swimsTimeArray = ['50FreeTime','100FreeTime','200FreeTime','400FreeTime','800FreeTime','1500FreeTime','50BreastTime','100BreastTime','200BreastTime','50FlyTime','100FlyTime','200FlyTime','50BackTime','100BackTime','200BackTime','100IMTime','150IMTime','200IMTime','400IMTime',];
+  // Check galas
+  $getGalas = $db->prepare("SELECT COUNT(*) FROM galas WHERE GalaID = ? AND Tenant = ?");
+  $getGalas->execute([
+    $_POST['gala'],
+    $tenant->getId()
+  ]);
+  if ($getGalas->fetchColumn() == 0) {
+    halt(404);
+  }
+
+  $swimsArray = ['50Free', '100Free', '200Free', '400Free', '800Free', '1500Free', '50Breast', '100Breast', '200Breast', '50Fly', '100Fly', '200Fly', '50Back', '100Back', '200Back', '100IM', '150IM', '200IM', '400IM',];
+  $swimsTextArray = ['50 Free', '100 Free', '200 Free', '400 Free', '800 Free', '1500 Free', '50 Breast', '100 Breast', '200 Breast', '50 Fly', '100 Fly', '200 Fly', '50 Back', '100 Back', '200 Back', '100 IM', '150 IM', '200 IM', '400 IM',];
+  $swimsTimeArray = ['50FreeTime', '100FreeTime', '200FreeTime', '400FreeTime', '800FreeTime', '1500FreeTime', '50BreastTime', '100BreastTime', '200BreastTime', '50FlyTime', '100FlyTime', '200FlyTime', '50BackTime', '100BackTime', '200BackTime', '100IMTime', '150IMTime', '200IMTime', '400IMTime',];
   $entriesArray = [];
   $memberID = "";
   $galaID = "";
@@ -73,21 +90,19 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
       }
 
       $swims = "";
-      for ($i=0; $i<sizeof($allowedSwims); $i++) {
-        if ($i < (sizeof($allowedSwims)-1)) {
+      for ($i = 0; $i < sizeof($allowedSwims); $i++) {
+        if ($i < (sizeof($allowedSwims) - 1)) {
           $swims .= "`" . $allowedSwims[$i] . "`, ";
-        }
-        else {
+        } else {
           $swims .= "`" . $allowedSwims[$i] . "` ";
         }
       }
 
       $values = "";
-      for ($i=0; $i<sizeof($entriesArray); $i++) {
-        if ($i < (sizeof($entriesArray)-1)) {
+      for ($i = 0; $i < sizeof($entriesArray); $i++) {
+        if ($i < (sizeof($entriesArray) - 1)) {
           $values .= "?, ";
-        }
-        else {
+        } else {
           $values .= "? ";
         }
       }
@@ -103,11 +118,12 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
 
       $fee = (string) (\Brick\Math\BigInteger::of((string) $price))->toBigDecimal()->withPointMovedLeft(2);
 
-      $getNumReps = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE Squad = ?");
-      $getNumReps->execute([
-        $squad
+      // Get squads (if requires approval and any squad has rep, approval will be false)
+      $getReps = $db->prepare("SELECT COUNT(*) FROM squadReps INNER JOIN squadMembers ON squadMembers.Squad = squadReps.Squad WHERE squadMembers.Member = ?");
+      $getReps->execute([
+        $_POST['swimmer']
       ]);
-      $numReps = $getNumReps->fetchColumn();
+      $numReps = $getReps->fetchColumn();
 
       $hyTek = bool($row['HyTek']);
       $approved = 1;
@@ -127,7 +143,7 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
       $get->execute([$_POST['swimmer'], $_POST['gala']]);
       $row = $get->fetch(PDO::FETCH_ASSOC);
       // Print <li>Swim Name</li> for each entry
-      for ($y=0; $y<sizeof($swimsArray); $y++) {
+      for ($y = 0; $y < sizeof($swimsArray); $y++) {
         if (bool($row[$swimsArray[$y]])) {
           $entryList .= '<li>' . $swimsTextArray[$y] . ', <em>&pound;' . $galaData->getEvent($swimsArray[$y])->getPriceAsString() . '</em></li>';
         }
@@ -145,27 +161,26 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
       if (bool($row['HyTek'])) {
         $message .= "<p><strong>This is a HyTek gala.</strong> Please remember to add times for this entry.</p>";
       }
-      $message .= '<p>If you have any questions, please contact the ' . htmlspecialchars(env('CLUB_NAME')) . ' gala team as soon as possible.</p>';
+      $message .= '<p>If you have any questions, please contact the ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' gala team as soon as possible.</p>';
       $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
       `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 1, 'Galas')";
-      
+
       $db = app()->db;
       $email = $db->prepare($notify);
-      $email->execute([$_SESSION['UserID'], $subject, $message]);
+      $email->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $subject, $message]);
 
-      $_SESSION['SuccessfulGalaEntry'] = [
+      $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessfulGalaEntry'] = [
         "Gala" => $_POST['gala'],
         "Swimmer" => $_POST['swimmer'],
         'HyTek' => $hyTek
       ];
 
-      if ($_SESSION['AccessLevel'] == 'Parent') {
+      if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
         header("Location: " . autoUrl("galas/entergala"));
       } else {
         header("Location: " . autoUrl("swimmers/" . $_POST['swimmer'] . "/enter-gala-success"));
       }
     }
-
   } catch (Exception $e) {
     reportError($e);
     halt(500);

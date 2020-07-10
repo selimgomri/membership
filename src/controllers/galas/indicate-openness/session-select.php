@@ -1,8 +1,13 @@
 <?php
 
 $db = app()->db;
-$galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends`, CoachEnters FROM galas WHERE GalaID = ?");
-$galaDetails->execute([$id]);
+$tenant = app()->tenant;
+
+$galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends`, CoachEnters FROM galas WHERE GalaID = ? AND Tenant = ?");
+$galaDetails->execute([
+  $id,
+  $tenant->getId()
+]);
 $gala = $galaDetails->fetch(PDO::FETCH_ASSOC);
 
 if ($gala == null) {
@@ -23,7 +28,7 @@ $sessions = $getSessions->fetchAll(PDO::FETCH_ASSOC);
 $getCanAttend = $db->prepare("SELECT `Session`, `CanEnter` FROM galaSessionsCanEnter ca INNER JOIN galaSessions gs ON ca.Session = gs.ID WHERE gs.Gala = ? AND ca.Member = ?");
 
 $getSwimmers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn FROM members WHERE UserID = ?");
-$getSwimmers->execute([$_SESSION['UserID']]);
+$getSwimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC);
 
 $hasSwimmers = true;
@@ -51,14 +56,14 @@ include BASE_PATH . 'views/header.php';
       <p class="lead">Select sessions your swimmers will be able to swim at.</p>
       <p>Your coaches will use this information to make suggested entries for your swimmers.</p>
 
-      <?php if (isset($_SESSION['SuccessStatus']) && $_SESSION['SuccessStatus']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']) { ?>
       <div class="alert alert-success">Saved</div>
-      <?php unset($_SESSION['SuccessStatus']);
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']);
       } ?>
 
-      <?php if (isset($_SESSION['ErrorStatus']) && $_SESSION['ErrorStatus']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus']) { ?>
       <div class="alert alert-danger">Changes were not saved</div>
-      <?php unset($_SESSION['ErrorStatus']);
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus']);
       } ?>
 
       <?php if ($nowDate > $galaDate) { ?>

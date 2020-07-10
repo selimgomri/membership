@@ -1,26 +1,30 @@
 <?php
 
+$db = app()->db;
+$tenant = app()->tenant;
+
 $noSquad = false;
 $doNotHalt = true;
 require 'info.json.php';
 $data = json_decode($output);
 
 $squads = null;
-$systemInfo = app()->system;
-$leavers = $systemInfo->getSystemOption('LeaversSquad');
+$leavers = app()->tenant->getKey('LeaversSquad');
 if ($leavers == null) {
   $leavers = 0;
 }
 
-if ($_SESSION['AccessLevel'] != 'Parent') {
-  $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads WHERE `SquadID` != ? ORDER BY SquadFee DESC, `name` ASC");
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') {
+  $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads WHERE Tenant = ? AND `SquadID` != ? ORDER BY SquadFee DESC, `name` ASC");
   $squads->execute([
+    $tenant->getId(),
     $leavers
   ]);
 } else {
-  $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads INNER JOIN squadReps ON squads.SquadID = squadReps.Squad WHERE squadReps.User = ? AND SquadID != ? ORDER BY SquadFee DESC, `name` ASC");
+  $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads INNER JOIN squadReps ON squads.SquadID = squadReps.Squad WHERE Tenant = ? squadReps.User = ? AND SquadID != ? ORDER BY SquadFee DESC, `name` ASC");
   $squads->execute([
-    $_SESSION['UserID'],
+    $tenant->getId(),
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
     $leavers
   ]);
 }
@@ -78,11 +82,11 @@ include BASE_PATH . 'views/header.php';
           <label for="squad-select">
             Choose squad
           </label>
-          <select class="custom-select" id="squad-select" name="squad-select" data-gala-id="<?=htmlspecialchars($id)?>">
+          <select class="custom-select" id="squad-select" name="squad-select" data-gala-id="<?=htmlspecialchars($id)?>" data-page="<?=htmlspecialchars(autoUrl(''))?>" data-ajax-url="<?=htmlspecialchars(autoUrl('galas/squad-reps/entry-states'))?>">
             <?php if ($noSquad) { ?>
             <option selected>Select a squad</option>
             <?php } ?>
-            <?php if ($_SESSION['AccessLevel'] != "Parent") { ?>
+            <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") { ?>
             <option value="all" <?php if ("all" == $squad) { ?>selected<?php } ?>>
               All squads
             </option>
@@ -244,5 +248,5 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs("js/squad-reps/select.js");
+$footer->addJs("public/js/galas/squad-reps/squad-rep-approval.js");
 $footer->render();

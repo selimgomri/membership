@@ -7,7 +7,7 @@ if (isset($renewal_trap) && $renewal_trap) {
 	$url_path = "renewal/emergencycontacts";
 }
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 $contact = new EmergencyContact();
 $contact->connect($db);
@@ -45,7 +45,7 @@ if (isset($renewal_trap) && $renewal_trap) {
     <div class="row">
       <div class="col-lg-8">
 
-        <?php if (isset($_SESSION['PhoneError']) && $_SESSION['PhoneError']) { ?>
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PhoneError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PhoneError']) { ?>
           <div class="alert alert-danger">
             <p class="mb-0"><strong>
               The number provided was not a valid UK phone number.
@@ -54,7 +54,7 @@ if (isset($renewal_trap) && $renewal_trap) {
               Please try again
             </p>
           </div>
-        <?php unset($_SESSION['PhoneError']); } ?>
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PhoneError']); } ?>
 
         <form method="post" class="needs-validation" novalidate>
           <div class="form-group">

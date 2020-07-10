@@ -14,21 +14,23 @@
  */
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $_POST['payment-ref'];
 $_POST['payment-date'];
 $_POST['payment-fees'];
 
-$_SESSION['PaymentConfSearch'] = [
+$_SESSION['TENANT-' . app()->tenant->getId()]['PaymentConfSearch'] = [
   'payment-ref' => $_POST['payment-ref'],
   'payment-date' => $_POST['payment-date'],
   'payment-fees' => $_POST['payment-fees']
 ];
 
 // Search by reference
-$findPayments = $db->prepare("SELECT COUNT(*) FROM payments WHERE PMkey LIKE ? COLLATE utf8mb4_general_ci AND `Type` = 'Payment'");
+$findPayments = $db->prepare("SELECT COUNT(*) FROM payments INNER JOIN users ON users.UserID = payments.PaymentID WHERE PMkey LIKE ? COLLATE utf8mb4_general_ci AND `Type` = 'Payment' AND Tenant = ?");
 $findPayments->execute([
-  '%' . $_POST['payment-ref'] . '%'
+  '%' . $_POST['payment-ref'] . '%',
+  $tenant->getId()
 ]);
 
 if ($findPayments->fetchColumn() > 0) {
@@ -36,16 +38,17 @@ if ($findPayments->fetchColumn() > 0) {
   // to user to pick
 
   // Search by reference
-  $findPayments = $db->prepare("SELECT PaymentID FROM payments WHERE PMkey LIKE ? COLLATE utf8mb4_general_ci AND `Type` = 'Payment'");
+  $findPayments = $db->prepare("SELECT PaymentID FROM payments INNER JOIN users ON users.UserID = payments.UserID WHERE PMkey LIKE ? COLLATE utf8mb4_general_ci AND `Type` = 'Payment' AND Tenant = ?");
   $findPayments->execute([
-    '%' . $_POST['payment-ref'] . '%'
+    '%' . $_POST['payment-ref'] . '%',
+    $tenant->getId()
   ]);
 
   $ids = [];
   while ($id = $findPayments->fetchColumn()) {
     $ids[] = $id;
   }
-  $_SESSION['PaymentConfSearch']['id'] = $ids;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['PaymentConfSearch']['id'] = $ids;
   header("Location: " . autoUrl("payments/confirmation/select-payment"));
 } else {
   // Ask user for more detail

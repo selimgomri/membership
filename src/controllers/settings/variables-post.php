@@ -1,7 +1,6 @@
 <?php
 
 $db = app()->db;
-$systemInfo = app()->system;
 
 $clubs = [];
 $row = 1;
@@ -30,82 +29,56 @@ $vars = [
   'EMAIL_DOMAIN' => null,
   'CLUB_WEBSITE' => null,
   'SENDGRID_API_KEY' => null,
-  'GOCARDLESS_USE_SANDBOX' => null,
-  'GOCARDLESS_SANDBOX_ACCESS_TOKEN' => null,
-  'GOCARDLESS_ACCESS_TOKEN' => null,
-  'GOCARDLESS_WEBHOOK_KEY' => null,
   'CLUB_ADDRESS' => null,
   'SYSTEM_COLOUR' => null,
-  'STRIPE' => null,
-  'STRIPE_PUBLISHABLE' => null,
-  'STRIPE_APPLE_PAY_DOMAIN' => null,
   'EMERGENCY_MESSAGE' => false,
+  'GOCARDLESS_ACCESS_TOKEN' => null,
+  'GOCARDLESS_WEBHOOK_KEY' => null,
   'EMERGENCY_MESSAGE_TYPE' => 'NONE',
 ];
 
 try {
   foreach ($vars as $key => $value) {
-    if (isset($_POST[$key]) && $_POST[$key] != null && !$systemInfo->isExistingEnvVar($key)) {
-      $systemInfo->setSystemOption($key, $_POST[$key]);
+    if (isset($_POST[$key]) && $_POST[$key] != null && !getenv($key)) {
+      app()->tenant->setKey($key, $_POST[$key]);
     }
   }
 
-  if (isset($_POST['CLUB_INFO']) && env('ASA_CLUB_CODE') != $_POST['CLUB_INFO']) {
-    // Update CLUB DATA
-    if (!$systemInfo->isExistingEnvVar('CLUB_NAME')) {
-      $systemInfo->setSystemOption('CLUB_NAME', $clubs[$_POST['CLUB_INFO']]['Name']);
-    }
-    if (!$systemInfo->isExistingEnvVar('CLUB_SHORT_NAME')) {
-      $systemInfo->setSystemOption('CLUB_SHORT_NAME', $clubs[$_POST['CLUB_INFO']]['MeetName']);
-    }
-    if (!$systemInfo->isExistingEnvVar('ASA_CLUB_CODE')) {
-      $systemInfo->setSystemOption('ASA_CLUB_CODE', $clubs[$_POST['CLUB_INFO']]['Code']);
-    }
-    if (!$systemInfo->isExistingEnvVar('ASA_DISTRICT')) {
-      $systemInfo->setSystemOption('ASA_DISTRICT', $clubs[$_POST['CLUB_INFO']]['District']);
-    }
-    if (!$systemInfo->isExistingEnvVar('ASA_COUNTY')) {
-      $systemInfo->setSystemOption('ASA_COUNTY', $clubs[$_POST['CLUB_INFO']]['County']);
-    }
+  if (isset($_POST['CLUB_INFO']) && app()->tenant->getKey('ASA_CLUB_CODE') != $_POST['CLUB_INFO'] && $_POST['CLUB_INFO'] != '0000') {
+    app()->tenant->setKey('CLUB_NAME', $clubs[$_POST['CLUB_INFO']]['Name']);
+    app()->tenant->setKey('CLUB_SHORT_NAME', $clubs[$_POST['CLUB_INFO']]['MeetName']);
+    app()->tenant->setKey('ASA_CLUB_CODE', $clubs[$_POST['CLUB_INFO']]['Code']);
+    app()->tenant->setKey('ASA_DISTRICT', $clubs[$_POST['CLUB_INFO']]['District']);
+    app()->tenant->setKey('ASA_COUNTY', $clubs[$_POST['CLUB_INFO']]['County']);
   }
 
-  if (!$systemInfo->isExistingEnvVar('EMERGENCY_MESSAGE')) {
-    $message = $_POST['EMERGENCY_MESSAGE'];
-    if (mb_strlen($message) == 0) {
-      $message = null;
-    }
-    $systemInfo->setSystemOption('EMERGENCY_MESSAGE', $message);
+  $message = $_POST['EMERGENCY_MESSAGE'];
+  if (mb_strlen($message) == 0) {
+    $message = null;
+  }
+  app()->tenant->setKey('EMERGENCY_MESSAGE', $message);
+
+  $type = $_POST['EMERGENCY_MESSAGE_TYPE'];
+  if ($type == 'NONE' || $type == 'SUCCESS' || $type == 'WARN' || $type == 'DANGER') {
+    app()->tenant->setKey('EMERGENCY_MESSAGE_TYPE', $type);
   }
 
-  if (!$systemInfo->isExistingEnvVar('EMERGENCY_MESSAGE_TYPE')) {
-    $type = $_POST['EMERGENCY_MESSAGE_TYPE'];
-    if ($type == 'NONE' || $type == 'SUCCESS' || $type == 'WARN' || $type == 'DANGER') {
-      $systemInfo->setSystemOption('EMERGENCY_MESSAGE_TYPE', $type);
-    }
+  $hide = 1;
+  if (isset($_POST['HIDE_MEMBER_ATTENDANCE']) && bool($_POST['HIDE_MEMBER_ATTENDANCE'])) {
+    $hide = 0;
   }
-
-  if (!$systemInfo->isExistingEnvVar('HIDE_MEMBER_ATTENDANCE')) {
-    $hide = 1;
-    if (bool($_POST['HIDE_MEMBER_ATTENDANCE'])) {
-      $hide = 0;
-    }
-    $systemInfo->setSystemOption('HIDE_MEMBER_ATTENDANCE', $hide);
-  }
+  app()->tenant->setKey('HIDE_MEMBER_ATTENDANCE', $hide);
 
   $vars['CLUB_ADDRESS'] = null;
-  if (!$systemInfo->isExistingEnvVar('CLUB_ADDRESS')) {
-    $addr = $_POST['CLUB_ADDRESS'];
-    $addr = str_replace("\r\n", "\n", $addr);
-    $addr = explode("\n", $addr);
-    $addr = json_encode($addr);
-    $systemInfo->setSystemOption('CLUB_ADDRESS', $addr);
-  }
+  $addr = $_POST['CLUB_ADDRESS'];
+  $addr = str_replace("\r\n", "\n", $addr);
+  $addr = explode("\n", $addr);
+  $addr = json_encode($addr);
+  app()->tenant->setKey('CLUB_ADDRESS', $addr);
 
-  $_SESSION['PCC-SAVED'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED'] = true;
 } catch (Exception $e) {
-  pre($e);
-  exit();
-  $_SESSION['PCC-ERROR'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR'] = true;
 }
 
 header("Location: " . autoUrl("settings/variables"));

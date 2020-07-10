@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 try {
 
@@ -19,8 +20,11 @@ try {
     throw new Exception('Invalid payment item type (must be Payment or Credit).');
   }
 
-  $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
-  $user->execute([$_POST['user-id']]);
+  $user = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ? AND Tenant = ?");
+  $user->execute([
+    $_POST['user-id'],
+    $tenant->getId()
+  ]);
   $user = $user->fetch(PDO::FETCH_ASSOC);
 
   if ($user == null) {
@@ -72,9 +76,9 @@ try {
       $subject .= 'credit/refund on account';
     }
     $message .= '<p>Hi ' . htmlspecialchars($user['Forename']) . ', </p>';
-    $message .= '<p>We\'ve manually added a ' . $typeString . ' of <strong>&pound;' . $amountString . '</strong> to your account for <strong>' . htmlspecialchars($description) .  '</strong>.</p><p>You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(env('CLUB_NAME')) . '.</p>';
+    $message .= '<p>We\'ve manually added a ' . $typeString . ' of <strong>&pound;' . $amountString . '</strong> to your account for <strong>' . htmlspecialchars($description) .  '</strong>.</p><p>You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . '.</p>';
 
-    $message .= '<p>Kind Regards, <br>The ' . htmlspecialchars(env('CLUB_NAME')) . ' Payments Team</p>';
+    $message .= '<p>Kind Regards, <br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Payments Team</p>';
 
     $notify = $db->prepare("INSERT INTO notify (UserID, `Status`, `Subject`, `Message`, EmailType) VALUES (?, ?, ?, ?, ?)");
 
@@ -91,18 +95,18 @@ try {
 
   $db->commit();
 
-  $_SESSION['NewPaymentSuccessMessage'] = 'We\'ve added the ' . $typeString . ' to ' . $user['Forename'] . '\'s account to pay in their next bill.';
+  $_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentSuccessMessage'] = 'We\'ve added the ' . $typeString . ' to ' . $user['Forename'] . '\'s account to pay in their next bill.';
 
 } catch (PDOException $e) {
   $db->rollBack();
 
   reportError($e);
 
-  $_SESSION['NewPaymentErrorMessage'] = 'A database error occurred. Please try again. If the error occurs again, please try again later.';
+  $_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentErrorMessage'] = 'A database error occurred. Please try again. If the error occurs again, please try again later.';
 } catch (Exception $e) {
   $db->rollBack();
 
-  $_SESSION['NewPaymentErrorMessage'] = $e->getMessage();
+  $_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentErrorMessage'] = $e->getMessage();
 }
 
 header('Location: ' . autoUrl('payments/invoice-payments/new'));

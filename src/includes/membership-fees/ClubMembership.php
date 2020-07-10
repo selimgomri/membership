@@ -19,7 +19,7 @@ class ClubMembership {
 
   public static function create($db, $user, $upgrade) {
     // Work out the fee object class and return it
-    $getType = $db->query("SELECT `Value` FROM systemOptions WHERE `Option` = 'ClubFeesType'");
+    $getType = $db->query("SELECT `Value` FROM tenantOptions WHERE `Option` = 'ClubFeesType'");
     $type = $getType->fetchColumn();
 
     if ($type == 'Family/Individual') {
@@ -40,7 +40,7 @@ class ClubMembership {
   }
 
   protected function fetchUpgradeType($db) {
-    $getValue = $db->prepare("SELECT `Value` FROM systemOptions WHERE `Option` = ?"); 
+    $getValue = $db->prepare("SELECT `Value` FROM tenantOptions WHERE `Option` = ?"); 
     // Upgrade type -> FullFee | TopUp | None
     $getValue->execute(['ClubFeeUpgradeType']);
     $type = $getValue->fetchColumn();

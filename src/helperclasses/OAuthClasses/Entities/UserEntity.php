@@ -17,6 +17,6 @@ class UserEntity implements UserEntityInterface
    */
   public function getIdentifier()
   {
-    return $_SESSION['UserID'];
+    return $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
   }
 }

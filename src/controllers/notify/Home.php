@@ -1,6 +1,6 @@
 <?php
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $pagetitle = "Notify";
 
 $use_white_background = true;
@@ -22,8 +22,8 @@ include BASE_PATH . "views/notifyMenu.php";
     <div class="col-lg-8 col-md-10">
       <h1>Notify</h1>
       <p class="lead">Notify is our <strong>GDPR Compliant</strong> email system for contacting parents and users.</p>
-      <?php if (isset($_SESSION['NotifyIndivSuccess'])) {
-        if ($_SESSION['NotifyIndivSuccess']) {?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess'])) {
+        if ($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess']) {?>
       <div class="alert alert-success">
         We've successfully sent your email.
       </div>
@@ -33,15 +33,15 @@ include BASE_PATH . "views/notifyMenu.php";
       </div>
       <?php }
       } ?>
-      <?php if (isset($_SESSION['NotifySuccess'])) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifySuccess'])) { ?>
       <div class="alert alert-success">
         We've successfully queued your email. <?=
-    		$_SESSION['NotifySuccess']['Count'] ?> people will receive your
-        message<?php if (!$_SESSION['NotifySuccess']['Force']) { ?> if they have
+    		$_SESSION['TENANT-' . app()->tenant->getId()]['NotifySuccess']['Count'] ?> people will receive your
+        message<?php if (!$_SESSION['TENANT-' . app()->tenant->getId()]['NotifySuccess']['Force']) { ?> if they have
         opted in to recieving emails from us<?php } ?>.
       </div>
       <?php }
-      unset($_SESSION['NotifySuccess']); ?>
+      unset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifySuccess']); ?>
 
       <h2>How to Use Notify</h2>
       <p>
@@ -62,7 +62,7 @@ include BASE_PATH . "views/notifyMenu.php";
         not opted in to recieving emails will not receive messages.
       </p>
 
-      <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
       <p>
         <strong>
           Please be aware:
@@ -84,7 +84,7 @@ include BASE_PATH . "views/notifyMenu.php";
       <?php } ?>
 
       <p class="small">
-        Provided by Swimming Club Data Systems to <?=htmlspecialchars(env('CLUB_NAME'))?>.
+        Provided by Swimming Club Data Systems to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>.
       </p>
     </div>
 
@@ -97,6 +97,6 @@ include BASE_PATH . "views/notifyMenu.php";
 
 <?php
 
-unset($_SESSION['NotifyIndivSuccess']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess']);
 $footer = new \SCDS\Footer();
 $footer->render();

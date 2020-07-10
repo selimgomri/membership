@@ -1,34 +1,46 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$userID = $_SESSION['UserID'];
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $pagetitle = "Enter a Gala";
 
 $swimmerCount = 0;
-if ($_SESSION['AccessLevel'] == 'Parent') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
   $count = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ?");
-  $count->execute([$_SESSION['UserID']]);
+  $count->execute([
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+  ]);
   $swimmerCount = $count->fetchColumn();
 } else if (isset($swimmer)) {
-  $count = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`MemberID` = ?");
-  $count->execute([$swimmer]);
+  $count = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`MemberID` = ? AND Tenant = ?");
+  $count->execute([
+    $swimmer,
+    $tenant->getId()
+  ]);
   $swimmerCount = $count->fetchColumn();
 }
 
 $mySwimmers = null;
-if ($_SESSION['AccessLevel'] == 'Parent') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
   $mySwimmers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM `members` WHERE `members`.`UserID` = ? ORDER BY fn ASC, sn ASC");
-  $mySwimmers->execute([$_SESSION['UserID']]);
+  $mySwimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 } else if (isset($swimmer)) {
-  $mySwimmers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM `members` WHERE `members`.`MemberID` = ?");
-  $mySwimmers->execute([$swimmer]);
+  $mySwimmers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM `members` WHERE `members`.`MemberID` = ? AND Tenant = ?");
+  $mySwimmers->execute([
+    $swimmer,
+    $tenant->getId()
+  ]);
 }
 
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
 $nowDay = $now->format('Y-m-d');
-$galas = $db->prepare("SELECT GalaID id, GalaName `name` FROM `galas` WHERE ClosingDate >= ? ORDER BY `galas`.`ClosingDate` ASC");
-$galas->execute([$nowDay]);
+$galas = $db->prepare("SELECT GalaID id, GalaName `name` FROM `galas` WHERE Tenant = ? AND ClosingDate >= ? ORDER BY `galas`.`ClosingDate` ASC");
+$galas->execute([
+  $tenant->getId(),
+  $nowDay
+]);
 
 $mySwimmer = $mySwimmers->fetch(PDO::FETCH_ASSOC);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
@@ -47,7 +59,7 @@ include "galaMenu.php";
 ?>
 <div class="container">
 
-  <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
+  <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("members")?>">Swimmers</a></li>

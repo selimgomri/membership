@@ -1,11 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $disabled = "";
 
-$sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE `EntryID` = ? ORDER BY `galas`.`GalaDate` DESC;");
+$sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.Tenant = ? AND `EntryID` = ? ORDER BY `galas`.`GalaDate` DESC;");
 $sql->execute([
+  $tenant->getId(),
   $idLast
 ]);
 $row = $sql->fetch(PDO::FETCH_ASSOC);
@@ -14,7 +16,7 @@ if ($row == null) {
   halt(404);
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent' && $row['UserID'] != $_SESSION['UserID']) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $row['UserID'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
   halt(404);
 }
 

@@ -7,12 +7,12 @@ $last = "";
 $email = "";
 $mobile = "";
 
-if (isset($_SESSION['AssRegPostData'])) {
-  $first = $_SESSION['AssRegPostData']['first'];
-  $last = $_SESSION['AssRegPostData']['last'];
-  $email = $_SESSION['AssRegPostData']['email-address'];
-  $mobile = $_SESSION['AssRegPostData']['phone'];
-  unset($_SESSION['AssRegPostData']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegPostData'])) {
+  $first = $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegPostData']['first'];
+  $last = $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegPostData']['last'];
+  $email = $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegPostData']['email-address'];
+  $mobile = $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegPostData']['phone'];
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegPostData']);
 }
 
 include BASE_PATH . 'views/header.php';
@@ -27,7 +27,7 @@ include BASE_PATH . 'views/header.php';
         Tell us the following...
       </p>
 
-      <?php if (isset($_SESSION['AssRegFormError']) && $_SESSION['AssRegFormError']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegFormError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegFormError']) { ?>
       <div class="alert alert-warning">
         <strong>There was a problem with some of the data supplied</strong>
       </div>
@@ -58,7 +58,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="form-group">
           <label for="email-address">Email Address</label>
-          <input disabled type="email" class="form-control text-lowercase" id="email-address" name="email-address" placeholder="name@example.com" required value="<?=htmlspecialchars($_SESSION['AssRegUserEmail'])?>">
+          <input disabled type="email" class="form-control text-lowercase" id="email-address" name="email-address" placeholder="name@example.com" required value="<?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUserEmail'])?>">
           <div class="invalid-feedback">
             Please enter a valid email address.
           </div>
@@ -84,8 +84,8 @@ include BASE_PATH . 'views/header.php';
 
 <?php
 
-if (isset($_SESSION['AssRegFormError'])) {
-  unset($_SESSION['AssRegFormError']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegFormError'])) {
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegFormError']);
 }
 
 $footer = new \SCDS\Footer();

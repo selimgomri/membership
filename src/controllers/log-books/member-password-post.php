@@ -1,10 +1,12 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getMember = $db->prepare("SELECT MForename fn, MSurname sn, ASANumber se, UserID `uid` FROM members WHERE MemberID = ?");
+$getMember = $db->prepare("SELECT MForename fn, MSurname sn, ASANumber se, UserID `uid` FROM members WHERE MemberID = ? AND Tenant = ?");
 $getMember->execute([
-  $_SESSION['LogBooks-Member']
+  $_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-Member'],
+  $tenant->getId()
 ]);
 $member = $getMember->fetch(PDO::FETCH_ASSOC);
 
@@ -34,7 +36,7 @@ try {
       $id
     ]);
 
-    $_SESSION['SetMemberPassSuccess'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassSuccess'] = true;
 
     http_response_code(303);
     if (isset($_POST['return'])) {
@@ -49,7 +51,7 @@ try {
 
 } catch (Exception $e) {
 
-  $_SESSION['SetMemberPassError'] = $e->getMessage();
+  $_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassError'] = $e->getMessage();
   http_response_code(303);
   header("location: " . autoUrl("log-books/settings/password"));
 

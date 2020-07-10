@@ -1,17 +1,22 @@
 <?php
 
 $emailPrefix = '';
-if (!bool(env('IS_CLS'))) {
-	$emailPrefix = mb_strtolower(trim(env('ASA_CLUB_CODE'))) . '-';
+if (!app()->tenant->isCLS()) {
+	$emailPrefix = mb_strtolower(trim(app()->tenant->getKey('ASA_CLUB_CODE'))) . '-';
 }
 
 ignore_user_abort(true);
 set_time_limit(0);
 
 $db = app()->db;
+$tenant = app()->tenant;
+
 $getExtraEmails = $db->prepare("SELECT Name, EmailAddress FROM notifyAdditionalEmails WHERE UserID = ?");
 
-$pending = $db->query("SELECT `EmailID`, `notify`.`UserID`, `EmailType`, `notify`.`ForceSend`, `Forename`, `Surname`, `EmailAddress`, notify.Subject AS PlainSub, notify.Message AS PlainMess FROM `notify` INNER JOIN `users` ON notify.UserID = users.UserID WHERE notify.MessageID IS NULL AND `Status` = 'Queued' LIMIT 8;");
+$pending = $db->prepare("SELECT `EmailID`, `notify`.`UserID`, `EmailType`, `notify`.`ForceSend`, `Forename`, `Surname`, `EmailAddress`, notify.Subject AS PlainSub, notify.Message AS PlainMess FROM `notify` INNER JOIN `users` ON notify.UserID = users.UserID WHERE notify.MessageID IS NULL AND `Status` = 'Queued' AND users.Tenant = ? LIMIT 8;");
+$pending->execute([
+	$tenant->getId()
+]);
 
 // Completed It PDO Object
 $completed = $db->prepare("UPDATE `notify` SET `Status` = ? WHERE `EmailID` = ?");
@@ -31,8 +36,8 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 		$message = str_replace("\r\n", "", $message);
 
 		$from = [
-			"Email" => "noreply@" . env('EMAIL_DOMAIN'),
-			"Name" => env('CLUB_NAME'),
+			"Email" => "noreply@" . getenv('EMAIL_DOMAIN'),
+			"Name" => app()->tenant->getKey('CLUB_NAME'),
 			"Unsub" => [
 				"Allowed" => true,
 				"User" => $row['UserID'],
@@ -42,8 +47,8 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 
     if ($row['EmailType'] == 'Payments') {
 			$from = [
-				"Email" => $emailPrefix . "payments@" . env('EMAIL_DOMAIN'),
-				"Name" => env('CLUB_NAME'),
+				"Email" => $emailPrefix . "payments@" . getenv('EMAIL_DOMAIN'),
+				"Name" => app()->tenant->getKey('CLUB_NAME'),
 				"Unsub" => [
 					"Allowed" => true,
 					"User" => $row['UserID'],
@@ -52,13 +57,13 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 			];
 		} else if ($row['EmailType'] == 'Galas') {
 			$from = [
-				"Email" => $emailPrefix . "galas@" . env('EMAIL_DOMAIN'),
-				"Name" => env('CLUB_NAME') . " Galas"
+				"Email" => $emailPrefix . "galas@" . getenv('EMAIL_DOMAIN'),
+				"Name" => app()->tenant->getKey('CLUB_NAME') . " Galas"
 			];
 		} else if ($row['EmailType'] == 'Security') {
 			$from = [
-				"Email" => $emailPrefix . "security-support@" . env('EMAIL_DOMAIN'),
-				"Name" => env('CLUB_NAME') . " Security",
+				"Email" => $emailPrefix . "security-support@" . getenv('EMAIL_DOMAIN'),
+				"Name" => app()->tenant->getKey('CLUB_NAME') . " Security",
 				"Unsub" => [
 					"Allowed" => true,
 					"User" => $row['UserID'],
@@ -67,8 +72,8 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 			];
 		} else if ($row['EmailType'] == 'NewMember') {
 			$from = [
-				"Email" => $emailPrefix . "membership-updates@" . env('EMAIL_DOMAIN'),
-				"Name" => env('CLUB_NAME'),
+				"Email" => $emailPrefix . "membership-updates@" . getenv('EMAIL_DOMAIN'),
+				"Name" => app()->tenant->getKey('CLUB_NAME'),
 				"Unsub" => [
 					"Allowed" => true,
 					"User" => $row['UserID'],
@@ -77,8 +82,8 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 			];
 		} else if ($row['EmailType'] == 'APIAlert') {
 			$from = [
-				"Email" => $emailPrefix . "membership-system-api-alerts@" . env('EMAIL_DOMAIN'),
-				"Name" => env('CLUB_SHORT_NAME') . " API Alerts",
+				"Email" => $emailPrefix . "membership-system-api-alerts@" . getenv('EMAIL_DOMAIN'),
+				"Name" => app()->tenant->getKey('CLUB_SHORT_NAME') . " API Alerts",
 				"Unsub" => [
 					"Allowed" => true,
 					"User" => $row['UserID'],
@@ -87,15 +92,15 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 			];
 		} else if ($row['EmailType'] == 'StaffBulletin') {
 			$from = [
-				"Email" => $emailPrefix . "team-notify@" . env('EMAIL_DOMAIN'),
-				"Name" => env('CLUB_SHORT_NAME') . " Staff"
+				"Email" => $emailPrefix . "team-notify@" . getenv('EMAIL_DOMAIN'),
+				"Name" => app()->tenant->getKey('CLUB_SHORT_NAME') . " Staff"
 			];
 		}
 
 		if ($row['ForceSend'] == 1) {
 			$from = [
-				"Email" => $emailPrefix . "noreply@" . env('EMAIL_DOMAIN'),
-				"Name" => env('CLUB_NAME')
+				"Email" => $emailPrefix . "noreply@" . getenv('EMAIL_DOMAIN'),
+				"Name" => app()->tenant->getKey('CLUB_NAME')
 			];
 
       if ($from['Unsub']['Allowed']) {
@@ -105,12 +110,12 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 
 		if ($row['EmailType'] == 'SquadMove') {
 			$from = [
-				"Email" => $emailPrefix . "squad-moves@" . env('EMAIL_DOMAIN'),
-				"Name" => env('CLUB_NAME')
+				"Email" => $emailPrefix . "squad-moves@" . getenv('EMAIL_DOMAIN'),
+				"Name" => app()->tenant->getKey('CLUB_NAME')
 			];
 		} else if ($row['EmailType'] == 'Notify-Audit') {
       $from = [
-				"Email" => $emailPrefix . "gdpr-notify@" . env('EMAIL_DOMAIN'),
+				"Email" => $emailPrefix . "gdpr-notify@" . getenv('EMAIL_DOMAIN'),
 				"Name" => "SCDS GDPR Compliance"
 			];
     }

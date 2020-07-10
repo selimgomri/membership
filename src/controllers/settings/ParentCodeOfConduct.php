@@ -3,10 +3,14 @@
 $fluidContainer = true;
 
 $db = app()->db;
-$codesOfConduct = $db->query("SELECT Title, ID FROM posts WHERE `Type` = 'conduct_code' ORDER BY Title ASC");
+$tenant = app()->tenant;
 
-$systemInfo = app()->system;
-$parentCode = $systemInfo->getSystemOption('ParentCodeOfConduct');
+$codesOfConduct = $db->prepare("SELECT Title, ID FROM posts WHERE Tenant = ? AND `Type` = 'conduct_code' ORDER BY Title ASC");
+$codesOfConduct->execute([
+  $tenant->getId()
+]);
+
+$parentCode = app()->tenant->getKey('ParentCodeOfConduct');
 
 $Extra = new ParsedownExtra();
 $Extra->setSafeMode(true);
@@ -15,8 +19,11 @@ $replace = array("\n###### ", "\n###### ", "\n##### ", "\n#### ", "\n### ");
 
 $codeOfConduct = null;
 if ($parentCode != null && $parentCode != "") {
-  $codeOfConduct = $db->prepare("SELECT Content FROM posts WHERE ID = ?");
-  $codeOfConduct->execute([$parentCode]);
+  $codeOfConduct = $db->prepare("SELECT Content FROM posts WHERE ID = ? AND Tenant = ?");
+  $codeOfConduct->execute([
+    $parentCode,
+    $tenant->getId()
+  ]);
   $codeOfConduct = str_replace($search, $replace, $codeOfConduct->fetchColumn());
   if ($codeOfConduct[0] == '#') {
     $codeOfConduct = '##' . $codeOfConduct;
@@ -43,13 +50,13 @@ include BASE_PATH . 'views/header.php';
         <form method="post">
           <h2>Choose a code of conduct</h2>
 
-          <?php if (isset($_SESSION['PCC-SAVED']) && $_SESSION['PCC-SAVED']) { ?>
+          <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']) { ?>
           <div class="alert alert-success">Parent code of conduct saved.</div>
-          <?php unset($_SESSION['PCC-SAVED']); } ?>
+          <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']); } ?>
 
-          <?php if (isset($_SESSION['PCC-ERROR']) && $_SESSION['PCC-ERROR']) { ?>
+          <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']) { ?>
           <div class="alert alert-danger">Changes were not saved.</div>
-          <?php unset($_SESSION['PCC-ERROR']); } ?>
+          <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']); } ?>
 
           <div class="form-group">
             <label for="CodeOfConduct">Squad Code of Conduct</label>

@@ -5,7 +5,7 @@
  */
 
 try {
-  $json = json_decode(file_get_contents(env('ENV_JSON_FILE')), true);
+  $json = json_decode(file_get_contents(getenv('ENV_JSON_FILE')), true);
 
   foreach ($json as $key => $value) {
     putenv("$key=$value");

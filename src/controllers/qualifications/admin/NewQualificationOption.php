@@ -2,7 +2,7 @@
 
 $pagetitle = "New Qualification";
 
-$form = $_SESSION['NewQualificationData'];
+$form = $_SESSION['TENANT-' . app()->tenant->getId()]['NewQualificationData'];
 
 include BASE_PATH . 'views/header.php';
 

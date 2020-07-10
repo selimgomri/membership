@@ -6,7 +6,7 @@
  * It also adds members to a renewal on the day it starts
  */
 
-$systemInfo = app()->system;
+
 $db = app()->db;
 
 // Mandatory Startup Sequence to carry out squad updates
@@ -43,7 +43,7 @@ $getRenewals->execute([
 ]);
 
 $getNumMembers = $db->prepare("SELECT COUNT(*) FROM renewalMembers WHERE RenewalID = ?");
-$leavers = $systemInfo->getSystemOption('LeaversSquad');
+$leavers = app()->tenant->getKey('LeaversSquad');
 
 if ($leavers != null) {
   // Delete leavers

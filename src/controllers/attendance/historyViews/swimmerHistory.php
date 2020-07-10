@@ -1,13 +1,20 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 // Get the last four weeks to calculate attendance
-$sql = $db->query("SELECT `WeekID` FROM `sessionsWeek` ORDER BY `WeekDateBeginning` DESC LIMIT 1 OFFSET 20");
+$sql = $db->prepare("SELECT `WeekID` FROM `sessionsWeek` WHERE Tenant = ? ORDER BY `WeekDateBeginning` DESC LIMIT 1 OFFSET 20");
+$sql->execute([
+	$tenant->getId()
+]);
 $earliestWeek = $sql->fetchColumn();
 
 if ($earliestWeek == null) {
-  $sql = $db->query("SELECT `WeekID` FROM `sessionsWeek` ORDER BY `WeekDateBeginning` ASC LIMIT 1");
+	$sql = $db->prepare("SELECT `WeekID` FROM `sessionsWeek` WHERE Tenant = ? ORDER BY `WeekDateBeginning` ASC LIMIT 1");
+	$sql->execute([
+		$tenant->getId()
+	]);
   $earliestWeek = $sql->fetchColumn();
 }
 
@@ -15,8 +22,11 @@ if ($earliestWeek == null) {
   // No weeks
 }
 
-$getMember = $db->prepare("SELECT MForename first, MSurname last FROM `members` WHERE `MemberID` = ?");
-$getMember->execute([$id]);
+$getMember = $db->prepare("SELECT MForename first, MSurname last FROM `members` WHERE `MemberID` = ? AND Tenant = ?");
+$getMember->execute([
+	$id,
+	$tenant->getId()
+]);
 $member = $getMember->fetch(PDO::FETCH_ASSOC);
 
 if ($member == null) {
@@ -45,7 +55,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
     You are now viewing attendance records for up to the last 20 weeks
   </p>
 
-  <?php if ($getPresent == null) { ?>
+  <?php if ($present == null) { ?>
     <div class="alert alert-warning">
       <p class="mb-0"><strong>No information available</strong></p>
 			<p class="mb-0">This is likely because no registers have been taken at sessions this swimmer could attend.</p>

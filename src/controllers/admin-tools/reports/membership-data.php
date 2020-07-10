@@ -1,9 +1,14 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getInfo = $db->prepare("SELECT members.UserID `uid`, Forename ufn, Surname usn, MForename mfn, MSurname msn, members.ASANumber asa, members.ASACategory cat, DateOfBirth dob, SquadName squad, SquadFee fee, ClubPays exempt, Mandate, BankName, AccountHolderName, AccountNumEnd FROM ((((members INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN paymentMandates ON paymentPreferredMandate.MandateID = paymentMandates.MandateID) ORDER BY usn ASC, ufn ASC, users.UserID ASC, msn ASC, mfn ASC");
-$getInfo->execute([]);
+$getInfo = $db->prepare("SELECT members.UserID `uid`, Forename ufn, Surname usn, members.MemberID mid, MForename mfn, MSurname msn, members.ASANumber asa, members.ASACategory cat, DateOfBirth dob, ClubPays exempt, Mandate, BankName, AccountHolderName, AccountNumEnd FROM (((members LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN paymentMandates ON paymentPreferredMandate.MandateID = paymentMandates.MandateID) WHERE members.Tenant = ? ORDER BY usn ASC, ufn ASC, users.UserID ASC, msn ASC, mfn ASC");
+$getInfo->execute([
+  $tenant->getId()
+]);
+
+$getSquads = $db->prepare("SELECT SquadName, SquadFee FROM squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad WHERE squadMembers.Member = ?");
 
 $logins = $db->prepare("SELECT `Time`, `IPAddress`, Browser, `Platform`, `GeoLocation` FROM userLogins WHERE UserID = ? ORDER BY `Time` DESC LIMIT 1");
 
@@ -36,7 +41,9 @@ while ($info = $getInfo->fetch(PDO::FETCH_ASSOC)) {
   if (bool($info['exempt'])) {
     $exempt = 'Fee exemption';
   }
-  $logins->execute([$info['uid']]);
+  $logins->execute([
+    $info['uid']
+  ]);
   $loginInfo = $logins->fetch(PDO::FETCH_ASSOC);
   $lastLogin = 'Never';
   if ($loginInfo) {
@@ -45,6 +52,29 @@ while ($info = $getInfo->fetch(PDO::FETCH_ASSOC)) {
     $lastLogin = $time->format('H:i T \o\n d/m/y');
   }
   $dob = new DateTime($info['dob']);
+
+  // Squads
+  $getSquads->execute([
+    $info['mid'],
+  ]);
+  $squads = '';
+  $fees = '';
+  $doneFirst = false;
+  while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)) {
+    if ($doneFirst) {
+      $squads .= ', ';
+      $fees .= ', ';
+    }
+    $doneFirst = true;
+
+    $squads .= $squad['SquadName'];
+    $fee = '£0.00';
+    try {
+      $fee = '£' . (string) \Brick\Math\BigDecimal::of((string) $squad['SquadFee'])->toScale(2);
+    } catch (Exception $e) { }
+    $fees .= $fee;
+  }
+
   fputcsv($output, [
     $info['ufn'],
     $info['usn'],
@@ -53,8 +83,8 @@ while ($info = $getInfo->fetch(PDO::FETCH_ASSOC)) {
     $info['asa'],
     $info['cat'],
     $dob->format("d/m/Y"),
-    $info['squad'],
-    (string) \Brick\Math\BigDecimal::of((string) $info['fee'])->toScale(2),
+    $squads,
+    $fees,
     $exempt,
     getBankName($info['BankName']),
     $info['AccountHolderName'],

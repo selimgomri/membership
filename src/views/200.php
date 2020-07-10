@@ -18,7 +18,7 @@ if ($currentUser == null) {
 			<p>API Incident, Errors or Downtime? Contact the support team urgently.</p>
 			<p>HTTP Status 200 - OK.</p>
 			<hr>
-			<p class="mt-2">Contact our <a href="mailto:support@myswimmingclub.uk" title="Support Hotline">Emergency Support Hotline</a> if there are API errors despite this 200 OK Status.</p>
+			<p class="mt-2"><a href="mailto:support@myswimmingclub.uk" title="Support Hotline">Email us</a> or <a href="tel:+441912494320">call us on +44 191 249 4320</a> for help and support if the issue persists.</p>
 		</div>
 	</div>
 </div>

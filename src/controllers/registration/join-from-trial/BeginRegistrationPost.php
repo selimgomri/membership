@@ -14,7 +14,7 @@ $query->execute([$hash]);
 
 $parent = $query->fetch(PDO::FETCH_ASSOC);
 
-$_SESSION['AC-Registration']['Hash'] = $parent['Hash'];
-$_SESSION['AC-Registration']['Stage'] = 'UserDetails';
+$_SESSION['TENANT-' . app()->tenant->getId()]['AC-Registration']['Hash'] = $parent['Hash'];
+$_SESSION['TENANT-' . app()->tenant->getId()]['AC-Registration']['Stage'] = 'UserDetails';
 
 header("Location: " . autoUrl("register/ac/user-details"));

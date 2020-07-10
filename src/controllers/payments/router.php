@@ -1,7 +1,7 @@
 <?php
 
 $this->group('/mandates', function() {
-	if ($_SESSION['AccessLevel'] == "Parent") {
+	if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 		$this->get('/', function() {
 			include 'mybanks.php';
 		});
@@ -11,21 +11,21 @@ $this->group('/mandates', function() {
 		});
 	}
 
-	if ($_SESSION['AccessLevel'] == "Parent" || $_SESSION['AccessLevel'] == "Admin") {
+	if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") {
 		$this->get('/{mandate}/print', function($mandate) {
 			include 'mandatePDFs.php';
 		});
 	}
 
 	$this->get('/{mandate}/', function($mandate) {
-		if ($_SESSION['AccessLevel'] == 'Admin') {
+		if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
 			include 'admin/user-mandates/mandate-info.php';
 		} else {
 			header("location: " . autoUrl("payments/mandates/" . $mandate . "/print"));
 		}
 	});
 
-	if ($_SESSION['AccessLevel'] == "Admin") {
+	if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") {
 		$this->get('/', function() {
 			include 'admin/user-mandates/mandates.php';
 		});
@@ -41,13 +41,13 @@ $this->group('/mandates', function() {
 	}
 });
 
-if ($_SESSION['AccessLevel'] == 'Admin') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
 	$this->group('/categories', function() {
 		include 'categories/router.php';
 	});
 }
 
-if ($_SESSION['AccessLevel'] == "Parent") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 
 	$this->get('/', function() {
 		
@@ -97,7 +97,7 @@ if ($_SESSION['AccessLevel'] == "Parent") {
 	});
 }
 
-if ($_SESSION['AccessLevel'] == "Coach") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Coach") {
 	$this->get('/history/{type}/{year}:int/{month}:int', function($type, $year, $month) {
 		
 		include 'admin/history/feestatus.php';
@@ -112,7 +112,7 @@ if ($_SESSION['AccessLevel'] == "Coach") {
 	});
 }
 
-if ($_SESSION['AccessLevel'] == "Admin") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") {
 	$this->get('/', function() {
 		
 		include 'admin.php';
@@ -251,14 +251,14 @@ if ($_SESSION['AccessLevel'] == "Admin") {
 	});
 }
 
-if ($_SESSION['AccessLevel'] == "Galas") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas") {
 	$this->get(['/', '/galas'], function() {
 		
 		include 'galas/Home.php';
 	});
 }
 
-if ($_SESSION['AccessLevel'] == "Galas" || $_SESSION['AccessLevel'] == "Admin") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") {
 	$this->get('/galas/{id}:int', function($id) {
 		
 		include 'galas/EntryCharge.php';
@@ -276,7 +276,7 @@ if ($_SESSION['AccessLevel'] == "Galas" || $_SESSION['AccessLevel'] == "Admin") 
 }
 
 // Only allow payment cards if not null
-if (env('STRIPE') != null) {
+if (getenv('STRIPE') && app()->tenant->getStripeAccount()) {
 
 	/*
 	* Payment Cards
@@ -322,11 +322,34 @@ if (env('STRIPE') != null) {
 			include 'stripe/DeleteCard.php';
 		});
 
-		if ($_SESSION['AccessLevel'] != "Parent") {
+		if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") {
 			$this->group('/terminal', function() {
 				include 'stripe/terminal/router.php';
 			});
 		}
+	});
+}
+
+if (bool(getenv('IS_DEV'))) {
+	$this->group('/direct-debit', function() {
+		$this->get('/', function() {
+			include 'stripe/direct-debit/info.php';
+		});
+
+		$this->group('/set-up', function() {
+			$this->get('/', function() {
+				include 'stripe/direct-debit/sign-up.php';
+			});
+
+			$this->get('/success', function() {
+				include 'stripe/direct-debit/success.php';
+			});
+
+			$this->get('/cancel', function() {
+				include 'stripe/direct-debit/failure.php';
+			});
+		});
+
 	});
 }
 
@@ -344,9 +367,9 @@ $this->group('/card-transactions', function() {
 	});
 });
 
-if ($_SESSION['AccessLevel'] == 'Parent' || $_SESSION['AccessLevel'] == 'Admin') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
 	$this->group('/statements', function() {
-		if ($_SESSION['AccessLevel'] == 'Parent') {
+		if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
 			$this->get('/', function() {
 				include 'parent/transactions.php';
 			});

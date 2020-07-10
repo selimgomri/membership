@@ -1,9 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$sql = $db->prepare("SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SessionID` = ?;");
-$sql->execute([$id]);
+$sql = $db->prepare("SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SessionID` = ? AND `sessions`.`Tenant` = ?;");
+$sql->execute([
+	$id,
+	$tenant->getId(),
+]);
 $row = $sql->fetch(PDO::FETCH_ASSOC);
 
 if ($row == null) {

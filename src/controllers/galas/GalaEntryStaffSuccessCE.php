@@ -1,10 +1,12 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getSwimmer = $db->prepare("SELECT MForename, MSurname FROM members WHERE MemberID = ?");
+$getSwimmer = $db->prepare("SELECT MForename, MSurname FROM members WHERE MemberID = ? AND Tenant = ?");
 $getSwimmer->execute([
-  $swimmer
+  $swimmer,
+  $tenant->getId()
 ]);
 $row = $getSwimmer->fetch(PDO::FETCH_ASSOC);
 
@@ -25,7 +27,7 @@ include BASE_PATH . "views/header.php";
         <?=htmlspecialchars($row['MForename'])?>'s Selected Sessions
       </h1>
 
-      <?php if ($_SESSION['SuccessStatus']) { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']) { ?>
       <p>
         Your selection has been saved. Use the coach entry system to choose swims.
       </p>
@@ -33,7 +35,7 @@ include BASE_PATH . "views/header.php";
       <p>
         An error occurred which meant your choices were not saved.
       </p>
-      <?php } unset($_SESSION['SuccessStatus']); ?>
+      <?php } unset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']); ?>
 
       <div class="cell">
         <h3>Make another entry for <?=htmlspecialchars($row['MForename'])?></h3>

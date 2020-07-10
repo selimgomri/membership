@@ -1,16 +1,20 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$sql = "SELECT MoveID, moves.SquadID, squads.SquadName, `MForename`, `MSurname`, Forename, Surname, DateOfBirth, squads.SquadFee, squads.SquadCoC, squads.SquadTimetable, `users`.`UserID`, MovingDate, old.SquadName AS OldSquad, old.SquadFee AS OldFee FROM ((((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) INNER JOIN squads AS old ON members.SquadID = old.SquadID) WHERE members.MemberID = ?";
+$sql = "SELECT MoveID, moves.SquadID, squads.SquadName, `MForename`, `MSurname`, Forename, Surname, DateOfBirth, squads.SquadFee, squads.SquadCoC, squads.SquadTimetable, `users`.`UserID`, MovingDate, old.SquadName AS OldSquad, old.SquadFee AS OldFee FROM ((((`members` INNER JOIN `users` ON users.UserID = members.UserID) INNER JOIN `moves` ON members.MemberID = moves.MemberID) INNER JOIN `squads` ON moves.SquadID = squads.SquadID) INNER JOIN squads AS old ON members.SquadID = old.SquadID) WHERE members.MemberID = ? AND members.Tenant = ?";
 $email_info = $db->prepare($sql);
-$email_info->execute([$id]);
+$email_info->execute([
+  $id,
+  $tenant->getId()
+]);
 $email_info = $email_info->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname']) . " Squad Move Contract";
 
-$_SESSION['qr'][0]['text'] = autoUrl("form-agreement/m/" . urlencode('CodeOfConduct') . '/' . urlencode(date("Y-m-d")) . "/" . urlencode($id) . '/' . urlencode("Squad: " . $email_info['SquadName']));
-$_SESSION['qr'][0]['size'] = 600;
+$_SESSION['TENANT-' . app()->tenant->getId()]['qr'][0]['text'] = autoUrl("form-agreement/m/" . urlencode('CodeOfConduct') . '/' . urlencode(date("Y-m-d")) . "/" . urlencode($id) . '/' . urlencode("Squad: " . $email_info['SquadName']));
+$_SESSION['TENANT-' . app()->tenant->getId()]['qr'][0]['size'] = 600;
 $qrFile = true;
 
 $hasDD = userHasMandates($email_info['UserID']);
@@ -28,7 +32,7 @@ ob_start();?>
 <html>
   <head>
   <meta charset='utf-8'>
-  <?php if (bool(env('IS_CLS'))) { ?>
+  <?php if (app()->tenant->isCLS()) { ?>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i" rel="stylesheet" type="text/css">
   <?php } else { ?>
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i" rel="stylesheet" type="text/css">
@@ -135,7 +139,7 @@ ob_start();?>
       If you do not think <?=htmlspecialchars($email_info['MForename'])?> will be able to take up their place in <?=htmlspecialchars($email_info['SquadName'])?> Squad, please contact us as soon as possible. We must however warn you that we may not be able keep <?=htmlspecialchars($email_info['MForename'])?> in <?=htmlspecialchars($email_info['OldSquad'])?> Squad if it would prevent us from moving up swimmers in our lower squads.
     </p>
 
-    <?php if ((bool(env('IS_CLS')))) { ?>
+    <?php if ((app()->tenant->isCLS())) { ?>
     <div class="avoid-page-break-inside">
       <div class="d-block">
         <h2>Instructions for parents</h2>
@@ -170,7 +174,7 @@ ob_start();?>
     <div class="page-break"></div>
 
     <h1 id="payment-questions">Paying Squad Fees for <?=htmlspecialchars($email_info['SquadName'])?></h1>
-    <?php if (bool(env('IS_CLS'))) { ?>
+    <?php if (app()->tenant->isCLS()) { ?>
     <p>
       Your monthly direct debit will be automatically adjusted accordingly. Payments by Direct Debit are covered by the <a href="#payment-dd-guarantee">Direct Debit Guarantee</a>.
     </p>
@@ -181,7 +185,7 @@ ob_start();?>
     <?php } ?>
 
     <p>
-      Full help and support for payments by Direct Debit is available on the Membership System Support Website at <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">https://www.chesterlestreetasc.co.uk/support/onlinemembership/</a>. Help and Support Documentation is provided by Chester-le-Street ASC<?php if (!(bool(env('IS_CLS')))) { ?> to all clubs and users that use this service. If you need somebody to help you, please contact your own club in the first instance<?php } ?>.
+      Full help and support for payments by Direct Debit is available on the Membership System Support Website at <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">https://www.chesterlestreetasc.co.uk/support/onlinemembership/</a>. Help and Support Documentation is provided by Chester-le-Street ASC<?php if (!(app()->tenant->isCLS())) { ?> to all clubs and users that use this service. If you need somebody to help you, please contact your own club in the first instance<?php } ?>.
     </p>
 
     <div class="row" id="payment-dd-guarantee">
@@ -192,21 +196,21 @@ ob_start();?>
         <img src="<?=BASE_PATH?>public/img/directdebit/directdebit@3x.png" style="height:1cm;" class="mb-3" alt="Direct Debit Logo">
       </div>
     </div>
-    <p>The Direct Debit Guarantee applies to payments made to <?=htmlspecialchars(env('CLUB_NAME'))?></p>
+    <p>The Direct Debit Guarantee applies to payments made to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></p>
 
     <ul>
       <li>
         This Guarantee is offered by all banks and building societies that accept instructions to pay Direct Debits
       </li>
       <li>
-        If there are any changes to the amount, date or frequency of your Direct Debit <?=htmlspecialchars(env('CLUB_NAME'))?> will notify you three working days in advance of your account being debited or as otherwise agreed. If you request <?=htmlspecialchars(env('CLUB_NAME'))?> to collect a payment, confirmation of the amount and date will be given to you at the time of the request
+        If there are any changes to the amount, date or frequency of your Direct Debit <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> will notify you three working days in advance of your account being debited or as otherwise agreed. If you request <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> to collect a payment, confirmation of the amount and date will be given to you at the time of the request
       </li>
       <li>
-        If an error is made in the payment of your Direct Debit, by <?=htmlspecialchars(env('CLUB_NAME'))?> or your bank or building society, you are entitled to a full and immediate refund of the amount paid from your bank or building society
+        If an error is made in the payment of your Direct Debit, by <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> or your bank or building society, you are entitled to a full and immediate refund of the amount paid from your bank or building society
       </li>
         <ul>
           <li>
-            If you receive a refund you are not entitled to, you must pay it back when <?=htmlspecialchars(env('CLUB_NAME'))?> asks you to
+            If you receive a refund you are not entitled to, you must pay it back when <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> asks you to
           </li>
         </ul>
       <li>
@@ -214,9 +218,9 @@ ob_start();?>
       </li>
     </ul>
 
-    <p>Payments are handled by <a href="https://gocardless.com/">GoCardless</a> on behalf of <?=htmlspecialchars(env('CLUB_NAME'))?>.</p>
+    <p>Payments are handled by <a href="https://gocardless.com/">GoCardless</a> on behalf of <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>.</p>
 
-    <!--<p>&copy; <?=htmlspecialchars(env('CLUB_NAME'))?> <?=date("Y")?></p>-->
+    <!--<p>&copy; <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> <?=date("Y")?></p>-->
 
     <?php } ?>
 
@@ -229,7 +233,7 @@ ob_start();?>
     </h1>
 
     <p>
-      By moving into this squad, you must agree to its code of conduct. <?php if ((bool(env('IS_CLS')))) { ?><strong>You are required to sign and return this form to the club before <?=date("l j F Y", strtotime($email_info['MovingDate']))?>.<?php } else { ?><strong>If instructed to do so</strong> by your club, you should sign and return this document.<?php } ?>
+      By moving into this squad, you must agree to its code of conduct. <?php if ((app()->tenant->isCLS())) { ?><strong>You are required to sign and return this form to the club before <?=date("l j F Y", strtotime($email_info['MovingDate']))?>.<?php } else { ?><strong>If instructed to do so</strong> by your club, you should sign and return this document.<?php } ?>
     </p>
 
     <p>
@@ -245,7 +249,7 @@ ob_start();?>
     </h1>
 
     <p><strong>
-      <?php if ((bool(env('IS_CLS')))) { ?>
+      <?php if ((app()->tenant->isCLS())) { ?>
         Please sign and return this form to any squad coach before you move into this squad on <?=date("l j F Y", strtotime($email_info['MovingDate']))?>. If you've been sent this form by email, please print it out. Electronic signatures will not be accepted.
       <?php } else { ?>
         If required to do so by your club, please sign and return this form.
@@ -273,7 +277,7 @@ ob_start();?>
         <?php } ?>
 
         <p>
-          I, <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> agree to the Code of Conduct for <?=htmlspecialchars($email_info['SquadName'])?> Squad as outlined above as required by the Terms and Conditions of Membership of <?=htmlspecialchars(env('CLUB_NAME'))?>.
+          I, <?=htmlspecialchars($email_info['MForename'] . " " . $email_info['MSurname'])?> agree to the Code of Conduct for <?=htmlspecialchars($email_info['SquadName'])?> Squad as outlined above as required by the Terms and Conditions of Membership of <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>.
         </p>
 
         <div class="signature-box mb-0">

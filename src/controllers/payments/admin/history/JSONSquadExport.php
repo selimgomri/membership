@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 use Respect\Validation\Validator as v;
 
@@ -38,11 +39,15 @@ payments.PaymentID, `ClubPays` FROM (((((`individualFeeTrack` LEFT JOIN
 LEFT JOIN `members` ON members.MemberID = individualFeeTrack.MemberID) LEFT JOIN
 `payments` ON paymentsPending.PMkey = payments.PMkey) LEFT JOIN `users` ON
 users.UserID = individualFeeTrack.UserID) WHERE `paymentMonths`.`Date` LIKE
-? AND `individualFeeTrack`.`Type` = ? ORDER BY `Forename`
+? AND `individualFeeTrack`.`Type` = ? AND members.Tenant = ? ORDER BY `Forename`
 ASC, `Surname` ASC, `users`.`UserID` ASC, `MForename` ASC, `MSurname` ASC;";
 
 $query = $db->prepare($sql);
-$query->execute([$searchDate, $name_type]);
+$query->execute([
+	$searchDate,
+	$name_type,
+	$tenant->getId()
+]);
 
 $row = $query->fetch(PDO::FETCH_ASSOC);
 

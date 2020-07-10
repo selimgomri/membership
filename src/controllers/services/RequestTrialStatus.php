@@ -1,21 +1,31 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ?");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ? AND Tenant = ?");
+$query->execute([
+  $hash,
+  $tenant->getId()
+]);
 
 if ($query->fetchColumn() != 1) {
   halt(404);
 }
 
-$query = $db->prepare("SELECT First, Last FROM joinParents WHERE Hash = ?");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT First, Last FROM joinParents WHERE Hash = ? AND Tenant = ?");
+$query->execute([
+  $hash,
+  $tenant->getId()
+]);
 
 $parent = $query->fetch(PDO::FETCH_ASSOC);
 
-$query = $db->prepare("SELECT ID, First, Last, DoB, ASA, Club, XPDetails, XP, Medical, Questions, TrialStart, TrialEnd, SquadSuggestion FROM joinSwimmers WHERE Parent = ? ORDER BY First ASC, Last ASC");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT ID, First, Last, DoB, ASA, Club, XPDetails, XP, Medical, Questions, TrialStart, TrialEnd, SquadSuggestion FROM joinSwimmers WHERE Parent = ? AND Tenant = ? ORDER BY First ASC, Last ASC");
+$query->execute([
+  $hash,
+  $tenant->getId()
+]);
 
 $swimmers = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -26,10 +36,10 @@ if ($use_membership_menu) {
   $use_website_menu = false;
 }
 
-$value = $_SESSION['RequestTrial-FC'];
+$value = $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-FC'];
 
-if (isset($_SESSION['RequestTrial-AddAnother'])) {
-  $value = $_SESSION['RequestTrial-AddAnother'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-AddAnother'])) {
+  $value = $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-AddAnother'];
 }
 
 include BASE_PATH . 'views/header.php';
@@ -89,8 +99,8 @@ include BASE_PATH . 'views/header.php';
         </p>
         <?php } ?>
         <?php } else {
-        $query = $db->prepare("SELECT SquadName, SquadFee FROM squads WHERE SquadID = ?");
-        $query->execute([$swimmer['SquadSuggestion']]);
+        $query = $db->prepare("SELECT SquadName, SquadFee FROM squads WHERE SquadID = ? AND Tenant = ?");
+        $query->execute([$swimmer['SquadSuggestion']], $tenant->getId());
         $squad = $query->fetch(PDO::FETCH_ASSOC);?>
         <p>
           <strong>
@@ -119,7 +129,7 @@ include BASE_PATH . 'views/header.php';
           </dd>
           <?php } ?>
 
-          <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
+          <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") { ?>
           <dt class="col-md-4 col-lg-3">Date of Birth</dt>
           <dd class="col-md-8 col-lg-9">
             <?=date("j F Y", strtotime($swimmer['DoB']))?>
@@ -145,7 +155,7 @@ include BASE_PATH . 'views/header.php';
           </dd>
           <?php } ?>
 
-          <?php if ($_SESSION['AccessLevel'] == "Admin") { ?>
+          <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") { ?>
           <?php if ($swimmer['Medical'] != null && $swimmer['Medical'] != "") { ?>
           <dt class="col-md-4 col-lg-3">Medical Info</dt>
           <dd class="col-md-8 col-lg-9">

@@ -1,8 +1,12 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getSquads = $db->query("SELECT SquadName squad, SquadID id FROM squads ORDER BY SquadFee DESC, squad ASC");
+$getSquads = $db->prepare("SELECT SquadName squad, SquadID id FROM squads WHERE Tenant = ? ORDER BY SquadFee DESC, squad ASC");
+$getSquads->execute([
+  $tenant->getId()
+]);
 $squad = $getSquads->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = "Member log books";

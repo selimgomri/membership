@@ -1,15 +1,20 @@
 <?php
 
 $galaId = null;
-if ($_SESSION['AccessLevel'] != 'Parent') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') {
   $galaId = $_POST['gala'];
 } else {
   $galaId = $id;
 }
 
 $db = app()->db;
-$galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends` FROM galas WHERE GalaID = ?");
-$galaDetails->execute([$galaId]);
+$tenant = app()->tenant;
+
+$galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends` FROM galas WHERE GalaID = ? AND Tenant = ?");
+$galaDetails->execute([
+  $galaId,
+  $tenant->getId()
+]);
 $gala = $galaDetails->fetch(PDO::FETCH_ASSOC);
 
 if ($gala == null) {
@@ -24,9 +29,9 @@ $getSessions->execute([$galaId]);
 $sessions = $getSessions->fetchAll(PDO::FETCH_ASSOC);
 
 $getSwimmers = null;
-if ($_SESSION['AccessLevel'] == 'Parent') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
   $getSwimmers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn FROM members WHERE UserID = ?");
-  $getSwimmers->execute([$_SESSION['UserID']]);
+  $getSwimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 } else {
   $getSwimmers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn FROM members WHERE MemberID = ?");
   $getSwimmers->execute([$_POST['swimmer']]);
@@ -68,13 +73,13 @@ if ($swimmer != null && $nowDate < $galaDate) {
       }
     } while ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC));
 
-    $_SESSION['SuccessStatus'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus'] = true;
   } catch (Exception $e) {
-    $_SESSION['ErrorStatus'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus'] = true;
   }
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
   header("Location: " . autoUrl("galas/" . $galaId . "/indicate-availability"));
 } else {
   header("Location: " . autoUrl("swimmers/" . $_POST['swimmer'] . "/enter-gala-success"));

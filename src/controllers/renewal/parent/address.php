@@ -12,7 +12,7 @@ if ($json != null) {
 $pagetitle = "My Address";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/renewalTitleBar.php";
-$userID = $_SESSION['UserID'];
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 ?>
 <div class="container">
   <div class="row">
@@ -20,13 +20,13 @@ $userID = $_SESSION['UserID'];
       <h1>My Address</h1>
       <p class="lead">Manage your address</p>
 
-    	<?php if (isset($_SESSION['ErrorState']) && $_SESSION['ErrorState']) { ?>
+    	<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) { ?>
     		<div class="alert alert-danger">
     			<p class="mb-0">
     				<strong>An error occurred when we tries to save the changes</strong>
     			</p>
     		</div>
-    	<?php unset($_SESSION['ErrorState']);
+    	<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
     	} ?>
 
       <?php if (isset($addr->streetAndNumber)) { ?>

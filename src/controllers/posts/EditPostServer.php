@@ -1,6 +1,26 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
+
+$query = null;
+if ($int) {
+	$query = $db->prepare("SELECT COUNT(*) FROM `posts` WHERE `ID` = ? AND Tenant = ?");
+	$query->execute([
+		$id,
+		$tenant->getId()
+	]);
+} else {
+	$query = $db->prepare("SELECT COUNT(*) FROM `posts` WHERE `Path` = ? AND Tenant = ?");
+	$query->execute([
+		$id,
+		$tenant->getId()
+	]);
+}
+
+if ($query->fetchColumn == 0) {
+	halt(404);
+}
 
 $data = [
 	$_POST['content'],
@@ -10,17 +30,6 @@ $data = [
 	$_POST['type'],
 	$_POST['mime']
 ];
-
-if ($people) {
-  $data = [
-  	$_POST['content'],
-  	getUserName($_SESSION['UserID']),
-  	$_POST['excerpt'],
-  	strtolower(str_replace(' ', '', getUserName($_SESSION['UserID']))),
-  	'people_pages',
-  	'text/html'
-  ];
-}
 
 $sql = null;
 if ($int) {
@@ -38,6 +47,6 @@ try {
 }
 
 
-$_SESSION['PostStatus'] = "Successfully updated";
+$_SESSION['TENANT-' . app()->tenant->getId()]['PostStatus'] = "Successfully updated";
 
 header("Location: " . autoUrl("posts/" . $id));

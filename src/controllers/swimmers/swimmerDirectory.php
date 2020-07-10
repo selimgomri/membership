@@ -1,8 +1,12 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$squads = $db->query("SELECT SquadName name, SquadID id FROM squads ORDER BY SquadFee DESC, SquadName ASC");
+$squads = $db->prepare("SELECT SquadName name, SquadID id FROM squads WHERE Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+$squads->execute([
+  $tenant->getId()
+]);
 
 $fluidContainer = true;
 $squadID = $search = "";
@@ -25,7 +29,7 @@ if (isset($_POST['squad'])) {
 <div class="container-fluid">
   <h1 class="mb-3">Members</h1>
 
-  <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+  <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
   <p>
     <a href="<?=autoUrl("members/new")?>" class="btn btn-success">
       Add new member

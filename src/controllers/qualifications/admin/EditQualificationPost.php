@@ -28,7 +28,7 @@ if ($_POST['expires']) {
 if (sizeof($form_errors) > 0) {
   // There was a problem, so send back to check details
 
-  $_SESSION['NewQualificationData'] = $_POST;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['NewQualificationData'] = $_POST;
   header("Location: " . currentUrl());
 } else {
   // Otherwise insert into the database

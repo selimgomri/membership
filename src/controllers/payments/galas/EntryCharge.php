@@ -1,11 +1,15 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $disabled = "";
 
-$getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas WHERE GalaID = ?");
-$getGala->execute([$id]);
+$getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas WHERE GalaID = ? AND Tenant = ?");
+$getGala->execute([
+	$id,
+	$tenant->getId()
+]);
 $gala = $getGala->fetch(PDO::FETCH_ASSOC);
 
 if ($gala == null) {
@@ -77,15 +81,15 @@ include BASE_PATH . 'views/header.php';
 	<div class="row">
 		<div class="col-md-8">
 
-			<?php if (isset($_SESSION['ChargeUsersSuccess'])) { 
-				unset($_SESSION['ChargeUsersSuccess']); ?>
+			<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersSuccess'])) { 
+				unset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersSuccess']); ?>
 				<div class="alert alert-success">
 					<strong>We've successfully charged the parents</strong>
 				</div>
 			<?php } ?>
 
-			<?php if (isset($_SESSION['ChargeUsersFailure'])) { 
-				unset($_SESSION['ChargeUsersFailure']); ?>
+			<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersFailure'])) { 
+				unset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersFailure']); ?>
 				<div class="alert alert-warning">
 					<strong>An error occurred.</strong> Please try again later.
 				</div>
@@ -179,8 +183,8 @@ include BASE_PATH . 'views/header.php';
 								</p>
 								<?php } ?>
 
-								<?php if (isset($_SESSION['OverhighChargeAmount'][$entry['EntryID']]) && $_SESSION['OverhighChargeAmount'][$entry['EntryID']]) {
-									unset($_SESSION['OverhighChargeAmount'][$entry['EntryID']]); ?>
+								<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'][$entry['EntryID']]) && $_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'][$entry['EntryID']]) {
+									unset($_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'][$entry['EntryID']]); ?>
 								<div class="alert alert-danger">
 									<strong>Refund failed!</strong> You have attempted to refund more than the user has paid.
 								</div>
@@ -245,8 +249,8 @@ include BASE_PATH . 'views/header.php';
 	</div>
 </div>
 
-<?php if (isset($_SESSION['OverhighChargeAmount'])) {
-	unset($_SESSION['OverhighChargeAmount']);
+<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'])) {
+	unset($_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount']);
 } ?>
 
 <?php

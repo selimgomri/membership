@@ -17,7 +17,7 @@ $captchaStatus = null;
 #
 # Verify captcha
 $post_data = http_build_query([
-  'secret' => env('GOOGLE_RECAPTCHA_SECRET'),
+  'secret' => getenv('GOOGLE_RECAPTCHA_SECRET'),
   'response' => $_POST['g-recaptcha-response'],
   'remoteip' => $_SERVER['REMOTE_ADDR']
 ]);
@@ -30,7 +30,7 @@ $context  = stream_context_create($opts);
 $response = file_get_contents('https://www.google.com/recaptcha/api/siteverify', false, $context);
 $result = json_decode($response);
 
-if ($_SESSION['RegistrationMode'] == "Family-Manual") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMode'] == "Family-Manual") {
   $sql = "SELECT * FROM `familyIdentifiers` WHERE `ID` = ? AND `ACS` = ?";
 
   $fid = trim(str_replace(["FAM", "fam"], "", $_POST['fam-reg-num']));
@@ -46,11 +46,11 @@ if ($_SESSION['RegistrationMode'] == "Family-Manual") {
   $row = $query->fetch(PDO::FETCH_ASSOC);
 
   if (!$row) {
-  	$_SESSION['RegistrationFamNum'] = htmlentities($fid);
-    $_SESSION['RegistrationFamKey'] = htmlentities($acs);
+  	$_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationFamNum'] = htmlentities($fid);
+    $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationFamKey'] = htmlentities($acs);
   }
 
-  $_SESSION['FamilyIdentifier'] = $fid;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['FamilyIdentifier'] = $fid;
 }
 
 // Registration Form Handler
@@ -141,8 +141,8 @@ $account = [
   "MobileComms"       => $smsAuth
 ];
 
-if (isset($_SESSION['FamilyIdentifier'])) {
-  $account["FamilyIdentifier"] = $_SESSION['FamilyIdentifier'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['FamilyIdentifier'])) {
+  $account["FamilyIdentifier"] = $_SESSION['TENANT-' . app()->tenant->getId()]['FamilyIdentifier'];
   $account["RequiresRegistraion"] = true;
 }
 
@@ -163,7 +163,7 @@ if ($status) {
   $to = $email;
   $sContent = '
   <p class="small">Hello ' . htmlspecialchars($forename) . '</p>
-  <p>Thanks for signing up for your ' . env('CLUB_NAME') . ' Account.</p>
+  <p>Thanks for signing up for your ' . app()->tenant->getKey('CLUB_NAME') . ' Account.</p>
   <p>We need you to verify your email address by following this link - <a
   href="' . autoUrl($verifyLink) . '" target="_blank">' .
   autoUrl($verifyLink) . '</a></p>
@@ -183,7 +183,7 @@ if ($status) {
     "description": "Login to your accounts",
     "publisher": {
       "@type": "Organization",
-      "name": "' . env('CLUB_NAME') . '",
+      "name": "' . app()->tenant->getKey('CLUB_NAME') . '",
       "url": "https://www.chesterlestreetasc.co.uk",
       "url/googlePlus": "https://plus.google.com/110024389189196283575"
     }
@@ -192,9 +192,9 @@ if ($status) {
   </script>
   ';
 
-  notifySend($to, $subject, $sContent, $forename . " " . $surname, $email, ["Email" => "registration@" . env('EMAIL_DOMAIN'), "Name" => env('CLUB_NAME')]);
+  notifySend($to, $subject, $sContent, $forename . " " . $surname, $email, ["Email" => "registration@" . getenv('EMAIL_DOMAIN'), "Name" => app()->tenant->getKey('CLUB_NAME')]);
 
-  $_SESSION['RegistrationGoVerify'] = '
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationGoVerify'] = '
   <div class="alert alert-success mb-0">
     <p class="mb-0">
       <strong>
@@ -212,19 +212,19 @@ if ($status) {
 
   header("Location: " . autoUrl("register"));
 } else {
-  $_SESSION['RegistrationUsername'] = $username;
-  $_SESSION['RegistrationForename'] = $forename;
-  $_SESSION['RegistrationSurname'] = $surname;
-  $_SESSION['RegistrationEmail'] = $email;
-  $_SESSION['RegistrationMobile'] = $mobile;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationUsername'] = $username;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationForename'] = $forename;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationSurname'] = $surname;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationEmail'] = $email;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMobile'] = $mobile;
   if ($emailAuth == 1) {
-    $_SESSION['RegistrationEmailAuth'] = " checked ";
+    $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationEmailAuth'] = " checked ";
   }
   if ($smsAuth == 1) {
-    $_SESSION['RegistrationSmsAuth'] = " checked ";
+    $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationSmsAuth'] = " checked ";
   }
 
-  $_SESSION['ErrorState'] = '
+  $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = '
   <div class="alert alert-warning">
   <p><strong>Something wasn\'t right</strong></p>
   <ul class="mb-0">' . $statusMessage . '</ul></div>';

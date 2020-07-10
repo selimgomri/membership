@@ -8,7 +8,7 @@ require 'AutoRouteStartup.php';
 	`UserID` = ?";
 	$db = app()->db;
 	try {
-		$db->prepare($sql)->execute([$_SESSION['UserID']]);
+		$db->prepare($sql)->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 	} catch (PDOException $e) {
 		halt(500);
 	}

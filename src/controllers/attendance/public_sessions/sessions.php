@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
 $startWeek = new DateTime('monday -1 week', new DateTimeZone('UTC'));
@@ -25,8 +26,9 @@ $day = $startWeek->format('d');
 $month = $startWeek->format('m');
 $year = $startWeek->format('Y');
 
-$sessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN squads ON squads.SquadID = sessions.SquadID) INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE DisplayFrom <= ? AND DisplayUntil >= ? ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC");
+$sessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN squads ON squads.SquadID = sessions.SquadID) INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE squads.Tenant = ? AND DisplayFrom <= ? AND DisplayUntil >= ? ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC");
 $sessions->execute([
+  $tenant->getId(),
   $startWeek->format('Y-m-d'),
   $endWeek->format('Y-m-d')
 ]);
@@ -157,7 +159,7 @@ include BASE_PATH . 'views/header.php';
             ?>
 
             <dt class="col-sm-3">Location</dt>
-        <dd class="col-sm-9 mb-0"><?php if (isset($_SESSION['LoggedIn']) && $_SESSION['LoggedIn']) { ?><?=htmlspecialchars($session['Location'])?><?php } else { ?>You must be logged in to see the location<?php } ?></dd>
+        <dd class="col-sm-9 mb-0"><?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && $_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) { ?><?=htmlspecialchars($session['Location'])?><?php } else { ?>You must be logged in to see the location<?php } ?></dd>
           </dl>
 
           <?php if (!bool($session['MainSequence'])) { ?>

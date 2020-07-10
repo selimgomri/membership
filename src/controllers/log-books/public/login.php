@@ -2,8 +2,8 @@
 $pagetitle = "Member Login - Log Books";
 
 $username = "";
-if (isset($_SESSION['LogBooks-SE-ID'])) {
-  $username = $_SESSION['LogBooks-SE-ID'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-SE-ID'])) {
+  $username = $_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-SE-ID'];
 }
 
 $use_white_background = true;
@@ -23,16 +23,16 @@ include BASE_PATH . "views/header.php";
         Our systems will not be sending emails between 23:00 on Friday 31 August and 15:00 on Saturday 1 September
       </div>
       -->
-      <?php if (isset($_SESSION['LogBooks-MemberLoginError'])) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoginError'])) { ?>
       <div class="alert alert-danger">
         <p class="mb-0">
           <strong>We could not log you in</strong>
         </p>
         <p class="mb-0">
-          <?=htmlspecialchars($_SESSION['LogBooks-MemberLoginError'])?>
+          <?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoginError'])?>
         </p>
       </div>
-      <?php unset($_SESSION['LogBooks-MemberLoginError']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoginError']); } ?>
 
       <form method="post" action="<?= autoUrl("log-books/login") ?>" name="loginform" id="loginform" class="needs-validation" novalidate>
         <div class="form-group">
@@ -61,13 +61,13 @@ include BASE_PATH . "views/header.php";
             </small>
           </div>
         </div>
-        <input type="hidden" name="target" value="<?= $_SESSION['TARGET_URL'] ?>">
+        <input type="hidden" name="target" value="<?= $_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL'] ?>">
         <?= SCDS\CSRF::write() ?>
         <input type="hidden" name="SessionSecurity" value="<?= session_id() ?>">
         <p class="mb-5"><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-primary"></p>
       </form>
 
-      <?php if (bool(env('IS_CLS'))) { ?>
+      <?php if (app()->tenant->isCLS()) { ?>
         <p class="small mb-0">
           Support Helpline: <a class="" href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>
         </p>
@@ -91,7 +91,7 @@ include BASE_PATH . "views/header.php";
 
       <!--
       <p class="small mb-5">
-        Unauthorised access to or misuse of this system is prohibited and constitutes an offence under the Computer Misuse Act 1990. If you disclose any information obtained through this system without authority then <?= htmlspecialchars(env('CLUB_NAME')) ?> or Swimming Club Data Systems may take legal action against you.
+        Unauthorised access to or misuse of this system is prohibited and constitutes an offence under the Computer Misuse Act 1990. If you disclose any information obtained through this system without authority then <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> or Swimming Club Data Systems may take legal action against you.
       </p>
       -->
 
@@ -120,6 +120,6 @@ $footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
 $footer->render();
 
-unset($_SESSION['ErrorState']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
 
 ?>

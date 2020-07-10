@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 use Respect\Validation\Validator as v;
 
 $status = true;
@@ -81,7 +82,7 @@ if (isset($_POST['approvalNeeded']) && bool($_POST['approvalNeeded'])) {
 if ($status) {
   $id = null;
   try {
-    $query = $db->prepare("INSERT INTO `galas` (`GalaName`, `Description`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`, `CoachEnters`, `RequiresApproval`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $query = $db->prepare("INSERT INTO `galas` (`GalaName`, `Description`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`, `CoachEnters`, `RequiresApproval`, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $query->execute([
       $galaName,
       $description,
@@ -93,7 +94,8 @@ if ($status) {
       $galaFee,
       $hyTek,
       $coachDoesEntries,
-      $approvalNeeded
+      $approvalNeeded,
+      $tenant->getId()
     ]);
     $added = true;
     $id = $db->lastInsertId();
@@ -118,20 +120,8 @@ if ($added && $status) {
   btn-success\">Return to Galas</a> <a href=\"" . autoUrl("galas/addgala") . "\"
   class=\"btn btn-dark\">Add another gala</a></p>";
 
-  if (env('TWITTER_CONSUMER_KEY') && env('TWITTER_CONSUMER_SECRET') &&
-  env('TWITTER_ACCESS_TOKEN') && env('TWITTER_ACCESS_TOKEN_SECRET')) {
-    // Send tweets via twitter
-    // ENTER HERE YOUR CREDENTIALS (see readme.txt)
-    $twitter = new Twitter(env('TWITTER_CONSUMER_KEY'), env('TWITTER_CONSUMER_SECRET'), env('TWITTER_ACCESS_TOKEN'), env('TWITTER_ACCESS_TOKEN_SECRET'));
-    try {
-    	$tweet = $twitter->send($galaName . ' is now available to enter online at ' . autoUrl("")); // you can add $imagePath or array of image paths as second argument
-    } catch (TwitterException $e) {
-    	// Do nothing just assume there isn't an API key
-    	// echo 'Error: ' . $e->getMessage();
-    }
-  }
   if ($id != null) {
-    $_SESSION['GalaAddedSuccess'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['GalaAddedSuccess'] = true;
     if (bool($coachDoesEntries)) {
       header("Location: " . autoUrl("galas/" . $id . "/sessions"));
     } else {
@@ -142,7 +132,7 @@ if ($added && $status) {
   }
 }
 else {
-  $_SESSION['ErrorState'] = '
+  $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = '
   <div class="alert alert-danger">
   <p class="mb-0">
   <strong>We were unable to add this gala</strong>

@@ -1,7 +1,6 @@
 <?php
 
 $db = app()->db;
-$systemInfo = app()->system;
 
 try {
 
@@ -16,10 +15,10 @@ try {
     }
   }
 
-  $systemInfo->setSystemOption('SquadFeeMonths', json_encode($exemptMonths));
-  $_SESSION['Update-Success'] = true;
+  app()->tenant->setKey('SquadFeeMonths', json_encode($exemptMonths));
+  $_SESSION['TENANT-' . app()->tenant->getId()]['Update-Success'] = true;
 } catch (Exception $e) {
-  $_SESSION['Update-Error'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['Update-Error'] = true;
 }
 
 header("Location: " . autoUrl("settings/fees/charge-months"));

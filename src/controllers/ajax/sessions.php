@@ -5,8 +5,9 @@ if (!isset($_POST["action"])) {
 }
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 $count = 0;
 
 // A function is used to produce the View/Edit and Add Sections Stuff
@@ -14,13 +15,20 @@ $count = 0;
 
 function sessionManagement($squadID, $old = null) {
 	ob_start();
-  $db = app()->db;
+	$db = app()->db;
+	$tenant = app()->tenant;
 	$output = $content = $modals = "";
 	
-	$getSessions = $db->prepare("SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SquadID` = ? AND (ISNULL(sessions.DisplayFrom) OR (sessions.DisplayFrom <= CURDATE( ))) AND (ISNULL(sessions.DisplayUntil) OR (sessions.DisplayUntil >= CURDATE( ))) ORDER BY `SessionDay` ASC, `StartTime` ASC");
-	$getSessions->execute([$squadID]);
+	$getSessions = $db->prepare("SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SquadID` = ? AND sessions.Tenant = ? AND (ISNULL(sessions.DisplayFrom) OR (sessions.DisplayFrom <= CURDATE( ))) AND (ISNULL(sessions.DisplayUntil) OR (sessions.DisplayUntil >= CURDATE( ))) ORDER BY `SessionDay` ASC, `StartTime` ASC");
+	$getSessions->execute([
+		$squadID,
+		$tenant->getId()
+	]);
 
-	$venues = $db->query("SELECT VenueName `name`, VenueID id FROM `sessionsVenues` ORDER BY VenueName ASC");
+	$venues = $db->prepare("SELECT VenueName `name`, VenueID id FROM `sessionsVenues` WHERE Tenant = ? ORDER BY VenueName ASC");
+	$venues->execute([
+		$tenant->getId()
+	]);
 
 	$row = $getSessions->fetch(PDO::FETCH_ASSOC);
 	
@@ -286,7 +294,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 	}
 
 	try {
-		$insert = $db->prepare("INSERT INTO `sessions` (`SquadID`, `VenueID`, `SessionName`, `SessionDay`, `StartTime`, `EndTime`, `MainSequence`, `DisplayFrom`, `DisplayUntil`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		$insert = $db->prepare("INSERT INTO `sessions` (`SquadID`, `VenueID`, `SessionName`, `SessionDay`, `StartTime`, `EndTime`, `MainSequence`, `DisplayFrom`, `DisplayUntil`, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		$insert->execute([
 			$squadID,
 			$venueID,
@@ -296,7 +304,8 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 			$endTime,
 			$mainSequence,
 			date("Y-m-d", $displayFrom),
-			date("Y-m-d", $displayUntil)
+			date("Y-m-d", $displayUntil),
+			$tenant->getId()
 		]);
 	} catch (Exception $e) {
 		halt(400);

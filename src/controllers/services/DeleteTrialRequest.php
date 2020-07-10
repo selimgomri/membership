@@ -1,16 +1,23 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ?");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ? AND Tenant = ?");
+$query->execute([
+  $hash,
+  $tenant->getId()
+]);
 
 if ($query->fetchColumn() != 1) {
   halt(404);
 }
 
-$query = $db->prepare("SELECT COUNT(*) FROM joinSwimmers WHERE Parent = ?");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT COUNT(*) FROM joinSwimmers WHERE Parent = ? AND Tenant = ?");
+$query->execute([
+  $hash,
+  $tenant->getId()
+]);
 
 $all = $false;
 $deleteAll = false;
@@ -20,16 +27,23 @@ if ($query->fetchColumn() == 1) {
 
 if ($trial == "all" || $deleteAll) {
   try {
-    $query = $db->prepare("DELETE FROM joinParents WHERE Hash = ?");
-    $query->execute([$hash]);
+    $query = $db->prepare("DELETE FROM joinParents WHERE Hash = ? AND Tenant = ?");
+    $query->execute([
+      $hash,
+      $tenant->getId()
+    ]);
     $all = true;
   } catch (Exception $e) {
     halt(404);
   }
 } else {
   try {
-    $query = $db->prepare("DELETE FROM joinSwimmers WHERE Parent = ? AND ID = ?");
-    $query->execute([$hash, $trial]);
+    $query = $db->prepare("DELETE FROM joinSwimmers WHERE Parent = ? AND ID = ? AND Tenant = ?");
+    $query->execute([
+      $hash,
+      $trial,
+      $tenant->getId()
+    ]);
   } catch (Exception $e) {
     halt(404);
   }
@@ -61,9 +75,9 @@ include BASE_PATH . 'views/header.php';
         personal information from our systems.
       </p>
       <p class="mb-5">
-        <a href="<?=CLUB_WEBSITE?>" class="btn btn-lg btn-primary">
+        <!-- <a href="" class="btn btn-lg btn-primary">
           Visit our website
-        </a>
+        </a> -->
       </p>
       <?php } else { ?>
       <p class="lead mb-5">

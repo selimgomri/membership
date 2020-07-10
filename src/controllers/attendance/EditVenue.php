@@ -1,12 +1,20 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$data = $db->prepare("SELECT VenueName, Location FROM sessionsVenues WHERE VenueID = ?");
-$data->execute([$id]);
+$data = $db->prepare("SELECT `VenueName`, `Location` FROM sessionsVenues WHERE VenueID = ? AND Tenant = ?");
+$data->execute([
+  $id,
+  $tenant->getId()
+]);
 $venue = $data->fetch(PDO::FETCH_ASSOC);
 
-$pagetitle = "Editing " . htmlspecialchars($venue);
+if (!$venue) {
+  halt(404);
+}
+
+$pagetitle = "Editing " . htmlspecialchars($venue['VenueName']);
 include BASE_PATH . "views/header.php";
 
 ?>
@@ -16,7 +24,7 @@ include BASE_PATH . "views/header.php";
   <div class="row">
     <div class="col-md-8">
 
-      <?php if (isset($_SESSION['EditVenueError']) && $_SESSION['EditVenueError']['Status']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EditVenueError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['EditVenueError']['Status']) { ?>
         <div class="alert alert-warning">
           <p class="mb-0">
             <strong>
@@ -29,7 +37,7 @@ include BASE_PATH . "views/header.php";
         </div>
       <?php } ?>
 
-      <?php if (isset($_SESSION['EditVenueSuccess']) && $_SESSION['EditVenueSuccess']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EditVenueSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['EditVenueSuccess']) { ?>
         <div class="alert alert-success">
           <p class="mb-0">
             <strong>
@@ -39,7 +47,7 @@ include BASE_PATH . "views/header.php";
         </div>
       <?php } ?>
 
-      <?php if (isset($_SESSION['NewVenueSuccess']) && $_SESSION['NewVenueSuccess']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NewVenueSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['NewVenueSuccess']) { ?>
         <div class="alert alert-success">
           <p class="mb-0">
             <strong>
@@ -81,9 +89,9 @@ include BASE_PATH . "views/header.php";
 
 <?php
 
-unset($_SESSION['EditVenueError']);
-unset($_SESSION['EditVenueSuccess']);
-unset($_SESSION['NewVenueSuccess']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['EditVenueError']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['EditVenueSuccess']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewVenueSuccess']);
 
 $footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");

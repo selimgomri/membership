@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $fluidContainer = true;
 $squadID = $search = "";
@@ -25,7 +26,10 @@ if (isset($_POST['squad'])) {
   <div class="d-print-none">
     <p class="lead">A list of swimmers.</p>
     <?php
-  $sql = $db->query("SELECT SquadID, SquadName FROM `squads` ORDER BY `squads`.`SquadFee` DESC;");
+  $sql = $db->prepare("SELECT SquadID, SquadName FROM `squads` WHERE Tenant = ? ORDER BY `squads`.`SquadFee` DESC;");
+  $sql->execute([
+    $tenant->getId()
+  ]);
   ?>
   <div class="form-row">
   <div class="col-md-6 mb-3">

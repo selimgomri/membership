@@ -1,30 +1,34 @@
 <?php
 
-$userID = $_SESSION['UserID'];
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
 $nowDay = $now->format('Y-m-d');
 
-$galas = $db->prepare("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters FROM galas WHERE GalaDate >= ? ORDER BY GalaDate ASC");
-$galas->execute([$nowDay]);
+$galas = $db->prepare("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters FROM galas WHERE Tenant = ? AND GalaDate >= ? ORDER BY GalaDate ASC");
+$galas->execute([
+  $tenant->getId(),
+  $nowDay
+]);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
 $entriesOpen = false;
 
 $entries = $db->prepare("SELECT EntryID, GalaName, ClosingDate, GalaVenue, MForename, MSurname, EntryProcessed Processed, Charged, Refunded, FeeToPay, Locked, Vetoable, RequiresApproval, Approved FROM ((galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE GalaDate >= ? AND members.UserID = ?");
-$entries->execute([$nowDay, $_SESSION['UserID']]);
+$entries->execute([$nowDay, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $entry = $entries->fetch(PDO::FETCH_ASSOC);
 
 $manualTimeGalas = $db->prepare("SELECT EntryID, GalaName, ClosingDate, GalaVenue, MForename, MSurname, EntryProcessed Processed, Charged, Refunded, FeeToPay, Locked, Vetoable FROM ((galaEntries INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE GalaDate >= ? AND members.UserID = ? AND galas.HyTek = 1;");
-$manualTimeGalas->execute([$nowDay, $_SESSION['UserID']]);
+$manualTimeGalas->execute([$nowDay, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 $timesheets = $db->prepare("SELECT DISTINCT `galas`.`GalaID`, `GalaName`, `GalaVenue` FROM ((`galas` INNER JOIN `galaEntries` ON `galas`.`GalaID` = `galaEntries`.`GalaID`) INNER JOIN members ON galaEntries.MemberID = members.MemberID) WHERE `GalaDate` >= ? AND members.UserID = ? ORDER BY `GalaDate` ASC");
-$timesheets->execute([$nowDay, $_SESSION['UserID']]);
+$timesheets->execute([$nowDay, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $timesheet = $timesheets->fetch(PDO::FETCH_ASSOC);
 
 $canPayByCard = false;
-if (env('STRIPE')) {
+if (getenv('STRIPE') && $tenant->getStripeAccount()) {
   $canPayByCard = true;
 }
 
@@ -77,7 +81,7 @@ $countEntriesCount = [];
 $countEntriesColours = [];
 foreach ($swimsArray as $col => $name) {
   $getCount = $db->prepare("SELECT COUNT(*) FROM galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID WHERE members.UserID = ? AND `" . $col . "` = 1");
-  $getCount->execute([$_SESSION['UserID']]);
+  $getCount->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   $count = $getCount->fetchColumn();
   if ($count > 0) {
     $countEntries[$col]['Name'] = $name;
@@ -244,7 +248,7 @@ include "galaMenu.php";
         </a>
       </p>
     </div>
-    <?php } else if (env('STRIPE')) { ?>
+    <?php } else if (getenv('STRIPE') && $tenant->getStripeAccount()) { ?>
       <div class="mb-4">
       <h2>
         Pay by card

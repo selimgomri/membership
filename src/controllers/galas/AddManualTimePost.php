@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Back','100Back','200Back','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','100IM','150IM','200IM','400IM',];
 $swimsTextArray = ['50&nbsp;Free','100&nbsp;Free','200&nbsp;Free','400&nbsp;Free','800&nbsp;Free','1500&nbsp;Free','50&nbsp;Back','100&nbsp;Back','200&nbsp;Back','50&nbsp;Breast','100&nbsp;Breast','200&nbsp;Breast','50&nbsp;Fly','100&nbsp;Fly','200&nbsp;Fly','100&nbsp;IM','150&nbsp;IM','200&nbsp;IM','400&nbsp;IM',];
@@ -8,15 +9,18 @@ $swimsTimeArray = ['50FreeTime','100FreeTime','200FreeTime','400FreeTime','800Fr
 
 $sql = $db->prepare("SELECT * FROM ((`galaEntries` INNER JOIN `members` ON
 `members`.`MemberID` = `galaEntries`.`MemberID`) INNER JOIN `galas` ON
-galaEntries.GalaID = galas.GalaID) WHERE `EntryID` = ?;");
-$sql->execute([$id]);
+galaEntries.GalaID = galas.GalaID) WHERE members.Tenant = ? AND `EntryID` = ?;");
+$sql->execute([
+	$tenant->getId(),
+	$id
+]);
 $row = $sql->fetch(PDO::FETCH_ASSOC);
 
 if ($row == null) {
 	halt(404);
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent' && $row['UserID'] != $_SESSION['UserID']) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $row['UserID'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
 	halt(404);
 }
 
@@ -31,14 +35,8 @@ try {
 	} else {
 		$type = "LCPB";
 	}
-	$getTimes = $db->prepare("SELECT * FROM `times` WHERE `MemberID` = ? AND `Type` = ?;");
-	$getTimes->execute([
-		$member,
-		$type
-	]);
-	$times = $getTimes->fetch(PDO::FETCH_ASSOC);
 
-	if (bool($row['EntryProcessed']) && $_SESSION['AccessLevel'] == 'Parent') {
+	if (bool($row['EntryProcessed']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
 		// Cannot change times as entry processed
 		$errorMessage = "Your entry has already been processed. As a result you are no longer able to edit your entry times. Please speak to your gala coordinator if you need to make changes.";
 		throw new Exception($errorMessage);
@@ -71,12 +69,12 @@ try {
 		$sql->execute([$time, $id]);
 	}
 	$db->commit();
-	$_SESSION['UpdateSuccess'] = true;
+	$_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess'] = true;
 } catch (PDOException $e) {
 	$db->rollBack();
-	$_SESSION['UpdateSuccess'] = false;
+	$_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess'] = false;
 } catch (Exception $e) {
-	$_SESSION['UpdateError'] = $e->getMessage();
+	$_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError'] = $e->getMessage();
 }
 
 header("Location: " . autoUrl("galas/entries/" . $id . "/manual-time"));

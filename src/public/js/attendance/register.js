@@ -139,4 +139,6 @@ if (date !== null && squad !== null && session !== null) {
   document.getElementById('date').value = date;
   document.getElementById('squad').value = squad;
   getSessions(false, setSessionAndGetRegister);
+} else {
+  resetRegisterArea();
 }

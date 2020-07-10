@@ -1,11 +1,12 @@
 <?php
 try {
 $db = app()->db;
+$tenant = app()->tenant;
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
-$sql = $db->prepare("SELECT Forename, Surname, notify.Subject PSubject, notifyHistory.Subject HSubject, notify.Message PMessage, notifyHistory.Message HMessage FROM ((`notify` LEFT JOIN notifyHistory ON notify.MessageID = notifyHistory.ID) INNER JOIN `users` ON notify.UserID = users.UserID) WHERE `EmailID` = ?");
-$sql->execute([$id]);
+$sql = $db->prepare("SELECT Forename, Surname, notify.Subject PSubject, notifyHistory.Subject HSubject, notify.Message PMessage, notifyHistory.Message HMessage FROM ((`notify` LEFT JOIN notifyHistory ON notify.MessageID = notifyHistory.ID) INNER JOIN `users` ON notify.UserID = users.UserID) WHERE `EmailID` = ? AND users.Tenant = ?");
+$sql->execute([$id, $tenant->getId()]);
 
 $row = $sql->fetch(PDO::FETCH_ASSOC);
 

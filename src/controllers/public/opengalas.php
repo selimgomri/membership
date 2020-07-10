@@ -3,11 +3,15 @@
 header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
 
-$galas = $db->prepare("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength FROM galas WHERE ClosingDate >= ? ORDER BY GalaDate ASC");
-$galas->execute([$now->format('Y-m-d')]);
+$galas = $db->prepare("SELECT GalaID, GalaName, ClosingDate, GalaDate, GalaVenue, CourseLength FROM galas WHERE Tenant = ? AND ClosingDate >= ? ORDER BY GalaDate ASC");
+$galas->execute([
+	$tenant->getId(),
+	$now->format('Y-m-d')
+]);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
 $entriesOpen = false;
 

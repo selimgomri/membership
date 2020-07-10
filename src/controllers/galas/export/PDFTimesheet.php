@@ -1,11 +1,20 @@
 <?php
 
 $db = app()->db;
-$user = $_SESSION['UserID'];
+$tenant = app()->tenant;
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
-$query = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ?");
-$query->execute([$id]);
+$query = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ? AND Tenant = ?");
+$query->execute([
+  $id,
+  $tenant->getId()
+]);
 $info = $query->fetch(PDO::FETCH_ASSOC);
+
+if ($info == null) {
+  halt(404);
+	$noTimeSheet = true;
+}
 
 $dateOfGala = new DateTime($info['GalaDate'], new DateTimeZone('Europe/London'))
 ;
@@ -14,28 +23,23 @@ $lastDayOfYear = new DateTime('last day of December ' . $dateOfGala->format('Y')
 
 $noTimeSheet = false;
 
-if ($info == null) {
-  halt(404);
-	$noTimeSheet = true;
-}
-
 $toHash = $info['GalaID'];
-if ($_SESSION['AccessLevel'] == 'Parent') {
-  $toHash .= $_SESSION['UserID'];
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
+  $toHash .= $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 }
 $hash = hash('sha256', $toHash);
 
-if ($_SESSION['AccessLevel'] == "Parent") {
-  $uid = $_SESSION['UserID'];
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
+  $uid = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
-  $query = $db->prepare("SELECT * FROM (((galaEntries INNER JOIN members ON galaEntries.MemberID =
-  members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN squads ON squads.SquadID = members.SquadID) WHERE
+  $query = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID =
+  members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE
   galas.GalaID = ? AND members.UserID = ? ORDER BY members.MForename ASC,
   members.MSurname ASC");
   $query->execute([$id, $uid]);
 } else {
-  $query = $db->prepare("SELECT * FROM (((galaEntries INNER JOIN members ON galaEntries.MemberID =
-  members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN squads ON squads.SquadID = members.SquadID) WHERE
+  $query = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID =
+  members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE
   galas.GalaID = ? ORDER BY members.MForename ASC, members.MSurname ASC");
   $query->execute([$id]);
 }
@@ -101,7 +105,7 @@ ob_start();?>
       <h1 class="mb-0">
         <?=htmlspecialchars($info['GalaName'])?>
       </h1>
-      <p class="lead mb-0">Gala Timesheet Report<?php if ($_SESSION['AccessLevel'] == "Parent") {?> for <?=htmlspecialchars(getUserName($_SESSION['UserID']))?><?php } ?></p>
+      <p class="lead mb-0">Gala Timesheet Report<?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {?> for <?=htmlspecialchars(getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']))?><?php } ?></p>
       <p class="lead mb-0"><?=htmlspecialchars($info['GalaVenue']) . " - " . date("d/m/Y", strtotime($info['GalaDate']))?></p>
     </div>
 
@@ -121,11 +125,11 @@ ob_start();?>
     </p>
 
     <div class="avoid-page-break-inside">
-      <?php if (bool(env('IS_CLS'))) { ?>
+      <?php if (app()->tenant->isCLS()) { ?>
       <p>&copy; Chester-le-Street ASC <?=date("Y")?></p>
       <?php } else { ?>
       <p class="mb-0">&copy; Swimming Club Data Systems <?=date("Y")?></p>
-      <p>Produced by Swimming Club Data Systems for <?=htmlspecialchars(env('CLUB_NAME'))?></p>
+      <p>Produced by Swimming Club Data Systems for <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></p>
       <?php } ?>
     </div>
 
@@ -199,7 +203,7 @@ ob_start();?>
       <div class="avoid-page-break-inside">
         <div class="mb-3">
           <h2 class="d-inline"><?=htmlspecialchars($data['MForename'] . ' ' . $data['MSurname'])?></h2>
-          <p class="d-inline"><?=htmlspecialchars($data['SquadName'])?> Squad, Born <?=$birth->format("j F Y")?>, Age on day: <?=$ageOnDay->format('%y')?>, Age at end of year: <?=$ageEndOfYear->format('%y')?></p>
+          <p class="d-inline">Born <?=$birth->format("j F Y")?>, Age on day: <?=$ageOnDay->format('%y')?>, Age at end of year: <?=$ageEndOfYear->format('%y')?></p>
         </div>
 
         <table>

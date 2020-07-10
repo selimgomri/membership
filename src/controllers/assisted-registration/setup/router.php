@@ -1,7 +1,7 @@
 <?php
 
-if (isset($_SESSION['AssRegGuestUser'])) {
-  if ($_SESSION['AssRegStage'] == 1 || $_SESSION['AssRegStage'] == 2) {
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGuestUser'])) {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegStage'] == 1 || $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegStage'] == 2) {
     $this->get('/get-started', function() {
       include 'getStarted.php';
     });
@@ -13,7 +13,7 @@ if (isset($_SESSION['AssRegGuestUser'])) {
     $this->post('/confirm-details', function() {
       include 'confirmDetailsPost.php';
     });
-  } else if ($_SESSION['AssRegStage'] == 3) {
+  } else if ($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegStage'] == 3) {
     $this->get('/go-to-onboarding', function() {
       include 'goToOnboarding.php';
     });

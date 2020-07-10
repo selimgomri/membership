@@ -1,14 +1,19 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$query = $db->prepare("SELECT COUNT(*) FROM joinParents");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Tenant = ?");
+$query->execute([
+  $tenant->getId()
+]);
 
 $count = $query->fetchColumn();
 
-$query = $db->prepare("SELECT ID, Hash, Email, joinSwimmers.First, joinSwimmers.Last, joinParents.First PFirst, joinParents.Last PLast FROM joinParents INNER JOIN joinSwimmers ON joinParents.Hash = joinSwimmers.Parent WHERE SquadSuggestion IS NULL ORDER BY ID DESC");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT ID, Hash, Email, joinSwimmers.First, joinSwimmers.Last, joinParents.First PFirst, joinParents.Last PLast FROM joinParents INNER JOIN joinSwimmers ON joinParents.Hash = joinSwimmers.Parent WHERE joinParents.Tenant = ? AND SquadSuggestion IS NULL ORDER BY ID DESC");
+$query->execute([
+  $tenant->getId()
+]);
 
 $pagetitle = "Trial Requests";
 $use_white_background = true;

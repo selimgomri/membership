@@ -1,19 +1,21 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 use Respect\Validation\Validator as v;
 
 // Registration Form Handler
 
-$userID = $_SESSION['UserID'];
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $asaNumber = trim($asa);
 $accessKey = trim($acs);
 
-$searchSQL = $db->prepare("SELECT * FROM members WHERE ASANumber = ? AND AccessKey = ?;");
+$searchSQL = $db->prepare("SELECT * FROM members WHERE ASANumber = ? AND AccessKey = ? AND Tenant = ?;");
 $searchSQL->execute([
   $asaNumber,
-  $accessKey
+  $accessKey,
+  $tenant->getId()
 ]);
 
 $row = $searchSQL->fetch(PDO::FETCH_ASSOC);
@@ -28,7 +30,6 @@ if (!($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumbe
 
 // Allow addition
 $memberID = $row['MemberID'];
-$squadID = $row['SquadID'];
 $existingUserID = $row['UserID'];
 
 if ($row['UserID'] != null) {
@@ -41,7 +42,7 @@ if ($row['UserID'] != null) {
   $message = "
   <h1>Hello " . htmlspecialchars($oldUser['Forename']) . "</h1>
   <p>Your swimmer, " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " has been removed from your account.</p>
-  <p>If this was not you, contact <a  href=\"mailto:" . htmlspecialchars(env('CLUB_EMAIL')) . "\">" . htmlspecialchars(env('CLUB_EMAIL')) . "</a> as soon as possible</p>";
+  <p>If this was not you, contact <a  href=\"mailto:" . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "\">" . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "</a> as soon as possible</p>";
   notifySend($oldUser['EmailAddress'], $row['MForename'] . " has been
   removed", $message, $oldUser['Forename'] . " " . $oldUser['Surname'],
   $oldUser['EmailAddress']);
@@ -58,11 +59,10 @@ $sql->execute([
 ]);
 
 // Get info about swimmer and parent
-$sql = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee
-        FROM ((members
+$sql = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber
+        FROM (members
           INNER JOIN users ON members.UserID = users.UserID)
-          INNER JOIN squads ON members.SquadID = squads.SquadID
-        ) WHERE users.UserID = ? AND members.MemberID = ?;");
+          WHERE users.UserID = ? AND members.MemberID = ?;");
 $sql->execute([
   $userID,
   $memberID
@@ -76,18 +76,16 @@ $message = "
 with your account.</p>
 <ul>
   <li>" . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "</li>
-  <li>Squad: " . htmlspecialchars($row['SquadName']) . " Squad</li>
-  <li>Monthly Fee: &pound;" . number_format($row['SquadFee'], 2) . "</li>
   <li>Swim England Number: " .htmlspecialchars($row['ASANumber']) . "</li>
-  <li>" . htmlspecialchars(env('CLUB_SHORT_NAME')) . " Member ID: " . htmlspecialchars($row['MemberID']) . "</li>
+  <li>" . htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME')) . " Member ID: " . htmlspecialchars($row['MemberID']) . "</li>
 </ul>
-<p>If this was not you, contact <a href=\"mailto:"  . htmlspecialchars(env('CLUB_EMAIL')) . "\">
-"  . htmlspecialchars(env('CLUB_EMAIL')) . "</a> as soon as possible</p>";
+<p>If this was not you, contact <a href=\"mailto:"  . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "\">
+"  . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "</a> as soon as possible</p>";
 notifySend($row['EmailAddress'], "You've added " . $row['MForename'] . "
 to your account", $message, $row['Forename'] . " " . $row['Surname'],
 $row['EmailAddress']);
 
-$_SESSION['AddSwimmerSuccessState'] = "
+$_SESSION['TENANT-' . app()->tenant->getId()]['AddSwimmerSuccessState'] = "
 <div class=\"alert alert-success\">
 <p class=\"mb-0\"><strong>We were able to successfully add your swimmer</strong></p>
 <p>We've sent an email confirming this to you.</p>

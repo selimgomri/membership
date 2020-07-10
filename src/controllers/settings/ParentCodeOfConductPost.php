@@ -2,11 +2,11 @@
 
 if (isset($_POST['CodeOfConduct'])) {
   try {
-    $systemInfo = app()->system;
-    $systemInfo->setSystemOption('ParentCodeOfConduct', $_POST['CodeOfConduct']);
-    $_SESSION['PCC-SAVED'] = true;
+    
+    app()->tenant->setKey('ParentCodeOfConduct', $_POST['CodeOfConduct']);
+    $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED'] = true;
   } catch (Exception $e) {
-    $_SESSION['PCC-ERROR'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR'] = true;
   }
 }
 

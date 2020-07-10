@@ -1,25 +1,33 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$galas = $db->prepare("SELECT GalaName, `Description`, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters, RequiresApproval FROM galas WHERE GalaID = ?");
-$galas->execute([$id]);
+$galas = $db->prepare("SELECT GalaName, `Description`, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters, RequiresApproval FROM galas WHERE Tenant = ? AND GalaID = ?");
+$galas->execute([
+  $tenant->getId(),
+  $id
+]);
 $gala = $galas->fetch(PDO::FETCH_ASSOC);
+
+if ($gala == null) {
+  halt(404);
+}
 
 $numEntries = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE GalaID = ?");
 $numEntries->execute([$id]);
 $numEntries = $numEntries->fetchColumn();
 
 $amountPaid = $amountLeftToPay = $amountRefunded = $total = 0;
-if ($_SESSION['AccessLevel'] == 'Parent') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
   $amountPaidQuery = $db->prepare("SELECT SUM(FeeToPay) FROM galaEntries INNER JOIN members ON members.MemberID = galaEntries.MemberID WHERE GalaID = ? AND Charged = ? AND members.UserID = ?");
-  $amountPaidQuery->execute([$id, 1, $_SESSION['UserID']]);
+  $amountPaidQuery->execute([$id, 1, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   $amountPaid = $amountPaidQuery->fetchColumn();
-  $amountPaidQuery->execute([$id, 0, $_SESSION['UserID']]);
+  $amountPaidQuery->execute([$id, 0, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   $amountLeftToPay = $amountPaidQuery->fetchColumn();
   $total = $amountPaid + $amountLeftToPay;
   $amountRefunded = $db->prepare("SELECT SUM(AmountRefunded) FROM galaEntries INNER JOIN members ON members.MemberID = galaEntries.MemberID WHERE GalaID = ? AND members.UserID = ?");
-  $amountRefunded->execute([$id, $_SESSION['UserID']]);
+  $amountRefunded->execute([$id, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   $amountRefunded = $amountRefunded->fetchColumn();
 } else {
   $amountPaidQuery = $db->prepare("SELECT SUM(FeeToPay) FROM galaEntries WHERE GalaID = ? AND Charged = ?");
@@ -34,18 +42,14 @@ if ($_SESSION['AccessLevel'] == 'Parent') {
 }
 
 $entries = $db->prepare("SELECT * FROM galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID WHERE GalaID = ?");
-if ($_SESSION['AccessLevel'] == "Parent") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
   $entries = $db->prepare("SELECT * FROM galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID WHERE GalaID = ? AND UserID = ?");
-  $entries->execute([$id, $_SESSION['UserID']]);
+  $entries->execute([$id, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 } else {
   $entries->execute([$id]);
 }
 
 $entry = $entries->fetch(PDO::FETCH_ASSOC);
-
-if ($gala == null) {
-  halt(404);
-}
 
 // Arrays of swims used to check whever to print the name of the swim entered
 // BEWARE This is in an order to ease inputting data into SportSystems, contrary to these arrays in other files
@@ -107,7 +111,7 @@ include "galaMenu.php";
         <?=htmlspecialchars($gala['GalaVenue'])?>
       </p>
     </div>
-    <?php if ($_SESSION['AccessLevel'] == "Galas" || $_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach") { ?>
+    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Coach") { ?>
     <div class="col text-md-right">
       <p>
         <div class="dropdown">
@@ -136,9 +140,9 @@ include "galaMenu.php";
     <?php } ?>
   </div>
 
-  <?php if (isset($_SESSION['GalaAddedSuccess']) && $_SESSION['GalaAddedSuccess']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaAddedSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['GalaAddedSuccess']) { ?>
   <div class="alert alert-success">We've successfully added this gala</div>
-  <?php unset($_SESSION['GalaAddedSuccess']); } ?>
+  <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaAddedSuccess']); } ?>
 
   <h2>About this gala</h2>
 
@@ -198,23 +202,23 @@ include "galaMenu.php";
     <?php if ($entry != null) { ?>
 
     <div class="col-sm-6 col-md-4">
-      <h3 class="h6"><?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>Total cost of your entries<?php } else { ?>Total cost of entries<?php } ?></h3>
+      <h3 class="h6"><?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>Total cost of your entries<?php } else { ?>Total cost of entries<?php } ?></h3>
       <p>&pound;<?=number_format($total, 2)?></p>
     </div>
 
-    <?php if ($_SESSION['AccessLevel'] != 'Parent' && $amountLeftToPay > 0) { ?>
+    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent' && $amountLeftToPay > 0) { ?>
     <div class="col-sm-6 col-md-4">
       <h3 class="h6">Total left to charge</h3>
       <p>&pound;<?=number_format($amountLeftToPay, 2)?></p>
     </div>
-    <?php } else if ($_SESSION['AccessLevel'] != 'Parent' && $amountRefunded > 0) { ?>
+    <?php } else if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent' && $amountRefunded > 0) { ?>
     <div class="col-sm-6 col-md-4">
       <h3 class="h6">Total after refunds</h3>
       <p>&pound;<?=number_format($total - ($amountRefunded/100), 2)?></p>
     </div>
     <?php } ?>
 
-    <?php if ($_SESSION['AccessLevel'] == 'Parent' && $amountRefunded > 0) { ?>
+    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $amountRefunded > 0) { ?>
     <div class="col-sm-6 col-md-4">
       <h3 class="h6">Total payable after refunds</h3>
       <p>&pound;<?=number_format($total - ($amountRefunded/100), 2)?></p>
@@ -222,14 +226,14 @@ include "galaMenu.php";
     <?php } ?>
 
     <div class="col-sm-6 col-md-4">
-      <h3 class="h6"><?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>Total refunded to you<?php } else { ?>Total refunded to parents<?php } ?></h3>
+      <h3 class="h6"><?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>Total refunded to you<?php } else { ?>Total refunded to parents<?php } ?></h3>
       <p>&pound;<?=number_format($amountRefunded/100, 2)?></p>
     </div>
 
     <?php } ?>
   </div>
 
-  <?php if ($_SESSION['AccessLevel'] == 'Parent' && $gala['CoachEnters']) { ?>
+  <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $gala['CoachEnters']) { ?>
   <h2>Entries are managed by your coach</h2>
   <p class="lead">Let them know you can enter this gala</p>
   <p>
@@ -237,7 +241,7 @@ include "galaMenu.php";
       Indicate availability
     </a>
   </p>
-  <?php } else if ($_SESSION['AccessLevel'] == 'Coach' || $_SESSION['AccessLevel'] == 'Galas' || $_SESSION['AccessLevel'] == 'Admin') { ?>
+  <?php } else if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Coach' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Galas' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
 
   <h2>Manage events and prices</h2>
   <p class="lead">Select which events are running and enter the price for each event</p>

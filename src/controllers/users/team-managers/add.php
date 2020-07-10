@@ -1,14 +1,19 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
-$userInfo->execute([$id]);
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ? AND Tenant = ?");
+$userInfo->execute([
+  $id,
+  $tenant->getId()
+]);
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
 
 $date = new DateTime('-1 day', new DateTimeZone('Europe/London'));
-$getGalas = $db->prepare("SELECT GalaName, GalaID FROM galas WHERE GalaDate >= ? ORDER BY GalaDate ASC, GalaName ASC");
+$getGalas = $db->prepare("SELECT GalaName, GalaID FROM galas WHERE Tenant = ? AND GalaDate >= ? ORDER BY GalaDate ASC, GalaName ASC");
 $getGalas->execute([
+  $tenant->getId(),
   $date->format("Y-m-d")
 ]);
 $gala = $getGalas->fetch(PDO::FETCH_ASSOC);
@@ -40,7 +45,7 @@ include BASE_PATH . "views/header.php";
         Assign a gala to <?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?>
       </h1>
 
-      <?php if (isset($_SESSION['AssignGalaError']) && $_SESSION['AssignGalaError']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssignGalaError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssignGalaError']) { ?>
       <div class="alert alert-danger">
         <p class="mb-0">
           <strong>
@@ -49,7 +54,7 @@ include BASE_PATH . "views/header.php";
         </p>
       </div>
       <?php
-        unset($_SESSION['AssignGalaError']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssignGalaError']);
       } ?>
 
       <?php if ($gala != null) { ?>

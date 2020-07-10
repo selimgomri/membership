@@ -5,6 +5,7 @@
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $deleteMandatePref = $db->prepare("DELETE FROM paymentPreferredMandate WHERE UserID = ? AND MandateID = ?");
 $getUser = $db->prepare("SELECT UserID, MandateID FROM paymentMandates WHERE Mandate = ?");
@@ -30,6 +31,17 @@ try {
   $getUser->execute([$mandate]);
   $user = $getUser->fetch(PDO::FETCH_ASSOC);
   if ($user != null) {
+
+    // Verify user
+    $getUserCount = $db->prepare("SELECT COUNT(*) FROM users WHERE UserID = ? AND Tenant = ?");
+    $getUserCount->execute([
+      $user['UserID'],
+      $tenant->getId()
+    ]);
+    if ($getUserCount->fetchColumn() == 0) {
+      throw new Exception('User ' . $user['UserID'] . ' does not exist in this tenant');
+    }
+
     // Delete if this is preferred mandate
     $deleteMandatePref->execute([
       $user['UserID'],
@@ -54,7 +66,7 @@ try {
   }
 
   if (app('request')->method == 'GET' && $user != null) {
-    $_SESSION['MandateDeletedTrue'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['MandateDeletedTrue'] = true;
     header("location: " . autoUrl("users/" . $user['UserID'] . "/mandates"));
   }
 

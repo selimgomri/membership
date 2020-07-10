@@ -41,6 +41,7 @@ $swimsArray = [
 ];
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 try {
 
@@ -50,8 +51,11 @@ try {
   $notify = $db->prepare("INSERT INTO notify (UserID, `Status`, `Subject`, `Message`, EmailType) VALUES (?, ?, ?, ?, ?)");
   $setRefundAmount = $db->prepare("UPDATE stripePayments SET `AmountRefunded` = ? WHERE `Intent` = ?");
 
-  $getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas INNER JOIN galaEntries ON galas.GalaID = galaEntries.GalaID WHERE EntryID = ?");
-  $getGala->execute([$entry]);
+  $getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas INNER JOIN galaEntries ON galas.GalaID = galaEntries.GalaID WHERE EntryID = ? AND galas.Tenant = ?");
+  $getGala->execute([
+    $entry,
+    $tenant->getId()
+  ]);
   $gala = $getGala->fetch(PDO::FETCH_ASSOC);
 
   if ($gala == null) {
@@ -123,11 +127,11 @@ try {
       'Refund',
       $json
     ]);
-  } else if ($entryData['Intent'] != null && bool($entryData['StripePaid']) && env('STRIPE')) {
+  } else if ($entryData['Intent'] != null && bool($entryData['StripePaid']) && getenv('STRIPE')) {
     // Refund to card used
 
     try {
-      \Stripe\Stripe::setApiKey(env('STRIPE'));
+      \Stripe\Stripe::setApiKey(getenv('STRIPE'));
       $intent = \Stripe\PaymentIntent::retrieve($entryData['Intent']);
       $re = \Stripe\Refund::create([
         "charge" => $intent->charges->data[0]->id,
@@ -164,7 +168,7 @@ try {
     }
 
     try {
-      \Stripe\Stripe::setApiKey(env('STRIPE'));
+      \Stripe\Stripe::setApiKey(getenv('STRIPE'));
       $intent = \Stripe\PaymentIntent::retrieve($entryData['Intent']);
 
       // Update amount refunded on payment
@@ -202,7 +206,7 @@ try {
     $message .= '<p>As you don\'t pay your club fees by direct debit or have opted out of paying for galas by direct debit, you\'ll need to collect this refund from the treasurer or gala coordinator.</p>';
   }
 
-  $message .= '<p>Kind Regards<br> The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
+  $message .= '<p>Kind Regards<br> The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
 
   $notify->execute([
     $entryData['UserID'],

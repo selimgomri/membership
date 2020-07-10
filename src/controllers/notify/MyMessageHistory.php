@@ -4,12 +4,17 @@ $db = app()->db;
 
 $fluidContainer = true;
 
+$page = null;
+if (isset($_GET['page'])) {
+  $page = $_GET['page'];
+}
+
 $null = $page;
 
 $start = 0;
 
 if ($page != null) {
-  $start = ($page-1)*10;
+  $start = ((int) $page-1)*10;
 } else {
   $page = 1;
 }
@@ -22,7 +27,7 @@ if ($page != null) {
 $sql = $db->prepare("SELECT COUNT(*) FROM ((`notifyHistory`
 LEFT JOIN `users` ON notifyHistory.Sender = users.UserID) INNER JOIN `notify` ON
 notify.MessageID = notifyHistory.ID) WHERE notify.UserID = ?;");
-$sql->execute([$_SESSION['UserID']]);
+$sql->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $numMails  = $sql->fetchColumn();
 $numPages = ((int)($numMails/10)) + 1;
 
@@ -31,7 +36,7 @@ if ($start > $numMails) {
 }
 
 $sql = $db->prepare("SELECT `notifyHistory`.`Subject`, `notifyHistory`.`Message`, `notify`.`ForceSend`, `Forename`, `Surname`, `JSONData`, `Date` FROM ((`notifyHistory` LEFT JOIN `users` ON notifyHistory.Sender = users.UserID) INNER JOIN `notify` ON notify.MessageID = notifyHistory.ID) WHERE notify.UserID = :user ORDER BY `EmailID` DESC LIMIT :offset, :num;");
-$sql->bindValue(':user', $_SESSION['UserID'], PDO::PARAM_INT);
+$sql->bindValue(':user', $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], PDO::PARAM_INT);
 $sql->bindValue(':offset', $start, PDO::PARAM_INT); 
 $sql->bindValue(':num', 10, PDO::PARAM_INT); 
 $sql->execute();
@@ -163,35 +168,35 @@ include BASE_PATH . "views/header.php";
       <nav aria-label="Page navigation">
         <ul class="pagination mb-0">
           <?php if ($numMails <= 10) { ?>
-          <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+          <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
           <?php } else if ($numMails <= 20) { ?>
             <?php if ($page == 1) { ?>
-            <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
-      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page+1 ?>">Next</a></li>
+            <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page+1 ?>">Next</a></li>
             <?php } else { ?>
-            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page-1 ?>">Previous</a></li>
-      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page-1 ?>"><?php echo $page-1 ?></a></li>
-      	    <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page-1 ?>">Previous</a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page-1 ?>"><?php echo $page-1 ?></a></li>
+      	    <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
             <?php } ?>
           <?php } else { ?>
       			<?php if ($page == 1) { ?>
-      			<li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
-      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page+2 ?>"><?php echo $page+2 ?></a></li>
-      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page+1 ?>">Next</a></li>
+      			<li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page+2 ?>"><?php echo $page+2 ?></a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page+1 ?>">Next</a></li>
             <?php } else { ?>
-      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page-1 ?>">Previous</a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page-1 ?>">Previous</a></li>
             <?php if ($page > 2) { ?>
-            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page-2 ?>"><?php echo $page-2 ?></a></li>
-      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page-1 ?>"><?php echo $page-1 ?></a></li>
-      	    <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page-2 ?>"><?php echo $page-2 ?></a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page-1 ?>"><?php echo $page-1 ?></a></li>
+      	    <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
       			<?php if ($numMails > $page*10) { ?>
-      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
             <?php if ($numMails > $page*10+10) { ?>
-            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page+2 ?>"><?php echo $page+2 ?></a></li>
+            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page+2 ?>"><?php echo $page+2 ?></a></li>
             <?php } ?>
-      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory/page/"); ?><?php echo $page+1 ?>">Next</a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/notifyhistory?page="); ?><?php echo $page+1 ?>">Next</a></li>
             <?php } ?>
           <?php } ?>
         <?php }

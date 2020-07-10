@@ -1,8 +1,8 @@
 <?php
 
-$rr = user_needs_registration($_SESSION['UserID']);
+$rr = user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
 
-$userID = $_SESSION['UserID'];
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $pagetitle = "Swimmer Review";
 
 include BASE_PATH . "views/header.php";
@@ -13,9 +13,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
 <div class="container">
   <div>
     <form method="post">
-      <?php if (isset($_SESSION['ErrorState'])) {
-				echo $_SESSION['ErrorState'];
-				unset($_SESSION['ErrorState']);
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
+				echo $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+				unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
 				?>
       <hr>
       <?php } ?>

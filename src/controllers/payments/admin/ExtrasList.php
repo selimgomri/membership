@@ -3,11 +3,15 @@
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$user = $_SESSION['UserId'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $pagetitle = "Extras";
 
-$extras = $db->query("SELECT * FROM `extras` ORDER BY `ExtraName` ASC");
+$extras = $db->prepare("SELECT * FROM `extras` WHERE Tenant = ? ORDER BY `ExtraName` ASC");
+$extras->execute([
+  $tenant->getId()
+]);
 $row = $extras->fetch(PDO::FETCH_ASSOC);
 
 include BASE_PATH . "views/header.php";
@@ -18,7 +22,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 <div class="container">
 
   <nav aria-label="breadcrumb">
-    <ol class="breadcrumb bg-light">
+    <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl('payments'))?>">Payments</a></li>
       <li class="breadcrumb-item active" aria-current="page">Extras</li>
     </ol>

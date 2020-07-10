@@ -1,16 +1,20 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getMember = $db->prepare("SELECT MForename fn, MSurname sn, members.UserID FROM members INNER JOIN squads ON squads.SquadID = members.SquadID WHERE members.MemberID = ?");
-$getMember->execute([$member]);
+$getMember = $db->prepare("SELECT MForename fn, MSurname sn, members.UserID FROM members WHERE members.MemberID = ? AND members.Tenant = ?");
+$getMember->execute([
+  $member,
+  $tenant->getId()
+]);
 $memberInfo = $getMember->fetch(PDO::FETCH_ASSOC);
 
 if ($memberInfo == null) {
   halt(404);
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent' && $memberInfo['UserID'] != $_SESSION['UserID']) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $memberInfo['UserID'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
   halt(404);
 }
 
@@ -19,28 +23,28 @@ $pagetitle = htmlspecialchars("New log entry - " . $memberInfo['fn'] . ' ' . $me
 $title = $entry = "";
 $contentType = "text/plain";
 
-$dateObject = new DateTime($info['DateTime'], new DateTimeZone('UTC'));
+$dateObject = new DateTime('now', new DateTimeZone('UTC'));
 $dateObject->setTimezone(new DateTimeZone('Europe/London'));
 $date = $dateObject->format("Y-m-d");
 $time = $dateObject->format("H:i");
 
-if (isset($_SESSION['LogEntryOldContent']['title'])) {
-  $title = $_SESSION['LogEntryOldContent']['title'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogEntryOldContent']['title'])) {
+  $title = $_SESSION['TENANT-' . app()->tenant->getId()]['LogEntryOldContent']['title'];
 }
-if (isset($_SESSION['LogEntryOldContent']['entry'])) {
-  $entry = $_SESSION['LogEntryOldContent']['entry'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogEntryOldContent']['entry'])) {
+  $entry = $_SESSION['TENANT-' . app()->tenant->getId()]['LogEntryOldContent']['entry'];
 }
-if (isset($_SESSION['LogEntryOldContent']['content-type'])) {
-  $contentType = $_SESSION['LogEntryOldContent']['content-type'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogEntryOldContent']['content-type'])) {
+  $contentType = $_SESSION['TENANT-' . app()->tenant->getId()]['LogEntryOldContent']['content-type'];
 }
-if (isset($_SESSION['LogEntryOldContent']['date'])) {
-  $date = $_SESSION['LogEntryOldContent']['date'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogEntryOldContent']['date'])) {
+  $date = $_SESSION['TENANT-' . app()->tenant->getId()]['LogEntryOldContent']['date'];
 }
-if (isset($_SESSION['LogEntryOldContent']['time'])) {
-  $time = $_SESSION['LogEntryOldContent']['time'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogEntryOldContent']['time'])) {
+  $time = $_SESSION['TENANT-' . app()->tenant->getId()]['LogEntryOldContent']['time'];
 }
-if (isset($_SESSION['LogEntryOldContent'])) {
-  unset($_SESSION['LogEntryOldContent']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogEntryOldContent'])) {
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['LogEntryOldContent']);
 }
 
 include BASE_PATH . 'views/header.php';
@@ -52,7 +56,7 @@ include BASE_PATH . 'views/header.php';
   <div class="bg-light mt-n3 py-3 mb-3">
     <div class="container">
 
-      <?php if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-MemberLoggedIn'])) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn'])) { ?>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("log-books"))?>">Log book</a></li>
@@ -93,11 +97,11 @@ include BASE_PATH . 'views/header.php';
     <div class="row">
       <div class="col-lg-8">
 
-        <?php if (isset($_SESSION['AddLogErrorMessage'])) { ?>
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AddLogErrorMessage'])) { ?>
         <div class="alert alert-danger">
-        <?=$_SESSION['AddLogErrorMessage']?>
+        <?=$_SESSION['TENANT-' . app()->tenant->getId()]['AddLogErrorMessage']?>
         </div>
-        <?php unset($_SESSION['AddLogErrorMessage']); } ?>
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['AddLogErrorMessage']); } ?>
 
         <h2>Log entry</h2>
         <div class="form-group">

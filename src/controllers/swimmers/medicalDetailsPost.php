@@ -5,17 +5,25 @@ if (!SCDS\CSRF::verify()) {
 }
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-if ($_SESSION['AccessLevel'] == "Parent") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
   $getMed = $db->prepare("SELECT MForename, MSurname, Conditions, Allergies,
   Medication FROM `members` LEFT JOIN `memberMedical` ON members.MemberID =
-  memberMedical.MemberID WHERE members.MemberID = ? AND members.UserID = ?");
-  $getMed->execute([$id, $_SESSION['UserID']]);
+  memberMedical.MemberID WHERE members.Tenant = ? AND members.MemberID = ? AND members.UserID = ?");
+  $getMed->execute([
+		$tenant->getId(),
+		$id,
+		$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+	]);
 } else {
   $getMed = $db->prepare("SELECT MForename, MSurname, Conditions, Allergies,
   Medication FROM `members` LEFT JOIN `memberMedical` ON members.MemberID =
-  memberMedical.MemberID WHERE members.MemberID = ?");
-  $getMed->execute([$id]);
+  memberMedical.MemberID WHERE members.Tenant = ? AND members.MemberID = ?");
+  $getMed->execute([
+		$tenant->getId(),
+		$id
+	]);
 }
 
 $row = $getMed->fetch(PDO::FETCH_ASSOC);
@@ -51,7 +59,7 @@ try {
   ]);
 	header("Location: " . autoUrl("members/" . $id . "/medical"));
 } catch (Exception $e) {
-	$_SESSION['ErrorState'] = "
+	$_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = "
 	<div class=\"alert alert-danger\">
 	<strong>An error occured when we tried to update our records</strong>
 	<p class=\"mb-0\">Please try again.</p></div>";

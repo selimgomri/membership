@@ -8,22 +8,23 @@ if (!\SCDS\CSRF::verify()) {
 }
 
 $db = app()->db;
+$tenant = app()->tenant->getId();
 
-$findSquadId = $db->prepare("SELECT SquadID FROM squads WHERE SquadName = ?");
-$insertIntoSwimmers = $db->prepare("INSERT INTO members (MForename, Msurname, SquadID, DateOfBirth, Gender, ASANumber, ASACategory, RR, AccessKey, ClubPays, OtherNotes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$findSquadId = $db->prepare("SELECT SquadID FROM squads WHERE SquadName = ? AND Tenant = ?");
+$insertIntoSwimmers = $db->prepare("INSERT INTO members (MForename, Msurname, SquadID, DateOfBirth, Gender, ASANumber, ASACategory, RR, AccessKey, ClubPays, OtherNotes, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 $setTempASA = $db->prepare("UPDATE members SET ASANumber = ? WHERE MemberID = ?");
 
 if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
 
   if (bool($_FILES['file-upload']['error'])) {
     // Error
-    $_SESSION['UploadError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
   } else if ($_FILES['file-upload']['type'] != 'text/csv' && $_FILES['file-upload']['type'] != 'application/vnd.ms-excel') {
     // Probably not a CSV
-    $_SESSION['UploadError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
   } else if ($_FILES['file-upload']['size'] > 30000) {
     // Too large, stop
-    $_SESSION['TooLargeError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError'] = true;
   } else {
     $failedSwimmers = [];
     try {
@@ -31,7 +32,7 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
 
       $filePointer = fopen($_FILES['file-upload']['tmp_name'], 'r');
       while ($row = fgetcsv($filePointer)) {
-        $findSquadId->execute([$row[2]]);
+        $findSquadId->execute([$row[2], $tenant]);
 
         $fn = mb_convert_case($row[1], MB_CASE_TITLE_SIMPLE);
         $sn = mb_convert_case($row[0], MB_CASE_TITLE_SIMPLE);
@@ -58,13 +59,14 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
             true,
             generateRandomString(6),
             0,
-            ''
+            '',
+            $tenant
           ]);
 
           if ($asa == 0) {
             $id = $db->lastInsertId();
             $setTempASA->execute([
-              env('ASA_CLUB_CODE') . $id,
+              app()->tenant->getKey('ASA_CLUB_CODE') . $id,
               $id
             ]);
           }
@@ -75,19 +77,19 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
       }
 
       $db->commit();
-      $_SESSION['UploadSuccess'] = true;
+      $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess'] = true;
     } catch (Exception $e) {
       $db->rollBack();
-      $_SESSION['UploadError'] = true;
+      $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
     }
 
     if (sizeof($failedSwimmers) > 0) {
-      $_SESSION['FailedSwimmers'] = $failedSwimmers;
+      $_SESSION['TENANT-' . app()->tenant->getId()]['FailedSwimmers'] = $failedSwimmers;
     }
 
   }
 } else {
-  $_SESSION['UploadError'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
 }
 
 header("Location: " . autoUrl("admin/member-upload"));

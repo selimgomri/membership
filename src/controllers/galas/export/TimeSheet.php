@@ -1,12 +1,14 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$sql = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ?");
-$sql->execute([$id]);
+$sql = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ? AND Tenant = ?");
+$sql->execute([
+	$id,
+	$tenant->getId()
+]);
 $info = $sql->fetch(PDO::FETCH_ASSOC);
-
-$getTimes = $db->prepare("SELECT * FROM `times` WHERE `MemberID` = ? AND `Type` = ?");
 
 $noTimeSheet = false;
 
@@ -17,9 +19,9 @@ if ($info = null) {
 
 $sql = null;
 
-if ($_SESSION['AccessLevel'] == "Parent") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 	$sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaID = '$id' AND members.UserID = '$uid' ORDER BY members.MForename ASC, members.MSurname ASC;");
-	$sql->execute([$id, $_SESSION['UserID']]);
+	$sql->execute([$id, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 } else {
 	$sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaID = ? ORDER BY members.MForename ASC, members.MSurname ASC;");
 	$sql->execute([$id]);
@@ -37,7 +39,7 @@ if ($noTimeSheet) {
   include "galaMenu.php"; ?>
   <div class="container">
     <h1>There is no Time Sheet available for the gala you requested</h1>
-    <?php if ($_SESSION['AccessLevel'] == "Parent") {
+    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
       ?><p class="lead">This may be because your swimmers have not entered this gala.</p>
 		<?php } else {
       ?><p class="lead">There are no entries yet for this gala.</p>
@@ -54,7 +56,7 @@ $footer->render();
 	// create a file pointer connected to the output stream
   $output = fopen('php://output', 'w');
 
-  fputcsv($output, array(env('CLUB_NAME') . ' Gala Time Sheet'));
+  fputcsv($output, array(app()->tenant->getKey('CLUB_NAME') . ' Gala Time Sheet'));
   fputcsv($output, array($info['GalaName'] . " - " . $info['GalaVenue'] . " - " . date("d/m/Y", strtotime($info['GalaDate']))));
   fputcsv($output, array('Time Sheet Report Generated on ' . date("d/m/Y, H:i")));
 	fputcsv($output, array(''));
@@ -75,10 +77,6 @@ $footer->render();
   		$typeA = "LCPB";
   		$typeB = "CY_LC";
 		}
-		$getTimes->execute([$row['MemberID'], $typeA]);
-		$timesPB = $getTimes->fetch(PDO::FETCH_ASSOC);
-		$getTimes->execute([$row['MemberID'], $typeB]);
-  	$timesCY = $getTimes->fetch(PDO::FETCH_ASSOC);
 		
 		//pre([$timesPB, $timesCY]);
 
@@ -102,8 +100,8 @@ $footer->render();
   	for ($i = 0; $i < sizeof($swimsArray); $i++) {
   		if ($row[$swimsArray[$i]] == 1) {
   			$swims[] = $swimsTextArray[$i];
-  			$timesArrayA[] = $timesPB[$swimsArray[$i]];
-  			$timesArrayB[] = $timesCY[$swimsArray[$i]];
+  			$timesArrayA[] = '';
+  			$timesArrayB[] = '';
   		}
   	}
 

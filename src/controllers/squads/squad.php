@@ -11,6 +11,7 @@ $replace = array("\n###### ", "\n##### ", "\n#### ", "\n### ", "\n## ");
 //echo $Extra->text('# Header {.sth}'); # prints: <h1 class="sth">Header</h1>
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $squad = null;
 try {
@@ -19,7 +20,7 @@ try {
   halt(404);
 }
 
-$numSwimmers = $db->prepare("SELECT COUNT(*) FROM members WHERE SquadID = ?");
+$numSwimmers = $db->prepare("SELECT COUNT(*) FROM squadMembers WHERE Squad = ?");
 $numSwimmers->execute([$id]);
 $numSwimmers = $numSwimmers->fetchColumn();
 
@@ -35,7 +36,7 @@ if ($codeOfConduct) {
 $canAccessSquadInfo = false;
 $isAllowed = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE User = ? AND Squad = ?");
 $isAllowed->execute([
-  $_SESSION['UserID'],
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
   $id
 ]);
 if ($isAllowed->fetchColumn() > 0) {
@@ -44,12 +45,85 @@ if ($isAllowed->fetchColumn() > 0) {
 }
 
 $swimmers = null;
-if ($_SESSION['AccessLevel'] != 'Parent' || $canAccessSquadInfo) {
-  $swimmers = $db->prepare("SELECT MemberID id, MForename first, MSurname last, DateOfBirth dob, Forename fn, Surname sn, EmailAddress email, Mobile mob, members.UserID `user` FROM members LEFT JOIN users ON members.UserID = users.UserID WHERE SquadID = ? ORDER BY first ASC, last ASC");
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent' || $canAccessSquadInfo) {
+  $swimmers = $db->prepare("SELECT MemberID id, MForename first, MSurname last, DateOfBirth dob, Forename fn, Surname sn, EmailAddress email, Mobile mob, members.UserID `user` FROM ((members INNER JOIN squadMembers ON squadMembers.Member = members.MemberID) LEFT JOIN users ON members.UserID = users.UserID) WHERE squadMembers.Squad = ? ORDER BY first ASC, last ASC");
   $swimmers->execute([$id]);
 }
 
 $coaches = $squad->getCoaches();
+
+// Chart data section start
+$getNumSex = $db->prepare("SELECT COUNT(*) FROM members INNER JOIN squadMembers ON squadMembers.Member = members.MemberID WHERE Squad = ? AND Gender = ?");
+$getNumSex->execute([$id, 'Male']);
+$male = (int) $getNumSex->fetchColumn();
+$getNumSex->execute([$id, 'Female']);
+$female = (int) $getNumSex->fetchColumn();
+
+$getBirths = $db->prepare("SELECT DateOfBirth FROM members INNER JOIN squadMembers ON squadMembers.Member = members.MemberID WHERE Squad = ?");
+$getBirths->execute([$id]);
+$agesArray = [];
+$timeNow = new DateTime('now', new DateTimeZone('Europe/London'));
+while ($dob = $getBirths->fetchColumn()) {
+  $timeBirth = new DateTime($dob, new DateTimeZone('Europe/London'));
+  $interval = $timeNow->diff($timeBirth);
+  $age = (int) $interval->format('%y');
+  if (isset($agesArray[$age])) {
+    $agesArray[$age] += 1;
+  } else {
+    $agesArray[$age] = 1;
+  }
+}
+$agesArrayKeys = array_keys($agesArray);
+$minAge = $maxAge = 0;
+if ($agesArrayKeys) {
+  $minAge = min($agesArrayKeys);
+  $maxAge = max($agesArrayKeys);
+}
+
+$output = [
+  'Labels' => [],
+  'Data' => []
+];
+
+if ($maxAge - $minAge > 10) {
+  foreach ($agesArray as $age => $count) {
+    $output['Labels'][] = $age . " Year Olds";
+    $output['Data'][] = $count;
+  }
+} else {
+  for ($i = $minAge; $i < $maxAge+1; $i++) {
+    $output['Labels'][] = $i . " Year Olds";
+    if (isset($agesArray[$i])) {
+      $output['Data'][] = (int) $agesArray[$i];
+    } else {
+      $output['Data'][] = 0;
+    }
+  }
+}
+
+$pie = [
+  'labels' => [
+    'Male',
+    'Female'
+  ],
+  'datasets' => [[
+    'label' => $squad->getName() . ' Split',
+    'data' => [$male, $female],
+    'backgroundColor' => chartColours(2)
+  ]]
+];
+
+$bar = [
+  'labels' => $output['Labels'],
+  'datasets' => [[
+    'label' => $squad->getName() . ' Squad',
+    'data' => $output['Data'],
+    'backgroundColor' => chartColours(sizeof($output['Data']))
+  ]]
+];
+
+
+// Chart data section end
 
 $pagetitle = htmlspecialchars($squad->getName());
 
@@ -71,7 +145,7 @@ include BASE_PATH . 'views/header.php';
         This squad has <?=htmlspecialchars($numSwimmers)?> swimmers
       </p>
     </div>
-    <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
     <div class="col text-sm-right">
       <a href="<?=autoUrl("squads/" . $id . "/edit")?>"
         class="btn btn-dark">Edit squad</a>
@@ -106,7 +180,7 @@ include BASE_PATH . 'views/header.php';
         </dd>
       </dl>
 
-      <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
       <?php $members = $squad->getMembers(); ?>
       <h2><?=htmlspecialchars($squad->getName())?> Members</h2>
       <div class="list-group mb-3">
@@ -158,15 +232,15 @@ include BASE_PATH . 'views/header.php';
       </ul>
       <?php } ?>
 
-      <?php if ($_SESSION['AccessLevel'] != "Parent") { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") { ?>
       <?php if ($numSwimmers > 0) { ?>
       <h2>Sex Split</h2>
-      <canvas class="mb-3" id="sexSplit"></canvas>
+      <canvas class="mb-3" id="sexSplit" data-data="<?=htmlspecialchars(json_encode($pie))?>"></canvas>
       <?php } ?>
 
       <h2>Age Distribution</h2>
       <p class="lead">The age distribution chart shows the number of swimmers of each age in this squad.</p>
-      <canvas class="mb-3" id="ageDistribution"></canvas>
+      <canvas class="mb-3" id="ageDistribution" data-data="<?=htmlspecialchars(json_encode($bar))?>"></canvas>
       <?php } ?>
 
       <?php if ($codeOfConduct != null) { ?>
@@ -182,8 +256,10 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new \SCDS\Footer();
-if ($_SESSION['AccessLevel'] != "Parent") {
-  $footer->addJs("public/js/Chart.min.js");
-  $footer->addJs("js/charts/squad.js?squad=" . $id);
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") {
+  // $footer->addJs("public/js/Chart.min.js");
+  if ($numSwimmers > 0) {
+    $footer->addJs("public/js/squads/squad-charts.js");
+  }
 }
 $footer->render();

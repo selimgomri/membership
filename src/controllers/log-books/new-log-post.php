@@ -1,16 +1,20 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getMember = $db->prepare("SELECT MForename fn, MSurname sn, members.UserID FROM members INNER JOIN squads ON squads.SquadID = members.SquadID WHERE members.MemberID = ?");
-$getMember->execute([$member]);
+$getMember = $db->prepare("SELECT MForename fn, MSurname sn, members.UserID FROM members WHERE members.MemberID = ? AND members.Tenant = ?");
+$getMember->execute([
+  $member,
+  $tenant->getId()
+]);
 $memberInfo = $getMember->fetch(PDO::FETCH_ASSOC);
 
 if ($memberInfo == null) {
   halt(404);
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent' && $memberInfo['UserID'] != $_SESSION['UserID']) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $memberInfo['UserID'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
   halt(404);
 }
 
@@ -48,8 +52,8 @@ if (sizeof($errors) > 0) {
   }
   $errorMessage .= "</ul>";
 
-  $_SESSION['AddLogErrorMessage'] = $errorMessage;
-  $_SESSION['LogEntryOldContent'] = $_POST;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AddLogErrorMessage'] = $errorMessage;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['LogEntryOldContent'] = $_POST;
 
   http_response_code(303);
   header("location: " . autoUrl("log-books/members/" . $id . "/new"));
@@ -80,7 +84,7 @@ if (sizeof($errors) > 0) {
 
     $logId = $db->lastInsertId();
 
-    $_SESSION['AddLogSuccessMessage'] = $logId;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['AddLogSuccessMessage'] = $logId;
 
     http_response_code(302);
     // Temp redirect until log pages are added
@@ -92,8 +96,8 @@ if (sizeof($errors) > 0) {
     $errorMessage .= "<li>" . $e->getMessage() . "</li>";
     $errorMessage .= "</ul>";
 
-    $_SESSION['AddLogErrorMessage'] = $errorMessage;
-    $_SESSION['LogEntryOldContent'] = $_POST;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['AddLogErrorMessage'] = $errorMessage;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['LogEntryOldContent'] = $_POST;
 
     http_response_code(303);
     header("location: " . autoUrl("log-books/members/" . $id . "/new"));

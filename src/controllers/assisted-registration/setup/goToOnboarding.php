@@ -2,11 +2,11 @@
 
 $db = app()->db;
 
-unset($_SESSION['AssRegStage']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegStage']);
 
 try {
   $login = new \CLSASC\Membership\Login($db);
-  $login->setUser($_SESSION['AssRegGuestUser']);
+  $login->setUser($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGuestUser']);
   $login->stayLoggedIn();
   $login->preventWarningEmail();
   $currentUser = app()->user;
@@ -15,10 +15,10 @@ try {
   halt(403);
 }
 
-unset($_SESSION['AssRegGuestUser']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGuestUser']);
 
 $requiresRegistration = $db->prepare("SELECT `RR` FROM users WHERE UserID = ?");
-$requiresRegistration->execute([$_SESSION['UserID']]);
+$requiresRegistration->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 if (bool($requiresRegistration->fetchColumn())) {
   header("Location: " . autoUrl("onboarding/go"));

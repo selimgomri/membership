@@ -1,21 +1,20 @@
 <?php
 
 $db = app()->db;
-$systemInfo = app()->system;
 
 $fluidContainer = true;
 
-$fees['County'][1] = $systemInfo->getSystemOption('ASA-County-Fee-L1')/100;
-$fees['Region'][1] = $systemInfo->getSystemOption('ASA-Regional-Fee-L1')/100;
-$fees['National'][1] = $systemInfo->getSystemOption('ASA-National-Fee-L1')/100;
+$fees['County'][1] = app()->tenant->getKey('ASA-County-Fee-L1')/100;
+$fees['Region'][1] = app()->tenant->getKey('ASA-Regional-Fee-L1')/100;
+$fees['National'][1] = app()->tenant->getKey('ASA-National-Fee-L1')/100;
 
-$fees['County'][2] = $systemInfo->getSystemOption('ASA-County-Fee-L2')/100;
-$fees['Region'][2] = $systemInfo->getSystemOption('ASA-Regional-Fee-L2')/100;
-$fees['National'][2] = $systemInfo->getSystemOption('ASA-National-Fee-L2')/100;
+$fees['County'][2] = app()->tenant->getKey('ASA-County-Fee-L2')/100;
+$fees['Region'][2] = app()->tenant->getKey('ASA-Regional-Fee-L2')/100;
+$fees['National'][2] = app()->tenant->getKey('ASA-National-Fee-L2')/100;
 
-$fees['County'][3] = $systemInfo->getSystemOption('ASA-County-Fee-L3')/100;
-$fees['Region'][3] = $systemInfo->getSystemOption('ASA-Regional-Fee-L3')/100;
-$fees['National'][3] = $systemInfo->getSystemOption('ASA-National-Fee-L3')/100;
+$fees['County'][3] = app()->tenant->getKey('ASA-County-Fee-L3')/100;
+$fees['Region'][3] = app()->tenant->getKey('ASA-Regional-Fee-L3')/100;
+$fees['National'][3] = app()->tenant->getKey('ASA-National-Fee-L3')/100;
 
 foreach ($fees as $region => $value) {
   foreach($value as $level => $amount) {
@@ -44,36 +43,36 @@ include BASE_PATH . 'views/header.php';
         <h1>Swim England Fee Management</h1>
         <p class="lead">Set amounts for Swim England membership fees</p>
 
-        <?php if ((isset($_SESSION['COUNTY-SAVED']) && $_SESSION['COUNTY-SAVED']) || (isset($_SESSION['REGION-SAVED']) && $_SESSION['REGION-SAVED']) || (isset($_SESSION['NATIONAL-SAVED']) && $_SESSION['NATIONAL-SAVED'])) { ?>
+        <?php if ((isset($_SESSION['TENANT-' . app()->tenant->getId()]['COUNTY-SAVED']) && $_SESSION['TENANT-' . app()->tenant->getId()]['COUNTY-SAVED']) || (isset($_SESSION['TENANT-' . app()->tenant->getId()]['REGION-SAVED']) && $_SESSION['TENANT-' . app()->tenant->getId()]['REGION-SAVED']) || (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NATIONAL-SAVED']) && $_SESSION['TENANT-' . app()->tenant->getId()]['NATIONAL-SAVED'])) { ?>
         <div class="alert alert-success">
           <p class="mb-0">We've saved:</p>
           <ul class="mb-0">
-            <?php if (isset($_SESSION['COUNTY-SAVED']) && $_SESSION['COUNTY-SAVED']) { ?><li>County fees</li><?php } ?>
-            <?php if (isset($_SESSION['REGION-SAVED']) && $_SESSION['REGION-SAVED']) { ?><li>Regional fees</li><?php } ?>
-            <?php if (isset($_SESSION['NATIONAL-SAVED']) && $_SESSION['NATIONAL-SAVED']) { ?><li>National fees</li>
+            <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['COUNTY-SAVED']) && $_SESSION['TENANT-' . app()->tenant->getId()]['COUNTY-SAVED']) { ?><li>County fees</li><?php } ?>
+            <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['REGION-SAVED']) && $_SESSION['TENANT-' . app()->tenant->getId()]['REGION-SAVED']) { ?><li>Regional fees</li><?php } ?>
+            <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NATIONAL-SAVED']) && $_SESSION['TENANT-' . app()->tenant->getId()]['NATIONAL-SAVED']) { ?><li>National fees</li>
             <?php } ?>
           </ul>
         </div>
         <?php 
-        unset($_SESSION['COUNTY-SAVED']);
-        unset($_SESSION['REGION-SAVED']);
-        unset($_SESSION['NATIONAL-SAVED']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['COUNTY-SAVED']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['REGION-SAVED']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['NATIONAL-SAVED']);
         } ?>
 
-        <?php if ((isset($_SESSION['COUNTY-ERROR']) && $_SESSION['COUNTY-ERROR']) || (isset($_SESSION['REGION-ERROR']) && $_SESSION['REGION-ERROR']) || (isset($_SESSION['NATIONAL-ERROR']) && $_SESSION['NATIONAL-ERROR'])) { ?>
+        <?php if ((isset($_SESSION['TENANT-' . app()->tenant->getId()]['COUNTY-ERROR']) && $_SESSION['TENANT-' . app()->tenant->getId()]['COUNTY-ERROR']) || (isset($_SESSION['TENANT-' . app()->tenant->getId()]['REGION-ERROR']) && $_SESSION['TENANT-' . app()->tenant->getId()]['REGION-ERROR']) || (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NATIONAL-ERROR']) && $_SESSION['TENANT-' . app()->tenant->getId()]['NATIONAL-ERROR'])) { ?>
         <div class="alert alert-danger">
           <p class="mb-0">We were unable to save the changes for:</p>
           <ul class="mb-0">
-            <?php if (isset($_SESSION['COUNTY-ERROR']) && $_SESSION['COUNTY-ERROR']) { ?><li>County fee</li><?php } ?>
-            <?php if (isset($_SESSION['REGION-ERROR']) && $_SESSION['REGION-ERROR']) { ?><li>Regional fee</li><?php } ?>
-            <?php if (isset($_SESSION['NATIONAL-ERROR']) && $_SESSION['NATIONAL-ERROR']) { ?><li>National fee</li>
+            <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['COUNTY-ERROR']) && $_SESSION['TENANT-' . app()->tenant->getId()]['COUNTY-ERROR']) { ?><li>County fee</li><?php } ?>
+            <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['REGION-ERROR']) && $_SESSION['TENANT-' . app()->tenant->getId()]['REGION-ERROR']) { ?><li>Regional fee</li><?php } ?>
+            <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NATIONAL-ERROR']) && $_SESSION['TENANT-' . app()->tenant->getId()]['NATIONAL-ERROR']) { ?><li>National fee</li>
             <?php } ?>
           </ul>
         </div>
         <?php 
-        unset($_SESSION['COUNTY-ERROR']);
-        unset($_SESSION['REGION-ERROR']);
-        unset($_SESSION['NATIONAL-ERROR']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['COUNTY-ERROR']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['REGION-ERROR']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['NATIONAL-ERROR']);
         } ?>
 
         <form method="post">

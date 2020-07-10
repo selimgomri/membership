@@ -1,8 +1,13 @@
 <?php
 
 $db = app()->db;
-$galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends`, CoachEnters, GalaFee fee, GalaFeeConstant gfc FROM galas WHERE GalaID = ?");
-$galaDetails->execute([$id]);
+$tenant = app()->tenant;
+
+$galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends`, CoachEnters, GalaFee fee, GalaFeeConstant gfc FROM galas WHERE GalaID = ? AND Tenant = ?");
+$galaDetails->execute([
+  $id,
+  $tenant->getId()
+]);
 $gala = $galaDetails->fetch(PDO::FETCH_ASSOC);
 
 if ($gala == null) {
@@ -23,7 +28,7 @@ $getSessions->execute([$id]);
 $sessions = $getSessions->fetchAll(PDO::FETCH_ASSOC);
 
 try {
-$getAvailableSwimmers = $db->prepare("SELECT Member, MForename fn, MSurname sn, DateOfBirth dob, gs.`Name` gsname, members.ASANumber `se` FROM ((((galaSessionsCanEnter ca INNER JOIN galaSessions gs ON gs.ID = ca.Session) INNER JOIN members ON ca.Member = members.MemberID) INNER JOIN squads ON squads.SquadID = members.SquadID) LEFT JOIN galaEntries ge ON ge.GalaID = gs.Gala AND ge.MemberID = members.MemberID) WHERE gs.Gala = ? AND ca.CanEnter = ? AND ge.EntryID IS NULL ORDER BY SquadFee DESC, SquadName ASC, sn ASC, fn ASC");
+$getAvailableSwimmers = $db->prepare("SELECT Member, MForename fn, MSurname sn, DateOfBirth dob, gs.`Name` gsname, members.ASANumber `se` FROM (((galaSessionsCanEnter ca INNER JOIN galaSessions gs ON gs.ID = ca.Session) INNER JOIN members ON ca.Member = members.MemberID) LEFT JOIN galaEntries ge ON ge.GalaID = gs.Gala AND ge.MemberID = members.MemberID) WHERE gs.Gala = ? AND ca.CanEnter = ? AND ge.EntryID IS NULL ORDER BY sn ASC, fn ASC");
 $getAvailableSwimmers->execute([$id, true]);
 $swimmers = $getAvailableSwimmers->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
 } catch (Exception $e) {
@@ -45,19 +50,19 @@ include BASE_PATH . 'views/header.php';
       <h1>Select entries for <?=htmlspecialchars($gala['name'])?></h1>
       <p class="lead">Below are all members which have indicated they are available at at least one session.</p>
 
-      <?php if (isset($_SESSION['SuccessStatus']) && $_SESSION['SuccessStatus']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']) { ?>
       <div class="alert alert-success">
         <p class="mb-0"><strong>Entries completed successfully</strong></p>
         <p class="mb-0">Parents will be notified about their entries by email.</p>
       </div>
-      <?php unset($_SESSION['SuccessStatus']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']); } ?>
 
-      <?php if (isset($_SESSION['ErrorStatus']) && $_SESSION['ErrorStatus']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus']) { ?>
       <div class="alert alert-success">
         <p class="mb-0"><strong>An error occurred</strong></p>
         <p class="mb-0">We've rolled back all changes.</p>
       </div>
-      <?php unset($_SESSION['ErrorStatus']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus']); } ?>
 
       <p>Once you have entered a swimmer for a gala they will not appear in this list and you will have to edit or delete an individual entry.</p>
       <p>Please remember to check which sessions events are in.</p>

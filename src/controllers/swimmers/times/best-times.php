@@ -1,16 +1,20 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$swimmer = $db->prepare("SELECT MForename, MSurname, UserID FROM members WHERE MemberID = ?");
-$swimmer->execute([$id]);
+$swimmer = $db->prepare("SELECT MForename, MSurname, UserID FROM members WHERE Tenant = ? AND MemberID = ?");
+$swimmer->execute([
+  $tenant->getId(),
+  $id
+]);
 $swimmer = $swimmer->fetch(PDO::FETCH_ASSOC);
 
 if ($swimmer == null) {
   halt(404);
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent' && $swimmer['UserID'] !== $_SESSION['UserID']) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $swimmer['UserID'] !== $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
 	halt(404);
 }
 
@@ -66,7 +70,7 @@ include BASE_PATH . 'views/header.php';
   <nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="<?=autoUrl("members")?>">Members</a></li>
-			<li class="breadcrumb-item"><a href="<?=autoUrl("members/" . $id)?>"><?=htmlspecialchars(mb_substr($swimmer["MForename"], 0, 1, 'utf-8'))?><?=htmlspecialchars(mb_substr($swimmer["MSurname"], 0, 1, 'utf-8'))?></a></li>
+			<li class="breadcrumb-item"><a href="<?=autoUrl("members/" . $id)?>">#<?=htmlspecialchars($id)?></a></li>
 			<li class="breadcrumb-item active" aria-current="page">Best times</li>
 		</ol>
 	</nav>

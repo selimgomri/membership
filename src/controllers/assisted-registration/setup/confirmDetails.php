@@ -1,10 +1,10 @@
 <?php
 
-$_SESSION['AssRegStage'] = 2;
+$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegStage'] = 2;
 
 $db = app()->db;
-$systemInfo = app()->system;
-$privacy = $systemInfo->getSystemOption('PrivacyPolicy');
+
+$privacy = app()->tenant->getKey('PrivacyPolicy');
 
 $Extra = new ParsedownExtra();
 $Extra->setSafeMode(true);
@@ -22,7 +22,7 @@ if ($privacy != null && $privacy != "") {
 }
 
 $getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile, `Password` FROM users WHERE UserID = ?");
-$getUser->execute([$_SESSION['AssRegGuestUser']]);
+$getUser->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGuestUser']]);
 $user = $getUser->fetch(PDO::FETCH_ASSOC);
 
 if ($user == null) {
@@ -32,11 +32,11 @@ if ($user == null) {
 $email = "";
 $sms = "";
 
-if (isset($_SESSION['AssRegGetDetailsError']) && $_SESSION['AssRegGetDetailsError']) {
-  if ($_SESSION['AssRegGetDetailsPostData']['emailAuthorise']) {
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError']) {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsPostData']['emailAuthorise']) {
     $email = " checked ";
   }
-  if ($_SESSION['AssRegGetDetailsPostData']['smsAuthorise']) {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsPostData']['smsAuthorise']) {
     $sms = " checked ";
   }
 } 
@@ -55,10 +55,10 @@ include BASE_PATH . 'views/header.php';
         We need a few more details from you
       </p>
 
-      <?php if (isset($_SESSION['AssRegGetDetailsError']) && $_SESSION['AssRegGetDetailsError']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError']) { ?>
       <div class="alert alert-danger">
         <p><strong>There was a problem</strong></p>
-        <?=$_SESSION['AssRegGetDetailsMessage']?>
+        <?=$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsMessage']?>
       </div>
       <?php } ?>
 
@@ -149,19 +149,19 @@ include BASE_PATH . 'views/header.php';
             YOUR CLUB HAS NOT SET UP A PRIVACY POLICY. PLEASE DO NOT PROCEED.
           </p>
           <p>
-            In accordance with European Law, <?=htmlspecialchars(env('CLUB_NAME'))?>, Swim England and British Swimming are Data Controllers for the purposes of the General Data Protection Regulation.
+            In accordance with European Law, <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>, Swim England and British Swimming are Data Controllers for the purposes of the General Data Protection Regulation.
           </p>
           <p>
-            By proceeding you agree to our <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy (this is an example policy)</a> and the use of your data by <?=htmlspecialchars(env('CLUB_NAME'))?>. Please note that you have also agreed to our use of you and/or your swimmer's data as part of your registration with the club and with British Swimming and Swim England.
+            By proceeding you agree to our <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy (this is an example policy)</a> and the use of your data by <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. Please note that you have also agreed to our use of you and/or your swimmer's data as part of your registration with the club and with British Swimming and Swim England.
           </p>
           <p>
             We will be unable to provide this service for technical reasons if
             you do not consent to the use of this data.
           </p>
           <p class="mb-0">
-            Contact a member of your committee if you have any questions or email <?php if (bool(env('IS_CLS'))) { ?><a
+            Contact a member of your committee if you have any questions or email <?php if (app()->tenant->isCLS()) { ?><a
             href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a><?php } else { ?><a
-            href="mailto:<?=htmlspecialchars(env('CLUB_EMAIL'))?>"><?=htmlspecialchars(env('CLUB_EMAIL'))?></a><?php } ?>.          
+            href="mailto:<?=htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL'))?>"><?=htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL'))?></a><?php } ?>.          
           </p>
           <?php } ?>
         </div>
@@ -179,14 +179,14 @@ include BASE_PATH . 'views/header.php';
 
 <?php
 
-if (isset($_SESSION['AssRegGetDetailsMessage'])) {
-  unset($_SESSION['AssRegGetDetailsMessage']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsMessage'])) {
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsMessage']);
 }
-if (isset($_SESSION['AssRegGetDetailsError'])) {
-  unset($_SESSION['AssRegGetDetailsError']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError'])) {
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError']);
 }
-if (isset($_SESSION['AssRegGetDetailsPostData'])) {
-  unset($_SESSION['AssRegGetDetailsPostData']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsPostData'])) {
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsPostData']);
 }
 
 $footer = new \SCDS\Footer();

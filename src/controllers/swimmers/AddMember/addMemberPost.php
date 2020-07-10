@@ -5,10 +5,11 @@ if (!SCDS\CSRF::verify()) {
 }
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $added = $action = false;
 
-$forename = $middlenames = $surname = $dateOfBirth = $asaNumber = $sex = $squad = $cat = $cp = $sql = $transfer = "";
+$forename = $middlenames = $surname = $dateOfBirth = $asaNumber = $sex = $cat = $cp = $sql = $transfer = "";
 $getASA = false;
 
 if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POST['datebirth'])) && (!empty($_POST['sex'])) && (!empty($_POST['squad']))) {
@@ -16,7 +17,6 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 	$surname = trim(ucwords($_POST['surname']));
 	$dateOfBirth = trim($_POST['datebirth']);
 	$sex = $_POST['sex'];
-	$squad = $_POST['squad'];
 	if ((!empty($_POST['middlenames']))) {
 		$middlenames = trim(ucwords($_POST['middlenames']));
 	}
@@ -45,11 +45,10 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 		$transfer = 0;
 	}
 
-
 	$accessKey = generateRandomString(6);
 
   try {
-    $insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, SquadID, AccessKey, ASACategory, ClubPays, OtherNotes, RRTransfer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, AccessKey, ASACategory, ClubPays, OtherNotes, RRTransfer, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $insert->execute([
       $forename,
       $middlenames,
@@ -57,18 +56,20 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
       $dateOfBirth,
       $asaNumber,
       $sex,
-      $squad,
       $accessKey,
       $cat,
       $cp,
 			"",
-			$transfer
+			$transfer,
+			$tenant->getId(),
     ]);
 
-  	$last_id = $db->lastInsertId();
+		$last_id = $db->lastInsertId();
+		
+		// If squad, add to squad
 
   	if ($getASA) {
-  		$swimEnglandTemp = env('ASA_CLUB_CODE') . $last_id;
+  		$swimEnglandTemp = app()->tenant->getKey('ASA_CLUB_CODE') . $last_id;
       $addTempSwimEnglandCode = $db->prepare("UPDATE `members` SET `ASANumber` = ? WHERE `MemberID` = ?");
       $addTempSwimEnglandCode->execute([$swimEnglandTemp, $last_id]);
   	}
@@ -76,11 +77,13 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
     $action = true;
 
     try {
-  		$getAdmins = $db->prepare("SELECT `UserID` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE `Permission` = 'Admin' AND `UserID` != ?");
-  		$getAdmins->execute(["Admin", $_SESSION['UserID']]);
+  		$getAdmins = $db->prepare("SELECT `UserID` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE Tenant = ? AND `Permission` = 'Admin' AND `UserID` != ?");
+  		$getAdmins->execute([
+				$tenant->getId(),
+				$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   		$notify = $db->prepare("INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'NewMember')");
     	$subject = "New Club Member";
-    	$message = '<p>' . htmlentities(getUserName($_SESSION['UserID'])) . ' has added a new member, ' . htmlentities($forename . ' ' . $surname) . ' to our online membership system.</p><p>We have sent you this email to ensure you\'re aware of this.</p>';
+    	$message = '<p>' . htmlentities(getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) . ' has added a new member, ' . htmlentities($forename . ' ' . $surname) . ' to our online membership system.</p><p>We have sent you this email to ensure you\'re aware of this.</p>';
     	while ($row = $getAdmins->fetch(PDO::FETCH_ASSOC)) {
     		try {
     			$notify->execute([$row['UserID'], $subject, $message]);
@@ -97,10 +100,10 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 }
 
 if ($action) {
-	$_SESSION['SwimmerAdded'] = true;
+	$_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerAdded'] = true;
 	header("Location: " . autoUrl("members/" . $last_id));
 } else {
-	$_SESSION['ErrorState'] = '
+	$_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = '
 	<div class="alert alert-danger">
 		<p class="mb-0">
 			<strong>We were not able to add the new swimmer</strong>

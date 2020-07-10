@@ -6,7 +6,12 @@ if (isset($_GET['squad'])) {
 }
 
 $db = app()->db;
-$squads = $db->query("SELECT SquadName `name`, SquadID id FROM squads ORDER BY SquadFee DESC, `name` ASC");
+$tenant = app()->tenant;
+
+$squads = $db->prepare("SELECT SquadName `name`, SquadID id FROM squads WHERE Tenant = ? ORDER BY SquadFee DESC, `name` ASC");
+$squads->execute([
+  $tenant->getId()
+]);
 $squad = $squads->fetch(PDO::FETCH_ASSOC);
 
 $fluidContainer = true;
@@ -24,6 +29,8 @@ include BASE_PATH . 'views/header.php';
 include "attendanceMenu.php";
 
 ?>
+
+<div id="ajax-info" data-page-url="<?=htmlspecialchars(autoUrl('attendance/sessions'))?>" data-ajax-url="<?=htmlspecialchars(autoUrl('attendance/sessions/ajax/handler'))?>"></div>
 
 <div class="container-fluid">
   <div class="card mb-3">
@@ -58,6 +65,6 @@ include "attendanceMenu.php";
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs("js/attendance/register.js");
+$footer->addJs("public/js/attendance/sessions.js");
 $footer->useFluidContainer();
 $footer->render();

@@ -1,9 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getUser = $db->prepare("SELECT Forename, Surname, RR FROM users INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE UserID = ? AND `permissions`.`Permission` = 'Parent';");
-$getUser->execute([$person]);
+$getUser = $db->prepare("SELECT Forename, Surname, RR FROM users INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE Tenant = ? AND UserID = ? AND `permissions`.`Permission` = 'Parent';");
+$getUser->execute([
+  $tenant->getId(),
+  $person
+]);
 
 $user = $getUser->fetch(PDO::FETCH_ASSOC);
 
@@ -31,23 +35,23 @@ include BASE_PATH . 'views/header.php';
         <form method="post">
           <p class="lead"><?php if ($user['RR']) { ?>Complete registration without setting up a direct debit<?php } else { ?>Complete renewal without setting up a direct debit<?php } ?></p>
 
-          <?php if (isset($_SESSION['ErrorInvalidRequest']) && $_SESSION['ErrorInvalidRequest']) { ?>
+          <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorInvalidRequest']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorInvalidRequest']) { ?>
           <div class="alert alert-warning">
             <strong>We couldn't verify you had the authority to do that</strong>
           </div>
-          <?php } unset($_SESSION['ErrorInvalidRequest']); ?>
+          <?php } unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorInvalidRequest']); ?>
 
-          <?php if (isset($_SESSION['ErrorNoReg']) && $_SESSION['ErrorNoReg']) { ?>
+          <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorNoReg']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorNoReg']) { ?>
           <div class="alert alert-warning">
             <strong>There was no open registration or renewal</strong>
           </div>
-          <?php } unset($_SESSION['ErrorNoReg']); ?>
+          <?php } unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorNoReg']); ?>
 
-          <?php if (isset($_SESSION['Successful']) && $_SESSION['Successful']) { ?>
+          <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['Successful']) && $_SESSION['TENANT-' . app()->tenant->getId()]['Successful']) { ?>
           <div class="alert alert-success">
             <strong>We've marked the renewal/registration as complete and bypassed the direct debit requirement</strong>
           </div>
-          <?php } unset($_SESSION['Successful']); ?>
+          <?php } unset($_SESSION['TENANT-' . app()->tenant->getId()]['Successful']); ?>
 
           <?php if ($renewalAvailable) { ?>
 

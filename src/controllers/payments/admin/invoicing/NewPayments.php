@@ -21,18 +21,18 @@ include BASE_PATH . 'views/header.php';
       <h1>New invoice payment</h1>
       <p class="lead">Add a new payment or credit to an account</p>
 
-      <?php if (isset($_SESSION['NewPaymentSuccessMessage'])) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentSuccessMessage'])) { ?>
       <div class="alert alert-success">
-        <?=htmlspecialchars($_SESSION['NewPaymentSuccessMessage'])?>
+        <?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentSuccessMessage'])?>
       </div>
-      <?php unset($_SESSION['NewPaymentSuccessMessage']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentSuccessMessage']); } ?>
 
-      <?php if (isset($_SESSION['NewPaymentErrorMessage'])) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentErrorMessage'])) { ?>
       <div class="alert alert-danger">
         <p class="mb-0"><strong>An error occured and we have not added the payment</strong></p>
-        <p class="mb-0"><?=htmlspecialchars($_SESSION['NewPaymentErrorMessage'])?></p>
+        <p class="mb-0"><?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentErrorMessage'])?></p>
       </div>
-      <?php unset($_SESSION['NewPaymentErrorMessage']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentErrorMessage']); } ?>
 
       <form id="payment-form" method="post" class="needs-validation" novalidate>
         <div class="form-group">

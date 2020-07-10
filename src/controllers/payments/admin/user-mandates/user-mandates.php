@@ -3,12 +3,18 @@
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$userName = $db->prepare("SELECT Forename, Surname FROM users WHERE UserID = ?");
+$userName = $db->prepare("SELECT Forename, Surname FROM users WHERE UserID = ? AND Tenant = ?");
 $userName->execute([
-  $user
+  $user,
+  $tenant->getId()
 ]);
 $un = $userName->fetch(PDO::FETCH_ASSOC);
+
+if (!$un) {
+  halt(404);
+}
 
 $pagetitle = htmlspecialchars($un['Forename'] . ' ' . $un['Surname'] . "'s Direct Debit Mandate");
 
@@ -48,14 +54,14 @@ $mandateDetails->execute([$user, true]);
     <?=htmlspecialchars($un['Forename'])?>'s mandates
   </p>
 
-  <?php if (isset($_SESSION['MandateDeletedTrue']) && $_SESSION['MandateDeletedTrue']) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['MandateDeletedTrue']) && $_SESSION['TENANT-' . app()->tenant->getId()]['MandateDeletedTrue']) { ?>
   <div class="alert alert-success">
     <p class="mb-0">
       <strong>Mandate deleted successfully</strong>
     </p>
     <p class="mb-0">Check below to see if the user needs to set up another mandate to pay by direct debit in future.</p>
   </div>
-  <?php unset($_SESSION['MandateDeletedTrue']); } ?>
+  <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['MandateDeletedTrue']); } ?>
 
   <p>
     You can view the status of a mandate or cancel it from this page.

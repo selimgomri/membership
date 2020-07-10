@@ -1,8 +1,13 @@
 <?php
 
 $db = app()->db;
-$galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends` FROM galas WHERE GalaID = ?");
-$galaDetails->execute([$id]);
+$tenant = app()->tenant;
+
+$galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends` FROM galas WHERE GalaID = ? AND Tenant = ?");
+$galaDetails->execute([
+  $id,
+  $tenant->getId()
+]);
 $gala = $galaDetails->fetch(PDO::FETCH_ASSOC);
 
 if ($gala == null) {
@@ -29,10 +34,10 @@ if ($nowDate < $galaDate) {
           $id,
           $sessionName
         ]);
-        $_SESSION['SuccessStatus'] = true;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus'] = true;
       } catch (Exception $e) {
         pre($e);
-        $_SESSION['ErrorStatus'] = true;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus'] = true;
       }
     }
   } else {
@@ -44,9 +49,9 @@ if ($nowDate < $galaDate) {
             trim($_POST['session-' . $session['ID']]),
             $session['ID']
           ]);
-          $_SESSION['SuccessStatus'] = true;
+          $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus'] = true;
         } catch (Exception $e) {
-          $_SESSION['ErrorStatus'] = true;
+          $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus'] = true;
         }
       }
     } while ($session = $getSessions->fetch(PDO::FETCH_ASSOC));
@@ -58,9 +63,9 @@ if ($nowDate < $galaDate) {
           $id,
           trim($_POST['newSession'])
         ]);
-        $_SESSION['SuccessStatus'] = true;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus'] = true;
       } catch (Exception $e) {
-        $_SESSION['ErrorStatus'] = true;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus'] = true;
       }
     }
   }

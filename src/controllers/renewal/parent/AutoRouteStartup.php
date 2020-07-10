@@ -5,27 +5,43 @@
 // Also controls single session progress.
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 function renewalProgress($user) {
-  $db = app()->db;
+	$db = app()->db;
+	$date = new DateTime('now', new DateTimeZone('Europe/London'));
+
   $details = null;
 	if (user_needs_registration($user)) {
-		$details = $db->prepare("SELECT * FROM `renewalProgress` WHERE `RenewalID` = 0 AND `UserID` = ?");
+		$details = $db->prepare("SELECT * FROM `renewalProgress` WHERE `RenewalID` = 0 AND `UserID` = :user");
+		$details->execute([
+			'user' => $user,
+		]);
 	} else {
 		$details = $db->prepare("SELECT * FROM `renewals` LEFT JOIN
 		`renewalProgress` ON renewals.ID = renewalProgress.RenewalID WHERE
-		`StartDate` <= CURDATE() AND CURDATE() <= `EndDate` AND `UserID` = ? ORDER
+		`StartDate` <= :today AND `EndDate` >= :today AND `UserID` = :user ORDER
 		BY renewals.ID DESC, renewalProgress.ID DESC");
+		$details->execute([
+			'user' => $user,
+			'today' => $date->format("Y-m-d")
+		]);
 	}
-	$details->execute([$user]);
 	$details = $details->fetch(PDO::FETCH_ASSOC);
 	return $details;
 }
 
 function latestRenewal() {
 	$db = app()->db;
-	$latest = $db->query("SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE()
-	AND CURDATE() <= `EndDate` ORDER BY renewals.ID DESC LIMIT 1");
+	$tenant = app()->tenant;
+	$date = new DateTime('now', new DateTimeZone('Europe/London'));
+
+	$latest = $db->prepare("SELECT * FROM `renewals` WHERE `StartDate` <= :today
+	AND `EndDate` >= :today AND Tenant = :tenant ORDER BY renewals.ID DESC LIMIT 1");
+	$latest->execute([
+		'today' => $date->format("Y-m-d"),
+		'tenant' => $tenant->getId()
+	]);
 	$latestRenewal = $latest->fetch(PDO::FETCH_ASSOC);
 	return $latestRenewal;
 }
@@ -57,12 +73,12 @@ function isPartialRegistration() {
 	$db = app()->db;
 	// Is user RR?
 	$query = $db->prepare("SELECT RR FROM users WHERE UserID = ?");
-	$query->execute([$_SESSION['UserID']]);
+	$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 	$userRR = bool($query->fetchColumn());
 
 	$query = $db->prepare("SELECT COUNT(*) FROM `members` WHERE UserID = ?");
 	try {
-		$query->execute([$_SESSION['UserID']]);
+		$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 	} catch (PDOException $e) {
 		halt(500);
 	}
@@ -70,7 +86,7 @@ function isPartialRegistration() {
 	
 	$query = $db->prepare("SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = ?");
 	try {
-		$query->execute([$_SESSION['UserID'], 1]);
+		$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 1]);
 	} catch (PDOException $e) {
 		halt(500);
 	}
@@ -82,7 +98,7 @@ function isPartialRegistration() {
 }
 
 //$currentRenewal = renewalProgress($user);
-$currentRenewalDetails = renewalProgress($_SESSION['UserID']);
+$currentRenewalDetails = renewalProgress($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
 
 $renewal = null;
 
@@ -90,7 +106,7 @@ if ($currentRenewalDetails == null) {
 	// Create a new Progress Record
 	$latestRenewal = latestRenewal();
 
-	if (user_needs_registration($_SESSION['UserID'])) {
+	if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
 		$renewal = 0;
 	} else if ($latestRenewal == null) {
     halt(404);
@@ -102,15 +118,18 @@ if ($currentRenewalDetails == null) {
 
   $addRenewal = $db->prepare("INSERT INTO `renewalProgress` (`UserID`, `RenewalID`, `Date`, `Stage`, `Substage`, `Part`) VALUES (?, ?, ?, '0', '0', '0')");
   $addRenewal->execute([
-    $_SESSION['UserID'],
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
     $renewal,
     $date
 	]);
-	$currentRenewalDetails = renewalProgress($_SESSION['UserID']);
+	$currentRenewalDetails = renewalProgress($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
 } else {
 	$row = latestRenewal();
-	$renewal = $row['ID'];
-	if (user_needs_registration($_SESSION['UserID'])) {
+	$renewal = null;
+	if ($row) {
+		$renewal = $row['ID'];
+	}
+	if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
 		$renewal = 0;
 	} else if ($row == null) {
 		halt(404);
@@ -120,7 +139,7 @@ if ($currentRenewalDetails == null) {
 $renewalName = 'Renewal';
 if (isset($currentRenewalDetails['Name'])) {
 	$renewalName = $currentRenewalDetails['Name'];
-} else if (user_needs_registration($_SESSION['UserID'])) {
+} else if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
 	$renewalName = '';
 }
 

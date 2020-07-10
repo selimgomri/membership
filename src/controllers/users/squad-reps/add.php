@@ -1,18 +1,23 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
-$userInfo->execute([$id]);
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ? AND Tenant = ?");
+$userInfo->execute([
+  $id,
+  $tenant->getId()
+]);
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
 
-$systemInfo = app()->system;
-$leavers = $systemInfo->getSystemOption('LeaversSquad');
+
+$leavers = app()->tenant->getKey('LeaversSquad');
 if ($leavers == null) {
   $leavers = 0;
 }
-$getSquads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE SquadID != ? ORDER BY SquadFee DESC, SquadName ASC");
+$getSquads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE Tenant = ? AND SquadID != ? ORDER BY SquadFee DESC, SquadName ASC");
 $getSquads->execute([
+  $tenant->getId(),
   $leavers
 ]);
 $squad = $getSquads->fetch(PDO::FETCH_ASSOC);
@@ -44,7 +49,7 @@ include BASE_PATH . "views/header.php";
         Assign a squad to <?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?>
       </h1>
 
-      <?php if (isset($_SESSION['AssignSquadError']) && $_SESSION['AssignSquadError']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssignSquadError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssignSquadError']) { ?>
       <div class="alert alert-danger">
         <p class="mb-0">
           <strong>
@@ -53,7 +58,7 @@ include BASE_PATH . "views/header.php";
         </p>
       </div>
       <?php
-        unset($_SESSION['AssignSquadError']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssignSquadError']);
       } ?>
 
       <?php if ($squad != null) { ?>

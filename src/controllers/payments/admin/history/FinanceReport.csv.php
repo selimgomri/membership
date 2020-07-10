@@ -33,7 +33,7 @@ if (isset($data->types)) {
 $output = fopen('php://output', 'w');
 
 // output the column headings
-fputcsv($output, [env('CLUB_NAME') . ' Finance Report']);
+fputcsv($output, [app()->tenant->getKey('CLUB_NAME') . ' Finance Report']);
 fputcsv($output, $fields);
 foreach ($items as $item) {
   $mainData = [

@@ -12,9 +12,14 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
  */
 
 $db = app()->db;
+$tenant = app()->tenant;
+
 $searchDate = $year . "-" . $month . "-" . "%";
-$getPayments = $db->prepare("SELECT * FROM (SELECT 'GoCardless' AS Provider, 'Payments' AS Type, paymentsPending.Amount, paymentsPending.Type AS DebitCredit, CONCAT(users.Forename, ' ', users.Surname) AS `User`, paymentsPending.Name, MetadataJSON AS Info, payments.Status AS `Status`, paymentsPending.Date AS `Date`, NULL AS `Fees` FROM (((`paymentsPending` INNER JOIN `payments` ON paymentsPending.PMkey = payments.PMkey) INNER JOIN `users` ON users.UserID = payments.UserID) LEFT JOIN paymentsPayouts ON paymentsPayouts.ID = payments.Payout) WHERE paymentsPayouts.ArrivalDate LIKE :searchDate UNION ALL SELECT 'GoCardless' AS Provider, 'Payouts' AS Type, Amount, NULL AS DebitCredit, NULL AS `User`, NULL AS `Name`, NULL AS Info, NULL AS `Status`, ArrivalDate AS `Date`, Fees FROM paymentsPayouts WHERE paymentsPayouts.ArrivalDate LIKE :searchDate UNION ALL SELECT 'Stripe' AS Provider, 'Payments' AS Type, stripePaymentItems.Amount, 'Payment' AS DebitCredit, CONCAT(users.Forename, ' ', users.Surname) AS `User`, CONCAT(stripePaymentItems.Name, ' ', stripePaymentItems.Description) AS `Name`, NULL AS Info, NULL AS `Status`, stripePayments.DateTime AS `Date`, stripePaymentItems.AmountRefunded AS `Fees` FROM ((`stripePaymentItems` INNER JOIN `stripePayments` ON stripePaymentItems.Payment = stripePayments.ID) INNER JOIN `users` ON users.UserID = stripePayments.User) WHERE stripePayments.DateTime LIKE :searchDate UNION ALL SELECT 'Stripe' AS Provider, 'Payouts' AS Type, Amount, NULL AS DebitCredit, NULL AS `User`, ID AS `Name`, NULL AS Info, NULL AS `Status`, ArrivalDate AS `Date`, NULL AS `Fees` FROM stripePayouts WHERE ArrivalDate LIKE :searchDate) AS UnitedTable ORDER BY UnitedTable.Date ASC, UnitedTable.User ASC");
-$getPayments->execute(['searchDate' => $searchDate]);
+$getPayments = $db->prepare("SELECT * FROM (SELECT 'GoCardless' AS Provider, 'Payments' AS Type, paymentsPending.Amount, paymentsPending.Type AS DebitCredit, CONCAT(users.Forename, ' ', users.Surname) AS `User`, paymentsPending.Name, MetadataJSON AS Info, payments.Status AS `Status`, paymentsPending.Date AS `Date`, NULL AS `Fees` FROM (((`paymentsPending` INNER JOIN `payments` ON paymentsPending.PMkey = payments.PMkey) INNER JOIN `users` ON users.UserID = payments.UserID) LEFT JOIN paymentsPayouts ON paymentsPayouts.ID = payments.Payout) WHERE paymentsPayouts.ArrivalDate LIKE :searchDate AND users.Tenant = :tenant UNION ALL SELECT 'GoCardless' AS Provider, 'Payouts' AS Type, Amount, NULL AS DebitCredit, NULL AS `User`, NULL AS `Name`, NULL AS Info, NULL AS `Status`, ArrivalDate AS `Date`, Fees FROM paymentsPayouts WHERE paymentsPayouts.ArrivalDate LIKE :searchDate AND paymentsPayouts.Tenant = :tenant UNION ALL SELECT 'Stripe' AS Provider, 'Payments' AS Type, stripePaymentItems.Amount, 'Payment' AS DebitCredit, CONCAT(users.Forename, ' ', users.Surname) AS `User`, CONCAT(stripePaymentItems.Name, ' ', stripePaymentItems.Description) AS `Name`, NULL AS Info, NULL AS `Status`, stripePayments.DateTime AS `Date`, stripePaymentItems.AmountRefunded AS `Fees` FROM ((`stripePaymentItems` INNER JOIN `stripePayments` ON stripePaymentItems.Payment = stripePayments.ID) INNER JOIN `users` ON users.UserID = stripePayments.User) WHERE stripePayments.DateTime LIKE :searchDate AND users.Tenant = :tenant UNION ALL SELECT 'Stripe' AS Provider, 'Payouts' AS Type, Amount, NULL AS DebitCredit, NULL AS `User`, ID AS `Name`, NULL AS Info, NULL AS `Status`, ArrivalDate AS `Date`, NULL AS `Fees` FROM stripePayouts WHERE ArrivalDate LIKE :searchDate AND stripePayouts.Tenant = :tenant) AS UnitedTable ORDER BY UnitedTable.Date ASC, UnitedTable.User ASC");
+$getPayments->execute([
+  'searchDate' => $searchDate,
+  'tenant' => $tenant->getId()
+]);
 
 // pre($getPayments->fetchAll(PDO::FETCH_ASSOC)); /*
 
@@ -27,7 +32,7 @@ $array = [];
 $types = [];
 
 // output the column headings
-//$array += ['about' => env('CLUB_NAME') . ' Finance Report'];
+//$array += ['about' => app()->tenant->getKey('CLUB_NAME') . ' Finance Report'];
 while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)) {
   if ($row['Type'] == 'Payments') {
     $date = new DateTime($row['Date']);
@@ -141,7 +146,7 @@ while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)) {
 }
 
 $output = [
-  'about' => env('CLUB_NAME') . ' Finance Report',
+  'about' => app()->tenant->getKey('CLUB_NAME') . ' Finance Report',
   'producer' => 'Swimming Club Data Systems - Membership Software',
   'month' => $month,
   'year' => $year,

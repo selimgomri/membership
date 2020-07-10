@@ -94,24 +94,34 @@ function paymentIntentStatus($value) {
 }
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$payment = $db->prepare("SELECT * FROM ((stripePayments LEFT JOIN stripePaymentItems ON stripePaymentItems.Payment = stripePayments.ID) INNER JOIN users ON stripePayments.User = users.UserID) WHERE stripePayments.ID = ?");
-$payment->execute([$id]);
+$payment = $db->prepare("SELECT * FROM ((stripePayments LEFT JOIN stripePaymentItems ON stripePaymentItems.Payment = stripePayments.ID) INNER JOIN users ON stripePayments.User = users.UserID) WHERE users.Tenant = ? AND stripePayments.ID = ?");
+$payment->execute([
+  $tenant->getId(),
+  $id
+]);
+
+$pm = $payment->fetch(PDO::FETCH_ASSOC);
+
+if (!$pm) {
+  halt(404);
+}
 
 $paymentItems = $db->prepare("SELECT * FROM stripePaymentItems WHERE stripePaymentItems.Payment = ?");
 $paymentItems->execute([$id]);
 
-$pm = $payment->fetch(PDO::FETCH_ASSOC);
-
-if ($pm == null || ($_SESSION['AccessLevel'] != 'Admin' && $pm['User'] != $_SESSION['UserID'])) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Admin' && $pm['User'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
   halt(404);
 }
 
-\Stripe\Stripe::setApiKey(env('STRIPE'));
+\Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
 $payment = \Stripe\PaymentIntent::retrieve([
   'id' => $pm['Intent'],
   'expand' => ['customer', 'payment_method']
+], [
+  'stripe_account' => $tenant->getStripeAccount()
 ]);
 
 $getGalaEntries = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN galas ON galas.GalaID = galaEntries.GalaID) INNER JOIN members ON members.MemberID = galaEntries.MemberID) WHERE StripePayment = ?");
@@ -148,7 +158,7 @@ $countries = getISOAlpha2Countries();
 
   <div class="row">
     <div class="col-md-8">
-      <h1><?php if ($_SESSION['AccessLevel'] == 'Admin') { ?><?=htmlspecialchars($pm['Forename'] . ' ' . $pm['Surname'] . ':')?> <?php } ?>Card payment #<?=htmlspecialchars($id)?></h1>
+      <h1><?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?><?=htmlspecialchars($pm['Forename'] . ' ' . $pm['Surname'] . ':')?> <?php } ?>Card payment #<?=htmlspecialchars($id)?></h1>
       <p class="lead">At <?=$date->format("H:i \o\\n j F Y")?></p>
 
       <h2>Payment Status</h2>
@@ -159,7 +169,7 @@ $countries = getISOAlpha2Countries();
         <dt class="col-sm-5 col-md-4">Amount</dt>
         <dd class="col-sm-7 col-md-8">&pound;<?=(string) \Brick\Math\BigDecimal::of((string) $payment->amount)->withPointMovedLeft(2)->toScale(2)?></dd>
 
-        <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
         <dt class="col-sm-5 col-md-4">Amount capturable</dt>
         <dd class="col-sm-7 col-md-8">&pound;<?=(string) \Brick\Math\BigDecimal::of((string) $payment->amount_capturable)->withPointMovedLeft(2)->toScale(2)?></dd>
 
@@ -193,7 +203,7 @@ $countries = getISOAlpha2Countries();
         <?php } ?>
       </dl>
         
-      <?php if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
       <h2>Transaction security information</h2>
       <dl class="row">
         <?php if (isset($payment->charges->data[0]->outcome->risk_level) && $payment->charges->data[0]->outcome->risk_level) { ?>
@@ -300,7 +310,7 @@ $countries = getISOAlpha2Countries();
       <?php if (isset($payment->charges->data[0]->amount_refunded) && $payment->charges->data[0]->amount_refunded > 0) { ?>
       <h2>Payment refunds</h2>
       <p>&pound;<?=(string) \Brick\Math\BigDecimal::of((string) $payment->charges->data[0]->amount_refunded)->withPointMovedLeft(2)->toScale(2)?>refunded to <?=htmlspecialchars(getCardBrand($card->brand))?> **** <?=htmlspecialchars($card->last4)?></p>
-      <?php } else if ($_SESSION['AccessLevel'] == 'Admin') { ?>
+      <?php } else if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
       <h2>Refund this transaction</h2>
       <p>To refund gala entries, use the gala refunds system.</p>
       <?php } ?>
@@ -323,7 +333,7 @@ $countries = getISOAlpha2Countries();
           <p class="mb-0">No money has been refunded for this entry.</p>
           <?php } ?>
 
-          <?php if ($_SESSION['AccessLevel'] == 'Galas' || $_SESSION['AccessLevel'] == 'Admin') { ?>
+          <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Galas' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
             <p class="mb-0 mt-3">
               <a href="<?=autoUrl("galas/" . $ents['GalaID'] . "/refunds#refund-box-" . $ents['EntryID'])?>" class="btn btn-primary">
                 Refund entry

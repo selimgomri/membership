@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $use_white_background = true;
 
@@ -13,7 +14,10 @@ if (isset($_GET['page']) && ((int) $_GET['page']) != 0) {
   $page = 1;
 }
 
-$sql = $db->query("SELECT COUNT(*) FROM notifyHistory");
+$sql = $db->prepare("SELECT COUNT(*) FROM notifyHistory WHERE Tenant = ?");
+$sql->execute([
+  $tenant->getId()
+]);
 $numMails  = $sql->fetchColumn();
 $numPages = ((int)($numMails/10)) + 1;
 
@@ -23,8 +27,9 @@ if ($start > $numMails) {
 
 $sql = $db->prepare("SELECT `notifyHistory`.`Subject`, `notifyHistory`.`Message`,
 `notifyHistory`.`ForceSend`, `Forename`, `Surname`, `JSONData`, `Date` FROM
-(`notifyHistory` LEFT JOIN `users` ON notifyHistory.Sender = users.UserID) ORDER
+(`notifyHistory` LEFT JOIN `users` ON notifyHistory.Sender = users.UserID) WHERE notifyHistory.Tenant = :tenant ORDER
 BY `Date` DESC LIMIT :offset, :num");
+$sql->bindValue(':tenant', $tenant->getId(), PDO::PARAM_INT);
 $sql->bindValue(':offset', $start, PDO::PARAM_INT); 
 $sql->bindValue(':num', 10, PDO::PARAM_INT); 
 $sql->execute();

@@ -1,9 +1,12 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getInfo = $db->prepare("SELECT MForename, MSurname, SquadName, DateOfBirth, Website, Social, Noticeboard, FilmTraining, ProPhoto FROM ((members INNER JOIN squads ON squads.SquadID = members.SquadID) LEFT JOIN memberPhotography ON members.MemberID = memberPhotography.MemberID) ORDER BY SquadFee DESC, SquadName ASC, MSurname ASC, MSurname ASC;");
-$getInfo->execute([]);
+$getInfo = $db->prepare("SELECT MForename, MSurname, SquadName, DateOfBirth, Website, Social, Noticeboard, FilmTraining, ProPhoto FROM (((members INNER JOIN squadMembers ON members.MemberID = squadMembers.Member) INNER JOIN squads ON squads.SquadID = squadMembers.Squad) LEFT JOIN memberPhotography ON members.MemberID = memberPhotography.MemberID) WHERE members.Tenant = ? ORDER BY SquadFee DESC, SquadName ASC, MSurname ASC, MSurname ASC;");
+$getInfo->execute([
+  $tenant->getId()
+]);
 
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
 

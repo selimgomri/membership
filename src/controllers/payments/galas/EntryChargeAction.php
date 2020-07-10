@@ -9,6 +9,7 @@ if (!SCDS\FormIdempotency::verify()) {
 }
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $disabled = "";
 
@@ -17,8 +18,11 @@ $insertPayment = $db->prepare("INSERT INTO paymentsPending (`Date`, `Status`, Us
 $markAsCharged = $db->prepare("UPDATE galaEntries SET Charged = ?, PaymentID = ?, FeeToPay = ? WHERE EntryID = ?");
 $notify = $db->prepare("INSERT INTO notify (UserID, `Status`, `Subject`, `Message`, EmailType) VALUES (?, ?, ?, ?, ?)");
 
-$getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas WHERE GalaID = ?");
-$getGala->execute([$id]);
+$getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas WHERE GalaID = ? AND Tenant = ?");
+$getGala->execute([
+	$id,
+	$tenant->getId()
+]);
 $gala = $getGala->fetch(PDO::FETCH_ASSOC);
 
 if ($gala == null) {
@@ -111,12 +115,12 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 					$entry['EntryID']
 				]);
 
-				$message = '<p>We\'ve charged <strong>&pound;' . $amountString . '</strong> to your account for ' . htmlspecialchars($entry['MForename']) .  '\'s entry into ' . htmlspecialchars($gala['name']) . '.</p><p>You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(env('CLUB_NAME')) . '.</p>';
+				$message = '<p>We\'ve charged <strong>&pound;' . $amountString . '</strong> to your account for ' . htmlspecialchars($entry['MForename']) .  '\'s entry into ' . htmlspecialchars($gala['name']) . '.</p><p>You will be able to see this charge in your pending charges and from the first day of next month, on your bill statement. You\'ll be charged for this as part of your next direct debit payment to ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . '.</p>';
 
 				$message .= '<p>You entered the following events;</p>';
 				$message .= $swimsList;
 
-				$message .= '<p>Kind Regards<br> The ' . htmlspecialchars(env('CLUB_NAME')) . ' Team</p>';
+				$message .= '<p>Kind Regards<br> The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
 
 				$notify->execute([
 					$entry['UserID'],
@@ -130,15 +134,15 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 			} catch (Exception $e) {
 				// A problem occured
 				$db->rollBack();
-				$_SESSION['ChargeUsersFailure'] = true;
+				$_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersFailure'] = true;
 			}
 		} else if ($amount > 15000) {
-			$_SESSION['OverhighChargeAmount'][$entry['EntryID']] = true;
+			$_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'][$entry['EntryID']] = true;
 		}
 	}
 }
 
-if (!isset($_SESSION['ChargeUsersFailure'])) {
-	$_SESSION['ChargeUsersSuccess'] = true;
+if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersFailure'])) {
+	$_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersSuccess'] = true;
 }
 header("Location: " . autoUrl("payments/galas/" . $id));

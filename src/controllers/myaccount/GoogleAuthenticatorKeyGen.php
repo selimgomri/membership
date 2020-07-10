@@ -4,7 +4,7 @@ $setup = false;
 $secretKey = null;
 
 $reset = false;
-if (filter_var(getUserOption($_SESSION['UserID'], "hasGoogleAuth2FA"), FILTER_VALIDATE_BOOLEAN)) {
+if (filter_var(getUserOption($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], "hasGoogleAuth2FA"), FILTER_VALIDATE_BOOLEAN)) {
   $reset = true;
 }
 
@@ -12,8 +12,8 @@ use PragmaRX\Google2FA\Google2FA;
 
 $google2fa = new Google2FA();
 
-if (!isset($_SESSION['G2FAKey'])) {
-  $_SESSION['G2FAKey'] = $google2fa->generateSecretKey(32);
+if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['G2FAKey'])) {
+  $_SESSION['TENANT-' . app()->tenant->getId()]['G2FAKey'] = $google2fa->generateSecretKey(32);
 }
 
 $pagetitle = "Generate Key";
@@ -35,12 +35,12 @@ include BASE_PATH . 'views/header.php';
       </p>
       <?php } ?>
       <p>
-        Your Secret Key is <span class="mono"><?=$_SESSION['G2FAKey']?></span>.
+        Your Secret Key is <span class="mono"><?=$_SESSION['TENANT-' . app()->tenant->getId()]['G2FAKey']?></span>.
       </p>
 
       <h2>Scan Code</h2>
       <?php
-      $qr_url = urlencode($google2fa->getQRCodeUrl(env('CLUB_NAME'), $_SESSION['EmailAddress'], $_SESSION['G2FAKey']));
+      $qr_url = urlencode($google2fa->getQRCodeUrl(app()->tenant->getKey('CLUB_NAME'), $_SESSION['TENANT-' . app()->tenant->getId()]['EmailAddress'], $_SESSION['TENANT-' . app()->tenant->getId()]['G2FAKey']));
       ?>
       <img src="<?=htmlspecialchars(autoUrl("services/qr-generator?size=200&margin=0&text=" . $qr_url))?>" srcset="<?=htmlspecialchars(autoUrl("services/qr-generator?size=400&margin=0&text=" . $qr_url))?> 2x, <?=htmlspecialchars(autoUrl("services/qr-generator?size=600&margin=0&text=" . $qr_url))?> 3x" class="img-fluid mb-3">
       <p>
@@ -52,7 +52,7 @@ include BASE_PATH . 'views/header.php';
         We're going to ask you to enter the code shown on your device. This
         verifies Google Authenticator has been set up correctly.
       </p>
-      <?php if (isset($_SESSION['G2FA_VerifyError']) && $_SESSION['G2FA_VerifyError']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['G2FA_VerifyError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['G2FA_VerifyError']) { ?>
       <div class="alert alert-danger">
         <strong>The code you entered was not valid</strong>
       </div>

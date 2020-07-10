@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $date = $_POST['date'];
 if ($date == "") {
@@ -10,24 +11,25 @@ if ($date == "") {
 }
 
 $data = [
-	$_SESSION['UserID'],
+	$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
 	$date->format("Y-m-d H:i:s"),
 	$_POST['content'],
 	$_POST['title'],
 	$_POST['excerpt'],
 	$_POST['path'],
 	$_POST['type'],
-	$_POST['mime']
+	$_POST['mime'],
+	$tenant->getId()
 ];
 
 try {
-	$db->prepare("INSERT INTO `posts` (`Author`, `Date`, `Content`, `Title`, `Excerpt`, `Path`, `Type`, `MIME`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")->execute($data);
+	$db->prepare("INSERT INTO `posts` (`Author`, `Date`, `Content`, `Title`, `Excerpt`, `Path`, `Type`, `MIME`, `Tenant`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")->execute($data);
 } catch (PDOException $e) {
 	halt(500);
 }
 
 $id = $db->lastInsertId();
 
-$_SESSION['PostStatus'] = "Successfully added";
+$_SESSION['TENANT-' . app()->tenant->getId()]['PostStatus'] = "Successfully added";
 
 header("Location: " . autoUrl("posts/" . $id));

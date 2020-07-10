@@ -1,10 +1,18 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
-$userInfo->execute([$id]);
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ? AND Tenant = ?");
+$userInfo->execute([
+  $id,
+  $tenant->getId()
+]);
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
+
+if ($info == null) {
+  halt(404);
+}
 
 $date = new DateTime('-1 day', new DateTimeZone('Europe/London'));
 $getGalas = $db->prepare("SELECT GalaName, GalaID FROM teamManagers INNER JOIN galas ON galas.GalaID = teamManagers.Gala WHERE teamManagers.User = ? AND galas.GalaDate >= ?");
@@ -13,10 +21,6 @@ $getGalas->execute([
   $date->format("Y-m-d")
 ]);
 $gala = $getGalas->fetch(PDO::FETCH_ASSOC);
-
-if ($info == null) {
-  halt(404);
-}
 
 $pagetitle = htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) . ' Team Manager Options';
 
@@ -40,7 +44,7 @@ include BASE_PATH . "views/header.php";
         <?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?><br><small>Team Manager Settings</small>
       </h1>
 
-      <?php if (isset($_SESSION['AssignGalaSuccess']) && $_SESSION['AssignGalaSuccess']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssignGalaSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssignGalaSuccess']) { ?>
       <div class="alert alert-success">
         <p class="mb-0">
           <strong>
@@ -49,10 +53,10 @@ include BASE_PATH . "views/header.php";
         </p>
       </div>
       <?php
-        unset($_SESSION['AssignGalaSuccess']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssignGalaSuccess']);
       } ?>
 
-      <?php if (isset($_SESSION['RemoveGalaSuccess']) && $_SESSION['RemoveGalaSuccess']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RemoveGalaSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['RemoveGalaSuccess']) { ?>
       <div class="alert alert-success">
         <p class="mb-0">
           <strong>
@@ -61,10 +65,10 @@ include BASE_PATH . "views/header.php";
         </p>
       </div>
       <?php
-        unset($_SESSION['RemoveGalaSuccess']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['RemoveGalaSuccess']);
       } ?>
 
-      <?php if (isset($_SESSION['RemoveGalaError']) && $_SESSION['RemoveGalaError']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RemoveGalaError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['RemoveGalaError']) { ?>
       <div class="alert alert-danger">
         <p class="mb-0">
           <strong>
@@ -73,7 +77,7 @@ include BASE_PATH . "views/header.php";
         </p>
       </div>
       <?php
-        unset($_SESSION['RemoveGalaError']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['RemoveGalaError']);
       } ?>
 
       <?php if ($gala != null) { ?>

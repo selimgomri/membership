@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $pagetitle = "Gala Entries";
 $galaID = $surname = null;
@@ -21,11 +22,15 @@ if (isset($_GET['sex'])) {
 
 $galas = null;
 if ($galaIDParam == 0) {
-  $galas = $db->query("SELECT GalaID, GalaName FROM `galas` WHERE GalaDate >= CURDATE() ORDER BY `galas`.`GalaDate` DESC");
+  $galas = $db->prepare("SELECT GalaID, GalaName FROM `galas` WHERE Tenant = ? AND GalaDate >= CURDATE() ORDER BY `galas`.`GalaDate` DESC");
+  $galas->execute([
+    $tenant->getId()
+  ]);
 } else {
   $date = new DateTime('now', new DateTimeZone('Europe/london'));
-  $galas = $db->prepare("SELECT GalaID, GalaName FROM `galas` WHERE GalaDate >= ? OR GalaID = ? ORDER BY `galas`.`GalaDate` DESC");
+  $galas = $db->prepare("SELECT GalaID, GalaName FROM `galas` WHERE Tenant = ? AND (GalaDate >= ? OR GalaID = ?) ORDER BY `galas`.`GalaDate` DESC");
   $galas->execute([
+    $tenant->getId(),
     $date->format("Y-m-d"),
     $galaIDParam
   ]);
@@ -46,7 +51,7 @@ include "galaMenu.php"; ?>
   <?php if (isset($_SESSION['Browser']['Name']) && ($_SESSION['Browser']['Name'] == 'Internet Explorer' || $_SESSION['Browser']['Name'] == 'Edge')) { ?>
     <div class="alert alert-warning">
       <p class="mb-0"><strong>We're aware of an issue affecting this page in Internet Explorer and Microsoft Edge.</strong></p>
-      <p class="mb-0">We're investigating the issue. In the meantime, this page works as expected in other common browsers such as <a href="https://firefox.com" class="alert-link">Mozilla Firefox</a> and <a href="https://www.google.com/chrome/" class="alert-link">Google Chrome</a>.</p>
+      <p class="mb-0">You can fix this by updating to Chromium based Edge or by installing <a href="https://firefox.com" class="alert-link">Mozilla Firefox</a> or <a href="https://www.google.com/chrome/" class="alert-link">Google Chrome</a>.</p>
     </div>
   <?php } ?>
 

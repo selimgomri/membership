@@ -1,15 +1,16 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $pagetitle = "Add a member";
 $title = "Add a member";
 $content = "<p class=\"lead\">Add a member to the club system.</p>";
 
 $content .= "<div class=\"row\"><div class=\"col col-md-8\">";
-if (isset($_SESSION['ErrorState'])) {
-	$content .= $_SESSION['ErrorState'];
-	unset($_SESSION['ErrorState']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
+	$content .= $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+	unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
 }
 // Main Info Content
 $content .= "<form method=\"post\">";
@@ -74,17 +75,20 @@ $content .= "
 		<option value=\"Female\">Female</option>
 	</select>
 </div>";
-$sql = $db->query("SELECT * FROM `squads` ORDER BY `squads`.`SquadFee` DESC;");
-$content .= "
-<div class=\"form-group\">
-	<label for=\"squad\">Squad</label>
-		<select class=\"custom-select\" placeholder=\"Select a Squad\" id=\"squad\" name=\"squad\">";
-//$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-	$content .= "<option value=\"" . $row['SquadID'] . "\"";
-	$content .= ">" . htmlspecialchars($row['SquadName']) . "</option>";
-}
-$content .= "</select></div>";
+$sql = $db->prepare("SELECT * FROM `squads` WHERE Tenant = ? ORDER BY `squads`.`SquadFee` DESC;");
+$sql->execute([
+	$tenant->getId()
+]);
+// $content .= "
+// <div class=\"form-group\">
+// 	<label for=\"squad\">Squad</label>
+// 		<select class=\"custom-select\" placeholder=\"Select a Squad\" id=\"squad\" name=\"squad\">";
+// //$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+// while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+// 	$content .= "<option value=\"" . $row['SquadID'] . "\"";
+// 	$content .= ">" . htmlspecialchars($row['SquadName']) . "</option>";
+// }
+// $content .= "</select></div>";
 $content .= "
 <div class=\"form-group\">
 	<div class=\"custom-control custom-checkbox\">

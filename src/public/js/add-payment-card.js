@@ -6,6 +6,9 @@
 var stripeData = document.getElementById('stripe-data');
 
 var stripe = Stripe(stripeData.dataset.stripePublishable);
+// , {
+//   stripeAccount: stripeData.dataset.stripeAccountId
+// });
 
 var elements = stripe.elements({
   fonts: [

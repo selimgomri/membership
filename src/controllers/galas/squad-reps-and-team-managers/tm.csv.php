@@ -10,7 +10,7 @@ header('Content-Disposition: attachment; filename=SCDSMembership-GalaEntriesInfo
 // create a file pointer connected to the output stream
 $output = fopen('php://output', 'w');
 
-fputcsv($output, [env('CLUB_NAME') . ' Team Manager Gala Entry Report']);
+fputcsv($output, [app()->tenant->getKey('CLUB_NAME') . ' Team Manager Gala Entry Report']);
 fputcsv($output, ['Swimmer', 'Age Now', 'Age Last Day', 'Age EoY', 'Row Type', '50 Free', '100 Free', '200 Free', '400 Free', '800 Free', '1500 Free', '50 Back', '100 Back', '200 Back', '50 Breast', '100 Breast', '200 Breast', '50 Fly', '100 Fly', '200 Fly', '100 IM', '200 IM', '400 IM', '150IM']);
 
 foreach ($data->entries as $entry) {

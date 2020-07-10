@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Back','100Back','200Back','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','100IM','150IM','200IM','400IM',];
 $swimsTextArray = ['50&nbsp;Free','100&nbsp;Free','200&nbsp;Free','400&nbsp;Free','800&nbsp;Free','1500&nbsp;Free','50&nbsp;Back','100&nbsp;Back','200&nbsp;Back','50&nbsp;Breast','100&nbsp;Breast','200&nbsp;Breast','50&nbsp;Fly','100&nbsp;Fly','200&nbsp;Fly','100&nbsp;IM','150&nbsp;IM','200&nbsp;IM','400&nbsp;IM',];
@@ -8,14 +9,17 @@ $swimsTimeArray = ['50FreeTime','100FreeTime','200FreeTime','400FreeTime','800Fr
 
 $sql = $db->prepare("SELECT * FROM ((`galaEntries` INNER JOIN `members` ON
 `members`.`MemberID` = `galaEntries`.`MemberID`) INNER JOIN `galas` ON
-galaEntries.GalaID = galas.GalaID) WHERE `EntryID` = ?;");
-$sql->execute([$id]);
+galaEntries.GalaID = galas.GalaID) WHERE members.Tenant = ? AND `EntryID` = ?;");
+$sql->execute([
+	$tenant->getId(),
+	$id
+]);
 
 $row = $sql->fetch(PDO::FETCH_ASSOC);
 
 $locked = "";
 $processed = false;
-if ($_SESSION['AccessLevel'] == 'Parent' && bool($row['EntryProcessed'])) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && bool($row['EntryProcessed'])) {
 	$locked = " disabled ";
 	$processed = true;
 }
@@ -24,7 +28,7 @@ if ($row == null) {
 	halt(404);
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent' && $row['UserID'] != $_SESSION['UserID']) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $row['UserID'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
 	halt(404);
 }
 
@@ -36,12 +40,6 @@ if ($row['CourseLength'] == "SHORT") {
 } else {
 	$type = "LCPB";
 }
-$getTimes = $db->prepare("SELECT * FROM `times` WHERE `MemberID` = ? AND `Type` = ?;");
-$getTimes->execute([
-	$member,
-	$type
-]);
-$times = $getTimes->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = "Add manual times for " . htmlspecialchars($row['MForename'][0] . $row['MSurname'][0] . ' at ' . $row['GalaName']);
 include BASE_PATH . 'views/header.php';
@@ -83,11 +81,11 @@ if ($row['CourseLength'] == 'LONG') {
 				<p class="mb-0">
 					As a result you are no longer able to edit your entry times. Please speak to your gala coordinator if you need to make changes.
 				</p>
-				<?php if (isset($_SESSION['UpdateError'])) { ?>
+				<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError'])) { ?>
 				<p class="mb-0 mt-3">
-					<?=htmlspecialchars($_SESSION['UpdateError'])?>
+					<?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError'])?>
 				</p>
-				<?php unset($_SESSION['UpdateError']); } ?>
+				<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError']); } ?>
 			</div>
 			<?php } else if (bool($row['EntryProcessed'])) { ?>
 			<div class="alert alert-warning">
@@ -97,16 +95,16 @@ if ($row['CourseLength'] == 'LONG') {
 				<p class="mb-0">
 					You may make changes, but any changes you make may not necessarily be submitted to the gala host.
 				</p>
-				<?php if (isset($_SESSION['UpdateError'])) { ?>
+				<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError'])) { ?>
 				<p class="mb-0 mt-3">
-					<?=htmlspecialchars($_SESSION['UpdateError'])?>
+					<?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError'])?>
 				</p>
-				<?php unset($_SESSION['UpdateError']); } ?>
+				<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateError']); } ?>
 			</div>
 			<?php } ?>
 
-			<?php if (isset($_SESSION['UpdateSuccess'])) {
-				if ($_SESSION['UpdateSuccess']) { ?>
+			<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess'])) {
+				if ($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess']) { ?>
 				<div class="alert alert-success">
 					<p class="mb-0">
 						<strong>
@@ -126,7 +124,7 @@ if ($row['CourseLength'] == 'LONG') {
 					</p>
 				</div>
 				<?php }
-				unset($_SESSION['UpdateSuccess']);
+				unset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess']);
 			} ?>
 
 			<p>
@@ -157,18 +155,6 @@ if ($row['CourseLength'] == 'LONG') {
 						$matches = $mins = $secs = $hunds = "";
 						if ($row[$swimsTimeArray[$i]] != "") {
 							if (preg_match('/([0-9]+)\:([0-9]{0,2})\.([0-9]{0,2})/', $row[$swimsTimeArray[$i]], $matches)) {
-								if (isset($matches[1]) && $matches[1] != 0) {
-									$mins = $matches[1];
-								}
-								if (isset($matches[2]) && $matches[2] != 0) {
-									$secs = $matches[2];
-								}
-								if (isset($matches[3]) && $matches[3] != 0) {
-									$hunds = $matches[3];
-								}
-							}
-						} else if ($times[$swimsArray[$i]] != "") {
-							if (preg_match('/([0-9]+)\:([0-9]{0,2})\.([0-9]{0,2})/', $times[$swimsArray[$i]], $matches)) {
 								if (isset($matches[1]) && $matches[1] != 0) {
 									$mins = $matches[1];
 								}

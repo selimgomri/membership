@@ -1,10 +1,12 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getMember = $db->prepare("SELECT MForename fn, MSurname sn, ASANumber se, UserID `uid` FROM members WHERE MemberID = ?");
+$getMember = $db->prepare("SELECT MForename fn, MSurname sn, ASANumber se, UserID `uid` FROM members WHERE MemberID = ? AND Tenant = ?");
 $getMember->execute([
-  $id
+  $id,
+  $tenant->getId()
 ]);
 $member = $getMember->fetch(PDO::FETCH_ASSOC);
 
@@ -12,7 +14,7 @@ if ($member == null) {
   halt(404);
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent' && $member['uid'] != $_SESSION['UserID']) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $member['uid'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
   halt(404);
 }
 
@@ -51,22 +53,22 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
     <div class="col-lg-8">
 
-      <?php if (isset($_SESSION['SetMemberPassError'])) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassError'])) { ?>
       <div class="alert alert-danger">
         <p class="mb-0">
           <strong>We could not set the password.</strong>
         </p>
         <p class="mb-0">
-          <?=htmlspecialchars($_SESSION['SetMemberPassError'])?>
+          <?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassError'])?>
         </p>
       </div>
-      <?php unset($_SESSION['SetMemberPassError']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassError']); } ?>
 
       <p>Set a password for <?=htmlspecialchars($member['fn'])?> to give them access to their log book.</p>
 
       <p>If they forget their password, you can come back here to reset it at any time.</p>
 
-      <p>Usual <?=htmlspecialchars(env('CLUB_NAME'))?> password policies apply - Use 8 characters or more, with at least one lowercase letter, at least one uppercase letter and at least one number</p>
+      <p>Usual <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> password policies apply - Use 8 characters or more, with at least one lowercase letter, at least one uppercase letter and at least one number</p>
 
       <?php if (isset($_GET['return'])) { ?>
       <p>When you press save, we will return you to the page you came from.</p>

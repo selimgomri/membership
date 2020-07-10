@@ -1,133 +1,96 @@
 <?php
 
-$userID = $_SESSION['UserID'];
-$access = $_SESSION['AccessLevel'];
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 
 // View a Swimmer
-$this->get('/{id}:int', function($id) {
+$this->get('/{id}:int', function ($id) {
 	include 'view.php';
-});
-
-// View a swimmers (legacy system) times
-$this->get('/{id}:int/legacy-times', function($id) {
-	include 'legacy-times.php';
 });
 
 if ($access == "Parent") {
 	// My Swimmers
-	$this->get('/', function() {
-	  require('parentSwimmers.php');
+	$this->get('/', function () {
+		require('parentSwimmers.php');
 	});
 
-  // Swimmer Membership Card
-	$this->get('/{id}:int/membershipcard', function($id) {
 
-	  require('Card.php');
-	});
+	// $leavers = app()->tenant->getKey('LeaversSquad');
 
-	$systemInfo = app()->system;
-	$leavers = $systemInfo->getSystemOption('LeaversSquad');
+	// if ($leavers != null) {
+	// 	// Swimmer is leaving
+	// 	$this->get('/{id}:int/leaveclub', function ($id) {
+	// 		require('Leave.php');
+	// 	});
 
-	if ($leavers != null) {
-		// Swimmer is leaving
-		$this->get('/{id}:int/leaveclub', function($id) {
-			require('Leave.php');
-		});
-
-		// Swimmer is leaving
-		$this->get('/{id}:int/leaveclub/{key}', function($id, $key) {
-			require('LeaveDo.php');
-		});
-	}
+	// 	// Swimmer is leaving
+	// 	$this->get('/{id}:int/leaveclub/{key}', function ($id, $key) {
+	// 		require('LeaveDo.php');
+	// 	});
+	// }
 
 	// Edit a Swimmer
-	$this->get('/{id}:int/edit', function($id) {
+	$this->get('/{id}:int/edit', function ($id) {
 
-	  require 'parentSingleSwimmer.php';
+		require 'parentSingleSwimmer.php';
 	});
 
 	// Edit a Swimmer
-	$this->post('/{id}:int/edit', function($id) {
+	$this->post('/{id}:int/edit', function ($id) {
 
-	  require 'parentSingleSwimmerPost.php';
+		require 'parentSingleSwimmerPost.php';
 	});
 
-	$this->group('/{id}:int/password', function($id) {
-		$this->get('/', function($id) {
+	$this->group('/{id}:int/password', function ($id) {
+		$this->get('/', function ($id) {
 			include 'member-accounts/password.php';
 		});
 
-		$this->post('/', function($id) {
+		$this->post('/', function ($id) {
 			include 'member-accounts/password-post.php';
 		});
 	});
-}
-else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $access == "Admin") {
+} else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $access == "Admin") {
 	// Directory
-	$this->get('/', function() {
+	$this->get('/', function () {
 
-	  require('swimmerDirectory.php');
+		require('swimmerDirectory.php');
 	});
 
 	if ($access == "Admin") {
-		$this->get('/orphaned', function() {
-	
-		  require('swimmerOrphaned.php');
+		$this->get('/orphaned', function () {
+
+			require('swimmerOrphaned.php');
 		});
 	}
 
-	$this->post('/ajax/swimmerDirectory', function() {
+	$this->post('/ajax/swimmerDirectory', function () {
 
-	  include BASE_PATH . "controllers/ajax/membersList.php";
+		include BASE_PATH . "controllers/ajax/membersList.php";
 	});
 
-	$this->get('/{swimmer}:int/enter-gala', function($swimmer) {
+	$this->get('/{swimmer}:int/enter-gala', function ($swimmer) {
 		require BASE_PATH . 'controllers/galas/GalaEntryForm.php';
 	});
 
-	$this->post('/{swimmer}:int/enter-gala', function($swimmer) {
+	$this->post('/{swimmer}:int/enter-gala', function ($swimmer) {
 		require BASE_PATH . 'controllers/galas/GalaEntryFormPost.php';
 	});
 
-	$this->get('/{swimmer}:int/enter-gala-success', function($swimmer) {
+	$this->get('/{swimmer}:int/enter-gala-success', function ($swimmer) {
 		require BASE_PATH . 'controllers/galas/GalaEntryStaffSuccess.php';
 	});
 
-  /*
+	/*
    * Squad moves
    *
    */
 	if ($access == "Coach" || $access == 'Admin') {
-		$this->get('/{id}:int/new-move', function($id) {
-			
-			require BASE_PATH . 'controllers/squads/newMove.php';
-		});
-
-		$this->post('/{id}:int/new-move', function($id) {
-			
-			require BASE_PATH . 'controllers/squads/newMoveAction.php';
-		});
-
-		$this->get('/{id}:int/edit-move', function($id) {
-			
-			require BASE_PATH . 'controllers/squads/editMove.php';
-		});
-
-		$this->post('/{id}:int/edit-move', function($id) {
-			
-			require BASE_PATH . 'controllers/squads/editMoveAction.php';
-		});
-
-		$this->get('/{id}:int/move-contract', function($id) {
+		$this->get('/{id}:int/move-contract', function ($id) {
 			require BASE_PATH . 'controllers/squads/SquadMoveContract.php';
 		});
-
-		$this->get('/{id}:int/cancel-move', function($id) {
-			
-			require BASE_PATH . 'controllers/squads/cancelMoveAction.php';
-		});
 	}
-  /*
+	/*
    * End of squad moves
    */
 
@@ -135,25 +98,25 @@ else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $
 	 * Member access passwords
 	 */
 
-	$this->group('/{id}:int/password', function($id) {
-		$this->get('/', function($id) {
+	$this->group('/{id}:int/password', function ($id) {
+		$this->get('/', function ($id) {
 			include 'member-accounts/password.php';
 		});
 
-		$this->post('/', function($id) {
+		$this->post('/', function ($id) {
 			include 'member-accounts/password-post.php';
 		});
 	});
 
 	// /*
-  $this->get('/{id}:int/contact-parent', function($id) {
+	$this->get('/{id}:int/contact-parent', function ($id) {
 		$user = getSwimmerParent($id);
 		$swimmer = $id;
 		include BASE_PATH . 'controllers/notify/EmailIndividual.php';
 	});
 
-	$this->post('/{id}:int/contact-parent', function($id) {
-    $user = getSwimmerParent($id);
+	$this->post('/{id}:int/contact-parent', function ($id) {
+		$user = getSwimmerParent($id);
 		$returnToSwimmer = true;
 		$swimmer = $id;
 		include BASE_PATH . 'controllers/notify/EmailQueuerIndividual.php';
@@ -161,22 +124,17 @@ else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $
 	// */
 
 	if ($access != "Galas") {
-		$this->get('/{id}:int/attendance', function($id) {
-				include BASE_PATH . "controllers/attendance/historyViews/swimmerHistory.php";
-			});
-
-		// Swimmer Membership Card
-		$this->get('/{id}:int/membershipcard', function($id) {
-			require('Card.php');
+		$this->get('/{id}:int/attendance', function ($id) {
+			include BASE_PATH . "controllers/attendance/historyViews/swimmerHistory.php";
 		});
-		
+
 		// Access Keys
-		$this->get('/access-keys', function() {
+		$this->get('/access-keys', function () {
 			require('accesskeys.php');
 		});
 
 		// Access Keys
-		$this->get('/access-keys.csv', function() {
+		$this->get('/access-keys.csv', function () {
 			require('accesskeysCSV.php');
 		});
 	}
@@ -184,22 +142,22 @@ else if ($access == "Committee" || $access == "Galas" || $access == "Coach" || $
 
 if ($access == "Admin") {
 	// Edit Individual Swimmers
-	$this->get('/{id}:int/edit', function($id) {
+	$this->get('/{id}:int/edit', function ($id) {
 
-	  require('singleSwimmerEdit.php');
+		require('singleSwimmerEdit.php');
 	});
 
-	$this->post('/{id}:int/edit', function($id) {
+	$this->post('/{id}:int/edit', function ($id) {
 
-	  require('singleSwimmerEdit.php');
+		require('singleSwimmerEdit.php');
 	});
 
-	$this->group('/reports', function() {
-		$this->get('/upgradeable', function() {
+	$this->group('/reports', function () {
+		$this->get('/upgradeable', function () {
 			include "reports/UpgradeableMembers.php";
 		});
 
-		$this->post('/upgradeable', function() {
+		$this->post('/upgradeable', function () {
 			include "reports/UpgradeableMembersPost.php";
 		});
 	});
@@ -208,75 +166,73 @@ if ($access == "Admin") {
 /**
  * Manage times for swimmers
  */
-$this->get('/{id}:int/edit-times', function($id) {
+$this->get('/{id}:int/edit-times', function ($id) {
 	require 'times/times.php';
 });
 
-$this->post('/{id}:int/edit-times', function($id) {
+$this->post('/{id}:int/edit-times', function ($id) {
 	require 'times/times-post.php';
 });
 
 if ($access != "Parent" && $access != 'Galas') {
-	$this->get('/addmember', function() {
-    //
+	$this->get('/addmember', function () {
+		//
 		//include 'AddMember/SelectType.php';
-		header("Location: ". autoUrl("members/new"));
+		header("Location: " . autoUrl("members/new"));
 	});
 
-  /*
-	$this->get('/new/family', function() {
+	$this->get('/new', function () {
 
-	  include 'AddMember/ActivateFamilyMode.php';
+		require('AddMember/addMember.php');
 	});
 
-	if (isset($_SESSION['Swimmers-FamilyMode'])) {
-		$this->get('/family/exit', function() {
-	
-		  include 'AddMember/ExitFamilyMode.php';
-		});
-	}
-  */
+	$this->post('/new', function () {
 
-	$this->get('/new', function() {
-
-	  require('AddMember/addMember.php');
+		require('AddMember/addMemberPost.php');
 	});
 
-	$this->post('/new', function() {
+	$this->get(['/{id}:int/parenthelp', '/parenthelp/{id}:int'], function ($id) {
 
-	  require('AddMember/addMemberPost.php');
-	});
-
-	$this->get(['/{id}:int/parenthelp', '/parenthelp/{id}:int'], function($id) {
-		
 		include 'parentSetupHelp.php';
 	});
 }
 
 // View Medical Notes
-$this->get('/{id}:int/medical', function($id) {
-	
+$this->get('/{id}:int/medical', function ($id) {
+
 	include 'medicalDetails.php';
 });
 
 // View Medical Notes
-$this->post('/{id}:int/medical', function($id) {
-	
+$this->post('/{id}:int/medical', function ($id) {
+
 	include 'medicalDetailsPost.php';
 });
 
-if ($_SESSION['AccessLevel'] != "Parent") {
-  $this->get('/{swimmer}:int/agreement-to-code-of-conduct/{squad}:int', function($swimmer, $squad) {
-  	include 'MarkCodeOfConductCompleted.php';
-  });
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") {
+	$this->get('/{swimmer}:int/agreement-to-code-of-conduct/{squad}:int', function ($swimmer, $squad) {
+		include 'MarkCodeOfConductCompleted.php';
+	});
 }
 
-$this->group('/{swimmer}:int/times', function() {
+$this->group('/{swimmer}:int/times', function () {
 	include 'times/router.php';
 });
 
-if ($_SESSION['AccessLevel'] == 'Admin') {
-	$this->post('/delete', function() {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
+	$this->post('/delete', function () {
 		include 'delete.php';
 	});
 }
+
+$this->post('/{id}:int/squads.json', function ($id) {
+	include 'moves/squads.php';
+});
+
+$this->post('/move-squad', function () {
+	include 'moves/move.php';
+});
+
+$this->post('/move-operations', function () {
+	include 'moves/operations.php';
+});

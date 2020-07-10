@@ -1,9 +1,12 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id, SquadName squad FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID = ? ORDER BY fn ASC, sn ASC");
-$getMembers->execute([$_SESSION['UserID']]);
+$getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM members WHERE members.UserID = ? ORDER BY fn ASC, sn ASC");
+$getMembers->execute([
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+]);
 $member = $getMembers->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = "Member log books";
@@ -20,7 +23,7 @@ include BASE_PATH . 'views/header.php';
       </ol>
     </nav>
 
-  <h1>Log books <span class="badge badge-info">BETA</span></h1>
+  <h1>Log books</h1>
   <p class="lead">
     Members can log training sessions and other activity.
   </p>
@@ -34,13 +37,15 @@ include BASE_PATH . 'views/header.php';
           <p class="mb-0">
             <strong><?=htmlspecialchars($member['fn'] . ' ' . $member['sn'])?>'s log book</strong>
           </p>
-          <p class="mb-0">
-            <?=htmlspecialchars($member['squad'])?>
-          </p>
         </a>
         <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>
       </div>
       <?php } else { ?>
+      <div class="alert alert-warning">
+        <p class="mb-0">
+          <strong>There are no members linked to your account.</strong>
+        </p>
+      </div>
       <?php } ?>
     </div>
     <div class="col">

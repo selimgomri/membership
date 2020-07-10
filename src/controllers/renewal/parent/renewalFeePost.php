@@ -3,7 +3,7 @@
 $paymentItems = [];
 
 $db = app()->db;
-$systemInfo = app()->system;
+
 
 $location = autoUrl("");
 
@@ -13,17 +13,17 @@ try {
 	$date = new \DateTime('now', new DateTimeZone('UTC'));
 	$asaDate = $clubDate = $date->format("Y-m-d");
 
-	if (env('CUSTOM_SCDS_CLUB_CHARGE_DATE') && $renewal != 0) {
-		$date = new \DateTime(env('CUSTOM_SCDS_CLUB_CHARGE_DATE'), new DateTimeZone('UTC'));
+	if (getenv('CUSTOM_SCDS_CLUB_CHARGE_DATE') && $renewal != 0) {
+		$date = new \DateTime(getenv('CUSTOM_SCDS_CLUB_CHARGE_DATE'), new DateTimeZone('UTC'));
 		$clubDate = $date->format("Y-m-d");
 	}
 
-	if (env('CUSTOM_SCDS_ASA_CHARGE_DATE') && $renewal != 0) {
-		$date = new \DateTime(env('CUSTOM_SCDS_ASA_CHARGE_DATE'), new DateTimeZone('UTC'));
+	if (getenv('CUSTOM_SCDS_ASA_CHARGE_DATE') && $renewal != 0) {
+		$date = new \DateTime(getenv('CUSTOM_SCDS_ASA_CHARGE_DATE'), new DateTimeZone('UTC'));
 		$asaDate = $date->format("Y-m-d");
 	}
 
-	$user = $_SESSION['UserID'];
+	$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 	$partial_reg = isPartialRegistration();
 
 	$partial_reg_require_topup = false;
@@ -31,7 +31,7 @@ try {
 		$db = app()->db;
 		$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = 0 AND ClubPays = 0";
 		$query = $db->prepare($sql);
-		$query->execute([$_SESSION['UserID']]);
+		$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 		if ($query->fetchColumn() == 1) {
 			$partial_reg_require_topup = true;
 		}
@@ -39,7 +39,7 @@ try {
 
 	$month = (new DateTime('now', new DateTimeZone('Europe/London')))->format('m');
 
-	$discounts = json_decode($systemInfo->getSystemOption('MembershipDiscounts'), true);
+	$discounts = json_decode(app()->tenant->getKey('MembershipDiscounts'), true);
 	$clubDiscount = $swimEnglandDiscount = 0;
 	if ($discounts != null && isset($discounts['CLUB'][$month])) {
 		$clubDiscount = $discounts['CLUB'][$month];
@@ -49,26 +49,26 @@ try {
 	}
 
 	$sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ? AND `ClubPays` = '0'");
-	$sql->execute([$_SESSION['UserID']]);
+	$sql->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 	$clubFee = 0;
 	$totalFee = 0;
 
 	$payingSwimmerCount = $sql->fetchColumn();
 
-	$clubFees = \SCDS\Membership\ClubMembership::create($db, $_SESSION['UserID'], $partial_reg);
+	$clubFees = \SCDS\Membership\ClubMembership::create($db, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $partial_reg);
 
 	$clubFee = $clubFees->getFee();
 
 	if ($partial_reg) {
-		$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
-		members.SquadID WHERE `members`.`UserID` = ? && `members`.`RR` = 1";
+		$sql = "SELECT * FROM ((`members` INNER JOIN squadMembers ON members.MemberID = squadMembers.Member) INNER JOIN `squads` ON squads.SquadID =
+		squadMembers.Squad) WHERE `members`.`UserID` = ? AND `members`.`RR` = 1";
 	} else {
-		$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
-		members.SquadID WHERE `members`.`UserID` = ?";
+		$sql = "SELECT * FROM ((`members` INNER JOIN squadMembers ON members.MemberID = squadMembers.Member) INNER JOIN `squads` ON squads.SquadID =
+		squadMembers.Squad) WHERE `members`.`UserID` = ?";
 	}
 	$getMembers = $db->prepare($sql);
-	$getMembers->execute([$_SESSION['UserID']]);
+	$getMembers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 	$member = $getMembers->fetchAll(PDO::FETCH_ASSOC);
 	$count = sizeof($member);
@@ -94,9 +94,9 @@ try {
 
 	$asaFees = [];
 
-	$asa1 = $systemInfo->getSystemOption('ASA-County-Fee-L1') + $systemInfo->getSystemOption('ASA-Regional-Fee-L1') + $systemInfo->getSystemOption('ASA-National-Fee-L1');
-	$asa2 = $systemInfo->getSystemOption('ASA-County-Fee-L2') + $systemInfo->getSystemOption('ASA-Regional-Fee-L2') + $systemInfo->getSystemOption('ASA-National-Fee-L2');
-	$asa3 = $systemInfo->getSystemOption('ASA-County-Fee-L3') + $systemInfo->getSystemOption('ASA-Regional-Fee-L3') + $systemInfo->getSystemOption('ASA-National-Fee-L3');
+	$asa1 = app()->tenant->getKey('ASA-County-Fee-L1') + app()->tenant->getKey('ASA-Regional-Fee-L1') + app()->tenant->getKey('ASA-National-Fee-L1');
+	$asa2 = app()->tenant->getKey('ASA-County-Fee-L2') + app()->tenant->getKey('ASA-Regional-Fee-L2') + app()->tenant->getKey('ASA-National-Fee-L2');
+	$asa3 = app()->tenant->getKey('ASA-County-Fee-L3') + app()->tenant->getKey('ASA-Regional-Fee-L3') + app()->tenant->getKey('ASA-National-Fee-L3');
 
 	for ($i = 0; $i < $count; $i++) {
 		if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ClubPays']) {
@@ -145,13 +145,13 @@ try {
 	$totalFeeString = number_format($totalFee/100,2,'.','');
 
 	$sql = $db->prepare("SELECT COUNT(*) FROM `paymentPreferredMandate` WHERE `UserID` = ?");
-	$sql->execute([$_SESSION['UserID']]);
+	$sql->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 	$hasDD = false;
 	if ($sql->fetchColumn() == 1) {
 		$hasDD = true;
 	}
 
-	if ($hasDD || !(env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN'))) {
+	if ($hasDD || !(app()->tenant->getGoCardlessAccessToken())) {
 		if ($hasDD) {
 			// INSERT Payment into pending
 			$date = new \DateTime('now', new DateTimeZone('Europe/London'));
@@ -169,7 +169,7 @@ try {
 			$insert->execute([
 				$date->format('Y-m-d'),
 				'Pending',
-				$_SESSION['UserID'],
+				$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
 				$description,
 				$totalFee,
 				'GBP',
@@ -186,7 +186,7 @@ try {
 				$insert->execute([
 					$charge['date'],
 					'Pending',
-					$_SESSION['UserID'],
+					$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
 					$charge['description'],
 					$charge['amount'],
 					'GBP',
@@ -238,21 +238,21 @@ try {
 		$progress = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
 		$progress->execute([
 			$renewal,
-			$_SESSION['UserID']
+			$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
 		]);
 
-		if (user_needs_registration($_SESSION['UserID'])) {
+		if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
 			$sql = "UPDATE `users` SET `RR` = 0 WHERE `UserID` = ?";
 			$query = $db->prepare($sql);
-			$query->execute([$_SESSION['UserID']]);
+			$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 			
 			$query = $db->prepare("UPDATE `members` SET `RR` = 0, `RRTransfer` = 0 WHERE `UserID` = ?");
-			$query->execute([$_SESSION['UserID']]);
+			$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 			
 			// Remove from status tracker
 			$delete = $db->prepare("DELETE FROM renewalProgress WHERE UserID = ? AND RenewalID = ?");
 			$delete->execute([
-				$_SESSION['UserID'],
+				$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
 				$renewal
 			]);
 			$location = autoUrl("");

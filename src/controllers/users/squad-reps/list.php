@@ -1,9 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
-$userInfo->execute([$id]);
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ? AND Tenant = ?");
+$userInfo->execute([
+  $id,
+  $tenant->getId()
+]);
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
 
 $getSquads = $db->prepare("SELECT SquadName, SquadID FROM squadReps INNER JOIN squads ON squads.SquadID = squadReps.Squad WHERE squadReps.User = ?");
@@ -38,7 +42,7 @@ include BASE_PATH . "views/header.php";
         <?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?><br><small>Squad Rep Settings</small>
       </h1>
 
-      <?php if (isset($_SESSION['AssignSquadSuccess']) && $_SESSION['AssignSquadSuccess']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssignSquadSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssignSquadSuccess']) { ?>
       <div class="alert alert-success">
         <p class="mb-0">
           <strong>
@@ -47,10 +51,10 @@ include BASE_PATH . "views/header.php";
         </p>
       </div>
       <?php
-        unset($_SESSION['AssignSquadSuccess']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssignSquadSuccess']);
       } ?>
 
-      <?php if (isset($_SESSION['RemoveSquadSuccess']) && $_SESSION['RemoveSquadSuccess']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RemoveSquadSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['RemoveSquadSuccess']) { ?>
       <div class="alert alert-success">
         <p class="mb-0">
           <strong>
@@ -59,10 +63,10 @@ include BASE_PATH . "views/header.php";
         </p>
       </div>
       <?php
-        unset($_SESSION['RemoveSquadSuccess']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['RemoveSquadSuccess']);
       } ?>
 
-      <?php if (isset($_SESSION['RemoveSquadError']) && $_SESSION['RemoveSquadError']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RemoveSquadError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['RemoveSquadError']) { ?>
       <div class="alert alert-danger">
         <p class="mb-0">
           <strong>
@@ -71,7 +75,7 @@ include BASE_PATH . "views/header.php";
         </p>
       </div>
       <?php
-        unset($_SESSION['RemoveSquadError']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['RemoveSquadError']);
       } ?>
 
       <?php if ($squad != null) { ?>

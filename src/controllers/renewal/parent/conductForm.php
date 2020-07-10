@@ -2,13 +2,14 @@
 
 $db = app()->db;
 
-$systemInfo = app()->system;
-$parentCode = $systemInfo->getSystemOption('ParentCodeOfConduct');
+
+$parentCode = app()->tenant->getKey('ParentCodeOfConduct');
 
 if (isset($id)) {
-	$getDetails = $db->prepare("SELECT * FROM `squads` INNER JOIN `members` ON members.SquadID =
-	squads.SquadID WHERE `MemberID` = ?");
-  $getDetails->execute([$id]);
+	$getDetails = $db->prepare("SELECT * FROM ((`squads` INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad) INNER JOIN `members` ON squadMembers.member = members.MemberID) WHERE `MemberID` = ?");
+  $getDetails->execute([
+    $id
+  ]);
 	$row = $getDetails->fetch(PDO::FETCH_ASSOC);
 
   if ($row == null) {
@@ -35,9 +36,9 @@ if (isset($id)) {
           <h1>Code of Conduct Acceptance</h1>
           <p class="lead">For <?=htmlspecialchars($row['MForename'] . ' ' . $row['MSurname'])?></p>
 
-          <?php if (isset($_SESSION['RenewalErrorInfo'])) {
-							echo $_SESSION['RenewalErrorInfo'];
-							unset($_SESSION['RenewalErrorInfo']);
+          <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RenewalErrorInfo'])) {
+							echo $_SESSION['TENANT-' . app()->tenant->getId()]['RenewalErrorInfo'];
+							unset($_SESSION['TENANT-' . app()->tenant->getId()]['RenewalErrorInfo']);
 						} ?>
 
           <div class="alert alert-warning">
@@ -58,7 +59,7 @@ if (isset($id)) {
 
           <hr>
 
-          <h2 class="h1"><?=htmlspecialchars(env('CLUB_NAME'))?> Squad Code of Conduct</h2>
+          <h2 class="h1"><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> Squad Code of Conduct</h2>
           <?php if ($linkExists) { ?>
           <div id="code_of_conduct">
             <?=getPostContent($link)?>

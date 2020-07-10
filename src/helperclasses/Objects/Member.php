@@ -3,6 +3,7 @@
 class Member extends Person
 {
   private $db;
+  private $tenant;
   // private int $id;
   // private string $forename;
   private $middlenames;
@@ -13,6 +14,7 @@ class Member extends Person
   private bool $requiresRegistration;
   private string $sex;
   private $notes;
+  private $squads;
   private bool $swimEnglandMember;
   private string $swimEnglandNumber;
   private int $swimEnglandCategory;
@@ -34,9 +36,12 @@ class Member extends Person
     $this->id = $id;
 
     $db = app()->db;
-    $getInfo = $db->prepare("SELECT * FROM members WHERE MemberID = ?");
+    $this->tenant = app()->tenant->getId();
+
+    $getInfo = $db->prepare("SELECT * FROM members WHERE MemberID = ? AND Tenant = ?");
     $getInfo->execute([
-      $this->id
+      $this->id,
+      $this->tenant
     ]);
     $info = $getInfo->fetch(PDO::FETCH_ASSOC);
 
@@ -52,7 +57,6 @@ class Member extends Person
     $this->surname = $info['MSurname'];
     $this->dob = new DateTime($info['DateOfBirth'], new DateTimeZone('Europe/London'));
     $this->user = $info['UserID'];
-    $this->squad = $info['SquadID'];
     $this->sex = $info['Gender'];
     $this->notes = $info['OtherNotes'];
 
@@ -75,12 +79,19 @@ class Member extends Person
 
     // Other
     $this->accessKey = $info['AccessKey'];
+
+    // Get squads
+    $getSquads = $db->prepare("SELECT Squad FROM squadMembers WHERE Member = ?");
+    $getSquads->execute([
+      $this->id
+    ]);
+    $this->squads = $getSquads->fetchAll(PDO::FETCH_COLUMN);
   }
 
   /**
    * Get member's middlename
    */
-  public function getMiddlenames()
+  public function getMiddleNames()
   {
     return $this->middlenames;
   }
@@ -92,9 +103,11 @@ class Member extends Person
    */
   public function getSquads()
   {
-    return [
-      Squad::get($this->squad)
-    ];
+    $squads = [];
+    foreach ($this->squads as $squad) {
+      $squads[] = Squad::get($squad);
+    }
+    return $squads;
   }
 
   /**

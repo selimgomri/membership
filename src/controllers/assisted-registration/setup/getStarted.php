@@ -3,7 +3,7 @@
 $db = app()->db;
 
 $getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile, `Password` FROM users WHERE UserID = ? AND RR = ?");
-$getUser->execute([$_SESSION['AssRegGuestUser'], true]);
+$getUser->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGuestUser'], true]);
 $user = $getUser->fetch(PDO::FETCH_ASSOC);
 
 // $um = userMember($user['UserID']);
@@ -14,9 +14,9 @@ if ($user == null) {
 }
 
 $getUserSwimmers = $db->prepare("SELECT MForename fn, MSurname sn FROM members WHERE UserID = ?");
-$getUserSwimmers->execute([$_SESSION['AssRegGuestUser']]);
+$getUserSwimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGuestUser']]);
 
-$pagetitle = "Welcome to " . htmlspecialchars(env('CLUB_NAME')) . " - Assisted Registration";
+$pagetitle = "Welcome to " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " - Assisted Registration";
 
 include BASE_PATH . 'views/header.php';
 
@@ -27,7 +27,7 @@ include BASE_PATH . 'views/header.php';
     <div class="col-md-8">
       <h1>Hello <?=htmlspecialchars($user['Forename'])?></h1>
       <p class="lead">
-        Welcome to <?=htmlspecialchars(env('CLUB_NAME'))?>. Let's complete your account registration.
+        Welcome to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. Let's complete your account registration.
       </p>
 
       <?php if ($um) { ?>

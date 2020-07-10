@@ -32,12 +32,12 @@ include BASE_PATH . 'views/header.php';
     <div class="col-sm-10 col-md-8">
       <form method="post">
         <p class="lead">
-          It's great that you want to join <?=htmlspecialchars(env('CLUB_NAME'))?>. There's a few details
+          It's great that you want to join <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. There's a few details
           we'll need to get going.
         </p>
         <p>
           You will be registering the following swimmers as members of
-          <?=htmlspecialchars(env('CLUB_NAME'))?> and you'll also be creating a user account for
+          <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> and you'll also be creating a user account for
           yourself. If any swimmers are missing or should not be listed here,
           please contact the membership officer.
         </p>

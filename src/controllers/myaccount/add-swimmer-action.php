@@ -2,30 +2,30 @@
 
 use Respect\Validation\Validator as v;
 $db = app()->db;
+$tenant = app()->tenant;
 
 // Registration Form Handler
 
-$userID = $_SESSION['UserID'];
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $asaNumber = trim(($_POST['asa']));
 $accessKey = trim($_POST['accessKey']);
 
 $isTemporaryNumber = false;
-if (mb_stripos($asaNumber, env('ASA_CLUB_CODE'))) {
-  $asaNumber = str_replace(env('ASA_CLUB_CODE'), '', $asaNumber);
+if (mb_stripos($asaNumber, app()->tenant->getKey('ASA_CLUB_CODE'))) {
+  $asaNumber = str_replace(app()->tenant->getKey('ASA_CLUB_CODE'), '', $asaNumber);
 }
 
-$getSwimmer = $db->prepare("SELECT MemberID, SquadID, UserID FROM members WHERE ASANumber = ? AND AccessKey = ? LIMIT 1");
+$getSwimmer = $db->prepare("SELECT MemberID, UserID FROM members WHERE ASANumber = ? AND Tenant = ? AND AccessKey = ? LIMIT 1");
 if ($isTemporaryNumber) {
-  $getSwimmer = $db->prepare("SELECT MemberID, SquadID, UserID FROM members WHERE MemberID = ? AND AccessKey = ? LIMIT 1");
+  $getSwimmer = $db->prepare("SELECT MemberID, UserID FROM members WHERE MemberID = ? AND Tenant = ? AND AccessKey = ? LIMIT 1");
 }
-$getSwimmer->execute([$asaNumber, $accessKey]);
+$getSwimmer->execute([$asaNumber, $tenant->getId(), $accessKey]);
 $row = $getSwimmer->fetch(PDO::FETCH_ASSOC);
 
 if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber) && v::alnum()->validate($accessKey)) {
   if ($row != null) {
     // Allow addition
     $memberID = $row['MemberID'];
-    $squadID = $row['SquadID'];
     $existingUserID = $row['UserID'];
 
     if ($row['UserID'] != null) {
@@ -37,7 +37,7 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
       <h1>Hello " . htmlspecialchars($oldUser['Forename']) . "</h1>
       <p>Your swimmer, " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " has been removed
       from your account.</p>
-      <p>If this was not you, contact <a href=\"mailto:" . htmlspecialchars(env('CLUB_EMAIL')) . "\">" . htmlspecialchars(env('CLUB_EMAIL')) . "</a> as soon as possible</p>";
+      <p>If this was not you, contact <a href=\"mailto:" . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "\">" . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "</a> as soon as possible</p>";
       notifySend("", "Swimmer removed from your account", $message,
       $oldUser['Forename'] . " " . $oldUser['Surname'],
       $oldUser['EmailAddress']);
@@ -47,14 +47,13 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
 
     // SQL To set UserID foreign key
     $updateSwimmer = $db->prepare("UPDATE members SET UserID = ?, AccessKey = ? WHERE MemberID = ?");
-    $updateSwimmer->execute([$_SESSION['UserID'], $accessKey, $memberID]);
+    $updateSwimmer->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $accessKey, $memberID]);
 
     // Get info about swimmer and parent
-    $sql = "SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber, squads.SquadName, squads.SquadFee
-            FROM ((members
+    $sql = "SELECT members.MemberID, members.MForename, members.MSurname, users.Forename, users.Surname, users.EmailAddress, members.ASANumber
+            FROM (members
               INNER JOIN users ON members.UserID = users.UserID)
-              INNER JOIN squads ON members.SquadID = squads.SquadID
-            ) WHERE members.MemberID = ?";
+              WHERE members.MemberID = ?";
     $getInfo = $db->prepare($sql);
     $getInfo->execute([$memberID]);
     $row = $getInfo->fetch(PDO::FETCH_ASSOC);
@@ -66,18 +65,16 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
     with your account.</p>
     <ul>
       <li>" . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "</li>
-      <li>Squad: " . htmlspecialchars($row['SquadName']) . "</li>
-      <li>Monthly Fee: &pound;" . number_format((int) $row['SquadFee'], 2, '.', ',') . "</li>
       <li>Swim England Number: " . htmlspecialchars($row['ASANumber']) . "</li>
-      <li>" . htmlspecialchars(env('CLUB_SHORT_NAME')) . " Member ID: " . htmlspecialchars($row['MemberID']) . "</li>
+      <li>" . htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME')) . " Member ID: " . htmlspecialchars($row['MemberID']) . "</li>
     </ul>
-    <p>If this was not you, contact <a href=\"mailto:"  . htmlspecialchars(env('CLUB_EMAIL')) . "\">
-    "  . htmlspecialchars(env('CLUB_EMAIL')) . "</a> as soon as possible</p>";
+    <p>If this was not you, contact <a href=\"mailto:"  . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "\">
+    "  . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "</a> as soon as possible</p>";
     notifySend($row['EmailAddress'], "You've added " . $row['MForename'] . " to your account",
     $message, $row['Forename'] . " " . $row['Surname'],
     $row['EmailAddress']);
 
-    $_SESSION['AddSwimmerSuccessState'] = "
+    $_SESSION['TENANT-' . app()->tenant->getId()]['AddSwimmerSuccessState'] = "
     <div class=\"alert alert-success\">
     <p class=\"mb-0\"><strong>We were able to successfully add your swimmer</strong></p>
     <p>We've sent an email confirming this to you.</p>
@@ -89,10 +86,9 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
     // Return to My Account
     header("Location: " . autoUrl("my-account/addswimmer"));
 
-  }
-  else {
+  } else {
     // Error, too many records found - Database error
-    $_SESSION['ErrorState'] = "
+    $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = "
     <div class=\"alert alert-danger\">
     <p class=\"mb-0\"><strong>An error occured when we tried to add a member</strong></p>
     <p>You may have got the Swim England Number or Access Key wrong</p>
@@ -103,7 +99,7 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
 }
 else {
   // Error, fields not filled out
-  $_SESSION['ErrorState'] = "
+  $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = "
   <div class=\"alert alert-danger\">
   <p class=\"mb-0\"><strong>An error occured when we tried to add a member</strong></p>
   <p>You may have got the Swim England Number or Access Key wrong</p>
@@ -111,4 +107,3 @@ else {
   </div>";
   header("Location: " . autoUrl("my-account/add-member"));
 }
-?>

@@ -3,9 +3,13 @@
 use Respect\Validation\Validator as v;
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getUser = $db->prepare("SELECT UserID FROM passwordTokens WHERE Token = ? ORDER BY TokenID DESC LIMIT 1");
-$getUser->execute([$token]);
+$getUser = $db->prepare("SELECT users.UserID FROM passwordTokens INNER JOIN users ON users.UserID = passwordTokens.UserID WHERE Token = ? AND users.Tenant = ? ORDER BY TokenID DESC LIMIT 1");
+$getUser->execute([
+	$token,
+	$tenant->getId()
+]);
 
 if ($user = $getUser->fetchColumn()) {
 	if ((isset($_POST['password']) && isset($_POST['confirm-password'])) && (trim($_POST['password']) == trim($_POST['confirm-password'])) && v::stringType()->length(8, null)->validate($_POST['password'])) {

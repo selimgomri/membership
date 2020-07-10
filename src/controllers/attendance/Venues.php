@@ -1,8 +1,12 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$venues = $db->query("SELECT VenueID, VenueName, Location FROM sessionsVenues ORDER BY VenueName ASC");
+$venues = $db->prepare("SELECT `VenueID`, `VenueName`, `Location` FROM sessionsVenues WHERE Tenant = ? ORDER BY VenueName ASC");
+$venues->execute([
+  $tenant->getId()
+]);
 
 $pagetitle = "Venues";
 include BASE_PATH . "views/header.php";
@@ -14,7 +18,7 @@ include BASE_PATH . "views/header.php";
     <div class="col-md-8">
       <h1>Venues</h1>
       <p class="lead">
-        Venues used for sessions at <?=htmlspecialchars(env('CLUB_NAME'))?>
+        Venues used for sessions at <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>
       </p>
       <p>
         You need to populate the Membership System with venues before you can

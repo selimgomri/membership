@@ -5,11 +5,11 @@ header('Content-Type: application/manifest+json');
 $icons = [];
 
 $themeColour = "#bd0000";
-if (env('SYSTEM_COLOUR')) {
-  $themeColour = env('SYSTEM_COLOUR');
+if (app()->tenant->getKey('SYSTEM_COLOUR')) {
+  $themeColour = app()->tenant->getKey('SYSTEM_COLOUR');
 }
 
-if (bool(env('IS_CLS'))) { 
+if (app()->tenant->isCLS()) { 
   $icons[] = [
     'src' => autoUrl('public/img/touchicons/apple-touch-icon-precomposed.png'),
     'sizes' => '57x57',
@@ -104,12 +104,12 @@ if (bool(env('IS_CLS'))) {
 }
 
 $data = [
-  'name' => env('CLUB_NAME') . ' Membership',
+  'name' => app()->tenant->getKey('CLUB_NAME') . ' Membership',
   'short_name' => 'My Club',
   'start_url' => autoUrl(''),
   'display' => 'minimal-ui',
   'background_color' => '#fff',
-  'description' => 'My ' . env('CLUB_NAME') . ' Membership',
+  'description' => 'My ' . app()->tenant->getKey('CLUB_NAME') . ' Membership',
   'icons' => $icons,
   'theme_color' => $themeColour,
   'lang' => 'en-GB',

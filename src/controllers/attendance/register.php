@@ -6,9 +6,22 @@ $getSessions = false;
 $week_to_get = null;
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getWeeks = $db->query("SELECT * FROM sessionsWeek ORDER BY WeekDateBeginning DESC LIMIT 4");
-$getSquads = $db->query("SELECT DISTINCT squads.SquadID, SquadName FROM squads INNER JOIN sessions ON squads.SquadID = sessions.SquadID ORDER BY SquadFee DESC, SquadName ASC");
+$getWeeks = $db->prepare("SELECT * FROM sessionsWeek WHERE Tenant = ? ORDER BY WeekDateBeginning DESC LIMIT 4");
+$getWeeks->execute([
+  $tenant->getId()
+]);
+$getSquads = $db->prepare("SELECT DISTINCT squads.SquadID, SquadName FROM squads INNER JOIN sessions ON squads.SquadID = sessions.SquadID WHERE squads.Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+$getSquads->execute([
+  $tenant->getId()
+]);
+
+$getSquadsCount = $db->prepare("SELECT COUNT(DISTINCT squads.SquadID) FROM squads INNER JOIN sessions ON squads.SquadID = sessions.SquadID WHERE squads.Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+$getSquadsCount->execute([
+  $tenant->getId()
+]);
+$squadCount = $getSquadsCount->fetchColumn();
 
 $session_init = $session;
 $squad_init = $squad;
@@ -39,11 +52,22 @@ include "attendanceMenu.php";
       </p>
     </div>
   </div>
-  <?php if (isset($_SESSION['return'])) { ?>
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['return'])) { ?>
   <div class="alert alert-success">
-    <?=$_SESSION['return']?>
+    <?=$_SESSION['TENANT-' . app()->tenant->getId()]['return']?>
   </div>
-  <?php unset($_SESSION['return']); } ?>
+  <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['return']); } ?>
+
+  <?php if ($squadCount == 0) { ?>
+    <div class="alert alert-warning">
+      <p class="mb-0">
+        <strong>No squads have sessions</strong>
+      </p>
+      <p class="mb-0">
+        Your club needs to add sessions before you can take a register.
+      </p>
+    </div>
+  <?php } ?>
 
   <form method="post">
     <div class="card mb-3">
@@ -59,7 +83,7 @@ include "attendanceMenu.php";
           <div class="col-md-4">
             <div class="form-group">
               <label for="squad">Select squad</label>
-              <select class="custom-select" name="squad" id="squad">';
+              <select class="custom-select" name="squad" id="squad">
                 <?php if ($squad == null) { ?>
                 <option value="0">Choose your squad from the menu</option>
                 <?php } ?>

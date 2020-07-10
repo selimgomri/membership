@@ -1,18 +1,22 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 use Respect\Validation\Validator as v;
 
-if (isset($_SESSION['AssRegUser']) && $_SESSION['AssRegUser']) {
-  $_SESSION['AssRegUser'] = null;
-  unset($_SESSION['AssRegUser']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']) {
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'] = null;
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']);
 }
 
-$getUserInfo = $db->prepare("SELECT UserID FROM users WHERE EmailAddress = ?");
+$getUserInfo = $db->prepare("SELECT UserID FROM users WHERE EmailAddress = ? AND Tenant = ?");
 
 $email = trim(mb_strtolower($_POST['email-address']));
-$getUserInfo->execute([$email]);
+$getUserInfo->execute([
+  $email,
+  $tenant->getId()
+]);
   
 $status = true;
 if (!v::email()->validate($email)) {
@@ -42,14 +46,14 @@ if ($status && $info) {
   header("Location: " . autoUrl("assisted-registration/select-swimmers"));
 } else if ($status && $info == null) {
   // USER DOES NOT EXIST
-  $_SESSION['AssRegUserEmail'] = $email;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUserEmail'] = $email;
   header("Location: " . autoUrl("assisted-registration/start"));
 } else if (!$status) {
   // INVALID EMAIL ADDRESS
-  $_SESSION['AssRegEmailError'] = 'INV-EMAIL';
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegEmailError'] = 'INV-EMAIL';
   header("Location: " . autoUrl("assisted-registration#get-started"));
 } else {
   // NOT A PARENT ACCOUNT
-  $_SESSION['AssRegEmailError'] = 'NOT-PARENT';
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegEmailError'] = 'NOT-PARENT';
   header("Location: " . autoUrl("assisted-registration#get-started"));
 }

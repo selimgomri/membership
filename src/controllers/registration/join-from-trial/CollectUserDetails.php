@@ -3,20 +3,20 @@
 $db = app()->db;
 
 $query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ? AND Invited = ?");
-$query->execute([$_SESSION['AC-Registration']['Hash'], true]);
+$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AC-Registration']['Hash'], true]);
 
 if ($query->fetchColumn() != 1) {
   halt(404);
 }
 
 $query = $db->prepare("SELECT First, Last, Email, Hash FROM joinParents WHERE Hash = ?");
-$query->execute([$_SESSION['AC-Registration']['Hash']]);
+$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AC-Registration']['Hash']]);
 
 $parent = $query->fetch(PDO::FETCH_ASSOC);
 
-$value = $_SESSION['UserDetailsPostData'];
-if (isset($_SESSION['UserDetailsPostData'])) {
-  unset($_SESSION['UserDetailsPostData']);
+$value = $_SESSION['TENANT-' . app()->tenant->getId()]['UserDetailsPostData'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserDetailsPostData'])) {
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['UserDetailsPostData']);
 } else {
   $value['forename'] = $parent['First'];
   $value['surname'] = $parent['Last'];
@@ -36,7 +36,7 @@ include BASE_PATH . 'views/header.php';
     <div class="col-sm-10 col-md-8">
       <form method="post" class="needs-validation" novalidate>
         <p class="lead">
-          It's great that you want to join <?=htmlspecialchars(env('CLUB_NAME'))?>. There's a few details
+          It's great that you want to join <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. There's a few details
           we'll need to get going.
         </p>
 
@@ -141,7 +141,7 @@ include BASE_PATH . 'views/header.php';
         <div class="cell">
           <p class="mb-0"><strong>Legal Stuff Applies</strong></p>
           <p>
-            In accordance with European Law, <?=htmlspecialchars(env('CLUB_NAME'))?>, Chester-le-Street
+            In accordance with European Law, <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>, Chester-le-Street
             ASC Club Digital Services, Swim England and British Swimming are
             Data Controllers for the purposes of the General Data Protection
             Regulation.
@@ -150,7 +150,7 @@ include BASE_PATH . 'views/header.php';
             By proceeding you agree to our <a
             href="https://www.chesterlestreetasc.co.uk/policies/privacy/"
             target="_blank">Privacy Policy</a> and the use of your data by
-            <?=htmlspecialchars(env('CLUB_NAME'))?> and Chester-le-Street ASC Club Digital Services.
+            <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> and Chester-le-Street ASC Club Digital Services.
             Please note that you have also agreed to our use of you and your
             swimmer's data as part of your registration with the club and with
             British Swimming and Swim England (Formerly known as the ASA).

@@ -1,6 +1,8 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
+
 $query = null;
 
 $markdown = new ParsedownExtra();
@@ -8,11 +10,11 @@ $markdown = new ParsedownExtra();
 // Safe mode is disabled during the transition to markdown
 // $markdown->setSafeMode(true);
 
-if ($_SESSION['AccessLevel'] == 'Parent') {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
   $sql = "SELECT COUNT(*) FROM `members` WHERE `UserID` = ?";
 	try {
 		$query = $db->prepare($sql);
-		$query->execute([$_SESSION['UserID']]);
+		$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
     if ($query->fetchColumn() == 0) {
       halt(404);
     }
@@ -22,18 +24,24 @@ if ($_SESSION['AccessLevel'] == 'Parent') {
 }
 
 if ($int) {
-	$sql = "SELECT * FROM `posts` WHERE `ID` = ?";
+	$sql = "SELECT * FROM `posts` WHERE `ID` = ? AND Tenant = ?";
 	try {
 		$query = $db->prepare($sql);
-		$query->execute([$id]);
+		$query->execute([
+			$id,
+			$tenant->getId()			
+		]);
 	} catch (PDOException $e) {
 		halt(500);
 	}
 } else {
-	$sql = "SELECT * FROM `posts` WHERE `Path` = ?";
+	$sql = "SELECT * FROM `posts` WHERE `Path` = ? AND Tenant = ?";
 	try {
 		$query = $db->prepare($sql);
-		$query->execute([$id]);
+		$query->execute([
+			$id,
+			$tenant->getId()
+		]);
 	} catch (PDOException $e) {
 		halt(500);
 	}

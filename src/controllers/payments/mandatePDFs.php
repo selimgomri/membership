@@ -7,9 +7,15 @@ if (!isset($mandate) || $mandate == "") {
 }
 
 $db = app()->db;
-$checkDetails = $db->prepare("SELECT `UserID` FROM `paymentMandates` WHERE `Mandate` = ?");
-$checkDetails->execute([$mandate]);
-$userID = $_SESSION['UserID'];
+$tenant = app()->tenant;
+
+$checkDetails = $db->prepare("SELECT paymentMandates.UserID FROM `paymentMandates` INNER JOIN users ON paymentMandates.UserID = users.UserID WHERE users.Tenant = ? AND `Mandate` = ?");
+$checkDetails->execute([
+  $tenant->getId(),
+  $mandate
+]);
+
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 $mandateUser = $checkDetails->fetchColumn();
 
@@ -17,11 +23,11 @@ if ($mandateUser == null) {
   halt(404);
 }
 
-if ($mandateUser != $_SESSION['UserID'] && $_SESSION['AccessLevel'] != "Admin") {
+if ($mandateUser != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'] && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Admin") {
   halt(404);
 }
 
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 
 try {
   $return = $client->mandatePdfs()->create([

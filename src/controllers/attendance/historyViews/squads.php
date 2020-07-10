@@ -1,8 +1,12 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$squads = $db->query("SELECT SquadID id, SquadName name FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC");
+$squads = $db->prepare("SELECT SquadID id, SquadName name FROM `squads` WHERE Tenant = ? ORDER BY `SquadFee` DESC, `SquadName` ASC");
+$squads->execute([
+	$tenant->getId()
+]);
 $squad = $squads->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = "Attendance History by Squad";

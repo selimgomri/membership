@@ -1,6 +1,6 @@
 <?php
 
-if ($_SESSION['AccessLevel'] == "Admin") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") {
   $this->group('/qualifications', function() {
     $this->get('/', function() {
       include 'admin/AdminPage.php';

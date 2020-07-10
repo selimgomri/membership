@@ -10,8 +10,8 @@ $hash;
 $updatePassword = $db->prepare("UPDATE `users` SET `Password` = :new WHERE `UserID` = :user");
 
 try {
-  $getPassword = $db->prepare("SELECT Password FROM users WHERE UserID = ?");
-  $getPassword->execute([$_SESSION['UserID']]);
+  $getPassword = $db->prepare("SELECT `Password` FROM users WHERE UserID = ?");
+  $getPassword->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   $hash = $getPassword->fetchColumn();
 } catch (Exception $e) {
   halt(500);
@@ -46,20 +46,19 @@ if (!password_verify($currentPW, $hash)) {
 if ($status == true) {
   try {
     $newHash = password_hash($password1, PASSWORD_BCRYPT);
-    $updatePassword->execute(['user' => $_SESSION['UserID'], 'new' => $newHash]);
+    $updatePassword->execute(['user' => $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 'new' => $newHash]);
 
-    $_SESSION['PasswordUpdate'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['PasswordUpdate'] = true;
     header("Location: " . autoUrl("my-account/password"));
   } catch (Exception $e) {
     halt(500);
   }
 }
 else {
-  $_SESSION['ErrorState'] = '
+  $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = '
   <div class="alert alert-danger">
   <p><strong>Something wasn\'t right</strong></p>
   <ul class="mb-0">' . $statusMessage . '</ul></div>';
 
   header("Location: " . autoUrl("my-account/password"));
 }
-?>

@@ -100,9 +100,9 @@ include "galaMenu.php"; ?>
       <li class="breadcrumb-item active" aria-current="page">Add gala</li>
     </ol>
   </nav>
-  <?php if (isset($_SESSION['ErrorState'])) {
-    echo $_SESSION['ErrorState'];
-    unset($_SESSION['ErrorState']);
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
+    echo $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
   } ?>
   <?php echo "<h1>" . $title . "</h1>";
   echo $content; ?>

@@ -10,7 +10,7 @@ $default = $currentUser->getUserOption('DefaultAccessLevel');
 
 $pagetitle = "Default Access Level";
 include BASE_PATH . "views/header.php";
-  $userID = $_SESSION['UserID'];
+  $userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 ?>
 <div class="container-fluid">
   <div class="row justify-content-between">
@@ -26,13 +26,13 @@ include BASE_PATH . "views/header.php";
         If you have been granted extra access permissions, you can switch between those accounts by selecting your name in the top right corner.
       </p>
 
-      <?php if (isset($_SESSION['SavedChanges']) && $_SESSION['SavedChanges']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SavedChanges']) && $_SESSION['TENANT-' . app()->tenant->getId()]['SavedChanges']) { ?>
         <div class="alert alert-success">
           <p class="mb-0">
             <strong>Changes saved successfully.</strong>
           </p>
         </div>
-      <?php unset($_SESSION['SavedChanges']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['SavedChanges']); } ?>
 
       <p>
         Here you can pick which access level is used as your default when you log in.

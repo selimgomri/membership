@@ -11,7 +11,7 @@ $default = $currentUser->getUserOption('DefaultAccessLevel');
 foreach ($perms as $key => $value) {
   if ($_POST['selector'] == $key) {
     $currentUser->setUserOption('DefaultAccessLevel', $key);
-    $_SESSION['SavedChanges'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['SavedChanges'] = true;
     break;
   }
 }

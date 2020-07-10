@@ -12,11 +12,11 @@ include BASE_PATH . 'views/header.php';
 
       <h1>Welcome to Assisted Registration</h1>
       <p class="lead">
-        Assisted registration allows you to create an account for new parents and automatically connect their swimmers to it.
+        Assisted registration allows you to create an account for new parents/members and automatically connect their members to it.
       </p>
 
       <p>
-        Parents will be led through a registration process to check their details and fill out required forms when they first log in.
+        Members will be led through a registration process to check their details and fill out required forms when they first log in.
       </p>
 
       <p>
@@ -25,7 +25,7 @@ include BASE_PATH . 'views/header.php';
 
       <ul>
         <li>
-          The parent's name,
+          The parent/member's name,
         </li>
         <li>
           Their email address,
@@ -36,20 +36,20 @@ include BASE_PATH . 'views/header.php';
       </ul>
 
       <p>
-        Given these details, we'll then ask you to select swimmers from a list of all unregistered swimmers. We'll send the parent an email which includes instructions on how to log in.
+        Given these details, we'll then ask you to select members from a list of all unregistered members. We'll send the user an email which includes instructions on how to log in.
       </p>
 
       <h2 id="get-started">Get started</h2>
-      <p class="lead">First we'll ask you for the parent's email address.</p>
-      <p>This let's us check if they already have an account. If they don't we'll ask you some more details and make a new account. If they do, we'll take you straight to the select swimmers page.</p>
+      <p class="lead">First we'll ask you for the member's email address.</p>
+      <p>This let's us check if they already have an account. If they don't we'll ask you some more details and make a new account. If they do, we'll take you straight to the select members page.</p>
 
-      <?php if (isset($_SESSION['AssRegEmailError'])) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegEmailError'])) { ?>
       <div class="alert alert-danger">
-        <?php if ($_SESSION['AssRegEmailError'] == 'INV-EMAIL') { ?>
+        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegEmailError'] == 'INV-EMAIL') { ?>
         <strong>The email address provided was not valid</strong>
         <?php } else { ?>
         <strong>A user already exists but is not a parent account</strong>
-        <?php } unset($_SESSION['AssRegEmailError']); ?>
+        <?php } unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegEmailError']); ?>
       </div>
       <?php } ?>
 

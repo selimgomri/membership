@@ -1,9 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$renewal = $db->prepare("SELECT * FROM `renewals` WHERE `ID` = ?");
-$renewal->execute([$id]);
+$renewal = $db->prepare("SELECT * FROM `renewals` WHERE `ID` = ? AND Tenant = ?");
+$renewal->execute([
+	$id,
+	$tenant->getId()
+]);
 
 $row = $renewal->fetch(PDO::FETCH_ASSOC);
 
@@ -18,9 +22,9 @@ include BASE_PATH . "views/swimmersMenu.php";
 
 		<div class="row">
 			<div class="col-lg-8">
-				<?php if (isset($_SESSION['NewRenewalErrorInfo'])) {
-					echo $_SESSION['NewRenewalErrorInfo'];
-					unset($_SESSION['NewRenewalErrorInfo']);
+				<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NewRenewalErrorInfo'])) {
+					echo $_SESSION['TENANT-' . app()->tenant->getId()]['NewRenewalErrorInfo'];
+					unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewRenewalErrorInfo']);
 				} ?>
 
 				<div class="form-group">

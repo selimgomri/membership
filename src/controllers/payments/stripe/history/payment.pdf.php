@@ -1,5 +1,7 @@
 <?php
 
+halt(404);
+
 function outcomeTypeInfo($type) {
   switch ($type) {
     case 'authorized':
@@ -102,11 +104,11 @@ $paymentItems->execute([$id]);
 
 $pm = $payment->fetch(PDO::FETCH_ASSOC);
 
-if ($pm == null || ($_SESSION['AccessLevel'] != 'Admin' && $pm['User'] != $_SESSION['UserID'])) {
+if ($pm == null || ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Admin' && $pm['User'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
   halt(404);
 }
 
-\Stripe\Stripe::setApiKey(env('STRIPE'));
+\Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
 $payment = \Stripe\PaymentIntent::retrieve([
   'id' => $pm['Intent'],
@@ -151,7 +153,7 @@ ob_start();?>
 
         <p>
           For help contact us via<br>
-          <?=htmlspecialchars(env('CLUB_EMAIL'))?>
+          <?=htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL'))?>
         </p>
       </div>
     </div>
@@ -168,7 +170,7 @@ ob_start();?>
     </div>
 
     <p>
-      Thank you for your payment to <?=htmlspecialchars(env('CLUB_NAME'))?>.
+      Thank you for your payment to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>.
     </p>
 
     <p>

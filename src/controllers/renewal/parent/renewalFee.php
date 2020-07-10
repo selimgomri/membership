@@ -1,9 +1,9 @@
 <?php
 
 $db = app()->db;
-$systemInfo = app()->system;
 
-$user = $_SESSION['UserID'];
+
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $partial_reg = isPartialRegistration();
 
 $partial_reg_require_topup = false;
@@ -11,7 +11,7 @@ if ($partial_reg) {
 	$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = 0 AND ClubPays = 0";
 	try {
 		$query = $db->prepare($sql);
-		$query->execute([$_SESSION['UserID']]);
+		$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 	} catch (PDOException $e) {
 		halt(500);
 	}
@@ -22,7 +22,7 @@ if ($partial_reg) {
 
 $month = (new DateTime('now', new DateTimeZone('Europe/London')))->format('m');
 
-$discounts = json_decode($systemInfo->getSystemOption('MembershipDiscounts'), true);
+$discounts = json_decode(app()->tenant->getKey('MembershipDiscounts'), true);
 $clubDiscount = $swimEnglandDiscount = 0;
 if ($discounts != null && isset($discounts['CLUB'][$month])) {
 	$clubDiscount = $discounts['CLUB'][$month];
@@ -32,25 +32,25 @@ if ($discounts != null && isset($discounts['ASA'][$month])) {
 }
 
 $sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ? AND `ClubPays` = '0'");
-$sql->execute([$_SESSION['UserID']]);
+$sql->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 $clubFee = $totalFeeDiscounted = $totalFee = 0;
 
 $payingSwimmerCount = $sql->fetchColumn();
 
-$clubFees = \SCDS\Membership\ClubMembership::create($db, $_SESSION['UserID'], $partial_reg);
+$clubFees = \SCDS\Membership\ClubMembership::create($db, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $partial_reg);
 
 $clubFee = $clubFees->getFee();
 
 if ($partial_reg) {
-	$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
-	members.SquadID WHERE `members`.`UserID` = ? AND `members`.`RR` = 1";
+	$sql = "SELECT * FROM ((`members` INNER JOIN squadMembers ON members.MemberID = squadMembers.Member) INNER JOIN `squads` ON squads.SquadID =
+	squadMembers.Squad) WHERE `members`.`UserID` = ? AND `members`.`RR` = 1";
 } else {
-	$sql = "SELECT * FROM `members` INNER JOIN `squads` ON squads.SquadID =
-	members.SquadID WHERE `members`.`UserID` = ?";
+	$sql = "SELECT * FROM ((`members` INNER JOIN squadMembers ON members.MemberID = squadMembers.Member) INNER JOIN `squads` ON squads.SquadID =
+	squadMembers.Squad) WHERE `members`.`UserID` = ?";
 }
 $getMembers = $db->prepare($sql);
-$getMembers->execute([$_SESSION['UserID']]);
+$getMembers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 $member = $getMembers->fetchAll(PDO::FETCH_ASSOC);
 $count = sizeof($member);
@@ -65,9 +65,9 @@ if ($clubDiscount > 0 && $renewal == 0) {
 
 $asaFees = [];
 
-$asa1 = $systemInfo->getSystemOption('ASA-County-Fee-L1') + $systemInfo->getSystemOption('ASA-Regional-Fee-L1') + $systemInfo->getSystemOption('ASA-National-Fee-L1');
-$asa2 = $systemInfo->getSystemOption('ASA-County-Fee-L2') + $systemInfo->getSystemOption('ASA-Regional-Fee-L2') + $systemInfo->getSystemOption('ASA-National-Fee-L2');
-$asa3 = $systemInfo->getSystemOption('ASA-County-Fee-L3') + $systemInfo->getSystemOption('ASA-Regional-Fee-L3') + $systemInfo->getSystemOption('ASA-National-Fee-L3');
+$asa1 = app()->tenant->getKey('ASA-County-Fee-L1') + app()->tenant->getKey('ASA-Regional-Fee-L1') + app()->tenant->getKey('ASA-National-Fee-L1');
+$asa2 = app()->tenant->getKey('ASA-County-Fee-L2') + app()->tenant->getKey('ASA-Regional-Fee-L2') + app()->tenant->getKey('ASA-National-Fee-L2');
+$asa3 = app()->tenant->getKey('ASA-County-Fee-L3') + app()->tenant->getKey('ASA-Regional-Fee-L3') + app()->tenant->getKey('ASA-National-Fee-L3');
 
 for ($i = 0; $i < $count; $i++) {
 	if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ClubPays']) {
@@ -118,9 +118,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		if ($renewal == 0) {
 			$nf = "first";
 		}; ?>
-		<?php if (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) { ?>
+		<?php if (app()->tenant->getGoCardlessAccessToken()) { ?>
 		<p>
-			You will pay these fees as part of your <?= $nf ?> Direct Debit payment to <?=htmlspecialchars(env('CLUB_NAME'))?>.
+			You will pay these fees as part of your <?= $nf ?> Direct Debit payment to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>.
 		</p>
 		<?php } ?>
 
@@ -271,13 +271,13 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			</table>
 		</div>
 
-		<?php if (env('GOCARDLESS_ACCESS_TOKEN') || env('GOCARDLESS_SANDBOX_ACCESS_TOKEN')) { ?>
+		<?php if (app()->tenant->getGoCardlessAccessToken()) { ?>
 		<p>
 			Your total <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?> fee will be &pound;<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0) && $renewal == 0) { ?><?=number_format(((int)$totalFeeDiscounted)/100, 2, '.', '')?><?php } else { ?><?=$totalFeeString?><?php } ?>. By continuing to complete your membership <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?>, you confirm that you will pay this amount as part of your <?= $nf ?> Direct Debit Payment.
 		</p>
 
-		<?php if (env('CUSTOM_SCDS_CLUB_CHARGE_DATE') && $renewal != 0) { 
-			$date = new DateTime(env('CUSTOM_SCDS_CLUB_CHARGE_DATE'), new DateTimeZone('Europe/London'));
+		<?php if (getenv('CUSTOM_SCDS_CLUB_CHARGE_DATE') && $renewal != 0) { 
+			$date = new DateTime(getenv('CUSTOM_SCDS_CLUB_CHARGE_DATE'), new DateTimeZone('Europe/London'));
 			$chargeDate = $date->format("j F Y");
 			$date->modify('first day of next month');
 			$debitDate = $date->format("F");
@@ -285,8 +285,8 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			<p><strong>Your club has overridden the charge date for club membership fees meaning the charge for your club membership fee will be added to your account on <?=htmlspecialchars($chargeDate)?> and you will pay this charge as part of your <?=htmlspecialchars($debitDate)?> Direct Debit.</strong></p>
 		<?php } ?>
 
-		<?php if (env('CUSTOM_SCDS_ASA_CHARGE_DATE') && $renewal != 0) { 
-			$date = new DateTime(env('CUSTOM_SCDS_ASA_CHARGE_DATE'), new DateTimeZone('Europe/London'));
+		<?php if (getenv('CUSTOM_SCDS_ASA_CHARGE_DATE') && $renewal != 0) { 
+			$date = new DateTime(getenv('CUSTOM_SCDS_ASA_CHARGE_DATE'), new DateTimeZone('Europe/London'));
 			$chargeDate = $date->format("j F Y");
 			$date->modify('first day of next month');
 			$debitDate = $date->format("F");
@@ -294,9 +294,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			<p><strong>Your club has overridden the charge date for Swim England membership fees meaning the charge your Swim England membership fee will be added to your account on <?=htmlspecialchars($chargeDate)?> and you will pay this charge as part of your <?=htmlspecialchars($debitDate)?> Direct Debit.</strong></p>
 		<?php } ?>
 
-		<?php if (!userHasMandates($_SESSION['UserID'])) { ?>
+		<?php if (!userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) { ?>
 			<p>
-				We now need you to set up your Direct Debit agreement with <?=htmlspecialchars(env('CLUB_NAME'))?>. We will redirect you to our payments system where you will setup a Direct Debit.
+				We now need you to set up your Direct Debit agreement with <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. We will redirect you to our payments system where you will setup a Direct Debit.
 			</p>
 		<?php } else { ?>
 			<p>
@@ -306,7 +306,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		<?php } ?>
 		<p>
 			<button type="submit" class="btn btn-success btn-lg">
-				<?php if (!userHasMandates($_SESSION['UserID'])) { ?>
+				<?php if (!userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) { ?>
 					Setup Direct Debit
 				<?php } else if ($renewal == 0) { ?>
 					Complete Registration
@@ -317,7 +317,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		</p>
 		<?php } else { ?>
 		<p>
-			You'll need to pay &pound;<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0) && $renewal == 0) { ?><?=number_format(((int)$totalFeeDiscounted)/100, 2, '.', '')?><?php } else { ?><?=$totalFeeString?><?php } ?> to your club as soon as possible. As <?=htmlspecialchars(env('CLUB_NAME'))?> does not use Direct Debit payments, they will tell you how they would like you to pay.
+			You'll need to pay &pound;<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0) && $renewal == 0) { ?><?=number_format(((int)$totalFeeDiscounted)/100, 2, '.', '')?><?php } else { ?><?=$totalFeeString?><?php } ?> to your club as soon as possible. As <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> does not use Direct Debit payments, they will tell you how they would like you to pay.
 		</p>
 		<p>
 			<button type="submit" class="btn btn-success btn-lg">

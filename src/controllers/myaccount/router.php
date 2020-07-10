@@ -30,7 +30,7 @@ $this->post('/password', function() {
 // 	include 'default-mode-post.php';
 // });
 
-if ($_SESSION['AccessLevel'] == "Parent") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 
 	// Add swimmer
 	$this->get('/add-member', function() {
@@ -75,7 +75,7 @@ $this->group('/email', function() {
 
   $this->group('/cc', function() {
 
-    if (isset($_SESSION['VerifyEmailSent']) && bool($_SESSION['VerifyEmailSent'])) {
+    if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['VerifyEmailSent']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['VerifyEmailSent'])) {
       $this->get('/new', function() {
       	include 'CC/CCEmailSent.php';
       });

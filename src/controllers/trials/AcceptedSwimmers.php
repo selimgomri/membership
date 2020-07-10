@@ -1,14 +1,21 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$query = $db->prepare("SELECT COUNT(*) FROM joinParents");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ? AND Tenant = ?");
+$query->execute([
+  $hash,
+  $tenant->getId()
+]);
 
 $count = $query->fetchColumn();
 
-$query = $db->prepare("SELECT ID, Hash, Email, joinSwimmers.First, joinSwimmers.Last, joinParents.First PFirst, joinParents.Last PLast, Comments FROM joinParents INNER JOIN joinSwimmers ON joinParents.Hash = joinSwimmers.Parent WHERE SquadSuggestion IS NOT NULL ORDER BY ID DESC");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT ID, Hash, Email, joinSwimmers.First, joinSwimmers.Last, joinParents.First PFirst, joinParents.Last PLast, Comments FROM joinParents INNER JOIN joinSwimmers ON joinParents.Hash = joinSwimmers.Parent WHERE Hash = ? AND SquadSuggestion AND joinParents.Tenant = ? IS NOT NULL ORDER BY ID DESC");
+$query->execute([
+  $hash,
+  $tenant->getId()
+]);
 
 $pagetitle = "Accepted Swimmers";
 $use_white_background = true;
@@ -27,7 +34,7 @@ include BASE_PATH . 'views/header.php';
 
       <p>
         If some children of a parent have been offered a place but won't be
-        joining <?=htmlspecialchars(env('CLUB_NAME'))?>, please press <em>Reject Squad Place</em> on each
+        joining <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>, please press <em>Reject Squad Place</em> on each
         swimmer so that they aren't added to the membership system.
       </p>
 

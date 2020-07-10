@@ -19,8 +19,8 @@ include BASE_PATH . 'views/header.php';
 
       <?php
 
-      if ($_SESSION['AddedNewOption']) {
-        unset($_SESSION['AddedNewOption']);
+      if ($_SESSION['TENANT-' . app()->tenant->getId()]['AddedNewOption']) {
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['AddedNewOption']);
         ?>
 
         <div class="alert alert-success">

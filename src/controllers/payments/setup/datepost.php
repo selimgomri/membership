@@ -7,12 +7,12 @@ if ($renewal_trap) {
 	$url_path = "renewal/payments";
 }
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $date = 1;
 
 try {
   $getPaySchdeule = $db->prepare("SELECT * FROM `paymentSchedule` WHERE `UserID` = ?");
-  $getPaySchdeule->execute([$_SESSION['UserID']]);
+  $getPaySchdeule->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   $scheduleExists = $getPaySchdeule->fetch(PDO::FETCH_ASSOC);
   if ($scheduleExists != null) {
   	header("Location: " . autoUrl($url_path . "/setup/2"));
@@ -26,7 +26,7 @@ if ($date == null || $date == "") {
 } else {
   try {
     $insert = $db->prepare("INSERT INTO `paymentSchedule` (`UserID`, `Day`) VALUES (?, ?)");
-    $insert->execute([$_SESSION['UserID'], $date]);
+    $insert->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $date]);
   	header("Location: " . autoUrl($url_path . "/setup/2"));
   } catch (Exception $e) {
     halt(500);

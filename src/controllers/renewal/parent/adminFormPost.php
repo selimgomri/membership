@@ -27,7 +27,7 @@ if ($partial_reg) {
 	`MForename` ASC, `MSurname` ASC;";
 }
 $getInfo = $db->prepare($sql);
-$getInfo->execute([$_SESSION['UserID']]);
+$getInfo->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $row = $getInfo->fetch(PDO::FETCH_ASSOC);
 
 for ($i = 0; $i < sizeof($row); $i++) {
@@ -125,11 +125,11 @@ if ($status) {
   $nextStage = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
   $nextStage->execute([
     $renewal,
-		$_SESSION['UserID']
+		$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
 	]);
 	header("Location: " . autoUrl("renewal/go"));
 } else {
-	$_SESSION['ErrorState'] = "
+	$_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = "
 	<div class=\"alert alert-danger\">
 	<strong>There was a problem with the information you submitted</strong>
 	<ul class=\"mb-0\">" . $statusMessage . "</ul>

@@ -1,10 +1,14 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $use_white_background = true;
 
-$null = $page;
+$null = null;
+if (isset($page)) {
+  $null = $page;
+}
 
 if (isset($_GET['page'])) {
   $page = (int) $_GET['page'];
@@ -25,23 +29,27 @@ if ($page == 1 && $null != null) {
   die();
 }
 
-$sql = "SELECT `ID` FROM `posts`";
+$sql = "SELECT COUNT(*) FROM `posts` WHERE Tenant = ?";
 try {
 	$query = $db->prepare($sql);
-	$query->execute();
+	$query->execute([
+    $tenant->getId()
+  ]);
 } catch (PDOException $e) {
 	halt(500);
 }
-$numPosts = sizeof($query->fetchAll(PDO::FETCH_ASSOC));
+$numPosts = $query->fetchColumn();
 $numPages = ((int)($numPosts/10)) + 1;
 
 if ($start > $numPosts) {
   halt(404);
 }
 
-$sql = "SELECT * FROM `posts` ORDER BY `Title` ASC, `Date` DESC LIMIT :start, 10;";
+$sql = "SELECT * FROM `posts` WHERE Tenant = :tenant ORDER BY `Title` ASC, `Date` DESC LIMIT :start, 10;";
 try {
-	$query = $db->prepare($sql);
+  $query = $db->prepare($sql);
+  $tenantId = $tenant->getId();
+  $query->bindParam('tenant', $tenantId, PDO::PARAM_INT);
   $query->bindParam('start', $start, PDO::PARAM_INT);
 	$query->execute();
 } catch (PDOException $e) {

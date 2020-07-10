@@ -21,7 +21,7 @@ $user = $getUser->fetch(PDO::FETCH_ASSOC);
 
 $name = $user['Forename'] . ' ' . $user['Surname'];
 
-$form = $_SESSION['NewQualificationData'];
+$form = $_SESSION['TENANT-' . app()->tenant->getId()]['NewQualificationData'];
 
 if ($form['valid-from'] == null) {
   $form['valid-from'] = date("Y-m-d");

@@ -2,11 +2,16 @@
 
 
 $db = app()->db;
-$squads = $db->query("SELECT SquadID, SquadName, SquadFee, SquadCoach FROM squads ORDER BY SquadFee DESC, SquadName ASC");
+$tenant = app()->tenant;
+
+$squads = $db->prepare("SELECT SquadID, SquadName, SquadFee, SquadCoach FROM squads WHERE Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+$squads->execute([
+	$tenant->getId()
+]);
 
 $getCoaches = $db->prepare("SELECT Forename fn, Surname sn FROM coaches INNER JOIN users ON coaches.User = users.UserID WHERE coaches.Squad = ? ORDER BY coaches.Type ASC, Forename ASC, Surname ASC");
 
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 $pagetitle = "Squads";
 include BASE_PATH . "views/header.php";
 
@@ -20,9 +25,9 @@ include BASE_PATH . "views/header.php";
       For full details about squads, please visit out website.
     </p>
 
-		<?php if (isset($_SESSION['DeleteSuccess']) && $_SESSION['DeleteSuccess']) { ?>
+		<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['DeleteSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['DeleteSuccess']) { ?>
 		<div class="alert alert-success">We've deleted that squad. That action cannot be undone.</div>
-		<?php unset($_SESSION['DeleteSuccess']); } ?>
+		<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['DeleteSuccess']); } ?>
 
     <div class="mb-4">
       <div class="news-grid">

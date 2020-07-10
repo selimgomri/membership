@@ -21,7 +21,7 @@ include BASE_PATH . "views/header.php";
             <?=SCDS\CSRF::write()?>
            </div>
            <div class="g-recaptcha mb-3"
-           data-sitekey="<?=htmlspecialchars(env('GOOGLE_RECAPTCHA_PUBLIC'))?>"
+           data-sitekey="<?=htmlspecialchars(getenv('GOOGLE_RECAPTCHA_PUBLIC'))?>"
            data-callback="enableBtn"></div>
 
           <p>

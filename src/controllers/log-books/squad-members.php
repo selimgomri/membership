@@ -1,12 +1,20 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getSquadInfo = $db->prepare("SELECT SquadName FROM squads WHERE SquadID = ?");
-$getSquadInfo->execute([$squad]);
+$getSquadInfo = $db->prepare("SELECT SquadName FROM squads WHERE SquadID = ? AND Tenant = ?");
+$getSquadInfo->execute([
+  $squad,
+  $tenant->getId()
+]);
 $squadInfo = $getSquadInfo->fetch(PDO::FETCH_ASSOC);
 
-$getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM members WHERE members.SquadID = ? ORDER BY fn ASC, sn ASC");
+if (!$squadInfo) {
+  halt(404);
+}
+
+$getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM members INNER JOIN squadMembers ON squadMembers.Member = members.MemberID WHERE squadMembers.Squad = ? ORDER BY fn ASC, sn ASC");
 $getMembers->execute([$squad]);
 $member = $getMembers->fetch(PDO::FETCH_ASSOC);
 
@@ -32,13 +40,15 @@ include BASE_PATH . 'views/header.php';
           <p class="mb-0">
             <strong><?=htmlspecialchars($member['fn'] . ' ' . $member['sn'])?>'s log book</strong>
           </p>
-          <p class="mb-0">
-            <?=htmlspecialchars($member['squad'])?>
-          </p>
         </a>
         <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>
       </div>
       <?php } else { ?>
+      <div class="alert alert-warning">
+        <p class="mb-0">
+          <strong>This squad has no members.</strong>
+        </p>
+      </div>
       <?php } ?>
     </div>
     <div class="col">

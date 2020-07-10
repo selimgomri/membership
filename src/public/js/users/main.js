@@ -111,21 +111,7 @@ function getCoachSquadList() {
 }
 
 
-document.addEventListener("DOMContentLoaded", function(event) { 
-  function apply() {
-    var type = document.getElementById('accountType');
-    var typeValue = type.value;
-    var user = type.dataset.userId;
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        document.getElementById('accountTypeOutput').innerHTML = this.responseText;
-      }
-    }
-    xhttp.open("POST", type.dataset.ajaxUrl + user, true);
-    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhttp.send('accountType=' + typeValue);
-  }
+document.addEventListener('DOMContentLoaded', function(event) { 
 
   function confirmResendRegistrationEmail(event) {
     event.preventDefault();
@@ -191,8 +177,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   if (resendButton) {
     resendButton.addEventListener('click', confirmResendRegistrationEmail)
   }
-
-  document.getElementById('accountType').onchange = apply;
 
   let button = document.getElementById('delete-button');
 
@@ -343,6 +327,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
               if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
                 var json = JSON.parse(this.responseText);
                 if (json.status == 200) {
                   $('#main-modal').modal('hide');

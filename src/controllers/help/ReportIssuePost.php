@@ -6,7 +6,7 @@ use Respect\Validation\Validator as v;
 $target = $_POST['report_url'];
 $usr_message = htmlspecialchars($_POST['Message']);
 
-$_SESSION['ErrorReportStatus'] = false;
+$_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportStatus'] = false;
 
 if (v::url()->validate($target)) {
 
@@ -18,10 +18,10 @@ if (v::url()->validate($target)) {
 	$message .= "<p>Reported on " . date("l j F Y") . ".</p>";
 	$message .= "<p>Sent Automatically by Swimming Club Data Systems.</p>";
 
-	notifySend("", "Website Error Report", $message, "Website Admin Team", "web@chesterlestreetasc.co.uk", ["Email" => "report-an-issue@" . env('EMAIL_DOMAIN'), "Name" => "Error Reports at " . env('CLUB_NAME')]);
+	notifySend("", "Website Error Report", $message, "Website Admin Team", "web@chesterlestreetasc.co.uk", ["Email" => "report-an-issue@" . getenv('EMAIL_DOMAIN'), "Name" => "Error Reports at " . app()->tenant->getKey('CLUB_NAME')]);
 
-	$_SESSION['ErrorReportStatus'] = true;
-	$_SESSION['ErrorReportTarget'] = $target;
+	$_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportStatus'] = true;
+	$_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportTarget'] = $target;
 
 }
 

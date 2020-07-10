@@ -8,6 +8,8 @@ $pagetitle = "Password Reset";
 include BASE_PATH . "views/header.php";
 
 $db = app()->db;
+$tenant = app()->tenant;
+
 $userDetails = trim($_POST['email-address']);
 $captcha = trim($_POST['g-recaptcha-response']);
 $captchaStatus = null;
@@ -15,7 +17,7 @@ $captchaStatus = null;
 #
 # Verify captcha
 $post_data = http_build_query([
-  'secret' => env('GOOGLE_RECAPTCHA_SECRET'),
+  'secret' => getenv('GOOGLE_RECAPTCHA_SECRET'),
   'response' => $_POST['g-recaptcha-response'],
   'remoteip' => $_SERVER['REMOTE_ADDR']
 ]);
@@ -46,8 +48,11 @@ else {
   $row = null;
 
   // Test for valid email
-  $findUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress FROM users WHERE EmailAddress = ?");
-  $findUser->execute([$userDetails]);
+  $findUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress FROM users WHERE EmailAddress = ? AND Tenant = ?");
+  $findUser->execute([
+    $userDetails,
+    $tenant->getId()
+  ]);
 
   if ($row = $findUser->fetch(PDO::FETCH_ASSOC)) {
     $found = true;
@@ -76,7 +81,7 @@ else {
 
     if (notifySend(null, $subject, $sContent, $row['Forename'] . " " .
     $row['Surname'], $row['EmailAddress'], ["Email" =>
-    "password-help@" . env('EMAIL_DOMAIN'), "Name" => env('CLUB_NAME') . " Account Help"])) {
+    "password-help@" . getenv('EMAIL_DOMAIN'), "Name" => app()->tenant->getKey('CLUB_NAME') . " Account Help"])) {
     ?>
       <div class="container-fluid">
         <div class="row justify-content-center">

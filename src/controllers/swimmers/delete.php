@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $db->beginTransaction();
 
@@ -17,9 +18,10 @@ try {
   }
 
   // Get info for member we're deleting
-  $getDeleteMember = $db->prepare("SELECT MForename Forname, MSurname Surname FROM members WHERE MemberID = ?");
+  $getDeleteMember = $db->prepare("SELECT MForename Forname, MSurname Surname FROM members WHERE MemberID = ? AND Tenant = ?");
   $getDeleteMember->execute([
-    $_POST['member']
+    $_POST['member'],
+    $tenant->getId()
   ]);
   $deleteMember = $getDeleteMember->fetch(PDO::FETCH_ASSOC);
 
@@ -30,7 +32,7 @@ try {
   // Get user info to verify password
   $getCurrentUser = $db->prepare("SELECT `Password`, Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
   $getCurrentUser->execute([
-    $_SESSION['UserID']
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
   ]);
   $currentUser = $getCurrentUser->fetch(PDO::FETCH_ASSOC);
 

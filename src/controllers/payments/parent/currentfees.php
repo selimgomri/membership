@@ -2,7 +2,7 @@
 
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
-$user = $_SESSION['UserID'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $pagetitle = "Current Fees";
 $use_white_background = true;
 
@@ -12,7 +12,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 ?>
 
 <div class="container">
-	<?php if ($_SESSION['AccessLevel'] == 'Parent') { ?>
+	<?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>

@@ -1,8 +1,13 @@
 <?php
 
 $db = app()->db;
-$getExtra = $db->prepare("SELECT * FROM `extras` WHERE `ExtraID` = ?");
-$getExtra->execute([$id]);
+$tenant = app()->tenant;
+
+$getExtra = $db->prepare("SELECT * FROM `extras` WHERE `ExtraID` = ? AND Tenant = ?");
+$getExtra->execute([
+  $id,
+  $tenant->getId()
+]);
 $row = $getExtra->fetch(PDO::FETCH_ASSOC);
 
 if ($row == null) {
@@ -19,7 +24,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 <div class="container">
 
   <nav aria-label="breadcrumb">
-    <ol class="breadcrumb bg-light">
+    <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl('payments'))?>">Payments</a></li>
       <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl('payments/extrafees'))?>">Extras</a></li>
       <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl('payments/extrafees/' . $id))?>"><?=htmlspecialchars($row['ExtraName'])?></a></li>
@@ -37,9 +42,9 @@ include BASE_PATH . "views/paymentsMenu.php";
     <div class="row">
       <div class="col-lg-8">
         <?php
-        if (isset($_SESSION['ErrorState'])) {
-          echo $_SESSION['ErrorState'];
-          unset($_SESSION['ErrorState']);
+        if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
+          echo $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+          unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
         }
         ?>
         <form method="post">

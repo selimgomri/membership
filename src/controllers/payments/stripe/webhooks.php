@@ -1,6 +1,6 @@
 <?php
 
-\Stripe\Stripe::setApiKey(env('STRIPE'));
+\Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
 function stripe_handlePayout($payout) {
   // Test if updating or new
@@ -174,7 +174,7 @@ $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
 $event = null;
 
 try {
-  if (env('STRIPE_ENDPOINT_SECRET')) {
+  if (getenv('STRIPE_ENDPOINT_SECRET')) {
     $event = \Stripe\Webhook::constructEvent(
       $payload, $sig_header, $endpoint_secret
     );

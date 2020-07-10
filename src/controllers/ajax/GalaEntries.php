@@ -2,8 +2,9 @@
 
 use CLSASC\EquivalentTime\EquivalentTime;
 $db = app()->db;
+$tenant = app()->tenant;
 
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 $sex = "";
 if ($_REQUEST["sex"] == "m") {
   $sex = " AND `Gender` = 'Male' ";
@@ -14,6 +15,7 @@ if ($_REQUEST["sex"] == "m") {
 }
 
 $sqlArgs = [];
+$sqlArgs[] = $tenant->getId();
 
 $count = 0;
 if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $access == "Galas") {
@@ -28,7 +30,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     if ($galaID == "allGalas") {
       $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
       galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
-      galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE() " .
+      galaEntries.GalaID = galas.GalaID) WHERE galas.Tenant = ? AND galas.GalaDate >= CURDATE() " .
       $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci ORDER BY galas.ClosingDate
       ASC, galas.GalaDate DESC";
       $sqlArgs[] = '%' . $search . '%';
@@ -36,7 +38,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     else {
       $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
       galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
-      galaEntries.GalaID = galas.GalaID) WHERE galas.GalaID = ? " .
+      galaEntries.GalaID = galas.GalaID) WHERE galas.Tenant = ? AND galas.GalaID = ? " .
       $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci";
       $sqlArgs[] = $galaID;
       $sqlArgs[] = '%' . $search . '%';
@@ -49,7 +51,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     // Search the database for the results
     $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
     galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
-    galaEntries.GalaID = galas.GalaID) WHERE galas.GalaDate >= CURDATE() " .
+    galaEntries.GalaID = galas.GalaID) WHERE galas.Tenant = ? AND galas.GalaDate >= CURDATE() " .
     $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci";
     $sqlArgs[] = '%' . $search . '%';
   }
@@ -60,7 +62,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     // Search the database for the results
     $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
     galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
-    galaEntries.GalaID = galas.GalaID) WHERE 1 " .
+    galaEntries.GalaID = galas.GalaID) WHERE galas.Tenant = ? " .
     $sex . " AND galas.GalaID = ?";
     $sqlArgs[] = $galaID;
   }
@@ -103,13 +105,13 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
           $type = "LCPB";
           $typeB = "SCPB";
         }
-        $getTimes = $db->prepare("SELECT * FROM `times` WHERE `MemberID` = ? AND `Type` = ?");
+        // $getTimes = $db->prepare("SELECT * FROM `times` WHERE `MemberID` = ? AND `Type` = ?");
 
-        $getTimes->execute([$row['MemberID'], $type]);
-        $times = $getTimes->fetchAll(PDO::FETCH_ASSOC);
+        // $getTimes->execute([$row['MemberID'], $type]);
+        // $times = $getTimes->fetchAll(PDO::FETCH_ASSOC);
 
-        $getTimes->execute([$row['MemberID'], $typeB]);
-        $timesB = $getTimes->fetchAll(PDO::FETCH_ASSOC);
+        // $getTimes->execute([$row['MemberID'], $typeB]);
+        // $timesB = $getTimes->fetchAll(PDO::FETCH_ASSOC);
       }
 
       // First part of the row content
@@ -157,55 +159,53 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
               $course = "25m";
               $to = "50m";
             }
-            if (isset($timesB[$swimsArray[$y]]) && $timesB[$swimsArray[$y]] != "") {
-              $time = explode(".", $timesB[$swimsArray[$y]]);
-              $ms = explode(":", $time[0]);
-              $mins = $secs = $hunds =  0;
-              if (sizeof($ms) == 1) {
-                $secs = (int) $ms[0];
-              } else {
-                $mins = (int) $ms[0];
-                $secs = (int) $ms[1];
-              }
-              $hunds = $time[1];
-              $time_in = $time_double = 0;
-              $time_in = (double) 60*$mins + $secs + ($hunds/100);
+            // if (isset($timesB[$swimsArray[$y]]) && $timesB[$swimsArray[$y]] != "") {
+            //   $time = explode(".", $timesB[$swimsArray[$y]]);
+            //   $ms = explode(":", $time[0]);
+            //   $mins = $secs = $hunds =  0;
+            //   if (sizeof($ms) == 1) {
+            //     $secs = (int) $ms[0];
+            //   } else {
+            //     $mins = (int) $ms[0];
+            //     $secs = (int) $ms[1];
+            //   }
+            //   $hunds = $time[1];
+            //   $time_in = $time_double = 0;
+            //   $time_in = (double) 60*$mins + $secs + ($hunds/100);
 
-              $entry_times = null;
-              if ($times[$swimsArray[$y]] != "") {
-                $entry_times = $times[$swimsArray[$y]];
-              } else if ($row[$swimsTimeArray[$y]]) {
-                $entry_times = $row[$swimsTimeArray[$y]];
-              }
-              $time = explode(".", $entry_times);
-              $ms = explode(":", $time[0]);
-              $mins = $secs = $hunds =  0;
-              if (sizeof($ms) == 1) {
-                $secs = (int) $ms[0];
-              } else {
-                $mins = (int) $ms[0];
-                $secs = (int) $ms[1];
-              }
-              $hunds = $time[1];
-              $time_double_oc = (double) 60*$mins + $secs + ($hunds/100);
-              try {
-              	$time = new EquivalentTime($course, str_replace('&nbsp;', ' ', $swimsTextArray[$y]), $time_in);
-                $time_double = (double) $time->getConversion($to);
-              	$time->setOutputAsString(true);
-                if (($time_double_oc > 0 && $time_double > 0) && $time_double < $time_double_oc) {
-                  $output = ', <abbr title="Faster converted time available">FC:</abbr> ' . htmlspecialchars($time->getConversion($to));
-                } else {
-                  $output = null;
-                }
-              } catch (Exception $e) {
-              	$output = null;
-              }
-            }
+            //   $entry_times = null;
+            //   if ($times[$swimsArray[$y]] != "") {
+            //     $entry_times = $times[$swimsArray[$y]];
+            //   } else if ($row[$swimsTimeArray[$y]]) {
+            //     $entry_times = $row[$swimsTimeArray[$y]];
+            //   }
+            //   $time = explode(".", $entry_times);
+            //   $ms = explode(":", $time[0]);
+            //   $mins = $secs = $hunds =  0;
+            //   if (sizeof($ms) == 1) {
+            //     $secs = (int) $ms[0];
+            //   } else {
+            //     $mins = (int) $ms[0];
+            //     $secs = (int) $ms[1];
+            //   }
+            //   $hunds = $time[1];
+            //   $time_double_oc = (double) 60*$mins + $secs + ($hunds/100);
+            //   try {
+            //   	$time = new EquivalentTime($course, str_replace('&nbsp;', ' ', $swimsTextArray[$y]), $time_in);
+            //     $time_double = (double) $time->getConversion($to);
+            //   	$time->setOutputAsString(true);
+            //     if (($time_double_oc > 0 && $time_double > 0) && $time_double < $time_double_oc) {
+            //       $output = ', <abbr title="Faster converted time available">FC:</abbr> ' . htmlspecialchars($time->getConversion($to));
+            //     } else {
+            //       $output = null;
+            //     }
+            //   } catch (Exception $e) {
+            //   	$output = null;
+            //   }
+            // }
             $content .= "<li><strong>" . $swimsTextArray[$y] . "</strong> <br>";
             if (isset($row[$swimsTimeArray[$y]]) && $row[$swimsTimeArray[$y]]) {
               $content .= htmlspecialchars($row[$swimsTimeArray[$y]]) . $output;
-            } else if (isset($times[$swimsArray[$y]]) && $times[$swimsArray[$y]] != "") {
-              $content .= htmlspecialchars($times[$swimsArray[$y]]) . $output;
             } else {
               $content .= "No time available";
             }

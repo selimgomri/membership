@@ -4,6 +4,14 @@ $this->get('/', function() {
   include 'home.php';
 });
 
+// $this->group('/direct-debit', function() {
+//   include 'gocardless/router.php';
+// });
+
+$this->group('/stripe', function() {
+  include 'stripe/router.php';
+});
+
 $this->group('/variables', function() {
     $this->get('/', function() {
       include 'variables.php';
@@ -14,15 +22,25 @@ $this->group('/variables', function() {
     });
 });
 
-$this->group('/leavers-squad', function() {
+$this->group('/logo', function() {
   $this->get('/', function() {
-    include 'leavers-squad.php';
+    include 'logo.php';
   });
 
   $this->post('/', function() {
-    include 'leavers-squad-post.php';
+    include 'logo-post.php';
   });
 });
+
+// $this->group('/leavers-squad', function() {
+//   $this->get('/', function() {
+//     include 'leavers-squad.php';
+//   });
+
+//   $this->post('/', function() {
+//     include 'leavers-squad-post.php';
+//   });
+// });
 
 $this->group('/terms-and-conditions', function() {
   $this->get('/', function() {
@@ -62,6 +80,16 @@ $this->group('/fees', function() {
 
     $this->post('/', function() {
       include 'fees/membership-fees-post.php';
+    });
+  });
+
+  $this->group('/multiple-squads', function() {
+    $this->get('/', function() {
+      include 'fees/multiple-squads.php';
+    });
+
+    $this->post('/', function() {
+      include 'fees/multiple-squads-post.php';
     });
   });
 

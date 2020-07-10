@@ -1,12 +1,19 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
-$userInfo->execute([$id]);
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ? AND Tenant = ?");
+$userInfo->execute([
+  $id,
+  $tenant->getId()
+]);
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
 
-$getLists = $db->query("SELECT targetedLists.Name, targetedLists.ID FROM targetedLists");
+$getLists = $db->prepare("SELECT targetedLists.Name, targetedLists.ID FROM targetedLists WHERE Tenant = ?");
+$getLists->execute([
+  $tenant->getId()
+]);
 $list = $getLists->fetch(PDO::FETCH_ASSOC);
 
 if ($info == null) {
@@ -36,7 +43,7 @@ include BASE_PATH . "views/header.php";
         Assign targeted list permissions to <?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?>
       </h1>
 
-      <?php if (isset($_SESSION['AssignListError']) && $_SESSION['AssignListError']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssignListError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssignListError']) { ?>
       <div class="alert alert-danger">
         <p class="mb-0">
           <strong>
@@ -45,7 +52,7 @@ include BASE_PATH . "views/header.php";
         </p>
       </div>
       <?php
-        unset($_SESSION['AssignListError']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssignListError']);
       } ?>
 
       <?php if ($list != null) { ?>

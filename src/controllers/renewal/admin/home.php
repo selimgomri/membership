@@ -1,10 +1,19 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$renewals = $db->query("SELECT ID, `Name`, StartDate, EndDate FROM `renewals` ORDER BY `EndDate` DESC LIMIT 5;");
+$renewals = $db->prepare("SELECT ID, `Name`, StartDate, EndDate FROM `renewals` WHERE Tenant = ? ORDER BY `EndDate` DESC LIMIT 5;");
+$renewals->execute([
+	$tenant->getId()
+]);
 
-$getRenewals = $db->query("SELECT * FROM `renewals` WHERE `StartDate` <= CURDATE() AND CURDATE() <= `EndDate`;");
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
+$getRenewals = $db->prepare("SELECT * FROM `renewals` WHERE Tenant = :tenant AND `StartDate` <= :today AND `EndDate` >= :today;");
+$getRenewals->execute([
+	'tenant' => $tenant->getId(),
+	'today' => $date->format("Y-m-d")
+]);
 $row = $getRenewals->fetch(PDO::FETCH_ASSOC);
 
 $use_white_background = true;

@@ -1,12 +1,13 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $row = null;
 
 try {
-  $list = $db->prepare("SELECT * FROM `targetedLists` WHERE `ID` = ?");
-  $list->execute([$id]);
+  $list = $db->prepare("SELECT * FROM `targetedLists` WHERE `ID` = ? AND `Tenant` = ?");
+  $list->execute([$id, $tenant->getId()]);
 } catch (Exception $e) {
   halt(500);
 }
@@ -42,9 +43,9 @@ include BASE_PATH . "views/notifyMenu.php";
       <p class="lead">Edit this targeted list.</p>
 
       <?php
-      if (isset($_SESSION['ErrorState'])) {
-        echo $_SESSION['ErrorState'];
-        unset($_SESSION['ErrorState']);
+      if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
+        echo $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
       }
       ?>
       <form method="post">

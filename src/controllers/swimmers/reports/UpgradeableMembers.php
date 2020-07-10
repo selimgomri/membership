@@ -1,16 +1,20 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $date = new DateTime('-9 years last day of December', new DateTimeZone('Europe/London'));
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
 
-$getMembers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, SquadName squad, DateOfBirth dob, ASACategory cat FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE DateOfBirth <= ? AND ASACategory = ? ORDER BY MForename ASC, MSurname ASC");
+$getMembers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, DateOfBirth dob, ASACategory cat FROM members WHERE members.Tenant = ? AND DateOfBirth <= ? AND ASACategory = ? ORDER BY MForename ASC, MSurname ASC");
 $getMembers->execute([
+  $tenant->getId(),
   $date->format("Y-m-d"),
   1
 ]);
 $member = $getMembers->fetch(PDO::FETCH_ASSOC);
+
+$getSqauds = $db->prepare("SELECT SquadName FROM squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad WHERE squadMembers.Member = ?");
 
 $pagetitle = "Upgradeable Members";
 
@@ -39,7 +43,7 @@ include BASE_PATH . 'views/header.php';
       <?php if ($member) { ?>
       <form method="post">
 
-        <?php if (isset($_SESSION['CatChangesSaveError']) && $_SESSION['CatChangesSaveError']) { ?>
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['CatChangesSaveError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['CatChangesSaveError']) { ?>
           <div class="alert alert-danger">
             <p class="mb-0">
               <strong>An error has occurred</strong>
@@ -48,9 +52,9 @@ include BASE_PATH . 'views/header.php';
               We were unable to save your Swim England Membership Category changes for these members.
             </p>
           </div>
-        <?php unset($_SESSION['CatChangesSaveError']); } ?> 
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['CatChangesSaveError']); } ?> 
 
-        <?php if (isset($_SESSION['CatChangesSavedSuccessfully']) && $_SESSION['CatChangesSavedSuccessfully']) { ?>
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['CatChangesSavedSuccessfully']) && $_SESSION['TENANT-' . app()->tenant->getId()]['CatChangesSavedSuccessfully']) { ?>
           <div class="alert alert-success">
             <p class="mb-0">
               <strong>Changes saved successfully</strong>
@@ -59,7 +63,7 @@ include BASE_PATH . 'views/header.php';
               Remember that members will not pay their new Swim England fee until their next registration/renewal.
             </p>
           </div>
-        <?php unset($_SESSION['CatChangesSavedSuccessfully']); } ?> 
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['CatChangesSavedSuccessfully']); } ?> 
 
         <p>
           To change a member's Swim England category, select the new category from the dropdown menu. press <strong>Save Changes</strong> when you're finished.
@@ -68,13 +72,25 @@ include BASE_PATH . 'views/header.php';
         <ul class="list-group mb-3">
           <?php do {
             $dob = new DateTime($member['dob'], new DateTimeZone('Europe/London'));
-            $age = $dob->diff($now)->y; ?>
+            $age = $dob->diff($now)->y;
+            $getSqauds->execute([$member['id']]);
+            $squads = $getSqauds->fetchColumn();
+          ?>
           <li class="list-group-item list-group-item-action">
             <div class="row align-items-center">
               <div class="col-md">
                 <a href="<?=htmlspecialchars(autoUrl("members/" . $member['id']))?>" class="">
-                  <strong><?=htmlspecialchars($member['fn'] . ' ' . $member['sn'])?></strong>, <?=htmlspecialchars($member['squad'])?>
+                  <strong><?=htmlspecialchars($member['fn'] . ' ' . $member['sn'])?></strong>
                 </a>
+                <?php if ($squads) { ?>
+                <ul class="list-unstyled">
+                  <?php do { ?>
+                  <li>
+                    <?=htmlspecialchars($squads)?>
+                  </li>
+                  <?php } while ($squads = $getSqauds->fetchColumn()); ?>
+                </ul>
+                <?php } ?>
                 <div class="mb-3 d-md-none"></div>
               </div>
               <div class="col-md">
@@ -106,7 +122,7 @@ include BASE_PATH . 'views/header.php';
       <?php } else { ?>
         <div class="alert alert-info">
           <p class="mb-0"><strong>There are no upgradeable members at the moment.</strong></p>
-          <p>Upgradeable members are nine years old by the end of the year and are Category 1 Swim England members.</p>
+          <p class="mb-0">Upgradeable members are nine years old by the end of the year and are Category 1 Swim England members.</p>
         </div>
       <?php } ?>
 

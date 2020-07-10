@@ -3,6 +3,7 @@
 require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 use Respect\Validation\Validator as v;
 
@@ -48,9 +49,13 @@ ON individualFeeTrack.PaymentID = paymentsPending.PaymentID) LEFT JOIN
 `members` ON members.MemberID = individualFeeTrack.MemberID) LEFT JOIN
 `payments` ON paymentsPending.PMkey = payments.PMkey) LEFT JOIN `users` ON
 users.UserID = individualFeeTrack.UserID) WHERE `paymentMonths`.`Date` LIKE
-? AND `individualFeeTrack`.`Type` = ? ORDER BY `Forename`
+? AND `individualFeeTrack`.`Type` = ? AND users.Tenant = ? ORDER BY `Forename`
 ASC, `Surname` ASC, `users`.`UserID` ASC, `MForename` ASC, `MSurname` ASC;");
-$getPayments->execute([$searchDate, $name_type]);
+$getPayments->execute([
+	$searchDate,
+	$name_type,
+	$tenant->getId()
+]);
 
 /*
 SELECT `Forename`, `Surname`, `MForename`, `MSurname`,
@@ -121,13 +126,15 @@ include BASE_PATH . "views/paymentsMenu.php";
 			<?php
       $link;
 			do {
-        $metadata = json_decode($row['metadataJSON']);
-        $swimmer_name = null;
-        for ($j = 0; $j < sizeof($metadata->Members); $j++) {
-          if ($metadata->Members[$j]->Member == $row['MemberID']) {
-            $swimmer_name = htmlspecialchars($metadata->Members[$j]->MemberName);
-          }
-        }
+				$metadata = json_decode($row['metadataJSON']);
+				$swimmer_name = null;
+				if (isset($metadata->Members)) {
+					for ($j = 0; $j < sizeof($metadata->Members); $j++) {
+						if ($metadata->Members[$j]->Member == $row['MemberID']) {
+							$swimmer_name = htmlspecialchars($metadata->Members[$j]->MemberName);
+						}
+					}
+				}
 				?>
 				<?php if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually") {
 					?><tr class="table-success"><?php

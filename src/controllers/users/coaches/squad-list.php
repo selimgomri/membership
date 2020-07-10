@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $responseData = [
   'status' => 200,
@@ -32,8 +33,9 @@ try {
   $responseData['squads'] = $squads;
   $responseData['squadCount'] = $i;
 
-  $getSquads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE `SquadID` NOT IN (SELECT Squad FROM coaches WHERE User = ?) ORDER BY SquadFee DESC, SquadName ASC");
+  $getSquads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE Tenant = ? AND `SquadID` NOT IN (SELECT Squad FROM coaches WHERE User = ?) ORDER BY SquadFee DESC, SquadName ASC");
   $getSquads->execute([
+    $tenant->getId(),
     $_POST['user']
   ]);
   $squads = [];

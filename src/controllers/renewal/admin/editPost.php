@@ -1,6 +1,19 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
+
+$renewal = $db->prepare("SELECT * FROM `renewals` WHERE `ID` = ? AND Tenant = ?");
+$renewal->execute([
+	$id,
+	$tenant->getId()
+]);
+
+$renewalInfo = $renewal->fetch(PDO::FETCH_ASSOC);
+
+if (!$renewalInfo) {
+	halt(404);
+}
 
 use Respect\Validation\Validator as v;
 
@@ -49,7 +62,7 @@ if ($ok) {
 			$end,
 			$id
 		]);
-		$_SESSION['NewRenewalErrorInfo'] = '
+		$_SESSION['TENANT-' . app()->tenant->getId()]['NewRenewalErrorInfo'] = '
 		<div class="alert alert-success">
 			<p class="mb-0">
 				<strong>
@@ -58,7 +71,7 @@ if ($ok) {
 			</p>
 		</div>';
 	} catch (Exception $e) {
-		$_SESSION['NewRenewalErrorInfo'] = '
+		$_SESSION['TENANT-' . app()->tenant->getId()]['NewRenewalErrorInfo'] = '
 		<div class="alert alert-danger">
 			<p class="mb-0">
 				<strong>
@@ -70,7 +83,7 @@ if ($ok) {
 
 	header("Location: " . autoUrl("renewal/" . $id . "/edit"));
 } else {
-	$_SESSION['NewRenewalErrorInfo'] = '
+	$_SESSION['TENANT-' . app()->tenant->getId()]['NewRenewalErrorInfo'] = '
 	<div class="alert alert-danger">
 		<p class="mb-0">
 			<strong>

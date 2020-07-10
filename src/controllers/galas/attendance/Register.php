@@ -1,6 +1,6 @@
 <?php
 
-canView('TeamManager', $_SESSION['UserID'], $id);
+canView('TeamManager', $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id);
 
 $db = app()->db;
 
@@ -25,7 +25,7 @@ include BASE_PATH . 'views/header.php';
 
 <div class="container-fluid">
 
-  <?php if ($_SESSION['AccessLevel'] != 'Parent') { ?>
+  <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>

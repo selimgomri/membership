@@ -1,11 +1,15 @@
 <?php
 
-if (!env('FILE_STORE_PATH')) {
+$tenant = app()->tenant;
+
+$file = '';
+try {
+  $file = $tenant->getFilePath();
+} catch (Exception $e) {
   halt(404);
 }
-
-$file = env('FILE_STORE_PATH');
 $file = $file . $filename;
+
 if (file_exists($file)) {
   header('Content-Description: File Transfer');
   header('Content-Type: ' . mime_content_type($file));

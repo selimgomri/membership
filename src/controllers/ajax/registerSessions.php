@@ -2,6 +2,7 @@
 
 use Respect\Validation\Validator as v;
 $db = app()->db;
+$tenant = app()->tenant;
 
 $getMemberAttendance = $db->prepare("SELECT AttendanceBoolean FROM `sessionsAttendance` WHERE `WeekID` = ? AND `SessionID` = ? AND `MemberID` = ?");
 
@@ -10,13 +11,13 @@ $markdown->setSafeMode(true);
 
 $swimmerCount = 0;
 
-if (!isset($_REQUEST["date"]) || !v::date()->validate($_REQUEST["date"])) {
-  halt(404);
+$dateString = 'now';
+if (isset($_REQUEST["date"]) && v::date()->validate($_REQUEST["date"])) {
+  $dateString = $_REQUEST["date"];
 }
+$date = new DateTime($dateString, new DateTimeZone('Europe/London'));
 
-$date = new DateTime($_REQUEST["date"], new DateTimeZone('Europe/London'));
-
-if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Coach") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Coach") {
   if ((isset($_REQUEST["squadID"]) && v::intVal()->validate($_REQUEST["squadID"])) || isset($preload) && $preload && $getSessions) {
     // get the squadID parameter from URL
     $squadID = $session = null;
@@ -31,8 +32,13 @@ if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admi
     $response = "";
 
     if ($squadID != null) {
-      $getSessions = $db->prepare("SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE squads.SquadID = :squad AND ((sessions.DisplayFrom <= :date) AND (sessions.DisplayUntil >= :date)) AND sessions.SessionDay = :dayNum ORDER BY sessions.SessionDay ASC, sessions.StartTime ASC");
-      $getSessions->execute(['squad' => $squadID, 'date' => $date->format("Y-m-d"), 'dayNum' => ((int) $date->format("N"))%7]);
+      $getSessions = $db->prepare("SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE squads.Tenant = :tenant AND squads.SquadID = :squad AND ((sessions.DisplayFrom <= :date) AND (sessions.DisplayUntil >= :date)) AND sessions.SessionDay = :dayNum ORDER BY sessions.SessionDay ASC, sessions.StartTime ASC");
+      $getSessions->execute([
+        'tenant' => $tenant->getId(),
+        'squad' => $squadID,
+        'date' => $date->format("Y-m-d"),
+        'dayNum' => ((int) $date->format("N"))%7
+      ]);
       $content = '<option>Choose the session from the menu</option>';
 
       $exists = false;
@@ -95,8 +101,11 @@ if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admi
       $weekBeginning = $date->format("Y-m-d");
 
       // Get the week id
-      $getWeekId = $db->prepare("SELECT WeekID FROM sessionsWeek WHERE WeekDateBeginning = ?");
-      $getWeekId->execute([$date->format("Y-m-d")]);
+      $getWeekId = $db->prepare("SELECT WeekID FROM sessionsWeek WHERE WeekDateBeginning = ? AND Tenant = ?");
+      $getWeekId->execute([
+        $date->format("Y-m-d"),
+        $tenant->getId()
+      ]);
       $weekId = $getWeekId->fetchColumn();
 
       if ($weekId == null) {
@@ -105,12 +114,23 @@ if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admi
 
       // Check if the register has been done before
       $sessionRecord = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` WHERE `WeekID` = ? AND `SessionID` = ?");
-      $sessionRecord->execute([$weekId, $sessionID]);
+      $sessionRecord->execute([
+        $weekId,
+        $sessionID
+      ]);
       $sessionRecordExists = $sessionRecord->fetchColumn();
 
-      $sessionDetails = $db->prepare("SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE sessions.SessionID = ?");
-      $sessionDetails->execute([$sessionID]);
+      $sessionDetails = $db->prepare("SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE sessions.SessionID = ? AND sessions.Tenant = ?");
+      $sessionDetails->execute([
+        $sessionID,
+        $tenant->getId()
+      ]);
       $row = $sessionDetails->fetch(PDO::FETCH_ASSOC);
+
+      if (!$row) {
+        halt(404);
+      }
+
       $dayAdd = $row['SessionDay'];
       $sessionDate = strtotime($weekBeginning. ' + ' . $dayAdd . ' days');
       $date = date ('j F Y', $sessionDate);
@@ -164,14 +184,17 @@ if ($_SESSION['AccessLevel'] == "Committee" || $_SESSION['AccessLevel'] == "Admi
       memberPhotography.Website, memberPhotography.Social,
       memberPhotography.Noticeboard, memberPhotography.FilmTraining,
       memberPhotography.ProPhoto, memberMedical.Conditions, memberMedical.Allergies,
-      memberMedical.Medication FROM ((((sessions INNER JOIN members ON
-      sessions.SquadID = members.SquadID) INNER JOIN squads ON sessions.SquadID =
+      memberMedical.Medication FROM (((((sessions INNER JOIN squadMembers ON sessions.SquadID = squadMembers.Squad) INNER JOIN members ON
+      squadMembers.Member = members.MemberID) INNER JOIN squads ON sessions.SquadID =
       squads.SquadID) LEFT JOIN `memberPhotography` ON members.MemberID =
       memberPhotography.MemberID) LEFT JOIN `memberMedical` ON members.MemberID =
-      memberMedical.MemberID) WHERE sessions.SessionID = ? AND members.Status = '1' ORDER BY
+      memberMedical.MemberID) WHERE sessions.Tenant = ? AND sessions.SessionID = ? AND members.Status = '1' ORDER BY
       members.MForename, members.MSurname ASC";
       $swimmers = $db->prepare($sql);
-      $swimmers->execute([$sessionID]);
+      $swimmers->execute([
+        $tenant->getId(),
+        $sessionID
+      ]);
 
       $content .= '</div><ul class="list-group list-group-flush">
       <li class="list-group-item bg-light">

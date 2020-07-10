@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $name = $price = $errorMessage = null;
 $errorState = false;
@@ -35,8 +36,14 @@ if (isset($_POST['pay-credit-type']) && ($_POST['pay-credit-type'] == 'Payment' 
 
 if (!$errorState) {
   try {
-    $update = $db->prepare("UPDATE extras SET ExtraName = ?, ExtraFee = ?, `Type` = ? WHERE ExtraID = ?");
-    $update->execute([$name, $price, $type, $id]);
+    $update = $db->prepare("UPDATE extras SET ExtraName = ?, ExtraFee = ?, `Type` = ? WHERE ExtraID = ? AND Tenant = ?");
+    $update->execute([
+			$name,
+			$price,
+			$type,
+			$id,
+			$tenant->getId()
+		]);
     header("Location: " . autoUrl("payments/extrafees/" . $id));
 	} catch (Exception $e) {
 		$errorState = true;
@@ -45,7 +52,7 @@ if (!$errorState) {
 }
 
 if ($errorState) {
-	$_SESSION['ErrorState'] = '
+	$_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = '
 	<div class="alert alert-danger">
 	Something went wrong and we couldn\'t carry out that operation
 	<ul class="mb-0">' . $errorMessage . '</ul></div>';

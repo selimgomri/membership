@@ -15,7 +15,7 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <p>
-        An email is on it's way to <?=htmlspecialchars($_SESSION['AssRegName'])?> which includes instructions to set a password.
+        An email is on it's way to <?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegName'])?> which includes instructions to set a password.
       </p>
     </div>
   </div>
@@ -23,10 +23,10 @@ include BASE_PATH . 'views/header.php';
 
 <?php
 
-unset($_SESSION['AssRegName']);
-unset($_SESSION['AssRegUser']);
-unset($_SESSION['AssRegPass']);
-unset($_SESSION['AssRegComplete']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegName']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegPass']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegComplete']);
 
 $footer = new \SCDS\Footer();
 $footer->render();

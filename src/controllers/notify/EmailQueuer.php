@@ -1,28 +1,29 @@
 <?php
 
-$_SESSION['NotifyPostData'] = $_POST;
+$_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData'] = $_POST;
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $db->beginTransaction();
 
 try {
   if (sizeof($_POST) == 0) {
-    $_SESSION['TooLargeError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError'] = true;
     throw new Exception('Filesize TooLargeError');
   }
 
   if (!SCDS\FormIdempotency::verify()) {
-    $_SESSION['FormError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['FormError'] = true;
     throw new Exception('Form idempotency error');
   }
 
   if (!SCDS\CSRF::verify()) {
-    $_SESSION['FormError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['FormError'] = true;
     throw new Exception('Form CSRF error');
   }
 
-  $replyAddress = getUserOption($_SESSION['UserID'], 'NotifyReplyAddress');
+  $replyAddress = getUserOption($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 'NotifyReplyAddress');
 
   $to_remove = [
     "<p>&nbsp;</p>",
@@ -45,35 +46,36 @@ try {
         // reportError($_FILES['file-upload']['error'][$i]);
         if ($_FILES['file-upload']['error'][$i] == 2) {
           // Too large
-          $_SESSION['TooLargeError'] = true;
+          $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError'] = true;
         } else {
-          $_SESSION['UploadError'] = true;
+          $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
         }
         throw new Exception();
       } else if (false/*$_FILES['file-upload']['type'][$i] != 'text/plain' && $_FILES['file-upload']['type'][$i] != 'application/octet-stream'*/) {
         // Probably not a text file
         reportError($_FILES['file-upload']['type'][$i]);
-        $_SESSION['UploadError'] = true;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
         throw new Exception();
       } else if ($_FILES['file-upload']['size'][$i] > 3145728) {
         // Too large, stop
         // reportError($_FILES['file-upload']['size'][$i]);
-        $_SESSION['TooLargeError'] = true;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError'] = true;
         throw new Exception();
       } else if ($_FILES['file-upload']['size'][$i] > 0) {
         // Store uploaded files in filestore, if exists
-        if (env('FILE_STORE_PATH')) {
+        if (getenv('FILE_STORE_PATH')) {
           // Work out filename for upload
           $date = new DateTime('now', new DateTimeZone('Europe/London'));
           $urlPath = 'notify/attachments/' . $date->format("Y/m/d") . '/';
-          $path = env('FILE_STORE_PATH') . $urlPath;
+          $path = getenv('FILE_STORE_PATH') . $urlPath;
           $hash = preg_replace('@[^0-9a-z\.]+@i', '-', basename($_FILES['file-upload']['name'][$i]));
           if (mb_strlen($hash) == 0) {
-            $hash = hash('sha256', $_FILES['file-upload']['name'][$i] . rand(0,1000000));
+            $hash = hash('sha256', $_FILES['file-upload']['name'][$i] . rand(0, 1000000));
           }
           $filenamePath = $path . $hash;
           $url = $urlPath . $hash;
-          $count = 0; $countText = "";
+          $count = 0;
+          $countText = "";
           while (file_exists($path . $countText . $hash)) {
             $count++;
             $countText = ((string) $count) . '-';
@@ -98,7 +100,7 @@ try {
       } else {
         // File upload error (no size)
         reportError($_FILES);
-        $_SESSION['UploadError'] = true;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
         throw new Exception();
       }
     }
@@ -106,18 +108,18 @@ try {
 
   if ($collectiveSize > 10485760) {
     // Collectively too large attachments
-    $_SESSION['CollectiveSizeTooLargeError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['CollectiveSizeTooLargeError'] = true;
     throw new Exception();
   }
 
-  if (env('FILE_STORE_PATH')) {
+  if (getenv('FILE_STORE_PATH')) {
     for ($i = 0; $i < sizeof($attachments); $i++) {
       if (!is_writeable($attachments[$i]['store_name'])) {
         // Try making folders
         $dir = explode('/', $attachments[$i]['store_name']);
         $path = "";
         $tried = [];
-        for ($y = 0; $y < sizeof($dir)-1; $y++) {
+        for ($y = 0; $y < sizeof($dir) - 1; $y++) {
           $path .= $dir[$y];
           if (!is_dir($path)) {
             mkdir($path);
@@ -145,13 +147,13 @@ try {
 
   $subject = $_POST['subject'];
   $message = str_replace($to_remove, "", $_POST['message']);
-  if ($_SESSION['AccessLevel'] != "Admin" && !($replyAddress && isset($_POST['ReplyToMe']) && bool($_POST['ReplyToMe']))) {
-    $name = getUserName($_SESSION['UserID']);
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Admin" && !($replyAddress && isset($_POST['ReplyToMe']) && bool($_POST['ReplyToMe']))) {
+    $name = getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
     $message .= '<p class="small text-muted">Sent by ' . $name . '. Reply to this email to contact our Enquiries Team who can pass your message on to ' . $name . '.</p>';
   }
   $force = 0;
-  $sender = $_SESSION['UserID'];
-  if (isset($_POST['force']) && bool($_POST['force']) && ($_SESSION['AccessLevel'] == "Admin" || $_SESSION['AccessLevel'] == "Galas")) {
+  $sender = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
+  if (isset($_POST['force']) && bool($_POST['force']) && ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas")) {
     $force = 1;
   }
 
@@ -163,26 +165,37 @@ try {
   $getCoaches = $db->prepare("SELECT User FROM coaches WHERE Squad = ?");
 
   $squads = null;
-  if ($_SESSION['AccessLevel'] != 'Parent') {
-    $squads = $db->query("SELECT `SquadName`, `SquadID` FROM `squads` ORDER BY `SquadFee` DESC, `SquadName` ASC;");
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') {
+    $squads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` WHERE Tenant = ? ORDER BY `SquadFee` DESC, `SquadName` ASC;");
+    $squads->execute([
+      $tenant->getId()
+    ]);
   } else {
     $squads = $db->prepare("SELECT `SquadName`, `SquadID` FROM `squads` INNER JOIN squadReps ON squadReps.Squad = squads.SquadID WHERE squadReps.User = ? ORDER BY `SquadFee` DESC, `SquadName` ASC;");
-    $squads->execute([$_SESSION['UserID']]);
+    $squads->execute([
+      $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+    ]);
   }
   $row = $squads->fetchAll(PDO::FETCH_ASSOC);
 
   $lists = null;
-  if ($_SESSION['AccessLevel'] != 'Parent') {
-    $lists = $db->query("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` ORDER BY `Name` ASC;");
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') {
+    $lists = $db->prepare("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` WHERE Tenant = ? ORDER BY `Name` ASC;");
+    $lists->execute([
+      $tenant->getId()
+    ]);
   } else {
     $lists = $db->prepare("SELECT targetedLists.ID, targetedLists.Name FROM `targetedLists` INNER JOIN listSenders ON listSenders.List = targetedLists.ID WHERE listSenders.User = ? ORDER BY `Name` ASC;");
-    $lists->execute([$_SESSION['UserID']]);
+    $lists->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   }
   $lists = $lists->fetchAll(PDO::FETCH_ASSOC);
 
-  $galas = $db->prepare("SELECT GalaName, GalaID FROM `galas` WHERE GalaDate >= ? ORDER BY `GalaName` ASC;");
+  $galas = $db->prepare("SELECT GalaName, GalaID FROM `galas` WHERE GalaDate >= ? AND Tenant = ? ORDER BY `GalaName` ASC;");
   $date = new DateTime('-1 week', new DateTimeZone('Europe/London'));
-  $galas->execute([$date->format('Y-m-d')]);
+  $galas->execute([
+    $date->format('Y-m-d'),
+    $tenant->getId()
+  ]);
 
   $query = $squadsQuery = $listsQuery = $galaQuery = "";
 
@@ -195,7 +208,7 @@ try {
       $squadsQuery .= "OR";
     }
     if ($_POST[$row[$i]['SquadID']] == 1) {
-      $squadsQuery .= " `SquadID` = '" . $row[$i]['SquadID'] . "' ";
+      $squadsQuery .= " `Squad` = '" . $row[$i]['SquadID'] . "' ";
       $squads[$row[$i]['SquadID']] = $row[$i]['SquadName'];
 
       if ($coachSend) {
@@ -238,7 +251,7 @@ try {
   $squadUsers = $listUsers = $galaUsers = null;
 
   if ($squadsQuery) {
-    $squadUsers = $db->query("SELECT UserID FROM members WHERE (" . $squadsQuery . ") AND UserID IS NOT NULL");
+    $squadUsers = $db->query("SELECT UserID FROM members INNER JOIN squadMembers ON members.MemberID = squadMembers.Member WHERE (" . $squadsQuery . ") AND UserID IS NOT NULL");
     while ($u = $squadUsers->fetch(PDO::FETCH_ASSOC)) {
       $toSendTo[$u['UserID']] = $u['UserID'];
     }
@@ -254,7 +267,7 @@ try {
       $toSendTo[$u['UserID']] = $u['UserID'];
     }
   }
-  if ($galaQuery && $_SESSION['AccessLevel'] != 'Parent') {
+  if ($galaQuery && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') {
     $galaUsers = $db->query("SELECT users.UserID FROM ((`users` INNER JOIN `members` ON members.UserID = users.UserID) INNER JOIN `galaEntries` ON galaEntries.MemberID = members.MemberID) WHERE " . $galaQuery);
     while ($u = $galaUsers->fetch(PDO::FETCH_ASSOC)) {
       $toSendTo[$u['UserID']] = $u['UserID'];
@@ -292,11 +305,11 @@ try {
       }
     }
 
-    if (!bool(env('IS_CLS'))) {
+    if (!app()->tenant->isCLS()) {
       $fromEmail .= '.' . urlencode(strtolower(str_replace(' ', '', CLUB_CODE)));
     }
 
-    $fromEmail .= '@' . env('EMAIL_DOMAIN');
+    $fromEmail .= '@' . getenv('EMAIL_DOMAIN');
 
     $recipientGroups["NamedSender"] = [
       "Email" => $fromEmail,
@@ -307,7 +320,7 @@ try {
   if ($replyAddress && isset($_POST['ReplyToMe']) && bool($_POST['ReplyToMe'])) {
     $recipientGroups["ReplyToMe"] = [
       "Email" => $replyAddress,
-      "Name" => $_SESSION['Forename'] . ' ' . $_SESSION['Surname'],
+      "Name" => $_SESSION['TENANT-' . app()->tenant->getId()]['Forename'] . ' ' . $_SESSION['TENANT-' . app()->tenant->getId()]['Surname'],
     ];
   }
 
@@ -315,7 +328,7 @@ try {
   if (sizeof($attachments) > 0) {
     $recipientGroups["Attachments"] = [];
   }
-  foreach($attachments as $attachment) {
+  foreach ($attachments as $attachment) {
     if ($attachment['uploaded']) {
       $recipientGroups["Attachments"][] = [
         'Filename' => $attachment['filename'],
@@ -330,9 +343,17 @@ try {
   $dbDate = $date->format('Y-m-d H:i:s');
 
   $sql = "INSERT INTO `notifyHistory` (`Sender`, `Subject`, `Message`,
-  `ForceSend`, `Date`, `JSONData`) VALUES (?, ?, ?, ?, ?, ?)";
+  `ForceSend`, `Date`, `JSONData`, `Tenant`) VALUES (?, ?, ?, ?, ?, ?, ?)";
   $pdo_query = $db->prepare($sql);
-  $pdo_query->execute([$_SESSION['UserID'], $subject, $message, $force, $dbDate, $json]);
+  $pdo_query->execute([
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+    $subject,
+    $message,
+    $force,
+    $dbDate,
+    $json,
+    $tenant->getId()
+  ]);
 
   $id = $db->lastInsertId();
 
@@ -348,7 +369,7 @@ try {
     }
   }
 
-  // if ($_SESSION['AccessLevel'] != "Admin" && $force == 1) {
+  // if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Admin" && $force == 1) {
   //   $sql = "SELECT `UserID` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE `Permission` = 'Admin'";
   //   try {
   //     $pdo_query = $db->prepare($sql);
@@ -364,11 +385,11 @@ try {
   //   }
 
   //   $gdpr_question = '<p>You have force sent the below message. Please contact <a href="mailto:gdpr@chesterlestreetasc.co.uk">gdpr@chesterlestreetasc.co.uk</a> to explain the rationale for using <strong>Force Send</strong> for this email.</p><hr>' . $message . '<p class="small text-muted">Sent via Notify, our custom built email notification service.</p>';
-  //   $sendToTeam->execute([$_SESSION['UserID'], null, "GDPR Compliance: " . $subject, $gdpr_question, $sender, $force]);
+  //   $sendToTeam->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], null, "GDPR Compliance: " . $subject, $gdpr_question, $sender, $force]);
 
   //   $intro = '
-  //   <p>We\'re sending you this email because you\'re an administrator at ' . env('CLUB_NAME') . '.</p>
-  //   <p>' . getUserName($_SESSION['UserID']) . ' has force sent the following email, overriding parent subscription options. We send these updates about emails which have been force sent in order to ensure compliance with GDPR rules.</p>
+  //   <p>We\'re sending you this email because you\'re an administrator at ' . app()->tenant->getKey('CLUB_NAME') . '.</p>
+  //   <p>' . getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) . ' has force sent the following email, overriding parent subscription options. We send these updates about emails which have been force sent in order to ensure compliance with GDPR rules.</p>
   //   <p>Emails should only be force sent when they are of high importance. An example would be to inform parents of a session cancellation.</p>
   //   <hr>';
   //   $message_admin = $intro . $message . '<p class="small text-muted">Sent via Notify, our custom built email notification service.</p>';
@@ -383,7 +404,7 @@ try {
   //   }
   // }
 
-  $_SESSION['NotifySuccess'] = [
+  $_SESSION['TENANT-' . app()->tenant->getId()]['NotifySuccess'] = [
     "Count" => $count,
     "Force" => $force
   ];
@@ -408,13 +429,13 @@ try {
     $mailObject->setHtmlContent($currentMessage['Message']);
 
     $mailObject->showName();
-    if (!$currentMessage['ForceSend']) { 
+    if (!$currentMessage['ForceSend']) {
       $mailObject->setUnsubscribable();
     }
 
-    $from = new \SendGrid\Mail\From("noreply@" . env('EMAIL_DOMAIN'), env('CLUB_NAME'));
+    $from = new \SendGrid\Mail\From("noreply@" . getenv('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_NAME'));
     if ($jsonData->NamedSender->Email != null && $jsonData->NamedSender->Name) {
-      $from = new \SendGrid\Mail\From("noreply@" . env('EMAIL_DOMAIN'), $jsonData->NamedSender->Name);
+      $from = new \SendGrid\Mail\From("noreply@" . getenv('EMAIL_DOMAIN'), $jsonData->NamedSender->Name);
     }
     $tos = [];
     while ($user = $getUsersForEmail->fetch(PDO::FETCH_ASSOC)) {
@@ -473,21 +494,21 @@ try {
       try {
         $email->setReplyTo($jsonData->ReplyToMe->Email, $jsonData->ReplyToMe->Name);
       } catch (Exception $e) {
-        $email->setReplyTo(env('CLUB_EMAIL'), env('CLUB_NAME') . ' Enquiries');
+        $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME') . ' Enquiries');
       }
     } else {
-      $email->setReplyTo(env('CLUB_EMAIL'), env('CLUB_NAME') . ' Enquiries');
+      $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME') . ' Enquiries');
     }
 
-    $email->addHeader("List-ID", env('CLUB NAME') . " Notify <" . mb_strtolower(env('ASA_CLUB_CODE')) . ".notify@" . env('EMAIL_DOMAIN') . ">");
+    $email->addHeader("List-ID", getenv('CLUB NAME') . " Notify <" . mb_strtolower(app()->tenant->getKey('ASA_CLUB_CODE')) . ".notify@" . getenv('EMAIL_DOMAIN') . ">");
 
-    $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
+    $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
     $response = $sendgrid->send($email);
   }
   $db->commit();
 
-  if (isset($_SESSION['NotifyPostData'])) {
-    unset($_SESSION['NotifyPostData']);
+  if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData'])) {
+    unset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData']);
   }
 
   header("Location: " . autoUrl("notify"));

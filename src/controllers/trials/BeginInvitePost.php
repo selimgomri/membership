@@ -1,21 +1,31 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 use Respect\Validation\Validator as v;
 
-$query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ?");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT COUNT(*) FROM joinParents WHERE Hash = ? AND Tenant = ?");
+$query->execute([
+  $hash,
+  $tenant->getId()
+]);
 
 if ($query->fetchColumn() != 1) {
   halt(404);
 }
 
-$query = $db->prepare("UPDATE joinParents SET Invited = '1' WHERE Hash = ?");
-$query->execute([$hash]);
+$query = $db->prepare("UPDATE joinParents SET Invited = '1' WHERE Hash = ? AND Tenant = ?");
+$query->execute([
+  $hash,
+  $tenant->getId()
+]);
 
-$query = $db->prepare("SELECT First, Last, Email, Hash FROM joinParents WHERE Hash = ?");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT First, Last, Email, Hash FROM joinParents WHERE Hash = ? AND Tenant = ?");
+$query->execute([
+  $hash,
+  $tenant->getId()
+]);
 
 $parent = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -24,11 +34,14 @@ if (trim($_POST['email-addr']) != $parent['Email'] && v::email()->validate($_POS
   $query->execute([trim($_POST['email-addr']), $hash]);
 } else if (!v::email()->validate($_POST['email-addr'])) {
   // cannot send email
-  $_SESSION['EmailInvalid'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['EmailInvalid'] = true;
 }
 
-$query = $db->prepare("SELECT ID, First, Last, SquadSuggestion, SquadName, SquadFee FROM joinSwimmers INNER JOIN squads ON squads.SquadID = joinSwimmers.SquadSuggestion WHERE Parent = ? AND SquadSuggestion IS NOT NULL ORDER BY First ASC, Last ASC");
-$query->execute([$hash]);
+$query = $db->prepare("SELECT ID, First, Last, SquadSuggestion, SquadName, SquadFee FROM joinSwimmers INNER JOIN squads ON squads.SquadID = joinSwimmers.SquadSuggestion WHERE Parent = ? AND SquadSuggestion IS NOT NULL AND joinSwimmers.Tenant = ? ORDER BY First ASC, Last ASC");
+$query->execute([
+  $hash,
+  $tenant->getId()
+]);
 
 $swimmers = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -57,6 +70,6 @@ if (sizeof($swimmers) > 2) {
 $email .= '
 <p>If you wish to complete registration and join the club, <a href="' . autoUrl("register/ac/" . $parent['Hash']) . '">please click here</a>.</p>';
 
-notifySend(null, 'Join ' . env('CLUB_NAME'), $email, $parent['First'] . ' ' . $parent['Last'], $_POST['email-addr']);
+notifySend(null, 'Join ' . app()->tenant->getKey('CLUB_NAME'), $email, $parent['First'] . ' ' . $parent['Last'], $_POST['email-addr']);
 
 header("Location: " . currentUrl());

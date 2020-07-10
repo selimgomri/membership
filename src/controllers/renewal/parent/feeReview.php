@@ -1,5 +1,5 @@
 <?php
-$userID = $_SESSION['UserID'];
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $pagetitle = "Fee Review";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/renewalTitleBar.php";
@@ -7,9 +7,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 <div class="container">
 	<main class="">
-		<?php if (isset($_SESSION['ErrorState'])) {
-			echo $_SESSION['ErrorState'];
-			unset($_SESSION['ErrorState']);
+		<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
+			echo $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
+			unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
 			?><hr><?php
 		} ?>
 		<h1>Your Fees</h1>

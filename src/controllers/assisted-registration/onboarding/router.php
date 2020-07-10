@@ -12,37 +12,37 @@ $this->get('/go', function() {
   // Go to the latest step
   $db = app()->db;
 
-  if (!isset($_SESSION['Onboarding'])) {
+  if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding'])) {
     $getFirstSwimmer = $db->prepare("SELECT MemberID FROM members WHERE UserID = ? ORDER BY MemberID ASC LIMIT 1");
     if ($first = $getFirstSwimmer->fetchColumn()) {
-      $_SESSION['Onboarding']['Stage'] = 1;
-      $_SESSION['Onboarding']['Part'] = $first;
+      $_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding']['Stage'] = 1;
+      $_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding']['Part'] = $first;
     } else {
-      $_SESSION['Onboarding']['Stage'] = 2;
-      $_SESSION['Onboarding']['Part'] = null;
+      $_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding']['Stage'] = 2;
+      $_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding']['Part'] = null;
     }
   }
-  if ($_SESSION['Onboarding']['Stage'] == 1) {
-    header("Location: " . autoUrl("onboarding/swimmer-information-form/" . $_SESSION['Onboarding']['Part']));
-  } else if ($_SESSION['Onboarding']['Stage'] == 2) {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding']['Stage'] == 1) {
+    header("Location: " . autoUrl("onboarding/swimmer-information-form/" . $_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding']['Part']));
+  } else if ($_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding']['Stage'] == 2) {
     header("Location: " . autoUrl("onboarding/emergency-contacts"));
-  } else if ($_SESSION['Onboarding']['Stage'] == 3) {
+  } else if ($_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding']['Stage'] == 3) {
     header("Location: " . autoUrl("onboarding/parent-code-of-conduct-form"));
-  } else if ($_SESSION['Onboarding']['Stage'] == 4) {
-    header("Location: " . autoUrl("onboarding/swimmer-code-of-conduct-form/" . $_SESSION['Onboarding']['Part']));
-  } else if ($_SESSION['Onboarding']['Stage'] == 5) {
+  } else if ($_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding']['Stage'] == 4) {
+    header("Location: " . autoUrl("onboarding/swimmer-code-of-conduct-form/" . $_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding']['Part']));
+  } else if ($_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding']['Stage'] == 5) {
     header("Location: " . autoUrl("onboarding/admin-form"));
-  } else if ($_SESSION['Onboarding']['Stage'] == 6) {
+  } else if ($_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding']['Stage'] == 6) {
     header("Location: " . autoUrl("onboarding/setup-direct-debit"));
-  } else if ($_SESSION['Onboarding']['Stage'] == 7) {
+  } else if ($_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding']['Stage'] == 7) {
     header("Location: " . autoUrl("onboarding/review"));
   } else {
     halt(404);
   }
 });
 
-if (isset($_SESSION['Onboarding'])) {
-  if ($_SESSION['Onboarding']['Stage'] > 0) {
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding'])) {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding']['Stage'] > 0) {
     $this->get('/swimmer-information-form/{id}:int', function($id) {
       include 'swimmer-details.php';
     });
@@ -52,7 +52,7 @@ if (isset($_SESSION['Onboarding'])) {
     });
   }
 
-  if ($_SESSION['Onboarding']['Stage'] > 1) {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['Onboarding']['Stage'] > 1) {
     $this->get('/emergency-contacts', function() {
       include 'emergency-contacts.php';
     });

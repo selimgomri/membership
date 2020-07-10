@@ -18,7 +18,7 @@ include BASE_PATH . "views/postsMenu.php";
 					<div class="form-group">
 						<label for="title">Title</label>
 						<input type="text" class="form-control" name="title" id="title"
-			      placeholder="Post Title" autocomplete="off" <?php if ($people) { ?>value="<?=getUserName($_SESSION['UserID'])?>" readonly <?php } ?> >
+			      placeholder="Post Title" autocomplete="off" <?php if ($people) { ?>value="<?=getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])?>" readonly <?php } ?> >
 					</div>
 
 					<div class="form-group mb-0">
@@ -43,7 +43,6 @@ include BASE_PATH . "views/postsMenu.php";
 					<p class="mb-0">We will publish this immediately.</p>
 				</div>
 
-                <?php if (!$people) { ?>
 				<div class="cell">
 					<h3>Meta</h3>
 					<div class="form-group">
@@ -77,7 +76,6 @@ include BASE_PATH . "views/postsMenu.php";
 						</select>
 					</div>
 				</div>
-				<?php } ?>
 
 				<div class="cell">
 					<h3>SEO</h3>

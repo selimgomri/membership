@@ -12,7 +12,7 @@ class FormIdempotency {
       $_SESSION['FORM-IDEMPOTENCY'] = hash('sha256', random_bytes(100));
     }
 
-    echo '<input name="SCDS-FORM-IDEMPOTENCY" type="hidden" value="' . htmlspecialchars($_SESSION['FORM-IDEMPOTENCY']) . '">';
+    echo '<input id="SCDS-FORM-IDEMPOTENCY" name="SCDS-FORM-IDEMPOTENCY" type="hidden" value="' . htmlspecialchars($_SESSION['FORM-IDEMPOTENCY']) . '">';
   }
 
   public static function verify() {

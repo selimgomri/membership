@@ -1,17 +1,24 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 $currentUser = app()->user;
 
-$query = $db->prepare("SELECT COUNT(*) FROM joinSwimmers WHERE ID = ?");
-$query->execute([$request]);
+$query = $db->prepare("SELECT COUNT(*) FROM joinSwimmers WHERE ID = ? AND Tenant = ?");
+$query->execute([
+  $request,
+  $tenant->getId()
+]);
 
 if ($query->fetchColumn() != 1) {
   halt(404);
 }
 
-$query = $db->prepare("SELECT ID, joinSwimmers.First, joinSwimmers.Last, joinParents.First PFirst, joinParents.Last PLast, DoB, ASA, Club, XPDetails, XP, Medical, Questions, TrialStart, TrialEnd, SquadSuggestion, Comments FROM joinSwimmers JOIN joinParents WHERE ID = ? ORDER BY First ASC, Last ASC");
-$query->execute([$request]);
+$query = $db->prepare("SELECT ID, joinSwimmers.First, joinSwimmers.Last, joinParents.First PFirst, joinParents.Last PLast, DoB, ASA, Club, XPDetails, XP, Medical, Questions, TrialStart, TrialEnd, SquadSuggestion, Comments FROM joinSwimmers JOIN joinParents WHERE ID = ? AND Tenant = ? ORDER BY First ASC, Last ASC");
+$query->execute([
+  $request,
+  $tenant->getId()
+]);
 
 $swimmer = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -31,12 +38,15 @@ if ($swimmer['XP'] == 2) {
 $pagetitle = "Trial Request - " . htmlspecialchars($swimmer['First'] . ' ' . $swimmer['Last']);
 $use_white_background = true;
 
-$query = $db->query("SELECT SquadID, SquadName FROM squads ORDER BY SquadFee DESC, SquadName ASC");
+$query = $db->prepare("SELECT SquadID, SquadName FROM squads WHERE Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+$query->execute([
+  $tenant->getId()
+]);
 
-$value = $_SESSION['RequestTrial-FC'];
+$value = $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-FC'];
 
-if (isset($_SESSION['RequestTrial-AddAnother'])) {
-  $value = $_SESSION['RequestTrial-AddAnother'];
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-AddAnother'])) {
+  $value = $_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-AddAnother'];
 }
 
 include BASE_PATH . 'views/header.php';
@@ -56,7 +66,7 @@ include BASE_PATH . 'views/header.php';
         also mark them as being ineligible to join.
       </p>
 
-      <?php if ($_SESSION['TrialRecommendationsUpdated'] === true) { ?>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['TrialRecommendationsUpdated'] === true) { ?>
         <div class="alert alert-success">
           <strong>Successfully updated the recommendations</strong>
         </div>
@@ -98,7 +108,7 @@ include BASE_PATH . 'views/header.php';
 
         <p>
             Press <em>Mark ineligible</em> if the swimmer will not be offered a
-            place at <?=htmlspecialchars(env('CLUB_NAME'))?>.
+            place at <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>.
         </p>
       </form>
     </div>
@@ -175,7 +185,7 @@ include BASE_PATH . 'views/header.php';
 
 <?php
 
-unset($_SESSION['TrialRecommendationsUpdated']);
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['TrialRecommendationsUpdated']);
 $footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
 $footer->render();

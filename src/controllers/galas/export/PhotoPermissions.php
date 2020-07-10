@@ -1,13 +1,22 @@
 <?php
 
 $db = app()->db;
-$user = $_SESSION['UserID'];
+$tenant = app()->tenant;
 
-canView('TeamManager', $_SESSION['UserID'], $id);
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
-$query = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ?");
-$query->execute([$id]);
+canView('TeamManager', $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id);
+
+$query = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ? AND Tenant = ?");
+$query->execute([
+  $id,
+  $tenant->getId()
+]);
 $info = $query->fetch(PDO::FETCH_ASSOC);
+
+if ($info == null) {
+  halt(404);
+}
 
 $dateOfGala = new DateTime($info['GalaDate'], new DateTimeZone('Europe/London'))
 ;
@@ -15,11 +24,7 @@ $lastDayOfYear = new DateTime('last day of December ' . $dateOfGala->format('Y')
 ;
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
 
-if ($info == null) {
-  halt(404);
-}
-
-$getSwimmers = $db->prepare("SELECT MForename first, MSurname last, SquadName squad, DateOfBirth dob, Website, Social, Noticeboard, FilmTraining, ProPhoto FROM (((galaEntries INNER JOIN members ON members.MemberID = galaEntries.MemberID) INNER JOIN squads ON members.SquadID = squads.SquadID) LEFT JOIN memberPhotography ON members.MemberID = memberPhotography.MemberID) WHERE galaEntries.GalaID = ? ORDER BY MForename ASC, MSurname ASC");
+$getSwimmers = $db->prepare("SELECT MForename first, MSurname last, DateOfBirth dob, Website, Social, Noticeboard, FilmTraining, ProPhoto FROM ((galaEntries INNER JOIN members ON members.MemberID = galaEntries.MemberID) LEFT JOIN memberPhotography ON members.MemberID = memberPhotography.MemberID) WHERE galaEntries.GalaID = ? ORDER BY MForename ASC, MSurname ASC");
 
 $getSwimmers->execute([$id]);
 
@@ -90,11 +95,11 @@ ob_start();?>
     </p>
 
     <div class="avoid-page-break-inside">
-      <?php if (bool(env('IS_CLS'))) { ?>
+      <?php if (app()->tenant->isCLS()) { ?>
       <p>&copy; Chester-le-Street ASC <?=date("Y")?></p>
       <?php } else { ?>
       <p class="mb-0">&copy; Swimming Club Data Systems <?=date("Y")?></p>
-      <p>Produced by Swimming Club Data Systems for <?=htmlspecialchars(env('CLUB_NAME'))?></p>
+      <p>Produced by Swimming Club Data Systems for <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></p>
       <?php } ?>
     </div>
 
@@ -106,7 +111,7 @@ ob_start();?>
       $dob = new DateTime($data['dob'], new DateTimeZone('Europe/London'));
       $age = (int) $dob->diff($now)->format("%Y"); ?>
       <div class="swimmer">
-        <h3><?=htmlspecialchars($data['first'] . ' ' . $data['last'])?> <small class="text-muted"><?=htmlspecialchars($data['squad'])?> Squad, <?=$age?></small></h3>
+        <h3><?=htmlspecialchars($data['first'] . ' ' . $data['last'])?> <small class="text-muted"><?=$age?></small></h3>
         <?php if ($age >= 18) { ?>
           <p><?=htmlspecialchars($data['first'])?> is an adult so has <strong>no restrictions</strong> on photography.</p>
         <?php } else { ?>

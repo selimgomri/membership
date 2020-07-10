@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 /** must go in form
 if (app('request')->method == 'POST' && !SCDS\CSRF::verify()) {
@@ -11,7 +12,7 @@ if (app('request')->method == 'POST' && !SCDS\CSRF::verify()) {
 // Get all countries
 $countries = getISOAlpha2CountriesWithHomeNations();
 
-$access = $_SESSION['AccessLevel'];
+$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 // Committee or Admin can see and change all data
 $forenameUpdate = false;
 $middlenameUpdate = false;
@@ -27,8 +28,11 @@ $update = false;
 $countryUpdate = false;
 $successInformation = "";
 
-$query = $db->prepare("SELECT * FROM members WHERE MemberID = ?");
-$query->execute([$id]);
+$query = $db->prepare("SELECT * FROM members WHERE MemberID = ? AND Tenant = ?");
+$query->execute([
+	$id,
+	$tenant->getId()
+]);
 $row = $query->fetch(PDO::FETCH_ASSOC);
 
 if ($row == null) {
@@ -41,7 +45,6 @@ $surname = $row['MSurname'];
 $asaNumber = $row['ASANumber'];
 $dbUserID = "";
 $dbUserID = $row['UserID'];
-$squad = $row['SquadID'];
 $dateOfBirth = $row['DateOfBirth'];
 $sex = $row['Gender'];
 $otherNotes = $row['OtherNotes'];
@@ -50,7 +53,10 @@ $cat = $row['ASACategory'];
 $cp = $row['ClubPays'];
 $swimmerStatus = $row['Status'];
 
-$deleteKey = $_POST['swimmerDeleteDanger'];
+$deleteKey = null;
+if (isset($_POST['swimmerDeleteDanger'])) {
+	$deleteKey = $_POST['swimmerDeleteDanger'];
+}
 
 if ($deleteKey == $dbAccessKey) {
 	$delete = $db->prepare("DELETE FROM `members` WHERE `MemberID` = ?");
@@ -94,8 +100,8 @@ if (!empty($_POST['asa'])) {
 		$asaUpdate = true;
 		$update = true;
 	}
-} else if ($_POST['asa'] == "" && app('request')->method == "post") {
-	$newASANumber = env('ASA_CLUB_CODE') . $id;
+} else if (isset($_POST['asa']) && $_POST['asa'] == "" && app('request')->method == "post") {
+	$newASANumber = app()->tenant->getKey('ASA_CLUB_CODE') . $id;
 	if ($newASANumber != $asaNumber) {
 		$updateSwimmer = $db->prepare("UPDATE `members` SET `ASANumber` = ? WHERE `MemberID` = ?");
 		$updateSwimmer->execute([$newASANumber, $id]);
@@ -167,7 +173,7 @@ if (isset($_POST['otherNotes'])) {
 		$update = true;
 	}
 }
-if (isset($_POST['swimmerStatus']) && $_SESSION['AccessLevel'] == "Admin") {
+if (isset($_POST['swimmerStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") {
 	$newSwimmerStatus = trim($_POST['swimmerStatus']);
 	if ($newSwimmerStatus != $swimmerStatus) {
 		$updateSwimmer = $db->prepare("UPDATE `members` SET `Status` = ? WHERE `MemberID` = ?");
@@ -193,11 +199,8 @@ if (isset($_POST['country'])) {
 
 $sqlSwim = "";
 $swimmer = $db->prepare("SELECT members.MForename, members.MForename, members.MMiddleNames,
-members.MSurname, members.ASANumber, members.ASACategory, members.ClubPays,
-squads.SquadName, squads.SquadID, squads.SquadFee, squads.SquadCoach,
-squads.SquadTimetable, squads.SquadCoC, members.DateOfBirth, members.Gender,
-members.OtherNotes, members.AccessKey, members.Status, members.Country FROM (members INNER JOIN squads ON
-members.SquadID = squads.SquadID) WHERE members.MemberID = ?");
+members.MSurname, members.ASANumber, members.ASACategory, members.ClubPays, members.DateOfBirth, members.Gender,
+members.OtherNotes, members.AccessKey, members.Status, members.Country FROM members WHERE members.MemberID = ?");
 $swimmer->execute([$id]);
 $rowSwim = $swimmer->fetch(PDO::FETCH_ASSOC);
 $pagetitle = "Swimmer: " . htmlspecialchars($rowSwim['MForename'] . " " . $rowSwim['MSurname']);
@@ -300,25 +303,14 @@ $content .= "
 	</select>
 </div>";
 
-$squads = $db->query("SELECT SquadName, SquadID FROM `squads` ORDER BY `squads`.`SquadFee` DESC");
-$content .= "
-<div class=\"form-group\">
-	<label for=\"squad\">Squad</label>
-		<select class=\"custom-select\" placeholder=\"Select a Squad\" id=\"squad\" name=\"squad\">";
-while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) {
-	$content .= "<option value=\"" . $squad['SquadID'] . "\"";
-	if ($squad['SquadID'] == $rowSwim['SquadID']) {
-		$content .= " selected";
-	}
-	$content .= ">" . htmlspecialchars($squad['SquadName']) . " Squad</option>";
-}
-$content .= "</select></div>";
-
-$cp = [];
+$cp = [
+	'',
+	''
+];
 $cp[$rowSwim['ClubPays']] = " selected ";
 $content .= "
 <div class=\"form-group\">
-	<label for=\"cp\">Club Pays Fees?</label>
+	<label for=\"cp\">Club pays Swim England/Club membership fees?</label>
 	<select class=\"custom-select\" id=\"cp\" name=\"cp\" placeholder=\"Select\">
 		<option value=\"0\" " . $cp[0] . ">No</option>
 		<option value=\"1\" " . $cp[1] . ">Yes</option>
@@ -335,8 +327,8 @@ $content .= "
 	<textarea class=\"form-control\" id=\"otherNotes\" name=\"otherNotes\" rows=\"3\" placeholder=\"Tell us any other notes for coaches\">" . htmlspecialchars($rowSwim['OtherNotes']) . "</textarea>
 </div>";
 if ($access == "Admin") {
-  $statusA;
-  $statusB;
+  $statusA = '';
+  $statusB = '';
 
   if ($rowSwim['Status']) {
     $statusA = "selected";
@@ -354,16 +346,8 @@ if ($access == "Admin") {
 		</div>";
 }
 $content .= "<p><button type=\"submit\" class=\"btn btn-success rounded\">Update</button></p>";
-$content .= "</div></div><div class=\"col-md-4\">";
-$content .= "<div class=\"cell\"><h2>Squad Information</h2><ul class=\"mb-0\"><li>Squad: " . htmlspecialchars($rowSwim['SquadName']) . "</li><li>Monthly Fee: &pound;" . $rowSwim['SquadFee'] . "</li>";
-if ($rowSwim['SquadTimetable'] != "") {
-	$content .= "<li><a href=\"" . htmlspecialchars($rowSwim['SquadTimetable']) . "\">Squad Timetable</a></li>";
-}
-if ($rowSwim['SquadCoC'] != "") {
-	$content .= "<li><a href=\"" . htmlspecialchars($rowSwim['SquadCoC']) . "\">Squad Code of Conduct</a></li>";
-}
-$content .= "</ul></div>";
-$content .= "</div></div></form>";
+$content .= "</div></div>";
+$content .= "</div></form>";
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>

@@ -1,20 +1,26 @@
 <?php
 
-$user = $_SESSION['AssRegUser'];
+$user = $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'];
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$swimmers = $db->query("SELECT MForename `first`, MSurname `last`, SquadName `name`, MemberID `id`, RRTransfer trans FROM members INNER JOIN squads ON members.SquadID = squads.SquadID WHERE members.UserID IS NULL ORDER BY MemberID DESC, `first` ASC, `last` ASC");
+$swimmers = $db->prepare("SELECT MForename `first`, MSurname `last`, MemberID `id`, RRTransfer trans FROM members WHERE Tenant = ? AND members.UserID IS NULL ORDER BY MemberID DESC, `first` ASC, `last` ASC");
+$swimmers->execute([
+  $tenant->getId()
+]);
+
+$getSquads = $db->prepare("SELECT SquadName FROM squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad WHERE Member = ?");
 
 $user = $db->prepare("SELECT Forename `first` FROM users WHERE UserID = ?");
-$user->execute([$_SESSION['AssRegUser']]);
+$user->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']]);
 $user = $user->fetch(PDO::FETCH_ASSOC);
 
 if ($user == null) {
   halt(404);
 }
 
-$pagetitle = "Select Swimmers - Assisted Registration";
+$pagetitle = "Select Members - Assisted Registration";
 
 include BASE_PATH . 'views/header.php';
 
@@ -25,7 +31,7 @@ include BASE_PATH . 'views/header.php';
     <div class="col-md-8">
       <h1>Select Swimmers</h1>
       <p class="lead">
-        Select <?=htmlspecialchars($user['first'])?>'s swimmer(s)
+        Select <?= htmlspecialchars($user['first']) ?>'s member(s)
       </p>
 
       <div class="alert alert-warning">
@@ -36,26 +42,41 @@ include BASE_PATH . 'views/header.php';
         </p>
       </div>
 
-      <?php if (isset($_SESSION['AssRegFormError']) && $_SESSION['AssRegFormError']) { ?>
-      <div class="alert alert-warning">
-        <strong>There was a problem with some of the data supplied</strong>
-      </div>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegFormError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegFormError']) { ?>
+        <div class="alert alert-warning">
+          <strong>There was a problem with some of the data supplied</strong>
+        </div>
       <?php } ?>
 
       <form method="post">
 
-        <?php while ($swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)) { ?>
-        <div class="form-group">
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="member-<?=htmlspecialchars($swimmer['id'])?>" name="member-<?=htmlspecialchars($swimmer['id'])?>">
-            <label class="custom-control-label" for="member-<?=htmlspecialchars($swimmer['id'])?>">
-              <?=htmlspecialchars($swimmer['first'] . ' ' . $swimmer['last'])?> <em><?=htmlspecialchars($swimmer['name'])?> Squad</em>
-              <?php if (isset($swimmer['trans']) && $swimmer['trans']) { ?>
-                - <span class="text-success">Transferring from another club</span>
-              <?php } ?>
-            </label>
+        <?php while ($swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)) {
+          $getSquads->execute([
+            $swimmer['id']
+          ]);
+        ?>
+          <div class="form-group">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="member-<?= htmlspecialchars($swimmer['id']) ?>" name="member-<?= htmlspecialchars($swimmer['id']) ?>">
+              <label class="custom-control-label" for="member-<?= htmlspecialchars($swimmer['id']) ?>">
+                <p class="mb-0 font-weight-bold">
+                  <?=htmlspecialchars($swimmer['first'] . ' ' . $swimmer['last'])?> 
+                    <?php if (isset($swimmer['trans']) && $swimmer['trans']) { ?>
+                      - <span class="text-success">Transferring from another club</span>
+                    <?php } ?>
+                </p>
+                <ul class="mb-0 list-unstyled">
+                  <?php if ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)) {
+                    do { ?>
+                      <li><?= htmlspecialchars($squad['SquadName']) ?></li>
+                    <?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC));
+                  } else { ?>
+                    <li>No squads</li>
+                  <?php } ?>
+                </ul>
+              </label>
+            </div>
           </div>
-        </div>
         <?php } ?>
 
         <p>
@@ -70,8 +91,8 @@ include BASE_PATH . 'views/header.php';
 
 <?php
 
-if (isset($_SESSION['AssRegFormError'])) {
-  unset($_SESSION['AssRegFormError']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegFormError'])) {
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegFormError']);
 }
 
 $footer = new \SCDS\Footer();

@@ -5,9 +5,11 @@ if (!SCDS\CSRF::verify()) {
 }
 
 $db = app()->db;
+$tenant = app()->tenant;
+
 use Respect\Validation\Validator as v;
 
-$userID = $_SESSION['UserID'];
+$userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $forenameUpdate = false;
 $middlenameUpdate = false;
 $surnameUpdate = false;
@@ -18,8 +20,12 @@ $photoUpdate = false;
 $update = false;
 $successInformation = "";
 
-$getDetails = $db->prepare("SELECT * FROM members WHERE MemberID = ? and UserID = ?");
-$getDetails->execute([$id, $_SESSION['UserID']]);
+$getDetails = $db->prepare("SELECT * FROM members WHERE Tenant = ? AND MemberID = ? and UserID = ?");
+$getDetails->execute([
+  $tenant->getId(),
+  $id,
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+]);
 $row = $getDetails->fetch(PDO::FETCH_ASSOC);
 
 if ($row == null) {
@@ -179,11 +185,11 @@ try {
   
   }
 
-  $_SESSION['SwimmerSaved'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerSaved'] = true;
 
 } catch (Exception $e) {
 
-  $_SESSION['SwimmerNotSaved'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerNotSaved'] = true;
 
 }
 

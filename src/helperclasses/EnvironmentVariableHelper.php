@@ -1,7 +1,7 @@
 <?php
 
 if (!function_exists('env')) {
-  function env($name) {
+  function getenv($name) {
     // If a $_SERVER environment variable is set return it
     if (isset($_SERVER[$name])) {
       return $_SERVER[$name];

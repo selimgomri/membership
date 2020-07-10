@@ -5,10 +5,14 @@ $dateDeparture = new DateTime('first day of next month', new DateTimeZone('Europ
 $fluidContainer = true;
 
 $db = app()->db;
-$getSquads = $db->query("SELECT SquadName `name`, SquadID id FROM squads ORDER BY SquadFee ASC, `name` ASC");
+$tenant = app()->tenant;
 
-$systemInfo = app()->system;
-$leavers = $systemInfo->getSystemOption('LeaversSquad');
+$getSquads = $db->prepare("SELECT SquadName `name`, SquadID id FROM squads WHERE Tenant = ? ORDER BY SquadFee ASC, `name` ASC");
+$getSquads->execute([
+  $tenant->getId()
+]);
+
+$leavers = app()->tenant->getKey('LeaversSquad');
 
 $pagetitle = "Leaver's Squad";
 
@@ -28,17 +32,17 @@ include BASE_PATH . 'views/header.php';
       <h1>Set Leaver's Squad</h1>
       <form method="post">
 
-        <?php if (isset($_SESSION['PCC-SAVED']) && $_SESSION['PCC-SAVED']) { ?>
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']) { ?>
         <div class="alert alert-success">Changes to leaver's squad saved.</div>
-        <?php unset($_SESSION['PCC-SAVED']); } ?>
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']); } ?>
 
-        <?php if (isset($_SESSION['PCC-ERROR']) && $_SESSION['PCC-ERROR']) { ?>
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']) { ?>
         <div class="alert alert-danger">Changes were not saved.</div>
-        <?php unset($_SESSION['PCC-ERROR']); } ?>
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']); } ?>
 
         <div id="leavers-squad-help">
           <p>
-            Setting a leaver's squad allows parents to indicate a swimmer is leaving <?=htmlspecialchars(env('CLUB_NAME'))?>. This will remove the swimmer on the first day of the next calendar month.
+            Setting a leaver's squad allows parents to indicate a swimmer is leaving <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. This will remove the swimmer on the first day of the next calendar month.
           </p>
           <p>
             e.g. if today a parent told the system a swimmer was leaving, that swimmer would be removed from squad registers on <?=$dateDeparture->format("j F Y")?>.

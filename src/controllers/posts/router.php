@@ -2,7 +2,7 @@
 
 use Respect\Validation\Validator as v;
 
-if ($_SESSION['AccessLevel'] != "Parent" && $_SESSION['AccessLevel'] != "Coach") {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent" && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Coach") {
 	$this->get('/new', function() {
 		
 		include 'NewPost.php';
@@ -32,43 +32,26 @@ if ($_SESSION['AccessLevel'] != "Parent" && $_SESSION['AccessLevel'] != "Coach")
 }
 
 $this->get('/', function() {
-	
-
-	if ($_SESSION['AccessLevel'] == "Parent") {
+	if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 		header("Location: " . autoUrl(""));
 	} else {
 		include 'PostList.php';
 	}
 });
 
-$this->get(['/{id}:int', '/*/{id}:int'], function($id) {
-	
+$this->get('/{id}:int', function($id) {
 	$int = true;
 	include 'Post.php';
 });
 
-$this->get(['/{id}:int/print.pdf', '/*/{id}:int/print.pdf'], function($id) {
-	
+
+$this->get('/{id}:int/print.pdf', function($club, $void, $id) {
 	$int = true;
 	include 'PrintPost.php';
 });
 
 $this->get(['/*'], function() {
-	
 	$int = false;
 	$id = ltrim($this[0], '/');
 	include 'Post.php';
-});
-
-$this->get(['/', '/{page}:int'], function($page = null) {
-	
-
-	include 'PeopleList.php';
-});
-
-$this->get(['/{id}'], function($id) {
-	
-	$people = true;
-	$int = false;
-	include 'People.php';
 });

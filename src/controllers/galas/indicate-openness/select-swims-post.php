@@ -31,8 +31,13 @@ if (isset($_POST['lock-entry']) && $_POST['lock-entry']) {
 }
 
 $db = app()->db;
-$galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends`, CoachEnters, GalaFee fee, GalaFeeConstant gfc, HyTek FROM galas WHERE GalaID = ?");
-$galaDetails->execute([$id]);
+$tenant = app()->tenant;
+
+$galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends`, CoachEnters, GalaFee fee, GalaFeeConstant gfc, HyTek FROM galas WHERE GalaID = ? AND Tenant = ?");
+$galaDetails->execute([
+  $id,
+  $tenant->getId()
+]);
 $gala = $galaDetails->fetch(PDO::FETCH_ASSOC);
 
 if ($gala == null) {
@@ -53,7 +58,7 @@ $getSessions->execute([$id]);
 $sessions = $getSessions->fetchAll(PDO::FETCH_ASSOC);
 
 try {
-$getAvailableSwimmers = $db->prepare("SELECT Member, members.UserID parent, MForename fn, MSurname sn, DateOfBirth dob, gs.`Name` gsname, members.ASANumber `se` FROM ((((galaSessionsCanEnter ca INNER JOIN galaSessions gs ON gs.ID = ca.Session) INNER JOIN members ON ca.Member = members.MemberID) INNER JOIN squads ON squads.SquadID = members.SquadID) LEFT JOIN galaEntries ge ON ge.GalaID = gs.Gala AND ge.MemberID = members.MemberID) WHERE gs.Gala = ? AND ca.CanEnter = ? AND ge.EntryID IS NULL ORDER BY SquadFee DESC, SquadName ASC, sn ASC, fn ASC");
+$getAvailableSwimmers = $db->prepare("SELECT Member, members.UserID parent, MForename fn, MSurname sn, DateOfBirth dob, gs.`Name` gsname, members.ASANumber `se` FROM (((galaSessionsCanEnter ca INNER JOIN galaSessions gs ON gs.ID = ca.Session) INNER JOIN members ON ca.Member = members.MemberID) LEFT JOIN galaEntries ge ON ge.GalaID = gs.Gala AND ge.MemberID = members.MemberID) WHERE gs.Gala = ? AND ca.CanEnter = ? AND ge.EntryID IS NULL ORDER BY, sn ASC, fn ASC");
 $getAvailableSwimmers->execute([$id, true]);
 $swimmers = $getAvailableSwimmers->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
 } catch (Exception $e) {
@@ -148,7 +153,7 @@ try {
       $subject = 'Entries into ' . $gala['name'];
     }
 
-    $message = '<p>' . htmlspecialchars($_SESSION['Forename'] . ' ' . $_SESSION['Surname']) . ' has entered ';
+    $message = '<p>' . htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['Forename'] . ' ' . $_SESSION['TENANT-' . app()->tenant->getId()]['Surname']) . ' has entered ';
     for ($i = 0; $i < sizeof($entries); $i++) {
       $message .= htmlspecialchars($entries[$i]['forename']);
       if ($i < sizeof($entries) - 2) {
@@ -206,10 +211,10 @@ try {
   }
 
   $db->commit();
-  $_SESSION['SuccessStatus'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus'] = true;
 } catch (Exception $e) {
   $db->rollBack();
-  $_SESSION['ErrorStatus'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus'] = true;
 }
 
 header("Location: " . autoUrl("galas/" . $id . "/select-entries"));

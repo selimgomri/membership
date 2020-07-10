@@ -24,10 +24,10 @@ function generatePaymentResponse($intent) {
 }
 
 // See your keys here: https://dashboard.stripe.com/account/apikeys
-\Stripe\Stripe::setApiKey(env('STRIPE'));
+\Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
 $getCustID = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
-$getCustID->execute([$_SESSION['UserID']]);
+$getCustID->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $customer = \Stripe\Customer::retrieve($getCustID->fetchColumn());
 
 $intent = \Stripe\PaymentIntent::create([

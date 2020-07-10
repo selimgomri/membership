@@ -2,7 +2,10 @@
 
 use GeoIp2\Database\Reader;
 
+$headerSent = false;
+
 $db = app()->db;
+$tenant = app()->tenant;
 
 $incrementFailedLoginCount = $db->prepare("UPDATE users SET WrongPassCount = WrongPassCount + 1 WHERE UserID = ?");
 $resetFailedLoginCount = $db->prepare("UPDATE users SET WrongPassCount = 0 WHERE UserID = ?");
@@ -30,8 +33,11 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
   $username = trim(mb_strtolower($_POST['email-address']));
   $target = ltrim(trim($_POST['target']), '/');
 
-  $getUser = $db->prepare("SELECT Forename, Surname, UserID, EmailAddress, `Password`, WrongPassCount FROM users WHERE EmailAddress = ? AND Active");
-  $getUser->execute([$_POST['email-address']]);
+  $getUser = $db->prepare("SELECT Forename, Surname, UserID, EmailAddress, `Password`, WrongPassCount FROM users WHERE EmailAddress = ? AND Tenant = ? AND Active");
+  $getUser->execute([
+    $_POST['email-address'],
+    $tenant->getId()
+  ]);
 
   $row = $getUser->fetch(PDO::FETCH_ASSOC);
 
@@ -55,7 +61,7 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
       if ($isNotJustParent || bool(getUserOption($userID, "Is2FA")) || $do_random_2FA) {
         // Do 2FA
         if (bool(getUserOption($userID, "hasGoogleAuth2FA"))) {
-          $_SESSION['TWO_FACTOR_GOOGLE'] = true;
+          $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE'] = true;
         } else {
           $code = random_int(100000, 999999);
 
@@ -67,22 +73,29 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
           <p>Hello. Confirm your login by entering the following code in your web browser.</p>
           <p><strong>' . $code . '</strong></p>
           <p>If you did not just try to log in, you can ignore this email. You may want to reset your password.</p>
-          <p>Kind Regards, <br>The ' . env('CLUB_NAME') . ' Team</p>';
+          <p>Kind Regards, <br>The ' . app()->tenant->getKey('CLUB_NAME') . ' Team</p>';
 
           $date = new DateTime('now', new DateTimeZone('Europe/London'));
 
           if (notifySend(null, "Verification Code - Requested at " . $date->format("H:i:s \o\\n d/m/Y"), $message, $forename . " " . $surname, $email)) {
-            $_SESSION['TWO_FACTOR_CODE'] = $code;
+            $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_CODE'] = $code;
           } else {
             halt(500);
           }
         }
-        $_SESSION['2FAUserID'] = $userID;
+        $_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserID'] = $userID;
         if ($_POST['RememberMe']) {
-          $_SESSION['2FAUserRememberMe'] = 1;
+          $_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe'] = 1;
         }
-        $_SESSION['TWO_FACTOR'] = true;
-        header("Location: " . autoUrl("2fa"));
+        $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR'] = true;
+        // reportError([
+        //   '1',
+        //   autoUrl("2fa?target=" . urlencode($_POST['target'])),
+        // ]);
+        if (!$headerSent) {
+          header("Location: " . autoUrl("2fa?target=" . urlencode($_POST['target'])));
+          $headerSent = true;
+        }
       } else {
         try {
           $login = new \CLSASC\Membership\Login($db);
@@ -97,7 +110,7 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
           halt(403);
         }
 
-        unset($_SESSION['LoginSec']);
+        unset($_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']);
       }
     } else {
       // Incorrect PW
@@ -106,26 +119,50 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
       $incrementFailedLoginCount->execute([$userID]);
 
       // Set error state
-      $_SESSION['ErrorState'] = true;
-      $_SESSION['EnteredUsername'] = $username;
+      $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = true;
+      $_SESSION['TENANT-' . app()->tenant->getId()]['EnteredUsername'] = $username;
     }
   }
   else {
-    $_SESSION['ErrorState'] = true;
-    $_SESSION['EnteredUsername'] = $username;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['EnteredUsername'] = $username;
 
   }
 } else {
   if (!$security_status) {
-    $_SESSION['ErrorState'] = true;
-    $_SESSION['ErrorStateLSVMessage'] = "We were unable to verify the integrity of your login attempt. The site you entered your email address and password on may have been attempting to capture your login details. Try reseting your password urgently.";
-    $_SESSION['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['LoginSec']];
+    $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStateLSVMessage'] = "We were unable to verify the integrity of your login attempt. The site you entered your email address and password on may have been attempting to capture your login details. Try reseting your password urgently.";
+    $_SESSION['TENANT-' . app()->tenant->getId()]['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']];
   }
 }
-$_SESSION['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['LoginSec']];
-unset($_SESSION['LoginSec']);
-if (isset($_SESSION['ErrorState']) && $_SESSION['ErrorState'] && $_POST['target'] == "" || isset($_SESSION['ErrorAccountLocked']) && $_SESSION['ErrorAccountLocked'] && $_POST['target'] == "") {
-  header("Location: " . autoUrl("login"));
+$_SESSION['TENANT-' . app()->tenant->getId()]['InfoSec'] = [$_POST['LoginSecurityValue'], $_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']];
+unset($_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']);
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] && $_POST['target'] == "" || isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorAccountLocked']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorAccountLocked'] && $_POST['target'] == "") {
+  // reportError([
+  //   '2',
+  //   autoUrl("login")
+  // ]);
+  if (!$headerSent) {
+    header("Location: " . autoUrl("login"));
+    $headerSent = true;
+  }
 } else {
-  header("Location: " . autoUrl(ltrim($_POST['target'], '/')));
+  // reportError([
+  //   '3',
+  //   autoUrl(ltrim($_POST['target'], '/'), false),
+  //   ltrim($_POST['target'], '/')
+  // ]);
+  if (!$headerSent) {
+    if (isset($_POST['target']) && $_POST['target']) {
+      header("Location: " . autoUrl(ltrim($_POST['target'], '/'), false));
+    } else {
+      header("Location: " . autoUrl(''));
+    }
+    $headerSent = true;
+  }
+}
+
+if (!$headerSent) {
+  header("Location: " . autoUrl(''));
+  $headerSent = true;
 }

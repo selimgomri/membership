@@ -7,7 +7,7 @@ $currentUser = app()->user;
 $sql = "SELECT `EmailAddress`, `EmailComms` FROM `users` WHERE `UserID` = ?";
 try {
 	$query = $db->prepare($sql);
-	$query->execute([$_SESSION['UserID']]);
+	$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 } catch (Exception $e) {
 	halt(404);
 }
@@ -22,14 +22,14 @@ if ($_POST['EmailComms']) {
 
 if ($email_comms != $row['EmailComms']) {
 	$email_comms_update = true;
-	$_SESSION['OptionsUpdate'] = true;
+	$_SESSION['TENANT-' . app()->tenant->getId()]['OptionsUpdate'] = true;
 	$emailCommsDb = (int) $email_comms;
   $sql = "UPDATE `users` SET `EmailComms` = ? WHERE `UserID` = ?";
   try {
-  	$db->prepare($sql)->execute([$emailCommsDb, $_SESSION['UserID']]);
+  	$db->prepare($sql)->execute([$emailCommsDb, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   } catch (Exception $e) {
 		// Could not update settings
-		$_SESSION['EmailUpdateError'] = '<p class="mb-0"><strong>We were unable to change your email subscription preferences</strong></p><p class="mb-0">Please try again. If the issue persists, please contact support referencing <span class="mono">Email Preferences Update Error</span></p>';
+		$_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateError'] = '<p class="mb-0"><strong>We were unable to change your email subscription preferences</strong></p><p class="mb-0">Please try again. If the issue persists, please contact support referencing <span class="mono">Email Preferences Update Error</span></p>';
   }
 }
 
@@ -44,7 +44,7 @@ if ($_POST['EmailAddress'] != $row['EmailAddress']) {
 		$authCode = hash('sha256', random_bytes(64) . time());
 
 		$user_details = [
-			'User'		   => $_SESSION['UserID'],
+			'User'		   => $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
 			'OldEmail'   => $row['EmailAddress'],
 			'NewEmail'	 => $_POST['EmailAddress']
 		];
@@ -56,11 +56,11 @@ if ($_POST['EmailAddress'] != $row['EmailAddress']) {
 		} catch (Exception $e) {
 			// Could not add to db
 			reportError($e);
-			$_SESSION['EmailUpdateError'] = '<p class="mb-0"><strong>We were unable to add your new email address to our awaiting confirmation list</strong></p><p class="mb-0">Please try again. If the issue persists, please contact support referencing <span class="mono">Email Address Update Error</span></p>';
+			$_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateError'] = '<p class="mb-0"><strong>We were unable to add your new email address to our awaiting confirmation list</strong></p><p class="mb-0">Please try again. If the issue persists, please contact support referencing <span class="mono">Email Address Update Error</span></p>';
 		}
 		$id = $db->lastInsertId();
 
-		$name = getUserName($_SESSION['UserID']);
+		$name = getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
 
 		$verifyLink = "email/auth/" . $id . "/" . $authCode;
 	  // PHP Email
@@ -74,13 +74,13 @@ if ($_POST['EmailAddress'] != $row['EmailAddress']) {
 	  <p>You will need to use your email address, ' . $email . ' to sign in.</p>
 	  <p>If you did not make a change to your email address, please ignore this email and consider reseting your password.</p>
 	  <p>For help, send an email to <a
-	  href="mailto:' . htmlspecialchars(env('CLUB_EMAIL')) . '">' . htmlspecialchars(env('CLUB_EMAIL')) . '</a>/</p>
+	  href="mailto:' . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . '">' . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . '</a>/</p>
 	  ';
-	  notifySend($to, $subject, $sContent, $name, $_POST['EmailAddress'], ["Email" => "support@" . env('EMAIL_DOMAIN'), "Name" => env('CLUB_NAME') . " Security"]);
-		$_SESSION['EmailUpdate'] = true;
-		$_SESSION['EmailUpdateNew'] = $_POST['EmailAddress'];
+	  notifySend($to, $subject, $sContent, $name, $_POST['EmailAddress'], ["Email" => "support@" . getenv('EMAIL_DOMAIN'), "Name" => app()->tenant->getKey('CLUB_NAME') . " Security"]);
+		$_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdate'] = true;
+		$_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateNew'] = $_POST['EmailAddress'];
 	} else {
-		$_SESSION['EmailUpdate'] = false;
+		$_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdate'] = false;
 	}
 }
 

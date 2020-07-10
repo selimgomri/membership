@@ -1,21 +1,25 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
-$getInfo = $db->prepare("SELECT members.MemberID, MForename fn, MSurname sn, members.UserID, trainingLogs.Title, trainingLogs.Content, trainingLogs.ContentType, trainingLogs.DateTime FROM trainingLogs INNER JOIN members ON trainingLogs.Member = members.MemberID WHERE trainingLogs.ID = ?");
-$getInfo->execute([$id]);
+$getInfo = $db->prepare("SELECT members.MemberID, MForename fn, MSurname sn, members.UserID, trainingLogs.Title, trainingLogs.Content, trainingLogs.ContentType, trainingLogs.DateTime FROM trainingLogs INNER JOIN members ON trainingLogs.Member = members.MemberID WHERE trainingLogs.ID = ? AND members.Tenant = ?");
+$getInfo->execute([
+  $id,
+  $tenant->getId()
+]);
 $info = $getInfo->fetch(PDO::FETCH_ASSOC);
 
 if ($info == null) {
   halt(404);
 }
 
-if ($_SESSION['AccessLevel'] == 'Parent' && $info['UserID'] != $_SESSION['UserID']) {
+if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $info['UserID'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
   halt(404);
 }
 
-if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-MemberLoggedIn'])) {
-  if ($_SESSION['LogBooks-Member'] != $info['MemberID']) {
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn'])) {
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-Member'] != $info['MemberID']) {
     halt(404);
   }
 }
@@ -41,7 +45,7 @@ include BASE_PATH . 'views/header.php';
   <div class="bg-light mt-n3 py-3 mb-3">
     <div class="container">
 
-      <?php if (isset($_SESSION['LogBooks-MemberLoggedIn']) && bool($_SESSION['LogBooks-MemberLoggedIn'])) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn'])) { ?>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("log-books"))?>">Log book</a></li>
