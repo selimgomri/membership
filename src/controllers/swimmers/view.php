@@ -39,7 +39,7 @@ try {
   if ($res->getStatusCode() == "200") {
     $pbs = json_decode($res->getBody());
   }
-} catch (GuzzleHttp\Exception\ClientException $e) {
+} catch (GuzzleHttp\Exception\ClientException | GuzzleHttp\Exception\ServerException $e) {
   // 404 or something
 }
 
