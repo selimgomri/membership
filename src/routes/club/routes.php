@@ -659,13 +659,15 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
 }
 
 $this->get('/files/*/viewer', function () {
-  $filename = $this[0];
+  $array = $this->getArrayCopy();
+  $filename = $array[sizeof($array) - 1];
   $type = 'files';
   require BASE_PATH . 'controllers/public/Viewer.php';
 });
 
 $this->get('/files/*', function () {
-  $filename = $this[0];
+  $array = $this->getArrayCopy();
+  $filename = $array[sizeof($array) - 1];
   require BASE_PATH . 'controllers/FileLoader.php';
 });
 
