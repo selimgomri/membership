@@ -283,9 +283,9 @@ class FeeSummer
       ];
 
       if ($item['Type'] == 'Payment') {
-        $debits += $fee;
+        $debits += (int) $item['Amount'];
       } else if ($item['Type'] == 'Refund') {
-        $credits += $fee;
+        $credits += (int) $item['Amount'];
       }
     }
 
