@@ -138,6 +138,11 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") {
 		include 'adminViewMonthlyFees.php';
 	});
 
+	$this->get('/estimated-fees', function() {
+		
+		include 'admin/reports/trial-run.php';
+	});
+
 	$this->group('/confirmation', function() {
 		include 'admin/confirmation/router.php';
 	});
