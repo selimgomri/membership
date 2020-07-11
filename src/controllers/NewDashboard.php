@@ -20,6 +20,7 @@ try {
 }
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $username = htmlspecialchars(explode(" ", getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']))[0]);
 
@@ -27,14 +28,12 @@ $day = (new DateTime('now', new DateTimeZone('Europe/London')))->format("w");
 $time = (new DateTime('-15 minutes', new DateTimeZone('Europe/London')))->format("H:i:s");
 $time30 = (new DateTime('-30 minutes', new DateTimeZone('Europe/London')))->format("H:i:s");
 
-$sql = "SELECT SessionID, squads.SquadID, SessionName, SquadName, VenueName, StartTime, EndTime FROM ((`sessions` INNER JOIN squads ON squads.SquadID = sessions.SquadID) INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE SessionDay = :day AND StartTime <= :timenow AND (EndTime > :timenow OR EndTime > :time30) AND DisplayFrom <= CURDATE() AND DisplayUntil >= CURDATE() ORDER BY SquadFee DESC, SquadName ASC";
-$db = app()->db;
+$sql = "SELECT SessionID, squads.SquadID, SessionName, SquadName, VenueName, StartTime, EndTime FROM ((`sessions` INNER JOIN squads ON squads.SquadID = sessions.SquadID) INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE SessionDay = :day AND StartTime <= :timenow AND (EndTime > :timenow OR EndTime > :time30) AND DisplayFrom <= CURDATE() AND DisplayUntil >= CURDATE() AND `sessions`.`Tenant` = :tenant ORDER BY SquadFee DESC, SquadName ASC";
 
 $query = $db->prepare($sql);
-$query->execute(['day' => $day, 'timenow' => $time, 'time30' => $time30]);
+$query->execute(['day' => $day, 'timenow' => $time, 'time30' => $time30, 'tenant' => $tenant->getId()]);
 $sessions = $query->fetchAll(PDO::FETCH_ASSOC);
 
-$db = app()->db;
 $query = $db->prepare("SELECT EmailAddress FROM users WHERE UserID = ?");
 $query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $userInfo = $query->fetch(PDO::FETCH_ASSOC);
