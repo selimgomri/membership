@@ -77,7 +77,7 @@ try {
   ]);
 
   // Delete moves
-  $delete = $db->prepare("DELETE FROM moves WHERE MemberID = ?");
+  $delete = $db->prepare("DELETE FROM squadMoves WHERE Member = ?");
   $delete->execute([
     $_POST['member']
   ]);
@@ -89,17 +89,25 @@ try {
     $_POST['member']
   ]);
 
-  // Delete times
-  $delete = $db->prepare("DELETE FROM `times` WHERE MemberID = ?");
-  $delete->execute([
-    $_POST['member']
-  ]);
+  try {
+    // Delete times
+    $delete = $db->prepare("DELETE FROM `times` WHERE MemberID = ?");
+    $delete->execute([
+      $_POST['member']
+    ]);
+  } catch (PDOException $e) {
+    // Ignore lack of legacy table
+  }
 
-  // Delete times individual
-  $delete = $db->prepare("DELETE FROM timesIndividual WHERE MemberID = ?");
-  $delete->execute([
-    $_POST['member']
-  ]);
+  try {
+    // Delete times individual
+    $delete = $db->prepare("DELETE FROM timesIndividual WHERE MemberID = ?");
+    $delete->execute([
+      $_POST['member']
+    ]);
+  } catch (PDOException $e) {
+    // Ignore lack of legacy table
+  }
 
   // Deactivate member
   $delete = $db->prepare("UPDATE members SET Active = 0, SquadID = NULL, UserID = NULL WHERE MemberID = ?");
@@ -115,7 +123,6 @@ try {
 
   $responseData['status'] = 200;
   $responseData['message'] = $deleteMember['Forename'] . ' has been deleted successfully.';
-
 } catch (PDOException $e) {
   $responseData['status'] = 500;
   $responseData['message'] = 'A database error occurred. All changes have been rolled back.';
