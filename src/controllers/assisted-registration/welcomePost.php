@@ -26,7 +26,6 @@ if (!v::email()->validate($email)) {
 $info = $getUserInfo->fetch(PDO::FETCH_ASSOC);
 
 if ($status && $info) {
-  reportError([$info,$email,$_POST]);
   $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'] = $info['UserID'];
   $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegExisting'] = true;
 
