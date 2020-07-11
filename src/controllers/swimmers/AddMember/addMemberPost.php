@@ -95,6 +95,7 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
   	}
 
   } catch (Exception $e) {
+	  reportError($e);
     $action = false;
   }
 }
