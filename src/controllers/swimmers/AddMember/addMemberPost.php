@@ -12,7 +12,7 @@ $added = $action = false;
 $forename = $middlenames = $surname = $dateOfBirth = $asaNumber = $sex = $cat = $cp = $sql = $transfer = "";
 $getASA = false;
 
-if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POST['datebirth'])) && (!empty($_POST['sex'])) && (!empty($_POST['squad']))) {
+if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POST['datebirth'])) && (!empty($_POST['sex']))) {
   $forename = trim(ucwords($_POST['forename']));
 	$surname = trim(ucwords($_POST['surname']));
 	$dateOfBirth = trim($_POST['datebirth']);
