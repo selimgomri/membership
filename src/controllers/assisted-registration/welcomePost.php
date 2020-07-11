@@ -26,6 +26,7 @@ if (!v::email()->validate($email)) {
 $info = $getUserInfo->fetch(PDO::FETCH_ASSOC);
 
 if ($status && $info) {
+  reportError([$info,$email,$_POST]);
   $_SESSION['AssRegUser'] = $info['UserID'];
   $_SESSION['AssRegExisting'] = true;
 
