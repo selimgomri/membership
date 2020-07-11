@@ -15,8 +15,9 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            cd /var/www/dev.myswimmingclub.uk/software/
+            cd /var/www/membership-mt/php/Membership/
             git pull
+            curl "https://mt.myswimmingclub.uk/db/run"
           host: ${{ secrets.HOST_SCDS }}
           user: ${{ secrets.USER_SCDS }}
           key: ${{ secrets.USER_PRIVATE_KEY_SCDS}}
