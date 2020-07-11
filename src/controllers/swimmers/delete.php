@@ -82,6 +82,12 @@ try {
     $_POST['member']
   ]);
 
+  // Delete membership of squads
+  $delete = $db->prepare("DELETE FROM squadMembers WHERE Member = ?");
+  $delete->execute([
+    $_POST['member']
+  ]);
+
   // Delete targeted list memberships
   $delete = $db->prepare("DELETE FROM targetedListMembers WHERE ReferenceType = ? AND ReferenceID = ?");
   $delete->execute([
