@@ -189,7 +189,7 @@ function mySwimmersTable($link = null, $userID)
   members.ClubPays exempt, users.Forename, users.Surname, users.EmailAddress,
   members.ASANumber FROM (members INNER JOIN
   users ON members.UserID = users.UserID) WHERE members.UserID = ?");
-  $getSquads = $db->prepare("SELECT SquadName squad, SquadFee fee FROM squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad WHERE Member = ?");
+  $getSquads = $db->prepare("SELECT SquadName squad, SquadFee fee, squadMembers.Paying FROM squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad WHERE Member = ?");
   // squads.SquadName, squads.SquadFee
   $swimmers->execute([$userID]);
   $swimmer = $swimmers->fetch(PDO::FETCH_ASSOC);
@@ -210,7 +210,7 @@ function mySwimmersTable($link = null, $userID)
               <ul class="mb-0 list-unstyled">
                 <?php if ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)) {
                   do { ?>
-                    <li><?= htmlspecialchars($squad['squad']) ?>, <em><?php if (bool($swimmer['exempt']) || (int) $squad['fee'] == 0) { ?><?php } else { ?>&pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $squad['fee']))->toScale(2) ?>/month<?php } ?></em></li>
+                    <li><?= htmlspecialchars($squad['squad']) ?>, <em><?php if (!bool($squad['Paying']) || (int) $squad['fee'] == 0) { ?><del>&pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $squad['fee']))->toScale(2) ?></del> &pound;0/month<?php } else { ?>&pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $squad['fee']))->toScale(2) ?>/month<?php } ?></em></li>
                   <?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC));
                 } else { ?>
                   <li>No squads</li>
@@ -262,7 +262,8 @@ function courseLengthString($string)
     $courseLength = "Short Course";
   } else if ($string == "LONG") {
     $courseLength = "Long Course";
-  } else {
+  }
+  else {
     $courseLength = "Non Standard Pool Distance";
   }
   return $courseLength;
@@ -273,6 +274,7 @@ function upcomingGalas($link = null, $links = false, $userID = null)
   $db = app()->db;
   $sql = $db->query("SELECT * FROM `galas` WHERE `galas`.`ClosingDate` >= CURDATE() ORDER BY `galas`.`ClosingDate` ASC;");
   $row = $sql->fetch(PDO::FETCH_ASSOC);
+  $output = "";
   if ($row != null) {
     $output = "<div class=\"media\">";
     do {
@@ -324,83 +326,29 @@ function upcomingGalas($link = null, $links = false, $userID = null)
 
 function myMonthlyFeeTable($link = null, $userID)
 {
-  $db = app()->db;
-  $sql = $db->prepare("SELECT squads.SquadName, squads.SquadID, squads.SquadFee,
-  members.MForename, members.MSurname FROM ((members INNER JOIN squadMembers ON squadMembers.Squad = squadMembers.Member) INNER JOIN squads ON
-  squadMembers.Squad = squads.SquadID) WHERE members.UserID = ? AND
-  members.ClubPays = '0' ORDER BY `squads`.`SquadFee` DESC;");
-  $sql->execute([$userID]);
+  try {
+    $fs = new FeeSummer((int) (new DateTime('now', new DateTimeZone('Europe/London')))->format('n'));
+    $fees = $fs->sumUser($userID);
 
-  $rows = $sql->fetchAll(PDO::FETCH_ASSOC);
+    $ret = '<ul class="list-group">';
 
-  $count = sizeof($rows);
-  $totalsArray = [];
-  $squadsOutput = "";
-  $totalCost = 0;
-  $reducedCost = 0;
-  for ($i = 0; $i < $count; $i++) {
-    $row = $rows[$i];
-    $totalsArray[$i] = $row['SquadFee'];
-    $totalCost += $totalsArray[$i];
-    $squadsOutput .= "<tr><td>" . htmlspecialchars($row['SquadName']) . " Squad <br>for " .
-      htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "</td><td>&pound;" .
-      number_format($row['SquadFee'], 2, '.', '') . "</td></tr>";
-  }
-  for ($i = 0; $i < $count; $i++) {
-    if (app()->tenant->isCLS() && $i == 2) {
-      $totalsArray[$i] = $totalsArray[$i] * 0.8;
-    } else if (app()->tenant->isCLS() && $i > 2) {
-      $totalsArray[$i] = $totalsArray[$i] * 0.6;
-    }
-    $reducedCost += $totalsArray[$i];
-  }
-  $sql = $db->prepare("SELECT extras.ExtraName, extras.ExtraFee, extras.Type, members.MForename,
-  members.MSurname FROM (((extras INNER JOIN extrasRelations ON extras.ExtraID =
-  extrasRelations.ExtraID) INNER JOIN members ON members.MemberID =
-  extrasRelations.MemberID) INNER JOIN users on users.UserID = members.UserID) WHERE users.UserID = ? ORDER BY
-  `extras`.`ExtraFee` DESC;");
-  $sql->execute([$userID]);
+    // Squad fees
+    $ret .= '<li class="list-group-item"><div class="row"><div class="col">Squad fees</div><div class="col text-right">&pound;' . htmlspecialchars((string) \Brick\Math\BigInteger::of((string) $fees['squad_total'])->toBigDecimal()->withPointMovedLeft(2)) . '</div></div></li>';
 
-  $rows = $sql->fetchAll(PDO::FETCH_ASSOC);
-  $count = sizeof($rows);
-  $monthlyExtras = "";
-  $monthlyExtrasTotal = 0;
-  $monthlyExtrasCreditTotal = 0;
-  for ($i = 0; $i < $count; $i++) {
-    $row = $rows[$i];
-    $monthlyExtras .= "<tr><td>" . htmlspecialchars($row['ExtraName']) . " <br>for " .
-      htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "</td><td>&pound;" .
-      number_format($row['ExtraFee'], 2, '.', '') . "</td></tr>";
-    if ($row['Type'] == 'Payment') {
-      $monthlyExtrasTotal += $row['ExtraFee'];
-    } else if ($row['Type'] == 'Refund') {
-      $monthlyExtrasCreditTotal += $row['ExtraFee'];
-    }
-  }
-  if ($monthlyExtrasTotal + $reducedCost > 0) {
-    $output = "<div class=\"table-responsive\"><table class=\"table mb-0\">
-    <thead class=\"thead-light\">
-      <tr>
-        <th>Fee Information</th>
-        <th>Price</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr><td>The monthly subtotal for Squad Fees is</td><td>&pound;" .
-      number_format($totalCost, 2, '.', '') . "</td></tr>";
-    if (($totalCost - $reducedCost) > 0) {
-      $output .= "<tr><td>The monthly total payable for squads with discounts is</td><td>&pound;" . number_format($reducedCost, 2, '.', '') .
-        "</td></tr>";
-    }
-    $output .= "<tr><td>The monthly subtotal for extras is</td><td>&pound;" . number_format($monthlyExtrasTotal, 2, '.', '') .
-      "</td></tr> <tr><td>The monthly subtotal for credit (refund) extras is</td><td>&pound;" . number_format($monthlyExtrasCreditTotal, 2, '.', '') .
-      "</td></tr> <tr class=\"bg-light\"><td><strong>The monthly total
-    is</strong></td><td>&pound;" . number_format(($reducedCost +
-        $monthlyExtrasTotal - $monthlyExtrasCreditTotal), 2, '.', '') . "</td></tr> </tbody></table></div>";
-    return $output;
-  } else {
-    return "<p>You have no monthly fees to pay. You may need to
-    add a swimmer to your account to see your fees.</p>";
+    // Extra fees
+    $ret .= '<li class="list-group-item"><div class="row"><div class="col">Extra fees</div><div class="col text-right">&pound;' . htmlspecialchars((string) \Brick\Math\BigInteger::of((string) $fees['extra_total'])->toBigDecimal()->withPointMovedLeft(2)) . '</div></div></li>';
+
+    $total = $fees['squad_total'] + $fees['extra_total'];
+
+    // Total fees
+    $ret .= '<li class="list-group-item font-weight-bold bg-light"><div class="row"><div class="col">Monthly total</div><div class="col text-right">&pound;' . htmlspecialchars((string) \Brick\Math\BigInteger::of((string) $total)->toBigDecimal()->withPointMovedLeft(2)) . '</div></div></li>';
+
+    $ret .= '</ul>';
+
+    return $ret;
+
+  } catch (Exception $e) {
+    return '<div class="alert alert-warning">Data currently unavailable</div>';
   }
 }
 
@@ -517,7 +465,8 @@ function monthlyFeeCost($link = null, $user, $format = "decimal")
     return (string) \Brick\Math\BigDecimal::of((string) $total)->withPointMovedLeft(2)->toScale(2);
   } else if ($format == "int") {
     return $total;
-  } else if ($format == "string") {
+  }
+  else if ($format == "string") {
     return "&pound;" . (string) \Brick\Math\BigDecimal::of((string) $total)->withPointMovedLeft(2)->toScale(2);
   }
 }
@@ -541,7 +490,8 @@ function monthlyExtraCost($link = null, $userID, $format = "decimal")
     return (string) $totalCost->toScale(2);
   } else if ($format == "int") {
     return $totalCost->withPointMovedRight(2)->toInt();
-  } else if ($format == "string") {
+  }
+  else if ($format == "string") {
     return "&pound;" . (string) $totalCost->toScale(2);
   }
 }
@@ -681,9 +631,11 @@ function getBillingDate($link = null, $user)
       $ordinal = "st";
     } else if ($row['Day'] % 10 == 2) {
       $ordinal = "nd";
-    } else if ($row['Day'] % 10 == 3) {
+    }
+    else if ($row['Day'] % 10 == 3) {
       $ordinal = "rd";
-    } else {
+    }
+    else {
       $ordinal = "th";
     }
     return $row['Day'] . $ordinal;
@@ -816,7 +768,8 @@ function updatePaymentStatus($PMkey)
       $sql2bool = false;
       echo "Failure in event process";
     }
-  } else if ($status == "customer_approval_denied") {
+  }
+  else if ($status == "customer_approval_denied") {
     $db = app()->db;
     try {
       $query = $db->prepare("SELECT payments.UserID, Name, Amount, Forename, Surname FROM payments INNER JOIN users ON payments.UserID = users.UserID WHERE PMkey = ?");
@@ -835,7 +788,8 @@ function updatePaymentStatus($PMkey)
       reportError($e);
       $sql2bool = false;
     }
-  } else if ($status == "charged_back") {
+  }
+  else if ($status == "charged_back") {
     $db = app()->db;
     try {
       $query = $db->prepare("SELECT payments.UserID, Name, Amount, Forename, Surname FROM payments INNER JOIN users ON payments.UserID = users.UserID WHERE PMkey = ?");
@@ -855,7 +809,8 @@ function updatePaymentStatus($PMkey)
       reportError($e);
       $sql2bool = false;
     }
-  } else {
+  }
+  else {
     $sql2bool = true;
   }
   if ($status == null) {
@@ -992,9 +947,11 @@ function ordinal($num)
     $ordinal = "st";
   } else if ($num % 10 == 2) {
     $ordinal = "nd";
-  } else if ($num % 10 == 3) {
+  }
+  else if ($num % 10 == 3) {
     $ordinal = "rd";
-  } else {
+  }
+  else {
     $ordinal = "th";
   }
   return $num . $ordinal;
@@ -1072,19 +1029,22 @@ function getTimes($asa)
         } else {
           $array['CY_SC'][] = trim($domElement->textContent);
         }
-      } else if ($col == 2) {
+      }
+      else if ($col == 2) {
         if ($domElement->textContent == "") {
           $array['SCPB'][] = null;
         } else {
           $array['SCPB'][] = trim($domElement->textContent);
         }
-      } else if ($col == 3) {
+      }
+      else if ($col == 3) {
         if ($domElement->textContent == "") {
           $array['CY_LC'][] = null;
         } else {
           $array['CY_LC'][] = trim($domElement->textContent);
         }
-      } else if ($col == 4) {
+      }
+      else if ($col == 4) {
         if ($domElement->textContent == "") {
           $array['LCPB'][] = null;
         } else {
@@ -1299,9 +1259,11 @@ function helloGreeting()
     return "Good Morning";
   } else if ($hour > 11 && $hour < 17) {
     return "Good Afternoon";
-  } else if ($hour > 16 && $hour < 21) {
+  }
+  else if ($hour > 16 && $hour < 21) {
     return "Good Evening";
-  } else {
+  }
+  else {
     return "Good Night";
   }
 }
@@ -1312,17 +1274,23 @@ function getCardFA($brand)
     return 'fa-cc-visa';
   } else if ($brand == 'mastercard') {
     return 'fa-cc-mastercard';
-  } else if ($brand == 'amex') {
+  }
+  else if ($brand == 'amex') {
     return 'fa-cc-amex';
-  } else if ($brand == 'diners') {
+  }
+  else if ($brand == 'diners') {
     return 'fa-cc-diners-club';
-  } else if ($brand == 'discover') {
+  }
+  else if ($brand == 'discover') {
     return 'fa-cc-discover';
-  } else if ($brand == 'jcb') {
+  }
+  else if ($brand == 'jcb') {
     return 'fa-cc-jcb';
-  } else if ($brand == 'unionpay') {
+  }
+  else if ($brand == 'unionpay') {
     return 'fa-cc-stripe';
-  } else {
+  }
+  else {
     return 'fa-cc-stripe';
   }
 }
@@ -1333,17 +1301,23 @@ function getCardBrand($brand)
     return 'Visa';
   } else if ($brand == 'mastercard') {
     return 'Mastercard';
-  } else if ($brand == 'amex') {
+  }
+  else if ($brand == 'amex') {
     return 'American Express';
-  } else if ($brand == 'diners') {
+  }
+  else if ($brand == 'diners') {
     return 'Diners Club';
-  } else if ($brand == 'discover') {
+  }
+  else if ($brand == 'discover') {
     return 'Discover';
-  } else if ($brand == 'jcb') {
+  }
+  else if ($brand == 'jcb') {
     return 'JCB';
-  } else if ($brand == 'unionpay') {
+  }
+  else if ($brand == 'unionpay') {
     return 'UnionPay';
-  } else {
+  }
+  else {
     return 'Unknown Card';
   }
 }

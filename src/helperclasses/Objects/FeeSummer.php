@@ -49,7 +49,7 @@ class FeeSummer
     }
   }
 
-  public function sumUser(int $user)
+  public function sumUser(int $user, $ignoreMonth = false)
   {
 
     // Prepare queries
@@ -70,8 +70,10 @@ class FeeSummer
     // Totals
     $credits = 0;
     $debits = 0;
+    $squadsTotal = 0;
+    $extrasTotal = 0;
 
-    if ($this->squadFeeRequired) {
+    if ($this->squadFeeRequired || $ignoreMonth) {
       // Get user members
       $getUserMembers->execute([
         $user
@@ -108,6 +110,7 @@ class FeeSummer
           $fee = BigDecimal::of((string) $squad['SquadFee'])->withPointMovedRight(2)->toInt();
           $memberTotal += $fee;
           $debits += $fee;
+          $squadsTotal += $fee;
 
           $provisionalItems[] = [
             'date' => $date,
@@ -145,6 +148,7 @@ class FeeSummer
             ];
 
             $memberTotal -= $fee;
+            $squadsTotal -= $fee;
             $credits += $fee;
           }
         }
@@ -207,6 +211,7 @@ class FeeSummer
               'payment_item_id' => null,
               'payment_id' => null,
             ];
+            $squadsTotal -= $swimmerDiscount;
             $credits += $swimmerDiscount;
           }
         }
@@ -255,8 +260,10 @@ class FeeSummer
 
         if ($swimmerRow['Type'] == 'Payment') {
           $debits += $fee;
+          $extrasTotal += $fee;
         } else if ($swimmerRow['Type'] == 'Refund') {
           $credits += $fee;
+          $extrasTotal -= $fee;
         }
       }
     }
@@ -303,6 +310,8 @@ class FeeSummer
       'total' => $debits - $credits,
       'credits' => $credits,
       'debits' => $debits,
+      'squad_total' => $squadsTotal,
+      'extra_total' => $extrasTotal,
       'items' => [
         'existing' => $existingItems,
         'provisional' => $provisionalItems,
