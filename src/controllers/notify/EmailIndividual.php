@@ -15,7 +15,10 @@ $query->execute([
   $tenant->getId()
 ]);
 $userInfo = $query->fetchAll(PDO::FETCH_ASSOC);
-$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
+$query->execute([
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+  $tenant->getId()
+]);
 $curUserInfo = $query->fetchAll(PDO::FETCH_ASSOC);
 
 if (sizeof($userInfo) != 1) {

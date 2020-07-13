@@ -306,7 +306,7 @@ try {
     }
 
     if (!app()->tenant->isCLS()) {
-      $fromEmail .= '.' . urlencode(strtolower(str_replace(' ', '', CLUB_CODE)));
+      $fromEmail .= '.' . urlencode(strtolower(str_replace(' ', '', app()->tenant->getKey("ASA_CLUB_CODE"))));
     }
 
     $fromEmail .= '@' . getenv('EMAIL_DOMAIN');

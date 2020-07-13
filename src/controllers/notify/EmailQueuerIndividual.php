@@ -20,7 +20,10 @@ try {
     $tenant->getId()
   ]);
   $userInfo = $query->fetch(PDO::FETCH_ASSOC);
-  $query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
+  $query->execute([
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+    $tenant->getId()
+  ]);
   $curUserInfo = $query->fetch(PDO::FETCH_ASSOC);
 
   if ($userInfo == null) {
@@ -173,7 +176,6 @@ try {
   } else {
     throw new Exception('Invalid request to SendGrid');
   }
-
 } catch (Exception $e) {
   $_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess'] = false;
   $_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivPostContent'] = $_POST;
@@ -198,5 +200,4 @@ try {
       header("location: " . autoUrl("notify"));
     }
   }
-
 }
