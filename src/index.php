@@ -235,6 +235,10 @@ app()->db = $db;
 
 // User login if required and make user var available
 
+$route->addPattern([
+  'uuid' => '/([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}){1}',
+]);
+
 $route->use(function () {
   // Make req available
   $req = app('request');

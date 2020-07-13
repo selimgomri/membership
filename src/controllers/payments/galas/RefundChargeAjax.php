@@ -79,13 +79,13 @@ try {
   $amountRefundable = $toPay - ($entryData['AmountRefunded']);
 
   if ($refundAmount < 0 || $refundAmount > $amountRefundable) {
-    throw new Exception ('The amount you\'re attempting to refund is not allowed');
+    throw new Exception('The amount you\'re attempting to refund is not allowed');
   }
 
   $hasNoDD = ($entryData['MandateID'] == null) || (getUserOption($entryData['user'], 'GalaDirectDebitOptOut'));
 
   $swimsList = '<ul>';
-  foreach($swimsArray as $colTitle => $text) {
+  foreach ($swimsArray as $colTitle => $text) {
     if ($entryData[$colTitle]) {
       $swimsList .= '<li>' . $text . '</li>';
     }
@@ -127,18 +127,27 @@ try {
       'Refund',
       $json
     ]);
-  } else if ($entryData['Intent'] != null && bool($entryData['StripePaid']) && getenv('STRIPE')) {
+  } else if ($entryData['Intent'] != null && bool($entryData['StripePaid']) && getenv('STRIPE') && $tenant->getStripeAccount()) {
     // Refund to card used
 
     try {
       \Stripe\Stripe::setApiKey(getenv('STRIPE'));
-      $intent = \Stripe\PaymentIntent::retrieve($entryData['Intent']);
-      $re = \Stripe\Refund::create([
-        "charge" => $intent->charges->data[0]->id,
-        "amount" => $refundAmount
-      ]);
-      
-    } catch(\Stripe\Exception\CardException $e) {
+      $intent = \Stripe\PaymentIntent::retrieve(
+        $entryData['Intent'],
+        [
+          'stripe_account' => $tenant->getStripeAccount()
+        ]
+      );
+      $re = \Stripe\Refund::create(
+        [
+          "charge" => $intent->charges->data[0]->id,
+          "amount" => $refundAmount
+        ],
+        [
+          'stripe_account' => $tenant->getStripeAccount()
+        ]
+      );
+    } catch (\Stripe\Exception\CardException $e) {
       // Since it's a decline, \Stripe\Exception\CardException will be caught
       throw new Exception($e->getStripeError()->message);
     } catch (\Stripe\Exception\RateLimitException $e) {
@@ -169,7 +178,12 @@ try {
 
     try {
       \Stripe\Stripe::setApiKey(getenv('STRIPE'));
-      $intent = \Stripe\PaymentIntent::retrieve($entryData['Intent']);
+      $intent = \Stripe\PaymentIntent::retrieve(
+        $entryData['Intent'],
+        [
+          'stripe_account' => $tenant->getStripeAccount()
+        ]
+      );
 
       // Update amount refunded on payment
       if (isset($intent->charges->data[0]->amount_refunded)) {

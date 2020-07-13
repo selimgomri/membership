@@ -41,7 +41,18 @@ try {
     throw new Exception('The description is too long.');
   }
 
-  $addToPaymentsPending = $db->prepare("INSERT INTO paymentsPending (`Date`, `Status`, UserID, `Name`, Amount, Currency, `Type`) VALUES (?, ?, ?, ?, ?, ?, ?)");
+  // Try to get category
+  $category = null;
+  if (isset($_POST['payment-category'])) {
+    $getCategory = $db->prepare("SELECT ID FROM paymentCategories WHERE UniqueID = ? AND Tenant = ?");
+    $getCategory->execute([
+      $_POST['payment-category'],
+      $tenant->getId(),
+    ]);
+    $category = $getCategory->fetchColumn();
+  }
+
+  $addToPaymentsPending = $db->prepare("INSERT INTO paymentsPending (`Date`, `Status`, UserID, `Name`, Amount, Currency, `Type`, `Category`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
   $date = new DateTime('now', new DateTimeZone('Europe/London'));
 
@@ -65,6 +76,7 @@ try {
     $amount,
     'GBP',
     $type,
+    $category,
   ]);
 
   if ($amount > 0) {
@@ -96,7 +108,6 @@ try {
   $db->commit();
 
   $_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentSuccessMessage'] = 'We\'ve added the ' . $typeString . ' to ' . $user['Forename'] . '\'s account to pay in their next bill.';
-
 } catch (PDOException $e) {
   $db->rollBack();
 

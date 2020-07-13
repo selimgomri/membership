@@ -2,6 +2,15 @@
 
 $pagetitle = "New Payment";
 
+$db = app()->db;
+$tenant = app()->tenant;
+
+$categories = $db->prepare("SELECT UniqueID, Name FROM paymentCategories WHERE Tenant = ? ORDER BY `Name` ASC");
+$categories->execute([
+  $tenant->getId(),
+]);
+$category = $categories->fetch(PDO::FETCH_ASSOC);
+
 include BASE_PATH . 'views/header.php';
 
 ?>
@@ -10,8 +19,8 @@ include BASE_PATH . 'views/header.php';
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl('payments'))?>">Payments</a></li>
-      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl('payments/invoice-payments'))?>">Invoicing</a></li>
+      <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('payments')) ?>">Payments</a></li>
+      <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('payments/invoice-payments')) ?>">Invoicing</a></li>
       <li class="breadcrumb-item active" aria-current="page">New</li>
     </ol>
   </nav>
@@ -22,22 +31,24 @@ include BASE_PATH . 'views/header.php';
       <p class="lead">Add a new payment or credit to an account</p>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentSuccessMessage'])) { ?>
-      <div class="alert alert-success">
-        <?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentSuccessMessage'])?>
-      </div>
-      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentSuccessMessage']); } ?>
+        <div class="alert alert-success">
+          <?= htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentSuccessMessage']) ?>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentSuccessMessage']);
+      } ?>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentErrorMessage'])) { ?>
-      <div class="alert alert-danger">
-        <p class="mb-0"><strong>An error occured and we have not added the payment</strong></p>
-        <p class="mb-0"><?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentErrorMessage'])?></p>
-      </div>
-      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentErrorMessage']); } ?>
+        <div class="alert alert-danger">
+          <p class="mb-0"><strong>An error occured and we have not added the payment</strong></p>
+          <p class="mb-0"><?= htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentErrorMessage']) ?></p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentErrorMessage']);
+      } ?>
 
       <form id="payment-form" method="post" class="needs-validation" novalidate>
         <div class="form-group">
           <label for="user-email">User email address</label>
-          <input type="text" class="form-control" id="user-email" name="user-email" aria-describedby="user-email-help" data-ajax-url="<?=htmlspecialchars(autoUrl("payments/invoice-payments/new/get-user"))?>">
+          <input type="text" class="form-control" id="user-email" name="user-email" aria-describedby="user-email-help" data-ajax-url="<?= htmlspecialchars(autoUrl("payments/invoice-payments/new/get-user")) ?>">
           <small id="user-email-help" class="form-text text-muted">Search for the user by email.</small>
         </div>
 
@@ -71,6 +82,22 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
 
+          <div class="form-group">
+            <label for="payment-category">
+              Category
+            </label>
+            <select class="custom-select" id="payment-category" name="payment-category" <?php if (!$category) { ?>disabled<?php } ?>>
+              <?php if (!$category) { ?>
+                <option value="none" selected>No categories available</option>
+              <?php } else { ?>
+                <option value="none" selected>Uncategorised</option>
+                <?php do { ?>
+                  <option value="<?= htmlspecialchars($category['UniqueID']) ?>"><?= htmlspecialchars($category['Name']) ?></option>
+                <?php } while ($category = $categories->fetch(PDO::FETCH_ASSOC)); ?>
+              <?php } ?>
+            </select>
+          </div>
+
           <div class="form-group" id="radios">
             <label>Type</label>
             <div class="custom-control custom-radio">
@@ -83,8 +110,8 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
 
-          <?=SCDS\CSRF::write()?>
-          <?=SCDS\FormIdempotency::write()?>
+          <?= SCDS\CSRF::write() ?>
+          <?= SCDS\FormIdempotency::write() ?>
 
           <p>Once you add a charge to an account, you won't be able to cancel it. If you make a mistake or need to reverse it, you would need to add another charge or a credit (refund).</p>
 
@@ -122,7 +149,7 @@ include BASE_PATH . 'views/header.php';
           <dl class="row mb-0">
             <dt class="col-sm-3">Email</dt>
             <dd class="col-sm-9 text-truncate"><a href="" id="confirmation-modal-user-info-email"></a></dd>
-            
+
             <dt class="col-sm-3">Phone</dt>
             <dd class="col-sm-9"><a href="" id="confirmation-modal-user-info-phone"></a></dd>
 
