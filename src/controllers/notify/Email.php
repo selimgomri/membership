@@ -254,12 +254,12 @@ include BASE_PATH . "views/notifyMenu.php";
 			<textarea class="form-control" id="message" name="message" rows="10" data-tinymce-css-location="<?=htmlspecialchars(autoUrl("public/css/tinymce.css"))?>" data-documentBaseUrl="<?=htmlspecialchars(autoUrl("notify/new/"))?>" required><?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData']['message'])) {?><?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData']['message'])?><?php } ?></textarea>
 		</div>
 
-    <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
+    <input type="hidden" name="MAX_FILE_SIZE" value="10485760">
 
     <div class="form-group">
       <label>Select files to attach</label>
       <div class="custom-file">
-        <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="file-upload-invalid-feedback">
+        <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="10485760" data-error-message-id="file-upload-invalid-feedback">
         <label class="custom-file-label text-truncate" for="file-upload">Choose file(s)</label>
         <div class="invalid-feedback" id="file-upload-invalid-feedback">
           Oh no!

@@ -56,7 +56,7 @@ try {
         reportError($_FILES['file-upload']['type'][$i]);
         $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
         throw new Exception();
-      } else if ($_FILES['file-upload']['size'][$i] > 3145728) {
+      } else if ($_FILES['file-upload']['size'][$i] > 10485760) {
         // Too large, stop
         // reportError($_FILES['file-upload']['size'][$i]);
         $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError'] = true;
