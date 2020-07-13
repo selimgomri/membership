@@ -26,6 +26,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 
   $getParentName = $db->prepare("SELECT Forename, Surname FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN users ON members.UserID = users.UserID) WHERE members.Tenant = ? AND galaEntries.EntryID = ?");
   $getParentName->execute([
+    $tenant->getId(),
     $id
   ]);
   if ($parent = $getParentName->fetch(PDO::FETCH_ASSOC)) {
