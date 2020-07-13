@@ -122,6 +122,27 @@ $income = $income->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <div class="mb-4">
+      <h2 class="mb-4">Administrative Options</h2>
+      <div class="mb-4">
+        <div class="news-grid">
+
+          <a href="<?=autoUrl('payments/categories')?>">
+  					<span class="mb-3">
+  	          <span class="title mb-0">
+  							Payment categories
+  						</span>
+  						<span>
+  							Create categories and assign them to payment items
+  						</span>
+  					</span>
+            <span class="category">
+  						Admin
+  					</span>
+          </a>
+        </div>
+      </div>
+
+    <div class="mb-4">
       <?php
 
       $labels = [];
