@@ -71,83 +71,82 @@ $pagetitle = "Email " . htmlspecialchars($name);
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";
 
- ?>
+?>
 
 <div class="bg-light py-3 mt-n3 mb-3">
   <div class="container">
 
     <?php if (isset($userOnly) && $userOnly) { ?>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("users"))?>">Users</a></li>
-        <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("users/" . $user))?>"><?=htmlspecialchars(mb_substr($userInfo['Forename'], 0, 1))?><?=htmlspecialchars(mb_substr($userInfo['Surname'], 0, 1))?></a></li>
-        <li class="breadcrumb-item active" aria-current="page">Email</li>
-      </ol>
-    </nav>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("users")) ?>">Users</a></li>
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("users/" . $user)) ?>"><?= htmlspecialchars(mb_substr($userInfo['Forename'], 0, 1)) ?><?= htmlspecialchars(mb_substr($userInfo['Surname'], 0, 1)) ?></a></li>
+          <li class="breadcrumb-item active" aria-current="page">Email</li>
+        </ol>
+      </nav>
     <?php } else { ?>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("swimmers"))?>">Members</a></li>
-        <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("swimmers/" . $id))?>"><?=htmlspecialchars(mb_substr($mySwimmer['fn'], 0, 1))?><?=htmlspecialchars(mb_substr($mySwimmer['sn'], 0, 1))?></a></li>
-        <li class="breadcrumb-item active" aria-current="page">Contact parent</li>
-      </ol>
-    </nav>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("swimmers")) ?>">Members</a></li>
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("swimmers/" . $id)) ?>"><?= htmlspecialchars(mb_substr($mySwimmer['fn'], 0, 1)) ?><?= htmlspecialchars(mb_substr($mySwimmer['sn'], 0, 1)) ?></a></li>
+          <li class="breadcrumb-item active" aria-current="page">Contact parent</li>
+        </ol>
+      </nav>
     <?php } ?>
 
     <h1>Contact a user</h1>
-    <p class="lead mb-0">Send an email<?php if ($mySwimmer) { ?> to <?=htmlspecialchars($mySwimmer['fn'] . ' ' . $mySwimmer['sn'])?>'s account<?php } ?></p>
-    
+    <p class="lead mb-0">Send an email<?php if ($mySwimmer) { ?> to <?= htmlspecialchars($mySwimmer['fn'] . ' ' . $mySwimmer['sn']) ?>'s account<?php } ?></p>
+
   </div>
 </div>
 
 <div class="container">
 
   <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) { ?>
-  <div class="alert alert-success">
-    <p class="mb-0"><strong>Results have been uploaded</strong>.</p>
-  </div>
+    <div class="alert alert-success">
+      <p class="mb-0"><strong>Results have been uploaded</strong>.</p>
+    </div>
   <?php
     unset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']);
   } ?>
 
   <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['FormError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['FormError']) { ?>
-  <div class="alert alert-danger">
-    <p class="mb-0"><strong>We could not verify the integrity of the submitted form</strong>. Please try again.</p>
-  </div>
+    <div class="alert alert-danger">
+      <p class="mb-0"><strong>We could not verify the integrity of the submitted form</strong>. Please try again.</p>
+    </div>
   <?php
     unset($_SESSION['TENANT-' . app()->tenant->getId()]['FormError']);
   } ?>
 
   <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError']) { ?>
-  <div class="alert alert-danger">
-    <p class="mb-0"><strong>There was a problem with the file uploaded</strong>. Please try again.</p>
-  </div>
+    <div class="alert alert-danger">
+      <p class="mb-0"><strong>There was a problem with the file uploaded</strong>. Please try again.</p>
+    </div>
   <?php
     unset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadError']);
   } ?>
 
   <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError']) { ?>
-  <div class="alert alert-danger">
-    <p class="mb-0"><strong>A file you uploaded was too large</strong>. The maximum size for an individual file is 300000 bytes.</p>
-  </div>
+    <div class="alert alert-danger">
+      <p class="mb-0"><strong>A file you uploaded was too large</strong>. The maximum size for an individual file is 300000 bytes.</p>
+    </div>
   <?php
     unset($_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError']);
   } ?>
 
   <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['CollectiveSizeTooLargeError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['CollectiveSizeTooLargeError']) { ?>
-  <div class="alert alert-danger">
-    <p class="mb-0"><strong>The files you uploaded were collectively too large</strong>. Attachments may not exceed a total of 10 megabytes in size.</p>
-  </div>
+    <div class="alert alert-danger">
+      <p class="mb-0"><strong>The files you uploaded were collectively too large</strong>. Attachments may not exceed a total of 10 megabytes in size.</p>
+    </div>
   <?php
     unset($_SESSION['TENANT-' . app()->tenant->getId()]['CollectiveSizeTooLargeError']);
   } ?>
 
-	<form method="post" onkeypress="return event.keyCode != 13;" class="needs-validation" novalidate id="notify-form" enctype="multipart/form-data">
+  <form method="post" onkeypress="return event.keyCode != 13;" class="needs-validation" novalidate id="notify-form" enctype="multipart/form-data">
     <div class="form-group">
-			<label for="recipient">To</label>
-			<input type="text" class="form-control" name="recipient" id="recipient"
-      placeholder="Recipient" autocomplete="off" value="<?=htmlspecialchars($name . " <" . $email . ">")?>" disabled>
-		</div>
+      <label for="recipient">To</label>
+      <input type="text" class="form-control" name="recipient" id="recipient" placeholder="Recipient" autocomplete="off" value="<?= htmlspecialchars($name . " <" . $email . ">") ?>" disabled>
+    </div>
 
     <div class="row">
       <div class="col-md">
@@ -155,11 +154,11 @@ include BASE_PATH . "views/notifyMenu.php";
           <label for="from">Send message as</label>
           <div class="custom-control custom-radio">
             <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" <?php if ($from == "club-sending-account") { ?>checked<?php } ?> required>
-            <label class="custom-control-label" for="from-club"><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></label>
+            <label class="custom-control-label" for="from-club"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></label>
           </div>
           <div class="custom-control custom-radio">
             <input type="radio" id="from-user" name="from" class="custom-control-input" value="current-user" <?php if ($from == "current-user") { ?>checked<?php } ?>>
-            <label class="custom-control-label" for="from-user"><?=htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'])?></label>
+            <label class="custom-control-label" for="from-user"><?= htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname']) ?></label>
           </div>
           <div class="invalid-feedback">
             Choose a send-as option
@@ -179,35 +178,34 @@ include BASE_PATH . "views/notifyMenu.php";
             <label class="custom-control-label" for="ReplyTo-Me">My reply-to email address</label>
           </div>
           <small class="form-text text-muted">
-            <a href="<?=htmlspecialchars(autoUrl("notify/reply-to"))?>" target="_blank">Manage reply-to address</a>
+            <a href="<?= htmlspecialchars(autoUrl("notify/reply-to")) ?>" target="_blank">Manage reply-to address</a>
           </small>
           <div class="invalid-feedback">
             Choose a reply-to address
           </div>
         </div>
       </div>
-		</div>
+    </div>
 
-		<div class="form-group">
-			<label for="subject">Message Subject</label>
-			<input type="text" class="form-control" name="subject" id="subject"
-      placeholder="Message Subject" autocomplete="off" value="<?=htmlspecialchars($subject)?>" required>
+    <div class="form-group">
+      <label for="subject">Message Subject</label>
+      <input type="text" class="form-control" name="subject" id="subject" placeholder="Message Subject" autocomplete="off" value="<?= htmlspecialchars($subject) ?>" required>
       <div class="invalid-feedback">
         You must enter a subject
       </div>
-		</div>
+    </div>
 
-		<div class="form-group">
-			<label for="message">Your Message</label>
-			<textarea class="form-control" id="message" name="message" rows="10" required><?=htmlspecialchars($content)?></textarea>
-			<small id="messageHelp" class="form-text text-muted">
+    <div class="form-group">
+      <label for="message">Your Message</label>
+      <textarea class="form-control" id="message" name="message" rows="10" required><?= htmlspecialchars($content) ?></textarea>
+      <small id="messageHelp" class="form-text text-muted">
         Styling will be stripped from this message
       </small>
       <div class="invalid-feedback">
         Include content in your email
       </div>
     </div>
-    
+
     <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
 
     <div class="form-group">
@@ -222,21 +220,21 @@ include BASE_PATH . "views/notifyMenu.php";
     </div>
 
     <?php if (isset($swimmer)) { ?>
-    <div class="form-group">
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" aria-describedby="coach-help" id="coach-send" name="coach-send" value="1" checked>
-        <label class="custom-control-label" for="coach-send">BCC coaches</label>
-        <small id="coach-help" class="form-text text-muted">
-          Send a blind carbon-copy of this email to coaches of this member's squads. The member will not be aware coaches were sent a copy of the email.
-        </small>
+      <div class="form-group">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" aria-describedby="coach-help" id="coach-send" name="coach-send" value="1" checked>
+          <label class="custom-control-label" for="coach-send">BCC coaches</label>
+          <small id="coach-help" class="form-text text-muted">
+            Send a blind carbon-copy of this email to coaches of this member's squads. The member will not be aware coaches were sent a copy of the email.
+          </small>
+        </div>
       </div>
-    </div>
     <?php } ?>
 
-    <?=SCDS\CSRF::write()?>
+    <?= SCDS\CSRF::write() ?>
 
-		<p><button class="btn btn-success" id="submit" value="submitted" type="submit">Send the email</button></p>
-	</form>
+    <p><button class="btn btn-success" id="submit" value="submitted" type="submit">Send the email</button></p>
+  </form>
 </div>
 
 <?php $footer = new \SCDS\Footer();
