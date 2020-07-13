@@ -116,7 +116,7 @@ try {
   }
 
   // Deactivate member
-  $delete = $db->prepare("UPDATE members SET Active = 0, SquadID = NULL, UserID = NULL WHERE MemberID = ?");
+  $delete = $db->prepare("UPDATE members SET Active = 0, UserID = NULL WHERE MemberID = ?");
   $delete->execute([
     $_POST['member']
   ]);
