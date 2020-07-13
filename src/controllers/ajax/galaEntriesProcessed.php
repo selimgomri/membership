@@ -3,12 +3,22 @@
 $db = app()->db;
 $tenant = app()->tenant->getId();
 
-$update = $db->prepare("UPDATE galaEntries SET EntryProcessed = ? WHERE EntryID = ? AND Tenant = ?");
-$markPaid = $db->prepare("UPDATE galaEntries SET Charged = ? WHERE EntryID = ? AND Tenant = ?");
+$verifyEntryId = $db->prepare("SELECT COUNT(*) FROM galaEntries INNER JOIN galas ON galas.GalaID = galaEntries.GalaID WHERE galaEntries.EntryID = ? AND galas.Tenant = ?");
+$update = $db->prepare("UPDATE galaEntries SET EntryProcessed = ? WHERE EntryID = ?");
+$markPaid = $db->prepare("UPDATE galaEntries SET Charged = ? WHERE EntryID = ?");
 
 $access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $access == "Galas") {
 	if ((isset($_POST["processedID"])) && (isset($_POST["clickedItemChecked"])) && (isset($_POST["verify"]))) {
+
+		// Verify entry id
+		$verifyEntryId->execute([
+			$id,
+			$tenant,
+		]);
+		if ($verifyEntryId->fetchColumn() == 0) {
+			halt(404);
+		}
 
 		// get the galaID parameter from POST
     $id = $_POST["processedID"];
@@ -22,15 +32,13 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
   			if ($itemChecked == "true") {
   				$update->execute([
 						true,
-						$id,
-						$tenant
+						$id
 					]);
   			}
   			else {
   				$update->execute([
 						0,
-						$id,
-						$tenant
+						$id
 					]);
   			}
   		}
@@ -41,15 +49,13 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
   			if ($itemChecked == "true") {
   				$markPaid->execute([
 						true,
-						$id,
-						$tenant
+						$id
 					]);
   			}
   			else {
 					$markPaid->execute([
 						0,
-						$id,
-						$tenant
+						$id
 					]);
   			}
   		}
