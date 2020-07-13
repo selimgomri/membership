@@ -26,8 +26,8 @@ if (!v::email()->validate($email)) {
 $info = $getUserInfo->fetch(PDO::FETCH_ASSOC);
 
 if ($status && $info) {
-  $_SESSION['AssRegUser'] = $info['UserID'];
-  $_SESSION['AssRegExisting'] = true;
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'] = $info['UserID'];
+  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegExisting'] = true;
 
   // Check has parent permissions
   $count = $db->prepare("SELECT COUNT(*) FROM `permissions` WHERE `User` = ? AND `Permission` = ?");
