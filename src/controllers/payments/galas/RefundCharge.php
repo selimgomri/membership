@@ -66,6 +66,8 @@ include BASE_PATH . 'views/header.php';
 		</ol>
 	</nav>
 
+	<div id="data" data-ajax-url="<?=htmlspecialchars(autoUrl('galas/payments/ajax-refund-handler'))?>"></div>
+
 	<h1>Refund Parents for <?=htmlspecialchars($gala['name'])?></h1>
 	<?php if ($gala['fixed']) { ?>
 	<p class="lead">
@@ -302,5 +304,5 @@ include BASE_PATH . 'views/header.php';
 
 $footer = new \SCDS\Footer();
 $footer->addJs("public/js/numerical/bignumber.min.js");
-$footer->addJs("js/galas/refund-entries.js");
+$footer->addJs("public/js/payments/galas/refund-charges.js");
 $footer->render();

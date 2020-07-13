@@ -55,7 +55,7 @@ modalButton.addEventListener('click', function(event) {
       console.log(response);
     }
   };
-  xhttp.open('POST', <?=json_encode(autoUrl('galas/payments/ajax-refund-handler'))?>, true);
+  xhttp.open('POST', document.getElementById('data').dataset.ajaxUrl, true);
   xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
   xhttp.send(encodeURI('entry=' + entry + '&refundAmount=' + refundAmount + '&amountRefunded=' + amountRefunded));
 });
