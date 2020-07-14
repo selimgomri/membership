@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 require 'GlobalHead.php';
 
@@ -177,7 +178,11 @@ if (isset($customBackground) && $customBackground) {
             <div class="col-auto">
               <h1 class="mb-0">
                 <a href="<?= htmlspecialchars(autoUrl("")) ?>" class="<?= $clubLogoColour ?> text-decoration-none">
-                  <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>
+                  <?php if ($tenant->getKey('LOGO_DIR') && $tenant->getKey('SHOW_LOGO')) { ?>
+                    <img src="<?= htmlspecialchars(autoUrl($logos . 'logo-75.png')) ?>" srcset="<?= htmlspecialchars(autoUrl($logos . 'logo-75@2x.png')) ?> 2x, <?= htmlspecialchars(autoUrl($logos . 'logo-75@3x.png')) ?> 3x" alt="<?= htmlspecialchars($tenant->getName()) ?>" class="img-fluid" style="height: 75px">
+                  <?php } else { ?>
+                    <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>
+                  <?php } ?>
                 </a>
               </h1>
             </div>

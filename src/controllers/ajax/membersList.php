@@ -50,7 +50,7 @@ if ((isset($_POST["squadID"])) && (isset($_POST["search"]))) {
 	  else {
       $query = $db->prepare("SELECT members.MemberID, members.MForename,
       members.MSurname, members.ASANumber,
-      members.DateOfBirth FROM members INNER JOIN squadMembers WHERE members.Tenant = ? AND members.UserID IS NULL AND members.Active AND squadMembers.Squad = ? AND (" .
+      members.DateOfBirth FROM members INNER JOIN squadMembers ON members.MemberID = squadMembers.Member WHERE members.Tenant = ? AND members.UserID IS NULL AND members.Active AND squadMembers.Squad = ? AND (" .
       $selection . ") ORDER BY `members`.`MForename` , `members`.`MSurname`
       ASC");
       $names = array_merge([$tenant->getId(), $_POST["squadID"]], $names);
@@ -66,7 +66,7 @@ if ((isset($_POST["squadID"])) && (isset($_POST["search"]))) {
 	  else {
       $query = $db->prepare("SELECT members.MemberID, members.MForename,
       members.MSurname, members.ASANumber,
-      members.DateOfBirth FROM members INNER JOIN squadMembers WHERE members.Tenant = ? AND squadMembers.Squad = ? AND members.Active AND (" . $selection . ") ORDER
+      members.DateOfBirth FROM members INNER JOIN squadMembers ON members.MemberID = squadMembers.Member WHERE members.Tenant = ? AND squadMembers.Squad = ? AND members.Active AND (" . $selection . ") ORDER
       BY `members`.`MForename` , `members`.`MSurname` ASC");
       $names = array_merge([$tenant->getId(), $_POST["squadID"]], $names);
 	  }

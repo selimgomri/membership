@@ -37,16 +37,48 @@ include BASE_PATH . 'views/header.php';
         </div>
       <?php } ?>
 
-      <form method="post" id="logo-form" enctype="multipart/form-data">
+      <form class="needs-validation" method="post" id="logo-form" enctype="multipart/form-data" novalidate>
 
         <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
+
+        <p>
+          We ask you to provide two versions of your logo.
+        </p>
+
+        <ul>
+          <li>
+            The first is your logo proper and we'll use this in emails and other parts of the membership system. Your logo can be any aspect ratio, but logos with an extreme width or height relative to the other may become distorted.
+          </li>
+          <li>
+            The second is an icon. For best results, this should be a square icon in a 1:1 aspect ratio. We'll use this as your icon in browser tabs and on device home screens.
+          </li>
+        </ul>
+
+        <p>
+          Providing an icon is optional. If you don't, we will generate an icon from your logo.
+        </p>
+
+        <p>
+          While we accept PNG and JPEG file uploads, we recommend you upload your logos an icons as PNG files as these are much better quality than JPEG files, which become noisy around text.
+        </p>
 
         <div class="form-group">
           <label>Upload logo</label>
           <div class="custom-file">
-            <input type="file" class="custom-file-input" accept="image/png,image/jpeg" id="file-upload" name="file-upload" data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="file-upload-invalid-feedback">
+            <input type="file" class="custom-file-input" accept="image/png,image/jpeg" id="file-upload" name="file-upload" data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="file-upload-invalid-feedback" required>
             <label class="custom-file-label text-truncate" for="file-upload">Choose image</label>
             <div class="invalid-feedback" id="file-upload-invalid-feedback">
+              Please include an image
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Upload icon <small class="text-muted">Optional</small></label>
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" accept="image/png,image/jpeg" id="icon-upload" name="icon-upload" data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="icon-upload-invalid-feedback">
+            <label class="custom-file-label text-truncate" for="icon-upload">Choose image</label>
+            <div class="invalid-feedback" id="icon-upload-invalid-feedback">
               Oh no!
             </div>
           </div>
@@ -74,5 +106,6 @@ include BASE_PATH . 'views/header.php';
 
 $footer = new \SCDS\Footer();
 $footer->useFluidContainer();
+$footer->addJS("public/js/NeedsValidation.js");
 $footer->addJS("public/js/settings/logo-upload.js");
 $footer->render();

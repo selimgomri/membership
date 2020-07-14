@@ -408,7 +408,6 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
     http_response_code(303);
     header("Location: " . autoUrl('login?target=' . urlencode(app('request')->path)));
   });
-
 } else if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
   $this->group('/renewal', function () {
 
@@ -456,14 +455,10 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
   });
 
   $this->group(['/swimmers', '/members', '/divers', '/water-polo-players'], function () {
-
-
     include BASE_PATH . 'controllers/swimmers/router.php';
   });
 
   $this->group('/squads', function () {
-
-
     include BASE_PATH . 'controllers/squads/router.php';
   });
 
@@ -497,14 +492,10 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
   });
 
   $this->group('/registration', function () {
-
-
     include BASE_PATH . 'controllers/registration/router.php';
   });
 
   $this->group(['/attendance', '/registers'], function () {
-
-
     include BASE_PATH . 'controllers/attendance/router.php';
   });
 
@@ -516,32 +507,27 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
     include BASE_PATH . 'controllers/admin-tools/router.php';
   });
 
+  $this->group('/tick-sheets', function () {
+    include BASE_PATH . 'controllers/tick-sheets/router.php';
+  });
+
   $this->group('/galas', function () {
-
-
     include BASE_PATH . 'controllers/galas/router.php';
   });
 
   $this->group('/family', function () {
-
     include BASE_PATH . 'controllers/family/router.php';
   });
 
   $this->group('/renewal', function () {
-
-
     include BASE_PATH . 'controllers/renewal/router.php';
   });
 
   $this->group('/registration', function () {
-
-
     include BASE_PATH . 'controllers/registration/router.php';
   });
 
   $this->group('/payments', function () {
-
-
     include BASE_PATH . 'controllers/payments/router.php';
   });
 
@@ -565,11 +551,7 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
   });
 
   $this->group('/webhooks', function () {
-
-
     $this->group('/payments', function () {
-
-
       include BASE_PATH . 'controllers/payments/webhooks.php';
     });
   });
@@ -653,7 +635,6 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
         }
       });
       */
-
     }
   }
 }

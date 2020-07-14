@@ -29,8 +29,9 @@ try {
   }
 
   $sizes = [
+    75,
     150,
-    255,
+    256,
     512,
     1024,
   ];
@@ -44,6 +45,15 @@ try {
         $srcset = '@' . $i . 'x';
       }
       $image->save($filePath . 'logo-' . $size . $srcset . '.png', 80, 'png');
+    }
+  }
+
+  if ($_FILES['icon-upload']['error'] == 0) {
+    try {
+      $image = Image::make($_FILES['icon-upload']['tmp_name']);
+      $image->backup();
+    } catch (Exception $e) {
+      $image->reset();
     }
   }
 
