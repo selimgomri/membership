@@ -158,7 +158,7 @@ class Squad {
 
   public function getMembers() {
     $db = app()->db;
-    $getMembers = $db->prepare("SELECT MemberID FROM members INNER JOIN squadMembers ON squadMembers.Member = members.MemberID WHERE Squad = ? ORDER BY MForename, MSurname");
+    $getMembers = $db->prepare("SELECT MemberID FROM members INNER JOIN squadMembers ON squadMembers.Member = members.MemberID WHERE squadMembers.Squad = ? ORDER BY MForename, MSurname");
     $getMembers->execute([
       $this->id
     ]);
