@@ -22,6 +22,8 @@ $vars = [
   'EMERGENCY_MESSAGE_TYPE' => 'NONE',
   'GOCARDLESS_ACCESS_TOKEN' => null,
   'GOCARDLESS_WEBHOOK_KEY' => null,
+  'SHOW_LOGO' => false,
+  'LOGO_DIR' => null,
 ];
 
 $disabled = [];
@@ -249,6 +251,15 @@ include BASE_PATH . 'views/header.php';
               <label class="custom-control-label" for="HIDE_MEMBER_ATTENDANCE">Show member attendance percentage to parents</label>
             </div>
           </div>
+
+          <?php if ($vars['LOGO_DIR']) { ?>
+          <div class="form-group">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="SHOW_LOGO" value="1" name="SHOW_LOGO" <?php if (bool($vars['SHOW_LOGO'])) { ?>checked<?php } ?> <?= $disabled['SHOW_LOGO'] ?>>
+              <label class="custom-control-label" for="SHOW_LOGO">Show organisation logo in header</label>
+            </div>
+          </div>
+          <?php } ?>
 
           <h2>GoCardless API keys (for direct debit)</h2>
 

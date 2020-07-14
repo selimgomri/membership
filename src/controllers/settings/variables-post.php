@@ -35,6 +35,8 @@ $vars = [
   'GOCARDLESS_ACCESS_TOKEN' => null,
   'GOCARDLESS_WEBHOOK_KEY' => null,
   'EMERGENCY_MESSAGE_TYPE' => 'NONE',
+  'SHOW_LOGO' => false,
+  'LOGO_DIR' => null,
 ];
 
 try {
@@ -68,6 +70,10 @@ try {
     $hide = 0;
   }
   app()->tenant->setKey('HIDE_MEMBER_ATTENDANCE', $hide);
+
+  if (app()->tenant->getKey('LOGO_DIR')) {
+    app()->tenant->setKey('SHOW_LOGO', (int) bool($_POST['SHOW_LOGO']));
+  }
 
   $vars['CLUB_ADDRESS'] = null;
   $addr = $_POST['CLUB_ADDRESS'];
