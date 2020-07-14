@@ -28,19 +28,16 @@ if (isset($fluidContainer) && $fluidContainer == true) {
 <!DOCTYPE html>
 <!--
 
-Copyright Chris Heppell & Chester-le-Street ASC 2016 - 2018.
+Copyright Swimming Club Data Systems / Chris Heppell / Chester-le-Street ASC 2016 - 2020.
+
 Bootstrap CSS and JavaScript is Copyright Twitter Inc 2011-2018
-jQuery v3.1.0 is Copyright jQuery Foundation 2016
+jQuery is Copyright jQuery Foundation
 
-Designed by Chris Heppell, www.chrisheppell.uk
+Designed by SCDS / Chris Heppell
 
-Chester-le-Street ASC
-Swimming Club based in Chester-le-Street, North East England
-https://github.com/Chester-le-Street-ASC/
+support@myswimmingclub.uk
 
-web@chesterlestreetasc.co.uk
-
-https://corporate.myswimmingclub.co.uk
+https://myswimmingclub.co.uk
 
 Chester-le-Street ASC is a non profit unincorporated association.
 

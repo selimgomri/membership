@@ -47,6 +47,15 @@ try {
     }
   }
 
+  if ($_FILES['icon-upload']['error'] == 0) {
+    try {
+      $image = Image::make($_FILES['icon-upload']['tmp_name']);
+      $image->backup();
+    } catch (Exception $e) {
+      $image->reset();
+    }
+  }
+
   $sizes = [
     196,
     192,
