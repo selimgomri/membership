@@ -63,11 +63,11 @@ try {
         throw new Exception();
       } else if ($_FILES['file-upload']['size'][$i] > 0) {
         // Store uploaded files in filestore, if exists
-        if (getenv('FILE_STORE_PATH')) {
+        if ($rootFilePath = $tenant->getFilePath()) {
           // Work out filename for upload
           $date = new DateTime('now', new DateTimeZone('Europe/London'));
           $urlPath = 'notify/attachments/' . $date->format("Y/m/d") . '/';
-          $path = getenv('FILE_STORE_PATH') . $urlPath;
+          $path = $rootFilePath . $urlPath;
           $hash = preg_replace('@[^0-9a-z\.]+@i', '-', basename($_FILES['file-upload']['name'][$i]));
           if (mb_strlen($hash) == 0) {
             $hash = hash('sha256', $_FILES['file-upload']['name'][$i] . rand(0, 1000000));
@@ -94,6 +94,7 @@ try {
           'disposition' => 'attachment',
           'tmp_name' => $_FILES['file-upload']['tmp_name'][$i],
           'store_name' => $filenamePath,
+          'directory' => $path,
           'url' => $url,
           'uploaded' => false,
         ];
@@ -116,16 +117,19 @@ try {
     for ($i = 0; $i < sizeof($attachments); $i++) {
       if (!is_writeable($attachments[$i]['store_name'])) {
         // Try making folders
-        $dir = explode('/', $attachments[$i]['store_name']);
-        $path = "";
-        $tried = [];
-        for ($y = 0; $y < sizeof($dir) - 1; $y++) {
-          $path .= $dir[$y];
-          if (!is_dir($path)) {
-            mkdir($path);
-            $tried[] = $path;
-          }
-          $path .= '/';
+        // $dir = explode('/', $attachments[$i]['store_name']);
+        // $path = "";
+        // $tried = [];
+        // for ($y = 0; $y < sizeof($dir) - 1; $y++) {
+        //   $path .= $dir[$y];
+        //   if (!is_dir($path)) {
+        //     mkdir($path);
+        //     $tried[] = $path;
+        //   }
+        //   $path .= '/';
+        // }
+        if (!is_dir($attachments[$i]['directory'])) {
+          mkdir($attachments[$i]['directory'], 0755, true);
         }
         if (!is_writeable($path)) {
           // reportError([$tried, $path, $attachments[$i]['store_name']]);
