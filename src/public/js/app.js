@@ -1,8 +1,8 @@
 const appInfo = document.getElementById('app-js-info');
 
-// if ('serviceWorker' in navigator) {
-//   navigator.serviceWorker.register(appInfo.dataset.serviceWorkerUrl);
-// }
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register(appInfo.dataset.serviceWorkerUrl);
+}
 
 var hidden, visibilityChange;
 if (typeof document.hidden !== 'undefined') { // Opera 12.10 and Firefox 18 and later support 
