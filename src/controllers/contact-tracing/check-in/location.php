@@ -16,6 +16,18 @@ if (!$location) {
   halt(404);
 }
 
+$guests = $members = null;
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
+  $guests = $db->prepare("SELECT ID, GuestName, GuestPhone FROM covidVisitors WHERE Inputter = ?");
+  $guests->execute([
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+  ]);
+  $members = $db->prepare("SELECT MForename fn, MSurname sn, MemberID `id` FROM members WHERE `UserID` = ? ORDER BY fn ASC, sn ASC");
+  $members->execute([
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+  ]);
+}
+
 $pagetitle = 'Check In to ' . htmlspecialchars($location['Name']) . ' - Contact Tracing';
 
 $addr = json_decode($location['Address']);
@@ -58,6 +70,55 @@ include BASE_PATH . 'views/header.php';
         <h2>
           Tell us who's with you
         </h2>
+
+        <form method="post" class="needs-validation" novalidate>
+
+          <p>
+            We've already got you down!
+          </p>
+
+          <p>
+            If there's nobody else, just check in now
+          </p>
+
+          <?php if ($member = $members->fetch(PDO::FETCH_ASSOC)) { ?>
+            <h3>Members</h3>
+            <?php do { ?>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('member-' . $member['id']) ?>" name="<?= htmlspecialchars('member-' . $member['id']) ?>">
+                <label class="custom-control-label" for="<?= htmlspecialchars('member-' . $member['id']) ?>"><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></label>
+              </div>
+            <?php } while ($member = $members->fetch(PDO::FETCH_ASSOC)); ?>
+          <?php } ?>
+
+          <?php if ($guest = $guests->fetch(PDO::FETCH_ASSOC)) { ?>
+            <h3>Previous guests</h3>
+            <?php do { ?>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('guest-' . $guest['ID']) ?>" name="<?= htmlspecialchars('guest-' . $guest['ID']) ?>">
+                <label class="custom-control-label" for="<?= htmlspecialchars('guest-' . $guest['ID']) ?>"><?= htmlspecialchars($guest['GuestName']) ?> <em><?= htmlspecialchars($guest['GuestPhone']) ?></em></label>
+              </div>
+            <?php } while ($guest = $guests->fetch(PDO::FETCH_ASSOC)); ?>
+          <?php } ?>
+
+          <h3>Guests</h3>
+
+          <div id="guests-box" data-init="false"></div>
+
+          <p>
+            <button class="btn btn-primary" id="add-guest" type="button">
+              Add a guest
+            </button>
+          </p>
+
+          <hr>
+
+          <p>
+            <button type="submit" class="btn btn-success">
+              Check in
+            </button>
+          </p>
+        </form>
       <?php } else { ?>
         <h2>
           You're a guest
@@ -66,6 +127,27 @@ include BASE_PATH . 'views/header.php';
         <p>
           If you have an account, <a href="<?= htmlspecialchars(autoUrl('login?target=' . urlencode($tenant->getCodeId() . '/contact-tracing/check-in/' . $id))) ?>">please sign in</a> so we can pre-fill your details
         </p>
+
+        <form method="post" class="needs-validation" novalidate>
+
+          <h3>Guests</h3>
+
+          <div id="guests-box" data-init="true"></div>
+
+          <p>
+            <button class="btn btn-primary" id="add-guest" type="button">
+              Add a guest
+            </button>
+          </p>
+
+          <hr>
+
+          <p>
+            <button type="submit" class="btn btn-success">
+              Check-in
+            </button>
+          </p>
+        </form>
       <?php } ?>
     </div>
     <div class="col">
@@ -95,4 +177,5 @@ include BASE_PATH . 'views/header.php';
 
 $footer = new \SCDS\Footer();
 $footer->addJs('public/js/NeedsValidation.js');
+$footer->addJs('public/js/contact-tracing/check-in.js');
 $footer->render();

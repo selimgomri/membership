@@ -48,4 +48,8 @@ $this->group('/check-in', function() {
   $this->get('/{id}:uuid', function($id) {
     include 'check-in/location.php';
   });
+
+  $this->post('/{id}:uuid', function($id) {
+    include 'check-in/location-post.php';
+  });
 });
