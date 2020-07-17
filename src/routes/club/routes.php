@@ -157,6 +157,10 @@ $this->group('/sessions', function () {
   include BASE_PATH . 'controllers/attendance/public_sessions/router.php';
 });
 
+$this->group('/contact-tracing', function () {
+  include BASE_PATH . 'controllers/contact-tracing/router.php';
+});
+
 $this->get('/log-book', function () {
   http_response_code(303);
   header("location: " . autoUrl("log-books"));

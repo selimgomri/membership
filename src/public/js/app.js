@@ -16,27 +16,27 @@ if (typeof document.hidden !== 'undefined') { // Opera 12.10 and Firefox 18 and 
   visibilityChange = 'webkitvisibilitychange';
 }
 
-function handleVisibilityChange() {
-  if (document[hidden]) {
-    // Do nothing
-  } else {
-    // Check still signed in when user returns
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        let status = JSON.parse(this.responseText);
-        if (!status.signed_in) {
-          window.location.reload(true);
-        }
-      }
-    }
-    xhttp.open('POST', appInfo.dataset.checkLoginUrl, true);
-    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhttp.send(JSON.stringify({}));
-  }
-}
+// function handleVisibilityChange() {
+//   if (document[hidden]) {
+//     // Do nothing
+//   } else {
+//     // Check still signed in when user returns
+//     let xhttp = new XMLHttpRequest();
+//     xhttp.onreadystatechange = function () {
+//       if (this.readyState == 4 && this.status == 200) {
+//         let status = JSON.parse(this.responseText);
+//         if (!status.signed_in) {
+//           window.location.reload(true);
+//         }
+//       }
+//     }
+//     xhttp.open('POST', appInfo.dataset.checkLoginUrl, true);
+//     xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+//     xhttp.send(JSON.stringify({}));
+//   }
+// }
 
-document.addEventListener(visibilityChange, handleVisibilityChange, false);
+// document.addEventListener(visibilityChange, handleVisibilityChange, false);
 
 
 // document.querySelector('#show').addEventListener('click', () => {

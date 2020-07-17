@@ -7,10 +7,12 @@ require 'GlobalHead.php';
 
 $clubLogoColour = 'text-white logo-text-shadow';
 $navTextColour = 'navbar-dark';
+$clubLinkColour = 'btn-light';
 
 if (app()->tenant->getKey('SYSTEM_COLOUR') && getContrastColor(app()->tenant->getKey('SYSTEM_COLOUR'))) {
   $clubLogoColour = 'text-dark';
   $navTextColour = 'navbar-light';
+  $clubLinkColour = 'btn-dark';
 }
 
 $bg = "";
@@ -20,19 +22,19 @@ if (isset($customBackground) && $customBackground) {
 ?>
 
 <body class="<?= $bg ?> account--body" <?php if (isset($pageHead['body'])) {
-                                        foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
-                                                                                                                            } ?>>
+                                          foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
+                                                                                            } ?>>
 
   <div class="sr-only sr-only-focusable">
     <a href="#maincontent">Skip to main content</a>
   </div>
 
   <?php if (bool(getenv('IS_DEV'))) { ?>
-  <div class="bg-warning text-dark bg-striped py-1">
-    <div class="<?= $container_class ?>">
-      <small><strong>DEVELOPMENT PLATFORM</strong> NOT FOR PRODUCTION USE</small>
+    <div class="bg-warning text-dark bg-striped py-1">
+      <div class="<?= $container_class ?>">
+        <small><strong>DEVELOPMENT PLATFORM</strong> NOT FOR PRODUCTION USE</small>
+      </div>
     </div>
-  </div>
   <?php } ?>
 
   <div class="d-print-none">
@@ -187,9 +189,9 @@ if (isset($customBackground) && $customBackground) {
               </h1>
             </div>
             <?php if (app()->tenant->getKey('CLUB_WEBSITE')) { ?>
-            <div class="col-auto">
-              <a href="<?=htmlspecialchars(app()->tenant->getKey('CLUB_WEBSITE'))?>" class="btn btn-dark">Club website</a>
-            </div>
+              <div class="col-auto">
+                <a href="<?= htmlspecialchars(app()->tenant->getKey('CLUB_WEBSITE')) ?>" class="btn <?= $clubLinkColour ?>">Club website</a>
+              </div>
             <?php } ?>
           </div>
         </div>

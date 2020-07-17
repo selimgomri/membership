@@ -49,6 +49,27 @@ include BASE_PATH . "views/header.php";
 		<h1><?= helloGreeting() ?> <?= $username ?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
 
+		<div class="p-3 mb-4 text-white bg-primary rounded" style="background-color: #005eb8 !important;">
+			<h2>COVID-19 Contact Tracing</h2>
+			<p class="lead">
+				Register your attendance
+			</p>
+
+			<p>
+				If asked to, please record your attenance at a session using our new COVID Tracing Support System.
+			</p>
+
+			<p>
+				If required, <?=htmlspecialchars($tenant->getName())?> may use this data to support NHS Test and Trace. We will automatically delete any logs you make after 21 days.
+			</p>
+
+			<p class="mb-0">
+				<a href="<?=htmlspecialchars(autoUrl('contact-tracing'))?>" class="btn btn-light">
+					Register
+				</a>
+			</p>
+		</div>
+
 		<?php if ($bankHoliday = isBankHoliday()) { ?>
 			<aside class="row mb-4">
 				<div class="col-lg-6">
