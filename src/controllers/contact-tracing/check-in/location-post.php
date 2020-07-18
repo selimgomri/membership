@@ -140,12 +140,12 @@ try {
   // Add members
   if ($getMembers) {
     while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)) {
-      if (isset($_POST['member-' . $member['ID']]) && bool($_POST['member-' . $member['ID']])) {
+      if (isset($_POST['member-' . $member['id']]) && bool($_POST['member-' . $member['id']])) {
         $addRecord->execute([
           getUUID(),
           $id,
           $time,
-          $member['ID'],
+          $member['id'],
           'member',
           $member['fn'] . ' ' . $member['sn'],
           $userMobile,

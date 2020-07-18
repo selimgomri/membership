@@ -82,44 +82,52 @@ include BASE_PATH . 'views/header.php';
           </p>
 
           <?php if ($member = $members->fetch(PDO::FETCH_ASSOC)) { ?>
-            <h3>Members</h3>
-            <?php do { ?>
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('member-' . $member['id']) ?>" name="<?= htmlspecialchars('member-' . $member['id']) ?>">
-                <label class="custom-control-label" for="<?= htmlspecialchars('member-' . $member['id']) ?>"><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></label>
-              </div>
-            <?php } while ($member = $members->fetch(PDO::FETCH_ASSOC)); ?>
-            <div class="mb-3"></div>
+            <div class="cell">
+              <h3>Members</h3>
+              <?php do { ?>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('member-' . $member['id']) ?>" name="<?= htmlspecialchars('member-' . $member['id']) ?>" value="1">
+                  <label class="custom-control-label" for="<?= htmlspecialchars('member-' . $member['id']) ?>"><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></label>
+                </div>
+              <?php } while ($member = $members->fetch(PDO::FETCH_ASSOC)); ?>
+            </div>
+
           <?php } ?>
 
           <?php if ($guest = $guests->fetch(PDO::FETCH_ASSOC)) { ?>
-            <h3>Previous guests</h3>
-            <?php do { ?>
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('guest-' . $guest['ID']) ?>" name="<?= htmlspecialchars('guest-' . $guest['ID']) ?>">
-                <label class="custom-control-label" for="<?= htmlspecialchars('guest-' . $guest['ID']) ?>"><?= htmlspecialchars($guest['GuestName']) ?> <em><?= htmlspecialchars($guest['GuestPhone']) ?></em></label>
-              </div>
-            <?php } while ($guest = $guests->fetch(PDO::FETCH_ASSOC)); ?>
-            <div class="mb-3"></div>
+            <div class="cell">
+              <h3>Previous guests</h3>
+              <?php do { ?>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('guest-' . $guest['ID']) ?>" name="<?= htmlspecialchars('guest-' . $guest['ID']) ?>" value="1">
+                  <label class="custom-control-label" for="<?= htmlspecialchars('guest-' . $guest['ID']) ?>"><?= htmlspecialchars($guest['GuestName']) ?> <em><?= htmlspecialchars($guest['GuestPhone']) ?></em></label>
+                </div>
+              <?php } while ($guest = $guests->fetch(PDO::FETCH_ASSOC)); ?>
+            </div>
           <?php } ?>
 
-          <h3>Guests</h3>
+          <div class="cell">
+            <h3>Guests</h3>
 
-          <p>
-            Press <strong>Add a guest</strong> to add as many other people as required.
-          </p>
+            <p>
+              Press <strong>Add a guest</strong> to add as many other people as required.
+            </p>
 
-          <div id="guests-box" data-init="false"></div>
+            <div id="guests-box" data-init="false"></div>
 
-          <p>
-            <button class="btn btn-primary" id="add-guest" type="button">
-              Add a guest
-            </button>
-          </p>
+            <p>
+              <button class="btn btn-primary" id="add-guest" type="button">
+                Add a guest
+              </button>
+            </p>
 
-          <hr>
+          </div>
 
           <?= SCDS\CSRF::write() ?>
+
+          <p>
+            All done? Double check what you've entered and press <strong>Check in</strong>
+          </p>
 
           <p>
             <button type="submit" class="btn btn-success">
@@ -138,23 +146,27 @@ include BASE_PATH . 'views/header.php';
 
         <form method="post" class="needs-validation" novalidate>
 
-          <h3>Guests</h3>
+          <div class="cell">
+            <h3>Guests</h3>
 
-          <p>
-            Please start with your own details, then add those of any others who are with you.
-          </p>
+            <p>
+              Please start with your own details, then add those of any others who are with you.
+            </p>
 
-          <div id="guests-box" data-init="true"></div>
+            <div id="guests-box" data-init="true"></div>
 
-          <p>
-            <button class="btn btn-primary" id="add-guest" type="button">
-              Add a guest
-            </button>
-          </p>
-
-          <hr>
+            <p>
+              <button class="btn btn-primary" id="add-guest" type="button">
+                Add a guest
+              </button>
+            </p>
+          </div>
 
           <?= SCDS\CSRF::write() ?>
+
+          <p>
+            All done? Double check what you've entered and press <strong>Check in</strong>
+          </p>
 
           <p>
             <button type="submit" class="btn btn-success">
