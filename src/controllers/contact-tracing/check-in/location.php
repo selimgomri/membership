@@ -89,6 +89,7 @@ include BASE_PATH . 'views/header.php';
                 <label class="custom-control-label" for="<?= htmlspecialchars('member-' . $member['id']) ?>"><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></label>
               </div>
             <?php } while ($member = $members->fetch(PDO::FETCH_ASSOC)); ?>
+            <div class="mb-3"></div>
           <?php } ?>
 
           <?php if ($guest = $guests->fetch(PDO::FETCH_ASSOC)) { ?>
@@ -99,9 +100,14 @@ include BASE_PATH . 'views/header.php';
                 <label class="custom-control-label" for="<?= htmlspecialchars('guest-' . $guest['ID']) ?>"><?= htmlspecialchars($guest['GuestName']) ?> <em><?= htmlspecialchars($guest['GuestPhone']) ?></em></label>
               </div>
             <?php } while ($guest = $guests->fetch(PDO::FETCH_ASSOC)); ?>
+            <div class="mb-3"></div>
           <?php } ?>
 
           <h3>Guests</h3>
+
+          <p>
+            Press <strong>Add a guest</strong> to add as many other people as required.
+          </p>
 
           <div id="guests-box" data-init="false"></div>
 
@@ -112,6 +118,8 @@ include BASE_PATH . 'views/header.php';
           </p>
 
           <hr>
+
+          <?= SCDS\CSRF::write() ?>
 
           <p>
             <button type="submit" class="btn btn-success">
@@ -132,6 +140,10 @@ include BASE_PATH . 'views/header.php';
 
           <h3>Guests</h3>
 
+          <p>
+            Please start with your own details, then add those of any others who are with you.
+          </p>
+
           <div id="guests-box" data-init="true"></div>
 
           <p>
@@ -141,6 +153,8 @@ include BASE_PATH . 'views/header.php';
           </p>
 
           <hr>
+
+          <?= SCDS\CSRF::write() ?>
 
           <p>
             <button type="submit" class="btn btn-success">

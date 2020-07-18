@@ -52,4 +52,10 @@ $this->group('/check-in', function() {
   $this->post('/{id}:uuid', function($id) {
     include 'check-in/location-post.php';
   });
+
+  if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingSuccess']) {
+    $this->get('/{id}:uuid/success', function($id) {
+      include 'check-in/success.php';
+    });
+  }
 });
