@@ -49,7 +49,7 @@ include BASE_PATH . "views/header.php";
 		<h1><?= helloGreeting() ?> <?= $username ?></h1>
 		<p class="lead mb-4">Welcome to your account</p>
 
-		<div class="p-3 mb-4 text-white bg-primary rounded" style="background-color: #005eb8 !important;">
+		<!-- <div class="p-3 mb-4 text-white bg-primary rounded" style="background-color: #005eb8 !important;">
 			<h2>COVID-19 Contact Tracing</h2>
 			<p class="lead">
 				Register your attendance
@@ -60,11 +60,28 @@ include BASE_PATH . "views/header.php";
 			</p>
 
 			<p>
-				If required, <?=htmlspecialchars($tenant->getName())?> may use this data to support NHS Test and Trace. We will automatically delete any logs you make after 21 days.
+				If required, <?= htmlspecialchars($tenant->getName()) ?> may use this data to support NHS Test and Trace. We will automatically delete any logs you make after 21 days.
 			</p>
 
 			<p class="mb-0">
-				<a href="<?=htmlspecialchars(autoUrl('contact-tracing'))?>" class="btn btn-light">
+				<a href="<?= htmlspecialchars(autoUrl('contact-tracing')) ?>" class="btn btn-light">
+					Register
+				</a>
+			</p>
+		</div> -->
+
+		<div class="p-3 text-white bg-danger rounded h-100 mb-4">
+			<h2>
+				Register your attendance
+			</h2>
+			<p class="lead">
+				Together, we can help the NHS.
+			</p>
+			<p>
+			  In the event a club member contract coronavirus and has been at a club session, <?= htmlspecialchars($tenant->getName()) ?> will use this data if required to support NHS Test and Trace. Data will be deleted automatically after 21 days.
+			</p>
+			<p class="mb-0">
+				<a href="<?= htmlspecialchars(autoUrl('contact-tracing/check-in')) ?>" class="btn btn-outline-light">
 					Register
 				</a>
 			</p>

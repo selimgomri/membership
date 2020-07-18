@@ -35,19 +35,19 @@ include BASE_PATH . 'views/header.php';
 <div class="container">
 
   <div class="row">
-    <div class="col-12 mb-3">
-      <div class="p-3 border border-danger rounded h-100">
+    <div class="col-12 mb-5">
+      <div class="p-3 text-white bg-danger rounded h-100">
         <h2>
-          Register attendance
+          Register your attendance
         </h2>
         <p class="lead">
-          Register your attendance at a club event.
+          Together, we can help the NHS.
         </p>
         <p>
-          <?= htmlspecialchars($tenant->getName()) ?> may use this data to support NHS Test and Trace. Data will be deleted after 21 days.
+          <?= htmlspecialchars($tenant->getName()) ?> will use this data if required to support NHS Test and Trace. Data will be deleted automatically after 21 days.
         </p>
         <p class="mb-0">
-          <a href="<?= htmlspecialchars(autoUrl('contact-tracing/check-in')) ?>" class="btn btn-success">
+          <a href="<?= htmlspecialchars(autoUrl('contact-tracing/check-in')) ?>" class="btn btn-outline-light">
             Register
           </a>
         </p>

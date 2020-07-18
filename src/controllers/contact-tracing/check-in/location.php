@@ -74,7 +74,7 @@ include BASE_PATH . 'views/header.php';
         <form method="post" class="needs-validation" novalidate>
 
           <p>
-            We've already got you down!
+            We'll add your own details automatically, once you press <strong>check in</strong>.
           </p>
 
           <p>
@@ -114,6 +114,10 @@ include BASE_PATH . 'views/header.php';
             </p>
 
             <div id="guests-box" data-init="false"></div>
+
+            <p>
+              We'll assume phone numbers are UK (+44) numbers. If you're providing a non-UK phone number, please include the country code.
+            </p>
 
             <p>
               <button class="btn btn-primary" id="add-guest" type="button">

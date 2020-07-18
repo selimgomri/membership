@@ -35,36 +35,40 @@ include BASE_PATH . 'views/header.php';
 
   <div class="row">
     <div class="col-md-6">
-      <div class="p-3 bg-primary rounded text-white h-100" style="background-color: #005eb8 !important;">
-        <h2>
-          Register attendance
-        </h2>
-        <p class="lead">
-          Register your attendance at a club event.
-        </p>
-        <p>
-          <?= htmlspecialchars($tenant->getName()) ?> may use this data to support NHS Test and Trace. Data will be deleted after 21 days.
-        </p>
-        <p class="mb-0">
-          <a href="<?= htmlspecialchars(autoUrl('contact-tracing/check-in')) ?>" class="btn btn-light">
+      <div class="p-3 bg-danger rounded text-white h-100">
+        <div>
+          <h2>
+            Register your attendance
+          </h2>
+          <p class="lead">
+            Together, we can help the NHS.
+          </p>
+          <p>
+            <?= htmlspecialchars($tenant->getName()) ?> will use this data if required to support NHS Test and Trace. Data will be deleted automatically after 21 days.
+          </p>
+        </div>
+        <p class="mb-0 mt-auto d-flex">
+          <a href="<?= htmlspecialchars(autoUrl('contact-tracing/check-in')) ?>" class="btn btn-outline-light">
             Register
           </a>
         </p>
       </div>
     </div>
     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
-    <div class="col-md-6">
-      <div class="p-3 bg-dark rounded text-white h-100">
-        <h2>
-          Manage locations and generate reports
-        </h2>
-        <p class="mb-0">
-          <a href="<?= htmlspecialchars(autoUrl('contact-tracing/locations')) ?>" class="btn btn-light">
-            Manage
-          </a>
-        </p>
+      <div class="col-md-6">
+        <div class="p-3 bg-dark rounded text-white h-100" style="display: grid;">
+          <div>
+            <h2>
+              Manage locations and generate reports
+            </h2>
+          </div>
+          <p class="mb-0 mt-auto d-flex">
+            <a href="<?= htmlspecialchars(autoUrl('contact-tracing/locations')) ?>" class="btn btn-light">
+              Manage
+            </a>
+          </p>
+        </div>
       </div>
-    </div>
     <?php } ?>
   </div>
 
