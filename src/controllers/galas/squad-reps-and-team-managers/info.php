@@ -21,7 +21,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') {
     $leavers
   ]);
 } else {
-  $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads INNER JOIN squadReps ON squads.SquadID = squadReps.Squad WHERE Tenant = ? squadReps.User = ? AND SquadID != ? ORDER BY SquadFee DESC, `name` ASC");
+  $squads = $db->prepare("SELECT SquadName `name`, SquadID `id` FROM squads INNER JOIN squadReps ON squads.SquadID = squadReps.Squad WHERE Tenant = ? AND squadReps.User = ? AND SquadID != ? ORDER BY SquadFee DESC, `name` ASC");
   $squads->execute([
     $tenant->getId(),
     $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
