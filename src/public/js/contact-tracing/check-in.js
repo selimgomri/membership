@@ -1,15 +1,15 @@
 function uuidv4() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
 }
 
-function addField(event) {
+function addField(event, hideRemove = false) {
   var id = uuidv4();
 
   var container = document.createElement('DIV');
-  container.classList.add('row', 'mb-3');
+  container.classList.add('row', 'mb-4');
   container.id = id;
 
   var formContainer = document.createElement('DIV');
@@ -78,17 +78,24 @@ function addField(event) {
   formRow.appendChild(col);
 
   var removeContainer = document.createElement('DIV');
-  removeContainer.classList.add('col-auto'); 
+  removeContainer.classList.add('col-md-auto');
   var removeButton = document.createElement('BUTTON');
   removeButton.classList.add('btn', 'btn-warning', 'remove-buttons');
   removeButton.textContent = 'Remove';
   removeButton.type = 'button';
   removeButton.dataset.removeTarget = id;
+
+  var removeButtonTopSpace = document.createElement('DIV');
+  removeButtonTopSpace.classList.add('mb-2', 'd-md-none');
+
+  removeContainer.appendChild(removeButtonTopSpace);
   removeContainer.appendChild(removeButton);
 
   formContainer.appendChild(formRow);
   container.appendChild(formContainer);
-  container.appendChild(removeContainer);
+  if (!hideRemove) {
+    container.appendChild(removeContainer);
+  }
 
   document.getElementById('guests-box').appendChild(container);
 
@@ -97,7 +104,7 @@ function addField(event) {
 document.getElementById('add-guest').addEventListener('click', addField);
 
 if (document.getElementById('guests-box').dataset.init === 'true') {
-  addField(null);
+  addField(null, true);
 }
 
 document.getElementById('guests-box').addEventListener('click', (event) => {

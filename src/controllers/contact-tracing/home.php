@@ -25,7 +25,6 @@ include BASE_PATH . 'views/header.php';
         <p class="lead mb-0">
           <?= htmlspecialchars($tenant->getName()) ?> <em>Supporting NHS Test and Trace</em>
         </p>
-        <div class="mb-3 d-lg-none"></div>
       </div>
     </div>
   </div>
@@ -34,7 +33,7 @@ include BASE_PATH . 'views/header.php';
 <div class="container">
 
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 mb-3">
       <div class="p-3 bg-danger rounded text-white h-100">
         <div>
           <h2>
@@ -55,7 +54,7 @@ include BASE_PATH . 'views/header.php';
       </div>
     </div>
     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
-      <div class="col-md-3">
+      <div class="col-md-3 mb-3">
         <div class="p-3 bg-dark rounded text-white h-100" style="display: grid;">
           <div>
             <h2>
@@ -70,7 +69,7 @@ include BASE_PATH . 'views/header.php';
         </div>
       </div>
 
-      <div class="col-md-3">
+      <div class="col-md-3 mb-3">
         <div class="p-3 bg-dark rounded text-white h-100" style="display: grid;">
           <div>
             <h2>
