@@ -26,7 +26,6 @@ include BASE_PATH . 'views/header.php';
         <p class="lead mb-0">
           <?= htmlspecialchars($tenant->getName()) ?> <em>Supporting NHS Test and Trace</em>
         </p>
-        <div class="mb-3 d-lg-none"></div>
       </div>
     </div>
   </div>
@@ -54,7 +53,7 @@ include BASE_PATH . 'views/header.php';
       </div>
     </div>
 
-    <div class="col mb-3">
+    <div class="col-md-4 mb-3">
       <div class="p-3 bg-primary rounded text-white h-100" style="background-color: #005eb8 !important; display: grid;">
         <div>
           <h2>
@@ -72,7 +71,7 @@ include BASE_PATH . 'views/header.php';
       </div>
     </div>
 
-    <div class="col mb-3">
+    <div class="col-md-4 mb-3">
       <div class="p-3 rounded border h-100" style="display: grid;">
         <div>
           <h2>
@@ -90,7 +89,7 @@ include BASE_PATH . 'views/header.php';
       </div>
     </div>
 
-    <div class="col mb-3">
+    <div class="col-md-4 mb-3">
       <div class="p-3 rounded border h-100" style="display: grid;">
         <div>
           <h2>

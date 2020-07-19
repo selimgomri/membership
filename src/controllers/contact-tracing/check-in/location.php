@@ -55,7 +55,6 @@ include BASE_PATH . 'views/header.php';
         <p class="lead mb-0">
           <?= htmlspecialchars($addr->streetAndNumber) ?>
         </p>
-        <div class="mb-3 d-lg-none"></div>
       </div>
     </div>
 
@@ -150,8 +149,8 @@ include BASE_PATH . 'views/header.php';
 
         <form method="post" class="needs-validation" novalidate>
 
-          <div class="cell">
-            <h3>Guests</h3>
+          <div class="">
+            <!-- <h3>Guests</h3> -->
 
             <p>
               Please start with your own details, then add those of any others who are with you.
@@ -180,7 +179,7 @@ include BASE_PATH . 'views/header.php';
         </form>
       <?php } ?>
     </div>
-    <div class="col">
+    <div class="col d-none d-lg-flex">
       <div class="cell">
         <h2>
           What do I need to do?
