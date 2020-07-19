@@ -16,7 +16,7 @@ if (getenv('CUSTOM_CSS_PATH')) {
   $stylesheet = getenv('CUSTOM_CSS_PATH');
 }
 
-header('Link: <' . autoUrl($stylesheet) . '>; rel=preload; as=style', false);
+header('Link: <' . $stylesheet . '>; rel=preload; as=style', false);
 header('Link: <' . autoUrl("public/css/colour.css") . '>; rel=preload; as=style', false);
 
 $container_class;

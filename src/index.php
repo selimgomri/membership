@@ -261,7 +261,7 @@ $route->use(function () {
 
 $route->group('/{club}:int', function ($club) {
 
-  if ($club) {
+  if ($club && gettype($club) == 'int') {
     // Get the club
     $clubObject = Tenant::fromId($club);
 

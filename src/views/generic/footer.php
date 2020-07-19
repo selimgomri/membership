@@ -3,6 +3,8 @@
 $districts = json_decode(file_get_contents(BASE_PATH . 'includes/regions/regions.json'), true);
 $counties = json_decode(file_get_contents(BASE_PATH . 'includes/regions/counties.json'), true);
 $time = new DateTime('now', new DateTimeZone('Europe/London'));
+$tenant = app()->tenant;
+$logos = $tenant->getKey('LOGO_DIR')
 
 ?>
 
@@ -115,9 +117,20 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
     <div class="<?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
       <div class="row">
         <div class="col source-org vcard copyright">
-          <a href="https://myswimmingclub.uk" target="_blank" title="Swimming Club Data Systems Website">
-            <img src="<?= autoUrl("public/img/corporate/scds.png") ?>" width="100">
-          </a>
+          <div class="row no-gutters">
+            <div class="col-auto">
+              <a href="https://myswimmingclub.uk" target="_blank" title="Swimming Club Data Systems Website">
+                <img src="<?= autoUrl("public/img/corporate/scds.png") ?>" width="100">
+              </a>
+            </div>
+            <!-- <?php if ($logos) { ?>
+            <div class="col-auto d-none d-md-flex">
+              <div style="height: 100px; padding: 0 12.5px 0 12.5px; max-width: 100%;" class="bg-white d-flex">
+                <img src="<?= htmlspecialchars(autoUrl($logos . 'logo-75.png')) ?>" srcset="<?= htmlspecialchars(autoUrl($logos . 'logo-75@2x.png')) ?> 2x, <?= htmlspecialchars(autoUrl($logos . 'logo-75@3x.png')) ?> 3x" alt="<?= htmlspecialchars($tenant->getName()) ?>" class="img-fluid my-auto">
+              </div>
+            </div>
+            <?php } ?> -->
+          </div>
 
           <div class="d-block mb-3"></div>
 

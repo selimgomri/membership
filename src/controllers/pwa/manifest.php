@@ -9,7 +9,55 @@ if (app()->tenant->getKey('SYSTEM_COLOUR')) {
   $themeColour = app()->tenant->getKey('SYSTEM_COLOUR');
 }
 
-if (app()->tenant->isCLS()) { 
+$logos = app()->tenant->getKey('LOGO_DIR');
+
+if ($logos) {
+  $icons[] = [
+    'src' => autoUrl($logos . 'icon-196x196.png'),
+    'sizes' => '196x196',
+    'type' => 'image/png'
+  ];
+  $icons[] = [
+    'src' => autoUrl($logos . 'icon-192x192.png'),
+    'sizes' => '192x192',
+    'type' => 'image/png'
+  ];
+  $icons[] = [
+    'src' => autoUrl($logos . 'icon-180x180.png'),
+    'sizes' => '180x180',
+    'type' => 'image/png'
+  ];
+  $icons[] = [
+    'src' => autoUrl($logos . 'icon-167x167.png'),
+    'sizes' => '167x167',
+    'type' => 'image/png'
+  ];
+  $icons[] = [
+    'src' => autoUrl($logos . 'icon-152x152.png'),
+    'sizes' => '152x152',
+    'type' => 'image/png'
+  ];
+  $icons[] = [
+    'src' => autoUrl($logos . 'icon-128x128.png'),
+    'sizes' => '128x128',
+    'type' => 'image/png'
+  ];
+  $icons[] = [
+    'src' => autoUrl($logos . 'icon-114x114.png'),
+    'sizes' => '114x114',
+    'type' => 'image/png'
+  ];
+  $icons[] = [
+    'src' => autoUrl($logos . 'icon-32x32.png'),
+    'sizes' => '32x32',
+    'type' => 'image/png'
+  ];
+  $icons[] = [
+    'src' => autoUrl($logos . 'icon-32x32.png'),
+    'sizes' => '32x32',
+    'type' => 'image/png'
+  ];
+} else if (app()->tenant->isCLS()) { 
   $icons[] = [
     'src' => autoUrl('public/img/touchicons/apple-touch-icon-precomposed.png'),
     'sizes' => '57x57',
@@ -106,14 +154,14 @@ if (app()->tenant->isCLS()) {
 $data = [
   'name' => app()->tenant->getKey('CLUB_NAME') . ' Membership',
   'short_name' => 'My Club',
-  'start_url' => autoUrl(''),
+  'start_url' => autoUrl("") . '/',
   'display' => 'minimal-ui',
   'background_color' => '#fff',
   'description' => 'My ' . app()->tenant->getKey('CLUB_NAME') . ' Membership',
   'icons' => $icons,
   'theme_color' => $themeColour,
   'lang' => 'en-GB',
-  'scope' => autoUrl("")
+  'scope' => autoUrl("") . '/',
 ];
 
 echo json_encode($data);
