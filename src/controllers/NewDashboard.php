@@ -70,22 +70,24 @@ include BASE_PATH . "views/header.php";
 			</p>
 		</div> -->
 
-		<div class="p-3 text-white bg-danger rounded h-100 mb-4">
-			<h2>
-				Register your attendance
-			</h2>
-			<p class="lead">
-				Together, we can help the NHS.
-			</p>
-			<p>
-			  In the event a club member contract coronavirus and has been at a club session, <?= htmlspecialchars($tenant->getName()) ?> will use this data if required to support NHS Test and Trace. Data will be deleted automatically after 21 days.
-			</p>
-			<p class="mb-0">
-				<a href="<?= htmlspecialchars(autoUrl('contact-tracing/check-in')) ?>" class="btn btn-outline-light">
-					Register
-				</a>
-			</p>
-		</div>
+		<?php if (bool(getenv('IS_DEV'))) { ?>
+			<div class="p-3 text-white bg-danger rounded h-100 mb-4">
+				<h2>
+					Register your attendance
+				</h2>
+				<p class="lead">
+					Together, we can help the NHS.
+				</p>
+				<p>
+					In the event a club member contract coronavirus and has been at a club session, <?= htmlspecialchars($tenant->getName()) ?> will use this data if required to support NHS Test and Trace. Data will be deleted automatically after 21 days.
+				</p>
+				<p class="mb-0">
+					<a href="<?= htmlspecialchars(autoUrl('contact-tracing/check-in')) ?>" class="btn btn-outline-light">
+						Register
+					</a>
+				</p>
+			</div>
+		<?php } ?>
 
 		<?php if ($bankHoliday = isBankHoliday()) { ?>
 			<aside class="row mb-4">

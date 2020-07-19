@@ -1,6 +1,9 @@
 <?php
 
 use function GuzzleHttp\json_encode;
+use Brick\Postcode\PostcodeFormatter;
+
+$PostcodeFormatter = new PostcodeFormatter();
 
 $tenant = app()->tenant;
 $db = app()->db;
@@ -48,7 +51,7 @@ try {
   if (!isset($_POST['post-code']) && mb_strlen((string) $_POST['post-code']) < 1) {
     throw new Exception('You must provide a post code');
   } else {
-    $postCode = $_POST['post-code'];
+    $postCode = (string) $PostcodeFormatter->format('GB', trim($_POST['post-code']));
   }
 
   $addr = [

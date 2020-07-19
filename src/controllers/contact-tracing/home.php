@@ -55,16 +55,31 @@ include BASE_PATH . 'views/header.php';
       </div>
     </div>
     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
-      <div class="col-md-6">
+      <div class="col-md-3">
         <div class="p-3 bg-dark rounded text-white h-100" style="display: grid;">
           <div>
             <h2>
-              Manage locations and generate reports
+              Manage locations
             </h2>
           </div>
           <p class="mb-0 mt-auto d-flex">
             <a href="<?= htmlspecialchars(autoUrl('contact-tracing/locations')) ?>" class="btn btn-light">
               Manage
+            </a>
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="p-3 bg-dark rounded text-white h-100" style="display: grid;">
+          <div>
+            <h2>
+              Generate reports
+            </h2>
+          </div>
+          <p class="mb-0 mt-auto d-flex">
+            <a href="<?= htmlspecialchars(autoUrl('contact-tracing/reports')) ?>" class="btn btn-light">
+              Reports
             </a>
           </p>
         </div>
