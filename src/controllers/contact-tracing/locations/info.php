@@ -77,6 +77,16 @@ include BASE_PATH . 'views/header.php';
         <?php } ?>
       </address>
 
+      <h3>
+        Poster
+      </h3>
+
+      <p>
+        <a href="<?= htmlspecialchars(autoUrl("contact-tracing/locations/$id/poster")) ?>" class="btn btn-primary">
+          Download location help poster
+        </a>
+      </p>
+
       <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
         <!-- Admin functions for this location -->
       <?php } ?>

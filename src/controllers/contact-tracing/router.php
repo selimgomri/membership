@@ -8,20 +8,12 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_S
 
   $this->group('/locations', function () {
     if (app()->user->hasPermission('Admin')) {
-      $this->get('/', function () {
-        include 'locations/list.php';
-      });
-
       $this->get('/new', function () {
         include 'locations/new.php';
       });
 
       $this->post('/new', function () {
         include 'locations/new-post.php';
-      });
-
-      $this->get('/{id}:uuid', function ($id) {
-        include 'locations/info.php';
       });
 
       $this->get('/{id}:uuid/edit', function ($id) {
@@ -32,6 +24,14 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_S
         include 'locations/edit-post.php';
       });
     }
+    $this->get('/', function () {
+      include 'locations/list.php';
+    });
+
+    $this->get('/{id}:uuid', function ($id) {
+      include 'locations/info.php';
+    });
+
     $this->get('/{id}:uuid/poster', function ($id) {
       include 'locations/poster.php';
     });
