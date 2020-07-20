@@ -31,7 +31,6 @@ include BASE_PATH . 'views/header.php';
         <p class="lead mb-0">
           Check in to a location
         </p>
-        <div class="mb-3 d-lg-none"></div>
       </div>
     </div>
 

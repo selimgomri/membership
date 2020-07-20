@@ -18,7 +18,8 @@ if ($logos = app()->tenant->getKey('LOGO_DIR')) {
     <?php } ?>
   </div>
   <div class="split-50 text-right">
-    <p class="mb-0">
+    <!-- <p class="mb-0"> -->
+      <address>
       <strong><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></strong><br>
       <?php
       for ($i = 0; $i < sizeof($addr); $i++) { ?>
@@ -27,6 +28,7 @@ if ($logos = app()->tenant->getKey('LOGO_DIR')) {
           break;
         } ?>
       <?php } ?>
-    </p>
+      </address>
+    <!-- </p> -->
   </div>
 </div>

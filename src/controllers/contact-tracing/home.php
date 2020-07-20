@@ -53,7 +53,7 @@ include BASE_PATH . 'views/header.php';
         </p>
       </div>
     </div>
-    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
+    <?php if (app()->user->hasPermission('Admin')) { ?>
       <div class="col-md-3 mb-3">
         <div class="p-3 bg-dark rounded text-white h-100" style="display: grid;">
           <div>

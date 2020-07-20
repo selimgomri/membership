@@ -45,7 +45,7 @@ include BASE_PATH . 'views/header.php';
         </p>
         <div class="mb-3 d-lg-none"></div>
       </div>
-      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
+      <?php if (app()->user->hasPermission('Admin')) {?>
       <div class="col text-right">
         <a href="<?= htmlspecialchars(autoUrl("contact-tracing/locations/$id/edit")) ?>" class="btn btn-success">
           Edit
@@ -76,6 +76,16 @@ include BASE_PATH . 'views/header.php';
           <?= htmlspecialchars($addr->postCode) ?>
         <?php } ?>
       </address>
+
+      <h3>
+        Poster
+      </h3>
+
+      <p>
+        <a href="<?= htmlspecialchars(autoUrl("contact-tracing/locations/$id/poster")) ?>" class="btn btn-primary">
+          Download location help poster
+        </a>
+      </p>
 
       <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
         <!-- Admin functions for this location -->

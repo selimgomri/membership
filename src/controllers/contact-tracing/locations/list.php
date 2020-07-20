@@ -33,11 +33,13 @@ include BASE_PATH . 'views/header.php';
         </p>
         <div class="mb-3 d-lg-none"></div>
       </div>
+      <?php if (app()->user->hasPermission('Admin')) { ?>
       <div class="col text-right">
         <div class="btn-group" role="group" aria-label="Quick options">
           <a href="<?=htmlspecialchars(autoUrl("contact-tracing/locations/new"))?>" class="btn btn-success">New</a>
         </div>
       </div>
+      <?php } ?>
     </div>
 
   </div>

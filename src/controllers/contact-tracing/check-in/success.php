@@ -43,7 +43,6 @@ include BASE_PATH . 'views/header.php';
         <p class="lead mb-0">
           <?= htmlspecialchars($addr->streetAndNumber) ?>
         </p>
-        <div class="mb-3 d-lg-none"></div>
       </div>
     </div>
 
