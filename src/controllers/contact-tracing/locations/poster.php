@@ -18,13 +18,13 @@ if (!$location) {
 }
 
 $_SESSION['TENANT-' . app()->tenant->getId()]['qr'][0]['text'] = autoUrl("contact-tracing/check-in/" . $id);
-$_SESSION['TENANT-' . app()->tenant->getId()]['qr'][0]['size'] = 600;
+$_SESSION['TENANT-' . app()->tenant->getId()]['qr'][0]['size'] = 1024;
 $qrFile = true;
 
 ob_start(); ?>
 
 <!DOCTYPE html>
-<html>
+<html style="padding-bottom: 0; margin-bottom: 0;">
 
 <head>
   <meta charset='utf-8'>
@@ -86,7 +86,7 @@ ob_start(); ?>
   <title>Location Poster</title>
 </head>
 
-<body>
+<body style="padding-bottom: 0; margin-bottom: 0;">
   <?php
 
   // Inserts the standard letterhead on PDF pages
@@ -106,6 +106,11 @@ ob_start(); ?>
         <h1 class="primary"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></h1>
       <?php } ?>
     </div>
+    <div class="split-50">
+    <div style="text-align:right">
+      <img src="<?= BASE_PATH . 'public/img/corporate/scds.png' ?>" style="width: 1cm;">
+    </div>
+    </div>
   </div>
 
 
@@ -113,10 +118,14 @@ ob_start(); ?>
 
     <div class="primary-box mb-3" id="title" style="margin-top: 12pt; padding-top: 24pt; padding-bottom: 24pt;">
       <h1 class="mb-0" style="line-height: 24pt; margin-bottom:12pt;">
-        Welcome to<br><?= htmlspecialchars($location['Name']) ?>
+        Contact Tracing Check In
       </h1>
-      <p class="lead">
-        For your safety, you <strong>must</strong> check in at this location.
+      <h1 class="mb-0" style="line-height: 24pt; margin-bottom:20pt;">
+        <?= htmlspecialchars($location['Name']) ?>
+      </h1>
+      <hr style="margin-bottom:18pt;">
+      <p class="lead" style="font-size: 20pt;">
+        For your safety, you <strong>must check in</strong> at this location.
       </p>
       <p class="mb-0">
         Together, we can help the NHS.
@@ -124,37 +133,28 @@ ob_start(); ?>
     </div>
 
     <h2>
-      How to check in
+      Scan this QR code with your phone
     </h2>
 
-    <h3>
-      Scan this QR code with your phone
-    </h3>
-
     <?php include BASE_PATH . 'controllers/barcode-generation-system/qr-safe.php'; ?>
-    <img width="600" class="qr" src="<?= 'data:image/png;base64,' . base64_encode($qrReturn) ?>" style="width: 6cm; height: 6cm; margin-top:24pt;">
+    <img width="600" class="qr" src="<?= 'data:image/png;base64,' . base64_encode($qrReturn) ?>" style="width: 6cm; height: 6cm; margin-top:24pt; image-rendering: pixelated;">
 
     <p>
-      And follow the on screen instructions.
+      And follow the on screen instructions
     </p>
 
-    <h3>
+    <h2>
       Or
-    </h3>
+    </h2>
 
-    <p>
-      Go to our membership system at <strong><?= htmlspecialchars(app('request')->hostname) ?></strong>, select <strong>Contact Tracing</strong>, select <?= htmlspecialchars($location['Name']) ?> and follow the on screen instructions.
+    <p style="margin: none; padding: none; line-height: 16pt;">
+      Go to <strong><?= htmlspecialchars(app('request')->hostname) ?></strong>, find <strong><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></strong>, select <strong>Contact Tracing</strong>, select <strong><?= htmlspecialchars($location['Name']) ?></strong> and follow the on screen instructions
     </p>
 
   </div>
 
-  <p style="font-size: 12pt;">
-    <strong><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></strong><br>
-    <strong>Location</strong> <?= htmlspecialchars($id) ?>
-  </p>
-
   <?php $landscape = false;
-  include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
+  // include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
 </body>
 
 </html>
@@ -165,18 +165,29 @@ $html = ob_get_clean();
 
 // reference the Dompdf namespace
 use Dompdf\Dompdf;
+use Dompdf\Options;
 
 // instantiate and use the dompdf class
 $dompdf = new Dompdf();
 
 // set font dir here
-$dompdf->set_option('fontDir', getenv('FILE_STORE_PATH') . 'fonts/');
-$dompdf->set_option('fontCache', getenv('FILE_STORE_PATH') . 'fonts/');
-$dompdf->set_option('isFontSubsettingEnabled', true);
+// $dompdf->setOptions();
+$options = new Options([
+  'fontDir' => getenv('FILE_STORE_PATH') . 'fonts/',
+  'fontCache' => getenv('FILE_STORE_PATH') . 'fonts/',
+  'isFontSubsettingEnabled' => true,
+  'defaultFont' => 'Open Sans',
+  'defaultMediaType' => 'all',
+  'isPhpEnabled' => true,
+]);
+$dompdf->setOptions($options);
+// $dompdf->set_option('fontDir', getenv('FILE_STORE_PATH') . 'fonts/');
+// $dompdf->set_option('fontCache', getenv('FILE_STORE_PATH') . 'fonts/');
+// $dompdf->set_option('isFontSubsettingEnabled', true);
 
-$dompdf->set_option('defaultFont', 'Open Sans');
-$dompdf->set_option('defaultMediaType', 'all');
-$dompdf->set_option("isPhpEnabled", true);
+// $dompdf->set_option('defaultFont', 'Open Sans');
+// $dompdf->set_option('defaultMediaType', 'all');
+// $dompdf->set_option("isPhpEnabled", true);
 // $dompdf->set_option('isFontSubsettingEnabled', false);
 $dompdf->loadHtml($html);
 
@@ -193,4 +204,4 @@ header('Content-Disposition: inline');
 header('Expires: 0');
 header('Cache-Control: must-revalidate');
 header('Pragma: public');
-$dompdf->stream(str_replace(' ', '', 'TEST') . ".pdf", ['Attachment' => 0]);
+$dompdf->stream(preg_replace('@[^0-9a-z\.]+@i', '-', basename($location['Name'])) . ".pdf", ['Attachment' => 0]);
