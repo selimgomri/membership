@@ -250,7 +250,7 @@
     font-family: 'Source Sans Pro Bold', 'Lato Bold' 'Noto Emoji';
   }
   .logo {
-    height: 2cm;
+    max-height: 2cm;
   }
   <?php } ?>
 </style>

@@ -7,7 +7,7 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_S
   });
 
   $this->group('/locations', function () {
-    if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') {
+    if (app()->user->hasPermission('Admin')) {
       $this->get('/', function () {
         include 'locations/list.php';
       });
@@ -32,10 +32,13 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_S
         include 'locations/edit-post.php';
       });
     }
+    $this->get('/{id}:uuid/poster', function ($id) {
+      include 'locations/poster.php';
+    });
   });
 
   $this->group('/reports', function () {
-    if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
+    if (app()->user->hasPermission('Admin')) {
       $this->get('/', function () {
         include 'reports/home.php';
       });
