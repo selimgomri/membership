@@ -93,7 +93,7 @@ if ($_POST['response'] == "getSwimmers") {
     if (mb_strlen($_POST['searchTerm']) > 0) {
       $searchTerm = '%' . $_POST['searchTerm'] . '%';
       $members = null;
-      $members = $db->prepare("SELECT UserID, Forename, Surname FROM `users` WHERE Tenant = :tenant AND `Forename` COLLATE utf8mb4_general_ci LIKE :searchTerm OR `Surname` COLLATE utf8mb4_general_ci LIKE :searchTerm AND UserID NOT IN (SELECT ReferenceID FROM targetedListMembers WHERE ListID = :list AND ReferenceType = 'User') ORDER BY `Forename` ASC, `Surname` ASC");
+      $members = $db->prepare("SELECT UserID, Forename, Surname FROM `users` WHERE Tenant = :tenant AND (`Forename` COLLATE utf8mb4_general_ci LIKE :searchTerm OR `Surname` COLLATE utf8mb4_general_ci LIKE :searchTerm) AND UserID NOT IN (SELECT ReferenceID FROM targetedListMembers WHERE ListID = :list AND ReferenceType = 'User') ORDER BY `Forename` ASC, `Surname` ASC");
       $members->execute([
         'tenant' => $tenant->getId(),
         'searchTerm' => $searchTerm,
