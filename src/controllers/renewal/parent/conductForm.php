@@ -6,18 +6,29 @@ $db = app()->db;
 $parentCode = app()->tenant->getKey('ParentCodeOfConduct');
 
 if (isset($id)) {
-	$getDetails = $db->prepare("SELECT * FROM ((`squads` INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad) INNER JOIN `members` ON squadMembers.member = members.MemberID) WHERE `MemberID` = ?");
+  $getDetails = $db->prepare("SELECT MemberID, MForename, MSurname FROM members WHERE MemberID = ? AND UserID = ?");
   $getDetails->execute([
-    $id
+    $id,
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
   ]);
-	$row = $getDetails->fetch(PDO::FETCH_ASSOC);
+  $row = $getDetails->fetch(PDO::FETCH_ASSOC);
+
+  if (!$row) {
+    halt(404);
+  }
+  
+  $getSquads = $db->prepare("SELECT SquadID, SquadName, SquadCoC FROM squads INNER JOIN squadMembers ON squadMembers.Squad = squads.SquadID WHERE squadMembers.Member = ?");
+  $getSquads->execute([
+    $id,
+  ]);
+  $squad = $getSquads->fetch(PDO::FETCH_ASSOC);
 
 	$linkExists = false;
 	$link = "";
 
-	if (isset($row['SquadCoC']) && $row['SquadCoC'] != "") {
+	if (isset($squad['SquadCoC']) && $squad['SquadCoC'] != "") {
 		$linkExists = true;
-		$link = $row['SquadCoC'];
+		$link = $squad['SquadCoC'];
 	}
 
 	$pagetitle = htmlspecialchars($row['MForename'] . ' ' . $row['MSurname']) . " - Code of Conduct";
@@ -61,17 +72,29 @@ if (isset($id)) {
             <?=getPostContent($link)?>
           </div>
           <?php } else if ($parentCode != null) { ?>
+            <?php if ($squad) { ?>
           <p>
             A code of conduct does not exist for the allocated squad(s). A general code of conduct is available instead in the form of the Parental Code of Conduct and Swim England Code of Conduct for Swimmers (both below).
           </p>
+          <?php } else { ?>
+          <p>
+            <?=htmlspecialchars($row['MForename'])?> has not been assigned to any squads so a general code of conduct is available instead in the form of the Parental Code of Conduct and Swim England Code of Conduct for Swimmers (both below).
+          </p>
+          <?php } ?>
 
           <?= getPostContent($parentCode) ?>
 
           <?php } else { ?>
 
+          <?php if ($squad) { ?>
           <p>
             A code of conduct does not exist for the allocated squad. A general code of conduct is available instead in the form of the Swim England Code of Conduct for Swimmers (both below).
           </p>
+          <?php } else { ?>
+          <p>
+            <?=htmlspecialchars($row['MForename'])?> has not been assigned to any squads so a general code of conduct is available instead in the form of the Swim England Code of Conduct for Swimmers (both below). 
+          </p>
+          <?php } ?>
 
 					<?php } ?>
 
