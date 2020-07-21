@@ -12,14 +12,10 @@ if (isset($id)) {
   ]);
 	$row = $getDetails->fetch(PDO::FETCH_ASSOC);
 
-  if ($row == null) {
-    halt(404);
-  }
-
 	$linkExists = false;
 	$link = "";
 
-	if ($row['SquadCoC'] != "") {
+	if (isset($row['SquadCoC']) && $row['SquadCoC'] != "") {
 		$linkExists = true;
 		$link = $row['SquadCoC'];
 	}
@@ -66,7 +62,7 @@ if (isset($id)) {
           </div>
           <?php } else if ($parentCode != null) { ?>
           <p>
-            A code of conduct does not exist for the allocated squad. A general code of conduct is available instead in the form of the Parental Code of Conduct and Swim England Code of Conduct for Swimmers (both below).
+            A code of conduct does not exist for the allocated squad(s). A general code of conduct is available instead in the form of the Parental Code of Conduct and Swim England Code of Conduct for Swimmers (both below).
           </p>
 
           <?= getPostContent($parentCode) ?>
