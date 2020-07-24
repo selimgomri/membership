@@ -4,6 +4,8 @@
  * New single member view and edit page
  */
 
+$db = app()->db;
+
 try {
   $member = new Member($id);
 } catch (Exception $e) {
@@ -43,6 +45,11 @@ try {
   // 404 or something
 }
 
+$extraFees = $db->prepare("SELECT extras.ExtraID, ExtraName, ExtraFee, `Type` FROM extrasRelations INNER JOIN extras ON extras.ExtraID = extrasRelations.ExtraID WHERE extrasRelations.MemberID = ?");
+$extraFees->execute([
+  $id,
+]);
+
 $fluidContainer = true;
 include BASE_PATH . 'views/header.php';
 
@@ -73,6 +80,7 @@ include BASE_PATH . 'views/header.php';
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/enter-gala")) ?>">Enter a gala</a>
+          <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("users/" . $user->getId())) ?>">View linked user</a>
           <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/contact-parent")) ?>">Email user/parent/guardian</a>
           <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') { ?>
             <button class="dropdown-item" id="new-move-dropdown" type="button">New squad move</button>
@@ -107,6 +115,9 @@ include BASE_PATH . 'views/header.php';
           </a>
           <a href="#squads" class="list-group-item list-group-item-action">
             Squad<?php if (sizeof($squads) != 1) { ?>s<?php } ?>
+          </a>
+          <a href="#extras" class="list-group-item list-group-item-action">
+            Extra fees
           </a>
           <a href="#personal-bests" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
             Personal best times
@@ -379,6 +390,30 @@ include BASE_PATH . 'views/header.php';
       <div id="squads-data" data-squads-url="<?= htmlspecialchars(autoUrl("members/$id/squads.json")) ?>"></div>
 
       <div id="squad-moves-area" data-show-options="<?php if ($manageSquads) { ?>true<?php } else { ?>false<?php } ?>" data-operations-url="<?= htmlspecialchars(autoUrl('members/move-operations')) ?>"></div>
+
+      <hr>
+
+      <h2 id="extras">Extra Fees</h2>
+
+      <?php if ($extra = $extraFees->fetch(PDO::FETCH_ASSOC)) { ?>
+        <div class="list-group">
+          <?php do { ?>
+            <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>
+              <div class="list-group-item">
+                <?= htmlspecialchars($extra['ExtraName']) ?> <em><?php if ($extra['Type'] == 'Refund') { ?>(Credit) <?php } ?>&pound;<?= (string) \Brick\Math\BigDecimal::of((string) $extra['ExtraFee'])->toScale(2) ?>/month</em>
+              </div>
+            <?php } else { ?>
+              <a href="<?= htmlspecialchars(autoUrl('payments/extrafees/' . $extra['ExtraID'])) ?>" class="list-group-item list-group-item-action">
+                <?= htmlspecialchars($extra['ExtraName']) ?> <em><?php if ($extra['Type'] == 'Refund') { ?>(Credit) <?php } ?>&pound;<?= (string) \Brick\Math\BigDecimal::of((string) $extra['ExtraFee'])->toScale(2) ?>/month</em>
+              </a>
+            <?php } ?>
+          <?php } while ($extra = $extraFees->fetch(PDO::FETCH_ASSOC)); ?>
+        </div>
+      <?php } else { ?>
+        <p>
+          <?= htmlspecialchars($member->getForename()) ?> has no additional fees to pay.
+        </p>
+      <?php } ?>
 
       <hr>
 
