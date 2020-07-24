@@ -101,7 +101,7 @@ try {
 
     $user = $getUser->fetch(PDO::FETCH_ASSOC);
 
-    if ($user) {
+    if ($user && isset($_POST['user']) && bool($_POST['user'])) {
       $addRecord->execute([
         getUUID(),
         $id,

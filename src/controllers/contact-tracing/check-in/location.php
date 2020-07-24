@@ -16,7 +16,7 @@ if (!$location) {
   halt(404);
 }
 
-$guests = $members = null;
+$guests = $members = $squads = null;
 if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
   $guests = $db->prepare("SELECT ID, GuestName, GuestPhone FROM covidVisitors WHERE Inputter = ?");
   $guests->execute([
@@ -25,6 +25,11 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_S
   $members = $db->prepare("SELECT MForename fn, MSurname sn, MemberID `id` FROM members WHERE `UserID` = ? ORDER BY fn ASC, sn ASC");
   $members->execute([
     $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+  ]);
+} else {
+  $squads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE Tenant = ? ORDER BY SquadFee DESC, SquadName ASC;");
+  $squads->execute([
+    $tenant->getId()
   ]);
 }
 
@@ -67,18 +72,29 @@ include BASE_PATH . 'views/header.php';
     <div class="col-lg-8">
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
         <h2>
-          Tell us who's with you
+          Tell us who's here
         </h2>
+        <p class="lead">
+          You can easily add yourself, members and guests.
+        </p>
 
         <form method="post" class="needs-validation" novalidate>
 
+        <div class="cell">
+          <h3>Yourself</h3>
           <p>
-            We'll add your own details automatically, once you press <strong>check in</strong>.
+            Let us know if you're here or just dropping off your members.
           </p>
 
-          <p>
-            If there's nobody else, just check in now
-          </p>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="user" name="user" value="1">
+            <label class="custom-control-label" for="user"><?= htmlspecialchars(app()->user->getName()) ?></label>
+          </div>
+        </div>
+
+          <!-- <p>
+            If there's nobody else, just check in now. Othwerwise, add your guests.
+          </p> -->
 
           <?php if ($member = $members->fetch(PDO::FETCH_ASSOC)) { ?>
             <div class="cell">
@@ -151,6 +167,36 @@ include BASE_PATH . 'views/header.php';
 
           <div class="">
             <!-- <h3>Guests</h3> -->
+
+            <!-- <?php if ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
+            <p>
+              If you're a swimmer, diver or water polo player, we can fetch your details if you tell us your squad and date of birth.
+            </p>
+
+            <p>
+              <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#member-collapse" aria-expanded="false" aria-controls="member-collapse">
+                I'm a member <i class="fa fa-caret-down" aria-hidden="true"></i>
+              </button>
+            </p>
+            <div class="collapse" id="member-collapse">
+              <div class="cell">
+                <div class="form-group">
+                  <label for="squad">Squad</label>
+                  <select class="custom-select" id="squad" name="squad">
+                    <option selected>Select a squad</option>
+                    <?php do { ?>
+                      <option value="<?=htmlspecialchars($squad['SquadID'])?>"><?=htmlspecialchars($squad['SquadName'])?></option>
+                    <?php } while($squad = $squads->fetch(PDO::FETCH_ASSOC)); ?>
+                  </select>
+                </div>
+
+                <div class="form-group mb-0">
+                  <label for="date-of-birth">Date of birth</label>
+                  <input type="date" name="date-of-birth" id="date-of-birth" class="form-control">
+                </div>
+              </div>
+            </div>
+            <?php } ?> -->
 
             <p>
               Please start with your own details, then add those of any others who are with you.
