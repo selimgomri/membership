@@ -35,7 +35,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
   <div class="row">
     <div class="col-lg-8">
       <div class="">
-        <form method="post">
+        <form method="post" class="needs-validation" novalidate>
           <h2>Details</h2>
           <p class="lead">View or edit the squad details</p>
 
@@ -52,6 +52,9 @@ include BASE_PATH . "views/squadMenu.php"; ?>
           <div class="form-group">
             <label for="squadName">Squad Name</label>
             <input type="text" class="form-control" id="squadName" name="squadName" placeholder="Enter Squad Name" value="<?= htmlspecialchars($row['SquadName']) ?>">
+            <div class="invalid-feedback">
+          Please provide a squad name.
+        </div>
           </div>
           <div class="form-group">
             <label for="squadFee" class="form-label">Squad Fee</label>
@@ -59,7 +62,10 @@ include BASE_PATH . "views/squadMenu.php"; ?>
               <div class="input-group-prepend">
                 <span class="input-group-text">&pound;</span>
               </div>
-              <input type="text" class="form-control" id="squadFee" name="squadFee" aria-describedby="squadFeeHelp" placeholder="eg 50.00" value="<?= htmlspecialchars($row['SquadFee']) ?>">
+              <input type="number" min="0" step="0.01" class="form-control" id="squadFee" name="squadFee" aria-describedby="squadFeeHelp" placeholder="eg 50.00" value="<?= htmlspecialchars($row['SquadFee']) ?>">
+              <div class="invalid-feedback">
+            Please provide a monthly fee.
+          </div>
             </div>
             <small id="squadFeeHelp" class="form-text text-muted">A squad can have a fee of &pound;0.00 if it represents
               a group for non paying members</small>
@@ -105,6 +111,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
 </div>
 
 <?php $footer = new \SCDS\Footer();
+$footer->addJs('public/js/NeedsValidation.js');
 $footer->render();
 
 ?>
