@@ -47,7 +47,7 @@ individualFeeTrack.Amount, individualFeeTrack.Description, payments.Status, paym
 individualFeeTrack.MonthID = paymentMonths.MonthID) LEFT JOIN `paymentsPending`
 ON individualFeeTrack.PaymentID = paymentsPending.PaymentID) LEFT JOIN
 `members` ON members.MemberID = individualFeeTrack.MemberID) LEFT JOIN
-`payments` ON paymentsPending.PMkey = payments.PMkey) LEFT JOIN `users` ON
+`payments` ON paymentsPending.Payment = payments.PaymentID) LEFT JOIN `users` ON
 users.UserID = individualFeeTrack.UserID) WHERE `paymentMonths`.`Date` LIKE
 ? AND `individualFeeTrack`.`Type` = ? AND users.Tenant = ? ORDER BY `Forename`
 ASC, `Surname` ASC, `users`.`UserID` ASC, `MForename` ASC, `MSurname` ASC;");
