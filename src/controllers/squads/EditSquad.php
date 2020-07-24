@@ -51,7 +51,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
 
           <div class="form-group">
             <label for="squadName">Squad Name</label>
-            <input type="text" class="form-control" id="squadName" name="squadName" placeholder="Enter Squad Name" value="<?= htmlspecialchars($row['SquadName']) ?>">
+            <input type="text" class="form-control" id="squadName" name="squadName" placeholder="Enter Squad Name" value="<?= htmlspecialchars($row['SquadName']) ?>" required>
             <div class="invalid-feedback">
           Please provide a squad name.
         </div>
@@ -62,7 +62,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
               <div class="input-group-prepend">
                 <span class="input-group-text">&pound;</span>
               </div>
-              <input type="number" min="0" step="0.01" class="form-control" id="squadFee" name="squadFee" aria-describedby="squadFeeHelp" placeholder="eg 50.00" value="<?= htmlspecialchars($row['SquadFee']) ?>">
+              <input type="number" min="0" step="0.01" class="form-control" id="squadFee" name="squadFee" aria-describedby="squadFeeHelp" placeholder="eg 50.00" value="<?= htmlspecialchars($row['SquadFee']) ?>" required>
               <div class="invalid-feedback">
             Please provide a monthly fee.
           </div>
