@@ -136,12 +136,10 @@ include BASE_PATH . "views/paymentsMenu.php";
 					}
 				}
 				?>
-				<?php if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually") {
+				<?php if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually" || $row['Status'] == "succeeded") {
 					?><tr class="table-success"><?php
           $link = "text-success";
-				} else if ($row['Status'] == "cancelled" || $row['Status'] ==
-				"customer_approval_denied" || $row['Status'] == "failed" ||
-				$row['Status'] == "charged_back" || $row['Status'] == null) {
+				} else if ($row['Status'] == "failed" || $row['Status'] == "charged_back" || $row['Status'] == "canceled" || $row['Status'] == "requires_payment_method" || $row['Status'] == null) {
 					?><tr class="table-danger"><?php
           $link = "text-danger";
 				} else if ($row['Status'] == "cust_not_dd") {
