@@ -6,8 +6,15 @@ $this->any('/sumpayments', function() {
 });
 
 $this->any('/chargeusers', function() {
-	
-	require 'chargeusers.php';
+	try {
+		if (app()->tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')) {
+			include 'charge-users-stripe.php';
+		} else {
+			include 'charge-users-gc-legacy.php';
+		}
+	} catch (Exception $e) {
+		reportError($e);
+	}
 });
 
 $this->any('/retrypayments', function() {
