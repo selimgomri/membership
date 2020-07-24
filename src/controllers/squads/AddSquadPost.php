@@ -17,9 +17,15 @@ if (isset($_POST['squadName']) && isset($_POST['squadFee'])) {
       $squadKey,
       $tenant->getId()
     ]);
-    header("Location: " . autoUrl('squads'));
+    $id = $db->lastInsertId();
+    header("Location: " . autoUrl('squads/' . $id));
+  } catch (PDOException $e) {
+    throw new Exception('A database error occurred');
   } catch (Exception $e) {
-    halt(500);
+    $_SESSION['TENANT-' . app()->tenant->getId()]['SquadAddError'] = [
+      'status' => true,
+      'message' => $e->getMessage(),
+    ];
   }
 } else {
   header("Location: " . autoUrl('squads/addsquad'));
