@@ -9,7 +9,7 @@ try {
 
   $db = app()->db;
   $tenant = app()->tenant;
-  
+
   \Stripe\Stripe::setApiKey(getenv('STRIPE'));
   \Stripe\Stripe::setMaxNetworkRetries(3);
 
@@ -17,7 +17,7 @@ try {
 
   $hasMandateQuery = null;
   try {
-    $sql = "SELECT * FROM `stripeMandates` INNER JOIN `stripeCustomers` ON stripeMandates.Customer = stripeCustomers.CustomerID WHERE stripeCustomers.User = ? AND stripeMandates.MandateStatus = 'active'";
+    $sql = "SELECT stripeMandates.Mandate, stripeMandates.ID, stripeMandates.Customer, stripeMandates.Reference, stripeMandates.Last4, stripeMandates.SortCode FROM `stripeMandates` INNER JOIN `stripeCustomers` ON stripeMandates.Customer = stripeCustomers.CustomerID WHERE stripeCustomers.User = ? AND stripeMandates.MandateStatus = 'active'";
     $hasMandateQuery = $db->prepare($sql);
   } catch (Exception $e) {
     reportError($e);
@@ -73,8 +73,8 @@ try {
           ]);
 
           $paymentID = $row['PaymentID'];
-          $id = $payment->id;
-          $email_statment_id = $id;
+          $id = $intent->id;
+          $email_statment_id = $paymentID;
           $status = $intent->status;
 
           $updatePayments->execute([
@@ -89,21 +89,23 @@ try {
             $paymentID
           ]);
         } catch (\Stripe\Error\InvalidRequest | \Stripe\Error\Authentication | \Stripe\Error\Api $e) {
-            $paymentID = $row['PaymentID'];
-            $id = "CASH-DDFAIL" . $paymentID;
-            $email_statment_id = $id;
+          $paymentID = $row['PaymentID'];
+          $id = "CASH-DDFAIL" . $paymentID;
+          $email_statment_id = $id;
 
-            $updatePayments->execute([
-              'cust_not_dd',
-              null,
-              $id,
-              $paymentID
-            ]);
+          $updatePayments->execute([
+            'cust_not_dd',
+            null,
+            $id,
+            $paymentID
+          ]);
 
-            $updatePaymentsPending->execute([
-              'Paid',
-              $paymentID
-            ]);
+          $updatePaymentsPending->execute([
+            'Paid',
+            $paymentID
+          ]);
+
+          reportError($e);
         } catch (Exception $e) {
           throw $e;
         }
@@ -140,7 +142,7 @@ try {
         }
         $message_content .= '</p></td></tr></table>';
       }
-      $message_content .= '<p>Your bill for ' . date("F Y") . ' is now available. The total amount payable for this month is <strong>&pound;' . (string) \Brick\Math\BigDecimal::of((string) $row['Amount'])->toScale(2) . '</strong>.</p>';
+      $message_content .= '<p>Your bill for ' . date("F Y") . ' is now available. The total amount payable for this month is <strong>&pound;' . (string) \Brick\Math\BigDecimal::of((string) $row['Amount'])->withPointMovedLeft(2)->toScale(2) . '</strong>.</p>';
 
       $message_content .= '<p>You can <a href="' . autoUrl("payments/statements/" . $paymentID) . '">view a full itemised statement for this payment online</a>. Statements show each item you have been charged or credited for.</p>';
 
@@ -175,6 +177,8 @@ try {
     'status' => 200,
   ]);
 } catch (Exception $e) {
+
+  reportError($e);
 
   header('content-type: application/json');
   echo (json_encode([

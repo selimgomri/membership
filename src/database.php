@@ -848,6 +848,20 @@ function paymentStatusString($status)
       return "Payment charged back";
     case "cust_not_dd":
       return "Customer has no Direct Debit mandate";
+    case "requires_payment_method":
+      return "Requires a Payment Method";
+    case "requires_confirmation":
+      return "Payment Intent requires confirmation";
+    case "requires_action":
+      return "Requires action, such as authentication";
+    case "processing":
+      return "Payment processing";
+    case "succeeded":
+      return "Payment successful";
+    case "canceled":
+      return "Payment cancelled";
+    case "pending_api_request":
+      return "Pending submission to service provider";
     default:
       return "Unknown Status Code";
   }
