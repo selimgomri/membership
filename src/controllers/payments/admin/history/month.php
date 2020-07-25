@@ -71,10 +71,10 @@ include BASE_PATH . "views/paymentsMenu.php";
 					<tbody>
 					<?php
 					do {
-						if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually") {
+						if ($row['Status'] == "confirmed" || $row['Status'] == "succeeded" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually") {
 							?><tr class="table-success"><?php
               $link = "text-success";
-						} else if ($row['Status'] == "failed" || $row['Status'] == "charged_back") {
+						} else if ($row['Status'] == "failed" || $row['Status'] == "charged_back" || $row['Status'] == "canceled" || $row['Status'] == "requires_payment_method") {
 							?><tr class="table-danger"><?php
               $link = "text-danger";
 						} else if ($row['Status'] == "cust_not_dd") {
@@ -100,7 +100,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 								&pound;<?=htmlspecialchars(number_format(($row['Amount']/100),2,'.',''))?>
 							</td>
 							<td>
-								<?=htmlspecialchars(paymentStatusString($row['Status']))?>
+								<?=htmlspecialchars(paymentStatusString($row['Status'], $row['stripeFailureCode']))?>
 							</td>
 						</tr>
 						<?php

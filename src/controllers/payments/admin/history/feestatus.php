@@ -42,12 +42,12 @@ if ($type == "squads") {
 $pagetitle = "Status - " . $dateString;
 
 $getPayments = $db->prepare("SELECT `Forename`, `Surname`, `MForename`, `MSurname`,
-individualFeeTrack.Amount, individualFeeTrack.Description, payments.Status, payments.PaymentID, users.UserID, metadataJSON, individualFeeTrack.MemberID FROM
+individualFeeTrack.Amount, individualFeeTrack.Description, payments.Status, payments.PaymentID, users.UserID, metadataJSON, individualFeeTrack.MemberID, payments.stripeFailureCode FROM
 (((((`individualFeeTrack` LEFT JOIN `paymentMonths` ON
 individualFeeTrack.MonthID = paymentMonths.MonthID) LEFT JOIN `paymentsPending`
 ON individualFeeTrack.PaymentID = paymentsPending.PaymentID) LEFT JOIN
 `members` ON members.MemberID = individualFeeTrack.MemberID) LEFT JOIN
-`payments` ON paymentsPending.PMkey = payments.PMkey) LEFT JOIN `users` ON
+`payments` ON paymentsPending.Payment = payments.PaymentID) LEFT JOIN `users` ON
 users.UserID = individualFeeTrack.UserID) WHERE `paymentMonths`.`Date` LIKE
 ? AND `individualFeeTrack`.`Type` = ? AND users.Tenant = ? ORDER BY `Forename`
 ASC, `Surname` ASC, `users`.`UserID` ASC, `MForename` ASC, `MSurname` ASC;");
@@ -136,12 +136,10 @@ include BASE_PATH . "views/paymentsMenu.php";
 					}
 				}
 				?>
-				<?php if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually") {
+				<?php if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually" || $row['Status'] == "succeeded") {
 					?><tr class="table-success"><?php
           $link = "text-success";
-				} else if ($row['Status'] == "cancelled" || $row['Status'] ==
-				"customer_approval_denied" || $row['Status'] == "failed" ||
-				$row['Status'] == "charged_back" || $row['Status'] == null) {
+				} else if ($row['Status'] == "failed" || $row['Status'] == "charged_back" || $row['Status'] == "canceled" || $row['Status'] == "requires_payment_method" || $row['Status'] == null) {
 					?><tr class="table-danger"><?php
           $link = "text-danger";
 				} else if ($row['Status'] == "cust_not_dd") {
@@ -175,7 +173,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 					</td>
 					<td>
 						<?php if ($row['Forename'] != null && $row['Surname'] != null) {
-							echo paymentStatusString($row['Status']);
+							echo paymentStatusString($row['Status'], $row['stripeFailureCode']);
 						} else {
 							echo "No Parent or Direct Debit Available";
 						} ?>

@@ -823,7 +823,7 @@ function updatePaymentStatus($PMkey)
   }
 }
 
-function paymentStatusString($status)
+function paymentStatusString($status, $stripeFailureCode = null)
 {
   switch ($status) {
     case "paid_out":
@@ -848,6 +848,36 @@ function paymentStatusString($status)
       return "Payment charged back";
     case "cust_not_dd":
       return "Customer has no Direct Debit mandate";
+    case "requires_payment_method": {
+      switch ($stripeFailureCode) {
+        case "account_closed":
+          return "Bank account closed";
+        case "bank_ownership_changed":
+          return "Account transferred to new PSP";
+        case "debit_not_authorized":
+          return "Customer told bank payment was not authorised";
+        case "generic_could_not_process":
+          return "Payment could not be processed";
+        case "insufficient_funds":
+          return "Account has insufficient funds";
+        case "invalid_account_number":
+          return "Account number not valid: Not a GBP account or does not support BACS Direct Debit";
+        default:
+          return "Requires a Payment Method";
+      }
+    }
+    case "requires_confirmation":
+      return "Payment Intent requires confirmation";
+    case "requires_action":
+      return "Requires action, such as authentication";
+    case "processing":
+      return "Payment processing";
+    case "succeeded":
+      return "Payment successful";
+    case "canceled":
+      return "Payment cancelled";
+    case "pending_api_request":
+      return "Pending submission to service provider";
     default:
       return "Unknown Status Code";
   }

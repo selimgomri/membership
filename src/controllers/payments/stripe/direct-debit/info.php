@@ -26,7 +26,7 @@ include BASE_PATH . "views/header.php";
   <div class="row">
     <div class="col-lg-8">
       <h1>Direct Debit</h1>
-      <p class="lead">Welcome to our new Direct Debit system</p>
+      <p class="lead">Manage your new Direct Debit</p>
       <p>
         We've upgraded our infrastructure and made changes to our direct debit systems.
       </p>
