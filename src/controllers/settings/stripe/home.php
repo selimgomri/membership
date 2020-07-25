@@ -87,32 +87,34 @@ include BASE_PATH . 'views/header.php';
             </a>
           </p>
 
-          <h2>
-            Options
-          </h2>
+          <?php if (bool(getenv('IS_DEV'))) { ?>
+            <h2>
+              Options
+            </h2>
 
-          <form method="post">
-          <div class="form-group">
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="GALA_CARD_PAYMENTS_ALLOWED" name="GALA_CARD_PAYMENTS_ALLOWED" <?php if (bool($vars['GALA_CARD_PAYMENTS_ALLOWED'])) { ?>checked<?php } ?> <?= $disabled['GALA_CARD_PAYMENTS_ALLOWED'] ?>>
-              <label class="custom-control-label" for="GALA_CARD_PAYMENTS_ALLOWED">Allow card payments for gala entries</label>
-            </div>
-          </div>
+            <form method="post">
+              <div class="form-group">
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input" id="GALA_CARD_PAYMENTS_ALLOWED" name="GALA_CARD_PAYMENTS_ALLOWED" <?php if (bool($vars['GALA_CARD_PAYMENTS_ALLOWED'])) { ?>checked<?php } ?> <?= $disabled['GALA_CARD_PAYMENTS_ALLOWED'] ?>>
+                  <label class="custom-control-label" for="GALA_CARD_PAYMENTS_ALLOWED">Allow card payments for gala entries</label>
+                </div>
+              </div>
 
-          <div class="form-group">
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="USE_STRIPE_DIRECT_DEBIT" name="USE_STRIPE_DIRECT_DEBIT" <?php if (bool($vars['USE_STRIPE_DIRECT_DEBIT'])) { ?>checked<?php } ?> <?= $disabled['USE_STRIPE_DIRECT_DEBIT'] ?> aria-describedby="USE_STRIPE_DIRECT_DEBIT-help">
-              <label class="custom-control-label" for="USE_STRIPE_DIRECT_DEBIT">Use Stripe for Direct Debit rather than GoCardless</label>
-            </div>
-            <small id="USE_STRIPE_DIRECT_DEBIT-help">Once you enable Stripe Direct Debit, GoCardless will stop working and this change can not be reversed.</small>
-          </div>
+              <div class="form-group">
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input" id="USE_STRIPE_DIRECT_DEBIT" name="USE_STRIPE_DIRECT_DEBIT" <?php if (bool($vars['USE_STRIPE_DIRECT_DEBIT'])) { ?>checked<?php } ?> <?= $disabled['USE_STRIPE_DIRECT_DEBIT'] ?> aria-describedby="USE_STRIPE_DIRECT_DEBIT-help">
+                  <label class="custom-control-label" for="USE_STRIPE_DIRECT_DEBIT">Use Stripe for Direct Debit rather than GoCardless</label>
+                </div>
+                <small id="USE_STRIPE_DIRECT_DEBIT-help">Once you enable Stripe Direct Debit, GoCardless will stop working and this change can not be reversed.</small>
+              </div>
 
-          <p>
-            <button type="submit" class="btn btn-success">
-              Save
-            </button>
-          </p>
-          </form>
+              <p>
+                <button type="submit" class="btn btn-success">
+                  Save
+                </button>
+              </p>
+            </form>
+          <?php } ?>
 
         <?php } else { ?>
 
