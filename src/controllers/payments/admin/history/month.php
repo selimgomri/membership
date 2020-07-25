@@ -100,7 +100,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 								&pound;<?=htmlspecialchars(number_format(($row['Amount']/100),2,'.',''))?>
 							</td>
 							<td>
-								<?=htmlspecialchars(paymentStatusString($row['Status']))?>
+								<?=htmlspecialchars(paymentStatusString($row['Status'], $row['stripeFailureCode']))?>
 							</td>
 						</tr>
 						<?php

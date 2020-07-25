@@ -42,7 +42,7 @@ if ($type == "squads") {
 $pagetitle = "Status - " . $dateString;
 
 $getPayments = $db->prepare("SELECT `Forename`, `Surname`, `MForename`, `MSurname`,
-individualFeeTrack.Amount, individualFeeTrack.Description, payments.Status, payments.PaymentID, users.UserID, metadataJSON, individualFeeTrack.MemberID FROM
+individualFeeTrack.Amount, individualFeeTrack.Description, payments.Status, payments.PaymentID, users.UserID, metadataJSON, individualFeeTrack.MemberID, payments.stripeFailureCode FROM
 (((((`individualFeeTrack` LEFT JOIN `paymentMonths` ON
 individualFeeTrack.MonthID = paymentMonths.MonthID) LEFT JOIN `paymentsPending`
 ON individualFeeTrack.PaymentID = paymentsPending.PaymentID) LEFT JOIN
@@ -173,7 +173,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 					</td>
 					<td>
 						<?php if ($row['Forename'] != null && $row['Surname'] != null) {
-							echo paymentStatusString($row['Status']);
+							echo paymentStatusString($row['Status'], $row['stripeFailureCode']);
 						} else {
 							echo "No Parent or Direct Debit Available";
 						} ?>

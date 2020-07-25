@@ -48,7 +48,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 
 $row = $payments->fetch(PDO::FETCH_ASSOC);
 
-$sql = $db->prepare("SELECT payments.`UserID`, payments.`Name`, `Amount`, `Status`, `Date`, BankName, AccountHolderName, AccountNumEnd, payments.PMKey, payments.stripeMandate FROM `payments` LEFT JOIN paymentMandates ON payments.MandateID = paymentMandates.MandateID WHERE `PaymentID` = ?");
+$sql = $db->prepare("SELECT payments.`UserID`, payments.`Name`, `Amount`, `Status`, `Date`, BankName, AccountHolderName, AccountNumEnd, payments.PMKey, payments.stripeMandate, payments.stripeFailureCode FROM `payments` LEFT JOIN paymentMandates ON payments.MandateID = paymentMandates.MandateID WHERE `PaymentID` = ?");
 $sql->execute([$id]);
 $payment_info = $sql->fetch(PDO::FETCH_ASSOC);
 $name = getUserName($payment_info['UserID']);
@@ -118,7 +118,7 @@ include BASE_PATH . "views/paymentsMenu.php";
       <dd class="col-md-8"><span class="mono">&pound;<?=(string) (\Brick\Math\BigDecimal::of((string) $payment_info['Amount']))->withPointMovedLeft(2)->toScale(2)?></span></dd>
 
       <dt class="col-md-4">Payment Status</dt>
-      <dd class="col-md-8"><span class=""><?=htmlspecialchars(paymentStatusString($payment_info['Status']))?></span></dd>
+      <dd class="col-md-8"><span class=""><?=htmlspecialchars(paymentStatusString($payment_info['Status'], $payment_info['stripeFailureCode']))?></span></dd>
 
       <?php if ($stripeMandateInfo) { ?>
       <dt class="col-md-4">Sort Code</dt>

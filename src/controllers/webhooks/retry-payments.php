@@ -11,7 +11,7 @@ try {
 
   $date = new DateTime('now', new DateTimeZone('Europe/London'));
 
-  $query = $db->prepare("SELECT PMKey, paymentRetries.UserID FROM paymentRetries INNER JOIN users ON users.UserID = paymentRetries.UserID WHERE `Tenant` = ? AND `Day` <= ? AND `Tried` = ? LIMIT 4");
+  $query = $db->prepare("SELECT PMKey, paymentRetries.UserID FROM paymentRetries INNER JOIN users ON users.UserID = paymentRetries.UserID INNER JOIN payments ON payments.PMkey = paymentRetries.PMKey WHERE `Tenant` = ? AND `Day` <= ? AND `Tried` = ? LIMIT 4");
   $query->execute([
     $tenant->getId(),
     $date->format("Y-m-d"),
