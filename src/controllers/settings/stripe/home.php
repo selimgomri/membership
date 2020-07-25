@@ -6,12 +6,23 @@ $pagetitle = 'Stripe Payment Services Options';
 $db = app()->db;
 $tenant = app()->tenant;
 
+\Stripe\Stripe::setApiKey(getenv('STRIPE'));
+$at = app()->tenant->getStripeAccount();
+
+$stripeAccount = \Stripe\Account::retrieve($at);
+
+$supportsDirectDebit = isset($stripeAccount->capabilities->bacs_debit_payments) && $stripeAccount->capabilities->bacs_debit_payments == 'active';
+
+$countries = getISOAlpha2Countries();
+
 $vars = [
   'GALA_CARD_PAYMENTS_ALLOWED' => true,
+  'ALLOW_STRIPE_DIRECT_DEBIT_SET_UP' => false,
   'USE_STRIPE_DIRECT_DEBIT' => false,
 ];
 $disabled = [
   'GALA_CARD_PAYMENTS_ALLOWED' => '',
+  'ALLOW_STRIPE_DIRECT_DEBIT_SET_UP' => '',
   'USE_STRIPE_DIRECT_DEBIT' => '',
 ];
 
@@ -21,8 +32,20 @@ foreach ($vars as $key => $value) {
   }
 }
 
-if ($vars['USE_STRIPE_DIRECT_DEBIT']) {
+if ($vars['USE_STRIPE_DIRECT_DEBIT'] || !$supportsDirectDebit) {
+  $disabled['ALLOW_STRIPE_DIRECT_DEBIT_SET_UP'] = ' disabled ';
   $disabled['USE_STRIPE_DIRECT_DEBIT'] = ' disabled ';
+}
+
+if ($vars['USE_STRIPE_DIRECT_DEBIT']) {
+  $vars['ALLOW_STRIPE_DIRECT_DEBIT_SET_UP'] = true;
+}
+
+$phone = $stripeAccount->business_profile->support_phone;
+try {
+  $number = \Brick\PhoneNumber\PhoneNumber::parse($phone);
+  $phone = $number->formatForCallingFrom('GB');
+} catch (Exception $e) {
 }
 
 include BASE_PATH . 'views/header.php';
@@ -71,14 +94,60 @@ include BASE_PATH . 'views/header.php';
         <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['Stripe-Reg-Error']);
         } ?>
 
-        <?php if ($at = app()->tenant->getStripeAccount()) { ?>
+        <?php if ($at) { ?>
 
           <h2>
             Stripe Account
           </h2>
 
           <p>
-            Your Stripe account is currently connected.
+            Your Stripe account (<span class="mono"><?= htmlspecialchars($at) ?></span>) is currently connected.
+          </p>
+
+          <h3>
+            Business details
+          </h3>
+
+          <dl class="row">
+            <dt class="col-sm-3">Business name</dt>
+            <dd class="col-sm-9"><?= htmlspecialchars($stripeAccount->business_profile->name) ?></dd>
+
+            <dt class="col-sm-3">Support email</dt>
+            <dd class="col-sm-9"><?= htmlspecialchars($stripeAccount->business_profile->support_email) ?></dd>
+
+            <dt class="col-sm-3">Support phone</dt>
+            <dd class="col-sm-9"><?= htmlspecialchars($phone) ?></dd>
+
+            <dt class="col-sm-3">Support url</dt>
+            <dd class="col-sm-9 text-truncate"><a href="<?= htmlspecialchars($stripeAccount->business_profile->support_url) ?>" target="_blank"><?= htmlspecialchars($stripeAccount->business_profile->support_url) ?></a></dd>
+
+            <dt class="col-sm-3">Business url</dt>
+            <dd class="col-sm-9 text-truncate"><a href="<?= htmlspecialchars($stripeAccount->business_profile->url) ?>" target="_blank"><?= htmlspecialchars($stripeAccount->business_profile->url) ?></a></dd>
+
+            <dt class="col-sm-3">Statement descriptor</dt>
+            <dd class="col-sm-9 mono"><?= htmlspecialchars($stripeAccount->settings->payments->statement_descriptor) ?></dd>
+
+            <dt class="col-sm-3">Short statement descriptor</dt>
+            <dd class="col-sm-9 mono"><?= htmlspecialchars($stripeAccount->settings->card_payments->statement_descriptor_prefix) ?></dd>
+
+            <dt class="col-sm-3">Administrator email</dt>
+            <dd class="col-sm-9 text-truncate"><a href="mailto:<?= htmlspecialchars($stripeAccount->email) ?>"><?= htmlspecialchars($stripeAccount->email) ?></a></dd>
+
+            <dt class="col-sm-3">Details submitted</dt>
+            <dd class="col-sm-9 text-truncate"><?php if ($stripeAccount->details_submitted) { ?>Yes<?php } else { ?>No<?php } ?></dd>
+
+            <dt class="col-sm-3">Payouts enabled</dt>
+            <dd class="col-sm-9 text-truncate"><?php if ($stripeAccount->payouts_enabled) { ?>Yes<?php } else { ?>No<?php } ?></dd>
+
+            <dt class="col-sm-3">Country</dt>
+            <dd class="col-sm-9 text-truncate"><?= htmlspecialchars($countries[$stripeAccount->country]) ?></dd>
+
+            <dt class="col-sm-3">Default currency</dt>
+            <dd class="col-sm-9 text-truncate"><?= htmlspecialchars(mb_strtoupper($stripeAccount->default_currency)) ?> (SCDS Membership will always charge in GBP)</dd>
+          </dl>
+
+          <p>
+            You can change the above details in your Stripe account dashboard.
           </p>
 
           <p>
@@ -92,26 +161,41 @@ include BASE_PATH . 'views/header.php';
           </h2>
 
           <form method="post">
-          <div class="form-group">
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="GALA_CARD_PAYMENTS_ALLOWED" name="GALA_CARD_PAYMENTS_ALLOWED" <?php if (bool($vars['GALA_CARD_PAYMENTS_ALLOWED'])) { ?>checked<?php } ?> <?= $disabled['GALA_CARD_PAYMENTS_ALLOWED'] ?>>
-              <label class="custom-control-label" for="GALA_CARD_PAYMENTS_ALLOWED">Allow card payments for gala entries</label>
+            <div class="form-group">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="GALA_CARD_PAYMENTS_ALLOWED" name="GALA_CARD_PAYMENTS_ALLOWED" <?php if (bool($vars['GALA_CARD_PAYMENTS_ALLOWED'])) { ?>checked<?php } ?> <?= $disabled['GALA_CARD_PAYMENTS_ALLOWED'] ?>>
+                <label class="custom-control-label" for="GALA_CARD_PAYMENTS_ALLOWED">Allow card payments for gala entries</label>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="USE_STRIPE_DIRECT_DEBIT" name="USE_STRIPE_DIRECT_DEBIT" <?php if (bool($vars['USE_STRIPE_DIRECT_DEBIT'])) { ?>checked<?php } ?> <?= $disabled['USE_STRIPE_DIRECT_DEBIT'] ?> aria-describedby="USE_STRIPE_DIRECT_DEBIT-help">
-              <label class="custom-control-label" for="USE_STRIPE_DIRECT_DEBIT">Use Stripe for Direct Debit rather than GoCardless</label>
+            <?php if (!$supportsDirectDebit) { ?>
+              <p>
+                BACS Direct Debit has not been enabled on your Stripe account. Please enable it through your Stripe Dashboard to turn on Direct Debit features.
+              </p>
+            <?php } ?>
+
+            <div class="form-group">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="ALLOW_STRIPE_DIRECT_DEBIT_SET_UP" name="ALLOW_STRIPE_DIRECT_DEBIT_SET_UP" <?php if (bool($vars['ALLOW_STRIPE_DIRECT_DEBIT_SET_UP'])) { ?>checked<?php } ?> <?= $disabled['ALLOW_STRIPE_DIRECT_DEBIT_SET_UP'] ?>>
+                <label class="custom-control-label" for="ALLOW_STRIPE_DIRECT_DEBIT_SET_UP">Allow users to set up a Direct Debit mandate with Stripe</label>
+              </div>
             </div>
-            <small id="USE_STRIPE_DIRECT_DEBIT-help">Once you enable Stripe Direct Debit, GoCardless will stop working and this change can not be reversed.</small>
-          </div>
 
-          <p>
-            <button type="submit" class="btn btn-success">
-              Save
-            </button>
-          </p>
+            <?php if (bool(getenv('IS_DEV'))) { ?>
+              <div class="form-group">
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input" id="USE_STRIPE_DIRECT_DEBIT" name="USE_STRIPE_DIRECT_DEBIT" <?php if (bool($vars['USE_STRIPE_DIRECT_DEBIT'])) { ?>checked<?php } ?> <?= $disabled['USE_STRIPE_DIRECT_DEBIT'] ?> aria-describedby="USE_STRIPE_DIRECT_DEBIT-help">
+                  <label class="custom-control-label" for="USE_STRIPE_DIRECT_DEBIT">Use Stripe for Direct Debit rather than GoCardless</label>
+                </div>
+                <small id="USE_STRIPE_DIRECT_DEBIT-help">Once you enable Stripe Direct Debit, GoCardless will stop working and this change can not be reversed.</small>
+              </div>
+            <?php } ?>
+
+            <p>
+              <button type="submit" class="btn btn-success">
+                Save
+              </button>
+            </p>
           </form>
 
         <?php } else { ?>

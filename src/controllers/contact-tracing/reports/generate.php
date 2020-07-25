@@ -78,7 +78,7 @@ try {
   }
 
 } catch (Exception $e) {
-  pre($e);
-  // http_response_code(302);
-  // header('location: ' . autoUrl('contact-tracing/reports'));
+  // pre($e);
+  http_response_code(302);
+  header('location: ' . autoUrl('contact-tracing/reports'));
 }
