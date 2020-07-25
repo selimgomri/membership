@@ -296,13 +296,13 @@ class Tenant
    * @return string token
    */
   public function getGoCardlessAccessToken() {
-    if (!$this->goCardlessLoaded) {
-      $this->loadGoCardless();
-    }
-    if ($this->goCardlessAccessToken) {
-      return $this->goCardlessAccessToken;
-    }
-    return null;
+    // if (!$this->goCardlessLoaded) {
+    //   $this->loadGoCardless();
+    // }
+    // if ($this->goCardlessAccessToken) {
+    //   return $this->goCardlessAccessToken;
+    // }
+    return $this->getKey('GOCARDLESS_ACCESS_TOKEN');
   }
 
   /**

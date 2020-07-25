@@ -361,7 +361,12 @@ if (!function_exists('chesterStandardMenu')) {
                     <h6 class="dropdown-header">Direct Debit</h6>
                     <a class="dropdown-item" href="<?= autoUrl("payments") ?>">Payments Home</a>
                     <a class="dropdown-item" href="<?= autoUrl("payments/statements") ?>">My Billing History</a>
-                    <a class="dropdown-item" href="<?= autoUrl("payments/mandates") ?>">My Bank Account</a>
+                    <?php if (app()->tenant->getGoCardlessAccessToken()) { ?>
+                    <a class="dropdown-item" href="<?= autoUrl("payments/mandates") ?>">My Bank Account (Old System)</a>
+                    <?php } ?>
+                    <?php if (stripeDirectDebit()) { ?>
+                    <a class="dropdown-item" href="<?= autoUrl("payments/direct-debit") ?>">My Bank Account (New System)</a>
+                    <?php } ?>
                     <a class="dropdown-item" href="<?= autoUrl("payments/statements/latest") ?>">My Latest Statement</a>
                     <a class="dropdown-item" href="<?= autoUrl("payments/fees") ?>">My Fees Since Last Bill</a>
                   <?php } else if (app()->tenant->getGoCardlessAccessToken()) { ?>

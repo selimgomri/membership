@@ -8,7 +8,7 @@ $tenant = app()->tenant;
 $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $pagetitle = "Payments Administration";
 
-require 'GoCardlessSetup.php';
+// require 'GoCardlessSetup.php';
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
@@ -76,7 +76,7 @@ $income = $income->fetchAll(PDO::FETCH_ASSOC);
       <div class="mb-4">
         <div class="news-grid">
 
-          <a href="<?=autoUrl('payments/fees')?>">
+          <a href="<?=autoUrl('payments/estimated-fees')?>">
   					<span class="mb-3">
   	          <span class="title mb-0">
   							Manual Billing Information

@@ -50,7 +50,7 @@ try {
       $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorNoReg'] = true;
     }
   }
-} catch (Excption $e) {
+} catch (Exception $e) {
 
 } finally {
   header("Location: " . autoUrl("users/" . $person . "/authorise-direct-debit-opt-out"));

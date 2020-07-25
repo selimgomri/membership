@@ -119,10 +119,10 @@ include BASE_PATH . 'views/header.php';
             <dd class="col-sm-9"><?= htmlspecialchars($phone) ?></dd>
 
             <dt class="col-sm-3">Support url</dt>
-            <dd class="col-sm-9 text-truncate"><a href="<?= htmlspecialchars($stripeAccount->business_profile->support_url) ?>" target="_blank"><?= htmlspecialchars($stripeAccount->business_profile->support_url) ?></a></dd>
+            <dd class="col-sm-9 text-truncate"><a href="<?= htmlspecialchars($stripeAccount->business_profile->support_url) ?>" target="_blank"><?= htmlspecialchars(trim(str_replace(['https://www.', 'http://www.', 'http://', 'https://'], '', $stripeAccount->business_profile->support_url), '/')) ?></a></dd>
 
             <dt class="col-sm-3">Business url</dt>
-            <dd class="col-sm-9 text-truncate"><a href="<?= htmlspecialchars($stripeAccount->business_profile->url) ?>" target="_blank"><?= htmlspecialchars($stripeAccount->business_profile->url) ?></a></dd>
+            <dd class="col-sm-9 text-truncate"><a href="<?= htmlspecialchars($stripeAccount->business_profile->url) ?>" target="_blank"><?= htmlspecialchars(trim(str_replace(['https://www.', 'http://www.', 'http://', 'https://'], '', $stripeAccount->business_profile->url), '/')) ?></a></dd>
 
             <dt class="col-sm-3">Statement descriptor</dt>
             <dd class="col-sm-9 mono"><?= htmlspecialchars($stripeAccount->settings->payments->statement_descriptor) ?></dd>

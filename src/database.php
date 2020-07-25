@@ -1407,6 +1407,17 @@ function getSwimmerParent($member)
   return $query->fetchColumn();
 }
 
+function stripeDirectDebit($absolute = false) {
+  if ($absolute) {
+    return getenv('STRIPE') && app()->tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT');
+  }
+  return getenv('STRIPE') && app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP') || app()->tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT');
+}
+
+function stripeSetUpDirectDebit() {
+  return getenv('STRIPE') && app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP');
+}
+
 include BASE_PATH . 'includes/security/Loader.php';
 include BASE_PATH . 'includes/security/CanView.php';
 include BASE_PATH . 'includes/ErrorReporting.php';

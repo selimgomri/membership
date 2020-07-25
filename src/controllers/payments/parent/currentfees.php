@@ -1,6 +1,6 @@
 <?php
 
-require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+// require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $pagetitle = "Current Fees";
