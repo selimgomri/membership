@@ -20,6 +20,11 @@ ob_start();?>
   <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:700,700i" rel="stylesheet" type="text/css">-->
   <?php include BASE_PATH . 'helperclasses/PDFStyles/Main.php'; ?>
   <title><?=$pagetitle?></title>
+  <style>
+  thead tr th {
+    text-align: left;
+  }
+  </style>
   </head>
   <body>
     <?php include BASE_PATH . 'helperclasses/PDFStyles/Letterhead.php'; ?>
@@ -152,7 +157,7 @@ ob_start();?>
     </p>
 
     <p>
-      Payments are handled by Stripe (card payments) and GoCardless (direct debit payments) on behalf of <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. You can also download reports from the Stripe Dashboard at <a href="https://dashboard.stripe.com/">dashboard.stripe.com</a> and from within the GoCardless user interface at <a href="https://manage.gocardless.com/">manage.gocardless.com</a>.
+      Payments are handled by Stripe and GoCardless on behalf of <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. You can also download reports from the Stripe Dashboard at <a href="https://dashboard.stripe.com/">dashboard.stripe.com</a> and from within the GoCardless user interface at <a href="https://manage.gocardless.com/">manage.gocardless.com</a>.
     </p>
 
     <p>
@@ -173,17 +178,21 @@ $html = ob_get_clean();
 
 // reference the Dompdf namespace
 use Dompdf\Dompdf;
+use Dompdf\Options;
 
 // instantiate and use the dompdf class
 $dompdf = new Dompdf();
 
 // set font dir here
-$dompdf->set_option('font_dir', BASE_PATH . 'fonts/');
-
-$dompdf->set_option('defaultFont', 'Open Sans');
-$dompdf->set_option('defaultMediaType', 'all');
-$dompdf->set_option("isPhpEnabled", true);
-$dompdf->set_option('isFontSubsettingEnabled', false);
+$options = new Options([
+  'fontDir' => getenv('FILE_STORE_PATH') . 'fonts/',
+  'fontCache' => getenv('FILE_STORE_PATH') . 'fonts/',
+  'isFontSubsettingEnabled' => true,
+  'defaultFont' => 'Open Sans',
+  'defaultMediaType' => 'all',
+  'isPhpEnabled' => true,
+]);
+$dompdf->setOptions($options);
 $dompdf->loadHtml($html);
 
 // (Optional) Setup the paper size and orientation

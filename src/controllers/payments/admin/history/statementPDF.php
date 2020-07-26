@@ -343,17 +343,21 @@ $html = ob_get_clean();
 
 // reference the Dompdf namespace
 use Dompdf\Dompdf;
+use Dompdf\Options;
 
 // instantiate and use the dompdf class
 $dompdf = new Dompdf();
 
 // set font dir here
-$dompdf->set_option('font_dir', BASE_PATH . 'fonts/');
-
-$dompdf->set_option('defaultFont', 'Open Sans');
-$dompdf->set_option('defaultMediaType', 'all');
-$dompdf->set_option("isPhpEnabled", true);
-$dompdf->set_option('isFontSubsettingEnabled', false);
+$options = new Options([
+  'fontDir' => getenv('FILE_STORE_PATH') . 'fonts/',
+  'fontCache' => getenv('FILE_STORE_PATH') . 'fonts/',
+  'isFontSubsettingEnabled' => true,
+  'defaultFont' => 'Open Sans',
+  'defaultMediaType' => 'all',
+  'isPhpEnabled' => true,
+]);
+$dompdf->setOptions($options);
 $dompdf->loadHtml($html);
 
 // (Optional) Setup the paper size and orientation
