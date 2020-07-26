@@ -53,6 +53,15 @@ $swimmerToo->execute([
 ]);
 $swimmerToo = $swimmerToo->fetchColumn();
 
+// Get Stripe direct debit info
+$getStripeDD = $db->prepare("SELECT stripeMandates.ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates INNER JOIN stripeCustomers ON stripeMandates.Customer = stripeCustomers.CustomerID WHERE stripeCustomers.User = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC LIMIT 1;");
+if (stripeDirectDebit()) {
+  $getStripeDD->execute([
+    $id
+  ]);
+}
+$stripeDD = $getStripeDD->fetch(PDO::FETCH_ASSOC);
+
 $bankName = $bank = $has_logo = $logo_path = null;
 if (userHasMandates($id)) {
   $bankName = mb_strtoupper(bankDetails($id, "account_holder_name"));
@@ -164,7 +173,8 @@ include BASE_PATH . "views/header.php";
         This user will be log in using the password you have created or by following the self-service password reset process.
       </p>
     </div>
-  <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['UserCreationSuccess']); } ?>
+  <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['UserCreationSuccess']);
+  } ?>
 
   <div class="row justify-content-between">
     <div class="col-md-4 col-lg-3 col-xl-3">
@@ -374,35 +384,66 @@ include BASE_PATH . "views/header.php";
                 Account details and monthly fees paid by this user.
               </p>
 
-              <div class="row">
-                <div class="col-lg-6">
-                  <h3 class="h6">Squad Fees</h3>
-                  <p><?= monthlyFeeCost($db, $id, "string") ?></p>
-                </div>
-                <div class="col-lg-6">
-                  <h3 class="h6">Extra Fees</h3>
-                  <p><?= monthlyExtraCost($db, $id, "string") ?></p>
-                </div>
-                <div class="col-lg-6">
-                  <h3 class="h6">Direct Debit</h3>
-                  <?php if (userHasMandates($id)) { ?>
-                    <?php if ($logo_path) { ?>
-                      <img class="img-fluid mb-3" style="max-height:35px;" src="<?= $logo_path ?>.png" srcset="<?= $logo_path ?>@2x.png 2x, <?= $logo_path ?>@3x.png 3x">
-                    <?php } ?>
-                    <p class="mb-0"><?= $bankName ?><abbr title="<?= htmlspecialchars(mb_strtoupper(bankDetails($id, "bank_name"))) ?>"><?= htmlspecialchars(getBankName(bankDetails($id, "bank_name"))) ?></abbr>
+              <div class="card card-body mb-3">
+
+                <h3 class="mb-3">
+                  Payment Information
+                </h3>
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <h3 class="h6">Squad Fees</h3>
+                    <p><?= monthlyFeeCost($db, $id, "string") ?></p>
+                  </div>
+                  <div class="col-lg-6">
+                    <h3 class="h6">Extra Fees</h3>
+                    <p><?= monthlyExtraCost($db, $id, "string") ?></p>
+                  </div>
+                  <div class="col-lg-6">
+                    <h3 class="h6">Account balance</h3>
+                    <p class="mb-0">
+                      &pound;<?= (string) (\Brick\Math\BigDecimal::of((string) getAccountBalance($id)))->withPointMovedLeft(2)->toScale(2) ?>
                     </p>
-                    <p class="mono">******<?= mb_strtoupper(bankDetails($id, "account_number_end")) ?></p>
-                  <?php } else { ?>
-                    <p>No Direct Debit set up</p>
-                  <?php } ?>
-                </div>
-                <div class="col-lg-6">
-                  <h3 class="h6">Account balance</h3>
-                  <p>
-                    &pound;<?= (string) (\Brick\Math\BigDecimal::of((string) getAccountBalance($id)))->withPointMovedLeft(2)->toScale(2) ?>
-                  </p>
+                  </div>
                 </div>
               </div>
+
+              <div class="card card-body">
+                <h3 class="mb-3">
+                  Current Direct Debit Mandates
+                </h3>
+
+                <div class="row">
+                  <div class="col-lg">
+                    <h4>Stripe DD (New System)</h4>
+                    <?php if ($stripeDD) { ?>
+                      <p class="mb-0"><strong>Sort Code</strong> <span class="mono"><?= htmlspecialchars($stripeDD['SortCode']) ?></span>
+                      </p>
+                      <p class="mb-0"><strong>Account Number</strong> <span class="mono">&middot;&middot;&middot;&middot;<?= htmlspecialchars($stripeDD['Last4']) ?></span></p>
+                    <?php } else { ?>
+                      <p class="mb-0">No Direct Debit set up</p>
+                    <?php } ?>
+                    <div class="mb-3 d-lg-none"></div>
+                  </div>
+
+                  <div class="col-lg">
+                    <h4>GoCardless DD (Legacy System)</h4>
+                    <?php if (userHasMandates($id)) { ?>
+                      <?php if ($logo_path) { ?>
+                        <img class="img-fluid mb-3" style="max-height:35px;" src="<?= $logo_path ?>.png" srcset="<?= $logo_path ?>@2x.png 2x, <?= $logo_path ?>@3x.png 3x">
+                      <?php } ?>
+                      <p class="mb-0"><?= $bankName ?><abbr title="<?= htmlspecialchars(mb_strtoupper(bankDetails($id, "bank_name"))) ?>"><?= htmlspecialchars(getBankName(bankDetails($id, "bank_name"))) ?></abbr>
+                      </p>
+                      <p class="mb-0 mono">&middot;&middot;&middot;&middot;&middot;&middot;<?= mb_strtoupper(bankDetails($id, "account_number_end")) ?></p>
+
+                    <?php } else { ?>
+                      <p class="mb-0">No Direct Debit set up</p>
+                    <?php } ?>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3 d-md-none"></div>
+
             </div>
 
             <div class="col-md-6 col-lg-4">
@@ -412,10 +453,15 @@ include BASE_PATH . "views/header.php";
                     Payment links
                   </div>
                   <div class="list-group list-group-flush">
-                    <a href="<?= htmlspecialchars(autoUrl("users/" . $id . "/membership-fees")) ?>" class="list-group-item list-group-item-action">Annual membership fees <span class="fa fa-chevron-right"></span></a>
-                    <a href="<?= autoUrl("users/" . $id . "/pending-fees") ?>" class="list-group-item list-group-item-action">Pending payments <span class="fa fa-chevron-right"></span></a>
-                    <a href="<?= autoUrl("payments/history/users/" . $id) ?>" class="list-group-item list-group-item-action">Previous bills <span class="fa fa-chevron-right"></span></a>
-                    <a href="<?= autoUrl("users/" . $id . "/mandates") ?>" class="list-group-item list-group-item-action">Direct debit mandates <span class="fa fa-chevron-right"></span></a>
+                    <a href="<?= htmlspecialchars(autoUrl("users/" . $id . "/membership-fees")) ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">Annual membership fees <span class="fa fa-chevron-right"></span></a>
+                    <a href="<?= autoUrl("users/" . $id . "/pending-fees") ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">Pending payments <span class="fa fa-chevron-right"></span></a>
+                    <a href="<?= autoUrl("payments/history/users/" . $id) ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">Previous bills <span class="fa fa-chevron-right"></span></a>
+                    <?php if ($tenant->getKey('GOCARDLESS_ACCESS_TOKEN')) { ?>
+                      <a href="<?= autoUrl("users/" . $id . "/mandates") ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">GoCardless direct debit mandates <span class="fa fa-chevron-right"></span></a>
+                    <?php } ?>
+                    <?php if (stripeSetUpDirectDebit()) { ?>
+                      <a href="<?= autoUrl("users/" . $id . "/direct-debit") ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">Stripe direct debit mandates <span class="fa fa-chevron-right"></span></a>
+                    <?php } ?>
                   </div>
                 </div>
               <?php } ?>

@@ -53,7 +53,9 @@ if (getenv('IS_DEV')) {
       $name = 'E_UNKNOWN';
     };
 
-    return (print(@sprintf("%s Error in file \xBB%s\xAB at line %d: %s\n", $name, ($file), $line, $message)));
+    if ($type != 0x2000) {
+      return (print(@sprintf("%s Error in file \xBB%s\xAB at line %d: %s\n", $name, ($file), $line, $message)));
+    }
   };
 
   $old_error_handler = set_error_handler("ErrorHandler");

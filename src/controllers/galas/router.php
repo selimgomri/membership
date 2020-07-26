@@ -146,7 +146,7 @@ if ($access == "Parent") {
 		include 'indicate-openness/veto-do.php';
 	});
 
-	if (getenv('STRIPE') && app()->tenant->getStripeAccount()) {
+	if (getenv('STRIPE') && app()->tenant->getStripeAccount() && app()->tenant->getBooleanKey('GALA_CARD_PAYMENTS_ALLOWED')) {
 		$this->group('/pay-for-entries', function() {
 			$this->get('/', function() {
 				include 'pay/welcome.php';

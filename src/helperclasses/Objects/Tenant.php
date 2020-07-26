@@ -102,6 +102,7 @@ class Tenant
       'STRIPE_APPLE_PAY_DOMAIN' => null,
       'EMERGENCY_MESSAGE' => false,
       'EMERGENCY_MESSAGE_TYPE' => 'NONE',
+      'GALA_CARD_PAYMENTS_ALLOWED' => true,
     ];
 
     foreach ($keys as $key => $value) {
@@ -296,13 +297,13 @@ class Tenant
    * @return string token
    */
   public function getGoCardlessAccessToken() {
-    if (!$this->goCardlessLoaded) {
-      $this->loadGoCardless();
-    }
-    if ($this->goCardlessAccessToken) {
-      return $this->goCardlessAccessToken;
-    }
-    return null;
+    // if (!$this->goCardlessLoaded) {
+    //   $this->loadGoCardless();
+    // }
+    // if ($this->goCardlessAccessToken) {
+    //   return $this->goCardlessAccessToken;
+    // }
+    return $this->getKey('GOCARDLESS_ACCESS_TOKEN');
   }
 
   /**

@@ -49,7 +49,7 @@ $mandateDetails->execute([$user, true]);
     </ol>
   </nav>
 
-	<h1>Bank Account Options</h1>
+	<h1>Bank Account Options (GoCardless)</h1>
   <p class="lead">
     <?=htmlspecialchars($un['Forename'])?>'s mandates
   </p>

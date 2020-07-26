@@ -4,7 +4,7 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 // Get mandates
-$getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending')");
+$getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC LIMIT 1");
 $getMandates->execute([
   app()->user->getStripeCustomer()->id,
 ]);
@@ -63,7 +63,7 @@ include BASE_PATH . "views/header.php";
             </dl>
 
             <p class="mb-0">
-              <a href="<?= htmlspecialchars($mandate['URL']) ?>">
+              <a href="<?= htmlspecialchars($mandate['URL']) ?>" target="_blank">
                 View Direct Debit Instruction
               </a>
             </p>

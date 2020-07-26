@@ -47,6 +47,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 		$this->get('/{user}:int/mandates', function ($user) {
 			include BASE_PATH . 'controllers/payments/admin/user-mandates/user-mandates.php';
 		});
+
+		$this->get('/{user}:int/direct-debit', function ($user) {
+			include BASE_PATH . 'controllers/payments/admin/user-mandates/stripe-user-mandates.php';
+		});
 	}
 
 	$this->get('/{id}:int/welcome-pack', function ($id) {

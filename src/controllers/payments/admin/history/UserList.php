@@ -1,6 +1,6 @@
 <?php
 
-require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+// require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 $search = null;
 

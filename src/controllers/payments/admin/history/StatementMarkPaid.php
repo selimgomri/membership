@@ -12,7 +12,7 @@ if ($sql->fetchColumn() == 0) {
   halt(404);
 }
 
-require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+// require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['Token' . $id] == $token) {
   $db->prepare("UPDATE payments SET Status='paid_manually' WHERE PaymentID = ?")->execute([$id]);

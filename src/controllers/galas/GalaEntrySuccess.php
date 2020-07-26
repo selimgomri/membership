@@ -4,7 +4,7 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 $canPayByCard = false;
-if (getenv('STRIPE') && $tenant->getStripeAccount()) {
+if (getenv('STRIPE') && $tenant->getStripeAccount() && $tenant->getBooleanKey('GALA_CARD_PAYMENTS_ALLOWED')) {
   $canPayByCard = true;
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-require 'GoCardlessSetup.php';
+// require 'GoCardlessSetup.php';
 
 $db = app()->db;
 
