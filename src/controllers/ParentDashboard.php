@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $obj = null;
 if (app()->tenant->isCLS()) {
@@ -45,6 +46,18 @@ try {
 
 $galas = $query->fetchAll(PDO::FETCH_ASSOC);
 
+$getCountNewMandates = $db->prepare("SELECT COUNT(*) FROM stripeMandates INNER JOIN stripeCustomers ON stripeMandates.Customer = stripeCustomers.CustomerID WHERE stripeCustomers.User = ? AND stripeMandates.MandateStatus != 'inactive';");
+$getCountNewMandates->execute([
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+]);
+$hasStripeMandate = $getCountNewMandates->fetchColumn() > 0;
+
+$getLocations = $db->prepare("SELECT COUNT(*) FROM `covidLocations` WHERE `Tenant` = ?");
+$getLocations->execute([
+  $tenant->getId(),
+]);
+$showCovid = $getLocations->fetchColumn() > 0;
+
 $username = htmlspecialchars(explode(" ", getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']))[0]);
 
 $pagetitle = "Home";
@@ -58,7 +71,7 @@ include BASE_PATH . "views/header.php";
     <h1><?= helloGreeting() ?> <?= $username ?></h1>
     <p class="lead mb-4">Welcome to your account</p>
 
-    <?php if (bool(getenv('IS_DEV'))) { ?>
+    <?php if ($showCovid) { ?>
       <div class="p-3 text-white bg-danger rounded h-100 mb-4">
         <h2>
           Register your attendance
@@ -110,7 +123,35 @@ include BASE_PATH . "views/header.php";
       </aside>
     <?php } ?>
 
-    <?php if (app()->tenant->getGoCardlessAccessToken() && !userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) { ?>
+    <?php if (false && stripeDirectDebit() && !$hasStripeMandate) { ?>
+      <div class="mb-4">
+        <h2 class="mb-4">Want to set up a Direct Debit?</h2>
+        <div class="news-grid">
+          <a href="<?= autoUrl("payments/direct-debit/set-up") ?>">
+            <span class="mb-3">
+              <span class="title mb-0">
+                Setup a Direct Debit Now (New System)
+              </span>
+            </span>
+            <span class="category">
+              Payments
+            </span>
+          </a>
+          <a href="https://www.chesterlestreetasc.co.uk/support/directdebit/">
+            <span class="mb-3">
+              <span class="title mb-0">
+                Learn more about Direct Debits
+              </span>
+            </span>
+            <span class="category">
+              Payments
+            </span>
+          </a>
+        </div>
+      </div>
+    <?php } ?>
+
+    <?php if (false && app()->tenant->getGoCardlessAccessToken() && !userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) { ?>
       <div class="mb-4">
         <h2 class="mb-4">Want to set up a Direct Debit?</h2>
         <div class="news-grid">

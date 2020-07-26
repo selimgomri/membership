@@ -351,33 +351,38 @@ if (!function_exists('chesterStandardMenu')) {
               </li>
             <?php } ?>
             <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
-              $hasMandate = userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']); ?>
+              $hasMandate = userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
+              $getCountNewMandates = $db->prepare("SELECT COUNT(*) FROM stripeMandates INNER JOIN stripeCustomers ON stripeMandates.Customer = stripeCustomers.CustomerID WHERE stripeCustomers.User = ? AND stripeMandates.MandateStatus != 'inactive';");
+              $getCountNewMandates->execute([
+                $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+              ]);
+              $hasStripeMandate = $getCountNewMandates->fetchColumn() > 0;
+            ?>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="paymentsParentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Pay
                 </a>
                 <div class="dropdown-menu" aria-labelledby="paymentsParentDropdown">
-                  <?php if ($hasMandate) { ?>
-                    <h6 class="dropdown-header">Direct Debit</h6>
-                    <a class="dropdown-item" href="<?= autoUrl("payments") ?>">Payments Home</a>
-                    <a class="dropdown-item" href="<?= autoUrl("payments/statements") ?>">My Billing History</a>
-                    <?php if (app()->tenant->getGoCardlessAccessToken()) { ?>
+                  <h6 class="dropdown-header">Direct Debit</h6>
+                  <a class="dropdown-item" href="<?= autoUrl("payments") ?>">Payments Home</a>
+                  <a class="dropdown-item" href="<?= autoUrl("payments/statements") ?>">My Billing History</a>
+                  <?php if (app()->tenant->getGoCardlessAccessToken() && $hasMandate && !stripeDirectDebit(true)) { ?>
                     <a class="dropdown-item" href="<?= autoUrl("payments/mandates") ?>">My Bank Account (Old System)</a>
-                    <?php } ?>
-                    <?php if (stripeDirectDebit()) { ?>
-                    <a class="dropdown-item" href="<?= autoUrl("payments/direct-debit") ?>">My Bank Account (New System)</a>
-                    <?php } ?>
-                    <a class="dropdown-item" href="<?= autoUrl("payments/statements/latest") ?>">My Latest Statement</a>
-                    <a class="dropdown-item" href="<?= autoUrl("payments/fees") ?>">My Fees Since Last Bill</a>
-                  <?php } else if (app()->tenant->getGoCardlessAccessToken()) { ?>
-                    <h6 class="dropdown-header">Direct debit</h6>
-                    <a class="dropdown-item" href="<?= autoUrl("payments") ?>">
-                      Setup a direct debit
+                  <?php } else if (app()->tenant->getGoCardlessAccessToken() && !stripeDirectDebit(true)) { ?>
+                    <a class="dropdown-item" href="<?= autoUrl("payments/setup") ?>">
+                      Setup a direct debit (Old System)
                     </a>
                   <?php } ?>
-                  <?php if (app()->tenant->getGoCardlessAccessToken() && bool(getenv('IS_DEV'))) { ?>
-                    <div class="dropdown-divider"></div>
+                  <?php if (stripeDirectDebit() && $hasStripeMandate) { ?>
+                    <a class="dropdown-item" href="<?= autoUrl("payments/direct-debit") ?>">My Bank Account (New System)</a>
+                  <?php } else if (stripeDirectDebit()) { ?>
+                    <a class="dropdown-item" href="<?= autoUrl("payments/direct-debit/set-up") ?>">
+                      Setup a direct debit (New System)
+                    </a>
                   <?php } ?>
+                  <a class="dropdown-item" href="<?= autoUrl("payments/statements/latest") ?>">My Latest Statement</a>
+                  <a class="dropdown-item" href="<?= autoUrl("payments/fees") ?>">My Fees Since Last Bill</a>
+                  <div class="dropdown-divider"></div>
                   <h6 class="dropdown-header">Fee information</h6>
                   <a class="dropdown-item" href="<?= autoUrl("payments/squad-fees") ?>">
                     Squad and extra fees

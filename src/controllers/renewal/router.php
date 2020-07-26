@@ -25,20 +25,44 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 
 	$this->group('/payments', function() {
 		$this->get(['/setup', '/setup/{stage}:int'], function($stage = 0) {
-			
+
 			$renewal_trap = true;
-			require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
-			if ($stage == 0) {
-				require(BASE_PATH . 'controllers/payments/setup/start.php');
-			} else if ($stage == 1) {
-				require(BASE_PATH . 'controllers/payments/setup/date.php');
-			} else if ($stage == 2) {
-				require(BASE_PATH . 'controllers/payments/setup/initiate.php');
-			} else if ($stage == 3) {
-				require(BASE_PATH . 'controllers/payments/setup/redirect.php');
-			} else if ($stage == 4) {
-				require(BASE_PATH . 'controllers/payments/setup/status.php');
+
+			if (stripeDirectDebit(true)) {
+				header("location: " . autoUrl("renewal/payments/direct-debit/set-up"));
+			} else {
+				require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+				if ($stage == 0) {
+					require(BASE_PATH . 'controllers/payments/setup/start.php');
+				} else if ($stage == 1) {
+					require(BASE_PATH . 'controllers/payments/setup/date.php');
+				} else if ($stage == 2) {
+					require(BASE_PATH . 'controllers/payments/setup/initiate.php');
+				} else if ($stage == 3) {
+					require(BASE_PATH . 'controllers/payments/setup/redirect.php');
+				} else if ($stage == 4) {
+					require(BASE_PATH . 'controllers/payments/setup/status.php');
+				}
 			}
+		});
+
+		$this->group('/direct-debit', function() {
+			$this->group('/set-up', function () {
+				$this->get('/', function () {
+					$renewal_trap = true;
+					include BASE_PATH . 'controllers/payments/stripe/direct-debit/sign-up.php';
+				});
+
+				$this->get('/success', function () {
+					$renewal_trap = true;
+					include BASE_PATH . 'controllers/payments/stripe/direct-debit/success.php';
+				});
+
+				$this->get('/cancel', function () {
+					$renewal_trap = true;
+					include BASE_PATH . 'controllers/payments/stripe/direct-debit/failure.php';
+				});
+			});
 		});
 
 		$this->post('/setup/1', function() {

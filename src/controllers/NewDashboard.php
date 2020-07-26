@@ -38,6 +38,12 @@ $query = $db->prepare("SELECT EmailAddress FROM users WHERE UserID = ?");
 $query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $userInfo = $query->fetch(PDO::FETCH_ASSOC);
 
+$getLocations = $db->prepare("SELECT COUNT(*) FROM `covidLocations` WHERE `Tenant` = ?");
+$getLocations->execute([
+  $tenant->getId(),
+]);
+$showCovid = $getLocations->fetchColumn() > 0;
+
 $pagetitle = "Home";
 include BASE_PATH . "views/header.php";
 
@@ -70,7 +76,7 @@ include BASE_PATH . "views/header.php";
 			</p>
 		</div> -->
 
-		<?php if (bool(getenv('IS_DEV'))) { ?>
+		<?php if ($showCovid) { ?>
 			<div class="p-3 text-white bg-danger rounded h-100 mb-4">
 				<h2>
 					Register your attendance

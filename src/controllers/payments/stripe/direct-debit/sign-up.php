@@ -12,21 +12,40 @@ $user = $getUserEmail->fetch(PDO::FETCH_ASSOC);
 // UPDATING
 $customer = app()->user->getStripeCustomer();
 
-$session = \Stripe\Checkout\Session::create([
-  'payment_method_types' => ['bacs_debit'],
-  'mode' => 'setup',
-  'customer' => $customer->id,
-  'success_url' => autoUrl('payments/direct-debit/set-up/success?session_id={CHECKOUT_SESSION_ID}'),
-  'cancel_url' => autoUrl('payments/direct-debit/set-up'),
-  'metadata' => [
-    'session_type' => 'direct_debit_setup',
-  ]
-], [
-  'stripe_account' => $tenant->getStripeAccount()
-]);
+$session = null;
+if (isset($renewal_trap) && $renewal_trap) {
+  $session = \Stripe\Checkout\Session::create([
+    'payment_method_types' => ['bacs_debit'],
+    'mode' => 'setup',
+    'customer' => $customer->id,
+    'success_url' => autoUrl('renewal/payments/direct-debit/set-up/success?session_id={CHECKOUT_SESSION_ID}'),
+    'cancel_url' => autoUrl('renewal/payments/direct-debit/set-up'),
+    'metadata' => [
+      'session_type' => 'direct_debit_setup',
+    ]
+  ], [
+    'stripe_account' => $tenant->getStripeAccount()
+  ]);
+} else {
+  $session = \Stripe\Checkout\Session::create([
+    'payment_method_types' => ['bacs_debit'],
+    'mode' => 'setup',
+    'customer' => $customer->id,
+    'success_url' => autoUrl('payments/direct-debit/set-up/success?session_id={CHECKOUT_SESSION_ID}'),
+    'cancel_url' => autoUrl('payments/direct-debit/set-up'),
+    'metadata' => [
+      'session_type' => 'direct_debit_setup',
+    ]
+  ], [
+    'stripe_account' => $tenant->getStripeAccount()
+  ]);
+}
 
 $pagetitle = "Set up a Direct Debit";
 include BASE_PATH . "views/header.php";
+if (isset($renewal_trap) && $renewal_trap) {
+  include BASE_PATH . "views/renewalTitleBar.php";
+}
 
 ?>
 
@@ -34,6 +53,7 @@ include BASE_PATH . "views/header.php";
 </div>
 
 <div class="container">
+  <?php if (!isset($renewal_trap) || !$renewal_trap) { ?>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?= autoUrl("payments") ?>">Payments</a></li>
@@ -41,6 +61,7 @@ include BASE_PATH . "views/header.php";
       <li class="breadcrumb-item active" aria-current="page">Set up</li>
     </ol>
   </nav>
+  <?php } ?>
 
   <div class="row">
     <div class="col-lg-8">
