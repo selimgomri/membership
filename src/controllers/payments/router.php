@@ -50,7 +50,6 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 
 	$this->get('/', function () {
-
 		include 'user.php';
 	});
 
