@@ -26,7 +26,7 @@ $day = $startWeek->format('d');
 $month = $startWeek->format('m');
 $year = $startWeek->format('Y');
 
-$sessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN squads ON squads.SquadID = sessions.SquadID) INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE squads.Tenant = ? AND DisplayFrom <= ? AND DisplayUntil >= ? ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC");
+$sessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN squads ON squads.SquadID = sessions.SquadID) INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE squads.Tenant = ? AND DisplayFrom <= ? AND DisplayUntil >= ? ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC, SquadFEE DESC, SquadName ASC;");
 $sessions->execute([
   $tenant->getId(),
   $startWeek->format('Y-m-d'),
