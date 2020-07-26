@@ -29,7 +29,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
 
   <div class="">
     <h2 class="">Squad Details</h2>
-    <form method="post" action="<?= htmlspecialchars(autoUrl("squads/addsquad")) ?>" class="needs-validation" novalidate>
+    <form method="post" action="<?= htmlspecialchars(autoUrl("squads/new")) ?>" class="needs-validation" novalidate>
 
       <div class="form-group">
         <label for="squadName">Squad Name</label>
