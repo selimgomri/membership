@@ -18,7 +18,7 @@ if (!function_exists('chesterStandardMenu')) {
     global $edit_link;
 
     $canPayByCard = false;
-    if (getenv('STRIPE') && app()->tenant->getStripeAccount()) {
+    if (getenv('STRIPE') && app()->tenant->getStripeAccount() && app()->tenant->getBooleanKey('GALA_CARD_PAYMENTS_ALLOWED')) {
       $canPayByCard = true;
     }
 

@@ -102,6 +102,7 @@ class Tenant
       'STRIPE_APPLE_PAY_DOMAIN' => null,
       'EMERGENCY_MESSAGE' => false,
       'EMERGENCY_MESSAGE_TYPE' => 'NONE',
+      'GALA_CARD_PAYMENTS_ALLOWED' => true,
     ];
 
     foreach ($keys as $key => $value) {

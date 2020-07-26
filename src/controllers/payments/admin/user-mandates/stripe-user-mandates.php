@@ -67,7 +67,7 @@ include BASE_PATH . "views/paymentsMenu.php";
         </dl>
 
         <p class="mb-0">
-          <a href="<?= htmlspecialchars($mandate['URL']) ?>">
+          <a href="<?= htmlspecialchars($mandate['URL']) ?>" target="_blank">
             View Direct Debit Instruction
           </a>
         </p>
