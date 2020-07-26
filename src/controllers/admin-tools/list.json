@@ -49,6 +49,14 @@
       "link": "settings",
       "target": "_self",
       "external": false
+    },
+    {
+      "id": "contact-tracing-settings",
+      "name": "Contact tracing",
+      "title": "Manage COVID-19 contact tracing locations and reports",
+      "link": "contact-tracing",
+      "target": "_self",
+      "external": false
     }
   ]
 }
