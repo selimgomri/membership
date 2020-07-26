@@ -63,11 +63,11 @@ $countEntriesColours = [];
 foreach ($swimsArray as $col => $name) {
   $getCount = null;
   if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
-    $getCount = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE `" . $col . "` = 1");
-    $getCount->execute([]);
+    $getCount = $db->prepare("SELECT COUNT(*) FROM galaEntries INNER JOIN galas ON galas.GalaID = galaEntries.GalaID WHERE `" . $col . "` = 1 AND galas.Tenant = ?");
+    $getCount->execute([$tenant->getId()]);
   } else {
-    $getCount = $db->prepare("SELECT COUNT(*) FROM galaEntries WHERE `" . $col . "` = 1");
-    $getCount->execute([]);
+    $getCount = $db->prepare("SELECT COUNT(*) FROM galaEntries INNER JOIN galas ON galas.GalaID = galaEntries.GalaID WHERE `" . $col . "` = 1 AND galas.Tenant = ?");
+    $getCount->execute([$tenant->getId()]);
   }
   $count = $getCount->fetchColumn();
   if ($count > 0) {

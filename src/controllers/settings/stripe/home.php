@@ -182,6 +182,7 @@ include BASE_PATH . 'views/header.php';
             </div>
 
             <?php if (bool(getenv('IS_DEV'))) { ?>
+
               <div class="form-group">
                 <div class="custom-control custom-switch">
                   <input type="checkbox" class="custom-control-input" id="USE_STRIPE_DIRECT_DEBIT" name="USE_STRIPE_DIRECT_DEBIT" <?php if (bool($vars['USE_STRIPE_DIRECT_DEBIT'])) { ?>checked<?php } ?> <?= $disabled['USE_STRIPE_DIRECT_DEBIT'] ?> aria-describedby="USE_STRIPE_DIRECT_DEBIT-help">

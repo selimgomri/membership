@@ -63,7 +63,7 @@ try {
     }
 
     // Check there are no existing moves
-    $getCount = $db->prepare("SELECT COUNT(*) FROM squadMoves WHERE Member = :member AND Old = :old_squad OR New = :old_squad OR Old = :new_squad OR New = :new_squad");
+    $getCount = $db->prepare("SELECT COUNT(*) FROM squadMoves WHERE Member = :member AND (Old = :old_squad OR New = :old_squad OR Old = :new_squad OR New = :new_squad)");
     $getCount->execute([
       'member' => $_POST['member'],
       'old_squad' => $_POST['leave'],
