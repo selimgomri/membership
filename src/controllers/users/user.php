@@ -453,14 +453,14 @@ include BASE_PATH . "views/header.php";
                     Payment links
                   </div>
                   <div class="list-group list-group-flush">
-                    <a href="<?= htmlspecialchars(autoUrl("users/" . $id . "/membership-fees")) ?>" class="list-group-item list-group-item-action">Annual membership fees <span class="fa fa-chevron-right"></span></a>
-                    <a href="<?= autoUrl("users/" . $id . "/pending-fees") ?>" class="list-group-item list-group-item-action">Pending payments <span class="fa fa-chevron-right"></span></a>
-                    <a href="<?= autoUrl("payments/history/users/" . $id) ?>" class="list-group-item list-group-item-action">Previous bills <span class="fa fa-chevron-right"></span></a>
+                    <a href="<?= htmlspecialchars(autoUrl("users/" . $id . "/membership-fees")) ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">Annual membership fees <span class="fa fa-chevron-right"></span></a>
+                    <a href="<?= autoUrl("users/" . $id . "/pending-fees") ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">Pending payments <span class="fa fa-chevron-right"></span></a>
+                    <a href="<?= autoUrl("payments/history/users/" . $id) ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">Previous bills <span class="fa fa-chevron-right"></span></a>
                     <?php if ($tenant->getKey('GOCARDLESS_ACCESS_TOKEN')) { ?>
-                      <a href="<?= autoUrl("users/" . $id . "/mandates") ?>" class="list-group-item list-group-item-action">GoCardless direct debit mandates <span class="fa fa-chevron-right"></span></a>
+                      <a href="<?= autoUrl("users/" . $id . "/mandates") ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">GoCardless direct debit mandates <span class="fa fa-chevron-right"></span></a>
                     <?php } ?>
                     <?php if (stripeSetUpDirectDebit()) { ?>
-                      <a href="<?= autoUrl("users/" . $id . "/direct-debit") ?>" class="list-group-item list-group-item-action">Stripe direct debit mandates <span class="fa fa-chevron-right"></span></a>
+                      <a href="<?= autoUrl("users/" . $id . "/direct-debit") ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">Stripe direct debit mandates <span class="fa fa-chevron-right"></span></a>
                     <?php } ?>
                   </div>
                 </div>
