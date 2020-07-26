@@ -149,8 +149,14 @@ try {
 		$hasDD = true;
 	}
 
-	if ($hasDD || !(app()->tenant->getGoCardlessAccessToken())) {
-		if ($hasDD) {
+	$getCountNewMandates = $db->prepare("SELECT COUNT(*) FROM stripeMandates INNER JOIN stripeCustomers ON stripeMandates.Customer = stripeCustomers.CustomerID WHERE stripeCustomers.User = ? AND stripeMandates.MandateStatus != 'inactive';");
+	$getCountNewMandates->execute([
+		$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+	]);
+	$hasStripeMandate = $getCountNewMandates->fetchColumn() > 0;
+
+	if ($hasDD || $hasStripeMandate || (!app()->tenant->getGoCardlessAccessToken() &&  !stripeDirectDebit(true))) {
+		if ($hasDD || $hasStripeMandate) {
 			// INSERT Payment into pending
 			$date = new \DateTime('now', new DateTimeZone('Europe/London'));
 			$date->setTimezone(new DateTimeZone('UTC'));

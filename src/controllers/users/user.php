@@ -417,7 +417,7 @@ include BASE_PATH . "views/header.php";
                   <div class="col-lg">
                     <h4>Stripe DD (New System)</h4>
                     <?php if ($stripeDD) { ?>
-                      <p class="mb-0"><strong>Sort Code</strong> <span class="mono"><?= htmlspecialchars($stripeDD['SortCode']) ?></span>
+                      <p class="mb-0"><strong>Sort Code</strong> <span class="mono"><?= htmlspecialchars(implode("-", str_split($stripeDD['SortCode'], 2))) ?></span>
                       </p>
                       <p class="mb-0"><strong>Account Number</strong> <span class="mono">&middot;&middot;&middot;&middot;<?= htmlspecialchars($stripeDD['Last4']) ?></span></p>
                     <?php } else { ?>
@@ -448,7 +448,7 @@ include BASE_PATH . "views/header.php";
 
             <div class="col-md-6 col-lg-4">
               <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
-                <div class="card">
+                <div class="card position-sticky top-3">
                   <div class="card-header">
                     Payment links
                   </div>
