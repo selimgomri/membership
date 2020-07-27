@@ -16,7 +16,7 @@ function setDate(clickedItem, clickedItemChecked) {
     }
   };
 
-  xhttp.open("POST", <?=json_encode(autoUrl("attendance/sessions/ajax/endDateHandler"))?>, true);
+  xhttp.open("POST", date.dataset.ajaxUrl, true);
   xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhttp.send('sessionID=' + session + '&sessionEndDate=' + dateValue);
 }
