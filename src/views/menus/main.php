@@ -38,7 +38,10 @@ if (!function_exists('chesterStandardMenu')) {
     }
 
     $haveSquadReps = false;
-    $getRepCount = $db->query("SELECT COUNT(*) FROM squadReps");
+    $getRepCount = $db->prepare("SELECT COUNT(*) FROM squadReps INNER JOIN users ON squadReps.User = users.UserID WHERE users.Tenant = ?");
+    $getRepCount->execute([
+      app()->tenant->getId(),
+    ]);
     if ($getRepCount->fetchColumn() > 0) {
       $haveSquadReps = true;
     }
