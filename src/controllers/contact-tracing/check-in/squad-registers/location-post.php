@@ -14,6 +14,10 @@ if (!$location) {
   halt(404);
 }
 
+if (!app()->user) {
+  halt(404);
+}
+
 $squad = null;
 
 $db->beginTransaction();
@@ -28,11 +32,20 @@ try {
   }
 
   // Get squad
-  $userSquads = $db->prepare("SELECT SquadName, SquadID FROM squadReps INNER JOIN squads ON squadReps.Squad = squads.SquadID WHERE User = ? AND Squad = ? ORDER BY SquadFee DESC, SquadName ASC");
-  $userSquads->execute([
-    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
-    $_POST['squad'],
-  ]);
+  $user = app()->user;
+  if ($user->hasPermission('Admin') || $user->hasPermission('Coach') || $user->hasPermission('Galas')) {
+    $userSquads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE SquadID = ? AND Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+    $userSquads->execute([
+      $_GET['squad'],
+      $tenant->getId(),
+    ]);
+  } else {
+    $userSquads = $db->prepare("SELECT SquadName, SquadID FROM squadReps INNER JOIN squads ON squadReps.Squad = squads.SquadID WHERE User = ? AND Squad = ? ORDER BY SquadFee DESC, SquadName ASC");
+    $userSquads->execute([
+      $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+      $_GET['squad'],
+    ]);
+  }
 
   $squad = $userSquads->fetch(PDO::FETCH_ASSOC);
 
@@ -69,6 +82,8 @@ try {
   }
 
   $db->commit();
+
+  $_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingSuccess'] = true;
 
   http_response_code(302);
   header("location: " . autoUrl('contact-tracing/check-in/' . $id . '/success'));

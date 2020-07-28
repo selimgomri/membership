@@ -126,6 +126,19 @@ include BASE_PATH . 'views/header.php';
                 Notify
               </span>
             </a>
+            <a href="<?=autoUrl("contact-tracing/check-in")?>">
+              <span class="mb-3">
+                <span class="title mb-0">
+                  COVID Liason Squad Registers
+                </span>
+                <span>
+                  Check in members for contact tracing
+                </span>
+              </span>
+              <span class="category">
+                Contact Tracing
+              </span>
+            </a>
             <a href="<?=autoUrl("squad-reps/list")?>">
               <span class="mb-3">
                 <span class="title mb-0">

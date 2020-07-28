@@ -19,10 +19,18 @@ if (!$location) {
 $guests = $members = $squads = $userSquads = null;
 if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
 
-  $userSquads = $db->prepare("SELECT SquadName, SquadID FROM squadReps INNER JOIN squads ON squadReps.Squad = squads.SquadID WHERE User = ? ORDER BY SquadFee DESC, SquadName ASC");
-  $userSquads->execute([
-    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
-  ]);
+  $user = app()->user;
+  if ($user->hasPermission('Admin') || $user->hasPermission('Coach') || $user->hasPermission('Galas')) {
+    $userSquads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+    $userSquads->execute([
+      $tenant->getId(),
+    ]);
+  } else {
+    $userSquads = $db->prepare("SELECT SquadName, SquadID FROM squadReps INNER JOIN squads ON squadReps.Squad = squads.SquadID WHERE User = ? ORDER BY SquadFee DESC, SquadName ASC");
+    $userSquads->execute([
+      $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+    ]);
+  }
 
   $guests = $db->prepare("SELECT ID, GuestName, GuestPhone FROM covidVisitors WHERE Inputter = ?");
   $guests->execute([
