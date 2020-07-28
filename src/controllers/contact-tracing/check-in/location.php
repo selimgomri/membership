@@ -16,8 +16,22 @@ if (!$location) {
   halt(404);
 }
 
-$guests = $members = $squads = null;
+$guests = $members = $squads = $userSquads = null;
 if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
+
+  $user = app()->user;
+  if ($user->hasPermission('Admin') || $user->hasPermission('Coach') || $user->hasPermission('Galas')) {
+    $userSquads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+    $userSquads->execute([
+      $tenant->getId(),
+    ]);
+  } else {
+    $userSquads = $db->prepare("SELECT SquadName, SquadID FROM squadReps INNER JOIN squads ON squadReps.Squad = squads.SquadID WHERE User = ? ORDER BY SquadFee DESC, SquadName ASC");
+    $userSquads->execute([
+      $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+    ]);
+  }
+
   $guests = $db->prepare("SELECT ID, GuestName, GuestPhone FROM covidVisitors WHERE Inputter = ?");
   $guests->execute([
     $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
@@ -53,7 +67,7 @@ include BASE_PATH . 'views/header.php';
     </nav>
 
     <div class="row align-items-center">
-      <div class="col-lg-8">
+      <div class="col">
         <h1>
           Check in to <?= htmlspecialchars($location['Name']) ?>
         </h1>
@@ -70,7 +84,62 @@ include BASE_PATH . 'views/header.php';
 
   <div class="row">
     <div class="col-lg-8">
+
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingError']) { ?>
+        <div class="alert alert-danger">
+          <p class="mb-0">
+            <strong>An error occurred</strong>
+          </p>
+          <p class="mb-0">
+            <?= htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingError']['message']) ?>
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingError']);
+      } ?>
+
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
+
+        <?php
+
+        if ($userSquads && $squad = $userSquads->fetch(PDO::FETCH_ASSOC)) {
+          $useCard = true;
+        ?>
+          <div class="">
+            <h2>
+              Squad Check In
+            </h2>
+
+            <p class="lead">
+              Are you the COVID Liason for this session?
+            </p>
+
+            <form action="<?= htmlspecialchars(autoUrl('contact-tracing/check-in/' . $id)) ?>" method="get">
+
+              <div class="form-group">
+                <label for="squad-list">Select squad</label>
+                <select class="custom-select" id="squad-list" name="squad">
+                  <?php do { ?>
+                    <option value="<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></option>
+                  <?php } while ($squad = $userSquads->fetch(PDO::FETCH_ASSOC)); ?>
+                </select>
+              </div>
+
+              <p class="">
+                <button type="submit" class="btn btn-success">
+                  Go to register
+                </button>
+              </p>
+
+            </form>
+          </div>
+
+          <div class="text-center p-3 rounded border mb-3">
+            <span class="font-weight-bold d-block mb-1">Otherwise...</span>
+            <span class="d-block mb-1">Complete an individual check in form</span>
+            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+          </div>
+        <?php } ?>
+
         <h2>
           Tell us who's here
         </h2>
@@ -80,17 +149,17 @@ include BASE_PATH . 'views/header.php';
 
         <form method="post" class="needs-validation" novalidate>
 
-        <div class="cell">
-          <h3>Yourself</h3>
-          <p>
-            Let us know if you're here or just dropping off your members.
-          </p>
+          <div class="cell">
+            <h3>Yourself</h3>
+            <p>
+              Let us know if you're here or just dropping off your members.
+            </p>
 
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="user" name="user" value="1">
-            <label class="custom-control-label" for="user"><?= htmlspecialchars(app()->user->getName()) ?></label>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="user" name="user" value="1">
+              <label class="custom-control-label" for="user"><?= htmlspecialchars(app()->user->getName()) ?></label>
+            </div>
           </div>
-        </div>
 
           <!-- <p>
             If there's nobody else, just check in now. Othwerwise, add your guests.
@@ -154,6 +223,7 @@ include BASE_PATH . 'views/header.php';
             </button>
           </p>
         </form>
+
       <?php } else { ?>
         <h2>
           You're a guest
@@ -185,8 +255,8 @@ include BASE_PATH . 'views/header.php';
                   <select class="custom-select" id="squad" name="squad">
                     <option selected>Select a squad</option>
                     <?php do { ?>
-                      <option value="<?=htmlspecialchars($squad['SquadID'])?>"><?=htmlspecialchars($squad['SquadName'])?></option>
-                    <?php } while($squad = $squads->fetch(PDO::FETCH_ASSOC)); ?>
+                      <option value="<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></option>
+                    <?php } while ($squad = $squads->fetch(PDO::FETCH_ASSOC)); ?>
                   </select>
                 </div>
 
