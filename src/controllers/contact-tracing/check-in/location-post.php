@@ -113,9 +113,9 @@ try {
         null,
         $tenant->getId(),
       ]);
-
-      $userMobile = $user['Mobile'];
     }
+
+    $userMobile = $user['Mobile'];
   }
 
   // Add existing guests
