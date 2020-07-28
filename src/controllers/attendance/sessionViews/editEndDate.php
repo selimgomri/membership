@@ -39,6 +39,10 @@ switch ($row['SessionDay']) {
 		break;
 }
 
+$datetime1 = new DateTime($row['StartTime']);
+$datetime2 = new DateTime($row['EndTime']);
+$interval = $datetime1->diff($datetime2);
+
 $pagetitle = htmlspecialchars($row['SessionName']);
 
 include BASE_PATH . "views/header.php";
@@ -54,23 +58,14 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php";
 		<dl>
 			<dt>Session Name</dt>
 			<dd><?= htmlspecialchars($row['SessionName']) ?></dd>
-			<dt>Main Sequence</dt>
-			<dd><?= htmlspecialchars($row['MainSequence']) ?><br>
-				<em>If 0, sessions will be ignored from attendance calculations. Use this for extra sessions which only some swimmers in a squad are to attend</em></dd>
+			<dt>Count towards attendance &percnt;</dt>
+			<dd><?php if (bool($row['MainSequence'])) { ?>Yes<?php } else { ?>No<?php } ?></dd>
 			<dt>Venue</dt>
 			<dd><?= htmlspecialchars($row['VenueName']) ?></dd>
 			<dt>Start Time</dt>
-			<dd><?= htmlspecialchars($row['StartTime']) ?></dd>
+			<dd><?= htmlspecialchars($datetime1->format("H:i")) ?></dd>
 			<dt>Finish Time</dt>
-			<dd><?= htmlspecialchars($row['EndTime']) ?></dd>
-			<dt>Session Duration</dt>
-			<?php
-
-			$datetime1 = new DateTime($row['StartTime']);
-			$datetime2 = new DateTime($row['EndTime']);
-			$interval = $datetime1->diff($datetime2);
-
-			?>
+			<dd><?= htmlspecialchars($datetime2->format("H:i")) ?></dd>
 			<dd><?= htmlspecialchars($interval->format('%h hours %I minutes')) ?></dd>
 			<div id="successAlert"></div>
 			<dt><label for="endDate">Display Until</label></dt>

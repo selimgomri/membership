@@ -13,12 +13,13 @@ $count = 0;
 // A function is used to produce the View/Edit and Add Sections Stuff
 // This is because we will call it when a squad is selected, and after a session is added
 
-function sessionManagement($squadID, $old = null) {
+function sessionManagement($squadID, $old = null)
+{
 	ob_start();
 	$db = app()->db;
 	$tenant = app()->tenant;
 	$output = $content = $modals = "";
-	
+
 	$getSessions = $db->prepare("SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SquadID` = ? AND sessions.Tenant = ? AND (ISNULL(sessions.DisplayFrom) OR (sessions.DisplayFrom <= CURDATE( ))) AND (ISNULL(sessions.DisplayUntil) OR (sessions.DisplayUntil >= CURDATE( ))) ORDER BY `SessionDay` ASC, `StartTime` ASC");
 	$getSessions->execute([
 		$squadID,
@@ -31,60 +32,66 @@ function sessionManagement($squadID, $old = null) {
 	]);
 
 	$row = $getSessions->fetch(PDO::FETCH_ASSOC);
-	
-	?>
 
-<div class="row">
-  <div class="col-md-6">
-    <div class="card mb-3">
-			<div class="card-body">
-				<h2 class="card-title">Sessions</h2>
-      <?php if ($row != null) { ?>
-				<p class="card-text">
-					Sessions are ordered by day of week and time
-				</p>
-			</div>
-			<ul class="list-group list-group-flush">
-			<?php
-		do {
+?>
 
-			$dayText = "";
-			switch ($row['SessionDay']) {
-					case 0:
-							$dayText = "Sunday";
-							break;
-					case 1:
-							$dayText = "Monday";
-							break;
-					case 2:
-							$dayText = "Tuesday";
-							break;
-					case 3:
-							$dayText = "Wednesday";
-							break;
-					case 4:
-							$dayText = "Thursday";
-							break;
-					case 5:
-							$dayText = "Friday";
-							break;
-					case 6:
-							$dayText = "Saturday";
-							break;
-			} ?>
-      <li class="list-group-item">
-        <p class="mb-0">
-          <a data-toggle="modal" href="#sessionModal<?=$row['SessionID']?>">
-            <strong class="text-gray-dark">
-              <?=htmlspecialchars($row['SessionName'])?>, <?=$dayText?> at <?=$row['StartTime']?>
-            </strong>
-          </a>
-        </p>
-        <p class="mb-0"><?=htmlspecialchars($row['VenueName'])?></p>
-      </li>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="card mb-3">
+				<div class="card-body">
+					<h2 class="card-title">Sessions</h2>
+					<?php if ($row != null) { ?>
+						<p class="card-text">
+							Sessions are ordered by day of week and time
+						</p>
+				</div>
+				<ul class="list-group list-group-flush">
+					<?php
+						do {
 
-      <?php 
-			$modals .= '
+							$dayText = "";
+							switch ($row['SessionDay']) {
+								case 0:
+									$dayText = "Sunday";
+									break;
+								case 1:
+									$dayText = "Monday";
+									break;
+								case 2:
+									$dayText = "Tuesday";
+									break;
+								case 3:
+									$dayText = "Wednesday";
+									break;
+								case 4:
+									$dayText = "Thursday";
+									break;
+								case 5:
+									$dayText = "Friday";
+									break;
+								case 6:
+									$dayText = "Saturday";
+									break;
+							}
+
+							$datetime1 = new DateTime($row['StartTime']);
+							$datetime2 = new DateTime($row['EndTime']);
+							$interval = $datetime1->diff($datetime2);
+
+					?>
+						<li class="list-group-item">
+							<p class="mb-0">
+								<a data-toggle="modal" href="#sessionModal<?= $row['SessionID'] ?>">
+									<strong class="text-gray-dark">
+										<?= htmlspecialchars($row['SessionName']) ?>, <?= $dayText ?> at <?= htmlspecialchars($datetime1->format("H:i")) ?>
+									</strong>
+								</a>
+							</p>
+							<p class="mb-0"><?= htmlspecialchars($row['VenueName']) ?></p>
+						</li>
+
+					<?php
+							$modals .= '
 			<!-- Modal -->
 			<div class="modal fade" id="sessionModal' . $row['SessionID'] . '" tabindex="-1" role="dialog" aria-labelledby="sessionModalTitle' . $row['SessionID'] . '" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered" role="document">
@@ -100,32 +107,28 @@ function sessionManagement($squadID, $old = null) {
 								<dt>Session Name</dt>
 								<dd>' . htmlspecialchars($row['SessionName']) . '</dd>
 								<dt>Include in attendance calculations</dt>';
-								if ($row['MainSequence']) {
-									$modals .= '<dd>This session is included in attendance calculations</dd>';
-								} else {
-									$modals .= '<dd>This session is <strong>not included</strong> in attendance calculations</dd>';
-								}
-								$modals .= '<dt>Venue</dt>
+							if ($row['MainSequence']) {
+								$modals .= '<dd>This session is included in attendance calculations</dd>';
+							} else {
+								$modals .= '<dd>This session is <strong>not included</strong> in attendance calculations</dd>';
+							}
+							$modals .= '<dt>Venue</dt>
 								<dd>' . htmlspecialchars($row['VenueName']) . '</dd>
 								<dt>Start Time</dt>
-								<dd>' . htmlspecialchars($row['StartTime']) . '</dd>
+								<dd>' . htmlspecialchars($datetime1->format("H:i")) . '</dd>
 								<dt>Finish Time</dt>
-								<dd>' . htmlspecialchars($row['EndTime']) . '</dd>
+								<dd>' . htmlspecialchars($datetime2->format("H:i")) . '</dd>
 								<dt>Session Duration</dt>';
-								$datetime1 = new DateTime($row['StartTime']);
-					      $datetime2 = new DateTime($row['EndTime']);
-					      $interval = $datetime1->diff($datetime2);
-					      $modals .= '
+							$modals .= '
 								<dd>' . $interval->format('%h hours %I minutes') . '</dd>
 								<dt>Display Until</dt>
 								<dd>';
-								if ($row['DisplayUntil'] != null) {
-									$modals .= date('j F Y', strtotime($row['DisplayUntil']));
-								}
-								else {
-									$modals .= "Not set";
-								}
-								$modals .= '
+							if ($row['DisplayUntil'] != null) {
+								$modals .= (new DateTime($row['DisplayUntil']))->format("j F Y");
+							} else {
+								$modals .= "Not set";
+							}
+							$modals .= '
 								<a class="btn btn-dark" href="sessions/' . $row['SessionID'] . '">Edit End Date</a></dd>
 							</dl>
 							<strong>You can\'t edit a session once it has been created</strong>  <br>Sessions are immutable. This is because swimmers may be marked as present at a session in the past, changing the session in any way, such as altering the start or finish time would distort the attendance records. Instead, set a DisplayUntil date for the session, after which it will not appear in the register, but will still be visible in attendance history
@@ -133,20 +136,19 @@ function sessionManagement($squadID, $old = null) {
 					</div>
 				</div>
 			</div>';
-		} while ($row = $getSessions->fetch(PDO::FETCH_ASSOC)); ?>
-		</ul>
-		<?php
-	}
-	else { ?>
+						} while ($row = $getSessions->fetch(PDO::FETCH_ASSOC)); ?>
+				</ul>
+			<?php
+					} else { ?>
 				<div class="alert alert-warning mb-0">
 					There aren't any sessions for this squad yet. Try adding one
 				</div>
-				</div>
-				<?php } ?>
-    </div>
-  </div>
+			</div>
+		<?php } ?>
+		</div>
+	</div>
 
-  <div class="col-md-6">
+	<div class="col-md-6">
 
 		<div class="card mb-3">
 			<div class="card-body">
@@ -183,9 +185,9 @@ function sessionManagement($squadID, $old = null) {
 							<select class="custom-select" name="newSessionVenue" id="newSessionVenue">
 								<option selected value="0">Select a Venue</option>
 								<?php while ($venue = $venues->fetch(PDO::FETCH_ASSOC)) { ?>
-								<option value="<?=$venue['id']?>">
-									<?=htmlspecialchars($venue['name'])?>
-								</option>
+									<option value="<?= $venue['id'] ?>">
+										<?= htmlspecialchars($venue['name']) ?>
+									</option>
 								<?php } ?>
 
 							</select>
@@ -231,8 +233,7 @@ function sessionManagement($squadID, $old = null) {
 					<div class="col">
 						<div class="form-group">
 							<label for="newSessionStartDate">Show From</label>
-							<input type="date" aria-labelledby="newSessionStartDateHelp" class="form-control" name="newSessionStartDate"
-								id="newSessionStartDate" placeholder="<?=date("Y-m-d")?>" value="<?=date("Y-m-d")?>">
+							<input type="date" aria-labelledby="newSessionStartDateHelp" class="form-control" name="newSessionStartDate" id="newSessionStartDate" placeholder="<?= date("Y-m-d") ?>" value="<?= date("Y-m-d") ?>">
 							<small id="newSessionStartDateHelp" class="form-text text-muted">
 								The date from which the session will appear in the registers
 							</small>
@@ -241,8 +242,7 @@ function sessionManagement($squadID, $old = null) {
 					<div class="col">
 						<div class="form-group">
 							<label for="newSessionEndDate">Show Until</label>
-							<input type="date" aria-labelledby="newSessionStartDateHelp" class="form-control" name="newSessionEndDate"
-								id="newSessionEndDate" placeholder="<?=date("Y-m-d", strtotime('+1 year'))?>" value="<?=date("Y-m-d", strtotime('+1 year'))?>">
+							<input type="date" aria-labelledby="newSessionStartDateHelp" class="form-control" name="newSessionEndDate" id="newSessionEndDate" placeholder="<?= date("Y-m-d", strtotime('+1 year')) ?>" value="<?= date("Y-m-d", strtotime('+1 year')) ?>">
 							<small id="newSessionEndDateHelp" class="form-text text-muted">
 								If you know when this session will stop running, enter the last date here
 							</small>
@@ -254,14 +254,13 @@ function sessionManagement($squadID, $old = null) {
 
 			</div>
 		</div>
-  </div>
-</div>
+	</div>
+	</div>
 
-	<?php
+<?php
 
 	$html = ob_get_clean();
 	return $html . $modals;
-
 }
 
 if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
@@ -269,55 +268,54 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 	$action = $_POST["action"];
 	if ($action == "getSessions" && $_POST["squadID"] != null) {
 		echo sessionManagement($_POST["squadID"]);
-} elseif ($action == "addSession") {
-	$squadID = $_POST["squadID"];
-	$venueID = $_POST["venueID"];
-	$sessionName = $_POST["sessionName"];
-	$sessionDay = $_POST["sessionDay"];
-	$startTime = $_POST["startTime"];
-	$endTime = $_POST["endTime"];
-	$mainSequence = $_POST["newSessionMS"];
-	$epoch = date(DATE_ATOM, mktime(0, 0, 0, 1, 1, 1970));
-	$future = date(DATE_ATOM, mktime(0, 0, 0, 1, 1, 2200));
-	$displayFrom = $displayUntil = null;
-	if (isset($_POST["newSessionStartDate"])) {
-		$displayFrom = strtotime($_POST["newSessionStartDate"]);
-		if ($displayFrom < $epoch) {
-			$displayFrom = null;
+	} elseif ($action == "addSession") {
+		$squadID = $_POST["squadID"];
+		$venueID = $_POST["venueID"];
+		$sessionName = $_POST["sessionName"];
+		$sessionDay = $_POST["sessionDay"];
+		$startTime = $_POST["startTime"];
+		$endTime = $_POST["endTime"];
+		$mainSequence = $_POST["newSessionMS"];
+		$epoch = date(DATE_ATOM, mktime(0, 0, 0, 1, 1, 1970));
+		$future = date(DATE_ATOM, mktime(0, 0, 0, 1, 1, 2200));
+		$displayFrom = $displayUntil = null;
+		if (isset($_POST["newSessionStartDate"])) {
+			$displayFrom = strtotime($_POST["newSessionStartDate"]);
+			if ($displayFrom < $epoch) {
+				$displayFrom = null;
+			}
 		}
-	}
-	if (isset($_POST["newSessionEndDate"])) {
-		$displayUntil = strtotime($_POST["newSessionEndDate"]);
-		if ($displayUntil < $epoch) {
-			$displayUntil = $future;
+		if (isset($_POST["newSessionEndDate"])) {
+			$displayUntil = strtotime($_POST["newSessionEndDate"]);
+			if ($displayUntil < $epoch) {
+				$displayUntil = $future;
+			}
 		}
-	}
 
-	try {
-		$insert = $db->prepare("INSERT INTO `sessions` (`SquadID`, `VenueID`, `SessionName`, `SessionDay`, `StartTime`, `EndTime`, `MainSequence`, `DisplayFrom`, `DisplayUntil`, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-		$insert->execute([
-			$squadID,
-			$venueID,
-			$sessionName,
-			$sessionDay,
-			$startTime,
-			$endTime,
-			$mainSequence,
-			date("Y-m-d", $displayFrom),
-			date("Y-m-d", $displayUntil),
-			$tenant->getId()
+		try {
+			$insert = $db->prepare("INSERT INTO `sessions` (`SquadID`, `VenueID`, `SessionName`, `SessionDay`, `StartTime`, `EndTime`, `MainSequence`, `DisplayFrom`, `DisplayUntil`, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			$insert->execute([
+				$squadID,
+				$venueID,
+				$sessionName,
+				$sessionDay,
+				$startTime,
+				$endTime,
+				$mainSequence,
+				date("Y-m-d", $displayFrom),
+				date("Y-m-d", $displayUntil),
+				$tenant->getId()
+			]);
+		} catch (Exception $e) {
+			halt(400);
+		}
+		$sessionsView = sessionManagement($squadID);
+		echo json_encode([
+			'displayFrom' => date("Y-m-d", $displayFrom),
+			'displayUntil' => date("Y-m-d", $displayUntil),
+			'will_display_in_future' => null,
+			'sessions_view' => $sessionsView
 		]);
-	} catch (Exception $e) {
-		halt(400);
-	}
-	$sessionsView = sessionManagement($squadID);
-	echo json_encode([
-		'displayFrom' => date("Y-m-d", $displayFrom),
-		'displayUntil' => date("Y-m-d", $displayUntil),
-		'will_display_in_future' => null,
-		'sessions_view' => $sessionsView
-	]);
-
 	}
 } else {
 	halt(404);
