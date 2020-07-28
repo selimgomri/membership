@@ -72,6 +72,10 @@ $this->group('/check-in', function () {
     include 'check-in/location-post.php';
   });
 
+  $this->post('/{id}:uuid/squad-register', function ($id) {
+    include 'check-in/squad-registers/location-post.php';
+  });
+
   if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingSuccess']) {
     $this->get('/{id}:uuid/success', function ($id) {
       include 'check-in/success.php';

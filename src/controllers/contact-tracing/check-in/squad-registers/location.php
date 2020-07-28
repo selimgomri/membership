@@ -30,7 +30,7 @@ if (!$squad) {
 } else {
 
   // Get Squad Members
-  $getMembers = $db->prepare("SELECT MemberID, MForename, MSurname FROM members INNER JOIN squadMembers ON squadMembers.Member = members.MemberID WHERE squadMembers.Squad = ? AND members.Tenant = ? ORDER BY MForename ASC, MSurname ASC;");
+  $getMembers = $db->prepare("SELECT MemberID, MForename, MSurname, users.UserID, Forename, Surname, Mobile FROM members INNER JOIN squadMembers ON squadMembers.Member = members.MemberID LEFT JOIN users ON members.UserID = users.UserID WHERE squadMembers.Squad = ? AND members.Tenant = ? ORDER BY MForename ASC, MSurname ASC;");
   $getMembers->execute([
     $_GET['squad'],
     $tenant->getId(),
@@ -73,7 +73,19 @@ if (!$squad) {
     <div class="row">
       <div class="col-lg-8">
 
-        <form method="post">
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingError']) { ?>
+          <div class="alert alert-danger">
+            <p class="mb-0">
+              <strong>An error occurred</strong>
+            </p>
+            <p class="mb-0">
+              <?= htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingError']['message']) ?>
+            </p>
+          </div>
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingError']);
+        } ?>
+
+        <form method="post" action="<?= htmlspecialchars(autoUrl('contact-tracing/check-in/' . $id . '/squad-register')) ?>">
 
           <?php if ($member = $getMembers->fetch(PDO::FETCH_ASSOC)) { ?>
 
@@ -81,11 +93,15 @@ if (!$squad) {
               Tick all members who are present.
             </p>
 
+            <input type="hidden" name="squad" value="<?= htmlspecialchars($squad['SquadID']) ?>">
+
+            <?= \SCDS\CSRF::write() ?>
+
             <div class="mb-3">
               <?php do { ?>
                 <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" name="<?= htmlspecialchars('member-' . $member['MemberID']) ?>">
-                  <label class="custom-control-label my-1" for="<?= htmlspecialchars('member-' . $member['MemberID']) ?>"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?></label>
+                  <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" name="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" value="1" <?php if (!$member['UserID']) { ?> disabled <?php } ?>>
+                  <label class="custom-control-label my-1" for="<?= htmlspecialchars('member-' . $member['MemberID']) ?>"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?> <em class="small"><?php if ($member['UserID']) { ?><?= htmlspecialchars($member['Forename'] . ' ' . $member['Surname']) ?>'s details<?php } else { ?>No details on file<?php } ?></em></label>
                 </div>
               <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>
             </div>

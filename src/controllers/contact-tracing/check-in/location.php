@@ -76,40 +76,53 @@ include BASE_PATH . 'views/header.php';
 
   <div class="row">
     <div class="col-lg-8">
+
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingError']) { ?>
+        <div class="alert alert-danger">
+          <p class="mb-0">
+            <strong>An error occurred</strong>
+          </p>
+          <p class="mb-0">
+            <?= htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingError']['message']) ?>
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingError']);
+      } ?>
+
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
 
         <?php
 
-        if ($userSquads && $squad = $userSquads->fetch(PDO::FETCH_ASSOC)) { 
+        if ($userSquads && $squad = $userSquads->fetch(PDO::FETCH_ASSOC)) {
           $useCard = true;
         ?>
-        <div class="">
-        <h2>
-          Squad Check In
-        </h2>
+          <div class="">
+            <h2>
+              Squad Check In
+            </h2>
 
-        <p class="lead">
-          Are you the COVID Liason for this session?
-        </p>
-
-        <form action="<?= htmlspecialchars(autoUrl('contact-tracing/check-in/' . $id)) ?>" method="get">
-
-        <div class="form-group">
-          <label for="squad-list">Select squad</label>
-          <select class="custom-select" id="squad-list" name="squad">
-          <?php do { ?>
-            <option value="<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></option>
-          <?php } while ($squad = $userSquads->fetch(PDO::FETCH_ASSOC)); ?>
-          </select>
-          </div>
-
-            <p class="">
-              <button type="submit" class="btn btn-success">
-                Go to register
-              </button>
+            <p class="lead">
+              Are you the COVID Liason for this session?
             </p>
 
-          </form>
+            <form action="<?= htmlspecialchars(autoUrl('contact-tracing/check-in/' . $id)) ?>" method="get">
+
+              <div class="form-group">
+                <label for="squad-list">Select squad</label>
+                <select class="custom-select" id="squad-list" name="squad">
+                  <?php do { ?>
+                    <option value="<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></option>
+                  <?php } while ($squad = $userSquads->fetch(PDO::FETCH_ASSOC)); ?>
+                </select>
+              </div>
+
+              <p class="">
+                <button type="submit" class="btn btn-success">
+                  Go to register
+                </button>
+              </p>
+
+            </form>
           </div>
 
           <div class="text-center p-3 rounded border mb-3">
