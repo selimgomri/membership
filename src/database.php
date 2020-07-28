@@ -649,10 +649,7 @@ function userHasMandates($user)
   $db = app()->db;
   $sql = $db->prepare("SELECT COUNT(*) FROM `paymentPreferredMandate` WHERE `UserID` = ?");
   $sql->execute([$user]);
-  if ($sql->fetchColumn() == 1) {
-    return true;
-  }
-  return false;
+  return $sql->fetchColumn() > 0;
 }
 
 function paymentExists($payment)

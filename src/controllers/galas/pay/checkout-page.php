@@ -12,15 +12,28 @@ try {
     'stripe_account' => $tenant->getStripeAccount()
   ]);
   // pre($res);
-  $res = \Stripe\ApplePayDomain::create([
-    'domain_name' => app('request')->hostname
-  ]);
+  // $res = \Stripe\ApplePayDomain::create([
+  //   'domain_name' => app('request')->hostname
+  // ]);
   // pre($res);
 } catch (Exception $e) {
   // Not the end of the world so report the error and continue.
   // Any errors can be resolved later.
-  pre($e);
+  reportError($e);
 }
+
+// DELETE
+// try {
+//   $apd = \Stripe\ApplePayDomain::retrieve(
+//     'STRIPE APPLE PAY DOMAIN ID',
+//     [
+//       'stripe_account' => $tenant->getStripeAccount()
+//     ]
+//   );
+//   $apd->delete();
+// } catch (Exception $e) {
+//   pre($e);
+// }
 
 // try {
 //   pre(\Stripe\ApplePayDomain::all([
@@ -28,9 +41,9 @@ try {
 //   ], [
 //     'stripe_account' => $tenant->getStripeAccount()
 //   ]));
-//   pre(\Stripe\ApplePayDomain::all([
-//     'limit' => 20
-//   ]));
+//   // pre(\Stripe\ApplePayDomain::all([
+//   //   'limit' => 20
+//   // ]));
 //   pre($tenant->getStripeAccount());
 // } catch (Exception $e) {
 //   // Not the end of the world so report the error and continue.
@@ -217,7 +230,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                 <div class="col-8 col-sm-5 col-md-4 col-lg-6">
                   <h3><?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?> <br><small><?= htmlspecialchars($entry['GalaName']) ?></small></h3>
                   <p class="mb-0">
-                    <a data-toggle="collapse"  href="#swims-<?= $entry['EntryID'] ?>" role="button" aria-expanded="false" aria-controls="swims-<?= $entry['EntryID'] ?>">
+                    <a data-toggle="collapse" href="#swims-<?= $entry['EntryID'] ?>" role="button" aria-expanded="false" aria-controls="swims-<?= $entry['EntryID'] ?>">
                       View swims <i class="fa fa-caret-down" aria-hidden="true"></i>
                     </a>
                   </p>

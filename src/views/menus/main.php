@@ -26,8 +26,9 @@ if (!function_exists('chesterStandardMenu')) {
     $renewalYear = null;
     if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
       $date = new DateTime('now', new DateTimeZone('Europe/London'));
-      $getRenewals = $db->prepare("SELECT COUNT(*) AS `Count`, `Year` FROM renewals WHERE StartDate <= :today AND EndDate >= :today;");
+      $getRenewals = $db->prepare("SELECT COUNT(*) AS `Count`, `Year` FROM renewals WHERE Tenant = :tenant AND StartDate <= :today AND EndDate >= :today;");
       $getRenewals->execute([
+        'tenant' => app()->tenant->getId(),
         'today' => $date->format('Y-m-d')
       ]);
       $renewals = $getRenewals->fetch(PDO::FETCH_ASSOC);
