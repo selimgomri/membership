@@ -295,8 +295,8 @@ include BASE_PATH . 'views/header.php';
         </form>
       <?php } ?>
     </div>
-    <div class="col d-none d-lg-flex">
-      <div class="cell">
+    <div class="col d-none d-lg-block">
+      <div class="cell position-sticky top-3">
         <h2>
           What do I need to do?
         </h2>

@@ -36,14 +36,14 @@ try {
   if ($user->hasPermission('Admin') || $user->hasPermission('Coach') || $user->hasPermission('Galas')) {
     $userSquads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE SquadID = ? AND Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
     $userSquads->execute([
-      $_GET['squad'],
+      $_POST['squad'],
       $tenant->getId(),
     ]);
   } else {
     $userSquads = $db->prepare("SELECT SquadName, SquadID FROM squadReps INNER JOIN squads ON squadReps.Squad = squads.SquadID WHERE User = ? AND Squad = ? ORDER BY SquadFee DESC, SquadName ASC");
     $userSquads->execute([
       $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
-      $_GET['squad'],
+      $_POST['squad'],
     ]);
   }
 
