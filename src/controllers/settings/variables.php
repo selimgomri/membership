@@ -24,6 +24,7 @@ $vars = [
   'GOCARDLESS_WEBHOOK_KEY' => null,
   'SHOW_LOGO' => false,
   'LOGO_DIR' => null,
+  'HIDE_CONTACT_TRACING_FROM_PARENTS' => false,
 ];
 
 $disabled = [];
@@ -260,6 +261,13 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
           <?php } ?>
+
+          <div class="form-group">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="HIDE_CONTACT_TRACING_FROM_PARENTS" value="1" name="HIDE_CONTACT_TRACING_FROM_PARENTS" <?php if (!bool($vars['HIDE_CONTACT_TRACING_FROM_PARENTS'])) { ?>checked<?php } ?> <?= $disabled['HIDE_CONTACT_TRACING_FROM_PARENTS'] ?>>
+              <label class="custom-control-label" for="HIDE_CONTACT_TRACING_FROM_PARENTS">Show contact tracing links to all parents</label>
+            </div>
+          </div>
 
           <h2>GoCardless API keys (for direct debit)</h2>
 

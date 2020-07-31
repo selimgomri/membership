@@ -75,6 +75,13 @@ try {
     app()->tenant->setKey('SHOW_LOGO', (int) bool($_POST['SHOW_LOGO']));
   }
 
+  // 'HIDE_CONTACT_TRACING_FROM_PARENTS' => false,
+  $hide = 0;
+  if (!isset($_POST['HIDE_CONTACT_TRACING_FROM_PARENTS']) || !bool($_POST['HIDE_MEMBER_ATTENDANCE'])) {
+    $hide = 1;
+  }
+  app()->tenant->setKey('HIDE_CONTACT_TRACING_FROM_PARENTS', $hide);
+
   $vars['CLUB_ADDRESS'] = null;
   $addr = $_POST['CLUB_ADDRESS'];
   $addr = str_replace("\r\n", "\n", $addr);

@@ -82,3 +82,27 @@ $this->group('/check-in', function () {
     });
   }
 });
+
+$this->group('/check-out', function () {
+  $this->get('/', function () {
+    include 'check-out/choose-location.php';
+  });
+
+  $this->get('/{id}:uuid', function ($id) {
+    if (isset($_GET['squad'])) {
+      include 'check-out/squad-registers/location.php';
+    } else {
+      include 'check-out/location.php';
+    }
+  });
+
+  $this->post('/{id}:uuid', function ($id) {
+    include 'check-out/location-post.php';
+  });
+
+  if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingSuccess']) {
+    $this->get('/{id}:uuid/success', function ($id) {
+      include 'check-out/success.php';
+    });
+  }
+});

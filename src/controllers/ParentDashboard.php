@@ -58,6 +58,18 @@ $getLocations->execute([
 ]);
 $showCovid = $getLocations->fetchColumn() > 0;
 
+if ($showCovid && $tenant->getBooleanKey('HIDE_CONTACT_TRACING_FROM_PARENTS')) {
+  // Hide covid banners
+  $showCovid = false;
+
+  // Show if this user is a squad rep
+  $getRepCount = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE User = ?");
+  $getRepCount->execute([
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+  ]);
+  $showCovid = $getRepCount->fetchColumn() > 0;
+}
+
 $username = htmlspecialchars(explode(" ", getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']))[0]);
 
 $pagetitle = "Home";
