@@ -39,7 +39,7 @@ Add php-http-client to your `composer.json` file. If you are not using [Composer
 ```json
 {
   "require": {
-    "sendgrid/php-http-client": "^3.10.8"
+    "sendgrid/php-http-client": "^3.11.0"
   }
 }
 ```
@@ -177,7 +177,6 @@ Quick links:
 
 - [Feature Request](https://github.com/sendgrid/php-http-client/blob/master/CONTRIBUTING.md#feature-request)
 - [Bug Reports](https://github.com/sendgrid/php-http-client/blob/master/CONTRIBUTING.md#submit-a-bug-report)
-- [Sign the CLA to Create a Pull Request](https://github.com/sendgrid/php-http-client/blob/master/CONTRIBUTING.md#cla)
 - [Improvements to the Codebase](https://github.com/sendgrid/php-http-client/blob/master/CONTRIBUTING.md#improvements-to-the-codebase)
 - [Review Pull Requests](https://github.com/sendgrid/php-http-client/blob/master/CONTRIBUTING.md#code-reviews)
 

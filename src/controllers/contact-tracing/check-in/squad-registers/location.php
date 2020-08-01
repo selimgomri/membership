@@ -146,6 +146,5 @@ if (!$squad) {
 
   $footer = new \SCDS\Footer();
   $footer->addJs('public/js/NeedsValidation.js');
-  $footer->addJs('public/js/contact-tracing/check-in.js');
   $footer->render();
 }

@@ -4,6 +4,18 @@ $db = app()->db;
 $tenant = app()->tenant;
 $pagetitle = 'Contact Tracing';
 
+// Show if this user is a squad rep
+$getRepCount = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE User = ?");
+$getRepCount->execute([
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+]);
+$showSignOut = $getRepCount->fetchColumn() > 0;
+
+$user = app()->user;
+if ($user->hasPermission('Admin') || $user->hasPermission('Coach') || $user->hasPermission('Galas')) {
+  $showSignOut = true;
+}
+
 include BASE_PATH . 'views/header.php';
 
 ?>
@@ -34,7 +46,7 @@ include BASE_PATH . 'views/header.php';
 
   <div class="row">
     <div class="col-md-6 mb-3">
-      <div class="p-3 bg-danger rounded text-white h-100">
+      <div class="p-3 bg-danger rounded text-white h-100" style="display: grid;">
         <div>
           <h2>
             Register your attendance
@@ -48,13 +60,35 @@ include BASE_PATH . 'views/header.php';
         </div>
         <p class="mb-0 mt-auto d-flex">
           <a href="<?= htmlspecialchars(autoUrl('contact-tracing/check-in')) ?>" class="btn btn-outline-light">
-            Register
+            Register <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
           </a>
         </p>
       </div>
     </div>
+    <?php if ($showSignOut) { ?>
+      <div class="col-md-6 mb-3">
+        <div class="p-3 bg-success rounded text-white h-100" style="display: grid;">
+          <div>
+            <h2>
+              Sign Out
+            </h2>
+            <p class="lead">
+              Sign people out of a location.
+            </p>
+            <p>
+              Useful for safely releasing children from a building.
+            </p>
+          </div>
+          <p class="mb-0 mt-auto d-flex">
+            <a href="<?= htmlspecialchars(autoUrl('contact-tracing/sign-out')) ?>" class="btn btn-outline-light">
+              Sign Out <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+            </a>
+          </p>
+        </div>
+      </div>
+    <?php } ?>
     <?php if (app()->user->hasPermission('Admin')) { ?>
-      <div class="col-md-3 mb-3">
+      <div class="col-md mb-3">
         <div class="p-3 bg-dark rounded text-white h-100" style="display: grid;">
           <div>
             <h2>
@@ -69,7 +103,7 @@ include BASE_PATH . 'views/header.php';
         </div>
       </div>
 
-      <div class="col-md-3 mb-3">
+      <div class="col-md mb-3">
         <div class="p-3 bg-dark rounded text-white h-100" style="display: grid;">
           <div>
             <h2>
