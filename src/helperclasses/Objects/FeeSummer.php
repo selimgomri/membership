@@ -181,7 +181,7 @@ class FeeSummer
           $swimmerDiscount = 0;
           $discountPercent = '0';
           try {
-            $memberTotalDec = \Brick\Math\BigInteger::of($member['fee'])->toBigDecimal();
+            $memberTotalDec = \Brick\Math\BigInteger::of($member['fee'])->toBigDecimal()->withPointMovedLeft(2);
             if ($number == 3) {
               // 20% discount applies
               $swimmerDiscount = $memberTotalDec->multipliedBy('0.20')->toScale(2, RoundingMode::DOWN)->withPointMovedRight(2)->toInt();
