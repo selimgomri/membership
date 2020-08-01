@@ -38,6 +38,8 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
+<!--
+
 <div class="container">
   <h1>Request a Trial</h1>
   <div class="row">
@@ -330,6 +332,13 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
+-->
+
+<div class="container">
+  <h1>Trial requests are currently paused</h1>
+  <p>We will be back with a new trial request system soon.</p>
+</div>
+
 <?php
 
 unset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-FC']);
@@ -338,6 +347,6 @@ unset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-AddAnother']);
 
 $footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
-$footer->addJs("public/js/request-a-trial/IsItYouOrYourChild.js");
+// $footer->addJs("public/js/request-a-trial/IsItYouOrYourChild.js");
 // $footer->addJs("public/js/request-a-trial/MultiSwimmers.js");
 $footer->render();
