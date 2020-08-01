@@ -5,6 +5,12 @@ use function GuzzleHttp\json_decode;
 $db = app()->db;
 $tenant = app()->tenant;
 
+// $dataInit = autoUrl('apis', false);
+$dataInit = 'https://production-apis.tenant-services.membership.myswimmingclub.uk';
+if (bool(getenv("IS_DEV"))) {
+  $dataInit = 'https://apis.tenant-services.membership.myswimmingclub.uk';
+}
+
 $getLocation = $db->prepare("SELECT `ID`, `Name`, `Address` FROM covidLocations WHERE `ID` = ? AND `Tenant` = ?");
 $getLocation->execute([
   $id,
@@ -20,6 +26,21 @@ if (!app()->user) {
   halt(404);
 }
 
+// Check if authenticated
+$getRepCount = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE User = ?");
+$getRepCount->execute([
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+]);
+$showSignOut = $getRepCount->fetchColumn() > 0;
+
+$user = app()->user;
+if ($user->hasPermission('Admin') || $user->hasPermission('Coach') || $user->hasPermission('Galas')) {
+  $showSignOut = true;
+}
+if (!$showSignOut) {
+  halt(404);
+}
+
 $earliest = new DateTime('-3 weeks', new DateTimeZone('Europe/London'));
 $latest = new DateTime('now', new DateTimeZone('Europe/London'));
 
@@ -31,7 +52,6 @@ if (isset($_GET['from-date']) && isset($_GET['from-time']) && isset($_GET['to-da
     $from = DateTime::createFromFormat("Y-m-d H:i", $_GET['from-date'] . ' ' . $_GET['from-time'], new DateTimeZone('Europe/London'));
     $to = DateTime::createFromFormat("Y-m-d H:i", $_GET['to-date'] . ' ' . $_GET['to-time'], new DateTimeZone('Europe/London'));
   } catch (Exception $e) {
-
   }
 }
 
@@ -42,14 +62,14 @@ $fromUTC->setTimezone(new DateTimeZone('UTC'));
 $toUTC->setTimezone(new DateTimeZone('UTC'));
 
 // Get Squad Members
-$getVisitors = $db->prepare("SELECT `ID`, `GuestName`, `GuestPhone`, `Person`, `Type`, `Time` FROM `covidVisitors` WHERE `Location` = :loc AND `Time` >= :startTime AND `Time` <= :endTime ORDER BY GuestName ASC, `Time` ASC;");
+$getVisitors = $db->prepare("SELECT `ID`, `GuestName`, `GuestPhone`, `Person`, `Type`, `Time`, `SignedOut` FROM `covidVisitors` WHERE `Location` = :loc AND `Time` >= :startTime AND `Time` <= :endTime ORDER BY GuestName ASC, `Time` ASC;");
 $getVisitors->execute([
   'loc' => $id,
   'startTime' => $fromUTC->format('Y-m-d H:i:s'),
   'endTime' => $toUTC->format('Y-m-d H:i:s'),
 ]);
 
-$pagetitle = 'Check out from ' . htmlspecialchars($location['Name']) . ' - Contact Tracing';
+$pagetitle = 'Sign Out of ' . htmlspecialchars($location['Name']) . ' - Contact Tracing';
 
 $addr = json_decode($location['Address']);
 
@@ -64,14 +84,14 @@ include BASE_PATH . 'views/header.php';
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('contact-tracing')) ?>">Tracing</a></li>
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('contact-tracing/locations')) ?>">Locations</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Check Out</li>
+        <li class="breadcrumb-item active" aria-current="page">Sign Out</li>
       </ol>
     </nav>
 
     <div class="row align-items-center">
       <div class="col">
         <h1>
-          Check out from <?= htmlspecialchars($location['Name']) ?>
+          Sign Out of <?= htmlspecialchars($location['Name']) ?>
         </h1>
         <p class="lead mb-0">
           <?= htmlspecialchars($addr->streetAndNumber) ?>
@@ -98,7 +118,7 @@ include BASE_PATH . 'views/header.php';
       <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['ContactTracingError']);
       } ?>
 
-      <form action="<?= htmlspecialchars(autoUrl('contact-tracing/check-out/' . $id)) ?>" method="get">
+      <form action="<?= htmlspecialchars(autoUrl('contact-tracing/sign-out/' . $id)) ?>" method="get">
         <div class="mb-3">
           <p class="mb-2">
             From
@@ -136,7 +156,7 @@ include BASE_PATH . 'views/header.php';
 
       <?php if ($visitor = $getVisitors->fetch(PDO::FETCH_ASSOC)) { ?>
 
-        <form method="post" action="<?= htmlspecialchars(autoUrl('contact-tracing/check-out/' . $id)) ?>">
+        <form>
 
           <input type="hidden" name="from-time" value="<?= htmlspecialchars($fromUTC->format('c')) ?>">
           <input type="hidden" name="to-time" value="<?= htmlspecialchars($toUTC->format('c')) ?>">
@@ -147,27 +167,23 @@ include BASE_PATH . 'views/header.php';
 
           <?= \SCDS\CSRF::write() ?>
 
-          <div class="mb-3">
-            <?php do { ?>
+          <div class="mb-3" id="checkboxes">
+            <?php do {
+              $date = new DateTime($visitor['Time'], new DateTimeZone('UTC'));
+              $date->setTimezone(new DateTimeZone('Europe/London'));
+            ?>
               <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>" name="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>" value="1">
-                <label class="custom-control-label my-1" for="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>"><?= htmlspecialchars($visitor['GuestName']) ?>
+                <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>" name="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>" value="1" data-id="<?= htmlspecialchars($visitor['ID']) ?>" <?php if (bool($visitor['SignedOut'])) { ?>checked<?php } ?> >
+                <label class="custom-control-label my-1" for="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>"><?= htmlspecialchars($visitor['GuestName']) ?> <small>Arrived <?= htmlspecialchars($date->format('H:i, j F')) ?></small>
               </div>
             <?php } while ($visitor = $getVisitors->fetch(PDO::FETCH_ASSOC)); ?>
           </div>
-
-          <p>
-            <button type="submit" class="btn btn-success">
-              Check In
-            </button>
-          </p>
-
         </form>
 
       <?php } else { ?>
         <div class="alert alert-warning">
           <p class="mb-0">
-            <strong>There are no people to check out of <?= htmlspecialchars($location['Name']) ?></strong>
+            <strong>There are no people to Sign Out of <?= htmlspecialchars($location['Name']) ?></strong>
           </p>
           <p class="mb-0">
             Try changing your time frame
@@ -178,11 +194,19 @@ include BASE_PATH . 'views/header.php';
     </div>
   </div>
 
+  <div id="socket-info" data-init="<?= htmlspecialchars($dataInit) ?>" data-room="<?= htmlspecialchars($id) ?>" data-ajax-url="<?= htmlspecialchars(autoUrl('contact-tracing/sign-out/ajax')) ?>"></div>
+
 </div>
 
 <?php
 
 $footer = new \SCDS\Footer();
 $footer->addJs('public/js/NeedsValidation.js');
-$footer->addJs('public/js/contact-tracing/check-in.js');
+if (bool(getenv("IS_DEV"))) {
+  $footer->addExternalJs('https://apis.tenant-services.membership.myswimmingclub.uk/socket.io/socket.io.js');
+} else {
+  $footer->addExternalJs('https://production-apis.tenant-services.membership.myswimmingclub.uk/socket.io/socket.io.js');
+}
+// $footer->addExternalJs(autoUrl('apis/socket.io/socket.io.js', false));
+$footer->addJs('public/js/contact-tracing/sign-out.js');
 $footer->render();
