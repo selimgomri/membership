@@ -438,7 +438,7 @@
                 "dev-master": "1.x-dev"
             }
         },
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
                 "Composer\\CaBundle\\": "src"
@@ -650,7 +650,7 @@
                 "dev-master": "2.0.x-dev"
             }
         },
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
                 "Doctrine\\Inflector\\": "lib/Doctrine/Inflector"
@@ -2788,7 +2788,7 @@
                 "dev-master": "1.0.x-dev"
             }
         },
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
                 "Psr\\Cache\\": "src/"
@@ -2836,7 +2836,7 @@
                 "dev-master": "1.0.x-dev"
             }
         },
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
                 "Psr\\Container\\": "src/"
@@ -2887,7 +2887,7 @@
                 "dev-master": "1.0.x-dev"
             }
         },
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
                 "Psr\\Http\\Message\\": "src/"
@@ -2939,7 +2939,7 @@
                 "dev-master": "1.0.x-dev"
             }
         },
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
                 "Psr\\SimpleCache\\": "src/"
