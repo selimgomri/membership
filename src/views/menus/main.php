@@ -466,9 +466,9 @@ if (!function_exists('chesterStandardMenu')) {
             <li class="nav-item">
               <a class="nav-link" href="<?= htmlspecialchars(autoUrl("log-books")) ?>">Log Books</a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" href="<?= htmlspecialchars(autoUrl("services/request-a-trial")) ?>">Request a Trial</a>
-            </li>
+            </li> -->
           <?php } ?>
         </ul>
         <?php if (!empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {

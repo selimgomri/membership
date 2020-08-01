@@ -2,7 +2,7 @@
 
 $db = app()->db;
 $tenant = app()->tenant;
-$pagetitle = 'Check In - Contact Tracing';
+$pagetitle = 'Check Out - Contact Tracing';
 
 $getLocations = $db->prepare("SELECT `ID`, `Name` FROM `covidLocations` WHERE `Tenant` = ? ORDER BY `Name` ASC");
 $getLocations->execute([
@@ -19,17 +19,17 @@ include BASE_PATH . 'views/header.php';
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('contact-tracing')) ?>">Tracing</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Check In</li>
+        <li class="breadcrumb-item active" aria-current="page">Check Out</li>
       </ol>
     </nav>
 
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>
-          Check In
+          Check Out
         </h1>
         <p class="lead mb-0">
-          Check in to a location
+          Check out those present at a location
         </p>
       </div>
     </div>
@@ -44,7 +44,7 @@ include BASE_PATH . 'views/header.php';
       <?php if ($location = $getLocations->fetch(PDO::FETCH_ASSOC)) { ?>
         <div class="list-group">
           <?php do { ?>
-            <a href="<?= htmlspecialchars(autoUrl('contact-tracing/check-in/' . $location['ID'])) ?>" class="list-group-item list-group-item-action">
+            <a href="<?= htmlspecialchars(autoUrl('contact-tracing/check-out/' . $location['ID'])) ?>" class="list-group-item list-group-item-action">
               <?= htmlspecialchars($location['Name']) ?>
             </a>
           <?php } while ($location = $getLocations->fetch(PDO::FETCH_ASSOC)); ?>
