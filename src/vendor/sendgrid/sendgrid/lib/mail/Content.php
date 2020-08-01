@@ -5,6 +5,8 @@
 
 namespace SendGrid\Mail;
 
+use SendGrid\Helper\Assert;
+
 /**
  * This class is used to construct a Content object for the /mail/send API call
  *
@@ -12,21 +14,29 @@ namespace SendGrid\Mail;
  */
 class Content implements \JsonSerializable
 {
-    /** @var $type string The mime type of the content you are including in your email. For example, “text/plain” or “text/html” */
+    /**
+     * @var string
+     * The mime type of the content you are including in your email. For example, “text/plain” or “text/html”
+     */
     private $type;
-    /** @var $value string The actual content of the specified mime type that you are including in your email */
+
+    /**
+     * @var string
+     * The actual content of the specified mime type that you are including in your email
+     */
     private $value;
 
-	/**
-	 * Optional constructor
-	 *
-	 * @param string|null $type  The mime type of the content you are including
-	 *                           in your email. For example, “text/plain” or
-	 *                           “text/html”
-	 * @param string|null $value The actual content of the specified mime type
-	 *                           that you are including in your email
-	 * @throws \SendGrid\Mail\TypeException
-	 */
+    /**
+     * Optional constructor
+     *
+     * @param string|null $type  The mime type of the content you are including
+     *                           in your email. For example, “text/plain” or
+     *                           “text/html”
+     * @param string|null $value The actual content of the specified mime type
+     *                           that you are including in your email
+     *
+     * @throws TypeException
+     */
     public function __construct($type = null, $value = null)
     {
         if (isset($type)) {
@@ -44,20 +54,19 @@ class Content implements \JsonSerializable
      *                     in your email. For example, “text/plain” or
      *                     “text/html”
      *
-     * @throws \SendGrid\Mail\TypeException
+     * @throws TypeException
      */
     public function setType($type)
     {
-        if (!is_string($type)) {
-            throw new TypeException('$type must be of type string.');
-        }
+        Assert::string($type, 'type');
+
         $this->type = $type;
     }
 
     /**
      * Retrieve the mime type on a Content object
      *
-     * @return string
+     * @return string|null
      */
     public function getType()
     {
@@ -70,20 +79,19 @@ class Content implements \JsonSerializable
      * @param string $value The actual content of the specified mime type
      *                      that you are including in your email
      *
-     * @throws \SendGrid\Mail\TypeException
+     * @throws TypeException
      */
     public function setValue($value)
     {
-        if (!is_string($value)) {
-            throw new TypeException('$value must be of type string');
-        }
+        Assert::minLength($value, 'value', 1);
+
         $this->value = mb_convert_encoding($value, 'UTF-8', 'UTF-8');
     }
 
     /**
      * Retrieve the content value to a Content object
      *
-     * @return string
+     * @return string|null
      */
     public function getValue()
     {
