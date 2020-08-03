@@ -390,3 +390,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' || 
 		});
 	});
 }
+
+$this->group('/disputes', function() {
+	include 'stripe/disputes/router.php';
+});
