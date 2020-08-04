@@ -333,6 +333,10 @@ if (getenv('STRIPE') && app()->tenant->getStripeAccount()) {
 				include 'stripe/direct-debit/info.php';
 			});
 
+			$this->get('/mandate/{id}/view-ddi', function ($id) {
+				include 'stripe/direct-debit/get-ddi.php';
+			});
+
 			$this->group('/set-up', function () {
 				$this->get('/', function () {
 					include 'stripe/direct-debit/sign-up.php';

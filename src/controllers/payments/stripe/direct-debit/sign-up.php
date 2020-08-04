@@ -49,24 +49,44 @@ if (isset($renewal_trap) && $renewal_trap) {
 
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+
+    <?php if (!isset($renewal_trap) || !$renewal_trap) { ?>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="<?= autoUrl("payments") ?>">Payments</a></li>
+          <li class="breadcrumb-item"><a href="<?= autoUrl("payments/direct-debit") ?>">Direct Debit</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Set up</li>
+        </ol>
+      </nav>
+    <?php } ?>
+
+    <div class="row align-items-center">
+      <div class="col">
+        <h1>
+          Set up a Direct Debit
+        </h1>
+        <p class="lead mb-0">
+          Direct debit is the easiest way to pay your club fees
+        </p>
+      </div>
+      <div class="d-none d-sm-flex col-sm-auto ml-auto">
+        <img style="max-height:50px;" src="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit.png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@3x.png")) ?> 3x" alt="Direct
+				Debit Logo">
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <div id="stripe-data" data-stripe-publishable="<?= htmlspecialchars(getenv('STRIPE_PUBLISHABLE')) ?>" data-stripe-account-id="<?= htmlspecialchars($tenant->getStripeAccount()) ?>" data-session-id="<?= htmlspecialchars($session->id) ?>">
 </div>
 
 <div class="container">
-  <?php if (!isset($renewal_trap) || !$renewal_trap) { ?>
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?= autoUrl("payments") ?>">Payments</a></li>
-      <li class="breadcrumb-item"><a href="<?= autoUrl("payments/direct-debit") ?>">Direct Debit</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Set up</li>
-    </ol>
-  </nav>
-  <?php } ?>
 
   <div class="row">
     <div class="col-lg-8">
-      <h1>Set up Direct Debit</h1>
-      <p class="lead">Direct Debit is the easiest way to pay your club fees</p>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['StripeDDError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['StripeDDError']) { ?>
         <div class="alert alert-error">
