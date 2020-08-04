@@ -4,32 +4,50 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 // Get mandates
-$getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC LIMIT 1");
+$getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC");
 $getMandates->execute([
   app()->user->getStripeCustomer()->id,
 ]);
 $mandate = $getMandates->fetch(PDO::FETCH_ASSOC);
+
+$used = true;
 
 $pagetitle = "Direct Debit";
 include BASE_PATH . "views/header.php";
 
 ?>
 
-<div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?= autoUrl("payments") ?>">Payments</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Direct Debit</li>
-    </ol>
-  </nav>
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
 
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= autoUrl("payments") ?>">Payments</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Direct Debit</li>
+      </ol>
+    </nav>
+
+    <div class="row align-items-center">
+      <div class="col">
+        <h1>
+          Direct Debit
+        </h1>
+        <p class="lead mb-0">
+          Manage your new direct debit
+        </p>
+      </div>
+      <div class="d-none d-sm-flex col-sm-auto ml-auto">
+        <img style="max-height:50px;" src="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit.png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@3x.png")) ?> 3x" alt="Direct
+				Debit Logo">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="container">
   <div class="row">
     <div class="col-lg-8">
-      <h1>Direct Debit</h1>
-      <p class="lead">Manage your new Direct Debit</p>
-      <p>
-        We've upgraded our infrastructure and made changes to our direct debit systems.
-      </p>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['StripeDDSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['StripeDDSuccess']) { ?>
         <div class="alert alert-success">
@@ -50,7 +68,7 @@ include BASE_PATH . "views/header.php";
       <?php if ($mandate) {
         do { ?>
           <div class="card card-body mb-3">
-            <h2>Your Direct Debit Mandate <span class="badge badge-secondary"><?php if ($mandate['Status'] == 'pending') { ?>Pending<?php } else if ($mandate['Status'] == 'accepted') { ?>Active<?php } ?></span></h2>
+            <h2><?php if ($used) { ?>Your Direct Debit Mandate<?php $user = false; } else { ?>Old Mandate<?php } ?> <span class="badge badge-secondary"><?php if ($mandate['Status'] == 'pending') { ?>Pending<?php } else if ($mandate['Status'] == 'accepted') { ?>Active<?php } ?></span></h2>
             <dl class="row">
               <dt class="col-sm-3">Sort code</dt>
               <dd class="col-sm-9 mono"><?= htmlspecialchars(implode("-", str_split($mandate['SortCode'], 2))) ?></dd>
@@ -63,7 +81,7 @@ include BASE_PATH . "views/header.php";
             </dl>
 
             <p class="mb-0">
-              <a href="<?= htmlspecialchars($mandate['URL']) ?>" target="_blank">
+              <a href="<?= htmlspecialchars(autoUrl('payments/direct-debit/mandate/' . $mandate['ID'] . '/view-ddi')) ?>" target="_blank">
                 View Direct Debit Instruction
               </a>
             </p>

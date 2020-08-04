@@ -21,10 +21,12 @@ $income->execute([
 ]);
 $income = $income->fetchAll(PDO::FETCH_ASSOC);
 
- ?>
+$month = new DateTime('now', new DateTimeZone('Europe/London'));
 
- <div class="front-page mb-n3">
-   <div class="container">
+?>
+
+<div class="front-page mb-n3">
+  <div class="container">
 
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb bg-light">
@@ -32,40 +34,54 @@ $income = $income->fetchAll(PDO::FETCH_ASSOC);
       </ol>
     </nav>
 
-  	<h1>Payment Administration</h1>
-  	<p class="lead">Control Direct Debit Payments</p>
+    <h1>Payment Administration</h1>
+    <p class="lead">Control Direct Debit Payments</p>
 
     <div class="mb-4">
-      <h2 class="mb-4">View Squad Fee Status</h2>
+      <h2 class="mb-4">View Fee Status</h2>
       <div class="mb-4">
         <div class="news-grid">
 
-          <a href="<?=autoUrl("payments/history/squads/" . date("Y/m"))?>">
-  					<span class="mb-3">
-  	          <span class="title mb-0">
-  							Squad Fees for <?=$dateString?>
-  						</span>
-  						<span>
-  							View current payment status
-  						</span>
-  					</span>
+        <a href="<?= htmlspecialchars(autoUrl("payments/history/" . $month->format("Y/m"))) ?>">
+            <span class="mb-3">
+              <span class="title mb-0">
+                All fees for <?= $dateString ?>
+              </span>
+              <span>
+                View current payment status
+              </span>
+            </span>
             <span class="category">
-  						Direct Debit
-  					</span>
+              Direct Debit
+            </span>
           </a>
 
-          <a href="<?=autoUrl("payments/history/extras/" . date("Y/m"))?>">
-  					<span class="mb-3">
-  	          <span class="title mb-0">
-  							Extra Fees for <?=$dateString?>
-  						</span>
-  						<span>
-  							View current payment status
-  						</span>
-  					</span>
+          <a href="<?= htmlspecialchars(autoUrl("payments/history/squads/" . $month->format("Y/m"))) ?>">
+            <span class="mb-3">
+              <span class="title mb-0">
+                Squad fees for <?= $dateString ?>
+              </span>
+              <span>
+                View current payment status
+              </span>
+            </span>
             <span class="category">
-  						Direct Debit
-  					</span>
+              Direct Debit
+            </span>
+          </a>
+
+          <a href="<?= htmlspecialchars(autoUrl("payments/history/extras/" . $month->format("Y/m"))) ?>">
+            <span class="mb-3">
+              <span class="title mb-0">
+                Extra fees for <?= $dateString ?>
+              </span>
+              <span>
+                View current payment status
+              </span>
+            </span>
+            <span class="category">
+              Direct Debit
+            </span>
           </a>
         </div>
       </div>
@@ -76,46 +92,46 @@ $income = $income->fetchAll(PDO::FETCH_ASSOC);
       <div class="mb-4">
         <div class="news-grid">
 
-          <a href="<?=autoUrl('payments/estimated-fees')?>">
-  					<span class="mb-3">
-  	          <span class="title mb-0">
-  							Manual Billing Information
-  						</span>
-  						<span>
-  							View all expected fees for all parents
-  						</span>
-  					</span>
+          <a href="<?= htmlspecialchars(autoUrl('payments/estimated-fees')) ?>">
+            <span class="mb-3">
+              <span class="title mb-0">
+                Manual Billing Information
+              </span>
+              <span>
+                View all expected fees for all parents
+              </span>
+            </span>
             <span class="category">
-  						Pay
-  					</span>
+              Pay
+            </span>
           </a>
 
-          <a href="<?=htmlspecialchars(autoUrl('payments/invoice-payments'))?>">
-  					<span class="mb-3">
-  	          <span class="title mb-0">
-  							Invoice payments
-  						</span>
-  						<span>
-  							Manually create charges and credits
-  						</span>
-  					</span>
+          <a href="<?= htmlspecialchars(autoUrl('payments/invoice-payments')) ?>">
+            <span class="mb-3">
+              <span class="title mb-0">
+                Invoice payments
+              </span>
+              <span>
+                Manually create charges and credits
+              </span>
+            </span>
             <span class="category">
-  						Pay
-  					</span>
+              Pay
+            </span>
           </a>
 
-          <a href="<?=autoUrl('galas/charges-and-refunds')?>">
-  					<span class="mb-3">
-  	          <span class="title mb-0">
-  							Charge for gala entries
-  						</span>
-  						<span>
-  							Charge and issue refunds for gala entries
-  						</span>
-  					</span>
+          <a href="<?= htmlspecialchars(autoUrl('galas/charges-and-refunds')) ?>">
+            <span class="mb-3">
+              <span class="title mb-0">
+                Charge for gala entries
+              </span>
+              <span>
+                Charge and issue refunds for gala entries
+              </span>
+            </span>
             <span class="category">
-  						Pay
-  					</span>
+              Pay
+            </span>
           </a>
         </div>
       </div>
@@ -126,48 +142,63 @@ $income = $income->fetchAll(PDO::FETCH_ASSOC);
       <div class="mb-4">
         <div class="news-grid">
 
-          <a href="<?=autoUrl('payments/categories')?>">
-  					<span class="mb-3">
-  	          <span class="title mb-0">
-  							Payment categories
-  						</span>
-  						<span>
-  							Create categories and assign them to payment items
-  						</span>
-  					</span>
+          <a href="<?= htmlspecialchars(autoUrl('payments/categories')) ?>">
+            <span class="mb-3">
+              <span class="title mb-0">
+                Payment categories
+              </span>
+              <span>
+                Create categories and assign them to payment items
+              </span>
+            </span>
             <span class="category">
-  						Admin
-  					</span>
+              Admin
+            </span>
           </a>
+
+          <a href="<?= htmlspecialchars(autoUrl('payments/disputes')) ?>">
+            <span class="mb-3">
+              <span class="title mb-0">
+                Disputes
+              </span>
+              <span>
+                Dispute information for card and direct debit payments
+              </span>
+            </span>
+            <span class="category">
+              Admin
+            </span>
+          </a>
+
         </div>
       </div>
 
-    <div class="mb-4">
-      <?php
+      <div class="mb-4">
+        <?php
 
-      $labels = [];
-      for ($i = sizeof($income); $i > 0; $i--) {
-        $date = new DateTime($income[$i-1]['Date'], new DateTimeZone('Europe/London'));
-        $labels[] = $date->format("F");
-      }
+        $labels = [];
+        for ($i = sizeof($income); $i > 0; $i--) {
+          $date = new DateTime($income[$i - 1]['Date'], new DateTimeZone('Europe/London'));
+          $labels[] = $date->format("F");
+        }
 
-      $data = [];
-      for ($i = sizeof($income); $i > 0; $i--) {
-        $data[] = \Brick\Math\BigDecimal::of((string) $income[$i-1]['Total'])->withPointMovedLeft(2)->toScale(2, RoundingMode::HALF_UP);
-      }
+        $data = [];
+        for ($i = sizeof($income); $i > 0; $i--) {
+          $data[] = \Brick\Math\BigDecimal::of((string) $income[$i - 1]['Total'])->withPointMovedLeft(2)->toScale(2, RoundingMode::HALF_UP);
+        }
 
-      $json = json_encode(['labels' => $labels, 'data' => $data]);
+        $json = json_encode(['labels' => $labels, 'data' => $data]);
 
-      ?>
-      <h2 class="mb-4">Income Statistics</h2>
-      <canvas id="incomeChart" data-data="<?=htmlspecialchars($json)?>" class="cell mb-1 bg-white"></canvas>
-      <p class="small text-muted mb-4">
-        This is the amount charged to parents before GoCardless handling fees.
-      </p>
+        ?>
+        <h2 class="mb-4">Income Statistics</h2>
+        <canvas id="incomeChart" data-data="<?= htmlspecialchars($json) ?>" class="cell mb-1 bg-white"></canvas>
+        <p class="small text-muted mb-4">
+          This is the amount charged to parents before GoCardless handling fees.
+        </p>
+      </div>
     </div>
   </div>
-</div>
 
-<?php $footer = new \SCDS\Footer();
-$footer->addJs('public/js/payments/admin-graph.js');
-$footer->render();
+  <?php $footer = new \SCDS\Footer();
+  $footer->addJs('public/js/payments/admin-graph.js');
+  $footer->render();
