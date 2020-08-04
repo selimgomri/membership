@@ -11,9 +11,12 @@ $responseData = [
   'message' => ''
 ];
 
+$data = false;
+
 try {
 
   if (empty($_POST['member']) || empty($_POST['password'])) {
+    $data = true;
     throw new Exception('Required details were not provided.');
   }
 
@@ -137,7 +140,9 @@ try {
 } catch (Exception $e) {
   $responseData['status'] = 500;
   $responseData['message'] = $e->getMessage();
-  reportError($e);
+  if (!$data) {
+    reportError($e);
+  }
   $db->rollBack();
 } finally {
   http_response_code(200);
