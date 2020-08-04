@@ -156,6 +156,7 @@ $month = new DateTime('now', new DateTimeZone('Europe/London'));
             </span>
           </a>
 
+          <?php if (app()->tenant->getStripeAccount()) { ?>
           <a href="<?= htmlspecialchars(autoUrl('payments/disputes')) ?>">
             <span class="mb-3">
               <span class="title mb-0">
@@ -169,6 +170,21 @@ $month = new DateTime('now', new DateTimeZone('Europe/London'));
               Admin
             </span>
           </a>
+
+          <a href="<?= htmlspecialchars(autoUrl('settings/stripe')) ?>">
+            <span class="mb-3">
+              <span class="title mb-0">
+                Stripe Options
+              </span>
+              <span>
+                Manage your Stripe account connection
+              </span>
+            </span>
+            <span class="category">
+              Admin
+            </span>
+          </a>
+          <?php } ?>
 
         </div>
       </div>
