@@ -167,17 +167,19 @@ include BASE_PATH . 'views/header.php';
 
           <?= \SCDS\CSRF::write() ?>
 
-          <div class="mb-3" id="checkboxes">
+          <ul class="list-group mb-3" id="checkboxes">
             <?php do {
               $date = new DateTime($visitor['Time'], new DateTimeZone('UTC'));
               $date->setTimezone(new DateTimeZone('Europe/London'));
             ?>
+            <li class="list-group-item">
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>" name="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>" value="1" data-id="<?= htmlspecialchars($visitor['ID']) ?>" <?php if (bool($visitor['SignedOut'])) { ?>checked<?php } ?> >
-                <label class="custom-control-label my-1" for="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>"><?= htmlspecialchars($visitor['GuestName']) ?> <small>Arrived <?= htmlspecialchars($date->format('H:i, j F')) ?></small>
+                <label class="custom-control-label d-block" for="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>"><?= htmlspecialchars($visitor['GuestName']) ?> <small>Arrived <?= htmlspecialchars($date->format('H:i, j F')) ?></small>
               </div>
+            </li>
             <?php } while ($visitor = $getVisitors->fetch(PDO::FETCH_ASSOC)); ?>
-          </div>
+            </ul>
         </form>
 
       <?php } else { ?>

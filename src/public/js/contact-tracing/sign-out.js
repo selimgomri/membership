@@ -10,15 +10,15 @@ socket.on('connect', () => {
     room: options.room,
   });
 
-  console.log(socket.connected); // true
+  // console.log(socket.connected); // true
 });
 
 socket.on('covid-test', (message) => {
-  console.log(message);
+  // console.log(message);
 })
 
 socket.on('tick-event', (message) => {
-  console.log(message);
+  // console.log(message);
 
   if (message.event == 'covid-sign-out-change') {
     let input = document.getElementById('visitor-' + message.field);
@@ -28,7 +28,7 @@ socket.on('tick-event', (message) => {
 })
 
 socket.on('disconnect', () => {
-  console.log(socket.connected); // false
+  // console.log(socket.connected); // false
 });
 
 document.getElementById('checkboxes').addEventListener('change', (event) => {

@@ -53,6 +53,10 @@ if (!$squad) {
 
   $addr = json_decode($location['Address']);
 
+  // Get member attendance
+  $isHere = $db->prepare("SELECT COUNT(*) FROM covidVisitors WHERE `Location` = ? AND `Person` = ? AND `Type` = ? AND `Time` > ?");
+  $time = (new DateTime('-1 hour', new DateTimeZone('UTC')))->format("Y-m-d H:i:s");
+
   include BASE_PATH . 'views/header.php';
 
 ?>
@@ -110,14 +114,25 @@ if (!$squad) {
 
             <?= \SCDS\CSRF::write() ?>
 
-            <div class="mb-3">
-              <?php do { ?>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" name="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" value="1" <?php if (!$member['UserID']) { ?> disabled <?php } ?>>
-                  <label class="custom-control-label my-1" for="<?= htmlspecialchars('member-' . $member['MemberID']) ?>"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?> <em class="small"><?php if ($member['UserID']) { ?><?= htmlspecialchars($member['Forename'] . ' ' . $member['Surname']) ?>'s details<?php } else { ?>No details on file<?php } ?></em></label>
-                </div>
+            <ul class="list-group mb-3">
+              <?php do {
+                $isHere->execute([
+                  $id,
+                  $member['MemberID'],
+                  'member',
+                  $time,
+                ]);
+
+                $here = $isHere->fetchColumn() > 0;
+              ?>
+                <li class="list-group-item <?php if (!$member['UserID'] || $here) { ?> bg-light <?php } ?>">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" name="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" value="1" <?php if (!$member['UserID'] || $here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
+                    <label class="custom-control-label d-block" for="<?= htmlspecialchars('member-' . $member['MemberID']) ?>"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?> <em class="small"><?php if ($member['UserID']) { ?><?= htmlspecialchars($member['Forename'] . ' ' . $member['Surname']) ?>'s details<?php } else { ?>No details on file<?php } ?></em></label>
+                  </div>
+                </li>
               <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>
-            </div>
+            </ul>
 
           <?php } else { ?>
             <div class="alert alert-warning">
