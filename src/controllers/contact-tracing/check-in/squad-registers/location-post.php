@@ -78,6 +78,8 @@ try {
         null,
         $tenant->getId(),
       ]);
+    } else if (isset($_POST['member-' . $member['MemberID']]) && !bool($_POST['member-' . $member['MemberID']])) {
+      // Eventual handling of unticking
     }
   }
 

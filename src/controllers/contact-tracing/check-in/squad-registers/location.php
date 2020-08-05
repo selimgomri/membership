@@ -54,7 +54,7 @@ if (!$squad) {
   $addr = json_decode($location['Address']);
 
   // Get member attendance
-  $isHere = $db->prepare("SELECT COUNT(*) FROM covidVisitors WHERE `Location` = ? AND `Person` = ? AND `Type` = ? AND `Time` > ?");
+  $isHere = $db->prepare("SELECT COUNT(*) FROM covidVisitors WHERE `Location` = ? AND `Person` = ? AND `Type` = ? AND `Time` > ? AND NOT `SignedOut`");
   $time = (new DateTime('-1 hour', new DateTimeZone('UTC')))->format("Y-m-d H:i:s");
 
   include BASE_PATH . 'views/header.php';
@@ -134,6 +134,16 @@ if (!$squad) {
               <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>
             </ul>
 
+            <p>
+              Don't forget to check yourself in with the other form!
+            </p>
+
+            <p>
+              <button type="submit" class="btn btn-success">
+                Check In
+              </button>
+            </p>
+
           <?php } else { ?>
             <div class="alert alert-warning">
               <p class="mb-0">
@@ -144,12 +154,6 @@ if (!$squad) {
               </p>
             </div>
           <?php } ?>
-
-          <p>
-            <button type="submit" class="btn btn-success">
-              Check In
-            </button>
-          </p>
         </form>
 
       </div>
