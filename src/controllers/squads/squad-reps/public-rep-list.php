@@ -14,7 +14,10 @@ $getMyMembers->execute([
 
 $getSquads = $db->prepare("SELECT SquadName `name`, SquadID id FROM squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad WHERE squadMembers.Member = ? ORDER BY SquadFee DESC, SquadName ASC");
 
-$getReps = $db->prepare("SELECT Forename forename, Surname surname FROM squadReps INNER JOIN users ON squadReps.User = users.UserID WHERE squadReps.Squad = ?");
+$getReps = $db->prepare("SELECT Forename forename, Surname surname, ContactDescription contact FROM squadReps INNER JOIN users ON squadReps.User = users.UserID WHERE squadReps.Squad = ?");
+
+$markdown = new ParsedownExtra();
+$markdown->setSafeMode(true);
 
 while ($member = $getMyMembers->fetch(PDO::FETCH_ASSOC)) {
   $getSquads->execute([
@@ -46,7 +49,7 @@ while ($member = $getMyMembers->fetch(PDO::FETCH_ASSOC)) {
   ];
 }
 
-$getAllReps = $db->prepare("SELECT SquadID, Forename, Surname, SquadName FROM ((squadReps INNER JOIN squads ON squads.SquadID = squadReps.Squad) INNER JOIN users ON squadReps.User = users.UserID) WHERE squads.Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+$getAllReps = $db->prepare("SELECT SquadID, Forename forename, Surname surname, SquadName, ContactDescription contact FROM ((squadReps INNER JOIN squads ON squads.SquadID = squadReps.Squad) INNER JOIN users ON squadReps.User = users.UserID) WHERE squads.Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
 $getAllReps->execute([
   $tenant->getId()
 ]);
@@ -84,9 +87,20 @@ include BASE_PATH . 'views/header.php';
                   <?= htmlspecialchars($squad['name']) ?>
                 </h4>
 
-                <ul class="list-unstyled">
+                <ul class="list-group">
                   <?php foreach ($squad['reps'] as $rep) { ?>
-                    <li><?= htmlspecialchars($rep['forename'] . ' ' . $rep['surname']) ?></li>
+                    <li class="list-group-item">
+                      <div>
+                        <h5><?= htmlspecialchars($rep['forename'] . ' ' . $rep['surname']) ?></h5>
+                      </div>
+                      <?php if ($rep['contact']) { ?><div class="">
+                          <hr>
+                          <h6>
+                            Contact details
+                          </h6>
+                          <div class="post-content mb-n3"><?= $markdown->parse($rep['contact']) ?></div>
+                        </div><?php } ?>
+                    </li>
                   <?php } ?>
                 </ul>
 
@@ -109,11 +123,30 @@ include BASE_PATH . 'views/header.php';
           <?php foreach ($allReps as $squad) { ?>
             <li class="list-group-item">
               <h3><?= htmlspecialchars($squad[0]['SquadName']) ?> Squad Rep<?php if (sizeof($squad) > 1) { ?>s<?php } ?></h3>
-              <ul class="list-unstyled">
-                <?php foreach ($squad as $reps) { ?>
-                  <li><?= htmlspecialchars($reps['Forename'] . ' ' . $reps['Surname']) ?></li>
+              <?php if (sizeof($squad) > 1) { ?>
+                <ul class="list-group">
                 <?php } ?>
-              </ul>
+                <?php foreach ($squad as $reps) { ?>
+                  <?php if (sizeof($squad) > 1) { ?>
+                    <li class="list-group-item">
+                    <?php } ?>
+                    <div>
+                      <h5><?= htmlspecialchars($reps['forename'] . ' ' . $reps['surname']) ?></h5>
+                    </div>
+                    <?php if ($reps['contact']) { ?><div class="">
+                        <hr>
+                        <h6>
+                          Contact details
+                        </h6>
+                        <div class="post-content mb-n3"><?= $markdown->parse($reps['contact']) ?></div>
+                      </div><?php } ?>
+                    <?php if (sizeof($squad) > 1) { ?>
+                    </li>
+                  <?php } ?>
+                <?php } ?>
+                <?php if (sizeof($squad) > 1) { ?>
+                </ul>
+              <?php } ?>
             </li>
           <?php } ?>
         </ul>

@@ -42,21 +42,21 @@ include BASE_PATH . 'views/header.php';
           </h2>
           <?php if ($squad != null) { ?>
             <div class="news-grid">
-            <?php do { ?>
-              <a href="<?=autoUrl("squads/" . $squad['SquadID'])?>">
-                <span class="mb-3">
-                  <span class="title mb-0">
-                    <?=htmlspecialchars($squad['SquadName'])?> Squad
+              <?php do { ?>
+                <a href="<?= autoUrl("squads/" . $squad['SquadID']) ?>">
+                  <span class="mb-3">
+                    <span class="title mb-0">
+                      <?= htmlspecialchars($squad['SquadName']) ?> Squad
+                    </span>
+                    <span>
+                      <?= htmlspecialchars($squad['SquadCoach']) ?>
+                    </span>
                   </span>
-                  <span>
-                    <?=htmlspecialchars($squad['SquadCoach'])?>
+                  <span class="category">
+                    Squads
                   </span>
-                </span>
-                <span class="category">
-                  Squads
-                </span>
-              </a>
-            <?php } while ($squad = $squads->fetch(PDO::FETCH_ASSOC)); ?>
+                </a>
+              <?php } while ($squad = $squads->fetch(PDO::FETCH_ASSOC)); ?>
             </div>
           <?php } else { ?>
             <div class="alert alert-warning">
@@ -78,21 +78,21 @@ include BASE_PATH . 'views/header.php';
           </h2>
           <?php if ($gala != null) { ?>
             <div class="news-grid">
-            <?php do { ?>
-              <a href="<?=autoUrl("galas/" . $gala['GalaID'] . "/squad-rep-view")?>">
-                <span class="mb-3">
-                  <span class="title mb-0">
-                    <?=htmlspecialchars($gala['GalaName'])?>
+              <?php do { ?>
+                <a href="<?= autoUrl("galas/" . $gala['GalaID'] . "/squad-rep-view") ?>">
+                  <span class="mb-3">
+                    <span class="title mb-0">
+                      <?= htmlspecialchars($gala['GalaName']) ?>
+                    </span>
+                    <span>
+                      <?= htmlspecialchars($gala['GalaVenue']) ?>
+                    </span>
                   </span>
-                  <span>
-                    <?=htmlspecialchars($gala['GalaVenue'])?>
+                  <span class="category">
+                    Galas
                   </span>
-                </span>
-                <span class="category">
-                  Galas
-                </span>
-              </a>
-            <?php } while ($gala = $getGalas->fetch(PDO::FETCH_ASSOC)); ?>
+                </a>
+              <?php } while ($gala = $getGalas->fetch(PDO::FETCH_ASSOC)); ?>
             </div>
           <?php } else { ?>
             <div class="alert alert-warning">
@@ -113,7 +113,7 @@ include BASE_PATH . 'views/header.php';
             Other services
           </h2>
           <div class="news-grid">
-            <a href="<?=autoUrl("notify/newemail")?>">
+            <a href="<?= autoUrl("notify/newemail") ?>">
               <span class="mb-3">
                 <span class="title mb-0">
                   Email parents
@@ -126,7 +126,7 @@ include BASE_PATH . 'views/header.php';
                 Notify
               </span>
             </a>
-            <a href="<?=autoUrl("contact-tracing/check-in")?>">
+            <a href="<?= autoUrl("contact-tracing/check-in") ?>">
               <span class="mb-3">
                 <span class="title mb-0">
                   COVID Liason Squad Registers
@@ -139,7 +139,20 @@ include BASE_PATH . 'views/header.php';
                 Contact Tracing
               </span>
             </a>
-            <a href="<?=autoUrl("squad-reps/list")?>">
+            <a href="<?= autoUrl("squad-reps/contact-details") ?>">
+              <span class="mb-3">
+                <span class="title mb-0">
+                  Contact details
+                </span>
+                <span>
+                  Provide contact information to be displayed to
+                </span>
+              </span>
+              <span class="category">
+                Squad Reps
+              </span>
+            </a>
+            <a href="<?= autoUrl("squad-reps/list") ?>">
               <span class="mb-3">
                 <span class="title mb-0">
                   View all squads reps
