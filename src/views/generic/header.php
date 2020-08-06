@@ -232,5 +232,5 @@ if (isset($customBackground) && $customBackground) {
   <?php if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) || !$_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) { ?>
     <div class="have-full-height">
     <?php } else { ?>
-      <div class="have-full-height">
+      <div class="have-full-height focus-highlight">
       <?php } ?>

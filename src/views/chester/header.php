@@ -304,5 +304,5 @@ p.lead {
   <?php if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) || !$_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) { ?>
   <div class="have-full-height" style="min-height:70vh">
     <?php } else { ?>
-    <div class="have-full-height">
+    <div class="have-full-height focus-highlight">
       <?php } ?>

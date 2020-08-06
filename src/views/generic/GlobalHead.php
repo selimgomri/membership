@@ -65,7 +65,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <link rel="manifest" href="<?= autoUrl("manifest.webmanifest") ?>">
   <?php
   // Check if user has opted out of tracking or has DNT headers set before serving Google Analytics
-  if (getenv('GOOGLE_ANALYTICS_ID') && (!$_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers'] && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1))) {
+  if ((!isset($_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers']) || !$_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers']) && !(isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1)) {
   ?>
     <meta name="X-SCDS-Membership-Tracking" content="yes">
     <script async>
@@ -80,7 +80,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
         a.src = g;
         m.parentNode.insertBefore(a, m)
       })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-      ga('create', '<?= htmlspecialchars(getenv('GOOGLE_ANALYTICS_ID')) ?>', 'auto');
+      ga('create', 'UA-78812259-4', 'auto');
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
         ga('set', 'userId', '<?= $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'] ?>');
         ga('send', 'event', 'authentication', 'user-id available');
@@ -134,42 +134,5 @@ Chester-le-Street ASC is a non profit unincorporated association.
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-
-  <style>
-    .focus-highlight a:focus,
-    .blog-sidebar a:focus,
-    .event a:focus,
-    .hentry a:focus,
-    .blog-main a:focus {
-      background: #ffbf47;
-      outline: 3px solid #ffbf47;
-      outline-offset: 0;
-    }
-
-    footer .focus-highlight a:focus,
-    .cls-global-footer-inverse a:focus {
-      color: #000 !important;
-    }
-
-    .festive {
-      /*background:#005fbd;*/
-      background-image: url("https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/christmas.png");
-      background-size: 50% auto;
-      /*padding: 1rem;*/
-      color: #fff;
-      text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
-    }
-
-    .top-3 {
-      top: 1rem;
-    }
-
-    /* @media (prefers-color-scheme: dark) {
-      body, .front-page {
-        background: var(--dark);
-        color: var(--light);
-      }
-    } */
-  </style>
 
 </head>
