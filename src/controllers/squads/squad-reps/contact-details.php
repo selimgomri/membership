@@ -66,15 +66,18 @@ include BASE_PATH . 'views/header.php';
         Formatting with <a href="https://www.markdownguide.org/basic-syntax/">Markdown</a> is supported.
       </p>
 
-      <form method="post">
+      <form method="post" class="needs-validation" novalidate>
         <h2>
           Squads and details
         </h2>
 
         <?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
           <div class="form-group">
-            <label for="<?= htmlspecialchars('field-' . $squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName'])?></label>
-            <textarea class="form-control mono" id="<?= htmlspecialchars('field-' . $squad['SquadID']) ?>" name="<?= htmlspecialchars('field-' . $squad['SquadID']) ?>" rows="3"><?= htmlspecialchars((string) $squad['ContactDescription']) ?></textarea>
+            <label for="<?= htmlspecialchars('field-' . $squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></label>
+            <textarea class="form-control mono" id="<?= htmlspecialchars('field-' . $squad['SquadID']) ?>" name="<?= htmlspecialchars('field-' . $squad['SquadID']) ?>" rows="3" maxlength="255"><?= htmlspecialchars((string) $squad['ContactDescription']) ?></textarea>
+            <div class="invalid-feedback">
+              Please use no more than 255 characters.
+            </div>
           </div>
         <?php } ?>
 
@@ -92,4 +95,5 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new \SCDS\Footer();
+$footer->addJs('public/js/NeedsValidation.js');
 $footer->render();

@@ -145,7 +145,7 @@ include BASE_PATH . 'views/header.php';
                   Contact details
                 </span>
                 <span>
-                  Provide contact information to be displayed to
+                  Provide contact information to be displayed to parents and members
                 </span>
               </span>
               <span class="category">
