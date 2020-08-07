@@ -528,3 +528,38 @@ thead {
 	overflow: hidden;
 	box-sizing: border-box;
 }
+
+.focus-highlight a:focus,
+.blog-sidebar a:focus,
+.event a:focus,
+.hentry a:focus,
+.blog-main a:focus {
+  background: #ffbf47;
+  outline: 3px solid #ffbf47;
+  outline-offset: 0;
+}
+
+footer .focus-highlight a:focus,
+.cls-global-footer-inverse a:focus {
+  color: #000 !important;
+}
+
+.festive {
+  /*background:#005fbd;*/
+  background-image: url("https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/christmas.png");
+  background-size: 50% auto;
+  /*padding: 1rem;*/
+  color: #fff;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+}
+
+.top-3 {
+  top: 1rem;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  body, .front-page {
+    background: var(--dark);
+    color: var(--light);
+  }
+} */
