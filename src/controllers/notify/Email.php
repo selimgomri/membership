@@ -259,8 +259,11 @@ include BASE_PATH . "views/notifyMenu.php";
     <div class="form-group">
       <label>Select files to attach</label>
       <div class="custom-file">
-        <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="10485760" data-error-message-id="file-upload-invalid-feedback">
+        <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="10485760" data-error-message-id="file-upload-invalid-feedback" aria-describedby="file-upload-multi-info">
         <label class="custom-file-label text-truncate" for="file-upload">Choose file(s)</label>
+        <small id="file-upload-multi-info" class="form-text text-muted">
+          To upload multiple files, press and hold <kbd>shift</kbd> or <kbd>control</kbd> while selecting files.
+        </small>
         <div class="invalid-feedback" id="file-upload-invalid-feedback">
           Oh no!
         </div>
