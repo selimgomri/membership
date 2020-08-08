@@ -91,7 +91,7 @@ include BASE_PATH . 'views/header.php';
             if ($swimmer['SquadSuggestion'] == $squad['SquadID']) {
             $selected = "selected";
              } ?>
-            <option value="<?=$squad['SquadID']?>" <?=$selected?>><?=htmlspecialchars($squad['SquadName'])?> Squad</option>
+            <option value="<?=$squad['SquadID']?>" <?=$selected?>><?=htmlspecialchars($squad['SquadName'])?></option>
             <?php } ?>
           </select>
         </div>

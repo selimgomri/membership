@@ -462,6 +462,11 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
     include BASE_PATH . 'controllers/swimmers/router.php';
   });
 
+  // Temporary tools and features for covid
+  $this->group('/covid', function () {
+    include BASE_PATH . 'controllers/covid/router.php';
+  });
+
   $this->group('/squads', function () {
     include BASE_PATH . 'controllers/squads/router.php';
   });

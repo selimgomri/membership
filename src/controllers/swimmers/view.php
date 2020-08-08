@@ -364,7 +364,7 @@ include BASE_PATH . 'views/header.php';
       <h2 id="squads">Squad<?php if (sizeof($squads) != 1) { ?>s<?php } ?></h2>
       <div id="squadDetails">
         <!-- <p>
-        <?= htmlspecialchars($member->getForename()) ?> is a member of <?= htmlspecialchars((new NumberFormatter("en", NumberFormatter::SPELLOUT))->format(sizeof($squads))) ?> squad<?php if (sizeof($squads) != 1) { ?>s<?php } ?>.
+        <?= htmlspecialchars($member->getForename()) ?> is a member of <?= htmlspecialchars((new NumberFormatter("en", NumberFormatter::SPELLOUT))->format(sizeof($squads))) ?><?php if (sizeof($squads) != 1) { ?>s<?php } ?>.
       </p>
 
       <div class="list-group mb-3">

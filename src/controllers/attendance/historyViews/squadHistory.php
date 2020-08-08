@@ -39,12 +39,12 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 <div class="container">
 	<div class="">
 
-		<h1>Attendance History for <?=htmlspecialchars($squadName)?> Squad</h1>
+		<h1>Attendance History for <?=htmlspecialchars($squadName)?></h1>
 		<p class="lead">Squad History currently only shows the current week</p>
 
     <?php if ($row == null) { ?>
       <div class="alert alert-warning">
-        <strong>No swimmers or recorded sessions were found for <?=htmlspecialchars($squadName)?> Squad</strong><br>
+        <strong>No swimmers or recorded sessions were found for <?=htmlspecialchars($squadName)?></strong><br>
         You need to take a register before swimmers will appear here
       </div>
     <?php } else { ?>

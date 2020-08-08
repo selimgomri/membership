@@ -116,7 +116,7 @@ include BASE_PATH . 'views/header.php';
           </div>
         <?php } ?>
         <div class="list-group-item">
-          <h3 class="mb-0"><?=htmlspecialchars($session['SquadName'])?> Squad</h3>
+          <h3 class="mb-0"><?=htmlspecialchars($session['SquadName'])?></h3>
           <p class="h3"><small><?=htmlspecialchars($session['SessionName'])?>, <?=htmlspecialchars($session['VenueName'])?></small></p>
 
           <?php
@@ -164,7 +164,7 @@ include BASE_PATH . 'views/header.php';
 
           <?php if (!bool($session['MainSequence'])) { ?>
           <div class="alert alert-warning mt-3 mb-0">
-            <p class="mb-0"><strong>This session is not for all swimmers in <?=htmlspecialchars($session['SquadName'])?> Squad</strong></p>
+            <p class="mb-0"><strong>This session is not for all swimmers in <?=htmlspecialchars($session['SquadName'])?></strong></p>
             <p class="mb-0">Your coach will tell you if you are to attend this session</p>
           </div>
           <?php } ?>

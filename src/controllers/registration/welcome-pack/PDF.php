@@ -101,7 +101,7 @@ ob_start();?>
 
       <ul class="mb-0 list-unstyled"> 
         <?php foreach ($swimmers as $s) { ?>
-        <li><?=htmlspecialchars($s['fn'] . ' ' . $s['sn'])?>, <?=htmlspecialchars($s['squad'])?> Squad</li>
+        <li><?=htmlspecialchars($s['fn'] . ' ' . $s['sn'])?>, <?=htmlspecialchars($s['squad'])?></li>
         <?php } ?>
       </ul>
     </div>

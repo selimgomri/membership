@@ -44,7 +44,7 @@ include "attendanceMenu.php";
   <div class="row align-items-center">
     <div class="col-sm-auto">
     <h1>Register</h1>
-    <p class="lead">Take the register for your Squad</p>
+    <p class="lead">Take the register for your squad</p>
     </div>
     <div class="col">
       <p class="lead text-sm-right">
