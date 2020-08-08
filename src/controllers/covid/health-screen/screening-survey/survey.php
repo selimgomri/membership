@@ -17,7 +17,9 @@ if (!$member) {
 }
 
 if (!$user->hasPermission('Admin') && !$user->hasPermission('Coach') && !$user->hasPermission('Galas')) {
-  halt(404);
+  if ($member['UserID'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
+    halt(404);
+  }
 }
 
 $pagetitle = htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) . ' - COVID Health Screening';
@@ -64,7 +66,7 @@ include BASE_PATH . 'views/header.php';
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>
-          COVID-19 Health Screening <small class="text-muted"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?></small>
+          COVID-19 Health Screening <small class="text-muted"><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></small>
         </h1>
         <p class="lead mb-0">
           The purpose of this screen is to inform and make you aware of the risks involved in returning to training.

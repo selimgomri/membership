@@ -16,6 +16,12 @@ if ($user->hasPermission('Admin') || $user->hasPermission('Coach') || $user->has
   $showSignOut = true;
 }
 
+$getMembers = $db->prepare("SELECT MForename, MSurname, MemberID FROM members WHERE UserID = ? ORDER BY MForename ASC, MSurname ASC;");
+$getMembers->execute([
+  $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+]);
+$member = $getMembers->fetch(PDO::FETCH_ASSOC);
+
 include BASE_PATH . 'views/header.php';
 
 ?>
@@ -48,18 +54,28 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
 
     <div class="col-lg-8">
-      <h2>
-        About our health screening
-      </h2>
-      <p class="lead">
-        Swim England are recommending that all clubs carry out a periodic screening survey of all members who are training.
-      </p>
       <p>
-        The screen is to inform you and make you aware of the risks.
+        All members need to complete a COVID-19 risk awareness declaration.
       </p>
-      <p>
-        Your club may refuse access to training if you do not have an up to date health screen.
-      </p>
+
+      <?php if ($member) { ?>
+      <div class="list-group">
+        <?php do { ?>
+          <a href="<?= htmlspecialchars(autoUrl('covid/risk-awareness/members/' . $member['MemberID'] . '/new-form')) ?>" class="list-group-item list-group-item-action">
+            <?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?>
+          </a>
+        <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>
+      </div>
+      <?php } else { ?>
+        <div class="alert alert-warning">
+          <p class="mb-0">
+            <strong>You don't have any members on your account</strong>
+          </p>
+          <p class="mb-0">
+            Please add a member to be able to use this service.
+          </p>
+        </div>
+      <?php } ?>
     </div>
 
   </div>
