@@ -55,7 +55,9 @@ include BASE_PATH . 'views/header.php';
 
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">Screening</li>
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('covid')) ?>">COVID</a></li>
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('covid/health-screening')) ?>">Screening</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Survey</li>
       </ol>
     </nav>
 
@@ -67,6 +69,9 @@ include BASE_PATH . 'views/header.php';
         <p class="lead mb-0">
           The purpose of this screen is to inform and make you aware of the risks involved in returning to training.
         </p>
+      </div>
+      <div class="col">
+        <img src="<?= htmlspecialchars(autoUrl('public/img/corporate/se.png')) ?>" class="w-50 ml-auto d-none d-lg-flex" alt="Swim England Logo">
       </div>
     </div>
   </div>

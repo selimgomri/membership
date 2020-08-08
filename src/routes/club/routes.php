@@ -161,8 +161,8 @@ $this->group('/contact-tracing', function () {
   include BASE_PATH . 'controllers/contact-tracing/router.php';
 });
 
-$this->group('/covid-health-screen', function () {
-  include BASE_PATH . 'controllers/covid-health-screen/router.php';
+$this->group('/covid', function () {
+  include BASE_PATH . 'controllers/covid/router.php';
 });
 
 $this->get('/log-book', function () {

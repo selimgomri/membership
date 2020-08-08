@@ -25,6 +25,7 @@ include BASE_PATH . 'views/header.php';
 
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('covid')) ?>">COVID</a></li>
         <li class="breadcrumb-item active" aria-current="page">Screening</li>
       </ol>
     </nav>
