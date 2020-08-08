@@ -161,10 +161,6 @@ $this->group('/contact-tracing', function () {
   include BASE_PATH . 'controllers/contact-tracing/router.php';
 });
 
-$this->group('/covid', function () {
-  include BASE_PATH . 'controllers/covid/router.php';
-});
-
 $this->get('/log-book', function () {
   http_response_code(303);
   header("location: " . autoUrl("log-books"));
@@ -464,6 +460,11 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
 
   $this->group(['/swimmers', '/members', '/divers', '/water-polo-players'], function () {
     include BASE_PATH . 'controllers/swimmers/router.php';
+  });
+
+  // Temporary tools and features for covid
+  $this->group('/covid', function () {
+    include BASE_PATH . 'controllers/covid/router.php';
   });
 
   $this->group('/squads', function () {
