@@ -244,7 +244,7 @@ include BASE_PATH . 'views/header.php';
       <?php } ?>
 
       <?php if ($codeOfConduct != null) { ?>
-      <h2>Code of conduct for <?=htmlspecialchars($squad->getName())?> Squad</h2>
+      <h2>Code of conduct for <?=htmlspecialchars($squad->getName())?></h2>
 
       <?=$Extra->text($codeOfConduct)?>
       <?php } ?>

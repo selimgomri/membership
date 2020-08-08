@@ -31,7 +31,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
     		<div class="list-group">
     			<?php do { ?>
     			<a class="list-group-item list-group-item-action" href="<?=autoUrl("attendance/history/squads/" . $squad['id'])?>">
-    				<span class="text-primary"><?=htmlspecialchars($squad['name'])?> Squad</span>
+    				<span class="text-primary"><?=htmlspecialchars($squad['name'])?></span>
     			</a>
     			<?php } while ($squad = $squads->fetch(PDO::FETCH_ASSOC)); ?>
     		</div>

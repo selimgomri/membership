@@ -91,7 +91,7 @@ ob_start();?>
 
     <h2>How to use this document</h2>
     <p class="lead">
-      This document lists all entries by swimmers <?php if ($data->squad->id != "all") { ?>in <?=htmlspecialchars($data->squad->name)?> Squad<?php } else { ?>for <?=htmlspecialchars($data->gala->name)?><?php } ?>. 
+      This document lists all entries by swimmers <?php if ($data->squad->id != "all") { ?>in <?=htmlspecialchars($data->squad->name)?><?php } else { ?>for <?=htmlspecialchars($data->gala->name)?><?php } ?>. 
     </p>
     <p>
       When printing this document, you may need to select

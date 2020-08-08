@@ -101,7 +101,7 @@ ob_start();
     <div class="page-break"></div>
 
     <div class="mb-3">
-      <h2><?=htmlspecialchars($squad['SquadName'])?> Squad</h2>
+      <h2><?=htmlspecialchars($squad['SquadName'])?></h2>
       <table>
         <thead>
           <tr>
