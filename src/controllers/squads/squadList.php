@@ -40,7 +40,7 @@ include BASE_PATH . "views/header.php";
         <a href="<?=htmlspecialchars(autoUrl("squads/" . $row['SquadID']))?>">
   				<span class="mb-3">
             <span class="title mb-0">
-  						<?=htmlspecialchars($row['SquadName'])?> Squad
+  						<?=htmlspecialchars($row['SquadName'])?>
   					</span>
   					<span>
   						<?php for ($i=0; $i < min(sizeof($coaches), 3); $i++) { ?>
