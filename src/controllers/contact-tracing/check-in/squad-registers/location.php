@@ -20,6 +20,9 @@ if (!app()->user) {
   halt(404);
 }
 
+$userOnList = false;
+$listsShown = false;
+
 $user = app()->user;
 if ($user->hasPermission('Admin') || $user->hasPermission('Coach') || $user->hasPermission('Galas')) {
   $userSquads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE SquadID = ? AND Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
@@ -47,6 +50,18 @@ if (!$squad) {
   $getMembers->execute([
     $_GET['squad'],
     $tenant->getId(),
+  ]);
+
+  // Get coaches
+  $getCoaches = $db->prepare("SELECT UserID, Forename, Surname, coaches.Type FROM coaches INNER JOIN users ON coaches.User = users.UserID WHERE Squad = ? ORDER BY Forename ASC, Surname ASC");
+  $getCoaches->execute([
+    $_GET['squad']
+  ]);
+
+  // Get reps
+  $getReps = $db->prepare("SELECT UserID, Forename, Surname FROM squadReps INNER JOIN users ON squadReps.User = users.UserID WHERE Squad = ? ORDER BY Forename ASC, Surname ASC");
+  $getReps->execute([
+    $_GET['squad']
   ]);
 
   $pagetitle = htmlspecialchars($squad['SquadName']) . ' Squad Check In to ' . htmlspecialchars($location['Name']) . ' - Contact Tracing';
@@ -104,45 +119,92 @@ if (!$squad) {
 
         <form method="post" action="<?= htmlspecialchars(autoUrl('contact-tracing/check-in/' . $id . '/squad-register')) ?>">
 
-          <?php if ($member = $getMembers->fetch(PDO::FETCH_ASSOC)) { ?>
+          <p>
+            Tick everyone who is present.
+          </p>
 
-            <p>
-              Tick all members who are present.
-            </p>
+          <?php if ($coach = $getCoaches->fetch(PDO::FETCH_ASSOC)) { ?>
 
             <input type="hidden" name="squad" value="<?= htmlspecialchars($squad['SquadID']) ?>">
 
             <?= \SCDS\CSRF::write() ?>
 
-            <ul class="list-group mb-3">
-              <?php do {
-                $isHere->execute([
-                  $id,
-                  $member['MemberID'],
-                  'member',
-                  $time,
-                ]);
+            <div class="card mb-3">
+              <div class="card-header">
+                Coaches
+              </div>
 
-                $here = $isHere->fetchColumn() > 0;
-              ?>
-                <li class="list-group-item <?php if (!$member['UserID'] || $here) { ?> bg-light <?php } ?>">
-                  <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" name="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" value="1" <?php if (!$member['UserID'] || $here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
-                    <label class="custom-control-label d-block" for="<?= htmlspecialchars('member-' . $member['MemberID']) ?>"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?> <em class="small"><?php if ($member['UserID']) { ?><?= htmlspecialchars($member['Forename'] . ' ' . $member['Surname']) ?>'s details<?php } else { ?>No details on file<?php } ?></em></label>
-                  </div>
-                </li>
-              <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>
-            </ul>
+              <ul class="list-group list-group-flush">
+                <?php do {
+                  $isHere->execute([
+                    $id,
+                    $coach['UserID'],
+                    'user',
+                    $time,
+                  ]);
 
-            <p>
-              Don't forget to check yourself in with the other form!
-            </p>
+                  $here = $isHere->fetchColumn() > 0;
 
-            <p>
-              <button type="submit" class="btn btn-success">
-                Check In
-              </button>
-            </p>
+                  if (!$here) {
+                    $listsShown = true;
+                  }
+
+                  if ($user->getId() == $coach['UserID']) {
+                    $userOnList = true;
+                  }
+                ?>
+                  <li class="list-group-item <?php if ($here) { ?> bg-light <?php } ?>">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('user-' . $coach['UserID']) ?>" name="<?= htmlspecialchars('user-' . $coach['UserID']) ?>" value="1" <?php if ($here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
+                      <label class="custom-control-label d-block" for="<?= htmlspecialchars('user-' . $coach['UserID']) ?>"><?= htmlspecialchars($coach['Forename'] . ' ' . $coach['Surname']) ?></label>
+                    </div>
+                  </li>
+                <?php } while ($coach = $getCoaches->fetch(PDO::FETCH_ASSOC)); ?>
+              </ul>
+            </div>
+
+          <?php } else { ?>
+            <div class="alert alert-warning">
+              <p class="mb-0">
+                <strong>There are no coaches for this squad</strong>
+              </p>
+              <p class="mb-0">
+                Please check with a member of club staff
+              </p>
+            </div>
+          <?php } ?>
+
+          <?php if ($member = $getMembers->fetch(PDO::FETCH_ASSOC)) { ?>
+
+            <div class="card mb-3">
+              <div class="card-header">
+                Members
+              </div>
+
+              <ul class="list-group list-group-flush">
+                <?php do {
+                  $isHere->execute([
+                    $id,
+                    $member['MemberID'],
+                    'member',
+                    $time,
+                  ]);
+
+                  $here = $isHere->fetchColumn() > 0;
+
+                  if (!$here) {
+                    $listsShown = true;
+                  }
+                ?>
+                  <li class="list-group-item <?php if (!$member['UserID'] || $here) { ?> bg-light <?php } ?>">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" name="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" value="1" <?php if (!$member['UserID'] || $here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
+                      <label class="custom-control-label d-block" for="<?= htmlspecialchars('member-' . $member['MemberID']) ?>"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?> <em class="small"><?php if ($member['UserID']) { ?><?= htmlspecialchars($member['Forename'] . ' ' . $member['Surname']) ?>'s details<?php } else { ?>No details on file<?php } ?></em></label>
+                    </div>
+                  </li>
+                <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>
+              </ul>
+            </div>
 
           <?php } else { ?>
             <div class="alert alert-warning">
@@ -154,6 +216,72 @@ if (!$squad) {
               </p>
             </div>
           <?php } ?>
+
+          <?php if ($rep = $getReps->fetch(PDO::FETCH_ASSOC)) { ?>
+
+            <input type="hidden" name="squad" value="<?= htmlspecialchars($squad['SquadID']) ?>">
+
+            <?= \SCDS\CSRF::write() ?>
+
+            <div class="card mb-3">
+              <div class="card-header">
+                Squad Reps &amp; Covid Liasons
+              </div>
+
+              <ul class="list-group list-group-flush">
+                <?php do {
+                  $isHere->execute([
+                    $id,
+                    $rep['UserID'],
+                    'user',
+                    $time,
+                  ]);
+
+                  $here = $isHere->fetchColumn() > 0;
+
+                  if (!$here) {
+                    $listsShown = true;
+                  }
+
+                  if ($user->getId() == $rep['UserID']) {
+                    $userOnList = true;
+                  }
+                ?>
+                  <li class="list-group-item <?php if ($here) { ?> bg-light <?php } ?>">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('rep-' . $rep['UserID']) ?>" name="<?= htmlspecialchars('rep-' . $rep['UserID']) ?>" value="1" <?php if ($here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
+                      <label class="custom-control-label d-block" for="<?= htmlspecialchars('rep-' . $rep['UserID']) ?>"><?= htmlspecialchars($rep['Forename'] . ' ' . $rep['Surname']) ?></label>
+                    </div>
+                  </li>
+                <?php } while ($rep = $getReps->fetch(PDO::FETCH_ASSOC)); ?>
+              </ul>
+            </div>
+
+          <?php } ?>
+
+          <?php if ($listsShown) { ?>
+          <?php if ($userOnList) { ?>
+            <p>
+              Please make sure you tick yourself and sign yourself in!
+            </p>
+          <?php } else { ?>
+            <p>
+              As you're not on any of the above lists, please complete the other form to check in!
+            </p>
+          <?php } ?>
+
+          <p>
+            <button type="submit" class="btn btn-success">
+              Check In
+            </button>
+          </p>
+
+          <?php } else { ?>
+            <p>
+              There is nobody to check in for this squad.
+            </p>
+          <?php } ?>
+
         </form>
 
       </div>
