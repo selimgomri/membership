@@ -60,8 +60,12 @@ include BASE_PATH . 'views/header.php';
         </div>
       <?php } ?>
     </div>
+
+    <div class="col text-center mb-3">
+      <img src="<?= htmlspecialchars(autoUrl("public/img/coronavirus/2020.05.20_Symptoms1_MPU_Web.png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/coronavirus/2020.05.20_Symptoms1_MPU_Web@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/coronavirus/2020.05.20_Symptoms1_MPU_Web@3x.png")) ?> 3x" class="mx-auto d-none d-lg-block img-fluid user-select-none" draggable="false">
+    </div>
   </div>
-  
+
 </div>
 
 <?php

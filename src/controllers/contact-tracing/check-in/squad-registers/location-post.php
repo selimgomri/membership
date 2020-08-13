@@ -60,13 +60,38 @@ try {
     $tenant->getId(),
   ]);
 
+  // Get coaches
+  $getCoaches = $db->prepare("SELECT UserID, Forename, Surname, coaches.Type, Mobile FROM coaches INNER JOIN users ON coaches.User = users.UserID WHERE Squad = ?");
+  $getCoaches->execute([
+    $_POST['squad'],
+  ]);
+
+  // Get reps
+  $getReps = $db->prepare("SELECT UserID, Forename, Surname, Mobile FROM squadReps INNER JOIN users ON squadReps.User = users.UserID WHERE Squad = ?");
+  $getReps->execute([
+    $_POST['squad'],
+  ]);
+
+  // Get member attendance
+  $isHere = $db->prepare("SELECT COUNT(*) FROM covidVisitors WHERE `Location` = ? AND `Person` = ? AND `Type` = ? AND `Time` > ? AND NOT `SignedOut`");
+  $hereWithinTime = (new DateTime('-1 hour', new DateTimeZone('UTC')))->format("Y-m-d H:i:s");
+
   $time = (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
   $addRecord = $db->prepare("INSERT INTO covidVisitors (`ID`, `Location`, `Time`, `Person`, `Type`, `GuestName`, `GuestPhone`, `Inputter`, `Tenant`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
   while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)) {
 
     // Check if present
-    if (isset($_POST['member-' . $member['MemberID']]) && bool($_POST['member-' . $member['MemberID']])) {
+    $isHere->execute([
+      $id,
+      $member['MemberID'],
+      'member',
+      $hereWithinTime,
+    ]);
+
+    $here = $isHere->fetchColumn() > 0;
+
+    if (isset($_POST['member-' . $member['MemberID']]) && bool($_POST['member-' . $member['MemberID']]) && !$here) {
       $addRecord->execute([
         (Ramsey\Uuid\Uuid::uuid4())->toString(),
         $id,
@@ -80,6 +105,60 @@ try {
       ]);
     } else if (isset($_POST['member-' . $member['MemberID']]) && !bool($_POST['member-' . $member['MemberID']])) {
       // Eventual handling of unticking
+    }
+  }
+
+  while ($coach = $getCoaches->fetch(PDO::FETCH_ASSOC)) {
+
+    // Check if present
+    $isHere->execute([
+      $id,
+      $coach['UserID'],
+      'user',
+      $hereWithinTime,
+    ]);
+
+    $here = $isHere->fetchColumn() > 0;
+
+    if (isset($_POST['user-' . $coach['UserID']]) && bool($_POST['user-' . $coach['UserID']]) && !$here) {
+      $addRecord->execute([
+        (Ramsey\Uuid\Uuid::uuid4())->toString(),
+        $id,
+        $time,
+        $coach['UserID'],
+        'user',
+        $coach['Forename'] . ' ' . $coach['Surname'],
+        $coach['Mobile'],
+        null,
+        $tenant->getId(),
+      ]);
+    }
+  }
+
+  while ($rep = $getReps->fetch(PDO::FETCH_ASSOC)) {
+
+    // Check if present
+    $isHere->execute([
+      $id,
+      $rep['UserID'],
+      'user',
+      $hereWithinTime,
+    ]);
+
+    $here = $isHere->fetchColumn() > 0;
+
+    if (isset($_POST['rep-' . $rep['UserID']]) && bool($_POST['rep-' . $rep['UserID']]) && !$here) {
+      $addRecord->execute([
+        (Ramsey\Uuid\Uuid::uuid4())->toString(),
+        $id,
+        $time,
+        $rep['UserID'],
+        'user',
+        $rep['Forename'] . ' ' . $rep['Surname'],
+        $rep['Mobile'],
+        null,
+        $tenant->getId(),
+      ]);
     }
   }
 

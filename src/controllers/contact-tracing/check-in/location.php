@@ -296,21 +296,27 @@ include BASE_PATH . 'views/header.php';
       <?php } ?>
     </div>
     <div class="col d-none d-lg-block">
-      <div class="cell position-sticky top-3">
-        <h2>
-          What do I need to do?
-        </h2>
-        <p class="lead">
-          Every time you visit a session run by <?= htmlspecialchars($tenant->getName()) ?>, you should check in to your current location.
-        </p>
+      <div class="position-sticky top-3">
+        <div class="cell">
+          <h2>
+            What do I need to do?
+          </h2>
+          <p class="lead">
+            Every time you visit a session run by <?= htmlspecialchars($tenant->getName()) ?>, you should check in to your current location.
+          </p>
 
-        <p>
-          Only one member of a party needs to check in. If you're a member and have an account with us, you can tick to say which of your members are with you today.
-        </p>
+          <p>
+            Only one member of a party needs to check in. If you're a member and have an account with us, you can tick to say which of your members are with you today.
+          </p>
 
-        <p>
-          All users can also register the details of guests (who are not members of the club) who are attending with you.
-        </p>
+          <p>
+            All users can also register the details of guests (who are not members of the club) who are attending with you.
+          </p>
+        </div>
+
+        <div class="text-center mb-3">
+          <img src="<?= htmlspecialchars(autoUrl("public/img/coronavirus/2020.05.20_Symptoms1_MPU_Web.png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/coronavirus/2020.05.20_Symptoms1_MPU_Web@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/coronavirus/2020.05.20_Symptoms1_MPU_Web@3x.png")) ?> 3x" class="mx-auto d-none d-lg-block img-fluid user-select-none" draggable="false">
+        </div>
       </div>
 
     </div>
