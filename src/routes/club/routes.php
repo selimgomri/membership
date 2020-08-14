@@ -496,9 +496,9 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
     include BASE_PATH . 'controllers/posts/router.php';
   });
 
-  $this->group('/file-manager', function () {
-    include BASE_PATH . 'controllers/file-manager/router.php';
-  });
+  // $this->group('/file-manager', function () {
+  //   include BASE_PATH . 'controllers/file-manager/router.php';
+  // });
 
   $this->group('/registration', function () {
     include BASE_PATH . 'controllers/registration/router.php';

@@ -21,7 +21,7 @@ $this->group('/services', function() {
 });
 
 $this->group('/shared-services', function() {
-  include BASE_PATH . 'controllers/shared-services/router.php';
+  include BASE_PATH . 'controllers/shared-services/routes.php';
 });
 
 $this->group(['/tenants', '/clubs'], function() {

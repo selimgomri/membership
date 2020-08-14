@@ -210,9 +210,23 @@ require_once "database.php";
 if (!isset($_SESSION['Browser'])) {
   $browser = new \WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);
 
-  $_SESSION['Browser']['Name'] = $browser->browser->name;
-  $_SESSION['Browser']['OS'] = $browser->os->toString();
-  $_SESSION['Browser']['Version'] = $browser->browser->version->value;
+  if (isset($browser->browser->name) && $browser->browser->name) {
+    $_SESSION['Browser']['Name'] = $browser->browser->name;
+  } else {
+    $_SESSION['Browser']['Name'] = 'Unknown Browser';
+  }
+
+  if (isset($browser->os) && $browser->os->toString()) {
+    $_SESSION['Browser']['OS'] = $browser->os->toString();
+  } else {
+    $_SESSION['Browser']['OS'] = 'Unknown OS';
+  }
+
+  if (isset($browser->browser->version->value) && $browser->browser->version->value) {
+    $_SESSION['Browser']['Version'] = $browser->browser->version->value;
+  } else {
+    $_SESSION['Browser']['Version'] = 'Unknown Browser Version';
+  }
 }
 
 // Make db available
