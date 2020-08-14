@@ -35,15 +35,15 @@ $pageHead = [
 ];
 
 $pbs = null;
-try {
-  $httpClient = new GuzzleHttp\Client();
-  $res = $httpClient->request('GET', 'https://dev.myswimmingclub.uk/bsdbc/members/' . $member->getSwimEnglandNumber() . '/times', []);
-  if ($res->getStatusCode() == "200") {
-    $pbs = json_decode($res->getBody());
-  }
-} catch (GuzzleHttp\Exception\ClientException | GuzzleHttp\Exception\ServerException $e) {
-  // 404 or something
-}
+// try {
+//   $httpClient = new GuzzleHttp\Client();
+//   $res = $httpClient->request('GET', 'https://dev.myswimmingclub.uk/bsdbc/members/' . $member->getSwimEnglandNumber() . '/times', []);
+//   if ($res->getStatusCode() == "200") {
+//     $pbs = json_decode($res->getBody());
+//   }
+// } catch (GuzzleHttp\Exception\ClientException | GuzzleHttp\Exception\ServerException $e) {
+//   // 404 or something
+// }
 
 $extraFees = $db->prepare("SELECT extras.ExtraID, ExtraName, ExtraFee, `Type` FROM extrasRelations INNER JOIN extras ON extras.ExtraID = extrasRelations.ExtraID WHERE extrasRelations.MemberID = ?");
 $extraFees->execute([

@@ -270,8 +270,8 @@ p.lead {
       class="bg-primary <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) && user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) { ?>d-lg-none<?php } ?>">
       <div class="<?=$container_class?>">
     <?php } ?>
-    <nav class="navbar <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) || $_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) { ?><?php } ?>  navbar-expand-lg navbar-dark bg-primary
-    d-print-none justify-content-between px-0" <?php if ($use_website_menu) { ?>id="club-menu" <?php } ?>
+    <nav class="navbar <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) { ?><?php } ?>  navbar-expand-lg navbar-dark bg-primary
+    d-print-none justify-content-between px-0" <?php if (isset($use_website_menu) && $use_website_menu) { ?>id="club-menu" <?php } ?>
           role="navigation">
 
           <a class="navbar-brand d-lg-none" href="<?=autoUrl("")?>">
