@@ -9,7 +9,7 @@ include BASE_PATH . 'views/header.php'; ?>
 
 <div class="container">
 	<h1>Report a Website Issue</h1>
-	<?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportStatus'] == true) { ?>
+	<?php if (app()->tenant && isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportStatus'] == true) { ?>
 		<p>We have reported that page to our team.</p>
 		<p>Thank you for your feedback. It really helps us improve our website.</p>
 		<p>

@@ -100,6 +100,7 @@ if ($status) {
     $added = true;
     $id = $db->lastInsertId();
   } catch (Exception $e) {
+    reportError($e);
     $statusInfo .= "<li>Database error</li>";
   }
 }

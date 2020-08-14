@@ -225,7 +225,7 @@ if (!$squad) {
 
             <div class="card mb-3">
               <div class="card-header">
-                Squad Reps &amp; Covid Liasons
+                Squad Reps &amp; Covid Liaisons
               </div>
 
               <ul class="list-group list-group-flush">
