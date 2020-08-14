@@ -16,6 +16,12 @@ if ($tenant->getStripeAccount()) {
     $tenant->setKey('GALA_CARD_PAYMENTS_ALLOWED', (int) false);
   }
 
+  if (isset($_POST['ALLOW_DIRECT_DEBIT_OPT_OUT'])) {
+    $tenant->setKey('ALLOW_DIRECT_DEBIT_OPT_OUT', (int) bool($_POST['ALLOW_DIRECT_DEBIT_OPT_OUT']));
+  } else {
+    $tenant->setKey('ALLOW_DIRECT_DEBIT_OPT_OUT', (int) false);
+  }
+
   if (!$tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT') && $supportsDirectDebit) {
 
     if (isset($_POST['ALLOW_STRIPE_DIRECT_DEBIT_SET_UP'])) {

@@ -19,11 +19,13 @@ $vars = [
   'GALA_CARD_PAYMENTS_ALLOWED' => true,
   'ALLOW_STRIPE_DIRECT_DEBIT_SET_UP' => false,
   'USE_STRIPE_DIRECT_DEBIT' => false,
+  'ALLOW_DIRECT_DEBIT_OPT_OUT' => false,
 ];
 $disabled = [
   'GALA_CARD_PAYMENTS_ALLOWED' => '',
   'ALLOW_STRIPE_DIRECT_DEBIT_SET_UP' => '',
   'USE_STRIPE_DIRECT_DEBIT' => '',
+  'ALLOW_DIRECT_DEBIT_OPT_OUT' => '',
 ];
 
 foreach ($vars as $key => $value) {
@@ -184,16 +186,21 @@ include BASE_PATH . 'views/header.php';
               </div>
             </div>
 
-            <?php if (bool(getenv('IS_DEV'))) { ?>
-
-              <div class="form-group">
-                <div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input" id="USE_STRIPE_DIRECT_DEBIT" name="USE_STRIPE_DIRECT_DEBIT" <?php if (bool($vars['USE_STRIPE_DIRECT_DEBIT'])) { ?>checked<?php } ?> <?= $disabled['USE_STRIPE_DIRECT_DEBIT'] ?> aria-describedby="USE_STRIPE_DIRECT_DEBIT-help">
-                  <label class="custom-control-label" for="USE_STRIPE_DIRECT_DEBIT">Use Stripe for Direct Debit rather than GoCardless</label>
-                </div>
-                <small id="USE_STRIPE_DIRECT_DEBIT-help">Once you enable Stripe Direct Debit, GoCardless will stop working and this change can not be reversed.</small>
+            <div class="form-group">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="USE_STRIPE_DIRECT_DEBIT" name="USE_STRIPE_DIRECT_DEBIT" <?php if (bool($vars['USE_STRIPE_DIRECT_DEBIT'])) { ?>checked<?php } ?> <?= $disabled['USE_STRIPE_DIRECT_DEBIT'] ?> aria-describedby="USE_STRIPE_DIRECT_DEBIT-help">
+                <label class="custom-control-label" for="USE_STRIPE_DIRECT_DEBIT">Use Stripe for Direct Debit rather than GoCardless</label>
               </div>
-            <?php } ?>
+              <small id="USE_STRIPE_DIRECT_DEBIT-help">Once you enable Stripe Direct Debit, GoCardless will stop working and this change can not be reversed.</small>
+            </div>
+
+            <div class="form-group">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="ALLOW_DIRECT_DEBIT_OPT_OUT" name="ALLOW_DIRECT_DEBIT_OPT_OUT" <?php if (bool($vars['ALLOW_DIRECT_DEBIT_OPT_OUT'])) { ?>checked<?php } ?> aria-describedby="ALLOW_DIRECT_DEBIT_OPT_OUT-help">
+                <label class="custom-control-label" for="ALLOW_DIRECT_DEBIT_OPT_OUT">Allow users to choose not to use Direct Debit</label>
+              </div>
+              <small id="ALLOW_DIRECT_DEBIT_OPT_OUT-help">If some of your users will continue to pay by standing order, enable this option so that they aren't forced to set up a Direct Debit mandate during registration or renewal.</small>
+            </div>
 
             <p>
               <button type="submit" class="btn btn-success">
