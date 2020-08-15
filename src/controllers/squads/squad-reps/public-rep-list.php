@@ -86,7 +86,7 @@ include BASE_PATH . 'views/header.php';
 
                   <li class="list-group-item">
                     <div>
-                      <h4 class="h6"><?= htmlspecialchars($reps['forename'] . ' ' . $reps['surname']) ?></h4>
+                      <h4 class="h6 mb-0"><?= htmlspecialchars($reps['forename'] . ' ' . $reps['surname']) ?></h4>
                     </div>
                     <?php if ($reps['contact']) { ?><div class="">
                         <hr>
@@ -124,7 +124,7 @@ include BASE_PATH . 'views/header.php';
 
                 <li class="list-group-item">
                   <div>
-                    <h4 class="h6"><?= htmlspecialchars($reps['forename'] . ' ' . $reps['surname']) ?></h4>
+                    <h4 class="h6 mb-0"><?= htmlspecialchars($reps['forename'] . ' ' . $reps['surname']) ?></h4>
                   </div>
                   <?php if ($reps['contact']) { ?><div class="">
                       <hr>
