@@ -37,7 +37,7 @@ if (file_exists($file) && mime_content_type($file) != 'directory') {
     header('content-type: ' . mime_content_type($file));
     header('cache-control: must-revalidate');
   }
-  if (mime_content_type($file) == 'application/pdf' || mime_content_type($file) == 'text/html' || mime_content_type($file) == 'text/css' || strpos($file, '.css') || mime_content_type($file) == 'application/javascript') {
+  if (mime_content_type($file) == 'application/pdf' || mime_content_type($file) == 'text/html' || mime_content_type($file) == 'text/css' || strpos($file, '.css') || mime_content_type($file) == 'application/javascript' || mb_substr(mime_content_type($file), 0, mb_strlen('image')) === 'image') {
     header('content-disposition: inline');
   } else {
     header('content-disposition: attachment; filename="'.basename($filename).'"');
