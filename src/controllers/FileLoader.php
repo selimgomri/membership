@@ -13,7 +13,7 @@ $file = $file . $filename;
 if (file_exists($file)) {
   header('Content-Description: File Transfer');
   header('Content-Type: ' . mime_content_type($file));
-  if (mime_content_type($file) == 'application/pdf') {
+  if (mime_content_type($file) == 'application/pdf' || mb_substr(mime_content_type($file), 0, mb_strlen('image')) === 'image') {
     header('Content-Disposition: inline');
   } else {
     header('Content-Disposition: attachment; filename="'.basename($filename).'"');
