@@ -1,5 +1,7 @@
 <?php
 
+$avoidDirectDebit = app()->tenant->getBooleanKey('ALLOW_DIRECT_DEBIT_OPT_OUT') && isset($_POST['avoid-dd']) && bool($_POST['avoid-dd']);
+
 $paymentItems = [];
 
 $db = app()->db;
@@ -155,7 +157,7 @@ try {
 	]);
 	$hasStripeMandate = $getCountNewMandates->fetchColumn() > 0;
 
-	if ($hasDD || $hasStripeMandate || (!app()->tenant->getGoCardlessAccessToken() &&  !stripeDirectDebit(true))) {
+	if ($hasDD || $hasStripeMandate || (!app()->tenant->getGoCardlessAccessToken() &&  !stripeDirectDebit(true)) || $avoidDirectDebit) {
 		if ($hasDD || $hasStripeMandate) {
 			// INSERT Payment into pending
 			$date = new \DateTime('now', new DateTimeZone('Europe/London'));

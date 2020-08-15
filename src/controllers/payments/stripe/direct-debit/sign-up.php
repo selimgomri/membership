@@ -13,33 +13,28 @@ $user = $getUserEmail->fetch(PDO::FETCH_ASSOC);
 $customer = app()->user->getStripeCustomer();
 
 $session = null;
+
+$successUrl = autoUrl('payments/direct-debit/set-up/success?session_id={CHECKOUT_SESSION_ID}');
+$cancelUrl = autoUrl('payments/direct-debit/set-up');
+
 if (isset($renewal_trap) && $renewal_trap) {
-  $session = \Stripe\Checkout\Session::create([
-    'payment_method_types' => ['bacs_debit'],
-    'mode' => 'setup',
-    'customer' => $customer->id,
-    'success_url' => autoUrl('renewal/payments/direct-debit/set-up/success?session_id={CHECKOUT_SESSION_ID}'),
-    'cancel_url' => autoUrl('renewal/payments/direct-debit/set-up'),
-    'metadata' => [
-      'session_type' => 'direct_debit_setup',
-    ]
-  ], [
-    'stripe_account' => $tenant->getStripeAccount()
-  ]);
-} else {
-  $session = \Stripe\Checkout\Session::create([
-    'payment_method_types' => ['bacs_debit'],
-    'mode' => 'setup',
-    'customer' => $customer->id,
-    'success_url' => autoUrl('payments/direct-debit/set-up/success?session_id={CHECKOUT_SESSION_ID}'),
-    'cancel_url' => autoUrl('payments/direct-debit/set-up'),
-    'metadata' => [
-      'session_type' => 'direct_debit_setup',
-    ]
-  ], [
-    'stripe_account' => $tenant->getStripeAccount()
-  ]);
+  $successUrl = autoUrl('renewal/payments/direct-debit/set-up/success?session_id={CHECKOUT_SESSION_ID}');
+  $cancelUrl = autoUrl('renewal/payments/direct-debit/set-up');
 }
+
+$session = \Stripe\Checkout\Session::create([
+  'payment_method_types' => ['bacs_debit'],
+  'mode' => 'setup',
+  'customer' => $customer->id,
+  'success_url' => $successUrl,
+  'cancel_url' => $cancelUrl,
+  'locale' => 'en-GB',
+  'metadata' => [
+    'session_type' => 'direct_debit_setup',
+  ],
+], [
+  'stripe_account' => $tenant->getStripeAccount()
+]);
 
 $pagetitle = "Set up a Direct Debit";
 include BASE_PATH . "views/header.php";

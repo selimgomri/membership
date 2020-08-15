@@ -26,29 +26,40 @@ include BASE_PATH . 'views/header.php';
 
 <div class="container">
 
-  <h1><?=htmlspecialchars($squadInfo['SquadName'])?> log books</h1>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("log-books")) ?>">Log Books</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><?= htmlspecialchars($squadInfo['SquadName']) ?></li>
+    </ol>
+  </nav>
+
+  <h1><?= htmlspecialchars($squadInfo['SquadName']) ?> log books</h1>
   <p class="lead">
     Members can log training sessions and other activity.
+  </p>
+
+  <p>
+    <a href="<?= htmlspecialchars(autoUrl('log-books/squads/4/recent')) ?>">View most recent entries for this squad</a>
   </p>
 
   <div class="row">
     <div class="col-md-8">
       <?php if ($member) { ?>
-      <div class="list-group mb-3">
-        <?php do { ?>
-        <a href="<?=htmlspecialchars(autoUrl("log-books/members/" . $member['id']))?>" class="list-group-item list-group-item-action">
-          <p class="mb-0">
-            <strong><?=htmlspecialchars($member['fn'] . ' ' . $member['sn'])?>'s log book</strong>
-          </p>
-        </a>
-        <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>
-      </div>
+        <div class="list-group mb-3">
+          <?php do { ?>
+            <a href="<?= htmlspecialchars(autoUrl("log-books/members/" . $member['id'])) ?>" class="list-group-item list-group-item-action">
+              <p class="mb-0">
+                <strong><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?>'s log book</strong>
+              </p>
+            </a>
+          <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>
+        </div>
       <?php } else { ?>
-      <div class="alert alert-warning">
-        <p class="mb-0">
-          <strong>This squad has no members.</strong>
-        </p>
-      </div>
+        <div class="alert alert-warning">
+          <p class="mb-0">
+            <strong>This squad has no members.</strong>
+          </p>
+        </div>
       <?php } ?>
     </div>
     <div class="col">

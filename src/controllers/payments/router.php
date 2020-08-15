@@ -146,8 +146,12 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") {
 		require 'admin/invoicing/router.php';
 	});
 
-	$this->get('/user-mandates', function () {
+	$this->get('/user-mandates/go-cardless', function () {
 		include 'admin/user-mandates/UserMandateList.php';
+	});
+
+	$this->get('/user-mandates', function () {
+		include 'admin/user-mandates/StripeUserMandateList.php';
 	});
 
 	$this->group('/history', function () {

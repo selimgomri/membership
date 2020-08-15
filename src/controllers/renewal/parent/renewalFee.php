@@ -112,14 +112,15 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 		<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['StripeDDSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['StripeDDSuccess']) { ?>
 			<div class="alert alert-success">
-          <p class="mb-0">
-            <strong>We've set up your new direct debit</strong>
-          </p>
-          <p class="mb-0">
-            It will take a few days for the mandate to be confirmed at your bank.
-          </p>
-        </div>
-		<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['StripeDDSuccess']); } ?>
+				<p class="mb-0">
+					<strong>We've set up your new direct debit</strong>
+				</p>
+				<p class="mb-0">
+					It will take a few days for the mandate to be confirmed at your bank.
+				</p>
+			</div>
+		<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['StripeDDSuccess']);
+		} ?>
 
 		<p>
 			These fees include your Swim England membership fees for the sport's governing bodies at National, Regional and County Level.
@@ -315,9 +316,11 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			$hasStripeMandate = $getCountNewMandates->fetchColumn() > 0;
 
 			if (!$hasStripeMandate) { ?>
+
 				<p>
 					We now need you to set up your Direct Debit agreement with <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>. We will redirect you to our payments system where you will setup a Direct Debit.
 				</p>
+
 			<?php } else { ?>
 				<p>
 					You're now ready to complete your <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?>.
@@ -335,6 +338,10 @@ include BASE_PATH . "views/renewalTitleBar.php";
 					<?php } ?>
 				</button>
 			</p>
+
+			<?php if (!$hasStripeMandate && app()->tenant->getBooleanKey('ALLOW_DIRECT_DEBIT_OPT_OUT')) { ?>
+				<p><button type="submit" name="avoid-dd" value="1" class="btn btn-outline-dark btn-sm">I want to pay my fees another way</button></p>
+			<?php } ?>
 
 		<?php } else if (app()->tenant->getGoCardlessAccessToken()) { ?>
 			<p>
