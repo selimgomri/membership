@@ -13,13 +13,15 @@ $this->post('/', function() {
 
 // Manage Password
 $this->get('/password', function() {
-	
 	require 'change-password.php';
 });
 
 $this->post('/password', function() {
-	
 	require 'change-password-action.php';
+});
+
+$this->get('/security-keys', function() {
+	require 'WebAuthn/home.php';
 });
 
 // $this->get('/default-access-level', function() {

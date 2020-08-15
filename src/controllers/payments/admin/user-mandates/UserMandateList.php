@@ -48,7 +48,7 @@ include BASE_PATH . 'views/header.php';
   <?php } else { ?>
     <div class="list-group">
       <?php do { ?>
-        <a href="<?= htmlspecialchars(autoUrl("users/" . $mandate['UserID'])) ?>" class="list-group-item list-group-item-action <?php if (!$mandate['BankName']) { ?> list-group-item-danger <?php } ?>">
+        <a href="<?= htmlspecialchars(autoUrl("users/" . $mandate['UserID'] . '#payment-information')) ?>" class="list-group-item list-group-item-action <?php if (!$mandate['BankName']) { ?> list-group-item-danger <?php } ?>">
           <div class="row align-items-center">
             <div class="col-md-6">
               <h2 class="mb-0 h4"><?= htmlspecialchars($mandate['Surname'] . ', ' . $mandate['Forename']) ?></h2>

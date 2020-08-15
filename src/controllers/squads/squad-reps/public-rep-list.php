@@ -72,42 +72,37 @@ include BASE_PATH . 'views/header.php';
           Your squad reps
         </h2>
         <p class="lead">
-          Reps for each of your swimmers
+          Reps for each of your member's squads
         </p>
 
-        <ul class="list-group mb-3">
-          <?php foreach ($members as $member) { ?>
-            <li class="list-group-item">
-              <h3>
-                <?= htmlspecialchars($member['forename']) ?> <?= htmlspecialchars($member['surname']) ?>
-              </h3>
+        <?php foreach ($members as $member) { ?>
+          <?php foreach ($member['squads'] as $squad) { ?>
+            <div class="card mb-3">
+              <div class="card-header">
+                <h3 class="h6 font-weight-normal mb-0"><strong><?= htmlspecialchars($member['forename']) ?> <?= htmlspecialchars($member['surname']) ?></strong> <?= htmlspecialchars($squad['name']) ?> Squad Rep<?php if (sizeof($squad) > 1) { ?>s<?php } ?></h3>
+              </div>
+              <ul class="list-group list-group-flush">
+                <?php foreach ($squad['reps'] as $reps) { ?>
 
-              <?php foreach ($member['squads'] as $squad) { ?>
-                <h4>
-                  <?= htmlspecialchars($squad['name']) ?>
-                </h4>
+                  <li class="list-group-item">
+                    <div>
+                      <h4 class="h6"><?= htmlspecialchars($reps['forename'] . ' ' . $reps['surname']) ?></h4>
+                    </div>
+                    <?php if ($reps['contact']) { ?><div class="">
+                        <hr>
+                        <h5 class="h6 font-weight-normal">
+                          Contact details
+                        </h5>
+                        <div class="post-content mb-n3"><?= $markdown->parse($reps['contact']) ?></div>
+                      </div><?php } ?>
 
-                <ul class="list-group">
-                  <?php foreach ($squad['reps'] as $rep) { ?>
-                    <li class="list-group-item">
-                      <div>
-                        <h5><?= htmlspecialchars($rep['forename'] . ' ' . $rep['surname']) ?></h5>
-                      </div>
-                      <?php if ($rep['contact']) { ?><div class="">
-                          <hr>
-                          <h6>
-                            Contact details
-                          </h6>
-                          <div class="post-content mb-n3"><?= $markdown->parse($rep['contact']) ?></div>
-                        </div><?php } ?>
-                    </li>
-                  <?php } ?>
-                </ul>
-
-              <?php } ?>
-            </li>
+                  </li>
+                <?php } ?>
+              </ul>
+            </div>
           <?php } ?>
-        </ul>
+        <?php } ?>
+
       <?php } ?>
 
 
@@ -115,41 +110,35 @@ include BASE_PATH . 'views/header.php';
         All reps
       </h2>
       <p class="lead">
-        Here is a full list of squad reps
+        Reps for all squads
       </p>
 
       <?php if (sizeof($allReps) > 0) { ?>
-        <ul class="list-group mb-3">
-          <?php foreach ($allReps as $squad) { ?>
-            <li class="list-group-item">
-              <h3><?= htmlspecialchars($squad[0]['SquadName']) ?> Squad Rep<?php if (sizeof($squad) > 1) { ?>s<?php } ?></h3>
-              <?php if (sizeof($squad) > 1) { ?>
-                <ul class="list-group">
-                <?php } ?>
-                <?php foreach ($squad as $reps) { ?>
-                  <?php if (sizeof($squad) > 1) { ?>
-                    <li class="list-group-item">
-                    <?php } ?>
-                    <div>
-                      <h5><?= htmlspecialchars($reps['forename'] . ' ' . $reps['surname']) ?></h5>
-                    </div>
-                    <?php if ($reps['contact']) { ?><div class="">
-                        <hr>
-                        <h6>
-                          Contact details
-                        </h6>
-                        <div class="post-content mb-n3"><?= $markdown->parse($reps['contact']) ?></div>
-                      </div><?php } ?>
-                    <?php if (sizeof($squad) > 1) { ?>
-                    </li>
-                  <?php } ?>
-                <?php } ?>
-                <?php if (sizeof($squad) > 1) { ?>
-                </ul>
+        <?php foreach ($allReps as $squad) { ?>
+          <div class="card mb-3">
+            <div class="card-header">
+              <h3 class="h6 font-weight-normal mb-0"><?= htmlspecialchars($squad[0]['SquadName']) ?> Squad Rep<?php if (sizeof($squad) > 1) { ?>s<?php } ?></h3>
+            </div>
+            <ul class="list-group list-group-flush">
+              <?php foreach ($squad as $reps) { ?>
+
+                <li class="list-group-item">
+                  <div>
+                    <h4 class="h6"><?= htmlspecialchars($reps['forename'] . ' ' . $reps['surname']) ?></h4>
+                  </div>
+                  <?php if ($reps['contact']) { ?><div class="">
+                      <hr>
+                      <h5 class="h6 font-weight-normal">
+                        Contact details
+                      </h5>
+                      <div class="post-content mb-n3"><?= $markdown->parse($reps['contact']) ?></div>
+                    </div><?php } ?>
+
+                </li>
               <?php } ?>
-            </li>
-          <?php } ?>
-        </ul>
+            </ul>
+          </div>
+        <?php } ?>
       <?php } else { ?>
         <div class="alert alert-warning">
           <p class="mb-0">
