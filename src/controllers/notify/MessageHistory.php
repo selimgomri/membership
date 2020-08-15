@@ -169,6 +169,7 @@ include BASE_PATH . "views/notifyMenu.php"; ?>
                       <?php $attachments = (array) $info->Attachments;
                       foreach ($attachments as $a) {
                         $faClass = ' fa-file-o ';
+                        $download = false;
 
                         if (isset($a->MIME) && $a->MIME) {
 
@@ -186,23 +187,29 @@ include BASE_PATH . "views/notifyMenu.php"; ?>
 
                           if (mb_substr($a->MIME, 0, mb_strlen('text')) === 'text') {
                             $faClass = ' fa-file-text-o ';
+                            $download = true;
                           }
 
                           if ($a->MIME == 'application/msword' || $a->MIME == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
                             $faClass = ' fa-file-word-o ';
+                            $download = true;
                           }
 
                           if ($a->MIME == 'application/vnd.ms-powerpoint' || $a->MIME == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
                             $faClass = ' fa-file-powerpoint-o ';
+                            $download = true;
                           }
 
                           if ($a->MIME == 'application/vnd.ms-excel' || $a->MIME == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
                             $faClass = ' fa-file-powerpoint-o ';
+                            $download = true;
                           }
+                        } else {
+                          $download = true;
                         }
 
                       ?>
-                        <a href="<?= htmlspecialchars(autoUrl("files/" . $a->URI)) ?>" download target="_blank" class="d-block mb-1 text-truncate">
+                        <a href="<?= htmlspecialchars(autoUrl("files/" . $a->URI)) ?>" class="d-block mb-1 text-truncate text-decoration-none" <?php if ($download) { ?> download="" <?php } else { ?> target="_blank" <?php } ?>>
                           <span class="fa <?= htmlspecialchars($faClass) ?> fa-fw"></span> <?= htmlspecialchars($a->Filename) ?>
                         </a>
                       <?php
