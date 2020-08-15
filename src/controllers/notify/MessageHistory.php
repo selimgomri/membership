@@ -173,7 +173,7 @@ include BASE_PATH . "views/notifyMenu.php"; ?>
                         if (isset($a->MIME) && $a->MIME) {
 
                           if ($a->MIME == 'application/pdf') {
-                            $faClass = ' fa-pdf-o ';
+                            $faClass = ' fa-file-pdf-o ';
                           }
 
                           if (mb_substr($a->MIME, 0, mb_strlen('image')) === 'image') {

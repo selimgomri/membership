@@ -156,7 +156,7 @@ include BASE_PATH . "views/header.php";
                         if (isset($a->MIME) && $a->MIME) {
 
                           if ($a->MIME == 'application/pdf') {
-                            $faClass = ' fa-pdf-o ';
+                            $faClass = ' fa-file-pdf-o ';
                           }
 
                           if (mb_substr($a->MIME, 0, mb_strlen('image')) === 'image') {
