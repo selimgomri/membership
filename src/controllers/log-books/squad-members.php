@@ -39,7 +39,7 @@ include BASE_PATH . 'views/header.php';
   </p>
 
   <p>
-    <a href="<?= htmlspecialchars(autoUrl('log-books/squads/4/recent')) ?>">View most recent entries for this squad</a>
+    <a href="<?= htmlspecialchars(autoUrl('log-books/squads/' . $squad . '/recent')) ?>">View most recent entries for this squad</a>
   </p>
 
   <div class="row">
