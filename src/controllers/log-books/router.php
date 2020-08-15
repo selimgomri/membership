@@ -50,9 +50,14 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_S
       include 'squads.php';
     });
 
-    // Logs by members
+    // Logs by squad
     $this->get('/squads/{squad}:int', function($squad) {
       include 'squad-members.php';
+    });
+
+    // Logs by most recent in squad
+    $this->get('/squads/{squad}:int/recent', function($squad) {
+      include 'squad-most-recent-logs.php';
     });
 
     // Logs by members
