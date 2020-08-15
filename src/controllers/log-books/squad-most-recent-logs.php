@@ -24,10 +24,6 @@ if (!$squadInfo) {
   halt(404);
 }
 
-if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && $memberInfo['UserID'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
-  halt(404);
-}
-
 $getCount = $db->prepare("SELECT COUNT(*) FROM trainingLogs INNER JOIN members ON trainingLogs.Member = members.MemberID INNER JOIN squadMembers ON squadMembers.Member = members.MemberID WHERE squadMembers.Squad = ?");
 $getCount->execute([$squad]);
 $numLogs  = $getCount->fetchColumn();
