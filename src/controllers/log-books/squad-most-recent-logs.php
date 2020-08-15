@@ -27,7 +27,7 @@ if (!$squadInfo) {
 $getCount = $db->prepare("SELECT COUNT(*) FROM trainingLogs INNER JOIN members ON trainingLogs.Member = members.MemberID INNER JOIN squadMembers ON squadMembers.Member = members.MemberID WHERE squadMembers.Squad = ?");
 $getCount->execute([$squad]);
 $numLogs  = $getCount->fetchColumn();
-$numPages = ((int)($numLogs / 10)) + 1;
+$numPages = ((int)($numLogs - 1 / 10)) + 1;
 
 if ($start > $numLogs) {
   halt(404);
