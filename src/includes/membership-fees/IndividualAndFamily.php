@@ -27,7 +27,7 @@ class IndividualAndFamily extends ClubMembership {
 
     // Get the fees
     // Indiv
-    $this->individualFee = $type = app()->tenant->getKey('ClubFeeIndividual');
+    $this->individualFee = app()->tenant->getKey('ClubFeeIndividual');
 
     // Family
     $this->familyFee = app()->tenant->getKey('ClubFeeFamily');
