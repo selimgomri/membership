@@ -19,8 +19,7 @@ class ClubMembership {
 
   public static function create($db, $user, $upgrade) {
     // Work out the fee object class and return it
-    $getType = $db->query("SELECT `Value` FROM tenantOptions WHERE `Option` = 'ClubFeesType'");
-    $type = $getType->fetchColumn();
+    $type = app()->tenant->getKey('ClubFeesType');
 
     if ($type == 'Family/Individual') {
       return new IndividualAndFamily($db, $user, $upgrade);
@@ -40,10 +39,8 @@ class ClubMembership {
   }
 
   protected function fetchUpgradeType($db) {
-    $getValue = $db->prepare("SELECT `Value` FROM tenantOptions WHERE `Option` = ?"); 
     // Upgrade type -> FullFee | TopUp | None
-    $getValue->execute(['ClubFeeUpgradeType']);
-    $type = $getValue->fetchColumn();
+    $type = app()->tenant->getKey('ClubFeeUpgradeType');
     if ($type == null) {
       // Default to no upgrade fee (safest option)
       $this->upgradeType = 'None';

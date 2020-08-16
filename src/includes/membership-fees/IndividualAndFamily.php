@@ -19,22 +19,18 @@ class IndividualAndFamily extends ClubMembership {
    * Object constructor
    */
   public function __construct($db, $user, $upgrade) {
-    $getValue = $db->prepare("SELECT `Value` FROM tenantOptions WHERE `Option` = ?");
-
     // Verify type is IndividualAndFamily
-    $getValue->execute(['ClubFeesType']);
-    if ($getValue->fetchColumn() != 'Family/Individual') {
-      throw new Exception('WrongType');
+    $type = app()->tenant->getKey('ClubFeesType');
+    if ($type != 'Family/Individual') {
+      throw new \Exception('WrongType');
     }
 
     // Get the fees
     // Indiv
-    $getValue->execute(['ClubFeeIndividual']);
-    $this->individualFee = $getValue->fetchColumn();
+    $this->individualFee = $type = app()->tenant->getKey('ClubFeeIndividual');
 
     // Family
-    $getValue->execute(['ClubFeeFamily']);
-    $this->familyFee = $getValue->fetchColumn();
+    $this->familyFee = app()->tenant->getKey('ClubFeeFamily');
 
     $this->fetchUpgradeType($db);
     $this->upgrade = $upgrade;
