@@ -28,7 +28,8 @@ $day = (new DateTime('now', new DateTimeZone('Europe/London')))->format("w");
 $time = (new DateTime('-15 minutes', new DateTimeZone('Europe/London')))->format("H:i:s");
 $time30 = (new DateTime('-30 minutes', new DateTimeZone('Europe/London')))->format("H:i:s");
 
-$sql = "SELECT SessionID, squads.SquadID, SessionName, SquadName, VenueName, StartTime, EndTime FROM ((`sessions` INNER JOIN squads ON squads.SquadID = sessions.SquadID) INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE SessionDay = :day AND StartTime <= :timenow AND (EndTime > :timenow OR EndTime > :time30) AND DisplayFrom <= CURDATE() AND DisplayUntil >= CURDATE() AND `sessions`.`Tenant` = :tenant ORDER BY SquadFee DESC, SquadName ASC";
+$sql = "SELECT SessionID, SessionName, VenueName, StartTime, EndTime FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE SessionDay = :day AND StartTime <= :timenow AND (EndTime > :timenow OR EndTime > :time30) AND DisplayFrom <= CURDATE() AND DisplayUntil >= CURDATE() AND `sessions`.`Tenant` = :tenant ORDER BY StartTime ASC, EndTime ASC";
+$getSessionSquads = $db->prepare("SELECT SquadName, ForAllMembers FROM `sessionsSquads` INNER JOIN `squads` ON sessionsSquads.Squad = squads.SquadID WHERE sessionsSquads.Session = ? ORDER BY SquadFee DESC, SquadName ASC;");
 
 $query = $db->prepare($sql);
 $query->execute(['day' => $day, 'timenow' => $time, 'time30' => $time30, 'tenant' => $tenant->getId()]);
@@ -40,7 +41,7 @@ $userInfo = $query->fetch(PDO::FETCH_ASSOC);
 
 $getLocations = $db->prepare("SELECT COUNT(*) FROM `covidLocations` WHERE `Tenant` = ?");
 $getLocations->execute([
-  $tenant->getId(),
+	$tenant->getId(),
 ]);
 $showCovid = $getLocations->fetchColumn() > 0;
 
@@ -114,11 +115,16 @@ include BASE_PATH . "views/header.php";
 				<h2 class="mb-4">Take Register for Current Sessions</h2>
 				<div class="mb-4">
 					<div class="news-grid">
-						<?php for ($i = 0; $i < sizeof($sessions); $i++) { ?>
-							<a href="<?= htmlspecialchars(autoUrl("attendance/register?date=" . urlencode($date) . "&squad=" . urlencode($sessions[$i]['SquadID']) . "&session=" . urlencode($sessions[$i]['SessionID']))) ?>" title="<?= htmlspecialchars($sessions[$i]['SquadName']) ?> Squad Register, <?= htmlspecialchars($sessions[$i]['SessionName']) ?>">
+						<?php for ($i = 0; $i < sizeof($sessions); $i++) {
+							$getSessionSquads->execute([
+								$sessions[$i]['SessionID'],
+							]);
+							$squadNames = $getSessionSquads->fetchAll(PDO::FETCH_ASSOC);
+						?>
+							<a href="<?= htmlspecialchars(autoUrl("attendance/register?date=" . urlencode($date) . "&session=" . urlencode($sessions[$i]['SessionID']))) ?>" title="<?= htmlspecialchars($sessions[$i]['SquadName']) ?> Squad Register, <?= htmlspecialchars($sessions[$i]['SessionName']) ?>">
 								<div>
 									<span class="title mb-0">
-										Take <?= htmlspecialchars($sessions[$i]['SquadName']) ?> Squad Register
+										Take <?php for ($i = 0; $i < sizeof($squadNames); $i++) { ?><?php if ($i > 0) { ?>, <?php } ?><?= htmlspecialchars($squadNames[$i]['SquadName']) ?><?php } ?> Register
 									</span>
 									<span class="d-flex mb-3">
 										<?= date("H:i", strtotime($sessions[$i]['StartTime'])) ?> - <?= date("H:i", strtotime($sessions[$i]['EndTime'])) ?>
