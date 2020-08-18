@@ -161,4 +161,244 @@ class TrainingSession
   {
     return $this->dayOfWeek;
   }
+
+  /**
+   * Sets up registers, with members in squad today prepopulated
+   * 
+   * @param string date string
+   */
+  public function handleRegisterSetup($dateString = 'now')
+  {
+    $db = app()->db;
+
+    $weekId = $this->getWeekId($dateString);
+
+    // Check if session exists
+    $getRecordCount = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` WHERE `WeekID` = ? AND `SessionID` = ?");
+    $getRecordCount->execute([
+      $weekId,
+      $this->id,
+    ]);
+
+    if ($getRecordCount->fetchColumn() == 0) {
+      // Need to create based on current members
+
+      // Get members
+      $getMembers = $db->prepare("SELECT `squadMembers`.`Member` FROM `sessions` INNER JOIN `sessionsSquads` ON `sessions`.`SessionID` = `sessionsSquads`.`Session` INNER JOIN squadMembers ON sessionsSquads.Squad = squadMembers.Squad WHERE sessions.SessionID = ?");
+      $getMembers->execute([
+        $this->id,
+      ]);
+
+      // Add query
+      $addRecord = $db->prepare("INSERT INTO sessionsAttendance (WeekID, SessionID, MemberID, AttendanceBoolean) VALUES (?, ?, ?, ?)");
+      $addedMembers = [];
+
+      while ($member = $getMembers->fetchColumn()) {
+
+        if (!isset($addedMembers[$member])) {
+          $addRecord->execute([
+            $weekId,
+            $this->id,
+            $member,
+            null,
+          ]);
+
+          // Prevent double counting of members in multiple squads
+          $addedMembers[$member] = true;
+        }
+      }
+    }
+  }
+
+  /**
+   * Get register members
+   * 
+   * @param string date string
+   */
+  public function getRegister($dateString = 'now')
+  {
+    $this->handleRegisterSetup($dateString);
+
+    $weekId = $this->getWeekId($dateString);
+
+    $db = app()->db;
+    $getMembers = $db->prepare("SELECT MForename fn, MSurname sn, members.MemberID id, members.UserID `uid`, sessionsAttendance.AttendanceBoolean tick, members.OtherNotes notes, members.DateOfBirth dob FROM sessionsAttendance INNER JOIN members ON members.MemberID = sessionsAttendance.MemberID WHERE sessionsAttendance.WeekID = ? AND sessionsAttendance.SessionID = ? ORDER BY fn ASC, sn ASC;");
+    $getMembers->execute([
+      $weekId,
+      $this->id,
+    ]);
+
+    $members = [];
+
+    while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)) {
+
+      // Notes
+      $notes = null;
+      if (isset($member['notes']) && mb_strlen(trim((string) $member['notes'])) > 0) {
+        $notes = trim((string) $member['notes']);
+      }
+
+      // Get member medical
+      $getMed = $db->prepare("SELECT Conditions, Allergies, Medication FROM memberMedical WHERE MemberID = ?");
+      $getMed->execute([
+        $member['id'],
+      ]);
+      $med = $getMed->fetch(PDO::FETCH_ASSOC);
+      $medical = [];
+      if ($med && isset($med['Conditions']) && mb_strlen(trim((string) $med['Conditions'])) > 0) {
+        $medical['Conditions'] = trim((string) $med['Conditions']);
+      }
+      if ($med && isset($med['Allergies']) && mb_strlen(trim((string) $med['Allergies'])) > 0) {
+        $medical['Allergies'] = trim((string) $med['Allergies']);
+      }
+      if ($med && isset($med['Medication']) && mb_strlen(trim((string) $med['Medication'])) > 0) {
+        $medical['Medication'] = trim((string) $med['Medication']);
+      }
+
+      // Get photography
+      // Calculate age
+      $photo = [];
+
+      $dob = new DateTime($member['dob'], new DateTimeZone('Europe/London'));
+      $today = new DateTime('now', new DateTimeZone('Europe/London'));
+
+      $age = $dob->diff($today);
+      $age = (int) $age->format('%y');
+
+      if ($age < 18) {
+        $getPhoto = $db->prepare("SELECT Website, Social, Noticeboard, FilmTraining, ProPhoto FROM memberPhotography WHERE MemberID = ?");
+        $getPhoto->execute([
+          $member['id'],
+        ]);
+        $photoDetails = $getPhoto->fetch(PDO::FETCH_ASSOC);
+
+        if ($photoDetails) {
+          if (!bool($photoDetails['Website'])) {
+            $photo['Website'] = true;
+          }
+          if (!bool($photoDetails['Social'])) {
+            $photo['Social'] = true;
+          }
+          if (!bool($photoDetails['Noticeboard'])) {
+            $photo['Noticeboard'] = true;
+          }
+          if (!bool($photoDetails['FilmTraining'])) {
+            $photo['FilmTraining'] = true;
+          }
+          if (!bool($photoDetails['ProPhoto'])) {
+            $photo['ProPhoto'] = true;
+          }
+        }
+      }
+
+      $emergencyContacts = [];
+      try {
+        $emergencyContacts = TrainingSession::getEmergencyContacts($member['uid']);
+      } catch (Exception $e) {
+        // Ignore, stay null
+      }
+
+      $members[] = [
+        'id' => $member['id'],
+        'fn' => $member['fn'],
+        'sn' => $member['sn'],
+        'tick' => $member['tick'],
+        'medical' => $medical,
+        'notes' => $notes,
+        'photo' => $photo,
+        'contacts' => $emergencyContacts,
+      ];
+    }
+
+    return $members;
+  }
+
+  /**
+   * Get the week id given a date string
+   * 
+   * @param string date string
+   * @return int week id
+   */
+  public function getWeekId($dateString = 'now')
+  {
+    $db = app()->db;
+
+    $date = new DateTime($dateString, new DateTimeZone('Europe/London'));
+
+    if ((int) $date->format('N') != '7') {
+      $date->modify('last Sunday');
+    }
+
+    // Get the week id
+    $getWeekId = $db->prepare("SELECT WeekID FROM sessionsWeek WHERE WeekDateBeginning = ? AND Tenant = ?");
+    $getWeekId->execute([
+      $date->format("Y-m-d"),
+      app()->tenant->getId(),
+    ]);
+    $weekId = $getWeekId->fetchColumn();
+
+    if (!$weekId) {
+      throw new Exception('No WeekID');
+    }
+
+    return $weekId;
+  }
+
+  public static function getEmergencyContacts($user = null, $member = null)
+  {
+    $contacts = [];
+
+    if ($user == null && $member == null) {
+      throw new Exception('Both null');
+    }
+
+    $db = app()->db;
+
+    if ($member && !$user) {
+      // Get user
+      $getUser = $db->prepare("SELECT UserID FROM members WHERE MemberID = ? AND Tenant = ?");
+      $getUser->execute([
+        $member,
+        app()->tenant->getId(),
+      ]);
+      $user = $getUser->fetchColumn();
+    }
+
+    if (!$user) {
+      return $contacts;
+    }
+
+    if ($user) {
+      $getECs = $db->prepare("SELECT Forename, Surname, Mobile FROM users WHERE UserID = ?");
+      $getECs->execute([
+        $user
+      ]);
+      $ec = $getECs->fetch(PDO::FETCH_ASSOC);
+
+      if ($ec) {
+        $contacts[] = new NewEmergencyContact(
+          $ec['Mobile'],
+          $ec['Forename'] . ' ' . $ec['Surname'],
+          null,
+          $user,
+          true
+        );
+      }
+
+      $getECs = $db->prepare("SELECT ID, `Name`, ContactNumber, Relation FROM emergencyContacts WHERE UserID = ?");
+      $getECs->execute([
+        $user
+      ]);
+      while ($ec = $getECs->fetch(PDO::FETCH_ASSOC)) {
+        $contacts[] = new NewEmergencyContact(
+          $ec['ContactNumber'],
+          $ec['Name'],
+          $ec['Relation'],
+          $user
+        );
+      }
+    }
+
+    return $contacts;
+  }
 }

@@ -11,6 +11,10 @@ $db->query(
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;"
 );
 
+// Allow null attendance value
+$db->query("ALTER TABLE `sessionsAttendance` 
+  MODIFY `AttendanceBoolean` int DEFAULT NULL;");
+
 // Get members and squads
 $sessions = $db->query("SELECT `SessionID`, `SquadID`, `MainSequence` FROM `sessions`");
 
@@ -25,7 +29,7 @@ while ($session = $sessions->fetch(PDO::FETCH_ASSOC)) {
   ]);
 }
 
-// Remove SquadID column from members
+// Modify sessions table
 $db->query("ALTER TABLE `sessions` 
   DROP FOREIGN KEY `sessions_ibfk_1`,
   DROP INDEX `SquadID`,
