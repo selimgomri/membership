@@ -1364,13 +1364,14 @@ function createOrUpdatePayout($payout, $update = false)
     try {
       $payout = $client->payouts()->get($payout);
 
-      $insert = $db->prepare("INSERT INTO paymentsPayouts (ID, Amount, Fees, Currency, ArrivalDate) VALUES (?, ?, ?, ?, ?)");
+      $insert = $db->prepare("INSERT INTO paymentsPayouts (ID, Amount, Fees, Currency, ArrivalDate, Tenant) VALUES (?, ?, ?, ?, ?, ?)");
       $insert->execute([
         $payout->id,
         $payout->amount,
         $payout->deducted_fees,
         $payout->currency,
-        $payout->arrival_date
+        $payout->arrival_date,
+        app()->tenant->getId(),
       ]);
     } catch (Exception $e) {
       reportError($e);
