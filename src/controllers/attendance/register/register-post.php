@@ -67,5 +67,7 @@ try {
 	}
 } catch (Exception $e) {
 
+	reportError($e);
+
 	http_response_code(500);
 }
