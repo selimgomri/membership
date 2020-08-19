@@ -6,7 +6,7 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 try {
-	
+
 	// Validate user has authority
 	$getMemberTenant = $db->prepare("SELECT Tenant FROM members WHERE MemberID = ?");
 	$getMemberTenant->execute([
@@ -28,40 +28,44 @@ try {
 		(int) $_POST['memberId'],
 	]);
 
-  // // Update data in db
-  // $setSignedOut = $db->prepare("UPDATE covidVisitors SET SignedOut = ? WHERE ID = ?");
-  // $setSignedOut->execute([
-  //   (int) bool($_POST['state']),
-  //   $_POST['id'],
-  // ]);
+	$getCount = $db->prepare("SELECT COUNT(*) FROM sessionsAttendance WHERE WeekID = ? AND SessionID = ? AND MemberID = ?");
+	$getCount->execute([
+		(int) ($_POST['state'] == 'true'),
+		(int) $_POST['weekId'],
+		(int) $_POST['sessionId'],
+		(int) $_POST['memberId'],
+	]);
+	$count = $getCount->fetchColumn();
 
-  // // Prep JSON body for socket service
-  $data = [
-    'room' => 'register_room:' . 'week-' . $_POST['weekId'] . '-session-' . $_POST['sessionId'],
-    'field' => $_POST['memberId'],
-    'state' => (int) ($_POST['state'] == 'true'),
-  ];
+	if ($count == 0) {
+		throw new Exception('No attendance record');
+	}
 
-  $url = 'https://production-apis.tenant-services.membership.myswimmingclub.uk/attendance/send-register-change-message';
-  if (bool(getenv("IS_DEV"))) {
-    $url = 'https://apis.tenant-services.membership.myswimmingclub.uk/attendance/send-register-change-message';
-  }
+	// // Prep JSON body for socket service
+	$data = [
+		'room' => 'register_room:' . 'week-' . $_POST['weekId'] . '-session-' . $_POST['sessionId'],
+		'field' => $_POST['memberId'],
+		'state' => (int) ($_POST['state'] == 'true'),
+	];
 
-  http_response_code(200);
+	$url = 'https://production-apis.tenant-services.membership.myswimmingclub.uk/attendance/send-register-change-message';
+	if (bool(getenv("IS_DEV"))) {
+		$url = 'https://apis.tenant-services.membership.myswimmingclub.uk/attendance/send-register-change-message';
+	}
 
-  try {
+	http_response_code(200);
 
-    $client = new Client();
+	try {
 
-    $r = $client->request('POST', $url, [
-      'json' => $data
-    ]);
+		$client = new Client();
 
-  } catch (Exception $e) {
-    // Ignore
-  }
+		$r = $client->request('POST', $url, [
+			'json' => $data
+		]);
+	} catch (Exception $e) {
+		// Ignore
+	}
 } catch (Exception $e) {
 
-  http_response_code(500);
-
+	http_response_code(500);
 }
