@@ -47,7 +47,7 @@ include BASE_PATH . "views/header.php";
 
 ?>
 
-<div id="data-block" data-ajax-url="<?= htmlspecialchars(autoUrl("attendance/ajax/register/sessions")) ?>" data-session-init="<?= htmlspecialchars($session_init) ?>" data-squad-init="<?= htmlspecialchars($squad_init) ?>" data-page-url="<?= htmlspecialchars(autoUrl("attendance/register")) ?>"></div>
+<div id="data-block" data-ajax-url="<?= htmlspecialchars(autoUrl("attendance/register/data-post")) ?>" data-register-sheet-ajax-url="<?= htmlspecialchars(autoUrl("attendance/register/sheet")) ?>" data-session-list-ajax-url="<?= htmlspecialchars(autoUrl("attendance/register/sessions")) ?>"></div>
 
 <div class="bg-light mt-n3 py-3 mb-3">
   <div class="container-fluid">
@@ -73,22 +73,6 @@ include BASE_PATH . "views/header.php";
 </div>
 
 <div class="container-fluid">
-
-  <div class="alert alert-info">
-    <p class="mb-0">
-      <strong>Heads up!</strong>
-    </p>
-    <p>
-      We've made some changes behind the scenes to our attenance software. As part of this, we've redesigned registers from the ground up.
-    </p>
-
-    <p class="mb-0">
-      <strong>Where's the save button?</strong>
-    </p>
-    <p class="mb-0">
-      We now save registers automatically as you complete them. Anybody else viewing the same register will see your changes in real-time.
-    </p>
-  </div>
 
   <div class="card mb-3">
     <div class="card-header">
@@ -122,7 +106,7 @@ include BASE_PATH . "views/header.php";
   </div>
 
   <div id="register-area">
-    <?php if ($sessionId) { 
+    <?php if ($sessionId) {
       registerSheetGenerator($date, $sessionId);
     } ?>
   </div>
@@ -130,7 +114,10 @@ include BASE_PATH . "views/header.php";
 </div>
 
 <script>
-  let ssf = document.getElementById('session-selection-form');
+  const options = document.getElementById('data-block').dataset;
+  const registerArea = document.getElementById('register-area');
+  const ssf = document.getElementById('session-selection-form');
+
   ssf.addEventListener('change', (event) => {
     console.log(event);
 
@@ -144,18 +131,115 @@ include BASE_PATH . "views/header.php";
       // Date changed - Reload session list
       sessionPicker.disabled = true;
       sessionPicker.innerHTML = `<option value="none">Loading sessions...</option>`;
+      registerArea.innerHTML = '';
+
+      // Get sessions
+      var req = new XMLHttpRequest();
+      req.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          object = JSON.parse(this.responseText);
+          if (object.status == 200) {
+            sessionPicker.innerHTML = object.html;
+            sessionPicker.disabled = false;
+          }
+        } else if (this.readyState == 4) {
+          // Not ok
+        }
+      }
+      req.open('POST', options.sessionListAjaxUrl, true);
+      req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      let sessionString = '';
+      if (session != 'none') {
+        sessionString = '&session=' + encodeURI(session);
+      }
+      req.send('date=' + encodeURI(date) + sessionString);
     }
 
     let sessionUrlString = '';
     if (event.target.id == 'session-select') {
-      // selected session changed - Get 
       sessionUrlString = '&session=' + encodeURI(session);
 
       // Get register for this session
+      var req = new XMLHttpRequest();
+      req.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          object = JSON.parse(this.responseText);
+          if (object.status == 200) {
+            registerArea.innerHTML = object.html;
+          }
+        } else if (this.readyState == 4) {
+          // Not ok
+        }
+      }
+      req.open('POST', options.registerSheetAjaxUrl, true);
+      req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      req.send('date=' + encodeURI(date) + '&session=' + encodeURI(session));
     }
 
     window.history.replaceState('string', 'Title', window.location.origin + window.location.pathname + '?date=' + encodeURI(date) + sessionUrlString);
-  })
+  });
+
+  let regArea = document.getElementById('register-area');
+  regArea.addEventListener('click', (event) => {
+
+    if (event) {
+      let clickedTarget = event.target;
+      if (clickedTarget.tagName == 'SPAN' && clickedTarget.parentNode && clickedTarget.parentNode.tagName == 'BUTTON') {
+        clickedTarget = clickedTarget.parentNode;
+      }
+
+      if (clickedTarget.dataset.show) {
+        let target = document.getElementById(clickedTarget.dataset.show);
+        if (target.classList.contains('d-none')) {
+          // Currently hidden so lets show
+          target.classList.remove('d-none');
+          target.classList.add('register-hideable-active');
+        } else {
+          // Currently displayed so hide
+          target.classList.add('d-none');
+          target.classList.remove('register-hideable-active');
+        }
+
+        // Hide all other displayed ones
+        let displayable = document.getElementsByClassName('register-hideable register-hideable-active');
+        for (let i = 0; i < displayable.length; i++) {
+          let toClose = displayable[i];
+          if (toClose != target) {
+            toClose.classList.add('d-none');
+            toClose.classList.remove('register-hideable-active');
+          }
+        }
+      }
+    }
+
+  });
+
+  regArea.addEventListener('change', (event) => {
+
+    if (event) {
+      console.info('Change event -');
+      console.log(event);
+    }
+
+    if (event.target.type == 'checkbox') {
+      // Get value and send an AJAX request
+      let value = event.target.checked;
+
+      var req = new XMLHttpRequest();
+      req.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+        } else if (this.readyState == 4) {
+          // Not ok
+          alert('An error occurred. Your change was not saved.');
+        }
+      }
+      req.open('POST', options.ajaxUrl, true);
+      req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      req.send('id=' + encodeURI(event.target.dataset.id) + '&state=' + encodeURI(value));
+    }
+
+  });
 </script>
 
 <?php

@@ -36,8 +36,16 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       include 'register/register.php';
     });
 
-    $this->post('/register', function() {
+    $this->post('/data-post', function() {
       include 'register/register-post.php';
+    });
+
+    $this->post('/sheet', function() {
+      include 'register/session-register-ajax.php';
+    });
+
+    $this->post('/sessions', function() {
+      include 'register/session-drop-down-ajax.php';
     });
 	});
 
