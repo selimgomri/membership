@@ -7,7 +7,8 @@ $day = (new DateTime('now', new DateTimeZone('Europe/London')))->format("w");
 $time = (new DateTime('-15 minutes', new DateTimeZone('Europe/London')))->format("H:i:s");
 $time30 = (new DateTime('-30 minutes', new DateTimeZone('Europe/London')))->format("H:i:s");
 
-$sql = "SELECT SessionID, squads.SquadID, SessionName, SquadName, VenueName, StartTime, EndTime FROM ((`sessions` INNER JOIN squads ON squads.SquadID = sessions.SquadID) INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `sessions`.`Tenant` = :tenant AND SessionDay = :day AND StartTime <= :timenow AND (EndTime > :timenow OR EndTime > :time30) AND DisplayFrom <= CURDATE() AND DisplayUntil >= CURDATE() ORDER BY SquadFee DESC, SquadName ASC";
+$sql = "SELECT SessionID, SessionName, VenueName, StartTime, EndTime FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE SessionDay = :day AND StartTime <= :timenow AND (EndTime > :timenow OR EndTime > :time30) AND DisplayFrom <= CURDATE() AND DisplayUntil >= CURDATE() AND `sessions`.`Tenant` = :tenant ORDER BY StartTime ASC, EndTime ASC";
+$getSessionSquads = $db->prepare("SELECT SquadName, ForAllMembers FROM `sessionsSquads` INNER JOIN `squads` ON sessionsSquads.Squad = squads.SquadID WHERE sessionsSquads.Session = ? ORDER BY SquadFee DESC, SquadName ASC;");
 
 $query = $db->prepare($sql);
 $query->execute([
@@ -24,33 +25,45 @@ include "attendanceMenu.php"; ?>
 <div class="front-page" style="margin-bottom: -1rem;">
   <div class="container">
 
-		<h1>Squad Attendance</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb bg-light">
+        <li class="breadcrumb-item active" aria-current="page">Attendance</li>
+      </ol>
+    </nav>
+
+		<h1>Attendance</h1>
 		<p class="lead mb-4">View attendance records and fill out registers for squads</p>
 
     <?php if (sizeof($sessions) > 0) { ?>
-      <div class="mb-4">
-        <h2 class="mb-4">Current Sessions</h2>
-        <div class="mb-4">
-          <div class="news-grid">
-        <?php for ($i = 0; $i < sizeof($sessions); $i++) { ?>
-          <a href="<?=htmlspecialchars(autoUrl("attendance/register?date=" . urlencode($date) . "&squad=" . urlencode($sessions[$i]['SquadID']) . "&session=" . urlencode($sessions[$i]['SessionID'])))?>" title="<?=htmlspecialchars($sessions[$i]['SquadName'])?> Squad Register, <?=htmlspecialchars($sessions[$i]['SessionName'])?>">
-            <div>
-              <span class="title mb-0">
-                Take <?=htmlspecialchars($sessions[$i]['SquadName'])?> Squad Register
-              </span>
-              <span class="d-flex mb-3">
-                <?=date("H:i", strtotime($sessions[$i]['StartTime']))?> - <?=date("H:i", strtotime($sessions[$i]['EndTime']))?>
-              </span>
-            </div>
-            <span class="category">
-              <?=htmlspecialchars($sessions[$i]['SessionName'])?>, <?=htmlspecialchars($sessions[$i]['VenueName'])?>
-            </span>
-          </a>
-        <?php } ?>
-        </div>
-      </div>
-    </div>
-    <?php } ?>
+			<?php $date = (new DateTime('now', new DateTimeZone('Europe/London')))->format("Y-m-d"); ?>
+			<div class="mb-4">
+				<h2 class="mb-4">Take Register for Current Sessions</h2>
+				<div class="mb-4">
+					<div class="news-grid">
+						<?php for ($i = 0; $i < sizeof($sessions); $i++) {
+							$getSessionSquads->execute([
+								$sessions[$i]['SessionID'],
+							]);
+							$squadNames = $getSessionSquads->fetchAll(PDO::FETCH_ASSOC);
+						?>
+							<a href="<?= htmlspecialchars(autoUrl("attendance/register?date=" . urlencode($date) . "&session=" . urlencode($sessions[$i]['SessionID']))) ?>" title="<?= htmlspecialchars($sessions[$i]['SquadName']) ?> Squad Register, <?= htmlspecialchars($sessions[$i]['SessionName']) ?>">
+								<div>
+									<span class="title mb-0">
+										Take <?php for ($i = 0; $i < sizeof($squadNames); $i++) { ?><?php if ($i > 0) { ?>, <?php } ?><?= htmlspecialchars($squadNames[$i]['SquadName']) ?><?php } ?> Register
+									</span>
+									<span class="d-flex mb-3">
+										<?= date("H:i", strtotime($sessions[$i]['StartTime'])) ?> - <?= date("H:i", strtotime($sessions[$i]['EndTime'])) ?>
+									</span>
+								</div>
+								<span class="category">
+									<?= htmlspecialchars($sessions[$i]['SessionName']) ?>, <?= htmlspecialchars($sessions[$i]['VenueName']) ?>
+								</span>
+							</a>
+						<?php } ?>
+					</div>
+				</div>
+			</div>
+		<?php } ?>
 
     <div class="mb-4">
       <?php if (sizeof($sessions) > 0) { ?>

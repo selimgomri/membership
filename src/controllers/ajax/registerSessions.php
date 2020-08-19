@@ -32,7 +32,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" 
     $response = "";
 
     if ($squadID != null) {
-      $getSessions = $db->prepare("SELECT * FROM (sessions INNER JOIN squads ON sessions.SquadID = squads.SquadID) WHERE squads.Tenant = :tenant AND squads.SquadID = :squad AND ((sessions.DisplayFrom <= :date) AND (sessions.DisplayUntil >= :date)) AND sessions.SessionDay = :dayNum ORDER BY sessions.SessionDay ASC, sessions.StartTime ASC");
+      $getSessions = $db->prepare("SELECT * FROM `sessions` WHERE squads.Tenant = :tenant AND squads.SquadID = :squad AND ((sessions.DisplayFrom <= :date) AND (sessions.DisplayUntil >= :date)) AND sessions.SessionDay = :dayNum ORDER BY sessions.SessionDay ASC, sessions.StartTime ASC");
       $getSessions->execute([
         'tenant' => $tenant->getId(),
         'squad' => $squadID,

@@ -24,8 +24,8 @@ if (!$squadName) {
 
 $get = $db->prepare("SELECT * FROM ((`members` LEFT JOIN `sessionsAttendance` ON
 `sessionsAttendance`.`MemberID` = `members`.`MemberID`) INNER JOIN `sessions` ON
-`sessionsAttendance`.`SessionID` = `sessions`.`SessionID`) WHERE
-`sessions`.`SquadID` = ? AND `WeekID` = ? AND members.Tenant = ? ORDER BY `MForename` ASC,
+`sessionsAttendance`.`SessionID` = `sessions`.`SessionID` INNER JOIN sessionsSquads ON sessions.SessionID = sessionsSquads.Squad) WHERE
+`sessionsSquads`.`Squad` = ? AND `WeekID` = ? AND members.Tenant = ? ORDER BY `MForename` ASC,
 `MSurname` ASC, `SessionDay` ASC, `StartTime` ASC");
 $get->execute([$id, $week, $tenant->getId()]);
 
@@ -33,14 +33,37 @@ $row = $get->fetch(PDO::FETCH_ASSOC);
 
 $swimmerOld = null;
 
-$pagetitle = "Attendance History for " . htmlspecialchars($squadName) . ' Squad';
+$pagetitle = "Attendance history for " . htmlspecialchars($squadName) . ' Squad';
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
+
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance')) ?>">Attendance</a></li>
+				<li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance/history')) ?>">History</a></li>
+				<li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance/history/squads')) ?>">Squads</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars($squadName)?></li>
+      </ol>
+    </nav>
+
+    <div class="row align-items-center">
+      <div class="col">
+        <h1>
+					Attendance history for <?=htmlspecialchars($squadName)?>
+        </h1>
+        <p class="lead mb-0">
+					Squad history currently only shows the current week
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
 	<div class="">
-
-		<h1>Attendance History for <?=htmlspecialchars($squadName)?></h1>
-		<p class="lead">Squad History currently only shows the current week</p>
 
     <?php if ($row == null) { ?>
       <div class="alert alert-warning">

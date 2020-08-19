@@ -3,7 +3,7 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$sql = $db->prepare("SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SessionID` = ? AND `sessions`.`Tenant` = ?;");
+$sql = $db->prepare("SELECT * FROM (`sessions` INNER JOIN sessionsSquads ON sessionsSquads.Session = sessions.SessionID INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SessionID` = ? AND `sessions`.`Tenant` = ?;");
 $sql->execute([
 	$id,
 	$tenant->getId(),
@@ -59,7 +59,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php";
 			<dt>Session Name</dt>
 			<dd><?= htmlspecialchars($row['SessionName']) ?></dd>
 			<dt>Count towards attendance &percnt;</dt>
-			<dd><?php if (bool($row['MainSequence'])) { ?>Yes<?php } else { ?>No<?php } ?></dd>
+			<dd><?php if (bool($row['ForAllMembers'])) { ?>Yes<?php } else { ?>No<?php } ?></dd>
 			<dt>Venue</dt>
 			<dd><?= htmlspecialchars($row['VenueName']) ?></dd>
 			<dt>Start Time</dt>

@@ -20,7 +20,7 @@ function sessionManagement($squadID, $old = null)
 	$tenant = app()->tenant;
 	$output = $content = $modals = "";
 
-	$getSessions = $db->prepare("SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `SquadID` = ? AND sessions.Tenant = ? AND (ISNULL(sessions.DisplayFrom) OR (sessions.DisplayFrom <= CURDATE( ))) AND (ISNULL(sessions.DisplayUntil) OR (sessions.DisplayUntil >= CURDATE( ))) ORDER BY `SessionDay` ASC, `StartTime` ASC");
+	$getSessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN sessionsSquads ON sessions.SessionID = sessionsSquads.Session) INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `sessionsSquads`.`Squad` = ? AND sessions.Tenant = ? AND (ISNULL(sessions.DisplayFrom) OR (sessions.DisplayFrom <= CURDATE( ))) AND (ISNULL(sessions.DisplayUntil) OR (sessions.DisplayUntil >= CURDATE( ))) ORDER BY `SessionDay` ASC, `StartTime` ASC");
 	$getSessions->execute([
 		$squadID,
 		$tenant->getId()
@@ -107,7 +107,7 @@ function sessionManagement($squadID, $old = null)
 								<dt>Session Name</dt>
 								<dd>' . htmlspecialchars($row['SessionName']) . '</dd>
 								<dt>Include in attendance calculations</dt>';
-							if ($row['MainSequence']) {
+							if ($row['ForAllMembers']) {
 								$modals .= '<dd>This session is included in attendance calculations</dd>';
 							} else {
 								$modals .= '<dd>This session is <strong>not included</strong> in attendance calculations</dd>';
@@ -293,19 +293,31 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 		}
 
 		try {
-			$insert = $db->prepare("INSERT INTO `sessions` (`SquadID`, `VenueID`, `SessionName`, `SessionDay`, `StartTime`, `EndTime`, `MainSequence`, `DisplayFrom`, `DisplayUntil`, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			$insert = $db->prepare("INSERT INTO `sessions` (`VenueID`, `SessionName`, `SessionDay`, `StartTime`, `EndTime`, `DisplayFrom`, `DisplayUntil`, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 			$insert->execute([
-				$squadID,
+				// $squadID,
 				$venueID,
 				$sessionName,
 				$sessionDay,
 				$startTime,
 				$endTime,
-				$mainSequence,
+				// $mainSequence,
 				date("Y-m-d", $displayFrom),
 				date("Y-m-d", $displayUntil),
 				$tenant->getId()
 			]);
+
+			$sessionId = $db->lastInsertId();
+
+			// Add session squads
+			$insert = $db->prepare("INSERT INTO `sessionsSquads` (`Session`, `Squad`, `ForAllMembers`) VALUES (?, ?, ?)");
+			$insert->execute([
+				$sessionId,
+				$squadID,
+				(int) $mainSequence,
+			]);
+			
+
 		} catch (Exception $e) {
 			halt(400);
 		}

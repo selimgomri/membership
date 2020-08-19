@@ -22,10 +22,31 @@ $squads->execute([
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 
-<div class="container">
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
 
-  <h1>Attendance History by Swimmer</h1>
-  <p class="lead">View Attendance History for a swimmer</p>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance')) ?>">Attendance</a></li>
+				<li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance/history')) ?>">History</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Members</li>
+      </ol>
+    </nav>
+
+    <div class="row align-items-center">
+      <div class="col">
+        <h1>
+					Attendance history by member
+        </h1>
+        <p class="lead mb-0">
+					View up to 20 weeks of attendance history
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
 
   <div class="form-row">
     <div class="col-md-6 mb-3">

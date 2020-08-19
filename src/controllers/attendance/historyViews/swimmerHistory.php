@@ -48,12 +48,32 @@ $present = $getPresent->fetch(PDO::FETCH_ASSOC);
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 
-<div class="container">
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
 
-  <h1>Attendance History for <?=htmlspecialchars($member['first'] . " " . $member['last'])?></h1>
-  <p class="lead">
-    You are now viewing attendance records for up to the last 20 weeks
-  </p>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance')) ?>">Attendance</a></li>
+				<li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance/history')) ?>">History</a></li>
+				<li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance/history/swimmers')) ?>">Members</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars(mb_substr($member['first'], 0, 1) . mb_substr($member['last'], 0, 1))?></li>
+      </ol>
+    </nav>
+
+    <div class="row align-items-center">
+      <div class="col">
+        <h1>
+					<?=htmlspecialchars($member['first'] . " " . $member['last'])?>'s Attendance History
+        </h1>
+        <p class="lead mb-0">
+					Up to the last 20 weeks
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
 
   <?php if ($present == null) { ?>
     <div class="alert alert-warning">
@@ -114,7 +134,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
           <tr>
         	  <td>
               <?=htmlspecialchars($sessionInfo['SessionName'])?>, <?=$dayText?> <?=$date?> at <?=$sessionInfo['StartTime']?>
-        	    <?php if ($present['MainSequence'] != 1) { ?>
+        	    <?php if ($present['AttendanceRequired'] != 1) { ?>
                 (Not Mandatory)
               <?php } ?>
         		</td>

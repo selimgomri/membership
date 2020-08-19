@@ -4,7 +4,6 @@
  * Class to represent a squad
  */
 class Squad {
-  private $db;
   private int $tenant;
   protected int $id;
   private string $name;

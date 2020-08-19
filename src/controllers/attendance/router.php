@@ -31,17 +31,27 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 	});
 
   // Registers
-  $this->get('/register', function($squad = null, $session = null) {
-    include 'register.php';
+  $this->group('/register', function() {
+    $this->get('/', function() {
+      include 'register/register.php';
+    });
+
+    $this->post('/data-post', function() {
+      include 'register/register-post.php';
+    });
+
+    $this->post('/sheet', function() {
+      include 'register/session-register-ajax.php';
+    });
+
+    $this->post('/sessions', function() {
+      include 'register/session-drop-down-ajax.php';
+    });
 	});
 
   $this->get('/ajax/register/sessions', function() {
     
     include BASE_PATH . 'controllers/ajax/registerSessions.php';
-	});
-
-  $this->post('/register', function() {
-    include 'POST/register.php';
 	});
 
   // Sessions
