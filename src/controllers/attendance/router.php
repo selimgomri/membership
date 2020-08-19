@@ -91,9 +91,12 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       include "historyViews/squads.php";
   	});
 
+    // $this->get('/squads/{id}:int', function($id) {
+    //   include "historyViews/squadHistory.php";
+    // });
+    
     $this->get('/squads/{id}:int', function($id) {
-      
-      include "historyViews/squadHistory.php";
+      include "historyViews/new-squad-history.php";
   	});
 
     $this->get('/swimmers', function() {
