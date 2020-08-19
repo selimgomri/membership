@@ -25,6 +25,8 @@ function registerSheetGenerator($date, $sessionId)
 
     $register = $session->getRegister();
 
+    $weekId = $session->getWeekId($date->format('Y-m-d'));
+
     $markdown = new ParsedownExtra();
     $markdown->setSafeMode(true);
 
@@ -57,6 +59,8 @@ function registerSheetGenerator($date, $sessionId)
           <?php } ?>
         </div>
         <?php if (sizeof($register) > 0) { ?>
+          <div id="socket-room-info" data-room-name="<?= htmlspecialchars('register_room:week-' . $weekId . '-session-' . $sessionId) ?>"></div>
+
           <ul class="list-group list-group-flush accordion">
             <?php foreach ($register as $row) { ?>
               <li class="list-group-item py-3">
@@ -64,8 +68,8 @@ function registerSheetGenerator($date, $sessionId)
                   <div class="row align-items-center">
                     <div class="col">
                       <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars($row['id']) ?>" <?php if (bool($row['tick'])) { ?>checked<?php } ?>>
-                        <label class="custom-control-label d-block" for="<?= htmlspecialchars($row['id']) ?>"><?= htmlspecialchars($row['fn'] . ' ' . $row['sn']) ?></label>
+                        <input type="checkbox" class="custom-control-input" id="member-<?= htmlspecialchars($row['id']) ?>" <?php if (bool($row['tick'])) { ?>checked<?php } ?> data-week-id="<?= htmlspecialchars($row['week_id']) ?>" data-session-id="<?= htmlspecialchars($row['session_id']) ?>" data-member-id="<?= htmlspecialchars($row['id']) ?>">
+                        <label class="custom-control-label d-block" for="member-<?= htmlspecialchars($row['id']) ?>"><?= htmlspecialchars($row['fn'] . ' ' . $row['sn']) ?></label>
                       </div>
                     </div>
                     <?php if (sizeof($row['medical']) > 0 || sizeof($row['photo']) > 0 || $row['notes'] || sizeof($row['contacts']) > 0) { ?>

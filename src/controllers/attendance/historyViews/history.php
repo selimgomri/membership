@@ -6,6 +6,13 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
 <div class="front-page">
   <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb bg-light">
+				<li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance')) ?>">Attendance</a></li>
+        <li class="breadcrumb-item active" aria-current="page">History</li>
+      </ol>
+    </nav>
+
     <h1>Attendance History</h1>
     <p class="lead">
       Swimmer attendance records

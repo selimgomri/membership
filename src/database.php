@@ -143,40 +143,40 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
 
 function getAttendanceByID($link = null, $id, $weeks = "all")
 {
-  // $db = app()->db;
-  // $hideAttendance = !bool(app()->tenant->getKey('HIDE_MEMBER_ATTENDANCE'));
-  // if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent' || $hideAttendance) {
-  //   $output = "";
-  //   $startWeek = 1;
+  $db = app()->db;
+  $hideAttendance = !bool(app()->tenant->getKey('HIDE_MEMBER_ATTENDANCE'));
+  if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent' || $hideAttendance) {
+    $output = "";
+    $startWeek = 1;
 
-  //   // Get the last four weeks to calculate attendance
-  //   $latestWeek = $db->query("SELECT MAX(WeekID) FROM `sessionsWeek`;")->fetchColumn();
+    // Get the last four weeks to calculate attendance
+    $latestWeek = $db->query("SELECT MAX(WeekID) FROM `sessionsWeek`;")->fetchColumn();
 
-  //   if ($weeks != "all") {
-  //     $startWeek = $latestWeek - $weeks;
-  //     if ($startWeek < 1) {
-  //       $startWeek = 1;
-  //     }
-  //   }
+    if ($weeks != "all") {
+      $startWeek = $latestWeek - $weeks;
+      if ($startWeek < 1) {
+        $startWeek = 1;
+      }
+    }
 
-  //   $member = [
-  //     "week" => $startWeek,
-  //     "member" => $id
-  //   ];
+    $member = [
+      "week" => $startWeek,
+      "member" => $id
+    ];
 
-  //   $numPresent = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` INNER JOIN sessions ON sessions.SessionID = sessionsAttendance.SessionID WHERE WeekID >= :week AND MemberID = :member AND AttendanceBoolean = 1 AND MainSequence = 1");
-  //   $numPresent->execute($member);
-  //   $numPresent = $numPresent->fetchColumn();
-  //   $totalNum = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` INNER JOIN sessions ON sessions.SessionID = sessionsAttendance.SessionID WHERE WeekID >= :week AND MemberID = :member AND MainSequence = 1");
-  //   $totalNum->execute($member);
-  //   $totalNum = $totalNum->fetchColumn();
+    $numPresent = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` INNER JOIN sessions ON sessions.SessionID = sessionsAttendance.SessionID WHERE WeekID >= :week AND MemberID = :member AND AttendanceBoolean = 1 AND AttendanceRequired = 1");
+    $numPresent->execute($member);
+    $numPresent = $numPresent->fetchColumn();
+    $totalNum = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` INNER JOIN sessions ON sessions.SessionID = sessionsAttendance.SessionID WHERE WeekID >= :week AND MemberID = :member AND (AttendanceBoolean = 0 OR AttendanceBoolean = 1) AND AttendanceRequired = 1");
+    $totalNum->execute($member);
+    $totalNum = $totalNum->fetchColumn();
 
-  //   if ($totalNum == 0) {
-  //     return "No Data 0";
-  //   }
+    if ($totalNum == 0) {
+      return "No Data 0";
+    }
 
-  //   return number_format(($numPresent / $totalNum) * 100, 1, ".", "");
-  // }
+    return number_format(($numPresent / $totalNum) * 100, 1, ".", "");
+  }
 
   return 'DATA HIDDEN ';
 }

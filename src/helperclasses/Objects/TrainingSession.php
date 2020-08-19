@@ -184,27 +184,28 @@ class TrainingSession
       // Need to create based on current members
 
       // Get members
-      $getMembers = $db->prepare("SELECT `squadMembers`.`Member` FROM `sessions` INNER JOIN `sessionsSquads` ON `sessions`.`SessionID` = `sessionsSquads`.`Session` INNER JOIN squadMembers ON sessionsSquads.Squad = squadMembers.Squad WHERE sessions.SessionID = ?");
+      $getMembers = $db->prepare("SELECT `squadMembers`.`Member`, sessionsSquads.ForAllMembers FROM `sessions` INNER JOIN `sessionsSquads` ON `sessions`.`SessionID` = `sessionsSquads`.`Session` INNER JOIN squadMembers ON sessionsSquads.Squad = squadMembers.Squad WHERE sessions.SessionID = ? ORDER BY sessionsSquads.ForAllMembers DESC");
       $getMembers->execute([
         $this->id,
       ]);
 
       // Add query
-      $addRecord = $db->prepare("INSERT INTO sessionsAttendance (WeekID, SessionID, MemberID, AttendanceBoolean) VALUES (?, ?, ?, ?)");
+      $addRecord = $db->prepare("INSERT INTO sessionsAttendance (WeekID, SessionID, MemberID, AttendanceBoolean, AttendanceRequired) VALUES (?, ?, ?, ?, ?)");
       $addedMembers = [];
 
-      while ($member = $getMembers->fetchColumn()) {
+      while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)) {
 
-        if (!isset($addedMembers[$member])) {
+        if (!isset($addedMembers[$member['Member']])) {
           $addRecord->execute([
             $weekId,
             $this->id,
-            $member,
-            null,
+            $member['Member'],
+            0,
+            (int) bool($member['ForAllMembers']),
           ]);
 
           // Prevent double counting of members in multiple squads
-          $addedMembers[$member] = true;
+          $addedMembers[$member['Member']] = true;
         }
       }
     }
@@ -307,6 +308,8 @@ class TrainingSession
         'notes' => $notes,
         'photo' => $photo,
         'contacts' => $emergencyContacts,
+        'week_id' => $weekId,
+        'session_id' => $this->id,
       ];
     }
 

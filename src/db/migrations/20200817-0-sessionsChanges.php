@@ -15,6 +15,9 @@ $db->query(
 $db->query("ALTER TABLE `sessionsAttendance` 
   MODIFY `AttendanceBoolean` int DEFAULT NULL;");
 
+$db->query("ALTER TABLE `sessionsAttendance` 
+  ADD COLUMN `AttendanceRequired` boolean DEFAULT TRUE;");
+
 // Get members and squads
 $sessions = $db->query("SELECT `SessionID`, `SquadID`, `MainSequence` FROM `sessions`");
 

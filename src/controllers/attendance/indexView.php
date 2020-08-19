@@ -25,7 +25,13 @@ include "attendanceMenu.php"; ?>
 <div class="front-page" style="margin-bottom: -1rem;">
   <div class="container">
 
-		<h1>Squad Attendance</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb bg-light">
+        <li class="breadcrumb-item active" aria-current="page">Attendance</li>
+      </ol>
+    </nav>
+
+		<h1>Attendance</h1>
 		<p class="lead mb-4">View attendance records and fill out registers for squads</p>
 
     <?php if (sizeof($sessions) > 0) { ?>
