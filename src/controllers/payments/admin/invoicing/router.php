@@ -16,6 +16,10 @@ $this->post('/new/get-user', function() {
   require 'GetUser.php';
 });
 
+$this->post('/new/search-users', function() {
+  require 'SearchUsers.php';
+});
+
 $this->post('/new', function() {
   require 'NewPaymentsPost.php';
 });
