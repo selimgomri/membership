@@ -91,9 +91,16 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       include "historyViews/squads.php";
   	});
 
+    // $this->get('/squads/{id}:int', function($id) {
+    //   include "historyViews/squadHistory.php";
+    // });
+    
     $this->get('/squads/{id}:int', function($id) {
-      
-      include "historyViews/squadHistory.php";
+      include "historyViews/squad-history.php";
+    });
+    
+    $this->post('/squads/{id}:int/jump-to-week', function($id) {
+      include "historyViews/jump-to-week.php";
   	});
 
     $this->get('/swimmers', function() {

@@ -47,17 +47,9 @@ include BASE_PATH . 'views/header.php';
 
       <form id="payment-form" method="post" class="needs-validation" novalidate>
         <div class="form-group">
-          <label for="user-first-name">User's name</label>
-          <input type="text" class="form-control" id="user-first-name" name="user-first-name" aria-describedby="user-first-name-help" data-ajax-url="<?= htmlspecialchars(autoUrl("payments/invoice-payments/new/search-users")) ?>">
-          <small id="user-first-name-help" class="form-text text-muted">Search for a user by name.</small>
-        </div>
-
-        <div class="form-group">
-          <label for="user-select">Select user</label>
-          <select class="custom-select overflow-hidden" id="user-select" name="user-select" disabled data-ajax-url="<?= htmlspecialchars(autoUrl("payments/invoice-payments/new/get-user")) ?>">
-            <option value="none" selected>Search for a user by name</option>
-          </select>
-          <small id="user-select-help" class="form-text text-muted">Pick a user from this drop down.</small>
+          <label for="user-email">User email address</label>
+          <input type="text" class="form-control" id="user-email" name="user-email" aria-describedby="user-email-help" data-ajax-url="<?= htmlspecialchars(autoUrl("payments/invoice-payments/new/get-user")) ?>">
+          <small id="user-email-help" class="form-text text-muted">Search for the user by email.</small>
         </div>
 
         <div id="user-info-box"></div>

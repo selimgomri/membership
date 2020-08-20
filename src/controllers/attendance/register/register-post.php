@@ -30,7 +30,6 @@ try {
 
 	$getCount = $db->prepare("SELECT COUNT(*) FROM sessionsAttendance WHERE WeekID = ? AND SessionID = ? AND MemberID = ?");
 	$getCount->execute([
-		(int) ($_POST['state'] == 'true'),
 		(int) $_POST['weekId'],
 		(int) $_POST['sessionId'],
 		(int) $_POST['memberId'],
@@ -66,6 +65,8 @@ try {
 		// Ignore
 	}
 } catch (Exception $e) {
+
+	reportError($e);
 
 	http_response_code(500);
 }

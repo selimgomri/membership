@@ -404,4 +404,35 @@ class TrainingSession
 
     return $contacts;
   }
+
+  /**
+   * Get the week id given a date string
+   * 
+   * @param string date string
+   * @return int week id
+   */
+  public static function weekId($dateString = 'now')
+  {
+    $db = app()->db;
+
+    $date = new DateTime($dateString, new DateTimeZone('Europe/London'));
+
+    if ((int) $date->format('N') != '7') {
+      $date->modify('last Sunday');
+    }
+
+    // Get the week id
+    $getWeekId = $db->prepare("SELECT WeekID FROM sessionsWeek WHERE WeekDateBeginning = ? AND Tenant = ?");
+    $getWeekId->execute([
+      $date->format("Y-m-d"),
+      app()->tenant->getId(),
+    ]);
+    $weekId = $getWeekId->fetchColumn();
+
+    if (!$weekId) {
+      throw new Exception('No WeekID');
+    }
+
+    return $weekId;
+  }
 }
