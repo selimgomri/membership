@@ -98,7 +98,7 @@ include BASE_PATH . "views/header.php";
         <div class="col">
           <div class="form-group mb-0">
             <label for="session-select">Select a session</label>
-            <select class="custom-select" name="session-select" id="session-select" required>
+            <select class="custom-select overflow-hidden" name="session-select" id="session-select" required>
               <?= registerSessionSelectGenerator($date, $sessionId) ?>
             </select>
             <div class="invalid-feedback">
