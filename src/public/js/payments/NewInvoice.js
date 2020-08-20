@@ -1,15 +1,19 @@
+/**
+ * Code to handle invoice payment form
+ */
+
 function clearPaymentAreas() {
   document.getElementById('user-info-box').innerHTML = '';
   document.getElementById('payment-details').classList.add('d-none');
   document.getElementById('payment-submit-button').disabled = true;
 }
 
-function getUser() {
-  var email = document.getElementById('user-email');
+function getUser(event) {
+  var user = event.target.value;
 
-  if (email.value) {
+  if (user != 'none') {
     var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         var result = JSON.parse(this.responseText);
         if (result.has_result) {
@@ -45,8 +49,8 @@ function getUser() {
         }
       }
     }
-    var target = email.dataset.ajaxUrl;
-    var params = 'email=' + encodeURIComponent(email.value);
+    var target = event.target.dataset.ajaxUrl;
+    var params = 'user=' + encodeURIComponent(user);
     // Make an ajax request to search for user
     xhr.open('POST', target, true);
     xhr.setRequestHeader('X-Requested-With', 'xhrRequest');
@@ -57,10 +61,31 @@ function getUser() {
   }
 }
 
-document.getElementById('user-email').oninput = getUser;
+let userSearch = document.getElementById('user-first-name');
+userSearch.addEventListener('input', (event) => {
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      let json = JSON.parse(this.responseText);
+      let select = document.getElementById('user-select');
+      select.innerHTML = json.html;
+      select.disabled = json.disabled;
+    } else if (this.readyState == 4) {
+      // Not ok
+      alert('An error occurred.');
+    }
+  }
+  req.open('POST', userSearch.dataset.ajaxUrl, true);
+  req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  req.send('search=' + encodeURI(userSearch.value));
+});
+
+let userSelect = document.getElementById('user-select');
+userSelect.addEventListener('change', getUser);
+// getUser();
 
 var form = document.getElementById('payment-form');
-form.addEventListener('submit', function (event) {
+form.addEventListener('submit', function(event) {
   // Cancel form submission
   event.preventDefault();
 
@@ -93,7 +118,7 @@ form.addEventListener('submit', function (event) {
 
     document.getElementById('confirmation-modal-user-info-address').textContent = document.getElementById('user-info-address').textContent;
 
-    document.getElementById('confirm').addEventListener('click', function (event) {
+    document.getElementById('confirm').addEventListener('click', function(event) {
       document.getElementById('payment-form').submit();
     });
 
@@ -110,7 +135,7 @@ if (radios !== null) {
   var options = radios.getElementsByTagName('input');
   for (var i = 0, len = options.length; i < len; i++) {
     if (options[i].type === 'radio') {
-      options[i].addEventListener('change', function (event) {
+      options[i].addEventListener('change', function(event) {
         var type = document.getElementById('payment-form').elements['type'];
         if (type.value === 'Payment') {
           document.getElementById('amount-type').textContent = 'charge';
