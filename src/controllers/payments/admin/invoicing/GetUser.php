@@ -7,14 +7,10 @@ use Brick\PhoneNumber\PhoneNumberFormat;
 $db = app()->db;
 $tenant = app()->tenant;
 
-if (!isset($_POST['user'])) {
-  // return;
-}
-
-$getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile FROM users INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE users.Tenant = ? AND UserID LIKE ? AND `permissions`.`Permission` = 'Parent'");
+$getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile FROM users INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE users.Tenant = ? AND EmailAddress LIKE ? AND `permissions`.`Permission` = 'Parent'");
 $getUser->execute([
   $tenant->getId(),
-  $_POST['user']
+  '%' . mb_strtolower($_POST['email']) . '%'
 ]);
 
 $row = $getUser->fetch(PDO::FETCH_ASSOC);
