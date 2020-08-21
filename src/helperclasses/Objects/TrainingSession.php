@@ -299,11 +299,15 @@ class TrainingSession
         // Ignore, stay null
       }
 
+      $tick = $member['tick'] == 1;
+      $indeterminate = $member['tick'] == 2;
+
       $members[] = [
         'id' => $member['id'],
         'fn' => $member['fn'],
         'sn' => $member['sn'],
-        'tick' => $member['tick'],
+        'tick' => $tick,
+        'indeterminate' => $indeterminate,
         'medical' => $medical,
         'notes' => $notes,
         'photo' => $photo,

@@ -68,7 +68,7 @@ function registerSheetGenerator($date, $sessionId)
                   <div class="row align-items-center">
                     <div class="col">
                       <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="member-<?= htmlspecialchars($row['id']) ?>" <?php if (bool($row['tick'])) { ?>checked<?php } ?> data-week-id="<?= htmlspecialchars($row['week_id']) ?>" data-session-id="<?= htmlspecialchars($row['session_id']) ?>" data-member-id="<?= htmlspecialchars($row['id']) ?>">
+                        <input type="checkbox" class="custom-control-input checkbox-input" id="member-<?= htmlspecialchars($row['id']) ?>" <?php if (bool($row['tick'])) { ?>checked<?php } ?> data-indeterminate="<?php if (bool($row['indeterminate'])) { ?>true<?php } else { ?>false<?php } ?>"" data-week-id=" <?= htmlspecialchars($row['week_id']) ?>" data-session-id="<?= htmlspecialchars($row['session_id']) ?>" data-member-id="<?= htmlspecialchars($row['id']) ?>">
                         <label class="custom-control-label d-block" for="member-<?= htmlspecialchars($row['id']) ?>"><?= htmlspecialchars($row['fn'] . ' ' . $row['sn']) ?></label>
                       </div>
                     </div>

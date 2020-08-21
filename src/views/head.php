@@ -1,10 +1,13 @@
 <?php
 
-$currentUser = app()->user;
+$currentUser = null;
+if (isset(app()->user)) {
+  $currentUser = app()->user;
+}
 $cvp = 'generic';
-if (app()->tenant->isCLS() && $currentUser != null && $currentUser->getUserBooleanOption('UsesGenericTheme')) {
+if (isset(app()->tenant) && app()->tenant->isCLS() && $currentUser != null && $currentUser->getUserBooleanOption('UsesGenericTheme')) {
   $cvp = 'generic';
-} else if (app()->tenant->isCLS()) {
+} else if (isset(app()->tenant) && app()->tenant->isCLS()) {
   $cvp = 'chester';
 }
 

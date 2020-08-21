@@ -278,11 +278,22 @@ include BASE_PATH . 'views/header.php';
                   </dd>
                 <?php } ?>
 
-                <?php if (isset($attendees['']) && sizeof($attendees['']) > 0) { ?>
+                <?php if (isset($attendees['0']) && sizeof($attendees['0']) > 0) { ?>
                   <dt class="col-sm-3">Not present</dt>
                   <dd class="col-sm-9">
                     <ul class="list-unstyled mb-0">
-                      <?php foreach ($attendees[''] as $member) { ?>
+                      <?php foreach ($attendees['0'] as $member) { ?>
+                        <li><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></li>
+                      <?php } ?>
+                    </ul>
+                  </dd>
+                <?php } ?>
+
+                <?php if (isset($attendees['2']) && sizeof($attendees['2']) > 0) { ?>
+                  <dt class="col-sm-3">Excused</dt>
+                  <dd class="col-sm-9">
+                    <ul class="list-unstyled mb-0">
+                      <?php foreach ($attendees['2'] as $member) { ?>
                         <li><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></li>
                       <?php } ?>
                     </ul>
