@@ -51,6 +51,7 @@ ssf.addEventListener('change', (event) => {
         object = JSON.parse(this.responseText);
         if (object.status == 200) {
           registerArea.innerHTML = object.html;
+          setIndeterminate();
 
           if (socket.connected) {
             joinSocketRoom();
@@ -225,3 +226,20 @@ async function joinSocketRoom() {
     // console.info('Socket connected');
   }
 }
+
+function setIndeterminate() {
+  let regCheckboxes = document.getElementsByClassName('checkbox-input');
+  for (let i = 0; i < regCheckboxes.length; i++) {
+    let checkbox = regCheckboxes[i];
+
+    if (checkbox.dataset.indeterminate && checkbox.dataset.indeterminate == 'true') {
+      checkbox.indeterminate = true;
+    } else {
+      checkbox.indeterminate = false;
+    }
+
+  }
+}
+
+// Call on first run
+setIndeterminate()
