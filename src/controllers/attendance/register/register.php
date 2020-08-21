@@ -45,6 +45,8 @@ if (bool(getenv("IS_DEV"))) {
 include 'session-drop-down.php';
 include 'session-register.php';
 
+$pageHead['body-class'][] = 'user-select-none';
+
 $fluidContainer = true;
 $use_white_background = true;
 include BASE_PATH . "views/header.php";
@@ -126,6 +128,6 @@ if (bool(getenv("IS_DEV"))) {
 } else {
   $footer->addExternalJs('https://production-apis.tenant-services.membership.myswimmingclub.uk/socket.io/socket.io.js');
 }
-$footer->addJs("public/js/attendance/register/register.js");
+$footer->addJs("public/js/attendance/register/register.js?version=1");
 $footer->useFluidContainer();
 $footer->render();

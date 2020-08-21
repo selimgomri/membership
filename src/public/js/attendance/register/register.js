@@ -103,6 +103,65 @@ regArea.addEventListener('click', (event) => {
 
 });
 
+function sendChange(weekId, sessionId, memberId, value) {
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+
+    } else if (this.readyState == 4) {
+      // Not ok
+      alert('An error occurred. Your change was not saved.');
+    }
+  }
+  req.open('POST', options.ajaxUrl, true);
+  req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  req.send('weekId=' + encodeURI(weekId) + '&sessionId=' + encodeURI(sessionId) + '&memberId=' + encodeURI(memberId) + '&state=' + encodeURI(value));
+}
+
+var mouseDownTimer;
+regArea.addEventListener('pointerdown', function (event) {
+  // simulating hold event
+  if (event.target.type == 'checkbox' || (event.target.previousElementSibling && event.target.previousElementSibling.nodeName == 'INPUT')) {
+    mouseDownTimer = window.setTimeout(function (event) {
+      // You are now in a hold state, you can do whatever you like!
+      // console.log(event);
+      event.stopPropagation();
+      event.preventDefault();
+
+      let checkbox = event.target;
+      if (event.target.previousElementSibling && event.target.previousElementSibling.nodeName == 'INPUT') {
+        checkbox = event.target.previousElementSibling;
+      }
+
+      let setState = !checkbox.indeterminate;
+      checkbox.indeterminate = setState;
+
+      // Get value and send an AJAX request
+      let value = checkbox.value;
+      if (setState) {
+        value = 2;
+      }
+      let weekId = checkbox.dataset.weekId;
+      let sessionId = checkbox.dataset.sessionId;
+      let memberId = checkbox.dataset.memberId;
+
+      checkbox.parentElement.addEventListener('change', (event) => {
+        // Ignore the event
+        event.stopPropagation();
+        event.preventDefault();
+        checkbox.indeterminate = setState;
+        checkbox.value = false;
+      }, { once: true });
+
+      sendChange(weekId, sessionId, memberId, value);
+    }, 500, event);
+  }
+});
+
+regArea.addEventListener('pointerup', function (event) {
+  if (mouseDownTimer) window.clearTimeout(mouseDownTimer);
+});
+
 regArea.addEventListener('change', (event) => {
 
   if (event) {
@@ -111,24 +170,16 @@ regArea.addEventListener('change', (event) => {
   }
 
   if (event.target.type == 'checkbox') {
+    // Remove any indeterminate state
+    delete event.target.indeterminate;
+
     // Get value and send an AJAX request
     let value = event.target.checked;
     let weekId = event.target.dataset.weekId;
     let sessionId = event.target.dataset.sessionId;
     let memberId = event.target.dataset.memberId;
 
-    var req = new XMLHttpRequest();
-    req.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-
-      } else if (this.readyState == 4) {
-        // Not ok
-        alert('An error occurred. Your change was not saved.');
-      }
-    }
-    req.open('POST', options.ajaxUrl, true);
-    req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    req.send('weekId=' + encodeURI(weekId) + '&sessionId=' + encodeURI(sessionId) + '&memberId=' + encodeURI(memberId) + '&state=' + encodeURI(value));
+    sendChange(weekId, sessionId, memberId, value);
   }
 
 });
@@ -144,12 +195,17 @@ socket.on('connect', () => {
 // });
 
 socket.on('register-tick-event', (message) => {
-  // console.log(message);
-
   if (message.event == 'register-item-state-change') {
     let input = document.getElementById('member-' + message.field);
-    if (input)
-      input.checked = message.state;
+    if (input) {
+      if (message.state == null) {
+        input.checked = false;
+        input.indeterminate = true;
+      } else {
+        input.checked = message.state;
+        input.indeterminate = false;
+      }
+    }
   }
 })
 
