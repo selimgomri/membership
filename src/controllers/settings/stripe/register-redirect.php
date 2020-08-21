@@ -1,18 +1,21 @@
 <?php
 
-if (!isset($_SESSION['Stripe-Reg-OAuth'])) {
-  halt(404);
-}
-
-$tenant = \Tenant::fromId((int) $_SESSION['Stripe-Reg-OAuth']['tenant']);
-
-if (!$tenant || !isset($_GET['code'])) {
-  halt(404);
-}
-
 \Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
 try {
+
+  if (!isset($_SESSION['Stripe-Reg-OAuth'])) {
+    throw new Exception('No reg');
+  }
+
+  $tenant = null;
+  if (isset($_SESSION['Stripe-Reg-OAuth']['tenant'])) {
+    $tenant = \Tenant::fromId((int) $_SESSION['Stripe-Reg-OAuth']['tenant']);
+  }
+
+  if (!$tenant || !isset($_GET['code'])) {
+    throw new Exception('Unknown organisation');
+  }
 
   if (isset($_GET['error'])) {
     throw new Exception('User denied access');
