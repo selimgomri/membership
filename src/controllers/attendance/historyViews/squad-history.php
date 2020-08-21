@@ -196,6 +196,7 @@ include BASE_PATH . 'views/header.php';
                 $weekId = TrainingSession::weekId($day->format('Y-m-d'));
               } catch (Exception $e) {
                 // Ignore
+                $weekId = null;
               }
 
             ?>
