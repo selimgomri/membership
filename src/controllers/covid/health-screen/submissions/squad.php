@@ -36,6 +36,8 @@ $member = $getMembers->fetch(PDO::FETCH_ASSOC);
 
 $getLatestCompletion = $db->prepare("SELECT `ID`, `DateTime`, `OfficerApproval` FROM covidHealthScreen WHERE Member = ? ORDER BY `DateTime` DESC LIMIT 1");
 
+$pagetitle = htmlspecialchars($squad['SquadName']) . ' - Health Screening';
+
 include BASE_PATH . 'views/header.php';
 
 ?>
