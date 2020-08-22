@@ -17,3 +17,9 @@ $this->group('/members', function () {
     include 'screening-survey/survey-post.php';
   });
 });
+
+$this->group('/squads', function () {
+  $this->get('/{id}:int', function($id) {
+    include 'submissions/squad.php';
+  });
+});

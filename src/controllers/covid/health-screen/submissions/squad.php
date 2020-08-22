@@ -4,35 +4,33 @@ $db = app()->db;
 $tenant = app()->tenant;
 $pagetitle = 'COVID Health Screening';
 
-$squads = null;
-$showSquadOpts = false;
-// Show if this user is a squad rep
-$getRepCount = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE User = ?");
-$getRepCount->execute([
-  $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
-]);
-$rep = $getRepCount->fetchColumn() > 0;
-$showSquadOpts = $rep;
-
-if ($rep) {
-  $squads = $db->prepare("SELECT SquadName, SquadID FROM squads INNER JOIN squadReps ON squads.SquadID = squadReps.Squad WHERE squadReps.User = ? ORDER BY SquadFee DESC, SquadName ASC;");
-  $squads->execute([
-    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
-  ]);
-}
+$squad = null;
 
 $user = app()->user;
 if ($user->hasPermission('Admin') || $user->hasPermission('Coach') || $user->hasPermission('Galas')) {
   $showSquadOpts = true;
-  $squads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE squads.Tenant = ? ORDER BY SquadFee DESC, SquadName ASC;");
-  $squads->execute([
+  $getSquad = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE squads.Tenant = ? AND squads.SquadID = ?;");
+  $getSquad->execute([
     $tenant->getId(),
+    $id,
   ]);
+  $squad = $getSquad->fetch(PDO::FETCH_ASSOC);
+} else {
+  $getSquad = $db->prepare("SELECT SquadName, SquadID FROM squads INNER JOIN squadReps ON squads.SquadID = squadReps.Squad WHERE squadReps.User = ? AND squadReps.Squad = ?;");
+  $getSquad->execute([
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+    $id,
+  ]);
+  $squad = $getSquad->fetch(PDO::FETCH_ASSOC);
 }
 
-$getMembers = $db->prepare("SELECT MForename, MSurname, MemberID FROM members WHERE UserID = ? ORDER BY MForename ASC, MSurname ASC;");
+if (!$squad) {
+  halt(404);
+}
+
+$getMembers = $db->prepare("SELECT MForename, MSurname, MemberID FROM members INNER JOIN squadMembers ON squadMembers.Member = members.MemberID WHERE squadMembers.Squad = ? ORDER BY MForename ASC, MSurname ASC;");
 $getMembers->execute([
-  $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+  $id,
 ]);
 $member = $getMembers->fetch(PDO::FETCH_ASSOC);
 
@@ -48,17 +46,19 @@ include BASE_PATH . 'views/header.php';
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('covid')) ?>">COVID</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Screening</li>
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('covid/health-screening')) ?>">Screening</a></li>
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('covid/health-screening#squads')) ?>">Squads</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><?= htmlspecialchars($squad['SquadName']) ?></li>
       </ol>
     </nav>
 
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>
-          COVID-19 Health Screening
+          <?= htmlspecialchars($squad['SquadName']) ?> Health Screening
         </h1>
         <p class="lead mb-0">
-          Making sure you're safe to train
+          Keeping everyone safe
         </p>
       </div>
     </div>
@@ -71,31 +71,6 @@ include BASE_PATH . 'views/header.php';
 
     <div class="col-lg-8">
 
-      <?php if (isset($_SESSION['CovidHealthSurveySuccess'])) { ?>
-        <div class="alert alert-success">
-          <p class="mb-0">
-            <strong>We've saved your COVID-19 health survey</strong>
-          </p>
-        </div>
-      <?php unset($_SESSION['CovidHealthSurveySuccess']);
-      } ?>
-
-      <h2>
-        About our health screening
-      </h2>
-      <p class="lead">
-        Swim England are recommending that all clubs carry out a periodic screening survey of all members who are training.
-      </p>
-      <p>
-        The screen is to inform you and make you aware of the risks.
-      </p>
-      <p>
-        Your club may refuse access to training if you do not have an up to date health screen.
-      </p>
-
-      <?php if ($showSquadOpts) { ?>
-        <h2 id="members">Your members</h2>
-      <?php } ?>
       <?php if ($member) { ?>
 
         <ul class="list-group mb-3">
@@ -136,28 +111,9 @@ include BASE_PATH . 'views/header.php';
       <?php } else { ?>
         <div class="alert alert-warning">
           <p class="mb-0">
-            <strong>You don't have any members on your account</strong>
-          </p>
-          <p class="mb-0">
-            Please add a member to be able to use this service.
+            <strong>There are no members in <?= htmlspecialchars($squad['SquadName']) ?></strong>
           </p>
         </div>
-      <?php } ?>
-
-      <?php if ($showSquadOpts) { ?>
-        <h2 id="squads">Other club members</h2>
-        <p class="lead">
-          View status for members in your squads
-        </p>
-        <?php if ($squads && $squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
-          <div class="list-group mb-3">
-            <?php do { ?>
-              <a href="<?= htmlspecialchars(autoUrl('covid/health-screening/squads/' . $squad['SquadID'])) ?>" class="list-group-item list-group-item-action">
-                <?= htmlspecialchars($squad['SquadName']) ?>
-              </a>
-            <?php } while ($squad = $squads->fetch(PDO::FETCH_ASSOC)); ?>
-          </div>
-        <?php } ?>
       <?php } ?>
 
       <p>
