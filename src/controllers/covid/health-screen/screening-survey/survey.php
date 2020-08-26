@@ -16,7 +16,14 @@ if (!$member) {
   halt(404);
 }
 
-if (!$user->hasPermission('Admin') && !$user->hasPermission('Coach') && !$user->hasPermission('Galas')) {
+$getCountRep = $db->prepare("SELECT COUNT(*) FROM squadMembers WHERE Member = ? AND Squad IN (SELECT Squad FROM squadReps WHERE User = ?)");
+$getCountRep->execute([
+  $id,
+  $user->getId(),
+]);
+$rep = $getCountRep->fetchColumn() > 0;
+
+if (!$rep && !$user->hasPermission('Admin') && !$user->hasPermission('Coach') && !$user->hasPermission('Galas')) {
   if ($member['UserID'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
     halt(404);
   }

@@ -18,7 +18,14 @@ if (!$member) {
   halt(404);
 }
 
-if (!$user->hasPermission('Admin') && !$user->hasPermission('Coach') && !$user->hasPermission('Galas')) {
+$getCountRep = $db->prepare("SELECT COUNT(*) FROM squadMembers WHERE Member = ? AND Squad IN (SELECT Squad FROM squadReps WHERE User = ?)");
+$getCountRep->execute([
+  $id,
+  $user->getId(),
+]);
+$rep = $getCountRep->fetchColumn() > 0;
+
+if (!$rep && !$user->hasPermission('Admin') && !$user->hasPermission('Coach') && !$user->hasPermission('Galas')) {
   if ($member['UserID'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
     halt(404);
   }
@@ -38,7 +45,7 @@ $getCount->execute([$id]);
 $numForms  = $getCount->fetchColumn();
 $numPages = ((int)($numForms / 10)) + 1;
 
-$getForms = $db->prepare("SELECT `ID`, `DateTime`, `OfficerApproval`, `Document` FROM covidHealthScreen WHERE Member = :member ORDER BY `DateTime` DESC LIMIT :offset, :num");
+$getForms = $db->prepare("SELECT `ID`, `DateTime`, `OfficerApproval`, `Document`, `ApprovedBy`, `Forename`, `Surname` FROM covidHealthScreen LEFT JOIN users ON covidHealthScreen.ApprovedBy = users.UserID WHERE Member = :member ORDER BY `DateTime` DESC LIMIT :offset, :num");
 $getForms->bindValue(':member', $id, PDO::PARAM_INT);
 $getForms->bindValue(':offset', $start, PDO::PARAM_INT);
 $getForms->bindValue(':num', 10, PDO::PARAM_INT);
@@ -93,8 +100,18 @@ include BASE_PATH . 'views/header.php';
           ?>
             <li class="list-group-item" id="<?= htmlspecialchars($form['ID']) ?>">
               <h2>
-                Submission at <?= htmlspecialchars($time->format('H:i, j F Y')) ?><?php if (bool($form['OfficerApproval'])) { ?> <span class="badge badge-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Approved by club</span><?php } ?>
+                Submission at <?= htmlspecialchars($time->format('H:i, j F Y')) ?>
               </h2>
+
+              <p class="lead">
+                <?php if (bool($form['OfficerApproval'])) { ?>
+                  <span class="text-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Approved by <?= htmlspecialchars($form['Forename'] . ' ' . $form['Surname']) ?></span>
+                <?php } else if (!bool($form['OfficerApproval']) && $form['ApprovedBy']) { ?>
+                  <span class="text-danger"><i class="fa fa-times-circle" aria-hidden="true"></i> Rejected by <?= htmlspecialchars($form['Forename'] . ' ' . $form['Surname']) ?></span>
+                <?php } else if (!bool($form['OfficerApproval'])) { ?>
+                  <span class="text-warning"><i class="fa fa-minus-circle" aria-hidden="true"></i> Awaiting approval</span>
+                <?php } ?>
+              </p>
 
               <?php
               $json = json_decode($form['Document'], true);
