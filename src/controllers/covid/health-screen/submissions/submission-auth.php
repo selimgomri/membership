@@ -78,7 +78,8 @@ try {
     }
     $subject = 'We\'ve ' . $type . ' ' . $member['MForename'] . '\'s COVID-19 Health Survey';
 
-    $subTime = new DateTime($row['DateTime'], new DateTimeZone('Europe/London'));
+    $subTime = new DateTime($row['DateTime'], new DateTimeZone('UTC'));
+    $subTime->setTimezone(new DateTimeZone('Europe/London'));
 
     $message = '<p>Hello ' . htmlspecialchars($memberUser['Forename'] . ' ' . $memberUser['Surname']) . '</p>';
 

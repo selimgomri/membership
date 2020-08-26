@@ -50,7 +50,7 @@ $extraFees->execute([
   $id,
 ]);
 
-$getLatestCovidSurveyCompletion = $db->prepare("SELECT `ID`, `DateTime`, `OfficerApproval` FROM covidHealthScreen WHERE Member = ? ORDER BY `DateTime` DESC LIMIT 1");
+$getLatestCovidSurveyCompletion = $db->prepare("SELECT `ID`, `DateTime`, `OfficerApproval`, `ApprovedBy`, `Forename`, `Surname` FROM covidHealthScreen LEFT JOIN users ON covidHealthScreen.ApprovedBy = users.UserID WHERE Member = ? ORDER BY `DateTime` DESC LIMIT 1");
 $getLatestCovidSurveyCompletion->execute([
   $id
 ]);
@@ -200,21 +200,31 @@ include BASE_PATH . 'views/header.php';
 
       <h2 id="covid-screen">COVID-19 Health Survey</h2>
 
-      <p>
-        <?php if ($latestCovidSurvey) {
-          $time = new DateTime($latestCovidSurvey['DateTime'], new DateTimeZone('UTC'));
-          $time->setTimezone(new DateTimeZone('Europe/London'));
-        ?>
-          Latest submission <?= htmlspecialchars($time->format('H:i, j F Y')) ?> <?php if (bool($latestCovidSurvey['OfficerApproval'])) { ?><span class="badge badge-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Approved by club</span><?php } else { ?><span class="badge badge-info"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Not yet approved</span><?php } ?>
-        <?php } else { ?>
-          No health survey submitted
-        <?php } ?></p>
+      <?php if ($latestCovidSurvey) {
+        $time = new DateTime($latestCovidSurvey['DateTime'], new DateTimeZone('UTC'));
+        $time->setTimezone(new DateTimeZone('Europe/London'));
+      ?>
+        <p>
+          Latest submission <?= htmlspecialchars($time->format('H:i, j F Y')) ?><br>
+          <?php if (bool($latestCovidSurvey['OfficerApproval'])) { ?>
+            <span class="text-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Approved by <?= htmlspecialchars($latestCovidSurvey['Forename'] . ' ' . $latestCovidSurvey['Surname']) ?></span>
+          <?php } else if (!bool($latestCovidSurvey['OfficerApproval']) && $latestCovidSurvey['ApprovedBy']) { ?>
+            <span class="text-danger"><i class="fa fa-times-circle" aria-hidden="true"></i> Rejected by <?= htmlspecialchars($latestCovidSurvey['Forename'] . ' ' . $latestCovidSurvey['Surname']) ?></span>
+          <?php } else if (!bool($latestCovidSurvey['OfficerApproval'])) { ?>
+            <span class="text-warning"><i class="fa fa-minus-circle" aria-hidden="true"></i> Awaiting approval</span>
+          <?php } ?>
+        </p>
 
-      <p>
-        <a href="<?= htmlspecialchars(autoUrl('covid/health-screening/members/' . $id)) ?>" class="btn btn-success">
-          View all submissions
-        </a>
-      </p>
+        <p>
+          <a href="<?= htmlspecialchars(autoUrl('covid/health-screening/members/' . $id)) ?>" class="btn btn-success">
+            View all submissions
+          </a>
+        </p>
+      <?php } else { ?>
+        <p class="mb-0">
+          No survey submitted
+        </p>
+      <?php } ?>
 
       <hr>
 
