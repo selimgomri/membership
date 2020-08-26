@@ -72,9 +72,10 @@ try {
   foreach ($jsonArray['form'] as $key => $value) {
     if (isset($_POST[$key . '-radio']) && bool($_POST[$key . '-radio'])) {
       $jsonArray['form'][$key]['state'] = true;
-      if (isset($jsonArray['form'][$key]['notes']) && isset($_POST[$key . '-more-textarea'])) {
-        $jsonArray['form'][$key]['notes'] = trim((string) $_POST[$key . '-more-textarea']);
-      }
+    }
+
+    if (isset($jsonArray['form'][$key]['notes']) && isset($_POST[$key . '-more-textarea'])) {
+      $jsonArray['form'][$key]['notes'] = trim((string) $_POST[$key . '-more-textarea']);
     }
   }
 

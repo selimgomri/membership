@@ -23,3 +23,7 @@ $this->group('/squads', function () {
     include 'submissions/squad.php';
   });
 });
+
+$this->post('/approval', function() {
+  include 'submissions/submission-auth.php';
+});
