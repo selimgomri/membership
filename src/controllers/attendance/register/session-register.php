@@ -30,6 +30,8 @@ function registerSheetGenerator($date, $sessionId)
     $markdown = new ParsedownExtra();
     $markdown->setSafeMode(true);
 
+    $getLatestCovidSurveyCompletion = $db->prepare("SELECT `ID`, `DateTime`, `OfficerApproval`, `ApprovedBy`, `Forename`, `Surname` FROM covidHealthScreen LEFT JOIN users ON covidHealthScreen.ApprovedBy = users.UserID WHERE Member = ? ORDER BY `DateTime` DESC LIMIT 1");
+
 ?>
     <form id="register-form">
 
@@ -63,6 +65,14 @@ function registerSheetGenerator($date, $sessionId)
 
           <ul class="list-group list-group-flush accordion">
             <?php foreach ($register as $row) { ?>
+              <?php
+              // COVID 19 STUFF
+              $getLatestCovidSurveyCompletion->execute([
+                $row['id']
+              ]);
+              $cvLatest = $getLatestCovidSurveyCompletion->fetch(PDO::FETCH_ASSOC);
+              // END OF COVID STUFF
+              ?>
               <li class="list-group-item py-3">
                 <div class="bg-white my-n3 py-3 sticky-top">
                   <div class="row align-items-center">
@@ -74,6 +84,25 @@ function registerSheetGenerator($date, $sessionId)
                     </div>
                     <?php if (sizeof($row['medical']) > 0 || sizeof($row['photo']) > 0 || $row['notes'] || sizeof($row['contacts']) > 0) { ?>
                       <div class="col-auto">
+                        <?php if ($cvLatest) { ?>
+                          <?php if (bool($cvLatest['OfficerApproval'])) { ?>
+                            <span class="badge badge-sm badge-success">
+                              COVID <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
+                            </span>
+                          <?php } else if (!bool($cvLatest['OfficerApproval']) && $cvLatest['ApprovedBy']) { ?>
+                            <span class="badge badge-sm badge-danger">
+                              COVID <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
+                            </span>
+                          <?php } else if (!bool($cvLatest['OfficerApproval']) && !$cvLatest['ApprovedBy']) { ?>
+                            <span class="badge badge-sm badge-warning">
+                              COVID <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
+                            </span>
+                          <?php } ?>
+                        <?php } else { ?>
+                          <span class="badge badge-sm badge-danger">
+                            NO CV SURVEY <span class="sr-only">Survey submitted</span>
+                          </span>
+                        <?php } ?>
                         <div class="btn-group">
                           <?php if (sizeof($row['medical']) > 0 || sizeof($row['photo']) > 0 || $row['notes']) { ?>
                             <button class="btn btn-sm btn-warning" type="button" data-show="extra-info-<?= htmlspecialchars($row['id']) ?>" aria-expanded="false" aria-controls="extra-info-<?= htmlspecialchars($row['id']) ?>"><span class="d-none d-md-inline">Medical, photo &amp; notes info</span><span class="d-md-none">Info</span> <span class="fa fa-caret-down"></span></button>
@@ -245,13 +274,50 @@ function registerSheetGenerator($date, $sessionId)
       </div>
     </form>
 
-    <div class="alert alert-info">
-      <p class="mb-0">
-        <strong>Where's the save button?</strong>
-      </p>
-      <p class="mb-0">
-        We now save registers automatically as you complete them. Anybody else viewing the same register will see your changes in real-time.
-      </p>
+    <p>
+      Register saves automatically
+    </p>
+
+    <div class="card">
+      <div class="card-header">
+        COVID-19 Badge Key
+      </div>
+      <div class="card-body">
+        <dl class="row mb-0">
+          <dt class="col-sm-3">
+            <span class="badge badge-sm badge-success">
+              COVID <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
+            </span>
+          </dt>
+          <dd class="col-sm-9">
+            COVID health survey submitted and approved by staff
+          </dd>
+          <dt class="col-sm-3">
+            <span class="badge badge-sm badge-danger">
+              COVID <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
+            </span>
+          </dt>
+          <dd class="col-sm-9">
+            COVID health survey submitted and rejected by staff
+          </dd>
+          <dt class="col-sm-3">
+            <span class="badge badge-sm badge-warning">
+              COVID <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
+            </span>
+          </dt>
+          <dd class="col-sm-9">
+            COVID health survey submitted, pending approval
+          </dd>
+          <dt class="col-sm-3">
+            <span class="badge badge-sm badge-danger">
+              NO CV SURVEY <span class="sr-only"> submitted</span>
+            </span>
+          </dt>
+          <dd class="col-sm-9 mb-0">
+            No COVID health survey has been submitted for this member
+          </dd>
+        </dl>
+      </div>
     </div>
 <?php
 

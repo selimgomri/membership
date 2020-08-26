@@ -206,7 +206,7 @@ if (isset($customBackground) && $customBackground) {
         d-print-none justify-content-between px-0" role="navigation">
 
                   <a class="navbar-brand d-lg-none" href="<?= htmlspecialchars(autoUrl("")) ?>">
-                    <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> Membership
+                    <?= htmlspecialchars(app()->tenant->getKey('ASA_CLUB_CODE')) ?> Club Membership
                   </a>
                   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>

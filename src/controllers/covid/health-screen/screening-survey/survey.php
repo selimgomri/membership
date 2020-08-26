@@ -16,7 +16,14 @@ if (!$member) {
   halt(404);
 }
 
-if (!$user->hasPermission('Admin') && !$user->hasPermission('Coach') && !$user->hasPermission('Galas')) {
+$getCountRep = $db->prepare("SELECT COUNT(*) FROM squadMembers WHERE Member = ? AND Squad IN (SELECT Squad FROM squadReps WHERE User = ?)");
+$getCountRep->execute([
+  $id,
+  $user->getId(),
+]);
+$rep = $getCountRep->fetchColumn() > 0;
+
+if (!$rep && !$user->hasPermission('Admin') && !$user->hasPermission('Coach') && !$user->hasPermission('Galas')) {
   if ($member['UserID'] != $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) {
     halt(404);
   }
@@ -84,6 +91,19 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
 
     <div class="col">
+
+      <?php if (isset($_SESSION['CovidHealthSurveyError'])) { ?>
+        <div class="alert alert-success">
+          <p class="mb-0">
+            <strong>There was a problem saving your COVID-19 health survey</strong>
+          </p>
+          <p class="mb-0">
+            <?= htmlspecialchars($_SESSION['CovidHealthSurveyError']) ?>
+          </p>
+        </div>
+      <?php unset($_SESSION['CovidHealthSurveyError']);
+      } ?>
+
       <form method="post" class="needs-validation" novalidate>
 
         <ol class="list-with-border">
@@ -120,7 +140,7 @@ include BASE_PATH . 'views/header.php';
                 <div class="d-none pt-3" id="confirmed-infection-more">
                   <div class="form-group mb-0">
                     <label for="confirmed-infection-more-textarea">Please provide details:</label>
-                    <textarea class="form-control" id="confirmed-infection-more-textarea" rows="4"></textarea>
+                    <textarea class="form-control" name="confirmed-infection-more-textarea" id="confirmed-infection-more-textarea" rows="4"></textarea>
                     <div class="invalid-feedback">
                       Please provide details.
                     </div>
@@ -163,7 +183,7 @@ include BASE_PATH . 'views/header.php';
                 <div class="d-none pt-3" id="exposure-more">
                   <div class="form-group mb-0">
                     <label for="exposure-more-textarea">Please provide details:</label>
-                    <textarea class="form-control" id="exposure-more-textarea" rows="4"></textarea>
+                    <textarea class="form-control" name="exposure-more-textarea" id="exposure-more-textarea" rows="4"></textarea>
                     <div class="invalid-feedback">
                       Please provide details.
                     </div>
@@ -209,7 +229,7 @@ include BASE_PATH . 'views/header.php';
                 <div class="d-none pt-3" id="underlying-medical-more">
                   <div class="form-group mb-0">
                     <label for="underlying-medical-more-textarea">Please provide details:</label>
-                    <textarea class="form-control" id="underlying-medical-more-textarea" rows="4"></textarea>
+                    <textarea class="form-control" name="underlying-medical-more-textarea" id="underlying-medical-more-textarea" rows="4"></textarea>
                     <div class="invalid-feedback">
                       Please provide details.
                     </div>
@@ -252,7 +272,7 @@ include BASE_PATH . 'views/header.php';
                 <div class="d-none pt-3" id="live-with-shielder-more">
                   <div class="form-group mb-0">
                     <label for="live-with-shielder-more-textarea">Please provide details:</label>
-                    <textarea class="form-control" id="live-with-shielder-more-textarea" rows="4"></textarea>
+                    <textarea class="form-control" name="live-with-shielder-more-textarea" id="live-with-shielder-more-textarea" rows="4"></textarea>
                     <div class="invalid-feedback">
                       Please provide details.
                     </div>
@@ -295,7 +315,7 @@ include BASE_PATH . 'views/header.php';
                 <div class="d-none pt-3" id="understand-return-more">
                   <div class="form-group mb-0">
                     <label for="understand-return-more-textarea">Please provide details:</label>
-                    <textarea class="form-control" id="understand-return-more-textarea" rows="4"></textarea>
+                    <textarea class="form-control" name="understand-return-more-textarea" id="understand-return-more-textarea" rows="4"></textarea>
                     <div class="invalid-feedback">
                       Please provide details.
                     </div>
@@ -388,7 +408,7 @@ include BASE_PATH . 'views/header.php';
                 <div class="d-none pt-3" id="advice-received-more">
                   <div class="form-group mb-0">
                     <label for="advice-received-more-textarea">Please provide details:</label>
-                    <textarea class="form-control" id="advice-received-more-textarea" rows="4"></textarea>
+                    <textarea class="form-control" name="advice-received-more-textarea" id="advice-received-more-textarea" rows="4"></textarea>
                     <div class="invalid-feedback">
                       Please provide details.
                     </div>

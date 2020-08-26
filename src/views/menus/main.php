@@ -78,7 +78,10 @@ if (!function_exists('chesterStandardMenu')) {
         <ul class="navbar-nav mr-auto">
           <?php if (!empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
             <li class="nav-item">
-              <a class="nav-link" href="<?php echo autoUrl("") ?>">Home</a>
+              <a class="nav-link" href="<?= htmlspecialchars(autoUrl('')) ?>">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="<?= htmlspecialchars(autoUrl('covid')) ?>">COVID</a>
             </li>
             <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { ?>
               <?php

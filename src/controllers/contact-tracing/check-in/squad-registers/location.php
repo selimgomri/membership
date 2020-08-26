@@ -72,6 +72,8 @@ if (!$squad) {
   $isHere = $db->prepare("SELECT COUNT(*) FROM covidVisitors WHERE `Location` = ? AND `Person` = ? AND `Type` = ? AND `Time` > ? AND NOT `SignedOut`");
   $time = (new DateTime('-1 hour', new DateTimeZone('UTC')))->format("Y-m-d H:i:s");
 
+  $getLatestCovidSurveyCompletion = $db->prepare("SELECT `ID`, `DateTime`, `OfficerApproval`, `ApprovedBy`, `Forename`, `Surname` FROM covidHealthScreen LEFT JOIN users ON covidHealthScreen.ApprovedBy = users.UserID WHERE Member = ? ORDER BY `DateTime` DESC LIMIT 1");
+
   include BASE_PATH . 'views/header.php';
 
 ?>
@@ -195,11 +197,41 @@ if (!$squad) {
                   if (!$here) {
                     $listsShown = true;
                   }
+
+                  $getLatestCovidSurveyCompletion->execute([
+                    $member['MemberID'],
+                  ]);
+                  $cvLatest = $getLatestCovidSurveyCompletion->fetch(PDO::FETCH_ASSOC);
                 ?>
                   <li class="list-group-item <?php if (!$member['UserID'] || $here) { ?> bg-light <?php } ?>">
-                    <div class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" name="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" value="1" <?php if (!$member['UserID'] || $here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
-                      <label class="custom-control-label d-block" for="<?= htmlspecialchars('member-' . $member['MemberID']) ?>"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?> <em class="small"><?php if ($member['UserID']) { ?><?= htmlspecialchars($member['Forename'] . ' ' . $member['Surname']) ?>'s details<?php } else { ?>No details on file<?php } ?></em></label>
+                    <div class="row">
+                      <div class="col">
+                        <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" name="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" value="1" <?php if (!$member['UserID'] || $here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
+                          <label class="custom-control-label d-block" for="<?= htmlspecialchars('member-' . $member['MemberID']) ?>"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?> <em class="small"><?php if ($member['UserID']) { ?><?= htmlspecialchars($member['Forename'] . ' ' . $member['Surname']) ?>'s details<?php } else { ?>No details on file<?php } ?></em></label>
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <?php if ($cvLatest) { ?>
+                          <?php if (bool($cvLatest['OfficerApproval'])) { ?>
+                            <span class="badge badge-sm badge-success">
+                              COVID <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
+                            </span>
+                          <?php } else if (!bool($cvLatest['OfficerApproval']) && $cvLatest['ApprovedBy']) { ?>
+                            <span class="badge badge-sm badge-danger">
+                              COVID <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
+                            </span>
+                          <?php } else if (!bool($cvLatest['OfficerApproval']) && !$cvLatest['ApprovedBy']) { ?>
+                            <span class="badge badge-sm badge-warning">
+                              COVID <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
+                            </span>
+                          <?php } ?>
+                        <?php } else { ?>
+                          <span class="badge badge-sm badge-danger">
+                            NO CV SURVEY <span class="sr-only">Survey submitted</span>
+                          </span>
+                        <?php } ?>
+                      </div>
                     </div>
                   </li>
                 <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>
@@ -260,27 +292,69 @@ if (!$squad) {
           <?php } ?>
 
           <?php if ($listsShown) { ?>
-          <?php if ($userOnList) { ?>
-            <p>
-              Please make sure you tick yourself and sign yourself in!
-            </p>
-          <?php } else { ?>
-            <p>
-              As you're not on any of the above lists, please complete the other form to check in!
-            </p>
-          <?php } ?>
+            <?php if ($userOnList) { ?>
+              <p>
+                Please make sure you tick yourself and sign yourself in!
+              </p>
+            <?php } else { ?>
+              <p>
+                As you're not on any of the above lists, please complete the other form to check in!
+              </p>
+            <?php } ?>
 
-          <p>
-            <button type="submit" class="btn btn-success">
-              Check In
-            </button>
-          </p>
+            <p>
+              <button type="submit" class="btn btn-success">
+                Check In
+              </button>
+            </p>
 
           <?php } else { ?>
             <p>
               There is nobody to check in for this squad.
             </p>
           <?php } ?>
+
+          <div class="card">
+            <div class="card-header">
+              COVID-19 Badge Key
+            </div>
+            <div class="card-body">
+              <dl class="row mb-0">
+                <dt class="col-sm-3">
+                  <span class="badge badge-sm badge-success">
+                    COVID <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
+                  </span>
+                </dt>
+                <dd class="col-sm-9">
+                  COVID health survey submitted and approved by staff
+                </dd>
+                <dt class="col-sm-3">
+                  <span class="badge badge-sm badge-danger">
+                    COVID <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
+                  </span>
+                </dt>
+                <dd class="col-sm-9">
+                  COVID health survey submitted and rejected by staff
+                </dd>
+                <dt class="col-sm-3">
+                  <span class="badge badge-sm badge-warning">
+                    COVID <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
+                  </span>
+                </dt>
+                <dd class="col-sm-9">
+                  COVID health survey submitted, pending approval
+                </dd>
+                <dt class="col-sm-3">
+                  <span class="badge badge-sm badge-danger">
+                    NO CV SURVEY <span class="sr-only"> submitted</span>
+                  </span>
+                </dt>
+                <dd class="col-sm-9 mb-0">
+                  No COVID health survey has been submitted for this member
+                </dd>
+              </dl>
+            </div>
+          </div>
 
         </form>
 
