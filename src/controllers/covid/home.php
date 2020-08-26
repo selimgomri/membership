@@ -12,8 +12,23 @@ $getRepCount->execute([
 $showSignOut = $getRepCount->fetchColumn() > 0;
 
 $user = app()->user;
+
+$showCovid = true;
+if ($showCovid && $tenant->getBooleanKey('HIDE_CONTACT_TRACING_FROM_PARENTS')) {
+  // Hide covid banners
+  $showCovid = false;
+
+  // Show if this user is a squad rep
+  $getRepCount = $db->prepare("SELECT COUNT(*) FROM squadReps WHERE User = ?");
+  $getRepCount->execute([
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+  ]);
+  $showCovid = $getRepCount->fetchColumn() > 0;
+}
+
 if ($user->hasPermission('Admin') || $user->hasPermission('Coach') || $user->hasPermission('Galas')) {
   $showSignOut = true;
+  $showCovid = true;
 }
 
 include BASE_PATH . 'views/header.php';
@@ -46,6 +61,7 @@ include BASE_PATH . 'views/header.php';
 
   <div class="row">
 
+    <?php if ($showCovid) { ?>
     <div class="col-md-4">
       <div class="card card-body h-100" style="display: grid;">
         <div>
@@ -66,6 +82,7 @@ include BASE_PATH . 'views/header.php';
         </p>
       </div>
     </div>
+    <?php } ?>
 
     <div class="col-md-4">
       <div class="card card-body h-100" style="display: grid;">
