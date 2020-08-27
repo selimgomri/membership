@@ -104,7 +104,7 @@ include BASE_PATH . 'views/header.php';
                     <div class="mb-3 d-sm-none"></div>
                   <?php } ?>
                 </div>
-                <?php if ($latest && bool($latest['MemberAgreement'])) { ?>
+                <?php if (false && $latest && bool($latest['MemberAgreement'])) { ?>
                   <div class="col-auto">
                     <a class="btn btn-warning" href="<?= htmlspecialchars(autoUrl('covid/risk-awareness/members/' . $member['MemberID'] . '/void-form')) ?>" title="Require that <?= htmlspecialchars($member['MForename']) ?> submits a new declaration form">
                       Void form

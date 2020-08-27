@@ -107,20 +107,20 @@ function registerSheetGenerator($date, $sessionId)
                         <?php if ($cvLatest) { ?>
                           <?php if (bool($cvLatest['OfficerApproval'])) { ?>
                             <span class="badge badge-sm badge-success">
-                              COVID <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
+                              HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
                             </span>
                           <?php } else if (!bool($cvLatest['OfficerApproval']) && $cvLatest['ApprovedBy']) { ?>
                             <span class="badge badge-sm badge-danger">
-                              COVID <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
+                              HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
                             </span>
                           <?php } else if (!bool($cvLatest['OfficerApproval']) && !$cvLatest['ApprovedBy']) { ?>
                             <span class="badge badge-sm badge-warning">
-                              COVID <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
+                              HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
                             </span>
                           <?php } ?>
                         <?php } else { ?>
                           <span class="badge badge-sm badge-danger">
-                            NO CV SURVEY <span class="sr-only">Survey submitted</span>
+                            NO HS <span class="sr-only">Survey submitted</span>
                           </span>
                         <?php } ?>
                         <div class="btn-group">
@@ -311,7 +311,7 @@ function registerSheetGenerator($date, $sessionId)
         <dl class="row mb-0">
           <dt class="col-sm-3">
             <span class="badge badge-sm badge-success">
-              COVID <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
+              HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
             </span>
           </dt>
           <dd class="col-sm-9">
@@ -319,7 +319,7 @@ function registerSheetGenerator($date, $sessionId)
           </dd>
           <dt class="col-sm-3">
             <span class="badge badge-sm badge-danger">
-              COVID <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
+              HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
             </span>
           </dt>
           <dd class="col-sm-9">
@@ -327,7 +327,7 @@ function registerSheetGenerator($date, $sessionId)
           </dd>
           <dt class="col-sm-3">
             <span class="badge badge-sm badge-warning">
-              COVID <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
+              HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
             </span>
           </dt>
           <dd class="col-sm-9">
@@ -335,7 +335,7 @@ function registerSheetGenerator($date, $sessionId)
           </dd>
           <dt class="col-sm-3">
             <span class="badge badge-sm badge-danger">
-              NO CV SURVEY <span class="sr-only"> submitted</span>
+              NO HS <span class="sr-only"> submitted</span>
             </span>
           </dt>
           <dd class="col-sm-9 mb-0">
