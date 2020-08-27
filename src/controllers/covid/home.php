@@ -62,26 +62,26 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
 
     <?php if ($showCovid) { ?>
-    <div class="col-md-4">
-      <div class="card card-body h-100" style="display: grid;">
-        <div>
-          <h2>
-            Contact Tracing
-          </h2>
-          <p class="lead">
-            We're keeping a record of those attending sessions.
-          </p>
-          <p>
-            <?= htmlspecialchars($tenant->getName()) ?> can use your contact data (if required) to support NHS Test and Trace.
+      <div class="col-md-4">
+        <div class="card card-body h-100" style="display: grid;">
+          <div>
+            <h2>
+              Contact Tracing
+            </h2>
+            <p class="lead">
+              We're keeping a record of those attending sessions.
+            </p>
+            <p>
+              <?= htmlspecialchars($tenant->getName()) ?> can use your contact data (if required) to support NHS Test and Trace.
+            </p>
+          </div>
+          <p class="mb-0 mt-auto d-flex">
+            <a href="<?= htmlspecialchars(autoUrl('covid/contact-tracing')) ?>" class="btn btn-primary">
+              Go
+            </a>
           </p>
         </div>
-        <p class="mb-0 mt-auto d-flex">
-          <a href="<?= htmlspecialchars(autoUrl('covid/contact-tracing')) ?>" class="btn btn-primary">
-            Go
-          </a>
-        </p>
       </div>
-    </div>
     <?php } ?>
 
     <div class="col-md-4">
@@ -105,12 +105,18 @@ include BASE_PATH . 'views/header.php';
       </div>
     </div>
 
-    <!-- <div class="col-md-4">
+    <div class="col-md-4">
       <div class="card card-body h-100" style="display: grid;">
         <div>
           <h2>
-            Risk Awareness Declaration (WIP)
+            Risk Awareness Declaration
           </h2>
+          <p class="lead">
+            Declare that you have submitted a Health Survey and understand the risks.
+          </p>
+          <p>
+            You also confirm you are free from any COVID-19 symptoms.
+          </p>
         </div>
         <p class="mb-0 mt-auto d-flex">
           <a href="<?= htmlspecialchars(autoUrl('covid/risk-awareness')) ?>" class="btn btn-primary">
@@ -118,7 +124,7 @@ include BASE_PATH . 'views/header.php';
           </a>
         </p>
       </div>
-    </div> -->
+    </div>
 
   </div>
 </div>

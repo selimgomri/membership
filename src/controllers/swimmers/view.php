@@ -56,6 +56,12 @@ $getLatestCovidSurveyCompletion->execute([
 ]);
 $latestCovidSurvey = $getLatestCovidSurveyCompletion->fetch(PDO::FETCH_ASSOC);
 
+$getLatestCovidRAForm = $db->prepare("SELECT `ID`, `DateTime`, `MemberAgreement`, `Guardian`, `Forename`, `Surname` FROM covidRiskAwareness LEFT JOIN users ON users.UserID = covidRiskAwareness.Guardian WHERE Member = ? ORDER BY `DateTime` DESC LIMIT 1");
+$getLatestCovidRAForm->execute([
+  $id
+]);
+$latestCovidRAForm = $getLatestCovidRAForm->fetch(PDO::FETCH_ASSOC);
+
 $fluidContainer = true;
 include BASE_PATH . 'views/header.php';
 
@@ -224,6 +230,23 @@ include BASE_PATH . 'views/header.php';
         <p class="mb-0">
           No survey submitted
         </p>
+      <?php } ?>
+
+      <hr>
+
+      <h2 id="covid-risk-awareness">COVID-19 Risk Awareness Declaration</h2>
+
+      <?php if ($latestCovidRAForm) {
+        $time = new DateTime($latestCovidRAForm['DateTime'], new DateTimeZone('UTC'));
+        $time->setTimezone(new DateTimeZone('Europe/London'));
+      ?>
+        <?php if (bool($latestCovidRAForm['MemberAgreement'])) { ?>
+          <span class="text-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Signed at <?= htmlspecialchars($time->format('H:i, j F Y')) ?><?php if ($latestCovidRAForm['Guardian']) { ?> with <?= htmlspecialchars($latestCovidRAForm['Forename'] . ' ' . $latestCovidRAForm['Surname']) ?> as parent/guardian<?php } ?></span>
+        <?php } else { ?>
+          <span class="text-warning"><i class="fa fa-minus-circle" aria-hidden="true"></i> A new declaration form is required</span>
+        <?php } ?>
+      <?php } else { ?>
+        <span class="text-danger"><i class="fa fa-times-circle" aria-hidden="true"></i> No risk awareness declaration submitted</span>
       <?php } ?>
 
       <hr>

@@ -35,7 +35,7 @@ $age = new DateTime($member['DateOfBirth'], new DateTimeZone('Europe/London'));
 $age = $age->diff($today);
 $age = (int) $age->format('%y');
 
-$pagetitle = htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) . ' - COVID Health Screening';
+$pagetitle = htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) . ' - COVID Risk Awareness';
 
 include BASE_PATH . 'views/header.php';
 
@@ -48,7 +48,7 @@ include BASE_PATH . 'views/header.php';
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('covid')) ?>">COVID</a></li>
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('covid/risk-awareness')) ?>">Risk Awareness</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Survey</li>
+        <li class="breadcrumb-item active" aria-current="page">Declaration</li>
       </ol>
     </nav>
 
@@ -74,6 +74,18 @@ include BASE_PATH . 'views/header.php';
 
     <div class="col-lg-8">
       <form method="post" class="needs-validation" novalidate>
+
+      <?php if (isset($_SESSION['CovidRiskAwarenessError'])) { ?>
+        <div class="alert alert-success">
+          <p class="mb-0">
+            <strong>There was a problem saving your COVID-19 Risk Awareness Declaration</strong>
+          </p>
+          <p class="mb-0">
+            <?= htmlspecialchars($_SESSION['CovidRiskAwarenessError']) ?>
+          </p>
+        </div>
+      <?php unset($_SESSION['CovidRiskAwarenessError']);
+      } ?>
 
         <p>
           I <?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?> am returning to training having completed and signed the Health Survey as requested by <?= htmlspecialchars($tenant->getName()) ?>.
@@ -116,7 +128,7 @@ include BASE_PATH . 'views/header.php';
         <?php if ($parent && $age < 18) { ?>
           <div class="custom-control custom-checkbox mb-3">
             <input type="checkbox" class="custom-control-input" id="parent-declaration" name="parent-declaration" required value="1">
-            <label class="custom-control-label" for="parent-declaration">As <?= htmlspecialchars($member['MForename']) ?> is under 18 (<?= htmlspecialchars($age) ?>), I <strong><?= htmlspecialchars($parent['Forename']) . '&nbsp;' . htmlspecialchars($parent['Surname']) ?></strong>, also agree to this declaration, <?= $today->format("j F Y") ?></label>
+            <label class="custom-control-label" for="parent-declaration">As <?= htmlspecialchars($member['MForename']) ?> is under 18 (aged <?= htmlspecialchars($age) ?>), I <strong><?= htmlspecialchars($parent['Forename']) . '&nbsp;' . htmlspecialchars($parent['Surname']) ?></strong>, also agree to this declaration, <?= $today->format("j F Y") ?></label>
             <div class="invalid-feedback">
               You (<?= htmlspecialchars($parent['Forename']) ?>) must agree to this declaration to proceed.
             </div>

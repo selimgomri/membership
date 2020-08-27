@@ -32,6 +32,8 @@ function registerSheetGenerator($date, $sessionId)
 
     $getLatestCovidSurveyCompletion = $db->prepare("SELECT `ID`, `DateTime`, `OfficerApproval`, `ApprovedBy`, `Forename`, `Surname` FROM covidHealthScreen LEFT JOIN users ON covidHealthScreen.ApprovedBy = users.UserID WHERE Member = ? ORDER BY `DateTime` DESC LIMIT 1");
 
+    $getLatestCovidRACompletion = $db->prepare("SELECT `ID`, `DateTime`, `MemberAgreement`, `Guardian`, `Forename`, `Surname` FROM covidRiskAwareness LEFT JOIN users ON users.UserID = covidRiskAwareness.Guardian WHERE Member = ? ORDER BY `DateTime` DESC LIMIT 1");
+
 ?>
     <form id="register-form">
 
@@ -71,6 +73,11 @@ function registerSheetGenerator($date, $sessionId)
                 $row['id']
               ]);
               $cvLatest = $getLatestCovidSurveyCompletion->fetch(PDO::FETCH_ASSOC);
+
+              $getLatestCovidRACompletion->execute([
+                $row['id'],
+              ]);
+              $cvRALatest = $getLatestCovidRACompletion->fetch(PDO::FETCH_ASSOC);
               // END OF COVID STUFF
               ?>
               <li class="list-group-item py-3">
@@ -84,23 +91,36 @@ function registerSheetGenerator($date, $sessionId)
                     </div>
                     <?php if (sizeof($row['medical']) > 0 || sizeof($row['photo']) > 0 || $row['notes'] || sizeof($row['contacts']) > 0) { ?>
                       <div class="col-auto">
+                        <?php if ($cvRALatest && bool($cvRALatest['MemberAgreement'])) { ?>
+                          <span class="badge badge-sm badge-success">
+                            RA <i class="fa fa-check-circle" aria-hidden="true"></i> <span class="sr-only">Valid declaration</span>
+                          </span>
+                        <?php } else if ($cvRALatest && !bool($cvRALatest['MemberAgreement'])) { ?>
+                          <span class="badge badge-sm badge-warning">
+                            RA <i class="fa fa-minus-circle" aria-hidden="true"></i> <span class="sr-only">New declaration required</span>
+                          </span>
+                        <?php } else { ?>
+                          <span class="badge badge-sm badge-danger">
+                            RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="sr-only">form not submitted</span>
+                          </span>
+                        <?php } ?>
                         <?php if ($cvLatest) { ?>
                           <?php if (bool($cvLatest['OfficerApproval'])) { ?>
                             <span class="badge badge-sm badge-success">
-                              COVID <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
+                              HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
                             </span>
                           <?php } else if (!bool($cvLatest['OfficerApproval']) && $cvLatest['ApprovedBy']) { ?>
                             <span class="badge badge-sm badge-danger">
-                              COVID <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
+                              HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
                             </span>
                           <?php } else if (!bool($cvLatest['OfficerApproval']) && !$cvLatest['ApprovedBy']) { ?>
                             <span class="badge badge-sm badge-warning">
-                              COVID <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
+                              HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
                             </span>
                           <?php } ?>
                         <?php } else { ?>
                           <span class="badge badge-sm badge-danger">
-                            NO CV SURVEY <span class="sr-only">Survey submitted</span>
+                            NO HS <span class="sr-only">Survey submitted</span>
                           </span>
                         <?php } ?>
                         <div class="btn-group">
@@ -283,10 +303,15 @@ function registerSheetGenerator($date, $sessionId)
         COVID-19 Badge Key
       </div>
       <div class="card-body">
+
+        <p>
+          <strong>Health Survey Symbols</strong>
+        </p>
+
         <dl class="row mb-0">
           <dt class="col-sm-3">
             <span class="badge badge-sm badge-success">
-              COVID <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
+              HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
             </span>
           </dt>
           <dd class="col-sm-9">
@@ -294,7 +319,7 @@ function registerSheetGenerator($date, $sessionId)
           </dd>
           <dt class="col-sm-3">
             <span class="badge badge-sm badge-danger">
-              COVID <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
+              HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
             </span>
           </dt>
           <dd class="col-sm-9">
@@ -302,7 +327,7 @@ function registerSheetGenerator($date, $sessionId)
           </dd>
           <dt class="col-sm-3">
             <span class="badge badge-sm badge-warning">
-              COVID <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
+              HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
             </span>
           </dt>
           <dd class="col-sm-9">
@@ -310,13 +335,47 @@ function registerSheetGenerator($date, $sessionId)
           </dd>
           <dt class="col-sm-3">
             <span class="badge badge-sm badge-danger">
-              NO CV SURVEY <span class="sr-only"> submitted</span>
+              NO HS <span class="sr-only"> submitted</span>
             </span>
           </dt>
           <dd class="col-sm-9 mb-0">
             No COVID health survey has been submitted for this member
           </dd>
         </dl>
+
+        <hr>
+
+        <p>
+          <strong>Risk Awareness Declaration Symbols</strong>
+        </p>
+
+        <dl class="row mb-0">
+          <dt class="col-sm-3">
+            <span class="badge badge-sm badge-success">
+              RA <i class="fa fa-check-circle" aria-hidden="true"></i> <span class="sr-only">Valid declaration</span>
+            </span>
+          </dt>
+          <dd class="col-sm-9">
+            COVID Risk Awareness Declaration is up to date
+          </dd>
+          <dt class="col-sm-3">
+            <span class="badge badge-sm badge-warning">
+              RA <i class="fa fa-minus-circle" aria-hidden="true"></i> <span class="sr-only">New declaration required</span>
+            </span>
+          </dt>
+          <dd class="col-sm-9">
+            A new COVID Risk Awareness Declaration is required
+          </dd>
+          <dt class="col-sm-3">
+            <span class="badge badge-sm badge-danger">
+              RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="sr-only">form not submitted</span>
+            </span>
+          </dt>
+          <dd class="col-sm-9 mb-0">
+            A COVID Risk Awareness Declaration is required
+          </dd>
+        </dl>
+
       </div>
     </div>
 <?php
