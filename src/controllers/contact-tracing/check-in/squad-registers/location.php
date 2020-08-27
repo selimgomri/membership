@@ -76,12 +76,13 @@ if (!$squad) {
 
   $getLatestCovidRACompletion = $db->prepare("SELECT `ID`, `DateTime`, `MemberAgreement`, `Guardian`, `Forename`, `Surname` FROM covidRiskAwareness LEFT JOIN users ON users.UserID = covidRiskAwareness.Guardian WHERE Member = ? ORDER BY `DateTime` DESC LIMIT 1");
 
+  $fluidContainer = true;
   include BASE_PATH . 'views/header.php';
 
 ?>
 
   <div class="bg-light mt-n3 py-3 mb-3">
-    <div class="container">
+    <div class="container-fluid">
 
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -104,7 +105,7 @@ if (!$squad) {
     </div>
   </div>
 
-  <div class="container">
+  <div class="container-fluid">
 
     <div class="row">
       <div class="col-lg-8">
@@ -334,89 +335,91 @@ if (!$squad) {
             </p>
           <?php } ?>
 
-          <div class="card">
-            <div class="card-header">
-              COVID-19 Badge Key
-            </div>
-            <div class="card-body">
-
-              <p>
-                <strong>Health Survey Symbols</strong>
-              </p>
-
-              <dl class="row mb-0">
-                <dt class="col-sm-3">
-                  <span class="badge badge-sm badge-success">
-                    HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
-                  </span>
-                </dt>
-                <dd class="col-sm-9">
-                  COVID health survey submitted and approved by staff
-                </dd>
-                <dt class="col-sm-3">
-                  <span class="badge badge-sm badge-danger">
-                    HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
-                  </span>
-                </dt>
-                <dd class="col-sm-9">
-                  COVID health survey submitted and rejected by staff
-                </dd>
-                <dt class="col-sm-3">
-                  <span class="badge badge-sm badge-warning">
-                    HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
-                  </span>
-                </dt>
-                <dd class="col-sm-9">
-                  COVID health survey submitted, pending approval
-                </dd>
-                <dt class="col-sm-3">
-                  <span class="badge badge-sm badge-danger">
-                    NO HS <span class="sr-only"> submitted</span>
-                  </span>
-                </dt>
-                <dd class="col-sm-9 mb-0">
-                  No COVID health survey has been submitted for this member
-                </dd>
-              </dl>
-
-              <hr>
-
-              <p>
-                <strong>Risk Awareness Declaration Symbols</strong>
-              </p>
-
-              <dl class="row mb-0">
-                <dt class="col-sm-3">
-                  <span class="badge badge-sm badge-success">
-                    RA <i class="fa fa-check-circle" aria-hidden="true"></i> <span class="sr-only">Valid declaration</span>
-                  </span>
-                </dt>
-                <dd class="col-sm-9">
-                  COVID Risk Awareness Declaration is up to date
-                </dd>
-                <dt class="col-sm-3">
-                  <span class="badge badge-sm badge-warning">
-                    RA <i class="fa fa-minus-circle" aria-hidden="true"></i> <span class="sr-only">New declaration required</span>
-                  </span>
-                </dt>
-                <dd class="col-sm-9">
-                  A new COVID Risk Awareness Declaration is required
-                </dd>
-                <dt class="col-sm-3">
-                  <span class="badge badge-sm badge-danger">
-                    RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="sr-only">form not submitted</span>
-                  </span>
-                </dt>
-                <dd class="col-sm-9 mb-0">
-                  A COVID Risk Awareness Declaration is required
-                </dd>
-              </dl>
-
-            </div>
-          </div>
-
         </form>
 
+      </div>
+
+      <div class="col">
+        <div class="card position-sticky top-3 mb-3">
+          <div class="card-header">
+            COVID-19 Badge Key
+          </div>
+          <div class="card-body">
+
+            <p>
+              <strong>Health Survey Symbols</strong>
+            </p>
+
+            <dl class="row mb-0">
+              <dt class="col-sm-3">
+                <span class="badge badge-sm badge-success">
+                  HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
+                </span>
+              </dt>
+              <dd class="col-sm-9">
+                COVID health survey submitted and approved by staff
+              </dd>
+              <dt class="col-sm-3">
+                <span class="badge badge-sm badge-danger">
+                  HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
+                </span>
+              </dt>
+              <dd class="col-sm-9">
+                COVID health survey submitted and rejected by staff
+              </dd>
+              <dt class="col-sm-3">
+                <span class="badge badge-sm badge-warning">
+                  HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
+                </span>
+              </dt>
+              <dd class="col-sm-9">
+                COVID health survey submitted, pending approval
+              </dd>
+              <dt class="col-sm-3">
+                <span class="badge badge-sm badge-danger">
+                  NO HS <span class="sr-only"> submitted</span>
+                </span>
+              </dt>
+              <dd class="col-sm-9 mb-0">
+                No COVID health survey has been submitted for this member
+              </dd>
+            </dl>
+
+            <hr>
+
+            <p>
+              <strong>Risk Awareness Declaration Symbols</strong>
+            </p>
+
+            <dl class="row mb-0">
+              <dt class="col-sm-3">
+                <span class="badge badge-sm badge-success">
+                  RA <i class="fa fa-check-circle" aria-hidden="true"></i> <span class="sr-only">Valid declaration</span>
+                </span>
+              </dt>
+              <dd class="col-sm-9">
+                COVID Risk Awareness Declaration is up to date
+              </dd>
+              <dt class="col-sm-3">
+                <span class="badge badge-sm badge-warning">
+                  RA <i class="fa fa-minus-circle" aria-hidden="true"></i> <span class="sr-only">New declaration required</span>
+                </span>
+              </dt>
+              <dd class="col-sm-9">
+                A new COVID Risk Awareness Declaration is required
+              </dd>
+              <dt class="col-sm-3">
+                <span class="badge badge-sm badge-danger">
+                  RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="sr-only">form not submitted</span>
+                </span>
+              </dt>
+              <dd class="col-sm-9 mb-0">
+                A COVID Risk Awareness Declaration is required
+              </dd>
+            </dl>
+
+          </div>
+        </div>
       </div>
     </div>
 
@@ -426,5 +429,6 @@ if (!$squad) {
 
   $footer = new \SCDS\Footer();
   $footer->addJs('public/js/NeedsValidation.js');
+  $footer->useFluidContainer();
   $footer->render();
 }
