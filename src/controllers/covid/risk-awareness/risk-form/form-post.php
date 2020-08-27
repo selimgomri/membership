@@ -38,11 +38,12 @@ try {
   }
 
   $date = new DateTime('now', new DateTimeZone('UTC'));
+  $today = new DateTime('now', new DateTimeZone('Europe/London'));
   $uuid = Ramsey\Uuid\Uuid::uuid4()->toString();
 
   $dob = new DateTime($member['DateOfBirth'], new DateTimeZone('Europe/London'));
 
-  $age = $dob->diff($date);
+  $age = $dob->diff($today);
   $age = (int) $age->format('%y');
 
   $member = $id;
