@@ -83,21 +83,22 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
     </div>
     <div class="cls-global-footer-legal">
       <div class="<?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
-        <div class="row">
-          <div class="col source-org vcard copyright">
+        <div class="row align-items-center">
+          <div class="col-sm-auto">
             <a href="https://myswimmingclub.uk" target="_blank" title="Swimming Club Data Systems Website">
               <img src="<?= autoUrl("public/img/corporate/scds.png") ?>" width="100">
             </a>
-
-            <div class="d-block mb-3"></div>
+            <div class="d-block d-sm-none mb-3"></div>
+          </div>
+          <div class="col">
 
             <?php if (defined('SOFTWARE_VERSION')) { ?>
-              <p>
+              <p class="mb-2">
                 Software version <?= mb_substr(SOFTWARE_VERSION, 0, 7); ?>.
               </p>
             <?php } ?>
 
-            <p class="mb-0">
+            <p class="mb-0 source-org vcard copyright">
               &copy; <?= $time->format('Y') ?> <span class="org fn">Swimming Club Data Systems</span>. Swimming Club Data Systems is not responsible
               for the content of external sites.
             </p>
