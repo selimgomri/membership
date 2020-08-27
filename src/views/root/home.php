@@ -11,6 +11,9 @@ include BASE_PATH . "views/root/header.php";
     <div class="col-lg-8">
       <h1>Membership management software for swimming clubs</h1>
       <p class="lead">Manage your members, subscriptions, competition entries and more.</p>
+      <p>
+        For sales enquiries, please contact <a href="mailto:sales@myswimmingclub.uk">sales@myswimmingclub.uk</a>.
+      </p>
     </div>
   </div>
 </div>
@@ -156,6 +159,7 @@ include BASE_PATH . "views/root/header.php";
       <div class="col">
         <h2>Used by clubs across the North East</h2>
         <p class="lead mb-4">Feature development is driven by the needs of our clubs.</p>
+
         <div class="row align-items-center club-logos">
           <div class="col-md">
             <a href="https://www.rdasc.org.uk/" target="_blank">
@@ -185,7 +189,6 @@ include BASE_PATH . "views/root/header.php";
             <a href="https://www.chesterlestreetasc.co.uk/" target="_blank">
               <img src="<?=autoUrl("public/img/chesterLogo.svg")?>" title="Chester-le-Street ASC" alt="Chester-le-Street ASC" class="img-fluid mx-auto d-block">
             </a>
-            <div class="mb-3 d-md-none"></div>
           </div>
         </div>
       </div>

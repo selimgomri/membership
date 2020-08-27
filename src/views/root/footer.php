@@ -23,14 +23,14 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
                 <p><i class="fa fa-flag fa-fw" aria-hidden="true"></i> <a href="<?= autoUrl("reportanissue?url=" . urlencode(currentUrl())) ?>">Report an issue with this page</a>
                 </p>
               </div>
-              <div class="col-sm-6">
+              <!-- <div class="col-sm-6">
                 <ul class="list-unstyled cls-global-footer-link-spacer">
                   <li><strong>Clubs</strong></li>
-                  <!-- <li>
+                  <li>
                   <a href="<?= htmlspecialchars(autoUrl("register")) ?>" title="Sign up for SCDS Membership">
                     Sign up
                   </a>
-                </li> -->
+                </li>
                   <li>
                     <a href="<?= htmlspecialchars(autoUrl("our-software")) ?>" title="Learn about our membership software">
                       Our software
@@ -42,7 +42,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
                     </a>
                   </li>
                 </ul>
-              </div>
+              </div> -->
             </div>
           </div>
           <div class="col-lg-6">

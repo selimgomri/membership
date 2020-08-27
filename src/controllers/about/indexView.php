@@ -11,9 +11,42 @@ include BASE_PATH . "views/header.php";
   <div class="row">
     <div class="col-md-8">
       <h1>About this system</h1>
-      <p class="lead">This software is licenced to <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> by Swimming Club Data Systems.</p>
+      <p class="lead">This software is licenced to <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> by Swimming Club Data Systems.</p>
 
       <p>You can use this software by subscribing to the <a href="https://myswimmingclub.uk/" target="_blank">Swimming Club Data Systems Software as a Service Package</a>.</p>
+
+      <h2>
+        Getting help
+      </h2>
+
+      <p class="lead">
+        Something unclear? We can help.
+      </p>
+
+      <div class="card card-body mb-3">
+        <h3 class="card-title">
+          Contact <?= htmlspecialchars(app()->tenant->getName()) ?> in the first instance
+        </h3>
+
+        <dl class="row mb-0">
+          <dt class="col-sm-3">Email</dt>
+          <dd class="col-sm-9 text-truncate mb-0"><a href="mailto:<?= htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) ?>"><?= htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) ?></a></dd>
+        </dl>
+      </div>
+
+      <div class="card card-body mb-3">
+        <h3 class="card-title">
+          If further help is required, contact SCDS
+        </h3>
+
+        <dl class="row mb-0">
+          <dt class="col-sm-3">Email</dt>
+          <dd class="col-sm-9 text-truncate"><a href="mailto:support@myswimmingclub.uk" title="Support Hotline">support@myswimmingclub.uk</a></dd>
+
+          <dt class="col-sm-3">Call</dt>
+          <dd class="col-sm-9 text-truncate mb-0"><a href="tel:+441912494320" title="Support Hotline">+44 191 249 4320</a></dd>
+        </dl>
+      </div>
 
       <h2>
         Support information
@@ -26,25 +59,25 @@ include BASE_PATH . "views/header.php";
       <div class="card card-body mb-3">
         <dl class="row mb-0">
           <dt class="col-sm-3">Tenant</dt>
-          <dd class="col-sm-9 mono text-truncate"><?=htmlspecialchars($tenant->getUuid())?></dd>
+          <dd class="col-sm-9 mono text-truncate"><?= htmlspecialchars($tenant->getUuid()) ?></dd>
 
           <dt class="col-sm-3">Tenant ID</dt>
-          <dd class="col-sm-9 mono"><?=htmlspecialchars($tenant->getId())?></dd>
+          <dd class="col-sm-9 mono"><?= htmlspecialchars($tenant->getId()) ?></dd>
 
           <dt class="col-sm-3">Tenant Name</dt>
-          <dd class="col-sm-9 mono"><?=htmlspecialchars($tenant->getName())?></dd>
+          <dd class="col-sm-9 mono"><?= htmlspecialchars($tenant->getName()) ?></dd>
 
           <?php if ($tenant->getCode()) { ?>
-          <dt class="col-sm-3">Tenant Code</dt>
-          <dd class="col-sm-9 mono"><?=htmlspecialchars($tenant->getCode())?></dd>
+            <dt class="col-sm-3">Tenant Code</dt>
+            <dd class="col-sm-9 mono"><?= htmlspecialchars($tenant->getCode()) ?></dd>
           <?php } ?>
 
           <?php if (app()->user) { ?>
-          <dt class="col-sm-3">User</dt>
-          <dd class="col-sm-9 mono mb-0"><?=htmlspecialchars(app()->user->getId())?></dd>
+            <dt class="col-sm-3">User</dt>
+            <dd class="col-sm-9 mono mb-0"><?= htmlspecialchars(app()->user->getId()) ?></dd>
           <?php } else { ?>
-          <dt class="col-sm-3">User</dt>
-          <dd class="col-sm-9 mono mb-0">Not signed in</dd>
+            <dt class="col-sm-3">User</dt>
+            <dd class="col-sm-9 mono mb-0">Not signed in</dd>
           <?php } ?>
         </dl>
       </div>
@@ -67,7 +100,7 @@ include BASE_PATH . "views/header.php";
       <p>Notify is our E-Mail mailing list solution. Administrators can send emails to selected groups of parents for each squad. The system is GDPR compliant and users can opt in or out of receiving emails at any time.</p>
 
       <h3>Direct Debit Payments</h3>
-      <p>This application has been integrated with GoCardless and their APIs to allow <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> to bill members by Direct Debit. The GoCardless client library which is included in this software is copyright of GoCardless.</p>
+      <p>This application has been integrated with GoCardless and their APIs to allow <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> to bill members by Direct Debit. The GoCardless client library which is included in this software is copyright of GoCardless.</p>
 
       <h2>Legal</h2>
       This product includes GeoLite2 data created by MaxMind, available from <a href="https://www.maxmind.com">https://www.maxmind.com</a>.

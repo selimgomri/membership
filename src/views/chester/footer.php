@@ -110,13 +110,19 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
   </div>
   <div class="cls-global-footer-legal">
     <div class="<?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
-      <div class="row">
-        <div class="col source-org vcard copyright">
-          <a href="https://myswimmingclub.uk" target="_blank" title="Swimming Club Data Systems Website">
-            <img src="<?= autoUrl("public/img/corporate/scds.png") ?>" width="100">
-          </a>
+      <div class="row align-items-center">
+        <div class="col-sm-auto source-org vcard copyright">
+          <div class="row no-gutters">
+            <div class="col-auto">
+              <a href="https://myswimmingclub.uk" target="_blank" title="Swimming Club Data Systems Website">
+                <img src="<?= autoUrl("public/img/corporate/scds.png") ?>" width="100">
+              </a>
+              <div class="d-block d-sm-none mb-3"></div>
+            </div>
+          </div>
 
-          <div class="d-block mb-3"></div>
+        </div>
+        <div class="col">
 
           <?php
           global $time_start;
@@ -124,10 +130,10 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
 
           $seconds = $time_end - $time_start;
           ?>
-          <p class="hidden-print">
+          <p class="hidden-print mb-1">
             Membership is designed and built by <a class="text-white" href="https://www.myswimmingclub.uk" target="_blank">Swimming Club Data Systems</a>. Licenced to <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>.
           </p>
-          <p>Page rendered in <?= number_format($seconds, 3) ?> seconds. <?php if (defined('SOFTWARE_VERSION')) { ?>Software version <?= mb_substr(SOFTWARE_VERSION, 0, 7); ?>.<?php } ?>
+          <p class="mb-1">Page rendered in <?= number_format($seconds, 3) ?> seconds. <?php if (defined('SOFTWARE_VERSION')) { ?>Software version <?= mb_substr(SOFTWARE_VERSION, 0, 7); ?>.<?php } ?>
           </p>
           <p class="mb-0">
             &copy; <?= $time->format('Y') ?> <span class="org fn">Swimming Club Data Systems</span>. Swimming Club Data Systems is not responsible
