@@ -48,7 +48,6 @@ try {
   $age = $dob->diff($today);
   $age = (int) $age->format('%y');
 
-  $member = $id;
   $memberAgreement = (int) bool($_POST['member-declaration']);
 
   $guardian = null;
@@ -70,7 +69,7 @@ try {
   $addData = [
     $uuid,
     $date->format('Y-m-d H:i:s'),
-    $member,
+    $id,
     $memberAgreement,
     $guardian,
     $guardianAgreement,
