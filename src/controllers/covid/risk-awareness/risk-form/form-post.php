@@ -29,6 +29,8 @@ if (!$rep && !$user->hasPermission('Admin') && !$user->hasPermission('Coach') &&
   }
 }
 
+$addData = null;
+
 http_response_code(302);
 
 try {
@@ -65,21 +67,23 @@ try {
     }
   }
 
-  // Add to database
-  $add = $db->prepare("INSERT INTO `covidRiskAwareness` (`ID`, `DateTime`, `Member`, `MemberAgreement`, `Guardian`, `GuardianAgreement`) VALUES (?, ?, ?, ?, ?, ?)");
-  $add->execute([
+  $addData = [
     $uuid,
     $date->format('Y-m-d H:i:s'),
     $member,
     $memberAgreement,
     $guardian,
     $guardianAgreement,
-  ]);
+  ];
+
+  // Add to database
+  $add = $db->prepare("INSERT INTO `covidRiskAwareness` (`ID`, `DateTime`, `Member`, `MemberAgreement`, `Guardian`, `GuardianAgreement`) VALUES (?, ?, ?, ?, ?, ?)");
+  $add->execute($addData);
 
   $_SESSION['CovidRiskAwarenessSuccess'] = true;
   header('location: ' . autoUrl('covid/risk-awareness'));
 } catch (PDOException $e) {
-  reportError($e);
+  reportError([$addData, $e]);
   // throw new Exception('A database error occurred');
   $_SESSION['CovidRiskAwarenessError'] = 'A database error occurred';
   header('location: ' . autoUrl('covid/risk-awareness/members/' . $id . '/new-form'));
