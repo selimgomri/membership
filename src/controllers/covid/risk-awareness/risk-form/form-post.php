@@ -66,23 +66,20 @@ try {
     }
   }
 
-  $addData = [
+  // Add to database
+  $add = $db->prepare("INSERT INTO `covidRiskAwareness` (`ID`, `DateTime`, `Member`, `MemberAgreement`, `Guardian`, `GuardianAgreement`) VALUES (?, ?, ?, ?, ?, ?)");
+  $add->execute([
     $uuid,
     $date->format('Y-m-d H:i:s'),
     $id,
     $memberAgreement,
     $guardian,
     $guardianAgreement,
-  ];
-
-  // Add to database
-  $add = $db->prepare("INSERT INTO `covidRiskAwareness` (`ID`, `DateTime`, `Member`, `MemberAgreement`, `Guardian`, `GuardianAgreement`) VALUES (?, ?, ?, ?, ?, ?)");
-  $add->execute($addData);
+  ]);
 
   $_SESSION['CovidRiskAwarenessSuccess'] = true;
   header('location: ' . autoUrl('covid/risk-awareness'));
 } catch (PDOException $e) {
-  reportError([$addData, $e]);
   // throw new Exception('A database error occurred');
   $_SESSION['CovidRiskAwarenessError'] = 'A database error occurred';
   header('location: ' . autoUrl('covid/risk-awareness/members/' . $id . '/new-form'));
