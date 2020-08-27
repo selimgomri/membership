@@ -36,7 +36,7 @@ $getMembers->execute([
 ]);
 $member = $getMembers->fetch(PDO::FETCH_ASSOC);
 
-$getLatestCompletion = $db->prepare("SELECT `ID`, `DateTime`, `OfficerApproval` FROM covidHealthScreen WHERE Member = ? ORDER BY `DateTime` DESC LIMIT 1");
+$getLatestCompletion = $db->prepare("SELECT `ID`, `DateTime`, `OfficerApproval`, `ApprovedBy`, `Forename`, `Surname`, `Document` FROM covidHealthScreen LEFT JOIN users ON covidHealthScreen.ApprovedBy = users.UserID WHERE Member = ? ORDER BY `DateTime` DESC LIMIT 1");
 
 include BASE_PATH . 'views/header.php';
 
@@ -115,7 +115,7 @@ include BASE_PATH . 'views/header.php';
                       $time = new DateTime($latest['DateTime'], new DateTimeZone('UTC'));
                       $time->setTimezone(new DateTimeZone('Europe/London'));
                     ?>
-                      Latest submission <?= htmlspecialchars($time->format('H:i, j F Y')) ?>
+                      Latest submission <?= htmlspecialchars($time->format('H:i, j F Y')) ?><?php if (!bool($latest['OfficerApproval']) && !$latest['ApprovedBy']) { ?> <span class="text-warning"><i class="fa fa-minus-circle" aria-hidden="true"></i> Awaiting approval</span><?php } else if (!bool($latest['OfficerApproval']) && $latest['ApprovedBy']) { ?> <span class="text-danger"><i class="fa fa-times-circle" aria-hidden="true"></i> Rejected by <?= htmlspecialchars($latest['Forename'] . ' ' . $latest['Surname']) ?></span><?php } ?>
                     <?php } else { ?>
                       No survey submitted
                     <?php } ?>
