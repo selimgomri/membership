@@ -39,5 +39,7 @@ $this->group('/db', function () {
 });
 
 $this->any('/*', function() {
-  include BASE_PATH . 'views/root/errors/404.php';
+  $filename = $this[0];
+  require BASE_PATH . 'controllers/PublicFileLoader.php';
+  // include BASE_PATH . 'views/root/errors/404.php';
 });

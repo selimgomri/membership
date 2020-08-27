@@ -158,7 +158,11 @@ function halt(int $statusCode, $throwException = true)
     } else if ($statusCode == 403) {
       require "views/403.php";
     } else if ($statusCode == 404) {
-      require "views/404.php";
+      if (isset(app()->tenant)) {
+        require "views/404.php";
+      } else {
+        require "views/root/errors/404.php";
+      }
     } else if ($statusCode == 503) {
       require "views/503.php";
     } else if ($statusCode == 0) {
@@ -176,7 +180,11 @@ function halt(int $statusCode, $throwException = true)
       // Show last report 500 error
       require 'views/LastResort500.php';
     } else {
-      require "views/500.php";
+      if (isset(app()->tenant)) {
+        require "views/500.php";
+      } else {
+        require "views/root/errors/500.php";
+      }
     }
   } catch (Exception | Error $e) {
     // Show emergency plain error page

@@ -22,9 +22,9 @@ if ($currentUser == null) {
 	<div class="row">
 		<div class="col-lg-8">
 			<h1>Internal Server Error</h1>
-<p class="lead <?php if (!$reportedError) { ?> mb-0 <?php } ?>">Something went wrong so we are unable to serve you this page. We're sorry that this has occured.</p>
+			<p class="lead <?php if (!$reportedError) { ?> mb-0 <?php } ?>">Something went wrong so we are unable to serve you this page. We're sorry that this has occured.</p>
 		</div>
-		
+
 		<?php if (bool(getenv('IS_DEV')) && isset($e)) { ?>
 			<div class="col-12">
 				<?php pre($e); ?>
