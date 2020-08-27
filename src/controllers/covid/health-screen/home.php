@@ -120,6 +120,7 @@ include BASE_PATH . 'views/header.php';
                       No survey submitted
                     <?php } ?>
                   </p>
+                  <div class="mb-3 d-sm-none"></div>
                 </div>
                 <div class="col-auto">
                   <div class="btn-group">
