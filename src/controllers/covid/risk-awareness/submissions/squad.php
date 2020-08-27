@@ -36,7 +36,7 @@ $member = $getMembers->fetch(PDO::FETCH_ASSOC);
 
 $getLatestCompletion = $db->prepare("SELECT `ID`, `DateTime`, `MemberAgreement`, `Guardian`, `Forename`, `Surname` FROM covidRiskAwareness LEFT JOIN users ON users.UserID = covidRiskAwareness.Guardian WHERE Member = ? ORDER BY `DateTime` DESC LIMIT 1");
 
-$pagetitle = htmlspecialchars($squad['SquadName']) . ' - Risk Awareness';
+$pagetitle = htmlspecialchars($squad['SquadName']) . ' - COVID Risk Awareness';
 
 include BASE_PATH . 'views/header.php';
 
