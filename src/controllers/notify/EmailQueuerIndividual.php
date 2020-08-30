@@ -147,24 +147,26 @@ try {
 
   // Get coaches
   if (isset($swimmer) && isset($_POST['coach-send']) && bool($_POST['coach-send'])) {
+    $bccEmails = [];
+
     // Get member squad(s)
-    $getSquad = $db->prepare("SELECT SquadID FROM members WHERE MemberID = ? AND Tenant = ?");
+    $getSquad = $db->prepare("SELECT SquadID FROM squadMembers WHERE Member = ?");
     $getSquad->execute([
       $swimmer,
-      $tenant->getId
-    ]);
-    $squad = $getSquad->fetchColumn();
-
-    // Get coaches for squads
-    $getCoaches = $db->prepare("SELECT Forename, Surname, EmailAddress FROM coaches INNER JOIN users ON users.UserID = coaches.User WHERE coaches.Squad = ?");
-    $getCoaches->execute([
-      $squad
     ]);
 
-    $bccEmails = [];
-    while ($coach = $getCoaches->fetch(PDO::FETCH_ASSOC)) {
-      $bccEmails[$coach['EmailAddress']] = $coach['Forename'] . ' ' . $coach['Surname'];
+    while ($squad = $getSquad->fetchColumn()) {
+      // Get coaches for squads
+      $getCoaches = $db->prepare("SELECT Forename, Surname, EmailAddress FROM coaches INNER JOIN users ON users.UserID = coaches.User WHERE coaches.Squad = ?");
+      $getCoaches->execute([
+        $squad
+      ]);
+
+      while ($coach = $getCoaches->fetch(PDO::FETCH_ASSOC)) {
+        $bccEmails[$coach['EmailAddress']] = $coach['Forename'] . ' ' . $coach['Surname'];
+      }
     }
+    
     $email->addBccs($bccEmails);
   }
 
