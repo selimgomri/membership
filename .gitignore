@@ -7,3 +7,4 @@ config.php
 client_secret.json
 phinx.yml
 src/cache
+.DS_Store
