@@ -36,13 +36,13 @@ include BASE_PATH . 'views/header.php';
       <h1>Privacy Policy</h1>
       <?php if ($privacyPolicy == null) { ?>
         <div class="alert alert-danger">
-          <p>
+          <p class="mb-0">
             <strong>Your club has no privacy policy set.</strong>
           </p>
           <p>
             Please speak to a member of club staff urgently about this issue.
           </p>
-          <p>
+          <p class="mb-0">
             Clubs are not permitted by SCDS to use this software without a privacy policy in place.
           </p>
         </div>
