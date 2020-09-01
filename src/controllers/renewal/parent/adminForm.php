@@ -58,7 +58,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				} ?>
         <p class="lead">
           <?php if ($partial_reg) { ?>
-          You must now complete the Club Administration Form. This form relates to Data Protection, Photoraphy
+          You must now complete the Club Administration Form. This form relates to Data Protection, Photography
           Permissions and the agreement to the Terms and Conditions of the club.
           <?php } else { ?>
           In this next step you, and/or your members will need to agree to the terms and conditions of the club.
