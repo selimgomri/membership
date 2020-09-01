@@ -420,6 +420,14 @@ include BASE_PATH . 'views/header.php';
         </ol>
 
         <p>
+          By signing this form I consent to <?= htmlspecialchars($tenant->getName()) ?> using my/my child's personal data for the protection and safeguarding of my/my child's health as well as safeguarding wider public health in response to the impact of COVID-19 on club training activities. I understand that <?= htmlspecialchars($tenant->getName()) ?> may still have a lawful need to use this information for such purposes even if I later seek to withdraw this consent.
+        </p>
+
+        <p>
+          For further details of how we process your personal data or your child’s personal data please view our <a href="<?= htmlspecialchars(autoUrl('privacy')) ?>" target="_blank">Privacy Policy</a>.
+        </p>
+
+        <p>
           <button type="submit" class="btn btn-success">
             Submit screening form
           </button>

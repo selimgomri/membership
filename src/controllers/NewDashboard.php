@@ -32,8 +32,9 @@ $sql = "SELECT SessionID, SessionName, VenueName, StartTime, EndTime FROM (`sess
 $getSessionSquads = $db->prepare("SELECT SquadName, ForAllMembers FROM `sessionsSquads` INNER JOIN `squads` ON sessionsSquads.Squad = squads.SquadID WHERE sessionsSquads.Session = ? ORDER BY SquadFee DESC, SquadName ASC;");
 
 $query = $db->prepare($sql);
-$query->execute(['day' => $day, 'timenow' => $time, 'time30' => $time30, 'tenant' => $tenant->getId()]);
-$sessions = $query->fetchAll(PDO::FETCH_ASSOC);
+// $query->execute(['day' => $day, 'timenow' => $time, 'time30' => $time30, 'tenant' => $tenant->getId()]);
+// $sessions = $query->fetchAll(PDO::FETCH_ASSOC);
+$sessions = [];
 
 $query = $db->prepare("SELECT EmailAddress FROM users WHERE UserID = ?");
 $query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);

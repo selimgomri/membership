@@ -49,7 +49,7 @@ if ($currentUser == null) {
 			<p>HTTP Error 500 - Internal Server Error.</p>
 			<hr>
 
-			<p class="mt-2"><a href="mailto:support@myswimmingclub.uk" title="Support Hotline">Email us</a> or <a href="tel:+441912494320">call us on +44 191 249 4320</a> for help and support if the issue persists.</p>
+			<p class="mt-2"><a href="mailto:support@myswimmingclub.uk" title="Support Hotline">Email SCDS</a> or <a href="tel:+441912494320">call SCDS on +44 191 249 4320</a> for help and support if the issue persists.</p>
 		</div>
 	</div>
 </div>

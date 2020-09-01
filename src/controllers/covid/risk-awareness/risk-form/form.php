@@ -75,17 +75,17 @@ include BASE_PATH . 'views/header.php';
     <div class="col-lg-8">
       <form method="post" class="needs-validation" novalidate>
 
-      <?php if (isset($_SESSION['CovidRiskAwarenessError'])) { ?>
-        <div class="alert alert-success">
-          <p class="mb-0">
-            <strong>There was a problem saving your COVID-19 Risk Awareness Declaration</strong>
-          </p>
-          <p class="mb-0">
-            <?= htmlspecialchars($_SESSION['CovidRiskAwarenessError']) ?>
-          </p>
-        </div>
-      <?php unset($_SESSION['CovidRiskAwarenessError']);
-      } ?>
+        <?php if (isset($_SESSION['CovidRiskAwarenessError'])) { ?>
+          <div class="alert alert-success">
+            <p class="mb-0">
+              <strong>There was a problem saving your COVID-19 Risk Awareness Declaration</strong>
+            </p>
+            <p class="mb-0">
+              <?= htmlspecialchars($_SESSION['CovidRiskAwarenessError']) ?>
+            </p>
+          </div>
+        <?php unset($_SESSION['CovidRiskAwarenessError']);
+        } ?>
 
         <p>
           I <?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?> am returning to training having completed and signed the Health Survey as requested by <?= htmlspecialchars($tenant->getName()) ?>.
@@ -115,6 +115,10 @@ include BASE_PATH . 'views/header.php';
 
         <p>
           I understand the processes and protocols <?= htmlspecialchars($tenant->getName()) ?> have put in place in order to reduce risks and I will adhere to these in order to protect my health and the health of other members, staff and other users of the facility.
+        </p>
+
+        <p>
+          I also understand that the club will have to be flexible and responsive due to the evolving government advice around COVID-19, and the fact that circumstances will change.
         </p>
 
         <div class="custom-control custom-checkbox mb-3">
