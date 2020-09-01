@@ -32,9 +32,9 @@ $sql = "SELECT SessionID, SessionName, VenueName, StartTime, EndTime FROM (`sess
 $getSessionSquads = $db->prepare("SELECT SquadName, ForAllMembers FROM `sessionsSquads` INNER JOIN `squads` ON sessionsSquads.Squad = squads.SquadID WHERE sessionsSquads.Session = ? ORDER BY SquadFee DESC, SquadName ASC;");
 
 $query = $db->prepare($sql);
-// $query->execute(['day' => $day, 'timenow' => $time, 'time30' => $time30, 'tenant' => $tenant->getId()]);
-// $sessions = $query->fetchAll(PDO::FETCH_ASSOC);
-$sessions = [];
+$query->execute(['day' => $day, 'timenow' => $time, 'time30' => $time30, 'tenant' => $tenant->getId()]);
+$sessions = $query->fetchAll(PDO::FETCH_ASSOC);
+// $sessions = [];
 
 $query = $db->prepare("SELECT EmailAddress FROM users WHERE UserID = ?");
 $query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
@@ -125,7 +125,7 @@ include BASE_PATH . "views/header.php";
 							<a href="<?= htmlspecialchars(autoUrl("attendance/register?date=" . urlencode($date) . "&session=" . urlencode($sessions[$i]['SessionID']))) ?>" title="<?= htmlspecialchars($sessions[$i]['SquadName']) ?> Squad Register, <?= htmlspecialchars($sessions[$i]['SessionName']) ?>">
 								<div>
 									<span class="title mb-0">
-										Take <?php for ($i = 0; $i < sizeof($squadNames); $i++) { ?><?php if ($i > 0) { ?>, <?php } ?><?= htmlspecialchars($squadNames[$i]['SquadName']) ?><?php } ?> Register
+										Take <?php for ($y = 0; $y < sizeof($squadNames); $y++) { ?><?php if ($y > 0) { ?>, <?php } ?><?= htmlspecialchars($squadNames[$y]['SquadName']) ?><?php } ?> Register
 									</span>
 									<span class="d-flex mb-3">
 										<?= date("H:i", strtotime($sessions[$i]['StartTime'])) ?> - <?= date("H:i", strtotime($sessions[$i]['EndTime'])) ?>
