@@ -304,8 +304,40 @@ include BASE_PATH . "views/notifyMenu.php";
 	</form>
 </div>
 
+<div class="modal" id="force-alert-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="force-alert-modal-label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="force-alert-modal">Are you sure?</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-danger">
+          <p>
+            <strong>Force sending an email overrides the subscription options of your members.</strong>
+          </p>
+
+          <p>
+            Under the General Data Protection Regulation, you may only override these preferences in specific cases.
+          </p>
+
+          <p class="mb-0">
+            SCDS may periodically review your organisation's use of the <em>Force Send</em> functionality.
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Don't force send</button>
+        <button type="button" class="btn btn-danger">I understood</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php $footer = new \SCDS\Footer();
 $footer->addJS("public/js/tinymce/tinymce.min.js");
-$footer->addJS("public/js/notify/TinyMCE.js");
+$footer->addJS("public/js/notify/TinyMCE.js?v=1");
 $footer->addJS("public/js/notify/FileUpload.js");
 $footer->render();

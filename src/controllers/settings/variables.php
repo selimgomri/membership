@@ -25,6 +25,7 @@ $vars = [
   'SHOW_LOGO' => false,
   'LOGO_DIR' => null,
   'HIDE_CONTACT_TRACING_FROM_PARENTS' => false,
+  'BLOCK_SQUAD_REPS_FROM_NOTIFY' => false,
 ];
 
 $disabled = [];
@@ -245,6 +246,13 @@ include BASE_PATH . 'views/header.php';
             <p>Your <a href="https://sendgrid.com/">Twilio SendGrid API key</a> is set at system level and cannot be viewed or modified here.</p>
           <?php } ?>
 
+          <div class="form-group">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="BLOCK_SQUAD_REPS_FROM_NOTIFY" name="BLOCK_SQUAD_REPS_FROM_NOTIFY" <?php if (!bool($vars['BLOCK_SQUAD_REPS_FROM_NOTIFY'])) { ?>checked<?php } ?> <?= $disabled['BLOCK_SQUAD_REPS_FROM_NOTIFY'] ?>>
+              <label class="custom-control-label" for="BLOCK_SQUAD_REPS_FROM_NOTIFY">Allow squad reps to use Notify</label>
+            </div>
+          </div>
+
           <h2>Display options</h2>
           <div class="form-group">
             <div class="custom-control custom-switch">
@@ -269,7 +277,7 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
 
-          <h2>GoCardless API keys (for direct debit)</h2>
+          <h2>GoCardless API keys (for legacy direct debit)</h2>
 
           <p>GoCardless is our legacy Direct Debit system. We're phasing it out and will replace it with Stripe, who we already partner with for card payments. We'll get in touch when you need to make changes.</a></p>
 

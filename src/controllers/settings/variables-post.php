@@ -82,6 +82,13 @@ try {
   }
   app()->tenant->setKey('HIDE_CONTACT_TRACING_FROM_PARENTS', $hide);
 
+  // 'BLOCK_SQUAD_REPS_FROM_NOTIFY' => false,
+  $hide = 0;
+  if (!isset($_POST['BLOCK_SQUAD_REPS_FROM_NOTIFY']) || !bool($_POST['BLOCK_SQUAD_REPS_FROM_NOTIFY'])) {
+    $hide = 1;
+  }
+  app()->tenant->setKey('BLOCK_SQUAD_REPS_FROM_NOTIFY', $hide);
+
   $vars['CLUB_ADDRESS'] = null;
   $addr = $_POST['CLUB_ADDRESS'];
   $addr = str_replace("\r\n", "\n", $addr);
