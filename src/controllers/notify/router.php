@@ -14,7 +14,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
 	}
 
 	// If rep blocked, block access to notify
-	if (app()->tenant && !app()->tenant->getBooleanKey('BLOCK_SQUAD_REPS_FROM_NOTIFY')) {
+	if (app()->tenant && app()->tenant->getBooleanKey('BLOCK_SQUAD_REPS_FROM_NOTIFY')) {
 		$repBlocked = true;
 	}
 
@@ -100,7 +100,7 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
 				include 'RepBlocked.php';
 			});
 		}
-		
+
     $this->get('/', function() {
 			include 'MessageHistory.php';
 		});
