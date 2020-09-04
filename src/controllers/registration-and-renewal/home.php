@@ -6,10 +6,13 @@ $db = app()->db;
 $tenant = app()->tenant;
 $user = app()->user;
 
-$getCurrentRegistrationAndRenewals = $db->prepare("SELECT renewalData.ID, renewalPeriods.ID PID, renewalPeriods.Name, renewalPeriods.Year FROM renewalData LEFT JOIN renewalPeriods ON renewalPeriods.ID = renewalData.Renewal WHERE renewalData.User = ? AND NOT JSON_VALUE(renewalData.Document, '$.completed')");
+$getCurrentRegistrationAndRenewals = $db->prepare("SELECT renewalData.ID, renewalPeriods.ID PID, renewalPeriods.Name, renewalPeriods.Year FROM renewalData LEFT JOIN renewalPeriods ON renewalPeriods.ID = renewalData.Renewal WHERE renewalData.User = ? AND NOT JSON_VALUE(renewalData.Document, '$.complete')");
 $getCurrentRegistrationAndRenewals->execute([
   $user->getId(),
 ]);
+
+// $ren = Renewal::createUserRenewal($user->getId());
+// $ren->save();
 
 $pagetitle = "Registration and Renewal";
 include BASE_PATH . 'views/header.php';
@@ -44,6 +47,9 @@ include BASE_PATH . 'views/header.php';
     <div class="col-lg-8">
       <h2>Your current registration and renewals</h2>
       <?php if ($renewal = $getCurrentRegistrationAndRenewals->fetch(PDO::FETCH_ASSOC)) { ?>
+      <p class="lead">
+        You must complete all registration or renewal forms listed below.
+      </p>
         <div class="list-group">
           <?php do { ?>
             <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $renewal['ID'])) ?>" class="list-group-item list-group-item-action">
