@@ -318,7 +318,7 @@ include BASE_PATH . "views/notifyMenu.php";
           <p>
             <strong>Force sending an email overrides the subscription options of your members.</strong>
           </p>
-          
+
           <p>
             Under the General Data Protection Regulation, you may only override these preferences in specific cases.
           </p>
@@ -338,6 +338,6 @@ include BASE_PATH . "views/notifyMenu.php";
 
 <?php $footer = new \SCDS\Footer();
 $footer->addJS("public/js/tinymce/tinymce.min.js");
-$footer->addJS("public/js/notify/TinyMCE.js");
+$footer->addJS("public/js/notify/TinyMCE.js?v=1");
 $footer->addJS("public/js/notify/FileUpload.js");
 $footer->render();
