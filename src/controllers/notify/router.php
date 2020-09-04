@@ -3,6 +3,7 @@
 $db = app()->db;
 
 $rep = false;
+$repBlocked = false;
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
 	$getSquadCount = $db->prepare("SELECT COUNT(*) FROM squads INNER JOIN squadReps ON squads.SquadID = squadReps.Squad AND squadReps.User = ?");
 	$getSquadCount->execute([
@@ -12,14 +13,22 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
 		$rep = true;
 	}
 
+	// If rep blocked, block access to notify
+	if (app()->tenant && app()->tenant->getBooleanKey('BLOCK_SQUAD_REPS_FROM_NOTIFY')) {
+		$repBlocked = true;
+	}
+
 	$getListCount = $db->prepare("SELECT COUNT(*) FROM `targetedLists` INNER JOIN listSenders ON listSenders.List = targetedLists.ID WHERE listSenders.User = ?");
 	$getListCount->execute([
 		$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
 	]);
 	if ($getListCount->fetchColumn() > 0) {
 		$rep = true;
+		$repBlocked = false;
 	}
 }
+
+define('REP_BLOCKED', $repBlocked);
 
 $access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 
@@ -32,19 +41,23 @@ if ($access != "Admin" && $access != "Coach" && $access != "Galas" && !$rep) {
 
 if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
 	$this->get('/', function() {
-		
 		include 'Home.php';
 	});
 
   $this->group(['/new', '/newemail'], function() {
 
+		$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
+		if (!($access == "Admin" || $access == "Coach" || $access == "Galas") && REP_BLOCKED) {
+			$this->any(['/', '/*'], function() {
+				include 'RepBlocked.php';
+			});
+		}
+
   	$this->get('/', function() {
-  		
   		include 'Email.php';
   	});
 
   	$this->post('/', function() {
-  		
   		include 'EmailQueuer.php';
   	});
 
@@ -81,10 +94,14 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
   }
 
   $this->group('/history', function() {
-		
+		$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
+		if (!($access == "Admin" || $access == "Coach" || $access == "Galas") && REP_BLOCKED) {
+			$this->any(['/', '/*'], function() {
+				include 'RepBlocked.php';
+			});
+		}
 
     $this->get('/', function() {
-			
 			include 'MessageHistory.php';
 		});
   });

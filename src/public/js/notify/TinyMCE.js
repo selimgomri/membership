@@ -62,3 +62,18 @@ window.addEventListener('keydown', function (e) {
     }
   }
 }, true);
+
+let force = document.getElementById('force');
+if (force) {
+  force.addEventListener('change', event => {
+    if (event.target.checked) {
+      $('#force-alert-modal').modal('show')
+    }
+  })
+}
+
+$('#force-alert-modal').on('hide.bs.modal', function (e) {
+  if (force) {
+    force.checked = false;
+  }
+})
