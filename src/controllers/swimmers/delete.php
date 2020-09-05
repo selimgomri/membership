@@ -2,6 +2,7 @@
 
 $db = app()->db;
 $tenant = app()->tenant;
+$user = app()->user;
 
 $db->beginTransaction();
 
@@ -33,9 +34,9 @@ try {
   }
 
   // Get user info to verify password
-  $getCurrentUser = $db->prepare("SELECT `Password`, Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
+  $getCurrentUser = $db->prepare("SELECT `Password`, `Forename`, `Surname`, `EmailAddress` FROM `users` WHERE UserID = ?");
   $getCurrentUser->execute([
-    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+    $user->getId(),
   ]);
   $currentUser = $getCurrentUser->fetch(PDO::FETCH_ASSOC);
 
