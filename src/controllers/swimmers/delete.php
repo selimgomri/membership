@@ -22,7 +22,7 @@ try {
   }
 
   // Get info for member we're deleting
-  $getDeleteMember = $db->prepare("SELECT MForename Forname, MSurname Surname FROM members WHERE MemberID = ? AND Tenant = ?");
+  $getDeleteMember = $db->prepare("SELECT MForename Forename, MSurname Surname FROM members WHERE MemberID = ? AND Tenant = ?");
   $getDeleteMember->execute([
     $_POST['member'],
     $tenant->getId()
@@ -141,9 +141,6 @@ try {
 } catch (Exception $e) {
   $responseData['status'] = 500;
   $responseData['message'] = $e->getMessage();
-  if (!$data) {
-    reportError($e);
-  }
   $db->rollBack();
 } finally {
   http_response_code(200);
