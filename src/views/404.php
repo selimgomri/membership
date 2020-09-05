@@ -7,21 +7,21 @@ if (isset(app()->user)) {
   $currentUser = app()->user;
 }
 if ($currentUser == null) {
-	include BASE_PATH . "views/head.php"; ?>
-<div class="bg-primary py-3 mb-3 text-white">
-  <div class="container">
-    <h1 class="mb-0">
-      <a href="<?=autoUrl("")?>" class="text-white">
-        <strong>
-          <?=mb_strtoupper(htmlspecialchars(app()->tenant->getKey('CLUB_NAME')))?>
-        </strong>
-      </a>
-    </h1>
+  include BASE_PATH . "views/head.php"; ?>
+  <div class="bg-primary py-3 mb-3 text-white">
+    <div class="container">
+      <h1 class="mb-0">
+        <a href="<?= autoUrl("") ?>" class="text-white">
+          <strong>
+            <?= mb_strtoupper(htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))) ?>
+          </strong>
+        </a>
+      </h1>
+    </div>
   </div>
-</div>
 <?php
 } else {
-	include BASE_PATH . "views/header.php";
+  include BASE_PATH . "views/header.php";
 }
 ?>
 
@@ -29,8 +29,52 @@ if ($currentUser == null) {
   <div class="row">
     <div class="col-lg-8">
       <h1>The page you requested cannot be found</h1>
-      <p class="lead">The page you are looking for might have been removed, had its name changed, or is temporarily
-        unavailable. You may also not be authorised to view the page.</p>
+
+      <?php if ($currentUser) {
+
+        // Get the user's access levels
+        $permissions = $currentUser->getPermissions();
+
+        if (sizeof($permissions) > 1) { ?>
+          <p class="lead">
+            If you expected to see something here, you may want to try reloading this page with an appropriate access level.
+          </p>
+
+          <div class="card">
+            <div class="card-header">
+              Reload this page as
+            </div>
+            <div class="list-group list-group-flush">
+              <?php
+              $url = rtrim(app('request')->curl, '/');
+              $queries = app('request')->query;
+              $i = 0;
+              foreach ($queries as $key => $value) {
+                if ($i == 0) {
+                  $url .= '?';
+                } else {
+                  $url .= '&';
+                }
+                $url .= $key . '=' . urlencode($value);
+              }
+              ?>
+              <?php foreach ($permissions as $permission) {
+                $disabled = $permission == $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
+              ?>
+                <a href="<?= htmlspecialchars(autoUrl("account-switch?type=" . urlencode($permission) . "&redirect=" . urlencode($url))) ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center <?php if ($disabled) { ?>user-select-none disabled<?php } ?>">
+                  <?= htmlspecialchars($permission) ?> <?php if ($disabled) { ?><span>Current mode <i class="text-primary fa fa-check-circle fa-fw" aria-hidden="true"></i></span><?php } ?>
+                </a>
+              <?php
+              } ?>
+            </div>
+          </div>
+
+        <?php } else { ?>
+          <p class="lead">
+            The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. You may also not be authorised to view the page.
+          </p>
+        <?php } ?>
+      <?php } ?>
 
       <hr>
       <p>Please try the following:</p>
