@@ -5,9 +5,9 @@ try {
   $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
   $hash = json_decode($hash);
   $hash = $hash->resourcesHash;
-  $stylesheet = autoUrl('compiled/css/generic.' . $hash . '.min.css');
+  $stylesheet = autoUrl('compiled/css/scds.' . $hash . '.min.css');
 } catch (Exception $e) {
-  $stylesheet = autoUrl('compiled/css/generic.css');
+  $stylesheet = autoUrl('compiled/css/scds.css');
 }
 
 $bg = null;
@@ -23,7 +23,7 @@ if (isset($fluidContainer) && $fluidContainer == true) {
 <!DOCTYPE html>
 <!--
 
-Copyright Chris Heppell & Chester-le-Street ASC 2016 - 2018.
+Copyright Chris Heppell SCDS 2016 - 2018.
 Bootstrap CSS and JavaScript is Copyright Twitter Inc 2011-2018
 jQuery v3.1.0 is Copyright jQuery Foundation 2016
 
@@ -108,16 +108,6 @@ Chester-le-Street ASC is a non profit unincorporated association.
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-
-  <style>
-    .bg-indigo {
-      background: var(--purple);
-    }
-
-    .club-logos img {
-      max-height: 75px;
-    }
-  </style>
 
 </head>
 

@@ -8,10 +8,10 @@ include BASE_PATH . "views/root/header.php";
 
 <div class="container">
 
-  <div class="row">
-    <div class="col-lg-8 col-md-10 offset-lg-2 offset-md-1">
-      <div class="h4 text-muted mb-3 font-weight-normal">Help and Support</div>
-      <div class="bg-indigo text-white p-4 mb-4 d-inline-block">
+  <div class="row justify-content-center py-3">
+    <div class="col-lg-8 col-md-10">
+      <!-- <div class="h4 text-muted mb-3 font-weight-normal">Help and Support</div> -->
+      <div class="bg-primary text-white p-4 mb-4 d-inline-block rounded">
         <h1>Membership System Help</h1>
         <p class="mb-0">
           Get help with membership system features
