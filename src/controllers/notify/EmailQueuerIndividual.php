@@ -150,7 +150,7 @@ try {
     $bccEmails = [];
 
     // Get member squad(s)
-    $getSquad = $db->prepare("SELECT SquadID FROM squadMembers WHERE Member = ?");
+    $getSquad = $db->prepare("SELECT Squad FROM squadMembers WHERE Member = ?");
     $getSquad->execute([
       $swimmer,
     ]);
