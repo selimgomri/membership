@@ -330,7 +330,7 @@ include BASE_PATH . "views/notifyMenu.php";
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-dark" data-dismiss="modal">Don't force send</button>
-        <button type="button" class="btn btn-danger">I understood</button>
+        <button type="button" class="btn btn-danger" id="accept">I understand</button>
       </div>
     </div>
   </div>

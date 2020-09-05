@@ -66,14 +66,16 @@ window.addEventListener('keydown', function (e) {
 let force = document.getElementById('force');
 if (force) {
   force.addEventListener('change', event => {
-    if (event.target.checked) {
-      $('#force-alert-modal').modal('show')
+    if (force.checked) {
+      force.checked = false;
+      $('#force-alert-modal').modal('show');
+
+      document.getElementById('accept').addEventListener('click', event => {
+        $('#force-alert-modal').modal('hide');
+        if (force) {
+          force.checked = true;
+        }
+      })
     }
   })
 }
-
-$('#force-alert-modal').on('hide.bs.modal', function (e) {
-  if (force) {
-    force.checked = false;
-  }
-})
