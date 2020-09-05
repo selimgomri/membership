@@ -51,7 +51,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
                 <ul class="list-unstyled cls-global-footer-link-spacer">
                   <li><strong>Membership System Support</strong></li>
                   <li>
-                    <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/" target="_blank" title="Chester-le-Street ASC Help and Support">
+                    <a href="<?= htmlspecialchars(autoUrl('help-and-support')) ?>" title="Help and Support">
                       Help and Support
                     </a>
                   </li>
@@ -86,7 +86,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
         <div class="row align-items-center">
           <div class="col-sm-auto">
             <a href="https://myswimmingclub.uk" target="_blank" title="Swimming Club Data Systems Website">
-              <img src="<?= autoUrl("public/img/corporate/scds.png") ?>" width="100">
+              <img src="<?= autoUrl("img/corporate/scds.png") ?>" width="100">
             </a>
             <div class="d-block d-sm-none mb-3"></div>
           </div>
@@ -119,14 +119,14 @@ try {
   $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
   $hash = json_decode($hash);
   $hash = $hash->resourcesHash;
-  $script = autoUrl('public/compiled/js/main.' . $hash . '.js');
+  $script = autoUrl('compiled/js/main.' . $hash . '.js');
 } catch (Exception $e) {
-  $script = autoUrl('public/compiled/js/main.js');
+  $script = autoUrl('compiled/js/main.js');
 }
 
 ?>
 <script rel="preload" src="<?= htmlspecialchars($script) ?>"></script>
-<script async src="<?= htmlspecialchars(autoUrl("public/js/Cookies.js")) ?>"></script>
+<script async src="<?= htmlspecialchars(autoUrl("js/Cookies.js")) ?>"></script>
 
 <?php if (isset($this->js)) { ?>
   <!-- Load per page JS -->

@@ -5,9 +5,9 @@ try {
   $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
   $hash = json_decode($hash);
   $hash = $hash->resourcesHash;
-  $stylesheet = autoUrl('public/compiled/css/generic.' . $hash . '.min.css');
+  $stylesheet = autoUrl('compiled/css/generic.' . $hash . '.min.css');
 } catch (Exception $e) {
-  $stylesheet = autoUrl('public/compiled/css/generic.css');
+  $stylesheet = autoUrl('compiled/css/generic.css');
 }
 
 $bg = null;
@@ -49,7 +49,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <?php } else { ?>
     <title>SCDS Membership</title>
   <?php } ?>
-  <meta name="description" content="SCDS Membership helps clubs run more efficiently.">
+  <meta name="description" content="SCDS Membership helps UK aquatics clubs run more efficiently.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0,
     user-scalable=no,maximum-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -82,24 +82,24 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheet) ?>">
 
   <!-- Generic icon -->
-  <link rel="icon" href="<?= htmlspecialchars(autoUrl("public/img/corporate/scds.png")) ?>">
+  <link rel="icon" href="<?= htmlspecialchars(autoUrl("img/corporate/scds.png")) ?>">
 
   <!-- For iPhone 6 Plus with @3× display: -->
-  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon-180x180.png") ?>">
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<?= autoUrl("img/corporate/icons/apple-touch-icon-180x180.png") ?>">
   <!-- For iPad with @2× display running iOS ≥ 7: -->
-  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon-152x152.png") ?>">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="<?= autoUrl("img/corporate/icons/apple-touch-icon-152x152.png") ?>">
   <!-- For iPad with @2× display running iOS ≤ 6: -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon-144x144.png") ?>">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<?= autoUrl("img/corporate/icons/apple-touch-icon-144x144.png") ?>">
   <!-- For iPhone with @2× display running iOS ≥ 7: -->
-  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon-120x120.png") ?>">
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="<?= autoUrl("img/corporate/icons/apple-touch-icon-120x120.png") ?>">
   <!-- For iPhone with @2× display running iOS ≤ 6: -->
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon-114x114.png") ?>">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?= autoUrl("img/corporate/icons/apple-touch-icon-114x114.png") ?>">
   <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
-  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon-76x76.png") ?>">
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="<?= autoUrl("img/corporate/icons/apple-touch-icon-76x76.png") ?>">
   <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon-72x72.png") ?>">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?= autoUrl("img/corporate/icons/apple-touch-icon-72x72.png") ?>">
   <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
-  <link rel="apple-touch-icon-precomposed" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon.png") ?>"><!-- 57×57px -->
+  <link rel="apple-touch-icon-precomposed" href="<?= autoUrl("img/corporate/icons/apple-touch-icon.png") ?>"><!-- 57×57px -->
   <!-- <link rel="mask-icon" href="https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterIcon.svg"
     color="#bd0000"> -->
   <script src="https://www.google.com/recaptcha/api.js"></script>
@@ -123,7 +123,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
 
 <body class="<?= $bg ?> account--body" <?php if (isset($pageHead['body'])) {
                                           foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
-                                                                                            } ?>>
+                                                                                              } ?>>
 
   <div class="sr-only sr-only-focusable">
     <a href="#maincontent">Skip to main content</a>

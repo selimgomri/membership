@@ -22,7 +22,7 @@ include 'head.php';
 <div class="container">
   <div class="row align-items-center py-2">
     <div class="col-auto">
-      <img src="<?= htmlspecialchars(autoUrl("public/img/corporate/scds.png")) ?>" class="img-fluid rounded-top" style="height: 75px;">
+      <img src="<?= htmlspecialchars(autoUrl("img/corporate/scds.png")) ?>" class="img-fluid rounded-top" style="height: 75px;">
     </div>
     <div class="col-auto d-none d-md-flex">
       <h1 class="mb-0">
@@ -49,7 +49,7 @@ include 'head.php';
           <a class="nav-link" href="<?= htmlspecialchars(autoUrl("register")) ?>">Register</a>
         </li> -->
         <li class="nav-item">
-          <a class="nav-link" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/" target="_blank">Help</a>
+          <a class="nav-link" href="<?= htmlspecialchars(autoUrl("help-and-support")) ?>">Help</a>
         </li>
       </ul>
     </div>
