@@ -88,6 +88,8 @@ class Renewal
       }
     }
 
+    $this->revalidateMembers();
+
     // Sort out dates
     $this->startedOn = new DateTime('now', new DateTimeZone('Europe/London'));
     $this->dueBy = new DateTime('last day of this month', new DateTimeZone('Europe/London'));
@@ -164,6 +166,30 @@ class Renewal
     $this->complete = false;
   }
 
+  private function revalidateMembers()
+  {
+    // Sort member list by name
+    usort($this->members, function ($item1, $item2) {
+      return $item1['name'] <=> $item2['name'];
+    });
+
+    // Fetch latest details from DB
+    $getMember = app()->db->prepare("SELECT MForename fn, MSurname sn, UserID FROM members WHERE MemberID = ?");
+    for ($i = 0; $i < sizeof($this->members); $i++) {
+      $getMember->execute([
+        $this->members[$i]['id'],
+      ]);
+
+      // Use current name incase changed
+      if ($member = $getMember->fetch(PDO::FETCH_ASSOC)) {
+        $this->members[$i]['name'] = $member['fn'] . ' ' . $member['sn'];
+        $this->members[$i]['current'] = $member['UserID'] != null;
+      } else {
+        $this->members[$i]['current'] = false;
+      }
+    }
+  }
+
   public static function getUserRenewal($id)
   {
     $object = new Renewal($id);
@@ -213,6 +239,7 @@ class Renewal
 
     $this->allowLateCompletion = $json['allow_late_completion'];
     $this->members = $json['members'];
+    $this->revalidateMembers();
     $this->fees = $json['fees'];
     $this->progress = $json['progress'];
     $this->complete = $json['complete'];
@@ -270,14 +297,33 @@ class Renewal
     $this->renewal = $renewal;
   }
 
-  public function getRenewalName() {
+  public function getRenewalName()
+  {
     if ($this->name) {
       return $this->name;
     }
     return 'Registration';
   }
 
-  public function getUser() {
+  public function getTypeName($upcase = true)
+  {
+    $val = 'Registration';
+    if ($this->name) {
+      $val = 'Renewal';
+    }
+    if ($upcase) {
+      return $val;
+    }
+    return mb_strtolower($val);
+  }
+
+  public function getUser()
+  {
     return $this->user;
+  }
+
+  public function getMembers()
+  {
+    return $this->members;
   }
 }

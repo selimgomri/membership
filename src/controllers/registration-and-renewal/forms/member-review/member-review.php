@@ -23,16 +23,7 @@ if (!$user->hasPermission('Admin') && $renewal['User'] != $user->getId()) {
 
 $ren = Renewal::getUserRenewal($id);
 
-$addr = [];
-$getAddress = $db->prepare("SELECT `Value` FROM `userOptions` WHERE `User` = ? AND `Option` = ?");
-$getAddress->execute([
-  $ren->getUser(),
-  'MAIN_ADDRESS',
-]);
-$json = $getAddress->fetchColumn();
-if ($json != null) {
-  $addr = json_decode($json);
-}
+$members = $ren->getMembers();
 
 $pagetitle = htmlspecialchars("Member Review - " . $ren->getRenewalName());
 
@@ -57,7 +48,7 @@ include BASE_PATH . 'views/header.php';
           Member Review
         </h1>
         <p class="lead mb-0">
-          Check all your members are included in this renewal
+          Check all your members are included in this <?= htmlspecialchars($ren->getTypeName(false)) ?>
         </p>
       </div>
     </div>
@@ -80,22 +71,45 @@ include BASE_PATH . 'views/header.php';
 
       <form method="post" class="needs-validation" novalidate>
 
-        <p>
-          Please check that all members for which you expect to complete registration/renewal are listed below.
-        </p>
+        <?php if (sizeof($members) > 0) { ?>
 
-        <ul class="list-group">
-          
-        </ul>
+          <p>
+            Please check that all members for which you expect to complete <?= htmlspecialchars($ren->getTypeName(false)) ?> are listed below.
+          </p>
 
-        <p>
-          If any members are not listed, please contact your club membership secretary before you continue.
-        </p>
+          <ul class="list-group mb-3">
+            <?php foreach ($members as $member) { ?>
+              <li class="list-group-item <?php if (!bool($member['current'])) { ?>disabled<?php } ?>" id="member-<?= htmlspecialchars($member['id']) ?>">
+                <?php if (bool($member['current'])) { ?>
+                  <?= htmlspecialchars($member['name']) ?>
+                <?php } else { ?>
+                  <?= htmlspecialchars($member['name']) ?> - This member is no longer associated with your account
+                <?php } ?>
+              </li>
+            <?php } ?>
+          </ul>
+
+          <p>
+            If any members are not listed, please contact your club membership secretary before you continue with <?= htmlspecialchars($ren->getTypeName(false)) ?>.
+          </p>
+
+        <?php } else { ?>
+
+          <div class="alert alert-danger">
+            <p class="mb-0">
+              <strong>There are no members associated with this renewal</strong>
+            </p>
+            <p class="mb-0">
+              This means there has been a problem. Please contact your club membership secretary for support before you try to continue with <?= htmlspecialchars($ren->getTypeName(false)) ?>.
+            </p>
+          </div>
+
+        <?php } ?>
 
         <?= \SCDS\CSRF::write() ?>
 
         <p>
-          <button type="submit" class="btn btn-success">Confirm and complete section</button>
+          <button type="submit" class="btn btn-success" <?php if (sizeof($members) == 0) { ?>disabled title="You cannot continue <?= htmlspecialchars($ren->getTypeName(false)) ?> without members" <?php } ?>>Confirm and complete section</button>
         </p>
       </form>
 

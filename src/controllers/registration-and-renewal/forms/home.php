@@ -54,9 +54,54 @@ include BASE_PATH . 'views/header.php';
 <div class="container">
 
   <div class="row">
+    <div class="col">
+      <div class="list-group">
+        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/account-review')) ?>" class="list-group-item list-group-item-action">
+          Account Review
+        </a>
+        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/member-review')) ?>" class="list-group-item list-group-item-action">
+          Member Review
+        </a>
+        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/fee-review')) ?>" class="list-group-item list-group-item-action">
+          Fee Review
+        </a>
+        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/address-review')) ?>" class="list-group-item list-group-item-action">
+          Address Review
+        </a>
+        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/emergency-contacts')) ?>" class="list-group-item list-group-item-action">
+          Emergency Contacts
+        </a>
+        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/medical-forms')) ?>" class="list-group-item list-group-item-action">
+          Medical Forms
+        </a>
+        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/conduct-forms')) ?>" class="list-group-item list-group-item-action">
+          Conduct Forms
+        </a>
+        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/data-protection-and-privacy')) ?>" class="list-group-item list-group-item-action">
+          Data Protection and Privacy
+        </a>
+        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/terms-and-conditions')) ?>" class="list-group-item list-group-item-action">
+          Terms and Conditions
+        </a>
+        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/photography-permissions')) ?>" class="list-group-item list-group-item-action">
+          Photography Permissions
+        </a>
+        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/administration-form')) ?>" class="list-group-item list-group-item-action">
+          Administration Form
+        </a>
+        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/direct-debit')) ?>" class="list-group-item list-group-item-action">
+          Direct Debit
+        </a>
+        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/renewal-fees')) ?>" class="list-group-item list-group-item-action">
+          <?= htmlspecialchars($ren->getTypeName()) ?> Fees
+        </a>
+      </div>
+    </div>
     <div class="col-lg-8">
 
-      <?= pre($ren) ?>
+      <div class="card card-body tidy-debug-pre">
+        <?= pre($ren) ?>
+      </div>
 
     </div>
   </div>
