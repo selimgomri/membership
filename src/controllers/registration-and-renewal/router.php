@@ -36,7 +36,11 @@ $this->group('/{id}:uuid', function ($id) {
 
   $this->group('/fee-review', function ($id) {
     $this->get('/', function ($id) {
-      include 'forms/home.php';
+      include 'forms/fee-review/fee-review.php';
+    });
+
+    $this->post('/', function ($id) {
+      include 'forms/fee-review/fee-review-post.php';
     });
   });
 
@@ -52,7 +56,7 @@ $this->group('/{id}:uuid', function ($id) {
 
   $this->group('/emergency-contacts', function ($id) {
     $this->get('/', function ($id) {
-      include 'forms/home.php';
+      include 'forms/emergency-contacts/emergency-contacts.php';
     });
   });
 

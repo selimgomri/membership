@@ -57,7 +57,7 @@ include BASE_PATH . 'views/header.php';
 
 <div class="container">
 
-  <div class="row">
+  <div class="row justify-content-between">
     <div class="col-lg-8">
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) { ?>
@@ -73,7 +73,7 @@ include BASE_PATH . 'views/header.php';
 
         <?php if (sizeof($members) > 0) { ?>
 
-          <p>
+          <p class="lead">
             Please check that all members for which you expect to complete <?= htmlspecialchars($ren->getTypeName(false)) ?> are listed below.
           </p>
 
@@ -113,6 +113,9 @@ include BASE_PATH . 'views/header.php';
         </p>
       </form>
 
+    </div>
+    <div class="col col-xl-3">
+      <?= CLSASC\BootstrapComponents\RenewalProgressListGroup::renderLinks($ren, 'member-review') ?>
     </div>
   </div>
 </div>

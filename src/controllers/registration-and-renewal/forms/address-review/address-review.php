@@ -66,8 +66,12 @@ include BASE_PATH . 'views/header.php';
 
 <div class="container">
 
-  <div class="row">
+  <div class="row justify-content-between">
     <div class="col-lg-8">
+
+    <p class="lead">
+      Please confirm, add or update your main home address.
+    </p>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) { ?>
         <div class="alert alert-danger">
@@ -150,6 +154,9 @@ include BASE_PATH . 'views/header.php';
         </p>
       </form>
 
+    </div>
+    <div class="col col-xl-3">
+      <?= CLSASC\BootstrapComponents\RenewalProgressListGroup::renderLinks($ren, 'address-review') ?>
     </div>
   </div>
 </div>

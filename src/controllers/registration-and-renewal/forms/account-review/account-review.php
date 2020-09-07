@@ -73,12 +73,15 @@ include BASE_PATH . 'views/header.php';
 
 <div class="container">
 
-  <div class="row">
+  <div class="row justify-content-between">
     <div class="col-lg-8">
+
+    <p class="lead">
+      Please update any incorrect details.
+    </p>
 
       <form method="post" class="needs-validation" novalidate>
         <div class="">
-          <h2>Your Details</h2>
           <div class="form-group">
             <label for="forename">Name</label>
             <input type="text" class="form-control" name="forename" id="forename" placeholder="Forename" value="<?= htmlspecialchars($forename) ?>" required>
@@ -128,6 +131,9 @@ include BASE_PATH . 'views/header.php';
         </p>
       </form>
 
+    </div>
+    <div class="col col-xl-3">
+      <?= CLSASC\BootstrapComponents\RenewalProgressListGroup::renderLinks($ren, 'account-review') ?>
     </div>
   </div>
 </div>

@@ -317,6 +317,16 @@ class Renewal
     return mb_strtolower($val);
   }
 
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  public function getRenewal()
+  {
+    return $this->renewal;
+  }
+
   public function getUser()
   {
     return $this->user;
@@ -325,5 +335,10 @@ class Renewal
   public function getMembers()
   {
     return $this->members;
+  }
+
+  public function getProgress()
+  {
+    return $this->progress;
   }
 }

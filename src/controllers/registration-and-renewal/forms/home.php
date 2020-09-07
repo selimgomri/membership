@@ -44,7 +44,7 @@ include BASE_PATH . 'views/header.php';
           <?= htmlspecialchars($ren->getRenewalName()) ?>
         </h1>
         <p class="lead mb-0">
-          Register or renew your membership
+          Register or renew your membership for the year
         </p>
       </div>
     </div>
@@ -53,56 +53,44 @@ include BASE_PATH . 'views/header.php';
 
 <div class="container">
 
-  <div class="row">
-    <div class="col">
-      <div class="list-group">
-        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/account-review')) ?>" class="list-group-item list-group-item-action">
-          Account Review
-        </a>
-        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/member-review')) ?>" class="list-group-item list-group-item-action">
-          Member Review
-        </a>
-        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/fee-review')) ?>" class="list-group-item list-group-item-action">
-          Fee Review
-        </a>
-        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/address-review')) ?>" class="list-group-item list-group-item-action">
-          Address Review
-        </a>
-        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/emergency-contacts')) ?>" class="list-group-item list-group-item-action">
-          Emergency Contacts
-        </a>
-        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/medical-forms')) ?>" class="list-group-item list-group-item-action">
-          Medical Forms
-        </a>
-        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/conduct-forms')) ?>" class="list-group-item list-group-item-action">
-          Conduct Forms
-        </a>
-        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/data-protection-and-privacy')) ?>" class="list-group-item list-group-item-action">
-          Data Protection and Privacy
-        </a>
-        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/terms-and-conditions')) ?>" class="list-group-item list-group-item-action">
-          Terms and Conditions
-        </a>
-        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/photography-permissions')) ?>" class="list-group-item list-group-item-action">
-          Photography Permissions
-        </a>
-        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/administration-form')) ?>" class="list-group-item list-group-item-action">
-          Administration Form
-        </a>
-        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/direct-debit')) ?>" class="list-group-item list-group-item-action">
-          Direct Debit
-        </a>
-        <a href="<?= htmlspecialchars(autoUrl('registration-and-renewal/' . $id . '/renewal-fees')) ?>" class="list-group-item list-group-item-action">
-          <?= htmlspecialchars($ren->getTypeName()) ?> Fees
-        </a>
-      </div>
-    </div>
+  <div class="row justify-content-between">
     <div class="col-lg-8">
 
-      <div class="card card-body tidy-debug-pre">
-        <?= pre($ren) ?>
-      </div>
+      <p class="lead">
+        Welcome to <?= htmlspecialchars($ren->getRenewalName()) ?>.
+      </p>
 
+      <?php if (false) { ?>
+
+        <p>
+          Membership renewal ensures all our information about you is up to date, that you / you and your members understand your rights and responsibilities at the club, and that you can pay your <abbr title="Including Swim England Membership Fees"> membership fee</abbr> for the year ahead.
+        </p>
+
+      <?php } else { ?>
+
+        <p>
+          Online membership registration allows us to collect all required information about you / you and your members in a GDPR compliant manner. This involves us asking for some emergency contact details and medical information.
+        </p>
+
+        <p>
+          It also ensures that you / you and your members understand your rights and responsibilities at the club, and that you can pay your <abbr title="Including Swim England Membership Fees"> membership fee</abbr> for the year ahead.
+        </p>
+
+      <?php } ?>
+
+      <p>
+        Do not worry if you make a mistake while filling out any forms. You can edit all information at any time.
+      </p>
+      <p>
+        We'll save your progress as you fill out the required forms.
+      </p>
+
+      <!-- <div class="card card-body tidy-debug-pre mb-3">
+        <?= pre($ren) ?>
+      </div> -->
+    </div>
+    <div class="col col-xl-3">
+      <?= CLSASC\BootstrapComponents\RenewalProgressListGroup::renderLinks($ren) ?>
     </div>
   </div>
 </div>
