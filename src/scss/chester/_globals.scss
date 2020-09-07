@@ -546,7 +546,7 @@ footer .focus-highlight a:focus,
 
 .festive {
   /*background:#005fbd;*/
-  background-image: url("https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/christmas.png");
+  background-image: url("/img/christmas.png");
   background-size: 50% auto;
   /*padding: 1rem;*/
   color: #fff;
@@ -563,3 +563,11 @@ footer .focus-highlight a:focus,
     color: var(--light);
   }
 } */
+
+.bg-indigo {
+  background: $purple;
+}
+
+.club-logos img {
+  max-height: 75px;
+}

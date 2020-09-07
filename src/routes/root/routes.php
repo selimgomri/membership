@@ -4,6 +4,10 @@ $this->get('/', function() {
   include BASE_PATH . 'views/root/home.php';
 });
 
+$this->group('/help-and-support', function() {
+  include BASE_PATH . 'routes/support/routes.php';
+});
+
 $this->group('/login', function() {
   include BASE_PATH . 'routes/login/routes.php';
 });

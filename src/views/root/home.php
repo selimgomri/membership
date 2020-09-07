@@ -18,7 +18,7 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-indigo text-light py-5">
+<div class="bg-primary text-light py-5">
   <div class="container">
     <div class="row">
       <div class="col-md-6">
@@ -52,7 +52,7 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-indigo text-light py-5">
+<div class="bg-primary text-light py-5">
   <div class="container">
     <div class="row align-items-center">
       <div class="col-md-9">
@@ -99,7 +99,7 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-indigo text-light py-5">
+<div class="bg-primary text-light py-5">
   <div class="container">
     <div class="row">
       <div class="col-md-6">
@@ -132,7 +132,7 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-indigo text-light py-5">
+<div class="bg-primary text-light py-5">
   <div class="container">
     <div class="row">
       <div class="col-md-6">

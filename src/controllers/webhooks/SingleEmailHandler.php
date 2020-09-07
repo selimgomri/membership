@@ -13,7 +13,7 @@ $tenant = app()->tenant;
 
 $getExtraEmails = $db->prepare("SELECT Name, EmailAddress FROM notifyAdditionalEmails WHERE UserID = ?");
 
-$pending = $db->prepare("SELECT `EmailID`, `notify`.`UserID`, `EmailType`, `notify`.`ForceSend`, `Forename`, `Surname`, `EmailAddress`, notify.Subject AS PlainSub, notify.Message AS PlainMess FROM `notify` INNER JOIN `users` ON notify.UserID = users.UserID WHERE notify.MessageID IS NULL AND `Status` = 'Queued' AND users.Tenant = ? LIMIT 8;");
+$pending = $db->prepare("SELECT users.Active, `EmailID`, `notify`.`UserID`, `EmailType`, `notify`.`ForceSend`, `Forename`, `Surname`, `EmailAddress`, notify.Subject AS PlainSub, notify.Message AS PlainMess FROM `notify` INNER JOIN `users` ON notify.UserID = users.UserID WHERE notify.MessageID IS NULL AND `Status` = 'Queued' AND users.Tenant = ? LIMIT 8;");
 $pending->execute([
 	$tenant->getId()
 ]);
@@ -23,11 +23,11 @@ $completed = $db->prepare("UPDATE `notify` SET `Status` = ? WHERE `EmailID` = ?"
 
 while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 	$emailid = $row['EmailID'];
-	if (isSubscribed($row['UserID'], $row['EmailType']) || $row['ForceSend'] == 1) {
-    $getExtraEmails->execute([$row['UserID']]);
+	if ((isSubscribed($row['UserID'], $row['EmailType']) || $row['ForceSend'] == 1) && bool($row['Active'])) {
+		$getExtraEmails->execute([$row['UserID']]);
 
 		//$to = $row['EmailAddress'];
-    $to = $row['Forename'] . " " . $row['Surname'] . " <" . $row['EmailAddress'] . ">";
+		$to = $row['Forename'] . " " . $row['Surname'] . " <" . $row['EmailAddress'] . ">";
 		$name = $row['Forename'] . " " . $row['Surname'];
 		$emailaddress = $row['EmailAddress'];
 		$subject = $row['PlainSub'] . $row['NotifySub'];
@@ -45,7 +45,7 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 			]
 		];
 
-    if ($row['EmailType'] == 'Payments') {
+		if ($row['EmailType'] == 'Payments') {
 			$from = [
 				"Email" => $emailPrefix . "payments@" . getenv('EMAIL_DOMAIN'),
 				"Name" => app()->tenant->getKey('CLUB_NAME'),
@@ -103,9 +103,9 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 				"Name" => app()->tenant->getKey('CLUB_NAME')
 			];
 
-      if ($from['Unsub']['Allowed']) {
-        unset($from['Unsub']);
-      }
+			if ($from['Unsub']['Allowed']) {
+				unset($from['Unsub']);
+			}
 		}
 
 		if ($row['EmailType'] == 'SquadMove') {
@@ -114,25 +114,25 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 				"Name" => app()->tenant->getKey('CLUB_NAME')
 			];
 		} else if ($row['EmailType'] == 'Notify-Audit') {
-      $from = [
+			$from = [
 				"Email" => $emailPrefix . "gdpr-notify@" . getenv('EMAIL_DOMAIN'),
 				"Name" => "SCDS GDPR Compliance"
 			];
-    }
+		}
 
-    if ($row['EmailType'] == "Notify") {
-      $ccEmails = [];
-      while ($extraEmails = $getExtraEmails->fetch(PDO::FETCH_ASSOC)) {
-        $ccEmails[$extraEmails['EmailAddress']] = $extraEmails['Name'];
-      }
-      $from['CC'] = $ccEmails;
-    }
+		if ($row['EmailType'] == "Notify") {
+			$ccEmails = [];
+			while ($extraEmails = $getExtraEmails->fetch(PDO::FETCH_ASSOC)) {
+				$ccEmails[$extraEmails['EmailAddress']] = $extraEmails['Name'];
+			}
+			$from['CC'] = $ccEmails;
+		}
 
 		if (notifySend($to, $subject, $message, $name, $emailaddress, $from)) {
-      $completed->execute(['Sent', $emailid]);
+			$completed->execute(['Sent', $emailid]);
 		} else {
-      $completed->execute(['Failed', $emailid]);
-    }
+			$completed->execute(['Failed', $emailid]);
+		}
 	} else {
 		$completed->execute(['No_Sub', $emailid]);
 	}

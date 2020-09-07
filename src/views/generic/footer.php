@@ -73,7 +73,7 @@ $logos = $tenant->getKey('LOGO_DIR')
                   </a>
                 </li>
                 <li>
-                  <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/" target="_blank" title="Chester-le-Street ASC Help and Support">
+                  <a href="<?= htmlspecialchars(autoUrl('help-and-support', false)) ?>" title="Help and Support">
                     Help and Support
                   </a>
                 </li>

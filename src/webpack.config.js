@@ -42,7 +42,8 @@ module.exports = (env, options) => {
     entry: [
       './js/javascript.js',
       './scss/clse.scss',
-      './scss/generic.scss'
+      './scss/generic.scss',
+      './scss/scds.scss'
     ],
     output: {
       path: path.resolve(__dirname, 'public/compiled/'),

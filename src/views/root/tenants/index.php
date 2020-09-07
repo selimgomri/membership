@@ -12,9 +12,11 @@ include BASE_PATH . "views/root/header.php";
 
 <div class="container">
   <div class="row justify-content-center py-3">
-    <div class="col-lg-8">
+    <div class="col-lg-8 col-md-10">
+    <div class="bg-primary text-white p-4 mb-4 d-inline-block rounded">
       <h1 class="">Clubs</h1>
-      <p class="lead">Find your club to get started.</p>
+      <p class="mb-0">Find your club to get started.</p>
+      </div>
 
       <?php if ($club) { ?>
         <div class="card">
