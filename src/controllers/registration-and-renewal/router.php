@@ -16,13 +16,21 @@ $this->group('/{id}:uuid', function ($id) {
 
   $this->group('/account-review', function ($id) {
     $this->get('/', function ($id) {
-      include 'forms/home.php';
+      include 'forms/account-review/account-review.php';
+    });
+
+    $this->post('/', function ($id) {
+      include 'forms/account-review/account-review-post.php';
     });
   });
 
   $this->group('/member-review', function ($id) {
     $this->get('/', function ($id) {
-      include 'forms/home.php';
+      include 'forms/member-review/member-review.php';
+    });
+
+    $this->post('/', function ($id) {
+      include 'forms/member-review/member-review-post.php';
     });
   });
 
@@ -34,7 +42,11 @@ $this->group('/{id}:uuid', function ($id) {
 
   $this->group('/address-review', function ($id) {
     $this->get('/', function ($id) {
-      include 'forms/home.php';
+      include 'forms/address-review/address-review.php';
+    });
+
+    $this->post('/', function ($id) {
+      include 'forms/address-review/address-review-post.php';
     });
   });
 

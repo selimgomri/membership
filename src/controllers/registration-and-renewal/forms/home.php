@@ -6,9 +6,10 @@ $db = app()->db;
 $tenant = app()->tenant;
 $user = app()->user;
 
-$getRenewal = $db->prepare("SELECT renewalData.ID, renewalPeriods.ID PID, renewalPeriods.Name, renewalPeriods.Year, renewalData.User, renewalData.Document FROM renewalData LEFT JOIN renewalPeriods ON renewalPeriods.ID = renewalData.Renewal WHERE renewalData.ID = ?");
+$getRenewal = $db->prepare("SELECT renewalData.ID, renewalPeriods.ID PID, renewalPeriods.Name, renewalPeriods.Year, renewalData.User, renewalData.Document FROM renewalData LEFT JOIN renewalPeriods ON renewalPeriods.ID = renewalData.Renewal LEFT JOIN users ON users.UserID = renewalData.User WHERE renewalData.ID = ? AND users.Tenant = ?");
 $getRenewal->execute([
   $id,
+  $tenant->getId(),
 ]);
 $renewal = $getRenewal->fetch(PDO::FETCH_ASSOC);
 

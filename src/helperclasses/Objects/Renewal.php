@@ -276,4 +276,8 @@ class Renewal
     }
     return 'Registration';
   }
+
+  public function getUser() {
+    return $this->user;
+  }
 }
