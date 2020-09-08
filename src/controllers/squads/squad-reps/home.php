@@ -46,7 +46,7 @@ include BASE_PATH . 'views/header.php';
                 <a href="<?= autoUrl("squads/" . $squad['SquadID']) ?>">
                   <span class="mb-3">
                     <span class="title mb-0">
-                      <?= htmlspecialchars($squad['SquadName']) ?> Squad
+                      <?= htmlspecialchars($squad['SquadName']) ?>
                     </span>
                     <span>
                       <?= htmlspecialchars($squad['SquadCoach']) ?>

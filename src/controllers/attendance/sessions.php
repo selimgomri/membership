@@ -43,7 +43,7 @@ include "attendanceMenu.php";
             <option value="0">Choose your squad from the menu</option>
             <?php do { ?>
             <option value="<?=$squad['id']?>" <?php if ($selectedSquad == $squad['id']) { ?>selected<?php } ?>>
-              <?=htmlspecialchars($squad['name'])?> Squad
+              <?=htmlspecialchars($squad['name'])?>
             </option>
             <?php } while ($squad = $squads->fetch(PDO::FETCH_ASSOC)); ?>
           </select>

@@ -19,3 +19,7 @@ $this->group('/squads', function () {
     include 'submissions/squad.php';
   });
 });
+
+$this->post('/void', function() {
+  include 'submissions/void.php';
+});

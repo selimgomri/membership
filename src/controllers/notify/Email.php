@@ -153,7 +153,7 @@ include BASE_PATH . "views/notifyMenu.php";
             value="1" <?=fieldChecked($squad['SquadID'])?>>
 					  <label class="custom-control-label"
               for="<?=$squad['SquadID']?>">
-              <?=htmlspecialchars($squad['SquadName'])?> Squad
+              <?=htmlspecialchars($squad['SquadName'])?>
             </label>
 					</div>
 				</div>
@@ -220,19 +220,6 @@ include BASE_PATH . "views/notifyMenu.php";
         </div>
       </div>
 		</div>
-
-    <aside class="alert alert-info">
-      <!-- COVID TEMPORARY ALERT -->
-      <p class="mb-0">
-        <strong>Sharing a Zoom Link?</strong>
-      </p>
-      <p class="mb-0">
-        <a class="alert-link" target="_blank" href="https://foundation.mozilla.org/en/blog/tips-make-your-zoom-gatherings-more-private/">Follow these tips</a> from the Mozilla Foundation to make your Zoom gatherings more private. Mozilla Foundation also has some <a class="alert-link" target="_blank" href="https://foundation.mozilla.org/en/blog/what-can-you-tell-me-about-zoom">information on security questions recently raised about Zoom</a>.
-      </p>
-      <p class="mb-0">
-        <small>Mozilla is the nonprofit organisation behind the Firefox Web Browser.</small>
-      </p>
-    </aside>
 
 		<div class="form-group">
 			<label for="subject">Message Subject</label>

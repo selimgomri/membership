@@ -67,7 +67,7 @@ include BASE_PATH . 'views/header.php';
 		</ol>
 	</nav>
 
-	<h1><?=htmlspecialchars($data->squad->name)?> Squad entries for <?=htmlspecialchars($data->gala->name)?></h1>
+	<h1><?=htmlspecialchars($data->squad->name)?> entries for <?=htmlspecialchars($data->gala->name)?></h1>
 	<p class="lead">
 		<?=htmlspecialchars($data->gala->venue)?>
 	</p>
@@ -128,7 +128,7 @@ include BASE_PATH . 'views/header.php';
 
 			<h2>Entries for this gala</h2>
       <p class="lead">
-        This list shows all entries by swimmers in <?=htmlspecialchars($data->squad->name)?> Squad.
+        This list shows all entries by swimmers in <?=htmlspecialchars($data->squad->name)?>.
       </p>
 
       <p>
