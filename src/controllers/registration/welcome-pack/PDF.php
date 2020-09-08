@@ -165,7 +165,7 @@ ob_start();?>
     <?php foreach ($swimmers as $s) { ?>
     <h2><?=htmlspecialchars($s['fn'])?> <?=htmlspecialchars($s['sn'])?></h2>
     
-    <p><?=htmlspecialchars($s['fn'])?> is in <?=htmlspecialchars($s['squad'])?> Squad which has a monthly fee of &pound;<?=htmlspecialchars(number_format($s['fee'], 2, '.', ''))?>.</p>
+    <p><?=htmlspecialchars($s['fn'])?> is in <?=htmlspecialchars($s['squad'])?> which has a monthly fee of &pound;<?=htmlspecialchars(number_format($s['fee'], 2, '.', ''))?>.</p>
 
     <?php
 

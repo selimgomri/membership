@@ -105,15 +105,15 @@ include BASE_PATH . 'views/header.php';
         <p>
           <strong>
             Congratulations, <?=$swimmer['First']?> has been offered a squad
-            place in <?=$squad['SquadName']?> Squad!
+            place in <?=$squad['SquadName']?>!
           </strong>
         </p>
         <p>
-          <?=$squad['SquadName']?> Squad has a monthly fee of
+          <?=$squad['SquadName']?> has a monthly fee of
           &pound;<?=number_format($squad['SquadFee'], 2, '.', ',')?>.
         </p>
         <p>
-          If you don't want to take up a place in <?=$squad['SquadName']?> Squad,
+          If you don't want to take up a place in <?=$squad['SquadName']?>,
           please press <em>Reject Squad Place</em> in the advanced menu to the
           bottom right of this box.
         </p>

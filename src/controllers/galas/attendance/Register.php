@@ -92,7 +92,7 @@ include BASE_PATH . 'views/header.php';
                     <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" name="s-<?=htmlspecialchars($session['ID'])?>-m-<?=htmlspecialchars($swimmers[$i]['id'])?>" value="1" id="s-<?=htmlspecialchars($session['ID'])?>-m-<?=htmlspecialchars($swimmers[$i]['id'])?>">
                     <label class="custom-control-label d-block" for="s-<?=htmlspecialchars($session['ID'])?>-m-<?=htmlspecialchars($swimmers[$i]['id'])?>">
-                      <?=htmlspecialchars($swimmers[$i]['fn'] . " " . $swimmers[$i]['sn'] . ", " . $swimmers[$i]['squad'])?> Squad
+                      <?=htmlspecialchars($swimmers[$i]['fn'] . " " . $swimmers[$i]['sn'] . ", " . $swimmers[$i]['squad'])?>
                     </label>
                   </div>
                 </div>

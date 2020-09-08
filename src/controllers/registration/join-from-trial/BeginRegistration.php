@@ -55,7 +55,7 @@ include BASE_PATH . 'views/header.php';
           <div class="cell">
             <h3><?=htmlspecialchars($s['First'])?></h3>
             <p>
-              Will join <?=$s['SquadName']?> Squad at
+              Will join <?=$s['SquadName']?> at
               &pound;<?=number_format($s['SquadFee'], 2)?>
             </p>
           </div>

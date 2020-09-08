@@ -58,7 +58,7 @@ include BASE_PATH . 'views/header.php';
             <?php while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)) { ?>
             <option value="<?=htmlspecialchars($squad['id'])?>"
               <?php if ($leavers == $squad['id']) { ?>selected<?php } ?>>
-              <?=htmlspecialchars($squad['name'])?> Squad
+              <?=htmlspecialchars($squad['name'])?>
             </option>
             <?php } ?>
           </select>

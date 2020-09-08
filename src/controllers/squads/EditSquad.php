@@ -16,7 +16,7 @@ $sql->execute([
 ]);
 $row = $sql->fetch(PDO::FETCH_ASSOC);
 
-$title = $pagetitle = $row['SquadName'] . " Squad";
+$pagetitle = htmlspecialchars($row['SquadName']);
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php"; ?>
@@ -30,7 +30,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
       <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
   </nav>
-  <h1><?= $title ?></h1>
+  <h1><?= htmlspecialchars($row['SquadName']) ?></h1>
 
   <div class="row">
     <div class="col-lg-8">

@@ -45,7 +45,7 @@ if (isset($_POST['squad'])) {
           <option value="allSquads">Show All Squads</option>;
           <?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
           <option value="<?=$squad['id']?>" <?php if ($squad['id'] == $squadID) { ?>selected<?php } ?>>
-            <?=htmlspecialchars($squad['name'])?> Squad
+            <?=htmlspecialchars($squad['name'])?>
           </option>
           <?php } ?>
         </select>

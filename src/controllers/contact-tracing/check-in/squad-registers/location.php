@@ -95,7 +95,7 @@ if (!$squad) {
       <div class="row align-items-center">
         <div class="col">
           <h1>
-            <?= htmlspecialchars($squad['SquadName']) ?> Squad Check in to <?= htmlspecialchars($location['Name']) ?>
+            <?= htmlspecialchars($squad['SquadName']) ?> Check in to <?= htmlspecialchars($location['Name']) ?>
           </h1>
           <p class="lead mb-0">
             <?= htmlspecialchars($addr->streetAndNumber) ?>
