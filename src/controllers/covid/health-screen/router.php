@@ -27,3 +27,7 @@ $this->group('/squads', function () {
 $this->post('/approval', function() {
   include 'submissions/submission-auth.php';
 });
+
+$this->post('/void', function() {
+  include 'submissions/void.php';
+});

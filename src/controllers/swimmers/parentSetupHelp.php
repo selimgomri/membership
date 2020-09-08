@@ -115,7 +115,7 @@ include BASE_PATH . "views/swimmersMenu.php";
   </div>
 
   <div class="py-3 mb-3 text-right mono">
-    <?=htmlspecialchars($row['SquadName'])?> Squad
+    <?=htmlspecialchars($row['SquadName'])?>
   </div>
 
   <div class="mb-3 p-5 bg-primary text-white">

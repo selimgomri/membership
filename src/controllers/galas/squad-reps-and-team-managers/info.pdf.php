@@ -86,7 +86,7 @@ ob_start();?>
       <h1 class="mb-0">
         <?=htmlspecialchars($data->gala->name)?>
       </h1>
-      <p class="lead mb-0"><?php if ($data->squad->id != "all") { ?><?=htmlspecialchars($data->squad->name)?> Squad <?php } ?>Gala Entry Report</p>
+      <p class="lead mb-0"><?php if ($data->squad->id != "all") { ?><?=htmlspecialchars($data->squad->name)?> <?php } ?>Gala Entry Report</p>
     </div>
 
     <h2>How to use this document</h2>

@@ -117,7 +117,7 @@ include BASE_PATH . 'views/header.php';
         <?php foreach ($allReps as $squad) { ?>
           <div class="card mb-3">
             <div class="card-header">
-              <h3 class="h6 font-weight-normal mb-0"><?= htmlspecialchars($squad[0]['SquadName']) ?> Squad Rep<?php if (sizeof($squad) > 1) { ?>s<?php } ?></h3>
+              <h3 class="h6 font-weight-normal mb-0"><?= htmlspecialchars($squad[0]['SquadName']) ?> Rep<?php if (sizeof($squad) > 1) { ?>s<?php } ?></h3>
             </div>
             <ul class="list-group list-group-flush">
               <?php foreach ($squad as $reps) { ?>
