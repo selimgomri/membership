@@ -58,6 +58,26 @@ $this->group('/{id}:uuid', function ($id) {
     $this->get('/', function ($id) {
       include 'forms/emergency-contacts/emergency-contacts.php';
     });
+
+    $this->post('/', function ($id) {
+      include 'forms/emergency-contacts/emergency-contacts-post.php';
+    });
+
+    $this->post('/view', function ($id) {
+      include 'forms/emergency-contacts/get-view.php';
+    });
+
+    $this->post('/add', function ($id) {
+      include 'forms/emergency-contacts/add.php';
+    });
+
+    $this->post('/edit', function ($id) {
+      include 'forms/emergency-contacts/edit.php';
+    });
+
+    $this->post('/delete', function ($id) {
+      include 'forms/emergency-contacts/delete.php';
+    });
   });
 
   $this->group('/medical-forms', function ($id) {
