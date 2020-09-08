@@ -86,13 +86,18 @@ include BASE_PATH . 'views/header.php';
             <li class="list-group-item">
               <div class="row align-items-center">
                 <div class="col-sm">
-                  <h3 class="h6 mb-1"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?><?php if ($latest && bool($latest['OfficerApproval'])) { ?> <span class="text-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Approved by <?= htmlspecialchars($latest['Forename'] . ' ' . $latest['Surname']) ?></span><?php } ?></h3>
-                  <?php if ($latest) {
+                  <h3 class="h6 mb-1"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?></h3>
+                  <?php if ($latest && $latest['Document']) { ?>
+                    <p class="mb-0 font-weight-bold">
+                      <?php if (bool($latest['OfficerApproval'])) { ?> <span class="text-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Approved by <?= htmlspecialchars($latest['Forename'] . ' ' . $latest['Surname']) ?></span><?php } ?><?php if (!bool($latest['OfficerApproval']) && !$latest['ApprovedBy']) { ?> <span class="text-warning"><i class="fa fa-minus-circle" aria-hidden="true"></i> Awaiting approval</span><?php } else if (!bool($latest['OfficerApproval']) && $latest['ApprovedBy']) { ?> <span class="text-danger"><i class="fa fa-times-circle" aria-hidden="true"></i> Rejected by <?= htmlspecialchars($latest['Forename'] . ' ' . $latest['Surname']) ?></span><?php } ?>
+                    </p>
+                  <?php } ?>
+                  <?php if ($latest && $latest['Document']) {
                     $time = new DateTime($latest['DateTime'], new DateTimeZone('UTC'));
                     $time->setTimezone(new DateTimeZone('Europe/London'));
                   ?>
                     <p class="mb-0">
-                      Latest submission <?= htmlspecialchars($time->format('H:i, j F Y')) ?><?php if (!bool($latest['OfficerApproval']) && !$latest['ApprovedBy']) { ?> <span class="text-warning"><i class="fa fa-minus-circle" aria-hidden="true"></i> Awaiting approval</span><?php } else if (!bool($latest['OfficerApproval']) && $latest['ApprovedBy']) { ?> <span class="text-danger"><i class="fa fa-times-circle" aria-hidden="true"></i> Rejected by <?= htmlspecialchars($latest['Forename'] . ' ' . $latest['Surname']) ?></span><?php } ?>
+                      Latest submission <?= htmlspecialchars($time->format('H:i, j F Y')) ?>
                     </p>
                     <?php if (!bool($latest['OfficerApproval'])) { ?>
                       <p class="mt-3 mb-0">
@@ -101,6 +106,13 @@ include BASE_PATH . 'views/header.php';
                         </button>
                       </p>
                     <?php } ?>
+                  <?php } else if ($latest && !bool($latest['OfficerApproval'])) {
+                    $time = new DateTime($latest['DateTime'], new DateTimeZone('UTC'));
+                    $time->setTimezone(new DateTimeZone('Europe/London'));
+                  ?>
+                    <p class="mb-0 text-danger font-weight-bold">
+                      <i class="fa fa-times-circle" aria-hidden="true"></i> New Health Survey requested from <?= htmlspecialchars($member['MForename'])?> at <?= htmlspecialchars($time->format('H:i, j F Y')) ?><?php if ($latest['ApprovedBy']) { ?> by <?= htmlspecialchars($latest['Forename'] . ' ' . $latest['Surname']) ?></span><?php } ?>
+                    </p>
                   <?php } else { ?>
                     <p class="mb-0">
                       No survey submitted
@@ -110,6 +122,11 @@ include BASE_PATH . 'views/header.php';
                 <div class="col-auto">
                   <div class="btn-group">
                     <?php if ($latest) { ?>
+                      <?php if (bool($latest['OfficerApproval'])) { ?>
+                        <button class="btn btn-warning" data-member-name="<?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?>" data-form-submission-id="<?= htmlspecialchars($latest['ID']) ?>" data-action="void" title="Require that <?= htmlspecialchars($member['MForename']) ?> submits a new health survey">
+                          Void survey
+                        </button>
+                      <?php } ?>
                       <a href="<?= htmlspecialchars(autoUrl('covid/health-screening/members/' . $member['MemberID'])) ?>" class="btn btn-dark">View all</a>
                     <?php } ?>
                     <a href="<?= htmlspecialchars(autoUrl('covid/health-screening/members/' . $member['MemberID'] . '/new-survey')) ?>" class="btn btn-success">New submission</a>
@@ -168,10 +185,29 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div id="js-opts" data-ajax-url="<?= htmlspecialchars(autoUrl('covid/health-screening/approval')) ?>"></div>
+<div class="modal" id="revokeModal" tabindex="-1" aria-labelledby="revokeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title" id="revokeModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="revokeModalBody">
+      </div>
+      <div class="modal-footer" id="revokeModalFooter">
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-warning" id="void-button" data-action="void">Void Form</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="js-opts" data-ajax-url="<?= htmlspecialchars(autoUrl('covid/health-screening/approval')) ?>" data-void-ajax-url="<?= htmlspecialchars(autoUrl('covid/health-screening/void')) ?>"></div>
 
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs('public/js/covid-health-screen/squad-page.js');
+$footer->addJs('public/js/covid-health-screen/squad-page.js?v=2');
 $footer->render();

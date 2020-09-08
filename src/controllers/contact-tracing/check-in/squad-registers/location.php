@@ -361,11 +361,11 @@ if (!$squad) {
               </dd>
               <dt class="col-sm-3">
                 <span class="badge badge-sm badge-danger">
-                  HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
+                  HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected or new survey submission requested</span>
                 </span>
               </dt>
               <dd class="col-sm-9">
-                COVID health survey submitted and rejected by staff
+                COVID health survey submitted and rejected by staff or survey voided and new survey submission requested by staff
               </dd>
               <dt class="col-sm-3">
                 <span class="badge badge-sm badge-warning">
