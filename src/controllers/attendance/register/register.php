@@ -185,20 +185,12 @@ include BASE_PATH . "views/header.php";
               COVID Risk Awareness Declaration is up to date
             </dd>
             <dt class="col-sm-3">
-              <span class="badge badge-sm badge-warning">
-                RA <i class="fa fa-minus-circle" aria-hidden="true"></i> <span class="sr-only">New declaration required</span>
-              </span>
-            </dt>
-            <dd class="col-sm-9">
-              A new COVID Risk Awareness Declaration is required
-            </dd>
-            <dt class="col-sm-3">
               <span class="badge badge-sm badge-danger">
-                RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="sr-only">form not submitted</span>
+                RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="sr-only">form not submitted or new submission required</span>
               </span>
             </dt>
             <dd class="col-sm-9 mb-0">
-              A COVID Risk Awareness Declaration is required
+              A COVID Risk Awareness Declaration is required or a new Risk Awareness Declaration has been requested
             </dd>
           </dl>
 

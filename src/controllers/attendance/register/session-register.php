@@ -95,13 +95,9 @@ function registerSheetGenerator($date, $sessionId)
                           <span class="badge badge-sm badge-success">
                             RA <i class="fa fa-check-circle" aria-hidden="true"></i> <span class="sr-only">Valid declaration</span>
                           </span>
-                        <?php } else if ($cvRALatest && !bool($cvRALatest['MemberAgreement'])) { ?>
-                          <span class="badge badge-sm badge-warning">
-                            RA <i class="fa fa-minus-circle" aria-hidden="true"></i> <span class="sr-only">New declaration required</span>
-                          </span>
                         <?php } else { ?>
                           <span class="badge badge-sm badge-danger">
-                            RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="sr-only">form not submitted</span>
+                            RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="sr-only">form not submitted or new submission required</span>
                           </span>
                         <?php } ?>
                         <?php if ($cvLatest) { ?>
