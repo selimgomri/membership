@@ -26,7 +26,7 @@ $ren = Renewal::getUserRenewal($id);
 $renewalUser = new User($ren->getUser());
 
 // Get mandates
-$getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC");
+$getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC LIMIT 1");
 $getMandates->execute([
   $renewalUser->getStripeCustomer()->id,
 ]);

@@ -141,6 +141,10 @@ $this->group('/{id}:uuid', function ($id) {
       include 'forms/direct-debit/set-up.php';
     });
 
+    $this->get('/set-up-success', function ($id) {
+      include 'forms/direct-debit/success.php';
+    });
+
     $this->get('/view-ddi', function ($id) {
       include 'forms/direct-debit/view-ddi.php';
     });
