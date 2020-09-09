@@ -341,4 +341,32 @@ class Renewal
   {
     return $this->progress;
   }
+
+  public function memberIsCurrent(int $id): bool
+  {
+    // Loop through members
+    for ($i = 0; $i < sizeof($this->members); $i++) {
+      if ($this->members[$i]['id'] == $id) return bool($this->members[$i]['current']);
+    }
+    
+    return false;
+  }
+
+  public function getMember(int $id)
+  {
+    // Loop through members
+    for ($i = 0; $i < sizeof($this->members); $i++) {
+      if ($this->members[$i]['id'] == $id) return $this->members[$i];
+    }
+    
+    throw new Exception('No section found');
+  }
+
+  public function getSection(string $sectionName) {
+    foreach ($this->progress as $id => $object) {
+      if ($object['object'] == $sectionName) return $object;
+    }
+
+    throw new Exception('No section found');
+  }
 }

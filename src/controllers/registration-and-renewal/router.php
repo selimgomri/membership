@@ -82,7 +82,19 @@ $this->group('/{id}:uuid', function ($id) {
 
   $this->group('/medical-forms', function ($id) {
     $this->get('/', function ($id) {
-      include 'forms/home.php';
+      include 'forms/medical-forms/medical-forms.php';
+    });
+
+    $this->post('/', function ($id) {
+      include 'forms/medical-forms/medical-forms-post.php';
+    });
+
+    $this->get('/{member}:int', function ($cc, $id, $member) {
+      include 'forms/medical-forms/member.php';
+    });
+
+    $this->post('/{member}:int', function ($cc, $id, $member) {
+      include 'forms/medical-forms/member-post.php';
     });
   });
 
