@@ -118,7 +118,11 @@ $this->group('/{id}:uuid', function ($id) {
 
   $this->group('/photography-permissions', function ($id) {
     $this->get('/', function ($id) {
-      include 'forms/home.php';
+      include 'forms/photography-permissions/photography-permissions.php';
+    });
+
+    $this->post('/', function ($id) {
+      include 'forms/photography-permissions/photography-permissions-post.php';
     });
   });
 
@@ -130,7 +134,15 @@ $this->group('/{id}:uuid', function ($id) {
 
   $this->group('/direct-debit', function ($id) {
     $this->get('/', function ($id) {
-      include 'forms/home.php';
+      include 'forms/direct-debit/direct-debit.php';
+    });
+
+    $this->get('/set-up', function ($id) {
+      include 'forms/direct-debit/set-up.php';
+    });
+
+    $this->get('/view-ddi', function ($id) {
+      include 'forms/direct-debit/view-ddi.php';
     });
   });
 
