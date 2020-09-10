@@ -85,6 +85,20 @@ include BASE_PATH . 'views/header.php';
         We'll save your progress as you fill out the required forms.
       </p>
 
+      <div class="card card-body mb-3">
+        <p class="mb-0">
+          <strong>Your unique renewal and registration number is</strong>
+        </p>
+
+        <p>
+          <input type="text" readonly class="form-control-plaintext mono p-0" id="reg-renewal-id" value="<?= htmlspecialchars($id) ?>">
+        </p>
+
+        <p class="mb-0">
+          If you have any issues, your membership secretary will be able to bring up your <?= htmlspecialchars($ren->getTypeName(false)) ?> forms on their own device.
+        </p>
+      </div>
+
       <!-- <div class="card card-body tidy-debug-pre mb-3">
         <?= pre($ren) ?>
       </div> -->

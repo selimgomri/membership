@@ -102,8 +102,8 @@ class RenewalProgressListGroup
         'title' => null,
       ],
       'renewal_fee' => [
-        'url' => 'renewal-fees',
-        'id' => 'renewal-fees',
+        'url' => $this->renewal->getTypeName(false) . '-fees',
+        'id' => $this->renewal->getTypeName(false) . '-fees',
         'progress_name' => 'renewal-fees',
         'name' => $this->renewal->getTypeName() . ' Fees',
         'title' => null,
@@ -122,7 +122,7 @@ class RenewalProgressListGroup
     //   $listGroupClass = ' list-group-flush ';
     // }
 
-    $output .= '<div class="list-group ' . $listGroupClass . '">';
+    $output .= '<div class="list-group ' . $listGroupClass . ' position-sticky top-3">';
 
     foreach ($this->renewal->getProgress() as $progressObject) {
       if (isset($this->orderedPossibleValues[$progressObject['object']])) {

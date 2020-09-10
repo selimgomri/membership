@@ -150,9 +150,9 @@ $this->group('/{id}:uuid', function ($id) {
     });
   });
 
-  $this->group('/renewal-fees', function ($id) {
+  $this->group(['/renewal-fees', '/registration-fees'], function ($id) {
     $this->get('/', function ($id) {
-      include 'forms/home.php';
+      include 'forms/renewal-fees/renewal-fees.php';
     });
   });
 });
