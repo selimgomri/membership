@@ -103,7 +103,16 @@ include BASE_PATH . 'views/header.php';
                 Submission at <?= htmlspecialchars($time->format('H:i, j F Y')) ?>
               </h2>
 
-              <p class="lead">
+              <?php
+              $json = null;
+              try {
+                $json = json_decode($form['Document'], true);
+              } catch (Exception $e) {
+                // An error occurred
+              }
+              ?>
+
+              <p class="lead <?php if (!$json) { ?>mb-0<?php } ?>">
                 <?php if (bool($form['OfficerApproval'])) { ?>
                   <span class="text-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Approved by <?= htmlspecialchars($form['Forename'] . ' ' . $form['Surname']) ?></span>
                 <?php } else if (!bool($form['OfficerApproval']) && $form['ApprovedBy']) { ?>
@@ -113,101 +122,99 @@ include BASE_PATH . 'views/header.php';
                 <?php } ?>
               </p>
 
-              <?php
-              $json = json_decode($form['Document'], true);
-              ?>
+              <?php if ($json) { ?>
+                <dl class="row mb-0">
+                  <dt class="col-sm-3">Confirmed infection</dt>
+                  <dd class="col-sm-9">
+                    <?php if ($json['form']['confirmed-infection']['state']) { ?>
+                      Yes
+                    <?php } else { ?>
+                      No
+                    <?php } ?>
+                    <?php if (isset($json['form']['confirmed-infection']['notes']) && mb_strlen($json['form']['confirmed-infection']['notes']) > 0) { ?>
+                      <div class="card card-body p-2 pb-0"><?= $markdown->text($json['form']['confirmed-infection']['notes']) ?></div>
+                    <?php } ?>
+                  </dd>
 
-              <dl class="row mb-0">
-                <dt class="col-sm-3">Confirmed infection</dt>
-                <dd class="col-sm-9">
-                  <?php if ($json['form']['confirmed-infection']['state']) { ?>
-                    Yes
-                  <?php } else { ?>
-                    No
-                  <?php } ?>
-                  <?php if (isset($json['form']['confirmed-infection']['notes']) && mb_strlen($json['form']['confirmed-infection']['notes']) > 0) { ?>
-                    <div class="card card-body p-2 pb-0"><?= $markdown->text($json['form']['confirmed-infection']['notes']) ?></div>
-                  <?php } ?>
-                </dd>
+                  <dt class="col-sm-3">Recent exposure</dt>
+                  <dd class="col-sm-9">
+                    <?php if ($json['form']['exposure']['state']) { ?>
+                      Yes
+                    <?php } else { ?>
+                      No
+                    <?php } ?>
+                    <?php if (isset($json['form']['exposure']['notes']) && mb_strlen($json['form']['exposure']['notes']) > 0) { ?>
+                      <div class="card card-body p-2 pb-0"><?= $markdown->text($json['form']['exposure']['notes']) ?></div>
+                    <?php } ?>
+                  </dd>
 
-                <dt class="col-sm-3">Recent exposure</dt>
-                <dd class="col-sm-9">
-                  <?php if ($json['form']['exposure']['state']) { ?>
-                    Yes
-                  <?php } else { ?>
-                    No
-                  <?php } ?>
-                  <?php if (isset($json['form']['exposure']['notes']) && mb_strlen($json['form']['exposure']['notes']) > 0) { ?>
-                    <div class="card card-body p-2 pb-0"><?= $markdown->text($json['form']['exposure']['notes']) ?></div>
-                  <?php } ?>
-                </dd>
+                  <dt class="col-sm-3">Underlying medical conditions</dt>
+                  <dd class="col-sm-9">
+                    <?php if ($json['form']['underlying-medical']['state']) { ?>
+                      Yes
+                    <?php } else { ?>
+                      No
+                    <?php } ?>
+                    <?php if (isset($json['form']['underlying-medical']['notes']) && mb_strlen($json['form']['underlying-medical']['notes']) > 0) { ?>
+                      <div class="card card-body p-2 pb-0"><?= $markdown->text($json['form']['underlying-medical']['notes']) ?></div>
+                    <?php } ?>
+                  </dd>
 
-                <dt class="col-sm-3">Underlying medical conditions</dt>
-                <dd class="col-sm-9">
-                  <?php if ($json['form']['underlying-medical']['state']) { ?>
-                    Yes
-                  <?php } else { ?>
-                    No
-                  <?php } ?>
-                  <?php if (isset($json['form']['underlying-medical']['notes']) && mb_strlen($json['form']['underlying-medical']['notes']) > 0) { ?>
-                    <div class="card card-body p-2 pb-0"><?= $markdown->text($json['form']['underlying-medical']['notes']) ?></div>
-                  <?php } ?>
-                </dd>
+                  <dt class="col-sm-3">Lives with shielder</dt>
+                  <dd class="col-sm-9">
+                    <?php if ($json['form']['live-with-shielder']['state']) { ?>
+                      Yes
+                    <?php } else { ?>
+                      No
+                    <?php } ?>
+                    <?php if (isset($json['form']['live-with-shielder']['notes']) && mb_strlen($json['form']['live-with-shielder']['notes']) > 0) { ?>
+                      <div class="card card-body p-2 pb-0"><?= $markdown->text($json['form']['live-with-shielder']['notes']) ?></div>
+                    <?php } ?>
+                  </dd>
 
-                <dt class="col-sm-3">Lives with shielder</dt>
-                <dd class="col-sm-9">
-                  <?php if ($json['form']['live-with-shielder']['state']) { ?>
-                    Yes
-                  <?php } else { ?>
-                    No
-                  <?php } ?>
-                  <?php if (isset($json['form']['live-with-shielder']['notes']) && mb_strlen($json['form']['live-with-shielder']['notes']) > 0) { ?>
-                    <div class="card card-body p-2 pb-0"><?= $markdown->text($json['form']['live-with-shielder']['notes']) ?></div>
-                  <?php } ?>
-                </dd>
+                  <dt class="col-sm-3">Understands return to training protocols</dt>
+                  <dd class="col-sm-9">
+                    <?php if ($json['form']['understand-return']['state']) { ?>
+                      Yes
+                    <?php } else { ?>
+                      No
+                    <?php } ?>
+                    <?php if (isset($json['form']['understand-return']['notes']) && mb_strlen($json['form']['understand-return']['notes']) > 0) { ?>
+                      <div class="card card-body p-2 pb-0"><?= $markdown->text($json['form']['understand-return']['notes']) ?></div>
+                    <?php } ?>
+                  </dd>
 
-                <dt class="col-sm-3">Understands return to training protocols</dt>
-                <dd class="col-sm-9">
-                  <?php if ($json['form']['understand-return']['state']) { ?>
-                    Yes
-                  <?php } else { ?>
-                    No
-                  <?php } ?>
-                  <?php if (isset($json['form']['understand-return']['notes']) && mb_strlen($json['form']['understand-return']['notes']) > 0) { ?>
-                    <div class="card card-body p-2 pb-0"><?= $markdown->text($json['form']['understand-return']['notes']) ?></div>
-                  <?php } ?>
-                </dd>
+                  <dt class="col-sm-3">Able to train</dt>
+                  <dd class="col-sm-9">
+                    <?php if ($json['form']['able-to-train']['state']) { ?>
+                      Yes
+                    <?php } else { ?>
+                      No
+                    <?php } ?>
+                  </dd>
 
-                <dt class="col-sm-3">Able to train</dt>
-                <dd class="col-sm-9">
-                  <?php if ($json['form']['able-to-train']['state']) { ?>
-                    Yes
-                  <?php } else { ?>
-                    No
-                  <?php } ?>
-                </dd>
+                  <dt class="col-sm-3">Sought advice</dt>
+                  <dd class="col-sm-9">
+                    <?php if ($json['form']['sought-advice']['state']) { ?>
+                      Yes
+                    <?php } else { ?>
+                      No
+                    <?php } ?>
+                  </dd>
 
-                <dt class="col-sm-3">Sought advice</dt>
-                <dd class="col-sm-9">
-                  <?php if ($json['form']['sought-advice']['state']) { ?>
-                    Yes
-                  <?php } else { ?>
-                    No
-                  <?php } ?>
-                </dd>
-
-                <dt class="col-sm-3">Advice received</dt>
-                <dd class="col-sm-9">
-                  <?php if ($json['form']['advice-received']['state']) { ?>
-                    Yes
-                  <?php } else { ?>
-                    No
-                  <?php } ?>
-                  <?php if (isset($json['form']['advice-received']['notes']) && mb_strlen($json['form']['advice-received']['notes']) > 0) { ?>
-                    <div class="card card-body p-2 pb-0"><?= $markdown->text($json['form']['advice-received']['notes']) ?></div>
-                  <?php } ?>
-                </dd>
-              </dl>
+                  <dt class="col-sm-3">Advice received</dt>
+                  <dd class="col-sm-9">
+                    <?php if ($json['form']['advice-received']['state']) { ?>
+                      Yes
+                    <?php } else { ?>
+                      No
+                    <?php } ?>
+                    <?php if (isset($json['form']['advice-received']['notes']) && mb_strlen($json['form']['advice-received']['notes']) > 0) { ?>
+                      <div class="card card-body p-2 pb-0"><?= $markdown->text($json['form']['advice-received']['notes']) ?></div>
+                    <?php } ?>
+                  </dd>
+                </dl>
+              <?php } ?>
             </li>
           <?php } while ($form = $getForms->fetch(PDO::FETCH_ASSOC)); ?>
         </ul>
