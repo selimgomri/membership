@@ -23,7 +23,7 @@ function registerSheetGenerator($date, $sessionId)
 
     $squads = $session->getSquads();
 
-    $register = $session->getRegister();
+    $register = $session->getRegister($date->format('Y-m-d'));
 
     $weekId = $session->getWeekId($date->format('Y-m-d'));
 
