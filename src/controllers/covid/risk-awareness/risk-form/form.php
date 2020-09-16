@@ -88,11 +88,11 @@ include BASE_PATH . 'views/header.php';
         } ?>
 
         <p>
-          I <?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?> am returning to training having completed and signed the Health Survey as requested by <?= htmlspecialchars($tenant->getName()) ?>.
+          [I / my child] <?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?> [am / is] returning to training having completed and signed the Health Survey as requested by <?= htmlspecialchars($tenant->getName()) ?>.
         </p>
 
         <p>
-          By signing this declaration, I confirm I am free from any symptoms related to the Covid-19 virus, I understand the main symptoms include:
+          By signing this declaration, I confirm [I am / my child is] free from any symptoms related to the Covid-19 virus, I understand the main symptoms include:
         </p>
 
         <ul>
@@ -106,15 +106,19 @@ include BASE_PATH . 'views/header.php';
         </p>
 
         <p>
-          By signing this declaration, I confirm that for any future training sessions I will only attend in the full knowledge that I am free from any Covid-19 symptoms. In addition, but conversely confirm by signing this declaration that if I do display any symptoms I will not attend training for a period of at least 14 days and follow government guidance to self-isolate.
+          By signing this declaration, I confirm that for any future training sessions [I / my child] will only attend in the full knowledge that [I am / my child is] free from any Covid-19 symptoms. In addition, but conversely confirm by signing this declaration that if [I do / my child does] display any symptoms [I / my child] will not attend training for a period of at least 14 days and follow government guidance to self-isolate.
         </p>
 
         <p>
-          I return to training knowing that my participation cannot be without risk, I am therefore aware of these risks associated with the Covid-19 virus, but still wish to participate in club training.
+          I am also confirming all in my household will follow the government guidance on quarantine and self-isolation following any travel abroad.
         </p>
 
         <p>
-          I understand the processes and protocols <?= htmlspecialchars($tenant->getName()) ?> have put in place in order to reduce risks and I will adhere to these in order to protect my health and the health of other members, staff and other users of the facility.
+          [I / My child] return[s] to training knowing that participation cannot be without risk, I am therefore aware of these risks associated with the Covid-19 virus, but [I still wish / I still wish my child] to participate in club training.
+        </p>
+
+        <p>
+          I understand the processes and protocols <?= htmlspecialchars($tenant->getName()) ?> have put in place in order to reduce risks and [I / my child] will adhere to these in order to protect [my / my child's] health and the health of other members, staff and other users of the facility.
         </p>
 
         <p>
