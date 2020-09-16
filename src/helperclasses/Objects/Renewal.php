@@ -348,7 +348,7 @@ class Renewal
     for ($i = 0; $i < sizeof($this->members); $i++) {
       if ($this->members[$i]['id'] == $id) return bool($this->members[$i]['current']);
     }
-    
+
     return false;
   }
 
@@ -358,15 +358,32 @@ class Renewal
     for ($i = 0; $i < sizeof($this->members); $i++) {
       if ($this->members[$i]['id'] == $id) return $this->members[$i];
     }
-    
+
     throw new Exception('No section found');
   }
 
-  public function getSection(string $sectionName) {
+  public function getSection(string $sectionName)
+  {
     foreach ($this->progress as $id => $object) {
       if ($object['object'] == $sectionName) return $object;
     }
 
     throw new Exception('No section found');
+  }
+
+  public function setCompletedState(string $objectType, bool $state): void
+  {
+    try {
+      $update = app()->db->prepare("UPDATE renewalData SET Document = JSON_REPLACE(Document, REPLACE(JSON_UNQUOTE(JSON_SEARCH(Document, 'one', ?, '', '$.progress')), '.object', '.completed'), ?) WHERE ID = ?");
+      $update->execute([
+        $objectType,
+        $state,
+        $this->id,
+      ]);
+    } catch (PDOException $e) {
+      // Error occurred
+      // Throw a more generic error
+      throw new Exception('Path did not exist, or another error occurred');
+    }
   }
 }
