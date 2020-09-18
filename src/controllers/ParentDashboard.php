@@ -83,24 +83,56 @@ include BASE_PATH . "views/header.php";
     <h1><?= helloGreeting() ?> <?= $username ?></h1>
     <p class="lead mb-4">Welcome to your account</p>
 
-    <?php if ($showCovid) { ?>
-      <div class="p-3 text-white bg-danger rounded h-100 mb-4">
-        <h2>
-          Register your attendance
-        </h2>
-        <p class="lead">
-          Together, we can help the NHS.
-        </p>
-        <p>
-          In the event a club member contract coronavirus and has been at a club session, <?= htmlspecialchars($tenant->getName()) ?> will use this data if required to support NHS Test and Trace. Data will be deleted automatically after 21 days.
-        </p>
-        <p class="mb-0">
-          <a href="<?= htmlspecialchars(autoUrl('contact-tracing')) ?>" class="btn btn-outline-light">
-            Register
+    <div class="mb-4">
+      <h2 class="mb-4">COVID-19 Tools</h2>
+      <div class="news-grid">
+
+        <?php if ($showCovid) { ?>
+          <a href="<?= autoUrl('covid/contact-tracing') ?>">
+            <span class="mb-3">
+              <span class="title mb-0">
+                Register your attendance
+              </span>
+              <span>
+                Through Contact Tracing, we can help the NHS
+              </span>
+            </span>
+            <span class="category">
+              COVID Tools
+            </span>
           </a>
-        </p>
+        <?php } ?>
+
+        <a href="<?= autoUrl('covid/health-screening') ?>">
+          <span class="mb-3">
+            <span class="title mb-0">
+              Health Screening Survey
+            </span>
+            <span>
+              Complete your periodic screening survey for training
+            </span>
+          </span>
+          <span class="category">
+            COVID Tools
+          </span>
+        </a>
+
+        <a href="<?= autoUrl('covid/risk-awareness') ?>">
+          <span class="mb-3">
+            <span class="title mb-0">
+              Risk Awareness Declaration
+            </span>
+            <span>
+              Declare that you have submitted a Health Survey and understand the risks
+            </span>
+          </span>
+          <span class="category">
+            COVID Tools
+          </span>
+        </a>
+
       </div>
-    <?php } ?>
+    </div>
 
     <?php if (!isSubscribed($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 'Notify')) { ?>
       <aside class="row mb-4">

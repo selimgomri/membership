@@ -104,12 +104,14 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
   	});
 
     $this->get(['/members', '/swimmers'], function() {
-      
       include "historyViews/swimmers.php";
+    });
+    
+    $this->get('/members/{id}:int/search', function($id) {
+      include "historyViews/member-search.php";
   	});
 
     $this->post('/ajax/swimmers', function() {
-      
       include BASE_PATH . "controllers/ajax/swimmerHistory.php";
   	});
 
