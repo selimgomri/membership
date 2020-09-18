@@ -103,7 +103,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       include "historyViews/jump-to-week.php";
   	});
 
-    $this->get('/swimmers', function() {
+    $this->get(['/members', '/swimmers'], function() {
       
       include "historyViews/swimmers.php";
   	});
@@ -113,7 +113,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       include BASE_PATH . "controllers/ajax/swimmerHistory.php";
   	});
 
-    $this->get('/swimmers/{id}:int', function($id) {
+    $this->get(['/members/{id}:int', '/swimmers/{id}:int'], function($id) {
       
       include "historyViews/swimmerHistory.php";
   	});
