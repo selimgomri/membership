@@ -4,7 +4,7 @@ $db = app()->db;
 $tenant = app()->tenant;
 $user = app()->user;
 
-if (!$user->hasPermission('Admin') || !$user->hasPermission('Coach')) {
+if (!$user->hasPermission('Admin') && !$user->hasPermission('Coach')) {
   halt(404);
 }
 

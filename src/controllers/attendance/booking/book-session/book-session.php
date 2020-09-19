@@ -4,10 +4,6 @@ $db = app()->db;
 $tenant = app()->tenant;
 $user = app()->user;
 
-if (!$user->hasPermission('Admin') || !$user->hasPermission('Coach')) {
-  halt(404);
-}
-
 if (!isset($_GET['session']) && !isset($_GET['date'])) halt(404);
 
 $date = null;
@@ -18,9 +14,10 @@ try {
 }
 
 // Get session
-$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay` FROM `sessions` INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessions`.`SessionID` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
+$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
 $getSession->execute([
   $_GET['session'],
+  $date->format('Y-m-d'),
   $tenant->getId(),
   $date->format('Y-m-d'),
   $date->format('Y-m-d'),
@@ -39,6 +36,57 @@ if ($session['SessionDay'] != $dayOfWeek) {
   halt(404);
 }
 
+$numFormatter = new NumberFormatter("en-GB", NumberFormatter::SPELLOUT);
+
+// Get bookable members
+$members = [];
+if (bool($session['AllSquads'])) {
+  $getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM members WHERE UserID = ? ORDER BY fn ASC, sn ASC");
+  $getMembers->execute([
+    $user->getId(),
+  ]);
+  $members = $getMembers->fetchAll(PDO::FETCH_ASSOC);
+} else {
+  // Get session squads
+  $getSquads = $db->prepare("SELECT `Squad` FROM `sessionsSquads` WHERE `Session` = ?");
+  $getSquads->execute([
+    $session['SessionID'],
+  ]);
+
+  while ($squad = $getSquads->fetchColumn()) {
+    // Get members for this user in this squad
+    $getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM members INNER JOIN squadMembers ON members.MemberID = squadMembers.Member WHERE UserID = ? AND squadMembers.Squad = ? ORDER BY fn ASC, sn ASC");
+    $getMembers->execute([
+      $user->getId(),
+      $squad,
+    ]);
+
+    while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)) {
+      $members[] = $member;
+    }
+  }
+
+  // Remove duplicated
+  $members = array_unique($members);
+}
+
+// Number booked in
+$getBookedCount = $db->prepare("SELECT COUNT(*) FROM `sessionsBookings` WHERE `Session` = ? AND `Date` = ?");
+$getBookedCount->execute([
+  $session['SessionID'],
+  $date->format('Y-m-d'),
+]);
+$bookedCount = $getBookedCount->fetchColumn();
+
+$getBookedMembers = null;
+if ($user->hasPermission('Admin') || $user->hasPermission('Coach')) {
+  $getBookedMembers = $db->prepare("SELECT Member id, MForename fn, MSurname sn, BookedAt FROM sessionsBookings INNER JOIN members ON sessionsBookings.Member = members.MemberID WHERE sessionsBookings.Session = ? AND sessionsBookings.Date = ? ORDER BY BookedAt ASC, MForename ASC, MSurname ASC;");
+  $getBookedMembers->execute([
+    $session['SessionID'],
+    $date->format('Y-m-d'),
+  ]);
+}
+
 $pagetitle = 'Session Booking';
 include BASE_PATH . 'views/header.php';
 
@@ -51,18 +99,25 @@ include BASE_PATH . 'views/header.php';
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('sessions')) ?>">Sessions</a></li>
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('sessions/booking')) ?>">Booking</a></li>
-        <li class="breadcrumb-item active" aria-current="page">SESSION</li>
+        <li class="breadcrumb-item active" aria-current="page">Book</li>
       </ol>
     </nav>
 
     <div class="row align-items-center">
-      <div class="col">
+      <div class="col-lg-8">
         <h1>
-          Require booking for <?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>
+          <?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>
         </h1>
         <p class="lead mb-0">
-          Book numbers limited or pay as you go sessions
+          <?php if ($session['MaxPlaces']) { ?>There are <?= htmlspecialchars($numFormatter->format($session['MaxPlaces'])) ?> places at this session<?php } else { ?>There are unlimited places at this session<?php } ?>
         </p>
+      </div>
+      <div class="col text-right">
+        <?php if ($user->hasPermission('Admin') || $user->hasPermission('Coach')) { ?>
+          <a href="<?= htmlspecialchars(autoUrl('sessions/booking/edit?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>" class="btn btn-primary">
+            Edit bookable session details
+          </a>
+        <?php } ?>
       </div>
     </div>
 
@@ -71,6 +126,59 @@ include BASE_PATH . 'views/header.php';
 
 <div class="container">
 
+  <div class="row">
+    <div class="col-lg-8">
+      <p class="lead">
+        <?= htmlspecialchars(mb_ucfirst($numFormatter->format($bookedCount))) ?> <?php if ($bookedCount == 1) { ?>member has<?php } else { ?>members have<?php } ?> booked onto this session. <?php if ($session['MaxPlaces']) { ?><?= htmlspecialchars(mb_ucfirst($numFormatter->format($session['MaxPlaces'] - $bookedCount))) ?><?php } ?> <?php if (($session['MaxPlaces'] - $bookedCount) == 1) { ?>place remains<?php } else { ?>places remain<?php } ?> available.
+      </p>
+
+      <h2>Book</h2>
+      <p class="lead">
+        Book a place for a member linked to your account.
+      </p>
+
+      <?php if (sizeof($members) > 0) { ?>
+
+      <?php } else { ?>
+        <div class="alert alert-warning">
+          <p class="mb-0">
+            <strong>You have no members</strong>
+          </p>
+          <p class="mb-0">
+            Only members can be booked onto sessions.
+          </p>
+        </div>
+      <?php } ?>
+
+      <?php if ($user->hasPermission('Admin') || $user->hasPermission('Coach')) { ?>
+        <h2>Booked members</h2>
+        <p class="lead">
+          Members who have booked a place for this session.
+        </p>
+
+        <?php if ($bookedMember = $getBookedMembers->fetch(PDO::FETCH_ASSOC)) { ?>
+          <ul class="list-group">
+            <?php do {
+              $booked = new DateTime($bookedMember['BookedAt'], new DateTimeZone('UTC'));
+              $booked->setTimezone(new DateTimeZone('Europe/London'));
+              ?>
+              <li class="list-group-items">
+                <a class="font-weight-bold d-block" href="<?= htmlspecialchars(autoUrl('members/' . $bookedMember['id'])) ?>"><?= htmlspecialchars($bookedMember['fn'] . ' ' . $bookedMember['sn']) ?></a>
+                <em>Booked at <?= htmlspecialchars($booked->format('H:i, j F Y')) ?></em>
+              </li>
+            <?php } while ($bookedMember = $getBookedMembers->fetch(PDO::FETCH_ASSOC)); ?>
+          </ul>
+        <?php } else { ?>
+          <div class="alert alert-info">
+            <p class="mb-0">
+              <strong>There are no members booked on this session yet</strong>
+            </p>
+          </div>
+        <?php } ?>
+      <?php } ?>
+
+    </div>
+  </div>
 
 </div>
 
