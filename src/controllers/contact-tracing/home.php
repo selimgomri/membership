@@ -46,13 +46,13 @@ include BASE_PATH . 'views/header.php';
 
   <div class="row">
     <div class="col-md-6 mb-3">
-      <div class="p-3 bg-danger rounded text-white h-100" style="display: grid;">
+      <div class="card card-body bg-danger text-white h-100" style="display: grid;">
         <div>
           <h2>
             Register your attendance
           </h2>
           <p class="lead">
-            Together, we can help the NHS.
+            For contact tracing purposes.
           </p>
           <p>
             <?= htmlspecialchars($tenant->getName()) ?> will use this data if required to support NHS Test and Trace. Data will be deleted automatically after 21 days.
@@ -67,7 +67,7 @@ include BASE_PATH . 'views/header.php';
     </div>
     <?php if ($showSignOut) { ?>
       <div class="col-md-6 mb-3">
-        <div class="p-3 bg-success rounded text-white h-100" style="display: grid;">
+        <div class="card card-body bg-success text-white h-100" style="display: grid;">
           <div>
             <h2>
               Sign Out
@@ -89,14 +89,14 @@ include BASE_PATH . 'views/header.php';
     <?php } ?>
     <?php if (app()->user->hasPermission('Admin')) { ?>
       <div class="col-md mb-3">
-        <div class="p-3 bg-dark rounded text-white h-100" style="display: grid;">
+        <div class="card card-body h-100" style="display: grid;">
           <div>
             <h2>
               Manage locations
             </h2>
           </div>
           <p class="mb-0 mt-auto d-flex">
-            <a href="<?= htmlspecialchars(autoUrl('contact-tracing/locations')) ?>" class="btn btn-light">
+            <a href="<?= htmlspecialchars(autoUrl('contact-tracing/locations')) ?>" class="btn btn-dark">
               Manage
             </a>
           </p>
@@ -104,14 +104,14 @@ include BASE_PATH . 'views/header.php';
       </div>
 
       <div class="col-md mb-3">
-        <div class="p-3 bg-dark rounded text-white h-100" style="display: grid;">
+        <div class="card card-body h-100" style="display: grid;">
           <div>
             <h2>
               Generate reports
             </h2>
           </div>
           <p class="mb-0 mt-auto d-flex">
-            <a href="<?= htmlspecialchars(autoUrl('contact-tracing/reports')) ?>" class="btn btn-light">
+            <a href="<?= htmlspecialchars(autoUrl('contact-tracing/reports')) ?>" class="btn btn-dark">
               Reports
             </a>
           </p>

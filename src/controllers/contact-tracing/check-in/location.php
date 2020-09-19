@@ -17,6 +17,7 @@ if (!$location) {
 }
 
 $guests = $members = $squads = $userSquads = null;
+$isUserMember = false;
 if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
 
   $user = app()->user;
@@ -40,6 +41,16 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_S
   $members->execute([
     $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
   ]);
+
+  // Check if a member name is equal to the user name
+  $getEqualCount = $db->prepare('SELECT COUNT(*) FROM members WHERE UserID = ? AND MForename COLLATE utf8mb4_general_ci LIKE ? AND MSurname COLLATE utf8mb4_general_ci LIKE ?');
+  $getEqualCount->execute([
+    app()->user->getId(),
+    app()->user->getForename(),
+    app()->user->getSurname(),
+  ]);
+  $isUserMember = $getEqualCount->fetchColumn() > 0;
+
 } else {
   $squads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE Tenant = ? ORDER BY SquadFee DESC, SquadName ASC;");
   $squads->execute([
@@ -149,7 +160,9 @@ include BASE_PATH . 'views/header.php';
 
         <form method="post" class="needs-validation" novalidate>
 
-          <div class="cell">
+          <?php if ($isUserMember) { ?>
+          <?php } ?>
+          <div class="cell <?php if ($isUserMember) { ?>d-none<?php } ?>">
             <h3>Yourself</h3>
             <p>
               Let us know if you're here or just dropping off your members.
@@ -312,10 +325,6 @@ include BASE_PATH . 'views/header.php';
           <p>
             All users can also register the details of guests (who are not members of the club) who are attending with you.
           </p>
-        </div>
-
-        <div class="text-center mb-3">
-          <img src="<?= htmlspecialchars(autoUrl("public/img/coronavirus/2020.05.20_Symptoms1_MPU_Web.png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/coronavirus/2020.05.20_Symptoms1_MPU_Web@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/coronavirus/2020.05.20_Symptoms1_MPU_Web@3x.png")) ?> 3x" class="mx-auto d-none d-lg-block img-fluid user-select-none" draggable="false">
         </div>
       </div>
 
