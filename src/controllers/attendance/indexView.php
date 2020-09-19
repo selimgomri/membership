@@ -84,6 +84,7 @@ include "attendanceMenu.php"; ?>
             Attendance
           </span>
         </a>
+
         <a href="<?= htmlspecialchars(autoUrl("attendance/history/members")) ?>">
           <div>
             <span class="title mb-0">
@@ -97,6 +98,7 @@ include "attendanceMenu.php"; ?>
             Attendance
           </span>
         </a>
+
         <a href="<?= htmlspecialchars(autoUrl("attendance/history/squads")) ?>">
           <div>
             <span class="title mb-0">
@@ -104,6 +106,20 @@ include "attendanceMenu.php"; ?>
             </span>
             <span class="d-flex mb-3">
               View squad attendance for the current week
+            </span>
+          </div>
+          <span class="category">
+            Attendance
+          </span>
+        </a>
+
+        <a href="<?= htmlspecialchars(autoUrl("sessions/booking")) ?>">
+          <div>
+            <span class="title mb-0">
+              Session Booking
+            </span>
+            <span class="d-flex mb-3">
+              Book a session
             </span>
           </div>
           <span class="category">

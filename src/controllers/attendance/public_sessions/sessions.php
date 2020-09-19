@@ -7,6 +7,8 @@ $now = new DateTime('now', new DateTimeZone('Europe/London'));
 $startWeek = new DateTime('monday -1 week', new DateTimeZone('UTC'));
 $now->setTimezone(new DateTimeZone('UTC'));
 
+$day = null;
+
 if ($now->format('l') == 'Monday') {
   $startWeek = $now;
 }
@@ -104,20 +106,40 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div class="container">
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
 
-  <h1>Sessions in week <?= htmlspecialchars($startWeek->format('W')) ?> / <?= htmlspecialchars($startWeek->format('o')) ?></h1>
-  <p class="lead">Timetable information</p>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Sessions</li>
+      </ol>
+    </nav>
+
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h1>
+          Sessions in week <?= htmlspecialchars($startWeek->format('W')) ?> / <?= htmlspecialchars($startWeek->format('o')) ?>
+        </h1>
+        <p class="lead mb-0">
+          Timetable information
+        </p>
+      </div>
+      <div class="col">
+        <div class="alert alert-warning mb-0">
+          <p class="mb-0"><strong>Please note:</strong> This system does not currently indicate whether or not a session is cancelled.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
 
   <p>Showing sessions for the week beginning <strong><?= htmlspecialchars($startWeek->format('l j F Y')) ?></strong>.</p>
 
   <?php if ($sessionToday) { ?>
     <p><a href="#day-<?= $dayNum ?>">Jump to today</a></p>
   <?php } ?>
-
-  <div class="alert alert-warning">
-    <p class="mb-0"><strong>Please note:</strong> This system cannot currently indicate whether or not a session is cancelled.</p>
-  </div>
 
   <div class="row">
     <div class="col-lg-8 order-2 order-lg-1">
@@ -146,6 +168,7 @@ include BASE_PATH . 'views/header.php';
               <p class="h3"><small><?= htmlspecialchars($session['SessionName']) ?>, <?= htmlspecialchars($session['VenueName']) ?></small></p>
 
               <?php
+              $sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $day->format('Y-m-d') .  '-' . $session['StartTime']);
               $startTime = new DateTime($session['StartTime'], new DateTimeZone('UTC'));
               $endTime = new DateTime($session['EndTime'], new DateTimeZone('UTC'));
               ?>
@@ -187,11 +210,16 @@ include BASE_PATH . 'views/header.php';
 
                 <?php } ?>
 
-                <?php
-
-                // This is sensitive so hide if logged out
-
-                ?>
+                <?php if ($sessionDateTime > $now) { ?>
+                  <dt class="col-sm-3">Booking</dt>
+                  <dd class="col-sm-9">
+                    <span class="d-block">Not required</span>
+                    <div class="btn-group">
+                      <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary">Require pre-booking</a>
+                      <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-success">Book a place</a>
+                    </div>
+                  </dd>
+                <?php } ?>
 
                 <dt class="col-sm-3">Location</dt>
                 <dd class="col-sm-9 mb-0"><?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && $_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) { ?><?= htmlspecialchars($session['Location']) ?><?php } else { ?>You must be logged in to see the location<?php } ?></dd>
