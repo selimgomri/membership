@@ -1,7 +1,5 @@
 <?php
 
-// File generated from our OpenAPI spec
-
 namespace Stripe\Service\Issuing;
 
 class TransactionService extends \Stripe\Service\AbstractService

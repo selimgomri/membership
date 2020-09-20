@@ -1,35 +1,36 @@
 <?php
 
-namespace Intervention\Image\Test;
-
-use Intervention\Image\AbstractDriver;
-use Intervention\Image\CachedImage;
 use Intervention\Image\Image;
-use PHPUnit\Framework\TestCase;
+use Intervention\Image\CachedImage;
 
-class CachedImageTest extends TestCase
+class CachedImageTest extends PHPUnit_Framework_TestCase
 {
+    public function tearDown()
+    {
+        Mockery::close();
+    }
+
     public function testSetFromOriginal()
     {
         $image = $this->getTestImage();
-        $cachedImage = new CachedImage();
+        $cachedImage = new CachedImage;
         $cachedImage->setFromOriginal($image, 'foo-key');
 
-        $this->assertInstanceOf(AbstractDriver::class, $cachedImage->getDriver());
+        $this->assertInstanceOf('\Intervention\Image\AbstractDriver', $cachedImage->getDriver());
         $this->assertEquals('mock', $cachedImage->getCore());
         $this->assertEquals('image/png', $cachedImage->mime);
         $this->assertEquals('./tmp', $cachedImage->dirname);
         $this->assertEquals('foo.png', $cachedImage->basename);
         $this->assertEquals('png', $cachedImage->extension);
         $this->assertEquals('foo', $cachedImage->filename);
-        $this->assertEquals([], $cachedImage->getBackups());
+        $this->assertEquals(array(), $cachedImage->getBackups());
         $this->assertEquals('', $cachedImage->encoded);
         $this->assertEquals('foo-key', $cachedImage->cachekey);
     }
 
     private function getTestImage()
     {
-        $driver = $this->getMockForAbstractClass(AbstractDriver::class);
+        $driver = Mockery::mock('\Intervention\Image\AbstractDriver');
         $image = new Image($driver, 'mock');
         $image->mime = 'image/png';
         $image->dirname = './tmp';

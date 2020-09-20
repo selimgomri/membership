@@ -1,7 +1,5 @@
 <?php
 
-// File generated from our OpenAPI spec
-
 namespace Stripe;
 
 /**
@@ -39,7 +37,6 @@ namespace Stripe;
  * @property \Stripe\Service\PlanService $plans
  * @property \Stripe\Service\PriceService $prices
  * @property \Stripe\Service\ProductService $products
- * @property \Stripe\Service\PromotionCodeService $promotionCodes
  * @property \Stripe\Service\Radar\RadarServiceFactory $radar
  * @property \Stripe\Service\RefundService $refunds
  * @property \Stripe\Service\Reporting\ReportingServiceFactory $reporting

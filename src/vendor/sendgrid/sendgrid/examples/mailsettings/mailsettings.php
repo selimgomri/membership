@@ -1,8 +1,9 @@
 <?php
+require 'vendor/autoload.php'; // If you're using Composer (recommended)
+// comment out the above line if not using Composer
+// require("./sendgrid-php.php"); 
+// If not using Composer, uncomment the above line
 
-// Next line will load dependencies to run this example
-// Please refer to the README how to use in your project
-require_once __DIR__ . '/../../sendgrid-php.php';
 
 $apiKey = getenv('SENDGRID_API_KEY');
 $sg = new \SendGrid($apiKey);
@@ -27,9 +28,9 @@ try {
 // PATCH /mail_settings/address_whitelist #
 
 $request_body = json_decode('{
-  "enabled": true,
+  "enabled": true, 
   "list": [
-    "email1@example.com",
+    "email1@example.com", 
     "example.com"
   ]
 }');
@@ -61,7 +62,7 @@ try {
 // PATCH /mail_settings/bcc #
 
 $request_body = json_decode('{
-  "email": "email@example.com",
+  "email": "email@example.com", 
   "enabled": false
 }');
 
@@ -92,8 +93,8 @@ try {
 // PATCH /mail_settings/bounce_purge #
 
 $request_body = json_decode('{
-  "enabled": true,
-  "hard_bounces": 5,
+  "enabled": true, 
+  "hard_bounces": 5, 
   "soft_bounces": 5
 }');
 
@@ -124,8 +125,8 @@ try {
 // PATCH /mail_settings/footer #
 
 $request_body = json_decode('{
-  "enabled": true,
-  "html_content": "...",
+  "enabled": true, 
+  "html_content": "...", 
   "plain_content": "..."
 }');
 
@@ -156,7 +157,7 @@ try {
 // PATCH /mail_settings/forward_bounce #
 
 $request_body = json_decode('{
-  "email": "example@example.com",
+  "email": "example@example.com", 
   "enabled": true
 }');
 
@@ -187,7 +188,7 @@ try {
 // PATCH /mail_settings/forward_spam #
 
 $request_body = json_decode('{
-  "email": "",
+  "email": "", 
   "enabled": false
 }');
 
@@ -248,8 +249,8 @@ try {
 // PATCH /mail_settings/spam_check #
 
 $request_body = json_decode('{
-  "enabled": true,
-  "max_score": 5,
+  "enabled": true, 
+  "max_score": 5, 
   "url": "url"
 }');
 
@@ -280,7 +281,7 @@ try {
 // PATCH /mail_settings/template #
 
 $request_body = json_decode('{
-  "enabled": true,
+  "enabled": true, 
   "html_content": "<% body %>"
 }');
 

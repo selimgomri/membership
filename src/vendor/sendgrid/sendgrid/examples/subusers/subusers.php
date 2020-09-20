@@ -1,8 +1,9 @@
 <?php
+require 'vendor/autoload.php'; // If you're using Composer (recommended)
+// comment out the above line if not using Composer
+// require("./sendgrid-php.php"); 
+// If not using Composer, uncomment the above line
 
-// Next line will load dependencies to run this example
-// Please refer to the README how to use in your project
-require_once __DIR__ . '/../../sendgrid-php.php';
 
 $apiKey = getenv('SENDGRID_API_KEY');
 $sg = new \SendGrid($apiKey);
@@ -12,12 +13,12 @@ $sg = new \SendGrid($apiKey);
 // POST /subusers #
 
 $request_body = json_decode('{
-  "email": "John@example.com",
+  "email": "John@example.com", 
   "ips": [
-    "1.1.1.1",
+    "1.1.1.1", 
     "2.2.2.2"
-  ],
-  "password": "johns_password",
+  ], 
+  "password": "johns_password", 
   "username": "John@example.com"
 }');
 
@@ -161,7 +162,7 @@ try {
 // PUT /subusers/{subuser_name}/monitor #
 
 $request_body = json_decode('{
-  "email": "example@example.com",
+  "email": "example@example.com", 
   "frequency": 500
 }');
 $subuser_name = "test_url_param";
@@ -180,7 +181,7 @@ try {
 // POST /subusers/{subuser_name}/monitor #
 
 $request_body = json_decode('{
-  "email": "example@example.com",
+  "email": "example@example.com", 
   "frequency": 50000
 }');
 $subuser_name = "test_url_param";

@@ -32,7 +32,7 @@ after_success:
 
 notifications:
   slack:
-    if: branch = main
+    if: branch = master
     on_pull_requests: false
     on_success: never
     on_failure: change

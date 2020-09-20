@@ -1,8 +1,9 @@
 <?php
+require 'vendor/autoload.php'; // If you're using Composer (recommended)
+// comment out the above line if not using Composer
+// require("./sendgrid-php.php"); 
+// If not using Composer, uncomment the above line
 
-// Next line will load dependencies to run this example
-// Please refer to the README how to use in your project
-require_once __DIR__ . '/../../sendgrid-php.php';
 
 $apiKey = getenv('SENDGRID_API_KEY');
 $sg = new \SendGrid($apiKey);
@@ -68,7 +69,7 @@ try {
 // PUT /user/password #
 
 $request_body = json_decode('{
-  "new_password": "new_password",
+  "new_password": "new_password", 
   "old_password": "old_password"
 }');
 
@@ -86,8 +87,8 @@ try {
 // PATCH /user/profile #
 
 $request_body = json_decode('{
-  "city": "Orange",
-  "first_name": "Example",
+  "city": "Orange", 
+  "first_name": "Example", 
   "last_name": "User"
 }');
 
@@ -119,7 +120,7 @@ try {
 // POST /user/scheduled_sends #
 
 $request_body = json_decode('{
-  "batch_id": "YOUR_BATCH_ID",
+  "batch_id": "YOUR_BATCH_ID", 
   "status": "pause"
 }');
 
@@ -198,7 +199,7 @@ try {
 // PATCH /user/settings/enforced_tls #
 
 $request_body = json_decode('{
-  "require_tls": true,
+  "require_tls": true, 
   "require_valid_cert": false
 }');
 
@@ -259,18 +260,18 @@ try {
 // PATCH /user/webhooks/event/settings #
 
 $request_body = json_decode('{
-  "bounce": true,
-  "click": true,
-  "deferred": true,
-  "delivered": true,
-  "dropped": true,
-  "enabled": true,
-  "group_resubscribe": true,
-  "group_unsubscribe": true,
-  "open": true,
-  "processed": true,
-  "spam_report": true,
-  "unsubscribe": true,
+  "bounce": true, 
+  "click": true, 
+  "deferred": true, 
+  "delivered": true, 
+  "dropped": true, 
+  "enabled": true, 
+  "group_resubscribe": true, 
+  "group_unsubscribe": true, 
+  "open": true, 
+  "processed": true, 
+  "spam_report": true, 
+  "unsubscribe": true, 
   "url": "url"
 }');
 
@@ -318,9 +319,9 @@ try {
 // POST /user/webhooks/parse/settings #
 
 $request_body = json_decode('{
-  "hostname": "myhostname.com",
-  "send_raw": false,
-  "spam_check": true,
+  "hostname": "myhostname.com", 
+  "send_raw": false, 
+  "spam_check": true, 
   "url": "http://email.myhosthame.com"
 }');
 
@@ -351,8 +352,8 @@ try {
 // PATCH /user/webhooks/parse/settings/{hostname} #
 
 $request_body = json_decode('{
-  "send_raw": true,
-  "spam_check": false,
+  "send_raw": true, 
+  "spam_check": false, 
   "url": "http://newdomain.com/parse"
 }');
 $hostname = "test_url_param";

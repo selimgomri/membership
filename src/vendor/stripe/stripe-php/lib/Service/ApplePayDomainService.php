@@ -1,7 +1,5 @@
 <?php
 
-// File generated from our OpenAPI spec
-
 namespace Stripe\Service;
 
 class ApplePayDomainService extends \Stripe\Service\AbstractService

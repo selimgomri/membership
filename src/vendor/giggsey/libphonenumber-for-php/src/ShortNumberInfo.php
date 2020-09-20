@@ -246,8 +246,7 @@ class ShortNumberInfo
         $normalizedNumber = PhoneNumberUtil::normalizeDigitsOnly($number);
         $emergencyDesc = $metadata->getEmergency();
 
-        $allowPrefixMatchForRegion = (
-            $allowPrefixMatch
+        $allowPrefixMatchForRegion = ($allowPrefixMatch
             && !in_array($regionCode, static::$regionsWhereEmergencyNumbersMustBeExact)
         );
 

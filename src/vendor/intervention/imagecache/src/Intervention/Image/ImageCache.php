@@ -2,13 +2,9 @@
 
 namespace Intervention\Image;
 
-use Carbon\Carbon;
-use Closure;
 use Exception;
-use Illuminate\Cache\FileStore;
+use Carbon\Carbon;
 use Illuminate\Cache\Repository as Cache;
-use Illuminate\Cache\Repository;
-use Illuminate\Filesystem\Filesystem;
 
 class ImageCache
 {
@@ -24,14 +20,14 @@ class ImageCache
      *
      * @var array
      */
-    public $calls = [];
+    public $calls = array();
 
     /**
      * Additional properties included in checksum
      *
      * @var array
      */
-    public $properties = [];
+    public $properties = array();
 
     /**
      * Processed Image
@@ -59,7 +55,7 @@ class ImageCache
      */
     public function __construct(ImageManager $manager = null, Cache $cache = null)
     {
-        $this->manager = $manager ? $manager : new ImageManager();
+        $this->manager = $manager ? $manager : new ImageManager;
 
         if (is_null($cache)) {
             // get laravel app
@@ -79,13 +75,13 @@ class ImageCache
                 if (isset($manager->config['cache']['path'])) {
                     $path = $manager->config['cache']['path'];
                 } else {
-                    $path = __DIR__ . '/../../../storage/cache';
+                    $path = __DIR__.'/../../../storage/cache';
                 }
 
                 // create new default cache
-                $filesystem = new Filesystem();
-                $storage = new FileStore($filesystem, $path);
-                $this->cache = new Repository($storage);
+                $filesystem = new \Illuminate\Filesystem\Filesystem;
+                $storage = new \Illuminate\Cache\FileStore($filesystem, $path);
+                $this->cache = new \Illuminate\Cache\Repository($storage);
             }
         } else {
             $this->cache = $cache;
@@ -120,7 +116,7 @@ class ImageCache
         }
 
         // register make call
-        $this->__call('make', [$data]);
+        $this->__call('make', array($data));
 
         return $this;
     }
@@ -162,7 +158,7 @@ class ImageCache
         $properties = serialize($this->properties);
         $calls = serialize($this->getSanitizedCalls());
 
-        return md5($properties . $calls);
+        return md5($properties.$calls);
     }
 
     /**
@@ -174,10 +170,7 @@ class ImageCache
      */
     protected function registerCall($name, $arguments)
     {
-        $this->calls[] = [
-            'name' => $name,
-            'arguments' => $arguments,
-        ];
+        $this->calls[] = array('name' => $name, 'arguments' => $arguments);
     }
 
     /**
@@ -187,7 +180,7 @@ class ImageCache
      */
     protected function clearCalls()
     {
-        $this->calls = [];
+        $this->calls = array();
     }
 
     /**
@@ -197,7 +190,7 @@ class ImageCache
      */
     protected function clearProperties()
     {
-        $this->properties = [];
+        $this->properties = array();
     }
 
     /**
@@ -207,7 +200,7 @@ class ImageCache
      */
     protected function getCalls()
     {
-        return count($this->calls) ? $this->calls : [];
+        return count($this->calls) ? $this->calls : array();
     }
 
     /**
@@ -221,8 +214,8 @@ class ImageCache
 
         foreach ($calls as $i => $call) {
             foreach ($call['arguments'] as $j => $argument) {
-                if (is_a($argument, Closure::class)) {
-                    $calls[$i]['arguments'][$j] = $this->getClosureHash($argument);
+                if (is_a($argument, 'Closure')) {
+                    $calls[$i]['arguments'][$j] = $this->buildSerializableClosure($argument);
                 }
             }
         }
@@ -231,14 +224,20 @@ class ImageCache
     }
 
     /**
-     * Build hash from closure
+     * Build SerializableClosure from Closure
      *
      * @param  Closure $closure
-     * @return string
+     * @return Jeremeamia\SuperClosure\SerializableClosure|SuperClosure\SerializableClosure
      */
-    protected function getClosureHash(Closure $closure)
+    protected function buildSerializableClosure(\Closure $closure)
     {
-        return (new HashableClosure($closure))->getHash();
+        switch (true) {
+            case class_exists('SuperClosure\\SerializableClosure'):
+                return new \SuperClosure\SerializableClosure($closure);
+
+            default:
+                return new \Jeremeamia\SuperClosure\SerializableClosure($closure);
+        }
     }
 
     /**
@@ -249,13 +248,7 @@ class ImageCache
      */
     protected function processCall($call)
     {
-        $this->image = call_user_func_array(
-            [
-                $this->image,
-                $call['name']
-            ],
-            $call['arguments']
-        );
+        $this->image = call_user_func_array(array($this->image, $call['name']), $call['arguments']);
     }
 
     /**
@@ -305,7 +298,8 @@ class ImageCache
             // transform into image-object
             if ($returnObj) {
                 $image = $this->manager->make($cachedImageData);
-                return (new CachedImage())->setFromOriginal($image, $key);
+                $cachedImage = new CachedImage;
+                return $cachedImage->setFromOriginal($image, $key);
             }
 
             // return raw data
