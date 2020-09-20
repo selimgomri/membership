@@ -13,8 +13,9 @@ $swimmers->execute([
 $setParent = $db->prepare("UPDATE members SET UserID = ?, RR = ? WHERE MemberID = ?");
 
 $setUserRequiresRenewal = $db->prepare("UPDATE users SET RR = ? WHERE UserID = ?");
+
 $setUserRequiresRenewal->execute([
-  1,
+  (int) $tenant->getBooleanOption('REQUIRE_FULL_REGISTRATION'),
   $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']
 ]);
 
@@ -35,7 +36,7 @@ while ($swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)) {
     $selectedSwimmers[] = $swimmer['id'];
     $setParent->execute([
       $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'],
-      1,
+      (int) $tenant->getBooleanOption('REQUIRE_FULL_REGISTRATION'),
       $swimmer['id']
     ]);
     $success = true;
@@ -47,17 +48,17 @@ if ($success) {
   $subject = "Complete your registration at " . app()->tenant->getKey('CLUB_NAME');
   $message = "<p>Hello " . htmlspecialchars($user['first']) . ", </p>";
   if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegExisting']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegExisting']) {
-    $message .= "<p>We've added a new swimmer to your " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " account. We now need you to <a href=\"" . autoUrl("") . "\">sign in and provide some information</a>.</p>";
+    $message .= "<p>We've added a new member to your " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " account. We now need you to <a href=\"" . autoUrl("") . "\">sign in and provide some information</a>.</p>";
     unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegExisting']);
   } else {
     $message .= "<p>We've created an account for you in our membership system. We use the system to keep track of all our members, information, gala entries, payments and more.</p>";
     $message .= "<p>To continue, <a href=\"" . autoUrl("assisted-registration/" . $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'] . "/" . $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegPass']) . "\">please follow this link</a></p>";
-    $message .= "<p>As part of the registration process, we'll ask you to set a password, let us know your communication preferences and fill in important information about you and/or your members. At the end, we'll set up a direct debit so that payments to " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " are taken automatically.</p>";
-    $message .= "<p>You'll also be given the opportunity to set up a direct debit.</p>";
+    if ($tenant->getBooleanOption('REQUIRE_FULL_REGISTRATION')) {
+      $message .= "<p>As part of the registration process, we'll ask you to set a password, let us know your communication preferences and fill in important information about you and/or your members. At the end, we'll set up a direct debit so that payments to " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " are taken automatically.</p>";
+      $message .= "<p>You'll also be given the opportunity to set up a direct debit.</p>";
+    }
   }
-  if (!app()->tenant->isCLS()) {
-    $message .= '<p>Please note that your club may not provide all services included in the membership software.</p>';
-  }
+  $message .= '<p>Please note that ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' may not provide all services included in the membership software.</p>';
 
   notifySend(null, $subject, $message, $user['first'] . ' ' . $user['last'], $user['email']);
 

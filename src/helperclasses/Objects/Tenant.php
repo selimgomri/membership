@@ -103,6 +103,7 @@ class Tenant
       'EMERGENCY_MESSAGE' => false,
       'EMERGENCY_MESSAGE_TYPE' => 'NONE',
       'GALA_CARD_PAYMENTS_ALLOWED' => true,
+      'REQUIRE_FULL_REGISTRATION' => true,
     ];
 
     foreach ($keys as $key => $value) {

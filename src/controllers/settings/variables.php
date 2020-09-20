@@ -26,6 +26,7 @@ $vars = [
   'LOGO_DIR' => null,
   'HIDE_CONTACT_TRACING_FROM_PARENTS' => false,
   'BLOCK_SQUAD_REPS_FROM_NOTIFY' => false,
+  'REQUIRE_FULL_REGISTRATION' => true,
 ];
 
 $disabled = [];
@@ -273,7 +274,15 @@ include BASE_PATH . 'views/header.php';
           <div class="form-group">
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="HIDE_CONTACT_TRACING_FROM_PARENTS" value="1" name="HIDE_CONTACT_TRACING_FROM_PARENTS" <?php if (!bool($vars['HIDE_CONTACT_TRACING_FROM_PARENTS'])) { ?>checked<?php } ?> <?= $disabled['HIDE_CONTACT_TRACING_FROM_PARENTS'] ?>>
-              <label class="custom-control-label" for="HIDE_CONTACT_TRACING_FROM_PARENTS">Show contact tracing links to all parents</label>
+              <label class="custom-control-label" for="HIDE_CONTACT_TRACING_FROM_PARENTS">Show contact tracing links to all member users</label>
+            </div>
+          </div>
+
+          <h2>Registration options</h2>
+          <div class="form-group">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="REQUIRE_FULL_REGISTRATION" value="1" name="REQUIRE_FULL_REGISTRATION" <?php if (bool($vars['REQUIRE_FULL_REGISTRATION'])) { ?>checked<?php } ?> <?= $disabled['REQUIRE_FULL_REGISTRATION'] ?>>
+              <label class="custom-control-label" for="REQUIRE_FULL_REGISTRATION">Require users to complete a full registration forms</label>
             </div>
           </div>
 

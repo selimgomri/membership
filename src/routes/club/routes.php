@@ -414,9 +414,11 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
   });
 } else if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
   $this->group('/renewal', function () {
-
-
     include BASE_PATH . 'controllers/renewal/router.php';
+  });
+
+  $this->get('/account-switch', function () {
+    include BASE_PATH . 'controllers/account-switch.php';
   });
 
   $this->group('/registration', function () {
