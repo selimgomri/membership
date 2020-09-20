@@ -82,6 +82,13 @@ foreach ($sundays as $session) {
 }
 $sessions = $otherDays;
 
+$showAdmin = false;
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
+  if (app()->user->hasPermission('Admin') || app()->user->hasPermission('Coach')) $showAdmin = true;
+}
+
+$getBookingRequired = $db->prepare("SELECT COUNT(*) FROM `sessionsBookable` INNER JOIN `sessions` ON `sessions`.`SessionID` = `sessionsBookable`.`Session` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ?");
+
 $getCoaches = $db->prepare("SELECT Forename fn, Surname sn, coaches.Type code FROM coaches INNER JOIN users ON coaches.User = users.UserID WHERE coaches.Squad = ? ORDER BY coaches.Type ASC, Forename ASC, Surname ASC");
 
 $days = [
@@ -210,14 +217,26 @@ include BASE_PATH . 'views/header.php';
 
                 <?php } ?>
 
-                <?php if ($sessionDateTime > $now) { ?>
+                <?php if ($sessionDateTime > $now) {
+                  // Work out if booking required
+                  $getBookingRequired->execute([
+                    $session['SessionID'],
+                    $sessionDateTime->format('Y-m-d'),
+                    $tenant->getId(),
+                  ]);
+                  $bookingRequired = $getBookingRequired->fetchColumn() > 0;
+                ?>
                   <dt class="col-sm-3">Booking</dt>
                   <dd class="col-sm-9">
-                    <span class="d-block">Not required</span>
-                    <div class="btn-group">
-                      <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary">Require pre-booking</a>
+                    <?php if ($bookingRequired) { ?>
+                      <span class="d-block mb-2">Booking is required for this session</span>
                       <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-success">Book a place</a>
-                    </div>
+                    <?php } else if ($showAdmin) { ?>
+                      <span class="d-block mb-2">Booking is not currently required for this session</span>
+                      <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary">Require pre-booking</a>
+                    <?php } else { ?>
+                      <span class="d-block">Booking is not required</span>
+                    <?php } ?>
                   </dd>
                 <?php } ?>
 

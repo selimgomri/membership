@@ -87,6 +87,21 @@ if ($user->hasPermission('Admin') || $user->hasPermission('Coach')) {
   ]);
 }
 
+$sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime']);
+$startTime = new DateTime($session['StartTime'], new DateTimeZone('UTC'));
+$endTime = new DateTime($session['EndTime'], new DateTimeZone('UTC'));
+$duration = $startTime->diff($endTime);
+$hours = (int) $duration->format('%h');
+$mins = (int) $duration->format('%i');
+
+$getCoaches = $db->prepare("SELECT Forename fn, Surname sn, coaches.Type code FROM coaches INNER JOIN users ON coaches.User = users.UserID WHERE coaches.Squad = ? ORDER BY coaches.Type ASC, Forename ASC, Surname ASC");
+
+$getSessionSquads = $db->prepare("SELECT SquadName, ForAllMembers, SquadID FROM `sessionsSquads` INNER JOIN `squads` ON sessionsSquads.Squad = squads.SquadID WHERE sessionsSquads.Session = ? ORDER BY SquadFee DESC, SquadName ASC;");
+$getSessionSquads->execute([
+  $session['SessionID'],
+]);
+$squadNames = $getSessionSquads->fetchAll(PDO::FETCH_ASSOC);
+
 $pagetitle = 'Session Booking';
 include BASE_PATH . 'views/header.php';
 
@@ -132,6 +147,49 @@ include BASE_PATH . 'views/header.php';
         <?= htmlspecialchars(mb_ucfirst($numFormatter->format($bookedCount))) ?> <?php if ($bookedCount == 1) { ?>member has<?php } else { ?>members have<?php } ?> booked onto this session. <?php if ($session['MaxPlaces']) { ?><?= htmlspecialchars(mb_ucfirst($numFormatter->format($session['MaxPlaces'] - $bookedCount))) ?><?php } ?> <?php if (($session['MaxPlaces'] - $bookedCount) == 1) { ?>place remains<?php } else { ?>places remain<?php } ?> available.
       </p>
 
+      <h2>Session Details</h2>
+      <dl class="row">
+        <dt class="col-sm-3">Starts at</dt>
+        <dd class="col-sm-9"><?= htmlspecialchars($startTime->format('H:i')) ?></dd>
+
+        <dt class="col-sm-3">Ends at</dt>
+        <dd class="col-sm-9"><?= htmlspecialchars($endTime->format('H:i')) ?></dd>
+
+        <dt class="col-sm-3">Duration</dt>
+        <dd class="col-sm-9"><?php if ($hours > 0) { ?><?= $hours ?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?= $mins ?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
+
+        <dt class="col-sm-3">Total places available</dt>
+        <dd class="col-sm-9"><?= htmlspecialchars($session['MaxPlaces']) ?></dd>
+
+        <dt class="col-sm-3">Places booked</dt>
+        <dd class="col-sm-9"><?= htmlspecialchars($bookedCount) ?></dd>
+
+        <dt class="col-sm-3">Places remaining</dt>
+        <dd class="col-sm-9"><?= htmlspecialchars(($session['MaxPlaces'] - $bookedCount)) ?></dd>
+
+        <?php for ($i = 0; $i < sizeof($squadNames); $i++) {
+          $getCoaches->execute([
+            $squadNames[$i]['SquadID'],
+          ]);
+          $coaches = $getCoaches->fetchAll(PDO::FETCH_ASSOC);
+        ?>
+          <dt class="col-sm-3"><?= htmlspecialchars($squadNames[$i]['SquadName']) ?> Coach<?php if (sizeof($coaches) > 0) { ?>es<?php } ?></dt>
+          <dd class="col-sm-9">
+            <ul class="list-unstyled mb-0">
+              <?php for ($i = 0; $i < sizeof($coaches); $i++) { ?>
+                <li><strong><?= htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn']) ?></strong>, <?= htmlspecialchars(coachTypeDescription($coaches[$i]['code'])) ?></li>
+              <?php } ?>
+              <?php if (sizeof($coaches) == 0) { ?>
+                <li>None assigned</li>
+              <?php } ?>
+            </ul>
+          </dd>
+        <?php } ?>
+
+        <dt class="col-sm-3">Location</dt>
+        <dd class="col-sm-9 mb-0"><?= htmlspecialchars($session['Location']) ?></dd>
+      </dl>
+
       <h2>Book</h2>
       <p class="lead">
         Book a place for a member linked to your account.
@@ -161,7 +219,7 @@ include BASE_PATH . 'views/header.php';
             <?php do {
               $booked = new DateTime($bookedMember['BookedAt'], new DateTimeZone('UTC'));
               $booked->setTimezone(new DateTimeZone('Europe/London'));
-              ?>
+            ?>
               <li class="list-group-items">
                 <a class="font-weight-bold d-block" href="<?= htmlspecialchars(autoUrl('members/' . $bookedMember['id'])) ?>"><?= htmlspecialchars($bookedMember['fn'] . ' ' . $bookedMember['sn']) ?></a>
                 <em>Booked at <?= htmlspecialchars($booked->format('H:i, j F Y')) ?></em>
