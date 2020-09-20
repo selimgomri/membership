@@ -39,7 +39,7 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError']
   if ($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsPostData']['smsAuthorise']) {
     $sms = " checked ";
   }
-} 
+}
 
 $pagetitle = "Your Details - Assisted Registration";
 
@@ -56,10 +56,10 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError']) { ?>
-      <div class="alert alert-danger">
-        <p><strong>There was a problem</strong></p>
-        <?=$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsMessage']?>
-      </div>
+        <div class="alert alert-danger">
+          <p><strong>There was a problem</strong></p>
+          <?= $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsMessage'] ?>
+        </div>
       <?php } ?>
 
       <p>
@@ -76,7 +76,7 @@ include BASE_PATH . 'views/header.php';
         </p>
 
         <p class="text-truncate">
-          <?=htmlspecialchars($user['EmailAddress'])?>
+          <?= htmlspecialchars($user['EmailAddress']) ?>
         </p>
 
         <div class="form-row">
@@ -113,8 +113,7 @@ include BASE_PATH . 'views/header.php';
           <div class="col-md-8 col-lg-6">
             <div class="form-group">
               <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input"
-                name="emailAuthorise" id="emailAuthorise" value="1" <?=$email?>>
+                <input type="checkbox" class="custom-control-input" name="emailAuthorise" id="emailAuthorise" value="1" <?= $email ?>>
                 <label class="custom-control-label" for="emailAuthorise">
                   I wish to receive important email updates about my squads.
                   This includes emails about session cancellations.
@@ -124,11 +123,11 @@ include BASE_PATH . 'views/header.php';
 
             <div class="form-group">
               <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input"
-                name="smsAuthorise" id="smsAuthorise" value="1" <?=$sms?>>
+                <input type="checkbox" class="custom-control-input" name="smsAuthorise" id="smsAuthorise" value="1" <?= $sms ?>>
                 <label class="custom-control-label" for="smsAuthorise">
                   I wish to receive text message notifications
                 </label>
+                <small class="d-block"><?= htmlspecialchars(app()->tenant->getName()) ?> may not offer this service</small>
               </div>
             </div>
 
@@ -143,26 +142,24 @@ include BASE_PATH . 'views/header.php';
         <div class="cell">
           <p class="mb-0"><strong>Legal Stuff Applies</strong></p>
           <?php if ($privacyPolicy != null) { ?>
-          <?=$Extra->text($privacyPolicy)?>
+            <?= $Extra->text($privacyPolicy) ?>
           <?php } else { ?>
-          <p>
-            YOUR CLUB HAS NOT SET UP A PRIVACY POLICY. PLEASE DO NOT PROCEED.
-          </p>
-          <p>
-            In accordance with European Law, <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>, Swim England and British Swimming are Data Controllers for the purposes of the General Data Protection Regulation.
-          </p>
-          <p>
-            By proceeding you agree to our <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy (this is an example policy)</a> and the use of your data by <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>. Please note that you have also agreed to our use of you and/or your swimmer's data as part of your registration with the club and with British Swimming and Swim England.
-          </p>
-          <p>
-            We will be unable to provide this service for technical reasons if
-            you do not consent to the use of this data.
-          </p>
-          <p class="mb-0">
-            Contact a member of your committee if you have any questions or email <?php if (app()->tenant->isCLS()) { ?><a
-            href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a><?php } else { ?><a
-            href="mailto:<?=htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL'))?>"><?=htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL'))?></a><?php } ?>.          
-          </p>
+            <p>
+              YOUR CLUB HAS NOT SET UP A PRIVACY POLICY. PLEASE DO NOT PROCEED.
+            </p>
+            <p>
+              In accordance with European Law, <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>, Swim England and British Swimming are Data Controllers for the purposes of the General Data Protection Regulation.
+            </p>
+            <p>
+              By proceeding you agree to our <a href="https://www.chesterlestreetasc.co.uk/policies/privacy/" target="_blank">Privacy Policy (this is an example policy)</a> and the use of your data by <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>. Please note that you have also agreed to our use of you and/or your swimmer's data as part of your registration with the club and with British Swimming and Swim England.
+            </p>
+            <p>
+              We will be unable to provide this service for technical reasons if
+              you do not consent to the use of this data.
+            </p>
+            <p class="mb-0">
+              Contact a member of your committee if you have any questions or email <?php if (app()->tenant->isCLS()) { ?><a href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a><?php } else { ?><a href="mailto:<?= htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) ?>"><?= htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) ?></a><?php } ?>.
+            </p>
           <?php } ?>
         </div>
 

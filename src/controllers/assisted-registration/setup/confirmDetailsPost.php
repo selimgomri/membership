@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 use Respect\Validation\Validator as v;
 
@@ -53,11 +54,16 @@ if ($status) {
     $update->bindValue(4, $rr, PDO::PARAM_BOOL);
     $update->bindValue(5, $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGuestUser'], PDO::PARAM_INT);
     $update->execute();
+
+    $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegStage'] = 3;
+    header("Location: " . autoUrl("assisted-registration/go-to-onboarding"));
   } catch (Exception $e) {
-    halt(500);
+    reportError($e);
+    $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError'] = true;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsPostData'] = $_POST;
+    $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsMessage'] = $statusMessage;
+    header("Location: " . autoUrl("assisted-registration/confirm-details"));
   }
-  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegStage'] = 3;
-  header("Location: " . autoUrl("assisted-registration/go-to-onboarding"));
 } else {
   $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError'] = true;
   $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsPostData'] = $_POST;

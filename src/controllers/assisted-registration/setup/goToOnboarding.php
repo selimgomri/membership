@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegStage']);
 
@@ -20,8 +21,16 @@ unset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGuestUser']);
 $requiresRegistration = $db->prepare("SELECT `RR` FROM users WHERE UserID = ?");
 $requiresRegistration->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
-if (bool($requiresRegistration->fetchColumn())) {
+if (bool($requiresRegistration->fetchColumn()) && $tenant->getBooleanKey('REQUIRE_FULL_REGISTRATION')) {
   header("Location: " . autoUrl("onboarding/go"));
 } else {
+
+  // Ensure RR is false
+  $updateRR = $db->prepare("UPDATE `users` SET `RR` = ? WHERE UserID = ?");
+  $updateRR->execute([
+    0,
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+  ]);
+
   header("Location: " . autoUrl(""));
 }
