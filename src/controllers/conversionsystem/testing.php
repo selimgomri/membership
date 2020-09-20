@@ -32,10 +32,10 @@ include BASE_PATH . "views/header.php";
       <div class="row align-items-center">
         <div class="col-lg-8">
           <h1>
-          Swim Time Converter
+            Swim Time Converter
           </h1>
           <p class="lead mb-0">
-          Easily get converted times
+            Easily get converted times
           </p>
           <div class="mb-3 d-lg-none"></div>
         </div>

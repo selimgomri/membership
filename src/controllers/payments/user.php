@@ -12,9 +12,9 @@ $pagetitle = "Payments and Direct Debits";
 $stripeCusomer = app()->user->getStripeCustomer();
 $getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC LIMIT 1");
 if ($stripeCusomer) {
-$getMandates->execute([
-  $stripeCusomer->id,
-]);
+  $getMandates->execute([
+    $stripeCusomer->id,
+  ]);
 }
 $mandate = $getMandates->fetch(PDO::FETCH_ASSOC);
 
