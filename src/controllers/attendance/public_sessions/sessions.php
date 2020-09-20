@@ -226,7 +226,7 @@ include BASE_PATH . 'views/header.php';
                   ]);
                   $bookingRequired = $getBookingRequired->fetchColumn() > 0;
                 ?>
-                  <dt class="col-sm-3">Booking</dt>
+                  <!-- <dt class="col-sm-3">Booking</dt>
                   <dd class="col-sm-9">
                     <?php if ($bookingRequired) { ?>
                       <span class="d-block mb-2">Booking is required for this session</span>
@@ -237,7 +237,7 @@ include BASE_PATH . 'views/header.php';
                     <?php } else { ?>
                       <span class="d-block">Booking is not required</span>
                     <?php } ?>
-                  </dd>
+                  </dd> -->
                 <?php } ?>
 
                 <dt class="col-sm-3">Location</dt>
