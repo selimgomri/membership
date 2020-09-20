@@ -67,7 +67,8 @@ if (bool($session['AllSquads'])) {
   }
 
   // Remove duplicated
-  $members = array_unique($members);
+  // $members = array_unique($members);
+  $members = array_map("unserialize", array_unique(array_map("serialize", $members)));
 }
 
 // Number booked in
@@ -197,6 +198,15 @@ include BASE_PATH . 'views/header.php';
 
       <?php if (sizeof($members) > 0) { ?>
 
+        <ul class="list-group" id="member-booking-list">
+          <?php foreach ($members as $member) { ?>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></span>
+              <span><button class="btn btn-primary" type="button" data-member-name="<?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?>" data-member-id="<?= htmlspecialchars($member['id']) ?>" data-operation="book-place" data-session-id="<?= htmlspecialchars($session['SessionID']) ?>" data-session-name="<?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>" data-session-location="<?= htmlspecialchars($session['Location']) ?>" data-session-date="<?= htmlspecialchars($date->format('Y-m-d')) ?>">Book</button></span>
+            </li>
+          <?php } ?>
+        </ul>
+
       <?php } else { ?>
         <div class="alert alert-warning">
           <p class="mb-0">
@@ -239,6 +249,99 @@ include BASE_PATH . 'views/header.php';
   </div>
 
 </div>
+
+<div class="modal" id="booking-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="booking-modal-label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-dark">
+        <h5 class="modal-title" id="booking-modal-title">Confirm booking</h5>
+        <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="member-booking-form">
+          <p>
+            Please confirm you're booking <strong><span id="booking-modal-member-name"></span></strong> onto <strong><span id="booking-modal-session-name"></span></strong>
+          </p>
+
+          <input type="hidden" name="member-id" id="member-id" value="">
+          <input type="hidden" name="session-id" id="session-id" value="">
+          <input type="hidden" name="session-date" id="session-date" value="">
+
+          <dl class="row">
+            <dt class="col-md-4">Charge</dt>
+            <dd class="col-md-8">There is no additional charge for this session.</dd>
+
+            <dt class="col-md-4">Location</dt>
+            <dd class="col-md-8" id="booking-modal-session-location">Unknown</dd>
+          </dl>
+
+          <p class="mb-0">
+            This is a new feature and we have not yet added a cancellation facility. Booking a place is final and your club may have penalties for non-attendance at a booked session.
+          </p>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Don't book</button>
+        <button type="submit" class="btn btn-info" form="member-booking-form" id="accept">Confirm booking</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="ajaxData" data-booking-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/book')) ?>"></div>
+
+<script>
+  const options = document.getElementById('ajaxData').dataset;
+
+  let mbl = document.getElementById('member-booking-list');
+  if (mbl) {
+    mbl.addEventListener('click', event => {
+      if (event.target.tagName === 'BUTTON' && event.target.dataset.operation === 'book-place') {
+        document.getElementById('booking-modal-member-name').textContent = event.target.dataset.memberName;
+        document.getElementById('booking-modal-session-name').textContent = event.target.dataset.sessionName;
+        document.getElementById('booking-modal-session-location').textContent = event.target.dataset.sessionLocation;
+
+        document.getElementById('member-id').value = event.target.dataset.memberId;
+        document.getElementById('session-id').value = event.target.dataset.sessionId;
+        document.getElementById('session-date').value = event.target.dataset.sessionDate;
+
+        $('#booking-modal').modal('show');
+
+        let form = document.getElementById('member-booking-form');
+        form.addEventListener('submit', event => {
+          event.preventDefault();
+          let formData = new FormData(form);
+
+          // console.log(formData);
+          var req = new XMLHttpRequest();
+          req.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              let json = JSON.parse(this.responseText);
+              if (json.status == 200) {
+                // Cheap and nasty!
+                // location.reload();
+
+                // Show success message, dismiss modal, reload booking box
+
+                
+              } else {
+                alert(json.error);
+              }
+            } else if (this.readyState == 4) {
+              // Not ok
+              alert('An error occurred and we could not parse the submission.');
+            }
+          }
+          req.open('POST', options.bookingAjaxUrl, true);
+          req.setRequestHeader('Accept', 'application/json');
+          req.send(formData);
+        });
+      }
+    });
+  }
+</script>
 
 <?php
 

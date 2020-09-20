@@ -9,7 +9,7 @@ $this->get('/book', function () {
 });
 
 $this->post('/book', function () {
-  // include 'book-session/require-booking-post.php';
+  include 'book-session/book-session-post.php';
 });
 
 $this->post('/require-booking', function () {
