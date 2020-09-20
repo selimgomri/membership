@@ -1,5 +1,34 @@
 # Changelog
 
+## 7.52.0 - 2020-09-08
+* [#1010](https://github.com/stripe/stripe-php/pull/1010) Update PHPDocs
+
+## 7.51.0 - 2020-09-02
+* [#1007](https://github.com/stripe/stripe-php/pull/1007) Multiple API changes
+  * Add support for the Issuing Dispute Submit API
+  * Add constants for `payment_status` on Checkout `Session`
+* [#1003](https://github.com/stripe/stripe-php/pull/1003) Add trim to getSignatures to allow for leading whitespace.
+
+## 7.50.0 - 2020-08-28
+* [#1005](https://github.com/stripe/stripe-php/pull/1005) Updated PHPDocs
+
+## 7.49.0 - 2020-08-19
+* [#998](https://github.com/stripe/stripe-php/pull/998) PHPDocs updated
+
+## 7.48.0 - 2020-08-17
+* [#997](https://github.com/stripe/stripe-php/pull/997) PHPDocs updated
+* [#996](https://github.com/stripe/stripe-php/pull/996) Fixing telemetry
+
+## 7.47.0 - 2020-08-13
+* [#994](https://github.com/stripe/stripe-php/pull/994) Nullable balance_transactions on issuing disputes
+* [#991](https://github.com/stripe/stripe-php/pull/991) Fix invalid return types in OAuthService
+
+## 7.46.1 - 2020-08-07
+* [#990](https://github.com/stripe/stripe-php/pull/990) PHPdoc changes
+
+## 7.46.0 - 2020-08-05
+* [#989](https://github.com/stripe/stripe-php/pull/989) Add support for the `PromotionCode` resource and APIs
+
 ## 7.45.0 - 2020-07-28
 * [#981](https://github.com/stripe/stripe-php/pull/981) PHPdoc updates
 

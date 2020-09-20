@@ -89,6 +89,13 @@ try {
   }
   app()->tenant->setKey('BLOCK_SQUAD_REPS_FROM_NOTIFY', $hide);
 
+  // 'REQUIRE_FULL_REGISTRATION' => true,
+  $hide = 1;
+  if (!isset($_POST['REQUIRE_FULL_REGISTRATION']) || !bool($_POST['REQUIRE_FULL_REGISTRATION'])) {
+    $hide = 0;
+  }
+  app()->tenant->setKey('REQUIRE_FULL_REGISTRATION', $hide);
+
   $vars['CLUB_ADDRESS'] = null;
   $addr = $_POST['CLUB_ADDRESS'];
   $addr = str_replace("\r\n", "\n", $addr);

@@ -42,10 +42,6 @@ $sql->bindValue(':num', 10, PDO::PARAM_INT);
 $sql->execute();
 $row = $sql->fetch(PDO::FETCH_ASSOC);
 
-if ($row == null) {
-  halt(404);
-}
-
 $pagetitle = "Message History";
 
 include BASE_PATH . "views/header.php";
@@ -90,9 +86,20 @@ include BASE_PATH . "views/header.php";
     </div>
     <div class="col-md-9">
       <h1>My Message History</h1>
-      <?php if ($numMails == 0) {
-      ?>
-        <p class="mb-0">There are no messages to view right now.</p>
+
+      <?php if ($numMails == 0) { ?>
+        <p class="lead">
+          All emails sent to you using our <a href="<?= htmlspecialchars(autoUrl('notify')) ?>">Notify</a> system.
+        </p>
+
+        <div class="alert alert-warning">
+          <p class="mb-0">
+            <strong>There are no messages to view right now</strong>
+          </p>
+          <p class="mb-0">
+            Check back later.
+          </p>
+        </div>
       <?php
       } else { ?>
         <p class="lead">

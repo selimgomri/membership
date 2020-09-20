@@ -71,7 +71,7 @@ include "attendanceMenu.php"; ?>
         <h2 class="mb-4">Further Attendance Options</h2>
       <?php } ?>
       <div class="news-grid">
-        <a href="<?= autoUrl("attendance/register") ?>">
+        <a href="<?= htmlspecialchars(autoUrl("attendance/register")) ?>">
           <div>
             <span class="title mb-0">
               Take a Register
@@ -84,26 +84,42 @@ include "attendanceMenu.php"; ?>
             Attendance
           </span>
         </a>
-        <a href="<?= autoUrl("attendance/history/swimmers") ?>">
+
+        <a href="<?= htmlspecialchars(autoUrl("attendance/history/members")) ?>">
           <div>
             <span class="title mb-0">
-              Swimmer Attendance
+              Member Attendance
             </span>
             <span class="d-flex mb-3">
-              View swimmer attendance records for up to the last twenty weeks
+              View member attendance records for up to the last twenty weeks
             </span>
           </div>
           <span class="category">
             Attendance
           </span>
         </a>
-        <a href="<?= autoUrl("attendance/history/squads") ?>">
+
+        <a href="<?= htmlspecialchars(autoUrl("attendance/history/squads")) ?>">
           <div>
             <span class="title mb-0">
               Squad Attendance
             </span>
             <span class="d-flex mb-3">
               View squad attendance for the current week
+            </span>
+          </div>
+          <span class="category">
+            Attendance
+          </span>
+        </a>
+
+        <a href="<?= htmlspecialchars(autoUrl("sessions/booking")) ?>">
+          <div>
+            <span class="title mb-0">
+              Session Booking
+            </span>
+            <span class="d-flex mb-3">
+              Book a session
             </span>
           </div>
           <span class="category">

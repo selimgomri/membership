@@ -107,29 +107,25 @@ ob_start(); ?>
       <?php } ?>
     </div>
     <div class="split-50">
-    <div style="text-align:right">
-      <img src="<?= BASE_PATH . 'public/img/corporate/scds.png' ?>" style="width: 1cm;">
-    </div>
+      <div style="text-align:right">
+        <img src="<?= BASE_PATH . 'public/img/corporate/scds.png' ?>" style="width: 1cm;">
+      </div>
     </div>
   </div>
-
 
   <div style="text-align: center;">
 
     <div class="primary-box mb-3" id="title" style="margin-top: 12pt; padding-top: 24pt; padding-bottom: 24pt;">
+      <p class="lead" style="font-size: 20pt; margin-bottom:20pt;">
+        <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>
+      </p>
+      <hr style="margin-bottom:18pt;">
       <h1 class="mb-0" style="line-height: 24pt; margin-bottom:12pt;">
         Contact Tracing Check In
       </h1>
-      <h1 class="mb-0" style="line-height: 24pt; margin-bottom:20pt;">
+      <h1 class="mb-0" style="line-height: 24pt; margin-bottom:0pt;">
         <?= htmlspecialchars($location['Name']) ?>
       </h1>
-      <hr style="margin-bottom:18pt;">
-      <p class="lead" style="font-size: 20pt;">
-        For your safety, you <strong>must check in</strong> at this location.
-      </p>
-      <p class="mb-0">
-        Together, we can help the NHS.
-      </p>
     </div>
 
     <h2>
@@ -154,7 +150,8 @@ ob_start(); ?>
   </div>
 
   <?php $landscape = false;
-  // include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
+  // include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; 
+  ?>
 </body>
 
 </html>

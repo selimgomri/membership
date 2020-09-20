@@ -77,7 +77,7 @@ class EmergencyContact {
 
 	public function getContactNumber() {
 		try {
-			$number = \Brick\PhoneNumber\PhoneNumber::parse($this->contactNumber);
+			$number = \Brick\PhoneNumber\PhoneNumber::parse($this->contactNumber, 'GB');
 			return $this->contactNumber = $number->format(\Brick\PhoneNumber\PhoneNumberFormat::E164);
 		} catch (\Brick\PhoneNumber\PhoneNumberParseException $e) {
 			return false;
@@ -86,7 +86,7 @@ class EmergencyContact {
 
 	public function getNationalContactNumber() {
 		try {
-			$number = \Brick\PhoneNumber\PhoneNumber::parse($this->contactNumber);
+			$number = \Brick\PhoneNumber\PhoneNumber::parse($this->contactNumber, 'GB');
 			return $this->contactNumber = $number->format(\Brick\PhoneNumber\PhoneNumberFormat::NATIONAL);
 		} catch (\Brick\PhoneNumber\PhoneNumberParseException $e) {
 			return false;
@@ -95,7 +95,7 @@ class EmergencyContact {
 
 	public function getInternationalContactNumber() {
 		try {
-			$number = \Brick\PhoneNumber\PhoneNumber::parse($this->contactNumber);
+			$number = \Brick\PhoneNumber\PhoneNumber::parse($this->contactNumber, 'GB');
 			return $this->contactNumber = $number->format(\Brick\PhoneNumber\PhoneNumberFormat::INTERNATIONAL);
 		} catch (\Brick\PhoneNumber\PhoneNumberParseException $e) {
 			return false;
@@ -104,7 +104,7 @@ class EmergencyContact {
 
 	public function getRFCContactNumber() {
 		try {
-			$number = \Brick\PhoneNumber\PhoneNumber::parse($this->contactNumber);
+			$number = \Brick\PhoneNumber\PhoneNumber::parse($this->contactNumber, 'GB');
 			return $this->contactNumber = $number->format(\Brick\PhoneNumber\PhoneNumberFormat::RFC3966);
 		} catch (\Brick\PhoneNumber\PhoneNumberParseException $e) {
 			return false;

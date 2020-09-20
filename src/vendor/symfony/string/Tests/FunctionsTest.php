@@ -14,20 +14,20 @@ namespace Symfony\Component\String\Tests;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\String\AbstractString;
 use Symfony\Component\String\ByteString;
-use Symfony\Component\String\UnicodeString;
 use function Symfony\Component\String\s;
+use Symfony\Component\String\UnicodeString;
 
 final class FunctionsTest extends TestCase
 {
     /**
-     * @dataProvider provideS
+     * @dataProvider provideStrings
      */
     public function testS(AbstractString $expected, string $input)
     {
         $this->assertEquals($expected, s($input));
     }
 
-    public function provideS()
+    public function provideStrings(): array
     {
         return [
             [new UnicodeString('foo'), 'foo'],

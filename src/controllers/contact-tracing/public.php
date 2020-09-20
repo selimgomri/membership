@@ -1,9 +1,13 @@
-
 <?php
 
 $db = app()->db;
 $tenant = app()->tenant;
 $pagetitle = 'Contact Tracing';
+
+$getLocations = $db->prepare("SELECT `ID`, `Name` FROM `covidLocations` WHERE `Tenant` = ? ORDER BY `Name` ASC");
+$getLocations->execute([
+  $tenant->getId(),
+]);
 
 include BASE_PATH . 'views/header.php';
 
@@ -24,7 +28,7 @@ include BASE_PATH . 'views/header.php';
           Contact Tracing
         </h1>
         <p class="lead mb-0">
-          <?= htmlspecialchars($tenant->getName()) ?> <em>Supporting NHS Test and Trace</em>
+          Select your current location to check in
         </p>
       </div>
     </div>
@@ -33,28 +37,34 @@ include BASE_PATH . 'views/header.php';
 
 <div class="container">
 
-  <div class="row">
-    <div class="col-12 mb-5">
-      <div class="p-3 text-white bg-danger rounded h-100">
-        <h2>
-          Register your attendance
-        </h2>
-        <p class="lead">
-          Together, we can help the NHS.
-        </p>
-        <p>
-          <?= htmlspecialchars($tenant->getName()) ?> will use this data if required to support NHS Test and Trace. Data will be deleted automatically after 21 days.
-        </p>
-        <p class="mb-0">
-          <a href="<?= htmlspecialchars(autoUrl('contact-tracing/check-in')) ?>" class="btn btn-outline-light">
-            Register
+  <?php if ($location = $getLocations->fetch(PDO::FETCH_ASSOC)) { ?>
+    <div class="card mb-5">
+      <div class="card-header">
+        Select
+      </div>
+      <div class="list-group list-group-flush">
+        <?php do { ?>
+          <a href="<?= htmlspecialchars(autoUrl('contact-tracing/check-in/' . $location['ID'])) ?>" class="list-group-item list-group-item-action">
+            <?= htmlspecialchars($location['Name']) ?>
           </a>
-        </p>
+        <?php } while ($location = $getLocations->fetch(PDO::FETCH_ASSOC)); ?>
       </div>
     </div>
+  <?php } else { ?>
+    <div class="alert alert-warning">
+      <p class="mb-0">
+        <strong>No locations yet!</strong>
+      </p>
+      <p class="mb-0">
+        Club staff can add a location so that you can get started.
+      </p>
+    </div>
+  <?php } ?>
+
+  <div class="row">
 
     <div class="col-md-4 mb-3">
-      <div class="p-3 bg-primary rounded text-white h-100" style="background-color: #005eb8 !important; display: grid;">
+      <div class="card card-body h-100 text-white" style="background-color: #005eb8 !important; display: grid;">
         <div>
           <h2>
             Coronavirus (COVID-19)
@@ -64,7 +74,7 @@ include BASE_PATH . 'views/header.php';
           </p>
         </div>
         <p class="mb-0 mt-auto d-flex">
-          <a href="https://www.nhs.uk/conditions/coronavirus-covid-19/" class="btn btn-light">
+          <a href="https://www.nhs.uk/conditions/coronavirus-covid-19/" class="btn btn-light" target="_blanks">
             <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> NHS.UK
           </a>
         </p>
@@ -72,7 +82,7 @@ include BASE_PATH . 'views/header.php';
     </div>
 
     <div class="col-md-4 mb-3">
-      <div class="p-3 rounded border h-100" style="display: grid;">
+      <div class="card card-body h-100" style="display: grid;">
         <div>
           <h2>
             The Rules
@@ -82,7 +92,7 @@ include BASE_PATH . 'views/header.php';
           </p>
         </div>
         <p class="mb-0 mt-auto d-flex">
-          <a href="https://www.nhs.uk/conditions/coronavirus-covid-19/" class="btn btn-dark">
+          <a href="https://www.nhs.uk/conditions/coronavirus-covid-19/" class="btn btn-dark" target="_blanks">
             <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> GOV.UK
           </a>
         </p>
@@ -90,7 +100,7 @@ include BASE_PATH . 'views/header.php';
     </div>
 
     <div class="col-md-4 mb-3">
-      <div class="p-3 rounded border h-100" style="display: grid;">
+      <div class="card card-body h-100" style="display: grid;">
         <div>
           <h2>
             Swim England Return to Pool Guidance
@@ -100,7 +110,7 @@ include BASE_PATH . 'views/header.php';
           </p>
         </div>
         <p class="mb-0 mt-auto d-flex">
-          <a href="https://www.swimming.org/swimengland/pool-return-guidance-documents/" class="btn btn-dark">
+          <a href="https://www.swimming.org/swimengland/pool-return-guidance-documents/" class="btn btn-dark" target="_blanks">
             <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Guidance
           </a>
         </p>

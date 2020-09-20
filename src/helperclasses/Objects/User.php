@@ -212,6 +212,15 @@ class User extends Person
     return in_array($permission, $this->permissions);
   }
 
+  public function hasPermissions(array $permissions = [])
+  {
+    foreach ($permissions as $type) {
+      if ($this->hasPermission($type)) {
+        return true;
+      }
+    }
+  }
+
   public function grantPermission($permission)
   {
     $db = app()->db;

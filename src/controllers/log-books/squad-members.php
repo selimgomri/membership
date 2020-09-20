@@ -62,22 +62,6 @@ include BASE_PATH . 'views/header.php';
         </div>
       <?php } ?>
     </div>
-    <div class="col">
-      <div class="position-sticky top-3">
-        <div class="cell">
-          <h2>Log books are new!</h2>
-          <p class="lead">
-            We have added log books to the membership system as a response to the coronavirus (COVID-19) outbreak.
-          </p>
-          <p>
-            This is to allow members to log their home based land training.
-          </p>
-          <p class="mb-0">
-            As always, feedback is very welcome. Send it to <a href="mailto:feedback@myswimmingclub.uk">feedback@myswimmingclub.uk</a>
-          </p>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 

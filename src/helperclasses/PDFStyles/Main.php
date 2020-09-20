@@ -253,4 +253,10 @@
     max-height: 2cm;
   }
   <?php } ?>
+
+  <?php if (app()->tenant->getKey('SYSTEM_COLOUR') && getContrastColor(app()->tenant->getKey('SYSTEM_COLOUR'))) { ?>
+    .primary-box {
+      color: #000;
+    }
+  <?php } ?>
 </style>

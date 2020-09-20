@@ -180,7 +180,17 @@ class TrainingSession
       $this->id,
     ]);
 
-    if ($getRecordCount->fetchColumn() == 0) {
+    // Check this session is not a 'Booking' session
+    $bookingDate = new DateTime($dateString, new DateTimeZone('Europe/London'));
+    // Check this is not a booking only session!
+    $getBookingCount = $db->prepare("SELECT COUNT(*) FROM `sessionsBookable` INNER JOIN `sessions` ON `sessions`.`SessionID` = `sessionsBookable`.`Session` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ?");
+    $getBookingCount->execute([
+      $this->id,
+      $bookingDate->format('Y-m-d'),
+      app()->tenant->getId(),
+    ]);
+
+    if ($getRecordCount->fetchColumn() == 0 && $getBookingCount->fetchColumn() == 0) {
       // Need to create based on current members
 
       // Get members

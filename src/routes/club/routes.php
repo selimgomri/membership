@@ -414,9 +414,11 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
   });
 } else if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
   $this->group('/renewal', function () {
-
-
     include BASE_PATH . 'controllers/renewal/router.php';
+  });
+
+  $this->get('/account-switch', function () {
+    include BASE_PATH . 'controllers/account-switch.php';
   });
 
   $this->group('/registration', function () {
@@ -577,6 +579,10 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
     include BASE_PATH . 'controllers/qualifications/AdminRouter.php';
   });
 
+  $this->group('/registration-and-renewal', function () {
+    include BASE_PATH . 'controllers/registration-and-renewal/router.php';
+  });
+
   $this->group('/resources', function () {
     include BASE_PATH . 'controllers/resources/router.php';
   });
@@ -590,7 +596,7 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
       include BASE_PATH . 'controllers/settings/router.php';
     });
 
-    if (bool(getenv('IS_DEV')) || app()->tenant->isCLS()) {
+    if (bool(getenv('IS_DEV'))) {
       $this->get('/about:php', function () {
         echo phpinfo();
       });

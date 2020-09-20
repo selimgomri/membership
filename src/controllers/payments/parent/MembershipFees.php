@@ -70,8 +70,10 @@ for ($i = 0; $i < $count; $i++) {
     $asaFees[$i] = $asa3;
   }
 
-  $totalFee += $asaFees[$i];
-  $totalFeeDiscounted += $asaFees[$i];
+  if (isset($asaFees[$i])) {
+    $totalFee += $asaFees[$i];
+    $totalFeeDiscounted += $asaFees[$i];
+  }
 }
 
 $clubFeeString = (string) (\Brick\Math\BigDecimal::of((string) $clubFee))->withPointMovedLeft(2)->toScale(2);
@@ -168,10 +170,12 @@ include BASE_PATH . 'views/header.php';
               $asaFeesString = "";
               if ($member[$i]['ClubPays']) {
                 $asaFeesString = "0.00 (Paid by club)";
-              } else {
+              } else if (isset($asaFees[$i])) {
                 if ((string) $asaFees[$i] != "") {
                   $asaFeesString = (string) (\Brick\Math\BigDecimal::of((string) $asaFees[$i]))->withPointMovedLeft(2)->toScale(2);
                 }
+              } else {
+                $asaFeesString = '0.00';
               }
             ?>
               <tr>

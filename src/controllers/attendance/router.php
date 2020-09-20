@@ -3,121 +3,125 @@ $access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 
 if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
   // Attendance Home
-  $this->get('/', function() {
-    
+  $this->get('/', function () {
+
     include 'indexView.php';
-	});
+  });
 
-  $this->group('/venues', function() {
-    $this->get('/', function() {
+  $this->group('/venues', function () {
+    $this->get('/', function () {
       include 'Venues.php';
-  	});
+    });
 
-    $this->get('/new', function() {
+    $this->get('/new', function () {
       include 'NewVenue.php';
-  	});
+    });
 
-    $this->post('/new', function() {
+    $this->post('/new', function () {
       include 'NewVenuePost.php';
-  	});
+    });
 
-    $this->get('/{id}:int', function($id) {
+    $this->get('/{id}:int', function ($id) {
       include 'EditVenue.php';
-  	});
+    });
 
-    $this->post('/{id}:int', function($id) {
+    $this->post('/{id}:int', function ($id) {
       include 'EditVenuePost.php';
-  	});
-	});
+    });
+  });
 
   // Registers
-  $this->group('/register', function() {
-    $this->get('/', function() {
+  $this->group('/register', function () {
+    $this->get('/', function () {
       include 'register/register.php';
     });
 
-    $this->post('/data-post', function() {
+    $this->post('/data-post', function () {
       include 'register/register-post.php';
     });
 
-    $this->post('/sheet', function() {
+    $this->post('/sheet', function () {
       include 'register/session-register-ajax.php';
     });
 
-    $this->post('/sessions', function() {
+    $this->post('/sessions', function () {
       include 'register/session-drop-down-ajax.php';
     });
-	});
+  });
 
-  $this->get('/ajax/register/sessions', function() {
-    
+  $this->get('/ajax/register/sessions', function () {
+
     include BASE_PATH . 'controllers/ajax/registerSessions.php';
-	});
+  });
 
   // Sessions
-  $this->group('/sessions', function() {
-    
+  $this->group('/sessions', function () {
 
-    $this->get('/', function() {
+
+    $this->get('/', function () {
       include "sessions.php";
-  	});
+    });
 
-    $this->get('/{id}:int', function($id) {
-      
+    $this->get('/{id}:int', function ($id) {
+
       include "sessionViews/editEndDate.php";
-  	});
+    });
 
-    $this->post('/ajax/handler', function() {
-      
+    $this->post('/ajax/handler', function () {
+
       include BASE_PATH . "controllers/ajax/sessions.php";
-  	});
+    });
 
-    $this->post('/ajax/endDateHandler', function() {
-      
+    $this->post('/ajax/endDateHandler', function () {
+
       include BASE_PATH . "controllers/ajax/sessionsEndDate.php";
-  	});
+    });
   });
 
   // History
-  $this->group('/history', function() {
-    
+  $this->group('/history', function () {
 
-    $this->get('/', function() {
-      
+
+    $this->get('/', function () {
+
       include "historyViews/history.php";
-  	});
+    });
 
-    $this->get('/squads', function() {
+    $this->get('/squads', function () {
       include "historyViews/squads.php";
-  	});
+    });
 
     // $this->get('/squads/{id}:int', function($id) {
     //   include "historyViews/squadHistory.php";
     // });
-    
-    $this->get('/squads/{id}:int', function($id) {
+
+    $this->get('/squads/{id}:int', function ($id) {
       include "historyViews/squad-history.php";
     });
-    
-    $this->post('/squads/{id}:int/jump-to-week', function($id) {
+
+    $this->post('/squads/{id}:int/jump-to-week', function ($id) {
       include "historyViews/jump-to-week.php";
-  	});
+    });
 
-    $this->get('/swimmers', function() {
-      
+    $this->get(['/members', '/swimmers'], function () {
       include "historyViews/swimmers.php";
-  	});
+    });
 
-    $this->post('/ajax/swimmers', function() {
-      
+    $this->get('/members/{id}:int/search', function ($id) {
+      include "historyViews/member-search.php";
+    });
+
+    $this->post('/ajax/swimmers', function () {
       include BASE_PATH . "controllers/ajax/swimmerHistory.php";
-  	});
+    });
 
-    $this->get('/swimmers/{id}:int', function($id) {
-      
+    $this->get(['/members/{id}:int', '/swimmers/{id}:int'], function ($id) {
+
       include "historyViews/swimmerHistory.php";
-  	});
+    });
   });
 }
 
-?>
+$this->group('/booking', function () {
+  include 'booking/router.php';
+});

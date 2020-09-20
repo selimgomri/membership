@@ -19,54 +19,73 @@ include BASE_PATH . "views/header.php";
 
 <div class="front-page mb-n3">
 	<div class="container">
-		<h1>Squad Details</h1>
-		<p class="lead">Information about our squads</p>
-    <p>
-      For full details about squads, please visit out website.
-    </p>
+
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb bg-light">
+				<li class="breadcrumb-item active" aria-current="page">Squads</li>
+			</ol>
+		</nav>
+
+		<h1>Squads</h1>
+		<p class="lead">Information about our squads and training groups</p>
 
 		<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['DeleteSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['DeleteSuccess']) { ?>
-		<div class="alert alert-success">We've deleted that squad. That action cannot be undone.</div>
-		<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['DeleteSuccess']); } ?>
+			<div class="alert alert-success">We've deleted that squad. That action cannot be undone.</div>
+		<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['DeleteSuccess']);
+		} ?>
 
-    <div class="mb-4">
-      <div class="news-grid">
+		<?php if ($row = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
 
-      <?php
-      while ($row = $squads->fetch(PDO::FETCH_ASSOC)) {
-				$getCoaches->execute([$row['SquadID']]);
-				$coaches = $getCoaches->fetchAll(PDO::FETCH_ASSOC);
-      ?>
-        <a href="<?=htmlspecialchars(autoUrl("squads/" . $row['SquadID']))?>">
-  				<span class="mb-3">
-            <span class="title mb-0">
-  						<?=htmlspecialchars($row['SquadName'])?>
-  					</span>
-  					<span>
-  						<?php for ($i=0; $i < min(sizeof($coaches), 3); $i++) { ?>
-								<?=htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn'])?><?php if ($i < min(sizeof($coaches), 3)-1) { ?>, <?php } ?>
-							<?php } ?>
-							<?php if (sizeof($coaches) > 3) { ?> <em>and more</em><?php } ?>
-							<?php if (sizeof($coaches) == 0) { ?>
-								No assigned coaches
-							<?php } ?>
-  					</span>
-  				</span>
-          <span class="category">
-  					&pound;<?=number_format($row['SquadFee'], 2)?> per month
-  				</span>
-        </a>
-      <?php
-      }
-      ?>
+			<div class="mb-4">
+				<div class="news-grid">
 
-      </div>
-    </div>
+					<?php
+					do {
+						$getCoaches->execute([$row['SquadID']]);
+						$coaches = $getCoaches->fetchAll(PDO::FETCH_ASSOC);
+					?>
+						<a href="<?= htmlspecialchars(autoUrl("squads/" . $row['SquadID'])) ?>">
+							<span class="mb-3">
+								<span class="title mb-0">
+									<?= htmlspecialchars($row['SquadName']) ?>
+								</span>
+								<span>
+									<?php for ($i = 0; $i < min(sizeof($coaches), 3); $i++) { ?>
+										<?= htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn']) ?><?php if ($i < min(sizeof($coaches), 3) - 1) { ?>, <?php } ?>
+								<?php } ?>
+								<?php if (sizeof($coaches) > 3) { ?> <em>and more</em><?php } ?>
+								<?php if (sizeof($coaches) == 0) { ?>
+									No assigned coaches
+								<?php } ?>
+								</span>
+							</span>
+							<span class="category">
+								&pound;<?= number_format($row['SquadFee'], 2) ?> per month
+							</span>
+						</a>
+					<?php
+					} while ($row = $squads->fetch(PDO::FETCH_ASSOC));
+					?>
+
+				</div>
+			</div>
+
+		<?php } else { ?>
+			<div class="row">
+				<div class="col-lg-8">
+					<div class="alert alert-info">
+						<p class="mb-0">
+							<strong>No squads to display</strong>
+						</p>
+					</div>
+				</div>
+			</div>
+		<?php } ?>
 
 		<?php if ($access == "Admin") { ?>
-		<p>
-			<a href="<?=autoUrl("squads/new")?>" class="btn btn-success">Add a Squad <span class="fa fa-chevron-right"></span></a>
-		</p>
+			<p>
+				<a href="<?= autoUrl("squads/new") ?>" class="btn btn-success">Add a Squad <span class="fa fa-chevron-right"></span></a>
+			</p>
 		<?php } ?>
 	</div>
 </div>
