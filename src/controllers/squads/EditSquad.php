@@ -21,23 +21,37 @@ $pagetitle = htmlspecialchars($row['SquadName']);
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php"; ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= autoUrl("squads") ?>">Squads</a></li>
+        <li class="breadcrumb-item"><a href="<?= autoUrl("squads/" . $id) ?>"><?= htmlspecialchars($row['SquadName']) ?></a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+      </ol>
+    </nav>
+
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h1>
+          Edit <?= htmlspecialchars($row['SquadName']) ?>
+        </h1>
+        <p class="lead mb-0">
+          Change details for this squad
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?= autoUrl("squads") ?>">Squads</a></li>
-      <li class="breadcrumb-item"><a href="<?= autoUrl("squads/" . $id) ?>"><?= htmlspecialchars($row['SquadName']) ?></a>
-      </li>
-      <li class="breadcrumb-item active" aria-current="page">Edit</li>
-    </ol>
-  </nav>
-  <h1><?= htmlspecialchars($row['SquadName']) ?></h1>
 
   <div class="row">
     <div class="col-lg-8">
       <div class="">
         <form method="post" class="needs-validation" novalidate>
-          <h2>Details</h2>
-          <p class="lead">View or edit the squad details</p>
 
           <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateDatabaseError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UpdateDatabaseError']) { ?>
             <div class="alert alert-danger">A database error occured. We did not save the changes.</div>
@@ -53,8 +67,8 @@ include BASE_PATH . "views/squadMenu.php"; ?>
             <label for="squadName">Squad Name</label>
             <input type="text" class="form-control" id="squadName" name="squadName" placeholder="Enter Squad Name" value="<?= htmlspecialchars($row['SquadName']) ?>" required>
             <div class="invalid-feedback">
-          Please provide a squad name.
-        </div>
+              Please provide a squad name.
+            </div>
           </div>
           <div class="form-group">
             <label for="squadFee" class="form-label">Squad Fee</label>
@@ -64,8 +78,8 @@ include BASE_PATH . "views/squadMenu.php"; ?>
               </div>
               <input type="number" min="0" step="0.01" class="form-control" id="squadFee" name="squadFee" aria-describedby="squadFeeHelp" placeholder="eg 50.00" value="<?= htmlspecialchars($row['SquadFee']) ?>" required>
               <div class="invalid-feedback">
-            Please provide a monthly fee.
-          </div>
+                Please provide a monthly fee.
+              </div>
             </div>
             <small id="squadFeeHelp" class="form-text text-muted">A squad can have a fee of &pound;0.00 if it represents
               a group for non paying members</small>
@@ -95,10 +109,8 @@ include BASE_PATH . "views/squadMenu.php"; ?>
           </div>
           <div class="alert alert-danger">
             <div class="form-group mb-0">
-              <label for="squadDeleteDanger"><strong>Danger Zone</strong> <br>Delete this Squad with this Key "<span class="mono"><?= htmlspecialchars($row['SquadKey']) ?></span>"</label>
-              <input type="text" class="form-control mono" id="squadDeleteDanger" name="squadDeleteDanger" aria-describedby="squadDeleteDangerHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
-              <small id="squadDeleteDangerHelp" class="form-text">Enter the key in quotes above and press submit. This
-                will delete this squad.</small>
+              <label for="squadDeleteDanger"><strong>Danger Zone</strong> <br>Delete this squad by entering this key "<span class="mono"><?= htmlspecialchars($row['SquadKey']) ?></span>" in the box below</label>
+              <input type="text" class="form-control mono" id="squadDeleteDanger" name="squadDeleteDanger" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
             </div>
           </div>
           <p>
