@@ -511,7 +511,7 @@ if (!function_exists('chesterStandardMenu')) {
                 <a class="dropdown-item" href="<?php echo autoUrl("my-account/loginhistory") ?>">Your Login
                   History</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" target="_blank" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/">Help</a>
+                <a class="dropdown-item" target="_blank" href="<?= htmlspecialchars(autoUrl('help-and-support', false)) ?>">Help</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="<?= autoUrl("logout") ?>">Logout</a>
               </div>

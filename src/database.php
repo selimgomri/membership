@@ -1433,3 +1433,4 @@ include BASE_PATH . 'includes/GetContrastColour.php';
 include BASE_PATH . 'includes/CoachTypes.php';
 require BASE_PATH . 'helperclasses/Components/Footer.php';
 require BASE_PATH . 'helperclasses/Components/RootFooter.php';
+require BASE_PATH . 'helperclasses/Components/RenewalProgressListGroup.php';

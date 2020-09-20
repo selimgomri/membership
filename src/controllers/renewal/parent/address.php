@@ -30,7 +30,7 @@ $userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
     	} ?>
 
       <?php if (isset($addr->streetAndNumber)) { ?>
-      <h2>Your address is</h2>
+      <h2>Your current address is</h2>
       <address>
         <?=htmlspecialchars($addr->streetAndNumber)?><br>
         <?php if (isset($addr->flatOrBuilding)) { ?>

@@ -7,13 +7,18 @@ if (!SCDS\CSRF::verify()) {
 $db = app()->db;
 $tenant = app()->tenant;
 
+$squads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
+$squads->execute([
+	$tenant->getId(),
+]);
+
 $added = $action = false;
 
 $forename = $middlenames = $surname = $dateOfBirth = $asaNumber = $sex = $cat = $cp = $sql = $transfer = "";
 $getASA = false;
 
 if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POST['datebirth'])) && (!empty($_POST['sex']))) {
-  $forename = trim(ucwords($_POST['forename']));
+	$forename = trim(ucwords($_POST['forename']));
 	$surname = trim(ucwords($_POST['surname']));
 	$dateOfBirth = trim($_POST['datebirth']);
 	$sex = $_POST['sex'];
@@ -32,7 +37,7 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 	if ($cat != 0 && $cat != 1 && $cat != 2 && $cat != 3) {
 		halt(500);
 	}
-	
+
 	if (isset($_POST['clubpays']) && bool($_POST['clubpays'])) {
 		$cp = 1;
 	} else {
@@ -47,57 +52,76 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 
 	$accessKey = generateRandomString(6);
 
-  try {
-    $insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, AccessKey, ASACategory, ClubPays, OtherNotes, RRTransfer, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $insert->execute([
-      $forename,
-      $middlenames,
-      $surname,
-      $dateOfBirth,
-      $asaNumber,
-      $sex,
-      $accessKey,
-      $cat,
-      $cp,
+	try {
+		$insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, AccessKey, ASACategory, ClubPays, OtherNotes, RRTransfer, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		$insert->execute([
+			$forename,
+			$middlenames,
+			$surname,
+			$dateOfBirth,
+			$asaNumber,
+			$sex,
+			$accessKey,
+			$cat,
+			$cp,
 			"",
 			$transfer,
 			$tenant->getId(),
-    ]);
+		]);
 
 		$last_id = $db->lastInsertId();
-		
+
 		// If squad, add to squad
 
-  	if ($getASA) {
-  		$swimEnglandTemp = app()->tenant->getKey('ASA_CLUB_CODE') . $last_id;
-      $addTempSwimEnglandCode = $db->prepare("UPDATE `members` SET `ASANumber` = ? WHERE `MemberID` = ?");
-      $addTempSwimEnglandCode->execute([$swimEnglandTemp, $last_id]);
-  	}
+		if ($getASA) {
+			$swimEnglandTemp = app()->tenant->getKey('ASA_CLUB_CODE') . $last_id;
+			$addTempSwimEnglandCode = $db->prepare("UPDATE `members` SET `ASANumber` = ? WHERE `MemberID` = ?");
+			$addTempSwimEnglandCode->execute([$swimEnglandTemp, $last_id]);
+		}
 
-    $action = true;
 
-    try {
-  		$getAdmins = $db->prepare("SELECT `UserID` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE Tenant = ? AND `Permission` = 'Admin' AND `UserID` != ?");
-  		$getAdmins->execute([
+
+		$addToSquad = $db->prepare("INSERT INTO squadMembers (Member, Squad, Paying) VALUES (?, ?, ?)");
+
+		while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) {
+			try {
+				if (isset($_POST['squad-' . $squad['SquadID']]) && bool($_POST['squad-' . $squad['SquadID']])) {
+					// Add member to the squad
+					$addToSquad->execute([
+						$last_id,
+						$squad['SquadID'],
+						(int) true,
+					]);
+				}
+			} catch (PDOException $e) {
+				// Catch any already exists errors, despite fact this is not expected
+			}
+		}
+
+		$action = true;
+
+		try {
+			$getAdmins = $db->prepare("SELECT `UserID` FROM `users` INNER JOIN `permissions` ON users.UserID = `permissions`.`User` WHERE Tenant = ? AND `Permission` = 'Admin' AND `UserID` != ?");
+			$getAdmins->execute([
 				$tenant->getId(),
-				$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
-  		$notify = $db->prepare("INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'NewMember')");
-    	$subject = "New Club Member";
-    	$message = '<p>' . htmlentities(getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) . ' has added a new member, ' . htmlentities($forename . ' ' . $surname) . ' to our online membership system.</p><p>We have sent you this email to ensure you\'re aware of this.</p>';
-    	while ($row = $getAdmins->fetch(PDO::FETCH_ASSOC)) {
-    		try {
-    			$notify->execute([$row['UserID'], $subject, $message]);
-    		} catch (PDOException $e) {
-    			//halt(500);
-    		}
-    	}
-    } catch (PDOException $e) {
-  	}
-
-  } catch (Exception $e) {
-	  reportError($e);
-    $action = false;
-  }
+				$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+			]);
+			$notify = $db->prepare("INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 0, 'NewMember')");
+			$subject = "New Club Member";
+			$message = '<p>' . htmlentities(getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) . ' has added a new member, <a href="' . htmlspecialchars(autoUrl('members/' . $last_id)) . '" target="_blank">' . htmlentities($forename . ' ' . $surname) . '</a> to our online membership system.</p><p>We have sent you this email (because you\'re an admin) to ensure you\'re aware of this.</p>';
+			while ($row = $getAdmins->fetch(PDO::FETCH_ASSOC)) {
+				try {
+					$notify->execute([$row['UserID'], $subject, $message]);
+				} catch (PDOException $e) {
+					//halt(500);
+				}
+			}
+		} catch (PDOException $e) {
+		}
+	} catch (Exception $e) {
+		reportError($e);
+		$action = false;
+	}
 }
 
 if ($action) {

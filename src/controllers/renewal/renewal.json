@@ -1,0 +1,140 @@
+{
+  "id": "UUID",
+  "started_on": "ISO8610 DATETIME",
+  "due_by": "ISO8610 DATETIME",
+  "allow_late_completion": false,
+  "members": [
+    {
+      "id": "int",
+      "name": "string"
+    }
+  ],
+  "fees": [
+    {
+      "id": "UUID",
+      "description": "string",
+      "amount": "int"
+    }
+  ],
+  "progress": [
+    {
+      "object": "account_review",
+      "completed": false
+    },
+    {
+      "object": "swimmer_review",
+      "completed": false
+    },
+    {
+      "object": "fee_review",
+      "completed": false
+    },
+    {
+      "object": "address_review",
+      "completed": false,
+      "address": {}
+    },
+    {
+      "object": "emergency_contacts",
+      "completed": false,
+      "contacts": [
+        {
+          "id": "int"
+        }
+      ]
+    },
+    {
+      "object": "medical_forms",
+      "completed": false,
+      "members": [
+        {
+          "id": "int"
+        }
+      ]
+    },
+    {
+      "object": "code_of_conduct",
+      "completed": false,
+      "user-forms": [
+        {
+          "type": "parent",
+          "signature": {
+            "object": "signature",
+            "signed": false,
+            "date": "ISO8610 DATE"
+          }
+        }
+      ],
+      "members": [
+        {
+          "id": "int",
+          "squads": [
+            {
+              "id": "squad",
+              "signature": {
+                "object": "signature",
+                "signed": false,
+                "date": "ISO8610 DATE"
+              },
+              "parent_signature": {
+                "object": "signature",
+                "signed": false,
+                "date": "ISO8610 DATE"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "object": "data_protection_and_privacy",
+      "completed": false,
+      "values": []
+    },
+    {
+      "object": "terms_and_conditions",
+      "completed": false,
+      "members": [
+        {
+          "id": "int",
+          "signature": {
+            "object": "signature",
+            "signed": false,
+            "date": "ISO8610 DATE"
+          },
+          "parent_signature": {
+            "object": "signature",
+            "signed": false,
+            "date": "ISO8610 DATE"
+          }
+        }
+      ]
+    },
+    {
+      "object": "photography_permissions",
+      "completed": false,
+      "members": [
+        {
+          "id": "int"
+        }
+      ]
+    },
+    {
+      "object": "admin_form",
+      "completed": false,
+      "values": []
+    },
+    {
+      "object": "direct_debit",
+      "completed": false,
+      "values": []
+    },
+    {
+      "object": "renewal_fee",
+      "completed": false,
+      "values": []
+    }
+  ],
+  "latest_save": "jsonpath",
+  "complete": false
+}
