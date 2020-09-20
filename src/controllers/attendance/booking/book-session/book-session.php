@@ -225,14 +225,27 @@ include BASE_PATH . 'views/header.php';
         </p>
 
         <?php if ($bookedMember = $getBookedMembers->fetch(PDO::FETCH_ASSOC)) { ?>
-          <ul class="list-group">
+          <ul class="list-group" id="all-member-booking-list">
             <?php do {
               $booked = new DateTime($bookedMember['BookedAt'], new DateTimeZone('UTC'));
               $booked->setTimezone(new DateTimeZone('Europe/London'));
             ?>
-              <li class="list-group-items">
-                <a class="font-weight-bold d-block" href="<?= htmlspecialchars(autoUrl('members/' . $bookedMember['id'])) ?>"><?= htmlspecialchars($bookedMember['fn'] . ' ' . $bookedMember['sn']) ?></a>
-                <em>Booked at <?= htmlspecialchars($booked->format('H:i, j F Y')) ?></em>
+              <li class="list-group-item" id="<?= htmlspecialchars('member-' . $bookedMember['id'] . '-booking') ?>">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <div>
+                      <a class="font-weight-bold" href="<?= htmlspecialchars(autoUrl('members/' . $bookedMember['id'])) ?>">
+                        <?= htmlspecialchars($bookedMember['fn'] . ' ' . $bookedMember['sn']) ?>
+                      </a>
+                    </div>
+                    <div>
+                      <em>Booked at <?= htmlspecialchars($booked->format('H:i, j F Y')) ?></em>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <button class="btn btn-danger" type="button" data-member-name="<?= htmlspecialchars($bookedMember['fn'] . ' ' . $bookedMember['sn']) ?>" data-member-id="<?= htmlspecialchars($bookedMember['id']) ?>" data-operation="cancel-place" data-session-id="<?= htmlspecialchars($session['SessionID']) ?>" data-session-name="<?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>" data-session-location="<?= htmlspecialchars($session['Location']) ?>" data-session-date="<?= htmlspecialchars($date->format('Y-m-d')) ?>">Remove</button>
+                  </div>
+                </div>
               </li>
             <?php } while ($bookedMember = $getBookedMembers->fetch(PDO::FETCH_ASSOC)); ?>
           </ul>
@@ -290,7 +303,47 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div id="ajaxData" data-booking-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/book')) ?>"></div>
+<div class="modal" id="cancel-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="cancel-modal-label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="cancel-modal-title">Cancel booking?</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="cancel-booking-form">
+          <p>
+            Please confirm you're cancelling <strong><span id="cancel-modal-member-name"></span></strong>'s booking for <strong><span id="cancel-modal-session-name"></span></strong>
+          </p>
+
+          <input type="hidden" name="member-id" id="cancel-member-id" value="">
+          <input type="hidden" name="session-id" id="cancel-session-id" value="">
+          <input type="hidden" name="session-date" id="cancel-session-date" value="">
+
+          <dl class="row">
+            <dt class="col-md-4">Charge</dt>
+            <dd class="col-md-8">There is no additional charge for this session so no refund or cancellation amount to apply.</dd>
+
+            <dt class="col-md-4">Location</dt>
+            <dd class="col-md-8" id="cancel-modal-session-location">Unknown</dd>
+          </dl>
+
+          <p class="mb-0">
+            We will send an automatic email informing the member their booking has been cancelled.
+          </p>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Don't cancel</button>
+        <button type="submit" class="btn btn-danger" form="cancel-booking-form" id="accept">Cancel booking</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="ajaxData" data-booking-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/book')) ?>" data-cancellation-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/cancel')) ?>"></div>
 
 <script>
   const options = document.getElementById('ajaxData').dataset;
@@ -325,7 +378,7 @@ include BASE_PATH . 'views/header.php';
 
                 // Show success message, dismiss modal, reload booking box
 
-                
+
               } else {
                 alert(json.error);
               }
@@ -335,6 +388,56 @@ include BASE_PATH . 'views/header.php';
             }
           }
           req.open('POST', options.bookingAjaxUrl, true);
+          req.setRequestHeader('Accept', 'application/json');
+          req.send(formData);
+        });
+      }
+    });
+  }
+
+  let ambl = document.getElementById('all-member-booking-list');
+  if (ambl) {
+    ambl.addEventListener('click', event => {
+      if (event.target.tagName === 'BUTTON' && event.target.dataset.operation === 'cancel-place') {
+        document.getElementById('cancel-modal-member-name').textContent = event.target.dataset.memberName;
+        document.getElementById('cancel-modal-session-name').textContent = event.target.dataset.sessionName;
+        document.getElementById('cancel-modal-session-location').textContent = event.target.dataset.sessionLocation;
+
+        document.getElementById('cancel-member-id').value = event.target.dataset.memberId;
+        document.getElementById('cancel-session-id').value = event.target.dataset.sessionId;
+        document.getElementById('cancel-session-date').value = event.target.dataset.sessionDate;
+
+        $('#cancel-modal').modal('show');
+
+        let form = document.getElementById('cancel-booking-form');
+        form.addEventListener('submit', event => {
+          event.preventDefault();
+          let formData = new FormData(form);
+
+          // console.log(formData);
+          var req = new XMLHttpRequest();
+          req.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              let json = JSON.parse(this.responseText);
+              if (json.status == 200) {
+                // Delete member row
+                let row = document.getElementById('member-' + document.getElementById('cancel-member-id').value + '-booking');
+                if (row) {
+                  row.remove();
+                }
+
+                // Hide modal
+                $('#cancel-modal').modal('hide');
+
+              } else {
+                alert(json.error);
+              }
+            } else if (this.readyState == 4) {
+              // Not ok
+              alert('An error occurred and we could not parse the submission.');
+            }
+          }
+          req.open('POST', options.cancellationAjaxUrl, true);
           req.setRequestHeader('Accept', 'application/json');
           req.send(formData);
         });

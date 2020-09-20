@@ -28,8 +28,6 @@ try {
     throw new Exception('Invalid date');
   }
 
-  $now = new DateTime('now', new DateTimeZone('UTC'));
-
   // Get session
   $getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
   $getSession->execute([
@@ -70,47 +68,7 @@ try {
   // If unauthorised not found
   if (!$user->hasPermission('Admin') && !$user->hasPermission('Coach') && $member['UserID'] != $user->getId()) throw new Exception('Member not found');
 
-  // Verify member can book on but allow admins and coaches to add anyone
-  if (!$user->hasPermission('Admin') && !$user->hasPermission('Coach') && !bool($session['AllSquads'])) {
-    // Check in a squad allowed
-
-    $getMemberCount = $db->prepare("SELECT COUNT(*) FROM squadMembers WHERE Member = ? AND Squad IN (SELECT `Squad` FROM `sessionsSquads` WHERE `Session` = ?)");
-    $getMemberCount->execute([
-      $_POST['member-id'],
-      $session['SessionID'],
-    ]);
-
-    if ($getMemberCount->fetchColumn() == 0) {
-      // Not in a squad for this session
-      throw new Exception('Member is not in a squad for this session');
-    }
-  }
-
-  $bookingPossible = true;
-
-  // Number booked in
-  $getBookedCount = $db->prepare("SELECT COUNT(*) FROM `sessionsBookings` WHERE `Session` = ? AND `Date` = ?");
-  $getBookedCount->execute([
-    $session['SessionID'],
-    $date->format('Y-m-d'),
-  ]);
-  $bookedCount = $getBookedCount->fetchColumn();
-
-  // Max number
-  $maxNumber = PHP_INT_MAX;
-  if ($session['MaxPlaces']) {
-    $maxNumber = $session['MaxPlaces'];
-  }
-
-  $placesAvailable = $maxNumber - $bookedCount;
-
-  if ($placesAvailable == 0) {
-    $bookingPossible = false;
-    throw new Exception('No spaces available to book');
-  }
-
-  // Check not already booked
-
+  // Check a booking exists
   $getBookingCount = $db->prepare("SELECT COUNT(*) FROM `sessionsBookings` WHERE `Session` = ? AND `Date` = ? AND `Member` = ?");
   $getBookingCount->execute([
     $session['SessionID'],
@@ -118,34 +76,20 @@ try {
     $member['MemberID'],
   ]);
 
-  if ($getBookingCount->fetchColumn() > 0) {
-    throw new Exception($member['MForename'] . ' is already booked onto this session');
+  if ($getBookingCount->fetchColumn() == 0) {
+    throw new Exception('Booking does not exist');
   }
 
-  // Book a space for the member
-
-  $addToBookings = $db->prepare("INSERT INTO `sessionsBookings` (`Session`, `Date`, `Member`, `BookedAt`) VALUES (?, ?, ?, ?)");
-  $addToBookings->execute([
+  // Cancel booking
+  $cancel = $db->prepare("DELETE FROM sessionsBookings WHERE `Session` = ? AND `Date` = ? AND `Member` = ?");
+  $cancel->execute([
     $session['SessionID'],
     $date->format('Y-m-d'),
     $member['MemberID'],
-    $now->format('Y-m-d H:i:s'),
   ]);
 
-  // $sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime']);
-  // $startTime = new DateTime($session['StartTime'], new DateTimeZone('UTC'));
-  // $endTime = new DateTime($session['EndTime'], new DateTimeZone('UTC'));
-  // $duration = $startTime->diff($endTime);
-  // $hours = (int) $duration->format('%h');
-  // $mins = (int) $duration->format('%i');
+  // Send an email to the user
 
-  // $getCoaches = $db->prepare("SELECT Forename fn, Surname sn, coaches.Type code FROM coaches INNER JOIN users ON coaches.User = users.UserID WHERE coaches.Squad = ? ORDER BY coaches.Type ASC, Forename ASC, Surname ASC");
-
-  // $getSessionSquads = $db->prepare("SELECT SquadName, ForAllMembers, SquadID FROM `sessionsSquads` INNER JOIN `squads` ON sessionsSquads.Squad = squads.SquadID WHERE sessionsSquads.Session = ? ORDER BY SquadFee DESC, SquadName ASC;");
-  // $getSessionSquads->execute([
-  //   $session['SessionID'],
-  // ]);
-  // $squadNames = $getSessionSquads->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
 
   $message = $e->getMessage();
