@@ -9,10 +9,13 @@ $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $pagetitle = "Payments and Direct Debits";
 
 // Get mandates
+$stripeCusomer = app()->user->getStripeCustomer();
 $getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC LIMIT 1");
+if ($stripeCusomer) {
 $getMandates->execute([
-  app()->user->getStripeCustomer()->id,
+  $stripeCusomer->id,
 ]);
+}
 $mandate = $getMandates->fetch(PDO::FETCH_ASSOC);
 
 $balance = getAccountBalance($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);

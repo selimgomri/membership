@@ -116,80 +116,106 @@ include "galaMenu.php";
 
 <div class="front-page" style="margin-bottom: -1rem;">
   <div class="container">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb bg-light">
+        <li class="breadcrumb-item active" aria-current="page">
+          Galas
+        </li>
+      </ol>
+    </nav>
+
+
     <h1>Galas</h1>
     <p class="lead">Manage your gala entries</p>
 
     <?php if ($gala) { ?>
-    <h2>
-      Upcoming galas
-    </h2>
+      <h2>
+        Upcoming galas
+      </h2>
 
-    <div class="news-grid mb-3">
-      <?php do {
-        
-        $closingDate = new DateTime($gala['ClosingDate']);
-        $endDate = new DateTime($gala['GalaDate']);
+      <div class="news-grid mb-3">
+        <?php do {
 
-        if ($now <= $closingDate) {
-          $openGalas = true;
-        }
+          $closingDate = new DateTime($gala['ClosingDate']);
+          $endDate = new DateTime($gala['GalaDate']);
+
+          if ($now <= $closingDate) {
+            $openGalas = true;
+          }
 
         ?>
-        <a href="<?=autoUrl("galas/" . $gala['GalaID'])?>">
-          <div>
-            <span class="title mb-0 justify-content-between align-items-start">
-              <span><?=htmlspecialchars($gala['GalaName'])?></span>
-              <?php if ($now <= $closingDate && !$gala['CoachEnters']) { $entriesOpen = true;?><span class="ml-2 badge badge-success">ENTRIES OPEN</span><?php } ?>
-              <?php if ($now <= $closingDate && $gala['CoachEnters']) { ?><span class="ml-2 badge badge-warning">COACH ENTERS</span><?php } ?>
-            </span>
-            <span class="d-flex mb-3"><?=htmlspecialchars($gala['GalaVenue'])?></span>
+          <a href="<?= autoUrl("galas/" . $gala['GalaID']) ?>">
+            <div>
+              <span class="title mb-0 justify-content-between align-items-start">
+                <span><?= htmlspecialchars($gala['GalaName']) ?></span>
+                <?php if ($now <= $closingDate && !$gala['CoachEnters']) {
+                  $entriesOpen = true; ?><span class="ml-2 badge badge-success">ENTRIES OPEN</span><?php } ?>
+                <?php if ($now <= $closingDate && $gala['CoachEnters']) { ?><span class="ml-2 badge badge-warning">COACH ENTERS</span><?php } ?>
+              </span>
+              <span class="d-flex mb-3"><?= htmlspecialchars($gala['GalaVenue']) ?></span>
+            </div>
+            <?php if ($now <= $closingDate) { ?>
+              <span class="category">Entries close on <?= $closingDate->format('j F Y') ?></span>
+            <?php } else { ?>
+              <span class="category">Ends on <?= $endDate->format('j F Y') ?></span>
+            <?php } ?>
+          </a>
+        <?php } while ($gala = $galas->fetch(PDO::FETCH_ASSOC)); ?>
+      </div>
+      <?php if ($openGalas) { ?>
+        <p class="mb-4">
+          <a href="<?= autoUrl("galas/entergala") ?>" class="btn btn-success">
+            Enter a gala
+          </a>
+        </p>
+      <?php } ?>
+    <?php } else { ?>
+
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="alert alert-info">
+            <p class="mb-0">
+              <strong>There are no upcoming galas at this time</strong>
+            </p>
+            <p class="mb-0">
+              Please check back later.
+            </p>
           </div>
-          <?php if ($now <= $closingDate) { ?>
-          <span class="category">Entries close on <?=$closingDate->format('j F Y')?></span>
-          <?php } else { ?>
-          <span class="category">Ends on <?=$endDate->format('j F Y')?></span>
-          <?php } ?>
-        </a>
-      <?php } while ($gala = $galas->fetch(PDO::FETCH_ASSOC)); ?>
-    </div>
-    <?php if ($openGalas) { ?>
-    <p class="mb-4">
-      <a href="<?=autoUrl("galas/entergala")?>" class="btn btn-success">
-        Enter a gala
-      </a>
-    </p>
-    <?php } ?>
+        </div>
+      </div>
+
     <?php } ?>
 
     <?php if ($entry) { ?>
-    <h2>
-      Your gala entries
-    </h2>
+      <h2>
+        Your gala entries
+      </h2>
 
-    <div class="news-grid mb-4">
-      <?php do {
-        
-        $closingDate = new DateTime($entry['ClosingDate']);
+      <div class="news-grid mb-4">
+        <?php do {
+
+          $closingDate = new DateTime($entry['ClosingDate']);
 
         ?>
-        <a href="<?=autoUrl("galas/entries/" . $entry['EntryID'])?>">
-          <div>
-            <span class="title mb-0 justify-content-between align-items-start">
-              <span><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?></span>
-              <span class="text-right">
-                <?php if ($now <= $closingDate && !$entry['Charged'] && !$entry['Processed'] && !$entry['Locked']) {?><span class="ml-2 badge badge-success">EDITABLE</span><?php } ?>
-                <?php if ($entry['Charged']) {?><span class="ml-2 badge badge-warning"><i class="fa fa-money" aria-hidden="true"></i> PAID</span><?php } ?>
-                <?php if ($entry['Vetoable']) {?><span class="ml-2 badge badge-info">VETOABLE</span><?php } ?>
-                <?php if ($entry['RequiresApproval'] && $entry['Approved']) { ?><abbr title="Approved by squad rep"><span class="ml-2 badge badge-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span></abbr><?php } else if ($entry['Approved']) { ?><abbr title="Entry automatically approved"><span class="ml-2 badge badge-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span></abbr><?php } ?>
-                <?php if ($entry['Refunded'] && $entry['FeeToPay'] > 0) {?><span class="ml-2 badge badge-warning">PART REFUNDED</span><?php } else if ($entry['Refunded'] && $entry['FeeToPay'] == 0) {?><span class="ml-2 badge badge-warning">FULLY REFUNDED</span><?php } ?>
+          <a href="<?= autoUrl("galas/entries/" . $entry['EntryID']) ?>">
+            <div>
+              <span class="title mb-0 justify-content-between align-items-start">
+                <span><?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?></span>
+                <span class="text-right">
+                  <?php if ($now <= $closingDate && !$entry['Charged'] && !$entry['Processed'] && !$entry['Locked']) { ?><span class="ml-2 badge badge-success">EDITABLE</span><?php } ?>
+                  <?php if ($entry['Charged']) { ?><span class="ml-2 badge badge-warning"><i class="fa fa-money" aria-hidden="true"></i> PAID</span><?php } ?>
+                  <?php if ($entry['Vetoable']) { ?><span class="ml-2 badge badge-info">VETOABLE</span><?php } ?>
+                  <?php if ($entry['RequiresApproval'] && $entry['Approved']) { ?><abbr title="Approved by squad rep"><span class="ml-2 badge badge-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span></abbr><?php } else if ($entry['Approved']) { ?><abbr title="Entry automatically approved"><span class="ml-2 badge badge-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span></abbr><?php } ?>
+                  <?php if ($entry['Refunded'] && $entry['FeeToPay'] > 0) { ?><span class="ml-2 badge badge-warning">PART REFUNDED</span><?php } else if ($entry['Refunded'] && $entry['FeeToPay'] == 0) { ?><span class="ml-2 badge badge-warning">FULLY REFUNDED</span><?php } ?>
+                </span>
               </span>
-            </span>
-            <span class="d-flex mb-3"><?=htmlspecialchars($entry['GalaName'])?></span>
-          </div>
-          <span class="category"><?=htmlspecialchars($entry['GalaVenue'])?></span>
-        </a>
-      <?php } while ($entry = $entries->fetch(PDO::FETCH_ASSOC)); ?>
-    </div>
+              <span class="d-flex mb-3"><?= htmlspecialchars($entry['GalaName']) ?></span>
+            </div>
+            <span class="category"><?= htmlspecialchars($entry['GalaVenue']) ?></span>
+          </a>
+        <?php } while ($entry = $entries->fetch(PDO::FETCH_ASSOC)); ?>
+      </div>
     <?php } ?>
 
     <?php
@@ -198,33 +224,35 @@ include "galaMenu.php";
 
     if ($gala != null) { ?>
 
-    <div class="mb-4">
-      <h2>
-        Manual times
-      </h2>
+      <div class="mb-4">
+        <h2>
+          Manual times
+        </h2>
 
-      <p class="lead">
-        Times must be provided manually for the following galas.
-      </p>
+        <p class="lead">
+          Times must be provided manually for the following galas.
+        </p>
 
-      <div class="news-grid mb-3">
-      <?php do {
-        
-        $closingDate = new DateTime($gala['ClosingDate']);
+        <div class="news-grid mb-3">
+          <?php do {
 
-        ?>
-        <a href="<?=autoUrl("galas/entries/" . $gala['EntryID'] . '/manual-time')?>">
-          <div>
-            <span class="title mb-0 justify-content-between align-items-start">
-              <span><?=htmlspecialchars($gala['MForename'] . ' ' . $gala['MSurname'])?></span>
-            </span>
-            <span class="d-flex mb-3"><?=htmlspecialchars($gala['GalaName'])?></span>
-          </div>
-          <span class="category"><div class="btn btn-success">Add or edit times</div></span>
-        </a>
-      <?php } while ($gala = $manualTimeGalas->fetch(PDO::FETCH_ASSOC)); ?>
-    </div>
-    </div>
+            $closingDate = new DateTime($gala['ClosingDate']);
+
+          ?>
+            <a href="<?= autoUrl("galas/entries/" . $gala['EntryID'] . '/manual-time') ?>">
+              <div>
+                <span class="title mb-0 justify-content-between align-items-start">
+                  <span><?= htmlspecialchars($gala['MForename'] . ' ' . $gala['MSurname']) ?></span>
+                </span>
+                <span class="d-flex mb-3"><?= htmlspecialchars($gala['GalaName']) ?></span>
+              </div>
+              <span class="category">
+                <div class="btn btn-success">Add or edit times</div>
+              </span>
+            </a>
+          <?php } while ($gala = $manualTimeGalas->fetch(PDO::FETCH_ASSOC)); ?>
+        </div>
+      </div>
 
     <?php
 
@@ -233,156 +261,156 @@ include "galaMenu.php";
     ?>
 
     <?php if ($canPayByCard) { ?>
-    <div class="mb-4">
-      <h2>
-        Make a payment
-      </h2>
+      <div class="mb-4">
+        <h2>
+          Make a payment
+        </h2>
 
-      <p class="lead">
-        Pay for gala entries by credit or debit card.
-      </p>
+        <p class="lead">
+          Pay for gala entries by credit or debit card.
+        </p>
 
-      <p>
-        <a href="<?=autoUrl("galas/pay-for-entries")?>" class="btn btn-success ">
-          Pay now
-        </a>
-      </p>
-    </div>
+        <p>
+          <a href="<?= autoUrl("galas/pay-for-entries") ?>" class="btn btn-success ">
+            Pay now
+          </a>
+        </p>
+      </div>
     <?php } else if (getenv('STRIPE') && $tenant->getStripeAccount()) { ?>
       <div class="mb-4">
-      <h2>
-        Pay by card
-      </h2>
+        <h2>
+          Pay by card
+        </h2>
 
-      <p class="lead">
-        You can pay for gala entries by credit or debit card.
-      </p>
+        <p class="lead">
+          You can pay for gala entries by credit or debit card.
+        </p>
 
-      <p>
-        <a href="<?=autoUrl("payments/cards/add")?>" class="btn btn-success ">
-          Add a card
-        </a>
-      </p>
-    </div>
+        <p>
+          <a href="<?= autoUrl("payments/cards/add") ?>" class="btn btn-success ">
+            Add a card
+          </a>
+        </p>
+      </div>
     <?php } ?>
 
     <?php if ($timesheet && false) { ?>
-    <h2>
-      Gala timesheets
-    </h2>
+      <h2>
+        Gala timesheets
+      </h2>
 
-    <div class="row">
-      <div class="col-lg-8">
+      <div class="row">
+        <div class="col-lg-8">
 
-        <p class="mb-4">
-          Gala Time Sheets give a list of each of your swimmer's entries to a gala
-          along with their all-time personal bests and <?=date("Y")?> personal
-          bests.
-        </p>
-
-        <div class="alert alert-warning">
-          <p class="mb-0">
-            <strong>
-              Gala timesheets are deprecated
-            </strong>
+          <p class="mb-4">
+            Gala Time Sheets give a list of each of your swimmer's entries to a gala
+            along with their all-time personal bests and <?= date("Y") ?> personal
+            bests.
           </p>
-          <p class="mb-0">
-            They will be removed in a future software update
-          </p>
-        </div>
 
-      </div>
-    </div>
-
-    <div class="news-grid mb-4">
-      <?php do { ?>
-        <a href="<?=autoUrl("galas/competitions/" . $timesheet['GalaID'] . "/timesheet")?>">
-          <div>
-            <span class="title mb-0 justify-content-between align-items-start">
-              <span><?=htmlspecialchars($timesheet['GalaName'])?></span>
-            </span>
-            <span class="d-flex mb-3"><?=htmlspecialchars($timesheet['GalaVenue'])?></span>
+          <div class="alert alert-warning">
+            <p class="mb-0">
+              <strong>
+                Gala timesheets are deprecated
+              </strong>
+            </p>
+            <p class="mb-0">
+              They will be removed in a future software update
+            </p>
           </div>
-          <span class="category">
-            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-          </span>
-        </a>
-      <?php } while ($timesheet = $timesheets->fetch(PDO::FETCH_ASSOC)); ?>
-    </div>
+
+        </div>
+      </div>
+
+      <div class="news-grid mb-4">
+        <?php do { ?>
+          <a href="<?= autoUrl("galas/competitions/" . $timesheet['GalaID'] . "/timesheet") ?>">
+            <div>
+              <span class="title mb-0 justify-content-between align-items-start">
+                <span><?= htmlspecialchars($timesheet['GalaName']) ?></span>
+              </span>
+              <span class="d-flex mb-3"><?= htmlspecialchars($timesheet['GalaVenue']) ?></span>
+            </div>
+            <span class="category">
+              <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+            </span>
+          </a>
+        <?php } while ($timesheet = $timesheets->fetch(PDO::FETCH_ASSOC)); ?>
+      </div>
     <?php } ?>
 
     <?php if (sizeof($countEntries) > 0) { ?>
-    <h2>Statistics</h2>
-    <p class="lead mb-4">
-      These are statistics for all of your swimmers put together, based on
-      entries over all time. Go to <a href="<?=autoUrl('swimmers')?>">My
-      Swimmers</a> to see stats for each swimmer.
-    </p>
+      <h2>Statistics</h2>
+      <p class="lead mb-4">
+        These are statistics for all of your swimmers put together, based on
+        entries over all time. Go to <a href="<?= autoUrl('swimmers') ?>">My
+          Swimmers</a> to see stats for each swimmer.
+      </p>
 
-    <div class="row">
-      <div class="col-lg-8">
-        <canvas id="eventEntries" class="mb-3"></canvas>
+      <div class="row">
+        <div class="col-lg-8">
+          <canvas id="eventEntries" class="mb-3"></canvas>
+        </div>
+        <div class="col-lg-4">
+          <canvas id="strokeEntries" class="mb-3"></canvas>
+        </div>
       </div>
-      <div class="col-lg-4">
-        <canvas id="strokeEntries" class="mb-3"></canvas>
-      </div>
-    </div>
     <?php } ?>
   </div>
 </div>
 
 <?php if (sizeof($countEntries) > 0) { ?>
 
-<script>
-document.addEventListener("DOMContentLoaded", function(event) {
-  var ctx = document.getElementById('eventEntries').getContext('2d');
-  var chart = new Chart(ctx, {
-    // The type of chart we want to create
-    type: 'bar',
+  <script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+      var ctx = document.getElementById('eventEntries').getContext('2d');
+      var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'bar',
 
-    // The data for our dataset
-    data: {
-      labels: <?=json_encode($countEntriesEvents)?>,
-      datasets: [{
-        label: <?=json_encode('All my entries')?>,
-        data: <?=json_encode($countEntriesCount)?>,
-        backgroundColor: <?=json_encode($countEntriesColours)?>,
-      }],
-    },
+        // The data for our dataset
+        data: {
+          labels: <?= json_encode($countEntriesEvents) ?>,
+          datasets: [{
+            label: <?= json_encode('All my entries') ?>,
+            data: <?= json_encode($countEntriesCount) ?>,
+            backgroundColor: <?= json_encode($countEntriesColours) ?>,
+          }],
+        },
 
-    // Configuration options go here
-    options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true,
-            precision: 0,
+        // Configuration options go here
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+                precision: 0,
+              }
+            }]
           }
-        }]
-      }
-    }
-  });
+        }
+      });
 
-  var ctx = document.getElementById('strokeEntries').getContext('2d');
-  var chart = new Chart(ctx, {
-    // The type of chart we want to create
-    type: 'pie',
+      var ctx = document.getElementById('strokeEntries').getContext('2d');
+      var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'pie',
 
-    // The data for our dataset
-    data: {
-      labels: <?=json_encode(['Free', 'Back', 'Breast', 'Fly', 'IM'])?>,
-      datasets: [{
-        label: <?=json_encode(html_entity_decode($gala['GalaName']))?>,
-        data: <?=json_encode($strokeCountsData)?>,
-        backgroundColor: <?=json_encode($chartColours)?>,
-      }],
-    },
+        // The data for our dataset
+        data: {
+          labels: <?= json_encode(['Free', 'Back', 'Breast', 'Fly', 'IM']) ?>,
+          datasets: [{
+            label: <?= json_encode(html_entity_decode($gala['GalaName'])) ?>,
+            data: <?= json_encode($strokeCountsData) ?>,
+            backgroundColor: <?= json_encode($chartColours) ?>,
+          }],
+        },
 
-    // Configuration options go here
-    // options: {}
-  });
-});
-</script>
+        // Configuration options go here
+        // options: {}
+      });
+    });
+  </script>
 <?php } ?>
 
 <?php $footer = new \SCDS\Footer();
