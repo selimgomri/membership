@@ -101,7 +101,7 @@ ob_start(); ?>
   <div class="row mb-3">
     <div class="split-50">
       <?php if ($logoPath) { ?>
-        <img src="<?= $logoPath ?>" class="logo">
+        <img src="<?= $logoPath ?>" class="logo" style="height: 25mm">
       <?php } else { ?>
         <h1 class="primary"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></h1>
       <?php } ?>

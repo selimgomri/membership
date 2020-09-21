@@ -76,7 +76,7 @@ include BASE_PATH . 'views/header.php';
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('sessions')) ?>">Sessions</a></li>
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('sessions/booking')) ?>">Booking</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Book</li>
+        <li class="breadcrumb-item active" aria-current="page"><?= htmlspecialchars($date->format('Y-m-d')) ?>-S<?= htmlspecialchars($session['SessionID']) ?></li>
       </ol>
     </nav>
 
@@ -168,7 +168,10 @@ include BASE_PATH . 'views/header.php';
             <?php } ?>
 
             <dt class="col-sm-12">Location</dt>
-            <dd class="col-sm-12 mb-0"><?= htmlspecialchars($session['Location']) ?></dd>
+            <dd class="col-sm-12"><?= htmlspecialchars($session['Location']) ?></dd>
+
+            <dt class="col-sm-12">Session Unique ID</dt>
+            <dd class="col-sm-12 mb-0"><?= htmlspecialchars($date->format('Y-m-d')) ?>-S<?= htmlspecialchars($session['SessionID']) ?></dd>
           </dl>
         </div>
         <div class="d-block d-lg-none">
@@ -216,7 +219,10 @@ include BASE_PATH . 'views/header.php';
             <?php } ?>
 
             <dt class="col-sm-3">Location</dt>
-            <dd class="col-sm-9 mb-0"><?= htmlspecialchars($session['Location']) ?></dd>
+            <dd class="col-sm-9"><?= htmlspecialchars($session['Location']) ?></dd>
+
+            <dt class="col-sm-12">Session Unique ID</dt>
+            <dd class="col-sm-12 mb-0"><?= htmlspecialchars($date->format('Y-m-d')) ?>-S<?= htmlspecialchars($session['SessionID']) ?></dd>
           </dl>
         </div>
       </div>

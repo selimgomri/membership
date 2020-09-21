@@ -27,3 +27,11 @@ $this->post('/cancel', function () {
 $this->post('/require-booking', function () {
   include 'require-booking/require-booking-post.php';
 });
+
+$this->get('/edit', function () {
+  include 'require-booking/edit-require-booking.php';
+});
+
+$this->post('/book', function () {
+  include 'require-booking/edit-require-booking-post.php';
+});

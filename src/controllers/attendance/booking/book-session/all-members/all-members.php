@@ -14,6 +14,8 @@ function getAllBookedMembersForSession($session, $date)
     $date->format('Y-m-d'),
   ]);
 
+  $bookingNumber = 1;
+
 ?>
 
   <h2>Booked members</h2>
@@ -22,7 +24,7 @@ function getAllBookedMembersForSession($session, $date)
   </p>
 
   <?php if ($bookedMember = $getBookedMembers->fetch(PDO::FETCH_ASSOC)) { ?>
-    <ul class="list-group" id="all-member-booking-list">
+    <ol class="list-group" id="all-member-booking-list">
       <?php do {
         $booked = new DateTime($bookedMember['BookedAt'], new DateTimeZone('UTC'));
         $booked->setTimezone(new DateTimeZone('Europe/London'));
@@ -36,7 +38,7 @@ function getAllBookedMembersForSession($session, $date)
                 </a>
               </div>
               <div>
-                <em>Booked at <?= htmlspecialchars($booked->format('H:i, j F Y')) ?></em>
+                <em>Booked at <?= htmlspecialchars($booked->format('H:i, j F Y')) ?>, (Booking Position #<?= htmlspecialchars($bookingNumber) ?>)</em>
               </div>
             </div>
             <div class="col-auto">
@@ -44,8 +46,9 @@ function getAllBookedMembersForSession($session, $date)
             </div>
           </div>
         </li>
+        <?php $bookingNumber++; ?>
       <?php } while ($bookedMember = $getBookedMembers->fetch(PDO::FETCH_ASSOC)); ?>
-    </ul>
+    </ol>
   <?php } else { ?>
     <div class="alert alert-info">
       <p class="mb-0">
