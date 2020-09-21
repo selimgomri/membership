@@ -55,7 +55,7 @@ $logos = $tenant->getKey('LOGO_DIR')
                 } ?>
               </address>
               <!--<p><i class="fa fa-envelope fa-fw" aria-hidden="true"></i> <a href="mailto:enquiries@chesterlestreetasc.co.uk" target="new">E-Mail Us</a></p>-->
-              <p><i class="fa fa-flag fa-fw" aria-hidden="true"></i> <a href="<?= htmlspecialchars(autoUrl("reportanissue?url=" . urlencode(currentUrl()))) ?>">Report an issue with this page</a>
+              <p><i class="fa fa-flag fa-fw" aria-hidden="true"></i> <a href="<?= htmlspecialchars(autoUrl("reportanissue?url=" . urlencode(app('request')->curl))) ?>">Report an issue with this page</a>
               </p>
               <p><i class="fa fa-info-circle fa-fw" aria-hidden="true"></i> <a href="<?= htmlspecialchars(autoUrl("about")) ?>">Support information</a>
               </p>
