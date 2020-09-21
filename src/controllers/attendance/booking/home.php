@@ -34,6 +34,22 @@ include BASE_PATH . 'views/header.php';
 
 <div class="container">
 
+  <div class="row">
+    <div class="col-lg-8">
+      <p class="lead">
+        Session booking is a new feature which will be introduced in the next few weeks.
+      </p>
+
+      <p>
+        The aim of our new session booking tools is to support clubs during this COVID era where numbers may be limited at sessions, or where prior indication of attendance is desired.
+      </p>
+
+      <p>
+        Going forward, additional features such as support for pay as you go sessions will be added, with fees billed to a user's account and paid on their next Direct Debit.
+      </p>
+    </div>
+  </div>
+
 </div>
 
 <?php
