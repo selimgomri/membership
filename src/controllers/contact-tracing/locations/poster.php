@@ -98,15 +98,15 @@ ob_start(); ?>
 
   ?>
 
-  <div class="row mb-3">
-    <div class="split-50">
+  <div class=" mb-3">
+    <div class="">
       <?php if ($logoPath) { ?>
         <img src="<?= $logoPath ?>" class="logo" style="height: 25mm">
       <?php } else { ?>
         <h1 class="primary"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></h1>
       <?php } ?>
     </div>
-    <div class="split-50">
+    <div class="" style="position: absolute; top: 0; right: 0;>
       <div style="text-align:right">
         <img src="<?= BASE_PATH . 'public/img/corporate/scds.png' ?>" style="width: 1cm;">
       </div>
