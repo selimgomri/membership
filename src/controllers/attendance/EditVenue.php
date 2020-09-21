@@ -19,10 +19,34 @@ include BASE_PATH . "views/header.php";
 
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance')) ?>">Attendance</a></li>
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance/venues')) ?>">Venues</a></li>
+        <li class="breadcrumb-item active" aria-current="page">#<?= htmlspecialchars($id) ?></li>
+      </ol>
+    </nav>
+
+    <div class="row align-items-center">
+      <div class="col-lg">
+        <h1>
+          Edit <?= htmlspecialchars($venue['VenueName']) ?>
+        </h1>
+        <p class="lead mb-0">
+          Venues used for sessions at <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>
+        </p>
+        <!-- <div class="mb-3 d-lg-none"></div> -->
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
-  <h1>Editing <?=htmlspecialchars($venue['VenueName'])?></h1>
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-lg-8">
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EditVenueError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['EditVenueError']['Status']) { ?>
         <div class="alert alert-warning">
@@ -60,7 +84,7 @@ include BASE_PATH . "views/header.php";
       <form method="post" class="needs-validation" novalidate>
         <div class="form-group">
           <label for="name">Venue Name</label>
-          <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter name" value="<?=$venue['VenueName']?>" required>
+          <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter name" value="<?= $venue['VenueName'] ?>" required>
           <div class="invalid-feedback">
             You must enter a venue name
           </div>
@@ -69,7 +93,7 @@ include BASE_PATH . "views/header.php";
 
         <div class="form-group">
           <label for="address">Address</label>
-          <input type="text" class="form-control" name="address" id="address" aria-describedby="addressHelp" placeholder="Enter address" value="<?=$venue['Location']?>" required>
+          <input type="text" class="form-control" name="address" id="address" aria-describedby="addressHelp" placeholder="Enter address" value="<?= $venue['Location'] ?>" required>
           <div class="invalid-feedback">
             You must enter an address
           </div>
