@@ -17,7 +17,7 @@ $db->query(
     `Date` Date NOT NULL,
     `Member` int(11) NOT NULL,
     `BookedAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`Session`, `Date`),
+    PRIMARY KEY (`Session`, `Date`, `Member`),
     FOREIGN KEY (`Session`) REFERENCES `sessions`(`SessionID`) ON DELETE CASCADE,
     FOREIGN KEY (`Member`) REFERENCES members(MemberID) ON DELETE CASCADE
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;"

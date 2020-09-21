@@ -5,7 +5,7 @@ $user = $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'];
 $db = app()->db;
 $tenant = app()->tenant;
 
-$swimmers = $db->prepare("SELECT MForename `first`, MSurname `last`, MemberID `id`, RRTransfer trans FROM members WHERE Tenant = ? AND members.UserID IS NULL ORDER BY MemberID DESC, `first` ASC, `last` ASC");
+$swimmers = $db->prepare("SELECT MForename `first`, MSurname `last`, MemberID `id`, RRTransfer trans FROM members WHERE Active AND Tenant = ? AND members.UserID IS NULL ORDER BY MemberID DESC, `first` ASC, `last` ASC");
 $swimmers->execute([
   $tenant->getId()
 ]);

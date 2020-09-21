@@ -4,6 +4,9 @@ $db = app()->db;
 $tenant = app()->tenant;
 $user = app()->user;
 
+include 'my-members/my-members.php';
+include 'all-members/all-members.php';
+
 if (!isset($_GET['session']) && !isset($_GET['date'])) halt(404);
 
 $date = null;
@@ -38,39 +41,6 @@ if ($session['SessionDay'] != $dayOfWeek) {
 
 $numFormatter = new NumberFormatter("en-GB", NumberFormatter::SPELLOUT);
 
-// Get bookable members
-$members = [];
-if (bool($session['AllSquads'])) {
-  $getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM members WHERE UserID = ? ORDER BY fn ASC, sn ASC");
-  $getMembers->execute([
-    $user->getId(),
-  ]);
-  $members = $getMembers->fetchAll(PDO::FETCH_ASSOC);
-} else {
-  // Get session squads
-  $getSquads = $db->prepare("SELECT `Squad` FROM `sessionsSquads` WHERE `Session` = ?");
-  $getSquads->execute([
-    $session['SessionID'],
-  ]);
-
-  while ($squad = $getSquads->fetchColumn()) {
-    // Get members for this user in this squad
-    $getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM members INNER JOIN squadMembers ON members.MemberID = squadMembers.Member WHERE UserID = ? AND squadMembers.Squad = ? ORDER BY fn ASC, sn ASC");
-    $getMembers->execute([
-      $user->getId(),
-      $squad,
-    ]);
-
-    while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)) {
-      $members[] = $member;
-    }
-  }
-
-  // Remove duplicated
-  // $members = array_unique($members);
-  $members = array_map("unserialize", array_unique(array_map("serialize", $members)));
-}
-
 // Number booked in
 $getBookedCount = $db->prepare("SELECT COUNT(*) FROM `sessionsBookings` WHERE `Session` = ? AND `Date` = ?");
 $getBookedCount->execute([
@@ -78,15 +48,6 @@ $getBookedCount->execute([
   $date->format('Y-m-d'),
 ]);
 $bookedCount = $getBookedCount->fetchColumn();
-
-$getBookedMembers = null;
-if ($user->hasPermission('Admin') || $user->hasPermission('Coach')) {
-  $getBookedMembers = $db->prepare("SELECT Member id, MForename fn, MSurname sn, BookedAt FROM sessionsBookings INNER JOIN members ON sessionsBookings.Member = members.MemberID WHERE sessionsBookings.Session = ? AND sessionsBookings.Date = ? ORDER BY BookedAt ASC, MForename ASC, MSurname ASC;");
-  $getBookedMembers->execute([
-    $session['SessionID'],
-    $date->format('Y-m-d'),
-  ]);
-}
 
 $sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime']);
 $startTime = new DateTime($session['StartTime'], new DateTimeZone('UTC'));
@@ -145,7 +106,7 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
     <div class="col-lg-8">
       <p class="lead">
-        <?= htmlspecialchars(mb_ucfirst($numFormatter->format($bookedCount))) ?> <?php if ($bookedCount == 1) { ?>member has<?php } else { ?>members have<?php } ?> booked onto this session. <?php if ($session['MaxPlaces']) { ?><?= htmlspecialchars(mb_ucfirst($numFormatter->format($session['MaxPlaces'] - $bookedCount))) ?><?php } ?> <?php if (($session['MaxPlaces'] - $bookedCount) == 1) { ?>place remains<?php } else { ?>places remain<?php } ?> available.
+        <span class="place-numbers-places-booked-string uc-first"><?= htmlspecialchars(mb_ucfirst($numFormatter->format($bookedCount))) ?></span> <?php if ($bookedCount == 1) { ?>member has<?php } else { ?>members have<?php } ?> booked onto this session. <?php if ($session['MaxPlaces']) { ?><span class="place-numbers-places-remaining-string uc-first"><?= htmlspecialchars(mb_ucfirst($numFormatter->format($session['MaxPlaces'] - $bookedCount))) ?></span> <?php if (($session['MaxPlaces'] - $bookedCount) == 1) { ?>place remains<?php } else { ?>places remain<?php } ?> available.<?php } ?>
       </p>
 
       <h2>Session Details</h2>
@@ -159,14 +120,18 @@ include BASE_PATH . 'views/header.php';
         <dt class="col-sm-3">Duration</dt>
         <dd class="col-sm-9"><?php if ($hours > 0) { ?><?= $hours ?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?= $mins ?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
 
-        <dt class="col-sm-3">Total places available</dt>
-        <dd class="col-sm-9"><?= htmlspecialchars($session['MaxPlaces']) ?></dd>
+        <?php if ($session['MaxPlaces']) { ?>
+          <dt class="col-sm-3">Total places available</dt>
+          <dd class="col-sm-9 place-numbers-max-places-int"><?= htmlspecialchars($session['MaxPlaces']) ?></dd>
+        <?php } ?>
 
         <dt class="col-sm-3">Places booked</dt>
-        <dd class="col-sm-9"><?= htmlspecialchars($bookedCount) ?></dd>
+        <dd class="col-sm-9 place-numbers-places-booked-int"><?= htmlspecialchars($bookedCount) ?></dd>
 
-        <dt class="col-sm-3">Places remaining</dt>
-        <dd class="col-sm-9"><?= htmlspecialchars(($session['MaxPlaces'] - $bookedCount)) ?></dd>
+        <?php if ($session['MaxPlaces']) { ?>
+          <dt class="col-sm-3">Places remaining</dt>
+          <dd class="col-sm-9 place-numbers-places-remaining-int"><?= htmlspecialchars(($session['MaxPlaces'] - $bookedCount)) ?></dd>
+        <?php } ?>
 
         <?php for ($i = 0; $i < sizeof($squadNames); $i++) {
           $getCoaches->execute([
@@ -191,71 +156,15 @@ include BASE_PATH . 'views/header.php';
         <dd class="col-sm-9 mb-0"><?= htmlspecialchars($session['Location']) ?></dd>
       </dl>
 
-      <h2>Book</h2>
-      <p class="lead">
-        Book a place for a member linked to your account.
-      </p>
-
-      <?php if (sizeof($members) > 0) { ?>
-
-        <ul class="list-group" id="member-booking-list">
-          <?php foreach ($members as $member) { ?>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              <span><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></span>
-              <span><button class="btn btn-primary" type="button" data-member-name="<?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?>" data-member-id="<?= htmlspecialchars($member['id']) ?>" data-operation="book-place" data-session-id="<?= htmlspecialchars($session['SessionID']) ?>" data-session-name="<?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>" data-session-location="<?= htmlspecialchars($session['Location']) ?>" data-session-date="<?= htmlspecialchars($date->format('Y-m-d')) ?>">Book</button></span>
-            </li>
-          <?php } ?>
-        </ul>
-
-      <?php } else { ?>
-        <div class="alert alert-warning">
-          <p class="mb-0">
-            <strong>You have no members</strong>
-          </p>
-          <p class="mb-0">
-            Only members can be booked onto sessions.
-          </p>
-        </div>
-      <?php } ?>
+      <!--  -->
+      <div id="my-member-booking-container-box">
+        <?= getMySessionBookingMembers($session, $date) ?>
+      </div>
 
       <?php if ($user->hasPermission('Admin') || $user->hasPermission('Coach')) { ?>
-        <h2>Booked members</h2>
-        <p class="lead">
-          Members who have booked a place for this session.
-        </p>
-
-        <?php if ($bookedMember = $getBookedMembers->fetch(PDO::FETCH_ASSOC)) { ?>
-          <ul class="list-group" id="all-member-booking-list">
-            <?php do {
-              $booked = new DateTime($bookedMember['BookedAt'], new DateTimeZone('UTC'));
-              $booked->setTimezone(new DateTimeZone('Europe/London'));
-            ?>
-              <li class="list-group-item" id="<?= htmlspecialchars('member-' . $bookedMember['id'] . '-booking') ?>">
-                <div class="row align-items-center">
-                  <div class="col">
-                    <div>
-                      <a class="font-weight-bold" href="<?= htmlspecialchars(autoUrl('members/' . $bookedMember['id'])) ?>">
-                        <?= htmlspecialchars($bookedMember['fn'] . ' ' . $bookedMember['sn']) ?>
-                      </a>
-                    </div>
-                    <div>
-                      <em>Booked at <?= htmlspecialchars($booked->format('H:i, j F Y')) ?></em>
-                    </div>
-                  </div>
-                  <div class="col-auto">
-                    <button class="btn btn-danger" type="button" data-member-name="<?= htmlspecialchars($bookedMember['fn'] . ' ' . $bookedMember['sn']) ?>" data-member-id="<?= htmlspecialchars($bookedMember['id']) ?>" data-operation="cancel-place" data-session-id="<?= htmlspecialchars($session['SessionID']) ?>" data-session-name="<?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>" data-session-location="<?= htmlspecialchars($session['Location']) ?>" data-session-date="<?= htmlspecialchars($date->format('Y-m-d')) ?>">Remove</button>
-                  </div>
-                </div>
-              </li>
-            <?php } while ($bookedMember = $getBookedMembers->fetch(PDO::FETCH_ASSOC)); ?>
-          </ul>
-        <?php } else { ?>
-          <div class="alert alert-info">
-            <p class="mb-0">
-              <strong>There are no members booked on this session yet</strong>
-            </p>
-          </div>
-        <?php } ?>
+        <div id="all-member-booking-container-box">
+          <?= getAllBookedMembersForSession($session, $date) ?>
+        </div>
       <?php } ?>
 
     </div>
@@ -343,12 +252,66 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div id="ajaxData" data-booking-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/book')) ?>" data-cancellation-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/cancel')) ?>"></div>
+<div id="ajaxData" data-booking-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/book')) ?>" data-cancellation-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/cancel')) ?>" data-my-member-reload-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/my-booking-info?session=' . urlencode($_GET['session']) . '&date=' . urlencode($_GET['date']))) ?>" data-all-member-reload-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/all-booking-info?session=' . urlencode($_GET['session']) . '&date=' . urlencode($_GET['date']))) ?>"></div>
 
 <script>
   const options = document.getElementById('ajaxData').dataset;
 
-  let mbl = document.getElementById('member-booking-list');
+  function updateBookingNumbers(stats) {
+    // Update numbers
+    if (stats.placesTotal) {
+      let intSpans = document.getElementsByClassName('place-numbers-max-places-int');
+      let stringSpans = document.getElementsByClassName('place-numbers-max-places-string');
+
+      for (let element of intSpans) {
+        element.textContent = stats.placesTotal.int;
+      }
+
+      for (let element of stringSpans) {
+        if (element.classList.contains('uc-first')) {
+          element.textContent = stats.placesTotal.string.charAt(0).toUpperCase() + stats.placesTotal.string.slice(1);
+        } else {
+          element.textContent = stats.placesTotal.string;
+        }
+      }
+    }
+
+    if (stats.placesBooked) {
+      let intSpans = document.getElementsByClassName('place-numbers-places-booked-int');
+      let stringSpans = document.getElementsByClassName('place-numbers-places-booked-string');
+
+      for (let element of intSpans) {
+        element.textContent = stats.placesBooked.int;
+      }
+
+      for (let element of stringSpans) {
+        if (element.classList.contains('uc-first')) {
+          element.textContent = stats.placesBooked.string.charAt(0).toUpperCase() + stats.placesBooked.string.slice(1);
+        } else {
+          element.textContent = stats.placesBooked.string;
+        }
+      }
+    }
+
+    if (stats.placesRemaining) {
+      let intSpans = document.getElementsByClassName('place-numbers-places-remaining-int');
+      let stringSpans = document.getElementsByClassName('place-numbers-places-remaining-string');
+
+      for (let element of intSpans) {
+        element.textContent = stats.placesRemaining.int;
+      }
+
+      for (let element of stringSpans) {
+        if (element.classList.contains('uc-first')) {
+          element.textContent = stats.placesRemaining.string.charAt(0).toUpperCase() + stats.placesRemaining.string.slice(1);
+        } else {
+          element.textContent = stats.placesRemaining.string;
+        }
+      }
+    }
+  }
+
+  let mbl = document.getElementById('my-member-booking-container-box');
   if (mbl) {
     mbl.addEventListener('click', event => {
       if (event.target.tagName === 'BUTTON' && event.target.dataset.operation === 'book-place') {
@@ -373,11 +336,38 @@ include BASE_PATH . 'views/header.php';
             if (this.readyState == 4 && this.status == 200) {
               let json = JSON.parse(this.responseText);
               if (json.status == 200) {
-                // Cheap and nasty!
-                // location.reload();
+                // Reload booking box etc
+                // console.log(formData);
+
+                // ------------------------------------------------------------
+                // Reload booking box etc via ajax request
+                // ------------------------------------------------------------
+                var dataReload = new XMLHttpRequest();
+                dataReload.onreadystatechange = function() {
+                  if (this.readyState == 4 && this.status == 200) {
+                    let json = JSON.parse(this.responseText);
+                    if (json.status == 200) {
+
+                      mbl.innerHTML = json.html;
+                      updateBookingNumbers(json.stats);
+
+                    } else {
+                      alert(json.error);
+                    }
+                  } else if (this.readyState == 4) {
+                    // Not ok
+                    alert('An error occurred and we could not parse the submission.');
+                  }
+                }
+                dataReload.open('GET', options.myMemberReloadAjaxUrl, true);
+                dataReload.setRequestHeader('Accept', 'application/json');
+                dataReload.send();
+                // ------------------------------------------------------------
+                // ENDS Reload booking box etc via ajax request
+                // ------------------------------------------------------------
 
                 // Show success message, dismiss modal, reload booking box
-
+                $('#booking-modal').modal('hide');
 
               } else {
                 alert(json.error);
@@ -395,7 +385,7 @@ include BASE_PATH . 'views/header.php';
     });
   }
 
-  let ambl = document.getElementById('all-member-booking-list');
+  let ambl = document.getElementById('all-member-booking-container-box');
   if (ambl) {
     ambl.addEventListener('click', event => {
       if (event.target.tagName === 'BUTTON' && event.target.dataset.operation === 'cancel-place') {
@@ -420,11 +410,33 @@ include BASE_PATH . 'views/header.php';
             if (this.readyState == 4 && this.status == 200) {
               let json = JSON.parse(this.responseText);
               if (json.status == 200) {
-                // Delete member row
-                let row = document.getElementById('member-' + document.getElementById('cancel-member-id').value + '-booking');
-                if (row) {
-                  row.remove();
+
+                // ------------------------------------------------------------
+                // Reload booking box etc via ajax request
+                // ------------------------------------------------------------
+                var dataReload = new XMLHttpRequest();
+                dataReload.onreadystatechange = function() {
+                  if (this.readyState == 4 && this.status == 200) {
+                    let json = JSON.parse(this.responseText);
+                    if (json.status == 200) {
+
+                      ambl.innerHTML = json.html;
+                      updateBookingNumbers(json.stats);
+
+                    } else {
+                      alert(json.error);
+                    }
+                  } else if (this.readyState == 4) {
+                    // Not ok
+                    alert('An error occurred and we could not parse the submission.');
+                  }
                 }
+                dataReload.open('GET', options.allMemberReloadAjaxUrl, true);
+                dataReload.setRequestHeader('Accept', 'application/json');
+                dataReload.send();
+                // ------------------------------------------------------------
+                // ENDS Reload booking box etc via ajax request
+                // ------------------------------------------------------------
 
                 // Hide modal
                 $('#cancel-modal').modal('hide');

@@ -226,7 +226,7 @@ include BASE_PATH . 'views/header.php';
                   ]);
                   $bookingRequired = $getBookingRequired->fetchColumn() > 0;
                 ?>
-                  <!-- <dt class="col-sm-3">Booking</dt>
+                  <dt class="col-sm-3">Booking</dt>
                   <dd class="col-sm-9">
                     <?php if ($bookingRequired) { ?>
                       <span class="d-block mb-2">Booking is required for this session</span>
@@ -237,11 +237,15 @@ include BASE_PATH . 'views/header.php';
                     <?php } else { ?>
                       <span class="d-block">Booking is not required</span>
                     <?php } ?>
-                  </dd> -->
+                  </dd>
                 <?php } ?>
 
+                <?php
+                  // IN FUTURE: LINK TO A LOCATION PAGE
+                  // GEOCODE AND USE A MAP
+                ?>
                 <dt class="col-sm-3">Location</dt>
-                <dd class="col-sm-9 mb-0"><?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && $_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) { ?><?= htmlspecialchars($session['Location']) ?><?php } else { ?>You must be logged in to see the location<?php } ?></dd>
+                <dd class="col-sm-9 mb-0"><?= htmlspecialchars($session['Location']) ?></dd>
               </dl>
 
               <?php for ($i = 0; $i < sizeof($squadNames); $i++) { ?>
