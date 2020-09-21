@@ -15,10 +15,34 @@ include BASE_PATH . "views/header.php";
 
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance')) ?>">Attendance</a></li>
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance/venues')) ?>">Venues</a></li>
+        <li class="breadcrumb-item active" aria-current="page">New</li>
+      </ol>
+    </nav>
+
+    <div class="row align-items-center">
+      <div class="col-lg">
+        <h1>
+          Add a venue
+        </h1>
+        <p class="lead mb-0">
+          Venues used for sessions at <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>
+        </p>
+        <!-- <div class="mb-3 d-lg-none"></div> -->
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
   <div class="row">
-    <div class="col-md-8">
-      <h1>Add a venue</h1>
+    <div class="col-lg-8">
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NewVenueError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['NewVenueError']['Status']) { ?>
         <div class="alert alert-warning">

@@ -13,8 +13,6 @@ $responseData = [
 
 try {
 
-  include BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
-
   if (empty($_POST['user']) || empty($_POST['password'])) {
     throw new Exception('Required details were not provided.');
   }
@@ -158,7 +156,12 @@ try {
   while ($oldMandate = $getMandates->fetch(PDO::FETCH_ASSOC)) {
     try {
       // Cancel the mandate
-      $client->mandates()->cancel($oldMandate['Mandate']);
+      try {
+        include BASE_PATH . 'controllers/payments/GoCardlessSetupClient.php';
+        $client->mandates()->cancel($oldMandate['Mandate']);
+      } catch (Exception $e) {
+        // Ignore - no GC
+      }
 
       // Only set OOU in DB if above does not throw exception
       $setOutOfUse->execute([
@@ -195,7 +198,6 @@ try {
 
   $responseData['status'] = 200;
   $responseData['message'] = $deleteUser['Forename'] . '\'s account has been deleted successfully.';
-
 } catch (PDOException $e) {
   $responseData['status'] = 500;
   $responseData['message'] = 'A database error occurred. All changes have been rolled back. If direct debit mandates were cancelled, this cannot be rolled back and you may need to ask the user to setup their direct debit again.';
