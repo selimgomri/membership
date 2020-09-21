@@ -124,6 +124,15 @@ include BASE_PATH . 'views/header.php';
         <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['RequireBookingError']);
         } ?>
 
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EditRequireBookingSuccess'])) { ?>
+          <div class="alert alert-success">
+            <p class="mb-0">
+              <strong>Changes saved successfully</strong>
+            </p>
+          </div>
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['EditRequireBookingSuccess']);
+        } ?>
+
         <?php if ($bookingClosed) { ?>
           <div class="alert alert-warning">
             <p class="mb-0">
@@ -168,7 +177,7 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <p>
-            If you reduce the limit on a session to a number lower than the number of bookings, then those who booked a place first will keep their places and the most recent bookings being remove down to the new limit.
+            If you reduce the limit on a session to a number lower than the number of bookings, then those who booked a place first will keep their places and the most recent bookings being remove down to the new limit. Members will be sent an email if they are affected.
           </p>
         </div>
 
@@ -193,7 +202,7 @@ include BASE_PATH . 'views/header.php';
 
         <p>
           <button type="submit" class="btn btn-primary" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
-            Require Booking
+            Save Session Booking Settings
           </button>
         </p>
 

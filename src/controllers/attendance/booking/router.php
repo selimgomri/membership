@@ -32,6 +32,10 @@ $this->get('/edit', function () {
   include 'require-booking/edit-require-booking.php';
 });
 
+$this->post('/edit', function () {
+  include 'require-booking/edit-require-booking-post.php';
+});
+
 $this->post('/book', function () {
   include 'require-booking/edit-require-booking-post.php';
 });

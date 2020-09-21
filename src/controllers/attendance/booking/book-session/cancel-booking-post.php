@@ -102,6 +102,39 @@ try {
   ]);
 
   // Send an email to the user
+  $getUser = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id, Forename ufn, Surname usn, EmailAddress email FROM members INNER JOIN users ON users.UserID = members.UserID WHERE members.MemberID = ?");
+  $getUser->execute([
+    $member['MemberID'],
+  ]);
+
+  $emailUser = $getUser->fetch(PDO::FETCH_ASSOC);
+
+  if ($emailUser) {
+
+    try {
+
+      $subject = 'Cancelled Session Booking - ' . $session['SessionName'] . ', ' . $sessionDateTime->format('H:i, j Y T');
+      $username = $emailUser['ufn'] . ' ' . $emailUser['usn'];
+      $emailAddress = $emailUser['email'];
+      $content = '<p>Hello ' . htmlspecialchars($username) . ',</p>';
+      $content .= '<p>' . htmlspecialchars($user->getFullName()) . ' has cancelled the following session booking;</p>';
+
+      $content .= '<dl>';
+
+      $content .= '<dt>Member</dt><dd>' . htmlspecialchars($emailUser['fn'] . ' ' . $emailUser['sn']) . '</dd>';
+      $content .= '<dt>Session</dt><dd>' . htmlspecialchars($session['SessionName']) . '</dd>';
+      $content .= '<dt>Date and time</dt><dd>' . htmlspecialchars($sessionDateTime->format('H:i, l j F Y T')) . '</dd>';
+      $content .= '<dt>Location</dt><dd>' . htmlspecialchars($session['Location']) . '</dd>';
+
+      $content .= '</dl>';
+
+      $content .= '<p>Please contact us if you think your booking has been cancelled by mistake.</p>';
+
+      notifySend(null, $subject, $content, $username, $emailAddress);
+    } catch (Exception $e) {
+      // Ignore failed send
+    }
+  }
 
 } catch (Exception $e) {
 
