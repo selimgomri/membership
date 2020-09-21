@@ -10,7 +10,7 @@ $now->setTimezone(new DateTimeZone('UTC'));
 $day = null;
 
 if ($now->format('l') == 'Monday') {
-  $startWeek = $now;
+  $startWeek = clone $now;
 }
 
 if (isset($_GET['year']) && isset($_GET['week'])) {
@@ -175,7 +175,7 @@ include BASE_PATH . 'views/header.php';
               <p class="h3"><small><?= htmlspecialchars($session['SessionName']) ?>, <?= htmlspecialchars($session['VenueName']) ?></small></p>
 
               <?php
-              $sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $day->format('Y-m-d') .  '-' . $session['StartTime']);
+              $sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $day->format('Y-m-d') .  '-' . $session['StartTime'], new DateTimeZone('Europe/London'));
               $startTime = new DateTime($session['StartTime'], new DateTimeZone('UTC'));
               $endTime = new DateTime($session['EndTime'], new DateTimeZone('UTC'));
               ?>
@@ -217,32 +217,40 @@ include BASE_PATH . 'views/header.php';
 
                 <?php } ?>
 
-                <?php if ($sessionDateTime > $now) {
-                  // Work out if booking required
-                  $getBookingRequired->execute([
-                    $session['SessionID'],
-                    $sessionDateTime->format('Y-m-d'),
-                    $tenant->getId(),
-                  ]);
-                  $bookingRequired = $getBookingRequired->fetchColumn() > 0;
+                <?php
+                $futureSession = false;
+                if ($sessionDateTime > $now) {
+                  $futureSession = true;
+                }
+                // Work out if booking required
+                $getBookingRequired->execute([
+                  $session['SessionID'],
+                  $sessionDateTime->format('Y-m-d'),
+                  $tenant->getId(),
+                ]);
+                $bookingRequired = $getBookingRequired->fetchColumn() > 0;
                 ?>
-                  <dt class="col-sm-3">Booking</dt>
-                  <dd class="col-sm-9">
-                    <?php if ($bookingRequired) { ?>
-                      <span class="d-block mb-2">Booking is required for this session</span>
-                      <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-success">Book a place</a>
-                    <?php } else if ($showAdmin) { ?>
-                      <span class="d-block mb-2">Booking is not currently required for this session</span>
-                      <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary">Require pre-booking</a>
-                    <?php } else { ?>
-                      <span class="d-block">Booking is not required</span>
-                    <?php } ?>
-                  </dd>
-                <?php } ?>
+                <dt class="col-sm-3">Booking</dt>
+                <dd class="col-sm-9">
+                  <?php if ($bookingRequired && $futureSession) { ?>
+                    <span class="d-block mb-2">Booking is required for this session</span>
+                    <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-success">Book a place<?php if ($showAdmin) { ?> or view/edit details<?php } ?></a>
+                  <?php } else if ($showAdmin && $futureSession) { ?>
+                    <span class="d-block mb-2">Booking is not currently required for this session</span>
+                    <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary">Require pre-booking</a>
+                  <?php } else if ($showAdmin && $bookingRequired && !$futureSession) { ?>
+                    <span class="d-block mb-2">Booking was required for this session</span>
+                    <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary">View booking info</a>
+                  <?php } else if (!$futureSession) { ?>
+                    <span class="d-block">Booking was not required</span>
+                  <?php } else { ?>
+                    <span class="d-block">Booking is not required</span>
+                  <?php } ?>
+                </dd>
 
                 <?php
-                  // IN FUTURE: LINK TO A LOCATION PAGE
-                  // GEOCODE AND USE A MAP
+                // IN FUTURE: LINK TO A LOCATION PAGE
+                // GEOCODE AND USE A MAP
                 ?>
                 <dt class="col-sm-3">Location</dt>
                 <dd class="col-sm-9 mb-0"><?= htmlspecialchars($session['Location']) ?></dd>

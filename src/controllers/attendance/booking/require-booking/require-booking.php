@@ -39,6 +39,14 @@ if ($session['SessionDay'] != $dayOfWeek) {
   halt(404);
 }
 
+$sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime'], new DateTimeZone('Europe/London'));
+$bookingCloses = clone $sessionDateTime;
+$bookingCloses->modify('-15 minutes');
+
+$now = new DateTime('now', new DateTimeZone('Europe/London'));
+
+$bookingClosed = $now > $bookingCloses;
+
 $pagetitle = 'Session Booking';
 include BASE_PATH . 'views/header.php';
 
@@ -86,25 +94,36 @@ include BASE_PATH . 'views/header.php';
         <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['RequireBookingError']);
         } ?>
 
+        <?php if ($bookingClosed) { ?>
+          <div class="alert alert-warning">
+            <p class="mb-0">
+              <strong>Booking has closed for this session</strong>
+            </p>
+            <p class="mb-0">
+              Registers have been automatically generated and you can no longer edit booking settings for the session.
+            </p>
+          </div>
+        <?php } ?>
+
         <div class="form-group">
           <label for="session-text-description">Session</label>
-          <input type="text" id="session-text-description" name="session-text-description" readonly class="form-control" value="<?= htmlspecialchars('#' . $session['SessionID'] . ' - ' . $session['SessionName']) ?>">
+          <input type="text" id="session-text-description" name="session-text-description" readonly class="form-control" value="<?= htmlspecialchars('#' . $session['SessionID'] . ' - ' . $session['SessionName']) ?>" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
         </div>
 
         <input type="hidden" name="session" value="<?= htmlspecialchars($session['SessionID']) ?>">
 
         <div class="form-group">
           <label for="date">Date</label>
-          <input type="date" id="date" name="date" readonly class="form-control" value="<?= htmlspecialchars($date->format('Y-m-d')) ?>">
+          <input type="date" id="date" name="date" readonly class="form-control" value="<?= htmlspecialchars($date->format('Y-m-d')) ?>" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
         </div>
 
         <div class="form-group" id="number-limit">
           <div class="custom-control custom-radio">
-            <input type="radio" id="unlimited-numbers" name="number-limit" class="custom-control-input" value="0" required>
+            <input type="radio" id="unlimited-numbers" name="number-limit" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?>>
             <label class="custom-control-label" for="unlimited-numbers">Unlimited numbers</label>
           </div>
           <div class="custom-control custom-radio">
-            <input type="radio" id="limited-numbers" name="number-limit" class="custom-control-input" value="1">
+            <input type="radio" id="limited-numbers" name="number-limit" class="custom-control-input" value="1" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
             <label class="custom-control-label" for="limited-numbers">Limited numbers</label>
           </div>
         </div>
@@ -112,7 +131,7 @@ include BASE_PATH . 'views/header.php';
         <div class="d-none" id="max-places-container">
           <div class="form-group">
             <label for="max-count">Maximum places</label>
-            <input type="number" id="max-count" name="max-count" min="1" step="1" class="form-control" value="">
+            <input type="number" id="max-count" name="max-count" min="1" step="1" class="form-control" value="" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
             <div class="invalid-feedback">
               Please provide a positive integer
             </div>
@@ -125,11 +144,11 @@ include BASE_PATH . 'views/header.php';
 
         <div class="form-group">
           <div class="custom-control custom-radio">
-            <input type="radio" id="open-to-squads" name="open-to" class="custom-control-input" value="0" required>
+            <input type="radio" id="open-to-squads" name="open-to" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?>>
             <label class="custom-control-label" for="open-to-squads">Open to this session's scheduled squads</label>
           </div>
           <div class="custom-control custom-radio">
-            <input type="radio" id="open-to-all" name="open-to" class="custom-control-input" value="1">
+            <input type="radio" id="open-to-all" name="open-to" class="custom-control-input" value="1" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
             <label class="custom-control-label" for="open-to-all">Open to all members</label>
           </div>
         </div>
@@ -139,7 +158,11 @@ include BASE_PATH . 'views/header.php';
         </p>
 
         <p>
-          <button type="submit" class="btn btn-primary">
+          Booking <?php if ($bookingClosed) { ?>closed<?php } else { ?>will close<?php } ?> automatically at <?= htmlspecialchars($bookingCloses->format('H:i, j F Y (T)')) ?>, 15 minutes prior to the session start time of <?= htmlspecialchars($sessionDateTime->format('H:i T')) ?>.
+        </p>
+
+        <p>
+          <button type="submit" class="btn btn-primary" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
             Require Booking
           </button>
         </p>

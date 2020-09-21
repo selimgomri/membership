@@ -53,6 +53,19 @@ try {
     throw new Exception('Session not found');
   }
 
+  $sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime'], new DateTimeZone('Europe/London'));
+
+  $bookingCloses = clone $sessionDateTime;
+  $bookingCloses->modify('-15 minutes');
+
+  $now = new DateTime('now', new DateTimeZone('Europe/London'));
+
+  $bookingClosed = $now > $bookingCloses;
+
+  if ($bookingClosed) {
+    throw new Exception('Booking has closed');
+  }
+
   $numFormatter = new NumberFormatter("en-GB", NumberFormatter::SPELLOUT);
 
   // Validate member exists and belongs to user

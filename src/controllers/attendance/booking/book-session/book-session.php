@@ -49,12 +49,21 @@ $getBookedCount->execute([
 ]);
 $bookedCount = $getBookedCount->fetchColumn();
 
-$sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime']);
+$sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime'], new DateTimeZone('Europe/London'));
 $startTime = new DateTime($session['StartTime'], new DateTimeZone('UTC'));
 $endTime = new DateTime($session['EndTime'], new DateTimeZone('UTC'));
 $duration = $startTime->diff($endTime);
 $hours = (int) $duration->format('%h');
 $mins = (int) $duration->format('%i');
+
+$sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime'], new DateTimeZone('Europe/London'));
+
+$bookingCloses = clone $sessionDateTime;
+$bookingCloses->modify('-15 minutes');
+
+$now = new DateTime('now', new DateTimeZone('Europe/London'));
+
+$bookingClosed = $now > $bookingCloses;
 
 $getCoaches = $db->prepare("SELECT Forename fn, Surname sn, coaches.Type code FROM coaches INNER JOIN users ON coaches.User = users.UserID WHERE coaches.Squad = ? ORDER BY coaches.Type ASC, Forename ASC, Surname ASC");
 
@@ -90,7 +99,7 @@ include BASE_PATH . 'views/header.php';
         </p>
       </div>
       <div class="col text-right">
-        <?php if ($user->hasPermission('Admin') || $user->hasPermission('Coach')) { ?>
+        <?php if (($user->hasPermission('Admin') || $user->hasPermission('Coach')) && !$bookingClosed) { ?>
           <a href="<?= htmlspecialchars(autoUrl('sessions/booking/edit?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>" class="btn btn-primary">
             Edit bookable session details
           </a>
@@ -108,6 +117,17 @@ include BASE_PATH . 'views/header.php';
       <p class="lead">
         <span class="place-numbers-places-booked-string uc-first"><?= htmlspecialchars(mb_ucfirst($numFormatter->format($bookedCount))) ?></span> <span id="place-numbers-booked-places-member-string"><?php if ($bookedCount == 1) { ?>member has<?php } else { ?>members have<?php } ?></span> booked onto this session. <?php if ($session['MaxPlaces']) { ?><span class="place-numbers-places-remaining-string uc-first"><?= htmlspecialchars(mb_ucfirst($numFormatter->format($session['MaxPlaces'] - $bookedCount))) ?></span> <span id="place-numbers-places-remaining-member-string"><?php if (($session['MaxPlaces'] - $bookedCount) == 1) { ?>place remains<?php } else { ?>places remain<?php } ?></span> available.<?php } ?>
       </p>
+
+      <?php if ($bookingClosed) { ?>
+        <div class="alert alert-warning">
+          <p class="mb-0">
+            <strong>Booking has closed for this session</strong>
+          </p>
+          <p class="mb-0">
+            Booking closed automatically at <?= htmlspecialchars($bookingCloses->format('H:i, j F Y (T)')) ?>, 15 minutes prior to the published session start time of <?= htmlspecialchars($sessionDateTime->format('H:i T')) ?>.
+          </p>
+        </div>
+      <?php } ?>
 
       <!--  -->
       <div id="my-member-booking-container-box">

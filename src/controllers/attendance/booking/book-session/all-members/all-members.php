@@ -16,6 +16,14 @@ function getAllBookedMembersForSession($session, $date)
 
   $bookingNumber = 1;
 
+  $sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime'], new DateTimeZone('Europe/London'));
+  $bookingCloses = clone $sessionDateTime;
+  $bookingCloses->modify('-15 minutes');
+
+  $now = new DateTime('now', new DateTimeZone('Europe/London'));
+
+  $bookingClosed = $now > $bookingCloses;
+
 ?>
 
   <h2>Booked members</h2>
@@ -24,7 +32,7 @@ function getAllBookedMembersForSession($session, $date)
   </p>
 
   <?php if ($bookedMember = $getBookedMembers->fetch(PDO::FETCH_ASSOC)) { ?>
-    <ol class="list-group" id="all-member-booking-list">
+    <ol class="list-group user-select-none" id="all-member-booking-list">
       <?php do {
         $booked = new DateTime($bookedMember['BookedAt'], new DateTimeZone('UTC'));
         $booked->setTimezone(new DateTimeZone('Europe/London'));
@@ -42,7 +50,11 @@ function getAllBookedMembersForSession($session, $date)
               </div>
             </div>
             <div class="col-auto">
-              <button class="btn btn-danger" type="button" data-member-name="<?= htmlspecialchars($bookedMember['fn'] . ' ' . $bookedMember['sn']) ?>" data-member-id="<?= htmlspecialchars($bookedMember['id']) ?>" data-operation="cancel-place" data-session-id="<?= htmlspecialchars($session['SessionID']) ?>" data-session-name="<?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>" data-session-location="<?= htmlspecialchars($session['Location']) ?>" data-session-date="<?= htmlspecialchars($date->format('Y-m-d')) ?>">Remove</button>
+              <?php if ($bookingClosed) { ?>
+                <span class="text-muted">Booking closed</span>
+              <?php } else { ?>
+                <button class="btn btn-danger" type="button" data-member-name="<?= htmlspecialchars($bookedMember['fn'] . ' ' . $bookedMember['sn']) ?>" data-member-id="<?= htmlspecialchars($bookedMember['id']) ?>" data-operation="cancel-place" data-session-id="<?= htmlspecialchars($session['SessionID']) ?>" data-session-name="<?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>" data-session-location="<?= htmlspecialchars($session['Location']) ?>" data-session-date="<?= htmlspecialchars($date->format('Y-m-d')) ?>">Remove</button>
+              <?php } ?>
             </div>
           </div>
         </li>

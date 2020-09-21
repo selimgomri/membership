@@ -57,6 +57,14 @@ function getMySessionBookingMembers($session, $date)
 
   $spaces = $spaces - $bookedCount;
 
+  $sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime'], new DateTimeZone('Europe/London'));
+  $bookingCloses = clone $sessionDateTime;
+  $bookingCloses->modify('-15 minutes');
+
+  $now = new DateTime('now', new DateTimeZone('Europe/London'));
+
+  $bookingClosed = $now > $bookingCloses;
+
 ?>
 
   <h2>Book</h2>
@@ -99,14 +107,20 @@ function getMySessionBookingMembers($session, $date)
             <span class="d-block"><strong><a href="<?= htmlspecialchars(autoUrl('members/' . $member['id'])) ?>"><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></a></strong></span>
             <?php if ($booking) { ?></strong><span class="d-block">Booked at <?= htmlspecialchars($bookingTime->format('H:i, j F Y')) ?></span><?php } ?>
           </span>
-          <?php if ($spaces > 0 && !$booking) { ?>
-            <span>
-              <button class="btn btn-primary" type="button" data-member-name="<?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?>" data-member-id="<?= htmlspecialchars($member['id']) ?>" data-operation="book-place" data-session-id="<?= htmlspecialchars($session['SessionID']) ?>" data-session-name="<?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>" data-session-location="<?= htmlspecialchars($session['Location']) ?>" data-session-date="<?= htmlspecialchars($date->format('Y-m-d')) ?>">Book</button>
-            </span>
-          <?php } else if ($spaces < 1) { ?>
-            <span>
-              Fully booked. No spaces.
-            </span>
+          <?php if ($bookingClosed && $booking) { ?>
+            <!-- <span class="text-muted">Booking closed</span> -->
+          <?php } else if ($bookingClosed) { ?>
+            <span class="text-muted">Booking closed</span>
+          <?php } else { ?>
+            <?php if ($spaces > 0 && !$booking) { ?>
+              <span>
+                <button class="btn btn-primary" type="button" data-member-name="<?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?>" data-member-id="<?= htmlspecialchars($member['id']) ?>" data-operation="book-place" data-session-id="<?= htmlspecialchars($session['SessionID']) ?>" data-session-name="<?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>" data-session-location="<?= htmlspecialchars($session['Location']) ?>" data-session-date="<?= htmlspecialchars($date->format('Y-m-d')) ?>">Book</button>
+              </span>
+            <?php } else if ($spaces < 1) { ?>
+              <span>
+                Fully booked. No spaces.
+              </span>
+            <?php } ?>
           <?php } ?>
         </li>
       <?php } ?>
