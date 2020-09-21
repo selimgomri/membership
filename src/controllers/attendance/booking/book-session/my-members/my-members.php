@@ -42,6 +42,21 @@ function getMySessionBookingMembers($session, $date)
 
   $getBooking = $db->prepare("SELECT `BookedAt` FROM `sessionsBookings` WHERE `Session` = ? AND `Date` = ? AND `Member` = ?");
 
+  // Check there is space
+  $getBookedCount = $db->prepare("SELECT COUNT(*) FROM `sessionsBookings` WHERE `Session` = ? AND `Date` = ?");
+  $getBookedCount->execute([
+    $session['SessionID'],
+    $date->format('Y-m-d'),
+  ]);
+  $bookedCount = $getBookedCount->fetchColumn();
+
+  $spaces = PHP_INT_MAX;
+  if ($session['MaxPlaces']) {
+    $spaces = $session['MaxPlaces'];
+  }
+
+  $spaces = $spaces - $bookedCount;
+
 ?>
 
   <h2>Book</h2>
@@ -50,6 +65,16 @@ function getMySessionBookingMembers($session, $date)
   </p>
 
   <?php if (sizeof($members) > 0) { ?>
+
+    <?php if (sizeof($members) > 1 && sizeof($members) > $spaces) { ?>
+      <p>
+        <strong>Beware:</strong> There is not enough space to book all of your members onto this session.
+      </p>
+    <?php } else if ($spaces < 1) { ?>
+      <p>
+        We're sorry but there are no spaces left to book on this session.
+      </p>
+    <?php } ?>
 
     <ul class="list-group mb-3" id="member-booking-list">
       <?php foreach ($members as $member) {
@@ -74,9 +99,13 @@ function getMySessionBookingMembers($session, $date)
             <span class="d-block"><strong><a href="<?= htmlspecialchars(autoUrl('members/' . $member['id'])) ?>"><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></a></strong></span>
             <?php if ($booking) { ?></strong><span class="d-block">Booked at <?= htmlspecialchars($bookingTime->format('H:i, j F Y')) ?></span><?php } ?>
           </span>
-          <?php if (!$booking) { ?>
+          <?php if ($spaces > 0 && !$booking) { ?>
             <span>
               <button class="btn btn-primary" type="button" data-member-name="<?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?>" data-member-id="<?= htmlspecialchars($member['id']) ?>" data-operation="book-place" data-session-id="<?= htmlspecialchars($session['SessionID']) ?>" data-session-name="<?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>" data-session-location="<?= htmlspecialchars($session['Location']) ?>" data-session-date="<?= htmlspecialchars($date->format('Y-m-d')) ?>">Book</button>
+            </span>
+          <?php } else if ($spaces < 1) { ?>
+            <span>
+              Fully booked. No spaces.
             </span>
           <?php } ?>
         </li>

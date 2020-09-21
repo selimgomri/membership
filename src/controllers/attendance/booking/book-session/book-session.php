@@ -104,57 +104,10 @@ include BASE_PATH . 'views/header.php';
 <div class="container">
 
   <div class="row">
-    <div class="col-lg-8">
+    <div class="col-lg-8 order-2 order-lg-1 mb-3">
       <p class="lead">
-        <span class="place-numbers-places-booked-string uc-first"><?= htmlspecialchars(mb_ucfirst($numFormatter->format($bookedCount))) ?></span> <?php if ($bookedCount == 1) { ?>member has<?php } else { ?>members have<?php } ?> booked onto this session. <?php if ($session['MaxPlaces']) { ?><span class="place-numbers-places-remaining-string uc-first"><?= htmlspecialchars(mb_ucfirst($numFormatter->format($session['MaxPlaces'] - $bookedCount))) ?></span> <?php if (($session['MaxPlaces'] - $bookedCount) == 1) { ?>place remains<?php } else { ?>places remain<?php } ?> available.<?php } ?>
+        <span class="place-numbers-places-booked-string uc-first"><?= htmlspecialchars(mb_ucfirst($numFormatter->format($bookedCount))) ?></span> <span id="place-numbers-booked-places-member-string"><?php if ($bookedCount == 1) { ?>member has<?php } else { ?>members have<?php } ?></span> booked onto this session. <?php if ($session['MaxPlaces']) { ?><span class="place-numbers-places-remaining-string uc-first"><?= htmlspecialchars(mb_ucfirst($numFormatter->format($session['MaxPlaces'] - $bookedCount))) ?></span> <span id="place-numbers-places-remaining-member-string"><?php if (($session['MaxPlaces'] - $bookedCount) == 1) { ?>place remains<?php } else { ?>places remain<?php } ?></span> available.<?php } ?>
       </p>
-
-      <h2>Session Details</h2>
-      <dl class="row">
-        <dt class="col-sm-3">Starts at</dt>
-        <dd class="col-sm-9"><?= htmlspecialchars($startTime->format('H:i')) ?></dd>
-
-        <dt class="col-sm-3">Ends at</dt>
-        <dd class="col-sm-9"><?= htmlspecialchars($endTime->format('H:i')) ?></dd>
-
-        <dt class="col-sm-3">Duration</dt>
-        <dd class="col-sm-9"><?php if ($hours > 0) { ?><?= $hours ?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?= $mins ?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
-
-        <?php if ($session['MaxPlaces']) { ?>
-          <dt class="col-sm-3">Total places available</dt>
-          <dd class="col-sm-9 place-numbers-max-places-int"><?= htmlspecialchars($session['MaxPlaces']) ?></dd>
-        <?php } ?>
-
-        <dt class="col-sm-3">Places booked</dt>
-        <dd class="col-sm-9 place-numbers-places-booked-int"><?= htmlspecialchars($bookedCount) ?></dd>
-
-        <?php if ($session['MaxPlaces']) { ?>
-          <dt class="col-sm-3">Places remaining</dt>
-          <dd class="col-sm-9 place-numbers-places-remaining-int"><?= htmlspecialchars(($session['MaxPlaces'] - $bookedCount)) ?></dd>
-        <?php } ?>
-
-        <?php for ($i = 0; $i < sizeof($squadNames); $i++) {
-          $getCoaches->execute([
-            $squadNames[$i]['SquadID'],
-          ]);
-          $coaches = $getCoaches->fetchAll(PDO::FETCH_ASSOC);
-        ?>
-          <dt class="col-sm-3"><?= htmlspecialchars($squadNames[$i]['SquadName']) ?> Coach<?php if (sizeof($coaches) > 0) { ?>es<?php } ?></dt>
-          <dd class="col-sm-9">
-            <ul class="list-unstyled mb-0">
-              <?php for ($i = 0; $i < sizeof($coaches); $i++) { ?>
-                <li><strong><?= htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn']) ?></strong>, <?= htmlspecialchars(coachTypeDescription($coaches[$i]['code'])) ?></li>
-              <?php } ?>
-              <?php if (sizeof($coaches) == 0) { ?>
-                <li>None assigned</li>
-              <?php } ?>
-            </ul>
-          </dd>
-        <?php } ?>
-
-        <dt class="col-sm-3">Location</dt>
-        <dd class="col-sm-9 mb-0"><?= htmlspecialchars($session['Location']) ?></dd>
-      </dl>
 
       <!--  -->
       <div id="my-member-booking-container-box">
@@ -167,6 +120,106 @@ include BASE_PATH . 'views/header.php';
         </div>
       <?php } ?>
 
+    </div>
+    <div class="col order-1 order-lg-2">
+      <div class="position-sticky top-3 mb-3">
+        <div class="card card-body d-none d-lg-flex">
+          <h2>Session Details</h2>
+          <dl class="row mb-0">
+            <dt class="col-sm-12">Starts at</dt>
+            <dd class="col-sm-12"><?= htmlspecialchars($startTime->format('H:i')) ?></dd>
+
+            <dt class="col-sm-12">Ends at</dt>
+            <dd class="col-sm-12"><?= htmlspecialchars($endTime->format('H:i')) ?></dd>
+
+            <dt class="col-sm-12">Duration</dt>
+            <dd class="col-sm-12"><?php if ($hours > 0) { ?><?= $hours ?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?= $mins ?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
+
+            <?php if ($session['MaxPlaces']) { ?>
+              <dt class="col-sm-12">Total places available</dt>
+              <dd class="col-sm-12 place-numbers-max-places-int"><?= htmlspecialchars($session['MaxPlaces']) ?></dd>
+            <?php } ?>
+
+            <dt class="col-sm-12">Places booked</dt>
+            <dd class="col-sm-12 place-numbers-places-booked-int"><?= htmlspecialchars($bookedCount) ?></dd>
+
+            <?php if ($session['MaxPlaces']) { ?>
+              <dt class="col-sm-12">Places remaining</dt>
+              <dd class="col-sm-12 place-numbers-places-remaining-int"><?= htmlspecialchars(($session['MaxPlaces'] - $bookedCount)) ?></dd>
+            <?php } ?>
+
+            <?php for ($i = 0; $i < sizeof($squadNames); $i++) {
+              $getCoaches->execute([
+                $squadNames[$i]['SquadID'],
+              ]);
+              $coaches = $getCoaches->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+              <dt class="col-sm-12"><?= htmlspecialchars($squadNames[$i]['SquadName']) ?> Coach<?php if (sizeof($coaches) > 0) { ?>es<?php } ?></dt>
+              <dd class="col-sm-12">
+                <ul class="list-unstyled mb-0">
+                  <?php for ($i = 0; $i < sizeof($coaches); $i++) { ?>
+                    <li><strong><?= htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn']) ?></strong>, <?= htmlspecialchars(coachTypeDescription($coaches[$i]['code'])) ?></li>
+                  <?php } ?>
+                  <?php if (sizeof($coaches) == 0) { ?>
+                    <li>None assigned</li>
+                  <?php } ?>
+                </ul>
+              </dd>
+            <?php } ?>
+
+            <dt class="col-sm-12">Location</dt>
+            <dd class="col-sm-12 mb-0"><?= htmlspecialchars($session['Location']) ?></dd>
+          </dl>
+        </div>
+        <div class="d-block d-lg-none">
+          <h2>Session Details</h2>
+          <dl class="row mb-0">
+            <dt class="col-sm-3">Starts at</dt>
+            <dd class="col-sm-9"><?= htmlspecialchars($startTime->format('H:i')) ?></dd>
+
+            <dt class="col-sm-3">Ends at</dt>
+            <dd class="col-sm-9"><?= htmlspecialchars($endTime->format('H:i')) ?></dd>
+
+            <dt class="col-sm-3">Duration</dt>
+            <dd class="col-sm-9"><?php if ($hours > 0) { ?><?= $hours ?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?= $mins ?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
+
+            <?php if ($session['MaxPlaces']) { ?>
+              <dt class="col-sm-3">Total places available</dt>
+              <dd class="col-sm-9 place-numbers-max-places-int"><?= htmlspecialchars($session['MaxPlaces']) ?></dd>
+            <?php } ?>
+
+            <dt class="col-sm-3">Places booked</dt>
+            <dd class="col-sm-9 place-numbers-places-booked-int"><?= htmlspecialchars($bookedCount) ?></dd>
+
+            <?php if ($session['MaxPlaces']) { ?>
+              <dt class="col-sm-3">Places remaining</dt>
+              <dd class="col-sm-9 place-numbers-places-remaining-int"><?= htmlspecialchars(($session['MaxPlaces'] - $bookedCount)) ?></dd>
+            <?php } ?>
+
+            <?php for ($i = 0; $i < sizeof($squadNames); $i++) {
+              $getCoaches->execute([
+                $squadNames[$i]['SquadID'],
+              ]);
+              $coaches = $getCoaches->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+              <dt class="col-sm-3"><?= htmlspecialchars($squadNames[$i]['SquadName']) ?> Coach<?php if (sizeof($coaches) > 0) { ?>es<?php } ?></dt>
+              <dd class="col-sm-9">
+                <ul class="list-unstyled mb-0">
+                  <?php for ($i = 0; $i < sizeof($coaches); $i++) { ?>
+                    <li><strong><?= htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn']) ?></strong>, <?= htmlspecialchars(coachTypeDescription($coaches[$i]['code'])) ?></li>
+                  <?php } ?>
+                  <?php if (sizeof($coaches) == 0) { ?>
+                    <li>None assigned</li>
+                  <?php } ?>
+                </ul>
+              </dd>
+            <?php } ?>
+
+            <dt class="col-sm-3">Location</dt>
+            <dd class="col-sm-9 mb-0"><?= htmlspecialchars($session['Location']) ?></dd>
+          </dl>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -291,6 +344,13 @@ include BASE_PATH . 'views/header.php';
           element.textContent = stats.placesBooked.string;
         }
       }
+
+      let bookedPlacesString = document.getElementById('place-numbers-booked-places-member-string');
+      if (stats.placesBooked.int == 1) {
+        bookedPlacesString.textContent = 'member has';
+      } else {
+        bookedPlacesString.textContent = 'members have';
+      }
     }
 
     if (stats.placesRemaining) {
@@ -308,8 +368,149 @@ include BASE_PATH . 'views/header.php';
           element.textContent = stats.placesRemaining.string;
         }
       }
+
+      let remainingPlacesString = document.getElementById('place-numbers-places-remaining-member-string');
+      if (stats.placesRemaining.int == 1) {
+        remainingPlacesString.textContent = 'place remains';
+      } else {
+        remainingPlacesString.textContent = 'places remain';
+      }
     }
   }
+
+  async function reloadMyMemberList() {
+
+    let targetBox = document.getElementById('my-member-booking-container-box');
+    if (targetBox) {
+
+      // ------------------------------------------------------------
+      // Reload booking box etc via ajax request
+      // ------------------------------------------------------------
+      var dataReload = new XMLHttpRequest();
+      dataReload.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          let json = JSON.parse(this.responseText);
+          if (json.status == 200) {
+
+            targetBox.innerHTML = json.html;
+            updateBookingNumbers(json.stats);
+
+          } else {
+            location.reload();
+          }
+        } else if (this.readyState == 4) {
+          location.reload();
+        }
+      }
+      dataReload.open('GET', options.myMemberReloadAjaxUrl, true);
+      dataReload.setRequestHeader('Accept', 'application/json');
+      dataReload.send();
+      // ------------------------------------------------------------
+      // ENDS Reload booking box etc via ajax request
+      // ------------------------------------------------------------
+
+    }
+
+  }
+
+  async function reloadAllMemberList() {
+
+    let targetBox = document.getElementById('all-member-booking-container-box');
+    if (targetBox) {
+
+      // ------------------------------------------------------------
+      // Reload booking box etc via ajax request
+      // ------------------------------------------------------------
+      var dataReload = new XMLHttpRequest();
+      dataReload.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          let json = JSON.parse(this.responseText);
+          if (json.status == 200) {
+
+            targetBox.innerHTML = json.html;
+            updateBookingNumbers(json.stats);
+
+          } else {
+            location.reload();
+          }
+        } else if (this.readyState == 4) {
+          // Not ok
+          location.reload();
+        }
+      }
+      dataReload.open('GET', options.allMemberReloadAjaxUrl, true);
+      dataReload.setRequestHeader('Accept', 'application/json');
+      dataReload.send();
+      // ------------------------------------------------------------
+      // ENDS Reload booking box etc via ajax request
+      // ------------------------------------------------------------
+
+    }
+
+  }
+
+  let form = document.getElementById('member-booking-form');
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    let formData = new FormData(form);
+
+    // console.log(formData);
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        let json = JSON.parse(this.responseText);
+        if (json.status == 200) {
+          // Reload booking box etc
+          // console.log(formData);
+          reloadMyMemberList();
+          reloadAllMemberList();
+
+          // Show success message, dismiss modal, reload booking box
+          $('#booking-modal').modal('hide');
+
+        } else {
+          alert(json.error);
+        }
+      } else if (this.readyState == 4) {
+        // Not ok
+        alert('An error occurred and we could not parse the submission.');
+      }
+    }
+    req.open('POST', options.bookingAjaxUrl, true);
+    req.setRequestHeader('Accept', 'application/json');
+    req.send(formData);
+  });
+
+  form = document.getElementById('cancel-booking-form');
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    let formData = new FormData(form);
+
+    // console.log(formData);
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        let json = JSON.parse(this.responseText);
+        if (json.status == 200) {
+
+          reloadMyMemberList();
+          reloadAllMemberList();
+
+          // Hide modal
+          $('#cancel-modal').modal('hide');
+
+        } else {
+          alert(json.error);
+        }
+      } else if (this.readyState == 4) {
+        // Not ok
+        alert('An error occurred and we could not parse the submission.');
+      }
+    }
+    req.open('POST', options.cancellationAjaxUrl, true);
+    req.setRequestHeader('Accept', 'application/json');
+    req.send(formData);
+  });
 
   let mbl = document.getElementById('my-member-booking-container-box');
   if (mbl) {
@@ -324,63 +525,6 @@ include BASE_PATH . 'views/header.php';
         document.getElementById('session-date').value = event.target.dataset.sessionDate;
 
         $('#booking-modal').modal('show');
-
-        let form = document.getElementById('member-booking-form');
-        form.addEventListener('submit', event => {
-          event.preventDefault();
-          let formData = new FormData(form);
-
-          // console.log(formData);
-          var req = new XMLHttpRequest();
-          req.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-              let json = JSON.parse(this.responseText);
-              if (json.status == 200) {
-                // Reload booking box etc
-                // console.log(formData);
-
-                // ------------------------------------------------------------
-                // Reload booking box etc via ajax request
-                // ------------------------------------------------------------
-                var dataReload = new XMLHttpRequest();
-                dataReload.onreadystatechange = function() {
-                  if (this.readyState == 4 && this.status == 200) {
-                    let json = JSON.parse(this.responseText);
-                    if (json.status == 200) {
-
-                      mbl.innerHTML = json.html;
-                      updateBookingNumbers(json.stats);
-
-                    } else {
-                      alert(json.error);
-                    }
-                  } else if (this.readyState == 4) {
-                    // Not ok
-                    alert('An error occurred and we could not parse the submission.');
-                  }
-                }
-                dataReload.open('GET', options.myMemberReloadAjaxUrl, true);
-                dataReload.setRequestHeader('Accept', 'application/json');
-                dataReload.send();
-                // ------------------------------------------------------------
-                // ENDS Reload booking box etc via ajax request
-                // ------------------------------------------------------------
-
-                // Show success message, dismiss modal, reload booking box
-                $('#booking-modal').modal('hide');
-
-              } else {
-                alert(json.error);
-              }
-            } else if (this.readyState == 4) {
-              // Not ok
-              alert('An error occurred and we could not parse the submission.');
-            }
-          }
-          req.open('POST', options.bookingAjaxUrl, true);
-          req.setRequestHeader('Accept', 'application/json');
-          req.send(formData);
-        });
       }
     });
   }
@@ -398,61 +542,6 @@ include BASE_PATH . 'views/header.php';
         document.getElementById('cancel-session-date').value = event.target.dataset.sessionDate;
 
         $('#cancel-modal').modal('show');
-
-        let form = document.getElementById('cancel-booking-form');
-        form.addEventListener('submit', event => {
-          event.preventDefault();
-          let formData = new FormData(form);
-
-          // console.log(formData);
-          var req = new XMLHttpRequest();
-          req.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-              let json = JSON.parse(this.responseText);
-              if (json.status == 200) {
-
-                // ------------------------------------------------------------
-                // Reload booking box etc via ajax request
-                // ------------------------------------------------------------
-                var dataReload = new XMLHttpRequest();
-                dataReload.onreadystatechange = function() {
-                  if (this.readyState == 4 && this.status == 200) {
-                    let json = JSON.parse(this.responseText);
-                    if (json.status == 200) {
-
-                      ambl.innerHTML = json.html;
-                      updateBookingNumbers(json.stats);
-
-                    } else {
-                      alert(json.error);
-                    }
-                  } else if (this.readyState == 4) {
-                    // Not ok
-                    alert('An error occurred and we could not parse the submission.');
-                  }
-                }
-                dataReload.open('GET', options.allMemberReloadAjaxUrl, true);
-                dataReload.setRequestHeader('Accept', 'application/json');
-                dataReload.send();
-                // ------------------------------------------------------------
-                // ENDS Reload booking box etc via ajax request
-                // ------------------------------------------------------------
-
-                // Hide modal
-                $('#cancel-modal').modal('hide');
-
-              } else {
-                alert(json.error);
-              }
-            } else if (this.readyState == 4) {
-              // Not ok
-              alert('An error occurred and we could not parse the submission.');
-            }
-          }
-          req.open('POST', options.cancellationAjaxUrl, true);
-          req.setRequestHeader('Accept', 'application/json');
-          req.send(formData);
-        });
       }
     });
   }
