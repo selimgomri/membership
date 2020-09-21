@@ -108,16 +108,23 @@ if (!function_exists('chesterStandardMenu')) {
                 </div>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="<?= autoUrl("sessions") ?>">
-                  Sessions
+                <a class="nav-link" href="<?= htmlspecialchars(autoUrl('sessions')) ?>">
+                  Timetable
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="<?= htmlspecialchars(autoUrl('sessions/booking')) ?>">
+                  Booking
+                </a>
+              </li>
+              <?php if (app()->tenant->getKey('ASA_CLUB_CODE') != 'UOSZ') { ?>
               <li class="nav-item">
                 <a class="nav-link" href="<?= htmlspecialchars(autoUrl("log-books")) ?>">Log Books</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="<?php echo autoUrl("emergency-contacts") ?>">Emergency Contacts</a>
               </li>
+              <?php } ?>
               <?php if ($renewalOpen) { ?>
                 <li class="nav-item">
                   <a class="nav-link" href="<?php echo autoUrl("renewal") ?>">
@@ -172,9 +179,10 @@ if (!function_exists('chesterStandardMenu')) {
                   </a>
                   <div class="dropdown-menu" aria-labelledby="registerDropdown">
                     <a class="dropdown-item" href="<?php echo autoUrl("attendance") ?>">Attendance Home</a>
+                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('sessions')) ?>">Timetable</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("attendance/register") ?>">Take Register</a>
                     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee") { ?>
-                      <a class="dropdown-item" href="<?php echo autoUrl("attendance/sessions") ?>">Manage Sessions</a>
+                      <a class="dropdown-item" href="<?php echo autoUrl("attendance/sessions") ?>">Manage Squad Sessions</a>
                       <a class="dropdown-item" href="<?= autoUrl("attendance/venues") ?>">Manage Venues</a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?php echo autoUrl("attendance/history") ?>">Attendance History</a>
@@ -357,7 +365,7 @@ if (!function_exists('chesterStandardMenu')) {
                 </a>
               </li>
             <?php } ?>
-            <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
+            <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent" && app()->tenant->getKey('ASA_CLUB_CODE') != 'UOSZ') {
               $hasMandate = userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
               $getCountNewMandates = $db->prepare("SELECT COUNT(*) FROM stripeMandates INNER JOIN stripeCustomers ON stripeMandates.Customer = stripeCustomers.CustomerID WHERE stripeCustomers.User = ? AND stripeMandates.MandateStatus != 'inactive';");
               $getCountNewMandates->execute([
@@ -462,6 +470,9 @@ if (!function_exists('chesterStandardMenu')) {
           <?php if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
             <li class="nav-item">
               <a class="nav-link" href="<?= htmlspecialchars(autoUrl("login")) ?>">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="<?= htmlspecialchars(autoUrl("covid/contact-tracing")) ?>">COVID-19 Contact Tracing</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="<?= htmlspecialchars(autoUrl("timeconverter")) ?>">Time Converter</a>

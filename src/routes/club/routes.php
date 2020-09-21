@@ -157,7 +157,7 @@ $this->group('/sessions', function () {
   include BASE_PATH . 'controllers/attendance/public_sessions/router.php';
 });
 
-$this->group('/contact-tracing', function () {
+$this->group(['/contact-tracing', '/covid/contact-tracing'], function () {
   include BASE_PATH . 'controllers/contact-tracing/router.php';
 });
 

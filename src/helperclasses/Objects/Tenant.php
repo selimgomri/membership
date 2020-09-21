@@ -235,7 +235,7 @@ class Tenant
     $result = $query->fetchColumn();
 
     $res = false;
-    if ($result == 0 && $value == null) {
+    if ($result > 0 && $value == null) {
       $query = $db->prepare("DELETE FROM tenantOptions WHERE `Option` = ? AND `Tenant` = ?");
       $res = $query->execute([$key, $this->id]);
     } else if ($result == 0) {

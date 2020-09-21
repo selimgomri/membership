@@ -188,7 +188,7 @@ include BASE_PATH . 'views/header.php';
             <?php } ?>
 
             <dt class="col-sm-12">Location</dt>
-            <dd class="col-sm-12"><?= htmlspecialchars($session['Location']) ?></dd>
+            <dd class="col-sm-12"><?= htmlspecialchars($session['VenueName']) ?>, <em><?= htmlspecialchars($session['Location']) ?></em></dd>
 
             <dt class="col-sm-12">Session Unique ID</dt>
             <dd class="col-sm-12 mb-0"><?= htmlspecialchars($date->format('Y-m-d')) ?>-S<?= htmlspecialchars($session['SessionID']) ?></dd>

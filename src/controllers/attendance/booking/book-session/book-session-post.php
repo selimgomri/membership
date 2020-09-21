@@ -179,7 +179,7 @@ try {
       $username = $emailUser['ufn'] . ' ' . $emailUser['usn'];
       $emailAddress = $emailUser['email'];
       $content = '<p>Hello ' . htmlspecialchars($username) . ',</p>';
-      $content .= '<p>This is a confirmation of the following session booking;</p>';
+      $content .= '<p>This is confirmation of the following session booking;</p>';
 
       $content .= '<dl>';
 
@@ -231,7 +231,7 @@ try {
         $content .= '</ul></dd>';
       }
 
-      $content .= '<dt>Location</dt><dd>' . htmlspecialchars($session['Location']) . '</dd>';
+      $content .= '<dt>Location</dt><dd>' . htmlspecialchars($session['VenueName']) . ', <em>' . htmlspecialchars($session['Location']) . '</em></dd>';
 
       $content .= '</dl>';
 

@@ -117,14 +117,14 @@ try {
       $username = $emailUser['ufn'] . ' ' . $emailUser['usn'];
       $emailAddress = $emailUser['email'];
       $content = '<p>Hello ' . htmlspecialchars($username) . ',</p>';
-      $content .= '<p>' . htmlspecialchars($user->getFullName()) . ' has cancelled the following session booking;</p>';
+      $content .= '<p><strong>' . htmlspecialchars($user->getFullName()) . ' has <em>cancelled</em> the following session booking;</strong></p>';
 
       $content .= '<dl>';
 
       $content .= '<dt>Member</dt><dd>' . htmlspecialchars($emailUser['fn'] . ' ' . $emailUser['sn']) . '</dd>';
       $content .= '<dt>Session</dt><dd>' . htmlspecialchars($session['SessionName']) . '</dd>';
       $content .= '<dt>Date and time</dt><dd>' . htmlspecialchars($sessionDateTime->format('H:i, l j F Y T')) . '</dd>';
-      $content .= '<dt>Location</dt><dd>' . htmlspecialchars($session['Location']) . '</dd>';
+      $content .= '<dt>Location</dt><dd>' . htmlspecialchars($session['VenueName']) . ', <em>' . htmlspecialchars($session['Location']) . '</em></dd>';
 
       $content .= '</dl>';
 
@@ -135,7 +135,6 @@ try {
       // Ignore failed send
     }
   }
-
 } catch (Exception $e) {
 
   reportError($e);
