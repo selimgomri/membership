@@ -6,12 +6,24 @@ $currentUser = null;
 if (isset(app()->user)) {
   $currentUser = app()->user;
 }
-if ($currentUser == null) {
-  include BASE_PATH . "views/head.php"; ?>
-  <div class="bg-primary py-3 mb-3 text-white">
+if ($currentUser == null && false) {
+  $clubLogoColour = 'text-white logo-text-shadow';
+  $navTextColour = 'navbar-dark';
+  $clubLinkColour = 'btn-light';
+
+  if (app()->tenant->getKey('SYSTEM_COLOUR') && getContrastColor(app()->tenant->getKey('SYSTEM_COLOUR'))) {
+    $clubLogoColour = 'text-dark';
+    $navTextColour = 'navbar-light';
+    $clubLinkColour = 'btn-dark';
+  }
+
+  include BASE_PATH . "views/head.php";
+  
+  ?>
+  <div class="py-3 mb-3 text-white membership-header <?= $clubLogoColour ?>">
     <div class="container">
       <h1 class="mb-0">
-        <a href="<?= autoUrl("") ?>" class="text-white">
+        <a href="<?= autoUrl("") ?>" class="<?= $clubLogoColour ?>">
           <strong>
             <?= mb_strtoupper(htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))) ?>
           </strong>
