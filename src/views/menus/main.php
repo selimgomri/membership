@@ -118,12 +118,12 @@ if (!function_exists('chesterStandardMenu')) {
                 </a>
               </li>
               <?php if (app()->tenant->getKey('ASA_CLUB_CODE') != 'UOSZ') { ?>
-              <li class="nav-item">
-                <a class="nav-link" href="<?= htmlspecialchars(autoUrl("log-books")) ?>">Log Books</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="<?php echo autoUrl("emergency-contacts") ?>">Emergency Contacts</a>
-              </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="<?= htmlspecialchars(autoUrl("log-books")) ?>">Log Books</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="<?php echo autoUrl("emergency-contacts") ?>">Emergency Contacts</a>
+                </li>
               <?php } ?>
               <?php if ($renewalOpen) { ?>
                 <li class="nav-item">
@@ -502,6 +502,12 @@ if (!function_exists('chesterStandardMenu')) {
                   <?php foreach ($perms as $perm => $name) { ?>
                     <a class="dropdown-item" href="<?= autoUrl("account-switch?type=" . urlencode($perm)) ?>"><?= htmlspecialchars($name) ?><?php if ($perm == $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) { ?> <i class="text-primary fa fa-check-circle fa-fw" aria-hidden="true"></i><?php } ?></a>
                   <?php } ?>
+                  <div class="dropdown-divider"></div>
+                <?php } ?>
+                <?php if (isset(app()->tenant) && app()->tenant->getKey('ASA_CLUB_CODE') == 'UOSZ') { ?>
+                  <h6 class="dropdown-header">UoS Swimming and Water Polo</h6>
+                  <a class="dropdown-item" target="_blank" href="https://github.com/Swimming-Club-Data-Systems/Membership/issues?q=is%3Aissue+is%3Aopen+label%3AUOSSWPC">Feature Requests and Issues</a>
+                  <a class="dropdown-item" target="_blank" href="https://www.facebook.com/groups/69294080736">Facebook Group</a>
                   <div class="dropdown-divider"></div>
                 <?php } ?>
                 <h6 class="dropdown-header">Account settings</h6>
