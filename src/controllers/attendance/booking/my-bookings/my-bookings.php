@@ -64,7 +64,7 @@ include BASE_PATH . 'views/header.php';
           My Bookings <span class="badge badge-info" title="This is a new service. Your feedback is always welcome - send an email to feedback@myswimmingclub.uk or call us on +44 191 249 4320">BETA</span>
         </h1>
         <p class="lead mb-0">
-          Book numbers limited or pay as you go sessions
+          View your current and upcoming session bookings
         </p>
       </div>
     </div>
@@ -115,10 +115,10 @@ include BASE_PATH . 'views/header.php';
               <h2 class="mb-0"><?php if (sizeof($squadNames) > 0) { ?><?php for ($i = 0; $i < sizeof($squadNames); $i++) { ?><?php if ($i > 0) { ?>, <?php } ?><?= htmlspecialchars($squadNames[$i]['SquadName']) ?><?php } ?><?php } else { ?>Any Member<?php } ?></h2>
               <p class="h3"><small><?= htmlspecialchars($booking['SessionName']) ?>, <?= htmlspecialchars($booking['VenueName']) ?></small></p>
 
-              <dl class="row mb-0">
-              <dt class="col-sm-3">Date</dt>
+              <dl class="row mb-0">s
+                <dt class="col-sm-3">Date</dt>
                 <dd class="col-sm-9"><?= htmlspecialchars($sessionDateTime->format('l j F Y')) ?></dd>
-                
+
                 <dt class="col-sm-3">Starts at</dt>
                 <dd class="col-sm-9"><?= htmlspecialchars($startTime->format('H:i')) ?></dd>
 
