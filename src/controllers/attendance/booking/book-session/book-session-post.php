@@ -219,7 +219,7 @@ try {
           $content .= 'es';
         }
 
-        $content .= '</dt><dd><ul>';
+        $content .= '</dt><dd><ul style="mb-0">';
 
         for ($i = 0; $i < sizeof($coaches); $i++) {
           $content .= '<li><strong>' . htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn']) . '</strong>, ' . htmlspecialchars(coachTypeDescription($coaches[$i]['code'])) . '</li>';
@@ -232,6 +232,7 @@ try {
       }
 
       $content .= '<dt>Location</dt><dd>' . htmlspecialchars($session['VenueName']) . ', <em>' . htmlspecialchars($session['Location']) . '</em></dd>';
+      $content .= '<dt>Session Unique ID</dt><dd>' . htmlspecialchars($sessionDateTime->format('Y-m-d')) . '-S' . htmlspecialchars($session['SessionID']) . '</dd>';
 
       $content .= '</dl>';
 

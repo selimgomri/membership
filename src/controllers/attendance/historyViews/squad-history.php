@@ -41,13 +41,13 @@ if (!$pageSquad) {
   halt(404);
 }
 
-$sessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN sessionsSquads ON `sessions`.`SessionID` = sessionsSquads.Session) INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE sessionsSquads.Squad = ? AND sessions.Tenant = ? AND DisplayFrom <= ? AND DisplayUntil >= ? ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC;");
-$sessions->execute([
-  (int) $id,
-  $tenant->getId(),
-  $startWeek->format('Y-m-d'),
-  $endWeek->format('Y-m-d')
-]);
+$sessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN sessionsSquads ON `sessions`.`SessionID` = sessionsSquads.Session) INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE sessionsSquads.Squad = :squad AND sessions.Tenant = :tenant AND ((DisplayFrom <= :startTime AND DisplayUntil >= :endTime) OR ((:startTime <= DisplayFrom AND DisplayFrom <= :endTime) AND (:startTime <= DisplayUntil AND DisplayUntil <= :endTime))) ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC;");
+  $sessions->execute([
+    'squad' => (int) $_GET['squad'],
+    'tenant' => $tenant->getId(),
+    'startTime' => $startWeek->format('Y-m-d'),
+    'endTime' => $endWeek->format('Y-m-d'),
+  ]);
 
 $getSessionSquads = $db->prepare("SELECT SquadName, ForAllMembers, SquadID FROM `sessionsSquads` INNER JOIN `squads` ON sessionsSquads.Squad = squads.SquadID WHERE sessionsSquads.Session = ? ORDER BY SquadFee DESC, SquadName ASC;");
 

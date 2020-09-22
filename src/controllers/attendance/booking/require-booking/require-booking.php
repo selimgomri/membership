@@ -173,25 +173,9 @@ include BASE_PATH . 'views/header.php';
 
 </div>
 
-<script>
-  let limitRadio = document.getElementById('number-limit');
-  console.log(limitRadio);
-
-  limitRadio.addEventListener('change', event => {
-    let maxPlacesContainer = document.getElementById('max-places-container');
-    let maxCount = document.getElementById('max-count');
-    if (event.target.value == '1') {
-      maxPlacesContainer.classList.remove('d-none');
-      maxCount.required = true;
-    } else {
-      maxPlacesContainer.classList.add('d-none');
-      maxCount.required = false;
-    }
-  });
-</script>
-
 <?php
 
 $footer = new \SCDS\Footer();
+$footer->addJs('public/js/attendance/booking/require-booking.js');
 $footer->addJs('public/js/NeedsValidation.js');
 $footer->render();

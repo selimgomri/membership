@@ -1,6 +1,16 @@
 <?php
 $access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 
+$this->group('/sessions/new', function () {
+  $this->get('/', function () {
+    include 'add-sessions/add-one-off.php';
+  });
+
+  $this->post('/', function () {
+    include 'add-sessions/add-one-off-post.php';
+  });
+});
+
 if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
   // Attendance Home
   $this->get('/', function () {
