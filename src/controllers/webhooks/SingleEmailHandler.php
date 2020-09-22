@@ -99,7 +99,7 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 
 		if ($row['ForceSend'] == 1) {
 			$from = [
-				"Email" => $emailPrefix . "noreply@" . getenv('EMAIL_DOMAIN'),
+				"Email" => "noreply@" . getenv('EMAIL_DOMAIN'),
 				"Name" => app()->tenant->getKey('CLUB_NAME')
 			];
 

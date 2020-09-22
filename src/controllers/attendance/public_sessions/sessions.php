@@ -7,6 +7,8 @@ $now = new DateTime('now', new DateTimeZone('Europe/London'));
 $startWeek = new DateTime('monday -1 week', new DateTimeZone('UTC'));
 $now->setTimezone(new DateTimeZone('UTC'));
 
+$closedBookingsTime = new DateTime('+15 minutes', new DateTimeZone('Europe/London'));
+
 $day = null;
 
 if ($now->format('l') == 'Monday') {
@@ -220,7 +222,7 @@ include BASE_PATH . 'views/header.php';
 
                 <?php
                 $futureSession = false;
-                if ($sessionDateTime > $now) {
+                if ($sessionDateTime > $closedBookingsTime) {
                   $futureSession = true;
                 }
                 // Work out if booking required
