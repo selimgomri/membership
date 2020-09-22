@@ -4,10 +4,6 @@ $db = app()->db;
 $tenant = app()->tenant;
 $user = app()->user;
 
-if (!$user->hasPermission('Admin') && !$user->hasPermission('Coach')) {
-  halt(404);
-}
-
 if (!isset($_GET['session']) && !isset($_GET['date'])) halt(404);
 
 $date = null;
@@ -18,9 +14,10 @@ try {
 }
 
 // Get session
-$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay` FROM `sessions` INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessions`.`SessionID` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
+$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
 $getSession->execute([
   $_GET['session'],
+  $date->format('Y-m-d'),
   $tenant->getId(),
   $date->format('Y-m-d'),
   $date->format('Y-m-d'),
@@ -47,6 +44,31 @@ $now = new DateTime('now', new DateTimeZone('Europe/London'));
 
 $bookingClosed = $now > $bookingCloses;
 
+$numFormatter = new NumberFormatter("en-GB", NumberFormatter::SPELLOUT);
+
+// Number booked in
+$getBookedCount = $db->prepare("SELECT COUNT(*) FROM `sessionsBookings` WHERE `Session` = ? AND `Date` = ?");
+$getBookedCount->execute([
+  $session['SessionID'],
+  $date->format('Y-m-d'),
+]);
+$bookedCount = $getBookedCount->fetchColumn();
+
+$sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime']);
+$startTime = new DateTime($session['StartTime'], new DateTimeZone('UTC'));
+$endTime = new DateTime($session['EndTime'], new DateTimeZone('UTC'));
+$duration = $startTime->diff($endTime);
+$hours = (int) $duration->format('%h');
+$mins = (int) $duration->format('%i');
+
+$getCoaches = $db->prepare("SELECT Forename fn, Surname sn, coaches.Type code FROM coaches INNER JOIN users ON coaches.User = users.UserID WHERE coaches.Squad = ? ORDER BY coaches.Type ASC, Forename ASC, Surname ASC");
+
+$getSessionSquads = $db->prepare("SELECT SquadName, ForAllMembers, SquadID FROM `sessionsSquads` INNER JOIN `squads` ON sessionsSquads.Squad = squads.SquadID WHERE sessionsSquads.Session = ? ORDER BY SquadFee DESC, SquadName ASC;");
+$getSessionSquads->execute([
+  $session['SessionID'],
+]);
+$squadNames = $getSessionSquads->fetchAll(PDO::FETCH_ASSOC);
+
 $pagetitle = 'Session Booking';
 include BASE_PATH . 'views/header.php';
 
@@ -59,18 +81,26 @@ include BASE_PATH . 'views/header.php';
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('sessions')) ?>">Sessions</a></li>
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('sessions/booking')) ?>">Booking</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Require Booking</li>
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>"><?= htmlspecialchars($date->format('Y-m-d')) ?>-S<?= htmlspecialchars($session['SessionID']) ?></a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
       </ol>
     </nav>
 
     <div class="row align-items-center">
-      <div class="col">
+      <div class="col-lg-8">
         <h1>
-          Require booking for <?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>
+          <?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>
         </h1>
         <p class="lead mb-0">
-          Book numbers limited or pay as you go sessions
+          Edit booking options
         </p>
+      </div>
+      <div class="col text-right">
+        <?php if ($user->hasPermission('Admin') || $user->hasPermission('Coach')) { ?>
+          <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>" class="btn btn-dark" title="Changes won't be saved">
+            Back
+          </a>
+        <?php } ?>
       </div>
     </div>
 
@@ -80,7 +110,7 @@ include BASE_PATH . 'views/header.php';
 <div class="container">
   <div class="row">
     <div class="col-lg-8">
-      <form class="needs-validation" method="post" action="<?= htmlspecialchars(autoUrl('sessions/booking/require-booking')) ?>" novalidate>
+      <form class="needs-validation" method="post" action="<?= htmlspecialchars(autoUrl('sessions/booking/edit')) ?>" novalidate>
 
         <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RequireBookingError'])) { ?>
           <div class="alert alert-warning">
@@ -92,6 +122,15 @@ include BASE_PATH . 'views/header.php';
             </p>
           </div>
         <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['RequireBookingError']);
+        } ?>
+
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EditRequireBookingSuccess'])) { ?>
+          <div class="alert alert-success">
+            <p class="mb-0">
+              <strong>Changes saved successfully</strong>
+            </p>
+          </div>
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['EditRequireBookingSuccess']);
         } ?>
 
         <?php if ($bookingClosed) { ?>
@@ -119,36 +158,36 @@ include BASE_PATH . 'views/header.php';
 
         <div class="form-group" id="number-limit">
           <div class="custom-control custom-radio">
-            <input type="radio" id="unlimited-numbers" name="number-limit" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?>>
+            <input type="radio" id="unlimited-numbers" name="number-limit" class="custom-control-input" value="0" required <?php if (!$session['MaxPlaces']) { ?>checked<?php } ?> <?php if ($bookingClosed) { ?>disabled<?php } ?>>
             <label class="custom-control-label" for="unlimited-numbers">Unlimited numbers</label>
           </div>
           <div class="custom-control custom-radio">
-            <input type="radio" id="limited-numbers" name="number-limit" class="custom-control-input" value="1" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
+            <input type="radio" id="limited-numbers" name="number-limit" class="custom-control-input" value="1" <?php if ($session['MaxPlaces']) { ?>checked<?php } ?> <?php if ($bookingClosed) { ?>disabled<?php } ?>>
             <label class="custom-control-label" for="limited-numbers">Limited numbers</label>
           </div>
         </div>
 
-        <div class="d-none" id="max-places-container">
+        <div class="<?php if (!$session['MaxPlaces']) { ?>d-none<?php } ?>" id="max-places-container">
           <div class="form-group">
             <label for="max-count">Maximum places</label>
-            <input type="number" id="max-count" name="max-count" min="1" step="1" class="form-control" value="" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
+            <input type="number" id="max-count" name="max-count" min="1" step="1" class="form-control" value="<?php if ($session['MaxPlaces']) { ?><?= htmlspecialchars($session['MaxPlaces']) ?><?php } ?>" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
             <div class="invalid-feedback">
               Please provide a positive integer
             </div>
           </div>
 
           <p>
-            If you later reduce the limit on a session to a number lower than the number of bookings, then those who booked a place first will keep their places and the most recent bookings being remove down to the new limit.
+            If you reduce the limit on a session to a number lower than the number of bookings, then those who booked a place first will keep their places and the most recent bookings being remove down to the new limit. Members will be sent an email if they are affected.
           </p>
         </div>
 
         <div class="form-group">
           <div class="custom-control custom-radio">
-            <input type="radio" id="open-to-squads" name="open-to" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?>>
+            <input type="radio" id="open-to-squads" name="open-to" class="custom-control-input" value="0" required <?php if (!bool($session['AllSquads'])) { ?>checked<?php } ?> <?php if ($bookingClosed) { ?>disabled<?php } ?>>
             <label class="custom-control-label" for="open-to-squads">Open to this session's scheduled squads</label>
           </div>
           <div class="custom-control custom-radio">
-            <input type="radio" id="open-to-all" name="open-to" class="custom-control-input" value="1" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
+            <input type="radio" id="open-to-all" name="open-to" class="custom-control-input" value="1" <?php if (bool($session['AllSquads'])) { ?>checked<?php } ?> <?php if ($bookingClosed) { ?>disabled<?php } ?>>
             <label class="custom-control-label" for="open-to-all">Open to all members</label>
           </div>
         </div>
@@ -163,7 +202,7 @@ include BASE_PATH . 'views/header.php';
 
         <p>
           <button type="submit" class="btn btn-primary" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
-            Require Booking
+            Save Session Booking Settings
           </button>
         </p>
 

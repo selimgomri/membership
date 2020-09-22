@@ -4,6 +4,9 @@ $db = app()->db;
 $tenant = app()->tenant;
 $user = app()->user;
 
+include 'my-members/my-members.php';
+include 'all-members/all-members.php';
+
 if (!isset($_GET['session']) && !isset($_GET['date'])) halt(404);
 
 $date = null;
@@ -38,39 +41,6 @@ if ($session['SessionDay'] != $dayOfWeek) {
 
 $numFormatter = new NumberFormatter("en-GB", NumberFormatter::SPELLOUT);
 
-// Get bookable members
-$members = [];
-if (bool($session['AllSquads'])) {
-  $getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM members WHERE UserID = ? ORDER BY fn ASC, sn ASC");
-  $getMembers->execute([
-    $user->getId(),
-  ]);
-  $members = $getMembers->fetchAll(PDO::FETCH_ASSOC);
-} else {
-  // Get session squads
-  $getSquads = $db->prepare("SELECT `Squad` FROM `sessionsSquads` WHERE `Session` = ?");
-  $getSquads->execute([
-    $session['SessionID'],
-  ]);
-
-  while ($squad = $getSquads->fetchColumn()) {
-    // Get members for this user in this squad
-    $getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM members INNER JOIN squadMembers ON members.MemberID = squadMembers.Member WHERE UserID = ? AND squadMembers.Squad = ? ORDER BY fn ASC, sn ASC");
-    $getMembers->execute([
-      $user->getId(),
-      $squad,
-    ]);
-
-    while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)) {
-      $members[] = $member;
-    }
-  }
-
-  // Remove duplicated
-  // $members = array_unique($members);
-  $members = array_map("unserialize", array_unique(array_map("serialize", $members)));
-}
-
 // Number booked in
 $getBookedCount = $db->prepare("SELECT COUNT(*) FROM `sessionsBookings` WHERE `Session` = ? AND `Date` = ?");
 $getBookedCount->execute([
@@ -79,21 +49,21 @@ $getBookedCount->execute([
 ]);
 $bookedCount = $getBookedCount->fetchColumn();
 
-$getBookedMembers = null;
-if ($user->hasPermission('Admin') || $user->hasPermission('Coach')) {
-  $getBookedMembers = $db->prepare("SELECT Member id, MForename fn, MSurname sn, BookedAt FROM sessionsBookings INNER JOIN members ON sessionsBookings.Member = members.MemberID WHERE sessionsBookings.Session = ? AND sessionsBookings.Date = ? ORDER BY BookedAt ASC, MForename ASC, MSurname ASC;");
-  $getBookedMembers->execute([
-    $session['SessionID'],
-    $date->format('Y-m-d'),
-  ]);
-}
-
-$sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime']);
+$sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime'], new DateTimeZone('Europe/London'));
 $startTime = new DateTime($session['StartTime'], new DateTimeZone('UTC'));
 $endTime = new DateTime($session['EndTime'], new DateTimeZone('UTC'));
 $duration = $startTime->diff($endTime);
 $hours = (int) $duration->format('%h');
 $mins = (int) $duration->format('%i');
+
+$sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime'], new DateTimeZone('Europe/London'));
+
+$bookingCloses = clone $sessionDateTime;
+$bookingCloses->modify('-15 minutes');
+
+$now = new DateTime('now', new DateTimeZone('Europe/London'));
+
+$bookingClosed = $now > $bookingCloses;
 
 $getCoaches = $db->prepare("SELECT Forename fn, Surname sn, coaches.Type code FROM coaches INNER JOIN users ON coaches.User = users.UserID WHERE coaches.Squad = ? ORDER BY coaches.Type ASC, Forename ASC, Surname ASC");
 
@@ -115,7 +85,7 @@ include BASE_PATH . 'views/header.php';
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('sessions')) ?>">Sessions</a></li>
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('sessions/booking')) ?>">Booking</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Book</li>
+        <li class="breadcrumb-item active" aria-current="page"><?= htmlspecialchars($date->format('Y-m-d')) ?>-S<?= htmlspecialchars($session['SessionID']) ?></li>
       </ol>
     </nav>
 
@@ -129,7 +99,7 @@ include BASE_PATH . 'views/header.php';
         </p>
       </div>
       <div class="col text-right">
-        <?php if ($user->hasPermission('Admin') || $user->hasPermission('Coach')) { ?>
+        <?php if (($user->hasPermission('Admin') || $user->hasPermission('Coach')) && !$bookingClosed) { ?>
           <a href="<?= htmlspecialchars(autoUrl('sessions/booking/edit?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>" class="btn btn-primary">
             Edit bookable session details
           </a>
@@ -143,121 +113,139 @@ include BASE_PATH . 'views/header.php';
 <div class="container">
 
   <div class="row">
-    <div class="col-lg-8">
+    <div class="col-lg-8 order-2 order-lg-1 mb-3">
       <p class="lead">
-        <?= htmlspecialchars(mb_ucfirst($numFormatter->format($bookedCount))) ?> <?php if ($bookedCount == 1) { ?>member has<?php } else { ?>members have<?php } ?> booked onto this session. <?php if ($session['MaxPlaces']) { ?><?= htmlspecialchars(mb_ucfirst($numFormatter->format($session['MaxPlaces'] - $bookedCount))) ?><?php } ?> <?php if (($session['MaxPlaces'] - $bookedCount) == 1) { ?>place remains<?php } else { ?>places remain<?php } ?> available.
+        <span class="place-numbers-places-booked-string uc-first"><?= htmlspecialchars(mb_ucfirst($numFormatter->format($bookedCount))) ?></span> <span id="place-numbers-booked-places-member-string"><?php if ($bookedCount == 1) { ?>member has<?php } else { ?>members have<?php } ?></span> booked onto this session. <?php if ($session['MaxPlaces']) { ?><span class="place-numbers-places-remaining-string uc-first"><?= htmlspecialchars(mb_ucfirst($numFormatter->format($session['MaxPlaces'] - $bookedCount))) ?></span> <span id="place-numbers-places-remaining-member-string"><?php if (($session['MaxPlaces'] - $bookedCount) == 1) { ?>place remains<?php } else { ?>places remain<?php } ?></span> available.<?php } ?>
       </p>
 
-      <h2>Session Details</h2>
-      <dl class="row">
-        <dt class="col-sm-3">Starts at</dt>
-        <dd class="col-sm-9"><?= htmlspecialchars($startTime->format('H:i')) ?></dd>
-
-        <dt class="col-sm-3">Ends at</dt>
-        <dd class="col-sm-9"><?= htmlspecialchars($endTime->format('H:i')) ?></dd>
-
-        <dt class="col-sm-3">Duration</dt>
-        <dd class="col-sm-9"><?php if ($hours > 0) { ?><?= $hours ?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?= $mins ?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
-
-        <dt class="col-sm-3">Total places available</dt>
-        <dd class="col-sm-9"><?= htmlspecialchars($session['MaxPlaces']) ?></dd>
-
-        <dt class="col-sm-3">Places booked</dt>
-        <dd class="col-sm-9"><?= htmlspecialchars($bookedCount) ?></dd>
-
-        <dt class="col-sm-3">Places remaining</dt>
-        <dd class="col-sm-9"><?= htmlspecialchars(($session['MaxPlaces'] - $bookedCount)) ?></dd>
-
-        <?php for ($i = 0; $i < sizeof($squadNames); $i++) {
-          $getCoaches->execute([
-            $squadNames[$i]['SquadID'],
-          ]);
-          $coaches = $getCoaches->fetchAll(PDO::FETCH_ASSOC);
-        ?>
-          <dt class="col-sm-3"><?= htmlspecialchars($squadNames[$i]['SquadName']) ?> Coach<?php if (sizeof($coaches) > 0) { ?>es<?php } ?></dt>
-          <dd class="col-sm-9">
-            <ul class="list-unstyled mb-0">
-              <?php for ($i = 0; $i < sizeof($coaches); $i++) { ?>
-                <li><strong><?= htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn']) ?></strong>, <?= htmlspecialchars(coachTypeDescription($coaches[$i]['code'])) ?></li>
-              <?php } ?>
-              <?php if (sizeof($coaches) == 0) { ?>
-                <li>None assigned</li>
-              <?php } ?>
-            </ul>
-          </dd>
-        <?php } ?>
-
-        <dt class="col-sm-3">Location</dt>
-        <dd class="col-sm-9 mb-0"><?= htmlspecialchars($session['Location']) ?></dd>
-      </dl>
-
-      <h2>Book</h2>
-      <p class="lead">
-        Book a place for a member linked to your account.
-      </p>
-
-      <?php if (sizeof($members) > 0) { ?>
-
-        <ul class="list-group" id="member-booking-list">
-          <?php foreach ($members as $member) { ?>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              <span><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></span>
-              <span><button class="btn btn-primary" type="button" data-member-name="<?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?>" data-member-id="<?= htmlspecialchars($member['id']) ?>" data-operation="book-place" data-session-id="<?= htmlspecialchars($session['SessionID']) ?>" data-session-name="<?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>" data-session-location="<?= htmlspecialchars($session['Location']) ?>" data-session-date="<?= htmlspecialchars($date->format('Y-m-d')) ?>">Book</button></span>
-            </li>
-          <?php } ?>
-        </ul>
-
-      <?php } else { ?>
+      <?php if ($bookingClosed) { ?>
         <div class="alert alert-warning">
           <p class="mb-0">
-            <strong>You have no members</strong>
+            <strong>Booking has closed for this session</strong>
           </p>
           <p class="mb-0">
-            Only members can be booked onto sessions.
+            Booking closed automatically at <?= htmlspecialchars($bookingCloses->format('H:i, j F Y (T)')) ?>, 15 minutes prior to the published session start time of <?= htmlspecialchars($sessionDateTime->format('H:i T')) ?>.
           </p>
         </div>
       <?php } ?>
 
-      <?php if ($user->hasPermission('Admin') || $user->hasPermission('Coach')) { ?>
-        <h2>Booked members</h2>
-        <p class="lead">
-          Members who have booked a place for this session.
-        </p>
+      <!--  -->
+      <div id="my-member-booking-container-box">
+        <?= getMySessionBookingMembers($session, $date) ?>
+      </div>
 
-        <?php if ($bookedMember = $getBookedMembers->fetch(PDO::FETCH_ASSOC)) { ?>
-          <ul class="list-group" id="all-member-booking-list">
-            <?php do {
-              $booked = new DateTime($bookedMember['BookedAt'], new DateTimeZone('UTC'));
-              $booked->setTimezone(new DateTimeZone('Europe/London'));
-            ?>
-              <li class="list-group-item" id="<?= htmlspecialchars('member-' . $bookedMember['id'] . '-booking') ?>">
-                <div class="row align-items-center">
-                  <div class="col">
-                    <div>
-                      <a class="font-weight-bold" href="<?= htmlspecialchars(autoUrl('members/' . $bookedMember['id'])) ?>">
-                        <?= htmlspecialchars($bookedMember['fn'] . ' ' . $bookedMember['sn']) ?>
-                      </a>
-                    </div>
-                    <div>
-                      <em>Booked at <?= htmlspecialchars($booked->format('H:i, j F Y')) ?></em>
-                    </div>
-                  </div>
-                  <div class="col-auto">
-                    <button class="btn btn-danger" type="button" data-member-name="<?= htmlspecialchars($bookedMember['fn'] . ' ' . $bookedMember['sn']) ?>" data-member-id="<?= htmlspecialchars($bookedMember['id']) ?>" data-operation="cancel-place" data-session-id="<?= htmlspecialchars($session['SessionID']) ?>" data-session-name="<?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>" data-session-location="<?= htmlspecialchars($session['Location']) ?>" data-session-date="<?= htmlspecialchars($date->format('Y-m-d')) ?>">Remove</button>
-                  </div>
-                </div>
-              </li>
-            <?php } while ($bookedMember = $getBookedMembers->fetch(PDO::FETCH_ASSOC)); ?>
-          </ul>
-        <?php } else { ?>
-          <div class="alert alert-info">
-            <p class="mb-0">
-              <strong>There are no members booked on this session yet</strong>
-            </p>
-          </div>
-        <?php } ?>
+      <?php if ($user->hasPermission('Admin') || $user->hasPermission('Coach')) { ?>
+        <div id="all-member-booking-container-box">
+          <?= getAllBookedMembersForSession($session, $date) ?>
+        </div>
       <?php } ?>
 
+    </div>
+    <div class="col order-1 order-lg-2">
+      <div class="position-sticky top-3 mb-3">
+        <div class="card card-body d-none d-lg-flex">
+          <h2>Session Details</h2>
+          <dl class="row mb-0">
+            <dt class="col-sm-12">Starts at</dt>
+            <dd class="col-sm-12"><?= htmlspecialchars($startTime->format('H:i')) ?></dd>
+
+            <dt class="col-sm-12">Ends at</dt>
+            <dd class="col-sm-12"><?= htmlspecialchars($endTime->format('H:i')) ?></dd>
+
+            <dt class="col-sm-12">Duration</dt>
+            <dd class="col-sm-12"><?php if ($hours > 0) { ?><?= $hours ?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?= $mins ?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
+
+            <?php if ($session['MaxPlaces']) { ?>
+              <dt class="col-sm-12">Total places available</dt>
+              <dd class="col-sm-12 place-numbers-max-places-int"><?= htmlspecialchars($session['MaxPlaces']) ?></dd>
+            <?php } ?>
+
+            <dt class="col-sm-12">Places booked</dt>
+            <dd class="col-sm-12 place-numbers-places-booked-int"><?= htmlspecialchars($bookedCount) ?></dd>
+
+            <?php if ($session['MaxPlaces']) { ?>
+              <dt class="col-sm-12">Places remaining</dt>
+              <dd class="col-sm-12 place-numbers-places-remaining-int"><?= htmlspecialchars(($session['MaxPlaces'] - $bookedCount)) ?></dd>
+            <?php } ?>
+
+            <?php for ($i = 0; $i < sizeof($squadNames); $i++) {
+              $getCoaches->execute([
+                $squadNames[$i]['SquadID'],
+              ]);
+              $coaches = $getCoaches->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+              <dt class="col-sm-12"><?= htmlspecialchars($squadNames[$i]['SquadName']) ?> Coach<?php if (sizeof($coaches) > 0) { ?>es<?php } ?></dt>
+              <dd class="col-sm-12">
+                <ul class="list-unstyled mb-0">
+                  <?php for ($i = 0; $i < sizeof($coaches); $i++) { ?>
+                    <li><strong><?= htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn']) ?></strong>, <?= htmlspecialchars(coachTypeDescription($coaches[$i]['code'])) ?></li>
+                  <?php } ?>
+                  <?php if (sizeof($coaches) == 0) { ?>
+                    <li>None assigned</li>
+                  <?php } ?>
+                </ul>
+              </dd>
+            <?php } ?>
+
+            <dt class="col-sm-12">Location</dt>
+            <dd class="col-sm-12"><?= htmlspecialchars($session['VenueName']) ?>, <em><?= htmlspecialchars($session['Location']) ?></em></dd>
+
+            <dt class="col-sm-12">Session Unique ID</dt>
+            <dd class="col-sm-12 mb-0"><?= htmlspecialchars($date->format('Y-m-d')) ?>-S<?= htmlspecialchars($session['SessionID']) ?></dd>
+          </dl>
+        </div>
+        <div class="d-block d-lg-none">
+          <h2>Session Details</h2>
+          <dl class="row mb-0">
+            <dt class="col-sm-3">Starts at</dt>
+            <dd class="col-sm-9"><?= htmlspecialchars($startTime->format('H:i')) ?></dd>
+
+            <dt class="col-sm-3">Ends at</dt>
+            <dd class="col-sm-9"><?= htmlspecialchars($endTime->format('H:i')) ?></dd>
+
+            <dt class="col-sm-3">Duration</dt>
+            <dd class="col-sm-9"><?php if ($hours > 0) { ?><?= $hours ?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?= $mins ?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
+
+            <?php if ($session['MaxPlaces']) { ?>
+              <dt class="col-sm-3">Total places available</dt>
+              <dd class="col-sm-9 place-numbers-max-places-int"><?= htmlspecialchars($session['MaxPlaces']) ?></dd>
+            <?php } ?>
+
+            <dt class="col-sm-3">Places booked</dt>
+            <dd class="col-sm-9 place-numbers-places-booked-int"><?= htmlspecialchars($bookedCount) ?></dd>
+
+            <?php if ($session['MaxPlaces']) { ?>
+              <dt class="col-sm-3">Places remaining</dt>
+              <dd class="col-sm-9 place-numbers-places-remaining-int"><?= htmlspecialchars(($session['MaxPlaces'] - $bookedCount)) ?></dd>
+            <?php } ?>
+
+            <?php for ($i = 0; $i < sizeof($squadNames); $i++) {
+              $getCoaches->execute([
+                $squadNames[$i]['SquadID'],
+              ]);
+              $coaches = $getCoaches->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+              <dt class="col-sm-3"><?= htmlspecialchars($squadNames[$i]['SquadName']) ?> Coach<?php if (sizeof($coaches) > 0) { ?>es<?php } ?></dt>
+              <dd class="col-sm-9">
+                <ul class="list-unstyled mb-0">
+                  <?php for ($i = 0; $i < sizeof($coaches); $i++) { ?>
+                    <li><strong><?= htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn']) ?></strong>, <?= htmlspecialchars(coachTypeDescription($coaches[$i]['code'])) ?></li>
+                  <?php } ?>
+                  <?php if (sizeof($coaches) == 0) { ?>
+                    <li>None assigned</li>
+                  <?php } ?>
+                </ul>
+              </dd>
+            <?php } ?>
+
+            <dt class="col-sm-3">Location</dt>
+            <dd class="col-sm-9"><?= htmlspecialchars($session['Location']) ?></dd>
+
+            <dt class="col-sm-12">Session Unique ID</dt>
+            <dd class="col-sm-12 mb-0"><?= htmlspecialchars($date->format('Y-m-d')) ?>-S<?= htmlspecialchars($session['SessionID']) ?></dd>
+          </dl>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -343,110 +331,10 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div id="ajaxData" data-booking-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/book')) ?>" data-cancellation-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/cancel')) ?>"></div>
-
-<script>
-  const options = document.getElementById('ajaxData').dataset;
-
-  let mbl = document.getElementById('member-booking-list');
-  if (mbl) {
-    mbl.addEventListener('click', event => {
-      if (event.target.tagName === 'BUTTON' && event.target.dataset.operation === 'book-place') {
-        document.getElementById('booking-modal-member-name').textContent = event.target.dataset.memberName;
-        document.getElementById('booking-modal-session-name').textContent = event.target.dataset.sessionName;
-        document.getElementById('booking-modal-session-location').textContent = event.target.dataset.sessionLocation;
-
-        document.getElementById('member-id').value = event.target.dataset.memberId;
-        document.getElementById('session-id').value = event.target.dataset.sessionId;
-        document.getElementById('session-date').value = event.target.dataset.sessionDate;
-
-        $('#booking-modal').modal('show');
-
-        let form = document.getElementById('member-booking-form');
-        form.addEventListener('submit', event => {
-          event.preventDefault();
-          let formData = new FormData(form);
-
-          // console.log(formData);
-          var req = new XMLHttpRequest();
-          req.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-              let json = JSON.parse(this.responseText);
-              if (json.status == 200) {
-                // Cheap and nasty!
-                // location.reload();
-
-                // Show success message, dismiss modal, reload booking box
-
-
-              } else {
-                alert(json.error);
-              }
-            } else if (this.readyState == 4) {
-              // Not ok
-              alert('An error occurred and we could not parse the submission.');
-            }
-          }
-          req.open('POST', options.bookingAjaxUrl, true);
-          req.setRequestHeader('Accept', 'application/json');
-          req.send(formData);
-        });
-      }
-    });
-  }
-
-  let ambl = document.getElementById('all-member-booking-list');
-  if (ambl) {
-    ambl.addEventListener('click', event => {
-      if (event.target.tagName === 'BUTTON' && event.target.dataset.operation === 'cancel-place') {
-        document.getElementById('cancel-modal-member-name').textContent = event.target.dataset.memberName;
-        document.getElementById('cancel-modal-session-name').textContent = event.target.dataset.sessionName;
-        document.getElementById('cancel-modal-session-location').textContent = event.target.dataset.sessionLocation;
-
-        document.getElementById('cancel-member-id').value = event.target.dataset.memberId;
-        document.getElementById('cancel-session-id').value = event.target.dataset.sessionId;
-        document.getElementById('cancel-session-date').value = event.target.dataset.sessionDate;
-
-        $('#cancel-modal').modal('show');
-
-        let form = document.getElementById('cancel-booking-form');
-        form.addEventListener('submit', event => {
-          event.preventDefault();
-          let formData = new FormData(form);
-
-          // console.log(formData);
-          var req = new XMLHttpRequest();
-          req.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-              let json = JSON.parse(this.responseText);
-              if (json.status == 200) {
-                // Delete member row
-                let row = document.getElementById('member-' + document.getElementById('cancel-member-id').value + '-booking');
-                if (row) {
-                  row.remove();
-                }
-
-                // Hide modal
-                $('#cancel-modal').modal('hide');
-
-              } else {
-                alert(json.error);
-              }
-            } else if (this.readyState == 4) {
-              // Not ok
-              alert('An error occurred and we could not parse the submission.');
-            }
-          }
-          req.open('POST', options.cancellationAjaxUrl, true);
-          req.setRequestHeader('Accept', 'application/json');
-          req.send(formData);
-        });
-      }
-    });
-  }
-</script>
+<div id="ajaxData" data-booking-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/book')) ?>" data-cancellation-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/cancel')) ?>" data-my-member-reload-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/my-booking-info?session=' . urlencode($_GET['session']) . '&date=' . urlencode($_GET['date']))) ?>" data-all-member-reload-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/all-booking-info?session=' . urlencode($_GET['session']) . '&date=' . urlencode($_GET['date']))) ?>"></div>
 
 <?php
 
 $footer = new \SCDS\Footer();
+$footer->addJs('public/js/attendance/booking/book-session.js');
 $footer->render();

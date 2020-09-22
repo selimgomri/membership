@@ -7,10 +7,12 @@ $now = new DateTime('now', new DateTimeZone('Europe/London'));
 $startWeek = new DateTime('monday -1 week', new DateTimeZone('UTC'));
 $now->setTimezone(new DateTimeZone('UTC'));
 
+$closedBookingsTime = new DateTime('+15 minutes', new DateTimeZone('Europe/London'));
+
 $day = null;
 
 if ($now->format('l') == 'Monday') {
-  $startWeek = $now;
+  $startWeek = clone $now;
 }
 
 if (isset($_GET['year']) && isset($_GET['week'])) {
@@ -44,19 +46,19 @@ if (isset($_GET['squad'])) {
     halt(404);
   }
 
-  $sessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN sessionsSquads ON `sessions`.`SessionID` = sessionsSquads.Session) INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE sessionsSquads.Squad = ? AND sessions.Tenant = ? AND DisplayFrom <= ? AND DisplayUntil >= ? ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC;");
+  $sessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN sessionsSquads ON `sessions`.`SessionID` = sessionsSquads.Session) INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE sessionsSquads.Squad = :squad AND sessions.Tenant = :tenant AND ((DisplayFrom <= :startTime AND DisplayUntil >= :endTime) OR ((:startTime <= DisplayFrom AND DisplayFrom <= :endTime) AND (:startTime <= DisplayUntil AND DisplayUntil <= :endTime))) ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC;");
   $sessions->execute([
-    (int) $_GET['squad'],
-    $tenant->getId(),
-    $startWeek->format('Y-m-d'),
-    $endWeek->format('Y-m-d')
+    'squad' => (int) $_GET['squad'],
+    'tenant' => $tenant->getId(),
+    'startTime' => $startWeek->format('Y-m-d'),
+    'endTime' => $endWeek->format('Y-m-d'),
   ]);
 } else {
-  $sessions = $db->prepare("SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE sessions.Tenant = ? AND DisplayFrom <= ? AND DisplayUntil >= ? ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC;");
+  $sessions = $db->prepare("SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE sessions.Tenant = :tenant AND ((DisplayFrom <= :startTime AND DisplayUntil >= :endTime) OR ((:startTime <= DisplayFrom AND DisplayFrom <= :endTime) AND (:startTime <= DisplayUntil AND DisplayUntil <= :endTime))) ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC;");
   $sessions->execute([
-    $tenant->getId(),
-    $startWeek->format('Y-m-d'),
-    $endWeek->format('Y-m-d')
+    'tenant' => $tenant->getId(),
+    'startTime' => $startWeek->format('Y-m-d'),
+    'endTime' => $endWeek->format('Y-m-d'),
   ]);
 }
 $getSessionSquads = $db->prepare("SELECT SquadName, ForAllMembers, SquadID FROM `sessionsSquads` INNER JOIN `squads` ON sessionsSquads.Squad = squads.SquadID WHERE sessionsSquads.Session = ? ORDER BY SquadFee DESC, SquadName ASC;");
@@ -170,15 +172,16 @@ include BASE_PATH . 'views/header.php';
                 <p class="lead mb-0"><?= htmlspecialchars($day->format('j F Y')) ?></p>
               </div>
             <?php } ?>
-            <div class="list-group-item">
+
+            <?php
+            $sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $day->format('Y-m-d') .  '-' . $session['StartTime'], new DateTimeZone('Europe/London'));
+            $startTime = new DateTime($session['StartTime'], new DateTimeZone('UTC'));
+            $endTime = new DateTime($session['EndTime'], new DateTimeZone('UTC'));
+            ?>
+
+            <div class="list-group-item" id="<?= htmlspecialchars('session-unique-id-' . $sessionDateTime->format('Y-m-d') . '-S' . $session['SessionID']) ?>">
               <h3 class="mb-0"><?php for ($i = 0; $i < sizeof($squadNames); $i++) { ?><?php if ($i > 0) { ?>, <?php } ?><?= htmlspecialchars($squadNames[$i]['SquadName']) ?><?php } ?></h3>
               <p class="h3"><small><?= htmlspecialchars($session['SessionName']) ?>, <?= htmlspecialchars($session['VenueName']) ?></small></p>
-
-              <?php
-              $sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $day->format('Y-m-d') .  '-' . $session['StartTime']);
-              $startTime = new DateTime($session['StartTime'], new DateTimeZone('UTC'));
-              $endTime = new DateTime($session['EndTime'], new DateTimeZone('UTC'));
-              ?>
 
               <dl class="row mb-0">
                 <dt class="col-sm-3">Starts at</dt>
@@ -217,31 +220,43 @@ include BASE_PATH . 'views/header.php';
 
                 <?php } ?>
 
-                <?php if ($sessionDateTime > $now) {
-                  // Work out if booking required
-                  $getBookingRequired->execute([
-                    $session['SessionID'],
-                    $sessionDateTime->format('Y-m-d'),
-                    $tenant->getId(),
-                  ]);
-                  $bookingRequired = $getBookingRequired->fetchColumn() > 0;
+                <?php
+                $futureSession = false;
+                if ($sessionDateTime > $closedBookingsTime) {
+                  $futureSession = true;
+                }
+                // Work out if booking required
+                $getBookingRequired->execute([
+                  $session['SessionID'],
+                  $sessionDateTime->format('Y-m-d'),
+                  $tenant->getId(),
+                ]);
+                $bookingRequired = $getBookingRequired->fetchColumn() > 0;
                 ?>
-                  <!-- <dt class="col-sm-3">Booking</dt>
-                  <dd class="col-sm-9">
-                    <?php if ($bookingRequired) { ?>
-                      <span class="d-block mb-2">Booking is required for this session</span>
-                      <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-success">Book a place</a>
-                    <?php } else if ($showAdmin) { ?>
-                      <span class="d-block mb-2">Booking is not currently required for this session</span>
-                      <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary">Require pre-booking</a>
-                    <?php } else { ?>
-                      <span class="d-block">Booking is not required</span>
-                    <?php } ?>
-                  </dd> -->
-                <?php } ?>
+                <dt class="col-sm-3">Booking</dt>
+                <dd class="col-sm-9">
+                  <?php if ($bookingRequired && $futureSession) { ?>
+                    <span class="d-block mb-2">Booking is required for this session</span>
+                    <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-success">Book a place<?php if ($showAdmin) { ?> or view/edit details<?php } ?></a>
+                  <?php } else if ($showAdmin && $futureSession) { ?>
+                    <span class="d-block mb-2">Booking is not currently required for this session</span>
+                    <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary">Require pre-booking</a>
+                  <?php } else if ($showAdmin && $bookingRequired && !$futureSession) { ?>
+                    <span class="d-block mb-2">Booking was required for this session</span>
+                    <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary">View booking info</a>
+                  <?php } else if (!$futureSession) { ?>
+                    <span class="d-block">Booking was not required</span>
+                  <?php } else { ?>
+                    <span class="d-block">Booking is not required</span>
+                  <?php } ?>
+                </dd>
 
+                <?php
+                // IN FUTURE: LINK TO A LOCATION PAGE
+                // GEOCODE AND USE A MAP
+                ?>
                 <dt class="col-sm-3">Location</dt>
-                <dd class="col-sm-9 mb-0"><?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && $_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) { ?><?= htmlspecialchars($session['Location']) ?><?php } else { ?>You must be logged in to see the location<?php } ?></dd>
+                <dd class="col-sm-9 mb-0"><?= htmlspecialchars($session['Location']) ?></dd>
               </dl>
 
               <?php for ($i = 0; $i < sizeof($squadNames); $i++) { ?>

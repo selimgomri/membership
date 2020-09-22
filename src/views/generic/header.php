@@ -21,9 +21,11 @@ if (isset($customBackground) && $customBackground) {
 }
 ?>
 
-<body class="<?= $bg ?> account--body <?php if (isset($pageHead['body-class'])) { foreach ($pageHead['body-class'] as $item) { ?> <?=$item?> <?php } } ?>" <?php if (isset($pageHead['body'])) {
-                                          foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
-                                                                                            } ?>>
+<body class="<?= $bg ?> account--body <?php if (isset($pageHead['body-class'])) {
+                                        foreach ($pageHead['body-class'] as $item) { ?> <?= $item ?> <?php }
+                                                                                                                                          } ?>" <?php if (isset($pageHead['body'])) {
+                                                                                                                                                              foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
+                                                                                                                                                            } ?>>
 
   <div class="sr-only sr-only-focusable">
     <a href="#maincontent">Skip to main content</a>
@@ -206,7 +208,11 @@ if (isset($customBackground) && $customBackground) {
         d-print-none justify-content-between px-0" role="navigation">
 
                   <a class="navbar-brand d-lg-none" href="<?= htmlspecialchars(autoUrl("")) ?>">
-                    <?= htmlspecialchars(app()->tenant->getKey('ASA_CLUB_CODE')) ?> Club Membership
+                    <?php if (app()->tenant->getKey('CLUB_SHORT_NAME')) { ?>
+                      <?= htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME')) ?> Membership
+                    <?php } else { ?>
+                      <?= htmlspecialchars(app()->tenant->getKey('ASA_CLUB_CODE')) ?> Club Membership
+                    <?php } ?>
                   </a>
                   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>

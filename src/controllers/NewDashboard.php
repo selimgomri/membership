@@ -154,7 +154,7 @@ include BASE_PATH . "views/header.php";
 							]);
 							$squadNames = $getSessionSquads->fetchAll(PDO::FETCH_ASSOC);
 						?>
-							<a href="<?= htmlspecialchars(autoUrl("attendance/register?date=" . urlencode($date) . "&session=" . urlencode($sessions[$i]['SessionID']))) ?>" title="<?= htmlspecialchars($sessions[$i]['SquadName']) ?> Register, <?= htmlspecialchars($sessions[$i]['SessionName']) ?>">
+							<a href="<?= htmlspecialchars(autoUrl("attendance/register?date=" . urlencode($date) . "&session=" . urlencode($sessions[$i]['SessionID']))) ?>" title="<?= htmlspecialchars($sessions[$i]['SessionName']) ?>, <?= htmlspecialchars($sessions[$i]['VenueName']) ?>">
 								<div>
 									<span class="title mb-0">
 										Take <?php for ($y = 0; $y < sizeof($squadNames); $y++) { ?><?php if ($y > 0) { ?>, <?php } ?><?= htmlspecialchars($squadNames[$y]['SquadName']) ?><?php } ?> Register

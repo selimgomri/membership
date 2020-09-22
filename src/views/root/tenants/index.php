@@ -1,7 +1,7 @@
 <?php
 
 $db = app()->db;
-$getClubs = $db->query("SELECT ID, `Name`, Code, Verified FROM tenants ORDER BY `Name` ASC");
+$getClubs = $db->query("SELECT `ID`, `Name`, `Code`, `Verified` FROM tenants WHERE `Verified` ORDER BY `Name` ASC");
 $club = $getClubs->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = "Clubs";

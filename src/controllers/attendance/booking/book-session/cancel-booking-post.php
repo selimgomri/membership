@@ -51,6 +51,19 @@ try {
     throw new Exception('Session not found');
   }
 
+  $sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime'], new DateTimeZone('Europe/London'));
+
+  $bookingCloses = clone $sessionDateTime;
+  $bookingCloses->modify('-15 minutes');
+
+  $now = new DateTime('now', new DateTimeZone('Europe/London'));
+
+  $bookingClosed = $now > $bookingCloses;
+
+  if ($bookingClosed) {
+    throw new Exception('Booking has closed');
+  }
+
   $numFormatter = new NumberFormatter("en-GB", NumberFormatter::SPELLOUT);
 
   // Validate member exists and belongs to user
@@ -89,8 +102,43 @@ try {
   ]);
 
   // Send an email to the user
+  $getUser = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id, Forename ufn, Surname usn, EmailAddress email FROM members INNER JOIN users ON users.UserID = members.UserID WHERE members.MemberID = ?");
+  $getUser->execute([
+    $member['MemberID'],
+  ]);
 
+  $emailUser = $getUser->fetch(PDO::FETCH_ASSOC);
+
+  if ($emailUser) {
+
+    try {
+
+      $subject = 'Cancelled Session Booking - ' . $session['SessionName'] . ', ' . $sessionDateTime->format('H:i, j Y T');
+      $username = $emailUser['ufn'] . ' ' . $emailUser['usn'];
+      $emailAddress = $emailUser['email'];
+      $content = '<p>Hello ' . htmlspecialchars($username) . ',</p>';
+      $content .= '<p><strong>' . htmlspecialchars($user->getFullName()) . ' has <em>cancelled</em> the following session booking;</strong></p>';
+
+      $content .= '<dl>';
+
+      $content .= '<dt>Member</dt><dd>' . htmlspecialchars($emailUser['fn'] . ' ' . $emailUser['sn']) . '</dd>';
+      $content .= '<dt>Session</dt><dd>' . htmlspecialchars($session['SessionName']) . '</dd>';
+      $content .= '<dt>Date and time</dt><dd>' . htmlspecialchars($sessionDateTime->format('H:i, l j F Y T')) . '</dd>';
+      $content .= '<dt>Location</dt><dd>' . htmlspecialchars($session['VenueName']) . ', <em>' . htmlspecialchars($session['Location']) . '</em></dd>';
+      $content .= '<dt>Session Unique ID</dt><dd>' . htmlspecialchars($sessionDateTime->format('Y-m-d')) . '-S' . htmlspecialchars($session['SessionID']) . '</dd>';
+
+      $content .= '</dl>';
+
+      $content .= '<p>Please contact us if you think your booking has been cancelled by mistake.</p>';
+
+      notifySend(null, $subject, $content, $username, $emailAddress);
+    } catch (Exception $e) {
+      // Ignore failed send
+    }
+  }
 } catch (Exception $e) {
+
+  reportError($e);
 
   $message = $e->getMessage();
   if (get_class($e) == 'PDOException') {

@@ -5,7 +5,7 @@ $tenant = app()->tenant;
 
 $user = $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'];
 
-$swimmers = $db->prepare("SELECT MemberID `id` FROM members WHERE Tenant = ? AND members.UserID IS NULL");
+$swimmers = $db->prepare("SELECT MemberID `id` FROM members WHERE Active AND Tenant = ? AND members.UserID IS NULL");
 $swimmers->execute([
   $tenant->getId()
 ]);

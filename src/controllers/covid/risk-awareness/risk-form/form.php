@@ -127,11 +127,21 @@ include BASE_PATH . 'views/header.php';
 
         <div class="custom-control custom-checkbox mb-3">
           <input type="checkbox" class="custom-control-input" id="member-declaration" name="member-declaration" required value="1">
-          <label class="custom-control-label" for="member-declaration">I <strong><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></strong>, agree to this declaration, <?= $today->format("j F Y") ?></label>
+          <label class="custom-control-label" for="member-declaration">I <strong><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></strong>, agree to this declaration<br><span class="badge badge-light">Signed <?= $today->format("j F Y") ?></span></label>
           <div class="invalid-feedback">
             You (<?= htmlspecialchars($member['MForename']) ?>) must agree to this declaration to proceed.
           </div>
         </div>
+
+        <?php if (app()->tenant->getKey('ASA_CLUB_CODE') == 'UOSZ') { ?>
+          <div class="custom-control custom-checkbox mb-3">
+            <input type="checkbox" class="custom-control-input" id="uosswpc-member-declaration" name="uosswpc-member-declaration" required value="1">
+            <label class="custom-control-label" for="uosswpc-member-declaration">I <strong><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></strong>, accept that I am swimming at my own risk and won't hold the club accountable if I get corona.<br><span class="badge badge-light">Signed <?= $today->format("j F Y") ?></span></label>
+            <div class="invalid-feedback">
+              You (<?= htmlspecialchars($member['MForename']) ?>) must agree to this special UoSSWPC declaration to proceed.
+            </div>
+          </div>
+        <?php } ?>
 
         <?php if ($parent && $age < 18) { ?>
           <div class="custom-control custom-checkbox mb-3">

@@ -154,10 +154,10 @@ $this->get('/setup', function () {
 });
 
 $this->group('/sessions', function () {
-  include BASE_PATH . 'controllers/attendance/public_sessions/router.php';
+  include BASE_PATH . 'controllers/attendance/public_sessions/router-public.php';
 });
 
-$this->group('/contact-tracing', function () {
+$this->group(['/contact-tracing', '/covid/contact-tracing'], function () {
   include BASE_PATH . 'controllers/contact-tracing/router.php';
 });
 
@@ -475,6 +475,10 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
 
   $this->group('/squad-reps', function () {
     include BASE_PATH . 'controllers/squads/squad-reps/router.php';
+  });
+
+  $this->group('/sessions', function () {
+    include BASE_PATH . 'controllers/attendance/public_sessions/router.php';
   });
 
   /**

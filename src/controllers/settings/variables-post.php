@@ -62,6 +62,9 @@ try {
 
   $type = $_POST['EMERGENCY_MESSAGE_TYPE'];
   if ($type == 'NONE' || $type == 'SUCCESS' || $type == 'WARN' || $type == 'DANGER') {
+    if ($message == null) {
+      $type = 'NONE';
+    }
     app()->tenant->setKey('EMERGENCY_MESSAGE_TYPE', $type);
   }
 
@@ -105,6 +108,7 @@ try {
 
   $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED'] = true;
 } catch (Exception $e) {
+  reportError($e);
   $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR'] = true;
 }
 

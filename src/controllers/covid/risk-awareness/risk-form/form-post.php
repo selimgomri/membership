@@ -39,6 +39,10 @@ try {
     throw new Exception('No member declaration given.');
   }
 
+  if (app()->tenant->getKey('ASA_CLUB_CODE') == 'UOSZ' && !isset($_POST['uosswpc-member-declaration'])) {
+    throw new Exception('No member declaration given to UoSSWPC agreement.');
+  }
+
   $date = new DateTime('now', new DateTimeZone('UTC'));
   $today = new DateTime('now', new DateTimeZone('Europe/London'));
   $uuid = Ramsey\Uuid\Uuid::uuid4()->toString();

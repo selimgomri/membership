@@ -27,6 +27,29 @@ function registerSheetGenerator($date, $sessionId)
 
     $weekId = $session->getWeekId($date->format('Y-m-d'));
 
+    // Work out if this session must be booked
+    $getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
+    $getSession->execute([
+      $sessionId,
+      $date->format('Y-m-d'),
+      app()->tenant->getId(),
+      $date->format('Y-m-d'),
+      $date->format('Y-m-d'),
+    ]);
+
+    $bookingSessionInfo = $getSession->fetch(PDO::FETCH_ASSOC);
+    $bookingClosed = false;
+    $bookingCloses = null;
+    if ($bookingSessionInfo) {
+      $sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $bookingSessionInfo['StartTime'], new DateTimeZone('Europe/London'));
+      $bookingCloses = clone $sessionDateTime;
+      $bookingCloses->modify('-15 minutes');
+
+      $now = new DateTime('now', new DateTimeZone('Europe/London'));
+
+      $bookingClosed = $now > $bookingCloses;
+    }
+
     $markdown = new ParsedownExtra();
     $markdown->setSafeMode(true);
 
@@ -54,8 +77,27 @@ function registerSheetGenerator($date, $sessionId)
             <em><?php for ($i = 0; $i < sizeof($squads); $i++) { ?><?php if ($i > 0) { ?>, <?php } ?><?= htmlspecialchars($squads[$i]->getName()) ?><?php } ?></em>
           </p>
 
-          <?php if (sizeof($register) == 0) { ?>
-            <div class="alert alert-warning">
+          <?php if ($bookingSessionInfo) { ?>
+            <p class="mt-3 mb-0">
+              This session requires pre-booking.
+            </p>
+          <?php } ?>
+
+          <?php if (!$bookingClosed) { ?>
+            <div class="text-center card card-body mt-3">
+              <p class="mb-0">
+                <strong>Booking is still open for this session!</strong>
+              </p>
+              <p>
+                We will generate the register for this session when booking closes at <?= htmlspecialchars($bookingCloses->format('H:i T')) ?>
+              </p>
+
+              <p class="mb-0">
+                Until then, head to <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($sessionId) . '&date=' . urlencode($date->format('Y-m-d')))) ?>">the booking page for this session</a> to see who's booked in.
+              </p>
+            </div>
+          <?php } else if (sizeof($register) == 0) { ?>
+            <div class="alert alert-warning mt-3 mb-0">
               <p class="mb-0">
                 <strong>There are no members for this session</strong>
               </p>
