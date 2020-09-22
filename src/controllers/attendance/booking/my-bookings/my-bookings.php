@@ -115,7 +115,7 @@ include BASE_PATH . 'views/header.php';
               <h2 class="mb-0"><?php if (sizeof($squadNames) > 0) { ?><?php for ($i = 0; $i < sizeof($squadNames); $i++) { ?><?php if ($i > 0) { ?>, <?php } ?><?= htmlspecialchars($squadNames[$i]['SquadName']) ?><?php } ?><?php } else { ?>Any Member<?php } ?></h2>
               <p class="h3"><small><?= htmlspecialchars($booking['SessionName']) ?>, <?= htmlspecialchars($booking['VenueName']) ?></small></p>
 
-              <dl class="row mb-0">s
+              <dl class="row mb-0">
                 <dt class="col-sm-3">Date</dt>
                 <dd class="col-sm-9"><?= htmlspecialchars($sessionDateTime->format('l j F Y')) ?></dd>
 
