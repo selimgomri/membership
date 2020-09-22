@@ -37,18 +37,46 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
     <div class="col-lg-8">
       <p class="lead">
-        Session booking is a new feature which will be introduced in the next few weeks.
-      </p>
-
-      <p>
-        The aim of our new session booking tools is to support clubs during this COVID era where numbers may be limited at sessions, or where prior indication of attendance is desired.
-      </p>
-
-      <p>
-        Going forward, additional features such as support for pay as you go sessions will be added, with fees billed to a user's account and paid on their next Direct Debit.
+        Session Booking is a new service, introduced to help clubs during COVID-19.
       </p>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card card-body h-100" style="display: grid;">
+        <span>
+          <h2>Book a place</h2>
+          <p class="lead">
+            To book a place at a session, search for it in our timetable and follow the booking instructions.
+          </p>
+        </span>
+
+        <p class="mb-0 mt-auto sd-flex">
+          <a href="<?= htmlspecialchars(autoUrl('sessions')) ?>" class="btn btn-primary">
+            View Timetable
+          </a>
+        </p>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card card-body h-100 d-grid" style="display: grid;">
+        <span>
+          <h2>View my bookings</h2>
+          <p class="lead">
+            See your upcoming booked sessions
+          </p>
+        </span>
+
+        <p class="mb-0 mt-auto d-flex">
+          <a href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings')) ?>" class="btn btn-primary">
+            View Bookings
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 
 </div>
 

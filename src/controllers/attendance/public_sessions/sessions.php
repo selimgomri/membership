@@ -180,7 +180,7 @@ include BASE_PATH . 'views/header.php';
             ?>
 
             <div class="list-group-item" id="<?= htmlspecialchars('session-unique-id-' . $sessionDateTime->format('Y-m-d') . '-S' . $session['SessionID']) ?>">
-              <h3 class="mb-0"><?php for ($i = 0; $i < sizeof($squadNames); $i++) { ?><?php if ($i > 0) { ?>, <?php } ?><?= htmlspecialchars($squadNames[$i]['SquadName']) ?><?php } ?></h3>
+              <h3 class="mb-0"><?php if (sizeof($squadNames) > 0) { ?><?php for ($i = 0; $i < sizeof($squadNames); $i++) { ?><?php if ($i > 0) { ?>, <?php } ?><?= htmlspecialchars($squadNames[$i]['SquadName']) ?><?php } ?><?php } else { ?>Any Member<?php } ?></h3>
               <p class="h3"><small><?= htmlspecialchars($session['SessionName']) ?>, <?= htmlspecialchars($session['VenueName']) ?></small></p>
 
               <dl class="row mb-0">

@@ -4,6 +4,10 @@ $this->get('/', function () {
   include 'home.php';
 });
 
+$this->get('/my-bookings', function () {
+  include 'my-bookings/my-bookings.php';
+});
+
 $this->get('/book', function () {
   include 'new-or-existing-handler.php';
 });
