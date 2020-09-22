@@ -83,7 +83,7 @@ function registerSheetGenerator($date, $sessionId)
             </p>
           <?php } ?>
 
-          <?php if (!$bookingClosed) { ?>
+          <?php if (!$bookingClosed && $bookingSessionInfo) { ?>
             <div class="text-center card card-body mt-3">
               <p class="mb-0">
                 <strong>Booking is still open for this session!</strong>
