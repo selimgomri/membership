@@ -209,6 +209,15 @@ include BASE_PATH . 'views/header.php';
             </li>
           <?php } while ($booking = $getBookings->fetch(PDO::FETCH_ASSOC)); ?>
         </ul>
+      <?php } else { ?>
+      <div class="alert alert-info">
+        <p class="mb-0">
+          <strong>No bookings to display</strong>
+        </p>
+        <p class="mb-0">
+          Book a place on a future session and then check back here later.
+        </p>
+      </div>
       <?php } ?>
 
       <!-- Pagination -->
