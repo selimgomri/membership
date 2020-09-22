@@ -159,14 +159,14 @@ if ($logos) {
 $data = [
   'name' => app()->tenant->getKey('CLUB_NAME') . ' Membership',
   'short_name' => $clubName,
-  'start_url' => autoUrl("") . '/',
+  'start_url' => autoUrl(""),
   'display' => 'minimal-ui',
   'background_color' => '#fff',
   'description' => 'My ' . app()->tenant->getKey('CLUB_NAME') . ' Membership',
   'icons' => $icons,
   'theme_color' => $themeColour,
   'lang' => 'en-GB',
-  'scope' => autoUrl("") . '/',
+  'scope' => autoUrl("")
 ];
 
 echo json_encode($data);
