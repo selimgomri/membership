@@ -25,6 +25,7 @@ include BASE_PATH . 'views/header.php';
       <h2>Members</h2>
       <ul>
         <li><a href="<?=htmlspecialchars(autoUrl("members/reports/upgradeable"))?>">Edit SE category of members upgradeable to Category 2</a></li>
+        <li><a href="<?=htmlspecialchars(autoUrl("admin/editors/squad-membership"))?>">Edit squad membership</a></li>
       </ul>
 
     </div>
