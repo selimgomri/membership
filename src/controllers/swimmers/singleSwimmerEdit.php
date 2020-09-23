@@ -53,18 +53,6 @@ $cat = $row['ASACategory'];
 $cp = $row['ClubPays'];
 $swimmerStatus = $row['Status'];
 
-$deleteKey = null;
-if (isset($_POST['swimmerDeleteDanger'])) {
-	$deleteKey = $_POST['swimmerDeleteDanger'];
-}
-
-if ($deleteKey == $dbAccessKey) {
-	$delete = $db->prepare("DELETE FROM `members` WHERE `MemberID` = ?");
-	$delete->execute([$id]);
-	header("Location: " . autoUrl("members"));
-  die();
-}
-
 if (!empty($_POST['forename'])) {
 	$newForename = trim(mb_ucfirst($_POST['forename']));
 	if ($newForename != $forename) {

@@ -71,7 +71,7 @@ include BASE_PATH . 'views/header.php';
 
       <p>Note that the system will attempt to find a squad with the name given. If it cannot find one, it will not add the swimmer.</p>
 
-      <form enctype="multipart/form-data" method="post">
+      <form enctype="multipart/form-data" method="post" class="needs-validation" novalidate>
 
         <?=\SCDS\FormIdempotency::write()?>
         <?=\SCDS\CSRF::write()?>
@@ -82,6 +82,9 @@ include BASE_PATH . 'views/header.php';
           <div class="custom-file">
             <input type="file" class="custom-file-input" id="file-upload" name="file-upload" accept="text/csv" required>
             <label class="custom-file-label" for="file-upload">Choose file</label>
+            <div class="invalid-feedback">
+              Please select a CSV file to upload
+            </div>
           </div>
         </div>
 
@@ -108,4 +111,5 @@ include BASE_PATH . 'views/header.php';
 $footer = new \SCDS\Footer();
 $footer->addJs("public/js/bs-custom-file-input.min.js");
 $footer->addJs("public/js/file-input-init.js");
+$footer->addJs("public/js/NeedsValidation.js");
 $footer->render();

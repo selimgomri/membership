@@ -11,14 +11,14 @@ include BASE_PATH . 'views/header.php';
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("admin"))?>">Admin</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Member upload (Sheffield Uni)</li>
+      <li class="breadcrumb-item active" aria-current="page">Member upload (Uni of Sheffield)</li>
     </ol>
   </nav>
 
   <div class="row">
     <div class="col-lg-8">
-      <h1>Member upload</h1>
-      <p class="lead">Batch upload swimmers from a <span class="mono">CSV</span> file.</p>
+      <h1>Member upload (for Uni of Sheffield only)</h1>
+      <p class="lead">Batch upload members from a <span class="mono">CSV</span> file.</p>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) { ?>
       <div class="alert alert-success">
@@ -84,7 +84,7 @@ include BASE_PATH . 'views/header.php';
         <li>Subscription End Date <span class="badge badge-info">Disregarded</span></li>
       </ol>
 
-      <form enctype="multipart/form-data" method="post">
+      <form enctype="multipart/form-data" method="post" class="needs-validation" novalidate>
 
         <?=\SCDS\FormIdempotency::write()?>
         <?=\SCDS\CSRF::write()?>
@@ -95,6 +95,9 @@ include BASE_PATH . 'views/header.php';
           <div class="custom-file">
             <input type="file" class="custom-file-input" id="file-upload" name="file-upload" accept="text/csv" required>
             <label class="custom-file-label" for="file-upload">Choose file</label>
+            <div class="invalid-feedback">
+              Please select a CSV file to upload
+            </div>
           </div>
         </div>
 
@@ -121,4 +124,5 @@ include BASE_PATH . 'views/header.php';
 $footer = new \SCDS\Footer();
 $footer->addJs("public/js/bs-custom-file-input.min.js");
 $footer->addJs("public/js/file-input-init.js");
+$footer->addJs("public/js/NeedsValidation.js");
 $footer->render();

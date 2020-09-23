@@ -7,10 +7,12 @@ if (!\SCDS\CSRF::verify()) {
   halt(404);
 }
 
+use Respect\Validation\Validator as v;
+
 $db = app()->db;
 $tenant = app()->tenant;
 
-$insertIntoSwimmers = $db->prepare("INSERT INTO members (MForename, MMiddleNames, Msurname, DateOfBirth, Gender, ASANumber, ASACategory, RR, AccessKey, ClubPays, OtherNotes, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$insertIntoSwimmers = $db->prepare("INSERT INTO members (MForename, MMiddleNames, Msurname, DateOfBirth, Gender, ASANumber, ASACategory, RR, AccessKey, ClubPays, OtherNotes, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 $setTempASA = $db->prepare("UPDATE members SET ASANumber = ? WHERE MemberID = ?");
 
@@ -49,7 +51,7 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
           break;
         }
 
-        if (isset($row[1]) && ((int) $row[1]) != 0) {
+        if (isset($row[1]) && ((int) $row[1]) != 0 && v::email()->validate(mb_strtolower(trim($row[7])))) {
 
           $names = explode(' ', trim($row[3]));
 
@@ -175,7 +177,7 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
               $content .= '<p>Please note that ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' may not provide all services included in the membership software.</p>';
 
               $sendEmail->execute([
-                "user" => $userId,
+                "user" => $user['UserID'],
                 "subject" => $subject,
                 "message" => $content
               ]);
@@ -235,7 +237,7 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
       $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess'] = true;
     } catch (Exception $e) {
       $db->rollBack();
-      pre($e);
+      reportError($e);
       $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
     }
 

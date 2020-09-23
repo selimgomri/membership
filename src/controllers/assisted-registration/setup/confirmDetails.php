@@ -29,6 +29,11 @@ if ($user == null) {
   halt(404);
 }
 
+$members = $db->prepare("SELECT MemberID, MForename, MSurname, ASANumber FROM members WHERE UserID = ? ORDER BY MForename ASC, MSurname ASC;");
+$members->execute([
+  $user['UserID'],
+]);
+
 $email = "";
 $sms = "";
 
@@ -67,6 +72,39 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <form method="post" class="needs-validation" novalidate>
+        <?php if (mb_strtoupper($tenant->getKey('ASA_CLUB_CODE')) == 'UOSZ' || mb_strlen($user['Mobile']) == 0) { ?>
+          <h2>About You</h2>
+
+          <!-- Mobile -->
+          <div class="form-group">
+            <label for="mobile-number">Mobile phone number</label>
+            <input type="tel" class="form-control" name="mobile-number" id="mobile-number" required placeholder="+447400123456" aria-describedby="mobile-number-help">
+            <div class="invalid-feedback">
+              You must provide a valid phone number (with no spaces).
+            </div>
+            <small class="text-muted" id="mobile-number-help">
+              Please provide your mobile phone number. We may need it for coronavirus (COVID-19) contact tracing. For non UK (not starting +44) phone numbers, please include your country code.
+            </small>
+          </div>
+
+          <?php if (mb_strtoupper($tenant->getKey('ASA_CLUB_CODE')) == 'UOSZ' && $member = $members->fetch(PDO::FETCH_ASSOC)) { ?>
+
+            <!-- Ask for Swim England number -->
+            <p>
+              Do you have a Swim England (ASA) or other UK aquatics governing body registration number? If so we may be able to use this in future to get information from the British Rankings Database.
+            </p>
+
+            <?php do { ?>
+              <div class="form-group">
+                <label for="<?= htmlspecialchars('swim-england-' . $member['MemberID']) ?>"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?> Swim England/Swim Wales/Scottish Swimming Number</label>
+                <input type="text" aria-describedby="<?= htmlspecialchars('help-swim-england-' . $member['MemberID']) ?>" name="<?= htmlspecialchars('swim-england-' . $member['MemberID']) ?>" id="<?= htmlspecialchars('swim-england-' . $member['MemberID']) ?>" class="form-control">
+                <small class="text-muted" id="<?= htmlspecialchars('help-swim-england-' . $member['MemberID']) ?>">You can skip this field if you want to</small>
+              </div>
+            <?php } while ($member = $members->fetch(PDO::FETCH_ASSOC)); ?>
+
+          <?php } ?>
+        <?php } ?>
+
         <h2>
           Create a password for your account
         </h2>
