@@ -1,6 +1,6 @@
 <?php
 
-$pagetitle = 'Member Uploads';
+$pagetitle = 'Member Upload - University of Sheffield Version';
 
 include BASE_PATH . 'views/header.php';
 
@@ -11,14 +11,14 @@ include BASE_PATH . 'views/header.php';
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("admin")) ?>">Admin</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Member upload</li>
+      <li class="breadcrumb-item active" aria-current="page">Member upload (Uni of Sheffield)</li>
     </ol>
   </nav>
 
   <div class="row">
     <div class="col-lg-8">
-      <h1>Member upload</h1>
-      <p class="lead">Batch upload swimmers from a <span class="mono">CSV</span> file.</p>
+      <h1>Member upload (for Uni of Sheffield only)</h1>
+      <p class="lead">Batch upload members from a <span class="mono">CSV</span> file.</p>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) { ?>
         <div class="alert alert-success">
@@ -57,19 +57,32 @@ include BASE_PATH . 'views/header.php';
         unset($_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError']);
       } ?>
 
-      <p>Your CSV file should contain the following columns in the order shown without any column headers (titles etc);</p>
+      <p>
+        Your CSV file should contain the following columns. We will assume the first three rows are headers.
+      </p>
 
-      <ul class="mono">
-        <li>Last name</li>
-        <li>First name</li>
-        <li>Squad name</li>
+      <p>
+        Columns marked <span class="badge badge-info">Disregarded</span> should be kept in the CSV so that you don't need to manipulate the layout, but the data in these columns will be ignored.
+      </p>
+
+      <p>
+        We will check for existing members by checking if their email address is already in the system. Existing members will not be added again. For this to work, members must not change their email address from their <span class="mono">@sheffield.ac.uk</span> email.
+      </p>
+
+      <ol class="mono">
+        <li>Empty column <span class="badge badge-info">Disregarded</span></li>
+        <li>Member ID <span class="badge badge-info">Disregarded</span></li>
+        <li>UCard Number <span class="badge badge-info">Disregarded</span></li>
+        <li>Name - We will automatically explode this into first and last</li>
         <li>Date of birth (DD/MM/YYYY format)</li>
-        <li>Sex (M or F)</li>
-        <li>Swim England Membership Category (1, 2 or 3 - use 0 or null if not a Swim England member)</li>
-        <li>Swim England Membership Number, null if not a member or no number available</li>
-      </ul>
-
-      <p>Note that the system will attempt to find a squad with the name given. If it cannot find one, it will not add the swimmer.</p>
+        <li>Age <span class="badge badge-info">Disregarded</span></li>
+        <li>Gender/Sex as one of Male or Female</li>
+        <li>Email Address (@sheffield.ac.uk)</li>
+        <li>Subscription <span class="badge badge-info">Disregarded</span></li>
+        <li>Empty column <span class="badge badge-info">Disregarded</span></li>
+        <li>Subscription Start Date <span class="badge badge-info">Disregarded</span></li>
+        <li>Subscription End Date <span class="badge badge-info">Disregarded</span></li>
+      </ol>
 
       <form enctype="multipart/form-data" method="post" class="needs-validation" novalidate>
 
@@ -100,7 +113,7 @@ include BASE_PATH . 'views/header.php';
     <div class="col">
       <?php
       $list = new \CLSASC\BootstrapComponents\ListGroup(file_get_contents(BASE_PATH . 'controllers/admin-tools/list.json'));
-      echo $list->render('admin-member-upload');
+      echo $list->render('admin-member-upload-uni-of-shef');
       ?>
     </div>
   </div>

@@ -4,6 +4,9 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 use Respect\Validation\Validator as v;
+use Brick\PhoneNumber\PhoneNumber;
+use Brick\PhoneNumber\PhoneNumberParseException;
+use Brick\PhoneNumber\PhoneNumberFormat;
 
 $countSwimmers = $db->prepare("SELECT COUNT(*) FROM members WHERE UserID = ?");
 $countSwimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGuestUser']]);
@@ -11,6 +14,10 @@ $rr = false;
 if ($countSwimmers->fetchColumn() > 0) {
   $rr = true;
 }
+
+$getUser = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress, Mobile, `Password` FROM users WHERE UserID = ?");
+$getUser->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGuestUser']]);
+$user = $getUser->fetch(PDO::FETCH_ASSOC);
 
 $status = true;
 
@@ -40,6 +47,50 @@ if ($password1 != $password2) {
   $statusMessage .= "
   <li>Passwords do not match</li>
   ";
+}
+
+// If need mobile
+if (mb_strlen($user['Mobile']) == 0) {
+  // Validate
+  $mobile = null;
+  try {
+    $number = PhoneNumber::parse($_POST['mobile-number'], 'GB');
+    $mobile = $number->format(PhoneNumberFormat::E164);
+    $updateMobile = $db->prepare("UPDATE users SET Mobile = ? WHERE UserID = ?");
+    $updateMobile->execute([
+      $mobile,
+      $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGuestUser']
+    ]);
+  } catch (PhoneNumberParseException $e) {
+    // 'The string supplied is too short to be a phone number.'
+    $status = false;
+    $statusMessage .= "
+  <li>Invalid mobile phone number</li>
+  ";
+  }
+}
+
+if (mb_strtoupper($tenant->getKey('ASA_CLUB_CODE')) == 'UOSZ') {
+  // Check for user supplied ASA numbers
+  $members = $db->prepare("SELECT MemberID, MForename, MSurname, ASANumber FROM members WHERE UserID = ? ORDER BY MForename ASC, MSurname ASC;");
+  $members->execute([
+    $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGuestUser'],
+  ]);
+
+  $updateAsa = $db->prepare("UPDATE members SET ASANumber = ? WHERE MemberID = ?");
+
+  while ($member = $members->fetch(PDO::FETCH_ASSOC)) {
+    if (isset($_POST['swim-england-' . $member['MemberID']]) && mb_strlen($_POST['swim-england-' . $member['MemberID']]) > 0) {
+      try {
+        $updateAsa->execute([
+          mb_strimwidth($_POST['swim-england-' . $member['MemberID']], 0, 255),
+          $member['MemberID']
+        ]);
+      } catch (PDOException $e) {
+        // Ignore - not important for our purposes
+      }
+    }
+  }
 }
 
 $statusMessage .= "<ul>";

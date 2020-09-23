@@ -7,6 +7,8 @@ if (!SCDS\CSRF::verify()) {
 $db = app()->db;
 $tenant = app()->tenant;
 
+$locked = mb_strtoupper($tenant->getKey('ASA_CLUB_CODE')) == 'UOSZ';
+
 use Respect\Validation\Validator as v;
 
 $userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
@@ -41,7 +43,7 @@ try {
   $sex = $row['Gender'];
   $otherNotes = $row['OtherNotes'];
 
-  if (!empty($_POST['forename'])) {
+  if (!empty($_POST['forename']) && !$locked) {
     $newForename = trim(mb_ucfirst($_POST['forename']));
 
     if ($newForename != $forename) {
@@ -51,7 +53,7 @@ try {
       $update = true;
     }
   }
-  if (isset($_POST['middlenames'])) {
+  if (isset($_POST['middlenames']) && !$locked) {
     $newMiddlenames = trim(mb_ucfirst($_POST['middlenames']));
     if ($newMiddlenames != $middlename) {
       $update = $db->prepare("UPDATE `members` SET `MMiddleNames` = ? WHERE `MemberID` = ?");
@@ -60,7 +62,7 @@ try {
       $update = true;
     }
   }
-  if (!empty($_POST['surname'])) {
+  if (!empty($_POST['surname']) && !$locked) {
     $newSurname = trim(mb_ucfirst($_POST['surname']));
     if ($newSurname != $surname) {
       $update = $db->prepare("UPDATE `members` SET `MSurname` = ? WHERE `MemberID` = ?");
@@ -69,7 +71,7 @@ try {
       $update = true;
     }
   }
-  if (!empty($_POST['datebirth'])) {
+  if (!empty($_POST['datebirth']) && !$locked) {
     $newDateOfBirth = trim(mb_ucfirst($_POST['datebirth']));
     if ($newDateOfBirth != $dateOfBirth && v::date()->validate($newDateOfBirth)) {
       $update = $db->prepare("UPDATE `members` SET `DateOfBirth` = ? WHERE `MemberID` = ?");
@@ -78,7 +80,7 @@ try {
       $update = true;
     }
   }
-  if (!empty($_POST['sex'])) {
+  if (!empty($_POST['sex']) && !$locked) {
     $newSex = trim(mb_ucfirst($_POST['sex']));
     if ($newSex != $sex) {
       $update = $db->prepare("UPDATE `members` SET `Gender` = ? WHERE `MemberID` = ?");
@@ -182,15 +184,12 @@ try {
       $countryUpdate = true;
       $update = true;
     }
-  
   }
 
   $_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerSaved'] = true;
-
 } catch (Exception $e) {
 
   $_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerNotSaved'] = true;
-
 }
 
 header("Location: " . autoUrl("members/" . $id . "/edit"));

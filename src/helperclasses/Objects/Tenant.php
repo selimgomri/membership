@@ -128,7 +128,8 @@ class Tenant
     return $this->id;
   }
 
-  public function __toString() {
+  public function __toString()
+  {
     if ($this->uuid) {
       return $this->uuid;
     }
@@ -235,13 +236,13 @@ class Tenant
     $result = $query->fetchColumn();
 
     $res = false;
-    if ($result > 0 && $value == null) {
+    if ($result > 0 && $value === null) {
       $query = $db->prepare("DELETE FROM tenantOptions WHERE `Option` = ? AND `Tenant` = ?");
       $res = $query->execute([$key, $this->id]);
-    } else if ($result == 0) {
+    } else if ($result == 0 && $value !== null) {
       $query = $db->prepare("INSERT INTO tenantOptions (`Option`, `Value`, `Tenant`) VALUES (?, ?, ?)");
       $res = $query->execute([$key, $value, $this->id]);
-    } else {
+    } else if ($result > 0) {
       $query = $db->prepare("UPDATE tenantOptions SET `Value` = ? WHERE `Option` = ? AND `Tenant` = ?");
       $res = $query->execute([$value, $key, $this->id]);
     }
@@ -267,7 +268,8 @@ class Tenant
    * 
    * @return string uuid
    */
-  public function getUuid() {
+  public function getUuid()
+  {
     return $this->uuid;
   }
 
@@ -276,7 +278,8 @@ class Tenant
    * 
    * To be called only once when required
    */
-  private function loadGoCardless() {
+  private function loadGoCardless()
+  {
     $db = app()->db;
     $getKey = $db->prepare("SELECT OrganisationId, AccessToken FROM gcCredentials WHERE Tenant = ?");
     $getKey->execute([
@@ -297,7 +300,8 @@ class Tenant
    * 
    * @return string token
    */
-  public function getGoCardlessAccessToken() {
+  public function getGoCardlessAccessToken()
+  {
     // if (!$this->goCardlessLoaded) {
     //   $this->loadGoCardless();
     // }
@@ -313,7 +317,8 @@ class Tenant
    * @param string the GC Org ID
    * @param string the GC Access Token
    */
-  public function setGoCardlessAccessToken(string $orgId, string $accessToken) {
+  public function setGoCardlessAccessToken(string $orgId, string $accessToken)
+  {
     $count = app()->db->prepare("SELECT COUNT(*) FROM gcCredentials WHERE OrganisationId = ? OR Tenant = ?");
     $count->execute([
       $orgId,
@@ -340,7 +345,8 @@ class Tenant
    * 
    * @return string org id
    */
-  public function getGoCardlessOrgId() {
+  public function getGoCardlessOrgId()
+  {
     if (!$this->goCardlessLoaded) {
       $this->loadGoCardless();
     }
@@ -355,7 +361,8 @@ class Tenant
    * 
    * @return string stripe account id
    */
-  public function getStripeAccount() {
+  public function getStripeAccount()
+  {
     if ($this->stripeAccountId) {
       return $this->stripeAccountId;
     }
@@ -374,7 +381,8 @@ class Tenant
    * 
    * @return boolean true if clse
    */
-  public function isCLS() {
+  public function isCLS()
+  {
     return $this->code == 'CLSE';
   }
 
@@ -385,7 +393,8 @@ class Tenant
    * @return string path
    * @throws Exception if not file store available
    */
-  public function getFilePath() {
+  public function getFilePath()
+  {
     if (!getenv('FILE_STORE_PATH')) {
       throw new Exception('No file store available');
     }

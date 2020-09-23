@@ -35,6 +35,16 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
     $this->get('/', function () {
       include 'editors/home.php';
     });
+
+    $this->group('/squad-membership', function () {
+      $this->get('/', function () {
+        include 'editors/member-squad-editor/editor.php';
+      });
+
+      $this->post('/add-remove', function () {
+        include 'editors/member-squad-editor/add-remove.php';
+      });
+    });
   });
 
   $this->group('/galas', function () {
