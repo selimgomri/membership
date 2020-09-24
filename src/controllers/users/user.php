@@ -260,7 +260,7 @@ include BASE_PATH . "views/header.php";
           <?php if ($number !== false) { ?>
             <div class="col-sm-6 col-lg-4">
               <h3 class="h6">Phone</h3>
-              <p><a href="<?= htmlspecialchars($number->format(PhoneNumberFormat::RFC3966)) ?>"><?= htmlspecialchars($number->format(PhoneNumberFormat::NATIONAL)) ?></a>
+              <p><a href="<?= htmlspecialchars($number->format(PhoneNumberFormat::RFC3966)) ?>"><?= htmlspecialchars($number->format(PhoneNumberFormat::INTERNATIONAL)) ?></a>
               </p>
             </div>
           <?php } ?>

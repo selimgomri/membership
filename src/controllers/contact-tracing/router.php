@@ -46,6 +46,10 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && bool($_S
       $this->get('/go', function () {
         include 'reports/generate.php';
       });
+
+      $this->get('/from-register', function () {
+        include 'reports/from-register.php';
+      });
     }
   });
 } else {

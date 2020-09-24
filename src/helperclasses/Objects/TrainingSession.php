@@ -324,6 +324,7 @@ class TrainingSession
         'contacts' => $emergencyContacts,
         'week_id' => $weekId,
         'session_id' => $this->id,
+        'user' => $member['uid'],
       ];
     }
 
