@@ -179,8 +179,9 @@ if (!function_exists('chesterStandardMenu')) {
                   </a>
                   <div class="dropdown-menu" aria-labelledby="registerDropdown">
                     <a class="dropdown-item" href="<?php echo autoUrl("attendance") ?>">Attendance Home</a>
-                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('sessions')) ?>">Timetable</a>
                     <a class="dropdown-item" href="<?php echo autoUrl("attendance/register") ?>">Take Register</a>
+                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('timetable')) ?>">Timetable</a>
+                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('timetable/booking')) ?>">Bookings</a>
                     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee") { ?>
                       <a class="dropdown-item" href="<?php echo autoUrl("attendance/sessions") ?>">Manage Squad Sessions</a>
                       <a class="dropdown-item" href="<?= autoUrl("attendance/venues") ?>">Manage Venues</a>

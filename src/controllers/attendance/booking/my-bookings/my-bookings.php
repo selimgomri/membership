@@ -172,7 +172,7 @@ include BASE_PATH . 'views/header.php';
                 <dd class="col-sm-9">
                   <?php if ($futureSession) { ?>
                     <span class="d-block mb-2">Booking is required for this session</span>
-                    <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($booking['Session']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-success">Manage bookings for this session</a>
+                    <a href="<?= htmlspecialchars(autoUrl('timetable/booking/book?session=' . urlencode($booking['Session']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-success">Manage bookings for this session</a>
                   <?php } else { ?>
                     <span class="d-block">Booking has closed for this session. No changes can be made.</span>
                   <?php } ?>
@@ -215,36 +215,36 @@ include BASE_PATH . 'views/header.php';
       <nav aria-label="Page navigation">
         <ul class="pagination mb-3">
           <?php if ($numBookings <= 10) { ?>
-            <li class="page-item active"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page))) ?>"><?= htmlspecialchars($page) ?></a></li>
+            <li class="page-item active"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page))) ?>"><?= htmlspecialchars($page) ?></a></li>
           <?php } else if ($numBookings <= 20) { ?>
             <?php if ($page == 1) { ?>
-              <li class="page-item active"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page))) ?>"><?= htmlspecialchars($page) ?></a></li>
-              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page + 1))) ?>"><?= htmlspecialchars($page + 1) ?></a></li>
-              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page + 1))) ?>">Next</a></li>
+              <li class="page-item active"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page))) ?>"><?= htmlspecialchars($page) ?></a></li>
+              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page + 1))) ?>"><?= htmlspecialchars($page + 1) ?></a></li>
+              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page + 1))) ?>">Next</a></li>
             <?php } else { ?>
-              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page - 1))) ?>">Previous</a></li>
-              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page - 1))) ?>"><?= htmlspecialchars($page - 1) ?></a></li>
-              <li class="page-item active"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page + 1))) ?><?= htmlspecialchars($page) ?>"><?= htmlspecialchars($page) ?></a></li>
+              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page - 1))) ?>">Previous</a></li>
+              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page - 1))) ?>"><?= htmlspecialchars($page - 1) ?></a></li>
+              <li class="page-item active"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page + 1))) ?><?= htmlspecialchars($page) ?>"><?= htmlspecialchars($page) ?></a></li>
             <?php } ?>
           <?php } else { ?>
             <?php if ($page == 1) { ?>
-              <li class="page-item active"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page))) ?>"><?= htmlspecialchars($page) ?></a></li>
-              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page + 1))) ?>"><?= htmlspecialchars($page + 1) ?></a></li>
-              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page + 2))) ?>"><?= htmlspecialchars($page + 2) ?></a></li>
-              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page + 1))) ?>">Next</a></li>
+              <li class="page-item active"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page))) ?>"><?= htmlspecialchars($page) ?></a></li>
+              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page + 1))) ?>"><?= htmlspecialchars($page + 1) ?></a></li>
+              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page + 2))) ?>"><?= htmlspecialchars($page + 2) ?></a></li>
+              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page + 1))) ?>">Next</a></li>
             <?php } else { ?>
-              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page - 1))) ?>">Previous</a></li>
+              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page - 1))) ?>">Previous</a></li>
               <?php if ($page > 2) { ?>
-                <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page - 2))) ?>"><?= htmlspecialchars($page - 2) ?></a></li>
+                <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page - 2))) ?>"><?= htmlspecialchars($page - 2) ?></a></li>
               <?php } ?>
-              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page - 1))) ?>"><?= htmlspecialchars($page - 1) ?></a></li>
-              <li class="page-item active"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page))) ?>"><?= htmlspecialchars($page) ?></a></li>
+              <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page - 1))) ?>"><?= htmlspecialchars($page - 1) ?></a></li>
+              <li class="page-item active"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page))) ?>"><?= htmlspecialchars($page) ?></a></li>
               <?php if ($numBookings > $page * 10) { ?>
-                <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page + 1))) ?>"><?= htmlspecialchars($page + 1) ?></a></li>
+                <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page + 1))) ?>"><?= htmlspecialchars($page + 1) ?></a></li>
                 <?php if ($numBookings > $page * 10 + 10) { ?>
-                  <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page + 2))) ?>"><?= htmlspecialchars($page + 2) ?></a></li>
+                  <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page + 2))) ?>"><?= htmlspecialchars($page + 2) ?></a></li>
                 <?php } ?>
-                <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('sessions/booking/my-bookings?page=' . urlencode($page + 1))) ?>">Next</a></li>
+                <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(autoUrl('timetable/booking/my-bookings?page=' . urlencode($page + 1))) ?>">Next</a></li>
               <?php } ?>
             <?php } ?>
           <?php } ?>
