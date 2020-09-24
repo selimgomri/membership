@@ -235,3 +235,38 @@ if (ambl) {
     }
   });
 }
+
+let shareButton = document.getElementById('share-this');
+shareButton.addEventListener('click', event => {
+  if (navigator.share) {
+    // Use system sharing sheet
+
+    navigator.share({
+      title: event.target.dataset.shareTitle,
+      text: event.target.dataset.shareText,
+      url: event.target.dataset.shareUrl,
+    })
+      .then(() => console.log('Share was successful.'))
+      .catch((err) => {
+        // Don't log error
+        $('#sharing-modal').modal('show');
+      }
+      );
+  } else {
+    // Use sharing modal
+    $('#sharing-modal').modal('show');
+  }
+});
+
+let printButton = document.getElementById('print-this-page');
+printButton.addEventListener('click', event => {
+  $('#sharing-modal').modal('hide');
+  window.print();
+});
+
+let sharingModal = document.getElementById('sharing-modal');
+sharingModal.addEventListener('click', event => {
+  if (event.target.classList.contains('dismiss-share-box')) {
+    $('#sharing-modal').modal('hide');
+  }
+});
