@@ -109,10 +109,10 @@ include BASE_PATH . 'views/header.php';
       <div class="card card-body h-100" style="display: grid;">
         <div>
           <h2>
-          <?php if (mb_strtoupper(app()->tenant->getKey('ASA_CLUB_CODE')) == 'UOSZ') { ?><?= htmlspecialchars(UOS_RETURN_FORM_NAME) ?><?php } else { ?>Risk Awareness Declaration<?php } ?>
+            <?php if (mb_strtoupper(app()->tenant->getKey('ASA_CLUB_CODE')) == 'UOSZ') { ?><?= htmlspecialchars(UOS_RETURN_FORM_NAME) ?><?php } else { ?>Risk Awareness Declaration<?php } ?>
           </h2>
           <p class="lead">
-          Declare that you understand the risks of returning to training
+            Declare that you understand the risks of returning to training
           </p>
           <p>
             You also confirm you are free from any COVID-19 symptoms.
