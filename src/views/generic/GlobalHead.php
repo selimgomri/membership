@@ -96,6 +96,8 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheet) ?>">
   <link rel="stylesheet preload" href="<?= htmlspecialchars(autoUrl("public/css/colour.css")) ?>">
 
+  <meta property="og:title" content="<?= $pagetitle ?>" />
+
   <!-- Generic icon first -->
   <?php if ($logos = $tenant->getKey('LOGO_DIR')) { ?>
     <link rel="icon" sizes="196x196" href="<?= htmlspecialchars(autoUrl($logos . 'icon-196x196.png')) ?>">
@@ -108,6 +110,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?= autoUrl($logos . 'icon-72x72.png') ?>">
     <link rel="apple-touch-icon-precomposed" sizes="32x32" href="<?= autoUrl($logos . 'icon-32x32.png') ?>">
     <link rel="apple-touch-icon-precomposed" sizes="196x196" href="<?= autoUrl($logos . 'icon-196x196.png') ?>">
+    <meta property="og:image" content="<?= autoUrl($logos . 'logo-512.png') ?>" />
   <?php } else { ?>
     <!-- For iPhone 6 Plus with @3× display: -->
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon-180x180.png") ?>">

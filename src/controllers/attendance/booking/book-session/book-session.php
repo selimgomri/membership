@@ -73,6 +73,9 @@ $getSessionSquads->execute([
 ]);
 $squadNames = $getSessionSquads->fetchAll(PDO::FETCH_ASSOC);
 
+$theTitle = 'Book ' . $session['SessionName'] . ' at ' . $startTime->format('H:i') . ' on ' . $date->format('j F Y') . ' - ' . $tenant->getName();
+$theLink = autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')));
+
 $pagetitle = 'Session Booking';
 include BASE_PATH . 'views/header.php';
 
@@ -97,13 +100,19 @@ include BASE_PATH . 'views/header.php';
         <p class="lead mb-0">
           <?php if ($session['MaxPlaces']) { ?>There are <?= htmlspecialchars($numFormatter->format($session['MaxPlaces'])) ?> places at this session<?php } else { ?>There are unlimited places at this session<?php } ?>
         </p>
+        <div class="mb-3 d-lg-none"></div>
       </div>
-      <div class="col text-right">
-        <?php if (($user->hasPermission('Admin') || $user->hasPermission('Coach')) && !$bookingClosed) { ?>
-          <a href="<?= htmlspecialchars(autoUrl('sessions/booking/edit?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>" class="btn btn-primary">
-            Edit bookable session details
-          </a>
-        <?php } ?>
+      <div class="col text-lg-right">
+        <div class="btn-group">
+          <?php if (($user->hasPermission('Admin') || $user->hasPermission('Coach')) && !$bookingClosed) { ?>
+            <a href="<?= htmlspecialchars(autoUrl('sessions/booking/edit?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>" class="btn btn-primary">
+              Edit bookable session details
+            </a>
+          <?php } ?>
+          <button class="btn btn-dark" id="share-this" data-share-url="<?= htmlspecialchars($theLink) ?>" data-share-title="<?= htmlspecialchars($theTitle) ?>" data-share-text="<?= htmlspecialchars('Book a space for ' . $session['SessionName'] . ' at ' . $startTime->format('H:i') . ' on ' . $date->format('j F Y') . ' - ' . $tenant->getName()) ?>">
+            Share <i class="fa fa-share" aria-hidden="true"></i>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -146,6 +155,9 @@ include BASE_PATH . 'views/header.php';
         <div class="card card-body d-none d-lg-flex">
           <h2>Session Details</h2>
           <dl class="row mb-0">
+            <dt class="col-sm-12">Date</dt>
+            <dd class="col-sm-12"><?= htmlspecialchars($sessionDateTime->format('l j F Y')) ?></dd>
+
             <dt class="col-sm-12">Starts at</dt>
             <dd class="col-sm-12"><?= htmlspecialchars($startTime->format('H:i')) ?></dd>
 
@@ -197,6 +209,9 @@ include BASE_PATH . 'views/header.php';
         <div class="d-block d-lg-none">
           <h2>Session Details</h2>
           <dl class="row mb-0">
+            <dt class="col-sm-3">Date</dt>
+            <dd class="col-sm-9"><?= htmlspecialchars($sessionDateTime->format('l j F Y')) ?></dd>
+
             <dt class="col-sm-3">Starts at</dt>
             <dd class="col-sm-9"><?= htmlspecialchars($startTime->format('H:i')) ?></dd>
 
@@ -241,8 +256,8 @@ include BASE_PATH . 'views/header.php';
             <dt class="col-sm-3">Location</dt>
             <dd class="col-sm-9"><?= htmlspecialchars($session['Location']) ?></dd>
 
-            <dt class="col-sm-12">Session Unique ID</dt>
-            <dd class="col-sm-12 mb-0"><?= htmlspecialchars($date->format('Y-m-d')) ?>-S<?= htmlspecialchars($session['SessionID']) ?></dd>
+            <dt class="col-sm-3">Session Unique ID</dt>
+            <dd class="col-sm-9 mb-0"><?= htmlspecialchars($date->format('Y-m-d')) ?>-S<?= htmlspecialchars($session['SessionID']) ?></dd>
           </dl>
         </div>
       </div>
@@ -327,6 +342,54 @@ include BASE_PATH . 'views/header.php';
         <button type="button" class="btn btn-dark" data-dismiss="modal">Don't cancel</button>
         <button type="submit" class="btn btn-danger" form="cancel-booking-form" id="accept">Cancel booking</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="sharing-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="sharing-modal-label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sharing-modal-title">Share this</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="row no-gutters sharing">
+          <div class="col">
+            <a target="_blank" class="btn btn-dark btn-block dismiss-share-box" href="mailto:?subject=<?= rawurlencode($theTitle); ?>&body=<?= rawurlencode($theLink); ?>"><i class="fa  fa-envelope" aria-hidden="true"></i><span class="sr-only sr-only-focusable">Share by Email</span></a>
+          </div>
+
+          <div class="col">
+            <a target="_self" class="btn btn-dark btn-block" id="print-this-page"><i class="fa fa-print" aria-hidden="true"></i><span class="sr-only sr-only-focusable">Print</span></a>
+          </div>
+
+          <div class="col">
+            <a target="_blank" class="btn btn-fb btn-block dismiss-share-box" href="http://www.facebook.com/sharer.php?u=<?= rawurlencode($theLink); ?>&amp;t=<?= ($theTitle); ?>"><i class="fa fa-facebook" aria-hidden="true"></i><span class="sr-only sr-only-focusable">Share on Facebook</span></a>
+          </div>
+
+          <div class="col">
+            <a target="_blank" class="btn btn-tweet btn-block dismiss-share-box" href="https://twitter.com/intent/tweet?text=<?= rawurlencode($theTitle); ?>&url=<?= rawurlencode($theLink); ?>"><i class="fa fa-twitter" aria-hidden="true"></i><span class="sr-only sr-only-focusable">Share on Twitter</span></a>
+          </div>
+
+          <div class="col">
+            <a target="_blank" class="btn btn-whatsapp btn-block dismiss-share-box" href="https://wa.me/?text=<?= rawurlencode($theLink); ?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true"></i><span class="sr-only sr-only-focusable">Share with Whatsapp</span></a>
+          </div>
+
+          <div class="col">
+            <a target="_blank" class="btn btn-linkedin btn-block dismiss-share-box" href="https://www.linkedin.com/shareArticle?mini=true&url=<?= rawurlencode($theLink); ?>&title=<?= rawurlencode($theTitle); ?>&source=<?= rawurlencode($tenant->getName() . ' / SCDS Membership') ?>"><i class="fa fa-linkedin" aria-hidden="true"></i><span class="sr-only sr-only-focusable">Share on Linked In</span></a>
+          </div>
+        </div>
+
+        <p class="small mt-3 mb-0"><?= htmlspecialchars($tenant->getName()) ?> is not responsible for these services</p>
+
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Don't cancel</button>
+        <button type="submit" class="btn btn-danger" form="cancel-booking-form" id="accept">Cancel booking</button>
+      </div> -->
     </div>
   </div>
 </div>
