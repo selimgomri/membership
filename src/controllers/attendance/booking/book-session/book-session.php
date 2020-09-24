@@ -123,7 +123,7 @@ include BASE_PATH . 'views/header.php';
 
   <div class="row">
     <div class="col-lg-8 order-2 order-lg-1 mb-3">
-      <p class="lead">
+      <p class="lead d-none d-lg-block">
         <span class="place-numbers-places-booked-string uc-first"><?= htmlspecialchars(mb_ucfirst($numFormatter->format($bookedCount))) ?></span> <span id="place-numbers-booked-places-member-string"><?php if ($bookedCount == 1) { ?>member has<?php } else { ?>members have<?php } ?></span> booked onto this session. <?php if ($session['MaxPlaces']) { ?><span class="place-numbers-places-remaining-string uc-first"><?= htmlspecialchars(mb_ucfirst($numFormatter->format($session['MaxPlaces'] - $bookedCount))) ?></span> <span id="place-numbers-places-remaining-member-string"><?php if (($session['MaxPlaces'] - $bookedCount) == 1) { ?>place remains<?php } else { ?>places remain<?php } ?></span> available.<?php } ?>
       </p>
 

@@ -181,8 +181,18 @@ include BASE_PATH . 'views/header.php';
         <dd class="col-sm-9"><?= htmlspecialchars($session['Location']) ?></dd>
 
         <dt class="col-sm-3">Session Unique ID</dt>
-        <dd class="col-sm-9 mb-0"><?= htmlspecialchars($date->format('Y-m-d')) ?>-S<?= htmlspecialchars($session['SessionID']) ?></dd>
+        <dd class="col-sm-9"><?= htmlspecialchars($date->format('Y-m-d')) ?>-S<?= htmlspecialchars($session['SessionID']) ?></dd>
       </dl>
+
+      <h2>Book a place</h2>
+      <p class="lead">
+        To book a place, please log into your <?= htmlspecialchars($tenant->getName()) ?> account.
+      </p>
+      <p>
+        <a href="<?= htmlspecialchars($bookingLoginLink) ?>" class="btn btn-primary">
+          Login
+        </a>
+      </p>
 
     </div>
     <div class="col order-1 order-lg-2">
