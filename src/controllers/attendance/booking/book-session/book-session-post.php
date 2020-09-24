@@ -242,6 +242,7 @@ try {
       notifySend(null, $subject, $content, $username, $emailAddress);
     } catch (Exception $e) {
       // Ignore failed send
+      reportError($e);
     }
   }
 } catch (Exception $e) {

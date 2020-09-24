@@ -120,10 +120,10 @@ include BASE_PATH . "views/header.php";
         <a href="<?= autoUrl('covid/risk-awareness') ?>">
           <span class="mb-3">
             <span class="title mb-0">
-              Risk Awareness Declaration
+              <?php if (mb_strtoupper(app()->tenant->getKey('ASA_CLUB_CODE')) == 'UOSZ') { ?><?= htmlspecialchars(UOS_RETURN_FORM_NAME) ?><?php } else { ?>Risk Awareness Declaration<?php } ?>
             </span>
             <span>
-              Declare that you have submitted a Health Survey and understand the risks
+              Declare that you understand the risks of returning to training
             </span>
           </span>
           <span class="category">

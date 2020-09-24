@@ -109,7 +109,7 @@ $pageHead = [
     'data-target="#member-page-menu"'
   ]
 ];
-$pagetitle = "Sessions";
+$pagetitle = "Timetable";
 
 include BASE_PATH . 'views/header.php';
 
@@ -120,17 +120,17 @@ include BASE_PATH . 'views/header.php';
 
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">Sessions</li>
+        <li class="breadcrumb-item active" aria-current="page">Timetable</li>
       </ol>
     </nav>
 
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>
-          Sessions in week <?= htmlspecialchars($startWeek->format('W')) ?> / <?= htmlspecialchars($startWeek->format('o')) ?>
+          Timetable - Week <?= htmlspecialchars($startWeek->format('W')) ?> / <?= htmlspecialchars($startWeek->format('o')) ?>
         </h1>
         <p class="lead mb-0">
-          Timetable information
+          <?php if ($pageSquad) { ?><?= htmlspecialchars($pageSquad['SquadName']) ?><?php } else { ?>All squads<?php } ?>
         </p>
       </div>
       <div class="col">
@@ -145,6 +145,48 @@ include BASE_PATH . 'views/header.php';
 <div class="container">
 
   <p>Showing sessions for the week beginning <strong><?= htmlspecialchars($startWeek->format('l j F Y')) ?></strong>.</p>
+
+  <?php $weeks = clone $startWeek; ?>
+  <?php $weeks->sub(new DateInterval('P7D')); ?>
+  <div class="row my-3">
+    <div class="col-auto">
+      <nav aria-label="Page navigation">
+        <ul class="pagination my-0">
+          <li class="page-item">
+            <a class="page-link" href="<?= autoUrl("sessions?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
+              Previous Week
+            </a>
+          </li>
+          <?php $weeks->add(new DateInterval('P7D')); ?>
+          <li class="page-item">
+            <a class="page-link" href="<?= autoUrl("sessions?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
+              Week <?= (int) $weeks->format('W') ?> / <?= $weeks->format('o') ?>
+            </a>
+          </li>
+          <?php $weeks->add(new DateInterval('P7D')); ?>
+          <li class="page-item">
+            <a class="page-link" href="<?= autoUrl("sessions?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
+              Next Week
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="mb-3 d-md-none"></div>
+    </div>
+    <div class="col-md">
+      <form action="<?= htmlspecialchars(autoUrl('timetable/jump-to-week')) ?>" method="post" class="needs-validation" novalidate>
+        <?php if ($pageSquad) { ?>
+          <input type="hidden" name="squad" value="<?= htmlspecialchars($pageSquad['SquadID']) ?>">
+        <?php } ?>
+        <div class="input-group">
+          <input type="date" class="form-control" value="<?= htmlspecialchars($startWeek->format('Y-m-d')) ?>" aria-label="Find a week" aria-describedby="go-to-week" name="go-to-week-date" id="go-to-week-date">
+          <div class="input-group-append">
+            <button class="btn btn-secondary" type="submit" id="go-to-week">Go to week</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <?php if ($sessionToday) { ?>
     <p><a href="#day-<?= $dayNum ?>">Jump to today</a></p>
@@ -282,7 +324,7 @@ include BASE_PATH . 'views/header.php';
         <ul class="pagination">
           <li class="page-item">
             <a class="page-link" href="<?= autoUrl("sessions?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
-              Week <?= (int) $weeks->format('W') ?> / <?= $weeks->format('o') ?>
+              Previous Week
             </a>
           </li>
           <?php $weeks->add(new DateInterval('P7D')); ?>
@@ -294,7 +336,7 @@ include BASE_PATH . 'views/header.php';
           <?php $weeks->add(new DateInterval('P7D')); ?>
           <li class="page-item">
             <a class="page-link" href="<?= autoUrl("sessions?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
-              Week <?= (int) $weeks->format('W') ?> / <?= $weeks->format('o') ?>
+              Next Week
             </a>
           </li>
         </ul>

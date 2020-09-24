@@ -59,10 +59,10 @@ include BASE_PATH . 'views/header.php';
 
 <div class="container">
 
-  <div class="row">
+  <div class="row mb-0">
 
     <?php if ($showCovid) { ?>
-      <div class="col-md-4">
+      <div class="col-md-4 pb-3">
         <div class="card card-body h-100" style="display: grid;">
           <div>
             <h2>
@@ -84,7 +84,7 @@ include BASE_PATH . 'views/header.php';
       </div>
     <?php } ?>
 
-    <div class="col-md-4">
+    <div class="col-md-4 pb-3">
       <div class="card card-body h-100" style="display: grid;">
         <div>
           <h2>
@@ -105,14 +105,14 @@ include BASE_PATH . 'views/header.php';
       </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-4 pb-3">
       <div class="card card-body h-100" style="display: grid;">
         <div>
           <h2>
-            Risk Awareness Declaration
+            <?php if (mb_strtoupper(app()->tenant->getKey('ASA_CLUB_CODE')) == 'UOSZ') { ?><?= htmlspecialchars(UOS_RETURN_FORM_NAME) ?><?php } else { ?>Risk Awareness Declaration<?php } ?>
           </h2>
           <p class="lead">
-            Declare that you have submitted a Health Survey and understand the risks.
+            Declare that you understand the risks of returning to training
           </p>
           <p>
             You also confirm you are free from any COVID-19 symptoms.

@@ -43,7 +43,7 @@ if (!$pageSquad) {
 
 $sessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN sessionsSquads ON `sessions`.`SessionID` = sessionsSquads.Session) INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE sessionsSquads.Squad = :squad AND sessions.Tenant = :tenant AND ((DisplayFrom <= :startTime AND DisplayUntil >= :endTime) OR ((:startTime <= DisplayFrom AND DisplayFrom <= :endTime) AND (:startTime <= DisplayUntil AND DisplayUntil <= :endTime))) ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC;");
 $sessions->execute([
-  'squad' => (int) $_GET['squad'],
+  'squad' => (int) $id,
   'tenant' => $tenant->getId(),
   'startTime' => $startWeek->format('Y-m-d'),
   'endTime' => $endWeek->format('Y-m-d'),

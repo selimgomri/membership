@@ -55,14 +55,16 @@ include BASE_PATH . 'views/header.php';
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>
-          COVID-19 Risk Awareness Declaration <small class="text-muted"><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></small>
+          <?php if (mb_strtoupper(app()->tenant->getKey('ASA_CLUB_CODE')) == 'UOSZ') { ?><?= htmlspecialchars(UOS_RETURN_FORM_NAME) ?><?php } else { ?>COVID-19 Risk Awareness Declaration<?php } ?> <small class="text-muted"><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></small>
         </h1>
         <p class="lead mb-0">
           Confirm your awareness of risk before returning to training.
         </p>
       </div>
-      <div class="col">
-        <img src="<?= htmlspecialchars(autoUrl('public/img/corporate/se.png')) ?>" class="w-50 ml-auto d-none d-lg-flex" alt="Swim England Logo">
+      <div class="col text-right">
+        <?php if (mb_strtoupper(app()->tenant->getKey('ASA_CLUB_CODE')) != 'UOSZ') { ?>
+          <img src="<?= htmlspecialchars(autoUrl('public/img/corporate/se.png')) ?>" class="w-50 ml-auto d-none d-lg-flex" alt="Swim England Logo">
+        <?php } ?>
       </div>
     </div>
   </div>
@@ -136,7 +138,7 @@ include BASE_PATH . 'views/header.php';
         <?php if (app()->tenant->getKey('ASA_CLUB_CODE') == 'UOSZ') { ?>
           <div class="custom-control custom-checkbox mb-3">
             <input type="checkbox" class="custom-control-input" id="uosswpc-member-declaration" name="uosswpc-member-declaration" required value="1">
-            <label class="custom-control-label" for="uosswpc-member-declaration">I <strong><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></strong>, accept that I am swimming at my own risk and won't hold the club accountable if I get corona.<br><span class="badge badge-light">Signed <?= $today->format("j F Y") ?></span></label>
+            <label class="custom-control-label" for="uosswpc-member-declaration">I <strong><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></strong>, accept that I am swimming at my own risk and won't hold the club accountable if I catch coronavirus (COVID-19).<br><span class="badge badge-light">Signed <?= $today->format("j F Y") ?></span></label>
             <div class="invalid-feedback">
               You (<?= htmlspecialchars($member['MForename']) ?>) must agree to this special UoSSWPC declaration to proceed.
             </div>

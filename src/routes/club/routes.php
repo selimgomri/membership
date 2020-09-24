@@ -153,7 +153,7 @@ $this->get('/setup', function () {
   include BASE_PATH . 'controllers/db/system-setup.php';
 });
 
-$this->group('/sessions', function () {
+$this->group(['/sessions', '/timetable'], function () {
   include BASE_PATH . 'controllers/attendance/public_sessions/router-public.php';
 });
 
@@ -477,7 +477,7 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
     include BASE_PATH . 'controllers/squads/squad-reps/router.php';
   });
 
-  $this->group('/sessions', function () {
+  $this->group(['/sessions', '/timetable'], function () {
     include BASE_PATH . 'controllers/attendance/public_sessions/router.php';
   });
 

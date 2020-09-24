@@ -108,12 +108,12 @@ if (!function_exists('chesterStandardMenu')) {
                 </div>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="<?= htmlspecialchars(autoUrl('sessions')) ?>">
+                <a class="nav-link" href="<?= htmlspecialchars(autoUrl('timetable')) ?>">
                   Timetable
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="<?= htmlspecialchars(autoUrl('sessions/booking')) ?>">
+                <a class="nav-link" href="<?= htmlspecialchars(autoUrl('timetable/booking')) ?>">
                   Booking
                 </a>
               </li>
@@ -473,6 +473,9 @@ if (!function_exists('chesterStandardMenu')) {
             </li>
             <li class="nav-item">
               <a class="nav-link" href="<?= htmlspecialchars(autoUrl("covid/contact-tracing")) ?>">COVID-19 Contact Tracing</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="<?= htmlspecialchars(autoUrl("timetable")) ?>">Timetable</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="<?= htmlspecialchars(autoUrl("timeconverter")) ?>">Time Converter</a>
