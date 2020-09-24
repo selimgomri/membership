@@ -16,6 +16,7 @@ try {
 
 	if (!$memberTenant || $memberTenant != $tenant->getId()) {
 		// No member
+		reportError($_POST); // Check what was sent to check later
 		throw new Exception('No such member');
 	}
 
