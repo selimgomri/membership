@@ -153,19 +153,19 @@ include BASE_PATH . 'views/header.php';
       <nav aria-label="Page navigation">
         <ul class="pagination my-0">
           <li class="page-item">
-            <a class="page-link" href="<?= autoUrl("sessions?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
+            <a class="page-link" href="<?= autoUrl("timetable?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
               Previous Week
             </a>
           </li>
           <?php $weeks->add(new DateInterval('P7D')); ?>
           <li class="page-item">
-            <a class="page-link" href="<?= autoUrl("sessions?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
+            <a class="page-link" href="<?= autoUrl("timetable?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
               Week <?= (int) $weeks->format('W') ?> / <?= $weeks->format('o') ?>
             </a>
           </li>
           <?php $weeks->add(new DateInterval('P7D')); ?>
           <li class="page-item">
-            <a class="page-link" href="<?= autoUrl("sessions?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
+            <a class="page-link" href="<?= autoUrl("timetable?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
               Next Week
             </a>
           </li>
@@ -181,7 +181,7 @@ include BASE_PATH . 'views/header.php';
         <div class="input-group">
           <input type="date" class="form-control" value="<?= htmlspecialchars($startWeek->format('Y-m-d')) ?>" aria-label="Find a week" aria-describedby="go-to-week" name="go-to-week-date" id="go-to-week-date">
           <div class="input-group-append">
-            <button class="btn btn-secondary" type="submit" id="go-to-week">Go to week</button>
+            <button class="btn btn-primary" type="submit" id="go-to-week">Go to week</button>
           </div>
         </div>
       </form>
@@ -279,13 +279,13 @@ include BASE_PATH . 'views/header.php';
                 <dd class="col-sm-9">
                   <?php if ($bookingRequired && $futureSession) { ?>
                     <span class="d-block mb-2">Booking is required for this session</span>
-                    <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-success">Book a place<?php if ($showAdmin) { ?> or view/edit details<?php } ?></a>
+                    <a href="<?= htmlspecialchars(autoUrl('timetable/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-success">Book a place<?php if ($showAdmin) { ?> or view/edit details<?php } ?></a>
                   <?php } else if ($showAdmin && $futureSession) { ?>
                     <span class="d-block mb-2">Booking is not currently required for this session</span>
-                    <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary">Require pre-booking</a>
+                    <a href="<?= htmlspecialchars(autoUrl('timetable/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary">Require pre-booking</a>
                   <?php } else if ($showAdmin && $bookingRequired && !$futureSession) { ?>
                     <span class="d-block mb-2">Booking was required for this session</span>
-                    <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary">View booking info</a>
+                    <a href="<?= htmlspecialchars(autoUrl('timetable/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary">View booking info</a>
                   <?php } else if (!$futureSession) { ?>
                     <span class="d-block">Booking was not required</span>
                   <?php } else { ?>
@@ -323,19 +323,19 @@ include BASE_PATH . 'views/header.php';
       <nav aria-label="Page navigation example">
         <ul class="pagination">
           <li class="page-item">
-            <a class="page-link" href="<?= autoUrl("sessions?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
+            <a class="page-link" href="<?= autoUrl("timetable?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
               Previous Week
             </a>
           </li>
           <?php $weeks->add(new DateInterval('P7D')); ?>
           <li class="page-item">
-            <a class="page-link" href="<?= autoUrl("sessions?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
+            <a class="page-link" href="<?= autoUrl("timetable?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
               Week <?= (int) $weeks->format('W') ?> / <?= $weeks->format('o') ?>
             </a>
           </li>
           <?php $weeks->add(new DateInterval('P7D')); ?>
           <li class="page-item">
-            <a class="page-link" href="<?= autoUrl("sessions?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
+            <a class="page-link" href="<?= autoUrl("timetable?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
               Next Week
             </a>
           </li>
