@@ -3,6 +3,9 @@
 $db = app()->db;
 $tenant = app()->tenant;
 $pagetitle = 'COVID Risk Awareness';
+if (mb_strtoupper(app()->tenant->getKey('ASA_CLUB_CODE')) == 'UOSZ') {
+  $pagetitle = htmlspecialchars(UOS_RETURN_FORM_NAME);
+}
 
 $squads = null;
 $showSquadOpts = false;
@@ -55,7 +58,7 @@ include BASE_PATH . 'views/header.php';
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>
-          COVID-19 Risk Awareness Forms
+          <?php if (mb_strtoupper(app()->tenant->getKey('ASA_CLUB_CODE')) == 'UOSZ') { ?><?= htmlspecialchars(UOS_RETURN_FORM_NAME) ?><?php } else { ?>COVID-19 Risk Awareness Forms<?php } ?>
         </h1>
         <p class="lead mb-0">
           Making sure you're safe to train
@@ -80,9 +83,19 @@ include BASE_PATH . 'views/header.php';
       <?php unset($_SESSION['CovidRiskAwarenessSuccess']);
       } ?>
 
-      <p>
-        All members need to complete a COVID-19 risk awareness declaration.
-      </p>
+      <?php if (mb_strtoupper(app()->tenant->getKey('ASA_CLUB_CODE')) == 'UOSZ') { ?>
+        <p>
+        All members need to complete a COVID-19 Sport Sheffield Return to Training Form.
+        </p>
+
+        <p>
+          If you're a member of a Swim England club, you may have filled out a very similar form at home.
+        </p>
+      <?php } else { ?>
+        <p>
+          All members need to complete a COVID-19 risk awareness declaration.
+        </p>
+      <?php } ?>
 
       <?php if ($showSquadOpts) { ?>
         <h2 id="members">Your members</h2>

@@ -88,6 +88,12 @@ if (getenv('CACHE_DIR')) {
   define('CACHE_DIR', BASE_PATH . 'cache/');
 }
 
+// Special STUFF
+
+define('UOS_RETURN_FORM_NAME', 'Sport Sheffield Return to Training Form');
+
+// END
+
 use Symfony\Component\DomCrawler\Crawler;
 use GeoIp2\Database\Reader;
 
