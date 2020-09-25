@@ -144,7 +144,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="form-group">
           <div class="custom-control custom-radio">
-            <input type="radio" id="open-to-squads" name="open-to" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?>>
+            <input type="radio" id="open-to-squads" name="open-to" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> checked>
             <label class="custom-control-label" for="open-to-squads">Open to this session's scheduled squads</label>
           </div>
           <div class="custom-control custom-radio">
