@@ -11,5 +11,7 @@ You can also follow us on Twitter for the latest news [@myswimmingclub.uk](https
 
 # 2020
 
+* [September](2020/September.md)
+* [August](2020/August.md)
 * [March](2020/March.md)
 * [February](2020/February.md)

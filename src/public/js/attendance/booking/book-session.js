@@ -246,10 +246,11 @@ shareButton.addEventListener('click', event => {
       text: event.target.dataset.shareText,
       url: event.target.dataset.shareUrl,
     })
-      .then(() => console.log('Share was successful.'))
       .catch((err) => {
         // Don't log error
-        $('#sharing-modal').modal('show');
+        if (err.name === 'NotAllowedError') {
+          $('#sharing-modal').modal('show');
+        }
       }
       );
   } else {
