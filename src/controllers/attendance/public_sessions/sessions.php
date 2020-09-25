@@ -251,8 +251,8 @@ include BASE_PATH . 'views/header.php';
                   <dt class="col-sm-3"><?= htmlspecialchars($squadNames[$i]['SquadName']) ?> Coach<?php if (sizeof($coaches) > 0) { ?>es<?php } ?></dt>
                   <dd class="col-sm-9">
                     <ul class="list-unstyled mb-0">
-                      <?php for ($i = 0; $i < sizeof($coaches); $i++) { ?>
-                        <li><strong><?= htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn']) ?></strong>, <?= htmlspecialchars(coachTypeDescription($coaches[$i]['code'])) ?></li>
+                      <?php for ($y = 0; $y < sizeof($coaches); $y++) { ?>
+                        <li><strong><?= htmlspecialchars($coaches[$y]['fn'] . ' ' . $coaches[$y]['sn']) ?></strong>, <?= htmlspecialchars(coachTypeDescription($coaches[$y]['code'])) ?></li>
                       <?php } ?>
                       <?php if (sizeof($coaches) == 0) { ?>
                         <li>None assigned</li>
