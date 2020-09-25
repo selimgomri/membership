@@ -113,7 +113,7 @@ include "attendanceMenu.php"; ?>
           </span>
         </a>
 
-        <a href="<?= htmlspecialchars(autoUrl("sessions/booking")) ?>">
+        <a href="<?= htmlspecialchars(autoUrl("timetable/booking")) ?>">
           <div>
             <span class="title mb-0">
               Session Booking
