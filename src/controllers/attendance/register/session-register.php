@@ -165,7 +165,7 @@ function registerSheetGenerator($date, $sessionId)
                           <?php } ?>
                         </div>
                         <div>
-                          <div class="btn-group">
+                          <div class="btn-group d-flex">
                             <?php if (sizeof($row['medical']) > 0 || sizeof($row['photo']) > 0 || $row['notes']) { ?>
                               <button class="btn btn-sm btn-warning" type="button" data-show="extra-info-<?= htmlspecialchars($row['id']) ?>" aria-expanded="false" aria-controls="extra-info-<?= htmlspecialchars($row['id']) ?>"><span class="d-none d-md-inline">Medical, photo &amp; notes info</span><span class="d-md-none">Info</span> <span class="fa fa-caret-down"></span></button>
                             <?php } ?>
