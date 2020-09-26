@@ -18,8 +18,8 @@ try {
 }
 
 $currentPW = trim($_POST['current']);
-$password1 = trim($_POST['new1']);
-$password2 = trim($_POST['new2']);
+$password1 = trim($_POST['password-1']);
+$password2 = trim($_POST['password-2']);
 
 if (!v::stringType()->length(7, null)->validate($password1)) {
   $status = false;

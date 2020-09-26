@@ -225,8 +225,11 @@ $this->group('/views', function () {
 });
 
 $this->group('/about', function () {
-
   include BASE_PATH . 'controllers/about/router.php';
+});
+
+$this->group('/ajax-utilities', function () {
+  include BASE_PATH . 'controllers/ajax/router.php';
 });
 
 $this->get('/privacy', function () {

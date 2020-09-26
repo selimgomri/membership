@@ -104,7 +104,7 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-row">
+        <div class="form-row" id="password-form-row">
           <div class="form-group col-md-6">
             <label for="password-1">Password</label>
             <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required class="form-control" name="password-1" id="password-1" aria-describedby="pwHelp">
@@ -117,9 +117,18 @@ include BASE_PATH . 'views/header.php';
             <label for="password-2">Confirm password</label>
             <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required class="form-control" name="password-2" id="password-2">
             <div class="invalid-feedback">
-              You must provide password that is at least 8 characters long with at least one lowercase letter, at least one uppercase letter and at least one number
+              Passwords do not match
             </div>
           </div>
+        </div>
+
+        <div class="alert alert-info d-none" id="pwned-password-warning">
+          <p class="mb-0">
+            <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Warning</strong>
+          </p>
+          <p class="mb-0">
+            That password has been part of a data breach elsewhere on the internet. We suggest you pick something different.
+          </p>
         </div>
 
         <h2>Access permissions</h2>
@@ -166,10 +175,13 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
+<div id="ajax-options" data-get-pwned-list-ajax-url="<?= htmlspecialchars(autoUrl('ajax-utilities/pwned-password-check')) ?>" data-cross-site-request-forgery-value="<?= htmlspecialchars(\SCDS\CSRF::getValue()) ?>"></div>
+
 <?php
 
 if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserCreationError'])) unset($_SESSION['TENANT-' . app()->tenant->getId()]['UserCreationError']);
 
 $footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
+$footer->addJs("public/js/ajax-utilities/pwned-password-check.js");
 $footer->render();

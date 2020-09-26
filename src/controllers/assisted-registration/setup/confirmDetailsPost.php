@@ -96,7 +96,7 @@ if (mb_strtoupper($tenant->getKey('ASA_CLUB_CODE')) == 'UOSZ') {
 $statusMessage .= "<ul>";
 
 if ($status) {
-  $password = password_hash($password1, PASSWORD_BCRYPT);
+  $password = password_hash($password1, PASSWORD_ARGON2ID);
   try {
     $update = $db->prepare("UPDATE users SET `Password` = ?, EmailComms = ?, MobileComms = ?, RR = ? WHERE UserID = ?");
     $update->bindValue(1, $password, PDO::PARAM_STR);
