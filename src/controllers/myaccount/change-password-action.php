@@ -45,7 +45,7 @@ if (!password_verify($currentPW, $hash)) {
 
 if ($status == true) {
   try {
-    $newHash = password_hash($password1, PASSWORD_BCRYPT);
+    $newHash = password_hash($password1, PASSWORD_ARGON2ID);
     $updatePassword->execute(['user' => $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 'new' => $newHash]);
 
     $_SESSION['TENANT-' . app()->tenant->getId()]['PasswordUpdate'] = true;
