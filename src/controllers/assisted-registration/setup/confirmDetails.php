@@ -1,5 +1,11 @@
 <?php
 
+use Brick\PhoneNumber\PhoneNumber;
+use Brick\PhoneNumber\PhoneNumberParseException;
+use Brick\PhoneNumber\PhoneNumberType;
+use Brick\PhoneNumber\PhoneNumberFormat;
+
+
 $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegStage'] = 2;
 
 $db = app()->db;
@@ -46,6 +52,12 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsError']
   }
 }
 
+$examplePhone = '+447400123456';
+try {
+  $examplePhone = PhoneNumber::getExampleNumber('GB', PhoneNumberType::MOBILE)->format(PhoneNumberFormat::E164);
+} catch (Exception $e) {
+}
+
 $pagetitle = "Your Details - Assisted Registration";
 
 include BASE_PATH . 'views/header.php';
@@ -78,7 +90,7 @@ include BASE_PATH . 'views/header.php';
           <!-- Mobile -->
           <div class="form-group">
             <label for="mobile-number">Mobile phone number</label>
-            <input type="tel" class="form-control" name="mobile-number" id="mobile-number" required placeholder="+447400123456" aria-describedby="mobile-number-help">
+            <input type="tel" class="form-control" name="mobile-number" id="mobile-number" required placeholder="<?= htmlspecialchars($examplePhone) ?>" aria-describedby="mobile-number-help">
             <div class="invalid-feedback">
               You must provide a valid phone number (with no spaces).
             </div>

@@ -2,6 +2,7 @@
 
 use Brick\PhoneNumber\PhoneNumber;
 use Brick\PhoneNumber\PhoneNumberType;
+use Brick\PhoneNumber\PhoneNumberFormat;
 // $countries = getISOAlpha2Countries();
 
 function valueOrString($name)
@@ -18,6 +19,12 @@ function checked($name)
     return 'checked';
   }
   return '';
+}
+
+$examplePhone = '+447400123456';
+try {
+  $examplePhone = PhoneNumber::getExampleNumber('GB', PhoneNumberType::MOBILE)->format(PhoneNumberFormat::E164);
+} catch (Exception $e) {
 }
 
 $pagetitle = 'Create a new user';
@@ -98,7 +105,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="form-group">
           <label for="phone">Mobile number</label>
-          <input type="tel" pattern="\+{0,1}[0-9]*" required class="form-control" name="phone" id="phone" placeholder="<?= htmlspecialchars(PhoneNumber::getExampleNumber('GB', PhoneNumberType::MOBILE)) ?>" value="<?= htmlspecialchars(valueOrString('phone')) ?>">
+          <input type="tel" pattern="\+{0,1}[0-9]*" required class="form-control" name="phone" id="phone" placeholder="<?= htmlspecialchars($examplePhone) ?>" value="<?= htmlspecialchars(valueOrString('phone')) ?>">
           <div class="invalid-feedback">
             You must provide a valid UK phone number
           </div>
