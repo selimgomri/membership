@@ -29,7 +29,7 @@ Once you've required bookings for a session, we will take you to the booking inf
 
 ![The booking page for admins](AdminBookingPage.png)
 
-At the top of the page you'll see the sesison name and two buttons.
+At the top of the page you'll see the session name and two buttons.
 
 * **Edit booking settings**
     * Use this button to edit session booking options such as
@@ -68,7 +68,7 @@ See the example cancel email below...
 
 ![The cancellation confirmation email](CancelEmail.png)
 
-## Session Registers
+## Session Registers
 
 The membership system will automatically generate a register for the training session 15 minutes before the session start time. At this moment, booking will close and you can no longer add or remove members.
 
@@ -78,3 +78,7 @@ To access a register
 * Otherwise select the **Registers** drop down then **Take Register**.
 
 The date will default to today and you should select the session from the drop down menu. To see a previous register, select a different date from the date field and repeat.
+
+## TODO
+
+Soon you will be able to schedule booking opening and ensure you and your other captain already have a spot before booking opens.
