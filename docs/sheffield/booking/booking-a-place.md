@@ -4,7 +4,7 @@
 
 To book a place at a training session, please log into your account and select **Timetable** from the main menu.
 
-> **Note** If you are a coach or committee member, select **Timetable** from the **Attendance** drop down in the main menu.
+> **Note** If you are a coach or committee member, select **Timetable** from the **Registers** drop down in the main menu.
 
 ![Main menu for non admin users](MainMenu.png)
 
@@ -29,7 +29,7 @@ To book your space, press the blue **Book** button next to your name.
 
 ![Booking page](BookingPage.png)
 
-We'll show your a confirmation dialog. Press the **Confirm booking** button to confirm your place.
+We'll show you a confirmation dialog. Press the **Confirm booking** button to confirm your place.
 
 ![Confirm booking dialog](ConfirmBooking.png)
 

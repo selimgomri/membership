@@ -6,8 +6,15 @@
 
 ## Help
 
+### For members
+
 * [Getting started](registration/get-started.md)
 * [Booking a session](booking/booking-a-place.md)
+
+### For captains, coaches and committee members
+
+* [Take a register](attendance/registers.md)
+* [Require and manage session booking](booking/manage-bookings.md)
 
 ## Providing feedback
 
