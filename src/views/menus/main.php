@@ -472,6 +472,11 @@ if (!function_exists('chesterStandardMenu')) {
             <li class="nav-item">
               <a class="nav-link" href="<?= htmlspecialchars(autoUrl("login")) ?>">Login</a>
             </li>
+            <?php if (isset(app()->tenant) && app()->tenant->getKey('ASA_CLUB_CODE') == 'UOSZ' && false) { ?>
+              <li class="nav-item">
+                <a class="nav-link" href="<?= htmlspecialchars(autoUrl("register/university-of-sheffield")) ?>">Sign Up (Trials)</a>
+              </li>
+            <?php } ?>
             <li class="nav-item">
               <a class="nav-link" href="<?= htmlspecialchars(autoUrl("covid/contact-tracing")) ?>">COVID-19 Contact Tracing</a>
             </li>

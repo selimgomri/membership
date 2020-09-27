@@ -207,16 +207,13 @@ $this->group(['/timeconverter', '/time-converter'], function () {
 });
 
 $this->get('/reportanissue', function () {
-
   include BASE_PATH . 'controllers/help/ReportIssueHandler.php';
 });
 $this->post('/reportanissue', function () {
-
   include BASE_PATH . 'controllers/help/ReportIssuePost.php';
 });
 
 $this->group('/ajax', function () {
-
   include BASE_PATH . 'controllers/public/router.php';
 });
 
@@ -320,6 +317,10 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
 
   $this->get('/login', function () {
     include BASE_PATH . 'views/Login.php';
+  });
+
+  $this->group('/register/university-of-sheffield', function () {
+    include BASE_PATH . 'controllers/register/sheffield/router.php';
   });
 
   // // Register
