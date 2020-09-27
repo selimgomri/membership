@@ -115,6 +115,13 @@ if (!isset($_POST['first']) || !isset($_POST['last']) || !isset($_POST['dob']) |
 
     $userId = $db->lastInsertId();
 
+    // Make parent
+    $addPermission = $db->prepare("INSERT INTO `permissions` (`Permission`, `User`) VALUES (?, ?)");
+    $addPermission->execute([
+      'Parent',
+      $userId,
+    ]);
+
     // Add member
     $insertIntoSwimmers = $db->prepare("INSERT INTO members (UserID, MForename, MMiddleNames, Msurname, DateOfBirth, Gender, ASANumber, ASACategory, RR, AccessKey, ClubPays, OtherNotes, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $insertIntoSwimmers->execute([
