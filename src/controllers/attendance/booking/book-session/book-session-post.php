@@ -31,7 +31,7 @@ try {
   $now = new DateTime('now', new DateTimeZone('UTC'));
 
   // Get session
-  $getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
+  $getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads`, `RegisterGenerated`, `BookingOpens` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
   $getSession->execute([
     $_POST['session-id'],
     $date->format('Y-m-d'),
@@ -61,7 +61,15 @@ try {
 
   $now = new DateTime('now', new DateTimeZone('Europe/London'));
 
-  $bookingClosed = $now > $bookingCloses;
+  $bookingClosed = $now > $bookingCloses || bool($session['RegisterGenerated']);
+
+  if ($session['BookingOpens']) {
+    $bookingOpensTime = new DateTime($session['BookingOpens'], new DateTimeZone('UTC'));
+    $bookingOpensTime->setTimezone(new DateTimeZone('Europe/London'));
+    if ($bookingOpensTime > $now) {
+      throw new Exception('Booking is not yet open');
+    }
+  }
 
   if ($bookingClosed) {
     throw new Exception('Booking has closed');
@@ -164,6 +172,27 @@ try {
   // Generate a confirmation email
   // Get member / user details
 
+  $url = 'https://production-apis.tenant-services.membership.myswimmingclub.uk/attendance/send-booking-page-change-message';
+  if (bool(getenv("IS_DEV"))) {
+    $url = 'https://apis.tenant-services.membership.myswimmingclub.uk/attendance/send-booking-page-change-message';
+  }
+
+  try {
+
+    $client = new \GuzzleHttp\Client([
+      'timeout' => 1.0,
+    ]);
+
+    $r = $client->request('POST', $url, [
+      'json' => [
+        'room' => 'session_booking_room:' . $date->format('Y-m-d') . '-S' . $session['SessionID'],
+        'update' => true,
+      ]
+    ]);
+  } catch (Exception $e) {
+    // Ignore
+  }
+
   $getUser = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id, Forename ufn, Surname usn, EmailAddress email FROM members INNER JOIN users ON users.UserID = members.UserID WHERE members.MemberID = ?");
   $getUser->execute([
     $member['MemberID'],
@@ -219,7 +248,7 @@ try {
           $content .= 'es';
         }
 
-        $content .= '</dt><dd><ul style="margin-bottom: 0px;">';
+        $content .= '</dt><dd><ul style="margin-top: 0px;margin-bottom: 0px;">';
 
         for ($i = 0; $i < sizeof($coaches); $i++) {
           $content .= '<li><strong>' . htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn']) . '</strong>, ' . htmlspecialchars(coachTypeDescription($coaches[$i]['code'])) . '</li>';
@@ -247,7 +276,7 @@ try {
   }
 } catch (Exception $e) {
 
-  reportError($e);
+  // reportError($e);
 
   $message = $e->getMessage();
   if (get_class($e) == 'PDOException') {

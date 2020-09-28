@@ -36,9 +36,13 @@ try {
     throw new Exception('Date invalid for this session');
   }
 
+  $sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime'], new DateTimeZone('Europe/London'));
+  $bookingCloses = clone $sessionDateTime;
+  $bookingCloses->modify('-15 minutes');
+
   try {
 
-    $addBookable = $db->prepare("INSERT INTO `sessionsBookable` (`Session`, `Date`, `MaxPlaces`, `AllSquads`) VALUES (?, ?, ?, ?)");
+    $addBookable = $db->prepare("INSERT INTO `sessionsBookable` (`Session`, `Date`, `MaxPlaces`, `AllSquads`, `BookingOpens`) VALUES (?, ?, ?, ?, ?)");
 
     $maxPlaces = null;
     if (isset($_POST['number-limit']) && bool($_POST['number-limit']) && ((int) $_POST['max-count']) > 0) {
@@ -50,11 +54,27 @@ try {
       $allSquads = true;
     }
 
+    // Booking opening time
+    $bookingOpensAt = null;
+    if (isset($_POST['open-bookings']) && bool($_POST['open-bookings'])) {
+      try {
+        $bookingOpens = DateTime::createFromFormat('Y-m-d-H:i', $_POST['open-booking-at-date'] . '-' . $_POST['open-booking-at-time'], new DateTimeZone('Europe/London'));
+        $bookingOpens->setTimezone(new DateTimeZone('UTC'));
+
+        if ($bookingOpens > $now && $bookingOpens < $bookingCloses) {
+          $bookingOpensAt = $bookingOpens->format('Y-m-d H:i:s');
+        }
+      } catch (Exception $e) {
+        $bookingOpensAt = null;
+      }
+    }
+
     $addBookable->execute([
       $session['SessionID'],
       $date->format('Y-m-d'),
       $maxPlaces,
       (int) $allSquads,
+      $bookingOpensAt,
     ]);
 
     // Ensure register is clear
@@ -62,24 +82,19 @@ try {
     // $_SESSION['TENANT-' . app()->tenant->getId()]['RequireBookingSuccess'] = $message;
     http_response_code(302);
     header("location: " . autoUrl('sessions/booking/book?session=' . $session['SessionID'] . '&date=' . $date->format('Y-m-d')));
+  } catch (Exception $e) {
 
-
-    } catch (Exception $e) {
-
-      $message = $e->getMessage();
-      if (get_class($e) == 'PDOException') {
-        $message = 'A database error occurred';
-      }
- 
-      $_SESSION['TENANT-' . app()->tenant->getId()]['RequireBookingError'] = $message;
-      http_response_code(302);
-      header("location: " . autoUrl('sessions/booking/book?session=' . $session['SessionID'] . '&date=' . $date->format('Y-m-d')));
-
+    $message = $e->getMessage();
+    if (get_class($e) == 'PDOException') {
+      $message = 'A database error occurred';
     }
 
+    $_SESSION['TENANT-' . app()->tenant->getId()]['RequireBookingError'] = $message;
+    http_response_code(302);
+    header("location: " . autoUrl('sessions/booking/book?session=' . $session['SessionID'] . '&date=' . $date->format('Y-m-d')));
+  }
 } catch (Exception $e) {
 
   reportError($e);
   halt(404);
-
 }

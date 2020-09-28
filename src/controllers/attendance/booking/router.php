@@ -43,3 +43,13 @@ $this->post('/edit', function () {
 $this->post('/book', function () {
   include 'require-booking/edit-require-booking-post.php';
 });
+
+$this->group('/book-on-behalf-of', function () {
+  $this->get('/', function () {
+    include 'book-session/book-on-behalf-of.php';
+  });
+
+  $this->post('/', function () {
+    include 'book-session/book-on-behalf-of-post.php';
+  });
+});

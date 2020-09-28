@@ -2,9 +2,7 @@
 
 $db = app()->db;
 $tenant = app()->tenant;
-
-include 'my-members/my-members.php';
-include 'all-members/all-members.php';
+$user = app()->user;
 
 if (!isset($_GET['session']) && !isset($_GET['date'])) halt(404);
 
@@ -73,24 +71,33 @@ $getSessionSquads->execute([
 $squadNames = $getSessionSquads->fetchAll(PDO::FETCH_ASSOC);
 
 $theTitle = 'Book ' . $session['SessionName'] . ' at ' . $startTime->format('H:i') . ' on ' . $date->format('j F Y') . ' - ' . $tenant->getName();
-$theLink = app('request')->curl;
-$bookingLoginLink = autoUrl('login?target=' . rawurlencode('/' . $tenant->getCodeId() . '/sessions/booking/book?session=' . $session['SessionID'] . '&date=' . $date->format('Y-m-d')));
+$theLink = autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')));
 
-$bookingOpensTime = null;
-$bookingOpen = true;
-if ($session['BookingOpens']) {
-  try {
-    $bookingOpensTime = new DateTime($session['BookingOpens'], new DateTimeZone('UTC'));
-    $bookingOpensTime->setTimezone(new DateTimeZone('Europe/London'));
-    if ($bookingOpensTime > $now) {
-      $bookingOpen = false;
-    }
-  } catch (Exception $e) {
-    // Ignore
+// Get session squads
+$getSquads = $db->prepare("SELECT `Squad` FROM `sessionsSquads` WHERE `Session` = ?");
+$getSquads->execute([
+  $session['SessionID'],
+]);
+
+while ($squad = $getSquads->fetchColumn()) {
+  // Get members for this user in this squad
+  $getMembers = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id FROM members INNER JOIN squadMembers ON members.MemberID = squadMembers.Member WHERE squadMembers.Squad = ? ORDER BY fn ASC, sn ASC");
+  $getMembers->execute([
+    $squad,
+  ]);
+
+  while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)) {
+    $members[] = $member;
   }
 }
 
-$pagetitle = 'Session Booking';
+// Remove duplicated
+// $members = array_unique($members);
+$members = array_map("unserialize", array_unique(array_map("serialize", $members)));
+
+$getBooking = $db->prepare("SELECT `BookedAt` FROM `sessionsBookings` WHERE `Session` = ? AND `Date` = ? AND `Member` = ?");
+
+$pagetitle = 'Book on behalf of - Session Booking';
 include BASE_PATH . 'views/header.php';
 
 ?>
@@ -102,7 +109,8 @@ include BASE_PATH . 'views/header.php';
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('timetable')) ?>">Timetable</a></li>
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('timetable/booking')) ?>">Booking</a></li>
-        <li class="breadcrumb-item active" aria-current="page"><?= htmlspecialchars($date->format('Y-m-d')) ?>-S<?= htmlspecialchars($session['SessionID']) ?></li>
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('timetable/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>"><?= htmlspecialchars($date->format('Y-m-d')) ?>-S<?= htmlspecialchars($session['SessionID']) ?></a></li>
+        <li class="breadcrumb-item active" aria-current="page"><abbr title="Book On Behalf Of">BOBO</abbr></li>
       </ol>
     </nav>
 
@@ -117,9 +125,11 @@ include BASE_PATH . 'views/header.php';
         <div class="mb-3 d-lg-none"></div>
       </div>
       <div class="col text-lg-right">
-        <a href="<?= htmlspecialchars($bookingLoginLink) ?>" class="btn btn-primary">
-          Login to book<?php if (!$bookingOpen) { ?> once open<?php } ?>
-        </a>
+        <?php if ($user->hasPermission('Admin') || $user->hasPermission('Coach')) { ?>
+          <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>" class="btn btn-dark" title="Changes won't be saved">
+            Back
+          </a>
+        <?php } ?>
       </div>
     </div>
 
@@ -130,9 +140,31 @@ include BASE_PATH . 'views/header.php';
 
   <div class="row">
     <div class="col-lg-8 order-2 order-lg-1 mb-3">
-      <p class="lead">
+      <p class="lead d-none d-lg-block">
         <span class="place-numbers-places-booked-string uc-first"><?= htmlspecialchars(mb_ucfirst($numFormatter->format($bookedCount))) ?></span> <span id="place-numbers-booked-places-member-string"><?php if ($bookedCount == 1) { ?>member has<?php } else { ?>members have<?php } ?></span> booked onto this session. <?php if ($session['MaxPlaces']) { ?><span class="place-numbers-places-remaining-string uc-first"><?= htmlspecialchars(mb_ucfirst($numFormatter->format($session['MaxPlaces'] - $bookedCount))) ?></span> <span id="place-numbers-places-remaining-member-string"><?php if (($session['MaxPlaces'] - $bookedCount) == 1) { ?>place remains<?php } else { ?>places remain<?php } ?></span> available.<?php } ?>
       </p>
+
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['BookOnBehalfOfSuccess'])) { ?>
+        <div class="alert alert-success">
+          <p class="mb-0">
+            <strong>Members booked successfully</strong>
+          </p>
+          <p class="mb-0">
+            We'll send an email to members to let them know you have booked them a place on their behalf.
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['BookOnBehalfOfSuccess']); } ?>
+
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['BookOnBehalfOfError'])) { ?>
+        <div class="alert alert-warning">
+          <p class="mb-0">
+            <strong>We could not book all members a place</strong>
+          </p>
+          <p class="mb-0">
+            Check the list below.
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['BookOnBehalfOfError']); } ?>
 
       <?php if ($bookingClosed) { ?>
         <div class="alert alert-warning">
@@ -143,91 +175,53 @@ include BASE_PATH . 'views/header.php';
             Booking closed automatically at <?= htmlspecialchars($bookingCloses->format('H:i, j F Y (T)')) ?>, 15 minutes prior to the published session start time of <?= htmlspecialchars($sessionDateTime->format('H:i T')) ?>.
           </p>
         </div>
-      <?php } ?>
+      <?php } else if (sizeof($members) > 0) { ?>
 
-      <h2>Session Details</h2>
-      <dl class="row mb-0">
-        <dt class="col-sm-3">Date</dt>
-        <dd class="col-sm-9"><?= htmlspecialchars($sessionDateTime->format('l j F Y')) ?></dd>
-
-        <dt class="col-sm-3">Starts at</dt>
-        <dd class="col-sm-9"><?= htmlspecialchars($startTime->format('H:i')) ?></dd>
-
-        <dt class="col-sm-3">Ends at</dt>
-        <dd class="col-sm-9"><?= htmlspecialchars($endTime->format('H:i')) ?></dd>
-
-        <dt class="col-sm-3">Duration</dt>
-        <dd class="col-sm-9"><?php if ($hours > 0) { ?><?= $hours ?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?= $mins ?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
-
-        <?php if ($bookingOpensTime) { ?>
-          <dt class="col-sm-3">Booking opens at</dt>
-          <dd class="col-sm-9"><?= htmlspecialchars($bookingOpensTime->format('H:i, j F Y')) ?></dd>
-        <?php } ?>
-
-        <?php if ($session['MaxPlaces']) { ?>
-          <dt class="col-sm-3">Total places available</dt>
-          <dd class="col-sm-9 place-numbers-max-places-int"><?= htmlspecialchars($session['MaxPlaces']) ?></dd>
-        <?php } ?>
-
-        <dt class="col-sm-3">Places booked</dt>
-        <dd class="col-sm-9 place-numbers-places-booked-int"><?= htmlspecialchars($bookedCount) ?></dd>
-
-        <?php if ($session['MaxPlaces']) { ?>
-          <dt class="col-sm-3">Places remaining</dt>
-          <dd class="col-sm-9 place-numbers-places-remaining-int"><?= htmlspecialchars(($session['MaxPlaces'] - $bookedCount)) ?></dd>
-        <?php } ?>
-
-        <?php for ($i = 0; $i < sizeof($squadNames); $i++) {
-          $getCoaches->execute([
-            $squadNames[$i]['SquadID'],
-          ]);
-          $coaches = $getCoaches->fetchAll(PDO::FETCH_ASSOC);
-        ?>
-          <dt class="col-sm-3"><?= htmlspecialchars($squadNames[$i]['SquadName']) ?> Coach<?php if (sizeof($coaches) > 0) { ?>es<?php } ?></dt>
-          <dd class="col-sm-9">
-            <ul class="list-unstyled mb-0">
-              <?php for ($y = 0; $y < sizeof($coaches); $y++) { ?>
-                <li><strong><?= htmlspecialchars($coaches[$y]['fn'] . ' ' . $coaches[$y]['sn']) ?></strong>, <?= htmlspecialchars(coachTypeDescription($coaches[$y]['code'])) ?></li>
-              <?php } ?>
-              <?php if (sizeof($coaches) == 0) { ?>
-                <li>None assigned</li>
-              <?php } ?>
-            </ul>
-          </dd>
-        <?php } ?>
-
-        <dt class="col-sm-3">Location</dt>
-        <dd class="col-sm-9"><?= htmlspecialchars($session['Location']) ?></dd>
-
-        <dt class="col-sm-3">Session Unique ID</dt>
-        <dd class="col-sm-9"><?= htmlspecialchars($date->format('Y-m-d')) ?>-S<?= htmlspecialchars($session['SessionID']) ?></dd>
-      </dl>
-
-      <h2>Book a place</h2>
-      <?php if ($bookingOpen) { ?>
+        <h2>Select members to add</h2>
         <p class="lead">
-          To book a place, please log into your <?= htmlspecialchars($tenant->getName()) ?> account.
-        </p>
-        <p>
-          <a href="<?= htmlspecialchars($bookingLoginLink) ?>" class="btn btn-primary">
-            Login
-          </a>
-        </p>
-      <?php } else if ($bookingOpensTime) { ?>
-        <p class="lead">
-          Booking for this session will open at <?= htmlspecialchars($bookingOpensTime->format('H:i T, l j F Y')) ?>
+          Select members to book a place on their behalf.
         </p>
 
         <p>
-          Come back to this page then and log in with your club account to book a space.
+          Please only do this for a limited number of members.
         </p>
+
+        <form method="post">
+          <ul class="list-group mb-3">
+            <?php foreach ($members as $member) {
+              $getBooking->execute([
+                $session['SessionID'],
+                $date->format('Y-m-d'),
+                $member['id'],
+              ]);
+              $booking = $getBooking->fetchColumn();
+            ?>
+              <li class="list-group-item <?php if ($booking) { ?>bg-light text-muted user-select-none<?php } ?>" id="<?= htmlspecialchars('member-box-for-member-' . $member['id']) ?>">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" name="<?= htmlspecialchars('member-checkbox-' . $member['id']) ?>" id="<?= htmlspecialchars('member-checkbox-' . $member['id']) ?>" <?php if ($booking) { ?>checked disabled<?php } ?>>
+                  <label class="custom-control-label" for="<?= htmlspecialchars('member-checkbox-' . $member['id']) ?>"><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></label>
+                </div>
+              </li>
+            <?php } ?>
+          </ul>
+
+          <p>
+            We will send an email to all selected members notifying them that you have pre-booked a slot on their behalf.
+          </p>
+
+          <p>
+            <button type="submit" class="btn btn-primary">
+              Add bookings
+            </button>
+          </p>
+
+        </form>
+
+      <?php } else { ?>
       <?php } ?>
 
-    </div>
-    <div class="col order-1 order-lg-2">
-      <div class="d-block d-lg-none">
 
-      </div>
+
     </div>
   </div>
 

@@ -17,7 +17,7 @@ try {
 }
 
 // Get session
-$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads`, `RegisterGenerated` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
+$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads`, `RegisterGenerated`, `BookingOpens` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
 $getSession->execute([
   $_GET['session'],
   $date->format('Y-m-d'),
@@ -76,6 +76,25 @@ $squadNames = $getSessionSquads->fetchAll(PDO::FETCH_ASSOC);
 $theTitle = 'Book ' . $session['SessionName'] . ' at ' . $startTime->format('H:i') . ' on ' . $date->format('j F Y') . ' - ' . $tenant->getName();
 $theLink = autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')));
 
+$bookingOpensTime = null;
+$bookingOpen = true;
+if ($session['BookingOpens']) {
+  try {
+    $bookingOpensTime = new DateTime($session['BookingOpens'], new DateTimeZone('UTC'));
+    $bookingOpensTime->setTimezone(new DateTimeZone('Europe/London'));
+    if ($bookingOpensTime > $now) {
+      $bookingOpen = false;
+    }
+  } catch (Exception $e) {
+    // Ignore
+  }
+}
+
+$socketDataInit = 'https://production-apis.tenant-services.membership.myswimmingclub.uk';
+if (bool(getenv("IS_DEV"))) {
+  $socketDataInit = 'https://apis.tenant-services.membership.myswimmingclub.uk';
+}
+
 $pagetitle = 'Session Booking';
 include BASE_PATH . 'views/header.php';
 
@@ -113,6 +132,12 @@ include BASE_PATH . 'views/header.php';
             Share <i class="fa fa-share" aria-hidden="true"></i>
           </button>
         </div>
+        <?php if (($user->hasPermission('Admin') || $user->hasPermission('Coach')) && !$bookingClosed) { ?>
+          <div class="mb-3"></div>
+          <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book-on-behalf-of?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>" class="btn btn-primary">
+            Book on behalf of
+          </a>
+        <?php } ?>
       </div>
     </div>
 
@@ -167,6 +192,11 @@ include BASE_PATH . 'views/header.php';
             <dt class="col-sm-12">Duration</dt>
             <dd class="col-sm-12"><?php if ($hours > 0) { ?><?= $hours ?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?= $mins ?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
 
+            <?php if ($bookingOpensTime) { ?>
+              <dt class="col-sm-12">Booking opens at</dt>
+              <dd class="col-sm-12"><?= htmlspecialchars($bookingOpensTime->format('H:i, j F Y')) ?></dd>
+            <?php } ?>
+
             <?php if ($session['MaxPlaces']) { ?>
               <dt class="col-sm-12">Total places available</dt>
               <dd class="col-sm-12 place-numbers-max-places-int"><?= htmlspecialchars($session['MaxPlaces']) ?></dd>
@@ -220,6 +250,11 @@ include BASE_PATH . 'views/header.php';
 
             <dt class="col-sm-3">Duration</dt>
             <dd class="col-sm-9"><?php if ($hours > 0) { ?><?= $hours ?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?= $mins ?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
+
+            <?php if ($bookingOpensTime) { ?>
+              <dt class="col-sm-3">Booking opens at</dt>
+              <dd class="col-sm-9"><?= htmlspecialchars($bookingOpensTime->format('H:i, j F Y')) ?></dd>
+            <?php } ?>
 
             <?php if ($session['MaxPlaces']) { ?>
               <dt class="col-sm-3">Total places available</dt>
@@ -394,10 +429,15 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div id="ajaxData" data-booking-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/book')) ?>" data-cancellation-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/cancel')) ?>" data-my-member-reload-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/my-booking-info?session=' . urlencode($_GET['session']) . '&date=' . urlencode($_GET['date']))) ?>" data-all-member-reload-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/all-booking-info?session=' . urlencode($_GET['session']) . '&date=' . urlencode($_GET['date']))) ?>"></div>
+<div id="ajaxData" data-booking-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/book')) ?>" data-cancellation-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/cancel')) ?>" data-my-member-reload-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/my-booking-info?session=' . urlencode($_GET['session']) . '&date=' . urlencode($_GET['date']))) ?>" data-all-member-reload-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/all-booking-info?session=' . urlencode($_GET['session']) . '&date=' . urlencode($_GET['date']))) ?>" data-socket-init="<?= htmlspecialchars($socketDataInit) ?>" data-socket-room-name="<?= htmlspecialchars('session_booking_room:' . $date->format('Y-m-d') . '-S' . $session['SessionID']) ?>"></div>
 
 <?php
 
 $footer = new \SCDS\Footer();
+if (bool(getenv("IS_DEV"))) {
+  $footer->addExternalJs('https://apis.tenant-services.membership.myswimmingclub.uk/socket.io/socket.io.js');
+} else {
+  $footer->addExternalJs('https://production-apis.tenant-services.membership.myswimmingclub.uk/socket.io/socket.io.js');
+}
 $footer->addJs('public/js/attendance/booking/book-session.js');
 $footer->render();
