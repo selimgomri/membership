@@ -105,18 +105,20 @@ regArea.addEventListener('click', (event) => {
 });
 
 function sendChange(weekId, sessionId, memberId, value) {
-  var req = new XMLHttpRequest();
-  req.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
+  if (typeof weekId !== 'undefined' && typeof sessionId !== 'undefined' && typeof memberId !== 'undefined') {
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
 
-    } else if (this.readyState == 4) {
-      // Not ok
-      alert('An error occurred. Your change was not saved.');
+      } else if (this.readyState == 4) {
+        // Not ok
+        alert('An error occurred. Your change was not saved.');
+      }
     }
+    req.open('POST', options.ajaxUrl, true);
+    req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    req.send('weekId=' + encodeURI(weekId) + '&sessionId=' + encodeURI(sessionId) + '&memberId=' + encodeURI(memberId) + '&state=' + encodeURI(value));
   }
-  req.open('POST', options.ajaxUrl, true);
-  req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-  req.send('weekId=' + encodeURI(weekId) + '&sessionId=' + encodeURI(sessionId) + '&memberId=' + encodeURI(memberId) + '&state=' + encodeURI(value));
 }
 
 var mouseDownTimer;
