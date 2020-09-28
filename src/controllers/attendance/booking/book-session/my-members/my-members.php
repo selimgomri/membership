@@ -65,6 +65,20 @@ function getMySessionBookingMembers($session, $date)
 
   $bookingClosed = $now > $bookingCloses;
 
+  $bookingOpensTime = null;
+  $bookingOpen = true;
+  if ($session['BookingOpens']) {
+    try {
+      $bookingOpensTime = new DateTime($session['BookingOpens'], new DateTimeZone('UTC'));
+      $bookingOpensTime->setTimezone(new DateTimeZone('Europe/London'));
+      if ($bookingOpensTime > $now) {
+        $bookingOpen = false;
+      }
+    } catch (Exception $e) {
+      // Ignore
+    }
+  }
+
 ?>
 
   <h2>Book</h2>
@@ -112,9 +126,13 @@ function getMySessionBookingMembers($session, $date)
           <?php } else if ($bookingClosed) { ?>
             <span class="text-muted">Booking closed</span>
           <?php } else { ?>
-            <?php if ($spaces > 0 && !$booking) { ?>
+            <?php if ($bookingOpen && $spaces > 0 && !$booking) { ?>
               <span>
                 <button class="btn btn-primary" type="button" data-member-name="<?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?>" data-member-id="<?= htmlspecialchars($member['id']) ?>" data-operation="book-place" data-session-id="<?= htmlspecialchars($session['SessionID']) ?>" data-session-name="<?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>" data-session-location="<?= htmlspecialchars($session['Location']) ?>" data-session-date="<?= htmlspecialchars($date->format('Y-m-d')) ?>">Book</button>
+              </span>
+            <?php } else if (!$bookingOpen && $bookingOpensTime) { ?>
+              <span class="text-muted small">
+                Booking opens at <?= htmlspecialchars($bookingOpensTime->format('H:i T, d/m/Y')) ?>
               </span>
             <?php } else if ($spaces < 1) { ?>
               <span>

@@ -14,7 +14,7 @@ try {
 }
 
 // Get session
-$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads`, `RegisterGenerated` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
+$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads`, `RegisterGenerated`, `BookingOpens` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
 $getSession->execute([
   $_GET['session'],
   $date->format('Y-m-d'),
@@ -68,6 +68,20 @@ $getSessionSquads->execute([
   $session['SessionID'],
 ]);
 $squadNames = $getSessionSquads->fetchAll(PDO::FETCH_ASSOC);
+
+$bookingOpensTime = $now;
+$min = $now;
+if ($session['BookingOpens']) {
+  try {
+    $bookingOpensTime = new DateTime($session['BookingOpens'], new DateTimeZOne('UTC'));
+    $bookingOpensTime->setTimezone(new DateTimeZOne('Europe/London'));
+    if ($bookingOpensTime < $now) {
+      $min = clone $bookingOpensTime;
+    }
+  } catch (Exception $e) {
+    $bookingOpensTime = $now;
+  }
+}
 
 $pagetitle = 'Session Booking';
 include BASE_PATH . 'views/header.php';
@@ -195,6 +209,44 @@ include BASE_PATH . 'views/header.php';
         <p>
           We will generate a register for this session based on bookings rather than squad membership.
         </p>
+
+        <div class="form-group" id="open-bookings">
+          <div class="custom-control custom-radio">
+        <input type="radio" id="open-bookings-now" name="open-bookings" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> <?php if (!$session['BookingOpens']) { ?>checked<?php } ?>>
+            <label class="custom-control-label" for="open-bookings-now">Opening bookings immediately</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="open-bookings-later" name="open-bookings" class="custom-control-input" value="1" <?php if ($bookingClosed) { ?>disabled<?php } ?> <?php if ($session['BookingOpens']) { ?>checked<?php } ?>>
+            <label class="custom-control-label" for="open-bookings-later">Open bookings later</label>
+          </div>
+        </div>
+
+        <div class="<?php if (!$session['BookingOpens']) { ?>d-none<?php } ?>" id="open-bookings-at-container">
+          <div class="form-row">
+            <div class="col">
+              <div class="form-group">
+                <label for="open-booking-at-date">Opens date</label>
+                <input type="date" id="open-booking-at-date" name="open-booking-at-date" min="<?= htmlspecialchars($min->format("Y-m-d")) ?>" max="<?= htmlspecialchars($date->format("Y-m-d")) ?>" class="form-control" value="<?= htmlspecialchars($bookingOpensTime->format("Y-m-d")) ?>" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
+                <div class="invalid-feedback">
+                  Please provide a date
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="open-booking-at-time">Opens time</label>
+                <input type="time" id="open-booking-at-time" name="open-booking-at-time" class="form-control" <?php if ($bookingClosed) { ?>disabled<?php } ?> value="<?= htmlspecialchars($bookingOpensTime->format("H:i")) ?>">
+                <div class="invalid-feedback">
+                  Please provide a time (24 hour format)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            As a coach or administrator, you can add members to this session ahead of booking opening.
+          </p>
+        </div>
 
         <p>
           Booking <?php if ($bookingClosed) { ?>closed<?php } else { ?>will close<?php } ?> automatically at <?= htmlspecialchars($bookingCloses->format('H:i, j F Y (T)')) ?>, 15 minutes prior to the session start time of <?= htmlspecialchars($sessionDateTime->format('H:i T')) ?>.

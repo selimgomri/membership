@@ -16,7 +16,7 @@ try {
 }
 
 // Get session
-$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads`, `RegisterGenerated` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
+$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads`, `RegisterGenerated`, `BookingOpens` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
 $getSession->execute([
   $_GET['session'],
   $date->format('Y-m-d'),
@@ -76,6 +76,20 @@ $theTitle = 'Book ' . $session['SessionName'] . ' at ' . $startTime->format('H:i
 $theLink = app('request')->curl;
 $bookingLoginLink = autoUrl('login?target=' . rawurlencode('/' . $tenant->getCodeId() . '/sessions/booking/book?session=' . $session['SessionID'] . '&date=' . $date->format('Y-m-d')));
 
+$bookingOpensTime = null;
+$bookingOpen = true;
+if ($session['BookingOpens']) {
+  try {
+    $bookingOpensTime = new DateTime($session['BookingOpens'], new DateTimeZone('UTC'));
+    $bookingOpensTime->setTimezone(new DateTimeZone('Europe/London'));
+    if ($bookingOpensTime > $now) {
+      $bookingOpen = false;
+    }
+  } catch (Exception $e) {
+    // Ignore
+  }
+}
+
 $pagetitle = 'Session Booking';
 include BASE_PATH . 'views/header.php';
 
@@ -104,7 +118,7 @@ include BASE_PATH . 'views/header.php';
       </div>
       <div class="col text-lg-right">
         <a href="<?= htmlspecialchars($bookingLoginLink) ?>" class="btn btn-primary">
-          Login to book
+          Login to book<?php if (!$bookingOpen) { ?> once open<?php } ?>
         </a>
       </div>
     </div>
@@ -144,6 +158,11 @@ include BASE_PATH . 'views/header.php';
 
         <dt class="col-sm-3">Duration</dt>
         <dd class="col-sm-9"><?php if ($hours > 0) { ?><?= $hours ?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?= $mins ?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
+
+        <?php if ($bookingOpensTime) { ?>
+          <dt class="col-sm-3">Booking opens at</dt>
+          <dd class="col-sm-9"><?= htmlspecialchars($bookingOpensTime->format('H:i, j F Y')) ?></dd>
+        <?php } ?>
 
         <?php if ($session['MaxPlaces']) { ?>
           <dt class="col-sm-3">Total places available</dt>
@@ -185,14 +204,24 @@ include BASE_PATH . 'views/header.php';
       </dl>
 
       <h2>Book a place</h2>
-      <p class="lead">
-        To book a place, please log into your <?= htmlspecialchars($tenant->getName()) ?> account.
-      </p>
-      <p>
-        <a href="<?= htmlspecialchars($bookingLoginLink) ?>" class="btn btn-primary">
-          Login
-        </a>
-      </p>
+      <?php if ($bookingOpen) { ?>
+        <p class="lead">
+          To book a place, please log into your <?= htmlspecialchars($tenant->getName()) ?> account.
+        </p>
+        <p>
+          <a href="<?= htmlspecialchars($bookingLoginLink) ?>" class="btn btn-primary">
+            Login
+          </a>
+        </p>
+      <?php } else if ($bookingOpensTime) { ?>
+        <p class="lead">
+          Booking for this session will open at <?= htmlspecialchars($bookingOpensTime->format('H:i T, l j F Y')) ?>
+        </p>
+
+        <p>
+          Come back to this page then and log in with your club account to book a space.
+        </p>
+      <?php } ?>
 
     </div>
     <div class="col order-1 order-lg-2">

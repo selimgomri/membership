@@ -31,7 +31,7 @@ try {
   $now = new DateTime('now', new DateTimeZone('UTC'));
 
   // Get session
-  $getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
+  $getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads`, `RegisterGenerated`, `BookingOpens` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
   $getSession->execute([
     $_POST['session-id'],
     $date->format('Y-m-d'),
@@ -61,7 +61,15 @@ try {
 
   $now = new DateTime('now', new DateTimeZone('Europe/London'));
 
-  $bookingClosed = $now > $bookingCloses;
+  $bookingClosed = $now > $bookingCloses || bool($session['RegisterGenerated']);
+
+  if ($session['BookingOpens']) {
+    $bookingOpensTime = new DateTime($session['BookingOpens'], new DateTimeZone('UTC'));
+    $bookingOpensTime->setTimezone(new DateTimeZone('Europe/London'));
+    if ($bookingOpensTime > $now) {
+      throw new Exception('Booking is not yet open');
+    }
+  }
 
   if ($bookingClosed) {
     throw new Exception('Booking has closed');

@@ -157,6 +157,44 @@ include BASE_PATH . 'views/header.php';
           We will generate a register for this session based on bookings rather than squad membership.
         </p>
 
+        <div class="form-group" id="open-bookings">
+          <div class="custom-control custom-radio">
+            <input type="radio" id="open-bookings-now" name="open-bookings" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> checked>
+            <label class="custom-control-label" for="open-bookings-now">Opening bookings immediately</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="open-bookings-later" name="open-bookings" class="custom-control-input" value="1" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
+            <label class="custom-control-label" for="open-bookings-later">Open bookings later</label>
+          </div>
+        </div>
+
+        <div class="d-none" id="open-bookings-at-container">
+          <div class="form-row">
+            <div class="col">
+              <div class="form-group">
+                <label for="open-booking-at-date">Opens date</label>
+                <input type="date" id="open-booking-at-date" name="open-booking-at-date" min="<?= htmlspecialchars($now->format("Y-m-d")) ?>" max="<?= htmlspecialchars($date->format("Y-m-d")) ?>" class="form-control" value="<?= htmlspecialchars($now->format("Y-m-d")) ?>" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
+                <div class="invalid-feedback">
+                  Please provide a date
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="open-booking-at-time">Opens time</label>
+                <input type="time" id="open-booking-at-time" name="open-booking-at-time" class="form-control" <?php if ($bookingClosed) { ?>disabled<?php } ?> value="<?= htmlspecialchars($now->format("H:i")) ?>">
+                <div class="invalid-feedback">
+                  Please provide a time (24 hour format)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            As a coach or administrator, you can add members to this session ahead of booking opening.
+          </p>
+        </div>
+
         <p>
           Booking <?php if ($bookingClosed) { ?>closed<?php } else { ?>will close<?php } ?> automatically at <?= htmlspecialchars($bookingCloses->format('H:i, j F Y (T)')) ?>, 15 minutes prior to the session start time of <?= htmlspecialchars($sessionDateTime->format('H:i T')) ?>.
         </p>

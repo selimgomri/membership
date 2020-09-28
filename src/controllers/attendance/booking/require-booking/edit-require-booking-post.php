@@ -53,7 +53,7 @@ try {
       throw new Exception('Booking has closed - No changes can be mades');
     }
 
-    $updateBookable = $db->prepare("UPDATE `sessionsBookable` SET `MaxPlaces` = ?, `AllSquads` = ? WHERE `Session` = ? AND `Date` = ?");
+    $updateBookable = $db->prepare("UPDATE `sessionsBookable` SET `MaxPlaces` = ?, `AllSquads` = ?, `BookingOpens` = ? WHERE `Session` = ? AND `Date` = ?");
 
     $maxPlaces = null;
     if (isset($_POST['number-limit']) && bool($_POST['number-limit']) && ((int) $_POST['max-count']) > 0) {
@@ -65,9 +65,25 @@ try {
       $allSquads = true;
     }
 
+    // Booking opening time
+    $bookingOpensAt = null;
+    if (isset($_POST['open-bookings']) && bool($_POST['open-bookings'])) {
+      try {
+        $bookingOpens = DateTime::createFromFormat('Y-m-d-H:i', $_POST['open-booking-at-date'] . '-' . $_POST['open-booking-at-time'], new DateTimeZone('Europe/London'));
+        $bookingOpens->setTimezone(new DateTimeZone('UTC'));
+
+        if ($bookingOpens > $now && $bookingOpens < $bookingCloses) {
+          $bookingOpensAt = $bookingOpens->format('Y-m-d H:i:s');
+        }
+      } catch (Exception $e) {
+        $bookingOpensAt = null;
+      }
+    }
+
     $updateBookable->execute([
       $maxPlaces,
       (int) $allSquads,
+      $bookingOpensAt,
       $session['SessionID'],
       $date->format('Y-m-d'),
     ]);

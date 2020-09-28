@@ -17,7 +17,7 @@ try {
 }
 
 // Get session
-$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads`, `RegisterGenerated` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
+$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads`, `RegisterGenerated`, `BookingOpens` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
 $getSession->execute([
   $_GET['session'],
   $date->format('Y-m-d'),
@@ -75,6 +75,20 @@ $squadNames = $getSessionSquads->fetchAll(PDO::FETCH_ASSOC);
 
 $theTitle = 'Book ' . $session['SessionName'] . ' at ' . $startTime->format('H:i') . ' on ' . $date->format('j F Y') . ' - ' . $tenant->getName();
 $theLink = autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')));
+
+$bookingOpensTime = null;
+$bookingOpen = true;
+if ($session['BookingOpens']) {
+  try {
+    $bookingOpensTime = new DateTime($session['BookingOpens'], new DateTimeZone('UTC'));
+    $bookingOpensTime->setTimezone(new DateTimeZone('Europe/London'));
+    if ($bookingOpensTime > $now) {
+      $bookingOpen = false;
+    }
+  } catch (Exception $e) {
+    // Ignore
+  }
+}
 
 $pagetitle = 'Session Booking';
 include BASE_PATH . 'views/header.php';
@@ -167,6 +181,11 @@ include BASE_PATH . 'views/header.php';
             <dt class="col-sm-12">Duration</dt>
             <dd class="col-sm-12"><?php if ($hours > 0) { ?><?= $hours ?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?= $mins ?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
 
+            <?php if ($bookingOpensTime) { ?>
+              <dt class="col-sm-12">Booking opens at</dt>
+              <dd class="col-sm-12"><?= htmlspecialchars($bookingOpensTime->format('H:i, j F Y')) ?></dd>
+            <?php } ?>
+
             <?php if ($session['MaxPlaces']) { ?>
               <dt class="col-sm-12">Total places available</dt>
               <dd class="col-sm-12 place-numbers-max-places-int"><?= htmlspecialchars($session['MaxPlaces']) ?></dd>
@@ -220,6 +239,11 @@ include BASE_PATH . 'views/header.php';
 
             <dt class="col-sm-3">Duration</dt>
             <dd class="col-sm-9"><?php if ($hours > 0) { ?><?= $hours ?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?= $mins ?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
+
+            <?php if ($bookingOpensTime) { ?>
+              <dt class="col-sm-3">Booking opens at</dt>
+              <dd class="col-sm-9"><?= htmlspecialchars($bookingOpensTime->format('H:i, j F Y')) ?></dd>
+            <?php } ?>
 
             <?php if ($session['MaxPlaces']) { ?>
               <dt class="col-sm-3">Total places available</dt>
