@@ -162,6 +162,27 @@ try {
 
     $db->commit();
 
+    $url = 'https://production-apis.tenant-services.membership.myswimmingclub.uk/attendance/send-booking-page-change-message';
+    if (bool(getenv("IS_DEV"))) {
+      $url = 'https://apis.tenant-services.membership.myswimmingclub.uk/attendance/send-booking-page-change-message';
+    }
+
+    try {
+
+      $client = new \GuzzleHttp\Client([
+        'timeout' => 1.0,
+      ]);
+
+      $r = $client->request('POST', $url, [
+        'json' => [
+          'room' => 'session_booking_room:' . $date->format('Y-m-d') . '-S' . $session['SessionID'],
+          'update' => true,
+        ]
+      ]);
+    } catch (Exception $e) {
+      // Ignore
+    }
+
     $_SESSION['TENANT-' . app()->tenant->getId()]['EditRequireBookingSuccess'] = true;
     http_response_code(302);
     header("location: " . autoUrl('sessions/booking/edit?session=' . $session['SessionID'] . '&date=' . $date->format('Y-m-d')));

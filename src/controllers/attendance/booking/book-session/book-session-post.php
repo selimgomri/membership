@@ -172,6 +172,27 @@ try {
   // Generate a confirmation email
   // Get member / user details
 
+  $url = 'https://production-apis.tenant-services.membership.myswimmingclub.uk/attendance/send-booking-page-change-message';
+  if (bool(getenv("IS_DEV"))) {
+    $url = 'https://apis.tenant-services.membership.myswimmingclub.uk/attendance/send-booking-page-change-message';
+  }
+
+  try {
+
+    $client = new \GuzzleHttp\Client([
+      'timeout' => 1.0,
+    ]);
+
+    $r = $client->request('POST', $url, [
+      'json' => [
+        'room' => 'session_booking_room:' . $date->format('Y-m-d') . '-S' . $session['SessionID'],
+        'update' => true,
+      ]
+    ]);
+  } catch (Exception $e) {
+    // Ignore
+  }
+
   $getUser = $db->prepare("SELECT MForename fn, MSurname sn, MemberID id, Forename ufn, Surname usn, EmailAddress email FROM members INNER JOIN users ON users.UserID = members.UserID WHERE members.MemberID = ?");
   $getUser->execute([
     $member['MemberID'],
@@ -255,7 +276,7 @@ try {
   }
 } catch (Exception $e) {
 
-  reportError($e);
+  // reportError($e);
 
   $message = $e->getMessage();
   if (get_class($e) == 'PDOException') {

@@ -90,6 +90,11 @@ if ($session['BookingOpens']) {
   }
 }
 
+$socketDataInit = 'https://production-apis.tenant-services.membership.myswimmingclub.uk';
+if (bool(getenv("IS_DEV"))) {
+  $socketDataInit = 'https://apis.tenant-services.membership.myswimmingclub.uk';
+}
+
 $pagetitle = 'Session Booking';
 include BASE_PATH . 'views/header.php';
 
@@ -424,10 +429,15 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div id="ajaxData" data-booking-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/book')) ?>" data-cancellation-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/cancel')) ?>" data-my-member-reload-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/my-booking-info?session=' . urlencode($_GET['session']) . '&date=' . urlencode($_GET['date']))) ?>" data-all-member-reload-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/all-booking-info?session=' . urlencode($_GET['session']) . '&date=' . urlencode($_GET['date']))) ?>"></div>
+<div id="ajaxData" data-booking-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/book')) ?>" data-cancellation-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/cancel')) ?>" data-my-member-reload-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/my-booking-info?session=' . urlencode($_GET['session']) . '&date=' . urlencode($_GET['date']))) ?>" data-all-member-reload-ajax-url="<?= htmlspecialchars(autoUrl('sessions/booking/all-booking-info?session=' . urlencode($_GET['session']) . '&date=' . urlencode($_GET['date']))) ?>" data-socket-init="<?= htmlspecialchars($socketDataInit) ?>" data-socket-room-name="<?= htmlspecialchars('session_booking_room:' . $date->format('Y-m-d') . '-S' . $session['SessionID']) ?>"></div>
 
 <?php
 
 $footer = new \SCDS\Footer();
+if (bool(getenv("IS_DEV"))) {
+  $footer->addExternalJs('https://apis.tenant-services.membership.myswimmingclub.uk/socket.io/socket.io.js');
+} else {
+  $footer->addExternalJs('https://production-apis.tenant-services.membership.myswimmingclub.uk/socket.io/socket.io.js');
+}
 $footer->addJs('public/js/attendance/booking/book-session.js');
 $footer->render();

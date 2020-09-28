@@ -1,4 +1,5 @@
 const options = document.getElementById('ajaxData').dataset;
+const socket = io(options.socketInit);
 
 function updateBookingNumbers(stats) {
   // Update numbers
@@ -49,6 +50,10 @@ function updateBookingNumbers(stats) {
 
     for (let element of intSpans) {
       element.textContent = stats.placesRemaining.int;
+    }
+
+    if (stats.placesRemaining.int == 0) {
+      $('#booking-modal').modal('hide');
     }
 
     for (let element of stringSpans) {
@@ -271,3 +276,35 @@ sharingModal.addEventListener('click', event => {
     $('#sharing-modal').modal('hide');
   }
 });
+
+socket.on('connect', () => {
+  joinSocketRoom();
+
+  // console.log(socket.connected); // true
+});
+
+socket.on('booking-page-book-cancel-event', (message) => {
+  if (message.event == 'booking-page-book-cancel') {
+    // Reload
+    if (message.update == true) {
+      reloadMyMemberList();
+      reloadAllMemberList();
+    }
+  }
+})
+
+/**
+ * Join the socket.io room for the current register
+ */
+async function joinSocketRoom() {
+  if (options.socketRoomName) {
+    let currentSocketRoom = options.socketRoomName;
+    // console.log(currentSocketRoom);
+    // Tell the socket which room we want to join
+    socket.emit('booking-page-join-room', {
+      room: currentSocketRoom,
+    });
+
+    // console.info('Socket connected');
+  }
+}
