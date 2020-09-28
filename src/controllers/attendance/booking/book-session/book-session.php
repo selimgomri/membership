@@ -127,6 +127,12 @@ include BASE_PATH . 'views/header.php';
             Share <i class="fa fa-share" aria-hidden="true"></i>
           </button>
         </div>
+        <?php if (($user->hasPermission('Admin') || $user->hasPermission('Coach')) && !$bookingClosed) { ?>
+          <div class="mb-3"></div>
+          <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book-on-behalf-of?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>" class="btn btn-primary">
+            Book on behalf of
+          </a>
+        <?php } ?>
       </div>
     </div>
 

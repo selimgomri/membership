@@ -227,7 +227,7 @@ try {
           $content .= 'es';
         }
 
-        $content .= '</dt><dd><ul style="margin-bottom: 0px;">';
+        $content .= '</dt><dd><ul style="margin-top: 0px;margin-bottom: 0px;">';
 
         for ($i = 0; $i < sizeof($coaches); $i++) {
           $content .= '<li><strong>' . htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn']) . '</strong>, ' . htmlspecialchars(coachTypeDescription($coaches[$i]['code'])) . '</li>';
