@@ -144,20 +144,28 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
 function getAttendanceByID($link = null, $id, $weeks = "all")
 {
   $db = app()->db;
-  $hideAttendance = !bool(app()->tenant->getKey('HIDE_MEMBER_ATTENDANCE'));
+  $tenant = app()->tenant;
+
+  $hideAttendance = !bool($tenant->getKey('HIDE_MEMBER_ATTENDANCE'));
   if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent' || $hideAttendance) {
     $output = "";
     $startWeek = 1;
 
-    // Get the last four weeks to calculate attendance
-    $latestWeek = $db->query("SELECT MAX(WeekID) FROM `sessionsWeek`;")->fetchColumn();
-
-    if ($weeks != "all") {
-      $startWeek = $latestWeek - $weeks;
-      if ($startWeek < 1) {
-        $startWeek = 1;
-      }
+    $latestWeek = null;
+    if ($weeks != 'all') {
+      // Get the last four weeks to calculate attendance
+      $latestWeek = $db->prepare("SELECT WeekID FROM sessionsWeek WHERE Tenant = :tenant ORDER BY WeekDateBeginning DESC LIMIT :retLimit OFFSET :offsetAmount");
+      $latestWeek->bindValue(':tenant', $tenant->getId(), PDO::PARAM_INT);
+      $latestWeek->bindValue(':retLimit', 1, PDO::PARAM_INT);
+      $latestWeek->bindValue(':offsetAmount', max($weeks - 1, 0), PDO::PARAM_INT);
+      $latestWeek->execute();
+    } else {
+      $latestWeek = $db->prepare("SELECT WeekID FROM sessionsWeek WHERE Tenant = ? ORDER BY WeekDateBeginning ASC LIMIT 1");
+      $latestWeek->execute([
+        $tenant->getId(),
+      ]);
     }
+    $startWeek = $latestWeek->fetchColumn();
 
     $member = [
       "week" => $startWeek,
@@ -262,8 +270,7 @@ function courseLengthString($string)
     $courseLength = "Short Course";
   } else if ($string == "LONG") {
     $courseLength = "Long Course";
-  }
-  else {
+  } else {
     $courseLength = "Non Standard Pool Distance";
   }
   return $courseLength;
@@ -346,7 +353,6 @@ function myMonthlyFeeTable($link = null, $userID)
     $ret .= '</ul>';
 
     return $ret;
-
   } catch (Exception $e) {
     return '<div class="alert alert-warning">Data currently unavailable</div>';
   }
@@ -465,8 +471,7 @@ function monthlyFeeCost($link = null, $user, $format = "decimal")
     return (string) \Brick\Math\BigDecimal::of((string) $total)->withPointMovedLeft(2)->toScale(2);
   } else if ($format == "int") {
     return $total;
-  }
-  else if ($format == "string") {
+  } else if ($format == "string") {
     return "&pound;" . (string) \Brick\Math\BigDecimal::of((string) $total)->withPointMovedLeft(2)->toScale(2);
   }
 }
@@ -490,8 +495,7 @@ function monthlyExtraCost($link = null, $userID, $format = "decimal")
     return (string) $totalCost->toScale(2);
   } else if ($format == "int") {
     return $totalCost->withPointMovedRight(2)->toInt();
-  }
-  else if ($format == "string") {
+  } else if ($format == "string") {
     return "&pound;" . (string) $totalCost->toScale(2);
   }
 }
@@ -631,11 +635,9 @@ function getBillingDate($link = null, $user)
       $ordinal = "st";
     } else if ($row['Day'] % 10 == 2) {
       $ordinal = "nd";
-    }
-    else if ($row['Day'] % 10 == 3) {
+    } else if ($row['Day'] % 10 == 3) {
       $ordinal = "rd";
-    }
-    else {
+    } else {
       $ordinal = "th";
     }
     return $row['Day'] . $ordinal;
@@ -765,8 +767,7 @@ function updatePaymentStatus($PMkey)
       $sql2bool = false;
       echo "Failure in event process";
     }
-  }
-  else if ($status == "customer_approval_denied") {
+  } else if ($status == "customer_approval_denied") {
     $db = app()->db;
     try {
       $query = $db->prepare("SELECT payments.UserID, Name, Amount, Forename, Surname FROM payments INNER JOIN users ON payments.UserID = users.UserID WHERE PMkey = ?");
@@ -785,8 +786,7 @@ function updatePaymentStatus($PMkey)
       reportError($e);
       $sql2bool = false;
     }
-  }
-  else if ($status == "charged_back") {
+  } else if ($status == "charged_back") {
     $db = app()->db;
     try {
       $query = $db->prepare("SELECT payments.UserID, Name, Amount, Forename, Surname FROM payments INNER JOIN users ON payments.UserID = users.UserID WHERE PMkey = ?");
@@ -806,8 +806,7 @@ function updatePaymentStatus($PMkey)
       reportError($e);
       $sql2bool = false;
     }
-  }
-  else {
+  } else {
     $sql2bool = true;
   }
   if ($status == null) {
@@ -846,23 +845,23 @@ function paymentStatusString($status, $stripeFailureCode = null)
     case "cust_not_dd":
       return "Customer has no Direct Debit mandate";
     case "requires_payment_method": {
-      switch ($stripeFailureCode) {
-        case "account_closed":
-          return "Bank account closed";
-        case "bank_ownership_changed":
-          return "Account transferred to new PSP";
-        case "debit_not_authorized":
-          return "Customer told bank payment was not authorised";
-        case "generic_could_not_process":
-          return "Payment could not be processed";
-        case "insufficient_funds":
-          return "Account has insufficient funds";
-        case "invalid_account_number":
-          return "Account number not valid: Not a GBP account or does not support BACS Direct Debit";
-        default:
-          return "Requires a Payment Method";
+        switch ($stripeFailureCode) {
+          case "account_closed":
+            return "Bank account closed";
+          case "bank_ownership_changed":
+            return "Account transferred to new PSP";
+          case "debit_not_authorized":
+            return "Customer told bank payment was not authorised";
+          case "generic_could_not_process":
+            return "Payment could not be processed";
+          case "insufficient_funds":
+            return "Account has insufficient funds";
+          case "invalid_account_number":
+            return "Account number not valid: Not a GBP account or does not support BACS Direct Debit";
+          default:
+            return "Requires a Payment Method";
+        }
       }
-    }
     case "requires_confirmation":
       return "Payment Intent requires confirmation";
     case "requires_action":
@@ -974,11 +973,9 @@ function ordinal($num)
     $ordinal = "st";
   } else if ($num % 10 == 2) {
     $ordinal = "nd";
-  }
-  else if ($num % 10 == 3) {
+  } else if ($num % 10 == 3) {
     $ordinal = "rd";
-  }
-  else {
+  } else {
     $ordinal = "th";
   }
   return $num . $ordinal;
@@ -1056,22 +1053,19 @@ function getTimes($asa)
         } else {
           $array['CY_SC'][] = trim($domElement->textContent);
         }
-      }
-      else if ($col == 2) {
+      } else if ($col == 2) {
         if ($domElement->textContent == "") {
           $array['SCPB'][] = null;
         } else {
           $array['SCPB'][] = trim($domElement->textContent);
         }
-      }
-      else if ($col == 3) {
+      } else if ($col == 3) {
         if ($domElement->textContent == "") {
           $array['CY_LC'][] = null;
         } else {
           $array['CY_LC'][] = trim($domElement->textContent);
         }
-      }
-      else if ($col == 4) {
+      } else if ($col == 4) {
         if ($domElement->textContent == "") {
           $array['LCPB'][] = null;
         } else {
@@ -1286,11 +1280,9 @@ function helloGreeting()
     return "Good Morning";
   } else if ($hour > 11 && $hour < 17) {
     return "Good Afternoon";
-  }
-  else if ($hour > 16 && $hour < 21) {
+  } else if ($hour > 16 && $hour < 21) {
     return "Good Evening";
-  }
-  else {
+  } else {
     return "Good Night";
   }
 }
@@ -1301,23 +1293,17 @@ function getCardFA($brand)
     return 'fa-cc-visa';
   } else if ($brand == 'mastercard') {
     return 'fa-cc-mastercard';
-  }
-  else if ($brand == 'amex') {
+  } else if ($brand == 'amex') {
     return 'fa-cc-amex';
-  }
-  else if ($brand == 'diners') {
+  } else if ($brand == 'diners') {
     return 'fa-cc-diners-club';
-  }
-  else if ($brand == 'discover') {
+  } else if ($brand == 'discover') {
     return 'fa-cc-discover';
-  }
-  else if ($brand == 'jcb') {
+  } else if ($brand == 'jcb') {
     return 'fa-cc-jcb';
-  }
-  else if ($brand == 'unionpay') {
+  } else if ($brand == 'unionpay') {
     return 'fa-cc-stripe';
-  }
-  else {
+  } else {
     return 'fa-cc-stripe';
   }
 }
@@ -1328,23 +1314,17 @@ function getCardBrand($brand)
     return 'Visa';
   } else if ($brand == 'mastercard') {
     return 'Mastercard';
-  }
-  else if ($brand == 'amex') {
+  } else if ($brand == 'amex') {
     return 'American Express';
-  }
-  else if ($brand == 'diners') {
+  } else if ($brand == 'diners') {
     return 'Diners Club';
-  }
-  else if ($brand == 'discover') {
+  } else if ($brand == 'discover') {
     return 'Discover';
-  }
-  else if ($brand == 'jcb') {
+  } else if ($brand == 'jcb') {
     return 'JCB';
-  }
-  else if ($brand == 'unionpay') {
+  } else if ($brand == 'unionpay') {
     return 'UnionPay';
-  }
-  else {
+  } else {
     return 'Unknown Card';
   }
 }
@@ -1405,14 +1385,16 @@ function getSwimmerParent($member)
   return $query->fetchColumn();
 }
 
-function stripeDirectDebit($absolute = false) {
+function stripeDirectDebit($absolute = false)
+{
   if ($absolute) {
     return getenv('STRIPE') && app()->tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT');
   }
   return getenv('STRIPE') && app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP') || app()->tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT');
 }
 
-function stripeSetUpDirectDebit() {
+function stripeSetUpDirectDebit()
+{
   return getenv('STRIPE') && app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP');
 }
 
