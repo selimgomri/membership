@@ -53,7 +53,7 @@ try {
       throw new Exception('Booking has closed - No changes can be mades');
     }
 
-    $updateBookable = $db->prepare("UPDATE `sessionsBookable` SET `MaxPlaces` = ?, `AllSquads` = ?, `BookingOpens` = ? WHERE `Session` = ? AND `Date` = ?");
+    $updateBookable = $db->prepare("UPDATE `sessionsBookable` SET `MaxPlaces` = ?, `AllSquads` = ?, `BookingOpens` = ?, `BookingFee` = ? WHERE `Session` = ? AND `Date` = ?");
 
     $maxPlaces = null;
     if (isset($_POST['number-limit']) && bool($_POST['number-limit']) && ((int) $_POST['max-count']) > 0) {
@@ -80,10 +80,22 @@ try {
       }
     }
 
+    $bookingFee = 0;
+    if (isset($_POST['booking-fees']) && bool($_POST['booking-fees'])) {
+      $bookingFee = 0;
+      try {
+        $amountDec = \Brick\Math\BigDecimal::of((string) $_POST['booking-fees-amount']);
+        $bookingFee = $amountDec->withPointMovedRight(2)->toInt();
+      } catch (Exception $e) {
+        $bookingFee = 0;
+      }
+    }
+
     $updateBookable->execute([
       $maxPlaces,
       (int) $allSquads,
       $bookingOpensAt,
+      $bookingFee,
       $session['SessionID'],
       $date->format('Y-m-d'),
     ]);

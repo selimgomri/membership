@@ -42,7 +42,7 @@ try {
 
   try {
 
-    $addBookable = $db->prepare("INSERT INTO `sessionsBookable` (`Session`, `Date`, `MaxPlaces`, `AllSquads`, `BookingOpens`) VALUES (?, ?, ?, ?, ?)");
+    $addBookable = $db->prepare("INSERT INTO `sessionsBookable` (`Session`, `Date`, `MaxPlaces`, `AllSquads`, `BookingOpens`, `BookingFee`) VALUES (?, ?, ?, ?, ?, ?)");
 
     $maxPlaces = null;
     if (isset($_POST['number-limit']) && bool($_POST['number-limit']) && ((int) $_POST['max-count']) > 0) {
@@ -69,12 +69,24 @@ try {
       }
     }
 
+    $bookingFee = 0;
+    if (isset($_POST['booking-fees']) && bool($_POST['booking-fees'])) {
+      $bookingFee = 0;
+      try {
+        $amountDec = \Brick\Math\BigDecimal::of((string) $_POST['booking-fees-amount']);
+        $bookingFee = $amountDec->withPointMovedRight(2)->toInt();
+      } catch (Exception $e) {
+        $bookingFee = 0;
+      }
+    }
+
     $addBookable->execute([
       $session['SessionID'],
       $date->format('Y-m-d'),
       $maxPlaces,
       (int) $allSquads,
       $bookingOpensAt,
+      $bookingFee,
     ]);
 
     // Ensure register is clear

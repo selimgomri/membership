@@ -213,7 +213,7 @@ if (mbl) {
     if (event.target.tagName === 'BUTTON' && event.target.dataset.operation === 'book-place') {
       document.getElementById('booking-modal-member-name').textContent = event.target.dataset.memberName;
       document.getElementById('booking-modal-session-name').textContent = event.target.dataset.sessionName;
-      document.getElementById('booking-modal-session-location').textContent = event.target.dataset.sessionLocation;
+      // document.getElementById('booking-modal-session-location').textContent = event.target.dataset.sessionLocation;
 
       document.getElementById('member-id').value = event.target.dataset.memberId;
       document.getElementById('session-id').value = event.target.dataset.sessionId;
@@ -230,7 +230,7 @@ if (ambl) {
     if (event.target.tagName === 'BUTTON' && event.target.dataset.operation === 'cancel-place') {
       document.getElementById('cancel-modal-member-name').textContent = event.target.dataset.memberName;
       document.getElementById('cancel-modal-session-name').textContent = event.target.dataset.sessionName;
-      document.getElementById('cancel-modal-session-location').textContent = event.target.dataset.sessionLocation;
+      // document.getElementById('cancel-modal-session-location').textContent = event.target.dataset.sessionLocation;
 
       document.getElementById('cancel-member-id').value = event.target.dataset.memberId;
       document.getElementById('cancel-session-id').value = event.target.dataset.sessionId;

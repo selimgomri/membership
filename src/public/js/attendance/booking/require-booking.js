@@ -25,6 +25,20 @@ openBookingRadio.addEventListener('change', event => {
   } else {
     openAtContainer.classList.add('d-none');
     opensDate.required = false;
-    opensTime.required = true;
+    opensTime.required = false;
+  }
+});
+
+let chargeFeeRadio = document.getElementById('booking-fees');
+
+chargeFeeRadio.addEventListener('change', event => {
+  let feesContainer = document.getElementById('booking-fees-container');
+  let feesInput = document.getElementById('booking-fees-amount');
+  if (event.target.value == '1') {
+    feesContainer.classList.remove('d-none');
+    feesInput.required = true;
+  } else {
+    feesContainer.classList.add('d-none');
+    feesInput.required = false;
   }
 });

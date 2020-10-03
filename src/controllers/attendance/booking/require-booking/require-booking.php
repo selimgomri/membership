@@ -119,7 +119,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="form-group" id="number-limit">
           <div class="custom-control custom-radio">
-            <input type="radio" id="unlimited-numbers" name="number-limit" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?>>
+            <input type="radio" id="unlimited-numbers" name="number-limit" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> checked>
             <label class="custom-control-label" for="unlimited-numbers">Unlimited numbers</label>
           </div>
           <div class="custom-control custom-radio">
@@ -192,6 +192,40 @@ include BASE_PATH . 'views/header.php';
 
           <p>
             As a coach or administrator, you can add members to this session ahead of booking opening.
+          </p>
+        </div>
+
+        <div class="form-group" id="booking-fees">
+          <div class="custom-control custom-radio">
+            <input type="radio" id="booking-fees-no" name="booking-fees" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> checked>
+            <label class="custom-control-label" for="booking-fees-no">Session is free</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="booking-fees-yes" name="booking-fees" class="custom-control-input" value="1" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
+            <label class="custom-control-label" for="booking-fees-yes">Charge a fee</label>
+          </div>
+        </div>
+
+        <div class="d-none" id="booking-fees-container">
+          <div class="form-row">
+            <div class="col">
+              <div class="form-group">
+                <label for="booking-fees-amount">Booking fee</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">&pound;</span>
+                  </div>
+                  <input type="num" id="booking-fees-amount" name="booking-fees-amount" min="0" max="50" step="0.01" class="form-control" <?php if ($bookingClosed) { ?>disabled<?php } ?> placeholder="0.00">
+                  <div class="invalid-feedback">
+                    Please provide a session fee
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            All members who book a space on this session will be charged this amount.
           </p>
         </div>
 

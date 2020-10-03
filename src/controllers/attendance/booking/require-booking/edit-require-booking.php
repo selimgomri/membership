@@ -14,7 +14,7 @@ try {
 }
 
 // Get session
-$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads`, `RegisterGenerated`, `BookingOpens` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
+$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads`, `RegisterGenerated`, `BookingOpens`, `BookingFee` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
 $getSession->execute([
   $_GET['session'],
   $date->format('Y-m-d'),
@@ -212,7 +212,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="form-group" id="open-bookings">
           <div class="custom-control custom-radio">
-        <input type="radio" id="open-bookings-now" name="open-bookings" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> <?php if (!$session['BookingOpens']) { ?>checked<?php } ?>>
+            <input type="radio" id="open-bookings-now" name="open-bookings" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> <?php if (!$session['BookingOpens']) { ?>checked<?php } ?>>
             <label class="custom-control-label" for="open-bookings-now">Opening bookings immediately</label>
           </div>
           <div class="custom-control custom-radio">
@@ -245,6 +245,40 @@ include BASE_PATH . 'views/header.php';
 
           <p>
             As a coach or administrator, you can add members to this session ahead of booking opening.
+          </p>
+        </div>
+
+        <div class="form-group" id="booking-fees">
+          <div class="custom-control custom-radio">
+            <input type="radio" id="booking-fees-no" name="booking-fees" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> <?php if ($session['BookingFee'] == 0) { ?>checked<?php } ?>>
+            <label class="custom-control-label" for="booking-fees-no">Session is free</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="booking-fees-yes" name="booking-fees" class="custom-control-input" value="1" <?php if ($bookingClosed) { ?>disabled<?php } ?> <?php if ($session['BookingFee'] > 0) { ?>checked<?php } ?>>
+            <label class="custom-control-label" for="booking-fees-yes">Charge a fee</label>
+          </div>
+        </div>
+
+        <div class="<?php if ($session['BookingFee'] == 0) { ?>d-none<?php } ?>" id="booking-fees-container">
+          <div class="form-row">
+            <div class="col">
+              <div class="form-group">
+                <label for="booking-fees-amount">Booking fee</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">&pound;</span>
+                  </div>
+                  <input type="num" id="booking-fees-amount" name="booking-fees-amount" min="0" max="50" step="0.01" class="form-control" <?php if ($bookingClosed) { ?>disabled<?php } ?> value="<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $session['BookingFee']))->withPointMovedLeft(2)->toScale(2)) ?>" placeholder="0.00">
+                  <div class="invalid-feedback">
+                    Please provide a session fee
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            All members who book a space on this session will be charged this amount.
           </p>
         </div>
 

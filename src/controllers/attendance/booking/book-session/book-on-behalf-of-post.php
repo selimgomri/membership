@@ -14,7 +14,7 @@ try {
 }
 
 // Get session
-$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads`, `RegisterGenerated`, `BookingOpens` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
+$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads`, `RegisterGenerated`, `BookingOpens`, `BookingFee` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
 $getSession->execute([
   $_GET['session'],
   $date->format('Y-m-d'),
@@ -212,6 +212,13 @@ if (!$bookingClosed) {
 
             $content .= '<dt>Duration</dt><dd>' . htmlspecialchars($durationString) . '</dd>';
 
+            $content .= '<dt>Price</dt>';
+            if ($session['BookingFee'] > 0) {
+              $content .= '<dd>&pound;' . htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $session['BookingFee']))->withPointMovedLeft(2)->toScale(2)) . '</dd>';
+            } else {
+              $content .= '<dd>Free</dd>';
+            }
+
             // Coaches
             // $content .= '<dt>Duration</dt><dd>' . htmlspecialchars($durationString) . '</dd>';
             for ($i = 0; $i < sizeof($squadNames); $i++) {
@@ -244,6 +251,11 @@ if (!$bookingClosed) {
             $content .= '</dl>';
 
             $content .= '<p>Booking made on your behalf by ' . htmlspecialchars($user->getFullName()) . '.</p>';
+
+            if ($session['BookingFee'] > 0) {
+              $content .= '<p>We will apply the booking fee to your account when we generate the register for this session. This happens approximately fifteen minutes before the session start time. The fee is payable as part of your next direct debit payment.</p>';
+            }
+
             $content .= '<p>Penalties may apply for non-attendance.</p>';
             $content .= '<p>If you need to cancel your booking, please contact the person running this session or a member of club staff as soon as possible.</p>';
 
