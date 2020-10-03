@@ -17,7 +17,7 @@ try {
 }
 
 // Get session
-$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads`, `RegisterGenerated`, `BookingOpens` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
+$getSession = $db->prepare("SELECT `SessionID`, `SessionName`, `DisplayFrom`, `DisplayUntil`, `StartTime`, `EndTime`, `VenueName`, `Location`, `SessionDay`, `MaxPlaces`, `AllSquads`, `RegisterGenerated`, `BookingOpens`, `BookingFee` FROM `sessionsBookable` INNER JOIN `sessions` ON sessionsBookable.Session = sessions.SessionID INNER JOIN `sessionsVenues` ON `sessions`.`VenueID` = `sessionsVenues`.`VenueID` WHERE `sessionsBookable`.`Session` = ? AND `sessionsBookable`.`Date` = ? AND `sessions`.`Tenant` = ? AND DisplayFrom <= ? AND DisplayUntil >= ?");
 $getSession->execute([
   $_GET['session'],
   $date->format('Y-m-d'),
@@ -114,7 +114,7 @@ include BASE_PATH . 'views/header.php';
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>
-          <?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>
+          <?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('l j')) ?><sup><?= htmlspecialchars($date->format('S')) ?></sup> <?= htmlspecialchars($date->format('F Y')) ?>
         </h1>
         <p class="lead mb-0">
           <?php if ($session['MaxPlaces']) { ?>There are <?= htmlspecialchars($numFormatter->format($session['MaxPlaces'])) ?> places at this session<?php } else { ?>There are unlimited places at this session<?php } ?>
@@ -192,6 +192,9 @@ include BASE_PATH . 'views/header.php';
             <dt class="col-sm-12">Duration</dt>
             <dd class="col-sm-12"><?php if ($hours > 0) { ?><?= $hours ?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?= $mins ?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
 
+            <dt class="col-sm-12">Price per place</dt>
+            <dd class="col-sm-12">&pound;<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $session['BookingFee']))->withPointMovedLeft(2)->toScale(2)) ?></dd>
+
             <?php if ($bookingOpensTime) { ?>
               <dt class="col-sm-12">Booking opens at</dt>
               <dd class="col-sm-12"><?= htmlspecialchars($bookingOpensTime->format('H:i, j F Y')) ?></dd>
@@ -251,6 +254,9 @@ include BASE_PATH . 'views/header.php';
             <dt class="col-sm-3">Duration</dt>
             <dd class="col-sm-9"><?php if ($hours > 0) { ?><?= $hours ?> hour<?php if ($hours > 1) { ?>s<?php } ?> <?php } ?><?php if ($mins > 0) { ?><?= $mins ?> minute<?php if ($mins > 1) { ?>s<?php } ?><?php } ?></dd>
 
+            <dt class="col-sm-3">Price per place</dt>
+            <dd class="col-sm-9">&pound;<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $session['BookingFee']))->withPointMovedLeft(2)->toScale(2)) ?></dd>
+
             <?php if ($bookingOpensTime) { ?>
               <dt class="col-sm-3">Booking opens at</dt>
               <dd class="col-sm-9"><?= htmlspecialchars($bookingOpensTime->format('H:i, j F Y')) ?></dd>
@@ -289,7 +295,7 @@ include BASE_PATH . 'views/header.php';
             <?php } ?>
 
             <dt class="col-sm-3">Location</dt>
-            <dd class="col-sm-9"><?= htmlspecialchars($session['Location']) ?></dd>
+            <dd class="col-sm-9"><?= htmlspecialchars($session['VenueName']) ?>, <em><?= htmlspecialchars($session['Location']) ?></em></dd>
 
             <dt class="col-sm-3">Session Unique ID</dt>
             <dd class="col-sm-9 mb-0"><?= htmlspecialchars($date->format('Y-m-d')) ?>-S<?= htmlspecialchars($session['SessionID']) ?></dd>
@@ -322,10 +328,10 @@ include BASE_PATH . 'views/header.php';
 
           <dl class="row">
             <dt class="col-md-4">Charge</dt>
-            <dd class="col-md-8">There is no additional charge for this session.</dd>
+            <dd class="col-md-8">&pound;<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $session['BookingFee']))->withPointMovedLeft(2)->toScale(2)) ?></dd>
 
             <dt class="col-md-4">Location</dt>
-            <dd class="col-md-8" id="booking-modal-session-location">Unknown</dd>
+            <dd class="col-md-8" id="booking-modal-session-location"><?= htmlspecialchars($session['VenueName']) ?>, <em><?= htmlspecialchars($session['Location']) ?></em></dd>
           </dl>
 
           <p class="mb-0">
@@ -362,10 +368,10 @@ include BASE_PATH . 'views/header.php';
 
           <dl class="row">
             <dt class="col-md-4">Charge</dt>
-            <dd class="col-md-8">There is no additional charge for this session so no refund or cancellation amount to apply.</dd>
+            <dd class="col-md-8">&pound;<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $session['BookingFee']))->withPointMovedLeft(2)->toScale(2)) ?> (Charges are only added to accounts when the session register is generated. This means no refund credits need will be applied if you cancel a place now.)</dd>
 
             <dt class="col-md-4">Location</dt>
-            <dd class="col-md-8" id="cancel-modal-session-location">Unknown</dd>
+            <dd class="col-md-8" id="cancel-modal-session-location"><?= htmlspecialchars($session['VenueName']) ?>, <em><?= htmlspecialchars($session['Location']) ?></em></dd>
           </dl>
 
           <p class="mb-0">
