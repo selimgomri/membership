@@ -54,7 +54,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
       Search parameters
     </div>
     <div class="card-body">
-      <form action="" class="needs-validation" novalidate>
+      <form id="search-form" action="" class="needs-validation" novalidate>
         <div class="form-row">
           <div class="col">
             <div class="form-group">
@@ -66,7 +66,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
             </div>
           </div>
           <div class="col">
-          <div class="form-group">
+            <div class="form-group">
               <label for="to-date">Until</label>
               <input class="form-control" type="date" name="to-date" id="to-date" value="<?= htmlspecialchars($date->format('Y-m-d')) ?>" max="<?= htmlspecialchars($date->format('Y-m-d')) ?>" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD">
               <div class="invalid-feedback">
@@ -83,23 +83,52 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
     </div>
   </div>
 
-  <div class="card mb-3">
-    <div class="card-body text-center">
-      <i class="fa fa-arrow-up" aria-hidden="true"></i>
-      <p class="mb-0">
-        <strong>Search to view data</strong>
-      </p>
+  <div class="mb-3" id="result-box">
+    <div class="card">
+      <div class="card-body text-center">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        <p class="mb-0">
+          <strong>Search to view data</strong>
+        </p>
 
-      <p class="mb-0">
-        Fill out the form above to pick a date range
-      </p>
+        <p class="mb-0">
+          Fill out the form above to pick a date range
+        </p>
 
+      </div>
     </div>
   </div>
 
-  <div id="ajax-data" data-page-url="<?= htmlspecialchars(autoUrl('attendance/history/members')) ?>" data-ajax-url="<?= htmlspecialchars(autoUrl('attendance/history/ajax/swimmers')) ?>"></div>
+  <div id="ajax-data" data-page-url="<?= htmlspecialchars(autoUrl('attendance/history/members/' . $id . '/search')) ?>" data-ajax-url="<?= htmlspecialchars(autoUrl('attendance/history/members/search')) ?>" data-member-id="<?= htmlspecialchars($id) ?>"></div>
 
 </div>
+
+<script>
+  const options = document.getElementById('ajax-data').dataset;
+
+  let searchForm = document.getElementById('search-form');
+  searchForm.addEventListener('submit', event => {
+    event.preventDefault();
+    let formData = new FormData(searchForm);
+    formData.append('member', options.memberId);
+    console.log(formData);
+
+    // AJAX Request
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        let json = JSON.parse(this.responseText);
+        console.log(json);
+
+        if (json.html) {
+          document.getElementById('result-box').innerHTML = json.html;
+        }
+      }
+    }
+    xmlhttp.open('POST', options.ajaxUrl, true);
+    xmlhttp.send(formData);
+  });
+</script>
 
 <?php
 

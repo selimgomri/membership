@@ -121,6 +121,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       include "historyViews/member-search.php";
     });
 
+    $this->post('/members/search', function ($id) {
+      include "historyViews/member-search-ajax.php";
+    });
+
     $this->post('/ajax/swimmers', function () {
       include BASE_PATH . "controllers/ajax/swimmerHistory.php";
     });

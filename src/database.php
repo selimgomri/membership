@@ -148,42 +148,20 @@ function getAttendanceByID($link = null, $id, $weeks = "all")
 
   $hideAttendance = !bool($tenant->getKey('HIDE_MEMBER_ATTENDANCE'));
   if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent' || $hideAttendance) {
-    $output = "";
-    $startWeek = 1;
 
-    $latestWeek = null;
-    if ($weeks != 'all') {
-      // Get the last four weeks to calculate attendance
-      $latestWeek = $db->prepare("SELECT WeekID FROM sessionsWeek WHERE Tenant = :tenant ORDER BY WeekDateBeginning DESC LIMIT :retLimit OFFSET :offsetAmount");
-      $latestWeek->bindValue(':tenant', $tenant->getId(), PDO::PARAM_INT);
-      $latestWeek->bindValue(':retLimit', 1, PDO::PARAM_INT);
-      $latestWeek->bindValue(':offsetAmount', max($weeks - 1, 0), PDO::PARAM_INT);
-      $latestWeek->execute();
-    } else {
-      $latestWeek = $db->prepare("SELECT WeekID FROM sessionsWeek WHERE Tenant = ? ORDER BY WeekDateBeginning ASC LIMIT 1");
-      $latestWeek->execute([
-        $tenant->getId(),
-      ]);
+    try {
+      $fromDate = new DateTime('1970-01-01', new DateTimeZone('Europe/London'));
+      if ((int) $weeks > 0) {
+        $fromDate = new DateTime('-' . (int) $weeks . ' weeks', new DateTimeZone('Europe/London'));
+      }
+      $toDate = new DateTime('now', new DateTimeZone('Europe/London'));
+      
+      $history = AttendanceHistory::getHistory($id, $fromDate->format('Y-m-d'), $toDate->format('Y-m-d'));
+
+      return number_format($history->getPercentageMandatory(), 1, ".", "");
+    } catch (Exception $e) {
+      return 'INVALID DATA ';
     }
-    $startWeek = $latestWeek->fetchColumn();
-
-    $member = [
-      "week" => $startWeek,
-      "member" => $id
-    ];
-
-    $numPresent = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` INNER JOIN sessions ON sessions.SessionID = sessionsAttendance.SessionID WHERE WeekID >= :week AND MemberID = :member AND AttendanceBoolean = 1 AND AttendanceRequired = 1");
-    $numPresent->execute($member);
-    $numPresent = $numPresent->fetchColumn();
-    $totalNum = $db->prepare("SELECT COUNT(*) FROM `sessionsAttendance` INNER JOIN sessions ON sessions.SessionID = sessionsAttendance.SessionID WHERE WeekID >= :week AND MemberID = :member AND (AttendanceBoolean = 0 OR AttendanceBoolean = 1) AND AttendanceRequired = 1");
-    $totalNum->execute($member);
-    $totalNum = $totalNum->fetchColumn();
-
-    if ($totalNum == 0) {
-      return "No Data 0";
-    }
-
-    return number_format(($numPresent / $totalNum) * 100, 1, ".", "");
   }
 
   return 'DATA HIDDEN ';
