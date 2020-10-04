@@ -3,8 +3,6 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-header('content-type: application/json');
-
 $json = [
   'status' => 200,
   'html' => null,
@@ -22,6 +20,8 @@ $member = $getMember->fetch(PDO::FETCH_ASSOC);
 if (!$member) {
   halt(404);
 }
+
+header('content-type: application/json');
 
 try {
 

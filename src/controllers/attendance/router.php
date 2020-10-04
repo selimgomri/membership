@@ -105,12 +105,20 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
     //   include "historyViews/squadHistory.php";
     // });
 
-    $this->get('/squads/{id}:int', function ($id) {
+    $this->get('/squads/{id}:int/week', function ($id) {
       include "historyViews/squad-history.php";
     });
 
-    $this->post('/squads/{id}:int/jump-to-week', function ($id) {
+    $this->post('/squads/{id}:int/week/jump-to-week', function ($id) {
       include "historyViews/jump-to-week.php";
+    });
+
+    $this->get('/squads/{id}:int/search', function ($id) {
+      include "historyViews/squad-search.php";
+    });
+
+    $this->post('/squads/search', function () {
+      include "historyViews/squad-search-ajax.php";
     });
 
     $this->get(['/members', '/swimmers'], function () {
@@ -121,7 +129,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
       include "historyViews/member-search.php";
     });
 
-    $this->post('/members/search', function ($id) {
+    $this->post('/members/search', function () {
       include "historyViews/member-search-ajax.php";
     });
 
