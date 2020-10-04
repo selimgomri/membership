@@ -3,18 +3,18 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$getMember = $db->prepare("SELECT MForename first, MSurname last FROM `members` WHERE `MemberID` = ? AND Tenant = ?");
-$getMember->execute([
+$getSquad = $db->prepare("SELECT SquadName FROM `squads` WHERE `SquadID` = ? AND Tenant = ?");
+$getSquad->execute([
   $id,
   $tenant->getId()
 ]);
-$member = $getMember->fetch(PDO::FETCH_ASSOC);
+$squad = $getSquad->fetch(PDO::FETCH_ASSOC);
 
-if ($member == null) {
+if ($squad == null) {
   halt(404);
 }
 
-$pagetitle = htmlspecialchars($member['first'] . " " . $member['last']) . " Attendance Search";
+$pagetitle = htmlspecialchars($squad['SquadName']) . " Attendance Search";
 
 $date = new DateTime('now', new DateTimeZone('Europe/London'));
 $dateMinus4 = new DateTime('-4 weeks today', new DateTimeZone('Europe/London'));
@@ -29,15 +29,15 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance')) ?>">Attendance</a></li>
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance/history')) ?>">History</a></li>
-        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance/history/members')) ?>">Members</a></li>
-        <li class="breadcrumb-item active" aria-current="page"><?= htmlspecialchars(mb_substr($member['first'], 0, 1) . mb_substr($member['last'], 0, 1)) ?></li>
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance/history/squads')) ?>">Squads</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Search</li>
       </ol>
     </nav>
 
     <div class="row align-items-center">
       <div class="col">
         <h1>
-          <?= htmlspecialchars($member['first'] . " " . $member['last']) ?>
+          <?= htmlspecialchars($squad['SquadName']) ?>
         </h1>
         <p class="lead mb-0">
           Search attendance history
@@ -99,7 +99,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
     </div>
   </div>
 
-  <div id="ajax-data" data-page-url="<?= htmlspecialchars(autoUrl('attendance/history/members/' . $id . '/search')) ?>" data-ajax-url="<?= htmlspecialchars(autoUrl('attendance/history/members/search')) ?>" data-member-id="<?= htmlspecialchars($id) ?>"></div>
+  <div id="ajax-data" data-page-url="<?= htmlspecialchars(autoUrl('attendance/history/squads/' . $id . '/search')) ?>" data-ajax-url="<?= htmlspecialchars(autoUrl('attendance/history/squads/search')) ?>" data-squad-id="<?= htmlspecialchars($id) ?>"></div>
 
 </div>
 
@@ -110,7 +110,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
   searchForm.addEventListener('submit', event => {
     event.preventDefault();
     let formData = new FormData(searchForm);
-    formData.append('member', options.memberId);
+    formData.append('squad', options.squadId);
     console.log(formData);
 
     // AJAX Request

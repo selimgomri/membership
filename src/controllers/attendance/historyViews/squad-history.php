@@ -107,7 +107,7 @@ include BASE_PATH . 'views/header.php';
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance')) ?>">Attendance</a></li>
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance/history')) ?>">History</a></li>
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance/history/squads')) ?>">Squads</a></li>
-        <li class="breadcrumb-item active" aria-current="page"><?= htmlspecialchars($pageSquad['SquadName']) ?></li>
+        <li class="breadcrumb-item active" aria-current="page">Week</li>
       </ol>
     </nav>
 
@@ -142,19 +142,19 @@ include BASE_PATH . 'views/header.php';
       <nav aria-label="Page navigation example">
         <ul class="pagination my-0">
           <li class="page-item">
-            <a class="page-link" href="<?= htmlspecialchars(autoUrl("attendance/history/squads/$id?year=" . $weeks->format('o') . "&week=" . $weeks->format('W'))) ?>">
+            <a class="page-link" href="<?= htmlspecialchars(autoUrl("attendance/history/squads/$id/week?year=" . $weeks->format('o') . "&week=" . $weeks->format('W'))) ?>">
               Week <?= (int) $weeks->format('W') ?> / <?= $weeks->format('o') ?>
             </a>
           </li>
           <?php $weeks->add(new DateInterval('P7D')); ?>
           <li class="page-item">
-            <a class="page-link" href="<?= htmlspecialchars(autoUrl("attendance/history/squads/$id?year=" . $weeks->format('o') . "&week=" . $weeks->format('W'))) ?>">
+            <a class="page-link" href="<?= htmlspecialchars(autoUrl("attendance/history/squads/$id/week?year=" . $weeks->format('o') . "&week=" . $weeks->format('W'))) ?>">
               Week <?= (int) $weeks->format('W') ?> / <?= $weeks->format('o') ?>
             </a>
           </li>
           <?php $weeks->add(new DateInterval('P7D')); ?>
           <li class="page-item">
-            <a class="page-link" href="<?= htmlspecialchars(autoUrl("attendance/history/squads/$id?year=" . $weeks->format('o') . "&week=" . $weeks->format('W'))) ?>">
+            <a class="page-link" href="<?= htmlspecialchars(autoUrl("attendance/history/squads/$id/week?year=" . $weeks->format('o') . "&week=" . $weeks->format('W'))) ?>">
               Week <?= (int) $weeks->format('W') ?> / <?= $weeks->format('o') ?>
             </a>
           </li>
@@ -163,7 +163,7 @@ include BASE_PATH . 'views/header.php';
       <div class="mb-3 d-md-none"></div>
     </div>
     <div class="col-md">
-      <form action="<?= htmlspecialchars(autoUrl('attendance/history/squads/' . $id . '/jump-to-week')) ?>" method="post" class="needs-validation" novalidate>
+      <form action="<?= htmlspecialchars(autoUrl('attendance/history/squads/' . $id . '/week/jump-to-week')) ?>" method="post" class="needs-validation" novalidate>
         <div class="input-group">
           <input type="date" class="form-control" value="<?= htmlspecialchars($startWeek->format('Y-m-d')) ?>" aria-label="Find a week" aria-describedby="go-to-week" name="go-to-week-date" id="go-to-week-date">
           <div class="input-group-append">
@@ -324,19 +324,19 @@ include BASE_PATH . 'views/header.php';
       <nav aria-label="Page navigation example">
         <ul class="pagination">
           <li class="page-item">
-            <a class="page-link" href="<?= htmlspecialchars(autoUrl("attendance/history/squads/$id?year=" . $weeks->format('o') . "&week=" . $weeks->format('W'))) ?>">
+            <a class="page-link" href="<?= htmlspecialchars(autoUrl("attendance/history/squads/$id/week?year=" . $weeks->format('o') . "&week=" . $weeks->format('W'))) ?>">
               Week <?= (int) $weeks->format('W') ?> / <?= $weeks->format('o') ?>
             </a>
           </li>
           <?php $weeks->add(new DateInterval('P7D')); ?>
           <li class="page-item">
-            <a class="page-link" href="<?= htmlspecialchars(autoUrl("attendance/history/squads/$id?year=" . $weeks->format('o') . "&week=" . $weeks->format('W'))) ?>">
+            <a class="page-link" href="<?= htmlspecialchars(autoUrl("attendance/history/squads/$id/week?year=" . $weeks->format('o') . "&week=" . $weeks->format('W'))) ?>">
               Week <?= (int) $weeks->format('W') ?> / <?= $weeks->format('o') ?>
             </a>
           </li>
           <?php $weeks->add(new DateInterval('P7D')); ?>
           <li class="page-item">
-            <a class="page-link" href="<?= htmlspecialchars(autoUrl("attendance/history/squads/$id?year=" . $weeks->format('o') . "&week=" . $weeks->format('W'))) ?>">
+            <a class="page-link" href="<?= htmlspecialchars(autoUrl("attendance/history/squads/$id/week?year=" . $weeks->format('o') . "&week=" . $weeks->format('W'))) ?>">
               Week <?= (int) $weeks->format('W') ?> / <?= $weeks->format('o') ?>
             </a>
           </li>

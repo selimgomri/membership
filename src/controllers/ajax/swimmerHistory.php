@@ -66,10 +66,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
                 <dd class="col-md-9"><?= getAttendanceByID(null, $row['MemberID'], 4) ?>%</dd>
 
                 <dt class="col-md-3">20 Week History</dt>
-                <dd class="col-md-9 mb-0"><a href="<?= htmlspecialchars(autoUrl("attendance/history/members/" . $row['MemberID'])) ?>">View</a></dd>
+                <dd class="col-md-9"><a href="<?= htmlspecialchars(autoUrl("attendance/history/members/" . $row['MemberID'])) ?>">View</a></dd>
 
-                <!-- <dt class="col-md-3">Custom History</dt>
-                <dd class="col-md-9 mb-0"><a href="<?= htmlspecialchars(autoUrl("attendance/history/members/" . $row['MemberID'] . '/search')) ?>">View</a></dd> -->
+                <dt class="col-md-3">Custom History</dt>
+                <dd class="col-md-9 mb-0"><a href="<?= htmlspecialchars(autoUrl("attendance/history/members/" . $row['MemberID'] . '/search')) ?>">View</a></dd>
               </dl>
             </div>
           </div>
