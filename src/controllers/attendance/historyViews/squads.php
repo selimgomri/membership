@@ -54,21 +54,13 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
         <ul class="list-group">
           <?php do { ?>
             <li class="list-group-item">
-              <p class="">
-                <strong><?= htmlspecialchars($squad['name']) ?></strong>
-              </p>
-              <div class="row">
-                <div class="col">
-                  <a class="btn btn-dark btn-block" href="<?= autoUrl("attendance/history/squads/" . $squad['id'] . '/week') ?>">
-                    By sessions in week
-                  </a>
-                </div>
-                <div class="col">
-                  <a class="btn btn-dark btn-block" href="<?= autoUrl("attendance/history/squads/" . $squad['id'] . '/search') ?>">
-                    Custom search
-                  </a>
-                </div>
-              </div>
+              <h2 class="mb-3"><?= htmlspecialchars($squad['name']) ?></h2>
+              <a class="btn btn-primary" href="<?= autoUrl("attendance/history/squads/" . $squad['id'] . '/week') ?>">
+                By sessions in week
+              </a>
+              <a class="btn btn-primary" href="<?= autoUrl("attendance/history/squads/" . $squad['id'] . '/search') ?>">
+                Custom search
+              </a>
             </li>
           <?php } while ($squad = $squads->fetch(PDO::FETCH_ASSOC)); ?>
         </ul>

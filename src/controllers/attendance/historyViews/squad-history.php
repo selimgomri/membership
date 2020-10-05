@@ -266,7 +266,17 @@ include BASE_PATH . 'views/header.php';
                 ?>
 
                 <dt class="col-sm-3">Location</dt>
-                <dd class="col-sm-9"><?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && $_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) { ?><?= htmlspecialchars($session['Location']) ?><?php } else { ?>You must be logged in to see the location<?php } ?></dd>
+                <dd class="col-sm-9"><?= htmlspecialchars($session['Location']) ?></dd>
+
+                <?php if ((isset($attendees['0']) && sizeof($attendees['0']) > 0) || (isset($attendees['1']) && sizeof($attendees['1']) > 0) || (isset($attendees['2']) && sizeof($attendees['2']) > 0)) { ?>
+                  <dt class="col-sm-3">Links</dt>
+                  <dd class="col-sm-9">
+                    <ul class="list-unstyled mb-0">
+                      <li><a href="<?= htmlspecialchars(autoUrl('attendance/register?date=' . urlencode($day->format('Y-m-d')) . '&session=' . $session['SessionID'])) ?>">Go to register</a></li>
+                      <li><a href="<?= htmlspecialchars(autoUrl('covid/contact-tracing/reports/from-register?date=' . urlencode($day->format('Y-m-d')) . '&session=' . $session['SessionID'])) ?>">View COVID-19 contact details list</a></li>
+                    </ul>
+                  </dd>
+                <?php } ?>
 
                 <?php if (isset($attendees['1']) && sizeof($attendees['1']) > 0) { ?>
                   <dt class="col-sm-3">Present</dt>

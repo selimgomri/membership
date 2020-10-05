@@ -64,31 +64,42 @@ try {
 
             <h3><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?></h3>
 
-            <dl class="row mb-0">
-              <dt class="col-sm-5">Sessions Attended</dt>
-              <dd class="col-sm-7"><?= htmlspecialchars($history->getTotalAttended()) ?></dd>
+            <div class="row">
+              <div class="col-md">
+                <h4>Mandatory sessions</h4>
+                <dl class="row mb-0">
+                  <dt class="col-sm-7">Mandatory sessions attended</dt>
+                  <dd class="col-sm-5"><?= htmlspecialchars($history->getTotalMandatoryAttended()) ?></dd>
 
-              <dt class="col-sm-5">Mandatory Sessions Attended</dt>
-              <dd class="col-sm-7"><?= htmlspecialchars($history->getTotalMandatoryAttended()) ?></dd>
+                  <dt class="col-sm-7">Mandatory sessions excused</dt>
+                  <dd class="col-sm-5"><?= htmlspecialchars($history->getTotalMandatoryExcused()) ?></dd>
 
-              <dt class="col-sm-5">Sessions Excused</dt>
-              <dd class="col-sm-7"><?= htmlspecialchars($history->getTotalExcused()) ?></dd>
+                  <dt class="col-sm-7">Total mandatory sessions</dt>
+                  <dd class="col-sm-5"><?= htmlspecialchars($history->getTotalMandatorySessions()) ?></dd>
 
-              <dt class="col-sm-5">Mandatory Sessions Excused</dt>
-              <dd class="col-sm-7"><?= htmlspecialchars($history->getTotalMandatoryExcused()) ?></dd>
+                  <dt class="col-sm-7">Attendance percentage (mandatory sessions)</dt>
+                  <dd class="col-sm-5 mb-0"><?= htmlspecialchars(number_format($history->getPercentageTotal(), 1)) ?>%</dd>
+                </dl>
+                <div class="mb-3 d-md-none"></div>
+              </div>
 
-              <dt class="col-sm-5">Total Sessions</dt>
-              <dd class="col-sm-7"><?= htmlspecialchars($history->getTotalSessions()) ?></dd>
+              <div class="col-md">
+                <h4>All sessions</h4>
+                <dl class="row mb-0">
+                  <dt class="col-sm-7">Sessions attended</dt>
+                  <dd class="col-sm-5"><?= htmlspecialchars($history->getTotalAttended()) ?></dd>
 
-              <dt class="col-sm-5">Total Mandatory Sessions</dt>
-              <dd class="col-sm-7"><?= htmlspecialchars($history->getTotalMandatorySessions()) ?></dd>
+                  <dt class="col-sm-7">Sessions excused</dt>
+                  <dd class="col-sm-5"><?= htmlspecialchars($history->getTotalExcused()) ?></dd>
 
-              <dt class="col-sm-5">Attendance Percentage (Mandatory Sessions)</dt>
-              <dd class="col-sm-7"><?= htmlspecialchars(number_format($history->getPercentageTotal(), 1)) ?>%</dd>
+                  <dt class="col-sm-7">Total sessions</dt>
+                  <dd class="col-sm-5"><?= htmlspecialchars($history->getTotalSessions()) ?></dd>
 
-              <dt class="col-sm-5">Attendance Percentage (Total Sessions)</dt>
-              <dd class="col-sm-7 mb-0"><?= htmlspecialchars(number_format($history->getPercentageMandatory(), 1)) ?>%</dd>
-            </dl>
+                  <dt class="col-sm-7">Attendance percentage (total sessions)</dt>
+                  <dd class="col-sm-5 mb-0"><?= htmlspecialchars(number_format($history->getPercentageMandatory(), 1)) ?>%</dd>
+                </dl>
+              </div>
+            </div>
 
           </li>
 
@@ -98,7 +109,7 @@ try {
 
       <div class="card-body">
         <p class="mb-0">
-          Excused sessions have no impact on percentages.
+        Excused sessions have no impact on percentages as these sessions are not counted towards the total number of sessions available.
         </p>
       </div>
     <?php } else { ?>
