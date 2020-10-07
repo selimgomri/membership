@@ -109,7 +109,7 @@ try {
 
       <div class="card-body">
         <p class="mb-0">
-        Excused sessions have no impact on percentages as these sessions are not counted towards the total number of sessions available.
+          Excused sessions have no impact on percentages as these sessions are not counted towards the total number of sessions available.
         </p>
       </div>
     <?php } else { ?>

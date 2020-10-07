@@ -8,35 +8,19 @@
 
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 // Add renewal members to database
 $date = new DateTime('now', new DateTimeZone('Europe/London'));
 
 // Select open membership renewals
-$getRenewals = $db->prepare("SELECT ID, Tenant FROM renewals WHERE StartDate <= :today AND EndDate >= :today;");
+$getRenewals = $db->prepare("SELECT ID, Tenant FROM renewals WHERE StartDate <= :today AND EndDate >= :today AND Tenant = :tenant;");
 $getRenewals->execute([
-  'today' => $date->format('Y-m-d')
+  'today' => $date->format('Y-m-d'),
+  'tenant' => $tenant->getId(),
 ]);
 
 $getNumMembers = $db->prepare("SELECT COUNT(*) FROM renewalMembers WHERE RenewalID = ?");
-$leavers = app()->tenant->getKey('LeaversSquad');
-
-if ($leavers != null) {
-  // Delete leavers
-  $deleteFromLeavers = $db->prepare("DELETE FROM members WHERE SquadID = ?");
-  $db->beginTransaction();
-
-  try {
-    $deleteFromLeavers->execute([
-      $leavers
-    ]);
-    $db->commit();
-    echo "Members in leavers deleted<br>";
-  } catch (Exception $e) {
-    // reportError($e);
-    $db->rollBack();
-  }
-}
 
 // Make sure we don't add members from leaver squad to renewal
 $getMembers = $db->prepare("SELECT MemberID FROM members WHERE RR = 0 AND Tenant = ?;");
@@ -47,7 +31,9 @@ $db->beginTransaction();
 
 try {
   while ($renewal = $getRenewals->fetch(PDO::FETCH_ASSOC)) {
-    
+
+    reportError($renewal);
+
     // Check number of members for renewal
 
     // If no members added to a renewal,
@@ -58,7 +44,7 @@ try {
       while ($member = $getMembers->fetchColumn()) {
         $addMember->execute([
           $member,
-          $renewal,
+          $renewal['ID'],
           true
         ]);
       }

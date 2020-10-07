@@ -1,11 +1,11 @@
 <?php
 
-$this->any('/sumpayments', function() {
-	
+$this->any('/sumpayments', function () {
+
 	require 'sumpayments.php';
 });
 
-$this->any('/chargeusers', function() {
+$this->any('/chargeusers', function () {
 	try {
 		if (app()->tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')) {
 			include 'charge-users-stripe.php';
@@ -17,32 +17,32 @@ $this->any('/chargeusers', function() {
 	}
 });
 
-$this->any('/retrypayments', function() {
+$this->any('/retrypayments', function () {
 	require 'retry-payments.php';
 });
 
-$this->any('/notifysend', function() {
-	
-  $db = app()->db;
+$this->any('/notifysend', function () {
+
+	$db = app()->db;
 	//echo "Service Suspended";
 	require 'SingleEmailHandler.php';
 });
 
-$this->any('/newnotifysend', function() {
+$this->any('/newnotifysend', function () {
 	require 'notifyhandler.php';
 });
 
-$this->any('/updatesquadmembers', function() {
+$this->any('/handle-legacy-renewal-period-creation', function () {
 	$db = app()->db;;
 	require 'squadmemberupdate.php';
 });
 
-$this->any('/updateregisterweeks', function() {
+$this->any('/updateregisterweeks', function () {
 	$db = app()->db;;
 	require 'newWeek.php';
 });
 
-$this->any('/timeupdate', function() {
+$this->any('/timeupdate', function () {
 	$db = app()->db;;
 	require 'getTimesNew.php';
 });
