@@ -32,8 +32,6 @@ $db->beginTransaction();
 try {
   while ($renewal = $getRenewals->fetch(PDO::FETCH_ASSOC)) {
 
-    reportError($renewal);
-
     // Check number of members for renewal
 
     // If no members added to a renewal,
