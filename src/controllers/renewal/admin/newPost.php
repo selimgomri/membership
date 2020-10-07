@@ -39,7 +39,7 @@ if (!v::date()->validate($end)) {
 	$ok = false;
 	$response .= '<li>The end date was incorrectly formatted</li>';
 } else {
-	$start = date("Y-m-d", strtotime($end));
+	$end = date("Y-m-d", strtotime($end));
 }
 
 if ($ok) {

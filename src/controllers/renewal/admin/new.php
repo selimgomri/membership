@@ -4,7 +4,16 @@ $pagetitle = "Create New Renewal Period";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php";
 
-$val = null;
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
+$datePlus = new DateTime('+2 week', new DateTimeZone('Europe/London'));
+
+$val = [
+	'',
+	'',
+	'',
+];
+
+
 ?>
 
 <div class="container">
@@ -21,18 +30,18 @@ $val = null;
 
 				<div class="form-group">
 					<label for="name">Renewal Name</label>
-					<input type="text" class="form-control" id="name" name="name" placeholder="For 2018" value="<?=htmlspecialchars($val[0])?>">
+					<input type="text" class="form-control" id="name" name="name" placeholder="For 2018" value="<?php if (isset($val[0])) { ?><?= htmlspecialchars($val[0]) ?><?php } ?>">
 				</div>
 
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						<label for="start">Start Date</label>
-						<input type="date" class="form-control" id="start" name="start" value="<?php echo date("Y-m-d"); ?>" value="<?=htmlspecialchars($val[1])?>">
+						<input type="date" class="form-control" id="start" name="start" value="<?= htmlspecialchars($date->format('Y-m-d')) ?>" value="<?= htmlspecialchars($val[1]) ?>">
 					</div>
 
 					<div class="form-group col-md-6">
 						<label for="end">End Date</label>
-						<input type="date" class="form-control" id="end" name="end" value="<?php echo date("Y-m-d"); ?>" value="<?=htmlspecialchars($val[2])?>">
+						<input type="date" class="form-control" id="end" name="end" value="<?= htmlspecialchars($datePlus->format('Y-m-d')) ?>" value="<?= htmlspecialchars($val[2]) ?>">
 					</div>
 				</div>
 
