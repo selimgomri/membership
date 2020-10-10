@@ -235,8 +235,8 @@ if (!$bookingClosed) {
 
               $content .= '</dt><dd><ul style="margin-top: 0px;margin-bottom: 0px;">';
 
-              for ($i = 0; $i < sizeof($coaches); $i++) {
-                $content .= '<li><strong>' . htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn']) . '</strong>, ' . htmlspecialchars(coachTypeDescription($coaches[$i]['code'])) . '</li>';
+              for ($y = 0; $y < sizeof($coaches); $y++) {
+                $content .= '<li><strong>' . htmlspecialchars($coaches[$y]['fn'] . ' ' . $coaches[$y]['sn']) . '</strong>, ' . htmlspecialchars(coachTypeDescription($coaches[$y]['code'])) . '</li>';
               }
               if (sizeof($coaches) == 0) {
                 $content .= '<li>None assigned</li>';
