@@ -84,7 +84,7 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
     </div>";
 
     // Return to My Account
-    header("Location: " . autoUrl("my-account/addswimmer"));
+    header("Location: " . autoUrl("my-account/add-member"));
 
   } else {
     // Error, too many records found - Database error
@@ -94,7 +94,7 @@ if ($asaNumber != null && $accessKey != null && v::alnum()->validate($asaNumber)
     <p>You may have got the Swim England Number or Access Key wrong</p>
     <p class=\"mb-0\">Please try again</p>
     </div>";
-    header("Location: " . autoUrl("my-account/addswimmer"));
+    header("Location: " . autoUrl("my-account/add-member"));
   }
 }
 else {
