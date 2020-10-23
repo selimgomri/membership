@@ -59,7 +59,7 @@ try {
       $_POST['join'],
     ]);
     if ($getMembershipCount->fetchColumn() != 0) {
-      throw new Exception('Member is already in the you have selected to add them to');
+      throw new Exception('Member is already in the squad you have selected to add them to');
     }
 
     // Check there are no existing moves
@@ -234,7 +234,7 @@ try {
     }
 
     // Check there are no existing moves
-    $getCount = $db->prepare("SELECT COUNT(*) FROM squadMoves WHERE Member = :member AND Old = :squad OR New = :squad");
+    $getCount = $db->prepare("SELECT COUNT(*) FROM squadMoves WHERE Member = :member AND (Old = :squad OR New = :squad)");
     $getCount->execute([
       'member' => $_POST['member'],
       'squad' => $_POST['leave'],
