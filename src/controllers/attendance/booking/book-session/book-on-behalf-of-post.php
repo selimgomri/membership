@@ -60,6 +60,7 @@ $bookingCloses = clone $sessionDateTime;
 $bookingCloses->modify('-15 minutes');
 
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
+$bookingTime = new DateTime('now', new DateTimeZone('UTC'));
 
 $bookingClosed = $now > $bookingCloses || bool($session['RegisterGenerated']);
 
@@ -154,7 +155,7 @@ if (!$bookingClosed) {
           $session['SessionID'],
           $date->format('Y-m-d'),
           $member['id'],
-          $now->format('Y-m-d H:i:s'),
+          $bookingTime->format('Y-m-d H:i:s'),
         ]);
 
         $duration = $sessionDateTime->diff($sessionEndDateTime);

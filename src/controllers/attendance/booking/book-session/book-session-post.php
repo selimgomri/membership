@@ -60,6 +60,7 @@ try {
   $bookingCloses->modify('-15 minutes');
 
   $now = new DateTime('now', new DateTimeZone('Europe/London'));
+  $bookingTime = new DateTime('now', new DateTimeZone('UTC'));
 
   $bookingClosed = $now > $bookingCloses || bool($session['RegisterGenerated']);
 
@@ -151,7 +152,7 @@ try {
     $session['SessionID'],
     $date->format('Y-m-d'),
     $member['MemberID'],
-    $now->format('Y-m-d H:i:s'),
+    $bookingTime->format('Y-m-d H:i:s'),
   ]);
 
   // $sessionDateTime = DateTime::createFromFormat('Y-m-d-H:i:s', $date->format('Y-m-d') .  '-' . $session['StartTime'], new Da);
