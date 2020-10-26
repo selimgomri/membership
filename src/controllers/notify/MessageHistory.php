@@ -201,7 +201,7 @@ include BASE_PATH . "views/notifyMenu.php"; ?>
                           }
 
                           if ($a->MIME == 'application/vnd.ms-excel' || $a->MIME == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-                            $faClass = ' fa-file-powerpoint-o ';
+                            $faClass = ' fa-file-excel-o ';
                             $download = true;
                           }
                         } else {
