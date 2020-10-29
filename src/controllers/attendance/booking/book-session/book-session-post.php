@@ -300,13 +300,19 @@ try {
         $htmlContent
       );
 
+      $sessionICalId = 'booking-' . mb_strtolower($sessionDateTime->format('Y-m-d') . '-S' . $session['SessionID']) . '@membership.myswimmingclub.uk';
+      if (bool(getenv("IS_DEV"))) {
+        $sessionICalId = 'booking-' . mb_strtolower($sessionDateTime->format('Y-m-d') . '-S' . $session['SessionID']) . '@mt.myswimmingclub.uk';
+      }
+
       $ics = new ICalendarGenerator([
         'location' => $session['VenueName'] . ', ' . $session['Location'],
         'description' => $session['SessionName'] . ', ' . $emailUser['fn'] . ' ' . $emailUser['sn'],
         'dtstart' => $sessionDateTime,
         'dtend' => $sessionEndDateTime,
         'summary' => $session['SessionName'] . ' (' . $sessionDateTime->format('Y-m-d') . '-S' . $session['SessionID'] . ')',
-        'url' => autoUrl('timetable/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))
+        'url' => autoUrl('timetable/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d'))),
+        'uid' => $sessionICalId,
       ]);
 
       try {

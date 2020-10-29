@@ -77,7 +77,8 @@ class ICalendarGenerator
     'dtstart',
     'location',
     'summary',
-    'url'
+    'url',
+    'uid'
   ];
 
   public function __construct($props)
@@ -118,13 +119,13 @@ class ICalendarGenerator
     // Build ICS properties - add header
     $props = array();
     foreach ($this->properties as $k => $v) {
-      $props[strtoupper($k . ($k === 'url' ? ';VALUE=URI' : ''))] = $v;
+      $props[mb_strtoupper($k . ($k === 'url' ? ';VALUE=URI' : ''))] = $v;
     }
 
     // Set some default values
     $props['DTSTAMP'] = $this->format_datetime(new DateTime('now', new DateTimeZone('Europe/London')));
     $uuid = Ramsey\Uuid\Uuid::uuid4();
-    $props['UID'] = $uuid->toString() . '@' . getenv('EMAIL_DOMAIN');
+    if (!isset($props['UID'])) $props['UID'] = $uuid->toString() . '@' . getenv('EMAIL_DOMAIN');
 
     // Append properties
     foreach ($props as $k => $v) {
