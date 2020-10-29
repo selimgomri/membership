@@ -280,7 +280,52 @@ try {
       $content .= '<p>Penalties may apply for non-attendance.</p>';
       $content .= '<p>If you need to cancel your booking, please contact the person running this session or a member of club staff as soon as possible.</p>';
 
-      notifySend(null, $subject, $content, $username, $emailAddress);
+      // echo $ics->to_string();
+
+      $mailObject = new \CLSASC\SuperMailer\CreateMail();
+      $mailObject->setHtmlContent($content);
+
+      $from = new \SendGrid\Mail\From("noreply@" . getenv('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_NAME'));
+      $to = new \SendGrid\Mail\To($emailAddress, $username);
+
+      $plain_text = $mailObject->getFormattedPlain();
+      $plainTextContent = new \SendGrid\Mail\PlainTextContent($plain_text);
+      $htmlContent = new \SendGrid\Mail\HtmlContent($mailObject->getFormattedHtml());
+
+      $email = new \SendGrid\Mail\Mail(
+        $from,
+        $to,
+        $subject,
+        $plainTextContent,
+        $htmlContent
+      );
+
+      $ics = new ICalendarGenerator([
+        'location' => $session['VenueName'] . ', ' . $session['Location'],
+        'description' => $session['SessionName'] . ', ' . $emailUser['fn'] . ' ' . $emailUser['sn'],
+        'dtstart' => $sessionDateTime,
+        'dtend' => $sessionEndDateTime,
+        'summary' => $session['SessionName'] . ' (' . $sessionDateTime->format('Y-m-d') . '-S' . $session['SessionID'] . ')',
+        'url' => autoUrl('timetable/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))
+      ]);
+
+      try {
+        $email->addAttachment(
+          base64_encode($ics->to_string()),
+          'text/calendar',
+          'booking.ics',
+          'attachment'
+        );
+      } catch (Exception $e) {
+        reportError($e);
+      }
+
+      $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME') . ' Enquiries');
+
+      $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+      $response = $sendgrid->send($email);
+
+      // notifySend(null, $subject, $content, $username, $emailAddress);
     } catch (Exception $e) {
       // Ignore failed send
       reportError($e);
@@ -288,7 +333,7 @@ try {
   }
 } catch (Exception $e) {
 
-  // reportError($e);
+  reportError($e);
 
   $message = $e->getMessage();
   if (get_class($e) == 'PDOException') {
