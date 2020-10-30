@@ -336,12 +336,12 @@ try {
       // notifySend(null, $subject, $content, $username, $emailAddress);
     } catch (Exception $e) {
       // Ignore failed send
-      reportError($e);
+      // reportError($e);
     }
   }
 } catch (Exception $e) {
 
-  reportError($e);
+  // reportError($e);
 
   $message = $e->getMessage();
   if (get_class($e) == 'PDOException') {
