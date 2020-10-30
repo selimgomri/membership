@@ -331,7 +331,7 @@ try {
       $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
       $response = $sendgrid->send($email);
 
-      reportError($response);
+      // reportError($response);
 
       // notifySend(null, $subject, $content, $username, $emailAddress);
     } catch (Exception $e) {
