@@ -126,6 +126,18 @@ include BASE_PATH . 'views/header.php';
       <p>
         Information about COVID-19 is available <a href="https://www.nhs.uk/conditions/coronavirus-covid-19/" target="_blank">on the NHS website</a>.
       </p>
+
+      <hr>
+
+      <p>
+        Need to quickly void all risk awareness declarations for this squad? Press <strong>Void all</strong> to require all members to submit a new COVID-19 Risk Awareness Declaration.
+      </p>
+
+      <p>
+        <button id="voidAllButton" class="btn btn-warning" data-squad-name="<?= htmlspecialchars($squad['SquadName']) ?>" data-squad-id="<?= htmlspecialchars($id) ?>">
+          Void all
+        </button>
+      </p>
     </div>
 
   </div>
@@ -155,5 +167,5 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs('public/js/covid-risk-awareness/squad-page.js?v=1');
+$footer->addJs('public/js/covid-risk-awareness/squad-page.js?v=2');
 $footer->render();
