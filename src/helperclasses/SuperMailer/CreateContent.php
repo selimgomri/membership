@@ -8,45 +8,55 @@ namespace CLSASC\SuperMailer;
  * @copyright Chester-le-Street ASC https://github.com/Chester-le-Street-ASC
  * @author Chris Heppell https://github.com/clheppell
  */
-class CreateMail {
+class CreateMail
+{
   private $htmlContent;
   private $plainContent;
   private $allowUnsubscribe;
   private $name;
 
-  function __construct() {
+  function __construct()
+  {
   }
 
-  public function setUnsubscribable() {
+  public function setUnsubscribable()
+  {
     $this->allowUnsubscribe = true;
   }
 
-  public function setForced() {
+  public function setForced()
+  {
     $this->allowUnsubscribe = false;
   }
 
-  public function showName($name = null) {
+  public function showName($name = null)
+  {
     $this->showName = true;
     $this->name = $name;
   }
 
-  public function hideName() {
+  public function hideName()
+  {
     $this->showName = false;
   }
 
-  public function setHtmlContent($htmlContent) {
+  public function setHtmlContent($htmlContent)
+  {
     $this->htmlContent = $htmlContent;
   }
 
-  public function getHtmlContent() {
+  public function getHtmlContent()
+  {
     return $this->htmlContent;
   }
 
-  public function setPlainContent($plainContent) {
+  public function setPlainContent($plainContent)
+  {
     $this->plainContent = html_entity_decode($plainContent);
   }
 
-  public function getPlainContent() {
+  public function getPlainContent()
+  {
     if ($this->plainContent != null) {
       return $this->plainContent;
     } else {
@@ -54,9 +64,10 @@ class CreateMail {
     }
   }
 
-  public function getFormattedHtml() {
+  public function getFormattedHtml()
+  {
     $fontStack = '"Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
-    if ((app()->tenant->isCLS())) {
+    if (isset(app()->tenant) && app()->tenant->isCLS()) {
       $fontStack = '"Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
     }
     $head = "
@@ -64,12 +75,12 @@ class CreateMail {
     <html lang=\"en-gb\">
     <head>
       <meta charset=\"utf-8\">";
-      if ((app()->tenant->isCLS())) {
-        $head .= "<link href=\"https://fonts.googleapis.com/css?family=Open+Sans:400,700\" rel=\"stylesheet\" type=\"text/css\">";
-      } else {
-        $head .= "<link href=\"https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700\" rel=\"stylesheet\" type=\"text/css\">";
-      }
-      $head .= "
+    if (isset(app()->tenant) && (app()->tenant->isCLS())) {
+      $head .= "<link href=\"https://fonts.googleapis.com/css?family=Open+Sans:400,700\" rel=\"stylesheet\" type=\"text/css\">";
+    } else {
+      $head .= "<link href=\"https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700\" rel=\"stylesheet\" type=\"text/css\">";
+    }
+    $head .= "
       <style type=\"text/css\">
         html, body {
           font-family: " . $fontStack . ";
@@ -109,21 +120,21 @@ class CreateMail {
     <div style=\"background:#e3eef6;\">
       <table style=\"width:100%;border:0px;text-align:left;padding:10px 0px 10px 0px;background:#e3eef6;\"><tr><td align=\"center\">
         <table style=\"width:100%;max-width:700px;border:0px;text-align:center;background:#ffffff;padding:10px 10px 0px 10px;\"><tr><td>";
-        if (app()->tenant->isCLS()) { 
-        $head .= "<img src=\"" . autoUrl("public/img/notify/NotifyLogo.png") . "\"
+    if (isset(app()->tenant) && app()->tenant->isCLS()) {
+      $head .= "<img src=\"" . autoUrl("public/img/notify/NotifyLogo.png") . "\"
         style=\"width:300px;max-width:100%;\" srcset=\"" .
         autoUrl("public/img/notify/NotifyLogo@2x.png") . " 2x, " .
         autoUrl("public/img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
-        } else if (isset(app()->tenant) && $logos = app()->tenant->getKey('LOGO_DIR')) {
-          $head .= "<img src=\"" . autoUrl($logos . 'logo-150.png') . "\" srcset=\"" .
-          autoUrl($logos . 'logo-150@2x.png') . " 2x, " .
-          autoUrl($logos . 'logo-150@3x.png') . " 3x\" style=\"max-width:100%;max-height:150px;\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
-        } else if (isset(app()->tenant)) {
-          $head .= htmlspecialchars(app()->tenant->getKey('CLUB_NAME'));
-        } else {
-          $head .= 'SCDS Membership MT';
-        }
-        $head .= "</td></tr></table>
+    } else if (isset(app()->tenant) && $logos = app()->tenant->getKey('LOGO_DIR')) {
+      $head .= "<img src=\"" . autoUrl($logos . 'logo-150.png') . "\" srcset=\"" .
+        autoUrl($logos . 'logo-150@2x.png') . " 2x, " .
+        autoUrl($logos . 'logo-150@3x.png') . " 3x\" style=\"max-width:100%;max-height:150px;\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
+    } else if (isset(app()->tenant)) {
+      $head .= htmlspecialchars(app()->tenant->getKey('CLUB_NAME'));
+    } else {
+      $head .= "<img src=\"" . autoUrl('public/img/corporate/icons/apple-touch-icon-152x152.png') . "\" alt=\"SCDS Membership Logo\">";
+    }
+    $head .= "</td></tr></table>
         <table style=\"width:100%;max-width:700px;border:0px;text-align:left;background:#ffffff;padding:0px 10px;\"><tr><td>
     ";
     if (isset($this->showName) && $this->showName && (!isset($this->name) || $this->name == null)) {
@@ -143,26 +154,26 @@ class CreateMail {
       if ($addr) {
         for ($i = 0; $i < sizeof($addr); $i++) {
           $foot .= htmlspecialchars($addr[$i]) . '<br>';
-          if (isset($addr[$i+1]) && $addr[$i+1] == "") {
+          if (isset($addr[$i + 1]) && $addr[$i + 1] == "") {
             break;
           }
         }
       }
     } else {
-      $foot .= "<p class=\"small\" align=\"center\">SCDS Membership MT";
+      $foot .= "<p class=\"small\" align=\"center\">SCDS Membership Software<br>Newcastle-upon-Tyne and Sheffield</p><p class=\"small\" align=\"center\">For support call <a href=\"tel:+441912494320\">+44 191 249 4320</a> or email <a href=\"mailto:support@myswimmingclub.uk\">support@myswimmingclub.uk</a>";
     }
     $foot .= "</p>";
     if (isset(app()->tenant)) {
-    $foot .= "
+      $foot .= "
     <p class=\"small\" align=\"center\">This email was sent via the " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Membership System.</p>";
-    $foot .= "<p class=\"small\" align=\"center\">Have questions? Contact us at <a
+      $foot .= "<p class=\"small\" align=\"center\">Have questions? Contact us at <a
     href=\"mailto:" . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "\">" . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "</a>.</p>
     <p class=\"small\" align=\"center\">To control your email options, go to <a href=\"" .
-    autoUrl("myaccount/email") . "\">My Account</a>.</p>";
-    if ($this->allowUnsubscribe) {
-      $foot .= '<p class="small" align="center"><a href="-unsub_link-">Click to Unsubscribe</a></p>';
-    }
-    $foot .= "
+        autoUrl("myaccount/email") . "\">My Account</a>.</p>";
+      if ($this->allowUnsubscribe) {
+        $foot .= '<p class="small" align="center"><a href="-unsub_link-">Click to Unsubscribe</a></p>';
+      }
+      $foot .= "
     <p class=\"small\" align=\"center\">&copy; " . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " " . date("Y") . ", Design &copy; SCDS</p>";
     }
     $foot .= "
@@ -176,7 +187,8 @@ class CreateMail {
     return $head . $this->getHtmlContent() . $foot;
   }
 
-  public function getFormattedPlain() {
+  public function getFormattedPlain()
+  {
     $head = "";
 
     if (isset($this->showName) && $this->showName && (!isset($this->name) || $this->name == null)) {
@@ -192,7 +204,7 @@ class CreateMail {
       if ($addr) {
         for ($i = 0; $i < sizeof($addr); $i++) {
           $foot .= $addr[$i] . "\r\n";
-          if (isset($addr[$i+1]) && $addr[$i+1] == "") {
+          if (isset($addr[$i + 1]) && $addr[$i + 1] == "") {
             break;
           }
         }

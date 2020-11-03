@@ -2,6 +2,15 @@
 
 $db = app()->db;
 
+$security_status = true;
+if ($_POST['SessionSecurity'] != session_id()) {
+  $security_status = false;
+}
+
+if (!SCDS\CSRF::verify()) {
+  $security_status = false;
+}
+
 if (isset($_SESSION['SCDS-SuperUser'])) {
   halt(404);
 }
@@ -16,6 +25,10 @@ http_response_code(302);
 
 try {
 
+  if (!$security_status) {
+    throw new Exception('CSRF Error');
+  }
+
   if (!$user) {
     throw new Exception('Not Found');
   }
@@ -27,7 +40,8 @@ try {
   $_SESSION['SCDS-SU-Login2FA'] = [
     'User' => $user['ID'],
     'Email' => $user['Email'],
-    'TwoFactorHash' => $user['TwoFactor']
+    'TwoFactorHash' => $user['TwoFactor'],
+    'RememberMe' => isset($_POST['RememberMe']),
   ];
 
   header('location: ' . autoUrl('admin/login'));
