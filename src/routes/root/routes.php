@@ -12,8 +12,8 @@ $this->group('/login', function() {
   include BASE_PATH . 'routes/login/routes.php';
 });
 
-$this->group('/register', function() {
-  include BASE_PATH . 'routes/register/routes.php';
+$this->group('/admin', function() {
+  include BASE_PATH . 'routes/admin/routes.php';
 });
 
 $this->group('/account', function() {

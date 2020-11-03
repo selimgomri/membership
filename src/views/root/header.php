@@ -51,6 +51,11 @@ include 'head.php';
         <li class="nav-item">
           <a class="nav-link" href="<?= htmlspecialchars(autoUrl("help-and-support")) ?>">Help</a>
         </li>
+        <?php if (isset($_SESSION['SCDS-SuperUser'])) { ?>
+          <li class="nav-item">
+            <a class="nav-link" href="<?= htmlspecialchars(autoUrl("admin")) ?>">Admin</a>
+          </li>
+        <?php } ?>
       </ul>
     </div>
   </nav>
