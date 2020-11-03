@@ -1,5 +1,11 @@
 <?php
 
+if (!isset($_SESSION['SCDS-SuperUser'])) {
+  http_response_code(302);
+  header("location: " . autoUrl('admin/login'));
+  return;
+}
+
 $clubs = [];
 
 $row = 1;
@@ -19,7 +25,7 @@ if (($handle = fopen(BASE_PATH . "includes/regions/clubs.csv", "r")) !== FALSE) 
   fclose($handle);
 }
 
-$pagetitle = "Register for our software";
+$pagetitle = "Add Tenant - Admin Dashboard - SCDS";
 
 include BASE_PATH . "views/root/header.php";
 
