@@ -1,11 +1,5 @@
 <?php
 
-if (!isset($_SESSION['SCDS-SuperUser'])) {
-  http_response_code(302);
-  header("location: " . autoUrl('admin/login'));
-  return;
-}
-
 $pagetitle = "Admin Dashboard - SCDS";
 
 include BASE_PATH . "views/root/header.php";

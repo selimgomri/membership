@@ -1,11 +1,5 @@
 <?php
 
-if (!isset($_SESSION['SCDS-SuperUser'])) {
-  http_response_code(302);
-  header("location: " . autoUrl('admin/login'));
-  return;
-}
-
 $db = app()->db;
 
 $use_white_background = true;
