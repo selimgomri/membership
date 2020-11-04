@@ -1,11 +1,5 @@
 <?php
 
-if (!isset($_SESSION['SCDS-SuperUser'])) {
-  http_response_code(302);
-  header("location: " . autoUrl('admin/login'));
-  return;
-}
-
 $pagetitle = "Notify - Admin Dashboard - SCDS";
 
 include BASE_PATH . "views/root/header.php";
@@ -33,14 +27,10 @@ include BASE_PATH . "views/root/header.php";
   <?php unset($_SESSION['SCDS-Notify']['Success']);
   } ?>
 
-  <ul>
-    <li>
-      <a href="<?= htmlspecialchars(autoUrl('admin/notify/history')) ?>">Message History</a>
-    </li>
-    <li>
-      <a href="<?= htmlspecialchars(autoUrl('admin/notify/composer')) ?>">New Email</a>
-    </li>
-  </ul>
+  <div class="list-group">
+    <a href="<?= htmlspecialchars(autoUrl('admin/notify/history')) ?>" class="list-group-item list-group-item-action">Message History</a>
+    <a href="<?= htmlspecialchars(autoUrl('admin/notify/compose')) ?>" class="list-group-item list-group-item-action">New Email</a>
+  </div>
 </div>
 
 <?php

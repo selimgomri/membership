@@ -52,9 +52,20 @@ include 'head.php';
           <a class="nav-link" href="<?= htmlspecialchars(autoUrl("help-and-support")) ?>">Help</a>
         </li>
         <?php if (isset($_SESSION['SCDS-SuperUser'])) { ?>
-          <li class="nav-item">
-            <a class="nav-link" href="<?= htmlspecialchars(autoUrl("admin")) ?>">Admin</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Admin
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("admin")) ?>">Dashboard</a>
+              <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("admin/notify")) ?>">Notify</a>
+              <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("admin/register")) ?>">New Tenant</a>
+              <!-- <div class="dropdown-divider"></div> -->
+            </div>
           </li>
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="<?= htmlspecialchars(autoUrl("admin")) ?>">Admin</a>
+          </li> -->
         <?php } ?>
       </ul>
     </div>
