@@ -60,7 +60,7 @@ try {
       $geo_string = "Location Information Unavailable";
     }
 
-    $sql = "INSERT INTO `superUsersLogins` (`User`, `IPAddress`, `GeoLocation`, `Browser`, `Platform`, `Mobile`, `Hash`, `HashActive`, `Time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $insert = $db->prepare("INSERT INTO `superUsersLogins` (`User`, `IPAddress`, `GeoLocation`, `Browser`, `Platform`, `Mobile`, `Hash`, `HashActive`, `Time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     $mobile = 0;
 
@@ -94,6 +94,8 @@ try {
       $remember_me,
       $dbDate
     ];
+
+    $insert->execute($login_details);
 
     $secure = true;
     if (app('request')->protocol == 'http' && bool(getenv('IS_DEV'))) {
