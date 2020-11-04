@@ -258,7 +258,7 @@ $route->use(function () {
 
   $db = app()->db;
 
-  if (isset($_SESSION['SCDS-SuperUser']) && isset($_COOKIE[COOKIE_PREFIX . 'SUPERUSER-AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'SUPERUSER-AutoLogin'] != "") {
+  if (!isset($_SESSION['SCDS-SuperUser']) && isset($_COOKIE[COOKIE_PREFIX . 'SUPERUSER-AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'SUPERUSER-AutoLogin'] != "") {
 
     $date = new DateTime('120 days ago', new DateTimeZone('UTC'));
 
