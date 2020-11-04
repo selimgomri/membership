@@ -1,5 +1,7 @@
 <?php
 
+$db = app()->db;
+
 if (empty($_SESSION['SCDS-SuperUser']) && isset($_COOKIE[COOKIE_PREFIX . 'SUPERUSER-AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'SUPERUSER-AutoLogin'] != "") {
 
   $date = new DateTime('120 days ago', new DateTimeZone('UTC'));
