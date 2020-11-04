@@ -212,7 +212,7 @@ include BASE_PATH . "views/root/header.php";
                         }
 
                       ?>
-                        <a href="<?= htmlspecialchars(autoUrl("files/" . $a->URI)) ?>" class="d-block mb-1 text-truncate text-decoration-none" <?php if ($download) { ?> download="" <?php } else { ?> target="_blank" <?php } ?>>
+                        <a href="<?= htmlspecialchars(autoUrl("admin/files/" . $tenant->getId() . '/' . $a->URI)) ?>" class="d-block mb-1 text-truncate text-decoration-none" <?php if ($download) { ?> download="" <?php } else { ?> target="_blank" <?php } ?>>
                           <span class="fa <?= htmlspecialchars($faClass) ?> fa-fw"></span> <?= htmlspecialchars($a->Filename) ?>
                         </a>
                       <?php
