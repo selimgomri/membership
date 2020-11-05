@@ -1,7 +1,5 @@
 <?php
 
-$use_white_background = true;
-
 use Brick\PhoneNumber\PhoneNumber;
 use Brick\PhoneNumber\PhoneNumberParseException;
 use Brick\PhoneNumber\PhoneNumberFormat;

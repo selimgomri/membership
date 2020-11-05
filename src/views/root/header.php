@@ -59,8 +59,11 @@ include 'head.php';
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("admin")) ?>">Dashboard</a>
               <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("admin/notify")) ?>">Notify</a>
+              <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("admin/users")) ?>">User Search</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="https://administration.myswimmingclub.uk/phpmyadmin" target="_blank">phpMyAdmin</a>
+              <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("admin/register")) ?>">New Tenant</a>
-              <!-- <div class="dropdown-divider"></div> -->
             </div>
           </li>
           <!-- <li class="nav-item">

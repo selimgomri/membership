@@ -43,6 +43,10 @@ $this->group('/notify', function () {
   include 'notify/routes.php';
 });
 
+$this->group('/users', function () {
+  include 'users/routes.php';
+});
+
 $this->get('/files/{tenant}:int/*', function () {
   $array = $this->getArrayCopy();
   $tenant = (int) $array['tenant'];
