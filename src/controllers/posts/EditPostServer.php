@@ -18,7 +18,7 @@ if ($int) {
 	]);
 }
 
-if ($query->fetchColumn == 0) {
+if ($query->fetchColumn() == 0) {
 	halt(404);
 }
 
