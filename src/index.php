@@ -224,6 +224,8 @@ require_once "database.php";
 if (!isset($_SESSION['Browser'])) {
   $browser = new \WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);
 
+  // reportError($browser);
+
   if (isset($browser->browser->name) && $browser->browser->name) {
     $_SESSION['Browser']['Name'] = $browser->browser->name;
   } else {
@@ -240,6 +242,18 @@ if (!isset($_SESSION['Browser'])) {
     $_SESSION['Browser']['Version'] = $browser->browser->version->value;
   } else {
     $_SESSION['Browser']['Version'] = 'Unknown Browser Version';
+  }
+
+  if (isset($browser->os->version->value) && $browser->os->version->value) {
+    $_SESSION['Browser']['OSVersion'] = $browser->os->version->value;
+  } else {
+    $_SESSION['Browser']['OSVersion'] = null;
+  }
+
+  if (isset($browser->os->name) && $browser->os->name) {
+    $_SESSION['Browser']['OSName'] = $browser->os->name;
+  } else {
+    $_SESSION['Browser']['OSName'] = null;
   }
 }
 

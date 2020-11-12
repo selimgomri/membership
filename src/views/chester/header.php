@@ -39,10 +39,10 @@ if (isset($customBackground) && $customBackground) {
 <?php } ?>
 
 <body class="<?= $bg ?> account--body <?php if (isset($pageHead['body-class'])) {
-                                      foreach ($pageHead['body-class'] as $item) { ?> <?= $item ?> <?php }
-                                                                                                                                        } ?>" <?php if (isset($pageHead['body'])) {
-                                                                                                                                                            foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
-                                                                                                                                                                                                                                                } ?>>
+                                        foreach ($pageHead['body-class'] as $item) { ?> <?= $item ?> <?php }
+                                                                                                } ?>" <?php if (isset($pageHead['body'])) {
+                                                                                                                                                foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
+                                                                                                                                                                                                                } ?>>
 
   <?php if (bool(getenv('IS_DEV'))) { ?>
     <div class="bg-warning bg-striped py-1">
@@ -136,6 +136,24 @@ if (isset($customBackground) && $customBackground) {
         </div>
       </div>
     </noscript>
+
+    <?php if (isset($_SESSION['Browser']['OSName']) && $_SESSION['Browser']['OSName'] == "Android" && isset($_SESSION['Browser']['OSVersion']) && (float) $_SESSION['Browser']['OSVersion'] <= 7.1) { ?>
+      <div class="bg-warning text-dark py-3 d-print-none small">
+        <div class="<?= $container_class ?>">
+          <p class="h2">
+            <strong>
+              Your device will not be supported from February 2021
+            </strong>
+          </p>
+          <p>
+            It looks like you're using Android version <?= htmlspecialchars($_SESSION['Browser']['OSVersion']) ?>. From February, you won't be able to access this site on your device because the DST Root X3 certificate will expire.
+          </p>
+          <p class="mb-0">
+            Upgrade to at least Android 7.1.1 now or <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by Mozilla</a></strong>. Firefox uses it's own root certificate list which avoids this problem and has great protections for your privacy with built in features including tracking protection.
+          </p>
+        </div>
+      </div>
+    <?php } ?>
 
     <?php if ($_SESSION['Browser']['Name'] == "Internet Explorer") { ?>
       <div class="bg-warning py-3 d-print-none">
