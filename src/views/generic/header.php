@@ -110,7 +110,7 @@ if (isset($customBackground) && $customBackground) {
         <div class="<?= $container_class ?>">
           <p class="h2">
             <strong>
-              Your device will not be supported from February 2021
+              Your device will not be supported from March 2021
             </strong>
           </p>
           <p>
