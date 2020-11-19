@@ -1,11 +1,10 @@
 <?php
 
-$avoidDirectDebit = app()->tenant->getBooleanKey('ALLOW_DIRECT_DEBIT_OPT_OUT') && isset($_POST['avoid-dd']) && bool($_POST['avoid-dd']);
-
 $paymentItems = [];
 
 $db = app()->db;
 
+\Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
 $location = autoUrl("");
 
@@ -81,10 +80,10 @@ try {
 	];
 
 	if ($clubDiscount > 0 && $renewal == 0) {
-		$totalFee += $clubFee*(1-($clubDiscount/100));
+		$totalFee += $clubFee * (1 - ($clubDiscount / 100));
 		$paymentItems[] = [
 			'description' => 'Club Membership Fee',
-			'amount' => $clubFee* ($clubDiscount/100),
+			'amount' => $clubFee * ($clubDiscount / 100),
 			'type' => 'credit',
 			'date' => $clubDate
 		];
@@ -126,10 +125,10 @@ try {
 				'date' => $clubDate
 			];
 		} else if ($swimEnglandDiscount > 0 && $renewal == 0) {
-			$totalFee += $asaFees[$i]*(1-($swimEnglandDiscount/100));
+			$totalFee += $asaFees[$i] * (1 - ($swimEnglandDiscount / 100));
 			$paymentItems[] = [
 				'description' => $member[$i]['MForename'] . ' SE Transfer',
-				'amount' => $asaFees[$i] * ($swimEnglandDiscount/100),
+				'amount' => $asaFees[$i] * ($swimEnglandDiscount / 100),
 				'type' => 'credit',
 				'date' => $clubDate
 			];
@@ -141,8 +140,9 @@ try {
 	// Print array for testing
 	// reportError($paymentItems);
 
-	$clubFeeString = number_format($clubFee/100,2,'.','');
-	$totalFeeString = number_format($totalFee/100,2,'.','');
+	$clubFeeString = number_format($clubFee / 100, 2, '.', '');
+	$totalFeeString = number_format($totalFee / 100, 2, '.', '');
+	$total = $totalFee;
 
 	$sql = $db->prepare("SELECT COUNT(*) FROM `paymentPreferredMandate` WHERE `UserID` = ?");
 	$sql->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
@@ -157,8 +157,8 @@ try {
 	]);
 	$hasStripeMandate = $getCountNewMandates->fetchColumn() > 0;
 
-	if ($hasDD || $hasStripeMandate || (!app()->tenant->getGoCardlessAccessToken() &&  !stripeDirectDebit(true)) || $avoidDirectDebit) {
-		if ($hasDD || $hasStripeMandate) {
+	if ($_POST['payment-method'] == 'dd' || $_POST['payment-method'] == 'bacs' || $_POST['payment-method'] == 'cash' || $_POST['payment-method'] == 'cheque') {
+		if ($_POST['payment-method'] == 'dd' && ($hasDD || $hasStripeMandate)) {
 			// INSERT Payment into pending
 			$date = new \DateTime('now', new DateTimeZone('Europe/London'));
 			$date->setTimezone(new DateTimeZone('UTC'));
@@ -251,10 +251,10 @@ try {
 			$sql = "UPDATE `users` SET `RR` = 0 WHERE `UserID` = ?";
 			$query = $db->prepare($sql);
 			$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
-			
+
 			$query = $db->prepare("UPDATE `members` SET `RR` = 0, `RRTransfer` = 0 WHERE `UserID` = ?");
 			$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
-			
+
 			// Remove from status tracker
 			$delete = $db->prepare("DELETE FROM renewalProgress WHERE UserID = ? AND RenewalID = ?");
 			$delete->execute([
@@ -265,8 +265,119 @@ try {
 		} else {
 			$location = autoUrl("renewal/go");
 		}
+	} else if ($_POST['payment-method'] == 'card') {
+		// Setup
+		if (getenv('STRIPE_APPLE_PAY_DOMAIN')) {
+			\Stripe\ApplePayDomain::create([
+				'domain_name' => getenv('STRIPE_APPLE_PAY_DOMAIN')
+			]);
+		}
+
+		// Update record
+		$updateEntryPayment = $db->prepare("UPDATE galaEntries SET StripePayment = ? WHERE EntryID = ?");
+
+		if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalPaymentIntent']) && \Stripe\PaymentIntent::retrieve($_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalPaymentIntent'], ['stripe_account' => $tenant->getStripeAccount()])->status != 'succeeded') {
+			$intent = \Stripe\PaymentIntent::retrieve(
+				$_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalPaymentIntent'],
+				[
+					'stripe_account' => $tenant->getStripeAccount()
+				]
+			);
+
+			$getId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
+			$getId->execute([
+				$intent->id
+			]);
+			$databaseId = $getId->fetchColumn();
+
+			$paymentDatabaseId = $databaseId;
+
+			if ($databaseId == null) {
+				halt(404);
+			}
+
+			// $setPaymentToNull = $db->prepare("UPDATE galaEntries SET StripePayment = ? WHERE StripePayment = ?");
+			// $setPaymentToNull->execute([
+			// 	null,
+			// 	$paymentDatabaseId
+			// ]);
+
+			// Assign id to each entry
+			// foreach ($payingEntries as $entry => $entryData) {
+			// 	$updateEntryPayment->execute([
+			// 		$databaseId,
+			// 		$entry
+			// 	]);
+			// }
+		} else {
+			$intent = \Stripe\PaymentIntent::create([
+				'amount' => $total,
+				'currency' => 'gbp',
+				'payment_method_types' => ['card'],
+				'confirm' => false,
+				'setup_future_usage' => 'off_session',
+			], [
+				'stripe_account' => $tenant->getStripeAccount()
+			]);
+			$_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalPaymentIntent'] = $intent->id;
+
+			$intentCreatedAt = new DateTime('@' . $intent->created, new DateTimeZone('UTC'));
+
+			// Check if intent already exists
+			$checkIntentCount = $db->prepare("SELECT COUNT(*) FROM stripePayments WHERE Intent = ?");
+			$checkIntentCount->execute([
+				$intent->id
+			]);
+
+			$databaseId = null;
+			if ($checkIntentCount->fetchColumn() == 0) {
+				// Add this payment intent to the database and assign the id to each entry
+				$addIntent = $db->prepare("INSERT INTO stripePayments (`User`, `DateTime`, Method, Intent, Amount, Currency, Paid, AmountRefunded) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+				$addIntent->execute([
+					$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+					$intentCreatedAt->format("Y-m-d H:i:s"),
+					null,
+					$intent->id,
+					$intent->amount,
+					$intent->currency,
+					0,
+					0
+				]);
+
+				$databaseId = $db->lastInsertId();
+			} else {
+				$getIntentDbId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
+				$getIntentDbId->execute([
+					$intent->id
+				]);
+				$databaseId = $getIntentDbId->fetchColumn();
+			}
+			$paymentDatabaseId = $databaseId;
+
+			// Assign id to each entry
+			foreach ($payingEntries as $entry => $details) {
+				$updateEntryPayment->execute([
+					$databaseId,
+					$entry
+				]);
+			}
+		}
+
+		if ($total != $intent->amount) {
+			$intent = \Stripe\PaymentIntent::update(
+				$_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalPaymentIntent'],
+				[
+					'amount' => $total,
+				],
+				[
+					'stripe_account' => $tenant->getStripeAccount()
+				]
+			);
+		}
+
+		$location = autoUrl("renewal/payments/checkout");
 	} else {
-		$location = autoUrl("renewal/payments/setup");
+		$location = autoUrl("renewal/go");
 	}
 
 	$db->commit();

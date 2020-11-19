@@ -122,8 +122,14 @@ for ($i = 0; $i < sizeof($row); $i++) {
 
 if ($status) {
 	// Update the database with current renewal state
-  $nextStage = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
-  $nextStage->execute([
+  // $nextStage = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
+  // $nextStage->execute([
+  //   $renewal,
+	// 	$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+	// ]);
+
+	$nextSubstage = $db->prepare("UPDATE `renewalProgress` SET `Substage` = `Substage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
+  $nextSubstage->execute([
     $renewal,
 		$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
 	]);

@@ -44,6 +44,8 @@ if ($stage == 0) {
 	// Administration Form
 	if ($substage == 0) {
 		include 'adminFormPost.php';
+	} else if ($substage == 1) {
+		include 'directDebitOptionsPost.php';
 	} else {
 		halt(404);
 	}

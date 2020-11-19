@@ -74,6 +74,8 @@ for ($i = 0; $i < $count; $i++) {
 		$asaFees[$i] = $asa2;
 	} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ClubPays']) {
 		$asaFees[$i] = $asa3;
+	} else {
+		$asaFees[$i] = 0;
 	}
 	if ($member[$i]['RRTransfer']) {
 		$totalFee += $asaFees[$i];
@@ -102,7 +104,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
 <div class="container">
-	<form method="post">
+	<form method="post" id="form">
 		<h1>
 			<?= $title ?>
 		</h1>
@@ -136,6 +138,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		<?php } ?>
 
 		<h2>Your Membership Fees</h2>
+		<p class="lead">
+			Check that these are as you expected before you continue.
+		</p>
 		<div class="table-responsive-md">
 			<table class="table">
 				<thead class="">
@@ -284,126 +289,103 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			</table>
 		</div>
 
-		<?php if (stripeDirectDebit(true)) { ?>
-			<p>
-				Your total <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?> fee will be &pound;<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0) && $renewal == 0) { ?><?= number_format(((int)$totalFeeDiscounted) / 100, 2, '.', '') ?><?php } else { ?><?= $totalFeeString ?><?php } ?>. By continuing to complete your membership <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?>, you confirm that you will pay this amount as part of your <?= $nf ?> Direct Debit Payment.
-			</p>
+		<div class="row">
+			<div class="col-lg-8">
+				<?php if ($totalFeeDiscounted > 0) { ?>
+					<h2>How would you like to pay?</h2>
+					<p class="lead">
+						We accept multiple payment methods
+					</p>
 
-			<?php if (app()->tenant->getKey('CUSTOM_SCDS_CLUB_CHARGE_DATE') && $renewal != 0) {
-				$date = new DateTime(app()->tenant->getKey('CUSTOM_SCDS_CLUB_CHARGE_DATE'), new DateTimeZone('Europe/London'));
-				$chargeDate = $date->format("j F Y");
-				$date->modify('first day of next month');
-				$debitDate = $date->format("F");
-			?>
-				<p><strong>Your club has overridden the charge date for club membership fees meaning the charge for your club membership fee will be added to your account on <?= htmlspecialchars($chargeDate) ?> and you will pay this charge as part of your <?= htmlspecialchars($debitDate) ?> Direct Debit.</strong></p>
-			<?php } ?>
+					<div class="mb-3" id="payment-method-select">
+						<div class="custom-control custom-radio">
+							<input type="radio" id="payment-method-card" name="payment-method" class="custom-control-input" value="card" checked>
+							<label class="custom-control-label" for="payment-method-card">Credit/Debit Card</label>
+						</div>
+						<div class="custom-control custom-radio">
+							<input type="radio" id="payment-method-dd" name="payment-method" class="custom-control-input" value="dd">
+							<label class="custom-control-label" for="payment-method-dd">As part of my next Direct Debit payment</label>
+						</div>
+						<div class="custom-control custom-radio">
+							<input type="radio" id="payment-method-bacs" name="payment-method" class="custom-control-input" value="bacs">
+							<label class="custom-control-label" for="payment-method-bacs">Bank Transfer</label>
+						</div>
+						<div class="custom-control custom-radio">
+							<input type="radio" id="payment-method-cash" name="payment-method" class="custom-control-input" value="cash">
+							<label class="custom-control-label" for="payment-method-cash">Cash</label>
+						</div>
+						<div class="custom-control custom-radio">
+							<input type="radio" id="payment-method-cheque" name="payment-method" class="custom-control-input" value="cheque">
+							<label class="custom-control-label" for="payment-method-cheque">Cheque</label>
+						</div>
+					</div>
 
-			<?php if (app()->tenant->getKey('CUSTOM_SCDS_ASA_CHARGE_DATE') && $renewal != 0) {
-				$date = new DateTime(app()->tenant->getKey('CUSTOM_SCDS_ASA_CHARGE_DATE'), new DateTimeZone('Europe/London'));
-				$chargeDate = $date->format("j F Y");
-				$date->modify('first day of next month');
-				$debitDate = $date->format("F");
-			?>
-				<p><strong>Your club has overridden the charge date for Swim England membership fees meaning the charge your Swim England membership fee will be added to your account on <?= htmlspecialchars($chargeDate) ?> and you will pay this charge as part of your <?= htmlspecialchars($debitDate) ?> Direct Debit.</strong></p>
-			<?php } ?>
+					<div id="descripton-box"></div>
 
-			<?php
-			// Work out if has mandates
-			$getCountNewMandates = $db->prepare("SELECT COUNT(*) FROM stripeMandates INNER JOIN stripeCustomers ON stripeMandates.Customer = stripeCustomers.CustomerID WHERE stripeCustomers.User = ? AND stripeMandates.MandateStatus != 'inactive';");
-			$getCountNewMandates->execute([
-				$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
-			]);
-			$hasStripeMandate = $getCountNewMandates->fetchColumn() > 0;
+					<p>
+						<button type="submit" class="btn btn-primary" id="checkout-button">
+							Checkout
+						</button>
+					</p>
 
-			if (!$hasStripeMandate) { ?>
+				<?php } else { ?>
+					<h2>You have nothing to pay</h2>
+					<p class="lead">
+						Welcome to <?= htmlspecialchars($tenant->getName()) ?>
+					</p>
+					<p>
+						<button type="submit" class="btn btn-success">
+							Finish registration/renewal
+						</button>
+					</p>
+				<?php } ?>
+			</div>
+		</div>
 
-				<p>
-					We now need you to set up your Direct Debit agreement with <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>. We will redirect you to our payments system where you will setup a Direct Debit.
-				</p>
-
-			<?php } else { ?>
-				<p>
-					You're now ready to complete your <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?>.
-				</p>
-			<?php } ?>
-
-			<p>
-				<button type="submit" class="btn btn-success btn-lg">
-					<?php if (!$hasStripeMandate) { ?>
-						Setup Direct Debit
-					<?php } else if ($renewal == 0) { ?>
-						Complete Registration
-					<?php } else { ?>
-						Complete Renewal
-					<?php } ?>
-				</button>
-			</p>
-
-			<?php if (!$hasStripeMandate && app()->tenant->getBooleanKey('ALLOW_DIRECT_DEBIT_OPT_OUT')) { ?>
-				<p><button type="submit" name="avoid-dd" value="1" class="btn btn-outline-dark btn-sm">I want to pay my fees another way</button></p>
-			<?php } ?>
-
-		<?php } else if (app()->tenant->getGoCardlessAccessToken()) { ?>
-			<p>
-				Your total <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?> fee will be &pound;<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0) && $renewal == 0) { ?><?= number_format(((int)$totalFeeDiscounted) / 100, 2, '.', '') ?><?php } else { ?><?= $totalFeeString ?><?php } ?>. By continuing to complete your membership <?php if ($renewal == 0) { ?>registration<?php } else { ?>renewal<?php } ?>, you confirm that you will pay this amount as part of your <?= $nf ?> Direct Debit Payment.
-			</p>
-
-			<?php if (app()->tenant->getKey('CUSTOM_SCDS_CLUB_CHARGE_DATE') && $renewal != 0) {
-				$date = new DateTime(app()->tenant->getKey('CUSTOM_SCDS_CLUB_CHARGE_DATE'), new DateTimeZone('Europe/London'));
-				$chargeDate = $date->format("j F Y");
-				$date->modify('first day of next month');
-				$debitDate = $date->format("F");
-			?>
-				<p><strong>Your club has overridden the charge date for club membership fees meaning the charge for your club membership fee will be added to your account on <?= htmlspecialchars($chargeDate) ?> and you will pay this charge as part of your <?= htmlspecialchars($debitDate) ?> Direct Debit.</strong></p>
-			<?php } ?>
-
-			<?php if (app()->tenant->getKey('CUSTOM_SCDS_ASA_CHARGE_DATE') && $renewal != 0) {
-				$date = new DateTime(app()->tenant->getKey('CUSTOM_SCDS_ASA_CHARGE_DATE'), new DateTimeZone('Europe/London'));
-				$chargeDate = $date->format("j F Y");
-				$date->modify('first day of next month');
-				$debitDate = $date->format("F");
-			?>
-				<p><strong>Your club has overridden the charge date for Swim England membership fees meaning the charge your Swim England membership fee will be added to your account on <?= htmlspecialchars($chargeDate) ?> and you will pay this charge as part of your <?= htmlspecialchars($debitDate) ?> Direct Debit.</strong></p>
-			<?php } ?>
-
-			<?php if (!userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) { ?>
-				<p>
-					We now need you to set up your Direct Debit agreement with <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>. We will redirect you to our payments system where you will setup a Direct Debit.
-				</p>
-			<?php } else { ?>
-				<p>
-					You're now ready to complete your <?php if ($renewal == 0) {
-																						?>registration<?php } else { ?>renewal<?php } ?>.
-				</p>
-			<?php } ?>
-
-			<p>
-				<button type="submit" class="btn btn-success btn-lg">
-					<?php if (!userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) { ?>
-						Setup Direct Debit
-					<?php } else if ($renewal == 0) { ?>
-						Complete Registration
-					<?php } else { ?>
-						Complete Renewal
-					<?php } ?>
-				</button>
-			</p>
-		<?php } else { ?>
-			<p>
-				You'll need to pay &pound;<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0) && $renewal == 0) { ?><?= number_format(((int)$totalFeeDiscounted) / 100, 2, '.', '') ?><?php } else { ?><?= $totalFeeString ?><?php } ?> to your club as soon as possible. As <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> does not use Direct Debit payments, they will tell you how they would like you to pay.
-			</p>
-			<p>
-				<button type="submit" class="btn btn-success btn-lg">
-					<?php if ($renewal == 0) { ?>
-						Complete Registration
-					<?php } else { ?>
-						Complete Renewal
-					<?php } ?>
-				</button>
-			</p>
-		<?php } ?>
 	</form>
 </div>
+
+<script>
+	let checkoutButton = document.getElementById('checkout-button');
+	let form = document.getElementById('form');
+	if (checkoutButton) {
+
+		// Change button text
+		let selectMethod = document.getElementById('payment-method-select');
+		selectMethod.addEventListener('change', event => {
+			let radios = document.getElementsByName('payment-method');
+			let selectedOption = 'card';
+			for (var i = 0, length = radios.length; i < length; i++) {
+				if (radios[i].checked) {
+					selectedOption = radios[i].value;
+					break;
+				}
+			}
+
+			let descriptionBox = document.getElementById('descripton-box');
+			if (selectedOption == 'card') {
+				checkoutButton.textContent = 'Proceed to payment';
+				descriptionBox.innerHTML = '';
+			} else if (selectedOption == 'dd') {
+				checkoutButton.textContent = 'Complete registration/renewal';
+				descriptionBox.innerHTML = '';
+			} else {
+				checkoutButton.textContent = 'Complete registration/renewal';
+				descriptionBox.innerHTML = '<p>Registration will be marked as completed immediately after you press <em>Complete registration/renewal</em>. Please ensure you\'ve noted down how much you owe.</p>';
+			}
+		});
+
+		// Handle alerts
+		form.addEventListener('submit', event => {
+
+			// event.stopPropagation();
+			// event.preventDefault();
+
+			// console.log(form);
+
+		});
+	}
+</script>
 
 <?php
 
