@@ -25,8 +25,8 @@ include 'head.php';
       <img src="<?= htmlspecialchars(autoUrl("img/corporate/scds.png")) ?>" class="img-fluid rounded-top" style="height: 75px;">
     </div>
     <div class="col-auto d-none d-md-flex">
-      <h1 class="mb-0">
-        <span class="sr-only">SCDS </span>Membership Software
+      <h1 class="sr-only">
+        SCDS Membership Software
       </h1>
     </div>
   </div>
