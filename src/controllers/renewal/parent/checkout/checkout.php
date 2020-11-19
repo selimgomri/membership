@@ -128,10 +128,10 @@ if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalPaymentMetho
   $_SESSION['TENANT-' . app()->tenant->getId()]['AddNewCard'] = true;
 }
 
-// $getEntriesByPI = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE StripePayment = ?");
-// $getEntriesByPI->execute([
-//   $paymentDatabaseId
-// ]);
+$getPaymentItems = $db->prepare("SELECT `Description`, `Amount`, `Currency` FROM stripePaymentItems WHERE `Payment` = ?");
+$getPaymentItems->execute([
+  $databaseId
+]);
 
 $countries = getISOAlpha2Countries();
 
@@ -181,53 +181,17 @@ include BASE_PATH . "views/renewalTitleBar.php";
         <p>You're paying for;</p>
 
         <ul class="list-group mb-3 accordion" id="entry-list-group">
-          <?php while (false && $entry = $getEntriesByPI->fetch(PDO::FETCH_ASSOC)) {
-            $notReady = !$entry['EntryProcessed'];
-            $galaData = new GalaPrices($db, $entry['GalaID']);
-          ?>
+          <?php while ($item = $getPaymentItems->fetch(PDO::FETCH_ASSOC)) { ?>
             <li class="list-group-item">
               <div class="row">
-                <div class="col-8 col-sm-5 col-md-4 col-lg-6">
-                  <h3><?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?> <br><small><?= htmlspecialchars($entry['GalaName']) ?></small></h3>
+                <div class="col-auto">
                   <p class="mb-0">
-                    <a data-toggle="collapse" href="#swims-<?= $entry['EntryID'] ?>" role="button" aria-expanded="false" aria-controls="swims-<?= $entry['EntryID'] ?>">
-                      View swims <i class="fa fa-caret-down" aria-hidden="true"></i>
-                    </a>
+                    <?= htmlspecialchars($item['Description']) ?>
                   </p>
-                  <div class="collapse" id="swims-<?= $entry['EntryID'] ?>" data-parent="#entry-list-group">
-                    <div class="mt-3"></div>
-                    <ul class="list-unstyled">
-                      <?php $count = 0; ?>
-                      <?php foreach ($swimsArray as $colTitle => $text) { ?>
-                        <?php if ($entry[$colTitle]) {
-                          $count++; ?>
-                          <li class="row">
-                            <div class="col">
-                              <?= $text ?>
-                            </div>
-                            <?php if ($galaData->getEvent($colTitle)->isEnabled()) { ?>
-                              <div class="col">
-                                &pound;<?= $galaData->getEvent($colTitle)->getPriceAsString() ?>
-                              </div>
-                            <?php } ?>
-                          </li>
-                        <?php } ?>
-                      <?php } ?>
-                  </div>
                 </div>
                 <div class="col text-right">
-                  <p>
-                    <?= mb_convert_case($numFormatter->format($count), MB_CASE_TITLE_SIMPLE) ?> event<?php if ($count != 1) { ?>s<?php } ?>
-                  </p>
-
-                  <!--<?php if ($notReady) { ?>
-              <p>
-                Once you pay for this entry, you won't be able to edit it.
-              </p>
-              <?php } ?>-->
-
                   <p class="mb-0">
-                    <strong>Fee &pound;<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2))) ?></strong>
+                    <strong><?php if ($item['Amount'] < 0) { ?>-<?php } ?>&pound;<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) abs($item['Amount']))->withPointMovedLeft(2)->toScale(2))) ?></strong>
                   </p>
                 </div>
               </div>

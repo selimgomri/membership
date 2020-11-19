@@ -296,6 +296,12 @@ try {
 				halt(404);
 			}
 
+			// Delete payment items
+			$deletePaymentItems = $db->prepare("DELETE FROM stripePaymentItems WHERE `Payment` = ?");
+			$deletePaymentItems->execute([
+				$databaseId
+			]);
+
 			// $setPaymentToNull = $db->prepare("UPDATE galaEntries SET StripePayment = ? WHERE StripePayment = ?");
 			// $setPaymentToNull->execute([
 			// 	null,
@@ -361,6 +367,22 @@ try {
 					$entry
 				]);
 			}
+		}
+
+		$addPaymentItem = $db->prepare("INSERT INTO stripePaymentItems (`Payment`, `Name`, `Description`, `Amount`, `Currency`, `AmountRefunded`, `Category`) VALUES (?, ?, ?, ?, ?, ?, ?)");
+		foreach ($paymentItems as $item) {
+			$amount = (int) $item['amount'];
+			if ($item['type'] == 'credit') $amount = 0 - (int) $item['amount'];
+
+			$addPaymentItem->execute([
+				$databaseId,
+				'RegRenewalFee',
+				$item['description'],
+				$amount,
+				$intent->currency,
+				0,
+				null
+			]);
 		}
 
 		if ($total != $intent->amount) {
