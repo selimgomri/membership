@@ -298,26 +298,36 @@ include BASE_PATH . "views/renewalTitleBar.php";
 					</p>
 
 					<div class="mb-3" id="payment-method-select">
+						<?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CARD')) { ?>
 						<div class="custom-control custom-radio">
 							<input type="radio" id="payment-method-card" name="payment-method" class="custom-control-input" value="card" checked>
 							<label class="custom-control-label" for="payment-method-card">Credit/Debit Card</label>
 						</div>
+						<?php } ?>
+						<?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_DD')) { ?>
 						<div class="custom-control custom-radio">
 							<input type="radio" id="payment-method-dd" name="payment-method" class="custom-control-input" value="dd">
 							<label class="custom-control-label" for="payment-method-dd">As part of my next Direct Debit payment</label>
 						</div>
+						<?php } ?>
+						<?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_BACS')) { ?>
 						<div class="custom-control custom-radio">
 							<input type="radio" id="payment-method-bacs" name="payment-method" class="custom-control-input" value="bacs">
 							<label class="custom-control-label" for="payment-method-bacs">Bank Transfer</label>
 						</div>
+						<?php } ?>
+						<?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CASH')) { ?>
 						<div class="custom-control custom-radio">
 							<input type="radio" id="payment-method-cash" name="payment-method" class="custom-control-input" value="cash">
 							<label class="custom-control-label" for="payment-method-cash">Cash</label>
 						</div>
+						<?php } ?>
+						<?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CHEQUE')) { ?>
 						<div class="custom-control custom-radio">
 							<input type="radio" id="payment-method-cheque" name="payment-method" class="custom-control-input" value="cheque">
 							<label class="custom-control-label" for="payment-method-cheque">Cheque</label>
 						</div>
+						<?php } ?>
 					</div>
 
 					<div id="descripton-box"></div>

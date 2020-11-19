@@ -79,7 +79,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 				include 'parent/checkout/complete.php';
 			});
 
-			$this->get('/complete/new', function() {
+			$this->get('/complete-new', function() {
 				$newMethod = true;
 				include 'parent/checkout/complete.php';
 			});

@@ -39,6 +39,9 @@ include BASE_PATH . 'views/header.php';
           <a href="<?=autoUrl("settings/fees/charge-months")?>" class="list-group-item list-group-item-action">
             Months without squad fees
           </a>
+          <a href="<?=autoUrl("settings/fees/membership-fee-payment-methods")?>" class="list-group-item list-group-item-action">
+            Payment methods for club and Swim England fees
+          </a>
         </div>
       </main>
     </div>

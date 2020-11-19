@@ -3,6 +3,21 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
+if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalDDSuccess'])) {
+  $nextSubstage = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1, `Substage` = 0 WHERE `RenewalID` = ? AND `UserID` = ?");
+  $nextSubstage->execute([
+    $renewal,
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+  ]);
+
+  http_response_code(302);
+  header("Location: " . autoUrl("renewal/go"));
+
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalDDSuccess']);
+
+  return;
+}
+
 $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $partial_reg = isPartialRegistration();
 
@@ -18,6 +33,21 @@ if (stripeDirectDebit(true)) {
 } else if (app()->tenant->getGoCardlessAccessToken()) {
   $hasGCMandate = userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
 } else {
+}
+
+if ($hasStripeMandate || $hasGCMandate || isset($_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalDDSuccess'])) {
+  $nextSubstage = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1, `Substage` = 0 WHERE `RenewalID` = ? AND `UserID` = ?");
+  $nextSubstage->execute([
+    $renewal,
+    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+  ]);
+
+  http_response_code(302);
+  header("Location: " . autoUrl("renewal/go"));
+
+  unset($_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalDDSuccess']);
+
+  return;
 }
 
 $pagetitle = "Direct Debit Options";

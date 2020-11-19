@@ -157,7 +157,12 @@ try {
 	]);
 	$hasStripeMandate = $getCountNewMandates->fetchColumn() > 0;
 
-	if ($_POST['payment-method'] == 'dd' || $_POST['payment-method'] == 'bacs' || $_POST['payment-method'] == 'cash' || $_POST['payment-method'] == 'cheque') {
+	if (
+		($_POST['payment-method'] == 'dd' && $tenant->getBooleanKey('MEMBERSHIP_FEE_PM_DD')) ||
+		($_POST['payment-method'] == 'bacs' && $tenant->getBooleanKey('MEMBERSHIP_FEE_PM_BACS')) ||
+		($_POST['payment-method'] == 'cash' && $tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CASH')) ||
+		($_POST['payment-method'] == 'cheque' && $tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CHEQUE'))
+	) {
 		if ($_POST['payment-method'] == 'dd' && ($hasDD || $hasStripeMandate)) {
 			// INSERT Payment into pending
 			$date = new \DateTime('now', new DateTimeZone('Europe/London'));
@@ -265,13 +270,18 @@ try {
 		} else {
 			$location = autoUrl("renewal/go");
 		}
-	} else if ($_POST['payment-method'] == 'card') {
+	} else if ($_POST['payment-method'] == 'card' && $tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CARD')) {
 		// Setup
 		if (getenv('STRIPE_APPLE_PAY_DOMAIN')) {
 			\Stripe\ApplePayDomain::create([
 				'domain_name' => getenv('STRIPE_APPLE_PAY_DOMAIN')
 			]);
 		}
+
+		$_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalID'] = $renewal;
+
+		$intent = null;
+		$databaseId = null;
 
 		// Update record
 		$updateEntryPayment = $db->prepare("UPDATE galaEntries SET StripePayment = ? WHERE EntryID = ?");
@@ -365,6 +375,46 @@ try {
 				$updateEntryPayment->execute([
 					$databaseId,
 					$entry
+				]);
+			}
+		}
+
+		// Set
+		// Foreach check if in renewal members
+		$countInRenewalMembers = $db->prepare("SELECT COUNT(*) FROM renewalMembers WHERE MemberID = ? AND RenewalID = ?");
+		$insert = $db->prepare("INSERT INTO `renewalMembers` (`PaymentID`, `MemberID`, `RenewalID`, `Date`, `CountRenewal`, `Renewed`, `PaymentType`, `StripePayment`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+		$update = $db->prepare("UPDATE renewalMembers SET PaymentID = ?, `Date` = ?, CountRenewal = ?, Renewed = ?, PaymentType = ?, StripePayment = ? WHERE MemberID = ? AND RenewalID = ?");
+		$date = new DateTime('now', new DateTimeZone('UTC'));
+
+		for ($i = 0; $i < $count; $i++) {
+			$countInRenewalMembers->execute([
+				$member[$i]['MemberID'],
+				$renewal
+			]);
+
+			if ($countInRenewalMembers->fetchColumn() > 0) {
+				// Update them
+				$update->execute([
+					null,
+					$date->format("Y-m-d H:i:s"),
+					true,
+					true,
+					'card',
+					$databaseId,
+					$member[$i]['MemberID'],
+					$renewal
+				]);
+			} else {
+				// Add them
+				$insert->execute([
+					null,
+					$member[$i]['MemberID'],
+					$renewal,
+					$date->format("Y-m-d H:i:s"),
+					true,
+					true,
+					'card',
+					$databaseId,
 				]);
 			}
 		}

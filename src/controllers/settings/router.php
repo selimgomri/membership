@@ -73,6 +73,16 @@ $this->group('/fees', function() {
     include 'fees/home.php';
   });
 
+  $this->group('/membership-fee-payment-methods', function() {
+    $this->get('/', function() {
+      include 'fees/membership-payment-methods.php';
+    });
+
+    $this->post('/', function() {
+      include 'fees/membership-payment-methods-post.php';
+    });
+  });
+
   $this->group('/membership-fees', function() {
     $this->get('/', function() {
       include 'fees/membership-fees.php';

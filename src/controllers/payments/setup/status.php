@@ -7,6 +7,8 @@ if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['GC-Setup-Status']) || 
 $pagetitle = "You've setup a Direct Debit";
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['GC-Setup-Status'] != 'success') {
   $pagetitle = 'An error has occurred';
+} else {
+  $_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalDDSuccess'] = true;
 }
 
 include BASE_PATH . "views/header.php";

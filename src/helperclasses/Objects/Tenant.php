@@ -104,6 +104,9 @@ class Tenant
       'EMERGENCY_MESSAGE_TYPE' => 'NONE',
       'GALA_CARD_PAYMENTS_ALLOWED' => true,
       'REQUIRE_FULL_REGISTRATION' => true,
+      'USE_DIRECT_DEBIT' => true,
+      'MEMBERSHIP_FEE_PM_CARD' => true,
+      'MEMBERSHIP_FEE_PM_DD' => true,
     ];
 
     foreach ($keys as $key => $value) {

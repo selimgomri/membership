@@ -18,6 +18,7 @@ try {
 
   $_SESSION['TENANT-' . app()->tenant->getId()]['StripeDDSuccess'] = true;
   if (isset($renewal_trap) && $renewal_trap) {
+    $_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalDDSuccess'] = true;
     header("location: " . autoUrl("renewal/go"));
   } else {
     header("location: " . autoUrl("payments/direct-debit"));

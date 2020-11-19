@@ -46,31 +46,6 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalPaymentMethod
   }
 }
 
-$swimsArray = [
-  '50Free' => '50&nbsp;Free',
-  '100Free' => '100&nbsp;Free',
-  '200Free' => '200&nbsp;Free',
-  '400Free' => '400&nbsp;Free',
-  '800Free' => '800&nbsp;Free',
-  '1500Free' => '1500&nbsp;Free',
-  '50Back' => '50&nbsp;Back',
-  '100Back' => '100&nbsp;Back',
-  '200Back' => '200&nbsp;Back',
-  '50Breast' => '50&nbsp;Breast',
-  '100Breast' => '100&nbsp;Breast',
-  '200Breast' => '200&nbsp;Breast',
-  '50Fly' => '50&nbsp;Fly',
-  '100Fly' => '100&nbsp;Fly',
-  '200Fly' => '200&nbsp;Fly',
-  '100IM' => '100&nbsp;IM',
-  '150IM' => '150&nbsp;IM',
-  '200IM' => '200&nbsp;IM',
-  '400IM' => '400&nbsp;IM'
-];
-
-$rowArray = [1, null, null, null, null, 2, 1,  null, 2, 1, null, 2, 1, null, 2, 1, null, null, 2];
-$rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 2, "Butterfly", null, 2, "Freestyle", null, 2, "Individual Medley", null, null, 2];
-
 if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalPaymentIntent'])) {
   halt(404);
 }
@@ -146,6 +121,8 @@ $entryRequestDetails[] = [
   'amount' => $intent->amount
 ];
 
+$renewal = $_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalID'];
+
 $numFormatter = new NumberFormatter("en", NumberFormatter::SPELLOUT);
 
 $pagetitle = "Checkout";
@@ -175,7 +152,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
   <div class="row justify-content-between">
     <div class="col-lg-4 order-lg-2">
 
-      <div class="position-sticky top-3">
+      <div class="position-sticky top-3" style="top: 3.5rem;">
 
         <h2>Summary</h2>
         <p>You're paying for;</p>

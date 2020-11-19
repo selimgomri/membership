@@ -33,8 +33,10 @@ $row = $getInfo->fetch(PDO::FETCH_ASSOC);
 for ($i = 0; $i < sizeof($row); $i++) {
 	$id[$i] = $row['MemberID'];
 	$name[$i] = $row['MForename'] . " " . $row['MSurname'];
-	$age[$i] = date_diff(date_create($row['DateOfBirth']),
-	date_create('today'))->y;
+	$age[$i] = date_diff(
+		date_create($row['DateOfBirth']),
+		date_create('today')
+	)->y;
 }
 
 // Verify that all swimmers have agreed to Ts and Cs of Membership
@@ -57,55 +59,63 @@ for ($i = 0; $i < sizeof($row); $i++) {
 // Add or Update Photography Permissions
 for ($i = 0; $i < sizeof($row); $i++) {
 	if ($age[$i] < 18) {
-		if (isset($_POST[htmlspecialchars($id[$i]) . '-photo-web']) ||
-		isset($_POST[htmlspecialchars($id[$i]) . '-photo-soc']) ||
-		isset($_POST[htmlspecialchars($id[$i]) . '-photo-nb']) ||
-		isset($_POST[htmlspecialchars($id[$i]) . '-photo-film']) ||
-		isset($_POST[htmlspecialchars($id[$i]) . '-photo-pro'])) {
-	    setupPhotoPermissions($id[$i]);
-	  }
-	  // Web Photo Permissions
-	  $photo[0] = 1;
-	  if (!isset($_POST[htmlspecialchars($id[$i]) . '-photo-web']) ||
-	  $_POST[htmlspecialchars($id[$i]) . '-photo-web'] != 1) {
-	    $photo[0] = 0;
-	  }
-	  $update = $db->prepare("UPDATE `memberPhotography` SET `Website` = ? WHERE `MemberID` = ?");
-    $update->execute([$photo[0], $id[$i]]);
+		if (
+			isset($_POST[htmlspecialchars($id[$i]) . '-photo-web']) ||
+			isset($_POST[htmlspecialchars($id[$i]) . '-photo-soc']) ||
+			isset($_POST[htmlspecialchars($id[$i]) . '-photo-nb']) ||
+			isset($_POST[htmlspecialchars($id[$i]) . '-photo-film']) ||
+			isset($_POST[htmlspecialchars($id[$i]) . '-photo-pro'])
+		) {
+			setupPhotoPermissions($id[$i]);
+		}
+		// Web Photo Permissions
+		$photo[0] = 1;
+		if (
+			!isset($_POST[htmlspecialchars($id[$i]) . '-photo-web']) ||
+			$_POST[htmlspecialchars($id[$i]) . '-photo-web'] != 1
+		) {
+			$photo[0] = 0;
+		}
+		$update = $db->prepare("UPDATE `memberPhotography` SET `Website` = ? WHERE `MemberID` = ?");
+		$update->execute([$photo[0], $id[$i]]);
 
-	  // Social Media Photo Permissions
-	  $photo[1] = 1;
-	  if (!isset($_POST[$id[$i] . '-photo-soc']) || $_POST[$id[$i] . '-photo-soc'] !=
-	  1) {
-	    $photo[1] = 0;
-	  }
-    $update = $db->prepare("UPDATE `memberPhotography` SET `Social` = ? WHERE `MemberID` = ?");
-    $update->execute([$photo[1], $id[$i]]);
+		// Social Media Photo Permissions
+		$photo[1] = 1;
+		if (
+			!isset($_POST[$id[$i] . '-photo-soc']) || $_POST[$id[$i] . '-photo-soc'] !=
+			1
+		) {
+			$photo[1] = 0;
+		}
+		$update = $db->prepare("UPDATE `memberPhotography` SET `Social` = ? WHERE `MemberID` = ?");
+		$update->execute([$photo[1], $id[$i]]);
 
-	  // Notice Board Photo Permissions
-	  $photo[2] = 1;
-	  if (!isset($_POST[$id[$i] . '-photo-nb']) || $_POST[$id[$i] . '-photo-nb'] != 1) {
-	    $photo[2] = 0;
-	  }
-    $update = $db->prepare("UPDATE `memberPhotography` SET `Noticeboard` = ? WHERE `MemberID` = ?");
-    $update->execute([$photo[2], $id[$i]]);
+		// Notice Board Photo Permissions
+		$photo[2] = 1;
+		if (!isset($_POST[$id[$i] . '-photo-nb']) || $_POST[$id[$i] . '-photo-nb'] != 1) {
+			$photo[2] = 0;
+		}
+		$update = $db->prepare("UPDATE `memberPhotography` SET `Noticeboard` = ? WHERE `MemberID` = ?");
+		$update->execute([$photo[2], $id[$i]]);
 
-	  // Filming in Training Permissions
-	  $photo[3] = 1;
-	  if (!isset($_POST[$id[$i] . '-photo-film']) || $_POST[$id[$i] . '-photo-film'] != 1) {
-	    $photo[3] = 0;
-	  }
-    $update = $db->prepare("UPDATE `memberPhotography` SET `FilmTraining` = ? WHERE `MemberID` = ?");
-    $update->execute([$photo[3], $id[$i]]);
+		// Filming in Training Permissions
+		$photo[3] = 1;
+		if (!isset($_POST[$id[$i] . '-photo-film']) || $_POST[$id[$i] . '-photo-film'] != 1) {
+			$photo[3] = 0;
+		}
+		$update = $db->prepare("UPDATE `memberPhotography` SET `FilmTraining` = ? WHERE `MemberID` = ?");
+		$update->execute([$photo[3], $id[$i]]);
 
-	  // Pro Photographer Photo Permissions
-	  $photo[4] = 1;
-	  if (!isset($_POST[$id[$i] . '-photo-pro']) || $_POST[$id[$i] . '-photo-pro'] !=
-	  1) {
-	    $photo[4] = 0;
-	  }
-    $update = $db->prepare("UPDATE `memberPhotography` SET `ProPhoto` = ? WHERE `MemberID` = ?");
-    $update->execute([$photo[4], $id[$i]]);
+		// Pro Photographer Photo Permissions
+		$photo[4] = 1;
+		if (
+			!isset($_POST[$id[$i] . '-photo-pro']) || $_POST[$id[$i] . '-photo-pro'] !=
+			1
+		) {
+			$photo[4] = 0;
+		}
+		$update = $db->prepare("UPDATE `memberPhotography` SET `ProPhoto` = ? WHERE `MemberID` = ?");
+		$update->execute([$photo[4], $id[$i]]);
 	}
 }
 
@@ -115,24 +125,40 @@ for ($i = 0; $i < sizeof($row); $i++) {
 		if ($_POST[htmlspecialchars($id[$i]) . '-med'] != 1) {
 			$status = false;
 			$statusMessage .= "<li>You did not complete the medical declaration for " .
-			$name[$i] . ". You cannot continue without doing this</li>";
+				$name[$i] . ". You cannot continue without doing this</li>";
 		}
 	}
 }
 
 if ($status) {
-	// Update the database with current renewal state
-  // $nextStage = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
-  // $nextStage->execute([
-  //   $renewal,
-	// 	$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
-	// ]);
 
-	$nextSubstage = $db->prepare("UPDATE `renewalProgress` SET `Substage` = `Substage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
-  $nextSubstage->execute([
-    $renewal,
-		$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
-	]);
+	$hasStripeMandate = false;
+	$hasGCMandate = false;
+	if (stripeDirectDebit(true)) {
+		// Work out if has mandates
+		$getCountNewMandates = $db->prepare("SELECT COUNT(*) FROM stripeMandates INNER JOIN stripeCustomers ON stripeMandates.Customer = stripeCustomers.CustomerID WHERE stripeCustomers.User = ? AND stripeMandates.MandateStatus != 'inactive';");
+		$getCountNewMandates->execute([
+			$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+		]);
+		$hasStripeMandate = $getCountNewMandates->fetchColumn() > 0;
+	} else if (app()->tenant->getGoCardlessAccessToken()) {
+		$hasGCMandate = userHasMandates($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
+	}
+
+	if (!$hasStripeMandate && !$hasGCMandate && app()->tenant->getKey('USE_DIRECT_DEBIT')) {
+		$nextSubstage = $db->prepare("UPDATE `renewalProgress` SET `Substage` = `Substage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
+		$nextSubstage->execute([
+			$renewal,
+			$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+		]);
+	} else {
+		// Update the database with current renewal state
+		$nextStage = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
+		$nextStage->execute([
+			$renewal,
+			$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+		]);
+	}
 	header("Location: " . autoUrl("renewal/go"));
 } else {
 	$_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = "
