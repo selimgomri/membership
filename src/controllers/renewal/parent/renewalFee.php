@@ -298,13 +298,13 @@ include BASE_PATH . "views/renewalTitleBar.php";
 					</p>
 
 					<div class="mb-3" id="payment-method-select">
-						<?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CARD')) { ?>
+						<?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CARD') && $tenant->getStripeAccount()) { ?>
 						<div class="custom-control custom-radio">
 							<input type="radio" id="payment-method-card" name="payment-method" class="custom-control-input" value="card" checked>
 							<label class="custom-control-label" for="payment-method-card">Credit/Debit Card</label>
 						</div>
 						<?php } ?>
-						<?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_DD')) { ?>
+						<?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_DD') && ($tenant->getStripeAccount() || $tenant->getGoCardlessAccessToken()) && $tenant->getKey('USE_DIRECT_DEBIT')) { ?>
 						<div class="custom-control custom-radio">
 							<input type="radio" id="payment-method-dd" name="payment-method" class="custom-control-input" value="dd">
 							<label class="custom-control-label" for="payment-method-dd">As part of my next Direct Debit payment</label>
