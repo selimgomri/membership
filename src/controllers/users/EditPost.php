@@ -88,7 +88,6 @@ try {
       $asaPaid,
       $asa
     ]);
-
   } else {
     // Make sure ASA things are unset
     $updateASA->execute([
@@ -151,6 +150,15 @@ try {
     $baseRequired = false;
   } else {
     $userObject->revokePermission('Admin');
+  }
+
+  // SCDS Payments Access
+  if (bool($_POST['permissions-scds-payments-manager'])) {
+    $userObject->grantPermission('SCDSPaymentsManager');
+    $userObject->grantPermission('Admin');
+    $baseRequired = false;
+  } else {
+    $userObject->revokePermission('SCDSPaymentsManager');
   }
 
   // Parent

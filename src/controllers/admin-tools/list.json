@@ -65,6 +65,14 @@
       "link": "contact-tracing",
       "target": "_self",
       "external": false
+    },
+    {
+      "id": "scds-payments",
+      "name": "SCDS Payments",
+      "title": "Manage payments to Swimming Club Data Systems",
+      "link": "admin/scds-payments",
+      "target": "_self",
+      "external": false
     }
   ]
 }
