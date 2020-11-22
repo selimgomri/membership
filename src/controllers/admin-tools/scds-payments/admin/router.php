@@ -17,4 +17,8 @@ if (!isset($_SESSION['SCDS-Payments-Admin'])) {
     include 'exit.php';
   });
 
+  $this->group('/direct-debit-instruction', function () {
+    include 'mandates/router.php';
+  });
+
 }

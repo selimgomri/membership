@@ -404,4 +404,55 @@ class Tenant
 
     return getenv('FILE_STORE_PATH') . $this->getId() . '/';
   }
+
+  public function getStripeCustomer()
+  {
+    if (!getenv('STRIPE')) {
+      return null;
+    }
+
+    \Stripe\Stripe::setApiKey(getenv('STRIPE'));
+
+    $db = app()->db;
+    $checkIfCustomer = $db->prepare("SELECT COUNT(*) FROM tenantStripeCustomers WHERE Tenant = ?");
+    $checkIfCustomer->execute([$this->id]);
+
+    $customer = null;
+    if ($checkIfCustomer->fetchColumn() == 0) {
+      // Create a Customer:
+      $customer = \Stripe\Customer::create([
+        "name" => $this->getName(),
+        "description" => "Customer for Tenant " . $this->getCodeId(),
+        'email' => $this->getEmail(),
+      ]);
+
+      // YOUR CODE: Save the customer ID and other info in a database for later.
+      $id = $customer->id;
+      $addCustomer = $db->prepare("INSERT INTO tenantStripeCustomers (Tenant, CustomerID) VALUES (?, ?)");
+      $addCustomer->execute([
+        $this->id,
+        $id
+      ]);
+    } else {
+      $getCustID = $db->prepare("SELECT CustomerID FROM tenantStripeCustomers WHERE Tenant = ?");
+      $getCustID->execute([$this->id]);
+      $customer = \Stripe\Customer::retrieve(
+        $getCustID->fetchColumn(),
+      );
+
+      // Check whether we should update user details
+      if ($customer->name != $this->getName() || $customer->email != $this->getEmail()) {
+        // Some details are not the same so let's update the stripe customer
+        $customer = \Stripe\Customer::update(
+          $customer->id,
+          [
+            "name" => $this->getName(),
+            'email' => $this->getEmail()
+          ]
+        );
+      }
+    }
+
+    return $customer;
+  }
 }
