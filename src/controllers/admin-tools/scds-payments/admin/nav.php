@@ -12,7 +12,7 @@
         <a class="nav-link" href="<?= htmlspecialchars(autoUrl('payments-admin/exit')) ?>" title="Return to the <?= htmlspecialchars(app()->adminCurrentTenant->getName()) ?> Membership System">Exit</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link disabled" href="<?= htmlspecialchars(autoUrl('payments-admin/direct-debit-instruction')) ?>">Mandate</a>
+        <a class="nav-link" href="<?= htmlspecialchars(autoUrl('payments-admin/direct-debit-instruction')) ?>">Mandate</a>
       </li>
       <li class="nav-item">
         <a class="nav-link disabled" href="<?= htmlspecialchars(autoUrl('payments-admin/invoices')) ?>">Bills</a>
