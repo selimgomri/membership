@@ -332,6 +332,11 @@ try {
 				'payment_method_types' => ['card'],
 				'confirm' => false,
 				'setup_future_usage' => 'off_session',
+				'metadata' => [
+					'payment_category' => 'renewal',
+					'renewal_id' => $renewal,
+					'user_id' => $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+				]
 			], [
 				'stripe_account' => $tenant->getStripeAccount()
 			]);

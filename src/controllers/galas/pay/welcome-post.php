@@ -141,6 +141,10 @@ if (sizeof($payingEntries) > 0) {
       'payment_method_types' => ['card'],
       'confirm' => false,
       'setup_future_usage' => 'off_session',
+      'metadata' => [
+        'payment_category' => 'gala_entry',
+        'user_id' => $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+      ]
     ], [
       'stripe_account' => $tenant->getStripeAccount()
     ]);

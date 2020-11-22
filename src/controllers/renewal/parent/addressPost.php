@@ -45,6 +45,8 @@ try {
       ]);
     }
     header("Location: " . autoUrl("renewal/go"));
+  } else {
+    throw new Exception();
   }
 } catch (Exception $e) {
   $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = "

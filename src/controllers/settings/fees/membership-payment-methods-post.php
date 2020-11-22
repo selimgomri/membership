@@ -5,9 +5,9 @@ try {
   $names = [
     'MEMBERSHIP_FEE_PM_CARD',
     'MEMBERSHIP_FEE_PM_DD',
-    'MEMBERSHIP_FEE_PM_CASH',
-    'MEMBERSHIP_FEE_PM_CHEQUE',
-    'MEMBERSHIP_FEE_PM_BACS',
+    // 'MEMBERSHIP_FEE_PM_CASH',
+    // 'MEMBERSHIP_FEE_PM_CHEQUE',
+    // 'MEMBERSHIP_FEE_PM_BACS',
   ];
 
   foreach ($names as $key => $value) {

@@ -58,23 +58,27 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
 
+          <p>
+            Support for the following payment methods is coming soon;
+          </p>
+
           <div class="form-group">
             <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="MEMBERSHIP_FEE_PM_BACS" name="MEMBERSHIP_FEE_PM_BACS" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_BACS')) { ?>checked<?php } ?>>
+              <input type="checkbox" class="custom-control-input" id="MEMBERSHIP_FEE_PM_BACS" name="MEMBERSHIP_FEE_PM_BACS" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_BACS')) { ?>checked<?php } ?> disabled>
               <label class="custom-control-label" for="MEMBERSHIP_FEE_PM_BACS">Bank transfer</label>
             </div>
           </div>
 
           <div class="form-group">
             <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="MEMBERSHIP_FEE_PM_CASH" name="MEMBERSHIP_FEE_PM_CASH" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CASH')) { ?>checked<?php } ?>>
+              <input type="checkbox" class="custom-control-input" id="MEMBERSHIP_FEE_PM_CASH" name="MEMBERSHIP_FEE_PM_CASH" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CASH')) { ?>checked<?php } ?> disabled>
               <label class="custom-control-label" for="MEMBERSHIP_FEE_PM_CASH">Cash</label>
             </div>
           </div>
 
           <div class="form-group">
             <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="MEMBERSHIP_FEE_PM_CHEQUE" name="MEMBERSHIP_FEE_PM_CHEQUE" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CHEQUE')) { ?>checked<?php } ?>>
+              <input type="checkbox" class="custom-control-input" id="MEMBERSHIP_FEE_PM_CHEQUE" name="MEMBERSHIP_FEE_PM_CHEQUE" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CHEQUE')) { ?>checked<?php } ?> disabled>
               <label class="custom-control-label" for="MEMBERSHIP_FEE_PM_CHEQUE">Cheque</label>
             </div>
           </div>
