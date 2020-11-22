@@ -10,6 +10,7 @@ if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalPaymentInten
 $renewal = $_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalID'];
 $paymentIntent = $_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalPaymentIntent'];
 $reuse = 1;
+$location = autoUrl("renewal/go");
 /*
   if (isset($_POST['reuse-card']) && bool($reuse)) {
     $reuse = 1;
@@ -87,7 +88,7 @@ if ($intent->status == 'succeeded') {
     }
   }
 
-  if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
+  if ($renewal == 0 || user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
     $sql = "UPDATE `users` SET `RR` = 0 WHERE `UserID` = ?";
     $query = $db->prepare($sql);
     $query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
@@ -108,7 +109,7 @@ if ($intent->status == 'succeeded') {
 
   unset($_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalID']);
 
-  header("Location: " . autoUrl("renewal/go"));
+  header("Location: " . $location);
 } else if ($onSession && $intent->status != 'succeeded') {
   header("Location: " . autoUrl("renewal/payments/checkout"));
 }
