@@ -266,6 +266,10 @@ include BASE_PATH . 'views/header.php';
             <input type="checkbox" class="custom-control-input" id="permissions-admin" name="permissions-admin" value="1" <?=selected($userObject, 'Admin')?>>
             <label class="custom-control-label" for="permissions-admin">Admin</label>
           </div>
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="permissions-scds-payments-manager" name="permissions-scds-payments-manager" value="1" <?=selected($userObject, 'SCDSPaymentsManager')?>>
+            <label class="custom-control-label" for="permissions-scds-payments-manager">SCDS Payments Access (Enabling this will also make the user an admin)</label>
+          </div>
         </div>
 
         <p>Users can switch access level by selecting their name in the main menu.</p>

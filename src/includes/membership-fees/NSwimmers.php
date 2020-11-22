@@ -32,6 +32,12 @@ class NSwimmers extends ClubMembership
     try {
       $this->fees = json_decode(app()->tenant->getKey('ClubFeeNSwimmers'));
 
+      if ($this->fees == null) {
+        $this->fees = [0];
+      }
+
+      $this->items = [];
+
       $this->fetchUpgradeType($db);
       $this->upgrade = $upgrade;
 
@@ -41,7 +47,7 @@ class NSwimmers extends ClubMembership
       $totalMembers = $counts['Total'];
 
       $numMemStr = null;
-      if ($totalMembers >= sizeof($this->fees)) {
+      if ($this->fees != null && $totalMembers >= sizeof($this->fees)) {
         $numMemStr = sizeof($this->fees) . ' or more members';
       } else if ($totalMembers > 1) {
         $numMemStr = $totalMembers . ' members';
@@ -51,17 +57,17 @@ class NSwimmers extends ClubMembership
 
       // Work out full membership fee
       $fullAmount = 0;
-      if ($totalMembers > 0 && $totalMembers > sizeof($this->fees)) {
+      if ($totalMembers > 0 && $this->fees != null && $totalMembers > sizeof($this->fees)) {
         $fullAmount = $this->fees[sizeof($this->fees) - 1];
-      } else if ($totalMembers > 0) {
+      } else if ($totalMembers > 0 && $this->fees != null) {
         $fullAmount = $this->fees[$totalMembers - 1];
       }
 
       // Work out previously paid membership fee
       $paidAmount = 0;
-      if ($count > 0 && $count > sizeof($this->fees) && isset($this->fees[sizeof($this->fees) - 1])) {
+      if ($this->fees != null && $count > 0 && $count > sizeof($this->fees) && isset($this->fees[sizeof($this->fees) - 1])) {
         $paidAmount = $this->fees[sizeof($this->fees) - 1];
-      } else if ($count > 0) {
+      } else if ($this->fees != null && $count > 0) {
         $paidAmount = $this->fees[$count - 1];
       }
 

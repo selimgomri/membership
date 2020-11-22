@@ -16,6 +16,10 @@ $this->group('/admin', function() {
   include BASE_PATH . 'routes/admin/routes.php';
 });
 
+$this->group('/payments-admin', function() {
+  include BASE_PATH . 'controllers/admin-tools/scds-payments/admin/router.php';
+});
+
 $this->group('/account', function() {
   include BASE_PATH . 'routes/login/routes.php';
 });

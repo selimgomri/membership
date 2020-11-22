@@ -67,6 +67,12 @@ try {
             'confirm' => true,
             'amount' => $row['Amount'],
             'currency' => $currency,
+            'description' => $description,
+            'metadata' => [
+              'payment_category' => 'monthly_fee',
+              'user_id' => $userid,
+              'payment_id' => $row['PaymentID'],
+            ]
           ], [
             'stripe_account' => $tenant->getStripeAccount(),
             'idempotency_key' => $idemKey,

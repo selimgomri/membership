@@ -94,6 +94,12 @@ if ($stage == 0) {
 		} else {
 			include 'adminForm.php';
 		}
+	} else if ($substage == 1) {
+		if (isset($redirect) && $redirect) {
+			header("Location: " . autoUrl("renewal/go/direct-debit-instruction"));
+		} else {
+			include 'directDebitOptions.php';
+		}
 	} else {
 		halt(404);
 	}

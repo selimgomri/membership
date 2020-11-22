@@ -70,4 +70,8 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
   $this->group('/member-upload', function () {
     include 'swimmer-upload/router.php';
   });
+
+  $this->group('/scds-payments', function () {
+    include 'scds-payments/router.php';
+  });
 }
