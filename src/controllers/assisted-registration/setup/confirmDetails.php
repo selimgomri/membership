@@ -5,6 +5,7 @@ use Brick\PhoneNumber\PhoneNumberParseException;
 use Brick\PhoneNumber\PhoneNumberType;
 use Brick\PhoneNumber\PhoneNumberFormat;
 
+$tenant = app()->tenant;
 
 $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegStage'] = 2;
 
