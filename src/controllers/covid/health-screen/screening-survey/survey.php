@@ -112,11 +112,11 @@ include BASE_PATH . 'views/header.php';
             <div class="row">
               <div class="col-lg-8">
                 <p>
-                  Have you had confirmed Covid-19 infection or any symptoms (listed below) in keeping with Covid-19 in the last five months?
+                  Have you had confirmed Covid-19 infection or any symptoms (listed below) in keeping with Covid-19 in the last three months?
                 </p>
                 <ul class="mb-3">
                   <li>Fever</li>
-                  <li>New, persistent dry cough</li>
+                  <li>New, persistent, dry cough</li>
                   <li>Shortness of breath</li>
                   <li>Loss of taste or smell</li>
                   <li>Diarrhoea or vomiting</li>
@@ -252,7 +252,7 @@ include BASE_PATH . 'views/header.php';
             <div class="row">
               <div class="col-lg-8">
                 <p>
-                  Do you live with or will you knowingly come in to close contact with someone who is currently ‘shielding’ or otherwise medically vulnerable if you return to the training environment?
+                  Do you or your child (if they are returning) live with or will you knowingly come into close contact with someone who is currently medically vulnerable if you return to the training environment?
                 </p>
 
                 <div class="controls" data-group-name="live-with-shielder">
