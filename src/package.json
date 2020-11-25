@@ -7,7 +7,7 @@
     "bootstrap": "^4.5.3",
     "chart.js": "^2.9.4",
     "file-loader": "^6.2.0",
-    "highlight.js": "^10.3.2",
+    "highlight.js": "^10.4.0",
     "jquery": "^3.5.1",
     "markdown-it": "^11.0.1",
     "markdown-it-loader": "^0.7.0",
