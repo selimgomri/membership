@@ -231,4 +231,4 @@ dist
 .yarn/build-state.yml
 .pnp.*
 
-# vendor/
+vendor/
