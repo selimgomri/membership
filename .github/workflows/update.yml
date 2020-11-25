@@ -17,6 +17,7 @@ jobs:
           command: |
             cd /var/www/membership-mt/php/production/
             git pull
+            cd src
             composer install
             curl "https://membership.myswimmingclub.uk/db/run"
             npm install
