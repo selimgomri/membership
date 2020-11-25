@@ -17,7 +17,11 @@ jobs:
           command: |
             cd /var/www/membership-mt/php/production/
             git pull
+            cd src
+            composer install
             curl "https://membership.myswimmingclub.uk/db/run"
+            npm install
+            npm run build-production
           host: ${{ secrets.HOST_SCDS }}
           user: ${{ secrets.USER_SCDS }}
           key: ${{ secrets.USER_PRIVATE_KEY_SCDS}}
