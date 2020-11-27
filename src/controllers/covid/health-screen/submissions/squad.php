@@ -105,6 +105,7 @@ include BASE_PATH . 'views/header.php';
                           Review<?php if ($latest['ApprovedBy']) { ?> again<?php } ?>
                         </button>
                       </p>
+                      <div class="mb-3 d-sm-none"></div>
                     <?php } ?>
                   <?php } else if ($latest && !bool($latest['OfficerApproval'])) {
                     $time = new DateTime($latest['DateTime'], new DateTimeZone('UTC'));
