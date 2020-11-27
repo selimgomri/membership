@@ -100,7 +100,7 @@ include BASE_PATH . 'views/header.php';
                       <span class="text-danger"><i class="fa fa-times-circle" aria-hidden="true"></i> No risk awareness declaration submitted</span>
                     <?php } ?>
                   </p>
-                  <?php if (!$latest) { ?>
+                  <?php if (false && !$latest) { ?>
                     <div class="mb-3 d-sm-none"></div>
                   <?php } ?>
                 </div>
