@@ -106,6 +106,7 @@ include BASE_PATH . 'views/header.php';
                 </div>
                 <?php if ($latest && bool($latest['MemberAgreement'])) { ?>
                   <div class="col-auto">
+                    <div class="mt-3 d-sm-none"></div>
                     <button class="btn btn-warning" data-member-name="<?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?>" data-form-submission-id="<?= htmlspecialchars($latest['ID']) ?>" data-action="void" title="Require that <?= htmlspecialchars($member['MForename']) ?> submits a new declaration form">
                       Void form
                     </button>
