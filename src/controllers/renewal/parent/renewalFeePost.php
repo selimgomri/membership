@@ -158,10 +158,11 @@ try {
 	$hasStripeMandate = $getCountNewMandates->fetchColumn() > 0;
 
 	if (
-		($_POST['payment-method'] == 'dd' && $tenant->getBooleanKey('MEMBERSHIP_FEE_PM_DD')) ||
-		($_POST['payment-method'] == 'bacs' && $tenant->getBooleanKey('MEMBERSHIP_FEE_PM_BACS')) ||
-		($_POST['payment-method'] == 'cash' && $tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CASH')) ||
-		($_POST['payment-method'] == 'cheque' && $tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CHEQUE'))
+		(isset($_POST['payment-method']) && $total > 0) && (
+			($_POST['payment-method'] == 'dd' && $tenant->getBooleanKey('MEMBERSHIP_FEE_PM_DD')) ||
+			($_POST['payment-method'] == 'bacs' && $tenant->getBooleanKey('MEMBERSHIP_FEE_PM_BACS')) ||
+			($_POST['payment-method'] == 'cash' && $tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CASH')) ||
+			($_POST['payment-method'] == 'cheque' && $tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CHEQUE')))
 	) {
 		if ($_POST['payment-method'] == 'dd' && ($hasDD || $hasStripeMandate)) {
 			// INSERT Payment into pending
@@ -270,7 +271,7 @@ try {
 		} else {
 			$location = autoUrl("renewal/go");
 		}
-	} else if ($_POST['payment-method'] == 'card' && $tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CARD')) {
+	} else if ($_POST['payment-method'] == 'card' && $tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CARD') && $total > 0) {
 		// Setup
 		if (getenv('STRIPE_APPLE_PAY_DOMAIN')) {
 			\Stripe\ApplePayDomain::create([
@@ -453,6 +454,30 @@ try {
 		}
 
 		$location = autoUrl("renewal/payments/checkout");
+	} else if ($total == 0) {
+		$progress = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
+		$progress->execute([
+			$renewal,
+			$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+		]);
+
+		if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
+			$query = $db->prepare("UPDATE `users` SET `RR` = 0 WHERE `UserID` = ?");
+			$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
+
+			$query = $db->prepare("UPDATE `members` SET `RR` = 0, `RRTransfer` = 0 WHERE `UserID` = ?");
+			$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
+
+			// Remove from status tracker
+			$delete = $db->prepare("DELETE FROM renewalProgress WHERE UserID = ? AND RenewalID = ?");
+			$delete->execute([
+				$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+				$renewal
+			]);
+			$location = autoUrl("");
+		} else {
+			$location = autoUrl("renewal/go");
+		}
 	} else {
 		$location = autoUrl("renewal/go");
 	}
