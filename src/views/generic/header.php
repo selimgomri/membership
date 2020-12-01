@@ -196,7 +196,7 @@ if (isset($customBackground) && $customBackground) {
     <?php } ?>
 
     <div class="membership-header">
-      <div class="club-name-header <?php if (date("m") == "12") { ?>festive<?php } ?>" style="background: rgba(0, 0, 0, .075)">
+      <div class="club-name-header <?php if (date("m") == "12") { ?>festive<?php } ?>" style="background-color: rgba(0, 0, 0, .075)">
         <div class="<?= $container_class ?>">
           <div class="row justify-content-between align-items-center py-3 mb-0 d-none d-md-flex">
             <div class="col-auto">
@@ -212,7 +212,7 @@ if (isset($customBackground) && $customBackground) {
             </div>
             <?php if (app()->tenant->getKey('CLUB_WEBSITE')) { ?>
               <div class="col-auto">
-                <a href="<?= htmlspecialchars(app()->tenant->getKey('CLUB_WEBSITE')) ?>" class="btn <?= $clubLinkColour ?>">Club website</a>
+                <a href="<?= htmlspecialchars(app()->tenant->getKey('CLUB_WEBSITE')) ?>" class="btn <?= $clubLinkColour ?> text-decoration-none">Club website</a>
               </div>
             <?php } ?>
           </div>
