@@ -62,11 +62,11 @@
 }
 
 .bg-primary-darker {
-  background: darken($primary, 5%);
+  background-color: darken($primary, 5%);
 }
 
 .bg-primary-dark {
-  background: darken(darken($primary, 5%), 5%);
+  background-color: darken(darken($primary, 5%), 5%);
 }
 
 /*
