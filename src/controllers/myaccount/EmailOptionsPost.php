@@ -39,14 +39,14 @@ if ($currentUser->hasPermission('Admin')) {
 	updateSubscription($_POST['NewMemberComms'], 'NewMember');
 }
 
-if ($_POST['EmailAddress'] != $row['EmailAddress']) {
-	if (v::email()->validate($_POST['EmailAddress'])) {
+if (mb_strtolower($_POST['EmailAddress']) != mb_strtolower($row['EmailAddress'])) {
+	if (v::email()->validate(mb_strtolower($_POST['EmailAddress']))) {
 		$authCode = hash('sha256', random_bytes(64) . time());
 
 		$user_details = [
 			'User'		   => $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
 			'OldEmail'   => $row['EmailAddress'],
-			'NewEmail'	 => $_POST['EmailAddress']
+			'NewEmail'	 => mb_strtolower($_POST['EmailAddress'])
 		];
 		$user_details = json_encode($user_details);
 
@@ -76,9 +76,9 @@ if ($_POST['EmailAddress'] != $row['EmailAddress']) {
 	  <p>For help, send an email to <a
 	  href="mailto:' . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . '">' . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . '</a>/</p>
 	  ';
-	  notifySend($to, $subject, $sContent, $name, $_POST['EmailAddress'], ["Email" => "support@" . getenv('EMAIL_DOMAIN'), "Name" => app()->tenant->getKey('CLUB_NAME') . " Security"]);
+	  notifySend($to, $subject, $sContent, $name, mb_strtolower($_POST['EmailAddress']), ["Email" => "support@" . getenv('EMAIL_DOMAIN'), "Name" => app()->tenant->getKey('CLUB_NAME') . " Security"]);
 		$_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdate'] = true;
-		$_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateNew'] = $_POST['EmailAddress'];
+		$_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateNew'] = mb_strtolower($_POST['EmailAddress']);
 	} else {
 		$_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdate'] = false;
 	}
