@@ -10,7 +10,7 @@ include BASE_PATH . "views/header.php";
 $db = app()->db;
 $tenant = app()->tenant;
 
-$userDetails = trim($_POST['email-address']);
+$userDetails = mb_strtolower(trim($_POST['email-address']));
 $captcha = trim($_POST['g-recaptcha-response']);
 $captchaStatus = null;
 
