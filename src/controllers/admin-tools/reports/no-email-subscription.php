@@ -5,7 +5,7 @@ $tenant = app()->tenant;
 
 $pagetitle = "Users without a Notify email subscription";
 
-$getUsers = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress FROM users WHERE NOT EmailComms AND Tenant = ? ORDER BY Forename ASC, Surname ASC");
+$getUsers = $db->prepare("SELECT UserID, Forename, Surname, EmailAddress FROM users WHERE Active AND NOT EmailComms AND Tenant = ? ORDER BY Forename ASC, Surname ASC");
 $getUsers->execute([
   $tenant->getId(),
 ]);
