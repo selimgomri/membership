@@ -107,6 +107,7 @@ class Tenant
       'USE_DIRECT_DEBIT' => true,
       'MEMBERSHIP_FEE_PM_CARD' => true,
       'MEMBERSHIP_FEE_PM_DD' => true,
+      'ENABLE_BILLING_SYSTEM' => true,
     ];
 
     foreach ($keys as $key => $value) {

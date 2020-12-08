@@ -18,11 +18,11 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
     <div class="col-lg-8">
       <h1>Member upload</h1>
-      <p class="lead">Batch upload swimmers from a <span class="mono">CSV</span> file.</p>
+      <p class="lead">Batch upload members from a <span class="mono">CSV</span> file.</p>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) { ?>
         <div class="alert alert-success">
-          <p class="mb-0"><strong>Swimmers have been uploaded</strong>. Check below for any errors.</p>
+          <p class="mb-0"><strong>Members have been uploaded</strong>. Check below for any errors.</p>
         </div>
       <?php
         unset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']);
@@ -30,7 +30,7 @@ include BASE_PATH . 'views/header.php';
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['FailedSwimmers'])) { ?>
         <div class="alert alert-warning">
-          <p>We've uploaded most of your swimmers but the following could not be uploaded as their squad could not be found;</p>
+          <p>We've uploaded most of your members but the following could not be uploaded as their squad could not be found;</p>
           <ul class="mb-0">
             <?php foreach ($_SESSION['TENANT-' . app()->tenant->getId()]['FailedSwimmers'] as $s) { ?>
               <li><?= htmlspecialchars($s) ?></li>
@@ -69,7 +69,7 @@ include BASE_PATH . 'views/header.php';
         <li>Swim England Membership Number, null if not a member or no number available</li>
       </ul>
 
-      <p>Note that the system will attempt to find a squad with the name given. If it cannot find one, it will not add the swimmer.</p>
+      <p>Note that the system will attempt to find a squad with the name given. If it cannot find one, it will still add the member, but not assign them to any squads. If members are in multiple squads, you must add them to additional squads later - The uploader will only put a member in a single squad.</p>
 
       <form enctype="multipart/form-data" method="post" class="needs-validation" novalidate>
 

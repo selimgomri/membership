@@ -47,7 +47,7 @@ include BASE_PATH . 'views/header.php';
               <label class="custom-control-label" for="full-fee">Charge the full fee for all squads</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" id="max-fee" value="MaxFee" name="fee-option" class="custom-control-input" <?php if ($option == 'MaxFee') { ?>checked<?php } ?>>
+              <input type="radio" id="max-fee" value="MaxFee" name="fee-option" class="custom-control-input" <?php if ($option == 'MaxFee') { ?>checked<?php } ?> disabled>
               <label class="custom-control-label" for="max-fee">Charge the maximum fee (from the member's squads)</label>
             </div>
           </div>

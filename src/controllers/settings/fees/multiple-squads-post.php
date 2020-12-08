@@ -4,7 +4,7 @@ try {
 
   if (!in_array(
     $_POST['fee-option'],
-    ['Full', 'MaxFee']
+    ['Full']
   )) {
     throw new Exception();
   }
