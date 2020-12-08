@@ -282,10 +282,10 @@ include BASE_PATH . "views/header.php";
             </div>
           <?php } ?>
 
-          <div class="col-sm-6 col-lg-4">
+          <!-- <div class="col-sm-6 col-lg-4">
             <h3 class="h6">Club Membership</h3>
             <p><?php if (bool($info['ClubMember'])) { ?><?= htmlspecialchars($info['Forename']) ?> is a club member<?php } else { ?><?= htmlspecialchars($info['Forename']) ?> is not a club member<?php } ?></p>
-          </div>
+          </div> -->
 
           <?php if (bool($info['ClubMember'])) { ?>
             <div class="col-sm-6 col-lg-4">
