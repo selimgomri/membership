@@ -126,7 +126,7 @@ include BASE_PATH . 'views/header.php';
         </div>
       <?php } ?>
 
-      <p>* Born on or after <?=htmlspecialchars($date->format("j F Y"))?></p>
+      <p>* Born on or before <?=htmlspecialchars($date->format("j F Y"))?></p>
     </div>
   </div>
 </div>
