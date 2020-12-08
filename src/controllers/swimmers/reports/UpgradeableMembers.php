@@ -6,7 +6,7 @@ $tenant = app()->tenant;
 $date = new DateTime('-9 years last day of December', new DateTimeZone('Europe/London'));
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
 
-$getMembers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, DateOfBirth dob, ASACategory cat FROM members WHERE members.Tenant = ? AND DateOfBirth <= ? AND ASACategory = ? ORDER BY MForename ASC, MSurname ASC");
+$getMembers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, DateOfBirth dob, ASACategory cat FROM members WHERE members.Active AND members.Tenant = ? AND DateOfBirth <= ? AND ASACategory = ? ORDER BY MForename ASC, MSurname ASC");
 $getMembers->execute([
   $tenant->getId(),
   $date->format("Y-m-d"),
@@ -126,7 +126,7 @@ include BASE_PATH . 'views/header.php';
         </div>
       <?php } ?>
 
-      <p>* Born on or after <?=htmlspecialchars($date->format("j F Y"))?></p>
+      <p>* Born on or before <?=htmlspecialchars($date->format("j F Y"))?></p>
     </div>
   </div>
 </div>
