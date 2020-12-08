@@ -99,6 +99,13 @@ try {
   }
   app()->tenant->setKey('REQUIRE_FULL_REGISTRATION', $hide);
 
+  // 'ENABLE_BILLING_SYSTEM' => true,
+  $hide = 1;
+  if (!isset($_POST['ENABLE_BILLING_SYSTEM']) || !bool($_POST['ENABLE_BILLING_SYSTEM'])) {
+    $hide = 0;
+  }
+  app()->tenant->setKey('ENABLE_BILLING_SYSTEM', $hide);
+
   $vars['CLUB_ADDRESS'] = null;
   $addr = $_POST['CLUB_ADDRESS'];
   $addr = str_replace("\r\n", "\n", $addr);
