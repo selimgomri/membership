@@ -19,7 +19,7 @@ try {
   $date = new DateTime('-9 years last day of December', new DateTimeZone('Europe/London'));
   $now = new DateTime('now', new DateTimeZone('Europe/London'));
 
-  $getMembers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, DateOfBirth dob, ASACategory cat FROM members WHERE members.Tenant = ? AND DateOfBirth <= ? AND ASACategory = ? ORDER BY MForename ASC, MSurname ASC");
+  $getMembers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, DateOfBirth dob, ASACategory cat FROM members WHERE members.Active AND members.Tenant = ? AND DateOfBirth <= ? AND ASACategory = ? ORDER BY MForename ASC, MSurname ASC");
   $getMembers->execute([
     $tenant->getId(),
     $date->format("Y-m-d"),

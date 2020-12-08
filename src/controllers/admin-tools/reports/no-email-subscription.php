@@ -34,7 +34,7 @@ include BASE_PATH . 'views/header.php';
       <?php if ($user = $getUsers->fetch(PDO::FETCH_ASSOC)) { ?>
         <div class="list-group">
           <?php do { ?>
-            <a class="list-group-item" href="<?= htmlspecialchars(autoUrl('users/' . $user['UserID'])) ?>">
+            <a class="list-group-item list-group-item-action" href="<?= htmlspecialchars(autoUrl('users/' . $user['UserID'])) ?>">
               <div><strong><?= htmlspecialchars($user['Forename'] . ' ' . $user['Surname']) ?></strong></div>
               <div class="text-truncate"><?= htmlspecialchars($user['EmailAddress']) ?></div>
             </a>
