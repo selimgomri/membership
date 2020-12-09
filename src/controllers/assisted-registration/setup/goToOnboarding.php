@@ -24,7 +24,6 @@ $requiresRegistration->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['U
 if (bool($requiresRegistration->fetchColumn()) && $tenant->getBooleanKey('REQUIRE_FULL_REGISTRATION')) {
   header("Location: " . autoUrl("onboarding/go"));
 } else {
-
   // Ensure RR is false
   $updateRR = $db->prepare("UPDATE `users` SET `RR` = ? WHERE UserID = ?");
   $updateRR->execute([

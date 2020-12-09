@@ -15,7 +15,7 @@ $setParent = $db->prepare("UPDATE members SET UserID = ?, RR = ? WHERE MemberID 
 $setUserRequiresRenewal = $db->prepare("UPDATE users SET RR = ? WHERE UserID = ?");
 
 $setUserRequiresRenewal->execute([
-  1,
+  (int) $tenant->getBooleanKey('REQUIRE_FULL_REGISTRATION'),
   $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']
 ]);
 
