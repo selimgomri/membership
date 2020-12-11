@@ -18,6 +18,14 @@ include BASE_PATH . "views/squadMenu.php";
 ?>
 
 <div class="container">
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('squads')) ?>">Squads</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Squad Moves</li>
+    </ol>
+  </nav>
+
   <div class="row">
     <div class="col">
       <h1>Squad Moves</h1>
@@ -50,7 +58,7 @@ include BASE_PATH . "views/squadMenu.php";
                           <div class="row align-items-center">
                             <div class="col">
                               <!-- <p class="mb-0"> -->
-                                <?php if ($move['fromId'] && $move['toId']) { ?><span class="sr-only">Moving from</span> <a class="font-weight-bold" href="<?= autoUrl("squads/" . $move['fromId']) ?>"><?= htmlspecialchars($move['fromName']) ?></a> <i class="fa fa-long-arrow-right" aria-hidden="true"></i><span class="sr-only">to</span> <a class="font-weight-bold" href="<?= autoUrl("squads/" . $move['toId']) ?>"><?= htmlspecialchars($move['toName']) ?></a><?php } else if ($move['fromId']) { ?>Leaving <a class="font-weight-bold" href="<?= autoUrl("squads/" . $move['fromId']) ?>"><?= htmlspecialchars($move['fromName']) ?></a><?php } else if ($move['toId']) { ?>Joining <a class="font-weight-bold" href="<?= autoUrl("squads/" . $move['toId']) ?>"><?= htmlspecialchars($move['toName']) ?></a><?php } ?> on <?= htmlspecialchars($moveDate->format("j F Y")) ?>
+                              <?php if ($move['fromId'] && $move['toId']) { ?><span class="sr-only">Moving from</span> <a class="font-weight-bold" href="<?= autoUrl("squads/" . $move['fromId']) ?>"><?= htmlspecialchars($move['fromName']) ?></a> <i class="fa fa-long-arrow-right" aria-hidden="true"></i><span class="sr-only">to</span> <a class="font-weight-bold" href="<?= autoUrl("squads/" . $move['toId']) ?>"><?= htmlspecialchars($move['toName']) ?></a><?php } else if ($move['fromId']) { ?>Leaving <a class="font-weight-bold" href="<?= autoUrl("squads/" . $move['fromId']) ?>"><?= htmlspecialchars($move['fromName']) ?></a><?php } else if ($move['toId']) { ?>Joining <a class="font-weight-bold" href="<?= autoUrl("squads/" . $move['toId']) ?>"><?= htmlspecialchars($move['toName']) ?></a><?php } ?> on <?= htmlspecialchars($moveDate->format("j F Y")) ?>
                               <!-- </p> -->
                             </div>
                             <div class="col-auto">

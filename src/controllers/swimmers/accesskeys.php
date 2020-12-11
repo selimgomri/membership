@@ -18,6 +18,14 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 <div class="container">
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<?= autoUrl("members") ?>">Members</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Access Keys</li>
+    </ol>
+  </nav>
+
   <h1>Member Access Keys</h1>
   <p class="lead">See access keys.</p>
   <p><a href="<?= autoUrl("members/access-keys.csv") ?>" class="btn btn-primary" download>Download as CSV</a></p>
