@@ -43,6 +43,13 @@ try {
         $renewal,
         $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
       ]);
+    } else {
+      // No member, so let's jump to complete as there won't be anything to pay
+      $sql = $db->prepare("UPDATE `renewalProgress` SET `Stage` = 6, `Substage` = 0, `Part` = 0 WHERE `RenewalID` = ? AND `UserID` = ?");
+      $sql->execute([
+        $renewal,
+        $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+      ]);
     }
     header("Location: " . autoUrl("renewal/go"));
   } else {
