@@ -143,7 +143,7 @@ try {
   $toSendTo = [];
 
   $emailUsers = [];
-  $getUsersForEmail = $db->prepare("SELECT Forename, Surname, EmailAddress, UserID FROM users WHERE users.Tenant = ?");
+  $getUsersForEmail = $db->prepare("SELECT Forename, Surname, EmailAddress, UserID FROM users WHERE users.Active AND users.Tenant = ?");
   while ($list = $lists->fetch(PDO::FETCH_ASSOC)) {
     if (isset($_POST['TL-' . $list['ID']])) {
       $getUsersForEmail->execute([
