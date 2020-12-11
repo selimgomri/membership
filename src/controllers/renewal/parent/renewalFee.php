@@ -244,7 +244,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 					?>
 						<tr>
 							<td>
-								<?= htmlspecialchars($member[$i]['MForename'] . " " . $member[$i]['MSurname']) ?>
+								<?= htmlspecialchars($member[$i]['MForename'] . " " . $member[$i]['MSurname']) ?><?php if ($member[$i]['ASACategory'] > 0) { ?> (Category <?= htmlspecialchars($member[$i]['ASACategory']) ?>)<?php } ?>
 							</td>
 							<td>
 								&pound;<?php echo $asaFeesString; ?>
@@ -369,7 +369,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 </div>
 
 <script>
-	
+
 </script>
 
 <?php

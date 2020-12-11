@@ -180,7 +180,7 @@ include BASE_PATH . 'views/header.php';
             ?>
               <tr>
                 <td>
-                  <?= htmlspecialchars($member[$i]['MForename'] . " " . $member[$i]['MSurname']) ?>
+                  <?= htmlspecialchars($member[$i]['MForename'] . " " . $member[$i]['MSurname']) ?><?php if ($member[$i]['ASACategory'] > 0) { ?> (Category <?= htmlspecialchars($member[$i]['ASACategory']) ?>)<?php } ?>
                 </td>
                 <td>
                   &pound;<?php echo $asaFeesString; ?>
