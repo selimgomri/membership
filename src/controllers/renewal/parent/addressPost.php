@@ -50,6 +50,21 @@ try {
         $renewal,
         $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
       ]);
+
+      if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
+        $query = $db->prepare("UPDATE `users` SET `RR` = 0 WHERE `UserID` = ?");
+        $query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
+
+        $query = $db->prepare("UPDATE `members` SET `RR` = 0, `RRTransfer` = 0 WHERE `UserID` = ?");
+        $query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
+
+        // Remove from status tracker
+        $delete = $db->prepare("DELETE FROM renewalProgress WHERE UserID = ? AND RenewalID = ?");
+        $delete->execute([
+          $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+          $renewal
+        ]);
+      }
     }
     header("Location: " . autoUrl("renewal/go"));
   } else {
@@ -61,5 +76,5 @@ try {
 	<p class=\"mb-0\"><strong>An error occured when we tried to update our records</strong></p>
 	<p class=\"mb-0\">Please try again</p>
 	</div>";
-	header("Location: " . autoUrl("renewal/go"));
+  header("Location: " . autoUrl("renewal/go"));
 }
