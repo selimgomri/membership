@@ -178,6 +178,8 @@ try {
   } else {
     throw new Exception('Invalid request to SendGrid');
   }
+
+  AuditLog::new('Notify-SentIndividual', 'Sent to ' . $name);
 } catch (Exception $e) {
   $_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess'] = false;
   $_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivPostContent'] = $_POST;

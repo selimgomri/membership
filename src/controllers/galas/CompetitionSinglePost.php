@@ -65,6 +65,9 @@ try {
     $approvalNeeded,
     $id
   ]);
+
+  AuditLog::new('Galas-Updated', 'Updated ' . $galaName . ', #' . $id);
+
   header("location: " . autoUrl("galas/" . $id));
 } catch (Exception $e) {
   halt(500);
