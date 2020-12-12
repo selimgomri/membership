@@ -5,6 +5,8 @@ $tenant = app()->tenant;
 
 $target = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
+$name = app()->user->getFullName();
+
 try {
 	$query = $db->prepare("SELECT * FROM `users` WHERE `UserID` = ? AND Tenant = ?");
 	$query->execute([
@@ -34,6 +36,9 @@ try {
 	$_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'] = 		1;
 
 	$userObject = new \User($info['UserID'], true);
+	app()->user = $userObject;
+
+	AuditLog::new('UserSimulation-Exited', 'Stopped simulating ' . $name);
 
 	header("Location: " . autoUrl("users/" . $target));
 } catch (Exception $e) {

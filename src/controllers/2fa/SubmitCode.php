@@ -10,6 +10,7 @@ use GeoIp2\Database\Reader;
 $security_status = false;
 
 use PragmaRX\Google2FA\Google2FA;
+
 $ga2fa = new Google2FA();
 
 if ($_POST['SessionSecurity'] == session_id()) {
@@ -48,6 +49,12 @@ if (($_POST['auth'] == $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR
     $currentUser = app()->user;
     $currentUser = $login->login();
     $resetFailedLoginCount->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserID']]);
+
+    $event = 'UserLogin-2FA-Email';
+    if ($auth_via_google_authenticator) {
+      $event = 'UserLogin-2FA-App';
+    }
+    AuditLog::new($event, 'Signed in from ' . $_SERVER['REMOTE_ADDR'], $currentUser->getId());
   } catch (Exception $e) {
     halt(403);
   }

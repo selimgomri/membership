@@ -62,6 +62,7 @@ include 'head.php';
               <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("admin")) ?>">Dashboard</a>
               <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("admin/notify")) ?>">Notify</a>
               <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("admin/users")) ?>">User Search</a>
+              <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("admin/audit")) ?>">Audit Logs</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="https://outlook.com/owa/myswimmingclub.uk" target="_blank">Outlook</a>
               <a class="dropdown-item" href="https://login.microsoftonline.com/login.srf?wa=wsignin1%2E0&rver=6%2E1%2E6206%2E0&wreply=https%3A%2F%2Fmyswimmingclubuk-my.sharepoint.com%2F&whr=myswimmingclub.uk" target="_blank">OneDrive</a>

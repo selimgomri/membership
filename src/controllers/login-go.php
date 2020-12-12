@@ -106,6 +106,8 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
           $currentUser = app()->user;
           $currentUser = $login->login();
           $resetFailedLoginCount->execute([$userID]);
+
+          AuditLog::new('UserLogin-NoAuth', 'Signed in from ' . $_SERVER['REMOTE_ADDR'], $userID);
         } catch (Exception $e) {
           halt(403);
         }
@@ -122,11 +124,9 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
       $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = true;
       $_SESSION['TENANT-' . app()->tenant->getId()]['EnteredUsername'] = $username;
     }
-  }
-  else {
+  } else {
     $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'] = true;
     $_SESSION['TENANT-' . app()->tenant->getId()]['EnteredUsername'] = $username;
-
   }
 } else {
   if (!$security_status) {

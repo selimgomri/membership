@@ -34,4 +34,6 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'] =     1;
 
 $userObject = new \User($id, true);
 
+AuditLog::new('UserSimulation-Entered', 'Started simulating ' . $userObject->getFullName());
+
 header("Location: " . autoUrl(""));

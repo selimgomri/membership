@@ -19,6 +19,14 @@
       "external": false
     },
     {
+      "id": "admin-audit",
+      "name": "Audit logs",
+      "title": "Audit logs of user actions",
+      "link": "admin/audit",
+      "target": "_self",
+      "external": false
+    },
+    {
       "id": "admin-galas",
       "name": "Galas",
       "title": "Upload SDIF files",
