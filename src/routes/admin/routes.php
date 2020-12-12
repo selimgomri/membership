@@ -43,6 +43,10 @@ $this->group('/notify', function () {
   include 'notify/routes.php';
 });
 
+$this->group('/audit', function () {
+  include 'audit/routes.php';
+});
+
 $this->group('/users', function () {
   include 'users/routes.php';
 });
