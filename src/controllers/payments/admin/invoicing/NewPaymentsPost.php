@@ -79,6 +79,8 @@ try {
     $category,
   ]);
 
+  $id = $db->lastInsertId();
+
   if ($amount > 0) {
     // Send an email to the user
     $subject = 'Payments: New ';
@@ -106,6 +108,8 @@ try {
   }
 
   $db->commit();
+
+  AuditLog::new('Payments-Invoices-Added', 'Created payment item #' . $id);
 
   $_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentSuccessMessage'] = 'We\'ve added the ' . $typeString . ' to ' . $user['Forename'] . '\'s account to pay in their next bill.';
 } catch (PDOException $e) {

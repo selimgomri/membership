@@ -508,6 +508,8 @@ try {
 
     $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
     $response = $sendgrid->send($email);
+
+    AuditLog::new('Notify-SentGroup', 'Sent email ' . $id);
   }
   $db->commit();
 

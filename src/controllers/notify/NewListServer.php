@@ -28,6 +28,9 @@ if (!$errorState) {
 			$desc,
 			$tenant->getId()
 		]);
+
+		AuditLog::new('Notify-List-Added', 'Created list #' . $db->lastInsertId());
+
     header("Location: " . autoUrl("notify/lists"));
 	} catch (Exception $e) {
 		$errorState = true;

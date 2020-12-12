@@ -23,7 +23,10 @@ if ($_POST['desc'] != null && $_POST['desc'] != "") {
 if (!$errorState) {
   try {
     $update = $db->prepare("UPDATE `targetedLists` SET `Name` = ?, `Description` = ? WHERE `ID` = ? AND `Tenant` = ?");
-    $update->execute([$name, $desc, $id, $tenant->getId()]);
+		$update->execute([$name, $desc, $id, $tenant->getId()]);
+		
+		AuditLog::new('Notify-List-Update', 'Updated list #' . $id);
+
     header("Location: " . autoUrl("notify/lists/" . $id));
 	} catch (Exception $e) {
 		$errorState = true;

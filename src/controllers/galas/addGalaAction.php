@@ -123,6 +123,7 @@ if ($added && $status) {
 
   if ($id != null) {
     $_SESSION['TENANT-' . app()->tenant->getId()]['GalaAddedSuccess'] = true;
+    AuditLog::new('Galas-Added', 'Added ' . $galaName . ', #' . $id);
     if (bool($coachDoesEntries)) {
       header("Location: " . autoUrl("galas/" . $id . "/sessions"));
     } else {
