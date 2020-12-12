@@ -46,7 +46,7 @@ if (isset($_POST['squad'])) {
           <?php while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
             $id = $row['SquadID']; ?>
             <option value="<?= $row['SquadID'] ?>" <?php if ($squadID == $id) { ?>selected<?php } ?>><?= htmlspecialchars($row['SquadName']) ?></option><?php
-                                                                                                                                                  } ?>
+                                                                                                                                                      } ?>
         </select></div>
       <div class="col-md-6 mb-3">
         <label class="sr-only" for="search">Search by Name</label>
