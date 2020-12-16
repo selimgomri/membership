@@ -18,10 +18,10 @@ $sql = $db->prepare("SELECT COUNT(*) FROM auditLogging INNER JOIN users ON audit
 $sql->execute([
   $tenant->getId()
 ]);
-$numMails  = $sql->fetchColumn();
-$numPages = ((int)($numMails / $perPage)) + 1;
+$numLogs  = $sql->fetchColumn();
+$numPages = ((int)($numLogs / $perPage)) + 1;
 
-if ($start > $numMails) {
+if ($start > $numLogs) {
   halt(404);
 }
 
@@ -34,6 +34,7 @@ $sql->execute();
 
 $row = $sql->fetch(PDO::FETCH_ASSOC);
 
+$fluidContainer = true;
 $pagetitle = "Logs - Audit Logs";
 
 include BASE_PATH . 'views/header.php';
@@ -85,9 +86,9 @@ include BASE_PATH . 'views/header.php';
 
         <nav aria-label="Page navigation">
           <ul class="pagination">
-            <?php if ($numMails <= 10) { ?>
+            <?php if ($numLogs <= $perPage) { ?>
               <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("admin/audit/logs?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-            <?php } else if ($numMails <= 20) { ?>
+            <?php } else if ($numLogs <= 20) { ?>
               <?php if ($page == 1) { ?>
                 <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("admin/audit/logs?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
                 <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/logs?page="); ?><?php echo $page + 1 ?>"><?php echo $page + 1 ?></a></li>
@@ -110,9 +111,9 @@ include BASE_PATH . 'views/header.php';
                 <?php } ?>
                 <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/logs?page="); ?><?php echo $page - 1 ?>"><?php echo $page - 1 ?></a></li>
                 <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("admin/audit/logs?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-                <?php if ($numMails > $page * 10) { ?>
+                <?php if ($numLogs > $page * $perPage) { ?>
                   <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/logs?page="); ?><?php echo $page + 1 ?>"><?php echo $page + 1 ?></a></li>
-                  <?php if ($numMails > $page * 10 + 10) { ?>
+                  <?php if ($numLogs > $page * $perPage + $perPage) { ?>
                     <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/logs?page="); ?><?php echo $page + 2 ?>"><?php echo $page + 2 ?></a></li>
                   <?php } ?>
                   <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/logs?page="); ?><?php echo $page + 1 ?>">Next</a></li>
@@ -136,4 +137,5 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new \SCDS\Footer();
+$footer->useFluidContainer();
 $footer->render();
