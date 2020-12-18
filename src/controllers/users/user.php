@@ -19,14 +19,6 @@ if ($info == null) {
   halt(404);
 }
 
-$qualifications;
-try {
-  $qualifications = $db->prepare("SELECT `Name`, Info, `From`, `To` FROM qualifications INNER JOIN qualificationsAvailable ON qualifications.Qualification = qualificationsAvailable.ID WHERE UserID = ? ORDER BY `Name` ASC");
-  $qualifications->execute([$id]);
-} catch (Exception $e) {
-  // Do nothing just handle table not existing
-}
-
 $logins = $db->prepare("SELECT `Time`, `IPAddress`, Browser, `Platform`, `GeoLocation` FROM userLogins WHERE UserID = ? ORDER BY `Time` DESC LIMIT 1");
 $logins->execute([$id]);
 $loginInfo = $logins->fetch(PDO::FETCH_ASSOC);
@@ -109,16 +101,46 @@ $pagetitle = htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) . " In
 $title = null;
 include BASE_PATH . "views/header.php";
 ?>
-<div class="container-fluid">
 
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?= autoUrl("users") ?>">Users</a></li>
-      <li class="breadcrumb-item active" aria-current="page">
-        <?= htmlspecialchars(mb_substr($info["Forename"], 0, 1, 'utf-8') . mb_substr($info["Surname"], 0, 1, 'utf-8')) ?>
-      </li>
-    </ol>
-  </nav>
+<div class="bg-light mt-n3 py-3 mb-3">
+
+  <div class="container-fluid">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= autoUrl("users") ?>">Users</a></li>
+        <li class="breadcrumb-item active" aria-current="page">
+          <?= htmlspecialchars(mb_substr($info["Forename"], 0, 1, 'utf-8') . mb_substr($info["Surname"], 0, 1, 'utf-8')) ?>
+        </li>
+      </ol>
+    </nav>
+
+    <div class="row align-items-center">
+      <div class="col-sm-9 col-md-10 col-lg-11">
+        <h1 class="mb-0">
+          <?= htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) ?>
+          <small><?= htmlspecialchars($accessLevel) ?></small>
+        </h1>
+        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
+          <div class="mb-3 d-md-none"></div>
+        <?php } ?>
+      </div>
+      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
+        <div class="col text-sm-right">
+          <p class="mb-0">
+            <a href="<?= htmlspecialchars(autoUrl("users/" . $id . "/edit")) ?>" class="btn btn-success">
+              Edit
+            </a>
+          </p>
+        </div>
+      <?php } ?>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="container-fluid">
 
   <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['User-Update-Email-Error']) && $_SESSION['TENANT-' . app()->tenant->getId()]['User-Update-Email-Error']) { ?>
     <div class="alert alert-danger">
@@ -140,27 +162,6 @@ include BASE_PATH . "views/header.php";
     </div>
   <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess']);
   } ?>
-
-  <div class="row mb-3">
-    <div class="col-sm-9 col-md-10 col-lg-11">
-      <h1 class="mb-0">
-        <?= htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) ?>
-        <small><?= htmlspecialchars($accessLevel) ?></small>
-      </h1>
-      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
-        <div class="mb-3 d-md-none"></div>
-      <?php } ?>
-    </div>
-    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
-      <div class="col text-sm-right">
-        <p class="mb-0">
-          <a href="<?= htmlspecialchars(autoUrl("users/" . $id . "/edit")) ?>" class="btn btn-success">
-            Edit
-          </a>
-        </p>
-      </div>
-    <?php } ?>
-  </div>
 
   <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserCreationSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UserCreationSuccess']) { ?>
     <div class="alert alert-success">
@@ -223,9 +224,6 @@ include BASE_PATH . "views/header.php";
               Team manager settings
             </a>
           <?php } ?>
-          <a href="#qualifications" class="list-group-item list-group-item-action">
-            Qualifications
-          </a>
           <a href="#simulate-user" class="list-group-item list-group-item-action">
             Simulate user
           </a>
@@ -594,56 +592,6 @@ include BASE_PATH . "views/header.php";
         </div>
       <?php } ?>
 
-      <div class="alert alert-info p-3 mb-4">
-        <h2 id="qualifications">Qualifications</h2>
-        <p class="lead">Qualification tracking for coaching qualifications, team managers and more is coming soon.</p>
-        <p>The system will be able to warn you in advance of qualifications expiring and details of qualifications will be visible to both staff and the users who hold those qualifications.</p>
-        <p class="mb-0">We'll be trialling this with one customer club before rolling it out to all clubs by the end of summer.</p>
-      </div>
-
-      <hr>
-
-      <!-- <div class="mb-4">
-        <h2>
-          Qualifications
-        </h2>
-
-        <p class="lead">
-          The membership tracks qualifications to assist you in your compliance
-          requirements.
-        </p>
-
-        <div class="row">
-          <?php
-          $count = 0;
-          while ($qualification = $qualifications->fetch(PDO::FETCH_ASSOC)) {
-            $count += 1; ?>
-          <div class="col-sm-6 col-lg-4">
-            <h3 class="h6"><?= htmlspecialchars($qualification['Name']) ?></h3>
-            <p><?= htmlspecialchars($qualification['Info']) ?></p>
-            <p>
-              Valid since <?= date("d/m/Y", strtotime($qualification['From'])) ?><?php if ($qualification['To'] != null) { ?>,
-              <strong>Expires <?= date("d/m/Y", strtotime($qualification['To'])) ?></strong><?php } ?>.
-            </p>
-          </div>
-          <?php } ?>
-          <?php if ($count == 0) { ?>
-          <div class="col">
-            <div class="alert alert-info">
-              <strong>This user has no listed qualifications</strong><br>
-              They may not have had any added
-            </div>
-          </div>
-          <?php } ?>
-        </div>
-
-        <p>
-          <a href="<?= htmlspecialchars(autoUrl("users/" . $id . "/qualifications")) ?>" class="btn btn-primary">
-            <span class="sr-only">View or add</span> Qualifications <span class="fa fa-chevron-right"></span>
-          </a>
-        </p>
-      </div> -->
-
       <div class="mb-4">
         <h2 id="simulate-user">Simulate this user</h2>
         <p class="lead">
@@ -653,6 +601,10 @@ include BASE_PATH . "views/header.php";
         <p>
           You can use this feature to provide help and support to other users. It
           will be as if you have logged in as this user.
+        </p>
+
+        <p>
+          <strong>Usage of this feature is recorded.</strong> Any actions will still be recorded as being performed by yourself in audit logs.
         </p>
 
         <p><a href="<?= autoUrl("users/simulate/" . $id) ?>" class="btn btn-primary">Simulate this user <span class="fa fa-chevron-right"></span> </a></p>

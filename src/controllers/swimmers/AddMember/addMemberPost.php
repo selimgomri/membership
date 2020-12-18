@@ -79,7 +79,7 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 			$addTempSwimEnglandCode->execute([$swimEnglandTemp, $last_id]);
 		}
 
-
+		AuditLog::new('Members-Added', 'Added ' . $forename . ' ' . $surname . ' (#' . $last_id . ')');
 
 		$addToSquad = $db->prepare("INSERT INTO squadMembers (Member, Squad, Paying) VALUES (?, ?, ?)");
 

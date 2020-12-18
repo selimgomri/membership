@@ -7,7 +7,7 @@ $tenant = app()->tenant;
 if (app('request')->method == 'POST' && !SCDS\CSRF::verify()) {
 	halt(403);
 }
-*/
+ */
 
 // Get all countries
 $countries = getISOAlpha2CountriesWithHomeNations();
@@ -26,6 +26,7 @@ $otherNotesUpdate = false;
 $catUpdate = $cpUpdate = false;
 $update = false;
 $countryUpdate = false;
+$swimmerStatusUpdate = false;
 $successInformation = "";
 
 $query = $db->prepare("SELECT * FROM members WHERE MemberID = ? AND Tenant = ?");
@@ -36,7 +37,7 @@ $query->execute([
 $row = $query->fetch(PDO::FETCH_ASSOC);
 
 if ($row == null) {
-  halt(404);
+	halt(404);
 }
 
 $forename = $row['MForename'];
@@ -182,8 +183,9 @@ if (isset($_POST['country'])) {
 		$countryUpdate = true;
 		$update = true;
 	}
-
 }
+
+AuditLog::new('Members-Edited', 'Edited ' . $forename . ' ' . $surname . ' (#' . $id . ')');
 
 $sqlSwim = "";
 $swimmer = $db->prepare("SELECT members.MForename, members.MForename, members.MMiddleNames,
@@ -193,27 +195,53 @@ $swimmer->execute([$id]);
 $rowSwim = $swimmer->fetch(PDO::FETCH_ASSOC);
 $pagetitle = "Swimmer: " . htmlspecialchars($rowSwim['MForename'] . " " . $rowSwim['MSurname']);
 $title = null;
-$content = '<form method="post"><div class="row align-items-center mb-3"><div class="col-md-8"><h1>Editing ' . htmlspecialchars($rowSwim['MForename'] . ' ' . $rowSwim['MSurname']) . '</h1></div><div class="col text-md-right"><button type="submit" class="btn btn-success">Update</button> <a class="btn btn-dark" href="../' . $id . '">Exit Edit Mode</a></div></div>';
+$content = '<form method="post" id="edit-form">';
 $content .= "<div class=\"row\"><div class=\"col col-md-8\"><div class=\"\">";
 if ($update) {
-$content .= '<div class="alert alert-success">
+	$content .= '<div class="alert alert-success">
 	<strong>We have updated</strong>
 	<ul class="mb-0">';
-		if ($forenameUpdate) { $content .= '<li>First name</li>'; }
-		if ($middlenameUpdate) { $content .= '<li>Middle name(s)</li>'; }
-		if ($surnameUpdate) { $content .= '<li>Last address</li>'; }
-		if ($dateOfBirthUpdate) { $content .= '<li>Date of birth</li>'; }
-		if ($asaUpdate) { $content .= '<li>Swim England Number</li>'; }
-		if ($userUpdate) { $content .= '<li>Parent</li>'; }
-		if ($squadUpdate) { $content .= '<li>Squad</li>'; }
-		if ($sexUpdate) { $content .= '<li>Sex</li>'; }
-		if ($catUpdate) { $content .= '<li>Swim England Category</li>'; }
-		if ($cpUpdate) { $content .= '<li>Whether or not the club pays swimmer\'s
-		fees</li>'; }
-		if ($otherNotesUpdate) { $content .= '<li>Other notes</li>'; }
-		if ($swimmerStatusUpdate) { $content .= '<li>Swimmer Membership Status</li>'; }
-		if ($countryUpdate) { $content .= '<li>Home nations meet country</li>'; }
-$content .= '
+	if ($forenameUpdate) {
+		$content .= '<li>First name</li>';
+	}
+	if ($middlenameUpdate) {
+		$content .= '<li>Middle name(s)</li>';
+	}
+	if ($surnameUpdate) {
+		$content .= '<li>Last address</li>';
+	}
+	if ($dateOfBirthUpdate) {
+		$content .= '<li>Date of birth</li>';
+	}
+	if ($asaUpdate) {
+		$content .= '<li>Swim England Number</li>';
+	}
+	if ($userUpdate) {
+		$content .= '<li>Parent</li>';
+	}
+	if ($squadUpdate) {
+		$content .= '<li>Squad</li>';
+	}
+	if ($sexUpdate) {
+		$content .= '<li>Sex</li>';
+	}
+	if ($catUpdate) {
+		$content .= '<li>Swim England Category</li>';
+	}
+	if ($cpUpdate) {
+		$content .= '<li>Whether or not the club pays swimmer\'s
+		fees</li>';
+	}
+	if ($otherNotesUpdate) {
+		$content .= '<li>Other notes</li>';
+	}
+	if ($swimmerStatusUpdate) {
+		$content .= '<li>Swimmer Membership Status</li>';
+	}
+	if ($countryUpdate) {
+		$content .= '<li>Home nations meet country</li>';
+	}
+	$content .= '
 	</ul>
 </div>';
 }
@@ -264,8 +292,7 @@ if ($rowSwim['Gender'] == "Male") {
 			<option value=\"Female\">Female</option>
 		</select>
 	</div>";
-}
-else {
+} else {
 	$content .= "
 	<div class=\"form-group\">
 		<label for=\"sex\">Sex</label>
@@ -280,14 +307,14 @@ $content .= "
 <div class=\"form-group\">
 	<label for=\"country\">Home Nations Country</label>
 	<select class=\"custom-select\" id=\"country\" name=\"country\" placeholder=\"Select\">";
-		foreach ($countries as $key => $value) {
-			$selected = '';
-			if ($rowSwim['Country'] == $key) {
-				$selected = ' selected ';
-			}
-			$content .= "<option value=\"" . htmlspecialchars($key) . "\" " . $selected . ">" . htmlspecialchars($value) . "</option>";
-		}
-		$content .= "
+foreach ($countries as $key => $value) {
+	$selected = '';
+	if ($rowSwim['Country'] == $key) {
+		$selected = ' selected ';
+	}
+	$content .= "<option value=\"" . htmlspecialchars($key) . "\" " . $selected . ">" . htmlspecialchars($value) . "</option>";
+}
+$content .= "
 	</select>
 </div>";
 
@@ -315,15 +342,15 @@ $content .= "
 	<textarea class=\"form-control\" id=\"otherNotes\" name=\"otherNotes\" rows=\"3\" placeholder=\"Tell us any other notes for coaches\">" . htmlspecialchars($rowSwim['OtherNotes']) . "</textarea>
 </div>";
 if ($access == "Admin") {
-  $statusA = '';
-  $statusB = '';
+	$statusA = '';
+	$statusB = '';
 
-  if ($rowSwim['Status']) {
-    $statusA = "selected";
-  } else {
-    $statusB = "selected";
-  }
-  $content .= "
+	if ($rowSwim['Status']) {
+		$statusA = "selected";
+	} else {
+		$statusB = "selected";
+	}
+	$content .= "
 		<div class=\"form-group\">
 			<label for=\"swimmerStatus\">Swimmer Membership Status</label>
 			<select class=\"custom-select\" id=\"swimmerStatus\" name=\"swimmerStatus\" aria-describedby=\"swimmerStatusHelp\">
@@ -339,18 +366,32 @@ $content .= "</div></form>";
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>
+<div class="bg-light mt-n3 py-3 mb-3">
+	<div class="container">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="<?= autoUrl("members") ?>">Members</a></li>
+
+				<li class="breadcrumb-item"><a href="<?= autoUrl("members/" . $id) ?>"><?= htmlspecialchars($rowSwim["MForename"]) ?> <?= htmlspecialchars(mb_substr($rowSwim["MSurname"], 0, 1, 'utf-8')) ?></a></li>
+				<li class="breadcrumb-item active" aria-current="page">Edit</li>
+			</ol>
+		</nav>
+
+		<div class="row align-items-center">
+			<div class="col-md-8">
+				<h1>Editing <?= htmlspecialchars($rowSwim['MForename'] . ' ' . $rowSwim['MSurname']) ?> </h1>
+			</div>
+			<div class="col text-md-right">
+				<button type="submit" class="btn btn-success" form="edit-form">Update</button>
+				<a class="btn btn-dark" href="<?= htmlspecialchars(autoUrl("members/$id")) ?>">Exit Edit Mode</a>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="container">
-	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a href="<?=autoUrl("members")?>">Members</a></li>
 
-			<li class="breadcrumb-item"><a href="<?=autoUrl("members/" . $id)?>"><?=htmlspecialchars($rowSwim["MForename"])?> <?=htmlspecialchars(mb_substr($rowSwim["MSurname"], 0, 1, 'utf-8'))?></a></li>
-			<li class="breadcrumb-item active" aria-current="page">Edit</li>
-		</ol>
-	</nav>
-
-<?php
-echo $content; ?>
+	<?php echo $content; ?>
 
 </div>
 
@@ -360,7 +401,7 @@ echo $content; ?>
 			<div class="cell">
 				<h2>Delete member</h2>
 				<p>
-					<button data-ajax-url="<?=htmlspecialchars(autoUrl("members/delete"))?>" data-members-url="<?=htmlspecialchars(autoUrl("members"))?>" data-member-id="<?=htmlspecialchars($id)?>" data-member-name="<?=htmlspecialchars($rowSwim['MForename'] . ' ' . $rowSwim['MSurname'])?>" id="delete-button" class="btn btn-danger">
+					<button data-ajax-url="<?= htmlspecialchars(autoUrl("members/delete")) ?>" data-members-url="<?= htmlspecialchars(autoUrl("members")) ?>" data-member-id="<?= htmlspecialchars($id) ?>" data-member-name="<?= htmlspecialchars($rowSwim['MForename'] . ' ' . $rowSwim['MSurname']) ?>" id="delete-button" class="btn btn-danger">
 						Delete account
 					</button>
 				</p>
@@ -372,23 +413,23 @@ echo $content; ?>
 
 <!-- Modal for use by JS code -->
 <div class="modal fade" id="main-modal" tabindex="-1" role="dialog" aria-labelledby="main-modal-title" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="main-modal-title">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" id="main-modal-body">
-        ...
-      </div>
-      <div class="modal-footer" id="main-modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
-        <button type="button" id="modal-confirm-button" class="btn btn-success">Confirm</button>
-      </div>
-    </div>
-  </div>
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="main-modal-title">Modal title</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="main-modal-body">
+				...
+			</div>
+			<div class="modal-footer" id="main-modal-footer">
+				<button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+				<button type="button" id="modal-confirm-button" class="btn btn-success">Confirm</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <?php $footer = new \SCDS\Footer();

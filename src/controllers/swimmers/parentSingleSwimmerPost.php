@@ -187,6 +187,8 @@ try {
   }
 
   $_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerSaved'] = true;
+
+  AuditLog::new('Members-Edited', 'Edited ' . $forename . ' ' . $surname . ' (#' . $id . ')');
 } catch (Exception $e) {
 
   $_SESSION['TENANT-' . app()->tenant->getId()]['SwimmerNotSaved'] = true;

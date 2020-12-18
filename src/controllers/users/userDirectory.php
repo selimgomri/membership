@@ -12,16 +12,21 @@ include BASE_PATH . "views/header.php";
 
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Users</li>
+      </ol>
+    </nav>
+
+    <h1>User Directory</h1>
+    <p class="lead mb-0">All active <?= htmlspecialchars($tenant->getName()) ?> users. Useful for changing account settings.</p>
+  </div>
+</div>
+
 <div class="container">
 
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item active" aria-current="page">Users</li>
-    </ol>
-  </nav>
-
-  <h1>User Directory</h1>
-  <p class="lead">All active <?= $tenant->getName() ?> users. Useful for changing account settings.</p>
   <div class="form-group row">
     <label class="col-sm-4 col-md-3 col-lg-2" for="search">Search by Name</label>
     <div class="col-sm-8 col-md-9 col-lg-10">

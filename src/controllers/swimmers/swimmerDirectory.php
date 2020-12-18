@@ -26,23 +26,38 @@ include BASE_PATH . "views/swimmersMenu.php";
 if (isset($_POST['squad'])) {
   $squadID = $_POST['squad'];
 } ?>
+
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container-fluid">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Members</li>
+      </ol>
+    </nav>
+
+    <div class="row align-items-center">
+      <div class="col">
+        <h1>
+          Members
+        </h1>
+        <p class="lead mb-0">
+          View all members or view members by squad.
+        </p>
+
+        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
+          <p class="mt-3 mb-0">
+            <a href="<?= autoUrl("members/new") ?>" class="btn btn-success">
+              Add new member
+            </a>
+          </p>
+        <?php } ?>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container-fluid">
-
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item active" aria-current="page">Members</li>
-    </ol>
-  </nav>
-
-  <h1 class="mb-3">Members</h1>
-
-  <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
-    <p>
-      <a href="<?= autoUrl("members/new") ?>" class="btn btn-success">
-        Add new member
-      </a>
-    </p>
-  <?php } ?>
 
   <div class="d-print-none">
     <div class="form-row">

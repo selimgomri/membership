@@ -14,10 +14,10 @@ if (isset($_GET['page']) && ((int) $_GET['page']) != 0) {
 }
 
 $sql = $db->query("SELECT COUNT(*) FROM auditLogging INNER JOIN users ON auditLogging.User = users.UserID");
-$numMails  = $sql->fetchColumn();
-$numPages = ((int)($numMails / $perPage)) + 1;
+$numLogs  = $sql->fetchColumn();
+$numPages = ((int)($numLogs / $perPage)) + 1;
 
-if ($start > $numMails) {
+if ($start > $numLogs) {
   halt(404);
 }
 
@@ -64,10 +64,10 @@ include BASE_PATH . "views/root/header.php";
                   <strong><a target="_blank" href="<?= htmlspecialchars(autoUrl($tenant->getCodeId() . '/users/' . $row['UserID'])) ?>"><?= htmlspecialchars($row['Forename'] . ' ' . $row['Surname']) ?></a></strong>
                 </div>
                 <div class="col text-center">
-                  <strong><a target="_blank" href="<?= htmlspecialchars(autoUrl($tenant->getCodeId())) ?>"><?= htmlspecialchars($tenant->getName()) ?></a></strong>
+                  <strong><?= htmlspecialchars($time->format('H:i:s d/m/Y')) ?></strong>
                 </div>
                 <div class="col text-right">
-                  <strong><?= htmlspecialchars($time->format('H:i:s d/m/Y')) ?></strong>
+                  <strong><a target="_blank" href="<?= htmlspecialchars(autoUrl($tenant->getCodeId())) ?>"><?= htmlspecialchars($tenant->getName()) ?></a></strong>
                 </div>
               </div>
               <p class="mb-0 mono">
@@ -83,9 +83,9 @@ include BASE_PATH . "views/root/header.php";
 
         <nav aria-label="Page navigation">
           <ul class="pagination">
-            <?php if ($numMails <= 10) { ?>
+            <?php if ($numLogs <= $perPage) { ?>
               <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("admin/audit/logs?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-            <?php } else if ($numMails <= 20) { ?>
+            <?php } else if ($numLogs <= 20) { ?>
               <?php if ($page == 1) { ?>
                 <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("admin/audit/logs?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
                 <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/logs?page="); ?><?php echo $page + 1 ?>"><?php echo $page + 1 ?></a></li>
@@ -108,9 +108,9 @@ include BASE_PATH . "views/root/header.php";
                 <?php } ?>
                 <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/logs?page="); ?><?php echo $page - 1 ?>"><?php echo $page - 1 ?></a></li>
                 <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("admin/audit/logs?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-                <?php if ($numMails > $page * 10) { ?>
+                <?php if ($numLogs > $page * $perPage) { ?>
                   <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/logs?page="); ?><?php echo $page + 1 ?>"><?php echo $page + 1 ?></a></li>
-                  <?php if ($numMails > $page * 10 + 10) { ?>
+                  <?php if ($numLogs > $page * $perPage + $perPage) { ?>
                     <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/logs?page="); ?><?php echo $page + 2 ?>"><?php echo $page + 2 ?></a></li>
                   <?php } ?>
                   <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/logs?page="); ?><?php echo $page + 1 ?>">Next</a></li>

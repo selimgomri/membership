@@ -1,5 +1,5 @@
 <?php
 
-$this->get('/', function() {
-  include 'MyQualifications.php';
+$this->get('/', function () {
+  include 'home.php';
 });

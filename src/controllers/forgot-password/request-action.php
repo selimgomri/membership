@@ -35,14 +35,13 @@ if (!$result->success) { ?>
       <div class="col-sm-6 col-md-5 col-lg4">
         <div class="alert alert-danger">
           <strong>Captcha Verification Failed</strong>
-          <p class="mb-0">You must prove that you are human to succeed in life.</p>
+          <p class="mb-0">You must prove that you are human.</p>
         </div>
       </div>
     </div>
   </div>
-<?php
-}
-else {
+  <?php
+} else {
   $captchaStatus = true;
   $found = false;
   $row = null;
@@ -80,9 +79,9 @@ else {
     ';
 
     if (notifySend(null, $subject, $sContent, $row['Forename'] . " " .
-    $row['Surname'], $row['EmailAddress'], ["Email" =>
+      $row['Surname'], $row['EmailAddress'], ["Email" =>
     "password-help@" . getenv('EMAIL_DOMAIN'), "Name" => app()->tenant->getKey('CLUB_NAME') . " Account Help"])) {
-    ?>
+  ?>
       <div class="container-fluid">
         <div class="row justify-content-center">
           <div class="col-sm-6 col-md-5 col-lg4">
@@ -96,23 +95,27 @@ else {
       </div>
     <?php
     } else {
-      ?>
+    ?>
       <div class="container-fluid">
         <div class="row justify-content-center">
           <div class="col-sm-6 col-md-5 col-lg4">
             <div class="alert alert-warning">
-              <strong>We were unable to send password reset details to your email address</strong>
-              <p>If you do not have an account, <a href="<?=autoUrl("register")?>" class="alert-link">register for an account</a></p>
-              <p>Or, <a href="<?=autoUrl("resetpassword")?>" class="alert-link">try again</a></p>
-              <p class="mb-0">Contact our support team if the issue persists.</p>
+              <p class="mb-0">
+                <strong>We were unable to send password reset details to your email address</strong>
+              </p>
+              <p>
+                If you do not have an account, please ask your club to create an account for you or <a href="<?= autoUrl("resetpassword") ?>" class="alert-link">try again</a>
+              </p>
+              <p class="mb-0">
+                Contact our support team if the issue persists.
+              </p>
             </div>
           </div>
         </div>
       </div>
-      <?php
+    <?php
     }
-  }
-  else {
+  } else {
     // error
     ?>
     <div class="container-fluid">
@@ -120,13 +123,13 @@ else {
         <div class="col-sm-6 col-md-5 col-lg4">
           <div class="alert alert-warning">
             <strong>We did not find an account using those details</strong>
-            <p>If you do not have an account, <a href="<?=autoUrl("register")?>" class="alert-link">register for an account</a></p>
-            <p>Or, <a href="<?=autoUrl("resetpassword")?>" class="alert-link">try again</a></p>
+            <p>If you do not have an account, <a href="<?= autoUrl("register") ?>" class="alert-link">register for an account</a></p>
+            <p>Or, <a href="<?= autoUrl("resetpassword") ?>" class="alert-link">try again</a></p>
           </div>
         </div>
       </div>
     </div>
-    <?php
+<?php
   }
 }
 
