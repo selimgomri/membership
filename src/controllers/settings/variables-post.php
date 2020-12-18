@@ -37,6 +37,8 @@ $vars = [
   'EMERGENCY_MESSAGE_TYPE' => 'NONE',
   'SHOW_LOGO' => false,
   'LOGO_DIR' => null,
+  'GLOBAL_PERSONAL_KEY' => null,
+  'GLOBAL_PERSONAL_KEY_ID_NUMBER' => null,
 ];
 
 try {

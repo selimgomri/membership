@@ -28,6 +28,8 @@ $vars = [
   'BLOCK_SQUAD_REPS_FROM_NOTIFY' => false,
   'REQUIRE_FULL_REGISTRATION' => true,
   'ENABLE_BILLING_SYSTEM' => true,
+  'GLOBAL_PERSONAL_KEY' => null,
+  'GLOBAL_PERSONAL_KEY_ID_NUMBER' => null,
 ];
 
 $disabled = [];
@@ -99,7 +101,7 @@ include BASE_PATH . 'views/header.php';
         <h1>System Variables</h1>
         <p class="lead">Change your club name and other settings.</p>
         <p>If you cannot edit a variable, it is because it has been set as an environment variable at a server level. Contact your administrator if you need to change these.</p>
-        <form method="post">
+        <form method="post" class="needs-validation" novalidate>
 
           <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PCC-SAVED']) { ?>
             <div class="alert alert-success">System variables saved.</div>
@@ -334,6 +336,31 @@ include BASE_PATH . 'views/header.php';
             <p>There are currently no customisation options available for your version of the membership system.</p>
           <?php } ?>
 
+          <h2>Personal Key</h2>
+          <p>
+            We're adding some membership features which require a Personal Key to access the rankings. Someone from your club should provide their details here.
+          </p>
+
+          <p>
+            Get your personal key from the <a href="https://www.swimmingresults.org/member_options/">swimmingresults.org</a> website.
+          </p>
+
+          <div class="form-group">
+            <label for="GLOBAL_PERSONAL_KEY_ID_NUMBER">Membership Number</label>
+            <input class="form-control mono" type="number" name="GLOBAL_PERSONAL_KEY_ID_NUMBER" id="GLOBAL_PERSONAL_KEY_ID_NUMBER" value="<?= htmlspecialchars($vars['GLOBAL_PERSONAL_KEY_ID_NUMBER']) ?>" <?= $disabled['GLOBAL_PERSONAL_KEY_ID_NUMBER'] ?> min="0">
+            <div class="invalid-feedback">
+              Please enter a Swim England, Swim Wales or Scottish Swimming membership number
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="GLOBAL_PERSONAL_KEY">Personal Key</label>
+            <input class="form-control mono" type="text" name="GLOBAL_PERSONAL_KEY" id="GLOBAL_PERSONAL_KEY" value="<?= htmlspecialchars($vars['GLOBAL_PERSONAL_KEY']) ?>" <?= $disabled['GLOBAL_PERSONAL_KEY'] ?> pattern="[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}" >
+            <div class="invalid-feedback">
+              Please enter your personal key in the corrent format
+            </div>
+          </div>
+
           <p>
             <button class="btn btn-success" type="submit">
               Save
@@ -349,4 +376,5 @@ include BASE_PATH . 'views/header.php';
 
 $footer = new \SCDS\Footer();
 $footer->useFluidContainer();
+$footer->addJs('public/js/NeedsValidation.js');
 $footer->render();
