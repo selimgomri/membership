@@ -110,6 +110,9 @@ try {
   $addr = $_POST['CLUB_ADDRESS'];
   $addr = str_replace("\r\n", "\n", $addr);
   $addr = explode("\n", $addr);
+  for ($i = 0; $i < sizeof($addr); $i++) {
+    $addr[0] = trim($addr[0], " \t\n\r\0\x0B,");
+  }
   $addr = json_encode($addr);
   app()->tenant->setKey('CLUB_ADDRESS', $addr);
 
