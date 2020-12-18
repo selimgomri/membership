@@ -67,41 +67,59 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div class="container-fluid">
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container-fluid">
 
-  <!-- Page header -->
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?= autoUrl("members") ?>">Members</a></li>
-      <li class="breadcrumb-item active" aria-current="page">#<?= htmlspecialchars($member->getId()) ?></li>
-    </ol>
-  </nav>
+    <!-- Page header -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= autoUrl("members") ?>">Members</a></li>
+        <li class="breadcrumb-item active" aria-current="page">#<?= htmlspecialchars($member->getId()) ?></li>
+      </ol>
+    </nav>
 
-  <h1>
-    <?= htmlspecialchars($member->getFullName()) ?>
-  </h1>
-  <p class="lead" id="leadDesc">
-    Member
-  </p>
-
-  <?php if ($user && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
-    <p>
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Quick actions
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/enter-gala")) ?>">Enter a gala</a>
-          <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("users/" . $user->getId())) ?>">View linked user</a>
-          <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/contact-parent")) ?>">Email user/parent/guardian</a>
-          <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') { ?>
-            <button class="dropdown-item" id="new-move-dropdown" type="button">New squad move</button>
-            <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/parenthelp")) ?>">Print access key</a>
-          <?php } ?>
-        </div>
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h1>
+          <?= htmlspecialchars($member->getFullName()) ?>
+        </h1>
+        <p class="lead mb-0" id="leadDesc">
+          Member
+        </p>
+        <div class="mb-3 d-lg-none"></div>
       </div>
-    </p>
-  <?php } ?>
+      <div class="ml-auto col-lg-auto">
+        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
+          <p>
+            <a href="<?= htmlspecialchars(autoUrl("members/" . $id . "/edit")) ?>" class="btn btn-block btn-success">
+              Edit basic details
+            </a>
+          </p>
+        <?php } ?>
+        <?php if ($user && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
+          <p>
+            <div class="dropdown">
+              <button class="btn btn-secondary btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Quick actions
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/enter-gala")) ?>">Enter a gala</a>
+                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("users/" . $user->getId())) ?>">View linked user</a>
+                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/contact-parent")) ?>">Email user/parent/guardian</a>
+                <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') { ?>
+                  <button class="dropdown-item" id="new-move-dropdown" type="button">New squad move</button>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/parenthelp")) ?>">Print access key</a>
+                <?php } ?>
+              </div>
+            </div>
+          </p>
+        <?php } ?>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
 
   <div class="row justify-content-between">
     <div class="col-md-4 col-lg-3 col-xl-3">
@@ -193,14 +211,6 @@ include BASE_PATH . 'views/header.php';
           Edit basic details
         </button>
       </p> -->
-
-      <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
-        <p>
-          <a href="<?= htmlspecialchars(autoUrl("members/" . $id . "/edit")) ?>" class="btn btn-success">
-            Edit basic details
-          </a>
-        </p>
-      <?php } ?>
 
       <hr>
 

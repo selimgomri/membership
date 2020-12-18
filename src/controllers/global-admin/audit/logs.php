@@ -64,10 +64,10 @@ include BASE_PATH . "views/root/header.php";
                   <strong><a target="_blank" href="<?= htmlspecialchars(autoUrl($tenant->getCodeId() . '/users/' . $row['UserID'])) ?>"><?= htmlspecialchars($row['Forename'] . ' ' . $row['Surname']) ?></a></strong>
                 </div>
                 <div class="col text-center">
-                  <strong><a target="_blank" href="<?= htmlspecialchars(autoUrl($tenant->getCodeId())) ?>"><?= htmlspecialchars($tenant->getName()) ?></a></strong>
+                  <strong><?= htmlspecialchars($time->format('H:i:s d/m/Y')) ?></strong>
                 </div>
                 <div class="col text-right">
-                  <strong><?= htmlspecialchars($time->format('H:i:s d/m/Y')) ?></strong>
+                  <strong><a target="_blank" href="<?= htmlspecialchars(autoUrl($tenant->getCodeId())) ?>"><?= htmlspecialchars($tenant->getName()) ?></a></strong>
                 </div>
               </div>
               <p class="mb-0 mono">
