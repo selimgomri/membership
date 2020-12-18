@@ -2,36 +2,25 @@
 
 use Respect\Validation\Validator as v;
 
-if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent" && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Coach") {
-	$this->get('/new', function() {
-		
+if (app()->user->hasPermission('Admin')) {
+	$this->get('/new', function () {
 		include 'NewPost.php';
 	});
 
-	$this->post('/new', function() {
-		
+	$this->post('/new', function () {
 		include 'NewPostServer.php';
 	});
 
-	$this->get(['/{id}:int/edit', '/{string}/edit'], function($id) {
-		$int = false;
-		if (v::intVal()->validate($id)) {
-			$int = true;
-		}
+	$this->get('/{id}:int/edit', function ($id) {
 		include 'EditPost.php';
 	});
 
-	$this->post(['/{id}:int/edit', '/{string}/edit'], function($id) {
-		
-		$int = false;
-		if (v::intVal()->validate($id)) {
-			$int = true;
-		}
+	$this->post('/{id}:int/edit', function ($id) {
 		include 'EditPostServer.php';
 	});
 }
 
-$this->get('/', function() {
+$this->get('/', function () {
 	if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 		header("Location: " . autoUrl(""));
 	} else {
@@ -39,18 +28,18 @@ $this->get('/', function() {
 	}
 });
 
-$this->get('/{id}:int', function($id) {
+$this->get('/{id}:int', function ($id) {
 	$int = true;
 	include 'Post.php';
 });
 
 
-$this->get('/{id}:int/print.pdf', function($club, $void, $id) {
+$this->get('/{id}:int/print.pdf', function ($club, $void, $id) {
 	$int = true;
 	include 'PrintPost.php';
 });
 
-$this->get(['/*'], function() {
+$this->get(['/*'], function () {
 	$int = false;
 	$id = ltrim($this[0], '/');
 	include 'Post.php';

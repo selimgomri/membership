@@ -424,27 +424,14 @@ if (!function_exists('chesterStandardMenu')) {
                 </div>
               </li>
             <?php } ?>
-            <?php if (
-              $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent" &&
-              $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Coach"
-            ) { ?>
+            <?php if (isset(app()->user) && app()->user->hasPermission('Admin')) { ?>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="postDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Posts
+                  Pages
                 </a>
                 <div class="dropdown-menu" aria-labelledby="postDropdown">
-                  <a class="dropdown-item" href="<?php echo autoUrl("posts") ?>">Home</a>
-                  <a class="dropdown-item" href="<?php echo autoUrl("posts/new") ?>">New Page</a>
-                  <?php if (isset($allow_edit) && $allow_edit && (($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent" &&
-                    $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Coach" && $edit_link != null))) { ?>
-                    <a class="dropdown-item" href="<?= $edit_link ?>">Edit Current Page</a>
-                  <?php } ?>
-                  <?php if (
-                    isset($exit_edit) && isset($id) && $exit_edit && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent" &&
-                    $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Coach"
-                  ) { ?>
-                    <a class="dropdown-item" href="<?= autoUrl("posts/" . $id) ?>">View Page</a>
-                  <?php } ?>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('pages')) ?>">Home</a>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('pages/new')) ?>">New Page</a>
                 </div>
               </li>
               <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>

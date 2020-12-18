@@ -32,4 +32,4 @@ $id = $db->lastInsertId();
 
 $_SESSION['TENANT-' . app()->tenant->getId()]['PostStatus'] = "Successfully added";
 
-header("Location: " . autoUrl("posts/" . $id));
+header("Location: " . autoUrl("pages/" . $id));

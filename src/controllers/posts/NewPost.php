@@ -17,8 +17,7 @@ include BASE_PATH . "views/postsMenu.php";
 					<h1>New Post</h1>
 					<div class="form-group">
 						<label for="title">Title</label>
-						<input type="text" class="form-control" name="title" id="title"
-			      placeholder="Post Title" autocomplete="off" <?php if ($people) { ?>value="<?=getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])?>" readonly <?php } ?> >
+						<input type="text" class="form-control" name="title" id="title" placeholder="Post Title" autocomplete="off" <?php if ($people) { ?>value="<?= getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) ?>" readonly <?php } ?>>
 					</div>
 
 					<div class="form-group mb-0">
@@ -27,14 +26,14 @@ include BASE_PATH . "views/postsMenu.php";
 			      </textarea>
 						<small id="contentHelp" class="form-text text-muted">
 							Posts are written in <a href="https://www.markdownguide.org" target="_blank">Markdown</a>. HTML is not allowed for security reasons.
-			      </small>
+						</small>
 					</div>
 
 					<!--<p><button class="btn btn-secondary" id="submit" value="submitted" type="submit">Publish</button></p>-->
 				</div>
 			</div>
 			<div class="col-12 col-md-4">
-				<div class="cell">
+				<div class="card card-body mb-3">
 					<p>
 						<button class="btn btn-secondary" id="submit" value="submitted" type="submit">
 							Publish
@@ -43,35 +42,34 @@ include BASE_PATH . "views/postsMenu.php";
 					<p class="mb-0">We will publish this immediately.</p>
 				</div>
 
-				<div class="cell">
+				<div class="card card-body">
 					<h3>Meta</h3>
 					<div class="form-group">
 						<label for="path">Path</label>
-						<p class="small mb-0">
-							<?= autoUrl("posts/") ?>
+						<p class="small mb-1">
+							<?= htmlspecialchars(autoUrl("pages/")) ?>
 						</p>
-						<input type="text" class="form-control" name="path" id="path"
-			      placeholder="Leave blank to use Post ID" autocomplete="off">
+						<input type="text" class="form-control" name="path" id="path" placeholder="Leave blank to use Post ID" autocomplete="off">
 					</div>
 					<div class="form-group">
 						<label for="date">Date and time</label>
-						<input type="datetime-local" class="form-control" name="date" id="date" value="<?=$date->format("c")?>">
+						<input type="datetime-local" class="form-control" name="date" id="date" value="<?= htmlspecialchars($date->format("c")) ?>">
 					</div>
 					<div class="form-group">
 						<label for="type">Type</label>
 						<select class="custom-select" name="type">
 							<?php for ($i = 0; $i < sizeof($post_types); $i++) { ?>
-							<option value="<?=$post_types[$i]['value']?>">
-								<?=$post_types[$i]['description']?>
-							</option>
+								<option value="<?= $post_types[$i]['value'] ?>">
+									<?= $post_types[$i]['description'] ?>
+								</option>
 							<?php } ?>
 						</select>
 					</div>
 					<div class="form-group mb-0">
 						<label for="mime">MIME Type</label>
 						<select class="custom-select" name="mime">
-						  <option value="text/html">text/html</option>
-						  <option value="text/plain">text/plain</option>
+							<option value="text/html">text/html</option>
+							<option value="text/plain">text/plain</option>
 							<option value="text/markdown">text/markdown</option>
 						</select>
 					</div>
@@ -80,9 +78,7 @@ include BASE_PATH . "views/postsMenu.php";
 				<div class="cell">
 					<h3>SEO</h3>
 					<div class="form-group mb-0">
-						<label for="excerpt">Excerpt</label> <textarea class="form-control"
-						name="excerpt" id="excerpt" placeholder="This is about"
-						autocomplete="off"></textarea>
+						<label for="excerpt">Excerpt</label> <textarea class="form-control" name="excerpt" id="excerpt" placeholder="This is about" autocomplete="off"></textarea>
 					</div>
 				</div>
 			</div>
