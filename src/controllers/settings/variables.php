@@ -266,12 +266,12 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <?php if ($vars['LOGO_DIR']) { ?>
-          <div class="form-group">
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="SHOW_LOGO" value="1" name="SHOW_LOGO" <?php if (bool($vars['SHOW_LOGO'])) { ?>checked<?php } ?> <?= $disabled['SHOW_LOGO'] ?>>
-              <label class="custom-control-label" for="SHOW_LOGO">Show organisation logo in header</label>
+            <div class="form-group">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="SHOW_LOGO" value="1" name="SHOW_LOGO" <?php if (bool($vars['SHOW_LOGO'])) { ?>checked<?php } ?> <?= $disabled['SHOW_LOGO'] ?>>
+                <label class="custom-control-label" for="SHOW_LOGO">Show organisation logo in header</label>
+              </div>
             </div>
-          </div>
           <?php } ?>
 
           <div class="form-group">
@@ -355,7 +355,7 @@ include BASE_PATH . 'views/header.php';
 
           <div class="form-group">
             <label for="GLOBAL_PERSONAL_KEY">Personal Key</label>
-            <input class="form-control mono" type="text" name="GLOBAL_PERSONAL_KEY" id="GLOBAL_PERSONAL_KEY" value="<?= htmlspecialchars($vars['GLOBAL_PERSONAL_KEY']) ?>" <?= $disabled['GLOBAL_PERSONAL_KEY'] ?> pattern="[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}" >
+            <input class="form-control mono" type="text" name="GLOBAL_PERSONAL_KEY" id="GLOBAL_PERSONAL_KEY" value="<?= htmlspecialchars($vars['GLOBAL_PERSONAL_KEY']) ?>" <?= $disabled['GLOBAL_PERSONAL_KEY'] ?> pattern="[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}">
             <div class="invalid-feedback">
               Please enter your personal key in the corrent format
             </div>

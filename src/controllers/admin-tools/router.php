@@ -82,4 +82,8 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
   $this->group('/audit', function () {
     include 'audit/router.php';
   });
+
+  $this->group('/member-lookup', function () {
+    include 'member-lookup/router.php';
+  });
 }
