@@ -100,12 +100,6 @@ try {
     $_POST['user']
   ]);
 
-  // Delete qualifications
-  $delete = $db->prepare("DELETE FROM qualifications WHERE UserID = ?");
-  $delete->execute([
-    $_POST['user']
-  ]);
-
   // Delete squad rep assignments
   $delete = $db->prepare("DELETE FROM squadReps WHERE User = ?");
   $delete->execute([
