@@ -93,27 +93,15 @@ include BASE_PATH . "views/header.php";
         </div>
       </form>
 
-      <?php if (app()->tenant->isCLS()) { ?>
-        <p class="small mb-0">
-          Support Helpline: <a class="" href="mailto:support@chesterlestreetasc.co.uk">support@chesterlestreetasc.co.uk</a>
-        </p>
-
-        <p class="small mb-4">
-          Support Website: <a class="" href="https://www.chesterlestreetasc.co.uk/support/onlinemembership">CLS
-            ASC Help and Support</a>
-        </p>
-      <?php } else { ?>
-        <p class="small mb-0">
-          For support, please contact your own club in the first instance.
-        </p>
-        <p class="small mb-0">
-          Support Helpline: <a class="" href="mailto:support@myswimmingclub.co.uk">support@myswimmingclub.co.uk</a>
-        </p>
-
-        <p class="small mb-4">
-          Support Website: <a class="" href="<?= htmlspecialchars(autoUrl('help-and-support', false)) ?>">Help and Support</a>
-        </p>
-      <?php } ?>
+      <p class="small mb-0">
+        For support, please contact your own club in the first instance.
+      </p>
+      <p class="small mb-0">
+        Support Helpline: <a class="" href="mailto:support@myswimmingclub.co.uk">support@myswimmingclub.co.uk</a>
+      </p>
+      <p class="small mb-4">
+        Support Website: <a class="" href="<?= htmlspecialchars(autoUrl('help-and-support', false)) ?>">Help and Support</a>
+      </p>
 
       <!--
       <p class="small mb-5">
