@@ -16,7 +16,7 @@ $data = [
 	$_POST['content'],
 	$_POST['title'],
 	$_POST['excerpt'],
-	$_POST['path'],
+	trim($_POST['path'], " \t\n\r\0\x0B/"),
 	$_POST['type'],
 	$_POST['mime'],
 	$tenant->getId()
@@ -32,4 +32,4 @@ $id = $db->lastInsertId();
 
 $_SESSION['TENANT-' . app()->tenant->getId()]['PostStatus'] = "Successfully added";
 
-header("Location: " . autoUrl("posts/" . $id));
+header("Location: " . autoUrl("pages/" . $id));
