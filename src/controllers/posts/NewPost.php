@@ -42,7 +42,7 @@ include BASE_PATH . "views/postsMenu.php";
 					<p class="mb-0">We will publish this immediately.</p>
 				</div>
 
-				<div class="card card-body">
+				<div class="card card-body mb-3">
 					<h3>Meta</h3>
 					<div class="form-group">
 						<label for="path">Path</label>
@@ -75,7 +75,7 @@ include BASE_PATH . "views/postsMenu.php";
 					</div>
 				</div>
 
-				<div class="cell">
+				<div class="card card-body">
 					<h3>SEO</h3>
 					<div class="form-group mb-0">
 						<label for="excerpt">Excerpt</label> <textarea class="form-control" name="excerpt" id="excerpt" placeholder="This is about" autocomplete="off"></textarea>
