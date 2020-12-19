@@ -2,6 +2,13 @@
 
 $db = app()->db;
 $tenant = app()->tenant;
+$user = $id;
+
+$object = MembershipFees::getByUser($user);
+
+pre($object);
+
+exit();
 
 $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $info = null;
@@ -33,7 +40,7 @@ if ($discounts != null && isset($discounts['ASA'][$month])) {
   $swimEnglandDiscount = $discounts['ASA'][$month];
 }
 
-$sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ? AND `ClubPays` = '0'");
+$sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ?");
 $sql->execute([$user]);
 
 $clubFee = $totalFeeDiscounted = $totalFee = 0;
