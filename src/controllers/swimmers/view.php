@@ -539,15 +539,6 @@ include BASE_PATH . 'views/header.php';
       <dl class="row">
         <div class="col-6">
           <dt class="text-truncate">
-            Club pays squad fees
-          </dt>
-          <dd>
-            <?php if ($member->squadFeesPaid()) { ?>Yes<?php } else { ?>No, member pays<?php } ?>
-          </dd>
-        </div>
-
-        <!-- <div class="col-6">
-          <dt class="text-truncate">
             Club pays club membership fees
           </dt>
           <dd>
@@ -562,7 +553,7 @@ include BASE_PATH . 'views/header.php';
           <dd>
             <?php if ($member->swimEnglandFeesPaid()) { ?>Yes<?php } else { ?>No, member pays<?php } ?>
           </dd>
-        </div> -->
+        </div>
 
         <div class="col-6">
           <dt class="text-truncate">

@@ -22,7 +22,7 @@ class Member extends Person
   private bool $clubPaysSwimEngland;
   private bool $swimEnglandPayingClub;
   private bool $clubMember;
-  private int $clubCategory;
+  private string $clubCategory;
   private bool $clubPaysMembership;
   private string $country;
   private bool $current;
@@ -73,7 +73,6 @@ class Member extends Person
     $this->country = $info['Country'];
 
     // Fees
-    $this->clubPaysFees = bool($info['ClubPays']);
     $this->clubPaysSwimEngland = bool($info['ASAPaid']);
     $this->clubPaysMembership = bool($info['ClubPaid']);
 
@@ -202,16 +201,6 @@ class Member extends Person
     }
 
     return $contacts;
-  }
-
-  /**
-   * Is the member's squad fee paid
-   * 
-   * @return bool true if club pays fees
-   */
-  public function squadFeesPaid()
-  {
-    return $this->clubPaysFees;
   }
 
   /**

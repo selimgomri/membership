@@ -23,7 +23,7 @@ $squadUpdate = false;
 $dateOfBirthUpdate = false;
 $sexUpdate = false;
 $otherNotesUpdate = false;
-$catUpdate = $cpUpdate = false;
+$catUpdate = $cpUpdate = $sepUpdate = $clubCatUpdate = false;
 $update = false;
 $countryUpdate = false;
 $swimmerStatusUpdate = false;
@@ -51,8 +51,10 @@ $sex = $row['Gender'];
 $otherNotes = $row['OtherNotes'];
 $dbAccessKey = $row['AccessKey'];
 $cat = $row['ASACategory'];
-$cp = $row['ClubPays'];
 $swimmerStatus = $row['Status'];
+$cp = $row['ClubPaid'];
+$sep = $row['ASAPaid'];
+$clubCat = $row['ClubCategory'];
 
 if (!empty($_POST['forename'])) {
 	$newForename = trim(mb_ucfirst($_POST['forename']));
@@ -147,9 +149,31 @@ if (isset($_POST['cat'])) {
 if (isset($_POST['cp'])) {
 	$newCp = trim($_POST['cp']);
 	if ($newCp != $cp && ($newCp == 0 || $newCp == 1)) {
-		$updateSwimmer = $db->prepare("UPDATE `members` SET `ClubPays` = ? WHERE `MemberID` = ?");
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `ClubPaid` = ? WHERE `MemberID` = ?");
 		$updateSwimmer->execute([$newCp, $id]);
 		$cpUpdate = true;
+		$update = true;
+	}
+}
+if (isset($_POST['sep'])) {
+	$newCp = trim($_POST['sep']);
+	if ($newCp != $sep && ($newCp == 0 || $newCp == 1)) {
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `ASAPaid` = ? WHERE `MemberID` = ?");
+		$updateSwimmer->execute([$newCp, $id]);
+		$sepUpdate = true;
+		$update = true;
+	}
+}
+if (isset($_POST['club-cat'])) {
+	$getCats = $db->prepare("SELECT `ID` FROM `clubMembershipClasses` WHERE `Tenant` = ? ORDER BY `Name` ASC");
+	$getCats->execute([
+		$tenant->getId()
+	]);
+	$cats = $getCats->fetchAll(PDO::FETCH_COLUMN);
+	if (in_array($_POST['club-cat'], $cats) && $_POST['club-cat'] != $clubCat) {
+		$updateSwimmer = $db->prepare("UPDATE `members` SET `ClubCategory` = ? WHERE `MemberID` = ?");
+		$updateSwimmer->execute([$_POST['club-cat'], $id]);
+		$clubCatUpdate = true;
 		$update = true;
 	}
 }
@@ -185,12 +209,18 @@ if (isset($_POST['country'])) {
 	}
 }
 
+$getClubCategories = $db->prepare("SELECT `ID`, `Name` FROM `clubMembershipClasses` WHERE `Tenant` = ? ORDER BY `Name` ASC");
+$getClubCategories->execute([
+	$tenant->getId()
+]);
+$clubCategory = $getClubCategories->fetch(PDO::FETCH_ASSOC);
+
 AuditLog::new('Members-Edited', 'Edited ' . $forename . ' ' . $surname . ' (#' . $id . ')');
 
 $sqlSwim = "";
 $swimmer = $db->prepare("SELECT members.MForename, members.MForename, members.MMiddleNames,
-members.MSurname, members.ASANumber, members.ASACategory, members.ClubPays, members.DateOfBirth, members.Gender,
-members.OtherNotes, members.AccessKey, members.Status, members.Country FROM members WHERE members.MemberID = ?");
+members.MSurname, members.ASANumber, members.ASACategory, members.ASAPaid, members.ClubPaid, members.DateOfBirth, members.Gender,
+members.OtherNotes, members.AccessKey, members.Status, members.Country, members.ClubCategory FROM members WHERE members.MemberID = ?");
 $swimmer->execute([$id]);
 $rowSwim = $swimmer->fetch(PDO::FETCH_ASSOC);
 $pagetitle = "Swimmer: " . htmlspecialchars($rowSwim['MForename'] . " " . $rowSwim['MSurname']);
@@ -228,9 +258,16 @@ if ($update) {
 	if ($catUpdate) {
 		$content .= '<li>Swim England Category</li>';
 	}
+	if ($clubCatUpdate) {
+		$content .= '<li>Club Membership Category</li>';
+	}
 	if ($cpUpdate) {
-		$content .= '<li>Whether or not the club pays swimmer\'s
-		fees</li>';
+		$content .= '<li>Whether or not the club pays the member\'s
+		Club Membership fees</li>';
+	}
+	if ($sepUpdate) {
+		$content .= '<li>Whether or not the club pays the member\'s
+		Swim England fees</li>';
 	}
 	if ($otherNotesUpdate) {
 		$content .= '<li>Other notes</li>';
@@ -283,6 +320,22 @@ $content .= "
 	</select>
 </div>";
 
+// $clubCategory = $getClubCategories->fetch(PDO::FETCH_ASSOC)
+$content .= "
+<div class=\"form-group\">
+	<label for=\"club-cat\">Club Membership Category</label>
+	<select class=\"custom-select\" id=\"club-cat\" name=\"club-cat\" placeholder=\"Select\" required>";
+do {
+	$selected = '';
+	if ($rowSwim['ClubCategory'] == $clubCategory['ID']) {
+		$selected = ' selected ';
+	}
+	$content .= "<option value=\"" . htmlspecialchars($clubCategory['ID']) . "\" " . $selected . ">" . htmlspecialchars($clubCategory['Name']) . "</option>";
+} while ($clubCategory = $getClubCategories->fetch(PDO::FETCH_ASSOC));
+$content .= "
+	</select>
+</div>";
+
 if ($rowSwim['Gender'] == "Male") {
 	$content .= "
 	<div class=\"form-group\">
@@ -322,10 +375,24 @@ $cp = [
 	'',
 	''
 ];
-$cp[$rowSwim['ClubPays']] = " selected ";
+$cp[$rowSwim['ASAPaid']] = " selected ";
 $content .= "
 <div class=\"form-group\">
-	<label for=\"cp\">Club pays Swim England/Club membership fees?</label>
+	<label for=\"sep\">Club pays Swim England fees?</label>
+	<select class=\"custom-select\" id=\"sep\" name=\"sep\" placeholder=\"Select\">
+		<option value=\"0\" " . $cp[0] . ">No</option>
+		<option value=\"1\" " . $cp[1] . ">Yes</option>
+	</select>
+</div>";
+
+$cp = [
+	'',
+	''
+];
+$cp[$rowSwim['ClubPaid']] = " selected ";
+$content .= "
+<div class=\"form-group\">
+	<label for=\"cp\">Club pays Club Membership fees?</label>
 	<select class=\"custom-select\" id=\"cp\" name=\"cp\" placeholder=\"Select\">
 		<option value=\"0\" " . $cp[0] . ">No</option>
 		<option value=\"1\" " . $cp[1] . ">Yes</option>
