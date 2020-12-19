@@ -18,7 +18,7 @@ class NSwimmers extends ClassType
       }
       $member = $members[$i];
       $items[] = new MembershipFeeItem(
-        $member['MForename'] . ' ' . $member['MForename'],
+        $member['MForename'] . ' ' . $member['MSurname'],
         $fee,
         $member['MemberID']
       );

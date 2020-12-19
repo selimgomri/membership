@@ -13,7 +13,7 @@ class MembershipFeeClass
   private $members;
   private $fees;
 
-  private function __contruct($user, $class, $name, $description, $fees)
+  private function __construct($user, $class, $name, $description, $fees)
   {
     $db = app()->db;
 
@@ -24,7 +24,7 @@ class MembershipFeeClass
     $this->description = $description;
     $fees = json_decode($fees);
     $this->type = $fees->type;
-    $this->upgradeType = $fees->upgrade;
+    $this->upgradeType = $fees->upgrade_type;
     $this->classFees = $fees->fees;
 
     // Get members with this class
@@ -69,5 +69,18 @@ class MembershipFeeClass
     pre($feeClass);
 
     return $feeClass;
+  }
+
+  public function getTotal() {
+    $total = 0;
+    foreach ($this->fees as $item) {
+      $total += $item->getAmount();
+    }
+
+    return $total;
+  }
+
+  public function getFormattedTotal() {
+    return (string) (\Brick\Math\BigDecimal::of((string) $this->getTotal()))->withPointMovedLeft(2)->toScale(2);
   }
 }

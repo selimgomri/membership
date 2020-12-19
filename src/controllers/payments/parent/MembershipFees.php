@@ -8,6 +8,8 @@ $object = MembershipFees::getByUser($user);
 
 pre($object);
 
+pre($object->getFormattedTotal());
+
 exit();
 
 $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];

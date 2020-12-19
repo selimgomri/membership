@@ -15,7 +15,7 @@ class PerPerson extends ClassType
     for ($i = 0; $i < sizeof($members); $i++) {
       $member = $members[$i];
       $items[] = new MembershipFeeItem(
-        $member['MForename'] . ' ' . $member['MForename'],
+        $member['MForename'] . ' ' . $member['MSurname'],
         $fee,
         $member['MemberID']
       );

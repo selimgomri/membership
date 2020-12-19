@@ -7,7 +7,7 @@ class MembershipFeeItem
   private $amount;
   private $member;
 
-  protected function __contruct($description, $amount, $member)
+  public function __construct($description, $amount, $member)
   {
     $this->description = $description;
     $this->amount = $amount;

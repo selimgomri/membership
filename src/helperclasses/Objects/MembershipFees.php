@@ -5,7 +5,7 @@ class MembershipFees {
   private $classes;
   private $user;
 
-  private function __contruct($user, $classes) {
+  private function __construct($user, $classes) {
     $this->user = $user;
     $this->classes = $classes;
   }
@@ -27,5 +27,18 @@ class MembershipFees {
 
     $object = new MembershipFees($user, $objects);
     return $object;
+  }
+
+  public function getTotal() {
+    $total = 0;
+    foreach ($this->classes as $class) {
+      $total += $class->getTotal();
+    }
+
+    return $total;
+  }
+
+  public function getFormattedTotal() {
+    return (string) (\Brick\Math\BigDecimal::of((string) $this->getTotal()))->withPointMovedLeft(2)->toScale(2);
   }
 }
