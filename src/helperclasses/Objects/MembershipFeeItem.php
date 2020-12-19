@@ -14,19 +14,23 @@ class MembershipFeeItem
     $this->member = $member;
   }
 
-  public function getDescription() {
+  public function getDescription()
+  {
     return $this->description;
   }
 
-  public function getAmount() {
+  public function getAmount()
+  {
     return $this->amount;
   }
 
-  public function getFormattedAmount() {
+  public function getFormattedAmount()
+  {
     return (string) (\Brick\Math\BigDecimal::of((string) $this->getAmount()))->withPointMovedLeft(2)->toScale(2);
   }
 
-  public function getMember() {
+  public function getMember()
+  {
     return $this->member;
   }
 }

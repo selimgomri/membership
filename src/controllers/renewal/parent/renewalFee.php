@@ -1,14 +1,14 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
+$user = app()->user;
 
-
-$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $partial_reg = isPartialRegistration();
 
 $partial_reg_require_topup = false;
 if ($partial_reg) {
-	$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = 0 AND ClubPays = 0";
+	$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = 0";
 	try {
 		$query = $db->prepare($sql);
 		$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
@@ -31,16 +31,16 @@ if ($discounts != null && isset($discounts['ASA'][$month])) {
 	$swimEnglandDiscount = $discounts['ASA'][$month];
 }
 
-$sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ? AND `ClubPays` = '0'");
+$sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ?");
 $sql->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 $clubFee = $totalFeeDiscounted = $totalFee = 0;
 
 $payingSwimmerCount = $sql->fetchColumn();
 
-$clubFees = \SCDS\Membership\ClubMembership::create($db, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $partial_reg);
+$clubFees = MembershipFees::getByUser($user->getId());
 
-$clubFee = $clubFees->getFee();
+$clubFee = $clubFees->getTotal();
 
 if ($partial_reg) {
 	$sql = "SELECT * FROM members WHERE `members`.`UserID` = ? AND `members`.`RR` = 1";
@@ -68,11 +68,11 @@ $asa2 = app()->tenant->getKey('ASA-County-Fee-L2') + app()->tenant->getKey('ASA-
 $asa3 = app()->tenant->getKey('ASA-County-Fee-L3') + app()->tenant->getKey('ASA-Regional-Fee-L3') + app()->tenant->getKey('ASA-National-Fee-L3');
 
 for ($i = 0; $i < $count; $i++) {
-	if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ClubPays']) {
+	if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ASAPaid']) {
 		$asaFees[$i] = $asa1;
-	} else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ClubPays']) {
+	} else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ASAPaid']) {
 		$asaFees[$i] = $asa2;
-	} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ClubPays']) {
+	} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ASAPaid']) {
 		$asaFees[$i] = $asa3;
 	} else {
 		$asaFees[$i] = 0;
@@ -89,7 +89,7 @@ for ($i = 0; $i < $count; $i++) {
 	}
 }
 
-$clubFeeString = (string) (\Brick\Math\BigDecimal::of((string) $clubFee))->withPointMovedLeft(2)->toScale(2);
+$clubFeeString = $clubFees->getFormattedTotal();
 $totalFeeString = (string) (\Brick\Math\BigDecimal::of((string) $totalFee))->withPointMovedLeft(2)->toScale(2);
 
 $pagetitle = "Your Renewal Fees";
@@ -164,40 +164,40 @@ include BASE_PATH . "views/renewalTitleBar.php";
 						<th>
 						</th>
 					</tr>
-				</thead>
-				<thead class="thead-light">
-					<tr>
-						<th>
-							Type
-						</th>
-						<th>
-							Fee
-						</th>
-					</tr>
-				</thead>
+					<?php foreach ($clubFees->getClasses() as $class) { ?>
+						<thead class="">
+							<tr class="bg-dark text-light">
+								<th>
+									<?= htmlspecialchars($class->getName()) ?>
+								</th>
+								<th>
+								</th>
+							</tr>
+						</thead>
+						<thead class="thead-light">
+							<tr>
+								<th>
+									Member
+								</th>
+								<th>
+									Fee
+								</th>
+							</tr>
+						</thead>
 				<tbody>
-					<?php foreach ($clubFees->getFeeItems() as $item) { ?>
+					<?php foreach ($class->getFeeItems() as $item) { ?>
 						<tr>
 							<td>
-								<?= htmlspecialchars($item['description']) ?>
+								<?= htmlspecialchars($item->getDescription()) ?>
 							</td>
 							<td>
-								&pound;<?= number_format($item['amount'] / 100, 2, '.', '') ?>
-							</td>
-						</tr>
-					<?php } ?>
-					<?php if ($clubDiscount > 0 && $renewal == 0) { ?>
-						<tr>
-							<td>
-								Discretionary discount at <?= htmlspecialchars($clubDiscount) ?>%
-							</td>
-							<td>
-								-&pound;<?= number_format(((int)$clubFee * ($clubDiscount / 100) / 100), 2, '.', '') ?>
+								&pound;<?= htmlspecialchars($item->getFormattedAmount()) ?>
 							</td>
 						</tr>
 					<?php } ?>
 				</tbody>
-				<!--</table>
+			<?php } ?>
+			<!--</table>
 		</div>
 		<?php if ($payingSwimmerCount > 1) {
 		?>
@@ -211,94 +211,94 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		<h2>Swim England Membership Fees</h2>
 		<div class="table-responsive-md">
 			<table class="table">-->
-				<thead class="">
-					<tr class="bg-primary text-light">
-						<th>
-							Swim England Membership
-						</th>
-						<th>
-						</th>
-					</tr>
-				</thead>
-				<thead class="thead-light">
+			<thead class="">
+				<tr class="bg-primary text-light">
+					<th>
+						Swim England Membership
+					</th>
+					<th>
+					</th>
+				</tr>
+			</thead>
+			<thead class="thead-light">
+				<tr>
+					<th>
+						Member
+					</th>
+					<th>
+						Fee
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				for ($i = 0; $i < $count; $i++) {
+					$asaFeesString;
+					if ($member[$i]['ASAPaid']) {
+						$asaFeesString = "0.00 (Paid by club)";
+					} else if (isset($asaFees[$i])) {
+						$asaFeesString = (string) (\Brick\Math\BigDecimal::of((string) $asaFees[$i]))->withPointMovedLeft(2)->toScale(2);
+					} else {
+						$asaFeesString = "0.00 (No fee information)";
+					}
+				?>
 					<tr>
-						<th>
-							Swimmer
-						</th>
-						<th>
-							Fee
-						</th>
+						<td>
+							<?= htmlspecialchars($member[$i]['MForename'] . " " . $member[$i]['MSurname']) ?><?php if ($member[$i]['ASACategory'] > 0) { ?> (Category <?= htmlspecialchars($member[$i]['ASACategory']) ?>)<?php } ?>
+						</td>
+						<td>
+							&pound;<?php echo $asaFeesString; ?>
+						</td>
 					</tr>
-				</thead>
-				<tbody>
-					<?php
-					for ($i = 0; $i < $count; $i++) {
-						$asaFeesString;
-						if ($member[$i]['ClubPays']) {
-							$asaFeesString = "0.00 (Paid by club)";
-						} else if (isset($asaFees[$i])) {
-							$asaFeesString = (string) (\Brick\Math\BigDecimal::of((string) $asaFees[$i]))->withPointMovedLeft(2)->toScale(2);
-						} else {
-							$asaFeesString = "0.00 (No fee information)";
-						}
-					?>
+					<?php if ($member[$i]['RRTransfer']) { ?>
 						<tr>
 							<td>
-								<?= htmlspecialchars($member[$i]['MForename'] . " " . $member[$i]['MSurname']) ?><?php if ($member[$i]['ASACategory'] > 0) { ?> (Category <?= htmlspecialchars($member[$i]['ASACategory']) ?>)<?php } ?>
+								<?= htmlspecialchars($member[$i]['MForename'] . " " . $member[$i]['MSurname']) ?> (Swim England Membership Transfer Credit)
 							</td>
 							<td>
-								&pound;<?php echo $asaFeesString; ?>
+								-&pound;<?= $asaFeesString ?>
 							</td>
 						</tr>
-						<?php if ($member[$i]['RRTransfer']) { ?>
-							<tr>
-								<td>
-									<?= htmlspecialchars($member[$i]['MForename'] . " " . $member[$i]['MSurname']) ?> (Swim England Membership Transfer Credit)
-								</td>
-								<td>
-									-&pound;<?= $asaFeesString ?>
-								</td>
-							</tr>
-						<?php } else if ($swimEnglandDiscount > 0 && $renewal == 0) { ?>
-							<tr>
-								<td>
-									Discretionary discount at <?= htmlspecialchars($swimEnglandDiscount) ?>%
-								</td>
-								<td>
-									-&pound;<?= number_format(((int)$asaFees[$i] * ($swimEnglandDiscount / 100)) / 100, 2, '.', '') ?>
-								</td>
-							</tr>
-						<?php } ?>
+					<?php } else if ($swimEnglandDiscount > 0 && $renewal == 0) { ?>
+						<tr>
+							<td>
+								Discretionary discount at <?= htmlspecialchars($swimEnglandDiscount) ?>%
+							</td>
+							<td>
+								-&pound;<?= number_format(((int)$asaFees[$i] * ($swimEnglandDiscount / 100)) / 100, 2, '.', '') ?>
+							</td>
+						</tr>
 					<?php } ?>
-				</tbody>
-				<tbody>
+				<?php } ?>
+			</tbody>
+			<tbody>
+				<tr class="table-active">
+					<td>
+						Total Membership Fee
+					</td>
+					<td>
+						&pound;<?= $totalFeeString ?>
+					</td>
+				</tr>
+				<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0)	 && $renewal == 0) { ?>
 					<tr class="table-active">
 						<td>
-							Total Membership Fee
+							Total discounts
 						</td>
 						<td>
-							&pound;<?= $totalFeeString ?>
+							-&pound;<?= number_format(((int)$totalFee - $totalFeeDiscounted) / 100, 2, '.', '') ?>
 						</td>
 					</tr>
-					<?php if (($swimEnglandDiscount > 0 || $clubDiscount > 0)	 && $renewal == 0) { ?>
-						<tr class="table-active">
-							<td>
-								Total discounts
-							</td>
-							<td>
-								-&pound;<?= number_format(((int)$totalFee - $totalFeeDiscounted) / 100, 2, '.', '') ?>
-							</td>
-						</tr>
-						<tr class="table-active">
-							<td>
-								Total Membership Fee (with discounts)
-							</td>
-							<td>
-								&pound;<?= number_format(((int)$totalFeeDiscounted) / 100, 2, '.', '') ?>
-							</td>
-						</tr>
-					<?php } ?>
-				</tbody>
+					<tr class="table-active">
+						<td>
+							Total Membership Fee (with discounts)
+						</td>
+						<td>
+							&pound;<?= number_format(((int)$totalFeeDiscounted) / 100, 2, '.', '') ?>
+						</td>
+					</tr>
+				<?php } ?>
+			</tbody>
 			</table>
 		</div>
 

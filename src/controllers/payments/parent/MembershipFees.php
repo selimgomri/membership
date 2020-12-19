@@ -2,15 +2,13 @@
 
 $db = app()->db;
 $tenant = app()->tenant;
-$user = $id;
+// $user = $id;
 
-$object = MembershipFees::getByUser($user);
+// $object = MembershipFees::getByUser($user);
 
-pre($object);
+// pre($object);
 
-pre($object->getFormattedTotal());
-
-exit();
+// pre($object->getFormattedTotal());
 
 $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 $info = null;
@@ -49,9 +47,9 @@ $clubFee = $totalFeeDiscounted = $totalFee = 0;
 
 $payingSwimmerCount = $sql->fetchColumn();
 
-$clubFees = \SCDS\Membership\ClubMembership::create($db, $user, false);
+$clubFees = MembershipFees::getByUser($user);
 
-$clubFee = $clubFees->getFee();
+$clubFee = $clubFees->getTotal();
 
 $getMembers = $db->prepare("SELECT * FROM `members` WHERE `members`.`UserID` = ?");
 $getMembers->execute([
@@ -71,11 +69,11 @@ $asa2 = app()->tenant->getKey('ASA-County-Fee-L2') + app()->tenant->getKey('ASA-
 $asa3 = app()->tenant->getKey('ASA-County-Fee-L3') + app()->tenant->getKey('ASA-Regional-Fee-L3') + app()->tenant->getKey('ASA-National-Fee-L3');
 
 for ($i = 0; $i < $count; $i++) {
-  if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ClubPays']) {
+  if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ASAPaid']) {
     $asaFees[$i] = $asa1;
-  } else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ClubPays']) {
+  } else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ASAPaid']) {
     $asaFees[$i] = $asa2;
-  } else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ClubPays']) {
+  } else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ASAPaid']) {
     $asaFees[$i] = $asa3;
   }
 
@@ -85,7 +83,7 @@ for ($i = 0; $i < $count; $i++) {
   }
 }
 
-$clubFeeString = (string) (\Brick\Math\BigDecimal::of((string) $clubFee))->withPointMovedLeft(2)->toScale(2);
+$clubFeeString = $clubFees->getFormattedTotal();
 $totalFeeString = (string) (\Brick\Math\BigDecimal::of((string) $totalFee))->withPointMovedLeft(2)->toScale(2);
 
 $pagetitle = "Membership Fees";
@@ -132,28 +130,39 @@ include BASE_PATH . 'views/header.php';
               </th>
             </tr>
           </thead>
-          <thead class="thead-light">
-            <tr>
-              <th>
-                Type
-              </th>
-              <th>
-                Fee
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($clubFees->getFeeItems() as $item) { ?>
-              <tr>
-                <td>
-                  <?= htmlspecialchars($item['description']) ?>
-                </td>
-                <td>
-                  &pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $item['amount']))->withPointMovedLeft(2)->toScale(2) ?>
-                </td>
+          <?php foreach ($clubFees->getClasses() as $class) { ?>
+            <thead class="">
+              <tr class="bg-dark text-light">
+                <th>
+                  <?= htmlspecialchars($class->getName()) ?>
+                </th>
+                <th>
+                </th>
               </tr>
-            <?php } ?>
-          </tbody>
+            </thead>
+            <thead class="thead-light">
+              <tr>
+                <th>
+                  Member
+                </th>
+                <th>
+                  Fee
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($class->getFeeItems() as $item) { ?>
+                <tr>
+                  <td>
+                    <?= htmlspecialchars($item->getDescription()) ?>
+                  </td>
+                  <td>
+                    &pound;<?= htmlspecialchars($item->getFormattedAmount()) ?>
+                  </td>
+                </tr>
+              <?php } ?>
+            </tbody>
+          <?php } ?>
           <thead class="">
             <tr class="bg-primary text-light">
               <th>
@@ -166,7 +175,7 @@ include BASE_PATH . 'views/header.php';
           <thead class="thead-light">
             <tr>
               <th>
-                Swimmer
+                Member
               </th>
               <th>
                 Fee
@@ -177,7 +186,7 @@ include BASE_PATH . 'views/header.php';
             <?php
             for ($i = 0; $i < $count; $i++) {
               $asaFeesString = "";
-              if ($member[$i]['ClubPays']) {
+              if ($member[$i]['ASAPaid']) {
                 $asaFeesString = "0.00 (Paid by club)";
               } else if (isset($asaFees[$i])) {
                 if ((string) $asaFees[$i] != "") {

@@ -28,9 +28,10 @@ class MembershipFeeClass
     $this->classFees = $fees->fees;
 
     // Get members with this class
-    $getMembers = $db->prepare("SELECT MemberID, MForename, MSurname, ClubPaid FROM members WHERE UserID = ? ORDER BY ClubPaid ASC, MForename ASC, MSurname ASC");
+    $getMembers = $db->prepare("SELECT MemberID, MForename, MSurname, ClubPaid FROM members WHERE UserID = ? AND ClubCategory = ? ORDER BY ClubPaid ASC, MForename ASC, MSurname ASC");
     $getMembers->execute([
       $this->user,
+      $class,
     ]);
     $this->members = $getMembers->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -66,12 +67,11 @@ class MembershipFeeClass
       $classDetails['Fees'],
     );
 
-    pre($feeClass);
-
     return $feeClass;
   }
 
-  public function getTotal() {
+  public function getTotal()
+  {
     $total = 0;
     foreach ($this->fees as $item) {
       $total += $item->getAmount();
@@ -80,7 +80,23 @@ class MembershipFeeClass
     return $total;
   }
 
-  public function getFormattedTotal() {
+  public function getFormattedTotal()
+  {
     return (string) (\Brick\Math\BigDecimal::of((string) $this->getTotal()))->withPointMovedLeft(2)->toScale(2);
+  }
+
+  public function getFeeItems()
+  {
+    return $this->fees;
+  }
+
+  public function getName()
+  {
+    return $this->name;
+  }
+
+  public function getDescription()
+  {
+    return $this->description;
   }
 }

@@ -1,16 +1,19 @@
 <?php
 
-class MembershipFees {
+class MembershipFees
+{
 
   private $classes;
   private $user;
 
-  private function __construct($user, $classes) {
+  private function __construct($user, $classes)
+  {
     $this->user = $user;
     $this->classes = $classes;
   }
 
-  public static function getByUser($user) {
+  public static function getByUser($user)
+  {
     $db = app()->db;
 
     // Get classes
@@ -29,7 +32,8 @@ class MembershipFees {
     return $object;
   }
 
-  public function getTotal() {
+  public function getTotal()
+  {
     $total = 0;
     foreach ($this->classes as $class) {
       $total += $class->getTotal();
@@ -38,7 +42,13 @@ class MembershipFees {
     return $total;
   }
 
-  public function getFormattedTotal() {
+  public function getFormattedTotal()
+  {
     return (string) (\Brick\Math\BigDecimal::of((string) $this->getTotal()))->withPointMovedLeft(2)->toScale(2);
+  }
+
+  public function getClasses()
+  {
+    return $this->classes;
   }
 }
