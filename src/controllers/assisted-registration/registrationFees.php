@@ -32,11 +32,11 @@ if ($discounts != null && isset($discounts['ASA'][$month])) {
 
 $clubFee = $totalFeeDiscounted = $totalFee = 0;
 
-$sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ? AND `ClubPays` = '0' AND `members`.`RR` = 1");
+$sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ? AND `members`.`RR` = 1");
 $sql->execute([$user]);
 $registeringCount = $sql->fetchColumn();
 
-$sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ? AND `ClubPays` = '0'");
+$sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ?");
 $sql->execute([$user]);
 $totalCount = $sql->fetchColumn();
 
@@ -62,11 +62,11 @@ $asa2 = app()->tenant->getKey('ASA-County-Fee-L2') + app()->tenant->getKey('ASA-
 $asa3 = app()->tenant->getKey('ASA-County-Fee-L3') + app()->tenant->getKey('ASA-Regional-Fee-L3') + app()->tenant->getKey('ASA-National-Fee-L3');
 
 for ($i = 0; $i < $count; $i++) {
-	if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ClubPays']) {
+	if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ASAPaid']) {
 		$asaFees[$i] = $asa1;
-	} else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ClubPays']) {
+	} else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ASAPaid']) {
 		$asaFees[$i] = $asa2;
-	} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ClubPays']) {
+	} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ASAPaid']) {
 		$asaFees[$i] = $asa3;
 	}
 
@@ -121,7 +121,7 @@ include BASE_PATH . 'views/header.php';
 
         <?php for ($i = 0; $i < $count; $i++) {
           $asaFeesString;
-          if ($member[$i]['ClubPays']) {
+          if ($member[$i]['ASAPaid']) {
             $asaFeesString = "0.00 (Paid by club)";
           } else {
             $asaFeesString = (string) (\Brick\Math\BigDecimal::of((string) $asaFees[$i]))->withPointMovedLeft(2)->toScale(2);

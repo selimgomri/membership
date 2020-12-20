@@ -33,7 +33,7 @@ $title = "Squad Fees - " . $dateString;
 
 $sql = "SELECT `users`.`UserID`, `Forename`, `Surname`, `MForename`, `MSurname`,
 individualFeeTrack.Amount, individualFeeTrack.Description, payments.Status,
-payments.PaymentID, `ClubPays` FROM (((((`individualFeeTrack` LEFT JOIN
+payments.PaymentID FROM (((((`individualFeeTrack` LEFT JOIN
 `paymentMonths` ON individualFeeTrack.MonthID = paymentMonths.MonthID) LEFT JOIN
 `paymentsPending` ON individualFeeTrack.PaymentID = paymentsPending.PaymentID)
 LEFT JOIN `members` ON members.MemberID = individualFeeTrack.MemberID) LEFT JOIN
@@ -99,14 +99,8 @@ if ($row != null) {
   		'Description'	=> $row['Description'],
   		'Amount'			=> (int) $row['Amount'],
   		'AmountString'=> '£' . number_format(($row['Amount']/100),2,'.',''),
-  		'ClubPaysFees'=> $row['ClubPays']
+  		'ClubPaysFees'=> false
   	];
-
-  	if ($row['ClubPays']) {
-  		$swimmer['ClubPaysFees'] = true;
-  	} else {
-  		$swimmer['ClubPaysFees'] = false;
-  	}
 
   	$swimmers[] = $swimmer;
   	$swimmer = [];

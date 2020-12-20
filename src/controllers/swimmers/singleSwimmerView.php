@@ -43,7 +43,7 @@ $mostRecentForms->execute([$id]);
 $mostRecentForm = $mostRecentForms->fetch(PDO::FETCH_ASSOC);
 
 $query = $db->prepare("SELECT members.UserID, members.MForename, members.MForename, members.MMiddleNames,
-members.MSurname, members.ASANumber, members.ASACategory, members.ClubPays,
+members.MSurname, members.ASANumber, members.ASACategory,
 squads.SquadName, squads.SquadFee, squads.SquadCoach, squads.SquadTimetable,
 squads.SquadCoC, members.DateOfBirth, members.Gender, members.OtherNotes,
 members.AccessKey, memberPhotography.Website, memberPhotography.Social,

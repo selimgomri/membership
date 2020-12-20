@@ -14,7 +14,7 @@ $squads->execute([
 
 $added = $action = false;
 
-$forename = $middlenames = $surname = $dateOfBirth = $asaNumber = $sex = $cat = $cp = $sql = $transfer = "";
+$forename = $middlenames = $surname = $dateOfBirth = $asaNumber = $sex = $cat = $cp = $sep = $sql = $transfer = "";
 $getASA = false;
 
 if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POST['datebirth'])) && (!empty($_POST['sex']))) {
@@ -39,6 +39,12 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 	}
 
 	if (isset($_POST['clubpays']) && bool($_POST['clubpays'])) {
+		$sep = 1;
+	} else {
+		$sep = 0;
+	}
+
+	if (isset($_POST['clubmemb']) && bool($_POST['clubmemb'])) {
 		$cp = 1;
 	} else {
 		$cp = 0;
@@ -53,7 +59,7 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 	$accessKey = generateRandomString(6);
 
 	try {
-		$insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, AccessKey, ASACategory, ClubPays, OtherNotes, RRTransfer, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		$insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, AccessKey, ASACategory, ClubPaid, ASAPaid, OtherNotes, RRTransfer, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		$insert->execute([
 			$forename,
 			$middlenames,
@@ -64,6 +70,7 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 			$accessKey,
 			$cat,
 			$cp,
+			$sep,
 			"",
 			$transfer,
 			$tenant->getId(),

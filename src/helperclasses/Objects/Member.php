@@ -282,4 +282,19 @@ class Member extends Person
       'disallowed' => $disallowed
     ];
   }
+
+  public function getClubCategory() {
+    $db = app()->db;
+    $getCat = $db->prepare("SELECT `Name` FROM clubMembershipClasses WHERE ID = ? AND Tenant = ?");
+    $getCat->execute([
+      $this->clubCategory,
+      $this->tenant,
+    ]);
+    $cat = $getCat->fetchColumn();
+
+    if ($cat) {
+      return $cat;
+    }
+    return 'UNKNOWN';
+  }
 }

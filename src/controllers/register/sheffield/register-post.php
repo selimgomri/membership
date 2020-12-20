@@ -123,7 +123,7 @@ if (!isset($_POST['first']) || !isset($_POST['last']) || !isset($_POST['dob']) |
     ]);
 
     // Add member
-    $insertIntoSwimmers = $db->prepare("INSERT INTO members (UserID, MForename, MMiddleNames, Msurname, DateOfBirth, Gender, ASANumber, ASACategory, RR, AccessKey, ClubPays, OtherNotes, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $insertIntoSwimmers = $db->prepare("INSERT INTO members (UserID, MForename, MMiddleNames, Msurname, DateOfBirth, Gender, ASANumber, ASACategory, RR, AccessKey, OtherNotes, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $insertIntoSwimmers->execute([
       $userId,
       $firstName,
@@ -135,7 +135,6 @@ if (!isset($_POST['first']) || !isset($_POST['last']) || !isset($_POST['dob']) |
       0,
       0,
       mb_substr(hash(random_bytes(64), 'sha256'), 0, 10),
-      0,
       '',
       $tenant->getId(),
     ]);

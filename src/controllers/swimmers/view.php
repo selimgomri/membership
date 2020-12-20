@@ -528,21 +528,36 @@ include BASE_PATH . 'views/header.php';
 
       <!-- Membership administration details -->
       <h2 id="membership-details">Membership details</h2>
-      <div class="alert alert-info">
-        <p class="mb-0">
-          <strong>New Swim England and club membership management options will be coming soon for club staff.</strong>
-        </p>
-        <p class="mb-0">
-          We'll also soon start displaying these.
-        </p>
-      </div>
+
+      <h3>Club Membership</h3>
       <dl class="row">
+        <div class="col-6">
+          <dt class="text-truncate">
+            Club membership category
+          </dt>
+          <dd>
+            <?= htmlspecialchars($member->getClubCategory()) ?>
+          </dd>
+        </div>
+
         <div class="col-6">
           <dt class="text-truncate">
             Club pays club membership fees
           </dt>
           <dd>
             <?php if ($member->clubMembershipPaid()) { ?>Yes<?php } else { ?>No, member pays<?php } ?>
+          </dd>
+        </div>
+      </dl>
+
+      <h3>Swim England Membership</h3>
+      <dl class="row">
+        <div class="col-6">
+          <dt class="text-truncate">
+            Swim England membership category
+          </dt>
+          <dd>
+            <?= htmlspecialchars($member->getSwimEnglandCategory()) ?>
           </dd>
         </div>
 
@@ -555,54 +570,47 @@ include BASE_PATH . 'views/header.php';
           </dd>
         </div>
 
-        <div class="col-6">
-          <dt class="text-truncate">
-            Swim England Membership category
-          </dt>
-          <dd>
-            <?= htmlspecialchars($member->getSwimEnglandCategory()) ?>
-          </dd>
+
+        </dl>
+
+        <hr>
+
+        <!-- Other notes -->
+        <h2 id="other-details">Other details</h2>
+        <?php $md = $member->getNotes(); ?>
+        <?php if ($md) { ?>
+          <?= $md ?>
+        <?php } else { ?>
+          <p>
+            No additional notes for <?= htmlspecialchars($member->getForename()) ?>
+          </p>
+        <?php } ?>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-title">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-      </dl>
-
-      <hr>
-
-      <!-- Other notes -->
-      <h2 id="other-details">Other details</h2>
-      <?php $md = $member->getNotes(); ?>
-      <?php if ($md) { ?>
-        <?= $md ?>
-      <?php } else { ?>
-        <p>
-          No additional notes for <?= htmlspecialchars($member->getForename()) ?>
-        </p>
-      <?php } ?>
-
-    </div>
-  </div>
-
-</div>
-
-<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modal-title">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div id="modal-body" class="modal-body"></div>
-      <div id="modal-footer" class="modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+        <div id="modal-body" class="modal-body"></div>
+        <div id="modal-footer" class="modal-footer">
+          <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<?php
+  <?php
 
-$footer = new \SCDS\Footer();
-$footer->addJs('public/js/members/main.js');
-$footer->useFluidContainer();
-$footer->render();
+  $footer = new \SCDS\Footer();
+  $footer->addJs('public/js/members/main.js');
+  $footer->useFluidContainer();
+  $footer->render();

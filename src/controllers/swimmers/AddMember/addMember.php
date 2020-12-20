@@ -133,9 +133,17 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 				<div class="form-group">
 					<div class="custom-control custom-checkbox">
 						<input type="checkbox" class="custom-control-input" id="clubpays" name="clubpays" value="1" aria-describedby="cphelp">
-						<label class="custom-control-label" for="clubpays">Club Pays?</label>
+						<label class="custom-control-label" for="clubpays">Club pays Swim England fees?</label>
 					</div>
-					<small id="cphelp" class="form-text text-muted">Tick the box if this swimmer will not pay any squad or membership fees, eg if they are at a university.</small>
+					<small id="cphelp" class="form-text text-muted">Tick the box if this swimmer will not pay any Swim England fees.</small>
+				</div>
+
+				<div class="form-group">
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" class="custom-control-input" id="clubmemb" name="clubmemb" value="1" aria-describedby="clubmembhelp">
+						<label class="custom-control-label" for="clubmemb">Club pays Swim England fees?</label>
+					</div>
+					<small id="clubmembhelp" class="form-text text-muted">Tick the box if this swimmer will not pay any annual club membership fees.</small>
 				</div>
 
 				<div class="form-group">

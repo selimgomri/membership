@@ -12,7 +12,7 @@ use Respect\Validation\Validator as v;
 $db = app()->db;
 $tenant = app()->tenant;
 
-$insertIntoSwimmers = $db->prepare("INSERT INTO members (MForename, MMiddleNames, Msurname, DateOfBirth, Gender, ASANumber, ASACategory, RR, AccessKey, ClubPays, OtherNotes, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$insertIntoSwimmers = $db->prepare("INSERT INTO members (MForename, MMiddleNames, Msurname, DateOfBirth, Gender, ASANumber, ASACategory, RR, AccessKey, OtherNotes, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 $setTempASA = $db->prepare("UPDATE members SET ASANumber = ? WHERE MemberID = ?");
 
@@ -128,7 +128,6 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
               $details['DOB'],
               $details['Sex'],
               null,
-              0,
               0,
               mb_substr(hash(random_bytes(64), 'sha256'), 0, 10),
               0,

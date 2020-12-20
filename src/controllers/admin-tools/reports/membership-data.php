@@ -3,7 +3,7 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$getInfo = $db->prepare("SELECT members.UserID `uid`, Forename ufn, Surname usn, members.MemberID mid, MForename mfn, MSurname msn, members.ASANumber asa, members.ASACategory cat, DateOfBirth dob, ClubPays exempt, Mandate, BankName, AccountHolderName, AccountNumEnd FROM (((members LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN paymentMandates ON paymentPreferredMandate.MandateID = paymentMandates.MandateID) WHERE members.Tenant = ? ORDER BY usn ASC, ufn ASC, users.UserID ASC, msn ASC, mfn ASC");
+$getInfo = $db->prepare("SELECT members.UserID `uid`, Forename ufn, Surname usn, members.MemberID mid, MForename mfn, MSurname msn, members.ASANumber asa, members.ASACategory cat, DateOfBirth dob, Mandate, BankName, AccountHolderName, AccountNumEnd FROM (((members LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN paymentMandates ON paymentPreferredMandate.MandateID = paymentMandates.MandateID) WHERE members.Tenant = ? ORDER BY usn ASC, ufn ASC, users.UserID ASC, msn ASC, mfn ASC");
 $getInfo->execute([
   $tenant->getId()
 ]);
@@ -30,17 +30,12 @@ fputcsv($output, [
   'Date of birth',
   'Squad',
   'Squad fee',
-  'Fee exemption',
   'Bank',
   'Bank a/c holder',
   'Bank a/c num end',
   'Last login',
 ]);
 while ($info = $getInfo->fetch(PDO::FETCH_ASSOC)) {
-  $exempt = 'Pays';
-  if (bool($info['exempt'])) {
-    $exempt = 'Fee exemption';
-  }
   $logins->execute([
     $info['uid']
   ]);
@@ -85,7 +80,6 @@ while ($info = $getInfo->fetch(PDO::FETCH_ASSOC)) {
     $dob->format("d/m/Y"),
     $squads,
     $fees,
-    $exempt,
     getBankName($info['BankName']),
     $info['AccountHolderName'],
     $info['AccountNumEnd'],
