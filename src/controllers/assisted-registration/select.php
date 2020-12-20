@@ -60,10 +60,10 @@ include BASE_PATH . 'views/header.php';
               <input type="checkbox" class="custom-control-input" id="member-<?= htmlspecialchars($swimmer['id']) ?>" name="member-<?= htmlspecialchars($swimmer['id']) ?>">
               <label class="custom-control-label" for="member-<?= htmlspecialchars($swimmer['id']) ?>">
                 <p class="mb-0 font-weight-bold">
-                  <?=htmlspecialchars($swimmer['first'] . ' ' . $swimmer['last'])?> 
-                    <?php if (isset($swimmer['trans']) && $swimmer['trans']) { ?>
-                      - <span class="text-success">Transferring from another club</span>
-                    <?php } ?>
+                  <?= htmlspecialchars($swimmer['first'] . ' ' . $swimmer['last']) ?>
+                  <?php if (isset($swimmer['trans']) && $swimmer['trans']) { ?>
+                    - <span class="text-success">Transferring from another club</span>
+                  <?php } ?>
                 </p>
                 <ul class="mb-0 list-unstyled">
                   <?php if ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)) {
@@ -75,6 +75,17 @@ include BASE_PATH . 'views/header.php';
                   <?php } ?>
                 </ul>
               </label>
+            </div>
+
+            <div class="">
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="member-rr-yes-<?= htmlspecialchars($swimmer['id']) ?>" name="member-rr-<?= htmlspecialchars($swimmer['id']) ?>" class="custom-control-input" checked value="yes">
+                <label class="custom-control-label" for="member-rr-yes-<?= htmlspecialchars($swimmer['id']) ?>">Require registration</label>
+              </div>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="member-rr-no-<?= htmlspecialchars($swimmer['id']) ?>" name="member-rr-<?= htmlspecialchars($swimmer['id']) ?>" class="custom-control-input" value="no">
+                <label class="custom-control-label" for="member-rr-no-<?= htmlspecialchars($swimmer['id']) ?>">Add to account quietly</label>
+              </div>
             </div>
           </div>
         <?php } ?>

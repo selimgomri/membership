@@ -3,44 +3,61 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
+$db->beginTransaction();
+
 $user = $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'];
 
-$swimmers = $db->prepare("SELECT MemberID `id` FROM members WHERE Active AND Tenant = ? AND members.UserID IS NULL");
-$swimmers->execute([
-  $tenant->getId()
-]);
+try {
+  $swimmers = $db->prepare("SELECT MemberID `id` FROM members WHERE Active AND Tenant = ? AND members.UserID IS NULL");
+  $swimmers->execute([
+    $tenant->getId()
+  ]);
 
-$setParent = $db->prepare("UPDATE members SET UserID = ?, RR = ? WHERE MemberID = ?");
+  $setParent = $db->prepare("UPDATE members SET UserID = ?, RR = ? WHERE MemberID = ?");
 
-$setUserRequiresRenewal = $db->prepare("UPDATE users SET RR = ? WHERE UserID = ?");
+  $setUserRequiresRenewal = $db->prepare("UPDATE users SET RR = ? WHERE UserID = ?");
 
-$setUserRequiresRenewal->execute([
-  (int) $tenant->getBooleanKey('REQUIRE_FULL_REGISTRATION'),
-  $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']
-]);
+  $user = $db->prepare("SELECT Forename `first`, Surname `last`, EmailAddress `email` FROM users WHERE UserID = ?");
+  $user->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']]);
+  $user = $user->fetch(PDO::FETCH_ASSOC);
 
-$user = $db->prepare("SELECT Forename `first`, Surname `last`, EmailAddress `email` FROM users WHERE UserID = ?");
-$user->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']]);
-$user = $user->fetch(PDO::FETCH_ASSOC);
-
-if ($user == null) {
-  halt(404);
-}
-
-$selectedSwimmers = [];
-
-$success = false;
-
-while ($swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)) {
-  if ($_POST['member-' . $swimmer['id']]) {
-    $selectedSwimmers[] = $swimmer['id'];
-    $setParent->execute([
-      $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'],
-      (int) $tenant->getBooleanKey('REQUIRE_FULL_REGISTRATION'),
-      $swimmer['id']
-    ]);
-    $success = true;
+  if ($user == null) {
+    halt(404);
   }
+
+  $selectedSwimmers = [];
+
+  $success = false;
+  $requireRegistration = false;
+
+  while ($swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)) {
+    if ($_POST['member-' . $swimmer['id']]) {
+      $rr = true;
+      if (isset($_POST['member-rr-' . $swimmer['id']])) {
+        $rr = ($_POST['member-rr-' . $swimmer['id']] == 'yes');
+      }
+      if ($rr) {
+        $requireRegistration = true;
+      }
+      $selectedSwimmers[] = $swimmer['id'];
+      $setParent->execute([
+        $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser'],
+        (int) ($tenant->getBooleanKey('REQUIRE_FULL_REGISTRATION') && $rr),
+        $swimmer['id']
+      ]);
+      $success = true;
+    }
+  }
+
+  $setUserRequiresRenewal->execute([
+    (int) ($tenant->getBooleanKey('REQUIRE_FULL_REGISTRATION') && $requireRegistration),
+    $_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUser']
+  ]);
+
+  $db->commit();
+} catch (Exception $e) {
+  $db->rollBack();
+  $success = false;
 }
 
 if ($success) {
