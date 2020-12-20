@@ -26,7 +26,7 @@ if ($json != null) {
   $address = json_decode($json);
 }
 
-$swimmers = $db->prepare("SELECT MForename fn, MSurname sn, SquadName squad, SquadFee fee, SquadCoC, ClubPays exempt, members.MemberID id FROM members INNER JOIN squads ON squads.SquadID = members.SquadID WHERE members.UserID = ? ORDER BY fn ASC");
+$swimmers = $db->prepare("SELECT MForename fn, MSurname sn, SquadName squad, SquadFee fee, SquadCoC exempt, members.MemberID id FROM members INNER JOIN squads ON squads.SquadID = members.SquadID WHERE members.UserID = ? ORDER BY fn ASC");
 $swimmers->execute([$id]);
 $swimmers = $swimmers->fetchAll(PDO::FETCH_ASSOC);
 

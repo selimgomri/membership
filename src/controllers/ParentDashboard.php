@@ -228,11 +228,7 @@ include BASE_PATH . "views/header.php";
       <div class="news-grid">
         <?php
         if (sizeof($swimmers) > 0) {
-          foreach ($swimmers as $s) {
-            $fee = "Exempt from fees";
-            if (!$s->squadFeesPaid()) {
-              $fee = "&pound;" . (string) (\Brick\Math\BigDecimal::of((string) '0'))->toScale(2);
-            } ?>
+          foreach ($swimmers as $s) { ?>
             <a href="<?= autoUrl("swimmers/" . $s->getId()) ?>">
               <span class="mb-3">
                 <span class="title mb-0">

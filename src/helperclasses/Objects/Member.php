@@ -22,7 +22,7 @@ class Member extends Person
   private bool $clubPaysSwimEngland;
   private bool $swimEnglandPayingClub;
   private bool $clubMember;
-  private int $clubCategory;
+  private string $clubCategory;
   private bool $clubPaysMembership;
   private string $country;
   private bool $current;
@@ -73,7 +73,6 @@ class Member extends Person
     $this->country = $info['Country'];
 
     // Fees
-    $this->clubPaysFees = bool($info['ClubPays']);
     $this->clubPaysSwimEngland = bool($info['ASAPaid']);
     $this->clubPaysMembership = bool($info['ClubPaid']);
 
@@ -205,16 +204,6 @@ class Member extends Person
   }
 
   /**
-   * Is the member's squad fee paid
-   * 
-   * @return bool true if club pays fees
-   */
-  public function squadFeesPaid()
-  {
-    return $this->clubPaysFees;
-  }
-
-  /**
    * Is the member's SE fee paid for them
    * 
    * @return bool true if club pays fees
@@ -292,5 +281,20 @@ class Member extends Person
       'allowed' => $allows,
       'disallowed' => $disallowed
     ];
+  }
+
+  public function getClubCategory() {
+    $db = app()->db;
+    $getCat = $db->prepare("SELECT `Name` FROM clubMembershipClasses WHERE ID = ? AND Tenant = ?");
+    $getCat->execute([
+      $this->clubCategory,
+      $this->tenant,
+    ]);
+    $cat = $getCat->fetchColumn();
+
+    if ($cat) {
+      return $cat;
+    }
+    return 'UNKNOWN';
   }
 }

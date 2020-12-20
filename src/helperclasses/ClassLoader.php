@@ -29,6 +29,8 @@ require 'Helpers/Login.php';
 
 require 'Objects/ObjectsLoader.php';
 
+// require 'MembershipFees/ObjectsLoader.php';
+
 require 'Components/ListGroup.php';
 
 require 'Markdown/ParsedownForMembership.php';

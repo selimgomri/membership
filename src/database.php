@@ -172,7 +172,7 @@ function mySwimmersTable($link = null, $userID)
   $db = app()->db;
   // Get the information about the swimmer
   $swimmers = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname,
-  members.ClubPays exempt, users.Forename, users.Surname, users.EmailAddress,
+  members.ASAPaid, members.ClubPaid, users.Forename, users.Surname, users.EmailAddress,
   members.ASANumber FROM (members INNER JOIN
   users ON members.UserID = users.UserID) WHERE members.UserID = ?");
   $getSquads = $db->prepare("SELECT SquadName squad, SquadFee fee, squadMembers.Paying FROM squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad WHERE Member = ?");

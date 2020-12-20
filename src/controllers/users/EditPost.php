@@ -8,7 +8,7 @@ use Respect\Validation\Validator as v;
 $db = app()->db;
 $tenant = app()->tenant;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, ASANumber, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory FROM users WHERE UserID = ? AND Tenant = ?");
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ? AND Tenant = ?");
 $userInfo->execute([
   $id,
   $tenant->getId()
@@ -58,71 +58,6 @@ try {
     $mobile,
     $id,
   ]);
-
-  $updateASA = $db->prepare("UPDATE users SET ASAMember = ?, ASANumber = ?, ASACategory = ?, ASAPrimary = ?, ASAPaid = ? WHERE UserID = ?");
-  $updateMemberASA = $db->prepare("UPDATE members SET ASAMember = ?, ASACategory = ?, ASAPrimary = ?, ASAPaid = ? WHERE ASANumber = ?");
-  if (bool($_POST['is-se-member'])) {
-    // Update ASA things
-
-    $asa = trim(mb_convert_case($_POST['se-number'], MB_CASE_UPPER));
-    $asaCat = (int) $_POST['se-category'];
-    $asaPrimary = (int) $_POST['is-se-primary-club'];
-    $asaPaid = (int) $_POST['se-club-pays'];
-    if (!bool($asaPrimary)) {
-      $asaPaid = 0;
-    }
-
-    $updateASA->execute([
-      1,
-      $asa,
-      $asaCat,
-      $asaPrimary,
-      $asaPaid,
-      $id
-    ]);
-
-    $updateMemberASA->execute([
-      1,
-      $asaCat,
-      $asaPrimary,
-      $asaPaid,
-      $asa
-    ]);
-  } else {
-    // Make sure ASA things are unset
-    $updateASA->execute([
-      0,
-      null,
-      0,
-      0,
-      0,
-      $id
-    ]);
-  }
-
-  $updateMembership = $db->prepare("UPDATE users SET ClubMember = ?, ClubPaid = ?, ClubCategory = ? WHERE UserID = ?");
-  if (bool($_POST['is-club-member'])) {
-    // Update club things
-    $clubMember = (int) $_POST['is-club-member'];
-    $clubCat = (int) $_POST['club-category'];
-    $clubPaid = (int) $_POST['club-club-pays'];
-
-    $updateMembership->execute([
-      $clubMember,
-      $clubPaid,
-      $clubCat,
-      $id
-    ]);
-  } else {
-    // Make sure club things are unset
-
-    $updateMembership->execute([
-      0,
-      0,
-      0,
-      $id
-    ]);
-  }
 
   // Set access permissions
   $baseRequired = true;

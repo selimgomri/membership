@@ -3,6 +3,8 @@
 $paymentItems = [];
 
 $db = app()->db;
+$tenant = app()->tenant;
+$user = app()->user;
 
 \Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
@@ -24,13 +26,12 @@ try {
 		$asaDate = $date->format("Y-m-d");
 	}
 
-	$user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 	$partial_reg = isPartialRegistration();
 
 	$partial_reg_require_topup = false;
 	if ($partial_reg) {
 		$db = app()->db;
-		$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = 0 AND ClubPays = 0";
+		$sql = "SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = 0";
 		$query = $db->prepare($sql);
 		$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 		if ($query->fetchColumn() == 1) {
@@ -49,7 +50,7 @@ try {
 		$swimEnglandDiscount = $discounts['ASA'][$month];
 	}
 
-	$sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ? AND `ClubPays` = '0'");
+	$sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ?");
 	$sql->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 	$clubFee = 0;
@@ -57,9 +58,9 @@ try {
 
 	$payingSwimmerCount = $sql->fetchColumn();
 
-	$clubFees = \SCDS\Membership\ClubMembership::create($db, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $partial_reg);
+	$clubFees = MembershipFees::getByUser($user->getId(), $partial_reg);
 
-	$clubFee = $clubFees->getFee();
+	$clubFee = $clubFees->getTotal();
 
 	if ($partial_reg) {
 		$sql = "SELECT * FROM members WHERE `members`.`UserID` = ? AND `members`.`RR` = 1";
@@ -72,21 +73,25 @@ try {
 	$member = $getMembers->fetchAll(PDO::FETCH_ASSOC);
 	$count = sizeof($member);
 
-	$paymentItems[] = [
-		'description' => 'Club Membership Fee',
-		'amount' => $clubFee,
-		'type' => 'debit',
-		'date' => $clubDate
-	];
+	foreach ($clubFees->getClasses() as $class) {
+		foreach ($class->getFeeItems() as $item) {
+			$paymentItems[] = [
+				'description' => $item->getDescription() . ' ' . $class->getName(),
+				'amount' => $item->getAmount(),
+				'type' => 'debit',
+				'date' => $clubDate
+			];
+		}
+	}
 
 	if ($clubDiscount > 0 && $renewal == 0) {
 		$totalFee += $clubFee * (1 - ($clubDiscount / 100));
-		$paymentItems[] = [
-			'description' => 'Club Membership Fee',
-			'amount' => $clubFee * ($clubDiscount / 100),
-			'type' => 'credit',
-			'date' => $clubDate
-		];
+		// $paymentItems[] = [
+		// 	'description' => 'Club Membership Fee',
+		// 	'amount' => $clubFee * ($clubDiscount / 100),
+		// 	'type' => 'credit',
+		// 	'date' => $clubDate
+		// ];
 	} else {
 		$totalFee += $clubFee;
 	}
@@ -98,11 +103,11 @@ try {
 	$asa3 = app()->tenant->getKey('ASA-County-Fee-L3') + app()->tenant->getKey('ASA-Regional-Fee-L3') + app()->tenant->getKey('ASA-National-Fee-L3');
 
 	for ($i = 0; $i < $count; $i++) {
-		if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ClubPays']) {
+		if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ASAPaid']) {
 			$asaFees[$i] = $asa1;
-		} else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ClubPays']) {
+		} else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ASAPaid']) {
 			$asaFees[$i] = $asa2;
-		} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ClubPays']) {
+		} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ASAPaid']) {
 			$asaFees[$i] = $asa3;
 		} else {
 			$asaFees[$i] = 0;
@@ -140,8 +145,8 @@ try {
 	// Print array for testing
 	// reportError($paymentItems);
 
-	$clubFeeString = number_format($clubFee / 100, 2, '.', '');
-	$totalFeeString = number_format($totalFee / 100, 2, '.', '');
+	$clubFeeString = $clubFees->getFormattedTotal();
+	$totalFeeString = (string) (\Brick\Math\BigDecimal::of((string) $totalFee))->withPointMovedLeft(2)->toScale(2);
 	$total = $totalFee;
 
 	$sql = $db->prepare("SELECT COUNT(*) FROM `paymentPreferredMandate` WHERE `UserID` = ?");

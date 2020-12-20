@@ -339,7 +339,7 @@ if ($tenant->getBooleanKey('ENABLE_BILLING_SYSTEM')) {
       // Add Swimmers with No Parent to Fee Tracker
       if ($squadFeeRequired) {
         // // Squad Fees
-        $sql = $db->query("SELECT `members`.`MemberID`, `SquadFee`, `SquadName` FROM ((`members` INNER JOIN squadMembers ON members.MemberID = squadMembers.Member) INNER JOIN `squads` ON squads.SquadID = squadMembers.Squad) WHERE `members`.`UserID` IS NULL AND `ClubPays` = 0");
+        $sql = $db->query("SELECT `members`.`MemberID`, `SquadFee`, `SquadName` FROM ((`members` INNER JOIN squadMembers ON members.MemberID = squadMembers.Member) INNER JOIN `squads` ON squads.SquadID = squadMembers.Squad) WHERE `members`.`UserID` IS NULL");
 
         $add_track = $db->prepare("INSERT INTO `individualFeeTrack` (`MonthID`, `PaymentID`, `MemberID`, `UserID`, `Amount`, `Description`, `Type`, `NC`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 

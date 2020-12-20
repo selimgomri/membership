@@ -20,6 +20,15 @@ include BASE_PATH . 'views/header.php';
       ?>
     </aside>
     <div class="col-md-9">
+
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('settings')) ?>">Settings</a></li>
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('settings/fees')) ?>">Fees</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Annual Payment Methods</li>
+        </ol>
+      </nav>
+
       <main>
         <h1>Payment Methods for Club and Swim England Membership Fees</h1>
         <p class="lead">Select available payment methods for annual membership fees</p>

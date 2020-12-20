@@ -7,7 +7,7 @@ use Brick\PhoneNumber\PhoneNumberFormat;
 $db = app()->db;
 $tenant = app()->tenant;
 
-$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, ASANumber, ASAMember, ASAPrimary, ASACategory, ASAPaid, ClubMember, ClubPaid, ClubCategory, RR FROM users WHERE Tenant = ? AND UserID = ? AND Active");
+$userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, RR FROM users WHERE Tenant = ? AND UserID = ? AND Active");
 $userInfo->execute([
   $tenant->getId(),
   $id
@@ -29,19 +29,11 @@ $par = $coa = $com = $gal = $adm = "";
 
 $swimmers = null;
 if ($userObj->hasPermission('Parent')) {
-  $swimmers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, ClubPays exempt FROM members WHERE members.UserID = ?");
+  $swimmers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn FROM members WHERE members.UserID = ?");
   $swimmers->execute([$id]);
 }
 
-$getSquads = $db->prepare("SELECT SquadName squad, SquadFee fee FROM squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad WHERE Member = ?");
-
-// Is this parent also a swimmer member?
-$swimmerToo = $db->prepare("SELECT MemberID FROM members WHERE UserID = ? AND ASANumber = ?");
-$swimmerToo->execute([
-  $id,
-  $info['ASANumber']
-]);
-$swimmerToo = $swimmerToo->fetchColumn();
+$getSquads = $db->prepare("SELECT SquadName squad, SquadFee fee, Paying pays FROM squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad WHERE Member = ?");
 
 // Get Stripe direct debit info
 $getStripeDD = $db->prepare("SELECT stripeMandates.ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates INNER JOIN stripeCustomers ON stripeMandates.Customer = stripeCustomers.CustomerID WHERE stripeCustomers.User = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC LIMIT 1;");
@@ -260,51 +252,7 @@ include BASE_PATH . "views/header.php";
               </p>
             </div>
           <?php } ?>
-          <?php if (bool($info['ASAMember'])) { ?>
-            <div class="col-sm-6 col-lg-4">
-              <h3 class="h6">Swim England Number</h3>
-              <p><a target="_blank" href="<?= htmlspecialchars('https://www.swimmingresults.org/membershipcheck/member_details.php?myiref=' . urlencode($info['ASANumber'])) ?>"><?= htmlspecialchars($info['ASANumber']) ?> <i class="fa fa-external-link" aria-hidden="true"></i></a>
-              </p>
-            </div>
 
-            <div class="col-sm-6 col-lg-4">
-              <h3 class="h6">Swim England Category</h3>
-              <p><?php if ($info['ASACategory'] != 0) { ?><?= htmlspecialchars($info['ASACategory']) ?><?php } else { ?><strong><span class="text-danger">Not set</span></strong><?php } ?>
-              </p>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-              <h3 class="h6">Swim England Payment</h3>
-              <p><?php if (bool($info['ASAPaid'])) { ?>Club pays <?= htmlspecialchars($info['Forename']) ?>'s SE Membership<?php } else { ?><?= htmlspecialchars($info['Forename']) ?> pays their own SE Membership<?php } ?>
-              </p>
-            </div>
-          <?php } ?>
-
-          <!-- <div class="col-sm-6 col-lg-4">
-            <h3 class="h6">Club Membership</h3>
-            <p><?php if (bool($info['ClubMember'])) { ?><?= htmlspecialchars($info['Forename']) ?> is a club member<?php } else { ?><?= htmlspecialchars($info['Forename']) ?> is not a club member<?php } ?></p>
-          </div> -->
-
-          <?php if (bool($info['ClubMember'])) { ?>
-            <div class="col-sm-6 col-lg-4">
-              <h3 class="h6">Club Membership Category</h3>
-              <p><?php if ($info['ClubCategory'] != null) { ?><?= htmlspecialchars($info['ClubCategory']) ?><?php } else { ?><strong><span class="text-danger">Not set</span></strong><?php } ?>
-              </p>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-              <h3 class="h6">Club Membership Payment</h3>
-              <p><?php if (bool($info['ClubPaid'])) { ?>Club pays <?= htmlspecialchars($info['Forename']) ?>'s Club Membership<?php } else { ?><?= htmlspecialchars($info['Forename']) ?> pays their own Club Membership<?php } ?>
-              </p>
-            </div>
-          <?php } ?>
-
-          <?php if ($swimmerToo) { ?>
-            <div class="col-sm-6 col-lg-4">
-              <h3 class="h6">Sport</h3>
-              <p><a href="<?= htmlspecialchars(autoUrl("members/" . $swimmerToo)) ?>"><?= htmlspecialchars($info['Forename']) ?> is also a member</a></p>
-            </div>
-          <?php } ?>
         </div>
       </div>
 
@@ -490,7 +438,7 @@ include BASE_PATH . "views/header.php";
                   <ul class="mb-0 list-unstyled">
                     <?php if ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)) {
                       do { ?>
-                        <li><?= htmlspecialchars($squad['squad']) ?>, <em><?php if ($s['exempt'] || (int) $squad['fee'] == 0) { ?><?php } else { ?>&pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $squad['fee']))->toScale(2) ?>/month<?php } ?></em></li>
+                        <li><?= htmlspecialchars($squad['squad']) ?>, <em><?php if (!bool($squad['pays']) || (int) $squad['fee'] == 0) { ?><?php } else { ?>&pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $squad['fee']))->toScale(2) ?>/month<?php } ?></em></li>
                       <?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC));
                     } else { ?>
                       <li>No squads</li>

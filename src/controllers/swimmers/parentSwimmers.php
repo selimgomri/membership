@@ -7,7 +7,7 @@ $userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
 include BASE_PATH . "views/header.php";
 
-$getSwimmers = $db->prepare("SELECT MemberID id, MForename `first`, MSurname `last`, ClubPays free FROM members WHERE members.UserID = ? ORDER BY `first` ASC, `last` ASC");
+$getSwimmers = $db->prepare("SELECT MemberID id, MForename `first`, MSurname `last` FROM members WHERE members.UserID = ? ORDER BY `first` ASC, `last` ASC");
 $getSwimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 ?>
@@ -39,11 +39,7 @@ $getSwimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']])
 							</span>
 						</span>
 						<span class="category">
-							<?php if ($swimmer['free']) { ?>
-								This member doesn't pay
-							<?php } else { ?>
-								Paying member
-							<?php } ?>
+							Member
 						</span>
 					</a>
 				<?php } while ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC)); ?>

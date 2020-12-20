@@ -84,13 +84,7 @@ $this->group('/fees', function() {
   });
 
   $this->group('/membership-fees', function() {
-    $this->get('/', function() {
-      include 'fees/membership-fees.php';
-    });
-
-    $this->post('/', function() {
-      include 'fees/membership-fees-post.php';
-    });
+    include 'fees/club-membership/router.php';
   });
 
   $this->group('/multiple-squads', function() {

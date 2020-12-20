@@ -23,28 +23,15 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
 	}
 }
 
-if ($int) {
-	$sql = "SELECT * FROM `posts` WHERE `ID` = ? AND Tenant = ?";
-	try {
-		$query = $db->prepare($sql);
-		$query->execute([
-      $id,
-      $tenant->getId()
-    ]);
-	} catch (PDOException $e) {
-		halt(500);
-	}
-} else {
-	$sql = "SELECT * FROM `posts` WHERE `Path` = ? AND Tenant = ?";
-	try {
-		$query = $db->prepare($sql);
-		$query->execute([
-      $id,
-      $tenant->getId()
-    ]);
-	} catch (PDOException $e) {
-		halt(500);
-	}
+$sql = "SELECT * FROM `posts` WHERE `ID` = ? AND Tenant = ?";
+try {
+  $query = $db->prepare($sql);
+  $query->execute([
+    $id,
+    $tenant->getId()
+  ]);
+} catch (PDOException $e) {
+  halt(500);
 }
 $row = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -52,7 +39,7 @@ if (!$row) {
   halt(404);
 }
 
-$date = new DateTime('now', new DateTimeZone('Europe/London'));
+$date = new DateTime($row['Modified'], new DateTimeZone('Europe/London'));
 	
 ob_start();?>
 

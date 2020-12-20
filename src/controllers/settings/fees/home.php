@@ -19,6 +19,14 @@ include BASE_PATH . 'views/header.php';
       ?>
     </aside>
     <div class="col-md-9">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('settings')) ?>">Settings</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Fees</li>
+      </ol>
+    </nav>
+
       <main>
         <h1>Swim England and Membership Fee Management</h1>
         <p class="lead">Set amounts for Swim England membership fees and club membership fees</p>

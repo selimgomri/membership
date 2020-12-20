@@ -11,7 +11,7 @@ $db = app()->db;
 $tenant = app()->tenant->getId();
 
 $findSquadId = $db->prepare("SELECT SquadID FROM squads WHERE SquadName = ? AND Tenant = ?");
-$insertIntoSwimmers = $db->prepare("INSERT INTO members (MForename, Msurname, DateOfBirth, Gender, ASANumber, ASACategory, RR, AccessKey, ClubPays, OtherNotes, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$insertIntoSwimmers = $db->prepare("INSERT INTO members (MForename, Msurname, DateOfBirth, Gender, ASANumber, ASACategory, RR, AccessKey, OtherNotes, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 $insertIntoSquads = $db->prepare("INSERT INTO `squadMembers` (`Member`, `Squad`, `Paying`) VALUES (?, ?, ?)");
 $setTempASA = $db->prepare("UPDATE members SET ASANumber = ? WHERE MemberID = ?");
 
@@ -58,7 +58,6 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
             $cat,
             true,
             generateRandomString(6),
-            0,
             '',
             $tenant
           ]);
