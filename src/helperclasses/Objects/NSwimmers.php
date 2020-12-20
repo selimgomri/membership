@@ -3,10 +3,20 @@
 class NSwimmers extends ClassType
 {
 
-  public static function calculate($members, $fees, $partial = false)
+  public static function calculate($allMembers, $fees, $partial = false)
   {
     $items = [];
     $existingItems = [];
+
+    $members = [];
+    $paidMembers = [];
+    foreach ($allMembers as $member) {
+      if (!bool($member['ClubPaid'])) {
+        $members[] = $member;
+      } else {
+        $paidMembers[] = $member;
+      }
+    }
 
     $fee = $originalFee = 0;
     if (sizeof($fees) > 0) {
@@ -43,7 +53,14 @@ class NSwimmers extends ClassType
       if (sizeof($items) > 0) {
         $items[0]->setAmount($fee);
       }
-      
+    }
+
+    foreach ($paidMembers as $member) {
+      $items[] = new MembershipFeeItem(
+        $member['MForename'] . ' ' . $member['MSurname'] . ' (Exempt from fee)',
+        0,
+        $member['MemberID']
+      );
     }
 
     return $items;
