@@ -19,6 +19,16 @@ include BASE_PATH . 'views/header.php';
       ?>
     </aside>
     <div class="col-md-9">
+
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('settings')) ?>">Settings</a></li>
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('settings/fees')) ?>">Fees</a></li>
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('settings/fees/membership-fees')) ?>">Club</a></li>
+          <li class="breadcrumb-item active" aria-current="page">New Class</li>
+        </ol>
+      </nav>
+
       <main>
         <h1>New Club Membership Fee Class</h1>
         <p class="lead">Set amounts for club membership fees</p>
