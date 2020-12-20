@@ -3,6 +3,12 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
+$getClasses = $db->prepare("SELECT `ID`, `Name`, `Description` FROM `clubMembershipClasses` WHERE `Tenant` = ? ORDER BY `Name` ASC");
+$getClasses->execute([
+	$tenant->getId(),
+]);
+$class = $getClasses->fetch(PDO::FETCH_ASSOC);
+
 $today = new DateTime('now', new DateTimeZone('Europe/London'));
 
 $squads = $db->prepare("SELECT SquadName, SquadID FROM squads WHERE Tenant = ? ORDER BY SquadFee DESC, SquadName ASC");
@@ -136,6 +142,16 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 						<label class="custom-control-label" for="clubpays">Club pays Swim England fees?</label>
 					</div>
 					<small id="cphelp" class="form-text text-muted">Tick the box if this swimmer will not pay any Swim England fees.</small>
+				</div>
+
+				<div class="form-group">
+					<label for="membership-class">Select membership class</label>
+					<select class="custom-select" id="membership-class" name="membership-class">
+						<option selected disabled>Open this select menu</option>
+						<?php do { ?>
+							<option value="<?= htmlspecialchars($class['ID']) ?>" <?php if ($tenant->getKey('DEFAULT_MEMBERSHIP_CLASS') == $class['ID']) { ?>selected<?php } ?>><?= htmlspecialchars($class['Name']) ?></option>
+						<?php } while ($class = $getClasses->fetch(PDO::FETCH_ASSOC)); ?>
+					</select>
 				</div>
 
 				<div class="form-group">

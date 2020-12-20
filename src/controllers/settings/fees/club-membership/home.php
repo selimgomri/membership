@@ -50,13 +50,39 @@ include BASE_PATH . 'views/header.php';
 
         <?php if ($class) { ?>
 
-        <div class="list-group mb-3">
-          <?php do { ?>
-          <a href="<?= htmlspecialchars(autoUrl('settings/fees/membership-fees/' . $class['ID'])) ?>" class="list-group-item list-group-item-action">
-            <p class="mb-0"><strong><?= htmlspecialchars($class['Name']) ?></strong></p>
-          </a>
-          <?php } while ($class = $getClasses->fetch(PDO::FETCH_ASSOC)); ?>
-        </div>
+          <div class="list-group mb-3">
+            <?php do { ?>
+              <a href="<?= htmlspecialchars(autoUrl('settings/fees/membership-fees/' . $class['ID'])) ?>" class="list-group-item list-group-item-action">
+                <p class="mb-0"><strong><?= htmlspecialchars($class['Name']) ?></strong></p>
+              </a>
+            <?php } while ($class = $getClasses->fetch(PDO::FETCH_ASSOC)); ?>
+          </div>
+
+          <p>
+            <a href="<?= htmlspecialchars(autoUrl('settings/fees/membership-fees/new')) ?>" class="btn btn-success">
+              Add new
+            </a>
+          </p>
+
+          <form method="post">
+            <?php $getClasses->execute(); ?>
+            <?php $class = $getClasses->fetch(PDO::FETCH_ASSOC); ?>
+            <div class="form-group">
+              <label for="default-class">Select default membership class</label>
+              <select class="custom-select" id="default-class" name="default-class">
+                <option selected disabled>Open this select menu</option>
+                <?php do { ?>
+                  <option value="<?= htmlspecialchars($class['ID']) ?>" <?php if ($tenant->getKey('DEFAULT_MEMBERSHIP_CLASS') == $class['ID']) { ?>selected<?php } ?>><?= htmlspecialchars($class['Name']) ?></option>
+                <?php } while ($class = $getClasses->fetch(PDO::FETCH_ASSOC)); ?>
+              </select>
+            </div>
+
+            <?= \SCDS\CSRF::write(); ?>
+
+            <p>
+              <button type="submit" class="btn btn-success">Save default</button>
+            </p>
+          </form>
 
         <?php } else { ?>
           <div class="alert alert-warning">
@@ -64,13 +90,13 @@ include BASE_PATH . 'views/header.php';
               <strong>There are no membership fee classes available</strong>
             </p>
           </div>
-        <?php } ?>
 
-        <p>
-          <a href="<?= htmlspecialchars(autoUrl('settings/fees/membership-fees/new')) ?>" class="btn btn-success">
-            Add new
-          </a>
-        </p>
+          <p>
+            <a href="<?= htmlspecialchars(autoUrl('settings/fees/membership-fees/new')) ?>" class="btn btn-success">
+              Add new
+            </a>
+          </p>
+        <?php } ?>
       </main>
     </div>
   </div>

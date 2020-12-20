@@ -56,10 +56,25 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 		$transfer = 0;
 	}
 
+	$membershipClass = null;
+	if (isset($_POST['membership-class'])) {
+		$getClass = $db->prepare("SELECT `ID`, `Name`, `Description`, `Fees` FROM `clubMembershipClasses` WHERE `ID` = ? AND `Tenant` = ?");
+    $getClass->execute([
+      $_POST['membership-class'],
+      $tenant->getId(),
+    ]);
+    $class = $getClass->fetch(PDO::FETCH_ASSOC);
+
+    if (!$class) {
+      throw new Exception('Membership class not found at this tenant');
+		}
+		$membershipClass = $_POST['membership-class'];
+	}
+
 	$accessKey = generateRandomString(6);
 
 	try {
-		$insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, AccessKey, ASACategory, ClubPaid, ASAPaid, OtherNotes, RRTransfer, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		$insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, AccessKey, ASACategory, ClubPaid, ASAPaid, OtherNotes, RRTransfer, Tenant, ClubCategory) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		$insert->execute([
 			$forename,
 			$middlenames,
@@ -74,6 +89,7 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 			"",
 			$transfer,
 			$tenant->getId(),
+			$membershipClass,
 		]);
 
 		$last_id = $db->lastInsertId();

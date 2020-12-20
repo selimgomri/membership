@@ -4,6 +4,10 @@ $this->get('/', function() {
   include 'home.php';
 });
 
+$this->post('/', function() {
+  include 'home-post.php';
+});
+
 $this->group('/new', function() {
   $this->get('/', function() {
     include 'new.php';
