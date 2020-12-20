@@ -33,4 +33,8 @@ class MembershipFeeItem
   {
     return $this->member;
   }
+
+  public function setAmount($amount) {
+    $this->amount = $amount;
+  }
 }

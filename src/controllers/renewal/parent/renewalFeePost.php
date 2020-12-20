@@ -58,7 +58,7 @@ try {
 
 	$payingSwimmerCount = $sql->fetchColumn();
 
-	$clubFees = MembershipFees::getByUser($user->getId());
+	$clubFees = MembershipFees::getByUser($user->getId(), $partial_reg);
 
 	$clubFee = $clubFees->getTotal();
 

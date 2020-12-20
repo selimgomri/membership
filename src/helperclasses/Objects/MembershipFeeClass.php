@@ -12,8 +12,9 @@ class MembershipFeeClass
   private $classFees;
   private $members;
   private $fees;
+  private $partial;
 
-  private function __construct($user, $class, $name, $description, $fees)
+  private function __construct($user, $class, $name, $description, $fees, $partial = false)
   {
     $db = app()->db;
 
@@ -26,9 +27,10 @@ class MembershipFeeClass
     $this->type = $fees->type;
     $this->upgradeType = $fees->upgrade_type;
     $this->classFees = $fees->fees;
+    $this->partial = $partial;
 
     // Get members with this class
-    $getMembers = $db->prepare("SELECT MemberID, MForename, MSurname, ClubPaid FROM members WHERE UserID = ? AND ClubCategory = ? ORDER BY ClubPaid ASC, MForename ASC, MSurname ASC");
+    $getMembers = $db->prepare("SELECT MemberID, MForename, MSurname, ClubPaid, RR FROM members WHERE UserID = ? AND ClubCategory = ? ORDER BY ClubPaid ASC, MForename ASC, MSurname ASC");
     $getMembers->execute([
       $this->user,
       $class,
@@ -36,13 +38,13 @@ class MembershipFeeClass
     $this->members = $getMembers->fetchAll(\PDO::FETCH_ASSOC);
 
     if ($this->type == 'NSwimmers') {
-      $this->fees = NSwimmers::calculate($this->members, $this->classFees);
+      $this->fees = NSwimmers::calculate($this->members, $this->classFees, $this->partial);
     } else if ($this->type == 'PerPerson') {
-      $this->fees = PerPerson::calculate($this->members, $this->classFees);
+      $this->fees = PerPerson::calculate($this->members, $this->classFees, $this->partial);
     }
   }
 
-  public static function get($class, $user)
+  public static function get($class, $user, $partial = false)
   {
     $db = app()->db;
     $tenant = app()->tenant;
@@ -65,6 +67,7 @@ class MembershipFeeClass
       $classDetails['Name'],
       $classDetails['Description'],
       $classDetails['Fees'],
+      $partial,
     );
 
     return $feeClass;

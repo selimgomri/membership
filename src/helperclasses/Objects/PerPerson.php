@@ -3,7 +3,7 @@
 class PerPerson extends ClassType
 {
 
-  public static function calculate($members, $fees)
+  public static function calculate($members, $fees, $partial = false)
   {
     $fee = 0;
     if (sizeof($fees) > 0) {

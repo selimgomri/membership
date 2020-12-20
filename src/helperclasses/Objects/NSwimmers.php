@@ -3,9 +3,10 @@
 class NSwimmers extends ClassType
 {
 
-  public static function calculate($members, $fees)
+  public static function calculate($members, $fees, $partial = false)
   {
     $items = [];
+    $existingItems = [];
 
     $fee = 0;
     if (sizeof($fees) > 0) {
@@ -22,6 +23,27 @@ class NSwimmers extends ClassType
         $fee,
         $member['MemberID']
       );
+    }
+
+    if ($partial) {
+      // Get list of partial members
+      $existingMembers = [];
+      for ($i = 0; $i < sizeof($members); $i++) {
+        if (!bool($members[$i]['RR'])) {
+          $existingMembers[] = $members[$i];
+        }
+      }
+
+      $paidFee = 0;
+      if (sizeof($fees) > 0) {
+        $paidFee = $fees[min(sizeof($fees) - 1, sizeof($existingMembers) - 1)];
+      }
+
+      $fee = max(0, $paidFee - $fee);
+      if (sizeof($items) > 0) {
+        $items[0]->setAmount($fee);
+      }
+      
     }
 
     return $items;

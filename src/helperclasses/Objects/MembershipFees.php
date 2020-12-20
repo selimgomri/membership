@@ -5,19 +5,24 @@ class MembershipFees
 
   private $classes;
   private $user;
+  private $partial;
 
-  private function __construct($user, $classes)
+  private function __construct($user, $classes, $partial)
   {
     $this->user = $user;
     $this->classes = $classes;
+    $this->partial = $partial;
   }
 
-  public static function getByUser($user)
+  public static function getByUser($user, $partial = false)
   {
     $db = app()->db;
 
     // Get classes
     $getClasses = $db->prepare("SELECT DISTINCT `ID` FROM clubMembershipClasses INNER JOIN members ON members.ClubCategory = clubMembershipClasses.ID WHERE members.UserID = ?");
+    if ($partial) {
+      $getClasses = $db->prepare("SELECT DISTINCT `ID` FROM clubMembershipClasses INNER JOIN members ON members.ClubCategory = clubMembershipClasses.ID WHERE members.UserID = ? AND members.RR");
+    }
     $getClasses->execute([
       $user,
     ]);
@@ -25,10 +30,10 @@ class MembershipFees
 
     $objects = [];
     foreach ($classes as $class) {
-      $objects[] = MembershipFeeClass::get($class, $user);
+      $objects[] = MembershipFeeClass::get($class, $user, $partial);
     }
 
-    $object = new MembershipFees($user, $objects);
+    $object = new MembershipFees($user, $objects, $partial);
     return $object;
   }
 
