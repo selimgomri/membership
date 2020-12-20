@@ -86,12 +86,12 @@ try {
 
 	if ($clubDiscount > 0 && $renewal == 0) {
 		$totalFee += $clubFee * (1 - ($clubDiscount / 100));
-		$paymentItems[] = [
-			'description' => 'Club Membership Fee',
-			'amount' => $clubFee * ($clubDiscount / 100),
-			'type' => 'credit',
-			'date' => $clubDate
-		];
+		// $paymentItems[] = [
+		// 	'description' => 'Club Membership Fee',
+		// 	'amount' => $clubFee * ($clubDiscount / 100),
+		// 	'type' => 'credit',
+		// 	'date' => $clubDate
+		// ];
 	} else {
 		$totalFee += $clubFee;
 	}

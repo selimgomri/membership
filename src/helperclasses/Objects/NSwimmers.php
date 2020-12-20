@@ -8,9 +8,9 @@ class NSwimmers extends ClassType
     $items = [];
     $existingItems = [];
 
-    $fee = 0;
+    $fee = $originalFee = 0;
     if (sizeof($fees) > 0) {
-      $fee = $fees[min(sizeof($fees) - 1, sizeof($members) - 1)];
+      $originalFee = $fee = $fees[min(sizeof($fees) - 1, sizeof($members) - 1)];
     }
 
     for ($i = 0; $i < sizeof($members); $i++) {
@@ -39,7 +39,7 @@ class NSwimmers extends ClassType
         $paidFee = $fees[min(sizeof($fees) - 1, sizeof($existingMembers) - 1)];
       }
 
-      $fee = max(0, $paidFee - $fee);
+      $fee = max(0, $originalFee - $paidFee);
       if (sizeof($items) > 0) {
         $items[0]->setAmount($fee);
       }

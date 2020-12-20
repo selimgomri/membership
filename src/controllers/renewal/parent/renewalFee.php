@@ -78,7 +78,7 @@ for ($i = 0; $i < $count; $i++) {
 		$asaFees[$i] = 0;
 	}
 	if ($member[$i]['RRTransfer']) {
-		$totalFee += $asaFees[$i];
+		// $totalFee += $asaFees[$i];
 		// $totalFeeDiscounted += 0;
 	} else if ($swimEnglandDiscount > 0 && $renewal == 0) {
 		$totalFee += $asaFees[$i];

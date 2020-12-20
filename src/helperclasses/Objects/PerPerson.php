@@ -14,11 +14,13 @@ class PerPerson extends ClassType
 
     for ($i = 0; $i < sizeof($members); $i++) {
       $member = $members[$i];
-      $items[] = new MembershipFeeItem(
-        $member['MForename'] . ' ' . $member['MSurname'],
-        $fee,
-        $member['MemberID']
-      );
+      if (($partial && bool($member['RR'])) || !$partial) {
+        $items[] = new MembershipFeeItem(
+          $member['MForename'] . ' ' . $member['MSurname'],
+          $fee,
+          $member['MemberID']
+        );
+      }
     }
 
     return $items;
