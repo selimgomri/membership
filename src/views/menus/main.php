@@ -153,19 +153,6 @@ if (!function_exists('chesterStandardMenu')) {
                   <?php } ?>
                   <a class="dropdown-item" href="<?php echo autoUrl("squad-reps") ?>">Squad reps</a>
                   <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("log-books")) ?>">Log books</a>
-                  <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Coach") { ?>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . date("Y/m")) ?>">
-                      Squad Fee Payments, <?= date("F Y") ?>
-                    </a>
-                    <?php
-                    $lm = date("Y/m", strtotime("first day of last month"));
-                    $lms = date("F Y", strtotime("first day of last month"));
-                    ?>
-                    <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . $lm) ?>">
-                      Squad Fee Payments, <?= $lms ?>
-                    </a>
-                  <?php } ?>
                 </div>
               </li>
               <?php if (
@@ -240,23 +227,13 @@ if (!function_exists('chesterStandardMenu')) {
                         Charge or refund gala entries
                       </a>
                     <?php } ?>
+                    <?php $date = new DateTime('now', new DateTimeZone('Europe/London')); ?>
                     <div class="dropdown-divider"></div>
-                    <h6 class="dropdown-header"><?php echo date("F Y"); ?></h6>
-                    <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . date("Y/m")) ?>">
+                    <h6 class="dropdown-header"><?= htmlspecialchars($date->format('F Y')) ?></h6>
+                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("payments/history/squads/" . $date->format("Y/m"))) ?>">
                       Squad Fees
                     </a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("payments/history/extras/" . date("Y/m")) ?>">
-                      Extra Fees
-                    </a>
-                    <?php
-                    $lm = date("Y/m", strtotime("first day of last month"));
-                    $lms = date("F Y", strtotime("first day of last month"));
-                    ?>
-                    <h6 class="dropdown-header"><?php echo $lms; ?></h6>
-                    <a class="dropdown-item" href="<?php echo autoUrl("payments/history/squads/" . $lm) ?>">
-                      Squad Fees
-                    </a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("payments/history/extras/" . $lm) ?>">
+                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("payments/history/extras/" . $date->format("Y/m"))) ?>">
                       Extra Fees
                     </a>
                     <div class="dropdown-divider"></div>
