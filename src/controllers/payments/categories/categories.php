@@ -5,7 +5,7 @@ $tenant = app()->tenant;
 
 $pagetitle = "Categories";
 
-$categories = $db->prepare("SELECT UniqueID, Name FROM paymentCategories WHERE Tenant = ? ORDER BY `Name` ASC");
+$categories = $db->prepare("SELECT `UniqueID`, `Name` FROM paymentCategories WHERE `Tenant` = ? AND `Show` ORDER BY `Name` ASC");
 $categories->execute([
   $tenant->getId(),
 ]);
@@ -48,6 +48,19 @@ include BASE_PATH . 'views/header.php';
 
   <div class="row">
     <div class="col-lg-8">
+
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['HideCategorySuccess'])) { ?>
+        <div class="alert alert-success">
+          <p class="mb-0">
+            <strong>Category hidden successfully</strong>
+          </p>
+          <p class="mb-0">
+            <em><?= htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['HideCategorySuccess']) ?></em> will no longer be shown as an option for future payments.
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['HideCategorySuccess']);
+      } ?>
+
       <?php if ($category = $categories->fetch(PDO::FETCH_ASSOC)) { ?>
         <div class="list-group">
           <?php do { ?>
@@ -62,7 +75,7 @@ include BASE_PATH . 'views/header.php';
             <strong>Your organisation has no existing categories</strong>
           </p>
           <p class="mb-0">
-            <a href="<?= htmlspecialchars(autoUrl("payments/categories/new")) ?>">Add one</a> to get started.
+            <a href="<?= htmlspecialchars(autoUrl("payments/categories/new")) ?>" class="alert-link">Add one</a> to get started.
           </p>
         </div>
       <?php } ?>

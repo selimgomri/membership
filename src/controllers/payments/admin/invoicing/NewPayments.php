@@ -5,7 +5,7 @@ $pagetitle = "New Payment";
 $db = app()->db;
 $tenant = app()->tenant;
 
-$categories = $db->prepare("SELECT UniqueID, Name FROM paymentCategories WHERE Tenant = ? ORDER BY `Name` ASC");
+$categories = $db->prepare("SELECT `UniqueID`, `Name` FROM paymentCategories WHERE `Tenant` = ? AND `Show` ORDER BY `Name` ASC");
 $categories->execute([
   $tenant->getId(),
 ]);

@@ -98,6 +98,10 @@ include BASE_PATH . 'views/header.php';
           </button>
         </p>
 
+        <p>
+          <a href="<?= htmlspecialchars(autoUrl("payments/categories/$id/remove")) ?>" class="btn btn-danger" title="Stop showing this category for new payments">Remove category from lists</a>
+        </p>
+
       </form>
     </div>
   </div>

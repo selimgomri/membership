@@ -92,21 +92,6 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 	});
 }
 
-if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Coach") {
-	$this->get('/history/{type}/{year}:int/{month}:int', function ($type, $year, $month) {
-
-		include 'admin/history/feestatus.php';
-	});
-
-	$this->get('/history/{type}/{year}:int/{month}:int/csv', function ($type, $year, $month) {
-		include BASE_PATH . 'controllers/squads/CSVSquadExport.php';
-	});
-
-	$this->get('/history/{type}/{year}:int/{month}:int/json', function ($type, $year, $month) {
-		include 'admin/history/JSONSquadExport.php';
-	});
-}
-
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") {
 	$this->get('/', function () {
 

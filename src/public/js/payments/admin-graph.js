@@ -7,11 +7,7 @@ var chart = new Chart(ctx, {
   // The data for our dataset
   data: {
     labels: chartData.labels,
-    datasets: [{
-      label: 'Total charged (£ Pounds)',
-      data: chartData.data,
-      backgroundColor: '#bd0000'
-    }],
+    datasets: chartData.data,
   },
 
   // Configuration options go here
