@@ -306,16 +306,16 @@ $month = new DateTime('now', new DateTimeZone('Europe/London'));
               'data' => $dataB,
               'backgroundColor' => $chartColours[1],
             ],
-            [
-              'label' => 'Total paid out (£ Pounds)',
-              'data' => $dataC,
-              'backgroundColor' => $chartColours[2],
-            ],
-            [
-              'label' => 'Transaction fees (£ Pounds)',
-              'data' => $dataD,
-              'backgroundColor' => $chartColours[3],
-            ],
+            // [
+            //   'label' => 'Total paid out (£ Pounds)',
+            //   'data' => $dataC,
+            //   'backgroundColor' => $chartColours[2],
+            // ],
+            // [
+            //   'label' => 'Transaction fees (£ Pounds)',
+            //   'data' => $dataD,
+            //   'backgroundColor' => $chartColours[3],
+            // ],
           ];
 
           $json = json_encode(['labels' => $labels, 'data' => $datasets]);
