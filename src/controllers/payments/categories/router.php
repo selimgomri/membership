@@ -18,6 +18,10 @@ $this->get('/{id}:uuid', function ($id) {
   include 'edit.php';
 });
 
+$this->get('/{id}:uuid/remove', function ($id) {
+  include 'remove.php';
+});
+
 $this->post('/{id}:uuid', function ($id) {
   include 'edit-post.php';
 });
