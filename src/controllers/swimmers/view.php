@@ -146,6 +146,10 @@ include BASE_PATH . 'views/header.php';
           <a href="#squads" class="list-group-item list-group-item-action">
             Squad<?php if (sizeof($squads) != 1) { ?>s<?php } ?>
           </a>
+          <a href="#qualifications" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+            Qualifications
+            <i class="fa fa-fw fa-certificate" aria-hidden="true"></i>
+          </a>
           <a href="#extras" class="list-group-item list-group-item-action">
             Extra fees
           </a>
@@ -462,6 +466,14 @@ include BASE_PATH . 'views/header.php';
 
       <hr>
 
+      <h2 id="qualifications">Qualifications</h2>
+
+      <p>
+        Coming soon.
+      </p>
+
+      <hr>
+
       <h2 id="extras">Extra Fees</h2>
 
       <?php if ($extra = $extraFees->fetch(PDO::FETCH_ASSOC)) { ?>
@@ -571,46 +583,46 @@ include BASE_PATH . 'views/header.php';
         </div>
 
 
-        </dl>
+      </dl>
 
-        <hr>
+      <hr>
 
-        <!-- Other notes -->
-        <h2 id="other-details">Other details</h2>
-        <?php $md = $member->getNotes(); ?>
-        <?php if ($md) { ?>
-          <?= $md ?>
-        <?php } else { ?>
-          <p>
-            No additional notes for <?= htmlspecialchars($member->getForename()) ?>
-          </p>
-        <?php } ?>
+      <!-- Other notes -->
+      <h2 id="other-details">Other details</h2>
+      <?php $md = $member->getNotes(); ?>
+      <?php if ($md) { ?>
+        <?= $md ?>
+      <?php } else { ?>
+        <p>
+          No additional notes for <?= htmlspecialchars($member->getForename()) ?>
+        </p>
+      <?php } ?>
 
-      </div>
-    </div>
-
-  </div>
-
-  <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modal-title">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
-        <div id="modal-footer" class="modal-footer">
-          <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-        </div>
-      </div>
     </div>
   </div>
 
-  <?php
+</div>
 
-  $footer = new \SCDS\Footer();
-  $footer->addJs('public/js/members/main.js');
-  $footer->useFluidContainer();
-  $footer->render();
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="modal-body" class="modal-body"></div>
+      <div id="modal-footer" class="modal-footer">
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<?php
+
+$footer = new \SCDS\Footer();
+$footer->addJs('public/js/members/main.js');
+$footer->useFluidContainer();
+$footer->render();
