@@ -7,3 +7,7 @@ $this->get('/', function() {
 $this->post('/', function() {
   include 'edit-post.php';
 });
+
+$this->get('/members', function() {
+  include 'members.php';
+});

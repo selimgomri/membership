@@ -61,6 +61,12 @@ include BASE_PATH . 'views/header.php';
         unset($_SESSION['TENANT-' . app()->tenant->getId()]['FormError']);
       } ?>
 
+      <?php if ($fees) { ?>
+        <p>
+          <a href="<?= htmlspecialchars(autoUrl('admin/tier-3/members')) ?>" class="btn btn-primary">See affected members</a>
+        </p>
+      <?php } ?>
+
       <?php if ($squad) { ?>
         <form method="post" class="needs-validation" novalidate>
 
@@ -142,10 +148,6 @@ include BASE_PATH . 'views/header.php';
     </div>
   </div>
 </div>
-
-<script>
-
-</script>
 
 <?php
 
