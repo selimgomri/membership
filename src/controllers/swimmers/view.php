@@ -468,6 +468,14 @@ include BASE_PATH . 'views/header.php';
 
       <h2 id="qualifications">Qualifications</h2>
 
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NewQualificationSuccess'])) { ?>
+        <div class="alert alert-success">
+          <p class="mb-0">
+            <strong>New qualification added successfully</strong>
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewQualificationSuccess']); } ?>
+
       <div id="qualifications-box" data-qualifications-url="<?= htmlspecialchars(autoUrl("members/$id/qualifications/current")) ?>"></div>
 
       <?php if (app()->user->hasPermissions(['Admin'])) { ?>

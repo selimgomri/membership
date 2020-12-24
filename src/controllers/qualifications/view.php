@@ -72,6 +72,24 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
     <div class="col-lg-8">
 
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NewQualificationSuccess'])) { ?>
+        <div class="alert alert-success">
+          <p class="mb-0">
+            <strong>New qualification type added successfully</strong>
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewQualificationSuccess']);
+      } ?>
+
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationSuccess'])) { ?>
+        <div class="alert alert-success">
+          <p class="mb-0">
+            <strong>Changes saved successfully</strong>
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationSuccess']);
+      } ?>
+
       <?php if ($qualification['Description']) { ?>
         <h2>Description</h2>
         <?= $markdown->text($qualification['Description']) ?>

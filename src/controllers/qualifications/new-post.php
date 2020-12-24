@@ -49,11 +49,16 @@ try {
     $tenant->getId(),
   ]);
 
+  $_SESSION['TENANT-' . app()->tenant->getId()]['NewQualificationSuccess'] = true;
+
   http_response_code(302);
   header('location: ' . autoUrl('qualifications/' . $id));
 
 } catch (Exception $e) {
 
-  pre($e);
+  $_SESSION['TENANT-' . app()->tenant->getId()]['NewQualificationError'] = $e->getMessage();
+
+  http_response_code(302);
+  header('location: ' . autoUrl('qualifications/new'));
 
 }

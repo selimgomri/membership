@@ -21,10 +21,13 @@ try {
   if (!\SCDS\CSRF::verify()) throw new Exception('Invalid CSRF token');
 
   // Check the qualification exists at this tenant
-  $getQualifications = $db->prepare("SELECT `ID`, `Name`, `Description`, `DefaultExpiry` FROM `qualifications` WHERE `ID` = ? AND `Show` AND `Tenant` = ?");
+  $date = new DateTime('now', new DateTimeZone('Europe/London'));
+  $getQualifications = $db->prepare("SELECT `Name`, `ID` FROM `qualifications` WHERE `ID` = :qual AND `Show` AND `Tenant` = :tenant AND (`ID` NOT IN (SELECT `Qualification` AS `ID` FROM `qualificationsMembers` WHERE `Member` = :member AND ValidFrom <= :date AND (ValidUntil >= :date OR ValidUntil IS NULL))) ORDER BY `Name` ASC;");
   $getQualifications->execute([
-    $_POST['qualification'],
-    $tenant->getId(),
+    'qual' => $_POST['qualification'],
+    'tenant' => $tenant->getId(),
+    'member' => $member->getId(),
+    'date' => $date->format('Y-m-d'),
   ]);
   $qualification = $getQualifications->fetch(PDO::FETCH_ASSOC);
 
@@ -59,10 +62,19 @@ try {
     $notes,
   ]);
 
+  $_SESSION['TENANT-' . app()->tenant->getId()]['NewQualificationSuccess'] = true;
+
   http_response_code(302);
   header('location: ' . autoUrl("members/$id#qualifications"));
 } catch (Exception $e) {
   // Error
+
+  $message = $e->getMessage();
+  if (get_class($e) == 'PDOException') {
+    $message = 'A database error occurred';
+  }
+
+  $_SESSION['TENANT-' . app()->tenant->getId()]['FormError'] = $message;
 
   http_response_code(302);
   header('location: ' . autoUrl("members/$id/qualifications/new"));

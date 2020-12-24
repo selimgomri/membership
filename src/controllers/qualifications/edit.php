@@ -50,6 +50,15 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
     <div class="col-lg-8">
 
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationError'])) { ?>
+        <div class="alert alert-danger">
+          <p class="mb-0">
+            <strong>A problem occurred</strong>
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationError']);
+      } ?>
+
       <form method="post" class="needs-validation" novalidate>
 
         <div class="form-group">

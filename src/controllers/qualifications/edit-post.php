@@ -61,11 +61,16 @@ try {
     $id,
   ]);
 
+  $_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationSuccess'] = true;
+
   http_response_code(302);
   header('location: ' . autoUrl('qualifications/' . $id));
 
 } catch (Exception $e) {
 
-  pre($e);
+  $_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationError'] = true;
+
+  http_response_code(302);
+  header('location: ' . autoUrl("qualifications/$id/edit"));
 
 }
