@@ -634,39 +634,9 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<script>
-  /**
-   * Get qualifications from the db and return a JSON object
-   */
-  function getQualifications() {
-    return new Promise(function(resolve, reject) {
-      var oReq = new XMLHttpRequest();
-      oReq.addEventListener('load', (event) => {
-        if (event.target.status == 200)
-          resolve(JSON.parse(event.target.responseText));
-        else
-          reject(JSON.parse(event.target.responseText));
-      });
-      oReq.open('GET', document.getElementById('qualifications-box').dataset.qualificationsUrl);
-      oReq.send();
-    });
-  }
-
-  async function displayQualifications() {
-    try {
-      let qualifications = await getQualifications();
-      document.getElementById('qualifications-box').innerHTML = qualifications.html;
-    } catch (error) {
-
-    }
-  }
-
-  displayQualifications();
-</script>
-
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs('public/js/members/main.js');
+$footer->addJs('public/js/members/main.js?v=2');
 $footer->useFluidContainer();
 $footer->render();
