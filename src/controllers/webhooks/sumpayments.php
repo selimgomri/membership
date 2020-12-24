@@ -23,7 +23,18 @@ if (isset($squadFeeMonths[$date->format("m")])) {
 
 if ($tenant->getBooleanKey('ENABLE_BILLING_SYSTEM')) {
   // Prepare things
-  $getUserMembers = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname FROM members WHERE UserID = ?");
+  $getUserMembers = $db->prepare("SELECT members.MemberID, members.MForename, members.MSurname, members.DateOfBirth FROM members WHERE UserID = ?");
+
+  // GET TIER 3 STUFF
+  $tier3Date = new DateTime('now', new DateTimeZone('Europe/London'));
+  $dateToday = clone $date;
+
+  $tier3 = $tenant->getKey('TIER3_SQUAD_FEES');
+  if ($tier3) {
+    $tier3 = json_decode($tier3, true);
+    $tier3Date = new DateTime($tier3['eighteen_by'], new DateTimeZone('Europe/London'));
+    $tier3Date->sub(new DateInterval('P18Y'));
+  }
 
   $getSquadMetadata = $db->prepare("SELECT squads.SquadName, squads.SquadID, squads.SquadFee, squadMembers.Paying FROM squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad WHERE squadMembers.Member = ?;");
 
@@ -160,6 +171,18 @@ if ($tenant->getBooleanKey('ENABLE_BILLING_SYSTEM')) {
                 ]);
 
                 $memberTotal -= $fee;
+              }
+
+              // Tier 3
+              $dob = new DateTime($member['DateOfBirth'], new DateTimeZone('Europe/London'));
+              if ($dob <= $tier3Date && isset($tier3['squads'][(string) $squad['SquadID']]) && ((int) $tier3['squads'][(string) $squad['SquadID']]) > 0) {
+                $addCreditToPaymentsPending->execute([
+                  $date,
+                  $user,
+                  $member['MForename'] . " " . $member['MSurname'] . ' - ' . $squad['SquadName'] . ' Tier 3 Squad Fee Rebate',
+                  min(((int) $tier3['squads'][(string) $squad['SquadID']]), $fee),
+                  null
+                ]);
               }
             }
 
