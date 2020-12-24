@@ -236,3 +236,21 @@ $this->post('/move-squad', function () {
 $this->post('/move-operations', function () {
 	include 'moves/operations.php';
 });
+
+$this->group('/{id}:int/qualifications', function($id) {
+	$this->get('/', function($id) {
+		include 'qualifications/list.php';
+	});
+
+	$this->get('/current', function($id) {
+		include 'qualifications/current.php';
+	});
+
+	$this->get('/new', function($id) {
+		include 'qualifications/new.php';
+	});
+
+	$this->post('/new', function($id) {
+		include 'qualifications/new-post.php';
+	});
+});

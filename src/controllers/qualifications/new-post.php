@@ -5,6 +5,9 @@ use function GuzzleHttp\json_encode;
 $db = app()->db;
 $tenant = app()->tenant;
 
+$user = app()->user;
+if (!$user->hasPermissions(['Admin'])) halt(404);
+
 try {
 
   if (!\SCDS\CSRF::verify()) {

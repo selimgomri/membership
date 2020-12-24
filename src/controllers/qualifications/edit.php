@@ -5,6 +5,9 @@ use function GuzzleHttp\json_decode;
 $db = app()->db;
 $tenant = app()->tenant;
 
+$user = app()->user;
+if (!$user->hasPermissions(['Admin'])) halt(404);
+
 $getQualifications = $db->prepare("SELECT `Name`, `Description`, `DefaultExpiry` FROM `qualifications` WHERE `Show` AND `ID` = ? AND `Tenant` = ?");
 $getQualifications->execute([
   $id,

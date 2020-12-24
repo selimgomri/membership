@@ -1,5 +1,8 @@
 <?php
 
+$user = app()->user;
+if (!$user->hasPermissions(['Admin'])) halt(404);
+
 $pagetitle = 'New Qualification Type';
 
 include BASE_PATH . 'views/header.php';

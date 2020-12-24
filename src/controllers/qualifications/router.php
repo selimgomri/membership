@@ -27,3 +27,7 @@ $this->group('/{id}:uuid', function ($id) {
     include 'edit-post.php';
   });
 });
+
+$this->post('/lookup', function () {
+  include 'add-lookup.php';
+});

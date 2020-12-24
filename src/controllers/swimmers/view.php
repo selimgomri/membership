@@ -468,9 +468,15 @@ include BASE_PATH . 'views/header.php';
 
       <h2 id="qualifications">Qualifications</h2>
 
-      <p>
-        Coming soon.
-      </p>
+      <div id="qualifications-box" data-qualifications-url="<?= htmlspecialchars(autoUrl("members/$id/qualifications/current")) ?>"></div>
+
+      <?php if (app()->user->hasPermissions(['Admin'])) { ?>
+        <p>
+          <a href="<?= htmlspecialchars(autoUrl("members/$id/qualifications/new")) ?>" class="btn btn-success" id="add-qualification">
+            Add qualification
+          </a>
+        </p>
+      <?php } ?>
 
       <hr>
 
@@ -619,6 +625,36 @@ include BASE_PATH . 'views/header.php';
     </div>
   </div>
 </div>
+
+<script>
+  /**
+   * Get qualifications from the db and return a JSON object
+   */
+  function getQualifications() {
+    return new Promise(function(resolve, reject) {
+      var oReq = new XMLHttpRequest();
+      oReq.addEventListener('load', (event) => {
+        if (event.target.status == 200)
+          resolve(JSON.parse(event.target.responseText));
+        else
+          reject(JSON.parse(event.target.responseText));
+      });
+      oReq.open('GET', document.getElementById('qualifications-box').dataset.qualificationsUrl);
+      oReq.send();
+    });
+  }
+
+  async function displayQualifications() {
+    try {
+      let qualifications = await getQualifications();
+      document.getElementById('qualifications-box').innerHTML = qualifications.html;
+    } catch (error) {
+
+    }
+  }
+
+  displayQualifications();
+</script>
 
 <?php
 
