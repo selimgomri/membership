@@ -1,5 +1,8 @@
 <?php
 
+$user = app()->user;
+if (!$user->hasPermissions(['Admin'])) halt(404);
+
 $pagetitle = 'New Qualification Type';
 
 include BASE_PATH . 'views/header.php';
@@ -28,6 +31,18 @@ include BASE_PATH . 'views/header.php';
 
   <div class="row">
     <div class="col-lg-8">
+
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['FormError'])) { ?>
+        <div class="alert alert-danger">
+          <p class="mb-0">
+            <strong>Error</strong>
+          </p>
+          <p class="mb-0">
+            <?= htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['FormError']) ?>
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['FormError']);
+      } ?>
 
       <form method="post" class="needs-validation" novalidate>
 

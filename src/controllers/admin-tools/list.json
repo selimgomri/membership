@@ -81,6 +81,14 @@
       "link": "admin/scds-payments",
       "target": "_self",
       "external": false
+    },
+    {
+      "id": "tier-three",
+      "name": "Tier 3 Discounts",
+      "title": "Manage discounts for over 18s in Tier 3 areas",
+      "link": "admin/tier-3",
+      "target": "_self",
+      "external": false
     }
   ]
 }

@@ -5,6 +5,9 @@ use function GuzzleHttp\json_decode;
 $db = app()->db;
 $tenant = app()->tenant;
 
+$user = app()->user;
+if (!$user->hasPermissions(['Admin'])) halt(404);
+
 $getQualifications = $db->prepare("SELECT `Name`, `Description`, `DefaultExpiry` FROM `qualifications` WHERE `Show` AND `ID` = ? AND `Tenant` = ?");
 $getQualifications->execute([
   $id,
@@ -69,6 +72,24 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
     <div class="col-lg-8">
 
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NewQualificationSuccess'])) { ?>
+        <div class="alert alert-success">
+          <p class="mb-0">
+            <strong>New qualification type added successfully</strong>
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewQualificationSuccess']);
+      } ?>
+
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationSuccess'])) { ?>
+        <div class="alert alert-success">
+          <p class="mb-0">
+            <strong>Changes saved successfully</strong>
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationSuccess']);
+      } ?>
+
       <?php if ($qualification['Description']) { ?>
         <h2>Description</h2>
         <?= $markdown->text($qualification['Description']) ?>
@@ -76,9 +97,9 @@ include BASE_PATH . 'views/header.php';
 
       <h2>Members</h2>
       <?php if ($member) { ?>
-        <div class="list-group">
+        <div class="list-group mb-3">
           <?php do { ?>
-            <a href="<?= htmlspecialchars(autoUrl('members/' . $member['MemberID'])) ?>" class="list-group-item list-group-item-action">
+            <a href="<?= htmlspecialchars(autoUrl('members/' . $member['MemberID'] . '#qualifications')) ?>" class="list-group-item list-group-item-action">
               <?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?>
             </a>
           <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>

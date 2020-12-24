@@ -153,6 +153,9 @@ if (!function_exists('chesterStandardMenu')) {
                   <?php } ?>
                   <a class="dropdown-item" href="<?php echo autoUrl("squad-reps") ?>">Squad reps</a>
                   <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("log-books")) ?>">Log books</a>
+                  <?php if (app()->user->hasPermission('Admin')) { ?>
+                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("qualifications")) ?>">Qualifications</a>
+                  <?php } ?>
                 </div>
               </li>
               <?php if (

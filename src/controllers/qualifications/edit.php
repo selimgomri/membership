@@ -5,6 +5,9 @@ use function GuzzleHttp\json_decode;
 $db = app()->db;
 $tenant = app()->tenant;
 
+$user = app()->user;
+if (!$user->hasPermissions(['Admin'])) halt(404);
+
 $getQualifications = $db->prepare("SELECT `Name`, `Description`, `DefaultExpiry` FROM `qualifications` WHERE `Show` AND `ID` = ? AND `Tenant` = ?");
 $getQualifications->execute([
   $id,
@@ -46,6 +49,15 @@ include BASE_PATH . 'views/header.php';
 
   <div class="row">
     <div class="col-lg-8">
+
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationError'])) { ?>
+        <div class="alert alert-danger">
+          <p class="mb-0">
+            <strong>A problem occurred</strong>
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationError']);
+      } ?>
 
       <form method="post" class="needs-validation" novalidate>
 

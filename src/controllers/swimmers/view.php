@@ -468,9 +468,23 @@ include BASE_PATH . 'views/header.php';
 
       <h2 id="qualifications">Qualifications</h2>
 
-      <p>
-        Coming soon.
-      </p>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NewQualificationSuccess'])) { ?>
+        <div class="alert alert-success">
+          <p class="mb-0">
+            <strong>New qualification added successfully</strong>
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewQualificationSuccess']); } ?>
+
+      <div id="qualifications-box" data-qualifications-url="<?= htmlspecialchars(autoUrl("members/$id/qualifications/current")) ?>"></div>
+
+      <?php if (app()->user->hasPermissions(['Admin'])) { ?>
+        <p>
+          <a href="<?= htmlspecialchars(autoUrl("members/$id/qualifications/new")) ?>" class="btn btn-success" id="add-qualification">
+            Add qualification
+          </a>
+        </p>
+      <?php } ?>
 
       <hr>
 
@@ -623,6 +637,6 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs('public/js/members/main.js');
+$footer->addJs('public/js/members/main.js?v=2');
 $footer->useFluidContainer();
 $footer->render();

@@ -5,6 +5,9 @@ use function GuzzleHttp\json_decode;
 $db = app()->db;
 $tenant = app()->tenant;
 
+$user = app()->user;
+if (!$user->hasPermissions(['Admin'])) halt(404);
+
 $getQualifications = $db->prepare("SELECT `Name`, `Description`, `DefaultExpiry` FROM `qualifications` WHERE `Show` AND `ID` = ? AND `Tenant` = ?");
 $getQualifications->execute([
   $id,
@@ -58,11 +61,16 @@ try {
     $id,
   ]);
 
+  $_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationSuccess'] = true;
+
   http_response_code(302);
   header('location: ' . autoUrl('qualifications/' . $id));
 
 } catch (Exception $e) {
 
-  pre($e);
+  $_SESSION['TENANT-' . app()->tenant->getId()]['EditQualificationError'] = true;
+
+  http_response_code(302);
+  header('location: ' . autoUrl("qualifications/$id/edit"));
 
 }
