@@ -12,10 +12,6 @@ $this->post('/add', function() {
   include 'add-post.php';
 });
 
-$this->get('/{id}:uuid', function($id) {
-  include 'view.php';
-});
-
 $this->get('/setup-success', function() {
   include 'success.php';
 });
