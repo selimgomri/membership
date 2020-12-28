@@ -161,4 +161,4 @@ Chester-le-Street ASC is a non profit unincorporated association.
       </div>
     <?php } ?>
 
-    <div>
+    <div class="have-full-height">

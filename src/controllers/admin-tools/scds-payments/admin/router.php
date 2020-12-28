@@ -21,4 +21,8 @@ if (!isset($_SESSION['SCDS-Payments-Admin'])) {
     include 'mandates/router.php';
   });
 
+  $this->group('/payment-cards', function () {
+    include 'cards/router.php';
+  });
+
 }
