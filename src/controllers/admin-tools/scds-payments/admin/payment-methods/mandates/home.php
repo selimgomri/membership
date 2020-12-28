@@ -6,12 +6,12 @@ $db = app()->db;
 $tenant = app()->adminCurrentTenant;
 $user = app()->adminCurrentUser;
 
-$getMandates = $db->prepare("SELECT `ID`, `MethodID`, `MandateID`, `Type`, `JSON`, `Usable` FROM tenantPaymentMethods INNER JOIN tenantStripeCustomers ON tenantPaymentMethods.Customer = tenantStripeCustomers.CustomerID WHERE Tenant = ? AND `Type` = 'bacs_debit' ORDER BY Usable DESC, Created DESC");
+$getMandates = $db->prepare("SELECT tenantPaymentMethods.ID, `MethodID`, `MandateID`, `Type`, `TypeData`, `AcceptanceData`, `MethodDetails`, `Usable`, `Status` FROM tenantPaymentMethods INNER JOIN tenantPaymentMandates ON tenantPaymentMandates.PaymentMethod = tenantPaymentMethods.MethodID INNER JOIN tenantStripeCustomers ON tenantPaymentMethods.Customer = tenantStripeCustomers.CustomerID WHERE Tenant = ? AND `Type` = 'bacs_debit' ORDER BY Usable DESC, tenantPaymentMethods.Created DESC");
 $getMandates->execute([
   $tenant->getId(),
 ]);
 
-$getUsableMandates = $db->prepare("SELECT `ID`, `MethodID`, `MandateID`, `Type`, `JSON`, `Usable` FROM tenantPaymentMethods INNER JOIN tenantStripeCustomers ON tenantPaymentMethods.Customer = tenantStripeCustomers.CustomerID WHERE Usable AND Tenant = ? AND `Type` = 'bacs_debit' ORDER BY Created DESC");
+$getUsableMandates = $db->prepare("SELECT tenantPaymentMethods.ID, `MethodID`, `MandateID`, `Type`, `TypeData`, `AcceptanceData`, `MethodDetails`, `Usable`, `Status` FROM tenantPaymentMethods INNER JOIN tenantPaymentMandates ON tenantPaymentMandates.PaymentMethod = tenantPaymentMethods.MethodID INNER JOIN tenantStripeCustomers ON tenantPaymentMethods.Customer = tenantStripeCustomers.CustomerID WHERE Usable AND Tenant = ? AND `Type` = 'bacs_debit' ORDER BY tenantPaymentMethods.Created DESC");
 $getUsableMandates->execute([
   $tenant->getId(),
 ]);
@@ -26,19 +26,30 @@ include BASE_PATH . "views/root/head.php";
 
   <?php include BASE_PATH . 'controllers/admin-tools/scds-payments/admin/nav.php'; ?>
 
-  <div class="bg-primary text-white p-4 my-4 d-inline-block rounded">
-    <h1 class="">Mandate</h1>
-    <p class="mb-0">Manage your Direct Debit Instruction</p>
+  <div class="row align-items-center">
+    <div class="col">
+      <div class="bg-primary text-white p-4 my-4 d-inline-block rounded">
+        <h1 class="">Direct Debit</h1>
+        <p class="mb-0">Manage your Direct Debit Instruction</p>
+      </div>
+    </div>
+    <div class="d-none d-sm-flex col-sm-auto ml-auto">
+      <img style="max-height:50px;" src="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit.png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@3x.png")) ?> 3x" alt="Direct Debit Logo">
+    </div>
   </div>
 
   <div class="row">
     <div class="col-lg-8">
-
       <p>
         <a href="<?= htmlspecialchars(autoUrl('payments-admin/direct-debit-instruction/set-up')) ?>" class="btn btn-primary">
           Set up a DDI
         </a>
       </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-8">
 
       <?php if (isset($_SESSION['Saved_DD_Default']) && $_SESSION['Saved_DD_Default']) { ?>
         <div class="alert alert-success">
@@ -46,7 +57,8 @@ include BASE_PATH . "views/root/head.php";
             <strong>We've saved your changes to your default direct debit</strong>
           </p>
         </div>
-      <?php unset($_SESSION['Saved_DD_Default']); } ?>
+      <?php unset($_SESSION['Saved_DD_Default']);
+      } ?>
 
       <?php if (isset($_SESSION['StripeDDSuccess']) && $_SESSION['StripeDDSuccess']) { ?>
         <div class="alert alert-success">
@@ -68,7 +80,9 @@ include BASE_PATH . "views/root/head.php";
 
         <ul class="list-group">
           <?php do {
-            $json = json_decode($mandate['JSON']);
+            $json = json_decode($mandate['TypeData']);
+            $acceptance = json_decode($mandate['AcceptanceData']);
+            $methodDetails = json_decode($mandate['MethodDetails']);
           ?>
             <li class="list-group-item" id="<?= htmlspecialchars('mandate-' . $mandate['ID']) ?>">
               <h2><?= htmlspecialchars(implode("-", str_split($json->sort_code, 2))) ?> - &middot;&middot;&middot;&middot;<?= htmlspecialchars($json->last4) ?><?php if ($default == $mandate['ID']) { ?> <span class="badge badge-success">Default</span><?php } ?></h2>
@@ -81,14 +95,14 @@ include BASE_PATH . "views/root/head.php";
                 <dd class="col-sm-9 mono">&middot;&middot;&middot;&middot;<?= htmlspecialchars($json->last4) ?></dd>
 
                 <dt class="col-sm-3">Payment reference</dt>
-                <dd class="col-sm-9 mono"><?= htmlspecialchars($json->reference) ?></dd>
+                <dd class="col-sm-9 mono"><?= htmlspecialchars($methodDetails->bacs_debit->reference) ?></dd>
 
                 <dt class="col-sm-3">Active</dt>
-                <dd class="col-sm-9"><?php if (bool($mandate['Usable'])) { ?>Yes<?php } else { ?>No<?php } ?></dd>
+                <dd class="col-sm-9"><?php if ($mandate['Status'] == 'active') { ?>Yes<?php } else { ?>No<?php } ?></dd>
               </dl>
 
               <p class="mb-0">
-                <a href="<?= htmlspecialchars($json->url) ?>" target="_blank">
+                <a href="<?= htmlspecialchars($methodDetails->bacs_debit->url) ?>" target="_blank">
                   View Direct Debit Instruction
                 </a>
               </p>
@@ -116,9 +130,11 @@ include BASE_PATH . "views/root/head.php";
               <select class="custom-select" id="default-mandate" name="default-mandate">
                 <option <?php if ($default == null) { ?>selected<?php } ?> disabled value="nothing">Select a default mandate</option>
                 <?php while ($mandate = $getUsableMandates->fetch(PDO::FETCH_ASSOC)) {
-                  $json = json_decode($mandate['JSON']);
+                  $json = json_decode($mandate['TypeData']);
                 ?>
-                  <option <?php if ($default == $mandate['ID']) { ?>selected<?php } ?> value="<?= htmlspecialchars($mandate['ID']) ?>"><?= htmlspecialchars(implode("-", str_split($json->sort_code, 2))) ?> - &middot;&middot;&middot;&middot;<?= htmlspecialchars($json->last4) ?></option>
+                  <option <?php if ($default == $mandate['ID']) { ?>selected<?php } ?> value="<?= htmlspecialchars($mandate['ID']) ?>">
+                    <?= htmlspecialchars($methodDetails->bacs_debit->reference) ?> (Account ending <?= htmlspecialchars($json->last4) ?>)
+                  </option>
                 <?php } ?>
               </select>
             </div>

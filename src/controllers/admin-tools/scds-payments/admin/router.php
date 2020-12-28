@@ -17,8 +17,16 @@ if (!isset($_SESSION['SCDS-Payments-Admin'])) {
     include 'exit.php';
   });
 
+  $this->group('/payment-methods', function () {
+    include 'payment-methods/router.php';
+  });
+
   $this->group('/direct-debit-instruction', function () {
-    include 'mandates/router.php';
+    include 'payment-methods/mandates/router.php';
+  });
+
+  $this->group('/payment-cards', function () {
+    include 'payment-methods/cards/router.php';
   });
 
 }
