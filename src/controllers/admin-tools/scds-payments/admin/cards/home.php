@@ -29,12 +29,10 @@ include BASE_PATH . "views/root/head.php";
         <p class="mb-0">Add and edit your payment cards</p>
       </div>
     </div>
-    <div class="col-auto ml-auto">
-      <div class="d-none d-sm-flex col-sm-auto ml-auto">
-        <p class="mb-0">
-          <img class="apple-pay-row" src="<?= autoUrl("public/img/stripe/apple-pay-mark.svg") ?>" aria-hidden="true"> <img class="google-pay-row" src="<?= autoUrl("public/img/stripe/google-pay-mark.svg") ?>" aria-hidden="true"> <img class="visa-row" src="<?= autoUrl("public/img/stripe/visa.svg") ?>" aria-hidden="true"> <img class="mastercard-row" src="<?= autoUrl("public/img/stripe/mastercard.svg") ?>" aria-hidden="true"> <img class="amex-row" src="<?= autoUrl("public/img/stripe/amex.svg") ?>" aria-hidden="true">
-        </p>
-      </div>
+    <div class="d-none d-sm-flex col-sm-auto ml-auto">
+      <p class="mb-0">
+        <img class="apple-pay-row" src="<?= autoUrl("public/img/stripe/apple-pay-mark.svg") ?>" aria-hidden="true"> <img class="google-pay-row" src="<?= autoUrl("public/img/stripe/google-pay-mark.svg") ?>" aria-hidden="true"> <img class="visa-row" src="<?= autoUrl("public/img/stripe/visa.svg") ?>" aria-hidden="true"> <img class="mastercard-row" src="<?= autoUrl("public/img/stripe/mastercard.svg") ?>" aria-hidden="true"> <img class="amex-row" src="<?= autoUrl("public/img/stripe/amex.svg") ?>" aria-hidden="true">
+      </p>
     </div>
   </div>
 

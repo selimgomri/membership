@@ -33,11 +33,9 @@ include BASE_PATH . "views/root/head.php";
         <p class="mb-0">Manage your Direct Debit Instruction</p>
       </div>
     </div>
-    <div class="col-auto ml-auto">
-      <div class="d-none d-sm-flex col-sm-auto ml-auto">
-        <img style="max-height:50px;" src="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit.png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@3x.png")) ?> 3x" alt="Direct
+    <div class="d-none d-sm-flex col-sm-auto ml-auto">
+      <img style="max-height:50px;" src="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit.png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@3x.png")) ?> 3x" alt="Direct
 				Debit Logo">
-      </div>
     </div>
   </div>
 

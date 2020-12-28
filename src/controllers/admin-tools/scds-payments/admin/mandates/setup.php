@@ -39,9 +39,9 @@ include BASE_PATH . "views/root/head.php";
 
   <?php include BASE_PATH . 'controllers/admin-tools/scds-payments/admin/nav.php'; ?>
 
-  <div class="row pt-3 align-items-center">
+  <div class="row align-items-center">
     <div class="col">
-      <div class="bg-primary text-white p-4 mb-4 d-inline-block rounded">
+      <div class="bg-primary text-white p-4 my-4 d-inline-block rounded">
         <h1>
           Set up a Direct Debit
         </h1>

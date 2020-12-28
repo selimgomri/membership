@@ -16,6 +16,7 @@ if (!isset($_SESSION['StripeSetupIntentId'])) {
   $setupIntent = \Stripe\SetupIntent::create(
     [
       'customer' => $customer->id,
+      'payment_method_types' => ['card']
     ]
   );
   $_SESSION['StripeSetupIntentId'] = $setupIntent->id;
@@ -58,17 +59,14 @@ include BASE_PATH . "views/root/head.php";
 
       <h1>Add a payment card</h1>
 
-      <?php if (isset($_SESSION['PayCardError'])) { ?>
+      <?php if (isset($_SESSION['StripeSetupIntentError'])) { ?>
         <div class="alert alert-danger">
           <p class="mb-0">
             <strong>An error occurred</strong>
           </p>
-          <?php if (isset($_SESSION['PayCardErrorMessage'])) { ?>
-            <p class="mb-0"><?= htmlspecialchars($_SESSION['PayCardErrorMessage']) ?></p>
-          <?php } ?>
+          <p class="mb-0"><?= htmlspecialchars($_SESSION['StripeSetupIntentError']) ?></p>
         </div>
-        <?php unset($_SESSION['PayCardError']);
-        unset($_SESSION['PayCardErrorMessage']); ?>
+        <?php unset($_SESSION['StripeSetupIntentError']);  ?>
       <?php } ?>
 
       <form action="<?= htmlspecialchars(autoUrl("payments-admin/payment-cards/add")) ?>" method="post" id="payment-form" class="mb-5 needs-validation" novalidate>
@@ -149,6 +147,10 @@ include BASE_PATH . "views/root/head.php";
 
         <!-- Used to display form errors. -->
         <div id="card-errors" role="alert"></div>
+
+        <p>
+          I authorise Swimming Club Data Systems to send instructions to the financial institution that issued my card to take payments from my card account in accordance with the terms of my agreement with you.
+        </p>
 
         <p>
           <button id="card-button" class="btn btn-success" data-secret="<?= htmlspecialchars($setupIntent->client_secret) ?>">Add payment card</button>
