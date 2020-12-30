@@ -146,7 +146,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 				<div class="form-group">
 					<label for="membership-class">Select membership class</label>
-					<select class="custom-select" id="membership-class" name="membership-class">
+					<select class="custom-select" id="membership-class" name="membership-class" required>
 						<option value="" selected disabled>Choose a club membership class</option>
 						<?php do { ?>
 							<option value="<?= htmlspecialchars($class['ID']) ?>" <?php if ($tenant->getKey('DEFAULT_MEMBERSHIP_CLASS') == $class['ID']) { ?>selected<?php } ?>><?= htmlspecialchars($class['Name']) ?></option>
