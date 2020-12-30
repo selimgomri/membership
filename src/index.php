@@ -114,6 +114,15 @@ if (!(sizeof($_SESSION) > 0)) {
 }
 */
 
+app()->locale = 'en_GB';
+if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+  try {
+    app()->locale = Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+  } catch (Exception $e) {
+    app()->locale = 'en_GB';
+  }
+}
+
 function currentUrl()
 {
   $uri = ltrim($_SERVER["REQUEST_URI"], '/');

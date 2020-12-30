@@ -181,7 +181,7 @@ try {
 <?php if (isset($this->js)) { ?>
   <!-- Load per page JS -->
   <?php foreach ($this->js as $script) {
-  ?><script src="<?= htmlspecialchars($script) ?>"></script><?php
+  ?><script <?php if ($script['module']) { ?>type="module"<?php } ?> src="<?= htmlspecialchars($script['url']) ?>"></script><?php
                                                           }
                                                         } ?>
 
