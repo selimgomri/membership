@@ -147,7 +147,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 				<div class="form-group">
 					<label for="membership-class">Select membership class</label>
 					<select class="custom-select" id="membership-class" name="membership-class">
-						<option selected disabled>Open this select menu</option>
+						<option value="" selected disabled>Choose a club membership class</option>
 						<?php do { ?>
 							<option value="<?= htmlspecialchars($class['ID']) ?>" <?php if ($tenant->getKey('DEFAULT_MEMBERSHIP_CLASS') == $class['ID']) { ?>selected<?php } ?>><?= htmlspecialchars($class['Name']) ?></option>
 						<?php } while ($class = $getClasses->fetch(PDO::FETCH_ASSOC)); ?>
@@ -157,7 +157,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 				<div class="form-group">
 					<div class="custom-control custom-checkbox">
 						<input type="checkbox" class="custom-control-input" id="clubmemb" name="clubmemb" value="1" aria-describedby="clubmembhelp">
-						<label class="custom-control-label" for="clubmemb">Club pays Swim England fees?</label>
+						<label class="custom-control-label" for="clubmemb">Club pays Club Membership fees?</label>
 					</div>
 					<small id="clubmembhelp" class="form-text text-muted">Tick the box if this swimmer will not pay any annual club membership fees.</small>
 				</div>
