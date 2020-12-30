@@ -29,4 +29,8 @@ if (!isset($_SESSION['SCDS-Payments-Admin'])) {
     include 'payment-methods/cards/router.php';
   });
 
+  $this->group('/subscriptions', function () {
+    include 'subscriptions/router.php';
+  });
+
 }
