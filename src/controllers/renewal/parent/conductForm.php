@@ -39,7 +39,7 @@ if (isset($id)) {
   <div class="row">
     <div class="col-lg-8">
       <div class="">
-        <form method="post">
+        <form method="post" class="needs-validation" novalidate>
           <h1>Code of Conduct Acceptance</h1>
           <p class="lead">For <?=htmlspecialchars($row['MForename'] . ' ' . $row['MSurname'])?></p>
 
@@ -48,7 +48,7 @@ if (isset($id)) {
 							unset($_SESSION['TENANT-' . app()->tenant->getId()]['RenewalErrorInfo']);
 						} ?>
 
-          <div class="alert alert-warning">
+          <div class="alert alert-info">
             <p>
               <strong>
                 You must ensure that <?=htmlspecialchars($row['MForename'])?> is present to agree to this code of conduct before you continue as they must read and agree to this code of conduct.
@@ -251,10 +251,13 @@ if (isset($id)) {
 					<div class="cell">
 						<div class="form-group">
 							<div class="custom-control custom-checkbox">
-								<input type="checkbox" class="custom-control-input" id="agree" name="agree" value="1">
+								<input type="checkbox" class="custom-control-input" id="agree" name="agree" value="1" required>
 								<label class="custom-control-label" for="agree">
 									I, <?=htmlspecialchars($row['MForename'] . ' ' . $row['MSurname'])?> agree to this code of conduct
-								</label>
+                </label>
+                <div class="invalid-feedback">
+                  Confirm your agreement
+                </div>
 							</div>
 						</div>
 
@@ -269,6 +272,7 @@ if (isset($id)) {
 </div>
 
 <?php $footer = new \SCDS\Footer();
+$footer->addJs('public/js/NeedsValidation.js');
 $footer->render(); } else {
     $pagetitle = "Code of	Conduct Acceptance";
     include BASE_PATH . "views/header.php";
@@ -279,7 +283,7 @@ $footer->render(); } else {
   <div class="row">
     <div class="col-lg-8">
       <div class="">
-        <form method="post">
+        <form method="post" class="needs-validation" novalidate>
           <h1>Parent Code of Conduct</h1>
 					<?php if ($parentCode != null) { ?>
           <p class="lead">
@@ -320,5 +324,6 @@ $footer->render(); } else {
 </div>
 
 <?php $footer = new \SCDS\Footer();
+$footer->addJs('public/js/NeedsValidation.js');
 $footer->render();
 }
