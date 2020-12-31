@@ -444,6 +444,7 @@ include BASE_PATH . "views/header.php";
                       <li>No squads</li>
                     <?php } ?>
                   </ul>
+                  <div class="mb-3"></div>
                 </div>
               <?php } while ($s = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
             </div>

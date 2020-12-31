@@ -75,7 +75,7 @@ $userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
               <label for="county-province">County</label>
               <input class="form-control" name="county-province" id="county-province" type="text" autocomplete="address-level1" <?php if (isset($addr->county)) { ?>value="<?=htmlspecialchars($addr->county)?>"<?php } ?> required>
               <div class="invalid-feedback">
-                Please enter ceremonial or traditional county
+                Please enter a ceremonial or traditional county
               </div>
             </div>
 
