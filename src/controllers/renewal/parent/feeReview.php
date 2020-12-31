@@ -10,8 +10,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
 			echo $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
 			unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
-			?><hr><?php
-		} ?>
+		?>
+			<hr><?php
+				} ?>
 		<h1>Your Fees</h1>
 		<form method="post">
 			<p class="lead">Here are the monthly fees you pay.</p>
@@ -20,7 +21,19 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				<?= myMonthlyFeeTable(null, $userID) ?>
 			</div>
 
-			<p>You will pay these fees by Direct Debit.</p>
+			<?php if (app()->tenant->getBooleanKey('ENABLE_BILLING_SYSTEM')) { ?>
+				<p>You will pay these fees by Direct Debit*.</p>
+
+				<p class="small">* Where supported by your club.</p>
+			<?php } else { ?>
+				<p>
+					Your club has disabled the automated billing systems provided as part of the membership system. Your club will tell you how they want you to pay these fees.
+				</p>
+
+				<p>
+					As your club isn't using automated billing, these fees shown above may not always be accurate.
+				</p>
+			<?php } ?>
 
 			<div>
 				<button type="submit" class="btn btn-success">Save and Continue</button>
