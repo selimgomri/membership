@@ -1385,7 +1385,7 @@ include BASE_PATH . 'includes/stripe/HandleCompletedGalaPayments.php';
 include BASE_PATH . 'includes/direct-debit/BankLogos.php';
 include BASE_PATH . 'includes/direct-debit/BankNames.php';
 include BASE_PATH . 'includes/direct-debit/Balances.php';
-include BASE_PATH . 'includes/membership-fees/Loader.php';
+// include BASE_PATH . 'includes/membership-fees/Loader.php';
 include BASE_PATH . 'includes/pdf/StringReplacements.php';
 include BASE_PATH . 'includes/GetCachedFile.php';
 include BASE_PATH . 'includes/BankHolidays.php';

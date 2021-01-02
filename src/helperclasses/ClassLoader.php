@@ -27,7 +27,7 @@ require 'SuperMailer/CreateContent.php';
 
 require 'Helpers/Login.php';
 
-require 'Objects/ObjectsLoader.php';
+require 'ObjectsLoader.php';
 
 // require 'MembershipFees/ObjectsLoader.php';
 

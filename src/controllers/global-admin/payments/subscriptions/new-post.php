@@ -40,6 +40,14 @@ try {
       break;
   }
 
+  // Check payment method
+  $getPm = $db->prepare("SELECT COUNT(*) FROM tenantPaymentMethods WHERE MethodID = ? AND Customer = ? AND Usable");
+  $getPm->execute([
+    $_POST['subscription-payment-method'],
+    $customer,
+  ]);
+  if ($getPm->fetchColumn() == 0) throw new Exception('No payment method');
+
   $id = Ramsey\Uuid\Uuid::uuid4()->toString();
   $addSubscription = $db->prepare("INSERT INTO tenantPaymentSubscriptions (ID, Customer, PaymentMethod, Memo, Footer, StartDate, EndDate, Active) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
   $addSubscription->execute([

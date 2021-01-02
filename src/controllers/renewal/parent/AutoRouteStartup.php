@@ -7,21 +7,19 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-function renewalProgress($user) {
+function renewalProgress($user)
+{
 	$db = app()->db;
 	$date = new DateTime('now', new DateTimeZone('Europe/London'));
 
-  $details = null;
+	$details = null;
 	if (user_needs_registration($user)) {
 		$details = $db->prepare("SELECT * FROM `renewalProgress` WHERE `RenewalID` = 0 AND `UserID` = :user");
 		$details->execute([
 			'user' => $user,
 		]);
 	} else {
-		$details = $db->prepare("SELECT * FROM `renewals` LEFT JOIN
-		`renewalProgress` ON renewals.ID = renewalProgress.RenewalID WHERE
-		`StartDate` <= :today AND `EndDate` >= :today AND `UserID` = :user ORDER
-		BY renewals.ID DESC, renewalProgress.ID DESC");
+		$details = $db->prepare("SELECT * FROM `renewals` LEFT JOIN `renewalProgress` ON renewals.ID = renewalProgress.RenewalID WHERE `StartDate` <= :today AND `EndDate` >= :today AND `UserID` = :user ORDER BY renewals.ID DESC, renewalProgress.ID DESC");
 		$details->execute([
 			'user' => $user,
 			'today' => $date->format("Y-m-d")
@@ -31,13 +29,13 @@ function renewalProgress($user) {
 	return $details;
 }
 
-function latestRenewal() {
+function latestRenewal()
+{
 	$db = app()->db;
 	$tenant = app()->tenant;
 	$date = new DateTime('now', new DateTimeZone('Europe/London'));
 
-	$latest = $db->prepare("SELECT * FROM `renewals` WHERE `StartDate` <= :today
-	AND `EndDate` >= :today AND Tenant = :tenant ORDER BY renewals.ID DESC LIMIT 1");
+	$latest = $db->prepare("SELECT * FROM `renewals` WHERE `StartDate` <= :today AND `EndDate` >= :today AND Tenant = :tenant ORDER BY renewals.EndDate DESC LIMIT 1");
 	$latest->execute([
 		'today' => $date->format("Y-m-d"),
 		'tenant' => $tenant->getId()
@@ -46,7 +44,8 @@ function latestRenewal() {
 	return $latestRenewal;
 }
 
-function getNextSwimmer($user, $current = 0, $rr_only = false) {
+function getNextSwimmer($user, $current = 0, $rr_only = false)
+{
 	$db = app()->db;
 
 	if ($rr_only) {
@@ -69,7 +68,8 @@ function getNextSwimmer($user, $current = 0, $rr_only = false) {
 	}
 }
 
-function isPartialRegistration() {
+function isPartialRegistration()
+{
 	$db = app()->db;
 	// Is user RR?
 	$query = $db->prepare("SELECT RR FROM users WHERE UserID = ?");
@@ -83,7 +83,7 @@ function isPartialRegistration() {
 		halt(500);
 	}
 	$total_swimmers = (int) $query->fetchColumn();
-	
+
 	$query = $db->prepare("SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = ?");
 	try {
 		$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 1]);
@@ -109,18 +109,18 @@ if ($currentRenewalDetails == null) {
 	if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
 		$renewal = 0;
 	} else if ($latestRenewal == null) {
-    halt(404);
+		halt(404);
 	} else {
 		$renewal = $latestRenewal['ID'];
 	}
 
 	$date = date("Y-m-d");
 
-  $addRenewal = $db->prepare("INSERT INTO `renewalProgress` (`UserID`, `RenewalID`, `Date`, `Stage`, `Substage`, `Part`) VALUES (?, ?, ?, '0', '0', '0')");
-  $addRenewal->execute([
-    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
-    $renewal,
-    $date
+	$addRenewal = $db->prepare("INSERT INTO `renewalProgress` (`UserID`, `RenewalID`, `Date`, `Stage`, `Substage`, `Part`) VALUES (?, ?, ?, '0', '0', '0')");
+	$addRenewal->execute([
+		$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+		$renewal,
+		$date
 	]);
 	$currentRenewalDetails = renewalProgress($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
 } else {

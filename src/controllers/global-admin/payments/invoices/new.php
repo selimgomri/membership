@@ -8,7 +8,7 @@ $getProducts = $db->query("SELECT `ID`, `Name`, `Description`, `Updated` FROM `t
 $today = new DateTime('now', new DateTimeZone('Europe/London'));
 $firstNextMonth = new DateTime('first day of next month', new DateTimeZone('Europe/London'));
 
-$pagetitle = "New Subscription - Payments - Admin Dashboard - SCDS";
+$pagetitle = "New Invoice - Payments - Admin Dashboard - SCDS";
 
 include BASE_PATH . "views/root/header.php";
 
@@ -18,15 +18,15 @@ include BASE_PATH . "views/root/header.php";
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('admin/payments')) ?>">Pay</a></li>
-      <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('admin/payments/subscriptions')) ?>">Subscriptions</a></li>
+      <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('admin/payments/invoices')) ?>">Invoices</a></li>
       <li class="breadcrumb-item active" aria-current="page">New</li>
     </ol>
   </nav>
 
   <h1>
-    New Subscription
+    New Invoice
   </h1>
-  <p class="lead">Create a subscription.</p>
+  <p class="lead">Create a custom invoice.</p>
 
   <div class="row">
     <div class="col-lg-8">
@@ -76,7 +76,19 @@ include BASE_PATH . "views/root/header.php";
 
         <input type="hidden" name="subscription-plans-object" id="subscription-plans-object" value="">
 
-        <div class="form-group">
+        <div class="form-group" id="pays-auto-radios">
+          <p class="mb-2">Bills when?</p>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="bills-when-immediately" name="bills-when" class="custom-control-input" value="immediately" required checked>
+            <label class="custom-control-label" for="bills-when-immediately">Bill selected payment method immediately</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="bills-when-manually" name="bills-when" class="custom-control-input" value="chooses">
+            <label class="custom-control-label" for="bills-when-manually">Customer makes manual payment</label>
+          </div>
+        </div>
+
+        <div class="form-group" id="payment-method-box">
           <label for="subscription-payment-method">Payment method</label>
           <select name="subscription-payment-method" id="subscription-payment-method" class="custom-select" required disabled>
             <option value="" selected disabled>Select a payment method</option>
@@ -96,25 +108,9 @@ include BASE_PATH . "views/root/header.php";
           <textarea class="form-control" name="subscription-invoice-footer" id="subscription-invoice-footer" rows="4"></textarea>
         </div>
 
-        <div class="form-group" id="subscription-first-bills-radios">
-          <p class="mb-2">Subscription first bills</p>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="subscription-first-bills-immediately" name="subscription-first-bills" class="custom-control-input" value="immediately" required checked>
-            <label class="custom-control-label" for="subscription-first-bills-immediately">Immediately</label>
-          </div>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="subscription-first-bills-next-first" name="subscription-first-bills" class="custom-control-input" value="next-first">
-            <label class="custom-control-label" for="subscription-first-bills-next-first">On <?= htmlspecialchars($firstNextMonth->format('l j F Y')) ?></label>
-          </div>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="subscription-first-bills-custom" name="subscription-first-bills" class="custom-control-input" value="custom">
-            <label class="custom-control-label" for="subscription-first-bills-custom">On a custom date</label>
-          </div>
-        </div>
-
-        <div class="form-group d-none" id="custom-date-box">
-          <label for="subscription-first-bills-date">First bills on</label>
-          <input type="date" name="subscription-first-bills-date" id="subscription-first-bills-date" class="form-control" min="<?= htmlspecialchars($today->format('Y-m-d')) ?>" value="<?= htmlspecialchars($today->format('Y-m-d')) ?>">
+        <div class="form-group">
+          <label for="invoice-date">Invoice date</label>
+          <input type="date" name="invoice-date" id="invoice-date" class="form-control" min="<?= htmlspecialchars($today->format('Y-m-d')) ?>" value="<?= htmlspecialchars($today->format('Y-m-d')) ?>">
           <div class="invalid-feedback">
             Please provide a valid date to start billing this subscription on
           </div>
@@ -122,7 +118,7 @@ include BASE_PATH . "views/root/header.php";
 
         <p>
           <button type="submit" class="btn btn-primary">
-            Create subscription
+            Create invoice
           </button>
         </p>
       </form>
@@ -192,6 +188,6 @@ include BASE_PATH . "views/root/header.php";
 
 $footer = new \SCDS\RootFooter();
 $footer->addJs("public/js/numerical/bignumber.min.js");
-$footer->addJs("public/js/global-admin/payments/subscriptions/new.js", true);
+$footer->addJs("public/js/global-admin/payments/invoices/new.js", true);
 $footer->addJs('js/NeedsValidation.js');
 $footer->render();
