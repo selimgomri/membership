@@ -47,7 +47,7 @@ $clubFee = $totalFeeDiscounted = $totalFee = 0;
 
 $payingSwimmerCount = $sql->fetchColumn();
 
-$clubFees = MembershipFees::getByUser($user);
+$clubFees = MembershipFees\MembershipFees::getByUser($user);
 
 $clubFee = $clubFees->getTotal();
 

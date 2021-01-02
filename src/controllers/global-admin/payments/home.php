@@ -22,6 +22,7 @@ include BASE_PATH . "views/root/header.php";
     <a href="<?= htmlspecialchars(autoUrl('admin/payments/products')) ?>" class="list-group-item list-group-item-action">Products</a>
     <a href="<?= htmlspecialchars(autoUrl('admin/payments/subscriptions')) ?>" class="list-group-item list-group-item-action">Subscriptions</a>
     <a href="<?= htmlspecialchars(autoUrl('admin/payments/tax-rates')) ?>" class="list-group-item list-group-item-action">Tax Rates</a>
+    <a href="<?= htmlspecialchars(autoUrl('admin/payments/invoices')) ?>" class="list-group-item list-group-item-action">Invoices</a>
   </div>
 </div>
 

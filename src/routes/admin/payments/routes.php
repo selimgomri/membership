@@ -102,3 +102,37 @@ $this->group('/subscriptions', function () {
     });
   });
 });
+
+$this->group('/invoices', function () {
+  $this->get('/', function () {
+    include BASE_PATH . 'controllers/global-admin/payments/invoices/home.php';
+  });
+
+  $this->group('/new', function () {
+    $this->get('/', function () {
+      include BASE_PATH . 'controllers/global-admin/payments/invoices/new.php';
+    });
+
+    $this->post('/', function () {
+      include BASE_PATH . 'controllers/global-admin/payments/invoices/new-post.php';
+    });
+
+    $this->post('/get-tenant-payment-methods', function() {
+      include BASE_PATH . 'controllers/global-admin/payments/subscriptions/get-tenant-payment-methods.php';
+    });
+
+    $this->post('/get-product-plans', function() {
+      include BASE_PATH . 'controllers/global-admin/payments/subscriptions/get-product-plans.php';
+    });
+  });
+
+  $this->group('/{id}:uuid', function ($id) {
+    $this->get('/', function ($id) {
+      include BASE_PATH . 'controllers/global-admin/payments/invoices/view.php';
+    });
+
+    $this->post('/', function ($id) {
+      include BASE_PATH . 'controllers/global-admin/payments/invoices/edit-post.php';
+    });
+  });
+});
