@@ -4,7 +4,7 @@ $pagetitle = "Create New Renewal Period";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php";
 
-$date = new DateTime('now', new DateTimeZone('Europe/London'));
+$date = new DateTime('tomorrow', new DateTimeZone('Europe/London'));
 $datePlus = new DateTime('+2 week', new DateTimeZone('Europe/London'));
 
 $val = [
@@ -17,7 +17,7 @@ $val = [
 ?>
 
 <div class="container">
-	<form method="post">
+	<form method="post" class="needs-validation" novalidate>
 		<h1>Create a new Renewal Period</h1>
 		<div class="row">
 			<div class="col-lg-8">
@@ -30,18 +30,27 @@ $val = [
 
 				<div class="form-group">
 					<label for="name">Renewal Name</label>
-					<input type="text" class="form-control" id="name" name="name" placeholder="For 2018" value="<?php if (isset($val[0])) { ?><?= htmlspecialchars($val[0]) ?><?php } ?>">
+					<input type="text" class="form-control" id="name" name="name" placeholder="For <?= htmlspecialchars($datePlus->format('Y')) ?>" value="<?php if (isset($val[0])) { ?><?= htmlspecialchars($val[0]) ?><?php } ?>" required>
+					<div class="invalid-feedback">
+						Enter a name for the renewal period
+					</div>
 				</div>
 
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						<label for="start">Start Date</label>
-						<input type="date" class="form-control" id="start" name="start" value="<?= htmlspecialchars($date->format('Y-m-d')) ?>" value="<?= htmlspecialchars($val[1]) ?>">
+						<input type="date" class="form-control" id="start" name="start" value="<?= htmlspecialchars($date->format('Y-m-d')) ?>" min="<?= htmlspecialchars($date->format('Y-m-d')) ?>" required>
+						<div class="invalid-feedback">
+							Enter a start date
+						</div>
 					</div>
 
 					<div class="form-group col-md-6">
 						<label for="end">End Date</label>
-						<input type="date" class="form-control" id="end" name="end" value="<?= htmlspecialchars($datePlus->format('Y-m-d')) ?>" value="<?= htmlspecialchars($val[2]) ?>">
+						<input type="date" class="form-control" id="end" name="end" value="<?= htmlspecialchars($datePlus->format('Y-m-d')) ?>" min="<?= htmlspecialchars($date->format('Y-m-d')) ?>" required>
+						<div class="invalid-feedback">
+							Enter an end date
+						</div>
 					</div>
 				</div>
 
@@ -56,5 +65,8 @@ $val = [
 	</form>
 </div>
 
-<?php $footer = new \SCDS\Footer();
+<?php
+
+$footer = new \SCDS\Footer();
+$footer->addJs('public/js/NeedsValidation.js');
 $footer->render();
