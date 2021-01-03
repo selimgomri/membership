@@ -49,7 +49,7 @@ function getNextSwimmer($user, $current = 0, $rr_only = false)
 	$db = app()->db;
 
 	if ($rr_only) {
-		$query = $db->prepare("SELECT `MemberID` FROM `members` WHERE `UserID` = ? AND `MemberID` > ? AND `RR` = ?");
+		$query = $db->prepare("SELECT `MemberID` FROM `members` WHERE Active AND `UserID` = ? AND `MemberID` > ? AND `RR` = ?");
 		$query->execute([
 			$user,
 			$current,
@@ -58,7 +58,7 @@ function getNextSwimmer($user, $current = 0, $rr_only = false)
 		$next = $query->fetchColumn();
 		return $next;
 	} else {
-		$query = $db->prepare("SELECT `MemberID` FROM `members` WHERE `UserID` = ? AND `MemberID` > ?");
+		$query = $db->prepare("SELECT `MemberID` FROM `members` WHERE Active AND `UserID` = ? AND `MemberID` > ?");
 		$query->execute([
 			$user,
 			$current

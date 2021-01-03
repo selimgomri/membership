@@ -9,7 +9,7 @@
         "dg/twitter-php": "^3.6",
         "nezamy/route": "^1.1",
         "gocardless/gocardless-pro": "^1.1",
-        "respect/validation": "^1.1",
+        "respect/validation": "^2.1",
         "league/oauth2-server": "^7.2",
         "endroid/qr-code": "^3.2",
         "fabpot/goutte": "^3.2",
