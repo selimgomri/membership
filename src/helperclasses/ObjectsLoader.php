@@ -8,9 +8,12 @@
 
 function loadObjects($className)
 {
-  $path = 'Objects/';
+  $path = BASE_PATH . 'helperclasses/Objects/';
   $className = str_replace("\\", DIRECTORY_SEPARATOR, $className);
-  require_once $path . $className . '.php';
+  $filename = $path . $className . '.php';
+  if (file_exists($filename)) {
+    require_once $filename;
+  }
 }
 
 spl_autoload_register('loadObjects');
