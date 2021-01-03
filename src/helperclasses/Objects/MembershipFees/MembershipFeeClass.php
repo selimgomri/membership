@@ -32,7 +32,7 @@ class MembershipFeeClass
     $this->partial = $partial;
 
     // Get members with this class
-    $getMembers = $db->prepare("SELECT MemberID, MForename, MSurname, ClubPaid, RR FROM members WHERE UserID = ? AND ClubCategory = ? ORDER BY ClubPaid ASC, MForename ASC, MSurname ASC");
+    $getMembers = $db->prepare("SELECT MemberID, MForename, MSurname, ClubPaid, RR FROM members WHERE UserID = ? AND ClubCategory = ? AND Active ORDER BY ClubPaid ASC, MForename ASC, MSurname ASC");
     $getMembers->execute([
       $this->user,
       $class,

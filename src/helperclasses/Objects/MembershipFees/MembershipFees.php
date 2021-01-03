@@ -21,9 +21,9 @@ class MembershipFees
     $db = app()->db;
 
     // Get classes
-    $getClasses = $db->prepare("SELECT DISTINCT `ID` FROM clubMembershipClasses INNER JOIN members ON members.ClubCategory = clubMembershipClasses.ID WHERE members.UserID = ?");
+    $getClasses = $db->prepare("SELECT DISTINCT `ID` FROM clubMembershipClasses INNER JOIN members ON members.ClubCategory = clubMembershipClasses.ID WHERE members.UserID = ? AND members.Active");
     if ($partial) {
-      $getClasses = $db->prepare("SELECT DISTINCT `ID` FROM clubMembershipClasses INNER JOIN members ON members.ClubCategory = clubMembershipClasses.ID WHERE members.UserID = ? AND members.RR");
+      $getClasses = $db->prepare("SELECT DISTINCT `ID` FROM clubMembershipClasses INNER JOIN members ON members.ClubCategory = clubMembershipClasses.ID WHERE members.UserID = ? AND members.RR AND members.Active");
     }
     $getClasses->execute([
       $user,
