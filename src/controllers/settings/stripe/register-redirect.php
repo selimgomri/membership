@@ -2,13 +2,14 @@
 
 \Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
+$tenant = null;
+
 try {
 
   if (!isset($_SESSION['Stripe-Reg-OAuth'])) {
     throw new Exception('No reg');
   }
 
-  $tenant = null;
   if (isset($_SESSION['Stripe-Reg-OAuth']['tenant'])) {
     $tenant = \Tenant::fromId((int) $_SESSION['Stripe-Reg-OAuth']['tenant']);
   }
@@ -38,21 +39,24 @@ try {
   $_SESSION['TENANT-' . $tenant->getId()]['Stripe-Reg-Success'] = true;
   unset($_SESSION['Stripe-Reg-OAuth']['tenant']);
 
+  try {
+    \Stripe\ApplePayDomain::create(
+      ['domain_name' => app('request')->hostname],
+      ['stripe_account' => $tenant->getStripeAccount()]
+    );
+  } catch (Exception $e) {
+    // Not the end of the world so report the error and continue.
+    // Any errors can be resolved later.
+    reportError($e);
+  }
 } catch (Exception $e) {
   reportError($e);
   $_SESSION['TENANT-' . $_SESSION['Stripe-Reg-OAuth']['tenant']]['Stripe-Reg-Error'] = true;
 }
 
-// Try to register Apple Pay domain
-try {
-  \Stripe\ApplePayDomain::create(
-    ['domain_name' => app('request')->hostname],
-    ['stripe_account' => $tenant->getStripeAccount()]
-  );
-} catch (Exception $e) {
-  // Not the end of the world so report the error and continue.
-  // Any errors can be resolved later.
-  reportError($e);
+if ($tenant) {
+  header("location: " . autoUrl($tenant->getCodeId() . "/settings/stripe"));
+} else {
+  // Argh
+  header("location: " . autoUrl("/clubs", false));
 }
-
-header("location: " . autoUrl($tenant->getCodeId() . "/settings/stripe"));
