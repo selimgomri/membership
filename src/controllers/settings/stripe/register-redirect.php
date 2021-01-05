@@ -39,6 +39,7 @@ try {
   unset($_SESSION['Stripe-Reg-OAuth']['tenant']);
 
 } catch (Exception $e) {
+  reportError($e);
   $_SESSION['TENANT-' . $_SESSION['Stripe-Reg-OAuth']['tenant']]['Stripe-Reg-Error'] = true;
 }
 
