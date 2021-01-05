@@ -21,7 +21,16 @@ include BASE_PATH . "views/root/header.php";
         The SCDS Online Membership System enables you to manage your swimmers, enter competitions, stay up to date by email and make payments by Direct Debit.
       </p>
 
-      <ul class="list-unstyled">
+      <div class="card card-body mb-3">
+        <h2>Contact SCDS Support</h2>
+        <p class="lead mb-0">
+          Contact <a href="mailto:support@myswimmingclub.uk">support@myswimmingclub.uk</a> to start a new support request.
+        </p>
+      </div>
+
+      <div class="card card-body mb-3">
+      <h2>Support articles</h2>
+      <ul class="list-unstyled mb-0">
         <li>
           <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/adding-a-payment-card/" rel="bookmark" title="Adding a payment card">
             Adding a payment card
@@ -73,6 +82,7 @@ include BASE_PATH . "views/root/header.php";
           </a>
         </li>
       </ul>
+      </div>
 
       <p>
         We're busy transferring help and support documentation over from the Chester-le-Street ASC website. Once this is completed, we'll be expanding our help and support resources.

@@ -20,7 +20,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
                   Newcastle-upon-Tyne
                 </address>
                 <!--<p><i class="fa fa-envelope fa-fw" aria-hidden="true"></i> <a href="mailto:enquiries@chesterlestreetasc.co.uk" target="new">E-Mail Us</a></p>-->
-                <p><i class="fa fa-flag fa-fw" aria-hidden="true"></i> <a href="<?= autoUrl("reportanissue?url=" . urlencode(currentUrl())) ?>">Report an issue with this page</a>
+                <p><i class="fa fa-flag fa-fw" aria-hidden="true"></i> <a href="<?= htmlspecialchars('mailto:support@myswimmingclub.uk') ?>">Report an issue with this page</a>
                 </p>
               </div>
               <div class="col-sm-6">
