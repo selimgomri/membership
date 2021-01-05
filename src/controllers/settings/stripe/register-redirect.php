@@ -39,7 +39,7 @@ try {
   unset($_SESSION['Stripe-Reg-OAuth']['tenant']);
 
 } catch (Exception $e) {
-  $_SESSION['TENANT-' . $tenant->getId()]['Stripe-Reg-Error'] = true;
+  $_SESSION['TENANT-' . $_SESSION['Stripe-Reg-OAuth']['tenant']]['Stripe-Reg-Error'] = true;
 }
 
 // Try to register Apple Pay domain
