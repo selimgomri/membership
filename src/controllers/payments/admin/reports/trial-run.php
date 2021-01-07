@@ -6,6 +6,8 @@ $fees = $summer->sumAll();
 
 $pagetitle = 'Payment Amounts - Trial Run';
 
+$total = 0;
+
 $fluidContainer = true;
 include BASE_PATH . 'views/header.php';
 
@@ -18,8 +20,9 @@ include BASE_PATH . 'views/header.php';
     See estimated payment amounts for each user, if squad fees and other charges were billed today.
   </p>
 
-  <ul class="list-group">
+  <ul class="list-group mb-3">
   <?php foreach ($fees as $row => $data) {
+    $total += $data['total'];
     if (sizeof($data['items']['existing']) > 0 || sizeof($data['items']['provisional']) > 0) { ?>
       <li class="list-group-item px-3 pb-0 bg-light">
         <div class="row mb-3">
@@ -80,6 +83,10 @@ include BASE_PATH . 'views/header.php';
     <?php }
   } ?>
   </ul>
+
+  <p>
+    The expected total income (before transaction fees) is <strong>&pound;<?=htmlspecialchars((string) \Brick\Math\BigInteger::of((string) $total)->toBigDecimal()->withPointMovedLeft(2))?></strong>
+  </p>
 
 </div>
 

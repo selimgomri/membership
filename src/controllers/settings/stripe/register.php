@@ -19,8 +19,6 @@ $_SESSION['Stripe-Reg-OAuth'] = [
 ];
 
 $authorizeUrl = $client->getAuthenticationUrl(
-  // Once you go live, this should be set to https://connect.gocardless.com. You'll also
-  // need to create a live app and update your client ID and secret.
   $url,
   autoUrl("services/stripe/redirect", false), // Your redirect URL
   [
