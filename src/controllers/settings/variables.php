@@ -27,6 +27,7 @@ $vars = [
   'HIDE_CONTACT_TRACING_FROM_PARENTS' => false,
   'BLOCK_SQUAD_REPS_FROM_NOTIFY' => false,
   'REQUIRE_FULL_REGISTRATION' => true,
+  'REQUIRE_FULL_RENEWAL' => true,
   'ENABLE_BILLING_SYSTEM' => true,
   'GLOBAL_PERSONAL_KEY' => null,
   'GLOBAL_PERSONAL_KEY_ID_NUMBER' => null,
@@ -281,11 +282,18 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
 
-          <h2>Registration options</h2>
+          <h2>Registration and renewal global options</h2>
           <div class="form-group">
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="REQUIRE_FULL_REGISTRATION" value="1" name="REQUIRE_FULL_REGISTRATION" <?php if (bool($vars['REQUIRE_FULL_REGISTRATION'])) { ?>checked<?php } ?> <?= $disabled['REQUIRE_FULL_REGISTRATION'] ?>>
-              <label class="custom-control-label" for="REQUIRE_FULL_REGISTRATION">Require users to complete a full registration forms</label>
+              <label class="custom-control-label" for="REQUIRE_FULL_REGISTRATION">Require users to complete all registration forms</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="REQUIRE_FULL_RENEWAL" value="1" name="REQUIRE_FULL_RENEWAL" <?php if (bool($vars['REQUIRE_FULL_RENEWAL'])) { ?>checked<?php } ?> <?= $disabled['REQUIRE_FULL_RENEWAL'] ?>>
+              <label class="custom-control-label" for="REQUIRE_FULL_RENEWAL">Require users to complete all renewal forms. If off renewal jumps direct to membership fees page.</label>
             </div>
           </div>
 

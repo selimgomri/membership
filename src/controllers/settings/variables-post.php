@@ -101,6 +101,13 @@ try {
   }
   app()->tenant->setKey('REQUIRE_FULL_REGISTRATION', $hide);
 
+  // 'REQUIRE_FULL_RENEWAL' => true,
+  $hide = 1;
+  if (!isset($_POST['REQUIRE_FULL_RENEWAL']) || !bool($_POST['REQUIRE_FULL_RENEWAL'])) {
+    $hide = 0;
+  }
+  app()->tenant->setKey('REQUIRE_FULL_RENEWAL', $hide);
+
   // 'ENABLE_BILLING_SYSTEM' => true,
   $hide = 1;
   if (!isset($_POST['ENABLE_BILLING_SYSTEM']) || !bool($_POST['ENABLE_BILLING_SYSTEM'])) {
