@@ -31,7 +31,7 @@ $numC2Renewals = $numRenewalsByCat->fetchColumn();
 $numRenewalsByCat->execute([$id, 3, true]);
 $numC3Renewals = $numRenewalsByCat->fetchColumn();
 
-$sql = $db->prepare("SELECT `MForename`, `MSurname`, `Forename`, `Surname`, members.ASANumber, `payments`.`Status`, `RenewalID`, `Renewed`, stripePayments.ID StripeDBID, stripePayments.Paid StripePaid, stripePayMethods.Last4, stripePayMethods.Brand, stripePayMethods.Funding FROM ((((((`renewalMembers` RIGHT JOIN `members`
+$sql = $db->prepare("SELECT `MForename`, `MSurname`, `Forename`, `Surname`, members.ASANumber, `payments`.`Status`, `RenewalID`, `Renewed`, stripePayments.ID StripeDBID, stripePayments.Paid StripePaid, stripePayMethods.Last4, stripePayMethods.Brand, stripePayMethods.Funding, ASACategory FROM ((((((`renewalMembers` RIGHT JOIN `members`
 ON members.MemberID = renewalMembers.MemberID) LEFT JOIN `users` ON
 members.UserID = users.UserID) LEFT JOIN `paymentsPending` ON
 renewalMembers.PaymentID = paymentsPending.PaymentID) LEFT JOIN `payments` ON
@@ -97,7 +97,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 							Member
 						</th>
 						<th>
-							Parent
+							Parent/User
 						</th>
 						<th>
 							ASA
@@ -127,7 +127,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 							</td>
 							<td>
 								<span class="mono">
-									<?= htmlspecialchars($renewalItem['ASANumber']) ?>
+									<?= htmlspecialchars($renewalItem['ASANumber']) ?><?php if ($renewalItem['ASACategory'] != 0) { ?> (Cat<?= htmlspecialchars($renewalItem['ASACategory']) ?>)<?php } ?>
 								</span>
 							</td>
 							<td>
