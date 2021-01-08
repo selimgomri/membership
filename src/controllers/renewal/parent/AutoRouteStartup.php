@@ -116,11 +116,21 @@ if ($currentRenewalDetails == null) {
 
 	$date = date("Y-m-d");
 
-	$addRenewal = $db->prepare("INSERT INTO `renewalProgress` (`UserID`, `RenewalID`, `Date`, `Stage`, `Substage`, `Part`) VALUES (?, ?, ?, '0', '0', '0')");
+	$doFull = app()->tenant->getBooleanKey('REQUIRE_FULL_RENEWAL');
+	$stage = $substage = $part = 0;
+
+	if (!$doFull) {
+		$stage = 5;
+	}
+
+	$addRenewal = $db->prepare("INSERT INTO `renewalProgress` (`UserID`, `RenewalID`, `Date`, `Stage`, `Substage`, `Part`) VALUES (?, ?, ?, ?, ?, ?)");
 	$addRenewal->execute([
 		$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
 		$renewal,
-		$date
+		$date,
+		$stage,
+		$substage,
+		$part,
 	]);
 	$currentRenewalDetails = renewalProgress($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
 } else {

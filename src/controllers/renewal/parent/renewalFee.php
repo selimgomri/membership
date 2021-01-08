@@ -144,11 +144,6 @@ include BASE_PATH . "views/renewalTitleBar.php";
 		if ($renewal == 0) {
 			$nf = "first";
 		}; ?>
-		<?php if (app()->tenant->getGoCardlessAccessToken()) { ?>
-			<p>
-				You will pay these fees as part of your <?= $nf ?> Direct Debit payment to <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>.
-			</p>
-		<?php } ?>
 
 		<h2>Your Membership Fees</h2>
 		<p class="lead">
