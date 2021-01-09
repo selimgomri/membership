@@ -23,7 +23,7 @@ $getRenewals->execute([
 $getNumMembers = $db->prepare("SELECT COUNT(*) FROM renewalMembers WHERE RenewalID = ?");
 
 // Make sure we don't add members from leaver squad to renewal
-$getMembers = $db->prepare("SELECT MemberID FROM members WHERE RR = 0 AND Tenant = ?;");
+$getMembers = $db->prepare("SELECT MemberID FROM members WHERE Active AND RR = 0 AND Tenant = ?;");
 
 $addMember = $db->prepare("INSERT INTO renewalMembers (MemberID, RenewalID, CountRenewal) VALUES (?, ?, ?)");
 
