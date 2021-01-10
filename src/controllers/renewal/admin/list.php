@@ -31,7 +31,7 @@ $numC2Renewals = $numRenewalsByCat->fetchColumn();
 $numRenewalsByCat->execute([$id, 3, true]);
 $numC3Renewals = $numRenewalsByCat->fetchColumn();
 
-$sql = $db->prepare("SELECT `MForename`, `MSurname`, `Forename`, `Surname`, members.ASANumber, `payments`.`Status`, `RenewalID`, `Renewed`, stripePayments.ID StripeDBID, stripePayments.Paid StripePaid, stripePayMethods.Last4, stripePayMethods.Brand, stripePayMethods.Funding, ASACategory, members.Active FROM ((((((`renewalMembers` RIGHT JOIN `members`
+$sql = $db->prepare("SELECT `MForename`, `MSurname`, `Forename`, `Surname`, members.ASANumber, `payments`.`Status`, `RenewalID`, `Renewed`, stripePayments.ID StripeDBID, stripePayments.Paid StripePaid, stripePayMethods.Last4, stripePayMethods.Brand, stripePayMethods.Funding, ASACategory, members.Active, renewalMembers.MemberID, renewalMembers.ID RMID FROM ((((((`renewalMembers` RIGHT JOIN `members`
 ON members.MemberID = renewalMembers.MemberID) LEFT JOIN `users` ON
 members.UserID = users.UserID) LEFT JOIN `paymentsPending` ON
 renewalMembers.PaymentID = paymentsPending.PaymentID) LEFT JOIN `payments` ON
@@ -110,16 +110,16 @@ include BASE_PATH . "views/swimmersMenu.php";
 				<tbody>
 					<?php do {
 						if ($renewalItem['Status'] == "failed" || $renewalItem['Status'] == "charged_back") {
-					?><tr class="table-danger"><?php
+					?><tr data-member="<?= htmlspecialchars($renewalItem['MemberID']) ?>" data-renewal-record="<?= htmlspecialchars($renewalItem['RMID']) ?>" class="table-danger"><?php
 																		} else if (bool($renewalItem['StripePaid']) || $renewalItem['Status'] == "paid_out" || $renewalItem['Status'] == "confirmed" || $renewalItem['Status'] == "paid_manually") {
 																			?>
-							<tr class="table-success"><?php
+							<tr data-member="<?= htmlspecialchars($renewalItem['MemberID']) ?>" data-renewal-record="<?= htmlspecialchars($renewalItem['RMID']) ?>" class="table-success"><?php
 																			} else if (!bool($renewalItem['Active'])) {
 																				?>
-							<tr class="table-active"><?php
+							<tr data-member="<?= htmlspecialchars($renewalItem['MemberID']) ?>" data-renewal-record="<?= htmlspecialchars($renewalItem['RMID']) ?>" class="table-active"><?php
 																			} else {
 																				?>
-							<tr><?php
+							<tr data-member="<?= htmlspecialchars($renewalItem['MemberID']) ?>" data-renewal-record="<?= htmlspecialchars($renewalItem['RMID']) ?>"><?php
 																			}
 									?>
 							<td>
