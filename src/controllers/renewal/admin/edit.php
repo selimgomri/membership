@@ -11,14 +11,51 @@ $renewal->execute([
 
 $row = $renewal->fetch(PDO::FETCH_ASSOC);
 
+if (!$row) {
+	halt(404);
+}
+
+$from = new DateTime($row['StartDate'], new DateTimeZone('Europe/London'));
+$to = new DateTime($row['EndDate'], new DateTimeZone('Europe/London'));
+
 $pagetitle = htmlspecialchars($row['Name']) . " - Edit Renewal";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php";
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+	<div class="container">
+
+		<!-- Page header -->
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("renewal")) ?>">Renewal</a></li>
+				<li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("renewal/$id")) ?>">#<?= htmlspecialchars($id) ?></a></li>
+				<li class="breadcrumb-item active" aria-current="page">Edit</li>
+			</ol>
+		</nav>
+
+		<div class="row align-items-center">
+			<div class="col-lg-8">
+				<h1>
+					Editing <?= htmlspecialchars($row['Name']) ?>
+				</h1>
+				<p class="lead mb-0" id="leadDesc">
+					<?= htmlspecialchars($from->format("l j F Y")) ?> to <?= htmlspecialchars($to->format("l j F Y")) ?>
+				</p>
+				<div class="mb-3 d-lg-none"></div>
+			</div>
+			<div class="ml-auto col-lg-auto">
+				<button type="submit" form="form" class="btn btn-success">
+					Save
+					</a>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="container">
-	<form method="post" class="needs-validation" novalidate>
-		<h1>Editing <?= htmlspecialchars($row['Name']) ?></h1>
+	<form id="form" method="post" class="needs-validation" novalidate>
 
 		<div class="row">
 			<div class="col-lg-8">
@@ -35,12 +72,12 @@ include BASE_PATH . "views/swimmersMenu.php";
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						<label for="start">Start Date</label>
-						<input type="date" class="form-control" id="start" name="start" value="<?= htmlspecialchars(date("Y-m-d", strtotime($row['StartDate']))) ?>">
+						<input type="date" class="form-control" id="start" name="start" value="<?= htmlspecialchars($from->format('Y-m-d')) ?>" required>
 					</div>
 
 					<div class="form-group col-md-6">
 						<label for="end">End Date</label>
-						<input type="date" class="form-control" id="end" name="end" value="<?= htmlspecialchars(date("Y-m-d", strtotime($row['EndDate']))) ?>" required>
+						<input type="date" class="form-control" id="end" name="end" value="<?= htmlspecialchars($to->format('Y-m-d')) ?>" required>
 					</div>
 				</div>
 
@@ -49,7 +86,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 						Save Changes
 					</button>
 					<a href="<?= htmlspecialchars(autoUrl("renewal/$id")) ?>" class="btn btn-danger">
-						Return to Status List
+						Cancel
 					</a>
 				</p>
 			</div>

@@ -22,48 +22,68 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php";
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+	<div class="container">
+
+		<!-- Page header -->
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item active" aria-current="page">Renewal</li>
+			</ol>
+		</nav>
+
+		<div class="row align-items-center">
+			<div class="col-lg-8">
+				<h1>
+					Membership Renewal System
+				</h1>
+				<p class="lead mb-0">
+					Welcome to the membership renewal system
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="container">
 	<div class="">
 		<?php if ($row != null) { ?>
-		<h1>Membership Renewal for <?php echo $row['Year']; ?></h1>
-		<p class="lead">Welcome to the Membership Renewal System for <?php echo
-		$row['Year']; ?></p>
-		<p>
-			Membership renewal ensures all our information about members is up to
-			date.
-		</p>
-		<p>
-			The Membership Renewal Period is open until <?php echo date("l j F Y",
-			strtotime($row['EndDate'])); ?></p>
-		<p>
-			We now charge fees by Direct Debit.
-		</p>
+			<p>
+				Membership renewal ensures all our information about members is up to date.
+			</p>
+			<p>
+				The current membership renewal period is open until <?php echo date("l j F Y", strtotime($row['EndDate'])); ?>
+			</p>
 		<?php } else { ?>
-		<h1>Membership Renewal System</h1>
-		<p class="lead">Welcome to the Membership Renewal System</p>
-		<p>
-			Membership renewal ensures all our information about members is up to
-			date.
-		</p>
-		<div class="alert alert-danger">
-			<strong>There is no open Renewal Period right now</strong> <br>
-			You'll need to add one first
-		</div>
+			<h1>Membership Renewal System</h1>
+			<p class="lead">Welcome to the Membership Renewal System</p>
+			<p>
+				Membership renewal ensures all our information about members is up to
+				date.
+			</p>
+			<div class="alert alert-danger">
+				<strong>There is no open Renewal Period right now</strong> <br>
+				You'll need to add one first
+			</div>
 		<?php } ?>
 		<h2>Recent renewals</h2>
 		<ol>
 			<?php while ($row = $renewals->fetch(PDO::FETCH_ASSOC)) {
-				?>
+			?>
 				<li>
-					<a href="<?=autoUrl("renewal/" . $row['ID'])?>">
-					<?=htmlspecialchars($row['Name'])?> (<?=date("j F Y",
-						strtotime($row['StartDate']))?> - <?=date("j F Y",
-						strtotime($row['EndDate']))?>)
+					<a href="<?= autoUrl("renewal/" . $row['ID']) ?>">
+						<?= htmlspecialchars($row['Name']) ?> (<?= date(
+																										"j F Y",
+																										strtotime($row['StartDate'])
+																									) ?> - <?= date(
+																								"j F Y",
+																								strtotime($row['EndDate'])
+																							) ?>)
 					</a>
 				</li>
-				<?php } ?>
+			<?php } ?>
 		</ol>
-		
+
 		<p>
 			<a href="<?php echo autoUrl("renewal/new"); ?>" class="btn
 			btn-success">

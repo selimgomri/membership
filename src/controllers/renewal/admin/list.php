@@ -31,7 +31,7 @@ $numC2Renewals = $numRenewalsByCat->fetchColumn();
 $numRenewalsByCat->execute([$id, 3, true]);
 $numC3Renewals = $numRenewalsByCat->fetchColumn();
 
-$sql = $db->prepare("SELECT `MForename`, `MSurname`, `Forename`, `Surname`, members.ASANumber, `payments`.`Status`, `RenewalID`, `Renewed`, stripePayments.ID StripeDBID, stripePayments.Paid StripePaid, stripePayMethods.Last4, stripePayMethods.Brand, stripePayMethods.Funding, ASACategory, members.Active, renewalMembers.MemberID, renewalMembers.ID RMID FROM ((((((`renewalMembers` RIGHT JOIN `members`
+$sql = $db->prepare("SELECT `MForename`, `MSurname`, `Forename`, `Surname`, members.ASANumber, `payments`.`Status`, `RenewalID`, `Renewed`, stripePayments.ID StripeDBID, stripePayments.Paid StripePaid, stripePayMethods.Last4, stripePayMethods.Brand, stripePayMethods.Funding, ASACategory, members.Active, renewalMembers.MemberID, renewalMembers.ID RMID, renewalMembers.Date FROM ((((((`renewalMembers` RIGHT JOIN `members`
 ON members.MemberID = renewalMembers.MemberID) LEFT JOIN `users` ON
 members.UserID = users.UserID) LEFT JOIN `paymentsPending` ON
 renewalMembers.PaymentID = paymentsPending.PaymentID) LEFT JOIN `payments` ON
@@ -43,32 +43,55 @@ $sql->execute([$id]);
 
 $fluidContainer = true;
 
+$from = new DateTime($renewalArray['StartDate'], new DateTimeZone('Europe/London'));
+$to = new DateTime($renewalArray['EndDate'], new DateTimeZone('Europe/London'));
+$earliest = new DateTime('2000-01-01', new DateTimeZone('Europe/London'));
+
+$latestDate = null;
+
 $pagetitle = "Membership Renewal";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php";
 
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+	<div class="container-fluid">
+
+		<!-- Page header -->
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("renewal")) ?>">Renewal</a></li>
+				<li class="breadcrumb-item active" aria-current="page">#<?= htmlspecialchars($id) ?></li>
+			</ol>
+		</nav>
+
+		<div class="row align-items-center">
+			<div class="col-lg-8">
+				<h1>
+					<?= htmlspecialchars($renewalArray['Name']) ?> Status
+				</h1>
+				<p class="lead mb-0" id="leadDesc">
+					<?= htmlspecialchars($from->format("l j F Y")) ?> to <?= htmlspecialchars($to->format("l j F Y")) ?>
+				</p>
+				<div class="mb-3 d-lg-none"></div>
+			</div>
+			<div class="ml-auto col-lg-auto">
+				<a href="<?= htmlspecialchars(autoUrl("renewal/$id/edit")) ?>" class="btn btn-dark">
+					Edit renewal period
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="container-fluid">
 	<div class="">
-		<h1><?= htmlspecialchars($renewalArray['Name']) ?> Status</h1>
-		<p class="lead">
-			This is the current status for this membership renewal which started on <?php
-																																							echo date("l j F Y", strtotime($renewalArray['StartDate'])); ?> and
-			finishes on <?php echo date("l j F Y", strtotime($renewalArray['EndDate'])); ?>
-		</p>
 		<p class="mb-0">
-			<?= $numRenewals ?> Renewals (<?= $numC1Renewals ?> Category 1, <?= $numC2Renewals ?> Category 2, <?= $numC3Renewals ?> Category 3)
-			of <?= $numMembers ?> members*.
+			<?= htmlspecialchars($numRenewals) ?> Renewals (<?= htmlspecialchars($numC1Renewals) ?> Category 1, <?= htmlspecialchars($numC2Renewals) ?> Category 2, <?= htmlspecialchars($numC3Renewals) ?> Category 3) of <?= $numMembers ?> members*.
 		</p>
 		<p class="small text-muted">
 			* Number of members on first day of renewal
-		</p>
-		<p class="">
-			<a href="<?= autoUrl("renewal/" . $id . "/edit") ?>" class="btn
-			btn-dark">
-				Edit this Renewal Period
-			</a>
 		</p>
 	</div>
 
@@ -109,19 +132,40 @@ include BASE_PATH . "views/swimmersMenu.php";
 				</thead>
 				<tbody>
 					<?php do {
+
+						$dateCompleted = new DateTime($renewalItem['Date'], new DateTimeZone('UTC'));
+						$dateCompleted->setTimezone(new DateTimeZone('Europe/London'));
+						if ($latestDate != $dateCompleted->format('Y-m-d') && $dateCompleted > $earliest) { ?>
+							<tr class="table-light">
+								<td colspan="4">
+									<strong><?= htmlspecialchars($dateCompleted->format('l j')) ?><sup><?= htmlspecialchars($dateCompleted->format('S')) ?></sup> <?= htmlspecialchars($dateCompleted->format('F Y')) ?></strong>
+								</td>
+							</tr>
+						<?php
+							$latestDate = $dateCompleted->format('Y-m-d');
+						} else if ($latestDate != $dateCompleted->format('Y-m-d') && $dateCompleted < $earliest) { ?>
+							<tr class="table-light">
+								<td colspan="4">
+									<strong>Uncompleted</strong>
+								</td>
+							</tr>
+						<?php
+							$latestDate = $dateCompleted->format('Y-m-d');
+						}
+
 						if ($renewalItem['Status'] == "failed" || $renewalItem['Status'] == "charged_back") {
-					?><tr data-member="<?= htmlspecialchars($renewalItem['MemberID']) ?>" data-renewal-record="<?= htmlspecialchars($renewalItem['RMID']) ?>" class="table-danger"><?php
-																		} else if (bool($renewalItem['StripePaid']) || $renewalItem['Status'] == "paid_out" || $renewalItem['Status'] == "confirmed" || $renewalItem['Status'] == "paid_manually") {
-																			?>
+						?><tr data-member="<?= htmlspecialchars($renewalItem['MemberID']) ?>" data-renewal-record="<?= htmlspecialchars($renewalItem['RMID']) ?>" class="table-danger"><?php
+																																																																																					} else if (bool($renewalItem['StripePaid']) || $renewalItem['Status'] == "paid_out" || $renewalItem['Status'] == "confirmed" || $renewalItem['Status'] == "paid_manually") {
+																																																																																						?>
 							<tr data-member="<?= htmlspecialchars($renewalItem['MemberID']) ?>" data-renewal-record="<?= htmlspecialchars($renewalItem['RMID']) ?>" class="table-success"><?php
-																			} else if (!bool($renewalItem['Active'])) {
-																				?>
+																																																																																					} else if (!bool($renewalItem['Active'])) {
+																																																																																						?>
 							<tr data-member="<?= htmlspecialchars($renewalItem['MemberID']) ?>" data-renewal-record="<?= htmlspecialchars($renewalItem['RMID']) ?>" class="table-active"><?php
-																			} else {
-																				?>
+																																																																																					} else {
+																																																																																						?>
 							<tr data-member="<?= htmlspecialchars($renewalItem['MemberID']) ?>" data-renewal-record="<?= htmlspecialchars($renewalItem['RMID']) ?>"><?php
-																			}
-									?>
+																																																																																					}
+																																																																											?>
 							<td>
 								<?= htmlspecialchars($renewalItem['MForename'] . " " . $renewalItem['MSurname']) ?><?php if (!bool($renewalItem['Active'])) { ?> <em>INACTIVE</em><?php } ?>
 							</td>
