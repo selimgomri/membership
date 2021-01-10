@@ -38,7 +38,7 @@ renewalMembers.PaymentID = paymentsPending.PaymentID) LEFT JOIN `payments` ON
 payments.PMkey = paymentsPending.PMkey) LEFT JOIN `stripePayments` ON
 stripePayments.ID = renewalMembers.StripePayment) LEFT JOIN `stripePayMethods` ON
 stripePayments.Method = stripePayMethods.ID) WHERE `renewalMembers`.`RenewalID` =
-? ORDER BY renewalMembers.Date DESC, `Surname` ASC, `Forename` ASC, members.UserID ASC, `MSurname` ASC, `MForename` ASC;");
+? ORDER BY members.Active DESC, renewalMembers.Date DESC, `Surname` ASC, `Forename` ASC, members.UserID ASC, `MSurname` ASC, `MForename` ASC;");
 $sql->execute([$id]);
 
 $fluidContainer = true;
