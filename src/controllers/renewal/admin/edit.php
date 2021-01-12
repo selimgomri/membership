@@ -18,6 +18,11 @@ if (!$row) {
 $from = new DateTime($row['StartDate'], new DateTimeZone('Europe/London'));
 $to = new DateTime($row['EndDate'], new DateTimeZone('Europe/London'));
 
+$min = new DateTime('tomorrow', new DateTimeZone('Europe/London'));
+if ($from < $min) {
+	$min = clone $from;
+}
+
 $pagetitle = htmlspecialchars($row['Name']) . " - Edit Renewal";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php";
@@ -72,7 +77,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						<label for="start">Start Date</label>
-						<input type="date" class="form-control" id="start" name="start" value="<?= htmlspecialchars($from->format('Y-m-d')) ?>" required>
+						<input type="date" class="form-control" id="start" name="start" value="<?= htmlspecialchars($from->format('Y-m-d')) ?>" min="<?= htmlspecialchars($min) ?>" required>
 					</div>
 
 					<div class="form-group col-md-6">
