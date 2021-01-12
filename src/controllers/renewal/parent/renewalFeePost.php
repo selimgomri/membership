@@ -466,6 +466,43 @@ try {
 			$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
 		]);
 
+		// Add tracker record
+		if ($renewal != 0) {
+			// Foreach check if in renewal members
+			$countInRenewalMembers = $db->prepare("SELECT COUNT(*) FROM renewalMembers WHERE MemberID = ? AND RenewalID = ?");
+			$insert = $db->prepare("INSERT INTO `renewalMembers` (`PaymentID`, `MemberID`, `RenewalID`, `Date`, `CountRenewal`, `Renewed`) VALUES (?, ?, ?, ?, ?, ?)");
+			$update = $db->prepare("UPDATE renewalMembers SET PaymentID = ?, `Date` = ?, CountRenewal = ?, Renewed = ? WHERE MemberID = ? AND RenewalID = ?");
+
+			for ($i = 0; $i < $count; $i++) {
+				$countInRenewalMembers->execute([
+					$member[$i]['MemberID'],
+					$renewal
+				]);
+
+				if ($countInRenewalMembers->fetchColumn() > 0) {
+					// Update them
+					$update->execute([
+						null,
+						$date->format("Y-m-d H:i:s"),
+						true,
+						true,
+						$member[$i]['MemberID'],
+						$renewal
+					]);
+				} else {
+					// Add them
+					$insert->execute([
+						null,
+						$member[$i]['MemberID'],
+						$renewal,
+						$date->format("Y-m-d H:i:s"),
+						true,
+						true
+					]);
+				}
+			}
+		}
+
 		if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
 			$query = $db->prepare("UPDATE `users` SET `RR` = 0 WHERE `UserID` = ?");
 			$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
