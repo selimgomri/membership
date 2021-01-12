@@ -41,6 +41,18 @@ function latestRenewal()
 		'tenant' => $tenant->getId()
 	]);
 	$latestRenewal = $latest->fetch(PDO::FETCH_ASSOC);
+
+	// Validate ready
+	$getNum = $db->prepare("SELECT COUNT(*) FROM renewalMembers WHERE RenewalID = ?");
+	$getNum->execute([
+		$latestRenewal['ID'],
+	]);
+
+	if ($getNum->fetchColumn() == 0) {
+		// Renewal cannot be completed at this time
+		halt(404);
+	}
+
 	return $latestRenewal;
 }
 
