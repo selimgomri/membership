@@ -277,6 +277,31 @@ try {
       $toSendTo[$u['UserID']] = $u['UserID'];
     }
   }
+  $date = new DateTime('now', new DateTimeZone('Europe/London'));
+  $renewals = $db->prepare("SELECT `ID` FROM `renewals` WHERE `StartDate` <= :today AND `EndDate` >= :today AND `Tenant` = :tenant");
+  $renewals->execute([
+    'tenant' => $tenant->getId(),
+    'today' => $date->format("Y-m-d")
+  ]);
+  $renewal = $renewals->fetchColumn();
+  if ($renewal) {
+    if (isset($_POST['pending-renewal']) && bool($_POST['pending-renewal'])) {
+      // Get those pending a renewal
+      $sql = $db->prepare("SELECT `UserID` FROM `renewalMembers` INNER JOIN `members` ON members.MemberID = renewalMembers.MemberID WHERE members.Active AND renewalMembers.RenewalID = ? AND NOT renewalMembers.Renewed AND `UserID` IS NOT NULL;");
+      $sql->execute([$renewal]);
+      while ($u = $sql->fetchColumn()) {
+        $toSendTo[$u] = $u;
+      }
+    }
+    if (isset($_POST['completed-renewal']) && bool($_POST['completed-renewal'])) {
+      // Get those who have completed renewal
+      $sql = $db->prepare("SELECT `UserID` FROM `renewalMembers` INNER JOIN `members` ON members.MemberID = renewalMembers.MemberID WHERE members.Active AND renewalMembers.RenewalID = ? AND renewalMembers.Renewed AND `UserID` IS NOT NULL;");
+      $sql->execute([$renewal]);
+      while ($u = $sql->fetchColumn()) {
+        $toSendTo[$u] = $u;
+      }
+    }
+  }
 
   $userSending = getUserName($sender);
 

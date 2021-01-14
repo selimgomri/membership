@@ -45,19 +45,33 @@ for ($i = 0; $i < sizeof($senderNames); $i++) {
   }
 }
 
+$pendingRenewal = false;
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
+$renewals = $db->prepare("SELECT * FROM `renewals` WHERE `StartDate` <= :today AND `EndDate` >= :today AND Tenant = :tenant");
+$renewals->execute([
+  'tenant' => $tenant->getId(),
+  'today' => $date->format("Y-m-d")
+]);
+$renewal = $renewals->fetch(PDO::FETCH_ASSOC);
+if ($renewal) {
+  $pendingRenewal = true;
+}
+
 if (!app()->tenant->isCLS()) {
   $fromEmail .= '.' . urlencode(mb_strtolower(str_replace(' ', '', getenv('CLUB_CODE'))));
 }
 
 $fromEmail .= '@' . getenv('EMAIL_DOMAIN');
 
-function fieldChecked($name) {
+function fieldChecked($name)
+{
   if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData'][$name]) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData'][$name])) {
     return ' checked ';
   }
 }
 
-function fieldValue($name) {
+function fieldValue($name)
+{
   if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData'][$name])) {
     return 'value="' . htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData'][$name]) . '"';
   }
@@ -66,120 +80,130 @@ function fieldValue($name) {
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";
 
- ?>
+?>
 
 <div class="container">
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("notify"))?>">Notify</a></li>
+      <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("notify")) ?>">Notify</a></li>
       <li class="breadcrumb-item active" aria-current="page">Composer</li>
     </ol>
   </nav>
 
-	<h1>Notify Composer</h1>
-	<p class="lead">Send emails to targeted groups</p>
+  <h1>Notify Composer</h1>
+  <p class="lead">Send emails to targeted groups</p>
 
   <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) { ?>
-  <div class="alert alert-success">
-    <p class="mb-0"><strong>Results have been uploaded</strong>.</p>
-  </div>
+    <div class="alert alert-success">
+      <p class="mb-0"><strong>Results have been uploaded</strong>.</p>
+    </div>
   <?php
     unset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']);
   } ?>
 
   <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['FormError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['FormError']) { ?>
-  <div class="alert alert-danger">
-    <p class="mb-0"><strong>An integrity or idempotency error has occurred</strong></p>
-    <p class="mb-0">We were unable to verify that you submitted the form. Please try again.</p>
-  </div>
+    <div class="alert alert-danger">
+      <p class="mb-0"><strong>An integrity or idempotency error has occurred</strong></p>
+      <p class="mb-0">We were unable to verify that you submitted the form. Please try again.</p>
+    </div>
   <?php
     unset($_SESSION['TENANT-' . app()->tenant->getId()]['FormError']);
   } ?>
 
   <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError']) { ?>
-  <div class="alert alert-danger">
-    <p class="mb-0"><strong>There was a problem with the file uploaded</strong>. Please try again.</p>
-  </div>
+    <div class="alert alert-danger">
+      <p class="mb-0"><strong>There was a problem with the file uploaded</strong>. Please try again.</p>
+    </div>
   <?php
     unset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadError']);
   } ?>
 
   <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError']) { ?>
-  <div class="alert alert-danger">
-    <p class="mb-0"><strong>A file you uploaded was too large</strong>. The maximum size for an individual file is 300000 bytes.</p>
-  </div>
+    <div class="alert alert-danger">
+      <p class="mb-0"><strong>A file you uploaded was too large</strong>. The maximum size for an individual file is 300000 bytes.</p>
+    </div>
   <?php
     unset($_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError']);
   } ?>
 
   <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['CollectiveSizeTooLargeError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['CollectiveSizeTooLargeError']) { ?>
-  <div class="alert alert-danger">
-    <p class="mb-0"><strong>The files you uploaded were collectively too large</strong>. Attachments may not exceed a total of 10 megabytes in size.</p>
-  </div>
+    <div class="alert alert-danger">
+      <p class="mb-0"><strong>The files you uploaded were collectively too large</strong>. Attachments may not exceed a total of 10 megabytes in size.</p>
+    </div>
   <?php
     unset($_SESSION['TENANT-' . app()->tenant->getId()]['CollectiveSizeTooLargeError']);
   } ?>
-  
+
   <form method="post" id="notify-form" onkeypress="return event.keyCode != 13;" enctype="multipart/form-data" novalidate>
 
     <div class="form-group">
-			<label>To members in the following targeted lists...</label>
-			<div class="row">
-			<?php while ($list = $lists->fetch(PDO::FETCH_ASSOC)) { ?>
-				<div class="col-6 col-sm-6 col-md-4 col-lg-3">
-					<div class="custom-control custom-checkbox">
-					  <input type="checkbox" class="custom-control-input"
-            id="TL-<?=$list['ID']?>" name="TL-<?=$list['ID']?>"
-            value="1" <?=fieldChecked('TL-' . $list['ID'])?>>
-					  <label class="custom-control-label"
-              for="TL-<?=$list['ID']?>">
-              <?=htmlspecialchars($list['Name'])?>
-            </label>
-					</div>
-				</div>
-			<?php } ?>
-			</div>
+      <label>To members in the following targeted lists...</label>
+      <div class="row">
+        <?php while ($list = $lists->fetch(PDO::FETCH_ASSOC)) { ?>
+          <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="TL-<?= $list['ID'] ?>" name="TL-<?= $list['ID'] ?>" value="1" <?= fieldChecked('TL-' . $list['ID']) ?>>
+              <label class="custom-control-label" for="TL-<?= $list['ID'] ?>">
+                <?= htmlspecialchars($list['Name']) ?>
+              </label>
+            </div>
+          </div>
+        <?php } ?>
+        <?php if ($pendingRenewal) { ?>
+          <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="pending-renewal" name="pending-renewal" value="1" <?= fieldChecked('pending-renewal') ?>>
+              <label class="custom-control-label" for="pending-renewal" title="Members who have not yet renewed (autogenerated list)">
+                Members pending renewal*
+              </label>
+            </div>
+          </div>
+
+          <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="completed-renewal" name="completed-renewal" value="1" <?= fieldChecked('completed-renewal') ?>>
+              <label class="custom-control-label" for="completed-renewal" title="Members who have renewed (autogenerated list)">
+                Members renewed*
+              </label>
+            </div>
+          </div>
+        <?php } ?>
+      </div>
     </div>
-    
-		<div class="form-group">
-			<label>To members in the following squads...</label>
-			<div class="row">
-			<?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
-				<div class="col-6 col-sm-6 col-md-4 col-lg-3">
-					<div class="custom-control custom-checkbox">
-					  <input type="checkbox" class="custom-control-input"
-            id="<?=$squad['SquadID']?>" name="<?=$squad['SquadID']?>"
-            value="1" <?=fieldChecked($squad['SquadID'])?>>
-					  <label class="custom-control-label"
-              for="<?=$squad['SquadID']?>">
-              <?=htmlspecialchars($squad['SquadName'])?>
-            </label>
-					</div>
-				</div>
-			<?php } ?>
-			</div>
-		</div>
+
+    <div class="form-group">
+      <label>To members in the following squads...</label>
+      <div class="row">
+        <?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
+          <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="<?= $squad['SquadID'] ?>" name="<?= $squad['SquadID'] ?>" value="1" <?= fieldChecked($squad['SquadID']) ?>>
+              <label class="custom-control-label" for="<?= $squad['SquadID'] ?>">
+                <?= htmlspecialchars($squad['SquadName']) ?>
+              </label>
+            </div>
+          </div>
+        <?php } ?>
+      </div>
+    </div>
 
     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
-    <div class="form-group">
-			<label>To members entered in the following galas...</label>
-			<div class="row">
-			<?php while ($gala = $galas->fetch(PDO::FETCH_ASSOC)) { ?>
-				<div class="col-6 col-sm-6 col-md-4 col-lg-3">
-					<div class="custom-control custom-checkbox">
-					  <input type="checkbox" class="custom-control-input"
-            id="GALA-<?=$gala['GalaID']?>" name="GALA-<?=$gala['GalaID']?>"
-            value="1" <?=fieldChecked('GALA-' . $gala['GalaID'])?>>
-					  <label class="custom-control-label"
-              for="GALA-<?=$gala['GalaID']?>">
-              <?=htmlspecialchars($gala['GalaName'])?>
-            </label>
-					</div>
-				</div>
-			<?php } ?>
-			</div>
-    </div>
+      <div class="form-group">
+        <label>To members entered in the following galas...</label>
+        <div class="row">
+          <?php while ($gala = $galas->fetch(PDO::FETCH_ASSOC)) { ?>
+            <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="GALA-<?= $gala['GalaID'] ?>" name="GALA-<?= $gala['GalaID'] ?>" value="1" <?= fieldChecked('GALA-' . $gala['GalaID']) ?>>
+                <label class="custom-control-label" for="GALA-<?= $gala['GalaID'] ?>">
+                  <?= htmlspecialchars($gala['GalaName']) ?>
+                </label>
+              </div>
+            </div>
+          <?php } ?>
+        </div>
+      </div>
     <?php } ?>
 
     <div class="row">
@@ -188,11 +212,11 @@ include BASE_PATH . "views/notifyMenu.php";
           <label for="from">Send message as</label>
           <div class="custom-control custom-radio">
             <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>checked<?php } ?> required>
-            <label class="custom-control-label" for="from-club"><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></label>
+            <label class="custom-control-label" for="from-club"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></label>
           </div>
           <div class="custom-control custom-radio">
             <input type="radio" id="from-user" name="from" class="custom-control-input" value="current-user" <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>checked<?php } ?>>
-            <label class="custom-control-label" for="from-user"><?=htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'])?></label>
+            <label class="custom-control-label" for="from-user"><?= htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname']) ?></label>
           </div>
           <div class="invalid-feedback">
             Choose a send-as option
@@ -212,34 +236,33 @@ include BASE_PATH . "views/notifyMenu.php";
             <label class="custom-control-label" for="ReplyTo-Me">My reply-to email address</label>
           </div>
           <small class="form-text text-muted">
-            <a href="<?=htmlspecialchars(autoUrl("notify/reply-to"))?>" target="_blank">Manage reply-to address</a>
+            <a href="<?= htmlspecialchars(autoUrl("notify/reply-to")) ?>" target="_blank">Manage reply-to address</a>
           </small>
           <div class="invalid-feedback">
             Choose a reply-to address
           </div>
         </div>
       </div>
-		</div>
+    </div>
 
-		<div class="form-group">
-			<label for="subject">Message Subject</label>
-			<input type="text" class="form-control" name="subject" id="subject"
-      placeholder="Message Subject" autocomplete="off" required <?=fieldValue('subject')?>>
+    <div class="form-group">
+      <label for="subject">Message Subject</label>
+      <input type="text" class="form-control" name="subject" id="subject" placeholder="Message Subject" autocomplete="off" required <?= fieldValue('subject') ?>>
       <div class="invalid-feedback">
         Please include a message subject
       </div>
-		</div>
+    </div>
 
-		<div class="form-group">
-			<label for="message">Your Message</label>
+    <div class="form-group">
+      <label for="message">Your Message</label>
       <p>
         <em>
           Your message will begin with "Hello
           <span class="mono">User Name</span>,".
         </em>
       </p>
-			<textarea class="form-control" id="message" name="message" rows="10" data-tinymce-css-location="<?=htmlspecialchars(autoUrl("public/css/tinymce.css"))?>" data-documentBaseUrl="<?=htmlspecialchars(autoUrl("notify/new/"))?>" required><?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData']['message'])) {?><?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData']['message'])?><?php } ?></textarea>
-		</div>
+      <textarea class="form-control" id="message" name="message" rows="10" data-tinymce-css-location="<?= htmlspecialchars(autoUrl("public/css/tinymce.css")) ?>" data-documentBaseUrl="<?= htmlspecialchars(autoUrl("notify/new/")) ?>" required><?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData']['message'])) { ?><?= htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData']['message']) ?><?php } ?></textarea>
+    </div>
 
     <input type="hidden" name="MAX_FILE_SIZE" value="10485760">
 
@@ -259,18 +282,18 @@ include BASE_PATH . "views/notifyMenu.php";
 
     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas") { ?>
 
-    <div class="form-group">
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" aria-describedby="forceHelp" id="force" name="force" value="1">
-        <label class="custom-control-label" for="force">Force Send</label>
-        <small id="forceHelp" class="form-text text-muted">
-          Normally, messages will only be sent to those who have opted in to email
-          notifications. Selecting Force Send overrides this. If you do this, you
-          must be able to justify your reason for doing so to the System
-          Administrator or the Chair Person.
-        </small>
+      <div class="form-group">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" aria-describedby="forceHelp" id="force" name="force" value="1">
+          <label class="custom-control-label" for="force">Force Send</label>
+          <small id="forceHelp" class="form-text text-muted">
+            Normally, messages will only be sent to those who have opted in to email
+            notifications. Selecting Force Send overrides this. If you do this, you
+            must be able to justify your reason for doing so to the System
+            Administrator or the Chair Person.
+          </small>
+        </div>
       </div>
-    </div>
 
     <?php } ?>
 
@@ -284,11 +307,17 @@ include BASE_PATH . "views/notifyMenu.php";
       </div>
     </div>
 
-    <?=SCDS\CSRF::write()?>
-    <?=SCDS\FormIdempotency::write()?>
+    <?= SCDS\CSRF::write() ?>
+    <?= SCDS\FormIdempotency::write() ?>
 
-		<p><button class="btn btn-success" id="submit" value="submitted" type="submit">Send the email</button></p>
-	</form>
+    <p><button class="btn btn-success" id="submit" value="submitted" type="submit">Send the email</button></p>
+  </form>
+
+  <div class="text-muted small">
+    <p>
+      * Indicates list is generated automatically by the system.
+    </p>
+  </div>
 </div>
 
 <div class="modal" id="force-alert-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="force-alert-modal-label" aria-hidden="true">
