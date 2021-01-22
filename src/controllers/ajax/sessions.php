@@ -13,6 +13,8 @@ $count = 0;
 // A function is used to produce the View/Edit and Add Sections Stuff
 // This is because we will call it when a squad is selected, and after a session is added
 
+$user = app()->user;
+
 function sessionManagement($squadID, $old = null)
 {
 	ob_start();
@@ -409,69 +411,10 @@ function sessionManagement($squadID, $old = null)
 	return $html . $modals;
 }
 
-if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
+if ($user->hasPermissions(['Admin', 'Coach', 'Committee'])) {
 	// Get the action to work out what we're going to do
-	$action = $_POST["action"];
-	if ($action == "getSessions" && $_POST["squadID"] != null) {
+	if (isset($_POST["action"]) && $_POST["action"] == "getSessions" && isset($_POST["squadID"]) && $_POST["squadID"] != null) {
 		echo sessionManagement($_POST["squadID"]);
-	} elseif ($action == "addSession") {
-		$squadID = $_POST["squadID"];
-		$venueID = $_POST["venueID"];
-		$sessionName = $_POST["sessionName"];
-		$sessionDay = $_POST["sessionDay"];
-		$startTime = $_POST["startTime"];
-		$endTime = $_POST["endTime"];
-		$mainSequence = $_POST["newSessionMS"];
-		$epoch = date(DATE_ATOM, mktime(0, 0, 0, 1, 1, 1970));
-		$future = date(DATE_ATOM, mktime(0, 0, 0, 1, 1, 2200));
-		$displayFrom = $displayUntil = null;
-		if (isset($_POST["newSessionStartDate"])) {
-			$displayFrom = strtotime($_POST["newSessionStartDate"]);
-			if ($displayFrom < $epoch) {
-				$displayFrom = null;
-			}
-		}
-		if (isset($_POST["newSessionEndDate"])) {
-			$displayUntil = strtotime($_POST["newSessionEndDate"]);
-			if ($displayUntil < $epoch) {
-				$displayUntil = $future;
-			}
-		}
-
-		try {
-			$insert = $db->prepare("INSERT INTO `sessions` (`VenueID`, `SessionName`, `SessionDay`, `StartTime`, `EndTime`, `DisplayFrom`, `DisplayUntil`, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-			$insert->execute([
-				// $squadID,
-				$venueID,
-				$sessionName,
-				$sessionDay,
-				$startTime,
-				$endTime,
-				// $mainSequence,
-				date("Y-m-d", $displayFrom),
-				date("Y-m-d", $displayUntil),
-				$tenant->getId()
-			]);
-
-			$sessionId = $db->lastInsertId();
-
-			// Add session squads
-			$insert = $db->prepare("INSERT INTO `sessionsSquads` (`Session`, `Squad`, `ForAllMembers`) VALUES (?, ?, ?)");
-			$insert->execute([
-				$sessionId,
-				$squadID,
-				(int) $mainSequence,
-			]);
-		} catch (Exception $e) {
-			halt(400);
-		}
-		$sessionsView = sessionManagement($squadID);
-		echo json_encode([
-			'displayFrom' => date("Y-m-d", $displayFrom),
-			'displayUntil' => date("Y-m-d", $displayUntil),
-			'will_display_in_future' => null,
-			'sessions_view' => $sessionsView
-		]);
 	}
 } else {
 	halt(404);

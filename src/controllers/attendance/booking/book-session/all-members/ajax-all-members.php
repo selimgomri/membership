@@ -26,7 +26,7 @@ $stats = [
   ]
 ];
 
-if (!$user->hasPermission('Admin') && !$user->hasPermission('Coach')) {
+if (!$user->hasPermissions(['Admin', 'Coach'])) {
   halt(404);
 }
 

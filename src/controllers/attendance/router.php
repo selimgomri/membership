@@ -2,16 +2,6 @@
 
 $user = app()->user;
 
-// $this->group('/sessions/new', function () {
-//   $this->get('/', function () {
-//     include 'add-sessions/add-one-off.php';
-//   });
-
-//   $this->post('/', function () {
-//     include 'add-sessions/add-one-off-post.php';
-//   });
-// });
-
 if ($user->hasPermissions(['Committee', 'Admin', 'Coach'])) {
   // Attendance Home
   $this->get('/', function () {

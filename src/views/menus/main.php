@@ -9,6 +9,7 @@ if (!function_exists('chesterStandardMenu')) {
   {
 
     $db = app()->db;
+    $user = app()->user;
     $use_website_menu = false;
     if (defined('USE_CLS_MENU')) {
       $use_website_menu = USE_CLS_MENU;
@@ -107,6 +108,7 @@ if (!function_exists('chesterStandardMenu')) {
                   <?php } ?>
                 </div>
               </li>
+              <?php if (!$user->hasPermissions(['Admin', 'Coach', 'Committee'])) { ?>
               <li class="nav-item">
                 <a class="nav-link" href="<?= htmlspecialchars(autoUrl('timetable')) ?>">
                   Timetable
@@ -117,6 +119,7 @@ if (!function_exists('chesterStandardMenu')) {
                   Booking
                 </a>
               </li>
+              <?php } ?>
               <?php if (app()->tenant->getKey('ASA_CLUB_CODE') != 'UOSZ') { ?>
                 <li class="nav-item">
                   <a class="nav-link" href="<?= htmlspecialchars(autoUrl("log-books")) ?>">Log Books</a>
@@ -158,31 +161,28 @@ if (!function_exists('chesterStandardMenu')) {
                   <?php } ?>
                 </div>
               </li>
-              <?php if (
-                $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" ||
-                $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Coach" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] ==
-                "Committee"
-              ) { ?>
+              <?php } ?>
+
+              <?php if ($user->hasPermissions(['Admin', 'Coach', 'Committee'])) { ?>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="swimmerDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Registers
                   </a>
                   <div class="dropdown-menu" aria-labelledby="registerDropdown">
-                    <a class="dropdown-item" href="<?php echo autoUrl("attendance") ?>">Attendance Home</a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("attendance/register") ?>">Take Register</a>
+                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance")) ?>">Attendance Home</a>
+                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/register")) ?>">Take Register</a>
                     <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('timetable')) ?>">Timetable</a>
                     <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('timetable/booking')) ?>">Bookings</a>
-                    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee") { ?>
-                      <a class="dropdown-item" href="<?php echo autoUrl("attendance/sessions") ?>">Manage Squad Sessions</a>
-                      <a class="dropdown-item" href="<?= autoUrl("attendance/venues") ?>">Manage Venues</a>
+                    <?php if ($user->hasPermissions(['Admin', 'Committee'])) { ?>
+                      <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/sessions")) ?>">Manage Squad Sessions</a>
+                      <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/venues")) ?>">Manage Venues</a>
                     <?php } ?>
-                    <a class="dropdown-item" href="<?php echo autoUrl("attendance/history") ?>">Attendance History</a>
-                    <?php if (app()->tenant->isCLS()) { ?>
-                      <a class="dropdown-item" href="https://www.chesterlestreetasc.co.uk/squads/" target="_blank">Timetables</a>
-                    <?php } ?>
+                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/history")) ?>">Attendance History</a>
                   </div>
                 </li>
               <?php } ?>
+
+              <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") { ?>
               <?php if (
                 $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" ||
                 $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas"
