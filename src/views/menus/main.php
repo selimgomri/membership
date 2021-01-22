@@ -109,16 +109,16 @@ if (!function_exists('chesterStandardMenu')) {
                 </div>
               </li>
               <?php if (!$user->hasPermissions(['Admin', 'Coach', 'Committee'])) { ?>
-              <li class="nav-item">
-                <a class="nav-link" href="<?= htmlspecialchars(autoUrl('timetable')) ?>">
-                  Timetable
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="<?= htmlspecialchars(autoUrl('timetable/booking')) ?>">
-                  Booking
-                </a>
-              </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="<?= htmlspecialchars(autoUrl('timetable')) ?>">
+                    Timetable
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="<?= htmlspecialchars(autoUrl('timetable/booking')) ?>">
+                    Booking
+                  </a>
+                </li>
               <?php } ?>
               <?php if (app()->tenant->getKey('ASA_CLUB_CODE') != 'UOSZ') { ?>
                 <li class="nav-item">
@@ -130,8 +130,8 @@ if (!function_exists('chesterStandardMenu')) {
               <?php } ?>
               <?php if ($renewalOpen) { ?>
                 <li class="nav-item">
-                  <a class="nav-link" href="<?php echo autoUrl("renewal") ?>">
-                    Membership Renewal
+                  <a class="nav-link" href="<?= htmlspecialchars(autoUrl("renewal")) ?>">
+                    Renewal
                   </a>
                 </li>
               <?php } ?>
@@ -161,28 +161,28 @@ if (!function_exists('chesterStandardMenu')) {
                   <?php } ?>
                 </div>
               </li>
-              <?php } ?>
+            <?php } ?>
 
-              <?php if ($user->hasPermissions(['Admin', 'Coach', 'Committee'])) { ?>
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="swimmerDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Registers
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="registerDropdown">
-                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance")) ?>">Attendance Home</a>
-                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/register")) ?>">Take Register</a>
-                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('timetable')) ?>">Timetable</a>
-                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('timetable/booking')) ?>">Bookings</a>
-                    <?php if ($user->hasPermissions(['Admin', 'Committee'])) { ?>
-                      <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/sessions")) ?>">Manage Squad Sessions</a>
-                      <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/venues")) ?>">Manage Venues</a>
-                    <?php } ?>
-                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/history")) ?>">Attendance History</a>
-                  </div>
-                </li>
-              <?php } ?>
+            <?php if ($user->hasPermissions(['Admin', 'Coach', 'Committee'])) { ?>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="swimmerDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Registers
+                </a>
+                <div class="dropdown-menu" aria-labelledby="registerDropdown">
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance")) ?>">Attendance Home</a>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/register")) ?>">Take Register</a>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('timetable')) ?>">Timetable</a>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('timetable/booking')) ?>">Bookings</a>
+                  <?php if ($user->hasPermissions(['Admin', 'Committee'])) { ?>
+                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/sessions")) ?>">Manage Squad Sessions</a>
+                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/venues")) ?>">Manage Venues</a>
+                  <?php } ?>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/history")) ?>">Attendance History</a>
+                </div>
+              </li>
+            <?php } ?>
 
-              <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") { ?>
+            <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") { ?>
               <?php if (
                 $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" ||
                 $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas"
@@ -487,22 +487,35 @@ if (!function_exists('chesterStandardMenu')) {
                   <div class="dropdown-divider"></div>
                 <?php } ?>
                 <h6 class="dropdown-header">Account settings</h6>
-                <a class="dropdown-item" href="<?= autoUrl("my-account") ?>">Your Profile</a>
-                <a class="dropdown-item" href="<?= autoUrl("my-account/email") ?>">Your Email Options</a>
-                <a class="dropdown-item" href="<?= autoUrl("my-account/address") ?>">Your Address</a>
-                <a class="dropdown-item" href="<?php echo autoUrl("my-account/general") ?>">Your General Options</a>
-                <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { ?>
-                  <a class="dropdown-item" href="<?php echo autoUrl("emergency-contacts") ?>">Your Emergency
-                    Contacts</a>
+                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("my-account")) ?>">
+                  Your Profile
+                </a>
+                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("my-account/email")) ?>">
+                  Your Email Options
+                </a>
+                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("my-account/address")) ?>">
+                  Your Address
+                </a>
+                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("my-account/general")) ?>">
+                  Your General Options
+                </a>
+                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("emergency-contacts")) ?>">
+                  Your Emergency Contacts
+                </a>
+                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("my-account/password")) ?>">
+                  Your Password
+                </a>
+                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("my-account/notify-history")) ?>">
+                  Your Message History
+                </a>
+                <?php if ($user->hasPermission('Parent')) { ?>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("account-switch?type=Parent&redirect=" . urlencode(autoUrl("my-account/add-member")))) ?>">
+                    Add Member
+                  </a>
                 <?php } ?>
-                <a class="dropdown-item" href="<?php echo autoUrl("my-account/password") ?>">Your Password</a>
-                <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { ?>
-                  <a class="dropdown-item" href="<?php echo autoUrl("my-account/notifyhistory") ?>">Your Message
-                    History</a>
-                  <a class="dropdown-item" href="<?php echo autoUrl("my-account/add-member") ?>">Add Member</a>
-                <?php } ?>
-                <a class="dropdown-item" href="<?php echo autoUrl("my-account/loginhistory") ?>">Your Login
-                  History</a>
+                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("my-account/login-history")) ?>">
+                  Your Login History
+                </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" target="_blank" href="<?= htmlspecialchars(autoUrl('help-and-support', false)) ?>">Help</a>
                 <div class="dropdown-divider"></div>

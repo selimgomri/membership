@@ -20,7 +20,7 @@ if ($page != null) {
 }
 
 if ($page == 1 && $null != null) {
-  header("Location: " . autoUrl("my-account/loginhistory"));
+  header("Location: " . autoUrl("my-account/login-history"));
   die();
 }
 
@@ -106,36 +106,36 @@ include BASE_PATH . "views/header.php";
       <nav aria-label="Page navigation">
         <ul class="pagination mt-3 mb-0">
           <?php if ($numLogins <= 10) { ?>
-          <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+          <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
           <?php } else if ($numLogins <= 20) { ?>
             <?php if ($page == 1) { ?>
-            <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
-      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page+1 ?>">Next</a></li>
+            <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page+1 ?>">Next</a></li>
             <?php } else { ?>
-            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page-1 ?>">Previous</a></li>
-      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page-1 ?>"><?php echo $page-1 ?></a></li>
-      	    <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page-1 ?>">Previous</a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page-1 ?>"><?php echo $page-1 ?></a></li>
+      	    <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
             <?php } ?>
           <?php } else { ?>
       			<?php if ($page == 1) { ?>
-      			<li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
-      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page+2 ?>"><?php echo $page+2 ?></a></li>
-      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page+1 ?>">Next</a></li>
+      			<li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page+2 ?>"><?php echo $page+2 ?></a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page+1 ?>">Next</a></li>
             <?php } else { ?>
-      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page-1 ?>">Previous</a></li>
+      			<li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page-1 ?>">Previous</a></li>
             <?php if ($page > 2) { ?>
-            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page-2 ?>"><?php echo $page-2 ?></a></li>
+            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page-2 ?>"><?php echo $page-2 ?></a></li>
             <?php } ?>
-      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page-1 ?>"><?php echo $page-1 ?></a></li>
-      	    <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page-1 ?>"><?php echo $page-1 ?></a></li>
+      	    <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
       			<?php if ($numLogins > $page*10) { ?>
-      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
             <?php if ($numLogins > $page*10+10) { ?>
-            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page+2 ?>"><?php echo $page+2 ?></a></li>
+            <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page+2 ?>"><?php echo $page+2 ?></a></li>
             <?php } ?>
-      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/loginhistory?page="); ?><?php echo $page+1 ?>">Next</a></li>
+      	    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("my-account/login-history?page="); ?><?php echo $page+1 ?>">Next</a></li>
             <?php } ?>
           <?php } ?>
         <?php } ?>

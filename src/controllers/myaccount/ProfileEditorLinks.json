@@ -57,7 +57,7 @@
       "id": "logins",
       "name": "My Login History",
       "title": "My Login History",
-      "link": "my-account/loginhistory",
+      "link": "my-account/login-history",
       "target": "_self",
       "external": false
     },
@@ -65,12 +65,9 @@
       "id": "notify",
       "name": "My Email History",
       "title": "Emails sent to you by us",
-      "link": "my-account/notifyhistory",
+      "link": "my-account/notify-history",
       "target": "_self",
-      "external": false,
-      "include": [
-        "Parent"
-      ]
+      "external": false
     }
   ]
 }
