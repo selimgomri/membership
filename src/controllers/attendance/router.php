@@ -1,20 +1,20 @@
 <?php
-$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 
-$this->group('/sessions/new', function () {
-  $this->get('/', function () {
-    include 'add-sessions/add-one-off.php';
-  });
+$user = app()->user;
 
-  $this->post('/', function () {
-    include 'add-sessions/add-one-off-post.php';
-  });
-});
+// $this->group('/sessions/new', function () {
+//   $this->get('/', function () {
+//     include 'add-sessions/add-one-off.php';
+//   });
 
-if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
+//   $this->post('/', function () {
+//     include 'add-sessions/add-one-off-post.php';
+//   });
+// });
+
+if ($user->hasPermissions(['Committee', 'Admin', 'Coach'])) {
   // Attendance Home
   $this->get('/', function () {
-
     include 'indexView.php';
   });
 
@@ -70,6 +70,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 
     $this->get('/', function () {
       include "sessions.php";
+    });
+
+    $this->post('/new', function () {
+      include 'add-sessions/new-post.php';
     });
 
     $this->get('/{id}:int', function ($id) {

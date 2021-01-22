@@ -4,7 +4,7 @@ $db = app()->db;
 $tenant = app()->tenant;
 $user = app()->user;
 
-if (!$user->hasPermission('Admin') && !$user->hasPermission('Committee') && !$user->hasPermission('Coach')) {
+if (!$user->hasPermissions(['Admin', 'Committee', 'Coach'])) {
   halt(404);
 }
 
@@ -37,6 +37,18 @@ if (isset($_POST['session-date'])) {
 
     $endDate = clone $startDate;
   } catch (Exception $e) {
+  }
+}
+
+if (isset($_POST['recurring']) && $_POST['recurring'] == 'recurring') {
+  if (isset($_POST['session-end-date'])) {
+    try {
+      $endDate = new DateTime($_POST['session-end-date'], new DateTimeZone('Europe/London'));
+    } catch (Exception $e) {
+      throw new Exception('End date invalid');
+    }
+  } else {
+    throw new Exception('No end date provided');
   }
 }
 

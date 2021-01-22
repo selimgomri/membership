@@ -20,10 +20,20 @@ function sessionManagement($squadID, $old = null)
 	$tenant = app()->tenant;
 	$output = $content = $modals = "";
 
-	$getSessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN sessionsSquads ON sessions.SessionID = sessionsSquads.Session) INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `sessionsSquads`.`Squad` = ? AND sessions.Tenant = ? AND (ISNULL(sessions.DisplayFrom) OR (sessions.DisplayFrom <= CURDATE( ))) AND (ISNULL(sessions.DisplayUntil) OR (sessions.DisplayUntil >= CURDATE( ))) ORDER BY `SessionDay` ASC, `StartTime` ASC");
+	$date = new DateTime('now', new DateTimeZone('Europe/London'));
+
+	$getSessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN sessionsSquads ON sessions.SessionID = sessionsSquads.Session) INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `sessionsSquads`.`Squad` = :squad AND sessions.Tenant = :tenant AND (ISNULL(sessions.DisplayFrom) OR (sessions.DisplayFrom <= :today)) AND (ISNULL(sessions.DisplayUntil) OR (sessions.DisplayUntil >= :today)) ORDER BY `SessionDay` ASC, `StartTime` ASC");
 	$getSessions->execute([
-		$squadID,
-		$tenant->getId()
+		'squad' => $squadID,
+		'tenant' => $tenant->getId(),
+		'today' => $date->format('Y-m-d'),
+	]);
+
+	$getFutureSessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN sessionsSquads ON sessions.SessionID = sessionsSquads.Session) INNER JOIN sessionsVenues ON sessions.VenueID = sessionsVenues.VenueID) WHERE `sessionsSquads`.`Squad` = :squad AND sessions.Tenant = :tenant AND sessions.DisplayFrom > :today AND sessions.DisplayUntil > :today ORDER BY sessions.DisplayFrom ASC, `StartTime` ASC");
+	$getFutureSessions->execute([
+		'squad' => $squadID,
+		'tenant' => $tenant->getId(),
+		'today' => $date->format('Y-m-d'),
 	]);
 
 	$venues = $db->prepare("SELECT VenueName `name`, VenueID id FROM `sessionsVenues` WHERE Tenant = ? ORDER BY VenueName ASC");
@@ -78,6 +88,10 @@ function sessionManagement($squadID, $old = null)
 							$datetime2 = new DateTime($row['EndTime']);
 							$interval = $datetime1->diff($datetime2);
 
+							$oneOff = $row['DisplayFrom'] == $row['DisplayUntil'];
+							$startDate = new DateTime($row['DisplayFrom'], new DateTimeZone('Europe/London'));
+							$endDate = new DateTime($row['DisplayUntil'], new DateTimeZone('Europe/London'));
+
 					?>
 						<li class="list-group-item">
 							<p class="mb-0">
@@ -87,7 +101,14 @@ function sessionManagement($squadID, $old = null)
 									</strong>
 								</a>
 							</p>
-							<p class="mb-0"><?= htmlspecialchars($row['VenueName']) ?></p>
+
+							<p class="mb-0">
+								<?= htmlspecialchars($row['VenueName']) ?>
+							</p>
+
+							<p class="mb-0">
+								<em><?php if ($oneOff) { ?>One-off session on <?= htmlspecialchars($startDate->format('j F Y')) ?><?php } else { ?>Recurring weekly until <?= htmlspecialchars($endDate->format('j F Y')) ?><?php } ?></em>
+							</p>
 						</li>
 
 					<?php
@@ -148,7 +169,132 @@ function sessionManagement($squadID, $old = null)
 		</div>
 	</div>
 
+	<?php $row = $getFutureSessions->fetch(PDO::FETCH_ASSOC); ?>
+
 	<div class="col-md-6">
+		<div class="card mb-3">
+			<div class="card-body">
+				<h2 class="card-title">Future Sessions</h2>
+				<?php if ($row != null) { ?>
+					<p class="card-text">
+						Sessions starting in the future for this squad, ordered by start date and time
+					</p>
+			</div>
+			<ul class="list-group list-group-flush">
+				<?php
+					do {
+
+						$dayText = "";
+						switch ($row['SessionDay']) {
+							case 0:
+								$dayText = "Sunday";
+								break;
+							case 1:
+								$dayText = "Monday";
+								break;
+							case 2:
+								$dayText = "Tuesday";
+								break;
+							case 3:
+								$dayText = "Wednesday";
+								break;
+							case 4:
+								$dayText = "Thursday";
+								break;
+							case 5:
+								$dayText = "Friday";
+								break;
+							case 6:
+								$dayText = "Saturday";
+								break;
+						}
+
+						$datetime1 = new DateTime($row['StartTime']);
+						$datetime2 = new DateTime($row['EndTime']);
+						$interval = $datetime1->diff($datetime2);
+
+						$oneOff = $row['DisplayFrom'] == $row['DisplayUntil'];
+						$startDate = new DateTime($row['DisplayFrom'], new DateTimeZone('Europe/London'));
+						$endDate = new DateTime($row['DisplayUntil'], new DateTimeZone('Europe/London'));
+
+				?>
+					<li class="list-group-item">
+						<p class="mb-0">
+							<a data-toggle="modal" href="#sessionModal<?= $row['SessionID'] ?>">
+								<strong class="text-gray-dark">
+									<?= htmlspecialchars($row['SessionName']) ?>, <?= $dayText ?> at <?= htmlspecialchars($datetime1->format("H:i")) ?>
+								</strong>
+							</a>
+						</p>
+
+						<p class="mb-0">
+							<?= htmlspecialchars($row['VenueName']) ?>
+						</p>
+
+						<p class="mb-0">
+							<em><?php if ($oneOff) { ?>One-off session on <?= htmlspecialchars($startDate->format('j F Y')) ?><?php } else { ?>From <?= htmlspecialchars($startDate->format('j F Y')) ?> until <?= htmlspecialchars($endDate->format('j F Y')) ?><?php } ?></em>
+						</p>
+					</li>
+
+				<?php
+						$modals .= '
+			<!-- Modal -->
+			<div class="modal fade" id="sessionModal' . $row['SessionID'] . '" tabindex="-1" role="dialog" aria-labelledby="sessionModalTitle' . $row['SessionID'] . '" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="sessionModalTitle' . $row['SessionID'] . '">' . htmlspecialchars($row['SessionName']) . ', ' . $dayText . ' at ' . $row['StartTime'] . '</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<dl>
+								<dt>Session Name</dt>
+								<dd>' . htmlspecialchars($row['SessionName']) . '</dd>
+								<dt>Include in attendance calculations</dt>';
+						if ($row['ForAllMembers']) {
+							$modals .= '<dd>This session is included in attendance calculations</dd>';
+						} else {
+							$modals .= '<dd>This session is <strong>not included</strong> in attendance calculations</dd>';
+						}
+						$modals .= '<dt>Venue</dt>
+								<dd>' . htmlspecialchars($row['VenueName']) . '</dd>
+								<dt>Start Time</dt>
+								<dd>' . htmlspecialchars($datetime1->format("H:i")) . '</dd>
+								<dt>Finish Time</dt>
+								<dd>' . htmlspecialchars($datetime2->format("H:i")) . '</dd>
+								<dt>Session Duration</dt>';
+						$modals .= '
+								<dd>' . $interval->format('%h hours %I minutes') . '</dd>
+								<dt>Display Until</dt>
+								<dd>';
+						if ($row['DisplayUntil'] != null) {
+							$modals .= (new DateTime($row['DisplayUntil']))->format("j F Y");
+						} else {
+							$modals .= "Not set";
+						}
+						$modals .= '
+								<a class="btn btn-dark" href="sessions/' . $row['SessionID'] . '">Edit End Date</a></dd>
+							</dl>
+							<strong>You can\'t edit a session once it has been created</strong>  <br>Sessions are immutable. This is because swimmers may be marked as present at a session in the past, changing the session in any way, such as altering the start or finish time would distort the attendance records. Instead, set a DisplayUntil date for the session, after which it will not appear in the register, but will still be visible in attendance history
+						</div>
+					</div>
+				</div>
+			</div>';
+					} while ($row = $getFutureSessions->fetch(PDO::FETCH_ASSOC)); ?>
+			</ul>
+		<?php
+				} else { ?>
+			<div class="alert alert-warning mb-0">
+				There aren't any sessions starting in the future for this squad.
+			</div>
+		</div>
+	<?php } ?>
+	</div>
+	</div>
+
+	<div class="col-md-6 d-none">
 
 		<div class="card mb-3">
 			<div class="card-body">
@@ -316,8 +462,6 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach") {
 				$squadID,
 				(int) $mainSequence,
 			]);
-			
-
 		} catch (Exception $e) {
 			halt(400);
 		}

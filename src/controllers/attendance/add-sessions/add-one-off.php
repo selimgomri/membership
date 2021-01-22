@@ -9,6 +9,7 @@ if (!$user->hasPermission('Admin') && !$user->hasPermission('Committee') && !$us
 }
 
 $dateToday = new DateTime('now', new DateTimeZone('Europe/London'));
+$datePlusYear = new DateTime('+1 year', new DateTimeZone('Europe/London'));
 
 // Get Venues
 $getVenues = $db->prepare("SELECT VenueName, VenueID FROM sessionsVenues WHERE Tenant = ? ORDER BY VenueName ASC");
@@ -24,7 +25,7 @@ $getSquads->execute([
 ]);
 $squad = $getSquads->fetch(PDO::FETCH_ASSOC);
 
-$pagetitle = 'Add One-Off Session';
+$pagetitle = 'Add New Session';
 
 include BASE_PATH . 'views/header.php';
 
@@ -44,10 +45,10 @@ include BASE_PATH . 'views/header.php';
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>
-          Add a new one-off session
+          Add a new session
         </h1>
         <p class="lead mb-0">
-          Add a session to the timetable which runs only once
+          Add a session to the timetable
         </p>
       </div>
     </div>
@@ -107,6 +108,20 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
+        <div class="form-group" id="recurrence-radios">
+          <p class="mb-2">
+            Recurrence
+          </p>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="recurring-one-off" name="recurring" class="custom-control-input" checked required value="one-off">
+            <label class="custom-control-label" for="recurring-one-off">One-off</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="recurring-session" name="recurring" class="custom-control-input" value="recurring">
+            <label class="custom-control-label" for="recurring-session">Weekly until cancelled</label>
+          </div>
+        </div>
+
         <div class="form-row">
           <div class="col">
             <div class="form-group">
@@ -117,15 +132,19 @@ include BASE_PATH . 'views/header.php';
               </div>
             </div>
           </div>
-          <!-- <div class="col">
+
+          <div class="col d-none" id="show-until-container">
             <div class="form-group">
-              <label for="newSessionEndDate">Show Until</label>
-              <input type="date" aria-labelledby="newSessionStartDateHelp" class="form-control" name="newSessionEndDate" id="newSessionEndDate" placeholder="2021-09-22" value="2021-09-22" required>
-              <small id="newSessionEndDateHelp" class="form-text text-muted">
-                If you know when this session will stop running, enter the last date here
+              <label for="session-end-date">Show Until</label>
+              <input type="date" aria-labelledby="session-end-date-help" class="form-control" name="session-end-date" id="session-end-date" placeholder="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>" value="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>">
+              <div class="invalid-feedback">
+                You must provide a valid end date for this session
+              </div>
+              <small id="session-end-date-help" class="form-text text-muted">
+                When this session should st op recurring
               </small>
             </div>
-          </div> -->
+          </div>
         </div>
 
         <div class="form-row">
@@ -164,12 +183,12 @@ include BASE_PATH . 'views/header.php';
               </div>
             <?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)); ?>
           </div>
-          <p class="text-muted mt-n2">
+          <p class="text-muted mt-n2 show-if-one-off">
             <small>If you don't select any squads, we will automatically assume this session requires booking and is open to all members. We'll direct you to the edit session booking page if this is the case.</small>
           </p>
 
         <?php } else { ?>
-          <p>
+          <p class="show-if-one-off">
             We can't assign this session to any squads because there are no squads in the system. We will automatically assume this session requires booking and is open to all members. We'll direct you to the edit session booking page for this session when you press <em>Add Session</em>.
           </p>
         <?php } ?>
@@ -180,10 +199,12 @@ include BASE_PATH . 'views/header.php';
           <button type="submit" class="btn btn-primary mr-sm-auto">
             Add Session
           </button>
-          <div class="mb-3 d-block d-md-none"></div>
-          <button type="submit" class="btn btn-dark" name="go-to-booking-settings" value="1">
-            Add Session, Require Booking
-          </button>
+          <div class="show-if-one-off">
+            <div class="mb-3 d-block d-md-none"></div>
+            <button type="submit" class="btn btn-dark" name="go-to-booking-settings" value="1">
+              Add Session, Require Booking
+            </button>
+          </div>
         </div>
 
       </form>
@@ -197,4 +218,5 @@ include BASE_PATH . 'views/header.php';
 
 $footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
+$footer->addJs("public/js/attendance/add-session.js");
 $footer->render();
