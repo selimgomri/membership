@@ -12,7 +12,7 @@ try {
 
 $bg = null;
 
-header('Link: <' . autoUrl($stylesheet) . '>; rel=preload; as=style');
+header('Link: <' . $stylesheet . '>; rel=preload; as=style', false);
 
 $container_class;
 if (isset($fluidContainer) && $fluidContainer == true) {

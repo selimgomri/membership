@@ -10,7 +10,7 @@ try {
   $stylesheet = autoUrl('public/compiled/css/clse.css');
 }
 
-header('Link: <' . autoUrl($stylesheet) . '>; rel=preload; as=style');
+header('Link: <' . $stylesheet . '>; rel=preload; as=style');
 
 $container_class;
 if (isset($fluidContainer) && $fluidContainer == true) {
