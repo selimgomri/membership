@@ -106,7 +106,7 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalDDSuccess']))
             </p>
           <?php } ?>
 
-          <?php if (true || !$hasStripeMandate && app()->tenant->getBooleanKey('ALLOW_DIRECT_DEBIT_OPT_OUT')) { ?>
+          <?php if (!$hasStripeMandate && app()->tenant->getBooleanKey('ALLOW_DIRECT_DEBIT_OPT_OUT')) { ?>
             <p><button type="submit" name="avoid-dd" value="1" class="btn btn-outline-dark btn-sm btn-block">I want to pay my fees another way</button></p>
           <?php } ?>
         </form>

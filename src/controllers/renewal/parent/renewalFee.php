@@ -318,6 +318,12 @@ include BASE_PATH . "views/renewalTitleBar.php";
 								<label class="custom-control-label" for="payment-method-dd">As part of my next Direct Debit payment</label>
 							</div>
 						<?php } ?>
+						<?php if ($tenant->getKey('USE_DIRECT_DEBIT') && !$hasStripeMandate && $tenant->getBooleanKey('ALLOW_DIRECT_DEBIT_OPT_OUT')) { ?>
+							<div class="custom-control custom-radio">
+								<input type="radio" id="payment-method-manual" name="payment-method" class="custom-control-input" value="manual">
+								<label class="custom-control-label" for="payment-method-manual">Manually</label>
+							</div>
+						<?php } ?>
 						<?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_BACS')) { ?>
 							<div class="custom-control custom-radio">
 								<input type="radio" id="payment-method-bacs" name="payment-method" class="custom-control-input" value="bacs">

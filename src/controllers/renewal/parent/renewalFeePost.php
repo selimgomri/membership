@@ -459,7 +459,68 @@ try {
 		}
 
 		$location = autoUrl("renewal/payments/checkout");
-	} else if ($total == 0) {
+	} else if ($total > 0 && $_POST['payment-method'] == 'manual' && $tenant->getKey('USE_DIRECT_DEBIT') && !$hasStripeMandate && $tenant->getBooleanKey('ALLOW_DIRECT_DEBIT_OPT_OUT')) {
+		$progress = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
+		$progress->execute([
+			$renewal,
+			$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+		]);
+
+		// Add tracker record
+		if ($renewal != 0) {
+			// Foreach check if in renewal members
+			$countInRenewalMembers = $db->prepare("SELECT COUNT(*) FROM renewalMembers WHERE MemberID = ? AND RenewalID = ?");
+			$insert = $db->prepare("INSERT INTO `renewalMembers` (`PaymentID`, `MemberID`, `RenewalID`, `Date`, `CountRenewal`, `Renewed`) VALUES (?, ?, ?, ?, ?, ?)");
+			$update = $db->prepare("UPDATE renewalMembers SET PaymentID = ?, `Date` = ?, CountRenewal = ?, Renewed = ? WHERE MemberID = ? AND RenewalID = ?");
+
+			for ($i = 0; $i < $count; $i++) {
+				$countInRenewalMembers->execute([
+					$member[$i]['MemberID'],
+					$renewal
+				]);
+
+				if ($countInRenewalMembers->fetchColumn() > 0) {
+					// Update them
+					$update->execute([
+						null,
+						$date->format("Y-m-d H:i:s"),
+						true,
+						true,
+						$member[$i]['MemberID'],
+						$renewal
+					]);
+				} else {
+					// Add them
+					$insert->execute([
+						null,
+						$member[$i]['MemberID'],
+						$renewal,
+						$date->format("Y-m-d H:i:s"),
+						true,
+						true
+					]);
+				}
+			}
+		}
+
+		if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
+			$query = $db->prepare("UPDATE `users` SET `RR` = 0 WHERE `UserID` = ?");
+			$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
+
+			$query = $db->prepare("UPDATE `members` SET `RR` = 0, `RRTransfer` = 0 WHERE `UserID` = ?");
+			$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
+
+			// Remove from status tracker
+			$delete = $db->prepare("DELETE FROM renewalProgress WHERE UserID = ? AND RenewalID = ?");
+			$delete->execute([
+				$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+				$renewal
+			]);
+			$location = autoUrl("");
+		} else {
+			$location = autoUrl("renewal/go");
+		}
+	} else if ((int) $total == 0) {
 		$progress = $db->prepare("UPDATE `renewalProgress` SET `Stage` = `Stage` + 1 WHERE `RenewalID` = ? AND `UserID` = ?");
 		$progress->execute([
 			$renewal,
