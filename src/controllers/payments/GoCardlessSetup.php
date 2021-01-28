@@ -5,7 +5,7 @@
 // $at = app()->tenant->getGoCardlessAccessToken();
 $client = null;
 try {
-  include 'GoCardlessSetupClient.php';
+  $client = SCDS\GoCardless\Client::get();
 } catch (Exception $e) {
   halt(902);
 }
