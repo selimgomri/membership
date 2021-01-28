@@ -583,10 +583,6 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
     include BASE_PATH . 'controllers/assisted-registration/router.php';
   });
 
-  $this->group('/admin', function () {
-    include BASE_PATH . 'controllers/qualifications/AdminRouter.php';
-  });
-
   $this->group('/registration-and-renewal', function () {
     include BASE_PATH . 'controllers/registration-and-renewal/router.php';
   });
