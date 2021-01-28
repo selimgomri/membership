@@ -8,7 +8,7 @@ include BASE_PATH . 'views/header.php';
 
 <div class="container">
 
-  <h1>Log books <span class="badge badge-info">BETA</span></h1>
+  <h1>Log books</h1>
   <p class="lead">
     Members can log training sessions and other activity.
   </p>
@@ -18,17 +18,17 @@ include BASE_PATH . 'views/header.php';
   </p>
 
   <p>
-    <a href="<?=htmlspecialchars(autoUrl("login"))?>" class="btn btn-primary">
+    <a href="<?= htmlspecialchars(autoUrl("login")) ?>" class="btn btn-primary">
       Login
     </a>
   </p>
 
   <p>
-    Are you a member? (such as a swimmer, diver or water polo player)
+    Are you a club member? (such as a swimmer, diver or water polo player)
   </p>
 
   <p>
-    <a href="<?=htmlspecialchars(autoUrl("log-books/login"))?>" class="btn btn-primary">
+    <a href="<?= htmlspecialchars(autoUrl("log-books/login")) ?>" class="btn btn-primary">
       Login
     </a>
   </p>

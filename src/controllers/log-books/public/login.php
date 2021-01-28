@@ -17,22 +17,17 @@ include BASE_PATH . "views/header.php";
   <div class="row justify-content-between">
     <div class="col-md-8 col-lg-5">
 
-      <!--
-      <div class="alert alert-warning">
-        <strong>Overnight System Maintenance</strong> <br>
-        Our systems will not be sending emails between 23:00 on Friday 31 August and 15:00 on Saturday 1 September
-      </div>
-      -->
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoginError'])) { ?>
-      <div class="alert alert-danger">
-        <p class="mb-0">
-          <strong>We could not log you in</strong>
-        </p>
-        <p class="mb-0">
-          <?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoginError'])?>
-        </p>
-      </div>
-      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoginError']); } ?>
+        <div class="alert alert-danger">
+          <p class="mb-0">
+            <strong>We could not log you in</strong>
+          </p>
+          <p class="mb-0">
+            <?= htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoginError']) ?>
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoginError']);
+      } ?>
 
       <form method="post" action="<?= autoUrl("log-books/login") ?>" name="loginform" id="loginform" class="needs-validation" novalidate>
         <div class="form-group">
@@ -61,9 +56,9 @@ include BASE_PATH . "views/header.php";
             </small>
           </div>
         </div>
-        <input type="hidden" name="target" value="<?= $_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL'] ?>">
+        <input type="hidden" name="target" value="<?= htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['TARGET_URL']) ?>">
         <?= SCDS\CSRF::write() ?>
-        <input type="hidden" name="SessionSecurity" value="<?= session_id() ?>">
+        <input type="hidden" name="SessionSecurity" value="<?= htmlspecialchars(session_id()) ?>">
         <p class="mb-5"><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-primary"></p>
       </form>
 
