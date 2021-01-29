@@ -152,7 +152,7 @@ function getAttendanceByID($link = null, $id, $weeks = "all")
         $fromDate = new DateTime('-' . (int) $weeks . ' weeks', new DateTimeZone('Europe/London'));
       }
       $toDate = new DateTime('now', new DateTimeZone('Europe/London'));
-      
+
       $history = AttendanceHistory::getHistory($id, $fromDate->format('Y-m-d'), $toDate->format('Y-m-d'));
 
       return number_format($history->getPercentageMandatory(), 1, ".", "");
@@ -1320,6 +1320,25 @@ function stripeDirectDebit($absolute = false)
 function stripeSetUpDirectDebit()
 {
   return getenv('STRIPE') && app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP');
+}
+
+function getWalletName($name)
+{
+  if ($name == 'apple_pay') {
+    return 'Apple Pay';
+  } else if ($name == 'amex_express_checkout') {
+    return 'Amex Express Checkout';
+  } else if ($name == 'google_pay') {
+    return 'Google Pay';
+  } else if ($name == 'masterpass') {
+    return 'Masterpass  ';
+  } else if ($name == 'samsung_pay') {
+    return 'Samsung Pay';
+  } else if ($name == 'visa_checkout') {
+    return 'Visa Checkout';
+  } else {
+    return 'Other wallet';
+  }
 }
 
 include BASE_PATH . 'includes/ErrorReporting.php';
