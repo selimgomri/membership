@@ -4,7 +4,7 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 if ($_POST['response'] == "getSwimmers") {
-  $swimmers = $db->prepare("SELECT members.MemberID, RelationID, MForename, MSurname FROM ((`extrasRelations` INNER JOIN `members` ON members.MemberID = extrasRelations.MemberID) INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) WHERE `extrasRelations`.`ExtraID` = ? AND extras.Tenant = ?");
+  $swimmers = $db->prepare("SELECT members.MemberID, RelationID, MForename, MSurname FROM ((`extrasRelations` INNER JOIN `members` ON members.MemberID = extrasRelations.MemberID) INNER JOIN `extras` ON extras.ExtraID = extrasRelations.ExtraID) WHERE `extrasRelations`.`ExtraID` = ? AND extras.Tenant = ? AND members.Active");
   $swimmers->execute([
     $id,
     $tenant->getId()
@@ -57,7 +57,7 @@ if ($_POST['response'] == "getSwimmers") {
       </div>
     <?php } else { ?>
       <div class="alert alert-info mb-0">
-        <strong>There are no swimmers linked to this extra</strong>
+        <strong>There are no members assigned to this extra</strong>
       </div>
     <?php } ?>
   </div>
@@ -70,12 +70,21 @@ if ($_POST['response'] == "getSwimmers") {
       'swimmerSelectContent' => '<option value="null" selected>Please select a squad</option>'
     ]);
   } else {
-    $getSwimmers = $db->prepare("SELECT members.MemberID, MForename, MSurname FROM `members` INNER JOIN squadMembers ON members.MemberID = squadMembers.Member WHERE members.Tenant = ? AND squadMembers.Squad = ? AND MemberID NOT IN (SELECT MemberID FROM extrasRelations WHERE ExtraID = ?) ORDER BY `MForename` ASC, `MSurname` ASC ");
-    $getSwimmers->execute([
-      $tenant->getId(),
-      $_POST['squadSelect'],
-      $id
-    ]);
+    $getSwimmers = null;
+    if ($_POST['squadSelect'] == 'all-members') {
+      $getSwimmers = $db->prepare("SELECT members.MemberID, MForename, MSurname FROM `members` WHERE members.Tenant = ? AND members.Active AND MemberID NOT IN (SELECT MemberID FROM extrasRelations WHERE ExtraID = ?) ORDER BY `MForename` ASC, `MSurname` ASC ");
+      $getSwimmers->execute([
+        $tenant->getId(),
+        $id
+      ]);
+    } else {
+      $getSwimmers = $db->prepare("SELECT members.MemberID, MForename, MSurname FROM `members` INNER JOIN squadMembers ON members.MemberID = squadMembers.Member WHERE members.Tenant = ? AND members.Active AND squadMembers.Squad = ? AND MemberID NOT IN (SELECT MemberID FROM extrasRelations WHERE ExtraID = ?) ORDER BY `MForename` ASC, `MSurname` ASC ");
+      $getSwimmers->execute([
+        $tenant->getId(),
+        $_POST['squadSelect'],
+        $id
+      ]);
+    }
     $state = false;
     $output = '<option value="null" selected>Select a swimmer</option>';
     while ($row = $getSwimmers->fetch(PDO::FETCH_ASSOC)) {

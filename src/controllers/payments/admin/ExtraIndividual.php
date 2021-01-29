@@ -28,27 +28,25 @@ $pagetitle = htmlspecialchars($row['ExtraName']) . " - Extras";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
 
- ?>
+?>
 
 <div class="container">
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl('payments'))?>">Payments</a></li>
-      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl('payments/extrafees'))?>">Extras</a></li>
-      <li class="breadcrumb-item active" aria-current="page"><?=htmlspecialchars($row['ExtraName'])?></li>
+      <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('payments')) ?>">Payments</a></li>
+      <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('payments/extrafees')) ?>">Extras</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><?= htmlspecialchars($row['ExtraName']) ?></li>
     </ol>
   </nav>
 
   <div class="row align-items-center mb-3">
     <div class="col-md-8">
-	    <h1><?=htmlspecialchars($row['ExtraName'])?> <small>&pound;<?=htmlspecialchars(number_format($row['ExtraFee'], 2))?>/month (<?php if ($row['Type'] == 'Payment') { ?>payment<?php } else { ?>credit/refund<?php } ?>)</small></h1>
+      <h1><?= htmlspecialchars($row['ExtraName']) ?> <small>&pound;<?= htmlspecialchars(number_format($row['ExtraFee'], 2)) ?>/month (<?php if ($row['Type'] == 'Payment') { ?>payment<?php } else { ?>credit/refund<?php } ?>)</small></h1>
     </div>
     <div class="col text-sm-right">
-      <a href="<?=autoUrl("payments/extrafees/" . $id . "/edit")?>"
-        class="btn btn-dark">Edit</a>
-      <a href="<?=autoUrl("payments/extrafees/" . $id . "/delete")?>"
-        class="btn btn-danger">Delete</a>
+      <a href="<?= htmlspecialchars(autoUrl("payments/extrafees/$id/edit")) ?>" class="btn btn-dark">Edit</a>
+      <a href="<?= htmlspecialchars(autoUrl("payments/extrafees/$id/delete")) ?>" class="btn btn-danger">Delete</a>
     </div>
   </div>
   <div class="row">
@@ -61,11 +59,12 @@ include BASE_PATH . "views/paymentsMenu.php";
           <div class="form-group">
             <label for="squadSelect">Select squad</label>
             <select class="custom-select" id="squadSelect" name="squadSelect">
-              <option selected>Choose...</option>
+              <option selected value="" disabled>Choose...</option>
+              <option value="all-members">All members</option>
               <?php while ($squadsRow = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
-              <option value="<?=htmlspecialchars($squadsRow['SquadID'])?>">
-                <?=htmlspecialchars($squadsRow['SquadName'])?>
-              </option>
+                <option value="<?= htmlspecialchars($squadsRow['SquadID']) ?>">
+                  <?= htmlspecialchars($squadsRow['SquadName']) ?>
+                </option>
               <?php } ?>
             </select>
           </div>
@@ -75,11 +74,11 @@ include BASE_PATH . "views/paymentsMenu.php";
               <option value="null " selected>Please select a squad</option>
             </select>
           </div>
-            <button disabled type="button" class="btn btn-success" id="addSwimmer" data-ajax-url="<?=htmlspecialchars(autoUrl("payments/extrafees/ajax/" . $id))?>">
-              Add member to extra
-            </button>
-            <div id="status">
-            </div>
+          <button disabled type="button" class="btn btn-success" id="addSwimmer" data-ajax-url="<?= htmlspecialchars(autoUrl("payments/extrafees/ajax/" . $id)) ?>">
+            Add member to extra
+          </button>
+          <div id="status">
+          </div>
         </form>
       </div>
     </div>

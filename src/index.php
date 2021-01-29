@@ -66,7 +66,16 @@ $time_start = microtime(true);
 
 $executionStartTime = microtime();
 
-require 'common.php';
+define('DS', DIRECTORY_SEPARATOR);
+define('BASE_PATH', __DIR__ . DS);
+
+require BASE_PATH . 'vendor/autoload.php';
+require "helperclasses/ClassLoader.php";
+require "classes-loader.php";
+
+if (getenv('ENV_JSON_FILE')) {
+  require 'common/env/loader.php';
+}
 
 $_SERVER['SERVER_PORT'] = 443;
 
@@ -228,7 +237,7 @@ if ($headInfo[0] == 'ref:') {
   define('SOFTWARE_VERSION', $HEAD_hash);
 }
 
-require_once "database.php";
+require_once "functions.php";
 
 if (!isset($_SESSION['Browser'])) {
   $browser = new \WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);

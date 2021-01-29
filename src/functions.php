@@ -132,10 +132,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
     }
     return true;
   } else {
-    // Using PHP Mail is a last resort if stuff goes really wrong
-    if (mail($to, $subject, $head . $message, $headers)) {
-      return true;
-    }
+    throw new Exception('Mailer failed');
   }
 
   return false;
@@ -243,7 +240,7 @@ function generateRandomString($length)
 
 function courseLengthString($string)
 {
-  $courseLength;
+  $courseLength = null;
   if ($string == "SHORT") {
     $courseLength = "Short Course";
   } else if ($string == "LONG") {
@@ -252,61 +249,6 @@ function courseLengthString($string)
     $courseLength = "Non Standard Pool Distance";
   }
   return $courseLength;
-}
-
-function upcomingGalas($link = null, $links = false, $userID = null)
-{
-  $db = app()->db;
-  $sql = $db->query("SELECT * FROM `galas` WHERE `galas`.`ClosingDate` >= CURDATE() ORDER BY `galas`.`ClosingDate` ASC;");
-  $row = $sql->fetch(PDO::FETCH_ASSOC);
-  $output = "";
-  if ($row != null) {
-    $output = "<div class=\"media\">";
-    do {
-      $output .= " <ul class=\"media-body pt-2 pb-2 mb-0 lh-125 ";
-      if ($i != $count - 1) {
-        if (app('request')->ajax) {
-          $output .= "border-bottom border-white";
-        } else {
-          $output .= "border-bottom border-gray";
-        }
-      }
-      $output .= " list-unstyled\"> <li><strong class=\"d-block
-      text-gray-dark\">";
-      if ($links == true) {
-        $output .= htmlspecialchars($row['GalaName']) . " (" .
-          courseLengthString($row['CourseLength']) . ") <a href=\"" .
-          autoUrl("galas/competitions/" . $row['GalaID'] . "") . "\"><span
-        class=\"small\">Edit Gala and View Statistics</span></a></li>";
-      } else {
-        $output .= "" . $row['GalaName'] . " (" .
-          courseLengthString($row['CourseLength']) . ")</li>";
-      }
-      $output .= "</strong></li>";
-      $output .= "<li>" . htmlspecialchars($row['GalaVenue']) . "<br>";
-      $output .= "<li>Closing Date " . date(
-        'jS F Y',
-        strtotime($row['ClosingDate'])
-      ) . "</li>";
-      if ($userID == null) {
-        $output .= "<li>Finishes on " . date(
-          'jS F Y',
-          strtotime($row['GalaDate'])
-        ) . "</li>";
-      }
-      if ($row['GalaFee'] > 0) {
-        $output .= "<li>Entry Fee of &pound;" .
-          number_format($row['GalaFee'], 2, '.', '') . "/Swim</li>";
-      } else {
-        $output .= "<li>Entry fee varies by event</li>";
-      }
-      $output .= "</ul>";
-    } while ($row = $sql->fetch(PDO::FETCH_ASSOC));
-    $output .= "</div>";
-  } else {
-    $output .= "<p class=\"lead mb-0 mt-2\">There are no galas available to enter</p>";
-  }
-  return $output;
 }
 
 function myMonthlyFeeTable($link = null, $userID)
@@ -659,8 +601,10 @@ function mandateExists($mandate)
 
 function updatePaymentStatus($PMkey)
 {
+  $client = null;
   $db = app()->db;
   require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
+  $client = SCDS\GoCardless\Client::get();
   $sql2bool = $payment = $status = null;
   try {
     $payment = $client->payments()->get($PMkey);
@@ -1312,6 +1256,8 @@ function createOrUpdatePayout($payout, $update = false)
   $db = app()->db;
   require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
+  $client = SCDS\GoCardless\Client::get();
+
   $getCount = $db->prepare("SELECT COUNT(*) FROM paymentsPayouts WHERE ID = ?");
   $getCount->execute([
     $payout
@@ -1376,12 +1322,8 @@ function stripeSetUpDirectDebit()
   return getenv('STRIPE') && app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP');
 }
 
-include BASE_PATH . 'includes/security/Loader.php';
-include BASE_PATH . 'includes/security/CanView.php';
 include BASE_PATH . 'includes/ErrorReporting.php';
 include BASE_PATH . 'includes/Colours.php';
-include BASE_PATH . 'includes/stripe/HandleBalanceTransactionForFees.php';
-include BASE_PATH . 'includes/stripe/HandleCompletedGalaPayments.php';
 include BASE_PATH . 'includes/direct-debit/BankLogos.php';
 include BASE_PATH . 'includes/direct-debit/BankNames.php';
 include BASE_PATH . 'includes/direct-debit/Balances.php';
@@ -1391,6 +1333,6 @@ include BASE_PATH . 'includes/GetCachedFile.php';
 include BASE_PATH . 'includes/BankHolidays.php';
 include BASE_PATH . 'includes/GetContrastColour.php';
 include BASE_PATH . 'includes/CoachTypes.php';
-require BASE_PATH . 'helperclasses/Components/Footer.php';
-require BASE_PATH . 'helperclasses/Components/RootFooter.php';
-require BASE_PATH . 'helperclasses/Components/RenewalProgressListGroup.php';
+// require BASE_PATH . 'helperclasses/Components/Footer.php';
+// require BASE_PATH . 'helperclasses/Components/RootFooter.php';
+// require BASE_PATH . 'helperclasses/Components/RenewalProgressListGroup.php';
