@@ -50,7 +50,7 @@ function latestRenewal()
 
 	if ($getNum->fetchColumn() == 0) {
 		// Renewal cannot be completed at this time
-		halt(404);
+		$latestRenewal = null;
 	}
 
 	return $latestRenewal;
