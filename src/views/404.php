@@ -1,5 +1,7 @@
 <?php
 
+$trace = debug_backtrace();
+
 http_response_code(404);
 $pagetitle = "Error 404 - Page not found";
 $currentUser = null;
@@ -18,8 +20,8 @@ if ($currentUser == null && false) {
   }
 
   include BASE_PATH . "views/head.php";
-  
-  ?>
+
+?>
   <div class="py-3 mb-3 text-white membership-header <?= $clubLogoColour ?>">
     <div class="container">
       <h1 class="mb-0">
@@ -101,6 +103,14 @@ if ($currentUser == null && false) {
       <hr>
 
       <p class="mt-2"><a href="mailto:support@myswimmingclub.uk" title="Support Hotline">Email SCDS</a> or <a href="tel:+441912494320">call SCDS on +44 191 249 4320</a> for help and support if the issue persists.</p>
+
+      <div id="trace" class="mono d-none">
+        <?php foreach ($trace as $key => $item) { ?>
+          <?php if (isset($item['file']) && isset($item['line'])) { ?>
+            <strong><?= htmlspecialchars('./' . str_replace(BASE_PATH, '', $item['file'])) ?></strong> <?= htmlspecialchars($item['line']) ?><?php if (isset($item['function'])) { ?> (<?= htmlspecialchars($item['function']) ?>)<?php } ?><br>
+          <?php } ?>
+        <?php } ?>
+      </div>
     </div>
   </div>
 </div>
