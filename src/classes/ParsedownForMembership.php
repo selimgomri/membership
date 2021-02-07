@@ -12,19 +12,21 @@ class ParsedownForMembership extends ParsedownExtra {
       return null;
     }
 
-    $image['element']['attributes']['src'] = autoUrl($image['element']['attributes']['src']);
+    $image['element']['attributes']['src'] = $image['element']['attributes']['src'];
 
     return $image;
   }
 
   protected function blockHeader($Line) {
     $Block = parent::blockHeader($Line);
-    if (preg_match('/[ #]*{('.$this->regexAttribute.'+)}[ ]*$/', $Block['element']['handler']['argument'], $matches, PREG_OFFSET_CAPTURE))
+    if (isset($Block['element']['handler']['argument']) && preg_match('/[ #]*{('.$this->regexAttribute.'+)}[ ]*$/', $Block['element']['handler']['argument'], $matches, PREG_OFFSET_CAPTURE))
     {
       $attributeString = $matches[1][0];
       $Block['element']['attributes'] = $this->parseAttributeData($attributeString);
       $Block['element']['handler']['argument'] = substr($Block['element']['handler']['argument'], 0, $matches[0][1]);
     }
+
+    $Block['element']['attributes']['id'] = mb_strtolower(preg_replace('@[^0-9a-z\.]+@i', '-', $Block['element']['text']));
 
     if ($this->allHeaders === null) {
       $this->allHeaders = [];

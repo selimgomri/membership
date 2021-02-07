@@ -36,6 +36,7 @@
         "huwcbjones/rankings-db": "^0.3",
         "ramsey/uuid": "^4.0",
         "intervention/image": "^2.5",
-        "intervention/imagecache": "^2.4"
+        "intervention/imagecache": "^2.4",
+        "symfony/yaml": "^5.2"
     }
 }

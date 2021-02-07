@@ -91,5 +91,7 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<?php $footer = new \SCDS\RootFooter();
-$footer->render(); ?>
+<?php
+
+$footer = new \SCDS\RootFooter();
+$footer->render();

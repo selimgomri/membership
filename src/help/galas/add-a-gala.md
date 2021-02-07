@@ -15,3 +15,5 @@ You can edit any of the information about a gala at any time.
 Head to the *Galas* page from the main menu and select the gala from the list shown. Once on the gala page. Select *Edit* from the top right.
 
 From there, modify any details and save the form.
+
+<!-- ![Test image](./test-image.png "Test Image") -->

@@ -2,7 +2,7 @@
 
 $db = app()->db;
 
-$getInvoices = $db->prepare("SELECT tenantPaymentSubscriptions.ID, tenants.Name FROM `tenantPaymentSubscriptions` INNER JOIN tenantStripeCustomers ON tenantPaymentSubscriptions.Customer = tenantStripeCustomers.CustomerID INNER JOIN tenants ON tenantStripeCustomers.Tenant = tenants.ID WHERE tenantPaymentSubscriptions.Active AND (EndDate IS NULL OR EndDate >= :today) ORDER BY `Name` ASC;");
+$getInvoices = $db->prepare("SELECT tenantPaymentInvoices.ID, tenants.Name FROM `tenantPaymentInvoices` INNER JOIN tenantStripeCustomers ON tenantPaymentInvoices.Customer = tenantStripeCustomers.CustomerID INNER JOIN tenants ON tenantStripeCustomers.Tenant = tenants.ID ORDER BY `Name` ASC;");
 $getInvoices->execute([
   'today' => (new DateTime('now', new DateTimeZone('Europe/London')))->format('Y-m-d'),
 ]);
@@ -41,7 +41,7 @@ include BASE_PATH . "views/root/header.php";
             <strong><?= htmlspecialchars($invoice['ID']) ?></strong>
           </p>
           <p class="mb-0">
-            Subscription <?= htmlspecialchars($invoice['ID']) ?>
+            Invoice <?= htmlspecialchars($invoice['ID']) ?>
           </p>
         </a>
       <?php } while ($invoice = $getInvoices->fetch(PDO::FETCH_ASSOC)); ?>
