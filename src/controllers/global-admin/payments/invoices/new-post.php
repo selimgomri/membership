@@ -151,7 +151,7 @@ try {
     ]),
     $intent->currency,
     'Pay within 30 days of invoice date',
-    'Pay electronically via with SCDS Online Payments Service',
+    'Pay electronically via the SCDS Online Payments Service',
   ]);
 
   // Add invoice line items

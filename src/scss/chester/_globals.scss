@@ -571,6 +571,10 @@ footer .focus-highlight a:focus,
   background: $purple;
 }
 
+.bg-scds {
+  background-image: linear-gradient(135deg, rgb(182, 37, 38), rgb(115, 25, 132))
+}
+
 .club-logos img {
   max-height: 75px;
 }

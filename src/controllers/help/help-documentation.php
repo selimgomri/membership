@@ -5,18 +5,34 @@ $date = null;
 $markdown = new ParsedownForMembership();
 $markdown->setSafeMode(false);
 
+$redirectIndex = false;
+
 $path = ltrim($this[0], '/');
 $file = file_get_contents(BASE_PATH . 'help/' . $path . '.md');
 $date = filemtime(BASE_PATH . 'help/' . $path . '.md');
 
 if ($file === false) {
+  // Redirect to this path with /index.md
   $file = file_get_contents(BASE_PATH . 'help/' . $path . '/index.md');
   $date = filemtime(BASE_PATH . 'help/' . $path . '/index.md');
+
+  if ($file) {
+    $redirectIndex = true;
+  }
 }
 
 if ($file === false) {
   halt(404);
 }
+
+// pre(app('request'));
+
+if ($redirectIndex) {
+  // http_response_code(302);
+  // header('location: ' . );
+  // return;
+}
+
 if ($date != null) {
   $date = new DateTime('@' . $date, new DateTimeZone('UTC'));
   $date->setTimezone(new DateTimeZone('Europe/London'));

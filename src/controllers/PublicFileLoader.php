@@ -50,7 +50,7 @@ if (file_exists($file) && mime_content_type($file) != 'directory') {
   header('pragma: public');
   header("service-worker-allowed: " . autoUrl(""));
   readfile($file);
-  exit;
+  return;
 } else {
   halt(404);
 }

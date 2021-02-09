@@ -28,60 +28,73 @@ include BASE_PATH . "views/root/header.php";
         </p>
       </div>
 
+      <div class="card mb-3">
+        <div class="card-body">
+          <h2>Help categories</h2>
+          <p class="mb-0">
+            Help categories available on our new support site
+          </p>
+        </div>
+        <div class="list-group list-group-flush">
+          <a href="<?= htmlspecialchars('help-and-support/log-books') ?>" class="list-group-item list-group-item-action">Log books</a>
+          <a href="<?= htmlspecialchars('help-and-support/documentation') ?>" class="list-group-item list-group-item-action">Contributing to our documentation</a>
+        </div>
+      </div>
+
       <div class="card card-body mb-3">
-      <h2>Support articles</h2>
-      <ul class="list-unstyled mb-0">
-        <li>
-          <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/adding-a-payment-card/" rel="bookmark" title="Adding a payment card">
-            Adding a payment card
-          </a>
-        </li>
-        <li>
-          <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/adding-an-additional-email-address/" rel="bookmark" title="Adding an additional email address">
-            Adding an additional email address
-          </a>
-        </li>
-        <li>
-          <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/adding-emergency-contact-details-to-your-club-account/" rel="bookmark" title="Adding Emergency Contact Details to your Club Account">
-            Adding Emergency Contact Details to your Club Account
-          </a>
-        </li>
-        <li>
-          <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/adding-swimmers-to-your-account/" rel="bookmark" title="Adding Swimmers to your Account">
-            Adding Swimmers to your Account
-          </a>
-        </li>
-        <li>
-          <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/direct-debit-transition/" rel="bookmark" title="Direct Debit Transition">
-            Direct Debit Transition
-          </a>
-        </li>
-        <li>
-          <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/downloading-a-copy-of-your-personal-data/" rel="bookmark" title="Downloading a copy of your personal data">
-            Downloading a copy of your personal data
-          </a>
-        </li>
-        <li>
-          <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/guidance/" rel="bookmark" title="Entering a Competition Online">
-            Entering a Competition Online
-          </a>
-        </li>
-        <li>
-          <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/paying-for-gala-entries/" rel="bookmark" title="Paying for gala entries">
-            Paying for gala entries
-          </a>
-        </li>
-        <li>
-          <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/paying-for-gala-entries-by-credit-or-debit-card/" rel="bookmark" title="Paying for gala entries by Credit or Debit Card">
-            Paying for gala entries by Credit or Debit Card
-          </a>
-        </li>
-        <li>
-          <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/guidance-setting-up-your-online-account/" rel="bookmark" title="Setting up your Online Account">
-            Setting up your Online Account
-          </a>
-        </li>
-      </ul>
+        <h2>Support articles</h2>
+        <ul class="list-unstyled mb-0">
+          <li>
+            <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/adding-a-payment-card/" rel="bookmark" title="Adding a payment card">
+              Adding a payment card
+            </a>
+          </li>
+          <li>
+            <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/adding-an-additional-email-address/" rel="bookmark" title="Adding an additional email address">
+              Adding an additional email address
+            </a>
+          </li>
+          <li>
+            <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/adding-emergency-contact-details-to-your-club-account/" rel="bookmark" title="Adding Emergency Contact Details to your Club Account">
+              Adding Emergency Contact Details to your Club Account
+            </a>
+          </li>
+          <li>
+            <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/adding-swimmers-to-your-account/" rel="bookmark" title="Adding Swimmers to your Account">
+              Adding Swimmers to your Account
+            </a>
+          </li>
+          <li>
+            <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/direct-debit-transition/" rel="bookmark" title="Direct Debit Transition">
+              Direct Debit Transition
+            </a>
+          </li>
+          <li>
+            <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/downloading-a-copy-of-your-personal-data/" rel="bookmark" title="Downloading a copy of your personal data">
+              Downloading a copy of your personal data
+            </a>
+          </li>
+          <li>
+            <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/guidance/" rel="bookmark" title="Entering a Competition Online">
+              Entering a Competition Online
+            </a>
+          </li>
+          <li>
+            <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/paying-for-gala-entries/" rel="bookmark" title="Paying for gala entries">
+              Paying for gala entries
+            </a>
+          </li>
+          <li>
+            <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/paying-for-gala-entries-by-credit-or-debit-card/" rel="bookmark" title="Paying for gala entries by Credit or Debit Card">
+              Paying for gala entries by Credit or Debit Card
+            </a>
+          </li>
+          <li>
+            <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/guidance-setting-up-your-online-account/" rel="bookmark" title="Setting up your Online Account">
+              Setting up your Online Account
+            </a>
+          </li>
+        </ul>
       </div>
 
       <p>
@@ -91,5 +104,7 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<?php $footer = new \SCDS\RootFooter();
-$footer->render(); ?>
+<?php
+
+$footer = new \SCDS\RootFooter();
+$footer->render();
