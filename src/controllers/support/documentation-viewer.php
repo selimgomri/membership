@@ -5,11 +5,15 @@ $date = null;
 $markdown = new ParsedownForMembership();
 $markdown->setSafeMode(false);
 
-$path = ltrim($this[0], '/');
-$path = rtrim($path, '.md');
+$path = trim($this[0], '/');
+
+// This will do for now
+$path = str_replace('.md', '', $path);
+
 $file = null;
 $pathToFile = BASE_PATH . 'help/' . $path;
 $pathToFileExtension = $pathToFile;
+$indexRedirect = false;
 
 if (file_exists($pathToFile . '.md') && str_contains(mime_content_type($pathToFile . '.md'), 'text/')) {
   $pathToFileExtension = $pathToFile . '.md';
@@ -17,6 +21,10 @@ if (file_exists($pathToFile . '.md') && str_contains(mime_content_type($pathToFi
 } else if (file_exists($pathToFile . '/index.md') && str_contains(mime_content_type($pathToFile . '/index.md'), 'text/')) {
   $pathToFileExtension = $pathToFile . '/index.md';
   $file = file_get_contents($pathToFileExtension);
+
+  if ($file) {
+    $indexRedirect = true;
+  }
 } else if (file_exists($pathToFile)) {
   // File loader
   // $file = file_get_contents($pathToFile);
@@ -42,6 +50,10 @@ $breadcrumb = SCDS\Support\Breadcrumb::find($pathToFileExtension);
 
 if (!$file) {
   halt(404);
+} else if ($indexRedirect) {
+  http_response_code(302);
+  header("location: " . autoUrl(trim(app('request')->path), '/') . '/index.md');
+  return;
 }
 if ($date != null) {
   $date = new DateTime('@' . $date, new DateTimeZone('UTC'));
