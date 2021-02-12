@@ -79,3 +79,7 @@ if (force) {
     }
   })
 }
+
+document.getElementById('tinymce-preview').addEventListener('click', ev => {
+  tinymce.activeEditor.execCommand('mcePreview');
+});
