@@ -30,6 +30,8 @@ $day = $startWeek->format('d');
 $month = $startWeek->format('m');
 $year = $startWeek->format('Y');
 
+$allSessions = [];
+
 $sessions = $pageSquad = null;
 if (isset($_GET['squad'])) {
 
@@ -45,25 +47,35 @@ if (isset($_GET['squad'])) {
   if (!$pageSquad) {
     halt(404);
   }
+}
 
-  $sessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN sessionsSquads ON `sessions`.`SessionID` = sessionsSquads.Session) INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE sessionsSquads.Squad = :squad AND sessions.Tenant = :tenant AND ((DisplayFrom <= :startTime AND DisplayUntil >= :endTime) OR ((:startTime <= DisplayFrom AND DisplayFrom <= :endTime) AND (:startTime <= DisplayUntil AND DisplayUntil <= :endTime))) ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC;");
-  $sessions->execute([
-    'squad' => (int) $_GET['squad'],
-    'tenant' => $tenant->getId(),
-    'startTime' => $startWeek->format('Y-m-d'),
-    'endTime' => $endWeek->format('Y-m-d'),
-  ]);
-} else {
-  $sessions = $db->prepare("SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE sessions.Tenant = :tenant AND ((DisplayFrom <= :startTime AND DisplayUntil >= :endTime) OR ((:startTime <= DisplayFrom AND DisplayFrom <= :endTime) AND (:startTime <= DisplayUntil AND DisplayUntil <= :endTime))) ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC;");
-  $sessions->execute([
-    'tenant' => $tenant->getId(),
-    'startTime' => $startWeek->format('Y-m-d'),
-    'endTime' => $endWeek->format('Y-m-d'),
-  ]);
+for ($i = 0; $i < 7; $i++) {
+  $date = clone $startWeek;
+  $date->add(new DateInterval('P' . $i . 'D'));
+
+  if (isset($_GET['squad'])) {
+    $sessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN sessionsSquads ON `sessions`.`SessionID` = sessionsSquads.Session) INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE sessionsSquads.Squad = :squad AND sessions.Tenant = :tenant AND DisplayFrom <= :today AND DisplayUntil >= :today AND SessionDay = :dayNum ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC;");
+    $sessions->execute([
+      'squad' => (int) $_GET['squad'],
+      'tenant' => $tenant->getId(),
+      'today' => $date->format('Y-m-d'),
+      'dayNum' => $date->format('w'),
+    ]);
+  } else {
+    $sessions = $db->prepare("SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE sessions.Tenant = :tenant AND DisplayFrom <= :today AND DisplayUntil >= :today AND SessionDay = :dayNum ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC;");
+    $sessions->execute([
+      'tenant' => $tenant->getId(),
+      'today' => $date->format('Y-m-d'),
+      'dayNum' => $date->format('w'),
+    ]);
+  }
+
+  $daySessions = $sessions->fetchAll(PDO::FETCH_ASSOC);
+  foreach ($daySessions as $session) {
+    $allSessions[] = $session;
+  }
 }
 $getSessionSquads = $db->prepare("SELECT SquadName, ForAllMembers, SquadID FROM `sessionsSquads` INNER JOIN `squads` ON sessionsSquads.Squad = squads.SquadID WHERE sessionsSquads.Session = ? ORDER BY SquadFee DESC, SquadName ASC;");
-
-$allSessions = $sessions->fetchAll(PDO::FETCH_ASSOC);
 
 $dayNum = (int) $now->format('N') % 7;
 $sessionToday = false;
@@ -118,7 +130,7 @@ include BASE_PATH . 'views/header.php';
 <div class="bg-light mt-n3 py-3 mb-3">
   <div class="container">
 
-    <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb" class="d-print-none">
       <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page">Timetable</li>
       </ol>
@@ -133,7 +145,7 @@ include BASE_PATH . 'views/header.php';
           <?php if ($pageSquad) { ?><?= htmlspecialchars($pageSquad['SquadName']) ?><?php } else { ?>All squads<?php } ?>
         </p>
       </div>
-      <div class="col">
+      <div class="col d-print-none">
         <div class="alert alert-warning mb-0">
           <p class="mb-0"><strong>Please note:</strong> This system does not currently indicate whether or not a session is cancelled.</p>
         </div>
@@ -150,7 +162,7 @@ include BASE_PATH . 'views/header.php';
   <?php $weeks->sub(new DateInterval('P7D')); ?>
   <div class="row my-3">
     <div class="col-auto">
-      <nav aria-label="Page navigation">
+      <nav aria-label="Page navigation" class="d-print-none">
         <ul class="pagination my-0">
           <li class="page-item">
             <a class="page-link" href="<?= autoUrl("timetable?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
@@ -174,7 +186,7 @@ include BASE_PATH . 'views/header.php';
       <div class="mb-3 d-md-none"></div>
     </div>
     <div class="col-md">
-      <form action="<?= htmlspecialchars(autoUrl('timetable/jump-to-week')) ?>" method="post" class="needs-validation" novalidate>
+      <form action="<?= htmlspecialchars(autoUrl('timetable/jump-to-week')) ?>" method="post" class="needs-validation d-print-none" novalidate>
         <?php if ($pageSquad) { ?>
           <input type="hidden" name="squad" value="<?= htmlspecialchars($pageSquad['SquadID']) ?>">
         <?php } ?>
@@ -189,7 +201,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 
   <?php if ($sessionToday) { ?>
-    <p><a href="#day-<?= $dayNum ?>">Jump to today</a></p>
+    <p class="d-print-none"><a href="#day-<?= $dayNum ?>">Jump to today</a></p>
   <?php } ?>
 
   <div class="row">
@@ -279,13 +291,13 @@ include BASE_PATH . 'views/header.php';
                 <dd class="col-sm-9">
                   <?php if ($bookingRequired && $futureSession) { ?>
                     <span class="d-block mb-2">Booking is required for this session</span>
-                    <a href="<?= htmlspecialchars(autoUrl('timetable/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-success">Book a place<?php if ($showAdmin) { ?> or view/edit details<?php } ?></a>
+                    <a href="<?= htmlspecialchars(autoUrl('timetable/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-success d-print-none">Book a place<?php if ($showAdmin) { ?> or view/edit details<?php } ?></a>
                   <?php } else if ($showAdmin && $futureSession) { ?>
                     <span class="d-block mb-2">Booking is not currently required for this session</span>
-                    <a href="<?= htmlspecialchars(autoUrl('timetable/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary">Require pre-booking</a>
+                    <a href="<?= htmlspecialchars(autoUrl('timetable/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary d-print-none">Require pre-booking</a>
                   <?php } else if ($showAdmin && $bookingRequired && !$futureSession) { ?>
                     <span class="d-block mb-2">Booking was required for this session</span>
-                    <a href="<?= htmlspecialchars(autoUrl('timetable/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary">View booking info</a>
+                    <a href="<?= htmlspecialchars(autoUrl('timetable/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($sessionDateTime->format('Y-m-d')))) ?>" class="btn btn-primary d-print-none">View booking info</a>
                   <?php } else if (!$futureSession) { ?>
                     <span class="d-block">Booking was not required</span>
                   <?php } else { ?>
@@ -320,7 +332,7 @@ include BASE_PATH . 'views/header.php';
 
       <?php $weeks = clone $startWeek; ?>
       <?php $weeks->sub(new DateInterval('P7D')); ?>
-      <nav aria-label="Page navigation example">
+      <nav aria-label="Page navigation example" class="d-print-none">
         <ul class="pagination">
           <li class="page-item">
             <a class="page-link" href="<?= autoUrl("timetable?year=" . $weeks->format('o') . "&week=" . $weeks->format('W')) ?>">
@@ -342,7 +354,7 @@ include BASE_PATH . 'views/header.php';
         </ul>
       </nav>
     </div>
-    <div class="col order-1 order-lg-2">
+    <div class="col order-1 order-lg-2 d-print-none">
       <div class="position-sticky top-3 card mb-3">
         <div class="card-header">
           Jump to day
