@@ -25,16 +25,16 @@ if (isset($customBackground) && $customBackground) {
 
 <body class="<?= $bg ?> account--body <?php if (isset($pageHead['body-class'])) {
                                         foreach ($pageHead['body-class'] as $item) { ?> <?= $item ?> <?php }
-                                                                                                                                          } ?>" <?php if (isset($pageHead['body'])) {
-                                                                                                                                                              foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
-                                                                                                                                                            } ?>>
+                                                                                                  } ?>" <?php if (isset($pageHead['body'])) {
+                                                                                                          foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
+                                                                                                                                                              } ?>>
 
   <div class="sr-only sr-only-focusable">
     <a href="#maincontent">Skip to main content</a>
   </div>
 
   <?php if (bool(getenv('IS_DEV'))) { ?>
-    <div class="bg-warning text-dark bg-striped py-1">
+    <div class="bg-warning text-dark bg-striped py-1 d-print-none">
       <div class="<?= $container_class ?>">
         <small><strong>DEVELOPMENT PLATFORM</strong> NOT FOR PRODUCTION USE</small>
       </div>
@@ -162,7 +162,7 @@ if (isset($customBackground) && $customBackground) {
           <p class="mb-0">
             <strong>
               You are in user simulation mode simulating <?=
-                                                            $_SESSION['TENANT-' . app()->tenant->getId()]['UserSimulation']['SimUserName'] ?>
+                                                          $_SESSION['TENANT-' . app()->tenant->getId()]['UserSimulation']['SimUserName'] ?>
             </strong>
           </p>
           <p class="mb-0">
@@ -253,6 +253,42 @@ if (isset($customBackground) && $customBackground) {
     <!-- END OF HEADERS -->
     <div class="mb-3"></div>
 
+  </div>
+
+  <div class="d-none d-print-block">
+    <?php
+    $addr = json_decode(app()->tenant->getKey('CLUB_ADDRESS'));
+    $logoPath = null;
+    if ($logos = app()->tenant->getKey('LOGO_DIR')) {
+      $logoPath = 'uploads/' . mb_substr($logos, 8) . 'logo-1024.png';
+    }
+    ?>
+
+    <div class="container">
+      <div class="row mb-3">
+        <div class="col club-logos">
+          <?php if ($logoPath) { ?>
+            <img src="<?= htmlspecialchars(autoUrl($logoPath)) ?>" class="">
+          <?php } else { ?>
+            <h1 class="primary"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></h1>
+          <?php } ?>
+        </div>
+        <div class="col text-right">
+          <!-- <p class="mb-0"> -->
+          <address>
+            <strong><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></strong><br>
+            <?php
+            for ($i = 0; $i < sizeof($addr); $i++) { ?>
+              <?= htmlspecialchars($addr[$i]) ?><br>
+              <?php if (isset($addr[$i + 1]) && $addr[$i + 1] == "") {
+                break;
+              } ?>
+            <?php } ?>
+          </address>
+          <!-- </p> -->
+        </div>
+      </div>
+    </div>
   </div>
 
   <?php if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) || !$_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) { ?>

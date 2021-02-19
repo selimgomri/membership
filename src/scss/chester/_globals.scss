@@ -584,3 +584,49 @@ footer .focus-highlight a:focus,
   width: 100% !important;
   max-width: 100% !important;
 }
+
+@media print {
+  @page {
+    margin: 1.27cm;
+  }
+
+  body {
+    font-size: 12pt;
+  }
+
+  h1 {
+    font-size: 24pt;
+  }
+
+  h2 {
+    font-size: 20pt;
+  }
+
+  h3 {
+    font-size: 18pt;
+  }
+
+  h4 {
+    font-size: 16pt;
+  }
+
+  h5 {
+    font-size: 14pt;
+  }
+
+  h6 {
+    font-size: 12;
+  }
+
+  .break-before {
+    break-before: page;
+  }
+
+  .break-after {
+    break-after: page;
+  }
+
+  .avoid-break {
+    break-inside: avoid;
+  }
+}
