@@ -173,8 +173,8 @@ if (!function_exists('chesterStandardMenu')) {
                   <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/register")) ?>">Take Register</a>
                   <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('timetable')) ?>">Timetable</a>
                   <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('timetable/booking')) ?>">Bookings</a>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/sessions")) ?>">Manage Squad Sessions</a>
                   <?php if ($user->hasPermissions(['Admin', 'Committee'])) { ?>
-                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/sessions")) ?>">Manage Squad Sessions</a>
                     <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/venues")) ?>">Manage Venues</a>
                   <?php } ?>
                   <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/history")) ?>">Attendance History</a>

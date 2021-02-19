@@ -30,6 +30,8 @@ $day = $startWeek->format('d');
 $month = $startWeek->format('m');
 $year = $startWeek->format('Y');
 
+$allSessions = [];
+
 $sessions = $pageSquad = null;
 if (isset($_GET['squad'])) {
 
@@ -45,25 +47,35 @@ if (isset($_GET['squad'])) {
   if (!$pageSquad) {
     halt(404);
   }
+}
 
-  $sessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN sessionsSquads ON `sessions`.`SessionID` = sessionsSquads.Session) INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE sessionsSquads.Squad = :squad AND sessions.Tenant = :tenant AND ((DisplayFrom <= :startTime AND DisplayUntil >= :endTime) OR ((:startTime <= DisplayFrom AND DisplayFrom <= :endTime) AND (:startTime <= DisplayUntil AND DisplayUntil <= :endTime))) ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC;");
-  $sessions->execute([
-    'squad' => (int) $_GET['squad'],
-    'tenant' => $tenant->getId(),
-    'startTime' => $startWeek->format('Y-m-d'),
-    'endTime' => $endWeek->format('Y-m-d'),
-  ]);
-} else {
-  $sessions = $db->prepare("SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE sessions.Tenant = :tenant AND ((DisplayFrom <= :startTime AND DisplayUntil >= :endTime) OR ((:startTime <= DisplayFrom AND DisplayFrom <= :endTime) AND (:startTime <= DisplayUntil AND DisplayUntil <= :endTime))) ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC;");
-  $sessions->execute([
-    'tenant' => $tenant->getId(),
-    'startTime' => $startWeek->format('Y-m-d'),
-    'endTime' => $endWeek->format('Y-m-d'),
-  ]);
+for ($i = 0; $i < 7; $i++) {
+  $date = clone $startWeek;
+  $date->add(new DateInterval('P' . $i . 'D'));
+
+  if (isset($_GET['squad'])) {
+    $sessions = $db->prepare("SELECT * FROM ((`sessions` INNER JOIN sessionsSquads ON `sessions`.`SessionID` = sessionsSquads.Session) INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE sessionsSquads.Squad = :squad AND sessions.Tenant = :tenant AND DisplayFrom <= :today AND DisplayUntil >= :today AND SessionDay = :dayNum ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC;");
+    $sessions->execute([
+      'squad' => (int) $_GET['squad'],
+      'tenant' => $tenant->getId(),
+      'today' => $date->format('Y-m-d'),
+      'dayNum' => $date->format('w'),
+    ]);
+  } else {
+    $sessions = $db->prepare("SELECT * FROM (`sessions` INNER JOIN sessionsVenues ON sessionsVenues.VenueID = sessions.VenueID) WHERE sessions.Tenant = :tenant AND DisplayFrom <= :today AND DisplayUntil >= :today AND SessionDay = :dayNum ORDER BY SessionDay ASC, StartTime ASC, EndTime ASC;");
+    $sessions->execute([
+      'tenant' => $tenant->getId(),
+      'today' => $date->format('Y-m-d'),
+      'dayNum' => $date->format('w'),
+    ]);
+  }
+
+  $daySessions = $sessions->fetchAll(PDO::FETCH_ASSOC);
+  foreach ($daySessions as $session) {
+    $allSessions[] = $session;
+  }
 }
 $getSessionSquads = $db->prepare("SELECT SquadName, ForAllMembers, SquadID FROM `sessionsSquads` INNER JOIN `squads` ON sessionsSquads.Squad = squads.SquadID WHERE sessionsSquads.Session = ? ORDER BY SquadFee DESC, SquadName ASC;");
-
-$allSessions = $sessions->fetchAll(PDO::FETCH_ASSOC);
 
 $dayNum = (int) $now->format('N') % 7;
 $sessionToday = false;
