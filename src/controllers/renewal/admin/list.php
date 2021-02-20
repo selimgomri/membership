@@ -153,9 +153,9 @@ include BASE_PATH . "views/swimmersMenu.php";
 							$latestDate = $dateCompleted->format('Y-m-d');
 						}
 
-						if ($renewalItem['Status'] == "failed" || $renewalItem['Status'] == "charged_back") {
+						if ($renewalItem['Status'] == "failed" || $renewalItem['Status'] == "charged_back" || $renewalItem['Status'] == "requires_payment_method") {
 						?><tr data-member="<?= htmlspecialchars($renewalItem['MemberID']) ?>" data-renewal-record="<?= htmlspecialchars($renewalItem['RMID']) ?>" class="table-danger"><?php
-																																																																																					} else if (bool($renewalItem['StripePaid']) || $renewalItem['Status'] == "paid_out" || $renewalItem['Status'] == "confirmed" || $renewalItem['Status'] == "paid_manually") {
+																																																																																					} else if (bool($renewalItem['StripePaid']) || $renewalItem['Status'] == "paid_out" || $renewalItem['Status'] == "confirmed" || $renewalItem['Status'] == "paid_manually" || $renewalItem['Status'] == "succeeded") {
 																																																																																						?>
 							<tr data-member="<?= htmlspecialchars($renewalItem['MemberID']) ?>" data-renewal-record="<?= htmlspecialchars($renewalItem['RMID']) ?>" class="table-success"><?php
 																																																																																					} else if (!bool($renewalItem['Active'])) {
