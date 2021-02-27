@@ -149,6 +149,9 @@ try {
   if (isset($swimmer) && isset($_POST['coach-send']) && bool($_POST['coach-send'])) {
     $bccEmails = [];
 
+    // There must be at least on person in this, so we will BCC the sender by default
+    $bccEmails[app()->user->getEmail()] = app()->user->getName();
+
     // Get member squad(s)
     $getSquad = $db->prepare("SELECT Squad FROM squadMembers WHERE Member = ?");
     $getSquad->execute([
