@@ -7,7 +7,6 @@
 
 // Enable popovers
 $(function() {
-  console.log('GOING');
   $('[data-toggle="popover"]').popover({
     trigger: 'focus'
   })
