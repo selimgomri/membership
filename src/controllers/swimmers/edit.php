@@ -403,49 +403,11 @@ include BASE_PATH . "views/swimmersMenu.php";
   </div>
 </div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // your code here
-    $(function() {
-      console.log('GOING');
-      $('[data-toggle="popover"]').popover({
-        trigger: 'focus'
-      })
-    });
-  }, false);
-
-  let gender = document.getElementById('gender-radio');
-  let pronouns = document.getElementById('gender-pronoun-radio');
-
-  gender.addEventListener('change', ev => {
-    let other = document.getElementById('gender-custom');
-    if (ev.target.value === 'O') {
-      other.disabled = false;
-      other.required = true;
-    } else {
-      other.disabled = true;
-      other.required = false;
-      other.value = '';
-    }
-  });
-
-  pronouns.addEventListener('change', ev => {
-    let other = document.getElementById('gender-pronoun-custom');
-    if (ev.target.value === 'O') {
-      other.disabled = false;
-      other.required = true;
-    } else {
-      other.disabled = true;
-      other.required = false;
-      other.value = '';
-    }
-  });
-</script>
-
 <?php
 
 $footer = new \SCDS\Footer();
 $footer->addJs("public/js/NeedsValidation.js");
+$footer->addJs("public/js/members/edit.js");
 if ($admin) {
   $footer->addJs("public/js/members/delete.js");
 }
