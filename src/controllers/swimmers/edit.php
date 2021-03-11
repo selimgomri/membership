@@ -21,6 +21,8 @@ if ($row == null) {
   halt(404);
 }
 
+$isMemberUser = $row['UserID'] == app()->user->getId();
+
 if (!$admin && $row['UserID'] != app()->user->getId()) {
   halt(404);
 }
@@ -58,8 +60,8 @@ include BASE_PATH . "views/swimmersMenu.php";
         <h1>Editing <?= htmlspecialchars($row['MForename'] . ' ' . $row['MSurname']) ?> </h1>
       </div>
       <div class="col text-md-right">
-        <button type="submit" class="btn btn-success" form="edit-form">Update</button>
-        <a class="btn btn-dark" href="<?= htmlspecialchars(autoUrl("members/$id")) ?>">Exit Edit Mode</a>
+        <button type="submit" class="btn btn-success" form="edit-form">Save</button>
+        <a class="btn btn-dark" href="<?= htmlspecialchars(autoUrl("members/$id")) ?>">Back</a>
       </div>
     </div>
   </div>
@@ -69,7 +71,32 @@ include BASE_PATH . "views/swimmersMenu.php";
 
   <div class="row">
     <div class="col-lg-8">
+
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessState'])) { ?>
+        <div class="alert alert-success">
+          <p class="mb-0">
+            <strong>Changes saved successfully</strong>
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessState']);
+      } ?>
+
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) { ?>
+        <div class="alert alert-danger">
+          <p class="mb-0">
+            <strong>An error occured trying to save your changes</strong>
+          </p>
+          <p class="mb-0">
+            <?= htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']) ?>
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
+      } ?>
+
       <form id="edit-form" method="post" class="needs-validation" novalidate>
+
+        <input type="hidden" name="is-admin" value="<?= htmlspecialchars((int) $admin) ?>">
+        <input type="hidden" name="is-member-user" value="<?= htmlspecialchars((int) $isMemberUser) ?>">
 
         <h2>Basic Information</h2>
 
@@ -112,193 +139,198 @@ include BASE_PATH . "views/swimmersMenu.php";
 
         <div class="form-group">
           <p class="mb-2">
-            Sex (for the purposes of competition) <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="Please select the sex you compete under, even if this is not the same as your gender identity. You can select your gender identity (for use internally at <?= htmlspecialchars(app()->tenant->getName()) ?>) below." data-original-title="What does this mean?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+            Sex (for the purposes of competition) <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="<?php if ($isMemberUser) { ?>Please select the sex you compete under, even if this is not the same as your gender identity. You can select your gender identity (for use internally at <?= htmlspecialchars(app()->tenant->getName()) ?>) below.<?php } else { ?>Select the sex <?= htmlspecialchars($row['MForename']) ?> competes under, even if this is not the same as their gender identity. They can select their gender identity (for use internally at <?= htmlspecialchars(app()->tenant->getName()) ?>) if they visit this page themselves.<?php } ?>" data-original-title="What does this mean?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
           </p>
           <div class="custom-control custom-radio">
-            <input type="radio" id="sex-m" name="sex" class="custom-control-input" value="M" <?php if ($row['Gender'] == 'Male') { ?>checked<?php } ?>>
+            <input type="radio" id="sex-m" name="sex" class="custom-control-input" value="Male" <?php if ($row['Gender'] == 'Male') { ?>checked<?php } ?>>
             <label class="custom-control-label" for="sex-m">Male</label>
           </div>
           <div class="custom-control custom-radio">
-            <input type="radio" id="sex-f" name="sex" class="custom-control-input" value="F" <?php if ($row['Gender'] == 'Female') { ?>checked<?php } ?>>
+            <input type="radio" id="sex-f" name="sex" class="custom-control-input" value="Female" <?php if ($row['Gender'] == 'Female') { ?>checked<?php } ?>>
             <label class="custom-control-label" for="sex-f">Female</label>
           </div>
         </div>
 
-        <div class="form-row mb-1">
-          <div class="col-lg">
-            <div class="card card-body mb-2">
-              <div class="form-group" id="gender-radio">
+        <?php if ($isMemberUser) { ?>
+          <div class="form-row mb-1">
+            <div class="col-lg">
+              <div class="card card-body mb-2">
+                <div class="form-group" id="gender-radio">
+                  <p class="mb-2">
+                    Gender <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="Your gender identity is a way to describe how you feel about your gender. You might identify your gender as a boy or a girl or something different. This is different from your sex, which is related to your physical body and biology." data-original-title="What is gender identity?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+                  </p>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="gender-m" name="gender" class="custom-control-input" value="M">
+                    <label class="custom-control-label" for="gender-m">Male</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="gender-f" name="gender" class="custom-control-input" value="F">
+                    <label class="custom-control-label" for="gender-f">Female</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="gender-nb" name="gender" class="custom-control-input" value="NB">
+                    <label class="custom-control-label" for="gender-nb">Non binary</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="gender-o" name="gender" class="custom-control-input" value="O">
+                    <label class="custom-control-label" for="gender-o">Other (please describe)</label>
+                  </div>
+                </div>
+
+                <div class="form-group mb-0">
+                  <label for="gender-custom">Other...</label>
+                  <input type="text" name="gender-custom" id="gender-custom" class="form-control" disabled>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg">
+              <div class="card card-body mb-2">
+                <div class="form-group" id="gender-pronoun-radio">
+                  <p class="mb-2">
+                    Gender pronouns <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="The words we use to refer to someone like, ‘he’, ‘she’ and ‘they’. We allow you to choose your pronouns so that you're never mis-gendered." data-original-title="What are pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+                  </p>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="gender-pronoun-m" name="gender-pronoun" class="custom-control-input" value="M">
+                    <label class="custom-control-label" for="gender-pronoun-m">He/Him/His</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="gender-pronoun-f" name="gender-pronoun" class="custom-control-input" value="F">
+                    <label class="custom-control-label" for="gender-pronoun-f">She/Her/Hers</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="gender-pronoun-neutral" name="gender-pronoun" class="custom-control-input" value="NB">
+                    <label class="custom-control-label" for="gender-pronoun-neutral">They/Them/Theirs</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="gender-pronoun-o" name="gender-pronoun" class="custom-control-input" value="O">
+                    <label class="custom-control-label" for="gender-pronoun-o">Other (please describe)</label>
+                  </div>
+                </div>
+
+                <div class="form-group mb-0">
+                  <label for="gender-pronoun-custom">Other...</label>
+                  <input type="text" name="gender-pronoun-custom" id="gender-pronoun-custom" class="form-control" disabled>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <p class="mb-2">
+              Show my gender and pronouns to club staff throughout the membership system <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="Choosing to show your pronouns to club staff helps us make sure you're not mis-gendered. If you choose no, we'll completely hide your chosen gender and pronouns from all club staff." data-original-title="Why show our staff your pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+            </p>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="show-gender-and-pronounds-yes" name="show-gender-and-pronounds" class="custom-control-input" value="1">
+              <label class="custom-control-label" for="show-gender-and-pronounds-yes">Yes</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="show-gender-and-pronounds-no" name="show-gender-and-pronounds" class="custom-control-input" value="0">
+              <label class="custom-control-label" for="show-gender-and-pronounds-no">No</label>
+            </div>
+          </div>
+
+        <?php } ?>
+
+        <?php if ($admin) { ?>
+          <h2>Membership Details</h2>
+
+          <div class="form-row">
+            <div class="col">
+              <div class="form-group">
+                <label for="asa">Swim England Registration Number</label>
+                <input type="text" name="asa" id="asa" class="form-control" value="<?= htmlspecialchars($row['ASANumber']) ?>">
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="cat">Swim England Membership Category</label>
+                <select class="custom-select overflow-hidden" id="cat" name="cat" placeholder="Select">
+                  <option value="0" <?php if ($row['ASACategory'] == 0) { ?>selected<?php } ?>>Not a Swim England Member</option>
+                  <option value="1" <?php if ($row['ASACategory'] == 1) { ?>selected<?php } ?>>Category 1</option>
+                  <option value="2" <?php if ($row['ASACategory'] == 2) { ?>selected<?php } ?>>Category 2</option>
+                  <option value="3" <?php if ($row['ASACategory'] == 3) { ?>selected<?php } ?>>Category 3</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="club-cat">Club Membership Category</label>
+            <select class="custom-select overflow-hidden" id="club-cat" name="club-cat" placeholder="Select" required>
+              <?php do {
+                $selected = '';
+                if ($row['ClubCategory'] == $clubCategory['ID']) {
+                  $selected = ' selected ';
+                } ?>
+                <option value="<?= htmlspecialchars($clubCategory['ID']) ?>" <?= $selected ?>><?= htmlspecialchars($clubCategory['Name']) ?></option>
+              <?php } while ($clubCategory = $getClubCategories->fetch(PDO::FETCH_ASSOC)); ?>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="country">Home Nations Country</label>
+            <select class="custom-select overflow-hidden" id="country" name="country" placeholder="Select">
+              <?php foreach ($countries as $key => $value) {
+                $selected = '';
+                if ($row['Country'] == $key) {
+                  $selected = ' selected ';
+                } ?>
+                <option value="<?= htmlspecialchars($key) ?>" <?= $selected ?>><?= htmlspecialchars($value) ?></option>
+              <?php } ?>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="col-lg">
+              <div class="form-group">
                 <p class="mb-2">
-                  Gender <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="Your gender identity is a way to describe how you feel about your gender. You might identify your gender as a boy or a girl or something different. This is different from your sex, which is related to your physical body and biology." data-original-title="What is gender identity?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+                  Club pays Swim England fees?
                 </p>
                 <div class="custom-control custom-radio">
-                  <input type="radio" id="gender-m" name="gender" class="custom-control-input" value="M">
-                  <label class="custom-control-label" for="gender-m">Male</label>
+                  <input type="radio" id="sep-no" name="sep" class="custom-control-input" <?php if (!bool($row['ASAPaid'])) { ?>checked<?php } ?> value="0">
+                  <label class="custom-control-label" for="sep-no">No</label>
                 </div>
                 <div class="custom-control custom-radio">
-                  <input type="radio" id="gender-f" name="gender" class="custom-control-input" value="F">
-                  <label class="custom-control-label" for="gender-f">Female</label>
+                  <input type="radio" id="sep-yes" name="sep" class="custom-control-input" <?php if (bool($row['ASAPaid'])) { ?>checked<?php } ?> value="1">
+                  <label class="custom-control-label" for="sep-yes">Yes</label>
                 </div>
-                <div class="custom-control custom-radio">
-                  <input type="radio" id="gender-nb" name="gender" class="custom-control-input" value="NB">
-                  <label class="custom-control-label" for="gender-nb">Non binary</label>
-                </div>
-                <div class="custom-control custom-radio">
-                  <input type="radio" id="gender-o" name="gender" class="custom-control-input" value="O">
-                  <label class="custom-control-label" for="gender-o">Other (please describe)</label>
-                </div>
-              </div>
-
-              <div class="form-group mb-0">
-                <label for="gender-custom">Other...</label>
-                <input type="text" name="gender-custom" id="gender-custom" class="form-control" disabled>
               </div>
             </div>
-          </div>
 
-          <div class="col-lg">
-            <div class="card card-body mb-2">
-              <div class="form-group" id="gender-pronoun-radio">
+            <div class="col-lg">
+              <div class="form-group">
                 <p class="mb-2">
-                  Gender pronouns <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="The words we use to refer to someone like, ‘he’, ‘she’ and ‘they’. We allow you to choose your pronouns so that you're never mis-gendered." data-original-title="What are pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+                  Club pays Club Membership fees?
                 </p>
                 <div class="custom-control custom-radio">
-                  <input type="radio" id="gender-pronoun-m" name="gender-pronoun" class="custom-control-input" value="M">
-                  <label class="custom-control-label" for="gender-pronoun-m">He/Him/His</label>
+                  <input type="radio" id="cp-no" name="cp" class="custom-control-input" <?php if (!bool($row['ClubPaid'])) { ?>checked<?php } ?> value="0">
+                  <label class="custom-control-label" for="cp-no">No</label>
                 </div>
                 <div class="custom-control custom-radio">
-                  <input type="radio" id="gender-pronoun-f" name="gender-pronoun" class="custom-control-input" value="F">
-                  <label class="custom-control-label" for="gender-pronoun-f">She/Her/Hers</label>
+                  <input type="radio" id="cp-yes" name="cp" class="custom-control-input" <?php if (bool($row['ClubPaid'])) { ?>checked<?php } ?> value="1">
+                  <label class="custom-control-label" for="cp-yes">Yes</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg">
+              <div class="form-group">
+                <p class="mb-2">
+                  Swimmer membership status
+                </p>
+                <div class="custom-control custom-radio">
+                  <input type="radio" id="member-status-active" name="member-status" class="custom-control-input" checked disabled value="1">
+                  <label class="custom-control-label" for="member-status-active">Active</label>
                 </div>
                 <div class="custom-control custom-radio">
-                  <input type="radio" id="gender-pronoun-neutral" name="gender-pronoun" class="custom-control-input" value="NB">
-                  <label class="custom-control-label" for="gender-pronoun-neutral">They/Them/Theirs</label>
-                </div>
-                <div class="custom-control custom-radio">
-                  <input type="radio" id="gender-pronoun-o" name="gender-pronoun" class="custom-control-input" value="O">
-                  <label class="custom-control-label" for="gender-pronoun-o">Other (please describe)</label>
+                  <input type="radio" id="member-status-suspended" name="member-status" class="custom-control-input" disabled value="0">
+                  <label class="custom-control-label" for="member-status-suspended">Suspended</label>
                 </div>
               </div>
-
-              <div class="form-group mb-0">
-                <label for="gender-pronoun-custom">Other...</label>
-                <input type="text" name="gender-pronoun-custom" id="gender-pronoun-custom" class="form-control" disabled>
-              </div>
             </div>
           </div>
-        </div>
-
-        <div class="form-group">
-          <p class="mb-2">
-            Show my gender and pronouns to club staff throughout the membership system <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="Choosing to show your pronouns to club staff helps us make sure you're not mis-gendered. If you choose no, we'll completely hide your chosen gender and pronouns from all club staff." data-original-title="Why show our staff your pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
-          </p>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="show-gender-and-pronounds-yes" name="show-gender-and-pronounds" class="custom-control-input" value="M">
-            <label class="custom-control-label" for="show-gender-and-pronounds-yes">Yes</label>
-          </div>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="show-gender-and-pronounds-no" name="show-gender-and-pronounds" class="custom-control-input" value="F">
-            <label class="custom-control-label" for="show-gender-and-pronounds-no">No</label>
-          </div>
-        </div>
-
-        <h2>Membership Details</h2>
-
-        <div class="form-row">
-          <div class="col">
-            <div class="form-group">
-              <label for="asa">Swim England Registration Number</label>
-              <input type="text" name="asa" id="asa" class="form-control">
-            </div>
-          </div>
-          <div class="col">
-            <div class="form-group">
-              <label for="cat">Swim England Membership Category</label>
-              <select class="custom-select overflow-hidden" id="cat" name="cat" placeholder="Select">
-                <option value="0">Not a Swim England Member</option>
-                <option value="1">Category 1</option>
-                <option value="2">Category 2</option>
-                <option value="3">Category 3</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="club-cat">Club Membership Category</label>
-          <select class="custom-select overflow-hidden" id="club-cat" name="club-cat" placeholder="Select" required>
-            <?php do {
-              $selected = '';
-              if ($row['ClubCategory'] == $clubCategory['ID']) {
-                $selected = ' selected ';
-              } ?>
-              <option value="<?= htmlspecialchars($clubCategory['ID']) ?>" <?= $selected ?>><?= htmlspecialchars($clubCategory['Name']) ?></option>
-            <?php } while ($clubCategory = $getClubCategories->fetch(PDO::FETCH_ASSOC)); ?>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="country">Home Nations Country</label>
-          <select class="custom-select overflow-hidden" id="country" name="country" placeholder="Select">
-            <?php foreach ($countries as $key => $value) {
-              $selected = '';
-              if ($row['Country'] == $key) {
-                $selected = ' selected ';
-              } ?>
-              <option value="<?= htmlspecialchars($key) ?>" <?= $selected ?>><?= htmlspecialchars($value) ?></option>
-            <?php } ?>
-          </select>
-        </div>
-
-        <div class="form-row">
-          <div class="col-lg">
-            <div class="form-group">
-              <p class="mb-2">
-                Club pays Swim England fees?
-              </p>
-              <div class="custom-control custom-radio">
-                <input type="radio" id="sep-no" name="sep" class="custom-control-input">
-                <label class="custom-control-label" for="sep-no">No</label>
-              </div>
-              <div class="custom-control custom-radio">
-                <input type="radio" id="sep-yes" name="sep" class="custom-control-input">
-                <label class="custom-control-label" for="sep-yes">Yes</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg">
-            <div class="form-group">
-              <p class="mb-2">
-                Club pays Club Membership fees?
-              </p>
-              <div class="custom-control custom-radio">
-                <input type="radio" id="cp-no" name="cp" class="custom-control-input">
-                <label class="custom-control-label" for="cp-no">No</label>
-              </div>
-              <div class="custom-control custom-radio">
-                <input type="radio" id="cp-yes" name="cp" class="custom-control-input">
-                <label class="custom-control-label" for="cp-yes">Yes</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg">
-            <div class="form-group">
-              <p class="mb-2">
-                Swimmer membership status
-              </p>
-              <div class="custom-control custom-radio">
-                <input type="radio" id="member-status-active" name="member-status" class="custom-control-input">
-                <label class="custom-control-label" for="member-status-active">Active</label>
-              </div>
-              <div class="custom-control custom-radio">
-                <input type="radio" id="member-status-suspended" name="member-status" class="custom-control-input">
-                <label class="custom-control-label" for="member-status-suspended">Suspended</label>
-              </div>
-            </div>
-          </div>
-        </div>
+        <?php } ?>
 
         <h2>Notes</h2>
 
@@ -319,29 +351,25 @@ include BASE_PATH . "views/swimmersMenu.php";
         </p>
 
       </form>
-    </div>
-  </div>
 
-  <hr>
+      <hr>
 
-</div>
-
-<?php if ($admin) { ?>
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8">
-        <div class="cell">
+      <?php if ($admin) { ?>
+        <div class="card card-body">
           <h2>Delete member</h2>
           <p>
+            By deleting this member, we will remove all personal information. Some information will be retained for the completeness of your club's records.
+          </p>
+          <p class="mb-0">
             <button data-ajax-url="<?= htmlspecialchars(autoUrl("members/delete")) ?>" data-members-url="<?= htmlspecialchars(autoUrl("members")) ?>" data-member-id="<?= htmlspecialchars($id) ?>" data-member-name="<?= htmlspecialchars($row['MForename'] . ' ' . $row['MSurname']) ?>" id="delete-button" class="btn btn-danger">
               Delete member
             </button>
           </p>
         </div>
-      </div>
+      <?php } ?>
     </div>
   </div>
-<?php } ?>
+</div>
 
 
 <!-- Modal for use by JS code -->
