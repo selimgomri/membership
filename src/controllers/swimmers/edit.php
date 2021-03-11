@@ -160,8 +160,9 @@ include BASE_PATH . "views/swimmersMenu.php";
                     Gender <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="Your gender identity is a way to describe how you feel about your gender. You might identify your gender as a boy or a girl or something different. This is different from your sex, which is related to your physical body and biology." data-original-title="What is gender identity?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
                   </p>
                   <?php $other = true; ?>
+                  <?php if ($row['GenderIdentity'] == '' || $row['GenderIdentity'] == null) $other = false; ?>
                   <div class="custom-control custom-radio">
-                    <input type="radio" id="gender-m" name="gender" class="custom-control-input" value="M" <?php if ($row['GenderIdentity'] == 'Male') { $other = false; ?>checked<?php } ?>>
+                    <input type="radio" id="gender-m" name="gender" class="custom-control-input" value="M" <?php if ($row['GenderIdentity'] == 'Male') { $other = false; ?>checked<?php } ?> required>
                     <label class="custom-control-label" for="gender-m">Male</label>
                   </div>
                   <div class="custom-control custom-radio">
@@ -195,8 +196,9 @@ include BASE_PATH . "views/swimmersMenu.php";
                     Gender pronouns <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="The words we use to refer to someone like, ‘he’, ‘she’ and ‘they’. We allow you to choose your pronouns so that you're never mis-gendered." data-original-title="What are pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
                   </p>
                   <?php $other = true; ?>
+                  <?php if ($row['GenderPronouns'] == '' || $row['GenderPronouns'] == null) $other = false; ?>
                   <div class="custom-control custom-radio">
-                    <input type="radio" id="gender-pronoun-m" name="gender-pronoun" class="custom-control-input" value="M" <?php if ($row['GenderPronouns'] == 'He/Him/His') { $other = false; ?>checked<?php } ?>>
+                    <input type="radio" id="gender-pronoun-m" name="gender-pronoun" class="custom-control-input" value="M" <?php if ($row['GenderPronouns'] == 'He/Him/His') { $other = false; ?>checked<?php } ?> required>
                     <label class="custom-control-label" for="gender-pronoun-m">He/Him/His</label>
                   </div>
                   <div class="custom-control custom-radio">
@@ -226,7 +228,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 
           <div class="form-group">
             <p class="mb-2">
-              Show my gender and pronouns to club staff throughout the membership system <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="Choosing to show your pronouns to club staff helps us make sure you're not mis-gendered. If you choose no, we'll completely hide your chosen gender and pronouns from all club staff." data-original-title="Why show our staff your pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+              Show my gender and pronouns to club staff throughout the membership system <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="Choosing to show your pronouns to club staff helps us make sure you're not mis-gendered. If you do, places we'll show your information include registers, squad lists and gala information (internally). If you choose no, we'll completely hide your chosen gender and pronouns from all club staff." data-original-title="Why show our staff your pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
             </p>
             <div class="custom-control custom-radio">
               <input type="radio" id="show-gender-and-pronounds-yes" name="show-gender-and-pronounds" class="custom-control-input" value="1" <?php if (bool($row['GenderDisplay'])) { ?>checked<?php } ?>>
