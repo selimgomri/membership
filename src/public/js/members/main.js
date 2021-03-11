@@ -5,6 +5,13 @@
  * - Squad moves
  */
 
+// Enable popovers
+$(function() {
+  $('[data-toggle="popover"]').popover({
+    trigger: 'focus'
+  })
+});
+
 async function movesHandler(event) {
   if (event.target.dataset.action) {
     // Delete the squad move via ajax request

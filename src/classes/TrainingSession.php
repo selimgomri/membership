@@ -233,7 +233,7 @@ class TrainingSession
     $weekId = $this->getWeekId($dateString);
 
     $db = app()->db;
-    $getMembers = $db->prepare("SELECT MForename fn, MSurname sn, members.MemberID id, members.UserID `uid`, sessionsAttendance.AttendanceBoolean tick, members.OtherNotes notes, members.DateOfBirth dob FROM sessionsAttendance INNER JOIN members ON members.MemberID = sessionsAttendance.MemberID WHERE sessionsAttendance.WeekID = ? AND sessionsAttendance.SessionID = ? ORDER BY fn ASC, sn ASC;");
+    $getMembers = $db->prepare("SELECT MForename fn, MSurname sn, members.MemberID id, members.UserID `uid`, sessionsAttendance.AttendanceBoolean tick, members.OtherNotes notes, members.DateOfBirth dob, members.GenderDisplay show_gender, members.GenderIdentity gender_identity, members.GenderPronouns gender_pronouns FROM sessionsAttendance INNER JOIN members ON members.MemberID = sessionsAttendance.MemberID WHERE sessionsAttendance.WeekID = ? AND sessionsAttendance.SessionID = ? ORDER BY fn ASC, sn ASC;");
     $getMembers->execute([
       $weekId,
       $this->id,
@@ -325,6 +325,9 @@ class TrainingSession
         'week_id' => $weekId,
         'session_id' => $this->id,
         'user' => $member['uid'],
+        'show_gender' => $member['show_gender'],
+        'gender_identity' => $member['gender_identity'],
+        'gender_pronouns' => $member['gender_pronouns'],
       ];
     }
 

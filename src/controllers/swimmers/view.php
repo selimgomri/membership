@@ -98,20 +98,20 @@ include BASE_PATH . 'views/header.php';
         <?php } ?>
         <?php if ($user && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
           <p>
-            <div class="dropdown">
-              <button class="btn btn-secondary btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Quick actions
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/enter-gala")) ?>">Enter a gala</a>
-                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("users/" . $user->getId())) ?>">View linked user</a>
-                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/contact-parent")) ?>">Email user/parent/guardian</a>
-                <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') { ?>
-                  <button class="dropdown-item" id="new-move-dropdown" type="button">New squad move</button>
-                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/parenthelp")) ?>">Print access key</a>
-                <?php } ?>
-              </div>
+          <div class="dropdown">
+            <button class="btn btn-secondary btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Quick actions
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/enter-gala")) ?>">Enter a gala</a>
+              <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("users/" . $user->getId())) ?>">View linked user</a>
+              <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/contact-parent")) ?>">Email user/parent/guardian</a>
+              <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') { ?>
+                <button class="dropdown-item" id="new-move-dropdown" type="button">New squad move</button>
+                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members/" . $id . "/parenthelp")) ?>">Print access key</a>
+              <?php } ?>
             </div>
+          </div>
           </p>
         <?php } ?>
       </div>
@@ -208,6 +208,35 @@ include BASE_PATH . 'views/header.php';
             <?= htmlspecialchars($member->getSwimEnglandCategory()) ?>
           </dd>
         </div>
+
+        <div class="col-6">
+          <dt class="text-truncate">
+            Sex (for the purposes of competition) <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="The sex <?= htmlspecialchars($member->getForename()) ?> competes under, even if this is not the same as their gender identity." data-original-title="What does this mean?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+          </dt>
+          <dd>
+            <?= htmlspecialchars($member->getSex()) ?>
+          </dd>
+        </div>
+
+        <?php if ($member->showGender()) { ?>
+          <div class="col-6">
+            <dt class="text-truncate">
+              Gender Identity <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="Your gender identity is a way to describe how you feel about your gender. You might identify your gender as a boy or a girl or something different. This is different from your sex, which is related to your physical body and biology." data-original-title="What is gender identity?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+            </dt>
+            <dd>
+              <?= htmlspecialchars($member->getGenderIdentity()) ?>
+            </dd>
+          </div>
+
+          <div class="col-6">
+            <dt class="text-truncate">
+              Gender Pronouns <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="The words we use to refer to someone like, ‘he’, ‘she’ and ‘they’. Members can choose their pronouns so that club staff don't misgender them." data-original-title="What are pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+            </dt>
+            <dd>
+              <?= htmlspecialchars($member->getGenderPronouns()) ?>
+            </dd>
+          </div>
+        <?php } ?>
       </dl>
 
       <!-- <p>
@@ -474,7 +503,8 @@ include BASE_PATH . 'views/header.php';
             <strong>New qualification added successfully</strong>
           </p>
         </div>
-      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewQualificationSuccess']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewQualificationSuccess']);
+      } ?>
 
       <div id="qualifications-box" data-qualifications-url="<?= htmlspecialchars(autoUrl("members/$id/qualifications/current")) ?>"></div>
 
@@ -637,6 +667,6 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs('public/js/members/main.js?v=2');
+$footer->addJs('public/js/members/main.js?v=3');
 $footer->useFluidContainer();
 $footer->render();

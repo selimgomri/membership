@@ -27,6 +27,9 @@ class Member extends Person
   private string $country;
   private bool $current;
   private string $accessKey;
+  private bool $showGender;
+  private string $genderIdentity;
+  private string $genderPronouns;
 
   /**
    * Create an empty member object
@@ -78,6 +81,13 @@ class Member extends Person
 
     // Other
     $this->accessKey = $info['AccessKey'];
+
+    // Gender Identity
+    $this->showGender = bool($info['GenderDisplay']);
+    if ($this->showGender) {
+      $this->genderIdentity = $info['GenderIdentity'];
+      $this->genderPronouns = $info['GenderPronouns'];
+    }
 
     // Get squads
     $getSquads = $db->prepare("SELECT Squad FROM squadMembers WHERE Member = ?");
@@ -296,5 +306,27 @@ class Member extends Person
       return $cat;
     }
     return 'UNKNOWN';
+  }
+
+  public function getSex() {
+    return $this->sex;
+  }
+
+  public function showGender() {
+    return $this->showGender;
+  }
+
+  public function getGenderIdentity($override = false) {
+    if (!$this->showGender() && !$override) {
+      throw new Exception('Gender identity may not be displayed for this member');
+    }
+    return $this->genderIdentity;
+  }
+
+  public function getGenderPronouns($override = false) {
+    if (!$this->showGender() && !$override) {
+      throw new Exception('Gender pronouns may not be displayed for this member');
+    }
+    return $this->genderPronouns;
   }
 }

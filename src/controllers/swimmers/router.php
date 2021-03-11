@@ -8,6 +8,14 @@ $this->get('/{id}:int', function ($id) {
 	include 'view.php';
 });
 
+$this->get('/{id}:int/edit', function ($id) {
+	include 'edit.php';
+});
+
+$this->post('/{id}:int/edit', function ($id) {
+	include 'edit-post.php';
+});
+
 if ($access == "Parent") {
 	// My Swimmers
 	$this->get('/', function () {
