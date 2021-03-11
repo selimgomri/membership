@@ -42,7 +42,7 @@ $db->beginTransaction();
 
 try {
   // GENERAL
-  $update = $db->prepare("UPDATE `members` SET `MForename` = ?, `MSurname` = ?, `MMiddleNames` = ?, `DateOfBirth` = ?, `Gender` = ?, `OtherNotes` = ?");
+  $update = $db->prepare("UPDATE `members` SET `MForename` = ?, `MSurname` = ?, `MMiddleNames` = ?, `DateOfBirth` = ?, `Gender` = ?, `OtherNotes` = ? WHERE MemberID = ?");
 
   // Validate
   if (!isset($_POST['forename']) || mb_strlen(trim($_POST['forename'])) == 0) {
@@ -91,16 +91,71 @@ try {
     $dob->format('Y-m-d'),
     $_POST['sex'],
     $otherNotes,
+    $id,
   ]);
 
   // MEMBER USER STUFF
   if ($memberUserMode) {
-    $update = $db->prepare("UPDATE `members` SET _______");
+    $update = $db->prepare("UPDATE `members` SET GenderIdentity = ?, GenderPronouns = ?, GenderDisplay = ? WHERE MemberID = ?");
+
+    $display = 0;
+    if (isset($_POST['show-gender-and-pronounds'])) {
+      $display = bool($_POST['show-gender-and-pronounds']);
+    }
+
+    $genderIdentity = 'Non binary';
+    if (isset($_POST['gender'])) {
+      switch ($_POST['gender']) {
+        case 'M':
+          $genderIdentity = 'Male';
+          break;
+        case 'F':
+          $genderIdentity = 'Female';
+          break;
+        case 'NB':
+          $genderIdentity = 'Non binary';
+          break;
+        default:
+          if (!isset($_POST['gender-custom']) || mb_strlen(trim($_POST['gender-custom'])) == 0) {
+            throw new Exception('No custom gender supplied');
+          }
+          $genderIdentity = mb_strimwidth(mb_convert_case(trim($_POST['gender-custom']), MB_CASE_TITLE), 0, 256);
+          break;
+      }
+    }
+
+    $genderPronouns = 'They/Them/Theirs';
+    if (isset($_POST['gender-pronoun'])) {
+      switch ($_POST['gender-pronoun']) {
+        case 'M':
+          $genderPronouns = 'He/Him/His';
+          break;
+        case 'F':
+          $genderPronouns = 'She/Her/Hers';
+          break;
+        case 'NB':
+          $genderPronouns = 'They/Them/Theirs';
+          break;
+        default:
+          if (!isset($_POST['gender-pronoun-custom']) || mb_strlen(trim($_POST['gender-pronoun-custom'])) == 0) {
+            throw new Exception('No custom pronoun supplied');
+          }
+          $genderPronouns = mb_strimwidth(mb_convert_case(trim($_POST['gender-pronoun-custom']), MB_CASE_TITLE), 0, 256);
+          break;
+      }
+    }
+
+    $update->execute([
+      $genderIdentity,
+      $genderPronouns,
+      (int) $display,
+      $id,
+    ]);
   }
 
   // ADMIN STUFF
   if ($adminMode) {
-    $update = $db->prepare("UPDATE `members` SET `ASANumber` = ?, `ASACategory` = ?, `ClubCategory` = ?, `Country` = ?, `ASAPaid` = ?, `ClubPaid` = ?");
+    $update = $db->prepare("UPDATE `members` SET `ASANumber` = ?, `ASACategory` = ?, `ClubCategory` = ?, `Country` = ?, `ASAPaid` = ?, `ClubPaid` = ? WHERE MemberID = ?");
 
     $asaNumber = mb_strtoupper(app()->tenant->getKey('ASA_CLUB_CODE')) . $id;
     if (isset($_POST['asa']) && mb_strlen(trim($_POST['asa']))) {
@@ -149,6 +204,7 @@ try {
       $country,
       (int) $asaPaid,
       (int) $clubPaid,
+      $id,
     ]);
   }
 
