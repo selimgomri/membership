@@ -231,11 +231,11 @@ include BASE_PATH . "views/swimmersMenu.php";
               Show my gender and pronouns to club staff throughout the membership system <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="Choosing to show your pronouns to club staff helps us make sure you're not mis-gendered. If you do, places we'll show your information include registers, squad lists and gala information (internally). If you choose no, we'll completely hide your chosen gender and pronouns from all club staff." data-original-title="Why show our staff your pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
             </p>
             <div class="custom-control custom-radio">
-              <input type="radio" id="show-gender-and-pronounds-yes" name="show-gender-and-pronounds" class="custom-control-input" value="1" <?php if (bool($row['GenderDisplay'])) { ?>checked<?php } ?>>
+              <input type="radio" id="show-gender-and-pronounds-yes" name="show-gender-and-pronounds" class="custom-control-input" value="1" <?php if (bool($row['GenderDisplay']) || ($row['GenderIdentity'] == '' || $row['GenderIdentity'] == null)) { ?>checked<?php } ?>>
               <label class="custom-control-label" for="show-gender-and-pronounds-yes">Yes</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" id="show-gender-and-pronounds-no" name="show-gender-and-pronounds" class="custom-control-input" value="0" <?php if (!bool($row['GenderDisplay'])) { ?>checked<?php } ?>>
+              <input type="radio" id="show-gender-and-pronounds-no" name="show-gender-and-pronounds" class="custom-control-input" value="0" <?php if (!bool($row['GenderDisplay']) && !($row['GenderIdentity'] == '' || $row['GenderIdentity'] == null)) { ?>checked<?php } ?>>
               <label class="custom-control-label" for="show-gender-and-pronounds-no">No</label>
             </div>
           </div>
