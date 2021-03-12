@@ -174,7 +174,6 @@ try {
 ?>
 <script rel="preload" src="<?= htmlspecialchars($script) ?>"></script>
 <?php if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) || !$_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) { ?>
-  <script async src="<?= htmlspecialchars(autoUrl("public/js/Cookies.js")) ?>"></script>
   <script src="<?= htmlspecialchars(autoUrl("public/js/app.js")) ?>"></script>
 <?php } ?>
 
