@@ -61,22 +61,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <meta name="og:locale" content="en_GB">
   <meta name="og:site_name" content="SCDS Membership">
   <link rel="manifest" href="<?= autoUrl("manifest.webmanifest") ?>">
-  <meta name="X-SCDS-Membership-Tracking" content="yes">
-  <script async>
-    (function(i, s, o, g, r, a, m) {
-      i['GoogleAnalyticsObject'] = r;
-      i[r] = i[r] || function() {
-        (i[r].q = i[r].q || []).push(arguments)
-      }, i[r].l = 1 * new Date();
-      a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0];
-      a.async = 1;
-      a.src = g;
-      m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-    ga('create', 'UA-78812259-4', 'auto');
-    ga('send', 'pageview');
-  </script>
+  <meta name="X-SCDS-Membership-Tracking" content="no">
   <script src="https://js.stripe.com/v3/"></script>
   <link rel="stylesheet preload" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700|Roboto+Mono|Merriweather:400,600">
   <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheet) ?>">

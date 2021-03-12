@@ -166,7 +166,6 @@ try {
 <script rel="preload" src="<?= htmlspecialchars($script) ?>"></script>
 <?php if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) || !$_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) { ?>
   <script defer src="https://static.chesterlestreetasc.co.uk/global/headers/GlobalNavigation.js"></script>
-  <script async src="<?= htmlspecialchars(autoUrl("public/js/Cookies.js")) ?>"></script>
 <?php } ?>
 <?php if (isset($use_website_menu) && $use_website_menu) { ?>
   <script defer src="https://static.chesterlestreetasc.co.uk/global/headers/MainSiteMenu.js"></script>

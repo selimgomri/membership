@@ -200,7 +200,9 @@ include BASE_PATH . 'views/header.php';
           <div class="list-group mb-3">
             <?php foreach ($members as $member) { ?>
               <a href="<?= autoUrl("members/" . $member->getId()) ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                <?= htmlspecialchars($member->getFullName()) ?>
+                <div>
+                  <div><?= htmlspecialchars($member->getFullName()) ?></div><?php if ($member->showGender()) { ?><div class=""><em><?= htmlspecialchars($member->getGenderIdentity()) ?>, <?= htmlspecialchars($member->getGenderPronouns()) ?></em></div><?php } ?>
+                </div>
                 <span class="badge badge-primary badge-pill rounded">Age <?= htmlspecialchars(($member->getAge())) ?></span>
               </a>
             <?php } ?>

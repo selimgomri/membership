@@ -281,15 +281,21 @@ include BASE_PATH . "views/header.php";
             Residential address
           </h2>
           <address>
+            <?php if (isset($addr->streetAndNumber)) { ?>
             <?= htmlspecialchars($addr->streetAndNumber) ?><br>
+            <?php } ?>
             <?php if (isset($addr->flatOrBuilding)) { ?>
               <?= htmlspecialchars($addr->flatOrBuilding) ?><br>
             <?php } ?>
+            <?php if (isset($addr->city)) { ?>
             <?= htmlspecialchars(mb_strtoupper($addr->city)) ?><br>
+            <?php } ?>
             <?php if (isset($addr->county)) { ?>
               <?= htmlspecialchars($addr->county) ?><br>
             <?php } ?>
+            <?php if (isset($addr->postCode)) { ?>
             <?= htmlspecialchars(mb_strtoupper($addr->postCode)) ?>
+            <?php } ?>
           </address>
         </div>
 

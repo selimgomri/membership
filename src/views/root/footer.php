@@ -118,7 +118,6 @@ try {
 
 ?>
 <script rel="preload" src="<?= htmlspecialchars($script) ?>"></script>
-<script async src="<?= htmlspecialchars(autoUrl("js/Cookies.js")) ?>"></script>
 
 <?php if (isset($this->js)) { ?>
   <!-- Load per page JS -->
