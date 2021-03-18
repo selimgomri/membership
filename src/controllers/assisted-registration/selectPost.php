@@ -58,6 +58,7 @@ try {
 } catch (Exception $e) {
   $db->rollBack();
   $success = false;
+  reportError($e);
 }
 
 if ($success) {
