@@ -57,9 +57,9 @@ if (userHasMandates($id)) {
 }
 
 $json = $userObj->getUserOption('MAIN_ADDRESS');
-$addr = null;
+$address = null;
 if ($json != null) {
-  $addr = json_decode($json);
+  $address = json_decode($json);
 }
 
 $number = null;
@@ -182,7 +182,7 @@ include BASE_PATH . "views/header.php";
               User registration
             </a>
           <?php } ?>
-          <?php if ($addr != null) { ?>
+          <?php if ($address != null) { ?>
             <a href="#residential-address" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
               Residential address
             </a>
@@ -275,26 +275,26 @@ include BASE_PATH . "views/header.php";
         <hr>
       <?php } ?>
 
-      <?php if ($addr != null) { ?>
+      <?php if ($address != null) { ?>
         <div class="mb-4">
           <h2 id="residential-address">
             Residential address
           </h2>
           <address>
-            <?php if (isset($addr->streetAndNumber)) { ?>
-            <?= htmlspecialchars($addr->streetAndNumber) ?><br>
+            <?php if (isset($address->streetAndNumber)) { ?>
+            <?= htmlspecialchars($address->streetAndNumber) ?><br>
             <?php } ?>
-            <?php if (isset($addr->flatOrBuilding)) { ?>
-              <?= htmlspecialchars($addr->flatOrBuilding) ?><br>
+            <?php if (isset($address->flatOrBuilding)) { ?>
+              <?= htmlspecialchars($address->flatOrBuilding) ?><br>
             <?php } ?>
-            <?php if (isset($addr->city)) { ?>
-            <?= htmlspecialchars(mb_strtoupper($addr->city)) ?><br>
+            <?php if (isset($address->city)) { ?>
+            <?= htmlspecialchars(mb_strtoupper($address->city)) ?><br>
             <?php } ?>
-            <?php if (isset($addr->county)) { ?>
-              <?= htmlspecialchars($addr->county) ?><br>
+            <?php if (isset($address->county)) { ?>
+              <?= htmlspecialchars($address->county) ?><br>
             <?php } ?>
-            <?php if (isset($addr->postCode)) { ?>
-            <?= htmlspecialchars(mb_strtoupper($addr->postCode)) ?>
+            <?php if (isset($address->postCode)) { ?>
+            <?= htmlspecialchars(mb_strtoupper($address->postCode)) ?>
             <?php } ?>
           </address>
         </div>
