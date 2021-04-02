@@ -108,7 +108,7 @@ include BASE_PATH . 'views/header.php';
         </p>
 
         <p>
-          By signing this declaration, I confirm that for any future training sessions [I / my child] will only attend in the full knowledge that [I am / my child is] free from any Covid-19 symptoms. In addition, but conversely confirm by signing this declaration that if [I do / my child does] display any symptoms [I / my child] will not attend training for a period of at least 14 days and follow government guidance to self-isolate.
+          By signing this declaration, I confirm that for any future training sessions [I / my child] will only attend in the full knowledge that [I am / my child is] free from any Covid-19 symptoms. In addition, but conversely confirm by signing this declaration that if [I do / my child does] display any symptoms [I / my child] will not attend training for a period of at least 10 days and follow government guidance to self-isolate.
         </p>
 
         <p>

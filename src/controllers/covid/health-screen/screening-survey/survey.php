@@ -194,7 +194,7 @@ include BASE_PATH . 'views/header.php';
                 <aside class="card card-body">
                   <h3><i class="fa fa-info-circle" aria-hidden="true"></i> Help</h3>
                   <p class="mb-0">
-                    Not allowed to train until they have self-isolated for 14 days.
+                    Not allowed to train until they have self-isolated for 10 days.
                   </p>
                 </aside>
               </div>
@@ -240,7 +240,7 @@ include BASE_PATH . 'views/header.php';
                 <aside class="card card-body">
                   <h3><i class="fa fa-info-circle" aria-hidden="true"></i> Help</h3>
                   <p class="mb-0">
-                    If you have an underlying medical condition that makes you more susceptible to poor outcomes with COVID-19 (including age >65) then you should consider the increased risk and may want to discuss this with you usual medical practitioner
+                    If you have an underlying medical condition that makes you more susceptible to poor outcomes with COVID-19 (including age 65+) then you should consider the increased risk and may want to discuss this with you usual medical practitioner
                   </p>
                 </aside>
               </div>
@@ -283,7 +283,7 @@ include BASE_PATH . 'views/header.php';
                 <aside class="card card-body">
                   <h3><i class="fa fa-info-circle" aria-hidden="true"></i> Help</h3>
                   <p class="mb-0">
-                    This is an individual call but awareness of risks and the appropriate precautions should be taken.
+                    This is an individual call but awareness of risks and the appropriate precautions should be taken. One dose of the vaccine significantly reduces the risk to a vulnerable person.
                   </p>
                 </aside>
               </div>
