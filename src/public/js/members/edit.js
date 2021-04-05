@@ -37,3 +37,25 @@ if (pronouns) {
     }
   });
 }
+
+function showPhotoIfRequired() {
+  let date = new Date(photoPermissions.dataset.dateEighteen);
+
+  let dob = new Date(dobField.value);
+
+  if (dob > date) {
+    photoPermissions.classList.remove('d-none');
+  } else {
+    photoPermissions.classList.add('d-none');
+  }
+}
+
+let photoPermissions = document.getElementById('photography-permissions');
+let dobField = document.getElementById('dob');
+if (photoPermissions) {
+  dobField.addEventListener('change', ev => {
+    showPhotoIfRequired();
+  });
+
+  showPhotoIfRequired();
+}
