@@ -63,6 +63,19 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_
 }
 app()->user = $currentUser;
 
+// Log urls
+if (isset(app()->user) && app()->user) {
+  try {
+    // pre(app()->request);
+    $path = substr(app()->request->path, strlen('/' . app()->tenant->getCodeId()), strlen(app()->request->path) - strlen('/' . app()->tenant->getCodeId()));
+    if (substr($path, 0, 7) !== "/public" && substr($path, 0, 8) !== "/uploads" && substr($path, 0, 6) !== "/sw.js") {
+      AuditLog::new('HTTP_REQUEST', app()->request->method . ' - ' . app()->request->curl);
+    }
+  } catch (Exception $e) {
+    // Ignore all errors
+  }
+}
+
 if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && $_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'] && !isset($_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers'])) {
   $_SESSION['TENANT-' . app()->tenant->getId()]['DisableTrackers'] = filter_var(getUserOption($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], "DisableTrackers"), FILTER_VALIDATE_BOOLEAN);
 }

@@ -14,7 +14,7 @@ if (isset($_GET['page']) && ((int) $_GET['page']) != 0) {
   $page = 1;
 }
 
-$sql = $db->prepare("SELECT COUNT(*) FROM auditLogging INNER JOIN users ON auditLogging.User = users.UserID WHERE users.Tenant = ?");
+$sql = $db->prepare("SELECT COUNT(*) FROM auditLogging INNER JOIN users ON auditLogging.User = users.UserID WHERE users.Tenant = ? AND `Event` != 'HTTP_REQUEST'");
 $sql->execute([
   $tenant->getId()
 ]);
@@ -25,7 +25,7 @@ if ($start > $numLogs) {
   halt(404);
 }
 
-$sql = $db->prepare("SELECT `Forename`, `Surname`, `UserID`, `Active`, `ID`, `Event`, `Description`, `Time` FROM `auditLogging` INNER JOIN `users` ON auditLogging.User = users.UserID WHERE users.Tenant = :tenant ORDER
+$sql = $db->prepare("SELECT `Forename`, `Surname`, `UserID`, `Active`, `ID`, `Event`, `Description`, `Time` FROM `auditLogging` INNER JOIN `users` ON auditLogging.User = users.UserID WHERE users.Tenant = :tenant AND `Event` != 'HTTP_REQUEST' ORDER
 BY `Time` DESC LIMIT :offset, :num");
 $sql->bindValue(':tenant', $tenant->getId(), PDO::PARAM_INT);
 $sql->bindValue(':offset', $start, PDO::PARAM_INT);

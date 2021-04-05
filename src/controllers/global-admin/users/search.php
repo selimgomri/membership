@@ -125,6 +125,7 @@ include BASE_PATH . "views/root/header.php";
 
           <p class="mb-0">
             <a target="_blank" href="<?= htmlspecialchars(autoUrl($tenantUrl . '/users/' . $user['UserID'])) ?>" class="btn btn-primary">View in tenant</a>
+            <a target="_self" href="<?= htmlspecialchars(autoUrl('admin/audit/requests?user=' . $user['UserID'])) ?>" class="btn btn-primary">View HTTP requests</a>
           </p>
         </li>
       <?php } while ($user = $getUsers->fetch(PDO::FETCH_ASSOC)); ?>

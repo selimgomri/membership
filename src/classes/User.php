@@ -52,14 +52,16 @@ class User extends Person
     if ($row) {
       $defaultAccessLevel = $this->getUserOption('DefaultAccessLevel');
 
-      if ($defaultAccessLevel && in_array($defaultAccessLevel, $this->permissions)) {
-        $this->accessLevel = $defaultAccessLevel;
-      } else if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && in_array($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'], $this->permissions)) {
-        $this->accessLevel = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
-      } else if (in_array('Admin', $this->permissions) && !$defaultAccessLevel) {
-        $this->accessLevel = 'Admin';
-      } else {
-        $this->accessLevel = $this->permissions[0];
+      if (isset(app()->tenant)) {
+        if ($defaultAccessLevel && in_array($defaultAccessLevel, $this->permissions)) {
+          $this->accessLevel = $defaultAccessLevel;
+        } else if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && in_array($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'], $this->permissions)) {
+          $this->accessLevel = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
+        } else if (in_array('Admin', $this->permissions) && !$defaultAccessLevel) {
+          $this->accessLevel = 'Admin';
+        } else {
+          $this->accessLevel = $this->permissions[0];
+        }
       }
 
 
