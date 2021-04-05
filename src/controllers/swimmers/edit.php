@@ -33,6 +33,19 @@ $getClubCategories->execute([
 ]);
 $clubCategory = $getClubCategories->fetch(PDO::FETCH_ASSOC);
 
+$member = new Member($id);
+$photoPermissions = $member->getPhotoPermissions();
+$photo = [];
+foreach ($photoPermissions['allowed'] as $permission) {
+  $photo[$permission->getType()] = $permission->isPermitted();
+}
+foreach ($photoPermissions['disallowed'] as $permission) {
+  $photo[$permission->getType()] = $permission->isPermitted();
+}
+
+$date18 = new DateTime('-18 years', new DateTimeZone('Europe/London'));
+$date18 = $date18->format('Y-m-d');
+
 // AuditLog::new('Members-Edited', 'Edited ' . $forename . ' ' . $surname . ' (#' . $id . ')');
 
 $pagetitle = "Edit " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " - Members";
@@ -162,15 +175,18 @@ include BASE_PATH . "views/swimmersMenu.php";
                   <?php $other = true; ?>
                   <?php if ($row['GenderIdentity'] == '' || $row['GenderIdentity'] == null) $other = false; ?>
                   <div class="custom-control custom-radio">
-                    <input type="radio" id="gender-m" name="gender" class="custom-control-input" value="M" <?php if ($row['GenderIdentity'] == 'Male') { $other = false; ?>checked<?php } ?> required>
+                    <input type="radio" id="gender-m" name="gender" class="custom-control-input" value="M" <?php if ($row['GenderIdentity'] == 'Male') {
+                                                                                                              $other = false; ?>checked<?php } ?> required>
                     <label class="custom-control-label" for="gender-m">Male</label>
                   </div>
                   <div class="custom-control custom-radio">
-                    <input type="radio" id="gender-f" name="gender" class="custom-control-input" value="F" <?php if ($row['GenderIdentity'] == 'Female') { $other = false; ?>checked<?php } ?>>
+                    <input type="radio" id="gender-f" name="gender" class="custom-control-input" value="F" <?php if ($row['GenderIdentity'] == 'Female') {
+                                                                                                              $other = false; ?>checked<?php } ?>>
                     <label class="custom-control-label" for="gender-f">Female</label>
                   </div>
                   <div class="custom-control custom-radio">
-                    <input type="radio" id="gender-nb" name="gender" class="custom-control-input" value="NB" <?php if ($row['GenderIdentity'] == 'Non binary') { $other = false; ?>checked<?php } ?>>
+                    <input type="radio" id="gender-nb" name="gender" class="custom-control-input" value="NB" <?php if ($row['GenderIdentity'] == 'Non binary') {
+                                                                                                                $other = false; ?>checked<?php } ?>>
                     <label class="custom-control-label" for="gender-nb">Non binary</label>
                   </div>
                   <div class="custom-control custom-radio">
@@ -181,7 +197,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 
                 <div class="form-group mb-0">
                   <label for="gender-custom">Other...</label>
-                  <input type="text" name="gender-custom" id="gender-custom" class="form-control" <?php if (!$other) { ?>disabled<?php } else { ?>required value="<?= htmlspecialchars($row['GenderIdentity']) ?>"<?php } ?> max="256">
+                  <input type="text" name="gender-custom" id="gender-custom" class="form-control" <?php if (!$other) { ?>disabled<?php } else { ?>required value="<?= htmlspecialchars($row['GenderIdentity']) ?>" <?php } ?> max="256">
                   <div class="invalid-feedback">
                     Please enter a custom gender identity.
                   </div>
@@ -198,15 +214,18 @@ include BASE_PATH . "views/swimmersMenu.php";
                   <?php $other = true; ?>
                   <?php if ($row['GenderPronouns'] == '' || $row['GenderPronouns'] == null) $other = false; ?>
                   <div class="custom-control custom-radio">
-                    <input type="radio" id="gender-pronoun-m" name="gender-pronoun" class="custom-control-input" value="M" <?php if ($row['GenderPronouns'] == 'He/Him/His') { $other = false; ?>checked<?php } ?> required>
+                    <input type="radio" id="gender-pronoun-m" name="gender-pronoun" class="custom-control-input" value="M" <?php if ($row['GenderPronouns'] == 'He/Him/His') {
+                                                                                                                              $other = false; ?>checked<?php } ?> required>
                     <label class="custom-control-label" for="gender-pronoun-m">He/Him/His</label>
                   </div>
                   <div class="custom-control custom-radio">
-                    <input type="radio" id="gender-pronoun-f" name="gender-pronoun" class="custom-control-input" value="F" <?php if ($row['GenderPronouns'] == 'She/Her/Hers') { $other = false; ?>checked<?php } ?>>
+                    <input type="radio" id="gender-pronoun-f" name="gender-pronoun" class="custom-control-input" value="F" <?php if ($row['GenderPronouns'] == 'She/Her/Hers') {
+                                                                                                                              $other = false; ?>checked<?php } ?>>
                     <label class="custom-control-label" for="gender-pronoun-f">She/Her/Hers</label>
                   </div>
                   <div class="custom-control custom-radio">
-                    <input type="radio" id="gender-pronoun-neutral" name="gender-pronoun" class="custom-control-input" value="NB" <?php if ($row['GenderPronouns'] == 'They/Them/Theirs') { $other = false; ?>checked<?php } ?>>
+                    <input type="radio" id="gender-pronoun-neutral" name="gender-pronoun" class="custom-control-input" value="NB" <?php if ($row['GenderPronouns'] == 'They/Them/Theirs') {
+                                                                                                                                    $other = false; ?>checked<?php } ?>>
                     <label class="custom-control-label" for="gender-pronoun-neutral">They/Them/Theirs</label>
                   </div>
                   <div class="custom-control custom-radio">
@@ -217,7 +236,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 
                 <div class="form-group mb-0">
                   <label for="gender-pronoun-custom">Other...</label>
-                  <input type="text" name="gender-pronoun-custom" id="gender-pronoun-custom" class="form-control" <?php if (!$other) { ?>disabled<?php } else { ?>required value="<?= htmlspecialchars($row['GenderPronouns']) ?>"<?php } ?> max="256">
+                  <input type="text" name="gender-pronoun-custom" id="gender-pronoun-custom" class="form-control" <?php if (!$other) { ?>disabled<?php } else { ?>required value="<?= htmlspecialchars($row['GenderPronouns']) ?>" <?php } ?> max="256">
                   <div class="invalid-feedback">
                     Please enter a custom pronoun. Where appropriate, use a similar format to those above.
                   </div>
@@ -353,6 +372,63 @@ include BASE_PATH . "views/swimmersMenu.php";
           <label for="other-notes">Other Notes</label>
           <textarea class="form-control" id="other-notes" name="other-notes" rows="3" placeholder="Tell us any other notes for coaches"><?= htmlspecialchars($row['OtherNotes']) ?></textarea>
         </div>
+
+        <?php if ($isMemberUser) { ?>
+          <div id="photography-permissions" class="" data-date-eighteen="<?= htmlspecialchars($date18) ?>">
+            <h2>Photography permissions</h2>
+
+            <p>
+              Please read the Swim England/<?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> Photography Policy before you continue to give or withold consent for photography.
+            </p>
+
+            <p>
+              <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> may wish to take photographs  <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>. Photographs will only be taken and published in accordance with Swim England policy which requires the club to obtain the consent of the parent or guardian to take and use photographs under the following circumstances.
+            </p>
+
+            <p>
+              It is entirely up to you whether or not you choose to allow us to take photographs and/or video of <?= htmlspecialchars($row['MForename']) ?>. You can change your choices at any time by heading to this page.
+            </p>
+
+            <p>
+              If you do not give your consent, please also inform <?= htmlspecialchars($row['MForename']) ?> so that they know, if possible, not to get into any photos.
+            </p>
+
+            <div class="form-group">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" value="1" class="custom-control-input" name="webPhoto" id="webPhoto" <?php if (isset($photo['Website']) && $photo['Website']) { ?>checked<?php } ?>>
+                <label class="custom-control-label" for="webPhoto">
+                  Take photographs to use on the clubs website
+                </label>
+              </div>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" value="1" class="custom-control-input" name="socPhoto" id="socPhoto" <?php if (isset($photo['Social']) && $photo['Social']) { ?>checked<?php } ?>>
+                <label class="custom-control-label" for="socPhoto">
+                  Take photographs to use on social media sites
+                </label>
+              </div>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" value="1" class="custom-control-input" name="noticePhoto" id="noticePhoto" <?php if (isset($photo['Noticeboard']) && $photo['Noticeboard']) { ?>checked<?php } ?>>
+                <label class="custom-control-label" for="noticePhoto">
+                  Take photographs to use on club noticeboards
+                </label>
+              </div>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" value="1" class="custom-control-input" name="trainFilm" id="trainFilm" <?php if (isset($photo['FilmTraining']) && $photo['FilmTraining']) { ?>checked<?php } ?>>
+                <label class="custom-control-label" for="trainFilm">
+                  Filming for training purposes only
+                </label>
+              </div>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" value="1" class="custom-control-input" name="proPhoto" id="proPhoto" <?php if (isset($photo['ProPhoto']) && $photo['ProPhoto']) { ?>checked<?php } ?>>
+                <label class="custom-control-label" for="proPhoto">
+                  Employ a professional photographer (approved by the club) who will take
+                  photographs in competitions and/or club events.
+                </label>
+              </div>
+              <ul></ul>
+            </div>
+          </div>
+        <?php } ?>
 
         <p>
           <button type="submit" class="btn btn-primary">
