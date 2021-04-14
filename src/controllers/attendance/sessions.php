@@ -195,7 +195,7 @@ include "attendanceMenu.php";
             <div class="col" id="show-until-container">
               <div class="form-group">
                 <label for="session-end-date">Show Until</label>
-                <input type="date" aria-labelledby="session-end-date-help" class="form-control add-session-form-reset-input" name="session-end-date" id="session-end-date" placeholder="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>" value="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>" data-default-value="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>" min="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>">
+                <input type="date" aria-labelledby="session-end-date-help" class="form-control add-session-form-reset-input" name="session-end-date" id="session-end-date" placeholder="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>" value="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>" data-default-value="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>" min="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>">
                 <div class="invalid-feedback">
                   You must provide a valid end date for this session
                 </div>
@@ -219,7 +219,7 @@ include "attendanceMenu.php";
             <div class="col">
               <div class="form-group">
                 <label for="session-end-time">End Time</label>
-                <input type="time" class="form-control add-session-form-reset-input" name="session-end-time" id="session-end-time" placeholder="0" value="18:30" required data-default-value="18:00">
+                <input type="time" class="form-control add-session-form-reset-input" name="session-end-time" id="session-end-time" placeholder="0" value="18:30" required data-default-value="18:30">
                 <small id="session-end-time-help" class="form-text text-muted">
                   Make sure to use 24 Hour Time
                 </small>
@@ -261,7 +261,7 @@ include "attendanceMenu.php";
               <label class="custom-control-label" for="main-sequence-all">This session is for all squad members</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" id="main-sequences-some" name="main-sequence" class="custom-control-input" value="some">
+              <input type="radio" id="main-sequence-some" name="main-sequence" class="custom-control-input" value="some">
               <label class="custom-control-label" for="main-sequence-some">This session is only for some squad members</label>
             </div>
           </div>

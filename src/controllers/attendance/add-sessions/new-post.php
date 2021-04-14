@@ -15,6 +15,8 @@ $responseData = [
   'redirect' => null,
 ];
 
+$recurring = false;
+
 header('content-type: application/json');
 
 $db->beginTransaction();
@@ -54,6 +56,7 @@ try {
     if (isset($_POST['session-end-date'])) {
       try {
         $endDate = new DateTime($_POST['session-end-date'], new DateTimeZone('Europe/London'));
+        $recurring = true;
       } catch (Exception $e) {
         throw new Exception('End date invalid');
       }
@@ -63,17 +66,11 @@ try {
   }
 
   if (isset($_POST['session-start-time'])) {
-    try {
-      $startTime = DateTime::createFromFormat('H:i', $_POST['session-start-time'], new DateTimeZOne('Europe/London'));
-    } catch (Exception $e) {
-    }
+    $startTime = DateTime::createFromFormat('H:i', $_POST['session-start-time'], new DateTimeZone('Europe/London'));
   }
 
   if (isset($_POST['session-end-time'])) {
-    try {
-      $endTime = DateTime::createFromFormat('H:i', $_POST['session-end-time'], new DateTimeZOne('Europe/London'));
-    } catch (Exception $e) {
-    }
+    $endTime = DateTime::createFromFormat('H:i', $_POST['session-end-time'], new DateTimeZone('Europe/London'));
   }
 
   $error = false;
@@ -137,10 +134,14 @@ try {
       $addSquadRecord->execute([
         $squad,
         $sessionId,
-        (int) true,
+        (int) (isset($_POST['main-sequence']) && bool($_POST['main-sequence'])),
       ]);
       $hasSquad = true;
     }
+  }
+
+  if ($recurring && !$hasSquad) {
+    throw new Exception('Alone and repeating session!');
   }
 
   if ((isset($_POST['recurring']) && $_POST['recurring'] == 'one-off') && (!$hasSquad || (isset($_POST['require-booking']) && bool($_POST['require-booking'])))) {
@@ -155,6 +156,7 @@ try {
 } catch (Exception $e) {
   $db->rollBack();
   $responseData['errors'] = $e->getMessage();
+  reportError($e);
 }
 
 echo json_encode($responseData);
