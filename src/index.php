@@ -354,6 +354,7 @@ $route->use(function () {
   header("X-Frame-Options: DENY");
   // Prevent MIME sniffing
   header("X-Content-Type-Options: nosniff");
+  header('Permissions-Policy: interest-cohort=()');
 });
 
 // $route->route(['GET'], '/*', function () {

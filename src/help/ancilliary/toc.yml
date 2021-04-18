@@ -6,3 +6,5 @@
       items: 
         - name: Download a copy of your data
           href: gdpr/data-dump.md
+    - name: Position on Google FLoC
+      href: position-on-floc.md

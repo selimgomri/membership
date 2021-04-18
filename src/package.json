@@ -8,7 +8,7 @@
     "chart.js": "^2.9.4",
     "file-loader": "^6.2.0",
     "highlight.js": "^10.5.0",
-    "jquery": "^3.5.1",
+    "jquery": "^3.6.0",
     "markdown-it": "^11.0.1",
     "markdown-it-loader": "^0.7.0",
     "mini-css-extract-plugin": "^0.9.0",
