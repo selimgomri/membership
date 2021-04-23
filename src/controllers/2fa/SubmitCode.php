@@ -73,7 +73,9 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) && bool(getUs
 
 unset($_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']);
 
-if (isset($_POST['target']) && $_POST['target']) {
+if (isset($_POST['setup-time-based-codes']) && bool($_POST['setup-time-based-codes'])) {
+  header("Location: " . autoUrl('my-account/googleauthenticator/setup', false));
+} else if (isset($_POST['target']) && $_POST['target']) {
   header("Location: " . autoUrl(ltrim($_POST['target'], '/'), false));
 } else {
   header("Location: " . autoUrl(''));

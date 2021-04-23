@@ -73,6 +73,19 @@ include BASE_PATH . "views/header.php";
           </div>
         </div>
         <input type="hidden" name="target" value="<?= htmlspecialchars($target) ?>">
+
+        <?php if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE']) || $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE'] !== true) { ?>
+          <div class="form-group">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" name="setup-time-based-codes" id="setup-time-based-codes" checked aria-describedby="setup-time-based-codes-help">
+              <label class="custom-control-label" for="setup-time-based-codes">Set up an authenticator app</label>
+              <small id="setup-time-based-codes-help" class="form-text text-muted">
+                Set up an authenticator app, such as Google Authenticator, so that you can use time-based one-time passwords and don't need to wait for an email from us. You can always still get codes by email if you don't have your phone with you.
+              </small>
+            </div>
+          </div>
+        <?php } ?>
+
         <?= SCDS\CSRF::write() ?>
         <input type="hidden" name="SessionSecurity" value="<?= session_id() ?>">
         <p class="mb-5"><input type="submit" name="verify" id="verify" value="Verify" class="btn btn-lg btn-primary"></p>
