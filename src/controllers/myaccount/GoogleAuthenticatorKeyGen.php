@@ -57,10 +57,13 @@ include BASE_PATH . 'views/header.php';
         <strong>The code you entered was not valid</strong>
       </div>
       <?php } ?>
-      <form method="post">
+      <form method="post" class="needs-validation" novalidate>
         <div class="form-group">
           <label for="verify">Verify Code</label>
-          <input type="text" class="form-control" id="verify" name="verify" aria-describedby="verifyHelp" placeholder="123456" pattern="[0-9]*" inputmode="numeric">
+          <input type="text" class="form-control" id="verify" name="verify" aria-describedby="verifyHelp" placeholder="654321" pattern="[0-9]*" inputmode="numeric" min="0" max="999999" step="1" required>
+          <div class="invalid-feedback">
+            You must enter a valid code
+          </div>
           <small id="verifyHelp" class="form-text text-muted">This code is shown in your app.</small>
         </div>
       <p>
@@ -74,4 +77,5 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new \SCDS\Footer();
+$footer->addJs("public/js/NeedsValidation.js");
 $footer->render();
