@@ -27,22 +27,22 @@ include BASE_PATH . 'views/header.php';
     <div class="col-lg-8">
       <h1>2FA Key Generation</h1>
       <?php if ($reset) { ?>
-      <p>
-        Hi there. We're going to reset the codes you use for Google
-        Authenticator. As soon as you confirmed setup below, any devices you've
-        already set up with Google Authenticator (or a similar app) will stop
-        working. This is essential to protect your security.
-      </p>
+        <p>
+          Hi there. We're going to reset the codes you use for Google
+          Authenticator. As soon as you confirmed setup below, any devices you've
+          already set up with Google Authenticator (or a similar app) will stop
+          working. This is essential to protect your security.
+        </p>
       <?php } ?>
       <p>
-        Your Secret Key is <span class="mono"><?=$_SESSION['TENANT-' . app()->tenant->getId()]['G2FAKey']?></span>.
+        Your Secret Key is <span class="mono"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['G2FAKey'] ?></span>.
       </p>
 
       <h2>Scan Code</h2>
       <?php
       $qr_url = urlencode($google2fa->getQRCodeUrl(app()->tenant->getKey('CLUB_NAME'), $_SESSION['TENANT-' . app()->tenant->getId()]['EmailAddress'], $_SESSION['TENANT-' . app()->tenant->getId()]['G2FAKey']));
       ?>
-      <img src="<?=htmlspecialchars(autoUrl("services/qr-generator?size=200&margin=0&text=" . $qr_url))?>" srcset="<?=htmlspecialchars(autoUrl("services/qr-generator?size=400&margin=0&text=" . $qr_url))?> 2x, <?=htmlspecialchars(autoUrl("services/qr-generator?size=600&margin=0&text=" . $qr_url))?> 3x" class="img-fluid mb-3">
+      <img src="<?= htmlspecialchars(autoUrl("services/qr-generator?size=200&margin=0&text=" . $qr_url)) ?>" srcset="<?= htmlspecialchars(autoUrl("services/qr-generator?size=400&margin=0&text=" . $qr_url)) ?> 2x, <?= htmlspecialchars(autoUrl("services/qr-generator?size=600&margin=0&text=" . $qr_url)) ?> 3x" class="img-fluid mb-3">
       <p>
         Scan this QR Code with your Authenticator App.
       </p>
@@ -53,10 +53,11 @@ include BASE_PATH . 'views/header.php';
         verifies Google Authenticator has been set up correctly.
       </p>
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['G2FA_VerifyError']) && $_SESSION['TENANT-' . app()->tenant->getId()]['G2FA_VerifyError']) { ?>
-      <div class="alert alert-danger">
-        <strong>The code you entered was not valid</strong>
-      </div>
-      <?php } ?>
+        <div class="alert alert-danger">
+          <strong>The code you entered was not valid</strong>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['G2FA_VerifyError']);
+      } ?>
       <form method="post" class="needs-validation" novalidate>
         <div class="form-group">
           <label for="verify">Verify Code</label>
@@ -66,9 +67,9 @@ include BASE_PATH . 'views/header.php';
           </div>
           <small id="verifyHelp" class="form-text text-muted">This code is shown in your app.</small>
         </div>
-      <p>
-        <button class="btn btn-primary" type="submit">Verify</button>
-      </p>
+        <p>
+          <button class="btn btn-primary" type="submit">Verify</button>
+        </p>
       </form>
     </div>
   </div>
