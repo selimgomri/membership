@@ -70,7 +70,7 @@ include BASE_PATH . "views/header.php";
         </div>
         <div class="form-group">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" name="RememberMe" id="RememberMe" checked aria-describedby="RememberMeHelp">
+            <input type="checkbox" class="custom-control-input" name="RememberMe" id="RememberMe" checked aria-describedby="RememberMeHelp" value="1">
             <label class="custom-control-label" for="RememberMe">Keep me logged in</label>
             <small id="RememberMeHelp" class="form-text text-muted">
               Untick this box if you are using a public or shared computer

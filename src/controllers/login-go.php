@@ -83,8 +83,8 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
           }
         }
         $_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserID'] = $userID;
-        if ($_POST['RememberMe']) {
-          $_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe'] = 1;
+        if (isset($_POST['RememberMe']) && bool($_POST['RememberMe'])) {
+          $_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe'] = true;
         }
         $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR'] = true;
         // reportError([

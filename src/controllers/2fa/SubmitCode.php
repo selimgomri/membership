@@ -43,7 +43,7 @@ if (($_POST['auth'] == $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR
   try {
     $login = new \CLSASC\Membership\Login($db);
     $login->setUser($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserID']);
-    if ($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe']) {
+    if (isset($_POST['RememberMe']) && bool($_POST['RememberMe'])) {
       $login->stayLoggedIn();
     }
     $currentUser = app()->user;
@@ -74,7 +74,7 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) && bool(getUs
 unset($_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']);
 
 if (isset($_POST['setup-time-based-codes']) && bool($_POST['setup-time-based-codes'])) {
-  header("Location: " . autoUrl('my-account/googleauthenticator/setup', false));
+  header("Location: " . autoUrl('my-account/googleauthenticator/setup'));
 } else if (isset($_POST['target']) && $_POST['target']) {
   header("Location: " . autoUrl(ltrim($_POST['target'], '/'), false));
 } else {
