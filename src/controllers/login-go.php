@@ -42,7 +42,6 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
   $row = $getUser->fetch(PDO::FETCH_ASSOC);
 
   if ($row != null) {
-    //$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     $hash = $row['Password'];
     $email = $row['EmailAddress'];
     $forename = $row['Forename'];
@@ -50,30 +49,30 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
     $userID = $row['UserID'];
 
     if (password_verify($_POST['password'], $hash)) {
-      $do_random_2FA = random_int(0, 99) < 5 || bool(getUserOption($userID, "IsSpotCheck2FA")) || $row['WrongPassCount'] > 2;
+      // $do_random_2FA = random_int(0, 99) < 5 || bool(getUserOption($userID, "IsSpotCheck2FA")) || $row['WrongPassCount'] > 2;
 
-      $isJustParent = $db->prepare("SELECT COUNT(*) FROM `permissions` WHERE `User` = ? AND `Permission` != 'Parent';");
-      $isJustParent->execute([
-        $userID
-      ]);
-      $isNotJustParent = $isJustParent->fetchColumn() > 0;
+      // $isJustParent = $db->prepare("SELECT COUNT(*) FROM `permissions` WHERE `User` = ? AND `Permission` != 'Parent';");
+      // $isJustParent->execute([
+      //   $userID
+      // ]);
+      // $isNotJustParent = $isJustParent->fetchColumn() > 0;
 
-      if ($isNotJustParent || bool(getUserOption($userID, "Is2FA")) || $do_random_2FA) {
+      if (true) {
         // Do 2FA
         if (bool(getUserOption($userID, "hasGoogleAuth2FA"))) {
           $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE'] = true;
         } else {
           $code = random_int(100000, 999999);
 
-          if ($do_random_2FA && !($isNotJustParent || bool(getUserOption($userID, "Is2FA")))) {
-            setUserOption($userID, "IsSpotCheck2FA", true);
-          }
+          // if ($do_random_2FA && !($isNotJustParent || bool(getUserOption($userID, "Is2FA")))) {
+          //   setUserOption($userID, "IsSpotCheck2FA", true);
+          // }
 
           $message = '
           <p>Hello. Confirm your login by entering the following code in your web browser.</p>
-          <p><strong>' . $code . '</strong></p>
+          <p><strong>' . htmlspecialchars($code) . '</strong></p>
           <p>If you did not just try to log in, you can ignore this email. You may want to reset your password.</p>
-          <p>Kind Regards, <br>The ' . app()->tenant->getKey('CLUB_NAME') . ' Team</p>';
+          <p>Kind Regards, <br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
 
           $date = new DateTime('now', new DateTimeZone('Europe/London'));
 
@@ -84,8 +83,8 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
           }
         }
         $_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserID'] = $userID;
-        if ($_POST['RememberMe']) {
-          $_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe'] = 1;
+        if (isset($_POST['RememberMe']) && bool($_POST['RememberMe'])) {
+          $_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe'] = true;
         }
         $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR'] = true;
         // reportError([
