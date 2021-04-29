@@ -127,7 +127,7 @@ $logos = $tenant->getKey('LOGO_DIR')
             <!-- <?php if ($logos) { ?>
             <div class="col-auto d-none d-md-flex">
               <div style="height: 100px; padding: 0 12.5px 0 12.5px; max-width: 100%;" class="bg-white d-flex">
-                <img src="<?= htmlspecialchars(autoUrl($logos . 'logo-75.png')) ?>" srcset="<?= htmlspecialchars(autoUrl($logos . 'logo-75@2x.png')) ?> 2x, <?= htmlspecialchars(autoUrl($logos . 'logo-75@3x.png')) ?> 3x" alt="<?= htmlspecialchars($tenant->getName()) ?>" class="img-fluid my-auto">
+                <img src="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75.png')) ?>" srcset="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75@2x.png')) ?> 2x, <?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75@3x.png')) ?> 3x" alt="<?= htmlspecialchars($tenant->getName()) ?>" class="img-fluid my-auto">
               </div>
             </div>
             <?php } ?> -->

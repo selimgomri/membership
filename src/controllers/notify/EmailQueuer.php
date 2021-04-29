@@ -5,6 +5,28 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData'] = $_POST;
 $db = app()->db;
 $tenant = app()->tenant;
 
+$client = new Aws\S3\S3Client([
+  'version'     => 'latest',
+  'region'      => getenv('AWS_S3_REGION'),
+  'visibility' => 'private',
+]);
+$adapter = new League\Flysystem\AwsS3V3\AwsS3V3Adapter(
+  // S3Client
+  $client,
+  // Bucket name
+  getenv('AWS_S3_BUCKET'),
+  // Optional path prefix
+  '',
+  // Visibility converter (League\Flysystem\AwsS3V3\VisibilityConverter)
+  new League\Flysystem\AwsS3V3\PortableVisibilityConverter(
+    // Optional default for directories
+    League\Flysystem\Visibility::PRIVATE // or ::PRIVATE
+  )
+);
+
+// The FilesystemOperator
+$filesystem = new League\Flysystem\Filesystem($adapter);
+
 $db->beginTransaction();
 
 try {
@@ -67,23 +89,13 @@ try {
           // Work out filename for upload
           $date = new DateTime('now', new DateTimeZone('Europe/London'));
           $urlPath = 'notify/attachments/' . $date->format("Y/m/d") . '/';
-          $path = $rootFilePath . $urlPath;
-          $hash = preg_replace('@[^0-9a-z\.]+@i', '-', basename($_FILES['file-upload']['name'][$i]));
-          if (mb_strlen($hash) == 0) {
-            $hash = hash('sha256', $_FILES['file-upload']['name'][$i] . rand(0, 1000000));
-          }
-          $filenamePath = $path . $hash;
-          $url = $urlPath . $hash;
-          $count = 0;
-          $countText = "";
-          while (file_exists($path . $countText . $hash)) {
-            $count++;
-            $countText = ((string) $count) . '-';
-          }
-          if ($count > 0) {
-            $filenamePath = $path . $countText . $hash;
-            $url = $urlPath . $countText . $hash;
-          }
+          $s3Path = $tenant->getId() . '/' . $urlPath;
+
+          $uuid = Ramsey\Uuid\Uuid::uuid4()->toString();
+          $filename = $uuid . '-' . preg_replace('@[^0-9a-z\.]+@i', '-', basename($_FILES['file-upload']['name'][$i]));
+
+          $filenamePath = $s3Path . $filename;
+          $url = $urlPath . $filename;
         }
 
         $collectiveSize += $_FILES['file-upload']['size'][$i];
@@ -113,37 +125,44 @@ try {
     throw new Exception();
   }
 
-  if (getenv('FILE_STORE_PATH')) {
+  if (getenv('AWS_S3_BUCKET')) {
     for ($i = 0; $i < sizeof($attachments); $i++) {
-      if (!is_writeable($attachments[$i]['store_name'])) {
-        // Try making folders
-        // $dir = explode('/', $attachments[$i]['store_name']);
-        // $path = "";
-        // $tried = [];
-        // for ($y = 0; $y < sizeof($dir) - 1; $y++) {
-        //   $path .= $dir[$y];
-        //   if (!is_dir($path)) {
-        //     mkdir($path);
-        //     $tried[] = $path;
-        //   }
-        //   $path .= '/';
-        // }
-        if (!is_dir($attachments[$i]['directory'])) {
-          mkdir($attachments[$i]['directory'], 0755, true);
-        }
-        if (!is_writeable($path)) {
-          // reportError([$tried, $path, $attachments[$i]['store_name']]);
-        } else {
-          // reportError([$tried, $path, $attachments[$i]['store_name']]);
-        }
-      } else {
-        // reportError("Filepath is writeable");
-      }
-      if (move_uploaded_file($attachments[$i]['tmp_name'], $attachments[$i]['store_name'])) {
+
+      try {
+        $filesystem->write($attachments[$i]['store_name'], file_get_contents($attachments[$i]['tmp_name']), ['visibility' => 'private']);
         $attachments[$i]['uploaded'] = true;
-      } else {
-        // reportError([$attachments[$i]['tmp_name'], $attachments[$i]['store_name'], $_FILES['file-upload']]);
+      } catch (League\Flysystem\FilesystemException | League\Flysystem\UnableToWriteFile $exception) {
       }
+
+      // if (!is_writeable($attachments[$i]['store_name'])) {
+      // Try making folders
+      // $dir = explode('/', $attachments[$i]['store_name']);
+      // $path = "";
+      // $tried = [];
+      // for ($y = 0; $y < sizeof($dir) - 1; $y++) {
+      //   $path .= $dir[$y];
+      //   if (!is_dir($path)) {
+      //     mkdir($path);
+      //     $tried[] = $path;
+      //   }
+      //   $path .= '/';
+      // }
+      //   if (!is_dir($attachments[$i]['directory'])) {
+      //     mkdir($attachments[$i]['directory'], 0755, true);
+      //   }
+      //   if (!is_writeable($path)) {
+      //     // reportError([$tried, $path, $attachments[$i]['store_name']]);
+      //   } else {
+      //     // reportError([$tried, $path, $attachments[$i]['store_name']]);
+      //   }
+      // } else {
+      //   // reportError("Filepath is writeable");
+      // }
+      // if (move_uploaded_file($attachments[$i]['tmp_name'], $attachments[$i]['store_name'])) {
+      //   $attachments[$i]['uploaded'] = true;
+      // } else {
+      //   // reportError([$attachments[$i]['tmp_name'], $attachments[$i]['store_name'], $_FILES['file-upload']]);
+      // }
     }
   }
 

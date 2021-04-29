@@ -4,7 +4,8 @@
 $addr = json_decode(app()->tenant->getKey('CLUB_ADDRESS'));
 $logoPath = null;
 if ($logos = app()->tenant->getKey('LOGO_DIR')) {
-  $logoPath = app()->tenant->getFilePath() . 'public/' . mb_substr($logos, 8) . 'logo-1024.png';
+  $logoPath = getUploadedAssetUrl($logos . 'logo-1024.png');
+  // app()->tenant->getFilePath() . 'public/' . mb_substr($logos, 8) . 'logo-1024.png';
 }
 
 ?>

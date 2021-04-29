@@ -353,6 +353,7 @@ $options = new Options([
   'fontDir' => getenv('FILE_STORE_PATH') . 'fonts/',
   'fontCache' => getenv('FILE_STORE_PATH') . 'fonts/',
   'isFontSubsettingEnabled' => true,
+  'isRemoteEnabled' => true,
   'defaultFont' => 'Open Sans',
   'defaultMediaType' => 'all',
   'isPhpEnabled' => true,

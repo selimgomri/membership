@@ -73,17 +73,17 @@ Chester-le-Street ASC is a non profit unincorporated association.
 
   <!-- Generic icon first -->
   <?php if ($logos = $tenant->getKey('LOGO_DIR')) { ?>
-    <link rel="icon" sizes="196x196" href="<?= htmlspecialchars(autoUrl($logos . 'icon-196x196.png')) ?>">
-    <link rel="icon" sizes="192x192" href="<?= htmlspecialchars(autoUrl($logos . 'icon-192x192.png')) ?>">
-    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<?= autoUrl($logos . 'icon-180x180.png') ?>">
-    <link rel="apple-touch-icon-precomposed" sizes="167x167" href="<?= autoUrl($logos . 'icon-167x167.png') ?>">
-    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="<?= autoUrl($logos . 'icon-152x152.png') ?>">
-    <link rel="apple-touch-icon-precomposed" sizes="128x128" href="<?= autoUrl($logos . 'icon-128x128.png') ?>">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?= autoUrl($logos . 'icon-114x114.png') ?>">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?= autoUrl($logos . 'icon-72x72.png') ?>">
-    <link rel="apple-touch-icon-precomposed" sizes="32x32" href="<?= autoUrl($logos . 'icon-32x32.png') ?>">
-    <link rel="apple-touch-icon-precomposed" sizes="196x196" href="<?= autoUrl($logos . 'icon-196x196.png') ?>">
-    <meta property="og:image" content="<?= autoUrl($logos . 'logo-512.png') ?>" />
+    <link rel="icon" sizes="196x196" href="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'icon-196x196.png')) ?>">
+    <link rel="icon" sizes="192x192" href="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'icon-192x192.png')) ?>">
+    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<?= getUploadedAssetUrl($logos . 'icon-180x180.png') ?>">
+    <link rel="apple-touch-icon-precomposed" sizes="167x167" href="<?= getUploadedAssetUrl($logos . 'icon-167x167.png') ?>">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="<?= getUploadedAssetUrl($logos . 'icon-152x152.png') ?>">
+    <link rel="apple-touch-icon-precomposed" sizes="128x128" href="<?= getUploadedAssetUrl($logos . 'icon-128x128.png') ?>">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?= getUploadedAssetUrl($logos . 'icon-114x114.png') ?>">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?= getUploadedAssetUrl($logos . 'icon-72x72.png') ?>">
+    <link rel="apple-touch-icon-precomposed" sizes="32x32" href="<?= getUploadedAssetUrl($logos . 'icon-32x32.png') ?>">
+    <link rel="apple-touch-icon-precomposed" sizes="196x196" href="<?= getUploadedAssetUrl($logos . 'icon-196x196.png') ?>">
+    <meta property="og:image" content="<?= getUploadedAssetUrl($logos . 'logo-512.png') ?>" />
   <?php } else { ?>
     <!-- For iPhone 6 Plus with @3× display: -->
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<?= autoUrl("public/img/corporate/icons/apple-touch-icon-180x180.png") ?>">

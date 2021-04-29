@@ -203,7 +203,7 @@ if (isset($customBackground) && $customBackground) {
               <h1 class="mb-0">
                 <a href="<?= htmlspecialchars(autoUrl("")) ?>" class="<?= $clubLogoColour ?> text-decoration-none">
                   <?php if ($tenant->getKey('LOGO_DIR') && $tenant->getKey('SHOW_LOGO')) { ?>
-                    <img src="<?= htmlspecialchars(autoUrl($logos . 'logo-75.png')) ?>" srcset="<?= htmlspecialchars(autoUrl($logos . 'logo-75@2x.png')) ?> 2x, <?= htmlspecialchars(autoUrl($logos . 'logo-75@3x.png')) ?> 3x" alt="<?= htmlspecialchars($tenant->getName()) ?>" class="img-fluid" style="height: 75px">
+                    <img src="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75.png')) ?>" srcset="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75@2x.png')) ?> 2x, <?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75@3x.png')) ?> 3x" alt="<?= htmlspecialchars($tenant->getName()) ?>" class="img-fluid" style="height: 75px">
                   <?php } else { ?>
                     <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>
                   <?php } ?>
@@ -260,7 +260,7 @@ if (isset($customBackground) && $customBackground) {
     $addr = json_decode(app()->tenant->getKey('CLUB_ADDRESS'));
     $logoPath = null;
     if ($logos = app()->tenant->getKey('LOGO_DIR')) {
-      $logoPath = 'uploads/' . mb_substr($logos, 8) . 'logo-1024.png';
+      $logoPath = ($logos . 'logo-1024.png');
     }
     ?>
 
@@ -268,7 +268,7 @@ if (isset($customBackground) && $customBackground) {
       <div class="row mb-3">
         <div class="col club-logos">
           <?php if ($logoPath) { ?>
-            <img src="<?= htmlspecialchars(autoUrl($logoPath)) ?>" class="">
+            <img src="<?= htmlspecialchars(getUploadedAssetUrl($logoPath)) ?>" class="">
           <?php } else { ?>
             <h1 class="primary"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></h1>
           <?php } ?>
