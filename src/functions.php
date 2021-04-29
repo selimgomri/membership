@@ -1803,6 +1803,15 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false)
   }
 }
 
+function isOnS3($asset) {
+  if (substr($asset, 0, 5) === "X-S3:") return true;
+  return false;
+}
+
+function getS3Key($asset) {
+  return ltrim(substr($asset, 5), '/');
+}
+
 function getUploadedAssetUrl($asset, $public = false)
 {
   // return $asset;
