@@ -125,7 +125,7 @@ try {
     throw new Exception();
   }
 
-  if (getenv('FILE_STORE_PATH')) {
+  if (getenv('AWS_S3_BUCKET')) {
     for ($i = 0; $i < sizeof($attachments); $i++) {
 
       try {
