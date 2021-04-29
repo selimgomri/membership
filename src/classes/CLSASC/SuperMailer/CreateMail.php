@@ -126,9 +126,9 @@ class CreateMail
         autoUrl("public/img/notify/NotifyLogo@2x.png") . " 2x, " .
         autoUrl("public/img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
     } else if (isset(app()->tenant) && $logos = app()->tenant->getKey('LOGO_DIR')) {
-      $head .= "<img src=\"" . autoUrl($logos . 'logo-150.png') . "\" srcset=\"" .
-        autoUrl($logos . 'logo-150@2x.png') . " 2x, " .
-        autoUrl($logos . 'logo-150@3x.png') . " 3x\" style=\"max-width:100%;max-height:150px;\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
+      $head .= "<img src=\"" . getUploadedAssetUrl($logos . 'logo-150.png') . "\" srcset=\"" .
+      getUploadedAssetUrl($logos . 'logo-150@2x.png') . " 2x, " .
+      getUploadedAssetUrl($logos . 'logo-150@3x.png') . " 3x\" style=\"max-width:100%;max-height:150px;\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
     } else if (isset(app()->tenant)) {
       $head .= htmlspecialchars(app()->tenant->getKey('CLUB_NAME'));
     } else {
