@@ -5,6 +5,28 @@
 
 // pre(file_get_contents($_FILES['file-upload']['tmp_name']));
 
+$client = new Aws\S3\S3Client([
+  'version'     => 'latest',
+  'region'      => getenv('AWS_S3_REGION'),
+  'visibility' => 'public',
+]);
+$adapter = new League\Flysystem\AwsS3V3\AwsS3V3Adapter(
+  // S3Client
+  $client,
+  // Bucket name
+  getenv('AWS_S3_BUCKET'),
+  // Optional path prefix
+  '',
+  // Visibility converter (League\Flysystem\AwsS3V3\VisibilityConverter)
+  new League\Flysystem\AwsS3V3\PortableVisibilityConverter(
+      // Optional default for directories
+      League\Flysystem\Visibility::PUBLIC // or ::PRIVATE
+  )
+);
+
+// The FilesystemOperator
+$filesystem = new League\Flysystem\Filesystem($adapter);
+
 use Ramsey\Uuid\Uuid;
 use Intervention\Image\ImageManagerStatic as Image;
 
@@ -15,6 +37,7 @@ try {
   $url = 'logos/' . $uuid->toString() . '/';
   $relative = 'public/' . $url;
   $filePath = $tenant->getFilePath() . $relative;
+  $s3FilePath = $tenant->getS3FilePath() . $relative;
 
   // Image::configure(array('driver' => 'imagick'));
 
@@ -44,7 +67,8 @@ try {
       if ($i > 1) {
         $srcset = '@' . $i . 'x';
       }
-      $image->save($filePath . 'logo-' . $size . $srcset . '.png', 80, 'png');
+      // $image->save($filePath . 'logo-' . $size . $srcset . '.png', 80, 'png');
+      $filesystem->write($s3FilePath . 'logo-' . $size . $srcset . '.png', $image->encode('png', 40), ['visibility' => 'public']);
     }
   }
 
@@ -75,14 +99,16 @@ try {
       $constraint->aspectRatio();
       $constraint->upsize();
     });
-    $image->save($filePath . 'icon-' . $size . 'x' . $size . '.png', 80, 'png');
+    // $image->save($filePath . 'icon-' . $size . 'x' . $size . '.png', 80, 'png');
+    $filesystem->write($s3FilePath . 'icon-' . $size . 'x' . $size . '.png', $image->encode('png', 40), ['visibility' => 'public']);
   }
 
-  $tenant->setKey('LOGO_DIR', 'uploads/' . $url);
+  $tenant->setKey('LOGO_DIR', 'X-S3:' . $s3FilePath);
 
   $_SESSION['TENANT-' . app()->tenant->getId()]['LOGO-SAVED'] = true;
 } catch (Exception $e) {
   $_SESSION['TENANT-' . app()->tenant->getId()]['LOGO-ERROR'] = true;
+  reportError($e);
 }
 
 header("location: " . autoUrl('settings/logo'));

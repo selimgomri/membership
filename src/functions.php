@@ -1341,7 +1341,8 @@ function getWalletName($name)
   }
 }
 
-function stripe_handleBalanceTransactionForFees($balanceTransaction) {
+function stripe_handleBalanceTransactionForFees($balanceTransaction)
+{
   global $db;
   $update = $db->prepare("UPDATE stripePayments SET `Fees` = ? WHERE `Intent` = ?");
 
@@ -1800,6 +1801,24 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false)
       return false;
     }
   }
+}
+
+function getUploadedAssetUrl($asset, $public = false)
+{
+  // return $asset;
+
+  if (substr($asset, 0, 5) === "X-S3:") {
+    $asset = ltrim(substr($asset, 5), '/');
+    if (getenv('AWS_CLOUDFRONT_ROOT')) {
+      return getenv('AWS_CLOUDFRONT_ROOT') . $asset;
+    } else if (getenv('AWS_S3_REGION') && getenv('AWS_S3_BUCKET')) {
+      return 'https://' . getenv('AWS_S3_BUCKET') . '.s3.' . getenv('AWS_S3_REGION') . '.amazonaws.com/' . $asset;
+    }
+  }
+
+  if ($public) autoUrl('public/' . $asset);
+
+  return autoUrl($asset);
 }
 
 include BASE_PATH . 'includes/ErrorReporting.php';

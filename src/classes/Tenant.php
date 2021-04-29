@@ -407,6 +407,15 @@ class Tenant
     return getenv('FILE_STORE_PATH') . $this->getId() . '/';
   }
 
+  public function getS3FilePath()
+  {
+    if (!getenv('AWS_S3_REGION') || !getenv('AWS_S3_BUCKET')) {
+      throw new Exception('No AWS S3 bucket available');
+    }
+
+    return '/' . $this->getId() . '/';
+  }
+
   public function getStripeCustomer()
   {
     if (!getenv('STRIPE')) {

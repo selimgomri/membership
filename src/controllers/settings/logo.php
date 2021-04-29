@@ -33,7 +33,7 @@ include BASE_PATH . 'views/header.php';
       <?php if ($logos = $tenant->getKey('LOGO_DIR')) { ?>
         <p>You currently have the below image set as your logo:</p>
         <div class="card card-body mb-3">
-          <img src="<?= htmlspecialchars(autoUrl($logos . 'logo-150.png')) ?>" srcset="<?= htmlspecialchars(autoUrl($logos . 'logo-150@2x.png')) ?> 2x, <?= htmlspecialchars(autoUrl($logos . 'logo-150@3x.png')) ?> 3x" alt="<?= htmlspecialchars($tenant->getName()) ?> logo" class="img-fluid mx-auto">
+          <img src="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-150.png')) ?>" srcset="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-150@2x.png')) ?> 2x, <?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-150@3x.png')) ?> 3x" alt="<?= htmlspecialchars($tenant->getName()) ?> logo" class="img-fluid mx-auto">
         </div>
       <?php } ?>
 
