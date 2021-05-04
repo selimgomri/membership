@@ -362,7 +362,10 @@ if ($tenant->getBooleanKey('ENABLE_BILLING_SYSTEM')) {
       // Add Swimmers with No Parent to Fee Tracker
       if ($squadFeeRequired) {
         // // Squad Fees
-        $sql = $db->query("SELECT `members`.`MemberID`, `SquadFee`, `SquadName` FROM ((`members` INNER JOIN squadMembers ON members.MemberID = squadMembers.Member) INNER JOIN `squads` ON squads.SquadID = squadMembers.Squad) WHERE `members`.`UserID` IS NULL");
+        $sql = $db->prepare("SELECT `members`.`MemberID`, `SquadFee`, `SquadName` FROM ((`members` INNER JOIN squadMembers ON members.MemberID = squadMembers.Member) INNER JOIN `squads` ON squads.SquadID = squadMembers.Squad) WHERE members.Tenant = ? AND `members`.`UserID` IS NULL");
+        $sql->execute([
+          $tenant->getId()
+        ]);
 
         $add_track = $db->prepare("INSERT INTO `individualFeeTrack` (`MonthID`, `PaymentID`, `MemberID`, `UserID`, `Amount`, `Description`, `Type`, `NC`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
@@ -383,7 +386,10 @@ if ($tenant->getBooleanKey('ENABLE_BILLING_SYSTEM')) {
         }
       }
 
-      $sql = $db->query("SELECT `members`.`MemberID`, `ExtraFee`, `ExtraName` FROM ((`members` INNER JOIN `extrasRelations` ON extrasRelations.MemberID = members.MemberID) INNER JOIN `extras` ON extrasRelations.ExtraID = extras.ExtraID) WHERE `members`.`UserID` IS NULL");
+      $sql = $db->query("SELECT `members`.`MemberID`, `ExtraFee`, `ExtraName` FROM ((`members` INNER JOIN `extrasRelations` ON extrasRelations.MemberID = members.MemberID) INNER JOIN `extras` ON extrasRelations.ExtraID = extras.ExtraID) WHERE members.Tenant = ? AND `members`.`UserID` IS NULL");
+      $sql->execute([
+        $tenant->getId()
+      ]);
 
       while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
         // Add to tracker

@@ -1,5 +1,8 @@
 <?php
 
+$db = app()->db;
+$tenant = app()->tenant;
+
 ignore_user_abort(true);
 set_time_limit(0);
 
@@ -7,22 +10,12 @@ use \Stripe\Exception\ApiConnectionException;
 
 try {
 
-  $db = app()->db;
-  $tenant = app()->tenant;
-
   \Stripe\Stripe::setApiKey(getenv('STRIPE'));
   \Stripe\Stripe::setMaxNetworkRetries(3);
 
   $sendEmail = $db->prepare("INSERT INTO notify (UserID, Status, Subject, Message, ForceSend, EmailType) VALUES (:user, 'Queued', :subject, :message, 0, 'Payments')");
 
-  $hasMandateQuery = null;
-  try {
-    $sql = "SELECT stripeMandates.Mandate, stripeMandates.ID, stripeMandates.Customer, stripeMandates.Reference, stripeMandates.Last4, stripeMandates.SortCode FROM `stripeMandates` INNER JOIN `stripeCustomers` ON stripeMandates.Customer = stripeCustomers.CustomerID WHERE stripeCustomers.User = ? AND stripeMandates.MandateStatus = 'active'";
-    $hasMandateQuery = $db->prepare($sql);
-  } catch (Exception $e) {
-    reportError($e);
-    throw new Exception();
-  }
+  $hasMandateQuery = $db->prepare("SELECT stripeMandates.Mandate, stripeMandates.ID, stripeMandates.Customer, stripeMandates.Reference, stripeMandates.Last4, stripeMandates.SortCode FROM `stripeMandates` INNER JOIN `stripeCustomers` ON stripeMandates.Customer = stripeCustomers.CustomerID WHERE stripeCustomers.User = ? AND stripeMandates.MandateStatus = 'active'");
 
   $date = date("Y-m") . "-01";
   $day = date("d");
@@ -31,7 +24,7 @@ try {
   $updatePaymentsPending = $db->prepare("UPDATE `paymentsPending` SET `Status` = ? WHERE Payment = ?");
 
   try {
-    $getPayments = $db->prepare("SELECT payments.UserID, Amount, Currency, `Name`, PaymentID FROM ((payments INNER JOIN users ON payments.UserID = users.UserID) LEFT JOIN paymentSchedule ON payments.UserID = paymentSchedule.UserID) WHERE users.Tenant = ? AND (Status = 'pending_api_request' AND `Day` <= ? AND Type = 'Payment') OR (Status = 'pending_api_request' AND `Day` IS NULL AND `Type` = 'Payment') LIMIT 4");
+    $getPayments = $db->prepare("SELECT payments.UserID, Amount, Currency, `Name`, PaymentID FROM ((payments INNER JOIN users ON payments.UserID = users.UserID) LEFT JOIN paymentSchedule ON payments.UserID = paymentSchedule.UserID) WHERE users.Tenant = ? AND ((Status = 'pending_api_request' AND `Day` <= ? AND Type = 'Payment') OR (Status = 'pending_api_request' AND `Day` IS NULL AND `Type` = 'Payment')) LIMIT 4");
     $getPayments->execute([
       $tenant->getId(),
       $day
