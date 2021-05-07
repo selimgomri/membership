@@ -72,7 +72,7 @@ include BASE_PATH . "views/header.php";
             <dd class="col-sm-9 mono"><?= htmlspecialchars($tenant->getCode()) ?></dd>
           <?php } ?>
 
-          <?php if (app()->user) { ?>
+          <?php if (isset(app()->user)) { ?>
             <dt class="col-sm-3">User</dt>
             <dd class="col-sm-9 mono mb-0"><?= htmlspecialchars(app()->user->getId()) ?></dd>
           <?php } else { ?>
