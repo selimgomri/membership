@@ -18,16 +18,37 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EnteredUsername'])) {
   $username = $_SESSION['TENANT-' . app()->tenant->getId()]['EnteredUsername'];
 }
 
-$use_white_background = true;
+$logos = app()->tenant->getKey('LOGO_DIR');
 
-include BASE_PATH . "views/header.php";
+include BASE_PATH . "views/head.php";
 
 ?>
 
-<div class="container">
-  <h1 class="mb-5">Sign in using your <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> Account</h1>
-  <div class="row">
-    <div class="col-md-8 col-lg-5">
+<div class="container min-vh-100 mb-n3 overflow-auto">
+  <!-- <h1 class="mb-5">Sign in using your <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> Account</h1> -->
+  <div class="row justify-content-center py-3">
+    <div class="col-lg-8 col-md-10">
+
+      <p class="mb-5">
+        <a href="<?= htmlspecialchars(autoUrl('')) ?>" class="btn btn-outline-primary">Quit</a>
+      </p>
+
+      <div class="row align-items-center">
+        <div class="col order-2 order-md-1">
+          <h1 class="">Login</h1>
+          <p class="">Sign in to <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></p>
+        </div>
+        <div class="col-12 col-md-auto order-1 order-md-2">
+          <?php if ($logos) { ?>
+            <img src="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75.png')) ?>" srcset="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75@2x.png')) ?> 2x, <?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75@3x.png')) ?> 3x" alt="" class="img-fluid">
+          <?php } else { ?>
+            <img src="<?= htmlspecialchars(autoUrl('public/img/corporate/scds.png')) ?>" height="75" width="75" alt="" class="img-fluid">
+          <?php } ?>
+          <div class="mb-4 d-md-none"></div>
+        </div>
+      </div>
+      <div class="mb-4 d-md-none"></div>
+      <div class="mb-5 d-none d-md-block"></div>
       <!--
       <div class="alert alert-warning">
         <strong>Overnight System Maintenance</strong> <br>
@@ -79,11 +100,11 @@ include BASE_PATH . "views/header.php";
         </div>
         <input type="hidden" name="target" value="<?= htmlspecialchars($target) ?>">
         <?= \SCDS\CSRF::write() ?>
-        <input type="hidden" name="SessionSecurity" value="<?= session_id() ?>">
+        <input type="hidden" name="SessionSecurity" value="<?= htmlspecialchars(session_id()) ?>">
         <p class="mb-5"><input type="submit" name="login" id="login" value="Login" class="btn btn-lg btn-primary"></p>
         <div class="mb-5">
           <p>
-            Not yet registered? Your club will create an account for you.
+            New member? Your club will create an account for you and send you a link to get started.
           </p>
           <span>
             <a href="<?= htmlspecialchars(autoUrl("resetpassword")) ?>" class="btn btn-dark">
@@ -93,21 +114,9 @@ include BASE_PATH . "views/header.php";
         </div>
       </form>
 
-      <p class="small mb-0">
-        For support, please contact your own club in the first instance.
+      <p>
+        Need help? <a href="<?= htmlspecialchars(autoUrl('about')) ?>">Get support from <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></a>.
       </p>
-      <p class="small mb-0">
-        Support Helpline: <a class="" href="mailto:support@myswimmingclub.co.uk">support@myswimmingclub.co.uk</a>
-      </p>
-      <p class="small mb-4">
-        Support Website: <a class="" href="<?= htmlspecialchars(autoUrl('help-and-support', false)) ?>">Help and Support</a>
-      </p>
-
-      <!--
-      <p class="small mb-5">
-        Unauthorised access to or misuse of this system is prohibited and constitutes an offence under the Computer Misuse Act 1990. If you disclose any information obtained through this system without authority then <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> or Swimming Club Data Systems may take legal action against you.
-      </p>
-      -->
 
     </div>
   </div>

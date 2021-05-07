@@ -43,14 +43,6 @@
       "external": false
     },
     {
-      "id": "admin-member-upload-uni-of-shef",
-      "name": "Member upload (Uni of Sheffield)",
-      "title": "Upload members via CSV",
-      "link": "admin/member-upload/sheffield",
-      "target": "_self",
-      "external": false
-    },
-    {
       "id": "admin-editors",
       "name": "Bulk editors",
       "title": "Edit details quickly",

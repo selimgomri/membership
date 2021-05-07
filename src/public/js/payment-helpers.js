@@ -9,7 +9,7 @@ var stripeElementStyle = {
     height: '38px',
     color: '#212529',
     fontWeight: 400,
-    fontFamily: 'Source Sans Pro, Open Sans, Segoe UI, sans-serif',
+    fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
     fontSize: '16px',
     fontSmoothing: 'antialiased',
     '::placeholder': {

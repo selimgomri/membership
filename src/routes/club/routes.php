@@ -4,7 +4,43 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 $currentUser = null;
-if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin'] != "") {
+
+if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_SESSION['SCDS-SuperUser'])) {
+  try {
+    // Sign in from super user
+    $getSuperUser = $db->prepare("SELECT Email FROM superUsers WHERE ID = ?");
+    $getSuperUser->execute([
+      $_SESSION['SCDS-SuperUser']
+    ]);
+    $email = $getSuperUser->fetchColumn();
+
+    if ($email == null) throw new Exception('No superuser');
+
+    // Get matching user
+    $getUser = $db->prepare("SELECT UserID FROM users WHERE EmailAddress = ? AND Tenant = ? AND Active = ?");
+    $getUser->execute([
+      $email,
+      $tenant->getId(),
+      (int) true,
+    ]);
+    $user = $getUser->fetchColumn();
+
+    if ($user == null) throw new Exception('No user');
+
+    $login = new \CLSASC\Membership\Login($db);
+    $login->setUser($user);
+    // $login->stayLoggedIn();
+    $login->preventWarningEmail();
+    app()->user = $login->login();
+
+  } catch (Exception $e) {
+    // Ignore
+  }
+} else if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'SUPERUSER-AutoLogin'])) {
+  // Ignore for now
+}
+
+if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_COOKIE[COOKIE_PREFIX . 'TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin'] != "") {
   $sql = "SELECT users.UserID, `Time` FROM `userLogins` INNER JOIN users ON users.UserID = userLogins.UserID WHERE users.Tenant = ? AND `Hash` = ? AND `Time` >= ? AND `HashActive` = ?";
 
   $data = [
@@ -33,7 +69,7 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_
       $login->stayLoggedIn();
       $login->preventWarningEmail();
       $login->reLogin();
-      $currentUser = $login->login();
+      app()->user = $login->login();
     } catch (Exception $e) {
       reportError($e);
       // halt(403);
@@ -59,9 +95,8 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($_
     setcookie('TENANT-' . app()->tenant->getId() . '-' . "AutoLogin", $hash, $expiry_time, $cookiePath, app('request')->hostname, $secure, false);
   }
 } else if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
-  $currentUser = new User($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], true);
+  app()->user = new User($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], true);
 }
-app()->user = $currentUser;
 
 // Log urls
 if (isset(app()->user) && app()->user) {

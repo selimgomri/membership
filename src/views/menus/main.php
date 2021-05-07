@@ -9,7 +9,10 @@ if (!function_exists('chesterStandardMenu')) {
   {
 
     $db = app()->db;
-    $user = app()->user;
+    $user = null;
+    if (isset(app()->user)) {
+      $user = app()->user;
+    }
     $use_website_menu = false;
     if (defined('USE_CLS_MENU')) {
       $use_website_menu = USE_CLS_MENU;
@@ -421,18 +424,6 @@ if (!function_exists('chesterStandardMenu')) {
                   </a>
                 </li>
               <?php } ?>
-              <!--
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="trialDropdown" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    Trials
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="trialDropdown">
-                    <a class="dropdown-item" href="<?= autoUrl("trials") ?>">Requested Trials</a>
-                    <a class="dropdown-item" href="<?= autoUrl("trials/accepted") ?>">Accepted Swimmers</a>
-                  </div>
-                </li>
-                -->
           <?php }
           } ?>
           <?php if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
@@ -456,14 +447,11 @@ if (!function_exists('chesterStandardMenu')) {
             <li class="nav-item">
               <a class="nav-link" href="<?= htmlspecialchars(autoUrl("log-books")) ?>">Log Books</a>
             </li>
-            <!-- <li class="nav-item">
-              <a class="nav-link" href="<?= htmlspecialchars(autoUrl("services/request-a-trial")) ?>">Request a Trial</a>
-            </li> -->
           <?php } ?>
         </ul>
         <?php if (!empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
           $currentUser = app()->user;
-          $user_name = preg_replace("/( +)/", '&nbsp;', htmlspecialchars($currentUser->getName())); ?>
+          $user_name = preg_replace("/( +)/", '&nbsp;', htmlspecialchars($currentUser->getFirstName())); ?>
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">

@@ -158,22 +158,6 @@ class Login
       ucwords(app('request')->platform())
     ];
 
-    $now = new DateTime('now', new DateTimeZone('Europe/London'));
-    $dec1 = new DateTime('2020-12-01', new DateTimeZone('Europe/London'));
-    if ($now > $dec1 && isset($_SESSION['Browser']['OSName']) && $_SESSION['Browser']['OSName'] == "Android" && isset($_SESSION['Browser']['OSVersion']) && (float) $_SESSION['Browser']['OSVersion'] <= 7.1 && !$this->noUserWarning && !$this->reLogin) {
-      // If Android < 7.1.1 send warning email from 1 Dec 2020
-      $subject = "Your device will not be supported from March 2021";
-      $message = '<p>It looks like you\'ve logged into the ' . htmlspecialchars(app()->tenant->getName()) . ' Membership System using Android version ' . htmlspecialchars($_SESSION['Browser']['OSVersion']) . '. By the end of March 2021, you won\'t be able to access the membership system on your device because the DST Root X3 certificate will expire and our new root certificate is not installed in your device\'s keychain.</p>';
-      $message .= '<p>Upgrade to at least Android 7.1.1 now or <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by Mozilla</a></strong>. Firefox uses it\'s own root certificate list which avoids this problem and has great protections for your privacy with built in features including tracking protection.</p>';
-      $message .= '<p>If you don\'t take action, then by March 28 2021 your browser will present an error message when you try to access the membership system.</p>';
-      $message .= '<p>Thank you,<br><strong>The Swimming Club Data Systems Team</strong></p>';
-
-      $message .= '<p><small>SCDS provides the membership system to ' . htmlspecialchars(app()->tenant->getName()) . '.</small></p>';
-      notifySend(null, $subject, $message, $details['Forename'] . ' ' . $details['Surname'], $details['EmailAddress'], [
-        'Name' => 'SCDS and ' . app()->tenant->getName(),
-      ]);
-    }
-
     $login_before = $this->db->prepare("SELECT COUNT(*) FROM `userLogins` WHERE `UserID` = ? AND `IPAddress` = ? AND `Browser` = ? AND `Platform` = ?");
     $login_before->execute($login_before_data);
     $login_before_count = $login_before->fetchColumn();
