@@ -71,7 +71,7 @@ $getVisitors->execute([
 
 $pagetitle = 'Sign Out of ' . htmlspecialchars($location['Name']) . ' - Contact Tracing';
 
-$addr = json_decode($location['Address']);
+$locationAddress = json_decode($location['Address']);
 
 include BASE_PATH . 'views/header.php';
 
@@ -94,7 +94,7 @@ include BASE_PATH . 'views/header.php';
           Sign Out of <?= htmlspecialchars($location['Name']) ?>
         </h1>
         <p class="lead mb-0">
-          <?= htmlspecialchars($addr->streetAndNumber) ?>
+          <?= htmlspecialchars($locationAddress->streetAndNumber) ?>
         </p>
       </div>
     </div>

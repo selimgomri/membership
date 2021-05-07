@@ -66,7 +66,7 @@ if (!$squad) {
 
   $pagetitle = htmlspecialchars($squad['SquadName']) . ' Squad Check In to ' . htmlspecialchars($location['Name']) . ' - Contact Tracing';
 
-  $addr = json_decode($location['Address']);
+  $locationAddress = json_decode($location['Address']);
 
   // Get member attendance
   $isHere = $db->prepare("SELECT COUNT(*) FROM covidVisitors WHERE `Location` = ? AND `Person` = ? AND `Type` = ? AND `Time` > ? AND NOT `SignedOut`");
@@ -98,7 +98,7 @@ if (!$squad) {
             <?= htmlspecialchars($squad['SquadName']) ?> Check in to <?= htmlspecialchars($location['Name']) ?>
           </h1>
           <p class="lead mb-0">
-            <?= htmlspecialchars($addr->streetAndNumber) ?>
+            <?= htmlspecialchars($locationAddress->streetAndNumber) ?>
           </p>
         </div>
       </div>
