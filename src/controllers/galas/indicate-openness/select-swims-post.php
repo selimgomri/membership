@@ -57,13 +57,9 @@ $getSessions = $db->prepare("SELECT `Name`, `ID` FROM galaSessions WHERE Gala = 
 $getSessions->execute([$id]);
 $sessions = $getSessions->fetchAll(PDO::FETCH_ASSOC);
 
-try {
 $getAvailableSwimmers = $db->prepare("SELECT Member, members.UserID parent, MForename fn, MSurname sn, DateOfBirth dob, gs.`Name` gsname, members.ASANumber `se` FROM (((galaSessionsCanEnter ca INNER JOIN galaSessions gs ON gs.ID = ca.Session) INNER JOIN members ON ca.Member = members.MemberID) LEFT JOIN galaEntries ge ON ge.GalaID = gs.Gala AND ge.MemberID = members.MemberID) WHERE gs.Gala = ? AND ca.CanEnter = ? AND ge.EntryID IS NULL ORDER BY, sn ASC, fn ASC");
 $getAvailableSwimmers->execute([$id, true]);
 $swimmers = $getAvailableSwimmers->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-  pre($e);
-}
 
 // Insert entry to database
 $insert = $db->prepare("INSERT INTO galaEntries (GalaID, MemberID, FeeToPay, Charged, Locked, Vetoable, EntryProcessed, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM) VALUES (:gala, :member, :fee, :charged, :locked, :vetoable, :processed, :val50Free, :val100Free, :val200Free, :val400Free, :val800Free, :val1500Free, :val50Back, :val100Back, :val200Back, :val50Breast, :val100Breast, :val200Breast, :val50Fly, :val100Fly, :val200Fly, :val100IM, :val150IM, :val200IM, :val400IM)");
