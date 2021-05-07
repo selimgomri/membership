@@ -5,7 +5,7 @@ $tenant = app()->tenant;
 
 $user = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 
-canView('TeamManager', $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id);
+\SCDS\Can::view('TeamManager', $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id);
 
 $query = $db->prepare("SELECT * FROM galas WHERE galas.GalaID = ? AND Tenant = ?");
 $query->execute([

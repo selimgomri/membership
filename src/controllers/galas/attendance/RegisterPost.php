@@ -1,3 +1,3 @@
 <?php
 
-canView('TeamManager', $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id);
+\SCDS\Can::view('TeamManager', $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id);
