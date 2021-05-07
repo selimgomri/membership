@@ -9,7 +9,10 @@ if (!function_exists('chesterStandardMenu')) {
   {
 
     $db = app()->db;
-    $user = app()->user;
+    $user = null;
+    if (isset(app()->user)) {
+      $user = app()->user;
+    }
     $use_website_menu = false;
     if (defined('USE_CLS_MENU')) {
       $use_website_menu = USE_CLS_MENU;
