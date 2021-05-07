@@ -1,7 +1,7 @@
 <?php
 
 // Verify user has access
-canView('TeamManager', $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id);
+\SCDS\Can::view('TeamManager', $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id);
 
 $db = app()->db;
 $tenant = app()->tenant;
