@@ -73,7 +73,7 @@ include BASE_PATH . "views/root/header.php";
       <div class="col">
         <div class="row align-items-center">
           <div class="col">
-            <a href="https://stripe.com/gb" title="Stripe" target="_blank"><img class="img-fluid" src="<?= htmlspecialchars(autoUrl('public/img/stripe/stripe-white.svg')) ?>" alt="Stripe Logo"></a>
+            <a href="https://stripe.com/gb" title="Stripe" target="_blank"><img class="img-fluid" src="<?= htmlspecialchars(autoUrl('img/stripe/stripe-white.svg')) ?>" alt="Stripe Logo"></a>
           </div>
         </div>
       </div>
@@ -160,31 +160,31 @@ include BASE_PATH . "views/root/header.php";
         <div class="row align-items-center club-logos">
           <div class="col-md">
             <a href="https://www.rdasc.org.uk/" target="_blank">
-              <img src="<?= autoUrl("public/img/customer-clubs/rice.png") ?>" title="Richmond Dales ASC" alt="Richmond Dales ASC" class="img-fluid mx-auto d-block">
+              <img src="<?= htmlspecialchars(autoUrl("img/customer-clubs/rice.png")) ?>" title="Richmond Dales ASC" alt="Richmond Dales ASC" class="img-fluid mx-auto d-block">
             </a>
             <div class="mb-3 d-md-none"></div>
           </div>
           <div class="col-md">
             <a href="https://www.newcastleswimteam.co.uk/" target="_blank">
-              <img src="<?= autoUrl("public/img/customer-clubs/newe.png") ?>" title="Newcastle Swim Team" alt="Newcastle Swim Team" class="img-fluid mx-auto d-block">
+              <img src="<?= htmlspecialchars(autoUrl("img/customer-clubs/newe.png")) ?>" title="Newcastle Swim Team" alt="Newcastle Swim Team" class="img-fluid mx-auto d-block">
             </a>
             <div class="mb-3 d-md-none"></div>
           </div>
           <div class="col-md">
             <a href="https://www.darlingtonasc.co.uk/" target="_blank">
-              <img src="<?= autoUrl("public/img/customer-clubs/dare.png") ?>" title="Darlington ASC" alt="Darlington ASC" class="img-fluid mx-auto d-block">
+              <img src="<?= htmlspecialchars(autoUrl("img/customer-clubs/dare.png")) ?>" title="Darlington ASC" alt="Darlington ASC" class="img-fluid mx-auto d-block">
             </a>
             <div class="mb-3 d-md-none"></div>
           </div>
           <div class="col-md">
             <a href="https://main.nasc.co.uk/" target="_blank">
-              <img src="<?= autoUrl("public/img/customer-clubs/nore.png") ?>" title="Northallerton ASC" alt="Northallerton ASC" class="img-fluid mx-auto d-block">
+              <img src="<?= htmlspecialchars(autoUrl("img/customer-clubs/nore.png")) ?>" title="Northallerton ASC" alt="Northallerton ASC" class="img-fluid mx-auto d-block">
             </a>
             <div class="mb-3 d-md-none"></div>
           </div>
           <div class="col-md">
             <a href="https://www.chesterlestreetasc.co.uk/" target="_blank">
-              <img src="<?= autoUrl("public/img/chesterLogo.svg") ?>" title="Chester-le-Street ASC" alt="Chester-le-Street ASC" class="img-fluid mx-auto d-block">
+              <img src="<?= htmlspecialchars(autoUrl("img/chesterLogo.svg")) ?>" title="Chester-le-Street ASC" alt="Chester-le-Street ASC" class="img-fluid mx-auto d-block">
             </a>
           </div>
         </div>

@@ -166,23 +166,23 @@ try {
   $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
   $hash = json_decode($hash);
   $hash = $hash->resourcesHash;
-  $script = autoUrl('public/compiled/js/main.' . $hash . '.js');
+  $script = autoUrl('compiled/js/main.' . $hash . '.js', false);
 } catch (Exception $e) {
-  $script = autoUrl('public/compiled/js/main.js');
+  $script = autoUrl('compiled/js/main.js', false);
 }
 
 ?>
 <script rel="preload" src="<?= htmlspecialchars($script) ?>"></script>
 <?php if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) || !$_SESSION['TENANT-' . app()->tenant->getId()]['PWA']) { ?>
-  <script src="<?= htmlspecialchars(autoUrl("public/js/app.js")) ?>"></script>
+  <script src="<?= htmlspecialchars(autoUrl("js/app.js", false)) ?>"></script>
 <?php } ?>
 
 <?php if (isset($this->js)) { ?>
   <!-- Load per page JS -->
-  <?php foreach ($this->js as $script) {
-  ?><script <?php if ($script['module']) { ?>type="module"<?php } ?> src="<?= htmlspecialchars($script['url']) ?>"></script><?php
-                                                          }
-                                                        } ?>
+  <?php foreach ($this->js as $script) { ?>
+    <script <?php if ($script['module']) { ?>type="module" <?php } ?> src="<?= htmlspecialchars($script['url']) ?>"></script>
+  <?php } ?>
+<?php } ?>
 
 </body>
 

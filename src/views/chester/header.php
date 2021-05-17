@@ -290,9 +290,9 @@ if (isset($customBackground) && $customBackground) {
 
           <a class="navbar-brand d-lg-none" href="<?= autoUrl("") ?>">
             <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
-              <img src="<?php echo autoUrl("public/img/chesterIcon.svg"); ?>" width="20" height="20"> My Membership
+              <img src="<?php echo autoUrl("img/chesterIcon.svg", false); ?>" width="20" height="20"> My Membership
             <?php } else { ?>
-              <img src="<?php echo autoUrl("public/img/chesterIcon.svg"); ?>" width="20" height="20"> Club Membership
+              <img src="<?php echo autoUrl("img/chesterIcon.svg", false); ?>" width="20" height="20"> Club Membership
             <?php } ?>
           </a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">

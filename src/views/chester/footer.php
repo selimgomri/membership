@@ -115,7 +115,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
           <div class="row no-gutters">
             <div class="col-auto">
               <a href="https://myswimmingclub.uk" target="_blank" title="Swimming Club Data Systems Website">
-                <img src="<?= autoUrl("public/img/corporate/scds.png") ?>" width="100">
+                <img src="<?= autoUrl("img/corporate/scds.png", false) ?>" width="100">
               </a>
               <div class="d-block d-sm-none mb-3"></div>
             </div>
@@ -145,7 +145,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
   </div><!-- /.container -->
 </footer>
 
-<div id="app-js-info" data-root="<?= htmlspecialchars(autoUrl("")) ?>" data-check-login-url="<?= htmlspecialchars(autoUrl("check-login.json")) ?>" data-service-worker-url="<?= htmlspecialchars(autoUrl("sw.js")) ?>"></div>
+<div id="app-js-info" data-root="<?= htmlspecialchars(autoUrl("")) ?>" data-check-login-url="<?= htmlspecialchars(autoUrl("check-login.json")) ?>" data-service-worker-url="<?= htmlspecialchars(autoUrl("sw.js", false)) ?>"></div>
 
 <!-- Modals and Other Hidden HTML -->
 <?php
@@ -156,9 +156,9 @@ try {
   $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
   $hash = json_decode($hash);
   $hash = $hash->resourcesHash;
-  $script = autoUrl('public/compiled/js/main.' . $hash . '.js');
+  $script = autoUrl('compiled/js/main.' . $hash . '.js', false);
 } catch (Exception $e) {
-  $script = autoUrl('public/compiled/js/main.js');
+  $script = autoUrl('compiled/js/main.js', false);
 }
 
 
@@ -170,14 +170,14 @@ try {
 <?php if (isset($use_website_menu) && $use_website_menu) { ?>
   <script defer src="https://static.chesterlestreetasc.co.uk/global/headers/MainSiteMenu.js"></script>
 <?php } ?>
-<script src="<?= htmlspecialchars(autoUrl("public/js/app.js")) ?>"></script>
+<script src="<?= htmlspecialchars(autoUrl("js/app.js", false)) ?>"></script>
 
 <?php if (isset($this->js)) { ?>
   <!-- Load per page JS -->
-  <?php foreach ($this->js as $script) {
-  ?><script <?php if ($script['module']) { ?>type="module"<?php } ?> src="<?= htmlspecialchars($script['url']) ?>"></script><?php
-                                                          }
-                                                        } ?>
+  <?php foreach ($this->js as $script) { ?>
+    <script <?php if ($script['module']) { ?>type="module" <?php } ?> src="<?= htmlspecialchars($script['url']) ?>"></script>
+  <?php } ?>
+<?php } ?>
 
 </body>
 
