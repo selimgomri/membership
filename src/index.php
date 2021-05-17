@@ -374,9 +374,8 @@ if (getenv('MAIN_DOMAIN')) {
 
   /**
    * This is currently a small scale test
-   * Production test club for this is CLS ASC
    * 
-   * In production we would lookup tenant from host in DB
+   * In production after the test we would lookup tenant from host in DB
    */
   $clubSet = '----';
   switch (app('request')->hostname) {
@@ -386,6 +385,21 @@ if (getenv('MAIN_DOMAIN')) {
     case 'chesterlestreetasc.mt.myswimmingclub.uk':
     case 'chesterlestreetasc.myswimmingclub.uk':
       $clubSet = 'clse';
+      break;
+    case 'newcastleswimteam.myswimmingclub.uk':
+      $clubSet = 'newe';
+      break;
+    case 'darlingtonasc.myswimmingclub.uk':
+      $clubSet = 'dare';
+      break;
+    case 'rdasc.myswimmingclub.uk':
+      $clubSet = 'rice';
+      break;
+    case 'swimleeds.myswimmingclub.uk':
+      $clubSet = 'ldse';
+      break;
+    case 'nasc.myswimmingclub.uk':
+      $clubSet = 'nore';
       break;
 
     default:
