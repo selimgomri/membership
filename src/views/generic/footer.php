@@ -120,7 +120,7 @@ $logos = $tenant->getKey('LOGO_DIR')
           <div class="row no-gutters">
             <div class="col-auto">
               <a href="https://myswimmingclub.uk" target="_blank" title="Swimming Club Data Systems Website">
-                <img src="<?= autoUrl("public/img/corporate/scds.png") ?>" width="100">
+                <img src="<?= autoUrl("img/corporate/scds.png", false) ?>" width="100">
               </a>
               <div class="d-block d-sm-none mb-3"></div>
             </div>
