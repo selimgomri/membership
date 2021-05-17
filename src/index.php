@@ -364,59 +364,112 @@ $route->use(function () {
 //   'continue' => true
 // ]);
 
-$route->group('/{club}:int', function ($club) {
+// If SUMDOMAIN OR DOMAIN
+if (getenv('MAIN_DOMAIN')) {
+  // Else use main domain
+  // Get the club
 
-  if ($club) {
-    // Get the club
-    $clubObject = Tenant::fromId((int) $club);
+  /**
+   * This is currently a small scale test
+   * Production test club for this is CLS ASC
+   * 
+   * In production we would lookup tenant from host in DB
+   */
+  $clubSet = '----';
+  switch (app('request')->hostname) {
+    case 'testclub.mt.myswimmingclub.uk':
+      $clubSet = 'xshf';
+      break;
+    case 'chesterlestreetasc.mt.myswimmingclub.uk':
+    case 'chesterlestreetasc.myswimmingclub.uk':
+      $clubSet = 'clse';
+      break;
 
-    if (!$clubObject) {
-      define('CLUB_PROVIDED', $club);
-      $this->any(['/', '/*'], function () {
-        $club = CLUB_PROVIDED;
-        include 'views/root/errors/no-club.php';
-      });
-    } else {
-      app()->club = $club;
-      app()->tenant = $clubObject;
-
-      include BASE_PATH . 'routes/club/routes.php';
-    }
+    default:
+      # code...
+      break;
   }
-});
+  /**
+   * END OF TEST CODE
+   */
 
-$route->group('/{club}:([a-z]{4})', function ($club) {
+  $clubObject = Tenant::fromCode($clubSet);
 
-  if ($club) {
-    // Get the club
-    $clubObject = Tenant::fromCode($club);
+  if (!$clubObject) {
+    // Because this is a trial, send to main page
+    $route->any('/', function () {
+      http_response_code(302);
+      header('location: https://myswimmingclub.uk');
+    });
+  } else {
+    app()->club = $clubSet;
+    app()->tenant = $clubObject;
 
-    if (!$clubObject) {
-      define('CLUB_PROVIDED', $club);
-      $this->any(['/', '/*'], function () {
-        $club = CLUB_PROVIDED;
-        include 'views/root/errors/no-club.php';
-      });
-    } else {
-      app()->club = $club;
-      app()->tenant = $clubObject;
+    // pre($clubObject);
 
+    // $route->get('/', function() {
+    //   pre(app()->request);
+    // });
+
+    $route->group('/', function () {
       include BASE_PATH . 'routes/club/routes.php';
-    }
+    });
   }
-});
+} else {
+  $route->group('/{club}:int', function ($club) {
 
-// $route->get('/migrate', function () {
-//   include 'controllers/db-increaseIds.php';
-// });
+    if ($club) {
+      // Get the club
+      $clubObject = Tenant::fromId((int) $club);
 
-// $route->get('/testing', function () {
-//   include 'controllers/dev/times.php';
-// });
+      if (!$clubObject) {
+        define('CLUB_PROVIDED', $club);
+        $this->any(['/', '/*'], function () {
+          $club = CLUB_PROVIDED;
+          include 'views/root/errors/no-club.php';
+        });
+      } else {
+        app()->club = $club;
+        app()->tenant = $clubObject;
 
-$route->group('/', function () {
-  include 'routes/root/routes.php';
-});
+        include BASE_PATH . 'routes/club/routes.php';
+      }
+    }
+  });
+
+  $route->group('/{club}:([a-z]{4})', function ($club) {
+
+    if ($club) {
+      // Get the club
+      $clubObject = Tenant::fromCode($club);
+
+      if (!$clubObject) {
+        define('CLUB_PROVIDED', $club);
+        $this->any(['/', '/*'], function () {
+          $club = CLUB_PROVIDED;
+          include 'views/root/errors/no-club.php';
+        });
+      } else {
+        app()->club = $club;
+        app()->tenant = $clubObject;
+
+        include BASE_PATH . 'routes/club/routes.php';
+      }
+    }
+  });
+
+  // $route->get('/migrate', function () {
+  //   include 'controllers/db-increaseIds.php';
+  // });
+
+  // $route->get('/testing', function () {
+  //   include 'controllers/dev/times.php';
+  // });
+
+  $route->group('/', function () {
+    include 'routes/root/routes.php';
+  });
+}
 
 
 try {

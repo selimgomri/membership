@@ -283,9 +283,14 @@ function autoUrl($relative, $includeClub = true)
   // Returns an absolute URL
   $rootUrl = getenv('ROOT_URL');
 
+  if (getenv('MAIN_DOMAIN')) {
+    $rootUrl = 'https://';
+    $rootUrl .= app('request')->hostname . '/';
+  }
+
   if (isset(app()->tenant)) {
     $club = app()->tenant;
-    if ($club && $includeClub) {
+    if ($club && $includeClub && !getenv('MAIN_DOMAIN')) {
       if ($club->getCode()) {
         $rootUrl .= mb_strtolower($club->getCode()) . '/';
       } else if ($club->getId()) {
