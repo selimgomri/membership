@@ -414,7 +414,7 @@ if (getenv('MAIN_DOMAIN')) {
 
   if (!$clubObject) {
     // Because this is a trial, send to main page
-    $route->any('/', function () {
+    $route->any(['/', '/*'], function () {
       http_response_code(302);
       header('location: https://myswimmingclub.uk');
     });
