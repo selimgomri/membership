@@ -92,6 +92,9 @@ if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($
       $secure = false;
     }
     $cookiePath = '/' . app()->tenant->getCodeId();
+    if (getenv('MAIN_DOMAIN')) {
+      $cookiePath = '';
+    }
     setcookie('TENANT-' . app()->tenant->getId() . '-' . "AutoLogin", $hash, $expiry_time, $cookiePath, app('request')->hostname, $secure, false);
   }
 } else if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {

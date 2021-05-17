@@ -147,6 +147,9 @@ class Login
     }
     if (!$this->reLogin) {
       $cookiePath = '/' . app()->tenant->getCodeId();
+      if (getenv('MAIN_DOMAIN')) {
+        $cookiePath = '';
+      }
       setcookie(COOKIE_PREFIX . 'TENANT-' . app()->tenant->getId() . '-' . 'AutoLogin', $hash, time() + 60 * 60 * 24 * 120, $cookiePath, app('request')->hostname, $secure, false);
     }
 

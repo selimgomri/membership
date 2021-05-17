@@ -48,7 +48,7 @@ if (isset($stripeAccount->business_profile->support_phone)) {
   $phone = $stripeAccount->business_profile->support_phone;
 }
 try {
-  $number = \Brick\PhoneNumber\PhoneNumber::parse($phone);
+  $number = \Brick\PhoneNumber\PhoneNumber::parse((string) $phone);
   $phone = $number->formatForCallingFrom('GB');
 } catch (Exception $e) {
 }
