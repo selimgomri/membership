@@ -59,6 +59,9 @@ if (getenv('IS_DEV')) {
   $old_error_handler = set_error_handler("ErrorHandler");
 }
 
+// This line fixes some things
+$_SERVER['SERVER_NAME'] = $_SERVER['HTTP_HOST'];
+
 // Do not reveal PHP when sending mail
 ini_set('expose_php', 'Off');
 
