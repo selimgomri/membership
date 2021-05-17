@@ -5,9 +5,9 @@ try {
   $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
   $hash = json_decode($hash);
   $hash = $hash->resourcesHash;
-  $stylesheet = autoUrl('public/compiled/css/clse.' . $hash . '.min.css');
+  $stylesheet = autoUrl('compiled/css/clse.' . $hash . '.min.css', false);
 } catch (Exception $e) {
-  $stylesheet = autoUrl('public/compiled/css/clse.css');
+  $stylesheet = autoUrl('compiled/css/clse.css', false);
 }
 
 header('Link: <' . $stylesheet . '>; rel=preload; as=style');
@@ -67,26 +67,26 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <script src="https://js.stripe.com/v3/"></script>
   <link rel="stylesheet preload" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Roboto+Mono|Merriweather:400,600">
   <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheet) ?>">
-  <link rel="icon" sizes="196x196" href="<?= htmlspecialchars(autoUrl("public/img/touchicons/touch-icon-196x196.png")) ?>">
+  <link rel="icon" sizes="196x196" href="<?= htmlspecialchars(autoUrl("img/touchicons/touch-icon-196x196.png", false)) ?>">
   <!-- For Chrome for Android: -->
-  <link rel="icon" sizes="192x192" href="<?= autoUrl("public/img/touchicons/touch-icon-192x192.png") ?>">
+  <link rel="icon" sizes="192x192" href="<?= autoUrl("img/touchicons/touch-icon-192x192.png", false) ?>">
   <!-- For iPhone 6 Plus with @3× display: -->
-  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<?= autoUrl("public/img/touchicons/apple-touch-icon-180x180-precomposed.png") ?>">
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<?= autoUrl("img/touchicons/apple-touch-icon-180x180-precomposed.png", false) ?>">
   <!-- For iPad with @2× display running iOS ≥ 7: -->
-  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="<?= autoUrl("public/img/touchicons/apple-touch-icon-152x152-precomposed.png") ?>">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="<?= autoUrl("img/touchicons/apple-touch-icon-152x152-precomposed.png", false) ?>">
   <!-- For iPad with @2× display running iOS ≤ 6: -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<?= autoUrl("public/img/touchicons/apple-touch-icon-144x144-precomposed.png") ?>">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<?= autoUrl("img/touchicons/apple-touch-icon-144x144-precomposed.png", false) ?>">
   <!-- For iPhone with @2× display running iOS ≥ 7: -->
-  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="<?= autoUrl("public/img/touchicons/apple-touch-icon-120x120-precomposed.png") ?>">
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="<?= autoUrl("img/touchicons/apple-touch-icon-120x120-precomposed.png", false) ?>">
   <!-- For iPhone with @2× display running iOS ≤ 6: -->
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?= autoUrl("public/img/touchicons/apple-touch-icon-114x114-precomposed.png") ?>">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?= autoUrl("img/touchicons/apple-touch-icon-114x114-precomposed.png", false) ?>">
   <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
-  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="<?= autoUrl("public/img/touchicons/apple-touch-icon-76x76-precomposed.png") ?>">
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="<?= autoUrl("img/touchicons/apple-touch-icon-76x76-precomposed.png", false) ?>">
   <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?= autoUrl("public/img/touchicons/apple-touch-icon-72x72-precomposed.png") ?>">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?= autoUrl("img/touchicons/apple-touch-icon-72x72-precomposed.png", false) ?>">
   <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
-  <link rel="apple-touch-icon-precomposed" href="<?= autoUrl("public/img/touchicons/apple-touch-icon-precomposed.png") ?>"><!-- 57×57px -->
-  <link rel="mask-icon" href="<?= autoUrl("public/img/touchicons/icon-mask.svg") ?>" color="#bd0000">
+  <link rel="apple-touch-icon-precomposed" href="<?= autoUrl("img/touchicons/apple-touch-icon-precomposed.png", false) ?>"><!-- 57×57px -->
+  <link rel="mask-icon" href="<?= autoUrl("img/touchicons/icon-mask.svg", false) ?>" color="#bd0000">
   <script src="https://www.google.com/recaptcha/api.js"></script>
 
   <!--[if lt IE 9]>
