@@ -48,70 +48,49 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
     $surname = $row['Surname'];
     $userID = $row['UserID'];
 
-    if (password_verify($_POST['password'], $hash)) {
-      // $do_random_2FA = random_int(0, 99) < 5 || bool(getUserOption($userID, "IsSpotCheck2FA")) || $row['WrongPassCount'] > 2;
+    $verified = password_verify($_POST['password'], $hash);
 
-      // $isJustParent = $db->prepare("SELECT COUNT(*) FROM `permissions` WHERE `User` = ? AND `Permission` != 'Parent';");
-      // $isJustParent->execute([
-      //   $userID
-      // ]);
-      // $isNotJustParent = $isJustParent->fetchColumn() > 0;
+    // if ($verified && CheckPwned::pwned($_POST['password'])) {
+    //   // The password is pwned. It must be reset.
+    // }
 
-      if (true) {
-        // Do 2FA
-        if (bool(getUserOption($userID, "hasGoogleAuth2FA"))) {
-          $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE'] = true;
-        } else {
-          $code = random_int(100000, 999999);
+    if ($verified) {
+      // Do 2FA
+      if (bool(getUserOption($userID, "hasGoogleAuth2FA"))) {
+        $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE'] = true;
+      } else {
+        $code = random_int(100000, 999999);
 
-          // if ($do_random_2FA && !($isNotJustParent || bool(getUserOption($userID, "Is2FA")))) {
-          //   setUserOption($userID, "IsSpotCheck2FA", true);
-          // }
+        // if ($do_random_2FA && !($isNotJustParent || bool(getUserOption($userID, "Is2FA")))) {
+        //   setUserOption($userID, "IsSpotCheck2FA", true);
+        // }
 
-          $message = '
+        $message = '
           <p>Hello. Confirm your login by entering the following code in your web browser.</p>
           <p><strong>' . htmlspecialchars($code) . '</strong></p>
           <p>If you did not just try to log in, you can ignore this email. You may want to reset your password.</p>
           <p>Kind Regards, <br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
 
-          $date = new DateTime('now', new DateTimeZone('Europe/London'));
+        $date = new DateTime('now', new DateTimeZone('Europe/London'));
 
-          if (notifySend(null, "Verification Code - Requested at " . $date->format("H:i:s \o\\n d/m/Y"), $message, $forename . " " . $surname, $email)) {
-            $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_CODE'] = $code;
-          } else {
-            halt(500);
-          }
+        if (notifySend(null, "Verification Code - Requested at " . $date->format("H:i:s \o\\n d/m/Y"), $message, $forename . " " . $surname, $email)) {
+          $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_CODE'] = $code;
+        } else {
+          halt(500);
         }
-        $_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserID'] = $userID;
-        if (isset($_POST['RememberMe']) && bool($_POST['RememberMe'])) {
-          $_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe'] = true;
-        }
-        $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR'] = true;
-        // reportError([
-        //   '1',
-        //   autoUrl("2fa?target=" . urlencode($_POST['target'])),
-        // ]);
-        if (!$headerSent) {
-          header("Location: " . autoUrl("2fa?target=" . urlencode($_POST['target'])));
-          $headerSent = true;
-        }
-      } else {
-        try {
-          $login = new \CLSASC\Membership\Login($db);
-          $login->setUser($userID);
-          if ($_POST['RememberMe']) {
-            $login->stayLoggedIn();
-          }
-          $currentUser = app()->user;
-          $currentUser = $login->login();
-          $resetFailedLoginCount->execute([$userID]);
-
-          AuditLog::new('UserLogin-NoAuth', 'Signed in from ' . $_SERVER['REMOTE_ADDR'], $userID);
-        } catch (Exception $e) {
-          halt(403);
-        }
-
-        unset($_SESSION['TENANT-' . app()->tenant->getId()]['LoginSec']);
+      }
+      $_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserID'] = $userID;
+      if (isset($_POST['RememberMe']) && bool($_POST['RememberMe'])) {
+        $_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe'] = true;
+      }
+      $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR'] = true;
+      // reportError([
+      //   '1',
+      //   autoUrl("2fa?target=" . urlencode($_POST['target'])),
+      // ]);
+      if (!$headerSent) {
+        header("Location: " . autoUrl("2fa?target=" . urlencode($_POST['target'])));
+        $headerSent = true;
       }
     } else {
       // Incorrect PW

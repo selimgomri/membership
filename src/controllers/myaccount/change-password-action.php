@@ -43,7 +43,12 @@ if (!password_verify($currentPW, $hash)) {
   ";
 }
 
-if ($status == true) {
+if (\CheckPwned::pwned($password1)) {
+  $status = false;
+  $statusMessage .= "<li>That password has been part of a data breach elsewhere on the internet. You must use a different password.</li>";
+}
+
+if ($status) {
   try {
     $newHash = password_hash($password1, PASSWORD_ARGON2ID);
     $updatePassword->execute(['user' => $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 'new' => $newHash]);

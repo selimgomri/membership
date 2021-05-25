@@ -37,12 +37,12 @@ if ($user = $getUser->fetchColumn()) {
 						</div>
 					</div>
 
-					<div class="alert alert-info d-none" id="pwned-password-warning">
+					<div class="alert alert-danger d-none" id="pwned-password-warning">
 						<p class="mb-0">
 							<strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Warning</strong>
 						</p>
 						<p class="mb-0">
-							That password has been part of a data breach elsewhere on the internet. We suggest you pick something different.
+							That password has been part of a data breach elsewhere on the internet. You must pick a stronger password.
 						</p>
 					</div>
 
