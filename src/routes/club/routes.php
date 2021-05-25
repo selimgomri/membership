@@ -92,6 +92,9 @@ if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn']) && isset($
       $secure = false;
     }
     $cookiePath = '/' . app()->tenant->getCodeId();
+    if (getenv('MAIN_DOMAIN')) {
+      $cookiePath = '';
+    }
     setcookie('TENANT-' . app()->tenant->getId() . '-' . "AutoLogin", $hash, $expiry_time, $cookiePath, app('request')->hostname, $secure, false);
   }
 } else if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
@@ -631,9 +634,9 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
     include BASE_PATH . 'controllers/assisted-registration/router.php';
   });
 
-  $this->group('/registration-and-renewal', function () {
-    include BASE_PATH . 'controllers/registration-and-renewal/router.php';
-  });
+  // $this->group('/registration-and-renewal', function () {
+  //   include BASE_PATH . 'controllers/registration-and-renewal/router.php';
+  // });
 
   $this->group('/resources', function () {
     include BASE_PATH . 'controllers/resources/router.php';

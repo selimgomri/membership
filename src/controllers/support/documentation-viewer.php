@@ -52,7 +52,7 @@ if (!$file) {
   halt(404);
 } else if ($indexRedirect) {
   http_response_code(302);
-  header("location: " . autoUrl(trim(app('request')->path), '/') . '/index.md');
+  header("location: " . autoUrl(trim(app('request')->path, '/') . '/index.md'));
   return;
 }
 if ($date != null) {

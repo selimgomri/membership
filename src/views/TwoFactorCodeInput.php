@@ -15,6 +15,8 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
   $errorState = $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];
 }
 
+$logos = app()->tenant->getKey('LOGO_DIR');
+
 include BASE_PATH . "views/head.php";
 
 ?>
