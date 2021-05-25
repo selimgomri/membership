@@ -37,7 +37,7 @@ if ($user = $getUser->fetchColumn()) {
 						</div>
 					</div>
 
-					<div class="alert alert-info d-none" id="pwned-password-warning">
+					<div class="alert alert-danger d-none" id="pwned-password-warning">
 						<p class="mb-0">
 							<strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Warning</strong>
 						</p>
