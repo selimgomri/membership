@@ -31,14 +31,10 @@ include BASE_PATH . "views/paymentsMenu.php";
   <div class="row">
     <div class="col-md-8">
       <h1 class="">Payments for Galas</h1>
-      <p class="lead">Charge Parents for Galas</p>
-      <div class="cell">
-        <strong>When using Direct Debit, we charge parents after submitting entries</strong> <br>
-        Rejections are handled as soon as they are returned.
-      </div>
+      <p class="lead">Charge users for gala entries</p>
       <hr>
       <?php if ($gala != null) { ?>
-        <h2>Galas to Charge or Refund</h2>
+        <h2 class="mb-3">Galas to Charge or Refund</h2>
         <ul class="list-group">
           <?php do { ?>
           <li class="list-group-item list-group-item-action">
