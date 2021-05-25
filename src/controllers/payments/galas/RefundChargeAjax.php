@@ -19,18 +19,22 @@ $requestData = [
 ];
 
 $swimsArray = [
+  '25Free' => '25&nbsp;Free',
   '50Free' => '50&nbsp;Free',
   '100Free' => '100&nbsp;Free',
   '200Free' => '200&nbsp;Free',
   '400Free' => '400&nbsp;Free',
   '800Free' => '800&nbsp;Free',
   '1500Free' => '1500&nbsp;Free',
+  '25Back' => '25&nbsp;Back',
   '50Back' => '50&nbsp;Back',
   '100Back' => '100&nbsp;Back',
   '200Back' => '200&nbsp;Back',
+  '25Breast' => '25&nbsp;Breast',
   '50Breast' => '50&nbsp;Breast',
   '100Breast' => '100&nbsp;Breast',
   '200Breast' => '200&nbsp;Breast',
+  '25Fly' => '25&nbsp;Fly',
   '50Fly' => '50&nbsp;Fly',
   '100Fly' => '100&nbsp;Fly',
   '200Fly' => '200&nbsp;Fly',
@@ -62,7 +66,7 @@ try {
     throw new Exception('We could not find a gala with the provided id number');
   }
 
-  $getEntry = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, users.UserID, stripePayments.Paid StripePaid FROM (((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) WHERE galaEntries.EntryID = ? AND Charged = ? AND EntryProcessed = ?");
+  $getEntry = $db->prepare("SELECT members.UserID `user`, 25Free, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 25Back, 50Back, 100Back, 200Back, 25Breast, 50Breast, 100Breast, 200Breast, 25Fly, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, users.UserID, stripePayments.Paid StripePaid FROM (((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) WHERE galaEntries.EntryID = ? AND Charged = ? AND EntryProcessed = ?");
   $getEntry->execute([$entry, '1', '1']);
 
   $entryData = $getEntry->fetch(PDO::FETCH_ASSOC);

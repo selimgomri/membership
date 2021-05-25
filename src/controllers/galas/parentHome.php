@@ -70,6 +70,7 @@ $strokeCounts = [
   'IM' => 0
 ];
 $distanceCounts = [
+  '25' => 0,
   '50' => 0,
   '100' => 0,
   '150' => 0,

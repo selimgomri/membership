@@ -18,34 +18,38 @@ if ($gala == null) {
 
 $galaData = new GalaPrices($db, $id);
 
-$getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) WHERE galaEntries.GalaID = ? ORDER BY MForename ASC, MSurname ASC");
+$getEntries = $db->prepare("SELECT members.UserID `user`, 25Free, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 25Back, 50Back, 100Back, 200Back, 25Breast, 50Breast, 100Breast, 200Breast, 25Fly, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) WHERE galaEntries.GalaID = ? ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id]);
 $entry = $getEntries->fetch(PDO::FETCH_ASSOC);
 
 $swimsArray = [
-  '50Free' => '50&nbsp;Free',
-  '100Free' => '100&nbsp;Free',
-  '200Free' => '200&nbsp;Free',
-  '400Free' => '400&nbsp;Free',
-  '800Free' => '800&nbsp;Free',
-  '1500Free' => '1500&nbsp;Free',
-  '50Back' => '50&nbsp;Back',
-  '100Back' => '100&nbsp;Back',
-  '200Back' => '200&nbsp;Back',
-  '50Breast' => '50&nbsp;Breast',
-  '100Breast' => '100&nbsp;Breast',
-  '200Breast' => '200&nbsp;Breast',
-  '50Fly' => '50&nbsp;Fly',
-  '100Fly' => '100&nbsp;Fly',
-  '200Fly' => '200&nbsp;Fly',
-  '100IM' => '100&nbsp;IM',
-  '150IM' => '150&nbsp;IM',
-  '200IM' => '200&nbsp;IM',
-  '400IM' => '400&nbsp;IM'
+	'25Free' => '25&nbsp;Free',
+	'50Free' => '50&nbsp;Free',
+	'100Free' => '100&nbsp;Free',
+	'200Free' => '200&nbsp;Free',
+	'400Free' => '400&nbsp;Free',
+	'800Free' => '800&nbsp;Free',
+	'1500Free' => '1500&nbsp;Free',
+	'25Back' => '25&nbsp;Back',
+	'50Back' => '50&nbsp;Back',
+	'100Back' => '100&nbsp;Back',
+	'200Back' => '200&nbsp;Back',
+	'25Breast' => '25&nbsp;Breast',
+	'50Breast' => '50&nbsp;Breast',
+	'100Breast' => '100&nbsp;Breast',
+	'200Breast' => '200&nbsp;Breast',
+	'25Fly' => '25&nbsp;Fly',
+	'50Fly' => '50&nbsp;Fly',
+	'100Fly' => '100&nbsp;Fly',
+	'200Fly' => '200&nbsp;Fly',
+	'100IM' => '100&nbsp;IM',
+	'150IM' => '150&nbsp;IM',
+	'200IM' => '200&nbsp;IM',
+	'400IM' => '400&nbsp;IM'
 ];
 
-$rowArray = [1, null, null, null, null, 2, 1,  null, 2, 1, null, 2, 1, null, 2, 1, null, null, 2];
-$rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 2, "Butterfly", null, 2, "Freestyle", null, 2, "Individual Medley", null, null, 2];
+$rowArray = [1, null, null, null, null, null, 2, 1,  null, null, 2, 1, null, null, 2, 1, null, null, 2, 1, null, null, 2];
+$rowArrayText = ["Freestyle", null, null, null, null, null, 2, "Backstroke",  null, null, 2, "Breaststroke", null, null, 2, "Butterfly", null, null, 2, "Individual Medley", null, null, 2];
 
 $countChargeable = 0;
 
@@ -100,18 +104,12 @@ include BASE_PATH . 'views/header.php';
 				Please review the charges shown for all entries listed below. You can edit the amount to be charged for each entry.
 			</p>
 
-			<?php if ($gala['fixed']) { ?>
 			<p>
-				As this gala has a fixed fee for each swim, the amount due for each entry should already be correct but it is your responsibility to verify this.
+				So long as you set up this competition properly, the prices shown below should be accurate. You can edit prices if any adjustments are required, but if you undercharge, you won't be able to charge the user again.
 			</p>
-			<?php } else { ?>
-			<p class="lead">
-				As there is no fixed fee for each swim at this gala, you will have to verify the amount shown next to each swim as this amount has been supplied by parents. You may not be able to recover losses incurred due to incorrect data entry by parents.
-			</p>
-			<?php } ?>
 
 			<p>
-				Please note that if this is a SPORTSYSTEMS gala with a <strong>locked entry file</strong> you will need to discount any entries made by parents which were not accepted by the SPORTSYSTEMS Entry Manager as these will not be listed on the entry report and may lead to overpayment. Alternatively, you may wish to edit the gala entry itself  before proceeding on this page to remove the swim in question - This may help you when processing refunds.
+				Please note that if this is a SPORTSYSTEMS gala with a <strong>locked entry file</strong> you will need to discount any entries made by parents which were not accepted by the SPORTSYSTEMS Entry Manager as these will not be listed on the entry report and may lead to overpayment. Alternatively, you may wish to edit the gala entry itself before proceeding on this page to remove the swim in question - This may help you when processing refunds.
 			</p>
 
 			<p>

@@ -18,34 +18,38 @@ if ($gala == null) {
 
 $galaData = new GalaPrices($db, $id);
 
-$getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, Forename, Surname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, stripePayMethods.Brand, stripePayMethods.Last4, stripePayMethods.Funding, stripePayments.Paid StripePaid FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? AND Charged = ? ORDER BY MForename ASC, MSurname ASC");
+$getEntries = $db->prepare("SELECT members.UserID `user`, 25Free, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 25Back, 50Back, 100Back, 200Back, 25Breast, 50Breast, 100Breast, 200Breast, 25Fly, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, Forename, Surname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, stripePayMethods.Brand, stripePayMethods.Last4, stripePayMethods.Funding, stripePayments.Paid StripePaid FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? AND Charged = ? ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id, '1']);
 $entry = $getEntries->fetch(PDO::FETCH_ASSOC);
 
 $swimsArray = [
-  '50Free' => '50&nbsp;Free',
-  '100Free' => '100&nbsp;Free',
-  '200Free' => '200&nbsp;Free',
-  '400Free' => '400&nbsp;Free',
-  '800Free' => '800&nbsp;Free',
-  '1500Free' => '1500&nbsp;Free',
-  '50Back' => '50&nbsp;Back',
-  '100Back' => '100&nbsp;Back',
-  '200Back' => '200&nbsp;Back',
-  '50Breast' => '50&nbsp;Breast',
-  '100Breast' => '100&nbsp;Breast',
-  '200Breast' => '200&nbsp;Breast',
-  '50Fly' => '50&nbsp;Fly',
-  '100Fly' => '100&nbsp;Fly',
-  '200Fly' => '200&nbsp;Fly',
-  '100IM' => '100&nbsp;IM',
-  '150IM' => '150&nbsp;IM',
-  '200IM' => '200&nbsp;IM',
-  '400IM' => '400&nbsp;IM'
+	'25Free' => '25&nbsp;Free',
+	'50Free' => '50&nbsp;Free',
+	'100Free' => '100&nbsp;Free',
+	'200Free' => '200&nbsp;Free',
+	'400Free' => '400&nbsp;Free',
+	'800Free' => '800&nbsp;Free',
+	'1500Free' => '1500&nbsp;Free',
+	'25Back' => '25&nbsp;Back',
+	'50Back' => '50&nbsp;Back',
+	'100Back' => '100&nbsp;Back',
+	'200Back' => '200&nbsp;Back',
+	'25Breast' => '25&nbsp;Breast',
+	'50Breast' => '50&nbsp;Breast',
+	'100Breast' => '100&nbsp;Breast',
+	'200Breast' => '200&nbsp;Breast',
+	'25Fly' => '25&nbsp;Fly',
+	'50Fly' => '50&nbsp;Fly',
+	'100Fly' => '100&nbsp;Fly',
+	'200Fly' => '200&nbsp;Fly',
+	'100IM' => '100&nbsp;IM',
+	'150IM' => '150&nbsp;IM',
+	'200IM' => '200&nbsp;IM',
+	'400IM' => '400&nbsp;IM'
 ];
 
-$rowArray = [1, null, null, null, null, 2, 1,  null, 2, 1, null, 2, 1, null, 2, 1, null, null, 2];
-$rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 2, "Butterfly", null, 2, "Freestyle", null, 2, "Individual Medley", null, null, 2];
+$rowArray = [1, null, null, null, null, null, 2, 1,  null, null, 2, 1, null, null, 2, 1, null, null, 2, 1, null, null, 2];
+$rowArrayText = ["Freestyle", null, null, null, null, null, 2, "Backstroke",  null, null, 2, "Breaststroke", null, null, 2, "Butterfly", null, null, 2, "Individual Medley", null, null, 2];
 
 $countChargeable = 0;
 
@@ -104,12 +108,6 @@ include BASE_PATH . 'views/header.php';
 			<p>
 			  For increased security, you must press the <strong>Refund</strong> button next next to each entry. The system will ask for confirmation and report back to you whether the refund was successful.
 			</p>
-
-			<?php if (!$gala['fixed']) { ?>
-			<p>
-				As there is no fixed fee for each swim at this gala, you will have to check the amount to refund very carefully as rejections reports by software such as SPORTSYSTEMS do not support events with different fees (eg 1500m events) and so may not show the right amount to refund.
-			</p>
-			<?php } ?>
 
 			<p>
 				This software will prevent you from refunding more than the cost of a gala entry.

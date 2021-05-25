@@ -114,6 +114,14 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 
 		<div id="gala-checkboxes">
 			<div class="row mb-3">
+				<?php if ($galaData->getEvent('25Free')->isEnabled()) { ?>
+					<div class="col-sm-4 col-md-2">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" value="1" class="custom-control-input" id="25Free" name="25Free" data-event-fee="<?= htmlspecialchars($galaData->getEvent('25Free')->getPrice()) ?>">
+							<label class="custom-control-label" for="25Free">25 Freestyle <span class="d-sm-block"><em>&pound;<?= htmlspecialchars($galaData->getEvent('25Free')->getPriceAsString()) ?></em></span></label>
+						</div>
+					</div>
+				<?php } ?>
 				<?php if ($galaData->getEvent('50Free')->isEnabled()) { ?>
 					<div class="col-sm-4 col-md-2">
 						<div class="custom-control custom-checkbox">
@@ -164,6 +172,14 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 				<?php } ?>
 			</div>
 			<div class="row mb-3">
+				<?php if ($galaData->getEvent('25Breast')->isEnabled()) { ?>
+					<div class="col-sm-4 col-md-2">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" value="1" class="custom-control-input" id="25Breast" name="25Breast" data-event-fee="<?= htmlspecialchars($galaData->getEvent('25Breast')->getPrice()) ?>">
+							<label class="custom-control-label" for="25Breast">25 Breaststroke <span class="d-sm-block"><em>&pound;<?= htmlspecialchars($galaData->getEvent('25Breast')->getPriceAsString()) ?></em></span></label>
+						</div>
+					</div>
+				<?php } ?>
 				<?php if ($galaData->getEvent('50Breast')->isEnabled()) { ?>
 					<div class="col-sm-4 col-md-2">
 						<div class="custom-control custom-checkbox">
@@ -190,6 +206,14 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 				<?php } ?>
 			</div>
 			<div class="row mb-3">
+				<?php if ($galaData->getEvent('25Fly')->isEnabled()) { ?>
+					<div class="col-sm-4 col-md-2">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" value="1" class="custom-control-input" id="25Fly" name="25Fly" data-event-fee="<?= htmlspecialchars($galaData->getEvent('25Fly')->getPrice()) ?>">
+							<label class="custom-control-label" for="25Fly">25 Butterfly <span class="d-sm-block"><em>&pound;<?= htmlspecialchars($galaData->getEvent('25Fly')->getPriceAsString()) ?></em></span></label>
+						</div>
+					</div>
+				<?php } ?>
 				<?php if ($galaData->getEvent('50Fly')->isEnabled()) { ?>
 					<div class="col-sm-4 col-md-2">
 						<div class="custom-control custom-checkbox">
@@ -216,6 +240,14 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 				<?php } ?>
 			</div>
 			<div class="row mb-3">
+				<?php if ($galaData->getEvent('25Back')->isEnabled()) { ?>
+					<div class="col-sm-4 col-md-2">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" value="1" class="custom-control-input" id="25Back" name="25Back" data-event-fee="<?= htmlspecialchars($galaData->getEvent('25Back')->getPrice()) ?>">
+							<label class="custom-control-label" for="25Back">25 Backstroke <span class="d-sm-block"><em>&pound;<?= htmlspecialchars($galaData->getEvent('25Back')->getPriceAsString()) ?></em></span></label>
+						</div>
+					</div>
+				<?php } ?>
 				<?php if ($galaData->getEvent('50Back')->isEnabled()) { ?>
 					<div class="col-sm-4 col-md-2">
 						<div class="custom-control custom-checkbox">
