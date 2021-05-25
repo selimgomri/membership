@@ -25,7 +25,7 @@ if ($row == null || !$row['Vetoable']) {
 }
 
 try {
-  $update = $db->prepare("UPDATE galaEntries SET 50Free = :fal, 100Free = :fal, 200Free = :fal, 400Free = :fal, 800Free = :fal, 1500Free = :fal, 50Back = :fal, 100Back = :fal, 200Back = :fal, 50Breast = :fal, 100Breast = :fal, 200Breast = :fal, 50Fly = :fal, 100Fly = :fal, 200Fly = :fal, 100IM = :fal, 150IM = :fal, 200IM = :fal, 400IM = :fal, FeeToPay = :zero, Charged = :tru WHERE EntryID = :entryCode");
+  $update = $db->prepare("UPDATE galaEntries SET 25Free = :fal, 50Free = :fal, 100Free = :fal, 200Free = :fal, 400Free = :fal, 800Free = :fal, 1500Free = :fal, 25Back = :fal, 50Back = :fal, 100Back = :fal, 200Back = :fal, 25Breast = :fal, 50Breast = :fal, 100Breast = :fal, 200Breast = :fal, 25Breast = :fal, 50Fly = :fal, 100Fly = :fal, 200Fly = :fal, 100IM = :fal, 150IM = :fal, 200IM = :fal, 400IM = :fal, FeeToPay = :zero, Charged = :tru WHERE EntryID = :entryCode");
   $update->bindValue('fal', false, PDO::PARAM_BOOL);
   $update->bindValue('tru', true, PDO::PARAM_BOOL);
   $update->bindValue('zero', 0, PDO::PARAM_INT);

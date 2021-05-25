@@ -43,7 +43,7 @@ class GalaPrices {
 
         // Events then prices
         foreach ($sysEvents as $key => $value) {
-          if ($events->$key) {
+          if (isset($events->$key) && $events->$key) {
             $this->events[$key]->enableEvent();
             $this->events[$key]->setPrice($prices[$key]);
           }

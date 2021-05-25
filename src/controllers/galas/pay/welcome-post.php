@@ -15,18 +15,22 @@ $updateTime = $db->prepare("UPDATE galaEntries SET FeeToPay = ? WHERE EntryID = 
 $date = new DateTime('now', new DateTimeZone('Europe/London'));
 
 $swimsArray = [
+  '25Free' => '25&nbsp;Free',
   '50Free' => '50&nbsp;Free',
   '100Free' => '100&nbsp;Free',
   '200Free' => '200&nbsp;Free',
   '400Free' => '400&nbsp;Free',
   '800Free' => '800&nbsp;Free',
   '1500Free' => '1500&nbsp;Free',
+  '25Back' => '25&nbsp;Back',
   '50Back' => '50&nbsp;Back',
   '100Back' => '100&nbsp;Back',
   '200Back' => '200&nbsp;Back',
+  '25Breast' => '25&nbsp;Breast',
   '50Breast' => '50&nbsp;Breast',
   '100Breast' => '100&nbsp;Breast',
   '200Breast' => '200&nbsp;Breast',
+  '25Fly' => '25&nbsp;Fly',
   '50Fly' => '50&nbsp;Fly',
   '100Fly' => '100&nbsp;Fly',
   '200Fly' => '200&nbsp;Fly',
@@ -36,13 +40,12 @@ $swimsArray = [
   '400IM' => '400&nbsp;IM'
 ];
 
-$rowArray = [1, null, null, null, null, 2, 1,  null, 2, 1, null, 2, 1, null, 2, 1, null, null, 2];
-$rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 2, "Butterfly", null, 2, "Freestyle", null, 2, "Individual Medley", null, null, 2];
-
+$rowArray = [1, null, null, null, null, null, 2, 1,  null, null, 2, 1, null, null, 2, 1, null, null, 2, 1, null, null, 2];
+$rowArrayText = ["Freestyle", null, null, null, null, null, 2, "Backstroke",  null, null, 2, "Breaststroke", null, null, 2, "Butterfly", null, null, 2, "Individual Medley", null, null, 2];
 
 try {
-$entries = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE members.UserID = ? AND (NOT RequiresApproval OR (RequiresApproval AND Approved)) AND NOT Charged AND FeeToPay > 0 AND galas.GalaDate >= ?");
-$entries->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $date->format("Y-m-d")]);
+  $entries = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE members.UserID = ? AND (NOT RequiresApproval OR (RequiresApproval AND Approved)) AND NOT Charged AND FeeToPay > 0 AND galas.GalaDate >= ?");
+  $entries->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $date->format("Y-m-d")]);
 } catch (Exception $e) {
   pre($e);
 }
@@ -85,8 +88,6 @@ if ($entry != null) {
         'Member' => $entry['MemberID']
       ]];
     }
-
-
   } while ($entry = $entries->fetch(PDO::FETCH_ASSOC));
 }
 
@@ -108,15 +109,15 @@ if (sizeof($payingEntries) > 0) {
         'stripe_account' => $tenant->getStripeAccount()
       ]
     );
-  
+
     $getId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
     $getId->execute([
       $intent->id
     ]);
     $databaseId = $getId->fetchColumn();
-  
+
     $paymentDatabaseId = $databaseId;
-  
+
     if ($databaseId == null) {
       halt(404);
     }
@@ -126,7 +127,7 @@ if (sizeof($payingEntries) > 0) {
       null,
       $paymentDatabaseId
     ]);
-  
+
     // Assign id to each entry
     foreach ($payingEntries as $entry => $entryData) {
       $updateEntryPayment->execute([
@@ -149,7 +150,7 @@ if (sizeof($payingEntries) > 0) {
       'stripe_account' => $tenant->getStripeAccount()
     ]);
     $_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'] = $intent->id;
-  
+
     $intentCreatedAt = new DateTime('@' . $intent->created, new DateTimeZone('UTC'));
 
     // Check if intent already exists
@@ -172,7 +173,7 @@ if (sizeof($payingEntries) > 0) {
         0,
         0
       ]);
-  
+
       $databaseId = $db->lastInsertId();
     } else {
       $getIntentDbId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
@@ -182,7 +183,7 @@ if (sizeof($payingEntries) > 0) {
       $databaseId = $getIntentDbId->fetchColumn();
     }
     $paymentDatabaseId = $databaseId;
-  
+
     // Assign id to each entry
     foreach ($payingEntries as $entry => $details) {
       $updateEntryPayment->execute([
