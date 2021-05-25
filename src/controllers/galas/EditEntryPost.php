@@ -35,7 +35,7 @@ $galaData = new GalaPrices($db, $row["GalaID"]);
 $closingDate = new DateTime($row['ClosingDate'], new DateTimeZone('Europe/London'));
 $theDate = new DateTime('now', new DateTimeZone('Europe/London'));
 
-if (bool($row['Charged']) || bool($row['EntryProcessed']) || ($closingDate < $theDate && ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Admin' && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas')) || bool($row['Locked'])) {
+if (bool($row['Charged']) || bool($row['EntryProcessed']) || ($closingDate < $theDate && ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Admin' && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas')) || (bool($row['Locked']) && ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Admin' && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas'))) {
   halt(404);
 }
 
