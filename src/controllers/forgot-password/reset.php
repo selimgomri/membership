@@ -42,7 +42,7 @@ if ($user = $getUser->fetchColumn()) {
 							<strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Warning</strong>
 						</p>
 						<p class="mb-0">
-							That password has been part of a data breach elsewhere on the internet. We suggest you pick something different.
+							That password has been part of a data breach elsewhere on the internet. You must pick a stronger password.
 						</p>
 					</div>
 

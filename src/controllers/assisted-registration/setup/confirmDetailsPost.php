@@ -49,6 +49,11 @@ if ($password1 != $password2) {
   ";
 }
 
+if (\CheckPwned::pwned($password1)) {
+  $status = false;
+  $statusMessage .= "<li>That password has been part of a data breach elsewhere on the internet. You must use a different password.</li>";
+}
+
 // If need mobile
 if (mb_strlen($user['Mobile']) == 0) {
   // Validate
