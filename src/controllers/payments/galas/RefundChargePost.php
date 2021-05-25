@@ -22,29 +22,33 @@ if ($gala == null) {
 	halt(404);
 }
 
-$getEntries = $db->prepare("SELECT members.UserID `user`, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 50Back, 100Back, 200Back, 50Breast, 100Breast, 200Breast, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, users.UserID FROM (((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) WHERE galaEntries.GalaID = ? AND Charged = ? AND EntryProcessed = ? ORDER BY MForename ASC, MSurname ASC");
+$getEntries = $db->prepare("SELECT members.UserID `user`, 25Free, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 25Back, 50Back, 100Back, 200Back, 25Breast, 50Breast, 100Breast, 200Breast, 25Fly, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, users.UserID FROM (((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) WHERE galaEntries.GalaID = ? AND Charged = ? AND EntryProcessed = ? ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id, '1', '1']);
 
 $swimsArray = [
-  '50Free' => '50 Free',
-  '100Free' => '100 Free',
-  '200Free' => '200 Free',
-  '400Free' => '400 Free',
-  '800Free' => '800 Free',
-  '1500Free' => '1500 Free',
-  '50Back' => '50 Back',
-  '100Back' => '100 Back',
-  '200Back' => '200 Back',
-  '50Breast' => '50 Breast',
-  '100Breast' => '100 Breast',
-  '200Breast' => '200 Breast',
-  '50Fly' => '50 Fly',
-  '100Fly' => '100 Fly',
-  '200Fly' => '200 Fly',
-  '100IM' => '100 IM',
-  '150IM' => '150 IM',
-  '200IM' => '200 IM',
-  '400IM' => '400 IM'
+	'25Free' => '25&nbsp;Free',
+	'50Free' => '50&nbsp;Free',
+	'100Free' => '100&nbsp;Free',
+	'200Free' => '200&nbsp;Free',
+	'400Free' => '400&nbsp;Free',
+	'800Free' => '800&nbsp;Free',
+	'1500Free' => '1500&nbsp;Free',
+	'25Back' => '25&nbsp;Back',
+	'50Back' => '50&nbsp;Back',
+	'100Back' => '100&nbsp;Back',
+	'200Back' => '200&nbsp;Back',
+	'25Breast' => '25&nbsp;Breast',
+	'50Breast' => '50&nbsp;Breast',
+	'100Breast' => '100&nbsp;Breast',
+	'200Breast' => '200&nbsp;Breast',
+	'25Fly' => '25&nbsp;Fly',
+	'50Fly' => '50&nbsp;Fly',
+	'100Fly' => '100&nbsp;Fly',
+	'200Fly' => '200&nbsp;Fly',
+	'100IM' => '100&nbsp;IM',
+	'150IM' => '150&nbsp;IM',
+	'200IM' => '200&nbsp;IM',
+	'400IM' => '400&nbsp;IM'
 ];
 
 while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {

@@ -22,18 +22,22 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') {
 }
 
 $swimsArray = [
+  '25Free' => '25&nbsp;Free',
   '50Free' => '50&nbsp;Free',
   '100Free' => '100&nbsp;Free',
   '200Free' => '200&nbsp;Free',
   '400Free' => '400&nbsp;Free',
   '800Free' => '800&nbsp;Free',
   '1500Free' => '1500&nbsp;Free',
+  '25Back' => '25&nbsp;Back',
   '50Back' => '50&nbsp;Back',
   '100Back' => '100&nbsp;Back',
   '200Back' => '200&nbsp;Back',
+  '25Breast' => '25&nbsp;Breast',
   '50Breast' => '50&nbsp;Breast',
   '100Breast' => '100&nbsp;Breast',
   '200Breast' => '200&nbsp;Breast',
+  '25Fly' => '25&nbsp;Fly',
   '50Fly' => '50&nbsp;Fly',
   '100Fly' => '100&nbsp;Fly',
   '200Fly' => '200&nbsp;Fly',
@@ -43,7 +47,7 @@ $swimsArray = [
   '400IM' => '400&nbsp;IM'
 ];
 
-$swimsTextArray = ['50 Fr','100 Fr','200 Fr','400 Fr','800 Fr','1500 Fr','50 Bk','100 Bk','200 Bk','50 Br','100 Br','200 Br','50 Fly','100 Fly','200 Fly','100 IM','150 IM','200 IM','400 IM'];
+$swimsTextArray = ['25 Fr','50 Fr','100 Fr','200 Fr','400 Fr','800 Fr','1500 Fr','25 Bk','50 Bk','100 Bk','200 Bk','25 Br','50 Br','100 Br','200 Br','25 Fly','50 Fly','100 Fly','200 Fly','100 IM','150 IM','200 IM','400 IM'];
 
 $pagetitle = htmlspecialchars($data->squad->name) . " Squad Rep View for " . htmlspecialchars($data->gala->name);
 

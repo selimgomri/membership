@@ -99,11 +99,11 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 		<?php }
 		}
 
-		$swimsArray = ['50Free', '100Free', '200Free', '400Free', '800Free', '1500Free', '50Breast', '100Breast', '200Breast', '50Fly', '100Fly', '200Fly', '50Back', '100Back', '200Back', '100IM', '150IM', '200IM', '400IM',];
-		$swimsTimeArray = ['50FreeTime', '100FreeTime', '200FreeTime', '400FreeTime', '800FreeTime', '1500FreeTime', '50BreastTime', '100BreastTime', '200BreastTime', '50FlyTime', '100FlyTime', '200FlyTime', '50BackTime', '100BackTime', '200BackTime', '100IMTime', '150IMTime', '200IMTime', '400IMTime',];
-		$swimsTextArray = ['50 Free', '100 Free', '200 Free', '400 Free', '800 Free', '1500 Free', '50 Breast', '100 Breast', '200 Breast', '50 Fly', '100 Fly', '200 Fly', '50 Back', '100 Back', '200 Back', '100 IM', '150 IM', '200 IM', '400 IM',];
-		$rowArray = [1, null, null, null, null, 2, 1,  null, 2, 1, null, 2, 1, null, 2, 1, null, null, 2];
-		$rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 2, "Butterfly", null, 2, "Freestyle", null, 2, "Individual Medley", null, null, 2];
+		$swimsArray = ['25Free', '50Free', '100Free', '200Free', '400Free', '800Free', '1500Free', '25Back', '50Back', '100Back', '200Back', '25Breast', '50Breast', '100Breast', '200Breast', '25Fly', '50Fly', '100Fly', '200Fly', '100IM', '150IM', '200IM', '400IM',];
+		$swimsTextArray = ['25&nbsp;Free', '50&nbsp;Free', '100&nbsp;Free', '200&nbsp;Free', '400&nbsp;Free', '800&nbsp;Free', '1500&nbsp;Free', '25&nbsp;Back', '50&nbsp;Back', '100&nbsp;Back', '200&nbsp;Back', '25&nbsp;Breast', '50&nbsp;Breast', '100&nbsp;Breast', '200&nbsp;Breast', '25&nbsp;Fly', '50&nbsp;Fly', '100&nbsp;Fly', '200&nbsp;Fly', '100&nbsp;IM', '150&nbsp;IM', '200&nbsp;IM', '400&nbsp;IM',];
+		$swimsTimeArray = ['25FreeTime', '50FreeTime', '100FreeTime', '200FreeTime', '400FreeTime', '800FreeTime', '1500FreeTime', '25BackTime', '50BackTime', '100BackTime', '200BackTime', '25BreastTime', '50BreastTime', '100BreastTime', '200BreastTime', '25FlyTime', '50FlyTime', '100FlyTime', '200FlyTime', '100IMTime', '150IMTime', '200IMTime', '400IMTime',];
+		$rowArray = [1, null, null, null, null, null, 2, 1,  null, null, 2, 1, null, null, 2, 1, null, null, 2, 1, null, null, 2];
+		$rowArrayText = ["Freestyle", null, null, null, null, null, 2, "Backstroke",  null, null, 2, "Breaststroke", null, null, 2, "Butterfly", null, null, 2, "Individual Medley", null, null, 2];
 
 		?>
 
@@ -114,6 +114,14 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 
 		<div id="gala-checkboxes">
 			<div class="row mb-3">
+				<?php if ($galaData->getEvent('25Free')->isEnabled()) { ?>
+					<div class="col-sm-4 col-md-2">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" value="1" class="custom-control-input" id="25Free" name="25Free" data-event-fee="<?= htmlspecialchars($galaData->getEvent('25Free')->getPrice()) ?>">
+							<label class="custom-control-label" for="25Free">25 Freestyle <span class="d-sm-block"><em>&pound;<?= htmlspecialchars($galaData->getEvent('25Free')->getPriceAsString()) ?></em></span></label>
+						</div>
+					</div>
+				<?php } ?>
 				<?php if ($galaData->getEvent('50Free')->isEnabled()) { ?>
 					<div class="col-sm-4 col-md-2">
 						<div class="custom-control custom-checkbox">
@@ -164,6 +172,14 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 				<?php } ?>
 			</div>
 			<div class="row mb-3">
+				<?php if ($galaData->getEvent('25Breast')->isEnabled()) { ?>
+					<div class="col-sm-4 col-md-2">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" value="1" class="custom-control-input" id="25Breast" name="25Breast" data-event-fee="<?= htmlspecialchars($galaData->getEvent('25Breast')->getPrice()) ?>">
+							<label class="custom-control-label" for="25Breast">25 Breaststroke <span class="d-sm-block"><em>&pound;<?= htmlspecialchars($galaData->getEvent('25Breast')->getPriceAsString()) ?></em></span></label>
+						</div>
+					</div>
+				<?php } ?>
 				<?php if ($galaData->getEvent('50Breast')->isEnabled()) { ?>
 					<div class="col-sm-4 col-md-2">
 						<div class="custom-control custom-checkbox">
@@ -190,6 +206,14 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 				<?php } ?>
 			</div>
 			<div class="row mb-3">
+				<?php if ($galaData->getEvent('25Fly')->isEnabled()) { ?>
+					<div class="col-sm-4 col-md-2">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" value="1" class="custom-control-input" id="25Fly" name="25Fly" data-event-fee="<?= htmlspecialchars($galaData->getEvent('25Fly')->getPrice()) ?>">
+							<label class="custom-control-label" for="25Fly">25 Butterfly <span class="d-sm-block"><em>&pound;<?= htmlspecialchars($galaData->getEvent('25Fly')->getPriceAsString()) ?></em></span></label>
+						</div>
+					</div>
+				<?php } ?>
 				<?php if ($galaData->getEvent('50Fly')->isEnabled()) { ?>
 					<div class="col-sm-4 col-md-2">
 						<div class="custom-control custom-checkbox">
@@ -216,6 +240,14 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 				<?php } ?>
 			</div>
 			<div class="row mb-3">
+				<?php if ($galaData->getEvent('25Back')->isEnabled()) { ?>
+					<div class="col-sm-4 col-md-2">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" value="1" class="custom-control-input" id="25Back" name="25Back" data-event-fee="<?= htmlspecialchars($galaData->getEvent('25Back')->getPrice()) ?>">
+							<label class="custom-control-label" for="25Back">25 Backstroke <span class="d-sm-block"><em>&pound;<?= htmlspecialchars($galaData->getEvent('25Back')->getPriceAsString()) ?></em></span></label>
+						</div>
+					</div>
+				<?php } ?>
 				<?php if ($galaData->getEvent('50Back')->isEnabled()) { ?>
 					<div class="col-sm-4 col-md-2">
 						<div class="custom-control custom-checkbox">

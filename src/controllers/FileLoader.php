@@ -28,6 +28,7 @@ $cmd = $client->getCommand('GetObject', [
   'Bucket' => getenv('AWS_S3_BUCKET'),
   'Key' => $key
 ]);
+// ResponseContentDisposition can be set here
 
 $exists = $client->doesObjectExist(getenv('AWS_S3_BUCKET'), $key);
 

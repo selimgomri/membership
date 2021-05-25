@@ -4,18 +4,22 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 $swimsArray = [
+  '25Free' => '25&nbsp;Free',
   '50Free' => '50&nbsp;Free',
   '100Free' => '100&nbsp;Free',
   '200Free' => '200&nbsp;Free',
   '400Free' => '400&nbsp;Free',
   '800Free' => '800&nbsp;Free',
   '1500Free' => '1500&nbsp;Free',
+  '25Back' => '25&nbsp;Back',
   '50Back' => '50&nbsp;Back',
   '100Back' => '100&nbsp;Back',
   '200Back' => '200&nbsp;Back',
+  '25Breast' => '25&nbsp;Breast',
   '50Breast' => '50&nbsp;Breast',
   '100Breast' => '100&nbsp;Breast',
   '200Breast' => '200&nbsp;Breast',
+  '25Fly' => '25&nbsp;Fly',
   '50Fly' => '50&nbsp;Fly',
   '100Fly' => '100&nbsp;Fly',
   '200Fly' => '200&nbsp;Fly',
@@ -25,8 +29,8 @@ $swimsArray = [
   '400IM' => '400&nbsp;IM'
 ];
 
-$rowArray = [1, null, null, null, null, 2, 1,  null, 2, 1, null, 2, 1, null, 2, 1, null, null, 2];
-$rowArrayText = ["Freestyle", null, null, null, null, 2, "Breaststroke",  null, 2, "Butterfly", null, 2, "Freestyle", null, 2, "Individual Medley", null, null, 2];
+$rowArray = [1, null, null, null, null, null, 2, 1,  null, null, 2, 1, null, null, 2, 1, null, null, 2, 1, null, null, 2];
+$rowArrayText = ["Freestyle", null, null, null, null, null, 2, "Backstroke",  null, null, 2, "Breaststroke", null, null, 2, "Butterfly", null, null, 2, "Individual Medley", null, null, 2];
 
 $getEntry = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE EntryID = ? AND members.UserID = ?");
 
