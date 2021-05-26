@@ -168,6 +168,9 @@ class Tenant
    */
   public function getWebsite()
   {
+    if ($this->getKey('CLUB_WEBSITE')) {
+      return $this->getKey('CLUB_WEBSITE');
+    }
     return $this->website;
   }
 
