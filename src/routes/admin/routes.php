@@ -55,6 +55,10 @@ $this->group('/payments', function () {
   include 'payments/routes.php';
 });
 
+$this->group('/tenants', function () {
+  include 'tenants/routes.php';
+});
+
 $this->get('/files/{tenant}:int/*', function () {
   $array = $this->getArrayCopy();
   $tenant = (int) $array['tenant'];

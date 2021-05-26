@@ -18,11 +18,14 @@ include BASE_PATH . "views/root/header.php";
         <a href="<?= htmlspecialchars(autoUrl('admin/notify/history')) ?>" class="list-group-item list-group-item-action">
           Notify Usage
         </a>
-        <a href="<?= htmlspecialchars(autoUrl('admin/audit/logs')) ?>" class="list-group-item list-group-item-action">
+        <a href="<?= htmlspecialchars(autoUrl('admin/audit')) ?>" class="list-group-item list-group-item-action">
           Audit Logs
         </a>
         <a href="<?= htmlspecialchars(autoUrl('admin/users')) ?>" class="list-group-item list-group-item-action">
           User Search
+        </a>
+        <a href="<?= htmlspecialchars(autoUrl('admin/tenants')) ?>" class="list-group-item list-group-item-action">
+          Tenants
         </a>
         <a href="<?= htmlspecialchars(autoUrl('admin/register')) ?>" class="list-group-item list-group-item-action">
           Add Tenant
