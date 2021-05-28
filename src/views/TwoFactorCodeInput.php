@@ -92,7 +92,7 @@ include BASE_PATH . "views/head.php";
         <input type="hidden" name="target" value="<?= htmlspecialchars($target) ?>">
 
         <div class="mb-3">
-          <div class="custom-control custom-checkbox">
+          <div class="custom-control form-checkbox">
             <input type="checkbox" class="custom-control-input" name="RememberMe" id="RememberMe" <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe'])) { ?>checked<?php } ?> aria-describedby="RememberMeHelp" value="1">
             <label class="custom-control-label" for="RememberMe">Keep me logged in</label>
             <small id="RememberMeHelp" class="form-text text-muted">
@@ -103,7 +103,7 @@ include BASE_PATH . "views/head.php";
 
         <?php if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE']) || $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE'] !== true) { ?>
           <div class="mb-3">
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control form-checkbox">
               <input type="checkbox" class="custom-control-input" name="setup-time-based-codes" id="setup-time-based-codes" aria-describedby="setup-time-based-codes-help">
               <label class="custom-control-label" for="setup-time-based-codes">Set up an authenticator app</label>
               <small id="setup-time-based-codes-help" class="form-text text-muted">

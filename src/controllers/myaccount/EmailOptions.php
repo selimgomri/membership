@@ -123,7 +123,7 @@ include BASE_PATH . "views/header.php";
     		  </div>
 
     			<div class="mb-3">
-    				<div class="custom-control custom-switch">
+    				<div class="custom-control form-switch">
     					<input type="checkbox" class="custom-control-input" value="1" id="EmailComms" aria-describedby="EmailCommsHelp" name="EmailComms" <?=$emailChecked?> >
               <label class="custom-control-label" for="EmailComms">Receive squad updates by email</label>
     					<small id="EmailCommsHelp" class="form-text text-muted">Squad updates include emails from your coaches. You'll still receive emails relating to your account if you don't receive updates.</small>
@@ -132,7 +132,7 @@ include BASE_PATH . "views/header.php";
 
 					<?php if ($currentUser->hasPermission('Parent')) { ?>
     			<div class="mb-3">
-    				<div class="custom-control custom-switch">
+    				<div class="custom-control form-switch">
     					<input type="checkbox" class="custom-control-input" value="1" id="SecurityComms" aria-describedby="SecurityCommsHelp" name="SecurityComms" <?=$emailChecked_security?> >
               <label class="custom-control-label" for="SecurityComms">Receive account security emails</label>
     					<small id="SecurityCommsHelp" class="form-text text-muted">Receive emails whenever somebody logs in to your account from an unrecognised <abbr title="Internet Protocol">IP</abbr> address.</small>
@@ -140,7 +140,7 @@ include BASE_PATH . "views/header.php";
     			</div>
 
     			<div class="mb-3">
-    				<div class="custom-control custom-switch">
+    				<div class="custom-control form-switch">
     					<input type="checkbox" class="custom-control-input" value="1" id="PaymentComms" aria-describedby="PaymentCommsHelp" name="PaymentComms" <?php echo $emailChecked_payments; ?> >
               <label class="custom-control-label" for="PaymentComms">Receive payment emails</label>
     					<small id="PaymentCommsHelp" class="form-text text-muted">If you opt out, you'll still receive emails required for regulatory purposes.</small>
@@ -150,7 +150,7 @@ include BASE_PATH . "views/header.php";
 
     			<?php if ($currentUser->hasPermission('Admin')) { ?>
     			<div class="mb-3">
-    				<div class="custom-control custom-switch">
+    				<div class="custom-control form-switch">
     					<input type="checkbox" class="custom-control-input" value="1" id="NewMemberComms" aria-describedby="NewMemberCommsHelp" name="NewMemberComms" <?php echo $emailChecked_new_member; ?> >
               <label class="custom-control-label" for="NewMemberComms">Receive new member emails</label>
     					<small id="NewMemberCommsHelp" class="form-text text-muted">Get notified when new members are added.</small>

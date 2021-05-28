@@ -44,7 +44,7 @@ include BASE_PATH . "views/paymentsMenu.php";
     <div class="col-md-8">
       <h1><?= htmlspecialchars($row['ExtraName']) ?> <small>&pound;<?= htmlspecialchars(number_format($row['ExtraFee'], 2)) ?>/month (<?php if ($row['Type'] == 'Payment') { ?>payment<?php } else { ?>credit/refund<?php } ?>)</small></h1>
     </div>
-    <div class="col text-sm-right">
+    <div class="col text-sm-end">
       <a href="<?= htmlspecialchars(autoUrl("payments/extrafees/$id/edit")) ?>" class="btn btn-dark">Edit</a>
       <a href="<?= htmlspecialchars(autoUrl("payments/extrafees/$id/delete")) ?>" class="btn btn-danger">Delete</a>
     </div>
@@ -58,7 +58,7 @@ include BASE_PATH . "views/paymentsMenu.php";
         <form class="card-body">
           <div class="mb-3">
             <label class="form-label" for="squadSelect">Select squad</label>
-            <select class="custom-select" id="squadSelect" name="squadSelect">
+            <select class="form-select" id="squadSelect" name="squadSelect">
               <option selected value="" disabled>Choose...</option>
               <option value="all-members">All members</option>
               <?php while ($squadsRow = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
@@ -70,7 +70,7 @@ include BASE_PATH . "views/paymentsMenu.php";
           </div>
           <div class="mb-3">
             <label class="form-label" for="swimmerSelect">Select member</label>
-            <select disabled class="custom-select" id="swimmerSelect" name="swimmerSelect">
+            <select disabled class="form-select" id="swimmerSelect" name="swimmerSelect">
               <option value="null " selected>Please select a squad</option>
             </select>
           </div>

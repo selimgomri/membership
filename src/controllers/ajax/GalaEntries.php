@@ -226,7 +226,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
       // If the entry has been processes, show a ticked checkbox
       $content .= "
-      <div class=\"custom-control custom-checkbox\">
+      <div class=\"custom-control form-checkbox\">
         <input type=\"checkbox\" value=\"1\" ";
         if ($row['EntryProcessed'] == 1) {
           $content .= ' checked ';
@@ -237,7 +237,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
       // If the entry has been processes, show a ticked checkbox
       $content .= "
-      <div class=\"custom-control custom-checkbox\">
+      <div class=\"custom-control form-checkbox\">
         <input type=\"checkbox\" value=\"1\" ";
       if ($row['Charged'] || $row['PaymentID'] != null) {
         $content .= ' checked ';

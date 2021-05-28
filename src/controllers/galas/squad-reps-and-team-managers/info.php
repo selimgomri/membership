@@ -86,7 +86,7 @@ include BASE_PATH . 'views/header.php';
           <label class="form-label" for="squad-select">
             Choose squad
           </label>
-          <select class="custom-select" id="squad-select" name="squad-select" data-gala-id="<?=htmlspecialchars($id)?>" data-page="<?=htmlspecialchars(autoUrl(''))?>" data-ajax-url="<?=htmlspecialchars(autoUrl('galas/squad-reps/entry-states'))?>">
+          <select class="form-select" id="squad-select" name="squad-select" data-gala-id="<?=htmlspecialchars($id)?>" data-page="<?=htmlspecialchars(autoUrl(''))?>" data-ajax-url="<?=htmlspecialchars(autoUrl('galas/squad-reps/entry-states'))?>">
             <?php if ($noSquad) { ?>
             <option selected>Select a squad</option>
             <?php } ?>
@@ -223,15 +223,15 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
           <hr>
-          <div class="custom-control custom-checkbox custom-control-inline">
+          <div class="custom-control form-checkbox custom-control-inline">
             <input type="checkbox" class="custom-control-input" id="paid-<?=htmlspecialchars($entry->id)?>" name="paid-<?=htmlspecialchars($entry->id)?>" <?php if (isset($entry->charged) && $entry->charged) { ?>checked<?php } ?> <?php if (isset($entry->charge_lock) && $entry->charge_lock) { ?>disabled<?php } ?> data-ajax-action="mark-paid" data-entry-id="<?=htmlspecialchars($entry->id)?>">
             <label class="custom-control-label" for="paid-<?=htmlspecialchars($entry->id)?>">Entry paid</label>
           </div>
-          <div class="custom-control custom-checkbox custom-control-inline">
+          <div class="custom-control form-checkbox custom-control-inline">
             <input type="checkbox" class="custom-control-input" id="approved-<?=htmlspecialchars($entry->id)?>" name="approved-<?=htmlspecialchars($entry->id)?>" <?php if (isset($entry->approved) && $entry->approved) { ?>checked<?php } ?> data-ajax-action="approve-entry" data-entry-id="<?=htmlspecialchars($entry->id)?>">
             <label class="custom-control-label" for="approved-<?=htmlspecialchars($entry->id)?>">Entry approved</label>
           </div>
-          <div class="custom-control custom-checkbox custom-control-inline">
+          <div class="custom-control form-checkbox custom-control-inline">
             <input type="checkbox" class="custom-control-input" id="processed-<?=htmlspecialchars($entry->id)?>" name="processed-<?=htmlspecialchars($entry->id)?>" <?php if (isset($entry->processed) && $entry->processed) { ?>checked<?php } ?> disabled data-ajax-action="approve-entry" data-entry-id="<?=htmlspecialchars($entry->id)?>">
             <label class="custom-control-label" for="processed-<?=htmlspecialchars($entry->id)?>"><abbr title="Only staff can mark an entry processed, meaning it has been entered into HyTek or SportSystems">Entry processed</abbr></label>
           </div>

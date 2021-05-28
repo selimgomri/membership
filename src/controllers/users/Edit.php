@@ -139,23 +139,23 @@ include BASE_PATH . 'views/header.php';
           <p>
             Select access permissions for <?= htmlspecialchars($info['Forename']) ?>
           </p>
-          <div class="custom-control custom-switch">
+          <div class="custom-control form-switch">
             <input type="checkbox" class="custom-control-input" id="permissions-parent" name="permissions-parent" value="1" <?= selected($userObject, 'Parent') ?>>
             <label class="custom-control-label" for="permissions-parent">Parent/user</label>
           </div>
-          <div class="custom-control custom-switch">
+          <div class="custom-control form-switch">
             <input type="checkbox" class="custom-control-input" id="permissions-gala" name="permissions-gala" value="1" <?= selected($userObject, 'Galas') ?>>
             <label class="custom-control-label" for="permissions-gala">Gala coordinator</label>
           </div>
-          <div class="custom-control custom-switch">
+          <div class="custom-control form-switch">
             <input type="checkbox" class="custom-control-input" id="permissions-coach" name="permissions-coach" value="1" <?= selected($userObject, 'Coach') ?>>
             <label class="custom-control-label" for="permissions-coach">Coach</label>
           </div>
-          <div class="custom-control custom-switch">
+          <div class="custom-control form-switch">
             <input type="checkbox" class="custom-control-input" id="permissions-admin" name="permissions-admin" value="1" <?= selected($userObject, 'Admin') ?>>
             <label class="custom-control-label" for="permissions-admin">Admin</label>
           </div>
-          <div class="custom-control custom-switch">
+          <div class="custom-control form-switch">
             <input type="checkbox" class="custom-control-input" id="permissions-scds-payments-manager" name="permissions-scds-payments-manager" value="1" <?= selected($userObject, 'SCDSPaymentsManager') ?>>
             <label class="custom-control-label" for="permissions-scds-payments-manager">SCDS Payments Access (Enabling this will also make the user an admin and allows them to manage payments to SCDS)</label>
           </div>

@@ -202,7 +202,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" 
           <div class="col">
             <strong>Swimmer</strong>
           </div>
-          <div class="col-auto text-right">
+          <div class="col-auto text-end">
             <strong>Notes</strong>
           </div>
         </div>
@@ -223,24 +223,24 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" 
         }
         $no_parent = "";
         if (date("m-d", strtotime($row['DateOfBirth'])) == date("m-d", $sessionDate)) {
-          $no_parent .= '<span class="visually-hidden"><em>Birthday is today</em></span><span class="badge badge-success"><i class="fa fa-birthday-cake" aria-hidden="true"></i> ' . $ageOnSession . ' today</span>';
+          $no_parent .= '<span class="visually-hidden"><em>Birthday is today</em></span><span class="badge bg-success"><i class="fa fa-birthday-cake" aria-hidden="true"></i> ' . $ageOnSession . ' today</span>';
         }
         if ($row['UserID'] == null && $age < 18) {
-          $no_parent .= "<span class=\"badge badge-primary\">NO PARENT</span>";
+          $no_parent .= "<span class=\"badge bg-primary\">NO PARENT</span>";
         }
         $content .= "
         <li class=\"list-group-item\">
           <div class=\"row\">
             <div class=\"col\">
-              <div class=\"custom-control custom-checkbox\">
+              <div class=\"custom-control form-checkbox\">
               <input type=\"checkbox\" class=\"custom-control-input\" " . $checked . " name=\"Member-" . $row['MemberID'] . "\" value=\"1\" id=\"Member-" . $row['MemberID'] . "\">
               <label class=\"custom-control-label d-block\" for=\"Member-" . $row['MemberID'] . "\">" . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " " . $no_parent . "</label>
               </div>
             </div>
-            <div class=\"col-auto text-right\">";
+            <div class=\"col-auto text-end\">";
             if ($row['Conditions'] != "" || $row['Allergies'] != "" || $row['Medication'] != "") {
               //ref=\"" . autoUrl("swimmers/" . $row['MemberID']) . "\" target=\"_blank\">
-              $content .= "<a data-toggle=\"modal\" href=\"#medicalModal" . $row['MemberID'] . "\"><span class=\"badge badge-danger\">MEDICAL</span></a>";
+              $content .= "<a data-toggle=\"modal\" href=\"#medicalModal" . $row['MemberID'] . "\"><span class=\"badge bg-danger\">MEDICAL</span></a>";
               $modalOutput .= '
               <!-- Modal -->
               <div class="modal fade" id="medicalModal' . $row['MemberID'] . '" tabindex="-1" role="dialog" aria-labelledby="medicalModalTitle' . $row['MemberID'] . '" aria-hidden="true">
@@ -289,7 +289,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" 
               ';
             }
             if ($row['OtherNotes'] != "") {
-              $content .= " <a data-toggle=\"modal\" href=\"#notesModal" . $row['MemberID'] . "\"><span class=\"badge badge-info\">OTHER</span></a>";
+              $content .= " <a data-toggle=\"modal\" href=\"#notesModal" . $row['MemberID'] . "\"><span class=\"badge bg-info\">OTHER</span></a>";
               $modalOutput .= '
               <!-- Modal -->
               <div class="modal fade" id="notesModal' . $row['MemberID'] . '" tabindex="-1" role="dialog" aria-labelledby="notesModalTitle' . $row['MemberID'] . '" aria-hidden="true">
@@ -310,7 +310,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" 
               ';
             }
             if (($row['Website'] != 1 || $row['Social'] != 1 || $row['Noticeboard'] != 1 || $row['FilmTraining'] != 1 || $row['ProPhoto'] != 1) && ($age < 18)) {
-              $content .= " <a data-toggle=\"modal\" href=\"#photoModal" . $row['MemberID'] . "\"><span class=\"badge badge-warning\">PHOTO</span></a>";
+              $content .= " <a data-toggle=\"modal\" href=\"#photoModal" . $row['MemberID'] . "\"><span class=\"badge bg-warning\">PHOTO</span></a>";
               $modalOutput .= '
               <!-- Modal -->
               <div class="modal fade" id="photoModal' . $row['MemberID'] . '" tabindex="-1" role="dialog" aria-labelledby="photoModalTitle' . $row['MemberID'] . '" aria-hidden="true">

@@ -70,7 +70,7 @@ include BASE_PATH . 'views/header.php';
           </p>
           <div class="mb-3 d-lg-none"></div>
         </div>
-        <div class="col text-right">
+        <div class="col text-end">
           <p class="mb-0">
             <a href="<?=htmlspecialchars(autoUrl("log-books/logs/" . $id . "/edit"))?>" class="btn btn-dark">Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
           </p>

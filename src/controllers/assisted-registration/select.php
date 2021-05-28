@@ -56,7 +56,7 @@ include BASE_PATH . 'views/header.php';
           ]);
         ?>
           <div class="mb-3">
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control form-checkbox">
               <input type="checkbox" class="custom-control-input" id="member-<?= htmlspecialchars($swimmer['id']) ?>" name="member-<?= htmlspecialchars($swimmer['id']) ?>">
               <label class="custom-control-label" for="member-<?= htmlspecialchars($swimmer['id']) ?>">
                 <p class="mb-0 font-weight-bold">
@@ -78,11 +78,11 @@ include BASE_PATH . 'views/header.php';
             </div>
 
             <div class="">
-              <div class="custom-control custom-radio custom-control-inline">
+              <div class="custom-control form-check custom-control-inline">
                 <input type="radio" id="member-rr-yes-<?= htmlspecialchars($swimmer['id']) ?>" name="member-rr-<?= htmlspecialchars($swimmer['id']) ?>" class="custom-control-input" checked value="yes">
                 <label class="custom-control-label" for="member-rr-yes-<?= htmlspecialchars($swimmer['id']) ?>">Require registration</label>
               </div>
-              <div class="custom-control custom-radio custom-control-inline">
+              <div class="custom-control form-check custom-control-inline">
                 <input type="radio" id="member-rr-no-<?= htmlspecialchars($swimmer['id']) ?>" name="member-rr-<?= htmlspecialchars($swimmer['id']) ?>" class="custom-control-input" value="no">
                 <label class="custom-control-label" for="member-rr-no-<?= htmlspecialchars($swimmer['id']) ?>">Add to account quietly</label>
               </div>

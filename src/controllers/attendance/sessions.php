@@ -66,7 +66,7 @@ include "attendanceMenu.php";
           Add or end scheduled squad sessions.
         </p>
       </div>
-      <div class="col text-right">
+      <div class="col text-end">
         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add-session-modal">
           Add new session
         </button>
@@ -85,7 +85,7 @@ include "attendanceMenu.php";
         <form>
           <div class="mb-3">
             <label class="form-label" for="squad">Select Squad</label>
-            <select class="custom-select" name="squad" id="squad">
+            <select class="form-select" name="squad" id="squad">
               <option value="" selected disabled>Choose a squad</option>
               <?php do { ?>
                 <option value="<?= $squad['id'] ?>" <?php if ($selectedSquad == $squad['id']) { ?>selected<?php } ?>>
@@ -154,7 +154,7 @@ include "attendanceMenu.php";
 
           <div class="mb-3">
             <label class="form-label" for="session-venue">Session Venue</label>
-            <select class="custom-select add-session-form-reset-input" name="session-venue" id="session-venue" required data-default-value="">
+            <select class="form-select add-session-form-reset-input" name="session-venue" id="session-venue" required data-default-value="">
               <option selected disabled value="">Select a Venue</option>
               <?php if ($venue) { ?>
                 <?php do { ?>
@@ -171,11 +171,11 @@ include "attendanceMenu.php";
             <p class="mb-2">
               Recurrence
             </p>
-            <div class="custom-control custom-radio">
+            <div class="custom-control form-check">
               <input type="radio" id="recurring-session" name="recurring" class="custom-control-input" value="recurring" checked required>
               <label class="custom-control-label" for="recurring-session">Weekly until cancelled</label>
             </div>
-            <div class="custom-control custom-radio">
+            <div class="custom-control form-check">
               <input type="radio" id="recurring-one-off" name="recurring" class="custom-control-input" value="one-off">
               <label class="custom-control-label" for="recurring-one-off">One-off</label>
             </div>
@@ -235,7 +235,7 @@ include "attendanceMenu.php";
             <div class="row">
               <?php do { ?>
                 <div class="col-6 col-md-4 col-lg-3 mb-2">
-                  <div class="custom-control custom-checkbox">
+                  <div class="custom-control form-checkbox">
                     <input type="checkbox" class="custom-control-input add-session-form-squad-checkboxes" id="squad-check-<?= htmlspecialchars($squadNew['SquadID']) ?>" name="squad-<?= htmlspecialchars($squadNew['SquadID']) ?>" value="1">
                     <label class="custom-control-label" for="squad-check-<?= htmlspecialchars($squadNew['SquadID']) ?>"><?= htmlspecialchars($squadNew['SquadName']) ?></label>
                   </div>
@@ -256,11 +256,11 @@ include "attendanceMenu.php";
             <p class="mb-2">
               Attendance monitoring
             </p>
-            <div class="custom-control custom-radio">
+            <div class="custom-control form-check">
               <input type="radio" id="main-sequence-all" name="main-sequence" class="custom-control-input" value="all" checked required>
               <label class="custom-control-label" for="main-sequence-all">This session is for all squad members</label>
             </div>
-            <div class="custom-control custom-radio">
+            <div class="custom-control form-check">
               <input type="radio" id="main-sequence-some" name="main-sequence" class="custom-control-input" value="some">
               <label class="custom-control-label" for="main-sequence-some">This session is only for some squad members</label>
             </div>
@@ -270,11 +270,11 @@ include "attendanceMenu.php";
             <p class="mb-2">
               Require booking for this session
             </p>
-            <div class="custom-control custom-radio">
+            <div class="custom-control form-check">
               <input type="radio" id="require-booking-no" name="require-booking" class="custom-control-input" value="0" checked required>
               <label class="custom-control-label" for="require-booking-no">Don't require booking</label>
             </div>
-            <div class="custom-control custom-radio">
+            <div class="custom-control form-check">
               <input type="radio" id="require-booking-yes" name="require-booking" class="custom-control-input" value="1">
               <label class="custom-control-label" for="require-booking-yes">Require booking</label>
             </div>
@@ -286,7 +286,7 @@ include "attendanceMenu.php";
       </div>
       <div class="modal-footer">
         <div class="row">
-          <div class="col-auto text-right">
+          <div class="col-auto text-end">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
             <button type="submit" form="new-session-form" class="btn btn-success">Add session</button>
           </div>

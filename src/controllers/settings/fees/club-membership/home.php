@@ -78,7 +78,7 @@ include BASE_PATH . 'views/header.php';
             <?php $class = $getClasses->fetch(PDO::FETCH_ASSOC); ?>
             <div class="mb-3">
               <label class="form-label" for="default-class">Select default membership class</label>
-              <select class="custom-select" id="default-class" name="default-class">
+              <select class="form-select" id="default-class" name="default-class">
                 <option selected disabled>Open this select menu</option>
                 <?php do { ?>
                   <option value="<?= htmlspecialchars($class['ID']) ?>" <?php if ($tenant->getKey('DEFAULT_MEMBERSHIP_CLASS') == $class['ID']) { ?>selected<?php } ?>><?= htmlspecialchars($class['Name']) ?></option>

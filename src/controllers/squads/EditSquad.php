@@ -94,7 +94,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
           </div>
           <div class="mb-3">
             <label class="form-label" for="squadCoC">Squad Code of Conduct</label>
-            <select class="custom-select" id="squadCoC" name="squadCoC" aria-describedby="conductSelectHelpBlock">
+            <select class="form-select" id="squadCoC" name="squadCoC" aria-describedby="conductSelectHelpBlock">
               <?php while ($codeDetails = $codesOfConduct->fetch(PDO::FETCH_ASSOC)) { ?>
                 <option value="<?= htmlspecialchars($codeDetails['ID']) ?>" <?php if ($row['SquadCoC'] == $codeDetails['ID']) { ?>selected<?php } ?>>
                   <?= htmlspecialchars($codeDetails['Title']) ?>

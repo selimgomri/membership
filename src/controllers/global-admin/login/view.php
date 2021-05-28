@@ -74,7 +74,7 @@ include BASE_PATH . "views/root/head.php";
             </div>
           </div>
           <div class="mb-3">
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control form-checkbox">
               <input type="checkbox" class="custom-control-input" name="RememberMe" id="RememberMe" checked aria-describedby="RememberMeHelp">
               <label class="custom-control-label" for="RememberMe">Keep me logged in</label>
               <small id="RememberMeHelp" class="form-text text-muted">

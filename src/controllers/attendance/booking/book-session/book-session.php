@@ -121,7 +121,7 @@ include BASE_PATH . 'views/header.php';
         </p>
         <div class="mb-3 d-lg-none"></div>
       </div>
-      <div class="col text-lg-right">
+      <div class="col text-lg-end">
         <div class="btn-group">
           <?php if (($user->hasPermission('Admin') || $user->hasPermission('Coach')) && !$bookingClosed) { ?>
             <a href="<?= htmlspecialchars(autoUrl('sessions/booking/edit?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>" class="btn btn-primary">
@@ -420,7 +420,7 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <div class="col">
-            <a target="_blank" class="btn btn-linkedin btn-block dismiss-share-box" href="https://www.linkedin.com/shareArticle?mini=true&url=<?= rawurlencode($theLink); ?>&title=<?= rawurlencode($theTitle); ?>&source=<?= rawurlencode($tenant->getName() . ' / SCDS Membership') ?>"><i class="fa fa-linkedin" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share on Linked In</span></a>
+            <a target="_blank" class="btn btn-lightedin btn-block dismiss-share-box" href="https://www.linkedin.com/shareArticle?mini=true&url=<?= rawurlencode($theLink); ?>&title=<?= rawurlencode($theTitle); ?>&source=<?= rawurlencode($tenant->getName() . ' / SCDS Membership') ?>"><i class="fa fa-linkedin" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share on Linked In</span></a>
           </div>
         </div>
 

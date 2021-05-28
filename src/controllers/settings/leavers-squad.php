@@ -51,7 +51,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="mb-3">
           <label class="form-label" for="leavers-squad">Leaver's Squad</label>
-          <select class="custom-select" id="leavers-squad" name="leavers-squad" aria-describedby="leavers-squad-help">
+          <select class="form-select" id="leavers-squad" name="leavers-squad" aria-describedby="leavers-squad-help">
             <option <?php if ($leavers == $null) { ?>selected<?php } ?>>
               Select an option
             </option>

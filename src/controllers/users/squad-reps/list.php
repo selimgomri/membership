@@ -89,7 +89,7 @@ include BASE_PATH . "views/header.php";
             <div class="col">
               <?=htmlspecialchars($squad['SquadName'])?>
             </div>
-            <div class="col text-right">
+            <div class="col text-end">
               <span>
                 <a class="btn btn-primary" href="<?=autoUrl("users/" . $id . "/rep/remove?squad=" . $squad['SquadID'] . "")?>">Remove</a>
               </span>

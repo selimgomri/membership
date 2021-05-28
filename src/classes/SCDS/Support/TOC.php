@@ -52,7 +52,7 @@ class TOC
 
   private static function renderList($list, $currentLocation)
   {
-    $output = '<ul class="list-unstyled ml-2">';
+    $output = '<ul class="list-unstyled ms-2">';
 
     foreach ($list as $key => $item) {
 

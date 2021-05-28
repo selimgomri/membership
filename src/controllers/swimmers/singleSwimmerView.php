@@ -363,7 +363,7 @@ $content .= '<!--
   $content .= '</ul><div class="card-body">';
 	if ($access == "Admin") {
     $content .= '
-	  <span class="d-block text-right d-print-none">
+	  <span class="d-block text-end d-print-none">
 	    <a class="btn btn-success" href="' . autoUrl("members/" . $id . "/edit") . '">Edit Details</a> <a class="btn btn-success" href="' . autoUrl("members/" . $id . "/medical") . '">Edit Medical Notes</a>
 	  </span>';
 	} else {

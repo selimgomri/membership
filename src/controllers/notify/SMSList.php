@@ -36,7 +36,7 @@ include BASE_PATH . "views/notifyMenu.php";
 
 		<div class="mb-3">
 		  <label class="visually-hidden" for="squad">Select a Squad</label>
-		  <select class="custom-select" placeholder="Select a Squad" id="squad" name="squad">
+		  <select class="form-select" placeholder="Select a Squad" id="squad" name="squad">
 			  <option value="allSquads">Show All Squads</option>;
 			  <?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
 				<option value="<?=$squad['id']?>"><?=htmlspecialchars($squad['name'])?></option>

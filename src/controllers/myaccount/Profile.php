@@ -239,7 +239,7 @@ if (app('request')->method == "POST") {
                   </p>
                 </div>
                 <div class="mb-3">
-                  <div class="custom-control custom-switch">
+                  <div class="custom-control form-switch">
                     <input type="checkbox" class="custom-control-input" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?= $emailChecked ?>>
                     <label class="custom-control-label" for="emailContactOK">Receive news by email</label>
                     <small id="emailContactOKHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small>
@@ -251,7 +251,7 @@ if (app('request')->method == "POST") {
                   <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number. By default, we will assume your number is a GB phone number. If it is an international number, please include your country code (e.g. +1).</small>
                 </div>
                 <div class="mb-3">
-                  <div class="custom-control custom-switch">
+                  <div class="custom-control form-switch">
                     <input type="checkbox" class="custom-control-input" value="1" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK" <?= $mobileChecked ?>>
                     <label class="custom-control-label" for="smsContactOK">Receive text messages</label>
                     <small id="smsContactOKHelp" class="form-text text-muted">We'll still use this number to contact you in an emergency</small>
@@ -263,7 +263,7 @@ if (app('request')->method == "POST") {
             <?php
             $grav_url = "https://www.gravatar.com/avatar/" . md5(mb_strtolower(trim($_SESSION['TENANT-' . app()->tenant->getId()]['EmailAddress']))) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=240";
             ?>
-            <img class="mr-3 rounded" src="<?= $grav_url ?>" alt="" width="80" height="80">
+            <img class="me-3 rounded" src="<?= $grav_url ?>" alt="" width="80" height="80">
             <small class="form-text text-muted">If you have <a href="https://en.gravatar.com/">an image linked to your email with Gravitar</a>, we'll display it in the system</small>
           </div>
           -->
@@ -321,7 +321,7 @@ if (app('request')->method == "POST") {
                                 </a>
                               </p>
                             </div>
-                            <div class="col text-sm-right">
+                            <div class="col text-sm-end">
                               <a href="<?= autoUrl("emergency-contacts/edit/" .
                                           $contactsArray[$i]->getID()) ?>" class="btn btn-primary">
                                 Edit

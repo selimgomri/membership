@@ -50,7 +50,7 @@ include BASE_PATH . "views/notifyMenu.php";
 	    <h1><?=htmlspecialchars($row['Name'])?></h1>
       <p class="lead"><?=htmlspecialchars($row['Description'])?></p>
     </div>
-    <div class="col text-sm-right">
+    <div class="col text-sm-end">
       <a href="<?=autoUrl("notify/lists/" . $id . "/edit")?>"
         class="btn btn-dark">Edit</a>
       <a href="<?=autoUrl("notify/lists/" . $id . "/delete")?>"
@@ -66,7 +66,7 @@ include BASE_PATH . "views/notifyMenu.php";
         <form class="card-body">
           <div class="mb-3">
             <label class="form-label" for="squadSelect">Select Squad (Optional)</label>
-            <select class="custom-select" id="squadSelect" name="squadSelect">
+            <select class="form-select" id="squadSelect" name="squadSelect">
               <option value="all" selected>Choose...</option>
               <?php while ($squadsRow = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
               <option value="<?=$squadsRow['SquadID']?>">
@@ -77,7 +77,7 @@ include BASE_PATH . "views/notifyMenu.php";
           </div>
           <div class="mb-3">
             <label class="form-label" for="swimmerSelect">Select member</label>
-            <select class="custom-select" id="swimmerSelect" name="swimmerSelect" disabled>
+            <select class="form-select" id="swimmerSelect" name="swimmerSelect" disabled>
               <option value="null" selected>Select squad first</option>
             </select>
           </div>
@@ -101,7 +101,7 @@ include BASE_PATH . "views/notifyMenu.php";
           </div>
           <div class="mb-3">
             <label class="form-label" for="user-select">Select user</label>
-            <select class="custom-select" id="user-select" name="user-select" disabled>
+            <select class="form-select" id="user-select" name="user-select" disabled>
               <option value="null" selected>Search for a user</option>
             </select>
           </div>

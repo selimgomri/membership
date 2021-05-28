@@ -198,7 +198,7 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMode'] = $mode;
         <div class="row">
           <div class="col-md-10 col-lg-8">
             <div class="mb-3">
-              <div class="custom-control custom-checkbox">
+              <div class="custom-control form-checkbox">
                 <input type="checkbox" class="custom-control-input"
                 name="emailAuthorise" id="emailAuthorise" value="1" <?=$email?>>
                 <label class="custom-control-label" for="emailAuthorise">
@@ -209,7 +209,7 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMode'] = $mode;
             </div>
 
             <div class="mb-3">
-              <div class="custom-control custom-checkbox">
+              <div class="custom-control form-checkbox">
                 <input type="checkbox" class="custom-control-input"
                 name="smsAuthorise" id="smsAuthorise" value="1" <?=$sms?>>
                 <label class="custom-control-label" for="smsAuthorise">

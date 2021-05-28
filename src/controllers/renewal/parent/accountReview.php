@@ -54,7 +54,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				<small id="email-help" class="form-text text-muted">You can only change your email address in account settings.</small>
 			</div>
 			<div class="mb-3">
-				<div class="custom-control custom-checkbox">
+				<div class="custom-control form-checkbox">
 					<input type="checkbox" class="custom-control-input" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?= $emailChecked ?>>
 					<label class="custom-control-label" for="emailContactOK">I would like to receive important news and messages from squad coaches by email</label>
 					<small id="emailContactOKHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small>
@@ -66,7 +66,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 				<small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
 			</div>
 			<div class="mb-3">
-				<div class="custom-control custom-checkbox">
+				<div class="custom-control form-checkbox">
 					<input type="checkbox" class="custom-control-input" value="1" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK" <?= $mobileChecked ?>>
 					<label class="custom-control-label" for="smsContactOK">I would like to receive important text messages</label>
 					<small id="smsContactOKHelp" class="form-text text-muted">We'll still use this to contact you in an emergency. Your club may not offer SMS services.</small>

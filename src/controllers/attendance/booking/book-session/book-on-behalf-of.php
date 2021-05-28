@@ -124,7 +124,7 @@ include BASE_PATH . 'views/header.php';
         </p>
         <div class="mb-3 d-lg-none"></div>
       </div>
-      <div class="col text-lg-right">
+      <div class="col text-lg-end">
         <?php if ($user->hasPermission('Admin') || $user->hasPermission('Coach')) { ?>
           <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>" class="btn btn-dark" title="Changes won't be saved">
             Back
@@ -197,7 +197,7 @@ include BASE_PATH . 'views/header.php';
               $booking = $getBooking->fetchColumn();
             ?>
               <li class="list-group-item <?php if ($booking) { ?>bg-light text-muted user-select-none<?php } ?>" id="<?= htmlspecialchars('member-box-for-member-' . $member['id']) ?>">
-                <div class="custom-control custom-checkbox">
+                <div class="custom-control form-checkbox">
                   <input type="checkbox" class="custom-control-input" name="<?= htmlspecialchars('member-checkbox-' . $member['id']) ?>" id="<?= htmlspecialchars('member-checkbox-' . $member['id']) ?>" <?php if ($booking) { ?>checked disabled<?php } ?>>
                   <label class="custom-control-label" for="<?= htmlspecialchars('member-checkbox-' . $member['id']) ?>"><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></label>
                 </div>

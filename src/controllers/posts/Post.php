@@ -87,7 +87,7 @@ include BASE_PATH . "views/postsMenu.php";
 				<h1><?= htmlentities($row['Title']) ?></h1>
 				<p class="lead mb-0">Last updated at <?= htmlspecialchars($modified->format('H:i \o\n j F Y')) ?></p>
 			</div>
-			<div class="ml-auto col-lg-auto">
+			<div class="ms-auto col-lg-auto">
 				<div class="btn-group">
 					<a href="<?= htmlspecialchars(autoUrl("pages/" . $row['ID'] . "/print.pdf")) ?>" class="btn btn-primary">
 						Print document <i class="fa fa-print" aria-hidden="true"></i>

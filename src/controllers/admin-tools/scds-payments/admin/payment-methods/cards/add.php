@@ -98,7 +98,7 @@ include BASE_PATH . "views/root/head.php";
 
           <div class="mb-3">
             <label class="form-label" for="addr-post-code">Country</label>
-            <select class="custom-select pm-can-disable" required id="addr-country" autocomplete="country">
+            <select class="form-select pm-can-disable" required id="addr-country" autocomplete="country">
               <?php foreach ($countries as $code => $name) { ?>
                 <option <?php if ($code == 'GB') { ?>selected<?php } ?> value="<?= htmlspecialchars($code) ?>"><?= htmlspecialchars($name) ?></option>
               <?php } ?>

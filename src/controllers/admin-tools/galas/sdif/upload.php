@@ -85,7 +85,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="mb-3">
           <label class="form-label" for="gala">Select a gala to link this file to</label>
-          <select class="custom-select" id="gala" name="gala" aria-describedby="galaHelp">
+          <select class="form-select" id="gala" name="gala" aria-describedby="galaHelp">
             <option value="0" selected>Don't link to an existing gala</option>
             <?php while ($gala = $getRecentGalas->fetch(PDO::FETCH_ASSOC)) { ?>
             <option value="<?=htmlspecialchars($gala['GalaID'])?>">

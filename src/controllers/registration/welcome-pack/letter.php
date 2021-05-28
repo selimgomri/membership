@@ -64,7 +64,7 @@ ob_start();?>
   <body>
     <?php include BASE_PATH . 'helperclasses/PDFStyles/Letterhead.php'; ?>
 
-    <p class="text-right">
+    <p class="text-end">
       <?=date("d/m/Y")?>
     </p>
 

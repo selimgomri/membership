@@ -44,7 +44,7 @@ include BASE_PATH . "views/header.php";
           <label class="form-label" for="selector">
             Select default access level
           </label>
-          <select class="custom-select" name="selector" id="selector" required <?php if (sizeof($perms) < 2) { ?>disabled<?php } ?>>
+          <select class="form-select" name="selector" id="selector" required <?php if (sizeof($perms) < 2) { ?>disabled<?php } ?>>
             <option>Choose your default mode</option>
             <?php foreach ($perms as $key => $value) { ?>
             <option <?php if ($key == $default) { ?>selected<?php } ?> value="<?=htmlspecialchars($key)?>"><?=htmlspecialchars($value)?></option>

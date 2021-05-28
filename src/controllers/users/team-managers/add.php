@@ -63,7 +63,7 @@ include BASE_PATH . "views/header.php";
           <label class="form-label" for="gala-select">
             Choose a gala
           </label>
-          <select class="custom-select" id="gala-select" name="gala-select">
+          <select class="form-select" id="gala-select" name="gala-select">
            <option selected>Select a gala</option>
             <?php do { ?>
               <option value="<?=$gala['GalaID']?>">

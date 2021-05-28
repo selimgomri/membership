@@ -62,7 +62,7 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <p>
-        Columns marked <span class="badge badge-info">Disregarded</span> should be kept in the CSV so that you don't need to manipulate the layout, but the data in these columns will be ignored.
+        Columns marked <span class="badge bg-info">Disregarded</span> should be kept in the CSV so that you don't need to manipulate the layout, but the data in these columns will be ignored.
       </p>
 
       <p>
@@ -70,18 +70,18 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <ol class="mono">
-        <li>Empty column <span class="badge badge-info">Disregarded</span></li>
-        <li>Member ID <span class="badge badge-info">Disregarded</span></li>
-        <li>UCard Number <span class="badge badge-info">Disregarded</span></li>
+        <li>Empty column <span class="badge bg-info">Disregarded</span></li>
+        <li>Member ID <span class="badge bg-info">Disregarded</span></li>
+        <li>UCard Number <span class="badge bg-info">Disregarded</span></li>
         <li>Name - We will automatically explode this into first and last</li>
         <li>Date of birth (DD/MM/YYYY format)</li>
-        <li>Age <span class="badge badge-info">Disregarded</span></li>
+        <li>Age <span class="badge bg-info">Disregarded</span></li>
         <li>Gender/Sex as one of Male or Female</li>
         <li>Email Address (@sheffield.ac.uk)</li>
-        <li>Subscription <span class="badge badge-info">Disregarded</span></li>
-        <li>Empty column <span class="badge badge-info">Disregarded</span></li>
-        <li>Subscription Start Date <span class="badge badge-info">Disregarded</span></li>
-        <li>Subscription End Date <span class="badge badge-info">Disregarded</span></li>
+        <li>Subscription <span class="badge bg-info">Disregarded</span></li>
+        <li>Empty column <span class="badge bg-info">Disregarded</span></li>
+        <li>Subscription Start Date <span class="badge bg-info">Disregarded</span></li>
+        <li>Subscription End Date <span class="badge bg-info">Disregarded</span></li>
       </ol>
 
       <form enctype="multipart/form-data" method="post" class="needs-validation" novalidate>

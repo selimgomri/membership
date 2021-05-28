@@ -131,7 +131,7 @@
                       <?php } ?>
 
                       <div class="mb-3">
-                        <div class="custom-control custom-checkbox">
+                        <div class="custom-control form-checkbox">
                           <input type="checkbox" id="<?= $entry['EntryID'] ?>-pay" name="<?= $entry['EntryID'] ?>-pay" class="custom-control-input">
                           <label class="custom-control-label" for="<?= $entry['EntryID'] ?>-pay">Pay for this entry</label>
                         </div>

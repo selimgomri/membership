@@ -80,7 +80,7 @@ include BASE_PATH . 'views/header.php';
 
           <div class="mb-3">
             <label class="form-label" for="qualification">Select qualification</label>
-            <select class="custom-select" name="qualification" id="qualification" required data-ajax-url="<?= htmlspecialchars(autoUrl('qualifications/lookup')) ?>">
+            <select class="form-select" name="qualification" id="qualification" required data-ajax-url="<?= htmlspecialchars(autoUrl('qualifications/lookup')) ?>">
               <option selected disabled>Choose qualification</option>
               <?php do { ?>
                 <option value="<?= htmlspecialchars($qualification['ID']) ?>"><?= htmlspecialchars($qualification['Name']) ?></option>
@@ -100,11 +100,11 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <div class="mb-3" id="expires-selector">
-            <div class="custom-control custom-radio custom-control-inline">
+            <div class="custom-control form-check custom-control-inline">
               <input type="radio" id="expires-yes" name="expires" class="custom-control-input" value="yes" checked>
               <label class="custom-control-label" for="expires-yes">Qualification expires</label>
             </div>
-            <div class="custom-control custom-radio custom-control-inline">
+            <div class="custom-control form-check custom-control-inline">
               <input type="radio" id="expires-no" name="expires" class="custom-control-input" value="no">
               <label class="custom-control-label" for="expires-no">Never expires</label>
             </div>

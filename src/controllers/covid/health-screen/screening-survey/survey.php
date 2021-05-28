@@ -80,7 +80,7 @@ include BASE_PATH . 'views/header.php';
         </p>
       </div>
       <div class="col">
-        <img src="<?= htmlspecialchars(autoUrl('public/img/corporate/se.png')) ?>" class="w-50 ml-auto d-none d-lg-flex" alt="Swim England Logo">
+        <img src="<?= htmlspecialchars(autoUrl('public/img/corporate/se.png')) ?>" class="w-50 ms-auto d-none d-lg-flex" alt="Swim England Logo">
       </div>
     </div>
   </div>
@@ -124,11 +124,11 @@ include BASE_PATH . 'views/header.php';
                 </ul>
 
                 <div class="controls" data-group-name="confirmed-infection">
-                  <div class="custom-control custom-radio">
+                  <div class="custom-control form-check">
                     <input type="radio" id="confirmed-infection-radio-yes" name="confirmed-infection-radio" class="custom-control-input yes-requires-more-radio" value="1" required>
                     <label class="custom-control-label" for="confirmed-infection-radio-yes">Yes</label>
                   </div>
-                  <div class="custom-control custom-radio">
+                  <div class="custom-control form-check">
                     <input type="radio" id="confirmed-infection-radio-no" name="confirmed-infection-radio" class="custom-control-input yes-requires-more-radio" value="0">
                     <label class="custom-control-label" for="confirmed-infection-radio-no">No</label>
                   </div>
@@ -167,11 +167,11 @@ include BASE_PATH . 'views/header.php';
                 </p>
 
                 <div class="controls" data-group-name="exposure">
-                  <div class="custom-control custom-radio">
+                  <div class="custom-control form-check">
                     <input type="radio" id="exposure-radio-yes" name="exposure-radio" class="custom-control-input yes-requires-more-radio" value="1" required>
                     <label class="custom-control-label" for="exposure-radio-yes">Yes</label>
                   </div>
-                  <div class="custom-control custom-radio">
+                  <div class="custom-control form-check">
                     <input type="radio" id="exposure-radio-no" name="exposure-radio" class="custom-control-input yes-requires-more-radio" value="0">
                     <label class="custom-control-label" for="exposure-radio-no">No</label>
                   </div>
@@ -213,11 +213,11 @@ include BASE_PATH . 'views/header.php';
                 </p>
 
                 <div class="controls" data-group-name="underlying-medical">
-                  <div class="custom-control custom-radio">
+                  <div class="custom-control form-check">
                     <input type="radio" id="underlying-medical-radio-yes" name="underlying-medical-radio" class="custom-control-input yes-requires-more-radio" value="1" required>
                     <label class="custom-control-label" for="underlying-medical-radio-yes">Yes</label>
                   </div>
-                  <div class="custom-control custom-radio">
+                  <div class="custom-control form-check">
                     <input type="radio" id="underlying-medical-radio-no" name="underlying-medical-radio" class="custom-control-input yes-requires-more-radio" value="0">
                     <label class="custom-control-label" for="underlying-medical-radio-no">No</label>
                   </div>
@@ -256,11 +256,11 @@ include BASE_PATH . 'views/header.php';
                 </p>
 
                 <div class="controls" data-group-name="live-with-shielder">
-                  <div class="custom-control custom-radio">
+                  <div class="custom-control form-check">
                     <input type="radio" id="live-with-shielder-radio-yes" name="live-with-shielder-radio" class="custom-control-input yes-requires-more-radio" value="1" required>
                     <label class="custom-control-label" for="live-with-shielder-radio-yes">Yes</label>
                   </div>
-                  <div class="custom-control custom-radio">
+                  <div class="custom-control form-check">
                     <input type="radio" id="live-with-shielder-radio-no" name="live-with-shielder-radio" class="custom-control-input yes-requires-more-radio" value="0">
                     <label class="custom-control-label" for="live-with-shielder-radio-no">No</label>
                   </div>
@@ -299,11 +299,11 @@ include BASE_PATH . 'views/header.php';
                 </p>
 
                 <div class="controls" data-group-name="understand-return">
-                  <div class="custom-control custom-radio">
+                  <div class="custom-control form-check">
                     <input type="radio" id="understand-return-radio-yes" name="understand-return-radio" class="custom-control-input no-requires-more-radio" value="1" required>
                     <label class="custom-control-label" for="understand-return-radio-yes">Yes</label>
                   </div>
-                  <div class="custom-control custom-radio">
+                  <div class="custom-control form-check">
                     <input type="radio" id="understand-return-radio-no" name="understand-return-radio" class="custom-control-input no-requires-more-radio" value="0">
                     <label class="custom-control-label" for="understand-return-radio-no">No</label>
                   </div>
@@ -342,11 +342,11 @@ include BASE_PATH . 'views/header.php';
                 </p>
 
                 <div class="controls" data-group-name="able-to-train-return">
-                  <div class="custom-control custom-radio">
+                  <div class="custom-control form-check">
                     <input type="radio" id="able-to-train-radio-yes" name="able-to-train-radio" class="custom-control-input" value="1" required>
                     <label class="custom-control-label" for="able-to-train-radio-yes">Yes</label>
                   </div>
-                  <div class="custom-control custom-radio">
+                  <div class="custom-control form-check">
                     <input type="radio" id="able-to-train-radio-no" name="able-to-train-radio" class="custom-control-input" value="0">
                     <label class="custom-control-label" for="able-to-train-radio-no">No</label>
                   </div>
@@ -367,11 +367,11 @@ include BASE_PATH . 'views/header.php';
                 </p>
 
                 <div class="controls" data-group-name="sought-advice">
-                  <div class="custom-control custom-radio">
+                  <div class="custom-control form-check">
                     <input type="radio" id="sought-advice-radio-yes" name="sought-advice-radio" class="custom-control-input" value="1" required>
                     <label class="custom-control-label" for="sought-advice-radio-yes">Yes</label>
                   </div>
-                  <div class="custom-control custom-radio">
+                  <div class="custom-control form-check">
                     <input type="radio" id="sought-advice-radio-no" name="sought-advice-radio" class="custom-control-input" value="0">
                     <label class="custom-control-label" for="sought-advice-radio-no">No</label>
                   </div>
@@ -392,11 +392,11 @@ include BASE_PATH . 'views/header.php';
                 </p>
 
                 <div class="controls" data-group-name="advice-received">
-                  <div class="custom-control custom-radio">
+                  <div class="custom-control form-check">
                     <input type="radio" id="advice-received-radio-yes" name="advice-received-radio" class="custom-control-input yes-requires-more-radio" value="1">
                     <label class="custom-control-label" for="advice-received-radio-yes">Yes</label>
                   </div>
-                  <div class="custom-control custom-radio">
+                  <div class="custom-control form-check">
                     <input type="radio" id="advice-received-radio-no" name="advice-received-radio" class="custom-control-input yes-requires-more-radio" value="0">
                     <label class="custom-control-label" for="advice-received-radio-no">No</label>
                   </div>

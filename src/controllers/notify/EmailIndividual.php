@@ -152,11 +152,11 @@ include BASE_PATH . "views/notifyMenu.php";
       <div class="col-md">
         <div class="mb-3">
           <label class="form-label" for="from">Send message as</label>
-          <div class="custom-control custom-radio">
+          <div class="custom-control form-check">
             <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" <?php if ($from == "club-sending-account") { ?>checked<?php } ?> required>
             <label class="custom-control-label" for="from-club"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></label>
           </div>
-          <div class="custom-control custom-radio">
+          <div class="custom-control form-check">
             <input type="radio" id="from-user" name="from" class="custom-control-input" value="current-user" <?php if ($from == "current-user") { ?>checked<?php } ?>>
             <label class="custom-control-label" for="from-user"><?= htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname']) ?></label>
           </div>
@@ -169,11 +169,11 @@ include BASE_PATH . "views/notifyMenu.php";
       <div class="col-md">
         <div class="mb-3">
           <label class="form-label" for="ReplyToMe">Send replies to</label>
-          <div class="custom-control custom-radio">
+          <div class="custom-control form-check">
             <input type="radio" id="ReplyTo-Club" name="ReplyToMe" class="custom-control-input" value="0" <?php if ($reply == "0") { ?>checked<?php } ?> required>
             <label class="custom-control-label" for="ReplyTo-Club">Main club address</label>
           </div>
-          <div class="custom-control custom-radio">
+          <div class="custom-control form-check">
             <input type="radio" id="ReplyTo-Me" name="ReplyToMe" class="custom-control-input" value="1" <?php if (!$replyMe) { ?>disabled<?php } ?> <?php if ($reply == "1") { ?>checked<?php } ?>>
             <label class="custom-control-label" for="ReplyTo-Me">My reply-to email address</label>
           </div>
@@ -221,7 +221,7 @@ include BASE_PATH . "views/notifyMenu.php";
 
     <?php if (isset($swimmer)) { ?>
       <div class="mb-3">
-        <div class="custom-control custom-checkbox">
+        <div class="custom-control form-checkbox">
           <input type="checkbox" class="custom-control-input" aria-describedby="coach-help" id="coach-send" name="coach-send" value="1" checked>
           <label class="custom-control-label" for="coach-send">BCC coaches</label>
           <small id="coach-help" class="form-text text-muted">

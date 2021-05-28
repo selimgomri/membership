@@ -18,7 +18,7 @@ if ($logos = app()->tenant->getKey('LOGO_DIR')) {
       <h1 class="primary"><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></h1>
     <?php } ?>
   </div>
-  <div class="split-50 text-right">
+  <div class="split-50 text-end">
     <!-- <p class="mb-0"> -->
       <address>
       <strong><?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></strong><br>

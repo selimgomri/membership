@@ -79,7 +79,7 @@ if (!function_exists('chesterStandardMenu')) {
 
     <?php if (!(isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) && user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) && (!isset($use_website_menu) || !$use_website_menu)) { ?>
       <div class="collapse navbar-collapse offcanvas-collapse" id="chesterNavbar">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav me-auto">
           <?php if (!empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
             <li class="nav-item">
               <a class="nav-link" href="<?= htmlspecialchars(autoUrl('')) ?>">Home</a>

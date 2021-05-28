@@ -43,7 +43,7 @@ include BASE_PATH . "views/root/header.php";
 
         <div class="mb-3">
           <label class="form-label" for="club">Club</label>
-          <select class="custom-select" name="club" id="club">
+          <select class="form-select" name="club" id="club">
             <option selected value="select">Select a club</option>
             <option value="not-se">Not Swim England Registered</option>
             <?php foreach ($clubs as $club) { ?>

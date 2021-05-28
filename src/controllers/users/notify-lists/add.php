@@ -61,7 +61,7 @@ include BASE_PATH . "views/header.php";
           <label class="form-label" for="list-select">
             Choose targeted list
           </label>
-          <select class="custom-select" id="list-select" name="list-select">
+          <select class="form-select" id="list-select" name="list-select">
            <option selected>Select a targeted list</option>
             <?php do { ?>
               <option value="<?=$list['ID']?>">

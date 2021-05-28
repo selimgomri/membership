@@ -53,7 +53,7 @@ include "galaMenu.php"; ?>
       <div class="col-md-4">
         <div class="mb-3">
           <label class="" for="gala">Select a Gala</label>
-          <select class="custom-select" placeholder="Select a Gala" id="galaID" name="galaID">
+          <select class="form-select" placeholder="Select a Gala" id="galaID" name="galaID">
             <option>Select a gala</option>
             <option value="allGalas" <?php if ($galaIDParam == "allGalas") { ?> selected <?php } ?>>Show All Gala
               Entries</option>
@@ -70,7 +70,7 @@ include "galaMenu.php"; ?>
       <div class="col-md-4">
         <div class="mb-3">
           <label class="" for="sex">Select Sex</label>
-          <select class="custom-select" placeholder="Select Sex" id="sex" name="sex">
+          <select class="form-select" placeholder="Select Sex" id="sex" name="sex">
             <option value="all" <?php if ($sex == "all") { ?> selected <?php } ?>>All Swimmers</option>
             <option value="f" <?php if ($sex == "f") { ?> selected <?php } ?>>
               Female

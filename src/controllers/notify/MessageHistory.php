@@ -137,7 +137,7 @@ include BASE_PATH . "views/notifyMenu.php"; ?>
                     $array = array_merge($squads, $lists, $galas);
                     sort($array);
                     foreach ($array as $s) { ?>
-                      <span class="badge badge-pill rounded badge-dark">
+                      <span class="badge rounded-pill rounded badge-dark">
                         <?= htmlspecialchars(mb_strimwidth($s, 0, 40)) ?>
                       </span><?php
                             } ?>

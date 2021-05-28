@@ -80,7 +80,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="mb-3">
           <label class="form-label" for="squad">Recommended Squad</label>
-          <select class="custom-select" name="squad" id="squad" required>
+          <select class="form-select" name="squad" id="squad" required>
 
             <?php if ($swimmer['SquadSuggestion'] == null) { ?>
             <option value="null" selected>Select a squad</option>

@@ -49,7 +49,7 @@ include BASE_PATH . "views/root/header.php";
 
         <div class="mb-3">
           <label class="form-label" for="subscription-tenant">Tenant</label>
-          <select name="subscription-tenant" id="subscription-tenant" class="custom-select" required data-payment-methods-ajax-url="<?= htmlspecialchars(autoUrl('admin/payments/subscriptions/new/get-tenant-payment-methods')) ?>">
+          <select name="subscription-tenant" id="subscription-tenant" class="form-select" required data-payment-methods-ajax-url="<?= htmlspecialchars(autoUrl('admin/payments/subscriptions/new/get-tenant-payment-methods')) ?>">
             <option value="" selected disabled>Select a customer</option>
             <?php while ($tenant = $getTenants->fetch(PDO::FETCH_ASSOC)) { ?>
               <option value="<?= htmlspecialchars($tenant['ID']) ?>"><?= htmlspecialchars($tenant['Name']) ?></option>
@@ -78,11 +78,11 @@ include BASE_PATH . "views/root/header.php";
 
         <div class="mb-3" id="pays-auto-radios">
           <p class="mb-2">Bills when?</p>
-          <div class="custom-control custom-radio">
+          <div class="custom-control form-check">
             <input type="radio" id="bills-when-immediately" name="bills-when" class="custom-control-input" value="immediately" required checked>
             <label class="custom-control-label" for="bills-when-immediately">Bill selected payment method immediately</label>
           </div>
-          <div class="custom-control custom-radio">
+          <div class="custom-control form-check">
             <input type="radio" id="bills-when-manually" name="bills-when" class="custom-control-input" value="chooses">
             <label class="custom-control-label" for="bills-when-manually">Customer makes manual payment</label>
           </div>
@@ -90,7 +90,7 @@ include BASE_PATH . "views/root/header.php";
 
         <div class="mb-3" id="payment-method-box">
           <label class="form-label" for="subscription-payment-method">Payment method</label>
-          <select name="subscription-payment-method" id="subscription-payment-method" class="custom-select" required disabled>
+          <select name="subscription-payment-method" id="subscription-payment-method" class="form-select" required disabled>
             <option value="" selected disabled>Select a payment method</option>
           </select>
           <div class="invalid-feedback">
@@ -145,7 +145,7 @@ include BASE_PATH . "views/root/header.php";
 
           <div class="mb-3">
             <label class="form-label" for="product-select">Product</label>
-            <select name="product-select" id="product-select" class="custom-select" required data-plans-ajax-url="<?= htmlspecialchars(autoUrl('admin/payments/subscriptions/new/get-product-plans')) ?>">
+            <select name="product-select" id="product-select" class="form-select" required data-plans-ajax-url="<?= htmlspecialchars(autoUrl('admin/payments/subscriptions/new/get-product-plans')) ?>">
               <option value="" selected disabled>Select a product</option>
               <?php while ($product = $getProducts->fetch(PDO::FETCH_ASSOC)) { ?>
                 <option id="<?= htmlspecialchars('product-select-' . $product['ID']) ?>" value="<?= htmlspecialchars($product['ID']) ?>" data-name="<?= htmlspecialchars($product['Name']) ?>"><?= htmlspecialchars($product['Name']) ?></option>
@@ -158,7 +158,7 @@ include BASE_PATH . "views/root/header.php";
 
           <div class="mb-3">
             <label class="form-label" for="plan-select">Plan</label>
-            <select name="plan-select" id="plan-select" class="custom-select" required>
+            <select name="plan-select" id="plan-select" class="form-select" required>
               <option value="" selected disabled>Select a plan</option>
             </select>
             <div class="invalid-feedback">

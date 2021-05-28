@@ -151,7 +151,7 @@ include BASE_PATH . 'views/header.php';
         </p>
       </div>
       <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
-        <div class="col text-sm-right">
+        <div class="col text-sm-end">
           <a href="<?= htmlspecialchars(autoUrl("squads/" . $id . "/edit")) ?>" class="btn btn-dark">Edit squad</a>
         </div>
       <?php } ?>
@@ -203,7 +203,7 @@ include BASE_PATH . 'views/header.php';
                 <div>
                   <div><?= htmlspecialchars($member->getFullName()) ?></div><?php if ($member->showGender()) { ?><div class=""><em><?= htmlspecialchars($member->getGenderIdentity()) ?>, <?= htmlspecialchars($member->getGenderPronouns()) ?></em></div><?php } ?>
                 </div>
-                <span class="badge badge-primary badge-pill rounded">Age <?= htmlspecialchars(($member->getAge())) ?></span>
+                <span class="badge bg-primary rounded-pill rounded">Age <?= htmlspecialchars(($member->getAge())) ?></span>
               </a>
             <?php } ?>
           </div>
@@ -225,7 +225,7 @@ include BASE_PATH . 'views/header.php';
               <li class="list-group-item">
                 <div class="d-flex justify-content-between align-items-center">
                   <?= htmlspecialchars($member->getFullName()) ?>
-                  <span class="badge badge-primary badge-pill rounded">Age <?= htmlspecialchars(($member->getAge())) ?></span>
+                  <span class="badge bg-primary rounded-pill rounded">Age <?= htmlspecialchars(($member->getAge())) ?></span>
                 </div>
 
                 <?php if ($user = $member->getUser()) { ?>

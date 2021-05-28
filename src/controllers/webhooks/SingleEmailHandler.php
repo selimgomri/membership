@@ -115,7 +115,7 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 			];
 		} else if ($row['EmailType'] == 'Notify-Audit') {
 			$from = [
-				"Email" => $emailPrefix . "gdpr-notify@" . getenv('EMAIL_DOMAIN'),
+				"Email" => $emailPrefix . "gdpe-notify@" . getenv('EMAIL_DOMAIN'),
 				"Name" => "SCDS GDPR Compliance"
 			];
 		}

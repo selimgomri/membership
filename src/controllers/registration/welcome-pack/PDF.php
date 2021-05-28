@@ -65,7 +65,7 @@ ob_start();?>
   <body>
     <?php include BASE_PATH . 'helperclasses/PDFStyles/Letterhead.php'; ?>
 
-    <p class="text-right">
+    <p class="text-end">
       <?=date("d/m/Y")?>
     </p>
 
@@ -386,7 +386,7 @@ ob_start();?>
       <div class="split-75">
         <h2>The Direct Debit Guarantee</h2>
       </div>
-      <div class="split-25 text-right">
+      <div class="split-25 text-end">
         <img src="<?=BASE_PATH?>public/img/directdebit/directdebit@3x.png" style="height:1cm;" class="mb-3" alt="Direct Debit Logo">
       </div>
     </div>

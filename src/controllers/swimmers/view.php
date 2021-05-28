@@ -88,7 +88,7 @@ include BASE_PATH . 'views/header.php';
         </p>
         <div class="mb-3 d-lg-none"></div>
       </div>
-      <div class="text-lg-right col-lg">
+      <div class="text-lg-end col-lg">
         <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
           <p>
             <a href="<?= htmlspecialchars(autoUrl("members/" . $id . "/edit")) ?>" class="btn btn-success">
@@ -553,7 +553,7 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <?php if ($pbs) { ?>
-        <h3><span class="badge badge-info">BETA</span> PBs <small class="text-muted">direct from British Swimming</small></h3>
+        <h3><span class="badge bg-info">BETA</span> PBs <small class="text-muted">direct from British Swimming</small></h3>
 
         <div class="row">
           <div class="col-sm-6">

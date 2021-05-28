@@ -86,7 +86,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
         </p>
 
         <div class="mb-3">
-          <div class="custom-control custom-checkbox">
+          <div class="custom-control form-checkbox">
             <input type="checkbox" value="1" class="custom-control-input" name="data-agree" id="data-agree" <?php if ($partial_reg) { ?>checked <?php } ?> required>
             <label class="custom-control-label" for="data-agree">
               I (<?= htmlspecialchars($name) ?>) agree to the use of my data by <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> as
@@ -141,7 +141,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
             <div class="mb-3 <?php if ($age[$i] >= 12) {
                                       echo "mb-0";
                                     } ?>">
-              <div class="custom-control custom-checkbox">
+              <div class="custom-control form-checkbox">
                 <input type="checkbox" value="1" class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-tc-confirm" id="<?= htmlspecialchars($id[$i]) ?>-tc-confirm" required>
                 <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-tc-confirm">
                   I, <?= htmlspecialchars($row[$i]['MForename'] . " " . $row[$i]['MSurname']) ?> agree to the Terms and
@@ -162,7 +162,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
               </p>
 
               <div class="mb-3 mb-0">
-                <div class="custom-control custom-checkbox">
+                <div class="custom-control form-checkbox">
                   <input type="checkbox" value="1" class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-pg-understanding" id="<?= htmlspecialchars($id[$i]) ?>-pg-understanding" required>
                   <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-pg-understanding">
                     I, <?= htmlspecialchars($name) ?> have explained the content and implications to
@@ -234,31 +234,31 @@ include BASE_PATH . "views/renewalTitleBar.php";
                   I, <?= htmlspecialchars($name) ?> agree to photography in the following circumstances. <strong>Tick boxes only
                     if you wish to grant us photography permission.</strong>
                 </p>
-                <div class="custom-control custom-checkbox">
+                <div class="custom-control form-checkbox">
                   <input type="checkbox" value="1" <?= $photo[0] ?> class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-photo-web" id="<?= htmlspecialchars($id[$i]) ?>-photo-web">
                   <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-photo-web">
                     Take photographs to use on the club's website
                   </label>
                 </div>
-                <div class="custom-control custom-checkbox">
+                <div class="custom-control form-checkbox">
                   <input type="checkbox" value="1" <?= $photo[1] ?> class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-photo-soc" id="<?= htmlspecialchars($id[$i]) ?>-photo-soc">
                   <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-photo-soc">
                     Take photographs to use on social media sites
                   </label>
                 </div>
-                <div class="custom-control custom-checkbox">
+                <div class="custom-control form-checkbox">
                   <input type="checkbox" value="1" <?= $photo[2] ?> class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-photo-nb" id="<?= htmlspecialchars($id[$i]) ?>-photo-nb">
                   <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-photo-nb">
                     Take photographs to use on club noticeboards
                   </label>
                 </div>
-                <div class="custom-control custom-checkbox">
+                <div class="custom-control form-checkbox">
                   <input type="checkbox" value="1" <?= $photo[3] ?> class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-photo-film" id="<?= htmlspecialchars($id[$i]) ?>-photo-film">
                   <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-photo-film">
                     Filming for training purposes only
                   </label>
                 </div>
-                <div class="custom-control custom-checkbox">
+                <div class="custom-control form-checkbox">
                   <input type="checkbox" value="1" <?= $photo[4] ?> class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-photo-pro" id="<?= htmlspecialchars($id[$i]) ?>-photo-pro">
                   <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-photo-pro">
                     Employ a professional photographer (approved by the club) who will
@@ -290,7 +290,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
                 advised by a doctor to not take part in physical activities unless under medical supervision.
               </p>
 
-              <!-- <div class="custom-control custom-checkbox">
+              <!-- <div class="custom-control form-checkbox">
             <input type="checkbox" value="1" class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-med"
               id="<?= htmlspecialchars($id[$i]) ?>-med">
             <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-med">
@@ -305,7 +305,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
                 seeking my personal consent.
               </p>
 
-              <div class="custom-control custom-checkbox">
+              <div class="custom-control form-checkbox">
                 <input type="checkbox" value="1" class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-med" id="<?= htmlspecialchars($id[$i]) ?>-med" required>
                 <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-med">
                   Confirm

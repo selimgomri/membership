@@ -100,11 +100,11 @@ include BASE_PATH . 'views/header.php';
         </p>
 
         <div class="mb-3">
-          <div class="custom-control custom-radio">
+          <div class="custom-control form-check">
             <input type="radio" id="sex-male" name="sex" class="custom-control-input" value="Male">
             <label class="custom-control-label" for="sex-male">Male</label>
           </div>
-          <div class="custom-control custom-radio">
+          <div class="custom-control form-check">
             <input type="radio" id="sex-female" name="sex" class="custom-control-input" value="Female">
             <label class="custom-control-label" for="sex-female">Female</label>
           </div>
@@ -176,7 +176,7 @@ include BASE_PATH . 'views/header.php';
         <div class="row">
           <div class="col-md-8 col-lg-6">
             <div class="mb-3">
-              <div class="custom-control custom-checkbox">
+              <div class="custom-control form-checkbox">
                 <input type="checkbox" class="custom-control-input" name="emailAuthorise" id="emailAuthorise" value="1" <?= $email ?>>
                 <label class="custom-control-label" for="emailAuthorise">
                   I wish to receive important email updates about my squads.
@@ -186,7 +186,7 @@ include BASE_PATH . 'views/header.php';
             </div>
 
             <!-- <div class="mb-3">
-              <div class="custom-control custom-checkbox">
+              <div class="custom-control form-checkbox">
                 <input type="checkbox" class="custom-control-input" name="smsAuthorise" id="smsAuthorise" value="1" <?= $sms ?>>
                 <label class="custom-control-label" for="smsAuthorise">
                   I wish to receive text message notifications

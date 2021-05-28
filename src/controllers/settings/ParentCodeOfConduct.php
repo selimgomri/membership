@@ -60,7 +60,7 @@ include BASE_PATH . 'views/header.php';
 
           <div class="mb-3">
             <label class="form-label" for="CodeOfConduct">Squad Code of Conduct</label>
-            <select class="custom-select" id="CodeOfConduct" name="CodeOfConduct" aria-describedby="conductSelectHelpBlock">
+            <select class="form-select" id="CodeOfConduct" name="CodeOfConduct" aria-describedby="conductSelectHelpBlock">
               <option <?php if ($parentCode == $null) { ?>selected<?php } ?>>
                 Select an option
               </option>

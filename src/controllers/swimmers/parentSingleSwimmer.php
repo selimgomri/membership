@@ -53,7 +53,7 @@ $title = null;
       <div class="col-sm-8">
         <h1>Editing <?= htmlspecialchars($row['MForename'] . ' ' . $row['MSurname']) ?></h1>
       </div>
-      <div class="col-sm-4 text-right">
+      <div class="col-sm-4 text-end">
         <button type="submit" class="btn btn-success">Save</button> <a class="btn btn-dark" href="<?= autoUrl("members/" . $id) ?>">Exit
           Edit Mode</a>
       </div>
@@ -151,7 +151,7 @@ $title = null;
 
         <div class="mb-3">
           <label class="form-label" for="country">Home Nations Country</label>
-          <select class="custom-select" id="country" name="country" placeholder="Select">
+          <select class="form-select" id="country" name="country" placeholder="Select">
             <?php foreach ($countries as $key => $value) {
               $selected = '';
               if ($row['Country'] == $key) {
@@ -165,7 +165,7 @@ $title = null;
         <?php if ($row['Gender'] == "Male") { ?>
           <div class="mb-3">
             <label class="form-label" for="sex">Sex</label>
-            <select class="custom-select" id="sex" name="sex" placeholder="Select" <?php if ($locked) { ?>disabled<?php } ?>>
+            <select class="form-select" id="sex" name="sex" placeholder="Select" <?php if ($locked) { ?>disabled<?php } ?>>
               <option value="Male" selected>Male</option>
               <option value="Female">Female</option>
             </select>
@@ -173,7 +173,7 @@ $title = null;
         <?php } else { ?>
           <div class="mb-3">
             <label class="form-label" for="sex">Sex</label>
-            <select class="custom-select" id="sex" name="sex" placeholder="Select" <?php if ($locked) { ?>disabled<?php } ?>>
+            <select class="form-select" id="sex" name="sex" placeholder="Select" <?php if ($locked) { ?>disabled<?php } ?>>
               <option value="Male">Male</option>
               <option value="Female" selected>Female</option>
             </select>
@@ -215,31 +215,31 @@ $title = null;
                 $row['MSurname']) ?> in the following circumstances. Tick boxes only
               if you wish to grant us photography permission.
             </p>
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control form-checkbox">
               <input type="checkbox" value="1" class="custom-control-input" name="webPhoto" id="webPhoto" <?= $photo[0] ?>>
               <label class="custom-control-label" for="webPhoto">
                 Take photographs to use on the clubs website
               </label>
             </div>
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control form-checkbox">
               <input type="checkbox" value="1" class="custom-control-input" name="socPhoto" id="socPhoto" <?= $photo[1] ?>>
               <label class="custom-control-label" for="socPhoto">
                 Take photographs to use on social media sites
               </label>
             </div>
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control form-checkbox">
               <input type="checkbox" value="1" class="custom-control-input" name="noticePhoto" id="noticePhoto" <?= $photo[2] ?>>
               <label class="custom-control-label" for="noticePhoto">
                 Take photographs to use on club noticeboards
               </label>
             </div>
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control form-checkbox">
               <input type="checkbox" value="1" class="custom-control-input" name="trainFilm" id="trainFilm" <?= $photo[3] ?>>
               <label class="custom-control-label" for="trainFilm">
                 Filming for training purposes only
               </label>
             </div>
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control form-checkbox">
               <input type="checkbox" value="1" class="custom-control-input" name="proPhoto" id="proPhoto" <?= $photo[4] ?>>
               <label class="custom-control-label" for="proPhoto">
                 Employ a professional photographer (approved by the club) who will take

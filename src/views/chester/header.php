@@ -197,15 +197,15 @@ if (isset($customBackground) && $customBackground) {
 
     <div class="text-white py-2 top-bar bg-primary-dark hide-a-underline" style="font-size:0.875rem;">
       <div class="<?= $container_class ?> d-flex">
-        <div class="mr-auto">
-          <span class="mr-2">
+        <div class="me-auto">
+          <span class="me-2">
             <a href="https://www.twitter.com/CLSASC" target="_blank" class="text-white" title="Twitter">
               <i class="fa fa-twitter fa-fw" aria-hidden="true"></i>
               <span class="visually-hidden">Chester-le-Street ASC on Twitter</span>
             </a>
           </span>
 
-          <span class="mr-2">
+          <span class="me-2">
             <a href="https://www.facebook.com/CLSASC" target="_blank" class="text-white" title="Facebook">
               <i class="fa fa-facebook fa-fw" aria-hidden="true"></i>
               <span class="visually-hidden">Chester-le-Street ASC on Facebook</span>
@@ -222,7 +222,7 @@ if (isset($customBackground) && $customBackground) {
           <span class="d-none" id="top-bar-login-status">0</span>
         <?php } ?>
 
-        <div class="ml-2 top-bar d-lg-none">
+        <div class="ms-2 top-bar d-lg-none">
           <span>
             <a data-toggle="collapse" href="#mobSearch" role="button" aria-expanded="false" aria-controls="mobSearch" class="text-white" title="Search the site">
               Search
@@ -230,7 +230,7 @@ if (isset($customBackground) && $customBackground) {
           </span>
         </div>
 
-        <div class="ml-2 top-bar">
+        <div class="ms-2 top-bar">
           <span>
             <a id="top-bar-more-link" href="#top-bar-more" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="top-bar-more" class="text-white d-none" title="More Links">
               More <i class="fa fa-caret-down" aria-hidden="true"></i>
@@ -275,7 +275,7 @@ if (isset($customBackground) && $customBackground) {
             <a class="logowhite" href="<?= autoUrl("") ?>" title="Membership Dashboard"></a>
           </div>
           <div class="col d-none d-lg-flex">
-            <p class="lead mb-0 ml-auto text-right">Club Membership</p>
+            <p class="lead mb-0 ms-auto text-end">Club Membership</p>
           </div>
         </div>
       </div>

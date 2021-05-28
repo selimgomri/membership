@@ -55,7 +55,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="mb-3">
           <label class="form-label" for="location">Location</label>
-          <select class="custom-select" id="location" name="location" <?php if (!$location) { ?> disabled <?php } ?> required>
+          <select class="form-select" id="location" name="location" <?php if (!$location) { ?> disabled <?php } ?> required>
             <option selected>Select a location</option>
             <?php if ($location) { ?>
               <?php do { ?>
@@ -97,15 +97,15 @@ include BASE_PATH . 'views/header.php';
           Format
         </p>
         <div class="mb-3">
-          <div class="custom-control custom-radio">
+          <div class="custom-control form-check">
             <input type="radio" class="custom-control-input" value="html" name="format" id="format-html" checked required>
             <label class="custom-control-label" for="format-html">Webpage (HTML)</label>
           </div>
-          <div class="custom-control custom-radio">
+          <div class="custom-control form-check">
             <input type="radio" class="custom-control-input" value="csv" name="format" id="format-csv" required>
             <label class="custom-control-label" for="format-csv">CSV (For Excel)</label>
           </div>
-          <div class="custom-control custom-radio">
+          <div class="custom-control form-check">
             <input type="radio" class="custom-control-input" value="json" name="format" id="format-json" required>
             <label class="custom-control-label" for="format-json">JSON</label>
           </div>

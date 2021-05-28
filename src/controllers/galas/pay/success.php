@@ -125,7 +125,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                 <?php } ?>
               </div>
             </div>
-            <div class="col text-right">
+            <div class="col text-end">
               <p>
                 <?=mb_convert_case($numFormatter->format($count), MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
               </p>
@@ -144,7 +144,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                 <strong>Total paid</strong>
               </p>
             </div>
-            <div class="col text-right">
+            <div class="col text-end">
               <p class="mb-0">
                 <strong>&pound;<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $intent->amount))->withPointMovedLeft(2)->toScale(2))?></strong>
               </p>

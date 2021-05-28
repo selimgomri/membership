@@ -66,7 +66,7 @@ include BASE_PATH . "views/root/header.php";
                 <div class="col text-center">
                   <strong><?= htmlspecialchars($time->format('H:i:s d/m/Y')) ?></strong>
                 </div>
-                <div class="col text-right">
+                <div class="col text-end">
                   <strong><a target="_blank" href="<?= htmlspecialchars(autoUrl($tenant->getCodeId())) ?>"><?= htmlspecialchars($tenant->getName()) ?></a></strong>
                 </div>
               </div>

@@ -36,7 +36,7 @@ include BASE_PATH . "views/header.php";
           Manage your new direct debit
         </p>
       </div>
-      <div class="d-none d-sm-flex col-sm-auto ml-auto">
+      <div class="d-none d-sm-flex col-sm-auto ms-auto">
         <img style="max-height:50px;" src="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit.png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@3x.png")) ?> 3x" alt="Direct
 				Debit Logo">
       </div>
@@ -68,7 +68,7 @@ include BASE_PATH . "views/header.php";
       <?php if ($mandate) {
         do { ?>
           <div class="card card-body mb-3">
-            <h2><?php if ($used) { ?>Your Direct Debit Mandate<?php $user = false; } else { ?>Old Mandate<?php } ?> <span class="badge badge-secondary"><?php if ($mandate['Status'] == 'pending') { ?>Pending<?php } else if ($mandate['Status'] == 'accepted') { ?>Active<?php } ?></span></h2>
+            <h2><?php if ($used) { ?>Your Direct Debit Mandate<?php $user = false; } else { ?>Old Mandate<?php } ?> <span class="badge bg-secondary"><?php if ($mandate['Status'] == 'pending') { ?>Pending<?php } else if ($mandate['Status'] == 'accepted') { ?>Active<?php } ?></span></h2>
             <dl class="row">
               <dt class="col-sm-3">Sort code</dt>
               <dd class="col-sm-9 mono"><?= htmlspecialchars(implode("-", str_split($mandate['SortCode'], 2))) ?></dd>

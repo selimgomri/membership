@@ -97,7 +97,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 					<div class="col-sm-6">
 						<div class="mb-3">
 							<label class="form-label" for="squad">Swim England Membership Category</label>
-							<select class="custom-select" placeholder="Select a Category" id="cat" name="cat" required>
+							<select class="form-select" placeholder="Select a Category" id="cat" name="cat" required>
 								<option value="0">Not a Swim England Member</option>
 								<option value="1">Category 1</option>
 								<option value="2" selected>Category 2</option>
@@ -108,7 +108,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 				</div>
 				<div class="mb-3">
 					<label class="form-label" for="sex">Sex</label>
-					<select class="custom-select" id="sex" name="sex" placeholder="Select" required>
+					<select class="form-select" id="sex" name="sex" placeholder="Select" required>
 						<option value="Male">Male</option>
 						<option value="Female">Female</option>
 					</select>
@@ -123,7 +123,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 					<div class="row">
 						<?php do { ?>
 							<div class="col-6 col-md-4 col-lg-3 mb-2">
-								<div class="custom-control custom-checkbox">
+								<div class="custom-control form-checkbox">
 									<input type="checkbox" class="custom-control-input" id="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>" name="squad-<?= htmlspecialchars($squad['SquadID']) ?>" value="1">
 									<label class="custom-control-label" for="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></label>
 								</div>
@@ -137,7 +137,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 				<?php } ?>
 
 				<div class="mb-3">
-					<div class="custom-control custom-checkbox">
+					<div class="custom-control form-checkbox">
 						<input type="checkbox" class="custom-control-input" id="clubpays" name="clubpays" value="1" aria-describedby="cphelp">
 						<label class="custom-control-label" for="clubpays">Club pays Swim England fees?</label>
 					</div>
@@ -146,7 +146,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 
 				<div class="mb-3">
 					<label class="form-label" for="membership-class">Select membership class</label>
-					<select class="custom-select" id="membership-class" name="membership-class" required>
+					<select class="form-select" id="membership-class" name="membership-class" required>
 						<option value="" selected disabled>Choose a club membership class</option>
 						<?php do { ?>
 							<option value="<?= htmlspecialchars($class['ID']) ?>" <?php if ($tenant->getKey('DEFAULT_MEMBERSHIP_CLASS') == $class['ID']) { ?>selected<?php } ?>><?= htmlspecialchars($class['Name']) ?></option>
@@ -155,7 +155,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 				</div>
 
 				<div class="mb-3">
-					<div class="custom-control custom-checkbox">
+					<div class="custom-control form-checkbox">
 						<input type="checkbox" class="custom-control-input" id="clubmemb" name="clubmemb" value="1" aria-describedby="clubmembhelp">
 						<label class="custom-control-label" for="clubmemb">Club pays Club Membership fees?</label>
 					</div>
@@ -163,7 +163,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 				</div>
 
 				<div class="mb-3">
-					<div class="custom-control custom-checkbox">
+					<div class="custom-control form-checkbox">
 						<input type="checkbox" class="custom-control-input" id="transfer" name="transfer" value="1" aria-describedby="transfer-help">
 						<label class="custom-control-label" for="transfer">Transferring from another club?</label>
 					</div>

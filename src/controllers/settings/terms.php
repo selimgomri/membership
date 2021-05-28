@@ -67,7 +67,7 @@ include BASE_PATH . 'views/header.php';
 
           <div class="mb-3">
             <label class="form-label" for="TermsAndConditions">Terms and Conditions Document</label>
-            <select class="custom-select" id="TermsAndConditions" name="TermsAndConditions" aria-describedby="TermsAndConditionsBlock">
+            <select class="form-select" id="TermsAndConditions" name="TermsAndConditions" aria-describedby="TermsAndConditionsBlock">
               <option <?php if ($terms == null) { ?>selected<?php } ?>>
                 Select an option
               </option>
@@ -84,7 +84,7 @@ include BASE_PATH . 'views/header.php';
 
           <div class="mb-3">
             <label class="form-label" for="PrivacyPolicy">Privacy Policy Document</label>
-            <select class="custom-select" id="PrivacyPolicy" name="PrivacyPolicy" aria-describedby="PrivacyPolicyBlock">
+            <select class="form-select" id="PrivacyPolicy" name="PrivacyPolicy" aria-describedby="PrivacyPolicyBlock">
               <option <?php if ($privacy == null) { ?>selected<?php } ?>>
                 Select an option
               </option>
@@ -101,7 +101,7 @@ include BASE_PATH . 'views/header.php';
 
           <div class="mb-3">
             <label class="form-label" for="WelcomeLetter">Welcome letter</label>
-            <select class="custom-select" id="WelcomeLetter" name="WelcomeLetter" aria-describedby="WelcomeLetterBlock">
+            <select class="form-select" id="WelcomeLetter" name="WelcomeLetter" aria-describedby="WelcomeLetterBlock">
               <option <?php if ($welcome == null) { ?>selected<?php } ?>>
                 Select an option
               </option>

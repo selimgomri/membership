@@ -116,7 +116,7 @@ include BASE_PATH . 'views/header.php';
         </p>
         <div class="mb-3 d-lg-none"></div>
       </div>
-      <div class="col text-lg-right">
+      <div class="col text-lg-end">
         <a href="<?= htmlspecialchars($bookingLoginLink) ?>" class="btn btn-primary">
           Login to book<?php if (!$bookingOpen) { ?> once open<?php } ?>
         </a>

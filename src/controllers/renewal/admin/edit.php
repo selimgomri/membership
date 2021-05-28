@@ -50,7 +50,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 				</p>
 				<div class="mb-3 d-lg-none"></div>
 			</div>
-			<div class="ml-auto col-lg-auto">
+			<div class="ms-auto col-lg-auto">
 				<button type="submit" form="form" class="btn btn-success">
 					Save
 					</a>

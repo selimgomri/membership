@@ -140,7 +140,7 @@ include BASE_PATH . "views/root/header.php";
 
           <div class="mb-3">
             <label class="form-label" for="plan-currency">Currency</label>
-            <select class="custom-select" required name="plan-currency" id="plan-currency">
+            <select class="form-select" required name="plan-currency" id="plan-currency">
               <option value="gbp" selected>British Pounds (GBP)</option>
             </select>
             <div class="invalid-feedback">You must supply a currency for this plan</div>
@@ -155,7 +155,7 @@ include BASE_PATH . "views/root/header.php";
                 <span class="input-group-text">Every</span>
               </div>
               <input type="number" min="1" step="1" value="1" aria-label="Billing Frequency" class="form-control" name="plan-frequency-n" id="plan-frequency-n" required>
-              <select class="custom-select" aria-label="Billing Frequency Type" required name="plan-frequency-type" id="plan-frequency-type">
+              <select class="form-select" aria-label="Billing Frequency Type" required name="plan-frequency-type" id="plan-frequency-type">
                 <option value="days">Days</option>
                 <option value="weeks">Weeks</option>
                 <option value="months" selected>Months</option>

@@ -73,7 +73,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
 		  <div class="mb-3 row">
 		    <label class="form-label" for="newSquad" class="col-sm-2 col-form-label">New Squad</label>
 		    <div class="col-sm-10">
-					<select class="custom-select" id="newSquad" name="newSquad">
+					<select class="form-select" id="newSquad" name="newSquad">
 						<!-- HIDES CURRENT SQUAD AS POINTLESS -->
 						<?php while ($row = $getSquads->fetch(PDO::FETCH_ASSOC)) { ?>
 							<option value="<?=$row['SquadID']?>" <?php if ($row['SquadID'] == $move['SquadID']) { echo "selected";} ?> ><?=htmlspecialchars($row['SquadName'])?></option>

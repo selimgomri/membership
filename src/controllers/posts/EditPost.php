@@ -90,7 +90,7 @@ include BASE_PATH . "views/postsMenu.php";
 					</div>
 					<div class="mb-3">
 						<label class="form-label" for="type">Type</label>
-						<select class="custom-select" name="type">
+						<select class="form-select" name="type">
 							<?php for ($i = 0; $i < sizeof($post_types); $i++) {
 								$s = null;
 								if ($post_types[$i]['value'] == $row['Type']) {
@@ -104,7 +104,7 @@ include BASE_PATH . "views/postsMenu.php";
 					</div>
 					<div class="mb-3 mb-0">
 						<label class="form-label" for="mime">MIME Type</label>
-						<select class="custom-select" name="mime">
+						<select class="form-select" name="mime">
 							<?php for ($i = 0; $i < sizeof($mimes); $i++) {
 								$s = null;
 								if ($mimes[$i]['value'] == $row['MIME']) {

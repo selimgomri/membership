@@ -82,7 +82,7 @@ include "galaMenu.php";
     <div class="col-md-8">
       <h1 class="mb-3">Enter a gala</h1>
     </div>
-    <div class="col text-md-right">
+    <div class="col text-md-end">
       <aside>
         <a href="<?=htmlspecialchars(autoUrl("galas/entergala/help"))?>" class="btn btn-info">
           Gala entry help <i class="fa fa-info-circle" aria-hidden="true"></i>
@@ -99,7 +99,7 @@ include "galaMenu.php";
       <div class="mb-3 row">
         <label class="form-label" for="swimmer" class="col-sm-2 col-form-label">Select Swimmer</label>
         <div class="col-sm-10">
-          <select class="custom-select" id="swimmer" name="swimmer" required><option value="null" <?php if ($swimmerCount > 1) { ?>selected<?php } ?>>Select a swimmer</option>
+          <select class="form-select" id="swimmer" name="swimmer" required><option value="null" <?php if ($swimmerCount > 1) { ?>selected<?php } ?>>Select a swimmer</option>
           <?php do { ?>
             <option value="<?=$mySwimmer['id']?>" <?php if ($swimmerCount == 1) { ?>selected<?php } ?>>
               <?=htmlspecialchars($mySwimmer['fn'] . " " . $mySwimmer['sn'])?>
@@ -111,7 +111,7 @@ include "galaMenu.php";
       <div class="mb-3 row">
         <label class="form-label" for="gala" class="col-sm-2 col-form-label">Select Gala</label>
         <div class="col-sm-10">
-          <select class="custom-select" id="gala" name="gala" required><option value="null" selected>Select a gala</option>
+          <select class="form-select" id="gala" name="gala" required><option value="null" selected>Select a gala</option>
           <?php do { ?>
             <option value="<?=$gala['id']?>">
               <?=htmlspecialchars($gala['name'])?>

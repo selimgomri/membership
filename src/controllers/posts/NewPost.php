@@ -57,7 +57,7 @@ include BASE_PATH . "views/postsMenu.php";
 					</div>
 					<div class="mb-3">
 						<label class="form-label" for="type">Type</label>
-						<select class="custom-select" name="type">
+						<select class="form-select" name="type">
 							<?php for ($i = 0; $i < sizeof($post_types); $i++) { ?>
 								<option value="<?= $post_types[$i]['value'] ?>">
 									<?= $post_types[$i]['description'] ?>
@@ -67,7 +67,7 @@ include BASE_PATH . "views/postsMenu.php";
 					</div>
 					<div class="mb-3 mb-0">
 						<label class="form-label" for="mime">MIME Type</label>
-						<select class="custom-select" name="mime">
+						<select class="form-select" name="mime">
 							<option value="text/html">text/html</option>
 							<option value="text/plain">text/plain</option>
 							<option value="text/markdown">text/markdown</option>

@@ -68,7 +68,7 @@ include BASE_PATH . 'views/header.php';
                 $isMember = $getIsMember->fetchColumn() > 0;
               ?>
                 <div class="col">
-                  <div class="custom-control custom-checkbox">
+                  <div class="custom-control form-checkbox">
                     <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('squad-member-check-squad-' . $squad['id'] . '-member-' . $member['id']) ?>" <?php if ($isMember) { ?>checked<?php } ?> data-member="<?= htmlspecialchars($member['id']) ?>" data-squad="<?= htmlspecialchars($squad['id']) ?>" data-member-name="<?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?>">
                     <label class="custom-control-label" for="<?= htmlspecialchars('squad-member-check-squad-' . $squad['id'] . '-member-' . $member['id']) ?>"><?= htmlspecialchars($squad['name']) ?></label>
                   </div>

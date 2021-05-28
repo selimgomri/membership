@@ -54,9 +54,9 @@ if ($user != null) { ?>
       ?>
   <a href="<?=autoUrl("users/" . $user['UserID'])?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
     <?=htmlspecialchars($user['Forename'] . " " . $user['Surname'])?>
-    <div class="text-right">
+    <div class="text-end">
     <?php while ($al = $getAccessLevels->fetchColumn()) { ?>
-      <span class="badge badge-primary badge-pill">
+      <span class="badge bg-primary rounded-pill">
         <?=$al?>
       </span>
     <?php } ?>

@@ -88,11 +88,11 @@ include BASE_PATH . "views/header.php";
 				$no = " checked ";
 			} ?>
 
-			<div class="custom-control custom-radio">
+			<div class="custom-control form-check">
 			  <input type="radio" value="0" <?=$no?> id="medConDisNo" name="medConDis" class="custom-control-input" onclick="toggleState('medConDisDetails', 'medConDis')">
 			  <label class="custom-control-label" for="medConDisNo">No</label>
 			</div>
-			<div class="custom-control custom-radio">
+			<div class="custom-control form-check">
 			  <input type="radio" value="1" <?=$yes?> id="medConDisYes" name="medConDis" class="custom-control-input" onclick="toggleState('medConDisDetails', 'medConDis')">
 			  <label class="custom-control-label" for="medConDisYes">Yes</label>
 			</div>
@@ -117,12 +117,12 @@ include BASE_PATH . "views/header.php";
 				$no = " checked ";
 			} ?>
 
-			<div class="custom-control custom-radio">
+			<div class="custom-control form-check">
 			  <input type="radio" value="0" <?=$no?> id="allergiesNo"
 			  name="allergies" class="custom-control-input" onclick="toggleState('allergiesDetails', 'allergies')">
 			  <label class="custom-control-label" for="allergiesNo">No</label>
 			</div>
-			<div class="custom-control custom-radio">
+			<div class="custom-control form-check">
 			  <input type="radio" value="1" <?=$yes?> id="allergiesYes"
 			  name="allergies" class="custom-control-input" onclick="toggleState('allergiesDetails', 'allergies')">
 			  <label class="custom-control-label" for="allergiesYes">Yes</label>
@@ -148,11 +148,11 @@ include BASE_PATH . "views/header.php";
 				$no = " checked ";
 			} ?>
 
-			<div class="custom-control custom-radio">
+			<div class="custom-control form-check">
 			  <input type="radio" value="0" <?=$no?> id="medicineNo" name="medicine" class="custom-control-input" onclick="toggleState('medicineDetails', 'medicine')">
 			  <label class="custom-control-label" for="medicineNo">No</label>
 			</div>
-			<div class="custom-control custom-radio">
+			<div class="custom-control form-check">
 			  <input type="radio" value="1" <?=$yes?> id="medicineYes" name="medicine" class="custom-control-input" onclick="toggleState('medicineDetails', 'medicine')">
 			  <label class="custom-control-label" for="medicineYes">Yes</label>
 			</div>

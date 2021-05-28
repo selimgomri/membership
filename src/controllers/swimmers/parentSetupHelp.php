@@ -114,7 +114,7 @@ include BASE_PATH . "views/swimmersMenu.php";
     </form> -->
   </div>
 
-  <div class="py-3 mb-3 text-right mono">
+  <div class="py-3 mb-3 text-end mono">
     <?=htmlspecialchars($row['SquadName'])?>
   </div>
 
@@ -172,7 +172,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 				</p>
 			</div>
 			<div class="col-4 text-center">
-        <img class="img-fluid ml-auto d-block" src="<?=autoUrl("services/qr/0/200")?>" srcset="<?=autoUrl("services/qr/0/400")?> 2x, <?=autoUrl("services/qr/0/600")?> 3x" alt="<?=htmlspecialchars(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey']))?>" title="<?=htmlspecialchars(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey']))?>"></img>
+        <img class="img-fluid ms-auto d-block" src="<?=autoUrl("services/qr/0/200")?>" srcset="<?=autoUrl("services/qr/0/400")?> 2x, <?=autoUrl("services/qr/0/600")?> 3x" alt="<?=htmlspecialchars(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey']))?>" title="<?=htmlspecialchars(autoUrl("my-account/addswimmer/auto/" . $row['ASANumber'] . "/" . $row['AccessKey']))?>"></img>
 			</div>
 		</div>
   </div>
@@ -191,12 +191,12 @@ include BASE_PATH . "views/swimmersMenu.php";
     <table class="table table-sm table-borderless d-inline mb-0">
       <tbody>
         <tr>
-          <th scope="row" class="pl-0"><?=$swimEnglandText?></th>
-          <td class="pr-0"><span class="mono"><?=htmlspecialchars($row['ASANumber'])?></span></td>
+          <th scope="row" class="ps-0"><?=$swimEnglandText?></th>
+          <td class="pe-0"><span class="mono"><?=htmlspecialchars($row['ASANumber'])?></span></td>
         </tr>
         <tr>
-          <th scope="row" class="pl-0"><?=htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME'))?> Access Key</th>
-          <td class="pr-0"><span class="mono"><?=htmlspecialchars($row['AccessKey'])?></span></td>
+          <th scope="row" class="ps-0"><?=htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME'))?> Access Key</th>
+          <td class="pe-0"><span class="mono"><?=htmlspecialchars($row['AccessKey'])?></span></td>
         </tr>
       </tbody>
     </table>

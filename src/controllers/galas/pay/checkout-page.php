@@ -207,7 +207,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
       <h1>Pay for gala entries</h1>
       <p class="lead">Checkout</p>
     </div>
-    <div class="col text-lg-right">
+    <div class="col text-lg-end">
       <div class="accepted-network-logos">
         <p>
           <img class="apple-pay-row" src="<?= autoUrl("public/img/stripe/apple-pay-mark.svg") ?>" aria-hidden="true"><img class="google-pay-row" src="<?= autoUrl("public/img/stripe/google-pay-mark.svg") ?>" aria-hidden="true"><img class="visa-row" src="<?= autoUrl("public/img/stripe/visa.svg") ?>" aria-hidden="true"><img class="mastercard-row" src="<?= autoUrl("public/img/stripe/mastercard.svg") ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("public/img/stripe/amex.svg") ?>" aria-hidden="true">
@@ -259,7 +259,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                       <?php } ?>
                   </div>
                 </div>
-                <div class="col text-right">
+                <div class="col text-end">
                   <p>
                     <?= mb_convert_case($numFormatter->format($count), MB_CASE_TITLE_SIMPLE) ?> event<?php if ($count != 1) { ?>s<?php } ?>
                   </p>
@@ -284,7 +284,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                   <strong>Total to pay</strong>
                 </p>
               </div>
-              <div class="col text-right">
+              <div class="col text-end">
                 <p class="mb-0">
                   <strong>&pound;<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $intent->amount))->withPointMovedLeft(2)->toScale(2)) ?></strong>
                 </p>
@@ -320,7 +320,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
               <div class="mb-3">
                 <label class="form-label" for="method">Choose a saved card</label>
-                <select class="custom-select pm-can-disable" name="method" id="method">
+                <select class="form-select pm-can-disable" name="method" id="method">
                   <option value="select">Select card</option>
                   <?php foreach ($cards as $card) { ?>
                     <option value="<?= $card['MethodID'] ?>">
@@ -381,7 +381,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
             <div class="mb-3">
               <label class="form-label" for="addr-post-code">Country</label>
-              <select class="custom-select pm-can-disable pm-can-disable" required id="addr-country" autocomplete="country">
+              <select class="form-select pm-can-disable pm-can-disable" required id="addr-country" autocomplete="country">
                 <?php foreach ($countries as $code => $name) { ?>
                   <option <?php if ($code == 'GB') { ?>selected<?php } ?> value="<?= htmlspecialchars($code) ?>"><?= htmlspecialchars($name) ?></option>
                 <?php } ?>
@@ -431,7 +431,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
             <!--
               <div class="mb-3">
-                <div class="custom-control custom-checkbox">
+                <div class="custom-control form-checkbox">
                   <input type="checkbox" class="custom-control-input" id="reuse-card" name="reuse-card" checked>
                   <label class="custom-control-label" for="reuse-card">Save this card for future payments</label>
                 </div>

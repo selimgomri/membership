@@ -106,7 +106,7 @@ include BASE_PATH . 'views/header.php';
         <?php for ($i = 0; $i < sizeof($sessions); $i++) { ?>
         <div class="col-sm-6 col-lg-4 col-xl-3">
           <div class="mb-3">
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control form-checkbox">
               <input type="checkbox" class="custom-control-input" id="<?=$swimmer['id']?>-<?=$sessions[$i]['ID']?>" name="<?=$swimmer['id']?>-<?=$sessions[$i]['ID']?>" <?=$checked[$i]?>>
               <label class="custom-control-label" for="<?=$swimmer['id']?>-<?=$sessions[$i]['ID']?>">
                 <?=htmlspecialchars($sessions[$i]['Name'])?>

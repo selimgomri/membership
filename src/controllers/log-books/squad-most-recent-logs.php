@@ -68,7 +68,7 @@ include BASE_PATH . 'views/header.php';
         </p>
         <div class="mb-3 d-lg-none"></div>
       </div>
-      <!-- <div class="col text-right">
+      <!-- <div class="col text-end">
         
       </div> -->
     </div>
@@ -87,7 +87,7 @@ include BASE_PATH . 'views/header.php';
               Page <?= htmlspecialchars($page) ?> of <?= htmlspecialchars($numPages) ?>
             </p>
           </div>
-          <div class="col text-right">
+          <div class="col text-end">
             <p class="lead text-muted mb-0">
               <?= htmlspecialchars($numLogs) ?> training log<?php if ($numLogs != 1) { ?>s<?php } ?> in total
             </p>

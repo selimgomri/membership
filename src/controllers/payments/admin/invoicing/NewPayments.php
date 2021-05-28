@@ -54,7 +54,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="mb-3">
           <label class="form-label" for="user-select">Select user</label>
-          <select class="custom-select overflow-hidden" id="user-select" name="user-select" disabled data-ajax-url="<?= htmlspecialchars(autoUrl("payments/invoice-payments/new/get-user")) ?>">
+          <select class="form-select overflow-hidden" id="user-select" name="user-select" disabled data-ajax-url="<?= htmlspecialchars(autoUrl("payments/invoice-payments/new/get-user")) ?>">
             <option value="none" selected>Search for a user by name</option>
           </select>
           <small id="user-select-help" class="form-text text-muted">Pick a user from this drop down.</small>
@@ -94,7 +94,7 @@ include BASE_PATH . 'views/header.php';
             <label class="form-label" for="payment-category">
               Category
             </label>
-            <select class="custom-select" id="payment-category" name="payment-category" <?php if (!$category) { ?>disabled<?php } ?>>
+            <select class="form-select" id="payment-category" name="payment-category" <?php if (!$category) { ?>disabled<?php } ?>>
               <?php if (!$category) { ?>
                 <option value="none" selected>No categories available</option>
               <?php } else { ?>
@@ -108,11 +108,11 @@ include BASE_PATH . 'views/header.php';
 
           <div class="mb-3" id="radios">
             <label>Type</label>
-            <div class="custom-control custom-radio">
+            <div class="custom-control form-check">
               <input type="radio" id="type-payment" name="type" class="custom-control-input" checked required value="Payment">
               <label class="custom-control-label" for="type-payment">Payment</label>
             </div>
-            <div class="custom-control custom-radio">
+            <div class="custom-control form-check">
               <input type="radio" id="type-credit" name="type" class="custom-control-input" required value="Credit">
               <label class="custom-control-label" for="type-credit">Credit (refund)</label>
             </div>

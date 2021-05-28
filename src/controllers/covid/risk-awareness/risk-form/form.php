@@ -61,9 +61,9 @@ include BASE_PATH . 'views/header.php';
           Confirm your awareness of risk before returning to training.
         </p>
       </div>
-      <div class="col text-right">
+      <div class="col text-end">
         <?php if (mb_strtoupper(app()->tenant->getKey('ASA_CLUB_CODE')) != 'UOSZ') { ?>
-          <img src="<?= htmlspecialchars(autoUrl('public/img/corporate/se.png')) ?>" class="w-50 ml-auto d-none d-lg-flex" alt="Swim England Logo">
+          <img src="<?= htmlspecialchars(autoUrl('public/img/corporate/se.png')) ?>" class="w-50 ms-auto d-none d-lg-flex" alt="Swim England Logo">
         <?php } ?>
       </div>
     </div>
@@ -127,7 +127,7 @@ include BASE_PATH . 'views/header.php';
           I also understand that the club will have to be flexible and responsive due to the evolving government advice around COVID-19, and the fact that circumstances will change.
         </p>
 
-        <div class="custom-control custom-checkbox mb-3">
+        <div class="custom-control form-checkbox mb-3">
           <input type="checkbox" class="custom-control-input" id="member-declaration" name="member-declaration" required value="1">
           <label class="custom-control-label" for="member-declaration">I <strong><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></strong>, agree to this declaration<br><span class="badge badge-light">Signed <?= $today->format("j F Y") ?></span></label>
           <div class="invalid-feedback">
@@ -136,7 +136,7 @@ include BASE_PATH . 'views/header.php';
         </div>
 
         <?php if (app()->tenant->getKey('ASA_CLUB_CODE') == 'UOSZ') { ?>
-          <div class="custom-control custom-checkbox mb-3">
+          <div class="custom-control form-checkbox mb-3">
             <input type="checkbox" class="custom-control-input" id="uosswpc-member-declaration" name="uosswpc-member-declaration" required value="1">
             <label class="custom-control-label" for="uosswpc-member-declaration">I <strong><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></strong>, accept that I am swimming at my own risk and won't hold the club accountable if I catch coronavirus (COVID-19).<br><span class="badge badge-light">Signed <?= $today->format("j F Y") ?></span></label>
             <div class="invalid-feedback">
@@ -146,7 +146,7 @@ include BASE_PATH . 'views/header.php';
         <?php } ?>
 
         <?php if ($parent && $age < 18) { ?>
-          <div class="custom-control custom-checkbox mb-3">
+          <div class="custom-control form-checkbox mb-3">
             <input type="checkbox" class="custom-control-input" id="parent-declaration" name="parent-declaration" required value="1">
             <label class="custom-control-label" for="parent-declaration">As <?= htmlspecialchars($member['MForename']) ?> is under 18 (aged <?= htmlspecialchars($age) ?>), I <strong><?= htmlspecialchars($parent['Forename']) . '&nbsp;' . htmlspecialchars($parent['Surname']) ?></strong>, also agree to this declaration, <?= $today->format("j F Y") ?></label>
             <div class="invalid-feedback">

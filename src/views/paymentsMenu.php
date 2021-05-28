@@ -10,7 +10,7 @@ $access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']; ?>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav me-auto">
           <li class="nav-item">
             <a class="nav-link" href="<?=autoUrl("payments")?>">Payments Home</a>
           </li>

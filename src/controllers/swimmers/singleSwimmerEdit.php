@@ -312,7 +312,7 @@ $cat[$rowSwim['ASACategory']] = " selected ";
 $content .= "
 <div class=\"mb-3\">
 	<label for=\"cat\">Swim England Membership Category</label>
-	<select class=\"custom-select\" id=\"cat\" name=\"cat\" placeholder=\"Select\">
+	<select class=\"form-select\" id=\"cat\" name=\"cat\" placeholder=\"Select\">
 		<option value=\"0\" " . $cat[0] . ">Not a Swim England Member</option>
 		<option value=\"1\" " . $cat[1] . ">Category 1</option>
 		<option value=\"2\" " . $cat[2] . ">Category 2</option>
@@ -324,7 +324,7 @@ $content .= "
 $content .= "
 <div class=\"mb-3\">
 	<label for=\"club-cat\">Club Membership Category</label>
-	<select class=\"custom-select\" id=\"club-cat\" name=\"club-cat\" placeholder=\"Select\" required>";
+	<select class=\"form-select\" id=\"club-cat\" name=\"club-cat\" placeholder=\"Select\" required>";
 do {
 	$selected = '';
 	if ($rowSwim['ClubCategory'] == $clubCategory['ID']) {
@@ -340,7 +340,7 @@ if ($rowSwim['Gender'] == "Male") {
 	$content .= "
 	<div class=\"mb-3\">
 		<label for=\"sex\">Sex</label>
-		<select class=\"custom-select\" id=\"sex\" name=\"sex\" placeholder=\"Select\">
+		<select class=\"form-select\" id=\"sex\" name=\"sex\" placeholder=\"Select\">
 			<option value=\"Male\" selected>Male</option>
 			<option value=\"Female\">Female</option>
 		</select>
@@ -349,7 +349,7 @@ if ($rowSwim['Gender'] == "Male") {
 	$content .= "
 	<div class=\"mb-3\">
 		<label for=\"sex\">Sex</label>
-		<select class=\"custom-select\" id=\"sex\" name=\"sex\" placeholder=\"Select\">
+		<select class=\"form-select\" id=\"sex\" name=\"sex\" placeholder=\"Select\">
 			<option value=\"Male\">Male</option>
 			<option value=\"Female\" selected>Female</option>
 		</select>
@@ -359,7 +359,7 @@ if ($rowSwim['Gender'] == "Male") {
 $content .= "
 <div class=\"mb-3\">
 	<label for=\"country\">Home Nations Country</label>
-	<select class=\"custom-select\" id=\"country\" name=\"country\" placeholder=\"Select\">";
+	<select class=\"form-select\" id=\"country\" name=\"country\" placeholder=\"Select\">";
 foreach ($countries as $key => $value) {
 	$selected = '';
 	if ($rowSwim['Country'] == $key) {
@@ -379,7 +379,7 @@ $cp[$rowSwim['ASAPaid']] = " selected ";
 $content .= "
 <div class=\"mb-3\">
 	<label for=\"sep\">Club pays Swim England fees?</label>
-	<select class=\"custom-select\" id=\"sep\" name=\"sep\" placeholder=\"Select\">
+	<select class=\"form-select\" id=\"sep\" name=\"sep\" placeholder=\"Select\">
 		<option value=\"0\" " . $cp[0] . ">No</option>
 		<option value=\"1\" " . $cp[1] . ">Yes</option>
 	</select>
@@ -393,7 +393,7 @@ $cp[$rowSwim['ClubPaid']] = " selected ";
 $content .= "
 <div class=\"mb-3\">
 	<label for=\"cp\">Club pays Club Membership fees?</label>
-	<select class=\"custom-select\" id=\"cp\" name=\"cp\" placeholder=\"Select\">
+	<select class=\"form-select\" id=\"cp\" name=\"cp\" placeholder=\"Select\">
 		<option value=\"0\" " . $cp[0] . ">No</option>
 		<option value=\"1\" " . $cp[1] . ">Yes</option>
 	</select>
@@ -420,7 +420,7 @@ if ($access == "Admin") {
 	$content .= "
 		<div class=\"mb-3\">
 			<label for=\"swimmerStatus\">Swimmer Membership Status</label>
-			<select class=\"custom-select\" id=\"swimmerStatus\" name=\"swimmerStatus\" aria-describedby=\"swimmerStatusHelp\">
+			<select class=\"form-select\" id=\"swimmerStatus\" name=\"swimmerStatus\" aria-describedby=\"swimmerStatusHelp\">
         <option value=\"1\" " . $statusA . ">Active</option>
         <option value=\"0\" " . $statusB . ">Suspended</option>
       </select>
@@ -448,7 +448,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 			<div class="col-md-8">
 				<h1>Editing <?= htmlspecialchars($rowSwim['MForename'] . ' ' . $rowSwim['MSurname']) ?> </h1>
 			</div>
-			<div class="col text-md-right">
+			<div class="col text-md-end">
 				<button type="submit" class="btn btn-success" form="edit-form">Update</button>
 				<a class="btn btn-dark" href="<?= htmlspecialchars(autoUrl("members/$id")) ?>">Exit Edit Mode</a>
 			</div>

@@ -116,7 +116,7 @@ include BASE_PATH . 'views/header.php';
 
         <h2>Choose notification preferences </h2>
         <div class="mb-3">
-          <div class="custom-control custom-checkbox">
+          <div class="custom-control form-checkbox">
             <input type="checkbox" class="custom-control-input"
             name="allow-email" id="allow-email" value="1" <?=$email?> checked>
             <label class="custom-control-label" for="allow-email">
@@ -124,7 +124,7 @@ include BASE_PATH . 'views/header.php';
             </label>
           </div>
 
-          <div class="custom-control custom-checkbox">
+          <div class="custom-control form-checkbox">
             <input type="checkbox" class="custom-control-input" name="allow-sms"
             id="allow-sms" value="1" <?=$sms?> checked>
             <label class="custom-control-label" for="allow-sms">

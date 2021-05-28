@@ -172,7 +172,7 @@ include BASE_PATH . 'views/header.php';
           <?php } ?>
         </dl>
 
-        <div class="text-right">
+        <div class="text-end">
           <div class="dropdown">
             <button class="btn btn-danger dropdown-toggle" type="button" id="deleteDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Advanced Options

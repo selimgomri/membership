@@ -49,7 +49,7 @@ include BASE_PATH . "views/root/header.php";
 
         <div class="mb-3">
           <label class="form-label" for="rate-type">Type</label>
-          <select class="custom-select" name="rate-type" id="rate-type" required>
+          <select class="form-select" name="rate-type" id="rate-type" required>
             <option value="vat" selected>VAT (Value Added Tax)</option>
           </select>
           <div class="invalid-feedback">
@@ -80,7 +80,7 @@ include BASE_PATH . "views/root/header.php";
 
         <div class="mb-3">
           <label class="form-label" for="rate-in-ex">Prices inclusive or exclusive of tax</label>
-          <select class="custom-select" name="rate-in-ex" id="rate-in-ex" required>
+          <select class="form-select" name="rate-in-ex" id="rate-in-ex" required>
             <option value="inclusive" selected>Inclusive</option>
             <option value="exclusive">Exclusive</option>
           </select>

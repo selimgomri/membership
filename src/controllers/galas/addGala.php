@@ -21,7 +21,7 @@ $content .= "<div class=\"row\"><div class=\"col-md-10 col-lg-8\"><form method=\
 <div class=\"mb-3 row\">
   <label for=\"length\" class=\"col-sm-2 col-form-label\">Course Length</label>
   <div class=\"col-sm-10\">
-    <select class=\"custom-select\" name=\"length\" id=\"length\" required>
+    <select class=\"form-select\" name=\"length\" id=\"length\" required>
       <option value=\"LONG\">Long Course</option>
       <option value=\"SHORT\">Short Course</option>
       <option value=\"IRREGULAR\">Other Pool Length or Open Water</option>
@@ -61,7 +61,7 @@ $content .= "<div class=\"row\"><div class=\"col-md-10 col-lg-8\"><form method=\
 <div class=\"mb-3 row\">
   <label for=\"HyTek\" class=\"col-sm-2 col-form-label\">Require times?</label>
   <div class=\"col-sm-10\">
-    <div class=\"custom-control custom-checkbox mt-2\">
+    <div class=\"custom-control form-checkbox mt-2\">
       <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"HyTek\" name=\"HyTek\">
       <label class=\"custom-control-label\" for=\"HyTek\">Tick if this is a HyTek gala or needs times from parents</label>
     </div>
@@ -70,7 +70,7 @@ $content .= "<div class=\"row\"><div class=\"col-md-10 col-lg-8\"><form method=\
 <div class=\"mb-3 row\">
   <label for=\"coachDecides\" class=\"col-sm-2 col-form-label\">Coach decides entries?</label>
   <div class=\"col-sm-10\">
-    <div class=\"custom-control custom-checkbox mt-2\">
+    <div class=\"custom-control form-checkbox mt-2\">
       <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"coachDecides\" name=\"coachDecides\">
       <label class=\"custom-control-label\" for=\"coachDecides\">Tick if a coach will make entries for this gala</label>
     </div>
@@ -79,7 +79,7 @@ $content .= "<div class=\"row\"><div class=\"col-md-10 col-lg-8\"><form method=\
 <div class=\"mb-3 row\">
   <label for=\"approvalNeeded\" class=\"col-sm-2 col-form-label\">Approval needed?</label>
   <div class=\"col-sm-10\">
-    <div class=\"custom-control custom-checkbox mt-2\">
+    <div class=\"custom-control form-checkbox mt-2\">
       <input type=\"checkbox\" value=\"1\" class=\"custom-control-input\" id=\"approvalNeeded\" name=\"approvalNeeded\">
       <label class=\"custom-control-label\" for=\"approvalNeeded\">Tick if entries must first be approved by a squad rep. Entries are automatically approved if a squad does not have a squad rep.</label>
     </div>

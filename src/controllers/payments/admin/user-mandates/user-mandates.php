@@ -78,9 +78,9 @@ $mandateDetails->execute([$user, true]);
         <div class="col">
           <?=htmlspecialchars($row['Mandate'])?> (<?=htmlspecialchars($row['AccountHolderName'])?>)
         </div>
-        <div class="col text-right">
+        <div class="col text-end">
           <?php if ($defaultAcc != null > 1 && $defaultAcc == $row['MandateID']) { ?>
-          <span class="badge badge-info">Main Account</span>
+          <span class="badge bg-info">Main Account</span>
           <?php } ?>
         </div>
       </div>

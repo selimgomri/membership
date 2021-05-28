@@ -53,7 +53,7 @@ include "galaMenu.php"; ?>
         <div class="mb-3 row">
           <label class="form-label" for="length" class="col-sm-4 col-form-label">Course Length</label>
           <div class="col-sm-8">
-            <select class="custom-select" name="length" id="length" required>";
+            <select class="form-select" name="length" id="length" required>";
             <?php for ($i=0; $i<sizeof($course); $i++) {
               if ($course[$i] == $row['CourseLength']) { ?>
                 <option selected value="<?=$course[$i]?>">
@@ -91,7 +91,7 @@ include "galaMenu.php"; ?>
         <div class="mb-3 row">
           <label class="form-label" for="HyTek" class="col-sm-4 col-form-label">Require times?</label>
           <div class="col-sm-8">
-            <div class="custom-control custom-checkbox mt-2">
+            <div class="custom-control form-checkbox mt-2">
               <input type="checkbox" value="1" class="custom-control-input" checked id="HyTek" name="HyTek">
               <label class="custom-control-label" for="HyTek">Tick if this is a HyTek gala or needs times from parents</label>
             </div>
@@ -101,7 +101,7 @@ include "galaMenu.php"; ?>
         <div class="mb-3 row">
           <label class="form-label" for="HyTek" class="col-sm-4 col-form-label">Require times?</label>
           <div class="col-sm-8">
-            <div class="custom-control custom-checkbox mt-2">
+            <div class="custom-control form-checkbox mt-2">
               <input type="checkbox" value="1" class="custom-control-input" id="HyTek" name="HyTek">
               <label class="custom-control-label" for="HyTek">Tick if this is a HyTek gala or needs times from parents</label>
             </div>
@@ -112,7 +112,7 @@ include "galaMenu.php"; ?>
         <div class="mb-3 row">
           <label class="form-label" for="coachDecides" class="col-sm-4 col-form-label">Coach decides entries?</label>
           <div class="col-sm-8">
-            <div class="custom-control custom-checkbox mt-2">
+            <div class="custom-control form-checkbox mt-2">
         <input type="checkbox" value="1" class="custom-control-input" <?php if ($row['CoachEnters']) { ?>checked<?php } ?> id="coachDecides" name="coachDecides">
               <label class="custom-control-label" for="coachDecides">Tick if a coach will make entries for this gala</label>
             </div>
@@ -122,7 +122,7 @@ include "galaMenu.php"; ?>
         <div class="mb-3 row">
           <label class="form-label" for="approvalNeeded" class="col-sm-4 col-form-label">Approval needed?</label>
           <div class="col-sm-8">
-            <div class="custom-control custom-checkbox mt-2">
+            <div class="custom-control form-checkbox mt-2">
         <input type="checkbox" value="1" class="custom-control-input" <?php if ($row['RequiresApproval']) { ?>checked<?php } ?> id="approvalNeeded" name="approvalNeeded">
               <label class="custom-control-label" for="approvalNeeded">Tick if entries must first be approved by a squad rep. Entries are automatically approved if a squad does not have a squad rep.</label>
             </div>

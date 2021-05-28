@@ -67,7 +67,7 @@ include BASE_PATH . "views/root/head.php";
         <p class="lead mb-0"><?= htmlspecialchars($methodDesc) ?></p>
       </div>
     </div>
-    <aside class="col-auto ml-auto">
+    <aside class="col-auto ms-auto">
       <?php if ($paymentMethod['Type'] == 'card') { ?>
         <img src="<?= htmlspecialchars(autoUrl("public/img/stripe/" . $typeData->brand . ".png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/stripe/" . $typeData->brand . "@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/stripe/" . $typeData->brand . "@3x.png")) ?> 3x" style="height:2.5rem;">
       <?php } else if ($paymentMethod['Type'] == 'bacs_debit') { ?>

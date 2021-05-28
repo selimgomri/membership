@@ -104,7 +104,7 @@ include BASE_PATH . "views/header.php";
             <div class="col">
               <div class="mb-3 mb-0">
                 <label class="form-label" for="session-select">Select a session</label>
-                <select class="custom-select overflow-hidden" name="session-select" id="session-select" required>
+                <select class="form-select overflow-hidden" name="session-select" id="session-select" required>
                   <?= registerSessionSelectGenerator($date, $sessionId) ?>
                 </select>
                 <div class="invalid-feedback">
@@ -136,7 +136,7 @@ include BASE_PATH . "views/header.php";
 
           <dl class="row mb-0">
             <dt class="col-sm-3">
-              <span class="badge badge-sm badge-success">
+              <span class="badge badge-sm bg-success">
                 HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted and approved</span>
               </span>
             </dt>
@@ -144,7 +144,7 @@ include BASE_PATH . "views/header.php";
               COVID health survey submitted and approved by staff
             </dd>
             <dt class="col-sm-3">
-              <span class="badge badge-sm badge-danger">
+              <span class="badge badge-sm bg-danger">
                 HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted and rejected or new survey submission requested</span>
               </span>
             </dt>
@@ -152,7 +152,7 @@ include BASE_PATH . "views/header.php";
               COVID health survey submitted and rejected by staff or survey voided and new survey submission requested by staff
             </dd>
             <dt class="col-sm-3">
-              <span class="badge badge-sm badge-warning">
+              <span class="badge badge-sm bg-warning">
                 HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted pending approval</span>
               </span>
             </dt>
@@ -160,7 +160,7 @@ include BASE_PATH . "views/header.php";
               COVID health survey submitted, pending approval
             </dd>
             <dt class="col-sm-3">
-              <span class="badge badge-sm badge-danger">
+              <span class="badge badge-sm bg-danger">
                 NO HS <span class="visually-hidden"> submitted</span>
               </span>
             </dt>
@@ -177,7 +177,7 @@ include BASE_PATH . "views/header.php";
 
           <dl class="row mb-0">
             <dt class="col-sm-3">
-              <span class="badge badge-sm badge-success">
+              <span class="badge badge-sm bg-success">
                 RA <i class="fa fa-check-circle" aria-hidden="true"></i> <span class="visually-hidden">Valid declaration</span>
               </span>
             </dt>
@@ -185,7 +185,7 @@ include BASE_PATH . "views/header.php";
               COVID Risk Awareness Declaration is up to date
             </dd>
             <dt class="col-sm-3">
-              <span class="badge badge-sm badge-danger">
+              <span class="badge badge-sm bg-danger">
                 RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="visually-hidden">form not submitted or new submission required</span>
               </span>
             </dt>

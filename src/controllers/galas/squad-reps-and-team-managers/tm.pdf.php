@@ -120,7 +120,7 @@ ob_start();?>
                 <strong>Age at end of year:</strong> <?=htmlspecialchars($entry->age_at_end_of_year)?><br>
               </p>
             </div>
-            <div class="split-50 text-right">
+            <div class="split-50 text-end">
             </div>
           </div>
 

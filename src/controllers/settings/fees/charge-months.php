@@ -53,7 +53,7 @@ include BASE_PATH . 'views/header.php';
           <?php for ($m = 1; $m <= 12; $m++) {
             $month =  mktime(0, 0, 0, $m, 1); ?>
             <div class="mb-3">
-              <div class="custom-control custom-checkbox">
+              <div class="custom-control form-checkbox">
                 <input type="checkbox" class="custom-control-input" id="month-<?= htmlspecialchars(date('m', $month)) ?>" name="month-<?= htmlspecialchars(date('m', $month)) ?>" <?php if ($squadFeeMonths != null && bool($squadFeeMonths[date('m', $month)])) { ?>checked<?php } ?>>
                 <label class="custom-control-label" for="month-<?= htmlspecialchars(date('m', $month)) ?>">
                   No fees in <?= htmlspecialchars(date('F', $month)) ?>

@@ -113,7 +113,7 @@ include "galaMenu.php";
       </p>
     </div>
     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Coach") { ?>
-    <div class="col text-md-right">
+    <div class="col text-md-end">
       <p>
         <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

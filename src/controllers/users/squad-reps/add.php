@@ -67,7 +67,7 @@ include BASE_PATH . "views/header.php";
           <label class="form-label" for="squad-select">
             Choose squad
           </label>
-          <select class="custom-select" id="squad-select" name="squad-select">
+          <select class="form-select" id="squad-select" name="squad-select">
            <option selected>Select a squad</option>
             <?php do { ?>
               <option value="<?=$squad['SquadID']?>">

@@ -130,7 +130,7 @@ include BASE_PATH . 'views/header.php';
 
               <div class="mb-3">
                 <label class="form-label" for="squad-list">Select squad</label>
-                <select class="custom-select" id="squad-list" name="squad">
+                <select class="form-select" id="squad-list" name="squad">
                   <?php do { ?>
                     <option value="<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></option>
                   <?php } while ($squad = $userSquads->fetch(PDO::FETCH_ASSOC)); ?>
@@ -170,7 +170,7 @@ include BASE_PATH . 'views/header.php';
               Let us know if you're here or just dropping off your members.
             </p>
 
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control form-checkbox">
               <input type="checkbox" class="custom-control-input" id="user" name="user" value="1">
               <label class="custom-control-label" for="user"><?= htmlspecialchars(app()->user->getName()) ?></label>
             </div>
@@ -184,7 +184,7 @@ include BASE_PATH . 'views/header.php';
             <div class="cell">
               <h3>Members</h3>
               <?php do { ?>
-                <div class="custom-control custom-checkbox">
+                <div class="custom-control form-checkbox">
                   <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('member-' . $member['id']) ?>" name="<?= htmlspecialchars('member-' . $member['id']) ?>" value="1">
                   <label class="custom-control-label" for="<?= htmlspecialchars('member-' . $member['id']) ?>"><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></label>
                 </div>
@@ -197,7 +197,7 @@ include BASE_PATH . 'views/header.php';
             <div class="cell">
               <h3>Previous guests</h3>
               <?php do { ?>
-                <div class="custom-control custom-checkbox">
+                <div class="custom-control form-checkbox">
                   <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('guest-' . $guest['ID']) ?>" name="<?= htmlspecialchars('guest-' . $guest['ID']) ?>" value="1">
                   <label class="custom-control-label" for="<?= htmlspecialchars('guest-' . $guest['ID']) ?>"><?= htmlspecialchars($guest['GuestName']) ?> <em><?= htmlspecialchars($guest['GuestPhone']) ?></em></label>
                 </div>
@@ -267,7 +267,7 @@ include BASE_PATH . 'views/header.php';
               <div class="cell">
                 <div class="mb-3">
                   <label class="form-label" for="squad">Squad</label>
-                  <select class="custom-select" id="squad" name="squad">
+                  <select class="form-select" id="squad" name="squad">
                     <option selected>Select a squad</option>
                     <?php do { ?>
                       <option value="<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></option>

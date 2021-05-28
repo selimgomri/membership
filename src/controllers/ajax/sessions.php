@@ -315,7 +315,7 @@ function sessionManagement($squadID, $old = null)
 					<div class="col">
 						<div class="mb-3">
 							<label class="form-label" for="newSessionDay">Session Day</label>
-							<select class="custom-select" name="newSessionDay" id="newSessionDay">
+							<select class="form-select" name="newSessionDay" id="newSessionDay">
 								<option value="9" selected>Select a Day</option>
 								<option value="0">Sunday</option>
 								<option value="1">Monday</option>
@@ -330,7 +330,7 @@ function sessionManagement($squadID, $old = null)
 					<div class="col">
 						<div class="mb-3">
 							<label class="form-label" for="newSessionVenue">Session Venue</label>
-							<select class="custom-select" name="newSessionVenue" id="newSessionVenue">
+							<select class="form-select" name="newSessionVenue" id="newSessionVenue">
 								<option selected value="0">Select a Venue</option>
 								<?php while ($venue = $venues->fetch(PDO::FETCH_ASSOC)) { ?>
 									<option value="<?= $venue['id'] ?>">
@@ -344,13 +344,13 @@ function sessionManagement($squadID, $old = null)
 				</div>
 				<div class="mb-3">
 					<label class="form-label" for="newSessionMS">Include in attendance count</label>
-					<div class="custom-control custom-radio">
+					<div class="custom-control form-check">
 						<input type="radio" id="newSessionMSYes" name="newSessionMS" class="custom-control-input" value="1" checked>
 						<label class="custom-control-label" for="newSessionMSYes">
 							Yes, the session is for the full squad
 						</label>
 					</div>
-					<div class="custom-control custom-radio">
+					<div class="custom-control form-check">
 						<input type="radio" id="newSessionMSNo" name="newSessionMS" class="custom-control-input" value="0">
 						<label class="custom-control-label" for="newSessionMSNo">
 							No, this session is only for selected swimmers

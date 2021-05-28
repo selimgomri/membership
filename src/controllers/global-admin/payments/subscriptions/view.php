@@ -111,7 +111,7 @@ include BASE_PATH . "views/root/header.php";
 
         <div class="mb-3">
           <label class="form-label" for="subscription-payment-method">Payment method</label>
-          <select name="subscription-payment-method" id="subscription-payment-method" class="custom-select" required>
+          <select name="subscription-payment-method" id="subscription-payment-method" class="form-select" required>
             <?php if ($paymentMethod) { ?>
               <?php
 
@@ -181,7 +181,7 @@ include BASE_PATH . "views/root/header.php";
 
           <div class="mb-3">
             <label class="form-label" for="product-select">Product</label>
-            <select name="product-select" id="product-select" class="custom-select" required data-plans-ajax-url="<?= htmlspecialchars(autoUrl('admin/payments/subscriptions/new/get-product-plans')) ?>">
+            <select name="product-select" id="product-select" class="form-select" required data-plans-ajax-url="<?= htmlspecialchars(autoUrl('admin/payments/subscriptions/new/get-product-plans')) ?>">
               <option value="" selected disabled>Select a product</option>
               <?php while ($product = $getProducts->fetch(PDO::FETCH_ASSOC)) { ?>
                 <option id="<?= htmlspecialchars('product-select-' . $product['ID']) ?>" value="<?= htmlspecialchars($product['ID']) ?>" data-name="<?= htmlspecialchars($product['Name']) ?>"><?= htmlspecialchars($product['Name']) ?></option>
@@ -194,7 +194,7 @@ include BASE_PATH . "views/root/header.php";
 
           <div class="mb-3">
             <label class="form-label" for="plan-select">Plan</label>
-            <select name="plan-select" id="plan-select" class="custom-select" required>
+            <select name="plan-select" id="plan-select" class="form-select" required>
               <option value="" selected disabled>Select a plan</option>
             </select>
             <div class="invalid-feedback">

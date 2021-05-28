@@ -53,11 +53,11 @@ include BASE_PATH . "views/paymentsMenu.php";
 
           <div class="mb-3">
             <label>Monthly payment or refund</label>
-            <div class="custom-control custom-radio">
+            <div class="custom-control form-check">
               <input type="radio" id="type-pay" name="pay-credit-type" class="custom-control-input" value="Payment" required>
               <label class="custom-control-label" for="type-pay">Payment</label>
             </div>
-            <div class="custom-control custom-radio">
+            <div class="custom-control form-check">
               <input type="radio" id="type-credit" name="pay-credit-type" class="custom-control-input" value="Refund">
               <label class="custom-control-label" for="type-credit">Credit/refund</label>
             </div>

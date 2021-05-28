@@ -155,8 +155,8 @@ include "galaMenu.php";
               <span class="title mb-0 justify-content-between align-items-start">
                 <span><?= htmlspecialchars($gala['GalaName']) ?></span>
                 <?php if ($now <= $closingDate && !$gala['CoachEnters']) {
-                  $entriesOpen = true; ?><span class="ml-2 badge badge-success">ENTRIES OPEN</span><?php } ?>
-                <?php if ($now <= $closingDate && $gala['CoachEnters']) { ?><span class="ml-2 badge badge-warning">COACH ENTERS</span><?php } ?>
+                  $entriesOpen = true; ?><span class="ms-2 badge bg-success">ENTRIES OPEN</span><?php } ?>
+                <?php if ($now <= $closingDate && $gala['CoachEnters']) { ?><span class="ms-2 badge bg-warning">COACH ENTERS</span><?php } ?>
               </span>
               <span class="d-flex mb-3"><?= htmlspecialchars($gala['GalaVenue']) ?></span>
             </div>
@@ -207,12 +207,12 @@ include "galaMenu.php";
             <div>
               <span class="title mb-0 justify-content-between align-items-start">
                 <span><?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?></span>
-                <span class="text-right">
-                  <?php if ($now <= $closingDate && !$entry['Charged'] && !$entry['Processed'] && !$entry['Locked']) { ?><span class="ml-2 badge badge-success">EDITABLE</span><?php } ?>
-                  <?php if ($entry['Charged']) { ?><span class="ml-2 badge badge-warning"><i class="fa fa-money" aria-hidden="true"></i> PAID</span><?php } ?>
-                  <?php if ($entry['Vetoable']) { ?><span class="ml-2 badge badge-info">VETOABLE</span><?php } ?>
-                  <?php if ($entry['RequiresApproval'] && $entry['Approved']) { ?><abbr title="Approved by squad rep"><span class="ml-2 badge badge-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span></abbr><?php } else if ($entry['Approved']) { ?><abbr title="Entry automatically approved"><span class="ml-2 badge badge-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span></abbr><?php } ?>
-                  <?php if ($entry['Refunded'] && $entry['FeeToPay'] > 0) { ?><span class="ml-2 badge badge-warning">PART REFUNDED</span><?php } else if ($entry['Refunded'] && $entry['FeeToPay'] == 0) { ?><span class="ml-2 badge badge-warning">FULLY REFUNDED</span><?php } ?>
+                <span class="text-end">
+                  <?php if ($now <= $closingDate && !$entry['Charged'] && !$entry['Processed'] && !$entry['Locked']) { ?><span class="ms-2 badge bg-success">EDITABLE</span><?php } ?>
+                  <?php if ($entry['Charged']) { ?><span class="ms-2 badge bg-warning"><i class="fa fa-money" aria-hidden="true"></i> PAID</span><?php } ?>
+                  <?php if ($entry['Vetoable']) { ?><span class="ms-2 badge bg-info">VETOABLE</span><?php } ?>
+                  <?php if ($entry['RequiresApproval'] && $entry['Approved']) { ?><abbr title="Approved by squad rep"><span class="ms-2 badge bg-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span></abbr><?php } else if ($entry['Approved']) { ?><abbr title="Entry automatically approved"><span class="ms-2 badge bg-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span></abbr><?php } ?>
+                  <?php if ($entry['Refunded'] && $entry['FeeToPay'] > 0) { ?><span class="ms-2 badge bg-warning">PART REFUNDED</span><?php } else if ($entry['Refunded'] && $entry['FeeToPay'] == 0) { ?><span class="ms-2 badge bg-warning">FULLY REFUNDED</span><?php } ?>
                 </span>
               </span>
               <span class="d-flex mb-3"><?= htmlspecialchars($entry['GalaName']) ?></span>

@@ -81,7 +81,7 @@ include BASE_PATH . 'views/header.php';
           </p>
           <div class="mb-3 d-lg-none"></div>
         </div>
-        <div class="col text-right">
+        <div class="col text-end">
           <p class="mb-0">
             <button type="submit" class="btn btn-success">Save <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
           </p>
@@ -151,7 +151,7 @@ include BASE_PATH . 'views/header.php';
 
           <div class="mb-3 mb-0">
             <label class="form-label" for="content-type">Content type</label>
-            <select required class="custom-select" id="content-type" name="content-type" aria-describedby="content-type-help">
+            <select required class="form-select" id="content-type" name="content-type" aria-describedby="content-type-help">
               <option value="text/plain" <?php if ($contentType == 'text/plain') { ?>selected<?php } ?> >Plain text</option>
               <option value="text/plain-monospace" <?php if ($contentType == 'text/plain-monospace') { ?>selected<?php } ?> >Monospaced plain text</option>
               <option value="text/markdown" <?php if ($contentType == 'text/markdown') { ?>selected<?php } ?> >Markdown</option>

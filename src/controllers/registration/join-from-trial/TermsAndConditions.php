@@ -112,7 +112,7 @@ include BASE_PATH . 'views/header.php';
         <?php foreach ($swimmers as $swimmer) {
           $id = $swimmer['ID'] . '-tc-confirm'; ?>
           <div class="mb-3">
-						<div class="custom-control custom-checkbox">
+						<div class="custom-control form-checkbox">
 							<input type="checkbox" value="1" class="custom-control-input" name="<?=$id?>" id="<?=$id?>" <?=$selected[$id]?> required>
 							<label class="custom-control-label" for="<?=$id?>">
 								I, <?=$swimmer['First']?> <?=$swimmer['Last']?>

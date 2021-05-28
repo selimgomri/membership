@@ -36,7 +36,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 		<p>On which day of the month should Chester-le-Street ASC make Direct Debit requests?</p>
 		<div class="mb-3">
 			<label class="form-label" for="chosenDay">Select Day</label>
-			<select name="chosenDay" id="chosenDay" class="custom-select">
+			<select name="chosenDay" id="chosenDay" class="form-select">
 				<?php for ($i = 1; $i < 29; $i++) {?>
 			  <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
 				<?php } ?>

@@ -273,7 +273,7 @@ if (isset($customBackground) && $customBackground) {
             <h1 class="primary"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></h1>
           <?php } ?>
         </div>
-        <div class="col text-right">
+        <div class="col text-end">
           <!-- <p class="mb-0"> -->
           <address>
             <strong><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></strong><br>

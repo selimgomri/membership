@@ -146,7 +146,7 @@ include BASE_PATH . 'views/header.php';
               <label>Date of Birth</label>
               <div class="row">
                 <div class="col">
-                  <select class="custom-select" id="day" name="day" required>
+                  <select class="form-select" id="day" name="day" required>
                     <?php if ($value['day'] == null | $value['day'] == "") { ?>
                     <option disabled selected>Day</option>
                     <?php } else {?>
@@ -169,7 +169,7 @@ include BASE_PATH . 'views/header.php';
                   </div>
                 </div>
                 <div class="col">
-                  <select class="custom-select" id="month" name="month" required>
+                  <select class="form-select" id="month" name="month" required>
                     <?php if ($value['month'] == null | $value['month'] == "") { ?>
                     <option disabled selected>Month</option>
                     <?php } else {?>
@@ -192,7 +192,7 @@ include BASE_PATH . 'views/header.php';
                   </div>
                 </div>
                 <div class="col">
-                  <select class="custom-select" id="year" name="year" required>
+                  <select class="form-select" id="year" name="year" required>
                     <?php if ($value['year'] == null | $value['year'] == "") { ?>
                     <option disabled selected>Year</option>
                     <?php } else {?>
@@ -217,7 +217,7 @@ include BASE_PATH . 'views/header.php';
 
             <div class="mb-3">
               <label class="form-label" for="sex">Sex</label>
-              <select class="custom-select" id="sex" name="sex" required>
+              <select class="form-select" id="sex" name="sex" required>
                 <?php if ($value['sex'] == null | $value['sex'] == "") { ?>
                 <option disabled selected>Select a sex</option>
                 <?php } else {?>
@@ -240,7 +240,7 @@ include BASE_PATH . 'views/header.php';
 
             <div class="mb-3">
               <label class="form-label" for="experience">Level of Experience</label>
-              <select class="custom-select" id="experience" name="experience" required>
+              <select class="form-select" id="experience" name="experience" required>
                 <?php if ($value['experience'] == null || $value['experience'] == "") { ?>
                 <option disabled selected>Select an option</option>
                 <?php } else {?>

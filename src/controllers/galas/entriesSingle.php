@@ -64,7 +64,7 @@ else { ?>
     <div class="row mb-3">
   <?php } ?>
     <div class="col-sm-4 col-md-2">
-    <div class="custom-control custom-checkbox">
+    <div class="custom-control form-checkbox">
   <input type="checkbox" value="1" class="custom-control-input" id="<?=$swimsArray[$i]?>" <?php if ($row[$swimsArray[$i]] == 1) { ?>checked<?php } ?> <?=$disabled?> name="<?=$swimsArray[$i]?>">
       <label class="custom-control-label" for="<?=$swimsArray[$i]?>">
         <?=$swimsTextArray[$i]?>

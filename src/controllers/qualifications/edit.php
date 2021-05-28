@@ -78,11 +78,11 @@ include BASE_PATH . 'views/header.php';
         </div>
 
         <div class="mb-3" id="expires-box">
-          <div class="custom-control custom-radio">
+          <div class="custom-control form-check">
             <input type="radio" id="expires-no" name="expires" class="custom-control-input" value="no" required <?php if (!$expiry->expires) { ?>checked<?php } ?>>
             <label class="custom-control-label" for="expires-no">This qualification never expires</label>
           </div>
-          <div class="custom-control custom-radio">
+          <div class="custom-control form-check">
             <input type="radio" id="expires-yes" name="expires" class="custom-control-input" value="yes" <?php if ($expiry->expires) { ?>checked<?php } ?>>
             <label class="custom-control-label" for="expires-yes">This qualification expires</label>
           </div>
@@ -93,15 +93,15 @@ include BASE_PATH . 'views/header.php';
             After how long does this qualification usually expire? Select a unit and then enter a number.
           </p>
           <div class="mb-3" id="expires-when-type">
-            <div class="custom-control custom-radio">
+            <div class="custom-control form-check">
               <input type="radio" id="expires-years" name="expires-when-type" class="custom-control-input requirable" value="years" <?php if ($expiry->expiry_schedule->type == 'years') { ?>checked<?php } ?>>
               <label class="custom-control-label" for="expires-years">Years</label>
             </div>
-            <div class="custom-control custom-radio">
+            <div class="custom-control form-check">
               <input type="radio" id="expires-months" name="expires-when-type" class="custom-control-input" value="months" <?php if ($expiry->expiry_schedule->type == 'months') { ?>checked<?php } ?>>
               <label class="custom-control-label" for="expires-months">Months</label>
             </div>
-            <div class="custom-control custom-radio">
+            <div class="custom-control form-check">
               <input type="radio" id="expires-days" name="expires-when-type" class="custom-control-input" value="days" <?php if ($expiry->expiry_schedule->type == 'days') { ?>checked<?php } ?>>
               <label class="custom-control-label" for="expires-days">Days</label>
             </div>

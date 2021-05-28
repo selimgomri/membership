@@ -36,6 +36,7 @@
     color: $body-color;
     @include border-radius($alert-border-radius);
     align-content: space-between;
+    text-decoration: none;
   }
 
   a:hover, a:active, a:focus {

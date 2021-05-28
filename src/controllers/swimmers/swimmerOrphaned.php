@@ -41,7 +41,7 @@ if (isset($_POST['squad'])) {
     <div class="row">
       <div class="col-md-6 mb-3">
         <label class="visually-hidden" for="squad">Select a Squad</label>
-        <select class="custom-select" placeholder="Select a Squad" id="squad" name="squad">
+        <select class="form-select" placeholder="Select a Squad" id="squad" name="squad">
           <option value="allSquads">Show All Squads</option>;
           <?php while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
             $id = $row['SquadID']; ?>
