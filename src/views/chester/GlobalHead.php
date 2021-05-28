@@ -1,14 +1,6 @@
 <?php
 
-$stylesheet = "";
-try {
-  $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
-  $hash = json_decode($hash);
-  $hash = $hash->resourcesHash;
-  $stylesheet = autoUrl('compiled/css/clse.' . $hash . '.min.css', false);
-} catch (Exception $e) {
-  $stylesheet = autoUrl('compiled/css/clse.css', false);
-}
+$stylesheet = autoUrl(getCompiledAsset('clse.css'), false);
 
 header('Link: <' . $stylesheet . '>; rel=preload; as=style');
 

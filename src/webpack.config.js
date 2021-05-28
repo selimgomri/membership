@@ -1,7 +1,10 @@
 const path = require('path');
 const fs = require('fs');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const postcssPresetEnv = require('postcss-preset-env');
+
+// const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const compileTime = Date.now();
 
@@ -39,47 +42,64 @@ module.exports = (env, options) => {
   return {
     mode: options.mode,
     devtool: 'source-map',
-    entry: [
-      './js/javascript.js',
-      './scss/clse.scss',
-      './scss/generic.scss',
-      './scss/scds.scss'
-    ],
+    entry: {
+      'main': './js/javascript.js',
+      'clse': './scss/clse.scss',
+      'generic': './scss/generic.scss',
+      'scds': './scss/scds.scss'
+    },
     output: {
       path: path.resolve(__dirname, 'public/compiled/'),
-      filename: 'js/main.' + compileTime + '.js'
+      filename: 'js/[name].[contenthash].js'
     },
     module: {
       rules: [
         {
           test: /\.(scss)$/,
-          use: [{
-            loader: 'file-loader',
-            options: {
-              outputPath: 'css/',
-              name: '[name].' + compileTime + '.min.css'
-            }
-          }, {
-            loader: 'postcss-loader', // Run postcss actions
-            options: {
-              plugins: function () { // postcss plugins, can be exported to postcss.config.js
-                return [
-                  require('autoprefixer')
-                ];
+          use: [
+            MiniCssExtractPlugin.loader,
+            {
+              // translates CSS into CommonJS modules
+              loader: 'css-loader',
+              options: {
+                url: false,
+              }
+            }, {
+              // Run postcss actions
+              loader: 'postcss-loader',
+              options: {
+                postcssOptions: {
+                  plugins: [
+                    [
+                      "postcss-preset-env",
+                      {
+                        // Options
+                      },
+                    ],
+                  ],
+                  // url: false,
+                  parser: null,
+                },
+              }
+            }, {
+              // compiles Sass to CSS
+              loader: 'sass-loader',
+              options: {
+                // Prefer `dart-sass`
+                implementation: require("sass"),
               },
-              sourceMap: true
-            }
-          }, {
-            loader: 'sass-loader', // compiles Sass to CSS
-            options: {
-              sourceMap: true
-            }
-          }]
+            }]
         },
       ],
     },
     plugins: [
       new CleanWebpackPlugin(),
+      new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // both options are optional
+        filename: "css/[name].[contenthash].css",
+        chunkFilename: "css/[id].css",
+      }),
     ]
   };
 };

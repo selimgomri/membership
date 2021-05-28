@@ -1,14 +1,6 @@
 <?php
 
-$stylesheet = "";
-try {
-  $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
-  $hash = json_decode($hash);
-  $hash = $hash->resourcesHash;
-  $stylesheet = autoUrl('compiled/css/scds.' . $hash . '.min.css');
-} catch (Exception $e) {
-  $stylesheet = autoUrl('compiled/css/scds.css');
-}
+$stylesheet = autoUrl(getCompiledAsset('scds.css'));
 
 $bg = null;
 

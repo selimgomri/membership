@@ -1808,12 +1808,14 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false)
   }
 }
 
-function isOnS3($asset) {
+function isOnS3($asset)
+{
   if (substr($asset, 0, 5) === "X-S3:") return true;
   return false;
 }
 
-function getS3Key($asset) {
+function getS3Key($asset)
+{
   return ltrim(substr($asset, 5), '/');
 }
 
@@ -1833,6 +1835,47 @@ function getUploadedAssetUrl($asset, $public = false)
   if ($public) autoUrl('public/' . $asset);
 
   return autoUrl($asset);
+}
+
+function getCompiledAsset($filename)
+{
+  $dirName = dirname($filename); // if we have a file name like dir1/dir2/style.css
+  $fileBaseName = pathinfo($filename, PATHINFO_FILENAME); // Just the file name
+  $fileExt = pathinfo($filename, PATHINFO_EXTENSION); // Just the file extension
+
+  // $assetType handles the asset folder inside the dist folder
+  switch ($fileExt) {
+    case 'js':
+      $assetType = 'js'; // dir/scripts
+      break;
+    case 'png':
+    case 'jpg':
+    case 'gif':
+    case 'ico':
+      $assetType = 'img'; // dir/images
+      break;
+    default:
+      $assetType = 'css'; // dir/styles
+  }
+
+  // if the file is inside another folder inside "dist" folder
+  if ($dirName != '.') {
+    $handler = "compiled/$assetType/$dirName/";
+    $externalHandler = "compiled/$assetType/$dirName/"; // for viewing it. e.g: http://example.com/dist/styles/style1/main.css
+  } else {
+    $handler = "compiled/$assetType/";
+    $externalHandler = "compiled/$assetType/"; // for viewing it. e.g: http://example.com/dist/styles/main.css
+  }
+
+  $openHandler = opendir($handler);
+  while ($file = readdir($openHandler)) {
+    if ($file !== '.' && $file !== '..') {
+      if (preg_match("/^" . $fileBaseName . "(.\w+)?." . $fileExt . "/i", $file, $name)) {
+        return $externalHandler . $name[0];
+      }
+    }
+  }
+  closedir($openHandler);
 }
 
 include BASE_PATH . 'includes/ErrorReporting.php';

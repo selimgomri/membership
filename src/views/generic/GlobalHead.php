@@ -2,15 +2,7 @@
 
 $tenant = app()->tenant;
 
-$stylesheet = "";
-try {
-  $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
-  $hash = json_decode($hash);
-  $hash = $hash->resourcesHash;
-  $stylesheet = autoUrl('compiled/css/generic.' . $hash . '.min.css', false);
-} catch (Exception $e) {
-  $stylesheet = autoUrl('compiled/css/generic.css', false);
-}
+$stylesheet = autoUrl(getCompiledAsset('generic.css'), false);
 
 if (getenv('CUSTOM_CSS_PATH')) {
   $stylesheet = getenv('CUSTOM_CSS_PATH');

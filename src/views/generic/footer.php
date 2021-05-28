@@ -161,15 +161,7 @@ $logos = $tenant->getKey('LOGO_DIR')
 <!-- Modals and Other Hidden HTML -->
 <?php
 
-$script = "";
-try {
-  $hash = file_get_contents(BASE_PATH . 'cachebuster.json');
-  $hash = json_decode($hash);
-  $hash = $hash->resourcesHash;
-  $script = autoUrl('compiled/js/main.' . $hash . '.js', false);
-} catch (Exception $e) {
-  $script = autoUrl('compiled/js/main.js', false);
-}
+$script = autoUrl(getCompiledAsset('main.js'), false);
 
 ?>
 <script rel="preload" src="<?= htmlspecialchars($script) ?>"></script>
